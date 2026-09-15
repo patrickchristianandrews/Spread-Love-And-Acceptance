@@ -1,0 +1,35 @@
+# WP-13 — Phase-Locked Loop (PLL) Protocol
+
+**Purpose:** a recurring, low-effort check-in ritual, named after the electronics circuit that keeps two signals in sync through constant small corrections rather than occasional large ones. Applied here as a daily habit that prevents the "frequency drift" described in Chapter I from building up into a squeal.
+
+## Why small and frequent beats big and rare
+
+A phase-locked loop doesn't wait for two signals to drift far apart and then yank them back into sync — it makes tiny corrections continuously, so drift never accumulates. The domestic equivalent: a 90-second daily check-in prevents most of what would otherwise become a 45-minute weekend argument.
+
+## The daily loop (about 90 seconds)
+
+Pick a consistent moment — after dinner, before bed, whatever's realistic. Each person answers, out loud, in one sentence each:
+
+1. **Load:** "Today I was at about [low / medium / high] capacity."
+2. **Friction:** "One small thing that didn't feel great today was ___." (Optional — skip if there's nothing.)
+3. **Ask:** "One thing that would help tomorrow is ___." (Optional.)
+
+No debate, no solving, no rebuttal. Each person just transmits; the other just receives. Anything that needs real discussion gets flagged for the weekly closing (Chapter V), not litigated in the 90 seconds.
+
+## The weekly resync
+
+Once a week, alongside closing the books:
+
+- Skim the week's daily loop notes for anything that repeated more than twice.
+- A repeated friction point is promoted to the RACI treaty (WP-03) or the tone filter (WP-09) rather than staying an ambient irritation.
+
+## Failure mode to watch for
+
+If the daily loop starts being used to deliver criticism ("well, since we're doing check-ins...") instead of a plain status update, it will get avoided, and avoidance is what causes the drift this protocol exists to prevent. Keep the daily version strictly observational; save anything evaluative for the weekly resync.
+
+## Sign-off
+
+| | Committed to daily loop | Date |
+|---|---|---|
+| Partner A | | |
+| Partner B | | |
