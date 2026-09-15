@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Objective Ledger™ (TOL-OS) — Canonical Volume I</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --cream:#FBF7F1;
+    --paper:#F7F1E9;
+    --ink:#4A4250;
+    --ink-soft:#8C8291;
+    --blush:#EFC9CE;
+    --rose:#D99AA0;
+    --sage:#C3D6BC;
+    --sage-deep:#93AE8A;
+    --lavender:#D7CBE8;
+    --lavender-deep:#A895C4;
+    --sky:#C9DEEA;
+    --sky-deep:#8FB6CC;
+    --line:rgba(74,66,80,0.12);
+    --serif:"Fraunces", Georgia, serif;
+    --sans:"Inter", -apple-system, "Segoe UI", sans-serif;
+  }
+
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  @media (prefers-reduced-motion: reduce){
+    html{scroll-behavior:auto;}
+    *{animation-duration:0.01ms !important; animation-iteration-count:1 !important; transition-duration:0.01ms !important;}
+  }
+
+  body{
+    margin:0;
+    background:var(--cream);
+    color:var(--ink);
+    font-family:var(--sans);
+    line-height:1.7;
+    font-size:17px;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  a{color:var(--sage-deep);}
+  ::selection{background:var(--blush); color:var(--ink);}
+  :focus-visible{outline:2px solid var(--sky-deep); outline-offset:3px; border-radius:4px;}
+
+  h1,h2{font-family:var(--serif); color:var(--ink); font-weight:500;}
+
+  p{margin:0 0 18px; max-width:62ch; color:var(--ink);}
+
+  .wrap{max-width:760px; margin:0 auto; padding:0 28px;}
+
+  /* ---------- watercolor blob layer ---------- */
+  .blob{
+    position:absolute;
+    border-radius:50%;
+    filter:blur(50px);
+    mix-blend-mode:multiply;
+    opacity:.55;
+    z-index:0;
+    pointer-events:none;
+  }
+  section, header.hero{position:relative; overflow:visible;}
+
+  /* ---------- top nav ---------- */
+  .topnav{
+    position:sticky;
+    top:0;
+    z-index:20;
+    backdrop-filter:blur(10px);
+    background:rgba(251,247,241,0.82);
+    border-bottom:1px solid var(--line);
+  }
+  .topnav-inner{
+    max-width:760px;
+    margin:0 auto;
+    padding:16px 28px;
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px 6px;
+  }
+  .topnav a{
+    font-family:var(--sans);
+    font-size:13px;
+    color:var(--ink-soft);
+    padding:6px 13px;
+    border-radius:999px;
+    white-space:nowrap;
+  }
+  .topnav a:hover{background:var(--blush); color:var(--ink); text-decoration:none;}
+  .topnav a.diag{color:var(--sage-deep); font-weight:600;}
+
+  /* ---------- hero ---------- */
+  .hero{
+    padding:90px 0 70px;
+    text-align:center;
+  }
+  .hero .blob-a{width:420px; height:420px; top:-160px; left:calc(50% - 340px); background:var(--blush);}
+  .hero .blob-b{width:360px; height:380px; top:-100px; left:calc(50% + 40px); background:var(--sky);}
+  .hero .blob-c{width:300px; height:300px; top:120px; left:calc(50% - 60px); background:var(--sage); opacity:.4;}
+
+  .hero-inner{position:relative; z-index:1;}
+  .hero-kicker{
+    font-family:var(--sans);
+    font-size:13px;
+    letter-spacing:.02em;
+    color:var(--ink-soft);
+    margin-bottom:22px;
+  }
+  .hero h1{
+    font-size:clamp(32px, 5.5vw, 50px);
+    line-height:1.18;
+    margin:0 auto 20px;
+    max-width:14ch;
+  }
+  .hero .sub{
+    font-size:16.5px;
+    color:var(--ink-soft);
+    max-width:52ch;
+    margin:0 auto;
+  }
+
+  .wash{
+    margin:48px auto 0;
+    max-width:520px;
+    height:90px;
+    position:relative;
+  }
+  .wash svg{width:100%; height:100%; display:block;}
+
+  /* ---------- sections ---------- */
+  section{padding:64px 0; border-bottom:1px solid var(--line);}
+  section:last-of-type{border-bottom:none;}
+  .content{position:relative; z-index:1;}
+
+  .sec-eyebrow{
+    font-family:var(--sans);
+    font-size:13px;
+    color:var(--rose);
+    margin-bottom:10px;
+  }
+  .sec-head h2{
+    font-size:28px;
+    margin:0 0 8px;
+  }
+  .sec-sub{
+    font-family:var(--sans);
+    font-size:14px;
+    color:var(--ink-soft);
+    font-style:italic;
+    margin-bottom:24px;
+  }
+
+  .axiom{
+    font-family:var(--serif);
+    font-size:19px;
+    font-style:italic;
+    color:var(--ink);
+    background:linear-gradient(100deg, var(--blush), var(--lavender));
+    padding:22px 26px;
+    border-radius:22px;
+    margin:26px 0;
+  }
+
+  /* preface blobs */
+  #preface .blob{width:280px; height:280px; top:10px; right:-100px; background:var(--lavender);}
+
+  /* chapter1 blobs */
+  #chapter1 .blob{width:320px; height:260px; top:60px; left:-120px; background:var(--sky);}
+
+  /* ---------- verdict panel ---------- */
+  .panel{
+    background:var(--paper);
+    border-radius:26px;
+    padding:32px 34px;
+    margin:26px 0;
+    border:1px solid var(--line);
+  }
+  .formula{
+    font-family:var(--sans);
+    font-size:15px;
+    color:var(--lavender-deep);
+    margin-bottom:20px;
+  }
+  .verdict-out{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    flex-wrap:wrap;
+    gap:14px;
+  }
+  .verdict-label{font-size:12.5px; color:var(--ink-soft); margin-bottom:4px;}
+  .verdict-value{font-family:var(--serif); font-size:30px; color:var(--rose);}
+  .verdict-tag{
+    font-size:13px;
+    color:#3d4f37;
+    background:var(--sage);
+    padding:9px 16px;
+    border-radius:999px;
+  }
+  #chapter2 .blob{width:300px; height:300px; bottom:-140px; right:-80px; background:var(--rose); opacity:.35;}
+
+  /* ---------- telemetry meters ---------- */
+  .meter{margin-bottom:26px;}
+  .meter-head{
+    display:flex;
+    justify-content:space-between;
+    font-size:14px;
+    margin-bottom:9px;
+  }
+  .meter-name{color:var(--ink);}
+  .meter-val{color:var(--sky-deep); font-weight:600;}
+  .meter-track{
+    height:12px;
+    background:var(--paper);
+    border-radius:999px;
+    overflow:hidden;
+    border:1px solid var(--line);
+  }
+  .meter-fill{
+    height:100%;
+    border-radius:999px;
+    background:linear-gradient(90deg, var(--sky), var(--sky-deep));
+  }
+  .meter-desc{font-size:13px; color:var(--ink-soft); margin-top:7px;}
+  #chapter3 .blob{width:260px; height:260px; top:-60px; left:-110px; background:var(--sage);}
+
+  /* ---------- ocular vectors ---------- */
+  .vectors{
+    display:grid;
+    grid-template-columns:repeat(2, 1fr);
+    gap:16px 20px;
+    margin-top:26px;
+  }
+  @media (max-width:600px){.vectors{grid-template-columns:1fr;}}
+  .vector{
+    background:var(--paper);
+    border-radius:20px;
+    padding:18px 20px;
+    border:1px solid var(--line);
+  }
+  .vector-top{
+    display:flex;
+    justify-content:space-between;
+    font-size:12.5px;
+    color:var(--ink-soft);
+    margin-bottom:8px;
+  }
+  .vector-code{color:var(--lavender-deep); font-weight:600;}
+  .vector-name{font-family:var(--serif); font-size:16px; margin-bottom:10px;}
+  .vector-bar{height:7px; background:var(--cream); border-radius:999px; overflow:hidden;}
+  .vector-bar i{display:block; height:100%; background:linear-gradient(90deg, var(--lavender-deep), var(--rose)); border-radius:999px;}
+  .composite{
+    margin-top:24px;
+    font-size:14.5px;
+    color:var(--ink-soft);
+    text-align:center;
+  }
+  .composite b{color:var(--rose); font-family:var(--serif); font-size:17px;}
+  #chapter4 .blob{width:320px; height:280px; bottom:-120px; left:calc(50% - 160px); background:var(--lavender); opacity:.4;}
+
+  /* ---------- diagnostic tool ---------- */
+  .tool{
+    background:var(--paper);
+    border-radius:28px;
+    border:1px solid var(--line);
+    overflow:hidden;
+  }
+  .tool-header{
+    padding:18px 28px;
+    border-bottom:1px solid var(--line);
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    font-size:13px;
+    color:var(--ink-soft);
+  }
+  .tool-body{padding:30px 30px 34px;}
+  .field{margin-bottom:24px;}
+  .field label{
+    display:block;
+    font-size:14px;
+    color:var(--ink);
+    margin-bottom:10px;
+  }
+  .field input[type=range]{
+    width:100%;
+    accent-color:var(--rose);
+  }
+  .field-vals{
+    display:flex;
+    justify-content:space-between;
+    font-size:12px;
+    color:var(--ink-soft);
+    margin-top:5px;
+  }
+  .field-vals span.now{color:var(--rose); font-weight:600;}
+
+  .run-btn{
+    font-family:var(--sans);
+    font-size:14px;
+    font-weight:600;
+    color:#3d3444;
+    background:linear-gradient(100deg, var(--blush), var(--sage));
+    border:none;
+    padding:14px 26px;
+    border-radius:999px;
+    cursor:pointer;
+    margin-top:6px;
+    transition:transform .15s ease;
+  }
+  .run-btn:hover{transform:translateY(-1px);}
+
+  .readout{
+    margin-top:28px;
+    padding-top:22px;
+    border-top:1px solid var(--line);
+    display:none;
+  }
+  .readout.show{display:block;}
+  .readout-row{
+    display:flex;
+    justify-content:space-between;
+    font-size:14px;
+    padding:8px 0;
+  }
+  .readout-verdict{
+    margin-top:16px;
+    padding:16px 18px;
+    font-size:13.5px;
+    border-radius:16px;
+  }
+  .readout-verdict.ok{background:var(--sage); color:#3d4f37;}
+  .readout-verdict.bad{background:var(--blush); color:#6b3d44;}
+  #diagnostic-tool .blob{width:300px; height:260px; top:20px; right:-120px; background:var(--sky);}
+
+  /* ---------- curriculum / CTA ---------- */
+  .curriculum{
+    background:linear-gradient(120deg, var(--blush), var(--lavender) 50%, var(--sky));
+    border-radius:30px;
+    padding:40px 38px;
+    text-align:left;
+  }
+  .curriculum h2{font-size:27px; margin:0 0 12px;}
+  .curriculum p{max-width:54ch; color:#4a4250;}
+  .cta{
+    display:inline-block;
+    margin-top:8px;
+    font-family:var(--sans);
+    font-size:14.5px;
+    font-weight:600;
+    color:#3d3444;
+    background:var(--cream);
+    padding:15px 28px;
+    border-radius:999px;
+  }
+  .cta:hover{background:#fff; text-decoration:none;}
+  .price-note{font-size:12.5px; color:#5f5666; margin-top:14px;}
+
+  footer{
+    max-width:760px;
+    margin:0 auto;
+    padding:36px 28px 60px;
+    font-size:12px;
+    color:var(--ink-soft);
+    display:flex;
+    justify-content:space-between;
+    flex-wrap:wrap;
+    gap:8px;
+  }
+</style>
+</head>
+<body>
+
+<nav class="topnav" aria-label="Table of contents">
+  <div class="topnav-inner">
+    <a href="#preface">Preface</a>
+    <a href="#chapter1">1. RF Paradigm</a>
+    <a href="#chapter2">2. Verdict Engine</a>
+    <a href="#chapter3">3. Telemetry</a>
+    <a href="#chapter4">4. Ocular Vectors</a>
+    <a href="#diagnostic-tool" class="diag">5. Field Audit</a>
+    <a href="#curriculum">6. Curriculum</a>
+  </div>
+</nav>
+
+<header class="hero">
+  <span class="blob blob-a"></span>
+  <span class="blob blob-b"></span>
+  <span class="blob blob-c"></span>
+  <div class="wrap hero-inner">
+    <div class="hero-kicker">THE OBJECTIVE LEDGER™ · CANONICAL VOLUME I</div>
+    <h1>They fail from unbilled operational debt.</h1>
+    <p class="sub">Most relational collapses are diagnosed as emotional deficits when they are, in fact, un-audited structural deficits. TOL-OS translates neurobiology, contract theory, and forensic bookkeeping into one shame-free framework for absolute equilibrium.</p>
+    <div class="wash">
+      <svg viewBox="0 0 520 90" preserveAspectRatio="none" aria-hidden="true">
+        <path d="M0,45 C40,10 80,80 120,45 C160,10 200,80 240,45 C280,10 320,80 360,45 C400,10 440,80 480,45 L520,45" fill="none" stroke="#D99AA0" stroke-width="2" stroke-linecap="round" opacity="0.6"/>
+        <path d="M0,45 C40,70 80,20 120,45 C160,70 200,20 240,45 C280,70 320,20 360,45 C400,70 440,20 480,45 L520,45" fill="none" stroke="#8FB6CC" stroke-width="2" stroke-linecap="round" opacity="0.5"/>
+      </svg>
+    </div>
+  </div>
+</header>
+
+<main>
+  <section id="preface">
+    <span class="blob"></span>
+    <div class="wrap content">
+      <div class="sec-eyebrow">Preface</div>
+      <div class="sec-head"><h2>Unbilled Debt</h2></div>
+      <p>When human beings operate without double-entry transparency, discretionary rescues calcify into unbilled obligations. Nobody agreed to the loan. Nobody wrote down the terms. The balance simply accrues, quietly, until it doesn't.</p>
+      <p>TOL-OS does not ask who loves harder. It asks who is carrying the receivable — and what it would take to close the books, gently.</p>
+    </div>
+  </section>
+
+  <section id="chapter1">
+    <span class="blob"></span>
+    <div class="wrap content">
+      <div class="sec-eyebrow">Chapter One</div>
+      <div class="sec-head"><h2>The Radio Frequency Paradigm</h2></div>
+      <p class="sec-sub">Heterodyne squeal vs. phase lock</p>
+      <p>When two transmitters broadcast on slightly mismatched carrier frequencies, the result is not harmony — it is a fine, high static. Two well-intentioned people, run on unsynchronized cycles, produce the very same hum.</p>
+      <div class="axiom">You are not in conflict because of personal malice; you are yelling to be heard over the static of misaligned frequency transmission cycles.</div>
+      <p>The Objective Ledger™ functions as a gentle Phase-Locked Loop — synchronizing transmission rhythms and softening background static so a clear signal can pass through, undisturbed.</p>
+    </div>
+  </section>
+
+  <section id="chapter2">
+    <span class="blob"></span>
+    <div class="wrap content">
+      <div class="sec-eyebrow">Chapter Two</div>
+      <div class="sec-head"><h2>The Master Epistemic Verdict Engine</h2></div>
+      <p>Systemic solvency is calculated via stochastic evaluation combining logical coherence and ethical parity. Kantian moral parity ensures both partners interact as sovereign ends, never as instruments of unpaid labor.</p>
+      <div class="panel">
+        <div class="formula">P(Solvency) = 1 / [ 1 + e^(−(Σ w_j · C_j − θ)) ]</div>
+        <div class="verdict-out">
+          <div>
+            <div class="verdict-label">CERTAINTY</div>
+            <div class="verdict-value">92.4%</div>
+          </div>
+          <div class="verdict-tag">Sustained Systemic Solvency</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="chapter3">
+    <span class="blob"></span>
+    <div class="wrap content">
+      <div class="sec-eyebrow">Chapter Three</div>
+      <div class="sec-head"><h2>Release Telemetry &amp; System Status</h2></div>
+      <p>Current kernel builds operate under strict empirical verification benchmarks across controlled interpersonal trials.</p>
+
+      <div class="meter">
+        <div class="meter-head"><span class="meter-name">Rollout Progress</span><span class="meter-val">78%</span></div>
+        <div class="meter-track"><div class="meter-fill" style="width:78%"></div></div>
+        <div class="meter-desc">Active deployment across core field manuals and distribution layers.</div>
+      </div>
+
+      <div class="meter">
+        <div class="meter-head"><span class="meter-name">Academic Accuracy</span><span class="meter-val">94.2%</span></div>
+        <div class="meter-track"><div class="meter-fill" style="width:94.2%"></div></div>
+        <div class="meter-desc">Validated across 1,200 benchmark test cases.</div>
+      </div>
+
+      <div class="meter">
+        <div class="meter-head"><span class="meter-name">Active Bug Margin</span><span class="meter-val">5.8%</span></div>
+        <div class="meter-track"><div class="meter-fill" style="width:5.8%"></div></div>
+        <div class="meter-desc">Quarantined variance accounting for cohabitation shifts and longitudinal drift.</div>
+      </div>
+    </div>
+  </section>
+
+  <section id="chapter4">
+    <span class="blob"></span>
+    <div class="wrap content">
+      <div class="sec-eyebrow">Chapter Four</div>
+      <div class="sec-head"><h2>The 7 Convergent Ocular Vectors</h2></div>
+      <p>Aperture telemetry measures relational health across seven specialized axes, resolving to one composite lucidity score.</p>
+
+      <div class="vectors">
+        <div class="vector">
+          <div class="vector-top"><span class="vector-code">DPS</span><span>0.91</span></div>
+          <div class="vector-name">Deontological Parity</div>
+          <div class="vector-bar"><i style="width:91%"></i></div>
+        </div>
+        <div class="vector">
+          <div class="vector-top"><span class="vector-code">ASI</span><span>1.18</span></div>
+          <div class="vector-name">Autonomic Saturation</div>
+          <div class="vector-bar"><i style="width:100%"></i></div>
+        </div>
+        <div class="vector">
+          <div class="vector-top"><span class="vector-code">DRI</span><span>1.00</span></div>
+          <div class="vector-name">Domestic RACI Integrity</div>
+          <div class="vector-bar"><i style="width:100%"></i></div>
+        </div>
+        <div class="vector">
+          <div class="vector-top"><span class="vector-code">FBW</span><span>0.84</span></div>
+          <div class="vector-name">Fiduciary Bandwidth</div>
+          <div class="vector-bar"><i style="width:84%"></i></div>
+        </div>
+        <div class="vector">
+          <div class="vector-top"><span class="vector-code">TLX</span><span>0.77</span></div>
+          <div class="vector-name">Temporal Latency</div>
+          <div class="vector-bar"><i style="width:77%"></i></div>
+        </div>
+        <div class="vector">
+          <div class="vector-top"><span class="vector-code">SDR</span><span>0.69</span></div>
+          <div class="vector-name">Semantic Drift</div>
+          <div class="vector-bar"><i style="width:69%"></i></div>
+        </div>
+        <div class="vector">
+          <div class="vector-top"><span class="vector-code">CTP</span><span>0.93</span></div>
+          <div class="vector-name">Consent Throughput</div>
+          <div class="vector-bar"><i style="width:93%"></i></div>
+        </div>
+      </div>
+
+      <div class="composite">Composite Lucidity Score — <b>0.88</b></div>
+    </div>
+  </section>
+
+  <section id="diagnostic-tool">
+    <span class="blob"></span>
+    <div class="wrap content">
+      <div class="sec-eyebrow">Chapter Five · Working Paper WP-01</div>
+      <div class="sec-head"><h2>The Lemonade Stand Diagnostic</h2></div>
+      <p class="sec-sub">Interactive field audit</p>
+      <p>Test your household balance sheet to see whether your dynamic runs on mutual reciprocity or unbilled partner subsidies.</p>
+
+      <div class="tool">
+        <div class="tool-header">
+          <span>Household Ledger Audit Tool</span>
+          <span>WP-01 / Rev.4</span>
+        </div>
+        <div class="tool-body">
+          <div class="field">
+            <label for="tasks">Weekly executed tasks (chores handled by you)</label>
+            <input type="range" id="tasks" min="0" max="30" value="12">
+            <div class="field-vals"><span>0</span><span class="now" id="tasks-val">12</span><span>30</span></div>
+          </div>
+
+          <div class="field">
+            <label for="bailouts">Emergency bailouts provided (unplanned rescues)</label>
+            <input type="range" id="bailouts" min="0" max="15" value="3">
+            <div class="field-vals"><span>0</span><span class="now" id="bailouts-val">3</span><span>15</span></div>
+          </div>
+
+          <button class="run-btn" id="run-audit">Execute Solvency Audit</button>
+
+          <div class="readout" id="readout">
+            <div class="readout-row"><span>Load Ratio (bailouts / tasks)</span><span id="out-ratio">—</span></div>
+            <div class="readout-row"><span>Computed Solvency</span><span id="out-solvency">—</span></div>
+            <div class="readout-verdict" id="out-verdict"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="curriculum">
+    <div class="wrap content">
+      <div class="sec-eyebrow">Chapter Six</div>
+      <div class="curriculum">
+        <h2>The Complete 6-Week Course &amp; Workpaper Suite</h2>
+        <p>Unlock the complete 12-chapter canonical volume, working papers WP-01 through WP-11, and the multi-axis spreadsheet calculators.</p>
+        <a class="cta" href="https://yourlink.gumroad.com">Unlock Full Canonical Suite — $49</a>
+        <div class="price-note">One-time purchase. Instant access to all kernel builds and future revisions.</div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <span>The Objective Ledger™ · Kernel Build v1.0.4 · Canonical Volume I</span>
+  <span>spreadloveandacceptance.com</span>
+</footer>
+
+<script>
+  const tasks = document.getElementById('tasks');
+  const bailouts = document.getElementById('bailouts');
+  const tasksVal = document.getElementById('tasks-val');
+  const bailoutsVal = document.getElementById('bailouts-val');
+  const runBtn = document.getElementById('run-audit');
+  const readout = document.getElementById('readout');
+  const outRatio = document.getElementById('out-ratio');
+  const outSolvency = document.getElementById('out-solvency');
+  const outVerdict = document.getElementById('out-verdict');
+
+  tasks.addEventListener('input', () => tasksVal.textContent = tasks.value);
+  bailouts.addEventListener('input', () => bailoutsVal.textContent = bailouts.value);
+
+  runBtn.addEventListener('click', () => {
+    const t = parseFloat(tasks.value);
+    const b = parseFloat(bailouts.value);
+    const ratio = t === 0 ? (b === 0 ? 0 : 99) : b / t;
+    const solvency = Math.max(2, Math.min(98, Math.round((1 - ratio) * 100)));
+
+    outRatio.textContent = ratio.toFixed(2);
+    outSolvency.textContent = solvency + '%';
+
+    outVerdict.classList.remove('ok', 'bad');
+    if (ratio > 0.3) {
+      outVerdict.textContent = 'Verdict: structural deficit detected — rescue volume exceeds sustainable threshold.';
+      outVerdict.classList.add('bad');
+    } else {
+      outVerdict.textContent = 'Verdict: sustained systemic solvency.';
+      outVerdict.classList.add('ok');
+    }
+    readout.classList.add('show');
+  });
+</script>
+
+</body>
+</html>
