@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cancellation &amp; Refund Policy — The Objective Ledger (TOL-OS)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,500&family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/book-layout.css">
+</head>
+<body>
+
+<div class="frame">
+
+  <aside class="sidebar">
+    <div class="mark">The Objective Ledger
+      <small>TOL&#8209;OS &middot; LEGAL</small>
+    </div>
+    <p class="tagline">Cancellation &amp; Refund Policy</p>
+    <nav aria-label="Table of contents">
+      <ol>
+        <li><a href="#overview" data-target="overview">Overview</a></li>
+        <li><a href="#cancellation" data-target="cancellation">How to Cancel</a></li>
+        <li><a href="#refunds" data-target="refunds">Refund Eligibility</a></li>
+        <li><a href="#ip" data-target="ip">Digital Content &amp; IP Protection</a></li>
+        <li><a href="#disputes" data-target="disputes">Billing Disputes</a></li>
+        <li><a href="#contact" data-target="contact">Contact</a></li>
+      </ol>
+    </nav>
+    <a class="back-link" href="../index.html">&larr; Back to TOL-OS</a>
+  </aside>
+
+  <div class="rule" aria-hidden="true"></div>
+
+  <main>
+
+    <div class="draft-notice">
+      <strong>Draft document, not yet reviewed by an attorney.</strong> This page is a working template and has not been finalized by qualified legal counsel. Confirm this policy is reviewed and approved before it governs real subscriber billing.
+    </div>
+
+    <div class="legal-meta">
+      Effective date: [insert date] &middot; Last updated: [insert date]
+    </div>
+
+    <section id="overview">
+      <div class="kicker">01</div>
+      <h2>Overview</h2>
+      <p>This policy governs cancellations and refunds for the paid "Spread Love &amp; Acceptance Relationship Survival Kit" monthly membership, billed and processed through Gumroad. It applies alongside our <a href="terms-of-service.html">Terms of Service</a>.</p>
+    </section>
+
+    <section id="cancellation">
+      <div class="kicker">02</div>
+      <h2>How to Cancel</h2>
+      <p>You can cancel your membership at any time, for any reason, in either of these ways:</p>
+      <ul class="tier-list">
+        <li>Log into your Gumroad Library (library.gumroad.com) and cancel the subscription directly.</li>
+        <li>Email <a href="mailto:patrickacloud@gmail.com">patrickacloud@gmail.com</a> with your cancellation request and the email address used for your subscription.</li>
+      </ul>
+      <p>Canceling stops all future billing. You retain access to previously delivered content for the remainder of the billing period you already paid for.</p>
+    </section>
+
+    <section id="refunds">
+      <div class="kicker">03</div>
+      <h2>Refund Eligibility</h2>
+      <p>Because this is digital content delivered immediately upon each billing cycle, refunds are handled as follows:</p>
+      <ul class="tier-list">
+        <li><strong>Partial months:</strong> we do not provide prorated refunds for canceling partway through a billing period — you keep access through the end of the period already paid for.</li>
+        <li><strong>First billing cycle:</strong> if you believe your first charge was made in error, or the content materially did not match what was described on the site at the time of purchase, contact us within 14 days of that charge to request a review.</li>
+        <li><strong>Discretionary review:</strong> requests outside the above are reviewed case by case at our discretion; we aim to respond within 5 business days.</li>
+      </ul>
+      <p>[This section is a placeholder framework — confirm the specific refund window and eligibility criteria with counsel and update this page to match the final policy before publishing.]</p>
+    </section>
+
+    <section id="ip">
+      <div class="kicker">04</div>
+      <h2>Digital Content &amp; IP Protection</h2>
+      <p>All manuscript chapters, workpapers, and calculators delivered as part of the membership are licensed for the personal use of the subscribing household only. Cancellation and any refund does not transfer ownership or resale rights to previously downloaded materials. Redistribution, resale, or public republication of paid content without written permission is a violation of the <a href="terms-of-service.html">Terms of Service</a> and may result in termination of access without refund.</p>
+    </section>
+
+    <section id="disputes">
+      <div class="kicker">05</div>
+      <h2>Billing Disputes</h2>
+      <p>If you have a billing question or believe you were charged incorrectly, please contact us directly before filing a chargeback with your bank or card provider — most billing issues can be resolved faster this way, and a direct resolution avoids unnecessary dispute fees on both sides.</p>
+    </section>
+
+    <section id="contact">
+      <div class="kicker">06</div>
+      <h2>Contact</h2>
+      <p>For cancellations, refund requests, or billing questions, contact <a href="mailto:patrickacloud@gmail.com">patrickacloud@gmail.com</a>.</p>
+    </section>
+
+  </main>
+</div>
+
+<footer>
+  TOL&#8209;OS &middot; spreadloveandacceptance.com
+  <div class="footer-links">
+    <a href="../index.html">Home</a>
+    <a href="../roadmap.html">Roadmap</a>
+    <a href="terms-of-service.html">Terms of Service</a>
+    <a href="privacy-policy.html">Privacy Policy</a>
+    <a href="refund-policy.html">Refund Policy</a>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var links = Array.prototype.slice.call(document.querySelectorAll('nav a'));
+  var sections = links.map(function(l){ return document.getElementById(l.dataset.target); });
+  var observer = new IntersectionObserver(function(entries){
+    entries.forEach(function(entry){
+      var link = links.find(function(l){ return l.dataset.target === entry.target.id; });
+      if(!link) return;
+      if(entry.isIntersecting){
+        links.forEach(function(l){ l.classList.remove('active'); });
+        link.classList.add('active');
+      }
+    });
+  }, { rootMargin: '-20% 0px -70% 0px' });
+  sections.forEach(function(s){ if(s) observer.observe(s); });
+})();
+</script>
+
+</body>
+</html>
