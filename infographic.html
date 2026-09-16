@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Objective Ledger — Executive Summary &amp; Infographic</title>
+<meta name="description" content="Printable one-page executive summary of The Objective Ledger framework: the Five-Pillar Foundation, the Asymmetric Extraction Cycle, the Lemonade Stand Heuristic, and the 3 Neutral Refusals.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,500&family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/book-layout.css">
+<style>
+  /*
+    infographic.html — page-local styles.
+    Reuses color/font tokens and base rules from book-layout.css,
+    but defines its own one-page print layout so it doesn't inherit
+    the multi-chapter ".sidebar / .frame" reading-view chrome.
+    Sections here are marked up as <article>, not <section>, on purpose:
+    book-layout.css's "section + section" rule (92px margin, top rule)
+    is meant for the long-form chapters and would blow out this
+    one-page layout if applied here.
+  */
+
+  @page{
+    size: letter portrait;
+    margin: 0.5in;
+  }
+
+  .print-bar{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    max-width: 8.5in;
+    margin: 20px auto;
+    padding: 14px 20px;
+    background: var(--paper-deep);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 0.8rem;
+  }
+
+  .print-bar-copy{ color: var(--ink-soft); }
+
+  .print-bar-actions{
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .print-bar .back-link{
+    color: var(--ink-soft);
+    font-size: 0.78rem;
+    text-decoration: underline;
+  }
+
+  .print-bar button.cta-button{
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 0.75rem;
+    border: none;
+    cursor: pointer;
+  }
+
+  @media print{
+    .print-bar{ display: none; }
+    body{ background: #fff; }
+  }
+
+  .sheet{
+    max-width: 8.5in;
+    margin: 0 auto 60px auto;
+    padding: 0.35in 0.55in 0.5in 0.55in;
+    background: var(--paper);
+    color: var(--ink);
+    border: 1px solid var(--line);
+  }
+
+  @media print{
+    .sheet{
+      margin: 0;
+      padding: 0;
+      max-width: 100%;
+      border: none;
+    }
+  }
+
+  .sheet-header{
+    text-align: center;
+    border-bottom: 2px solid var(--brass);
+    padding-bottom: 14px;
+    margin-bottom: 22px;
+  }
+
+  .sheet-mark{
+    font-family: "Fraunces", serif;
+    font-weight: 600;
+    font-size: 1.55rem;
+    margin: 0;
+  }
+
+  .sheet-mark small{
+    display: block;
+    font-family: "IBM Plex Mono", monospace;
+    font-weight: 400;
+    font-size: 0.62rem;
+    letter-spacing: 0.12em;
+    color: var(--brass);
+    margin-top: 5px;
+  }
+
+  .sheet-tagline{
+    font-size: 0.85rem;
+    color: var(--ink-soft);
+    margin: 10px 0 0 0;
+  }
+
+  .block{
+    margin-bottom: 26px;
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  .block h2{
+    font-family: "Fraunces", serif;
+    font-size: 1.05rem;
+    font-weight: 600;
+    max-width: none;
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    border-bottom: 1px solid var(--line);
+    padding-bottom: 6px;
+    margin: 0 0 12px 0;
+  }
+
+  .block-num{
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 0.68rem;
+    color: var(--brass);
+    border: 1px solid var(--brass);
+    border-radius: 2px;
+    padding: 1px 6px;
+  }
+
+  .block-intro{
+    font-size: 0.85rem;
+    color: var(--ink-soft);
+    max-width: 72ch;
+    margin: 0 0 14px 0;
+  }
+
+  /* Five-Pillar Foundation */
+
+  .pillar-grid{
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 10px;
+  }
+
+  .pillar-card{
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    background: var(--paper-deep);
+    padding: 12px 9px;
+    text-align: center;
+  }
+
+  .pillar-mono{
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 0.62rem;
+    color: var(--brass);
+    letter-spacing: 0.06em;
+    margin-bottom: 6px;
+  }
+
+  .pillar-card h3{
+    font-size: 0.78rem;
+    margin: 0 0 5px 0;
+    font-family: "Fraunces", serif;
+  }
+
+  .pillar-card p{
+    font-size: 0.67rem;
+    line-height: 1.35;
+    color: var(--ink-soft);
+    margin: 0;
+  }
+
+  /* Asymmetric Extraction Cycle */
+
+  .cycle{
+    display: flex;
+    align-items: stretch;
+    gap: 4px;
+    flex-wrap: nowrap;
+  }
+
+  .cycle-step{
+    flex: 1 1 0;
+    min-width: 0;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    background: var(--paper);
+    padding: 10px 8px;
+  }
+
+  .cycle-step .step-num{
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 0.64rem;
+    color: var(--debit);
+  }
+
+  .cycle-step h3{
+    font-size: 0.7rem;
+    font-family: "Fraunces", serif;
+    margin: 4px 0;
+  }
+
+  .cycle-step p{
+    font-size: 0.63rem;
+    line-height: 1.32;
+    color: var(--ink-soft);
+    margin: 0;
+  }
+
+  .cycle-arrow{
+    flex: 0 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--brass);
+    font-size: 0.95rem;
+    width: 14px;
+  }
+
+  .cycle-loop{
+    margin-top: 10px;
+    border: 1px dashed var(--debit);
+    background: var(--debit-soft);
+    border-radius: var(--radius);
+    padding: 8px 12px;
+    font-size: 0.68rem;
+    color: var(--ink);
+    text-align: center;
+  }
+
+  /* Lemonade Stand Heuristic */
+
+  .lemonade-callout{
+    border-left: 4px solid var(--credit);
+    background: var(--credit-soft);
+    border-radius: var(--radius);
+    padding: 14px 18px;
+  }
+
+  .lemonade-callout p{
+    margin: 0;
+    font-size: 0.86rem;
+    line-height: 1.55;
+    color: var(--ink);
+  }
+
+  /* 3 Neutral Refusals */
+
+  .refusal-grid{
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+  }
+
+  .refusal-card{
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    background: var(--paper-deep);
+    padding: 12px 14px;
+  }
+
+  .refusal-card h3{
+    font-family: "Fraunces", serif;
+    font-size: 0.8rem;
+    margin: 0 0 7px 0;
+  }
+
+  .refusal-card .script{
+    font-style: italic;
+    font-size: 0.74rem;
+    line-height: 1.45;
+    color: var(--ink);
+    margin: 0 0 8px 0;
+  }
+
+  .refusal-card .use-note{
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 0.6rem;
+    color: var(--ink-soft);
+    letter-spacing: 0.02em;
+    margin: 0;
+  }
+
+  /* Footer */
+
+  .sheet-footer{
+    margin-top: 22px;
+    border-top: 1px solid var(--line);
+    padding-top: 12px;
+    text-align: center;
+  }
+
+  .sheet-footer p{
+    margin: 3px 0;
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 0.62rem;
+    color: var(--ink-soft);
+  }
+
+  .sheet-footer .disclaimer{
+    max-width: 62ch;
+    margin: 0 auto 6px auto;
+    font-family: "Lora", Georgia, serif;
+    font-size: 0.68rem;
+    font-style: italic;
+  }
+
+  @media (max-width: 760px){
+    .print-bar{ flex-direction: column; align-items: stretch; text-align: center; }
+    .pillar-grid{ grid-template-columns: repeat(2, 1fr); }
+    .refusal-grid{ grid-template-columns: 1fr; }
+    .cycle{ flex-direction: column; }
+    .cycle-arrow{ width: auto; padding: 2px 0; transform: rotate(90deg); }
+  }
+
+  @media print{
+    .pillar-grid{ grid-template-columns: repeat(5, 1fr); }
+    .cycle{ flex-direction: row; }
+    .refusal-grid{ grid-template-columns: repeat(3, 1fr); }
+  }
+</style>
+</head>
+<body>
+
+  <div class="print-bar" role="toolbar" aria-label="Page actions">
+    <span class="print-bar-copy">Printable Executive Summary &middot; US Letter, portrait</span>
+    <div class="print-bar-actions">
+      <a class="back-link" href="index.html">&larr; Back to the full ledger</a>
+      <button class="cta-button" type="button" onclick="window.print()">Print / Save as PDF</button>
+    </div>
+  </div>
+
+  <main class="sheet" aria-label="The Objective Ledger — executive summary">
+
+    <header class="sheet-header">
+      <p class="sheet-mark">The Objective Ledger
+        <small>TOL&#8209;OS &middot; Executive Summary</small>
+      </p>
+      <p class="sheet-tagline">A nervous-system-aware ledger for relationships &mdash; condensed to one page.</p>
+    </header>
+
+    <article class="block block-pillars" aria-labelledby="pillars-h">
+      <h2 id="pillars-h"><span class="block-num">01</span> The Five-Pillar Foundation</h2>
+      <p class="block-intro">Five disciplines this framework borrows from, on purpose &mdash; because each one is good at describing a system's actual state without moralizing about who's to blame for it.</p>
+      <div class="pillar-grid">
+        <div class="pillar-card">
+          <div class="pillar-mono">I</div>
+          <h3>Ledger Accounting</h3>
+          <p>Makes invisible labor visible, in shared units, on a shared page.</p>
+        </div>
+        <div class="pillar-card">
+          <div class="pillar-mono">II</div>
+          <h3>Systems Engineering</h3>
+          <p>Treats a strained household as a workload arrangement to redesign, not a character flaw to fix.</p>
+        </div>
+        <div class="pillar-card">
+          <div class="pillar-mono">III</div>
+          <h3>Nervous System Science</h3>
+          <p>Reads a person's ventral, sympathetic, or dorsal state before it reads their words.</p>
+        </div>
+        <div class="pillar-card">
+          <div class="pillar-mono">IV</div>
+          <h3>Signal Theory</h3>
+          <p>Explains mismatched pace, register, and urgency as a tuning problem, not a moral one.</p>
+        </div>
+        <div class="pillar-card">
+          <div class="pillar-mono">V</div>
+          <h3>Behavioral Economics</h3>
+          <p>Names the incentives that let an unclaimed task quietly become someone's permanent job.</p>
+        </div>
+      </div>
+    </article>
+
+    <article class="block block-cycle" aria-labelledby="cycle-h">
+      <h2 id="cycle-h"><span class="block-num">02</span> The Asymmetric Extraction Cycle&trade;</h2>
+      <p class="block-intro">How an unclaimed task compounds into resentment when ownership is never explicitly named.</p>
+      <div class="cycle">
+        <div class="cycle-step">
+          <div class="step-num">01</div>
+          <h3>Unclaimed Task Appears</h3>
+          <p>Something needs doing, and no one has explicitly agreed to own it.</p>
+        </div>
+        <div class="cycle-arrow" aria-hidden="true">&rarr;</div>
+        <div class="cycle-step">
+          <div class="step-num">02</div>
+          <h3>Default Owner Absorbs It</h3>
+          <p>Whoever notices first, cares most, or tolerates least just quietly does it.</p>
+        </div>
+        <div class="cycle-arrow" aria-hidden="true">&rarr;</div>
+        <div class="cycle-step">
+          <div class="step-num">03</div>
+          <h3>The Debt Goes Unbilled</h3>
+          <p>No one logs the hour, so no one sees the running total accumulate.</p>
+        </div>
+        <div class="cycle-arrow" aria-hidden="true">&rarr;</div>
+        <div class="cycle-step">
+          <div class="step-num">04</div>
+          <h3>Resentment Detaches From Cause</h3>
+          <p>The feeling outlives any memory of which specific tasks actually caused it.</p>
+        </div>
+        <div class="cycle-arrow" aria-hidden="true">&rarr;</div>
+        <div class="cycle-step">
+          <div class="step-num">05</div>
+          <h3>Conflict Erupts Elsewhere</h3>
+          <p>A minor, unrelated trigger absorbs months of unbilled debt all at once.</p>
+        </div>
+      </div>
+      <div class="cycle-loop">&#8635; Without a named owner, the cycle resets at Step 01 &mdash; the register exists to interrupt it there.</div>
+    </article>
+
+    <article class="block block-lemonade" aria-labelledby="lemonade-h">
+      <h2 id="lemonade-h"><span class="block-num">03</span> The Lemonade Stand Heuristic</h2>
+      <div class="lemonade-callout">
+        <p>Two people run one household the way two people might run one lemonade stand: shared costs, shared hours, shared profit &mdash; except most households never write any of it down. The Lemonade Stand Heuristic says the fix isn't more effort from whoever's already doing the most; it's a shared register both people can see. List every task, log every hour, in the same columns, at the same time. Not to keep score and win an argument &mdash; a ledger only one person reads isn't a ledger, it's a grudge with better formatting &mdash; but so the conversation about fairness starts from the same line items instead of two competing impressions of how bad things have gotten.</p>
+      </div>
+    </article>
+
+    <article class="block block-refusals" aria-labelledby="refusals-h">
+      <h2 id="refusals-h"><span class="block-num">04</span> The 3 Neutral Refusals</h2>
+      <p class="block-intro">Ready-to-use scripts for declining or deferring a task without starting a fight.</p>
+      <div class="refusal-grid">
+        <div class="refusal-card">
+          <h3>The Capacity Refusal</h3>
+          <p class="script">"I don't have the bandwidth for this today &mdash; can it wait until tomorrow, or can we find someone else to own it right now?"</p>
+          <p class="use-note">FOR REQUESTS ARRIVING AFTER YOU'RE ALREADY AT CAPACITY</p>
+        </div>
+        <div class="refusal-card">
+          <h3>The Redirect Refusal</h3>
+          <p class="script">"I'm not the best-positioned person for this one. I can help find who is, but it isn't going to be me tonight."</p>
+          <p class="use-note">FOR TASKS THAT DON'T ACTUALLY BELONG ON YOUR SIDE OF THE REGISTER</p>
+        </div>
+        <div class="refusal-card">
+          <h3>The Delayed Yes</h3>
+          <p class="script">"I'll take this &mdash; just not until [specific time]. I can't do it well right now, and a rushed version isn't a favor to either of us."</p>
+          <p class="use-note">FOR TASKS YOU'LL OWN, JUST NOT ON THE TIMELINE BEING ASSUMED</p>
+        </div>
+      </div>
+    </article>
+
+    <footer class="sheet-footer">
+      <p class="disclaimer">These are communication heuristics for household coordination &mdash; not a diagnostic, clinical, or therapeutic instrument.</p>
+      <p>For the complete 12-chapter manuscript, the full WP-01&ndash;WP-15 workpaper suite, and CALC-01&ndash;CALC-07 &mdash; visit spreadloveandacceptance.com</p>
+      <p>TOL&#8209;OS &middot; Baseline v1.0.4</p>
+    </footer>
+
+  </main>
+
+</body>
+</html>
