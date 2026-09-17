@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Suite Index — The Objective Ledger</title>
+<meta name="description" content="What each piece of the Workpaper Suite does, when to use it, and what is actually built. The source of truth for the suite's contents.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,500&family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  /*
+    suite-index.html — the Suite Index.
+
+    Two jobs in one page: tell a member what each instrument does and when to
+    reach for it, and state plainly what exists. Status on this page is
+    descriptive, generated from the shipped bundle and the repository, not
+    from the roadmap. Anything not listed here is not built.
+  */
+
+  :root{
+    --paper: #F5EFDE;
+    --paper-deep: #ECE2C4;
+    --ink: #211D17;
+    --ink-soft: #524B3E;
+    --line: #D9CBA3;
+    --credit: #3E6B4C;
+    --credit-soft: #E4EDE3;
+    --debit: #96412B;
+    --debit-soft: #F2E2DB;
+    --brass: #A8792F;
+    --focus: #2B5B8C;
+    --radius: 3px;
+  }
+
+  *{ box-sizing: border-box; }
+
+  @page{ size: letter portrait; margin: 0.55in; }
+
+  html{ scroll-behavior: smooth; }
+  @media (prefers-reduced-motion: reduce){
+    html{ scroll-behavior: auto; }
+    *{ transition-duration: 0.001ms !important; animation-duration: 0.001ms !important; }
+  }
+
+  body{
+    margin: 0; background: var(--paper); color: var(--ink);
+    font-family: "Lora", Georgia, serif; font-size: 16px; line-height: 1.6;
+  }
+
+  h1,h2,h3,h4{ font-family: "Fraunces","Lora",serif; font-weight: 600; line-height: 1.2; margin: 0 0 0.5em 0; }
+  :focus-visible{ outline: 2px solid var(--focus); outline-offset: 3px; }
+  a{ color: var(--focus); }
+
+  code, .mono{ font-family: "IBM Plex Mono", monospace; }
+  code{ font-size: 0.82em; background: var(--paper-deep); padding: 1px 5px; border-radius: var(--radius); }
+
+  .print-bar{
+    display: flex; align-items: center; justify-content: space-between; gap: 16px;
+    max-width: 8.5in; margin: 20px auto; padding: 14px 20px;
+    background: var(--paper-deep); border: 1px solid var(--line); border-radius: var(--radius);
+    font-family: "IBM Plex Mono", monospace; font-size: 0.8rem; color: var(--ink-soft);
+  }
+  .print-bar button{
+    font-family: "IBM Plex Mono", monospace; font-size: 0.75rem; padding: 8px 16px;
+    border: none; border-radius: var(--radius); background: var(--ink); color: var(--paper); cursor: pointer;
+  }
+
+  .sheet{
+    max-width: 8.5in; margin: 0 auto 60px auto; padding: 0.5in 0.6in;
+    background: var(--paper); border: 1px solid var(--line);
+  }
+
+  @media print{
+    .print-bar, .no-print{ display: none !important; }
+    body{ background: #fff; font-size: 11pt; }
+    .sheet{ margin: 0; padding: 0; max-width: 100%; border: none; }
+    .entry, .stamp, .chain{ break-inside: avoid; }
+  }
+
+  .sheet-header{ text-align: center; border-bottom: 2px solid var(--brass); padding-bottom: 16px; margin-bottom: 24px; }
+  .wp-num{ font-family: "IBM Plex Mono", monospace; font-size: 0.7rem; color: var(--brass); letter-spacing: 0.08em; margin: 0 0 4px 0; }
+  .sheet-mark{ font-size: 1.5rem; margin: 0; }
+  .sheet-mark small{
+    display: block; font-family: "IBM Plex Mono", monospace; font-weight: 400;
+    font-size: 0.62rem; letter-spacing: 0.1em; color: var(--brass); margin-top: 6px;
+  }
+  .sheet-tagline{ font-size: 0.9rem; color: var(--ink-soft); margin: 10px auto 0 auto; max-width: 64ch; }
+
+  .toc{
+    display: flex; flex-wrap: wrap; justify-content: center; gap: 16px;
+    font-family: "IBM Plex Mono", monospace; font-size: 0.7rem; margin-top: 14px;
+  }
+  .toc a{ color: var(--brass); text-decoration: none; }
+
+  p{ max-width: 72ch; }
+
+  /* verification stamp */
+
+  .stamp{
+    border: 1px solid var(--line); border-left: 4px solid var(--focus);
+    background: #E7EEF4; border-radius: var(--radius); padding: 16px 20px; margin-bottom: 8px;
+  }
+  .stamp p{ margin: 0 0 9px 0; font-size: 0.9rem; }
+  .stamp p:last-child{ margin-bottom: 0; }
+
+  .key{
+    display: flex; flex-wrap: wrap; gap: 14px; margin: 16px 0 0 0;
+    font-family: "IBM Plex Mono", monospace; font-size: 0.7rem; color: var(--ink-soft);
+  }
+  .key span{ display: flex; align-items: center; gap: 6px; }
+
+  .chip{
+    display: inline-block; font-family: "IBM Plex Mono", monospace; font-size: 0.6rem;
+    letter-spacing: 0.06em; text-transform: uppercase; padding: 2px 7px;
+    border-radius: var(--radius); border: 1px solid;
+  }
+  .chip.live{ color: var(--credit); border-color: var(--credit); background: var(--credit-soft); }
+  .chip.bundle{ color: var(--brass); border-color: var(--brass); background: var(--paper-deep); }
+  .chip.draft{ color: var(--focus); border-color: var(--focus); background: #E7EEF4; }
+  .chip.none{ color: var(--debit); border-color: var(--debit); background: var(--debit-soft); }
+
+  /* sections */
+
+  .section-head{ margin: 42px 0 20px 0; padding-top: 24px; border-top: 3px double var(--brass); }
+  .section-head .part-label{
+    font-family: "IBM Plex Mono", monospace; font-size: 0.68rem; letter-spacing: 0.1em;
+    text-transform: uppercase; color: var(--brass); margin: 0 0 4px 0;
+  }
+  .section-head h2{ font-size: 1.32rem; margin: 0; }
+
+  /* entries */
+
+  .entry{
+    border: 1px solid var(--line); border-radius: var(--radius);
+    background: var(--paper-deep); padding: 18px 20px; margin-bottom: 14px;
+  }
+
+  .entry-head{
+    display: flex; flex-wrap: wrap; align-items: baseline; gap: 10px;
+    border-bottom: 1px solid var(--line); padding-bottom: 9px; margin-bottom: 12px;
+  }
+  .entry-head h3{ margin: 0; font-size: 1.05rem; flex: 1 1 auto; }
+  .entry-head .id{ font-family: "IBM Plex Mono", monospace; font-size: 0.7rem; color: var(--brass); }
+
+  .entry dl{ margin: 0; display: grid; grid-template-columns: 96px 1fr; gap: 6px 14px; font-size: 0.9rem; }
+  .entry dt{
+    font-family: "IBM Plex Mono", monospace; font-size: 0.64rem; letter-spacing: 0.05em;
+    text-transform: uppercase; color: var(--brass); padding-top: 4px;
+  }
+  .entry dd{ margin: 0; }
+  .entry dd.file{ font-family: "IBM Plex Mono", monospace; font-size: 0.74rem; color: var(--ink-soft); word-break: break-all; }
+
+  /* the chain */
+
+  .chain{
+    border: 1px solid var(--line); border-radius: var(--radius);
+    background: var(--paper-deep); padding: 18px 20px; margin: 18px 0;
+  }
+  table{ width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+  th{
+    text-align: left; font-family: "IBM Plex Mono", monospace; font-size: 0.64rem;
+    letter-spacing: 0.04em; text-transform: uppercase; color: var(--brass);
+    border-bottom: 2px solid var(--line); padding: 4px 8px 8px 0; vertical-align: bottom;
+  }
+  td{ border-bottom: 1px solid var(--line); padding: 8px 8px 8px 0; vertical-align: top; }
+  td.mono{ font-family: "IBM Plex Mono", monospace; font-size: 0.76rem; white-space: nowrap; }
+
+  .warn-box{
+    border-left: 4px solid var(--debit); background: var(--debit-soft);
+    border-radius: var(--radius); padding: 16px 20px; margin: 18px 0;
+  }
+  .warn-box p{ margin: 0 0 9px 0; font-size: 0.9rem; }
+  .warn-box p:last-child{ margin-bottom: 0; }
+
+  .note-box{
+    border-left: 4px solid var(--credit); background: var(--credit-soft);
+    border-radius: var(--radius); padding: 16px 20px; margin: 18px 0;
+  }
+  .note-box p{ margin: 0 0 9px 0; font-size: 0.9rem; }
+  .note-box p:last-child{ margin-bottom: 0; }
+
+  ul.plain{ padding-left: 20px; max-width: 72ch; font-size: 0.92rem; }
+  ul.plain li{ margin-bottom: 6px; }
+
+  .sheet-footer{
+    margin-top: 32px; border-top: 1px solid var(--line); padding-top: 14px; text-align: center;
+    font-family: "IBM Plex Mono", monospace; font-size: 0.64rem; color: var(--ink-soft);
+  }
+
+  @media (max-width: 720px){
+    .sheet{ padding: 0.35in 0.3in; }
+    .entry dl{ grid-template-columns: 1fr; gap: 2px; }
+    .entry dt{ padding-top: 8px; }
+    .print-bar{ flex-direction: column; align-items: stretch; text-align: center; }
+    table{ font-size: 0.78rem; }
+  }
+</style>
+</head>
+<body>
+
+<div class="print-bar no-print" role="toolbar" aria-label="Page actions">
+  <span>Suite Index &middot; verified build state</span>
+  <button type="button" onclick="window.print()">Print / Save as PDF</button>
+</div>
+
+<main class="sheet">
+
+  <header class="sheet-header">
+    <p class="wp-num">TOL-OS &middot; BASELINE v1.0.4</p>
+    <h1 class="sheet-mark">The Suite Index
+      <small>WHAT EACH PIECE DOES &middot; WHEN TO USE IT &middot; WHAT IS BUILT</small>
+    </h1>
+    <p class="sheet-tagline">The map for a growing set of instruments. Read it before you read any of them.</p>
+    <div class="toc no-print">
+      <a href="#start">Start Here</a>
+      <a href="#free">Free &amp; Public</a>
+      <a href="#manuscript">Manuscript</a>
+      <a href="#workpapers">Workpapers</a>
+      <a href="#calculators">Calculators</a>
+      <a href="#chain">How They Connect</a>
+      <a href="#notbuilt">Not Yet Built</a>
+    </div>
+  </header>
+
+  <div class="stamp">
+    <p><strong>This page is the source of truth for what the Suite contains.</strong> Status below is descriptive: it was checked against the member bundle and the published files, not against the roadmap. If something isn't listed on this page, it isn't built — regardless of where else it may be mentioned.</p>
+    <p>Verified 17 September 2026 against <span class="mono">Baseline v1.0.4</span>, whose cover states its contents as: the Preface, Chapters I through V, and Workpapers 01 through 04, 09 and 13.</p>
+    <div class="key">
+      <span><span class="chip live">Live page</span> has its own page on the site</span>
+      <span><span class="chip bundle">In bundle</span> delivered in the member PDF, no standalone page yet</span>
+      <span><span class="chip draft">Drafted</span> written, not yet published</span>
+      <span><span class="chip none">Not built</span> nothing exists</span>
+    </div>
+  </div>
+
+  <!-- ============ START HERE ============ -->
+
+  <section id="start">
+    <div class="section-head">
+      <p class="part-label">Orientation</p>
+      <h2>Start Here</h2>
+    </div>
+
+    <p>Every instrument in the Suite works on its own, but they were built to be picked up in an order. Used all at once they collapse into paperwork, which is the most common way a household abandons the whole thing in week two.</p>
+
+    <div class="note-box">
+      <p><strong>If you're new:</strong> begin with WP-01 and keep a single week of the Field Audit before touching anything else. One week of honest observation is what makes every other instrument here readable. Nothing downstream works without it.</p>
+      <p><strong>If something is on fire right now:</strong> WP-02 first, then WP-09. Check what you're carrying before you decide what the conversation is about.</p>
+      <p><strong>If the same argument keeps recurring:</strong> that's a WP-03 problem, not a communication problem. Unowned work defaults to whoever notices first, every single time.</p>
+    </div>
+
+    <p>The intended sequence runs WP-01 &rarr; WP-02 &rarr; WP-03 &rarr; WP-09 &rarr; WP-13, with CALC-01 read once the first three have produced numbers, and WP-04 picked up monthly after that. The six-week program that paces this is drafted but not yet published; see <a href="#notbuilt">Not Yet Built</a>.</p>
+  </section>
+
+  <!-- ============ FREE ============ -->
+
+  <section id="free">
+    <div class="section-head">
+      <p class="part-label">Open to everyone</p>
+      <h2>Free &amp; Public</h2>
+    </div>
+
+    <p>These stay free because a quick, honest read on your own household shouldn't require payment. They're diagnostic snapshots, not the full system.</p>
+
+    <div class="entry">
+      <div class="entry-head">
+        <h3>The Lemonade Stand Heuristic</h3>
+        <span class="chip live">Live page</span>
+      </div>
+      <dl>
+        <dt>What it does</dt><dd>An interactive ledger of the week's visible hours, per person, per line item. Reports the split as a fact rather than a verdict.</dd>
+        <dt>When to use</dt><dd>As a first look, or any time "I do everything around here" and "no you don't" need a shared set of numbers to argue from instead of each other.</dd>
+        <dt>File</dt><dd class="file"><a href="/index.html#lemonade">index.html</a> &middot; engine at <span class="mono">/assets/js/lemonade-calc.js</span></dd>
+      </dl>
+    </div>
+
+    <div class="entry">
+      <div class="entry-head">
+        <h3>The Nervous System Ladder</h3>
+        <span class="chip live">Live page</span>
+      </div>
+      <dl>
+        <dt>What it does</dt><dd>A three-rung self-check — ventral, sympathetic, dorsal — on which state you're reading from right now. The short version of what WP-02 measures properly.</dd>
+        <dt>When to use</dt><dd>Before reading any number on this site. The same figure lands very differently depending on where your body is.</dd>
+        <dt>File</dt><dd class="file"><a href="/index.html#nervous-system">index.html</a></dd>
+      </dl>
+    </div>
+
+    <div class="entry">
+      <div class="entry-head">
+        <h3>The Infographic Executive Summary</h3>
+        <span class="chip live">Live page</span>
+      </div>
+      <dl>
+        <dt>What it does</dt><dd>The whole framework compressed to one printable page.</dd>
+        <dt>When to use</dt><dd>To explain the approach to someone else — including the other person in your household — without asking them to read five chapters first.</dd>
+        <dt>File</dt><dd class="file"><a href="/infographic.html">infographic.html</a></dd>
+      </dl>
+    </div>
+
+    <div class="entry">
+      <div class="entry-head">
+        <h3>Chapters I &amp; II, as a preview</h3>
+        <span class="chip live">Live page</span>
+      </div>
+      <dl>
+        <dt>What it does</dt><dd>The Radio Frequency Paradigm and the Epistemic Verdict Engine, free to read in full.</dd>
+        <dt>When to use</dt><dd>Before deciding whether the rest of the system is for you.</dd>
+        <dt>File</dt><dd class="file"><a href="/index.html">index.html</a></dd>
+      </dl>
+    </div>
+  </section>
+
+  <!-- ============ MANUSCRIPT ============ -->
+
+  <section id="manuscript">
+    <div class="section-head">
+      <p class="part-label">The Suite</p>
+      <h2>The Manuscript</h2>
+    </div>
+
+    <p>Five chapters and a preface, delivered in the member bundle. Each chapter explains the reasoning behind one or more workpapers; the workpapers are where the reasoning becomes something you fill in.</p>
+
+    <div class="chain">
+      <table>
+        <thead>
+          <tr><th style="width:74px;">Part</th><th>Title</th><th>Pairs with</th><th style="width:96px;">Status</th></tr>
+        </thead>
+        <tbody>
+          <tr><td class="mono">Front</td><td>Preface &mdash; Unbilled Debt</td><td>&mdash;</td><td><span class="chip bundle">In bundle</span></td></tr>
+          <tr><td class="mono">Ch. I</td><td>The Radio Frequency Paradigm</td><td>WP-09</td><td><span class="chip bundle">In bundle</span></td></tr>
+          <tr><td class="mono">Ch. II</td><td>The Epistemic Verdict Engine &amp; P(Solvency)</td><td>CALC-01</td><td><span class="chip bundle">In bundle</span></td></tr>
+          <tr><td class="mono">Ch. III</td><td>Autonomic Saturation &amp; the 7 Ocular Vectors</td><td>WP-02</td><td><span class="chip bundle">In bundle</span></td></tr>
+          <tr><td class="mono">Ch. IV</td><td>Deontological Parity &amp; Sensory Gating</td><td>WP-03</td><td><span class="chip bundle">In bundle</span></td></tr>
+          <tr><td class="mono">Ch. V</td><td>The Deficit Audit</td><td>WP-04</td><td><span class="chip bundle">In bundle</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p style="font-size:0.88rem;color:var(--ink-soft);">Chapters I and II are also free to read on the public site. Chapters III through V require membership.</p>
+  </section>
+
+  <!-- ============ WORKPAPERS ============ -->
+
+  <section id="workpapers">
+    <div class="section-head">
+      <p class="part-label">The Suite</p>
+      <h2>The Workpapers</h2>
+    </div>
+
+    <p>Six built. The numbering is not sequential and never has been — the numbers are slots in a planned framework, and the gaps are honest rather than accidental.</p>
+
+    <div class="entry">
+      <div class="entry-head">
+        <span class="id">WP-01</span>
+        <h3>Field Audit &amp; Neutral Refusals</h3>
+        <span class="chip live">Live page</span>
+      </div>
+      <dl>
+        <dt>What it does</dt><dd>A seven-day raw log of what was actually done, by whom, for roughly how long — kept before any interpretation is added. Part B adds scripts for declining or deferring a request without it becoming a fight.</dd>
+        <dt>When to use</dt><dd>First, always. Then one full week per quarter as a re-baseline. Not continuously — permanent logging turns a diagnostic into a chore, which is where this all started.</dd>
+        <dt>Feeds</dt><dd>Workload Balance (WB) into CALC-01.</dd>
+        <dt>File</dt><dd class="file"><a href="/workpapers/wp-01.html">/workpapers/wp-01.html</a></dd>
+      </dl>
+    </div>
+
+    <div class="entry">
+      <div class="entry-head">
+        <span class="id">WP-02</span>
+        <h3>Autonomic Saturation Index</h3>
+        <span class="chip live">Live page</span>
+      </div>
+      <dl>
+        <dt>What it does</dt><dd>Five factors, rated 0&ndash;4 by each person about themselves, separating "how much am I already carrying" from "how upset am I about this specific thing."</dd>
+        <dt>When to use</dt><dd>Daily as a sixty-second habit, and always before a conversation you expect to be hard. Never filled in about the other person.</dd>
+        <dt>Feeds</dt><dd>Autonomic Saturation (AS) into CALC-01, entering inverted as <code>1 &minus; AS</code>.</dd>
+        <dt>File</dt><dd class="file"><a href="/workpapers/wp-02-The-Battery-__Stress-Meter.html">/workpapers/wp-02-The-Battery-__Stress-Meter.html</a></dd>
+        <dt>Note</dt><dd>The bundle calls this the Autonomic Saturation Index; the site page is titled The Battery &amp; Stress Meter. Same instrument, same five factors, same arithmetic.</dd>
+      </dl>
+    </div>
+
+    <div class="entry">
+      <div class="entry-head">
+        <span class="id">WP-03</span>
+        <h3>Domestic RACI Treaty</h3>
+        <span class="chip live">Live page</span>
+      </div>
+      <dl>
+        <dt>What it does</dt><dd>Assigns exactly one Responsible and one Accountable to every recurring task, so ownership stops getting renegotiated by default every week.</dd>
+        <dt>When to use</dt><dd>After two weeks of Field Audit data, so you're assigning from evidence rather than impressions. Amend it whenever life changes — it's a living agreement, and one that's never been amended probably isn't being used.</dd>
+        <dt>Feeds</dt><dd>Ownership Clarity (OC) into CALC-01.</dd>
+        <dt>File</dt><dd class="file"><a href="/workpapers/wp-03.html">/workpapers/wp-03.html</a> &middot; bundle pages 15&ndash;16</dd>
+      </dl>
+    </div>
+
+    <div class="entry">
+      <div class="entry-head">
+        <span class="id">WP-04</span>
+        <h3>Unbilled Deficit Audit</h3>
+        <span class="chip live">Live page</span>
+      </div>
+      <dl>
+        <dt>What it does</dt><dd>A monthly pass across four weeks of Field Audits to find the tasks that keep becoming deficits, and to classify each as a structural gap, a capacity issue, or a one-off.</dd>
+        <dt>When to use</dt><dd>Monthly, not weekly. It exists specifically for patterns that are invisible at the weekly scale.</dd>
+        <dt>Feeds</dt><dd>Nothing scored. It drives amendments to WP-03.</dd>
+        <dt>File</dt><dd class="file"><a href="/workpapers/wp-04.html">/workpapers/wp-04.html</a> &middot; bundle pages 17&ndash;18</dd>
+      </dl>
+    </div>
+
+    <div class="entry">
+      <div class="entry-head">
+        <span class="id">WP-09</span>
+        <h3>Tone Transducer &amp; Filter</h3>
+        <span class="chip live">Live page</span>
+      </div>
+      <dl>
+        <dt>What it does</dt><dd>Two directions. The transducer converts your raw reaction into fact, feeling, and ask before you send it. The filter decides how much weight to give what you just received.</dd>
+        <dt>When to use</dt><dd>In the moment, on one thing that actually stung. Running everything through it turns a repair tool into a performance.</dd>
+        <dt>Feeds</dt><dd>Retuning Frequency (RF) into the apex score.</dd>
+        <dt>File</dt><dd class="file"><a href="/workpapers/wp-09.html">/workpapers/wp-09.html</a> &middot; bundle pages 19&ndash;20</dd>
+      </dl>
+    </div>
+
+    <div class="entry">
+      <div class="entry-head">
+        <span class="id">WP-13</span>
+        <h3>Phase-Locked Loop Protocol</h3>
+        <span class="chip live">Live page</span>
+      </div>
+      <dl>
+        <dt>What it does</dt><dd>A ninety-second daily check-in — load, friction, ask — with no debate, no solving, and no rebuttal. Small continuous corrections instead of occasional large ones.</dd>
+        <dt>When to use</dt><dd>Daily, permanently. This is the one habit meant to outlive the rest of the system; everything else here is scaffolding for it.</dd>
+        <dt>Feeds</dt><dd>Qualitative notes only. Never scored.</dd>
+        <dt>Note</dt><dd>The page adds a seven-day capture grid and a resync table; the protocol itself is unchanged from the bundle.</dd>
+        <dt>File</dt><dd class="file"><a href="/workpapers/wp-13.html">/workpapers/wp-13.html</a> &middot; bundle pages 21&ndash;22</dd>
+      </dl>
+    </div>
+  </section>
+
+  <!-- ============ CALCULATORS ============ -->
+
+  <section id="calculators">
+    <div class="section-head">
+      <p class="part-label">The Suite</p>
+      <h2>The Calculators</h2>
+    </div>
+
+    <div class="entry">
+      <div class="entry-head">
+        <span class="id">CALC-01</span>
+        <h3>The Solvency Read</h3>
+        <span class="chip live">Live page</span>
+      </div>
+      <dl>
+        <dt>What it does</dt><dd>Takes the numbers the workpapers produce and returns a single 0&ndash;1 read on whether the current workload arrangement looks sustainable. It scores the arrangement — not either person, and not the relationship.</dd>
+        <dt>When to use</dt><dd>At the weekly closing, once WP-01, WP-02 and WP-03 have each produced a figure. A single read describes one week; the trend is what tells you whether anything is moving.</dd>
+        <dt>Takes</dt><dd>WB from WP-01, OC from WP-03, AS from WP-02, and optionally RF from WP-09.</dd>
+        <dt>File</dt><dd class="file"><a href="/workpapers/calculators/calc01-solvency.html">/workpapers/calculators/calc01-solvency.html</a></dd>
+      </dl>
+    </div>
+
+    <p style="font-size:0.88rem;color:var(--ink-soft);">The calculator is browser-based and isn't reproduced as a static page in the bundle. It runs locally and stores nothing.</p>
+  </section>
+
+  <!-- ============ CHAIN ============ -->
+
+  <section id="chain">
+    <div class="section-head">
+      <p class="part-label">Architecture</p>
+      <h2>How They Connect</h2>
+    </div>
+
+    <p>Four workpapers produce numbers. Two workpapers don't, and that's deliberate — not everything worth doing is worth scoring.</p>
+
+    <div class="chain">
+      <table>
+        <thead>
+          <tr><th style="width:74px;">Source</th><th style="width:70px;">Produces</th><th>Definition</th><th style="width:96px;">Used in</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="mono">WP-01</td><td class="mono">WB</td>
+            <td>Workload Balance &mdash; <code>1 &minus; |pctA &minus; pctB| &divide; 100</code></td>
+            <td class="mono">Both scores</td>
+          </tr>
+          <tr>
+            <td class="mono">WP-03</td><td class="mono">OC</td>
+            <td>Ownership Clarity &mdash; tasks with both R and A, over total tasks</td>
+            <td class="mono">Both scores</td>
+          </tr>
+          <tr>
+            <td class="mono">WP-02</td><td class="mono">AS</td>
+            <td>Autonomic Saturation &mdash; mean of both partners' five-factor scores</td>
+            <td class="mono">Both scores</td>
+          </tr>
+          <tr>
+            <td class="mono">WP-09</td><td class="mono">RF</td>
+            <td>Retuning Frequency &mdash; retunes used over friction events</td>
+            <td class="mono">Apex only</td>
+          </tr>
+          <tr>
+            <td class="mono">WP-04</td><td class="mono">&mdash;</td>
+            <td>Monthly deficit classification; drives treaty amendments</td>
+            <td class="mono">Not scored</td>
+          </tr>
+          <tr>
+            <td class="mono">WP-13</td><td class="mono">&mdash;</td>
+            <td>Daily qualitative notes; repeated items promote to WP-03 or WP-09</td>
+            <td class="mono">Not scored</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p><strong>P(Solvency)</strong> uses WB, OC and AS, and asks the narrow question: is this week's workload sustainable as structured? The <strong>apex score</strong> adds RF and asks the wider one: is the whole system working, including repair? They can disagree, and the disagreement is the useful part — a household can have a well-shared, clearly-owned workload and still not be repairing after friction.</p>
+
+    <div class="warn-box">
+      <p><strong>What none of this will ever take as an input:</strong> tone of voice, recordings, message sentiment, response timestamps, or anything describing one person without their direct participation in entering it. Every figure here comes from shared, observable things that both people enter about their own week.</p>
+      <p>No score on this site is ever computed from one partner's inputs alone, and none of it is a validated clinical or statistical instrument. If a number is ever used to end a conversation rather than start one, it's being misused.</p>
+    </div>
+  </section>
+
+  <!-- ============ NOT BUILT ============ -->
+
+  <section id="notbuilt">
+    <div class="section-head">
+      <p class="part-label">Honest accounting</p>
+      <h2>Not Yet Built</h2>
+    </div>
+
+    <p>The framework is designed toward a wider set of instruments than currently exist. Listing the gaps is the point of this page: a suite that quietly grows without a map is how the same task ends up with two names and the same number ends up with two formulas.</p>
+
+    <div class="chain">
+      <table>
+        <thead>
+          <tr><th>Item</th><th>State</th><th style="width:96px;">Status</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>The six-week guided curriculum</td>
+            <td>Written in full &mdash; sequences WP-01, 02, 03, 09 and 13 into a week-by-week program with checkpoints. Not yet published or included in the bundle.</td>
+            <td><span class="chip draft">Drafted</span></td>
+          </tr>
+          <tr>
+            <td>Chapters VI through XII</td>
+            <td>Topics not yet finalized.</td>
+            <td><span class="chip none">Not built</span></td>
+          </tr>
+          <tr>
+            <td>WP-05 through WP-08, WP-10 through WP-12, WP-14, WP-15</td>
+            <td>Reserved slots. Topics not yet finalized.</td>
+            <td><span class="chip none">Not built</span></td>
+          </tr>
+          <tr>
+            <td>CALC-02 through CALC-07</td>
+            <td>Reserved slots. Topics not yet finalized.</td>
+            <td><span class="chip none">Not built</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="note-box">
+      <p>Release order and timing are estimates, not commitments. This page is updated when work is actually finished, not on a schedule anyone is being billed against. The <a href="/roadmap.html">roadmap</a> describes intent; this index describes what exists, and where the two disagree, this index is correct.</p>
+    </div>
+  </section>
+
+  <footer class="sheet-footer">
+    The Objective Ledger&trade; &middot; Suite Index &middot; Baseline v1.0.4 &middot; Verified 17 September 2026 &middot; Heuristic framework, not clinically validated
+  </footer>
+
+</main>
+
+</body>
+</html>
