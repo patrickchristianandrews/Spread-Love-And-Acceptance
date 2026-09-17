@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WP-11 — The Calm-Down Kit</title>
+<meta name="description" content="Working Paper WP-11: The Calm-Down Kit — a sensory self-regulation toolkit.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,500&family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  /*
+    wp-11.html — self-contained deliverable for the paid Workpaper Suite.
+    Not hosted on the public site; delivered as a file through Gumroad.
+    Inlines the book-layout.css design tokens rather than linking to it,
+    so this works standalone regardless of how it's bundled/downloaded.
+  */
+
+  :root{
+    --paper: #F5EFDE;
+    --paper-deep: #ECE2C4;
+    --ink: #211D17;
+    --ink-soft: #524B3E;
+    --line: #D9CBA3;
+    --credit: #3E6B4C;
+    --credit-soft: #E4EDE3;
+    --debit: #96412B;
+    --debit-soft: #F2E2DB;
+    --brass: #A8792F;
+    --focus: #2B5B8C;
+    --radius: 3px;
+  }
+
+  *{ box-sizing: border-box; }
+
+  @page{
+    size: letter portrait;
+    margin: 0.6in;
+  }
+
+  body{
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: "Lora", Georgia, serif;
+    font-size: 16px;
+    line-height: 1.65;
+  }
+
+  h1, h2, h3{
+    font-family: "Fraunces", "Lora", serif;
+    font-weight: 600;
+    line-height: 1.2;
+    margin: 0 0 0.5em 0;
+  }
+
+  .print-bar{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    max-width: 8.5in;
+    margin: 20px auto;
+    padding: 14px 20px;
+    background: var(--paper-deep);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 0.8rem;
+  }
+
+  .print-bar-copy{ color: var(--ink-soft); }
+
+  .print-bar button{
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 0.75rem;
+    padding: 8px 16px;
+    border: none;
+    border-radius: var(--radius);
+    background: var(--ink);
+    color: var(--paper);
+    cursor: pointer;
+  }
+
+  @media print{
+    .print-bar{ display: none; }
+    body{ background: #fff; }
+  }
+
+  .sheet{
+    max-width: 8.5in;
+    margin: 0 auto 60px auto;
+    padding: 0.5in 0.6in;
+    background: var(--paper);
+    border: 1px solid var(--line);
+  }
+
+  @media print{
+    .sheet{ margin: 0; padding: 0; max-width: 100%; border: none; }
+  }
+
+  .sheet-header{
+    text-align: center;
+    border-bottom: 2px solid var(--brass);
+    padding-bottom: 16px;
+    margin-bottom: 28px;
+  }
+
+  .sheet-mark{
+    font-size: 1.4rem;
+    margin: 0;
+  }
+
+  .sheet-mark small{
+    display: block;
+    font-family: "IBM Plex Mono", monospace;
+    font-weight: 400;
+    font-size: 0.62rem;
+    letter-spacing: 0.12em;
+    color: var(--brass);
+    margin-top: 6px;
+  }
+
+  .sheet-tagline{
+    font-size: 0.9rem;
+    color: var(--ink-soft);
+    margin: 10px 0 0 0;
+  }
+
+  .wp-num{
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 0.7rem;
+    color: var(--brass);
+    letter-spacing: 0.08em;
+    margin-bottom: 4px;
+  }
+
+  section{
+    margin-bottom: 34px;
+    break-inside: avoid;
+  }
+
+  section h2{
+    font-size: 1.3rem;
+    border-bottom: 1px solid var(--line);
+    padding-bottom: 8px;
+    margin-bottom: 14px;
+  }
+
+  section p{
+    max-width: 70ch;
+  }
+
+  .science-note{
+    border-left: 4px solid var(--focus);
+    background: #E7EEF4;
+    border-radius: var(--radius);
+    padding: 16px 20px;
+    margin: 16px 0;
+  }
+
+  .science-note p{
+    margin: 0 0 10px 0;
+    font-size: 0.95rem;
+  }
+
+  .science-note p:last-child{ margin-bottom: 0; }
+
+  .science-note ul{
+    margin: 0;
+    padding-left: 20px;
+  }
+
+  .science-note li{
+    margin-bottom: 10px;
+    font-size: 0.95rem;
+  }
+
+  .worksheet{
+    background: var(--paper-deep);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 22px 26px;
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 0.82rem;
+    line-height: 1.7;
+  }
+
+  .worksheet .ws-title{
+    font-weight: 500;
+    color: var(--brass);
+    letter-spacing: 0.04em;
+    margin-bottom: 14px;
+    text-transform: uppercase;
+    font-size: 0.72rem;
+  }
+
+  .worksheet .ws-step{
+    margin-bottom: 18px;
+  }
+
+  .worksheet .ws-step:last-child{ margin-bottom: 0; }
+
+  .worksheet .ws-step-label{
+    font-family: "Lora", Georgia, serif;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--ink);
+    margin-bottom: 8px;
+  }
+
+  .checkbox-line{
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    margin-bottom: 6px;
+  }
+
+  .checkbox-line .box{
+    display: inline-block;
+    width: 11px;
+    height: 11px;
+    border: 1px solid var(--ink-soft);
+    flex-shrink: 0;
+    transform: translateY(1px);
+  }
+
+  .disclaimer-box{
+    border-left: 4px solid var(--debit);
+    background: var(--debit-soft);
+    border-radius: var(--radius);
+    padding: 16px 20px;
+    margin-top: 20px;
+  }
+
+  .disclaimer-box p{
+    margin: 0;
+    font-size: 0.9rem;
+  }
+
+  .sheet-footer{
+    margin-top: 30px;
+    border-top: 1px solid var(--line);
+    padding-top: 14px;
+    text-align: center;
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 0.65rem;
+    color: var(--ink-soft);
+  }
+
+  @media (max-width: 700px){
+    .print-bar{ flex-direction: column; align-items: stretch; text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+  <div class="print-bar" role="toolbar" aria-label="Page actions">
+    <span class="print-bar-copy">Workpaper Suite &middot; WP-11 &middot; For Survival Kit members</span>
+    <button type="button" onclick="window.print()">Print / Save as PDF</button>
+  </div>
+
+  <main class="sheet" aria-label="Working Paper WP-11: The Calm-Down Kit">
+
+    <header class="sheet-header">
+      <p class="wp-num">WP-11</p>
+      <h1 class="sheet-mark">The Calm-Down Kit
+        <small>A Sensory Self-Regulation Toolkit</small>
+      </h1>
+      <p class="sheet-tagline">Part of The Objective Ledger&trade; Workpaper Suite</p>
+    </header>
+
+    <section>
+      <h2>I. Core Intent &amp; Purpose</h2>
+      <p>To help interrupt an acute stress spike using calming sensory input, before returning to a harder conversation. WP-11 offers a menu of self-regulation options &mdash; sound, touch, lighting &mdash; that different people find calming for different reasons, so you can build a personal toolkit rather than follow a single prescribed protocol.</p>
+      <p>This is a heuristic toolkit, not a validated clinical intervention. It works the same way the rest of this framework does: offering structure and options, not a guaranteed mechanism.</p>
+    </section>
+
+    <section>
+      <h2>II. A Note on the Science &mdash; Read This First</h2>
+      <div class="science-note">
+        <p>Some of the tools below (steady background sound, physical bass, dimmer lighting) are commonly used in general relaxation and sensory-regulation practices, and plenty of people find them genuinely calming. It's worth being honest about what is and isn't established:</p>
+        <ul>
+          <li><strong>Predictable, steady sound masking irregular noise</strong> (a flickering light's hum, distant traffic) is a widely used, low-risk calming technique. Many people find a steady sound easier to tune out than an unpredictable one.</li>
+          <li><strong>Physical bass or vibration</strong> is commonly used in sensory tools (weighted blankets, drum circles, bass-heavy music), and many people describe it as physically grounding. That's a real, common experience &mdash; it isn't evidence of a specific mechanism, and we're not claiming one.</li>
+          <li><strong>40 Hz / gamma-frequency audio</strong> is an area of early, narrow scientific research (mostly studied in unrelated contexts), not an established tool for conflict de-escalation or nervous-system regulation. We include it only as one optional sound some people enjoy &mdash; not because a specific mechanism has been established for this use.</li>
+        </ul>
+        <p>None of this is a substitute for professional mental health care, and none of it is a diagnostic or clinical claim. Treat everything below as "worth trying to see if it works for you," not "proven to work."</p>
+      </div>
+    </section>
+
+    <section>
+      <h2>III. Why Try Steady Sensory Input at All?</h2>
+      <p>Many people report that a steady, predictable sensory environment is easier to relax into than a chaotic one &mdash; a hard-to-articulate but common experience. That's the entire basis for trying the options on the next page: not a specific brain mechanism, just a heuristic worth testing for yourself.</p>
+    </section>
+
+    <section>
+      <h2>IV. Field Execution Sheet &mdash; Build Your Own Sensory Toolkit</h2>
+      <div class="worksheet">
+        <div class="ws-title">WP-11 &middot; Personal Sensory Toolkit Worksheet</div>
+
+        <div class="ws-step">
+          <div class="ws-step-label">Step 1: Notice What's Draining You Right Now</div>
+          <div class="checkbox-line"><span class="box"></span> A specific irregular sound (buzzing, flickering, distant noise)</div>
+          <div class="checkbox-line"><span class="box"></span> Visual clutter or unpredictable movement nearby</div>
+          <div class="checkbox-line"><span class="box"></span> General physical tension or restlessness</div>
+        </div>
+
+        <div class="ws-step">
+          <div class="ws-step-label">Step 2: Pick Something to Try</div>
+          <div class="checkbox-line"><span class="box"></span> Steady background sound (brown noise, rain, a fan)</div>
+          <div class="checkbox-line"><span class="box"></span> Physical bass or vibration (bass-heavy music, a low hum you can feel)</div>
+          <div class="checkbox-line"><span class="box"></span> Deep-pressure touch (a weighted blanket, a firm hug, pressing your palms together)</div>
+          <div class="checkbox-line"><span class="box"></span> Dimmer, warmer lighting</div>
+          <div class="checkbox-line"><span class="box"></span> Something else you already know helps you personally</div>
+        </div>
+
+        <div class="ws-step">
+          <div class="ws-step-label">Step 3: Try It for a Few Minutes</div>
+          Give it long enough to actually notice how you feel &mdash; a few minutes, however long feels right for you. There's no required time limit.
+        </div>
+
+        <div class="ws-step">
+          <div class="ws-step-label">Step 4: Personal Calibration Check</div>
+          This isn't a pass/fail test &mdash; it's a way to learn your own preferences.
+          <div class="checkbox-line" style="margin-top:8px;"><span class="box"></span> Calming &mdash; worth adding to your personal toolkit</div>
+          <div class="checkbox-line"><span class="box"></span> Neutral or activating &mdash; that's useful information too; try a different combination next time</div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>V. Using WP-11 Alongside the Rest of the Framework</h2>
+      <p>WP-11 is something either partner can choose for themselves &mdash; it isn't a system that overrides or pauses anything for the other person. If you want a break from a hard conversation, say so plainly (this pairs naturally with the Capacity Refusal or Delayed Yes from the 3 Neutral Refusals) rather than treating WP-11 as an authority that settles the matter. The other person can still disagree, ask to keep talking, or want a different kind of break &mdash; this toolkit doesn't decide that for them.</p>
+      <div class="disclaimer-box">
+        <p><strong>Important:</strong> WP-11 is meant for everyday stress spikes &mdash; the kind of tension that shows up in an ordinary hard conversation. It is not designed for, and should not be used as, a response to a real mental health crisis, panic attack, or safety concern. If you or your partner are in real distress, please reach out to a mental health professional or, if there's any immediate danger, emergency services &mdash; this toolkit is not a substitute for that kind of support.</p>
+      </div>
+    </section>
+
+    <footer class="sheet-footer">
+      The Objective Ledger&trade; &middot; Workpaper Suite &middot; WP-11 &middot; For Survival Kit members only, not for public redistribution
+    </footer>
+
+  </main>
+
+</body>
+</html>

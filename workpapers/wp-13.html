@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WP-13 / Phase-Locked Loop (PLL) Protocol</title>
+<meta name="description" content="Working Paper WP-13: a 90-second daily check-in ritual that prevents frequency drift through constant small corrections.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,500&family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper: #F5EFDE;
+    --paper-deep: #ECE2C4;
+    --ink: #211D17;
+    --ink-soft: #524B3E;
+    --line: #D9CBA3;
+    --credit: #3E6B4C;
+    --credit-soft: #E4EDE3;
+    --brass: #A8792F;
+    --focus: #2B5B8C;
+    --radius: 3px;
+  }
+
+  *{ box-sizing: border-box; }
+
+  @page{
+    size: letter portrait;
+    margin: 0.55in;
+  }
+
+  body{
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: "Lora", Georgia, serif;
+    font-size: 16px;
+    line-height: 1.65;
+  }
+
+  h1, h2, h3{
+    font-family: "Fraunces", "Lora", serif;
+    font-weight: 600;
+    line-height: 1.2;
+    margin: 0 0 0.5em 0;
+  }
+
+  .print-bar{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    max-width: 8.5in;
+    margin: 20px auto;
+    padding: 14px 20px;
+    background: var(--paper-deep);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 0.8rem;
+    color: var(--ink-soft);
+  }
+
+  .print-bar button{
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 0.75rem;
+    padding: 8px 16px;
+    border: none;
+    border-radius: var(--radius);
+    background: var(--ink);
+    color: var(--paper);
+    cursor: pointer;
+  }
+
+  @media print{
+    .print-bar{ display: none; }
+    body{ background: #fff; }
+  }
+
+  .sheet{
+    max-width: 8.5in;
+    margin: 0 auto 60px auto;
+    padding: 0.5in 0.6in;
+    background: var(--paper);
+    border: 1px solid var(--line);
+  }
+
+  @media print{
+    .sheet{ margin: 0; padding: 0; max-width: 100%; border: none; }
+    section{ break-inside: avoid; }
+  }
+
+  .sheet-header{
+    text-align: center;
+    border-bottom: 2px solid var(--brass);
+    padding-bottom: 16px;
+    margin-bottom: 28px;
+  }
+
+  .wp-num{
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 0.7rem;
+    color: var(--brass);
+    letter-spacing: 0.08em;
+    margin-bottom: 4px;
+  }
+
+  .sheet-mark{ font-size: 1.4rem; margin: 0; }
+
+  .sheet-mark small{
+    display: block;
+    font-family: "IBM Plex Mono", monospace;
+    font-weight: 400;
+    font-size: 0.62rem;
+    letter-spacing: 0.1em;
+    color: var(--brass);
+    margin-top: 6px;
+  }
+
+  .sheet-tagline{
+    font-size: 0.9rem;
+    color: var(--ink-soft);
+    margin: 10px 0 0 0;
+  }
+
+  .intro-note{
+    border-left: 4px solid var(--focus);
+    background: #E7EEF4;
+    border-radius: var(--radius);
+    padding: 16px 20px;
+    margin-bottom: 30px;
+  }
+
+  .intro-note p{ margin: 0 0 10px 0; font-size: 0.95rem; }
+  .intro-note p:last-child{ margin-bottom: 0; }
+
+  section{ margin-bottom: 34px; }
+
+  section > h2{
+    font-size: 1.15rem;
+    border-bottom: 1px solid var(--brass);
+    padding-bottom: 8px;
+    margin-bottom: 18px;
+  }
+
+  .resync-box{
+    background: var(--paper-deep);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 16px 20px;
+  }
+
+  .resync-box p{ margin: 0 0 12px 0; font-size: 0.92rem; }
+
+  .resync-box ol{
+    margin: 0;
+    padding-left: 20px;
+  }
+
+  .resync-box li{
+    margin-bottom: 8px;
+    font-size: 0.92rem;
+  }
+
+  .resync-box li:last-child{ margin-bottom: 0; }
+
+  table.loop-table{
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.85rem;
+  }
+
+  table.loop-table th{
+    text-align: left;
+    font-family: "Fraunces", serif;
+    font-weight: 600;
+    font-size: 0.78rem;
+    background: var(--paper-deep);
+    border: 1px solid var(--line);
+    padding: 8px 10px;
+  }
+
+  table.loop-table td{
+    border: 1px solid var(--line);
+    padding: 8px 10px;
+    height: 34px;
+    vertical-align: top;
+  }
+
+  table.loop-table td.day-cell{
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 0.72rem;
+    color: var(--brass);
+    white-space: nowrap;
+    width: 90px;
+  }
+
+  .rule-box{
+    border-left: 4px solid var(--credit);
+    background: var(--credit-soft);
+    border-radius: var(--radius);
+    padding: 16px 20px;
+    margin-top: 18px;
+  }
+
+  .rule-box p{ margin: 0; font-size: 0.92rem; }
+
+  .signoff-table{
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.85rem;
+    margin-top: 8px;
+  }
+
+  .signoff-table th{
+    text-align: left;
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--brass);
+    border-bottom: 2px solid var(--line);
+    padding: 6px 10px 10px 0;
+  }
+
+  .signoff-table td{
+    border-bottom: 1px solid var(--line);
+    padding: 14px 10px 8px 0;
+  }
+
+  .signoff-table td.label-cell{
+    font-family: "Fraunces", serif;
+    font-weight: 600;
+    color: var(--ink);
+    white-space: nowrap;
+    width: 1%;
+    padding-right: 24px;
+  }
+
+  .sheet-footer{
+    margin-top: 30px;
+    border-top: 1px solid var(--line);
+    padding-top: 14px;
+    text-align: center;
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 0.65rem;
+    color: var(--ink-soft);
+  }
+
+  @media (max-width: 700px){
+    .print-bar{ flex-direction: column; align-items: stretch; text-align: center; }
+    table.loop-table{ font-size: 0.75rem; }
+  }
+</style>
+</head>
+<body>
+
+  <div class="print-bar" role="toolbar" aria-label="Page actions">
+    <span>WP-13 &middot; For Survival Kit members</span>
+    <button type="button" onclick="window.print()">Print / Save as PDF</button>
+  </div>
+
+  <main class="sheet" aria-label="WP-13 / Phase-Locked Loop Protocol">
+
+    <header class="sheet-header">
+      <p class="wp-num">WP-13</p>
+      <h1 class="sheet-mark">Phase-Locked Loop (PLL) Protocol
+        <small>Preventing Frequency Drift</small>
+      </h1>
+      <p class="sheet-tagline">Constant small corrections, instead of occasional large ones.</p>
+    </header>
+
+    <div class="intro-note">
+      <p>Purpose: a recurring, low-effort check-in ritual. Named after the electronics circuit that keeps two signals in sync through constant small corrections rather than occasional large ones.</p>
+      <p>A 90-second daily check-in prevents most of what would otherwise become a 45-minute weekend argument.</p>
+    </div>
+
+    <section aria-labelledby="log-h">
+      <h2 id="log-h">The Daily Loop</h2>
+      <table class="loop-table">
+        <thead>
+          <tr>
+            <th>Day</th>
+            <th>Observational Status Update (No criticism)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="day-cell">Mon</td>
+            <td></td>
+          </tr>
+          <tr>
+            <td class="day-cell">Tue</td>
+            <td></td>
+          </tr>
+          <tr>
+            <td class="day-cell">Wed</td>
+            <td></td>
+          </tr>
+          <tr>
+            <td class="day-cell">Thu</td>
+            <td></td>
+          </tr>
+          <tr>
+            <td class="day-cell">Fri</td>
+            <td></td>
+          </tr>
+          <tr>
+            <td class="day-cell">Sat</td>
+            <td></td>
+          </tr>
+          <tr>
+            <td class="day-cell">Sun</td>
+            <td></td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="rule-box">
+        <p><strong>Failure mode to watch for:</strong> If the daily loop starts being used to deliver criticism ("well, since we're doing check-ins...") instead of a plain status update, it will get avoided. Avoidance causes the drift this protocol exists to prevent. Keep the daily version strictly observational; save anything evaluative for the weekly resync.</p>
+      </div>
+    </section>
+
+    <section aria-labelledby="resync-h">
+      <h2 id="resync-h">The Weekly Resync</h2>
+      <div class="resync-box">
+        <p>Once a week, alongside closing the books:</p>
+        <ol>
+          <li>Skim the week's daily loop notes for anything that repeated more than twice.</li>
+          <li>A repeated friction point is promoted to the RACI treaty (WP-03) or the tone filter (WP-09) rather than staying an ambient irritation.</li>
+        </ol>
+      </div>
+    </section>
+
+    <section aria-labelledby="signoff-h">
+      <h2 id="signoff-h">Sign-Off</h2>
+      <table class="signoff-table">
+        <thead>
+          <tr>
+            <th></th>
+            <th>Committed to daily loop</th>
+            <th>Date</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="label-cell">Partner A</td>
+            <td></td>
+            <td></td>
+          </tr>
+          <tr>
+            <td class="label-cell">Partner B</td>
+            <td></td>
+            <td></td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <footer class="sheet-footer">
+      The Objective Ledger&trade; &middot; Workpaper Suite &middot; WP-13 &middot; For Survival Kit members only, not for public redistribution
+    </footer>
+
+  </main>
+
+</body>
+</html>
