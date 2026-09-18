@@ -4,835 +4,25 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>The Objective Ledger — TOL-OS</title>
-<meta name="description" content="A nervous-system-aware ledger for relationships. Read it in order, or jump ahead.">
+<meta name="description" content="A nervous-system-aware ledger for relationships.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,500&family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
-<style>
-:root {
-  --paper: #F5EFDE;
-  --paper-deep: #ECE2C4;
-  --ink: #211D17;
-  --ink-soft: #524B3E;
-  --line: #D9CBA3;
-  --brass: #A8792F;
-  --brass-soft: #C4A570;
-  --credit: #3E6B4C;
-  --credit-soft: #E4EDE3;
-  --focus: #2B5B8C;
-  --focus-soft: #E8EEF5;
-  --radius: 3px;
-}
-
-* {
-  box-sizing: border-box;
-}
-
-html, body {
-  margin: 0;
-  padding: 0;
-  background: var(--paper);
-  color: var(--ink);
-  font-family: "Lora", Georgia, serif;
-  font-size: 16px;
-  line-height: 1.65;
-}
-
-body {
-  display: flex;
-}
-
-.frame {
-  display: flex;
-  width: 100%;
-  min-height: 100vh;
-}
-
-.rule {
-  width: 2px;
-  background: var(--line);
-  margin: 0;
-}
-
-/* ────────────────────────────────────────────────────────────────────── */
-/* SIDEBAR NAVIGATION                                                     */
-/* ────────────────────────────────────────────────────────────────────── */
-
-.sidebar {
-  width: 280px;
-  padding: 2.5rem 2rem;
-  background: var(--paper);
-  overflow-y: auto;
-  position: sticky;
-  top: 0;
-  height: 100vh;
-}
-
-.mark {
-  font-family: "Fraunces", serif;
-  font-size: 1.3rem;
-  font-weight: 600;
-  margin-bottom: 0.5rem;
-  line-height: 1.2;
-  color: var(--ink);
-}
-
-.mark small {
-  display: block;
-  font-size: 0.75rem;
-  color: var(--ink-soft);
-  margin-top: 0.25rem;
-  font-weight: 400;
-  letter-spacing: 0.05em;
-}
-
-.tagline {
-  font-size: 1rem;
-  color: var(--ink-soft);
-  margin: 1rem 0 1.5rem 0;
-  line-height: 1.5;
-}
-
-.header-cta {
-  display: inline-block;
-  padding: 0.7rem 1.4rem;
-  background: var(--brass);
-  color: var(--paper);
-  text-decoration: none;
-  border-radius: var(--radius);
-  font-weight: 600;
-  font-size: 0.95rem;
-  margin-bottom: 2rem;
-  transition: background 0.2s ease;
-}
-
-.header-cta:hover {
-  background: var(--brass-soft);
-}
-
-.ext-note {
-  font-size: 0.75rem;
-  color: var(--paper-deep);
-  display: block;
-  margin-top: 0.25rem;
-}
-
-.sidebar nav {
-  margin-bottom: 2rem;
-}
-
-.sidebar nav ol,
-.sidebar nav ul {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-
-.sidebar nav li {
-  margin-bottom: 0.5rem;
-}
-
-.sidebar nav a {
-  color: var(--ink);
-  text-decoration: none;
-  font-size: 0.95rem;
-  display: block;
-  padding: 0.4rem 0;
-  transition: color 0.2s ease;
-  border-left: 3px solid transparent;
-  padding-left: 0.5rem;
-}
-
-.sidebar nav a:hover {
-  color: var(--brass);
-  border-left-color: var(--brass);
-}
-
-.sidebar nav a.active {
-  color: var(--brass);
-  font-weight: 600;
-  border-left-color: var(--brass);
-}
-
-.nav-group-label {
-  font-family: "IBM Plex Mono", monospace;
-  font-size: 0.75rem;
-  color: var(--ink-soft);
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  margin-top: 1.5rem;
-  margin-bottom: 0.75rem;
-  font-weight: 500;
-}
-
-.tool-nav {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-
-.sidebar-foot {
-  font-family: "IBM Plex Mono", monospace;
-  font-size: 0.75rem;
-  color: var(--ink-soft);
-  margin-top: 2rem;
-  padding-top: 1rem;
-  border-top: 1px solid var(--line);
-}
-
-/* ────────────────────────────────────────────────────────────────────── */
-/* MAIN CONTENT                                                           */
-/* ────────────────────────────────────────────────────────────────────── */
-
-main {
-  flex: 1;
-  padding: 3rem;
-  max-width: 900px;
-  margin: 0 auto;
-}
-
-section {
-  margin-bottom: 3rem;
-  padding-bottom: 2rem;
-  border-bottom: 2px solid var(--line);
-}
-
-section + section {
-  border-top: 2px solid var(--line);
-  padding-top: 2rem;
-}
-
-section:first-of-type {
-  border-top: none;
-  padding-top: 0;
-}
-
-.kicker {
-  font-family: "IBM Plex Mono", monospace;
-  font-size: 0.75rem;
-  color: var(--brass);
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  margin-bottom: 0.5rem;
-}
-
-section h2 {
-  font-family: "Fraunces", serif;
-  font-size: 1.8rem;
-  font-weight: 600;
-  margin: 0 0 1rem 0;
-  line-height: 1.2;
-  color: var(--ink);
-}
-
-.lede {
-  font-size: 1.1rem;
-  color: var(--brass);
-  font-weight: 500;
-  margin: 0 0 1rem 0;
-  line-height: 1.5;
-}
-
-p {
-  margin: 0 0 1rem 0;
-  line-height: 1.65;
-}
-
-p:last-child {
-  margin-bottom: 0;
-}
-
-code {
-  font-family: "IBM Plex Mono", monospace;
-  background: var(--paper-deep);
-  padding: 0.1em 0.3em;
-  border-radius: 2px;
-  font-size: 0.9em;
-}
-
-/* ────────────────────────────────────────────────────────────────────── */
-/* NERVOUS SYSTEM STATE ROUTER                                           */
-/* ────────────────────────────────────────────────────────────────────── */
-
-.state-router {
-  padding: 1.5rem;
-  background: var(--focus-soft);
-  border: 2px solid var(--focus);
-  border-radius: var(--radius);
-  margin-bottom: 2rem;
-}
-
-.state-router-title {
-  font-family: "Fraunces", serif;
-  font-size: 1.2rem;
-  font-weight: 600;
-  color: var(--focus);
-  margin: 0 0 1rem 0;
-}
-
-.state-router-desc {
-  font-size: 0.95rem;
-  color: var(--ink-soft);
-  margin: 0 0 1.25rem 0;
-  font-style: italic;
-}
-
-.state-buttons {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 1rem;
-}
-
-.state-btn {
-  padding: 1rem;
-  background: var(--paper);
-  border: 2px solid var(--focus);
-  border-radius: var(--radius);
-  cursor: pointer;
-  text-align: center;
-  transition: all 0.2s ease;
-  font-family: "Fraunces", serif;
-  font-size: 1rem;
-  font-weight: 600;
-  color: var(--focus);
-}
-
-.state-btn:hover {
-  background: var(--focus);
-  color: var(--paper);
-  transform: translateY(-2px);
-}
-
-.state-content {
-  display: none;
-  padding: 1.25rem;
-  background: var(--paper);
-  border: 1px solid var(--line);
-  border-radius: var(--radius);
-  margin-top: 1.25rem;
-  font-size: 0.95rem;
-  line-height: 1.6;
-}
-
-.state-content.active {
-  display: block;
-}
-
-.state-content strong {
-  font-weight: 600;
-  color: var(--focus);
-}
-
-/* ────────────────────────────────────────────────────────────────────── */
-/* ENTRY PATHS                                                            */
-/* ────────────────────────────────────────────────────────────────────── */
-
-.entry-paths {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: 1.5rem;
-  margin: 2rem 0;
-}
-
-.entry-card {
-  padding: 1.5rem;
-  background: var(--paper-deep);
-  border: 1px solid var(--line);
-  border-radius: var(--radius);
-  transition: all 0.2s ease;
-}
-
-.entry-card:hover {
-  box-shadow: 0 4px 12px rgba(33, 29, 23, 0.1);
-  border-color: var(--brass);
-  transform: translateY(-2px);
-}
-
-.entry-icon {
-  font-size: 2rem;
-  margin-bottom: 0.75rem;
-  display: block;
-}
-
-.entry-title {
-  font-family: "Fraunces", serif;
-  font-size: 1.1rem;
-  font-weight: 600;
-  color: var(--ink);
-  margin: 0 0 0.5rem 0;
-}
-
-.entry-desc {
-  font-size: 0.9rem;
-  color: var(--ink-soft);
-  margin: 0 0 0.75rem 0;
-  line-height: 1.5;
-}
-
-.entry-link {
-  display: inline-block;
-  color: var(--brass);
-  text-decoration: none;
-  font-weight: 600;
-  font-size: 0.9rem;
-  transition: color 0.2s ease;
-}
-
-.entry-link:hover {
-  color: var(--brass-soft);
-  text-decoration: underline;
-}
-
-/* ────────────────────────────────────────────────────────────────────── */
-/* TOOL CARDS                                                             */
-/* ────────────────────────────────────────────────────────────────────── */
-
-.ladder {
-  display: flex;
-  gap: 2rem;
-  margin: 1.5rem 0;
-  flex-wrap: wrap;
-}
-
-.rungs {
-  flex: 1;
-  min-width: 250px;
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
-}
-
-.rung {
-  padding: 1rem;
-  background: var(--paper);
-  border: 2px solid var(--line);
-  border-radius: var(--radius);
-  cursor: pointer;
-  text-align: left;
-  transition: all 0.2s ease;
-  font-family: "Fraunces", serif;
-  font-size: 0.95rem;
-  font-weight: 600;
-  color: var(--ink);
-}
-
-.rung:hover {
-  border-color: var(--brass);
-  box-shadow: 0 2px 6px rgba(33, 29, 23, 0.05);
-}
-
-.rung.active {
-  background: var(--brass);
-  color: var(--paper);
-  border-color: var(--brass);
-}
-
-.rung strong {
-  display: block;
-  margin-bottom: 0.25rem;
-}
-
-.reading {
-  flex: 1;
-  min-width: 250px;
-  padding: 1.25rem;
-  background: var(--paper-deep);
-  border: 1px solid var(--line);
-  border-radius: var(--radius);
-}
-
-.label {
-  font-family: "IBM Plex Mono", monospace;
-  font-size: 0.75rem;
-  color: var(--brass);
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  margin-bottom: 0.75rem;
-}
-
-#reading-text {
-  margin: 0;
-  font-size: 0.95rem;
-  line-height: 1.6;
-  color: var(--ink);
-}
-
-/* ────────────────────────────────────────────────────────────────────── */
-/* ACCESS TIERS                                                           */
-/* ────────────────────────────────────────────────────────────────────── */
-
-.tier-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 2rem;
-  margin: 2rem 0;
-}
-
-.tier-card {
-  padding: 2rem;
-  background: var(--paper);
-  border: 2px solid var(--line);
-  border-radius: var(--radius);
-}
-
-.tier-card.paid {
-  border-color: var(--brass);
-  background: var(--paper-deep);
-}
-
-.tier-name {
-  font-family: "Fraunces", serif;
-  font-size: 1.4rem;
-  font-weight: 600;
-  color: var(--ink);
-  margin: 0 0 0.5rem 0;
-}
-
-.tier-card.paid .tier-name {
-  color: var(--brass);
-}
-
-.tier-price {
-  font-family: "IBM Plex Mono", monospace;
-  font-size: 0.85rem;
-  color: var(--ink-soft);
-  margin: 0 0 1.25rem 0;
-}
-
-.tier-note {
-  font-size: 0.9rem;
-  color: var(--ink-soft);
-  margin: 0 0 1rem 0;
-  font-style: italic;
-}
-
-.tier-list {
-  list-style: none;
-  padding: 0;
-  margin: 0 0 1.5rem 0;
-}
-
-.tier-list li {
-  padding: 0.5rem 0 0.5rem 1.5rem;
-  position: relative;
-  font-size: 0.95rem;
-  margin-bottom: 0.5rem;
-}
-
-.tier-list li:before {
-  content: "✓";
-  position: absolute;
-  left: 0;
-  color: var(--credit);
-  font-weight: bold;
-}
-
-.cta-button {
-  display: inline-block;
-  padding: 0.8rem 1.6rem;
-  background: var(--brass);
-  color: var(--paper);
-  text-decoration: none;
-  border: none;
-  border-radius: var(--radius);
-  font-weight: 600;
-  font-size: 1rem;
-  cursor: pointer;
-  transition: background 0.2s ease;
-  font-family: "Lora", serif;
-}
-
-.cta-button:hover {
-  background: var(--brass-soft);
-}
-
-/* ────────────────────────────────────────────────────────────────────── */
-/* REGISTER CARD                                                          */
-/* ────────────────────────────────────────────────────────────────────── */
-
-.register-card {
-  padding: 2rem;
-  background: var(--paper-deep);
-  border: 1px solid var(--line);
-  border-radius: var(--radius);
-}
-
-.register-form {
-  display: flex;
-  gap: 0.5rem;
-  margin: 1.5rem 0;
-  flex-wrap: wrap;
-}
-
-.register-form input[type="email"] {
-  flex: 1;
-  min-width: 200px;
-  padding: 0.75rem 1rem;
-  border: 1px solid var(--line);
-  border-radius: var(--radius);
-  font-family: "Lora", serif;
-  font-size: 0.95rem;
-}
-
-.register-form button {
-  padding: 0.75rem 1.5rem;
-  background: var(--brass);
-  color: var(--paper);
-  border: none;
-  border-radius: var(--radius);
-  font-weight: 600;
-  cursor: pointer;
-  font-family: "Lora", serif;
-}
-
-.register-note {
-  font-size: 0.85rem;
-  color: var(--ink-soft);
-  margin: 1rem 0 0 0;
-}
-
-.register-divider {
-  text-align: center;
-  color: var(--line);
-  margin: 1.5rem 0;
-  font-weight: 600;
-}
-
-.visually-hidden {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  margin: -1px;
-  overflow: hidden;
-  clip: rect(0, 0, 0, 0);
-  white-space: nowrap;
-  border-width: 0;
-}
-
-.resource-card {
-  padding: 1.5rem;
-  background: var(--paper-deep);
-  border: 1px solid var(--line);
-  border-radius: var(--radius);
-  margin: 1.5rem 0;
-}
-
-.resource-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 1.5rem;
-  margin-top: 1.25rem;
-}
-
-.resource-item {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-}
-
-.resource-item strong {
-  font-weight: 600;
-  color: var(--brass);
-}
-
-.resource-item span {
-  font-size: 0.9rem;
-  color: var(--ink-soft);
-  line-height: 1.5;
-}
-
-.print-action {
-  padding: 1.5rem;
-  background: var(--focus-soft);
-  border: 1px solid var(--focus);
-  border-radius: var(--radius);
-  margin: 1.5rem 0;
-}
-
-.print-action-copy {
-  margin-bottom: 1.25rem;
-}
-
-.print-action strong {
-  color: var(--focus);
-  font-weight: 600;
-}
-
-.print-action span {
-  display: block;
-  margin-top: 0.5rem;
-  font-size: 0.9rem;
-  color: var(--ink-soft);
-  line-height: 1.5;
-}
-
-.telemetry-bar {
-  display: flex;
-  gap: 1rem;
-  margin-bottom: 2rem;
-  flex-wrap: wrap;
-}
-
-.telemetry-pill {
-  padding: 0.75rem 1.25rem;
-  background: var(--paper);
-  border: 1px solid var(--line);
-  border-radius: 20px;
-  font-size: 0.9rem;
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  font-family: "IBM Plex Mono", monospace;
-}
-
-.dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  display: inline-block;
-}
-
-.pill-active .dot {
-  background: var(--credit);
-}
-
-.pill-complete .dot {
-  background: var(--credit);
-}
-
-.pill-status .dot {
-  background: var(--brass);
-}
-
-.pill-note {
-  display: block;
-  font-size: 0.75rem;
-  color: var(--ink-soft);
-  margin-top: 0.25rem;
-  font-weight: normal;
-}
-
-/* ────────────────────────────────────────────────────────────────────── */
-/* FOOTER                                                                 */
-/* ────────────────────────────────────────────────────────────────────── */
-
-footer {
-  background: var(--ink);
-  color: var(--paper);
-  padding: 2rem 0;
-  text-align: center;
-  font-family: "IBM Plex Mono", monospace;
-  font-size: 0.85rem;
-  margin-top: 4rem;
-}
-
-.footer-links {
-  display: flex;
-  justify-content: center;
-  gap: 2rem;
-  margin-top: 1rem;
-  flex-wrap: wrap;
-}
-
-.footer-links a {
-  color: var(--brass-soft);
-  text-decoration: none;
-  transition: color 0.2s ease;
-}
-
-.footer-links a:hover {
-  color: var(--paper);
-}
-
-/* ────────────────────────────────────────────────────────────────────── */
-/* RESPONSIVE                                                             */
-/* ────────────────────────────────────────────────────────────────────── */
-
-@media screen and (max-width: 1024px) {
-  .sidebar {
-    width: 240px;
-    padding: 2rem 1.5rem;
-  }
-
-  main {
-    padding: 2rem;
-  }
-
-  .ladder {
-    gap: 1rem;
-  }
-}
-
-@media screen and (max-width: 768px) {
-  body {
-    flex-direction: column;
-  }
-
-  .frame {
-    flex-direction: column;
-  }
-
-  .sidebar {
-    width: 100%;
-    height: auto;
-    position: static;
-    padding: 1.5rem;
-    border-right: none;
-    border-bottom: 2px solid var(--line);
-  }
-
-  .rule {
-    display: none;
-  }
-
-  main {
-    padding: 1.5rem;
-    max-width: 100%;
-  }
-
-  section h2 {
-    font-size: 1.5rem;
-  }
-
-  .ladder {
-    flex-direction: column;
-  }
-
-  .entry-paths,
-  .tier-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .register-form {
-    flex-direction: column;
-  }
-
-  .register-form input[type="email"],
-  .register-form button {
-    width: 100%;
-  }
-}
-
-</style>
+<link rel="stylesheet" href="assets/css/book-layout.css">
 </head>
-
 <body>
 
 <div class="frame">
 
-  <!-- SIDEBAR -->
   <aside class="sidebar">
     <div class="mark">The Objective Ledger
-      <small>TOL-OS &middot; BASELINE v1.0.4</small>
+      <small>TOL&#8209;OS &middot; BASELINE v1.0.4</small>
     </div>
     <p class="tagline">A nervous-system-aware ledger for relationships. Read it in order, or jump ahead.</p>
 
-    <a class="header-cta" href="suite-index.html">
-      Browse the Complete Suite
-      <span class="ext-note">All workpapers, chapters & media</span>
+    <a class="header-cta" href="infographic.html" target="_blank" rel="noopener">
+      Open the printable summary
+      <span class="ext-note">Opens in a new tab</span>
     </a>
 
     <nav aria-label="Table of contents">
@@ -841,13 +31,6 @@ footer {
         <li><a href="#chapter-1" data-target="chapter-1">The Radio Frequency Paradigm</a></li>
         <li><a href="#chapter-2" data-target="chapter-2">The Epistemic Verdict Engine</a></li>
       </ol>
-      <div class="nav-group-label">Explore</div>
-      <ul class="tool-nav">
-        <li><a href="suite-index.html">Complete Suite Index</a></li>
-        <li><a href="prog-01.html">PROG-01 Curriculum</a></li>
-        <li><a href="podcast-index.html">Podcast Episodes</a></li>
-        <li><a href="infographic.html" target="_blank" rel="noopener">Executive Summary</a></li>
-      </ul>
       <div class="nav-group-label">Tools</div>
       <ul class="tool-nav">
         <li><a href="#nervous-system" data-target="nervous-system">Check Your State</a></li>
@@ -855,13 +38,15 @@ footer {
       </ul>
       <div class="nav-group-label">Access</div>
       <ul class="tool-nav">
-        <li><a href="#access-tiers" data-target="access-tiers">Free vs. Full Suite</a></li>
+        <li><a href="#access-tiers" data-target="access-tiers">Free Tools vs. Full Suite</a></li>
         <li><a href="#register" data-target="register">Register</a></li>
         <li><a href="roadmap.html">Content Roadmap</a></li>
       </ul>
       <div class="nav-group-label">Appendix</div>
       <ul class="tool-nav">
-        <li><a href="infographic.html" target="_blank" rel="noopener">Infographic Summary</a></li>
+        <li><a href="infographic.html" target="_blank" rel="noopener">Infographic Executive Summary</a></li>
+        <li><a href="soundscapes.html">Soundscape Catalog</a></li>
+        <li><a href="echoes-of-gold.html">Echoes of Gold &mdash; Companion Album</a></li>
       </ul>
     </nav>
     <div class="sidebar-foot">spreadloveandacceptance.com</div>
@@ -869,19 +54,17 @@ footer {
 
   <div class="rule" aria-hidden="true"></div>
 
-  <!-- MAIN CONTENT -->
   <main>
 
-    <!-- BUILD STATUS -->
     <div class="telemetry-bar" role="status" aria-label="Build status">
       <div class="telemetry-pill pill-active">
         <span class="dot"></span>
         Kernel Build v1.0.4 &middot; Active
       </div>
-      <div class="telemetry-pill pill-complete">
+      <div class="telemetry-pill pill-progress">
         <span class="dot"></span>
-        Content Rollout &middot; Complete
-        <span class="pill-note">12-chapter manuscript, WP-01–WP-15, PROG-01 curriculum, and podcast series live</span>
+        Content Rollout &middot; In Progress
+        <span class="pill-note">9 of 34 planned chapters, workpapers &amp; calculators live &mdash; updated as new material ships</span>
       </div>
       <div class="telemetry-pill pill-status">
         <span class="dot"></span>
@@ -889,35 +72,22 @@ footer {
       </div>
     </div>
 
-    <!-- NERVOUS SYSTEM STATE ROUTER -->
-    <section id="state-router">
-      <div class="state-router">
-        <h2 class="state-router-title">🧠 Where Are You Right Now?</h2>
-        <p class="state-router-desc">Check your nervous system state before you explore. This framework works differently depending on which state you're reading from.</p>
-        <div class="state-buttons">
-          <button class="state-btn" data-state="ventral" aria-pressed="true">
-            <strong>Ventral Vagal</strong><br>Safe & social
-          </button>
-          <button class="state-btn" data-state="sympathetic" aria-pressed="false">
-            <strong>Sympathetic</strong><br>Mobilized
-          </button>
-          <button class="state-btn" data-state="dorsal" aria-pressed="false">
-            <strong>Dorsal Vagal</strong><br>Shutdown
-          </button>
-        </div>
-        <div class="state-content active" data-state="ventral">
-          <strong>You're in ventral vagal state.</strong> Breath is easy, your shoulders aren't braced, and you can hear feedback without immediately defending yourself. This is the state the rest of this framework actually works in. You're ready to explore, read, and engage with tools.
-        </div>
-        <div class="state-content" data-state="sympathetic">
-          <strong>You're in sympathetic (mobilized) state.</strong> Heart rate's up, thoughts are moving fast, and small things can start to feel urgent or personal. Good energy for doing the dishes right now. Riskier for deciding, calmly, who should be doing them going forward. That conversation might go better in twenty minutes. Consider: WP-01 (Neutral Refusals) + WP-11 audio reset first.
-        </div>
-        <div class="state-content" data-state="dorsal">
-          <strong>You're in dorsal vagal state.</strong> Flat, foggy, or far away, and words are harder to find than usual. This isn't the moment to open the register or have a big conversation. Rest, eat, get warm, or just wait. The ledger will still be here when you're back. Try the audio reset if it helps.
-        </div>
-      </div>
-    </section>
+    <div class="roadmap-spacer" aria-hidden="true"></div>
 
-    <!-- PREFACE -->
+    <div class="roadmap-callout">
+      <svg class="roadmap-icon" viewBox="0 0 90 70" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <circle cx="12" cy="52" r="4.5" fill="var(--brass)"/>
+        <path d="M12 52 C 28 60, 34 34, 48 38 S 66 18, 78 14" fill="none" stroke="var(--brass)" stroke-width="2.5" stroke-linecap="round" stroke-dasharray="1 8"/>
+        <path d="M78 4 L78 22" stroke="var(--ink)" stroke-width="2" stroke-linecap="round"/>
+        <path d="M78 5 L90 9 L78 13 Z" fill="var(--credit)"/>
+      </svg>
+      <div class="roadmap-callout-copy">
+        <strong>Curious exactly what's live right now?</strong>
+        <span>The Content Roadmap tracks every chapter, workpaper, and calculator by real status &mdash; Live Now, In Progress, or Planned &mdash; updated the same day something actually ships. No guessing, no marketing gloss: if it's not listed as live there, it isn't live yet.</span>
+      </div>
+      <a class="cta-button" href="roadmap.html">View the Content Roadmap</a>
+    </div>
+
     <section id="preface">
       <div class="kicker">Front Matter</div>
       <h2>Preface: Unbilled Debt</h2>
@@ -928,7 +98,6 @@ footer {
       <p>What follows borrows vocabulary from accounting, systems engineering, and nervous-system science on purpose: these fields are good at describing a system's actual state without moralizing about who's to blame for it. Read the chapters, use the tools, and close the books together at the end of each week.</p>
     </section>
 
-    <!-- CHAPTER 1 -->
     <section id="chapter-1">
       <div class="kicker">Chapter I</div>
       <h2>The Radio Frequency Paradigm</h2>
@@ -938,7 +107,6 @@ footer {
       <p>Before continuing a conversation that's started to squeal: name the mismatch out loud without blame, check your own state, slow the pace deliberately, and only then return to the actual content of the conversation. The paradigm isn't a diagnosis of who's transmitting badly — it's a shared vocabulary for the moment when both of you are just out of sync.</p>
     </section>
 
-    <!-- NERVOUS SYSTEM CHECK TOOL -->
     <section id="nervous-system">
       <div class="kicker">Tool</div>
       <h2>Check Your State</h2>
@@ -967,98 +135,91 @@ footer {
       </div>
     </section>
 
-    <!-- CHAPTER 2 -->
     <section id="chapter-2">
       <div class="kicker">Chapter II</div>
       <h2>The Epistemic Verdict Engine &amp; P(Solvency)</h2>
       <p class="lede">A heuristic worksheet, not a scientific instrument — it scores the workload arrangement, never either person.</p>
       <p>Every long-running household eventually gets asked, in one form or another: "is this actually working?" Usually the question gets answered with whichever incident happened most recently. The Verdict Engine asks a narrower, calmer question instead: based on what's actually logged this week — hours in the ledger, tasks with a named owner, self-reported nervous-system load — does the current workload arrangement look sustainable, or is it quietly running a deficit?</p>
-      <p><code>P(Solvency) = (workload_balance × 0.40) + (ownership_clarity × 0.35) + ((1 − autonomic_saturation) × 0.25)</code></p>
-      <p>Above roughly 0.70, the current arrangement is carrying its own weight. Between 0.40 and 0.70, something is drifting — usually ownership clarity first. Below 0.40, the workload as structured isn't sustainable — a statement about the arrangement, not about either person's love, effort, or worth.</p>
+      <p><code>P(Solvency) = (workload_balance &times; 0.40) + (ownership_clarity &times; 0.35) + ((1 &minus; autonomic_saturation) &times; 0.25)</code></p>
+      <p>Above roughly 0.70, the current arrangement is carrying its own weight. Between 0.40 and 0.70, something is drifting — usually ownership clarity first. Below 0.40, the workload as structured isn't sustainable — a statement about the arrangement, not about either person's love, effort, or worth. See <code>/telemetry/epistemic-verdict-engine.md</code> for the full formula reference and <code>/workpapers/calculators/calc01-solvency.html</code> for the interactive version.</p>
     </section>
 
-    <!-- LEMONADE STAND TOOL -->
     <section id="lemonade">
       <div class="kicker">Tool</div>
-      <h2>The Lemonade Stand Heuristic</h2>
-      <p class="lede">A thought experiment about why shared visibility in work accounting matters.</p>
-      <p>Imagine two people running a lemonade stand. One makes the lemonade. One sells it. Both are necessary work. At the end of the day, one person opens the register and counts the money. If only that person gets to see the ledger, the other person can't tell whether they're carrying an unfair share or whether the business is actually balanced.</p>
-      <p>Writing the numbers down together, in the same units, at the same time—that's when honest conversation becomes possible. A household works the same way. Someone cooks. Someone remembers birthdays. Someone fixes things. Someone carries emotional labor nobody names. If only one person keeps the books, resentment is the only possible outcome. If both people can see the same page, fairness becomes something you can actually talk about.</p>
-    </section>
+      <h2>The Lemonade Stand</h2>
+      <p class="lede">Two people, one stand. Everyone who runs it should be able to see the register — not to catch anyone out, just so nobody's guessing.</p>
+      <p>List what it actually takes to keep the household running this week, and how many hours each of you put toward it. Rename the columns, add what's missing — it recalculates as you type. The totals here feed the <code>workload_balance</code> input in the Verdict Engine above.</p>
 
-    <!-- ENTRY PATHS TO THE SUITE -->
-    <section id="entry-paths" style="border: none; padding: 0; margin: 3rem 0;">
-      <h2 style="margin-bottom: 1.5rem;">Choose Your Path Into The Suite</h2>
-      <div class="entry-paths">
-        <div class="entry-card">
-          <span class="entry-icon">🚨</span>
-          <h3 class="entry-title">I Need Help Now</h3>
-          <p class="entry-desc">Activated, overwhelmed, or in conflict. Start here for immediate tools and grounding.</p>
-          <a href="suite-index.html#entry-paths" class="entry-link">Emergency Tools →</a>
+      <div class="stand">
+        <div class="stand-heads">
+          <div class="task-head">Line item</div>
+          <input type="text" id="label-a" value="Column A" aria-label="Name for column A">
+          <input type="text" id="label-b" value="Column B" aria-label="Name for column B">
+          <span></span>
         </div>
-        <div class="entry-card">
-          <span class="entry-icon">📚</span>
-          <h3 class="entry-title">Understand First</h3>
-          <p class="entry-desc">Want the conceptual foundation before using tools? Read the chapters, listen to the podcast, then tools.</p>
-          <a href="suite-index.html#chapters" class="entry-link">Read Chapters →</a>
+
+        <div id="rows"></div>
+
+        <div class="stand-add">
+          <button class="add-row" id="add-row" type="button">Add a line item</button>
         </div>
-        <div class="entry-card">
-          <span class="entry-icon">🗓️</span>
-          <h3 class="entry-title">Committed to 6 Weeks</h3>
-          <p class="entry-desc">Ready for structured, paced implementation. Clear weekly deliverables and integration.</p>
-          <a href="prog-01.html" class="entry-link">Start PROG-01 →</a>
+
+        <div class="balance">
+          <div class="bar" aria-hidden="true">
+            <div class="bar-a" id="bar-a" style="width:50%"></div>
+            <div class="bar-b" id="bar-b" style="width:50%"></div>
+          </div>
+          <div class="bar-legend">
+            <span class="a" id="legend-a">Column A &middot; 0h</span>
+            <span class="b" id="legend-b">Column B &middot; 0h</span>
+          </div>
+          <span class="balance-badge badge-awaiting-data" id="balance-badge">Awaiting data</span>
+          <p class="balance-line" id="balance-line">Add some hours above to see the register.</p>
         </div>
       </div>
     </section>
 
-    <!-- ACCESS TIERS -->
     <section id="access-tiers">
       <div class="kicker">Access</div>
-      <h2>Free Tools vs. Full Suite</h2>
+      <h2>Free Diagnostic Tools vs. The Workpaper Suite</h2>
+      <p class="lede">These are two different things. The tools above — the Nervous System Ladder, the Lemonade Stand Heuristic, and the printable infographic — are free, public, and always will be: a quick, honest first read on your own household. The Workpaper Suite below is the paid system those free tools are excerpted from — a living, growing program, not a finished archive.</p>
 
       <div class="tier-grid">
-        <div class="tier-card">
-          <h3 class="tier-name">Free Tier</h3>
-          <div class="tier-price">Public • On spreadloveandacceptance.com</div>
-          <p class="tier-note">Start here. No credit card required. No paywall on these sections:</p>
+        <div class="tier-card tier-free">
+          <h3>Free Public Diagnostic Tools</h3>
+          <div class="tier-price">No cost &middot; no account required</div>
           <ul class="tier-list">
-            <li>Preface + Chapters I–II</li>
-            <li>The Nervous System Check tool</li>
-            <li>The Lemonade Stand Heuristic (interactive)</li>
-            <li>CALC-01 Solvency Read (preview)</li>
-            <li>Printable infographic summary</li>
-            <li>The Complete Suite Index (see what's available)</li>
+            <li>The Lemonade Stand Heuristic (interactive calculator, above)</li>
+            <li>The Nervous System Ladder self-check</li>
+            <li>The Infographic Executive Summary &mdash; <code>infographic.html</code>, a printable one-pager</li>
+            <li>Chapters I &amp; II of the manuscript, as a preview</li>
           </ul>
-          <p style="font-size: 0.9rem; color: var(--ink-soft); margin: 0;">Everything you need to understand the framework's core ideas. Use this to decide if the full suite is right for you and your partner.</p>
+          <p class="tier-note">These stay free because a quick, honest read on your own household shouldn't require payment. They're diagnostic snapshots, not the full system.</p>
         </div>
 
-        <div class="tier-card paid">
-          <h3 class="tier-name">Paid Tier: The Survival Kit</h3>
-          <div class="tier-price">Monthly membership via Gumroad</div>
-          <p class="tier-note">The complete system for ongoing relational work:</p>
+        <div class="tier-card tier-full">
+          <h3>The Workpaper Suite</h3>
+          <div class="tier-price">Sold as the Spread Love &amp; Acceptance Relationship Survival Kit &middot; monthly membership</div>
+          <p class="tier-note">Live right now:</p>
           <ul class="tier-list">
-            <li>The complete 12-chapter manuscript (Chapters I–XII)</li>
-            <li>The full workpaper suite (WP-01 through WP-15)</li>
-            <li>All 7 calculators (CALC-01 through CALC-07)</li>
-            <li>PROG-01: The 6-week guided curriculum</li>
-            <li>Observational podcast episodes (Lamonz collaboration)</li>
-            <li>Audio entrainment stems (40Hz binaural, sub-bass, composites)</li>
-            <li>Member-only updates and refinements</li>
+            <li>Manuscript Chapters I &amp; II, with III&ndash;XII in active development</li>
+            <li>WP-01, WP-02, WP-03, WP-09, WP-11, and WP-13 &mdash; the remaining workpapers are rolling out over time</li>
+            <li>CALC-01 (the Solvency Read) &mdash; CALC-02&ndash;CALC-07 are in development</li>
+            <li>PROG-01, the 6-week guided curriculum sequencing the six live workpapers above</li>
           </ul>
           <a class="cta-button" href="https://cloudpat.gumroad.com/l/vigkfs">Get the Survival Kit</a>
-          <p class="tier-note">Billed monthly. Cancel anytime. Updated as the program evolves.</p>
+          <p class="tier-note">Recurring monthly membership, billed and managed through Gumroad. Everyone who joins keeps access to each new release as it ships.</p>
         </div>
       </div>
     </section>
 
-    <!-- REGISTER -->
     <section id="register">
       <div class="kicker">Join</div>
       <h2>Register for the Program</h2>
-      <p class="lede">The framework is complete and live today. But it's a living system. Register to stay in the loop.</p>
+      <p class="lede">This program is a living one, still actively being built — not a finished archive. Register for free to hear about new chapters, workpapers, and calculators as they ship, or get full access now to what's already live plus everything still coming.</p>
 
       <div class="register-card">
-        <p><strong>Free registration</strong> keeps you updated as the program evolves. As real households put this framework to use, expect refinements, new companion material, and curriculum improvements. Everyone on this list hears about changes first, at no cost.</p>
+        <p>Free registration doesn't unlock the paid workpaper suite &mdash; it just keeps you in the loop. As new material ships and real households put this framework to use, expect new workpapers, new chapters, and refinements to what's already here. Everyone on this list hears about changes first, at no cost, for as long as the program keeps developing.</p>
 
         <form class="register-form" action="https://buttondown.com/api/emails/embed-subscribe/spreadloveandacceptance" method="post" target="popupwindow" onsubmit="window.open('https://buttondown.com/spreadloveandacceptance', 'popupwindow')" novalidate>
           <label class="visually-hidden" for="register-email">Email address</label>
@@ -1070,35 +231,34 @@ footer {
 
         <div class="register-divider" role="separator">or</div>
 
-        <p class="register-note"><strong>Ready for the complete system now?</strong></p>
-        <a class="cta-button" href="https://cloudpat.gumroad.com/l/vigkfs">Get the Survival Kit</a>
+        <p class="register-note">Ready for the complete system now, rather than waiting for updates?</p>
+        <a class="cta-button" href="https://cloudpat.gumroad.com/l/vigkfs">Skip ahead &mdash; get the Survival Kit</a>
       </div>
     </section>
 
-    <!-- PRINTABLE SUMMARY -->
     <section id="printable-summary">
       <div class="kicker">Appendix</div>
-      <h2>Printable Executive Summary &amp; Infographic</h2>
-      <p class="lede">Everything on this page, condensed into one US Letter document you can open, print, or save as PDF.</p>
+      <h2>Appendix: Printable Executive Summary &amp; Infographic</h2>
+      <p class="lede">Everything on this page, condensed into a single US Letter document you can open, print, or save — good for sharing with someone who'd rather read it on paper than click through a website.</p>
 
       <div class="resource-card">
-        <p><strong>The infographic covers four core pieces in one sitting:</strong></p>
+        <p>The infographic covers four of this framework's core pieces in a single sitting:</p>
         <div class="resource-grid">
           <div class="resource-item">
-            <strong>The 5 Pillars</strong>
-            <span>The interdisciplinary foundation, in one card row.</span>
+            <strong>The Five Pillars</strong>
+            <span>The interdisciplinary foundation this whole framework is built on, in one card row.</span>
           </div>
           <div class="resource-item">
-            <strong>The Extraction Cycle</strong>
-            <span>How unclaimed tasks compound into resentment.</span>
+            <strong>The Extraction Cycle&trade;</strong>
+            <span>How an unclaimed task compounds into resentment when ownership isn't named.</span>
           </div>
           <div class="resource-item">
-            <strong>The Lemonade Stand</strong>
-            <span>Why shared accounting matters.</span>
+            <strong>The Lemonade Stand Heuristic</strong>
+            <span>The one-paragraph version of why the shared register matters.</span>
           </div>
           <div class="resource-item">
             <strong>The 3 Neutral Refusals</strong>
-            <span>Pocket boundary scripts, ready to use.</span>
+            <span>Three ready-to-use scripts for declining or deferring a task without starting a fight.</span>
           </div>
         </div>
       </div>
@@ -1106,7 +266,7 @@ footer {
       <div class="print-action">
         <div class="print-action-copy">
           <strong>Ready to print or save a copy?</strong>
-          <span>Opens as formatted US Letter (8.5" × 11", portrait). Use your browser's Print dialog — choosing "Save as PDF" gives you a publication-grade PDF. For full color, enable "Background graphics" in print options.</span>
+          <span>Opens as a formatted US Letter page (8.5" &times; 11", portrait). Use your browser's Print dialog — choosing "Save as PDF" as the destination gives you a publication-grade PDF; printing directly sends it straight to paper. For full-color output, enable "Background graphics" in the print options.</span>
         </div>
         <a class="cta-button" href="infographic.html" target="_blank" rel="noopener">Open &amp; print the executive summary</a>
       </div>
@@ -1115,13 +275,9 @@ footer {
   </main>
 </div>
 
-<!-- FOOTER -->
 <footer>
-  TOL-OS &middot; Baseline v1.0.4 &middot; spreadloveandacceptance.com
+  TOL&#8209;OS &middot; Baseline v1.0.4 &middot; spreadloveandacceptance.com
   <div class="footer-links">
-    <a href="suite-index.html">Suite Index</a>
-    <a href="prog-01.html">PROG-01</a>
-    <a href="podcast-index.html">Podcast</a>
     <a href="roadmap.html">Roadmap</a>
     <a href="legal/terms-of-service.html">Terms of Service</a>
     <a href="legal/privacy-policy.html">Privacy Policy</a>
@@ -1129,64 +285,44 @@ footer {
   </div>
 </footer>
 
-<!-- SCRIPTS -->
 <script src="assets/js/lemonade-calc.js"></script>
 <script>
-(function() {
-  // Nervous System State Router
-  var stateBtns = document.querySelectorAll('[data-state]');
-  var stateContents = document.querySelectorAll('.state-content');
+(function(){
+  // Nervous System Ladder — small page-local widget, not part of lemonade-calc.js
   var rungs = document.querySelectorAll('.rung');
   var readingText = document.getElementById('reading-text');
-
   var copy = {
-    ventral: "Breath is easy, your shoulders aren't braced, and you can hear feedback without immediately defending yourself. This is the state the rest of this framework actually works in.",
-    sympathetic: "Heart rate's up, thoughts are moving fast, and small things can start to feel urgent or personal. Good energy for doing the dishes right now. Riskier for deciding, calmly, who should be doing them going forward—that conversation might go better in twenty minutes.",
-    dorsal: "Flat, foggy, or far away, and words are harder to find than usual. This isn't the moment to open the register. Rest, eat, get warm, or just wait—the ledger will still be here when you're back."
+    ventral: "Breath is easy, your shoulders aren't braced, and you can hear feedback without immediately defending yourself. This is the state the rest of this page actually works in.",
+    sympathetic: "Heart rate's up, thoughts are moving fast, and small things can start to feel urgent or personal. Good energy for doing the dishes right now. Riskier for deciding, calmly, who should be doing them going forward \u2014 that conversation might go better in twenty minutes.",
+    dorsal: "Flat, foggy, or far away, and words are harder to find than usual. This isn't the moment to open the register. Rest, eat, get warm, or just wait \u2014 the ledger will still be here when you're back."
   };
 
-  // State buttons in router section
-  Array.prototype.slice.call(document.querySelectorAll('.state-router .state-btn')).forEach(function(btn) {
-    btn.addEventListener('click', function() {
-      var state = this.dataset.state;
-      var allBtns = document.querySelectorAll('.state-router .state-btn');
-      allBtns.forEach(function(b) { b.setAttribute('aria-pressed', 'false'); });
-      this.setAttribute('aria-pressed', 'true');
-
-      stateContents.forEach(function(content) { content.classList.remove('active'); });
-      document.querySelector('.state-content[data-state="' + state + '"]').classList.add('active');
-    });
-  });
-
-  // Ladder rungs
-  rungs.forEach(function(rung) {
-    rung.addEventListener('click', function() {
-      rungs.forEach(function(r) { 
-        r.classList.remove('active'); 
-        r.setAttribute('aria-pressed', 'false'); 
-      });
+  rungs.forEach(function(rung){
+    rung.addEventListener('click', function(){
+      rungs.forEach(function(r){ r.classList.remove('active'); r.setAttribute('aria-pressed','false'); });
       rung.classList.add('active');
-      rung.setAttribute('aria-pressed', 'true');
+      rung.setAttribute('aria-pressed','true');
       readingText.textContent = copy[rung.dataset.state];
     });
   });
+})();
 
-  // Sidebar nav highlighting
-  var links = Array.prototype.slice.call(document.querySelectorAll('nav a[data-target]'));
-  var sections = links.map(function(l) { return document.getElementById(l.dataset.target); });
+(function(){
+  var links = Array.prototype.slice.call(document.querySelectorAll('nav a'));
+  var sections = links.map(function(l){ return document.getElementById(l.dataset.target); });
 
-  var observer = new IntersectionObserver(function(entries) {
-    entries.forEach(function(entry) {
-      var link = links.find(function(l) { return l.dataset.target === entry.target.id; });
-      if (!link) return;
-      if (entry.isIntersecting) {
-        links.forEach(function(l) { l.classList.remove('active'); });
+  var observer = new IntersectionObserver(function(entries){
+    entries.forEach(function(entry){
+      var link = links.find(function(l){ return l.dataset.target === entry.target.id; });
+      if(!link) return;
+      if(entry.isIntersecting){
+        links.forEach(function(l){ l.classList.remove('active'); });
         link.classList.add('active');
       }
     });
   }, { rootMargin: '-20% 0px -70% 0px' });
 
-  sections.forEach(function(s) { if (s) observer.observe(s); });
+  sections.forEach(function(s){ if(s) observer.observe(s); });
 })();
 </script>
 
