@@ -371,6 +371,7 @@
       <small>WB &middot; OC &middot; AS &middot; RF &rarr; P(Solvency) &middot; Apex</small>
     </h1>
     <p class="sheet-tagline">Scores one narrow thing: whether the current workload arrangement, as logged, looks sustainable. Not either person. Not the relationship.</p>
+    <p class="sheet-tagline" style="color:var(--debit);margin-top:8px;"><strong>A diagnostic starting point, not an exit script.</strong> A low score doesn't assign blame, and a high score doesn't silence a partner.</p>
     <div class="toc no-print">
       <a href="#state">Check Your State</a>
       <a href="#wb">Workload Balance</a>
@@ -1176,8 +1177,8 @@ apex_score  = (WB &times; 0.35) + (OC &times; 0.30) + ((1 &minus; AS) &times; 0.
 
   function bandFor(v){
     if(v >= 0.70) return { cls: "", label: "Carrying its own weight." };
-    if(v >= 0.40) return { cls: "mid", label: "Drifting." };
-    return { cls: "low", label: "Not sustainable as structured." };
+    if(v >= 0.40) return { cls: "mid", label: "Structural drift." };
+    return { cls: "low", label: "Operating in overdraft." };
   }
 
   function renderContrib(terms){
@@ -1300,8 +1301,11 @@ apex_score  = (WB &times; 0.35) + (OC &times; 0.30) + ((1 &minus; AS) &times; 0.
       base = "The arrangement is carrying its own weight. Nothing structural needs changing this week \u2014 keep the same rhythm of check-ins and log the read.";
     } else if(sol >= 0.40){
       base = "Something is drifting. The largest single shortfall is " + worst.fix + ", costing " + worst.shortfall.toFixed(3) + " of the available points. Start there rather than with whatever happened most recently.";
+      if(worst.name === "OC"){
+        base += " The load isn't failing \u2014 the ownership is blurry. An ambiguous task defaults to whoever notices first, every time, and that compounds quietly.";
+      }
     } else {
-      base = "As structured, this isn't sustainable \u2014 a statement about the arrangement, not about either person. The largest shortfall is " + worst.fix + ". This is a full treaty renegotiation, not another one-off patch.";
+      base = "The system is operating in overdraft. This is an audit of the operational setup, not of anyone's affection or character \u2014 the largest shortfall is " + worst.fix + ". What it calls for is structural relief and renegotiation, not emotional defence.";
     }
 
     var mode = currentState ? STATE_COPY[currentState].mode : "go";
