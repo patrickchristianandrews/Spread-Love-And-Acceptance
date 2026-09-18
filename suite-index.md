@@ -8,12 +8,15 @@ Two delivery routes, marked on each row. `Page` means it has its own page on the
 
 For the counts behind this list — how much of the designed whole is built — see the Rollout Telemetry (`telemetry.html`).
 
+**What this index covers:** the manuscript, the workpapers, and the calculators — the instruments the framework is built from. Audio is a separate project with its own catalog (`soundscapes.html`) and is deliberately not listed here. No workpaper requires audio, and none ever will.
+
 ## Free, public
 
 | Item | What it does | Where |
 |---|---|---|
 | **Ch. I–II** — The Radio Frequency Paradigm & The Epistemic Verdict Engine | Free chapters of the manuscript, in full, on the homepage. | Page |
 | **The Lemonade Stand Heuristic & The Nervous System Ladder** | Free interactive tools on the homepage. The Lemonade Stand totals feed the workload balance input in CALC-01. | Page |
+| **Program Overview** | `program-overview.html` — what each chapter argues, which instrument it pairs with, and what is designed but not yet written. | Page |
 | **Printable Infographic** | `infographic.html` — the Five Pillars, the Extraction Cycle, the Lemonade Stand, and the 3 Neutral Refusals in one page. | Page |
 
 ## Manuscript
@@ -33,7 +36,7 @@ Every workpaper works on its own, but they were built to be picked up in sequenc
 
 **WP-01 → WP-02 → WP-03 → WP-09 → WP-13**
 
-Read CALC-01 once the first three have produced numbers. Pick up WP-04 monthly after that. PROG-01 paces the whole sequence across six weeks.
+Read CALC-01 once the first three have produced numbers. Pick up WP-04 monthly after that. PROG-01 paces the whole sequence across six weeks, and REPORT-01 is where each week's figures get recorded so the picture accumulates instead of resetting.
 
 - **If you're new:** start with WP-01 and keep one week of the Field Audit before touching anything else.
 - **If something is on fire right now:** WP-02, then WP-09.
@@ -58,6 +61,7 @@ The numbering isn't sequential and never has been — the numbers are slots in a
 | ID | Name | What it does | Where |
 |---|---|---|---|
 | CALC-01 | The Solvency Read | Takes the figures the workpapers produce and returns a 0–1 read on whether the current workload arrangement looks sustainable. Scores the arrangement — never either person. Runs in your browser; nothing saved or sent. | Page |
+| REPORT-01 | The Full Read | The compilation layer. Records what each worksheet produced, week by week, and writes the findings no single instrument can see. Your ledger is a file you save and reload; nothing is stored in the browser. | Page |
 | PROG-01 | The 6-Week Program | A guided sequence through the live workpapers in a deliberate order, one instrument at a time, ending in a second read you can compare against the first. | Page |
 
 ## What nothing here will ever use
@@ -66,6 +70,6 @@ Tone of voice, recordings, message sentiment, response timestamps, or anything d
 
 ## Not yet built
 
-Chapters VI through XII of the manuscript, the remaining workpapers (WP-05 through WP-08, WP-10, WP-12, WP-14, WP-15), and CALC-02 through CALC-07 are not yet written. If you see any of these referenced elsewhere as already complete, that reference is wrong — this index is the current source of truth.
+Chapters VI through XII of the manuscript, the remaining workpapers (WP-05 through WP-08, WP-10, WP-12, WP-14, WP-15), and CALC-02 through CALC-07 are not yet written. If you see any chapter, workpaper or calculator referenced elsewhere as already complete and it is not listed above, that reference is wrong — within its stated scope, this index is the current source of truth.
 
 New material gets added to this index the same day it ships, not before.

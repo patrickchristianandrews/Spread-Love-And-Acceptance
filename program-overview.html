@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Program Overview — The Objective Ledger (TOL-OS)</title>
+<meta name="description" content="How the manuscript chapters map onto the workpapers: what each chapter argues, which instrument it pairs with, and what is built today.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,500&family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/book-layout.css">
+<style>
+  /*
+    Page-local styles for the program overview. Reuses book-layout.css
+    tokens and the roadmap's status-badge classes; adds only what a
+    chapter/mechanic mapping layout needs.
+  */
+
+  .map-note{
+    border-left: 4px solid var(--focus, #2B5B8C);
+    background: #E7EEF4;
+    border-radius: var(--radius);
+    padding: 16px 20px;
+    margin-bottom: 30px;
+  }
+
+  .map-note p{ margin: 0 0 9px 0; font-size: 0.93rem; }
+  .map-note p:last-child{ margin-bottom: 0; }
+
+  .map-card{
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    background: var(--paper-deep);
+    padding: 20px 24px;
+    margin-bottom: 14px;
+  }
+
+  .map-card-head{
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 8px 14px;
+    border-bottom: 1px solid var(--line);
+    padding-bottom: 10px;
+    margin-bottom: 12px;
+  }
+
+  .map-id{
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 0.68rem;
+    letter-spacing: 0.06em;
+    color: var(--brass);
+    text-transform: uppercase;
+  }
+
+  .map-title{
+    font-family: "Fraunces", serif;
+    font-weight: 600;
+    font-size: 1.06rem;
+    margin: 0;
+    flex: 1 1 auto;
+  }
+
+  .map-card p{ font-size: 0.92rem; margin: 0 0 10px 0; }
+  .map-card p:last-child{ margin-bottom: 0; }
+
+  .pairs{
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 0.72rem;
+    color: var(--ink-soft);
+    border-top: 1px solid var(--line);
+    padding-top: 10px;
+    margin-top: 12px;
+  }
+
+  .pairs b{ color: var(--brass); font-weight: 500; }
+
+  table.map-table{
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.85rem;
+    margin-bottom: 8px;
+  }
+
+  table.map-table th{
+    text-align: left;
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 0.68rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--brass);
+    border-bottom: 2px solid var(--line);
+    padding: 5px 10px 9px 0;
+    vertical-align: bottom;
+  }
+
+  table.map-table td{
+    border-bottom: 1px solid var(--line);
+    padding: 9px 10px 9px 0;
+    vertical-align: top;
+  }
+
+  table.map-table td.mono{
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 0.76rem;
+    white-space: nowrap;
+    width: 1%;
+    padding-right: 18px;
+  }
+
+  .scope-box{
+    border-left: 4px solid var(--debit, #96412B);
+    background: #F2E2DB;
+    border-radius: var(--radius);
+    padding: 16px 20px;
+    margin-top: 24px;
+  }
+
+  .scope-box p{ margin: 0 0 9px 0; font-size: 0.9rem; }
+  .scope-box p:last-child{ margin-bottom: 0; }
+
+  @media (max-width: 700px){
+    .map-card{ padding: 16px 16px; }
+    table.map-table{ font-size: 0.78rem; }
+  }
+</style>
+</head>
+<body>
+
+<div class="frame">
+
+  <aside class="sidebar">
+    <div class="mark">The Objective Ledger
+      <small>TOL&#8209;OS &middot; PROGRAM OVERVIEW</small>
+    </div>
+    <p class="tagline">What each chapter argues, which instrument it pairs with, and what exists today.</p>
+    <nav aria-label="Table of contents">
+      <ol>
+        <li><a href="#manuscript">The Manuscript</a></li>
+        <li><a href="#signal">The Signal Layer</a></li>
+        <li><a href="#connect">How They Connect</a></li>
+        <li><a href="#designed">Designed, Not Built</a></li>
+      </ol>
+    </nav>
+    <a class="back-link" href="suite-index.html">The Suite Index &rarr;</a>
+    <a class="back-link" href="index.html">&larr; Back to TOL-OS</a>
+  </aside>
+
+  <div class="rule" aria-hidden="true"></div>
+
+  <main>
+
+    <div class="draft-notice">
+      <strong>A note on status:</strong> every item below is marked either built or designed-not-built. Sections marked as designed describe intended structure only &mdash; no text exists for them yet. Where this page and the <a href="suite-index.html">Suite Index</a> disagree, the Suite Index is correct.
+    </div>
+
+    <section id="manuscript">
+      <div class="kicker">Layer One</div>
+      <h2>The Manuscript</h2>
+      <p class="lede">Five chapters and a preface. Each chapter makes an argument; the workpaper it pairs with is where that argument becomes something a household fills in.</p>
+
+      <div class="map-note">
+        <p>The framework borrows its vocabulary from signal processing and accounting because those fields already have precise words for things households experience vaguely &mdash; drift, saturation, an unbilled cost. The metaphors are descriptive tools, not claims about physiology or physics.</p>
+      </div>
+
+      <div class="map-card">
+        <div class="map-card-head">
+          <span class="map-id">Chapter I</span>
+          <h3 class="map-title">The Radio Frequency Paradigm</h3>
+          <span class="status-badge status-live">Live</span>
+        </div>
+        <p>Separates the carrier from the payload: the thing being said, and the tone carrying it. Most household conflict isn't a disagreement about content &mdash; it's two people transmitting at frequencies the other can't receive, and hearing static where a message was intended.</p>
+        <p class="pairs"><b>Pairs with:</b> WP-09, the Tone Transducer &amp; Filter &middot; <b>Free to read on the homepage</b></p>
+      </div>
+
+      <div class="map-card">
+        <div class="map-card-head">
+          <span class="map-id">Chapter II</span>
+          <h3 class="map-title">The Epistemic Verdict Engine &amp; P(Solvency)</h3>
+          <span class="status-badge status-live">Live</span>
+        </div>
+        <p>The case for scoring an arrangement rather than a person, and the arithmetic that does it. Defines the three inputs the calculator reads and states plainly what the resulting number can and cannot support.</p>
+        <p class="pairs"><b>Pairs with:</b> CALC-01, the Solvency Read &middot; <b>Free to read on the homepage</b></p>
+      </div>
+
+      <div class="map-card">
+        <div class="map-card-head">
+          <span class="map-id">Chapter III</span>
+          <h3 class="map-title">Autonomic Saturation &amp; the 7 Ocular Vectors</h3>
+          <span class="status-badge status-live">Live</span>
+        </div>
+        <p>How much of a reaction was already present before the conversation started, and which vantage point each person is arguing from. Separates "how much am I carrying" from "how upset am I about this specific thing" &mdash; two questions that feel identical in the moment and need different answers.</p>
+        <p class="pairs"><b>Pairs with:</b> WP-02, the Battery &amp; Stress Meter &middot; WP-11, the Calm-Down Kit</p>
+      </div>
+
+      <div class="map-card">
+        <div class="map-card-head">
+          <span class="map-id">Chapter IV</span>
+          <h3 class="map-title">Deontological Parity &amp; Sensory Gating</h3>
+          <span class="status-badge status-live">Live</span>
+        </div>
+        <p>Why most chore arguments are fairness-philosophy arguments wearing a dish towel &mdash; two people applying different theories of what a fair share means, neither having said which theory they hold. Sensory gating covers what gets filtered out before it reaches attention, and why one person genuinely doesn't see what the other cannot stop seeing.</p>
+        <p class="pairs"><b>Pairs with:</b> WP-03, the Domestic RACI Treaty</p>
+      </div>
+
+      <div class="map-card">
+        <div class="map-card-head">
+          <span class="map-id">Chapter V</span>
+          <h3 class="map-title">The Deficit Audit</h3>
+          <span class="status-badge status-live">Live</span>
+        </div>
+        <p>Why a monthly pass is needed on top of the weekly ones. Some patterns are invisible at the weekly scale and only resolve when four weeks are laid side by side &mdash; and a recurring gap usually turns out to be structural rather than a run of bad weeks.</p>
+        <p class="pairs"><b>Pairs with:</b> WP-04, the Unbilled Deficit Audit</p>
+      </div>
+    </section>
+
+    <section id="signal">
+      <div class="kicker">Layer Two</div>
+      <h2>The Signal Layer</h2>
+      <p class="lede">The instruments concerned with transmission and timing rather than with workload. One is built; three are designed and not written.</p>
+
+      <div class="map-card">
+        <div class="map-card-head">
+          <span class="map-id">WP-13</span>
+          <h3 class="map-title">Phase-Locked Loop Protocol</h3>
+          <span class="status-badge status-live">Live</span>
+        </div>
+        <p>A ninety-second daily check-in &mdash; load, friction, ask &mdash; with no debate, no solving and no rebuttal. Named after the circuit that keeps two signals in step through continuous small corrections rather than occasional large ones, which is also the argument: a minute a day prevents most of what becomes a Saturday afternoon.</p>
+        <p class="pairs"><b>Status:</b> built, in the member bundle, and the one habit intended to outlive the rest of the system</p>
+      </div>
+
+      <div class="map-card">
+        <div class="map-card-head">
+          <span class="map-id">WP-12</span>
+          <h3 class="map-title">Carrier Frequency Audit</h3>
+          <span class="status-badge status-planned">Designed</span>
+        </div>
+        <p>Intended to map pacing mismatch &mdash; where one person is mid-stride and quick and the other is at the end of capacity and slow, and the resulting conversation produces noise neither of them meant. A difference in tempo, not in willingness.</p>
+        <p class="pairs"><b>Status:</b> no text exists yet</p>
+      </div>
+
+      <div class="map-card">
+        <div class="map-card-head">
+          <span class="map-id">WP-14</span>
+          <h3 class="map-title">Static Dampening Log</h3>
+          <span class="status-badge status-planned">Designed</span>
+        </div>
+        <p>Intended to separate external pressure &mdash; money, work, illness, broken sleep &mdash; from friction that actually originates between two people, so that environmental strain stops being attributed to a partner by default.</p>
+        <p class="pairs"><b>Status:</b> no text exists yet</p>
+      </div>
+
+      <div class="map-card">
+        <div class="map-card-head">
+          <span class="map-id">WP-15</span>
+          <h3 class="map-title">Harmonic Resonance &amp; Entrainment</h3>
+          <span class="status-badge status-planned">Designed</span>
+        </div>
+        <p>Intended as long-cycle calibration: the shared touchpoints that keep two people in step across years rather than weeks, and what to do when they've quietly lapsed.</p>
+        <p class="pairs"><b>Status:</b> no text exists yet</p>
+      </div>
+    </section>
+
+    <section id="connect">
+      <div class="kicker">Architecture</div>
+      <h2>How They Connect</h2>
+      <p class="lede">Four workpapers produce numbers. Three don't, deliberately &mdash; not everything worth doing is worth scoring.</p>
+
+      <table class="map-table">
+        <thead>
+          <tr><th>Instrument</th><th>Reads from</th><th>Produces</th><th>Feeds</th></tr>
+        </thead>
+        <tbody>
+          <tr><td class="mono">WP-01</td><td>Ch. V</td><td>Workload balance</td><td>CALC-01</td></tr>
+          <tr><td class="mono">WP-02</td><td>Ch. III</td><td>Autonomic saturation</td><td>CALC-01</td></tr>
+          <tr><td class="mono">WP-03</td><td>Ch. IV</td><td>Ownership clarity</td><td>CALC-01</td></tr>
+          <tr><td class="mono">WP-09</td><td>Ch. I</td><td>Retuning frequency</td><td>Apex score only</td></tr>
+          <tr><td class="mono">WP-04</td><td>Ch. V</td><td>&mdash;</td><td>Amendments to WP-03</td></tr>
+          <tr><td class="mono">WP-11</td><td>Ch. III</td><td>&mdash;</td><td>Gates WP-03 and WP-09</td></tr>
+          <tr><td class="mono">WP-13</td><td>Ch. I</td><td>&mdash;</td><td>Promotes items to WP-03 or WP-09</td></tr>
+          <tr><td class="mono">CALC-01</td><td>Ch. II</td><td>P(Solvency), apex score</td><td>The weekly closing</td></tr>
+          <tr><td class="mono">REPORT-01</td><td>All of the above</td><td>Cross-instrument findings</td><td>The member's own ledger file</td></tr>
+        </tbody>
+      </table>
+
+      <div class="scope-box">
+        <p><strong>What none of this will ever take as an input:</strong> tone of voice, recordings, message sentiment, response timestamps, or anything describing one person without their direct participation in entering it. No score is ever computed from one partner's inputs alone.</p>
+        <p>None of it is a validated clinical or statistical instrument. Nothing here was trained on data and nothing predicts an outcome. If a number is ever used to end a conversation rather than start one, it is being misused.</p>
+      </div>
+    </section>
+
+    <section id="designed">
+      <div class="kicker">Honest accounting</div>
+      <h2>Designed, Not Built</h2>
+      <p class="lede">The framework is designed toward a wider set than currently exists. Naming the gaps is the point of this page.</p>
+
+      <table class="map-table">
+        <thead>
+          <tr><th>Item</th><th>State</th></tr>
+        </thead>
+        <tbody>
+          <tr><td class="mono">Ch. VI&ndash;XII</td><td>Topics not yet finalized.</td></tr>
+          <tr><td class="mono">WP-12, 14, 15</td><td>Structure sketched above. No text written.</td></tr>
+          <tr><td class="mono">WP-05&ndash;08, 10</td><td>Reserved slots. Topics not yet finalized.</td></tr>
+          <tr><td class="mono">CALC-02&ndash;07</td><td>Reserved slots. Topics not yet finalized.</td></tr>
+        </tbody>
+      </table>
+
+      <p style="font-size:0.88rem;color:var(--ink-soft);margin-top:16px;">For counts rather than descriptions, see the <a href="telemetry.html">Rollout Telemetry</a>. For what each built instrument does and when to reach for it, see the <a href="suite-index.html">Suite Index</a>. Release order and timing are estimates, not commitments.</p>
+    </section>
+
+  </main>
+</div>
+
+<footer>
+  TOL&#8209;OS &middot; spreadloveandacceptance.com
+  <div class="footer-links">
+    <a href="index.html">Home</a>
+    <a href="suite-index.html">Suite Index</a>
+    <a href="telemetry.html">Telemetry</a>
+    <a href="roadmap.html">Roadmap</a>
+  </div>
+</footer>
+
+</body>
+</html>
