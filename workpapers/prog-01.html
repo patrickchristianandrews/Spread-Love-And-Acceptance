@@ -1,0 +1,822 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PROG-01 — The Six-Week Guided Curriculum</title>
+<meta name="description" content="PROG-01: the six-week program that sequences WP-01, WP-02, WP-03, WP-09 and WP-13 into a week-by-week order, ending in a measurable second read.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,500&family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  /*
+    PROG-01 — the six-week curriculum.
+    Shares the WP-01 / WP-02 token system and print behaviour so the
+    whole Suite prints as one consistent set of documents.
+  */
+
+  :root{
+    --paper: #F5EFDE;
+    --paper-deep: #ECE2C4;
+    --ink: #211D17;
+    --ink-soft: #524B3E;
+    --line: #D9CBA3;
+    --credit: #3E6B4C;
+    --credit-soft: #E4EDE3;
+    --brass: #A8792F;
+    --focus: #2B5B8C;
+    --radius: 3px;
+  }
+
+  *{ box-sizing: border-box; }
+
+  @page{
+    size: letter portrait;
+    margin: 0.55in;
+  }
+
+  body{
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: "Lora", Georgia, serif;
+    font-size: 16px;
+    line-height: 1.65;
+  }
+
+  h1, h2, h3{
+    font-family: "Fraunces", "Lora", serif;
+    font-weight: 600;
+    line-height: 1.2;
+    margin: 0 0 0.5em 0;
+  }
+
+  .print-bar{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    max-width: 8.5in;
+    margin: 20px auto;
+    padding: 14px 20px;
+    background: var(--paper-deep);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 0.8rem;
+    color: var(--ink-soft);
+  }
+
+  .print-bar button{
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 0.75rem;
+    padding: 8px 16px;
+    border: none;
+    border-radius: var(--radius);
+    background: var(--ink);
+    color: var(--paper);
+    cursor: pointer;
+  }
+
+  .print-bar button:focus-visible,
+  .toc a:focus-visible{
+    outline: 2px solid var(--focus);
+    outline-offset: 2px;
+  }
+
+  @media print{
+    .print-bar{ display: none; }
+    body{ background: #fff; }
+  }
+
+  .sheet{
+    max-width: 8.5in;
+    margin: 0 auto 60px auto;
+    padding: 0.5in 0.6in;
+    background: var(--paper);
+    border: 1px solid var(--line);
+  }
+
+  @media print{
+    .sheet{ margin: 0; padding: 0; max-width: 100%; border: none; }
+    .week{ break-inside: avoid; }
+    .part-section{ break-inside: avoid; }
+    .week-divider{ break-before: page; }
+    #week-1{ break-before: auto; }
+  }
+
+  .sheet-header{
+    text-align: center;
+    border-bottom: 2px solid var(--brass);
+    padding-bottom: 16px;
+    margin-bottom: 28px;
+  }
+
+  .wp-num{
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 0.7rem;
+    color: var(--brass);
+    letter-spacing: 0.08em;
+    margin-bottom: 4px;
+  }
+
+  .sheet-mark{ font-size: 1.4rem; margin: 0; }
+
+  .sheet-mark small{
+    display: block;
+    font-family: "IBM Plex Mono", monospace;
+    font-weight: 400;
+    font-size: 0.62rem;
+    letter-spacing: 0.1em;
+    color: var(--brass);
+    margin-top: 6px;
+  }
+
+  .sheet-tagline{
+    font-size: 0.9rem;
+    color: var(--ink-soft);
+    margin: 10px 0 0 0;
+  }
+
+  .toc{
+    display: flex;
+    justify-content: center;
+    gap: 18px;
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 0.72rem;
+    color: var(--ink-soft);
+    margin: 14px 0 0 0;
+  }
+
+  .toc a{ color: var(--brass); text-decoration: none; }
+
+  .intro-note{
+    border-left: 4px solid var(--focus);
+    background: #E7EEF4;
+    border-radius: var(--radius);
+    padding: 16px 20px;
+    margin-bottom: 30px;
+  }
+
+  .intro-note p{ margin: 0 0 10px 0; font-size: 0.95rem; }
+  .intro-note p:last-child{ margin-bottom: 0; }
+
+  .part-divider{
+    text-align: center;
+    margin: 44px 0 30px 0;
+    padding-top: 30px;
+    border-top: 3px double var(--brass);
+  }
+
+  .part-divider .part-label{
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--brass);
+    margin-bottom: 6px;
+  }
+
+  .part-divider h2{ font-size: 1.5rem; margin: 0; }
+
+  .part-section{ margin-bottom: 34px; }
+
+  .part-section > h3{
+    font-size: 1.15rem;
+    border-bottom: 1px solid var(--brass);
+    padding-bottom: 8px;
+    margin-bottom: 18px;
+  }
+
+  p{ max-width: 72ch; }
+
+  /* Tables — shared with WP-01's audit table */
+
+  table.audit-table{
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.85rem;
+    margin-bottom: 8px;
+  }
+
+  table.audit-table th{
+    text-align: left;
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--brass);
+    border-bottom: 2px solid var(--line);
+    padding: 6px 10px 10px 0;
+    vertical-align: bottom;
+  }
+
+  table.audit-table td{
+    border-bottom: 1px solid var(--line);
+    padding: 10px 10px 10px 0;
+    vertical-align: top;
+  }
+
+  table.audit-table td.day-cell,
+  table.audit-table td.term-cell{
+    font-family: "Fraunces", serif;
+    font-weight: 600;
+    white-space: nowrap;
+    width: 1%;
+    padding-right: 20px;
+  }
+
+  table.audit-table tr:last-child td{ border-bottom: 1px solid var(--line); }
+
+  table.fill-table td{ height: 34px; }
+
+  /* Week blocks */
+
+  .week-divider{
+    margin: 46px 0 26px 0;
+    padding-top: 26px;
+    border-top: 3px double var(--brass);
+  }
+
+  .week-divider .part-label{
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--brass);
+    margin: 0 0 4px 0;
+  }
+
+  .week-divider h2{ font-size: 1.4rem; margin: 0; }
+
+  .week-meta{
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 0.72rem;
+    line-height: 1.7;
+    color: var(--ink-soft);
+    background: var(--paper-deep);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 12px 16px;
+    margin: 16px 0 22px 0;
+  }
+
+  .week-meta span{ display: block; }
+  .week-meta b{ color: var(--brass); font-weight: 500; }
+
+  .week h3{
+    font-size: 1.02rem;
+    margin: 24px 0 8px 0;
+  }
+
+  .hold-box{
+    border-left: 4px solid var(--brass);
+    background: var(--paper-deep);
+    border-radius: var(--radius);
+    padding: 16px 20px;
+    margin: 18px 0;
+  }
+
+  .hold-box p{ margin: 0 0 10px 0; font-size: 0.92rem; }
+  .hold-box p:last-child{ margin-bottom: 0; }
+  .hold-box strong{ color: var(--brass); }
+
+  .rule-box{
+    border-left: 4px solid var(--credit);
+    background: var(--credit-soft);
+    border-radius: var(--radius);
+    padding: 16px 20px;
+    margin: 18px 0;
+  }
+
+  .rule-box p{ margin: 0 0 10px 0; font-size: 0.92rem; }
+  .rule-box p:last-child{ margin-bottom: 0; }
+
+  .rule-box ol{ margin: 0 0 10px 0; padding-left: 20px; font-size: 0.92rem; }
+  .rule-box ol li{ margin-bottom: 4px; }
+  .rule-box ol:last-child{ margin-bottom: 0; }
+
+  .checkpoint-label{
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 0.68rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--credit);
+    margin-bottom: 8px;
+  }
+
+  .hold-box .checkpoint-label{ color: var(--brass); }
+
+  .failure{
+    font-size: 0.9rem;
+    color: var(--ink-soft);
+    border-top: 1px solid var(--line);
+    padding-top: 12px;
+    margin-top: 22px;
+  }
+
+  .failure b{
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 0.68rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--brass);
+    font-weight: 500;
+    display: block;
+    margin-bottom: 4px;
+  }
+
+  ul.plain{ padding-left: 20px; max-width: 72ch; }
+  ul.plain li{ margin-bottom: 8px; }
+
+  code{
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 0.82em;
+    background: var(--paper-deep);
+    padding: 1px 5px;
+    border-radius: var(--radius);
+  }
+
+  /* Sign-off */
+
+  .signoff-table{
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.85rem;
+    margin-top: 8px;
+  }
+
+  .signoff-table th{
+    text-align: left;
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--brass);
+    border-bottom: 2px solid var(--line);
+    padding: 6px 10px 10px 0;
+  }
+
+  .signoff-table td{
+    border-bottom: 1px solid var(--line);
+    padding: 14px 10px 8px 0;
+  }
+
+  .signoff-table td.label-cell{
+    font-family: "Fraunces", serif;
+    font-weight: 600;
+    color: var(--ink);
+    white-space: nowrap;
+    width: 1%;
+    padding-right: 24px;
+  }
+
+  .sheet-footer{
+    margin-top: 30px;
+    border-top: 1px solid var(--line);
+    padding-top: 14px;
+    text-align: center;
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 0.65rem;
+    color: var(--ink-soft);
+  }
+
+  @media (max-width: 700px){
+    .print-bar{ flex-direction: column; align-items: stretch; text-align: center; }
+    table.audit-table{ font-size: 0.72rem; }
+    .toc{ flex-wrap: wrap; gap: 12px; }
+    .sheet{ padding: 0.35in 0.3in; }
+  }
+</style>
+</head>
+<body>
+
+  <div class="print-bar" role="toolbar" aria-label="Page actions">
+    <span>PROG-01 &middot; For Survival Kit members</span>
+    <button type="button" onclick="window.print()">Print / Save as PDF</button>
+  </div>
+
+  <main class="sheet" aria-label="PROG-01 — The Six-Week Guided Curriculum">
+
+    <header class="sheet-header">
+      <p class="wp-num">PROG-01</p>
+      <h1 class="sheet-mark">The Six-Week Guided Curriculum
+        <small>Program Sequence &middot; WP-01 &middot; WP-02 &middot; WP-03 &middot; WP-09 &middot; WP-13</small>
+      </h1>
+      <p class="sheet-tagline">One instrument at a time, in the order that makes each one land.</p>
+      <div class="toc">
+        <a href="#before">Before You Start</a>
+        <a href="#week-1">Weeks 1&ndash;6</a>
+        <a href="#after">After Week 6</a>
+        <a href="#running">Running It</a>
+      </div>
+    </header>
+
+    <div class="intro-note">
+      <p>Every instrument in the Suite is usable on its own. Used all at once, they collapse into paperwork. This program introduces one at a time, in the order that makes each one land &mdash; and ends with a measurable second read on where the household actually is.</p>
+      <p>Roughly 20 minutes a week of maintenance, plus one longer session in Week 3 and one in Week 6.</p>
+    </div>
+
+    <!-- ============================ BEFORE YOU START -->
+
+    <section id="before" aria-labelledby="before-h">
+      <div class="part-divider">
+        <div class="part-label">Setup</div>
+        <h2 id="before-h">Before You Start</h2>
+      </div>
+
+      <div class="part-section">
+        <p>Sit down together for fifteen minutes and settle four things. Doing this badly is the most common reason a program like this dies in Week 2.</p>
+
+        <table class="audit-table">
+          <thead>
+            <tr><th>Decision</th><th>Why it matters</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="term-cell">When the daily log gets written</td>
+              <td>Pick an existing moment &mdash; after dinner, before bed. A logging habit with no anchor gets skipped by Thursday.</td>
+            </tr>
+            <tr>
+              <td class="term-cell">Where it lives</td>
+              <td>One shared place, readable by both people. A shared note, a printed sheet on the fridge, a notebook. Not two private lists.</td>
+            </tr>
+            <tr>
+              <td class="term-cell">A weekly closing slot</td>
+              <td>About 20 minutes, same time each week. This is where every week below ends. Put it in the calendar now.</td>
+            </tr>
+            <tr>
+              <td class="term-cell">Who reads what</td>
+              <td>Both people read the same chapter each week, ideally before the weekly closing.</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="rule-box">
+          <div class="checkpoint-label">The ground rule for all six weeks</div>
+          <p><strong>Nothing logged becomes evidence.</strong> Anything written in a Field Audit, a Battery score, or a daily loop is not quotable in an argument, not stored up, and not read back to the other person as proof. The moment the log becomes ammunition, the log stops being honest &mdash; and an honest log is the only thing that makes the rest of this work.</p>
+          <p>Agree to it out loud before Week 1. If either person can't, the program won't survive contact with a bad week.</p>
+        </div>
+
+        <h3>The reading map</h3>
+        <p>Read by title; chapter numbering is listed in the manuscript's own table of contents.</p>
+
+        <table class="audit-table">
+          <thead>
+            <tr><th>Week</th><th>Chapter</th></tr>
+          </thead>
+          <tbody>
+            <tr><td class="day-cell">1</td><td>Preface &mdash; "Unbilled Debt" &middot; The Radio Frequency Paradigm</td></tr>
+            <tr><td class="day-cell">2</td><td>Autonomic Saturation &amp; the 7 Ocular Vectors</td></tr>
+            <tr><td class="day-cell">3</td><td>Deontological Parity &amp; Sensory Gating</td></tr>
+            <tr><td class="day-cell">4</td><td>The Epistemic Verdict Engine &amp; P(Solvency)</td></tr>
+            <tr><td class="day-cell">5</td><td>The Deficit Audit</td></tr>
+            <tr><td class="day-cell">6</td><td>No new reading &mdash; this week is review</td></tr>
+          </tbody>
+        </table>
+
+        <div class="intro-note" style="margin-top:24px;">
+          <p><strong>A scope note.</strong> This program assumes two people who are both frustrated and both willing. It isn't built for a household where one person is afraid of the other. A system that logs behaviour and assigns ownership becomes a tool of control in a relationship that already has coercion in it, which is the opposite of what it's for. If that's closer to your situation, this isn't the right instrument, and a counselor or a domestic violence advocate is a better first call than a workpaper.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================ WEEK 1 -->
+
+    <section class="week" id="week-1" aria-labelledby="week-1-h">
+      <div class="week-divider">
+        <p class="part-label">Week One</p>
+        <h2 id="week-1-h">Observe, don't interpret</h2>
+      </div>
+
+      <div class="week-meta">
+        <span><b>Reading:</b> Preface, and The Radio Frequency Paradigm</span>
+        <span><b>In play:</b> WP-01, Part A &mdash; the Field Audit</span>
+        <span><b>Time:</b> ~2 min/day, plus 20 min at the weekly closing</span>
+      </div>
+
+      <h3>What you do</h3>
+      <p>Keep the 7-day log. One row per task noticed or done. Two minutes a day, written at the same time each day, by both people independently or together.</p>
+      <p>Log what happened, not what should have happened. Rough minutes are fine &mdash; "20" is as useful as "18," and stopping to time yourself will kill the habit by Wednesday.</p>
+
+      <div class="hold-box">
+        <div class="checkpoint-label">What you deliberately don't do yet</div>
+        <p><strong>Don't total the columns until Sunday.</strong> Don't compare. Don't discuss what the log is showing while it's being kept. A week of observation contaminated by mid-week argument produces a week of data about the argument.</p>
+        <p><strong>Don't use Part B yet.</strong> The Neutral Refusals are Week 2's material.</p>
+      </div>
+
+      <div class="rule-box">
+        <div class="checkpoint-label">End-of-week checkpoint</div>
+        <ol>
+          <li>Did both people log on at least five of the seven days?</li>
+          <li>Is there anything in the log that surprised either of you?</li>
+        </ol>
+        <p>If the answer to (1) is no, <strong>repeat Week 1</strong> rather than moving on. Everything downstream reads from this data, and a three-day log isn't a week.</p>
+      </div>
+
+      <p class="failure"><b>Failure mode to watch for</b>The log turning into a scoreboard mid-week. If either person catches themselves logging in order to win Sunday's conversation, say so out loud and go back to logging what happened.</p>
+    </section>
+
+    <!-- ============================ WEEK 2 -->
+
+    <section class="week" id="week-2" aria-labelledby="week-2-h">
+      <div class="week-divider">
+        <p class="part-label">Week Two</p>
+        <h2 id="week-2-h">Add the daily gut-check</h2>
+      </div>
+
+      <div class="week-meta">
+        <span><b>Reading:</b> Autonomic Saturation &amp; the 7 Ocular Vectors</span>
+        <span><b>In play:</b> WP-01 Part A continues &middot; WP-02 introduced &middot; WP-01 Part B available</span>
+        <span><b>Time:</b> ~3 min/day, plus 20 min at the weekly closing</span>
+      </div>
+
+      <h3>What you do</h3>
+      <p>Keep logging &mdash; the Field Audit doesn't stop, it just gets quieter now that it's a habit.</p>
+      <p>Add the Battery score once a day, filled in by each person about themselves. Five rows, sixty seconds, no discussion required. Write the number next to the day's log.</p>
+      <p>Read WP-01 Part B this week and pick two scripts that sound like something you'd actually say. Not all of them &mdash; two. A script you'd never use in real life is worse than no script.</p>
+
+      <div class="hold-box">
+        <div class="checkpoint-label">What you deliberately don't do yet</div>
+        <p><strong>Don't assign ownership.</strong> The urge to fix the imbalance Week 1 exposed is going to be strong. Fixing it before Week 3 means assigning tasks from one week of data and a lot of feeling.</p>
+        <p><strong>Don't fill in a Battery score for the other person.</strong> Not as a guess, not as a joke.</p>
+      </div>
+
+      <div class="rule-box">
+        <div class="checkpoint-label">End-of-week checkpoint</div>
+        <ol>
+          <li>Does each person have five to seven daily Battery scores?</li>
+          <li>Looking at the two weeks side by side: does either person's score move with something predictable &mdash; a day of the week, a work cycle, a recurring obligation?</li>
+        </ol>
+        <p>You're not acting on the pattern yet. You're noticing whether one exists.</p>
+      </div>
+
+      <p class="failure"><b>Failure mode to watch for</b>A high Battery score used as an exit &mdash; "I'm at 0.8, I can't talk about this." A high score means <em>revisit tomorrow</em>, and tomorrow has to actually come. If a conversation gets postponed on a Battery score, name when it resumes.</p>
+    </section>
+
+    <!-- ============================ WEEK 3 -->
+
+    <section class="week" id="week-3" aria-labelledby="week-3-h">
+      <div class="week-divider">
+        <p class="part-label">Week Three</p>
+        <h2 id="week-3-h">Assign ownership</h2>
+      </div>
+
+      <div class="week-meta">
+        <span><b>Reading:</b> Deontological Parity &amp; Sensory Gating</span>
+        <span><b>In play:</b> WP-03 &mdash; the RACI Treaty. WP-01 and WP-02 continue as habit</span>
+        <span><b>Time:</b> 45&ndash;60 min once, plus ~3 min/day and the weekly closing</span>
+      </div>
+
+      <h3>What you do</h3>
+      <p>This is the program's first long session. Set aside 45 to 60 minutes, and don't try to do it at the end of a hard day.</p>
+      <p>Fill in the treaty using two weeks of real data instead of impressions. For every recurring task, name exactly one Responsible and one Accountable. They can be the same person. Add rows for anything the Field Audit turned up that the default list doesn't cover &mdash; the audit almost always surfaces two or three.</p>
+      <p>Then calculate the Ownership Clarity Score: tasks with both R and A filled in, divided by total tasks listed. Write it down with the date.</p>
+
+      <div class="hold-box">
+        <div class="checkpoint-label">What you deliberately don't do yet</div>
+        <p><strong>Don't try to make the treaty fair.</strong> Ratifying it means ownership is <em>clear</em>, not that every line feels even. A clear but lopsided treaty is visible and fixable; an unwritten fair-feeling arrangement is neither.</p>
+        <p><strong>Don't renegotiate tasks that are working.</strong> Only the contested and the unowned need this session.</p>
+      </div>
+
+      <div class="rule-box">
+        <div class="checkpoint-label">End-of-week checkpoint</div>
+        <ol>
+          <li>Does every row have both an R and an A?</li>
+          <li>Have both people initialed it?</li>
+          <li>Were there tasks nobody wanted to claim &mdash; and did they get assigned anyway, rather than left blank?</li>
+        </ol>
+        <p>A blank row isn't a compromise. It's the same invisible arrangement you started with.</p>
+      </div>
+
+      <p class="failure"><b>Failure mode to watch for</b>The treaty becoming a one-session document. It's a living agreement. If it's never amended in six weeks, it's probably not being used.</p>
+    </section>
+
+    <!-- ============================ WEEK 4 -->
+
+    <section class="week" id="week-4" aria-labelledby="week-4-h">
+      <div class="week-divider">
+        <p class="part-label">Week Four</p>
+        <h2 id="week-4-h">Retune before you transmit</h2>
+      </div>
+
+      <div class="week-meta">
+        <span><b>Reading:</b> The Epistemic Verdict Engine &amp; P(Solvency)</span>
+        <span><b>In play:</b> WP-09 &mdash; the Tone Transducer &amp; Filter &middot; first solvency read</span>
+        <span><b>Time:</b> 15 min to read WP-09, applied in the moment &middot; ~20 min for the first solvency read</span>
+      </div>
+
+      <h3>What you do</h3>
+      <p>By now something has landed badly. Three weeks of logging, scoring, and assigning ownership without a single hard moment would be unusual, and Week 4 exists because that moment has probably already happened.</p>
+      <p>Read WP-09 and run one real reaction through it &mdash; fact, feeling, ask &mdash; before responding. Once. Don't try to run everything through it; try it on one thing that actually stung and see whether what comes out the other side is different.</p>
+      <p>Then, at the weekly closing, run CALC-01 for the first time. You now have all three inputs, and this is the first week they all exist:</p>
+
+      <table class="audit-table">
+        <thead>
+          <tr><th>Input</th><th>Comes from</th></tr>
+        </thead>
+        <tbody>
+          <tr><td class="term-cell"><code>workload_balance_score</code></td><td>Week 1 Field Audit totals</td></tr>
+          <tr><td class="term-cell"><code>average_autonomic_saturation</code></td><td>Week 2 Battery scores</td></tr>
+          <tr><td class="term-cell"><code>ownership_clarity_score</code></td><td>Week 3 RACI Treaty</td></tr>
+        </tbody>
+      </table>
+
+      <p>Write the result down with the date. This is a baseline, not a verdict &mdash; you read the chapter first specifically so the number arrives already interpreted.</p>
+
+      <div class="hold-box">
+        <div class="checkpoint-label">What you deliberately don't do yet</div>
+        <p><strong>Don't compare the number to anything.</strong> There's nothing to compare it to yet &mdash; that's Week 6. A single solvency read taken in isolation tells you about one month's operations and nothing about the relationship's worth.</p>
+      </div>
+
+      <div class="rule-box">
+        <div class="checkpoint-label">End-of-week checkpoint</div>
+        <ol>
+          <li>Did at least one message actually get rewritten through the transducer before sending?</li>
+          <li>Is the baseline solvency read written down somewhere it will still be findable in two weeks?</li>
+        </ol>
+      </div>
+
+      <p class="failure"><b>Failure mode to watch for</b>Running the filter on the other person's messages instead of your own. The transducer is for what you're about to send; the filter is for how much weight you give what you received. Neither is for grading their delivery.</p>
+    </section>
+
+    <!-- ============================ WEEK 5 -->
+
+    <section class="week" id="week-5" aria-labelledby="week-5-h">
+      <div class="week-divider">
+        <p class="part-label">Week Five</p>
+        <h2 id="week-5-h">Make the correction continuous</h2>
+      </div>
+
+      <div class="week-meta">
+        <span><b>Reading:</b> The Deficit Audit</span>
+        <span><b>In play:</b> WP-13 &mdash; the Phase-Locked Loop Protocol</span>
+        <span><b>Time:</b> 90 seconds/day, plus 20 min at the weekly closing</span>
+      </div>
+
+      <h3>What you do</h3>
+      <p>Start the daily loop: 90 seconds, out loud, one sentence each. Load, friction, ask. No debate, no solving, no rebuttal.</p>
+      <p>This is the habit meant to outlive the program. Everything else in these six weeks is scaffolding for a structure; the daily loop <em>is</em> the structure.</p>
+      <p>At the weekly closing, do the first weekly resync: skim the week's loops for anything that came up more than twice, and promote it &mdash; to the RACI Treaty if it's an ownership problem, to the tone filter if it's a transmission problem.</p>
+
+      <div class="hold-box">
+        <div class="checkpoint-label">What you deliberately don't do yet</div>
+        <p><strong>Don't let the loop absorb the weekly closing.</strong> The 90 seconds is observational. Anything that needs real discussion gets flagged and waits.</p>
+        <p><strong>Don't drop the Field Audit.</strong> It gets picked back up in full next week, and the habit needs to still be warm.</p>
+      </div>
+
+      <div class="rule-box">
+        <div class="checkpoint-label">End-of-week checkpoint</div>
+        <ol>
+          <li>Did the loop happen on at least five days?</li>
+          <li>Did anything get promoted out of it this week?</li>
+          <li>Has the loop stayed status-only, or has it started carrying criticism?</li>
+        </ol>
+        <p>If it's carrying criticism, name it now. A loop that becomes a nightly review gets avoided, and avoidance is the exact drift it exists to prevent.</p>
+      </div>
+
+      <p class="failure"><b>Failure mode to watch for</b>Skipping the loop on the days it would be most useful. The bad days are the data.</p>
+    </section>
+
+    <!-- ============================ WEEK 6 -->
+
+    <section class="week" id="week-6" aria-labelledby="week-6-h">
+      <div class="week-divider">
+        <p class="part-label">Week Six</p>
+        <h2 id="week-6-h">The second read</h2>
+      </div>
+
+      <div class="week-meta">
+        <span><b>Reading:</b> None &mdash; this week is review</span>
+        <span><b>In play:</b> WP-01 Part A, run again in full &middot; CALC-01, second read</span>
+        <span><b>Time:</b> ~2 min/day, plus a 45-minute closing session</span>
+      </div>
+
+      <h3>What you do</h3>
+      <p>Keep a full second week of Field Audit &mdash; same format, same rules, seven days. Then hold a longer closing session and compare the two weeks directly.</p>
+
+      <table class="audit-table fill-table">
+        <thead>
+          <tr><th>Compare</th><th>Week 1</th><th>Week 6</th></tr>
+        </thead>
+        <tbody>
+          <tr><td class="term-cell">Total minutes, Partner A</td><td></td><td></td></tr>
+          <tr><td class="term-cell">Total minutes, Partner B</td><td></td><td></td></tr>
+          <tr><td class="term-cell">Split (%)</td><td></td><td></td></tr>
+          <tr><td class="term-cell">Noticed and handled, unasked</td><td></td><td></td></tr>
+          <tr><td class="term-cell">Average Battery score, each</td><td><em>n/a</em></td><td></td></tr>
+          <tr><td class="term-cell">Ownership Clarity Score</td><td><em>n/a</em></td><td></td></tr>
+          <tr><td class="term-cell">Solvency read</td><td><em>Week 4 baseline:</em></td><td></td></tr>
+        </tbody>
+      </table>
+
+      <h3>How to read the comparison</h3>
+      <ul class="plain">
+        <li><strong>The split moved.</strong> Something in the structure changed. Look at the treaty to see what.</li>
+        <li><strong>The split didn't move, but noticed-and-handled dropped.</strong> Fewer things are being silently absorbed. That's the change worth having, and it won't show up in a minutes total.</li>
+        <li><strong>Nothing moved.</strong> Six weeks of accurate data is still worth more than six weeks of guessing. The honest next question is whether the arrangement is genuinely stable or just untested &mdash; and the Deficit Audit, run monthly from here, is what answers it.</li>
+        <li><strong>It got worse.</strong> Surfacing an arrangement can make it feel heavier before it gets lighter, because it stops being invisible. Worth sitting with before concluding the framework failed. If it's still worse in a month, that's real information, and it may be pointing at something bigger than a chore split.</li>
+      </ul>
+
+      <div class="rule-box">
+        <div class="checkpoint-label">End-of-week checkpoint</div>
+        <ol>
+          <li>Are both solvency reads written down, dated, and stored together?</li>
+          <li>Is the daily loop still running?</li>
+          <li>Has the RACI Treaty been amended at least once since Week 3?</li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- ============================ AFTER -->
+
+    <section id="after" aria-labelledby="after-h">
+      <div class="part-divider">
+        <div class="part-label">Afterwards</div>
+        <h2 id="after-h">After Week 6</h2>
+      </div>
+
+      <div class="part-section">
+        <p>The program ends. The instruments don't.</p>
+
+        <table class="audit-table">
+          <thead>
+            <tr><th>What continues</th><th>Cadence</th></tr>
+          </thead>
+          <tbody>
+            <tr><td class="term-cell">WP-13 daily loop</td><td>Daily, 90 seconds &mdash; the one habit meant to be permanent</td></tr>
+            <tr><td class="term-cell">Weekly closing</td><td>Weekly, 20 minutes</td></tr>
+            <tr><td class="term-cell">WP-02 Battery score</td><td>As needed, before hard conversations</td></tr>
+            <tr><td class="term-cell">WP-09 transducer</td><td>As needed, in the moment</td></tr>
+            <tr><td class="term-cell">WP-01 Field Audit</td><td>One week per quarter, as a re-baseline</td></tr>
+          </tbody>
+        </table>
+
+        <p>The Field Audit isn't meant to run forever. Two weeks of honest logging a quarter is enough to catch drift; logging permanently turns a diagnostic into a chore, and a chore nobody assigned is where this started.</p>
+      </div>
+    </section>
+
+    <!-- ============================ RUNNING IT -->
+
+    <section id="running" aria-labelledby="running-h">
+      <div class="part-divider">
+        <div class="part-label">Notes</div>
+        <h2 id="running-h">Running the Program</h2>
+      </div>
+
+      <div class="part-section">
+        <h3>If a week goes sideways</h3>
+        <p>Repeat the week. Don't skip it.</p>
+        <p>The weeks are ordered because each one reads from the one before it &mdash; the treaty needs the audit, the solvency read needs all three, the comparison needs a real Week 1. Skipping forward produces a program that looks completed and has nothing under it.</p>
+        <div class="rule-box">
+          <p>Two exceptions, where a partial week is worse than a repeated one: <strong>Week 1 and Week 6 must both be full seven-day weeks.</strong> They're the two halves of the same measurement.</p>
+        </div>
+
+        <h3>Running this alone</h3>
+        <p>Most of it works solo, with one honest limitation.</p>
+
+        <table class="audit-table">
+          <thead>
+            <tr><th>Week</th><th>Alone?</th></tr>
+          </thead>
+          <tbody>
+            <tr><td class="day-cell">1</td><td>Yes &mdash; log your own tasks, and note what you observe of the household's</td></tr>
+            <tr><td class="day-cell">2</td><td>Yes</td></tr>
+            <tr><td class="day-cell">3</td><td>Partially &mdash; fill in the treaty as a <strong>proposal</strong>, not a ratified agreement. Ownership can't be unilaterally assigned</td></tr>
+            <tr><td class="day-cell">4</td><td>Yes</td></tr>
+            <tr><td class="day-cell">5</td><td>No &mdash; the loop needs two people. Substitute a written daily version for yourself and return to it later</td></tr>
+            <tr><td class="day-cell">6</td><td>Yes</td></tr>
+          </tbody>
+        </table>
+
+        <p>A solo run produces a real picture of your own load and a clear proposal to bring to the other person. What it can't produce is a treaty, because a treaty one person wrote is just a list of expectations.</p>
+      </div>
+    </section>
+
+    <!-- ============================ SIGN-OFF -->
+
+    <section id="signoff" aria-labelledby="signoff-h">
+      <div class="part-divider">
+        <div class="part-label">Sign-Off</div>
+        <h2 id="signoff-h">Program Record</h2>
+      </div>
+
+      <table class="signoff-table">
+        <thead>
+          <tr><th></th><th>Started</th><th>Completed</th></tr>
+        </thead>
+        <tbody>
+          <tr><td class="label-cell">Partner A</td><td></td><td></td></tr>
+          <tr><td class="label-cell">Partner B</td><td></td><td></td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <footer class="sheet-footer">
+      The Objective Ledger&trade; &middot; Workpaper Suite &middot; PROG-01 &middot; For Survival Kit members only, not for public redistribution
+    </footer>
+
+  </main>
+
+</body>
+</html>
