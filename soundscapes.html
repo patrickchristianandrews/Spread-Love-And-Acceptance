@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Soundscape Catalog — The Objective Ledger</title>
+<meta name="description" content="An honest, growing catalog of the audio pieces produced for The Objective Ledger — only tracks that actually exist and are ready to hear.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,500&family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/book-layout.css">
+<style>
+  /*
+    Page-local styles for the soundscape catalog. Reuses book-layout.css
+    tokens; adds only what's specific to a track-listing/player layout.
+  */
+
+  .catalog-note{
+    border-left: 4px solid var(--focus, #2B5B8C);
+    background: #E7EEF4;
+    border-radius: var(--radius);
+    padding: 16px 20px;
+    margin-bottom: 30px;
+  }
+
+  .catalog-note p{ margin: 0 0 8px 0; font-size: 0.95rem; }
+  .catalog-note p:last-child{ margin-bottom: 0; }
+
+  .track-list{
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  .track-card{
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    background: var(--paper-deep);
+    padding: 22px 26px;
+  }
+
+  .track-meta{
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 6px;
+  }
+
+  .track-title{
+    font-family: "Fraunces", serif;
+    font-weight: 600;
+    font-size: 1.15rem;
+    margin: 0;
+  }
+
+  .track-tags{
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 0.7rem;
+    color: var(--brass);
+    letter-spacing: 0.04em;
+  }
+
+  .track-album{
+    font-size: 0.85rem;
+    color: var(--ink-soft);
+    margin-bottom: 16px;
+  }
+
+  .track-player{
+    width: 100%;
+    max-width: 420px;
+    border-radius: var(--radius);
+    display: block;
+    margin-bottom: 12px;
+    background: #000;
+  }
+
+  .track-description{
+    font-size: 0.9rem;
+    color: var(--ink-soft);
+    max-width: 65ch;
+  }
+
+  .empty-slot{
+    border: 1px dashed var(--line);
+    border-radius: var(--radius);
+    padding: 20px 24px;
+    text-align: center;
+    color: var(--ink-soft);
+    font-size: 0.88rem;
+  }
+</style>
+</head>
+<body>
+
+<div class="frame">
+
+  <aside class="sidebar">
+    <div class="mark">The Objective Ledger
+      <small>TOL&#8209;OS &middot; SOUNDSCAPES</small>
+    </div>
+    <p class="tagline">A catalog of the audio pieces actually produced so far &mdash; nothing listed here is a placeholder.</p>
+    <a class="back-link" href="index.html">&larr; Back to TOL-OS</a>
+  </aside>
+
+  <div class="rule" aria-hidden="true"></div>
+
+  <main>
+
+    <section id="catalog">
+      <div class="kicker">Audio</div>
+      <h2>Soundscape Catalog</h2>
+      <p class="lede">Every track below has actually been produced and is ready to hear &mdash; this page grows one real entry at a time, not by a planned tracklist.</p>
+
+      <div class="catalog-note">
+        <p><strong>A note on what these are:</strong> these are ambient/atmospheric audio pieces, not a validated therapeutic or clinical tool. Some people find ambient and low-frequency audio calming as part of a personal listening habit; that's a matter of individual taste, not an established treatment.</p>
+        <p><strong>A note on "WP-11":</strong> WP-11 is a conceptual framework within this project, not a manufactured or purchasable device. Tracks described as designed for it are fully functional on standard sub-bass and vibroacoustic equipment you likely already own &mdash; no special hardware required.</p>
+      </div>
+
+      <div class="track-list">
+
+        <div class="track-card">
+          <div class="track-meta">
+            <h3 class="track-title">The Breath Beneath</h3>
+            <span class="track-tags">Vibroacoustic Ambient &middot; 2:55</span>
+          </div>
+          <div class="track-album">From the collection <em>Internal Landscapes</em></div>
+          <video class="track-player" controls preload="metadata" poster="">
+            <source src="assets/audio/soundscapes/the-breath-beneath.mp4" type="video/mp4">
+            Your browser doesn't support embedded video playback. <a href="assets/audio/soundscapes/the-breath-beneath.mp4">Download the track directly</a>.
+          </video>
+          <p class="track-description">Pairs a 40Hz sub-bass tone with an 80 BPM tempo, echoing the pace of a slow, resting breath &mdash; the two-part title refers to that pairing, the "breath" of the tempo and the sub-bass "beneath" it. Designed for the WP-11 conceptual system, and fully functional on any 40Hz-capable somatosensory transducer, tactile bass mat, or high-fidelity over-ear headphones &mdash; no special branded hardware required. Played through bass-capable equipment, the low end can be felt as well as heard. Some people find that combination of a slow tempo and physical low-end presence calming, especially after a stretch of demanding or high-focus work &mdash; that's a matter of personal experience, not an established physiological effect. This isn't a therapeutic or medical audio treatment, and it isn't a substitute for real support during genuine sensory overload or distress.</p>
+        </div>
+
+        <div class="empty-slot">More tracks will appear here as they're actually finished and uploaded.</div>
+
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<footer>
+  TOL&#8209;OS &middot; spreadloveandacceptance.com
+  <div class="footer-links">
+    <a href="index.html">Home</a>
+    <a href="roadmap.html">Roadmap</a>
+  </div>
+</footer>
+
+</body>
+</html>
