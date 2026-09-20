@@ -118,6 +118,51 @@
 
   .study-pointer a{ color: var(--brass); }
 
+  .update-banner{
+    border: 1px solid var(--brass);
+    border-left: 4px solid var(--brass);
+    border-radius: 4px;
+    background: var(--paper-deep);
+    padding: 18px 22px;
+    margin-bottom: 36px;
+  }
+
+  .update-banner .banner-label{
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 0.64rem;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    color: var(--brass);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 9px;
+  }
+
+  .banner-dot{
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--credit);
+    display: inline-block;
+    flex: none;
+  }
+
+  .update-banner p{
+    margin: 0;
+    font-size: 0.96rem;
+    line-height: 1.65;
+    color: var(--ink);
+  }
+
+  .update-banner .share-line{
+    margin-top: 9px;
+    color: var(--ink-soft);
+    font-size: 0.92rem;
+  }
+
+  .update-banner strong{ color: var(--ink); }
+
   .discipline{
     border: 1px solid var(--line);
     border-radius: 4px;
@@ -217,6 +262,12 @@
   <div class="rule" aria-hidden="true"></div>
 
   <main>
+
+    <div class="update-banner">
+      <div class="banner-label"><span class="banner-dot"></span>Live &amp; Growing &middot; Updated Daily</div>
+      <p><strong>This site changes fast.</strong> New chapters, workpapers, and calculators ship here almost every day &mdash; often several in a day. Nothing sits half-finished behind a coming-soon page; if it's live, it's live. Check back whenever you like, and you'll find something that wasn't here last time.</p>
+      <p class="share-line">And if any of this helps you, please pass it on. Share it, send it to someone who needs it, talk about it &mdash; help spread love and acceptance.</p>
+    </div>
 
     <section id="about">
       <div class="kicker">About</div>
