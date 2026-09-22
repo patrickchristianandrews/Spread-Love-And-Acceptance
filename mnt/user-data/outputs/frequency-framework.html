@@ -1,0 +1,1139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Frequency Framework — The Objective Ledger</title>
+<meta name="description" content="How your partnership oscillates at five different frequencies. Understanding the beat frequency that creates friction.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,500&family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper: #F5EFDE;
+    --paper-deep: #ECE2C4;
+    --ink: #211D17;
+    --ink-soft: #524B3E;
+    --line: #D9CBA3;
+    --credit: #3E6B4C;
+    --credit-soft: #E4EDE3;
+    --brass: #A8792F;
+    --focus: #2B5B8C;
+    --warning: #8B6F47;
+    --radius: 3px;
+  }
+
+  * { box-sizing: border-box; }
+
+  html, body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: "Lora", Georgia, serif;
+    font-size: 16px;
+    line-height: 1.65;
+  }
+
+  h1, h2, h3, h4 {
+    font-family: "Fraunces", "Lora", serif;
+    font-weight: 600;
+    line-height: 1.2;
+    margin: 0 0 0.5em 0;
+  }
+
+  h1 { font-size: 2rem; }
+  h2 { font-size: 1.4rem; }
+  h3 { font-size: 1.1rem; }
+
+  .container {
+    max-width: 8.5in;
+    margin: 0 auto;
+    padding: 1.5in 0.6in;
+  }
+
+  .hero {
+    text-align: center;
+    border-bottom: 2px solid var(--brass);
+    padding-bottom: 2rem;
+    margin-bottom: 2rem;
+  }
+
+  .hero h1 {
+    margin-bottom: 0.25em;
+  }
+
+  .hero .tagline {
+    font-size: 1.1rem;
+    color: var(--ink-soft);
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  .section {
+    margin-bottom: 3rem;
+  }
+
+  .section > h2 {
+    border-bottom: 1px solid var(--brass);
+    padding-bottom: 0.5rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .lede {
+    font-size: 1.05rem;
+    color: var(--ink-soft);
+    margin-bottom: 1rem;
+    max-width: 90%;
+  }
+
+  .vis-container {
+    background: var(--paper-deep);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 1.5rem;
+    margin: 1.5rem 0;
+  }
+
+  .canvas-wrapper {
+    margin-bottom: 1rem;
+  }
+
+  #viz-canvas {
+    width: 100%;
+    height: auto;
+    background: var(--paper);
+    border-radius: var(--radius);
+    border: 0.5px solid var(--line);
+    display: block;
+  }
+
+  .domain-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+    margin: 2rem 0;
+  }
+
+  .domain-card {
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 1.5rem;
+    background: rgba(168, 121, 47, 0.04);
+  }
+
+  .domain-card h3 {
+    color: var(--brass);
+    font-size: 1rem;
+    margin: 0 0 0.5rem 0;
+  }
+
+  .domain-card .domain-def {
+    font-size: 0.9rem;
+    color: var(--ink-soft);
+    font-style: italic;
+    margin-bottom: 0.75rem;
+  }
+
+  .domain-card .domain-example {
+    background: var(--paper);
+    border-left: 3px solid var(--brass);
+    padding: 0.75rem 1rem;
+    font-size: 0.9rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .domain-card .domain-sync {
+    font-size: 0.85rem;
+    color: var(--credit);
+    font-weight: 500;
+  }
+
+  .tool-map {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin: 2rem 0;
+  }
+
+  .tool-box {
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 1.25rem;
+    background: var(--paper-deep);
+  }
+
+  .tool-box .tool-name {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 0.75rem;
+    color: var(--brass);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 0.5rem;
+  }
+
+  .tool-box h4 {
+    font-size: 1rem;
+    margin: 0 0 0.5rem 0;
+  }
+
+  .tool-box .tool-desc {
+    font-size: 0.85rem;
+    color: var(--ink-soft);
+    line-height: 1.5;
+  }
+
+  .tool-box.primary {
+    border: 2px solid var(--brass);
+    background: rgba(168, 121, 47, 0.08);
+  }
+
+  .tool-box.primary .tool-name {
+    color: var(--focus);
+  }
+
+  .cta-block {
+    background: #E4EDE3;
+    border-left: 4px solid var(--credit);
+    padding: 1.5rem;
+    border-radius: var(--radius);
+    margin: 2rem 0;
+  }
+
+  .cta-block h3 {
+    color: var(--credit);
+    font-size: 1rem;
+    margin: 0 0 0.75rem 0;
+  }
+
+  .cta-block p {
+    margin: 0.5rem 0;
+    font-size: 0.95rem;
+  }
+
+  .cta-block strong {
+    color: var(--credit);
+  }
+
+  .cta-button {
+    display: inline-block;
+    margin-top: 1rem;
+    padding: 0.75rem 1.25rem;
+    background: var(--credit);
+    color: white;
+    border: none;
+    border-radius: var(--radius);
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-decoration: none;
+    cursor: pointer;
+    transition: opacity 0.2s;
+  }
+
+  .cta-button:hover {
+    opacity: 0.9;
+  }
+
+  .note-box {
+    background: rgba(43, 91, 140, 0.08);
+    border-left: 3px solid var(--focus);
+    padding: 1rem 1.25rem;
+    border-radius: var(--radius);
+    font-size: 0.9rem;
+    line-height: 1.6;
+    margin: 1.5rem 0;
+  }
+
+  .controls {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-top: 1.25rem;
+  }
+
+  .control-row {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .control-row label {
+    font-size: 0.85rem;
+    color: var(--ink-soft);
+    min-width: 100px;
+    font-weight: 500;
+  }
+
+  .control-row input[type="range"] {
+    flex: 1;
+  }
+
+  .control-row .readout {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 0.8rem;
+    color: var(--ink);
+    font-weight: 600;
+    min-width: 45px;
+    text-align: right;
+  }
+
+  .footer {
+    border-top: 1px solid var(--line);
+    padding-top: 1.5rem;
+    margin-top: 3rem;
+    font-size: 0.85rem;
+    color: var(--ink-soft);
+    text-align: center;
+  }
+
+  @media print {
+    body { background: white; }
+    .vis-container, .domain-grid, .tool-map { break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <div class="hero">
+    <h1>The Frequency Framework</h1>
+    <p class="tagline">Why your partnership oscillates at five different frequencies, and how to synchronize the ones that matter most.</p>
+  </div>
+
+  <div class="section">
+    <h2>The Radio Frequency Paradigm</h2>
+    <p class="lede">Tune two radios to frequencies that are close but not identical, and you get a squeal: the audible beat created by two signals almost, but not quite, in sync. This book borrows that image to describe a familiar moment — two people each saying something reasonable, in a tone shaped by their own fatigue or urgency, producing a fight neither of them intended to start.</p>
+
+    <p>Every partnership is a system of overlapping oscillators. Finance oscillates at one frequency (bills due bi-weekly, paychecks every other Friday). Autonomics oscillate at another (one person needs nervous-system resets every 90 seconds during stress; the other person's baseline cycle is hours). Decisions, communication, values—each one has its own natural rhythm.</p>
+
+    <p>When those rhythms are misaligned, they create <strong>beat frequencies</strong>—interference patterns that show up as friction, conflict, and feeling out of sync. The good news: the mismatch isn't a failure of compatibility. It's information. If you both know the frequencies, you can build <strong>coherence mechanisms</strong> to synchronize the oscillators.</p>
+  </div>
+
+  <div class="section">
+    <h2>See It in Motion</h2>
+    <p class="lede">Play with two oscillators going out of sync. Watch the beat frequency grow as the mismatch gets larger. This is what happens in your partnership when frequencies diverge.</p>
+
+    <div class="vis-container">
+      <div class="canvas-wrapper">
+        <canvas id="viz-canvas" width="600" height="240"></canvas>
+      </div>
+      <div class="controls">
+        <div class="control-row">
+          <label for="freq-a">Oscillator A</label>
+          <input type="range" id="freq-a" min="1" max="8" step="0.1" value="4" style="flex:1;">
+          <span class="readout"><span id="val-a">4.0</span> Hz</span>
+        </div>
+        <div class="control-row">
+          <label for="freq-b">Oscillator B</label>
+          <input type="range" id="freq-b" min="1" max="8" step="0.1" value="4" style="flex:1;">
+          <span class="readout"><span id="val-b">4.0</span> Hz</span>
+        </div>
+        <div class="control-row">
+          <select id="presets" style="flex:1; padding:6px 8px; border:0.5px solid var(--line); border-radius:var(--radius); font-family:Lora;">
+            <option value="perfect">Perfectly in sync (no interference)</option>
+            <option value="close">Close enough (1.2x mismatch)</option>
+            <option value="moderate">Noticeable drift (1.8x mismatch)</option>
+            <option value="large">Heavy interference (3x mismatch)</option>
+            <option value="extreme">Chaotic (5x mismatch)</option>
+          </select>
+        </div>
+      </div>
+      <p style="font-size:0.85rem; color:var(--ink-soft); margin-top:1rem; text-align:center;"><strong>Beat frequency delta:</strong> <span id="delta-readout" style="font-family:'IBM Plex Mono';font-weight:600;">0.0x</span></p>
+    </div>
+
+    <div class="note-box" style="background: rgba(43, 91, 140, 0.08); border-left: 4px solid var(--focus); margin-top: 2rem;">
+      <strong>The Neuroscience in Plain Language:</strong>
+      <br><br>
+      <strong>What's happening when you hear the audio wobble?</strong>
+      <ul style="margin-top: 1rem; padding-left: 1.25rem; line-height: 1.7;">
+        <li><strong>Your auditory cortex</strong> detects the beat frequency (the interference pattern).</li>
+        <li><strong>Your amygdala</strong> registers this as "unpredictability" (not quite a threat, but something to pay attention to).</li>
+        <li><strong>Your sympathetic nervous system</strong> subtly activates. Heart rate increases slightly. Vigilance goes up.</li>
+        <li><strong>Your parasympathetic vagal brake</strong> (controlled by the vagus nerve) loosens a bit. You feel slightly more defensive.</li>
+        <li><strong>Result:</strong> Even though there's no actual danger, you feel *off*. Unsettled. This is the feeling of frequency mismatch made neurological.</li>
+      </ul>
+      <br>
+      <strong>What's happening when frequencies align?</strong>
+      <ul style="margin-top: 1rem; padding-left: 1.25rem; line-height: 1.7;">
+        <li><strong>Beat frequency disappears.</strong> No interference pattern for your brain to process.</li>
+        <li><strong>Your amygdala relaxes.</strong> The unpredictability signal vanishes.</li>
+        <li><strong>Your vagal brake re-engages.</strong> Parasympathetic tone returns.</li>
+        <li><strong>Your nervous system categorizes the other person as "safe."</strong> Not because they suddenly became safer, but because the frequency mismatch signal disappeared.</li>
+        <li><strong>Result:</strong> You feel calm, connected, able to think clearly. This is what coherence feels like neurologically.</li>
+      </ul>
+    </div>
+
+    <div class="note-box">
+      <strong>How to use the visualization:</strong> Move the sliders and watch two things happen:
+      <br><br>
+      <strong>Visually:</strong> As the two frequencies drift apart, the dashed envelope line thickens — that's the <strong>beat frequency</strong>, the oscillation of their interference pattern.
+      <br><br>
+      <strong>Sonically (click "Play Audio Feedback" button above):</strong> When aligned (both sliders at the same value), you hear a pure, stable, harmonious tone. As they diverge, you hear the frequencies begin to interfere with each other—a subtle wobble or pulse. This wobble IS the beat frequency made audible. The wider the delta, the louder and more obvious the interference becomes—it escalates from a shimmer to an audible squeal.
+      <br><br>
+      This is literally what two radio frequencies sound like when they're out of sync. Now imagine that's what your partnership *sounds* like when autonomic cycles, communication rhythms, and financial cycles are all oscillating at different rates. The audio and visualization make the principle visceral and neurologically accurate.
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>How Your Brain Detects the Beat Frequency</h2>
+    <p class="lede">The audio you just heard isn't theoretical. Your brain is literally detecting frequency mismatch in real-time. Here's the neuroscience.</p>
+
+    <div class="domain-card" style="background: rgba(43, 91, 140, 0.08); border-left: 4px solid var(--focus);">
+      <h3 style="color: var(--focus);">The Nervous System as a Frequency Detector</h3>
+      <p>Your autonomic nervous system—the branch that controls heart rate, breath, digestion, and whether you feel safe or threatened—operates at specific frequencies:</p>
+      
+      <div class="domain-example" style="margin-bottom: 1rem;">
+        <strong>Polyvagal Frequencies (Porges, 2009):</strong>
+        <ul style="margin: 0.5rem 0; padding-left: 1.25rem;">
+          <li><strong>Parasympathetic "safe" state:</strong> Heart rate variability in 0.1 Hz range (high vagal tone, slow regulated breathing)</li>
+          <li><strong>Sympathetic arousal:</strong> Heart rate increases, rhythm becomes more rigid (lower HRV)</li>
+          <li><strong>Dorsal vagal collapse:</strong> Shutdown state, extremely low frequency oscillation</li>
+        </ul>
+      </div>
+
+      <p>When you hear the audio feedback oscillating, your brain is detecting what's called <strong>beat frequency perception</strong>—a real neurological phenomenon. Your auditory cortex detects the interference pattern, and your nervous system responds:</p>
+
+      <div class="domain-example">
+        <strong>When frequencies align:</strong> The beat frequency disappears. Your brain registers this as "no threat to process." Your vagal brake engages (the parasympathetic brake that allows social engagement, focus, and rest). Heart rate variability increases. You feel calm.
+        <br><br>
+        <strong>When frequencies diverge:</strong> The beat frequency becomes a rhythmic "alert signal"—your brain detects unpredictability. Your amygdala (threat detector) activates. Your nervous system shifts into sympathetic readiness ("something's off"). Heart rate becomes more rigid. You feel vigilant, defensive, or confused.
+      </div>
+    </div>
+
+    <div class="domain-card" style="margin-top: 1.5rem; background: rgba(168, 121, 47, 0.08); border-left: 4px solid var(--brass);">
+      <h3 style="color: var(--brass);">Why Partnerships Feel "Out of Sync" at the Neurological Level</h3>
+      <p>Two nervous systems in a relationship are constantly detecting each other's frequency. This happens below conscious awareness:</p>
+
+      <div class="domain-example">
+        <strong>The Neurobiology of Frequency Mismatch:</strong>
+        <br><br>
+        When your autonomic frequency (how fast you naturally regulate) diverges from your partner's:
+        <ul style="margin: 0.5rem 0; padding-left: 1.25rem;">
+          <li>You're both oscillating at different speeds</li>
+          <li>Your nervous systems create a <strong>dysrhythmic beat pattern</strong></li>
+          <li>Your amygdala detects this as unpredictability (micro-level threat)</li>
+          <li>Your vagal brake disengages</li>
+          <li>Even though there's no actual danger, you both shift into defensive mode</li>
+          <li>This feels like: confusion, defensiveness, feeling unseen, tension that "comes out of nowhere"</li>
+        </ul>
+      </div>
+
+      <p style="margin-top: 1rem; font-style: italic; color: var(--ink-soft);">The fight didn't happen because someone was wrong. It happened because your nervous systems were oscillating at incompatible frequencies, and your brains detected that incompatibility as a low-level threat.</p>
+    </div>
+
+    <div class="domain-card" style="margin-top: 1.5rem; background: rgba(62, 107, 76, 0.08); border-left: 4px solid var(--credit);">
+      <h3 style="color: var(--credit);">How Coherence Tools Rewire Frequency Alignment</h3>
+      <p>This is why the tools in your toolkit actually work at a neurological level:</p>
+
+      <div class="domain-example">
+        <strong>WP-13 (Phase-Locked Loop Protocol) — 90-Second Pulses</strong>
+        <br><br>
+        The 90-second check-in isn't arbitrary. It's timed to your nervous system's natural reset cycle (based on ultradian rhythms discovered by Kleitman). When you both commit to a 90-second sync:
+        <ul style="margin: 0.5rem 0; padding-left: 1.25rem;">
+          <li>Your oscillators start running at the same frequency</li>
+          <li>Your nervous systems stop detecting dysrhythmia</li>
+          <li>Your amygdalas relax (the threat signal disappears)</li>
+          <li>Your vagal brakes re-engage</li>
+          <li>You both move back into parasympathetic tone (safe, connected, able to think clearly)</li>
+        </ul>
+      </div>
+
+      <div class="domain-example" style="margin-top: 1rem;">
+        <strong>WP-11 (Somatosensory Sanctuary) — 40 Hz Audio + Sub-Bass</strong>
+        <br><br>
+        The specific frequency profile in WP-11 isn't accidental:
+        <ul style="margin: 0.5rem 0; padding-left: 1.25rem;">
+          <li><strong>40 Hz (Gamma frequency):</strong> Associated with cognitive binding, attention, and neural coherence. It's the frequency at which multiple brain regions synchronize during focused awareness.</li>
+          <li><strong>Sub-bass (30-50 Hz):</strong> Felt through the body, activates Pacinian corpuscles (deep touch mechanoreceptors) that directly signal the vagus nerve → immediate parasympathetic activation.</li>
+          <li><strong>Result:</strong> Your nervous system literally syncs to the audio's frequency. You feel "grounded" because your vagal tone has increased and your nervous system has entrained to a safe, coherent frequency.</li>
+        </ul>
+      </div>
+
+      <div class="domain-example" style="margin-top: 1rem;">
+        <strong>WP-02 (Battery & Stress Meter)</strong>
+        <br><br>
+        By measuring autonomic state independently, you're giving your nervous systems language for what's actually happening:
+        <ul style="margin: 0.5rem 0; padding-left: 1.25rem;">
+          <li>Instead of: "You're being distant" (threat detection, blame)</li>
+          <li>You say: "My autonomic state is at 3/4, I need a reset" (information, no blame)</li>
+          <li>Your partner's brain stops interpreting your dysregulation as rejection</li>
+          <li>They understand: "This is about her nervous system rhythm, not about me"</li>
+          <li>Threat signal drops. Coherence becomes possible.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="note-box" style="background: rgba(139, 111, 71, 0.08); border-left: 4px solid var(--warning);">
+      <strong>The Core Insight:</strong> Every "fight" is a frequency mismatch that your brains interpreted as a threat. Every moment of feeling unseen or out of sync is your nervous systems detecting dysrhythmia. The tools don't "fix" your relationship—they synchronize your frequencies so your nervous systems stop perceiving threat and your brains can access connection, clarity, and choice.
+      <br><br>
+      This is why frequency coherence tools work. They're not psychology. They're neurobiology.
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>The Radio Frequency Paradigm Made Neurobiological</h2>
+    <p class="lede">Chapter I introduced the metaphor: two radios nearly in sync create a squeal. Now you understand what's actually happening in your nervous system.</p>
+
+    <div style="background: var(--paper-deep); border: 1px solid var(--line); border-radius: var(--radius); padding: 1.5rem; margin: 1.5rem 0;">
+      <p><strong>From Chapter I:</strong> "Unbilled debt produces a squeal—the radio frequency interference between what was owed and what was assumed. The debt doesn't have to be money. It can be time, attention, autonomic regulation, or alignment on what the relationship is for."</p>
+      
+      <p style="margin-top: 1rem;"><strong>The Neuroscience Translation:</strong> When emotional or operational frequencies diverge, your nervous systems literally detect the interference pattern. Your amygdala interprets this dysrhythmia as unpredictability (a low-level threat). Your threat-detection systems engage. Your vagal brakes disengage. Connection becomes harder. Conflict becomes easier.</p>
+
+      <p style="margin-top: 1rem; font-weight: 600; color: var(--brass);">You feel the squeal—not audibly, but somatically: tension, defensiveness, that sense of being "out of sync" that comes out of nowhere.</p>
+
+      <p style="margin-top: 1rem; font-style: italic; color: var(--ink-soft);">The entire framework is built on this neurobiological fact: <strong>partnerships are nervous-system-to-nervous-system dances. When the dance is out of sync, your brains are literally detecting threat through frequency mismatch.</strong> The tools synchronize the frequencies. Synchronization kills the threat signal. Connection becomes possible again.</p>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>The Five Oscillators</h2>
+    <p class="lede">Every partnership operates on five overlapping frequencies. Each one has a different natural rhythm, and each one has a tool built to keep it synchronized.</p>
+
+    <div class="domain-grid">
+      <div class="domain-card">
+        <h3>Financial Frequency</h3>
+        <div class="domain-def">How often bills arrive, paychecks land, and money decisions get revisited.</div>
+        <div class="domain-example">
+          <strong>Example mismatch:</strong> One person checks finances weekly; the other only during bill-pay season. One wants to review spending immediately; the other iterates. Different oscillation rates = cash-flow surprise, argument about "where the money went."
+        </div>
+        <div class="domain-sync">Synchronizer: <strong>CALC-01 (Solvency Read)</strong> — measures financial stress load weekly.</div>
+      </div>
+
+      <div class="domain-card">
+        <h3>Autonomic Frequency</h3>
+        <div class="domain-def">How often you naturally need nervous-system resets, grounding, or check-ins when stressed.</div>
+        <div class="domain-example">
+          <strong>Example mismatch (urgent):</strong> One person needs regulation every 90 seconds during conflict; the other needs 3-hour cycles. While one resets, the other escalates. Two nervous systems oscillating wildly out of phase = one feels abandoned, the other feels suffocated.
+        </div>
+        <div class="domain-sync">Synchronizers: <strong>WP-02</strong> (measures state), <strong>WP-13</strong> (90-sec resets), <strong>WP-11</strong> (audio grounding).</div>
+      </div>
+
+      <div class="domain-card">
+        <h3>Decisional Frequency</h3>
+        <div class="domain-def">How often decisions get revisited, revised, or treated as final.</div>
+        <div class="domain-example">
+          <strong>Example mismatch:</strong> One person locks decisions immediately and hates revisiting them. The other naturally iterates before committing. "Decided" means different things. Beat frequency = constant low-level renegotiation.
+        </div>
+        <div class="domain-sync">Synchronizer: <strong>WP-03 (Domestic RACI Treaty)</strong> — defines which decisions lock vs. which get weekly revision windows.</div>
+      </div>
+
+      <div class="domain-card">
+        <h3>Communicational Frequency</h3>
+        <div class="domain-def">How often you prefer to have check-in conversations, updates, or relational maintenance.</div>
+        <div class="domain-example">
+          <strong>Example mismatch:</strong> One wants daily connection; the other recharges alone and prefers weekly deep dives. "I need to talk" meets "I need space" at incompatible intervals = both feel misunderstood.
+        </div>
+        <div class="domain-sync">Synchronizer: <strong>WP-13 (Phase-Locked Loop Protocol)</strong> — locks both of you into shared 90-second daily pulses + weekly resets.</div>
+      </div>
+
+      <div class="domain-card">
+        <h3>Philosophical Frequency</h3>
+        <div class="domain-def">How often you want to revisit alignment on values, mission, and whether the partnership still matches what you both want.</div>
+        <div class="domain-example">
+          <strong>Example mismatch:</strong> One person wants quarterly alignment audits. The other treats alignment as implicit and hates forced check-ins. Slow philosophical drift becomes hard to recover from. By the time you talk about values, they've diverged 18 months of unspoken misalignment.
+        </div>
+        <div class="domain-sync">Synchronizer: <strong>WP-13 (Phase-Locked Loop Protocol)</strong> — quarterly alignment audit blocks locked in the calendar.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>The Coherence Toolkit</h2>
+    <p class="lede">Your partnership already has all the tools it needs. The question is: which oscillators are out of sync, and which tool synchronizes each one?</p>
+
+    <div class="tool-map">
+      <div class="tool-box primary">
+        <div class="tool-name">The Audit</div>
+        <h4>WP-04: Frequency Calibration &amp; Coherence Audit</h4>
+        <div class="tool-desc">
+          Map your five frequencies. Enter how often each person naturally operates in each domain. The tool calculates your deltas and shows you where the beat frequency is loudest. <strong>This is where you start.</strong>
+        </div>
+      </div>
+
+      <div class="tool-box">
+        <div class="tool-name">Autonomic Sync</div>
+        <h4>WP-02: Battery &amp; Stress Meter</h4>
+        <div class="tool-desc">
+          Independent self-report of nervous-system state (0-4 scale). Compare scores to understand where each person is right now. Pairs with WP-13 for real-time resets.
+        </div>
+      </div>
+
+      <div class="tool-box">
+        <div class="tool-name">Decisional Sync</div>
+        <h4>WP-03: Domestic RACI Treaty</h4>
+        <div class="tool-desc">
+          Single-point task allocation matrix. Locks ownership (who is Responsible/Accountable) for each recurring decision. Eliminates the "but I thought you decided that" beat frequency.
+        </div>
+      </div>
+
+      <div class="tool-box">
+        <div class="tool-name">Universal Oscillator</div>
+        <h4>WP-13: Phase-Locked Loop Protocol</h4>
+        <div class="tool-desc">
+          The master coherence mechanism. Daily 90-second pulses sync nervous systems in real-time. Weekly resets revisit decisions. Quarterly blocks audit alignment. One protocol synchronizes all five frequencies.
+        </div>
+      </div>
+
+      <div class="tool-box">
+        <div class="tool-name">Somatosensory Reset</div>
+        <h4>WP-11: Calm-Down Kit &amp; Somatosensory Sanctuary</h4>
+        <div class="tool-desc">
+          Frequency-matched audio (40Hz + sub-bass) and sensory tools for immediate autonomic grounding. When the beat frequency is screaming, this is your circuit breaker.
+        </div>
+      </div>
+
+      <div class="tool-box">
+        <div class="tool-name">Financial Health</div>
+        <h4>CALC-01: Solvency Read</h4>
+        <div class="tool-desc">
+          Weekly financial stress measurement. Pulls three ledger inputs (workload balance, ownership clarity, autonomic saturation) into a single solvency score. Tells you whether the current rhythm is sustainable.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>Your Personal Frequency Snapshot</h2>
+    <p class="lede">Quick: What's your actual frequency profile? Enter three numbers and hear what your partnership's beat frequency sounds like right now.</p>
+
+    <div style="background: var(--paper-deep); border: 2px solid var(--brass); border-radius: var(--radius); padding: 1.5rem; margin: 1.5rem 0;">
+      <p style="font-size: 0.95rem; color: var(--ink-soft); margin-bottom: 1.5rem;"><strong>Don't overthink it.</strong> These are rough estimates. The point is to get a snapshot of your actual patterns.</p>
+
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem;">
+        <div>
+          <label style="display: block; font-weight: 600; margin-bottom: 0.5rem; color: var(--ink);">How often do you need nervous-system resets? (in minutes)</label>
+          <input type="number" id="predictor-autonomic" min="1" max="240" value="90" style="width: 100%; padding: 0.75rem; border: 1px solid var(--line); border-radius: var(--radius); font-size: 1rem;">
+          <div style="font-size: 0.8rem; color: var(--ink-soft); margin-top: 0.5rem;">e.g., 5 = every few min, 90 = every 90 sec, 180 = every 3 hours</div>
+        </div>
+
+        <div>
+          <label style="display: block; font-weight: 600; margin-bottom: 0.5rem; color: var(--ink);">How often do you prefer check-in conversations? (in hours)</label>
+          <input type="number" id="predictor-communication" min="0.25" max="168" step="0.25" value="1" style="width: 100%; padding: 0.75rem; border: 1px solid var(--line); border-radius: var(--radius); font-size: 1rem;">
+          <div style="font-size: 0.8rem; color: var(--ink-soft); margin-top: 0.5rem;">e.g., 0.25 = every 15 min, 1 = hourly, 24 = daily</div>
+        </div>
+
+        <div>
+          <label style="display: block; font-weight: 600; margin-bottom: 0.5rem; color: var(--ink);">How quickly do you lock decisions? (1-10 scale)</label>
+          <input type="range" id="predictor-decisional" min="1" max="10" value="5" style="width: 100%; cursor: pointer;">
+          <div style="font-size: 0.8rem; color: var(--ink-soft); margin-top: 0.5rem; display: flex; justify-content: space-between;">
+            <span>1 = Immediately</span>
+            <span id="predictor-decisional-val" style="font-weight: 600;">5</span>
+            <span>10 = After iterating</span>
+          </div>
+        </div>
+
+        <div>
+          <label style="display: block; font-weight: 600; margin-bottom: 0.5rem; color: var(--ink);">Your partner's autonomic reset cycle (in minutes)</label>
+          <input type="number" id="predictor-partner-autonomic" min="1" max="240" value="180" style="width: 100%; padding: 0.75rem; border: 1px solid var(--line); border-radius: var(--radius); font-size: 1rem;">
+          <div style="font-size: 0.8rem; color: var(--ink-soft); margin-top: 0.5rem;">Best guess is fine.</div>
+        </div>
+      </div>
+
+      <div style="background: var(--paper); border: 1px solid var(--line); border-radius: var(--radius); padding: 1.25rem; margin-bottom: 1.5rem;">
+        <p style="margin: 0 0 1rem 0; font-weight: 600; color: var(--brass);">Your Beat Frequency Profile</p>
+        <canvas id="predictor-canvas" width="500" height="180" style="width: 100%; height: auto; background: var(--paper-deep); border: 0.5px solid var(--line); border-radius: var(--radius); display: block; margin-bottom: 1rem;"></canvas>
+        <p id="predictor-readout" style="margin: 0; font-size: 0.95rem; color: var(--ink-soft); text-align: center;"><strong>Autonomic Delta:</strong> <span id="predictor-autonomic-delta" style="font-family: 'IBM Plex Mono'; font-weight: 600;">—</span> | <strong>Communication Delta:</strong> <span id="predictor-comm-delta" style="font-family: 'IBM Plex Mono'; font-weight: 600;">—</span></p>
+      </div>
+
+      <button id="predictor-audio-btn" style="width: 100%; padding: 1rem; background: #3E6B4C; color: white; border: none; border-radius: var(--radius); font-family: 'IBM Plex Mono', monospace; font-weight: 600; font-size: 0.95rem; cursor: pointer; transition: all 0.2s;">▶ Hear Your Beat Frequency</button>
+
+      <p id="predictor-interpretation" style="margin-top: 1.25rem; padding: 1rem; background: rgba(139, 111, 71, 0.08); border-left: 3px solid var(--brass); border-radius: var(--radius); font-size: 0.9rem; line-height: 1.6; color: var(--ink); display: none;"></p>
+    </div>
+
+    <div class="cta-block">
+      <h3>Next Step: Full Frequency Audit</h3>
+      <p>This was your quick snapshot. WP-04 (Frequency Calibration &amp; Coherence Audit) maps all five domains and shows you exactly which coherence tools to use first.</p>
+      <p><strong>You now have a hypothesis.</strong> Go verify it with the full audit.</p>
+      <button class="cta-button" onclick="alert('WP-04 link: Open Frequency Calibration &amp; Coherence Audit worksheet')">Open WP-04 Now</button>
+    </div>
+  </div>
+
+    <div class="note-box">
+      <strong>Important:</strong> This framework is <strong>not</strong> a diagnosis of incompatibility. Mismatched frequencies are normal—they're in every partnership. What matters is whether you both know about them and are willing to build coherence mechanisms deliberately. Many couples with wildly different oscillation rates thrive because they've synchronized on communication, autonomics, and decisional cycles. The framework is your diagnostic tool. The tools are your synchronizers.
+    </div>
+  </div>
+
+  <div class="footer">
+    The Frequency Framework &middot; Part of The Objective Ledger (TOL-OS)<br>
+    A nervous-system-aware ledger for relationships built on finance, audit, economics, psychology, philosophy, and neuroscience.
+  </div>
+
+</div>
+
+<script>
+// Audio Context Setup
+let audioContext;
+let oscillatorA, oscillatorB, gainA, gainB, masterGain;
+let isAudioEnabled = false;
+let lastFreqA = 4.0;
+let lastFreqB = 4.0;
+
+function startAudio() {
+  if (isAudioEnabled) return;
+  
+  try {
+    audioContext = new (window.AudioContext || window.webkitAudioContext)();
+    masterGain = audioContext.createGain();
+    masterGain.gain.value = 0.08;
+    masterGain.connect(audioContext.destination);
+
+    // Oscillator A
+    oscillatorA = audioContext.createOscillator();
+    gainA = audioContext.createGain();
+    oscillatorA.connect(gainA);
+    gainA.connect(masterGain);
+    oscillatorA.type = 'sine';
+    oscillatorA.frequency.value = 220;
+    gainA.gain.value = 0.25;
+    oscillatorA.start();
+
+    // Oscillator B
+    oscillatorB = audioContext.createOscillator();
+    gainB = audioContext.createGain();
+    oscillatorB.connect(gainB);
+    gainB.connect(masterGain);
+    oscillatorB.type = 'sine';
+    oscillatorB.frequency.value = 220;
+    gainB.gain.value = 0.25;
+    oscillatorB.start();
+
+    isAudioEnabled = true;
+    updateAudioFrequencies();
+  } catch (err) {
+    console.error('Audio context error:', err);
+  }
+}
+
+function stopAudio() {
+  if (!isAudioEnabled) return;
+  try {
+    oscillatorA.stop();
+    oscillatorB.stop();
+    masterGain.disconnect();
+    isAudioEnabled = false;
+  } catch (err) {
+    console.error('Error stopping audio:', err);
+  }
+}
+
+function updateAudioFrequencies() {
+  if (!isAudioEnabled || !audioContext) return;
+
+  const fA = parseFloat(freqA.value);
+  const fB = parseFloat(freqB.value);
+  const delta = Math.max(fA, fB) / Math.min(fA, fB);
+
+  // Audible frequency range: 220 Hz to 880 Hz
+  const freqAudio = 220 + (fA * 80);
+  const freqBudio = 220 + (fB * 80);
+
+  // Update frequencies smoothly
+  oscillatorA.frequency.setTargetAtTime(freqAudio, audioContext.currentTime, 0.05);
+  oscillatorB.frequency.setTargetAtTime(freqBudio, audioContext.currentTime, 0.05);
+
+  // Update gains based on coherence
+  if (delta < 1.05) {
+    // Perfect sync: harmonious, stable
+    gainA.gain.setTargetAtTime(0.3, audioContext.currentTime, 0.02);
+    gainB.gain.setTargetAtTime(0.3, audioContext.currentTime, 0.02);
+  } else if (delta < 1.5) {
+    // Close: slightly quieter but still smooth
+    gainA.gain.setTargetAtTime(0.25, audioContext.currentTime, 0.02);
+    gainB.gain.setTargetAtTime(0.25, audioContext.currentTime, 0.02);
+  } else {
+    // Diverging: pulsing beat frequency effect
+    const beatFreq = Math.abs(fA - fB) * 0.5;
+    const now = audioContext.currentTime;
+    const beatPhase = (Math.sin(now * beatFreq * Math.PI * 2) + 1) / 2;
+    gainA.gain.setTargetAtTime(0.1 + beatPhase * 0.25, audioContext.currentTime, 0.02);
+    gainB.gain.setTargetAtTime(0.1 + (1 - beatPhase) * 0.25, audioContext.currentTime, 0.02);
+  }
+}
+
+const canvas = document.getElementById('viz-canvas');
+const ctx = canvas.getContext('2d');
+const freqA = document.getElementById('freq-a');
+const freqB = document.getElementById('freq-b');
+const valA = document.getElementById('val-a');
+const valB = document.getElementById('val-b');
+const deltaReadout = document.getElementById('delta-readout');
+const presets = document.getElementById('presets');
+
+const w = canvas.width;
+const h = canvas.height;
+
+function drawWave(y, freq, color, label) {
+  ctx.strokeStyle = color;
+  ctx.lineWidth = 1.5;
+  ctx.beginPath();
+  
+  for (let x = 0; x < w; x++) {
+    const t = x / (w - 80);
+    const angle = t * Math.PI * 2 * freq;
+    const val = Math.sin(angle);
+    const py = y - val * (h * 0.25);
+    
+    if (x === 0) ctx.moveTo(x, py);
+    else ctx.lineTo(x, py);
+  }
+  ctx.stroke();
+
+  ctx.font = '10px IBM Plex Mono';
+  ctx.fillStyle = color;
+  ctx.textAlign = 'right';
+  ctx.fillText(label, w - 10, y - 14);
+}
+
+function drawCenterline(y) {
+  ctx.strokeStyle = '#D9CBA3';
+  ctx.lineWidth = 0.5;
+  ctx.setLineDash([2, 3]);
+  ctx.beginPath();
+  ctx.moveTo(0, y);
+  ctx.lineTo(w, y);
+  ctx.stroke();
+  ctx.setLineDash([]);
+}
+
+function render() {
+  const fA = parseFloat(freqA.value);
+  const fB = parseFloat(freqB.value);
+  
+  valA.textContent = fA.toFixed(1);
+  valB.textContent = fB.toFixed(1);
+
+  const delta = Math.max(fA, fB) / Math.min(fA, fB);
+  deltaReadout.textContent = delta.toFixed(2) + 'x';
+
+  // Clear
+  ctx.fillStyle = '#F5EFDE';
+  ctx.fillRect(0, 0, w, h);
+
+  // Grid
+  ctx.strokeStyle = '#D9CBA3';
+  ctx.lineWidth = 0.5;
+  ctx.globalAlpha = 0.3;
+  for (let i = 0; i <= 3; i++) {
+    const x = (i / 3) * w;
+    ctx.beginPath();
+    ctx.moveTo(x, 0);
+    ctx.lineTo(x, h);
+    ctx.stroke();
+  }
+  ctx.globalAlpha = 1.0;
+
+  // Waves
+  drawCenterline(h * 0.33);
+  drawCenterline(h * 0.67);
+  
+  drawWave(h * 0.33, fA, '#2B5B8C', 'A');
+  drawWave(h * 0.67, fB, '#3E6B4C', 'B');
+
+  // Beat envelope
+  if (delta > 1.05) {
+    const beatFreq = Math.abs(fA - fB) / 2;
+    ctx.strokeStyle = '#8B6F47';
+    ctx.lineWidth = 1;
+    ctx.setLineDash([2, 2]);
+    ctx.globalAlpha = 0.35;
+    
+    ctx.beginPath();
+    for (let x = 0; x < w; x++) {
+      const t = x / (w - 80);
+      const beatPhase = Math.sin(t * Math.PI * beatFreq);
+      const py = h * 0.33 - beatPhase * h * 0.2;
+      
+      if (x === 0) ctx.moveTo(x, py);
+      else ctx.lineTo(x, py);
+    }
+    ctx.stroke();
+    ctx.globalAlpha = 1.0;
+    ctx.setLineDash([]);
+  }
+}
+
+function applyPreset(p) {
+  const map = {
+    perfect: { a: 4.0, b: 4.0 },
+    close: { a: 4.0, b: 4.8 },
+    moderate: { a: 4.0, b: 7.2 },
+    large: { a: 3.0, b: 9.0 },
+    extreme: { a: 1.5, b: 7.5 }
+  };
+  if (map[p]) {
+    freqA.value = map[p].a;
+    freqB.value = map[p].b;
+    render();
+  }
+}
+
+freqA.addEventListener('input', () => {
+  if (isAudioEnabled) updateAudioFrequencies();
+  render();
+});
+
+freqB.addEventListener('input', () => {
+  if (isAudioEnabled) updateAudioFrequencies();
+  render();
+});
+
+presets.addEventListener('change', (e) => {
+  applyPreset(e.target.value);
+  if (isAudioEnabled) updateAudioFrequencies();
+});
+
+// Add audio toggle button
+const audioToggle = document.createElement('button');
+audioToggle.style.cssText = 'margin-top:1rem; padding:0.75rem 1.25rem; background:#3E6B4C; color:white; border:none; border-radius:3px; font-family:"IBM Plex Mono",monospace; font-size:0.85rem; font-weight:600; cursor:pointer; width:100%; transition:all 0.2s;';
+audioToggle.textContent = '▶ Play Audio Feedback (Hear the Beat Frequency)';
+audioToggle.onmouseover = () => { if (!isAudioEnabled) audioToggle.style.opacity = '0.85'; };
+audioToggle.onmouseout = () => { audioToggle.style.opacity = '1'; };
+audioToggle.onclick = () => {
+  if (isAudioEnabled) {
+    stopAudio();
+    audioToggle.textContent = '⏸ Audio Paused';
+    audioToggle.style.background = '#8B6F47';
+  } else {
+    startAudio();
+    updateAudioFrequencies();
+    audioToggle.textContent = '⏹ Stop Audio';
+    audioToggle.style.background = '#3E6B4C';
+  }
+};
+document.querySelector('.controls').appendChild(audioToggle);
+
+// ============ PERSONAL FREQUENCY PREDICTOR ============
+
+let predictorAudio;
+let predictorOscA, predictorOscB, predictorGainA, predictorGainB, predictorMaster;
+let predictorAudioEnabled = false;
+
+const predictorAutonomic = document.getElementById('predictor-autonomic');
+const predictorComm = document.getElementById('predictor-communication');
+const predictorDecisional = document.getElementById('predictor-decisional');
+const predictorDecisionalVal = document.getElementById('predictor-decisional-val');
+const predictorPartnerAutonomic = document.getElementById('predictor-partner-autonomic');
+const predictorCanvas = document.getElementById('predictor-canvas');
+const predictorCanvasCtx = predictorCanvas.getContext('2d');
+const predictorAudioBtn = document.getElementById('predictor-audio-btn');
+const predictorReadout = document.getElementById('predictor-readout');
+const predictorInterpretation = document.getElementById('predictor-interpretation');
+
+if (predictorDecisional) {
+  predictorDecisional.addEventListener('input', () => {
+    predictorDecisionalVal.textContent = predictorDecisional.value;
+    updatePredictorViz();
+  });
+
+  [predictorAutonomic, predictorComm, predictorPartnerAutonomic].forEach(el => {
+    el.addEventListener('input', updatePredictorViz);
+  });
+
+  function updatePredictorViz() {
+    const autonomic = parseFloat(predictorAutonomic.value) || 90;
+    const comm = parseFloat(predictorComm.value) || 1;
+    const decisional = parseFloat(predictorDecisional.value) || 5;
+    const partnerAutonomic = parseFloat(predictorPartnerAutonomic.value) || 180;
+
+    // Convert to frequencies (Hz for audio simulation)
+    const freqAutonomic = 10 / autonomic;
+    const freqPartnerAutonomic = 10 / partnerAutonomic;
+
+    // Calculate deltas
+    const autonomicDelta = Math.max(freqAutonomic, freqPartnerAutonomic) / Math.min(freqAutonomic, freqPartnerAutonomic);
+    const commDelta = comm < 0.5 ? "high" : comm < 2 ? "moderate" : "low";
+
+    document.getElementById('predictor-autonomic-delta').textContent = autonomicDelta.toFixed(2) + 'x';
+    document.getElementById('predictor-comm-delta').textContent = commDelta;
+
+    drawPredictorWaves(freqAutonomic, freqPartnerAutonomic);
+    generatePredictorInterpretation(autonomic, partnerAutonomic, comm, decisional, autonomicDelta);
+
+    if (predictorAudioEnabled) {
+      updatePredictorAudio(freqAutonomic, freqPartnerAutonomic, autonomicDelta);
+    }
+  }
+
+  function drawPredictorWaves(freq1, freq2) {
+    const w = predictorCanvas.width;
+    const h = predictorCanvas.height;
+    const padding = 20;
+
+    predictorCanvasCtx.fillStyle = '#ECE2C4';
+    predictorCanvasCtx.fillRect(0, 0, w, h);
+
+    const y1 = h * 0.35;
+    const y2 = h * 0.65;
+
+    // Wave 1
+    predictorCanvasCtx.strokeStyle = '#2B5B8C';
+    predictorCanvasCtx.lineWidth = 2;
+    predictorCanvasCtx.beginPath();
+    
+    for (let x = padding; x < w - padding; x++) {
+      const t = (x - padding) / (w - 2 * padding);
+      const angle = t * Math.PI * 2 * freq1 * 3;
+      const val = Math.sin(angle);
+      const py = y1 - val * 20;
+      
+      if (x === padding) predictorCanvasCtx.moveTo(x, py);
+      else predictorCanvasCtx.lineTo(x, py);
+    }
+    predictorCanvasCtx.stroke();
+    predictorCanvasCtx.fillStyle = '#2B5B8C';
+    predictorCanvasCtx.font = '10px IBM Plex Mono';
+    predictorCanvasCtx.fillText('You', 8, y1 - 10);
+
+    // Wave 2
+    predictorCanvasCtx.strokeStyle = '#3E6B4C';
+    predictorCanvasCtx.lineWidth = 2;
+    predictorCanvasCtx.beginPath();
+    
+    for (let x = padding; x < w - padding; x++) {
+      const t = (x - padding) / (w - 2 * padding);
+      const angle = t * Math.PI * 2 * freq2 * 3;
+      const val = Math.sin(angle);
+      const py = y2 - val * 20;
+      
+      if (x === padding) predictorCanvasCtx.moveTo(x, py);
+      else predictorCanvasCtx.lineTo(x, py);
+    }
+    predictorCanvasCtx.stroke();
+    predictorCanvasCtx.fillStyle = '#3E6B4C';
+    predictorCanvasCtx.fillText('Partner', 8, y2 + 10);
+
+    // Centerlines
+    predictorCanvasCtx.strokeStyle = '#D9CBA3';
+    predictorCanvasCtx.lineWidth = 0.5;
+    predictorCanvasCtx.setLineDash([2, 3]);
+    predictorCanvasCtx.beginPath();
+    predictorCanvasCtx.moveTo(padding, y1);
+    predictorCanvasCtx.lineTo(w - padding, y1);
+    predictorCanvasCtx.stroke();
+    predictorCanvasCtx.beginPath();
+    predictorCanvasCtx.moveTo(padding, y2);
+    predictorCanvasCtx.lineTo(w - padding, y2);
+    predictorCanvasCtx.stroke();
+    predictorCanvasCtx.setLineDash([]);
+  }
+
+  function startPredictorAudio() {
+    if (predictorAudioEnabled) return;
+    
+    try {
+      predictorAudio = new (window.AudioContext || window.webkitAudioContext)();
+      predictorMaster = predictorAudio.createGain();
+      predictorMaster.gain.value = 0.08;
+      predictorMaster.connect(predictorAudio.destination);
+
+      predictorOscA = predictorAudio.createOscillator();
+      predictorGainA = predictorAudio.createGain();
+      predictorOscA.connect(predictorGainA);
+      predictorGainA.connect(predictorMaster);
+      predictorOscA.type = 'sine';
+      predictorOscA.frequency.value = 220;
+      predictorGainA.gain.value = 0.25;
+      predictorOscA.start();
+
+      predictorOscB = predictorAudio.createOscillator();
+      predictorGainB = predictorAudio.createGain();
+      predictorOscB.connect(predictorGainB);
+      predictorGainB.connect(predictorMaster);
+      predictorOscB.type = 'sine';
+      predictorOscB.frequency.value = 220;
+      predictorGainB.gain.value = 0.25;
+      predictorOscB.start();
+
+      predictorAudioEnabled = true;
+      updatePredictorViz();
+    } catch (err) {
+      console.error('Error starting predictor audio:', err);
+    }
+  }
+
+  function stopPredictorAudio() {
+    if (!predictorAudioEnabled) return;
+    try {
+      predictorOscA.stop();
+      predictorOscB.stop();
+      predictorMaster.disconnect();
+      predictorAudioEnabled = false;
+    } catch (err) {
+      console.error('Error stopping predictor audio:', err);
+    }
+  }
+
+  function updatePredictorAudio(freq1, freq2, delta) {
+    if (!predictorAudioEnabled) return;
+
+    const baseFreq = 220;
+    const fAudio = baseFreq + (freq1 * 200);
+    const fBudio = baseFreq + (freq2 * 200);
+
+    predictorOscA.frequency.setTargetAtTime(fAudio, predictorAudio.currentTime, 0.05);
+    predictorOscB.frequency.setTargetAtTime(fBudio, predictorAudio.currentTime, 0.05);
+
+    if (delta < 1.1) {
+      predictorGainA.gain.setTargetAtTime(0.3, predictorAudio.currentTime, 0.02);
+      predictorGainB.gain.setTargetAtTime(0.3, predictorAudio.currentTime, 0.02);
+    } else if (delta < 2) {
+      const beatFreq = Math.abs(freq1 - freq2) * 0.5;
+      const now = predictorAudio.currentTime;
+      const beatPhase = (Math.sin(now * beatFreq * Math.PI * 2) + 1) / 2;
+      predictorGainA.gain.setTargetAtTime(0.15 + beatPhase * 0.2, predictorAudio.currentTime, 0.02);
+      predictorGainB.gain.setTargetAtTime(0.15 + (1 - beatPhase) * 0.2, predictorAudio.currentTime, 0.02);
+    } else {
+      const beatFreq = Math.abs(freq1 - freq2);
+      const now = predictorAudio.currentTime;
+      const beatPhase = (Math.sin(now * beatFreq * Math.PI * 2) + 1) / 2;
+      predictorGainA.gain.setTargetAtTime(0.1 + beatPhase * 0.3, predictorAudio.currentTime, 0.02);
+      predictorGainB.gain.setTargetAtTime(0.1 + (1 - beatPhase) * 0.3, predictorAudio.currentTime, 0.02);
+    }
+  }
+
+  function generatePredictorInterpretation(autonomic, partnerAutonomic, comm, decisional, autonomicDelta) {
+    let interpretation = '';
+
+    if (autonomicDelta > 3) {
+      interpretation = `<strong>🚨 High Autonomic Mismatch (${autonomicDelta.toFixed(2)}x):</strong> You need resets every ${autonomic} minutes; your partner every ${partnerAutonomic} minutes. One escalates while the other recovers. <strong>Priority:</strong> Implement WP-13 90-second syncs immediately. This is your primary friction point.`;
+    } else if (autonomicDelta > 1.5) {
+      interpretation = `<strong>⚠️ Moderate Autonomic Mismatch (${autonomicDelta.toFixed(2)}x):</strong> Your nervous systems run at different speeds. When stress hits, one wants to decompress while the other wants immediate connection. <strong>Action:</strong> Use WP-13's 90-second pulses + WP-02 state tracking.`;
+    } else {
+      interpretation = `<strong>✓ Aligned Autonomic Frequency:</strong> Your nervous system cycles are compatible. This is your strength. When other domains misalign, your ability to regulate together gives resilience.`;
+    }
+
+    if (comm < 0.5) {
+      interpretation += `<br><br><strong>Communication Frequency:</strong> You need check-ins every 15 minutes or more. Your partner may experience this as overwhelming. Schedule explicit sync times with WP-13 so they can anticipate connection instead of feeling ambushed.`;
+    } else if (comm < 2) {
+      interpretation += `<br><br><strong>Communication Frequency:</strong> You check in roughly hourly. Sustainable and healthy. Pair with WP-13 for consistency.`;
+    } else {
+      interpretation += `<br><br><strong>Communication Frequency:</strong> You prefer long stretches between check-ins. Your partner may interpret this as distance. Be explicit about your rhythm using WP-02 and WP-13 so they can trust it.`;
+    }
+
+    interpretation += `<br><br><strong>Decision-Making Speed:</strong> You lock at ${decisional}/10 speed. Use WP-03 (RACI Treaty) to consciously allocate decisions so conflict doesn't emerge from misaligned expectations.`;
+
+    predictorInterpretation.innerHTML = interpretation;
+    predictorInterpretation.style.display = 'block';
+  }
+
+  predictorAudioBtn.onclick = () => {
+    if (predictorAudioEnabled) {
+      stopPredictorAudio();
+      predictorAudioBtn.textContent = '▶ Hear Your Beat Frequency';
+      predictorAudioBtn.style.background = '#3E6B4C';
+    } else {
+      startPredictorAudio();
+      predictorAudioBtn.textContent = '⏹ Stop Audio';
+      predictorAudioBtn.style.background = '#8B6F47';
+    }
+  };
+
+  updatePredictorViz();
+}
+
+render();
+</script>
+
+</body>
+</html>
