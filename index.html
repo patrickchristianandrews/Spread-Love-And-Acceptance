@@ -198,7 +198,12 @@
               <li>First word on changes, for as long as the program keeps developing</li>
             </ul>
             <p class="access-note">Free membership doesn't unlock the paid workpaper suite. Your email is held by Buttondown, our newsletter service, and used only for program updates. You can unsubscribe from any email.</p>
-            <a class="cta-button access-cta-quiet" href="#register">Join free</a>
+            <form class="register-form access-signup" action="https://buttondown.com/api/emails/embed-subscribe/spreadloveandacceptance" method="post" target="popupwindow" onsubmit="window.open('https://buttondown.com/spreadloveandacceptance', 'popupwindow')">
+              <label class="visually-hidden" for="access-signup-email">Email address</label>
+              <input type="email" id="access-signup-email" name="email" placeholder="you@domain.com" autocomplete="email" required>
+              <input type="hidden" value="1" name="embed">
+              <button type="submit" class="cta-button">Join free</button>
+            </form>
           </div>
         </article>
 
