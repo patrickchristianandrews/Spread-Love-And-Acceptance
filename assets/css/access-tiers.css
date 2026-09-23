@@ -1,0 +1,143 @@
+/*
+  access-tiers.css
+  The Objective Ledger (TOL-OS) — Access Levels
+  Load after book-layout.css; uses its :root tokens.
+  Levels stack as ledger rows rather than side-by-side columns:
+  the main column is 780px max, too narrow for three readable cards.
+*/
+
+.access-levels{
+  margin-top: 28px;
+  border-top: 1px solid var(--line);
+}
+
+.access-level{
+  display: grid;
+  grid-template-columns: 200px minmax(0, 1fr);
+  gap: 28px;
+  padding: 28px 0 30px 18px;
+  border-bottom: 1px solid var(--line);
+  border-left: 3px solid var(--line);
+}
+
+.access-level--open{ border-left-color: var(--line); }
+.access-level--free{ border-left-color: var(--credit); }
+.access-level--paid{
+  border-left-color: var(--brass);
+  background: var(--paper-deep);
+  padding-right: 22px;
+}
+
+.access-level-head h3{
+  font-size: 1.35rem;
+  margin: 0 0 8px 0;
+}
+
+.access-cost{
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.74rem;
+  line-height: 1.5;
+  color: var(--ink-soft);
+}
+
+.access-level--free .access-cost{ color: var(--credit); }
+.access-level--paid .access-cost{ color: var(--brass); }
+
+.access-list{
+  margin: 0 0 14px 0;
+  padding-left: 1.1em;
+}
+
+.access-list li{
+  margin-bottom: 6px;
+  max-width: 56ch;
+}
+
+.access-list li:first-child{
+  color: var(--ink-soft);
+  font-style: italic;
+}
+
+.access-level--open .access-list li:first-child{
+  color: inherit;
+  font-style: normal;
+}
+
+.access-note{
+  font-size: 0.88rem;
+  color: var(--ink-soft);
+  max-width: 56ch;
+  margin: 0 0 18px 0;
+}
+
+.access-note a{ color: var(--ink); }
+
+/* Secondary buttons: outline instead of filled, so the paid CTA
+   remains the single filled button in the section. */
+.cta-button.access-cta-quiet{
+  background: transparent;
+  color: var(--ink);
+  border: 1px solid var(--ink-soft);
+}
+
+.cta-button.access-cta-quiet:hover{
+  background: var(--paper-deep);
+}
+
+/* ---------- privacy ledger ---------- */
+
+.access-privacy{
+  margin-top: 40px;
+}
+
+.access-privacy h3{
+  font-size: 1.1rem;
+  margin-bottom: 12px;
+}
+
+.access-privacy-scroll{
+  overflow-x: auto;
+  margin-bottom: 14px;
+}
+
+.access-privacy table{
+  width: 100%;
+  min-width: 480px;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+
+.access-privacy th,
+.access-privacy td{
+  text-align: left;
+  vertical-align: top;
+  padding: 10px 14px 10px 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.access-privacy thead th{
+  font-family: "IBM Plex Mono", monospace;
+  font-weight: 500;
+  font-size: 0.7rem;
+  color: var(--brass);
+  border-bottom-color: var(--ink-soft);
+}
+
+.access-privacy tbody th{
+  font-family: "Fraunces", "Lora", serif;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+@media (max-width: 860px){
+  .access-level{
+    grid-template-columns: 1fr;
+    gap: 14px;
+    padding: 22px 0 24px 16px;
+  }
+  .access-level--paid{ padding-right: 16px; }
+  .access-level .cta-button{
+    display: block;
+    text-align: center;
+  }
+}
