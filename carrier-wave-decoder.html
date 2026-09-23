@@ -13,7 +13,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Carrier Wave Decoder — The Objective Ledger (TOL-OS)</title>
-<meta name="description" content="Decode the moment a conversation starts to squeal, check your state, and practice getting back in tune. A free companion to Chapter I of The Objective Ledger.">
+<meta name="description" content="Decode the moment a conversation starts to squeal, check your state, practice getting back in tune, and close the books together. A free companion to Chapter I of The Objective Ledger.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,500&family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -21,10 +21,10 @@
 :root{
   /* Site tokens from assets/css/book-layout.css */
   --bg:#F5EFDE; --panel:#ECE2C4; --ink:#211D17; --muted:#524B3E; --line:#D9CBA3;
-  --brass:#8A5E1E; --radius:3px;
+  --brass:#8A5E1E; --sheet:#FFFDF7; --radius:3px;
   /* Two people */
   --a:#96412B; --b:#2B5B8C;
-  /* Nervous-system states (all pass 4.5:1 with paper-coloured text) */
+  /* Nervous-system states (each passes 4.5:1 with paper-coloured text) */
   --v:#3E6B4C; --s:#86591A; --d:#5A5580;
   --state:var(--v);
   --display:"Fraunces", "Lora", Georgia, serif;
@@ -181,6 +181,64 @@ textarea{width:100%;min-height:90px;margin-top:6px;border:1px solid var(--line);
 .legend i{display:inline-block;width:12px;height:12px;border-radius:50%;background:var(--muted);vertical-align:-1px;margin-right:6px}
 .legend i.ring{background:none;border:2px solid var(--muted)}
 .insight{font-size:1.05rem}
+/* Flow + session */
+.flow{margin:0;padding:0;list-style:none;counter-reset:f;display:grid;gap:2px}
+.flow li{counter-increment:f;display:grid;grid-template-columns:34px 1fr;gap:2px 10px;padding:10px 0;border-bottom:1px solid var(--line)}
+.flow li:last-child{border-bottom:none}
+.flow li::before{content:counter(f);grid-row:1/3;width:26px;height:26px;border-radius:50%;border:1.5px solid var(--line);display:grid;place-items:center;font-family:var(--display);font-size:.85rem;margin-top:2px}
+.flow b{font-family:var(--display);font-weight:600}
+.flow span{font-size:.9rem;color:var(--muted)}
+.sessbar{border:1.5px solid var(--state);border-radius:var(--radius);padding:14px 16px;margin:-8px 0 22px;background:var(--panel);display:grid;gap:10px}
+.sb-top{display:flex;justify-content:space-between;align-items:center;gap:10px;font-family:var(--display);font-size:.9rem;color:var(--muted)}
+.sb-top button,.sb-hint button{background:none;border:none;padding:0;text-decoration:underline;color:var(--ink);font-size:.9rem}
+.sb-steps{display:flex;gap:6px;margin:0;padding:0;list-style:none;overflow-x:auto;scrollbar-width:none}
+.sb-steps li button{border:1.5px solid var(--line);background:none;border-radius:var(--radius);padding:5px 12px;font-family:var(--display);font-size:.85rem;white-space:nowrap;color:var(--muted)}
+.sb-steps li.done button{color:var(--ink)}
+.sb-steps li.done button::before{content:"✓ "}
+.sb-steps li.now button{border-color:var(--state);color:var(--ink);font-weight:600}
+.sb-hint{margin:0;font-size:.95rem}
+/* Journal settle */
+.settle{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:end;margin-top:10px}
+@media (max-width:560px){.settle{grid-template-columns:1fr}}
+.settle input{width:100%;border:1px solid var(--line);border-radius:var(--radius);padding:8px 10px;background:var(--bg);font:inherit;font-size:.95rem;color:inherit;margin-top:4px}
+.settle label{font-size:.85rem}
+.tag{display:inline-block;font-family:var(--display);font-size:.78rem;border-radius:var(--radius);padding:1px 9px;margin-left:6px;border:1.5px solid var(--line)}
+.tag.ok{border-color:var(--v);color:var(--v)}
+.tag.open{border-color:var(--s);color:var(--s)}
+/* Close the books */
+.pbtn{border:1.5px solid var(--line);background:none;border-radius:var(--radius);padding:6px 14px;font-family:var(--display);font-size:.9rem}
+.pbtn[aria-pressed="true"]{border-color:var(--ink);box-shadow:inset 0 0 0 1px var(--ink)}
+.status{font-family:var(--display);font-weight:700;font-size:clamp(1.6rem,4.5vw,2.3rem);line-height:1.08;margin:0 0 6px}
+.status.ok{color:var(--v)} .status.no{color:var(--s)}
+.ckl{list-style:none;margin:14px 0;padding:0;display:grid;gap:8px}
+.ckl li{display:grid;grid-template-columns:26px 1fr;gap:0 8px}
+.ckl .mk{font-family:var(--display);font-weight:700}
+.ckl small{display:block;color:var(--muted);font-size:.85rem}
+.focus{list-style:none;margin:8px 0 0;padding:0;display:grid;gap:12px}
+.focus li{border-left:3px solid var(--s);padding:2px 0 2px 14px}
+.focus b{font-family:var(--display)}
+.focus button{margin-top:6px}
+.names{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-bottom:12px}
+.checks{display:grid;gap:6px;margin-bottom:12px;font-size:.95rem}
+.checks input{margin-right:8px;accent-color:var(--state)}
+.paper{background:var(--sheet);color:var(--ink);border-radius:var(--radius);padding:clamp(22px,5vw,48px);box-shadow:0 1px 0 var(--line),0 12px 30px -18px rgba(33,29,23,.3);font-family:var(--body);line-height:1.65}
+.paper h1{font-size:1.9rem;margin:0 0 4px}
+.paper .pmeta{color:var(--muted);font-family:var(--display);font-size:.9rem;margin:0 0 22px}
+.paper h2{font-family:var(--display);font-size:1.1rem;margin:24px 0 6px;color:var(--ink)}
+.paper p{margin:0 0 10px;max-width:64ch}
+.paper ul{margin:0 0 10px;padding-left:1.2em}
+.paper li{margin-bottom:6px}
+.paper .sig{margin-top:26px}
+.paper .fine{font-size:.8rem;color:var(--muted);margin-top:28px;border-top:1px solid var(--line);padding-top:10px}
+@media print{
+  body{background:#fff}
+  .sitebar,header,.scope,.readout,.tabs,.sessbar,.note,.sitefoot,[data-panel]:not([data-panel="close"]){display:none!important}
+  [data-panel="close"] > div > :not(#printout){display:none!important}
+  [data-panel="close"]{display:block!important}
+  .wrap{padding:0;max-width:none}
+  #printout{box-shadow:none;background:#fff;padding:0 6mm}
+}
+}
 @media (prefers-reduced-motion:reduce){.bar i,.script li,.orb{transition:none!important}}
 </style>
 </head>
@@ -203,17 +261,32 @@ textarea{width:100%;min-height:90px;margin-top:6px;border:1px solid var(--line);
   </div>
 
   <div class="tabs" role="tablist" aria-label="Sections">
-    <button class="tab" role="tab" data-tab="practice" aria-selected="true">Practice</button>
-    <button class="tab" role="tab" data-tab="decode" aria-selected="false">Decode a moment</button>
-    <button class="tab" role="tab" data-tab="together" aria-selected="false">Together</button>
+    <button class="tab" role="tab" data-tab="start" aria-selected="true">Start</button>
     <button class="tab" role="tab" data-tab="check" aria-selected="false">Check your state</button>
     <button class="tab" role="tab" data-tab="retune" aria-selected="false">Retune</button>
-    <button class="tab" role="tab" data-tab="learn" aria-selected="false">Learn</button>
+    <button class="tab" role="tab" data-tab="decode" aria-selected="false">Decode a moment</button>
+    <button class="tab" role="tab" data-tab="together" aria-selected="false">Together</button>
+    <button class="tab" role="tab" data-tab="practice" aria-selected="false">Practice</button>
     <button class="tab" role="tab" data-tab="journal" aria-selected="false">Journal</button>
+    <button class="tab" role="tab" data-tab="close" aria-selected="false">Close the books</button>
+    <button class="tab" role="tab" data-tab="learn" aria-selected="false">Learn</button>
   </div>
 
+  <div class="sessbar" id="sessbar" hidden></div>
+
+  <!-- START -->
+  <section data-panel="start" role="tabpanel">
+    <div class="panel" style="max-width:780px">
+      <h3>One session, start to finish</h3>
+      <p style="max-width:60ch;margin:0 0 16px">When a moment has squealed, work through it in this order. Each step takes a few minutes, and you can skip any of them.</p>
+      <ol class="flow" id="flow"></ol>
+      <div class="row" style="margin-top:18px"><button class="play" id="sessgo">Start a session</button></div>
+      <p class="hint" id="bookstatus" style="margin:16px 0 0"></p>
+    </div>
+  </section>
+
   <!-- PRACTICE -->
-  <section data-panel="practice" role="tabpanel">
+  <section data-panel="practice" role="tabpanel" hidden>
     <div class="grid">
       <nav aria-label="Scenarios">
         <h2>Scenarios</h2>
@@ -310,6 +383,31 @@ textarea{width:100%;min-height:90px;margin-top:6px;border:1px solid var(--line);
         <p class="sub" id="csub">About one minute</p>
         <button class="play" id="rstart">Start</button>
       </div>
+    </div>
+  </section>
+
+  <!-- CLOSE -->
+  <section data-panel="close" role="tabpanel" hidden>
+    <div style="max-width:780px;display:grid;gap:20px">
+      <div class="row" role="group" aria-label="Period" id="period"></div>
+      <div class="panel" id="recon"></div>
+      <div class="panel">
+        <h3>A summary for your partner</h3>
+        <p class="hint">A printable letter from you to them: what came up, what you're working on, and what would help. You choose what goes in it, and you can read the whole thing below before printing.</p>
+        <div class="names">
+          <div class="field"><label for="pme">Your name</label><input id="pme" maxlength="24" autocomplete="off"></div>
+          <div class="field"><label for="pthem">Your partner's name</label><input id="pthem" maxlength="24" autocomplete="off"></div>
+        </div>
+        <div class="checks">
+          <label><input type="checkbox" id="inc-notes" checked> Include what I wrote about each moment</label>
+          <label><input type="checkbox" id="inc-work"> Include my practice and retune activity</label>
+          <label><input type="checkbox" id="inc-state"> Include the states I've been checking in from</label>
+        </div>
+        <div><label for="pmsg">A personal note (optional)</label><textarea id="pmsg" placeholder="Anything you want to say in your own words."></textarea></div>
+        <div class="row" style="margin-top:12px"><button class="play" id="printbtn">Print or save as PDF</button></div>
+        <p class="hint" style="margin:10px 0 0">If the print window doesn't open here, use your browser's own print command, or open the downloaded copy of this page and print from there.</p>
+      </div>
+      <div class="paper" id="printout"></div>
     </div>
   </section>
 
@@ -432,9 +530,12 @@ const LESSONS=[
 
 // ---------- storage ----------
 const KEY="cwd-v1";
-let store={done:{},notes:{},voice:true,log:[]};
+let store={done:{},notes:{},voice:true,log:[],doneAt:{},checks:[],retunes:[],people:{me:"",them:""},letter:{notes:true,work:false,state:false,msg:""}};
 try{const raw=localStorage.getItem(KEY); if(raw) store=Object.assign(store,JSON.parse(raw));}catch(e){}
 if(!Array.isArray(store.log)) store.log=[];
+["checks","retunes"].forEach(k=>{if(!Array.isArray(store[k])) store[k]=[];});
+store.doneAt=store.doneAt||{}; store.people=Object.assign({me:"",them:""},store.people||{});
+store.letter=Object.assign({notes:true,work:false,state:false,msg:""},store.letter||{});
 function save(){try{localStorage.setItem(KEY,JSON.stringify(store));}catch(e){}}
 
 const $=id=>document.getElementById(id);
@@ -443,7 +544,7 @@ const hasSpeech="speechSynthesis" in window && "SpeechSynthesisUtterance" in win
 if(!hasSpeech) store.voice=false;
 $("total").textContent=SCEN.length*3;
 
-let tab="practice", cur=SCEN[0].id, st="v";
+let tab="start", cur=SCEN[0].id, st="v";
 const scen=()=>SCEN.find(s=>s.id===cur);
 const key=()=>cur+":"+st;
 function setStateColor(s){document.documentElement.style.setProperty("--state",`var(--${s})`);}
@@ -484,6 +585,11 @@ function go(t){
   if(t==="practice"){setStateColor(st);renderPanel();}
   if(t==="journal") renderJournal();
   if(t==="together") renderTog();
+  if(t==="start") renderStart();
+  if(t==="close") renderClose();
+  if(t==="check"){answers=Array(QUESTIONS.length).fill(null);checkRecorded=false;renderQs();renderResult();}
+  if(session){const j=STEPS.findIndex((x,k)=>x.tab===t||(x.alt===t&&k===session.i)); if(j>=0) session.i=j;}
+  renderSess();
   if(t==="retune") setStateColor(mode==="breath"?"s":"d");
   if(t==="decode"||t==="check"||t==="learn") setStateColor(st);
 }
@@ -528,7 +634,7 @@ function renderPanel(){
 document.querySelectorAll('.st[data-s]:not([data-mode])').forEach(b=>b.onclick=()=>{stopAll();st=b.dataset.s;renderPanel();});
 $("voice").onclick=()=>{store.voice=!store.voice;save();stopAll();renderPanel();};
 let noteT; $("notes").oninput=e=>{clearTimeout(noteT);const k=key(),v=e.target.value;noteT=setTimeout(()=>{if(v.trim())store.notes[k]=v;else delete store.notes[k];save();},300);};
-$("mark").onclick=()=>{store.done[key()]=!store.done[key()];save();renderList();renderPanel();};
+$("mark").onclick=()=>{store.done[key()]=!store.done[key()];if(store.done[key()])store.doneAt[key()]=Date.now();save();renderList();renderPanel();};
 $("play").onclick=()=>{
   if(run.owner==="practice"){stopAll();return;}
   resetScript(); $("play").textContent="Stop";
@@ -539,6 +645,7 @@ $("play").onclick=()=>{
       document.querySelectorAll("#script li").forEach((li,j)=>{li.classList.toggle("now",j===i);li.classList.toggle("done",j<i);});},
     onDone:()=>{practiceProgress=1;practiceFinished=true;$("prog").style.width="100%";$("play").textContent="Play again";
       document.querySelectorAll("#script li").forEach(li=>{li.classList.remove("now");li.classList.add("done");});
+      store.doneAt[key()]=Date.now();
       if(!store.done[key()]){store.done[key()]=true;save();renderList();$("mark").setAttribute("aria-pressed","true");$("mark").textContent="Completed ✓";}}
   });
 };
@@ -585,7 +692,8 @@ function renderDecode(){
 }
 $("decsave").onclick=()=>{
   const summary=CHANNELS.map(c=>`${c.name}: you ${c.opts[dec[c.id][0]].toLowerCase()}, them ${c.opts[dec[c.id][1]].toLowerCase()}`).join(" · ");
-  store.log.unshift({t:Date.now(),kind:"decode",verdict:verdictFor(decTotal()),summary,say:decodeSentence(),note:$("decnote").value.trim()});
+  store.log.unshift({t:Date.now(),kind:"decode",verdict:verdictFor(decTotal()),summary,say:decodeSentence(),note:$("decnote").value.trim(),
+    raw:{me:CHANNELS.map(c=>dec[c.id][0]),them:CHANNELS.map(c=>dec[c.id][1])},settled:false,agreed:""});
   save(); $("decsave").textContent="Saved ✓"; setTimeout(()=>$("decsave").textContent="Save to journal",1800);
 };
 $("deccopy").onclick=async()=>{
@@ -598,7 +706,7 @@ $("deccopy").onclick=async()=>{
 $("decreset").onclick=()=>{dec={pace:[1,1],reg:[1,1],urg:[1,1]};$("decnote").value="";renderChans();renderDecode();};
 
 // ---------- check ----------
-let answers=Array(QUESTIONS.length).fill(null), suggested="v";
+let answers=Array(QUESTIONS.length).fill(null), suggested="v", checkRecorded=false;
 function renderQs(){
   $("qs").innerHTML=QUESTIONS.map((q,i)=>`<div class="q"><p id="q${i}">${q.q}</p><div class="opts" role="group" aria-labelledby="q${i}">${q.o.map(([t,s])=>`<button data-q="${i}" data-s="${s}" aria-pressed="${answers[i]===s}">${t}</button>`).join("")}</div></div>`).join("");
   $("qs").querySelectorAll("button").forEach(b=>b.onclick=()=>{answers[+b.dataset.q]=b.dataset.s;renderQs();renderResult();});
@@ -612,6 +720,10 @@ function renderResult(){
   $("rstate").textContent=top.length>1?`A mix of ${top.map(k=>SN[k].toLowerCase()).join(" and ")}`:`Mostly ${SN[suggested].toLowerCase()}`;
   $("rtext").textContent=(top.length>1?"Mixed readings are common, especially mid-conversation. Start with the more activated side. ":"")+RESULT_TEXT[suggested];
   setStateColor(suggested);
+  if(checkRecorded&&store.checks[0]) store.checks[0].state=suggested;
+  else{store.checks.unshift({t:Date.now(),state:suggested});checkRecorded=true;}
+  store.checks=store.checks.slice(0,300); save();
+  if(session){session.state=suggested;st=suggested;}
 }
 $("rgo").onclick=()=>{st=suggested;go("practice");};
 $("rretune").onclick=()=>{setMode(suggested==="d"?"orient":"breath");go("retune");};
@@ -658,6 +770,7 @@ function startPacer(){
   }
   function finish(){
     pacer.on=false; pacer.prog=1; $("rstart").textContent="Start again";
+    store.retunes.unshift(Date.now()); store.retunes=store.retunes.slice(0,300); save();
     $("cue").textContent="Nice. Check in with yourself: any different?";
     $("csub").textContent="If you're ready, try a practice from where you are now.";
     orb.style.transitionDuration=reduceMotion?"0s":"2s"; orb.style.transform="scale(.7)";
@@ -684,24 +797,29 @@ function renderLessons(){
 
 // ---------- journal ----------
 function fmt(t){try{return new Date(t).toLocaleString([], {month:"short",day:"numeric",hour:"numeric",minute:"2-digit"});}catch(e){return "";}}
+function settleBlock(e,i){
+  return `<div class="settle"><label>What we agreed<input data-agree="${i}" value="${esc(e.agreed||"")}" placeholder="e.g. I'll name a real time instead of saying soon"></label><button class="ghost" data-settle="${i}" aria-pressed="${!!e.settled}">${e.settled?"Settled ✓":"Mark settled"}</button></div>`;
+}
 function renderJournal(){
   const items=[];
   store.log.forEach((e,i)=>items.push(e.kind==="together"
-    ? `<li><div class="meta">Together · ${esc(e.names.join(" & "))} · ${esc(fmt(e.t))} · ${esc(e.verdict)}</div>${e.note?`<p>${esc(e.note)}</p>`:""}<p class="hint" style="margin:6px 0">${esc(e.summary)}</p><p><i>${esc(e.say)}</i></p><div class="row" style="margin-top:8px"><button class="ghost" data-del="${i}">Delete</button></div></li>`
-    : `<li><div class="meta">Decoded moment · ${esc(fmt(e.t))} · ${esc(e.verdict)}</div>${e.note?`<p>${esc(e.note)}</p>`:""}<p class="hint" style="margin:6px 0">${esc(e.summary)}</p><p><i>${esc(e.say)}</i></p><div class="row" style="margin-top:8px"><button class="ghost" data-del="${i}">Delete</button></div></li>`));
+    ? `<li><div class="meta">Together · ${esc(e.names.join(" & "))} · ${esc(fmt(e.t))} · ${esc(e.verdict)}<span class="tag ${e.settled?"ok":"open"}">${e.settled?"Settled":"Open"}</span></div>${e.note?`<p>${esc(e.note)}</p>`:""}<p class="hint" style="margin:6px 0">${esc(e.summary)}</p><p><i>${esc(e.say)}</i></p>${settleBlock(e,i)}<div class="row" style="margin-top:8px"><button class="ghost" data-del="${i}">Delete</button></div></li>`
+    : `<li><div class="meta">Decoded moment · ${esc(fmt(e.t))} · ${esc(e.verdict)}<span class="tag ${e.settled?"ok":"open"}">${e.settled?"Settled":"Open"}</span></div>${e.note?`<p>${esc(e.note)}</p>`:""}<p class="hint" style="margin:6px 0">${esc(e.summary)}</p><p><i>${esc(e.say)}</i></p>${settleBlock(e,i)}<div class="row" style="margin-top:8px"><button class="ghost" data-del="${i}">Delete</button></div></li>`));
   Object.keys(store.notes).forEach(k=>{
     const [id,s]=k.split(":"), sc=SCEN.find(x=>x.id===id); if(!sc||!store.notes[k]) return;
     items.push(`<li><div class="meta">Practice note · ${esc(sc.title)} · ${SN[s]}</div><p>${esc(store.notes[k])}</p><div class="row" style="margin-top:8px"><button class="ghost" data-open="${esc(k)}">Open practice</button></div></li>`);
   });
   $("entries").innerHTML=items.join("")||`<li class="empty">Nothing here yet. Decode a moment or add notes to a practice, and they'll collect here.</li>`;
   $("entries").querySelectorAll("[data-del]").forEach(b=>b.onclick=()=>{store.log.splice(+b.dataset.del,1);save();renderJournal();});
+  $("entries").querySelectorAll("[data-settle]").forEach(b=>b.onclick=()=>{const e=store.log[+b.dataset.settle];e.settled=!e.settled;save();renderJournal();});
+  $("entries").querySelectorAll("[data-agree]").forEach(inp=>inp.onchange=()=>{store.log[+inp.dataset.agree].agreed=inp.value.trim().slice(0,200);save();});
   $("entries").querySelectorAll("[data-open]").forEach(b=>b.onclick=()=>{const [id,s]=b.dataset.open.split(":");cur=id;st=s;renderList();go("practice");});
 }
 let wipeArm=null;
 $("wipe").onclick=()=>{
   if(!wipeArm){$("wipe").textContent="Tap again to erase everything";wipeArm=setTimeout(()=>{wipeArm=null;$("wipe").textContent="Clear all my data";},4000);return;}
   clearTimeout(wipeArm); wipeArm=null;
-  store={done:{},notes:{},voice:hasSpeech,log:[]}; save(); togReset();
+  store={done:{},notes:{},voice:hasSpeech,log:[],doneAt:{},checks:[],retunes:[],people:{me:"",them:""},letter:{notes:true,work:false,state:false,msg:""}}; save(); togReset();
   $("wipe").textContent="Cleared ✓"; setTimeout(()=>$("wipe").textContent="Clear all my data",1800);
   renderList(); renderJournal();
 };
@@ -859,7 +977,12 @@ function renderTog(){
       ${tog.mode==="join"?`<div><p class="lab" style="margin:0 0 6px">Send this reply code back so ${esc(na)} can see this too</p><div class="code" id="rcode">${esc(encode(nb,B))}</div><div class="row" style="margin-top:8px"><button class="ghost" id="rcopy">Copy reply code</button></div></div>`:""}
       <div class="row"><button class="play" id="tsave">Save to journal</button><button class="ghost" id="tpractice">Practice this together</button><button class="ghost" id="tnew">Start a new one</button></div>`;
     if(tog.mode==="join") $("rcopy").onclick=()=>copyText(encode(nb,B),$("rcopy"),$("rcode"));
-    $("tsave").onclick=()=>{store.log.unshift({t:Date.now(),kind:"together",names:[na,nb],note:tog.note,verdict:verdictFor(gaps),summary:tog.summary,say});save();$("tsave").textContent="Saved ✓";};
+    $("tsave").onclick=()=>{
+      const mi=tog.mode==="join"?1:0;
+      store.log.unshift({t:Date.now(),kind:"together",names:[na,nb],note:tog.note,verdict:verdictFor(gaps),summary:tog.summary,say,
+        raw:{A:{self:[...A.self],guess:[...A.guess]},B:{self:[...B.self],guess:[...B.guess]}},makerIdx:mi,settled:false,agreed:""});
+      if(!store.people.me) store.people.me=mi?nb:na; if(!store.people.them) store.people.them=mi?na:nb;
+      save();$("tsave").textContent="Saved ✓";};
     $("tpractice").onclick=()=>{
       const worst=CHANNELS.map((c,ci)=>({c,g:Math.abs(A.self[ci]-B.self[ci])})).sort((x,y)=>y.g-x.g)[0];
       const map={pace:"pause",reg:"status",urg:"chance"};
@@ -873,6 +996,192 @@ async function copyText(txt,btn,node){
   if(!ok&&node){const r=document.createRange();r.selectNodeContents(node);const s=getSelection();s.removeAllRanges();s.addRange(r);}
   const old=btn.textContent; btn.textContent=ok?"Copied ✓":"Selected, press copy"; setTimeout(()=>btn.textContent=old,1800);
 }
+
+
+// ---------- session flow ----------
+const STEPS=[
+ {tab:"check",t:"Check your state",h:"Answer five quick questions so the rest of the session fits where you are right now."},
+ {tab:"retune",t:"Retune",h:"Recommended if you checked in keyed up or shut down. If you're steady, skip ahead."},
+ {tab:"decode",t:"Decode the moment",h:"Mark where each of you was, then save it to the journal.",alt:"together"},
+ {tab:"practice",t:"Practice",h:"The scenario that matches your biggest gap is already picked, in your current state."},
+ {tab:"journal",t:"Record it",h:"Write what you agreed on the entry you just saved. Mark it settled once it really is."},
+ {tab:"close",t:"Close the books",h:"See whether everything reconciles, and print a summary for your partner."}
+];
+let session=null;
+function renderStart(){
+  $("flow").innerHTML=STEPS.map(x=>`<li><b>${x.t}</b><span>${x.h}</span></li>`).join("");
+  const r=reconcile(30);
+  $("bookstatus").innerHTML=r.items.length?`Last 30 days: ${r.reconciled?"your books reconcile.":`not yet reconciled, ${r.focus.length} area${r.focus.length===1?"":"s"} to focus on.`} <button class="linkbtn" data-go2="close">See details</button>`:"Nothing logged yet. Your first session will start the books.";
+  const g=$("bookstatus").querySelector("[data-go2]"); if(g) g.onclick=()=>go("close");
+}
+$("sessgo").onclick=()=>{session={i:0,state:null};go(STEPS[0].tab);};
+function goStep(j){
+  if(!session) return; session.i=Math.max(0,Math.min(STEPS.length-1,j));
+  const stp=STEPS[session.i];
+  if(stp.tab==="retune"&&session.state) setMode(session.state==="d"?"orient":"breath");
+  if(stp.tab==="practice"){
+    if(session.state) st=session.state;
+    const latest=store.log.find(e=>e.kind==="decode"||e.kind==="together"), m=latest&&metrics(latest);
+    if(m){const gaps=[0,1,2].map(c=>Math.abs(m.mine[c]-m.theirs[c])+(m.mis?m.mis[c]:0));const top=gaps.indexOf(Math.max(...gaps));
+      cur=Math.max(...gaps)===0?"repair":PRACT[top][0];}
+    renderList();
+  }
+  go(stp.tab); window.scrollTo({top:0,behavior:reduceMotion?"auto":"smooth"});
+}
+function renderSess(){
+  const bar=$("sessbar"); if(!session){bar.hidden=true;return;}
+  const i=session.i, stp=STEPS[i]; bar.hidden=false;
+  bar.innerHTML=`<div class="sb-top"><span>Session, step ${i+1} of ${STEPS.length}</span><button id="sbend">End session</button></div>
+    <ol class="sb-steps">${STEPS.map((x,j)=>`<li class="${j<i?"done":j===i?"now":""}"><button data-j="${j}" ${j===i?'aria-current="step"':""}>${x.t}</button></li>`).join("")}</ol>
+    <p class="sb-hint">${stp.h}${stp.alt?(tab===stp.alt?` <button id="sbalt">Decode it on your own instead</button>`:` <button id="sbalt">Do it together instead</button>`):""}</p>
+    <div class="row">${i>0?`<button class="ghost" id="sbback">Back</button>`:""}<button class="play" id="sbnext">${i===STEPS.length-1?"Finish session":"Next: "+STEPS[i+1].t}</button></div>`;
+  $("sbend").onclick=()=>{session=null;renderSess();};
+  bar.querySelectorAll("[data-j]").forEach(b=>b.onclick=()=>goStep(+b.dataset.j));
+  if($("sbback")) $("sbback").onclick=()=>goStep(i-1);
+  $("sbnext").onclick=()=>{if(i===STEPS.length-1){session=null;go("start");}else goStep(i+1);};
+  if($("sbalt")) $("sbalt").onclick=()=>go(tab===stp.alt?stp.tab:stp.alt);
+}
+
+// ---------- reconciliation ----------
+const PRACT={0:["pause"],1:["status","correct"],2:["chance","late"]};
+const CH_WORD=["pace","tone","timing"];
+function rawOf(e){
+  if(e.raw) return e.raw;
+  if(e.kind==="decode"&&e.summary){
+    const me=[],th=[]; let ok=true;
+    CHANNELS.forEach((c,ci)=>{
+      const m=e.summary.match(new RegExp(c.name+": you ([a-z ]+?), them ([a-z ]+?)(?: ·|$)"));
+      const lo=c.opts.map(x=>x.toLowerCase());
+      if(!m){ok=false;return;} me[ci]=lo.indexOf(m[1]); th[ci]=lo.indexOf(m[2]); if(me[ci]<0||th[ci]<0) ok=false;});
+    return ok?{me,them:th}:null;
+  }
+  return null;
+}
+function metrics(e){
+  const r=rawOf(e); if(!r) return null;
+  if(e.kind==="decode") return {mine:r.me,theirs:r.them,mis:null};
+  if(e.kind==="together"&&r.A&&r.B){
+    const mi=e.makerIdx||0, M=mi?r.B:r.A, O=mi?r.A:r.B;
+    return {mine:M.self,theirs:O.self,mis:[0,1,2].map(c=>(M.guess[c]!==O.self[c]?1:0)+(O.guess[c]!==M.self[c]?1:0))};
+  }
+  return null;
+}
+const joinList=a=>a.length<2?(a[0]||""):a.slice(0,-1).join(", ")+" and "+a[a.length-1];
+function reconcile(days){
+  const since=days?Date.now()-days*864e5:0;
+  const items=store.log.filter(e=>(e.kind==="decode"||e.kind==="together")&&e.t>=since);
+  const ch=[0,1,2].map(()=>({gap:0,dir:0,flag:0,mis:0}));
+  let tN=0,tAcc=0;
+  items.forEach(e=>{const m=metrics(e); if(!m) return;
+    [0,1,2].forEach(c=>{const g=Math.abs(m.mine[c]-m.theirs[c]); ch[c].gap+=g; ch[c].dir+=m.mine[c]-m.theirs[c]; if(g) ch[c].flag++; if(m.mis) ch[c].mis+=m.mis[c];});
+    if(m.mis){tN++;tAcc+=6-m.mis.reduce((a,b)=>a+b,0);}
+  });
+  const open=items.filter(e=>!e.settled);
+  const practiced=c=>PRACT[c].some(id=>["v","s","d"].some(k=>{const kk=id+":"+k; if(!store.done[kk]) return false; const t=store.doneAt[kk]; return !t||t>=since;}));
+  const flagged=[0,1,2].filter(c=>ch[c].flag>0), unpracticed=flagged.filter(c=>!practiced(c));
+  const avgAcc=tN?tAcc/tN:null;
+  const checks=[
+    {t:"Every logged moment is settled",pass:open.length===0,d:open.length?`${open.length} of ${items.length} still open`:`All ${items.length} settled`},
+    {t:"Each gap has had some practice",pass:unpracticed.length===0,d:unpracticed.length?`No practice yet for ${joinList(unpracticed.map(c=>CH_WORD[c]))}`:(flagged.length?"Every channel that showed a gap has been practiced":"No gaps showed up")},
+    {t:"You're reading each other accurately",pass:avgAcc===null?null:avgAcc>=4,d:avgAcc===null?"Not checked yet. This needs at least one Together session.":`On average ${avgAcc.toFixed(1)} of 6 guesses were right (the bar is 4)`}
+  ];
+  const recentChecks=store.checks.filter(c=>c.t>=since), sc={v:0,s:0,d:0}; recentChecks.forEach(c=>sc[c.state]=(sc[c.state]||0)+1);
+  const topState=recentChecks.length?["s","d","v"].sort((a,b)=>sc[b]-sc[a])[0]:null;
+  const focus=[];
+  [0,1,2].map(c=>({c,score:ch[c].gap+ch[c].mis})).filter(x=>x.score>0).sort((a,b)=>b.score-a.score).forEach(({c})=>{
+    const d=ch[c].dir, them=store.people.them||"your partner", Them=them.charAt(0).toUpperCase()+them.slice(1);
+    const dirTxt=[
+      d>0?"You've tended to move faster than "+them+".":d<0?Them+" has tended to move faster than you.":"Pace has been off in both directions.",
+      d>0?"Your tone has tended to run sharper than you meant.":d<0?"Their tone has tended to land sharper for you.":"Tone has tripped you both up at different times.",
+      d>0?"You've usually been the one in more of a hurry.":d<0?Them+" has usually been the one in more of a hurry.":"Your sense of timing has differed both ways."][c];
+    const misTxt=ch[c].mis?` Guesses about each other were off ${ch[c].mis} time${ch[c].mis===1?"":"s"} here.`:"";
+    focus.push({kind:"channel",c,title:`${CHANNELS[c].name}: showed a gap in ${ch[c].flag} of ${items.length} moment${items.length===1?"":"s"}`,text:dirTxt+misTxt,scen:PRACT[c][0]});
+  });
+  if(open.length) focus.push({kind:"open",title:`${open.length} moment${open.length===1?"":"s"} still open`,text:"Talk these through, write down what you agreed, and mark them settled in the journal."});
+  if(avgAcc!==null&&avgAcc<4) focus.push({kind:"read",title:"Misreading each other",text:"More than a third of your guesses about each other were off. Asking before assuming will clear a lot of the static."});
+  if(topState&&topState!=="v"&&sc[topState]>=2) focus.push({kind:"state",title:`Mostly checking in ${SN[topState].toLowerCase()}`,text:topState==="s"?"You've usually been keyed up. Starting each session with the long-exhale retune should help everything after it.":"You've often been low or far away. The look-around retune and smaller, shorter conversations may work better for now."});
+  const practices=Object.keys(store.done).filter(k=>store.done[k]&&(!store.doneAt[k]||store.doneAt[k]>=since)).length;
+  const retunes=store.retunes.filter(t=>t>=since).length;
+  const reconciled=items.length>0&&checks.every(c=>c.pass!==false);
+  return {since,items,open,ch,checks,focus,reconciled,avgAcc,topState,sc,practices,retunes,unpracticed};
+}
+let period=30;
+function renderClose(){
+  $("period").innerHTML=[[7,"Last 7 days"],[30,"Last 30 days"],[0,"All time"]].map(([d,l])=>`<button class="pbtn" data-p="${d}" aria-pressed="${period===d}">${l}</button>`).join("");
+  $("period").querySelectorAll("[data-p]").forEach(b=>b.onclick=()=>{period=+b.dataset.p;renderClose();});
+  const r=reconcile(period);
+  if(!r.items.length){
+    $("recon").innerHTML=`<p class="status">Nothing to reconcile yet</p><p style="margin:0 0 14px">There are no decoded moments in this period. Decode a moment, alone or together, and save it to the journal to start the books.</p><button class="play" id="rc-dec">Decode a moment</button>`;
+    $("rc-dec").onclick=()=>go("decode");
+  }else{
+    $("recon").innerHTML=`<p class="status ${r.reconciled?"ok":"no"}">${r.reconciled?"The books reconcile":"Not yet reconciled"}</p>
+      <p style="margin:0">${r.reconciled?"Every logged moment is settled and every gap has had attention. Nice work closing the loop.":"Here's what's keeping the books from balancing, and where to put your attention next."}</p>
+      <ul class="ckl">${r.checks.map(c=>`<li><span class="mk" style="color:var(${c.pass===null?"--muted":c.pass?"--v":"--s"})">${c.pass===null?"–":c.pass?"✓":"✗"}</span><span>${c.t}<small>${esc(c.d)}</small></span></li>`).join("")}</ul>
+      ${r.focus.length?`<h2 style="margin-top:18px">Areas of focus</h2><ol class="focus">${r.focus.map((f,k)=>`<li><b>${esc(f.title)}</b><br>${esc(f.text)}${f.kind==="channel"?`<br><button class="ghost" data-sc="${f.scen}">Practice: ${esc(SCEN.find(x=>x.id===f.scen).title)}</button>`:f.kind==="open"?`<br><button class="ghost" data-j="1">Open the journal</button>`:f.kind==="read"?`<br><button class="ghost" data-t="1">Try a Together session</button>`:f.kind==="state"?`<br><button class="ghost" data-rt="1">Go to Retune</button>`:""}</li>`).join("")}</ol>`:""}
+      <p class="hint" style="margin:16px 0 0">These checks are rules of thumb for reflection, not a score. The books describe the arrangement, never either person's worth.</p>`;
+    $("recon").querySelectorAll("[data-sc]").forEach(b=>b.onclick=()=>{cur=b.dataset.sc;renderList();go("practice");});
+    $("recon").querySelectorAll("[data-j]").forEach(b=>b.onclick=()=>go("journal"));
+    $("recon").querySelectorAll("[data-t]").forEach(b=>b.onclick=()=>go("together"));
+    $("recon").querySelectorAll("[data-rt]").forEach(b=>b.onclick=()=>go("retune"));
+  }
+  $("pme").value=store.people.me; $("pthem").value=store.people.them;
+  $("inc-notes").checked=store.letter.notes; $("inc-work").checked=store.letter.work; $("inc-state").checked=store.letter.state; $("pmsg").value=store.letter.msg;
+  renderLetter(r);
+}
+function letterSave(){
+  store.people.me=$("pme").value.trim().slice(0,24); store.people.them=$("pthem").value.trim().slice(0,24);
+  store.letter={notes:$("inc-notes").checked,work:$("inc-work").checked,state:$("inc-state").checked,msg:$("pmsg").value.slice(0,2000)};
+  save(); renderLetter(reconcile(period));
+}
+["pme","pthem","pmsg"].forEach(id=>$(id).addEventListener("input",letterSave));
+["inc-notes","inc-work","inc-state"].forEach(id=>$(id).addEventListener("change",letterSave));
+
+const ASK=[
+ {up:"I tend to move faster than you do in these moments, and I'm working on slowing down. If I speed up, saying “can we slow down?” really helps.",
+  down:"You tend to move faster than I do. When I go quiet, I'm usually thinking, not avoiding you. A quick “take your time” goes a long way.",
+  even:"Our pace has been out of step in both directions. Either of us saying “I need a second” seems to help."},
+ {up:"My tone has sometimes come across sharper than I mean it, and I'm working on that. If something I say lands hard, please tell me. I'd rather know.",
+  down:"Sometimes your tone lands sharper for me than you probably intend. Starting with “this is just a heads-up” helps me hear what you mean.",
+  even:"Tone has tripped us both up at different times. Asking “did that come out how you meant it?” helps."},
+ {up:"I'm often the one in more of a hurry. I'll try to name an actual time instead of just sounding rushed. If I forget, asking “by when?” helps.",
+  down:"You're often the one in more of a hurry. A specific time, like “by six,” helps me much more than a sense of urgency.",
+  even:"Our sense of timing has differed both ways. Agreeing on a real time up front helps us both."}
+];
+function renderLetter(r){
+  const me=store.people.me||"", them=store.people.them||"", L=store.letter;
+  const today=new Date().toLocaleDateString([], {month:"long",day:"numeric",year:"numeric"});
+  const per=period?`the last ${period} days`:"everything so far";
+  const chans=r.focus.filter(f=>f.kind==="channel");
+  const parts=[];
+  parts.push(`<h1>${them?`For ${esc(them)}`:"For you"}</h1><p class="pmeta">${me?`From ${esc(me)}, `:""}${esc(today)}. Covering ${per}.</p>`);
+  parts.push(`<p>I've been using a small tool to notice the moments when we fall out of sync: times when we were each being reasonable, but it still came out as friction. This isn't a scorecard, and nothing in it is about who's right. It's what I've noticed, what I'm working on, and what might help us both.</p>`);
+  if(L.msg.trim()) parts.push(`<p>${esc(L.msg.trim()).replace(/\n/g,"<br>")}</p>`);
+  if(!r.items.length){
+    parts.push(`<h2>Where we stand</h2><p>I haven't logged any moments in this period yet, so there's nothing to report. I wanted you to know I'm paying attention to how we connect.</p>`);
+  }else{
+    parts.push(`<h2>Where we stand</h2><p>${r.reconciled
+      ?`Our books balance for ${per}. Every moment I logged (${r.items.length} in all) has been talked through and settled. Thank you for that.`
+      :`We're not quite balanced yet. I logged ${r.items.length} moment${r.items.length===1?"":"s"}${r.open.length?`, and ${r.open.length} ${r.open.length===1?"is":"are"} still open`:""}. There are a few things I'd like us to look at together.`}</p>`);
+    if(chans.length){
+      parts.push(`<h2>What's been coming up</h2><ul>${chans.map(f=>{const d=r.ch[f.c].dir;return `<li><b>${CHANNELS[f.c].name === "Register" ? "Tone" : CHANNELS[f.c].name === "Urgency" ? "Timing" : "Pace"}.</b> ${esc(d>0?ASK[f.c].up:d<0?ASK[f.c].down:ASK[f.c].even)}</li>`;}).join("")}</ul>`);
+    }else parts.push(`<h2>What's been coming up</h2><p>When I compared where each of us was, we were closer than it felt in the moment. The friction may have come from tiredness or something neither of us has said yet.</p>`);
+    if(r.avgAcc!==null) parts.push(`<p>${r.avgAcc>=4?"When we compared notes side by side, we mostly read each other accurately. That's worth holding on to.":"When we compared notes side by side, we often guessed wrong about where the other person was. I'd like us both to ask a little more before assuming."}</p>`);
+    const openItems=r.open;
+    if(openItems.length){
+      parts.push(`<h2>Still open</h2><ul>${openItems.map(e=>`<li>${esc(fmt(e.t))}${L.notes&&e.note?`: ${esc(e.note)}`:""}${e.agreed?`<br>What we said: ${esc(e.agreed)}`:""}</li>`).join("")}</ul>`);
+    }
+    const agreed=r.items.filter(e=>e.settled&&e.agreed);
+    if(agreed.length) parts.push(`<h2>What we've agreed</h2><ul>${agreed.map(e=>`<li>${esc(e.agreed)}${L.notes&&e.note?` <span style="color:var(--muted)">(${esc(e.note)})</span>`:""}</li>`).join("")}</ul>`);
+  }
+  if(L.work&&(r.practices||r.retunes)) parts.push(`<h2>What I've been working on</h2><p>${[r.practices?`I've done ${r.practices} guided practice${r.practices===1?"":"s"} on my own`:"",r.retunes?`I've used a one-minute reset ${r.retunes} time${r.retunes===1?"":"s"} before or during hard conversations`:""].filter(Boolean).join(", and ")}.</p>`);
+  if(L.state&&r.topState){const w={v:"steady and open",s:"keyed up",d:"low or far away"}[r.topState];
+    parts.push(`<h2>How I've been showing up</h2><p>When I've checked in with myself, I've most often been ${w}. ${r.topState==="s"?"If I seem quick or sharp, that's usually my body running hot, not how I feel about you.":r.topState==="d"?"If I seem distant or quiet, that's usually me running low, not pulling away from you.":"That's made these conversations easier."}</p>`);}
+  parts.push(`<h2>An invitation</h2><p>${r.reconciled?"Could we keep closing the books together once a week? Twenty minutes, starting with what went right.":"Could we find twenty minutes this week to look at this together? No verdicts, just a look at where our signals crossed and one small change to try."}</p>`);
+  parts.push(`<p class="sig">${me?`With care,<br>${esc(me)}`:"With care"}</p>`);
+  parts.push(`<p class="fine">Made with the Carrier Wave Decoder from The Objective Ledger (TOL‑OS), spreadloveandacceptance.com. It isn't therapy or a clinical assessment, and it measures nothing about either person's worth.</p>`);
+  $("printout").innerHTML=parts.join("");
+}
+$("printbtn").onclick=()=>{try{window.print();}catch(e){}};
 
 // ---------- scope ----------
 const cv=$("scope"), ctx=cv.getContext("2d");
@@ -904,7 +1213,7 @@ requestAnimationFrame(draw);
 if(reduceMotion) setInterval(()=>requestAnimationFrame(draw),500);
 
 // ---------- init ----------
-renderList(); renderPanel(); renderChans(); renderDecode(); renderQs(); renderLessons(); setMode("breath"); setStateColor(st);
+renderList(); renderPanel(); renderStart(); renderChans(); renderDecode(); renderQs(); renderLessons(); setMode("breath"); setStateColor(st);
 </script>
 </body>
 </html>
