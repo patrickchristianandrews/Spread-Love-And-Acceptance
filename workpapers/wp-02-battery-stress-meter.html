@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WP-02 / The Battery &amp; Stress Meter</title>
+<meta name="description" content="Working Paper WP-02: a 5-factor self-report checklist separating existing stress load from reaction to a specific thing.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,500&family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper: #F5EFDE;
+    --paper-deep: #ECE2C4;
+    --ink: #211D17;
+    --ink-soft: #524B3E;
+    --line: #D9CBA3;
+    --credit: #3E6B4C;
+    --credit-soft: #E4EDE3;
+    --brass: #A8792F;
+    --focus: #2B5B8C;
+    --radius: 3px;
+  }
+
+  *{ box-sizing: border-box; }
+
+  @page{
+    size: letter portrait;
+    margin: 0.55in;
+  }
+
+  body{
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: "Lora", Georgia, serif;
+    font-size: 16px;
+    line-height: 1.65;
+  }
+
+  h1, h2, h3{
+    font-family: "Fraunces", "Lora", serif;
+    font-weight: 600;
+    line-height: 1.2;
+    margin: 0 0 0.5em 0;
+  }
+
+  .print-bar{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    max-width: 8.5in;
+    margin: 20px auto;
+    padding: 14px 20px;
+    background: var(--paper-deep);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 0.8rem;
+    color: var(--ink-soft);
+  }
+
+  .print-bar button{
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 0.75rem;
+    padding: 8px 16px;
+    border: none;
+    border-radius: var(--radius);
+    background: var(--ink);
+    color: var(--paper);
+    cursor: pointer;
+  }
+
+  @media print{
+    .print-bar{ display: none; }
+    body{ background: #fff; }
+  }
+
+  .sheet{
+    max-width: 8.5in;
+    margin: 0 auto 60px auto;
+    padding: 0.5in 0.6in;
+    background: var(--paper);
+    border: 1px solid var(--line);
+  }
+
+  @media print{
+    .sheet{ margin: 0; padding: 0; max-width: 100%; border: none; }
+    section{ break-inside: avoid; }
+  }
+
+  .sheet-header{
+    text-align: center;
+    border-bottom: 2px solid var(--brass);
+    padding-bottom: 16px;
+    margin-bottom: 28px;
+  }
+
+  .wp-num{
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 0.7rem;
+    color: var(--brass);
+    letter-spacing: 0.08em;
+    margin-bottom: 4px;
+  }
+
+  .sheet-mark{ font-size: 1.4rem; margin: 0; }
+
+  .sheet-mark small{
+    display: block;
+    font-family: "IBM Plex Mono", monospace;
+    font-weight: 400;
+    font-size: 0.62rem;
+    letter-spacing: 0.1em;
+    color: var(--brass);
+    margin-top: 6px;
+  }
+
+  .sheet-tagline{
+    font-size: 0.9rem;
+    color: var(--ink-soft);
+    margin: 10px 0 0 0;
+  }
+
+  .intro-note{
+    border-left: 4px solid var(--focus);
+    background: #E7EEF4;
+    border-radius: var(--radius);
+    padding: 16px 20px;
+    margin-bottom: 30px;
+  }
+
+  .intro-note p{ margin: 0 0 10px 0; font-size: 0.95rem; }
+  .intro-note p:last-child{ margin-bottom: 0; }
+
+  section{ margin-bottom: 34px; }
+
+  section > h2{
+    font-size: 1.15rem;
+    border-bottom: 1px solid var(--brass);
+    padding-bottom: 8px;
+    margin-bottom: 18px;
+  }
+
+  table.meter-table{
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.85rem;
+  }
+
+  table.meter-table th{
+    text-align: left;
+    font-family: "Fraunces", serif;
+    font-weight: 600;
+    font-size: 0.78rem;
+    background: var(--paper-deep);
+    border: 1px solid var(--line);
+    padding: 8px 10px;
+  }
+
+  table.meter-table th.score-col{
+    text-align: center;
+    font-family: "IBM Plex Mono", monospace;
+    font-weight: 500;
+    width: 36px;
+  }
+
+  table.meter-table td{
+    border: 1px solid var(--line);
+    padding: 8px 10px;
+    height: 34px;
+    vertical-align: middle;
+  }
+
+  table.meter-table td.factor-cell{
+    font-weight: 600;
+  }
+
+  table.meter-table td.score-cell{
+    text-align: center;
+    width: 36px;
+  }
+
+  table.meter-table td.score-cell .box{
+    display: inline-block;
+    width: 14px;
+    height: 14px;
+    border: 1px solid var(--ink-soft);
+  }
+
+  .scale-key{
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 0.68rem;
+    color: var(--ink-soft);
+    margin: 10px 0 0 0;
+    text-align: right;
+  }
+
+  .reading-box{
+    border-left: 4px solid var(--focus);
+    background: #E7EEF4;
+    border-radius: var(--radius);
+    padding: 16px 20px;
+    margin-top: 18px;
+  }
+
+  .reading-box .formula{
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 0.85rem;
+    color: var(--ink);
+    margin: 0 0 14px 0;
+    padding-bottom: 12px;
+    border-bottom: 1px dashed var(--line);
+  }
+
+  .reading-box .band{
+    margin-bottom: 10px;
+    font-size: 0.9rem;
+  }
+
+  .reading-box .band:last-child{ margin-bottom: 0; }
+
+  .reading-box .band strong{
+    color: var(--focus);
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 0.8rem;
+  }
+
+  .rule-box{
+    border-left: 4px solid var(--credit);
+    background: var(--credit-soft);
+    border-radius: var(--radius);
+    padding: 16px 20px;
+    margin-top: 18px;
+  }
+
+  .rule-box p{ margin: 0; font-size: 0.92rem; }
+
+  .signoff-table{
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.85rem;
+    margin-top: 8px;
+  }
+
+  .signoff-table th{
+    text-align: left;
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--brass);
+    border-bottom: 2px solid var(--line);
+    padding: 6px 10px 10px 0;
+  }
+
+  .signoff-table td{
+    border-bottom: 1px solid var(--line);
+    padding: 14px 10px 8px 0;
+  }
+
+  .signoff-table td.label-cell{
+    font-family: "Fraunces", serif;
+    font-weight: 600;
+    color: var(--ink);
+    white-space: nowrap;
+    width: 1%;
+    padding-right: 24px;
+  }
+
+  .sheet-footer{
+    margin-top: 30px;
+    border-top: 1px solid var(--line);
+    padding-top: 14px;
+    text-align: center;
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 0.65rem;
+    color: var(--ink-soft);
+  }
+
+  @media (max-width: 700px){
+    .print-bar{ flex-direction: column; align-items: stretch; text-align: center; }
+    table.meter-table{ font-size: 0.72rem; }
+  }
+</style>
+<link rel="stylesheet" href="/assets/css/site.css">
+<script src="/assets/js/site.js" defer></script>
+</head>
+<body>
+
+  <div class="print-bar" role="toolbar" aria-label="Page actions">
+    <span>WP-02 &middot; For Survival Kit members</span>
+    <button type="button" onclick="window.print()">Print / Save as PDF</button>
+  </div>
+
+  <main class="sheet" aria-label="WP-02 / The Battery and Stress Meter">
+
+    <header class="sheet-header">
+      <p class="wp-num">WP-02</p>
+      <h1 class="sheet-mark">The Battery &amp; Stress Meter
+        <small>A 5-Factor Self-Report Checklist</small>
+      </h1>
+      <p class="sheet-tagline">Separating how much you're already carrying from how upset you are about this specific thing.</p>
+    </header>
+<div class="locked-section">
+
+    <div class="intro-note">
+      <p>Purpose: a self-report matrix, filled in by each person about themselves, that separates "how much stress am I already carrying" from "how upset am I about this specific thing." Not a clinical instrument &mdash; a structured gut-check.</p>
+      <p>Fill this in independently. Score each row 0 (not at all) to 4 (maximally true) for how the last 24&ndash;48 hours have actually gone.</p>
+    </div>
+
+    <section aria-labelledby="checklist-h">
+      <h2 id="checklist-h">The Checklist</h2>
+      <table class="meter-table">
+        <thead>
+          <tr>
+            <th>Factor</th>
+            <th class="score-col">0</th>
+            <th class="score-col">1</th>
+            <th class="score-col">2</th>
+            <th class="score-col">3</th>
+            <th class="score-col">4</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="factor-cell">Sleep debt (less rested than usual)</td>
+            <td class="score-cell"><span class="box"></span></td>
+            <td class="score-cell"><span class="box"></span></td>
+            <td class="score-cell"><span class="box"></span></td>
+            <td class="score-cell"><span class="box"></span></td>
+            <td class="score-cell"><span class="box"></span></td>
+          </tr>
+          <tr>
+            <td class="factor-cell">Workload elsewhere (job, school, caregiving)</td>
+            <td class="score-cell"><span class="box"></span></td>
+            <td class="score-cell"><span class="box"></span></td>
+            <td class="score-cell"><span class="box"></span></td>
+            <td class="score-cell"><span class="box"></span></td>
+            <td class="score-cell"><span class="box"></span></td>
+          </tr>
+          <tr>
+            <td class="factor-cell">Recent unresolved conflict (any source)</td>
+            <td class="score-cell"><span class="box"></span></td>
+            <td class="score-cell"><span class="box"></span></td>
+            <td class="score-cell"><span class="box"></span></td>
+            <td class="score-cell"><span class="box"></span></td>
+            <td class="score-cell"><span class="box"></span></td>
+          </tr>
+          <tr>
+            <td class="factor-cell">Physical state (hungry, sick, in pain)</td>
+            <td class="score-cell"><span class="box"></span></td>
+            <td class="score-cell"><span class="box"></span></td>
+            <td class="score-cell"><span class="box"></span></td>
+            <td class="score-cell"><span class="box"></span></td>
+            <td class="score-cell"><span class="box"></span></td>
+          </tr>
+          <tr>
+            <td class="factor-cell">Time pressure today specifically</td>
+            <td class="score-cell"><span class="box"></span></td>
+            <td class="score-cell"><span class="box"></span></td>
+            <td class="score-cell"><span class="box"></span></td>
+            <td class="score-cell"><span class="box"></span></td>
+            <td class="score-cell"><span class="box"></span></td>
+          </tr>
+        </tbody>
+      </table>
+      <p class="scale-key">0 = not at all &nbsp;&middot;&nbsp; 4 = maximally true</p>
+
+      <div class="reading-box">
+        <p class="formula">Average Battery Score = sum of the five scores &divide; 20</p>
+        <p class="band"><strong>0.0&ndash;0.3</strong> &mdash; Low load. Whatever's coming up is probably actually about the thing itself.</p>
+        <p class="band"><strong>0.3&ndash;0.6</strong> &mdash; Moderate. Worth naming out loud before a hard conversation: "heads up, I'm carrying more than usual today."</p>
+        <p class="band"><strong>0.6&ndash;1.0</strong> &mdash; High. This is a signal to postpone anything that doesn't need deciding in the next hour.</p>
+      </div>
+
+      <div class="rule-box">
+        <p><strong>What this workpaper is not for:</strong> Don't fill this in about your partner, and don't use your own high score as a way to end a conversation you don't want to have &mdash; it's a postponement tool, not an exit. A high score means "let's revisit this tomorrow," not "this doesn't need to happen."</p>
+      </div>
+    </section>
+
+    <section aria-labelledby="signoff-h">
+      <h2 id="signoff-h">Sign-Off</h2>
+      <table class="signoff-table">
+        <thead>
+          <tr>
+            <th></th>
+            <th>Score</th>
+            <th>Date</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="label-cell">Partner A</td>
+            <td></td>
+            <td></td>
+          </tr>
+          <tr>
+            <td class="label-cell">Partner B</td>
+            <td></td>
+            <td></td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    </div>
+<footer class="sheet-footer">
+      The Objective Ledger&trade; &middot; Workpaper Suite &middot; WP-02 &middot; For Survival Kit members only, not for public redistribution
+    </footer>
+
+  </main>
+
+</body>
+</html>

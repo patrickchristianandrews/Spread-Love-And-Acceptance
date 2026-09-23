@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Quick checks — The Objective Ledger</title>
+<meta name="description" content="Two free self-checks: where your nervous system is right now, and how this week's household hours actually split.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,500&family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/css/site.css">
+<link rel="stylesheet" href="/assets/css/reading.css">
+<script src="/assets/js/site.js" defer></script>
+<style>
+  .rungs{ display:grid; gap:0; border:1px solid var(--ink); border-radius:var(--radius); margin:1.5rem 0 1rem; }
+  .rung{
+    font:inherit; text-align:left; background:var(--paper); color:var(--ink); cursor:pointer;
+    border:0; border-bottom:1px solid var(--line); padding:.9rem 1.1rem; display:grid; grid-template-columns:11rem 1fr; gap:1rem;
+  }
+  .rung:last-child{ border-bottom:0; }
+  .rung strong{ font-family:"Fraunces", Georgia, serif; font-weight:600; }
+  .rung span{ color:var(--ink-soft); }
+  .rung:hover{ background:var(--paper-deep); }
+  .rung[aria-pressed="true"]{ background:var(--paper-deep); box-shadow:inset 4px 0 0 var(--brass); }
+  .rung:focus-visible{ outline:2px solid var(--focus); outline-offset:-2px; }
+  .reading{ border-left:3px solid var(--brass); padding:.25rem 0 .25rem 1.1rem; }
+  .reading p{ margin:0; }
+  @media (max-width:560px){ .rung{ grid-template-columns:1fr; gap:.1rem; } }
+
+  .stand{ margin:1.5rem 0; }
+  .stand-heads, .row{ display:grid; grid-template-columns:1fr 6.5rem 6.5rem 2.5rem; gap:.5rem; align-items:center; }
+  .stand-heads{ padding-bottom:.5rem; border-bottom:3px double var(--ink); font-weight:600; }
+  .row{ padding:.4rem 0; border-bottom:1px solid var(--line); }
+  .stand input{
+    width:100%; font:inherit; font-size:.98rem; color:var(--ink); background:var(--paper);
+    border:1px solid var(--line); border-radius:var(--radius); padding:.4rem .5rem;
+  }
+  .stand-heads input{ font-weight:600; }
+  .stand input:focus-visible, .stand button:focus-visible{ outline:2px solid var(--focus); outline-offset:1px; }
+  .stand input[type=number]{ text-align:right; font-family:"IBM Plex Mono", ui-monospace, monospace; }
+  .remove{ font:inherit; font-size:1.2rem; background:none; border:1px solid transparent; border-radius:var(--radius); color:var(--ink-soft); cursor:pointer; }
+  .remove:hover{ border-color:var(--line); color:var(--debit); }
+  .add-row{ margin-top:.9rem; font:inherit; background:none; border:1px solid var(--ink); border-radius:var(--radius); padding:.45rem .9rem; cursor:pointer; color:var(--ink); }
+  .add-row:hover{ background:var(--paper-deep); }
+  .bar{ display:flex; height:14px; margin:1.75rem 0 .5rem; border:1px solid var(--ink); }
+  .bar-a{ background:var(--credit); transition:width .2s; }
+  .bar-b{ background:var(--brass); transition:width .2s; }
+  .bar-legend{ display:flex; justify-content:space-between; font-family:"IBM Plex Mono", ui-monospace, monospace; font-size:.85rem; }
+  .bar-legend .a{ color:var(--credit); } .bar-legend .b{ color:var(--brass); }
+  .balance-line{ margin-top:1rem !important; font-size:1.05rem; }
+  @media (max-width:560px){ .stand-heads, .row{ grid-template-columns:1fr 4.5rem 4.5rem 2rem; } }
+</style>
+</head>
+<body>
+<main class="read">
+
+  <header class="read-head">
+    <p class="read-code">Free</p>
+    <h1>Quick checks</h1>
+  </header>
+
+  <p>Two self-checks, in the order they work best: first where you are, then what the week actually looked like. Nothing here is saved or sent anywhere.</p>
+
+  <h2 id="ladder">The Nervous System Ladder</h2>
+  <p>Polyvagal theory describes three broad states, arranged like rungs on a ladder. Pick the one closest to true right now. This is a check on yourself, not a reading of anyone else.</p>
+
+  <div class="rungs" role="group" aria-label="Your current state">
+    <button class="rung" type="button" data-state="ventral" aria-pressed="true"><strong>Ventral vagal</strong><span>Safe and social</span></button>
+    <button class="rung" type="button" data-state="sympathetic" aria-pressed="false"><strong>Sympathetic</strong><span>Mobilized</span></button>
+    <button class="rung" type="button" data-state="dorsal" aria-pressed="false"><strong>Dorsal vagal</strong><span>Shutdown</span></button>
+  </div>
+  <div class="reading" aria-live="polite"><p id="reading-text">Breath is easy, your shoulders aren’t braced, and you can hear feedback without immediately defending yourself. This is the state the rest of the site actually works in.</p></div>
+
+  <h2 id="lemonade">The Lemonade Stand</h2>
+  <p>Two people, one stand. List what it took to keep the household running this week and how many hours each of you put in. Rename the columns and add what’s missing; it recalculates as you type. The totals feed the workload balance input in <a href="/workpapers/calculators/calc01-solvency.html">CALC-01 Solvency Read</a>.</p>
+
+  <div class="stand">
+    <div class="stand-heads">
+      <span>Line item</span>
+      <input type="text" id="label-a" value="Column A" aria-label="Name for column A">
+      <input type="text" id="label-b" value="Column B" aria-label="Name for column B">
+      <span></span>
+    </div>
+    <div id="rows"></div>
+    <button class="add-row" id="add-row" type="button">Add a line item</button>
+    <div class="bar" aria-hidden="true">
+      <div class="bar-a" id="bar-a" style="width:50%"></div>
+      <div class="bar-b" id="bar-b" style="width:50%"></div>
+    </div>
+    <div class="bar-legend">
+      <span class="a" id="legend-a">Column A · 0h</span>
+      <span class="b" id="legend-b">Column B · 0h</span>
+    </div>
+    <p class="balance-line" id="balance-line" aria-live="polite">Add some hours above to see the register.</p>
+  </div>
+
+</main>
+
+<script src="/assets/js/lemonade-calc.js"></script>
+<script>
+(function(){
+  var rungs = document.querySelectorAll('.rung');
+  var out = document.getElementById('reading-text');
+  var copy = {
+    ventral: "Breath is easy, your shoulders aren\u2019t braced, and you can hear feedback without immediately defending yourself. This is the state the rest of the site actually works in.",
+    sympathetic: "Heart rate\u2019s up, thoughts are moving fast, and small things can start to feel urgent or personal. Good energy for doing the dishes right now. Riskier for deciding who should be doing them going forward \u2014 that conversation might go better in twenty minutes.",
+    dorsal: "Flat, foggy, or far away, and words are harder to find than usual. This isn\u2019t the moment to open the register. Rest, eat, get warm, or just wait \u2014 the ledger will still be here when you\u2019re back."
+  };
+  rungs.forEach(function(r){
+    r.addEventListener('click', function(){
+      rungs.forEach(function(x){ x.setAttribute('aria-pressed','false'); });
+      r.setAttribute('aria-pressed','true');
+      out.textContent = copy[r.dataset.state];
+    });
+  });
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,1327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mood Arbitrage: The Architecture of Autonomic Shifting</title>
+<meta name="description" content="Complete framework for identifying nervous system states and deploying real-time frequency shifts in partnerships. Theory, neuroscience, interactive tool, and real-life scenarios.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,500&family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --paper: #F5EFDE;
+    --paper-deep: #ECE2C4;
+    --ink: #211D17;
+    --ink-soft: #524B3E;
+    --line: #D9CBA3;
+    --credit: #3E6B4C;
+    --brass: #A8792F;
+    --focus: #2B5B8C;
+    --warning: #8B6F47;
+    --radius: 3px;
+    --sympathetic: #d97a4a;
+    --dorsal: #4a6a8b;
+    --anxious: #b8792f;
+  }
+
+  * { box-sizing: border-box; }
+
+  html, body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: "Lora", Georgia, serif;
+    font-size: 16px;
+    line-height: 1.7;
+  }
+
+  h1, h2, h3, h4, h5 {
+    font-family: "Fraunces", "Lora", serif;
+    font-weight: 600;
+    line-height: 1.2;
+    margin: 1.5rem 0 0.75rem 0;
+  }
+
+  h1 { font-size: 2.2rem; }
+  h2 { font-size: 1.5rem; }
+  h3 { font-size: 1.2rem; }
+  h4 { font-size: 1.05rem; }
+
+  p { margin: 0.75rem 0; }
+
+  /* ===== PAYWALL SYSTEM CSS ===== */
+  .locked-section { display: none; }
+  body.unlocked .locked-section { display: block; }
+  
+  .locked-section {
+    position: relative;
+    border: 2px dashed var(--brass);
+    padding: 2rem;
+    margin: 2rem 0;
+    background: rgba(168, 121, 47, 0.04);
+    border-radius: var(--radius);
+  }
+  
+  .locked-section::before {
+    content: "🔒 Membership Content";
+    display: block;
+    color: var(--brass);
+    font-weight: bold;
+    font-size: 0.85rem;
+    margin-bottom: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  
+  .paywall-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+  }
+  
+  .paywall-content {
+    background: white;
+    padding: 3rem;
+    border-radius: 8px;
+    max-width: 550px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+  }
+  
+  .paywall-content h2 { margin-top: 0; }
+  
+  .paywall-tabs {
+    display: flex;
+    gap: 1rem;
+    margin: 2rem 0;
+    border-bottom: 2px solid var(--line);
+  }
+  
+  .paywall-tabs button {
+    flex: 1;
+    padding: 1rem;
+    background: none;
+    border: none;
+    border-bottom: 3px solid transparent;
+    cursor: pointer;
+    font-weight: 600;
+    color: var(--ink-soft);
+    font-size: 0.95rem;
+    transition: all 0.2s;
+  }
+  
+  .paywall-tabs button.active {
+    color: var(--brass);
+    border-bottom-color: var(--brass);
+  }
+  
+  .paywall-tab-content { display: none; }
+  .paywall-tab-content.active { display: block; }
+  
+  .paywall-content input {
+    display: block;
+    width: 100%;
+    margin: 1rem 0;
+    padding: 0.75rem;
+    font-size: 1rem;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    font-family: "Lora", Georgia, serif;
+  }
+  
+  .paywall-content button {
+    width: 100%;
+    padding: 0.9rem;
+    background: var(--brass);
+    color: white;
+    border: none;
+    border-radius: var(--radius);
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 1rem;
+    transition: all 0.2s;
+  }
+  
+  .paywall-content button:hover { background: var(--focus); }
+  
+  .paywall-content a.gumroad-link {
+    display: block;
+    width: 100%;
+    padding: 0.9rem;
+    background: var(--focus);
+    color: white;
+    text-align: center;
+    text-decoration: none;
+    border-radius: var(--radius);
+    font-weight: 600;
+    margin: 1rem 0;
+    transition: all 0.2s;
+  }
+  
+  .paywall-content a.gumroad-link:hover { background: var(--brass); }
+  
+  .error-message, .success-message {
+    padding: 1rem;
+    border-radius: var(--radius);
+    margin: 1rem 0;
+    display: none;
+    font-weight: 500;
+  }
+  
+  .error-message {
+    color: #d97a4a;
+    background: rgba(217, 122, 74, 0.1);
+    border: 1px solid rgba(217, 122, 74, 0.3);
+  }
+  
+  .error-message.show { display: block; }
+  
+  .success-message {
+    color: var(--credit);
+    background: rgba(62, 107, 76, 0.1);
+    border: 1px solid rgba(62, 107, 76, 0.3);
+  }
+  
+  .success-message.show { display: block; }
+  
+  .paywall-features {
+    display: grid;
+    gap: 0.75rem;
+    margin: 1.5rem 0;
+  }
+  
+  .feature-item {
+    padding: 0.75rem;
+    background: rgba(168, 121, 47, 0.08);
+    border-left: 3px solid var(--brass);
+    border-radius: var(--radius);
+    font-size: 0.9rem;
+  }
+  
+  .feature-item strong {
+    display: block;
+    color: var(--brass);
+    margin-bottom: 0.25rem;
+  }
+  
+  @media (max-width: 600px) {
+    .paywall-content { width: 90%; padding: 2rem 1.5rem; }
+    .paywall-tabs { flex-direction: column; }
+    .paywall-tabs button { padding: 0.75rem; border-bottom: none; border-left: 3px solid transparent; }
+    .paywall-tabs button.active { border-left-color: var(--brass); border-bottom: none; }
+  }
+
+  .container {
+    max-width: 8in;
+    margin: 0 auto;
+    padding: 2rem 0.6in;
+  }
+
+  .hero {
+    text-align: center;
+    margin-bottom: 3rem;
+    border-bottom: 2px solid var(--brass);
+    padding-bottom: 2rem;
+  }
+
+  .hero h1 { margin-top: 0; }
+
+  .hero-tagline {
+    color: var(--ink-soft);
+    font-size: 1.05rem;
+    max-width: 700px;
+    margin: 0.75rem auto 0;
+  }
+
+  .section {
+    margin: 2.5rem 0;
+    padding: 1.5rem;
+    background: var(--paper-deep);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+  }
+
+  .section h2 {
+    margin-top: 0;
+  }
+
+  .section > h2 {
+    border-bottom: 1px solid var(--brass);
+    padding-bottom: 0.75rem;
+  }
+
+  .frequency-card {
+    background: white;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 1.25rem;
+    margin: 1rem 0;
+  }
+
+  .frequency-card h3 {
+    margin-top: 0;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .frequency-dot {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .dot-sympathetic { background: var(--sympathetic); }
+  .dot-dorsal { background: var(--dorsal); }
+  .dot-anxious { background: var(--anxious); }
+
+  .markers {
+    font-size: 0.9rem;
+    color: var(--ink-soft);
+    margin: 0.5rem 0 0 0;
+    line-height: 1.5;
+  }
+
+  .step-box {
+    background: white;
+    border: 1px solid var(--line);
+    padding: 1.25rem;
+    margin: 1.5rem 0;
+    border-radius: var(--radius);
+  }
+
+  .step-box h3 {
+    margin-top: 0;
+  }
+
+  .step-label {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 0.75rem;
+    color: var(--brass);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 0.75rem;
+  }
+
+  .options-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+    margin: 1rem 0;
+  }
+
+  .option-button {
+    padding: 1rem;
+    border: 2px solid var(--line);
+    background: white;
+    border-radius: var(--radius);
+    cursor: pointer;
+    text-align: left;
+    transition: all 0.2s;
+    font-family: "Lora", serif;
+    font-size: 1rem;
+  }
+
+  .option-button:hover {
+    border-color: var(--brass);
+    background: var(--paper-deep);
+  }
+
+  .option-button.active {
+    background: var(--paper-deep);
+    border-color: var(--brass);
+    box-shadow: 0 0 0 3px rgba(168, 121, 47, 0.1);
+  }
+
+  .result-box {
+    background: white;
+    border: 2px solid var(--brass);
+    border-radius: var(--radius);
+    padding: 1.5rem;
+    margin: 1.5rem 0;
+    display: none;
+  }
+
+  .result-box.active {
+    display: block;
+    animation: slideIn 0.3s ease-out;
+  }
+
+  @keyframes slideIn {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .result-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .result-header .frequency-dot {
+    width: 24px;
+    height: 24px;
+  }
+
+  .result-header h3 {
+    margin: 0;
+  }
+
+  .result-header p {
+    margin: 0;
+    color: var(--ink-soft);
+    font-size: 0.9rem;
+  }
+
+  .mood-move {
+    background: var(--paper-deep);
+    border-left: 4px solid var(--brass);
+    padding: 1.25rem;
+    margin: 1rem 0;
+    border-radius: var(--radius);
+  }
+
+  .mood-move h4 {
+    margin-top: 0;
+    color: var(--brass);
+  }
+
+  .mood-move p {
+    margin: 0.75rem 0 0 0;
+  }
+
+  .embody-section {
+    background: rgba(43, 91, 140, 0.08);
+    border-left: 3px solid var(--focus);
+    padding: 1rem;
+    margin: 1rem 0 0 0;
+    border-radius: var(--radius);
+  }
+
+  .embody-section strong {
+    color: var(--focus);
+    display: block;
+    margin-bottom: 0.5rem;
+  }
+
+  .neuroscience-note {
+    background: rgba(168, 121, 47, 0.08);
+    border-left: 3px solid var(--brass);
+    padding: 1rem;
+    margin: 1rem 0 0 0;
+    border-radius: var(--radius);
+    font-size: 0.9rem;
+  }
+
+  .neuroscience-note strong {
+    color: var(--brass);
+    display: block;
+    margin-bottom: 0.5rem;
+  }
+
+  .failure-warning {
+    background: rgba(217, 122, 74, 0.08);
+    border-left: 3px solid var(--sympathetic);
+    padding: 1rem;
+    margin: 1rem 0 0 0;
+    border-radius: var(--radius);
+    display: none;
+  }
+
+  .failure-warning.show {
+    display: block;
+  }
+
+  .failure-warning strong {
+    color: var(--sympathetic);
+    display: block;
+    margin-bottom: 0.5rem;
+  }
+
+  .checklist {
+    background: var(--paper-deep);
+    border: 1px solid var(--line);
+    padding: 1.25rem;
+    border-radius: var(--radius);
+    margin: 1rem 0;
+  }
+
+  .checklist strong {
+    display: block;
+    margin-bottom: 1rem;
+  }
+
+  .checklist-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    margin: 0.75rem 0;
+  }
+
+  .checklist-item input {
+    margin-top: 0.3rem;
+    cursor: pointer;
+  }
+
+  .checklist-item label {
+    cursor: pointer;
+    margin: 0;
+  }
+
+  .button-group {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1.5rem;
+  }
+
+  .btn {
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: var(--radius);
+    cursor: pointer;
+    font-family: "IBM Plex Mono", monospace;
+    font-weight: 600;
+    font-size: 0.9rem;
+    transition: all 0.2s;
+    flex: 1;
+  }
+
+  .btn-primary {
+    background: var(--brass);
+    color: white;
+  }
+
+  .btn-primary:hover {
+    background: var(--focus);
+  }
+
+  .btn-secondary {
+    background: white;
+    color: var(--ink);
+    border: 1px solid var(--line);
+  }
+
+  .btn-secondary:hover {
+    border-color: var(--brass);
+  }
+
+  .divider {
+    border-top: 1px solid var(--line);
+    margin: 3rem 0;
+    padding-top: 3rem;
+  }
+
+  .scenario {
+    background: white;
+    border-left: 4px solid var(--brass);
+    padding: 1.25rem;
+    margin: 1.5rem 0;
+    border-radius: var(--radius);
+  }
+
+  .scenario h4 {
+    margin-top: 0;
+    color: var(--brass);
+  }
+
+  .scenario .setup {
+    font-style: italic;
+    color: var(--ink-soft);
+    margin: 0.75rem 0;
+    padding: 0.75rem;
+    background: var(--paper-deep);
+    border-radius: var(--radius);
+  }
+
+  .scenario .label {
+    font-weight: 600;
+    color: var(--brass);
+    margin-top: 1rem;
+  }
+
+  .failure-mode {
+    background: white;
+    border-left: 3px solid var(--sympathetic);
+    padding: 1.25rem;
+    margin: 1rem 0;
+    border-radius: var(--radius);
+  }
+
+  .failure-mode strong {
+    color: var(--sympathetic);
+    display: block;
+    margin-bottom: 0.5rem;
+  }
+
+  .note-box {
+    background: rgba(43, 91, 140, 0.08);
+    border-left: 3px solid var(--focus);
+    padding: 1.25rem;
+    border-radius: var(--radius);
+    margin: 1.5rem 0;
+  }
+
+  .note-box strong {
+    color: var(--focus);
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1rem 0;
+    background: white;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    overflow: hidden;
+  }
+
+  table th {
+    background: var(--paper-deep);
+    padding: 1rem;
+    text-align: left;
+    font-weight: 600;
+    border-bottom: 1px solid var(--line);
+    color: var(--brass);
+  }
+
+  table td {
+    padding: 1rem;
+    border-bottom: 1px solid var(--line);
+  }
+
+  table tr:last-child td {
+    border-bottom: none;
+  }
+
+  .footer {
+    text-align: center;
+    font-size: 0.85rem;
+    color: var(--ink-soft);
+    margin-top: 3rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--line);
+  }
+
+  ul, ol {
+    color: var(--ink-soft);
+    margin: 1rem 0;
+    padding-left: 1.5rem;
+  }
+
+  li {
+    margin: 0.5rem 0;
+  }
+
+  @media (max-width: 900px) {
+    .container {
+      padding: 1.5rem 1rem;
+    }
+
+    .button-group {
+      flex-direction: column;
+    }
+
+    .btn {
+      width: 100%;
+    }
+  }
+</style>
+<link rel="stylesheet" href="/assets/css/site.css">
+<script src="/assets/js/site.js" defer></script>
+</head>
+<body>
+
+<div class="container">
+
+  <!-- HERO -->
+  <div class="hero">
+    <h1>Mood Arbitrage</h1>
+    <p class="hero-tagline">The architecture of autonomic shifting. Identifying nervous system states and deploying real-time frequency shifts to restore connection.</p>
+  </div>
+
+  <!-- CORE PRINCIPLE -->
+  <div class="section">
+    <h2>The Core Principle</h2>
+    <p>In The Objective Ledger™ (TOL-OS), shifting a negative interaction into a positive one is not about forcing toxic positivity or invalidating a partner's reality. It is an act of <strong>deliberate autonomic regulation</strong>—changing the carrier wave so the conversational payload can be delivered safely.</p>
+    <p>A successful mood shift requires recognizing the current biological state of the room and deploying a specific physical or linguistic circuit breaker to alter the nervous system's frequency.</p>
+    <p style="background: rgba(168, 121, 47, 0.1); padding: 1rem; border-left: 3px solid var(--brass); border-radius: var(--radius); margin: 1rem 0;"><strong>The human nervous system detects safety and threat long before it decodes semantic meaning.</strong> When your partner is dysregulated, logic doesn't work. Reassurance doesn't work. What works is shifting the frequency itself—the emotional carrier wave—so their nervous system can stand down from threat detection and return to connection.</p>
+  </div>
+
+  <!-- THE THREE FREQUENCIES (Quick Reference) -->
+  <div class="section">
+    <h2>The Three Mood Frequencies</h2>
+    <p style="color: var(--ink-soft); margin-bottom: 1.5rem;">What does their body tell you? Look at their physical state before you decode their words.</p>
+
+    <div class="frequency-card">
+      <h3>
+        <span class="frequency-dot dot-sympathetic"></span>
+        Sympathetic (Wound Up / Fight Mode)
+      </h3>
+      <p class="markers"><strong>Biological markers:</strong> Tight jaw • Rapid speech • Narrow eyes • Rigid posture • Words getting louder or sharper • Everything feels urgent and adversarial</p>
+      <p style="color: var(--brass); font-size: 0.95rem; margin-top: 1rem;"><strong>What's happening:</strong> Their nervous system is in fight mode. They're detecting threat (even if the threat is just "dirty dishes"). Their amygdala has taken over. Logic will make this worse.</p>
+      <p style="color: var(--ink-soft); font-size: 0.9rem;"><strong>Your job:</strong> Deploy absurdity to disrupt the threat signal. Shared ridiculousness tells the nervous system: "Wait, if we're joking, we're not in danger."</p>
+    </div>
+
+    <div class="frequency-card">
+      <h3>
+        <span class="frequency-dot dot-dorsal"></span>
+        Dorsal (Shutdown / Freeze Mode)
+      </h3>
+      <p class="markers"><strong>Biological markers:</strong> Blank affect • Slow or no speech • Looking away or down • Body feels heavy • Might cry silently • Everything feels hopeless and stuck</p>
+      <p style="color: var(--brass); font-size: 0.95rem; margin-top: 1rem;"><strong>What's happening:</strong> Their nervous system has given up. They're in collapse mode. They've withdrawn from connection entirely. Fixing things won't help. They need presence, not solutions.</p>
+      <p style="color: var(--ink-soft); font-size: 0.9rem;"><strong>Your job:</strong> Deploy steady embodied warmth without demands. Be boring, predictable, solid. Let them know the world didn't end.</p>
+    </div>
+
+    <div class="frequency-card">
+      <h3>
+        <span class="frequency-dot dot-anxious"></span>
+        Anxious (Helicopter Brain / Spiral Mode)
+      </h3>
+      <p class="markers"><strong>Biological markers:</strong> Rapid thoughts (visible in darting eyes) • Can't settle attention • Multiple concerns spilling out at once • Hands fidgeting • Voice gets higher • Everything feels like it's falling apart simultaneously</p>
+      <p style="color: var(--brass); font-size: 0.95rem; margin-top: 1rem;"><strong>What's happening:</strong> Their prefrontal cortex is drowning. Too many threads. No clear priority. Their autonomic nervous system is oscillating erratically.</p>
+      <p style="color: var(--ink-soft); font-size: 0.9rem;"><strong>Your job:</strong> Deploy clear structural containment. Take one thing off their plate. Give them ONE thing to do. Absorb the chaos.</p>
+    </div>
+  </div>
+
+  <!-- THE MOOD ARBITRAGE SEQUENCE -->
+  <div class="section">
+    <h2>The Four-Step Sequence</h2>
+    <p style="color: var(--ink-soft); margin-bottom: 1.5rem;">Every mood shift follows this structure. Understand the structure, and you can deploy it in any situation.</p>
+
+    <div class="step-box">
+      <h3>Step 1: Identify the Current Frequency</h3>
+      <p>Before you do anything, get YOUR own nervous system regulated first. If you're also activated, you'll add interference instead of clarity.</p>
+      <p style="margin-top: 1rem;"><strong>The move:</strong> Take three deep breaths. Notice their body language (use the three frequencies above). Don't judge it—just register it. "They're in sympathetic right now" or "They're shut down" or "They're spiraling."</p>
+    </div>
+
+    <div class="step-box">
+      <h3>Step 2: Select the Transducer</h3>
+      <p>A <strong>transducer</strong> is the specific tool—the linguistic or physical circuit breaker—that converts a raw, dysregulated state into something safer. Different frequencies need different transducers.</p>
+
+      <table>
+        <tr>
+          <th>Frequency</th>
+          <th>Transducer</th>
+          <th>Goal</th>
+        </tr>
+        <tr>
+          <td><span class="frequency-dot dot-sympathetic"></span> Sympathetic</td>
+          <td><strong>Absurdity + Shared Ridiculousness</strong></td>
+          <td>Break threat signal through shared laughter</td>
+        </tr>
+        <tr>
+          <td><span class="frequency-dot dot-dorsal"></span> Dorsal</td>
+          <td><strong>Steady Presence + Somatic Anchor</strong></td>
+          <td>Signal safety through embodiment and touch</td>
+        </tr>
+        <tr>
+          <td><span class="frequency-dot dot-anxious"></span> Anxious</td>
+          <td><strong>Structural Clarity + Task Absorption</strong></td>
+          <td>Contain chaos, restore hierarchy and control</td>
+        </tr>
+      </table>
+
+      <p style="margin-top: 1rem; background: rgba(168, 121, 47, 0.08); padding: 1rem; border-left: 3px solid var(--brass); border-radius: var(--radius);"><strong>The transducer is not about fixing the problem.</strong> It's about changing the carrier frequency so their nervous system can access connection again. The dishes still need washing. The work problem still needs solving. But if you can shift the frequency first, everything else becomes possible.</p>
+    </div>
+
+    <div class="step-box">
+      <h3>Step 3: Deploy with Embodiment</h3>
+      <p>This is the critical step where most people fail. <strong>Don't just say the words. Embody the shift.</strong></p>
+      <ul style="color: var(--ink);">
+        <li><strong>If deploying absurdity:</strong> Your body language becomes playful, your voice gets lighter, your face softens. You're genuinely amused, not performing amusement.</li>
+        <li><strong>If deploying presence:</strong> Your body becomes still, your breath becomes deeper, your voice drops an octave. You're a harbor—still water, solid walls.</li>
+        <li><strong>If deploying containment:</strong> Your body becomes decisive, your voice becomes clear, your posture becomes grounded. You're saying with your whole being: "I have this handled."</li>
+      </ul>
+    </div>
+
+    <div class="step-box">
+      <h3>Step 4: Anchor the New Baseline</h3>
+      <p>Don't just shift and disappear. <strong>Stay in the shift.</strong> Let them adjust to the new frequency with you present.</p>
+      <p style="margin-top: 1rem;"><strong>This is where couples fail.</strong> They shift the mood, then immediately go back to whatever they were doing. The nervous system snaps back.</p>
+      <p><strong>Stay in the new frequency for at least 5 minutes.</strong> Breathe. Be present. Let the shift consolidate. The new frequency needs time to become real.</p>
+    </div>
+  </div>
+
+  <!-- INTERACTIVE GENERATOR (Integrated Teaching Tool) -->
+  <div class="locked-section">
+  <div class="section" style="background: linear-gradient(135deg, rgba(168, 121, 47, 0.08) 0%, rgba(43, 91, 140, 0.08) 100%); border: 2px solid var(--brass);">
+    <div class="step-label">Interactive Generator</div>
+    <h2>Try the Sequence (Right Now)</h2>
+    <p style="color: var(--ink-soft); margin-bottom: 1.5rem;">You're in a moment right now, or you're learning for later. Use this tool to practice identifying frequency and selecting the right transducer.</p>
+
+    <!-- Step 1 -->
+    <div style="margin-bottom: 2rem;">
+      <h3 style="color: var(--brass); margin-top: 0;">Step 1: Which Frequency Are They In?</h3>
+      <p style="color: var(--ink-soft); font-size: 0.95rem;">Look at their body. What do you see?</p>
+      <div class="options-grid">
+        <button class="option-button" onclick="selectFrequency('sympathetic')">
+          <span class="frequency-dot dot-sympathetic" style="display: inline-block; margin-right: 0.75rem;"></span>
+          <strong>Sympathetic (Wound Up)</strong>
+          <br><span style="font-size: 0.85rem; color: var(--ink-soft);">Tight jaw • Sharp voice • Defensive • Urgent</span>
+        </button>
+
+        <button class="option-button" onclick="selectFrequency('dorsal')">
+          <span class="frequency-dot dot-dorsal" style="display: inline-block; margin-right: 0.75rem;"></span>
+          <strong>Dorsal (Shutdown)</strong>
+          <br><span style="font-size: 0.85rem; color: var(--ink-soft);">Blank stare • Quiet • Heavy • Withdrawn</span>
+        </button>
+
+        <button class="option-button" onclick="selectFrequency('anxious')">
+          <span class="frequency-dot dot-anxious" style="display: inline-block; margin-right: 0.75rem;"></span>
+          <strong>Anxious (Helicopter Brain)</strong>
+          <br><span style="font-size: 0.85rem; color: var(--ink-soft);">Darting eyes • Fidgeting • Multiple thoughts • Spiraling</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Step 2 -->
+    <div id="step2" style="display: none; margin-bottom: 2rem;">
+      <h3 style="color: var(--brass); margin-top: 0;">Step 2: What's the Specific Scenario?</h3>
+      <p style="color: var(--ink-soft); font-size: 0.95rem;">What triggered this state?</p>
+      <div class="options-grid">
+        <button class="option-button" onclick="selectScenario('conflict')">
+          <strong>Conflict/Argument</strong>
+          <br><span style="font-size: 0.85rem; color: var(--ink-soft);">Things escalated. The room is tense.</span>
+        </button>
+
+        <button class="option-button" onclick="selectScenario('withdrawal')">
+          <strong>They're Withdrawn</strong>
+          <br><span style="font-size: 0.85rem; color: var(--ink-soft);">Something hurt them. They've gone quiet.</span>
+        </button>
+
+        <button class="option-button" onclick="selectScenario('overwhelm')">
+          <strong>They're Overwhelmed</strong>
+          <br><span style="font-size: 0.85rem; color: var(--ink-soft);">Too much is happening. They're spiraling.</span>
+        </button>
+
+        <button class="option-button" onclick="selectScenario('accumulation')">
+          <strong>Resentment Building</strong>
+          <br><span style="font-size: 0.85rem; color: var(--ink-soft);">They're carrying too much. Pressure building.</span>
+        </button>
+
+        <button class="option-button" onclick="selectScenario('sensory')">
+          <strong>Sensory Overload</strong>
+          <br><span style="font-size: 0.85rem; color: var(--ink-soft);">Environment is hostile. Lights/sounds/chaos.</span>
+        </button>
+
+        <button class="option-button" onclick="selectScenario('other')">
+          <strong>Other / Not Sure</strong>
+          <br><span style="font-size: 0.85rem; color: var(--ink-soft);">Just give me the transducer.</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Results (Step 3 & 4 Applied) -->
+    <div class="result-box" id="resultBox">
+      <div class="result-header">
+        <span class="frequency-dot" id="resultFreqIndicator"></span>
+        <div>
+          <h3 id="resultTitle" style="margin: 0;">Transducer: The Specific Move</h3>
+          <p id="resultSubtitle"></p>
+        </div>
+      </div>
+
+      <div class="mood-move">
+        <h4 id="moveTitle">The Move (Step 3: Deploy)</h4>
+        <p id="moveDescription"></p>
+        <div class="embody-section" id="embodySection"></div>
+        <div class="neuroscience-note" id="neuroscience"></div>
+        <div class="failure-warning" id="failureWarning"></div>
+      </div>
+
+      <div class="checklist">
+        <strong>Before You Deploy (30-Second Checklist):</strong>
+        <div class="checklist-item">
+          <input type="checkbox" id="check1">
+          <label for="check1">Am I regulated enough to regulate them? (My nervous system is calm)</label>
+        </div>
+        <div class="checklist-item">
+          <input type="checkbox" id="check2">
+          <label for="check2">I've correctly identified their frequency</label>
+        </div>
+        <div class="checklist-item">
+          <input type="checkbox" id="check3">
+          <label for="check3">I'm ready to embody this (not just say the words)</label>
+        </div>
+        <div class="checklist-item">
+          <input type="checkbox" id="check4">
+          <label for="check4">I'll stay in the new frequency for 5+ minutes (Step 4: Anchor)</label>
+        </div>
+      </div>
+
+      <div class="button-group">
+        <button class="btn btn-primary" onclick="deployMove()">✓ Ready to Deploy</button>
+        <button class="btn btn-secondary" onclick="reset()">← Start Over</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- REAL-LIFE SCENARIOS (Full Depth) -->
+  <div class="section">
+    <h2>Real-Life Scenarios (The Actual Stuff That Happens)</h2>
+    <p style="color: var(--ink-soft);">Here's what mood arbitrage looks like when it's messy, real, and actually works.</p>
+
+    <div class="scenario">
+      <h4>Scenario 1: The Kitchen Catastrophe</h4>
+      <p class="setup">You walk in. Sink full of dishes. Partner standing there. Jaw clenched. Not saying anything, but radiating resentment.</p>
+      
+      <p class="label">Frequency:</p>
+      <p>Sympathetic (wound-up resentment)</p>
+      
+      <p class="label">What NOT to do:</p>
+      <ul>
+        <li>Defend yourself ("I was going to do them")</li>
+        <li>Logical problem-solve ("Let's make a schedule")</li>
+        <li>Match the energy ("Oh, NOW we care about dishes?")</li>
+      </ul>
+      
+      <p class="label">Transducer: Absurdity Pivot</p>
+      <p>Walk up slowly. Look at the dishes. Look at their face. Then say: "Okay. These dishes have filed a formal complaint with the Hague. They're saying we've violated the Geneva Convention on dishware. We need to mount a defense. Should we argue that we were just storing them here for later?"</p>
+      <p>Then pick up a dish. Make it talk in a ridiculous voice: "Help meeeee, I'm a lonely fork, I'm so alone and wet."</p>
+
+      <p class="label">Why it works:</p>
+      <p>Absurdity doesn't dismiss the real problem (dishes ARE there). Shared ridiculousness pulls you both out of the adversarial frame. Their nervous system registers: "Oh, we're not fighting. We're being weird together." The resentment dissolves because you're no longer an opponent; you're a co-conspirator in silliness. Then you actually wash the dishes together, still being stupid, and it becomes bonding instead of resentful.</p>
+
+      <p class="label">The embodiment:</p>
+      <p>You move slower, your voice gets lighter, your face shows you're being genuinely playful (not mean). Your partner's shoulders visibly drop.</p>
+    </div>
+
+    <div class="scenario">
+      <h4>Scenario 2: The 11 PM Shutdown</h4>
+      <p class="setup">Partner comes to bed and just lies there. Staring at the ceiling. Eyes glassy. You ask "how was your day?" and get a one-word answer. The whole body feels heavy and distant.</p>
+      
+      <p class="label">Frequency:</p>
+      <p>Dorsal (shutdown/collapse)</p>
+      
+      <p class="label">What NOT to do:</p>
+      <ul>
+        <li>Ask probing questions ("What's wrong? Talk to me.")</li>
+        <li>Offer solutions ("Well, tomorrow will be better")</li>
+        <li>Make it about you ("You're shutting me out")</li>
+      </ul>
+      
+      <p class="label">Transducer: Steady Presence</p>
+      <p>Don't try to fix it. Just lie down next to them. After a minute of silence, say quietly: "Your day sounds like it was a real one. You don't have to tell me anything. I'm just going to lie here and be the world's most boring person while you exist for a little bit. I'm not going anywhere."</p>
+      <p>Then actually do it. Lie there. Breathe. Maybe put your hand on their shoulder—proprioceptive grounding through touch. No expectations. No performance.</p>
+
+      <p class="label">Why it works:</p>
+      <p>Their nervous system is in dorsal freeze (shutdown). Logic feels like demands. Steady presence without interrogation tells their brain: "It's safe to exist here, even in this broken state." Touch directly activates vagal tone, which signals the parasympathetic nervous system: safety, not threat.</p>
+
+      <p class="label">The embodiment:</p>
+      <p>Slow way down. Your breathing becomes deliberate. Your voice drops an octave. You become the most boring, reliable, warm thing in the room. Not boring as in uninterested—boring as in predictably safe.</p>
+    </div>
+
+    <div class="scenario">
+      <h4>Scenario 3: The Work Crisis Spiral</h4>
+      <p class="setup">Partner gets a text about something at work going wrong. Suddenly they're pacing. Talking fast. Multiple thoughts tumbling out: "I should have caught this. Now they think I'm incompetent. Maybe I should just quit. Do you think I should quit? This was a mistake, I shouldn't have taken that role. What if they fire me?"</p>
+      
+      <p class="label">Frequency:</p>
+      <p>Anxious (helicopter brain)</p>
+      
+      <p class="label">What NOT to do:</p>
+      <ul>
+        <li>Reassure ("It's going to be fine, they won't fire you")</li>
+        <li>Logic ("Let's think through this rationally")</li>
+        <li>Minimize ("It's not that bad")</li>
+      </ul>
+      
+      <p class="label">Transducer: Structural Containment</p>
+      <p>Stop the pacing. Gently but firmly, say: "Okay. Your brain is doing the helicopter thing right now. I can see it. Your thoughts are just going 'woop woop woop.' Here's what's happening: You're trying to solve seven problems at once and your brain is overheating. We're not going to solve anything tonight. Here's what IS happening: You're going to sit down. I'm getting you water. Then we're going to handle exactly ONE thing—the email response. That's it. One thing. Everything else can wait until your brain is back online."</p>
+      <p>Then actually do it: Get water. Sit down. Help them write ONE clear email response (not fix the whole situation, just the immediate next step). Then say: "Done. That's all we're handling tonight. The rest waits until morning when your brain is back online."</p>
+
+      <p class="label">Why it works:</p>
+      <p>Anxious spirals need container, not reassurance. They need you to be the executive function they can't access right now. One clear task tells their nervous system: "We have a plan." Taking action (even small action) signals: "We're handling this." You're not dismissing their worry; you're creating hierarchy (first this, then that).</p>
+
+      <p class="label">The embodiment:</p>
+      <p>You become still and clear. Your voice gets decisive. You're not panicked, you're not dismissive—you're competent and steady. Your body language says: "I have this. Sit down. You're safe."</p>
+    </div>
+
+    <div class="scenario">
+      <h4>Scenario 4: The Resentment Accumulation</h4>
+      <p class="setup">Partner's been doing ALL the mental load for weeks. Remembering appointments, managing the budget, tracking deadlines. They're not angry yet, but you can feel the pressure building. They're getting snippy over small things. Sighing a lot.</p>
+      
+      <p class="label">Frequency:</p>
+      <p>Early sympathetic escalation (the pressure is building)</p>
+      
+      <p class="label">What NOT to do:</p>
+      <ul>
+        <li>Wait for it to blow up into full conflict</li>
+        <li>Defend your lack of mental load tracking</li>
+        <li>Offer generic help ("Tell me what to do")</li>
+      </ul>
+      
+      <p class="label">Transducer: Proactive Recognition & Transfer</p>
+      <p>Don't wait. Notice the pressure. Say: "I'm watching you carry the entire mental load like you're Atlas and the world is a very heavy ball. That's not sustainable and also I didn't sign up to be a passenger. Here's what I'm doing: I'm taking the budget review, all appointment reminders, and project deadline tracking. You're officially off the mental load committee. I'm sending you a list of what I'm handling now so you can stop tracking it. This is non-negotiable."</p>
+      <p>Then actually do it. Don't ask them to tell you what they need you to handle—figure it out yourself and tell them. (This is crucial. Asking them to manage your management is just more work for them.)</p>
+
+      <p class="label">Why it works:</p>
+      <p>You're intervening before resentment becomes sharp resentment. You're taking action, not offering empty support. Making the invisible work visible reduces the mental load significantly. Your partner's nervous system relaxes because someone else is holding the container.</p>
+
+      <p class="label">The embodiment:</p>
+      <p>You're decisive and clear. Not asking permission—stating fact. "This is happening." Your body language says: "I see you. I'm stepping up." Then you actually do the work.</p>
+    </div>
+
+    <div class="scenario">
+      <h4>Scenario 5: The Public Sensory Overwhelm</h4>
+      <p class="setup">You're at a crowded grocery store. Fluorescent lights. Chaotic music. Kids screaming. Partner's face goes blank. Movements get slower. Energy drops like a stone. They're starting to shut down.</p>
+      
+      <p class="label">Frequency:</p>
+      <p>Dorsal (sensory shutdown)</p>
+      
+      <p class="label">What NOT to do:</p>
+      <ul>
+        <li>Keep shopping like everything's normal</li>
+        <li>Make a big deal out of it ("Are you okay? What's wrong?")</li>
+        <li>Suggest they "just relax"</li>
+      </ul>
+      
+      <p class="label">Transducer: Sensory Redirection & Exit</p>
+      <p>Notice it immediately. Walk closer. Quiet voice. Say: "This place is insane. The lights are basically weaponized. The music is playing a song that sounds like it was composed by a robot having an identity crisis. We're leaving. But first—we're going to walk through the produce section like we own the place and spot the most absurd things we can find. Ready? Let's go."</p>
+      <p>Then you actually do it together—be ridiculous in the hostile environment, which discharges the tension. Movement + purpose = nervous system recalibration.</p>
+
+      <p class="label">Why it works:</p>
+      <p>You're acknowledging the sensory overload is REAL (not dismissing it). You're giving their brain a specific task (spot weird things) instead of shutdown. You're exiting quickly. Movement + purpose = nervous system regulation.</p>
+
+      <p class="label">The embodiment:</p>
+      <p>Your calm, your certainty about leaving, your lowered voice—all signal safety. You're not frustrated they're overwhelmed; you're matter-of-fact and protective.</p>
+    </div>
+  </div>
+
+  <!-- FAILURE MODES -->
+  <div class="section">
+    <h2>When Mood Arbitrage Fails (Failure Modes to Avoid)</h2>
+    <p style="color: var(--ink-soft); margin-bottom: 1.5rem;">You tried to deploy and it backfired. Here's why and how to recover.</p>
+
+    <div class="failure-mode">
+      <strong>Failure Mode 1: Dismissal Disguised as Levity</strong>
+      <p>You deploy absurdity when they actually need to be <em>heard</em>. They feel invalidated because the real hurt isn't being acknowledged.</p>
+      <p><strong>Recovery:</strong> Pause. Shift gears immediately. Say: "Actually, I'm going to stop being silly for a second. You said something real and I made a joke. That wasn't right. Tell me again, and I'm going to actually listen this time."</p>
+      <p><strong>Prevention:</strong> Lead with validation first when the issue is genuinely hurtful. "I hear you" before "let's be weird about it."</p>
+    </div>
+
+    <div class="failure-mode">
+      <strong>Failure Mode 2: Playfulness When They Need Seriousness</strong>
+      <p>Not every moment is absurdity-friendly. Some situations are genuinely serious and need serious acknowledgment first.</p>
+      <p><strong>The test:</strong> Before deploying absurdity, ask yourself: "Is this a moment where they need to feel understood first, or can we break tension together?"</p>
+      <p><strong>Fix:</strong> If they need understanding first, lead with understanding. Then absurdity can come later.</p>
+    </div>
+
+    <div class="failure-mode">
+      <strong>Failure Mode 3: Presence When They Need Solutions</strong>
+      <p>You sit quietly with them, being present. But actually, they needed you to help them handle the problem itself.</p>
+      <p><strong>Recovery:</strong> Check in directly. Say: "Do you need me to just be here, or do you need me to help you handle this?"</p>
+      <p><strong>Prevention:</strong> Sometimes people need both—presence AND problem-solving. Ask, don't assume.</p>
+    </div>
+
+    <div class="failure-mode">
+      <strong>Failure Mode 4: Forcing Connection When They Need Space</strong>
+      <p>Mood arbitrage is for shared moments. Sometimes your partner needs to process alone, and your presence actually makes it worse.</p>
+      <p><strong>The signal:</strong> If they're moving away from you (physically or emotionally), they might need isolation.</p>
+      <p><strong>The move:</strong> Say: "I can see you need some space right now. I'm going to [other room]. Come find me when you're ready. I'm not going anywhere."</p>
+    </div>
+
+    <div class="failure-mode">
+      <strong>Failure Mode 5: Reinforcing the Catastrophe Instead of Redirecting It</strong>
+      <p>They're in anxious spiral mode, spiraling about spiraling. You validate the spiral instead of gently redirecting to reality.</p>
+      <p><strong>Recovery:</strong> Separate the spiral from reality. Say: "Your brain is now catastrophizing about catastrophizing. That's a loop. Let me name what's actually true: You're capable. Here's what I'm doing. Here's what you're doing. This is shared."</p>
+      <p><strong>Prevention:</strong> Anxious spirals need gentle reality checks, not validation of the catastrophe thinking.</p>
+    </div>
+  </div>
+
+  <!-- NEUROSCIENCE DEEP DIVE -->
+  <div class="section">
+    <h2>Why This Actually Works (The Neuroscience)</h2>
+
+    <h3>Threat Detection & Discharge (Autonomic Dysrhythmia)</h3>
+    <p>When two nervous systems are dysrhythmic (oscillating at different frequencies), each partner's amygdala detects the other as <em>unpredictable</em>. Unpredictability = threat.</p>
+    <p>Absurdity and shared ridiculousness discharge this threat signal because:</p>
+    <ul>
+      <li><strong>Humor only happens when the nervous system is safe.</strong> Your amygdala must be offline for laughter to happen.</li>
+      <li><strong>Shared laughter synchronizes two nervous systems.</strong> Your frequencies start oscillating together instead of in opposition.</li>
+      <li><strong>The beat frequency of dysrhythmia gets replaced by the rhythm of laughter.</strong> The interference signal disappears.</li>
+    </ul>
+
+    <h3>The Polyvagal Brake (Vagal Regulation)</h3>
+    <p>Your vagus nerve controls whether your parasympathetic nervous system (safety) is "on" or "off." The vagal brake is released when you detect threat; it engages when you detect safety.</p>
+    <p>When you:</p>
+    <ul>
+      <li><strong>Lower your voice</strong> (signal: safety, not urgency)</li>
+      <li><strong>Slow your breathing</strong> (signal: no emergency, nervous system is regulated)</li>
+      <li><strong>Make deliberate, unhurried movements</strong> (signal: I'm in control, not panicked)</li>
+    </ul>
+    <p>...you're directly signaling to your partner's vagal brake: <em>"It's safe now. You can relax."</em> Your nervous system stability becomes contagious.</p>
+
+    <h3>Proprioceptive Grounding (Touch & Embodiment)</h3>
+    <p>Touch activates the proprioceptive system (sense of where your body is in space). When someone is in dorsal freeze or anxious spiral, their proprioceptive sense is offline.</p>
+    <p>A firm hand on their shoulder re-anchors them to <em>physical reality</em>. It tells their nervous system: "You exist. You're here. You're not floating." This is why touch works even when words don't.</p>
+
+    <h3>Beat Frequency & Coherence (From Frequency Framework)</h3>
+    <p>Remember the Radio Frequency Paradigm from the Frequency Framework? This is where mood arbitrage applies it in real-time.</p>
+    <p>When your frequencies align (through shared laughter, steady presence, or structural clarity), the beat frequency disappears. Your partner's amygdala stops detecting the interference pattern as threat. Connection becomes possible again.</p>
+  </div>
+
+  <!-- VARIATIONS BY TYPE -->
+  <div class="section">
+    <h2>Variations by Relationship Type & Neurodivergence</h2>
+    <p style="color: var(--ink-soft); margin-bottom: 1.5rem;">Mood arbitrage works differently depending on attachment style, neurodivergence, and relationship history. Here's how to adapt.</p>
+
+    <h3>For High-Conflict Couples (Entrenched Patterns)</h3>
+    <p>Mood arbitrage takes longer. You might need to shift the frequency <em>multiple times</em> before the old pattern breaks. The amygdala's threat detection is well-worn, so it's faster to activate.</p>
+    <p><strong>Strategy:</strong> Stay consistent. The new frequency will gradually become the baseline. Celebrate small shifts. Keep going.</p>
+
+    <h3>For Partners with ADHD</h3>
+    <p>Absurdity and playfulness are natural territory for ADHD brains. Use it extensively. But also pair it with <em>structure</em> (the containment move) because their nervous system often needs clear hierarchy and task prioritization.</p>
+    <p><strong>Strategy:</strong> Playfulness + one clear task = their preferred format.</p>
+
+    <h3>For Partners with Autism or Sensory Sensitivity</h3>
+    <p>Be specific about absurdity. "Let's do the thing where we make the dishes talk" works better than vague playfulness. They may prefer presence over levity. <strong>Check what actually regulates them individually.</strong> Don't assume.</p>
+    <p><strong>Strategy:</strong> Predictable absurdity + clear communication of what's happening = safety.</p>
+
+    <h3>For Anxiously Attached Partners</h3>
+    <p>They often need <em>reassurance + action</em>. Presence alone can feel like abandonment. "I see you're spiraling, I'm handling X, and I'm staying right here" works better than pure presence alone.</p>
+    <p><strong>Strategy:</strong> Words + actions + presence simultaneously.</p>
+
+    <h3>For Avoidantly Attached Partners</h3>
+    <p>They need space <em>without abandonment messaging</em>. "I'm going to step back, and I'm not leaving" works better than aggressive presence.</p>
+    <p><strong>Strategy:</strong> "I see you need room. I'm right here when you're ready."</p>
+  </div>
+
+  <!-- PRACTICE PLAN -->
+  <div class="section">
+    <h2>Building the Skill (4-Week Practice Plan)</h2>
+    <p style="color: var(--ink-soft); margin-bottom: 1.5rem;">Mood arbitrage is a skill. It gets better with practice. Here's how to build it systematically.</p>
+
+    <h3>Week 1: Notice the Frequencies</h3>
+    <p>Your only job this week: Get good at identifying which state your partner is in. Don't try to shift anything. Just notice.</p>
+    <p><strong>Daily practice:</strong> When your partner is in a negative state, pause and identify: "Are they wound-up, shut down, or spiraling?" Say it out loud to yourself. Build the pattern recognition muscle.</p>
+
+    <h3>Week 2: Pick One Scenario</h3>
+    <p>Choose one scenario from the real-life examples above and practice the mood arbitrage move in a low-stakes moment (not during active conflict).</p>
+    <p><strong>Practice approach:</strong> "Hey, I want to try something. When you're feeling [stressed/overwhelmed/frustrated], can I try [specific move]?" They'll likely be open to it.</p>
+
+    <h3>Week 3: Build Flexibility</h3>
+    <p>Recognize which move works for which state. Start deploying in real moments (not just practice moments). Notice what lands and what doesn't.</p>
+    <p><strong>Adjustments:</strong> Mood arbitrage is personalized. Your partner's nervous system may respond differently than the framework predicts. Notice and adjust.</p>
+
+    <h3>Week 4+: It Becomes Intuitive</h3>
+    <p>You're naturally shifting frequencies together. You recognize dysrhythmia instantly and know which transducer to deploy. The goal isn't perfection. It's showing your partner: <em>"When you're dysregulated, I can help regulate the room. You're not alone in this. And we're going to get through it together—with playfulness, presence, or structure, whatever you need."</em></p>
+  </div>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="footer">
+    <p><strong>Mood Arbitrage</strong> is a core tool in The Objective Ledger (TOL-OS) partnership framework.</p>
+    <p>Use it with:</p>
+    <ul style="color: var(--ink-soft); margin: 0.5rem 0; padding-left: 1.5rem;">
+      <li><strong>WP-13 (Phase-Locked Loop Protocol)</strong> — Daily 90-second pulses to maintain coherence</li>
+      <li><strong>WP-04 (Frequency Calibration Audit)</strong> — Map your five operating frequencies</li>
+      <li><strong>Frequency Framework</strong> — Understand why frequency mismatch feels like conflict</li>
+    </ul>
+    <p style="margin-top: 1rem; color: var(--ink-soft); font-size: 0.8rem;">© The Objective Ledger | Nervous-system-aware partnership operating system | Built on polyvagal theory, systems engineering, and honest heuristics</p>
+  </div>
+
+</div>
+
+<script>
+let selectedFrequency = null;
+let selectedScenario = null;
+
+const moves = {
+  sympathetic: {
+    conflict: {
+      title: "The Absurdity Pivot",
+      description: "Walk up slowly. Look at whatever you're fighting about. Then say: 'Okay. We're literally fighting about [this tiny thing]. TINY THING. You know what this thing is? It's just an object with no feelings. We're standing here having opinions about inanimate objects. We're grown humans with actual lives having strong feelings about a ceramic plate/pile of laundry/administrative task.' Then pick up the object. Make it talk in a ridiculous voice.",
+      embody: "Your voice gets lighter. Your shoulders drop. Your face shows genuine playfulness—not meanness. You move slower. You make the object talk in ridiculous voices. Your body language says: 'We're a team being weird together, not opponents.'",
+      neuroscience: "Shared laughter synchronizes two nervous systems. Humor only happens when the nervous system feels safe, so your amygdala registers: 'If we're joking, we're not in danger.' The threat signal discharges. The beat frequency of dysrhythmia gets replaced by the rhythm of laughter.",
+      failure: "This backfires if they're genuinely hurt and need to be heard first. If the issue is real and they need validation, lead with 'I hear you' before the absurdity."
+    },
+    withdrawal: {
+      title: "Steady Presence with Gentle Humor",
+      description: "Don't attack the shutdown with absurdity. Instead, lie down next to them and say: 'Your day sounds like it was a real one. I'm going to be the world's most boring person while you exist. No jokes required. Just me and you in this not-terrible moment together.'",
+      embody: "Slow way down. Breathing deliberate. Voice drops. You're the harbor. Not rocking, not anxious. Just there. After a moment, you might add gentle, soft humor—not to fix, but to signal safety.",
+      neuroscience: "Their nervous system is in dorsal freeze. Logic feels like demands. Steady presence without interrogation signals: 'It's safe to exist here, even broken.'",
+      failure: "Don't push humor if they explicitly need seriousness first. Some people need acknowledgment before they can access laughter."
+    },
+    overwhelm: {
+      title: "Structural Containment with Confidence",
+      description: "Say: 'Your brain is doing the tornado thing. I can see it. We're not solving anything tonight. Here's what's happening: I'm taking the top three urgent things off your plate RIGHT NOW. You're going to sit. I'm getting water. We handle one email. That's it. Everything else is tomorrow's problem.'",
+      embody: "Still and clear. Voice gets decisive, not panicked. Body language says: 'I have this handled.' You're competent, not dismissive.",
+      neuroscience: "Anxious spirals need container, not reassurance. One clear task tells their nervous system: 'We have a plan. You can relax.' Your calm becomes their external regulation.",
+      failure: "Don't say 'it's going to be fine.' This amplifies spirals. You need to absorb the chaos and create hierarchy, not minimize it."
+    },
+    accumulation: {
+      title: "Proactive Recognition & Transfer",
+      description: "Say: 'I'm watching you carry the entire load like you're Atlas. That's not sustainable. Here's what I'm doing: I'm taking [specific things]. Done. Non-negotiable.' Then send them a list of what you're handling so they can stop tracking it mentally.",
+      embody: "Decisive and clear. Not asking permission—stating fact. 'This is happening.' Body language says: 'I see you. I'm stepping up.'",
+      neuroscience: "You're intervening before resentment becomes sharp. Making invisible work visible reduces the mental load significantly. Your partner's nervous system relaxes because someone else is holding the container.",
+      failure: "Don't ask them to tell you what to handle. Figure it out yourself. They're already managing too much and need you to manage yourself."
+    },
+    sensory: {
+      title: "Absurdity + Exit",
+      description: "Notice immediately. Quiet voice. Say: 'This place is genuinely hostile. The lights are at a frequency that makes human brains angry. We're leaving. But first—count the number of insane things you see while we walk out. Ready? Go.'",
+      embody: "Calm, certainty about leaving, lowered voice. You're not frustrated they're overwhelmed; you're matter-of-fact and protective. You move decisively toward the exit.",
+      neuroscience: "You're validating the overload is real. You're giving their brain a specific task instead of shutdown. Movement + purpose = nervous system regulation.",
+      failure: "Don't minimize ('It's not that bad') or blame ('Why are you so sensitive?'). The sensory overload is real. Honor it."
+    }
+  },
+
+  dorsal: {
+    conflict: {
+      title: "Steady Presence (Not Argument)",
+      description: "They've withdrawn. Don't try to fight or solve. Say: 'I'm going to stop talking for a second. We're not going to solve this right now. I'm just going to sit here quietly with you.' Then actually sit. Breathe. Be present.",
+      embody: "Most boring, warm, predictable thing in the room. Body is still. Eyes are soft. Not performing—just there.",
+      neuroscience: "They've activated dorsal freeze. Words don't land. Presence does. Your nervous system stability becomes contagious. Proximity without demands tells their brain: 'You're safe.'",
+      failure: "Don't try to talk them out of the shutdown. This makes it worse. Silence is often better than words."
+    },
+    withdrawal: {
+      title: "Harbor Anchor",
+      description: "Say: 'Your day was a real one. You don't have to perform for me. I'm going to be really boring and steady while you just exist. I'm holding the space for you.'",
+      embody: "Breathing deepens. Presence becomes like a harbor—still water, solid walls. Anchored. Not rocking. Not anxious. Just there. Maybe hand on their shoulder for proprioceptive grounding.",
+      neuroscience: "They need co-regulation, not fixing. Your steady vagal tone directly influences theirs. Shared breathing synchronizes nervous systems at a biological level.",
+      failure: "Don't offer solutions or try to lift their mood. They need to feel sad without it being wrong."
+    },
+    overwhelm: {
+      title: "Gentle Structure (Micro-Steps)",
+      description: "Don't overwhelm with options. Give one clear next step: 'You don't have to figure anything out right now. One thing: go drink water. That's it. Just water. Then sit down. I'm right here.'",
+      embody: "Movements are slow. Voice is warm and low. You guide gently, like helping someone who's disoriented. One step at a time.",
+      neuroscience: "Dorsal shutdown needs micro-steps, not big plans. Water → sit → breathe. Small wins build toward stability.",
+      failure: "Don't give them a list of things to do. This triggers more shutdown. One. Thing."
+    },
+    accumulation: {
+      title: "Gentle Recognition & Shared Burden",
+      description: "Say: 'I see you carrying everything. You don't have to carry it all alone. I'm here. Let's sit for a minute. We'll handle things together.'",
+      embody: "Sit next to them, not across. You're on the same team, not opposing sides. Your body language conveys: 'We're in this together.'",
+      neuroscience: "They're carrying so much they've given up. Your presence tells them: 'You don't have to do this alone.' Shared burden feels lighter.",
+      failure: "Don't minimize. 'It's not that bad' is invalidating when they're already in collapse."
+    },
+    sensory: {
+      title: "Safe Harbor Exit",
+      description: "Say quietly: 'This place is too much. We're leaving quietly. No rush. I'm right here.' Guide them out calmly, hand on their arm.",
+      embody: "Pace is steady. Pressure is firm (through touch). You're the anchor they're holding onto. Proprioceptive grounding through touch signals physical safety.",
+      neuroscience: "Your physical presence guides them back to sense of safety. Touch activates the proprioceptive system—where is my body in space? I'm here. I'm safe.",
+      failure: "Don't rush them or make them feel bad about needing to leave. This is a real response from a dysregulated nervous system."
+    }
+  },
+
+  anxious: {
+    conflict: {
+      title: "Containment & Reality Check",
+      description: "Say: 'I hear all the things. Your brain is jumping between six different catastrophes. Let's slow down. One thing first: we're okay. That's solid. Now—what's the ONE thing that needs handling first?'",
+      embody: "Calm and grounded. Your body doesn't match their energy. You're the still center. Your steadiness is the message.",
+      neuroscience: "Anxiety spirals need hierarchy. First this, then that. Your calmness is contagious. One clear focus = nervous system can settle.",
+      failure: "Don't say 'just relax' or 'it's not that bad.' This amplifies spirals. You're containing and redirecting, not minimizing."
+    },
+    withdrawal: {
+      title: "Gentle Activation with Company",
+      description: "Say: 'Something happened and it hurts. You don't have to figure it out today. But let's do one small thing together—go for a walk, drink something warm, sit outside. Just one thing with me.'",
+      embody: "Invite gently. Not demanding, but offering structure and companionship. Movement breaks the spiral.",
+      neuroscience: "They're spiraling inward. Movement + presence + one activity = nervous system recalibration. Physical activity regulates the anxious nervous system.",
+      failure: "Don't leave them alone if they're in dorsal+anxious combo. They need company even if they don't say it."
+    },
+    overwhelm: {
+      title: "Task Absorption (You Handle It)",
+      description: "Say: 'Your brain is doing the helicopter thing. I'm taking the top three urgent items off your plate. Not later—right now. Sit down. I'm handling it. One by one. Updates in 30 minutes.'",
+      embody: "Decisive and capable. You become their external executive function. Your competence settles their nervous system.",
+      neuroscience: "Anxious brain needs external regulation. Your calm, clear action directly calms their nervous system. You're borrowing them your prefrontal cortex.",
+      failure: "Don't ask them to prioritize. Their brain is too scattered. You pick what's urgent and handle it."
+    },
+    accumulation: {
+      title: "Reality Check & Shared Load",
+      description: "Say: 'I'm watching you carry too much and your brain is catastrophizing about carrying too much. That's a loop. Here's what's real: you're capable. Here's what I'm doing: [specific]. Here's what you're doing: [specific]. This is shared.'",
+      embody: "Separate the spiral from reality. Clear, grounded, present. You're gently redirecting without invalidating.",
+      neuroscience: "Anxious accumulation needs reality grounding + shared load. Seeing the division of labor calms the catastrophe spiral.",
+      failure: "Don't validate the catastrophe thinking. Gently redirect to reality and shared responsibility."
+    },
+    sensory: {
+      title: "Exit & Grounding Exercise",
+      description: "Say: 'This place is overstimulating your nervous system. We're leaving in two minutes. On the way out, we're going to count: three things you can see, two things you can touch, one thing you can hear. Grounding exercise. Let's go.'",
+      embody: "Moving with purpose. Helping them regain sensory orientation. Your steadiness guides them.",
+      neuroscience: "5-4-3-2-1 grounding exercise engages the prefrontal cortex. This pulls them out of the amygdala spiral by anchoring them to sensory reality.",
+      failure: "Don't rush them. This needs to be steady and slow. Let the nervous system settle as you practice the exercise."
+    }
+  }
+};
+
+function selectFrequency(freq) {
+  selectedFrequency = freq;
+  document.querySelectorAll('[onclick*="selectFrequency"]').forEach(btn => btn.classList.remove('active'));
+  event.target.closest('.option-button').classList.add('active');
+  document.getElementById('step2').style.display = 'block';
+  document.getElementById('resultBox').classList.remove('active');
+  document.getElementById('step2').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function selectScenario(scenario) {
+  selectedScenario = scenario;
+  document.querySelectorAll('[onclick*="selectScenario"]').forEach(btn => btn.classList.remove('active'));
+  event.target.closest('.option-button').classList.add('active');
+  showResult();
+}
+
+function showResult() {
+  const moveData = moves[selectedFrequency][selectedScenario] || moves[selectedFrequency]['conflict'];
+  
+  const freqColors = { sympathetic: 'var(--sympathetic)', dorsal: 'var(--dorsal)', anxious: 'var(--anxious)' };
+  const freqLabels = { sympathetic: 'Sympathetic (Wound Up)', dorsal: 'Dorsal (Shutdown)', anxious: 'Anxious (Helicopter Brain)' };
+  
+  document.getElementById('resultFreqIndicator').style.background = freqColors[selectedFrequency];
+  document.getElementById('resultTitle').textContent = moveData.title;
+  document.getElementById('resultSubtitle').textContent = freqLabels[selectedFrequency];
+  document.getElementById('moveDescription').innerHTML = moveData.description;
+  
+  const embodyHTML = `<strong>The Embodiment (Step 3):</strong> ${moveData.embody}`;
+  document.getElementById('embodySection').innerHTML = embodyHTML;
+  
+  const neuroHTML = `<strong>The Neuroscience:</strong> ${moveData.neuroscience}`;
+  document.getElementById('neuroscience').innerHTML = neuroHTML;
+  
+  if (moveData.failure) {
+    document.getElementById('failureWarning').innerHTML = `<strong>⚠️ Failure Mode to Avoid:</strong><br>${moveData.failure}`;
+    document.getElementById('failureWarning').classList.add('show');
+  } else {
+    document.getElementById('failureWarning').classList.remove('show');
+  }
+  
+  document.getElementById('resultBox').classList.add('active');
+  document.getElementById('resultBox').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function deployMove() {
+  alert('You\'ve got this. Remember: embody it, stay in it for 5+ minutes, and let the new frequency consolidate. The room will shift.');
+  reset();
+}
+
+function reset() {
+  selectedFrequency = null;
+  selectedScenario = null;
+  document.querySelectorAll('.option-button').forEach(btn => btn.classList.remove('active'));
+  document.getElementById('step2').style.display = 'none';
+  document.getElementById('resultBox').classList.remove('active');
+  document.querySelectorAll('input[type="checkbox"]').forEach(cb => cb.checked = false);
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+</script>
+
+
+
+</body>
+</html>

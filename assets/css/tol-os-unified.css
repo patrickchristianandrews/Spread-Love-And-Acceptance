@@ -1,0 +1,591 @@
+/* ===================================================================
+   The Objective Ledger (TOL-OS) — Unified Design System
+   =================================================================== */
+
+:root {
+  --paper: #F5EFDE;
+  --paper-deep: #ECE2C4;
+  --ink: #211D17;
+  --ink-soft: #524B3E;
+  --line: #D9CBA3;
+  --credit: #3E6B4C;
+  --brass: #A8792F;
+  --focus: #2B5B8C;
+  --warning: #8B6F47;
+  --radius: 3px;
+  
+  /* Domain colors */
+  --domain-autonomic: #d97a4a;
+  --domain-financial: #3E6B4C;
+  --domain-decisional: #2B5B8C;
+  --domain-communicational: #b8792f;
+  --domain-philosophical: #8B6F47;
+}
+
+/* ===================================================================
+   TOL-OS HEADER (Global Navigation)
+   =================================================================== */
+
+.tol-header {
+  background: var(--paper-deep);
+  border-bottom: 2px solid var(--brass);
+  padding: 1.5rem 0.6in;
+  margin-bottom: 2rem;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 2px 8px rgba(33, 29, 23, 0.08);
+}
+
+.tol-header-content {
+  max-width: 8in;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 2rem;
+}
+
+.tol-header-logo {
+  flex: 1;
+}
+
+.tol-header-logo h1 {
+  font-family: "Fraunces", serif;
+  font-size: 1.3rem;
+  font-weight: 600;
+  margin: 0;
+  color: var(--ink);
+}
+
+.tol-header-logo p {
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.7rem;
+  color: var(--brass);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin: 0.25rem 0 0 0;
+}
+
+.tol-header-nav {
+  display: flex;
+  gap: 1.5rem;
+}
+
+.tol-header-nav a {
+  font-size: 0.9rem;
+  color: var(--ink-soft);
+  text-decoration: none;
+  transition: color 0.2s;
+  border-bottom: 2px solid transparent;
+  padding-bottom: 2px;
+}
+
+.tol-header-nav a:hover {
+  color: var(--brass);
+  border-bottom-color: var(--brass);
+}
+
+@media (max-width: 900px) {
+  .tol-header-content {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+  
+  .tol-header-nav {
+    width: 100%;
+    gap: 1rem;
+    font-size: 0.85rem;
+  }
+}
+
+/* ===================================================================
+   BREADCRUMB NAVIGATION
+   =================================================================== */
+
+.breadcrumb {
+  max-width: 8in;
+  margin: 0 auto 1.5rem;
+  padding: 0 0.6in;
+}
+
+.breadcrumb ol {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  font-size: 0.85rem;
+  color: var(--ink-soft);
+}
+
+.breadcrumb li {
+  display: flex;
+  align-items: center;
+  margin: 0;
+  padding: 0;
+}
+
+.breadcrumb li:not(:last-child)::after {
+  content: "→";
+  margin: 0 0.5rem;
+  color: var(--brass);
+}
+
+.breadcrumb a {
+  color: var(--brass);
+  text-decoration: none;
+  transition: all 0.2s;
+}
+
+.breadcrumb a:hover {
+  text-decoration: underline;
+}
+
+.breadcrumb .current {
+  font-weight: 600;
+  color: var(--ink);
+}
+
+/* ===================================================================
+   CONTEXT OPENING (Where you are in the journey)
+   =================================================================== */
+
+.context-opening {
+  max-width: 8in;
+  margin: 2rem auto;
+  padding: 1.5rem 0.6in;
+}
+
+.context-box {
+  background: linear-gradient(135deg, rgba(43, 91, 140, 0.08) 0%, rgba(168, 121, 47, 0.08) 100%);
+  border: 1px solid var(--line);
+  border-left: 4px solid var(--brass);
+  border-radius: var(--radius);
+  padding: 1.5rem;
+}
+
+.context-box h3 {
+  margin-top: 0;
+  color: var(--brass);
+  font-size: 1.1rem;
+}
+
+.context-box ol {
+  margin: 1rem 0;
+  padding-left: 1.5rem;
+}
+
+.context-box li {
+  margin: 0.75rem 0;
+  line-height: 1.6;
+}
+
+.context-box strong {
+  color: var(--ink);
+}
+
+.context-box em {
+  color: var(--ink-soft);
+}
+
+/* ===================================================================
+   "USE WITH" BLOCK (Shows related tools)
+   =================================================================== */
+
+.use-with-block {
+  background: white;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  margin: 2rem 0;
+  float: right;
+  width: 35%;
+  margin-left: 2rem;
+}
+
+.use-with-block h4 {
+  margin-top: 0;
+  color: var(--brass);
+  font-size: 1rem;
+  border-bottom: 1px solid var(--line);
+  padding-bottom: 0.75rem;
+}
+
+.use-item {
+  margin: 1.25rem 0;
+  padding: 0.75rem;
+  border-left: 3px solid var(--line);
+  border-radius: var(--radius);
+}
+
+.use-item.upstream {
+  border-left-color: var(--focus);
+  background: rgba(43, 91, 140, 0.04);
+}
+
+.use-item.parallel {
+  border-left-color: var(--brass);
+  background: rgba(168, 121, 47, 0.04);
+}
+
+.use-item.downstream {
+  border-left-color: var(--credit);
+  background: rgba(62, 107, 76, 0.04);
+}
+
+.use-item strong {
+  display: block;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--ink-soft);
+  margin-bottom: 0.5rem;
+}
+
+.use-item a {
+  color: var(--brass);
+  text-decoration: none;
+  font-weight: 600;
+  display: inline;
+}
+
+.use-item a:hover {
+  text-decoration: underline;
+}
+
+.use-item a.locked {
+  opacity: 0.7;
+  cursor: default;
+}
+
+.use-item p {
+  margin: 0.5rem 0 0 0;
+  font-size: 0.9rem;
+  color: var(--ink-soft);
+  line-height: 1.5;
+}
+
+@media (max-width: 1100px) {
+  .use-with-block {
+    float: none;
+    width: 100%;
+    margin: 2rem 0;
+  }
+}
+
+/* ===================================================================
+   DOMAIN INDICATORS (Which frequencies does this tool address?)
+   =================================================================== */
+
+.domain-indicator {
+  background: white;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 1.25rem;
+  margin: 2rem 0;
+  float: right;
+  width: 30%;
+  margin-left: 2rem;
+}
+
+.domain-indicator h4 {
+  margin-top: 0;
+  font-size: 0.95rem;
+  color: var(--brass);
+  border-bottom: 1px solid var(--line);
+  padding-bottom: 0.75rem;
+}
+
+.domains {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.75rem;
+}
+
+.domain {
+  display: inline-block;
+  padding: 0.4rem 0.75rem;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: white;
+}
+
+.domain.autonomic {
+  background: var(--domain-autonomic);
+}
+
+.domain.financial {
+  background: var(--domain-financial);
+}
+
+.domain.decisional {
+  background: var(--domain-decisional);
+}
+
+.domain.communicational {
+  background: var(--domain-communicational);
+}
+
+.domain.philosophical {
+  background: var(--domain-philosophical);
+}
+
+@media (max-width: 1100px) {
+  .domain-indicator {
+    float: none;
+    width: 100%;
+    margin: 2rem 0;
+  }
+}
+
+/* ===================================================================
+   NEXT STEPS SECTION (CTA to next tool)
+   =================================================================== */
+
+.next-steps {
+  max-width: 8in;
+  margin: 2.5rem auto 0;
+  padding: 2rem 0.6in;
+  background: var(--paper-deep);
+  border: 1px solid var(--line);
+  border-top: 3px solid var(--brass);
+  border-radius: var(--radius);
+}
+
+.next-steps h3 {
+  margin-top: 0;
+  color: var(--brass);
+}
+
+.next-steps p {
+  color: var(--ink-soft);
+  margin-bottom: 1.25rem;
+}
+
+.next-steps .btn {
+  display: inline-block;
+  padding: 0.75rem 1.5rem;
+  background: var(--brass);
+  color: white;
+  text-decoration: none;
+  border-radius: var(--radius);
+  font-family: "IBM Plex Mono", monospace;
+  font-weight: 600;
+  font-size: 0.9rem;
+  transition: all 0.2s;
+}
+
+.next-steps .btn:hover {
+  background: var(--focus);
+}
+
+/* ===================================================================
+   TOL-OS FOOTER (Global Acknowledgment + Links)
+   =================================================================== */
+
+.tol-footer {
+  background: var(--paper-deep);
+  border-top: 2px solid var(--brass);
+  padding: 2rem 0.6in;
+  margin-top: 3rem;
+}
+
+.tol-footer-content {
+  max-width: 8in;
+  margin: 0 auto;
+}
+
+.tol-integration {
+  margin-bottom: 2rem;
+}
+
+.tol-integration h4 {
+  margin-top: 0;
+  font-size: 1rem;
+  color: var(--brass);
+  border-bottom: 1px solid var(--line);
+  padding-bottom: 0.75rem;
+}
+
+.tool-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 1.5rem;
+  margin: 1.5rem 0;
+}
+
+.tool-category {
+  padding: 1rem;
+  background: white;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+}
+
+.tool-category h5 {
+  margin: 0 0 0.75rem 0;
+  font-size: 0.9rem;
+  color: var(--brass);
+  font-weight: 600;
+}
+
+.tool-category ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.tool-category li {
+  font-size: 0.85rem;
+  color: var(--ink-soft);
+  margin: 0.5rem 0;
+  padding-left: 0;
+}
+
+.tool-category a {
+  color: var(--brass);
+  text-decoration: none;
+  transition: all 0.2s;
+}
+
+.tool-category a:hover {
+  text-decoration: underline;
+}
+
+.tool-category .lock {
+  opacity: 0.6;
+  font-size: 0.7rem;
+  cursor: default;
+}
+
+.footer-nav {
+  margin: 1.5rem 0;
+  padding: 1.5rem 0;
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  text-align: center;
+}
+
+.footer-nav a {
+  display: inline-block;
+  margin: 0 1rem;
+  color: var(--brass);
+  text-decoration: none;
+  font-size: 0.9rem;
+  transition: all 0.2s;
+}
+
+.footer-nav a:hover {
+  text-decoration: underline;
+}
+
+.copyright {
+  text-align: center;
+  font-size: 0.8rem;
+  color: var(--ink-soft);
+  margin: 1.5rem 0 0 0;
+  padding-top: 1.5rem;
+}
+
+/* ===================================================================
+   INTEGRATION CALLOUTS (Specific to tool connections)
+   =================================================================== */
+
+.deployment-flow,
+.wp13-integration,
+.integrate-with-wp13,
+.scenario-reference {
+  background: linear-gradient(135deg, rgba(168, 121, 47, 0.08) 0%, rgba(43, 91, 140, 0.08) 100%);
+  border: 1px solid var(--brass);
+  border-left: 4px solid var(--brass);
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  margin: 1.5rem 0;
+  clear: both;
+}
+
+.deployment-flow h3,
+.wp13-integration h4,
+.integrate-with-wp13 h4,
+.scenario-reference h4 {
+  margin-top: 0;
+  color: var(--brass);
+}
+
+.deployment-flow p,
+.wp13-integration p,
+.integrate-with-wp13 p,
+.scenario-reference p {
+  margin: 0.75rem 0;
+  line-height: 1.6;
+  color: var(--ink);
+}
+
+.deployment-flow strong,
+.wp13-integration strong,
+.integrate-with-wp13 strong,
+.scenario-reference strong {
+  color: var(--brass);
+}
+
+/* ===================================================================
+   UTILITY: Clearfix for floated blocks
+   =================================================================== */
+
+.clearfix::after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+/* ===================================================================
+   RESPONSIVE: Mobile optimization
+   =================================================================== */
+
+@media (max-width: 900px) {
+  .use-with-block,
+  .domain-indicator {
+    float: none;
+    width: 100%;
+    margin: 2rem 0;
+  }
+  
+  .tool-grid {
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  }
+  
+  .footer-nav a {
+    display: block;
+    margin: 0.5rem 0;
+  }
+}
+
+@media (max-width: 600px) {
+  .tol-header {
+    padding: 1rem 1rem;
+  }
+  
+  .tol-header-content {
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  .tol-header-nav {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  .breadcrumb ol {
+    font-size: 0.75rem;
+  }
+  
+  .tool-grid {
+    grid-template-columns: 1fr;
+  }
+}

@@ -1,0 +1,180 @@
+/* site.css — shared chrome for every page on spreadloveandacceptance.com
+   Header bar, contents index, members gate, pager, footer.
+   All selectors are prefixed .tol- so they never collide with page styles. */
+
+:root{
+  --paper:#F5EFDE; --paper-deep:#ECE2C4; --ink:#211D17; --ink-soft:#524B3E;
+  --line:#D9CBA3; --credit:#3E6B4C; --brass:#A8792F; --focus:#2B5B8C;
+  --debit:#96412B; --radius:3px;
+}
+
+/* Members-only content stays hidden until the membership check passes */
+.locked-section{ display:none !important; }
+body.unlocked .locked-section{ display:block !important; }
+/* Once unlocked, members content reads as normal page content */
+body.unlocked .locked-section{ border:0 !important; padding:0 !important; margin:0 !important; background:none !important; }
+body.unlocked .locked-section::before{ content:none !important; display:none !important; }
+
+/* ---------- Skip link ---------- */
+.tol-skip{
+  position:absolute; left:-9999px; top:0; z-index:1000;
+  background:var(--ink); color:var(--paper); padding:.6rem 1rem;
+  font:500 15px/1.2 "Lora", Georgia, serif;
+}
+.tol-skip:focus{ left:1rem; top:.5rem; }
+
+/* ---------- Header bar ---------- */
+.tol-bar{
+  position:sticky; top:0; z-index:900;
+  display:flex; align-items:center; gap:1.25rem;
+  padding:.7rem clamp(1rem, 4vw, 2.5rem);
+  background:var(--paper);
+  border-bottom:3px double var(--ink);  /* the ledger's closing rule */
+  font-family:"Lora", Georgia, serif; color:var(--ink);
+  box-sizing:border-box;
+}
+.tol-bar *{ box-sizing:border-box; }
+.tol-brand{
+  font-family:"Fraunces", Georgia, serif; font-weight:600; font-size:1.15rem;
+  color:var(--ink); text-decoration:none; white-space:nowrap; letter-spacing:-.01em;
+}
+.tol-brand:hover{ color:var(--brass); }
+.tol-sections{ display:flex; gap:.25rem; margin-left:auto; }
+.tol-bar button, .tol-bar a.tol-member{
+  font:inherit; font-size:.95rem; color:var(--ink);
+  background:none; border:1px solid transparent; border-radius:var(--radius);
+  padding:.4rem .7rem; cursor:pointer; text-decoration:none; line-height:1.2;
+}
+.tol-bar button:hover{ border-color:var(--line); background:var(--paper-deep); }
+.tol-bar button[aria-current="true"]{ border-bottom:2px solid var(--brass); border-radius:0; }
+.tol-contents-btn{ display:none; margin-left:auto; }
+.tol-bar a.tol-member{ border-color:var(--ink); }
+.tol-bar a.tol-member:hover{ background:var(--ink); color:var(--paper); }
+.tol-bar a.tol-member.is-member{ border-color:var(--credit); color:var(--credit); }
+.tol-bar a.tol-member.is-member:hover{ background:var(--credit); color:var(--paper); }
+
+@media (max-width:720px){
+  .tol-sections{ display:none; }
+  .tol-contents-btn{ display:inline-block; }
+  .tol-brand{ font-size:1rem; }
+}
+
+/* ---------- Contents panel ---------- */
+.tol-scrim{
+  position:fixed; inset:0; z-index:950; background:rgba(33,29,23,.35);
+}
+.tol-panel{
+  position:fixed; top:0; right:0; bottom:0; z-index:960;
+  width:min(34rem, 100vw); overflow-y:auto;
+  background:var(--paper); border-left:3px double var(--ink);
+  padding:1.25rem clamp(1rem,4vw,2rem) 3rem;
+  font-family:"Lora", Georgia, serif; color:var(--ink);
+  transform:translateX(0); transition:transform .22s ease-out;
+}
+.tol-panel[hidden], .tol-scrim[hidden]{ display:none; }
+.tol-panel-head{ display:flex; align-items:center; justify-content:space-between; margin-bottom:.5rem; }
+.tol-panel-head h2{ font-family:"Fraunces", Georgia, serif; font-size:1.5rem; margin:0; font-weight:600; }
+.tol-close{
+  font:inherit; font-size:.95rem; background:none; color:var(--ink);
+  border:1px solid var(--line); border-radius:var(--radius); padding:.35rem .7rem; cursor:pointer;
+}
+.tol-close:hover{ background:var(--paper-deep); }
+@media (prefers-reduced-motion: reduce){ .tol-panel{ transition:none; } }
+
+/* ---------- The index (used in the panel and on the home page) ---------- */
+.tol-index{ font-family:"Lora", Georgia, serif; color:var(--ink); }
+.tol-index-section{ margin:1.75rem 0 0; }
+.tol-index-section > h3{
+  font-family:"Fraunces", Georgia, serif; font-style:italic; font-weight:500;
+  font-size:1.2rem; margin:0 0 .35rem; padding-bottom:.3rem; border-bottom:1px solid var(--ink);
+}
+.tol-index-section > p{ margin:.2rem 0 .6rem; color:var(--ink-soft); font-size:.92rem; }
+.tol-index ol{ list-style:none; margin:0; padding:0; }
+.tol-row{
+  display:grid; grid-template-columns:4.2rem 1fr auto; align-items:baseline; gap:.5rem;
+  padding:.5rem .35rem .5rem .5rem; text-decoration:none; color:var(--ink);
+  border-bottom:1px dotted var(--line); border-left:3px solid transparent;
+}
+.tol-row:hover{ background:var(--paper-deep); }
+.tol-row[aria-current="page"]{ border-left-color:var(--brass); background:var(--paper-deep); }
+.tol-code{ font-family:"IBM Plex Mono", ui-monospace, monospace; font-size:.78rem; color:var(--ink-soft); }
+.tol-title{ font-size:1rem; line-height:1.35; }
+.tol-title small{ display:block; color:var(--ink-soft); font-size:.85rem; margin-top:.1rem; }
+.tol-access{ font-size:.8rem; color:var(--brass); white-space:nowrap; font-style:italic; }
+.tol-index.is-member .tol-access{ color:var(--credit); }
+
+/* Larger index on the home page */
+.tol-index.is-page .tol-index-section{ margin-top:2.5rem; }
+.tol-index.is-page .tol-index-section > h3{ font-size:1.5rem; }
+.tol-index.is-page .tol-title{ font-size:1.08rem; }
+
+/* ---------- Members gate ---------- */
+.tol-gate{
+  margin:2.5rem 0; padding:1.75rem clamp(1.1rem,4vw,2rem);
+  background:var(--paper-deep); border-top:3px double var(--ink); border-bottom:1px solid var(--ink);
+  font-family:"Lora", Georgia, serif; color:var(--ink); max-width:44rem;
+}
+.tol-gate h2{ font-family:"Fraunces", Georgia, serif; font-size:1.45rem; font-weight:600; margin:0 0 .5rem; max-width:none; }
+.tol-gate p{ margin:.4rem 0; line-height:1.6; max-width:60ch; }
+.tol-gate .tol-actions{ display:flex; flex-wrap:wrap; gap:.75rem; align-items:center; margin:1rem 0 1.25rem; }
+.tol-btn{
+  display:inline-block; font:600 1rem/1.2 "Lora", Georgia, serif;
+  background:var(--ink); color:var(--paper) !important; text-decoration:none;
+  border:1px solid var(--ink); border-radius:var(--radius); padding:.7rem 1.2rem; cursor:pointer;
+}
+.tol-btn:hover{ background:var(--brass); border-color:var(--brass); }
+.tol-btn.is-quiet{ background:none; color:var(--ink) !important; }
+.tol-btn.is-quiet:hover{ background:var(--paper); }
+.tol-signin label{ display:block; font-size:.95rem; margin-bottom:.35rem; }
+.tol-signin .tol-field{ display:flex; gap:.5rem; flex-wrap:wrap; }
+.tol-signin input{
+  flex:1 1 16rem; font:1rem "Lora", Georgia, serif; color:var(--ink);
+  background:var(--paper); border:1px solid var(--ink-soft); border-radius:var(--radius); padding:.6rem .75rem;
+}
+.tol-msg{ min-height:1.4em; font-size:.92rem; margin-top:.5rem !important; }
+.tol-msg.is-error{ color:var(--debit); }
+.tol-msg.is-ok{ color:var(--credit); }
+
+/* ---------- Pager + footer ---------- */
+.tol-pager{
+  display:grid; grid-template-columns:1fr 1fr; gap:1rem;
+  margin:4rem auto 0; padding:1.25rem clamp(1rem,4vw,2.5rem);
+  border-top:1px solid var(--line); max-width:64rem;
+  font-family:"Lora", Georgia, serif; box-sizing:border-box;
+}
+.tol-pager a{ text-decoration:none; color:var(--ink); display:block; padding:.5rem 0; }
+.tol-pager a:hover .tol-pager-title{ text-decoration:underline; text-decoration-color:var(--brass); }
+.tol-pager .is-next{ text-align:right; grid-column:2; }
+.tol-pager-dir{ display:block; font-size:.85rem; color:var(--ink-soft); }
+.tol-pager-title{ font-family:"Fraunces", Georgia, serif; font-size:1.1rem; }
+
+.tol-foot{
+  margin-top:2rem; padding:1.5rem clamp(1rem,4vw,2.5rem) 2.5rem;
+  border-top:3px double var(--ink); background:var(--paper);
+  font-family:"Lora", Georgia, serif; font-size:.92rem; color:var(--ink-soft);
+  display:flex; flex-wrap:wrap; gap:.5rem 1.5rem; justify-content:space-between; box-sizing:border-box;
+}
+.tol-foot a{ color:var(--ink-soft); }
+.tol-foot a:hover{ color:var(--ink); }
+.tol-foot-links{ display:flex; flex-wrap:wrap; gap:.4rem 1.1rem; }
+
+/* ---------- Focus ---------- */
+.tol-bar :focus-visible, .tol-panel :focus-visible, .tol-gate :focus-visible,
+.tol-pager :focus-visible, .tol-foot :focus-visible, .tol-index :focus-visible{
+  outline:2px solid var(--focus); outline-offset:2px;
+}
+
+/* ---------- Print: worksheets print clean ---------- */
+@media print{
+  .tol-bar, .tol-panel, .tol-scrim, .tol-pager, .tol-foot, .tol-gate, .tol-skip{ display:none !important; }
+}
+
+/* ---------- Guard chrome against page-level link/heading/list styles ---------- */
+.tol-index a.tol-row, .tol-index a.tol-row *{ text-decoration:none; }
+.tol-index a.tol-row:hover .tol-title{ text-decoration:underline; text-decoration-color:var(--brass); text-underline-offset:3px; }
+.tol-index li{ max-width:none; margin:0; padding:0; }
+div.tol-gate a.tol-btn, div.tol-gate button.tol-btn, main a.tol-btn{ text-decoration:none; }
+div.tol-gate h2{ margin:0 0 .5rem; }
+div.tol-gate p{ max-width:60ch; }
+.tol-panel-head{ position:sticky; top:-1.25rem; background:var(--paper); padding:1.25rem 0 .75rem; margin-top:-1.25rem; z-index:1; border-bottom:1px solid var(--line); }
+.tol-panel .tol-index-section{ scroll-margin-top:4.5rem; }

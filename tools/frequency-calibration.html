@@ -1,0 +1,1136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WP-04 / Frequency Calibration &amp; Coherence Audit</title>
+<meta name="description" content="Working Paper WP-04: A unified systems audit mapping operating frequencies across finance, autonomics, decision-making, communication, and philosophy—then identifying coherence deltas and recommending resolution tools.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,500&family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper: #F5EFDE;
+    --paper-deep: #ECE2C4;
+    --ink: #211D17;
+    --ink-soft: #524B3E;
+    --line: #D9CBA3;
+    --credit: #3E6B4C;
+    --credit-soft: #E4EDE3;
+    --brass: #A8792F;
+    --focus: #2B5B8C;
+    --warning: #8B6F47;
+    --radius: 3px;
+  }
+
+  *{ box-sizing: border-box; }
+
+  @page{
+    size: letter portrait;
+    margin: 0.55in;
+  }
+
+  html, body{
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: "Lora", Georgia, serif;
+    font-size: 16px;
+    line-height: 1.65;
+  }
+
+  h1, h2, h3, h4{
+    font-family: "Fraunces", "Lora", serif;
+    font-weight: 600;
+    line-height: 1.2;
+    margin: 0 0 0.5em 0;
+  }
+
+  .print-bar{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    max-width: 8.5in;
+    margin: 20px auto;
+    padding: 14px 20px;
+    background: var(--paper-deep);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 0.8rem;
+    color: var(--ink-soft);
+  }
+
+  .print-bar button{
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 0.75rem;
+    padding: 8px 16px;
+    border: none;
+    border-radius: var(--radius);
+    background: var(--ink);
+    color: var(--paper);
+    cursor: pointer;
+  }
+
+  .print-bar button:hover{
+    background: var(--focus);
+  }
+
+  @media print{
+    .print-bar{ display: none; }
+    html, body{ background: #fff; }
+  }
+
+  .sheet{
+    max-width: 8.5in;
+    margin: 0 auto 60px auto;
+    padding: 0.5in 0.6in;
+    background: var(--paper);
+    border: 1px solid var(--line);
+  }
+
+  @media print{
+    .sheet{ margin: 0; padding: 0; max-width: 100%; border: none; }
+    section{ break-inside: avoid; }
+  }
+
+  .sheet-header{
+    text-align: center;
+    border-bottom: 2px solid var(--brass);
+    padding-bottom: 16px;
+    margin-bottom: 28px;
+  }
+
+  .wp-num{
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 0.7rem;
+    color: var(--brass);
+    letter-spacing: 0.08em;
+    margin-bottom: 4px;
+  }
+
+  .sheet-mark{ font-size: 1.4rem; margin: 0; }
+
+  .sheet-mark small{
+    display: block;
+    font-family: "IBM Plex Mono", monospace;
+    font-weight: 400;
+    font-size: 0.62rem;
+    letter-spacing: 0.1em;
+    color: var(--brass);
+    margin-top: 6px;
+  }
+
+  .sheet-tagline{
+    font-size: 0.9rem;
+    color: var(--ink-soft);
+    margin: 10px 0 0 0;
+  }
+
+  .intro-note{
+    border-left: 4px solid var(--focus);
+    background: #E7EEF4;
+    border-radius: var(--radius);
+    padding: 16px 20px;
+    margin-bottom: 30px;
+  }
+
+  .intro-note p{ margin: 0 0 10px 0; font-size: 0.95rem; }
+  .intro-note p:last-child{ margin-bottom: 0; }
+
+  section{ margin-bottom: 34px; }
+
+  section > h2{
+    font-size: 1.15rem;
+    border-bottom: 1px solid var(--brass);
+    padding-bottom: 8px;
+    margin-bottom: 18px;
+  }
+
+  .domain-grid{
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 22px;
+    margin-bottom: 28px;
+  }
+
+  .frequency-domain{
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 18px;
+    background: rgba(168, 121, 47, 0.04);
+  }
+
+  .frequency-domain h3{
+    font-size: 1rem;
+    margin: 0 0 12px 0;
+    color: var(--brass);
+    font-weight: 600;
+  }
+
+  .frequency-domain .definition{
+    font-size: 0.85rem;
+    color: var(--ink-soft);
+    margin-bottom: 14px;
+    font-style: italic;
+  }
+
+  .frequency-domain .field-group{
+    margin-bottom: 16px;
+  }
+
+  .frequency-domain label{
+    display: block;
+    font-size: 0.9rem;
+    font-weight: 500;
+    margin-bottom: 4px;
+    color: var(--ink);
+  }
+
+  .frequency-domain input[type="text"],
+  .frequency-domain input[type="number"],
+  .frequency-domain select{
+    width: 100%;
+    padding: 8px 10px;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    font-family: "Lora", serif;
+    font-size: 0.95rem;
+    background: var(--paper);
+    color: var(--ink);
+  }
+
+  .frequency-domain input[type="text"]:focus,
+  .frequency-domain input[type="number"]:focus,
+  .frequency-domain select:focus{
+    outline: none;
+    border-color: var(--focus);
+    box-shadow: 0 0 0 3px rgba(43, 91, 140, 0.1);
+  }
+
+  .hint-text{
+    font-size: 0.8rem;
+    color: var(--ink-soft);
+    margin-top: 4px;
+  }
+
+  .delta-readout{
+    margin-top: 30px;
+    padding: 24px;
+    background: var(--paper-deep);
+    border: 2px solid var(--brass);
+    border-radius: var(--radius);
+  }
+
+  .delta-readout h3{
+    font-size: 1rem;
+    margin: 0 0 16px 0;
+  }
+
+  .delta-item{
+    margin-bottom: 18px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .delta-item:last-child{
+    margin-bottom: 0;
+    padding-bottom: 0;
+    border-bottom: none;
+  }
+
+  .delta-domain-name{
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 0.8rem;
+    color: var(--brass);
+    font-weight: 600;
+    margin-bottom: 6px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .delta-value{
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    font-size: 0.95rem;
+    margin-bottom: 4px;
+  }
+
+  .delta-value .person-a{
+    color: var(--ink);
+  }
+
+  .delta-value .delta-num{
+    font-family: "IBM Plex Mono", monospace;
+    font-weight: 600;
+    font-size: 1.2rem;
+  }
+
+  .delta-num.high{
+    color: var(--warning);
+  }
+
+  .delta-num.med{
+    color: var(--brass);
+  }
+
+  .delta-num.low{
+    color: var(--credit);
+  }
+
+  .delta-help{
+    font-size: 0.82rem;
+    color: var(--ink-soft);
+    margin-top: 6px;
+  }
+
+  .coherence-recommendation{
+    background: #E4EDE3;
+    border-left: 4px solid var(--credit);
+    padding: 12px 16px;
+    border-radius: var(--radius);
+    font-size: 0.9rem;
+    line-height: 1.55;
+  }
+
+  .coherence-recommendation strong{
+    color: var(--credit);
+  }
+
+  .coherence-recommendation .tool-ref{
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--credit);
+  }
+
+  .summary-grid{
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+    margin-top: 20px;
+  }
+
+  .summary-card{
+    border: 1px solid var(--line);
+    padding: 14px;
+    border-radius: var(--radius);
+    background: var(--paper);
+  }
+
+  .summary-card .label{
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 0.7rem;
+    color: var(--brass);
+    letter-spacing: 0.08em;
+    margin-bottom: 4px;
+  }
+
+  .summary-card .value{
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: var(--ink);
+  }
+
+  .summary-card .value.high-delta{
+    color: var(--warning);
+  }
+
+  .summary-card .value.med-delta{
+    color: var(--brass);
+  }
+
+  .summary-card .value.low-delta{
+    color: var(--credit);
+  }
+
+  .action-block{
+    background: var(--paper-deep);
+    border: 1px solid var(--brass);
+    padding: 20px;
+    border-radius: var(--radius);
+    margin-top: 24px;
+  }
+
+  .action-block h4{
+    font-size: 1rem;
+    color: var(--brass);
+    margin-bottom: 12px;
+  }
+
+  .action-block ul{
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .action-block li{
+    padding-left: 20px;
+    margin-bottom: 10px;
+    position: relative;
+    font-size: 0.95rem;
+  }
+
+  .action-block li:before{
+    content: "→";
+    position: absolute;
+    left: 0;
+    color: var(--brass);
+    font-weight: 600;
+  }
+
+  .disclaimer{
+    font-size: 0.8rem;
+    color: var(--ink-soft);
+    margin-top: 24px;
+    border-top: 1px solid var(--line);
+    padding-top: 16px;
+  }
+
+  @media (max-width: 700px){
+    .summary-grid{
+      grid-template-columns: 1fr;
+    }
+    .sheet{
+      padding: 0.3in 0.4in;
+    }
+  }
+
+  @media print{
+    .print-only{ display: block; }
+    .screen-only{ display: none; }
+  }
+
+  .screen-only{ }
+
+  /* ===== PAYWALL SYSTEM CSS ===== */
+  .locked-section { display: none; }
+  body.unlocked .locked-section { display: block; }
+  
+  .locked-section {
+    position: relative;
+    border: 2px dashed var(--brass);
+    padding: 2rem;
+    margin: 2rem 0;
+    background: rgba(168, 121, 47, 0.04);
+    border-radius: var(--radius);
+  }
+  
+  .locked-section::before {
+    content: "🔒 Membership Content";
+    display: block;
+    color: var(--brass);
+    font-weight: bold;
+    font-size: 0.85rem;
+    margin-bottom: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  
+  .paywall-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+  }
+  
+  .paywall-content {
+    background: white;
+    padding: 3rem;
+    border-radius: 8px;
+    max-width: 550px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+  }
+  
+  .paywall-content h2 { margin-top: 0; }
+  
+  .paywall-tabs {
+    display: flex;
+    gap: 1rem;
+    margin: 2rem 0;
+    border-bottom: 2px solid var(--line);
+  }
+  
+  .paywall-tabs button {
+    flex: 1;
+    padding: 1rem;
+    background: none;
+    border: none;
+    border-bottom: 3px solid transparent;
+    cursor: pointer;
+    font-weight: 600;
+    color: var(--ink-soft);
+    font-size: 0.95rem;
+    transition: all 0.2s;
+  }
+  
+  .paywall-tabs button.active {
+    color: var(--brass);
+    border-bottom-color: var(--brass);
+  }
+  
+  .paywall-tab-content { display: none; }
+  .paywall-tab-content.active { display: block; }
+  
+  .paywall-content input {
+    display: block;
+    width: 100%;
+    margin: 1rem 0;
+    padding: 0.75rem;
+    font-size: 1rem;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    font-family: "Lora", Georgia, serif;
+  }
+  
+  .paywall-content button {
+    width: 100%;
+    padding: 0.9rem;
+    background: var(--brass);
+    color: white;
+    border: none;
+    border-radius: var(--radius);
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 1rem;
+    transition: all 0.2s;
+  }
+  
+  .paywall-content button:hover { background: var(--focus); }
+  
+  .paywall-content a.gumroad-link {
+    display: block;
+    width: 100%;
+    padding: 0.9rem;
+    background: var(--focus);
+    color: white;
+    text-align: center;
+    text-decoration: none;
+    border-radius: var(--radius);
+    font-weight: 600;
+    margin: 1rem 0;
+    transition: all 0.2s;
+  }
+  
+  .paywall-content a.gumroad-link:hover { background: var(--brass); }
+  
+  .error-message, .success-message {
+    padding: 1rem;
+    border-radius: var(--radius);
+    margin: 1rem 0;
+    display: none;
+    font-weight: 500;
+  }
+  
+  .error-message {
+    color: #d97a4a;
+    background: rgba(217, 122, 74, 0.1);
+    border: 1px solid rgba(217, 122, 74, 0.3);
+  }
+  
+  .error-message.show { display: block; }
+  
+  .success-message {
+    color: var(--credit);
+    background: rgba(62, 107, 76, 0.1);
+    border: 1px solid rgba(62, 107, 76, 0.3);
+  }
+  
+  .success-message.show { display: block; }
+  
+  .paywall-features {
+    display: grid;
+    gap: 0.75rem;
+    margin: 1.5rem 0;
+  }
+  
+  .feature-item {
+    padding: 0.75rem;
+    background: rgba(168, 121, 47, 0.08);
+    border-left: 3px solid var(--brass);
+    border-radius: var(--radius);
+    font-size: 0.9rem;
+  }
+  
+  .feature-item strong {
+    display: block;
+    color: var(--brass);
+    margin-bottom: 0.25rem;
+  }
+  
+  @media (max-width: 600px) {
+    .paywall-content { width: 90%; padding: 2rem 1.5rem; }
+    .paywall-tabs { flex-direction: column; }
+    .paywall-tabs button { padding: 0.75rem; border-bottom: none; border-left: 3px solid transparent; }
+    .paywall-tabs button.active { border-left-color: var(--brass); border-bottom: none; }
+  }
+</style>
+<link rel="stylesheet" href="/assets/css/site.css">
+<script src="/assets/js/site.js" defer></script>
+</head>
+<body>
+
+<div class="print-bar">
+  <span>WP-04 / Frequency Calibration &amp; Coherence Audit</span>
+  <button onclick="window.print()">Print this worksheet</button>
+</div>
+
+<div class="sheet">
+
+  <div class="sheet-header">
+    <div class="wp-num">WORKING PAPER</div>
+    <h1 class="sheet-mark">Frequency Calibration &amp; Coherence Audit<small>TOL-WP04-SPEC-V1.0</small></h1>
+    <p class="sheet-tagline">Map the operating frequencies where the partnership runs. Identify where they're out of sync. Suggest coherence mechanisms to align them.</p>
+  </div>
+
+  <div class="intro-note">
+    <p><strong>What this measures:</strong> A partnership is a system made of overlapping oscillators—think of it like two radios running at slightly different frequencies. When they're in sync, there's clarity. When they drift out of phase, they create interference and a "squeal" (the beat frequency). Finance, autonomics, decisions, communication, and philosophy all oscillate at their own rates. Every friction point is usually a frequency mismatch, not a values conflict.</p>
+    <p><strong>The good news:</strong> Mismatched frequencies aren't a failure—they're information. If you both know the frequencies, you can build coherence mechanisms (shared rhythms, locked cycles, synchronized check-ins) to synchronize the oscillators.</p>
+    <p><strong>What this is not:</strong> This is not a diagnostic tool, a compatibility test, or a predictor of relationship viability. It's a systems audit: a description of how the machine is currently running, so you can both make deliberate choices about which frequencies need to align.</p>
+  </div>
+
+  <div class="locked-section">
+  <section id="person-a">
+    <h2>Person A: Operating Frequencies</h2>
+    <p style="color: var(--ink-soft); font-size: 0.95rem;">For each domain, enter how often this person naturally operates, checks in, or revisits decisions in that domain. Use days, hours, or cycles (e.g., "every 2 days," "weekly," "per conversation").</p>
+
+    <div class="domain-grid">
+
+      <div class="frequency-domain">
+        <h3>Financial Frequency</h3>
+        <div class="definition">How often bills, payments, or money decisions get checked, discussed, or revised.</div>
+        <div class="field-group">
+          <label for="a-fin">Your natural financial check-in cycle</label>
+          <input type="text" id="a-fin" placeholder="e.g., Weekly, Every 2 weeks, Monthly" value="">
+          <div class="hint-text">When do you prefer to look at spending, bills, or budget?</div>
+        </div>
+      </div>
+
+      <div class="frequency-domain">
+        <h3>Autonomic Frequency</h3>
+        <div class="definition">How often you naturally need nervous-system resets, grounding, or check-ins when stressed.</div>
+        <div class="field-group">
+          <label for="a-auto">Your nervous system reset interval</label>
+          <input type="text" id="a-auto" placeholder="e.g., Every 90 seconds, Every few minutes, Every hour" value="">
+          <div class="hint-text">When do you feel you need to decompress, regulate, or step away?</div>
+        </div>
+      </div>
+
+      <div class="frequency-domain">
+        <h3>Decisional Frequency</h3>
+        <div class="definition">How often decisions get revisited, revised, or reconsidered before they're treated as final.</div>
+        <div class="field-group">
+          <label for="a-dec">How often do you revisit decisions?</label>
+          <input type="text" id="a-dec" placeholder="e.g., Immediately, After a night's sleep, Weekly review" value="">
+          <div class="hint-text">Do you lock decisions quickly, or do you naturally iterate?</div>
+        </div>
+      </div>
+
+      <div class="frequency-domain">
+        <h3>Communicational Frequency</h3>
+        <div class="definition">How often you prefer to have check-in conversations, updates, or relational maintenance (from WP-13, Phase-Locked Loop Protocol).</div>
+        <div class="field-group">
+          <label for="a-comm">Your preferred check-in rhythm</label>
+          <input type="text" id="a-comm" placeholder="e.g., Daily 90-second pulse, Weekly sit-down, As-needed" value="">
+          <div class="hint-text">How often do you want to sync up with your partner?</div>
+        </div>
+      </div>
+
+      <div class="frequency-domain">
+        <h3>Philosophical Frequency</h3>
+        <div class="definition">How often you revisit alignment on values, mission, or whether the partnership still matches what you both want.</div>
+        <div class="field-group">
+          <label for="a-phil">How often do you want alignment checks?</label>
+          <input type="text" id="a-phil" placeholder="e.g., Quarterly, Yearly, Never (implicit)" value="">
+          <div class="hint-text">When do you want to step back and ask: are we still on the same page about what this is for?</div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <section id="person-b">
+    <h2>Person B: Operating Frequencies</h2>
+    <p style="color: var(--ink-soft); font-size: 0.95rem;">Same five domains, from the other person's perspective. If you're doing this alone, skip this section for now and come back when both can fill it in together.</p>
+
+    <div class="domain-grid">
+
+      <div class="frequency-domain">
+        <h3>Financial Frequency</h3>
+        <div class="definition">How often bills, payments, or money decisions get checked, discussed, or revised.</div>
+        <div class="field-group">
+          <label for="b-fin">Your natural financial check-in cycle</label>
+          <input type="text" id="b-fin" placeholder="e.g., Weekly, Every 2 weeks, Monthly" value="">
+          <div class="hint-text">When do you prefer to look at spending, bills, or budget?</div>
+        </div>
+      </div>
+
+      <div class="frequency-domain">
+        <h3>Autonomic Frequency</h3>
+        <div class="definition">How often you naturally need nervous-system resets, grounding, or check-ins when stressed.</div>
+        <div class="field-group">
+          <label for="b-auto">Your nervous system reset interval</label>
+          <input type="text" id="b-auto" placeholder="e.g., Every 90 seconds, Every few minutes, Every hour" value="">
+          <div class="hint-text">When do you feel you need to decompress, regulate, or step away?</div>
+        </div>
+      </div>
+
+      <div class="frequency-domain">
+        <h3>Decisional Frequency</h3>
+        <div class="definition">How often decisions get revisited, revised, or reconsidered before they're treated as final.</div>
+        <div class="field-group">
+          <label for="b-dec">How often do you revisit decisions?</label>
+          <input type="text" id="b-dec" placeholder="e.g., Immediately, After a night's sleep, Weekly review" value="">
+          <div class="hint-text">Do you lock decisions quickly, or do you naturally iterate?</div>
+        </div>
+      </div>
+
+      <div class="frequency-domain">
+        <h3>Communicational Frequency</h3>
+        <div class="definition">How often you prefer to have check-in conversations, updates, or relational maintenance (from WP-13, Phase-Locked Loop Protocol).</div>
+        <div class="field-group">
+          <label for="b-comm">Your preferred check-in rhythm</label>
+          <input type="text" id="b-comm" placeholder="e.g., Daily 90-second pulse, Weekly sit-down, As-needed" value="">
+          <div class="hint-text">How often do you want to sync up with your partner?</div>
+        </div>
+      </div>
+
+      <div class="frequency-domain">
+        <h3>Philosophical Frequency</h3>
+        <div class="definition">How often you revisit alignment on values, mission, or whether the partnership still matches what you both want.</div>
+        <div class="field-group">
+          <label for="b-phil">How often do you want alignment checks?</label>
+          <input type="text" id="b-phil" placeholder="e.g., Quarterly, Yearly, Never (implicit)" value="">
+          <div class="hint-text">When do you want to step back and ask: are we still on the same page about what this is for?</div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <section id="coherence-deltas">
+    <h2>Frequency Deltas &amp; Coherence Status</h2>
+    <p style="color: var(--ink-soft); font-size: 0.95rem;">The following six calculations show where your frequencies are misaligned. A large delta doesn't mean someone is wrong—it means you're oscillating at different rates, and the system is producing friction.</p>
+
+    <div class="delta-readout">
+      <h3>Delta Summary</h3>
+
+      <div class="delta-item">
+        <div class="delta-domain-name">Financial Frequency</div>
+        <div class="delta-value">
+          <span><span class="person-a" id="delta-fin-display">A: —</span> vs <span class="person-b" id="delta-fin-b-display">B: —</span></span>
+          <span class="delta-num" id="delta-fin-score">—</span>
+        </div>
+        <div class="delta-help" id="delta-fin-help">Enter values above to see coherence status.</div>
+        <div class="coherence-recommendation" id="delta-fin-rec" style="margin-top: 10px; display: none;">
+          <strong>Why this matters:</strong> Your bill cycles and income cycles are out of sync, creating cash-flow interference. <strong>Action:</strong> Run <span class="tool-ref">CALC-01</span> (Solvency Read) weekly. It measures financial stress load and tells you whether the current arrangement is sustainable. Align your check-in cycle to match whichever frequency creates the least friction.
+        </div>
+      </div>
+
+      <div class="delta-item">
+        <div class="delta-domain-name">Autonomic Frequency</div>
+        <div class="delta-value">
+          <span><span class="person-a" id="delta-auto-display">A: —</span> vs <span class="person-b" id="delta-auto-b-display">B: —</span></span>
+          <span class="delta-num" id="delta-auto-score">—</span>
+        </div>
+        <div class="delta-help" id="delta-auto-help">Enter values above to see coherence status.</div>
+        <div class="coherence-recommendation" id="delta-auto-rec" style="margin-top: 10px; display: none;">
+          <strong>Why this matters (urgent):</strong> Your nervous systems are creating a beat frequency. One person needs regulation every 90 seconds; the other goes hours. While one resets, the other escalates. <strong>Start immediately:</strong> (1) Both complete <span class="tool-ref">WP-02</span> independently. (2) Implement <span class="tool-ref">WP-13</span> (Phase-Locked Loop)—shared 90-second pulses sync you both. (3) Use <span class="tool-ref">WP-11</span> (Somatosensory Sanctuary) audio during high-friction moments for instant coherence.
+        </div>
+      </div>
+
+      <div class="delta-item">
+        <div class="delta-domain-name">Decisional Frequency</div>
+        <div class="delta-value">
+          <span><span class="person-a" id="delta-dec-display">A: —</span> vs <span class="person-b" id="delta-dec-b-display">B: —</span></span>
+          <span class="delta-num" id="delta-dec-score">—</span>
+        </div>
+        <div class="delta-help" id="delta-dec-help">Enter values above to see coherence status.</div>
+        <div class="coherence-recommendation" id="delta-dec-rec" style="margin-top: 10px; display: none;">
+          <strong>Why this matters:</strong> One person locks decisions immediately; the other naturally iterates. This mismatch creates conflict because "decided" and "revisiting" are oscillating asynchronously. <strong>Action:</strong> Complete <span class="tool-ref">WP-03</span> (Domestic RACI Treaty) to explicitly define which decisions lock now vs. which get revisited weekly. Use <span class="tool-ref">WP-13</span>'s weekly cycle as your mutual revision window.
+        </div>
+      </div>
+
+      <div class="delta-item">
+        <div class="delta-domain-name">Communicational Frequency</div>
+        <div class="delta-value">
+          <span><span class="person-a" id="delta-comm-display">A: —</span> vs <span class="person-b" id="delta-comm-b-display">B: —</span></span>
+          <span class="delta-num" id="delta-comm-score">—</span>
+        </div>
+        <div class="delta-help" id="delta-comm-help">Enter values above to see coherence status.</div>
+        <div class="coherence-recommendation" id="delta-comm-rec" style="margin-top: 10px; display: none;">
+          <strong>Why this matters:</strong> You're checking in at incompatible intervals. One person feels abandoned if there's no sync for hours; the other feels suffocated by daily check-ins. <strong>Action (do this this week):</strong> Complete <span class="tool-ref">WP-13</span> (Phase-Locked Loop Protocol) together. It synchronizes your communication frequency: 90-second daily pulses that both of you can lock onto, plus a structured weekly alignment window. This is the coherence mechanism.
+        </div>
+      </div>
+
+      <div class="delta-item">
+        <div class="delta-domain-name">Philosophical Frequency</div>
+        <div class="delta-value">
+          <span><span class="person-a" id="delta-phil-display">A: —</span> vs <span class="person-b" id="delta-phil-b-display">B: —</span></span>
+          <span class="delta-num" id="delta-phil-score">—</span>
+        </div>
+        <div class="delta-help" id="delta-phil-help">Enter values above to see coherence status.</div>
+        <div class="coherence-recommendation" id="delta-phil-rec" style="margin-top: 10px; display: none;">
+          <strong>Why this matters:</strong> One person wants to audit mission and values regularly; the other treats alignment as implicit. Over time, slow philosophical drift becomes hard to recover from. <strong>Action:</strong> Use <span class="tool-ref">WP-13</span>'s quarterly alignment blocks as your synchronization points. Pick one person's natural revisit cycle and make it the shared one. Even "never" + "yearly" can coexist if you lock the "yearly" into the calendar.
+        </div>
+      </div>
+
+    </div>
+
+    <div style="margin-top: 30px; padding: 20px; background: rgba(168, 121, 47, 0.08); border: 1px solid var(--line); border-radius: var(--radius);">
+      <h3 style="font-size: 1rem; margin: 0 0 16px 0;">Visual Frequency Map</h3>
+      <p style="font-size: 0.9rem; color: var(--ink-soft); margin: 0 0 16px 0;">Once you've entered your frequencies above, this chart shows your delta patterns. Wider oscillations = larger interference.</p>
+      <canvas id="delta-chart" width="600" height="200" style="width: 100%; height: auto; background: var(--paper); border-radius: var(--radius); border: 0.5px solid var(--line);"></canvas>
+      <p style="font-size: 0.8rem; color: var(--ink-soft); margin: 12px 0 0 0;">Left to right: Financial, Autonomic, Decisional, Communicational, Philosophical. Taller waves = larger deltas.</p>
+    </div>
+
+  </section>
+
+  <section id="action-plan">
+    <h2>Coherence Action Plan</h2>
+    <p style="color: var(--ink-soft); font-size: 0.95rem;">The oscillators creating the largest beat frequencies (visual chart above) are your primary friction points. Work through them in this order: autonomic first (most urgent), then communicational, then decisional, financial, and finally philosophical.</p>
+
+    <div class="action-block">
+      <h4>Immediate (This Week)</h4>
+      <ul>
+        <li>Sit down together with both frequency maps filled in. Look at the visual chart above—where are the tallest oscillations?</li>
+        <li>Starting with any autonomic mismatches (highest urgency), read the coherence recommendation for that domain.</li>
+        <li>If autonomic delta is above 1.5x, implement <span style="font-family: 'IBM Plex Mono', monospace; font-weight: 600;">WP-13</span> (Phase-Locked Loop) 90-second syncs immediately. This is your beat-frequency dampener.</li>
+      </ul>
+    </div>
+
+    <div class="action-block" style="margin-top: 16px;">
+      <h4>This Month</h4>
+      <ul>
+        <li>For each medium-to-large delta (yellow/red in the chart), follow the specific coherence recommendation above. Each one names the tool that synchronizes that oscillator.</li>
+        <li><strong>Communicational first:</strong> Lock <span style="font-family: 'IBM Plex Mono', monospace; font-weight: 600;">WP-13</span> (Phase-Locked Loop Protocol) into your calendar. This synchronizes check-in frequency.</li>
+        <li><strong>Then decisional:</strong> Complete <span style="font-family: 'IBM Plex Mono', monospace; font-weight: 600;">WP-03</span> (Domestic RACI Treaty) to define which decisions lock immediately vs. revisit cycles.</li>
+        <li><strong>Then financial:</strong> Run <span style="font-family: 'IBM Plex Mono', monospace; font-weight: 600;">CALC-01</span> (Solvency Read) every Friday to track whether your cash-flow rhythm is sustainable.</li>
+      </ul>
+    </div>
+
+    <div class="action-block" style="margin-top: 16px;">
+      <h4>Every Quarter</h4>
+      <ul>
+        <li>Re-run this audit. Circumstances change (new job, illness, seasons, life stage), and your frequencies may shift. Track whether your deltas are converging or diverging.</li>
+        <li>If philosophical frequency was "never," use <span style="font-family: 'IBM Plex Mono', monospace; font-weight: 600;">WP-13</span>'s quarterly alignment blocks to make it "once per quarter" explicitly. Implicit alignment drifts. Scheduled alignment holds.</li>
+      </ul>
+    </div>
+
+  </section>
+  </div>
+
+  <p class="disclaimer">
+    <strong>Important:</strong> This is a heuristic self-report tool, not a validated diagnostic instrument. It describes observed operating frequencies, not underlying pathology or incompatibility. Large frequency deltas are normal in human partnerships; they're not a sign of failure. What matters is whether you both know about them and are willing to build coherence mechanisms. This tool is only useful if both partners fill it in independently, then sit down and compare notes with genuine curiosity.
+  </p>
+
+</div>
+
+<script>
+(function(){
+  // All input fields
+  var inputs = {
+    'a-fin': document.getElementById('a-fin'),
+    'b-fin': document.getElementById('b-fin'),
+    'a-auto': document.getElementById('a-auto'),
+    'b-auto': document.getElementById('b-auto'),
+    'a-dec': document.getElementById('a-dec'),
+    'b-dec': document.getElementById('b-dec'),
+    'a-comm': document.getElementById('a-comm'),
+    'b-comm': document.getElementById('b-comm'),
+    'a-phil': document.getElementById('a-phil'),
+    'b-phil': document.getElementById('b-phil')
+  };
+
+  // Delta display and scoring elements
+  var deltas = {
+    'fin': {
+      aDisplay: document.getElementById('delta-fin-display'),
+      bDisplay: document.getElementById('delta-fin-b-display'),
+      score: document.getElementById('delta-fin-score'),
+      help: document.getElementById('delta-fin-help'),
+      rec: document.getElementById('delta-fin-rec')
+    },
+    'auto': {
+      aDisplay: document.getElementById('delta-auto-display'),
+      bDisplay: document.getElementById('delta-auto-b-display'),
+      score: document.getElementById('delta-auto-score'),
+      help: document.getElementById('delta-auto-help'),
+      rec: document.getElementById('delta-auto-rec')
+    },
+    'dec': {
+      aDisplay: document.getElementById('delta-dec-display'),
+      bDisplay: document.getElementById('delta-dec-b-display'),
+      score: document.getElementById('delta-dec-score'),
+      help: document.getElementById('delta-dec-help'),
+      rec: document.getElementById('delta-dec-rec')
+    },
+    'comm': {
+      aDisplay: document.getElementById('delta-comm-display'),
+      bDisplay: document.getElementById('delta-comm-b-display'),
+      score: document.getElementById('delta-comm-score'),
+      help: document.getElementById('delta-comm-help'),
+      rec: document.getElementById('delta-comm-rec')
+    },
+    'phil': {
+      aDisplay: document.getElementById('delta-phil-display'),
+      bDisplay: document.getElementById('delta-phil-b-display'),
+      score: document.getElementById('delta-phil-score'),
+      help: document.getElementById('delta-phil-help'),
+      rec: document.getElementById('delta-phil-rec')
+    }
+  };
+
+  // Map input labels to days for scoring
+  function parseToDays(text) {
+    if (!text || text.trim() === '') return null;
+    text = text.toLowerCase().trim();
+
+    // Match patterns like "90 seconds", "every 2 days", "daily", "weekly", etc.
+    if (text.match(/90\s*seconds?|90s/)) return 0.0625; // 90 sec ≈ 0.0625 days
+    if (text.match(/\beveryday\b|\bdaily\b|every\s*1?\s*day/)) return 1;
+    if (text.match(/\bweekly?\b|every\s*7?\s*days?|once\s*a\s*week/)) return 7;
+    if (text.match(/bi.?weekly|every\s*2\s*weeks?/)) return 14;
+    if (text.match(/monthly|every\s*30?\s*days?|once\s*a\s*month/)) return 30;
+    if (text.match(/quarterly|every\s*3\s*months?/)) return 90;
+    if (text.match(/yearly|annually|once\s*a\s*year/)) return 365;
+    if (text.match(/never|implicit|as.?needed|on.?demand|immediate/)) return 0;
+    if (text.match(/after\s*a\s*night|overnight|next\s*day/)) return 1;
+    if (text.match(/several\s*minutes?|few\s*minutes?|every\s*few\s*minutes?/)) return 0.01; // ~15 min
+    if (text.match(/every\s*hour?|hourly/)) return 0.04; // 1 hour
+    if (text.match(/every\s*\d+\s*hours?/)) {
+      var match = text.match(/every\s*(\d+)\s*hours?/);
+      return parseInt(match[1]) / 24;
+    }
+    if (text.match(/every\s*(\d+)\s*days?/)) {
+      var match = text.match(/every\s*(\d+)\s*days?/);
+      return parseInt(match[1]);
+    }
+
+    // If we can't parse, return null (unknown)
+    return null;
+  }
+
+  function calcDelta(dayA, dayB) {
+    // Returns null if either is unparseable
+    if (dayA === null || dayB === null) return null;
+
+    // If both are "never/implicit/as-needed" (0), delta is 0 (they match)
+    if (dayA === 0 && dayB === 0) return 0;
+
+    // If one is 0 and other isn't, the delta is the non-zero value (maximal mismatch)
+    if (dayA === 0 || dayB === 0) {
+      return Math.max(dayA, dayB);
+    }
+
+    // Otherwise, calculate ratio (higher frequency vs lower frequency)
+    var ratio = Math.max(dayA, dayB) / Math.min(dayA, dayB);
+    return ratio; // Ratio > 1 indicates mismatch
+  }
+
+  function updateDeltas() {
+    // Financial
+    var aFin = parseToDays(inputs['a-fin'].value);
+    var bFin = parseToDays(inputs['b-fin'].value);
+    updateDeltaDisplay('fin', inputs['a-fin'].value, inputs['b-fin'].value, aFin, bFin);
+
+    // Autonomic
+    var aAuto = parseToDays(inputs['a-auto'].value);
+    var bAuto = parseToDays(inputs['b-auto'].value);
+    updateDeltaDisplay('auto', inputs['a-auto'].value, inputs['b-auto'].value, aAuto, bAuto);
+
+    // Decisional
+    var aDec = parseToDays(inputs['a-dec'].value);
+    var bDec = parseToDays(inputs['b-dec'].value);
+    updateDeltaDisplay('dec', inputs['a-dec'].value, inputs['b-dec'].value, aDec, bDec);
+
+    // Communicational
+    var aComm = parseToDays(inputs['a-comm'].value);
+    var bComm = parseToDays(inputs['b-comm'].value);
+    updateDeltaDisplay('comm', inputs['a-comm'].value, inputs['b-comm'].value, aComm, bComm);
+
+    // Philosophical
+    var aPhil = parseToDays(inputs['a-phil'].value);
+    var bPhil = parseToDays(inputs['b-phil'].value);
+    updateDeltaDisplay('phil', inputs['a-phil'].value, inputs['b-phil'].value, aPhil, bPhil);
+  }
+
+  function updateDeltaDisplay(key, aText, bText, aDays, bDays) {
+    var delta = deltas[key];
+
+    // Display what was entered
+    delta.aDisplay.textContent = 'A: ' + (aText || '—');
+    delta.bDisplay.textContent = 'B: ' + (bText || '—');
+
+    // Calculate and display delta
+    var deltaVal = calcDelta(aDays, bDays);
+
+    if (deltaVal === null) {
+      delta.score.textContent = '—';
+      delta.score.className = 'delta-num';
+      delta.help.textContent = 'Complete both fields to see coherence status.';
+      delta.rec.style.display = 'none';
+    } else {
+      // Domain-specific thresholds (they have different urgency profiles)
+      var thresholdGreen = 1.2;
+      var thresholdYellow = 2.0;
+      var thresholdRed = 4.0;
+
+      // Autonomic is more urgent: smaller mismatches create real stress
+      if (key === 'auto') {
+        thresholdGreen = 1.3;
+        thresholdYellow = 1.7;
+        thresholdRed = 2.5;
+      }
+
+      // Communicational has moderate urgency
+      if (key === 'comm') {
+        thresholdGreen = 1.5;
+        thresholdYellow = 2.5;
+        thresholdRed = 4.0;
+      }
+
+      // Philosophical has lowest urgency (long cycles are normal)
+      if (key === 'phil') {
+        thresholdGreen = 2.0;
+        thresholdYellow = 4.0;
+        thresholdRed = 10.0;
+      }
+
+      // Format the delta as a ratio or difference
+      if (deltaVal === 0) {
+        delta.score.textContent = '✓ Perfect sync';
+        delta.score.className = 'delta-num low';
+        delta.help.textContent = 'Your oscillators are aligned. The system is quiet.';
+      } else if (deltaVal <= thresholdGreen) {
+        delta.score.textContent = Math.round(deltaVal * 10) / 10 + 'x';
+        delta.score.className = 'delta-num low';
+        delta.help.textContent = 'Tight coherence. Minor drift, easily managed. Light interference only.';
+      } else if (deltaVal <= thresholdYellow) {
+        delta.score.textContent = Math.round(deltaVal * 10) / 10 + 'x';
+        delta.score.className = 'delta-num med';
+        delta.help.textContent = 'Noticeable interference. You\'re oscillating at different rates. Friction is building. See coherence mechanism below.';
+      } else {
+        delta.score.textContent = Math.round(deltaVal * 10) / 10 + 'x';
+        delta.score.className = 'delta-num high';
+        delta.help.textContent = 'Heavy interference. These frequencies are creating significant conflict. The coherence mechanism below is urgent.';
+      }
+
+      delta.rec.style.display = 'block';
+    }
+  }
+
+  // Delta chart rendering
+  var chartCanvas = document.getElementById('delta-chart');
+  var chartCtx = chartCanvas.getContext('2d');
+
+  function renderDeltaChart() {
+    var deltas_arr = [
+      { key: 'fin', label: 'Fin' },
+      { key: 'auto', label: 'Auto' },
+      { key: 'dec', label: 'Dec' },
+      { key: 'comm', label: 'Comm' },
+      { key: 'phil', label: 'Phil' }
+    ];
+
+    // Get current delta values
+    var aFin = parseToDays(inputs['a-fin'].value);
+    var bFin = parseToDays(inputs['b-fin'].value);
+    var deltaFin = calcDelta(aFin, bFin);
+
+    var aAuto = parseToDays(inputs['a-auto'].value);
+    var bAuto = parseToDays(inputs['b-auto'].value);
+    var deltaAuto = calcDelta(aAuto, bAuto);
+
+    var aDec = parseToDays(inputs['a-dec'].value);
+    var bDec = parseToDays(inputs['b-dec'].value);
+    var deltaDec = calcDelta(aDec, bDec);
+
+    var aComm = parseToDays(inputs['a-comm'].value);
+    var bComm = parseToDays(inputs['b-comm'].value);
+    var deltaComm = calcDelta(aComm, bComm);
+
+    var aPhil = parseToDays(inputs['a-phil'].value);
+    var bPhil = parseToDays(inputs['b-phil'].value);
+    var deltaPhil = calcDelta(aPhil, bPhil);
+
+    var delta_values = [deltaFin, deltaAuto, deltaDec, deltaComm, deltaPhil];
+
+    // Clear canvas
+    chartCtx.fillStyle = 'var(--paper)';
+    chartCtx.fillRect(0, 0, chartCanvas.width, chartCanvas.height);
+
+    // Draw waveforms for each domain
+    var barWidth = chartCanvas.width / (deltas_arr.length * 2);
+    var centerY = chartCanvas.height / 2;
+    var maxHeight = chartCanvas.height * 0.35;
+
+    for (var i = 0; i < deltas_arr.length; i++) {
+      var deltaVal = delta_values[i];
+      if (deltaVal === null || deltaVal === 0) continue;
+
+      var x = (i * 2.5 + 1) * barWidth;
+      var waveHeight = Math.min(deltaVal * 8, maxHeight); // Scale delta to visual height
+      
+      // Determine color based on delta magnitude
+      var color = 'var(--brass)'; // medium
+      if (deltaVal < 1.3 && deltas_arr[i].key !== 'auto') color = 'var(--credit)'; // low
+      if (deltaVal > 3 || (deltas_arr[i].key === 'auto' && deltaVal > 2)) color = 'var(--warning)'; // high
+
+      // Draw oscillation pattern (sine wave showing beat frequency)
+      chartCtx.strokeStyle = color;
+      chartCtx.lineWidth = 2;
+      chartCtx.beginPath();
+      
+      for (var px = 0; px < barWidth * 1.5; px += 2) {
+        var angle = (px / (barWidth * 1.5)) * Math.PI * 2;
+        var yOffset = Math.sin(angle) * waveHeight;
+        var pixelY = centerY - yOffset;
+        
+        if (px === 0) {
+          chartCtx.moveTo(x + px, pixelY);
+        } else {
+          chartCtx.lineTo(x + px, pixelY);
+        }
+      }
+      chartCtx.stroke();
+
+      // Label
+      chartCtx.font = '11px IBM Plex Mono';
+      chartCtx.fillStyle = 'var(--ink)';
+      chartCtx.textAlign = 'center';
+      chartCtx.fillText(deltas_arr[i].label, x + barWidth * 0.75, chartCanvas.height - 8);
+
+      // Delta value above
+      chartCtx.font = '9px IBM Plex Mono';
+      chartCtx.fillStyle = color;
+      chartCtx.fillText((Math.round(deltaVal * 10) / 10) + 'x', x + barWidth * 0.75, 12);
+    }
+  }
+
+  // Attach input listeners
+  Object.keys(inputs).forEach(function(key) {
+    inputs[key].addEventListener('input', function() {
+      updateDeltas();
+      renderDeltaChart();
+    });
+  });
+
+  // Initial render
+  updateDeltas();
+  renderDeltaChart();
+})();
+</script>
+
+
+
+</body>
+</html>

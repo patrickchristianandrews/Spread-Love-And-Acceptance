@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mood Arbitrage: Free Introduction — The Objective Ledger</title>
+<meta name="description" content="Learn the framework for identifying nervous system states and shifting dysregulation. Free intro; interactive tool available in The Objective Ledger membership.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,500&family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/css/tol-os-unified.css">
+<style>
+  :root {
+    --paper: #F5EFDE;
+    --paper-deep: #ECE2C4;
+    --ink: #211D17;
+    --ink-soft: #524B3E;
+    --line: #D9CBA3;
+    --credit: #3E6B4C;
+    --brass: #A8792F;
+    --focus: #2B5B8C;
+    --warning: #8B6F47;
+    --radius: 3px;
+    --sympathetic: #d97a4a;
+    --dorsal: #4a6a8b;
+    --anxious: #b8792f;
+  }
+
+  * { box-sizing: border-box; }
+
+  html, body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: "Lora", Georgia, serif;
+    font-size: 16px;
+    line-height: 1.7;
+  }
+
+  h1, h2, h3, h4, h5 {
+    font-family: "Fraunces", "Lora", serif;
+    font-weight: 600;
+    line-height: 1.2;
+    margin: 1.5rem 0 0.75rem 0;
+  }
+
+  h1 { font-size: 2rem; }
+  h2 { font-size: 1.4rem; }
+  h3 { font-size: 1.1rem; }
+  h4 { font-size: 1rem; }
+
+  p { margin: 0.75rem 0; }
+
+  a { color: var(--brass); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+
+  .container {
+    max-width: 8in;
+    margin: 0 auto;
+    padding: 0 0.6in;
+  }
+
+  /* Hero */
+  .hero {
+    text-align: center;
+    margin: 2rem 0 2rem 0;
+    padding-bottom: 1.5rem;
+    border-bottom: 2px solid var(--line);
+  }
+
+  .hero .badge {
+    display: inline-block;
+    padding: 0.4rem 0.8rem;
+    background: rgba(168, 121, 47, 0.2);
+    border: 1px solid var(--brass);
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--brass);
+    margin-bottom: 1rem;
+  }
+
+  .hero h1 {
+    margin-bottom: 0.5rem;
+    color: var(--ink);
+  }
+
+  .hero .hero-tagline {
+    font-size: 1.05rem;
+    color: var(--brass);
+    font-weight: 500;
+    max-width: 550px;
+    margin: 0.5rem auto;
+  }
+
+  /* Sections */
+  .section {
+    margin: 2.5rem 0;
+    padding: 2rem 1.5rem;
+    background: white;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+  }
+
+  .section h2 {
+    color: var(--brass);
+    border-bottom: 2px solid var(--line);
+    padding-bottom: 1rem;
+    margin-top: 0;
+  }
+
+  /* Frequency cards */
+  .frequency-card {
+    background: rgba(168, 121, 47, 0.04);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 1.5rem;
+    margin: 1.5rem 0;
+  }
+
+  .frequency-card h3 {
+    margin-top: 0;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .frequency-dot {
+    display: inline-block;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+  }
+
+  .dot-sympathetic { background: var(--sympathetic); }
+  .dot-dorsal { background: var(--dorsal); }
+  .dot-anxious { background: var(--anxious); }
+
+  .frequency-card .markers {
+    font-size: 0.95rem;
+    color: var(--ink-soft);
+    margin: 1rem 0;
+    font-weight: 500;
+  }
+
+  /* Step boxes */
+  .step-box {
+    background: white;
+    border: 1px solid var(--line);
+    border-left: 4px solid var(--brass);
+    padding: 1.25rem;
+    margin: 1.5rem 0;
+    border-radius: var(--radius);
+  }
+
+  .step-box h3 {
+    margin-top: 0;
+    color: var(--brass);
+    font-size: 1.05rem;
+  }
+
+  /* Table styling */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1rem 0;
+  }
+
+  th, td {
+    border: 0.5px solid var(--line);
+    padding: 0.75rem;
+    text-align: left;
+  }
+
+  th {
+    background: rgba(168, 121, 47, 0.1);
+    font-weight: 600;
+    color: var(--brass);
+  }
+
+  /* Scenario box */
+  .scenario-box {
+    background: rgba(43, 91, 140, 0.08);
+    border: 1px solid var(--focus);
+    border-left: 4px solid var(--focus);
+    padding: 1.5rem;
+    margin: 1.5rem 0;
+    border-radius: var(--radius);
+  }
+
+  .scenario-box h4 {
+    margin-top: 0;
+    color: var(--focus);
+  }
+
+  .scenario-box .move-name {
+    display: inline-block;
+    padding: 0.35rem 0.7rem;
+    background: var(--focus);
+    color: white;
+    border-radius: 3px;
+    font-family: "IBM Plex Mono", monospace;
+    font-weight: 600;
+    font-size: 0.8rem;
+    margin: 0.5rem 0;
+  }
+
+  /* CTA Block */
+  .paywall-cta {
+    background: linear-gradient(135deg, rgba(43, 91, 140, 0.1) 0%, rgba(168, 121, 47, 0.1) 100%);
+    border: 2px solid var(--brass);
+    border-radius: var(--radius);
+    padding: 2rem;
+    margin: 2rem 0;
+    text-align: center;
+  }
+
+  .paywall-cta h3 {
+    margin-top: 0;
+    color: var(--focus);
+  }
+
+  .paywall-cta .btn {
+    display: inline-block;
+    padding: 0.9rem 2rem;
+    background: var(--brass);
+    color: white;
+    text-decoration: none;
+    border-radius: var(--radius);
+    font-family: "IBM Plex Mono", monospace;
+    font-weight: 600;
+    font-size: 1rem;
+    transition: all 0.2s;
+    margin-top: 1rem;
+  }
+
+  .paywall-cta .btn:hover {
+    background: var(--focus);
+    transform: translateY(-2px);
+  }
+
+  .paywall-features {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 1rem;
+    margin: 1.5rem 0;
+    text-align: left;
+  }
+
+  .paywall-feature {
+    font-size: 0.9rem;
+    padding: 0.75rem;
+    background: white;
+    border-radius: 3px;
+  }
+
+  .paywall-feature strong {
+    display: block;
+    color: var(--brass);
+    margin-bottom: 0.25rem;
+  }
+
+  @media (max-width: 900px) {
+    .section {
+      padding: 1.5rem 1rem;
+    }
+  }
+
+  @media (max-width: 600px) {
+    .container {
+      padding: 0 1rem;
+    }
+
+    .section {
+      padding: 1rem;
+    }
+
+    .paywall-features {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
+<link rel="stylesheet" href="/assets/css/site.css">
+<script src="/assets/js/site.js" defer></script>
+</head>
+<body>
+
+<!-- TOL-OS UNIFIED HEADER -->
+
+
+<!-- BREADCRUMB NAVIGATION -->
+
+
+<!-- CONTEXT: Where you are -->
+<div class="context-opening">
+  <div class="context-box">
+    <h3>You're here in TOL-OS</h3>
+    <p>
+      You've learned that partnerships oscillate at five different frequencies. Now you'll see these frequencies <strong>in action during an actual dysregulation event</strong>.
+    </p>
+    <p>
+      <strong>This page is free.</strong> It shows you the core principle and one complete example. The full interactive version with 15+ scenarios and a deployable moves library is available in the membership.
+    </p>
+    <p><em>Next step after this: Measure your actual five frequencies with <strong>WP-04: Frequency Calibration</strong>.</em></p>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="badge">Free Introduction</div>
+    <h1>Mood Arbitrage</h1>
+    <p class="hero-tagline">Learn how to identify nervous system states and shift dysregulation in real-time.</p>
+  </div>
+
+  <!-- USE WITH BLOCK (floating) -->
+  <div class="use-with-block">
+    <h4>Use With</h4>
+    
+    <div class="use-item upstream">
+      <strong>Before this:</strong>
+      <a href="/frequency-framework.html">Frequency Framework</a>
+      <p>Understand the five oscillators</p>
+    </div>
+
+    <div class="use-item parallel">
+      <strong>Right now:</strong>
+      <a href="/tools/mood-arbitrage-free.html">This Page</a>
+      <p>See frequencies in live conflict</p>
+    </div>
+
+    <div class="use-item downstream">
+      <strong>Next:</strong>
+      <a href="/tools/frequency-calibration.html" class="locked">WP-04 Audit 🔒</a>
+      <p>Measure your five domains</p>
+    </div>
+
+    <div class="use-item downstream">
+      <strong>Then:</strong>
+      <a href="/tools/mood-arbitrage-full.html" class="locked">Mood Arbitrage Full 🔒</a>
+      <p>15+ interactive scenarios</p>
+    </div>
+  </div>
+
+  <!-- DOMAIN INDICATORS -->
+  <div class="domain-indicator">
+    <h4>Frequencies Covered</h4>
+    <div class="domains">
+      <span class="domain autonomic">Autonomic</span>
+      <span class="domain communicational">Communicational</span>
+    </div>
+  </div>
+
+  <!-- CORE PRINCIPLE -->
+  <div class="section">
+    <h2>The Core Principle</h2>
+    <p>Shifting a negative interaction into a positive one is not about toxic positivity. It's an act of <strong>deliberate autonomic regulation</strong>—changing the carrier wave so the conversational payload can be delivered safely.</p>
+    <div class="note-box">
+      <strong>The neuroscience:</strong> The human nervous system detects safety and threat long before it decodes semantic meaning. When your partner is dysregulated, logic doesn't work. What works is shifting the frequency itself—the emotional carrier wave—so their nervous system can return to connection.
+    </div>
+  </div>
+
+  <!-- THE THREE FREQUENCIES -->
+  <div class="section">
+    <h2>The Three Mood Frequencies</h2>
+    <p style="color: var(--ink-soft); margin-bottom: 1.5rem;">What does their body tell you? Look at their physical state before you decode their words.</p>
+
+    <div class="frequency-card">
+      <h3>
+        <span class="frequency-dot dot-sympathetic"></span>
+        Sympathetic (Wound Up / Fight Mode)
+      </h3>
+      <p class="markers"><strong>Biological markers:</strong> Tight jaw • Rapid speech • Narrow eyes • Rigid posture • Words getting louder or sharper</p>
+      <p style="color: var(--brass); font-size: 0.95rem;"><strong>What's happening:</strong> Their nervous system is in fight mode. They're detecting threat. Their amygdala has taken over. Logic will make this worse.</p>
+    </div>
+
+    <div class="frequency-card">
+      <h3>
+        <span class="frequency-dot dot-dorsal"></span>
+        Dorsal (Shutdown / Freeze Mode)
+      </h3>
+      <p class="markers"><strong>Biological markers:</strong> Blank affect • Slow or no speech • Looking away or down • Body feels heavy • Withdrawal</p>
+      <p style="color: var(--brass); font-size: 0.95rem;"><strong>What's happening:</strong> Their nervous system has given up. They've withdrawn from connection. Fixing things won't help. They need presence.</p>
+    </div>
+
+    <div class="frequency-card">
+      <h3>
+        <span class="frequency-dot dot-anxious"></span>
+        Anxious (Helicopter Brain / Spiral Mode)
+      </h3>
+      <p class="markers"><strong>Biological markers:</strong> Rapid thoughts (darting eyes) • Can't settle attention • Multiple concerns spilling out • Fidgeting • Higher voice</p>
+      <p style="color: var(--brass); font-size: 0.95rem;"><strong>What's happening:</strong> Their prefrontal cortex is drowning. Too many threads. No clear priority. Their nervous system is oscillating erratically.</p>
+    </div>
+  </div>
+
+  <!-- THE FOUR-STEP SEQUENCE -->
+  <div class="section">
+    <h2>The Four-Step Sequence</h2>
+    <p style="color: var(--ink-soft); margin-bottom: 1.5rem;">Every mood shift follows this structure.</p>
+
+    <div class="step-box">
+      <h3>Step 1: Identify the Current Frequency</h3>
+      <p>Regulate yourself first. Take three deep breaths. Notice their body language. Register which state they're in without judgment.</p>
+    </div>
+
+    <div class="step-box">
+      <h3>Step 2: Select the Right Move</h3>
+      <p>Each frequency requires a different move. You can't use logic to fix fight mode. You can't use activity to fix freeze mode. You need the right carrier wave.</p>
+      <table>
+        <tr>
+          <th>Frequency</th>
+          <th>Your Goal</th>
+          <th>Move (Free Teaser)</th>
+        </tr>
+        <tr>
+          <td><strong>Sympathetic</strong></td>
+          <td>Lower threat</td>
+          <td><em>Absurdity Pivot</em> (see below)</td>
+        </tr>
+        <tr>
+          <td><strong>Dorsal</strong></td>
+          <td>Activate safety signal</td>
+          <td><em>Structural Containment</em> (paid)</td>
+        </tr>
+        <tr>
+          <td><strong>Anxious</strong></td>
+          <td>Clear one thread</td>
+          <td><em>Priority Anchor</em> (paid)</td>
+        </tr>
+      </table>
+    </div>
+
+    <div class="step-box">
+      <h3>Step 3: Deploy the Move</h3>
+      <p>Use specific language + embodiment + your presence. The move isn't about what you say. It's about the frequency you're broadcasting.</p>
+    </div>
+
+    <div class="step-box">
+      <h3>Step 4: Hold the New Frequency</h3>
+      <p>Their nervous system will test you. Stay in the new carrier wave. After 30 seconds of consistent presence, their vagal brake activates and connection becomes possible again.</p>
+    </div>
+  </div>
+
+  <!-- FULL SCENARIO (THE FREE EXAMPLE) -->
+  <div class="section">
+    <h2>The Complete Example: Kitchen Catastrophe</h2>
+    <p style="color: var(--ink-soft); margin-bottom: 1rem;">
+      <strong>The setup:</strong> You come home to find the kitchen in chaos. Dishes are everywhere. Your partner has been stressed all day and has completely avoided it.
+    </p>
+    <p style="color: var(--ink-soft); margin-bottom: 2rem;">
+      Your automatic reaction: frustration, criticism, withdrawal. But let's play a different move.
+    </p>
+
+    <div class="scenario-box">
+      <h4>🔴 They're in sympathetic (fight/defense)</h4>
+      <p><strong>Their body language:</strong> Tight shoulders. Sharp voice. Preemptive defensiveness: "I know, I know—it was a terrible day and I just couldn't—"</p>
+      <p><strong>The trap:</strong> If you go into lecture mode ("We agreed on kitchen standards..."), their nervous system doubles down on fight. The argument locks in.</p>
+      <p><strong>The move: Absurdity Pivot</strong></p>
+      <div class="move-name">ABSURDITY PIVOT</div>
+      <p><strong>What you do:</strong> Interrupt the threat loop with unexpected lightness. Not sarcasm. Not mockery. Real, warm absurdity.</p>
+      <p style="background: white; padding: 1rem; border-left: 3px solid var(--sympathetic); border-radius: 3px; margin: 1rem 0; font-style: italic;">
+        <strong>You:</strong> "Okay, I have a theory. These lonely forks? They're staging a rebellion. Look—they've abandoned their post. Tiny ceramic boats just left adrift on the counter."
+      </p>
+      <p><strong>Why this works:</strong> Your nervous system just signaled "I'm not threat." You shifted from criticism to alliance. Suddenly, your partner's amygdala has to recalibrate. Their fight posture softens.</p>
+      <p><strong>What happens next:</strong> Sometimes they laugh. Sometimes they roll their eyes and smile. Sometimes they say "Yeah, it's a disaster." But now you're no longer two threat-detectors in opposition. You're two people looking at the same problem together.</p>
+      <p><strong>Then you can actually help:</strong> "Want company while you handle this? Or do you need space first?" Now they can tell you the truth without defense.</p>
+    </div>
+
+    <div class="scenario-box">
+      <h4>🔵 If they were in dorsal instead (shutdown/freeze)</h4>
+      <p><strong>Their body language:</strong> Blank face. No response. Withdrawn. "I don't know. Whatever."</p>
+      <p><strong>The move:</strong> Not "Absurdity Pivot"—that would feel like mockery to someone already disconnected. Instead: <strong>Structural Containment</strong> (available in full version).</p>
+      <p style="background: white; padding: 1rem; border-left: 3px solid var(--dorsal); border-radius: 3px; margin: 1rem 0; font-style: italic;">
+        You: "The dishes aren't going anywhere. Neither am I. Let's just sit for a minute. I'm not mad. I'm just here."
+      </p>
+      <p><strong>Why this works:</strong> You're not trying to fix or manage. You're just offering regulated presence. Their nervous system hears: "You're not alone in this." That's all the disconnected nervous system needs to start returning.</p>
+    </div>
+  </div>
+
+  <!-- PAYWALL CTA -->
+  <div class="paywall-cta">
+    <h3>Ready for the Full Toolkit?</h3>
+    <p>
+      This page shows you the principle and one complete scenario. The full version includes 15+ interactive scenarios, a move generator, and deployment checklists.
+    </p>
+
+    <div class="paywall-features">
+      <div class="paywall-feature">
+        <strong>5 Complete Scenarios</strong>
+        <p>Kitchen, 11PM shutdown, work crisis, resentment spiral, public overwhelm</p>
+      </div>
+      <div class="paywall-feature">
+        <strong>Interactive Generator</strong>
+        <p>Pick your frequency + scenario. Get your exact move.</p>
+      </div>
+      <div class="paywall-feature">
+        <strong>Variations</strong>
+        <p>ADHD, autism, anxious attachment, avoidant, high-conflict</p>
+      </div>
+      <div class="paywall-feature">
+        <strong>Failure Modes</strong>
+        <p>When the move backfires and how to recover</p>
+      </div>
+      <div class="paywall-feature">
+        <strong>Neuroscience</strong>
+        <p>Polyvagal brake, beat frequency, proprioceptive grounding</p>
+      </div>
+      <div class="paywall-feature">
+        <strong>4-Week Practice</strong>
+        <p>Deploy one move per week. Build the skill.</p>
+      </div>
+    </div>
+
+    <p><strong>The Objective Ledger Membership:</strong> $97 one-time or $27/month</p>
+    <p style="font-size: 0.9rem; color: var(--ink-soft);">Includes mood-arbitrage-full.html + WP-04 + WP-02 + WP-13 + frequency visualizer + more</p>
+    
+    <a href="/membership.html" class="btn">Get Started on Gumroad</a>
+
+    <p style="font-size: 0.85rem; color: var(--ink-soft); margin-top: 1.5rem;">
+      Questions? Check the <a href="/index.html">TOL-OS Index</a> or read the full <a href="/frequency-framework.html">Frequency Framework</a>.
+    </p>
+  </div>
+
+</div>
+
+<!-- NEXT STEPS SECTION -->
+<div class="next-steps">
+  <div class="container">
+    <h3>Your Next Move</h3>
+    <p>
+      Understanding the three frequencies is half the battle. The other half is measuring your actual frequencies—autonomic, financial, decisional, communicational, philosophical.
+    </p>
+    <p>
+      <strong>WP-04: Frequency Calibration</strong> is the full diagnostic audit. It shows you exactly where you and your partner are out of sync.
+    </p>
+    <p>
+      <a href="/tools/frequency-calibration.html" class="btn">Go to WP-04: Frequency Calibration 🔒</a>
+    </p>
+    <p style="font-size: 0.9rem; color: var(--ink-soft); margin-top: 1.5rem;">
+      (This is a paid membership feature. <a href="#membership" style="color: var(--brass);">Get access to the full toolkit.</a>)
+    </p>
+  </div>
+</div>
+
+<!-- TOL-OS UNIFIED FOOTER -->
+
+
+</body>
+</html>
