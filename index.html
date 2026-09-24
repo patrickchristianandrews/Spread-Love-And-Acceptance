@@ -166,9 +166,10 @@
     .read .roadmap-icon{ width: 40px; height: 31px; max-width: 40px; }
   }
 
-  /* Announcement: new feature (Carrier Wave Decoder) */
+  /* Announcements: stacked, one under the other */
+  .announce-stack{ display: flex; flex-direction: column; gap: 10px; margin: 0 0 2rem; }
   .announce-bar{
-    margin: 0 0 2rem;
+    margin: 0;
     padding: 10px 14px;
     background: var(--paper-deep, #ECE2C4);
     border-left: 3px solid var(--brass, #A8792F);
@@ -285,30 +286,55 @@
 <main class="read">
 
 
-    <header class="hero" aria-labelledby="hero-h">
-      <p class="hero-brand">The Objective Ledger</p>
-      <h1 id="hero-h">Self-discovery first, then healthier relationships of every kind.</h1>
-      <p class="hero-lede">The Objective Ledger is a tool for seeing yourself from the outside. It offers an objective, unbiased, outside lens on how three things shape the way you think, feel and react: your life situation, your neurological wiring, and what you discover when you finally look closely.</p>
-      <p class="hero-body">Once you understand why you respond the way you do, you can tune yourself on purpose. That brings a steadier, calmer frequency into your own life, and from there into every relationship you share: partners, family, friends, roommates, co-parents, coworkers, and the people you care for.</p>
-      <p class="hero-actions"><a class="hero-start" href="/quick-checks.html#ladder">Start with a 30-second state check</a> <a href="#outside-lens">An outside lens on yourself</a> <a href="is-this-for-you.html">Is this right for you?</a></p>
-    </header>
-
-    <aside class="announce-bar" aria-label="New on the site">
+    <div class="announce-stack">
+    <aside class="announce-bar" aria-label="New: Wired Differently and the Signal Translator">
       <div class="announce-line">
         <span class="announce-tag">New</span>
         <strong>Wired Differently and the Signal Translator</strong> are here: how different neurotypes receive the same words, and a free tool that shows how a phrase might land for someone wired differently than you. Nothing you type is sent to us.
-        <a href="signal-translator.html">Open the translator &rarr;</a>
+        <a href="https://spreadloveandacceptance.com/signal-translator.html">Open the translator &rarr;</a>
         <details>
           <summary><span class="more">More</span><span class="less">Less</span></summary>
           <div class="announce-more">
-            <p><strong>What it does</strong>Choose how each person is wired, one neurotype or a combination (autistic, ADHD, dyslexic, anxious, highly sensitive, neurotypical and more), then type a phrase. The translator marks where static may come from, shows how it may land and what the speaker probably meant, and suggests a clearer way to say it. <a href="wired-differently.html">Wired Differently</a> is the guide behind it, with plenty of examples and the research it draws on.</p>
+            <p><strong>What it does</strong>Choose how each person is wired, one neurotype or a combination (autistic, ADHD, dyslexic, anxious, highly sensitive, neurotypical and more), then type a phrase. The translator marks where static may come from, shows how it may land and what the speaker probably meant, and suggests a clearer way to say it. <a href="https://spreadloveandacceptance.com/wired-differently.html">Wired Differently</a> is the guide behind it, with plenty of examples and the research it draws on.</p>
             <p><strong>Your data stays with you</strong>No account and no upload. The translator runs entirely in your browser and saves nothing.</p>
-            <p><strong>Also here</strong><a href="carrier-wave-decoder.html">The Carrier Wave Decoder</a>: a free, guided tool for the moment a conversation starts to squeal.</p>
+          </div>
+        </details>
+      </div>
+    </aside>
+    <aside class="announce-bar" aria-label="New: The Carrier Wave Decoder">
+      <div class="announce-line">
+        <span class="announce-tag">New</span>
+        <strong>The Carrier Wave Decoder</strong> is here: a free, guided tool for the moment a conversation starts to squeal. Nothing you enter is sent to us.
+        <a href="https://spreadloveandacceptance.com/carrier-wave-decoder.html">Open it &rarr;</a>
+        <details>
+          <summary><span class="more">More</span><span class="less">Less</span></summary>
+          <div class="announce-more">
+            <p><strong>What it does</strong>Find where each of you slipped on pace, register or urgency, check your state, practice getting back in tune, and close the books together. A private tone check flags wording that may land harder than you mean.</p>
+            <p><strong>Your data stays with you</strong>No account and no upload. Your notes and progress stay in your own browser on your own device, and clearing your browser data removes them.</p>
             <p><strong>Where it leads</strong>The Decoder connects to the workpapers: WP-02 for your state, WP-09 for tone, WP-03 and WP-04 for problems that keep coming back, and CALC-01 to read the whole arrangement. They open free with your email while the program is being built. <a href="is-this-for-you.html#new">Read the full announcement</a></p>
           </div>
         </details>
       </div>
     </aside>
+    </div>
+
+    <header class="hero" aria-labelledby="hero-h">
+      <p class="hero-brand">The Objective Ledger</p>
+      <h1 id="hero-h">Self-discovery first, then healthier relationships of every kind.</h1>
+      <div class="announce-stack">
+      <aside class="announce-bar" aria-label="What The Objective Ledger is">
+        <div class="announce-line">
+          <strong>The Objective Ledger</strong> is a tool for seeing yourself from the outside. It offers an objective, unbiased, outside lens on how three things shape the way you think, feel and react: your life situation, your neurological wiring, and what you discover when you finally look closely.
+        </div>
+      </aside>
+      <aside class="announce-bar" aria-label="Why that matters">
+        <div class="announce-line">
+          <strong>Once you understand why you respond the way you do, you can tune yourself with intent.</strong> That brings a steadier, calmer frequency into your own life, and from there into every relationship you share: partners, family, friends, roommates, co-parents, coworkers, and the people you care for.
+        </div>
+      </aside>
+      </div>
+      <p class="hero-actions"><a class="hero-start" href="/quick-checks.html#ladder">Start with a 30-second state check</a> <a href="#outside-lens">An outside lens on yourself</a> <a href="is-this-for-you.html">Is this right for you?</a></p>
+    </header>
     <p class="home-print"><a href="infographic.html" target="_blank" rel="noopener">Open the printable summary</a> <span>(opens in a new tab)</span></p>
 
     <section id="outside-lens" class="lens" aria-labelledby="lens-h">

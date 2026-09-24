@@ -40,6 +40,7 @@
     ]},
     { id: 'self', title: 'Self-discovery', blurb: 'Tools for understanding yourself: your load, your wiring, your patterns. Start here, with or without anyone else.', items: [
       { href: '/quick-checks.html#ladder', code: 'Tool', title: 'Check Your State', note: 'Thirty seconds to name which of three stress states you’re in' },
+      { href: '/wired-differently.html', code: 'New', title: 'Wired Differently', note: 'How different neurotypes receive the same words, and how to talk across the difference' },
       { href: '/workpapers/wp-02-battery-stress-meter.html', code: 'WP-02', title: 'The Battery & Stress Meter', note: 'What you’re already carrying, separate from what just happened', paid: true },
       { href: '/tools/frequency-calibration.html', code: 'Tool', title: 'Frequency Calibration', note: 'Your natural rhythms for money, decisions, check-ins and recovery', paid: true },
       { href: '/wp-11.html', code: 'WP-11', title: 'The Calm-Down Kit', note: 'Decide in advance what settles your body', paid: true },
@@ -80,7 +81,8 @@
       { href: '/workpapers/report-01.html', code: 'REPORT-01', title: 'The Full Read', note: 'Your week-by-week record, so progress builds instead of resetting', paid: true }
     ]},
     { id: 'tools', title: 'Tools', blurb: 'Interactive pages. Everything you type stays in your own browser.', items: [
-      { href: '/carrier-wave-decoder.html', code: 'New', title: 'The Carrier Wave Decoder', note: 'A guided session for the moment a conversation starts going sideways' },
+      { href: '/signal-translator.html', code: 'New', title: 'The Signal Translator', note: 'Pick how each person is wired, type a phrase, and see how it might land' },
+      { href: '/carrier-wave-decoder.html', code: 'Tool', title: 'The Carrier Wave Decoder', note: 'A guided session for the moment a conversation starts going sideways' },
       { href: '/workpapers/calculators/calc01-solvency.html', code: 'CALC-01', title: 'The Solvency Read', note: 'Enter your workpaper numbers and see whether the arrangement looks sustainable' },
       { href: '/tools/mood-arbitrage-free.html', code: '', title: 'Mood Arbitrage: introduction', note: 'The core idea and one worked example, free' },
       { href: '/tools/mood-arbitrage-full.html', code: '', title: 'Mood Arbitrage: full toolkit', note: 'A move generator, five scenarios and a four-week practice plan', paid: true },
