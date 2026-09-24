@@ -470,6 +470,14 @@ footer {
   }
 }
 
+
+/* Shared site header, footer and pager sit on their own full-width rows above and below the sidebar layout */
+body { flex-wrap: wrap; align-items: flex-start; }
+body > .tol-bar, body > .tol-foot, body > .tol-pager, body > footer, body > #tol-main { flex: 0 0 100%; }
+main { flex: 1 1 0; min-width: 0; }
+@media screen and (min-width: 769px) {
+  .sidebar { top: var(--tol-bar-h, 58px); height: calc(100vh - var(--tol-bar-h, 58px)); }
+}
 </style>
 <script src="/assets/js/site.js" defer></script>
 </head>
