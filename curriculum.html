@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The 6-Week Program</title>
+<meta name="description" content="A 6-week guided sequence through the real, shipped workpapers of The Objective Ledger Workpaper Suite.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,500&family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper: #F5EFDE;
+    --paper-deep: #ECE2C4;
+    --ink: #211D17;
+    --ink-soft: #524B3E;
+    --line: #D9CBA3;
+    --credit: #3E6B4C;
+    --credit-soft: #E4EDE3;
+    --brass: #A8792F;
+    --focus: #2B5B8C;
+    --radius: 3px;
+  }
+
+  *{ box-sizing: border-box; }
+
+  @page{ size: letter portrait; margin: 0.55in; }
+
+  body{
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: "Lora", Georgia, serif;
+    font-size: 16px;
+    line-height: 1.65;
+  }
+
+  h1, h2, h3{
+    font-family: "Fraunces", "Lora", serif;
+    font-weight: 600;
+    line-height: 1.2;
+    margin: 0 0 0.5em 0;
+  }
+
+  .print-bar{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    max-width: 8.5in;
+    margin: 20px auto;
+    padding: 14px 20px;
+    background: var(--paper-deep);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 0.8rem;
+    color: var(--ink-soft);
+  }
+
+  .print-bar button{
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 0.75rem;
+    padding: 8px 16px;
+    border: none;
+    border-radius: var(--radius);
+    background: var(--ink);
+    color: var(--paper);
+    cursor: pointer;
+  }
+
+  @media print{ .print-bar{ display: none; } body{ background: #fff; } }
+
+  .sheet{
+    max-width: 8.5in;
+    margin: 0 auto 60px auto;
+    padding: 0.5in 0.6in;
+    background: var(--paper);
+    border: 1px solid var(--line);
+  }
+
+  @media print{
+    .sheet{ margin: 0; padding: 0; max-width: 100%; border: none; }
+    .week-card{ break-inside: avoid; }
+  }
+
+  .sheet-header{
+    text-align: center;
+    border-bottom: 2px solid var(--brass);
+    padding-bottom: 16px;
+    margin-bottom: 28px;
+  }
+
+  .doc-num{
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 0.7rem;
+    color: var(--brass);
+    letter-spacing: 0.08em;
+    margin-bottom: 4px;
+  }
+
+  .sheet-mark{ font-size: 1.5rem; margin: 0; }
+
+  .sheet-tagline{
+    font-size: 0.9rem;
+    color: var(--ink-soft);
+    margin: 10px 0 0 0;
+  }
+
+  .intro-note{
+    border-left: 4px solid var(--focus);
+    background: #E7EEF4;
+    border-radius: var(--radius);
+    padding: 16px 20px;
+    margin-bottom: 30px;
+  }
+
+  .intro-note p{ margin: 0 0 10px 0; font-size: 0.95rem; }
+  .intro-note p:last-child{ margin-bottom: 0; }
+
+  .week-card{
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    background: var(--paper-deep);
+    padding: 18px 22px;
+    margin-bottom: 16px;
+  }
+
+  .week-card:last-of-type{ margin-bottom: 0; }
+
+  .week-label{
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 0.68rem;
+    color: var(--brass);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+
+  .week-card h2{
+    font-size: 1.15rem;
+    margin-bottom: 6px;
+  }
+
+  .week-uses{
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 0.7rem;
+    color: var(--ink-soft);
+    margin-bottom: 10px;
+  }
+
+  .week-uses code{
+    background: var(--paper);
+    border: 1px solid var(--line);
+    border-radius: 2px;
+    padding: 1px 5px;
+    margin-right: 4px;
+  }
+
+  .week-card p.week-goal{
+    font-size: 0.92rem;
+    margin: 0;
+  }
+
+  .weeks-wrap{ margin-bottom: 30px; }
+
+  .rule-box{
+    border-left: 4px solid var(--credit);
+    background: var(--credit-soft);
+    border-radius: var(--radius);
+    padding: 16px 20px;
+    margin-top: 10px;
+  }
+
+  .rule-box p{ margin: 0; font-size: 0.92rem; }
+
+  .sheet-footer{
+    margin-top: 30px;
+    border-top: 1px solid var(--line);
+    padding-top: 14px;
+    text-align: center;
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 0.65rem;
+    color: var(--ink-soft);
+  }
+
+  @media (max-width: 700px){
+    .print-bar{ flex-direction: column; align-items: stretch; text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+  <div class="print-bar" role="toolbar" aria-label="Page actions">
+    <span>The 6-Week Program &middot; For Survival Kit members</span>
+    <button type="button" onclick="window.print()">Print / Save as PDF</button>
+  </div>
+
+  <main class="sheet" aria-label="The 6-Week Program">
+
+    <header class="sheet-header">
+      <p class="doc-num">Curriculum</p>
+      <h1 class="sheet-mark">The 6-Week Program</h1>
+      <p class="sheet-tagline">A guided sequence through the workpapers that already exist &mdash; no new tools, just an order to use them in.</p>
+    </header>
+
+    <div class="intro-note">
+      <p>Purpose: the workpapers work better in a deliberate order than dropped on someone all at once. This sequence uses only the five workpapers that are actually built and reviewed &mdash; WP-01, WP-02, WP-03, WP-09, and WP-13 &mdash; each introduced once the previous week's data makes it useful.</p>
+      <p>As new workpapers ship, this curriculum will be revised to include them. It's a living sequence, not a fixed track.</p>
+    </div>
+
+    <div class="weeks-wrap">
+      <div class="week-card">
+        <div class="week-label">Week 1</div>
+        <h2>Just Observe</h2>
+        <div class="week-uses"><code>WP-01</code> Field Audit</div>
+        <p class="week-goal">Run the 7-day Field Audit for the first time. No interpretation yet, no fixing anything &mdash; just log what actually happened, honestly, before either person's memory of the week hardens into a story.</p>
+      </div>
+
+      <div class="week-card">
+        <div class="week-label">Week 2</div>
+        <h2>Add the Daily Habit</h2>
+        <div class="week-uses"><code>WP-01</code> continues &middot; <code>WP-02</code> introduced</div>
+        <p class="week-goal">Keep logging the Field Audit. Introduce the Battery &amp; Stress Meter as a quick daily self-check &mdash; independently, about yourself only &mdash; so stress load becomes visible before it gets mistaken for something else.</p>
+      </div>
+
+      <div class="week-card">
+        <div class="week-label">Week 3</div>
+        <h2>Assign Ownership, With Data</h2>
+        <div class="week-uses"><code>WP-03</code> Domestic RACI Treaty</div>
+        <p class="week-goal">Now there are two weeks of real Field Audit data to work from. Fill out the RACI Treaty informed by what actually happened, not by guessing or by whoever argues more persuasively.</p>
+      </div>
+
+      <div class="week-card">
+        <div class="week-label">Week 4</div>
+        <h2>Retune Before Responding</h2>
+        <div class="week-uses"><code>WP-09</code> The Tone Transducer &amp; Filter</div>
+        <p class="week-goal">By now there's likely been at least one hard conversation. Introduce the three-question self-check before sending a message that landed hard &mdash; a tool for your own reaction, not for reading anyone else's.</p>
+      </div>
+
+      <div class="week-card">
+        <div class="week-label">Week 5</div>
+        <h2>Small Corrections, Daily</h2>
+        <div class="week-uses"><code>WP-13</code> Phase-Locked Loop Protocol</div>
+        <p class="week-goal">Start the 90-second daily check-in habit. The goal is small, constant corrections instead of letting friction build toward a bigger blowup later &mdash; the exact failure mode the earlier weeks were making visible.</p>
+      </div>
+
+      <div class="week-card">
+        <div class="week-label">Week 6</div>
+        <h2>Full-Cycle Review</h2>
+        <div class="week-uses"><code>WP-01</code> Field Audit, run again</div>
+        <p class="week-goal">Run a second week of the Field Audit and compare it against Week 1. This is the actual test of whether the previous five weeks changed anything measurable &mdash; not a feeling, but the same log, run twice.</p>
+      </div>
+    </div>
+
+    <div class="rule-box">
+      <p><strong>What this program is not:</strong> a guarantee that six weeks fixes anything. It's a sequence for using real tools in a sensible order. Some weeks will need more than a week; that's fine &mdash; move at the pace that's actually true for you, not the pace on this page.</p>
+    </div>
+
+    <footer class="sheet-footer">
+      The Objective Ledger&trade; &middot; The 6-Week Program &middot; For Survival Kit members only, not for public redistribution
+    </footer>
+
+  </main>
+
+</body>
+</html>

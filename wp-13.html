@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WP-13 — Phase-Locked Loop (PLL) Protocol</title>
+<meta name="description" content="Working Paper WP-13: the 90-second daily check-in and weekly resync that keeps drift from accumulating.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,500&family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  /*
+    Canonical single-file WP-13 deliverable for the paid Workpaper Suite.
+    Shares the WP-01 token system and print behaviour so the whole Suite
+    prints as one consistent set of documents.
+  */
+
+  :root{
+    --paper: #F5EFDE;
+    --paper-deep: #ECE2C4;
+    --ink: #211D17;
+    --ink-soft: #524B3E;
+    --line: #D9CBA3;
+    --credit: #3E6B4C;
+    --credit-soft: #E4EDE3;
+    --debit: #96412B;
+    --debit-soft: #F2E2DB;
+    --brass: #A8792F;
+    --focus: #2B5B8C;
+    --radius: 3px;
+  }
+
+  *{ box-sizing: border-box; }
+
+  @page{
+    size: letter portrait;
+    margin: 0.55in;
+  }
+
+  body{
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: "Lora", Georgia, serif;
+    font-size: 16px;
+    line-height: 1.65;
+  }
+
+  h1, h2, h3{
+    font-family: "Fraunces", "Lora", serif;
+    font-weight: 600;
+    line-height: 1.2;
+    margin: 0 0 0.5em 0;
+  }
+
+  :focus-visible{ outline: 2px solid var(--focus); outline-offset: 3px; }
+
+  code{
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 0.84em;
+    background: var(--paper-deep);
+    padding: 1px 5px;
+    border-radius: var(--radius);
+  }
+
+  .print-bar{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    max-width: 8.5in;
+    margin: 20px auto;
+    padding: 14px 20px;
+    background: var(--paper-deep);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 0.8rem;
+    color: var(--ink-soft);
+  }
+
+  .print-bar button{
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 0.75rem;
+    padding: 8px 16px;
+    border: none;
+    border-radius: var(--radius);
+    background: var(--ink);
+    color: var(--paper);
+    cursor: pointer;
+  }
+
+  @media print{
+    .print-bar{ display: none; }
+    body{ background: #fff; }
+  }
+
+  .sheet{
+    max-width: 8.5in;
+    margin: 0 auto 60px auto;
+    padding: 0.5in 0.6in;
+    background: var(--paper);
+    border: 1px solid var(--line);
+  }
+
+  @media print{
+    .sheet{ margin: 0; padding: 0; max-width: 100%; border: none; }
+    .part-section{ break-inside: avoid; }
+    .scenario{ break-inside: avoid; }
+    table{ break-inside: auto; }
+  }
+
+  .sheet-header{
+    text-align: center;
+    border-bottom: 2px solid var(--brass);
+    padding-bottom: 16px;
+    margin-bottom: 28px;
+  }
+
+  .wp-num{
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 0.7rem;
+    color: var(--brass);
+    letter-spacing: 0.08em;
+    margin-bottom: 4px;
+  }
+
+  .sheet-mark{ font-size: 1.4rem; margin: 0; }
+
+  .sheet-mark small{
+    display: block;
+    font-family: "IBM Plex Mono", monospace;
+    font-weight: 400;
+    font-size: 0.62rem;
+    letter-spacing: 0.1em;
+    color: var(--brass);
+    margin-top: 6px;
+  }
+
+  .sheet-tagline{
+    font-size: 0.9rem;
+    color: var(--ink-soft);
+    margin: 10px auto 0 auto;
+    max-width: 66ch;
+  }
+
+  .toc{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 24px;
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 0.72rem;
+    color: var(--ink-soft);
+    margin: 14px 0 0 0;
+  }
+
+  .toc a{ color: var(--brass); text-decoration: none; }
+
+  .intro-note{
+    border-left: 4px solid var(--focus);
+    background: #E7EEF4;
+    border-radius: var(--radius);
+    padding: 16px 20px;
+    margin-bottom: 30px;
+  }
+
+  .intro-note p{ margin: 0 0 10px 0; font-size: 0.95rem; }
+  .intro-note p:last-child{ margin-bottom: 0; }
+
+  .part-divider{
+    text-align: center;
+    margin: 44px 0 30px 0;
+    padding-top: 30px;
+    border-top: 3px double var(--brass);
+  }
+
+  .part-divider .part-label{
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--brass);
+    margin-bottom: 6px;
+  }
+
+  .part-divider h2{ font-size: 1.5rem; margin: 0; }
+
+  .part-section{ margin-bottom: 34px; }
+
+  .part-section > h3{
+    font-size: 1.15rem;
+    border-bottom: 1px solid var(--brass);
+    padding-bottom: 8px;
+    margin-bottom: 18px;
+  }
+
+  .section-def{
+    font-size: 0.92rem;
+    color: var(--ink-soft);
+    max-width: 70ch;
+    margin-bottom: 20px;
+  }
+
+  p{ max-width: 72ch; }
+
+  table.audit-table{
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.85rem;
+  }
+
+  table.audit-table th{
+    text-align: left;
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--brass);
+    border-bottom: 2px solid var(--line);
+    padding: 6px 10px 10px 0;
+    vertical-align: bottom;
+  }
+
+  table.audit-table td{
+    border-bottom: 1px solid var(--line);
+    padding: 9px 10px 9px 0;
+    vertical-align: top;
+  }
+
+  table.audit-table td.day-cell,
+  table.audit-table td.term-cell{
+    font-family: "Fraunces", serif;
+    font-weight: 600;
+    white-space: nowrap;
+    width: 1%;
+    padding-right: 20px;
+  }
+
+  table.audit-table td.opt-cell{
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 0.72rem;
+    color: var(--ink-soft);
+  }
+
+  table.fill-table td{ height: 36px; }
+  table.tall-table td{ height: 52px; }
+
+  .rule-box{
+    border-left: 4px solid var(--credit);
+    background: var(--credit-soft);
+    border-radius: var(--radius);
+    padding: 16px 20px;
+    margin-top: 18px;
+  }
+
+  .rule-box p{ margin: 0 0 10px 0; font-size: 0.92rem; }
+  .rule-box p:last-child{ margin-bottom: 0; }
+
+  .rule-box ol, .rule-box ul{ margin: 0; padding-left: 20px; font-size: 0.92rem; }
+  .rule-box li{ margin-bottom: 6px; }
+  .rule-box li:last-child{ margin-bottom: 0; }
+
+  .warn-box{
+    border-left: 4px solid var(--debit);
+    background: var(--debit-soft);
+    border-radius: var(--radius);
+    padding: 16px 20px;
+    margin-top: 18px;
+  }
+
+  .warn-box p{ margin: 0 0 10px 0; font-size: 0.92rem; }
+  .warn-box p:last-child{ margin-bottom: 0; }
+
+  .scenario{
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    background: var(--paper-deep);
+    padding: 16px 20px;
+    margin-bottom: 14px;
+  }
+
+  .scenario:last-child{ margin-bottom: 0; }
+
+  .scenario .context{
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 0.68rem;
+    color: var(--brass);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+
+  .scenario .script-line{
+    margin-bottom: 6px;
+    font-size: 0.92rem;
+  }
+
+  .scenario .script-line:last-child{ margin-bottom: 0; }
+
+  .scenario .script-line strong{
+    color: var(--brass);
+    font-weight: 600;
+  }
+
+  .adapt-box{
+    border-left: 4px solid var(--credit);
+    background: var(--credit-soft);
+    border-radius: var(--radius);
+    padding: 16px 20px;
+    margin-top: 24px;
+  }
+
+  .adapt-box p{ margin: 0 0 10px 0; font-size: 0.92rem; }
+  .adapt-box p:last-child{ margin-bottom: 0; }
+
+  ol.steps{ padding-left: 22px; font-size: 0.95rem; max-width: 72ch; }
+  ol.steps li{ margin-bottom: 10px; }
+
+  ul.plain{ padding-left: 20px; font-size: 0.95rem; max-width: 72ch; }
+  ul.plain li{ margin-bottom: 9px; }
+
+  .signoff-table{
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.85rem;
+    margin-top: 8px;
+  }
+
+  .signoff-table th{
+    text-align: left;
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--brass);
+    border-bottom: 2px solid var(--line);
+    padding: 6px 10px 10px 0;
+  }
+
+  .signoff-table td{
+    border-bottom: 1px solid var(--line);
+    padding: 14px 10px 8px 0;
+  }
+
+  .signoff-table td.label-cell{
+    font-family: "Fraunces", serif;
+    font-weight: 600;
+    color: var(--ink);
+    white-space: nowrap;
+    width: 1%;
+    padding-right: 24px;
+  }
+
+  .sheet-footer{
+    margin-top: 30px;
+    border-top: 1px solid var(--line);
+    padding-top: 14px;
+    text-align: center;
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 0.65rem;
+    color: var(--ink-soft);
+  }
+
+  @media (max-width: 700px){
+    .print-bar{ flex-direction: column; align-items: stretch; text-align: center; }
+    table.audit-table{ font-size: 0.72rem; }
+    .toc{ gap: 12px; }
+    .sheet{ padding: 0.35in 0.3in; }
+  }
+
+</style>
+</head>
+<body>
+
+  <div class="print-bar" role="toolbar" aria-label="Page actions">
+    <span>WP-13 &middot; For Survival Kit members</span>
+    <button type="button" onclick="window.print()">Print / Save as PDF</button>
+  </div>
+
+  <main class="sheet" aria-label="WP-13 — Phase-Locked Loop Protocol">
+
+    <header class="sheet-header">
+      <p class="wp-num">WP-13</p>
+      <h1 class="sheet-mark">Phase-Locked Loop Protocol
+        <small>Daily Loop &middot; 90 Seconds &middot; Weekly Resync</small>
+      </h1>
+      <p class="sheet-tagline">A recurring, low-effort check-in ritual that keeps two signals in sync through constant small corrections rather than occasional large ones.</p>
+      <div class="toc">
+        <a href="#why">Why Small &amp; Frequent</a>
+        <a href="#daily">The Daily Loop</a>
+        <a href="#log">The Week's Log</a>
+        <a href="#resync">Weekly Resync</a>
+      </div>
+    </header>
+
+    <div class="intro-note">
+      <p>Purpose: a recurring, low-effort check-in ritual, named after the electronics circuit that keeps two signals in sync through constant small corrections rather than occasional large ones. Applied here as a daily habit that prevents the "frequency drift" described in Chapter I from building up into a squeal.</p>
+    </div>
+
+    <section id="why" aria-labelledby="why-h">
+      <div class="part-divider">
+        <div class="part-label">Premise</div>
+        <h2 id="why-h">Why Small and Frequent Beats Big and Rare</h2>
+      </div>
+
+      <div class="part-section">
+        <p>A phase-locked loop doesn't wait for two signals to drift far apart and then yank them back into sync &mdash; it makes tiny corrections continuously, so drift never accumulates. The domestic equivalent: a 90-second daily check-in prevents most of what would otherwise become a 45-minute weekend argument.</p>
+      </div>
+    </section>
+
+    <section id="daily" aria-labelledby="daily-h">
+      <div class="part-divider">
+        <div class="part-label">Part A</div>
+        <h2 id="daily-h">The Daily Loop</h2>
+      </div>
+      <p class="sheet-tagline" style="text-align:center; margin-bottom: 24px;">About 90 seconds</p>
+
+      <div class="part-section">
+        <p class="section-def">Pick a consistent moment &mdash; after dinner, before bed, whatever's realistic. Each person answers, out loud, in one sentence each:</p>
+
+        <ol class="steps">
+          <li><strong>Load:</strong> "Today I was at about [low / medium / high] capacity."</li>
+          <li><strong>Friction:</strong> "One small thing that didn't feel great today was ___." (Optional &mdash; skip if there's nothing.)</li>
+          <li><strong>Ask:</strong> "One thing that would help tomorrow is ___." (Optional.)</li>
+        </ol>
+
+        <div class="rule-box">
+          <p>No debate, no solving, no rebuttal. Each person just transmits; the other just receives. Anything that needs real discussion gets flagged for the weekly closing (Chapter V), not litigated in the 90 seconds.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="log" aria-labelledby="log-h">
+      <div class="part-divider">
+        <div class="part-label">Part B</div>
+        <h2 id="log-h">The Week's Log</h2>
+      </div>
+
+      <div class="part-section">
+        <p class="section-def">Optional, and only as much as fits on one line. The weekly resync below works from whatever's written here, so the point is a legible trace, not a transcript.</p>
+
+        <table class="audit-table fill-table">
+          <thead>
+            <tr>
+              <th style="width:54px;">Day</th>
+              <th style="width:110px;">Load (A / B)</th>
+              <th>Friction</th>
+              <th style="width:180px;">Ask</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td class="day-cell">Mon</td><td></td><td></td><td></td></tr>
+            <tr><td class="day-cell">Tue</td><td></td><td></td><td></td></tr>
+            <tr><td class="day-cell">Wed</td><td></td><td></td><td></td></tr>
+            <tr><td class="day-cell">Thu</td><td></td><td></td><td></td></tr>
+            <tr><td class="day-cell">Fri</td><td></td><td></td><td></td></tr>
+            <tr><td class="day-cell">Sat</td><td></td><td></td><td></td></tr>
+            <tr><td class="day-cell">Sun</td><td></td><td></td><td></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="resync" aria-labelledby="resync-h">
+      <div class="part-divider">
+        <div class="part-label">Part C</div>
+        <h2 id="resync-h">The Weekly Resync</h2>
+      </div>
+
+      <div class="part-section">
+        <p class="section-def">Once a week, alongside closing the books:</p>
+
+        <ul class="plain">
+          <li>Skim the week's daily loop notes for anything that repeated more than twice.</li>
+          <li>A repeated friction point is promoted to the RACI treaty (WP-03) or the tone filter (WP-09) rather than staying an ambient irritation.</li>
+        </ul>
+
+        <table class="audit-table fill-table" style="margin-top:20px;">
+          <thead>
+            <tr>
+              <th>Repeated this week</th>
+              <th style="width:100px;">Times</th>
+              <th style="width:180px;">Promoted to</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td></td><td></td><td class="opt-cell">WP-03 &#124; WP-09</td></tr>
+            <tr><td></td><td></td><td class="opt-cell">WP-03 &#124; WP-09</td></tr>
+            <tr><td></td><td></td><td class="opt-cell">WP-03 &#124; WP-09</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="failure" aria-labelledby="failure-h">
+      <div class="part-divider">
+        <div class="part-label">Scope</div>
+        <h2 id="failure-h">Failure Mode to Watch For</h2>
+      </div>
+
+      <div class="part-section">
+        <div class="warn-box">
+          <p>If the daily loop starts being used to deliver criticism ("well, since we're doing check-ins...") instead of a plain status update, it will get avoided, and avoidance is what causes the drift this protocol exists to prevent.</p>
+          <p>Keep the daily version strictly observational; save anything evaluative for the weekly resync.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="signoff" aria-labelledby="signoff-h">
+      <div class="part-divider">
+        <div class="part-label">Sign-Off</div>
+        <h2 id="signoff-h">Commitment</h2>
+      </div>
+
+      <table class="signoff-table">
+        <thead>
+          <tr><th></th><th>Committed to daily loop</th><th>Date</th></tr>
+        </thead>
+        <tbody>
+          <tr><td class="label-cell">Partner A</td><td></td><td></td></tr>
+          <tr><td class="label-cell">Partner B</td><td></td><td></td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <footer class="sheet-footer">
+      The Objective Ledger&trade; &middot; Workpaper Suite &middot; WP-13 &middot; For Survival Kit members only, not for public redistribution
+    </footer>
+
+  </main>
+
+</body>
+</html>

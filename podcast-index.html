@@ -1,26 +1,184 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-NKC6CQ9S66"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-NKC6CQ9S66');
-</script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Observational Podcast: The Kane and Christian Experience</title>
-<meta name="description" content="The Objective Ledger™ podcast series: episodes exploring workpapers, chapters, and real-world applications of the framework with Kane and Christian.">
+<title>Observational Podcast: The Lamonz Collaboration</title>
+<meta name="description" content="The Objective Ledger™ podcast series: episodes exploring workpapers, chapters, and real-world applications of the framework with Lamonz.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,500&family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/css/book-layout.css">
 <style>
-  /* Page-local components. Layout, typography, sidebar and footer
-     come from assets/css/book-layout.css, same as every other page. */
+:root {
+  --paper: #F5EFDE;
+  --paper-deep: #ECE2C4;
+  --ink: #211D17;
+  --ink-soft: #524B3E;
+  --line: #D9CBA3;
+  --brass: #A8792F;
+  --brass-soft: #C4A570;
+  --credit: #3E6B4C;
+  --credit-soft: #E4EDE3;
+  --focus: #2B5B8C;
+  --focus-soft: #E8EEF5;
+  --radius: 3px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: "Lora", Georgia, serif;
+  font-size: 16px;
+  line-height: 1.65;
+}
+
+body {
+  display: flex;
+  min-height: 100vh;
+}
+
+/* ────────────────────────────────────────────────────────────────────── */
+/* SIDEBAR NAVIGATION                                                     */
+/* ────────────────────────────────────────────────────────────────────── */
+
+.sidebar {
+  width: 240px;
+  background: var(--ink);
+  color: var(--paper);
+  padding: 2rem 1.5rem;
+  overflow-y: auto;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+}
+
+.mark {
+  font-family: "Fraunces", serif;
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  line-height: 1.2;
+  color: var(--brass-soft);
+}
+
+.mark small {
+  display: block;
+  font-size: 0.75rem;
+  color: var(--paper-deep);
+  margin-top: 0.25rem;
+  font-weight: 400;
+  letter-spacing: 0.05em;
+}
+
+.tagline {
+  font-size: 0.95rem;
+  color: var(--paper);
+  margin: 1rem 0 1.5rem 0;
+  line-height: 1.5;
+}
+
+.sidebar nav {
+  margin-bottom: 2rem;
+}
+
+.sidebar nav ol, .sidebar nav ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.sidebar nav li {
+  margin-bottom: 0.5rem;
+}
+
+.sidebar nav a {
+  color: var(--paper);
+  text-decoration: none;
+  font-size: 0.95rem;
+  display: block;
+  padding: 0.4rem 0;
+  transition: color 0.2s ease;
+  border-left: 3px solid transparent;
+  padding-left: 0.5rem;
+}
+
+.sidebar nav a:hover {
+  color: var(--brass-soft);
+  border-left-color: var(--brass-soft);
+}
+
+.sidebar nav a.active {
+  color: var(--brass-soft);
+  font-weight: 600;
+  border-left-color: var(--brass-soft);
+}
+
+.nav-group-label {
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.75rem;
+  color: var(--paper-deep);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-top: 1.5rem;
+  margin-bottom: 0.75rem;
+  font-weight: 500;
+}
+
+.sidebar-foot {
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.75rem;
+  color: var(--paper-deep);
+  margin-top: 2rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--ink-soft);
+}
+
+/* ────────────────────────────────────────────────────────────────────── */
+/* MAIN CONTENT                                                           */
+/* ────────────────────────────────────────────────────────────────────── */
+
+main {
+  flex: 1;
+  padding: 3rem 4rem;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+/* ────────────────────────────────────────────────────────────────────── */
+/* PAGE HEADER                                                            */
+/* ────────────────────────────────────────────────────────────────────── */
+
+.page-header {
+  margin-bottom: 3rem;
+  padding-bottom: 2rem;
+  border-bottom: 2px solid var(--brass);
+}
+
+.page-title {
+  font-family: "Fraunces", serif;
+  font-size: 2.2rem;
+  font-weight: 600;
+  margin: 0 0 0.5rem 0;
+  line-height: 1.1;
+  color: var(--ink);
+}
+
+.page-subtitle {
+  font-size: 1.1rem;
+  color: var(--ink-soft);
+  margin: 0;
+  font-style: italic;
+}
+
+/* ────────────────────────────────────────────────────────────────────── */
+/* INTRO CALLOUT                                                          */
+/* ────────────────────────────────────────────────────────────────────── */
 
 .intro-callout {
   padding: 1.5rem;
@@ -94,6 +252,16 @@
   border-color: var(--brass);
 }
 
+/* ────────────────────────────────────────────────────────────────────── */
+/* EPISODE CARDS                                                          */
+/* ────────────────────────────────────────────────────────────────────── */
+
+.episodes-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 3rem;
+}
 
 .episode-card {
   padding: 1.5rem;
@@ -202,6 +370,64 @@
 /* EPISODE LIST (ALTERNATIVE VIEW)                                       */
 /* ────────────────────────────────────────────────────────────────────── */
 
+.episodes-list {
+  display: none;
+}
+
+.episodes-list.active {
+  display: block;
+}
+
+.episode-list-item {
+  padding: 1.5rem;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-left: 3px solid var(--brass);
+  border-radius: var(--radius);
+  margin-bottom: 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+}
+
+.episode-list-content {
+  flex: 1;
+}
+
+.episode-list-number {
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.75rem;
+  color: var(--brass);
+  font-weight: 600;
+  text-transform: uppercase;
+  margin-bottom: 0.25rem;
+}
+
+.episode-list-title {
+  font-family: "Fraunces", serif;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--ink);
+  margin: 0 0 0.3rem 0;
+}
+
+.episode-list-meta {
+  font-size: 0.85rem;
+  color: var(--ink-soft);
+}
+
+.episode-list-duration {
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.9rem;
+  color: var(--ink-soft);
+  text-align: right;
+}
+
+/* ────────────────────────────────────────────────────────────────────── */
+/* SECTION HEADING                                                        */
+/* ────────────────────────────────────────────────────────────────────── */
+
 .section-title {
   font-family: "Fraunces", serif;
   font-size: 1.6rem;
@@ -216,99 +442,145 @@
 /* FOOTER                                                                 */
 /* ────────────────────────────────────────────────────────────────────── */
 
+footer {
+  background: var(--ink);
+  color: var(--paper);
+  padding: 2rem 0;
+  text-align: center;
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.85rem;
+  margin-top: 4rem;
+}
 
-  .section-title{
-    font-family: "Fraunces", serif;
-    font-size: 1.15rem;
-    font-weight: 600;
-    color: var(--ink);
-    margin-bottom: 16px;
+.footer-links {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  margin-top: 1rem;
+  flex-wrap: wrap;
+}
+
+.footer-links a {
+  color: var(--brass-soft);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.footer-links a:hover {
+  color: var(--paper);
+}
+
+/* ────────────────────────────────────────────────────────────────────── */
+/* RESPONSIVE                                                             */
+/* ────────────────────────────────────────────────────────────────────── */
+
+@media screen and (max-width: 1024px) {
+  .sidebar {
+    width: 200px;
+    padding: 1.5rem 1rem;
   }
 
-  .footer-links{
-    margin-top: 10px;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 14px;
+  main {
+    padding: 2rem;
   }
 
-  .footer-links a{
-    color: var(--ink-soft);
-    text-decoration: none;
-    border-bottom: 1px solid var(--line);
+  .page-title {
+    font-size: 1.8rem;
   }
 
-  .footer-links a:hover{ color: var(--brass); border-bottom-color: var(--brass); }
+  .episodes-grid {
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  }
+}
 
-  .nav-group-label{
-    font-family: "IBM Plex Mono", monospace;
-    font-size: 0.64rem;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: var(--brass);
-    margin: 22px 0 8px;
+@media screen and (max-width: 768px) {
+  body {
+    flex-direction: column;
   }
 
-  .back-link{
-    display: inline-block;
-    margin-top: 26px;
-    font-family: "IBM Plex Mono", monospace;
-    font-size: 0.72rem;
-    color: var(--ink-soft);
-    text-decoration: none;
+  .sidebar {
+    width: 100%;
+    height: auto;
+    position: static;
+    padding: 1.5rem;
   }
 
-  .back-link:hover{ color: var(--brass); }
-
-  @media (max-width: 760px){
-    .episodes-grid{ grid-template-columns: 1fr; }
+  main {
+    padding: 1.5rem;
+    max-width: 100%;
   }
+
+  .page-title {
+    font-size: 1.5rem;
+  }
+
+  .episodes-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .filter-section {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .episode-list-item {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .episode-list-duration {
+    text-align: left;
+  }
+}
+
 </style>
 </head>
+
 <body>
 
-<div class="frame">
+<!-- SIDEBAR NAVIGATION -->
+<aside class="sidebar">
+  <div class="mark">The Objective Ledger
+    <small>PODCAST INDEX</small>
+  </div>
+  <p class="tagline">Observational episodes exploring the framework with Lamonz.</p>
 
-  <aside class="sidebar">
-    <div class="mark">The Objective Ledger
-      <small>TOL&#8209;OS &middot; PODCAST INDEX</small>
-    </div>
-    <p class="tagline">Observational episodes exploring the framework with Kane and Christian.</p>
+  <nav aria-label="Podcast sections">
+    <ol>
+      <li><a href="#all" data-target="all">All Episodes</a></li>
+      <li><a href="#foundation" data-target="foundation">Foundation (Ep 1–3)</a></li>
+      <li><a href="#diagnostics" data-target="diagnostics">Diagnostics (Ep 4–7)</a></li>
+      <li><a href="#communication" data-target="communication">Communication (Ep 8–9)</a></li>
+      <li><a href="#resonance" data-target="resonance">Resonance (Ep 10–11)</a></li>
+    </ol>
 
-    <nav aria-label="Podcast sections">
-      <ol>
-        <li><a href="#all" data-target="all">All Episodes</a></li>
-        <li><a href="#foundation" data-target="foundation">Foundation (Ep 1&ndash;3)</a></li>
-        <li><a href="#diagnostics" data-target="diagnostics">Diagnostics (Ep 4&ndash;7)</a></li>
-        <li><a href="#communication" data-target="communication">Communication (Ep 8&ndash;9)</a></li>
-        <li><a href="#resonance" data-target="resonance">Resonance (Ep 10&ndash;11)</a></li>
-      </ol>
+    <div class="nav-group-label">Resources</div>
+    <ul>
+      <li><a href="suite-index.html">Suite Index</a></li>
+      <li><a href="prog-01.html">PROG-01 Curriculum</a></li>
+      <li><a href="index.html">Home</a></li>
+    </ul>
+  </nav>
 
-      <div class="nav-group-label">Resources</div>
-      <ul class="tool-nav">
-        <li><a href="suite-index.html">Suite Index</a></li>
-        <li><a href="prog-01.html">PROG-01 Curriculum</a></li>
-        <li><a href="roadmap.html">Content Roadmap</a></li>
-      </ul>
-    </nav>
+  <div class="sidebar-foot">spreadloveandacceptance.com</div>
+</aside>
 
-    <a class="back-link" href="index.html">&larr; Back to TOL-OS</a>
-    <div class="sidebar-foot">spreadloveandacceptance.com</div>
-  </aside>
+<!-- MAIN CONTENT -->
+<main>
 
-  <div class="rule" aria-hidden="true"></div>
-
-  <main>
-
-    <div class="kicker">Podcast</div>
-    <h2>Observational Podcast</h2>
-    <p class="lede">The Kane and Christian Experience. Exploring The Objective Ledger&trade; framework through narrative, real-world application, and dialogue.</p>
-
-  <div class="intro-callout">
-    <p><strong>About the podcast:</strong> Each episode is a deep dive into one workpaper, chapter, or thematic area. Listen in any order, or follow the episode path matched to the PROG-01 curriculum weeks. Parallel listening while you read or use the tools deepens comprehension and provides voice context for the framework's emotional texture.</p>
-    <p><strong>Hosted by Kane and Christian</strong> with rotating guests, real couple interviews, and listener questions. All episodes are available to paid members of the Survival Kit.</p>
+  <!-- PAGE HEADER -->
+  <div class="page-header">
+    <h1 class="page-title">📻 Observational Podcast</h1>
+    <p class="page-subtitle">The Lamonz Collaboration. Exploring The Objective Ledger™ framework through narrative, real-world application, and dialogue.</p>
   </div>
 
+  <!-- INTRO CALLOUT -->
+  <div class="intro-callout">
+    <p><strong>About the podcast:</strong> Each episode is a deep dive into one workpaper, chapter, or thematic area. Listen in any order, or follow the episode path matched to the PROG-01 curriculum weeks. Parallel listening while you read or use the tools deepens comprehension and provides voice context for the framework's emotional texture.</p>
+    <p><strong>Hosted by Lamonz</strong> with rotating guests, real couple interviews, and listener questions. All episodes are available to paid members of the Survival Kit.</p>
+  </div>
+
+  <!-- FILTER SECTION -->
   <div class="filter-section">
     <span class="filter-label">Filter by:</span>
     <div class="filter-buttons">
@@ -320,6 +592,7 @@
     </div>
   </div>
 
+  <!-- ALL EPISODES GRID -->
   <div class="episodes-grid" id="episodes-grid">
 
     <!-- Episode 1 -->
@@ -327,7 +600,7 @@
       <div class="episode-number">Episode 1</div>
       <h3 class="episode-title">Unbilled Debt: Why Your Ledger Has Only One Column</h3>
       <div class="episode-duration">28 minutes</div>
-      <p class="episode-desc">Kane and Christian open the series by exploring the core problem: invisible labor accumulates when only one person sees the books. What gets recorded? What stays hidden? And why does this matter?</p>
+      <p class="episode-desc">Lamonz opens the series by exploring the core problem: invisible labor accumulates when only one person sees the books. What gets recorded? What stays hidden? And why does this matter?</p>
       <div class="episode-tags">
         <span class="episode-tag">Foundation</span>
         <span class="episode-tag">Preface + Chapter I</span>
@@ -342,7 +615,7 @@
       <div class="episode-number">Episode 2</div>
       <h3 class="episode-title">The Radio Frequency Paradigm in Action</h3>
       <div class="episode-duration">31 minutes</div>
-      <p class="episode-desc">Kane and Christian break down pace, register, and urgency mismatch with real examples. Two reasonable people, slightly out of sync, create interference. How to notice when you're in heterodyne and how to lock back in.</p>
+      <p class="episode-desc">Lamonz breaks down pace, register, and urgency mismatch with real examples. Two reasonable people, slightly out of sync, create interference. How to notice when you're in heterodyne and how to lock back in.</p>
       <div class="episode-tags">
         <span class="episode-tag">Foundation</span>
         <span class="episode-tag">Chapter I</span>
@@ -372,7 +645,7 @@
       <div class="episode-number">Episode 4</div>
       <h3 class="episode-title">Your Nervous System is Data</h3>
       <div class="episode-duration">33 minutes</div>
-      <p class="episode-desc">Kane, Christian, and neuroscience guests discuss polyvagal theory, why your body knows when the arrangement is unsustainable before your mind does, and how to trust somatic signals.</p>
+      <p class="episode-desc">Lamonz and neuroscience guests discuss polyvagal theory, why your body knows when the arrangement is unsustainable before your mind does, and how to trust somatic signals.</p>
       <div class="episode-tags">
         <span class="episode-tag">Diagnostics</span>
         <span class="episode-tag">WP-02 (Battery)</span>
@@ -402,7 +675,7 @@
       <div class="episode-number">Episode 6</div>
       <h3 class="episode-title">Opening the Ledger: How to Talk About the Numbers</h3>
       <div class="episode-duration">35 minutes</div>
-      <p class="episode-desc">Kane and Christian interview couples who've successfully opened their shared ledger. What worked? What failed? What did they wish they'd known before they started?</p>
+      <p class="episode-desc">Lamonz interviews couples who've successfully opened their shared ledger. What worked? What failed? What did they wish they'd known before they started?</p>
       <div class="episode-tags">
         <span class="episode-tag">Communication</span>
         <span class="episode-tag">WP-01, WP-09</span>
@@ -432,7 +705,7 @@
       <div class="episode-number">Episode 8</div>
       <h3 class="episode-title">Processing Speed: Why You Mobilize Faster Than They Do</h3>
       <div class="episode-duration">32 minutes</div>
-      <p class="episode-desc">Kane and Christian explore pace differences, activation timelines, and why one person's "when you get a chance" is another person's immediate emergency. The frequency mismatch explained.</p>
+      <p class="episode-desc">Lamonz explores pace differences, activation timelines, and why one person's "when you get a chance" is another person's immediate emergency. The frequency mismatch explained.</p>
       <div class="episode-tags">
         <span class="episode-tag">Resonance</span>
         <span class="episode-tag">WP-12, WP-13</span>
@@ -462,7 +735,7 @@
       <div class="episode-number">Episode 10</div>
       <h3 class="episode-title">External Static: When the Stress Isn't Relational</h3>
       <div class="episode-duration">30 minutes</div>
-      <p class="episode-desc">Kane and Christian interview therapists and couples about separating structural relational issues from external life pressure. How to support your partner through burnout without confusing it with abandonment.</p>
+      <p class="episode-desc">Lamonz interviews therapists and couples about separating structural relational issues from external life pressure. How to support your partner through burnout without confusing it with abandonment.</p>
       <div class="episode-tags">
         <span class="episode-tag">Resonance</span>
         <span class="episode-tag">WP-14 (Static)</span>
@@ -489,38 +762,36 @@
 
   </div>
 
-  <div class="section-title" style="margin-top: 3.5rem;">Subscribe &amp; Stay Updated</div>
+  <!-- SUBSCRIBE SECTION -->
+  <div class="section-title" style="margin-top: 4rem;">Subscribe & Stay Updated</div>
   <div class="intro-callout">
     <p>New episodes release <strong>every two weeks</strong> on Spotify, Apple Podcasts, and here on spreadloveandacceptance.com. Already a paid member of the Survival Kit? Episodes are included in your membership.</p>
-    <p><strong>Not a member yet?</strong> <a href="https://cloudpat.gumroad.com/l/vigkfs" style="color: var(--brass); text-decoration: none; font-weight: 600;">Get full access to PROG-01, all workpapers, and the complete podcast archive &rarr;</a></p>
+    <p><strong>Not a member yet?</strong> <a href="https://cloudpat.gumroad.com/l/vigkfs" style="color: var(--brass); text-decoration: none; font-weight: 600;">Get full access to PROG-01, all workpapers, and the complete podcast archive →</a></p>
   </div>
 
-  </main>
-</div>
+</main>
 
+<!-- FOOTER -->
 <footer>
-  TOL&#8209;OS &middot; Observational Podcast &middot; The Kane and Christian Experience
+  Observational Podcast · The Lamonz Collaboration
   <div class="footer-links">
-    <a href="index.html">Home</a>
-    <a href="about.html">About</a>
-    <a href="roadmap.html">Roadmap</a>
     <a href="suite-index.html">Suite Index</a>
     <a href="prog-01.html">PROG-01</a>
-    <a href="echoes-of-gold.html">Echoes of Gold</a>
-    <a href="legal/terms-of-service.html">Terms</a>
-    <a href="legal/privacy-policy.html">Privacy</a>
+    <a href="index.html">Home</a>
+    <a href="roadmap.html">Roadmap</a>
   </div>
 </footer>
 
 <script>
 (function() {
+  // Filter buttons
   var filterBtns = document.querySelectorAll('.filter-btn');
   var episodeCards = document.querySelectorAll('.episode-card');
 
   filterBtns.forEach(function(btn) {
     btn.addEventListener('click', function() {
       var filter = this.dataset.filter;
-
+      
       filterBtns.forEach(function(b) { b.classList.remove('active'); });
       this.classList.add('active');
 
@@ -534,6 +805,7 @@
     });
   });
 
+  // Sidebar nav highlighting
   var links = Array.prototype.slice.call(document.querySelectorAll('aside nav a'));
   links.forEach(function(link) {
     link.addEventListener('click', function() {

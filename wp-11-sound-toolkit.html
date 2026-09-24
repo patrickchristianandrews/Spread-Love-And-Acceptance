@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>WP-11 Companion &mdash; Sound Toolkit Generator</title>
+  <style>
+    :root {
+      --paper: #F5EFDE;
+      --paper-deep: #ECE2C4;
+      --ink: #211D17;
+      --ink-soft: #524B3E;
+      --brass: #A8792F;
+      --line: #D9CBA3;
+      --focus: #2B5B8C;
+    }
+    body {
+      background: var(--paper);
+      color: var(--ink);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      padding: 30px 20px;
+      display: flex;
+      justify-content: center;
+    }
+    .stem-rack {
+      max-width: 680px;
+      width: 100%;
+      background: var(--paper-deep);
+      border: 2px solid var(--line);
+      border-radius: 16px;
+      padding: 24px;
+    }
+    h2 { margin-top: 0; color: var(--brass); }
+    .note {
+      background: #E7EEF4;
+      border-left: 4px solid var(--focus);
+      border-radius: 6px;
+      padding: 14px 16px;
+      font-size: 0.85rem;
+      margin-bottom: 20px;
+      line-height: 1.5;
+    }
+    .note p { margin: 0 0 8px 0; }
+    .note p:last-child { margin-bottom: 0; }
+    .stem-track {
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 16px;
+      margin-bottom: 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+    }
+    .track-meta { font-size: 0.88rem; }
+    .track-meta strong { display: block; font-size: 1rem; margin-bottom: 2px; }
+    .track-meta span { color: var(--ink-soft); }
+    button {
+      background: var(--brass);
+      color: #fff;
+      border: none;
+      padding: 10px 18px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+      flex-shrink: 0;
+    }
+    button.active { background: #825c21; }
+    .master-controls {
+      margin-top: 20px;
+      display: flex;
+      gap: 12px;
+      justify-content: flex-end;
+    }
+    .volume-warning {
+      font-size: 0.78rem;
+      color: var(--ink-soft);
+      margin-top: 16px;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+
+<div class="stem-rack">
+  <h2>WP-11 Companion &mdash; Sound Toolkit</h2>
+
+  <div class="note">
+    <p>These are plain sound generators &mdash; a steady bass tone, a steady click pattern, and brown noise. Some people find one or more of these calming as part of a personal sensory toolkit; others won't, and that's useful information too. Nothing here is a validated mechanism for stress relief or nervous-system regulation &mdash; see WP-11's "Note on the Science" for the full context.</p>
+    <p>Try one at a time, at a comfortable volume, and notice how it actually feels for you.</p>
+  </div>
+
+  <!-- Stem 1 -->
+  <div class="stem-track">
+    <div class="track-meta">
+      <strong>Steady Bass Tone (40 Hz)</strong>
+      <span>A low, continuous hum some people describe as physically grounding.</span>
+    </div>
+    <button onclick="toggleStem('sub', this)">Start</button>
+  </div>
+
+  <!-- Stem 2 -->
+  <div class="stem-track">
+    <div class="track-meta">
+      <strong>Steady Pulse (40 Hz Click Pattern)</strong>
+      <span>An evenly repeating pulse &mdash; optional, some people enjoy it, no specific effect is established.</span>
+    </div>
+    <button onclick="toggleStem('gamma', this)">Start</button>
+  </div>
+
+  <!-- Stem 3 -->
+  <div class="stem-track">
+    <div class="track-meta">
+      <strong>Brown Noise</strong>
+      <span>A smooth, low-pitched static that can mask irregular background sounds.</span>
+    </div>
+    <button onclick="toggleStem('brown', this)">Start</button>
+  </div>
+
+  <div class="master-controls">
+    <button onclick="stopAll()" style="background: #64748b;">Stop All</button>
+  </div>
+
+  <p class="volume-warning">Start at low volume, especially with headphones &mdash; bass tones can feel more intense than expected.</p>
+</div>
+
+<script>
+  let ctx = null;
+  const nodes = { sub: null, gamma: null, brown: null };
+
+  function initAudio() {
+    if (!ctx) ctx = new (window.AudioContext || window.webkitAudioContext)();
+    if (ctx.state === 'suspended') ctx.resume();
+  }
+
+  function toggleStem(type, btn) {
+    initAudio();
+    if (nodes[type]) {
+      nodes[type].stop();
+      nodes[type] = null;
+      btn.textContent = 'Start';
+      btn.classList.remove('active');
+    } else {
+      nodes[type] = startGenerator(type);
+      btn.textContent = 'Stop';
+      btn.classList.add('active');
+    }
+  }
+
+  function startGenerator(type) {
+    if (type === 'sub') {
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(40, ctx.currentTime);
+      gain.gain.setValueAtTime(0.25, ctx.currentTime);
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.start();
+      return { stop: () => { osc.stop(); osc.disconnect(); } };
+    }
+
+    if (type === 'gamma') {
+      const carrier = ctx.createOscillator();
+      const mod = ctx.createOscillator();
+      const modGain = ctx.createGain();
+      const masterGain = ctx.createGain();
+
+      carrier.type = 'sine';
+      carrier.frequency.setValueAtTime(200, ctx.currentTime);
+
+      mod.type = 'square';
+      mod.frequency.setValueAtTime(40, ctx.currentTime);
+
+      modGain.gain.setValueAtTime(1, ctx.currentTime);
+      masterGain.gain.setValueAtTime(0.1, ctx.currentTime);
+
+      mod.connect(modGain.gain);
+      carrier.connect(masterGain);
+      masterGain.connect(ctx.destination);
+
+      carrier.start();
+      mod.start();
+      return {
+        stop: () => {
+          carrier.stop();
+          mod.stop();
+          carrier.disconnect();
+          mod.disconnect();
+        }
+      };
+    }
+
+    if (type === 'brown') {
+      const bufferSize = ctx.sampleRate * 2;
+      const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+      const data = buffer.getChannelData(0);
+      let lastOut = 0.0;
+      for (let i = 0; i < bufferSize; i++) {
+        const white = Math.random() * 2 - 1;
+        data[i] = (lastOut + (0.02 * white)) / 1.02;
+        lastOut = data[i];
+        data[i] *= 3.0;
+      }
+      const noise = ctx.createBufferSource();
+      noise.buffer = buffer;
+      noise.loop = true;
+      const gain = ctx.createGain();
+      gain.gain.setValueAtTime(0.15, ctx.currentTime);
+      noise.connect(gain);
+      gain.connect(ctx.destination);
+      noise.start();
+      return { stop: () => { noise.stop(); noise.disconnect(); } };
+    }
+  }
+
+  function stopAll() {
+    for (let key in nodes) {
+      if (nodes[key]) {
+        nodes[key].stop();
+        nodes[key] = null;
+      }
+    }
+    document.querySelectorAll('.stem-track button').forEach(b => {
+      b.textContent = 'Start';
+      b.classList.remove('active');
+    });
+  }
+</script>
+</body>
+</html>

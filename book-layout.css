@@ -274,53 +274,6 @@ footer{
   border: 0;
 }
 
-/* ---------- roadmap callout ---------- */
-
-.roadmap-spacer{
-  height: 8px;
-}
-
-.roadmap-callout{
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  background: var(--credit-soft);
-  border: 1px solid var(--line);
-  border-radius: 8px;
-  padding: 16px 22px;
-  margin: 28px 0 40px 0;
-}
-
-.roadmap-icon{
-  width: 30px;
-  height: 24px;
-  flex-shrink: 0;
-  opacity: 0.75;
-}
-
-.roadmap-callout-copy{
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  flex: 1 1 auto;
-  max-width: 48ch;
-}
-
-.roadmap-callout-copy strong{
-  font-family: "Fraunces", serif;
-  font-size: 1.05rem;
-  color: var(--ink);
-}
-
-.roadmap-callout-copy span{
-  font-size: 0.88rem;
-  color: var(--ink-soft);
-}
-
-.roadmap-callout .cta-button{
-  flex-shrink: 0;
-}
-
 @media (max-width: 860px){
   .frame{ grid-template-columns: 1fr; }
   .rule{ display: none; }
@@ -336,6 +289,4 @@ footer{
   .register-card{ padding: 24px 22px; }
   .register-form{ flex-direction: column; }
   .register-form button{ width: 100%; }
-  .roadmap-callout{ flex-direction: column; align-items: stretch; text-align: center; }
-  .roadmap-icon{ align-self: center; }
 }
