@@ -134,6 +134,7 @@ body.unlocked .locked-section::before{ content:none !important; display:none !im
 .tol-msg{ min-height:1.4em; font-size:.92rem; margin-top:.5rem !important; }
 .tol-msg.is-error{ color:var(--debit); }
 .tol-msg.is-ok{ color:var(--credit); }
+.tol-fine{ font-size:.85rem; color:var(--ink-soft); margin:.25rem 0 0 !important; }
 
 /* ---------- Pager + footer ---------- */
 .tol-pager{
@@ -178,3 +179,88 @@ div.tol-gate h2{ margin:0 0 .5rem; }
 div.tol-gate p{ max-width:60ch; }
 .tol-panel-head{ position:sticky; top:-1.25rem; background:var(--paper); padding:1.25rem 0 .75rem; margin-top:-1.25rem; z-index:1; border-bottom:1px solid var(--line); }
 .tol-panel .tol-index-section{ scroll-margin-top:4.5rem; }
+
+/* ---------- Site sidebar: the original TOL-OS left rail, on every page ----------
+   site.js adds .tol-side on pages without their own sidebar (html.tol-has-side),
+   or .tol-side-site inside an existing aside.sidebar (html.tol-own-side).
+   Below 900px the sidebar hides and the top bar's Contents menu takes over. */
+.tol-side{ display:none; }
+.tol-side-site{ display:none; }
+
+@media (min-width:900px){
+  html.tol-has-side{ padding-left:268px; }
+  html.tol-has-side .tol-bar{ display:none; }
+  .tol-side{
+    display:block; position:fixed; z-index:40; top:0; left:0; bottom:0; width:268px;
+    overflow-y:auto; overscroll-behavior:contain;
+    padding:40px 22px 36px 26px;
+    background:var(--paper-deep);
+    /* the dotted brass rule from the original layout */
+    border-right:0;
+    background-image:linear-gradient(var(--brass), var(--brass) 40%, transparent 40%, transparent 100%);
+    background-size:1px 10px; background-repeat:repeat-y; background-position:right top;
+    font-family:"Lora", Georgia, serif; font-size:16px; line-height:1.5; color:var(--ink);
+  }
+}
+@media (min-width:861px){
+  html.tol-own-side .tol-bar{ display:none; }
+  .tol-side-site{ display:block; margin-top:30px; }
+}
+
+.tol-side-mark{
+  display:block; text-decoration:none; color:var(--ink);
+  font-family:"Fraunces", Georgia, serif; font-weight:600; font-size:1.15rem; letter-spacing:.01em;
+}
+.tol-side-mark small{
+  display:block; margin-top:6px;
+  font-family:"IBM Plex Mono", ui-monospace, monospace; font-weight:400; font-size:.6rem; letter-spacing:.1em; color:var(--brass);
+}
+.tol-side-tag{ font-size:.84rem; font-style:italic; color:var(--ink-soft); margin:10px 0 26px; max-width:24ch; }
+.tol-side-label{
+  font-family:"IBM Plex Mono", ui-monospace, monospace; font-size:.66rem; letter-spacing:.08em;
+  color:var(--brass); margin:0 0 6px; padding-top:14px; border-top:1px solid var(--line);
+}
+
+.tol-side-group{ border-top:1px solid var(--line); }
+.tol-side-group:last-child{ border-bottom:1px solid var(--line); }
+.tol-side-group summary{
+  cursor:pointer; list-style:none; padding:10px 2px;
+  font-family:"Fraunces", Georgia, serif; font-weight:600; font-size:.95rem; color:var(--ink);
+  display:flex; justify-content:space-between; align-items:baseline;
+}
+.tol-side-group summary::-webkit-details-marker{ display:none; }
+.tol-side-group summary::after{ content:"+"; font-family:"IBM Plex Mono", monospace; font-weight:400; color:var(--brass); }
+.tol-side-group[open] summary::after{ content:"\2212"; }
+.tol-side-group summary:focus-visible, .tol-side a:focus-visible, .tol-side-site a:focus-visible{ outline:2px solid var(--focus); outline-offset:2px; }
+
+.tol-side-nav ol{ list-style:none; margin:0 0 8px; padding:0; border:0; counter-reset:none; }
+.tol-side-nav li{ margin:0; border:0; counter-increment:none; }
+.tol-side-nav a{
+  display:grid; grid-template-columns:3.6rem 1fr auto; gap:0 6px; align-items:baseline;
+  padding:5px 2px 5px 0; text-decoration:none; color:var(--ink-soft); font-size:.88rem; line-height:1.35;
+  transition:color .15s ease, padding-left .15s ease;
+}
+.tol-side-nav a::before{ content:none !important; display:none !important; }
+.tol-side-nav a:hover{ color:var(--ink); padding-left:5px; }
+.tol-side-nav a[aria-current="page"]{ color:var(--ink); font-weight:600; }
+.tol-side-nav a[aria-current="page"] .tol-side-code{ color:var(--debit); }
+.tol-side-code{ font-family:"IBM Plex Mono", ui-monospace, monospace; font-size:.66rem; color:var(--brass); white-space:nowrap; }
+.tol-side-lock{ font-family:"IBM Plex Mono", ui-monospace, monospace; font-size:.6rem; color:var(--ink-soft); opacity:.75; }
+body.unlocked .tol-side-lock{ display:none; }
+
+.tol-side-join{
+  display:inline-block; margin-top:20px; padding:7px 14px;
+  border:1px solid var(--ink); border-radius:var(--radius);
+  font-size:.88rem; font-weight:600; text-decoration:none; color:var(--ink);
+}
+.tol-side-join:hover{ background:var(--ink); color:var(--paper); }
+.tol-side-join.is-member{ border-color:var(--credit); color:var(--credit); }
+.tol-side-foot{ margin:22px 0 0; font-family:"IBM Plex Mono", ui-monospace, monospace; font-size:.62rem; color:var(--ink-soft); }
+
+@media (prefers-reduced-motion: reduce){ .tol-side-nav a{ transition:none; } }
+@media print{
+  .tol-side, .tol-side-site{ display:none !important; }
+  html.tol-has-side{ padding-left:0 !important; }
+}
+.tol-side-nav a.no-code{ grid-template-columns:1fr auto; }
+.tol-side-nav a.no-code .tol-side-code{ display:none; }
