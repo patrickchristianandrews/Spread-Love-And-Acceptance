@@ -28,7 +28,7 @@ This is a superset of the `P(Solvency)` formula in `epistemic-verdict-engine.md`
 ## Reporting cadence
 
 - **Daily:** PLL loop (WP-13) feeds qualitative notes only, not scored.
-- **Weekly:** all four sub-matrices recomputed at the closing-the-books session (Manuscript, Chapter V).
+- **Weekly:** all four sub-matrices recomputed at the weekly closing-the-books session (see the Preface and WP-13's weekly resync).
 - **Monthly:** apex score trend reviewed for drift; three consecutive weekly drops of >0.1 triggers a RACI treaty review, not an emergency conversation.
 
 ## Explicit exclusions

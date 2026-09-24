@@ -5,6 +5,10 @@
 - **Responsible (R):** does the task.
 - **Accountable (A):** notices if it didn't happen and follows up. Can be the same person as R.
 
+**When to use it:** after your first full week of the Field Audit (WP-01). Fill in the treaty using what that week's log actually showed, not what either of you assumes happens. Amend it whenever life changes.
+
+**Before you start:** check your state with WP-02 first. If either of you is running hot, use the Calm-Down Kit (WP-11) and come back to this later. Ownership is not something to negotiate while overloaded.
+
 ## The Treaty
 
 | Task | Frequency | Responsible | Accountable | Notes |
@@ -25,7 +29,7 @@
 
 This treaty isn't permanent — it's meant to be renegotiated when life changes (new job, health issue, new baby, etc.), not silently reassigned when one person just starts doing more. To amend:
 
-1. Either person can call for a review at the weekly closing (Chapter V).
+1. Either person can call for a review at the weekly closing, or at the monthly Deficit Audit (WP-04) when a task keeps coming up as a structural gap.
 2. Changes are written into the table above, not just agreed verbally.
 3. Both people initial the change.
 

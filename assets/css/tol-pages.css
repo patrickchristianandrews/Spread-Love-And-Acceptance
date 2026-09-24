@@ -1,0 +1,108 @@
+/*
+  tol-pages.css — components for Start Here and the Roadmap.
+  Loads after /assets/css/site.css and /assets/css/reading.css and only adds
+  what those don't have. Every colour has a fallback, so the components
+  render correctly whatever variable names the site stylesheets use.
+*/
+
+.tol-lede{ font-size: 1.12em; color: var(--ink-soft, #524B3E); }
+
+/* ---------- names (Start Here) ---------- */
+.tol-names{ margin: 1.4em 0 0; border-top: 1px solid var(--line, #D9CBA3); }
+.tol-names div{ padding: 0.8em 0; border-bottom: 1px solid var(--line, #D9CBA3); }
+.tol-names dt{ font-family: "Fraunces", Georgia, serif; font-weight: 600; }
+.tol-names dd{ margin: 0.15em 0 0; color: var(--ink-soft, #524B3E); }
+
+/* ---------- four questions ---------- */
+.tol-four{
+  list-style: none; margin: 1.2em 0 0; padding: 0;
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1px; background: var(--line, #D9CBA3); border: 1px solid var(--line, #D9CBA3);
+}
+.tol-four li{ background: var(--paper, #F5EFDE); padding: 1em 1.1em; margin: 0; }
+.tol-four strong{ display: block; font-family: "Fraunces", Georgia, serif; margin-bottom: 0.2em; }
+.tol-four span{ color: var(--ink-soft, #524B3E); font-size: 0.95em; }
+
+/* ---------- callouts ---------- */
+.tol-aside, .tol-warning{ margin: 1.6em 0; padding: 1em 1.2em; }
+.tol-aside{ background: var(--paper-deep, #ECE2C4); border-left: 3px solid var(--brass, #A8792F); }
+.tol-warning{ border: 1px solid var(--debit, #96412B); border-radius: 3px; }
+.tol-aside h3, .tol-warning h3{ margin: 0 0 0.3em; font-size: 1.05em; }
+.tol-warning h3{ color: var(--debit, #96412B); }
+.tol-aside p, .tol-warning p{ margin: 0; }
+
+/* ---------- the sequence, as journal entries ---------- */
+.tol-journal{ list-style: none; margin: 1.4em 0 0; padding: 0; counter-reset: entry; border-top: 2px solid var(--ink, #211D17); }
+.tol-journal > li{
+  counter-increment: entry;
+  display: grid; grid-template-columns: 2rem 1fr; gap: 0 0.9em;
+  padding: 0.9em 0; margin: 0;
+  border-bottom: 1px solid var(--line, #D9CBA3);
+}
+.tol-journal > li::before{
+  content: counter(entry);
+  grid-row: 1 / span 3;
+  font-family: "IBM Plex Mono", ui-monospace, monospace; font-size: 0.8em;
+  color: var(--brass, #A8792F); padding-top: 0.3em;
+}
+.tol-step{ font-family: "Fraunces", Georgia, serif; font-weight: 600; font-size: 1.08em; }
+.tol-inst{ display: block; font-family: "IBM Plex Mono", ui-monospace, monospace; font-size: 0.75em; color: var(--ink-soft, #524B3E); }
+.tol-q{ font-style: italic; margin-top: 0.25em; }
+.tol-when{ font-size: 0.88em; color: var(--ink-soft, #524B3E); margin-top: 0.2em; }
+.tol-journal > li.tol-gate{ counter-increment: none; background: var(--debit-soft, #F2E2DB); margin: 0 -0.6em; padding-left: 0.6em; padding-right: 0.6em; }
+.tol-journal > li.tol-gate::before{ content: "\21B3"; color: var(--debit, #96412B); font-size: 1em; }
+.tol-gate .tol-step{ color: var(--debit, #96412B); }
+.tol-journal-foot{ font-size: 0.92em; color: var(--ink-soft, #524B3E); }
+
+/* ---------- theory → review chain ---------- */
+.tol-chain{
+  list-style: none; margin: 1em 0 0; padding: 0;
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  border: 1px solid var(--line, #D9CBA3);
+}
+.tol-chain li{ margin: 0; padding: 0.8em 0.9em; border-right: 1px solid var(--line, #D9CBA3); }
+.tol-chain li:last-child{ border-right: none; }
+.tol-chain strong{ display: block; font-family: "Fraunces", Georgia, serif; }
+.tol-chain span{ font-size: 0.88em; color: var(--ink-soft, #524B3E); }
+
+/* ---------- where to start ---------- */
+.tol-paths{ list-style: none; margin: 1em 0 0; padding: 0; border-top: 1px solid var(--line, #D9CBA3); }
+.tol-paths li{ margin: 0; padding: 0.75em 0.8em; border-bottom: 1px solid var(--line, #D9CBA3); }
+.tol-paths .if{ display: block; color: var(--ink-soft, #524B3E); font-size: 0.92em; }
+.tol-paths a{ font-weight: 600; }
+.tol-paths li.tol-primary{ background: var(--credit-soft, #E4EDE3); }
+
+/* ---------- two columns: free/paid, is/isn't ---------- */
+.tol-cols{ display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1em; margin-top: 1.2em; }
+.tol-col{ padding: 1.1em 1.2em; border: 1px solid var(--line, #D9CBA3); border-radius: 3px; }
+.tol-col h3{ margin-top: 0; }
+.tol-col .sub{ color: var(--ink-soft, #524B3E); font-size: 0.9em; margin: -0.3em 0 0.8em; }
+.tol-col ul{ margin: 0; padding-left: 1.1em; }
+.tol-col li{ margin-bottom: 0.35em; }
+.tol-col.debit{ border-top: 3px solid var(--debit, #96412B); }
+.tol-col.credit{ border-top: 3px solid var(--credit, #3E6B4C); }
+.tol-col.paid{ background: var(--paper-deep, #ECE2C4); }
+
+.tol-button{
+  display: inline-block; margin-top: 1em; padding: 0.6em 1.1em;
+  background: var(--ink, #211D17); color: var(--paper, #F5EFDE);
+  text-decoration: none; border-radius: 3px; font-weight: 600;
+}
+.tol-button:hover{ background: var(--credit, #3E6B4C); color: var(--paper, #F5EFDE); }
+
+.tol-small{ font-size: 0.9em; color: var(--ink-soft, #524B3E); }
+
+/* ---------- roadmap ---------- */
+.tol-group{ margin-top: 1.4em; }
+.tol-group-head{ display: flex; align-items: baseline; justify-content: space-between; gap: 1em; border-bottom: 1px solid var(--brass, #A8792F); padding-bottom: 0.3em; }
+.tol-group-head h3{ margin: 0; }
+.tol-status{
+  font-family: "IBM Plex Mono", ui-monospace, monospace; font-size: 0.72em;
+  padding: 0.15em 0.6em; border-radius: 3px; white-space: nowrap;
+}
+.tol-status.live{ background: var(--credit-soft, #E4EDE3); color: var(--credit, #3E6B4C); }
+.tol-status.progress{ background: var(--paper-deep, #ECE2C4); color: var(--brass, #A8792F); }
+.tol-status.planned{ border: 1px solid var(--line, #D9CBA3); color: var(--ink-soft, #524B3E); }
+.tol-items{ list-style: none; margin: 0; padding: 0; }
+.tol-items li{ margin: 0; padding: 0.5em 0; border-bottom: 1px solid var(--line, #D9CBA3); }
+.tol-items .tbd{ color: var(--ink-soft, #524B3E); font-style: italic; }
