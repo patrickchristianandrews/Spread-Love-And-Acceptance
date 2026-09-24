@@ -11,131 +11,117 @@
   gtag('config', 'G-NKC6CQ9S66');
 </script>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>The Objective Ledger — TOL-OS</title>
 <meta name="description" content="A nervous-system-aware ledger for relationships.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,500&family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/css/book-layout.css">
+
+<!-- The homepage's tools (state check, Lemonade Stand, access columns, sign-up form)
+     still take their styling from the original stylesheet. -->
+<link rel="stylesheet" href="/assets/css/book-layout.css">
 <style>
-  /* Announcement bar: new feature (Carrier Wave Decoder) */
-  .announce-bar{
-    background: var(--paper-deep, #ECE2C4);
-    border-bottom: 2px solid var(--brass, #A8792F);
-    color: var(--ink, #211D17);
-    font-size: 0.95rem;
-    line-height: 1.5;
+  /* Switch off the original stylesheet's page-wide rules for menus, footers and
+     headings, so they don't leak into the site navigation that site.js adds.
+     This block sits BEFORE site.css on purpose: site.css still overrides it. */
+  nav ol, nav ul{ list-style: revert; margin: revert; padding: revert; border-top: revert; counter-reset: none; }
+  nav li{ border-bottom: revert; counter-increment: none; }
+  nav a{ display: revert; gap: revert; align-items: revert; padding: revert; text-decoration: revert; color: revert; font-size: revert; transition: revert; }
+  nav a::before{ content: none; }
+  nav a:hover{ color: revert; padding-left: revert; }
+  nav a.active{ color: revert; font-weight: revert; }
+  main{ padding: revert; max-width: revert; }
+  footer{ max-width: revert; margin: revert; padding: revert; font-family: revert; font-size: revert; color: revert; }
+  h2{ font-size: revert; max-width: revert; }
+</style>
+
+<link rel="stylesheet" href="/assets/css/site.css">
+<link rel="stylesheet" href="/assets/css/reading.css">
+<link rel="stylesheet" href="/assets/css/tol-index.css">
+<style>
+  /* Homepage additions */
+  .home-tagline{ font-size: 1.12rem; color: var(--ink-soft, #524B3E); margin-top: -.4rem; }
+  .home-print{ font-size: .95rem; }
+  .home-print span{ color: var(--ink-soft, #524B3E); }
+  .home-more{ font-size: .95rem; color: var(--ink-soft, #524B3E); margin-top: 1rem; }
+  #contents h2, #directory h2{ margin-top: 0; }
+
+  /* The two callout boxes: small icon on the left, text and button beside it */
+  .read .roadmap-callout{
+    display: grid;
+    grid-template-columns: 54px 1fr;
+    gap: .4rem 1rem;
+    align-items: start;
+    margin: 0 0 1.25rem;
   }
-  .announce-inner{ max-width: 1100px; margin: 0 auto; padding: 10px 20px; }
+  .read .roadmap-icon{ width: 54px; height: 42px; max-width: 54px; margin: .2rem 0 0; flex: none; }
+  .read .roadmap-callout-copy{ grid-column: 2; min-width: 0; }
+  .read .roadmap-callout-copy strong{ display: block; }
+  .read .roadmap-callout .cta-button{ grid-column: 2; justify-self: start; margin-top: .3rem; }
+  @media (max-width: 520px){
+    .read .roadmap-callout{ grid-template-columns: 40px 1fr; gap: .4rem .8rem; }
+    .read .roadmap-icon{ width: 40px; height: 31px; max-width: 40px; }
+  }
+
+  /* Announcement: new feature (Carrier Wave Decoder) */
+  .announce-bar{
+    margin: 0 0 2rem;
+    padding: 10px 14px;
+    background: var(--paper-deep, #ECE2C4);
+    border-left: 3px solid var(--brass, #A8792F);
+    border-radius: 3px;
+    font-size: .93rem; line-height: 1.5;
+    color: var(--ink, #211D17);
+  }
   .announce-line{ margin: 0; }
   .announce-tag{
-    display: inline-block; margin-right: 8px; padding: 1px 8px;
-    font-family: "IBM Plex Mono", ui-monospace, monospace; font-size: 0.72rem;
-    color: var(--paper, #F5EFDE); background: var(--brass, #A8792F); border-radius: 3px;
-    vertical-align: 1px;
+    display: inline-block; margin-right: 6px; padding: 1px 8px;
+    font-family: "IBM Plex Mono", ui-monospace, monospace; font-size: .72rem;
+    color: var(--paper, #F5EFDE); background: var(--brass, #A8792F); border-radius: 3px; vertical-align: 1px;
   }
   .announce-bar a{ color: var(--ink, #211D17); font-weight: 600; text-decoration-color: var(--brass, #A8792F); text-underline-offset: 3px; white-space: nowrap; }
   .announce-bar a:hover{ color: var(--credit, #3E6B4C); }
   .announce-bar details{ display: inline; }
   .announce-bar summary{
-    display: inline; cursor: pointer; list-style: none;
-    margin-left: 10px; color: var(--ink-soft, #524B3E);
-    text-decoration: underline dotted; text-underline-offset: 3px;
+    display: inline; cursor: pointer; list-style: none; margin-left: 8px;
+    color: var(--ink-soft, #524B3E); text-decoration: underline dotted; text-underline-offset: 3px;
   }
   .announce-bar summary::-webkit-details-marker{ display: none; }
   .announce-bar summary:focus-visible, .announce-bar a:focus-visible{ outline: 2px solid var(--focus, #2B5B8C); outline-offset: 2px; }
-  .announce-bar details[open] summary .more{ display: none; }
-  .announce-bar details:not([open]) summary .less{ display: none; }
-  .announce-more{
-    display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 8px 22px;
-    margin: 10px 0 4px; padding-top: 10px; border-top: 1px solid var(--line, #D9CBA3);
-    font-size: 0.9rem; color: var(--ink-soft, #524B3E);
-  }
-  .announce-more p{ margin: 0; }
+  .announce-bar details[open] summary .more, .announce-bar details:not([open]) summary .less{ display: none; }
+  .announce-more{ margin: 10px 0 2px; padding-top: 10px; border-top: 1px solid var(--line, #D9CBA3); font-size: .9rem; color: var(--ink-soft, #524B3E); }
+  .announce-more p{ margin: 0 0 8px; max-width: none; }
   .announce-more strong{ display: block; color: var(--ink, #211D17); }
 </style>
+<script src="/assets/js/site.js" defer></script>
 </head>
 <body>
+<main class="read">
 
-<aside class="announce-bar" aria-label="New on the site">
-  <div class="announce-inner">
-    <div class="announce-line">
-      <span class="announce-tag">New</span>
-      <strong>The Carrier Wave Decoder</strong> is here: a free, guided tool for the moment a conversation starts to squeal. Nothing you enter is sent to us.
-      <a href="carrier-wave-decoder.html">Open it &rarr;</a>
-      <details>
-        <summary><span class="more">More</span><span class="less">Less</span></summary>
-        <div class="announce-more">
-          <p><strong>What it does</strong>Find where each of you slipped on pace, register or urgency, check your state, practice getting back in tune, and close the books together. A private tone check flags wording that may land harder than you mean.</p>
-          <p><strong>Your data stays with you</strong>No account and no upload. Your notes and progress stay in your own browser on your own device, and clearing your browser data removes them.</p>
-          <p><strong>A preview of the full toolkit</strong>The Decoder is a free taste of how the tools work together. Members get the workpapers it leads into: WP-02 for your state, WP-09 for tone, WP-03 and WP-04 for problems that keep coming back, and CALC-01 to read the whole arrangement. <a href="membership.html">See membership</a></p>
-        </div>
-      </details>
-    </div>
-  </div>
-</aside>
+    <aside class="announce-bar" aria-label="New on the site">
+      <div class="announce-line">
+        <span class="announce-tag">New</span>
+        <strong>The Carrier Wave Decoder</strong> is here: a free, guided tool for the moment a conversation starts to squeal. Nothing you enter is sent to us.
+        <a href="carrier-wave-decoder.html">Open it &rarr;</a>
+        <details>
+          <summary><span class="more">More</span><span class="less">Less</span></summary>
+          <div class="announce-more">
+            <p><strong>What it does</strong>Find where each of you slipped on pace, register or urgency, check your state, practice getting back in tune, and close the books together. A private tone check flags wording that may land harder than you mean.</p>
+            <p><strong>Your data stays with you</strong>No account and no upload. Your notes and progress stay in your own browser on your own device, and clearing your browser data removes them.</p>
+            <p><strong>A preview of the full toolkit</strong>The Decoder is a free taste of how the tools work together. Members get the workpapers it leads into: WP-02 for your state, WP-09 for tone, WP-03 and WP-04 for problems that keep coming back, and CALC-01 to read the whole arrangement. <a href="membership.html">See membership</a></p>
+          </div>
+        </details>
+      </div>
+    </aside>
 
-<div class="frame">
+    <header class="read-head">
+      <p class="read-code">TOL&#8209;OS &middot; Baseline v1.0.4</p>
+      <h1>The Objective Ledger</h1>
+    </header>
 
-  <aside class="sidebar">
-    <div class="mark">The Objective Ledger
-      <small>TOL&#8209;OS &middot; BASELINE v1.0.4</small>
-    </div>
-    <p class="tagline">A nervous-system-aware ledger for relationships. Read it in order, or jump ahead.</p>
-
-    <a class="header-cta" href="infographic.html" target="_blank" rel="noopener">
-      Open the printable summary
-      <span class="ext-note">Opens in a new tab</span>
-    </a>
-
-    <nav aria-label="Table of contents">
-      <ol>
-        <li><a href="#preface" data-target="preface">Preface: Unbilled Debt</a></li>
-        <li><a href="#chapter-1" data-target="chapter-1">The Radio Frequency Paradigm</a></li>
-        <li><a href="#chapter-2" data-target="chapter-2">The Epistemic Verdict Engine</a></li>
-      </ol>
-      <div class="nav-group-label">Tools</div>
-      <ul class="tool-nav">
-        <li><a href="#carrier-wave" data-target="carrier-wave">Carrier Wave Decoder</a></li>
-        <li><a href="#nervous-system" data-target="nervous-system">Check Your State</a></li>
-        <li><a href="#lemonade" data-target="lemonade">The Lemonade Stand</a></li>
-      </ul>
-      <div class="nav-group-label">Access</div>
-      <ul class="tool-nav">
-        <li><a href="#access-tiers" data-target="access-tiers">Free Tools vs. Full Suite</a></li>
-        <li><a href="#register" data-target="register">Register</a></li>
-        <li><a href="roadmap.html">Content Roadmap</a></li>
-        <li><a href="program-overview.html">Program Overview</a></li>
-        <li><a href="about.html">About the Creator of Spread Love and Acceptance</a></li>
-      </ul>
-      <div class="nav-group-label">Appendix</div>
-      <ul class="tool-nav">
-        <li><a href="infographic.html" target="_blank" rel="noopener">Infographic Executive Summary</a></li>
-        <li><a href="soundscapes.html">Soundscape Catalog</a></li>
-        <li><a href="echoes-of-gold.html">Echoes of Gold &mdash; Companion Album</a></li>
-        <li><a href="podcast-index.html">Observational Podcast</a></li>
-      </ul>
-      <div class="nav-group-label">Resources</div>
-      <ul class="tool-nav">
-        <li><a href="suite-index.html">Instrument Suite Index</a></li>
-        <li><a href="telemetry.html">Rollout Status &amp; Telemetry</a></li>
-      </ul>
-      <div class="nav-group-label">Explore &amp; Discover</div>
-      <ul class="tool-nav">
-        <li><a href="snapshot/">Diagnostic Snapshot</a></li>
-        <li><a href="learn/">Marco &amp; Yuki's Story</a></li>
-        <li><a href="do/">Try the Workpapers</a></li>
-        <li><a href="architecture/">System Architecture</a></li>
-        <li><a href="reference/">Reference Materials</a></li>
-      </ul>
-    </nav>
-    <div class="sidebar-foot">spreadloveandacceptance.com</div>
-  </aside>
-
-  <div class="rule" aria-hidden="true"></div>
-
-  <main>
+    <p class="home-tagline">A nervous-system-aware ledger for relationships. Read it in order, or jump ahead.</p>
+    <p class="home-print"><a href="infographic.html" target="_blank" rel="noopener">Open the printable summary</a> <span>(opens in a new tab)</span></p>
 
     <div class="telemetry-bar" role="status" aria-label="Build status">
       <div class="telemetry-pill pill-active">
@@ -153,10 +139,29 @@
       </div>
     </div>
 
-    <div class="roadmap-spacer" aria-hidden="true"></div>
+    <section id="contents" aria-labelledby="contents-h">
+      <h2 id="contents-h">Contents</h2>
+      <div class="tol-index">
+      <div class="tol-index-section">
+        <h3>On this page</h3>
+        <ol>
+          <li><a class="tol-row" href="#preface"><span class="tol-code">Preface</span><span class="tol-title">Unbilled Debt<small>The invisible work every household runs on</small></span><span class="tol-access"></span></a></li>
+          <li><a class="tol-row" href="#chapter-1"><span class="tol-code">Ch. I</span><span class="tol-title">The Radio Frequency Paradigm<small>Why two reasonable people end up out of sync</small></span><span class="tol-access"></span></a></li>
+          <li><a class="tol-row" href="#carrier-wave"><span class="tol-code">Tool</span><span class="tol-title">The Carrier Wave Decoder<small>New · Chapter I, hands-on</small></span><span class="tol-access"></span></a></li>
+          <li><a class="tol-row" href="#nervous-system"><span class="tol-code">Tool</span><span class="tol-title">Check Your State<small>A quick self-check before you open the register</small></span><span class="tol-access"></span></a></li>
+          <li><a class="tol-row" href="#chapter-2"><span class="tol-code">Ch. II</span><span class="tol-title">The Epistemic Verdict Engine &amp; P(Solvency)<small>Is the workload arrangement sustainable?</small></span><span class="tol-access"></span></a></li>
+          <li><a class="tol-row" href="#lemonade"><span class="tol-code">Tool</span><span class="tol-title">The Lemonade Stand<small>A shared register of who does what</small></span><span class="tol-access"></span></a></li>
+          <li><a class="tol-row" href="#access-tiers"><span class="tol-code">Access</span><span class="tol-title">Free Diagnostic Tools vs. The Workpaper Suite<small>What’s free, and what membership adds</small></span><span class="tol-access"></span></a></li>
+          <li><a class="tol-row" href="#register"><span class="tol-code">Join</span><span class="tol-title">Register for the Program<small>Free updates by email, or full access now</small></span><span class="tol-access"></span></a></li>
+          <li><a class="tol-row" href="#appendix"><span class="tol-code">Appendix</span><span class="tol-title">Printable Executive Summary &amp; Infographic<small>Everything on this page, on one printable sheet</small></span><span class="tol-access"></span></a></li>
+        </ol>
+      </div>
+      </div>
+      <p class="home-more"><a href="#directory">Everything else on the site</a> is in the Site Directory at the bottom of this page.</p>
+    </section>
 
     <div class="roadmap-callout">
-      <svg class="roadmap-icon" viewBox="0 0 90 70" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <svg class="roadmap-icon" viewBox="0 0 90 70" width="54" height="42" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
         <circle cx="45" cy="24" r="11" fill="none" stroke="var(--brass)" stroke-width="2.5"/>
         <path d="M24 60 C 24 44, 34 38, 45 38 S 66 44, 66 60" fill="none" stroke="var(--brass)" stroke-width="2.5" stroke-linecap="round"/>
         <path d="M14 14 L14 30 M8 14 L20 14" stroke="var(--credit)" stroke-width="2" stroke-linecap="round"/>
@@ -170,7 +175,7 @@
     </div>
 
     <div class="roadmap-callout">
-      <svg class="roadmap-icon" viewBox="0 0 90 70" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <svg class="roadmap-icon" viewBox="0 0 90 70" width="54" height="42" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
         <circle cx="12" cy="52" r="4.5" fill="var(--brass)"/>
         <path d="M12 52 C 28 60, 34 34, 48 38 S 66 18, 78 14" fill="none" stroke="var(--brass)" stroke-width="2.5" stroke-linecap="round" stroke-dasharray="1 8"/>
         <path d="M78 4 L78 22" stroke="var(--ink)" stroke-width="2" stroke-linecap="round"/>
@@ -359,29 +364,60 @@
       <a href="infographic.html" target="_blank" rel="noopener" class="cta-button">Open &amp; print the executive summary</a>
     </section>
 
-  </main>
-</div>
+    <section id="directory" aria-labelledby="directory-h">
+      <div class="kicker">Resources</div>
+      <h2 id="directory-h">Site Directory</h2>
+      <p class="lede">Everything on spreadloveandacceptance.com, in one place.</p>
+      <div class="tol-index">
+      <div class="tol-index-section">
+        <h3>Access</h3>
+        <ol>
+          <li><a class="tol-row" href="membership.html"><span class="tol-code"></span><span class="tol-title">Membership<small>One membership, the whole ledger</small></span><span class="tol-access"></span></a></li>
+          <li><a class="tol-row" href="roadmap.html"><span class="tol-code"></span><span class="tol-title">Content Roadmap<small>What’s live, in progress, and planned</small></span><span class="tol-access"></span></a></li>
+          <li><a class="tol-row" href="program-overview.html"><span class="tol-code"></span><span class="tol-title">Program Overview<small>How the chapters, workpapers and calculators connect</small></span><span class="tol-access"></span></a></li>
+          <li><a class="tol-row" href="about.html"><span class="tol-code"></span><span class="tol-title">About the Creator of Spread Love and Acceptance</span><span class="tol-access"></span></a></li>
+        </ol>
+      </div>
+      <div class="tol-index-section">
+        <h3>Resources</h3>
+        <ol>
+          <li><a class="tol-row" href="suite-index.html"><span class="tol-code"></span><span class="tol-title">Instrument Suite Index<small>Exactly what’s built today</small></span><span class="tol-access"></span></a></li>
+          <li><a class="tol-row" href="telemetry.html"><span class="tol-code"></span><span class="tol-title">Rollout Status &amp; Telemetry</span><span class="tol-access"></span></a></li>
+        </ol>
+      </div>
+      <div class="tol-index-section">
+        <h3>Appendix</h3>
+        <ol>
+          <li><a class="tol-row" href="infographic.html" target="_blank" rel="noopener"><span class="tol-code"></span><span class="tol-title">Infographic Executive Summary<small>Printable · opens in a new tab</small></span><span class="tol-access"></span></a></li>
+          <li><a class="tol-row" href="soundscapes.html"><span class="tol-code"></span><span class="tol-title">Soundscape Catalog</span><span class="tol-access"></span></a></li>
+          <li><a class="tol-row" href="echoes-of-gold.html"><span class="tol-code"></span><span class="tol-title">Echoes of Gold<small>Companion album</small></span><span class="tol-access"></span></a></li>
+          <li><a class="tol-row" href="podcast-index.html"><span class="tol-code"></span><span class="tol-title">Observational Podcast</span><span class="tol-access"></span></a></li>
+        </ol>
+      </div>
+      <div class="tol-index-section">
+        <h3>Explore &amp; Discover</h3>
+        <ol>
+          <li><a class="tol-row" href="snapshot/"><span class="tol-code"></span><span class="tol-title">Diagnostic Snapshot</span><span class="tol-access"></span></a></li>
+          <li><a class="tol-row" href="learn/"><span class="tol-code"></span><span class="tol-title">Marco &amp; Yuki’s Story</span><span class="tol-access"></span></a></li>
+          <li><a class="tol-row" href="do/"><span class="tol-code"></span><span class="tol-title">Try the Workpapers</span><span class="tol-access"></span></a></li>
+          <li><a class="tol-row" href="architecture/"><span class="tol-code"></span><span class="tol-title">System Architecture</span><span class="tol-access"></span></a></li>
+          <li><a class="tol-row" href="reference/"><span class="tol-code"></span><span class="tol-title">Reference Materials</span><span class="tol-access"></span></a></li>
+        </ol>
+      </div>
+      <div class="tol-index-section">
+        <h3>Legal</h3>
+        <ol>
+          <li><a class="tol-row" href="legal/terms-of-service.html"><span class="tol-code"></span><span class="tol-title">Terms of Service</span><span class="tol-access"></span></a></li>
+          <li><a class="tol-row" href="legal/privacy-policy.html"><span class="tol-code"></span><span class="tol-title">Privacy Policy</span><span class="tol-access"></span></a></li>
+          <li><a class="tol-row" href="legal/refund-policy.html"><span class="tol-code"></span><span class="tol-title">Refund Policy</span><span class="tol-access"></span></a></li>
+        </ol>
+      </div>
+      </div>
+    </section>
 
-<footer>
-  TOL&#8209;OS &middot; Baseline v1.0.4 &middot; spreadloveandacceptance.com
-  <div class="footer-links">
-    <a href="index.html">Home</a>
-    <a href="about.html">About</a>
-    <a href="roadmap.html">Roadmap</a>
-    <a href="podcast-index.html">Podcast</a>
-    <a href="suite-index.html">Suite Index</a>
-    <a href="program-overview.html">Program Overview</a>
-    <a href="telemetry.html">Telemetry</a>
-    <a href="snapshot/">Snapshot</a>
-    <a href="do/">Try It</a>
-    <a href="architecture/">Architecture</a>
-    <a href="legal/terms-of-service.html">Terms of Service</a>
-    <a href="legal/privacy-policy.html">Privacy Policy</a>
-    <a href="legal/refund-policy.html">Refund Policy</a>
-  </div>
-</footer>
+</main>
 
-<script src="assets/js/lemonade-calc.js"></script>
+<script src="/assets/js/lemonade-calc.js"></script>
 <script>
 (function(){
   // Nervous System Ladder — small page-local widget, not part of lemonade-calc.js
@@ -402,25 +438,6 @@
     });
   });
 })();
-
-(function(){
-  var links = Array.prototype.slice.call(document.querySelectorAll('nav a'));
-  var sections = links.map(function(l){ return document.getElementById(l.dataset.target); });
-
-  var observer = new IntersectionObserver(function(entries){
-    entries.forEach(function(entry){
-      var link = links.find(function(l){ return l.dataset.target === entry.target.id; });
-      if(!link) return;
-      if(entry.isIntersecting){
-        links.forEach(function(l){ l.classList.remove('active'); });
-        link.classList.add('active');
-      }
-    });
-  }, { rootMargin: '-20% 0px -70% 0px' });
-
-  sections.forEach(function(s){ if(s) observer.observe(s); });
-})();
 </script>
-
 </body>
 </html>
