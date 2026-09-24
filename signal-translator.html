@@ -1,0 +1,1237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-NKC6CQ9S66"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-NKC6CQ9S66');
+</script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>The Signal Translator — The Objective Ledger (TOL-OS)</title>
+<meta name="description" content="Pick how Person A and Person B are wired, from neurotypical, autistic, ADHD, dyslexic and more, type a phrase, and see how it might land, what it might sound like, and a clearer way to say it. Free, and nothing you type leaves your browser.">
+<meta property="og:title" content="The Signal Translator — The Objective Ledger">
+<meta property="og:description" content="Same words, different receivers. See how a phrase might land for someone wired differently than you.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,500&family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/css/site.css">
+<style>
+:root{
+  --bg:#F5EFDE; --panel:#ECE2C4; --ink:#211D17; --muted:#524B3E; --line:#D9CBA3;
+  --brass:#8A5E1E; --sheet:#FFFDF7; --radius:3px;
+  --a:#96412B; --b:#2B5B8C;
+  --v:#3E6B4C; --s:#86591A; --d:#5A5580;
+  --state:var(--v);
+  --display:"Fraunces", "Lora", Georgia, serif;
+  --body:"Lora", Georgia, "Times New Roman", serif;
+  --mono:"IBM Plex Mono", ui-monospace, Menlo, monospace;
+  box-sizing:border-box;
+}
+*,*::before,*::after{box-sizing:inherit}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);font-size:17px;line-height:1.6}
+button,textarea,select,input{font:inherit;color:inherit}
+button{cursor:pointer}
+[hidden]{display:none!important}
+:focus-visible{outline:3px solid var(--b);outline-offset:2px;border-radius:var(--radius)}
+a{color:inherit}
+.wrap{max-width:1080px;margin:0 auto;padding:0 20px 48px}
+.sitebar{display:flex;justify-content:space-between;align-items:center;gap:10px 20px;flex-wrap:wrap;padding:22px 0 16px;border-bottom:1px solid var(--line)}
+.sitebar .mark{font-family:var(--display);font-weight:600;font-size:1.05rem;text-decoration:none}
+.sitebar .mark small{display:block;font-family:var(--mono);font-weight:400;font-size:.62rem;letter-spacing:.12em;color:var(--brass);margin-top:4px}
+.sitebar .back{font-family:var(--mono);font-size:.78rem;color:var(--muted)}
+.kicker{font-family:var(--mono);font-size:.72rem;color:var(--brass);margin-bottom:12px}
+header.top{padding:30px 0 8px}
+h1{font-family:var(--display);font-weight:700;font-size:clamp(2rem,5.5vw,3.4rem);line-height:1.02;letter-spacing:-.02em;margin:0}
+.lede{color:var(--muted);max-width:62ch;margin:.7rem 0 0}
+.privacy{font-family:var(--mono);font-size:.74rem;color:var(--muted);margin:14px 0 0}
+h2{font-family:var(--display);font-weight:600;font-size:1.3rem;margin:0 0 10px;line-height:1.25}
+h3{font-family:var(--display);font-weight:600;font-size:1.08rem;margin:0 0 6px;line-height:1.3}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:22px clamp(16px,3vw,30px) 24px;margin-top:22px}
+.step{font-family:var(--mono);font-size:.7rem;letter-spacing:.08em;color:var(--brass);display:block;margin-bottom:4px}
+.hint{font-size:.86rem;color:var(--muted);margin:0 0 12px;max-width:66ch}
+
+/* People */
+.people{display:grid;grid-template-columns:1fr auto 1fr;gap:18px;align-items:start}
+@media (max-width:860px){.people{grid-template-columns:1fr}}
+.person{background:var(--sheet);border:1px solid var(--line);border-top:4px solid var(--pc);border-radius:var(--radius);padding:16px 16px 12px}
+.person.pa{--pc:var(--a)} .person.pb{--pc:var(--b)}
+.person .who{display:flex;align-items:baseline;justify-content:space-between;gap:8px;flex-wrap:wrap;margin-bottom:6px}
+.person .who h3{margin:0;color:var(--pc)}
+.person .who .role{font-family:var(--mono);font-size:.68rem;color:var(--muted)}
+.namefield{display:flex;gap:8px;align-items:center;margin:4px 0 12px;font-size:.85rem;color:var(--muted)}
+.namefield input{flex:1;min-width:0;border:1px solid var(--line);border-radius:var(--radius);background:var(--bg);padding:5px 9px;font-size:.92rem}
+.grp{margin:10px 0 2px;font-family:var(--mono);font-size:.66rem;letter-spacing:.07em;color:var(--muted);text-transform:uppercase}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{border:1.5px solid var(--line);background:var(--bg);border-radius:999px;padding:4px 11px;font-size:.86rem;font-family:var(--display);line-height:1.35;text-align:left}
+.chip:hover{border-color:var(--muted)}
+.chip[aria-pressed="true"]{border-color:var(--pc);background:color-mix(in srgb,var(--pc) 13%,var(--bg));box-shadow:inset 0 0 0 1px var(--pc)}
+.chip[aria-pressed="true"]::before{content:"✓ ";font-family:var(--mono);font-size:.78rem}
+.picked{margin:12px 0 0;font-size:.84rem;color:var(--muted);min-height:1.4em}
+.picked b{color:var(--ink);font-weight:600}
+.swapcol{display:flex;align-items:center;justify-content:center;padding-top:60px}
+@media (max-width:860px){.swapcol{padding-top:0}}
+.swap{border:1.5px solid var(--line);background:var(--bg);border-radius:var(--radius);padding:8px 12px;font-family:var(--display);font-size:.9rem}
+.swap:hover{border-color:var(--ink)}
+
+/* Context */
+.ctx{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+@media (max-width:760px){.ctx{grid-template-columns:1fr}}
+.seg{display:flex;flex-wrap:wrap;gap:6px}
+.seg button{border:1.5px solid var(--line);background:var(--bg);border-radius:var(--radius);padding:6px 12px;font-size:.88rem;font-family:var(--display)}
+.seg button[aria-pressed="true"]{border-color:var(--ink);box-shadow:inset 0 0 0 1px var(--ink)}
+.states{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+.st{border:1.5px solid var(--line);background:var(--bg);border-radius:var(--radius);padding:8px 8px;text-align:left}
+.st .n{display:block;font-family:var(--display);font-weight:600;font-size:.92rem}
+.st .h{display:block;font-size:.76rem;color:var(--muted);line-height:1.3}
+.st[aria-pressed="true"]{border-color:var(--sc);box-shadow:inset 0 0 0 1.5px var(--sc)}
+.st[data-s="v"]{--sc:var(--v)} .st[data-s="s"]{--sc:var(--s)} .st[data-s="d"]{--sc:var(--d)}
+.lab{font-family:var(--display);font-weight:600;font-size:.95rem;display:block;margin-bottom:6px}
+
+/* Phrase */
+textarea{width:100%;min-height:96px;margin-top:4px;border:1px solid var(--line);border-radius:var(--radius);padding:10px 12px;background:var(--sheet);resize:vertical;font-size:1.02rem}
+.presets{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0 0}
+.presets button{border:1px dashed var(--muted);background:none;border-radius:var(--radius);padding:4px 10px;font-size:.82rem;font-family:var(--body);font-style:italic}
+.presets button:hover{background:var(--bg)}
+.actions{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:16px}
+.go{background:var(--ink);color:var(--bg);border:none;border-radius:var(--radius);padding:11px 24px;font-family:var(--display);font-weight:600;font-size:1rem}
+.go:hover{background:var(--v)}
+.ghost{background:none;border:1.5px solid var(--line);border-radius:var(--radius);padding:9px 16px;font-family:var(--display);font-size:.9rem}
+.ghost:hover{border-color:var(--ink)}
+.msg{font-size:.88rem;color:var(--a)}
+
+/* Results */
+#results{margin-top:28px}
+.rhead{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:12px;border-bottom:3px double var(--ink);padding-bottom:8px;margin-bottom:16px}
+.rhead h2{margin:0}
+.pair{font-family:var(--mono);font-size:.74rem;color:var(--muted)}
+.pair .pa{color:var(--a)} .pair .pb{color:var(--b)}
+.meter{display:grid;grid-template-columns:auto 1fr;gap:6px 16px;align-items:center;margin:0 0 18px}
+.meter .lvl{font-family:var(--display);font-weight:700;font-size:1.3rem}
+.meter .track{height:10px;background:var(--sheet);border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.meter .fill{height:100%;width:0;border-radius:10px;transition:width .5s}
+.meter .why{grid-column:1/-1;font-size:.9rem;color:var(--muted);margin:0}
+.lvl-clear{color:var(--v)} .fill.lvl-clear{background:var(--v)}
+.lvl-some{color:var(--s)} .fill.lvl-some{background:var(--s)}
+.lvl-heavy{color:var(--a)} .fill.lvl-heavy{background:var(--a)}
+.box{background:var(--sheet);border:1px solid var(--line);border-radius:var(--radius);padding:16px 18px;margin:0 0 14px}
+.box.tone-b{border-left:4px solid var(--b)}
+.box.tone-a{border-left:4px solid var(--a)}
+.box.tone-v{border-left:4px solid var(--v)}
+.box.tone-brass{border-left:4px solid var(--brass)}
+.box h3 .sub{font-family:var(--mono);font-weight:400;font-size:.68rem;color:var(--muted);letter-spacing:.05em;display:block;margin-top:2px}
+.marked{font-family:var(--display);font-size:1.18rem;line-height:1.7;margin:6px 0 10px;white-space:pre-wrap;word-wrap:break-word}
+mark{background:color-mix(in srgb,var(--s) 20%,transparent);border-bottom:2px solid var(--s);padding:0 1px;color:inherit}
+.flist{list-style:none;padding:0;margin:0;display:flex;flex-wrap:wrap;gap:6px}
+.flist li{font-family:var(--mono);font-size:.72rem;border:1px solid var(--line);border-radius:999px;padding:2px 9px;background:var(--bg)}
+.receiver{border-top:1px solid var(--line);padding-top:12px;margin-top:12px}
+.receiver:first-of-type{border-top:0;padding-top:0;margin-top:4px}
+.receiver h4{font-family:var(--display);font-weight:600;font-size:1rem;margin:0 0 6px;color:var(--b)}
+.land{list-style:none;padding:0;margin:0}
+.land li{padding:6px 0 6px 12px;border-left:2px solid var(--line);margin:0 0 6px}
+.land li.w3{border-left-color:var(--a)} .land li.w2{border-left-color:var(--s)} .land li.w1{border-left-color:var(--line)} .land li.w0{border-left-color:var(--v)}
+.land .heard{font-family:var(--display);font-style:italic;font-size:1.02rem}
+.land .fx{font-family:var(--mono);font-size:.66rem;color:var(--muted);letter-spacing:.04em;display:block}
+.land .y{display:block;font-size:.88rem;color:var(--muted)}
+.quote{font-family:var(--display);font-size:1.12rem;font-style:italic;margin:6px 0;padding-left:12px;border-left:2px solid var(--b)}
+.rewrite{font-family:var(--display);font-size:1.15rem;margin:6px 0 8px;white-space:pre-wrap}
+.ph{font-family:var(--mono);font-size:.82em;background:color-mix(in srgb,var(--v) 14%,transparent);border:1px dashed var(--v);border-radius:2px;padding:0 4px;font-style:normal}
+.ul{margin:6px 0 0;padding-left:1.15rem}
+.ul li{margin:.3rem 0;font-size:.95rem}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media (max-width:760px){.two{grid-template-columns:1fr}}
+.two .box{margin:0}
+.small{font-size:.86rem;color:var(--muted)}
+.src{font-size:.82rem;color:var(--muted)}
+.src a{color:var(--ink)}
+.src li{margin:.2rem 0}
+.rfoot{display:flex;flex-wrap:wrap;gap:10px;margin-top:16px}
+.note{margin-top:30px;padding:16px 18px;border:1px dashed var(--muted);border-radius:var(--radius);font-size:.9rem;color:var(--muted);max-width:760px}
+.note b{color:var(--ink)}
+.sitefoot{max-width:1080px;margin:0 auto;padding:8px 20px 64px;font-family:var(--mono);font-size:.7rem;color:var(--muted)}
+.sitefoot .links{display:flex;flex-wrap:wrap;gap:6px 18px;margin-top:8px}
+#results:focus{outline:none}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+details.src summary{cursor:pointer;font-family:var(--display);font-size:.98rem;color:var(--ink)}
+.rfoot a.ghost{display:inline-flex;align-items:center;color:var(--ink)}
+@media print{
+  .sitebar,.panel,.actions,.rfoot,.sitefoot,.privacy,.tol-bar,.tol-panel{display:none!important}
+  body{background:#fff;font-size:12pt}
+  .box{break-inside:avoid;border-color:#bbb}
+}
+@media (prefers-reduced-motion:reduce){.meter .fill{transition:none}}
+</style>
+<script src="/assets/js/site.js" defer></script>
+</head>
+<body>
+<div class="wrap">
+  <div class="sitebar">
+    <a class="mark" href="index.html">The Objective Ledger<small>TOL&#8209;OS &middot; TOOLS</small></a>
+    <a class="back" href="wired-differently.html">&larr; Read: Wired Differently</a>
+  </div>
+
+  <header class="top">
+    <div class="kicker">Tool &middot; Pairs with <a href="wired-differently.html">Wired Differently</a> and <a href="book/chapter-1.html">Chapter I</a></div>
+    <h1>The Signal Translator</h1>
+    <p class="lede">Choose how the speaker is wired and how the listener is wired. You can pick one wiring or several for each person. Then type what the speaker is about to say, or already said, and see how it might land, what the listener might hear, what the speaker probably meant, and a clearer way to say it.</p>
+    <p class="privacy">Runs entirely in your browser. Nothing you type is saved, stored or sent anywhere.</p>
+  </header>
+
+  <!-- STEP 1: PEOPLE -->
+  <section class="panel" aria-labelledby="s1">
+    <span class="step">STEP 1</span>
+    <h2 id="s1">Who's talking to whom?</h2>
+    <p class="hint">Pick everything that fits each person. Combinations are common. Autism and ADHD, for example, often occur together. If you're not sure, choose what you know and leave the rest blank. The last two groups aren't neurotypes in the strict sense, but they change how words land just as much.</p>
+    <div class="people">
+      <div class="person pa" id="personA">
+        <div class="who"><h3>Person A</h3><span class="role">THE SPEAKER · SENDS THE MESSAGE</span></div>
+        <label class="namefield">Name (optional) <input type="text" id="nameA" maxlength="24" placeholder="Person A" autocomplete="off"></label>
+        <div data-chips="A"></div>
+        <p class="picked" id="pickedA" aria-live="polite"></p>
+      </div>
+      <div class="swapcol"><button class="swap" id="swap" type="button" title="Swap Person A and Person B">&#8646; Swap</button></div>
+      <div class="person pb" id="personB">
+        <div class="who"><h3>Person B</h3><span class="role">THE LISTENER · RECEIVES THE MESSAGE</span></div>
+        <label class="namefield">Name (optional) <input type="text" id="nameB" maxlength="24" placeholder="Person B" autocomplete="off"></label>
+        <div data-chips="B"></div>
+        <p class="picked" id="pickedB" aria-live="polite"></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- STEP 2: CONTEXT -->
+  <section class="panel" aria-labelledby="s2">
+    <span class="step">STEP 2</span>
+    <h2 id="s2">How and when is it being said?</h2>
+    <div class="ctx">
+      <div>
+        <span class="lab" id="chLab">Channel</span>
+        <div class="seg" id="channel" role="group" aria-labelledby="chLab">
+          <button type="button" data-ch="person" aria-pressed="true">In person</button>
+          <button type="button" data-ch="phone" aria-pressed="false">Phone or video</button>
+          <button type="button" data-ch="text" aria-pressed="false">Text message</button>
+          <button type="button" data-ch="email" aria-pressed="false">Email or long note</button>
+        </div>
+      </div>
+      <div>
+        <span class="lab" id="stLab">Listener's state right now</span>
+        <div class="states" id="state" role="group" aria-labelledby="stLab">
+          <button type="button" class="st" data-s="v" aria-pressed="true"><span class="n">Settled</span><span class="h">Calm, connected, can take things in</span></button>
+          <button type="button" class="st" data-s="s" aria-pressed="false"><span class="n">Mobilized</span><span class="h">Stressed, on edge, braced</span></button>
+          <button type="button" class="st" data-s="d" aria-pressed="false"><span class="n">Shut down</span><span class="h">Flat, overloaded, far away</span></button>
+        </div>
+        <p class="hint" style="margin:6px 0 0">Not sure? The <a href="quick-checks.html#ladder">Nervous System Ladder</a> takes thirty seconds.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- STEP 3: PHRASE -->
+  <section class="panel" aria-labelledby="s3">
+    <span class="step">STEP 3</span>
+    <h2 id="s3">What does Person A say?</h2>
+    <label for="phrase" class="lab" id="phraseLab">The exact words</label>
+    <textarea id="phrase" placeholder="Type or paste the phrase, exactly as it would be said or sent…" maxlength="1500"></textarea>
+    <div class="presets" id="presets" aria-label="Example phrases"></div>
+    <div class="actions">
+      <button class="go" id="go" type="button">Translate the signal</button>
+      <button class="ghost" id="reset" type="button">Start over</button>
+      <span class="msg" id="msg" role="alert"></span>
+    </div>
+  </section>
+
+  <!-- RESULTS -->
+  <section id="results" hidden aria-live="polite" aria-labelledby="rTitle" tabindex="-1"></section>
+
+  <div class="note">
+    <b>What this tool is, and isn't.</b> It uses rules built from published research and lived-experience guidance, collected in <a href="wired-differently.html">Wired Differently</a>. It looks for patterns in the words, like hints, sarcasm, vague timing and labels, that commonly cause static for particular wirings. It can't hear tone, see faces or know your history, and it can't diagnose anyone. Every reading starts with "may" for a reason: people vary widely within every group. The best use is to find the question worth asking each other. It scores the wording, never the person.
+  </div>
+</div>
+
+<footer class="sitefoot">
+  TOL&#8209;OS &middot; spreadloveandacceptance.com
+  <div class="links">
+    <a href="index.html">Home</a>
+    <a href="about.html">About</a>
+    <a href="roadmap.html">Roadmap</a>
+    <a href="podcast-index.html">Podcast</a>
+    <a href="suite-index.html">Suite Index</a>
+    <a href="program-overview.html">Program Overview</a>
+    <a href="telemetry.html">Telemetry</a>
+    <a href="snapshot/">Snapshot</a>
+    <a href="do/">Try It</a>
+    <a href="architecture/">Architecture</a>
+    <a href="legal/terms-of-service.html">Terms of Service</a>
+    <a href="legal/privacy-policy.html">Privacy Policy</a>
+    <a href="legal/refund-policy.html">Refund Policy</a>
+  </div>
+</footer>
+
+<script>
+(function(){
+"use strict";
+
+/* ============================================================
+   SOURCES (full list lives on wired-differently.html)
+   ============================================================ */
+const SRC = {
+  nasComm:["National Autistic Society: autism and communication","https://www.autism.org.uk/advice-and-guidance/about-autism/autism-and-communication"],
+  nasDE:["National Autistic Society: the double empathy problem","https://www.autism.org.uk/learn/knowledge-hub/professional-practice/double-empathy"],
+  mono:["National Autistic Society: monotropism","https://www.autism.org.uk/learn/knowledge-hub/professional-practice/what-is-monotropism"],
+  frost:["Frost, Nagano & Zane (2024): indirect requests","https://pmc.ncbi.nlm.nih.gov/articles/PMC11897084/"],
+  zalla:["Zalla et al. (2014): irony in autistic adults","https://pmc.ncbi.nlm.nih.gov/articles/PMC3991690/"],
+  kaland:["Kalandadze et al. (2018): figurative language meta-analysis","https://journals.sagepub.com/doi/10.1177/1362361316668652"],
+  howard:["Howard & Sedgewick (2021): communication preferences of 245 autistic adults","https://journals.sagepub.com/doi/full/10.1177/13623613211014995"],
+  suth:["Sutherland et al. (2025): 'Read my lips, not my body'","https://journals.sagepub.com/doi/10.1177/27546330251333919"],
+  asa:["Autism Society of America: first responder guidance","https://iacc.hhs.gov/meetings/iacc-meetings/2024/full-committee-meeting/january24/first_responder_handout.pdf"],
+  lpt:["Leicestershire Partnership NHS: meltdowns and shutdowns","https://www.leicspart.nhs.uk/autism-space/health-and-lifestyle/meltdowns-and-shutdowns/"],
+  chadd:["CHADD: ADHD, relationships and social skills","https://chadd.org/for-adults/relationships-social-skills/"],
+  yang:["Yang et al. (2017): ADHD and following instructions","https://pmc.ncbi.nlm.nih.gov/articles/PMC5258743/"],
+  weiss:["Weissenberger et al. (2021): ADHD and time perception","https://pmc.ncbi.nlm.nih.gov/articles/PMC8293837/"],
+  soler:["Soler-Gutiérrez et al. (2023): emotion regulation in adult ADHD","https://pmc.ncbi.nlm.nih.gov/articles/PMC9821724/"],
+  rsd:["Cleveland Clinic: rejection sensitive dysphoria","https://my.clevelandclinic.org/health/diseases/24099-rejection-sensitive-dysphoria-rsd"],
+  rowney:["Rowney-Smith et al. (2026): rejection sensitivity in students with ADHD","https://pmc.ncbi.nlm.nih.gov/articles/PMC12822938/"],
+  autistica:["Autistica: ADHD and autism","https://www.autistica.org.uk/what-is-autism/adhd-and-autism"],
+  dyslexia:["Cleveland Clinic: dyslexia","https://my.clevelandclinic.org/health/diseases/6005-dyslexia"],
+  dyspraxia:["Dyspraxia Foundation: dyspraxia in adults","https://www.dyspraxiafoundation.org.uk/adults/dyspraxia-in-adults"],
+  nhsApd:["NHS: auditory processing disorder","https://www.nhs.uk/conditions/auditory-processing-disorder/"],
+  asha:["ASHA: central auditory processing disorder","https://www.asha.org/practice-portal/clinical-topics/central-auditory-processing-disorder/"],
+  nidcd:["NIDCD: developmental language disorder","https://www.nidcd.nih.gov/health/developmental-language-disorder"],
+  taa:["Tourette Association of America: the facts","https://tourette.org/what-makes-them-tic-the-facts-about-tourette-syndrome/"],
+  hog:["Hogeveen & Grafman (2021): alexithymia","https://pmc.ncbi.nlm.nih.gov/articles/PMC8456171/"],
+  bird:["Bird & Cook (2013): alexithymia and emotion recognition","https://www.nature.com/articles/tp201361"],
+  acev:["Acevedo et al. (2014): sensory processing sensitivity","https://pmc.ncbi.nlm.nih.gov/articles/PMC4086365/"],
+  beard:["Beard & Amir (2009): interpretation bias in social anxiety","https://pmc.ncbi.nlm.nih.gov/articles/PMC2792932/"],
+  kimble:["Kimble et al. (2013): hypervigilance and PTSD","https://pmc.ncbi.nlm.nih.gov/articles/PMC4157995/"],
+  ocd:["Cardiff and Vale UHB: OCD guide for friends and family","https://cavuhb.nhs.wales/files/mental-health/friends-and-family-booklet-pdf/"],
+  gunraj:["Gunraj et al. (2016): periods in text messages","https://phys.org/news/2015-12-text-messages-period-sincere.html"],
+  achim:["Achimova, Franke & Butz (2025): why people speak indirectly","https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0323839"],
+  crompton:["Crompton et al. (2020): information transfer between autistic and non-autistic people","https://pmc.ncbi.nlm.nih.gov/articles/PMC7545656/"],
+  nature25:["Nature Human Behaviour (2025): large replication of the diffusion-chain study","https://www.nature.com/articles/s41562-025-02163-z"]
+};
+
+/* ============================================================
+   FEATURES: patterns in the words that commonly add static
+   ============================================================ */
+const LABEL_WORDS="lazy|selfish|inconsiderate|careless|useless|ridiculous|pathetic|stupid|irresponsible|childish|crazy|dramatic|immature|clueless|rude|incompetent|hopeless|unreliable|controlling|needy|petty|disrespectful|dumb|idiot|worthless|annoying";
+const IDIOMS=["ball['’]?s in your court","play it by ear","break a leg","piece of cake","under the weather","beat(?:ing)? around the bush","on the same page","hit the hay","cut (?:me |you )?some slack","get your act together","pull your (?:own )?weight","walk(?:ing)? on eggshells","(?:the )?last straw","elephant in the room","cross that bridge","bite the bullet","spill the beans","hold your horses","in hot water","on thin ice","drop(?:ped)? the ball","at the end of the day","when pigs fly","blow(?:ing)? off steam","rain ?check","touch base","get off my back","cool it","jump(?:ed|ing)? the gun","go the extra mile","keep an eye on","give me a hand","hang in there","hit the roof","the whole nine yards","not rocket science","a lot on my plate","keep me in the loop","out of the loop","heads up","sleep on it","hit a wall","on the fence","up in the air","cold feet","cost an arm and a leg","kill two birds","get it together","pull yourself together","get a grip","knock it off","cut it out","over the moon","see eye to eye","water under the bridge","throw(?:n)? under the bus","read the room","get the ball rolling","on the back burner","call it a day","the bottom line","you['’]?re on thin ice","take it easy","break the ice","sit tight","hang on a sec","bent out of shape","push(?:ing)? my buttons","on edge","between a rock and a hard place"];
+
+const F = [
+  {id:"sarcasm", name:"Possible sarcasm", re:/\b(?:oh,? (?:great|wonderful|perfect|nice|fantastic|lovely|good)|yeah,? right|thanks a lot|(?:nice|great|good) (?:job|work|one)|just (?:perfect|great|wonderful|what i needed)|real(?:ly)? (?:mature|helpful|nice)|wow,? (?:thanks|great|ok)|sure you (?:did|are|will|do)|what a surprise|big surprise|how (?:nice|lovely|thoughtful)|i['’]?m so (?:thrilled|glad|happy) for you|love that for (?:me|us)|must be nice)\b/gi,
+   fix:"Say the real message plainly. Sarcasm carries its meaning in tone, which is the easiest signal to lose or to over-amplify."},
+  {id:"idiom", name:"Figure of speech", re:new RegExp("\\b(?:"+IDIOMS.join("|")+")\\b","gi"),
+   fix:"Swap the figure of speech for the literal meaning."},
+  {id:"hint", name:"Hint instead of a request", re:/\b(?:it(?: would|['’]d) be (?:nice|great|good|helpful|lovely) if|(?:someone|somebody|anyone) (?:should|needs to|could|has to|might want to)|i guess i['’]?ll just|i['’]?ll just do it myself|i wish (?:someone|somebody|you) would|would it kill you|no pressure,? but|if you (?:want|feel like it)|it['’]?s (?:so |really )?(?:cold|hot|loud|messy|dark|quiet) in here|the (?:trash|garbage|dishes|laundry|sink|bin)(?: is| are|['’]s) (?:full|piling up|overflowing|still there)|have you (?:seen|noticed) (?:the|how))/gi,
+   fix:"Turn the hint into a direct request: who, what and by when."},
+  {id:"vtime", name:"Vague timing", re:/\b(?:when you get a chance|when you can|whenever|at some point|sometime|eventually|(?<!see you |talk to you |talk |catch you )later(?! on today)|soon|in a bit|in a minute|one of these days|asap|shortly)\b/gi,
+   fix:"Replace vague timing with a real time or cue: \"by 6\" or \"right after dinner.\""},
+  {id:"vstd", name:"Undefined standard", re:/\b(?:clean(?:ed)? up|tidy(?: up)?|a bit|a little more|properly|the right way|like a normal person|like an adult|help (?:out|more)|do better|be (?:more )?(?:supportive|responsible|considerate|present|helpful|thoughtful|involved|mature)|step up|pitch in|make an effort|try harder|fix (?:it|this)|sort it out|deal with (?:it|this))\b/gi,
+   fix:"Define the finish line: exactly what, how much, and what \"done\" looks like."},
+  {id:"absolute", name:"Absolute word", re:/\b(?:always|never|every (?:single )?time|constantly|all the time|nothing ever|no one ever|nobody ever)\b/gi,
+   fix:"Replace \"always\" and \"never\" with one specific, recent example."},
+  {id:"label", name:"Label on the person", re:new RegExp("\\byou(?:['’]re| are) (?:so |such an? |being |acting |really |just )?(?:"+LABEL_WORDS+")\\b|\\b(?:"+LABEL_WORDS+")\\b","gi"),
+   fix:"Describe the behavior, never the person. A label can't be fixed. A behavior can."},
+  {id:"blameq", name:"Blame dressed as a question", re:/\b(?:why (?:didn['’]?t|don['’]?t|can['’]?t|won['’]?t|wouldn['’]?t|haven['’]?t|aren['’]?t|do you always|would you|did you)|what['’]?s wrong with you|how (?:hard|difficult) (?:is|can) it|how many times|what were you thinking|who does that|are you (?:serious|kidding(?: me)?|even listening))\b|\b(?:seriously|really)\?/gi,
+   fix:"Replace the \"why\" question with the request underneath it: \"Next time, could you…?\""},
+  {id:"ominous", name:"Ominous opener", re:/\b(?:we need to talk|can we talk|call me(?= *(?:[.!]|$| now| asap| when))|don['’]?t be mad|don['’]?t freak out|i have something to tell you|we (?:have|need to discuss) a problem|come here(?:,? now)?|see me|you['’]?re in trouble|i need to tell you something|have you got a (?:minute|sec)|got a minute)\b/gi,
+   fix:"Say what it's about and how serious it is in the same breath."},
+  {id:"minimal", name:"Minimal reply", whole:true, re:/^\s*(?:fine|k|kk|ok|okay|sure|whatever|noted|cool|great|i['’]?m fine|it['’]?s fine|nothing|nvm|never ?mind|if you say so|yep|yeah|mhm|good|right|wow|alright|all right)\s*[.!]*\s*$/gi,
+   fix:"Add the half that's missing: whether it's really fine, or whether you need a minute."},
+  {id:"period", name:"Full stop on a short text", chOnly:["text"], re:null,
+   fix:"On short texts, drop the final period, or add a warm word. Periods on one-word texts read as less sincere."},
+  {id:"ellipsis", name:"Trailing dots", re:/\.{3,}|…/g,
+   fix:"Finish the thought. Trailing dots leave the listener to guess what's unsaid."},
+  {id:"shout", name:"Shouting or stacked punctuation", re:/\b(?!(?:ASAP|ADHD|OCD|PTSD|APD|DLD|DCD|HSP|USA|OK|TV|LOL|LMAO|JK|FYI|ETA|ID|AM|PM|UK|US|NHS)\b)[A-Z]{3,}\b|[!?]{2,}/g,
+   fix:"Lower the volume. Capitals and stacked punctuation read as shouting."},
+  {id:"calm", name:"Telling someone how to feel", re:/\b(?:calm down|relax|chill(?: out)?|get over it|stop (?:crying|overreacting|being (?:so )?\w+)|grow up|deal with it|let it go|move on|just (?:drop|forget) it|snap out of it|cheer up|smile)\b/gi,
+   fix:"Offer a break or name what you see instead of instructing a feeling."},
+  {id:"invalid", name:"Invalidation", re:/\b(?:overreacting|too sensitive|so sensitive|being dramatic|making a (?:big )?deal|(?:it['’]?s|that['’]?s) not (?:a )?big deal|you['’]?re imagining (?:it|things)|that['’]?s not what happened|you['’]?re being (?:silly|irrational|ridiculous)|it was (?:just )?a joke|can['’]?t (?:you )?take a joke|you always take things)\b/gi,
+   fix:"Acknowledge how it landed before explaining how you meant it."},
+  {id:"multi", name:"Several tasks in one breath", re:null,
+   fix:"Send several tasks as a written list, or give them one at a time."},
+  {id:"long", name:"Long message or sentence", re:null,
+   fix:"Lead with the ask or headline, then keep the rest short."},
+  {id:"questions", name:"Stacked questions", re:null,
+   fix:"Ask one question, then wait for the answer."},
+  {id:"critic", name:"Criticism", re:/\b(?:wrong|mistake|messed up|screwed up|failed|forgot|forgotten|forget|again|disappoint(?:ed|ing)|annoy(?:ed|ing)|frustrat(?:ed|ing)|sick of|tired of|fed up|ruined|a mess|mess(?:y)?|late again|useless)\b/gi,
+   fix:"Name one behavior and one next step, and say you're on the same side."},
+  {id:"reassure", name:"Reassurance check", re:/\b(?:are you (?:mad|angry|upset|annoyed)(?: at me| with me)?|did you (?:lock|turn off|check|unplug)|are you sure|is (?:it|that|this) (?:ok|okay|alright)|are we (?:ok|okay|good)|do you still (?:love|like)|promise me)\b/gi,
+   fix:"If this is a repeat question, agree together on how to answer it."},
+  {id:"vemo", name:"Emotional subtext with no specifics", re:/\b(?:you know what you did|you know why|figure it out|i shouldn['’]?t have to (?:tell|ask) you|if you (?:really |actually )?cared|you should (?:already )?know|read between the lines|think about it|you know what i mean|you['’]?re not (?:there|present) for me)\b/gi,
+   fix:"Say the specific event and the feeling: \"When X happened, I felt Y.\""},
+  {id:"feelingq", name:"Open feelings question", re:/\b(?:how (?:does|did) (?:that|it|this) make you feel|how do you feel(?: about)?|what are you feeling|tell me how you feel|why are you (?:upset|sad|angry|mad|quiet|like this)|what['’]?s wrong\?)/gi,
+   fix:"Offer options (\"More tired, or more annoyed?\") or ask about the body and what would help."},
+  {id:"hyper", name:"Exaggeration", re:/\b(?:literally dying|i['’]?m dying|kill (?:you|me|him|her)|going to die|a million times|takes forever|the worst(?: ever)?|i could (?:kill|murder)|dead to me|i['’]?m done|i can['’]?t even|losing my mind)\b/gi,
+   fix:"Say the true size of it. Exaggeration reads as literal to some listeners and alarming to others."},
+  {id:"joke", name:"Joke marker", re:/\b(?:lol|lmao|jk|haha+|hehe|just kidding|kidding)\b|😂|🙃|😉|🙄|😒|😅|🤣/gi,
+   fix:"If it's a joke about something real, say the real part plainly too."},
+  {id:"minim", name:"Minimizer", re:/\b(?:just|simply|obviously|clearly|of course|all you have to do|literally just|(?:it['’]?s|that['’]?s) (?:so |really )?easy|only takes a (?:second|minute))\b/gi,
+   fix:"Drop \"just,\" \"obviously\" and \"easy.\" What's easy for one wiring can be hard work for another."},
+  {id:"tone", name:"Policing tone or face", re:/\b(?:look at me(?: when i['’]?m talking(?: to you)?)?|(?:watch|lose) (?:your|that) tone|don['’]?t (?:use|give me) that (?:tone|look)|your tone|that tone|wipe that look|what['’]?s (?:that|with that) face|why are you making that face|stop (?:sighing|rolling your eyes)|don['’]?t look at me like that)\b/gi,
+   fix:"Respond to the words, not the delivery. If the delivery worries you, ask what it means."},
+  {id:"demand", name:"Demand for an instant reply", re:/\b(?:say something|answer me|talk to me|are you ignoring me|why aren['’]?t you (?:answering|responding|replying|saying anything)|hello\?+|well\?+)(?=\W|$)/gi,
+   fix:"Offer time: \"Take your time, I'm here when you're ready.\""},
+  {id:"butc", name:"Compliment followed by \"but\"", re:/\b(?:good|great|nice|love|like|appreciate|thanks|thank you|well done)\b[^.!?]{0,60}?\bbut\b/gi,
+   fix:"Keep the compliment and the correction in separate sentences, or separate moments."},
+  {id:"urgent", name:"Urgency without a reason", re:/\b(?:right now|immediately|this instant|hurry(?: up)?|now!)/gi,
+   fix:"Give the reason for the urgency alongside the time."},
+  {id:"already", name:"\"I already told you\"", re:/\b(?:i (?:already )?(?:told|said|asked|explained)(?: you)?(?: this| that)? (?:already|before|twice)|i already (?:told|said|asked|explained)|as i (?:said|mentioned|wrote|told you)|like i said|did you (?:even )?read|it['’]?s in the (?:email|text|message))\b/gi,
+   fix:"Assume it didn't arrive intact and resend it in a better channel."},
+  {id:"hedge", name:"Hedged answer", re:/\b(?:i think|probably|pretty sure|should be|might have|not sure|i guess|i believe|possibly)\b/gi,
+   fix:"If you know, say it plainly. If you don't, say what you'll do to find out."},
+  {id:"softno", name:"Soft no", re:/\b(?:we['’]?ll see|maybe|i['’]?ll think about it|perhaps|we can talk about it)\b/gi,
+   fix:"If it's a no, say no kindly. If it's a real maybe, say when you'll decide."},
+  {id:"stopask", name:"\"Stop asking\"", re:/\b(?:stop asking(?: me)?|you already asked(?: me)?|i already answered|not this again)\b/gi,
+   fix:"Use a kind, agreed-on script for repeat questions instead of shutting them down."},
+  {id:"tic", name:"Commenting on a movement or sound", re:/\b(?:stop (?:doing|making) that|quit (?:it|doing that)|can['’]?t you (?:just )?stop|stop (?:twitching|blinking|sniffing|clearing your throat|making (?:that |those )?noises?|fidgeting|rocking|tapping|humming|flapping)|do you have to do that|what are you doing with your (?:hands|face))\b/gi,
+   fix:"Leave the movement or sound alone. A tic or stim isn't a message."}
+];
+const FBY = Object.fromEntries(F.map(f=>[f.id,f]));
+
+/* ============================================================
+   NEUROTYPES
+   receive[feature] = [weight 0-3, what they may hear, why]
+   channel-limited entries use {w,h,y,ch:[...]}
+   ============================================================ */
+const NT = {
+ nt:{name:"Neurotypical", group:"nd", short:"neurotypical",
+  sum:"Reads the words, tone, face and context together, and tends to trust tone over words. Expects some indirectness, and may read hidden meaning into plain statements.",
+  receive:{
+   minimal:[2,"They're annoyed with me.","Without softeners, short replies read as cold. Neurotypical listeners fill the gap with tone."],
+   period:[1,"That period feels curt.","One-word texts ending in a period were rated less sincere in a study of 126 students (Gunraj et al.)."],
+   sarcasm:[1,"They're being snide.","Neurotypical listeners usually catch sarcasm, and they feel its edge."],
+   label:[3,"They think I'm a bad person.","A label turns a problem into a verdict on character."],
+   absolute:[2,"Nothing I do counts.","\"Always\" and \"never\" erase every counterexample, so the listener argues the exception instead of the point."],
+   blameq:[2,"I'm being accused.","\"Why didn't you\" is heard as an accusation, not a request for information."],
+   ominous:[2,"Something bad is coming.","The weight is signaled but the topic isn't, so the listener braces."],
+   calm:[2,"My feelings don't count.","Being told how to feel rarely changes the feeling and usually adds resentment."],
+   invalid:[3,"I'm the problem for feeling this.","Invalidation shifts the topic from what happened to whether the reaction is allowed."],
+   tone:[2,"They're policing my face instead of hearing me.","Commenting on delivery moves the argument to delivery."],
+   butc:[1,"The compliment was just packaging.","Listeners often discount everything before \"but.\""],
+   ellipsis:[1,"There's something they're not saying.","Trailing dots signal withheld meaning."],
+   shout:[2,"They're yelling at me.","Capitals and stacked punctuation read as volume."],
+   critic:[1,"They're disappointed in me.","Correction about a task is often heard as a judgment of the person."],
+   vemo:[2,"I'm supposed to guess, and I'll get it wrong.","Unnamed grievances leave the listener to reconstruct the case."],
+   hint:[0,"A polite request.","Indirect requests are normal in neurotypical culture and usually decoded without effort."],
+   joke:[0,"Probably light-hearted.","Joke markers usually work as intended, unless they're covering something real."],
+   hyper:[0,"Exaggeration for effect.","Usually understood as not literal."],
+   demand:[2,"I'm being pressured.","Demanding a reply turns a conversation into a test."],
+   urgent:[1,"Something's wrong.","Urgency without a reason raises alarm."],
+   already:[1,"I'm being told I'm not listening.","It frames a missed message as a character flaw."],
+   softno:[0,"Probably a polite no.","Neurotypical listeners often hear \"we'll see\" as a soft no."],
+   stopask:[1,"I'm being shut out.","It ends the conversation without resolving it."],
+   tic:[1,"I'm being corrected in public.","Commenting on someone's movements draws attention to them."]
+  },
+  ch:{text:"On text, tone lives in punctuation and length. Short or clipped messages get decoded for mood.", email:"Formal or brief emails can read as cold. Add one warm line.", person:"Face and tone will carry as much as the words. Make sure they match.", phone:"Tone of voice carries most of the message on a call."},
+  tips:["Add the social layer a blunt message is missing: a reason, a softener, a warm word.","Say out loud what your face or tone might not be showing.","Announce pauses: \"Give me a minute to think.\"","If you're brief by habit, tell them once so they stop decoding it."],
+  meant:{hint:"Probably a polite request. Indirect wording is how many neurotypical speakers soften an ask.",sarcasm:"Probably frustration, made lighter or sharper with irony.",minimal:"Could be fine, or could mean \"ask me later.\" Tone would carry the rest.",ominous:"Something serious, worded this way to signal its weight.",vtime:"A soft deadline, often sooner than the words suggest.",softno:"Possibly a polite no.",joke:"Probably signaling friendliness."},
+  meantDefault:"Probably meant more than the words alone. Neurotypical speakers often let tone and context carry part of the message.",
+  src:["gunraj","achim"]},
+
+ autistic:{name:"Autistic", group:"nd", short:"autistic",
+  sum:"Takes words at their stated meaning first. Decoding tone, faces, hints and figures of speech is possible but costly, especially under load.",
+  receive:{
+   hint:[3,"That's a statement, not a request.","The request is in the subtext. Autistic adults decode hints as well as peers in studies, but it isn't automatic when tired or focused (Frost et al., 2024)."],
+   sarcasm:[3,"They mean what they said.","Sarcasm is carried by tone. In one study, autistic adults identified ironic intent 72.5% of the time versus 80% for comparison adults (Zalla et al., 2014)."],
+   idiom:[2,"The literal meaning, or confusion.","Figurative language is harder on average, though the gap mostly closes when language ability is matched (Kalandadze et al.)."],
+   vtime:[2,"When exactly? Is waiting really OK?","Undefined timing leaves the plan open, and open plans cost energy."],
+   vstd:[3,"What counts as done?","Without a finish line, there's no way to know you've succeeded."],
+   blameq:[2,"A literal question. I'll give the reason.","Answering the literal question can sound defensive to someone who meant it as an accusation."],
+   tone:[3,"I'm being judged for my face, not my words.","Autistic tone and eye contact can differ without meaning anything. Tone may sound angry or bored when the person feels neither (Autism Society)."],
+   demand:[3,"I need time, and I'm being rushed.","Processing can take 7 to 10 seconds or more. Pressure can stop speech entirely."],
+   questions:[2,"Too many questions. Which one first?","Monotropic attention tends to handle one thread at a time."],
+   long:{w:1,h:"Hard to hold all of this at once.",y:"Long spoken passages tax working memory. Writing helps.",ch:["person","phone"]},
+   vemo:[3,"I don't know what I did, and I'm expected to.","Emotional subtext without facts gives nothing to act on."],
+   calm:[2,"An instruction I can't follow on command.","Regulation doesn't happen on request, especially during overload."],
+   ellipsis:[1,"Unclear. Is there more?","Trailing dots imply unsaid meaning."],
+   joke:[1,"Why is this funny?","Joke markers signal a tone that isn't in the words."],
+   hyper:[2,"Did they literally mean that?","Exaggeration can be taken at face value."],
+   minimal:[0,"They said it's fine, so it's fine.","Autistic listeners usually take the word at face value, which only causes problems if the speaker didn't mean it."],
+   multi:[1,"Several tasks. Order unclear.","Sequence and priority matter. Numbered steps help."],
+   shout:[2,"Too loud. Sensory load comes before meaning.","Volume can overwhelm before the words register."],
+   invalid:[2,"My experience is being overwritten.","Being told your perception is wrong is a common and exhausting pattern."],
+   label:[2,"A permanent verdict.","Labels are taken as literal statements of fact."],
+   absolute:[2,"That's not accurate. I'll point out the exception.","Precision matters, so the counterexample feels like the relevant point."],
+   ominous:[2,"Talk about what? When? How long?","The uncertainty, not the talk itself, is the stressful part."],
+   butc:[1,"Which part is the real message?","Mixed signals in one sentence are hard to weigh."],
+   softno:[2,"A real maybe, so it's still possible.","\"We'll see\" is often heard as literal. A later no can feel like a broken promise."],
+   feelingq:[1,"Hard to answer on the spot.","Many autistic people also have alexithymia (see that wiring)."],
+   hedge:[1,"So is it done or not?","Uncertain answers leave the question open."],
+   tic:[2,"I'm being told to stop something that regulates me.","Stimming, like rocking, tapping or humming, helps many autistic people regulate."],
+   urgent:[2,"Sudden change with no reason.","Unexplained urgency disrupts a plan without a replacement."]
+  },
+  ch:{text:"Text is often easier. It removes tone and face-reading and allows time to reply. Text and face-to-face ranked highest with family in a survey of 245 autistic adults (Howard & Sedgewick).", email:"Email suits detailed or complex topics and was a preferred way to contact services and work in the same survey.", phone:"Phone calls were among the least preferred ways to communicate for many autistic adults. Consider text for anything complex.", person:"Allow processing time, don't require eye contact, and keep the room quiet."},
+  tips:["Say the request as a request: what, by when.","Define the finish line for any task.","Leave out sarcasm in serious talk, or flag it: \"I'm joking.\"","Say your feeling in words instead of expecting it to be read from your face.","Give processing time. Wait 7 to 10 seconds before repeating a question.","During a shutdown, stop asking questions until they've recovered."],
+  meant:{minimal:"Probably literally that. Autistic speakers often answer without social padding.",period:"Almost certainly just punctuation.",blameq:"Possibly a real question. They may want the reason, not an apology.",absolute:"May have meant it precisely, or may be overloaded. Ask for the specific instance.",critic:"Probably about the task, not about you.",long:"The detail is often care or accuracy, not a lecture.",tone:"They may be genuinely unsure what your face or tone is saying.",label:"Possibly overload talking. Ask what specifically went wrong."},
+  meantDefault:"Most likely meant the words as stated. Many autistic people prefer direct, precise language (National Autistic Society).",
+  src:["nasComm","frost","zalla","kaland","howard","asa","mono","lpt","suth"]},
+
+ adhd:{name:"ADHD", group:"nd", short:"ADHD",
+  sum:"Takes information in fast, in bursts. Details can drop out during brief attention lapses. Time is fuzzy, and criticism can land with extra force.",
+  receive:{
+   multi:[3,"Heard the first thing. The rest slipped.","Working memory is often stretched. Children with ADHD recalled multi-step instructions less accurately than peers (Yang et al., 2017)."],
+   vtime:[3,"Not now, which may become never.","Time perception and remembering to do things later are common difficulties (Weissenberger et al.)."],
+   long:[2,"Skimmed it. Where's the ask?","Dense messages compete with attention. The key line can be missed."],
+   critic:[2,"I've failed again.","Emotion regulation is harder for many adults with ADHD. Estimates run 34 to 70% (Soler-Gutiérrez et al.)."],
+   label:[3,"I'm a failure, like always.","Labels echo years of similar comments."],
+   absolute:[2,"Everything I do is wrong.","\"Always\" and \"never\" confirm the listener's worst self-story."],
+   blameq:[2,"Shame. I forgot, and I know it.","The honest answer is often \"I forgot,\" which feels like an admission of fault."],
+   minimal:[2,"They're pulling away from me.","Rejection sensitivity can turn neutral or vague replies into rejection (Cleveland Clinic)."],
+   period:[2,"Cold. Did I do something?","Short, punctuated texts get read as mood."],
+   ominous:[3,"What did I forget? Replaying everything.","An unnamed topic invites a search through every recent slip."],
+   sarcasm:[2,"Hard to tell if it's a joke or a dig.","Students with ADHD described struggling to tell jokes from criticism (Rowney-Smith et al., 2026)."],
+   joke:[1,"Is this actually a dig?","Same difficulty telling jokes from criticism."],
+   questions:[2,"Too many at once. I'll answer the last one.","Earlier questions drop out of working memory."],
+   vstd:[1,"Unclear where to start.","Without a first step, starting is the hard part."],
+   calm:[2,"My big feelings are the problem again.","It targets an emotion that already feels too big."],
+   invalid:[2,"I'm too much.","It echoes a common lifetime message."],
+   ellipsis:[2,"They're upset and not saying it.","Ambiguity leans toward rejection."],
+   demand:[1,"Pressure while I'm still catching up.","Replies can lag while attention shifts."],
+   hint:[1,"May miss it if focused elsewhere.","Attention lapses drop details. CHADD notes subtext can be harder to catch."],
+   butc:[2,"Only heard the \"but.\"","Criticism tends to drown out the praise before it."],
+   already:[2,"I'm hopeless.","It highlights the lapse instead of fixing the channel."],
+   softno:[1,"Is that a no?","Ambiguous answers linger."],
+   stopask:[1,"I'm annoying them.","Shutdowns of questions read as rejection."],
+   hedge:[0,"Fine, probably done.","Usually not a problem for this wiring."],
+   tic:[1,"Being told to stop fidgeting, which helps me focus.","Movement often helps attention."]
+  },
+  ch:{text:"Put the ask in the first line. A slow reply from them usually isn't rejection, and a slow reply to them can feel like it.", email:"Long emails get skimmed. Lead with the ask and bold the date.", person:"Follow up any plan or list in writing afterward.", phone:"Anything agreed on a call should be sent in text too."},
+  tips:["One request at a time, or send the list in writing.","Swap \"later\" for a time or a cue.","Lead with the ask, then the reasons.","Separate the behavior from the person, and say you're on their side.","If you'll be slow to reply, say so.","Ask them to echo back what they heard (CHADD)."],
+  meant:{vtime:"Sincere in the moment, but without a time or cue, it's at risk of slipping.",critic:"Possibly a flash of frustration that passes quickly.",shout:"Energy or excitement can come out loud.",multi:"Thinking out loud. The list may be as much for them as for you.",blameq:"Probably frustration rather than a real question.",hyper:"Probably intensity of feeling, not a literal claim."},
+  meantDefault:"Likely meant what they said, fast. If it came out sharp, it may have been a passing flash of emotion rather than their settled view.",
+  src:["chadd","yang","weiss","soler","rsd","rowney"]},
+
+ dyslexic:{name:"Dyslexic", group:"nd", short:"dyslexic",
+  sum:"Understands spoken words easily. Reading costs effort and may need rereading, so the channel matters a lot.",
+  receive:{
+   long:{w:3,h:"A wall of text. Exhausting before I start, and easy to misread.",y:"People with dyslexia often read slowly and reread to understand (Cleveland Clinic).",ch:["text","email"]},
+   multi:{w:1,h:"Easy to skip one.",y:"Lists buried in sentences are easy to misread.",ch:["text","email"]},
+   already:[3,"Shamed for something I did try to read.","They may have read it more than once and still missed a line."],
+   questions:{w:1,h:"Which question am I answering?",y:"Several written questions at once are hard to track.",ch:["text","email"]},
+   critic:[1,"Judged again.","Many dyslexic adults carry years of being called careless."],
+   idiom:[0,"Understood.","Figures of speech aren't usually a problem for this wiring."]
+  },
+  ch:{text:"Keep it short, one idea per line. Offer a voice note for anything complex.", email:"Put the headline in the first line and keep paragraphs to two or three lines. Offer a call.", person:"Spoken conversation is usually the easy channel for this wiring.", phone:"A call is usually easier than a long written message."},
+  tips:["Keep written messages short, with one idea per line.","Put anything important in the first line.","Offer a voice note or call for anything emotional or complex.","Never comment on spelling in a personal conversation."],
+  meant:{minimal:"Short because typing costs effort, not because they're being curt.",period:"Short because typing costs effort, not because they're being curt."},
+  meantDefault:"If it was written, it may be short, or spelled oddly, for reasons that have nothing to do with tone.",
+  src:["dyslexia"]},
+
+ dyspraxic:{name:"Dyspraxic (DCD)", group:"nd", short:"dyspraxic",
+  sum:"Can find fast conversation hard to keep up with and may pause before replying. Organization and memory can be affected too.",
+  receive:{
+   minim:[2,"It isn't easy for me, and now I feel slow.","\"Just\" and \"easy\" minimize a task that costs more for their body and planning."],
+   questions:[2,"I can't organize answers that fast.","Some dyspraxic people struggle to keep up with conversation and pause before replying (Dyspraxia Foundation)."],
+   multi:[2,"Lost the order.","Sequencing several steps is a common difficulty."],
+   demand:[2,"Rushed while I'm building the reply.","Long pauses before responding are common."],
+   long:{w:1,h:"Hard to keep up.",y:"Fast, long talk outpaces processing.",ch:["person","phone"]},
+   critic:[1,"Clumsy, again.","Many dyspraxic adults have heard this all their lives."],
+   urgent:[1,"Pressure makes the task harder.","Motor planning gets worse under time pressure."]
+  },
+  ch:{person:"Let pauses happen. Show rather than describe when you can.", phone:"Allow extra time to reply on calls.", text:"Text gives time to organize a reply.", email:"Numbered steps help."},
+  tips:["Drop \"just,\" \"easy\" and \"obviously.\"","Give steps in order, and demonstrate when you can.","Let the pause happen before the reply."],
+  meant:{},
+  meantDefault:"If the reply came slowly, that was the answer being built, not reluctance.",
+  src:["dyspraxia"]},
+
+ apd:{name:"Auditory processing differences (APD)", group:"nd", short:"someone with auditory processing differences",
+  sum:"Hears normally but can struggle to make sense of speech in noise, at speed, or with similar-sounding words. Tone shifts can be missed.",
+  receive:{
+   sarcasm:{w:2,h:"Taken as sincere.",y:"Difficulty detecting the tone changes that signal sarcasm or jokes (ASHA).",ch:["person","phone"]},
+   joke:{w:1,h:"Was that a joke?",y:"The tone cue carrying the joke may not register.",ch:["person","phone"]},
+   long:{w:2,h:"Lost after the first part.",y:"Long, complicated sentences are hard to process (NHS).",ch:["person","phone"]},
+   multi:{w:2,h:"Got one of the steps.",y:"Spoken multi-step directions are a known difficulty (ASHA).",ch:["person","phone"]},
+   already:[2,"Blamed for something I couldn't hear properly.","It was said, but it may not have arrived intact."],
+   idiom:{w:1,h:"Misheard or confusing.",y:"Similar-sounding phrases can blur.",ch:["person","phone"]},
+   questions:{w:1,h:"Which question?",y:"Rapid questions pile up in noise.",ch:["person","phone"]},
+   shout:{w:1,h:"Louder, but no clearer.",y:"Volume doesn't fix processing. Rephrasing does.",ch:["person","phone"]},
+   demand:[1,"I'm still decoding what you said.","Longer response times are common."]
+  },
+  ch:{person:"Face to face in a quiet room is best. Turn off the TV and don't cover your mouth.", phone:"Calls remove lip-reading and add line noise. Follow up in text.", text:"Written messages avoid the processing problem entirely.", email:"Written is often the clearest channel for this wiring."},
+  tips:["Talk face to face, in a quiet place.","Rephrase rather than repeat louder.","Avoid long, complicated sentences (NHS).","Follow up important plans in writing."],
+  meant:{},
+  meantDefault:"If the reply seemed off-topic, they may be answering what they thought they heard. Check the words arrived.",
+  src:["nhsApd","asha"]},
+
+ dld:{name:"Developmental language disorder (DLD)", group:"nd", short:"someone with DLD",
+  sum:"Needs longer to decode complex sentences, figures of speech and abstract words. Word-finding can be hard when speaking.",
+  receive:{
+   idiom:[3,"Confusing, or taken literally.","Adults with DLD can have trouble understanding figurative language (NIDCD)."],
+   long:[3,"Lost after the first clause.","Complex grammar takes longer to unpack than conversation allows."],
+   multi:[2,"Only part of it landed.","Several instructions in one sentence overload decoding."],
+   vstd:[1,"What does that mean exactly?","Abstract standard words are harder than concrete ones."],
+   vemo:[2,"I don't understand what I'm meant to do.","Implied meaning needs extra decoding."],
+   sarcasm:[2,"Taken at face value.","Non-literal language is harder."],
+   hyper:[1,"Did they mean that?","Exaggeration can be taken literally."],
+   questions:[1,"Which one first?","Stacked questions overload processing."]
+  },
+  ch:{person:"Short, concrete sentences. Check understanding kindly.", phone:"Slow down and check understanding.", text:"Writing lets them reread. Keep sentences short.", email:"Short sentences and bullet points."},
+  tips:["Short sentences, one idea each.","Concrete words over abstract ones.","Check understanding kindly: \"What are you taking from this?\""],
+  meant:{vstd:"The vague word may stand in for a specific one they couldn't find.",vemo:"The vague word may stand in for a specific one they couldn't find."},
+  meantDefault:"The words may be simpler or vaguer than the thought behind them. Word-finding can be hard.",
+  src:["nidcd"]},
+
+ tourette:{name:"Tourette or tic disorder", group:"nd", short:"someone with Tourette",
+  sum:"Usually receives words normally. The static tends to sit with the listener, who may mistake a tic for a reaction.",
+  receive:{
+   tic:[3,"I'm being told to stop something I can't fully control.","Tics are involuntary or semi-voluntary, can be briefly suppressed at a cost, and are suggestible. Talking about them can bring them on (Tourette Association)."],
+   tone:[2,"My tic is being read as a reaction.","An eye roll, grunt or sound may be a tic, not a comment."],
+   calm:[1,"Stress makes tics worse, and so does this.","Pressure tends to increase tics."],
+   label:[1,"Judged for something I don't choose.","Tics are often assumed to be deliberate."]
+  },
+  ch:{person:"If they tic while you're talking, it isn't a reply. Keep going.", phone:"Vocal tics on a call aren't comments on what you said.", text:"Text removes the tic-misreading problem.", email:"No special adjustment needed."},
+  tips:["Respond to the words, not the tic.","Don't comment on tics unless they've asked you to.","If they say something was a tic, believe them."],
+  meant:{},
+  meantDefault:"If a sound or gesture came with the words, it may have been a tic, not a comment.",
+  src:["taa"]},
+
+ alex:{name:"Alexithymia", group:"trait", short:"someone with alexithymia",
+  sum:"Takes in facts well but finds it hard to identify and name feelings, in themselves and sometimes in others.",
+  receive:{
+   feelingq:[3,"An exam question with no answer I can find.","Difficulty identifying and describing feelings is the core of alexithymia (Hogeveen & Grafman)."],
+   vemo:[3,"Nothing to act on.","Emotional subtext without specifics is especially hard to decode."],
+   vstd:{w:2,h:"\"Supportive\" means what, exactly?",y:"Feeling-words without actions are hard to translate.",ch:null},
+   hint:[1,"May miss the feeling behind it.","Emotional hints are the hardest kind."],
+   sarcasm:[1,"Missed the edge.","Emotion-reading differences are often driven by alexithymia (Bird & Cook)."],
+   calm:[1,"I didn't know I wasn't calm.","The body signal may not have been noticed."]
+  },
+  ch:{person:"Ask about the body and actions, not only feelings.", phone:"Offer options instead of open questions.", text:"Writing gives time to work out the feeling.", email:"Writing gives time to work out the feeling."},
+  tips:["Ask about the body or actions: \"Tight chest? Want space or company?\"","Offer options instead of open questions.","Translate feeling-words into actions."],
+  meant:{minimal:"Possibly the most accurate answer they have right now.",critic:"The feeling may be showing up as a complaint about a fact."},
+  meantDefault:"They may not have a label for the feeling behind this. Actions and body cues may say more than the words.",
+  src:["hog","bird"]},
+
+ hsp:{name:"Highly sensitive (SPS)", group:"trait", short:"a highly sensitive person",
+  sum:"Takes in a lot, in detail, including subtle tone and mood. The problem isn't missing signal. It's too much of it.",
+  receive:{
+   shout:[3,"Overwhelming.","Loud input registers strongly."],
+   invalid:[3,"My whole way of being is a problem.","\"Too sensitive\" dismisses the trait instead of the moment."],
+   critic:[2,"I'll be thinking about this for hours.","Deep processing means a sharp comment keeps echoing."],
+   sarcasm:[2,"Caught it instantly, and it stings.","Stronger activation of awareness and empathy regions in response to emotional faces was found in highly sensitive people (Acevedo et al.)."],
+   label:[2,"Deeply hurt.","Labels land hard."],
+   tone:[1,"Now I'm self-conscious.","Attention on delivery adds to the load."],
+   ellipsis:[1,"Something is off.","Subtle cues get noticed and dwelt on."],
+   demand:[2,"Too much pressure.","Pressure adds stimulation."],
+   period:[1,"That felt clipped.","Small shifts in tone get noticed."],
+   calm:[1,"My reaction is being policed.","It dismisses the input."],
+   urgent:[1,"Jolted.","Sudden urgency is high stimulation."]
+  },
+  ch:{person:"Quiet setting, soft start. Loud places add load.", phone:"Keep the volume and pace even.", text:"Watch clipped wording. Small shifts get noticed.", email:"Warm framing matters."},
+  tips:["Soft start, quiet setting, one topic.","Name your tone if it's off for other reasons.","Give time to process before asking for a decision."],
+  meant:{},
+  meantDefault:"Probably worded carefully. Highly sensitive people often know exactly how words can land.",
+  src:["acev"]},
+
+ anxiety:{name:"Anxiety-wired", group:"cond", short:"someone with anxiety",
+  sum:"Resolves ambiguity toward the worst reading. The more a message leaves unsaid, the more room the worry has.",
+  receive:{
+   ominous:[3,"Breakup, firing or disaster, until we talk.","Socially anxious participants chose the threatening reading of ambiguous sentences 59% of the time versus 30% (Beard & Amir)."],
+   minimal:[3,"They're angry with me.","Short replies are ambiguous, and ambiguity resolves to threat."],
+   period:[2,"Cold. Something's wrong.","Punctuation gets read for mood."],
+   ellipsis:[2,"What aren't they saying?","Unsaid meaning fills with worst cases."],
+   vtime:[1,"They're putting me off.","Undefined timing leaves an open loop."],
+   critic:[2,"I've ruined it.","Criticism gets scaled up."],
+   demand:[2,"Panic.","Pressure to reply increases anxiety."],
+   hint:[1,"Are they upset with me?","Indirect wording invites guessing."],
+   butc:[2,"The \"but\" is the real message.","Negative information dominates."],
+   questions:[1,"Am I in trouble?","A string of questions feels like an interrogation."],
+   sarcasm:[1,"They're mocking me.","Ambiguous tone resolves to threat."],
+   joke:[1,"What is the \"lol\" hiding?","Joke markers can look like cover."],
+   absolute:[1,"It's hopeless.","Absolutes feed catastrophic thinking."],
+   softno:[1,"Is that a no? Did I ask wrong?","Ambiguous answers loop."],
+   stopask:[2,"I'm too much.","It adds shame to worry."],
+   urgent:[2,"Emergency.","Unexplained urgency reads as danger."],
+   hedge:[1,"So it might not be OK.","Uncertainty fuels worry."]
+  },
+  ch:{text:"Text leaves room for worst-case reading. Add warmth and close the loop.", email:"Say up front whether it's routine.", person:"Lead with reassurance, then the topic.", phone:"Give the reason for the call before calling, or at the start."},
+  tips:["Lead with the reassurance, then the topic.","Give the reason for a call or meeting up front.","Close loops. \"Got it, thanks!\" beats silence.","Answer \"Are you mad?\" plainly."],
+  meant:{reassure:"A real question. They need a plain answer.",long:"Over-explaining is often insurance against being misunderstood.",ellipsis:"Hesitation, not hostility.",hedge:"Caution, not evasion."},
+  meantDefault:"Possibly worded to avoid conflict. There may be worry underneath the words.",
+  src:["beard"]},
+
+ trauma:{name:"Trauma-wired (PTSD / C-PTSD)", group:"cond", short:"someone with a trauma history",
+  sum:"Scans for threat first and content second. Volume, sudden requests and a hard edge can register before the words do.",
+  receive:{
+   shout:[3,"Danger.","Hypervigilance means neutral or ambiguous signals can read as threat (Kimble et al.)."],
+   urgent:[3,"Something bad is happening.","Urgency without a reason echoes past threat."],
+   calm:[3,"My alarm is being ignored.","Ignored alarms get louder."],
+   ominous:[3,"Brace for impact.","An unnamed serious topic primes the body for conflict."],
+   blameq:[3,"A trap. Any answer will be wrong.","Accusing questions can echo past interrogations."],
+   tone:[2,"I'm being watched and judged.","Scrutiny of the face or tone raises threat."],
+   label:[2,"An attack.","Character attacks register as danger."],
+   critic:[2,"I'm in trouble.","Criticism can trigger a threat response."],
+   invalid:[2,"My reality doesn't count.","Being told something didn't happen can be especially destabilizing."],
+   hyper:[2,"Violent words, even as a joke.","Threat language registers before the joke does."],
+   demand:[2,"Cornered.","Demands for an answer reduce the sense of choice."],
+   minimal:[1,"Cold. Is this the calm before something?","Flat replies are ambiguous."],
+   sarcasm:[1,"Hostile.","Edges register strongly."]
+  },
+  ch:{person:"Keep your volume steady, move slowly, and don't approach from behind.", phone:"Keep an even pace. Say the reason for the call first.", text:"Say the purpose in the first line.", email:"Say whether it's urgent in the subject line."},
+  tips:["Keep your volume steady and give the purpose first.","Avoid starting serious talks late at night or by surprise.","If they're activated, co-regulate first and talk later.","Agree on a pause-and-return plan for heated moments."],
+  meant:{},
+  meantDefault:"If it came out defensive, that may have been an alarm going off, not a position.",
+  src:["kimble"]},
+
+ ocd:{name:"OCD", group:"cond", short:"someone with OCD",
+  sum:"Uncertainty sticks, and doubt can loop. Clear, one-time answers and an agreed plan for repeat questions help most.",
+  receive:{
+   hedge:[3,"So it might not be done.","Hedged answers leave the doubt open."],
+   stopask:[3,"Rejected, and the doubt is still there.","It denies the answer without addressing the loop. Family guidance: \"Once is a question, anything more is reassurance.\""],
+   vstd:[2,"What exactly counts as done?","Undefined standards invite checking."],
+   softno:[1,"Unresolved.","\"Maybe\" keeps the loop open."],
+   absolute:[1,"Now I have to check every time.","Absolutes become rules."],
+   minimal:[1,"Is it really fine?","Brief answers can feel incomplete."],
+   critic:[1,"Proof I got it wrong.","Mistakes can feed the doubt."],
+   invalid:[1,"Dismissed.","The doubt isn't a choice."]
+  },
+  ch:{text:"A written answer can be reread instead of re-asked. That can help, or feed checking, so agree together how to use it.", email:"Clear, specific answers help.", person:"Warm tone, one clear answer.", phone:"One clear answer, then move on together."},
+  tips:["Answer the first time clearly and without hedging.","For repeat questions, use the script you agreed on together.","Speak to the person, not the doubt, and keep your tone warm."],
+  meant:{reassure:"The doubt is talking, not distrust of you.",vstd:"Precision may reflect a need for certainty, not pickiness."},
+  meantDefault:"Precision or repeat questions often reflect a need for certainty, not pickiness or distrust.",
+  src:["ocd"]}
+};
+const GROUPS = [
+  {id:"nd", label:"Neurodevelopmental", ids:["nt","autistic","adhd","dyslexic","dyspraxic","apd","dld","tourette"]},
+  {id:"trait", label:"Traits across wirings", ids:["alex","hsp"]},
+  {id:"cond", label:"Conditions that change how words land", ids:["anxiety","trauma","ocd"]}
+];
+const ND_DIVERGENT = ["autistic","adhd","dyslexic","dyspraxic","apd","dld","tourette"];
+
+const PRESETS = [
+  "Can you clean up a bit when you get a chance?",
+  "Oh great, that's just perfect.",
+  "We need to talk.",
+  "Fine.",
+  "Why didn't you tell me?",
+  "Calm down, you're overreacting.",
+  "It would be nice if someone took the trash out.",
+  "Can you grab milk, drop off the package, and call your mom back?",
+  "I'll do it later.",
+  "You never listen to me.",
+  "No worries, it's fine lol",
+  "Great job on dinner, but the kitchen is a mess.",
+  "How does that make you feel?",
+  "I think I locked it.",
+  "Look at me when I'm talking to you."
+];
+
+/* ============================================================
+   STATE + UI
+   ============================================================ */
+const sel = {A:new Set(), B:new Set()};
+let channel = "person", bstate = "v";
+const $ = s=>document.querySelector(s);
+const esc = s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[c]));
+
+function buildChips(who){
+  const host = document.querySelector('[data-chips="'+who+'"]');
+  host.innerHTML = GROUPS.map(g=>'<div class="grp">'+esc(g.label)+'</div><div class="chips" role="group" aria-label="'+esc(g.label)+' for Person '+who+'">'+
+    g.ids.map(id=>'<button type="button" class="chip" data-who="'+who+'" data-id="'+id+'" aria-pressed="false">'+esc(NT[id].name)+'</button>').join("")+'</div>').join("");
+  host.addEventListener("click",e=>{
+    const b=e.target.closest(".chip"); if(!b) return;
+    toggle(who,b.dataset.id);
+  });
+}
+function toggle(who,id){
+  const s=sel[who];
+  if(s.has(id)) s.delete(id);
+  else{
+    s.add(id);
+    if(id==="nt") ND_DIVERGENT.forEach(x=>s.delete(x));
+    if(ND_DIVERGENT.includes(id)) s.delete("nt");
+  }
+  sync();
+}
+function nm(who){ const v=$("#name"+who).value.trim(); return v||("Person "+who); }
+function listNames(set){
+  const arr=[...set].map(id=>NT[id].name);
+  if(!arr.length) return "";
+  if(arr.length===1) return arr[0];
+  return arr.slice(0,-1).join(", ")+" and "+arr[arr.length-1];
+}
+function sync(){
+  ["A","B"].forEach(w=>{
+    document.querySelectorAll('.chip[data-who="'+w+'"]').forEach(b=>b.setAttribute("aria-pressed",sel[w].has(b.dataset.id)?"true":"false"));
+    const s=sel[w];
+    $("#picked"+w).innerHTML = s.size ? "Selected: <b>"+esc(listNames(s))+"</b>"+(s.has("autistic")&&s.has("adhd")?" (AuDHD)":"") : "Nothing selected yet.";
+  });
+  $("#phraseLab").textContent = "What "+nm("A")+" says, exactly";
+  $("#s3").textContent = "What does "+nm("A")+" say?";
+}
+
+function segBind(hostSel, attr, cb){
+  const host=$(hostSel);
+  host.addEventListener("click",e=>{
+    const b=e.target.closest("button"); if(!b) return;
+    host.querySelectorAll("button").forEach(x=>x.setAttribute("aria-pressed", x===b?"true":"false"));
+    cb(b.dataset[attr]);
+  });
+}
+
+/* ============================================================
+   ANALYSIS
+   ============================================================ */
+const REQ_RE = /\b(?:can you|could you|would you|please|need you to|don['’]?t forget|remember to|make sure|you need to|you have to|grab|pick up|drop off|call|bring|take|get|buy|send|pay|book|email|text)\b/i;
+
+function rx(f){ if(!f._rx) f._rx = f.re.global ? f.re : new RegExp(f.re.source, f.re.flags+"g"); return f._rx; }
+
+function segmentsOf(text){
+  return text.split(/,|;|\band then\b|\bthen\b|\band\b|\balso\b|\bplus\b/i)
+    .map(s=>s.trim().replace(/^(?:can you|could you|would you|please|and|also|then)\s+/i,"").replace(/[.?!]+$/,"").trim())
+    .filter(s=>s.split(/\s+/).length>=2);
+}
+
+function detect(text, ch){
+  const found = {}; const spans = [];
+  const words = (text.match(/\S+/g)||[]).length;
+  F.forEach(f=>{
+    if(!f.re) return;
+    if(f.chOnly && !f.chOnly.includes(ch)) return;
+    const r = rx(f); r.lastIndex = 0;
+    let m, hits=[];
+    while((m=r.exec(text))!==null){
+      if(m[0]===""){ r.lastIndex++; continue; }
+      hits.push([m.index, m.index+m[0].length, m[0].trim()]);
+    }
+    if(hits.length){
+      found[f.id]=hits.map(h=>h[2]);
+      hits.forEach(h=>spans.push({s:h[0],e:h[1],f:f.id}));
+    }
+  });
+  const drop = id=>{ delete found[id]; for(let i=spans.length-1;i>=0;i--) if(spans[i].f===id) spans.splice(i,1); };
+  // "just" only counts as a minimizer in requests and judgments, not "I just got home"
+  if(found.minim && found.minim.every(x=>/^just$/i.test(x)) &&
+     !/\b(?:just (?:do|go|get|put|ask|tell|say|stop|clean|pick|take|call|be|try|make|use|let|leave|finish|fix)|you just|it['’]?s just|that['’]?s just)\b/i.test(text)) drop("minim");
+  // a minimal reply ("great", "sure") is not sarcasm
+  if(found.minimal){ drop("sarcasm"); drop("vstd"); }
+  // "Great job on dinner, but..." is a compliment sandwich, not sarcasm
+  if(found.butc && found.sarcasm){
+    const bs=spans.filter(x=>x.f==="butc");
+    const inside=spans.filter(x=>x.f==="sarcasm").every(x=>bs.some(b=>x.s>=b.s&&x.e<=b.e));
+    if(inside) drop("sarcasm");
+  }
+  // idioms that are also listed elsewhere: keep the more specific reading
+  if(found.vstd && found.idiom && found.vstd.some(x=>/pull your weight/i.test(x))) drop("vstd");
+  // period on a short text
+  if(ch==="text" && words>0 && words<=5 && /[^.]\.\s*$/.test(text)){
+    found.period=["."]; const i=text.lastIndexOf("."); spans.push({s:i,e:i+1,f:"period"});
+  }
+  // several tasks in one breath
+  const segs = segmentsOf(text);
+  if(segs.length>=3 && REQ_RE.test(text)) found.multi = segs;
+  // long message or long sentence
+  const sentences = text.split(/[.!?]+\s/).map(s=>(s.match(/\S+/g)||[]).length);
+  if(words>45 || sentences.some(n=>n>28)) found.long=[words+" words"];
+  // stacked questions
+  const q=(text.match(/\?+/g)||[]).length;
+  if(q>=3) found.questions=[q+" questions"];
+  return {found, spans, words};
+}
+
+function markup(text, spans){
+  if(!spans.length) return esc(text);
+  const pts = spans.slice().sort((a,b)=>a.s-b.s||b.e-a.e);
+  const merged=[];
+  pts.forEach(p=>{
+    const last=merged[merged.length-1];
+    if(last && p.s<last.e){ last.e=Math.max(last.e,p.e); if(!last.f.includes(p.f)) last.f.push(p.f); }
+    else merged.push({s:p.s,e:p.e,f:[p.f]});
+  });
+  let out="", i=0;
+  merged.forEach(m=>{
+    out+=esc(text.slice(i,m.s));
+    const names=m.f.map(id=>FBY[id].name).join(", ");
+    out+='<mark title="'+esc(names)+'">'+esc(text.slice(m.s,m.e))+'<span class="sr-only"> ('+esc(names)+')</span></mark>';
+    i=m.e;
+  });
+  return out+esc(text.slice(i));
+}
+
+function entry(nt, fid, ch){
+  let r = NT[nt].receive[fid];
+  if(!r) return null;
+  if(Array.isArray(r)) r = {w:r[0], h:r[1], y:r[2]};
+  if(r.ch && !r.ch.includes(ch)) return null;
+  return r;
+}
+
+/* ---------- rewrite rules: [pattern, replacement] ---------- */
+const PAST = {took:"take",did:"do",made:"make",put:"put",went:"go",got:"get",brought:"bring",fed:"feed",gave:"give",bought:"buy",paid:"pay",told:"tell",said:"say",left:"leave",ran:"run",wrote:"write",threw:"throw",swept:"sweep",hung:"hang",shut:"shut",used:"use",moved:"move",shared:"share",closed:"close",changed:"change",organized:"organize",replaced:"replace",placed:"place",taken:"take",done:"do",gotten:"get",emptied:"empty",tidied:"tidy",folded:"fold",loaded:"load",unloaded:"unload",vacuumed:"vacuum",cleaned:"clean",mopped:"mop",stopped:"stop",planned:"plan",texted:"text",called:"call",answered:"answer",listened:"listen",remembered:"remember",noticed:"notice",asked:"ask",offered:"offer",checked:"check",helped:"help",walked:"walk",washed:"wash",picked:"pick",watered:"water",started:"start",finished:"finish",fixed:"fix",returned:"return",showed:"show",handled:"handle",scheduled:"schedule",booked:"book",wiped:"wipe"};
+function baseForm(clause){
+  return clause.replace(/^(\w+)/, w=>{
+    const l=w.toLowerCase();
+    if(PAST[l]) return PAST[l];
+    if(/ied$/.test(l)) return l.slice(0,-3)+"y";
+    if(/(?:sh|ch|ck|lk|nt|st|rk|lp|mp|ay|ey|ow|rn|wn|ll|ss)ed$/.test(l)) return l.slice(0,-2);
+    return w;
+  });
+}
+const MINIMAL_FIX = {
+  "fine":"I'm OK with that. [Or, if you're not: \"I'm not OK yet. Can we talk in an hour?\"]",
+  "i'm fine":"I'm OK. [Or say what's actually going on, even in a few words.]",
+  "it's fine":"It's really OK, I mean it.",
+  "k":"OK, sounds good!", "kk":"OK, sounds good!", "ok":"OK, sounds good!", "okay":"OK, sounds good!",
+  "alright":"OK, sounds good!", "all right":"OK, sounds good!",
+  "sure":"Sure, happy to.", "noted":"Got it, thanks.", "cool":"Cool, thanks!", "great":"Great, thank you!",
+  "good":"Good, thanks!", "yep":"Yes, sounds good.", "yeah":"Yes, sounds good.", "mhm":"Yes, sounds good.", "right":"Right, I understand.",
+  "whatever":"I need a break from this. Can we come back to it at [time]?",
+  "nothing":"[Say what's on your mind, or: \"I'm not ready to talk yet. Can we at [time]?\"]",
+  "nvm":"It's OK, it can wait until [time].", "never mind":"It's OK, it can wait until [time].", "nevermind":"It's OK, it can wait until [time].",
+  "if you say so":"I see it differently, but I'm OK going with that.",
+  "wow":"[Say what you're reacting to, in words.]"
+};
+const RW = [
+  [/\bwe need to talk\b[.!]*/gi, "I'd like to talk about [topic] at [time]. [Say how serious it is: \"Nothing's wrong\" or \"It's important, but we're OK.\"]"],
+  [/\bcan we talk\?*/gi, "Can we talk about [topic] at [time]?"],
+  [/\bcall me(?= *(?:[.!]|$| now| asap| when))(?: when you can| asap| now)?[.!]*/gi, "Call me about [topic] when you're free. [Say whether it's urgent.]"],
+  [/\bdon['’]?t be mad,?(?: but)?/gi, "I'm a little nervous to tell you this:"],
+  [/\bdon['’]?t freak out,?(?: but)?/gi, "Everyone's OK. I need to tell you something:"],
+  [/\bi have something to tell you\b[.!]*/gi, "I have something to tell you about [topic]. [Say how serious it is.]"],
+  [/\bit(?: would|['’]d) be (?:nice|great|good|helpful|lovely) if (?:someone|somebody|anyone|you) (?:could |would )?([^.!?]+)[.!?]*/gi, (m,c)=>"Could you "+baseForm(c)+" by [time]?"],
+  [/\b(?:someone|somebody|anyone) (?:should|needs to|could|has to|might want to) ([^.!?]+)[.!?]*/gi, (m,c)=>"Could you "+baseForm(c)+" by [time]?"],
+  [/\bi wish (?:you|someone|somebody) would ([^.!?]+)[.!?]*/gi, "Could you $1?"],
+  [/\bi guess i['’]?ll just (?:do|handle|take care of|deal with) (?:it|this|that)(?: myself)?[.!?]*/gi, "I need a hand with this. Could you take [one part]?"],
+  [/\bi['’]?ll just do it myself[.!?]*/gi, "I need a hand with this. Could you take [one part]?"],
+  [/\bwould it kill you to ([^.!?]+)[.!?]*/gi, "Could you $1?"],
+  [/\bmust be nice[^.!?]*[.!?]*/gi, "I'm stretched thin and could use help with [task]."],
+  [/\bno pressure,? but\b/gi, "No pressure at all, and I'd like it if"],
+  [/\bwhy didn['’]?t you ([^?.!]+)\?*/gi, "Next time, could you $1?"],
+  [/\bwhy don['’]?t you (?:ever )?([^?.!]+)\?*/gi, "Could you $1?"],
+  [/\bwhy can['’]?t you (?:just )?([^?.!]+)\?*/gi, "Could you $1?"],
+  [/\bwhy won['’]?t you ([^?.!]+)\?*/gi, "Could you $1?"],
+  [/\bhow (?:hard|difficult) (?:is|can) it (?:be )?to ([^?.!]+)\?*/gi, "Could you $1?"],
+  [/\bhow many times do i have to (?:tell|ask|remind) you\b[^?.!]*[?.!]*/gi, "This keeps coming up. Can we find a system for it together?"],
+  [/\bwhat['’]?s wrong with you\?*/gi, "[The specific thing that happened] is bothering me."],
+  [/\bwhat were you thinking\?*/gi, "Help me understand what happened."],
+  [/\bare you (?:even )?listening(?: to me)?\?*/gi, "I want to make sure this is landing. What did you hear?"],
+  [/\b(?:seriously|really|are you kidding(?: me)?|are you serious)\?+/gi, "[Say what surprised or upset you.]"],
+  [/\bcalm down\b[.!]*/gi, "This is a lot. Want to take ten minutes and come back to it?"],
+  [/\b(?:relax|chill out|chill)\b[.!]*/gi, "Want to take a short break?"],
+  [/\bget over it\b[.!]*/gi, "I can see this is still bothering you."],
+  [/\bgrow up\b[.!]*/gi, "I'd like us to handle this differently."],
+  [/\b(?:let it go|move on|just drop it|drop it|deal with it)\b[.!]*/gi, "Can we set this aside and come back to it at [time]?"],
+  [/\bstop (?:crying|overreacting)\b[.!]*/gi, "I can see this hit hard. What would help right now?"],
+  [/\byou['’]?re (?:being |just )?(?:so |too |really )?(?:overreacting|dramatic|too sensitive|so sensitive|sensitive|irrational|silly)\b[.!]*/gi, "This clearly hit you harder than I expected."],
+  [/\b(?:it['’]?s|that['’]?s) not (?:a )?big deal\b[.!]*/gi, "I didn't realize this mattered so much."],
+  [/\b(?:making a (?:big )?deal (?:out )?of (?:nothing|it|this))\b[.!]*/gi, "taking this harder than I expected. Help me understand."],
+  [/\bit was (?:just )?a joke\b[.!]*/gi, "I meant it as a joke, and I can see it didn't land that way."],
+  [/\bcan['’]?t (?:you )?take a joke\b\?*/gi, "I meant it as a joke, and I can see it didn't land that way."],
+  [/\byou['’]?re imagining (?:it|things)\b[.!]*/gi, "I remember it differently, and I want to hear how you saw it."],
+  [new RegExp("\\byou(?:['’]re| are) (?:so |such an? |being |acting |really |just )?(?:"+LABEL_WORDS+")\\b[.!]*","gi"), "[The specific thing that happened] is frustrating me."],
+  [new RegExp("\\b(?:this|that|it)(?:['’]s| is) (?:so |just |totally |really )?(?:"+LABEL_WORDS+")\\b[.!]*","gi"), "[This specific thing] isn't working for me."],
+  [/\byou know what you did\b[.!]*/gi, "When [specific thing] happened, I felt [feeling]."],
+  [/\bif you (?:really |actually )?cared,? (?:you would|you['’]d)\b/gi, "It would mean a lot to me if you would"],
+  [/\bi shouldn['’]?t have to (?:tell|ask) you\b[^.!?]*[.!?]*/gi, "I'd like to tell you what I need: [need]."],
+  [/\byou should (?:already )?know\b/gi, "I'll spell it out:"],
+  [/\bfigure it out\b[.!]*/gi, "Here's what I need: [need]."],
+  [/\bread between the lines\b/gi, "take this at face value"],
+  [/\blook at me when i['’]?m talking(?: to you)?\b[.!]*/gi, "Are you with me? You don't have to look at me."],
+  [/(?<!have to )\blook at me\b[.!]*/gi, "Are you with me?"],
+  [/\b(?:watch|lose) (?:your|that) tone\b[.!]*/gi, "I'm hearing your tone as upset. Is that what you mean?"],
+  [/\bdon['’]?t (?:use|give me) that (?:tone|look)\b[.!]*/gi, "I'm reading that as upset. Is that right?"],
+  [/\b(?:say something|answer me|talk to me)\b[.!]*/gi, "Take your time. I'm here when you're ready."],
+  [/\bare you ignoring me\?*/gi, "No rush. Reply once you're free."],
+  [/\bwhy aren['’]?t you (?:answering|responding|replying|saying anything)\?*/gi, "No rush. Reply once you're free."],
+  [/\bstop asking(?: me)?(?: that)?\b[.!]*/gi, "I answered that one. I'm here with you while the doubt passes."],
+  [/\bnot this again\b[.!]*/gi, "I answered that one. I'm here with you while the doubt passes."],
+  [/\b(?:stop (?:doing|making) that|quit (?:it|doing that)|can['’]?t you (?:just )?stop)\b[^.!?]*[.!?]*/gi, "[Leave this out. If it's a tic or a stim, it isn't a message.]"],
+  [/\b(?:right now|immediately|this instant)\b/gi, "by [time], because [reason]"],
+  [/\bhurry(?: up)?\b[.!]*/gi, "We need to leave by [time]."],
+  [/\bi (?:already )?told you (?:this |that )?(?:already|before|twice)\b[.!]*/gi, "Let me say this again in a way that sticks:"],
+  [/\b(?:i already (?:told|said|asked|explained)(?: you)?(?: this| that)?|as i (?:said|mentioned|wrote|told you)|like i said)\b[,.!]*/gi, "Just to recap:"],
+  [/\bdid you (?:even )?read (?:it|my (?:message|text|email))\?*/gi, "Here's the short version:"],
+  [/\b(?:every (?:single )?time)\b/gi, "a few times lately"],
+  [/\b(?:constantly|all the time)\b/gi, "a lot lately"],
+  [/\balways\b/gi, "often"],
+  [/\bnever\b/gi, "rarely"],
+  [/\b(?:obviously|clearly|simply|literally just),?\s*/gi, ""],
+  [/\ball you have to do is\b/gi, "the next step is to"],
+  [/\b(?:it['’]?s|that['’]?s) (?:so |really )?easy\b[.!]*/gi, "here's how it works:"],
+  [/\bjust (?=(?:do|go|get|put|ask|tell|say|stop|clean|pick|take|call|be|try|make|use|let|leave|finish|fix)\b)/gi, ""],
+  [/\b(?:clean(?:ed)? up|tidy(?: up)?)(?: a bit| a little)?\b/gi, "clean [which rooms, and what 'done' looks like]"],
+  [/\b(?:properly|the right way|like a normal person|like an adult)\b/gi, "[how exactly]"],
+  [/\bhelp (?:out|more)\b/gi, "help with [specific task]"],
+  [/\bbe (?:more )?(?:supportive|responsible|considerate|present|helpful|thoughtful|involved|mature)\b/gi, "[do one specific thing, e.g. ask how the appointment went]"],
+  [/\b(?:do better|step up|pitch in|make an effort|try harder)\b/gi, "[do one specific thing]"],
+  [/\b(?:when you get a chance|when you can|whenever|at some point|sometime|eventually|in a bit|one of these days|asap|soon|(?<!see you |talk to you |talk |catch you )later(?! on today))\b/gi, "by [time]"],
+  [/\bhow (?:does|did) (?:that|it|this) make you feel\?*/gi, "Did that feel more like [tired], [annoyed] or [hurt]? It's OK if it's hard to say yet."],
+  [/\bhow do you feel(?: about (?:it|that|this))?\?*/gi, "Are you more [tired], [annoyed] or [hurt] right now? Or would you rather not say yet?"],
+  [/\bwhat['’]?s wrong\?+/gi, "Would space or company help more right now?"],
+  [/^(.*?\b(?:good|great|nice|love|like|appreciate|thanks|thank you|well done)\b[^.!?]{0,60}?),?\s+but\s+([^.!?]+)[.!?]*/i, "$1. [Later, separately, as a request:] $2."],
+  [/\s*(?:\b(?:lol|lmao|jk|haha+|hehe)\b|😂|🙃|😉|🙄|😒|😅|🤣)/gi, ""],
+  [/\bwe['’]?ll see\b[.!]*/gi, "[If it's a no, say no kindly. If it's a real maybe, say when you'll decide.]"],
+  [/\bi['’]?ll think about it\b/gi, "I'll think about it and tell you by [time]"],
+  [/\.{3,}|…/g, "."],
+  [/([!?])[!?]+/g, "$1"]
+];
+
+function fixCaps(t){
+  return t.replace(/\b(?!(?:ASAP|ADHD|OCD|PTSD|APD|DLD|DCD|HSP|USA|OK|TV|LOL|LMAO|JK|FYI|ETA|ID|AM|PM|UK|US|NHS)\b)[A-Z]{3,}\b/g, w=>w.toLowerCase());
+}
+function tidy(t){
+  t = t.replace(/([.!?]),\s*/g,"$1 ").replace(/\s+([,.!?:])/g,"$1").replace(/([,.!?:])(?=[A-Za-z\[])/g,"$1 ").replace(/\s{2,}/g," ").replace(/,\s*([.!?])/g,"$1").replace(/([.?!])\s*\./g,"$1").replace(/\?\?+/g,"?").trim();
+  t = t.replace(/(^|[.!?]\s+|[:.!?]\]\s+)([a-z])/g,(m,p,c)=>p+c.toUpperCase());
+  if(t && !/[.!?\]”"]$/.test(t)) t+=".";
+  return t;
+}
+
+function rewrite(text, found, ch){
+  const norm = text.trim().toLowerCase().replace(/[’]/g,"'").replace(/[.!]+$/,"").trim();
+  if(found.minimal && MINIMAL_FIX[norm]) return MINIMAL_FIX[norm];
+  const words=(text.match(/\S+/g)||[]).length;
+  if(found.sarcasm && words<=10) return "[Say it straight: what happened, and how you feel about it. For example: \"That's frustrating. Now we'll be late.\"]";
+  let t = text.trim();
+  RW.forEach(([re,rep])=>{ re.lastIndex=0; t=t.replace(re,rep); });
+  t = fixCaps(t);
+  t = tidy(t);
+  if(found.sarcasm) t = "[Drop the sarcasm and say the real message.] "+t;
+  if(found.hedge && words<=14){
+    const plain = tidy(t.replace(/\b(?:i think|pretty sure|probably|i guess|i believe)\s*/gi,""));
+    t = "[If you're sure:] "+plain+" [If you're not: \"I'm not sure. I'll check now.\"]";
+  }
+  if(found.joke && !/\[/.test(t) && !found.minimal) t += " [If there's a real part under the joke, say it plainly.]";
+  const onlyPeriod = Object.keys(found).every(k=>k==="period");
+  if(found.period && ch==="text" && onlyPeriod && !/\[/.test(t)) t = t.replace(/\.$/,"!");
+  return t;
+}
+function phHTML(s){ return esc(s).replace(/\[([^\]]+)\]/g,'<span class="ph">$1</span>'); }
+
+/* ---------- check-back scripts for the listener ---------- */
+const CHECK = {
+  hint:"\"Is that a request? If so, what would you like, and by when?\"",
+  sarcasm:"\"Did you mean that literally, or were you being sarcastic?\"",
+  joke:"\"Was that a joke, or is something bothering you?\"",
+  idiom:"\"I want to be sure I've got it. What do you mean by that, exactly?\"",
+  vtime:"\"When do you need it by?\"",
+  vstd:"\"What does 'done' look like to you?\"",
+  minimal:"\"Is it actually fine, or do you need a minute?\"",
+  period:"\"Just checking the tone. Are we good?\"",
+  ellipsis:"\"It sounds like there's more. Want to say the rest?\"",
+  ominous:"\"Is everything OK? What's it about, and how serious is it?\"",
+  blameq:"\"Are you asking for the reason, or telling me you're upset? I can do either.\"",
+  critic:"\"I want to fix this. What's the one thing you'd like different?\"",
+  label:"\"I want to fix this. What's the specific thing that happened?\"",
+  absolute:"\"Can you give me the most recent example, so I know what to work on?\"",
+  vemo:"\"I honestly don't know what you mean. Can you tell me the specific thing?\"",
+  multi:"\"Let me repeat that back so I don't lose any of it. Could you text me the list?\"",
+  long:"\"That was a lot. What's the most important part?\"",
+  questions:"\"Which question should I answer first?\"",
+  softno:"\"Is that a no, or a real maybe? When will you decide?\"",
+  hedge:"\"Are you sure, or should we check together once?\"",
+  tone:"\"I'm not upset. This is just how my face and voice work. Can we focus on the words?\"",
+  demand:"\"I need a minute to think. I'm not ignoring you.\"",
+  calm:"\"I need a few minutes. I'll come back when I can talk.\"",
+  invalid:"\"It landed hard for me. Can I tell you why?\"",
+  feelingq:"\"I'm not sure what I'm feeling yet. Can I tell you later, or can you give me some options?\"",
+  already:"\"I didn't catch it the first time. Could you send it to me in writing?\"",
+  urgent:"\"What's happening, and why does it need to be right now?\"",
+  shout:"\"I'm finding the volume hard. Can we slow down?\"",
+  stopask:"\"Can we agree on how you'll answer when the doubt comes back?\"",
+  tic:"\"That was a tic. It's not a reaction to you.\"",
+  butc:"\"Thanks for the first part. What exactly would you like different?\""
+};
+
+const STATE_NOTE = {
+  v:["Settled","The best time for anything hard. Most of this should get through if it's said clearly."],
+  s:["Mobilized","A stressed nervous system reads every signal as louder and more threatening. Shorten it, slow it down, lead with reassurance, or wait until they've settled."],
+  d:["Shut down","In shutdown, words may barely get through. Hold off on questions, decisions and anything hard. Offer quiet company and come back later. Guidance on autistic shutdowns says to avoid questions and instructions until the person has recovered."]
+};
+
+function combos(set, who){
+  const n=[]; const h=id=>set.has(id);
+  if(h("autistic")&&h("adhd")) n.push(["Autistic and ADHD together (AuDHD)", who==="B"
+    ? "Needs directness and a written plan at the same time. ADHD's pull toward novelty and autism's need for routine can compete inside one person, so a sudden change can be distressing even when the new plan sounds fun. Keep it literal, short, early and in writing."
+    : "Messages may come out direct and fast at once, with tangents that are really deep dives. Directness is usually efficiency, and speed is usually enthusiasm.", "autistica"]);
+  if(who==="B" && h("adhd")&&h("anxiety")) n.push(["ADHD and anxiety", "Rejection sensitivity and a threat-leaning read on ambiguity stack up. Silence, short replies and unexplained \"we need to talk\" messages are the loudest static for this combination. Close every loop.", "rsd"]);
+  if(who==="B" && h("autistic")&&h("alex")) n.push(["Autistic with alexithymia", "Emotional hints and open \"how do you feel?\" questions carry the least signal here. Ask about actions, options and the body instead.", "hog"]);
+  if(who==="B" && h("trauma")&&h("hsp")) n.push(["Trauma-wired and highly sensitive", "Volume, pace and small shifts in tone will register before the words do. Keep your voice steady and give the purpose first.", "kimble"]);
+  if(who==="B" && h("autistic")&&(h("apd")||h("dld"))) n.push(["Literal processing plus a language or listening difference", "Use short, concrete, literal spoken sentences, then follow up in writing.", "nhsApd"]);
+  if(who==="B" && h("ocd")&&h("anxiety")) n.push(["OCD and anxiety", "Uncertainty is the main static. Answer clearly once, don't hedge, and agree ahead of time how repeat questions will be handled.", "ocd"]);
+  if(who==="B" && h("adhd")&&h("dyslexic")) n.push(["ADHD and dyslexia", "Long written messages cost twice: attention and decoding. Headline first, three short lines at most, or a voice note.", "dyslexia"]);
+  if(who==="B" && h("tourette")&&(h("adhd")||h("ocd"))) n.push(["Tourette with ADHD or OCD", "These often occur together. Stress raises tics, so a calm, low-pressure delivery helps on every channel.", "taa"]);
+  if(set.size>=3) n.push(["Several wirings at once", who==="B" ? "When several wirings share one receiver, the strictest rule wins. If any of them needs it in writing, write it. If any needs time, give time." : "Several wirings in one speaker can pull their messages in different directions. Ask what they meant rather than decoding it.", null]);
+  return n;
+}
+
+function srcList(keys){
+  const seen=new Set(); const out=[];
+  keys.forEach(k=>{ if(k && SRC[k] && !seen.has(k)){ seen.add(k); out.push('<li><a href="'+SRC[k][1]+'" target="_blank" rel="noopener">'+esc(SRC[k][0])+'</a></li>'); } });
+  return out.join("");
+}
+
+/* ============================================================
+   RUN
+   ============================================================ */
+function run(){
+  const text=$("#phrase").value.trim();
+  const msg=$("#msg"); msg.textContent="";
+  if(!sel.B.size){ msg.textContent="Pick at least one wiring for "+nm("B")+" (the listener)."; $("#personB").scrollIntoView({behavior:"smooth",block:"center"}); return; }
+  if(!text){ msg.textContent="Type a phrase, or pick one of the examples."; $("#phrase").focus(); return; }
+
+  const A=nm("A"), B=nm("B");
+  const {found, spans, words} = detect(text, channel);
+  const fids = Object.keys(found);
+  const Bids=[...sel.B], Aids=[...sel.A];
+
+  // --- per-receiver readings and score
+  let score=0; const top=[]; const perB={};
+  fids.forEach(fid=>{
+    const ws=[];
+    Bids.forEach(b=>{
+      const e=entry(b,fid,channel);
+      if(e){ (perB[b]=perB[b]||[]).push({fid,...e}); ws.push(e.w); if(e.w>=1) top.push({b,fid,...e}); }
+    });
+    if(ws.length){ const mx=Math.max(...ws); score+=mx+0.5*Math.max(0,ws.filter(w=>w>=2).length-1); }
+    else score+=0.25;
+  });
+  if(channel==="phone" && sel.B.has("autistic")) score+=0.5;
+  if(channel==="phone" && sel.B.has("apd")) score+=1;
+  if(channel==="email" && sel.B.has("dyslexic") && words>25) score+=0.5;
+  const mult={v:1,s:1.4,d:1.9}[bstate];
+  score = score*mult + (bstate==="d"?1:0) + (bstate==="s"&&score>0?0.3:0);
+  const lvl = score<1.5?["clear","Clear signal"]:score<4.5?["some","Some static"]:["heavy","Heavy static"];
+  const pct = Math.max(6, Math.min(100, Math.round(score/8*100)));
+
+  const strongest = top.slice().sort((a,b)=>b.w-a.w);
+  const whyBits=[];
+  whyBits.push(fids.length ? fids.length+" pattern"+(fids.length>1?"s":"")+" found in the words." : "No known static patterns found in the words.");
+  if(strongest.length) whyBits.push("Strongest for "+NT[strongest[0].b].short+": "+FBY[strongest[0].fid].name.toLowerCase()+".");
+  if(bstate!=="v") whyBits.push(B+" is "+STATE_NOTE[bstate][0].toLowerCase()+", which makes everything land harder.");
+
+  const chName={person:"in person",phone:"by phone or video",text:"by text",email:"by email or long note"}[channel];
+  let h='';
+  h+='<div class="rhead"><h2 id="rTitle">The read</h2><p class="pair"><span class="pa">'+esc(A)+(Aids.length?' ('+esc(listNames(sel.A))+')':'')+'</span> &rarr; <span class="pb">'+esc(B)+' ('+esc(listNames(sel.B))+')</span> &middot; '+chName+' &middot; '+esc(B)+' is '+STATE_NOTE[bstate][0].toLowerCase()+'</p></div>';
+
+  // meter
+  h+='<div class="box tone-brass"><div class="meter"><span class="lvl lvl-'+lvl[0]+'">'+lvl[1]+'</span><div class="track" role="img" aria-label="Static level: '+lvl[1]+'"><div class="fill lvl-'+lvl[0]+'" data-w="'+pct+'"></div></div><p class="why">'+esc(whyBits.join(" "))+'</p></div>';
+  h+='<h3>The phrase, marked up<span class="sub">HIGHLIGHTS SHOW WHERE STATIC MAY COME FROM</span></h3><p class="marked">'+markup(text,spans)+'</p>';
+  if(fids.length) h+='<ul class="flist">'+fids.map(id=>'<li>'+esc(FBY[id].name)+'</li>').join("")+'</ul>';
+  h+='</div>';
+
+  // how it may land, per receiver wiring
+  h+='<div class="box tone-b"><h3>How it may land for '+esc(B)+'<span class="sub">ONE READING PER WIRING YOU SELECTED</span></h3>';
+  Bids.forEach(b=>{
+    const list=(perB[b]||[]).slice().sort((x,y)=>y.w-x.w);
+    h+='<div class="receiver"><h4>As '+esc(NT[b].short)+'</h4>';
+    if(list.length){
+      h+='<ul class="land">'+list.map(e=>'<li class="w'+e.w+'"><span class="fx">'+esc(FBY[e.fid].name.toUpperCase())+(e.w===0?' &middot; LIKELY LANDS AS MEANT':e.w===3?' &middot; HEAVY STATIC':e.w===2?' &middot; SOME STATIC':'')+'</span><span class="heard">&ldquo;'+esc(e.h)+'&rdquo;</span><span class="y">'+esc(e.y)+'</span></li>').join("")+'</ul>';
+    } else {
+      h+='<p class="small">Nothing in these words is a known trouble spot for this wiring. '+esc(NT[b].sum)+'</p>';
+    }
+    if(NT[b].ch && NT[b].ch[channel]) h+='<p class="small"><b>About the channel:</b> '+esc(NT[b].ch[channel])+'</p>';
+    h+='</div>';
+  });
+  const cB=combos(sel.B,"B");
+  cB.forEach(c=>{ h+='<div class="receiver"><h4>'+esc(c[0])+'</h4><p class="small">'+esc(c[1])+'</p></div>'; });
+  h+='<p class="small" style="margin-top:12px"><b>'+esc(STATE_NOTE[bstate][0])+':</b> '+esc(STATE_NOTE[bstate][1])+'</p>';
+  h+='</div>';
+
+  // what they may hear / what A meant
+  h+='<div class="two">';
+  h+='<div class="box tone-b"><h3>What '+esc(B)+' may hear<span class="sub">THE LOUDEST READINGS</span></h3>';
+  const seenH=new Set(); const heard=strongest.filter(e=>{ if(seenH.has(e.h)) return false; seenH.add(e.h); return true; }).slice(0,3);
+  if(heard.length) h+=heard.map(e=>'<p class="quote">&ldquo;'+esc(e.h)+'&rdquo;</p>').join("");
+  else h+='<p class="quote">&ldquo;Roughly what '+esc(A)+' meant.&rdquo;</p><p class="small">Tone, timing and history can still add static the words don\'t show.</p>';
+  h+='</div>';
+  h+='<div class="box tone-a"><h3>What '+esc(A)+' probably meant<span class="sub">READ THROUGH '+esc(A.toUpperCase())+'\'S WIRING</span></h3>';
+  if(!Aids.length){
+    h+='<p class="small">Pick '+esc(A)+'\'s wiring in Step 1 to see how their wiring might shape what they meant.</p>';
+  } else {
+    Aids.forEach(a=>{
+      const notes=[]; fids.forEach(fid=>{ const m=NT[a].meant&&NT[a].meant[fid]; if(m && !notes.includes(m)) notes.push(m); });
+      h+='<p style="margin:6px 0"><b>As '+esc(NT[a].short)+':</b> '+esc(notes.length?notes.slice(0,2).join(" "):NT[a].meantDefault)+'</p>';
+    });
+    combos(sel.A,"A").forEach(c=>{ h+='<p class="small"><b>'+esc(c[0])+':</b> '+esc(c[1])+'</p>'; });
+  }
+  h+='<p class="small">Only '+esc(A)+' knows what they meant. This is a starting guess to check, not a verdict.</p></div>';
+  h+='</div>';
+
+  // rewrite
+  const rw=rewrite(text,found,channel);
+  const changed = rw.replace(/\s/g,"").toLowerCase()!==text.replace(/\s/g,"").toLowerCase();
+  h+='<div class="box tone-v" style="margin-top:14px"><h3>A clearer transmission<span class="sub">A STARTING POINT, NOT A SCRIPT. FILL IN THE BRACKETS.</span></h3>';
+  if(changed) h+='<p class="rewrite" id="rwText">'+phHTML(rw)+'</p>';
+  else if(!found.multi) h+='<p class="small">No automatic changes. By these rules it already reads clearly. The notes below still apply.</p>';
+  if(found.multi){
+    h+='<p class="small" style="margin-bottom:2px"><b>Or send the tasks as a list:</b></p><p class="rewrite">'+phHTML("Could you do these by [time]?\n"+found.multi.map((s,i)=>(i+1)+". "+s).join("\n"))+'</p>';
+  }
+  const fixes=[]; strongest.concat(fids.map(fid=>({fid,w:0}))).forEach(e=>{ const fx=FBY[e.fid].fix; if(!fixes.includes(fx)) fixes.push(fx); });
+  if(fixes.length) h+='<ul class="ul">'+fixes.slice(0,6).map(f=>'<li>'+esc(f)+'</li>').join("")+'</ul>';
+  const soft = ["critic","label","absolute","blameq","already"].some(f=>found[f]) && ["adhd","anxiety","trauma","hsp"].some(x=>sel.B.has(x));
+  if(soft) h+='<p class="small" style="margin-top:10px"><b>An opener that helps this listener:</b> "I\'m not upset with you. I want to sort this out together."</p>';
+  if(bstate==="d") h+='<p class="small"><b>Timing:</b> '+esc(B)+' is shut down. The clearest version of this is still best saved for later.</p>';
+  else if(bstate==="s" && lvl[0]!=="clear") h+='<p class="small"><b>Timing:</b> '+esc(B)+' is mobilized. Consider waiting, or say only the first sentence now.</p>';
+  h+='</div>';
+
+  // tips + check-back
+  h+='<div class="two">';
+  const tips=[]; Bids.forEach(b=>NT[b].tips.slice(0,3).forEach(t=>{ if(!tips.includes(t)) tips.push(t); }));
+  h+='<div class="box"><h3>Speaking to '+esc(B)+'\'s wiring<span class="sub">WORKS BEYOND THIS ONE PHRASE</span></h3><ul class="ul">'+tips.slice(0,9).map(t=>'<li>'+esc(t)+'</li>').join("")+'</ul></div>';
+  const checks=[]; strongest.forEach(e=>{ const c=CHECK[e.fid]; if(c && !checks.includes(c)) checks.push(c); });
+  fids.forEach(fid=>{ const c=CHECK[fid]; if(c && !checks.includes(c)) checks.push(c); });
+  h+='<div class="box"><h3>If you\'re '+esc(B)+': a check-back<span class="sub">ASK INSTEAD OF DECODING</span></h3>';
+  h+= checks.length ? '<ul class="ul">'+checks.slice(0,3).map(c=>'<li>'+esc(c)+'</li>').join("")+'</ul>' : '<p class="small">"Here\'s what I heard: ___. Is that what you meant?"</p>';
+  h+='<p class="small" style="margin-top:8px">A check-back is not an accusation. It\'s the fastest way to find out which reading was right.</p></div>';
+  h+='</div>';
+
+  // double empathy
+  const same = Aids.length && Aids.length===Bids.length && Aids.every(x=>sel.B.has(x));
+  let srcKeys=[];
+  if(Aids.length){
+    if(same){
+      h+='<div class="box" style="margin-top:14px"><h3>Same wiring on both ends</h3><p class="small">People with similar wiring often find each other easier to understand. Shared wiring also means shared blind spots, though. Two people can forget the same bill, or wind up the same worry. Use an outside system for those.</p></div>';
+    } else {
+      h+='<div class="box" style="margin-top:14px"><h3>The static runs both ways</h3><p class="small">When two differently wired people misread each other, the breakdown is usually mutual. Each is decoding with a receiver built for their own kind of signal. This is the <a href="'+SRC.nasDE[1]+'" target="_blank" rel="noopener">double empathy problem</a>. In a large 2025 replication, mixed pairs passed information along as well as matched pairs, but rapport still felt lower. The words can arrive while the connection lags. Try the <b>Swap</b> button to see how '+esc(B)+'\'s reply might land for '+esc(A)+'.</p></div>';
+      srcKeys.push("nasDE","crompton","nature25");
+    }
+  }
+
+  // sources + actions
+  Bids.concat(Aids).forEach(id=>srcKeys=srcKeys.concat(NT[id].src||[]));
+  if(sel.B.has("autistic")&&sel.B.has("adhd")) srcKeys.push("autistica");
+  if(bstate==="d") srcKeys.push("lpt");
+  h+='<details class="box src" style="margin-top:14px"><summary><b>Where these readings come from</b></summary><ul class="ul">'+srcList(srcKeys)+'</ul><p>The full explanations, with more examples, are in <a href="wired-differently.html">Wired Differently</a>.</p></details>';
+  h+='<div class="rfoot"><button class="go" type="button" id="again">Try the reverse</button><button class="ghost" type="button" id="copy">Copy the read</button><button class="ghost" type="button" id="print">Print</button><a class="ghost" href="wired-differently.html" style="text-decoration:none">Read the guide</a></div>';
+
+  const R=$("#results"); R.innerHTML=h; R.hidden=false;
+  requestAnimationFrame(()=>{ const f=R.querySelector(".fill"); if(f) f.style.width=f.dataset.w+"%"; });
+  $("#again").addEventListener("click",()=>{ swap(); $("#phrase").focus(); $("#msg").textContent="Swapped. Type what "+nm("A")+" might say back, then translate."; });
+  $("#copy").addEventListener("click",()=>{
+    const t=R.innerText.replace(/\n{3,}/g,"\n\n");
+    (navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(()=>{$("#copy").textContent="Copied";},()=>{$("#copy").textContent="Select and copy manually";});
+  });
+  $("#print").addEventListener("click",()=>window.print());
+  R.focus({preventScroll:true});
+  R.scrollIntoView({behavior: matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth", block:"start"});
+}
+
+function swap(){
+  const t=sel.A; sel.A=sel.B; sel.B=t;
+  const na=$("#nameA").value; $("#nameA").value=$("#nameB").value; $("#nameB").value=na;
+  sync();
+}
+
+/* ============================================================
+   INIT
+   ============================================================ */
+buildChips("A"); buildChips("B");
+$("#presets").innerHTML='<span class="lab" style="width:100%;font-size:.82rem">Or try an example:</span>'+PRESETS.map(p=>'<button type="button">'+esc(p)+'</button>').join("");
+$("#presets").addEventListener("click",e=>{ const b=e.target.closest("button"); if(!b) return; $("#phrase").value=b.textContent; $("#phrase").focus(); });
+segBind("#channel","ch",v=>{ channel=v; if(!$("#results").hidden) run(); });
+segBind("#state","s",v=>{ bstate=v; document.documentElement.style.setProperty("--state","var(--"+v+")"); if(!$("#results").hidden) run(); });
+$("#swap").addEventListener("click",()=>{ swap(); if(!$("#results").hidden && sel.B.size && $("#phrase").value.trim()) run(); });
+$("#go").addEventListener("click",run);
+$("#phrase").addEventListener("keydown",e=>{ if(e.key==="Enter"&&(e.ctrlKey||e.metaKey)){ e.preventDefault(); run(); } });
+["nameA","nameB"].forEach(id=>$("#"+id).addEventListener("input",sync));
+$("#reset").addEventListener("click",()=>{
+  sel.A.clear(); sel.B.clear(); $("#phrase").value=""; $("#nameA").value=""; $("#nameB").value="";
+  $("#results").hidden=true; $("#results").innerHTML=""; $("#msg").textContent=""; sync(); window.scrollTo({top:0});
+});
+sync();
+})();
+</script>
+</body>
+</html>
