@@ -1,0 +1,73 @@
+/*
+  tol-index.css — the page-list ("menu") format used by the 404 page:
+    <div class="tol-index">
+      <div class="tol-index-section"><h3>Section</h3><ol>
+        <li><a class="tol-row" href="…">
+          <span class="tol-code">WP-03</span>
+          <span class="tol-title">Title<small>Note</small></span>
+          <span class="tol-access">members</span>
+        </a></li>
+      </ol></div>
+    </div>
+
+  On pages that load /assets/css/site.css, site.css styles these rows. Every rule
+  here is wrapped in :where(), which gives it zero specificity, so site.css
+  always wins. On older pages without site.css (the homepage for now), these
+  rules make the rows look the same.
+*/
+
+:where(.tol-index) ol{ list-style: none; margin: 0; padding: 0; }
+:where(.tol-index) li{ margin: 0; max-width: none; }
+:where(.tol-index-section){ margin-top: 1.5rem; }
+:where(.tol-index-section) h3{
+  font-family: "Fraunces", Georgia, serif; font-weight: 600; font-size: 1.05rem;
+  margin: 0 0 .4rem; padding-bottom: .35rem;
+  border-bottom: 1px solid var(--ink, #211D17);
+}
+
+:where(.tol-row){
+  display: grid;
+  grid-template-columns: 4.2rem 1fr auto;
+  gap: .2rem 1rem;
+  align-items: baseline;
+  padding: .7rem .25rem;
+  border-bottom: 1px solid var(--line, #D9CBA3);
+  color: var(--ink, #211D17);
+  text-decoration: none;
+}
+:where(a.tol-row):hover{ background: var(--paper-deep, #ECE2C4); }
+:where(a.tol-row):hover :where(.tol-title){ text-decoration: underline; text-decoration-color: var(--brass, #A8792F); text-underline-offset: 3px; }
+:where(a.tol-row):focus-visible{ outline: 2px solid var(--focus, #2B5B8C); outline-offset: 2px; }
+
+:where(.tol-code){
+  font-family: "IBM Plex Mono", ui-monospace, monospace;
+  font-size: .78rem; color: var(--brass, #A8792F); white-space: nowrap;
+}
+:where(.tol-title){ font-weight: 600; }
+:where(.tol-title) small{
+  display: block; font-weight: 400; font-size: .88rem;
+  color: var(--ink-soft, #524B3E); margin-top: .1rem;
+}
+:where(.tol-access){
+  font-family: "IBM Plex Mono", ui-monospace, monospace;
+  font-size: .72rem; color: var(--ink-soft, #524B3E); white-space: nowrap;
+}
+
+/* Rows for things that exist but have no page of their own (planned items) */
+:where(div.tol-row){ color: var(--ink-soft, #524B3E); }
+:where(div.tol-row) :where(.tol-title){ font-weight: 400; font-style: italic; }
+
+/* Access marks that switch when the member check unlocks the page (body.unlocked),
+   without any script: <span class="tol-access"><span class="is-locked">members</span><span class="is-open">unlocked</span></span> */
+.tol-access .is-open{ display: none; }
+body.unlocked .tol-access .is-open{ display: inline; }
+body.unlocked .tol-access .is-locked{ display: none; }
+
+/* Pages in the reading layout indent ordered lists; these lists shouldn't be */
+.read .tol-index ol{ padding-left: 0; }
+.read .tol-index li{ max-width: none; }
+
+@media (max-width: 520px){
+  :where(.tol-row){ grid-template-columns: 1fr auto; }
+  :where(.tol-code){ grid-column: 1 / -1; }
+}

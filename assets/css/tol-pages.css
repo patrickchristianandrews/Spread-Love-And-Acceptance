@@ -66,11 +66,7 @@
 .tol-chain span{ font-size: 0.88em; color: var(--ink-soft, #524B3E); }
 
 /* ---------- where to start ---------- */
-.tol-paths{ list-style: none; margin: 1em 0 0; padding: 0; border-top: 1px solid var(--line, #D9CBA3); }
-.tol-paths li{ margin: 0; padding: 0.75em 0.8em; border-bottom: 1px solid var(--line, #D9CBA3); }
-.tol-paths .if{ display: block; color: var(--ink-soft, #524B3E); font-size: 0.92em; }
-.tol-paths a{ font-weight: 600; }
-.tol-paths li.tol-primary{ background: var(--credit-soft, #E4EDE3); }
+.tol-start li:first-child .tol-row{ background: var(--credit-soft, #E4EDE3); }
 
 /* ---------- two columns: free/paid, is/isn't ---------- */
 .tol-cols{ display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1em; margin-top: 1.2em; }
