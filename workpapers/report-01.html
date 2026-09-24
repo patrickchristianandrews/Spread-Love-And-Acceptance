@@ -193,12 +193,12 @@
     <div class="panel">
       <div class="grid">
         <div class="field">
-          <label for="name-a">Partner A</label>
-          <input type="text" id="name-a" value="Partner A">
+          <label for="name-a">Person A</label>
+          <input type="text" id="name-a" value="Person A">
         </div>
         <div class="field">
-          <label for="name-b">Partner B</label>
-          <input type="text" id="name-b" value="Partner B">
+          <label for="name-b">Person B</label>
+          <input type="text" id="name-b" value="Person B">
         </div>
       </div>
     </div>
@@ -452,7 +452,7 @@
   "use strict";
 
   var W = { sol:{wb:.40,oc:.35,as:.25}, apex:{wb:.35,oc:.30,as:.20,rf:.15} };
-  var ledger = { version:1, nameA:"Partner A", nameB:"Partner B", weeks:[], months:[] };
+  var ledger = { version:1, nameA:"Person A", nameB:"Person B", weeks:[], months:[] };
 
   function $(id){ return document.getElementById(id); }
   function val(id){ var v=parseFloat($(id).value); return isNaN(v)?null:v; }
@@ -554,7 +554,7 @@
   function buildFindings(){
     var out=[], ws=ledger.weeks, ds=ws.map(derive);
     var last=ds.length?ds[ds.length-1]:null;
-    var nA=esc($("name-a").value||"Partner A"), nB=esc($("name-b").value||"Partner B");
+    var nA=esc($("name-a").value||"Person A"), nB=esc($("name-b").value||"Person B");
 
     if(!ds.length) return '<p class="empty">Nothing to read yet.</p>';
 
@@ -784,7 +784,7 @@
       try{
         var data=JSON.parse(r.result);
         if(!data || !Array.isArray(data.weeks)) throw new Error("not a ledger file");
-        ledger={ version:data.version||1, nameA:data.nameA||"Partner A", nameB:data.nameB||"Partner B",
+        ledger={ version:data.version||1, nameA:data.nameA||"Person A", nameB:data.nameB||"Person B",
                  weeks:data.weeks, months:Array.isArray(data.months)?data.months:[] };
         $("name-a").value=ledger.nameA; $("name-b").value=ledger.nameB;
         renderAll();

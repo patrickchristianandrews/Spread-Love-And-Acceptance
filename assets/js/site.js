@@ -33,6 +33,7 @@
     { id: 'start', title: 'Start here', blurb: 'New to the site? These pages explain the idea and let you try it in a few minutes.', items: [
       { href: '/index.html', code: '', title: 'Home', note: 'What’s new, the ways in, and the full contents' },
       { href: '/is-this-for-you.html', code: '', title: 'Is this right for you?', note: 'What the program is and isn’t, who it helps, and a guide to every section' },
+      { href: '/relationships.html', code: '', title: 'How it fits your relationships', note: 'How every part of the program connects to yourself, partners, family, friends, roommates, co-parents, coworkers and caregivers' },
       { href: '/quick-checks.html', code: '', title: 'Quick checks', note: 'Two short free tools: check your stress state, and total up who did what this week' },
       { href: '/frequency-framework.html', code: '', title: 'The Frequency Framework', note: 'Why two reasonable people can end up in a fight neither of them started' },
       { href: '/infographic.html', code: '', title: 'Executive summary', note: 'The whole framework on one printable page, easy to share' }
