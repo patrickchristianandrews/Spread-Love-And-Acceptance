@@ -30,61 +30,61 @@
 
   // ===== Every page on the site, in reading order =====
   var SECTIONS = [
-    { id: 'start', title: 'Start here', blurb: 'The idea in one sitting, plus two quick self-checks.', items: [
-      { href: '/index.html', code: '', title: 'Home' },
-      { href: '/is-this-for-you.html', code: '', title: 'Is this right for you?', note: 'What this is and isn’t, and where everything is' },
-      { href: '/quick-checks.html', code: '', title: 'Quick checks', note: 'Check Your State and the Lemonade Stand' },
-      { href: '/frequency-framework.html', code: '', title: 'The Frequency Framework', note: 'Why two reasonable people end up in a fight neither started' },
-      { href: '/infographic.html', code: '', title: 'Executive summary', note: 'A printable one-page overview' }
+    { id: 'start', title: 'Start here', blurb: 'New to the site? These pages explain the idea and let you try it in a few minutes.', items: [
+      { href: '/index.html', code: '', title: 'Home', note: 'What’s new, the ways in, and the full contents' },
+      { href: '/is-this-for-you.html', code: '', title: 'Is this right for you?', note: 'What the program is and isn’t, who it helps, and a guide to every section' },
+      { href: '/quick-checks.html', code: '', title: 'Quick checks', note: 'Two short free tools: check your stress state, and total up who did what this week' },
+      { href: '/frequency-framework.html', code: '', title: 'The Frequency Framework', note: 'Why two reasonable people can end up in a fight neither of them started' },
+      { href: '/infographic.html', code: '', title: 'Executive summary', note: 'The whole framework on one printable page, easy to share' }
     ]},
-    { id: 'book', title: 'The book', blurb: 'The manuscript, chapter by chapter.', items: [
-      { href: '/book/preface.html', code: 'Preface', title: 'Unbilled Debt' },
-      { href: '/book/chapter-1.html', code: 'I', title: 'The Radio Frequency Paradigm' },
-      { href: '/book/chapter-2.html', code: 'II', title: 'The Epistemic Verdict Engine & P(Solvency)' },
-      { href: '/book/chapter-3.html', code: 'III', title: 'Autonomic Saturation & the 7 Ocular Vectors', paid: true },
-      { href: '/book/chapter-4.html', code: 'IV', title: 'Deontological Parity & Sensory Gating', paid: true },
-      { href: '/book/chapter-5.html', code: 'V', title: 'The Deficit Audit', paid: true }
+    { id: 'book', title: 'The book', blurb: 'The manuscript, one idea per chapter. Each chapter pairs with a workpaper that puts it to use.', items: [
+      { href: '/book/preface.html', code: 'Preface', title: 'Unbilled Debt', note: 'Why the unseen work of running a shared life builds up like a debt only one person can see' },
+      { href: '/book/chapter-1.html', code: 'I', title: 'The Radio Frequency Paradigm', note: 'How pace, tone and urgency knock two people out of sync, and how to get back in tune' },
+      { href: '/book/chapter-2.html', code: 'II', title: 'The Epistemic Verdict Engine & P(Solvency)', note: 'A simple formula for whether the current split of work is sustainable. It judges the arrangement, never a person' },
+      { href: '/book/chapter-3.html', code: 'III', title: 'Autonomic Saturation & the 7 Ocular Vectors', note: 'How much of a reaction is leftover stress, and the seven angles people argue from', paid: true },
+      { href: '/book/chapter-4.html', code: 'IV', title: 'Deontological Parity & Sensory Gating', note: 'Agreeing how you’ll judge fairness, and giving a comment time to land before reacting', paid: true },
+      { href: '/book/chapter-5.html', code: 'V', title: 'The Deficit Audit', note: 'Why a monthly look back catches the problems that weekly check-ins miss', paid: true }
     ]},
-    { id: 'workpapers', title: 'Workpapers', blurb: 'Printable worksheets you fill in together.', items: [
-      { href: '/workpapers/wp-01.html', code: 'WP-01', title: 'The Daily Balance Sheet & Neutral Refusals', paid: true },
-      { href: '/workpapers/wp-02-battery-stress-meter.html', code: 'WP-02', title: 'The Battery & Stress Meter', paid: true },
-      { href: '/workpapers/wp-03-raci-treaty.html', code: 'WP-03', title: 'The Household Chore Treaty', paid: true },
-      { href: '/workpapers/wp-04-deficit-audit.html', code: 'WP-04', title: 'Unbilled Deficit Audit', paid: true },
-      { href: '/workpapers/wp-09-tone-filter.html', code: 'WP-09', title: 'The Tone Transducer', paid: true },
-      { href: '/wp-11.html', code: 'WP-11', title: 'The Calm-Down Kit', note: 'Settle first, when either of you is too activated to talk', paid: true },
-      { href: '/workpapers/wp-13-pll-protocol.html', code: 'WP-13', title: 'Phase-Locked Loop Protocol', paid: true },
-      { href: '/workpapers/fill/index.html', code: 'Fill-in', title: 'Fill-in workpapers', note: 'Type in, save as PDF' }
+    { id: 'workpapers', title: 'Workpapers', blurb: 'Worksheets each person fills in about themselves, then reads together. Best in this order: WP-01, 02, 03, 09, 13, with WP-04 monthly.', items: [
+      { href: '/workpapers/wp-01.html', code: 'WP-01', title: 'The Daily Balance Sheet & Neutral Refusals', note: 'Start here: a week’s log of who did what, plus kind scripts for saying no', paid: true },
+      { href: '/workpapers/wp-02-battery-stress-meter.html', code: 'WP-02', title: 'The Battery & Stress Meter', note: 'A five-question self-check: how much are you already carrying today?', paid: true },
+      { href: '/workpapers/wp-03-raci-treaty.html', code: 'WP-03', title: 'Domestic RACI Treaty', note: 'One named owner for every recurring task, so it stops being renegotiated', paid: true },
+      { href: '/workpapers/wp-04-deficit-audit.html', code: 'WP-04', title: 'Unbilled Deficit Audit', note: 'A monthly review that sorts repeat problems into their real causes', paid: true },
+      { href: '/workpapers/wp-09-tone-filter.html', code: 'WP-09', title: 'Tone Transducer & Filter', note: 'Turn a raw reaction into fact, feeling and a clear ask before you send it', paid: true },
+      { href: '/wp-11.html', code: 'WP-11', title: 'The Calm-Down Kit', note: 'Settle your body first, when either of you is too activated to talk', paid: true },
+      { href: '/workpapers/wp-13-pll-protocol.html', code: 'WP-13', title: 'Phase-Locked Loop Protocol', note: 'A 90-second daily check-in, with no debate, that keeps small things small', paid: true },
+      { href: '/workpapers/fill/index.html', code: 'Fill-in', title: 'Fill-in workpapers', note: 'Type straight into the worksheets and save them as PDFs on your device' }
     ]},
-    { id: 'program', title: 'Program & record', blurb: 'A guided path, and the record that keeps your numbers.', items: [
-      { href: '/prog-01.html', code: 'PROG-01', title: 'The 6-Week Program', note: 'A guided path through the workpapers', paid: true },
-      { href: '/workpapers/report-01.html', code: 'REPORT-01', title: 'The Full Read', note: 'Your week-by-week record', paid: true }
+    { id: 'program', title: 'Program & record', blurb: 'For anyone who’d rather be walked through it step by step.', items: [
+      { href: '/prog-01.html', code: 'PROG-01', title: 'The 6-Week Program', note: 'One workpaper at a time, in order, ending with a before-and-after read', paid: true },
+      { href: '/workpapers/report-01.html', code: 'REPORT-01', title: 'The Full Read', note: 'Your week-by-week record, so progress builds instead of resetting', paid: true }
     ]},
-    { id: 'tools', title: 'Tools', blurb: 'Interactive calculators. Everything you enter stays in your browser.', items: [
-      { href: '/carrier-wave-decoder.html', code: 'New', title: 'The Carrier Wave Decoder', note: 'Decode a moment and get back in tune' },
-      { href: '/workpapers/calculators/calc01-solvency.html', code: 'CALC-01', title: 'The Solvency Read' },
-      { href: '/tools/mood-arbitrage-free.html', code: '', title: 'Mood Arbitrage: introduction' },
-      { href: '/tools/mood-arbitrage-full.html', code: '', title: 'Mood Arbitrage: full toolkit', note: 'Generator, five scenarios, four-week practice plan', paid: true },
-      { href: '/tools/frequency-calibration.html', code: '', title: 'Frequency Calibration Audit', note: 'Five-domain audit and delta calculator', paid: true },
-      { href: '/tools/frequency-sync-visualizer.html', code: '', title: 'Frequency Sync Visualizer', note: 'A live picture of the WP-13 loop', paid: true }
+    { id: 'tools', title: 'Tools', blurb: 'Interactive pages. Everything you type stays in your own browser.', items: [
+      { href: '/carrier-wave-decoder.html', code: 'New', title: 'The Carrier Wave Decoder', note: 'A guided session for the moment a conversation starts going sideways' },
+      { href: '/workpapers/calculators/calc01-solvency.html', code: 'CALC-01', title: 'The Solvency Read', note: 'Enter your workpaper numbers and see whether the arrangement looks sustainable' },
+      { href: '/tools/mood-arbitrage-free.html', code: '', title: 'Mood Arbitrage: introduction', note: 'The core idea and one worked example, free' },
+      { href: '/tools/mood-arbitrage-full.html', code: '', title: 'Mood Arbitrage: full toolkit', note: 'A move generator, five scenarios and a four-week practice plan', paid: true },
+      { href: '/tools/frequency-calibration.html', code: '', title: 'Frequency Calibration Audit', note: 'Compare your natural rhythms across five areas of daily life', paid: true },
+      { href: '/tools/frequency-sync-visualizer.html', code: '', title: 'Frequency Sync Visualizer', note: 'A live picture of how the WP-13 daily check-in keeps two people in step', paid: true }
     ]},
-    { id: 'explore', title: 'Explore & listen', blurb: 'Lighter ways in, and audio companions.', items: [
-      { href: '/snapshot/index.html', code: '', title: 'Diagnostic Snapshot', note: 'A two-minute check' },
-      { href: '/learn/index.html', code: '', title: 'Marco & Yuki’s Story' },
-      { href: '/do/index.html', code: '', title: 'Try the Workpapers' },
-      { href: '/soundscapes.html', code: '', title: 'Soundscape Catalog' },
-      { href: '/echoes-of-gold.html', code: '', title: 'Echoes of Gold', note: 'Companion album' },
-      { href: '/podcast-index.html', code: '', title: 'Observational Podcast' }
+    { id: 'explore', title: 'Explore & listen', blurb: 'Lighter ways in, and optional audio companions.', items: [
+      { href: '/snapshot/index.html', code: '', title: 'Diagnostic Snapshot', note: 'A two-minute check on where things stand right now' },
+      { href: '/learn/index.html', code: '', title: 'Marco & Yuki’s Story', note: 'Follow two people as they work through the framework, start to finish' },
+      { href: '/do/index.html', code: '', title: 'Try the Workpapers', note: 'A playground for test-driving the worksheets before you commit' },
+      { href: '/soundscapes.html', code: '', title: 'Soundscape Catalog', note: 'Background audio made for settling down and focusing' },
+      { href: '/echoes-of-gold.html', code: '', title: 'Echoes of Gold', note: 'The companion album: the music that came before the framework' },
+      { href: '/podcast-index.html', code: '', title: 'Observational Podcast', note: 'Conversations with Kane and Christian on the ideas behind the framework' }
     ]},
-    { id: 'about', title: 'About & status', blurb: '', items: [
-      { href: '/about.html', code: '', title: 'About the creator' },
-      { href: '/program-overview.html', code: '', title: 'Program Overview' },
-      { href: '/suite-index.html', code: '', title: 'Suite Index', note: 'Exactly what’s built today' },
-      { href: '/roadmap.html', code: '', title: 'Content Roadmap' },
-      { href: '/telemetry.html', code: '', title: 'Rollout Status' },
-      { href: '/membership.html', code: '', title: 'Membership', note: 'Free while in development' },
-      { href: '/legal/privacy-policy.html', code: '', title: 'Privacy policy' },
-      { href: '/legal/terms-of-service.html', code: '', title: 'Terms of service' },
-      { href: '/legal/refund-policy.html', code: '', title: 'Refund policy' }
+    { id: 'about', title: 'About & status', blurb: 'Who built this and why, exactly what’s finished, and the site’s policies.', items: [
+      { href: '/about.html', code: '', title: 'About the creator', note: 'The auditor, the story, and why this framework exists' },
+      { href: '/program-overview.html', code: '', title: 'Program Overview', note: 'How the chapters, workpapers and calculators fit together' },
+      { href: '/suite-index.html', code: '', title: 'Suite Index', note: 'The official list of what’s built today. If it isn’t here, it isn’t live yet' },
+      { href: '/roadmap.html', code: '', title: 'Content Roadmap', note: 'What’s live, what’s being written, and what’s planned' },
+      { href: '/telemetry.html', code: '', title: 'Rollout Status', note: 'How much of the planned program is finished, counted plainly' },
+      { href: '/membership.html', code: '', title: 'Membership', note: 'Free while in development: sign up, or sign out of this browser' },
+      { href: '/legal/privacy-policy.html', code: '', title: 'Privacy policy', note: 'What’s collected, who holds it, and your rights' },
+      { href: '/legal/terms-of-service.html', code: '', title: 'Terms of service', note: 'The rules for using the site' },
+      { href: '/legal/refund-policy.html', code: '', title: 'Refund policy', note: 'How cancellations and refunds will work once paid membership launches' }
     ]}
   ];
 
@@ -124,7 +124,7 @@
       if (opts.page && s.id === 'about') return;
       var sec = el('div', { class: 'tol-index-section', id: (opts.page ? 'contents-' : 'tol-sec-') + s.id });
       sec.appendChild(el('h3', null, esc(s.title)));
-      if (s.blurb && opts.page) sec.appendChild(el('p', null, esc(s.blurb)));
+      if (s.blurb) sec.appendChild(el('p', null, esc(s.blurb)));
       var ol = el('ol');
       s.items.forEach(function (it) {
         if (it.href === '/index.html') return;
@@ -142,57 +142,12 @@
     return wrap;
   }
 
-  // ---------- Sidebar (the site-wide navigation, on every page) ----------
-  // Pages with their own <aside class="sidebar"> keep it; the site links are added under it.
-  // Every other page gets a fixed sidebar on the left. On narrow screens the sidebar
-  // hides and the top bar's Contents menu takes over.
+  // ---------- Join / Signed-up link (header bar) ----------
   var memberLinks = [];
-  function sideGroups() {
-    var box = el('div', { class: 'tol-side-nav', role: 'navigation', 'aria-label': 'Site' });
-    SECTIONS.forEach(function (s) {
-      var hasHere = s.items.some(function (it) { return it.href === current; });
-      var d = el('details', { class: 'tol-side-group' });
-      if (hasHere || s.id === 'start') d.open = true;
-      d.appendChild(el('summary', null, esc(s.title)));
-      var ol = el('ol');
-      s.items.forEach(function (it) {
-        var a = el('a', { href: it.href, class: it.code ? '' : 'no-code' });
-        if (it.href === current) a.setAttribute('aria-current', 'page');
-        var code = it.code ? (/^[IVX]+$/.test(it.code) ? 'Ch. ' + it.code : it.code) : '';
-        a.innerHTML = '<span class="tol-side-code">' + esc(code) + '</span><span class="tol-side-title">' + esc(it.title) + '</span>' +
-          (it.paid ? '<span class="tol-side-lock" title="Opens free with your email">email</span>' : '');
-        var li = el('li'); li.appendChild(a); ol.appendChild(li);
-      });
-      d.appendChild(ol);
-      box.appendChild(d);
-    });
-    return box;
-  }
   function joinLink(cls) {
     var a = el('a', { class: cls, href: '/membership.html' }, CONFIG.freePreview ? 'Join free' : 'Join');
     memberLinks.push(a);
     return a;
-  }
-  function buildSidebar() {
-    var own = document.querySelector('aside.sidebar');
-    if (own) {
-      document.documentElement.classList.add('tol-own-side');
-      var block = el('div', { class: 'tol-side-site' });
-      block.appendChild(el('p', { class: 'tol-side-label' }, 'The whole site'));
-      block.appendChild(sideGroups());
-      block.appendChild(joinLink('tol-side-join'));
-      var foot = own.querySelector('.sidebar-foot');
-      if (foot) own.insertBefore(block, foot); else own.appendChild(block);
-      return;
-    }
-    document.documentElement.classList.add('tol-has-side');
-    var side = el('aside', { class: 'tol-side', 'aria-label': 'Site navigation' });
-    side.innerHTML = '<a class="tol-side-mark" href="/index.html">The Objective Ledger<small>TOL&#8209;OS &middot; SPREAD LOVE AND ACCEPTANCE</small></a>' +
-      '<p class="tol-side-tag">Patience, clarity, and kindness over speed and stress.</p>';
-    side.appendChild(sideGroups());
-    side.appendChild(joinLink('tol-side-join'));
-    side.appendChild(el('p', { class: 'tol-side-foot' }, 'spreadloveandacceptance.com'));
-    document.body.insertBefore(side, document.body.firstChild);
   }
 
   // ---------- Header bar + panel ----------
@@ -226,18 +181,18 @@
     bar.appendChild(el('a', { class: 'tol-brand', href: '/index.html' }, 'The Objective Ledger'));
 
     var nav = el('div', { class: 'tol-sections', role: 'navigation', 'aria-label': 'Site sections' });
-    [['book', 'Book'], ['workpapers', 'Workpapers'], ['tools', 'Tools']].forEach(function (p) {
+    [['start', 'Start here'], ['book', 'Book'], ['workpapers', 'Workpapers'], ['tools', 'Tools']].forEach(function (p) {
       var b = el('button', { type: 'button', 'aria-controls': 'tol-panel', 'aria-expanded': 'false' }, p[1]);
       if (hereSection && hereSection.id === p[0]) b.setAttribute('aria-current', 'true');
       b.addEventListener('click', function () { openPanel(p[0]); });
       nav.appendChild(b);
     });
-    var all = el('button', { type: 'button', 'aria-controls': 'tol-panel', 'aria-expanded': 'false' }, 'Contents');
+    var all = el('button', { type: 'button', class: 'tol-all', 'aria-controls': 'tol-panel', 'aria-expanded': 'false' }, 'All pages');
     all.addEventListener('click', function () { openPanel(null); });
     nav.appendChild(all);
     bar.appendChild(nav);
 
-    var mob = el('button', { type: 'button', class: 'tol-contents-btn', 'aria-controls': 'tol-panel', 'aria-expanded': 'false' }, 'Contents');
+    var mob = el('button', { type: 'button', class: 'tol-contents-btn', 'aria-controls': 'tol-panel', 'aria-expanded': 'false' }, 'Menu');
     mob.addEventListener('click', function () { openPanel(hereSection && hereSection.id); });
     bar.appendChild(mob);
 
@@ -246,13 +201,15 @@
 
     scrim = el('div', { class: 'tol-scrim', hidden: '' });
     scrim.addEventListener('click', closePanel);
-    panel = el('div', { class: 'tol-panel', id: 'tol-panel', role: 'dialog', 'aria-modal': 'true', 'aria-label': 'Contents', hidden: '' });
+    panel = el('div', { class: 'tol-panel', id: 'tol-panel', role: 'dialog', 'aria-modal': 'true', 'aria-label': 'All pages', hidden: '' });
     var head = el('div', { class: 'tol-panel-head' });
-    head.appendChild(el('h2', null, 'Contents'));
+    head.appendChild(el('h2', null, 'All pages'));
     var close = el('button', { type: 'button', class: 'tol-close' }, 'Close');
     close.addEventListener('click', closePanel);
     head.appendChild(close);
     panel.appendChild(head);
+    panel.appendChild(el('p', { class: 'tol-panel-intro' }, 'Every page on the site, grouped by what it’s for.' +
+      (CONFIG.freePreview ? ' Pages marked <em>free · email</em> open once you sign up with your email.' : '')));
     panel.appendChild(buildIndex({}));
 
     document.addEventListener('keydown', function (e) {
@@ -270,6 +227,9 @@
     body.insertBefore(anchor, body.firstChild);
     body.insertBefore(bar, body.firstChild);
     body.insertBefore(skip, body.firstChild);
+    if (document.querySelector('aside.sidebar')) document.documentElement.classList.add('tol-own-side');
+    function barHeight() { document.documentElement.style.setProperty('--tol-bar-h', bar.offsetHeight + 'px'); }
+    barHeight(); window.addEventListener('resize', barHeight);
     body.appendChild(scrim);
     body.appendChild(panel);
 
@@ -507,7 +467,6 @@
     // Returning members see content immediately; the check below confirms or revokes it
     isMember = !!stored;
     buildChrome();
-    buildSidebar();
     installGates();
     applyState(isMember);
     if (location.hash) { var t = document.getElementById(location.hash.slice(1)); if (t) t.scrollIntoView(); }
