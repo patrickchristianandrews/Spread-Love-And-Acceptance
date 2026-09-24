@@ -230,6 +230,23 @@
   .lens-item .lens-q{ font-style: italic; color: var(--brass, #A8792F); font-size: .92rem; line-height: 1.4; margin: 0; }
   .lens-links{ display: flex; flex-wrap: wrap; gap: .3rem 1.1rem; margin: 0 !important; font-size: .9rem !important; }
   .read .lens-sub{ font-family: "Fraunces", Georgia, serif; font-weight: 600; font-size: 1.25rem; margin: 0 0 .5rem; }
+  .layers{ margin: 1.4rem 0 1.6rem; }
+  .read .layers h3{ font-family: "Fraunces", Georgia, serif; font-weight: 600; font-size: 1.25rem; margin: 0 0 .5rem; }
+  .layer-demo{ display: grid; grid-template-columns: 1fr 1fr; gap: 0; margin-top: 1rem; border-top: 3px double var(--ink, #211D17); border-bottom: 1px solid var(--ink, #211D17); }
+  .layer{ padding: .9rem 1.1rem 1rem 0; }
+  .layer + .layer{ padding-left: 1.1rem; border-left: 1px dashed var(--line, #D9CBA3); }
+  .layer p{ font-size: .96rem; line-height: 1.6; margin: 0; }
+  .layer .layer-tag{ font-family: "IBM Plex Mono", ui-monospace, monospace; font-size: .72rem; color: var(--credit, #3E6B4C); margin: 0 0 .4rem; }
+  .layer.is-tech{ color: var(--ink-soft, #524B3E); }
+  .layer.is-tech .layer-tag{ color: var(--brass, #A8792F); }
+  .layer-tag span{ color: var(--ink-soft, #524B3E); }
+  @media (max-width: 640px){
+    .layer-demo{ grid-template-columns: 1fr; }
+    .layer + .layer{ padding-left: 0; border-left: 0; border-top: 1px dashed var(--line, #D9CBA3); }
+  }
+  .spirit{ margin: .2rem 0 1rem; }
+  .spirit p{ margin: 0 0 .75rem; padding-left: 1rem; border-left: 3px solid var(--credit, #3E6B4C); }
+  .spirit strong{ font-family: "Fraunces", Georgia, serif; }
   .lens-note{ font-size: .93rem; color: var(--ink-soft, #524B3E); border-left: 3px solid var(--line, #D9CBA3); padding-left: 1rem; margin-top: 1.2rem; }
   .lens-actions{ display: flex; flex-wrap: wrap; gap: .75rem 1.4rem; align-items: center; margin-top: 1.2rem; }
   .read .lens a.lens-start{
@@ -273,7 +290,7 @@
       <h1 id="hero-h">Self-discovery first, then healthier relationships of every kind.</h1>
       <p class="hero-lede">The Objective Ledger is a tool for seeing yourself from the outside. It offers an objective, unbiased, outside lens on how three things shape the way you think, feel and react: your life situation, your neurological wiring, and what you discover when you finally look closely.</p>
       <p class="hero-body">Once you understand why you respond the way you do, you can tune yourself on purpose. That brings a steadier, calmer frequency into your own life, and from there into every relationship you share: partners, family, friends, roommates, co-parents, coworkers, and the people you care for.</p>
-      <p class="hero-actions"><a class="hero-start" href="/quick-checks.html#ladder">Start with a 30-second state check</a> <a href="#outside-lens">How the outside lens works</a> <a href="is-this-for-you.html">Is this right for you?</a></p>
+      <p class="hero-actions"><a class="hero-start" href="/quick-checks.html#ladder">Start with a 30-second state check</a> <a href="#outside-lens">An outside lens on yourself</a> <a href="is-this-for-you.html">Is this right for you?</a></p>
     </header>
 
     <aside class="announce-bar" aria-label="New on the site">
@@ -294,9 +311,10 @@
     <p class="home-print"><a href="infographic.html" target="_blank" rel="noopener">Open the printable summary</a> <span>(opens in a new tab)</span></p>
 
     <section id="outside-lens" class="lens" aria-labelledby="lens-h">
-      <h2 id="lens-h">How the outside lens works</h2>
-      <p class="lens-lede">Most of us only see our lives from the inside, through the mood we're in, the history we carry, and the way our brain happens to be wired. The ledger steps outside all three. It looks at you the way an honest auditor would, with no agenda except what's true and no verdict on your worth.</p>
+      <h2 id="lens-h">An outside lens on yourself</h2>
+      <p class="lens-lede">Most of us only see our lives from the inside, through the mood we're in, the history we carry, and the way our brain happens to be wired. The Objective Ledger gives you a view from outside: a calm, structured way to look at yourself as an honest auditor would, with no agenda except what's true and no verdict on your worth.</p>
       <p>It borrows an auditor's discipline, which is to write down what actually happened, in plain terms, before deciding what it means. Then it turns that discipline gently inward, onto the three things that shape nearly every reaction you have.</p>
+
 
       <div class="lens-grid">
         <div class="lens-item">
@@ -321,10 +339,33 @@
           </div>
         </div>
       </div>
+      <div class="layers">
+        <h3>Plain first. Technical only if you want it.</h3>
+        <p>The program has some technical parts, drawn from nervous-system science, accounting and even radio physics. You never need them. Each section is written to be understood first: the idea in everyday language, with an example you'll recognize. The technical layer comes after, for anyone who enjoys the "why" behind the "what."</p>
+        <p>Skip it entirely and the program is just as useful. The tools work the same, and everything you learn about yourself is just as real.</p>
+        <div class="layer-demo" role="group" aria-label="Example of the two layers">
+          <div class="layer is-plain">
+            <p class="layer-tag">In plain terms</p>
+            <p>Some days you're already running on empty, so a small comment hits much harder than it would on a good day. That's not about the comment; it's about the day.</p>
+          </div>
+          <div class="layer is-tech">
+            <p class="layer-tag">The technical layer <span>(optional)</span></p>
+            <p>Autonomic saturation: stress activation left over from earlier in the day lowers your threshold for reacting to a new stressor. Chapter III and WP-02 put a number on it.</p>
+          </div>
+        </div>
+      </div>
 
-      <h3 class="lens-sub">Finding a better frequency</h3>
-      <p>The program's central image comes from radio. Two stations tuned close to, but not exactly on, the same frequency produce a squeal, and that is often what a fight between two reasonable people sounds like. Once you understand your own frequency, meaning your pace, your tone, your stress level, and how much closeness and space you need, you can tune yourself on purpose instead of by accident, and meet other people where they are.</p>
-      <p>The result is a steadier signal: calmer days for you, and clearer, kinder connection with everyone you share life with, including partners, family, friends, roommates, co-parents, coworkers and the people you care for.</p>
+      <h3 class="lens-sub">A static-free frequency</h3>
+      <p>The program's central image comes from radio. Two stations tuned close to, but not exactly on, the same frequency produce static and a squeal, and that is often what a fight between two reasonable people sounds like. Once you understand your own frequency, meaning your pace, your tone, your stress level, and how much closeness and space you need, you can tune yourself on purpose instead of by accident, and meet other people where they are.</p>
+      <p>That's the goal: a clear, static-free frequency in your own life, and static-free relationships with everyone you share it with, including partners, family, friends, roommates, co-parents, coworkers and the people you care for.</p>
+
+      <h3 class="lens-sub">The spirit of it</h3>
+      <div class="spirit">
+        <p><strong>Engaging, not homework.</strong> Curiosity is the point. Filling in a worksheet should feel more like solving a puzzle about yourself than taking a test.</p>
+        <p><strong>No intimidation, no judgment.</strong> There are no wrong answers, and no one is graded. Every number describes a situation, never a person's worth.</p>
+        <p><strong>Rooted in morals and ethics.</strong> Honesty, fairness and kindness come before any tool. The tools serve people, never the other way around.</p>
+        <p><strong>Honest introspection.</strong> The program invites you to look at everything around you and everything that shapes you: your history, your body, your wiring, your circumstances and the people in your life. The aim is understanding, not blame.</p>
+      </div>
 
       <p class="lens-note"><strong>An honest note.</strong> No self-report is perfectly unbiased, and this isn't a clinical or diagnostic tool. What the ledger offers is the next best thing: the same questions, asked the same way, week after week, with your own answers in front of you. Over time, that builds a picture far more objective than memory or mood can give you.</p>
 
