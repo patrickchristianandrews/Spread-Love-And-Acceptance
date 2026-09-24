@@ -70,7 +70,7 @@
     ]},
     { id: 'explore', title: 'Explore & listen', blurb: 'Lighter ways in, and optional audio companions.', items: [
       { href: '/snapshot/index.html', code: '', title: 'Diagnostic Snapshot', note: 'A two-minute check on where things stand right now' },
-      { href: '/learn/index.html', code: '', title: 'Marco & Yuki’s Story', note: 'Follow two people as they work through the framework, start to finish' },
+      { href: '/learn/index.html', code: '', title: 'Stories from Philosophy', note: 'Twelve real stories on knowing yourself and living well with others, each tied to the program' },
       { href: '/do/index.html', code: '', title: 'Try the Workpapers', note: 'A playground for test-driving the worksheets before you commit' },
       { href: '/soundscapes.html', code: '', title: 'Soundscape Catalog', note: 'Background audio made for settling down and focusing' },
       { href: '/echoes-of-gold.html', code: '', title: 'Echoes of Gold', note: 'The companion album: the music that came before the framework' },
