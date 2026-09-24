@@ -213,3 +213,8 @@ div.tol-gate p{ max-width:60ch; }
 @media (min-width:861px){
   html.tol-own-side aside.sidebar{ top:var(--tol-bar-h, 58px); height:calc(100vh - var(--tol-bar-h, 58px)); }
 }
+
+/* Medium screens: keep the header on one line. Book, Workpapers and Tools stay in All pages. */
+@media (max-width:1120px) and (min-width:861px){
+  .tol-sections button[data-sec="book"], .tol-sections button[data-sec="workpapers"], .tol-sections button[data-sec="tools"]{ display:none; }
+}

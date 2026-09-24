@@ -38,6 +38,25 @@
       { href: '/frequency-framework.html', code: '', title: 'The Frequency Framework', note: 'Why two reasonable people can end up in a fight neither of them started' },
       { href: '/infographic.html', code: '', title: 'Executive summary', note: 'The whole framework on one printable page, easy to share' }
     ]},
+    { id: 'self', title: 'Self-discovery', blurb: 'Tools for understanding yourself: your load, your wiring, your patterns. Start here, with or without anyone else.', items: [
+      { href: '/quick-checks.html#ladder', code: 'Tool', title: 'Check Your State', note: 'Thirty seconds to name which of three stress states you’re in' },
+      { href: '/workpapers/wp-02-battery-stress-meter.html', code: 'WP-02', title: 'The Battery & Stress Meter', note: 'What you’re already carrying, separate from what just happened', paid: true },
+      { href: '/tools/frequency-calibration.html', code: 'Tool', title: 'Frequency Calibration', note: 'Your natural rhythms for money, decisions, check-ins and recovery', paid: true },
+      { href: '/wp-11.html', code: 'WP-11', title: 'The Calm-Down Kit', note: 'Decide in advance what settles your body', paid: true },
+      { href: '/book/chapter-3.html', code: 'III', title: 'Autonomic Saturation & the 7 Ocular Vectors', note: 'Why some reactions are bigger than their cause', paid: true },
+      { href: '/learn/index.html#part-self', code: 'Stories', title: 'Stories from Philosophy: Knowing yourself', note: 'The Second Arrow, the Ship of Theseus, What Is Up to Us' },
+      { href: '/soundscapes.html', code: 'Audio', title: 'Soundscape Catalog', note: 'Background audio for settling and focus' }
+    ]},
+    { id: 'relationships', title: 'Relationships by type', blurb: 'Where to start in each kind of relationship, and every tool that fits. The shared relationship tools themselves are under The book, Workpapers and Tools.', items: [
+      { href: '/relationships.html#partners', code: '', title: 'Partners', note: 'Start with WP-01, WP-03 and WP-13' },
+      { href: '/relationships.html#family', code: '', title: 'Family', note: 'Start with Chapter I, WP-03 and WP-09' },
+      { href: '/relationships.html#co-parents', code: '', title: 'Co-parents', note: 'Start with WP-03, WP-09 and WP-04' },
+      { href: '/relationships.html#friends', code: '', title: 'Friends', note: 'Start with the Carrier Wave Decoder, WP-09 and WP-01' },
+      { href: '/relationships.html#roommates', code: '', title: 'Roommates', note: 'Start with the Lemonade Stand, WP-03 and WP-13' },
+      { href: '/relationships.html#coworkers', code: '', title: 'Coworkers & teams', note: 'Start with WP-03, Chapter I and WP-09' },
+      { href: '/relationships.html#caregivers', code: '', title: 'Caregivers', note: 'Start with WP-02, WP-03 and WP-11' },
+      { href: '/relationships.html#map', code: 'Map', title: 'The full map', note: 'Every chapter, workpaper and tool against every kind of relationship' }
+    ]},
     { id: 'book', title: 'The book', blurb: 'The manuscript, one idea per chapter. Each chapter pairs with a workpaper that puts it to use.', items: [
       { href: '/book/preface.html', code: 'Preface', title: 'Unbilled Debt', note: 'Why the unseen work of running a shared life builds up like a debt only one person can see' },
       { href: '/book/chapter-1.html', code: 'I', title: 'The Radio Frequency Paradigm', note: 'How pace, tone and urgency knock two people out of sync, and how to get back in tune' },
@@ -182,8 +201,8 @@
     bar.appendChild(el('a', { class: 'tol-brand', href: '/index.html' }, 'The Objective Ledger'));
 
     var nav = el('div', { class: 'tol-sections', role: 'navigation', 'aria-label': 'Site sections' });
-    [['start', 'Start here'], ['book', 'Book'], ['workpapers', 'Workpapers'], ['tools', 'Tools']].forEach(function (p) {
-      var b = el('button', { type: 'button', 'aria-controls': 'tol-panel', 'aria-expanded': 'false' }, p[1]);
+    [['start', 'Start here'], ['self', 'Self-discovery'], ['relationships', 'Relationships'], ['book', 'Book'], ['workpapers', 'Workpapers'], ['tools', 'Tools']].forEach(function (p) {
+      var b = el('button', { type: 'button', 'data-sec': p[0], 'aria-controls': 'tol-panel', 'aria-expanded': 'false' }, p[1]);
       if (hereSection && hereSection.id === p[0]) b.setAttribute('aria-current', 'true');
       b.addEventListener('click', function () { openPanel(p[0]); });
       nav.appendChild(b);
