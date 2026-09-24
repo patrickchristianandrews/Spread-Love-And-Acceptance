@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-NKC6CQ9S66"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-NKC6CQ9S66');</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Diagnostic Snapshot Framework — TOL-OS</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,500&family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/book-layout.css">
+</head>
+<body>
+<div class="frame">
+<aside class="sidebar">
+<div class="mark">Diagnostic Framework<small>TOL&#8209;OS &middot; REFERENCE</small></div>
+<p class="tagline">Scoring logic &amp; trainer guide.</p>
+<a class="back-link" href="index.html">&larr; Back to Reference</a>
+<nav aria-label="Navigation"><ol><li><a href="#framework">Framework Guide</a></li></ol></nav>
+<div class="sidebar-foot">spreadloveandacceptance.com</div>
+</aside>
+<div class="rule" aria-hidden="true"></div>
+<main>
+
+<div class="kicker">Reference Material</div>
+<h2>Diagnostic Snapshot Framework</h2>
+<p class="lede">Complete scoring logic, result templates, tone principles, and A/B testing recommendations for trainers and facilitators.</p>
+
+<h3>Overview</h3>
+<p>The Diagnostic Snapshot is a 2-minute, 4-question assessment designed to:</p>
+<ol>
+<li>Help individuals quickly understand their current relationship state</li>
+<li>Provide actionable next steps without pathologizing or over-diagnosing</li>
+<li>Create appropriate entry points into the deeper system (case studies, tools, etc.)</li>
+<li>Measure engagement and guide A/B testing for UI/copy improvements</li>
+</ol>
+
+<h3>The Four Questions</h3>
+
+<h4>Q1: Workload Visibility</h4>
+<p><em>How would you describe the general pattern in your household right now?</em></p>
+<ul>
+<li><strong>Clear:</strong> Work is visibly divided</li>
+<li><strong>Unclear:</strong> Tasks drift from person to person</li>
+<li><strong>Lopsided:</strong> One person is clearly carrying more</li>
+<li><strong>Invisible:</strong> Work is invisible but someone's paying a price</li>
+</ul>
+
+<h4>Q2: Communication Frequency</h4>
+<p><em>How often do you talk about the workload you're each carrying?</em></p>
+<ul>
+<li><strong>Regular:</strong> Every week or every other week</li>
+<li><strong>Crisis:</strong> Only when someone hits a breaking point</li>
+<li><strong>Never:</strong> Almost never</li>
+<li><strong>Brief:</strong> Occasionally, but the conversation is strained</li>
+</ul>
+
+<h4>Q3: Resilience Pattern</h4>
+<p><em>When the workload gets heavy, what usually happens?</em></p>
+<ul>
+<li><strong>Adjust:</strong> You adjust or ask for help together</li>
+<li><strong>Resentment:</strong> Someone pushes through but resentment builds</li>
+<li><strong>Shutdown:</strong> One person shuts down or withdraws</li>
+<li><strong>Conflict:</strong> It usually sparks a fight</li>
+</ul>
+
+<h4>Q4: Current Feeling</h4>
+<p><em>The word that comes to mind when you think about your partnership:</em></p>
+<ul>
+<li><strong>Stable:</strong> We've got this figured out</li>
+<li><strong>Urgent:</strong> Things need to change soon</li>
+<li><strong>Rigid:</strong> The pattern is stuck and changing feels impossible</li>
+<li><strong>Brittle:</strong> One thing going wrong would unravel everything</li>
+</ul>
+
+<h3>Scoring Algorithm</h3>
+
+<p><strong>Primary Logic:</strong> Q4 provides the dominant signal. Q1, Q2, and Q3 are used to validate or refine.</p>
+
+<table style="width:100%; border-collapse: collapse; margin: 1.5rem 0;">
+<tr style="border-bottom: 1px solid var(--line);">
+<th style="text-align:left; padding: 0.5rem;">Result</th>
+<th style="text-align:left; padding: 0.5rem;">Trigger</th>
+</tr>
+<tr style="border-bottom: 1px solid var(--line);">
+<td style="padding: 0.5rem;"><strong>STABLE</strong></td>
+<td style="padding: 0.5rem;">Q4=Stable OR (Q1=Clear AND Q3=Adjust)</td>
+</tr>
+<tr style="border-bottom: 1px solid var(--line);">
+<td style="padding: 0.5rem;"><strong>URGENT</strong></td>
+<td style="padding: 0.5rem;">Q4=Urgent OR (Q1∈{Lopsided, Invisible} AND Q2∈{Crisis, Brief})</td>
+</tr>
+<tr style="border-bottom: 1px solid var(--line);">
+<td style="padding: 0.5rem;"><strong>RIGID</strong></td>
+<td style="padding: 0.5rem;">Q4=Rigid OR (Q2=Never AND Q3≠Adjust)</td>
+</tr>
+<tr>
+<td style="padding: 0.5rem;"><strong>BRITTLE</strong></td>
+<td style="padding: 0.5rem;">Q4=Brittle OR (Q1=Invisible AND Q3∈{Shutdown, Resentment})</td>
+</tr>
+</table>
+
+<h3>Result Templates</h3>
+
+<p>Each result provides:</p>
+<ol>
+<li>A single-sentence naming of their state</li>
+<li>A 2-3 sentence description (honest, not alarmist)</li>
+<li>One concrete action they can take this week</li>
+<li>Links to deeper content (case study, tools, architecture)</li>
+</ol>
+
+<h3>Tone Principles</h3>
+
+<ul>
+<li><strong>No pathology language.</strong> Never use "broken," "unhealthy," "codependent," or clinical terms. These are structural states, not personality flaws.</li>
+<li><strong>Validate without shame.</strong> If their result is "Brittle," say "you're carrying risk" not "you're failing."</li>
+<li><strong>Point toward agency.</strong> Every result should imply "this can change."</li>
+<li><strong>Be specific.</strong> "One thing you could try this week" is better than "consider seeking help."</li>
+</ul>
+
+<h3>A/B Testing Recommendations</h3>
+
+<p><strong>High-Priority Tests:</strong></p>
+<ul>
+<li>Q1 framing: Test "workload visibility" vs. "task ownership" vs. "who's doing what"</li>
+<li>Result tone: Test clinical language vs. plain language vs. affirming language</li>
+<li>Next step specificity: Test specific actions vs. general guidance</li>
+<li>CTA placement: Test link to case study vs. playground vs. snapshot tool</li>
+</ul>
+
+<p><strong>Metrics to Track:</strong></p>
+<ul>
+<li>Completion rate (how many people finish all 4 questions)</li>
+<li>Result distribution (are we seeing realistic quadrant splits)</li>
+<li>Click-through rate (which CTA actually gets used)</li>
+<li>Survey response rate if you follow up with "was this helpful?"</li>
+</ul>
+
+</main>
+</div>
+<footer>
+TOL&#8209;OS &middot; Baseline v1.0.4 &middot; spreadloveandacceptance.com
+<div class="footer-links">
+<a href="../index.html">Home</a> | <a href="index.html">Back</a> | <a href="carrier-wave-decoder.html">Production</a> | <a href="tol-os-strategy.html">Strategy</a>
+</div>
+</footer>
+</body>
+</html>
