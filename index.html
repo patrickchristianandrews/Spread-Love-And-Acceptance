@@ -7,6 +7,7 @@
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
+
   gtag('config', 'G-NKC6CQ9S66');
 </script>
 <meta charset="UTF-8">
@@ -17,9 +18,63 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,500&family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/css/book-layout.css">
-<link rel="stylesheet" href="assets/css/lemonade-stand.css">
+<style>
+  /* Announcement bar: new feature (Carrier Wave Decoder) */
+  .announce-bar{
+    background: var(--paper-deep, #ECE2C4);
+    border-bottom: 2px solid var(--brass, #A8792F);
+    color: var(--ink, #211D17);
+    font-size: 0.95rem;
+    line-height: 1.5;
+  }
+  .announce-inner{ max-width: 1100px; margin: 0 auto; padding: 10px 20px; }
+  .announce-line{ margin: 0; }
+  .announce-tag{
+    display: inline-block; margin-right: 8px; padding: 1px 8px;
+    font-family: "IBM Plex Mono", ui-monospace, monospace; font-size: 0.72rem;
+    color: var(--paper, #F5EFDE); background: var(--brass, #A8792F); border-radius: 3px;
+    vertical-align: 1px;
+  }
+  .announce-bar a{ color: var(--ink, #211D17); font-weight: 600; text-decoration-color: var(--brass, #A8792F); text-underline-offset: 3px; white-space: nowrap; }
+  .announce-bar a:hover{ color: var(--credit, #3E6B4C); }
+  .announce-bar details{ display: inline; }
+  .announce-bar summary{
+    display: inline; cursor: pointer; list-style: none;
+    margin-left: 10px; color: var(--ink-soft, #524B3E);
+    text-decoration: underline dotted; text-underline-offset: 3px;
+  }
+  .announce-bar summary::-webkit-details-marker{ display: none; }
+  .announce-bar summary:focus-visible, .announce-bar a:focus-visible{ outline: 2px solid var(--focus, #2B5B8C); outline-offset: 2px; }
+  .announce-bar details[open] summary .more{ display: none; }
+  .announce-bar details:not([open]) summary .less{ display: none; }
+  .announce-more{
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 8px 22px;
+    margin: 10px 0 4px; padding-top: 10px; border-top: 1px solid var(--line, #D9CBA3);
+    font-size: 0.9rem; color: var(--ink-soft, #524B3E);
+  }
+  .announce-more p{ margin: 0; }
+  .announce-more strong{ display: block; color: var(--ink, #211D17); }
+</style>
 </head>
 <body>
+
+<aside class="announce-bar" aria-label="New on the site">
+  <div class="announce-inner">
+    <div class="announce-line">
+      <span class="announce-tag">New</span>
+      <strong>The Carrier Wave Decoder</strong> is here: a free, guided tool for the moment a conversation starts to squeal. Nothing you enter is sent to us.
+      <a href="carrier-wave-decoder.html">Open it &rarr;</a>
+      <details>
+        <summary><span class="more">More</span><span class="less">Less</span></summary>
+        <div class="announce-more">
+          <p><strong>What it does</strong>Find where each of you slipped on pace, register or urgency, check your state, practice getting back in tune, and close the books together. A private tone check flags wording that may land harder than you mean.</p>
+          <p><strong>Your data stays with you</strong>No account and no upload. Your notes and progress stay in your own browser on your own device, and clearing your browser data removes them.</p>
+          <p><strong>A preview of the full toolkit</strong>The Decoder is a free taste of how the tools work together. Members get the workpapers it leads into: WP-02 for your state, WP-09 for tone, WP-03 and WP-04 for problems that keep coming back, and CALC-01 to read the whole arrangement. <a href="membership.html">See membership</a></p>
+        </div>
+      </details>
+    </div>
+  </div>
+</aside>
 
 <div class="frame">
 
@@ -28,10 +83,12 @@
       <small>TOL&#8209;OS &middot; BASELINE v1.0.4</small>
     </div>
     <p class="tagline">A nervous-system-aware ledger for relationships. Read it in order, or jump ahead.</p>
+
     <a class="header-cta" href="infographic.html" target="_blank" rel="noopener">
       Open the printable summary
       <span class="ext-note">Opens in a new tab</span>
     </a>
+
     <nav aria-label="Table of contents">
       <ol>
         <li><a href="#preface" data-target="preface">Preface: Unbilled Debt</a></li>
@@ -46,8 +103,8 @@
       </ul>
       <div class="nav-group-label">Access</div>
       <ul class="tool-nav">
-        <li><a href="#access-tiers" data-target="access-tiers">Access Levels</a></li>
-        <li><a href="#register" data-target="register">Join Free</a></li>
+        <li><a href="#access-tiers" data-target="access-tiers">Free Tools vs. Full Suite</a></li>
+        <li><a href="#register" data-target="register">Register</a></li>
         <li><a href="roadmap.html">Content Roadmap</a></li>
         <li><a href="program-overview.html">Program Overview</a></li>
         <li><a href="about.html">About the Creator of Spread Love and Acceptance</a></li>
@@ -61,7 +118,6 @@
       </ul>
       <div class="nav-group-label">Resources</div>
       <ul class="tool-nav">
-        <li><a href="#directory" data-target="directory">Site Directory</a></li>
         <li><a href="suite-index.html">Instrument Suite Index</a></li>
         <li><a href="telemetry.html">Rollout Status &amp; Telemetry</a></li>
       </ul>
@@ -141,8 +197,11 @@
       <div class="kicker">Chapter I</div>
       <h2>The Radio Frequency Paradigm</h2>
       <p class="lede">A model, not a measurement — nothing here records or analyzes anyone's actual voice.</p>
+
       <p>Tune two radios to frequencies that are close but not identical, and you get a squeal: the audible beat created by two signals that are almost, but not quite, in sync. This book borrows that image for a familiar moment — two people each saying something reasonable, in a tone shaped by their own fatigue or urgency, producing a fight neither of them intended to start.</p>
+
       <p>Three things tend to shift someone's "transmission frequency" without their noticing: <strong>pace</strong> (mobilized people talk faster and read pauses as stonewalling), <strong>register</strong> (a status update can transmit as an accusation), and <strong>urgency</strong> (two people's "when you get a chance" can mean very different windows of time).</p>
+
       <p>Before continuing a conversation that's started to squeal: name the mismatch out loud without blame, check your own state, slow the pace deliberately, and only then return to the actual content of the conversation. The paradigm isn't a diagnosis of who's transmitting badly — it's a shared vocabulary for the moment when both of you are just out of sync.</p>
     </section>
 
@@ -150,7 +209,9 @@
       <div class="kicker">Tool</div>
       <h2>The Carrier Wave Decoder</h2>
       <p class="lede">Chapter I, hands-on. For the moment a conversation starts to squeal: find which channel slipped, check your state, and practice getting back in tune.</p>
+
       <p>Start a guided session and it walks you through the whole loop: check your state, retune if you need to, decode where each of you was on pace, register, and urgency, practice the scenario that matches your biggest gap, and write down what you agreed. Close the Books then shows whether every moment has been talked through and settled, and can print a short letter for your partner. Before you send something, a private tone check marks wording that tends to land harder than you mean, like a spell-checker for tone. When the same thing keeps coming back, log it as a finding, with a corrective action plan that starts only once you've both had a say. Decode alone or together, on one phone or two. Everything you enter stays in your own browser.</p>
+
       <a class="cta-button" href="carrier-wave-decoder.html">Open the Carrier Wave Decoder</a>
     </section>
 
@@ -158,7 +219,9 @@
       <div class="kicker">Tool</div>
       <h2>Check Your State</h2>
       <p class="lede">Before you open the register below, check which state you're reading it from. The same numbers land differently depending on where your body is.</p>
+
       <p>Polyvagal theory describes three broad states, arranged like rungs on a ladder rather than points on a line. Pick the one that's closest to true right now — this is a self-check, not a measurement of anyone else.</p>
+
       <div class="rung-selector">
         <button class="rung" data-state="ventral" aria-label="Ventral vagal: safe and social" aria-pressed="false">
           <strong>Ventral vagal</strong>
@@ -173,6 +236,7 @@
           <span>Shutdown</span>
         </button>
       </div>
+
       <div class="reading-label">CURRENT READING</div>
       <p id="reading-text"></p>
     </section>
@@ -181,8 +245,11 @@
       <div class="kicker">Chapter II</div>
       <h2>The Epistemic Verdict Engine &amp; P(Solvency)</h2>
       <p class="lede">A heuristic worksheet, not a scientific instrument — it scores the workload arrangement, never either person.</p>
+
       <p>Every long-running household eventually gets asked, in one form or another: "is this actually working?" Usually the question gets answered with whichever incident happened most recently. The Verdict Engine asks a narrower, calmer question instead: based on what's actually logged this week — hours in the ledger, tasks with a named owner, self-reported nervous-system load — does the current workload arrangement look sustainable, or is it quietly running a deficit?</p>
+
       <p><code>P(Solvency) = (workload_balance × 0.40) + (ownership_clarity × 0.35) + ((1 − autonomic_saturation) × 0.25)</code></p>
+
       <p>Above roughly 0.70, the current arrangement is carrying its own weight. Between 0.40 and 0.70, something is drifting — usually ownership clarity first. Below 0.40, the workload as structured isn't sustainable — a statement about the arrangement, not about either person's love, effort, or worth. See <code>/telemetry/epistemic-verdict-engine.md</code> for the full formula reference and <code>/workpapers/calculators/calc01-solvency.html</code> for the interactive version.</p>
     </section>
 
@@ -190,182 +257,88 @@
       <div class="kicker">Tool</div>
       <h2>The Lemonade Stand</h2>
       <p class="lede">Two people, one stand. Everyone who runs it should be able to see the register — not to catch anyone out, just so nobody's guessing.</p>
+
       <p>List what it actually takes to keep the household running this week, and how many hours each of you put toward it. Rename the columns, add what's missing — it recalculates as you type. The totals here feed the <code>workload_balance</code> input in the Verdict Engine above.</p>
 
-      <div class="ls" id="calculator">
-        <div class="ls-head">
-          <span class="ls-head-item">Line item</span>
-          <input type="text" id="label-a" value="Column A" maxlength="30" aria-label="Name for column A">
-          <input type="text" id="label-b" value="Column B" maxlength="30" aria-label="Name for column B">
-          <span></span>
+      <div id="calculator" class="calculator">
+        <div class="calc-header">
+          <div class="calc-label">Line item</div>
+          <div class="calc-button"><a href="#" onclick="addRow();return false;">Add a line item</a></div>
         </div>
-        <div id="rows"></div>
-        <button id="add-row" class="ls-add" type="button">+ Add a line item</button>
-        <div class="ls-bar" aria-hidden="true">
-          <div id="bar-a" class="ls-bar-a"></div>
-          <div id="bar-b" class="ls-bar-b"></div>
+        <div class="calc-table">
+          <div class="calc-row calc-header-row">
+            <div class="calc-item-label"></div>
+            <div class="calc-col-header">Column A<br><span class="hours-label">· 0h</span></div>
+            <div class="calc-col-header">Column B<br><span class="hours-label">· 0h</span></div>
+          </div>
+          <div id="calc-rows"></div>
         </div>
-        <div class="ls-legend">
-          <span id="legend-a" class="ls-legend-a"></span>
-          <span id="legend-b" class="ls-legend-b"></span>
-        </div>
-        <p id="balance-line" class="ls-balance" aria-live="polite"></p>
-        <p class="ls-note">Runs entirely in your browser. Nothing you type here is sent anywhere or saved after you close the page.</p>
+        <div class="calc-footer">Awaiting data</div>
+        <div class="calc-note">Add some hours above to see the register.</div>
       </div>
     </section>
 
     <section id="access-tiers">
       <div class="kicker">Access</div>
-      <h2>Three Ways In</h2>
-      <p class="lede">Open access needs nothing from you. Free membership needs an email address. Paid membership is the Workpaper Suite the free tools are excerpted from &mdash; a living, growing program, not a finished archive. None of the three asks you to create an account or a password.</p>
+      <h2>Free Diagnostic Tools vs. The Workpaper Suite</h2>
+      <p class="lede">These are two different things. The tools above — the Carrier Wave Decoder, the Nervous System Ladder, the Lemonade Stand Heuristic, and the printable infographic — are free, public, and always will be: a quick, honest first read on your own household. The Workpaper Suite below is the paid system those free tools are excerpted from — a living, growing program, not a finished archive.</p>
 
-      <div class="roadmap-phase">
-        <div class="roadmap-phase-head">
-          <h3>Open Access</h3>
-          <span class="status-badge status-live">Free &middot; no sign-up</span>
+      <div class="access-row">
+        <div class="access-col">
+          <h3>Free Public Diagnostic Tools</h3>
+          <p class="access-label">No cost · no account required</p>
+          <ul>
+            <li>The Carrier Wave Decoder (guided practice tool, above)</li>
+            <li>The Lemonade Stand Heuristic (interactive calculator, above)</li>
+            <li>The Nervous System Ladder self-check</li>
+            <li>The Infographic Executive Summary — <code>infographic.html</code>, a printable one-pager</li>
+            <li>Chapters I &amp; II of the manuscript, as a preview</li>
+          </ul>
+          <p>These stay free because a quick, honest read on your own household shouldn't require payment. They're diagnostic snapshots, not the full system.</p>
         </div>
-        <ul class="roadmap-list">
-          <li>The Carrier Wave Decoder (guided practice tool, above)</li>
-          <li>The Lemonade Stand Heuristic (interactive calculator, above)</li>
-          <li>The Nervous System Ladder self-check</li>
-          <li>The Infographic Executive Summary &mdash; <a href="infographic.html" target="_blank" rel="noopener">a printable one-pager</a></li>
-          <li>The Preface and Chapters I &amp; II of the manuscript, as a preview</li>
-        </ul>
-        <p>These stay free because a quick, honest read on your own household shouldn't require payment. They're diagnostic snapshots, not the full system.</p>
-        <a class="cta-button" href="#carrier-wave">Start with the free tools</a>
-      </div>
-
-      <div class="roadmap-phase">
-        <div class="roadmap-phase-head">
-          <h3>Free Member</h3>
-          <span class="status-badge status-live">Free &middot; email only</span>
+        <div class="access-col">
+          <h3>The Workpaper Suite</h3>
+          <p class="access-label">Sold as the Spread Love &amp; Acceptance Relationship Survival Kit · monthly membership</p>
+          <p class="access-label live-label">Live right now:</p>
+          <ul>
+            <li>Manuscript Chapters I &amp; II, with III–XII in active development</li>
+            <li>WP-01, WP-02, WP-03, WP-09, WP-11, and WP-13 — the remaining workpapers are rolling out over time</li>
+            <li>CALC-01 (the Solvency Read) — CALC-02–CALC-07 are in development</li>
+            <li>PROG-01, the 6-week guided curriculum sequencing the six live workpapers above</li>
+          </ul>
+          <a href="https://cloudpat.gumroad.com/l/vigkfs" class="cta-button">Get the Survival Kit</a>
+          <p class="access-note">Recurring monthly membership, billed and managed through Gumroad. Everyone who joins keeps access to each new release as it ships.</p>
         </div>
-        <ul class="roadmap-list">
-          <li>Everything in Open Access</li>
-          <li>A note by email when new chapters, workpapers, and calculators ship, and when what's already here is refined</li>
-          <li>First word on changes, for as long as the program keeps developing</li>
-        </ul>
-        <p>Free membership doesn't unlock the paid Workpaper Suite. Your email is held by Buttondown, our newsletter service, and used only for program updates. Unsubscribe from any email.</p>
-        <a class="cta-button" href="#register">Join free</a>
-      </div>
-
-      <div class="roadmap-phase">
-        <div class="roadmap-phase-head">
-          <h3>Paid Member: The Workpaper Suite</h3>
-          <span class="status-badge status-progress">Monthly membership</span>
-        </div>
-        <p>Sold as the Spread Love &amp; Acceptance Relationship Survival Kit. <strong>Live right now:</strong></p>
-        <ul class="roadmap-list">
-          <li>Manuscript Chapters I &amp; II, with III&ndash;XII in active development</li>
-          <li>WP-01, WP-02, WP-03, WP-09, WP-11, and WP-13 &mdash; the remaining workpapers are rolling out over time</li>
-          <li>CALC-01 (the Solvency Read) &mdash; CALC-02&ndash;CALC-07 are in development</li>
-          <li>PROG-01, the 6-week guided curriculum sequencing the six live workpapers above</li>
-        </ul>
-        <a href="https://cloudpat.gumroad.com/l/vigkfs" class="cta-button">Get the Survival Kit</a>
-        <p class="access-note">Recurring monthly membership, billed and managed through Gumroad. Everyone who joins keeps access to each new release as it ships. Exactly what's live is always on the <a href="roadmap.html">Content Roadmap</a>.</p>
-      </div>
-
-      <div class="roadmap-phase">
-        <div class="roadmap-phase-head">
-          <h3>What each level shares, and with whom</h3>
-        </div>
-        <ul class="roadmap-list">
-          <li><strong>Open Access:</strong> nothing you type into the tools leaves your browser. Like every visit to this page, it's counted by Google Analytics.</li>
-          <li><strong>Free Member:</strong> your email address, held by Buttondown.</li>
-          <li><strong>Paid Member:</strong> your name, email, and payment details, held by Gumroad. We never see your card details.</li>
-        </ul>
-        <p>Nothing is sold or used for advertising. Full details are in the <a href="legal/privacy-policy.html">Privacy Policy</a>.</p>
       </div>
     </section>
 
     <section id="register">
       <div class="kicker">Join</div>
-      <h2>Become a Free Member</h2>
-      <p class="lede">This program is a living one, still actively being built — not a finished archive. Join free to hear about new chapters, workpapers, and calculators as they ship, or get paid membership now for what's already live plus everything still coming.</p>
-      <p>Free membership means no password and no account &mdash; just your email on our list. It doesn't unlock the paid Workpaper Suite; it keeps you in the loop. As new material ships and real households put this framework to use, expect new workpapers, new chapters, and refinements to what's already here. Everyone on this list hears about changes first, at no cost, for as long as the program keeps developing.</p>
-      <form class="register-form" action="https://buttondown.com/api/emails/embed-subscribe/spreadloveandacceptance" method="post" target="popupwindow" onsubmit="window.open('https://buttondown.com/spreadloveandacceptance', 'popupwindow')">
+      <h2>Register for the Program</h2>
+      <p class="lede">This program is a living one, still actively being built — not a finished archive. Register for free to hear about new chapters, workpapers, and calculators as they ship, or get full access now to what's already live plus everything still coming.</p>
+
+      <p>Free registration doesn't unlock the paid workpaper suite — it just keeps you in the loop. As new material ships and real households put this framework to use, expect new workpapers, new chapters, and refinements to what's already here. Everyone on this list hears about changes first, at no cost, for as long as the program keeps developing.</p>
+
+      <form class="register-form" action="https://buttondown.email/api/emails/embed-subscribe/spreadloveandacceptance" method="post">
         <label for="bd-email">Email address</label>
-        <input type="email" name="email" id="bd-email" placeholder="name@example.com" autocomplete="email" required>
-        <input type="hidden" value="1" name="embed">
+        <input type="email" name="email" id="bd-email" placeholder="name@example.com" required>
         <button type="submit">Join free</button>
       </form>
-      <p class="register-note">No spam, unsubscribe anytime. We'll only write when the program actually changes. Your email is held by Buttondown and used for nothing else &mdash; see the <a href="legal/privacy-policy.html">Privacy Policy</a>.</p>
+      <p class="register-note">No spam, unsubscribe anytime. We'll only write when the program actually changes.</p>
+
       <div class="register-or">or</div>
+
       <p class="register-cta">Ready for the complete system now, rather than waiting for updates?</p>
-      <a href="https://cloudpat.gumroad.com/l/vigkfs" class="cta-button">Skip ahead — become a paid member</a>
-    </section>
-
-    <section id="directory">
-      <div class="kicker">Resources</div>
-      <h2>Site Directory</h2>
-      <p class="lede">Everything on spreadloveandacceptance.com, in one place.</p>
-
-      <div class="roadmap-phase">
-        <div class="roadmap-phase-head">
-          <h3>Program &amp; Status</h3>
-        </div>
-        <ul class="roadmap-list">
-          <li><a href="program-overview.html">Program Overview</a></li>
-          <li><a href="roadmap.html">Content Roadmap</a> &mdash; what's live, in progress, and planned</li>
-          <li><a href="suite-index.html">Instrument Suite Index</a></li>
-          <li><a href="telemetry.html">Rollout Status &amp; Telemetry</a></li>
-        </ul>
-      </div>
-
-      <div class="roadmap-phase">
-        <div class="roadmap-phase-head">
-          <h3>Tools</h3>
-        </div>
-        <ul class="roadmap-list">
-          <li><a href="carrier-wave-decoder.html">The Carrier Wave Decoder</a></li>
-          <li><a href="#nervous-system">Check Your State</a> (on this page)</li>
-          <li><a href="#lemonade">The Lemonade Stand</a> (on this page)</li>
-          <li><a href="infographic.html" target="_blank" rel="noopener">Infographic Executive Summary</a> &mdash; printable</li>
-        </ul>
-      </div>
-
-      <div class="roadmap-phase">
-        <div class="roadmap-phase-head">
-          <h3>Explore &amp; Discover</h3>
-        </div>
-        <ul class="roadmap-list">
-          <li><a href="snapshot/">Diagnostic Snapshot</a></li>
-          <li><a href="learn/">Marco &amp; Yuki's Story</a></li>
-          <li><a href="do/">Try the Workpapers</a></li>
-          <li><a href="architecture/">System Architecture</a></li>
-          <li><a href="reference/">Reference Materials</a></li>
-        </ul>
-      </div>
-
-      <div class="roadmap-phase">
-        <div class="roadmap-phase-head">
-          <h3>Listen</h3>
-        </div>
-        <ul class="roadmap-list">
-          <li><a href="podcast-index.html">Observational Podcast</a></li>
-          <li><a href="soundscapes.html">Soundscape Catalog</a></li>
-          <li><a href="echoes-of-gold.html">Echoes of Gold &mdash; Companion Album</a></li>
-        </ul>
-      </div>
-
-      <div class="roadmap-phase">
-        <div class="roadmap-phase-head">
-          <h3>About &amp; Legal</h3>
-        </div>
-        <ul class="roadmap-list">
-          <li><a href="about.html">About the Creator of Spread Love and Acceptance</a></li>
-          <li><a href="legal/terms-of-service.html">Terms of Service</a></li>
-          <li><a href="legal/privacy-policy.html">Privacy Policy</a></li>
-          <li><a href="legal/refund-policy.html">Refund Policy</a></li>
-        </ul>
-      </div>
+      <a href="https://cloudpat.gumroad.com/l/vigkfs" class="cta-button">Skip ahead — get the Survival Kit</a>
     </section>
 
     <section id="appendix">
       <div class="kicker">Appendix</div>
       <h2>Appendix: Printable Executive Summary &amp; Infographic</h2>
       <p class="lede">Everything on this page, condensed into a single US Letter document you can open, print, or save — good for sharing with someone who'd rather read it on paper than click through a website.</p>
+
       <p>The infographic covers four of this framework's core pieces in a single sitting:</p>
+
       <div class="infographic-features">
         <div class="feature">
           <strong>The Five Pillars</strong> The interdisciplinary foundation this whole framework is built on, in one card row.
@@ -380,7 +353,9 @@
           <strong>The 3 Neutral Refusals</strong> Three ready-to-use scripts for declining or deferring a task without starting a fight.
         </div>
       </div>
+
       <p><strong>Ready to print or save a copy?</strong> Opens as a formatted US Letter page (8.5" × 11", portrait). Use your browser's Print dialog — choosing "Save as PDF" as the destination gives you a publication-grade PDF; printing directly sends it straight to paper. For full-color output, enable "Background graphics" in the print options.</p>
+
       <a href="infographic.html" target="_blank" rel="noopener" class="cta-button">Open &amp; print the executive summary</a>
     </section>
 
@@ -393,18 +368,13 @@
     <a href="index.html">Home</a>
     <a href="about.html">About</a>
     <a href="roadmap.html">Roadmap</a>
-    <a href="program-overview.html">Program Overview</a>
-    <a href="suite-index.html">Suite Index</a>
-    <a href="telemetry.html">Telemetry</a>
-    <a href="carrier-wave-decoder.html">Carrier Wave Decoder</a>
     <a href="podcast-index.html">Podcast</a>
-    <a href="soundscapes.html">Soundscapes</a>
-    <a href="echoes-of-gold.html">Echoes of Gold</a>
+    <a href="suite-index.html">Suite Index</a>
+    <a href="program-overview.html">Program Overview</a>
+    <a href="telemetry.html">Telemetry</a>
     <a href="snapshot/">Snapshot</a>
-    <a href="learn/">Marco &amp; Yuki</a>
     <a href="do/">Try It</a>
     <a href="architecture/">Architecture</a>
-    <a href="reference/">Reference</a>
     <a href="legal/terms-of-service.html">Terms of Service</a>
     <a href="legal/privacy-policy.html">Privacy Policy</a>
     <a href="legal/refund-policy.html">Refund Policy</a>
@@ -422,6 +392,7 @@
     sympathetic: "Heart rate's up, thoughts are moving fast, and small things can start to feel urgent or personal. Good energy for doing the dishes right now. Riskier for deciding, calmly, who should be doing them going forward — that conversation might go better in twenty minutes.",
     dorsal: "Flat, foggy, or far away, and words are harder to find than usual. This isn't the moment to open the register. Rest, eat, get warm, or just wait — the ledger will still be here when you're back."
   };
+
   rungs.forEach(function(rung){
     rung.addEventListener('click', function(){
       rungs.forEach(function(r){ r.classList.remove('active'); r.setAttribute('aria-pressed','false'); });
@@ -433,8 +404,9 @@
 })();
 
 (function(){
-  var links = Array.prototype.slice.call(document.querySelectorAll('nav a[data-target]'));
+  var links = Array.prototype.slice.call(document.querySelectorAll('nav a'));
   var sections = links.map(function(l){ return document.getElementById(l.dataset.target); });
+
   var observer = new IntersectionObserver(function(entries){
     entries.forEach(function(entry){
       var link = links.find(function(l){ return l.dataset.target === entry.target.id; });
@@ -445,6 +417,7 @@
       }
     });
   }, { rootMargin: '-20% 0px -70% 0px' });
+
   sections.forEach(function(s){ if(s) observer.observe(s); });
 })();
 </script>
