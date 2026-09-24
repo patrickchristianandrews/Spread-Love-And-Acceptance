@@ -481,7 +481,7 @@ textarea{width:100%;min-height:90px;margin-top:6px;border:1px solid var(--line);
 
   <!-- TONE CHECK -->
   <section data-panel="tone" role="tabpanel" hidden>
-    <div class="guarantee" role="note"><b>Private pre-flight check.</b> This reads only your own draft, and only in this browser. Your partner never sees these suggestions, and nothing on this tab is saved or sent anywhere. Like a spell-checker, it suggests and you decide: you can copy or use your draft as written at any time.</div>
+    <div class="guarantee" role="note"><b>Private pre-flight check.</b> This reads only your own draft, and only in this browser. The other person never sees these suggestions, and nothing on this tab is saved or sent anywhere. Like a spell-checker, it suggests and you decide: you can copy or use your draft as written at any time.</div>
     <div class="tgrid">
       <div>
         <p class="lab" style="margin:0">How do you mean this to come across?</p>
@@ -528,7 +528,7 @@ textarea{width:100%;min-height:90px;margin-top:6px;border:1px solid var(--line);
           <dt>Significant deficiency</dt><dd>Recurring or clearly felt, or several small gaps in one area adding up. A full plan with a target date and a test, reviewed at the weekly close.</dd>
           <dt>Material weakness</dt><dd>Your usual repairs aren't catching it: moments stay open, it's a repeat, an agreement was broken, or trust was breached. A priority plan, reviewed monthly with WP-04. Consider a counselor.</dd>
           <dt>Four parts</dt><dd>From deficiency up, every finding is written as condition (what happened), criteria (what was expected), cause (what in the arrangement allowed it), and effect (what it cost). The fact and the cause are kept apart, and neither can be a character word.</dd>
-          <dt>Response</dt><dd>The receiving partner logs Agree, Partly agree, or Disagree, in their own words and signed with their name, before a plan can move from Open to In progress. Revising a finding after that asks them to respond again.</dd>
+          <dt>Response</dt><dd>The receiving person logs Agree, Partly agree, or Disagree, in their own words and signed with their name, before a plan can move from Open to In progress. Revising a finding after that asks them to respond again.</dd>
           <dt>Closing</dt><dd>A plan is marked remediated with evidence that its test was met, and it closes only after holding through one monthly review. Closed findings become strengths.</dd>
         </dl>
       </details>
@@ -541,11 +541,11 @@ textarea{width:100%;min-height:90px;margin-top:6px;border:1px solid var(--line);
       <div class="row" role="group" aria-label="Period" id="period"></div>
       <div class="panel" id="recon"></div>
       <div class="panel">
-        <h3>A summary for your partner</h3>
+        <h3>A summary for the other person</h3>
         <p class="hint">A printable letter from you to them: what came up, what you're working on, and what would help. You choose what goes in it, and you can read the whole thing below before printing.</p>
         <div class="names">
           <div class="field"><label for="pme">Your name</label><input id="pme" maxlength="24" autocomplete="off"></div>
-          <div class="field"><label for="pthem">Your partner's name</label><input id="pthem" maxlength="24" autocomplete="off"></div>
+          <div class="field"><label for="pthem">The other person's name</label><input id="pthem" maxlength="24" autocomplete="off"></div>
         </div>
         <div class="checks">
           <label><input type="checkbox" id="inc-notes" checked> Include what I wrote about each moment</label>
@@ -675,8 +675,8 @@ const LESSONS=[
  {t:"The three channels",p:["Pace is speed. A fast talker can read a thoughtful pause as stonewalling, and a slow thinker can feel steamrolled by quick replies.","Register is tone. The same words can arrive as a status update or as an accusation, depending on what's underneath them and what the listener is braced for.","Urgency is timing. When you get a chance can mean before dinner to one person and this week to the other. Neither is wrong, but the gap between them is where the friction lives."]},
  {t:"The state you're listening from",p:["This tool borrows a simple ladder from polyvagal theory: a steady, social state; a mobilized, braced state; and a shut-down, far-away state. People move between rungs many times a day.","The same sentence lands differently depending on which rung you're on. Mobilized ears hear criticism. Shut-down ears barely hear anything at all.","Polyvagal theory is a popular model, and some of its physiology is debated by researchers. Here it's used as a practical vocabulary for noticing yourself, not as a measurement of anyone."]},
  {t:"Retuning in four moves",p:["First, name the mismatch out loud without blame: I think we're on different timelines here.","Second, check your own state. You can only change your own dial.","Third, slow the pace on purpose. Longer exhales, shorter sentences, real pauses.","Fourth, return to the actual content. Most of the time the original question was small and solvable once the static cleared."]},
- {t:"Before you send: the tone check",p:["The Tone check tab works like a spell-checker for tone. You say how you mean a message to come across, and it marks wording that tends to land harder than that: absolutes, labels, blame questions, orders, and vague timing.","It is private by design. It reads only your own draft, only in your browser. It never reads your partner's words, never saves what you typed, and never stops you from sending. You decide.","The shape that tends to work is the WP-09 transducer: appreciation or a shared goal first, then the fact, the feeling, and one specific ask with a real time."]},
- {t:"Findings: separating what's material",p:["Most friction is noise. A finding is for the thing that keeps coming back or clearly costs something. Severity runs from observation, through deficiency and significant deficiency, up to material weakness.","From deficiency up, a finding is written in four parts: the condition, what happened; the criteria, what was expected; the cause, what in the arrangement let it happen; and the effect, what it cost. Keeping the fact apart from the cause is what stops a finding from turning into an accusation.","Before a corrective action plan can start, the other partner logs a management response: agree, partly agree, or disagree, in their own words. A plan closes only after it holds through a monthly review, and closed findings become strengths."]},
+ {t:"Before you send: the tone check",p:["The Tone check tab works like a spell-checker for tone. You say how you mean a message to come across, and it marks wording that tends to land harder than that: absolutes, labels, blame questions, orders, and vague timing.","It is private by design. It reads only your own draft, only in your browser. It never reads the other person's words, never saves what you typed, and never stops you from sending. You decide.","The shape that tends to work is the WP-09 transducer: appreciation or a shared goal first, then the fact, the feeling, and one specific ask with a real time."]},
+ {t:"Findings: separating what's material",p:["Most friction is noise. A finding is for the thing that keeps coming back or clearly costs something. Severity runs from observation, through deficiency and significant deficiency, up to material weakness.","From deficiency up, a finding is written in four parts: the condition, what happened; the criteria, what was expected; the cause, what in the arrangement let it happen; and the effect, what it cost. Keeping the fact apart from the cause is what stops a finding from turning into an accusation.","Before a corrective action plan can start, the other person logs a management response: agree, partly agree, or disagree, in their own words. A plan closes only after it holds through a monthly review, and closed findings become strengths."]},
  {t:"Keeping shared books",p:["A lot of household work is invisible: remembering, tracking, noticing the milk is low. Invisible work can't be thanked, and it can't be shared.","Writing it down as a line item makes it visible to both people in the same units at the same time, so conversations start from shared facts instead of competing impressions.","Once a week, look at the books together. Start with what went right, check which tasks have no owner, and choose one change. The ledger describes the arrangement, never either person's worth."]}
 ];
 
@@ -987,7 +987,7 @@ const tog={step:"start",mode:null,names:["",""],ans:[null,null],idx:0,draft:null
 const blankAns=()=>({self:[null,null,null],guess:[null,null,null]});
 const cleanName=(n,f)=>(String(n||"").replace(/[^A-Za-z0-9 ]/g,"").trim().slice(0,16))||f;
 const nm=i=>tog.names[i]||(i?"Person B":"Person A");
-function encode(name,a){return cleanName(name,"Partner").replace(/ /g,"_")+"-"+a.self.join("")+a.guess.join("");}
+function encode(name,a){return cleanName(name,"Person").replace(/ /g,"_")+"-"+a.self.join("")+a.guess.join("");}
 function decode(code){
   const m=String(code||"").trim().match(/^([A-Za-z0-9_]{1,16})-([0-2]{6})$/);
   if(!m) return null;
@@ -1005,10 +1005,10 @@ function renderTog(){
       <p>Each of you marks where you were during a moment that squealed, and where you think the other person was. Then you reveal both at once and see where you actually differed, and where you simply misread each other.</p>
       <div class="choices">
         <button class="choice" data-m="same"><b>One device</b><span>Pass it back and forth. Answers stay hidden until the reveal.</span></button>
-        <button class="choice" data-m="send"><b>Two devices: start it</b><span>Answer here, then send your code to your partner.</span></button>
-        <button class="choice" data-m="join"><b>Two devices: I got a code</b><span>Enter the code your partner sent you.</span></button>
+        <button class="choice" data-m="send"><b>Two devices: start it</b><span>Answer here, then send your code to the other person.</span></button>
+        <button class="choice" data-m="join"><b>Two devices: I got a code</b><span>Enter the code the other person sent you.</span></button>
       </div>
-      ${pend?`<p class="hint" style="margin:0">You have a code waiting from ${esc(fmt(pend.t))}. <button data-resume>Enter your partner's reply</button> or <button data-drop>discard it</button>.</p>`:""}`;
+      ${pend?`<p class="hint" style="margin:0">You have a code waiting from ${esc(fmt(pend.t))}. <button data-resume>Enter the other person's reply</button> or <button data-drop>discard it</button>.</p>`:""}`;
     el.querySelectorAll("[data-m]").forEach(b=>b.onclick=()=>{
       tog.mode=b.dataset.m;
       tog.step=tog.mode==="join"?"entercode":"names"; renderTog();});
@@ -1031,8 +1031,8 @@ function renderTog(){
   }
   if(S==="entercode"||S==="replycode"){
     const reply=S==="replycode";
-    el.innerHTML=`<h3>${reply?"Enter your partner's reply":"Enter the code you received"}</h3>
-      <p>${reply?"When your partner finishes, they'll get a code to send back to you. Paste it here to see the same reveal they saw.":"It looks something like Sam-201112."}</p>
+    el.innerHTML=`<h3>${reply?"Enter the other person's reply":"Enter the code you received"}</h3>
+      <p>${reply?"When the other person finishes, they'll get a code to send back to you. Paste it here to see the same reveal they saw.":"It looks something like Sam-201112."}</p>
       <div class="field"><label for="cin">Code</label><input id="cin" autocomplete="off" autocapitalize="off" spellcheck="false"></div>
       ${reply?"":`<div class="field"><label for="n1">Your name</label><input id="n1" maxlength="16" autocomplete="off"></div>`}
       <p class="hint" id="cerr" style="margin:0" role="alert"></p>
@@ -1047,7 +1047,7 @@ function renderTog(){
     return;
   }
   if(S==="answer"){
-    const i=tog.idx, o=1-i, me=nm(i), other=tog.mode==="same"?nm(o):(tog.names[o]||"your partner"), dr=tog.draft;
+    const i=tog.idx, o=1-i, me=nm(i), other=tog.mode==="same"?nm(o):(tog.names[o]||"the other person"), dr=tog.draft;
     const seg=(kind,c,label,cls)=>`<div class="seg ${cls}" role="group" aria-label="${esc(CHANNELS[c].name+", "+label)}"><span class="who" style="width:auto;min-width:44px">${esc(label)}</span>${CHANNELS[c].opts.map((op,k)=>`<button data-k="${kind}" data-c="${c}" data-i="${k}" aria-pressed="${dr[kind][c]===k}">${op}</button>`).join("")}</div>`;
     const ready=dr.self.every(x=>x!==null)&&dr.guess.every(x=>x!==null);
     el.innerHTML=`<h3><span class="${i?"who-b":"who-a"}">${esc(me)}</span>, your turn</h3>
@@ -1077,7 +1077,7 @@ function renderTog(){
   }
   if(S==="mycode"){
     const code=encode(nm(0),tog.ans[0]);
-    el.innerHTML=`<h3>Send this code to your partner</h3>
+    el.innerHTML=`<h3>Send this code to the other person</h3>
       <p>Text it or message it. They'll open this same page, choose “I got a code,” and answer for themselves. Your answers aren't shown to them until the reveal.</p>
       <div class="code" id="mycode">${esc(code)}</div>
       <div class="row"><button class="ghost" id="ccopy">Copy code</button></div>
@@ -1162,7 +1162,7 @@ const STEPS=[
  {tab:"decode",t:"Decode the moment",h:"Mark where each of you was, then save it to the journal.",alt:"together"},
  {tab:"practice",t:"Practice",h:"The scenario that matches your biggest gap is already picked, in your current state."},
  {tab:"journal",t:"Record it",h:"Write what you agreed on the entry you just saved, and mark it settled once it really is. If it keeps coming back, log it as a finding."},
- {tab:"close",t:"Close the books",h:"See whether everything reconciles, and print a summary for your partner."}
+ {tab:"close",t:"Close the books",h:"See whether everything reconciles, and print a summary for the other person."}
 ];
 let session=null;
 function renderStart(){
@@ -1246,7 +1246,7 @@ function reconcile(days){
   const topState=recentChecks.length?["s","d","v"].sort((a,b)=>sc[b]-sc[a])[0]:null;
   const focus=[];
   [0,1,2].map(c=>({c,score:ch[c].gap+ch[c].mis})).filter(x=>x.score>0).sort((a,b)=>b.score-a.score).forEach(({c})=>{
-    const d=ch[c].dir, them=store.people.them||"your partner", Them=them.charAt(0).toUpperCase()+them.slice(1);
+    const d=ch[c].dir, them=store.people.them||"the other person", Them=them.charAt(0).toUpperCase()+them.slice(1);
     const dirTxt=[
       d>0?"You've tended to move faster than "+them+".":d<0?Them+" has tended to move faster than you.":"Pace has been off in both directions.",
       d>0?"Your tone has tended to run sharper than you meant.":d<0?"Their tone has tended to land sharper for you.":"Tone has tripped you both up at different times.",
@@ -1263,7 +1263,7 @@ function reconcile(days){
     checks.push({t:"Every finding has a management response",pass:aw===0,d:aw?`${aw} waiting on a response`:"All findings have one"});
     checks.push({t:"No corrective action is past due",pass:pd===0,d:pd?`${pd} past the target date`:"All plans on schedule"});
     if(aw||pd) focus.push({kind:"findings",title:[aw?`${aw} finding${aw===1?"":"s"} awaiting a response`:"",pd?`${pd} plan${pd===1?"":"s"} past due`:""].filter(Boolean).join(", "),
-      text:aw?"A corrective action plan can't start until the receiving partner logs a management response.":"Revisit the target date or the action at the weekly close."});
+      text:aw?"A corrective action plan can't start until the receiving person logs a management response.":"Revisit the target date or the action at the weekly close."});
   }
   const practices=Object.keys(store.done).filter(k=>store.done[k]&&(!store.doneAt[k]||store.doneAt[k]>=since)).length;
   const retunes=store.retunes.filter(t=>t>=since).length;
@@ -1358,7 +1358,7 @@ $("printbtn").onclick=()=>{try{window.print();}catch(e){}};
 
 // ---------- tone check (WP-09: client-side guarantee) ----------
 // Runs only in this browser, only on the writer's own draft. Results are never stored,
-// never sent, and never shown to the other partner. Suggestions never block copying,
+// never sent, and never shown to the other person. Suggestions never block copying,
 // using, or sending a draft: the writer always has the final say.
 const LABEL_WORDS="lazy|selfish|inconsiderate|careless|useless|ridiculous|pathetic|stupid|irresponsible|childish|crazy|dramatic|immature|clueless|rude|incompetent|hopeless|unreliable|controlling|needy|petty|disrespectful";
 const LABEL_RE=new RegExp("\\b(?:"+LABEL_WORDS+")\\b","i");
@@ -1488,7 +1488,7 @@ $("pmsg").addEventListener("input",()=>mountTone($("pmsg-tone"),$("pmsg"),pmsgTo
 // Four-Part Finding Rule (WP-04): Deficiency and above cannot be logged without a factual
 // Condition, a Criteria, a systemic Cause, and an Effect, kept separate from each other.
 // Management Response Workflow: a plan cannot move from Open to In progress until the
-// receiving partner has logged Agree / Partly agree / Disagree plus their own view.
+// receiving person has logged Agree / Partly agree / Disagree plus their own view.
 const SEV=[
  {id:"obs",n:"Observation",h:"A one-off with a small effect, often already corrected. Noted, no plan needed."},
  {id:"def",n:"Deficiency",h:"A gap that could recur, with a limited effect. A quick fix with a named owner."},
@@ -1562,8 +1562,8 @@ function validateFinding(fd){
   if(LABEL_RE.test(fd.cause)) e.push("Cause includes a character word. A cause here is something in the arrangement, not who someone is.");
   if(overlap(fd.condition,fd.cause)>.8) e.push("Condition and Cause say the same thing. Condition is what happened; Cause is why the arrangement let it happen.");
   if(L(fd.effect)<10) e.push("Effect: describe what it cost the arrangement.");
-  if(!L(fd.by)||!L(fd.to)) e.push("Add both names. The receiving partner logs the management response.");
-  else if(fd.by.trim().toLowerCase()===fd.to.trim().toLowerCase()) e.push("The receiving partner has to be someone other than the person logging the finding.");
+  if(!L(fd.by)||!L(fd.to)) e.push("Add both names. The receiving person logs the management response.");
+  else if(fd.by.trim().toLowerCase()===fd.to.trim().toLowerCase()) e.push("The receiving person has to be someone other than the person logging the finding.");
   if(L(fd.action)<8) e.push("Corrective action: name one specific change.");
   if(strict&&!dueDate(fd.due)) e.push("Target date: required for a significant deficiency or material weakness.");
   if(strict&&L(fd.test)<8) e.push("How we'll know it's fixed: required for a significant deficiency or material weakness.");
@@ -1621,16 +1621,16 @@ function renderWork(){
     </div>
     <div class="names">
       <div class="field"><label for="ff-by">Logged by</label><input type="text" id="ff-by" data-f="by" maxlength="24" value="${esc(fd.by)}" autocomplete="off"></div>
-      ${full?`<div class="field"><label for="ff-to">Receiving partner</label><input type="text" id="ff-to" data-f="to" maxlength="24" value="${esc(fd.to)}" autocomplete="off"><small class="hint">They log the management response.</small></div>`:""}
+      ${full?`<div class="field"><label for="ff-to">Receiving person</label><input type="text" id="ff-to" data-f="to" maxlength="24" value="${esc(fd.to)}" autocomplete="off"><small class="hint">They log the management response.</small></div>`:""}
     </div>
     ${full?`<h4 class="caph">Corrective action plan</h4>
     <div class="field wide"><label for="ff-action">Action</label><textarea id="ff-action" data-f="action" placeholder="One specific change.">${esc(fd.action)}</textarea></div>
     <div class="names">
-      <div class="field"><label for="ff-owner">Owner</label><select id="ff-owner" data-f="owner">${opt("by",fd.owner,"The person logging it")}${opt("to",fd.owner,"The receiving partner")}${opt("both",fd.owner,"Both of us")}</select></div>
+      <div class="field"><label for="ff-owner">Owner</label><select id="ff-owner" data-f="owner">${opt("by",fd.owner,"The person logging it")}${opt("to",fd.owner,"The receiving person")}${opt("both",fd.owner,"Both of us")}</select></div>
       <div class="field"><label for="ff-due">Target date${strict?"":" (optional)"}</label><input type="date" id="ff-due" data-f="due" value="${esc(fd.due)}"></div>
     </div>
     <div class="field wide"><label for="ff-test">How we'll know it's fixed${strict?"":" (optional)"}</label><textarea id="ff-test" data-f="test" placeholder="A test you can check, like “the next five requests all name a time.”">${esc(fd.test)}</textarea></div>
-    ${fd.sev==="mat"?`<p class="warn">Material weakness: review it monthly alongside WP-04, and consider bringing in a couples counselor. This tool is a heuristic, not a substitute.</p>`:""}`:""}
+    ${fd.sev==="mat"?`<p class="warn">Material weakness: review it monthly alongside WP-04, and consider bringing in a counselor or mediator. This tool is a heuristic, not a substitute.</p>`:""}`:""}
     <ul class="errs" id="ff-errs" role="alert" tabindex="-1" hidden></ul>
     <div class="row" style="margin-top:16px"><button class="play" id="ff-save">${full?(editing?"Save revision":"Log finding"):(editing?"Save observation":"Note observation")}</button><button class="ghost" id="ff-cancel">Cancel</button></div>`;
   w.oninput=w.onchange=ev=>{const t=ev.target;
@@ -1671,7 +1671,7 @@ function renderResp(){
   $("rp-save").onclick=()=>{
     const e=[]; if(!fresp.stance) e.push("Choose Agree, Partly agree, or Disagree.");
     if(fresp.view.trim().length<20) e.push("Add your view in a sentence or two. A response needs your own words, not just a choice.");
-    if(fresp.sign.trim().toLowerCase()!==f.to.trim().toLowerCase()) e.push(`Sign with the receiving partner's name as it appears on the finding (${f.to}). If that name is wrong, the finding can be revised.`);
+    if(fresp.sign.trim().toLowerCase()!==f.to.trim().toLowerCase()) e.push(`Sign with the receiving person's name as it appears on the finding (${f.to}). If that name is wrong, the finding can be revised.`);
     if(e.length){$("rp-errs").innerHTML=e.map(x=>`<li>${esc(x)}</li>`).join("");$("rp-errs").hidden=false;$("rp-errs").focus();return;}
     const now=Date.now(); f.response={by:f.to,stance:fresp.stance,view:fresp.view.trim().slice(0,1200),t:now};
     f.hist.push({t:now,ev:`Management response logged: ${STANCE[fresp.stance]}`,by:f.to});
