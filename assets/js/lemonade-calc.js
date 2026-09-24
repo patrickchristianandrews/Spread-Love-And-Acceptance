@@ -1,6 +1,6 @@
 /*
   lemonade-calc.js
-  The Objective Ledger (TOL-OS) — Lemonade Stand calculator
+  The Objective Ledger (TOL-OS) — Lemonade Stand diagnostic engine
 
   Expects this markup somewhere on the page:
 

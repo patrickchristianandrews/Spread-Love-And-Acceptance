@@ -1,0 +1,149 @@
+/*
+  lemonade-stand.css
+  The Objective Ledger (TOL-OS) — Lemonade Stand calculator
+  Styles the markup that assets/js/lemonade-calc.js expects
+  (#label-a, #label-b, #rows, #add-row, #bar-a, #bar-b, #legend-a,
+  #legend-b, #balance-line). Everything is scoped under #lemonade so it
+  can't affect any other part of the site. Load after book-layout.css.
+*/
+
+#lemonade .ls{
+  margin-top: 24px;
+  padding: 22px 24px;
+  background: var(--paper-deep);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+}
+
+#lemonade .ls-head,
+#lemonade #rows .row{
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 96px 96px 32px;
+  gap: 8px;
+  align-items: center;
+}
+
+#lemonade .ls-head{
+  padding-bottom: 8px;
+  margin-bottom: 10px;
+  border-bottom: 1px solid var(--ink-soft);
+}
+
+#lemonade .ls-head-item{
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.7rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--brass);
+}
+
+#lemonade #rows .row{ margin-bottom: 6px; }
+
+#lemonade .ls input,
+#lemonade #rows input{
+  font: inherit;
+  font-size: 0.95rem;
+  color: var(--ink);
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 8px 10px;
+  width: 100%;
+  min-width: 0;
+}
+
+#lemonade #label-a,
+#lemonade #label-b{
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.78rem;
+  text-align: right;
+}
+#lemonade #label-a{ color: var(--credit); }
+#lemonade #label-b{ color: var(--brass); }
+
+#lemonade #rows .hours-a,
+#lemonade #rows .hours-b{
+  font-family: "IBM Plex Mono", monospace;
+  text-align: right;
+}
+
+#lemonade .ls input:focus-visible,
+#lemonade .ls button:focus-visible{
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
+
+#lemonade #rows .remove{
+  width: 32px;
+  height: 32px;
+  border: 1px solid transparent;
+  border-radius: var(--radius);
+  background: transparent;
+  color: var(--ink-soft);
+  font-size: 1.2rem;
+  line-height: 1;
+  cursor: pointer;
+}
+#lemonade #rows .remove:hover{ color: var(--debit); border-color: var(--line); }
+
+#lemonade .ls-add{
+  margin-top: 8px;
+  padding: 0;
+  background: none;
+  border: none;
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.8rem;
+  color: var(--ink);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+#lemonade .ls-add:hover{ color: var(--brass); }
+
+#lemonade .ls-bar{
+  display: flex;
+  height: 12px;
+  margin-top: 20px;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+#lemonade .ls-bar-a{ background: var(--credit); transition: width 0.25s ease; }
+#lemonade .ls-bar-b{ background: var(--brass); transition: width 0.25s ease; }
+
+#lemonade .ls-legend{
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 6px;
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.78rem;
+}
+#lemonade .ls-legend-a{ color: var(--credit); }
+#lemonade .ls-legend-b{ color: var(--brass); text-align: right; }
+
+#lemonade .ls-balance{ margin: 12px 0 0 0; }
+
+#lemonade .ls-note{
+  margin: 14px 0 0 0;
+  font-size: 0.82rem;
+  color: var(--ink-soft);
+}
+
+@media (max-width: 860px){
+  #lemonade .ls{ padding: 18px 16px; }
+
+  /* Each line item gets its own row, with the two hour boxes beneath. */
+  #lemonade .ls-head,
+  #lemonade #rows .row{ grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) 32px; gap: 6px; }
+  #lemonade .ls-head-item,
+  #lemonade #rows .task-name{ grid-column: 1 / -1; }
+  #lemonade #rows .row{
+    padding-bottom: 10px;
+    margin-bottom: 10px;
+    border-bottom: 1px solid var(--line);
+  }
+  #lemonade #label-a,
+  #lemonade #label-b{ text-align: left; }
+}
