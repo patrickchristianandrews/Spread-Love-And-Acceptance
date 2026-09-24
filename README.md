@@ -1,44 +1,33 @@
-# spreadloveandacceptance.com
+# TOL-OS site update
 
-Everything in this folder is the website. Upload the whole folder to the root of your GitHub Pages repo.
+Everything in `site/` mirrors the root of spreadloveandacceptance.com. Copy its contents into your site repository, keeping the folders as they are.
 
-## Before you launch
+## What's in `site/`
 
-1. **Gumroad link.** Open `site.js` and replace `joinUrl` near the top with your Gumroad product link. Every Join button on the site reads from that one line.
-2. **Remove the test member.** `python3 manage-members.py remove test@example.com`
-3. Push:
-   ```
-   git add -A && git commit -m "Launch site" && git push
-   ```
+| Path | Status | Notes |
+|---|---|---|
+| `start-here.html` | New | The Start Here orientation page |
+| `roadmap.html` | Replaces the live file | Matches the Suite Index. Confirm "Chapter VI" is what's actually in progress |
+| `infographic.html` | Replaces the live file | Only the footer line changed. Compare it with your live version first. If the live one has changed since, edit just that line instead |
+| `assets/js/lemonade-calc.js` | Replaces the live file | A code comment only |
+| `manuscript/ch03-autonomic-saturation.md` | Renamed | Replaces `ch03-telemetry-metrics.md`, which you can delete |
+| `manuscript/ch04-deontological-parity.md` | Renamed | Replaces `ch04-ocular-vectors.md`, which you can delete |
+| `workpapers/wp-01.md` | Updated | Stale Chapter III reference fixed |
+| `workpapers/wp03-raci-treaty.md` | Updated | Adds "When to use" and fixes the Chapter V reference |
+| `workpapers/wp13-pll-protocol.md` | Updated | Chapter V reference fixed |
+| `telemetry/hierarchy-matrix.md` | Updated | Chapter V reference fixed |
+| `workpapers/fill/` | New folder | The fill-in workpapers that save as PDFs. Upload the whole folder |
 
-## Members
+The `manuscript/` and `workpapers/` locations for the markdown files are my best guess from your project notes. If your repository keeps them elsewhere, put them wherever the old versions are.
 
-The members list (`members.json`) is public, so it stores a one-way fingerprint of each email, never the address.
+## Everything else
 
-- New subscriber: `python3 manage-members.py add their@email.com`, then commit and push `members.json`.
-- Cancellation: your refund policy promises access until the end of the paid period, so remove them when that period ends, not when the cancellation notice arrives: `python3 manage-members.py remove their@email.com`, then push.
-- Check someone: `python3 manage-members.py check their@email.com`
+- `notes/site-fixes.md`: find-and-replace edits for live pages whose source wasn't in the project (homepage, Suite Index, About, Try It, Playground, Program Overview, Telemetry, Privacy Policy), in priority order. Not for uploading.
+- `samples/`: two example PDFs from the fill-in workpapers, filled in with test entries. Not for uploading.
 
-A member signs in once with their subscription email and every members page opens in that browser. Each visit re-checks the list, so removing someone locks them out on their next page load.
+## After uploading
 
-## Changing the site
-
-- **Make a page free or members-only:** in `site.js`, add or remove `paid: true` on that page's line in `SECTIONS`.
-- **Add a page:** add one line to `SECTIONS`, and put these two lines in the new page's `<head>`:
-  ```html
-  <link rel="stylesheet" href="site.css">
-  <script src="site.js" defer></script>
-  ```
-  Wrap any members-only part in `<div class="locked-section"> … </div>`.
-
-## Testing on your computer
-
-Sign-in needs the site served over http, not opened as a file:
-```
-cd this-folder && python3 -m http.server 8000
-```
-Then visit http://localhost:8000.
-
-## Limits worth knowing
-
-This is a static site, so members content is hidden in the browser, not withheld by a server. Anyone who views the page source can read it. That's normal for a small membership at this stage; if it becomes a problem, the next step is a host with real login (Gumroad's own content delivery, Memberful, or similar).
+1. Delete `manuscript/ch03-telemetry-metrics.md` and `manuscript/ch04-ocular-vectors.md`.
+2. Work through `notes/site-fixes.md`, including the Privacy Policy update in item 14.
+3. Open `/workpapers/fill/wp-01.html` on the live site and check that Download PDF works.
+4. Add the fill-in page links to the member bundle, then regenerate the bundle (item 12).

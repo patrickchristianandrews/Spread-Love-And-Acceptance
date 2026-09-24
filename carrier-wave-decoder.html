@@ -230,6 +230,95 @@ textarea{width:100%;min-height:90px;margin-top:6px;border:1px solid var(--line);
 .paper li{margin-bottom:6px}
 .paper .sig{margin-top:26px}
 .paper .fine{font-size:.8rem;color:var(--muted);margin-top:28px;border-top:1px solid var(--line);padding-top:10px}
+/* ---------- Tone check ---------- */
+.tgrid{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:24px;align-items:start}
+@media (max-width:820px){.tgrid{grid-template-columns:1fr}}
+.guarantee{border-left:3px solid var(--v);background:var(--panel);padding:12px 16px;margin:0 0 20px;max-width:80ch;font-size:.95rem;border-radius:0 var(--radius) var(--radius) 0}
+.guarantee b{font-family:var(--display)}
+.intent{display:flex;gap:8px;flex-wrap:wrap;margin:6px 0 14px}
+.intent button{border:1.5px solid var(--line);background:none;border-radius:var(--radius);padding:6px 14px;font-family:var(--display);font-size:.9rem}
+.intent button[aria-pressed="true"]{border-color:var(--ink);box-shadow:inset 0 0 0 1px var(--ink)}
+.tc-sum{font-size:.95rem;margin:0 0 12px}
+.tc-preview{background:var(--sheet);border:1px solid var(--line);border-radius:var(--radius);padding:12px 14px;white-space:pre-wrap;margin:0 0 14px;overflow-wrap:anywhere}
+.tc-preview mark{background:none;color:inherit;text-decoration:underline wavy var(--s);text-decoration-thickness:1.5px;text-underline-offset:4px;text-decoration-skip-ink:none}
+.tc-preview mark.soft{text-decoration-color:var(--d)}
+.tc-list{list-style:none;margin:0;padding:0;display:grid;gap:12px}
+.tc-list li{border-left:3px solid var(--s);padding:2px 0 2px 12px}
+.tc-list li.soft{border-left-color:var(--d)}
+.tc-list q{font-family:var(--display);font-weight:600}
+.tc-list .kind{font-family:var(--mono);font-size:.72rem;color:var(--muted);margin-left:6px}
+.tc-list .why{display:block;font-size:.88rem;color:var(--muted);margin:3px 0 6px}
+.tc-list .row button{font-size:.84rem;padding:5px 12px}
+.good{list-style:none;margin:6px 0 0;padding:0;display:grid;gap:4px;font-size:.93rem}
+.good li{display:grid;grid-template-columns:22px 1fr}
+.good .mk{font-family:var(--display);font-weight:700}
+.good small{color:var(--muted)}
+.tc-compact{margin-top:8px;border-top:1px dashed var(--line);padding-top:8px}
+.tc-compact:empty{display:none}
+.tc-head{display:flex;justify-content:space-between;gap:10px;align-items:baseline;font-size:.86rem;color:var(--muted)}
+.tc-head button{background:none;border:none;padding:0;text-decoration:underline;color:var(--ink);font-size:.86rem;font-family:var(--body)}
+.tc-compact .tc-sum{margin:8px 0}
+.builder{border:1px solid var(--line);border-radius:var(--radius);padding:10px 14px;margin:0 0 16px;background:var(--panel)}
+.builder summary{cursor:pointer;font-family:var(--display);font-weight:600}
+.builder .field{max-width:none;margin-top:10px}
+.field label small,.field .hint{font-family:var(--body);font-weight:400;color:var(--muted);font-size:.82rem;margin:0}
+.field.wide{max-width:none}
+/* ---------- Findings ---------- */
+.fsum{display:flex;flex-wrap:wrap;gap:10px 26px;margin:14px 0 0;padding:0;list-style:none}
+.fsum li{font-size:.86rem;color:var(--muted)}
+.fsum b{font-family:var(--display);font-size:1.45rem;color:var(--ink);display:block;line-height:1.1}
+.sev{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:8px}
+.sev button{border:1.5px solid var(--line);background:var(--bg);border-radius:var(--radius);padding:10px 12px;text-align:left;color:inherit}
+.sev button b{display:block;font-family:var(--display);font-size:.95rem;margin-bottom:2px}
+.sev button span{display:block;font-size:.8rem;color:var(--muted);line-height:1.4}
+.sev button[aria-pressed="true"]{border-color:var(--ink);box-shadow:inset 0 0 0 1px var(--ink)}
+.four{display:grid;gap:16px;margin:18px 0}
+.four .part{border-left:3px solid var(--brass);padding-left:14px}
+.four .part > label{display:block}
+.four .part > small{display:block;color:var(--muted);font-size:.84rem;margin:2px 0 6px;line-height:1.45}
+.four textarea{min-height:66px;margin-top:0}
+.four select{margin-bottom:8px}
+#fwork select,#fwork input[type=text],#fwork input[type=date]{width:100%;border:1px solid var(--line);border-radius:var(--radius);padding:9px 12px;background:var(--bg);font:inherit;color:inherit}
+#fwork textarea:disabled{opacity:.45}
+.chk{display:flex;gap:8px;align-items:flex-start;font-family:var(--body);font-weight:400;font-size:.9rem;margin-top:8px}
+.chk input{margin-top:5px;accent-color:var(--ink)}
+.caph{font-family:var(--display);font-weight:600;font-size:1.05rem;margin:20px 0 10px}
+.warn{font-size:.88rem;color:var(--s);margin:8px 0 0}
+.errs{margin:14px 0 0;padding:10px 14px 10px 30px;border-left:3px solid var(--a);background:color-mix(in srgb,var(--a) 7%,transparent);display:grid;gap:4px;font-size:.92rem;color:var(--ink)}
+.errs:focus{outline:2px solid var(--a);outline-offset:2px}
+.fcard .fhead{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.fcard .fhead .tag{margin-left:0}
+.fcard .fid{font-family:var(--mono);font-size:.8rem;color:var(--muted);margin-right:4px}
+.fcard h3{margin:8px 0 2px;font-size:1.2rem}
+.fmeta{font-size:.84rem;color:var(--muted);margin:0 0 6px}
+.fcard.strength{border-color:var(--v)}
+.fparts{display:grid;grid-template-columns:96px 1fr;gap:8px 16px;margin:12px 0;font-size:.95rem}
+.fparts dt{font-family:var(--display);font-weight:600}
+.fparts dd{margin:0;overflow-wrap:anywhere}
+@media (max-width:560px){.fparts{grid-template-columns:1fr;gap:2px}.fparts dd{margin-bottom:8px}}
+.resp{background:var(--bg);border-radius:var(--radius);padding:12px 14px;margin:12px 0}
+.resp.await{background:none;border:1.5px dashed var(--s)}
+.resp .tag{margin-left:0}
+.stepper{display:flex;gap:6px;list-style:none;margin:14px 0 12px;padding:0;flex-wrap:wrap}
+.stepper li{font-family:var(--display);font-size:.84rem;padding:4px 10px;border:1.5px solid var(--line);border-radius:var(--radius);color:var(--muted)}
+.stepper li.done{color:var(--ink)}
+.stepper li.done::before{content:"✓ "}
+.stepper li.now{border-color:var(--ink);color:var(--ink);font-weight:600}
+.gate{font-size:.86rem;color:var(--muted);margin:8px 0 0}
+.gate:empty{display:none}
+.hist{margin-top:12px;font-size:.86rem;color:var(--muted)}
+.hist summary{cursor:pointer;font-family:var(--display);color:var(--ink)}
+.hist ol{margin:6px 0 0;padding-left:1.3em;display:grid;gap:3px}
+.tag.sev-obs{color:var(--muted)}
+.tag.sev-def{border-color:var(--d);color:var(--d)}
+.tag.sev-sig{border-color:var(--s);color:var(--s)}
+.tag.sev-mat{border-color:var(--a);color:var(--a)}
+.sevguide summary{cursor:pointer;font-family:var(--display);font-weight:600}
+.sevguide dl{display:grid;grid-template-columns:minmax(120px,190px) 1fr;gap:8px 16px;margin:14px 0 0;font-size:.93rem}
+.sevguide dt{font-family:var(--display);font-weight:600}
+.sevguide dd{margin:0}
+@media (max-width:560px){.sevguide dl{grid-template-columns:1fr;gap:2px}.sevguide dd{margin-bottom:8px}}
+.play:disabled,.ghost:disabled{opacity:.45;cursor:not-allowed}
 @media print{
   body{background:#fff}
   .sitebar,header,.scope,.readout,.tabs,.sessbar,.note,.sitefoot,[data-panel]:not([data-panel="close"]){display:none!important}
@@ -266,8 +355,10 @@ textarea{width:100%;min-height:90px;margin-top:6px;border:1px solid var(--line);
     <button class="tab" role="tab" data-tab="retune" aria-selected="false">Retune</button>
     <button class="tab" role="tab" data-tab="decode" aria-selected="false">Decode a moment</button>
     <button class="tab" role="tab" data-tab="together" aria-selected="false">Together</button>
+    <button class="tab" role="tab" data-tab="tone" aria-selected="false">Tone check</button>
     <button class="tab" role="tab" data-tab="practice" aria-selected="false">Practice</button>
     <button class="tab" role="tab" data-tab="journal" aria-selected="false">Journal</button>
+    <button class="tab" role="tab" data-tab="findings" aria-selected="false">Findings</button>
     <button class="tab" role="tab" data-tab="close" aria-selected="false">Close the books</button>
     <button class="tab" role="tab" data-tab="learn" aria-selected="false">Learn</button>
   </div>
@@ -386,6 +477,62 @@ textarea{width:100%;min-height:90px;margin-top:6px;border:1px solid var(--line);
     </div>
   </section>
 
+  <!-- TONE CHECK -->
+  <section data-panel="tone" role="tabpanel" hidden>
+    <div class="guarantee" role="note"><b>Private pre-flight check.</b> This reads only your own draft, and only in this browser. Your partner never sees these suggestions, and nothing on this tab is saved or sent anywhere. Like a spell-checker, it suggests and you decide: you can copy or use your draft as written at any time.</div>
+    <div class="tgrid">
+      <div>
+        <p class="lab" style="margin:0">How do you mean this to come across?</p>
+        <div class="intent" role="group" aria-label="Intended tone" id="intent"></div>
+        <details class="builder">
+          <summary>Build it from fact, feeling, and ask (WP-09)</summary>
+          <div class="field"><label for="b-appr">Appreciation or shared goal <small>(optional)</small></label><input id="b-appr" autocomplete="off" placeholder="I know this week has been a lot."></div>
+          <div class="field"><label for="b-fact">The fact <small>one sentence, no adjectives</small></label><input id="b-fact" autocomplete="off" placeholder="The trash didn't go out before pickup this morning."></div>
+          <div class="field"><label for="b-feel">The feeling</label><input id="b-feel" autocomplete="off" placeholder="stretched thin, and a little unseen"></div>
+          <div class="field"><label for="b-ask">The ask <small>specific, with a time</small></label><input id="b-ask" autocomplete="off" placeholder="Could we pick a set trash night by Sunday"></div>
+          <div class="row" style="margin-top:12px"><button class="ghost" id="b-go" type="button">Write it into the draft</button></div>
+        </details>
+        <label for="draft">Your draft</label>
+        <textarea id="draft" style="min-height:170px" placeholder="Write the message the way you'd send it or say it."></textarea>
+        <div class="row" style="margin-top:12px">
+          <button class="play" id="t-copy" type="button">Copy draft</button>
+          <button class="ghost" id="t-letter" type="button">Use as my letter note</button>
+          <button class="ghost" id="t-clear" type="button">Clear</button>
+        </div>
+        <p class="hint" style="margin:8px 0 0">These buttons always work, whatever the check says.</p>
+      </div>
+      <div class="panel" id="t-out" aria-live="polite"></div>
+    </div>
+  </section>
+
+  <!-- FINDINGS -->
+  <section data-panel="findings" role="tabpanel" hidden>
+    <div style="max-width:820px;display:grid;gap:20px">
+      <div class="panel">
+        <h3>Findings and corrective action plans</h3>
+        <p style="margin:0;max-width:64ch">When the same thing keeps coming back, log it as a finding. A finding describes the arrangement, never a person, and a plan doesn't start until you've both had a say.</p>
+        <ul class="fsum" id="fsum"></ul>
+        <p class="hint" id="fnote" style="margin:14px 0 0"></p>
+        <div class="row" style="margin-top:16px"><button class="play" id="f-new" type="button">Log a finding</button></div>
+      </div>
+      <div class="panel" id="fwork" hidden></div>
+      <div class="row" role="group" aria-label="Show findings" id="ffilter"></div>
+      <div id="flist" style="display:grid;gap:16px"></div>
+      <details class="panel sevguide">
+        <summary>How findings work</summary>
+        <dl>
+          <dt>Observation</dt><dd>A one-off with a small effect, often already corrected. Noted, no plan needed.</dd>
+          <dt>Deficiency</dt><dd>A gap that could recur, with a limited effect. A quick fix with a named owner.</dd>
+          <dt>Significant deficiency</dt><dd>Recurring or clearly felt, or several small gaps in one area adding up. A full plan with a target date and a test, reviewed at the weekly close.</dd>
+          <dt>Material weakness</dt><dd>Your usual repairs aren't catching it: moments stay open, it's a repeat, an agreement was broken, or trust was breached. A priority plan, reviewed monthly with WP-04. Consider a counselor.</dd>
+          <dt>Four parts</dt><dd>From deficiency up, every finding is written as condition (what happened), criteria (what was expected), cause (what in the arrangement allowed it), and effect (what it cost). The fact and the cause are kept apart, and neither can be a character word.</dd>
+          <dt>Response</dt><dd>The receiving partner logs Agree, Partly agree, or Disagree, in their own words and signed with their name, before a plan can move from Open to In progress. Revising a finding after that asks them to respond again.</dd>
+          <dt>Closing</dt><dd>A plan is marked remediated with evidence that its test was met, and it closes only after holding through one monthly review. Closed findings become strengths.</dd>
+        </dl>
+      </details>
+    </div>
+  </section>
+
   <!-- CLOSE -->
   <section data-panel="close" role="tabpanel" hidden>
     <div style="max-width:780px;display:grid;gap:20px">
@@ -402,8 +549,9 @@ textarea{width:100%;min-height:90px;margin-top:6px;border:1px solid var(--line);
           <label><input type="checkbox" id="inc-notes" checked> Include what I wrote about each moment</label>
           <label><input type="checkbox" id="inc-work"> Include my practice and retune activity</label>
           <label><input type="checkbox" id="inc-state"> Include the states I've been checking in from</label>
+          <label><input type="checkbox" id="inc-find"> Include our findings and corrective action plans</label>
         </div>
-        <div><label for="pmsg">A personal note (optional)</label><textarea id="pmsg" placeholder="Anything you want to say in your own words."></textarea></div>
+        <div><label for="pmsg">A personal note (optional)</label><textarea id="pmsg" placeholder="Anything you want to say in your own words."></textarea><div class="tc-compact" id="pmsg-tone"></div></div>
         <div class="row" style="margin-top:12px"><button class="play" id="printbtn">Print or save as PDF</button></div>
         <p class="hint" style="margin:10px 0 0">If the print window doesn't open here, use your browser's own print command, or open the downloaded copy of this page and print from there.</p>
       </div>
@@ -525,17 +673,21 @@ const LESSONS=[
  {t:"The three channels",p:["Pace is speed. A fast talker can read a thoughtful pause as stonewalling, and a slow thinker can feel steamrolled by quick replies.","Register is tone. The same words can arrive as a status update or as an accusation, depending on what's underneath them and what the listener is braced for.","Urgency is timing. When you get a chance can mean before dinner to one person and this week to the other. Neither is wrong, but the gap between them is where the friction lives."]},
  {t:"The state you're listening from",p:["This tool borrows a simple ladder from polyvagal theory: a steady, social state; a mobilized, braced state; and a shut-down, far-away state. People move between rungs many times a day.","The same sentence lands differently depending on which rung you're on. Mobilized ears hear criticism. Shut-down ears barely hear anything at all.","Polyvagal theory is a popular model, and some of its physiology is debated by researchers. Here it's used as a practical vocabulary for noticing yourself, not as a measurement of anyone."]},
  {t:"Retuning in four moves",p:["First, name the mismatch out loud without blame: I think we're on different timelines here.","Second, check your own state. You can only change your own dial.","Third, slow the pace on purpose. Longer exhales, shorter sentences, real pauses.","Fourth, return to the actual content. Most of the time the original question was small and solvable once the static cleared."]},
+ {t:"Before you send: the tone check",p:["The Tone check tab works like a spell-checker for tone. You say how you mean a message to come across, and it marks wording that tends to land harder than that: absolutes, labels, blame questions, orders, and vague timing.","It is private by design. It reads only your own draft, only in your browser. It never reads your partner's words, never saves what you typed, and never stops you from sending. You decide.","The shape that tends to work is the WP-09 transducer: appreciation or a shared goal first, then the fact, the feeling, and one specific ask with a real time."]},
+ {t:"Findings: separating what's material",p:["Most friction is noise. A finding is for the thing that keeps coming back or clearly costs something. Severity runs from observation, through deficiency and significant deficiency, up to material weakness.","From deficiency up, a finding is written in four parts: the condition, what happened; the criteria, what was expected; the cause, what in the arrangement let it happen; and the effect, what it cost. Keeping the fact apart from the cause is what stops a finding from turning into an accusation.","Before a corrective action plan can start, the other partner logs a management response: agree, partly agree, or disagree, in their own words. A plan closes only after it holds through a monthly review, and closed findings become strengths."]},
  {t:"Keeping shared books",p:["A lot of household work is invisible: remembering, tracking, noticing the milk is low. Invisible work can't be thanked, and it can't be shared.","Writing it down as a line item makes it visible to both people in the same units at the same time, so conversations start from shared facts instead of competing impressions.","Once a week, look at the books together. Start with what went right, check which tasks have no owner, and choose one change. The ledger describes the arrangement, never either person's worth."]}
 ];
 
 // ---------- storage ----------
 const KEY="cwd-v1";
-let store={done:{},notes:{},voice:true,log:[],doneAt:{},checks:[],retunes:[],people:{me:"",them:""},letter:{notes:true,work:false,state:false,msg:""}};
+let store={done:{},notes:{},voice:true,log:[],doneAt:{},checks:[],retunes:[],people:{me:"",them:""},letter:{notes:true,work:false,state:false,msg:"",find:false},findings:[],findSeq:0};
 try{const raw=localStorage.getItem(KEY); if(raw) store=Object.assign(store,JSON.parse(raw));}catch(e){}
 if(!Array.isArray(store.log)) store.log=[];
 ["checks","retunes"].forEach(k=>{if(!Array.isArray(store[k])) store[k]=[];});
 store.doneAt=store.doneAt||{}; store.people=Object.assign({me:"",them:""},store.people||{});
-store.letter=Object.assign({notes:true,work:false,state:false,msg:""},store.letter||{});
+store.letter=Object.assign({notes:true,work:false,state:false,msg:"",find:false},store.letter||{});
+if(!Array.isArray(store.findings)) store.findings=[];
+store.findSeq=Math.max(store.findSeq||0,...store.findings.map(f=>f.n||0));
 function save(){try{localStorage.setItem(KEY,JSON.stringify(store));}catch(e){}}
 
 const $=id=>document.getElementById(id);
@@ -587,6 +739,8 @@ function go(t){
   if(t==="together") renderTog();
   if(t==="start") renderStart();
   if(t==="close") renderClose();
+  if(t==="tone") renderTone();
+  if(t==="findings") renderFindings();
   if(t==="check"){answers=Array(QUESTIONS.length).fill(null);checkRecorded=false;renderQs();renderResult();}
   if(session){const j=STEPS.findIndex((x,k)=>x.tab===t||(x.alt===t&&k===session.i)); if(j>=0) session.i=j;}
   renderSess();
@@ -803,8 +957,8 @@ function settleBlock(e,i){
 function renderJournal(){
   const items=[];
   store.log.forEach((e,i)=>items.push(e.kind==="together"
-    ? `<li><div class="meta">Together · ${esc(e.names.join(" & "))} · ${esc(fmt(e.t))} · ${esc(e.verdict)}<span class="tag ${e.settled?"ok":"open"}">${e.settled?"Settled":"Open"}</span></div>${e.note?`<p>${esc(e.note)}</p>`:""}<p class="hint" style="margin:6px 0">${esc(e.summary)}</p><p><i>${esc(e.say)}</i></p>${settleBlock(e,i)}<div class="row" style="margin-top:8px"><button class="ghost" data-del="${i}">Delete</button></div></li>`
-    : `<li><div class="meta">Decoded moment · ${esc(fmt(e.t))} · ${esc(e.verdict)}<span class="tag ${e.settled?"ok":"open"}">${e.settled?"Settled":"Open"}</span></div>${e.note?`<p>${esc(e.note)}</p>`:""}<p class="hint" style="margin:6px 0">${esc(e.summary)}</p><p><i>${esc(e.say)}</i></p>${settleBlock(e,i)}<div class="row" style="margin-top:8px"><button class="ghost" data-del="${i}">Delete</button></div></li>`));
+    ? `<li><div class="meta">Together · ${esc(e.names.join(" & "))} · ${esc(fmt(e.t))} · ${esc(e.verdict)}<span class="tag ${e.settled?"ok":"open"}">${e.settled?"Settled":"Open"}</span></div>${e.note?`<p>${esc(e.note)}</p>`:""}<p class="hint" style="margin:6px 0">${esc(e.summary)}</p><p><i>${esc(e.say)}</i></p>${settleBlock(e,i)}<div class="row" style="margin-top:8px"><button class="ghost" data-lfe="${i}">Log a finding</button><button class="ghost" data-del="${i}">Delete</button></div></li>`
+    : `<li><div class="meta">Decoded moment · ${esc(fmt(e.t))} · ${esc(e.verdict)}<span class="tag ${e.settled?"ok":"open"}">${e.settled?"Settled":"Open"}</span></div>${e.note?`<p>${esc(e.note)}</p>`:""}<p class="hint" style="margin:6px 0">${esc(e.summary)}</p><p><i>${esc(e.say)}</i></p>${settleBlock(e,i)}<div class="row" style="margin-top:8px"><button class="ghost" data-lfe="${i}">Log a finding</button><button class="ghost" data-del="${i}">Delete</button></div></li>`));
   Object.keys(store.notes).forEach(k=>{
     const [id,s]=k.split(":"), sc=SCEN.find(x=>x.id===id); if(!sc||!store.notes[k]) return;
     items.push(`<li><div class="meta">Practice note · ${esc(sc.title)} · ${SN[s]}</div><p>${esc(store.notes[k])}</p><div class="row" style="margin-top:8px"><button class="ghost" data-open="${esc(k)}">Open practice</button></div></li>`);
@@ -813,13 +967,14 @@ function renderJournal(){
   $("entries").querySelectorAll("[data-del]").forEach(b=>b.onclick=()=>{store.log.splice(+b.dataset.del,1);save();renderJournal();});
   $("entries").querySelectorAll("[data-settle]").forEach(b=>b.onclick=()=>{const e=store.log[+b.dataset.settle];e.settled=!e.settled;save();renderJournal();});
   $("entries").querySelectorAll("[data-agree]").forEach(inp=>inp.onchange=()=>{store.log[+inp.dataset.agree].agreed=inp.value.trim().slice(0,200);save();});
+  $("entries").querySelectorAll("[data-lfe]").forEach(b=>b.onclick=()=>findingFromEntry(+b.dataset.lfe));
   $("entries").querySelectorAll("[data-open]").forEach(b=>b.onclick=()=>{const [id,s]=b.dataset.open.split(":");cur=id;st=s;renderList();go("practice");});
 }
 let wipeArm=null;
 $("wipe").onclick=()=>{
   if(!wipeArm){$("wipe").textContent="Tap again to erase everything";wipeArm=setTimeout(()=>{wipeArm=null;$("wipe").textContent="Clear all my data";},4000);return;}
   clearTimeout(wipeArm); wipeArm=null;
-  store={done:{},notes:{},voice:hasSpeech,log:[],doneAt:{},checks:[],retunes:[],people:{me:"",them:""},letter:{notes:true,work:false,state:false,msg:""}}; save(); togReset();
+  store={done:{},notes:{},voice:hasSpeech,log:[],doneAt:{},checks:[],retunes:[],people:{me:"",them:""},letter:{notes:true,work:false,state:false,msg:"",find:false},findings:[],findSeq:0}; save(); togReset(); fdraft=null; fresp=null;
   $("wipe").textContent="Cleared ✓"; setTimeout(()=>$("wipe").textContent="Clear all my data",1800);
   renderList(); renderJournal();
 };
@@ -1004,7 +1159,7 @@ const STEPS=[
  {tab:"retune",t:"Retune",h:"Recommended if you checked in keyed up or shut down. If you're steady, skip ahead."},
  {tab:"decode",t:"Decode the moment",h:"Mark where each of you was, then save it to the journal.",alt:"together"},
  {tab:"practice",t:"Practice",h:"The scenario that matches your biggest gap is already picked, in your current state."},
- {tab:"journal",t:"Record it",h:"Write what you agreed on the entry you just saved. Mark it settled once it really is."},
+ {tab:"journal",t:"Record it",h:"Write what you agreed on the entry you just saved, and mark it settled once it really is. If it keeps coming back, log it as a finding."},
  {tab:"close",t:"Close the books",h:"See whether everything reconciles, and print a summary for your partner."}
 ];
 let session=null;
@@ -1100,6 +1255,14 @@ function reconcile(days){
   if(open.length) focus.push({kind:"open",title:`${open.length} moment${open.length===1?"":"s"} still open`,text:"Talk these through, write down what you agreed, and mark them settled in the journal."});
   if(avgAcc!==null&&avgAcc<4) focus.push({kind:"read",title:"Misreading each other",text:"More than a third of your guesses about each other were off. Asking before assuming will clear a lot of the static."});
   if(topState&&topState!=="v"&&sc[topState]>=2) focus.push({kind:"state",title:`Mostly checking in ${SN[topState].toLowerCase()}`,text:topState==="s"?"You've usually been keyed up. Starting each session with the long-exhale retune should help everything after it.":"You've often been low or far away. The look-around retune and smaller, shorter conversations may work better for now."});
+  const FA=store.findings.filter(f=>f.sev!=="obs"&&f.status!=="closed");
+  if(store.findings.some(f=>f.sev!=="obs")){
+    const aw=FA.filter(f=>!f.response).length, pd=FA.filter(isPastDue).length;
+    checks.push({t:"Every finding has a management response",pass:aw===0,d:aw?`${aw} waiting on a response`:"All findings have one"});
+    checks.push({t:"No corrective action is past due",pass:pd===0,d:pd?`${pd} past the target date`:"All plans on schedule"});
+    if(aw||pd) focus.push({kind:"findings",title:[aw?`${aw} finding${aw===1?"":"s"} awaiting a response`:"",pd?`${pd} plan${pd===1?"":"s"} past due`:""].filter(Boolean).join(", "),
+      text:aw?"A corrective action plan can't start until the receiving partner logs a management response.":"Revisit the target date or the action at the weekly close."});
+  }
   const practices=Object.keys(store.done).filter(k=>store.done[k]&&(!store.doneAt[k]||store.doneAt[k]>=since)).length;
   const retunes=store.retunes.filter(t=>t>=since).length;
   const reconciled=items.length>0&&checks.every(c=>c.pass!==false);
@@ -1117,24 +1280,27 @@ function renderClose(){
     $("recon").innerHTML=`<p class="status ${r.reconciled?"ok":"no"}">${r.reconciled?"The books reconcile":"Not yet reconciled"}</p>
       <p style="margin:0">${r.reconciled?"Every logged moment is settled and every gap has had attention. Nice work closing the loop.":"Here's what's keeping the books from balancing, and where to put your attention next."}</p>
       <ul class="ckl">${r.checks.map(c=>`<li><span class="mk" style="color:var(${c.pass===null?"--muted":c.pass?"--v":"--s"})">${c.pass===null?"–":c.pass?"✓":"✗"}</span><span>${c.t}<small>${esc(c.d)}</small></span></li>`).join("")}</ul>
-      ${r.focus.length?`<h2 style="margin-top:18px">Areas of focus</h2><ol class="focus">${r.focus.map((f,k)=>`<li><b>${esc(f.title)}</b><br>${esc(f.text)}${f.kind==="channel"?`<br><button class="ghost" data-sc="${f.scen}">Practice: ${esc(SCEN.find(x=>x.id===f.scen).title)}</button>`:f.kind==="open"?`<br><button class="ghost" data-j="1">Open the journal</button>`:f.kind==="read"?`<br><button class="ghost" data-t="1">Try a Together session</button>`:f.kind==="state"?`<br><button class="ghost" data-rt="1">Go to Retune</button>`:""}</li>`).join("")}</ol>`:""}
+      ${r.focus.length?`<h2 style="margin-top:18px">Areas of focus</h2><ol class="focus">${r.focus.map((f,k)=>`<li><b>${esc(f.title)}</b><br>${esc(f.text)}${f.kind==="channel"?`<br><button class="ghost" data-sc="${f.scen}">Practice: ${esc(SCEN.find(x=>x.id===f.scen).title)}</button> <button class="ghost" data-lf="${f.c}">Log a finding</button>`:f.kind==="open"?`<br><button class="ghost" data-j="1">Open the journal</button>`:f.kind==="read"?`<br><button class="ghost" data-t="1">Try a Together session</button>`:f.kind==="state"?`<br><button class="ghost" data-rt="1">Go to Retune</button>`:f.kind==="findings"?`<br><button class="ghost" data-fd="1">Open findings</button>`:""}</li>`).join("")}</ol>`:""}
       <p class="hint" style="margin:16px 0 0">These checks are rules of thumb for reflection, not a score. The books describe the arrangement, never either person's worth.</p>`;
     $("recon").querySelectorAll("[data-sc]").forEach(b=>b.onclick=()=>{cur=b.dataset.sc;renderList();go("practice");});
     $("recon").querySelectorAll("[data-j]").forEach(b=>b.onclick=()=>go("journal"));
     $("recon").querySelectorAll("[data-t]").forEach(b=>b.onclick=()=>go("together"));
     $("recon").querySelectorAll("[data-rt]").forEach(b=>b.onclick=()=>go("retune"));
+    $("recon").querySelectorAll("[data-lf]").forEach(b=>b.onclick=()=>findingFromChannel(+b.dataset.lf));
+    $("recon").querySelectorAll("[data-fd]").forEach(b=>b.onclick=()=>go("findings"));
   }
   $("pme").value=store.people.me; $("pthem").value=store.people.them;
-  $("inc-notes").checked=store.letter.notes; $("inc-work").checked=store.letter.work; $("inc-state").checked=store.letter.state; $("pmsg").value=store.letter.msg;
+  $("inc-notes").checked=store.letter.notes; $("inc-work").checked=store.letter.work; $("inc-state").checked=store.letter.state; $("pmsg").value=store.letter.msg; $("inc-find").checked=!!store.letter.find;
+  mountTone($("pmsg-tone"),$("pmsg"),pmsgTone,true);
   renderLetter(r);
 }
 function letterSave(){
   store.people.me=$("pme").value.trim().slice(0,24); store.people.them=$("pthem").value.trim().slice(0,24);
-  store.letter={notes:$("inc-notes").checked,work:$("inc-work").checked,state:$("inc-state").checked,msg:$("pmsg").value.slice(0,2000)};
+  store.letter={notes:$("inc-notes").checked,work:$("inc-work").checked,state:$("inc-state").checked,msg:$("pmsg").value.slice(0,2000),find:$("inc-find").checked};
   save(); renderLetter(reconcile(period));
 }
 ["pme","pthem","pmsg"].forEach(id=>$(id).addEventListener("input",letterSave));
-["inc-notes","inc-work","inc-state"].forEach(id=>$(id).addEventListener("change",letterSave));
+["inc-notes","inc-work","inc-state","inc-find"].forEach(id=>$(id).addEventListener("change",letterSave));
 
 const ASK=[
  {up:"I tend to move faster than you do in these moments, and I'm working on slowing down. If I speed up, saying “can we slow down?” really helps.",
@@ -1176,12 +1342,420 @@ function renderLetter(r){
   if(L.work&&(r.practices||r.retunes)) parts.push(`<h2>What I've been working on</h2><p>${[r.practices?`I've done ${r.practices} guided practice${r.practices===1?"":"s"} on my own`:"",r.retunes?`I've used a one-minute reset ${r.retunes} time${r.retunes===1?"":"s"} before or during hard conversations`:""].filter(Boolean).join(", and ")}.</p>`);
   if(L.state&&r.topState){const w={v:"steady and open",s:"keyed up",d:"low or far away"}[r.topState];
     parts.push(`<h2>How I've been showing up</h2><p>When I've checked in with myself, I've most often been ${w}. ${r.topState==="s"?"If I seem quick or sharp, that's usually my body running hot, not how I feel about you.":r.topState==="d"?"If I seem distant or quiet, that's usually me running low, not pulling away from you.":"That's made these conversations easier."}</p>`);}
+  if(L.find){
+    const A=store.findings.filter(f=>f.sev!=="obs"&&f.status!=="closed"), C=store.findings.filter(f=>f.status==="closed");
+    if(A.length) parts.push(`<h2>What we're working on</h2><ul>${A.map(f=>`<li><b>${esc(f.title)}</b> (${esc(sevName(f.sev).toLowerCase())}). The plan: ${esc(f.cap.action.replace(/[.!?]\s*$/,""))}. Status: ${esc(STATUS[f.status].toLowerCase())}${f.response?`; ${esc(f.response.by)} responded “${esc(STANCE[f.response.stance].toLowerCase())}.”`:`, waiting on ${esc(f.to)}'s response.`}</li>`).join("")}</ul>`);
+    if(C.length) parts.push(`<h2>What we've fixed</h2><ul>${C.map(f=>`<li><b>${esc(f.title)}</b>${f.growth?`: ${esc(f.growth)}`:""}</li>`).join("")}</ul>`);
+  }
   parts.push(`<h2>An invitation</h2><p>${r.reconciled?"Could we keep closing the books together once a week? Twenty minutes, starting with what went right.":"Could we find twenty minutes this week to look at this together? No verdicts, just a look at where our signals crossed and one small change to try."}</p>`);
   parts.push(`<p class="sig">${me?`With care,<br>${esc(me)}`:"With care"}</p>`);
   parts.push(`<p class="fine">Made with the Carrier Wave Decoder from The Objective Ledger (TOL‑OS), spreadloveandacceptance.com. It isn't therapy or a clinical assessment, and it measures nothing about either person's worth.</p>`);
   $("printout").innerHTML=parts.join("");
 }
 $("printbtn").onclick=()=>{try{window.print();}catch(e){}};
+
+// ---------- tone check (WP-09: client-side guarantee) ----------
+// Runs only in this browser, only on the writer's own draft. Results are never stored,
+// never sent, and never shown to the other partner. Suggestions never block copying,
+// using, or sending a draft: the writer always has the final say.
+const LABEL_WORDS="lazy|selfish|inconsiderate|careless|useless|ridiculous|pathetic|stupid|irresponsible|childish|crazy|dramatic|immature|clueless|rude|incompetent|hopeless|unreliable|controlling|needy|petty|disrespectful";
+const LABEL_RE=new RegExp("\\b(?:"+LABEL_WORDS+")\\b","i");
+const CAUSAL_RE=/\b(?:because|due to|caused by|as a result of|which is why|that['’]s why|that is why|the reason)\b/i;
+const DAYS="(?:mon|tues|wednes|thurs|fri|satur|sun)day";
+const TIME_RE=new RegExp("\\b(?:by|at|before|after|until|around)\\s+(?:\\d{1,2}(?::\\d{2})?\\s?(?:am|pm)?|noon|midnight|tonight|tomorrow|today|dinner|lunch|breakfast|bedtime|pickup|the weekend|this \\w+|next \\w+|"+DAYS+")\\b|\\b(?:tonight|today|tomorrow|this (?:morning|afternoon|evening|week|weekend)|\\d{1,2}(?::\\d{2})?\\s?(?:am|pm)|noon|"+DAYS+")\\b","i");
+const FEEL_RE=/\b(?:frustrated|tired|hurt|worried|anxious|overwhelmed|stressed|sad|unseen|rushed|upset|disappointed|lonely|confused|angry|annoyed|stretched|ignored|embarrassed|scared|nervous|exhausted|drained|unheard|dismissed|grateful|happy|relieved|stuck)\b/i;
+const TONE_RULES=[
+ {id:"label",hard:true,name:"Label",re:new RegExp("\\byou(?:['’]re| are) (?:so |such an? |being |acting )?(?:"+LABEL_WORDS+")\\b|\\b(?:"+LABEL_WORDS+")\\b","gi"),
+  why:"Character words put the other person on trial, so they defend who they are instead of hearing what happened.",fix:"Describe the action instead: what was done or not done, and when."},
+ {id:"absolute",hard:true,name:"Absolute",re:/\b(?:always|never|every single time|every time|constantly|nothing ever|not once)\b/gi,
+  why:"Absolutes turn one moment into a verdict on all of them, and the other person argues the exception instead.",fix:"Point to the specific time, like “on Tuesday” or “twice this week.”"},
+ {id:"blame",hard:true,name:"Blame question",re:/\bwhy (?:didn['’]t|don['’]t|can['’]t|won['’]t|wouldn['’]t|haven['’]t|couldn['’]t|do|did|would|are|can) you\b/gi,
+  why:"“Why did you…” asks for a defense, not a solution.",fix:"Turn it into a request: “Could you … by [time]?”"},
+ {id:"directive",hard:true,name:"Order",re:/\byou (?:need to|have to|should|must|better)\b/gi,
+  why:"Orders tend to land as a ranking, even when you mean them as a plan.",fix:"Ask instead of tell.",swap:()=>"could you"},
+ {id:"youmake",hard:true,name:"“You make me”",re:/\byou make me(?: feel)?\b/gi,
+  why:"It hands your feeling to them to fix, which usually starts a debate about whether they caused it.",fix:"Own the feeling: “I feel … when …”.",swap:m=>/feel/i.test(m)?"I feel":null},
+ {id:"stop",hard:true,name:"Stop-request",re:/\b(?:stop|quit) \w+ing\b/gi,
+  why:"It says what you don't want, so the other person has to guess what you do.",fix:"Name what you'd like instead, like “Could the dishes go in the dishwasher tonight?”"},
+ {id:"dismiss",hard:true,name:"Dismissive",re:/\b(?:whatever|forget it|never mind|as usual|typical|must be nice|thanks a lot|of course you did)\b/gi,
+  why:"These often read as sarcasm or giving up, even when you mean them lightly.",fix:"Say the plain version of what you feel."},
+ {id:"caps",hard:true,name:"Capitals",re:/\b[A-Z]{2,}(?:\s+[A-Z]{2,})+\b|\b[A-Z]{4,}\b/g,skip:m=>/^(?:ASAP|RACI|CALC|FYI)$/.test(m),
+  why:"Capitals read as shouting.",fix:"Let the words carry the weight.",swap:m=>m.toLowerCase()},
+ {id:"bang",hard:true,name:"Stacked punctuation",re:/[?!]*(?:!{2,}|\?{2,}|\?!|!\?)[?!]*/g,
+  why:"Stacked marks read as raised voices.",fix:"One mark is enough.",swap:m=>m.includes("?")?"?":"."},
+ {id:"stack",hard:false,name:"Stacking",re:/\b(?:and another thing|another thing|while we['’]re at it|while we are at it|not to mention|on top of that|and also)\b/gi,
+  why:"Adding more issues makes it harder to fix any one of them.",fix:"Pick the one that's material and save the rest for the weekly close."},
+ {id:"vague",hard:false,name:"Vague timing",re:/\b(?:when you get a chance|at some point|soon|later|whenever|eventually|asap|sometime)\b/gi,
+  why:"Timing words mean different windows to different people. That's the urgency channel from Chapter I.",fix:"Name a real time.",swap:m=>/later/i.test(m)?"at [time]":"by [time]"}
+];
+function toneScan(text,ignored){
+  const hits=[];
+  TONE_RULES.forEach((r,ri)=>{r.re.lastIndex=0;let m;
+    while((m=r.re.exec(text))){ if(!m[0].length){r.re.lastIndex++;continue;} if(r.skip&&r.skip(m[0])) continue;
+      hits.push({ri,r,start:m.index,end:m.index+m[0].length,text:m[0]}); }});
+  hits.sort((a,b)=>a.start-b.start||(b.end-b.start)-(a.end-a.start)||a.ri-b.ri);
+  const out=[]; let last=0;
+  hits.forEach(h=>{if(h.start>=last){out.push(h);last=h.end;}});
+  return out.filter(h=>!ignored.has(h.r.id+"|"+h.text.toLowerCase()));
+}
+function toneGood(text,hits){
+  const t=text.trim(), first=t.split(/[.!?\n]/)[0]||"";
+  const ask=/\b(?:could you|would you|can you|can we|could we|would it|i['’]d like|i would like|let['’]s|let us|please|would you be willing|are you open to|how about)\b/i.test(t);
+  return [
+   {ok:/\b(?:thank|thanks|appreciate|grateful|i know|i love|i care|we both|i want us|i['’]d like us|i want to get this right|i['’]m glad)\b/i.test(first),t:"Opens with appreciation or a shared goal",opt:true},
+   {ok:/\bi (?:feel|felt)\b/i.test(t)||(/\bi(?:['’]m| am| was| get)\b/i.test(t)&&FEEL_RE.test(t)),t:"Says how you feel, in an “I” sentence"},
+   {ok:ask,t:"Makes one clear ask"},
+   {ok:ask&&TIME_RE.test(t),t:"Puts a real time on the ask",opt:true},
+   {ok:!hits.some(h=>h.r.id==="stack"),t:"Sticks to one issue"}
+  ];
+}
+function atSentenceStart(text,i){const b=text.slice(0,i).replace(/\s+$/,"");return !b||/[.!?\n]$/.test(b);}
+function markPreview(text,hits){let o="",p=0;hits.forEach(h=>{o+=esc(text.slice(p,h.start))+`<mark class="${h.r.hard?"":"soft"}" title="${esc(h.r.name)}">${esc(h.text)}</mark>`;p=h.end;});return o+esc(text.slice(p));}
+function mountTone(mount,ta,st,compact){
+  if(!mount||!ta) return;
+  const text=ta.value, hits=toneScan(text,st.ignored);
+  const hard=hits.filter(h=>h.r.hard).length, soft=hits.length-hard; st.hard=hard;
+  const iw={info:"just information",warm:"warm",firm:"firm"}[st.intent||"warm"];
+  let sum;
+  if(!text.trim()) sum=compact?"Suggestions appear here as you type.":"Start typing. Suggestions appear here as you go, the way a spell-checker's do.";
+  else if(st.intent==="firm") sum=hard?`You've chosen to be firm, and that's allowed. ${hard} phrase${hard===1?"":"s"} may land as a verdict rather than a request.`:"Firm and clear. Nothing here tends to land as a verdict.";
+  else sum=hard?`You mean this as ${iw}. ${hard} phrase${hard===1?"":"s"} often land${hard===1?"s":""} sharper than that.`:`Nothing here tends to land sharper than ${iw}.`;
+  if(text.trim()&&soft) sum+=` ${soft} more suggestion${soft===1?"":"s"} could make it clearer.`;
+  const list=hits.length?`<ul class="tc-list">${hits.map((h,k)=>{const rep=h.r.swap?h.r.swap(h.text):null;
+    return `<li class="${h.r.hard?"":"soft"}"><q>${esc(h.text)}</q> <span class="kind">${esc(h.r.name)}</span><span class="why">${esc(h.r.why)} ${esc(h.r.fix)}</span><span class="row">${rep?`<button class="ghost" data-rep="${k}">Replace with “${esc(rep)}”</button>`:""}<button class="ghost" data-ign="${k}">Ignore</button></span></li>`;}).join("")}</ul>`:"";
+  if(compact){
+    mount.innerHTML=`<div class="tc-head"><span>Private tone check, only you see this: ${text.trim()?(hits.length?`${hits.length} suggestion${hits.length===1?"":"s"}`:"no suggestions"):"waiting for text"}</span>${hits.length?`<button type="button" data-tog>${st.open?"Hide":"Show"}</button>`:""}</div>${st.open&&hits.length?`<p class="tc-sum">${esc(sum)}</p>${list}`:""}`;
+  }else{
+    const G=text.trim()?toneGood(text,hits):[];
+    mount.innerHTML=`<h2>Private suggestions</h2><p class="tc-sum">${esc(sum)}</p>
+      ${text.trim()?`<div class="tc-preview" aria-label="Your draft with suggestions marked">${markPreview(text,hits)}</div>`:""}
+      ${list}
+      ${G.length?`<h2 style="margin-top:18px">What's working</h2><ul class="good">${G.map(g=>`<li><span class="mk" style="color:var(${g.ok?"--v":"--muted"})">${g.ok?"✓":"○"}</span><span>${g.t}${g.opt?` <small>(optional)</small>`:""}</span></li>`).join("")}</ul>`:""}
+      <p class="hint" style="margin:16px 0 0">Only you see these suggestions. They're never saved, sent, or added to the journal, the letter, or a finding.</p>`;
+  }
+  mount.querySelectorAll("[data-rep]").forEach(b=>b.onclick=()=>{
+    const hs=toneScan(ta.value,st.ignored), h=hs[+b.dataset.rep]; if(!h||!h.r.swap) return;
+    let rep=h.r.swap(h.text); if(!rep) return;
+    if(atSentenceStart(ta.value,h.start)) rep=rep.charAt(0).toUpperCase()+rep.slice(1);
+    ta.value=ta.value.slice(0,h.start)+rep+ta.value.slice(h.end);
+    ta.dispatchEvent(new Event("input",{bubbles:true})); ta.focus();
+    const pos=h.start+rep.length; try{ta.setSelectionRange(pos,pos);}catch(e){}
+  });
+  mount.querySelectorAll("[data-ign]").forEach(b=>b.onclick=()=>{const h=hits[+b.dataset.ign]; if(h){st.ignored.add(h.r.id+"|"+h.text.toLowerCase());} mountTone(mount,ta,st,compact);});
+  const tg=mount.querySelector("[data-tog]"); if(tg) tg.onclick=()=>{st.open=!st.open;mountTone(mount,ta,st,compact);};
+}
+
+const INTENTS=[["info","Just info"],["warm","Warm"],["firm","Firm"]];
+const toneState={intent:"warm",ignored:new Set(),hard:0};
+function renderTone(){
+  $("intent").innerHTML=INTENTS.map(([k,l])=>`<button type="button" data-in="${k}" aria-pressed="${toneState.intent===k}">${l}</button>`).join("");
+  $("intent").querySelectorAll("[data-in]").forEach(b=>b.onclick=()=>{toneState.intent=b.dataset.in;renderTone();});
+  mountTone($("t-out"),$("draft"),toneState,false);
+}
+$("draft").addEventListener("input",()=>mountTone($("t-out"),$("draft"),toneState,false));
+const sentence=s=>{s=String(s||"").trim();if(!s)return "";s=s.charAt(0).toUpperCase()+s.slice(1);return /[.!?]$/.test(s)?s:s+".";};
+let bArm=null;
+$("b-go").onclick=()=>{
+  const ap=$("b-appr").value, fa=$("b-fact").value, fe=$("b-feel").value.trim(), as=$("b-ask").value.trim();
+  if(!fa.trim()&&!fe&&!as){$("b-go").textContent="Fill in at least the fact or the ask";setTimeout(()=>$("b-go").textContent="Write it into the draft",1800);return;}
+  if($("draft").value.trim()&&!bArm){$("b-go").textContent="Tap again to replace your draft";bArm=setTimeout(()=>{bArm=null;$("b-go").textContent="Write it into the draft";},4000);return;}
+  clearTimeout(bArm); bArm=null; $("b-go").textContent="Write it into the draft";
+  const feel=fe?(/^i\b|^i['’]/i.test(fe)?sentence(fe):sentence("I'm feeling "+fe.replace(/^(?:i['’]m|i am)\s+(?:feeling\s+)?/i,""))):"";
+  let ask=as?as.charAt(0).toUpperCase()+as.slice(1):"";
+  if(ask&&!/[.!?]$/.test(ask)) ask+=/^(?:could|can|would|will|is|are|do|does|shall|should|may)\b/i.test(ask)?"?":".";
+  $("draft").value=[sentence(ap),sentence(fa),feel,ask].filter(Boolean).join(" ");
+  $("draft").dispatchEvent(new Event("input",{bubbles:true}));
+};
+$("t-copy").onclick=async()=>{
+  const txt=$("draft").value; let ok=false;
+  try{await navigator.clipboard.writeText(txt);ok=true;}catch(e){}
+  if(!ok){try{$("draft").select();ok=document.execCommand("copy");}catch(e){}}
+  $("t-copy").textContent=ok?"Copied ✓":"Selected, press copy"; setTimeout(()=>$("t-copy").textContent="Copy draft",1800);
+};
+$("t-letter").onclick=()=>{store.letter.msg=$("draft").value.slice(0,2000);save();go("close");setTimeout(()=>{$("pmsg").focus();},50);};
+let tcArm=null;
+$("t-clear").onclick=()=>{
+  if(!tcArm){$("t-clear").textContent="Tap again to clear";tcArm=setTimeout(()=>{tcArm=null;$("t-clear").textContent="Clear";},4000);return;}
+  clearTimeout(tcArm); tcArm=null; $("t-clear").textContent="Clear";
+  $("draft").value=""; toneState.ignored.clear(); mountTone($("t-out"),$("draft"),toneState,false);
+};
+const pmsgTone={intent:"warm",ignored:new Set(),open:false};
+$("pmsg").addEventListener("input",()=>mountTone($("pmsg-tone"),$("pmsg"),pmsgTone,true));
+
+// ---------- findings & corrective action plans ----------
+// Four-Part Finding Rule (WP-04): Deficiency and above cannot be logged without a factual
+// Condition, a Criteria, a systemic Cause, and an Effect, kept separate from each other.
+// Management Response Workflow: a plan cannot move from Open to In progress until the
+// receiving partner has logged Agree / Partly agree / Disagree plus their own view.
+const SEV=[
+ {id:"obs",n:"Observation",h:"A one-off with a small effect, often already corrected. Noted, no plan needed."},
+ {id:"def",n:"Deficiency",h:"A gap that could recur, with a limited effect. A quick fix with a named owner."},
+ {id:"sig",n:"Significant deficiency",h:"Recurring or clearly felt, or several small gaps in one area adding up. A full plan, reviewed at the weekly close."},
+ {id:"mat",n:"Material weakness",h:"Your usual repairs aren't catching it: moments stay open, it's a repeat, an agreement was broken, or trust was breached. A priority plan, reviewed monthly."}
+];
+const SEV_I=id=>SEV.findIndex(s=>s.id===id);
+const sevName=id=>(SEV[SEV_I(id)]||SEV[0]).n;
+const CAUSES=[
+ {id:"pace",n:"Pace mismatch",h:"One of you was moving faster than the other (Chapter I)"},
+ {id:"reg",n:"Tone mismatch",h:"What was meant as information landed as something sharper"},
+ {id:"urg",n:"Timing mismatch",h:"Different windows for “soon” or “when you get a chance”"},
+ {id:"structural",n:"Structural gap",h:"No named owner, or the named owner isn't who actually does it (WP-03)"},
+ {id:"capacity",n:"Capacity issue",h:"The owner has been unable to keep up with it"},
+ {id:"standard",n:"No agreed standard",h:"You never agreed what “done” or “on time” means"},
+ {id:"oneoff",n:"Temporary circumstance",h:"Illness, travel, or an unusually hard week (a WP-04 one-off)"}
+];
+const causeName=id=>(CAUSES.find(c=>c.id===id)||{n:""}).n;
+const STATUS={noted:"Noted",open:"Open",progress:"In progress",remediated:"Remediated",closed:"Closed"};
+const STANCE={agree:"Agree",partly:"Partly agree",disagree:"Disagree"};
+const STANCE_H={agree:"This describes what happened, and the plan makes sense to me.",partly:"Some of it fits. I'll say which part doesn't.",disagree:"I see it differently. My view is recorded next to the finding, not overruled."};
+const HOLD_DAYS=28;
+const fid=f=>"F-"+String(f.n).padStart(2,"0");
+function fmtDay(t){try{return new Date(t).toLocaleDateString([], {month:"short",day:"numeric",year:"numeric"});}catch(e){return "";}}
+function dueDate(s){const m=String(s||"").match(/^(\d{4})-(\d{2})-(\d{2})$/);return m?new Date(+m[1],+m[2]-1,+m[3],23,59,59):null;}
+function isPastDue(f){const d=f.cap&&dueDate(f.cap.due);return !!d&&(f.status==="open"||f.status==="progress")&&Date.now()>d.getTime();}
+function overlap(a,b){const w=s=>new Set(String(s).toLowerCase().replace(/[^a-z0-9\s]/g," ").split(/\s+/).filter(x=>x.length>2));
+  const A=w(a),B=w(b); if(A.size<4||B.size<4) return 0; let i=0; A.forEach(x=>{if(B.has(x))i++;}); return i/Math.min(A.size,B.size);}
+const ownerName=(f,o)=>o==="by"?f.by:o==="to"?f.to:"Both of you";
+
+function priorFor(causeType,exceptId){return store.findings.find(f=>f.id!==exceptId&&f.causeType===causeType&&(f.status==="closed"||f.status==="remediated"));}
+function suggestFor(causeType,c,days){
+  const r=reconcile(days), flag=c>=0?r.ch[c].flag:0, total=r.items.length;
+  let i=flag>=3||(flag>=2&&total&&flag/total>=.75)?2:flag>=2?1:flag===1?0:1;
+  const prior=priorFor(causeType);
+  if(prior) i=Math.min(3,Math.max(i,SEV_I(prior.sev))+1);
+  const per=days?`the last ${days} days`:"everything logged";
+  const why=(c>=0?`${CHANNELS[c].name} showed a gap in ${flag} of ${total} logged moment${total===1?"":"s"} in ${per}.`:"")+(prior?` ${fid(prior)} covered the same cause before, so this is a repeat finding and moves up a level.`:"");
+  return {sev:SEV[i].id,why:why.trim(),repeatOf:prior?prior.id:null};
+}
+
+let fdraft=null, fresp=null, ffilter="active";
+function newDraft(p){return Object.assign({id:null,title:"",sev:"def",condition:"",criteria:"",noStd:false,causeType:"",cause:"",effect:"",
+  by:store.people.me||"",to:store.people.them||"",action:"",owner:"both",due:"",test:"",sources:[],suggest:null,repeatOf:null},p||{});}
+function openFindingForm(p){fresp=null;fdraft=newDraft(p);go("findings");renderWork();setTimeout(()=>{$("fwork").scrollIntoView({behavior:reduceMotion?"auto":"smooth",block:"start"});const t=$("ff-title");if(t)t.focus();},60);}
+function findingFromEntry(i){
+  const e=store.log[i]; if(!e) return; const m=metrics(e); let c=-1;
+  if(m){const g=[0,1,2].map(k=>Math.abs(m.mine[k]-m.theirs[k])+(m.mis?m.mis[k]:0)); const mx=Math.max(...g); if(mx>0) c=g.indexOf(mx);}
+  const causeType=c>=0?CHANNELS[c].id:"", sug=c>=0?suggestFor(causeType,c,30):null;
+  openFindingForm({title:(e.note||(c>=0?`Recurring ${CH_WORD[c]} gap`:"Decoded moment")).slice(0,90),
+    condition:`${fmtDay(e.t)}${e.note?`, “${e.note}”`:""}. ${e.summary}.`.replace(/\.\./g,"."),
+    causeType,sev:sug?sug.sev:"def",suggest:sug,repeatOf:sug&&sug.repeatOf,sources:[e.t]});
+}
+function findingFromChannel(c){
+  const r=reconcile(period), causeType=CHANNELS[c].id, sug=suggestFor(causeType,c,period);
+  const per=period?`the last ${period} days`:"everything logged so far";
+  openFindingForm({title:`Recurring ${CH_WORD[c]} gap`,condition:`In ${per}, ${CHANNELS[c].name.toLowerCase()} showed a gap in ${r.ch[c].flag} of ${r.items.length} logged moment${r.items.length===1?"":"s"}.`,
+    causeType,sev:sug.sev,suggest:sug,repeatOf:sug.repeatOf,sources:r.items.filter(e=>{const m=metrics(e);return m&&m.mine[c]!==m.theirs[c];}).map(e=>e.t)});
+}
+
+function validateFinding(fd){
+  const e=[], full=fd.sev!=="obs", strict=fd.sev==="sig"||fd.sev==="mat", L=s=>String(s||"").trim().length;
+  if(L(fd.title)<3) e.push("Give the finding a short name.");
+  if(L(fd.condition)<10) e.push("Condition: describe what happened, as fact.");
+  if(LABEL_RE.test(fd.condition)) e.push("Condition includes a character word. Describe the action instead.");
+  if(!full) return e;
+  if(CAUSAL_RE.test(fd.condition)) e.push("Condition includes a reason (“because…”). Keep Condition to what happened, and move the why to Cause.");
+  if(!fd.noStd&&L(fd.criteria)<5) e.push("Criteria: say what was expected, or check “No shared standard exists yet.”");
+  if(!fd.causeType) e.push("Cause: choose the systemic cause.");
+  if(L(fd.cause)<10) e.push("Cause: explain what in the arrangement allowed this.");
+  if(LABEL_RE.test(fd.cause)) e.push("Cause includes a character word. A cause here is something in the arrangement, not who someone is.");
+  if(overlap(fd.condition,fd.cause)>.8) e.push("Condition and Cause say the same thing. Condition is what happened; Cause is why the arrangement let it happen.");
+  if(L(fd.effect)<10) e.push("Effect: describe what it cost the arrangement.");
+  if(!L(fd.by)||!L(fd.to)) e.push("Add both names. The receiving partner logs the management response.");
+  else if(fd.by.trim().toLowerCase()===fd.to.trim().toLowerCase()) e.push("The receiving partner has to be someone other than the person logging the finding.");
+  if(L(fd.action)<8) e.push("Corrective action: name one specific change.");
+  if(strict&&!dueDate(fd.due)) e.push("Target date: required for a significant deficiency or material weakness.");
+  if(strict&&L(fd.test)<8) e.push("How we'll know it's fixed: required for a significant deficiency or material weakness.");
+  return e;
+}
+function saveFinding(){
+  const fd=fdraft, errs=validateFinding(fd), box=$("ff-errs");
+  if(errs.length){box.innerHTML=errs.map(x=>`<li>${esc(x)}</li>`).join("");box.hidden=false;box.focus();return;}
+  const now=Date.now(), clip=(s,n)=>String(s||"").trim().slice(0,n||1200), obs=fd.sev==="obs";
+  const data={title:clip(fd.title,90),sev:fd.sev,condition:clip(fd.condition),criteria:obs||fd.noStd?"":clip(fd.criteria),noStd:!obs&&!!fd.noStd,
+    causeType:obs?"":fd.causeType,cause:obs?"":clip(fd.cause),effect:obs?"":clip(fd.effect),by:clip(fd.by,24),to:clip(fd.to,24),
+    cap:obs?null:{action:clip(fd.action,600),owner:fd.owner,due:fd.due||"",test:clip(fd.test,600)}};
+  if(fd.id){
+    const f=store.findings.find(x=>x.id===fd.id); if(!f) return;
+    const had=!!f.response, prev=f.status;
+    if(had){f.superseded=f.superseded||[];f.superseded.push(Object.assign({supersededAt:now},f.response));f.response=null;}
+    Object.assign(f,data); f.status=obs?"noted":"open"; if(!obs){delete f.startedAt;}
+    f.hist.push({t:now,ev:`Revised as ${sevName(f.sev)}${had?"; the earlier management response was superseded":""}${prev!==f.status?`; status ${STATUS[prev]} → ${STATUS[f.status]}`:""}`,by:data.by});
+  }else{
+    store.findSeq=(store.findSeq||0)+1;
+    const repeatOf=fd.repeatOf||(obs?null:(priorFor(fd.causeType)||{}).id||null);
+    store.findings.unshift(Object.assign({id:"f"+now.toString(36),n:store.findSeq,t:now,status:obs?"noted":"open",response:null,sources:fd.sources||[],repeatOf,
+      hist:[{t:now,ev:`Logged as ${sevName(fd.sev)}${repeatOf?" (repeat finding)":""}`,by:data.by}]},data));
+  }
+  if(data.by&&!store.people.me) store.people.me=data.by; if(data.to&&!store.people.them) store.people.them=data.to;
+  save(); fdraft=null; renderFindings();
+}
+
+function renderWork(){
+  const w=$("fwork");
+  if(fresp){renderResp();return;}
+  if(!fdraft){w.hidden=true;w.innerHTML="";return;}
+  w.hidden=false; const fd=fdraft, full=fd.sev!=="obs", strict=fd.sev==="sig"||fd.sev==="mat";
+  const editing=fd.id?store.findings.find(x=>x.id===fd.id):null;
+  const opt=(v,cur,l)=>`<option value="${v}"${v===cur?" selected":""}>${l}</option>`;
+  const prior=full&&fd.causeType?priorFor(fd.causeType,fd.id):null;
+  w.innerHTML=`<h3>${editing?`Revise ${fid(editing)}`:"Log a finding"}</h3>
+    ${fd.suggest&&fd.suggest.why?`<p class="hint" style="margin:0 0 10px">Suggested from your logs: <b>${sevName(fd.suggest.sev)}</b>. ${esc(fd.suggest.why)}</p>`:""}
+    ${editing&&editing.response?`<p class="warn">Revising supersedes ${esc(editing.to)}'s management response. They'll need to respond again, and the plan goes back to Open.</p>`:""}
+    <div class="field wide"><label for="ff-title">Short name</label><input type="text" id="ff-title" data-f="title" maxlength="90" value="${esc(fd.title)}" placeholder="Timing requests without a named time"></div>
+    <p class="lab" style="margin:16px 0 4px">Severity</p>
+    <div class="sev" role="group" aria-label="Severity">${SEV.map(s=>`<button type="button" data-sev="${s.id}" aria-pressed="${fd.sev===s.id}"><b>${s.n}</b><span>${s.h}</span></button>`).join("")}</div>
+    <p class="hint" style="margin:6px 0 0">Not on this scale: anything involving fear or safety. That isn't an arrangement to fix together. Reach out to someone you trust or a local support line; in the US, the National Domestic Violence Hotline is 1-800-799-7233.</p>
+    <div class="four">
+      <div class="part"><label for="ff-condition">Condition</label><small>What happened, as fact: when, how often, what was said or done. No reasons and no labels.</small><textarea id="ff-condition" data-f="condition">${esc(fd.condition)}</textarea></div>
+      ${full?`
+      <div class="part"><label for="ff-criteria">Criteria</label><small>What was expected: the agreement or reasonable standard this is measured against.</small><textarea id="ff-criteria" data-f="criteria"${fd.noStd?" disabled":""}>${esc(fd.criteria)}</textarea>
+        <label class="chk"><input type="checkbox" id="ff-nostd"${fd.noStd?" checked":""}> No shared standard exists yet. That becomes part of the finding, and the plan should set one.</label></div>
+      <div class="part"><label for="ff-causeType">Cause</label><small>What in the arrangement allowed this. Choose the systemic cause, then explain it. A person's character can't be a cause here.</small>
+        <select id="ff-causeType" data-f="causeType">${opt("",fd.causeType,"Choose a cause…")}${CAUSES.map(c=>opt(c.id,fd.causeType,`${c.n}: ${c.h}`)).join("")}</select>
+        <textarea id="ff-cause" data-f="cause" aria-label="Cause, explained" placeholder="What about the setup let this happen?">${esc(fd.cause)}</textarea>
+        <p class="warn" id="ff-oneoff"${fd.causeType==="oneoff"?"":" hidden"}>WP-04 treats a one-off with a temporary cause as no action. Consider noting it as an observation instead.</p>
+        <p class="warn" id="ff-repeat"${prior?"":" hidden"}>${prior?`Repeat of ${fid(prior)} (${STATUS[prior.status].toLowerCase()}). Repeat findings usually move up one level.`:""}</p></div>
+      <div class="part"><label for="ff-effect">Effect</label><small>What it cost the arrangement: time, repeated requests, how it landed for each of you.</small><textarea id="ff-effect" data-f="effect">${esc(fd.effect)}</textarea></div>`:""}
+    </div>
+    <div class="names">
+      <div class="field"><label for="ff-by">Logged by</label><input type="text" id="ff-by" data-f="by" maxlength="24" value="${esc(fd.by)}" autocomplete="off"></div>
+      ${full?`<div class="field"><label for="ff-to">Receiving partner</label><input type="text" id="ff-to" data-f="to" maxlength="24" value="${esc(fd.to)}" autocomplete="off"><small class="hint">They log the management response.</small></div>`:""}
+    </div>
+    ${full?`<h4 class="caph">Corrective action plan</h4>
+    <div class="field wide"><label for="ff-action">Action</label><textarea id="ff-action" data-f="action" placeholder="One specific change.">${esc(fd.action)}</textarea></div>
+    <div class="names">
+      <div class="field"><label for="ff-owner">Owner</label><select id="ff-owner" data-f="owner">${opt("by",fd.owner,"The person logging it")}${opt("to",fd.owner,"The receiving partner")}${opt("both",fd.owner,"Both of us")}</select></div>
+      <div class="field"><label for="ff-due">Target date${strict?"":" (optional)"}</label><input type="date" id="ff-due" data-f="due" value="${esc(fd.due)}"></div>
+    </div>
+    <div class="field wide"><label for="ff-test">How we'll know it's fixed${strict?"":" (optional)"}</label><textarea id="ff-test" data-f="test" placeholder="A test you can check, like “the next five requests all name a time.”">${esc(fd.test)}</textarea></div>
+    ${fd.sev==="mat"?`<p class="warn">Material weakness: review it monthly alongside WP-04, and consider bringing in a couples counselor. This tool is a heuristic, not a substitute.</p>`:""}`:""}
+    <ul class="errs" id="ff-errs" role="alert" tabindex="-1" hidden></ul>
+    <div class="row" style="margin-top:16px"><button class="play" id="ff-save">${full?(editing?"Save revision":"Log finding"):(editing?"Save observation":"Note observation")}</button><button class="ghost" id="ff-cancel">Cancel</button></div>`;
+  w.oninput=w.onchange=ev=>{const t=ev.target;
+    if(t.id==="ff-nostd"){fd.noStd=t.checked;const c=$("ff-criteria");if(c)c.disabled=t.checked;return;}
+    if(t.dataset&&t.dataset.f){fd[t.dataset.f]=t.value;
+      if(t.id==="ff-causeType"){$("ff-oneoff").hidden=t.value!=="oneoff";const p=t.value?priorFor(t.value,fd.id):null;$("ff-repeat").hidden=!p;$("ff-repeat").textContent=p?`Repeat of ${fid(p)} (${STATUS[p.status].toLowerCase()}). Repeat findings usually move up one level.`:"";}}};
+  w.querySelectorAll("[data-sev]").forEach(b=>b.onclick=()=>{fd.sev=b.dataset.sev;renderWork();const nb=w.querySelector(`[data-sev="${fd.sev}"]`);if(nb)nb.focus();});
+  $("ff-save").onclick=saveFinding;
+  $("ff-cancel").onclick=()=>{fdraft=null;renderWork();};
+}
+
+function startResponse(id){fdraft=null;fresp={id,step:"handoff",stance:"",view:"",sign:""};renderWork();setTimeout(()=>$("fwork").scrollIntoView({behavior:reduceMotion?"auto":"smooth",block:"start"}),60);}
+const respTone={intent:"warm",ignored:new Set(),open:false};
+function renderResp(){
+  const w=$("fwork"), f=store.findings.find(x=>x.id===fresp.id); if(!f){fresp=null;renderWork();return;}
+  w.hidden=false; w.oninput=w.onchange=null;
+  if(fresp.step==="handoff"){
+    w.innerHTML=`<div class="cover"><p class="verdict">Pass the device to <span class="who-b">${esc(f.to)}</span></p>
+      <p>${esc(f.by)} logged ${fid(f)}, “${esc(f.title)}.” The plan can't start until ${esc(f.to)} responds. Whatever the response says, it's recorded next to the finding.</p>
+      <div class="row" style="justify-content:center"><button class="play" id="rp-go">I'm ${esc(f.to)}, I'm ready</button><button class="ghost" id="rp-x">Not now</button></div></div>`;
+    $("rp-go").onclick=()=>{fresp.step="form";renderResp();};
+    $("rp-x").onclick=()=>{fresp=null;renderWork();};
+    return;
+  }
+  w.innerHTML=`<h3>Management response to ${fid(f)}</h3>
+    <p class="hint" style="margin:0 0 10px">${esc(f.to)}, read ${esc(f.by)}'s finding, then give your response in your own words.</p>
+    <div class="resp"><b>${esc(f.title)}</b> <span class="tag sev-${f.sev}">${sevName(f.sev)}</span>${partsHTML(f)}${capHTML(f)}</div>
+    <p class="lab" style="margin:14px 0 4px">Your response</p>
+    <div class="sev" role="group" aria-label="Your response" style="grid-template-columns:repeat(auto-fit,minmax(150px,1fr))">${Object.keys(STANCE).map(k=>`<button type="button" data-st="${k}" aria-pressed="${fresp.stance===k}"><b>${STANCE[k]}</b><span>${STANCE_H[k]}</span></button>`).join("")}</div>
+    <div style="margin-top:12px"><label for="rp-view">Your view, in your own words</label><textarea id="rp-view" placeholder="What fits, what doesn't, and what would help from your side.">${esc(fresp.view)}</textarea><div class="tc-compact" id="rp-tone"></div></div>
+    <div class="field" style="margin-top:12px"><label for="rp-sign">Sign off with your name</label><input type="text" id="rp-sign" maxlength="24" value="${esc(fresp.sign)}" autocomplete="off" placeholder="${esc(f.to)}"></div>
+    <ul class="errs" id="rp-errs" role="alert" tabindex="-1" hidden></ul>
+    <div class="row" style="margin-top:14px"><button class="play" id="rp-save">Sign and log response</button><button class="ghost" id="rp-x">Not now</button></div>`;
+  w.querySelectorAll("[data-st]").forEach(b=>b.onclick=()=>{fresp.stance=b.dataset.st;w.querySelectorAll("[data-st]").forEach(x=>x.setAttribute("aria-pressed",x.dataset.st===fresp.stance?"true":"false"));});
+  const v=$("rp-view"); v.addEventListener("input",()=>{fresp.view=v.value;mountTone($("rp-tone"),v,respTone,true);}); mountTone($("rp-tone"),v,respTone,true);
+  $("rp-sign").oninput=e=>{fresp.sign=e.target.value;};
+  $("rp-x").onclick=()=>{fresp=null;renderWork();};
+  $("rp-save").onclick=()=>{
+    const e=[]; if(!fresp.stance) e.push("Choose Agree, Partly agree, or Disagree.");
+    if(fresp.view.trim().length<20) e.push("Add your view in a sentence or two. A response needs your own words, not just a choice.");
+    if(fresp.sign.trim().toLowerCase()!==f.to.trim().toLowerCase()) e.push(`Sign with the receiving partner's name as it appears on the finding (${f.to}). If that name is wrong, the finding can be revised.`);
+    if(e.length){$("rp-errs").innerHTML=e.map(x=>`<li>${esc(x)}</li>`).join("");$("rp-errs").hidden=false;$("rp-errs").focus();return;}
+    const now=Date.now(); f.response={by:f.to,stance:fresp.stance,view:fresp.view.trim().slice(0,1200),t:now};
+    f.hist.push({t:now,ev:`Management response logged: ${STANCE[fresp.stance]}`,by:f.to});
+    respTone.ignored.clear(); respTone.open=false; fresp=null; save(); renderFindings();
+  };
+}
+
+function partsHTML(f){
+  if(f.sev==="obs") return `<dl class="fparts"><dt>Condition</dt><dd>${esc(f.condition)}</dd></dl>`;
+  return `<dl class="fparts"><dt>Condition</dt><dd>${esc(f.condition)}</dd><dt>Criteria</dt><dd>${f.noStd?"<i>No shared standard exists yet.</i>":esc(f.criteria)}</dd>
+    <dt>Cause</dt><dd><b>${esc(causeName(f.causeType))}.</b> ${esc(f.cause)}</dd><dt>Effect</dt><dd>${esc(f.effect)}</dd></dl>`;
+}
+function capHTML(f){
+  if(!f.cap) return ""; const past=isPastDue(f), d=dueDate(f.cap.due);
+  return `<h4 class="caph">Corrective action plan</h4><dl class="fparts"><dt>Action</dt><dd>${esc(f.cap.action)}</dd><dt>Owner</dt><dd>${esc(ownerName(f,f.cap.owner))}</dd>
+    <dt>Target</dt><dd>${d?esc(fmtDay(d)):"Not set"}${past?` <span class="tag sev-mat">Past due</span>`:""}</dd><dt>Test</dt><dd>${f.cap.test?esc(f.cap.test):"Not set"}</dd>
+    ${f.evidence?`<dt>Evidence</dt><dd>${esc(f.evidence)}</dd>`:""}</dl>`;
+}
+function stepperHTML(f){
+  const order=["open","progress","remediated","closed"], i=order.indexOf(f.status);
+  return `<ol class="stepper" aria-label="Plan status">${order.map((s,k)=>`<li class="${k<i?"done":k===i?"now":""}"${k===i?' aria-current="step"':""}>${STATUS[s]}</li>`).join("")}</ol>`;
+}
+function cardHTML(f){
+  const obs=f.sev==="obs", canRevise=["noted","open","progress"].includes(f.status);
+  let resp="", act="";
+  if(!obs){
+    resp=f.response
+      ?`<div class="resp"><p class="lab" style="margin:0 0 4px">Management response · ${esc(f.response.by)} · ${esc(fmtDay(f.response.t))}</p><p style="margin:0 0 4px"><span class="tag ${f.response.stance==="agree"?"ok":"open"}">${STANCE[f.response.stance]}</span></p><p style="margin:0;white-space:pre-wrap">${esc(f.response.view)}</p>
+        ${f.response.stance==="disagree"&&f.status==="open"?`<p class="hint" style="margin:8px 0 0">${esc(f.by)} can start the plan as written or revise the finding. Revising asks ${esc(f.to)} to respond again.</p>`:""}</div>`
+      :`<div class="resp await"><p style="margin:0 0 8px"><b>Awaiting ${esc(f.to)}'s management response.</b> The plan can't move to In progress until ${esc(f.to)} logs Agree, Partly agree, or Disagree, with their view.</p><button class="ghost" data-resp="${f.id}">Log ${esc(f.to)}'s response</button></div>`;
+    if(f.status==="open"){
+      act=`<button class="play" data-start="${f.id}"${f.response?"":" disabled"}>Move to In progress</button>
+        <p class="gate">${f.response?"Response logged. The plan can start.":`Locked until ${esc(f.to)} logs a management response. This is the plan's sign-off control.`}</p>`;
+    }else if(f.status==="progress"){
+      act=`<div class="field wide"><label for="ev-${f.id}">Evidence the test was met</label><textarea id="ev-${f.id}" placeholder="${esc(f.cap.test||"What happened that shows it's fixed?")}"></textarea></div>
+        <div class="row" style="margin-top:8px"><button class="play" data-rem="${f.id}">Mark remediated</button></div><p class="gate" id="evx-${f.id}" role="alert"></p>`;
+    }else if(f.status==="remediated"){
+      const ok=Date.now()-f.remediatedAt>=HOLD_DAYS*864e5, when=fmtDay(f.remediatedAt+HOLD_DAYS*864e5);
+      act=`<div class="row"><button class="play" data-close="${f.id}"${ok?"":" disabled"}>Close finding</button><button class="ghost" data-reopen="${f.id}">It came back, reopen</button></div>
+        <p class="gate">${ok?"It has held through a monthly review. You can close it.":`A remediated finding closes only after it holds through one monthly review. You can close it on ${esc(when)}.`}</p>`;
+    }else if(f.status==="closed"){
+      act=`<div class="field wide"><label for="gr-${f.id}">What this makes possible</label><input type="text" id="gr-${f.id}" data-grow="${f.id}" maxlength="200" value="${esc(f.growth||"")}" placeholder="Now requests come with a time, and we don't have to chase each other."></div>`;
+    }
+  }
+  return `<article class="panel fcard${f.status==="closed"?" strength":""}">
+    <div class="fhead"><span class="fid">${fid(f)}</span><span class="tag sev-${f.sev}">${sevName(f.sev)}</span><span class="tag">${STATUS[f.status]}</span>${f.repeatOf?`<span class="tag sev-sig">Repeat</span>`:""}${f.status==="closed"?`<span class="tag ok">Strength</span>`:""}</div>
+    <h3>${esc(f.title)}</h3><p class="fmeta">Logged ${esc(fmtDay(f.t))} by ${esc(f.by)}${!obs&&f.to?`, response from ${esc(f.to)}`:""}</p>
+    ${partsHTML(f)}${resp}${capHTML(f)}${obs?"":stepperHTML(f)}${act}
+    <details class="hist"><summary>History (${f.hist.length})</summary><ol>${f.hist.map(h=>`<li>${esc(fmt(h.t))}: ${esc(h.ev)}${h.by?` (${esc(h.by)})`:""}</li>`).join("")}${(f.superseded||[]).map(s=>`<li>Superseded response from ${esc(s.by)}, ${esc(fmt(s.t))}: ${STANCE[s.stance]}. “${esc(s.view)}”</li>`).join("")}</ol></details>
+    <div class="row" style="margin-top:12px">${obs?`<button class="ghost" data-esc="${f.id}">Escalate to a deficiency</button>`:""}${canRevise&&!obs?`<button class="ghost" data-rev="${f.id}">Revise finding</button>`:""}<button class="ghost" data-fdel="${f.id}">Delete</button></div>
+  </article>`;
+}
+
+function renderFindings(){
+  const F=store.findings, act=F.filter(f=>f.sev!=="obs"&&f.status!=="closed");
+  const n=s=>F.filter(f=>f.status===s).length, awaiting=act.filter(f=>!f.response).length, past=act.filter(isPastDue).length;
+  $("fsum").innerHTML=[["Open",n("open")],["In progress",n("progress")],["Remediated",n("remediated")],["Closed",n("closed")],["Awaiting response",awaiting],["Past due",past],["Observations",n("noted")]]
+    .map(([l,v])=>`<li><b>${v}</b>${l}</li>`).join("");
+  const notes=[];
+  if(act.some(f=>f.sev==="mat")) notes.push("A material weakness is open. Review it monthly alongside WP-04.");
+  if(awaiting) notes.push(`${awaiting} finding${awaiting===1?" is":"s are"} waiting on a management response before ${awaiting===1?"its plan":"their plans"} can start.`);
+  if(past) notes.push(`${past} corrective action${past===1?" is":"s are"} past the target date. Revisit the date or the action at the weekly close.`);
+  $("fnote").textContent=notes.join(" ")||(F.length?"Everything is on track.":"No findings yet. Most friction is noise; a finding is for what keeps coming back.");
+  const filters=[["active","Active"],["noted","Observations"],["closed","Strengths"],["all","All"]];
+  $("ffilter").innerHTML=filters.map(([k,l])=>`<button class="pbtn" data-ff="${k}" aria-pressed="${ffilter===k}">${l}</button>`).join("");
+  $("ffilter").querySelectorAll("[data-ff]").forEach(b=>b.onclick=()=>{ffilter=b.dataset.ff;renderFindings();});
+  const shown=F.filter(f=>ffilter==="all"||(ffilter==="active"?(f.status!=="closed"&&f.status!=="noted"):f.status===ffilter));
+  $("flist").innerHTML=shown.map(cardHTML).join("")||`<p class="empty">${ffilter==="closed"?"Closed findings show up here as strengths.":ffilter==="noted"?"No observations noted.":"Nothing here. Log a finding when something keeps coming back."}</p>`;
+  const L=$("flist"), get=id=>F.find(f=>f.id===id);
+  L.querySelectorAll("[data-resp]").forEach(b=>b.onclick=()=>startResponse(b.dataset.resp));
+  L.querySelectorAll("[data-start]").forEach(b=>b.onclick=()=>{const f=get(b.dataset.start);if(!f||!f.response)return;const now=Date.now();f.status="progress";f.startedAt=now;f.hist.push({t:now,ev:"Status Open → In progress"});save();renderFindings();});
+  L.querySelectorAll("[data-rem]").forEach(b=>b.onclick=()=>{const f=get(b.dataset.rem), ev=$("ev-"+f.id).value.trim();
+    if(ev.length<10){$("evx-"+f.id).textContent="Describe what happened that shows the test was met.";return;}
+    const now=Date.now();f.status="remediated";f.remediatedAt=now;f.evidence=ev.slice(0,600);f.hist.push({t:now,ev:"Status In progress → Remediated, with evidence"});save();renderFindings();});
+  L.querySelectorAll("[data-reopen]").forEach(b=>b.onclick=()=>{const f=get(b.dataset.reopen),now=Date.now();f.status="progress";f.reopened=(f.reopened||0)+1;delete f.remediatedAt;f.hist.push({t:now,ev:"Reopened: it came back. Status Remediated → In progress"});save();renderFindings();});
+  L.querySelectorAll("[data-close]").forEach(b=>b.onclick=()=>{const f=get(b.dataset.close);if(Date.now()-f.remediatedAt<HOLD_DAYS*864e5)return;const now=Date.now();f.status="closed";f.closedAt=now;f.hist.push({t:now,ev:"Status Remediated → Closed. Now a strength"});save();renderFindings();});
+  L.querySelectorAll("[data-grow]").forEach(i=>i.onchange=()=>{const f=get(i.dataset.grow);f.growth=i.value.trim().slice(0,200);save();});
+  L.querySelectorAll("[data-esc]").forEach(b=>b.onclick=()=>{const f=get(b.dataset.esc);fresp=null;fdraft=newDraft({id:f.id,title:f.title,sev:"def",condition:f.condition,by:f.by||store.people.me||"",to:f.to||store.people.them||""});renderWork();$("fwork").scrollIntoView({block:"start"});});
+  L.querySelectorAll("[data-rev]").forEach(b=>b.onclick=()=>{const f=get(b.dataset.rev);fresp=null;
+    fdraft=newDraft({id:f.id,title:f.title,sev:f.sev,condition:f.condition,criteria:f.criteria,noStd:f.noStd,causeType:f.causeType,cause:f.cause,effect:f.effect,by:f.by,to:f.to,
+      action:f.cap?f.cap.action:"",owner:f.cap?f.cap.owner:"both",due:f.cap?f.cap.due:"",test:f.cap?f.cap.test:""});renderWork();$("fwork").scrollIntoView({block:"start"});});
+  L.querySelectorAll("[data-fdel]").forEach(b=>{let arm=null;b.onclick=()=>{if(!arm){b.textContent="Tap again to delete";arm=setTimeout(()=>{arm=null;b.textContent="Delete";},4000);return;}
+    clearTimeout(arm);store.findings=store.findings.filter(f=>f.id!==b.dataset.fdel);save();renderFindings();};});
+  renderWork();
+}
+$("f-new").onclick=()=>openFindingForm({});
 
 // ---------- scope ----------
 const cv=$("scope"), ctx=cv.getContext("2d");
@@ -1191,6 +1765,7 @@ function target(){
   if(tab==="practice") return run.owner==="practice"?.28*(1-practiceProgress):(practiceFinished?0:.22);
   if(tab==="decode") return decTotal()*.055;
   if(tab==="together") return tog.step==="reveal"?togGap()*.055:.12;
+  if(tab==="tone") return Math.min(.3,(toneState.hard||0)*.07);
   if(tab==="retune") return pacer.on||pacer.prog>=1?.25*(1-pacer.prog):.22;
   return .12;
 }
