@@ -1,0 +1,525 @@
+/*
+  dashboard.css
+  The Objective Ledger (TOL-OS) — Household Dashboard
+  Load after book-layout.css. The page uses the same frame as roadmap.html
+  (.frame / .sidebar / main / section / .kicker / .lede / .roadmap-phase /
+  .status-badge / .roadmap-list / .draft-notice), so the site stylesheet
+  supplies the look. This file only adds the form controls and ledger
+  components that roadmap.html doesn't have.
+*/
+
+/* ------------------------------------------------------------------ */
+/* Fallbacks for roadmap classes. :where() has zero specificity, so     */
+/* these apply only if book-layout.css doesn't already define them.    */
+/* ------------------------------------------------------------------ */
+
+:where(.roadmap-phase){
+  margin: 28px 0;
+  padding: 22px 24px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--paper-deep);
+}
+:where(.roadmap-phase-head){
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 14px;
+}
+:where(.roadmap-phase-head h3){ margin: 0; font-size: 1.2rem; }
+:where(.status-badge){
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.68rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 3px 9px;
+  border: 1px solid currentColor;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+:where(.status-live){ color: var(--credit); }
+:where(.status-progress){ color: var(--brass); }
+:where(.status-planned){ color: var(--ink-soft); }
+:where(.roadmap-list){ margin: 0; padding-left: 1.2em; }
+:where(.roadmap-list li){ margin-bottom: 6px; }
+:where(.roadmap-list li.tbd){ color: var(--ink-soft); font-style: italic; }
+:where(.draft-notice){
+  margin-bottom: 36px;
+  padding: 14px 18px;
+  border: 1px solid var(--brass);
+  border-radius: var(--radius);
+  background: var(--paper-deep);
+  font-size: 0.92rem;
+}
+:where(.back-link){
+  display: inline-block;
+  margin-top: 28px;
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.78rem;
+  color: var(--ink-soft);
+}
+
+/* ------------------------------------------------------------------ */
+/* sidebar extras                                                      */
+/* ------------------------------------------------------------------ */
+
+#side-actions:empty{ display: none; }
+#side-actions{ margin-top: 20px; }
+
+.db-side-link{
+  background: none;
+  border: none;
+  padding: 0;
+  font: inherit;
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.78rem;
+  color: var(--ink-soft);
+  text-decoration: underline;
+  cursor: pointer;
+}
+.db-side-link:hover{ color: var(--ink); }
+
+/* ------------------------------------------------------------------ */
+/* shared controls                                                     */
+/* ------------------------------------------------------------------ */
+
+#app input[type="text"],
+#app input[type="email"],
+#app input[type="number"],
+#app textarea,
+#app select{
+  font: inherit;
+  font-size: 0.95rem;
+  color: var(--ink);
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 8px 10px;
+  width: 100%;
+  min-width: 0;
+}
+#app textarea{ resize: vertical; }
+#app input:disabled, #app select:disabled{ opacity: 0.7; background: transparent; }
+
+#app :focus-visible{
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
+
+.db-btn{
+  display: inline-block;
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.8rem;
+  letter-spacing: 0.02em;
+  padding: 10px 16px;
+  border: 1px solid var(--ink);
+  border-radius: var(--radius);
+  background: var(--ink);
+  color: var(--paper);
+  cursor: pointer;
+  white-space: nowrap;
+}
+.db-btn:hover{ background: var(--ink-soft); border-color: var(--ink-soft); }
+.db-btn:disabled{ opacity: 0.45; cursor: not-allowed; }
+.db-btn--quiet{ background: transparent; color: var(--ink); border-color: var(--ink-soft); }
+.db-btn--quiet:hover{ background: var(--paper); color: var(--ink); }
+.db-btn--danger{ background: transparent; color: var(--debit); border-color: var(--debit); }
+.db-btn--danger:hover{ background: var(--debit-soft); color: var(--debit); border-color: var(--debit); }
+
+.db-link{
+  background: none;
+  border: none;
+  padding: 0;
+  font: inherit;
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.8rem;
+  color: var(--ink);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+.db-link:hover{ color: var(--brass); }
+.db-add{ margin-top: 12px; }
+
+.db-actions{ display: flex; flex-wrap: wrap; gap: 10px; margin: 12px 0; }
+
+.db-inline{ display: flex; gap: 10px; align-items: stretch; }
+.db-inline input{ flex: 1 1 auto; }
+
+.db-form{ display: grid; gap: 8px; }
+.db-form label{
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.72rem;
+  color: var(--ink-soft);
+  margin-top: 6px;
+}
+.db-form-msg{ margin: 4px 0 0 0; font-size: 0.9rem; min-height: 1.4em; }
+.db-form-msg.is-error{ color: var(--debit); }
+.db-form-msg.is-ok{ color: var(--credit); }
+
+.db-muted{ color: var(--ink-soft); }
+.db-fine{ font-size: 0.82rem; color: var(--ink-soft); margin: 14px 0 0 0; }
+.db-fine a{ color: var(--ink); }
+
+.db-sr{
+  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+}
+
+.db-scroll{ overflow-x: auto; position: relative; }
+
+/* ------------------------------------------------------------------ */
+/* Solvency Read: the formula laid out as a ledger, totaled with a     */
+/* double rule the way an audited figure is                            */
+/* ------------------------------------------------------------------ */
+
+.db-read-ledger{
+  width: 100%;
+  min-width: 440px;
+  border-collapse: collapse;
+  font-size: 0.95rem;
+}
+.db-read-ledger th,
+.db-read-ledger td{
+  text-align: left;
+  padding: 10px 12px 10px 0;
+  border-bottom: 1px solid var(--line);
+  vertical-align: top;
+}
+.db-read-ledger td{
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.9rem;
+  text-align: right;
+  white-space: nowrap;
+}
+.db-read-ledger thead th{
+  font-family: "IBM Plex Mono", monospace;
+  font-weight: 500;
+  font-size: 0.68rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--brass);
+  border-bottom-color: var(--ink-soft);
+}
+.db-read-ledger thead th:not(:first-child){ text-align: right; }
+.db-read-ledger tbody th{ font-weight: 600; }
+.db-read-note{
+  display: block;
+  font-weight: 400;
+  font-size: 0.8rem;
+  color: var(--ink-soft);
+}
+.db-read-weight{ color: var(--ink-soft); }
+.db-read-ledger tfoot th{
+  font-family: "Fraunces", Georgia, serif;
+  font-size: 1.05rem;
+  border-bottom: none;
+  padding-top: 14px;
+}
+.db-read-total{
+  font-size: 1.9rem !important;
+  line-height: 1.1;
+  border-bottom: 4px double currentColor !important;
+  padding-top: 12px !important;
+}
+.db-read-total.is-high{ color: var(--credit); }
+.db-read-total.is-mid{ color: var(--brass); }
+.db-read-total.is-low{ color: var(--debit); }
+.db-read-total.is-pending{ color: var(--ink-soft); }
+
+.db-read-band{ margin: 18px 0 8px 0; }
+.db-read-band.is-high{ color: var(--credit); }
+.db-read-band.is-mid{ color: var(--ink); }
+.db-read-band.is-low{ color: var(--debit); }
+
+/* ------------------------------------------------------------------ */
+/* The Lemonade Stand register                                         */
+/* ------------------------------------------------------------------ */
+
+.db-ledger-head,
+.db-ledger-row{
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 84px 84px 32px;
+  gap: 8px;
+  align-items: center;
+}
+.db-ledger-head{
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.68rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--brass);
+  padding-bottom: 6px;
+  border-bottom: 1px solid var(--ink-soft);
+  margin-bottom: 8px;
+}
+.db-ledger-head span{ overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.db-ledger-row{ margin-bottom: 6px; }
+#app .db-ledger-row input[type="number"]{
+  font-family: "IBM Plex Mono", monospace;
+  text-align: right;
+}
+
+.db-remove{
+  width: 32px;
+  height: 32px;
+  border: 1px solid transparent;
+  border-radius: var(--radius);
+  background: transparent;
+  color: var(--ink-soft);
+  font-size: 1.2rem;
+  line-height: 1;
+  cursor: pointer;
+}
+.db-remove:hover{ color: var(--debit); border-color: var(--line); }
+
+.db-balance{ margin-top: 20px; }
+.db-balance p{ margin: 10px 0 0 0; }
+.db-bar{
+  display: flex;
+  height: 12px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  overflow: hidden;
+  background: var(--paper);
+}
+.db-bar-a{ background: var(--credit); transition: width 0.25s ease; }
+.db-bar-b{ background: var(--brass); transition: width 0.25s ease; }
+.db-bar-legend{
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 6px;
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.78rem;
+}
+.db-bar-legend .a{ color: var(--credit); }
+.db-bar-legend .b{ color: var(--brass); }
+
+/* ------------------------------------------------------------------ */
+/* Battery & Stress Meter                                              */
+/* ------------------------------------------------------------------ */
+
+.db-asi-row{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--line);
+}
+.db-asi-row:last-child{ border-bottom: none; }
+.db-asi-label strong{ display: block; font-weight: 600; }
+.db-asi-label span{ font-size: 0.82rem; color: var(--ink-soft); }
+
+.db-segs{ display: flex; flex-shrink: 0; }
+.db-seg{
+  width: 40px;
+  height: 36px;
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.9rem;
+  background: var(--paper);
+  color: var(--ink);
+  border: 1px solid var(--line);
+  margin-left: -1px;
+  cursor: pointer;
+}
+.db-seg:first-child{ margin-left: 0; border-radius: var(--radius) 0 0 var(--radius); }
+.db-seg:last-child{ border-radius: 0 var(--radius) var(--radius) 0; }
+.db-seg:hover{ background: var(--paper-deep); }
+.db-seg.is-on{
+  background: var(--ink);
+  color: var(--paper);
+  border-color: var(--ink);
+  position: relative;
+}
+.db-seg:disabled{ cursor: not-allowed; }
+
+.db-asi-result{ margin: 16px 0 0 0; }
+.db-asi-score{
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 1.3rem;
+  margin-right: 6px;
+}
+
+/* ------------------------------------------------------------------ */
+/* Domestic RACI Treaty                                                */
+/* ------------------------------------------------------------------ */
+
+.db-raci-score{
+  margin: 0 0 12px 0;
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.8rem;
+  color: var(--ink-soft);
+}
+.db-raci{
+  width: 100%;
+  min-width: 600px;
+  border-collapse: collapse;
+}
+.db-raci th{
+  text-align: left;
+  font-family: "IBM Plex Mono", monospace;
+  font-weight: 500;
+  font-size: 0.68rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--brass);
+  padding: 0 8px 6px 0;
+  border-bottom: 1px solid var(--ink-soft);
+}
+.db-raci td{
+  padding: 6px 8px 6px 0;
+  border-bottom: 1px solid var(--line);
+}
+.db-raci td:first-child{ width: 36%; }
+.db-raci td:nth-child(2){ width: 18%; }
+.db-raci td:last-child{ width: 36px; padding-right: 0; }
+.db-raci tr.is-open td:first-child{ box-shadow: inset 3px 0 0 var(--brass); padding-left: 8px; }
+.db-raci tr.is-owned td:first-child{ box-shadow: inset 3px 0 0 var(--credit); padding-left: 8px; }
+
+/* ------------------------------------------------------------------ */
+/* Check Your State                                                    */
+/* ------------------------------------------------------------------ */
+
+.db-rungs{
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+  margin-bottom: 12px;
+}
+.db-rung{
+  text-align: left;
+  padding: 12px 14px;
+  background: var(--paper);
+  color: var(--ink);
+  border: 1px solid var(--line);
+  border-top: 4px solid var(--line);
+  border-radius: var(--radius);
+  cursor: pointer;
+  font: inherit;
+}
+.db-rung strong{ display: block; font-size: 0.95rem; }
+.db-rung span{ font-size: 0.8rem; color: var(--ink-soft); }
+.db-rung.is-ventral{ border-top-color: var(--credit); }
+.db-rung.is-sympathetic{ border-top-color: var(--brass); }
+.db-rung.is-dorsal{ border-top-color: var(--ink-soft); }
+.db-rung:hover{ background: var(--paper-deep); }
+.db-rung.is-on{ border-color: var(--ink); box-shadow: inset 0 0 0 1px var(--ink); }
+
+.db-state-list time{
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.74rem;
+  color: var(--ink-soft);
+  white-space: nowrap;
+}
+.db-state-item.is-ventral::marker{ color: var(--credit); }
+.db-state-item.is-sympathetic::marker{ color: var(--brass); }
+.db-state-item.is-dorsal::marker{ color: var(--ink-soft); }
+
+/* ------------------------------------------------------------------ */
+/* Close the Books history                                             */
+/* ------------------------------------------------------------------ */
+
+.db-history{ list-style: none; margin: 0; padding: 0; }
+.db-history li{
+  display: grid;
+  grid-template-columns: 64px minmax(0, 1fr) 48px;
+  gap: 4px 12px;
+  align-items: center;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--line);
+}
+.db-history li:last-child{ border-bottom: none; }
+.db-history-date{ font-family: "IBM Plex Mono", monospace; font-size: 0.78rem; color: var(--ink-soft); }
+.db-history-bar{ height: 8px; background: var(--paper); border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; }
+.db-history-bar span{ display: block; height: 100%; }
+.db-history-bar .is-high{ background: var(--credit); }
+.db-history-bar .is-mid{ background: var(--brass); }
+.db-history-bar .is-low{ background: var(--debit); }
+.db-history-val{ font-family: "IBM Plex Mono", monospace; font-size: 0.85rem; text-align: right; }
+.db-history-val.is-high{ color: var(--credit); }
+.db-history-val.is-mid{ color: var(--brass); }
+.db-history-val.is-low{ color: var(--debit); }
+.db-history-val.is-pending{ color: var(--ink-soft); }
+.db-history-note{ grid-column: 2 / -1; font-size: 0.85rem; color: var(--ink-soft); }
+
+/* ------------------------------------------------------------------ */
+/* Household & Account                                                 */
+/* ------------------------------------------------------------------ */
+
+.db-invite-code code{
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 1.15rem;
+  letter-spacing: 0.08em;
+  padding: 4px 10px;
+  background: var(--paper);
+  border: 1px dashed var(--brass);
+  border-radius: var(--radius);
+  margin-right: 8px;
+}
+.db-danger summary{
+  cursor: pointer;
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.8rem;
+  color: var(--debit);
+}
+.db-danger p{ font-size: 0.9rem; }
+.db-danger .db-inline{ max-width: 460px; }
+
+/* ------------------------------------------------------------------ */
+/* save status                                                         */
+/* ------------------------------------------------------------------ */
+
+.db-status{
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  max-width: calc(100vw - 40px);
+  padding: 8px 14px;
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.78rem;
+  background: var(--ink);
+  color: var(--paper);
+  border-radius: var(--radius);
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  pointer-events: none;
+  z-index: 10;
+}
+.db-status.is-visible{ opacity: 1; transform: none; }
+.db-status.is-ok{ background: var(--credit); }
+.db-status.is-error{ background: var(--debit); pointer-events: auto; }
+
+/* ------------------------------------------------------------------ */
+/* small screens                                                       */
+/* ------------------------------------------------------------------ */
+
+@media (max-width: 860px){
+  .db-ledger-head,
+  .db-ledger-row{ grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) 32px; gap: 6px; }
+  .db-ledger-head span:first-child,
+  .db-ledger-row .db-ledger-task{ grid-column: 1 / -1; }
+  .db-ledger-head span:last-child{ display: none; }
+  .db-ledger-row{ padding-bottom: 10px; margin-bottom: 10px; border-bottom: 1px solid var(--line); }
+  .db-asi-row{ flex-direction: column; align-items: flex-start; gap: 8px; }
+  .db-seg{ width: 48px; height: 40px; }
+  .db-rungs{ grid-template-columns: 1fr; }
+  .db-inline{ flex-direction: column; }
+  .db-status{ right: 10px; left: 10px; bottom: 10px; max-width: none; }
+
+  /* The read must fit a phone: the total is the point of the table. */
+  .db-read-ledger{ min-width: 0; font-size: 0.88rem; }
+  .db-read-ledger th,
+  .db-read-ledger td{ padding: 8px 6px 8px 0; }
+  .db-read-ledger td{ font-size: 0.8rem; }
+  .db-read-ledger thead th{ font-size: 0.6rem; letter-spacing: 0.02em; }
+  .db-read-note{ font-size: 0.74rem; }
+  .db-read-total{ font-size: 1.5rem !important; }
+}
+
+/* Let wide tables scroll inside their own box instead of widening the page. */
+.frame > main{ min-width: 0; }

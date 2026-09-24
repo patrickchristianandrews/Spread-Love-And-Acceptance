@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Household Dashboard — The Objective Ledger (TOL-OS)</title>
+<meta name="description" content="Your household's shared ledger, synced across devices.">
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,500&family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/book-layout.css">
+<link rel="stylesheet" href="assets/css/dashboard.css">
+</head>
+<body>
+
+<div class="frame">
+
+  <aside class="sidebar">
+    <div class="mark">The Objective Ledger
+      <small>TOL&#8209;OS &middot; DASHBOARD</small>
+    </div>
+    <p class="tagline" id="side-meta">Household dashboard</p>
+    <nav aria-label="Dashboard sections" hidden>
+      <ol id="side-nav"></ol>
+    </nav>
+    <div id="side-actions"></div>
+    <a class="back-link" href="index.html">&larr; Back to TOL-OS</a>
+  </aside>
+
+  <div class="rule" aria-hidden="true"></div>
+
+  <main>
+
+    <div class="draft-notice" id="demo-banner" hidden>
+      <strong>Preview mode:</strong> this is a sample household, and nothing you change is saved. The dashboard connects to its database once <code>assets/js/dashboard-config.js</code> is filled in.
+    </div>
+
+    <div id="app">
+      <section id="loading">
+        <div class="kicker">Dashboard</div>
+        <h2>Opening the Ledger</h2>
+        <p class="lede">One moment&hellip;</p>
+      </section>
+    </div>
+
+  </main>
+</div>
+
+<div class="db-status" id="save-status" role="status" aria-live="polite"></div>
+
+<footer>
+  TOL&#8209;OS &middot; spreadloveandacceptance.com
+  <div class="footer-links">
+    <a href="index.html">Home</a>
+    <a href="roadmap.html">Roadmap</a>
+    <a href="legal/terms-of-service.html">Terms of Service</a>
+    <a href="legal/privacy-policy.html">Privacy Policy</a>
+    <a href="legal/refund-policy.html">Refund Policy</a>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="assets/js/dashboard-config.js"></script>
+<script src="assets/js/dashboard.js"></script>
+</body>
+</html>

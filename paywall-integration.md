@@ -40,7 +40,7 @@ Given the site is "static now, backend later," Option A (Gumroad) is the better 
 
 ## Access levels (current)
 
-The site offers three access levels. None of them uses accounts, roles, tokens, or webhooks, and none needs a backend:
+The site offers three access levels. None of them uses accounts, roles, tokens, or webhooks, and none needs a backend. (The optional household dashboard is separate from the access levels: it has its own sign-in and a Supabase database, documented in `dashboard-setup.md`. It doesn't gate or unlock any paid content.)
 
 | Level | What it requires | Where it's handled | What the site does |
 |---|---|---|---|
@@ -55,3 +55,4 @@ When changing any of the three levels, update these together so they stay consis
 - `index.html` → `#access-tiers` (level cards and the "What each level shares" table) and `#register`
 - `legal/privacy-policy.html` → Sections 01–06
 - `legal/terms-of-service.html` → Sections 01, 02, and 07
+- `dashboard-setup.md` → if a change affects what the dashboard stores or who can see it
