@@ -198,7 +198,7 @@ Running the filter on the other person's messages instead of your own. The trans
 
 ### What you do
 
-Start the daily loop: 90 seconds, out loud, one sentence each. Load, friction, ask. No debate, no solving, no rebuttal.
+Start the daily loop: 90 seconds, out loud, one sentence each. Load, appreciation, friction, ask. No debate, no solving, no rebuttal.
 
 This is the habit that's meant to outlive the program. Everything else in these six weeks is scaffolding for a structure; the daily loop is the structure.
 

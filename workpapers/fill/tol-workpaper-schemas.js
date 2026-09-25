@@ -370,14 +370,15 @@
     sections: [
       {
         id: 'daily', type: 'table', title: 'The daily loop',
-        intro: 'Load: "Today I was at about low / medium / high capacity." Friction and ask are optional. Anything that needs real discussion waits for the weekly resync.',
+        intro: 'Load: "Today I was at about low / medium / high capacity." Appreciation: one specific thing you appreciated about the other person today. Friction and ask are optional. Anything that needs real discussion waits for the weekly resync.',
         addLabel: 'Add a row',
         columns: [
           { id: 'day', label: 'Day', type: 'select', options: DAYS, w: 0.7, prefill: true },
           { id: 'who', label: 'Person', type: 'person', w: 1.1, prefill: true },
           { id: 'load', label: 'Load', type: 'select', options: ['Low', 'Medium', 'High'], w: 0.9 },
-          { id: 'friction', label: 'One small thing that didn\'t feel great', type: 'text', w: 2.4 },
-          { id: 'ask', label: 'One thing that would help tomorrow', type: 'text', w: 2.4 }
+          { id: 'thanks', label: 'One thing I appreciated today', type: 'text', w: 2 },
+          { id: 'friction', label: 'One small thing that didn\'t feel great', type: 'text', w: 2 },
+          { id: 'ask', label: 'One thing that would help tomorrow', type: 'text', w: 2 }
         ],
         defaultRows: WP13_ROWS
       },

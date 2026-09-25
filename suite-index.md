@@ -54,7 +54,7 @@ The numbering isn't sequential and never has been — the numbers are slots in a
 | WP-04 | Unbilled Deficit Audit | Monthly pass across four weeks, classifying repeat deficits as structural gap, capacity issue, standard in question, or one-off. | Page · Bundle |
 | WP-09 | Tone Transducer & Filter | Converts a raw reaction into fact, feeling and ask before sending; weighs what arrived before answering. Produces retuning frequency. | Page · Bundle |
 | WP-11 | The Calm-Down Kit | Sensory self-regulation toolkit for interrupting an acute stress spike before a hard conversation. | Page |
-| WP-13 | Phase-Locked Loop Protocol | 90-second daily check-in — load, friction, ask. The one habit meant to outlive the rest of the system. | Page · Bundle |
+| WP-13 | Phase-Locked Loop Protocol | 90-second daily check-in — load, appreciation, friction, ask. The one habit meant to outlive the rest of the system. | Page · Bundle |
 
 ## Calculator & program
 

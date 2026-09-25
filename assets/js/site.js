@@ -56,6 +56,7 @@
       { href: '/learn/index.html#part-self', deep: true, code: 'Stories', title: 'Stories from Philosophy: Knowing yourself', note: 'The Second Arrow, the Ship of Theseus, What Is Up to Us' },
     ]},
     { id: 'relationships', title: 'Relationships by type', blurb: 'Where to start in each kind of relationship, and every tool that fits. The shared relationship tools themselves are under The book, Workpapers and Tools.', items: [
+      { href: '/turning-toward.html', deep: true, code: 'New', title: 'Turning toward', note: 'Seven small, everyday ways to build connection with anyone who matters to you' },
       { href: '/check-ins.html', deep: true, code: 'Guide', title: 'Check-ins', note: 'How to hold a hard conversation in any relationship: a safe time and room, acknowledgement before rebuttal, a close that works for both' },
       { href: '/relationships.html#partners', deep: true, code: '', title: 'Partners', note: 'Start with WP-01, WP-03 and WP-13' },
       { href: '/relationships.html#family', deep: true, code: '', title: 'Family', note: 'Start with Chapter I, WP-03 and WP-09' },

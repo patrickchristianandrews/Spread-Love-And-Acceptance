@@ -55,9 +55,9 @@
     { id:'keep-good', ico:'\uD83C\uDF31', label:'We are okay, and I want to keep it that way',
       say:'The best time to build the habit is now, while nothing is on fire. Almost nobody starts here, and the ones who do have a far easier time of it later.',
       picks:[
+        ['/turning-toward.html','Turning toward','Seven small, everyday ways to build connection while things are good.'],
         ['/workpapers/wp-13-pll-protocol.html','WP-13: the 90-second check-in','The smallest habit here, and the one that lasts.'],
-        ['/quick-checks.html#today','Today\u2019s Weather','A daily minute that keeps small things small.'],
-        ['/prog-01.html','The 6-Week Program','If you would rather be walked through it.']
+        ['/quick-checks.html#today','Today\u2019s Weather','A daily minute that keeps small things small.']
       ]},
     { id:'unsure', ico:'\uD83E\uDD14', label:'I am not sure this is for me',
       say:'Fair. It fits some situations and not others, and it is better to find that out now than after three worksheets. Nothing here costs anything while it is being built.',
