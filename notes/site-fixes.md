@@ -1,5 +1,7 @@
 # Site fixes, in priority order
 
+> **Retired name:** "Survival Kit" is no longer used anywhere on the site. Where these older notes say "Survival Kit", read "membership" (and "member bundle" for the PDF). Don't reintroduce the name.
+
 These are edits for live pages whose source files aren't in the Claude project. Each one gives the text as it appears on the live page and what to replace it with. In the HTML source, some characters appear as entities (`&middot;` for ·, `&amp;` for &, `&mdash;` for —, `&ndash;` for –), so search for a distinctive phrase if an exact match fails.
 
 Files delivered alongside this list:

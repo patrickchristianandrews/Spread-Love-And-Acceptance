@@ -22,7 +22,7 @@ Source for The Objective Ledger (TOL-OS) site. The repo root is the site root: G
 
 | Path | What's there |
 |---|---|
-| root `*.html` | Public pages, plus the standalone workpaper files (`wp-01.html`, `wp-02.html`, …, `calc01-solvency.html`) that also make up the Survival Kit bundle |
+| root `*.html` | Public pages, plus the standalone workpaper files (`wp-01.html`, `wp-02.html`, …, `calc01-solvency.html`) that also make up the member bundle |
 | `book/` | The manuscript chapters (Preface, I–V) |
 | `workpapers/` | Workpaper pages linked from the menu, plus their `.md` sources |
 | `workpapers/fill/` | Fill-in versions that save as PDFs |
