@@ -211,7 +211,7 @@ details.src summary{cursor:pointer;font-family:var(--display);font-size:.98rem;c
     <aside class="use-banner" aria-labelledby="bestUse">
       <p class="eyebrow" id="bestUse">BEST USE</p>
       <p class="big">Best used before a <a href="check-ins.html">check-in</a>: test the sentence you plan to open with, in a room that is already safe. Do not read a score out loud at the other person. The order for the conversation itself, acknowledgement before any rebuttal, is on that page.</p>
-      <p class="sub">If you have not said how you receive words yet, make a <a href="wiring-card.html">wiring card</a> first. Then come back and test the sentence, not the person.</p>
+      <p class="sub">If you have not said how you receive words yet, make a <a href="wiring-card.html">wiring card</a> first. Then come back and test the sentence, not the person. One topic. No blame, no criticism of the person, and no assumption of bad intent. Say that you are not against them before you say the fact. The ground rules, including how to notice a spike and regroup, are on <a href="check-ins.html#ground">Check-ins</a>.</p>
       <div class="jobs">
         <article><strong>How you are interpreted</strong><p>Person A speaks. The read shows what Person B's wiring may do with those words.</p></article>
         <article><strong>How you interpret them</strong><p>Paste their reply, or try the reverse. The same sentence can be a different signal on the way back.</p></article>
@@ -392,7 +392,7 @@ details.src summary{cursor:pointer;font-family:var(--display);font-size:.98rem;c
   <section class="panel" id="agendaPanel" aria-labelledby="sheetH">
     <span class="step">TAKE THIS INTO THE ROOM</span>
     <h2 id="sheetH">Meeting sheet</h2>
-    <p class="hint">Translate a sentence, then add it here. Add every topic you need to cover. Save one PDF before you sit down, and leave the score at home. This list is not stored. If you close the tab, it is gone.</p>
+    <p class="hint">Translate one sentence, then add it. If you have more than one topic, prioritize before you add a second. The sheet is for today's item, not the whole relationship. Save one PDF, and leave the score at home. This list is not stored.</p>
     <p class="hint" id="agendaEmpty">Nothing on the sheet yet. The first translated sentence can be the first topic.</p>
     <ol id="agendaList"></ol>
     <div class="actions">
@@ -400,6 +400,8 @@ details.src summary{cursor:pointer;font-family:var(--display);font-size:.98rem;c
       <button class="ghost" id="clearAgenda" type="button">Clear the sheet</button>
     </div>
     <div class="derail" id="derailCard">
+      <h3>Ground rules for the room</h3>
+      <p>One topic. Park the rest with a date. No overload, no blame, and no criticism of the person. Say once: "I am not against you. I do not think you meant harm." Intent does not cancel how it landed. If your voice rises, you repeat yourself, or a second topic shows up to win the first, stop before the next sentence. The full version is on <a href="check-ins.html#ground">Check-ins</a>.</p>
       <h3>If it starts to derail</h3>
       <p>Stop the topic. Do not finish the point. Say: "I need a pause. I am not leaving this. We are okay. I will come back at [time]." A flooded body often needs at least 20 minutes, and the return should not slip past the next day (<a href="https://www.gottman.com/blog/flooding-and-conflict-avoidance/">Gottman Institute</a>).</p>
       <p>Care does not require a solution. Lower your voice. Sit down. Get water. Put the phones away. If they asked for space, do not follow them, and do not send a stack of messages. One line is the signal. The return is the care.</p>
@@ -1943,6 +1945,10 @@ function sheetLines(){
   lines.push(USE_LABEL[useId]||"Preparation");
   lines.push(nm("A")+" speaking to "+nm("B")+(relId&&REL[relId]?" · "+REL[relId].label:""));
   lines.push("Leave the score at home. Do not read a reading out loud.");
+  lines.push("Ground rules: one topic. No overload, no blame, no criticism of the person.");
+  lines.push("Say once: I am not against you. I do not think you meant harm.");
+  lines.push("Intent does not cancel impact. Park a second topic with a date. Do not follow it.");
+  lines.push("If your voice rises, you repeat yourself, or you go blank, stop before the next sentence.");
   lines.push("");
   if(useId!=="now" && agenda.length){
     agenda.forEach((t,i)=>{
