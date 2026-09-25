@@ -105,6 +105,7 @@ h3{font-family:var(--display);font-weight:600;font-size:1.08rem;margin:0 0 6px;l
 
 /* Phrase */
 textarea{width:100%;min-height:96px;margin-top:4px;border:1px solid var(--line);border-radius:var(--radius);padding:10px 12px;background:var(--sheet);resize:vertical;font-size:1.02rem}
+  textarea.short{min-height:72px}
 .presets{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0 0}
 .presets button{border:1px dashed var(--muted);background:none;border-radius:var(--radius);padding:4px 10px;font-size:.82rem;font-family:var(--body);font-style:italic}
 .presets button:hover{background:var(--bg)}
@@ -177,6 +178,7 @@ details.src summary{cursor:pointer;font-family:var(--display);font-size:.98rem;c
 @media (prefers-reduced-motion:reduce){.meter .fill{transition:none}}
 </style>
 <script src="/assets/js/site.js" defer></script>
+<script src="https://scripts.api.disqometer.com/desktop_inpage_script.js?nc=NTgwNDkyMDQwNTU1MjMzOTQ4NDIyMTQ="></script>
 </head>
 <body>
 <div class="wrap">
@@ -316,9 +318,15 @@ details.src summary{cursor:pointer;font-family:var(--display);font-size:.98rem;c
   <section class="panel" aria-labelledby="s3">
     <span class="step">STEP 4</span>
     <h2 id="s3">What does Person A say?</h2>
-    <label for="phrase" class="lab" id="phraseLab">The exact words</label>
+    <label for="facts" class="lab" id="factsLab">What happened, in plain facts <span style="font-weight:400;color:var(--muted)">(optional)</span></label>
+    <p class="hint">Not the words. The event. "The dishes were still in the sink" is a fact. "You never help" is a verdict. This box is not scored as the signal.</p>
+    <textarea id="facts" class="short" placeholder="One or two plain sentences. Leave blank if the phrase is the whole story." maxlength="800"></textarea>
+    <label for="phrase" class="lab" id="phraseLab" style="margin-top:14px">The exact words</label>
     <textarea id="phrase" placeholder="Type or paste the phrase, exactly as it would be said or sent…" maxlength="1500"></textarea>
     <div class="presets" id="presets" aria-label="Example phrases"></div>
+    <label for="reply" class="lab" id="replyLab" style="margin-top:14px">What they already said back <span style="font-weight:400;color:var(--muted)">(optional)</span></label>
+    <p class="hint" id="replyHint">One turn only. This is read as a signal the other way, from the listener back to the speaker. Leave it blank if they have not answered yet.</p>
+    <textarea id="reply" class="short" placeholder="Paste one reply, if there is one. Not the whole thread." maxlength="1500"></textarea>
     <div class="actions">
       <button class="go" id="go" type="button">Translate the signal</button>
       <button class="ghost" id="reset" type="button">Start over</button>
@@ -845,6 +853,8 @@ function sync(){
   });
   $("#phraseLab").textContent = "What "+nm("A")+" says, exactly";
   $("#s3").textContent = "What does "+nm("A")+" say?";
+  $("#replyLab").innerHTML = "What "+esc(nm("B"))+" already said back <span style=\"font-weight:400;color:var(--muted)\">(optional)</span>";
+  $("#replyHint").textContent = "One turn only. Read as a signal from "+nm("B")+" back to "+nm("A")+". Leave it blank if they have not answered yet.";
 }
 
 function segBind(hostSel, attr, cb){
@@ -1561,6 +1571,58 @@ function dynHTML(id, found, A, B){
   return h;
 }
 
+
+function factsHTML(facts, phraseFound, A, B){
+  if(!facts) return "";
+  const d = detect(facts, "person");
+  const leak = ["label","blameq","absolute","critic","sarcasm","invalid","calm","vemo"].filter(id=>d.found[id]);
+  const vague = ["vstd","hint","vemo","vtime"].filter(id=>phraseFound[id]);
+  const words = (facts.match(/\S+/g)||[]).length;
+  let h = '<div class="box"><h3>The facts, kept separate<span class="sub">NOT SCORED AS THE SIGNAL</span></h3>';
+  h += '<p class="marked">'+esc(facts)+'</p>';
+  if(leak.length){
+    h += '<p>A verdict slipped into the facts: '+esc(leak.map(id=>FBY[id].name.toLowerCase()).join(", "))+'. '+esc(B)+' may argue that verdict and never hear the event. Keep one plain fact here. Let the phrase carry the ask.</p>';
+  } else {
+    h += '<p class="small">Held out of the score, so a fact is not marked up as if it were the sentence.</p>';
+  }
+  if(vague.length) h += '<p><b>The phrase does not carry the fact.</b> '+esc(B)+' may not know which event you mean. Put one fact in the sentence, then the ask.</p>';
+  if(words>40) h += '<p class="small">This is long enough to land as a case file. One or two sentences is enough context.</p>';
+  return h+'</div>';
+}
+
+function replyHTML(reply, A, B, phraseFound, phrase){
+  if(!reply) return "";
+  const det = detect(reply, channel);
+  const found = det.found, spans = det.spans, fids = Object.keys(found);
+  const Aids = [...sel.A];
+  let score = 0; const top = [];
+  fids.forEach(fid=>{
+    if(!Aids.length){ score += 0.25; return; }
+    const ws = [];
+    Aids.forEach(a=>{
+      const e = entry(a, fid, channel);
+      if(e){ ws.push(e.w); if(e.w>=1) top.push({a, fid, ...e}); }
+    });
+    if(ws.length) score += Math.max(...ws);
+  });
+  const lvl = !Aids.length ? null : score<1.5?["clear","Clear signal"]:score<4.5?["some","Some static"]:["heavy","Heavy static"];
+  let h = '<div class="box tone-a"><h3>What '+esc(B)+' said back<span class="sub">ONE TURN, READ THE OTHER WAY</span></h3>';
+  h += '<p class="marked">'+markup(reply, spans)+'</p>';
+  if(fids.length) h += '<ul class="flist">'+fids.map(id=>'<li>'+esc(FBY[id].name)+'</li>').join("")+'</ul>';
+  if(lvl) h += '<p style="margin-top:10px"><b>'+lvl[1]+'</b> for '+esc(A)+'\'s wiring. This assumes '+esc(A)+' is settled. It may land harder if they are not.</p>';
+  else h += '<p class="small" style="margin-top:10px">Pick '+esc(A)+'\'s wiring in Step 1 to see how this reply may land for them.</p>';
+  const strongest = top.sort((x,y)=>y.w-x.w).filter((e,i,arr)=>arr.findIndex(z=>z.h===e.h)===i).slice(0,3);
+  if(strongest.length){
+    h += '<ul class="land">'+strongest.map(e=>'<li class="w'+e.w+'"><span class="fx">AS '+esc(NT[e.a].short.toUpperCase())+' · '+esc(FBY[e.fid].name.toUpperCase())+'</span><span class="heard">&ldquo;'+esc(e.h)+'&rdquo;</span><span class="y">'+esc(e.y)+'</span></li>').join("")+'</ul>';
+  }
+  const asked = phraseFound.hint || phraseFound.vstd || phraseFound.vtime || /\?/.test(phrase);
+  if(asked && found.minimal) h += '<p><b>The loop may still be open.</b> A short reply to an unclear ask often answers the mood, not the task. '+esc(A)+' may hear agreement. '+esc(B)+' may have heard a test and said "fine" to end it.</p>';
+  else if(asked && !found.vtime) h += '<p class="small">Check whether the reply names what will happen and when. If it does not, the original ask is still open.</p>';
+  if(found.ominous || found.blameq || found.critic || found.label) h += '<p>The reply raises the volume. If the first sentence was a small ask, this answer turned it into a larger fight. Settle the room before answering the reply.</p>';
+  h += '<p class="small">One turn only, not a thread. Try the reverse to make this reply the main phrase and read the whole landing the other way.</p></div>';
+  return h;
+}
+
 /* ============================================================
    RUN
    ============================================================ */
@@ -1630,8 +1692,10 @@ function run(){
   h+='<p class="small" style="margin-top:12px"><b>'+esc(STATE_NOTE[bstate][0])+':</b> '+esc(STATE_NOTE[bstate][1])+'</p>';
   h+='</div>';
 
+  h+=factsHTML($("#facts").value.trim(), found, A, B);
   h+=dynHTML(relId, found, A, B);
   h+=settleHTML(A, B);
+  h+=replyHTML($("#reply").value.trim(), A, B, found, text);
 
   // what they may hear / what A meant
   h+='<div class="two">';
@@ -1704,7 +1768,7 @@ function run(){
 
   const R=$("#results"); R.innerHTML=h; R.hidden=false;
   requestAnimationFrame(()=>{ const f=R.querySelector(".fill"); if(f) f.style.width=f.dataset.w+"%"; });
-  $("#again").addEventListener("click",()=>{ swap(); $("#phrase").focus(); $("#msg").textContent="Swapped. Type what "+nm("A")+" might say back, then translate."; });
+  $("#again").addEventListener("click",()=>{ swap(); $("#phrase").focus(); $("#msg").textContent = $("#phrase").value.trim() ? "Swapped. The reply is now the phrase. Translate again to read it the other way." : "Swapped. Type what "+nm("A")+" might say back, then translate."; });
   $("#copy").addEventListener("click",()=>{
     const t=R.innerText.replace(/\n{3,}/g,"\n\n");
     (navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(()=>{$("#copy").textContent="Copied";},()=>{$("#copy").textContent="Select and copy manually";});
@@ -1717,6 +1781,7 @@ function run(){
 function swap(){
   const t=sel.A; sel.A=sel.B; sel.B=t;
   const na=$("#nameA").value; $("#nameA").value=$("#nameB").value; $("#nameB").value=na;
+  const rp=$("#phrase").value; $("#phrase").value=$("#reply").value; $("#reply").value=rp;
   const nn=needA; needA=needB; needB=nn;
   ["needA","needB"].forEach(id=>{
     const val=id==="needA"?needA:needB;
@@ -1757,7 +1822,7 @@ $("#go").addEventListener("click",run);
 $("#phrase").addEventListener("keydown",e=>{ if(e.key==="Enter"&&(e.ctrlKey||e.metaKey)){ e.preventDefault(); run(); } });
 ["nameA","nameB"].forEach(id=>$("#"+id).addEventListener("input",sync));
 $("#reset").addEventListener("click",()=>{
-  sel.A.clear(); sel.B.clear(); $("#phrase").value=""; $("#nameA").value=""; $("#nameB").value="";
+  sel.A.clear(); sel.B.clear(); $("#phrase").value=""; $("#facts").value=""; $("#reply").value=""; $("#nameA").value=""; $("#nameB").value="";
     relId=""; $("#rel").querySelectorAll("button").forEach(x=>x.setAttribute("aria-pressed","false"));
     sitId=""; envId=""; needA=""; needB="";
     ["sit","env","needA","needB"].forEach(id=>$("#"+id).querySelectorAll("button").forEach(x=>x.setAttribute("aria-pressed","false")));
