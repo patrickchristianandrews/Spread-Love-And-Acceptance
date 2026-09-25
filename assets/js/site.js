@@ -32,6 +32,7 @@
   var SECTIONS = [
     { id: 'start', title: 'Start here', blurb: 'New to the site? These pages explain the idea and let you try it in a few minutes.', items: [
       { href: '/index.html', code: '', title: 'Home', note: 'What’s new, the ways in, and the full contents' },
+      { href: '/plain-english.html', code: '', title: 'Plain English', note: 'Every technical term on the site, translated into one sentence. You never need them to use the program' },
       { href: '/how-it-works.html', code: '', title: 'How it works', note: 'The outside lens in full: what the program looks at, and why the technical layer is optional' },
       { href: '/contents.html', code: '', title: 'Contents', note: 'Everything in the program, in three parts, plus the full site directory' },
       { href: '/ways-in.html', code: '', title: 'Ways in', note: 'Free while it’s being built: what each level opens, and what it shares' },
@@ -42,7 +43,7 @@
       { href: '/infographic.html', code: '', title: 'Executive summary', note: 'The whole framework on one printable page, easy to share' }
     ]},
     { id: 'self', title: 'Self-discovery', blurb: 'Tools for understanding yourself: your load, your wiring, your patterns. Start here, with or without anyone else.', items: [
-      { href: '/quick-checks.html#ladder', code: 'Tool', title: 'Check Your State', note: 'Thirty seconds to name which of three stress states you’re in' },
+      { href: '/quick-checks.html#today', code: 'Daily', title: 'Today’s Weather', note: 'One minute on your own conditions: a forecast, a talk window, what today is good for, and a private almanac of your patterns' },
       { href: '/wired-differently.html', code: 'New', title: 'Wired Differently', note: 'How different neurotypes receive the same words, and how to talk across the difference' },
       { href: '/wiring-card.html', code: 'Tool', title: 'Wiring Card', note: 'A one-page card on how you receive words, what silence means, and what to avoid' },
       { href: '/workpapers/wp-02-battery-stress-meter.html', code: 'WP-02', title: 'The Battery & Stress Meter', note: 'What you’re already carrying, separate from what just happened', paid: true },
@@ -224,6 +225,7 @@
     mob.addEventListener('click', function () { openPanel(hereSection && hereSection.id); });
     bar.appendChild(mob);
 
+    bar.appendChild(el('a', { class: 'tol-jargon', href: '/plain-english.html', title: 'Every technical term on the site, in one plain sentence' }, 'Jargon?'));
     memberLink = joinLink('tol-member');
     bar.appendChild(memberLink);
 
@@ -415,11 +417,14 @@
       // Page marked paid but has no locked markup: lock everything after its first block
       var host = document.querySelector('main, .container, .sheet') || document.body;
       var kids = Array.prototype.filter.call(host.children, function (c) {
-        return !/^tol-/.test(c.className || '') && c.id !== 'tol-main' && c.tagName !== 'SCRIPT';
+        // .plain is the always-visible plain-English summary: it must never be locked away
+        return !/^tol-/.test(c.className || '') && !/\bplain\b/.test(c.className || '') &&
+               c.id !== 'tol-main' && c.tagName !== 'SCRIPT';
       });
       if (kids.length > 1) {
         var wrap = el('div', { class: 'locked-section' });
-        kids[0].after(wrap);
+        var anchorEl = host.querySelector(':scope > .plain') || kids[0];
+        anchorEl.after(wrap);
         kids.slice(1).forEach(function (k) { wrap.appendChild(k); });
         locked = [wrap];
       }

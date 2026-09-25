@@ -1,10 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-NKC6CQ9S66"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-NKC6CQ9S66');
+</script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Quick checks — The Objective Ledger</title>
-<meta name="description" content="Two free self-checks: where your nervous system is right now, and how this week's household hours actually split.">
+<title>Today&#39;s Weather &mdash; A 60-second read on your own conditions &middot; The Objective Ledger</title>
+<meta name="description" content="Check your inner weather in about a minute: the sky, the pressure, the ground conditions, sleep, people load and what is pressing. You get a forecast, a talk window, what today is good for, what to leave, and a private almanac of your own patterns.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,500&family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -12,21 +20,92 @@
 <link rel="stylesheet" href="/assets/css/reading.css">
 <script src="/assets/js/site.js" defer></script>
 <style>
-  .rungs{ display:grid; gap:0; border:1px solid var(--ink); border-radius:var(--radius); margin:1.5rem 0 1rem; }
+  .steps{ counter-reset:step; }
+  .step{ margin:1.5rem 0 0; padding-top:1.1rem; border-top:1px solid var(--line); }
+  .step:first-child{ border-top:0; }
+  .step-n{ font-family:"IBM Plex Mono", ui-monospace, monospace; font-size:.7rem; letter-spacing:.08em; color:var(--brass); margin:0 0 .15rem; }
+  .read .step h2{ font-size:1.18rem; margin:0 0 .15rem; }
+  .step-hint{ font-size:.9rem; color:var(--ink-soft); margin:0 0 .55rem; max-width:62ch; }
+  .opt{ font-family:"IBM Plex Mono", ui-monospace, monospace; font-size:.66rem; color:var(--ink-soft); text-transform:none; margin-left:.4rem; }
+
+  .rungs{ display:grid; gap:0; border:1px solid var(--ink); border-radius:var(--radius); margin:.2rem 0 0; }
   .rung{
     font:inherit; text-align:left; background:var(--paper); color:var(--ink); cursor:pointer;
-    border:0; border-bottom:1px solid var(--line); padding:.9rem 1.1rem; display:grid; grid-template-columns:11rem 1fr; gap:1rem;
+    border:0; border-bottom:1px solid var(--line); padding:.8rem 1.05rem; display:grid; grid-template-columns:2.2rem 11rem 1fr; gap:.9rem; align-items:baseline;
   }
   .rung:last-child{ border-bottom:0; }
-  .rung strong{ font-family:"Fraunces", Georgia, serif; font-weight:600; }
-  .rung span{ color:var(--ink-soft); }
+  .rung .ico{ font-size:1.3rem; line-height:1; }
+  .rung strong{ font-family:"Fraunces", Georgia, serif; font-weight:600; font-size:1.02rem; }
+  .rung em{ display:block; font-style:normal; font-family:"IBM Plex Mono", ui-monospace, monospace; font-size:.66rem; color:var(--brass); margin-top:.15rem; }
+  .rung span.d{ color:var(--ink-soft); font-size:.94rem; }
   .rung:hover{ background:var(--paper-deep); }
   .rung[aria-pressed="true"]{ background:var(--paper-deep); box-shadow:inset 4px 0 0 var(--brass); }
   .rung:focus-visible{ outline:2px solid var(--focus); outline-offset:-2px; }
-  .reading{ border-left:3px solid var(--brass); padding:.25rem 0 .25rem 1.1rem; }
-  .reading p{ margin:0; }
-  @media (max-width:560px){ .rung{ grid-template-columns:1fr; gap:.1rem; } }
+  @media (max-width:600px){ .rung{ grid-template-columns:2rem 1fr; } .rung span.d{ grid-column:2; } }
 
+  .chips{ display:flex; flex-wrap:wrap; gap:.45rem; margin:.2rem 0 0; }
+  .chip{ font:inherit; font-size:.94rem; cursor:pointer; padding:.45rem .85rem; background:var(--paper); color:var(--ink); border:1px solid var(--line); border-radius:var(--radius); }
+  .chip:hover{ background:var(--paper-deep); }
+  .chip[aria-pressed="true"]{ background:var(--ink); color:var(--paper); border-color:var(--ink); }
+  .chip:focus-visible{ outline:2px solid var(--focus); outline-offset:2px; }
+
+  .forecast{ margin:2.2rem 0 0; border-top:3px double var(--ink); border-bottom:1px solid var(--ink); padding:1.3rem 0 1.4rem; }
+  .fc-head{ display:flex; align-items:center; gap:1rem; flex-wrap:wrap; }
+  .fc-ico{ font-size:2.6rem; line-height:1; }
+  .fc-titles{ flex:1 1 16rem; }
+  .read .fc-titles h2{ font-size:1.55rem; margin:0 0 .15rem; }
+  .fc-sub{ font-family:"IBM Plex Mono", ui-monospace, monospace; font-size:.74rem; color:var(--brass); margin:0; }
+  .window{ display:inline-block; padding:.22rem .75rem; border-radius:3px; font-family:"IBM Plex Mono", ui-monospace, monospace; font-size:.74rem; color:#FFFDF7; white-space:nowrap; }
+  .w-open{ background:var(--credit); } .w-short{ background:var(--credit); opacity:.8; }
+  .w-wait{ background:var(--brass); } .w-closed{ background:var(--debit); }
+
+  .gauge{ margin:1.1rem 0 .2rem; }
+  .gauge-track{ height:12px; background:var(--paper-deep); border:1px solid var(--line); border-radius:99px; overflow:hidden; }
+  .gauge-fill{ height:100%; width:0; background:var(--credit); transition:width .3s ease, background .3s ease; }
+  .gauge-line{ display:flex; justify-content:space-between; font-family:"IBM Plex Mono", ui-monospace, monospace; font-size:.7rem; color:var(--ink-soft); margin-top:.3rem; }
+  .fc-body{ font-size:1.04rem; line-height:1.7; max-width:62ch; margin:1rem 0 0; }
+  .fc-body p{ margin:0 0 .7rem; }
+
+  .cols{ display:grid; grid-template-columns:1fr 1fr; gap:0; border:1px solid var(--line); border-radius:var(--radius); margin:1.2rem 0 0; overflow:hidden; }
+  .col{ padding:.9rem 1.05rem 1rem; background:var(--paper); }
+  .col+.col{ border-left:1px solid var(--line); }
+  .read .col h3{ font-family:"Fraunces", Georgia, serif; font-weight:600; font-size:1rem; margin:0 0 .4rem; }
+  .col.good h3{ color:var(--credit); } .col.later h3{ color:var(--debit); }
+  .col ul{ list-style:none; margin:0; padding:0; }
+  .col li{ font-size:.94rem; line-height:1.5; margin:.3rem 0; padding-left:1rem; position:relative; }
+  .col.good li::before{ content:"\2713"; position:absolute; left:0; color:var(--credit); }
+  .col.later li::before{ content:"\00B7"; position:absolute; left:0; color:var(--debit); font-weight:700; }
+  @media (max-width:600px){ .cols{ grid-template-columns:1fr; } .col+.col{ border-left:0; border-top:1px solid var(--line); } }
+
+  .fc-sec{ margin:1.3rem 0 0; }
+  .read .fc-sec h3{ font-family:"Fraunces", Georgia, serif; font-weight:600; font-size:1.02rem; margin:0 0 .35rem; }
+  .do-list{ list-style:none; margin:0; padding:0; }
+  .do-list li{ margin:.4rem 0; padding-left:1.15rem; position:relative; font-size:.97rem; line-height:1.55; }
+  .do-list li::before{ content:"\2192"; position:absolute; left:0; color:var(--brass); }
+  .do-list a{ font-weight:600; }
+  .say{ margin:.35rem 0 0; padding:.8rem 1rem; background:var(--paper-deep); border-left:4px solid var(--brass); border-radius:var(--radius); }
+  .say p{ margin:0; font-style:italic; }
+  .actions{ margin:1.1rem 0 0; display:flex; flex-wrap:wrap; gap:.5rem; }
+  .btn{ font:inherit; font-size:.92rem; cursor:pointer; padding:.5rem .95rem; border-radius:var(--radius); border:1px solid var(--ink); background:var(--paper); color:var(--ink); }
+  .btn:hover{ background:var(--ink); color:var(--paper); }
+  .btn.is-primary{ background:var(--ink); color:var(--paper); font-weight:600; }
+  .btn.is-primary:hover{ background:var(--credit); }
+  .btn:focus-visible{ outline:2px solid var(--focus); outline-offset:2px; }
+  .btn[disabled]{ opacity:.5; cursor:default; }
+  .msg{ font-size:.9rem; color:var(--credit); min-height:1.3em; margin:.5rem 0 0 !important; }
+
+  .almanac{ margin:1.8rem 0 0; padding:1.15rem 1.25rem 1.3rem; background:var(--paper-deep); border-radius:var(--radius); }
+  .read .almanac h2{ font-size:1.18rem; margin:0 0 .3rem; }
+  .almanac p{ font-size:.94rem; margin:0 0 .5rem; max-width:62ch; }
+  .strip{ display:flex; gap:3px; flex-wrap:wrap; margin:.8rem 0 .4rem; }
+  .cell{ width:30px; height:30px; border-radius:2px; border:1px solid var(--line); display:flex; align-items:center; justify-content:center; font-size:.95rem; background:var(--paper); }
+  .cell.s-clear{ background:#E8F0E6; border-color:var(--credit); }
+  .cell.s-gusty{ background:#F6EBD5; border-color:var(--brass); }
+  .cell.s-fog{ background:#F1E3E0; border-color:var(--debit); }
+  .strip-key{ font-family:"IBM Plex Mono", ui-monospace, monospace; font-size:.7rem; color:var(--ink-soft); display:flex; gap:1.1rem; flex-wrap:wrap; margin:0 0 .3rem; }
+  .pattern{ border-left:3px solid var(--brass); padding-left:1rem; margin:.9rem 0 0; }
+  .pattern p{ margin:0 0 .4rem; font-size:.97rem; }
+  .why{ font-size:.92rem; color:var(--ink-soft); border-left:3px solid var(--line); padding-left:1rem; margin-top:1.4rem; max-width:62ch; }
   .stand{ margin:1.5rem 0; }
   .stand-heads, .row{ display:grid; grid-template-columns:1fr 6.5rem 6.5rem 2.5rem; gap:.5rem; align-items:center; }
   .stand-heads{ padding-bottom:.5rem; border-bottom:3px double var(--ink); font-weight:600; }
@@ -55,21 +134,170 @@
 <main class="read">
 
   <header class="read-head">
-    <p class="read-code">Free</p>
-    <h1>Quick checks</h1>
+    <p class="read-code">Free &middot; nothing leaves your device</p>
+    <h1>Today&#39;s Weather</h1>
   </header>
 
-  <p>Two self-checks, in the order they work best: first where you are, then what the week actually looked like. Nothing here is saved or sent anywhere.</p>
+  <p class="lede">People have inner weather. Some mornings are clear, some are gusty, some are fogged in, and it changes without asking your permission. This is a one-minute reading of today&#39;s conditions: the sky, the pressure, the ground underneath, and what&#39;s blowing in.</p>
+  <p class="why">Weather is the point of the metaphor. It isn&#39;t a grade, a diagnosis or a verdict on you, any more than rain is a verdict on a town. Conditions pass. Knowing them just tells you what today is good for, and what to leave until the front moves through.</p>
 
-  <h2 id="ladder">The Nervous System Ladder</h2>
-  <p>Polyvagal theory describes three broad states, arranged like rungs on a ladder. Pick the one closest to true right now. This is a check on yourself, not a reading of anyone else. If you are not on the top rung, do not start a hard talk. A sharper voice, a repeated sentence, or the urge to add a second topic are early signs you are already leaving the conversation. Stop there. The <a href="/check-ins.html#signs">signs, and how to regroup</a>, are on Check-ins. The order for when you are ready is on <a href="/check-ins.html">Check-ins</a>. The <a href="/signal-translator.html">Signal Translator</a> is for the sentence, after the body can hear it.</p>
+  <section id="today">
+    <div class="steps">
 
-  <div class="rungs" role="group" aria-label="Your current state">
-    <button class="rung" type="button" data-state="ventral" aria-pressed="true"><strong>Ventral vagal</strong><span>Safe and social</span></button>
-    <button class="rung" type="button" data-state="sympathetic" aria-pressed="false"><strong>Sympathetic</strong><span>Mobilized</span></button>
-    <button class="rung" type="button" data-state="dorsal" aria-pressed="false"><strong>Dorsal vagal</strong><span>Shutdown</span></button>
-  </div>
-  <div class="reading" aria-live="polite"><p id="reading-text">Breath is easy, your shoulders aren’t braced, and you can hear feedback without immediately defending yourself. This is the state the rest of the site actually works in.</p></div>
+      <div class="step">
+        <p class="step-n">Step 1 of 7 &middot; required</p>
+        <h2 id="ladder">The sky</h2>
+        <p class="step-hint">Pick the one closest to true right now. This is a reading of you, never of anyone else.</p>
+        <div class="rungs" role="group" aria-label="The sky right now">
+          <button class="rung" type="button" data-sky="clear" aria-pressed="false"><span class="ico" aria-hidden="true">&#9728;</span><strong>Clear<em>Ventral vagal</em></strong><span class="d">Breath is easy, shoulders aren&#39;t braced, and you can hear something hard without defending yourself.</span></button>
+          <button class="rung" type="button" data-sky="gusty" aria-pressed="false"><span class="ico" aria-hidden="true">&#127788;</span><strong>Gusty<em>Sympathetic</em></strong><span class="d">Heart rate&#39;s up, thoughts move fast, and small things start to feel urgent or personal.</span></button>
+          <button class="rung" type="button" data-sky="fog" aria-pressed="false"><span class="ico" aria-hidden="true">&#127787;</span><strong>Fogged in<em>Dorsal vagal</em></strong><span class="d">Flat, far away or foggy, and words are harder to find than usual.</span></button>
+        </div>
+      </div>
+
+      <div class="step">
+        <p class="step-n">Step 2 of 7 <span class="opt">optional</span></p>
+        <h2>The pressure</h2>
+        <p class="step-hint">How much were you already carrying before whatever just happened?</p>
+        <div class="chips" role="group" aria-label="Pressure">
+          <button class="chip" type="button" data-load="light" aria-pressed="false">Light</button>
+          <button class="chip" type="button" data-load="building" aria-pressed="false">Building</button>
+          <button class="chip" type="button" data-load="heavy" aria-pressed="false">Heavy</button>
+        </div>
+      </div>
+
+      <div class="step">
+        <p class="step-n">Step 3 of 7 <span class="opt">optional</span></p>
+        <h2>Ground conditions</h2>
+        <p class="step-hint">The body underneath the mood. Tap anything true today.</p>
+        <div class="chips" role="group" aria-label="Ground conditions">
+          <button class="chip" type="button" data-body="hungry" aria-pressed="false">Haven&#39;t eaten in a while</button>
+          <button class="chip" type="button" data-body="thirsty" aria-pressed="false">Thirsty</button>
+          <button class="chip" type="button" data-body="pain" aria-pressed="false">In pain or unwell</button>
+          <button class="chip" type="button" data-body="still" aria-pressed="false">Been still all day</button>
+          <button class="chip" type="button" data-body="noise" aria-pressed="false">Too much noise or light</button>
+          <button class="chip" type="button" data-body="caffeine" aria-pressed="false">Running on caffeine</button>
+          <button class="chip" type="button" data-body="screens" aria-pressed="false">Screens since I woke up</button>
+        </div>
+      </div>
+
+      <div class="step">
+        <p class="step-n">Step 4 of 7 <span class="opt">optional</span></p>
+        <h2>Last night&#39;s sleep</h2>
+        <p class="step-hint">Roughly. This is the single strongest signal in the whole check.</p>
+        <div class="chips" role="group" aria-label="Sleep last night">
+          <button class="chip" type="button" data-sleep="bad" aria-pressed="false">Barely slept</button>
+          <button class="chip" type="button" data-sleep="short" aria-pressed="false">Short night</button>
+          <button class="chip" type="button" data-sleep="ok" aria-pressed="false">About enough</button>
+          <button class="chip" type="button" data-sleep="good" aria-pressed="false">Properly rested</button>
+        </div>
+      </div>
+
+      <div class="step">
+        <p class="step-n">Step 5 of 7 <span class="opt">optional</span></p>
+        <h2>People load</h2>
+        <p class="step-hint">How much peopling has today already asked of you?</p>
+        <div class="chips" role="group" aria-label="People load">
+          <button class="chip" type="button" data-people="none" aria-pressed="false">Barely any</button>
+          <button class="chip" type="button" data-people="some" aria-pressed="false">A normal amount</button>
+          <button class="chip" type="button" data-people="lots" aria-pressed="false">A lot</button>
+          <button class="chip" type="button" data-people="nonstop" aria-pressed="false">Nonstop, no gaps</button>
+        </div>
+      </div>
+
+      <div class="step">
+        <p class="step-n">Step 6 of 7 <span class="opt">optional</span></p>
+        <h2>What&#39;s blowing in</h2>
+        <p class="step-hint">The fronts on the horizon. Tap any that are sitting on you today.</p>
+        <div class="chips" role="group" aria-label="What is pressing today">
+          <button class="chip" type="button" data-front="work" aria-pressed="false">Work</button>
+          <button class="chip" type="button" data-front="money" aria-pressed="false">Money</button>
+          <button class="chip" type="button" data-front="kids" aria-pressed="false">Kids or caring</button>
+          <button class="chip" type="button" data-front="health" aria-pressed="false">Health</button>
+          <button class="chip" type="button" data-front="family" aria-pressed="false">Family</button>
+          <button class="chip" type="button" data-front="home" aria-pressed="false">The house</button>
+          <button class="chip" type="button" data-front="convo" aria-pressed="false">One conversation</button>
+          <button class="chip" type="button" data-front="unnamed" aria-pressed="false">Something I can&#39;t name</button>
+        </div>
+      </div>
+
+      <div class="step">
+        <p class="step-n">Step 7 of 7 <span class="opt">optional</span></p>
+        <h2>What would actually help in the next hour?</h2>
+        <p class="step-hint">Pick as many as fit. Naming it is most of the work.</p>
+        <div class="chips" role="group" aria-label="What would help">
+          <button class="chip" type="button" data-need="space" aria-pressed="false">Space</button>
+          <button class="chip" type="button" data-need="food" aria-pressed="false">Food or water</button>
+          <button class="chip" type="button" data-need="sleep" aria-pressed="false">Rest</button>
+          <button class="chip" type="button" data-need="move" aria-pressed="false">To move</button>
+          <button class="chip" type="button" data-need="heard" aria-pressed="false">To be heard</button>
+          <button class="chip" type="button" data-need="plan" aria-pressed="false">A plan</button>
+          <button class="chip" type="button" data-need="company" aria-pressed="false">Company</button>
+          <button class="chip" type="button" data-need="quiet" aria-pressed="false">Quiet</button>
+          <button class="chip" type="button" data-need="help" aria-pressed="false">Someone to take something off me</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="forecast" id="forecast" aria-live="polite">
+      <div class="fc-head">
+        <span class="fc-ico" id="fc-ico" aria-hidden="true">&#9925;</span>
+        <div class="fc-titles">
+          <h2 id="fc-head">Your forecast appears here</h2>
+          <p class="fc-sub" id="fc-sub">Pick the sky in step 1 to begin</p>
+        </div>
+        <span class="window w-wait" id="fc-window" hidden>Waiting</span>
+      </div>
+
+      <div class="gauge" id="gauge" hidden>
+        <div class="gauge-track"><div class="gauge-fill" id="gauge-fill"></div></div>
+        <div class="gauge-line"><span id="gauge-label">Pressure reading</span><span id="gauge-num"></span></div>
+      </div>
+
+      <div class="fc-body" id="fc-body"><p>Answer step 1 and the forecast fills in. Every extra step sharpens it, and none of them are required.</p></div>
+
+      <div id="fc-extra" hidden>
+        <div class="cols">
+          <div class="col good"><h3>Good hours for</h3><ul id="col-good"></ul></div>
+          <div class="col later"><h3>Leave until the front passes</h3><ul id="col-later"></ul></div>
+        </div>
+
+        <div class="fc-sec" id="sec-reset" hidden>
+          <h3>Sixty seconds that would help right now</h3>
+          <ul class="do-list" id="fc-reset"></ul>
+        </div>
+
+        <div class="fc-sec">
+          <h3>Then, in the program</h3>
+          <ul class="do-list" id="fc-do"></ul>
+        </div>
+
+        <div class="fc-sec">
+          <h3>If you need to say something now</h3>
+          <div class="say"><p id="fc-say"></p></div>
+        </div>
+
+        <div class="actions">
+          <button class="btn" type="button" id="copy-say">Copy the sentence</button>
+          <button class="btn" type="button" id="copy-all">Copy the whole forecast</button>
+          <button class="btn is-primary" type="button" id="save">Log today&#39;s weather</button>
+          <button class="btn" type="button" id="reset">Start over</button>
+        </div>
+        <p class="msg" id="msg" aria-live="polite"></p>
+      </div>
+    </div>
+
+    <section class="almanac" id="almanac" hidden>
+      <h2>Your almanac</h2>
+      <p id="al-intro">Kept on this device only. Nothing is uploaded, and no one else can see it.</p>
+      <div class="strip" id="strip" role="img" aria-label="Your recent weather"></div>
+      <p class="strip-key"><span>&#9728; Clear</span><span>&#127788; Gusty</span><span>&#127787; Fogged in</span></p>
+      <div class="pattern" id="pattern"></div>
+      <div class="actions"><button class="btn" type="button" id="erase">Erase my almanac</button></div>
+    </section>
+
+    <p class="why"><strong>What this is not.</strong> It isn&#39;t a diagnosis, a score or a judgment. It describes a few hours of conditions, and conditions change. A heavy reading is information about a day, not a failing in a person. If you&#39;re in crisis, please reach a person rather than a page: in the US, call or text 988.</p>
+  </section>
 
   <h2 id="lemonade">The Lemonade Stand</h2>
   <p>Two people, one stand. List what it took to keep the household running this week and how many hours each of you put in. Rename the columns and add what’s missing; it recalculates as you type. The totals feed the workload balance input in <a href="/workpapers/calculators/calc01-solvency.html">CALC-01 Solvency Read</a>.</p>
@@ -99,20 +327,295 @@
 <script src="/assets/js/lemonade-calc.js"></script>
 <script>
 (function(){
-  var rungs = document.querySelectorAll('.rung');
-  var out = document.getElementById('reading-text');
-  var copy = {
-    ventral: "Breath is easy, your shoulders aren\u2019t braced, and you can hear feedback without immediately defending yourself. This is the state the rest of the site actually works in.",
-    sympathetic: "Heart rate\u2019s up, thoughts are moving fast, and small things can start to feel urgent or personal. Good energy for doing the dishes right now. Riskier for deciding who should be doing them going forward \u2014 that conversation might go better in twenty minutes.",
-    dorsal: "Flat, foggy, or far away, and words are harder to find than usual. This isn\u2019t the moment to open the register. Rest, eat, get warm, or just wait \u2014 the ledger will still be here when you\u2019re back."
+  var KEY='tol-weather-v1', MAX=14;
+  var sky=null, load=null, sleep=null, people=null;
+  var body={}, front={}, need={};
+  function $(id){ return document.getElementById(id); }
+  function on(o){ return Object.keys(o).filter(function(k){ return o[k]; }); }
+  function list(a){ return a.length<2 ? (a[0]||'') : a.slice(0,-1).join(', ')+' and '+a[a.length-1]; }
+
+  var SKY={
+    clear:{ico:'\u2600',name:'Clear',sub:'Settled \u00b7 ventral vagal'},
+    gusty:{ico:'\uD83C\uDF2C',name:'Gusty',sub:'Mobilized \u00b7 sympathetic'},
+    fog:{ico:'\uD83C\uDF2B',name:'Fogged in',sub:'Shut down \u00b7 dorsal vagal'}
   };
-  rungs.forEach(function(r){
-    r.addEventListener('click', function(){
-      rungs.forEach(function(x){ x.setAttribute('aria-pressed','false'); });
-      r.setAttribute('aria-pressed','true');
-      out.textContent = copy[r.dataset.state];
+  var BODYTXT={hungry:"you haven't eaten in a while",thirsty:"you're thirsty",pain:"you're in pain or unwell",
+    still:"you've been still all day",noise:"there's been too much noise or light",caffeine:"you're running on caffeine",
+    screens:"you've been on screens since you woke"};
+  var FRONTTXT={work:'work',money:'money',kids:'kids or caring',health:'health',family:'family',home:'the house',
+    convo:'one conversation',unnamed:"something you can't name yet"};
+  var NEEDTXT={space:'space',food:'food or water',sleep:'rest',move:'to move',heard:'to be heard',plan:'a plan',
+    company:'company',quiet:'quiet',help:'someone to take something off you'};
+
+  function index(){
+    var s=0;
+    s+= sky==='clear'?0: sky==='gusty'?26: 34;
+    s+= load==='light'?0: load==='building'?10: load==='heavy'?20:6;
+    s+= sleep==='bad'?18: sleep==='short'?10: sleep==='ok'?2: sleep==='good'?0:6;
+    s+= people==='none'?0: people==='some'?3: people==='lots'?9: people==='nonstop'?14:4;
+    s+= Math.min(on(body).length*4,14);
+    s+= Math.min(on(front).length*3,10);
+    return Math.max(0,Math.min(100,Math.round(s)));
+  }
+
+  function band(i){
+    if(i<25) return 'Settled conditions';
+    if(i<45) return 'Breezy';
+    if(i<65) return 'Building front';
+    if(i<82) return 'Storm conditions';
+    return 'Whiteout';
+  }
+
+  function talkWindow(i){
+    if(sky==='fog') return ['Window closed','w-closed'];
+    if(sky==='gusty') return i>=60?['Not tonight','w-closed']:['Wait 20 minutes','w-wait'];
+    return i>=50?['Open, keep it short','w-short']:['Window open','w-open'];
+  }
+
+  function reset(){
+    var r=[];
+    if(body.thirsty||need.food) r.push('Drink a full glass of water. Dehydration reads as irritation more often than anyone expects.');
+    if(body.hungry) r.push('Eat something, even something small. An empty tank makes every sentence land harder.');
+    if(body.still||need.move) r.push('Two minutes on your feet: stairs, the garden, once around the block. Movement burns off what the gusts leave behind.');
+    if(body.noise||need.quiet) r.push('Find the quietest room in the building and close the door for five minutes.');
+    if(body.screens) r.push('Look at something more than twenty feet away for a minute. Let your eyes reach their real range.');
+    if(sleep==='bad'||sleep==='short'||need.sleep) r.push('If you can lie down for ten minutes, do. If you can\u2019t, decide now what time tonight ends.');
+    if(body.caffeine) r.push('Skip the next coffee. Caffeine on a gusty day mostly adds wind.');
+    if(sky!=='clear' && !r.length) r.push('Slow the breath out rather than in: the long exhale is the part that settles you.');
+    return r.slice(0,4);
+  }
+
+  function goodAndLater(i){
+    var good=[], later=[];
+    if(sky==='clear'){
+      good.push('The conversation you\u2019ve been putting off');
+      good.push('Agreeing who owns what, while nobody is defending');
+      good.push('Writing down this week honestly');
+      later.push('Nothing much. Use the window.');
+      if(i>=50){ later=['Anything that needs a long attention span','Big, irreversible decisions']; good=['One short, honest conversation','Something practical and physical','Writing it down for later']; }
+    } else if(sky==='gusty'){
+      good=['Physical jobs: dishes, laundry, a walk','Writing the thing down instead of saying it','Short factual messages, nothing weighty'];
+      later=['Deciding who does more','Anything about money','Replying to the message that stung','Any sentence beginning "you always"'];
+    } else {
+      good=['Warmth, water, food, lying down','Nothing that needs deciding','One small finishable thing, if any'];
+      later=['Every conversation that can wait until tomorrow','Any promise you\u2019d have to keep','Reading meaning into anyone\u2019s tone tonight'];
+    }
+    if(front.money) later.push('Money talk, specifically. It never goes well under pressure.');
+    if(front.convo && sky!=='clear') later.push('That one conversation, until the sky changes.');
+    return [good,later];
+  }
+
+  function nextSteps(){
+    var d=[];
+    if(sky==='clear'){
+      d.push('Use the order in <a href="/check-ins.html">Check-ins</a> so a good window doesn\u2019t get wasted.');
+      d.push('Test your opening line in the <a href="/signal-translator.html">Signal Translator</a> before you say it.');
+      d.push('Log this week in <a href="/workpapers/wp-01.html">WP-01</a> while you can see it clearly.');
+    } else if(sky==='gusty'){
+      d.push('<a href="/wp-11.html">WP-11, the Calm-Down Kit</a> is the two-minute version of settling.');
+      d.push('<a href="/workpapers/wp-02-battery-stress-meter.html">WP-02</a> separates today\u2019s load from this one thing.');
+      d.push('If something must be said now, run it through <a href="/workpapers/wp-09-tone-filter.html">WP-09</a>: fact, feeling, ask.');
+    } else {
+      d.push('<a href="/wp-11.html">WP-11</a> holds the list you already decided on for exactly this.');
+      d.push('Tell someone a time rather than a reason. <a href="/check-ins.html">Check-ins</a> has the words.');
+      d.push('When you\u2019re back up, <a href="/workpapers/wp-04-deficit-audit.html">WP-04</a> is for what keeps knocking you down.');
+    }
+    if(need.heard) d.push('If you mostly need to be heard, say that first: <a href="/wired-differently.html">Wired Differently</a> covers why people answer with fixes instead.');
+    if(need.help) d.push('Handing something over is a structural fix, not a favour: <a href="/workpapers/wp-03-raci-treaty.html">WP-03</a> gives every recurring task one owner.');
+    return d.slice(0,4);
+  }
+
+  function sentence(){
+    if(need.space||need.quiet) return 'I need a bit of space before we get into this. Not forever, just now. Can we talk at [time]?';
+    if(need.heard) return 'I don\u2019t need it solved. I just need you to hear this for a few minutes first.';
+    if(need.help) return 'I\u2019m at the end of what I can carry today. Could you take [one thing] off me tonight?';
+    if(need.plan && sky!=='fog') return 'I think we\u2019re stuck because there isn\u2019t a plan yet. Ten minutes to make one?';
+    if(sky==='clear') return 'I\u2019m in a decent place to talk. Is now good for you?';
+    if(sky==='gusty') return 'I\u2019m running hot, and it isn\u2019t about you. Give me twenty minutes and I\u2019ll come find you.';
+    return 'I\u2019ve got nothing left in the tank tonight. I\u2019m not shutting you out. Can we pick this up tomorrow?';
+  }
+
+  function paragraphs(i){
+    var p=[], s=SKY[sky];
+    var lead={clear:'The sky is clear. Your body isn\u2019t braced, which means you can hear something hard without treating it as a threat. This is the weather the rest of the site is designed for.',
+      gusty:'It\u2019s gusty. Your system is mobilized: useful energy for doing something physical, poor conditions for deciding anything about another person.',
+      fog:'You\u2019re fogged in. Flat, far away or foggy, and words are further off than usual. Nothing decided in this weather gets decided well.'}[sky];
+    p.push(lead);
+
+    var b=on(body).map(function(k){ return BODYTXT[k]; });
+    var groundBits=[];
+    if(sleep==='bad') groundBits.push('you barely slept');
+    else if(sleep==='short') groundBits.push('it was a short night');
+    groundBits=groundBits.concat(b);
+    if(people==='nonstop') groundBits.push('there\u2019s been no gap between people all day');
+    else if(people==='lots') groundBits.push('today has asked a lot of peopling from you');
+    if(groundBits.length){
+      p.push('The ground underneath: '+list(groundBits)+'. That is not a side note. It is most of why today feels the way it does, and it is fixable in a way that character is not.');
+    }
+
+    var f=on(front).map(function(k){ return FRONTTXT[k]; });
+    if(f.length){
+      p.push('Blowing in: '+list(f)+'. Weather from one front lands on whoever is nearest, which is usually the person who had nothing to do with it. Worth saying out loud before it does.');
+    }
+
+    if(load==='heavy'&&sky!=='clear') p.push('You were already carrying a heavy day before this. Treat the size of your reaction as a reading on the day, not on whoever is in front of you.');
+    if(load==='light'&&sky==='gusty') p.push('Your day has been light, which makes this worth a second look. Whatever stirred the air may matter more than its size suggests.');
+    if(sleep==='good'&&sky==='gusty') p.push('You slept well, so this isn\u2019t exhaustion talking. Something real is pushing, and it deserves a proper hearing rather than a quick fix.');
+
+    var n=on(need).map(function(k){ return NEEDTXT[k]; });
+    if(n.length) p.push('You said what would help is '+list(n)+'. Arrange that before anything else. It is a reasonable thing to ask for out loud, and asking is cheaper than the argument you get by not asking.');
+
+    p.push('Overall: '+band(i).toLowerCase()+', at '+i+' out of 100 on the pressure reading. '+(i<45?'There is room in the day.':i<65?'There is less room than usual today; spend it deliberately.':'There is very little room today. Protect what is left rather than spending it on a debate.'));
+    return p;
+  }
+
+  function render(){
+    if(!sky) return;
+    var i=index(), s=SKY[sky], w=talkWindow(i), gl=goodAndLater(i);
+    $('fc-ico').textContent=s.ico;
+    $('fc-head').textContent=s.name+' today';
+    $('fc-sub').textContent=s.sub+' \u00b7 '+band(i);
+    var win=$('fc-window'); win.hidden=false; win.className='window '+w[1]; win.textContent=w[0];
+    $('gauge').hidden=false;
+    $('gauge-fill').style.width=i+'%';
+    $('gauge-fill').style.background=i<45?'var(--credit)':i<65?'var(--brass)':'var(--debit)';
+    $('gauge-label').textContent='Pressure reading \u00b7 '+band(i);
+    $('gauge-num').textContent=i+' / 100';
+    var fb=$('fc-body'); fb.innerHTML='';
+    paragraphs(i).forEach(function(t){ var el=document.createElement('p'); el.textContent=t; fb.appendChild(el); });
+    function fill(id,arr,html){ var ul=$(id); ul.innerHTML=''; arr.forEach(function(t){ var li=document.createElement('li'); if(html){ li.innerHTML=t; } else { li.textContent=t; } ul.appendChild(li); }); }
+    fill('col-good',gl[0],false); fill('col-later',gl[1],false);
+    var r=reset();
+    $('sec-reset').hidden=!r.length; if(r.length) fill('fc-reset',r,false);
+    fill('fc-do',nextSteps(),true);
+    $('fc-say').textContent=sentence();
+    $('fc-extra').hidden=false;
+    $('msg').textContent=''; $('save').disabled=false; $('save').textContent="Log today\u2019s weather";
+  }
+
+  function plain(){
+    var i=index();
+    var t='Today\u2019s weather: '+SKY[sky].name+' \u00b7 '+band(i)+' \u00b7 pressure '+i+'/100\n\n';
+    t+=paragraphs(i).join('\n\n')+'\n\nSentence: '+sentence();
+    return t;
+  }
+
+  // ---------- almanac ----------
+  function get(){ try{ return JSON.parse(localStorage.getItem(KEY)||'[]'); }catch(e){ return []; } }
+  function put(a){ try{ localStorage.setItem(KEY, JSON.stringify(a.slice(-MAX))); }catch(e){} }
+  function bucket(h){ return h<12?'mornings':h<17?'afternoons':'evenings'; }
+
+  function patterns(a){
+    var out=[];
+    if(a.length<2){ out.push('One reading is a mood. Come back a few times and the shape of your weeks starts to show.'); return out; }
+    var last=a.slice(-7), c={};
+    last.forEach(function(e){ c[e.sky]=(c[e.sky]||0)+1; });
+    var top=Object.keys(c).sort(function(x,y){ return c[y]-c[x]; })[0];
+    if(c[top]>=2) out.push(c[top]+' of your last '+last.length+' readings were '+SKY[top].name.toLowerCase()+'.');
+
+    var rough=a.filter(function(e){ return e.sky!=='clear'; });
+    var badSleep=rough.filter(function(e){ return e.sleep==='bad'||e.sleep==='short'; });
+    if(rough.length>=3 && badSleep.length/rough.length>=0.6){
+      out.push('Sleep is doing most of the work here: '+badSleep.length+' of your '+rough.length+' rough days followed a short night. That makes bedtime a relationship tool, which is an odd sentence and a true one.');
+    }
+    var heavy=a.filter(function(e){ return e.i>=60; });
+    if(heavy.length>=3){
+      var b={}; heavy.forEach(function(e){ var k=bucket(e.t); b[k]=(b[k]||0)+1; });
+      var bt=Object.keys(b).sort(function(x,y){ return b[y]-b[x]; })[0];
+      if(b[bt]>=2) out.push('Your high-pressure readings cluster in the '+bt+': '+b[bt]+' of '+heavy.length+'. Worth protecting that stretch, or at least not scheduling hard talks inside it.');
+    }
+    var fc={}; a.forEach(function(e){ (e.front||[]).forEach(function(k){ fc[k]=(fc[k]||0)+1; }); });
+    var ft=Object.keys(fc).sort(function(x,y){ return fc[y]-fc[x]; })[0];
+    if(ft && fc[ft]>=3) out.push('The front that keeps returning is '+FRONTTXT[ft]+', '+fc[ft]+' times. A front that never clears is usually structural: <a href="/workpapers/wp-04-deficit-audit.html">WP-04</a> is built for exactly that.');
+    var nc={}; a.forEach(function(e){ (e.need||[]).forEach(function(k){ nc[k]=(nc[k]||0)+1; }); });
+    var nt=Object.keys(nc).sort(function(x,y){ return nc[y]-nc[x]; })[0];
+    if(nt && nc[nt]>=3) out.push('What you ask for most is '+NEEDTXT[nt]+', '+nc[nt]+' times. If nobody around you knows that, a <a href="/wiring-card.html">wiring card</a> says it once so you don\u2019t have to keep saying it.');
+    var peoplish=a.filter(function(e){ return e.people==='lots'||e.people==='nonstop'; });
+    var peoplishRough=peoplish.filter(function(e){ return e.sky!=='clear'; });
+    if(peoplish.length>=3 && peoplishRough.length/peoplish.length>=0.6) out.push('Heavy people days and rough weather travel together for you: '+peoplishRough.length+' of '+peoplish.length+'. That is a capacity fact, not an attitude problem.');
+    var avg=Math.round(a.reduce(function(s,e){ return s+(e.i||0); },0)/a.length);
+    out.push('Your average pressure across '+a.length+' reading'+(a.length===1?'':'s')+' is '+avg+' out of 100.'+(avg>=60?' That is a lot to be running at. <a href="/workpapers/wp-02-battery-stress-meter.html">WP-02</a> puts firmer numbers on it, and <a href="/relationships.html">the relationships page</a> shows where the weight usually hides.':''));
+    return out;
+  }
+
+  function draw(){
+    var a=get();
+    if(!a.length){ $('almanac').hidden=true; return; }
+    $('almanac').hidden=false;
+    var strip=$('strip'); strip.innerHTML='';
+    a.slice(-MAX).forEach(function(e){
+      var d=document.createElement('span');
+      d.className='cell s-'+(e.sky==='clear'?'clear':e.sky==='gusty'?'gusty':'fog');
+      d.textContent=SKY[e.sky]?SKY[e.sky].ico:'';
+      d.title=e.d+' \u2014 '+(SKY[e.sky]?SKY[e.sky].name:'')+', pressure '+(e.i||0)+'/100';
+      strip.appendChild(d);
+    });
+    $('al-intro').textContent=a.length+' reading'+(a.length===1?'':'s')+' kept on this device only. Nothing is uploaded, and no one else can see it.';
+    var p=$('pattern'); p.innerHTML='';
+    patterns(a).forEach(function(t){ var el=document.createElement('p'); el.innerHTML=t; p.appendChild(el); });
+  }
+
+  // ---------- wiring ----------
+  document.querySelectorAll('[data-sky]').forEach(function(b){
+    b.addEventListener('click', function(){
+      document.querySelectorAll('[data-sky]').forEach(function(x){ x.setAttribute('aria-pressed','false'); });
+      b.setAttribute('aria-pressed','true'); sky=b.dataset.sky; render();
     });
   });
+  [['data-load',function(v){ load=v; }],['data-sleep',function(v){ sleep=v; }],['data-people',function(v){ people=v; }]].forEach(function(pair){
+    var attr=pair[0], set=pair[1];
+    document.querySelectorAll('['+attr+']').forEach(function(c){
+      c.addEventListener('click', function(){
+        var was=c.getAttribute('aria-pressed')==='true';
+        document.querySelectorAll('['+attr+']').forEach(function(x){ x.setAttribute('aria-pressed','false'); });
+        c.setAttribute('aria-pressed', was?'false':'true');
+        set(was?null:c.getAttribute(attr)); render();
+      });
+    });
+  });
+  [['data-body',body],['data-front',front],['data-need',need]].forEach(function(pair){
+    document.querySelectorAll('['+pair[0]+']').forEach(function(c){
+      c.addEventListener('click', function(){
+        var was=c.getAttribute('aria-pressed')==='true';
+        c.setAttribute('aria-pressed', was?'false':'true');
+        pair[1][c.getAttribute(pair[0])]=!was; render();
+      });
+    });
+  });
+
+  function copy(text,ok){
+    if(navigator.clipboard){ navigator.clipboard.writeText(text).then(function(){ $('msg').textContent=ok; },function(){ $('msg').textContent='Select the text to copy it.'; }); }
+    else { $('msg').textContent='Select the text to copy it.'; }
+  }
+  $('copy-say').addEventListener('click', function(){ copy($('fc-say').textContent,'Sentence copied.'); });
+  $('copy-all').addEventListener('click', function(){ copy(plain(),'Forecast copied.'); });
+
+  $('save').addEventListener('click', function(){
+    if(!sky) return;
+    var now=new Date(), a=get();
+    a.push({ d: now.toISOString().slice(0,10), t: now.getHours(), sky: sky, i: index(), load: load,
+             sleep: sleep, people: people, body: on(body), front: on(front), need: on(need) });
+    put(a); draw();
+    $('msg').textContent='Logged on this device. Erase it any time below.';
+    $('save').disabled=true; $('save').textContent='Logged';
+  });
+
+  $('reset').addEventListener('click', function(){
+    sky=load=sleep=people=null; body={}; front={}; need={};
+    document.querySelectorAll('[aria-pressed]').forEach(function(x){ x.setAttribute('aria-pressed','false'); });
+    $('fc-extra').hidden=true; $('gauge').hidden=true; $('fc-window').hidden=true;
+    $('fc-ico').textContent='\u26C5'; $('fc-head').textContent='Your forecast appears here';
+    $('fc-sub').textContent='Pick the sky in step 1 to begin';
+    $('fc-body').innerHTML='<p>Answer step 1 and the forecast fills in. Every extra step sharpens it, and none of them are required.</p>';
+    window.scrollTo({top:document.getElementById('today').offsetTop-70, behavior:'smooth'});
+  });
+
+  $('erase').addEventListener('click', function(){
+    try{ localStorage.removeItem(KEY); }catch(e){}
+    $('almanac').hidden=true; $('msg').textContent='Almanac erased.';
+  });
+
+  draw();
 })();
 </script>
 </body>

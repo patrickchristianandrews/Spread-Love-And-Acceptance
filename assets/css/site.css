@@ -218,3 +218,47 @@ div.tol-gate p{ max-width:60ch; }
 @media (max-width:1120px) and (min-width:861px){
   .tol-sections button[data-sec="book"], .tol-sections button[data-sec="workpapers"], .tol-sections button[data-sec="tools"]{ display:none; }
 }
+
+/* ---------- Plain-first layer: "In plain terms" box + optional depth ----------
+   Used at the top of any page that has technical content. The plain box is always
+   visible; the technical version sits inside <details class="deeper"> and stays shut
+   until someone opens it. Nothing on the site requires opening it. */
+.plain{
+  margin:1.1rem 0 1.6rem; padding:1rem 1.2rem 1.1rem;
+  background:var(--paper-deep); border-left:5px solid var(--credit); border-radius:var(--radius);
+}
+.plain > p:first-child{ margin-top:0; }
+.plain > p:last-child{ margin-bottom:0; }
+.plain-tag{
+  display:block; font-family:"IBM Plex Mono", ui-monospace, monospace;
+  font-size:.7rem; letter-spacing:.08em; color:var(--credit); margin:0 0 .5rem;
+}
+.plain p{ font-size:1.02rem; line-height:1.65; max-width:64ch; margin:0 0 .7rem; }
+.plain .plain-do{ margin:.8rem 0 0; padding-top:.7rem; border-top:1px solid var(--line); font-size:.97rem; }
+.plain .plain-do strong{ font-family:"Fraunces", Georgia, serif; }
+.plain .plain-more{ margin:.55rem 0 0; font-size:.92rem; color:var(--ink-soft); }
+.plain a{ color:var(--ink); text-decoration-color:var(--brass); text-underline-offset:3px; }
+.plain a:hover{ color:var(--credit); }
+.plain .plain-more a{ font-weight:600; margin-right:.9rem; white-space:nowrap; }
+
+details.deeper{
+  margin:1.2rem 0; padding:.2rem 0 0; border-top:1px solid var(--line); border-bottom:1px solid var(--line);
+}
+details.deeper > summary{
+  cursor:pointer; list-style:none; padding:.7rem 0;
+  font-family:"IBM Plex Mono", ui-monospace, monospace; font-size:.76rem; letter-spacing:.04em; color:var(--brass);
+  display:flex; justify-content:space-between; gap:1rem; align-items:center;
+}
+details.deeper > summary::-webkit-details-marker{ display:none; }
+details.deeper > summary::after{ content:"Show"; font-size:.72rem; color:var(--ink-soft); }
+details.deeper[open] > summary::after{ content:"Hide"; }
+details.deeper > summary:hover{ color:var(--ink); }
+details.deeper > summary:focus-visible{ outline:2px solid var(--focus); outline-offset:2px; }
+details.deeper .deeper-body{ padding:0 0 1rem; }
+details.deeper .deeper-body > :first-child{ margin-top:0; }
+
+/* Jargon link in the header bar */
+.tol-jargon{ font-size:.82rem !important; color:var(--ink-soft); text-decoration:none; padding:.5rem .55rem !important; white-space:nowrap; }
+.tol-jargon:hover{ color:var(--ink); text-decoration:underline; text-decoration-color:var(--brass); text-underline-offset:3px; }
+@media (max-width:1120px){ .tol-jargon{ display:none; } }
+@media print{ details.deeper{ border:0; } details.deeper > summary{ display:none; } details.deeper .deeper-body{ padding:0; } }
