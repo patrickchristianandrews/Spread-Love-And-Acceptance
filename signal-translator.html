@@ -49,6 +49,23 @@ header.top{padding:30px 0 8px}
 h1{font-family:var(--display);font-weight:700;font-size:clamp(2rem,5.5vw,3.4rem);line-height:1.02;letter-spacing:-.02em;margin:0}
 .lede{color:var(--muted);max-width:62ch;margin:.7rem 0 0}
 .privacy{font-family:var(--mono);font-size:.74rem;color:var(--muted);margin:14px 0 0}
+	.use-banner{margin:22px 0 0;padding:22px 24px 18px;background:var(--sheet);border:3px double var(--ink);border-radius:var(--radius)}
+	.use-banner .eyebrow{font-family:var(--mono);font-size:.72rem;letter-spacing:.08em;color:var(--brass);margin:0 0 10px}
+	.use-banner p.big{font-family:var(--display);font-weight:600;font-size:clamp(1.45rem,2.6vw,2rem);line-height:1.28;margin:0;color:var(--ink);max-width:28em}
+	.use-banner p.big a{color:var(--ink)}
+	.use-banner p.sub{margin:.85rem 0 0;max-width:66ch;font-size:1.02rem}
+	.jobs{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:16px}
+	.jobs article{background:var(--panel);padding:12px 12px 10px;border-top:3px solid var(--brass)}
+	.jobs strong{font-family:var(--display);display:block;margin-bottom:4px}
+	.jobs p{margin:0;font-size:.92rem;color:var(--muted)}
+	@media (max-width:760px){.jobs{grid-template-columns:1fr}}
+	.s4box{background:var(--sheet);border:1px solid var(--line);border-radius:var(--radius);padding:12px 14px 14px;margin-top:12px}
+	.s4box .n{font-family:var(--mono);font-size:.68rem;letter-spacing:.06em;color:var(--brass)}
+	.s4box .req{color:var(--a)}
+	#agendaList{margin:.4rem 0 0;padding-left:1.2rem}
+	#agendaList li{margin:.7rem 0}
+	.derail{margin-top:16px;padding:14px 16px;background:var(--sheet);border-left:3px solid var(--a)}
+	.derail h3{margin:0 0 6px}
 h2{font-family:var(--display);font-weight:600;font-size:1.3rem;margin:0 0 10px;line-height:1.25}
 h3{font-family:var(--display);font-weight:600;font-size:1.08rem;margin:0 0 6px;line-height:1.3}
 .panel{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:22px clamp(16px,3vw,30px) 24px;margin-top:22px}
@@ -189,10 +206,34 @@ details.src summary{cursor:pointer;font-family:var(--display);font-size:.98rem;c
   <header class="top">
     <div class="kicker">Tool &middot; Pairs with <a href="wired-differently.html">Wired Differently</a> and <a href="book/chapter-1.html">Chapter I</a></div>
     <h1>The Signal Translator</h1>
-    <p class="lede">Choose how the speaker is wired and how the listener is wired. You can pick one wiring or several for each person. Then choose the relationship, the situation, and the room, if you want the read to include how this moment may land. Type what the speaker is about to say, or already said, and see how it might land, what the listener might hear, what the speaker probably meant, and a clearer way to say it.</p>
-    <p class="privacy">Runs entirely in your browser. Nothing you type is saved, stored or sent anywhere.</p>
-    <p class="privacy">Best used before a <a href="check-ins.html">check-in</a>: test the sentence you plan to open with, in a room that is already safe. Do not read a score out loud at the other person. The order for the conversation itself, acknowledgement before any rebuttal, is on that page. If you have not said how you receive words yet, make a <a href="wiring-card.html">wiring card</a> first.</p>
+    <p class="lede">This tool shows the mechanics of a sentence. How you may be interpreted. How you may interpret someone else. And a matching sentence both of you are more likely to receive the same way.</p>
+    <p class="privacy">Runs entirely in your browser. Nothing you type is saved, stored or sent anywhere. A meeting sheet lives only in this tab until you save the PDF.</p>
+    <aside class="use-banner" aria-labelledby="bestUse">
+      <p class="eyebrow" id="bestUse">BEST USE</p>
+      <p class="big">Best used before a <a href="check-ins.html">check-in</a>: test the sentence you plan to open with, in a room that is already safe. Do not read a score out loud at the other person. The order for the conversation itself, acknowledgement before any rebuttal, is on that page.</p>
+      <p class="sub">If you have not said how you receive words yet, make a <a href="wiring-card.html">wiring card</a> first. Then come back and test the sentence, not the person.</p>
+      <div class="jobs">
+        <article><strong>How you are interpreted</strong><p>Person A speaks. The read shows what Person B's wiring may do with those words.</p></article>
+        <article><strong>How you interpret them</strong><p>Paste their reply, or try the reverse. The same sentence can be a different signal on the way back.</p></article>
+        <article><strong>A matching language</strong><p>A sentence that keeps the fact and the ask, and drops the part only one wiring can hear.</p></article>
+      </div>
+    </aside>
   </header>
+
+  <section class="panel" aria-labelledby="whenH">
+    <span class="step">BEFORE YOU START</span>
+    <h2 id="whenH">When are you using this?</h2>
+    <p class="hint">The translator is a preparation tool. The best time is before the conversation, when both of you can still choose the room. Pick the use. The note under the buttons says what to do with it.</p>
+    <div class="seg rel" id="use" role="group" aria-labelledby="whenH">
+      <button type="button" data-use="checkin" aria-pressed="true">Before a check-in<small>Best use. One topic, a named time.</small></button>
+      <button type="button" data-use="talk" aria-pressed="false">Before a hard conversation<small>Planned. Not in the spike.</small></button>
+      <button type="button" data-use="send" aria-pressed="false">Before you send it<small>A text, email, or note.</small></button>
+      <button type="button" data-use="after" aria-pressed="false">After a miss, before you answer<small>You already have their words.</small></button>
+      <button type="button" data-use="learn" aria-pressed="false">To learn the mechanics<small>How you are heard, and how you hear.</small></button>
+      <button type="button" data-use="now" aria-pressed="false">It is already a fight<small>Do not open this in their face.</small></button>
+    </div>
+    <p class="hint" id="useNote" style="margin-top:12px"></p>
+  </section>
 
   <!-- STEP 1: PEOPLE -->
   <section class="panel" aria-labelledby="s1">
@@ -317,16 +358,27 @@ details.src summary{cursor:pointer;font-family:var(--display);font-size:.98rem;c
   <!-- STEP 4: PHRASE -->
   <section class="panel" aria-labelledby="s3">
     <span class="step">STEP 4</span>
-    <h2 id="s3">What does Person A say?</h2>
-    <label for="facts" class="lab" id="factsLab">What happened, in plain facts <span style="font-weight:400;color:var(--muted)">(optional)</span></label>
-    <p class="hint">Not the words. The event. "The dishes were still in the sink" is a fact. "You never help" is a verdict. This box is not scored as the signal.</p>
-    <textarea id="facts" class="short" placeholder="One or two plain sentences. Leave blank if the phrase is the whole story." maxlength="800"></textarea>
-    <label for="phrase" class="lab" id="phraseLab" style="margin-top:14px">The exact words</label>
-    <textarea id="phrase" placeholder="Type or paste the phrase, exactly as it would be said or sent…" maxlength="1500"></textarea>
-    <div class="presets" id="presets" aria-label="Example phrases"></div>
-    <label for="reply" class="lab" id="replyLab" style="margin-top:14px">What they already said back <span style="font-weight:400;color:var(--muted)">(optional)</span></label>
-    <p class="hint" id="replyHint">One turn only. This is read as a signal the other way, from the listener back to the speaker. Leave it blank if they have not answered yet.</p>
-    <textarea id="reply" class="short" placeholder="Paste one reply, if there is one. Not the whole thread." maxlength="1500"></textarea>
+    <h2 id="s3">Three boxes. Only the middle one is required.</h2>
+    <p class="hint">You are checking how a sentence may be interpreted, not writing a speech. Box 1 is the event, so they know which thing you mean. Box 2 is the sentence they will actually hear. Box 3 is their reply, so you can see how you may interpret them.</p>
+    <div class="s4box">
+      <span class="n">BOX 1 &middot; OPTIONAL &middot; NOT SCORED</span>
+      <label for="facts" class="lab" id="factsLab">What happened, in plain facts</label>
+      <p class="hint">The event, not the verdict. "The dishes were still in the sink" is a fact. "You never help" is a judgment of the person. Leave this blank if the sentence is the whole story.</p>
+      <textarea id="facts" class="short" placeholder="One or two plain sentences." maxlength="800"></textarea>
+    </div>
+    <div class="s4box">
+      <span class="n req">BOX 2 &middot; THIS IS THE SIGNAL</span>
+      <label for="phrase" class="lab" id="phraseLab">The sentence you might say</label>
+      <p class="hint" id="phraseHint">Type it the way it would actually come out. The read shows how the other person may interpret it, and a matching sentence that is more likely to arrive as you meant it.</p>
+      <textarea id="phrase" placeholder="The exact words, as they would be said or sent." maxlength="1500"></textarea>
+      <div class="presets" id="presets" aria-label="Example phrases"></div>
+    </div>
+    <div class="s4box">
+      <span class="n">BOX 3 &middot; OPTIONAL &middot; THE WAY BACK</span>
+      <label for="reply" class="lab" id="replyLab">What they already said back</label>
+      <p class="hint" id="replyHint">One reply, not the whole thread. This is how you may interpret them. Leave it blank if they have not answered yet.</p>
+      <textarea id="reply" class="short" placeholder="Paste one reply, if there is one." maxlength="1500"></textarea>
+    </div>
     <div class="actions">
       <button class="go" id="go" type="button">Translate the signal</button>
       <button class="ghost" id="reset" type="button">Start over</button>
@@ -336,6 +388,25 @@ details.src summary{cursor:pointer;font-family:var(--display);font-size:.98rem;c
 
   <!-- RESULTS -->
   <section id="results" hidden aria-live="polite" aria-labelledby="rTitle" tabindex="-1"></section>
+
+  <section class="panel" id="agendaPanel" aria-labelledby="sheetH">
+    <span class="step">TAKE THIS INTO THE ROOM</span>
+    <h2 id="sheetH">Meeting sheet</h2>
+    <p class="hint">Translate a sentence, then add it here. Add every topic you need to cover. Save one PDF before you sit down, and leave the score at home. This list is not stored. If you close the tab, it is gone.</p>
+    <p class="hint" id="agendaEmpty">Nothing on the sheet yet. The first translated sentence can be the first topic.</p>
+    <ol id="agendaList"></ol>
+    <div class="actions">
+      <button class="go" id="pdf" type="button">Save meeting sheet as PDF</button>
+      <button class="ghost" id="clearAgenda" type="button">Clear the sheet</button>
+    </div>
+    <div class="derail" id="derailCard">
+      <h3>If it starts to derail</h3>
+      <p>Stop the topic. Do not finish the point. Say: "I need a pause. I am not leaving this. We are okay. I will come back at [time]." A flooded body often needs at least 20 minutes, and the return should not slip past the next day (<a href="https://www.gottman.com/blog/flooding-and-conflict-avoidance/">Gottman Institute</a>).</p>
+      <p>Care does not require a solution. Lower your voice. Sit down. Get water. Put the phones away. If they asked for space, do not follow them, and do not send a stack of messages. One line is the signal. The return is the care.</p>
+      <p>A gesture is optional, never owed, and off at work, in public, around children, or if anyone is afraid of the other person. Fear of losing someone is not fear of someone. If anyone is afraid of the other person, this is not a pause to manage. In the US, the National Domestic Violence Hotline is 1-800-799-7233, text START to 88788, or thehotline.org. If you are in crisis, call or text 988.</p>
+      <p class="hint">The speaking order, acknowledgement before any rebuttal, is on <a href="check-ins.html">Check-ins</a>.</p>
+    </div>
+  </section>
 
   <div class="note">
     <b>What this tool is, and isn't.</b> It uses rules built from published research and lived-experience guidance, collected in <a href="wired-differently.html">Wired Differently</a>. It looks for patterns in the words, like hints, sarcasm, vague timing and labels, that commonly cause static for particular wirings. It can't hear tone, see faces or know your history, and it can't diagnose anyone. Every reading starts with "may" for a reason: people vary widely within every group. The best use is to find the question worth asking each other. It scores the wording, never the person.
@@ -815,7 +886,8 @@ const PRESETS = [
    STATE + UI
    ============================================================ */
 const sel = {A:new Set(), B:new Set()};
-let channel = "person", bstate = "v", relId = "", sitId = "", envId = "", needA = "", needB = "";
+let channel = "person", bstate = "v", relId = "", sitId = "", envId = "", needA = "", needB = "", useId = "checkin";
+let agenda = [], lastTopic = null;
 const $ = s=>document.querySelector(s);
 const esc = s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[c]));
 
@@ -851,10 +923,20 @@ function sync(){
     const s=sel[w];
     $("#picked"+w).innerHTML = s.size ? "Selected: <b>"+esc(listNames(s))+"</b>"+(s.has("autistic")&&s.has("adhd")?" (AuDHD)":"") : "Nothing selected yet.";
   });
-  $("#phraseLab").textContent = "What "+nm("A")+" says, exactly";
-  $("#s3").textContent = "What does "+nm("A")+" say?";
-  $("#replyLab").innerHTML = "What "+esc(nm("B"))+" already said back <span style=\"font-weight:400;color:var(--muted)\">(optional)</span>";
-  $("#replyHint").textContent = "One turn only. Read as a signal from "+nm("B")+" back to "+nm("A")+". Leave it blank if they have not answered yet.";
+  $("#phraseLab").textContent = "The sentence "+nm("A")+" might say";
+  $("#s3").textContent = "Three boxes. Only the middle one is required.";
+  $("#phraseHint").textContent = "Type it the way "+nm("A")+" would actually say it. The read shows how "+nm("B")+" may interpret it, and a matching sentence that is more likely to arrive as meant.";
+  $("#replyLab").textContent = "What "+nm("B")+" already said back";
+  $("#replyHint").textContent = "One reply, not the whole thread. This is how "+nm("A")+" may interpret "+nm("B")+". Leave it blank if they have not answered yet.";
+  const notes={
+    checkin:"Best use. Test the opening sentence, then add each topic to the meeting sheet. Take the PDF into the check-in. Leave the score here.",
+    talk:"Use it the day of, or the day before, not in the doorway. One topic at a time on the sheet. If either body is mobilized or shut down, postpone.",
+    send:"Run the unsent message as Box 2. If the read is heavy, send the matching sentence, or wait. Do not send the score.",
+    after:"Put their reply in Box 3 before you answer. The way back is where most second spikes start. Match their fact before you add yours.",
+    learn:"You do not need a meeting. Swap the people and run the same sentence both ways. That is the mechanic: each receiver is built for a different signal.",
+    now:"Do not build a case while it is happening. Close this, or save only the pause card. A score in the middle of a fight is a weapon. Care is the pause, the signal, and the return."
+  };
+  $("#useNote").textContent = notes[useId]||notes.checkin;
 }
 
 function segBind(hostSel, attr, cb){
@@ -1720,7 +1802,8 @@ function run(){
   // rewrite
   const rw=rewrite(text,found,channel);
   const changed = rw.replace(/\s/g,"").toLowerCase()!==text.replace(/\s/g,"").toLowerCase();
-  h+='<div class="box tone-v" style="margin-top:14px"><h3>A clearer transmission<span class="sub">A STARTING POINT, NOT A SCRIPT. FILL IN THE BRACKETS.</span></h3>';
+  h+='<div class="box tone-v" style="margin-top:14px"><h3>A matching sentence<span class="sub">KEEPS THE FACT AND THE ASK. DROPS WHAT ONLY ONE WIRING CAN HEAR.</span></h3>';
+  h+='<p class="small">This is the language to take into the room. It is a starting point, not a script. Fill in the brackets in your own words. Do not read the score out loud.</p>';
   if(changed) h+='<p class="rewrite" id="rwText">'+phHTML(rw)+'</p>';
   else if(!found.multi) h+='<p class="small">No automatic changes. By these rules it already reads clearly. The notes below still apply.</p>';
   if(found.multi){
@@ -1764,10 +1847,30 @@ function run(){
   if(relId) srcKeys.push("achim");
   if(sitId||envId||needA||needB||bstate!=="v") srcKeys.push("gottman","gottman20");
   h+='<details class="box src" style="margin-top:14px"><summary><b>Where these readings come from</b></summary><ul class="ul">'+srcList(srcKeys)+'</ul><p>The full explanations, with more examples, are in <a href="wired-differently.html">Wired Differently</a>.</p></details>';
-  h+='<div class="rfoot"><button class="go" type="button" id="again">Try the reverse</button><button class="ghost" type="button" id="copy">Copy the read</button><button class="ghost" type="button" id="print">Print</button><a class="ghost" href="wired-differently.html" style="text-decoration:none">Read the guide</a></div>';
+  const meantBits=[];
+  if(Aids.length) Aids.forEach(a=>{
+    const notes=[]; fids.forEach(fid=>{ const m=NT[a].meant&&NT[a].meant[fid]; if(m && !notes.includes(m)) notes.push(m); });
+    meantBits.push(NT[a].short+": "+(notes[0]||NT[a].meantDefault));
+  });
+  lastTopic={
+    fact:$("#facts").value.trim(),
+    phrase:text,
+    heard:heard.map(e=>e.h).slice(0,2),
+    meant:meantBits.slice(0,2).join(" "),
+    say: (changed?rw:text).replace(/\s+/g," ").trim(),
+    check: checks[0] || "Here's what I heard: ___. Is that what you meant?"
+  };
+  h+='<div class="rfoot"><button class="go" type="button" id="addTopic">'+(useId==="now"?"Save the pause card, not this score":"Add this topic to the meeting sheet")+'</button><button class="ghost" type="button" id="again">Try the reverse</button><button class="ghost" type="button" id="copy">Copy the read</button><button class="ghost" type="button" id="print">Print</button><a class="ghost" href="check-ins.html" style="text-decoration:none">Check-in order</a></div>';
 
   const R=$("#results"); R.innerHTML=h; R.hidden=false;
   requestAnimationFrame(()=>{ const f=R.querySelector(".fill"); if(f) f.style.width=f.dataset.w+"%"; });
+  $("#addTopic").addEventListener("click",()=>{
+    if(useId==="now"){ savePdf(); return; }
+    if(!lastTopic) return;
+    agenda.push(Object.assign({who:nm("A")+" to "+nm("B")}, lastTopic));
+    paintAgenda();
+    $("#agendaPanel").scrollIntoView({behavior: matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth", block:"start"});
+  });
   $("#again").addEventListener("click",()=>{ swap(); $("#phrase").focus(); $("#msg").textContent = $("#phrase").value.trim() ? "Swapped. The reply is now the phrase. Translate again to read it the other way." : "Swapped. Type what "+nm("A")+" might say back, then translate."; });
   $("#copy").addEventListener("click",()=>{
     const t=R.innerText.replace(/\n{3,}/g,"\n\n");
@@ -1828,6 +1931,126 @@ $("#reset").addEventListener("click",()=>{
     ["sit","env","needA","needB"].forEach(id=>$("#"+id).querySelectorAll("button").forEach(x=>x.setAttribute("aria-pressed","false")));
   $("#results").hidden=true; $("#results").innerHTML=""; $("#msg").textContent=""; sync(); window.scrollTo({top:0});
 });
+const USE_LABEL={checkin:"Before a check-in",talk:"Before a hard conversation",send:"Before you send it",after:"After a miss, before you answer",learn:"To learn the mechanics",now:"It is already a fight"};
+function paintAgenda(){
+  const list=$("#agendaList"), empty=$("#agendaEmpty");
+  empty.hidden = agenda.length>0;
+  list.innerHTML = agenda.map((t,i)=>'<li><b>Topic '+(i+1)+'</b> &middot; '+esc(t.who)+'<br>'+(t.fact?'Fact: '+esc(t.fact)+'<br>':'')+'Say: '+esc(t.say)+'<br><span class="small">They may hear: '+esc(t.heard.join(" / ")||"roughly what was meant")+'</span></li>').join("");
+}
+function sheetLines(){
+  const lines=[];
+  lines.push("Meeting sheet");
+  lines.push(USE_LABEL[useId]||"Preparation");
+  lines.push(nm("A")+" speaking to "+nm("B")+(relId&&REL[relId]?" · "+REL[relId].label:""));
+  lines.push("Leave the score at home. Do not read a reading out loud.");
+  lines.push("");
+  if(useId!=="now" && agenda.length){
+    agenda.forEach((t,i)=>{
+      lines.push("Topic "+(i+1));
+      if(t.fact) lines.push("Fact: "+t.fact);
+      lines.push("Say this: "+t.say);
+      if(t.heard.length) lines.push("They may hear: "+t.heard.join(" / "));
+      if(t.meant) lines.push("You may have meant: "+t.meant);
+      lines.push("Check: "+t.check);
+      lines.push("Then stop and let them mirror it before you add anything.");
+      lines.push("");
+    });
+  } else if(useId==="now"){
+    lines.push("Do not cover topics while this is a fight.");
+    lines.push("");
+  } else {
+    lines.push("No topics added yet. This PDF is the pause card only.");
+    lines.push("");
+  }
+  lines.push("If it starts to derail");
+  lines.push("Stop the topic. Do not finish the point.");
+  lines.push("Say: I need a pause. I am not leaving this. We are okay. I will come back at [time].");
+  lines.push("A flooded body often needs at least 20 minutes. Come back. Do not let it slip past the next day.");
+  lines.push("Care does not require a solution. Lower your voice. Sit down. Get water. Put the phones away.");
+  lines.push("If they asked for space, do not follow them, and do not send a stack of messages.");
+  lines.push("One line is the signal. The return is the care.");
+  lines.push("A gesture is optional, never owed, and off at work, in public, around children, or if anyone is afraid of the other person.");
+  lines.push("Fear of losing someone is not fear of someone. If anyone is afraid of the other person, stop.");
+  lines.push("US: National Domestic Violence Hotline 1-800-799-7233, text START to 88788, thehotline.org. Crisis: call or text 988.");
+  lines.push("");
+  lines.push("Acknowledgement before any rebuttal. The order is on Check-ins.");
+  lines.push("Not a diagnosis. Not a script. Generated in your browser. Nothing was sent.");
+  return lines;
+}
+function pdfEscape(s){
+  return String(s).replace(/[\\()]/g, m=>"\\"+m).replace(/[^\x20-\x7E]/g,"?");
+}
+function wrapLine(s, width){
+  const words=String(s).split(/\s+/).filter(Boolean);
+  if(!words.length) return [""];
+  const out=[]; let cur="";
+  words.forEach(w=>{
+    const next=cur?cur+" "+w:w;
+    if(next.length>width){ if(cur) out.push(cur); cur=w; }
+    else cur=next;
+  });
+  if(cur) out.push(cur);
+  return out;
+}
+function savePdf(){
+  const raw=[];
+  sheetLines().forEach(l=>wrapLine(l,88).forEach(w=>raw.push(w)));
+  const per=46, pages=[];
+  for(let i=0;i<raw.length;i+=per) pages.push(raw.slice(i,i+per));
+  if(!pages.length) pages.push(["Meeting sheet"]);
+  const objs=[];
+  const add=s=>{ objs.push(s); return objs.length; };
+  const font=add("<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>");
+  const pageIds=[];
+  pages.forEach(lines=>{
+    let stream="BT /F1 11 Tf 54 760 Td 14 TL\n";
+    lines.forEach((line,idx)=>{
+      stream += (idx?"T* ":"")+"("+pdfEscape(line)+") Tj\n";
+    });
+    stream += "ET";
+    const content=add("<< /Length "+stream.length+" >>\nstream\n"+stream+"\nendstream");
+    pageIds.push(add("<< /Type /Page /Parent PARENT 0 R /MediaBox [0 0 612 792] /Contents "+content+" 0 R /Resources << /Font << /F1 "+font+" 0 R >> >> >>"));
+  });
+  const kids=pageIds.map(id=>id+" 0 R").join(" ");
+  const pagesId=add("<< /Type /Pages /Count "+pageIds.length+" /Kids ["+kids+"] >>");
+  pageIds.forEach(id=>{ objs[id-1]=objs[id-1].replace("PARENT", String(pagesId)); });
+  const catalog=add("<< /Type /Catalog /Pages "+pagesId+" 0 R >>");
+  let pdf="%PDF-1.4\n";
+  const off=[0];
+  objs.forEach((body,idx)=>{
+    off.push(pdf.length);
+    const n=idx+1;
+    if(body.indexOf("stream\n")>=0){
+      const i=body.indexOf("stream\n");
+      const j=body.lastIndexOf("\nendstream");
+      const stream=body.slice(i+7,j);
+      const head=body.slice(0,i).replace(/\/Length \d+/,"/Length "+stream.length);
+      pdf += n+" 0 obj\n"+head+"stream\n"+stream+"\nendstream\nendobj\n";
+    } else {
+      pdf += n+" 0 obj\n"+body+"\nendobj\n";
+    }
+  });
+  const xref=pdf.length;
+  pdf += "xref\n0 "+(objs.length+1)+"\n";
+  pdf += "0000000000 65535 f \n";
+  for(let i=1;i<=objs.length;i++) pdf += String(off[i]).padStart(10,"0")+" 00000 n \n";
+  pdf += "trailer << /Size "+(objs.length+1)+" /Root "+catalog+" 0 R >>\nstartxref\n"+xref+"\n%%EOF";
+  const blob=new Blob([pdf],{type:"application/pdf"});
+  const a=document.createElement("a");
+  a.href=URL.createObjectURL(blob);
+  a.download="meeting-sheet.pdf";
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(()=>URL.revokeObjectURL(a.href), 1500);
+}
+$("#use").addEventListener("click",e=>{
+  const b=e.target.closest("button"); if(!b) return;
+  useId=b.dataset.use;
+  $("#use").querySelectorAll("button").forEach(x=>x.setAttribute("aria-pressed", x===b?"true":"false"));
+  sync();
+});
+$("#pdf").addEventListener("click", savePdf);
+$("#clearAgenda").addEventListener("click",()=>{ agenda=[]; paintAgenda(); });
+paintAgenda();
 sync();
 })();
 </script>
