@@ -35,6 +35,8 @@ Source for The Objective Ledger (TOL-OS) site. The repo root is the site root: G
 
 ## Rules to keep
 
+- **No analytics or tracking scripts.** The privacy promise is that people can complete the program without being tracked, and the privacy policy says the site runs no analytics. Adding any tracker means changing that promise first.
+
 - **Don't move `workpapers/calculators/calc01-solvency.html`.** That URL is printed in the member bundle.
 - **Shipping anything means updating all three status pages:** `telemetry.html` (the counts), `suite-index.html` (every component named) and `roadmap.html` (what's next). Where they disagree, `suite-index.html` wins. Denominators never shrink to raise a percentage; if the plan changes, say so on the page.
 - **One copy per page.** Before uploading a new version, check where the current one lives (search the repo) and replace it there instead of adding a second copy under another name.
@@ -45,5 +47,4 @@ Source for The Objective Ledger (TOL-OS) site. The repo root is the site root: G
 - WP-03, WP-04, WP-09 and CALC-01 each have a longer standalone version at the root (`wp-03.html`, `wp-04.html`, `wp-09.html`, `calc01-solvency.html`) and a shorter version linked from the menu under `workpapers/`. Decide which is current and keep one.
 - `workpapers/wp-11.html` is a standalone copy of the Calm-Down Kit; the menu links the root `wp-11.html`.
 - Several markdown sources still exist in more than one version: `workpapers/wp-01.md` vs `workpapers/workpapers/wp-01.md`, `wp-03.md` and `wp-04.md` (in root, `workpapers/` and `workpapers/workpapers/`), and `workpapers/wp03-raci-treaty.md` vs `workpapers/workpapers/wp03-raci-treaty.md`.
-- Google Analytics (`G-NKC6CQ9S66`) runs on about 25 pages, but the privacy policy says the site has no analytics. Remove the tag or update the policy.
 - `joinUrl` and `formKey` in `assets/js/site.js` are still placeholders.
