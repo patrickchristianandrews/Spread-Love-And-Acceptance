@@ -440,3 +440,7 @@ details.deeper .deeper-body > :first-child{ margin-top:0; }
   background:var(--paper-deep); border-left:4px solid var(--debit); border-radius:var(--radius);
   font-size:.98rem; line-height:1.6;
 }
+
+/* The privacy promise at the top of the footer */
+.tol-foot .tol-promise{ flex-basis:100%; margin:0 0 .9rem; padding:0 0 .9rem; border-bottom:1px solid var(--line); font-size:.9rem; line-height:1.5; color:var(--ink); }
+.tol-foot .tol-promise a{ color:var(--ink-soft); white-space:nowrap; }

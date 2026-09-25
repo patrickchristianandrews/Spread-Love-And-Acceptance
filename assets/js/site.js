@@ -346,7 +346,10 @@
 
     var foot = el('div', { class: 'tol-foot', role: 'contentinfo' });
     foot.style.margin = '2rem ' + (-pr) + 'px ' + (-pb) + 'px ' + (-pl) + 'px';
-    foot.innerHTML =
+    // The privacy promise, on every page except the dashboard (which saves entries by design)
+    var promise = current === '/dashboard.html' ? '' :
+      '<p class="tol-promise">What you type into the tools and worksheets stays on your device. It is never collected or sent to us. <a href="/legal/privacy-policy.html#your-entries">How we handle your information</a></p>';
+    foot.innerHTML = promise +
       '<span>The Objective Ledger &middot; spreadloveandacceptance.com</span>' +
       '<span class="tol-foot-links">' +
         '<a href="/contents.html">All pages</a>' +
