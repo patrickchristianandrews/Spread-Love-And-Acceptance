@@ -91,6 +91,17 @@ h3{font-family:var(--display);font-weight:600;font-size:1.08rem;margin:0 0 6px;l
 .st[aria-pressed="true"]{border-color:var(--sc);box-shadow:inset 0 0 0 1.5px var(--sc)}
 .st[data-s="v"]{--sc:var(--v)} .st[data-s="s"]{--sc:var(--s)} .st[data-s="d"]{--sc:var(--d)}
 .lab{font-family:var(--display);font-weight:600;font-size:.95rem;display:block;margin-bottom:6px}
+  .relrow{grid-column:1/-1}
+  .seg.rel{gap:8px}
+  .seg.rel button{display:flex;flex-direction:column;align-items:flex-start;gap:1px;padding:7px 12px;line-height:1.25;text-align:left}
+  .seg.rel button small{font-family:var(--body);font-size:.74rem;color:var(--muted);font-weight:400}
+  .seg.rel button[aria-pressed="true"] small{color:var(--ink)}
+  .dyn-list{list-style:none;padding:0;margin:8px 0 0}
+  .dyn-list li{padding:8px 0 8px 12px;border-left:2px solid var(--brass);margin:0 0 8px}
+  .dyn-list .who{font-family:var(--display);font-weight:600;display:block}
+  .box.tone-warn{border-left:4px solid var(--a);background:color-mix(in srgb,var(--a) 7%,var(--sheet))}
+  .needrow{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+  @media (max-width:760px){.needrow{grid-template-columns:1fr}}
 
 /* Phrase */
 textarea{width:100%;min-height:96px;margin-top:4px;border:1px solid var(--line);border-radius:var(--radius);padding:10px 12px;background:var(--sheet);resize:vertical;font-size:1.02rem}
@@ -177,7 +188,7 @@ details.src summary{cursor:pointer;font-family:var(--display);font-size:.98rem;c
   <header class="top">
     <div class="kicker">Tool &middot; Pairs with <a href="wired-differently.html">Wired Differently</a> and <a href="book/chapter-1.html">Chapter I</a></div>
     <h1>The Signal Translator</h1>
-    <p class="lede">Choose how the speaker is wired and how the listener is wired. You can pick one wiring or several for each person. Then type what the speaker is about to say, or already said, and see how it might land, what the listener might hear, what the speaker probably meant, and a clearer way to say it.</p>
+    <p class="lede">Choose how the speaker is wired and how the listener is wired. You can pick one wiring or several for each person. Then choose the relationship, the situation, and the room, if you want the read to include how this moment may land. Type what the speaker is about to say, or already said, and see how it might land, what the listener might hear, what the speaker probably meant, and a clearer way to say it.</p>
     <p class="privacy">Runs entirely in your browser. Nothing you type is saved, stored or sent anywhere.</p>
   </header>
 
@@ -206,8 +217,21 @@ details.src summary{cursor:pointer;font-family:var(--display);font-size:.98rem;c
   <!-- STEP 2: CONTEXT -->
   <section class="panel" aria-labelledby="s2">
     <span class="step">STEP 2</span>
-    <h2 id="s2">How and when is it being said?</h2>
+    <h2 id="s2">How, when, and in what relationship?</h2>
     <div class="ctx">
+      <div class="relrow">
+        <span class="lab" id="relLab">Relationship</span>
+        <p class="hint">Optional. The same sentence can be a loose plan between friends and a broken agreement between partners. <a href="wired-differently.html#dynamics">What these dynamics are, and why they exist</a>.</p>
+        <div class="seg rel" id="rel" role="group" aria-labelledby="relLab">
+          <button type="button" data-rel="partner" aria-pressed="false">Partners<small>Sharing a life</small></button>
+          <button type="button" data-rel="family" aria-pressed="false">Family<small>Kin and shared history</small></button>
+          <button type="button" data-rel="coparent" aria-pressed="false">Co-parents<small>Raising a child</small></button>
+          <button type="button" data-rel="friend" aria-pressed="false">Friends<small>Chosen, no contract</small></button>
+          <button type="button" data-rel="roommate" aria-pressed="false">Roommates<small>A home, not a life</small></button>
+          <button type="button" data-rel="coworker" aria-pressed="false">Coworkers<small>Shared work</small></button>
+          <button type="button" data-rel="caregiver" aria-pressed="false">Caregivers<small>Shared care</small></button>
+        </div>
+      </div>
       <div>
         <span class="lab" id="chLab">Channel</span>
         <div class="seg" id="channel" role="group" aria-labelledby="chLab">
@@ -229,9 +253,68 @@ details.src summary{cursor:pointer;font-family:var(--display);font-size:.98rem;c
     </div>
   </section>
 
-  <!-- STEP 3: PHRASE -->
-  <section class="panel" aria-labelledby="s3">
+  <section class="panel" aria-labelledby="s2b">
     <span class="step">STEP 3</span>
+    <h2 id="s2b">What is the situation, and where are you?</h2>
+    <p class="hint">The words are only part of it. A calm kitchen and a parking lot after a fight are different rooms, even with the same sentence. Leave a row blank if you are not sure. <a href="wired-differently.html#situation">How to settle a hard moment without erasing either person</a>.</p>
+    <div class="relrow" style="margin-bottom:16px">
+      <span class="lab" id="sitLab">Situation</span>
+      <div class="seg rel" id="sit" role="group" aria-labelledby="sitLab">
+        <button type="button" data-sit="ordinary" aria-pressed="false">Ordinary exchange<small>A normal ask or update</small></button>
+        <button type="button" data-sit="repair" aria-pressed="false">Repair<small>Coming back after a miss</small></button>
+        <button type="button" data-sit="argument" aria-pressed="false">Active argument<small>It is happening now</small></button>
+        <button type="button" data-sit="after" aria-pressed="false">Just after a blow-up<small>The spike already happened</small></button>
+        <button type="button" data-sit="decision" aria-pressed="false">A decision is due<small>Someone needs an answer</small></button>
+        <button type="button" data-sit="bond" aria-pressed="false">Bond feels at risk<small>Fear of losing the person</small></button>
+        <button type="button" data-sit="news" aria-pressed="false">Bad news or a crisis<small>A fact, not a score</small></button>
+      </div>
+    </div>
+    <div class="relrow" style="margin-bottom:16px">
+      <span class="lab" id="envLab">Environment</span>
+      <div class="seg rel" id="env" role="group" aria-labelledby="envLab">
+        <button type="button" data-env="calm" aria-pressed="false">Private and calm<small>A room that can hold it</small></button>
+        <button type="button" data-env="charged" aria-pressed="false">Private but charged<small>Door closed, air not</small></button>
+        <button type="button" data-env="public" aria-pressed="false">Public<small>An audience is present</small></button>
+        <button type="button" data-env="kids" aria-pressed="false">Around children<small>They borrow the alarm</small></button>
+        <button type="button" data-env="work" aria-pressed="false">At work<small>Task channel, not a therapy room</small></button>
+        <button type="button" data-env="depleted" aria-pressed="false">Depleted<small>Late, hungry, tired, overloaded</small></button>
+        <button type="button" data-env="apart" aria-pressed="false">Apart<small>Different rooms, or not together</small></button>
+        <button type="button" data-env="substances" aria-pressed="false">Substances<small>Alcohol or anything altering</small></button>
+      </div>
+    </div>
+    <span class="lab">What each person needs in a hard moment</span>
+    <p class="hint">These can differ. One person may need the bond confirmed now, because silence feels like losing you. The other may need space before they can think. Both can be cared for. Neither cancels the other. A hug is never owed.</p>
+    <div class="needrow">
+      <div>
+        <span class="lab" id="needALab">Person A needs</span>
+        <div class="seg rel" id="needA" role="group" aria-labelledby="needALab">
+          <button type="button" data-need="now" aria-pressed="false">To resolve it now</button>
+          <button type="button" data-need="bond" aria-pressed="false">A signal the bond is ok</button>
+          <button type="button" data-need="space" aria-pressed="false">Space before talking</button>
+          <button type="button" data-need="heard" aria-pressed="false">To be heard first</button>
+          <button type="button" data-need="plan" aria-pressed="false">A concrete plan</button>
+          <button type="button" data-need="quiet" aria-pressed="false">Quiet company</button>
+          <button type="button" data-need="touch" aria-pressed="false">A gesture, if welcome</button>
+        </div>
+      </div>
+      <div>
+        <span class="lab" id="needBLab">Person B needs</span>
+        <div class="seg rel" id="needB" role="group" aria-labelledby="needBLab">
+          <button type="button" data-need="now" aria-pressed="false">To resolve it now</button>
+          <button type="button" data-need="bond" aria-pressed="false">A signal the bond is ok</button>
+          <button type="button" data-need="space" aria-pressed="false">Space before talking</button>
+          <button type="button" data-need="heard" aria-pressed="false">To be heard first</button>
+          <button type="button" data-need="plan" aria-pressed="false">A concrete plan</button>
+          <button type="button" data-need="quiet" aria-pressed="false">Quiet company</button>
+          <button type="button" data-need="touch" aria-pressed="false">A gesture, if welcome</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- STEP 4: PHRASE -->
+  <section class="panel" aria-labelledby="s3">
+    <span class="step">STEP 4</span>
     <h2 id="s3">What does Person A say?</h2>
     <label for="phrase" class="lab" id="phraseLab">The exact words</label>
     <textarea id="phrase" placeholder="Type or paste the phrase, exactly as it would be said or sent…" maxlength="1500"></textarea>
@@ -309,6 +392,8 @@ const SRC = {
   ocd:["Cardiff and Vale UHB: OCD guide for friends and family","https://cavuhb.nhs.wales/files/mental-health/friends-and-family-booklet-pdf/"],
   gunraj:["Gunraj et al. (2016): periods in text messages","https://phys.org/news/2015-12-text-messages-period-sincere.html"],
   achim:["Achimova, Franke & Butz (2025): why people speak indirectly","https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0323839"],
+  gottman:["Gottman Institute: flooding, a break, and a return time","https://www.gottman.com/blog/flooding-and-conflict-avoidance/"],
+  gottman20:["Gottman Institute: a break of at least 20 minutes, and not more than 24 hours","https://www.gottman.com/blog/manage-conflict-part-4/"],
   crompton:["Crompton et al. (2020): information transfer between autistic and non-autistic people","https://pmc.ncbi.nlm.nih.gov/articles/PMC7545656/"],
   nature25:["Nature Human Behaviour (2025): large replication of the diffusion-chain study","https://www.nature.com/articles/s41562-025-02163-z"]
 };
@@ -722,7 +807,7 @@ const PRESETS = [
    STATE + UI
    ============================================================ */
 const sel = {A:new Set(), B:new Set()};
-let channel = "person", bstate = "v";
+let channel = "person", bstate = "v", relId = "", sitId = "", envId = "", needA = "", needB = "";
 const $ = s=>document.querySelector(s);
 const esc = s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[c]));
 
@@ -1062,6 +1147,420 @@ function srcList(keys){
   return out.join("");
 }
 
+
+/* ============================================================
+   RELATIONSHIP DYNAMICS
+   The wiring read says how the listener's brain may take the
+   words in. This says what the arrangement between them adds.
+   ============================================================ */
+const REL = {
+  partner:{
+    label:"Partners", anchor:"partners",
+    what:"Two people sharing a life, whether married, dating, living together or not. Love, money, chores and a future are all in the same conversation.",
+    why:"This dynamic exists because two people chose an ongoing bond and then built a shared life on top of it. Most of the work that keeps that life running is invisible, and it is the work least likely to be said out loud. The bond also raises the cost of being direct: a plain ask can feel like a verdict on the relationship, so people hint instead.",
+    fallback:"With no obvious trouble spot in the words, a partner may still hear history. In a shared life, a neutral sentence can land as one more item on a list only one person can see.",
+    say:"Name the task, the time and that you are on the same side. A partnership hears criticism as a threat to the bond unless you separate the task from the person.",
+    care:"The tools describe the arrangement, never the person. If either of you starts using a reading to win, stop."
+  },
+  family:{
+    label:"Family", anchor:"family",
+    what:"Parents and adult children, siblings, in-laws and grandparents: people who often share a history, a roof, a group chat or a holiday table.",
+    why:"This dynamic exists because of kinship, not a fresh agreement. Old roles stay in the room after everyone is grown. A parent can still sound like a parent. A sibling can still sound like the old scorekeeper. People speak carefully, or not at all, because the relationship is hard to leave and the history is already written.",
+    fallback:"Even a plain sentence can land as the old family argument, because the roles were set long before these words.",
+    say:"Say what you mean now, and say it is about this moment, not the last ten years. Write down what was actually agreed.",
+    care:"These readings are for adults. Never ask a child to audit a parent, and don't use a family role as a reason someone must absorb a harsh message."
+  },
+  coparent:{
+    label:"Co-parents", anchor:"co-parents",
+    what:"Two people raising a child together, in one home or two, together or separated. The work is constant, and most of it is invisible to the other house.",
+    why:"This dynamic exists because a child needs care that one adult cannot hold alone, and because the adults may no longer share a life. The child is the stake. A short message can be read as a record, a criticism of parenting, or a bid to look responsible. People go vague or sharp because the cost of being misunderstood includes the child, and sometimes a court file.",
+    fallback:"A neutral update can still land as a parenting verdict. In this dynamic, silence and brevity are often read as the other house not doing its share.",
+    say:"Lead with the child's need, then the ask, then the time. Keep the other parent out of the character judgment.",
+    care:"If there is a court order or parenting plan, it comes first. This is for the day-to-day, never for building a case against the other parent."
+  },
+  friend:{
+    label:"Friends", anchor:"friends",
+    what:"A chosen relationship with no job description. It runs on company, and on give and take that is usually unspoken.",
+    why:"This dynamic exists because people want closeness without a contract. Friendship has no owner for the planning, the reminders or the emotional labor, so the person who does it can feel unseen while the other has no idea a ledger exists. A direct ask can sound like the friendship has turned into a debt. A hint can sound like withdrawal. People stay indirect because naming the imbalance feels like ending the ease that made the friendship worth having.",
+    fallback:"Between friends, a plain sentence usually lands lighter than it would at home or at work. The risk is the opposite: the thing that needs saying stays unsaid until it has already hurt.",
+    say:"Name the unseen thing once, kindly, as a request. Don't keep a score of favors out loud.",
+    care:"Use a light touch. The point is not a ledger of favors. It is naming what has gone unseen, once."
+  },
+  roommate:{
+    label:"Roommates", anchor:"roommates",
+    what:"People sharing a home without sharing a life: housemates, flatmates, or a friend in the spare room.",
+    why:"This dynamic exists because housing is shared for cost or convenience, not intimacy. The only real contract is the space, the bills and the chores. Goodwill is the whole relationship, and it runs out fast when the kitchen is a guess. A comment about a mess can sound like a judgment of character, because there is no deeper bond to absorb it. People hint because a direct ask feels like starting a feud with someone they have to see tomorrow.",
+    fallback:"In a shared house, even a friendly sentence about the space can land as a house rule. Roommates often hear standards that were never agreed.",
+    say:"Name the task, the standard and whose turn it is. Keep character out of it. A written chore plan beats a sigh.",
+    care:"With more than two people, the read is still between two of you. The house may need the same sentence said to each person."
+  },
+  coworker:{
+    label:"Coworkers", anchor:"coworkers",
+    what:"People who share tasks, hours and credit, not a private life. Some of them have more power than others.",
+    why:"This dynamic exists because work needs coordination, and because pay, reviews and reputation sit under the words. A casual phrase can sound like a status threat or a hidden performance note. People hint, or go formal, because being direct with a teammate can cost the working relationship, and being direct with a boss can cost the job. Invisible work, the follow-ups and reminders, rarely shows up in a review, so resentment builds where nobody wrote the task down.",
+    fallback:"At work, a neutral sentence can still land as an instruction or a judgment of competence. Power changes the volume, even when the speaker didn't mean to use it.",
+    say:"Put the ask, the owner and the deadline in the first lines. Separate the task from the person's worth.",
+    care:"Use this among peers who agree to it. It is not a way for a manager to evaluate someone, and nothing here should become a performance record or HR note about anyone."
+  },
+  caregiver:{
+    label:"Caregivers", anchor:"caregivers",
+    what:"People sharing care for an aging parent, a relative who is ill, or someone with a disability, often alongside siblings or other family.",
+    why:"This dynamic exists because one person's needs are bigger than one caregiver can hold, and because love, guilt and geography decide who actually does it. The person who lives closest often gets the appointments, the medications and the 2 a.m. calls, while others help \"whenever they can.\" A vague offer lands as abandonment. A direct ask lands as an accusation. People stay indirect because saying the load out loud feels like complaining about someone they love, or about a sibling they don't want to lose.",
+    fallback:"In shared care, a calm update can still land as one more task landing on the person who is already carrying it.",
+    say:"Name the task, the time and who owns it. \"Whenever\" is not a plan. If someone is near empty, the next step is more support, not a better sentence.",
+    care:"If the person doing the care is running on empty, that is a signal to get more help, not a personal failing. If anyone is afraid of the person they care for, or of another caregiver, put safety first."
+  }
+};
+
+const REL_LAND = {
+  hint:{
+    partner:"A hint between partners often lands as a test: if you loved me, you would already know. The shared life makes mind-reading feel like care, which is exactly what different wiring cannot do.",
+    family:"In a family, a hint often lands as the old criticism in a new outfit. People hear the role, not the request, because this is how needs were signaled for years.",
+    coparent:"A hint between co-parents can land as a record being started. \"The dishes are still there\" can sound like \"you are failing the child,\" because the other house cannot see the work.",
+    friend:"Between friends, a hint often lands as cooling off. The friendship has no contract, so an unmade request sounds like the bond itself is thinning.",
+    roommate:"A hint in a shared house lands as a passive house rule. The other person hears judgment, not a task, because the only thing you share is the space.",
+    coworker:"At work, a hint lands as unclear ownership. Someone may also hear it as a quiet mark against them, because credit and blame are part of the job.",
+    caregiver:"A hint to another caregiver lands as \"you should have noticed.\" The person already doing the nights hears one more unpaid expectation."
+  },
+  vtime:{
+    partner:"\"Whenever\" in a partnership often lands as \"this is not important enough to schedule.\" The shared life runs on tasks nobody wrote down, so vague timing leaves the load where it already sits.",
+    family:"Vague timing in a family lands as the old pattern: someone will be disappointed, and nobody will be able to say when the agreement was made.",
+    coparent:"\"When you get a chance\" between co-parents can land as \"this will be late, and I will be blamed.\" A child's deadline does not move because the other adult is busy.",
+    friend:"Between friends, vague timing usually lands as a loose plan, not a broken promise. The cost is low, which is why the same words feel fine here and sharp at home.",
+    roommate:"Vague timing in a house lands as \"you will do it, eventually, and I will live with it until then.\"",
+    coworker:"Vague timing at work lands as no deadline, which means it will not get done, or it will land on whoever feels responsible. It can also sound like the asker is avoiding accountability.",
+    caregiver:"\"Whenever you can\" in shared care lands as \"not you.\" The person on the ground hears the 2 a.m. call staying with them."
+  },
+  vstd:{
+    partner:"An undefined standard between partners lands as a moving finish line. One person cannot tell when they have helped enough, so every attempt can still count as not helping.",
+    family:"\"Clean up\" or \"be more supportive\" in a family lands as the family standard nobody wrote down. Each person is sure the other already knows it.",
+    coparent:"An undefined standard between co-parents lands as two different childhoods being applied to one child. \"Help more\" does not say which form, which appointment, or what done looks like.",
+    friend:"Between friends, a vague standard usually lands softer, as a preference. It still strains the friendship if one person is quietly keeping score.",
+    roommate:"An undefined standard in a shared house is the whole fight. \"A bit\" means a different kitchen to each person, and there is no shared life to cushion the mismatch.",
+    coworker:"An undefined standard at work lands as a performance risk. People hear \"you are not meeting the bar\" without being told what the bar is.",
+    caregiver:"\"Help more\" in caregiving lands as an endless job. Without a finish line, the person closest to the care hears that rest is never allowed."
+  },
+  critic:{
+    partner:"Criticism between partners lands on the bond, not just the task. \"You forgot again\" can sound like \"I cannot rely on you in this life.\"",
+    family:"Criticism in a family lands with the old volume turned up. A small correction can sound like the verdict this person has been hearing since childhood.",
+    coparent:"Criticism between co-parents lands as an attack on how someone parents. The child becomes the evidence, which makes the words much louder than the mistake.",
+    friend:"Criticism between friends lands as a threat to a relationship that has no obligation to survive it. People often hear \"this friendship is in trouble.\"",
+    roommate:"Criticism in a house lands as a character judgment from someone you did not choose to be close to. There is little goodwill stored up to absorb it.",
+    coworker:"Criticism at work lands as a status threat. Even a peer can sound like a review, because reputation is part of the arrangement.",
+    caregiver:"Criticism of a caregiver lands as \"you are failing someone who depends on you.\" That is a much heavier sentence than the same words about a chore."
+  },
+  label:{
+    partner:"A label between partners lands as a fixed verdict on the person you share a life with. A behavior can be fixed. \"You are irresponsible\" cannot.",
+    family:"A family label lands as the old name. Once a person has been \"the dramatic one\" or \"the lazy one\" in that family, the word confirms the role.",
+    coparent:"A label between co-parents lands as a claim about fitness to parent. It is the kind of sentence people save.",
+    friend:"A label between friends lands as the end of ease. Friendship rarely has a repair script for \"you are selfish.\"",
+    roommate:"A label in a shared house lands as a reason to stop cooperating. The chore becomes a feud.",
+    coworker:"A label at work lands as a reputation. It can follow the person into meetings they were not in.",
+    caregiver:"A label aimed at a caregiver lands as a moral failure, not a scheduling problem. Shame makes the next ask harder to hear."
+  },
+  blameq:{
+    partner:"\"Why didn't you\" between partners lands as a prosecution. The question already contains the verdict, and the shared life makes the verdict feel permanent.",
+    family:"A blame question in a family lands as the old cross-examination. People answer the history, not the question.",
+    coparent:"A blame question between co-parents lands as evidence. \"Why didn't you\" is how a parenting disagreement starts to sound like a case.",
+    friend:"Between friends, a blame question lands as a withdrawal of goodwill. The friendship has no process for a trial.",
+    roommate:"A blame question in a house lands as a confrontation you cannot leave the building to escape.",
+    coworker:"A blame question at work lands as a public or private dressing-down, even in a private message. Power decides how safe it is to answer.",
+    caregiver:"A blame question to a caregiver lands as \"you don't care enough.\" The person who is already depleted hears an attack, not a logistics problem."
+  },
+  ominous:{
+    partner:"\"We need to talk\" between partners lands as the relationship itself being at risk. The nervous system answers before the topic arrives.",
+    family:"An ominous opener in a family lands as bad news about someone you cannot easily cut off. Old alarms go off first.",
+    coparent:"\"We need to talk\" between co-parents lands as news about the child, or about the arrangement. The stakes are not social. They are practical and sometimes legal.",
+    friend:"Between friends, \"we need to talk\" lands as the friendship ending. There is no shared life to force a repair, so the fear is abandonment.",
+    roommate:"An ominous opener in a house lands as \"you may have to move\" or \"this living situation is over.\"",
+    coworker:"\"Can we talk\" at work lands as a meeting about your standing. Even a kind boss can trigger that read, because the power is real.",
+    caregiver:"An ominous opener in a care arrangement lands as a crisis: a fall, a diagnosis, or one more person stepping back."
+  },
+  minimal:{
+    partner:"A one-word reply between partners often lands as withdrawal from the bond. \"Fine\" can mean fine, or it can mean the conversation is no longer safe.",
+    family:"A minimal reply in a family lands as the old shutdown. People fill the silence with the story they already have about this person.",
+    coparent:"\"K\" between co-parents can land as refusal, or as a record of non-cooperation. Brevity has a paper trail in this dynamic.",
+    friend:"Between friends, a short reply usually lands as busyness. It only becomes static if it is the third one in a row.",
+    roommate:"A minimal reply in a house lands as \"I'm not dealing with the chore.\" The shared space makes silence feel like a no.",
+    coworker:"\"Noted\" at work can land as cold compliance or as quiet resentment. Tone is missing, and rank fills it in.",
+    caregiver:"A one-word reply in a care thread lands as \"you're on your own.\" The person holding the crisis hears abandonment."
+  },
+  vemo:{
+    partner:"\"You know what you did\" between partners lands as a loyalty test. The bond is being asked to replace a sentence.",
+    family:"Emotional subtext in a family lands as the rule everyone was supposed to absorb years ago. Not knowing it can sound like not belonging.",
+    coparent:"\"If you cared\" between co-parents lands as an attack on love for the child, which is the sharpest static this dynamic has.",
+    friend:"Between friends, unspoken hurt lands as a sudden distance. The other person may genuinely not know a score was being kept.",
+    roommate:"Unspoken resentment in a house lands as a mood in the kitchen. Without a shared life, people rarely ask what it means. They avoid.",
+    coworker:"Unspoken disappointment at work lands as politics. People guess who is in trouble instead of hearing a request.",
+    caregiver:"\"If you really cared\" in a care arrangement lands as a moral indictment. It ignores that love and capacity are not the same thing."
+  },
+  calm:{
+    partner:"\"Calm down\" between partners lands as a dismissal of the feeling and of the bond. The person hears that their alarm is inconvenient.",
+    family:"Telling a family member how to feel lands as the old control. It recreates the hierarchy, even between adults.",
+    coparent:"\"Relax\" between co-parents lands as \"your worry about the child is the problem.\" That usually escalates the worry.",
+    friend:"Between friends, instructing a feeling lands as a refusal to sit with them. Friendship is often the place people expect to be allowed to feel it.",
+    roommate:"\"Calm down\" in a house lands as condescension from someone with no standing to manage your feelings.",
+    coworker:"Telling a coworker to relax lands as a status move. It is especially loaded from someone with more power.",
+    caregiver:"\"Calm down\" to a depleted caregiver lands as proof that the load is invisible. The feeling is information about capacity."
+  },
+  invalid:{
+    partner:"\"You're too sensitive\" between partners lands as the bond refusing the person. The feeling is treated as the flaw.",
+    family:"Invalidation in a family lands as the old line. If this person was called dramatic for years, the sentence confirms they will not be believed here.",
+    coparent:"Invalidation between co-parents lands as \"your read of the child doesn't count.\" That is a fight about authority, not tone.",
+    friend:"Between friends, \"it was just a joke\" lands as the friendship choosing the laugh over the person.",
+    roommate:"Invalidation in a house lands as \"your standard for the space is silly.\" Cooperation usually stops there.",
+    coworker:"Invalidation at work lands as a credibility cut. Being told you imagined it can also be a power move.",
+    caregiver:"\"You're overreacting\" to a caregiver lands as the strain being unreal. That is how people burn out without anyone noticing."
+  },
+  demand:{
+    partner:"A demand for an instant reply between partners lands as a test of devotion. Silence, which may be processing, gets read as rejection.",
+    family:"\"Answer me\" in a family lands as the old authority. An adult child, or a parent, may hear a role they no longer consent to.",
+    coparent:"A demand for an instant reply between co-parents lands as an emergency about the child, even when it is not one.",
+    friend:"Between friends, demanding a reply lands as pressure the friendship did not agree to. People often just go quiet.",
+    roommate:"A demand in a house lands as a confrontation in a place the other person cannot easily leave.",
+    coworker:"A demand for an instant reply at work lands differently by rank. From a boss it is an order. From a peer it can sound like overreach.",
+    caregiver:"\"Answer me\" in a care thread lands as a crisis ping. If it is not a crisis, it spends the alarm the real crisis will need."
+  },
+  sarcasm:{
+    partner:"Sarcasm between partners lands as contempt, which is much louder in a shared life than the speaker usually means. Tone is the first thing a stressed partner loses.",
+    family:"Sarcasm in a family lands as the old teasing that was never only teasing. Some people in the family hear the joke. Others hear the slight they grew up with.",
+    coparent:"Sarcasm between co-parents lands as disrespect on a channel that may be saved. It rarely reads as wit once trust is thin.",
+    friend:"Between friends, sarcasm often lands as intended, because the relationship was built on that humor. It still fails when the topic is the friendship itself.",
+    roommate:"Sarcasm in a house lands as hostility. You do not know each other well enough for the tone to carry the real meaning.",
+    coworker:"Sarcasm at work lands as unprofessional, or as a jab with an audience. Power decides who is allowed to joke.",
+    caregiver:"Sarcasm about care lands as cruelty. The topic is someone vulnerable, so the joke has almost no safe landing."
+  },
+  urgent:{
+    partner:"Urgency without a reason between partners lands as panic about the relationship, or as one more fire only one person is allowed to name.",
+    family:"\"Right now\" in a family lands as the old emergency voice. People brace before they know the topic.",
+    coparent:"Urgency between co-parents lands as a child emergency until proven otherwise. If it is not one, say so in the first line.",
+    friend:"Between friends, urgency usually lands as a real need for help. Friends often want to be useful. False alarms spend that.",
+    roommate:"Urgency in a house lands as a demand on someone who did not sign up for your crisis, only for the rent.",
+    coworker:"Urgency at work lands as a priority change. Without a reason, people hear chaos, or a boss who will not protect their other deadlines.",
+    caregiver:"Urgency in a care arrangement lands as a real emergency. Use it only when it is one, or the next true alarm will be doubted."
+  },
+  multi:{
+    partner:"Several tasks in one breath between partners land as the whole invisible list arriving at once. The listener hears the size of the life, not the first step.",
+    family:"A stack of tasks in a family lands as the family manager assigning roles again. People argue the fairness before they hear the list.",
+    coparent:"Several tasks in one message between co-parents land as a handover with no owner. Something about the child will be the thing that slips.",
+    friend:"Between friends, a stack of asks lands as more labor than the friendship agreed to. One ask is a favor. Four asks is a job.",
+    roommate:"A stack of house tasks lands as one person running the house. The others hear a lecture, not a list.",
+    coworker:"Several tasks in one message at work land as unclear priority. People do the first one, or the easiest one, and the real deadline is the one they miss.",
+    caregiver:"A stack of care tasks lands on the person already nearest the bed. Without owners, \"we should\" means \"you will.\""
+  },
+  absolute:{
+    partner:"\"Always\" and \"never\" between partners land as a closing argument about the whole relationship, not about Tuesday.",
+    family:"An absolute in a family lands as the permanent story. \"You never help\" confirms the role, so the latest example never gets heard.",
+    coparent:"\"You always\" between co-parents lands as a character exhibit. It is the sentence most likely to be screenshotted.",
+    friend:"Between friends, an absolute lands as the friendship being summed up and found wanting.",
+    roommate:"\"You never\" in a house lands as a reason to stop trying. The chore chart dies in that sentence.",
+    coworker:"An absolute at work lands as a performance summary. It is heavier from someone who writes reviews, and still heavy from a peer.",
+    caregiver:"\"You never show up\" in a care arrangement lands as a moral verdict. It erases the constraints and keeps the shame."
+  },
+  butc:{
+    partner:"A compliment with \"but\" between partners lands as the compliment being bait. The bond hears only the correction.",
+    family:"\"Good, but\" in a family lands as the familiar almost-enough. Some people have heard that shape their whole life.",
+    coparent:"Praise followed by \"but\" between co-parents lands as a setup. The other parent waits for the real message and discounts the thanks.",
+    friend:"Between friends, \"thanks, but\" lands as the thanks being cancelled. Friendship repair usually needs the thanks to stand alone.",
+    roommate:"A compliment with a correction in a house lands as a chore complaint wearing a smile.",
+    coworker:"\"Nice work, but\" at work lands as the real review. People remember the but, especially in writing.",
+    caregiver:"\"Thanks for helping, but\" to a caregiver lands as the help not counting. That is how willing people stop offering."
+  },
+  reassure:{
+    partner:"\"Are you mad at me?\" between partners lands as a bid for the bond. Answer it once, clearly. A loop of it can also exhaust the other person.",
+    family:"A reassurance check in a family lands on old uncertainty: am I in trouble, am I the problem, is the mood about me.",
+    coparent:"\"Are we good?\" between co-parents can land as a bid to keep the parenting civil, which is useful, or as pressure to smooth over a real problem.",
+    friend:"Between friends, \"are you mad?\" usually lands as care. Friendship can hold that question if it is not asked ten times.",
+    roommate:"A reassurance check in a house can land as more intimacy than the living arrangement includes.",
+    coworker:"\"Are you upset with me?\" at work lands as a risk question. Colleagues may not have standing, or safety, to answer honestly.",
+    caregiver:"Repeated \"are you sure?\" in a care arrangement can be a real safety check or an anxiety loop. Agree in a calm moment which is which."
+  }
+};
+
+const REL_ORDER = ["hint","vtime","vstd","critic","label","blameq","ominous","minimal","vemo","calm","invalid","demand","sarcasm","urgent","multi","absolute","butc","reassure"];
+
+function relHits(id, found){
+  const lines=[];
+  REL_ORDER.forEach(fid=>{
+    if(found[fid] && REL_LAND[fid] && REL_LAND[fid][id]) lines.push({fid, text:REL_LAND[fid][id]});
+  });
+  return lines;
+}
+
+
+/* ============================================================
+   SITUATION, ENVIRONMENT, AND HOW TO SETTLE
+   ============================================================ */
+const SIT = {
+  ordinary:{label:"Ordinary exchange", hot:0, note:"A low-stakes moment. Say the real ask. You do not need a repair ritual."},
+  repair:{label:"Repair after a miss", hot:1, note:"Something already landed wrong. Lead with what you meant, then one ask. Do not add a new complaint."},
+  argument:{label:"Active argument", hot:2, note:"Both bodies are likely loud. The sentence will be heard at full volume. Settle bodies before you settle the point."},
+  after:{label:"Just after a blow-up", hot:2, note:"The spike already happened. The next sentence is either a bridge or a second hit. Keep it to one or two lines."},
+  decision:{label:"A decision is due", hot:1, note:"Someone needs an answer, not a feeling-talk. Name the decision, the deadline, and what can wait."},
+  bond:{label:"The bond feels at risk", hot:2, note:"Someone is reading this moment as 'I might lose you.' Ambiguous silence will land as abandonment, even if the other person only needed a minute."},
+  news:{label:"Bad news or a crisis", hot:2, note:"This is not the moment to score the relationship. Say the fact, the next step, and whether you are still here."}
+};
+const ENV = {
+  calm:{label:"Private and calm", hot:0, note:"The best room for a hard sentence. You can go slow."},
+  charged:{label:"Private but charged", hot:1, note:"The door is closed, but the air is not. Lower your voice before you add words."},
+  public:{label:"Public, or with an audience", hot:2, note:"Do not do the real conversation here. An audience makes people perform, and a public correction lands as shame."},
+  kids:{label:"Around children", hot:2, note:"Children borrow the alarm. Move the adult talk. Tell them, in one plain sentence, that they are not in trouble and the adults will sort it."},
+  work:{label:"At work", hot:2, note:"Keep it to the task. No hug, no therapy, no character read. A personal rupture does not belong on a work channel."},
+  depleted:{label:"Late, tired, hungry, or overloaded", hot:1, note:"A body this low cannot do a fair talk. Water, food, a lower light, or sleep will change the landing more than a better sentence."},
+  apart:{label:"Apart", hot:1, note:"You cannot offer a hand or a glass of water from another room. The return time has to be in the words, or the gap gets filled in as rejection."},
+  substances:{label:"Alcohol or other substances", hot:3, note:"Do not resolve a relationship while anyone is altered. A sentence said now will be heard wrong, and may be used later. Name that you care, name the morning, and stop."}
+};
+const NEED = {
+  now:{label:"to resolve it now"},
+  bond:{label:"a signal the bond is ok"},
+  space:{label:"space before talking"},
+  heard:{label:"to be heard first"},
+  plan:{label:"a concrete plan"},
+  quiet:{label:"quiet company"},
+  touch:{label:"a settling gesture, if it is welcome"}
+};
+const NEED_GIVE = {
+  now:"Finish one point only. Write the decision down so it does not have to be re-argued.",
+  bond:"Say, in words, whether the bond is intact. Do not leave it to be guessed from a pause.",
+  space:"Name a real return time, at least 20 minutes and not past tomorrow, then actually return.",
+  heard:"Two minutes of listening with no fix, no defense, and no new topic. Then swap.",
+  plan:"One owner, one next step, one time. Put it where it will be seen.",
+  quiet:"Sit nearby, or stay on the line, without questions. Company is the care.",
+  touch:"Offer, do not assume. 'Hug, hand, or words?' A no is a complete answer."
+};
+
+function touchOk(){
+  if(envId==="work" || envId==="substances" || envId==="public" || envId==="kids" || relId==="coworker") return false;
+  if(channel!=="person") return false;
+  return true;
+}
+
+function settleHTML(A, B){
+  const sit = SIT[sitId], env = ENV[envId];
+  let hot = (sit?sit.hot:0) + (env?env.hot:0);
+  if(bstate==="s") hot += 1;
+  if(bstate==="d") hot += 2;
+  if(sitId==="argument" || sitId==="after" || sitId==="bond") hot += (bstate!=="v"?1:0);
+  if((sel.B.has("trauma")||sel.B.has("anxiety")||sel.A.has("trauma")||sel.A.has("anxiety")) && (sitId==="bond"||sitId==="argument"||sitId==="after"||sitId==="news")) hot += 1;
+  const level = hot>=5?"high":hot>=2?"some":"low";
+
+  const na = needA && NEED[needA] ? NEED[needA].label : "";
+  const nb = needB && NEED[needB] ? NEED[needB].label : "";
+  const bondish = x => x==="bond" || x==="now" || x==="touch";
+  const spaceish = x => x==="space";
+  const mismatch = (bondish(needA)&&spaceish(needB)) || (bondish(needB)&&spaceish(needA));
+  const spaceWho = spaceish(needA)?A:(spaceish(needB)?B:"");
+  const bondWho = bondish(needA)&&spaceish(needB)?A:(bondish(needB)&&spaceish(needA)?B:"");
+
+  let h = "";
+  if(level==="high"){
+    h += '<div class="box tone-warn"><h3>Risk: this situation is volatile<span class="sub">DO NOT SEND THE LONG VERSION</span></h3>';
+    h += '<p>The words, the state, and the room are stacking. A clearer sentence will still land hard. Pause the content. Regulate first. If anyone is afraid of the other person, not afraid of losing them, stop. A better wording can be turned against someone. In the US, the National Domestic Violence Hotline is 1-800-799-7233, text START to 88788, or <a href="https://www.thehotline.org" target="_blank" rel="noopener">thehotline.org</a>. If you are in crisis, call or text 988.</p>';
+    h += '</div>';
+  } else if(level==="some"){
+    h += '<div class="box tone-warn"><h3>Go smaller than the sentence you planned</h3><p class="small">This room can hold a bridge. It may not hold the whole topic. One signal, one return time, then the rest later.</p></div>';
+  }
+
+  h += '<div class="box tone-v"><h3>How to settle this, on both sides<span class="sub">CARE FOR THEIR CONFLICT NEED, AND KEEP YOURS</span></h3>';
+  if(sit) h += '<p><b>Situation.</b> '+esc(sit.label)+'. '+esc(sit.note)+'</p>';
+  if(env) h += '<p><b>Environment.</b> '+esc(env.label)+'. '+esc(env.note)+'</p>';
+  if(!sit && !env) h += '<p class="small">Pick a situation and an environment in Step 3 to tailor this. The bridge below still applies whenever one person needs the bond confirmed and the other needs space.</p>';
+
+  h += '<p>Regulation is a two-person job. '+esc(A)+' can lower the volume, send one sentence, and not add a new complaint. '+esc(B)+' can name which need is loudest, instead of making the other person guess. Neither person has to abandon their need so the other can be comfortable. The skill is to meet the smaller need first, so the larger one becomes possible.</p>';
+
+  if(na || nb){
+    h += '<p><b>What was selected.</b> ';
+    if(na) h += esc(A)+' needs '+esc(na)+'. ';
+    if(nb) h += esc(B)+' needs '+esc(nb)+'. ';
+    h += '</p>';
+  }
+
+  if(mismatch){
+    h += '<p><b>The mismatch.</b> '+esc(bondWho)+' needs the bond confirmed before they can wait. '+esc(spaceWho)+' needs space before they can think. If the space happens with no signal, it lands as abandonment. If the talk is forced before the body settles, it lands as another spike. Both are real. The order is: signal, then space, then return.</p>';
+    const gesture = touchOk()
+      ? "If you want a hug first, I can do that. A no is fine."
+      : (channel!=="person" ? "I cannot hug you from here. The words have to carry the signal." : "I will not guess at touch. Tell me if you want a hand, a hug, or words only.");
+    h += '<p class="rewrite">'+esc(spaceWho)+': "I am not leaving this. I need 20 minutes, until [time], because I cannot think clearly yet. We are ok. This is a pause, not an ending. '+esc(gesture)+' I will come back, and we will finish one point."</p>';
+    h += '<p class="small">'+esc(bondWho)+' can answer: "I can give you that time if I know you are coming back. The hug, or the words \'we are ok,\' is what lets me wait." Then let the pause happen. Do not send a second essay during it.</p>';
+  } else if(needA && needB && needA===needB){
+    h += '<p><b>Same need on both sides.</b> You do not have to negotiate a mismatch. Give each other '+esc(NEED[needA].label)+'. '+esc(NEED_GIVE[needA])+'</p>';
+  } else if(needA || needB){
+    h += '<ul class="ul">';
+    if(needA) h += '<li><b>For '+esc(A)+':</b> '+esc(NEED_GIVE[needA])+'</li>';
+    if(needB) h += '<li><b>For '+esc(B)+':</b> '+esc(NEED_GIVE[needB])+'</li>';
+    h += '</ul>';
+  } else if(sitId==="bond" || sitId==="argument" || sitId==="after"){
+    h += '<p><b>If one of you fears losing the person, and the other needs space.</b> Do the small thing before the pause. A welcome hug, a hand, or the sentence "we are ok, this is a pause," then a named return. Space without that signal feels like the ending. A forced talk before the body settles becomes the next fight.</p>';
+    h += '<p class="rewrite">"I am not leaving this. I need 20 minutes. We are ok. If you want a hug first, I can do that. I will be back at [time], and we will finish one point."</p>';
+  }
+
+  const moves = [];
+  function add(t){ if(t && !moves.includes(t)) moves.push(t); }
+  if(envId==="substances") add("Stop the topic. Say you care and name the morning. Nothing decided now counts.");
+  if(envId==="public") add("Leave the audience. 'Not here. Ten minutes, in the car or the other room.'");
+  if(envId==="kids") add("One sentence to the children: 'You are not in trouble. The adults are going to talk and then come back.' Then leave the room.");
+  if(envId==="work" || relId==="coworker") add("At work, the settle is logistical: 'Let's take the task offline at [time], just the two of us.' No hug. No character read.");
+  if(envId==="depleted") add("Before more words: water, a snack, sitting down, or a lower light. A depleted body hears every sentence as an attack.");
+  if(envId==="apart" || channel==="text" || channel==="phone") add("From a distance, the little thing is a return time in the message itself. 'I am not done with you. I will reply at 8.' Then do it.");
+  if(bstate==="d") add(B+" is shut down. No questions, no list, no 'why.' Offer quiet and a later time. Guidance on shutdowns is to wait until the person has recovered.");
+  if(bstate==="s") add(B+" is mobilized. Shorten it, slow it, and lead with reassurance, or wait. A braced body cannot audit a paragraph.");
+  if(sel.B.has("autistic") || sel.A.has("autistic")) add("Make the return literal: a clock time, not 'later.' 'I will be back at 8:15, in this room.'");
+  if(sel.B.has("adhd") || sel.A.has("adhd")) add("Write the return time where it will be seen. A spoken 'later' often becomes never, which then feels like rejection.");
+  if(sel.B.has("anxiety") || sel.B.has("trauma") || sel.A.has("anxiety") || sel.A.has("trauma")) add("Close the loop before any pause. 'This is not me leaving' has to be said. Silence is the loudest signal for this wiring.");
+  if(sel.B.has("hsp") || sel.A.has("hsp")) add("Drop the volume and the overhead light if you can. For a highly sensitive nervous system, the room is part of the sentence.");
+  if(sel.B.has("alex") || sel.A.has("alex")) add("Skip 'how do you feel?' Offer a body choice: water, a walk, space, or company.");
+  if(sel.B.has("ocd") || sel.A.has("ocd")) add("If you mean 'we are ok,' say it once, clearly. Do not hedge it. If you do not mean it, do not fake it. Agree later how repeat questions will be handled.");
+  if(sitId==="decision") add("Settle the decision, not the whole relationship. One choice, one owner, one time. Feelings can have a second meeting.");
+  if(sitId==="news") add("Fact, next step, and whether you are staying for the next hour. Comfort is presence, not a speech.");
+  if(sitId==="repair") add("Repair is one miss, owned. 'I meant X. I can see it landed as Y. I am sorry for Y.' Then stop.");
+  if(relId==="coparent") add("If a child is the stake, keep the other parent out of the character judgment. Lead with the child's need, not the score.");
+  if(relId==="caregiver") add("If someone is near empty from care, the settle is more support, not a sharper sentence. A pause is not a failing.");
+  if(relId==="roommate") add("In a shared house, skip the hug unless that closeness already exists. The settle is the chore, the time, and a closed kitchen door.");
+  add("A stated pause is not the silent treatment. Name it, soothe during it, and come back. A flooded body often needs at least 20 minutes, and the return should not slip past the next day.");
+  if(!touchOk() && (needA==="touch" || needB==="touch" || sitId==="bond")) add("Touch is off the table in this room, or it cannot be assumed. Use words: 'We are ok. This is a pause.'");
+  else if(touchOk()) add("A hug, a hand on a shoulder, or a glass of water can settle a body faster than an explanation. Offer it. Do not take it if the answer is no, a flinch, or silence.");
+
+  h += '<h3 style="margin-top:14px">Little things that settle the room</h3><ul class="ul">'+moves.slice(0,7).map(t=>'<li>'+esc(t)+'</li>').join("")+'</ul>';
+  h += '<p class="small">Your need counts too. Caring for someone else\'s fear of losing you does not mean you skip the pause your body requires. Their fear is real. Your limit is real. The nurture is the signal plus the return, not one person disappearing into the other\'s need. The <a href="quick-checks.html#ladder">Nervous System Ladder</a> and <a href="wp-11.html">WP-11</a> are for the body. The <a href="https://www.gottman.com/blog/flooding-and-conflict-avoidance/" target="_blank" rel="noopener">Gottman Institute</a> describes naming the break and coming back, rather than walking out in silence.</p>';
+  h += '<p class="small"><a href="wired-differently.html#situation">More on situation, environment, and caring for both needs</a></p>';
+  h += '</div>';
+  return h;
+}
+
+function dynHTML(id, found, A, B){
+  if(!id || !REL[id]){
+    return '<div class="box"><h3>The relationship changes the read<span class="sub">OPTIONAL, IN STEP 2</span></h3><p class="small">Wiring says how '+esc(B)+' may take the words in. The relationship says what those words threaten, or protect. The same sentence can be a loose plan between friends and a broken agreement between partners, because the cost of being direct is not the same in every arrangement. People often speak indirectly when they are not sure the other person agrees, to avoid a conflict that could strain the bond (<a href="'+SRC.achim[1]+'" target="_blank" rel="noopener">Achimova, Franke &amp; Butz, 2025</a>). Pick a relationship above to see how this phrase may land in that dynamic, what the dynamic is, and why it exists.</p></div>';
+  }
+  const r=REL[id];
+  const hits=relHits(id, found).slice(0,3);
+  let h='<div class="box tone-brass"><h3>How this may land in this dynamic<span class="sub">'+esc(r.label.toUpperCase())+' · WHAT THE ARRANGEMENT ADDS</span></h3>';
+  h+='<p><b>What this dynamic is.</b> '+esc(r.what)+'</p>';
+  h+='<p><b>Why it exists.</b> '+esc(r.why)+'</p>';
+  h+='<p class="small">People often choose an indirect sentence when they are unsure the other person agrees, because a direct one can threaten the bond (<a href="'+SRC.achim[1]+'" target="_blank" rel="noopener">Achimova, Franke &amp; Butz, 2025</a>). That cost is higher in some dynamics than others. The wiring read above is how '+esc(B)+' may decode the words. This is what the arrangement adds on top.</p>';
+  h+='<h3 style="margin-top:14px">This phrase, in this dynamic</h3>';
+  if(hits.length){
+    h+='<ul class="dyn-list">'+hits.map(x=>'<li><span class="who">'+esc(FBY[x.fid].name)+'</span>'+esc(x.text)+'</li>').join("")+'</ul>';
+  } else {
+    h+='<p>'+esc(r.fallback)+'</p>';
+  }
+  h+='<p><b>A clearer way to say it here.</b> '+esc(r.say)+'</p>';
+  const others=Object.keys(REL).filter(k=>k!==id).slice(0,3);
+  // pick three contrasts that are most different: prefer ones with a hit, else the first three others is weak.
+  const prefer={partner:["friend","coworker","family"],family:["roommate","partner","friend"],coparent:["friend","partner","coworker"],friend:["partner","coworker","coparent"],roommate:["partner","family","friend"],coworker:["partner","friend","family"],caregiver:["friend","roommate","partner"]};
+  const show=(prefer[id]||others).slice(0,3);
+  h+='<h3 style="margin-top:14px">How the same words can land elsewhere</h3>';
+  h+='<ul class="dyn-list">'+show.map(oid=>{
+    const o=REL[oid];
+    const oh=relHits(oid, found)[0];
+    const line=oh?oh.text:o.fallback;
+    return '<li><span class="who">'+esc(o.label)+'</span>'+esc(line)+'</li>';
+  }).join("")+'</ul>';
+  h+='<p class="small"><b>A limit.</b> '+esc(r.care)+'</p>';
+  h+='<p class="small"><a href="wired-differently.html#dynamics">The full note on these dynamics</a> · <a href="relationships.html#'+r.anchor+'">How the program fits '+esc(r.label.toLowerCase())+'</a></p>';
+  h+='</div>';
+  return h;
+}
+
 /* ============================================================
    RUN
    ============================================================ */
@@ -1102,8 +1601,10 @@ function run(){
   if(bstate!=="v") whyBits.push(B+" is "+STATE_NOTE[bstate][0].toLowerCase()+", which makes everything land harder.");
 
   const chName={person:"in person",phone:"by phone or video",text:"by text",email:"by email or long note"}[channel];
+  const relName = relId && REL[relId] ? REL[relId].label.toLowerCase() : "";
+  const ctxBits = [relName, sitId&&SIT[sitId]?SIT[sitId].label.toLowerCase():"", envId&&ENV[envId]?ENV[envId].label.toLowerCase():""].filter(Boolean);
   let h='';
-  h+='<div class="rhead"><h2 id="rTitle">The read</h2><p class="pair"><span class="pa">'+esc(A)+(Aids.length?' ('+esc(listNames(sel.A))+')':'')+'</span> &rarr; <span class="pb">'+esc(B)+' ('+esc(listNames(sel.B))+')</span> &middot; '+chName+' &middot; '+esc(B)+' is '+STATE_NOTE[bstate][0].toLowerCase()+'</p></div>';
+  h+='<div class="rhead"><h2 id="rTitle">The read</h2><p class="pair"><span class="pa">'+esc(A)+(Aids.length?' ('+esc(listNames(sel.A))+')':'')+'</span> &rarr; <span class="pb">'+esc(B)+' ('+esc(listNames(sel.B))+')</span>'+(ctxBits.length?' &middot; '+esc(ctxBits.join(", ")):'')+' &middot; '+chName+' &middot; '+esc(B)+' is '+STATE_NOTE[bstate][0].toLowerCase()+'</p></div>';
 
   // meter
   h+='<div class="box tone-brass"><div class="meter"><span class="lvl lvl-'+lvl[0]+'">'+lvl[1]+'</span><div class="track" role="img" aria-label="Static level: '+lvl[1]+'"><div class="fill lvl-'+lvl[0]+'" data-w="'+pct+'"></div></div><p class="why">'+esc(whyBits.join(" "))+'</p></div>';
@@ -1128,6 +1629,9 @@ function run(){
   cB.forEach(c=>{ h+='<div class="receiver"><h4>'+esc(c[0])+'</h4><p class="small">'+esc(c[1])+'</p></div>'; });
   h+='<p class="small" style="margin-top:12px"><b>'+esc(STATE_NOTE[bstate][0])+':</b> '+esc(STATE_NOTE[bstate][1])+'</p>';
   h+='</div>';
+
+  h+=dynHTML(relId, found, A, B);
+  h+=settleHTML(A, B);
 
   // what they may hear / what A meant
   h+='<div class="two">';
@@ -1193,6 +1697,8 @@ function run(){
   Bids.concat(Aids).forEach(id=>srcKeys=srcKeys.concat(NT[id].src||[]));
   if(sel.B.has("autistic")&&sel.B.has("adhd")) srcKeys.push("autistica");
   if(bstate==="d") srcKeys.push("lpt");
+  if(relId) srcKeys.push("achim");
+  if(sitId||envId||needA||needB||bstate!=="v") srcKeys.push("gottman","gottman20");
   h+='<details class="box src" style="margin-top:14px"><summary><b>Where these readings come from</b></summary><ul class="ul">'+srcList(srcKeys)+'</ul><p>The full explanations, with more examples, are in <a href="wired-differently.html">Wired Differently</a>.</p></details>';
   h+='<div class="rfoot"><button class="go" type="button" id="again">Try the reverse</button><button class="ghost" type="button" id="copy">Copy the read</button><button class="ghost" type="button" id="print">Print</button><a class="ghost" href="wired-differently.html" style="text-decoration:none">Read the guide</a></div>';
 
@@ -1211,6 +1717,11 @@ function run(){
 function swap(){
   const t=sel.A; sel.A=sel.B; sel.B=t;
   const na=$("#nameA").value; $("#nameA").value=$("#nameB").value; $("#nameB").value=na;
+  const nn=needA; needA=needB; needB=nn;
+  ["needA","needB"].forEach(id=>{
+    const val=id==="needA"?needA:needB;
+    $("#"+id).querySelectorAll("button").forEach(x=>x.setAttribute("aria-pressed", x.dataset.need===val?"true":"false"));
+  });
   sync();
 }
 
@@ -1221,6 +1732,25 @@ buildChips("A"); buildChips("B");
 $("#presets").innerHTML='<span class="lab" style="width:100%;font-size:.82rem">Or try an example:</span>'+PRESETS.map(p=>'<button type="button">'+esc(p)+'</button>').join("");
 $("#presets").addEventListener("click",e=>{ const b=e.target.closest("button"); if(!b) return; $("#phrase").value=b.textContent; $("#phrase").focus(); });
 segBind("#channel","ch",v=>{ channel=v; if(!$("#results").hidden) run(); });
+  $("#rel").addEventListener("click",e=>{
+    const b=e.target.closest("button"); if(!b) return;
+    relId = relId===b.dataset.rel ? "" : b.dataset.rel;
+    $("#rel").querySelectorAll("button").forEach(x=>x.setAttribute("aria-pressed", x.dataset.rel===relId?"true":"false"));
+    if(!$("#results").hidden && sel.B.size && $("#phrase").value.trim()) run();
+  });
+  function tog(hostSel, attr, get, set){
+    $(hostSel).addEventListener("click",e=>{
+      const b=e.target.closest("button"); if(!b) return;
+      const id=b.dataset[attr];
+      set(get()===id?"":id);
+      $(hostSel).querySelectorAll("button").forEach(x=>x.setAttribute("aria-pressed", x.dataset[attr]===get()?"true":"false"));
+      if(!$("#results").hidden && sel.B.size && $("#phrase").value.trim()) run();
+    });
+  }
+  tog("#sit","sit",()=>sitId,v=>{sitId=v});
+  tog("#env","env",()=>envId,v=>{envId=v});
+  tog("#needA","need",()=>needA,v=>{needA=v});
+  tog("#needB","need",()=>needB,v=>{needB=v});
 segBind("#state","s",v=>{ bstate=v; document.documentElement.style.setProperty("--state","var(--"+v+")"); if(!$("#results").hidden) run(); });
 $("#swap").addEventListener("click",()=>{ swap(); if(!$("#results").hidden && sel.B.size && $("#phrase").value.trim()) run(); });
 $("#go").addEventListener("click",run);
@@ -1228,6 +1758,9 @@ $("#phrase").addEventListener("keydown",e=>{ if(e.key==="Enter"&&(e.ctrlKey||e.m
 ["nameA","nameB"].forEach(id=>$("#"+id).addEventListener("input",sync));
 $("#reset").addEventListener("click",()=>{
   sel.A.clear(); sel.B.clear(); $("#phrase").value=""; $("#nameA").value=""; $("#nameB").value="";
+    relId=""; $("#rel").querySelectorAll("button").forEach(x=>x.setAttribute("aria-pressed","false"));
+    sitId=""; envId=""; needA=""; needB="";
+    ["sit","env","needA","needB"].forEach(id=>$("#"+id).querySelectorAll("button").forEach(x=>x.setAttribute("aria-pressed","false")));
   $("#results").hidden=true; $("#results").innerHTML=""; $("#msg").textContent=""; sync(); window.scrollTo({top:0});
 });
 sync();
