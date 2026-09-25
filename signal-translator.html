@@ -58,6 +58,12 @@ h1{font-family:var(--display);font-weight:700;font-size:clamp(2rem,5.5vw,3.4rem)
 	.use-banner p.sub{margin:.7rem 0 0;max-width:68ch;font-size:.95rem}
 	.load-note{margin-top:10px;padding:10px 12px;background:#fff;border-left:3px solid var(--brass);font-size:.95rem}
 	.load-note.heavy{border-left-color:var(--a)}
+	.cheat{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-top:12px}
+	.cheat article{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:12px 12px 10px}
+	.cheat h3{font-size:1rem;margin:0 0 6px}
+	.cheat ul{margin:.2rem 0 0;padding-left:1.1rem}
+	.cheat li{margin:.28rem 0;font-size:.92rem}
+	@media(max-width:760px){.cheat{grid-template-columns:1fr}}
 	@media(max-width:720px){.use-list{grid-template-columns:1fr}}
 	.jobs{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:16px}
 	.jobs article{background:var(--panel);padding:12px 12px 10px;border-top:3px solid var(--brass)}
@@ -377,7 +383,7 @@ details.src summary{cursor:pointer;font-family:var(--display);font-size:.98rem;c
   <section class="panel" aria-labelledby="s3">
     <span class="step">STEP 4</span>
     <h2 id="s3">Write the sentence you plan to say</h2>
-    <p class="s4lead">Steps 1 to 3 set the people and the room. This step is the words. There is one required field: the sentence the other person will hear. Translate shows how they may receive it, and a matching sentence you can add to the talking notes. Add another after this one if you have it.</p>
+    <p class="s4lead">Steps 1 to 3 set the people and the room. This step is the words, and you can run it again for every sentence you might say. Translate one, add it to the page you take in, then write the next. The people and the room stay. Only the sentence clears.</p>
     <div class="s4main">
       <span class="n req">REQUIRED</span>
       <label for="phrase" class="lab" id="phraseLab">The sentence</label>
@@ -411,26 +417,66 @@ details.src summary{cursor:pointer;font-family:var(--display);font-size:.98rem;c
   <section id="results" hidden aria-live="polite" aria-labelledby="rTitle" tabindex="-1"></section>
 
   <section class="panel" id="notes" aria-labelledby="sheetH">
-    <span class="step">THE PAGE YOU TAKE IN</span>
+    <span class="step">TAKE THIS INTO THE ROOM</span>
     <h2 id="sheetH">Talking notes</h2>
-    <p class="s4lead">These are the sentences you might say, written before anyone is waiting. Translate one, add it, then translate the next. You can add more than one. The note under the list will tell you when the load is getting heavy, and which one to say first. How to build the list is on <a href="check-ins.html#notes">Check-ins</a>.</p>
+    <p class="s4lead">Run Step 4 once for each sentence. Add it here, then write the next. This page is what you print. The score stays off it. How to choose what belongs on the list is on <a href="check-ins.html#notes">Check-ins</a>.</p>
+    <div class="actions">
+      <button class="go" id="writeNext" type="button">Write the next sentence</button>
+      <button class="ghost" id="pdf" type="button">Save talking notes as PDF</button>
+      <button class="ghost" id="clearAgenda" type="button">Clear the sentences</button>
+    </div>
     <div class="sheet-card">
       <span class="sheet-k">1. OPEN</span>
       <p>"We will start with one sentence. I am not against you. I do not think you meant harm. If we pause, we come back at a time we name now."</p>
       <p>Return time, if you need it: _______________</p>
     </div>
-    <p class="hint" id="agendaEmpty">Nothing here yet. Translate a sentence, add it, then do the next one if you have it. Until then, the PDF is the open line and the pause plan.</p>
+    <p class="hint" id="agendaEmpty">No sentences yet. Translate one in Step 4, add it, then use Write the next sentence for the one after that.</p>
     <div id="agendaList"></div>
     <p class="load-note" id="loadNote" hidden></p>
     <div class="sheet-card">
-      <span class="sheet-k">3. THE ORDER, AFTER THE SENTENCE</span>
+      <span class="sheet-k">3. HEAR BOTH SIDES</span>
+      <p>A productive conversation is two people heard, not one person convinced. Acknowledgement is not agreement. Hearing how it landed does not cancel your fact, and your fact does not cancel how it landed.</p>
       <ol>
-        <li>Say the sentence. Stop. Do not explain it.</li>
-        <li>They say what they heard. You confirm the fact, or correct the fact. Not the person.</li>
-        <li>Switch. Same two moves the other way.</li>
-        <li>One ask. One owner. One time. Then stop.</li>
+        <li>Say the sentence. Stop. Do not explain it, and do not defend your intent yet.</li>
+        <li>They say what they heard. You confirm the fact, or correct the fact. Not the person. "That's not how it felt" is not a correction of the fact.</li>
+        <li>They name how it landed. You say it back. "That can make sense" means you heard them. It does not mean you are guilty, and it does not mean they have to drop it.</li>
+        <li>Switch. Same moves the other way. One side heard is not a conversation. Do not skip their turn because you already know what you meant.</li>
+        <li>Only then, if a fact is still missing: "Your fact, as I heard it. My part. One fact I want added. I am not asking you to cancel how it landed."</li>
+        <li>One ask that works for both. One owner. One time. Then stop. If another sentence is on this page, ask whether both bodies can hold it. If not, park it.</li>
       </ol>
-      <p>The longer version is on <a href="check-ins.html">Check-ins</a>.</p>
+      <p>Do not invalidate. "You're too sensitive," "that isn't what happened," and "I didn't mean it, so it doesn't count" end the hearing. Intent can be said after they have been mirrored, not instead of it. The longer order is on <a href="check-ins.html">Check-ins</a>. The mirror-before-answer step is the speaker-listener order (<a href="https://www.family-institute.org/behavioral-health-resources/trouble-communicating-your-partner-top-five-tips-couples-therapist">Family Institute</a>). Complain about the event, not the person (<a href="https://www.gottman.com/blog/manage-conflict-the-six-skills/">Gottman Institute</a>).</p>
+    </div>
+    <div class="cheat" aria-label="Cheat sheet">
+      <article>
+        <h3>Check-in</h3>
+        <ul>
+          <li>Named time. Settled bodies. One room.</li>
+          <li>Start with sentence 1. Stop.</li>
+          <li>Mirror before any answer.</li>
+          <li>Then their turn, the same way.</li>
+          <li>One owner. One time.</li>
+          <li>Another sentence only if both can still hear.</li>
+        </ul>
+      </article>
+      <article>
+        <h3>Conflict</h3>
+        <ul>
+          <li>The event, not the person. No always, no never.</li>
+          <li>Hearing them is not losing.</li>
+          <li>If the voice rises or a second topic arrives to win, stop.</li>
+          <li>Pause. Name a return. Do not build the case.</li>
+          <li>Come back to the same sentence.</li>
+        </ul>
+      </article>
+      <article>
+        <h3>Any conversation</h3>
+        <ul>
+          <li>One clear ask. Check what they heard if it matters.</li>
+          <li>A text is a conversation too. Send the matching sentence, not the score.</li>
+          <li>Do not read this page at them.</li>
+          <li>If it is already a fight, close this. Care is the pause and the return.</li>
+        </ul>
+      </article>
     </div>
     <div class="sheet-card">
       <span class="sheet-k">4. IF A SECOND TOPIC SHOWS UP</span>
@@ -444,11 +490,7 @@ details.src summary{cursor:pointer;font-family:var(--display);font-size:.98rem;c
       <p>A flooded body often needs at least 20 minutes, and the return should not slip past the next day (<a href="https://www.gottman.com/blog/flooding-and-conflict-avoidance/">Gottman Institute</a>). Come back to the same topic. Do not open with what happened during the pause.</p>
       <p>Care does not require a solution. Lower your voice. Sit down. Get water. Put the phones away. If they asked for space, do not follow them, and do not send a stack of messages. One line is the signal. The return is the care.</p>
     </div>
-    <div class="actions">
-      <button class="go" id="pdf" type="button">Save talking notes as PDF</button>
-      <button class="ghost" id="clearAgenda" type="button">Clear the sentences</button>
-    </div>
-    <p class="hint">Nothing on this sheet is stored. If you close the tab before you save the PDF, the sentences are gone. Leave the score at home.</p>
+    <p class="hint">Nothing on this sheet is stored. If you close the tab before you save the PDF, the sentences are gone. Leave the score at home. Write the next sentence does not erase what is already here.</p>
   </section>
 
   <div class="note">
@@ -1906,16 +1948,14 @@ function run(){
     say: (changed?rw:text).replace(/\s+/g," ").trim(),
     check: checks[0] || "Here's what I heard: ___. Is that what you meant?"
   };
-  h+='<div class="rfoot"><button class="go" type="button" id="addTopic">'+(useId==="now"?"Save the pause card, not this score":"Add this sentence to the talking notes")+'</button><button class="ghost" type="button" id="again">Try the reverse</button><button class="ghost" type="button" id="copy">Copy the read</button><button class="ghost" type="button" id="print">Print</button><a class="ghost" href="check-ins.html" style="text-decoration:none">Check-in order</a></div>';
+  h+='<div class="rfoot"><button class="go" type="button" id="addTopic">'+(useId==="now"?"Save the pause card, not this score":"Add this, then write the next")+'</button><button class="ghost" type="button" id="again">Try the reverse</button><button class="ghost" type="button" id="copy">Copy the read</button><button class="ghost" type="button" id="print">Print</button><a class="ghost" href="check-ins.html" style="text-decoration:none">Check-in order</a></div>';
 
   const R=$("#results"); R.innerHTML=h; R.hidden=false;
   requestAnimationFrame(()=>{ const f=R.querySelector(".fill"); if(f) f.style.width=f.dataset.w+"%"; });
   $("#addTopic").addEventListener("click",()=>{
     if(useId==="now"){ savePdf(); return; }
-    if(!lastTopic) return;
-    agenda.push(Object.assign({who:nm("A")+" to "+nm("B")}, lastTopic));
-    paintAgenda();
-    $("#notes").scrollIntoView({behavior: matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth", block:"start"});
+    addCurrent();
+    writeNext();
   });
   $("#again").addEventListener("click",()=>{ swap(); $("#phrase").focus(); $("#msg").textContent = $("#phrase").value.trim() ? "Swapped. The reply is now the phrase. Translate again to read it the other way." : "Swapped. Type what "+nm("A")+" might say back, then translate."; });
   $("#copy").addEventListener("click",()=>{
@@ -2029,12 +2069,24 @@ function sheetLines(){
     lines.push(loadAdvice(agenda.length));
     lines.push("");
   }
-  lines.push("3. The order, after the sentence");
-  lines.push("Say the sentence. Stop. Do not explain it.");
-  lines.push("They say what they heard. You confirm the fact, or correct the fact. Not the person.");
-  lines.push("Switch. Same two moves the other way.");
-  lines.push("One ask. One owner. One time. Then stop.");
+  lines.push("3. Hear both sides");
+  lines.push("A productive conversation is two people heard, not one person convinced.");
+  lines.push("Acknowledgement is not agreement. Hearing how it landed does not cancel your fact.");
+  lines.push("Say the sentence. Stop. Do not explain it, and do not defend your intent yet.");
+  lines.push("They say what they heard. Confirm the fact, or correct the fact. Not the person.");
+  lines.push("They name how it landed. Say it back. That can make sense is not I am guilty.");
+  lines.push("Switch. Same moves the other way. One side heard is not a conversation.");
+  lines.push("Only then, if a fact is missing: their fact, your part, one fact to add.");
+  lines.push("Do not ask them to cancel how it landed.");
+  lines.push("One ask that works for both. One owner. One time. Then stop.");
+  lines.push("Another sentence only if both bodies can still hear. If not, park it.");
+  lines.push("Do not say: you are too sensitive. That is not what happened. I did not mean it, so it does not count.");
   lines.push("Owner: ____________________   By: ____________________");
+  lines.push("");
+  lines.push("Cheat sheet");
+  lines.push("Check-in: named time, settled bodies, start with sentence 1, mirror before any answer, then their turn, one owner, one time.");
+  lines.push("Conflict: the event, not the person. No always, no never. Hearing them is not losing. If the voice rises, pause, name a return, do not build the case, come back to the same sentence.");
+  lines.push("Any conversation: one clear ask. Check what they heard if it matters. A text gets the matching sentence, not the score. Do not read this page at them. If it is already a fight, close this.");
   lines.push("");
   lines.push("4. If a second topic shows up");
   lines.push("Say: That's real. It is not this meeting. I'm writing it down. We are still on this one.");
@@ -2123,8 +2175,27 @@ $("#use").addEventListener("click",e=>{
   $("#use").querySelectorAll("button").forEach(x=>x.setAttribute("aria-pressed", x===b?"true":"false"));
   sync();
 });
+function addCurrent(){
+  if(!lastTopic) return false;
+  agenda.push(Object.assign({who:nm("A")+" to "+nm("B")}, lastTopic));
+  lastTopic=null;
+  paintAgenda();
+  return true;
+}
+function writeNext(){
+  $("#facts").value="";
+  $("#phrase").value="";
+  $("#reply").value="";
+  $("#results").hidden=true;
+  $("#results").innerHTML="";
+  $("#msg").textContent = agenda.length ? ("Sentence "+(agenda.length+1)+". "+agenda.length+" already on the page you take in.") : "";
+  const step=$("#s3");
+  if(step) step.scrollIntoView({behavior: matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth", block:"start"});
+  $("#phrase").focus();
+}
+$("#writeNext").addEventListener("click",()=>{ if(lastTopic && useId!=="now") addCurrent(); writeNext(); });
 $("#pdf").addEventListener("click", savePdf);
-$("#clearAgenda").addEventListener("click",()=>{ agenda=[]; paintAgenda(); });
+$("#clearAgenda").addEventListener("click",()=>{ agenda=[]; lastTopic=null; paintAgenda(); });
 paintAgenda();
 sync();
 })();
