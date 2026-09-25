@@ -9,6 +9,11 @@ Source for The Objective Ledger (TOL-OS) site. The repo root is the site root: G
   <link rel="stylesheet" href="/assets/css/site.css">
   <script src="/assets/js/site.js" defer></script>
   ```
+- **Simple first, dig deeper on demand.** A page's normal address is its simple version: a short lede, a few numbered ideas, and a "Try this" box. The full version sits beside it as `<name>-in-depth.html` (for example `book/chapter-2.html` and `book/chapter-2-in-depth.html`). Each idea ends with a pickaxe link that jumps to the matching section of the full page:
+  ```html
+  <a class="dig" href="/book/chapter-2-in-depth.html#inputs">Dig deeper: where each number comes from</a>
+  ```
+  Give every section on the in-depth page an `id` to jump to. Set `deep: true` on the page's line in `SECTIONS`: the menu then shows its own Dig deeper link, and the in-depth page shares the simple page's members lock and previous/next links. Done so far: the home page and the book (Preface, Chapters I–V).
 - **Members-only pages:** set `paid: true` on the page's line in `SECTIONS`. While `freePreview: true`, those pages open for anyone who signs up with an email (sent to Buttondown). The lock only runs in the browser: the page's HTML is still public, so treat it as a sign-up prompt, not protection.
 - **Members list:** `data/members.json` holds SHA-256 fingerprints of member emails, never the addresses. Manage it with `python3 manage-members.py add|remove|check|count <email>`, then commit and push.
 - **Household dashboard:** `dashboard.html` uses Supabase. Setup is in `dashboard-setup.md`, the schema in `supabase/schema.sql`. Only the anon/publishable key goes in `assets/js/dashboard-config.js`, never the service_role key.

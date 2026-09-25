@@ -3,6 +3,10 @@
      <link rel="stylesheet" href="/assets/css/site.css">
      <script src="/assets/js/site.js" defer></script>
    To make a page members-only: set  paid: true  on its line. That's the only switch.
+   SIMPLE FIRST: every page's address is its simple version. If a page also has a full
+   version saved beside it as <name>-in-depth.html, set  deep: true  on its line. The menu
+   then shows a "Dig deeper" link to it, and the in-depth page shares the simple page's
+   menu entry, members lock and previous/next links.
 
    FREE PREVIEW: while the program is being built, freePreview (below) is true.
    Every "paid: true" page then opens for anyone who signs up with an email
@@ -49,7 +53,7 @@
       { href: '/workpapers/wp-02-battery-stress-meter.html', code: 'WP-02', title: 'The Battery & Stress Meter', note: 'What you’re already carrying, separate from what just happened', paid: true },
       { href: '/tools/frequency-calibration.html', code: 'Tool', title: 'Frequency Calibration', note: 'Your natural rhythms for money, decisions, check-ins and recovery', paid: true },
       { href: '/wp-11.html', code: 'WP-11', title: 'The Calm-Down Kit', note: 'Decide in advance what settles your body', paid: true },
-      { href: '/book/chapter-3.html', code: 'III', title: 'Autonomic Saturation & the 7 Ocular Vectors', note: 'Why some reactions are bigger than their cause', paid: true },
+      { href: '/book/chapter-3.html', deep: true, code: 'III', title: 'Autonomic Saturation & the 7 Ocular Vectors', note: 'Why some reactions are bigger than their cause', paid: true },
       { href: '/learn/index.html#part-self', code: 'Stories', title: 'Stories from Philosophy: Knowing yourself', note: 'The Second Arrow, the Ship of Theseus, What Is Up to Us' },
       { href: '/soundscapes.html', code: 'Audio', title: 'Soundscape Catalog', note: 'Background audio for settling and focus' }
     ]},
@@ -65,12 +69,12 @@
       { href: '/relationships.html#map', code: 'Map', title: 'The full map', note: 'Every chapter, workpaper and tool against every kind of relationship' }
     ]},
     { id: 'book', title: 'The book', blurb: 'The manuscript, one idea per chapter. Each chapter pairs with a workpaper that puts it to use.', items: [
-      { href: '/book/preface.html', code: 'Preface', title: 'Unbilled Debt', note: 'Why the unseen work of running a shared life builds up like a debt only one person can see' },
-      { href: '/book/chapter-1.html', code: 'I', title: 'The Radio Frequency Paradigm', note: 'How pace, tone and urgency knock two people out of sync, and how to get back in tune' },
-      { href: '/book/chapter-2.html', code: 'II', title: 'The Epistemic Verdict Engine & P(Solvency)', note: 'A simple formula for whether the current split of work is sustainable. It judges the arrangement, never a person' },
-      { href: '/book/chapter-3.html', code: 'III', title: 'Autonomic Saturation & the 7 Ocular Vectors', note: 'How much of a reaction is leftover stress, and the seven angles people argue from', paid: true },
-      { href: '/book/chapter-4.html', code: 'IV', title: 'Deontological Parity & Sensory Gating', note: 'Agreeing how you’ll judge fairness, and giving a comment time to land before reacting', paid: true },
-      { href: '/book/chapter-5.html', code: 'V', title: 'The Deficit Audit', note: 'Why a monthly look back catches the problems that weekly check-ins miss', paid: true }
+      { href: '/book/preface.html', deep: true, code: 'Preface', title: 'Unbilled Debt', note: 'Why the unseen work of running a shared life builds up like a debt only one person can see' },
+      { href: '/book/chapter-1.html', deep: true, code: 'I', title: 'The Radio Frequency Paradigm', note: 'How pace, tone and urgency knock two people out of sync, and how to get back in tune' },
+      { href: '/book/chapter-2.html', deep: true, code: 'II', title: 'The Epistemic Verdict Engine & P(Solvency)', note: 'A simple formula for whether the current split of work is sustainable. It judges the arrangement, never a person' },
+      { href: '/book/chapter-3.html', deep: true, code: 'III', title: 'Autonomic Saturation & the 7 Ocular Vectors', note: 'How much of a reaction is leftover stress, and the seven angles people argue from', paid: true },
+      { href: '/book/chapter-4.html', deep: true, code: 'IV', title: 'Deontological Parity & Sensory Gating', note: 'Agreeing how you’ll judge fairness, and giving a comment time to land before reacting', paid: true },
+      { href: '/book/chapter-5.html', deep: true, code: 'V', title: 'The Deficit Audit', note: 'Why a monthly look back catches the problems that weekly check-ins miss', paid: true }
     ]},
     { id: 'workpapers', title: 'Workpapers', blurb: 'Worksheets each person fills in about themselves, then reads together. Best in this order: WP-01, 02, 03, 09, 13, with WP-04 monthly.', items: [
       { href: '/workpapers/wp-01.html', code: 'WP-01', title: 'The Daily Balance Sheet & Neutral Refusals', note: 'Start here: a week’s log of who did what, plus kind scripts for saying no', paid: true },
@@ -123,6 +127,10 @@
   var current = decodeURIComponent(location.pathname);
   if (/\/$/.test(current)) current += 'index.html';
   else if (!/\.[a-z0-9]+$/i.test(current)) current += '.html';
+  // An in-depth page shares its simple page's menu entry: /book/chapter-2-in-depth.html → /book/chapter-2.html
+  var inDepth = /-in-depth\.html$/.test(current);
+  if (inDepth) current = current.replace(/-in-depth\.html$/, '.html');
+  function deepHref(it) { return it.href.replace(/\.html(#.*)?$/, '-in-depth.html'); }
 
   var here = null, hereSection = null;
   SECTIONS.forEach(function (s) {
@@ -163,7 +171,9 @@
           '<span class="tol-code">' + esc(it.code || '') + '</span>' +
           '<span class="tol-title">' + esc(it.title) + (it.note ? '<small>' + esc(it.note) + '</small>' : '') + '</span>' +
           '<span class="tol-access">' + (it.paid ? (isMember ? 'unlocked' : (CONFIG.freePreview ? 'free · email' : 'members')) : '') + '</span>';
-        var li = el('li'); li.appendChild(a); ol.appendChild(li);
+        var li = el('li'); li.appendChild(a);
+        if (it.deep) li.appendChild(el('a', { class: 'dig tol-dig', href: deepHref(it) }, 'Dig deeper'));
+        ol.appendChild(li);
       });
       sec.appendChild(ol);
       wrap.appendChild(sec);
@@ -271,9 +281,11 @@
       if (prev || next) {
         var pager = el('div', { class: 'tol-pager', role: 'navigation', 'aria-label': 'Previous and next' });
         if (pl || pr) { pager.style.marginLeft = (-pl) + 'px'; pager.style.marginRight = (-pr) + 'px'; pager.style.maxWidth = 'none'; }
-        if (prev) pager.appendChild(el('a', { href: prev.href, class: 'is-prev' },
+        // Reading in depth? Stay in depth where the next page has a full version too.
+        var pagerHref = function (it) { return inDepth && it.deep ? deepHref(it) : it.href; };
+        if (prev) pager.appendChild(el('a', { href: pagerHref(prev), class: 'is-prev' },
           '<span class="tol-pager-dir">Previous</span><span class="tol-pager-title">' + esc(label(prev)) + '</span>'));
-        if (next) pager.appendChild(el('a', { href: next.href, class: 'is-next' },
+        if (next) pager.appendChild(el('a', { href: pagerHref(next), class: 'is-next' },
           '<span class="tol-pager-dir">Next</span><span class="tol-pager-title">' + esc(label(next)) + '</span>'));
         body.insertBefore(pager, scrim);
       }

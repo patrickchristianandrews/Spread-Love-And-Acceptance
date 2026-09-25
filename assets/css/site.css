@@ -219,27 +219,63 @@ div.tol-gate p{ max-width:60ch; }
   .tol-sections button[data-sec="book"], .tol-sections button[data-sec="workpapers"], .tol-sections button[data-sec="tools"]{ display:none; }
 }
 
-/* ---------- Plain-first layer: "In plain terms" box + optional depth ----------
-   Used at the top of any page that has technical content. The plain box is always
-   visible; the technical version sits inside <details class="deeper"> and stays shut
-   until someone opens it. Nothing on the site requires opening it. */
-.plain{
-  margin:1.1rem 0 1.6rem; padding:1rem 1.2rem 1.1rem;
-  background:var(--paper-deep); border-left:5px solid var(--credit); border-radius:var(--radius);
+/* ---------- Simple first, dig deeper on demand ----------
+   Every section's default page is the simple version. The full version sits
+   beside it as <name>-in-depth.html, and "Dig deeper" links jump straight to
+   the matching section there. */
+
+/* The pickaxe: <a class="dig" href="/book/chapter-2-in-depth.html#inputs">Dig deeper: the inputs</a> */
+.dig{
+  display:inline-flex; align-items:center; gap:.4em;
+  font-family:"IBM Plex Mono", ui-monospace, monospace; font-size:.8rem; letter-spacing:.02em;
+  color:var(--brass) !important; text-decoration:none !important; white-space:nowrap;
 }
-.plain > p:first-child{ margin-top:0; }
-.plain > p:last-child{ margin-bottom:0; }
-.plain-tag{
-  display:block; font-family:"IBM Plex Mono", ui-monospace, monospace;
-  font-size:.7rem; letter-spacing:.08em; color:var(--credit); margin:0 0 .5rem;
+.dig::before{
+  content:""; flex:none; width:1.35em; height:1.35em; background:currentColor;
+  -webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M5 4.4Q20.2 0.8 19.6 19Q15.6 9.6 5 4.4Z'/%3E%3Cpath d='M3.2 20.8 14.4 9.6' stroke='black' stroke-width='2.6' stroke-linecap='round'/%3E%3C/svg%3E") center / contain no-repeat;
+          mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M5 4.4Q20.2 0.8 19.6 19Q15.6 9.6 5 4.4Z'/%3E%3Cpath d='M3.2 20.8 14.4 9.6' stroke='black' stroke-width='2.6' stroke-linecap='round'/%3E%3C/svg%3E") center / contain no-repeat;
 }
-.plain p{ font-size:1.02rem; line-height:1.65; max-width:64ch; margin:0 0 .7rem; }
-.plain .plain-do{ margin:.8rem 0 0; padding-top:.7rem; border-top:1px solid var(--line); font-size:.97rem; }
-.plain .plain-do strong{ font-family:"Fraunces", Georgia, serif; }
-.plain .plain-more{ margin:.55rem 0 0; font-size:.92rem; color:var(--ink-soft); }
-.plain a{ color:var(--ink); text-decoration-color:var(--brass); text-underline-offset:3px; }
-.plain a:hover{ color:var(--credit); }
-.plain .plain-more a{ font-weight:600; margin-right:.9rem; white-space:nowrap; }
+.dig:hover{ color:var(--ink) !important; text-decoration:underline !important; text-underline-offset:3px; }
+.dig:focus-visible{ outline:2px solid var(--focus); outline-offset:2px; }
+
+/* One line under the title saying which version this is, with the way across */
+.depth-bar{
+  display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:.4rem 1rem;
+  margin:-1.25rem 0 2rem; padding:.55rem 0; border-bottom:1px solid var(--line);
+  font-family:"IBM Plex Mono", ui-monospace, monospace; font-size:.76rem; color:var(--ink-soft);
+}
+.read .depth-bar{ max-width:none; }
+.depth-bar a:not(.dig){ color:var(--ink-soft); text-underline-offset:3px; }
+
+/* Simple pages: a handful of big ideas, each with its own way down */
+.simple-lede{ font-size:1.18rem; line-height:1.6; max-width:36rem; }
+.ideas{ list-style:none; padding:0 !important; margin:1.5rem 0 2rem !important; counter-reset:idea; }
+.ideas > li{
+  counter-increment:idea; position:relative; max-width:none !important;
+  margin:0 !important; padding:1.1rem 0 1.1rem 2.6rem; border-top:1px dotted var(--line);
+}
+.ideas > li:last-child{ border-bottom:1px dotted var(--line); }
+.ideas > li::before{
+  content:counter(idea); position:absolute; left:0; top:.95rem;
+  font-family:"Fraunces", Georgia, serif; font-size:1.6rem; line-height:1; color:var(--brass);
+}
+.ideas h2, .ideas h3, .read .ideas h2, .read .ideas h3{ font-family:"Fraunces", Georgia, serif; font-weight:600; font-size:1.2rem !important; line-height:1.3; margin:0 0 .35rem !important; }
+.ideas p{ margin:0 0 .5rem !important; }
+.try-this{
+  margin:2rem 0; padding:1rem 1.2rem; background:var(--paper-deep);
+  border-left:5px solid var(--credit); border-radius:var(--radius);
+}
+.try-this strong{ font-family:"Fraunces", Georgia, serif; }
+.try-this p{ margin:0 !important; }
+.try-this p + p{ margin-top:.6rem !important; }
+.dig-list{ list-style:none; padding:0 !important; margin:.5rem 0 1.5rem !important; display:grid; gap:.45rem; }
+.dig-list li{ margin:0 !important; }
+.dig-list .dig{ white-space:normal; }
+
+/* In-depth pages: jump targets land below the sticky header, and briefly show where you landed */
+[id]{ scroll-margin-top:calc(var(--tol-bar-h, 60px) + 1rem); }
+.read h2:target, .read section:target > h2{ background:linear-gradient(transparent 60%, rgba(168,121,47,.22) 60%); }
+@media print{ .depth-bar, .dig{ display:none !important; } }
 
 details.deeper{
   margin:1.2rem 0; padding:.2rem 0 0; border-top:1px solid var(--line); border-bottom:1px solid var(--line);
@@ -303,3 +339,8 @@ details.deeper .deeper-body > :first-child{ margin-top:0; }
   font-size:1.08rem; line-height:1.6; color:var(--ink); max-width:60ch;
 }
 @media print{ .scene{ background:transparent; } }
+
+/* "Dig deeper" link under a menu row that has an in-depth page */
+.tol-index li > .tol-dig{ margin:.4rem 0 .5rem calc(5.2rem + 3px); font-size:.72rem; }
+.tol-panel .tol-index li > .tol-dig{ margin-left:calc(5.65rem + 3px); }
+@media (max-width:520px){ .tol-index li > .tol-dig, .tol-panel .tol-index li > .tol-dig{ margin-left:.55rem; } }
