@@ -35,7 +35,6 @@ Source for The Objective Ledger (TOL-OS) site. The repo root is the site root: G
 
 ## Rules to keep
 
-- **No analytics or tracking scripts.** The privacy promise is that people can complete the program without being tracked, and the privacy policy says the site runs no analytics. Adding any tracker means changing that promise first.
 
 - **Don't move `workpapers/calculators/calc01-solvency.html`.** That URL is printed in the member bundle.
 - **Shipping anything means updating all three status pages:** `telemetry.html` (the counts), `suite-index.html` (every component named) and `roadmap.html` (what's next). Where they disagree, `suite-index.html` wins. Denominators never shrink to raise a percentage; if the plan changes, say so on the page.
