@@ -1,5 +1,7 @@
 # CALC-01 — The Solvency Read
 
+**A diagnostic starting point, not an exit script.** A low score doesn't assign blame, and a high score doesn't silence a partner.
+
 **Scope note:** this is a heuristic scoring worksheet. It is not a validated statistical model, was not trained on any dataset, and does not output a judgment about either person or about the relationship's worth. It scores exactly one thing: whether the current shared-workload arrangement, as logged, looks sustainable. Treat everything below as a spec for a transparent, editable formula — not a black box.
 
 **Deployed at:** `/workpapers/calculators/calc01-solvency.html`
@@ -48,9 +50,9 @@ If weights are changed, every previous read becomes non-comparable, and the chan
 
 | Range | Reading | First move |
 |---|---|---|
-| ≥ 0.70 | The arrangement is carrying its own weight | Change nothing structural. Keep the same rhythm of check-ins. |
-| 0.40–0.69 | Something is drifting | Go to the shortfall with the largest gap. Usually ownership clarity — but read it rather than assuming it. |
-| < 0.40 | Not sustainable as currently structured | A full treaty renegotiation, not another one-off patch. A statement about the arrangement. |
+| ≥ 0.70 | The structure is carrying its own weight | Change nothing structural. Keep the same rhythm of check-ins, and protect the rest windows. |
+| 0.40–0.69 | Structural drift | Go to the shortfall with the largest gap. When it's ownership: the load isn't failing, the ownership is blurry — an ambiguous task defaults to whoever notices first, every time. |
+| < 0.40 | Operating in overdraft | Structural relief and renegotiation, not emotional defence. This is an audit of the operational setup, not of anyone's affection or character. |
 
 Band boundaries are round numbers chosen for legibility. A 0.69 and a 0.70 are the same week; treat the bands as regions, not thresholds.
 

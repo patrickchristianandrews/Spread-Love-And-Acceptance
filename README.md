@@ -1,33 +1,44 @@
-# TOL-OS site update
+# spreadloveandacceptance.com
 
-Everything in `site/` mirrors the root of spreadloveandacceptance.com. Copy its contents into your site repository, keeping the folders as they are.
+Source for The Objective Ledger (TOL-OS) site. The repo root is the site root: GitHub Pages serves it as-is, so a file's path is its URL (`workpapers/wp-01.html` → `spreadloveandacceptance.com/workpapers/wp-01.html`). Every file in the repo is public, including `.md` files and this README.
 
-## What's in `site/`
+## How the site fits together
 
-| Path | Status | Notes |
-|---|---|---|
-| `start-here.html` | New | The Start Here orientation page |
-| `roadmap.html` | Replaces the live file | Matches the Suite Index. Confirm "Chapter VI" is what's actually in progress |
-| `infographic.html` | Replaces the live file | Only the footer line changed. Compare it with your live version first. If the live one has changed since, edit just that line instead |
-| `assets/js/lemonade-calc.js` | Replaces the live file | A code comment only |
-| `manuscript/ch03-autonomic-saturation.md` | Renamed | Replaces `ch03-telemetry-metrics.md`, which you can delete |
-| `manuscript/ch04-deontological-parity.md` | Renamed | Replaces `ch04-ocular-vectors.md`, which you can delete |
-| `workpapers/wp-01.md` | Updated | Stale Chapter III reference fixed |
-| `workpapers/wp03-raci-treaty.md` | Updated | Adds "When to use" and fixes the Chapter V reference |
-| `workpapers/wp13-pll-protocol.md` | Updated | Chapter V reference fixed |
-| `telemetry/hierarchy-matrix.md` | Updated | Chapter V reference fixed |
-| `workpapers/fill/` | New folder | The fill-in workpapers that save as PDFs. Upload the whole folder |
+- **Navigation and membership** live in one file: `assets/js/site.js`. The `SECTIONS` list at the top is the menu for every page, in reading order. To add a page, add a line there and put these two lines in the page's `<head>`:
+  ```html
+  <link rel="stylesheet" href="/assets/css/site.css">
+  <script src="/assets/js/site.js" defer></script>
+  ```
+- **Members-only pages:** set `paid: true` on the page's line in `SECTIONS`. While `freePreview: true`, those pages open for anyone who signs up with an email (sent to Buttondown). The lock only runs in the browser: the page's HTML is still public, so treat it as a sign-up prompt, not protection.
+- **Members list:** `data/members.json` holds SHA-256 fingerprints of member emails, never the addresses. Manage it with `python3 manage-members.py add|remove|check|count <email>`, then commit and push.
+- **Household dashboard:** `dashboard.html` uses Supabase. Setup is in `dashboard-setup.md`, the schema in `supabase/schema.sql`. Only the anon/publishable key goes in `assets/js/dashboard-config.js`, never the service_role key.
 
-The `manuscript/` and `workpapers/` locations for the markdown files are my best guess from your project notes. If your repository keeps them elsewhere, put them wherever the old versions are.
+## Folders
 
-## Everything else
+| Path | What's there |
+|---|---|
+| root `*.html` | Public pages, plus the standalone workpaper files (`wp-01.html`, `wp-02.html`, …, `calc01-solvency.html`) that also make up the Survival Kit bundle |
+| `book/` | The manuscript chapters (Preface, I–V) |
+| `workpapers/` | Workpaper pages linked from the menu, plus their `.md` sources |
+| `workpapers/fill/` | Fill-in versions that save as PDFs |
+| `workpapers/calculators/` | CALC-01 as linked from the menu |
+| `tools/`, `snapshot/`, `learn/`, `do/`, `architecture/` | Interactive tools and explainer sections |
+| `legal/` | Privacy policy, terms, refund policy. The root copies only redirect here |
+| `assets/css`, `assets/js`, `assets/audio` | Shared styles, scripts and media |
+| `manuscript/`, `telemetry/` | Markdown sources and specs (`telemetry/calc01-solvency.md` is the current CALC-01 spec) |
+| `infrastructure/`, `notes/`, `samples/` | Internal notes and sample PDFs, not linked from the site |
 
-- `notes/site-fixes.md`: find-and-replace edits for live pages whose source wasn't in the project (homepage, Suite Index, About, Try It, Playground, Program Overview, Telemetry, Privacy Policy), in priority order. Not for uploading.
-- `samples/`: two example PDFs from the fill-in workpapers, filled in with test entries. Not for uploading.
+## Rules to keep
 
-## After uploading
+- **Don't move `workpapers/calculators/calc01-solvency.html`.** That URL is printed in the member bundle.
+- **Shipping anything means updating all three status pages:** `telemetry.html` (the counts), `suite-index.html` (every component named) and `roadmap.html` (what's next). Where they disagree, `suite-index.html` wins. Denominators never shrink to raise a percentage; if the plan changes, say so on the page.
+- **One copy per page.** Before uploading a new version, check where the current one lives (search the repo) and replace it there instead of adding a second copy under another name.
+- **Use root-relative links** (`/book/chapter-1.html`) so pages work from any folder.
 
-1. Delete `manuscript/ch03-telemetry-metrics.md` and `manuscript/ch04-ocular-vectors.md`.
-2. Work through `notes/site-fixes.md`, including the Privacy Policy update in item 14.
-3. Open `/workpapers/fill/wp-01.html` on the live site and check that Download PDF works.
-4. Add the fill-in page links to the member bundle, then regenerate the bundle (item 12).
+## Open decisions
+
+- WP-03, WP-04, WP-09 and CALC-01 each have a longer standalone version at the root (`wp-03.html`, `wp-04.html`, `wp-09.html`, `calc01-solvency.html`) and a shorter version linked from the menu under `workpapers/`. Decide which is current and keep one.
+- `workpapers/wp-11.html` is a standalone copy of the Calm-Down Kit; the menu links the root `wp-11.html`.
+- Several markdown sources still exist in more than one version: `workpapers/wp-01.md` vs `workpapers/workpapers/wp-01.md`, `wp-03.md` and `wp-04.md` (in root, `workpapers/` and `workpapers/workpapers/`), and `workpapers/wp03-raci-treaty.md` vs `workpapers/workpapers/wp03-raci-treaty.md`.
+- Google Analytics (`G-NKC6CQ9S66`) runs on about 25 pages, but the privacy policy says the site has no analytics. Remove the tag or update the policy.
+- `joinUrl` and `formKey` in `assets/js/site.js` are still placeholders.
