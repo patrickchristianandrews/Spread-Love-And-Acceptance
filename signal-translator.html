@@ -59,13 +59,22 @@ h1{font-family:var(--display);font-weight:700;font-size:clamp(2rem,5.5vw,3.4rem)
 	.jobs strong{font-family:var(--display);display:block;margin-bottom:4px}
 	.jobs p{margin:0;font-size:.92rem;color:var(--muted)}
 	@media (max-width:760px){.jobs{grid-template-columns:1fr}}
-	.s4box{background:var(--sheet);border:1px solid var(--line);border-radius:var(--radius);padding:12px 14px 14px;margin-top:12px}
-	.s4box .n{font-family:var(--mono);font-size:.68rem;letter-spacing:.06em;color:var(--brass)}
-	.s4box .req{color:var(--a)}
-	#agendaList{margin:.4rem 0 0;padding-left:1.2rem}
-	#agendaList li{margin:.7rem 0}
-	.derail{margin-top:16px;padding:14px 16px;background:var(--sheet);border-left:3px solid var(--a)}
-	.derail h3{margin:0 0 6px}
+	.s4lead{max-width:62ch;font-size:1.05rem}
+	.s4main{margin-top:14px;padding:16px 16px 14px;background:#fff;border:2px solid var(--ink);border-radius:var(--radius)}
+	.s4main textarea{min-height:8.5rem}
+	.s4box{background:var(--sheet);border:1px solid var(--line);border-radius:var(--radius);padding:12px 14px 14px}
+	.s4box .n,.s4main .n,.sheet-k{font-family:var(--mono);font-size:.68rem;letter-spacing:.06em;color:var(--brass)}
+	.s4main .req{color:var(--a)}
+	.s4split{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px}
+	.s4note{margin:14px 0 0;font-size:.95rem}
+	.sheet-card{margin-top:12px;padding:14px 16px;background:#fff;border:1px solid var(--line);border-radius:var(--radius)}
+	.sheet-card p{margin:.35rem 0}
+	.sheet-card ol{margin:.4rem 0 0;padding-left:1.2rem}
+	.sheet-card li{margin:.35rem 0}
+	.sheet-topic{margin-top:12px;padding:14px 16px;background:var(--sheet);border-left:3px solid var(--ink)}
+	.sheet-topic p{margin:.35rem 0}
+	.sheet-topic .quiet{color:var(--muted);font-size:.92rem}
+	@media(max-width:720px){.s4split{grid-template-columns:1fr}}
 h2{font-family:var(--display);font-weight:600;font-size:1.3rem;margin:0 0 10px;line-height:1.25}
 h3{font-family:var(--display);font-weight:600;font-size:1.08rem;margin:0 0 6px;line-height:1.3}
 .panel{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:22px clamp(16px,3vw,30px) 24px;margin-top:22px}
@@ -358,29 +367,32 @@ details.src summary{cursor:pointer;font-family:var(--display);font-size:.98rem;c
   <!-- STEP 4: PHRASE -->
   <section class="panel" aria-labelledby="s3">
     <span class="step">STEP 4</span>
-    <h2 id="s3">Three boxes. Only the middle one is required.</h2>
-    <p class="hint">You are checking how a sentence may be interpreted, not writing a speech. Box 1 is the event, so they know which thing you mean. Box 2 is the sentence they will actually hear. Box 3 is their reply, so you can see how you may interpret them.</p>
-    <div class="s4box">
-      <span class="n">BOX 1 &middot; OPTIONAL &middot; NOT SCORED</span>
-      <label for="facts" class="lab" id="factsLab">What happened, in plain facts</label>
-      <p class="hint">The event, not the verdict. "The dishes were still in the sink" is a fact. "You never help" is a judgment of the person. Leave this blank if the sentence is the whole story.</p>
-      <textarea id="facts" class="short" placeholder="One or two plain sentences." maxlength="800"></textarea>
-    </div>
-    <div class="s4box">
-      <span class="n req">BOX 2 &middot; THIS IS THE SIGNAL</span>
-      <label for="phrase" class="lab" id="phraseLab">The sentence you might say</label>
-      <p class="hint" id="phraseHint">Type it the way it would actually come out. The read shows how the other person may interpret it, and a matching sentence that is more likely to arrive as you meant it.</p>
+    <h2 id="s3">Write the sentence you plan to say</h2>
+    <p class="s4lead">Steps 1 to 3 set the people and the room. This step is the words. There is one required field: the sentence the other person will hear. Translate shows how they may receive it, and a matching sentence you can put on the meeting sheet.</p>
+    <div class="s4main">
+      <span class="n req">REQUIRED</span>
+      <label for="phrase" class="lab" id="phraseLab">The sentence</label>
+      <p class="hint" id="phraseHint">Type it the way it would actually come out. One sentence is enough. Add the ask in a second sentence if you need to.</p>
       <textarea id="phrase" placeholder="The exact words, as they would be said or sent." maxlength="1500"></textarea>
       <div class="presets" id="presets" aria-label="Example phrases"></div>
     </div>
-    <div class="s4box">
-      <span class="n">BOX 3 &middot; OPTIONAL &middot; THE WAY BACK</span>
-      <label for="reply" class="lab" id="replyLab">What they already said back</label>
-      <p class="hint" id="replyHint">One reply, not the whole thread. This is how you may interpret them. Leave it blank if they have not answered yet.</p>
-      <textarea id="reply" class="short" placeholder="Paste one reply, if there is one." maxlength="1500"></textarea>
+    <p class="s4note">Two optional notes. Skip both if you only have the sentence.</p>
+    <div class="s4split">
+      <div class="s4box">
+        <span class="n">OPTIONAL</span>
+        <label for="facts" class="lab" id="factsLab">What happened</label>
+        <p class="hint">The event, in plain facts, so the sentence is about one thing. This is not the sentence that gets translated. "The dishes were still in the sink" is a fact. "You never help" is a criticism of the person.</p>
+        <textarea id="facts" class="short" placeholder="One or two plain sentences. Leave blank if you do not need it." maxlength="800"></textarea>
+      </div>
+      <div class="s4box">
+        <span class="n">OPTIONAL</span>
+        <label for="reply" class="lab" id="replyLab">What they already said</label>
+        <p class="hint" id="replyHint">Only if they have already answered. One reply, not the thread. After you translate, Try the reverse shows how you may interpret them.</p>
+        <textarea id="reply" class="short" placeholder="Paste one reply, or leave this blank." maxlength="1500"></textarea>
+      </div>
     </div>
     <div class="actions">
-      <button class="go" id="go" type="button">Translate the signal</button>
+      <button class="go" id="go" type="button">Translate the sentence</button>
       <button class="ghost" id="reset" type="button">Start over</button>
       <span class="msg" id="msg" role="alert"></span>
     </div>
@@ -392,22 +404,41 @@ details.src summary{cursor:pointer;font-family:var(--display);font-size:.98rem;c
   <section class="panel" id="agendaPanel" aria-labelledby="sheetH">
     <span class="step">TAKE THIS INTO THE ROOM</span>
     <h2 id="sheetH">Meeting sheet</h2>
-    <p class="hint">Translate one sentence, then add it. If you have more than one topic, prioritize before you add a second. The sheet is for today's item, not the whole relationship. Save one PDF, and leave the score at home. This list is not stored.</p>
-    <p class="hint" id="agendaEmpty">Nothing on the sheet yet. The first translated sentence can be the first topic.</p>
-    <ol id="agendaList"></ol>
+    <p class="s4lead">This is the page you take in. It is not the score. Translate the sentence, add it, then save the PDF. One topic on the table. The rest stay parked, with a date.</p>
+    <div class="sheet-card">
+      <span class="sheet-k">1. OPEN</span>
+      <p>"Twenty minutes. One topic. I am not against you. I do not think you meant harm. If we pause, we come back at a time we name now."</p>
+      <p>Return time, if you need it: _______________</p>
+    </div>
+    <p class="hint" id="agendaEmpty">No sentence on the sheet yet. Translate the sentence above, then add it. Until then, the PDF is the open line and the pause plan.</p>
+    <div id="agendaList"></div>
+    <div class="sheet-card">
+      <span class="sheet-k">3. THE ORDER, AFTER THE SENTENCE</span>
+      <ol>
+        <li>Say the sentence. Stop. Do not explain it.</li>
+        <li>They say what they heard. You confirm the fact, or correct the fact. Not the person.</li>
+        <li>Switch. Same two moves the other way.</li>
+        <li>One ask. One owner. One time. Then stop.</li>
+      </ol>
+      <p>The longer version is on <a href="check-ins.html">Check-ins</a>.</p>
+    </div>
+    <div class="sheet-card">
+      <span class="sheet-k">4. IF A SECOND TOPIC SHOWS UP</span>
+      <p>"That's real. It is not this meeting. I'm writing it down for ________. We are still on this one."</p>
+      <p>Parked for later: _______________</p>
+    </div>
+    <div class="sheet-card" id="derailCard">
+      <span class="sheet-k">5. IF IT STARTS TO DERAIL</span>
+      <p>Stop the topic. Do not finish the point.</p>
+      <p>Say: "I need a pause. I am not leaving this. We are okay. I will come back at [time]."</p>
+      <p>A flooded body often needs at least 20 minutes, and the return should not slip past the next day (<a href="https://www.gottman.com/blog/flooding-and-conflict-avoidance/">Gottman Institute</a>). Come back to the same topic. Do not open with what happened during the pause.</p>
+      <p>Care does not require a solution. Lower your voice. Sit down. Get water. Put the phones away. If they asked for space, do not follow them, and do not send a stack of messages. One line is the signal. The return is the care.</p>
+    </div>
     <div class="actions">
       <button class="go" id="pdf" type="button">Save meeting sheet as PDF</button>
-      <button class="ghost" id="clearAgenda" type="button">Clear the sheet</button>
+      <button class="ghost" id="clearAgenda" type="button">Clear the sentences</button>
     </div>
-    <div class="derail" id="derailCard">
-      <h3>Ground rules for the room</h3>
-      <p>One topic. Park the rest with a date. No overload, no blame, and no criticism of the person. Say once: "I am not against you. I do not think you meant harm." Intent does not cancel how it landed. If your voice rises, you repeat yourself, or a second topic shows up to win the first, stop before the next sentence. The full version is on <a href="check-ins.html#ground">Check-ins</a>.</p>
-      <h3>If it starts to derail</h3>
-      <p>Stop the topic. Do not finish the point. Say: "I need a pause. I am not leaving this. We are okay. I will come back at [time]." A flooded body often needs at least 20 minutes, and the return should not slip past the next day (<a href="https://www.gottman.com/blog/flooding-and-conflict-avoidance/">Gottman Institute</a>).</p>
-      <p>Care does not require a solution. Lower your voice. Sit down. Get water. Put the phones away. If they asked for space, do not follow them, and do not send a stack of messages. One line is the signal. The return is the care.</p>
-      <p>A gesture is optional, never owed, and off at work, in public, around children, or if anyone is afraid of the other person. Fear of losing someone is not fear of someone. If anyone is afraid of the other person, this is not a pause to manage. In the US, the National Domestic Violence Hotline is 1-800-799-7233, text START to 88788, or thehotline.org. If you are in crisis, call or text 988.</p>
-      <p class="hint">The speaking order, acknowledgement before any rebuttal, is on <a href="check-ins.html">Check-ins</a>.</p>
-    </div>
+    <p class="hint">Nothing on this sheet is stored. If you close the tab before you save the PDF, the sentences are gone. Leave the score at home.</p>
   </section>
 
   <div class="note">
@@ -926,15 +957,15 @@ function sync(){
     $("#picked"+w).innerHTML = s.size ? "Selected: <b>"+esc(listNames(s))+"</b>"+(s.has("autistic")&&s.has("adhd")?" (AuDHD)":"") : "Nothing selected yet.";
   });
   $("#phraseLab").textContent = "The sentence "+nm("A")+" might say";
-  $("#s3").textContent = "Three boxes. Only the middle one is required.";
-  $("#phraseHint").textContent = "Type it the way "+nm("A")+" would actually say it. The read shows how "+nm("B")+" may interpret it, and a matching sentence that is more likely to arrive as meant.";
-  $("#replyLab").textContent = "What "+nm("B")+" already said back";
-  $("#replyHint").textContent = "One reply, not the whole thread. This is how "+nm("A")+" may interpret "+nm("B")+". Leave it blank if they have not answered yet.";
+  $("#s3").textContent = "Write the sentence you plan to say";
+  $("#phraseHint").textContent = "Type it the way "+nm("A")+" would actually say it to "+nm("B")+". Translate shows how "+nm("B")+" may receive it, and a matching sentence.";
+  $("#replyLab").textContent = "What "+nm("B")+" already said";
+  $("#replyHint").textContent = "Only if "+nm("B")+" has already answered. One reply. After you translate, Try the reverse shows how "+nm("A")+" may interpret it.";
   const notes={
-    checkin:"Best use. Test the opening sentence, then add each topic to the meeting sheet. Take the PDF into the check-in. Leave the score here.",
-    talk:"Use it the day of, or the day before, not in the doorway. One topic at a time on the sheet. If either body is mobilized or shut down, postpone.",
-    send:"Run the unsent message as Box 2. If the read is heavy, send the matching sentence, or wait. Do not send the score.",
-    after:"Put their reply in Box 3 before you answer. The way back is where most second spikes start. Match their fact before you add yours.",
+    checkin:"Best use. Write the sentence, translate it, add it to the meeting sheet, and take the PDF in. Leave the score here.",
+    talk:"Use it the day of, or the day before, not in the doorway. One sentence on the sheet. If either body is mobilized or shut down, postpone.",
+    send:"Put the unsent message in the sentence box. If the read is heavy, send the matching sentence, or wait. Do not send the score.",
+    after:"Put their reply in the optional box before you answer. The way back is where most second spikes start. Match their fact before you add yours.",
     learn:"You do not need a meeting. Swap the people and run the same sentence both ways. That is the mechanic: each receiver is built for a different signal.",
     now:"Do not build a case while it is happening. Close this, or save only the pause card. A score in the middle of a fight is a weapon. Care is the pause, the signal, and the return."
   };
@@ -1937,50 +1968,59 @@ const USE_LABEL={checkin:"Before a check-in",talk:"Before a hard conversation",s
 function paintAgenda(){
   const list=$("#agendaList"), empty=$("#agendaEmpty");
   empty.hidden = agenda.length>0;
-  list.innerHTML = agenda.map((t,i)=>'<li><b>Topic '+(i+1)+'</b> &middot; '+esc(t.who)+'<br>'+(t.fact?'Fact: '+esc(t.fact)+'<br>':'')+'Say: '+esc(t.say)+'<br><span class="small">They may hear: '+esc(t.heard.join(" / ")||"roughly what was meant")+'</span></li>').join("");
+  list.innerHTML = agenda.map((t,i)=>'<article class="sheet-topic"><span class="sheet-k">2. SENTENCE '+(i+1)+' &middot; '+esc(t.who)+'</span>'+(t.fact?'<p><b>The event.</b> '+esc(t.fact)+'</p>':'')+'<p><b>Say this, then stop.</b> '+esc(t.say)+'</p><p><b>Then ask.</b> '+esc(t.check)+'</p><p class="quiet">Do not read this part out loud. They may hear: '+esc((t.heard&&t.heard.join(" / "))||"roughly what was meant")+'.</p></article>').join("");
 }
 function sheetLines(){
   const lines=[];
   lines.push("Meeting sheet");
   lines.push(USE_LABEL[useId]||"Preparation");
   lines.push(nm("A")+" speaking to "+nm("B")+(relId&&REL[relId]?" · "+REL[relId].label:""));
-  lines.push("Leave the score at home. Do not read a reading out loud.");
-  lines.push("Ground rules: one topic. No overload, no blame, no criticism of the person.");
-  lines.push("Say once: I am not against you. I do not think you meant harm.");
-  lines.push("Intent does not cancel impact. Park a second topic with a date. Do not follow it.");
-  lines.push("If your voice rises, you repeat yourself, or you go blank, stop before the next sentence.");
+  lines.push("This page goes into the room. The score stays home. Do not read a reading out loud.");
   lines.push("");
+  lines.push("1. Open");
+  lines.push("Say: Twenty minutes. One topic. I am not against you. I do not think you meant harm. If we pause, we come back at a time we name now.");
+  lines.push("Return time: ____________________");
+  lines.push("");
+  lines.push("2. The sentence");
   if(useId!=="now" && agenda.length){
     agenda.forEach((t,i)=>{
-      lines.push("Topic "+(i+1));
-      if(t.fact) lines.push("Fact: "+t.fact);
-      lines.push("Say this: "+t.say);
-      if(t.heard.length) lines.push("They may hear: "+t.heard.join(" / "));
+      lines.push("Sentence "+(i+1)+"  "+t.who);
+      if(t.fact) lines.push("The event: "+t.fact);
+      lines.push("Say this, then stop: "+t.say);
+      lines.push("Then ask: "+t.check);
+      lines.push("Do not read aloud. They may hear: "+(t.heard&&t.heard.length?t.heard.join(" / "):"roughly what was meant")+".");
       if(t.meant) lines.push("You may have meant: "+t.meant);
-      lines.push("Check: "+t.check);
-      lines.push("Then stop and let them mirror it before you add anything.");
       lines.push("");
     });
   } else if(useId==="now"){
-    lines.push("Do not cover topics while this is a fight.");
+    lines.push("Do not cover a topic while this is a fight. Use the pause plan below.");
     lines.push("");
   } else {
-    lines.push("No topics added yet. This PDF is the pause card only.");
+    lines.push("No sentence added yet. Write it here after you translate, or go back and add it.");
+    lines.push("Say this, then stop: ____________________");
     lines.push("");
   }
-  lines.push("If it starts to derail");
+  lines.push("3. The order, after the sentence");
+  lines.push("Say the sentence. Stop. Do not explain it.");
+  lines.push("They say what they heard. You confirm the fact, or correct the fact. Not the person.");
+  lines.push("Switch. Same two moves the other way.");
+  lines.push("One ask. One owner. One time. Then stop.");
+  lines.push("Owner: ____________________   By: ____________________");
+  lines.push("");
+  lines.push("4. If a second topic shows up");
+  lines.push("Say: That's real. It is not this meeting. I'm writing it down. We are still on this one.");
+  lines.push("Parked for later: ____________________");
+  lines.push("");
+  lines.push("5. If it starts to derail");
   lines.push("Stop the topic. Do not finish the point.");
   lines.push("Say: I need a pause. I am not leaving this. We are okay. I will come back at [time].");
-  lines.push("A flooded body often needs at least 20 minutes. Come back. Do not let it slip past the next day.");
-  lines.push("Care does not require a solution. Lower your voice. Sit down. Get water. Put the phones away.");
-  lines.push("If they asked for space, do not follow them, and do not send a stack of messages.");
+  lines.push("Often at least 20 minutes. Come back to the same topic. Do not open with the pause.");
+  lines.push("Care does not require a solution. Lower your voice. Sit. Water. Phones away.");
+  lines.push("If they asked for space, do not follow, and do not send a stack of messages.");
   lines.push("One line is the signal. The return is the care.");
-  lines.push("A gesture is optional, never owed, and off at work, in public, around children, or if anyone is afraid of the other person.");
-  lines.push("Fear of losing someone is not fear of someone. If anyone is afraid of the other person, stop.");
-  lines.push("US: National Domestic Violence Hotline 1-800-799-7233, text START to 88788, thehotline.org. Crisis: call or text 988.");
   lines.push("");
-  lines.push("Acknowledgement before any rebuttal. The order is on Check-ins.");
-  lines.push("Not a diagnosis. Not a script. Generated in your browser. Nothing was sent.");
+  lines.push("One topic. No overload, no blame, no criticism of the person.");
+  lines.push("Not a diagnosis. Not a script. Made in your browser. Nothing was sent.");
   return lines;
 }
 function pdfEscape(s){
