@@ -82,6 +82,7 @@ input[type=text]{width:100%;border:1px solid var(--line);background:var(--bg);bo
   .sheet dt:has(+ dd.empty){display:none}
 }
 </style>
+<script src="/assets/js/site.js" defer></script>
 </head>
 <body>
 <div class="wrap">
@@ -174,7 +175,7 @@ input[type=text]{width:100%;border:1px solid var(--line);background:var(--bg);bo
         h += '<button type="button" data-line="'+line.id+'" data-opt="'+o[0]+'" data-who="'+who+'" aria-pressed="'+(picked.includes(o[0])?"true":"false")+'">'+esc(o[1])+'</button>';
       });
       h += '</div>';
-      h += '<input data-custom="'+line.id+'" data-who="'+who+'" type="text" maxlength="160" placeholder="Or add your own words" value="'+esc(st.custom[line.id]||"")+'">';
+      h += '<input data-custom="'+line.id+'" data-who="'+who+'" type="text" maxlength="160" aria-label="Your own words: '+esc(line.q)+'" placeholder="Or add your own words" value="'+esc(st.custom[line.id]||"")+'">';
     });
     h += '<div class="actions">';
     h += '<button class="ghost" type="button" data-example="'+who+'">Use the guide\'s example</button>';

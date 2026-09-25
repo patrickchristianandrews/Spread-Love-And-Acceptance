@@ -41,7 +41,7 @@
     { id: 'self', title: 'Self-discovery', blurb: 'Tools for understanding yourself: your load, your wiring, your patterns. Start here, with or without anyone else.', items: [
       { href: '/quick-checks.html#ladder', code: 'Tool', title: 'Check Your State', note: 'Thirty seconds to name which of three stress states you’re in' },
       { href: '/wired-differently.html', code: 'New', title: 'Wired Differently', note: 'How different neurotypes receive the same words, and how to talk across the difference' },
-      { href: '/check-ins.html', code: 'New', title: 'Check-ins', note: 'A safe time and room, acknowledgement before any rebuttal, and a close that works for both' },
+      { href: '/wiring-card.html', code: 'Tool', title: 'Wiring Card', note: 'A one-page card on how you receive words, what silence means, and what to avoid' },
       { href: '/workpapers/wp-02-battery-stress-meter.html', code: 'WP-02', title: 'The Battery & Stress Meter', note: 'What you’re already carrying, separate from what just happened', paid: true },
       { href: '/tools/frequency-calibration.html', code: 'Tool', title: 'Frequency Calibration', note: 'Your natural rhythms for money, decisions, check-ins and recovery', paid: true },
       { href: '/wp-11.html', code: 'WP-11', title: 'The Calm-Down Kit', note: 'Decide in advance what settles your body', paid: true },
@@ -50,6 +50,7 @@
       { href: '/soundscapes.html', code: 'Audio', title: 'Soundscape Catalog', note: 'Background audio for settling and focus' }
     ]},
     { id: 'relationships', title: 'Relationships by type', blurb: 'Where to start in each kind of relationship, and every tool that fits. The shared relationship tools themselves are under The book, Workpapers and Tools.', items: [
+      { href: '/check-ins.html', code: 'Guide', title: 'Check-ins', note: 'How to hold a hard conversation in any relationship: a safe time and room, acknowledgement before rebuttal, a close that works for both' },
       { href: '/relationships.html#partners', code: '', title: 'Partners', note: 'Start with WP-01, WP-03 and WP-13' },
       { href: '/relationships.html#family', code: '', title: 'Family', note: 'Start with Chapter I, WP-03 and WP-09' },
       { href: '/relationships.html#co-parents', code: '', title: 'Co-parents', note: 'Start with WP-03, WP-09 and WP-04' },
