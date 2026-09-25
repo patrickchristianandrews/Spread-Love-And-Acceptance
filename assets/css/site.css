@@ -302,26 +302,59 @@ div.tol-gate p{ max-width:60ch; }
 .depth-bar a:not(.dig){ color:var(--ink-soft); text-underline-offset:3px; }
 
 /* Simple pages: a handful of big ideas, each with its own way down */
-.simple-lede{ font-size:1.18rem; line-height:1.6; max-width:36rem; }
-.ideas{ list-style:none; padding:0 !important; margin:1.5rem 0 2rem !important; counter-reset:idea; }
-.ideas > li{
-  counter-increment:idea; position:relative; max-width:none !important;
-  margin:0 !important; padding:1.1rem 0 1.1rem 2.6rem; border-top:1px dotted var(--line);
+/* Simple pages borrow the home page's look: a tinted lede, a grid of cards, a callout with a button */
+.read .simple-lede{
+  max-width:none; margin:0 0 1.6rem; padding:.85rem 1.1rem;
+  background:var(--paper-deep); border-left:3px solid var(--brass); border-radius:var(--radius);
+  font-size:1.1rem; line-height:1.6;
 }
-.ideas > li:last-child{ border-bottom:1px dotted var(--line); }
-.ideas > li::before{
-  content:counter(idea); position:absolute; left:0; top:.95rem;
-  font-family:"Fraunces", Georgia, serif; font-size:1.6rem; line-height:1; color:var(--brass);
+.read .ideas{
+  list-style:none; padding:0 !important; margin:1.8rem 0 2rem !important; counter-reset:idea;
+  display:grid; grid-template-columns:1fr 1fr; gap:1px;
+  background:var(--line); border:1px solid var(--line); border-radius:var(--radius); overflow:hidden;
 }
-.ideas h2, .ideas h3, .read .ideas h2, .read .ideas h3{ font-family:"Fraunces", Georgia, serif; font-weight:600; font-size:1.2rem !important; line-height:1.3; margin:0 0 .35rem !important; }
-.ideas p{ margin:0 0 .5rem !important; }
+.read .ideas > li{
+  counter-increment:idea; position:relative; max-width:none !important; margin:0 !important;
+  display:flex; flex-direction:column; padding:1.15rem 1.25rem 1.1rem; background:var(--paper);
+  transition:background .15s ease;
+}
+.read .ideas > li:last-child:nth-child(odd){ grid-column:1 / -1; }
+.read .ideas > li:hover, .read .ideas > li:focus-within{ background:var(--paper-deep); }
+.read .ideas > li::before{
+  content:counter(idea, decimal-leading-zero); display:block; margin:0 0 .35rem;
+  font-family:"IBM Plex Mono", ui-monospace, monospace; font-size:.7rem; letter-spacing:.08em; color:var(--brass);
+}
+.ideas h2, .ideas h3, .read .ideas h2, .read .ideas h3{
+  font-family:"Fraunces", Georgia, serif; font-weight:600; font-size:1.2rem !important; line-height:1.25; margin:0 0 .45rem !important;
+  text-decoration:underline; text-decoration-color:var(--line); text-underline-offset:3px; text-decoration-thickness:1px;
+}
+.read .ideas > li:hover h2, .read .ideas > li:hover h3{ text-decoration-color:var(--brass); }
+.read .ideas p{ margin:0 0 .8rem !important; font-size:.97rem; line-height:1.6; color:var(--ink-soft); }
+.read .ideas .dig{ margin-top:auto; }
+/* The whole card opens its Dig deeper link */
+.read .ideas .dig::after{ content:""; position:absolute; inset:0; }
+.read .ideas .dig:focus-visible{ outline:none; }
+.read .ideas > li:focus-within{ outline:2px solid var(--focus); outline-offset:-3px; }
+.read .ideas > li:target{ background:var(--paper-deep); box-shadow:inset 4px 0 0 var(--brass); }
+@media (max-width:720px){
+  .read .ideas{ grid-template-columns:1fr; }
+  .read .ideas > li:last-child:nth-child(odd){ grid-column:auto; }
+}
+
 .try-this{
-  margin:2rem 0; padding:1rem 1.2rem; background:var(--paper-deep);
-  border-left:5px solid var(--credit); border-radius:var(--radius);
+  margin:2rem 0 2.5rem; padding:1.3rem 1.5rem 1.4rem;
+  background:var(--paper-deep); border:1px solid var(--ink); border-left:6px solid var(--credit); border-radius:var(--radius);
 }
-.try-this strong{ font-family:"Fraunces", Georgia, serif; }
-.try-this p{ margin:0 !important; }
-.try-this p + p{ margin-top:.6rem !important; }
+.try-this strong{ font-family:"Fraunces", Georgia, serif; font-size:1.08rem; }
+.try-this p{ margin:0 !important; max-width:62ch; }
+.try-this p + p{ margin-top:.9rem !important; display:flex; flex-wrap:wrap; gap:.75rem 1.25rem; align-items:center; }
+.read .try-this p + p a{ font-weight:600; }
+.read .try-this p + p a:first-child{
+  display:inline-block; padding:.6rem 1.1rem; background:var(--ink); color:var(--paper);
+  text-decoration:none; border-radius:var(--radius);
+}
+.read .try-this p + p a:first-child:hover{ background:var(--credit); color:var(--paper); }
+.read .try-this p + p a:first-child:focus-visible{ outline:2px solid var(--focus); outline-offset:3px; }
 .dig-list{ list-style:none; padding:0 !important; margin:.5rem 0 1.5rem !important; display:grid; gap:.45rem; }
 .dig-list li{ margin:0 !important; }
 
@@ -400,3 +433,10 @@ details.deeper .deeper-body > :first-child{ margin-top:0; }
   .tol-contents-btn{ display:inline-block; border-color:var(--ink-soft) !important; font-weight:600; }
 }
 .tol-acc-here{ margin-left:.5rem; font-family:"IBM Plex Mono", ui-monospace, monospace; font-size:.68rem; font-weight:400; color:var(--brass); vertical-align:.15em; }
+
+/* A safety note after the cards gets its own callout so it can't be missed */
+.read .ideas + p#safety{
+  margin:0 0 1.5rem; padding:.9rem 1.1rem; max-width:none;
+  background:var(--paper-deep); border-left:4px solid var(--debit); border-radius:var(--radius);
+  font-size:.98rem; line-height:1.6;
+}
