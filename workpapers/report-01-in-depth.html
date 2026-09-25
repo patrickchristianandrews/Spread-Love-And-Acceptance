@@ -1,0 +1,811 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>REPORT-01 in depth — The Full Read</title>
+<meta name="description" content="The compilation layer: one place to record each week's figures, and an auto-written report on how they intersect.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,500&family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/css/site.css">
+<style>
+  /*
+    REPORT-01 — The Full Read.
+
+    Compilation layer for the workpaper suite. The worksheets are filled in by
+    hand; this is where the week's resulting figures get typed once, and where
+    the history lives.
+
+    PERSISTENCE: none. No localStorage, no cookies, no network. Continuity is
+    provided by a ledger file the member saves and re-loads themselves, which
+    keeps the site's privacy commitment intact and keeps a household's records
+    off a shared machine unless they choose otherwise.
+  */
+
+  :root{
+    --paper: #F5EFDE;
+    --paper-deep: #ECE2C4;
+    --ink: #211D17;
+    --ink-soft: #524B3E;
+    --line: #D9CBA3;
+    --credit: #3E6B4C;
+    --credit-soft: #E4EDE3;
+    --debit: #96412B;
+    --debit-soft: #F2E2DB;
+    --brass: #A8792F;
+    --focus: #2B5B8C;
+    --radius: 3px;
+  }
+
+  *{ box-sizing: border-box; }
+
+  @page{ size: letter portrait; margin: 0.5in; }
+
+  html{ scroll-behavior: smooth; }
+  @media (prefers-reduced-motion: reduce){ html{ scroll-behavior:auto; } *{ transition:none !important; } }
+
+  body{
+    margin: 0; background: var(--paper); color: var(--ink);
+    font-family: "Lora", Georgia, serif; font-size: 16px; line-height: 1.6;
+  }
+
+  h1,h2,h3,h4{ font-family:"Fraunces","Lora",serif; font-weight:600; line-height:1.2; margin:0 0 .5em; }
+  :focus-visible{ outline:2px solid var(--focus); outline-offset:3px; }
+  code,.mono{ font-family:"IBM Plex Mono",monospace; }
+  code{ font-size:.84em; background:var(--paper-deep); padding:1px 5px; border-radius:var(--radius); }
+  p{ max-width:74ch; }
+
+  .print-bar{
+    display:flex; align-items:center; justify-content:space-between; gap:14px; flex-wrap:wrap;
+    max-width:9in; margin:20px auto; padding:14px 20px;
+    background:var(--paper-deep); border:1px solid var(--line); border-radius:var(--radius);
+    font-family:"IBM Plex Mono",monospace; font-size:.78rem; color:var(--ink-soft);
+  }
+
+  .btn{
+    font-family:"IBM Plex Mono",monospace; font-size:.72rem; padding:7px 14px;
+    border:1px solid var(--ink); border-radius:var(--radius);
+    background:transparent; color:var(--ink); cursor:pointer;
+  }
+  .btn:hover{ background:var(--ink); color:var(--paper); }
+  .btn-solid{ background:var(--ink); color:var(--paper); }
+  .btn-solid:hover{ background:var(--ink-soft); }
+  .btn-row{ display:flex; flex-wrap:wrap; gap:8px; }
+
+  .sheet{
+    max-width:9in; margin:0 auto 60px; padding:.5in .6in;
+    background:var(--paper); border:1px solid var(--line);
+  }
+
+  @media print{
+    .print-bar,.no-print{ display:none !important; }
+    body{ background:#fff; font-size:11pt; }
+    .sheet{ margin:0; padding:0; max-width:100%; border:none; }
+    .panel,.finding,.headline{ break-inside:avoid; }
+    #report{ break-before:page; }
+  }
+
+  .sheet-header{ text-align:center; border-bottom:2px solid var(--brass); padding-bottom:16px; margin-bottom:24px; }
+  .wp-num{ font-family:"IBM Plex Mono",monospace; font-size:.7rem; color:var(--brass); letter-spacing:.08em; margin:0 0 4px; }
+  .sheet-mark{ font-size:1.5rem; margin:0; }
+  .sheet-mark small{ display:block; font-family:"IBM Plex Mono",monospace; font-weight:400; font-size:.62rem; letter-spacing:.1em; color:var(--brass); margin-top:6px; }
+  .sheet-tagline{ font-size:.9rem; color:var(--ink-soft); margin:10px auto 0; max-width:66ch; }
+
+  .intro-note{ border-left:4px solid var(--focus); background:#E7EEF4; border-radius:var(--radius); padding:16px 20px; margin:22px 0; }
+  .intro-note p{ margin:0 0 9px; font-size:.92rem; }
+  .intro-note p:last-child{ margin-bottom:0; }
+
+  .section-head{ margin:42px 0 20px; padding-top:24px; border-top:3px double var(--brass); }
+  .section-head .part-label{ font-family:"IBM Plex Mono",monospace; font-size:.68rem; letter-spacing:.1em; text-transform:uppercase; color:var(--brass); margin:0 0 4px; }
+  .section-head h2{ font-size:1.32rem; margin:0; }
+
+  .panel{ border:1px solid var(--line); border-radius:var(--radius); background:var(--paper-deep); padding:20px 22px; margin:18px 0; }
+  .panel h3{ font-size:1.02rem; margin:0 0 4px; }
+  .panel .hint{ font-size:.84rem; color:var(--ink-soft); margin:0 0 14px; }
+
+  .grid{ display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:12px 16px; }
+  .field label{ display:block; font-family:"IBM Plex Mono",monospace; font-size:.66rem; letter-spacing:.04em; text-transform:uppercase; color:var(--brass); margin-bottom:4px; }
+  .field input, .field select{
+    font-family:"IBM Plex Mono",monospace; font-size:.85rem; width:100%; color:var(--ink);
+    background:var(--paper); border:1px solid var(--line); border-radius:var(--radius); padding:6px 8px;
+  }
+  .field .sub{ font-size:.7rem; color:var(--ink-soft); margin-top:3px; font-family:"Lora",serif; }
+
+  table{ width:100%; border-collapse:collapse; font-size:.82rem; }
+  th{ text-align:left; font-family:"IBM Plex Mono",monospace; font-size:.64rem; letter-spacing:.04em; text-transform:uppercase; color:var(--brass); border-bottom:2px solid var(--line); padding:4px 8px 8px 0; vertical-align:bottom; }
+  td{ border-bottom:1px solid var(--line); padding:7px 8px 7px 0; vertical-align:middle; }
+  td.num,th.num{ text-align:right; padding-right:10px; font-family:"IBM Plex Mono",monospace; }
+  .remove{ background:transparent; border:1px solid var(--line); border-radius:var(--radius); color:var(--ink-soft); cursor:pointer; width:24px; height:24px; line-height:1; padding:0; }
+  .remove:hover{ border-color:var(--debit); color:var(--debit); }
+
+  .spark{ display:inline-block; width:62px; height:12px; vertical-align:middle; }
+
+  .headline{ border:2px solid var(--brass); border-radius:var(--radius); background:var(--paper); padding:22px 24px; margin:18px 0; }
+  .headline .lbl{ font-family:"IBM Plex Mono",monospace; font-size:.64rem; letter-spacing:.06em; text-transform:uppercase; color:var(--ink-soft); display:block; margin-bottom:6px; }
+  .headline .verdict{ font-family:"Fraunces",serif; font-size:1.3rem; line-height:1.25; margin:0 0 10px; }
+  .headline p{ font-size:.93rem; margin:0 0 9px; }
+  .headline p:last-child{ margin-bottom:0; }
+
+  .finding{ border-left:4px solid var(--brass); background:var(--paper-deep); border-radius:var(--radius); padding:14px 18px; margin-bottom:12px; }
+  .finding.good{ border-left-color:var(--credit); background:var(--credit-soft); }
+  .finding.warn{ border-left-color:var(--debit); background:var(--debit-soft); }
+  .finding .tag{ font-family:"IBM Plex Mono",monospace; font-size:.62rem; letter-spacing:.06em; text-transform:uppercase; color:var(--brass); display:block; margin-bottom:5px; }
+  .finding.good .tag{ color:var(--credit); }
+  .finding.warn .tag{ color:var(--debit); }
+  .finding p{ margin:0; font-size:.91rem; }
+
+  .empty{ color:var(--ink-soft); font-size:.88rem; font-style:italic; }
+
+  .privacy{ border-left:4px solid var(--debit); background:var(--debit-soft); border-radius:var(--radius); padding:16px 20px; margin:20px 0; }
+  .privacy p{ margin:0 0 9px; font-size:.9rem; }
+  .privacy p:last-child{ margin-bottom:0; }
+
+  .sheet-footer{ margin-top:32px; border-top:1px solid var(--line); padding-top:14px; text-align:center; font-family:"IBM Plex Mono",monospace; font-size:.64rem; color:var(--ink-soft); }
+
+  @media (max-width:760px){
+    .sheet{ padding:.35in .3in; }
+    .print-bar{ flex-direction:column; align-items:stretch; text-align:center; }
+    table{ font-size:.74rem; }
+  }
+</style>
+<script src="/assets/js/site.js" defer></script>
+</head>
+<body>
+
+<div class="print-bar no-print" role="toolbar" aria-label="Ledger actions">
+  <span>REPORT-01 &middot; nothing saved or sent &middot; your ledger is a file you keep</span>
+  <div class="btn-row">
+    <button type="button" class="btn" id="load-btn">Load ledger</button>
+    <input type="file" id="load-input" accept=".json,application/json" style="display:none">
+    <button type="button" class="btn" id="save-btn">Save ledger</button>
+    <button type="button" class="btn btn-solid" onclick="window.print()">Print report</button>
+  </div>
+</div>
+
+<main class="sheet">
+
+  <header class="sheet-header">
+    <p class="wp-num">REPORT-01</p>
+    <h1 class="sheet-mark">The Full Read
+      <small>THE COMPILATION LAYER &middot; WHERE EVERYTHING MEETS</small>
+    </h1>
+    <p class="sheet-tagline">One place to record what the worksheets produced, and a report that reads them against each other rather than one at a time.</p>
+  </header>
+    <p class="depth-bar" style="margin:0 0 28px;"><span>Full version</span><a href="/workpapers/report-01.html">&larr; Back to the simple version</a></p>
+
+
+  
+<div class="intro-note">
+    <p>Each workpaper answers one question well and is blind to the others. WP-01 can't see whether the load is owned. WP-03 can't see whether it's shared. CALC-01 reads three of them and still can't see whether last month's fixes held.</p>
+    <p><strong>This page is where they're read together.</strong> Type in what the worksheets produced &mdash; a minute a week &mdash; and it writes the part no single instrument can: where the figures agree, where they contradict each other, and which contradiction matters.</p>
+  </div>
+
+  <div class="privacy" id="privacy">
+    <p><strong>Your ledger is a file, not a login.</strong> Nothing here is stored in this browser and nothing is sent anywhere. Press <em>Save ledger</em> to download a small file; press <em>Load ledger</em> next week to pick up where you left off.</p>
+    <p>That's deliberate. A household's records shouldn't be sitting in the browser of a machine two people share &mdash; and a file you keep is one you can put somewhere private, copy, or delete outright.</p>
+  </div>
+
+  <!-- ================= WHO ================= -->
+
+  <section id="who">
+    <div class="section-head">
+      <p class="part-label">Setup</p>
+      <h2>Names</h2>
+    </div>
+    <div class="panel">
+      <div class="grid">
+        <div class="field">
+          <label for="name-a">Person A</label>
+          <input type="text" id="name-a" value="Person A">
+        </div>
+        <div class="field">
+          <label for="name-b">Person B</label>
+          <input type="text" id="name-b" value="Person B">
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= WEEKLY ================= -->
+
+  <section id="weekly">
+    <div class="section-head">
+      <p class="part-label">Capture</p>
+      <h2>Add a Week</h2>
+    </div>
+
+    <div class="panel">
+      <h3>From the weekly closing</h3>
+      <p class="hint">Everything here comes off a worksheet you've already filled in. Leave anything blank that you didn't run &mdash; the report handles gaps rather than guessing.</p>
+
+      <div class="grid">
+        <div class="field">
+          <label for="w-date">Week of</label>
+          <input type="date" id="w-date">
+        </div>
+        <div class="field">
+          <label for="w-mins-a">WP-01 minutes &middot; A</label>
+          <input type="number" id="w-mins-a" min="0" step="1" placeholder="—">
+          <div class="sub">Field audit total</div>
+        </div>
+        <div class="field">
+          <label for="w-mins-b">WP-01 minutes &middot; B</label>
+          <input type="number" id="w-mins-b" min="0" step="1" placeholder="—">
+          <div class="sub">Field audit total</div>
+        </div>
+        <div class="field">
+          <label for="w-unasked">Noticed &amp; handled, unasked</label>
+          <input type="number" id="w-unasked" min="0" step="1" placeholder="—">
+          <div class="sub">Count, either person</div>
+        </div>
+        <div class="field">
+          <label for="w-as-a">WP-02 battery &middot; A</label>
+          <input type="number" id="w-as-a" min="0" max="1" step="0.05" placeholder="0.00–1.00">
+          <div class="sub">Sum of 5 &divide; 20</div>
+        </div>
+        <div class="field">
+          <label for="w-as-b">WP-02 battery &middot; B</label>
+          <input type="number" id="w-as-b" min="0" max="1" step="0.05" placeholder="0.00–1.00">
+          <div class="sub">Sum of 5 &divide; 20</div>
+        </div>
+        <div class="field">
+          <label for="w-oc-owned">WP-03 tasks owned</label>
+          <input type="number" id="w-oc-owned" min="0" step="1" placeholder="—">
+          <div class="sub">Both R and A named</div>
+        </div>
+        <div class="field">
+          <label for="w-oc-total">WP-03 tasks listed</label>
+          <input type="number" id="w-oc-total" min="0" step="1" placeholder="—">
+          <div class="sub">Total rows</div>
+        </div>
+        <div class="field">
+          <label for="w-friction">WP-09 friction events</label>
+          <input type="number" id="w-friction" min="0" step="1" placeholder="—">
+        </div>
+        <div class="field">
+          <label for="w-retunes">WP-09 retunes used</label>
+          <input type="number" id="w-retunes" min="0" step="1" placeholder="—">
+        </div>
+        <div class="field">
+          <label for="w-loops">WP-13 loops run</label>
+          <input type="number" id="w-loops" min="0" max="7" step="1" placeholder="0–7">
+        </div>
+        <div class="field">
+          <label for="w-promos">WP-13 items promoted</label>
+          <input type="number" id="w-promos" min="0" step="1" placeholder="—">
+          <div class="sub">To WP-03 or WP-09</div>
+        </div>
+        <div class="field">
+          <label for="w-kit">WP-11 kit used</label>
+          <input type="number" id="w-kit" min="0" step="1" placeholder="—">
+          <div class="sub">Times this week</div>
+        </div>
+        <div class="field">
+          <label for="w-amend">WP-03 amendments</label>
+          <input type="number" id="w-amend" min="0" step="1" placeholder="—">
+          <div class="sub">Treaty changes logged</div>
+        </div>
+      </div>
+
+      <div class="btn-row no-print" style="margin-top:16px;">
+        <button type="button" class="btn btn-solid" id="add-week">Add this week</button>
+        <button type="button" class="btn" id="clear-week">Clear fields</button>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h3>The weeks so far</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>Week of</th>
+            <th class="num">WB</th>
+            <th class="num">OC</th>
+            <th class="num">AS</th>
+            <th class="num">RF</th>
+            <th class="num">Solv.</th>
+            <th class="num">&Delta;</th>
+            <th class="num">Apex</th>
+            <th class="num">Loops</th>
+            <th style="width:30px;"></th>
+          </tr>
+        </thead>
+        <tbody id="weeks-rows">
+          <tr><td colspan="10" class="empty">No weeks recorded yet.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ================= MONTHLY ================= -->
+
+  <section id="monthly">
+    <div class="section-head">
+      <p class="part-label">Capture</p>
+      <h2>Add a Month</h2>
+    </div>
+
+    <div class="panel">
+      <h3>From WP-04, the deficit audit</h3>
+      <p class="hint">Run monthly. The recurrence figure is the one that matters most here &mdash; a falling gap count with a high recurrence rate is a different situation from a falling count without one.</p>
+
+      <div class="grid">
+        <div class="field">
+          <label for="m-date">Month of</label>
+          <input type="month" id="m-date">
+        </div>
+        <div class="field">
+          <label for="m-gaps">Structural gaps found</label>
+          <input type="number" id="m-gaps" min="0" step="1" placeholder="—">
+        </div>
+        <div class="field">
+          <label for="m-recur">Of those, recurring</label>
+          <input type="number" id="m-recur" min="0" step="1" placeholder="—">
+          <div class="sub">Fixed last month, back again</div>
+        </div>
+        <div class="field">
+          <label for="m-cap">Capacity issues</label>
+          <input type="number" id="m-cap" min="0" step="1" placeholder="—">
+        </div>
+        <div class="field">
+          <label for="m-std">Standards removed</label>
+          <input type="number" id="m-std" min="0" step="1" placeholder="—">
+        </div>
+        <div class="field">
+          <label for="m-one">One-offs</label>
+          <input type="number" id="m-one" min="0" step="1" placeholder="—">
+        </div>
+      </div>
+
+      <div class="btn-row no-print" style="margin-top:16px;">
+        <button type="button" class="btn btn-solid" id="add-month">Add this month</button>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h3>The months so far</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>Month</th>
+            <th class="num">Gaps</th>
+            <th class="num">Recurring</th>
+            <th class="num">Recur. rate</th>
+            <th class="num">Capacity</th>
+            <th class="num">Removed</th>
+            <th class="num">One-offs</th>
+            <th style="width:30px;"></th>
+          </tr>
+        </thead>
+        <tbody id="months-rows">
+          <tr><td colspan="8" class="empty">No months recorded yet.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ================= REPORT ================= -->
+
+  <section id="report">
+    <div class="section-head">
+      <p class="part-label">Output</p>
+      <h2>The Full Read</h2>
+    </div>
+
+    <div class="headline" id="headline">
+      <span class="lbl">Where things stand</span>
+      <p class="verdict" id="verdict">Waiting on data.</p>
+      <p id="verdict-body">Add at least one week above and this writes itself.</p>
+    </div>
+
+    <h3 style="margin-top:28px;">What the figures say to each other</h3>
+    <p class="hint" style="font-size:.86rem;color:var(--ink-soft);max-width:72ch;">Each finding below comes from two or more instruments read together. A single worksheet cannot produce any of them.</p>
+    <div id="findings"></div>
+
+    <h3 style="margin-top:28px;">The shape of it so far</h3>
+    <div id="summary-block"></div>
+
+    <h3 style="margin-top:28px;">What to do next</h3>
+    <div id="next-block"></div>
+  </section>
+
+  <!-- ================= METHOD ================= -->
+
+  <section id="method">
+    <div class="section-head">
+      <p class="part-label">Reference</p>
+      <h2>How This Report Is Written</h2>
+    </div>
+
+    <p>Nothing here is a model, a prediction, or an opinion. Every finding is a stated rule applied to figures you entered, and each rule is listed below so the output can be checked rather than trusted.</p>
+
+    <table>
+      <thead>
+        <tr><th style="width:190px;">Finding</th><th>Rule</th><th style="width:110px;">Reads from</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Clarity without parity</td><td>Ownership clarity at or above 0.85 while workload balance sits at or below 0.60 &mdash; the treaty is clear and the split is not.</td><td class="mono">WP-01 + WP-03</td></tr>
+        <tr><td>Structure holding, repair not</td><td>Solvency exceeds apex by more than 0.08 &mdash; friction is being absorbed rather than processed.</td><td class="mono">CALC-01 + WP-09</td></tr>
+        <tr><td>Repair carrying the structure</td><td>Apex exceeds solvency by more than 0.08 &mdash; good communication compensating for an arrangement that keeps generating the need for it.</td><td class="mono">CALC-01 + WP-09</td></tr>
+        <tr><td>Load isn't the driver</td><td>Saturation rising across three or more weeks while workload balance stays flat &mdash; something outside the chore split is doing it.</td><td class="mono">WP-01 + WP-02</td></tr>
+        <tr><td>Drift rule</td><td>Three consecutive apex drops greater than 0.10 &mdash; a scheduled treaty review, not an emergency.</td><td class="mono">CALC-01</td></tr>
+        <tr><td>Fixes aren't holding</td><td>Recurrence rate above 50% across the recorded months &mdash; the same gaps being re-fixed rather than closed.</td><td class="mono">WP-04</td></tr>
+        <tr><td>Treaty gone quiet</td><td>Six or more weeks recorded with no amendments logged &mdash; a living agreement that hasn't changed probably isn't being used.</td><td class="mono">WP-03 + WP-13</td></tr>
+        <tr><td>The loop isn't feeding forward</td><td>Friction recorded across three or more weeks with nothing promoted &mdash; the daily loop is running and going nowhere.</td><td class="mono">WP-13 + WP-09</td></tr>
+        <tr><td>Kit doing its job</td><td>The calm-down kit used in a week where saturation fell &mdash; the intervention and the drop line up.</td><td class="mono">WP-11 + WP-02</td></tr>
+        <tr><td>Invisible work surfacing</td><td>Ownership clarity falls while the task list grows &mdash; the score drops because hidden work got named, which is the score behaving correctly.</td><td class="mono">WP-03 + WP-04</td></tr>
+      </tbody>
+    </table>
+
+    <div class="privacy">
+      <p><strong>What this report will never contain:</strong> a judgment about either person, a comparison between the two of you, or a recommendation about the relationship's future. It reads an arrangement across time. That is its whole scope.</p>
+      <p>None of it is a validated clinical or statistical instrument. If a finding here is used to end a conversation rather than start one, it is being misused.</p>
+    </div>
+  </section>
+
+  <footer class="sheet-footer">
+    The Objective Ledger&trade; &middot; REPORT-01 &middot; The Full Read &middot; Runs locally; nothing saved or sent
+  </footer>
+
+</main>
+
+<script>
+(function(){
+  "use strict";
+
+  var W = { sol:{wb:.40,oc:.35,as:.25}, apex:{wb:.35,oc:.30,as:.20,rf:.15} };
+  var ledger = { version:1, nameA:"Person A", nameB:"Person B", weeks:[], months:[] };
+
+  function $(id){ return document.getElementById(id); }
+  function val(id){ var v=parseFloat($(id).value); return isNaN(v)?null:v; }
+  function fmt(v){ return v===null||v===undefined ? "\u2014" : v.toFixed(2); }
+  function esc(s){ var d=document.createElement("div"); d.textContent=String(s); return d.innerHTML; }
+  function clamp01(v){ return Math.max(0,Math.min(1,v)); }
+
+  /* ---------- derivation ---------- */
+
+  function derive(w){
+    var d = {};
+    var ta=w.minsA, tb=w.minsB;
+    if(ta!==null && tb!==null && (ta+tb)>0){
+      var pa=ta/(ta+tb)*100, pb=tb/(ta+tb)*100;
+      d.wb = clamp01(1-Math.abs(pa-pb)/100);
+      d.pctA = pa;
+    } else { d.wb=null; d.pctA=null; }
+
+    d.as = (w.asA!==null && w.asB!==null) ? (w.asA+w.asB)/2 : null;
+    d.oc = (w.ocTotal!==null && w.ocTotal>0 && w.ocOwned!==null) ? clamp01(w.ocOwned/w.ocTotal) : null;
+    d.rf = (w.friction!==null && w.friction>0 && w.retunes!==null) ? clamp01(w.retunes/w.friction) : null;
+
+    if(d.wb!==null && d.oc!==null && d.as!==null){
+      d.sol = d.wb*W.sol.wb + d.oc*W.sol.oc + (1-d.as)*W.sol.as;
+      if(d.rf!==null){
+        d.apex = d.wb*W.apex.wb + d.oc*W.apex.oc + (1-d.as)*W.apex.as + d.rf*W.apex.rf;
+      } else {
+        var part = W.apex.wb+W.apex.oc+W.apex.as;
+        d.apex = (d.wb*W.apex.wb + d.oc*W.apex.oc + (1-d.as)*W.apex.as)/part;
+      }
+    } else { d.sol=null; d.apex=null; }
+    return d;
+  }
+
+  /* ---------- tables ---------- */
+
+  function sparkline(series){
+    var pts = series.filter(function(v){ return v!==null; });
+    if(pts.length < 2) return "";
+    var min=Math.min.apply(null,pts), max=Math.max.apply(null,pts), rng=(max-min)||1;
+    var w=62,h=12, step=w/(series.length-1), d="", started=false;
+    series.forEach(function(v,i){
+      if(v===null) return;
+      var x=(i*step).toFixed(1), y=(h-((v-min)/rng)*(h-2)-1).toFixed(1);
+      d += (started?" L":"M")+x+" "+y; started=true;
+    });
+    return '<svg class="spark" viewBox="0 0 '+w+' '+h+'" aria-hidden="true"><path d="'+d+'" fill="none" stroke="var(--brass)" stroke-width="1.4"/></svg>';
+  }
+
+  function renderWeeks(){
+    var tb=$("weeks-rows"); tb.innerHTML="";
+    if(!ledger.weeks.length){
+      tb.innerHTML='<tr><td colspan="10" class="empty">No weeks recorded yet.</td></tr>'; return;
+    }
+    ledger.weeks.forEach(function(w,i){
+      var d=derive(w), prev=i>0?derive(ledger.weeks[i-1]):null;
+      var delta=(d.sol!==null&&prev&&prev.sol!==null)?d.sol-prev.sol:null;
+      var dtxt = delta===null?"\u2014":(delta>=0?"+":"")+delta.toFixed(2);
+      var dcol = delta===null?"var(--ink-soft)":(delta>=0?"var(--credit)":"var(--debit)");
+      var tr=document.createElement("tr");
+      tr.innerHTML='<td class="mono" style="font-size:.76rem;">'+esc(w.date||"\u2014")+'</td>'+
+        '<td class="num">'+fmt(d.wb)+'</td><td class="num">'+fmt(d.oc)+'</td>'+
+        '<td class="num">'+fmt(d.as)+'</td><td class="num">'+(d.rf===null?"n/a":d.rf.toFixed(2))+'</td>'+
+        '<td class="num" style="font-weight:600;">'+fmt(d.sol)+'</td>'+
+        '<td class="num" style="color:'+dcol+';">'+dtxt+'</td>'+
+        '<td class="num">'+fmt(d.apex)+'</td>'+
+        '<td class="num">'+(w.loops===null?"\u2014":w.loops)+'</td>'+
+        '<td><button type="button" class="remove no-print" aria-label="Remove week">&times;</button></td>';
+      tb.appendChild(tr);
+      tr.querySelector(".remove").addEventListener("click",function(){ ledger.weeks.splice(i,1); renderAll(); });
+    });
+  }
+
+  function renderMonths(){
+    var tb=$("months-rows"); tb.innerHTML="";
+    if(!ledger.months.length){
+      tb.innerHTML='<tr><td colspan="8" class="empty">No months recorded yet.</td></tr>'; return;
+    }
+    ledger.months.forEach(function(m,i){
+      var rate = (m.gaps!==null && m.gaps>0 && m.recur!==null) ? (m.recur/m.gaps*100).toFixed(0)+"%" : "\u2014";
+      var tr=document.createElement("tr");
+      tr.innerHTML='<td class="mono" style="font-size:.76rem;">'+esc(m.month||"\u2014")+'</td>'+
+        '<td class="num">'+(m.gaps===null?"\u2014":m.gaps)+'</td>'+
+        '<td class="num">'+(m.recur===null?"\u2014":m.recur)+'</td>'+
+        '<td class="num">'+rate+'</td>'+
+        '<td class="num">'+(m.cap===null?"\u2014":m.cap)+'</td>'+
+        '<td class="num">'+(m.std===null?"\u2014":m.std)+'</td>'+
+        '<td class="num">'+(m.one===null?"\u2014":m.one)+'</td>'+
+        '<td><button type="button" class="remove no-print" aria-label="Remove month">&times;</button></td>';
+      tb.appendChild(tr);
+      tr.querySelector(".remove").addEventListener("click",function(){ ledger.months.splice(i,1); renderAll(); });
+    });
+  }
+
+  /* ---------- the intersection engine ---------- */
+
+  function finding(cls,tag,text){ return '<div class="finding '+cls+'"><span class="tag">'+tag+'</span><p>'+text+'</p></div>'; }
+
+  function buildFindings(){
+    var out=[], ws=ledger.weeks, ds=ws.map(derive);
+    var last=ds.length?ds[ds.length-1]:null;
+    var nA=esc($("name-a").value||"Person A"), nB=esc($("name-b").value||"Person B");
+
+    if(!ds.length) return '<p class="empty">Nothing to read yet.</p>';
+
+    /* 1. clarity without parity */
+    if(last && last.oc!==null && last.wb!==null && last.oc>=0.85 && last.wb<=0.60){
+      var heavier = last.pctA>50 ? nA : nB;
+      out.push(finding("warn","WP-01 + WP-03 \u00b7 clarity without parity",
+        "Ownership is clear (" + last.oc.toFixed(2) + ") and the split is not (" + last.wb.toFixed(2) + "). Every task has a name on it, and most of those names are " + heavier + "'s. This is a household that has written down exactly how lopsided it is \u2014 a real first step, and not the last one. Clarity and fairness are separate measurements, and only one of them is currently good."));
+    }
+
+    /* 2 & 3. solvency vs apex */
+    if(last && last.sol!==null && last.apex!==null && last.rf!==null){
+      var gap=last.sol-last.apex;
+      if(gap>=0.08){
+        out.push(finding("warn","CALC-01 + WP-09 \u00b7 structure holding, repair not",
+          "Solvency is running " + gap.toFixed(2) + " above apex. The arrangement works on paper and the repair isn't happening \u2014 friction is being absorbed rather than processed, which holds for a while and then doesn't. The lever here is WP-09, not the treaty."));
+      } else if(gap<=-0.08){
+        out.push(finding("warn","CALC-01 + WP-09 \u00b7 repair carrying the structure",
+          "Apex is running " + Math.abs(gap).toFixed(2) + " above solvency. You're repairing well around a structure that keeps generating the need for repair. Good communication is compensating for an arrangement that isn't working, and that's expensive to maintain. The lever here is the treaty, not the scripts."));
+      }
+    }
+
+    /* 4. saturation rising, workload flat */
+    if(ds.length>=3){
+      var t=ds.slice(-3);
+      if(t.every(function(d){ return d.as!==null && d.wb!==null; })){
+        var asUp = t[2].as>t[1].as && t[1].as>t[0].as;
+        var wbFlat = Math.abs(t[2].wb-t[0].wb)<0.08;
+        if(asUp && wbFlat){
+          out.push(finding("warn","WP-01 + WP-02 \u00b7 the load isn't the driver",
+            "Saturation has risen three weeks running while the workload split has barely moved. Whatever is costing you isn't the chore arrangement \u2014 renegotiating the treaty won't touch it. Worth naming what's actually outside the house before rebalancing what's inside it."));
+        }
+      }
+    }
+
+    /* 5. drift rule */
+    if(ds.length>=4){
+      var drops=0;
+      for(var i=ds.length-1;i>0&&drops<3;i--){
+        if(ds[i-1].apex!==null && ds[i].apex!==null && (ds[i-1].apex-ds[i].apex)>0.10) drops++; else break;
+      }
+      if(drops>=3){
+        out.push(finding("warn","CALC-01 \u00b7 drift rule triggered",
+          "Three consecutive weekly apex drops greater than 0.10. That's a structural signal rather than a bad run, and it calls for a scheduled WP-03 review \u2014 not an emergency conversation. Structure is the fixable kind of problem."));
+      }
+    }
+
+    /* 6. recurrence */
+    var g=0,r=0;
+    ledger.months.forEach(function(m){ if(m.gaps!==null){g+=m.gaps;} if(m.recur!==null){r+=m.recur;} });
+    if(g>0 && (r/g)>0.5){
+      out.push(finding("warn","WP-04 \u00b7 the fixes aren't holding",
+        Math.round(r/g*100)+"% of structural gaps have come back after being fixed. A falling gap count means little at that rate \u2014 it's the same problems being re-closed. A fix that keeps failing usually means the owner was assigned but the conditions weren't: no trigger, no time, no realistic slot in the week. Ask what would have to be true for it to happen, not who should have made it happen."));
+    }
+
+    /* 7. treaty gone quiet */
+    if(ws.length>=6){
+      var amend=ws.reduce(function(a,w){ return a+(w.amend||0); },0);
+      if(amend===0){
+        out.push(finding("warn","WP-03 \u00b7 the treaty has gone quiet",
+          "Six or more weeks recorded and not one amendment logged. The treaty is meant to be a living agreement; one that never changes is usually one nobody is consulting. Worth checking whether it still describes who actually does what."));
+      }
+    }
+
+    /* 8. loop not feeding forward */
+    if(ws.length>=3){
+      var recent=ws.slice(-3);
+      var fr=recent.reduce(function(a,w){ return a+(w.friction||0); },0);
+      var pr=recent.reduce(function(a,w){ return a+(w.promos||0); },0);
+      if(fr>=3 && pr===0){
+        out.push(finding("warn","WP-13 + WP-09 \u00b7 the loop isn't feeding forward",
+          "Friction has been logged across the last three weeks and nothing has been promoted out of the daily loop. The loop is running and going nowhere \u2014 its whole purpose is that a repeated friction point becomes a treaty row or a tone problem instead of staying an ambient irritation."));
+      }
+    }
+
+    /* 9. kit lining up with a drop */
+    if(ds.length>=2){
+      var li=ds.length-1;
+      if((ws[li].kit||0)>0 && ds[li].as!==null && ds[li-1].as!==null && ds[li].as<ds[li-1].as-0.05){
+        out.push(finding("good","WP-11 + WP-02 \u00b7 the kit is doing its job",
+          "The calm-down kit was used this week and saturation fell by " + (ds[li-1].as-ds[li].as).toFixed(2) + ". One week isn't proof of anything, but the intervention and the drop line up, which is worth noticing rather than assuming."));
+      }
+    }
+
+    /* 10. invisible work surfacing */
+    if(ws.length>=2){
+      var a=ws[ws.length-2], b=ws[ws.length-1];
+      if(a.ocTotal!==null && b.ocTotal!==null && b.ocTotal>a.ocTotal){
+        var oa=derive(a).oc, ob=derive(b).oc;
+        if(oa!==null && ob!==null && ob<oa){
+          out.push(finding("good","WP-03 + WP-04 \u00b7 invisible work surfacing",
+            "Ownership clarity fell from " + oa.toFixed(2) + " to " + ob.toFixed(2) + ", and the task list grew by " + (b.ocTotal-a.ocTotal) + " at the same time. That's the score behaving correctly, not the household getting worse \u2014 it was previously measuring a treaty that didn't know those tasks existed. A lower honest number beats a higher one computed from an incomplete list."));
+        }
+      }
+    }
+
+    /* 11. loops kept */
+    if(ws.length>=3){
+      var lp=ws.slice(-3).map(function(w){ return w.loops; }).filter(function(v){ return v!==null; });
+      if(lp.length===3 && lp.every(function(v){ return v>=5; })){
+        out.push(finding("good","WP-13 \u00b7 the habit is holding",
+          "The daily loop has run at least five days a week for three weeks. That's the one habit meant to outlive the rest of the system, and it is the single best predictor in this suite that the framework will still be in use in six months \u2014 not because the loop is powerful, but because a household that keeps it is a household still talking on ordinary days."));
+      }
+    }
+
+    if(!out.length){
+      out.push(finding("","nothing to flag",
+        "No rule has fired. Either the figures are agreeing with each other, or there isn't enough recorded yet for a pattern to be visible \u2014 most rules need three or more weeks. Neither is a problem."));
+    }
+    return out.join("");
+  }
+
+  /* ---------- headline, summary, next ---------- */
+
+  function renderReport(){
+    var ds=ledger.weeks.map(derive);
+    var last=ds.length?ds[ds.length-1]:null;
+    var v=$("verdict"), vb=$("verdict-body");
+
+    if(!last || last.sol===null){
+      v.textContent="Waiting on data.";
+      vb.textContent = ds.length ? "Weeks are recorded, but none yet has all three of workload, ownership and both batteries \u2014 the read needs all three." : "Add at least one week above and this writes itself.";
+    } else {
+      var band = last.sol>=0.70 ? "The structure is carrying its own weight."
+               : last.sol>=0.40 ? "Structural drift."
+               : "Operating in overdraft.";
+      v.textContent = band;
+      var first=ds.find(function(d){ return d.sol!==null; });
+      var moved = (first && ds.length>1) ? last.sol-first.sol : null;
+      vb.innerHTML = "Latest solvency read <strong>"+last.sol.toFixed(2)+"</strong>, apex <strong>"+(last.apex===null?"\u2014":last.apex.toFixed(2))+"</strong>, across "+ds.length+" recorded week"+(ds.length===1?"":"s")+
+        (moved===null?"." : ". Since the first complete read it has moved <strong>"+(moved>=0?"+":"")+moved.toFixed(2)+"</strong>.")+
+        " This describes an arrangement, not either person.";
+    }
+
+    $("findings").innerHTML = buildFindings();
+
+    /* trend summary */
+    var sb=$("summary-block");
+    if(ds.length<2){
+      sb.innerHTML='<p class="empty">Two or more weeks are needed before a trend means anything.</p>';
+    } else {
+      var rows=[["Workload balance","wb"],["Ownership clarity","oc"],["Autonomic saturation","as"],["Retuning frequency","rf"],["Solvency","sol"],["Apex","apex"]];
+      var html='<table><thead><tr><th>Measure</th><th class="num">First</th><th class="num">Latest</th><th class="num">Change</th><th style="width:74px;">Trend</th></tr></thead><tbody>';
+      rows.forEach(function(r){
+        var series=ds.map(function(d){ return d[r[1]]; });
+        var vals=series.filter(function(x){ return x!==null; });
+        if(vals.length<2) return;
+        var f=vals[0], l=vals[vals.length-1], ch=l-f;
+        var good = (r[1]==="as") ? ch<0 : ch>0;
+        var col = Math.abs(ch)<0.02 ? "var(--ink-soft)" : (good?"var(--credit)":"var(--debit)");
+        html+='<tr><td>'+r[0]+'</td><td class="num">'+f.toFixed(2)+'</td><td class="num">'+l.toFixed(2)+
+              '</td><td class="num" style="color:'+col+';">'+(ch>=0?"+":"")+ch.toFixed(2)+'</td><td>'+sparkline(series)+'</td></tr>';
+      });
+      html+='</tbody></table><p style="font-size:.82rem;color:var(--ink-soft);margin-top:10px;">Saturation is the one measure where a fall is the improvement.</p>';
+      sb.innerHTML=html;
+    }
+
+    /* next steps */
+    var nb=$("next-block");
+    if(!last || last.sol===null){ nb.innerHTML='<p class="empty">No recommendation yet.</p>'; return; }
+    var terms=[
+      {n:"the workload split",v:last.wb,short:(1-last.wb)*W.sol.wb,fix:"WP-01 and the treaty"},
+      {n:"ownership clarity",v:last.oc,short:(1-last.oc)*W.sol.oc,fix:"WP-03, the unowned rows"},
+      {n:"baseline load",v:1-last.as,short:last.as*W.sol.as,fix:"WP-02, and what's driving it"}
+    ].sort(function(a,b){ return b.short-a.short; });
+    var w0=terms[0];
+    nb.innerHTML='<div class="finding'+(last.sol>=0.70?" good":"")+'"><span class="tag">largest shortfall</span><p>'+
+      (last.sol>=0.70
+        ? "Nothing structural needs changing. The largest remaining gap is "+w0.n+", costing "+w0.short.toFixed(3)+" of the available points \u2014 worth knowing, not worth acting on this week. Keep the rhythm and protect the rest windows."
+        : "Start with "+w0.n+" \u2014 "+w0.fix+". It is costing "+w0.short.toFixed(3)+" of the available points, more than anything else. Start there rather than with whatever happened most recently.")+
+      '</p></div>';
+  }
+
+  function renderAll(){ renderWeeks(); renderMonths(); renderReport(); }
+
+  /* ---------- capture ---------- */
+
+  $("add-week").addEventListener("click",function(){
+    var w={
+      date:$("w-date").value||"", minsA:val("w-mins-a"), minsB:val("w-mins-b"),
+      unasked:val("w-unasked"), asA:val("w-as-a"), asB:val("w-as-b"),
+      ocOwned:val("w-oc-owned"), ocTotal:val("w-oc-total"),
+      friction:val("w-friction"), retunes:val("w-retunes"),
+      loops:val("w-loops"), promos:val("w-promos"), kit:val("w-kit"), amend:val("w-amend")
+    };
+    if(!w.date){ window.alert("Give the week a date first."); return; }
+    ledger.weeks.push(w);
+    ledger.weeks.sort(function(a,b){ return a.date<b.date?-1:(a.date>b.date?1:0); });
+    clearWeekFields();
+    renderAll();
+  });
+
+  function clearWeekFields(){
+    ["w-date","w-mins-a","w-mins-b","w-unasked","w-as-a","w-as-b","w-oc-owned","w-oc-total",
+     "w-friction","w-retunes","w-loops","w-promos","w-kit","w-amend"].forEach(function(id){ $(id).value=""; });
+  }
+  $("clear-week").addEventListener("click",clearWeekFields);
+
+  $("add-month").addEventListener("click",function(){
+    var m={ month:$("m-date").value||"", gaps:val("m-gaps"), recur:val("m-recur"),
+            cap:val("m-cap"), std:val("m-std"), one:val("m-one") };
+    if(!m.month){ window.alert("Give the month a date first."); return; }
+    ledger.months.push(m);
+    ledger.months.sort(function(a,b){ return a.month<b.month?-1:(a.month>b.month?1:0); });
+    ["m-date","m-gaps","m-recur","m-cap","m-std","m-one"].forEach(function(id){ $(id).value=""; });
+    renderAll();
+  });
+
+  /* ---------- ledger file ---------- */
+
+  $("save-btn").addEventListener("click",function(){
+    ledger.nameA=$("name-a").value; ledger.nameB=$("name-b").value;
+    var blob=new Blob([JSON.stringify(ledger,null,2)],{type:"application/json"});
+    var url=URL.createObjectURL(blob), a=document.createElement("a");
+    var stamp=new Date().toISOString().slice(0,10);
+    a.href=url; a.download="objective-ledger-"+stamp+".json";
+    document.body.appendChild(a); a.click(); document.body.removeChild(a);
+    setTimeout(function(){ URL.revokeObjectURL(url); },1000);
+  });
+
+  $("load-btn").addEventListener("click",function(){ $("load-input").click(); });
+
+  $("load-input").addEventListener("change",function(e){
+    var f=e.target.files&&e.target.files[0]; if(!f) return;
+    var r=new FileReader();
+    r.onload=function(){
+      try{
+        var data=JSON.parse(r.result);
+        if(!data || !Array.isArray(data.weeks)) throw new Error("not a ledger file");
+        ledger={ version:data.version||1, nameA:data.nameA||"Person A", nameB:data.nameB||"Person B",
+                 weeks:data.weeks, months:Array.isArray(data.months)?data.months:[] };
+        $("name-a").value=ledger.nameA; $("name-b").value=ledger.nameB;
+        renderAll();
+      }catch(err){
+        window.alert("That file couldn't be read as a ledger. Nothing was changed.");
+      }
+      e.target.value="";
+    };
+    r.onerror=function(){ window.alert("The file couldn't be opened."); e.target.value=""; };
+    r.readAsText(f);
+  });
+
+  $("name-a").addEventListener("input",renderReport);
+  $("name-b").addEventListener("input",renderReport);
+
+  renderAll();
+})();
+</script>
+
+</body>
+</html>

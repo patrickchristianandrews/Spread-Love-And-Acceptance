@@ -12,159 +12,49 @@
 </script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Ways In — Free While It’s Being Built · The Objective Ledger</title>
-<meta name="description" content="How to get into The Objective Ledger: open access with no sign-up, everything free with an email address, and paid membership coming later. What each level shares, and with whom.">
+<title>Ways In — The Objective Ledger</title>
+<meta name="description" content="The whole site is free while the program is being built. Most of it needs nothing from you, an email address opens everything else, and paid membership is coming later.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,500&family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/assets/css/book-layout.css">
 <link rel="stylesheet" href="/assets/css/site.css">
 <link rel="stylesheet" href="/assets/css/reading.css">
-<link rel="stylesheet" href="/assets/css/tol-index.css">
-<style>
-  .contents-join{ display: flex; flex-wrap: wrap; align-items: flex-end; gap: .5rem .6rem; margin: 0; }
-  .contents-join label{ flex: 1 1 100%; display: block; text-align: left; font-weight: 600; font-size: .92rem; margin: 0; }
-  @media (max-width: 520px){ .contents-join input, .contents-join button{ flex: 1 1 100%; } }
-  .contents-join input{
-    flex: 1 1 220px; min-width: 0; font: inherit; font-size: 1rem;
-    padding: .6rem .75rem; border: 1px solid var(--ink-soft, #524B3E); border-radius: var(--radius, 3px);
-    background: #FFFDF7; color: var(--ink, #211D17);
-  }
-  .contents-join button{
-    flex: 0 0 auto; font: inherit; font-weight: 600; font-size: .98rem;
-    padding: .6rem 1.1rem; border: 1px solid var(--ink, #211D17); border-radius: var(--radius, 3px);
-    background: var(--ink, #211D17); color: var(--paper, #F5EFDE); cursor: pointer;
-  }
-  .contents-join button:hover{ background: var(--focus, #2B5B8C); border-color: var(--focus, #2B5B8C); }
-  .contents-join input:focus-visible, .contents-join button:focus-visible{ outline: 2px solid var(--focus, #2B5B8C); outline-offset: 2px; }
-  /* Three Ways In: the three membership levels */
-  .tiers{ display: grid; gap: 1rem; margin-top: 1.25rem; }
-  .tier{
-    padding: 1.1rem 1.25rem;
-    border: 1px solid var(--line, #D9CBA3);
-    border-radius: var(--radius, 3px);
-    background: var(--paper, #F5EFDE);
-  }
-  .tier-paid{ background: var(--paper-deep, #ECE2C4); border-top: 3px solid var(--brass, #A8792F); }
-  .tier-head{ display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: .2rem 1rem; margin-bottom: .5rem; }
-  .tier-head h3{ margin: 0; font-size: 1.15rem; }
-  .tier-price{
-    margin: 0; font-family: "IBM Plex Mono", ui-monospace, monospace;
-    font-size: .74rem; color: var(--brass, #A8792F);
-  }
-  .tier ul{ margin: 0 0 .75rem; padding-left: 1.1rem; }
-  .tier li{ margin-bottom: .3rem; max-width: none; }
-  .tier p{ margin: 0 0 .75rem; font-size: .95rem; max-width: none; }
-  .tier .tier-note{ margin: .75rem 0 0; font-size: .88rem; color: var(--ink-soft, #524B3E); }
-  .tier-privacy{ margin-top: 1.5rem; padding-top: 1rem; border-top: 1px solid var(--line, #D9CBA3); }
-  .tier-privacy h3{ margin: 0 0 .5rem; font-size: 1.05rem; }
-  .tier-privacy ul{ padding-left: 1.1rem; margin: 0 0 .6rem; }
-  .tier-privacy li{ margin-bottom: .3rem; font-size: .95rem; max-width: none; }
-  .tier-privacy p{ font-size: .92rem; color: var(--ink-soft, #524B3E); }
-  .read .roadmap-callout .cta-button{ grid-column: 2; justify-self: start; margin-top: .3rem; }
-  .read .fit-callout a.cta-button{
-    display: inline-block; margin-top: .3rem; padding: .6rem 1.1rem;
-    background: var(--ink, #211D17); color: var(--paper, #F5EFDE);
-    font-weight: 600; text-decoration: none; border-radius: var(--radius, 3px);
-  }
-  .read .fit-callout a.cta-button:hover{ background: var(--credit, #3E6B4C); color: var(--paper, #F5EFDE); }
-  .read .fit-callout a.cta-button:focus-visible{ outline: 2px solid var(--focus, #2B5B8C); outline-offset: 3px; }
-  [hidden]{ display: none !important; }
-  .read-back{ font-size:.92rem; color:var(--ink-soft, #524B3E); margin:2.5rem 0 0; padding-top:1rem; border-top:1px solid var(--line, #D9CBA3); }
-  #contents h2, #directory h2, .lens h2{ margin-top:0; }
-</style>
 <script src="/assets/js/site.js" defer></script>
 </head>
 <body>
 <main class="read">
+<header class="read-head"><p class="read-code">Access</p><h1>Ways in</h1></header>
+<p class="depth-bar"><span>Simple version</span><a class="dig" href="/ways-in-in-depth.html">Read the full page</a></p>
 
-  <header class="read-head">
-    <p class="read-code">Access</p>
-    <h1>Ways in</h1>
-  </header>
+<p class="simple-lede">The whole site is free while the program is being built. Most of it needs nothing from you, an email address opens everything else, and paid membership is coming later.</p>
 
-  <p class="lede">The whole site is free while the program is being built. Open access needs nothing from you, an email address opens everything else, and paid membership is coming later.</p>
+<ol class="ideas">
+  <li>
+    <h2>Most of the site is open to anyone.</h2>
+    <p>No sign-up. That includes the Carrier Wave Decoder, the Signal Translator, the Wiring Card, the guides, the quick checks, and the Preface and Chapters I and II.</p>
+    <a class="dig" href="/ways-in-in-depth.html#open-access">Dig deeper: what’s open to everyone</a>
+  </li>
+  <li>
+    <h2>Your email opens the rest, free.</h2>
+    <p>Chapters III–V, all seven live workpapers, REPORT-01, PROG-01 and the full tools. There is no account and no password.</p>
+    <a class="dig" href="/ways-in-in-depth.html#free-email">Dig deeper: what an email opens</a>
+  </li>
+  <li>
+    <h2>Paid membership comes later.</h2>
+    <p>Nothing is charged now. Everyone on the email list will hear about paid membership before anything changes.</p>
+    <a class="dig" href="/ways-in-in-depth.html#paid-membership">Dig deeper: the plan for paid membership</a>
+  </li>
+  <li>
+    <h2>You share very little.</h2>
+    <p>What you type into the tools stays in your browser. If you sign up, your email is held by Buttondown. Nothing is sold or used for advertising.</p>
+    <a class="dig" href="/ways-in-in-depth.html#what-is-shared">Dig deeper: what each level shares, and with whom</a>
+  </li>
+</ol>
 
-    <section id="access-tiers">
-      <div class="kicker">Access</div>
-            <p class="lede">The whole site is free while the program is being built. Open access needs nothing from you. An email address opens everything else. Paid membership is coming later. Neither free option asks you to create an account or a password.</p>
-
-      <div class="tiers">
-        <div class="tier">
-          <div class="tier-head">
-            <h3>Open Access</h3>
-            <p class="tier-price">Free · no sign-up</p>
-          </div>
-          <ul>
-            <li>The <a href="carrier-wave-decoder.html">Carrier Wave Decoder</a>, a guided practice tool</li>
-            <li>The <a href="signal-translator.html">Signal Translator</a> and the <a href="wiring-card.html">Wiring Card</a>, plus the <a href="wired-differently.html">Wired Differently</a> and <a href="check-ins.html">Check-ins</a> guides</li>
-            <li>The Lemonade Stand and Check Your State, on the <a href="quick-checks.html">Quick checks</a> page</li>
-            <li>The Infographic Executive Summary — <a href="infographic.html" target="_blank" rel="noopener">a printable one-pager</a></li>
-            <li>The <a href="book/preface.html">Preface</a> and Chapters <a href="book/chapter-1.html">I</a> &amp; <a href="book/chapter-2.html">II</a> of the manuscript</li>
-          </ul>
-          <p>These stay free because a quick, honest read on your own household shouldn't require payment. They're diagnostic snapshots, not the full system.</p>
-          <a href="quick-checks.html" class="cta-button">Start with the free tools</a>
-        </div>
-
-        <div class="tier">
-          <div class="tier-head">
-            <h3>Free with Email</h3>
-            <p class="tier-price">Free · email only</p>
-          </div>
-          <ul>
-            <li>Everything in Open Access</li>
-            <li>Chapters III–V of the manuscript</li>
-            <li>All seven live workpapers: WP-01, 02, 03, 04, 09, 11 and 13</li>
-            <li>REPORT-01, your week-by-week record, and PROG-01, the 6-week program</li>
-            <li>The full Mood Arbitrage toolkit, Frequency Calibration and the Sync Visualizer</li>
-            <li>A note by email when something new ships</li>
-          </ul>
-          <p>Your email is held by Buttondown, our newsletter service, and used only for program updates. Unsubscribe from any email.</p>
-          <a href="#register" class="cta-button">Open everything free</a>
-        </div>
-
-        <div class="tier tier-paid">
-          <div class="tier-head">
-            <h3>Paid Membership</h3>
-            <p class="tier-price">Coming soon</p>
-          </div>
-          <p>A paid membership will come once more of the program is built: Chapters VI–XII, the remaining workpapers, and CALC-02 to CALC-07 are still being written.</p>
-          <p class="tier-note">Nothing is charged now. Everyone on the email list will hear about paid membership before anything changes. Exactly what's live is always on the <a href="suite-index.html">Suite Index</a>.</p>
-        </div>
-      </div>
-
-      <div class="tier-privacy">
-        <h3>What each level shares, and with whom</h3>
-        <ul>
-          <li><strong>Open Access:</strong> nothing you type into the tools leaves your browser. Like every visit to this page, it's counted by Google Analytics.</li>
-          <li><strong>Free with email:</strong> your email address, held by Buttondown. This browser also remembers that you signed up, so pages stay open.</li>
-          <li><strong>Paid membership (when it launches):</strong> your name, email, and payment details, held by Gumroad. We never see your card details.</li>
-        </ul>
-        <p>Nothing is sold or used for advertising. Full details are in the <a href="legal/privacy-policy.html">Privacy Policy</a>.</p>
-      </div>
-    </section>
-
-    <section id="register">
-      <div class="kicker">Join</div>
-      <h2>Open Everything Free</h2>
-      <p class="lede">This program is still being built, and while it is, all of it is free. Enter your email and every chapter, workpaper and tool on the site opens in this browser.</p>
-
-      <p>No password and no account, just your email on our list. On another device, enter the same email there. As new material ships, expect new chapters, new workpapers and refinements to what's already here; everyone on the list hears first. Paid membership is coming later, and nothing changes without notice.</p>
-
-      <p class="register-note" data-tol-if-member hidden><strong>You're signed up.</strong> Everything is open in this browser. <a href="is-this-for-you.html#directory">Go to the directory</a></p>
-      <form class="register-form" data-tol-if-guest data-tol-signup action="https://buttondown.email/api/emails/embed-subscribe/spreadloveandacceptance" method="post">
-        <label for="bd-email">Email address</label>
-        <input type="email" name="email" id="bd-email" placeholder="name@example.com" required>
-        <button type="submit">Open everything free</button>
-      </form>
-      <p class="register-note">No spam, unsubscribe anytime. We'll only write when the program actually changes. Your email is held by Buttondown and used for nothing else — see the <a href="legal/privacy-policy.html">Privacy Policy</a>.</p>
-
-      <p class="register-cta">Not sure yet? <a href="is-this-for-you.html">See if this is right for you</a> first.</p>
-    </section>
-
-
-  <p class="read-back"><a href="/index.html">&larr; Back to the home page</a></p>
-
+<div class="try-this">
+  <p><strong>Try this:</strong> If you want everything open, enter your email once. It takes a few seconds.</p>
+  <p><a href="/ways-in-in-depth.html#register">Open everything free &rarr;</a></p>
+</div>
 </main>
 </body>
 </html>

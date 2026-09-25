@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-NKC6CQ9S66"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-NKC6CQ9S66');
+</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>About in depth — The Objective Ledger</title>
+<meta name="description" content="Fifteen years auditing complex systems for a living, and a lifetime auditing the architecture of the human experience. The story behind The Objective Ledger and Spread Love and Acceptance.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,500&family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/book-layout.css">
+<link rel="stylesheet" href="/assets/css/site.css">
+<style>
+  /* Page-local styles for the about page */
+
+  .bio-header{
+    margin-bottom: 40px;
+  }
+
+  .bio-header h2{
+    max-width: none;
+    margin-bottom: 10px;
+  }
+
+  .bio-header .bio-subtitle{
+    font-size: 1.02rem;
+    color: var(--ink-soft);
+    font-style: italic;
+    margin: 0 0 18px;
+  }
+
+  .bio-badge{
+    display: inline-block;
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 0.68rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--brass);
+    border: 1px solid var(--line);
+    background: var(--paper-deep);
+    border-radius: 4px;
+    padding: 7px 13px;
+  }
+
+  .bio-section{
+    margin-bottom: 34px;
+  }
+
+  .bio-section h3{
+    font-family: "Fraunces", serif;
+    font-size: 1.12rem;
+    font-weight: 600;
+    margin: 0 0 14px;
+    color: var(--ink);
+  }
+
+  .bio-section h3 .section-num{
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 0.7rem;
+    color: var(--brass);
+    letter-spacing: 0.06em;
+    margin-right: 10px;
+    vertical-align: 2px;
+  }
+
+  .pull-quote{
+    border-left: 2px solid var(--brass);
+    padding: 4px 0 4px 18px;
+    margin: 32px 0;
+    font-family: "Fraunces", serif;
+    font-size: 1.16rem;
+    line-height: 1.55;
+    color: var(--ink);
+  }
+
+  .benediction{
+    margin: 48px 0 8px;
+    padding: 28px 30px;
+    background: var(--paper-deep);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    text-align: center;
+  }
+
+  .benediction p{
+    font-family: "Fraunces", serif;
+    font-style: italic;
+    font-size: 1.06rem;
+    line-height: 1.7;
+    color: var(--ink);
+    margin: 0;
+    max-width: 36em;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .bio-cta{
+    margin-top: 44px;
+    padding-top: 28px;
+    border-top: 1px solid var(--line);
+  }
+
+  .study-pointer{
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 0.76rem;
+    color: var(--ink-soft);
+    letter-spacing: 0.01em;
+    margin-top: 20px;
+  }
+
+  .study-pointer a{ color: var(--brass); }
+
+  .update-banner{
+    border: 1px solid var(--brass);
+    border-left: 4px solid var(--brass);
+    border-radius: 4px;
+    background: var(--paper-deep);
+    padding: 18px 22px;
+    margin-bottom: 36px;
+  }
+
+  .update-banner .banner-label{
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 0.64rem;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    color: var(--brass);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 9px;
+  }
+
+  .banner-dot{
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--credit);
+    display: inline-block;
+    flex: none;
+  }
+
+  .update-banner p{
+    margin: 0;
+    font-size: 0.96rem;
+    line-height: 1.65;
+    color: var(--ink);
+  }
+
+  .update-banner .share-line{
+    margin-top: 9px;
+    color: var(--ink-soft);
+    font-size: 0.92rem;
+  }
+
+  .update-banner strong{ color: var(--ink); }
+
+  .discipline{
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    background: var(--paper-deep);
+    padding: 20px 22px;
+    margin-bottom: 14px;
+  }
+
+  .discipline:last-child{ margin-bottom: 0; }
+
+  .discipline-head{
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    margin-bottom: 12px;
+    flex-wrap: wrap;
+  }
+
+  .discipline-num{
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 0.66rem;
+    color: var(--brass);
+    letter-spacing: 0.08em;
+  }
+
+  .discipline-name{
+    font-family: "Fraunces", serif;
+    font-weight: 600;
+    font-size: 1.04rem;
+    color: var(--ink);
+  }
+
+  .discipline p{
+    font-size: 0.94rem;
+    line-height: 1.68;
+    margin: 0 0 12px;
+  }
+
+  .discipline p:last-child{ margin-bottom: 0; }
+
+  .discipline .built{
+    border-top: 1px solid var(--line);
+    padding-top: 12px;
+    color: var(--ink-soft);
+    font-size: 0.9rem;
+  }
+
+  .discipline .built strong{
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 0.66rem;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    color: var(--brass);
+    display: block;
+    margin-bottom: 6px;
+    font-weight: 500;
+  }
+
+  .curriculum-close{
+    border-left: 2px solid var(--brass);
+    padding: 4px 0 4px 18px;
+    margin: 34px 0 0;
+    font-size: 0.96rem;
+    line-height: 1.68;
+    color: var(--ink-soft);
+  }
+
+  @media (max-width: 700px){
+    .benediction{ padding: 22px 18px; }
+    .pull-quote{ font-size: 1.06rem; }
+  }
+</style>
+<script src="/assets/js/site.js" defer></script>
+</head>
+<body>
+
+<div class="frame">
+
+  <aside class="sidebar">
+    <div class="mark">The Objective Ledger
+      <small>TOL&#8209;OS &middot; ABOUT</small>
+    </div>
+    <p class="tagline">The audit behind the framework.</p>
+    <nav aria-label="Navigation">
+      <ol>
+        <li><a href="#the-mandate">The Mandate</a></li>
+        <li><a href="#different-language">A Different Language</a></li>
+        <li><a href="#invisible-cost">The Invisible Cost</a></li>
+        <li><a href="#relational-static">Relational Static</a></li>
+        <li><a href="#dropping-the-mask">Dropping the Mask</a></li>
+        <li><a href="#the-mission">The Mission</a></li>
+        <li><a href="#curriculum">The Nine Inputs</a></li>
+      </ol>
+    </nav>
+    <a class="back-link" href="index.html">&larr; Back to TOL-OS</a>
+  </aside>
+
+  <div class="rule" aria-hidden="true"></div>
+
+  <main>
+
+    <div class="update-banner">
+      <div class="banner-label"><span class="banner-dot"></span>Live &amp; Growing &middot; Updated Daily</div>
+      <p><strong>This site changes fast.</strong> New chapters, workpapers, and calculators ship here almost every day &mdash; often several in a day. Nothing sits half-finished behind a coming-soon page; if it's live, it's live. Check back whenever you like, and you'll find something that wasn't here last time.</p>
+      <p class="share-line">And if any of this helps you, please pass it on. Share it, send it to someone who needs it, talk about it &mdash; help spread love and acceptance.</p>
+    </div>
+
+    <section id="about">
+      <div class="kicker">About</div>
+
+      <div class="bio-header">
+        <h2>The Auditor</h2>
+        <p class="bio-subtitle">Christian &mdash; founder, Spread Love and Acceptance</p>
+        <span class="bio-badge">15 Years in Audit &middot; A Lifetime in the Other One</span>
+      </div>
+      <p class="depth-bar" style="margin:-1.5rem 0 2rem;"><span>Full version</span><a href="/about.html">&larr; Back to the simple version</a></p>
+
+      <div class="bio-section" id="the-mandate">
+        <h3><span class="section-num">I</span>The Mandate</h3>
+        <p class="lede">For fifteen years, I built a career as a government auditor and audit manager specializing in tax enforcement, internal controls, and compliance. My professional life was defined by a singular mandate: finding the objective truth inside highly complex, opaque systems.</p>
+        <p>But my most intense, lifelong audit hasn't been financial; it has been a relentless, forensic quest to understand the architecture of the human experience. Driven by a burning desire to map how our internal and external worlds intersect, I have obsessively studied psychology, philosophy, behavioral science, neurobiology, economics, business, finance, alternative holistic therapies, and aromatherapy. I needed to understand the exact mechanics of the mind, the body, and the environments we exist in.</p>
+
+        <p class="study-pointer">Nine fields, studied for a reason. <a href="#curriculum">What each one contributed &darr;</a></p>
+      </div>
+
+      <div class="bio-section" id="different-language">
+        <h3><span class="section-num">II</span>A Different Language</h3>
+        <p>My brain inherently speaks a different language. I am autistic, and my specific neurological wiring includes OCD, ADHD, and anxiety. I possess a unique, multi-threaded thinking process drenched in creativity that deviates dramatically from a neurotypical mind (and for the record, being neurotypical is awesome too!). This divergence gave me extraordinary cognitive gifts: high-speed pattern recognition, uncompromising logic, and the ability to operate coherently with adaptive technology. When leveraged correctly, I can channel this processing power for good, driving tasks and systemic problem-solving to near-perfect execution.</p>
+      </div>
+
+      <div class="bio-section" id="invisible-cost">
+        <h3><span class="section-num">III</span>The Invisible Cost</h3>
+        <p>But that horsepower came with a crushing, invisible cost. Since I was a kid, I absorbed the unspoken societal message that it wasn't okay to just be me. I spent my life aggressively masking my neurodivergence to make everyone else comfortable, sacrificing my own identity and peace in front of the world. Running a high-velocity cognitive engine while simultaneously pretending to run a standard operating system led to profound, debilitating exhaustion.</p>
+      </div>
+
+      <div class="bio-section" id="relational-static">
+        <h3><span class="section-num">IV</span>Relational Static</h3>
+        <p>The heaviest toll of this exhaustion was exacted on my personal life. The process of forming and keeping relationships became a source of severe relational static. Because of the way I am inherently wired, my high-resolution directness and rapid pattern synthesis were constantly misinterpreted. My genuine intentions to provide clarity, operational truth, and structural support were misunderstood as intensity, aggression, or a lack of empathy.</p>
+
+        <div class="pull-quote">This constant mistranslation led to a very lonely and tortured existence &mdash; a feeling of being entirely unseen despite standing right in front of people I cared for deeply.</div>
+      </div>
+
+      <div class="bio-section" id="dropping-the-mask">
+        <h3><span class="section-num">V</span>Dropping the Mask</h3>
+        <p>Yet, as I look back, none of that pain went in vain. My uncompromising logic demanded that I learn from every bad outcome and leverage it for good. Through pivotal life events, relentless study, and the crucible of my career, I finally found absolute clarity. I realized that to survive, I had to drop the mask. I had to stop living for everyone else and start honoring my own biological reality. I worked through the burnout to learn precisely what I need to do to manage the taxing sides of my gifts.</p>
+        <p>Today, my equilibrium is sustained by deeply individualized self-care routines based on my specific sensory and bodily needs, utilizing holistic practices to keep my nervous system regulated and grounded.</p>
+      </div>
+
+      <div class="bio-section" id="the-mission">
+        <h3><span class="section-num">VI</span>The Mission</h3>
+        <p>Through Spread Love and Acceptance and the foundational framework of The Objective Ledger&trade; (TOL&#8209;OS), I now use my lived experience to help others map their own realities. I stopped trying to force my brain to run an incompatible operating system and instead built an environment where my true wiring could thrive &mdash; and my mission is to help you do the exact same thing.</p>
+      </div>
+
+
+      <section id="curriculum" style="margin-top: 56px; padding-top: 40px; border-top: 1px solid var(--line);">
+        <div class="kicker">The Curriculum</div>
+        <h2>The Nine Inputs</h2>
+        <p class="lede">I didn't study nine fields because I was collecting credentials. I studied them because each one held a piece of a problem I was living inside, and none of them held the whole thing. The framework is what happened when the pieces were finally laid on the same table.</p>
+
+        <div class="discipline">
+          <div class="discipline-head"><span class="discipline-num">01</span><span class="discipline-name">Psychology</span></div>
+          <p>I spent years being told my intent and my impact were different things, without anyone able to tell me where the gap was opening. Psychology gave me the vocabulary for masking &mdash; for what it costs to run a performance of normalcy on top of an already-taxed system &mdash; and for why a clear, accurate, well-meant sentence can still land as an attack.</p>
+          <p class="built"><strong>What it became</strong>The Tone Transducer &amp; Filter (WP&#8209;09). The fact &rarr; feeling &rarr; ask structure exists because I needed a way to send what I actually meant instead of what my wiring transmitted by default. The Neutral Refusals in WP&#8209;01 came from the same place: a way to say no that doesn't read as rejection.</p>
+        </div>
+
+        <div class="discipline">
+          <div class="discipline-head"><span class="discipline-num">02</span><span class="discipline-name">Philosophy</span></div>
+          <p>Epistemology is the study of how we know what we claim to know, and it's the discipline I return to most. In a conflict, almost nothing being asserted is actually knowledge &mdash; it's inference, memory, and pattern-matching, all wearing the costume of fact. Ethics did the other half of the work: it told me what a ledger is not allowed to do.</p>
+          <p class="built"><strong>What it became</strong>The Epistemic Verdict Engine is named for exactly this. It scores an arrangement, never a person, and it takes only inputs both people entered together. Chapter IV &mdash; Deontological Parity &mdash; is the formal version: each person's needs carry equal weight as a starting principle, not as something earned by performance.</p>
+        </div>
+
+        <div class="discipline">
+          <div class="discipline-head"><span class="discipline-num">03</span><span class="discipline-name">Behavioral Science</span></div>
+          <p>My own hardest lesson: willpower collapses precisely when you need it most. Every resolution I made about handling things better evaporated the moment I was depleted. What survived depletion wasn't discipline &mdash; it was structure that didn't require discipline to run.</p>
+          <p class="built"><strong>What it became</strong>The Phase&#8209;Locked Loop Protocol (WP&#8209;13): ninety seconds a day, deliberately too small to skip, because small and frequent beats big and rare. The whole weekly closing rhythm follows the same logic. A system that only works when both people are at their best isn't a system.</p>
+        </div>
+
+        <div class="discipline">
+          <div class="discipline-head"><span class="discipline-num">04</span><span class="discipline-name">Neurobiology</span></div>
+          <p>This is the field that explained me to myself. Learning how the autonomic nervous system actually governs state &mdash; that shutdown isn't a choice, that mobilization isn't aggression, that both are a body doing its job &mdash; ended years of treating my own responses as character defects. It also explained why the same sentence lands three different ways depending on nothing but where a body is that day.</p>
+          <p class="built"><strong>What it became</strong>The Nervous System Ladder on the front page, and the Autonomic Saturation Index (WP&#8209;02) behind it. Saturation is a weighted input in P(Solvency) rather than a footnote, because a workload that's fine for a regulated system is genuinely unsustainable for a saturated one, and that's physiology, not attitude.</p>
+        </div>
+
+        <div class="discipline">
+          <div class="discipline-head"><span class="discipline-num">05</span><span class="discipline-name">Economics</span></div>
+          <p>Economics is the study of finite capacity and what it costs to allocate it. It gave me the language for the thing I could feel but never name: that noticing, remembering, and anticipating are real expenditures, drawn from a real and limited account, and that they accumulate whether or not anyone is recording them.</p>
+          <p class="built"><strong>What it became</strong>The Preface concept of unbilled debt, and the Unbilled Deficit Audit (WP&#8209;04) that reconciles it monthly. Also the maintenance margin principle throughout: a household running at ninety-five percent of capacity has no reserve for the ordinary bad week, and the ordinary bad week always comes.</p>
+        </div>
+
+        <div class="discipline">
+          <div class="discipline-head"><span class="discipline-num">06</span><span class="discipline-name">Business</span></div>
+          <p>Fifteen years of audit taught me that most operational failure isn't incompetence &mdash; it's undefined ownership. Work that belongs to everyone belongs to no one, and it quietly lands on whoever notices first. That person then gets characterized as controlling for noticing. I watched this destroy departments. I lived it at home.</p>
+          <p class="built"><strong>What it became</strong>The Domestic RACI Treaty (WP&#8209;03), lifted almost directly from internal controls practice. One Responsible name, one Accountable name, per recurring task. The amendment process matters as much as the table: ownership gets renegotiated deliberately and in writing, never reassigned by silent default to whoever cracked first.</p>
+        </div>
+
+        <div class="discipline">
+          <div class="discipline-head"><span class="discipline-num">07</span><span class="discipline-name">Finance</span></div>
+          <p>My professional native language. Double-entry bookkeeping carries a quiet philosophical claim: every entry has two sides, and a book that only balances from one direction isn't balanced at all. A solvency read tells you whether this month's operations are sustainable. It says nothing about whether the enterprise is worthwhile. That distinction is the whole discipline, and it's the one most people skip.</p>
+          <p class="built"><strong>What it became</strong>The ledger framing itself, and the P(Solvency) formula in Chapter II. Both carry the caveat that took me longest to learn: the number describes the arrangement, never the people inside it. Arrangements get restructured every day without anyone being on trial.</p>
+        </div>
+
+        <div class="discipline">
+          <div class="discipline-head"><span class="discipline-num">08</span><span class="discipline-name">Alternative Holistic Therapies</span></div>
+          <p>This is where I went when the cognitive approaches stopped being enough. Everything I'd learned worked beautifully at the level of thought and did nothing at all when my system was already past its limit. Holistic practice starts at the body instead of the argument, and it is the practical basis of how I maintain equilibrium now &mdash; not as a supplement to the framework, but as the thing that makes the framework usable.</p>
+          <p class="built"><strong>What it became</strong>The Soundscape Catalog, and a rule that runs through the whole system: regulate first, negotiate second. The catalog is deliberately optional &mdash; no workpaper requires audio, and none ever will &mdash; because a practice that becomes another obligation has already stopped working.</p>
+        </div>
+
+        <div class="discipline">
+          <div class="discipline-head"><span class="discipline-num">09</span><span class="discipline-name">Aromatherapy</span></div>
+          <p>Scent is the only sense routed more or less directly into the limbic system, which makes it the fastest lever I have found for changing state without changing circumstance. For a sensory profile like mine, that isn't a pleasant extra. It's a functional tool &mdash; part of the individualized routine that keeps my system regulated on days that would otherwise take it apart.</p>
+          <p class="built"><strong>What it became</strong>The Sensory Gating half of Chapter IV. Environment isn't neutral background to a conversation; light, noise, and scent are inputs that shift what either person can actually access. Choosing where and when to talk is part of the method, not a preamble to it.</p>
+        </div>
+
+        <p class="curriculum-close">Fifteen years of audit is the thread running through all nine. An audit doesn't ask whether people are good &mdash; it asks whether the system produces reliable results, where the controls are missing, and what the evidence actually supports. Turning that lens on a household is the entire premise of The Objective Ledger&trade;. The nine fields above are where the evidence came from. The audit is what holds them together.</p>
+      </section>
+
+      <div class="benediction">
+        <p>God, thank you for the allowance of the presence of my angels who work so hard; I feel their love every day with every step. I feel blessed, sanctified.</p>
+      </div>
+
+      <div class="bio-cta">
+        <p>If any of this sounds like your own wiring, or like the static in a relationship you care about, the framework built out of it is here: the <a href="quick-checks.html#ladder">nervous system self-check</a> and the <a href="quick-checks.html#lemonade">shared register</a> are free and take a few minutes. The <a href="echoes-of-gold.html">companion album</a> carries what the numbers were never going to reach.</p>
+      </div>
+
+    </section>
+
+  </main>
+</div>
+
+<footer>
+  TOL&#8209;OS &middot; spreadloveandacceptance.com
+  <div class="footer-links">
+    <a href="index.html">Home</a>
+    <a href="roadmap.html">Roadmap</a>
+    <a href="program-overview.html">Program Overview</a>
+    <a href="podcast-index.html">Podcast</a>
+    <a href="echoes-of-gold.html">Echoes of Gold</a>
+    <a href="legal/terms-of-service.html">Terms of Service</a>
+    <a href="legal/privacy-policy.html">Privacy Policy</a>
+  </div>
+</footer>
+
+</body>
+</html>

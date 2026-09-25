@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WP-11 in depth — The Calm-Down Kit</title>
+<meta name="description" content="Working Paper WP-11: a pre-decided protocol for lowering acute arousal enough to resume a conversation, or to postpone it honestly.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,500&family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/css/site.css">
+<style>
+  /*
+    Canonical single-file WP-11 deliverable for the paid Workpaper Suite.
+    Shares the WP-01 token system and print behaviour so the whole Suite
+    prints as one consistent set of documents.
+  */
+
+  :root{
+    --paper: #F5EFDE;
+    --paper-deep: #ECE2C4;
+    --ink: #211D17;
+    --ink-soft: #524B3E;
+    --line: #D9CBA3;
+    --credit: #3E6B4C;
+    --credit-soft: #E4EDE3;
+    --debit: #96412B;
+    --debit-soft: #F2E2DB;
+    --brass: #A8792F;
+    --focus: #2B5B8C;
+    --radius: 3px;
+  }
+
+  *{ box-sizing: border-box; }
+
+  @page{
+    size: letter portrait;
+    margin: 0.55in;
+  }
+
+  body{
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: "Lora", Georgia, serif;
+    font-size: 16px;
+    line-height: 1.65;
+  }
+
+  h1, h2, h3{
+    font-family: "Fraunces", "Lora", serif;
+    font-weight: 600;
+    line-height: 1.2;
+    margin: 0 0 0.5em 0;
+  }
+
+  :focus-visible{ outline: 2px solid var(--focus); outline-offset: 3px; }
+
+  code{
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 0.84em;
+    background: var(--paper-deep);
+    padding: 1px 5px;
+    border-radius: var(--radius);
+  }
+
+  .print-bar{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    max-width: 8.5in;
+    margin: 20px auto;
+    padding: 14px 20px;
+    background: var(--paper-deep);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 0.8rem;
+    color: var(--ink-soft);
+  }
+
+  .print-bar button{
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 0.75rem;
+    padding: 8px 16px;
+    border: none;
+    border-radius: var(--radius);
+    background: var(--ink);
+    color: var(--paper);
+    cursor: pointer;
+  }
+
+  @media print{
+    .print-bar{ display: none; }
+    body{ background: #fff; }
+  }
+
+  .sheet{
+    max-width: 8.5in;
+    margin: 0 auto 60px auto;
+    padding: 0.5in 0.6in;
+    background: var(--paper);
+    border: 1px solid var(--line);
+  }
+
+  @media print{
+    .sheet{ margin: 0; padding: 0; max-width: 100%; border: none; }
+    .part-section{ break-inside: avoid; }
+    .scenario{ break-inside: avoid; }
+    table{ break-inside: auto; }
+  }
+
+  .sheet-header{
+    text-align: center;
+    border-bottom: 2px solid var(--brass);
+    padding-bottom: 16px;
+    margin-bottom: 28px;
+  }
+
+  .wp-num{
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 0.7rem;
+    color: var(--brass);
+    letter-spacing: 0.08em;
+    margin-bottom: 4px;
+  }
+
+  .sheet-mark{ font-size: 1.4rem; margin: 0; }
+
+  .sheet-mark small{
+    display: block;
+    font-family: "IBM Plex Mono", monospace;
+    font-weight: 400;
+    font-size: 0.62rem;
+    letter-spacing: 0.1em;
+    color: var(--brass);
+    margin-top: 6px;
+  }
+
+  .sheet-tagline{
+    font-size: 0.9rem;
+    color: var(--ink-soft);
+    margin: 10px auto 0 auto;
+    max-width: 66ch;
+  }
+
+  .toc{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 24px;
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 0.72rem;
+    color: var(--ink-soft);
+    margin: 14px 0 0 0;
+  }
+
+  .toc a{ color: var(--brass); text-decoration: none; }
+
+  .intro-note{
+    border-left: 4px solid var(--focus);
+    background: #E7EEF4;
+    border-radius: var(--radius);
+    padding: 16px 20px;
+    margin-bottom: 30px;
+  }
+
+  .intro-note p{ margin: 0 0 10px 0; font-size: 0.95rem; }
+  .intro-note p:last-child{ margin-bottom: 0; }
+
+  .part-divider{
+    text-align: center;
+    margin: 44px 0 30px 0;
+    padding-top: 30px;
+    border-top: 3px double var(--brass);
+  }
+
+  .part-divider .part-label{
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--brass);
+    margin-bottom: 6px;
+  }
+
+  .part-divider h2{ font-size: 1.5rem; margin: 0; }
+
+  .part-section{ margin-bottom: 34px; }
+
+  .part-section > h3{
+    font-size: 1.15rem;
+    border-bottom: 1px solid var(--brass);
+    padding-bottom: 8px;
+    margin-bottom: 18px;
+  }
+
+  .section-def{
+    font-size: 0.92rem;
+    color: var(--ink-soft);
+    max-width: 70ch;
+    margin-bottom: 20px;
+  }
+
+  p{ max-width: 72ch; }
+
+  table.audit-table{
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.85rem;
+  }
+
+  table.audit-table th{
+    text-align: left;
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--brass);
+    border-bottom: 2px solid var(--line);
+    padding: 6px 10px 10px 0;
+    vertical-align: bottom;
+  }
+
+  table.audit-table td{
+    border-bottom: 1px solid var(--line);
+    padding: 9px 10px 9px 0;
+    vertical-align: top;
+  }
+
+  table.audit-table td.day-cell,
+  table.audit-table td.term-cell{
+    font-family: "Fraunces", serif;
+    font-weight: 600;
+    white-space: nowrap;
+    width: 1%;
+    padding-right: 20px;
+  }
+
+  table.audit-table td.opt-cell{
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 0.72rem;
+    color: var(--ink-soft);
+  }
+
+  table.fill-table td{ height: 36px; }
+  table.tall-table td{ height: 52px; }
+
+  .rule-box{
+    border-left: 4px solid var(--credit);
+    background: var(--credit-soft);
+    border-radius: var(--radius);
+    padding: 16px 20px;
+    margin-top: 18px;
+  }
+
+  .rule-box p{ margin: 0 0 10px 0; font-size: 0.92rem; }
+  .rule-box p:last-child{ margin-bottom: 0; }
+
+  .rule-box ol, .rule-box ul{ margin: 0; padding-left: 20px; font-size: 0.92rem; }
+  .rule-box li{ margin-bottom: 6px; }
+  .rule-box li:last-child{ margin-bottom: 0; }
+
+  .warn-box{
+    border-left: 4px solid var(--debit);
+    background: var(--debit-soft);
+    border-radius: var(--radius);
+    padding: 16px 20px;
+    margin-top: 18px;
+  }
+
+  .warn-box p{ margin: 0 0 10px 0; font-size: 0.92rem; }
+  .warn-box p:last-child{ margin-bottom: 0; }
+
+  .scenario{
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    background: var(--paper-deep);
+    padding: 16px 20px;
+    margin-bottom: 14px;
+  }
+
+  .scenario:last-child{ margin-bottom: 0; }
+
+  .scenario .context{
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 0.68rem;
+    color: var(--brass);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+
+  .scenario .script-line{
+    margin-bottom: 6px;
+    font-size: 0.92rem;
+  }
+
+  .scenario .script-line:last-child{ margin-bottom: 0; }
+
+  .scenario .script-line strong{
+    color: var(--brass);
+    font-weight: 600;
+  }
+
+  .adapt-box{
+    border-left: 4px solid var(--credit);
+    background: var(--credit-soft);
+    border-radius: var(--radius);
+    padding: 16px 20px;
+    margin-top: 24px;
+  }
+
+  .adapt-box p{ margin: 0 0 10px 0; font-size: 0.92rem; }
+  .adapt-box p:last-child{ margin-bottom: 0; }
+
+  ol.steps{ padding-left: 22px; font-size: 0.95rem; max-width: 72ch; }
+  ol.steps li{ margin-bottom: 10px; }
+
+  ul.plain{ padding-left: 20px; font-size: 0.95rem; max-width: 72ch; }
+  ul.plain li{ margin-bottom: 9px; }
+
+  .signoff-table{
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.85rem;
+    margin-top: 8px;
+  }
+
+  .signoff-table th{
+    text-align: left;
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--brass);
+    border-bottom: 2px solid var(--line);
+    padding: 6px 10px 10px 0;
+  }
+
+  .signoff-table td{
+    border-bottom: 1px solid var(--line);
+    padding: 14px 10px 8px 0;
+  }
+
+  .signoff-table td.label-cell{
+    font-family: "Fraunces", serif;
+    font-weight: 600;
+    color: var(--ink);
+    white-space: nowrap;
+    width: 1%;
+    padding-right: 24px;
+  }
+
+  .sheet-footer{
+    margin-top: 30px;
+    border-top: 1px solid var(--line);
+    padding-top: 14px;
+    text-align: center;
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 0.65rem;
+    color: var(--ink-soft);
+  }
+
+  @media (max-width: 700px){
+    .print-bar{ flex-direction: column; align-items: stretch; text-align: center; }
+    table.audit-table{ font-size: 0.72rem; }
+    .toc{ gap: 12px; }
+    .sheet{ padding: 0.35in 0.3in; }
+  }
+
+</style>
+<script src="/assets/js/site.js" defer></script>
+</head>
+<body>
+
+  <div class="print-bar" role="toolbar" aria-label="Page actions">
+    <span>WP-11 &middot; Free with email while in development</span>
+    <button type="button" onclick="window.print()">Print / Save as PDF</button>
+  </div>
+
+  <main class="sheet" aria-label="WP-11 — The Calm-Down Kit">
+
+    <header class="sheet-header">
+      <p class="wp-num">WP-11</p>
+      <h1 class="sheet-mark">The Calm-Down Kit
+        <small>Set Your Defaults &middot; Intervene &middot; Re-Enter</small>
+      </h1>
+      <p class="sheet-tagline">A short, pre-decided protocol for bringing autonomic arousal back down far enough to have the conversation &mdash; or to postpone it honestly.</p>
+      <div class="toc">
+        <a href="#defaults">Part A &mdash; Defaults</a>
+        <a href="#moment">Part B &mdash; In the Moment</a>
+        <a href="#reentry">Part C &mdash; Re-Entry</a>
+        <a href="#notfor">Not For</a>
+      </div>
+    </header>
+    <p class="depth-bar" style="margin:0 0 28px;"><span>Full version</span><a href="/wp-11.html">&larr; Back to the simple version</a></p>
+
+
+    
+<div class="intro-note" id="purpose">
+      <p>Purpose: to lower acute arousal enough that WP-03, WP-09 or an ordinary conversation becomes possible again. This workpaper is used by one person, about themselves. It is never deployed at the other person. When the body is back, the conversation order is on <a href="/check-ins.html">Check-ins</a>. Do not use the calm to deliver the criticism you paused. One topic, no blame, and the <a href="/check-ins.html#regroup">return line</a>. Test what you will say in the <a href="/signal-translator.html">Signal Translator</a> before you resume. Do not resume just because the clock you named has arrived if the rung has not changed.</p>
+      <p><strong>Part A is filled in while calm.</strong> That's the whole design. A kit that asks you to weigh options at the moment you're least able to weigh options isn't a kit &mdash; it's another task. Decide now, so that later you only have to do what you already chose.</p>
+    </div>
+
+    <!-- ========================= PART A ========================= -->
+
+    <section id="defaults" aria-labelledby="defaults-h">
+      <div class="part-divider">
+        <div class="part-label">Part A</div>
+        <h2 id="defaults-h">Before You Need It</h2>
+      </div>
+      <p class="sheet-tagline" style="text-align:center;margin-bottom:24px;">Fill this in on an ordinary day, not a hard one.</p>
+
+      <div class="part-section">
+        <h3>What tends to start it</h3>
+        <p class="section-def">Name the two or three that actually recur for you. Specific beats comprehensive &mdash; "the second time something gets asked" is more useful than "stress."</p>
+
+        <table class="audit-table fill-table">
+          <thead>
+            <tr>
+              <th>Trigger</th>
+              <th style="width:230px;">How it shows up in the body first</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td></td><td></td></tr>
+            <tr><td></td><td></td></tr>
+            <tr><td></td><td></td></tr>
+          </tbody>
+        </table>
+
+        <div class="rule-box">
+          <p>The body's first signal is the useful one &mdash; jaw, shoulders, breath going shallow, hearing sharpen, hands going cold. It arrives before the thought does, which is what makes it worth knowing.</p>
+        </div>
+
+        <h3 style="margin-top:30px;">Your two defaults</h3>
+        <p class="section-def">Pick two from Part B and write them here. In the moment you don't choose; you do these.</p>
+
+        <table class="audit-table tall-table">
+          <tbody>
+            <tr><td class="term-cell">First default</td><td></td></tr>
+            <tr><td class="term-cell">Second, if the first isn't available</td><td></td></tr>
+          </tbody>
+        </table>
+
+        <h3 style="margin-top:30px;">Your signal line</h3>
+        <p class="section-def">Leaving the room mid-conflict without saying why reads as walking out, however it's meant. Agree on one sentence now, so using the kit isn't mistaken for stonewalling.</p>
+
+        <div class="scenario">
+          <div class="context">The shape of it</div>
+          <p class="script-line">Name the state, name the length, name the return. <em>"I'm at capacity. I need ten minutes. I'll be back at quarter past and we can pick this up."</em></p>
+          <p class="script-line">The return time is the part that matters. Without it the sentence is a departure, not a pause.</p>
+        </div>
+
+        <table class="audit-table tall-table">
+          <tbody>
+            <tr><td class="term-cell">Person A's line</td><td></td></tr>
+            <tr><td class="term-cell">Person B's line</td><td></td></tr>
+          </tbody>
+        </table>
+
+        <div class="rule-box">
+          <p>Both people agree in advance that hearing this line is not an insult and not an escape. It's information, and the conversation resumes at the stated time.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================= PART B ========================= -->
+
+    <section id="moment" aria-labelledby="moment-h">
+      <div class="part-divider">
+        <div class="part-label">Part B</div>
+        <h2 id="moment-h">In the Moment</h2>
+      </div>
+
+      <div class="part-section">
+        <h3>1 &middot; Read where you are</h3>
+        <p class="section-def">Run WP-02 &mdash; the same five factors, the same 0&ndash;4, the same arithmetic. This workpaper deliberately does not invent a second stress scale; one instrument measuring one thing is the point, and it means the before-and-after below is comparable to every other reading you've taken.</p>
+
+        <table class="audit-table fill-table">
+          <thead>
+            <tr><th>WP-02 score, right now</th><th style="width:120px;">Time</th></tr>
+          </thead>
+          <tbody>
+            <tr><td></td><td></td></tr>
+          </tbody>
+        </table>
+
+        <h3 style="margin-top:28px;">2 &middot; Say the line</h3>
+        <p>If another person is in the room, use your signal line from Part A before you go. Ten seconds, and it's the difference between a pause and an exit.</p>
+
+        <h3 style="margin-top:28px;">3 &middot; Run your default</h3>
+        <p class="section-def">Your two from Part A. The rest of this table exists so Part A had something to choose from &mdash; not as a menu to browse at 9 out of 10.</p>
+
+        <table class="audit-table">
+          <thead>
+            <tr>
+              <th style="width:118px;">Category</th>
+              <th style="width:150px;">Tactic</th>
+              <th>How to run it</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="term-cell">Physiological</td>
+              <td>Asymmetric breathing</td>
+              <td>Four seconds in, six seconds out, for at least two minutes. The longer exhale is the active ingredient; counting is what keeps you doing it.</td>
+            </tr>
+            <tr>
+              <td class="term-cell">Orienting</td>
+              <td>Naming the room</td>
+              <td>Five things you can see, four you can hear, three you can touch. Moves attention from the argument in your head to the room you're actually standing in.</td>
+            </tr>
+            <tr>
+              <td class="term-cell">Kinesthetic</td>
+              <td>Weight and pressure</td>
+              <td>Feet pressed flat into the floor, a hand resting on your own chest, or something warm held in both hands. Sixty seconds, unhurried.</td>
+            </tr>
+            <tr>
+              <td class="term-cell">Environmental</td>
+              <td>Gating</td>
+              <td>Lower the lights, leave the noisy room, step outside. Removing input costs nothing and works when nothing else has any room to.</td>
+            </tr>
+            <tr>
+              <td class="term-cell">Movement</td>
+              <td>Walking it out</td>
+              <td>Five minutes at an ordinary pace, ideally outdoors. Slower than you want to walk, which is part of it.</td>
+            </tr>
+            <tr>
+              <td class="term-cell">Auditory</td>
+              <td>Low-frequency sound</td>
+              <td>Some people find low, steady, bass-heavy sound settling through over-ear headphones &mdash; any source you already have. A preference, not a mechanism: if it does nothing for you, it does nothing, and one of the rows above will serve you better.</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="warn-box">
+          <p><strong>Two things this kit deliberately leaves out.</strong> It contains nothing that works by cold, pain, or physical shock. Those techniques come from crisis protocols built for supervised clinical settings, and a printed worksheet has no way of knowing who picked it up. Everything above works by slowing the body down rather than startling it.</p>
+          <p>It also makes no claim about frequencies, brainwaves, or mechanisms. These are ordinary settling techniques. They are not treatment, and nothing here has been validated as such.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================= PART C ========================= -->
+
+    <section id="reentry" aria-labelledby="reentry-h">
+      <div class="part-divider">
+        <div class="part-label">Part C</div>
+        <h2 id="reentry-h">Re-Entry</h2>
+      </div>
+
+      <div class="part-section">
+        <p class="section-def">Re-read WP-02 before going back in. "Feeling better" is not a threshold; the number is.</p>
+
+        <table class="audit-table fill-table">
+          <thead>
+            <tr>
+              <th>WP-02, before</th>
+              <th>WP-02, after</th>
+              <th style="width:100px;">Change</th>
+              <th style="width:120px;">Time</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td></td><td></td><td></td><td></td></tr>
+          </tbody>
+        </table>
+
+        <div class="rule-box">
+          <p><strong>Under 0.50 &mdash;</strong> go back in. Return at the time you named.</p>
+          <p><strong>0.50 to 0.60 &mdash;</strong> run a second cycle. Same default or the other one.</p>
+          <p><strong>Still 0.60 or above after two cycles &mdash;</strong> the answer is postponement, not persistence. Say so, and name a specific time. "Tomorrow after dinner" is a postponement; "later" is an avoidance, and WP-13 exists to catch the difference.</p>
+        </div>
+
+        <h3 style="margin-top:28px;">Coming back</h3>
+        <p>Pick something small and single-focus to do first &mdash; put the dishes away, take the bin out, answer one message. Not the argument, and not a second demanding thing. One low-friction task is how you find out whether the baseline actually holds.</p>
+
+        <table class="audit-table tall-table">
+          <tbody>
+            <tr><td class="term-cell">Next immediate action</td><td></td></tr>
+            <tr><td class="term-cell">If the conversation was postponed &mdash; when it resumes</td><td></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ========================= SCOPE ========================= -->
+
+    <section id="notfor" aria-labelledby="notfor-h">
+      <div class="part-divider">
+        <div class="part-label">Scope</div>
+        <h2 id="notfor-h">What This Kit Is Not For</h2>
+      </div>
+
+      <div class="part-section">
+        <div class="warn-box" style="margin-top:0;">
+          <p><strong>Not a treatment.</strong> These are ordinary settling techniques for an ordinary bad moment. Panic attacks, trauma responses, and persistent anxiety are not what this addresses, and a worksheet is the wrong instrument for any of them. If that's closer to what's happening, a doctor or therapist is the better call &mdash; not a better default from the table.</p>
+          <p><strong>Not something to hand to the other person.</strong> "Go use your kit" is the same misuse as quoting a solvency score to end an argument. Each person runs this for themselves, or it isn't this workpaper.</p>
+          <p><strong>Not a way to leave a conversation permanently.</strong> The signal line commits you to a return time. A kit used to make hard conversations never happen has become the problem it was meant to solve.</p>
+          <p><strong>Not a measure of anything about the other person.</strong> Nothing recorded here describes them. It describes one person's own state, entered by that person.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="feeds" aria-labelledby="feeds-h">
+      <div class="part-divider">
+        <div class="part-label">Feeds Into</div>
+        <h2 id="feeds-h">Where It Connects</h2>
+      </div>
+
+      <div class="part-section">
+        <table class="audit-table">
+          <thead>
+            <tr><th style="width:120px;">Workpaper</th><th>Relationship</th></tr>
+          </thead>
+          <tbody>
+            <tr><td class="term-cell">WP-02</td><td>Supplies the scale this kit reads before and after. A high battery score is what triggers it.</td></tr>
+            <tr><td class="term-cell">WP-03</td><td>Gated by it. Don't open the treaty session &mdash; the longest in the suite &mdash; until the re-entry threshold is met.</td></tr>
+            <tr><td class="term-cell">WP-09</td><td>Gated by it. Retuning a message works poorly at high arousal; the fact, feeling and ask all come out sharper than intended.</td></tr>
+            <tr><td class="term-cell">WP-01</td><td>Part B's neutral refusals and the signal line here do related work &mdash; declining without it becoming a fight.</td></tr>
+            <tr><td class="term-cell">CALC-01</td><td>Nothing. This workpaper produces no scored input, deliberately. Not everything worth doing is worth scoring.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="signoff" aria-labelledby="signoff-h">
+      <div class="part-divider">
+        <div class="part-label">Sign-Off</div>
+        <h2 id="signoff-h">Defaults Set</h2>
+      </div>
+
+      <table class="signoff-table">
+        <thead>
+          <tr><th></th><th>Defaults chosen</th><th>Signal line agreed</th><th>Date</th></tr>
+        </thead>
+        <tbody>
+          <tr><td class="label-cell">Person A</td><td></td><td></td><td></td></tr>
+          <tr><td class="label-cell">Person B</td><td></td><td></td><td></td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <footer class="sheet-footer">
+      The Objective Ledger&trade; &middot; Workpaper Suite &middot; WP-11 &middot; Free with email while in development &middot; please don't redistribute
+    </footer>
+
+  </main>
+
+</body>
+</html>

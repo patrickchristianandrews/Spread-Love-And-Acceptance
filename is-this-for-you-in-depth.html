@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Is This Right for You? In depth — The Objective Ledger</title>
+<meta name="description" content="What The Objective Ledger is and isn't, who it helps, how to get in free while it's being built, and a guide to every page on the site.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,500&family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/css/site.css">
+<link rel="stylesheet" href="/assets/css/reading.css">
+<link rel="stylesheet" href="/assets/css/tol-index.css">
+<style>
+  /* Page-local pieces. Colors come from the shared tokens in site.css. */
+  .fit-intro{ font-size:1.12rem; line-height:1.7; }
+  .motto{
+    margin:1.75rem 0 0; padding:1rem 0 0; border-top:1px solid var(--line);
+    font-family:"Fraunces", Georgia, serif; font-style:italic; font-size:1.2rem; color:var(--ink-soft);
+  }
+  .jump{ margin:1.5rem 0 0; font-size:.95rem; color:var(--ink-soft); }
+  .jump a{ margin-right:.9rem; white-space:nowrap; }
+
+  /* Is / isn't: two ruled columns, like the two sides of a ledger */
+  .ledger{ display:grid; grid-template-columns:1fr 1fr; border-top:3px double var(--ink); border-bottom:1px solid var(--ink); margin:1rem 0 1.5rem; }
+  .ledger > div{ padding:1rem 1.25rem 1.1rem 0; }
+  .ledger > div + div{ padding-left:1.25rem; border-left:1px solid var(--ink); }
+  .ledger h3{ margin:0 0 .5rem; font-size:1.1rem; }
+  .ledger .is h3{ color:var(--credit); }
+  .ledger .isnt h3{ color:var(--debit); }
+  .ledger ul{ margin:0; padding-left:1.1rem; }
+  .ledger li{ font-size:.98rem; line-height:1.55; margin:.45rem 0; }
+  @media (max-width:620px){
+    .ledger{ grid-template-columns:1fr; }
+    .ledger > div + div{ padding-left:0; border-left:0; border-top:1px solid var(--line); }
+  }
+
+  .safety{
+    margin:1.25rem 0 0; padding:1rem 1.25rem; border-left:4px solid var(--debit);
+    background:var(--paper-deep); border-radius:var(--radius);
+  }
+  .safety p{ margin:0 0 .6rem; font-size:.98rem; }
+  .safety p:last-child{ margin-bottom:0; }
+
+  .announce{
+    margin:1rem 0 0; padding:1.25rem 1.4rem; border:1px solid var(--brass); border-radius:var(--radius);
+    background:var(--paper-deep);
+  }
+  .announce .when{ font-family:"IBM Plex Mono", ui-monospace, monospace; font-size:.78rem; color:var(--brass); margin:0 0 .35rem; }
+  .announce h3{ margin:0 0 .6rem; font-size:1.35rem; }
+  .announce dl{ margin:0 0 1rem; }
+  .announce dt{ font-weight:600; margin-top:.6rem; }
+  .announce dd{ margin:0; font-size:.98rem; color:var(--ink-soft); max-width:62ch; }
+
+  /* Tiers: three rows on one rule, not three floating cards */
+  .tiers{ border-top:3px double var(--ink); margin:1rem 0 1.25rem; }
+  .tier{ display:grid; grid-template-columns:11rem 1fr; gap:.25rem 1.5rem; padding:1.1rem 0; border-bottom:1px solid var(--line); }
+  .tier h3{ margin:0; font-size:1.15rem; }
+  .tier .cost{ display:block; font-family:"IBM Plex Mono", ui-monospace, monospace; font-size:.78rem; color:var(--ink-soft); font-weight:400; margin-top:.2rem; }
+  .tier p, .tier ul{ margin:0 0 .5rem; font-size:.98rem; }
+  .tier ul{ padding-left:1.1rem; }
+  .tier li{ margin:.2rem 0; }
+  .tier.is-soon{ color:var(--ink-soft); }
+  .tier.is-soon h3{ font-style:italic; font-weight:500; }
+  @media (max-width:620px){ .tier{ grid-template-columns:1fr; } }
+
+  .signup-box{ margin:1.25rem 0 0; }
+
+  .dir-note{ font-size:.96rem; color:var(--ink-soft); margin:.1rem 0 .5rem !important; }
+  .read .tol-index-section h3{ margin-top:0; }
+  .read .tol-index-section{ margin-top:2rem; }
+  .order{ font-family:"IBM Plex Mono", ui-monospace, monospace; font-size:.85rem; }
+</style>
+<script src="/assets/js/site.js" defer></script>
+</head>
+<body>
+<main class="read">
+
+  <header class="read-head">
+    <p class="read-code">Before you start</p>
+    <h1>Is this right for you?</h1>
+  </header>
+  <p class="depth-bar"><span>Full version</span><a href="/is-this-for-you.html">&larr; Back to the simple version</a></p>
+
+  <p class="fit-intro">The Objective Ledger is a framework for self-discovery and for building and sustaining healthy relationships of every kind. It takes a logical, objective look at some of life's most changing times, and it starts with you.</p>
+  <p>First, it helps you understand your own stress, rhythms and reactions, objectively and without shame. Then it gives any two people who share time, space, work or care a fair way to see what each person carries: the noticing, remembering, planning and smoothing things over that usually go unseen. Those two people might be partners, family, friends, roommates, co-parents, coworkers or caregivers. Written down in the same units, where both people can see it, that work stops being a matter of competing impressions and becomes a shared fact you can talk about.</p>
+  <p>This page will help you decide whether it fits your situation, show you how to get in free while it's being built, and walk you through where everything lives. To see how each chapter, workpaper and tool connects to each kind of relationship, read <a href="/relationships.html">How it fits your relationships</a>.</p>
+  <p class="motto">Patience, clarity, and kindness over speed and stress.</p>
+
+  <p class="jump">On this page:
+    <a href="#is-isnt">What it is and isn't</a>
+    <a href="#fit">Who it's for</a>
+    <a href="#new">New: Carrier Wave Decoder</a>
+    <a href="#ways-in">Ways in</a>
+    <a href="#directory">Where everything is</a>
+    <a href="/relationships.html">How it fits your relationships</a>
+  </p>
+
+  <h2 id="is-isnt">What it is, and what it isn't</h2>
+  <div class="ledger">
+    <div class="is">
+      <h3>What it is</h3>
+      <ul>
+        <li>A path to self-discovery: understanding your own load, rhythms and reactions.</li>
+        <li>A shared ledger for the unseen work in any relationship, so it gets written down.</li>
+        <li>Worksheets each person fills in about themselves, then reads together.</li>
+        <li>A common vocabulary for the moment a conversation starts to go out of sync.</li>
+        <li>A practical heuristic built from accounting and nervous-system ideas. It isn't clinically validated.</li>
+      </ul>
+    </div>
+    <div class="isnt">
+      <h3>What it isn't</h3>
+      <ul>
+        <li>A scorecard for proving who's right. A ledger only one person reads is just a grudge with better formatting.</li>
+        <li>Therapy, counseling, or a diagnosis of anyone.</li>
+        <li>A way for one person to monitor, rate or report on another, at home or at work.</li>
+        <li>A way to assign blame. Every score describes the arrangement, never a person.</li>
+      </ul>
+    </div>
+  </div>
+
+  <h2 id="fit">Who it's for</h2>
+  <h3>It's likely a good fit if</h3>
+  <ul>
+    <li>You want to understand your own reactions better: why some moments hit harder than they should.</li>
+    <li>The same arguments about chores, fairness or "who does more" keep coming back, with a partner, a parent, a roommate or a teammate.</li>
+    <li>Someone feels like they're carrying work the other person can't see.</li>
+    <li>Both people want things to be fairer, and each is willing to write down their own side honestly.</li>
+    <li>Structure helps you. Lists, numbers and a clear order of steps make hard topics easier to talk about.</li>
+  </ul>
+  <p>You can start on your own; the self-discovery half of the program is just for you. The shared tools work best when both people take part. See <a href="/relationships.html">how it fits your relationships</a> for where to start with a partner, family member, friend, roommate, co-parent, coworker or someone you care for.</p>
+
+  <h3>It's probably not the right tool right now if</h3>
+  <ul>
+    <li>You're hoping for proof that you're right, or a verdict on someone else.</li>
+    <li>Someone involved is in crisis and needs support today, not a worksheet.</li>
+    <li>Someone involved is afraid of the other person.</li>
+  </ul>
+  <div class="safety" id="safety">
+    <p><strong>If you don't feel safe.</strong> If someone you live with, depend on or care for controls your money, phone, friends or movements, threatens you, or leaves you afraid of how they'll react, a shared ledger can be turned against you. Please put your safety first and talk to people trained for exactly this.</p>
+    <p>In the US, the National Domestic Violence Hotline is free and confidential: call 1-800-799-7233, text START to 88788, or chat at <a href="https://www.thehotline.org">thehotline.org</a>. For a child at risk, call Childhelp at 1-800-422-4453. For an older or disabled adult, the Eldercare Locator at 1-800-677-1116 can connect you with Adult Protective Services. If you're thinking about suicide or in emotional crisis, call or text 988. If you're in immediate danger, call 911.</p>
+  </div>
+
+  <h2 id="new">New: The Carrier Wave Decoder</h2>
+  <div class="announce">
+    <p class="when">Just released &middot; free, no sign-up</p>
+    <h3>A guided tool for the moment a conversation starts to squeal</h3>
+    <p>Chapter I describes how two reasonable people drift out of sync. The Decoder turns that chapter into a guided session you can use in real life.</p>
+    <dl>
+      <dt>What it does</dt>
+      <dd>Find where each of you slipped on pace, register or urgency. Check your state, practice getting back in tune, and close the books together. A private tone check flags wording that may land harder than you mean.</dd>
+      <dt>Your data stays with you</dt>
+      <dd>No account and no upload. Your notes and progress stay in your own browser on your own device. Clearing your browser data removes them.</dd>
+      <dt>Where it leads</dt>
+      <dd>It connects to the workpapers: WP-02 for your state, WP-09 for tone, and WP-03 and WP-04 for problems that keep coming back. Those open free with your email while the program is being built.</dd>
+    </dl>
+    <a class="tol-btn" href="/carrier-wave-decoder.html">Open the Carrier Wave Decoder</a>
+  </div>
+
+  <h2 id="ways-in">Ways in</h2>
+  <p>The program is still being written: 5 of 12 chapters, 7 of 15 workpapers and 1 of 7 calculators are live today. While it's being built, all of it is free.</p>
+  <div class="tiers" id="tiers">
+    <div class="tier">
+      <h3>Open access<span class="cost">Free &middot; no sign-up</span></h3>
+      <div>
+        <p>Start right away, with nothing asked of you.</p>
+        <ul>
+          <li>The Preface and Chapters I and II</li>
+          <li>The Carrier Wave Decoder</li>
+          <li>The Signal Translator and the Wiring Card</li>
+          <li>The Wired Differently and Check-ins guides</li>
+          <li>Check Your State and the Lemonade Stand</li>
+          <li>The printable executive summary</li>
+        </ul>
+      </div>
+    </div>
+    <div class="tier">
+      <h3>Free with email<span class="cost">Free &middot; email only</span></h3>
+      <div>
+        <p>Enter your email once and everything else on the site opens in that browser.</p>
+        <ul>
+          <li>Chapters III to V</li>
+          <li>All seven workpapers, including the Calm-Down Kit (WP-11)</li>
+          <li>REPORT-01, your week-by-week record, and PROG-01, the 6-week program</li>
+          <li>The full Mood Arbitrage toolkit, Frequency Calibration and the Sync Visualizer</li>
+          <li>A short note when something new ships</li>
+        </ul>
+        <p>No password and no account. Your address is held by Buttondown and used only for program updates.</p>
+      </div>
+    </div>
+    <div class="tier is-soon">
+      <h3>Paid membership<span class="cost">Coming soon</span></h3>
+      <div>
+        <p>A paid membership will come once the program is further along. Nothing is charged now. Everyone on the email list will hear about it before anything changes.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="signup-box" data-tol="account"></div>
+
+  <h2 id="directory">Where everything is</h2>
+  <p>Every live page on the site, grouped by what it's for. Items marked <em>free &middot; email</em> open once you've signed up.</p>
+
+  <div class="tol-index">
+    <div class="tol-index-section">
+      <h3>Start here</h3>
+      <p class="dir-note">The shortest route to the idea. Read these first if you're new.</p>
+      <ol>
+        <li><a class="tol-row" href="/index.html"><span class="tol-code">Home</span><span class="tol-title">The Objective Ledger<small>The front door: what's new, the ways in, and the full contents.</small></span><span class="tol-access">free</span></a></li>
+        <li><a class="tol-row" href="/wired-differently.html"><span class="tol-code">Guide</span><span class="tol-title">Wired Differently<small>How 14 kinds of wiring receive the same words, and how to talk across the difference.</small></span><span class="tol-access">free</span></a></li>
+        <li><a class="tol-row" href="/check-ins.html"><span class="tol-code">Guide</span><span class="tol-title">Check-ins<small>How to hold a hard conversation in any relationship, with acknowledgement before any rebuttal.</small></span><span class="tol-access">free</span></a></li>
+        <li><a class="tol-row" href="/plain-english.html"><span class="tol-code">Words</span><span class="tol-title">Plain English<small>Every technical term on the site translated into one sentence. Carrier wave, solvency, ventral vagal and the rest.</small></span><span class="tol-access">free</span></a></li>
+        <li><a class="tol-row" href="/relationships.html"><span class="tol-code"></span><span class="tol-title">How it fits your relationships<small>How every chapter, workpaper and tool connects to yourself, partners, family, co-parents, friends, roommates, coworkers and caregivers.</small></span><span class="tol-access">free</span></a></li>
+        <li><a class="tol-row" href="/quick-checks.html"><span class="tol-code">Tool</span><span class="tol-title">Quick checks<small>Check which of three nervous-system states you're in, and total up the week on the Lemonade Stand.</small></span><span class="tol-access">free</span></a></li>
+        <li><a class="tol-row" href="/frequency-framework.html"><span class="tol-code"></span><span class="tol-title">The Frequency Framework<small>Why two reasonable people end up in a fight neither of them started.</small></span><span class="tol-access">free</span></a></li>
+        <li><a class="tol-row" href="/infographic.html"><span class="tol-code">Print</span><span class="tol-title">Executive summary<small>The whole framework on one printable page, good for someone who'd rather read on paper.</small></span><span class="tol-access">free</span></a></li>
+      </ol>
+    </div>
+
+    <div class="tol-index-section">
+      <h3>The book</h3>
+      <p class="dir-note">The manuscript, chapter by chapter. Each chapter explains one idea and pairs with a workpaper that puts it to use.</p>
+      <ol>
+        <li><a class="tol-row" href="/book/preface.html"><span class="tol-code">Preface</span><span class="tol-title">Unbilled Debt<small>Why invisible household work builds up like a debt only one person can see.</small></span><span class="tol-access">free</span></a></li>
+        <li><a class="tol-row" href="/book/chapter-1.html"><span class="tol-code">Ch. I</span><span class="tol-title">The Radio Frequency Paradigm<small>How pace, register and urgency knock two people out of sync.</small></span><span class="tol-access">free</span></a></li>
+        <li><a class="tol-row" href="/book/chapter-2.html"><span class="tol-code">Ch. II</span><span class="tol-title">The Epistemic Verdict Engine &amp; P(Solvency)<small>The formula for whether the current split of work looks sustainable. It scores the arrangement, never a person.</small></span><span class="tol-access">free</span></a></li>
+        <li><a class="tol-row" href="/book/chapter-3.html"><span class="tol-code">Ch. III</span><span class="tol-title">Autonomic Saturation &amp; the 7 Ocular Vectors<small>How much of a reaction is stress left over from somewhere else, and which angle each of you is seeing from.</small></span><span class="tol-access"><span class="is-locked">free &middot; email</span><span class="is-open">unlocked</span></span></a></li>
+        <li><a class="tol-row" href="/book/chapter-4.html"><span class="tol-code">Ch. IV</span><span class="tol-title">Deontological Parity &amp; Sensory Gating<small>Agreeing how you judge fairness, and letting a comment land before you react.</small></span><span class="tol-access"><span class="is-locked">free &middot; email</span><span class="is-open">unlocked</span></span></a></li>
+        <li><a class="tol-row" href="/book/chapter-5.html"><span class="tol-code">Ch. V</span><span class="tol-title">The Deficit Audit<small>Why a monthly look back catches the problems weekly checks miss.</small></span><span class="tol-access"><span class="is-locked">free &middot; email</span><span class="is-open">unlocked</span></span></a></li>
+      </ol>
+    </div>
+
+    <div class="tol-index-section">
+      <h3>Workpapers</h3>
+      <p class="dir-note">The worksheets you actually fill in. Each person fills in their own, then you read them together. They work best in this order: <span class="order">WP-01 &rarr; WP-02 &rarr; WP-03 &rarr; WP-09 &rarr; WP-13</span>, with WP-04 once a month. If something is on fire right now, start with WP-11 or WP-02.</p>
+      <ol>
+        <li><a class="tol-row" href="/workpapers/wp-01.html"><span class="tol-code">WP-01</span><span class="tol-title">The Daily Balance Sheet &amp; Neutral Refusals<small>A week's log of who actually did what, plus scripts for saying no without starting a fight. Start here.</small></span><span class="tol-access"><span class="is-locked">free &middot; email</span><span class="is-open">unlocked</span></span></a></li>
+        <li><a class="tol-row" href="/workpapers/wp-02-battery-stress-meter.html"><span class="tol-code">WP-02</span><span class="tol-title">The Battery &amp; Stress Meter<small>A five-question self-check that separates stress you're carrying from how upset you are about this one thing.</small></span><span class="tol-access"><span class="is-locked">free &middot; email</span><span class="is-open">unlocked</span></span></a></li>
+        <li><a class="tol-row" href="/workpapers/wp-03-raci-treaty.html"><span class="tol-code">WP-03</span><span class="tol-title">The Household Chore Treaty<small>One named owner for every recurring task, so ownership stops being renegotiated every week.</small></span><span class="tol-access"><span class="is-locked">free &middot; email</span><span class="is-open">unlocked</span></span></a></li>
+        <li><a class="tol-row" href="/workpapers/wp-04-deficit-audit.html"><span class="tol-code">WP-04</span><span class="tol-title">Unbilled Deficit Audit<small>The monthly review that sorts recurring problems into structural gaps, capacity issues and one-offs.</small></span><span class="tol-access"><span class="is-locked">free &middot; email</span><span class="is-open">unlocked</span></span></a></li>
+        <li><a class="tol-row" href="/workpapers/wp-09-tone-filter.html"><span class="tol-code">WP-09</span><span class="tol-title">The Tone Transducer<small>Turn a raw reaction into fact, feeling and ask before you send it.</small></span><span class="tol-access"><span class="is-locked">free &middot; email</span><span class="is-open">unlocked</span></span></a></li>
+        <li><a class="tol-row" href="/wp-11.html"><span class="tol-code">WP-11</span><span class="tol-title">The Calm-Down Kit<small>For settling first, when either of you is too activated to talk it through.</small></span><span class="tol-access"><span class="is-locked">free &middot; email</span><span class="is-open">unlocked</span></span></a></li>
+        <li><a class="tol-row" href="/workpapers/wp-13-pll-protocol.html"><span class="tol-code">WP-13</span><span class="tol-title">Phase-Locked Loop Protocol<small>A 90-second daily check-in, with no debate and no rebuttal. The habit meant to outlast everything else.</small></span><span class="tol-access"><span class="is-locked">free &middot; email</span><span class="is-open">unlocked</span></span></a></li>
+        <li><a class="tol-row" href="/workpapers/fill/index.html"><span class="tol-code">Fill-in</span><span class="tol-title">Fill-in workpapers<small>On-screen versions you can type into and save as PDFs on your own device.</small></span><span class="tol-access">free</span></a></li>
+      </ol>
+    </div>
+
+    <div class="tol-index-section">
+      <h3>Program &amp; record</h3>
+      <p class="dir-note">For people who'd rather be walked through it. The program sets the pace; the report keeps the numbers so the picture builds week to week.</p>
+      <ol>
+        <li><a class="tol-row" href="/prog-01.html"><span class="tol-code">PROG-01</span><span class="tol-title">The 6-Week Program<small>A guided path through the live workpapers, one at a time, ending with a before-and-after read.</small></span><span class="tol-access"><span class="is-locked">free &middot; email</span><span class="is-open">unlocked</span></span></a></li>
+        <li><a class="tol-row" href="/workpapers/report-01.html"><span class="tol-code">REPORT-01</span><span class="tol-title">The Full Read<small>Your week-by-week record of what each workpaper produced, and where the numbers agree or disagree.</small></span><span class="tol-access"><span class="is-locked">free &middot; email</span><span class="is-open">unlocked</span></span></a></li>
+      </ol>
+    </div>
+
+    <div class="tol-index-section">
+      <h3>Tools</h3>
+      <p class="dir-note">Interactive pages. Everything you type into them stays in your own browser.</p>
+      <ol>
+        <li><a class="tol-row" href="/signal-translator.html"><span class="tol-code">New</span><span class="tol-title">The Signal Translator<small>Test how a sentence may land for someone wired differently, before you say it.</small></span><span class="tol-access">free</span></a></li>
+        <li><a class="tol-row" href="/wiring-card.html"><span class="tol-code">Tool</span><span class="tol-title">Wiring Card<small>A one-page card on how you receive words, what your silence means, and what to avoid.</small></span><span class="tol-access">free</span></a></li>
+        <li><a class="tol-row" href="/carrier-wave-decoder.html"><span class="tol-code">Tool</span><span class="tol-title">The Carrier Wave Decoder<small>Decode a moment that went sideways, get back in tune, and close the books together.</small></span><span class="tol-access">free</span></a></li>
+        <li><a class="tol-row" href="/workpapers/calculators/calc01-solvency.html"><span class="tol-code">CALC-01</span><span class="tol-title">The Solvency Read<small>Put in the figures the workpapers produce and get one read on whether the arrangement looks sustainable.</small></span><span class="tol-access">free</span></a></li>
+        <li><a class="tol-row" href="/tools/mood-arbitrage-free.html"><span class="tol-code"></span><span class="tol-title">Mood Arbitrage: introduction<small>The core idea and one worked example.</small></span><span class="tol-access">free</span></a></li>
+        <li><a class="tol-row" href="/tools/mood-arbitrage-full.html"><span class="tol-code"></span><span class="tol-title">Mood Arbitrage: full toolkit<small>The generator, five scenarios and a four-week practice plan.</small></span><span class="tol-access"><span class="is-locked">free &middot; email</span><span class="is-open">unlocked</span></span></a></li>
+        <li><a class="tol-row" href="/tools/frequency-calibration.html"><span class="tol-code"></span><span class="tol-title">Frequency Calibration Audit<small>Compare your rhythms across five areas of daily life.</small></span><span class="tol-access"><span class="is-locked">free &middot; email</span><span class="is-open">unlocked</span></span></a></li>
+        <li><a class="tol-row" href="/tools/frequency-sync-visualizer.html"><span class="tol-code"></span><span class="tol-title">Frequency Sync Visualizer<small>A live picture of the WP-13 daily check-in loop.</small></span><span class="tol-access"><span class="is-locked">free &middot; email</span><span class="is-open">unlocked</span></span></a></li>
+      </ol>
+    </div>
+
+    <div class="tol-index-section">
+      <h3>Try it out</h3>
+      <p class="dir-note">Lighter ways in: a two-minute check, stories from philosophy that show the ideas behind the framework, and demos you can play with before committing to anything.</p>
+      <ol>
+        <li><a class="tol-row" href="/snapshot/"><span class="tol-code"></span><span class="tol-title">Diagnostic Snapshot<small>A two-minute check on where your household stands.</small></span><span class="tol-access">free</span></a></li>
+        <li><a class="tol-row" href="/learn/"><span class="tol-code"></span><span class="tol-title">Stories from Philosophy<small>Twelve real stories on knowing yourself and living well with others, from Plato and the Buddha to Zhuangzi and Buber, each tied to the program.</small></span><span class="tol-access">free</span></a></li>
+        <li><a class="tol-row" href="/do/"><span class="tol-code"></span><span class="tol-title">Try the Workpapers<small>A playground for test-driving the worksheets.</small></span><span class="tol-access">free</span></a></li>
+      </ol>
+    </div>
+
+    <div class="tol-index-section">
+      <h3>Listen</h3>
+      <p class="dir-note">Audio companions. Optional: no workpaper requires audio.</p>
+      <ol>
+        <li><a class="tol-row" href="/soundscapes.html"><span class="tol-code"></span><span class="tol-title">Soundscape Catalog<small>Background audio for settling and focus.</small></span><span class="tol-access">free</span></a></li>
+        <li><a class="tol-row" href="/echoes-of-gold.html"><span class="tol-code"></span><span class="tol-title">Echoes of Gold<small>The companion album.</small></span><span class="tol-access">free</span></a></li>
+        <li><a class="tol-row" href="/podcast-index.html"><span class="tol-code"></span><span class="tol-title">Observational Podcast<small>Episodes on the ideas behind the framework.</small></span><span class="tol-access">free</span></a></li>
+      </ol>
+    </div>
+
+    <div class="tol-index-section">
+      <h3>About &amp; status</h3>
+      <p class="dir-note">Who built this and why, and exactly what's finished. If something isn't on the Suite Index, it isn't live yet.</p>
+      <ol>
+        <li><a class="tol-row" href="/about.html"><span class="tol-code"></span><span class="tol-title">About the creator<small>The person and the story behind the framework.</small></span><span class="tol-access"></span></a></li>
+        <li><a class="tol-row" href="/program-overview.html"><span class="tol-code"></span><span class="tol-title">Program Overview<small>How the chapters, workpapers and calculators connect.</small></span><span class="tol-access"></span></a></li>
+        <li><a class="tol-row" href="/suite-index.html"><span class="tol-code"></span><span class="tol-title">Suite Index<small>Exactly what's built today, nothing more.</small></span><span class="tol-access"></span></a></li>
+        <li><a class="tol-row" href="/roadmap.html"><span class="tol-code"></span><span class="tol-title">Content Roadmap<small>What's live, in progress and planned.</small></span><span class="tol-access"></span></a></li>
+        <li><a class="tol-row" href="/telemetry.html"><span class="tol-code"></span><span class="tol-title">Rollout Status<small>How much of the planned whole is built, counted plainly.</small></span><span class="tol-access"></span></a></li>
+        <li><a class="tol-row" href="/membership.html"><span class="tol-code"></span><span class="tol-title">Membership<small>Free while in development. Sign up or sign out here.</small></span><span class="tol-access"></span></a></li>
+      </ol>
+    </div>
+
+    <div class="tol-index-section">
+      <h3>Legal</h3>
+      <p class="dir-note">The site's terms and policies.</p>
+      <ol>
+        <li><a class="tol-row" href="/legal/terms-of-service.html"><span class="tol-code"></span><span class="tol-title">Terms of Service</span><span class="tol-access"></span></a></li>
+        <li><a class="tol-row" href="/legal/privacy-policy.html"><span class="tol-code"></span><span class="tol-title">Privacy Policy</span><span class="tol-access"></span></a></li>
+        <li><a class="tol-row" href="/legal/refund-policy.html"><span class="tol-code"></span><span class="tol-title">Refund Policy</span><span class="tol-access"></span></a></li>
+      </ol>
+    </div>
+  </div>
+
+</main>
+</body>
+</html>

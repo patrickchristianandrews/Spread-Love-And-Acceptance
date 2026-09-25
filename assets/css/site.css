@@ -228,7 +228,8 @@ div.tol-gate p{ max-width:60ch; }
 .dig{
   display:inline-flex; align-items:center; gap:.4em;
   font-family:"IBM Plex Mono", ui-monospace, monospace; font-size:.8rem; letter-spacing:.02em;
-  color:var(--brass) !important; text-decoration:none !important; white-space:nowrap;
+  color:var(--brass) !important; text-decoration:none !important;
+  align-items:flex-start; line-height:1.45; max-width:100%;
 }
 .dig::before{
   content:""; flex:none; width:1.35em; height:1.35em; background:currentColor;
@@ -270,7 +271,6 @@ div.tol-gate p{ max-width:60ch; }
 .try-this p + p{ margin-top:.6rem !important; }
 .dig-list{ list-style:none; padding:0 !important; margin:.5rem 0 1.5rem !important; display:grid; gap:.45rem; }
 .dig-list li{ margin:0 !important; }
-.dig-list .dig{ white-space:normal; }
 
 /* In-depth pages: jump targets land below the sticky header, and briefly show where you landed */
 [id]{ scroll-margin-top:calc(var(--tol-bar-h, 60px) + 1rem); }

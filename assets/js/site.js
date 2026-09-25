@@ -37,36 +37,36 @@
     { id: 'start', title: 'Start here', blurb: 'New to the site? These pages explain the idea and let you try it in a few minutes.', items: [
       { href: '/index.html', code: '', title: 'Home', note: 'What’s new, the ways in, and the full contents' },
       { href: '/plain-english.html', code: '', title: 'Plain English', note: 'Every technical term on the site, translated into one sentence. You never need them to use the program' },
-      { href: '/how-it-works.html', code: '', title: 'How it works', note: 'The outside lens in full: what the program looks at, and why the technical layer is optional' },
-      { href: '/contents.html', code: '', title: 'Contents', note: 'Everything in the program, in three parts, plus the full site directory' },
-      { href: '/ways-in.html', code: '', title: 'Ways in', note: 'Free while it’s being built: what each level opens, and what it shares' },
-      { href: '/is-this-for-you.html', code: '', title: 'Is this right for you?', note: 'What the program is and isn’t, who it helps, and a guide to every section' },
-      { href: '/relationships.html', code: '', title: 'How it fits your relationships', note: 'How every part of the program connects to yourself, partners, family, friends, roommates, co-parents, coworkers and caregivers' },
+      { href: '/how-it-works.html', deep: true, code: '', title: 'How it works', note: 'The outside lens in full: what the program looks at, and why the technical layer is optional' },
+      { href: '/contents.html', deep: true, code: '', title: 'Contents', note: 'Everything in the program, in three parts, plus the full site directory' },
+      { href: '/ways-in.html', deep: true, code: '', title: 'Ways in', note: 'Free while it’s being built: what each level opens, and what it shares' },
+      { href: '/is-this-for-you.html', deep: true, code: '', title: 'Is this right for you?', note: 'What the program is and isn’t, who it helps, and a guide to every section' },
+      { href: '/relationships.html', deep: true, code: '', title: 'How it fits your relationships', note: 'How every part of the program connects to yourself, partners, family, friends, roommates, co-parents, coworkers and caregivers' },
       { href: '/quick-checks.html', code: '', title: 'Quick checks', note: 'Two short free tools: check your stress state, and total up who did what this week' },
-      { href: '/frequency-framework.html', code: '', title: 'The Frequency Framework', note: 'Why two reasonable people can end up in a fight neither of them started' },
+      { href: '/frequency-framework.html', deep: true, code: '', title: 'The Frequency Framework', note: 'Why two reasonable people can end up in a fight neither of them started' },
       { href: '/infographic.html', code: '', title: 'Executive summary', note: 'The whole framework on one printable page, easy to share' }
     ]},
     { id: 'self', title: 'Self-discovery', blurb: 'Tools for understanding yourself: your load, your wiring, your patterns. Start here, with or without anyone else.', items: [
       { href: '/quick-checks.html#today', code: 'Daily', title: 'Today’s Weather', note: 'One minute on your own conditions: a forecast, a talk window, what today is good for, and a private almanac of your patterns' },
-      { href: '/wired-differently.html', code: 'New', title: 'Wired Differently', note: 'How different neurotypes receive the same words, and how to talk across the difference' },
+      { href: '/wired-differently.html', deep: true, code: 'New', title: 'Wired Differently', note: 'How different neurotypes receive the same words, and how to talk across the difference' },
       { href: '/wiring-card.html', code: 'Tool', title: 'Wiring Card', note: 'A one-page card on how you receive words, what silence means, and what to avoid' },
-      { href: '/workpapers/wp-02-battery-stress-meter.html', code: 'WP-02', title: 'The Battery & Stress Meter', note: 'What you’re already carrying, separate from what just happened', paid: true },
+      { href: '/workpapers/wp-02-battery-stress-meter.html', deep: true, code: 'WP-02', title: 'The Battery & Stress Meter', note: 'What you’re already carrying, separate from what just happened', paid: true },
       { href: '/tools/frequency-calibration.html', code: 'Tool', title: 'Frequency Calibration', note: 'Your natural rhythms for money, decisions, check-ins and recovery', paid: true },
-      { href: '/wp-11.html', code: 'WP-11', title: 'The Calm-Down Kit', note: 'Decide in advance what settles your body', paid: true },
+      { href: '/wp-11.html', deep: true, code: 'WP-11', title: 'The Calm-Down Kit', note: 'Decide in advance what settles your body', paid: true },
       { href: '/book/chapter-3.html', deep: true, code: 'III', title: 'Autonomic Saturation & the 7 Ocular Vectors', note: 'Why some reactions are bigger than their cause', paid: true },
-      { href: '/learn/index.html#part-self', code: 'Stories', title: 'Stories from Philosophy: Knowing yourself', note: 'The Second Arrow, the Ship of Theseus, What Is Up to Us' },
+      { href: '/learn/index.html#part-self', deep: true, code: 'Stories', title: 'Stories from Philosophy: Knowing yourself', note: 'The Second Arrow, the Ship of Theseus, What Is Up to Us' },
       { href: '/soundscapes.html', code: 'Audio', title: 'Soundscape Catalog', note: 'Background audio for settling and focus' }
     ]},
     { id: 'relationships', title: 'Relationships by type', blurb: 'Where to start in each kind of relationship, and every tool that fits. The shared relationship tools themselves are under The book, Workpapers and Tools.', items: [
-      { href: '/check-ins.html', code: 'Guide', title: 'Check-ins', note: 'How to hold a hard conversation in any relationship: a safe time and room, acknowledgement before rebuttal, a close that works for both' },
-      { href: '/relationships.html#partners', code: '', title: 'Partners', note: 'Start with WP-01, WP-03 and WP-13' },
-      { href: '/relationships.html#family', code: '', title: 'Family', note: 'Start with Chapter I, WP-03 and WP-09' },
-      { href: '/relationships.html#co-parents', code: '', title: 'Co-parents', note: 'Start with WP-03, WP-09 and WP-04' },
-      { href: '/relationships.html#friends', code: '', title: 'Friends', note: 'Start with the Carrier Wave Decoder, WP-09 and WP-01' },
-      { href: '/relationships.html#roommates', code: '', title: 'Roommates', note: 'Start with the Lemonade Stand, WP-03 and WP-13' },
-      { href: '/relationships.html#coworkers', code: '', title: 'Coworkers & teams', note: 'Start with WP-03, Chapter I and WP-09' },
-      { href: '/relationships.html#caregivers', code: '', title: 'Caregivers', note: 'Start with WP-02, WP-03 and WP-11' },
-      { href: '/relationships.html#map', code: 'Map', title: 'The full map', note: 'Every chapter, workpaper and tool against every kind of relationship' }
+      { href: '/check-ins.html', deep: true, code: 'Guide', title: 'Check-ins', note: 'How to hold a hard conversation in any relationship: a safe time and room, acknowledgement before rebuttal, a close that works for both' },
+      { href: '/relationships.html#partners', deep: true, code: '', title: 'Partners', note: 'Start with WP-01, WP-03 and WP-13' },
+      { href: '/relationships.html#family', deep: true, code: '', title: 'Family', note: 'Start with Chapter I, WP-03 and WP-09' },
+      { href: '/relationships.html#co-parents', deep: true, code: '', title: 'Co-parents', note: 'Start with WP-03, WP-09 and WP-04' },
+      { href: '/relationships.html#friends', deep: true, code: '', title: 'Friends', note: 'Start with the Carrier Wave Decoder, WP-09 and WP-01' },
+      { href: '/relationships.html#roommates', deep: true, code: '', title: 'Roommates', note: 'Start with the Lemonade Stand, WP-03 and WP-13' },
+      { href: '/relationships.html#coworkers', deep: true, code: '', title: 'Coworkers & teams', note: 'Start with WP-03, Chapter I and WP-09' },
+      { href: '/relationships.html#caregivers', deep: true, code: '', title: 'Caregivers', note: 'Start with WP-02, WP-03 and WP-11' },
+      { href: '/relationships.html#map', deep: true, code: 'Map', title: 'The full map', note: 'Every chapter, workpaper and tool against every kind of relationship' }
     ]},
     { id: 'book', title: 'The book', blurb: 'The manuscript, one idea per chapter. Each chapter pairs with a workpaper that puts it to use.', items: [
       { href: '/book/preface.html', deep: true, code: 'Preface', title: 'Unbilled Debt', note: 'Why the unseen work of running a shared life builds up like a debt only one person can see' },
@@ -77,18 +77,18 @@
       { href: '/book/chapter-5.html', deep: true, code: 'V', title: 'The Deficit Audit', note: 'Why a monthly look back catches the problems that weekly check-ins miss', paid: true }
     ]},
     { id: 'workpapers', title: 'Workpapers', blurb: 'Worksheets each person fills in about themselves, then reads together. Best in this order: WP-01, 02, 03, 09, 13, with WP-04 monthly.', items: [
-      { href: '/workpapers/wp-01.html', code: 'WP-01', title: 'The Daily Balance Sheet & Neutral Refusals', note: 'Start here: a week’s log of who did what, plus kind scripts for saying no', paid: true },
-      { href: '/workpapers/wp-02-battery-stress-meter.html', code: 'WP-02', title: 'The Battery & Stress Meter', note: 'A five-question self-check: how much are you already carrying today?', paid: true },
-      { href: '/workpapers/wp-03-raci-treaty.html', code: 'WP-03', title: 'Domestic RACI Treaty', note: 'One named owner for every recurring task, so it stops being renegotiated', paid: true },
-      { href: '/workpapers/wp-04-deficit-audit.html', code: 'WP-04', title: 'Unbilled Deficit Audit', note: 'A monthly review that sorts repeat problems into their real causes', paid: true },
-      { href: '/workpapers/wp-09-tone-filter.html', code: 'WP-09', title: 'Tone Transducer & Filter', note: 'Turn a raw reaction into fact, feeling and a clear ask before you send it', paid: true },
-      { href: '/wp-11.html', code: 'WP-11', title: 'The Calm-Down Kit', note: 'Settle your body first, when either of you is too activated to talk', paid: true },
-      { href: '/workpapers/wp-13-pll-protocol.html', code: 'WP-13', title: 'Phase-Locked Loop Protocol', note: 'A 90-second daily check-in, with no debate, that keeps small things small', paid: true },
+      { href: '/workpapers/wp-01.html', deep: true, code: 'WP-01', title: 'The Daily Balance Sheet & Neutral Refusals', note: 'Start here: a week’s log of who did what, plus kind scripts for saying no', paid: true },
+      { href: '/workpapers/wp-02-battery-stress-meter.html', deep: true, code: 'WP-02', title: 'The Battery & Stress Meter', note: 'A five-question self-check: how much are you already carrying today?', paid: true },
+      { href: '/workpapers/wp-03-raci-treaty.html', deep: true, code: 'WP-03', title: 'Domestic RACI Treaty', note: 'One named owner for every recurring task, so it stops being renegotiated', paid: true },
+      { href: '/workpapers/wp-04-deficit-audit.html', deep: true, code: 'WP-04', title: 'Unbilled Deficit Audit', note: 'A monthly review that sorts repeat problems into their real causes', paid: true },
+      { href: '/workpapers/wp-09-tone-filter.html', deep: true, code: 'WP-09', title: 'Tone Transducer & Filter', note: 'Turn a raw reaction into fact, feeling and a clear ask before you send it', paid: true },
+      { href: '/wp-11.html', deep: true, code: 'WP-11', title: 'The Calm-Down Kit', note: 'Settle your body first, when either of you is too activated to talk', paid: true },
+      { href: '/workpapers/wp-13-pll-protocol.html', deep: true, code: 'WP-13', title: 'Phase-Locked Loop Protocol', note: 'A 90-second daily check-in, with no debate, that keeps small things small', paid: true },
       { href: '/workpapers/fill/index.html', code: 'Fill-in', title: 'Fill-in workpapers', note: 'Type straight into the worksheets and save them as PDFs on your device' }
     ]},
     { id: 'program', title: 'Program & record', blurb: 'For anyone who’d rather be walked through it step by step.', items: [
-      { href: '/prog-01.html', code: 'PROG-01', title: 'The 6-Week Program', note: 'One workpaper at a time, in order, ending with a before-and-after read', paid: true },
-      { href: '/workpapers/report-01.html', code: 'REPORT-01', title: 'The Full Read', note: 'Your week-by-week record, so progress builds instead of resetting', paid: true }
+      { href: '/prog-01.html', deep: true, code: 'PROG-01', title: 'The 6-Week Program', note: 'One workpaper at a time, in order, ending with a before-and-after read', paid: true },
+      { href: '/workpapers/report-01.html', deep: true, code: 'REPORT-01', title: 'The Full Read', note: 'Your week-by-week record, so progress builds instead of resetting', paid: true }
     ]},
     { id: 'tools', title: 'Tools', blurb: 'Interactive pages. Everything you type stays in your own browser.', items: [
       { href: '/wiring-card.html', code: 'New', title: 'Wiring Card', note: 'Make a one-page card for how you receive words, what silence means, and what to avoid' },
@@ -102,16 +102,16 @@
     ]},
     { id: 'explore', title: 'Explore & listen', blurb: 'Lighter ways in, and optional audio companions.', items: [
       { href: '/snapshot/index.html', code: '', title: 'Diagnostic Snapshot', note: 'A two-minute check on where things stand right now' },
-      { href: '/learn/index.html', code: '', title: 'Stories from Philosophy', note: 'Twelve real stories on knowing yourself and living well with others, each tied to the program' },
+      { href: '/learn/index.html', deep: true, code: '', title: 'Stories from Philosophy', note: 'Twelve real stories on knowing yourself and living well with others, each tied to the program' },
       { href: '/do/index.html', code: '', title: 'Try the Workpapers', note: 'A playground for test-driving the worksheets before you commit' },
       { href: '/soundscapes.html', code: '', title: 'Soundscape Catalog', note: 'Background audio made for settling down and focusing' },
       { href: '/echoes-of-gold.html', code: '', title: 'Echoes of Gold', note: 'The companion album: the music that came before the framework' },
       { href: '/podcast-index.html', code: '', title: 'Observational Podcast', note: 'Conversations with Kane and Christian on the ideas behind the framework' }
     ]},
     { id: 'about', title: 'About & status', blurb: 'Who built this and why, exactly what’s finished, and the site’s policies.', items: [
-      { href: '/about.html', code: '', title: 'About the creator', note: 'The auditor, the story, and why this framework exists' },
-      { href: '/program-overview.html', code: '', title: 'Program Overview', note: 'How the chapters, workpapers and calculators fit together' },
-      { href: '/suite-index.html', code: '', title: 'Suite Index', note: 'The official list of what’s built today. If it isn’t here, it isn’t live yet' },
+      { href: '/about.html', deep: true, code: '', title: 'About the creator', note: 'The auditor, the story, and why this framework exists' },
+      { href: '/program-overview.html', deep: true, code: '', title: 'Program Overview', note: 'How the chapters, workpapers and calculators fit together' },
+      { href: '/suite-index.html', deep: true, code: '', title: 'Suite Index', note: 'The official list of what’s built today. If it isn’t here, it isn’t live yet' },
       { href: '/roadmap.html', code: '', title: 'Content Roadmap', note: 'What’s live, what’s being written, and what’s planned' },
       { href: '/telemetry.html', code: '', title: 'Rollout Status', note: 'How much of the planned program is finished, counted plainly' },
       { href: '/membership.html', code: '', title: 'Membership', note: 'Free while in development: sign up, or sign out of this browser' },
@@ -130,7 +130,7 @@
   // An in-depth page shares its simple page's menu entry: /book/chapter-2-in-depth.html → /book/chapter-2.html
   var inDepth = /-in-depth\.html$/.test(current);
   if (inDepth) current = current.replace(/-in-depth\.html$/, '.html');
-  function deepHref(it) { return it.href.replace(/\.html(#.*)?$/, '-in-depth.html'); }
+  function deepHref(it) { return it.href.replace(/\.html(?=#|$)/, '-in-depth.html'); }
 
   var here = null, hereSection = null;
   SECTIONS.forEach(function (s) {
@@ -429,13 +429,13 @@
       // Page marked paid but has no locked markup: lock everything after its first block
       var host = document.querySelector('main, .container, .sheet') || document.body;
       var kids = Array.prototype.filter.call(host.children, function (c) {
-        // .plain is the always-visible plain-English summary: it must never be locked away
-        return !/^tol-/.test(c.className || '') && !/\bplain\b/.test(c.className || '') &&
+        // The simple/full version bar must never be locked away
+        return !/^tol-/.test(c.className || '') && !/\bdepth-bar\b/.test(c.className || '') &&
                c.id !== 'tol-main' && c.tagName !== 'SCRIPT';
       });
       if (kids.length > 1) {
         var wrap = el('div', { class: 'locked-section' });
-        var anchorEl = host.querySelector(':scope > .plain') || kids[0];
+        var anchorEl = host.querySelector(':scope > .depth-bar') || kids[0];
         anchorEl.after(wrap);
         kids.slice(1).forEach(function (k) { wrap.appendChild(k); });
         locked = [wrap];

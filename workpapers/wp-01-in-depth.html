@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WP-01 in depth — The Daily Balance Sheet &amp; Neutral Refusals</title>
+<meta name="description" content="Working Paper WP-01: the 7-day Field Audit and the expanded Neutral Refusals scenario guide, in one combined document.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,500&family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  /*
+    Canonical, single-file WP-01 deliverable for the paid Workpaper Suite.
+    Combines Part A (Field Audit) and Part B (Neutral Refusals, expanded)
+    into one document, matching the source wp01-field-ledger.md structure.
+  */
+
+  :root{
+    --paper: #F5EFDE;
+    --paper-deep: #ECE2C4;
+    --ink: #211D17;
+    --ink-soft: #524B3E;
+    --line: #D9CBA3;
+    --credit: #3E6B4C;
+    --credit-soft: #E4EDE3;
+    --brass: #A8792F;
+    --focus: #2B5B8C;
+    --radius: 3px;
+  }
+
+  *{ box-sizing: border-box; }
+
+  @page{
+    size: letter portrait;
+    margin: 0.55in;
+  }
+
+  body{
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: "Lora", Georgia, serif;
+    font-size: 16px;
+    line-height: 1.65;
+  }
+
+  h1, h2, h3{
+    font-family: "Fraunces", "Lora", serif;
+    font-weight: 600;
+    line-height: 1.2;
+    margin: 0 0 0.5em 0;
+  }
+
+  .print-bar{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    max-width: 8.5in;
+    margin: 20px auto;
+    padding: 14px 20px;
+    background: var(--paper-deep);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 0.8rem;
+    color: var(--ink-soft);
+  }
+
+  .print-bar button{
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 0.75rem;
+    padding: 8px 16px;
+    border: none;
+    border-radius: var(--radius);
+    background: var(--ink);
+    color: var(--paper);
+    cursor: pointer;
+  }
+
+  @media print{
+    .print-bar{ display: none; }
+    body{ background: #fff; }
+  }
+
+  .sheet{
+    max-width: 8.5in;
+    margin: 0 auto 60px auto;
+    padding: 0.5in 0.6in;
+    background: var(--paper);
+    border: 1px solid var(--line);
+  }
+
+  @media print{
+    .sheet{ margin: 0; padding: 0; max-width: 100%; border: none; }
+    .part-section{ break-inside: avoid; }
+    .scenario{ break-inside: avoid; }
+  }
+
+  .sheet-header{
+    text-align: center;
+    border-bottom: 2px solid var(--brass);
+    padding-bottom: 16px;
+    margin-bottom: 28px;
+  }
+
+  .wp-num{
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 0.7rem;
+    color: var(--brass);
+    letter-spacing: 0.08em;
+    margin-bottom: 4px;
+  }
+
+  .sheet-mark{ font-size: 1.4rem; margin: 0; }
+
+  .sheet-mark small{
+    display: block;
+    font-family: "IBM Plex Mono", monospace;
+    font-weight: 400;
+    font-size: 0.62rem;
+    letter-spacing: 0.1em;
+    color: var(--brass);
+    margin-top: 6px;
+  }
+
+  .sheet-tagline{
+    font-size: 0.9rem;
+    color: var(--ink-soft);
+    margin: 10px 0 0 0;
+  }
+
+  .toc{
+    display: flex;
+    justify-content: center;
+    gap: 24px;
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 0.72rem;
+    color: var(--ink-soft);
+    margin: 14px 0 0 0;
+  }
+
+  .toc a{ color: var(--brass); text-decoration: none; }
+
+  .intro-note{
+    border-left: 4px solid var(--focus);
+    background: #E7EEF4;
+    border-radius: var(--radius);
+    padding: 16px 20px;
+    margin-bottom: 30px;
+  }
+
+  .intro-note p{ margin: 0 0 10px 0; font-size: 0.95rem; }
+  .intro-note p:last-child{ margin-bottom: 0; }
+
+  .part-divider{
+    text-align: center;
+    margin: 44px 0 30px 0;
+    padding-top: 30px;
+    border-top: 3px double var(--brass);
+  }
+
+  .part-divider .part-label{
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--brass);
+    margin-bottom: 6px;
+  }
+
+  .part-divider h2{
+    font-size: 1.5rem;
+    margin: 0;
+  }
+
+  .part-section{ margin-bottom: 34px; }
+
+  .part-section > h3{
+    font-size: 1.15rem;
+    border-bottom: 1px solid var(--brass);
+    padding-bottom: 8px;
+    margin-bottom: 18px;
+  }
+
+  .section-def{
+    font-size: 0.92rem;
+    color: var(--ink-soft);
+    max-width: 70ch;
+    margin-bottom: 20px;
+  }
+
+  /* Field Audit table */
+
+  table.audit-table{
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.85rem;
+  }
+
+  table.audit-table th{
+    text-align: left;
+    font-family: "Fraunces", serif;
+    font-weight: 600;
+    font-size: 0.78rem;
+    background: var(--paper-deep);
+    border: 1px solid var(--line);
+    padding: 8px 10px;
+  }
+
+  table.audit-table td{
+    border: 1px solid var(--line);
+    padding: 0;
+    height: 34px;
+  }
+
+  table.audit-table td.day-cell{
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 0.72rem;
+    color: var(--brass);
+    padding: 8px 10px;
+    vertical-align: top;
+    white-space: nowrap;
+  }
+
+  .rule-box{
+    border-left: 4px solid var(--credit);
+    background: var(--credit-soft);
+    border-radius: var(--radius);
+    padding: 16px 20px;
+    margin-top: 18px;
+  }
+
+  .rule-box p{ margin: 0; font-size: 0.92rem; }
+
+  /* Neutral Refusals scenarios */
+
+  .scenario{
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    background: var(--paper-deep);
+    padding: 16px 20px;
+    margin-bottom: 14px;
+  }
+
+  .scenario:last-child{ margin-bottom: 0; }
+
+  .scenario .context{
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 0.68rem;
+    color: var(--brass);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+
+  .scenario .script-line{
+    margin-bottom: 6px;
+    font-size: 0.92rem;
+  }
+
+  .scenario .script-line:last-child{ margin-bottom: 0; }
+
+  .scenario .script-line strong{
+    color: var(--brass);
+    font-weight: 600;
+  }
+
+  .adapt-box{
+    border-left: 4px solid var(--credit);
+    background: var(--credit-soft);
+    border-radius: var(--radius);
+    padding: 16px 20px;
+    margin-top: 24px;
+  }
+
+  .adapt-box p{ margin: 0 0 10px 0; font-size: 0.92rem; }
+  .adapt-box p:last-child{ margin-bottom: 0; }
+
+  /* Sign-off */
+
+  .signoff-table{
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.85rem;
+    margin-top: 8px;
+  }
+
+  .signoff-table th{
+    text-align: left;
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--brass);
+    border-bottom: 2px solid var(--line);
+    padding: 6px 10px 10px 0;
+  }
+
+  .signoff-table td{
+    border-bottom: 1px solid var(--line);
+    padding: 14px 10px 8px 0;
+  }
+
+  .signoff-table td.label-cell{
+    font-family: "Fraunces", serif;
+    font-weight: 600;
+    color: var(--ink);
+    white-space: nowrap;
+    width: 1%;
+    padding-right: 24px;
+  }
+
+  .sheet-footer{
+    margin-top: 30px;
+    border-top: 1px solid var(--line);
+    padding-top: 14px;
+    text-align: center;
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 0.65rem;
+    color: var(--ink-soft);
+  }
+
+  @media (max-width: 700px){
+    .print-bar{ flex-direction: column; align-items: stretch; text-align: center; }
+    table.audit-table{ font-size: 0.72rem; }
+    .toc{ flex-wrap: wrap; gap: 12px; }
+  }
+</style>
+<link rel="stylesheet" href="/assets/css/site.css">
+<script src="/assets/js/site.js" defer></script>
+</head>
+<body>
+
+  <div class="print-bar" role="toolbar" aria-label="Page actions">
+    <span>WP-01 &middot; Free with email while in development</span>
+    <button type="button" onclick="window.print()">Print / Save as PDF</button>
+  </div>
+
+  <main class="sheet" aria-label="WP-01 — The Daily Balance Sheet and Neutral Refusals">
+
+    <header class="sheet-header">
+      <p class="wp-num">WP-01</p>
+      <h1 class="sheet-mark">The Daily Balance Sheet &amp; Neutral Refusals
+        <small>Field Audit &middot; Communication Scripts</small>
+      </h1>
+      <p class="sheet-tagline">The complete WP-01 module, in one document.</p>
+      <div class="toc">
+        <a href="#part-a">Part A &mdash; Field Audit</a>
+        <a href="#part-b">Part B &mdash; Neutral Refusals</a>
+        <a href="#signoff">Sign-Off</a>
+      </div>
+    </header>
+    <p class="depth-bar" style="margin:0 0 28px;"><span>Full version</span><a href="/workpapers/wp-01.html">&larr; Back to the simple version</a></p>
+
+
+<div class="locked-section">
+
+    <div class="intro-note" id="purpose">
+      <p>Purpose: capture what actually happened this week before either person's memory of it hardens into a story. Fill this in together, or independently and compare &mdash; don't fill it in about the other person.</p>
+      <p>This module has two parts. Part A is a raw observational log, kept before any interpretation gets added. Part B is a set of scripts for declining or deferring a task without starting a fight. The totals from Part A feed the Lemonade Stand calculator and the Verdict Engine's <code>workload_balance</code> input elsewhere in the framework.</p>
+    </div>
+
+    <section id="part-a" aria-labelledby="part-a-h">
+      <div class="part-divider">
+        <div class="part-label">Part A</div>
+        <h2 id="part-a-h">The Field Audit</h2>
+      </div>
+      <p class="sheet-tagline" style="text-align:center; margin-bottom: 24px;">A 7-Day Observational Ledger</p>
+
+      <div class="part-section">
+        <h3 id="log">The 7-Day Log</h3>
+        <table class="audit-table">
+          <thead>
+            <tr>
+              <th>Day</th>
+              <th>Task noticed / done</th>
+              <th>Who did it</th>
+              <th>Minutes (rough)</th>
+              <th>Was it asked for, or just noticed and handled?</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="day-cell">Mon</td>
+              <td></td><td></td><td></td><td></td>
+            </tr>
+            <tr>
+              <td class="day-cell">Tue</td>
+              <td></td><td></td><td></td><td></td>
+            </tr>
+            <tr>
+              <td class="day-cell">Wed</td>
+              <td></td><td></td><td></td><td></td>
+            </tr>
+            <tr>
+              <td class="day-cell">Thu</td>
+              <td></td><td></td><td></td><td></td>
+            </tr>
+            <tr>
+              <td class="day-cell">Fri</td>
+              <td></td><td></td><td></td><td></td>
+            </tr>
+            <tr>
+              <td class="day-cell">Sat</td>
+              <td></td><td></td><td></td><td></td>
+            </tr>
+            <tr>
+              <td class="day-cell">Sun</td>
+              <td></td><td></td><td></td><td></td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="rule-box" id="audit-rule">
+          <p><strong>Audit rule:</strong> log what happened, not what should have happened. "I noticed the trash needed to go out three times before doing it" is one row, logged honestly, not three rows of resentment.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="part-b" aria-labelledby="part-b-h">
+      <div class="part-divider">
+        <div class="part-label">Part B</div>
+        <h2 id="part-b-h">The Neutral Refusals</h2>
+      </div>
+      <p class="sheet-tagline" style="text-align:center; margin-bottom: 24px;">An Expanded Scenario Guide</p>
+
+      <div class="intro-note">
+        <p>No fixed set of scripts covers every situation two people might run into &mdash; that would be a false promise. What follows is a wide range of common, realistic scenarios across three categories, so you can find something close to your actual situation and adapt the wording. The final section teaches the underlying pattern directly, so you can build your own script for anything not covered here.</p>
+        <p>All three refusal types follow the same three-part shape: <strong>Acknowledge</strong> the request is real and reasonable, <strong>State Capacity</strong> honestly, and <strong>Offer an Alternative</strong> so the other person isn't left with nothing. None of these are meant to end a conversation unilaterally &mdash; they're an opening line, and the other person can still respond, push back, or propose something different.</p>
+      </div>
+
+      <div class="part-section">
+        <h3 id="capacity-check">The Capacity Check</h3>
+        <p class="section-def">For requests arriving after you're already at capacity &mdash; when saying yes right now would come at a real cost to you.</p>
+
+        <div class="scenario">
+          <div class="context">End-of-day exhaustion</div>
+          <div class="script-line"><strong>Acknowledge:</strong> "I know bedtime is a lot to handle solo."</div>
+          <div class="script-line"><strong>State Capacity:</strong> "I'm running on empty tonight and don't have much left in me."</div>
+          <div class="script-line"><strong>Offer Alternative:</strong> "Can we split it &mdash; I'll do bath, you do the rest?"</div>
+        </div>
+
+        <div class="scenario">
+          <div class="context">Overbooked weekend</div>
+          <div class="script-line"><strong>Acknowledge:</strong> "That errand does need to get done this weekend."</div>
+          <div class="script-line"><strong>State Capacity:</strong> "My Saturday's already full, and I don't want to rush through it."</div>
+          <div class="script-line"><strong>Offer Alternative:</strong> "Could it move to Sunday morning, or could you take it this time?"</div>
+        </div>
+
+        <div class="scenario">
+          <div class="context">Being asked for emotional support while depleted yourself</div>
+          <div class="script-line"><strong>Acknowledge:</strong> "I can tell you need to talk this through."</div>
+          <div class="script-line"><strong>State Capacity:</strong> "I don't have the emotional bandwidth to be fully present right now."</div>
+          <div class="script-line"><strong>Offer Alternative:</strong> "Can we talk after I've had a chance to reset &mdash; maybe in an hour?"</div>
+        </div>
+
+        <div class="scenario">
+          <div class="context">A relayed favor request from extended family</div>
+          <div class="script-line"><strong>Acknowledge:</strong> "I get why your mom's request feels urgent to you."</div>
+          <div class="script-line"><strong>State Capacity:</strong> "I don't have room to take this on this week."</div>
+          <div class="script-line"><strong>Offer Alternative:</strong> "Can you let her know it'll have to wait, or handle this one yourself?"</div>
+        </div>
+
+        <div class="scenario">
+          <div class="context">Low physical energy during illness or recovery</div>
+          <div class="script-line"><strong>Acknowledge:</strong> "That project really has been sitting for a while."</div>
+          <div class="script-line"><strong>State Capacity:</strong> "I physically don't have the energy for it today."</div>
+          <div class="script-line"><strong>Offer Alternative:</strong> "Let's pencil it in for this weekend once I'm feeling steadier."</div>
+        </div>
+
+        <div class="scenario">
+          <div class="context">A hard week, being asked to also handle finances</div>
+          <div class="script-line"><strong>Acknowledge:</strong> "The budget conversation is overdue, you're right."</div>
+          <div class="script-line"><strong>State Capacity:</strong> "My head isn't clear enough for numbers tonight."</div>
+          <div class="script-line"><strong>Offer Alternative:</strong> "Can we set thirty minutes aside this weekend instead, when I can actually focus?"</div>
+        </div>
+      </div>
+
+      <div class="part-section">
+        <h3 id="delegation-pivot">The Delegation Pivot</h3>
+        <p class="section-def">For tasks that don't actually belong on your side of the register &mdash; not because you're refusing to help, but because someone else is genuinely better positioned.</p>
+
+        <div class="scenario">
+          <div class="context">School logistics outside your usual domain</div>
+          <div class="script-line"><strong>Acknowledge:</strong> "The school schedule change does need a response today."</div>
+          <div class="script-line"><strong>State Capacity:</strong> "I don't have the context on this the way you do &mdash; you've been handling the school stuff."</div>
+          <div class="script-line"><strong>Offer Alternative:</strong> "Can you take this one, or walk me through what's needed so I can?"</div>
+        </div>
+
+        <div class="scenario">
+          <div class="context">Extended family relationship management</div>
+          <div class="script-line"><strong>Acknowledge:</strong> "I know your uncle's visit needs planning."</div>
+          <div class="script-line"><strong>State Capacity:</strong> "I don't know the family dynamics well enough to make the right call here."</div>
+          <div class="script-line"><strong>Offer Alternative:</strong> "You're better positioned to decide the details &mdash; I'm happy to help execute once it's planned."</div>
+        </div>
+
+        <div class="scenario">
+          <div class="context">A task requiring a skill you don't have</div>
+          <div class="script-line"><strong>Acknowledge:</strong> "The car noise does need looking at."</div>
+          <div class="script-line"><strong>State Capacity:</strong> "I genuinely don't know enough about cars to handle this well."</div>
+          <div class="script-line"><strong>Offer Alternative:</strong> "Can you take the lead, and I'll cover something else off your plate in exchange?"</div>
+        </div>
+
+        <div class="scenario">
+          <div class="context">Coordinating a friend group that isn't yours</div>
+          <div class="script-line"><strong>Acknowledge:</strong> "Planning the trip with your friends does need to happen soon."</div>
+          <div class="script-line"><strong>State Capacity:</strong> "I don't have the relationships with that group to coordinate it well."</div>
+          <div class="script-line"><strong>Offer Alternative:</strong> "This one makes more sense as yours to run &mdash; let me know how I can support from the side."</div>
+        </div>
+
+        <div class="scenario">
+          <div class="context">Managing another family member's feelings</div>
+          <div class="script-line"><strong>Acknowledge:</strong> "Your dad being upset does need addressing."</div>
+          <div class="script-line"><strong>State Capacity:</strong> "That's not a conversation I can have on your behalf."</div>
+          <div class="script-line"><strong>Offer Alternative:</strong> "I'll support you in having that conversation, but it needs to come from you."</div>
+        </div>
+
+        <div class="scenario">
+          <div class="context">An account or system only the other person manages</div>
+          <div class="script-line"><strong>Acknowledge:</strong> "The insurance renewal does need attention."</div>
+          <div class="script-line"><strong>State Capacity:</strong> "I don't have login access or the history on that account."</div>
+          <div class="script-line"><strong>Offer Alternative:</strong> "Can you handle the renewal itself, and I'll take on a task from your list to even it out?"</div>
+        </div>
+      </div>
+
+      <div class="part-section">
+        <h3 id="time-commitment">The Time Commitment</h3>
+        <p class="section-def">For tasks you'll take on &mdash; just not on the timeline currently being assumed.</p>
+
+        <div class="scenario">
+          <div class="context">Interrupted mid-task</div>
+          <div class="script-line"><strong>Acknowledge:</strong> "I'll fix that today."</div>
+          <div class="script-line"><strong>State Capacity:</strong> "I'm in the middle of something I don't want to drop right now."</div>
+          <div class="script-line"><strong>Offer Alternative:</strong> "I'll get to it in about half an hour, once I'm finished here."</div>
+        </div>
+
+        <div class="scenario">
+          <div class="context">A request during needed rest time</div>
+          <div class="script-line"><strong>Acknowledge:</strong> "That's on my list for this week."</div>
+          <div class="script-line"><strong>State Capacity:</strong> "Tonight is the wind-down time I need before tomorrow."</div>
+          <div class="script-line"><strong>Offer Alternative:</strong> "I'll take care of it first thing in the morning instead."</div>
+        </div>
+
+        <div class="scenario">
+          <div class="context">Wanting to think before committing to specifics</div>
+          <div class="script-line"><strong>Acknowledge:</strong> "I do want to plan the trip with you."</div>
+          <div class="script-line"><strong>State Capacity:</strong> "I don't want to commit to dates on the spot without checking my week."</div>
+          <div class="script-line"><strong>Offer Alternative:</strong> "Let me look tonight and give you a real answer tomorrow."</div>
+        </div>
+
+        <div class="scenario">
+          <div class="context">Needing to finish something before switching tasks</div>
+          <div class="script-line"><strong>Acknowledge:</strong> "I hear that the dishes are piling up."</div>
+          <div class="script-line"><strong>State Capacity:</strong> "I want to finish what I'm working on first so I don't lose my place."</div>
+          <div class="script-line"><strong>Offer Alternative:</strong> "I'll handle them right after &mdash; give me fifteen minutes."</div>
+        </div>
+
+        <div class="scenario">
+          <div class="context">A request during emotional flooding</div>
+          <div class="script-line"><strong>Acknowledge:</strong> "This conversation matters and I want to have it properly."</div>
+          <div class="script-line"><strong>State Capacity:</strong> "I'm too activated right now to think clearly or be fair to you."</div>
+          <div class="script-line"><strong>Offer Alternative:</strong> "Can we come back to this in twenty minutes, once I've settled?"</div>
+        </div>
+
+        <div class="scenario">
+          <div class="context">A larger project better done with dedicated time</div>
+          <div class="script-line"><strong>Acknowledge:</strong> "The garage does need to get organized."</div>
+          <div class="script-line"><strong>State Capacity:</strong> "Squeezing it into a spare hour won't do it justice."</div>
+          <div class="script-line"><strong>Offer Alternative:</strong> "Let's block out Saturday morning for it, so it actually gets done right."</div>
+        </div>
+      </div>
+
+      <div class="adapt-box" id="adapt">
+        <p><strong>Adapting this to a situation not listed here:</strong> the pattern behind every scenario above is the same three moves, in order.</p>
+        <p>1. Say something true and specific about why the request is reasonable &mdash; not a generic "I understand," but naming the actual need.</p>
+        <p>2. State your actual capacity honestly &mdash; not an excuse, and not an overstated inability. Say what's really true about your bandwidth, energy, skill, or timing right now.</p>
+        <p>3. Offer something concrete in place of a flat no &mdash; a different time, a different person, a partial version, or a plan to revisit it. The goal is that the other person is never left with nothing, even when the answer isn't "yes, right now."</p>
+      </div>
+
+      <div class="rule-box" style="margin-top: 24px;">
+        <p><strong>What a neutral refusal is not:</strong> a justification essay, a counter-list of everything you already did, or a refusal to ever revisit the request. It's a single, calm boundary statement that keeps the door open for renegotiation instead of ending the conversation.</p>
+      </div>
+    </section>
+
+    <section id="signoff" aria-labelledby="signoff-h">
+      <div class="part-divider">
+        <div class="part-label">Sign-Off</div>
+        <h2 id="signoff-h">Prepared &amp; Reviewed</h2>
+      </div>
+      <table class="signoff-table">
+        <thead>
+          <tr>
+            <th></th>
+            <th>Name</th>
+            <th>Date</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="label-cell">Prepared by</td>
+            <td></td>
+            <td></td>
+          </tr>
+          <tr>
+            <td class="label-cell">Reviewed by</td>
+            <td></td>
+            <td></td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    </div>
+<footer class="sheet-footer">
+      The Objective Ledger&trade; &middot; Workpaper Suite &middot; WP-01 &middot; Free with email while in development &middot; please don't redistribute
+    </footer>
+
+  </main>
+
+</body>
+</html>

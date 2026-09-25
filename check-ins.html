@@ -11,320 +11,64 @@
 </script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Check-ins — A Safe Room for a Hard Conversation · The Objective Ledger</title>
-<meta name="description" content="How to hold a check-in: a safe time, a regulated room, acknowledgement before any rebuttal, a rebuttal that does not erase what was heard, a solution that works for both, and how a miss becomes a useful signal. Pairs with the Signal Translator.">
-<meta property="og:title" content="Check-ins — The Objective Ledger">
-<meta property="og:description" content="A proven order for a hard conversation, and where the Signal Translator fits before, during and after it.">
-<meta property="og:type" content="article">
+<title>Check-ins — The Objective Ledger</title>
+<meta name="description" content="A check-in is a short, agreed talk about one hard topic, in a room that can hold it. The topic can wait for that room. It cannot survive without it.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,500&family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/assets/css/site.css">
 <link rel="stylesheet" href="/assets/css/reading.css">
-<link rel="stylesheet" href="/assets/css/tol-pages.css">
 <script src="/assets/js/site.js" defer></script>
-<style>
-  :root{ --paper:#F5EFDE; --paper-deep:#ECE2C4; --ink:#211D17; --ink-soft:#524B3E; --line:#D9CBA3; --credit:#3E6B4C; --brass:#8A5E1E; --focus:#2B5B8C; --debit:#96412B; --radius:3px; }
-  .read.is-wide{ max-width:52rem; }
-  .read p, .read li{ max-width:68ch; }
-  .ci-lede{ font-size:1.12rem; color:var(--ink-soft); }
-  .ci-cta{ display:flex; flex-wrap:wrap; gap:.75rem 1rem; align-items:center; margin:1.4rem 0 .4rem; }
-  .ci-cta .tol-button{ margin:0; }
-  .ci-jump{ list-style:none; padding:0; margin:1rem 0 0; display:flex; flex-wrap:wrap; gap:.4rem; }
-  .ci-jump li{ margin:0; max-width:none; }
-  .ci-jump a{ display:inline-block; font-family:"IBM Plex Mono", ui-monospace, monospace; font-size:.78rem; padding:.3rem .6rem; border:1px solid var(--line); border-radius:var(--radius); text-decoration:none !important; background:var(--paper); }
-  .ci-jump a:hover{ background:var(--paper-deep); color:var(--ink) !important; }
-  .read h2{ scroll-margin-top:5rem; }
-  .ci-script{ margin:1rem 0; padding:1rem 1.15rem; background:var(--paper-deep); border-left:3px solid var(--brass); font-family:"Fraunces", Georgia, serif; font-size:1.05rem; }
-  .ci-script p{ margin:.35rem 0; max-width:none; }
-  .ci-script .who{ font-family:"IBM Plex Mono", monospace; font-size:.72rem; letter-spacing:.04em; color:var(--brass); font-style:normal; }
-  .ci-bad{ border-left-color:var(--debit); }
-  .ci-good{ border-left-color:var(--credit); }
-  .ci-note{ font-size:.92rem; color:var(--ink-soft); }
-  .ci-table{ width:100%; border-collapse:collapse; font-size:.95rem; line-height:1.45; margin:.6rem 0 1rem; }
-  .ci-table th{ text-align:left; padding:.45rem .55rem; border-bottom:3px double var(--ink); font-family:"Fraunces", Georgia, serif; }
-  .ci-table td{ padding:.55rem .55rem; border-bottom:1px solid var(--line); vertical-align:top; }
-  .ci-table td + td, .ci-table th + th{ border-left:1px dotted var(--line); }
-  @media (max-width:640px){
-    .ci-table, .ci-table tbody, .ci-table tr, .ci-table td{ display:block; width:auto; }
-    .ci-table thead{ display:none; }
-    .ci-table tr{ border-bottom:1px solid var(--line); padding:.4rem 0; }
-    .ci-table td{ border:0; padding:.15rem 0; }
-    .ci-table td::before{ content:attr(data-h); display:block; font-family:"IBM Plex Mono", monospace; font-size:.7rem; color:var(--brass); }
-  }
-</style>
 </head>
 <body>
-<main class="read is-wide">
-  <header class="read-head">
-    <p class="read-code">Guide</p>
-    <h1>Check-ins</h1>
-  </header>
-  
+<main class="read">
+<header class="read-head"><p class="read-code">Guide</p><h1>Check-ins</h1></header>
+<p class="depth-bar"><span>Simple version</span><a class="dig" href="/check-ins-in-depth.html">Read the full guide</a></p>
+
+<p class="simple-lede">A check-in is a short, agreed talk about one hard topic, in a room that can hold it. The topic can wait for that room. It cannot survive without it.</p>
+
 <div class="scene">
   <p class="scene-when">Wednesday, 10:50pm</p>
   <p>You start the conversation because it is finally quiet. It goes badly, because it is 10:50pm and you are both nearly empty. The topic was fine. The room was wrong.</p>
 </div>
-<p class="ci-lede">A check-in is not a fight with a time on the calendar. It is a short, agreed conversation in a room that can hold it: bodies settled enough to listen, outside noise turned down, and a speaking order that puts acknowledgement before any rebuttal. The hard topic can wait for that room. It cannot survive without it.</p>
-  <p>The daily version already lives in <a href="/workpapers/wp-13-pll-protocol.html">WP-13</a>: ninety seconds, one status each, no debate. This page is the other kind. One topic that has been waiting. Twenty to forty minutes. A stop if either body leaves the conversation. Before the first hard one, each person can make a <a href="/wiring-card.html">wiring card</a> so the room already knows how words arrive. The <a href="/signal-translator.html#notes">Signal Translator</a> can hold more than one sentence in the talking notes, then save one PDF for the room. How to build that list is <a href="#notes">below</a>. Leave the score at home.</p>
-  <div class="ci-cta">
-    <a class="tol-button" href="/signal-translator.html">Test the opening sentence</a>
-    <a class="quiet" href="/wired-differently.html">How the same words land differently</a>
-  </div>
-  <ul class="ci-jump">
-    <li><a href="#ground">Ground rules</a></li>
-    <li><a href="#room">The room</a></li>
-    <li><a href="#order">The order</a></li>
-    <li><a href="#acknowledge">Acknowledgement</a></li>
-    <li><a href="#rebuttal">A proper rebuttal</a></li>
-    <li><a href="#both">A solution for both</a></li>
-    <li><a href="#leverage">Negatives to positives</a></li>
-    <li><a href="#notes">Talking notes</a></li>
-    <li><a href="#translator">Where the translator sits</a></li>
-    <li><a href="#card">A card to read from</a></li>
-  </ul>
 
-  <h2 id="ground">Ground rules</h2>
-  <p>A hard topic is allowed. Overload, blame, and criticism of the person are not. The moment a check-in becomes a pile of grievances, a case against someone's character, or a hunt for bad intent, it has stopped being a check-in. Neither person is here to be found guilty. Say that out loud before the content, so the room is not left to guess.</p>
-  <div class="ci-script">
-    <p><span class="who">SAY THIS ONCE, AND MEAN IT</span><br>"I am not against you. I am not saying you are the problem. I do not think you meant harm. I want this one thing sorted, and I can hear how it landed."</p>
-  </div>
-  <p>If you are the listener, say the other half: "I am not taking this as an attack until I have mirrored it. If I start defending, stop me." One time is enough. Repeating it after every sentence starts to sound like a script. Leaving it unsaid lets the nervous system write a worse story than the one you meant.</p>
-  <h3>Do not overload the conversation</h3>
-  <p>One topic. If you have five, you have a list, not a meeting. A check-in that tries to clear the whole relationship in half an hour will overload both bodies, and an overloaded body hears criticism even in a careful sentence.</p>
-  <p>Prioritize before you sit down. Write every thing you are tempted to raise. Then sort them, out loud if you need to, into three piles:</p>
-  <ol>
-    <li><strong>Today.</strong> What will still be wrong tomorrow if you do not touch it, or what needs a bond signal so someone is not left afraid of losing you. One item. That is the meeting.</li>
-    <li><strong>A system, not a hearing.</strong> A task with no owner, a bill, a recurring miss. That goes to <a href="/workpapers/wp-03-raci-treaty.html">WP-03</a> or the weekly resync, not into a character speech.</li>
-    <li><strong>Can wait.</strong> Real, and not this room. Name the date it will be looked at. An unnamed wait feels like dismissal.</li>
-  </ol>
-  <p>If you cannot tell which item is today's, you are not ready to open. The urgency you feel is often the fear of an open loop, not proof that all five items are equal. Pick the one that, if settled, would make the others smaller.</p>
-  <h3>Do not deviate</h3>
-  <p>A second topic will show up. It usually shows up when the first one starts to land. Following it is how a check-in becomes a trial. The person who brought it is not wrong to have it. They are early.</p>
-  <div class="ci-script">
-    <p><span class="who">PARK IT</span><br>"That's real. It is not this meeting. I'm writing it down for Sunday. We are still on the sink."</p>
-  </div>
-  <p>Then go back to the one topic. Do not explain why their second point is less important. Do not use the park as a way to never return. A parked item with no date is a dismissal wearing good manners.</p>
-  <p>"While we're here" is a deviation. So is "this is just like when you…" and so is answering a fact about last night with a history of the whole year. History can matter. It is a different meeting, after this one has an owner and a time.</p>
-  <h3>No blame, and no criticism of the person</h3>
-  <p>Describe the event. Do not describe the character. Gottman's softened start is the line: complain, don't blame. Describe what happened, don't judge the person. Start from what you need, not from what they are (<a href="https://www.gottman.com/blog/manage-conflict-the-six-skills/">Gottman Institute</a>).</p>
-  <ul>
-    <li>Criticism: "You never help. You're careless." That is a verdict. It cannot be fixed tonight.</li>
-    <li>A complaint: "The sink was full at 7, and the morning started behind. I need a close by 9." That can be owned.</li>
-    <li>Blame with a soft voice is still blame. "I'm not angry, but you always…" is criticism wearing a calm tone.</li>
-  </ul>
-  <p>If the sentence needs a label, it is not ready. Take it through <a href="/workpapers/wp-09-tone-filter.html">WP-09</a>, then the <a href="/signal-translator.html">Signal Translator</a>. If the read is heavy, you are about to overload the room. Send the matching sentence, or wait.</p>
-  <h3>No negative intent, on either side</h3>
-  <p>Do not arrive assuming they meant to hurt you. Do not make them guess that you meant no harm. Most static between differently wired people is a missed signal, not a plot (<a href="/wired-differently.html">Wired Differently</a>). Say the no-harm line before the fact, not after they flinch.</p>
-  <p>Intent does not cancel impact. "I didn't mean it that way" is not a request that they stop feeling it. Both can be true in one breath: "I did not mean harm. I can see it landed as harm. I am not asking you to cancel that." Then stop. Let them mirror it. A defense of your intent, before they have been heard, is the rebuttal arriving early.</p>
-  <h3>Prepare, so the room is not doing the sorting</h3>
-  <ol>
-    <li>Each person names their state on the <a href="/quick-checks.html#ladder">ladder</a>. If either of you is mobilized or shut down, this is not the meeting.</li>
-    <li>Eat, drink, phones down, one room, a clock, a way out that is not a way out of the relationship.</li>
-    <li>Write the facts and the asks you might actually say. Test each sentence and add it to the <a href="#notes">talking notes</a>. If the list gets heavy, say one. Park the rest with a date. Leave the score at home.</li>
-    <li>If you have not said how you receive words, exchange <a href="/wiring-card.html">wiring cards</a> on an ordinary day, not in this one.</li>
-    <li>Agree the stop before you need it. "If either of us leaves the conversation, we say so, and we come back at a named time."</li>
-  </ol>
-  <h3 id="signs">Notice dysregulation before it is too late</h3>
-  <p>The explosion is late. The useful signs are earlier, and they are ordinary. You do not need a theory to see them. You need to treat the first one as the cue, not the fifth.</p>
-  <ul>
-    <li>Voice faster, sharper, or louder than the topic deserves.</li>
-    <li>The same sentence, said again, as if volume will make it land.</li>
-    <li>"Always," "never," or a label, arriving where a fact was.</li>
-    <li>A second topic, brought in to win the first.</li>
-    <li>Jaw, heat, a tight chest, the urge to leave, or the urge to win.</li>
-    <li>Going blank, short answers, looking away, the wish to disappear. Shutdown is dysregulation too. It is not calm.</li>
-    <li>Reaching for the phone, old messages, or a list of evidence. That is a case being built, not a conversation being had.</li>
-  </ul>
-  <p>When you notice one, you are already late enough. Do not wait for them to notice it in you, and do not diagnose it in them as a way to win. Name your own.</p>
-  <h3 id="regulate">Regulate before the next sentence</h3>
-  <p>"I am leaving the conversation. My voice is up." That is regulation. Another paragraph is not. A single deep breath is not a plan if you are already flooded. A flooded body often needs at least twenty minutes before it can hear again (<a href="https://www.gottman.com/blog/flooding-and-conflict-avoidance/">Gottman Institute</a>). Use the pause to come back to yourself, not to prepare a better case. The <a href="https://www.family-institute.org/behavioral-health-resources/trouble-communicating-your-partner-top-five-tips-couples-therapist">Family Institute</a> is plain about that: the timeout is for connection, not for lawyering up.</p>
-  <p>The other person can care without fixing. Lower your volume. Stop adding points. Sit down. Water. If they asked for space, do not follow, and do not send a stack of texts. One line: "We are okay. This is a pause. I will come back at 8:40." Then actually come back. <a href="/wp-11.html">WP-11</a> is the kit you decided while calm. Use that, not a new invention made of adrenaline.</p>
-  <h3 id="regroup">How to regroup</h3>
-  <p>A regroup is not a rematch. Do not open with what they did during the pause. Do not open with the second topic you thought of while you were gone.</p>
-  <div class="ci-script">
-    <p><span class="who">THE RETURN</span><br>"I'm back. The topic is still the sink. I am not against you. My state is ___. If I'm not settled enough, we set a new time instead of pretending the clock won."</p>
-  </div>
-  <p>If the body is not back, say so. A clock that arrives before the nervous system is not a regroup. Set the next time, keep it short, and do not add a topic as interest on the delay. Then return to the one fact, the mirror, and the ask. The pause is over when you are back on the original topic, not when someone has won the argument about the pause.</p>
+<ol class="ideas">
+  <li id="ground">
+    <h2>One topic, and nobody is on trial.</h2>
+    <p>Say it once before you start: “I am not against you. I do not think you meant harm. I want this one thing sorted.” Describe what happened, not what the other person is. A second topic gets written down for another day.</p>
+    <a class="dig" href="/check-ins-in-depth.html#ground">Dig deeper: the ground rules</a>
+  </li>
+  <li id="room">
+    <h2>Get the room right first.</h2>
+    <p>A time you both agreed, not in the middle of a spike. Private, phones down, nobody hungry or drinking. If either of you is too wound up or shut down, pick another time and name it.</p>
+    <a class="dig" href="/check-ins-in-depth.html#room">Dig deeper: a safe time and place</a>
+  </li>
+  <li id="order">
+    <h2>Hear it back before you answer.</h2>
+    <p>One person says one fact and how it landed. The other says back what they heard and asks, “Did I get that?” Then you swap. A correction comes only after both of you have been heard.</p>
+    <a class="dig" href="/check-ins-in-depth.html#order">Dig deeper: the order, and why</a>
+  </li>
+  <li id="regroup">
+    <h2>A pause is fine. Come back to the same topic.</h2>
+    <p>If a voice goes up or someone goes blank, stop and name a return time. When you come back, it is not a rematch: “I’m back. The topic is still the sink. I am not against you.”</p>
+    <a class="dig" href="/check-ins-in-depth.html#regroup">Dig deeper: noticing it early, and how to regroup</a>
+  </li>
+  <li id="leverage">
+    <h2>Turn the miss into one thing you will repeat.</h2>
+    <p>Keep the cost in plain words. Then agree one small action you can keep doing, and name one thing the other person already does well. That way the hard moment pays for a clearer setup.</p>
+    <a class="dig" href="/check-ins-in-depth.html#leverage">Dig deeper: turning a negative into a positive</a>
+  </li>
+  <li id="notes">
+    <h2>Write your sentences down before you go in.</h2>
+    <p>List everything you want to raise, then keep only the one that would make the others smaller. The Signal Translator, a tool that shows how a sentence may land, can hold your notes and save them as one page. You do not owe the whole list.</p>
+    <a class="dig" href="/check-ins-in-depth.html#notes">Dig deeper: building your talking notes</a>
+  </li>
+</ol>
 
-  <h2 id="room">The room has to be safe before the topic is</h2>
-  <p>Challenging conversations fail less from the words than from the conditions around the words. Four things have to be true at the same time. If one is missing, postpone. Postponing with a return time is not avoidance. Walking in anyway is how a check-in becomes the next spike.</p>
-  <h3>A safe time</h3>
-  <ul>
-    <li>Not in the spike, and not in the first minutes after one. A flooded body often needs at least twenty minutes before it can hear again, and the return should not slip past the next day (<a href="https://www.gottman.com/blog/flooding-and-conflict-avoidance/">Gottman Institute</a>).</li>
-    <li>Not when one person is about to leave for work, pick up a child, or fall asleep. A hard topic with no exit time trains people to rush or to hide.</li>
-    <li>Named in advance. "Can we use twenty minutes at 8, after dinner, for the kitchen thing?" is a check-in. "While you're walking out the door" is an ambush.</li>
-    <li>One topic. A second topic is a different meeting.</li>
-  </ul>
-  <h3>A safe environment</h3>
-  <ul>
-    <li>Private. No audience, including children. Children borrow the alarm even when the words are careful.</li>
-    <li>Phones face down. Notifications are a third person in the room.</li>
-    <li>Both people seated, or both standing. One person standing over the other is already a power difference.</li>
-    <li>A door that can close, and a way for either person to leave the room without leaving the relationship. Say the return before anyone uses it.</li>
-    <li>Light, noise and temperature low enough that a sensitive nervous system is not already spending its budget on the room. If one of you is highly sensitive, lower the volume of the house before you lower the volume of the talk. <a href="/wired-differently.html#sensitive">Wired Differently</a> covers why.</li>
-  </ul>
-  <h3>External factors, regulated on purpose</h3>
-  <p>Hunger, thirst, pain, a full bladder, alcohol, a deadline in ten minutes, a messy room that is the topic and also the setting: these are not character. They are load. Handle the ones you can before you open the topic. Eat if someone is sharp because they have not eaten. Move the conversation out of the pile of dishes if the dishes are what you came to discuss. A body that is already spending itself on the environment will spend the check-in defending, not listening.</p>
-  <p>Substances are a stop, not a style. If either person has been drinking or is otherwise altered, the check-in waits. Insight from an altered state rarely survives the morning, and harm from one often does.</p>
-  <h3>A stable connection, before the content</h3>
-  <p>Some people cannot hear a hard fact until they know the bond is still there. Silence, for them, is the start of being left. Other people cannot think until they have a little space. Both can be true in the same pair. Before the topic, offer a short signal if it is welcome: "We are okay. This is one topic, not a verdict on us. I am not leaving this." A hug or a hand is optional, never owed, and off if anyone does not want it, if you are not in private, or if anyone is afraid of the other person. The <a href="/signal-translator.html">Signal Translator</a> builds that bridge from the situation, the room, and what each person needs.</p>
-  <p>Then check states. Thirty seconds on the <a href="/quick-checks.html#ladder">Nervous System Ladder</a>, each person naming their own rung, not the other person's. If either of you is mobilized or shut down, this is not the meeting. Use <a href="/wp-11.html">WP-11</a>, name a return, and keep it.</p>
-  <aside class="tol-warning" aria-labelledby="ci-risk">
-    <h3 id="ci-risk">When a check-in is the wrong tool</h3>
-    <p>Fear of losing someone is not the same as fear of someone. If you are afraid of the other person, do not schedule a closer conversation in order to feel safer. In the US, the National Domestic Violence Hotline is 1-800-799-7233, text START to 88788, or <a href="https://www.thehotline.org">thehotline.org</a>. If you are in crisis, call or text 988. This page assumes both people want a fair exchange and can leave the room.</p>
-  </aside>
-
-  <h2 id="order">The order, and why it is this order</h2>
-  <p>The sequence below is not a new therapy. It puts three published methods in one order, then slots this program's tools into the steps they already belong to.</p>
-  <ul>
-    <li><strong>Speaker-Listener.</strong> One person speaks in short pieces. The other paraphrases before adding anything, asks whether they got it, and only then do the roles reverse. The listener is not preparing a rebuttal while the other person is still talking (<a href="https://www.family-institute.org/behavioral-health-resources/trouble-communicating-your-partner-top-five-tips-couples-therapist">The Family Institute at Northwestern</a>, describing the technique in Markman, Stanley and Blumberg).</li>
-    <li><strong>Imago dialogue.</strong> Mirror first, without analyzing or answering. Then validate that the other person's experience can make sense on its own terms. Empathy, if you can name it without inventing a feeling they did not claim. Then the process reverses (<a href="https://imagoworks.com/the-imago-dialogue/steps/">Imago Dialogue steps</a>).</li>
-    <li><strong>Gottman's six skills.</strong> Soften the start: complain without blaming, describe without judging, speak from "I." Accept influence. Repair if it spikes. Soothe yourself and, if welcome, the other person. Compromise (<a href="https://www.gottman.com/blog/manage-conflict-the-six-skills/">Gottman Institute</a>).</li>
-  </ul>
-  <p>Skip the mirror and the rebuttal arrives as a cross-examination. Skip the state check and you will do the mirror in a body that cannot hear. Skip the both-sides close and you will have a beautiful conversation with no owner for tomorrow.</p>
-  <ol>
-    <li><strong>Name the container.</strong> Time, place, one topic, the stop rule, the return.</li>
-    <li><strong>Regulate.</strong> Ladder, food, phones, door, bond signal if needed.</li>
-    <li><strong>Speaker states one fact and one impact.</strong> Not a history. Not a character.</li>
-    <li><strong>Listener acknowledges, all the way through, before any rebuttal.</strong></li>
-    <li><strong>Roles reverse.</strong> Same rules.</li>
-    <li><strong>Only then, a rebuttal</strong> if something was inaccurate. Own your part first.</li>
-    <li><strong>A solution that meets the minimum of both needs.</strong> One owner. One time. A review.</li>
-    <li><strong>Turn the miss into a repeatable positive.</strong> Not a speech. One action.</li>
-    <li><strong>Close.</strong> One specific appreciation. Next check-in, even if it is the ordinary ninety-second one.</li>
-  </ol>
-
-  <h2 id="acknowledge">Acknowledgement, before any answer</h2>
-  <p>Acknowledgement is proof of receipt. It is not agreement. It is not therapy voice. It is not "I hear you, but." The "but" deletes the sentence in front of it. If you need a second sentence, use "and."</p>
-  <div class="ci-script">
-    <p><span class="who">LISTENER</span><br>"What I heard is: the dishes were still there this morning, and you felt like the evening had been left on you. Did I get that?"</p>
-    <p><span class="who">IF THEY CORRECT YOU</span><br>Mirror the correction. Do not defend the first version. "Got it. Not the dishes in general. Last night's, still in the sink at 7. Did I get that now?"</p>
-    <p><span class="who">THEN, STILL BEFORE YOUR VIEW</span><br>"That can make sense. If I came down to a job I thought was done, I would be frustrated too. You don't have to be wrong for me to have a different picture. I'm not answering yet."</p>
-  </div>
-  <p>Stay in acknowledgement until they say you have it. Two or three short turns is normal. A speech is not a mirror. Speaker-Listener practice uses pieces of about fifteen to thirty seconds, then a check, on purpose, so neither person stockpiles a case (<a href="https://www.family-institute.org/behavioral-health-resources/trouble-communicating-your-partner-top-five-tips-couples-therapist">Family Institute</a>).</p>
-  <p>Validation is the next inch, and it is easy to fake. "That can make sense" means their landing is a possible reading of the facts. It does not mean you intended the harm, and it does not mean their reading is the only one. Say that out loud if you need to, after the mirror has landed, not instead of it.</p>
-  <p>Empathy is optional, and it has a limit. Do not assign a feeling they did not name. Someone with alexithymia may not have a feeling-word, and being handed one can feel like a correction. "You seem hurt" is a guess. "You said it landed as being left with it. Did I get that?" is a mirror. <a href="/wired-differently.html#alexithymia">Wired Differently</a> has the longer version.</p>
-  <h3>Acknowledgement across wirings</h3>
-  <ul>
-    <li><strong>Autistic listener or speaker.</strong> Mirror the words, not a vibe you inferred. A literal repeat is respect, not coldness. Vague comfort ("it's fine, we're good") can sound like the topic was cancelled.</li>
-    <li><strong>ADHD.</strong> Write the mirror in one line if either of you will lose it. A spoken "I got you" with no content is not receipt.</li>
-    <li><strong>Anxious, or afraid of losing the person.</strong> Add the bond line once, and mean it. Repeating "we are okay" after every sentence starts to sound like a script.</li>
-    <li><strong>Highly sensitive.</strong> Lower your volume before you lower your standards. A correct mirror at a sharp volume still lands as an attack.</li>
-    <li><strong>Trauma-wired.</strong> A fast mirror can feel like mimicry or a trap. Slow down. Ask "Was that close?" instead of performing perfect recall.</li>
-  </ul>
-  <p class="ci-note">If you cannot mirror without preparing your defense, you are not in the listener role yet. Say so. "I want to get this, and my answer is already crowding it. Give me a minute, then ask me to mirror again." That is regulation, not refusal.</p>
-
-  <h2 id="rebuttal">How to rebut without erasing what you just heard</h2>
-  <p>A rebuttal is allowed. Accuracy matters. What is not allowed is a rebuttal that pretends the acknowledgement did not happen, or that uses the other person's feeling as the thing to disprove.</p>
-  <p>Gottman's softened start is the shape: complain, don't blame. Describe what happened, don't judge the person. Start from "I," not "you always" (<a href="https://www.gottman.com/blog/manage-conflict-the-six-skills/">Gottman Institute</a>). Run that sentence through the <a href="/signal-translator.html">Signal Translator</a> before the meeting, with their wiring selected, the relationship selected, and the situation set to repair. If the read is heavy static, the rebuttal is not ready.</p>
-  <div class="ci-script ci-bad">
-    <p><span class="who">THIS ERASES THE MIRROR</span><br>"I hear you, but you never notice what I did do, and if you weren't so sensitive this wouldn't be a thing."</p>
-  </div>
-  <div class="ci-script ci-good">
-    <p><span class="who">THIS KEEPS IT</span><br>"I got the part about last night's dishes still there at 7, and that it landed as the evening being left on you. My part: I said I'd do them and I didn't. What I want on the record is that I did the lunch boxes and the trash before bed, and I treated those as the close. I was wrong to leave the sink unspoken. I'm not asking you to feel differently about the sink."</p>
-  </div>
-  <p>A proper rebuttal has four moves, in this order.</p>
-  <ol>
-    <li><strong>Restate their fact in one line,</strong> so they can hear that it survived.</li>
-    <li><strong>Own the part that is yours,</strong> without a discount. "I said I would" is an ownership. "I would have if you had reminded me nicely" is a transfer.</li>
-    <li><strong>Add one fact they may not have,</strong> not a character contrast. One event. A time. No always, never, or "everyone else."</li>
-    <li><strong>Separate impact from intent,</strong> then stop. "I did not mean to leave it on you. I can see that it landed that way. I'm not asking you to cancel the landing."</li>
-  </ol>
-  <p>Then be quiet. Their turn is another acknowledgement of your fact, not an instant verdict on whether your intent counts. Intent can be true and still not be the point. The point is what happens tomorrow.</p>
-  <p>If the rebuttal needs a label ("lazy," "crazy," "too much," "cold"), it is not a rebuttal. It is a verdict. Take it back to <a href="/workpapers/wp-09-tone-filter.html">WP-09</a>: one fact, one feeling, one ask. Paste that ask into the translator. The facts box is for the event. The phrase box is for the sentence. Do not mix them, or the listener will argue the verdict and never hear the event.</p>
-
-  <h2 id="both">A solution that works for both</h2>
-  <p>Understanding is not the close. A check-in that ends on "I feel heard" and no next action will have the same conversation next week. Gottman names compromise, and accepting influence, as skills: the other person's picture is data, not an attack to repel (<a href="https://www.gottman.com/blog/manage-conflict-the-six-skills/">Gottman Institute</a>).</p>
-  <p>Write both needs before either solution. Use the same split the translator already asks for. One person may need the bond confirmed. The other may need a written plan, quiet, or space before they can think. A solution that meets only the faster person's need will be called peace and felt as a loss.</p>
-  <div class="ci-script">
-    <p><span class="who">BOTH NEEDS, THEN ONE MOVE</span><br>"You need the kitchen not to be a surprise in the morning. I need the close of the night not to be a test I can fail without knowing the list. The move: a ten-minute close together, or a note on the fridge that says what is still open. Owner this week: me, for writing the note if we skip the ten minutes. We look at it Sunday."</p>
-  </div>
-  <p>A both-sides solution has five parts. If one is missing, you have a wish.</p>
-  <ol>
-    <li>Need A, in their words, mirrored.</li>
-    <li>Need B, in their words, mirrored.</li>
-    <li>One action that covers the minimum of each. Not the maximum of the louder one.</li>
-    <li>A named owner, and a clock time, not "when you get a chance."</li>
-    <li>A review. Sunday, or the next weekly close in <a href="/book/chapter-5.html">Chapter V</a>. If it fails, you change the system, not the verdict on the person.</li>
-  </ol>
-  <p>Some topics will not resolve in one sitting. That is not failure if you leave with a temporary experiment and a date. Forcing a permanent answer because one person fears an open loop will produce a promise the other person cannot keep. Name the experiment as an experiment. "For seven days, not forever."</p>
-  <p>If the real fix is ownership of a recurring task, do not leave it inside the check-in. Promote it to <a href="/workpapers/wp-03-raci-treaty.html">WP-03</a>. A spoken agreement with no owner returns as resentment, which is how <a href="/book/chapter-5.html">the deficit audit</a> describes a fluke becoming a pattern.</p>
-
-  <h2 id="leverage">Using the time to turn a negative into a positive</h2>
-  <p>This is not looking on the bright side. The pile of dishes does not become a gift because you rename it. <a href="/tools/mood-arbitrage-free.html">Mood Arbitrage</a> is explicit about that: shifting a negative interaction is not toxic positivity. It is changing the carrier so the actual point can land. The negative stays visible. What changes is what you do with it.</p>
-  <p>A miss is information about the system. Used well, the check-in spends its last minutes converting that information into one repeatable action, and into one thing that is already working. Used badly, it spends those minutes prosecuting the person who missed.</p>
-  <ol>
-    <li><strong>Keep the cost in plain words.</strong> "The sink was full at 7, and the morning started behind." Do not sand it down into "a little miscommunication."</li>
-    <li><strong>Ask what the miss was pointing at.</strong> A need, a missing owner, a time of day when one of you is already empty, a sentence that was a hint instead of an ask. The translator's facts box is the right place to write this before you say it.</li>
-    <li><strong>Convert the need into one positive action you can repeat,</strong> not a speech about growth. The positive is behavioral. "A written close of the kitchen" is a positive. "Try to be more considerate" is a mood.</li>
-    <li><strong>Name one specific thing the other person already does</strong> that is the positive version of this. Specific, recent, observable. "You did the lunch boxes without being asked" gives the nervous system a true counterweight. "You're a great partner" does not, because it cannot be checked.</li>
-    <li><strong>Put the action where the program can see it.</strong> A repeated friction belongs in the weekly resync of <a href="/workpapers/wp-13-pll-protocol.html">WP-13</a>, then in WP-03 or <a href="/workpapers/wp-04-deficit-audit.html">WP-04</a>, not in a hotter speech next Tuesday.</li>
-  </ol>
-  <p>The leverage is this: the negative paid for a clearer system. If you leave with only the sting, you wasted the cost. If you leave with only the compliment, you hid the cost and it will bill you again.</p>
-  <div class="ci-script ci-good">
-    <p><span class="who">CLOSE</span><br>"The negative was a sink with no owner after 9. The positive we are keeping is a ten-minute close, or a note. Thank you for saying it as a fact instead of as a verdict on me. I'll write tonight's note before I sit down."</p>
-  </div>
-
-  <h2 id="notes">How to build the talking notes</h2>
-  <p>Talking notes are the sentences you might say, written before anyone is waiting. They live in the <a href="/signal-translator.html#notes">Signal Translator</a>. You can add more than one. You do not have to say all of them.</p>
-  <ol>
-    <li>Alone, before you open the tool, write every thing you are tempted to raise.</li>
-    <li>Sort the list. <strong>Today:</strong> what will still be wrong tomorrow, or what needs a signal that you are not leaving. <strong>A system:</strong> a task with no owner. That goes to <a href="/workpapers/wp-03-raci-treaty.html">WP-03</a>, not into a speech. <strong>Can wait:</strong> real, and named with a date. An unnamed wait feels like a dismissal.</li>
-    <li>Open the translator. Set both people, the relationship, and the room. If you have not said how you receive words, make the <a href="/wiring-card.html">wiring card</a> on an ordinary day, not in this one.</li>
-    <li>For each item you might actually say, write the sentence and translate it. Read the takeaway: how it may be heard, then pick one way to say it. Set priority and care, then add it. Step 4 clears the sentence and keeps the page. The people and the room stay. The optional boxes are the event, and a reply you already have. Skip them if you only have the sentence.</li>
-    <li>Read the load note under the list. One sentence is light. Two can fit if both are small and both of you are settled. Three is getting heavy. Four is a list, not a conversation. When it says the load is heavy, keep the sentence that, if settled, makes the others smaller. Park the rest with a date.</li>
-    <li>Save the PDF. Take that page in. Leave the score at home. Do not read a reading out loud.</li>
-    <li>In the room, start with one sentence. Stop. Let them say what they heard. If there is time and both bodies are still in the conversation, you may take the next. You do not owe the whole list. A second topic that shows up in the room gets parked, even if it is already on the page.</li>
-  </ol>
-  <p><a href="/signal-translator.html#notes">Open the translator and start the notes.</a> The page you take in includes the order for hearing both sides, and a cheat sheet for a check-in, a conflict, and an ordinary conversation. The same tool works outside a check-in: an unsent text, a work email, a handoff, a family dinner, or a sentence you are only trying to understand.</p>
-
-  <h2 id="translator">Where the Signal Translator sits in the program</h2>
-  <p>The translator is a pre-flight check for a sentence, not a score you read out loud at someone. Use it on your own next line. Using it to prove the other person heard you wrong, in the middle of the check-in, is a verdict with a progress bar. Do not do that.</p>
-  <table class="ci-table">
-    <thead><tr><th>When</th><th>What to set</th><th>What you are protecting</th></tr></thead>
-    <tbody>
-      <tr><td data-h="When">Before the check-in</td><td data-h="What to set">Both wirings, the relationship, situation "Repair" or "A decision is due," environment "Private and calm." Paste the opening sentence. Put the event in the facts box.</td><td data-h="Protecting">You find the static before they have to.</td></tr>
-      <tr><td data-h="When">If you already have their reply</td><td data-h="What to set">Paste it in the reply box. Read it as a signal the other way. Then try the reverse.</td><td data-h="Protecting">You stop answering the mood and start answering what they actually said.</td></tr>
-      <tr><td data-h="When">Daily 90-second loop</td><td data-h="What to set">Usually skip it. WP-13 is status, not a case. If your one friction sentence feels sharp, test that sentence only.</td><td data-h="Protecting">The daily loop stays a loop. Criticism will get it avoided.</td></tr>
-      <tr><td data-h="When">Weekly resync</td><td data-h="What to set">Test the sentence that promotes a repeated friction into WP-03 or WP-09.</td><td data-h="Protecting">A pattern gets a system, not a speech.</td></tr>
-      <tr><td data-h="When">WP-09, before you send</td><td data-h="What to set">Fact, feeling, ask. The ask is the phrase. The fact stays in the facts box.</td><td data-h="Protecting">The raw reaction does not become the message.</td></tr>
-      <tr><td data-h="When">Mid-conversation, if a line lands wrong</td><td data-h="What to set">Do not open the tool in their face. Pause. Mirror. If you are flooded, stop and return. Run the sentence later, alone, before you try again.</td><td data-h="Protecting">The tool stays a mirror for you, not a weapon.</td></tr>
-      <tr><td data-h="When">After, if it squealed anyway</td><td data-h="What to set"><a href="/carrier-wave-decoder.html">Carrier Wave Decoder</a> for the moment it slipped. Translator for the sentence you wish you had used.</td><td data-h="Protecting">Repair is specific, not "let's communicate better."</td></tr>
-    </tbody>
-  </table>
-  <p>The rest of the program is the furniture around the check-in, not a rival to it.</p>
-  <ul>
-    <li><a href="/quick-checks.html#ladder">Nervous System Ladder</a> and <a href="/wp-11.html">WP-11</a>: whether the bodies can be in the room.</li>
-    <li><a href="/workpapers/wp-02-battery-stress-meter.html">WP-02</a>: how much load was already there before the topic.</li>
-    <li><a href="/wired-differently.html">Wired Differently</a>: why the same acknowledgement can feel warm to one person and vague to another.</li>
-    <li><a href="/workpapers/wp-09-tone-filter.html">WP-09</a>: fact, feeling, ask, before the sentence exists.</li>
-    <li><a href="/workpapers/wp-13-pll-protocol.html">WP-13</a>: the small daily check-in that keeps most topics from needing this page.</li>
-    <li><a href="/workpapers/wp-03-raci-treaty.html">WP-03</a> and <a href="/workpapers/wp-04-deficit-audit.html">WP-04</a>: where a both-sides solution goes if it is really about ownership.</li>
-    <li><a href="/tools/mood-arbitrage-free.html">Mood Arbitrage</a>: the carrier shift, when the content is right and the frequency is not.</li>
-    <li><a href="/relationships.html">Relationships</a>: the dynamic changes what "we" means. Set it in the translator before you trust the read.</li>
-    <li><a href="/book/chapter-1.html">Chapter I</a>: pace, register, urgency. <a href="/book/chapter-4.html">Chapter IV</a>: letting a comment land before you answer it. <a href="/book/chapter-5.html">Chapter V</a>: the monthly look that weekly check-ins miss.</li>
-  </ul>
-
-  <h2 id="card">A card you can read from</h2>
-  <p>Print this block, or keep it on the table. Reading a card is not childish. It is how you keep the order when your body wants to skip to the rebuttal.</p>
-  <div class="ci-script">
-    <p><span class="who">OPEN</span><br>"Twenty minutes. One topic: ___. I am not against you. This is not a verdict on you. Either of us can pause. If we pause, we come back at ___. Other topics get parked, not added."</p>
-    <p><span class="who">IF IT DRIFTS OR SPIKES</span><br>"That's a second topic. I'm parking it for ___. We are still on ___." Or: "I'm leaving the conversation. I will come back at ___."</p>
-    <p><span class="who">STATE</span><br>"I'm at ___ on the ladder. You?"</p>
-    <p><span class="who">SPEAKER</span><br>"The fact is ___. It landed as ___. The ask is ___."</p>
-    <p><span class="who">LISTENER, BEFORE ANY ANSWER</span><br>"What I heard is ___. Did I get that?" Then: "That can make sense." Stop.</p>
-    <p><span class="who">SWITCH</span><br>Same two lines, the other way.</p>
-    <p><span class="who">REBUTTAL, ONLY IF NEEDED</span><br>"Your fact, as I heard it: ___. My part: ___. One fact I want added: ___. I'm not asking you to cancel how it landed."</p>
-    <p><span class="who">BOTH</span><br>"You need ___. I need ___. The move is ___. Owner: ___. By: ___. We look again on ___."</p>
-    <p><span class="who">LEVERAGE</span><br>"The miss showed us ___. The positive we are keeping is ___. One thing you already did that counts: ___."</p>
-  </div>
-  <p class="ci-note">Practice the card once on a small topic before you use it on a loaded one. The Family Institute notes that the speaker-listener order is easier in a tense talk if you have already used it when nothing is at stake. A first performance, on the worst topic, is how good protocols get abandoned.</p>
-
-  <aside class="tol-warning" aria-labelledby="ci-limits">
-    <h3 id="ci-limits">What this page can't do</h3>
-    <p>It can't replace a clinician, a mediator, or a safety plan. It can't make two unwilling people fair. It scores no one. If a check-in becomes a cross-examination with better manners, stop and return to the mirror, or stop for the day. The <a href="/signal-translator.html">Signal Translator</a> can show how a sentence may land. It cannot hear the room, and it should not be used to win one.</p>
-  </aside>
+<div class="try-this">
+  <p><strong>Try this:</strong> Ask for twenty minutes at a set time for one small topic, and practice the order there before you use it on a big one.</p>
+  <p><a href="/signal-translator.html#notes">Start your talking notes &rarr;</a></p>
+</div>
 </main>
 </body>
 </html>
