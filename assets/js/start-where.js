@@ -64,7 +64,7 @@
       picks:[
         ['/is-this-for-you.html','Is this right for you?','What it is, what it is not, and who it does not suit.'],
         ['/how-it-works.html','How it works','The whole idea in plain language, in about four minutes.'],
-        ['/plain-english.html','Plain English','Every technical word on the site, translated.']
+        ['/ways-in.html','Ways in','What is free, what an email opens, and what each level shares.']
       ]}
   ];
 

@@ -36,7 +36,6 @@
   var SECTIONS = [
     { id: 'start', title: 'Start here', blurb: 'New to the site? These pages explain the idea and let you try it in a few minutes.', items: [
       { href: '/index.html', code: '', title: 'Home', note: 'What’s new, the ways in, and the full contents' },
-      { href: '/plain-english.html', code: '', title: 'Plain English', note: 'Every technical term on the site, translated into one sentence. You never need them to use the program' },
       { href: '/how-it-works.html', deep: true, code: '', title: 'How it works', note: 'The outside lens in full: what the program looks at, and why the technical layer is optional' },
       { href: '/contents.html', deep: true, code: '', title: 'Contents', note: 'Everything in the program, in three parts, plus the full site directory' },
       { href: '/ways-in.html', deep: true, code: '', title: 'Ways in', note: 'Free while it’s being built: what each level opens, and what it shares' },
@@ -234,8 +233,6 @@
     var mob = el('button', { type: 'button', class: 'tol-contents-btn', 'aria-controls': 'tol-panel', 'aria-expanded': 'false' }, 'Menu');
     mob.addEventListener('click', function () { openPanel(hereSection && hereSection.id); });
     bar.appendChild(mob);
-
-    bar.appendChild(el('a', { class: 'tol-jargon', href: '/plain-english.html', title: 'Every technical term on the site, in one plain sentence' }, 'Jargon?'));
     memberLink = joinLink('tol-member');
     bar.appendChild(memberLink);
 

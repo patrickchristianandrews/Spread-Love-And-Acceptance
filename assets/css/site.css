@@ -293,10 +293,6 @@ details.deeper > summary:focus-visible{ outline:2px solid var(--focus); outline-
 details.deeper .deeper-body{ padding:0 0 1rem; }
 details.deeper .deeper-body > :first-child{ margin-top:0; }
 
-/* Jargon link in the header bar */
-.tol-jargon{ font-size:.82rem !important; color:var(--ink-soft); text-decoration:none; padding:.5rem .55rem !important; white-space:nowrap; }
-.tol-jargon:hover{ color:var(--ink); text-decoration:underline; text-decoration-color:var(--brass); text-underline-offset:3px; }
-@media (max-width:1120px){ .tol-jargon{ display:none; } }
 @media print{ details.deeper{ border:0; } details.deeper > summary{ display:none; } details.deeper .deeper-body{ padding:0; } }
 
 /* ---------- "Start where you are" chooser (assets/js/start-where.js) ---------- */
