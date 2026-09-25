@@ -79,7 +79,7 @@
 
     // How to respond
     if (r.next && r.next.length) {
-      html += '<h3 style="margin-top:2rem;">How to respond</h3><ol class="cr-moves">';
+      html += '<h3>How to respond</h3><ol class="cr-moves">';
       r.next.forEach(function (m, i) {
         html += '<li' + (i === 0 ? ' class="is-first"' : '') + '><h3>' + esc(m.title) + '</h3><p>' + esc(m.say) + '</p>' +
           (m.script ? '<div class="cr-script"><q>' + esc(m.script) + '</q><button type="button" class="cr-btn is-quiet is-small" data-copy="' + esc(m.script) + '">Copy</button></div>' : '') +
@@ -90,10 +90,10 @@
     }
 
     // The form it happened in
-    html += '<h3 style="margin-top:2rem;">Because this was ' + ({ text: 'by text', email: 'by email', person: 'in person', phone: 'on the phone' })[state.form] + '</h3><p>' + formAdvice(state.form, r) + '</p>';
+    html += '<h3>Because this was ' + ({ text: 'by text', email: 'by email', person: 'in person', phone: 'on the phone' })[state.form] + '</h3><p>' + formAdvice(state.form, r) + '</p>';
 
     // Message by message
-    html += '<h3 style="margin-top:2rem;">Message by message</h3><p class="cr-hint">Marked words show what may have added heat, and what helped. Tap “What they may hear” under a message for more.</p><ol class="cr-thread">';
+    html += '<h3>Message by message</h3><p class="cr-hint">Marked words show what may have added heat, and what helped. Tap “What they may hear” under a message for more.</p><ol class="cr-thread">';
     r.turns.forEach(function (t, i) { html += bubble(r, t, i); });
     html += '</ol>';
 
@@ -117,7 +117,7 @@
       var h = Math.round(g.mins / 60);
       notes.push('<strong>A long silence</strong> of about ' + plural(h, 'hour') + ' before message ' + (g.at + 1) + '. Silence after a hard message is often read as not caring, even when it means someone needed time. Saying “I need some time, I’ll reply tonight” closes that gap.');
     });
-    if (notes.length) html += '<h3 style="margin-top:2rem;">Worth noticing</h3><ul class="cr-list">' + notes.map(function (n) { return '<li>' + n + '</li>'; }).join('') + '</ul>';
+    if (notes.length) html += '<h3>Worth noticing</h3><ul class="cr-list">' + notes.map(function (n) { return '<li>' + n + '</li>'; }).join('') + '</ul>';
 
     html += '<p style="margin-top:1.5rem;"><a class="dig" href="/check-ins-in-depth.html#order">Dig deeper: how to hold the conversation that comes next</a></p>';
     html += '</section>';
@@ -205,7 +205,7 @@
   function patterns(r, them) {
     var rows = ORDER.filter(function (k) { return r.tallyMe[k] || r.tallyThem[k]; });
     if (!rows.length) return '';
-    var h = '<h3 style="margin-top:2rem;">Patterns on each side</h3><p class="cr-hint">How often each pattern shows up. These count words, not people: both of you are doing your best with what you were carrying.</p>' +
+    var h = '<h3>Patterns on each side</h3><p class="cr-hint">How often each pattern shows up. These count words, not people: both of you are doing your best with what you were carrying.</p>' +
       '<div class="cr-table-wrap"><table class="cr-table"><thead><tr><th scope="col">Pattern</th><th scope="col" class="n">You</th><th scope="col" class="n">' + esc(them.length > 14 ? 'Them' : them) + '</th></tr></thead><tbody>';
     rows.forEach(function (k) {
       h += '<tr' + (GOOD[k] ? ' class="good"' : '') + '><td>' + esc(R.KINDS[k].label) + '</td><td class="n">' + (r.tallyMe[k] || '·') + '</td><td class="n">' + (r.tallyThem[k] || '·') + '</td></tr>';
