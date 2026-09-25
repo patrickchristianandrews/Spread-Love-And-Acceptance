@@ -54,7 +54,6 @@
       { href: '/wp-11.html', deep: true, code: 'WP-11', title: 'The Calm-Down Kit', note: 'Decide in advance what settles your body', paid: true },
       { href: '/book/chapter-3.html', deep: true, code: 'III', title: 'Autonomic Saturation & the 7 Ocular Vectors', note: 'Why some reactions are bigger than their cause', paid: true },
       { href: '/learn/index.html#part-self', deep: true, code: 'Stories', title: 'Stories from Philosophy: Knowing yourself', note: 'The Second Arrow, the Ship of Theseus, What Is Up to Us' },
-      { href: '/soundscapes.html', code: 'Audio', title: 'Soundscape Catalog', note: 'Background audio for settling and focus' }
     ]},
     { id: 'relationships', title: 'Relationships by type', blurb: 'Where to start in each kind of relationship, and every tool that fits. The shared relationship tools themselves are under The book, Workpapers and Tools.', items: [
       { href: '/check-ins.html', deep: true, code: 'Guide', title: 'Check-ins', note: 'How to hold a hard conversation in any relationship: a safe time and room, acknowledgement before rebuttal, a close that works for both' },
@@ -83,6 +82,7 @@
       { href: '/workpapers/wp-09-tone-filter.html', deep: true, code: 'WP-09', title: 'Tone Transducer & Filter', note: 'Turn a raw reaction into fact, feeling and a clear ask before you send it', paid: true },
       { href: '/wp-11.html', deep: true, code: 'WP-11', title: 'The Calm-Down Kit', note: 'Settle your body first, when either of you is too activated to talk', paid: true },
       { href: '/workpapers/wp-13-pll-protocol.html', deep: true, code: 'WP-13', title: 'Phase-Locked Loop Protocol', note: 'A 90-second daily check-in, with no debate, that keeps small things small', paid: true },
+      { href: '/do/index.html', code: '', title: 'Try the Workpapers', note: 'A playground for test-driving the worksheets before you commit' },
       { href: '/workpapers/fill/index.html', code: 'Fill-in', title: 'Fill-in workpapers', note: 'Type straight into the worksheets and save them as PDFs on your device' }
     ]},
     { id: 'program', title: 'Program & record', blurb: 'For anyone who’d rather be walked through it step by step.', items: [
@@ -97,15 +97,13 @@
       { href: '/tools/mood-arbitrage-free.html', code: '', title: 'Mood Arbitrage: introduction', note: 'The core idea and one worked example, free' },
       { href: '/tools/mood-arbitrage-full.html', code: '', title: 'Mood Arbitrage: full toolkit', note: 'A move generator, five scenarios and a four-week practice plan', paid: true },
       { href: '/tools/frequency-calibration.html', code: '', title: 'Frequency Calibration Audit', note: 'Compare your natural rhythms across five areas of daily life', paid: true },
-      { href: '/tools/frequency-sync-visualizer.html', code: '', title: 'Frequency Sync Visualizer', note: 'A live picture of how the WP-13 daily check-in keeps two people in step', paid: true }
+      { href: '/tools/frequency-sync-visualizer.html', code: '', title: 'Frequency Sync Visualizer', note: 'A live picture of how the WP-13 daily check-in keeps two people in step', paid: true },
+      { href: '/snapshot/index.html', code: '', title: 'Diagnostic Snapshot', note: 'A two-minute check on where things stand right now' }
     ]},
-    { id: 'explore', title: 'Explore & listen', blurb: 'Lighter ways in, and optional audio companions.', items: [
-      { href: '/snapshot/index.html', code: '', title: 'Diagnostic Snapshot', note: 'A two-minute check on where things stand right now' },
-      { href: '/learn/index.html', deep: true, code: '', title: 'Stories from Philosophy', note: 'Twelve real stories on knowing yourself and living well with others, each tied to the program' },
-      { href: '/do/index.html', code: '', title: 'Try the Workpapers', note: 'A playground for test-driving the worksheets before you commit' },
-      { href: '/soundscapes.html', code: '', title: 'Soundscape Catalog', note: 'Background audio made for settling down and focusing' },
-      { href: '/echoes-of-gold.html', code: '', title: 'Echoes of Gold', note: 'The companion album: the music that came before the framework' },
-      { href: '/podcast-index.html', code: '', title: 'Observational Podcast', note: 'Conversations with Kane and Christian on the ideas behind the framework' }
+    { id: 'media', title: 'Media', blurb: 'Music, audio and conversations to go with the program.', items: [
+      { href: '/soundscapes.html', code: 'Audio', title: 'Soundscape Catalog', note: 'Background audio made for settling down and focusing' },
+      { href: '/echoes-of-gold.html', code: 'Album', title: 'Echoes of Gold', note: 'The companion album: the music that came before the framework' },
+      { href: '/podcast-index.html', code: 'Podcast', title: 'Observational Podcast', note: 'Conversations with Kane and Christian on the ideas behind the framework' }
     ]},
     { id: 'about', title: 'About & status', blurb: 'Who built this and why, exactly what’s finished, and the site’s policies.', items: [
       { href: '/about.html', deep: true, code: '', title: 'About the creator', note: 'The auditor, the story, and why this framework exists' },
@@ -158,8 +156,23 @@
     var wrap = el('div', { class: 'tol-index' + (opts.page ? ' is-page' : '') + (isMember ? ' is-member' : '') });
     SECTIONS.forEach(function (s) {
       if (opts.page && s.id === 'about') return;
-      var sec = el('div', { class: 'tol-index-section', id: (opts.page ? 'contents-' : 'tol-sec-') + s.id });
-      sec.appendChild(el('h3', null, esc(s.title)));
+      var sec;
+      if (opts.accordion) {
+        // The panel shows section names only; open one to see its pages
+        var count = s.items.filter(function (i) { return i.href !== '/index.html'; }).length;
+        sec = el('details', { class: 'tol-index-section tol-acc', id: 'tol-sec-' + s.id });
+        if (s.id === opts.open) sec.open = true;
+        var hereMark = hereSection && hereSection.id === s.id ? ' <span class="tol-acc-here">you are here</span>' : '';
+        sec.appendChild(el('summary', null, '<span class="tol-acc-title">' + esc(s.title) + hereMark + '</span><span class="tol-acc-count">' + count + (count === 1 ? ' page' : ' pages') + '</span>'));
+        // One section open at a time keeps the list short
+        sec.addEventListener('toggle', function () {
+          if (!sec.open) return;
+          wrap.querySelectorAll('details.tol-acc[open]').forEach(function (d) { if (d !== sec) d.open = false; });
+        });
+      } else {
+        sec = el('div', { class: 'tol-index-section', id: (opts.page ? 'contents-' : 'tol-sec-') + s.id });
+        sec.appendChild(el('h3', null, esc(s.title)));
+      }
       if (s.blurb) sec.appendChild(el('p', null, esc(s.blurb)));
       var ol = el('ol');
       s.items.forEach(function (it) {
@@ -191,13 +204,64 @@
   // ---------- Header bar + panel ----------
   var panel, scrim, lastFocus, memberLink;
 
+  // The sections shown in the top bar. Each opens a short list of its pages.
+  var RIBBON = [['start', 'Start here'], ['self', 'Self-discovery'], ['relationships', 'Relationships'],
+                ['book', 'Book'], ['workpapers', 'Workpapers'], ['tools', 'Tools'], ['media', 'Media']];
+  var openDrop = null;
+
+  function closeDrop(refocus) {
+    if (!openDrop) return;
+    openDrop.btn.setAttribute('aria-expanded', 'false');
+    openDrop.menu.hidden = true;
+    if (refocus) openDrop.btn.focus();
+    openDrop = null;
+  }
+
+  function buildDrop(id, name, alignRight) {
+    var s = SECTIONS.filter(function (x) { return x.id === id; })[0];
+    var item = el('div', { class: 'tol-nav-item' });
+    var btn = el('button', { type: 'button', 'data-sec': id, 'aria-expanded': 'false', 'aria-controls': 'tol-drop-' + id }, esc(name));
+    if (hereSection && hereSection.id === id) btn.setAttribute('aria-current', 'true');
+    var menu = el('div', { class: 'tol-drop' + (alignRight ? ' is-right' : ''), id: 'tol-drop-' + id, hidden: '' });
+    if (s.blurb) menu.appendChild(el('p', { class: 'tol-drop-blurb' }, esc(s.blurb)));
+    var ul = el('ul');
+    s.items.forEach(function (it) {
+      if (it.href === '/index.html') return;
+      var a = el('a', { href: it.href }, (it.code ? '<span class="tol-drop-code">' + esc(it.code) + '</span>' : '') + '<span>' + esc(it.title) + '</span>');
+      if (it.href === current) a.setAttribute('aria-current', 'page');
+      var li = el('li'); li.appendChild(a); ul.appendChild(li);
+    });
+    menu.appendChild(ul);
+    var all = el('button', { type: 'button', class: 'tol-drop-all', 'aria-controls': 'tol-panel' }, 'Everything on the site &rarr;');
+    all.addEventListener('click', function () { openPanel(id); });
+    menu.appendChild(all);
+    btn.addEventListener('click', function () {
+      var wasOpen = openDrop && openDrop.btn === btn;
+      closeDrop();
+      if (wasOpen) return;
+      btn.setAttribute('aria-expanded', 'true'); menu.hidden = false;
+      openDrop = { btn: btn, menu: menu };
+    });
+    item.addEventListener('focusout', function (e) {
+      if (openDrop && openDrop.btn === btn && !item.contains(e.relatedTarget)) closeDrop();
+    });
+    item.appendChild(btn); item.appendChild(menu);
+    return item;
+  }
+  document.addEventListener('click', function (e) {
+    if (openDrop && !(e.target.closest && e.target.closest('.tol-nav-item'))) closeDrop();
+  });
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && openDrop) closeDrop(true);
+  });
+
   function openPanel(sectionId) {
     lastFocus = document.activeElement;
-    panel.querySelector('.tol-index').replaceWith(buildIndex({}));
+    closeDrop();
+    panel.querySelector('.tol-index').replaceWith(buildIndex({ accordion: true, open: sectionId }));
     scrim.hidden = false; panel.hidden = false;
     document.querySelectorAll('[aria-controls="tol-panel"]').forEach(function (b) { b.setAttribute('aria-expanded', 'true'); });
-    var target = sectionId && panel.querySelector('#tol-sec-' + sectionId);
-    if (target) target.scrollIntoView({ block: 'start' }); else panel.scrollTop = 0;
+    panel.scrollTop = 0;  // start at the top so every section name is in view
     panel.querySelector('.tol-close').focus({ preventScroll: true });
   }
   function closePanel() {
@@ -219,41 +283,33 @@
     bar.appendChild(el('a', { class: 'tol-brand', href: '/index.html' }, 'The Objective Ledger'));
 
     var nav = el('div', { class: 'tol-sections', role: 'navigation', 'aria-label': 'Site sections' });
-    [['start', 'Start here'], ['self', 'Self-discovery'], ['relationships', 'Relationships'], ['book', 'Book'], ['workpapers', 'Workpapers'], ['tools', 'Tools']].forEach(function (p) {
-      var b = el('button', { type: 'button', 'data-sec': p[0], 'aria-controls': 'tol-panel', 'aria-expanded': 'false' }, p[1]);
-      if (hereSection && hereSection.id === p[0]) b.setAttribute('aria-current', 'true');
-      b.addEventListener('click', function () { openPanel(p[0]); });
-      nav.appendChild(b);
-    });
-    var all = el('button', { type: 'button', class: 'tol-all', 'aria-controls': 'tol-panel', 'aria-expanded': 'false' }, 'All pages');
-    all.addEventListener('click', function () { openPanel(null); });
-    nav.appendChild(all);
+    RIBBON.forEach(function (p, n) { nav.appendChild(buildDrop(p[0], p[1], n >= RIBBON.length - 3)); });
     bar.appendChild(nav);
 
     var mob = el('button', { type: 'button', class: 'tol-contents-btn', 'aria-controls': 'tol-panel', 'aria-expanded': 'false' }, 'Menu');
-    mob.addEventListener('click', function () { openPanel(hereSection && hereSection.id); });
+    mob.addEventListener('click', function () { openPanel(null); });
     bar.appendChild(mob);
     memberLink = joinLink('tol-member');
     bar.appendChild(memberLink);
 
     scrim = el('div', { class: 'tol-scrim', hidden: '' });
     scrim.addEventListener('click', closePanel);
-    panel = el('div', { class: 'tol-panel', id: 'tol-panel', role: 'dialog', 'aria-modal': 'true', 'aria-label': 'All pages', hidden: '' });
+    panel = el('div', { class: 'tol-panel', id: 'tol-panel', role: 'dialog', 'aria-modal': 'true', 'aria-label': 'Everything on the site', hidden: '' });
     var head = el('div', { class: 'tol-panel-head' });
-    head.appendChild(el('h2', null, 'All pages'));
+    head.appendChild(el('h2', null, 'Everything on the site'));
     var close = el('button', { type: 'button', class: 'tol-close' }, 'Close');
     close.addEventListener('click', closePanel);
     head.appendChild(close);
     panel.appendChild(head);
-    panel.appendChild(el('p', { class: 'tol-panel-intro' }, 'Every page on the site, grouped by what it’s for.' +
+    panel.appendChild(el('p', { class: 'tol-panel-intro' }, 'Open a section to see its pages.' +
       (CONFIG.freePreview ? ' Pages marked <em>free · email</em> open once you sign up with your email.' : '')));
-    panel.appendChild(buildIndex({}));
+    panel.appendChild(buildIndex({ accordion: true }));
 
     document.addEventListener('keydown', function (e) {
       if (panel.hidden) return;
       if (e.key === 'Escape') closePanel();
       if (e.key === 'Tab') {
-        var f = panel.querySelectorAll('a, button');
+        var f = Array.prototype.filter.call(panel.querySelectorAll('a, button, summary'), function (n) { return n.offsetParent !== null; });
         var first = f[0], last = f[f.length - 1];
         if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
         else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }

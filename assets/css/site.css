@@ -188,7 +188,6 @@ div.tol-gate p{ max-width:60ch; }
 .tol-bar button:hover{ border-color:var(--line); background:var(--paper-deep); text-decoration:underline; text-decoration-color:var(--brass); text-underline-offset:4px; }
 .tol-bar button:focus-visible, .tol-bar a:focus-visible, .tol-close:focus-visible, .tol-row:focus-visible{ outline:2px solid var(--focus); outline-offset:2px; }
 .tol-bar button[aria-current="true"]{ border-bottom:3px solid var(--brass); font-weight:600; }
-.tol-bar button.tol-all{ border-color:var(--ink-soft); margin-left:.35rem; }
 .tol-bar a.tol-member{ margin-left:.35rem; font-weight:600; }
 @media (max-width:980px){ .tol-sections button:not(.tol-all){ padding:.5rem .55rem; } }
 @media (max-width:860px){
@@ -214,10 +213,64 @@ div.tol-gate p{ max-width:60ch; }
   html.tol-own-side aside.sidebar{ top:var(--tol-bar-h, 58px); height:calc(100vh - var(--tol-bar-h, 58px)); }
 }
 
-/* Medium screens: keep the header on one line. Book, Workpapers and Tools stay in All pages. */
-@media (max-width:1120px) and (min-width:861px){
-  .tol-sections button[data-sec="book"], .tol-sections button[data-sec="workpapers"], .tol-sections button[data-sec="tools"]{ display:none; }
+/* ---------- Top-bar dropdowns: one short list per section ---------- */
+.tol-nav-item{ position:relative; }
+.tol-nav-item > button::after{
+  content:""; display:inline-block; width:.38em; height:.38em; margin-left:.45em; vertical-align:.2em;
+  border-right:1.5px solid currentColor; border-bottom:1.5px solid currentColor; transform:rotate(45deg); opacity:.55;
 }
+.tol-nav-item > button[aria-expanded="true"]{ background:var(--paper-deep); border-color:var(--line); }
+.tol-nav-item > button[aria-expanded="true"]::after{ transform:rotate(225deg); vertical-align:-.05em; }
+.tol-drop{
+  position:absolute; top:calc(100% + .55rem); left:0; z-index:970;
+  width:max-content; min-width:15rem; max-width:21rem;
+  background:var(--paper); border:1px solid var(--ink); border-radius:var(--radius);
+  box-shadow:0 10px 28px rgba(33,29,23,.16); padding:.8rem .5rem .55rem;
+  font-family:"Lora", Georgia, serif; text-align:left;
+}
+.tol-drop.is-right{ left:auto; right:0; }
+.tol-drop[hidden]{ display:none; }
+.tol-drop-blurb{ margin:0 .5rem .55rem; font-size:.85rem; line-height:1.45; color:var(--ink-soft); }
+.tol-drop ul{ list-style:none; margin:0; padding:0; }
+.tol-drop li{ margin:0; }
+.tol-drop a{
+  display:flex; gap:.6rem; align-items:baseline; padding:.42rem .5rem; border-radius:var(--radius);
+  color:var(--ink); text-decoration:none; font-size:.97rem; line-height:1.35;
+}
+.tol-drop a:hover{ background:var(--paper-deep); }
+.tol-drop a[aria-current="page"]{ background:var(--paper-deep); font-weight:600; }
+.tol-drop-code{ flex:none; min-width:3.6rem; font-family:"IBM Plex Mono", ui-monospace, monospace; font-size:.72rem; color:var(--brass); }
+.tol-bar .tol-drop .tol-drop-all{
+  display:block; width:100%; margin:.45rem 0 0; padding:.6rem .5rem .2rem; text-align:left;
+  border:0; border-top:1px solid var(--line); border-radius:0; background:none;
+  font-family:"IBM Plex Mono", ui-monospace, monospace; font-size:.76rem; color:var(--ink-soft);
+}
+.tol-bar .tol-drop .tol-drop-all:hover{ background:none; color:var(--ink); }
+
+/* Medium screens: tighter spacing so all seven sections fit on one line */
+.tol-nav-item > button{ white-space:nowrap; }
+@media (max-width:1180px) and (min-width:981px){
+  .tol-brand{ font-size:1.02rem; }
+  .tol-bar{ gap:.6rem; }
+  .tol-sections .tol-nav-item > button{ padding:.5rem .45rem; font-size:.93rem; }
+  .tol-nav-item > button::after{ margin-left:.3em; }
+}
+
+/* ---------- The full list: collapsed sections, open one at a time ---------- */
+.tol-panel .tol-acc{ margin:0; border-bottom:1px solid var(--line); }
+.tol-panel .tol-acc > summary{
+  list-style:none; cursor:pointer; display:flex; align-items:baseline; justify-content:space-between; gap:1rem;
+  padding:.95rem .2rem;
+}
+.tol-panel .tol-acc > summary::-webkit-details-marker{ display:none; }
+.tol-acc-title{ font-family:"Fraunces", Georgia, serif; font-weight:600; font-size:1.2rem; }
+.tol-acc-count{ font-family:"IBM Plex Mono", ui-monospace, monospace; font-size:.74rem; color:var(--ink-soft); white-space:nowrap; }
+.tol-acc-count::after{ content:" +"; color:var(--brass); font-size:.95rem; }
+.tol-acc[open] .tol-acc-count::after{ content:" \2212"; }
+.tol-panel .tol-acc > summary:hover .tol-acc-title{ text-decoration:underline; text-decoration-color:var(--brass); text-underline-offset:4px; }
+.tol-panel .tol-acc > summary:focus-visible{ outline:2px solid var(--focus); outline-offset:2px; }
+.tol-panel .tol-acc > p{ margin:0 0 .5rem; }
+.tol-panel .tol-acc > ol{ margin-bottom:1rem; }
 
 /* ---------- Simple first, dig deeper on demand ----------
    Every section's default page is the simple version. The full version sits
@@ -340,3 +393,10 @@ details.deeper .deeper-body > :first-child{ margin-top:0; }
 .tol-index li > .tol-dig{ margin:.4rem 0 .5rem calc(5.2rem + 3px); font-size:.72rem; }
 .tol-panel .tol-index li > .tol-dig{ margin-left:calc(5.65rem + 3px); }
 @media (max-width:520px){ .tol-index li > .tol-dig, .tol-panel .tol-index li > .tol-dig{ margin-left:.55rem; } }
+
+/* Below this width the seven sections no longer fit on one line: use the Menu button */
+@media (max-width:980px){
+  .tol-sections{ display:none; }
+  .tol-contents-btn{ display:inline-block; border-color:var(--ink-soft) !important; font-weight:600; }
+}
+.tol-acc-here{ margin-left:.5rem; font-family:"IBM Plex Mono", ui-monospace, monospace; font-size:.68rem; font-weight:400; color:var(--brass); vertical-align:.15em; }
