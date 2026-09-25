@@ -317,6 +317,12 @@
       }
     });
 
+    // Pastel watercolour splashes behind the page (decorative; see site.css)
+    if (!body.hasAttribute('data-no-wash')) {
+      var wash = el('div', { class: 'tol-wash', 'aria-hidden': 'true' }, '<i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>');
+      document.documentElement.appendChild(wash);
+    }
+
     var anchor = el('span', { id: 'tol-main', tabindex: '-1' });
     body.insertBefore(anchor, body.firstChild);
     body.insertBefore(bar, body.firstChild);
