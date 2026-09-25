@@ -85,6 +85,18 @@ h1{font-family:var(--display);font-weight:700;font-size:clamp(2rem,5.5vw,3.4rem)
 	.sheet-topic{margin-top:12px;padding:14px 16px;background:var(--sheet);border-left:3px solid var(--ink)}
 	.sheet-topic p{margin:.35rem 0}
 	.sheet-topic .quiet{color:var(--muted);font-size:.92rem}
+	.takeaway{background:#fff;border:2px solid var(--ink);border-radius:var(--radius);padding:16px 16px 14px;margin:0 0 16px}
+	.takeaway h2{margin-bottom:6px}
+	.opt{display:block;margin:8px 0;padding:10px 12px;border:1px solid var(--line);background:var(--sheet);border-radius:var(--radius);cursor:pointer}
+	.opt:has(input:checked){border:2px solid var(--ink);background:#fff}
+	.opt b{display:block;margin-bottom:2px}
+	.opt .why{display:block;color:var(--muted);font-size:.88rem;margin-bottom:4px}
+	.cue{margin-top:10px;padding:10px 12px;background:var(--sheet);border-left:3px solid var(--brass)}
+	.cue.stop{border-left-color:var(--a)}
+	.note-tools{display:flex;flex-wrap:wrap;gap:8px;align-items:end;margin:.4rem 0 .2rem}
+	.note-tools label{font-size:.82rem;color:var(--muted)}
+	.note-tools select{display:block;margin-top:2px;font:inherit;padding:4px 6px}
+	.fullread{margin-top:8px}
 	@media(max-width:720px){.s4split{grid-template-columns:1fr}}
 h2{font-family:var(--display);font-weight:600;font-size:1.3rem;margin:0 0 10px;line-height:1.25}
 h3{font-family:var(--display);font-weight:600;font-size:1.08rem;margin:0 0 6px;line-height:1.3}
@@ -422,6 +434,7 @@ details.src summary{cursor:pointer;font-family:var(--display);font-size:.98rem;c
     <p class="s4lead">Run Step 4 once for each sentence. Add it here, then write the next. This page is what you print. The score stays off it. How to choose what belongs on the list is on <a href="check-ins.html#notes">Check-ins</a>.</p>
     <div class="actions">
       <button class="go" id="writeNext" type="button">Write the next sentence</button>
+      <button class="ghost" id="sortNotes" type="button">Put say-first, lighter ones on top</button>
       <button class="ghost" id="pdf" type="button">Save talking notes as PDF</button>
       <button class="ghost" id="clearAgenda" type="button">Clear the sentences</button>
     </div>
@@ -482,6 +495,11 @@ details.src summary{cursor:pointer;font-family:var(--display);font-size:.98rem;c
       <span class="sheet-k">4. IF A SECOND TOPIC SHOWS UP</span>
       <p>"That's real. It is not this meeting. I'm writing it down for ________. We are still on this one."</p>
       <p>Parked for later: _______________</p>
+    </div>
+    <div class="sheet-card">
+      <span class="sheet-k">WHEN TO REDIRECT, AND WHEN TO STOP</span>
+      <p><b>Redirect</b> when the voice rises, a second topic shows up to win, or they heard a verdict you did not mean. Say once: "That's real. We are still on this sentence. I am not against you." Then say the chosen sentence again, and stop.</p>
+      <p><b>Stop</b> when you repeat yourself, you go blank, they shut down, the room is not safe, or a note on this page says Stop. Say: "I need a pause. I am not leaving this. We are okay. I will come back at [time]." Do not finish the point.</p>
     </div>
     <div class="sheet-card" id="derailCard">
       <span class="sheet-k">5. IF IT STARTS TO DERAIL</span>
@@ -1796,6 +1814,51 @@ function replyHTML(reply, A, B, phraseFound, phrase){
 /* ============================================================
    RUN
    ============================================================ */
+function cleanSay(s){
+  return String(s||"").replace(/\[[^\]]*\]/g,"").replace(/\s+/g," ").trim();
+}
+function sayOptions(text, rw, found, words){
+  const plain = cleanSay(rw) || text;
+  const opts=[];
+  const push=(o)=>{ if(!o.say) return; if(opts.some(x=>x.say.toLowerCase()===o.say.toLowerCase())) return; opts.push(o); };
+  const bondNeed = needB==="bond"||needB==="now"||needB==="touch"||sitId==="bond"||sel.B.has("anxiety")||sel.B.has("adhd")||sel.B.has("trauma");
+  const shortNeed = sel.B.has("adhd")||sel.B.has("dyslexic")||bstate!=="v"||channel==="text"||words>28;
+  const literalNeed = sel.B.has("autistic")||sel.B.has("alex");
+  if(bstate==="d"||useId==="now"||envId==="substances"){
+    push({id:"wait", fit:"Do not say it now", why:"This state, or this room, cannot hold the sentence. The care is the pause and the return.", say:"I need a pause. I am not leaving this. We are okay. I will come back at [time]."});
+  }
+  push({id:"plain", fit:"Clearest version", why:"Keeps the fact and the ask. Drops the part only one wiring may hear. Still uses the room, the relationship, and their state.", say:plain});
+  if(bondNeed) push({id:"bond", fit:"If they need to know you are not against them", why:"Lead with the bond, then the fact. Fits a fear of losing you, or a wiring that reads a hard sentence as rejection.", say:"I am not against you. "+plain});
+  if(shortNeed){
+    const first=(plain.split(/(?<=[.!?])\s+/)[0]||plain);
+    push({id:"short", fit:"If they need it short", why:"One line. Better if they are mobilized, reading a text, or the sentence is long.", say:first});
+  }
+  if(literalNeed) push({id:"literal", fit:"If they need it literal", why:"The ask, with the hint taken out. Better when hints and vague time do not arrive.", say:plain.replace(/\b(?:maybe|just|soon|later|whenever)\b/gi,"").replace(/\s+/g," ").trim()||plain});
+  if(relId==="coworker"||envId==="work") push({id:"work", fit:"If this is work", why:"The task and a time. No read of their character, and no gesture.", say:"The task is this. I need it by a time we name. Can we do that?"});
+  if(plain.replace(/\s/g,"").toLowerCase()!==text.replace(/\s/g,"").toLowerCase()){
+    push({id:"yours", fit:"Keep your words", why:"Use this only if the clearer version drops something you still mean. They may still hear the static.", say:text});
+  }
+  return opts.slice(0,4);
+}
+function cueFor(lvlId){
+  const stop = useId==="now" || bstate==="d" || envId==="substances" || (lvlId==="heavy" && (bstate==="s" || sitId==="argument"));
+  const redirect = !stop && (lvlId!=="clear" || sitId==="argument" || sitId==="bond" || (needA&&needB&&needA!==needB));
+  if(stop) return {
+    id:"stop", label:"Stop",
+    when:"Stop before the next sentence if a body has left the talk, the room is not safe, or you are already in the fight.",
+    how:"Say: I need a pause. I am not leaving this. We are okay. I will come back at [time]. Do not finish the point. Do not follow if they asked for space."
+  };
+  if(redirect) return {
+    id:"redirect", label:"Redirect",
+    when:"Redirect if the voice rises, a second topic shows up to win, or they heard a verdict you did not mean.",
+    how:"Say once: That's real. We are still on this sentence. I am not against you. Then say the chosen sentence again, and stop."
+  };
+  return {
+    id:"go", label:"Go",
+    when:"The words and the room can hold this sentence. Still stop if a body leaves.",
+    how:"Say the sentence you chose. Stop. Let them say what they heard before you add anything."
+  };
+}
 function run(){
   const text=$("#phrase").value.trim();
   const msg=$("#msg"); msg.textContent="";
@@ -1836,7 +1899,7 @@ function run(){
   const relName = relId && REL[relId] ? REL[relId].label.toLowerCase() : "";
   const ctxBits = [relName, sitId&&SIT[sitId]?SIT[sitId].label.toLowerCase():"", envId&&ENV[envId]?ENV[envId].label.toLowerCase():""].filter(Boolean);
   let h='';
-  h+='<div class="rhead"><h2 id="rTitle">The read</h2><p class="pair"><span class="pa">'+esc(A)+(Aids.length?' ('+esc(listNames(sel.A))+')':'')+'</span> &rarr; <span class="pb">'+esc(B)+' ('+esc(listNames(sel.B))+')</span>'+(ctxBits.length?' &middot; '+esc(ctxBits.join(", ")):'')+' &middot; '+chName+' &middot; '+esc(B)+' is '+STATE_NOTE[bstate][0].toLowerCase()+'</p></div>';
+  h+='<div class="rhead"><h2>The read</h2><p class="pair"><span class="pa">'+esc(A)+(Aids.length?' ('+esc(listNames(sel.A))+')':'')+'</span> &rarr; <span class="pb">'+esc(B)+' ('+esc(listNames(sel.B))+')</span>'+(ctxBits.length?' &middot; '+esc(ctxBits.join(", ")):'')+' &middot; '+chName+' &middot; '+esc(B)+' is '+STATE_NOTE[bstate][0].toLowerCase()+'</p></div>';
 
   // meter
   h+='<div class="box tone-brass"><div class="meter"><span class="lvl lvl-'+lvl[0]+'">'+lvl[1]+'</span><div class="track" role="img" aria-label="Static level: '+lvl[1]+'"><div class="fill lvl-'+lvl[0]+'" data-w="'+pct+'"></div></div><p class="why">'+esc(whyBits.join(" "))+'</p></div>';
@@ -1940,18 +2003,49 @@ function run(){
     const notes=[]; fids.forEach(fid=>{ const m=NT[a].meant&&NT[a].meant[fid]; if(m && !notes.includes(m)) notes.push(m); });
     meantBits.push(NT[a].short+": "+(notes[0]||NT[a].meantDefault));
   });
+  const opts=sayOptions(text, changed?rw:text, found, words);
+  const cue=cueFor(lvl[0]);
+  const heardLines=heard.map(e=>e.h).slice(0,2);
+  const cond=[listNames(sel.B), STATE_NOTE[bstate][0].toLowerCase(), relName, sitId&&SIT[sitId]?SIT[sitId].label.toLowerCase():"", envId&&ENV[envId]?ENV[envId].label.toLowerCase():"", chName].filter(Boolean);
+  const perceived = heardLines[0] ? heardLines[0] : "Close to what you meant. Tone and history can still change it.";
   lastTopic={
     fact:$("#facts").value.trim(),
     phrase:text,
-    heard:heard.map(e=>e.h).slice(0,2),
+    heard:heardLines,
     meant:meantBits.slice(0,2).join(" "),
-    say: (changed?rw:text).replace(/\s+/g," ").trim(),
-    check: checks[0] || "Here's what I heard: ___. Is that what you meant?"
+    say: opts[0].say,
+    choice: opts[0].fit,
+    check: checks[0] || "Here's what I heard: ___. Is that what you meant?",
+    pri: cue.id==="stop"?"3":"1",
+    care: (cue.id==="stop"||lvl[0]==="heavy")?"3":(cue.id==="redirect"||lvl[0]==="some")?"2":"1",
+    cueLabel: cue.label,
+    cueWhen: cue.when,
+    cueHow: cue.how
   };
-  h+='<div class="rfoot"><button class="go" type="button" id="addTopic">'+(useId==="now"?"Save the pause card, not this score":"Add this, then write the next")+'</button><button class="ghost" type="button" id="again">Try the reverse</button><button class="ghost" type="button" id="copy">Copy the read</button><button class="ghost" type="button" id="print">Print</button><a class="ghost" href="check-ins.html" style="text-decoration:none">Check-in order</a></div>';
+  let sum='<div class="takeaway" id="takeaway">';
+  sum+='<h2 id="rTitle">The takeaway</h2>';
+  sum+='<p><b>How it may be heard.</b> '+esc(perceived)+'</p>';
+  sum+='<p>That reading uses '+esc(B)+'\'s wiring, and the conditions you set: '+esc(cond.join(", "))+'. It is a may, not a verdict.</p>';
+  sum+='<p><b>Choose one way to say it.</b> The one you pick is what gets added to the page you take in.</p>';
+  sum+=opts.map((o,i)=>'<label class="opt"><input type="radio" name="saypick" value="'+esc(o.id)+'"'+(i===0?' checked':'')+'> <b>'+esc(o.fit)+'</b><span class="why">'+esc(o.why)+'</span>'+esc(o.say)+'</label>').join("");
+  sum+='<div class="note-tools"><label>Priority<select id="pickPri"><option value="1"'+(lastTopic.pri==="1"?' selected':'')+'>Say first</option><option value="2"'+(lastTopic.pri==="2"?' selected':'')+'>If there is time</option><option value="3"'+(lastTopic.pri==="3"?' selected':'')+'>Park</option></select></label><label>Care<select id="pickCare"><option value="1"'+(lastTopic.care==="1"?' selected':'')+'>Light</option><option value="2"'+(lastTopic.care==="2"?' selected':'')+'>Careful</option><option value="3"'+(lastTopic.care==="3"?' selected':'')+'>Heavy</option></select></label></div>';
+  sum+='<div class="cue'+(cue.id==="stop"?' stop':'')+'"><b>'+esc(cue.label)+'.</b> '+esc(cue.when)+' '+esc(cue.how)+'</div>';
+  sum+='<div class="actions"><button class="ghost" type="button" id="copyTake">Copy the takeaway</button></div></div>';
+  h=sum+'<details class="fullread"><summary><b>The full read, if you want it</b></summary>'+h+'</details>';
+  h+='<div class="rfoot"><button class="go" type="button" id="addTopic">'+(useId==="now"?"Save the pause card, not this score":"Add the sentence I chose, then write the next")+'</button><button class="ghost" type="button" id="again">Try the reverse</button><button class="ghost" type="button" id="copy">Copy the full read</button><button class="ghost" type="button" id="print">Print</button><a class="ghost" href="check-ins.html" style="text-decoration:none">Check-in order</a></div>';
 
   const R=$("#results"); R.innerHTML=h; R.hidden=false;
   requestAnimationFrame(()=>{ const f=R.querySelector(".fill"); if(f) f.style.width=f.dataset.w+"%"; });
+  R.querySelectorAll('input[name="saypick"]').forEach(inp=>inp.addEventListener("change",()=>{
+    const o=opts.find(x=>x.id===inp.value); if(!o||!lastTopic) return;
+    lastTopic.say=o.say; lastTopic.choice=o.fit;
+  }));
+  $("#pickPri").addEventListener("change",e=>{ if(lastTopic) lastTopic.pri=e.target.value; });
+  $("#pickCare").addEventListener("change",e=>{ if(lastTopic) lastTopic.care=e.target.value; });
+  $("#copyTake").addEventListener("click",()=>{
+    const t=["How it may be heard: "+(lastTopic.heard[0]||"close to what you meant"), "Say this: "+lastTopic.say, lastTopic.cueLabel+": "+lastTopic.cueHow].join("\n");
+    (navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(()=>{$("#copyTake").textContent="Copied";},()=>{$("#copyTake").textContent="Select and copy manually";});
+  });
   $("#addTopic").addEventListener("click",()=>{
     if(useId==="now"){ savePdf(); return; }
     addCurrent();
@@ -2028,7 +2122,21 @@ function loadAdvice(n){
 function paintAgenda(){
   const list=$("#agendaList"), empty=$("#agendaEmpty"), note=$("#loadNote");
   empty.hidden = agenda.length>0;
-  list.innerHTML = agenda.map((t,i)=>'<article class="sheet-topic"><span class="sheet-k">SENTENCE '+(i+1)+(i===0?" · START HERE IF YOU ONLY SAY ONE":"")+' &middot; '+esc(t.who)+'</span>'+(t.fact?'<p><b>The event.</b> '+esc(t.fact)+'</p>':'')+'<p><b>Say this, then stop.</b> '+esc(t.say)+'</p><p><b>Then ask.</b> '+esc(t.check)+'</p><p class="quiet">Do not read this part out loud. They may hear: '+esc((t.heard&&t.heard.join(" / "))||"roughly what was meant")+'.</p></article>').join("");
+  const PRI={1:"Say first",2:"If there is time",3:"Park"};
+  const CARE={1:"Light",2:"Careful",3:"Heavy"};
+  list.innerHTML = agenda.map((t,i)=>{
+    const pri=t.pri||"1", care=t.care||"2";
+    return '<article class="sheet-topic"><span class="sheet-k">SENTENCE '+(i+1)+(pri==="1"&&i===agenda.findIndex(x=>(x.pri||"1")==="1")?" · START HERE":"")+' &middot; '+esc(t.who)+'</span>'
+      +'<div class="note-tools"><label>Priority<select data-i="'+i+'" data-k="pri">'+[1,2,3].map(n=>'<option value="'+n+'"'+(pri===String(n)?' selected':'')+'>'+PRI[n]+'</option>').join("")+'</select></label>'
+      +'<label>Care<select data-i="'+i+'" data-k="care">'+[1,2,3].map(n=>'<option value="'+n+'"'+(care===String(n)?' selected':'')+'>'+CARE[n]+'</option>').join("")+'</select></label>'
+      +'<button type="button" class="ghost" data-i="'+i+'" data-move="-1">Up</button><button type="button" class="ghost" data-i="'+i+'" data-move="1">Down</button></div>'
+      +(t.fact?'<p><b>The event.</b> '+esc(t.fact)+'</p>':'')
+      +'<p><b>Say this, then stop.</b> '+esc(t.say)+'</p>'
+      +(t.choice?'<p class="quiet">Chosen because: '+esc(t.choice)+'</p>':'')
+      +'<p class="quiet">Do not read this part out loud. They may hear: '+esc((t.heard&&t.heard.join(" / "))||"roughly what was meant")+'.</p>'
+      +(t.cueLabel?'<p><b>'+esc(t.cueLabel)+'.</b> '+esc(t.cueWhen||"")+' '+esc(t.cueHow||"")+'</p>':'')
+      +'</article>';
+  }).join("");
   if(note){
     note.hidden = agenda.length===0;
     note.textContent = loadAdvice(agenda.length);
@@ -2049,12 +2157,13 @@ function sheetLines(){
   lines.push("2. The sentence");
   if(useId!=="now" && agenda.length){
     agenda.forEach((t,i)=>{
-      lines.push("Sentence "+(i+1)+"  "+t.who);
+      const PRI={1:"Say first",2:"If there is time",3:"Park"};
+      const CARE={1:"Light",2:"Careful",3:"Heavy"};
+      lines.push("Sentence "+(i+1)+"  "+(PRI[t.pri]||"Say first")+"  "+(CARE[t.care]||"Careful")+"  "+t.who);
       if(t.fact) lines.push("The event: "+t.fact);
       lines.push("Say this, then stop: "+t.say);
-      lines.push("Then ask: "+t.check);
       lines.push("Do not read aloud. They may hear: "+(t.heard&&t.heard.length?t.heard.join(" / "):"roughly what was meant")+".");
-      if(t.meant) lines.push("You may have meant: "+t.meant);
+      if(t.cueLabel) lines.push(t.cueLabel+": "+(t.cueHow||""));
       lines.push("");
     });
   } else if(useId==="now"){
@@ -2194,6 +2303,18 @@ function writeNext(){
   $("#phrase").focus();
 }
 $("#writeNext").addEventListener("click",()=>{ if(lastTopic && useId!=="now") addCurrent(); writeNext(); });
+$("#sortNotes").addEventListener("click",()=>{ agenda.sort((a,b)=>(+(a.pri||1)-+(b.pri||1))||(+(a.care||2)-+(b.care||2))); paintAgenda(); });
+$("#agendaList").addEventListener("click",e=>{
+  const b=e.target.closest("button"); if(!b||b.dataset.move==null) return;
+  const i=+b.dataset.i, j=i+Number(b.dataset.move);
+  if(j<0||j>=agenda.length) return;
+  const [x]=agenda.splice(i,1); agenda.splice(j,0,x); paintAgenda();
+});
+$("#agendaList").addEventListener("change",e=>{
+  const s=e.target.closest("select"); if(!s) return;
+  const t=agenda[+s.dataset.i]; if(!t) return;
+  t[s.dataset.k]=s.value;
+});
 $("#pdf").addEventListener("click", savePdf);
 $("#clearAgenda").addEventListener("click",()=>{ agenda=[]; lastTopic=null; paintAgenda(); });
 paintAgenda();
