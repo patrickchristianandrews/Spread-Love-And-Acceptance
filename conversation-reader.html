@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-NKC6CQ9S66"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-NKC6CQ9S66');
+</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Conversation Reader — The Objective Ledger</title>
+<meta name="description" content="Paste a text thread, chat or email exchange. See where it turned, what each of you may be hearing, and a calmer way to answer. Runs entirely in your browser.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,500&family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/css/site.css">
+<link rel="stylesheet" href="/assets/css/reading.css">
+<style>
+  .cr-private{ display:flex; gap:.8rem; align-items:flex-start; margin:0 0 2rem; padding:.85rem 1.1rem; background:var(--paper-deep); border-left:4px solid var(--credit); border-radius:var(--radius); font-size:.95rem; line-height:1.55; }
+  .cr-private strong{ font-family:"Fraunces", Georgia, serif; }
+  .cr-private svg{ flex:none; margin-top:.15rem; }
+  .cr-step{ margin:2.2rem 0 0; }
+  .cr-step > h2{ margin:0 0 .5rem !important; font-size:1.35rem !important; }
+  .cr-step > h2 span{ font-family:"IBM Plex Mono", ui-monospace, monospace; font-size:.8rem; color:var(--brass); margin-right:.5rem; font-weight:400; }
+  .cr-hint{ font-size:.93rem; color:var(--ink-soft); margin:0 0 .7rem !important; }
+  .read textarea, .read select{ font:inherit; font-size:1rem; line-height:1.55; width:100%; box-sizing:border-box; padding:.8rem .9rem; background:#FFFDF6; color:var(--ink); border:1px solid var(--ink-soft); border-radius:var(--radius); }
+  .read textarea:focus-visible{ outline:2px solid var(--focus); outline-offset:1px; }
+  #cr-input{ min-height:13rem; font-family:"IBM Plex Mono", ui-monospace, monospace; font-size:.9rem; }
+  .cr-actions{ display:flex; flex-wrap:wrap; gap:.6rem 1rem; align-items:center; margin:.8rem 0 0; }
+  .cr-btn{ font:inherit; font-weight:600; font-size:1rem; padding:.6rem 1.15rem; border-radius:var(--radius); border:1px solid var(--ink); background:var(--ink); color:var(--paper); cursor:pointer; }
+  .cr-btn:hover{ background:var(--credit); border-color:var(--credit); }
+  .cr-btn.is-quiet{ background:none; color:var(--ink); }
+  .cr-btn.is-quiet:hover{ background:var(--paper-deep); color:var(--ink); border-color:var(--ink); }
+  .cr-btn.is-small{ font-size:.85rem; padding:.35rem .7rem; font-weight:500; }
+  .cr-btn:focus-visible, .cr-chip:focus-within, .cr-who button:focus-visible{ outline:2px solid var(--focus); outline-offset:2px; }
+  .cr-formats{ margin:.6rem 0 0; font-size:.9rem; }
+  .cr-formats summary{ cursor:pointer; color:var(--ink-soft); }
+  .cr-formats ul{ margin:.5rem 0 0; }
+  .cr-chips{ display:flex; flex-wrap:wrap; gap:.5rem; margin:.3rem 0 0; }
+  .cr-chip{ position:relative; }
+  .cr-chip input{ position:absolute; opacity:0; inset:0; margin:0; cursor:pointer; }
+  .cr-chip span{ display:inline-block; padding:.45rem .85rem; border:1px solid var(--line); border-radius:999px; background:var(--paper); font-size:.95rem; }
+  .cr-chip input:checked + span{ background:var(--ink); color:var(--paper); border-color:var(--ink); }
+  .cr-note{ font-size:.9rem; color:var(--ink-soft); margin:.6rem 0 0 !important; }
+
+  .cr-safety{ margin:2rem 0 0; padding:1.1rem 1.3rem; background:#F6E4DC; border:1px solid var(--debit); border-left:6px solid var(--debit); border-radius:var(--radius); }
+  .cr-safety h2{ margin:0 0 .4rem !important; font-size:1.3rem !important; }
+  .cr-safety p{ margin:0 0 .5rem !important; }
+
+  .cr-summary{ margin:2rem 0 0; padding:1.3rem 1.4rem; border:1px solid var(--ink); border-radius:var(--radius); background:var(--paper); }
+  .cr-summary h2{ margin:0 0 .5rem !important; }
+  .cr-summary p{ margin:0 0 .6rem !important; }
+  .cr-temp{ display:inline-block; padding:.1rem .55rem; border-radius:999px; font-family:"IBM Plex Mono", ui-monospace, monospace; font-size:.78rem; vertical-align:.1em; }
+  .cr-temp.calm{ background:#DCE8DF; color:#2F5A3C; } .cr-temp.warm{ background:#F1E2C2; color:#7A5520; } .cr-temp.hot{ background:#F2D6CC; color:#7E3421; }
+  .cr-chart{ margin:1rem 0 .3rem; }
+  .cr-chart svg{ display:block; width:100%; height:auto; }
+  .cr-legend{ display:flex; flex-wrap:wrap; gap:.3rem 1.2rem; font-family:"IBM Plex Mono", ui-monospace, monospace; font-size:.74rem; color:var(--ink-soft); }
+  .cr-legend i{ display:inline-block; width:.8rem; height:.8rem; border-radius:2px; vertical-align:-.1em; margin-right:.35rem; }
+
+  .cr-moves{ list-style:none; padding:0 !important; margin:1rem 0 0 !important; display:grid; gap:1rem; }
+  .cr-moves li{ margin:0 !important; max-width:none !important; padding:1.1rem 1.25rem; background:var(--paper-deep); border:1px solid var(--line); border-left:6px solid var(--credit); border-radius:var(--radius); }
+  .cr-moves li.is-first{ border-color:var(--ink); border-left-color:var(--credit); }
+  .cr-moves h3{ margin:0 0 .35rem !important; font-size:1.15rem !important; }
+  .cr-moves p{ margin:0 0 .6rem !important; font-size:.97rem; }
+  .cr-script{ display:flex; gap:.6rem; align-items:flex-start; margin:.2rem 0 .7rem; padding:.7rem .85rem; background:#FFFDF6; border:1px dashed var(--brass); border-radius:var(--radius); font-size:1rem; line-height:1.55; }
+  .cr-script q{ flex:1; quotes:none; }
+  .cr-script .cr-btn{ flex:none; }
+
+  .cr-thread{ list-style:none; padding:0 !important; margin:1rem 0 0 !important; display:flex; flex-direction:column; gap:.7rem; }
+  .cr-msg{ margin:0 !important; max-width:min(34rem, 88%) !important; align-self:flex-start; }
+  .cr-msg.is-me{ align-self:flex-end; }
+  .cr-bubble{ padding:.65rem .9rem .7rem; border-radius:14px 14px 14px 4px; background:#FFFDF6; border:1px solid var(--line); font-size:.98rem; line-height:1.55; white-space:pre-wrap; overflow-wrap:anywhere; }
+  .cr-msg.is-me .cr-bubble{ border-radius:14px 14px 4px 14px; background:#E6EEE7; border-color:#C9D9CC; }
+  .cr-meta{ display:flex; flex-wrap:wrap; gap:.3rem .6rem; align-items:center; margin:0 0 .25rem; font-family:"IBM Plex Mono", ui-monospace, monospace; font-size:.72rem; color:var(--ink-soft); }
+  .cr-msg.is-me .cr-meta{ justify-content:flex-end; }
+  .cr-who button{ font:inherit; background:none; border:0; padding:0; color:var(--ink-soft); text-decoration:underline dotted; text-underline-offset:3px; cursor:pointer; }
+  .cr-flag{ padding:.05rem .45rem; border-radius:999px; background:var(--ink); color:var(--paper); }
+  .cr-flag.is-repair{ background:var(--credit); }
+  .cr-flag.is-missed{ background:var(--debit); }
+  .cr-heat{ display:inline-block; width:3.2rem; height:.4rem; border-radius:2px; background:var(--line); overflow:hidden; vertical-align:middle; }
+  .cr-heat b{ display:block; height:100%; background:var(--debit); }
+  .cr-bubble mark{ background:none; color:inherit; padding:0 .05em; border-radius:2px; }
+  .cr-bubble mark.t-hot{ background:rgba(150,65,43,.16); box-shadow:inset 0 -2px 0 var(--debit); }
+  .cr-bubble mark.t-warm{ background:rgba(168,121,47,.16); box-shadow:inset 0 -2px 0 var(--brass); }
+  .cr-bubble mark.t-note{ box-shadow:inset 0 -2px 0 rgba(82,75,62,.45); }
+  .cr-bubble mark.t-good{ background:rgba(62,107,76,.15); box-shadow:inset 0 -2px 0 var(--credit); }
+  .cr-bubble mark.t-alarm{ background:rgba(150,65,43,.3); box-shadow:inset 0 -2px 0 var(--debit); }
+  .cr-why{ margin:.35rem 0 0; font-size:.9rem; }
+  .cr-why summary{ cursor:pointer; color:var(--ink-soft); font-family:"IBM Plex Mono", ui-monospace, monospace; font-size:.74rem; }
+  .cr-why ul{ margin:.4rem 0 0; padding-left:1.1rem; }
+  .cr-why li{ margin:.3rem 0; }
+  .cr-msg.is-me .cr-why{ text-align:left; }
+
+  .cr-table-wrap{ overflow-x:auto; margin:1rem 0 .3rem; }
+  .cr-table{ width:100%; border-collapse:collapse; font-size:.95rem; }
+  .cr-table th, .cr-table td{ text-align:left; padding:.45rem .6rem; border-bottom:1px solid var(--line); }
+  .cr-table th{ border-bottom:3px double var(--ink); font-weight:600; }
+  .cr-table td.n{ text-align:center; font-family:"IBM Plex Mono", ui-monospace, monospace; width:5.5rem; }
+  .cr-table tr.good td:first-child::before{ content:"+ "; color:var(--credit); font-weight:600; }
+
+  .cr-list{ padding-left:1.2rem; }
+  .cr-list li{ margin:.45rem 0; }
+
+  #cr-draft{ min-height:6.5rem; }
+  .cr-checks{ list-style:none; padding:0 !important; margin:.8rem 0 0 !important; display:grid; gap:.3rem; font-size:.95rem; }
+  .cr-checks li{ margin:0 !important; }
+  .cr-checks li::before{ content:"○"; display:inline-block; width:1.4rem; color:var(--ink-soft); }
+  .cr-checks li.ok::before{ content:"✓"; color:var(--credit); font-weight:700; }
+  .cr-soft{ margin:.9rem 0 0; padding:.8rem .95rem; background:var(--paper-deep); border-left:4px solid var(--credit); border-radius:var(--radius); }
+  .cr-soft p{ margin:0 0 .5rem !important; }
+  .cr-draft-marks{ margin:.7rem 0 0 !important; font-size:.93rem; }
+
+  .cr-limits{ margin:2.5rem 0 0; }
+  [hidden]{ display:none !important; }
+  @media (max-width:560px){ .cr-msg{ max-width:94% !important; } .cr-script{ flex-direction:column; } }
+  @media print{ .cr-input-step, .cr-actions, .cr-draft-step, .cr-private{ display:none; } }
+</style>
+<script src="/assets/js/site.js" defer></script>
+<script src="/assets/js/conversation-reader-engine.js" defer></script>
+<script src="/assets/js/conversation-reader.js" defer></script>
+</head>
+<body>
+<main class="read">
+<header class="read-head"><p class="read-code">Tool</p><h1>The Conversation Reader</h1></header>
+
+<p class="simple-lede">Paste a text thread, chat or email exchange. The Reader shows where it turned, what each of you may be hearing, and a calmer way to answer.</p>
+
+<div class="cr-private">
+  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--credit)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="10.5" width="16" height="10" rx="2"/><path d="M8 10.5V7a4 4 0 0 1 8 0v3.5"/></svg>
+  <p style="margin:0;"><strong>Private by design.</strong> The Reader runs entirely in your browser. What you paste is never saved, collected or sent anywhere, and nobody sees it but you. Close the tab and it’s gone.</p>
+</div>
+
+<section class="cr-step cr-input-step" aria-labelledby="cr-s1">
+  <h2 id="cr-s1"><span>01</span>Paste the conversation</h2>
+  <p class="cr-hint">Copy the messages from your phone, a chat app or an email, and paste them here. Names at the start of each line help (“Sam: …”), but they’re not required.</p>
+  <label for="cr-input" class="visually-hidden" style="position:absolute;left:-9999px;">The conversation</label>
+  <textarea id="cr-input" spellcheck="false" placeholder="Sam: did you get a chance to look at the sink?&#10;Alex: not yet, I'll do it later&#10;Sam: you said that on Sunday. When exactly?"></textarea>
+  <div class="cr-actions">
+    <button type="button" class="cr-btn" id="cr-go">Read it</button>
+    <button type="button" class="cr-btn is-quiet" id="cr-example">Try an example</button>
+    <button type="button" class="cr-btn is-quiet" id="cr-clear">Clear</button>
+  </div>
+  <details class="cr-formats">
+    <summary>What can I paste?</summary>
+    <ul>
+      <li><strong>Lines with names:</strong> “Sam: …” / “Alex: …”, or “Me:” and “Them:”.</li>
+      <li><strong>A WhatsApp chat export</strong> (Export chat, without media).</li>
+      <li><strong>A copied text thread</strong> with no names: put a blank line between messages and the Reader will alternate; you can switch who said what afterwards.</li>
+      <li><strong>An email thread,</strong> with the “On … wrote:” lines left in.</li>
+      <li><strong>A conversation from memory</strong> (in person or on the phone): write it as “Me:” and “Them:” lines.</li>
+    </ul>
+  </details>
+</section>
+
+<div id="cr-out" aria-live="polite"></div>
+
+<section class="cr-step cr-draft-step" id="cr-draft-step" aria-labelledby="cr-s4" hidden>
+  <h2 id="cr-s4"><span>04</span>Check your reply before you send it</h2>
+  <p class="cr-hint">Write what you’re thinking of sending. The Reader checks it the same way, as you type.</p>
+  <label for="cr-draft" style="position:absolute;left:-9999px;">Your reply</label>
+  <textarea id="cr-draft" placeholder="Write your reply here…"></textarea>
+  <div id="cr-draft-out"></div>
+</section>
+
+<section class="cr-limits" aria-labelledby="cr-lim">
+  <details>
+    <summary><strong id="cr-lim">What the Reader can and can’t do</strong></summary>
+    <p>The Reader looks for patterns in words: absolutes like “always” and “never”, sentences about who someone is, dismissals, sarcasm markers, capitals, apologies and other repair attempts, clear asks, questions that may not have been answered, the past being brought in, and long silences when times are included. It weighs them to show where the conversation warmed up.</p>
+    <p>It can’t hear tone of voice, and it doesn’t know your history, your in-jokes, or what either of you meant. The same words can be affectionate between two people and cutting between two others. Use it to slow down and prepare, never as proof of who was right. The program judges arrangements, never people.</p>
+    <p>If someone’s wiring shapes how words land, the <a href="/signal-translator.html">Signal Translator</a> goes deeper on one sentence at a time, and <a href="/wired-differently.html">Wired Differently</a> explains why the same words reach people differently.</p>
+  </details>
+</section>
+</main>
+</body>
+</html>
