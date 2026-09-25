@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-NKC6CQ9S66"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-NKC6CQ9S66');
+</script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Wiring Card — The Objective Ledger (TOL-OS)</title>
+<meta name="description" content="Make a one-page wiring card: how you receive words, what silence means, what to avoid, and how a request should be phrased. Free. Nothing you type is saved or sent.">
+<meta property="og:title" content="Wiring Card — The Objective Ledger">
+<meta property="og:description" content="Tell the people you live and work with how you receive words, before a hard conversation.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,500&family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/css/site.css">
+<style>
+:root{
+  --bg:#F5EFDE; --panel:#ECE2C4; --ink:#211D17; --muted:#524B3E; --line:#D9CBA3;
+  --brass:#8A5E1E; --sheet:#FFFDF7; --radius:3px; --credit:#3E6B4C; --focus:#2B5B8C;
+  --display:"Fraunces","Lora",Georgia,serif;
+  --body:"Lora",Georgia,"Times New Roman",serif;
+  --mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;
+  box-sizing:border-box;
+}
+*,*::before,*::after{box-sizing:inherit}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);font-size:17px;line-height:1.55}
+button,input{font:inherit;color:inherit}
+button{cursor:pointer}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+.wrap{max-width:1100px;margin:0 auto;padding:0 20px 64px}
+.sitebar{display:flex;justify-content:space-between;align-items:center;gap:10px 20px;flex-wrap:wrap;padding:22px 0 16px;border-bottom:1px solid var(--line)}
+.sitebar .mark{font-family:var(--display);font-weight:600;font-size:1.05rem;text-decoration:none}
+.sitebar .mark small{display:block;font-family:var(--mono);font-weight:400;font-size:.62rem;letter-spacing:.12em;color:var(--brass);margin-top:4px}
+.sitebar .back{font-family:var(--mono);font-size:.78rem;color:var(--muted)}
+.kicker{font-family:var(--mono);font-size:.72rem;color:var(--brass);margin:0 0 10px}
+h1{font-family:var(--display);font-weight:700;font-size:clamp(2rem,5vw,3.2rem);line-height:1.02;letter-spacing:-.02em;margin:0}
+.lede,.privacy{color:var(--muted);max-width:62ch}
+.lede{margin:.7rem 0 0}
+.privacy{font-size:.92rem;margin:.4rem 0 0}
+.layout{display:grid;grid-template-columns:minmax(0,1fr) minmax(280px,380px);gap:28px;align-items:start;margin-top:22px}
+@media (max-width:860px){.layout{grid-template-columns:1fr}}
+.panel{background:var(--sheet);border:1px solid var(--line);border-radius:var(--radius);padding:16px 16px 18px;margin:0 0 14px}
+.panel h2{font-family:var(--display);font-size:1.25rem;margin:0 0 4px}
+.hint{color:var(--muted);font-size:.9rem;margin:0 0 10px}
+.lab{display:block;font-family:var(--mono);font-size:.72rem;letter-spacing:.04em;color:var(--brass);margin:12px 0 6px}
+input[type=text]{width:100%;border:1px solid var(--line);background:var(--bg);border-radius:var(--radius);padding:8px 10px}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chips button{border:1px solid var(--line);background:var(--bg);border-radius:var(--radius);padding:6px 10px;font-size:.92rem;text-align:left}
+.chips button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.go,.ghost{border-radius:var(--radius);padding:10px 14px;border:1px solid var(--ink);text-decoration:none;display:inline-flex;align-items:center}
+.go{background:var(--ink);color:var(--bg)}
+.ghost{background:transparent;color:var(--ink)}
+.side{position:sticky;top:12px}
+@media (max-width:860px){.side{position:static}}
+.sheet{background:var(--sheet);border:3px double var(--ink);padding:18px 18px 14px;margin:0 0 14px}
+.sheet .ck{font-family:var(--mono);font-size:.68rem;letter-spacing:.12em;color:var(--brass);margin:0}
+.sheet h2{font-family:var(--display);font-size:1.7rem;line-height:1.05;margin:.2rem 0 .15rem}
+.sheet .wire{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:0 0 10px}
+.sheet dl{margin:0}
+.sheet dt{font-family:var(--mono);font-size:.68rem;letter-spacing:.03em;color:var(--brass);margin-top:8px}
+.sheet dd{margin:0;font-size:1.02rem}
+.sheet dd.empty{color:var(--muted);font-style:italic}
+.sheet .fine{font-size:.78rem;color:var(--muted);margin:12px 0 0;border-top:1px solid var(--line);padding-top:8px}
+.note{margin-top:18px;padding:14px 16px;border:1px dashed var(--muted);border-radius:var(--radius);font-size:.9rem;color:var(--muted);max-width:70ch}
+.note b{color:var(--ink)}
+@media print{
+  .sitebar,.formside,.actions,.privacy,.lede,.kicker,h1,.note,.tol-bar,.tol-panel{display:none!important}
+  body{background:#fff}
+  .wrap{max-width:none;padding:0}
+  .layout{display:block}
+  .side{position:static}
+  .sheet{break-inside:avoid;margin:0 0 18px}
+  .sheet dd.empty{display:none}
+  .sheet dt:has(+ dd.empty){display:none}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="sitebar">
+    <a class="mark" href="index.html">The Objective Ledger<small>TOL&#8209;OS &middot; TOOLS</small></a>
+    <a class="back" href="wired-differently.html">&larr; Read: Wired Differently</a>
+  </div>
+  <header>
+    <p class="kicker">Tool &middot; Pairs with <a href="wired-differently.html#card">the wiring card</a> in Wired Differently</p>
+    <h1>Wiring Card</h1>
+    <p class="lede">Fill in how you actually receive words. The card on the right updates as you go. Print it, or copy it, and give it to the people you live and work with before a hard conversation, not during one.</p>
+    <p class="privacy">Runs in your browser. Nothing you type is saved, stored, or sent. This is not a diagnosis, and it is not a contract. When you are depleted, every line gets stricter.</p>
+  </header>
+
+  <div class="layout">
+    <div class="formside" id="forms"></div>
+    <div class="side" id="sheets" aria-live="polite"></div>
+  </div>
+
+  <div class="note">
+    <b>What this is for.</b> A card is a receipt, not a label. It tells someone how to send a request so it arrives. It does not obligate them to manage you, and it does not obligate you to stay available in every state. Pair it with the <a href="signal-translator.html">Signal Translator</a> when you want to test one sentence, and with <a href="check-ins.html">Check-ins</a> when the topic itself needs a safe room. The explanations are in <a href="wired-differently.html">Wired Differently</a>.
+  </div>
+</div>
+<script>
+(function(){
+  const WIRING = [
+    ["nt","Neurotypical"],["autistic","Autistic"],["adhd","ADHD"],["dyslexic","Dyslexic"],
+    ["dyspraxic","Dyspraxic"],["apd","Auditory processing"],["dld","Language processing"],
+    ["tourette","Tourette or tics"],["alex","Alexithymia"],["hsp","Highly sensitive"],
+    ["anxiety","Anxiety"],["trauma","Trauma-wired"],["ocd","OCD"]
+  ];
+  const DEV = new Set(["autistic","adhd","dyslexic","dyspraxic","apd","dld","tourette"]);
+  const LINES = [
+    {id:"receive", q:"How I receive things best", opts:[["writing","In writing"],["face","Face to face"],["call","A short call"],["voice","A voice note I can replay"],["one","One thing at a time"],["list","A written list"]]},
+    {id:"words", q:"I take words", opts:[["literal","Literally"],["tone","I read tone as part of the message"],["both","Literally when it matters, tone when it is light"]]},
+    {id:"time", q:"Give me time to answer", opts:[["sec","A few seconds"],["min","A few minutes"],["tomorrow","Until tomorrow"],["write","Write it down so I can answer later"]]},
+    {id:"quiet", q:"If I go quiet, it means", opts:[["think","I'm thinking"],["load","I'm overloaded"],["space","I need space"],["upset","I'm upset and don't have words yet"],["fine","Nothing is wrong"]]},
+    {id:"texts", q:"Short texts from me mean", opts:[["brief","Nothing. I'm just brief"],["wrong","Something is wrong"],["minute","I need a minute"],["done","I'm done for now, not done with you"]]},
+    {id:"upset", q:"When I'm upset, I need", opts:[["space","Space first, then a return time"],["company","Quiet company"],["talk","To talk it through"],["plan","A written plan"],["hug","A gesture, only if I ask"],["signal","A signal that we are still okay"]]},
+    {id:"avoid", q:"Please avoid", opts:[["sarcasm","Sarcasm when it matters"],["calm","\"Calm down\""],["loud","Loud voices"],["long","Long texts or many topics at once"],["hints","Hints instead of the ask"],["always","Always, never, and labels"],["public","Correcting me in public"],["surprise","A hard topic with no warning"]]},
+    {id:"ask", q:"A request lands best as", opts:[["could","\"Could you ___ by ___?\""],["list","One written list, not a stack of hints"],["headline","The ask in the first sentence"],["choice","Two clear options, not an open guess"]]},
+    {id:"depleted", q:"When I'm depleted, tighten this", opts:[["shorter","Shorter messages"],["writing","Writing only"],["volume","Lower volume and fewer people"],["notopic","Don't add a second topic"],["return","Name a return time, then give space"]]}
+  ];
+
+  const people = ["A"];
+  const state = {A: fresh(), B: fresh()};
+
+  function fresh(){ return {name:"", wiring:new Set(), picks:{}, custom:{}}; }
+  function $(s,r){ return (r||document).querySelector(s); }
+  function esc(s){ return String(s).replace(/[&<>"']/g, c=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[c])); }
+
+  function lineText(who, line){
+    const st = state[who];
+    const chosen = (st.picks[line.id]||[]).map(id=>{
+      const o = line.opts.find(x=>x[0]===id);
+      return o?o[1]:"";
+    }).filter(Boolean);
+    const custom = (st.custom[line.id]||"").trim();
+    if(custom) chosen.push(custom);
+    return chosen.join(". ").replace(/\.\./g,".");
+  }
+
+  function wiringLabel(who){
+    const ids = [...state[who].wiring];
+    if(!ids.length) return "";
+    const names = ids.map(id=>WIRING.find(w=>w[0]===id)[1]);
+    if(ids.includes("autistic") && ids.includes("adhd")) names.push("often called AuDHD");
+    return names.join(", ");
+  }
+
+  function buildForm(who){
+    const st = state[who];
+    const title = who==="A" ? "Your card" : "The other person's card";
+    let h = '<section class="panel" data-who="'+who+'">';
+    h += '<h2>'+title+'</h2>';
+    h += '<p class="hint">Pick what is usually true. Add a few words where the chips are not enough. Leave a line blank if it does not apply.</p>';
+    h += '<label class="lab" for="name'+who+'">Name on the card, optional</label>';
+    h += '<input id="name'+who+'" data-name="'+who+'" type="text" maxlength="60" placeholder="Alex" value="'+esc(st.name)+'">';
+    h += '<span class="lab">How I describe my wiring, optional</span>';
+    h += '<div class="chips" role="group" aria-label="Wiring">';
+    WIRING.forEach(w=>{
+      const on = st.wiring.has(w[0]);
+      h += '<button type="button" data-wire="'+w[0]+'" data-who="'+who+'" aria-pressed="'+(on?"true":"false")+'">'+w[1]+'</button>';
+    });
+    h += '</div>';
+    LINES.forEach(line=>{
+      h += '<span class="lab">'+esc(line.q)+'</span><div class="chips" role="group" aria-label="'+esc(line.q)+'">';
+      const picked = st.picks[line.id]||[];
+      line.opts.forEach(o=>{
+        h += '<button type="button" data-line="'+line.id+'" data-opt="'+o[0]+'" data-who="'+who+'" aria-pressed="'+(picked.includes(o[0])?"true":"false")+'">'+esc(o[1])+'</button>';
+      });
+      h += '</div>';
+      h += '<input data-custom="'+line.id+'" data-who="'+who+'" type="text" maxlength="160" placeholder="Or add your own words" value="'+esc(st.custom[line.id]||"")+'">';
+    });
+    h += '<div class="actions">';
+    h += '<button class="ghost" type="button" data-example="'+who+'">Use the guide\'s example</button>';
+    h += '<button class="ghost" type="button" data-clear="'+who+'">Clear this card</button>';
+    if(who==="B") h += '<button class="ghost" type="button" id="removeB">Remove this card</button>';
+    h += '</div></section>';
+    return h;
+  }
+
+  function paintForms(){
+    let h = people.map(buildForm).join("");
+    if(!people.includes("B")){
+      h += '<div class="actions"><button class="go" type="button" id="addB">Add the other person\'s card</button></div>';
+    }
+    $("#forms").innerHTML = h;
+  }
+
+  function paintSheets(){
+    $("#sheets").innerHTML = people.map(who=>{
+      const st = state[who];
+      const name = st.name.trim() || (who==="A"?"Your wiring card":"Their wiring card");
+      const wire = wiringLabel(who);
+      let rows = LINES.map(line=>{
+        const t = lineText(who, line);
+        const empty = !t;
+        return '<dt>'+esc(line.q)+'</dt><dd class="'+(empty?"empty":"")+'">'+(empty?"Not filled in yet":esc(t))+'</dd>';
+      }).join("");
+      return '<article class="sheet"><p class="ck">WIRING CARD &middot; NOT A DIAGNOSIS</p><h2>'+esc(name)+'</h2>'+(wire?'<p class="wire">'+esc(wire)+'</p>':'<p class="wire">Wiring not listed. That is fine.</p>')+'<dl>'+rows+'</dl><p class="fine">Stricter when depleted. Not a contract, and not a label. Change it when it stops being true. Objective Ledger &middot; spreadloveandacceptance.com/wiring-card.html</p></article>';
+    }).join("") + '<div class="actions"><button class="go" type="button" id="copy">Copy the card</button><button class="ghost" type="button" id="print">Print</button></div>';
+    $("#copy").addEventListener("click", copyCard);
+    $("#print").addEventListener("click", ()=>window.print());
+  }
+
+  function plain(who){
+    const st = state[who];
+    const name = st.name.trim() || (who==="A"?"Wiring card":"Second wiring card");
+    const lines = [name];
+    const wire = wiringLabel(who);
+    if(wire) lines.push("Wiring, as I describe it: "+wire);
+    LINES.forEach(line=>{
+      const t = lineText(who, line);
+      if(t) lines.push(line.q+": "+t);
+    });
+    lines.push("Not a diagnosis. Stricter when depleted. Not a contract.");
+    return lines.join("\n");
+  }
+
+  function copyCard(){
+    const text = people.map(plain).join("\n\n");
+    const btn = $("#copy");
+    (navigator.clipboard?navigator.clipboard.writeText(text):Promise.reject()).then(()=>{btn.textContent="Copied";},()=>{btn.textContent="Select the card and copy";});
+  }
+
+  function paint(){ paintSheets(); }
+
+  function toggleWire(who, id){
+    const set = state[who].wiring;
+    if(set.has(id)){ set.delete(id); return; }
+    if(id==="nt") DEV.forEach(d=>set.delete(d));
+    if(DEV.has(id)) set.delete("nt");
+    set.add(id);
+  }
+
+  function toggleOpt(who, line, opt){
+    const arr = state[who].picks[line] || (state[who].picks[line]=[]);
+    const i = arr.indexOf(opt);
+    if(i>=0) arr.splice(i,1); else arr.push(opt);
+  }
+
+  function example(who){
+    state[who].picks = {
+      receive:["writing"], words:["literal"], time:["min"], quiet:["think"],
+      texts:["brief"], upset:["space"], avoid:["sarcasm","calm"], ask:["could"], depleted:["writing"]
+    };
+    state[who].custom = {ask:"Could you take the trash out by 8?"};
+  }
+
+  $("#forms").addEventListener("click", e=>{
+    const t = e.target.closest("button");
+    if(!t) return;
+    if(t.id==="addB"){ people.push("B"); state.B=fresh(); paintForms(); paint(); return; }
+    if(t.id==="removeB"){ people.pop(); paintForms(); paint(); return; }
+    const who = t.dataset.who;
+    if(t.dataset.wire){ toggleWire(who, t.dataset.wire); paintForms(); paint(); return; }
+    if(t.dataset.opt){ toggleOpt(who, t.dataset.line, t.dataset.opt); paintForms(); paint(); return; }
+    if(t.dataset.clear){ state[t.dataset.clear]=fresh(); paintForms(); paint(); return; }
+    if(t.dataset.example){ example(t.dataset.example); paintForms(); paint(); }
+  });
+  $("#forms").addEventListener("input", e=>{
+    const t = e.target;
+    const who = t.dataset.who;
+    if(!who) return;
+    if(t.dataset.name!=null) state[who].name = t.value;
+    if(t.dataset.custom) state[who].custom[t.dataset.custom] = t.value;
+    paint();
+  });
+
+  paintForms();
+  paint();
+})();
+</script>
+</body>
+</html>
