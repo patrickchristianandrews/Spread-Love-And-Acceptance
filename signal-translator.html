@@ -13,7 +13,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>The Signal Translator — The Objective Ledger (TOL-OS)</title>
-<meta name="description" content="Pick how Person A and Person B are wired, from neurotypical, autistic, ADHD, dyslexic and more, type a phrase, and see how it might land, what it might sound like, and a clearer way to say it. Free, and nothing you type leaves your browser.">
+<meta name="description" content="Pick how you and the other person are wired, from neurotypical, autistic, ADHD, dyslexic and more, type a phrase, and see how it might land, what it might sound like, and a clearer way to say it. Free, and nothing you type leaves your browser.">
 <meta property="og:title" content="The Signal Translator — The Objective Ledger">
 <meta property="og:description" content="Same words, different receivers. See how a phrase might land for someone wired differently than you.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -49,11 +49,16 @@ header.top{padding:30px 0 8px}
 h1{font-family:var(--display);font-weight:700;font-size:clamp(2rem,5.5vw,3.4rem);line-height:1.02;letter-spacing:-.02em;margin:0}
 .lede{color:var(--muted);max-width:62ch;margin:.7rem 0 0}
 .privacy{font-family:var(--mono);font-size:.74rem;color:var(--muted);margin:14px 0 0}
-	.use-banner{margin:22px 0 0;padding:22px 24px 18px;background:var(--sheet);border:3px double var(--ink);border-radius:var(--radius)}
-	.use-banner .eyebrow{font-family:var(--mono);font-size:.72rem;letter-spacing:.08em;color:var(--brass);margin:0 0 10px}
-	.use-banner p.big{font-family:var(--display);font-weight:600;font-size:clamp(1.45rem,2.6vw,2rem);line-height:1.28;margin:0;color:var(--ink);max-width:28em}
+	.use-banner{margin:16px 0 0;padding:14px 16px 12px;background:var(--sheet);border:1px solid var(--line);border-radius:var(--radius)}
+	.use-banner .eyebrow{font-family:var(--mono);font-size:.68rem;letter-spacing:.08em;color:var(--brass);margin:0 0 6px}
+	.use-banner p.big{font-family:var(--display);font-weight:600;font-size:clamp(1.05rem,1.6vw,1.28rem);line-height:1.35;margin:0;color:var(--ink);max-width:40em}
 	.use-banner p.big a{color:var(--ink)}
-	.use-banner p.sub{margin:.85rem 0 0;max-width:66ch;font-size:1.02rem}
+	.use-list{display:grid;grid-template-columns:1fr 1fr;gap:8px 18px;margin:.7rem 0 0;padding:0;list-style:none}
+	.use-list li{margin:0;font-size:.92rem}
+	.use-banner p.sub{margin:.7rem 0 0;max-width:68ch;font-size:.95rem}
+	.load-note{margin-top:10px;padding:10px 12px;background:#fff;border-left:3px solid var(--brass);font-size:.95rem}
+	.load-note.heavy{border-left-color:var(--a)}
+	@media(max-width:720px){.use-list{grid-template-columns:1fr}}
 	.jobs{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:16px}
 	.jobs article{background:var(--panel);padding:12px 12px 10px;border-top:3px solid var(--brass)}
 	.jobs strong{font-family:var(--display);display:block;margin-bottom:4px}
@@ -216,13 +221,17 @@ details.src summary{cursor:pointer;font-family:var(--display);font-size:.98rem;c
     <div class="kicker">Tool &middot; Pairs with <a href="wired-differently.html">Wired Differently</a> and <a href="book/chapter-1.html">Chapter I</a></div>
     <h1>The Signal Translator</h1>
     <p class="lede">This tool shows the mechanics of a sentence. How you may be interpreted. How you may interpret someone else. And a matching sentence both of you are more likely to receive the same way.</p>
-    <p class="privacy">Runs entirely in your browser. Nothing you type is saved, stored or sent anywhere. A meeting sheet lives only in this tab until you save the PDF.</p>
+    <p class="privacy">Runs entirely in your browser. Nothing you type is saved, stored or sent anywhere. Talking notes live only in this tab until you save the PDF.</p>
     <aside class="use-banner" aria-labelledby="bestUse">
-      <p class="eyebrow" id="bestUse">BEST USE</p>
-      <p class="big">Best used before a <a href="check-ins.html">check-in</a>: test the sentence you plan to open with, in a room that is already safe. Do not read a score out loud at the other person. The order for the conversation itself, acknowledgement before any rebuttal, is on that page.</p>
-      <p class="sub">If you have not said how you receive words yet, make a <a href="wiring-card.html">wiring card</a> first. Then come back and test the sentence, not the person. One topic. No blame, no criticism of the person, and no assumption of bad intent. Say that you are not against them before you say the fact. The ground rules, including how to notice a spike and regroup, are on <a href="check-ins.html#ground">Check-ins</a>.</p>
+      <p class="eyebrow" id="bestUse">WHERE IT FITS</p>
+      <p class="big">Use it anywhere a sentence has to cross from one person to another. Inside the program, or with no program at all.</p>
+      <ul class="use-list">
+        <li><strong>In the program.</strong> A check-in, a weekly resync, a WP-09 message, the line you wish you had used, or the sentence you will say when you come back from a pause. After the ladder says you can hear. Once a wiring card exists, test the sentence, not the person.</li>
+        <li><strong>Outside it.</strong> A text or email you have not sent. A note to a coworker, a teacher, a landlord, a doctor, or a friend. A family dinner, a coparent handoff, a meeting. Or just learning how you hear, with no conversation planned.</li>
+      </ul>
+      <p class="sub">Do not read a score out loud at the other person. You can add more than one sentence to the <a href="#notes">talking notes</a>. How to build them, and when the list is getting heavy, is on <a href="check-ins.html#notes">Check-ins</a>.</p>
       <div class="jobs">
-        <article><strong>How you are interpreted</strong><p>Person A speaks. The read shows what Person B's wiring may do with those words.</p></article>
+        <article><strong>How you are interpreted</strong><p>You speak. The read shows what the other person's wiring may do with those words.</p></article>
         <article><strong>How you interpret them</strong><p>Paste their reply, or try the reverse. The same sentence can be a different signal on the way back.</p></article>
         <article><strong>A matching language</strong><p>A sentence that keeps the fact and the ask, and drops the part only one wiring can hear.</p></article>
       </div>
@@ -234,7 +243,7 @@ details.src summary{cursor:pointer;font-family:var(--display);font-size:.98rem;c
     <h2 id="whenH">When are you using this?</h2>
     <p class="hint">The translator is a preparation tool. The best time is before the conversation, when both of you can still choose the room. Pick the use. The note under the buttons says what to do with it.</p>
     <div class="seg rel" id="use" role="group" aria-labelledby="whenH">
-      <button type="button" data-use="checkin" aria-pressed="true">Before a check-in<small>Best use. One topic, a named time.</small></button>
+      <button type="button" data-use="checkin" aria-pressed="true">Before a planned talk<small>A check-in, a resync, or any named time.</small></button>
       <button type="button" data-use="talk" aria-pressed="false">Before a hard conversation<small>Planned. Not in the spike.</small></button>
       <button type="button" data-use="send" aria-pressed="false">Before you send it<small>A text, email, or note.</small></button>
       <button type="button" data-use="after" aria-pressed="false">After a miss, before you answer<small>You already have their words.</small></button>
@@ -251,12 +260,12 @@ details.src summary{cursor:pointer;font-family:var(--display);font-size:.98rem;c
     <p class="hint">Pick everything that fits each person. Combinations are common. Autism and ADHD, for example, often occur together. If you're not sure, choose what you know and leave the rest blank. The last two groups aren't neurotypes in the strict sense, but they change how words land just as much.</p>
     <div class="people">
       <div class="person pa" id="personA">
-        <div class="who"><h3>Person A</h3><span class="role">THE SPEAKER · SENDS THE MESSAGE</span></div>
-        <label class="namefield">Name (optional) <input type="text" id="nameA" maxlength="24" placeholder="Person A" autocomplete="off"></label>
+        <div class="who"><h3 id="whoA">You</h3><span class="role">THE SPEAKER · SENDS THE MESSAGE</span></div>
+        <label class="namefield">Name (optional) <input type="text" id="nameA" maxlength="24" placeholder="You" autocomplete="off"></label>
         <div data-chips="A"></div>
         <p class="picked" id="pickedA" aria-live="polite"></p>
       </div>
-      <div class="swapcol"><button class="swap" id="swap" type="button" title="Swap Person A and Person B">&#8646; Swap</button></div>
+      <div class="swapcol"><button class="swap" id="swap" type="button" title="Swap you and the other person">&#8646; Swap</button></div>
       <div class="person pb" id="personB">
         <div class="who"><h3>Person B</h3><span class="role">THE LISTENER · RECEIVES THE MESSAGE</span></div>
         <label class="namefield">Name (optional) <input type="text" id="nameB" maxlength="24" placeholder="Person B" autocomplete="off"></label>
@@ -338,7 +347,7 @@ details.src summary{cursor:pointer;font-family:var(--display);font-size:.98rem;c
     <p class="hint">These can differ. One person may need the bond confirmed now, because silence feels like losing you. The other may need space before they can think. Both can be cared for. Neither cancels the other. A hug is never owed.</p>
     <div class="needrow">
       <div>
-        <span class="lab" id="needALab">Person A needs</span>
+        <span class="lab" id="needALab">You need</span>
         <div class="seg rel" id="needA" role="group" aria-labelledby="needALab">
           <button type="button" data-need="now" aria-pressed="false">To resolve it now</button>
           <button type="button" data-need="bond" aria-pressed="false">A signal the bond is ok</button>
@@ -368,7 +377,7 @@ details.src summary{cursor:pointer;font-family:var(--display);font-size:.98rem;c
   <section class="panel" aria-labelledby="s3">
     <span class="step">STEP 4</span>
     <h2 id="s3">Write the sentence you plan to say</h2>
-    <p class="s4lead">Steps 1 to 3 set the people and the room. This step is the words. There is one required field: the sentence the other person will hear. Translate shows how they may receive it, and a matching sentence you can put on the meeting sheet.</p>
+    <p class="s4lead">Steps 1 to 3 set the people and the room. This step is the words. There is one required field: the sentence the other person will hear. Translate shows how they may receive it, and a matching sentence you can add to the talking notes. Add another after this one if you have it.</p>
     <div class="s4main">
       <span class="n req">REQUIRED</span>
       <label for="phrase" class="lab" id="phraseLab">The sentence</label>
@@ -401,17 +410,18 @@ details.src summary{cursor:pointer;font-family:var(--display);font-size:.98rem;c
   <!-- RESULTS -->
   <section id="results" hidden aria-live="polite" aria-labelledby="rTitle" tabindex="-1"></section>
 
-  <section class="panel" id="agendaPanel" aria-labelledby="sheetH">
-    <span class="step">TAKE THIS INTO THE ROOM</span>
-    <h2 id="sheetH">Meeting sheet</h2>
-    <p class="s4lead">This is the page you take in. It is not the score. Translate the sentence, add it, then save the PDF. One topic on the table. The rest stay parked, with a date.</p>
+  <section class="panel" id="notes" aria-labelledby="sheetH">
+    <span class="step">THE PAGE YOU TAKE IN</span>
+    <h2 id="sheetH">Talking notes</h2>
+    <p class="s4lead">These are the sentences you might say, written before anyone is waiting. Translate one, add it, then translate the next. You can add more than one. The note under the list will tell you when the load is getting heavy, and which one to say first. How to build the list is on <a href="check-ins.html#notes">Check-ins</a>.</p>
     <div class="sheet-card">
       <span class="sheet-k">1. OPEN</span>
-      <p>"Twenty minutes. One topic. I am not against you. I do not think you meant harm. If we pause, we come back at a time we name now."</p>
+      <p>"We will start with one sentence. I am not against you. I do not think you meant harm. If we pause, we come back at a time we name now."</p>
       <p>Return time, if you need it: _______________</p>
     </div>
-    <p class="hint" id="agendaEmpty">No sentence on the sheet yet. Translate the sentence above, then add it. Until then, the PDF is the open line and the pause plan.</p>
+    <p class="hint" id="agendaEmpty">Nothing here yet. Translate a sentence, add it, then do the next one if you have it. Until then, the PDF is the open line and the pause plan.</p>
     <div id="agendaList"></div>
+    <p class="load-note" id="loadNote" hidden></p>
     <div class="sheet-card">
       <span class="sheet-k">3. THE ORDER, AFTER THE SENTENCE</span>
       <ol>
@@ -435,7 +445,7 @@ details.src summary{cursor:pointer;font-family:var(--display);font-size:.98rem;c
       <p>Care does not require a solution. Lower your voice. Sit down. Get water. Put the phones away. If they asked for space, do not follow them, and do not send a stack of messages. One line is the signal. The return is the care.</p>
     </div>
     <div class="actions">
-      <button class="go" id="pdf" type="button">Save meeting sheet as PDF</button>
+      <button class="go" id="pdf" type="button">Save talking notes as PDF</button>
       <button class="ghost" id="clearAgenda" type="button">Clear the sentences</button>
     </div>
     <p class="hint">Nothing on this sheet is stored. If you close the tab before you save the PDF, the sentences are gone. Leave the score at home.</p>
@@ -943,7 +953,7 @@ function toggle(who,id){
   }
   sync();
 }
-function nm(who){ const v=$("#name"+who).value.trim(); return v||("Person "+who); }
+function nm(who){ const v=$("#name"+who).value.trim(); return v||(who==="A"?"You":"Person B"); }
 function listNames(set){
   const arr=[...set].map(id=>NT[id].name);
   if(!arr.length) return "";
@@ -956,13 +966,16 @@ function sync(){
     const s=sel[w];
     $("#picked"+w).innerHTML = s.size ? "Selected: <b>"+esc(listNames(s))+"</b>"+(s.has("autistic")&&s.has("adhd")?" (AuDHD)":"") : "Nothing selected yet.";
   });
-  $("#phraseLab").textContent = "The sentence "+nm("A")+" might say";
+  $("#whoA").textContent = nm("A");
+  $("#needALab").textContent = nm("A")+" need"+(nm("A")==="You"?"":"s");
+  const aSay = nm("A")==="You" ? "you" : nm("A");
+  $("#phraseLab").textContent = "The sentence "+aSay+" might say";
   $("#s3").textContent = "Write the sentence you plan to say";
-  $("#phraseHint").textContent = "Type it the way "+nm("A")+" would actually say it to "+nm("B")+". Translate shows how "+nm("B")+" may receive it, and a matching sentence.";
+  $("#phraseHint").textContent = "Type it the way "+aSay+" would actually say it to "+nm("B")+". Translate shows how "+nm("B")+" may receive it, and a matching sentence.";
   $("#replyLab").textContent = "What "+nm("B")+" already said";
-  $("#replyHint").textContent = "Only if "+nm("B")+" has already answered. One reply. After you translate, Try the reverse shows how "+nm("A")+" may interpret it.";
+  $("#replyHint").textContent = "Only if "+nm("B")+" has already answered. One reply. After you translate, Try the reverse shows how "+aSay+" may interpret it.";
   const notes={
-    checkin:"Best use. Write the sentence, translate it, add it to the meeting sheet, and take the PDF in. Leave the score here.",
+    checkin:"Write the sentence, translate it, and add it to the talking notes. Add the next one the same way. Take the PDF in. Leave the score here.",
     talk:"Use it the day of, or the day before, not in the doorway. One sentence on the sheet. If either body is mobilized or shut down, postpone.",
     send:"Put the unsent message in the sentence box. If the read is heavy, send the matching sentence, or wait. Do not send the score.",
     after:"Put their reply in the optional box before you answer. The way back is where most second spikes start. Match their fact before you add yours.",
@@ -1893,7 +1906,7 @@ function run(){
     say: (changed?rw:text).replace(/\s+/g," ").trim(),
     check: checks[0] || "Here's what I heard: ___. Is that what you meant?"
   };
-  h+='<div class="rfoot"><button class="go" type="button" id="addTopic">'+(useId==="now"?"Save the pause card, not this score":"Add this topic to the meeting sheet")+'</button><button class="ghost" type="button" id="again">Try the reverse</button><button class="ghost" type="button" id="copy">Copy the read</button><button class="ghost" type="button" id="print">Print</button><a class="ghost" href="check-ins.html" style="text-decoration:none">Check-in order</a></div>';
+  h+='<div class="rfoot"><button class="go" type="button" id="addTopic">'+(useId==="now"?"Save the pause card, not this score":"Add this sentence to the talking notes")+'</button><button class="ghost" type="button" id="again">Try the reverse</button><button class="ghost" type="button" id="copy">Copy the read</button><button class="ghost" type="button" id="print">Print</button><a class="ghost" href="check-ins.html" style="text-decoration:none">Check-in order</a></div>';
 
   const R=$("#results"); R.innerHTML=h; R.hidden=false;
   requestAnimationFrame(()=>{ const f=R.querySelector(".fill"); if(f) f.style.width=f.dataset.w+"%"; });
@@ -1902,7 +1915,7 @@ function run(){
     if(!lastTopic) return;
     agenda.push(Object.assign({who:nm("A")+" to "+nm("B")}, lastTopic));
     paintAgenda();
-    $("#agendaPanel").scrollIntoView({behavior: matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth", block:"start"});
+    $("#notes").scrollIntoView({behavior: matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth", block:"start"});
   });
   $("#again").addEventListener("click",()=>{ swap(); $("#phrase").focus(); $("#msg").textContent = $("#phrase").value.trim() ? "Swapped. The reply is now the phrase. Translate again to read it the other way." : "Swapped. Type what "+nm("A")+" might say back, then translate."; });
   $("#copy").addEventListener("click",()=>{
@@ -1965,20 +1978,32 @@ $("#reset").addEventListener("click",()=>{
   $("#results").hidden=true; $("#results").innerHTML=""; $("#msg").textContent=""; sync(); window.scrollTo({top:0});
 });
 const USE_LABEL={checkin:"Before a check-in",talk:"Before a hard conversation",send:"Before you send it",after:"After a miss, before you answer",learn:"To learn the mechanics",now:"It is already a fight"};
+function loadAdvice(n){
+  if(n<=0) return "";
+  if(n===1) return "One sentence is a light load. You can add another. Translate the next one, then add it the same way.";
+  if(n===2) return "Two can fit if both are small and both of you are settled. If one is loaded, say that one. Park the other with a date.";
+  if(n===3) return "Three is getting heavy. Say the one that, if settled, makes the others smaller. What will still be wrong tomorrow comes first. A signal that you are not leaving comes before a system. A system goes to WP-03, not into this sitting. Park the rest with a date.";
+  return "This is a list, not a conversation. Do not take all of these in. Keep one, or two if they are small. Park the rest with a date. First: what will still be wrong tomorrow, or what needs a signal that you are not leaving. Next: a task with no owner, which belongs in WP-03. Last: what can wait, named with a date so it is not a dismissal.";
+}
 function paintAgenda(){
-  const list=$("#agendaList"), empty=$("#agendaEmpty");
+  const list=$("#agendaList"), empty=$("#agendaEmpty"), note=$("#loadNote");
   empty.hidden = agenda.length>0;
-  list.innerHTML = agenda.map((t,i)=>'<article class="sheet-topic"><span class="sheet-k">2. SENTENCE '+(i+1)+' &middot; '+esc(t.who)+'</span>'+(t.fact?'<p><b>The event.</b> '+esc(t.fact)+'</p>':'')+'<p><b>Say this, then stop.</b> '+esc(t.say)+'</p><p><b>Then ask.</b> '+esc(t.check)+'</p><p class="quiet">Do not read this part out loud. They may hear: '+esc((t.heard&&t.heard.join(" / "))||"roughly what was meant")+'.</p></article>').join("");
+  list.innerHTML = agenda.map((t,i)=>'<article class="sheet-topic"><span class="sheet-k">SENTENCE '+(i+1)+(i===0?" · START HERE IF YOU ONLY SAY ONE":"")+' &middot; '+esc(t.who)+'</span>'+(t.fact?'<p><b>The event.</b> '+esc(t.fact)+'</p>':'')+'<p><b>Say this, then stop.</b> '+esc(t.say)+'</p><p><b>Then ask.</b> '+esc(t.check)+'</p><p class="quiet">Do not read this part out loud. They may hear: '+esc((t.heard&&t.heard.join(" / "))||"roughly what was meant")+'.</p></article>').join("");
+  if(note){
+    note.hidden = agenda.length===0;
+    note.textContent = loadAdvice(agenda.length);
+    note.classList.toggle("heavy", agenda.length>=3);
+  }
 }
 function sheetLines(){
   const lines=[];
-  lines.push("Meeting sheet");
+  lines.push("Talking notes");
   lines.push(USE_LABEL[useId]||"Preparation");
   lines.push(nm("A")+" speaking to "+nm("B")+(relId&&REL[relId]?" · "+REL[relId].label:""));
   lines.push("This page goes into the room. The score stays home. Do not read a reading out loud.");
   lines.push("");
   lines.push("1. Open");
-  lines.push("Say: Twenty minutes. One topic. I am not against you. I do not think you meant harm. If we pause, we come back at a time we name now.");
+  lines.push("Say: We will start with one sentence. I am not against you. I do not think you meant harm. If we pause, we come back at a time we name now.");
   lines.push("Return time: ____________________");
   lines.push("");
   lines.push("2. The sentence");
@@ -1998,6 +2023,10 @@ function sheetLines(){
   } else {
     lines.push("No sentence added yet. Write it here after you translate, or go back and add it.");
     lines.push("Say this, then stop: ____________________");
+    lines.push("");
+  }
+  if(agenda.length){
+    lines.push(loadAdvice(agenda.length));
     lines.push("");
   }
   lines.push("3. The order, after the sentence");
@@ -2043,7 +2072,7 @@ function savePdf(){
   sheetLines().forEach(l=>wrapLine(l,88).forEach(w=>raw.push(w)));
   const per=46, pages=[];
   for(let i=0;i<raw.length;i+=per) pages.push(raw.slice(i,i+per));
-  if(!pages.length) pages.push(["Meeting sheet"]);
+  if(!pages.length) pages.push(["Talking notes"]);
   const objs=[];
   const add=s=>{ objs.push(s); return objs.length; };
   const font=add("<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>");
@@ -2084,7 +2113,7 @@ function savePdf(){
   const blob=new Blob([pdf],{type:"application/pdf"});
   const a=document.createElement("a");
   a.href=URL.createObjectURL(blob);
-  a.download="meeting-sheet.pdf";
+  a.download="talking-notes.pdf";
   document.body.appendChild(a); a.click(); a.remove();
   setTimeout(()=>URL.revokeObjectURL(a.href), 1500);
 }
