@@ -32,6 +32,9 @@
   var SECTIONS = [
     { id: 'start', title: 'Start here', blurb: 'New to the site? These pages explain the idea and let you try it in a few minutes.', items: [
       { href: '/index.html', code: '', title: 'Home', note: 'What’s new, the ways in, and the full contents' },
+      { href: '/how-it-works.html', code: '', title: 'How it works', note: 'The outside lens in full: what the program looks at, and why the technical layer is optional' },
+      { href: '/contents.html', code: '', title: 'Contents', note: 'Everything in the program, in three parts, plus the full site directory' },
+      { href: '/ways-in.html', code: '', title: 'Ways in', note: 'Free while it’s being built: what each level opens, and what it shares' },
       { href: '/is-this-for-you.html', code: '', title: 'Is this right for you?', note: 'What the program is and isn’t, who it helps, and a guide to every section' },
       { href: '/relationships.html', code: '', title: 'How it fits your relationships', note: 'How every part of the program connects to yourself, partners, family, friends, roommates, co-parents, coworkers and caregivers' },
       { href: '/quick-checks.html', code: '', title: 'Quick checks', note: 'Two short free tools: check your stress state, and total up who did what this week' },
@@ -279,7 +282,7 @@
     foot.innerHTML =
       '<span>The Objective Ledger &middot; spreadloveandacceptance.com</span>' +
       '<span class="tol-foot-links">' +
-        '<a href="/index.html#contents">All pages</a>' +
+        '<a href="/contents.html">All pages</a>' +
         '<a href="/membership.html">Membership</a>' +
         '<a href="/roadmap.html">Roadmap</a>' +
         '<a href="/legal/privacy-policy.html">Privacy</a>' +
@@ -454,7 +457,7 @@
             '</strong>. On another device, enter the same email there.</p>'
           : '<h2>You’re signed in</h2><p>Members pages are open in this browser for <strong>' + esc(email) +
             '</strong>. To use another device, sign in there with the same email.</p>') +
-          '<div class="tol-actions"><a class="tol-btn" href="/index.html#contents">Go to all pages</a>' +
+          '<div class="tol-actions"><a class="tol-btn" href="/contents.html">Go to all pages</a>' +
           '<button class="tol-btn is-quiet" type="button">Sign out of this browser</button></div>';
         box.querySelector('button').addEventListener('click', signOut);
         n.appendChild(box);

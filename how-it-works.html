@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-NKC6CQ9S66"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-NKC6CQ9S66');
+</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>How It Works — An Outside Lens on Yourself · The Objective Ledger</title>
+<meta name="description" content="How The Objective Ledger works: an objective, outside look at your life situation, your neurological wiring and what you discover, why the technical layer is optional, and where the static in a relationship comes from.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,500&family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/css/book-layout.css">
+<link rel="stylesheet" href="/assets/css/site.css">
+<link rel="stylesheet" href="/assets/css/reading.css">
+<link rel="stylesheet" href="/assets/css/tol-index.css">
+<style>
+  .start-main{ display: block; font-size: 1.05rem; line-height: 1.25; }
+  .start-sub{ display: block; margin-top: .2rem; font-family: "IBM Plex Mono", ui-monospace, monospace; font-size: .74rem; font-weight: 400; opacity: .82; }
+  /* Outside lens section */
+  .lens{ margin: 2.25rem 0 0; }
+  .lens > h2{ margin: 0 0 .7rem; }
+  .lens p{ max-width: 64ch; }
+  .lens-lede{ font-size: 1.14rem; line-height: 1.7; }
+  .lens-grid{ border-top: 3px double var(--ink, #211D17); border-bottom: 1px solid var(--ink, #211D17); margin: 1.4rem 0 1.6rem; }
+  .lens-item{ display: grid; grid-template-columns: 11.5rem 1fr; gap: .3rem 1.5rem; padding: 1.1rem 0; }
+  .lens-item + .lens-item{ border-top: 1px solid var(--line, #D9CBA3); }
+  .read .lens-item h3{ font-family: "Fraunces", Georgia, serif; font-weight: 600; font-size: 1.12rem; margin: 0 0 .25rem; }
+  .lens-item p{ font-size: .98rem; line-height: 1.65; margin: 0 0 .6rem; }
+  .lens-item .lens-q{ font-style: italic; color: var(--brass, #A8792F); font-size: .92rem; line-height: 1.4; margin: 0; }
+  .lens-links{ display: flex; flex-wrap: wrap; gap: .3rem 1.1rem; margin: 0 !important; font-size: .9rem !important; }
+  .read .lens-sub{ font-family: "Fraunces", Georgia, serif; font-weight: 600; font-size: 1.25rem; margin: 0 0 .5rem; }
+  .layers{ margin: 1.4rem 0 1.6rem; }
+  .read .layers h3{ font-family: "Fraunces", Georgia, serif; font-weight: 600; font-size: 1.25rem; margin: 0 0 .5rem; }
+  .layer-demo{ display: grid; grid-template-columns: 1fr 1fr; gap: 0; margin-top: 1rem; border-top: 3px double var(--ink, #211D17); border-bottom: 1px solid var(--ink, #211D17); }
+  .layer{ padding: .9rem 1.1rem 1rem 0; }
+  .layer + .layer{ padding-left: 1.1rem; border-left: 1px dashed var(--line, #D9CBA3); }
+  .layer p{ font-size: .96rem; line-height: 1.6; margin: 0; }
+  .layer .layer-tag{ font-family: "IBM Plex Mono", ui-monospace, monospace; font-size: .72rem; color: var(--credit, #3E6B4C); margin: 0 0 .4rem; }
+  .layer.is-tech{ color: var(--ink-soft, #524B3E); }
+  .layer.is-tech .layer-tag{ color: var(--brass, #A8792F); }
+  .layer-tag span{ color: var(--ink-soft, #524B3E); }
+  @media (max-width: 640px){
+    .layer-demo{ grid-template-columns: 1fr; }
+    .layer + .layer{ padding-left: 0; border-left: 0; border-top: 1px dashed var(--line, #D9CBA3); }
+  }
+  .spirit{ margin: .2rem 0 1rem; }
+  .spirit p{ margin: 0 0 .75rem; padding-left: 1rem; border-left: 3px solid var(--credit, #3E6B4C); }
+  .spirit strong{ font-family: "Fraunces", Georgia, serif; }
+  .lens-note{ font-size: .93rem; color: var(--ink-soft, #524B3E); border-left: 3px solid var(--line, #D9CBA3); padding-left: 1rem; margin-top: 1.2rem; }
+  .lens-actions{ display: flex; flex-wrap: wrap; gap: .75rem 1.4rem; align-items: center; margin-top: 1.2rem; }
+  .read .lens a.lens-start{
+    display: inline-block; padding: .6rem 1.1rem; background: var(--ink, #211D17); color: var(--paper, #F5EFDE);
+    font-weight: 600; text-decoration: none; border-radius: var(--radius, 3px);
+  }
+  .read .lens a.lens-start:hover{ background: var(--credit, #3E6B4C); color: var(--paper, #F5EFDE); }
+  .read .lens a.lens-start:focus-visible{ outline: 2px solid var(--focus, #2B5B8C); outline-offset: 3px; }
+  .lens-actions a:not(.lens-start){ font-weight: 600; }
+  @media (max-width: 640px){
+    .lens-item{ grid-template-columns: 1fr; }
+  }
+  .read-back{ font-size:.92rem; color:var(--ink-soft, #524B3E); margin:2.5rem 0 0; padding-top:1rem; border-top:1px solid var(--line, #D9CBA3); }
+  #contents h2, #directory h2, .lens h2{ margin-top:0; }
+</style>
+<script src="/assets/js/site.js" defer></script>
+</head>
+<body>
+<main class="read">
+
+  <header class="read-head">
+    <p class="read-code">How it works</p>
+    <h1>An outside lens on yourself</h1>
+  </header>
+
+  <p class="lede">What the program actually does, in plain language: the three things it looks at, why the technical parts are optional, and where the static between two people comes from.</p>
+
+    <section id="outside-lens" class="lens">
+            <p class="lens-lede">Most of us only see our lives from the inside, through the mood we're in, the history we carry, and the way our brain happens to be wired. The Objective Ledger gives you a view from outside: a calm, structured way to look at yourself as an honest auditor would, with no agenda except what's true and no verdict on your worth.</p>
+      <p>It borrows an auditor's discipline, which is to write down what actually happened, in plain terms, before deciding what it means. Then it turns that discipline gently inward, onto the three things that shape nearly every reaction you have.</p>
+
+
+      <div class="lens-grid">
+        <div class="lens-item">
+          <div class="lens-head"><h3>Your life situation</h3><p class="lens-q">What are you carrying right now?</p></div>
+          <div class="lens-body">
+          <p>A new baby, a job change, a move, an illness, caring for a parent, or grief. Life's biggest transitions change how much you can hold, often before you notice. Seeing your load as it really is lets you stop blaming yourself, or anyone else, for what is really the season you're in.</p>
+          <p class="lens-links"><a href="/workpapers/wp-02-battery-stress-meter.html">WP-02: Battery &amp; Stress Meter</a> <a href="/workpapers/wp-04-deficit-audit.html">WP-04: monthly review</a></p>
+          </div>
+        </div>
+        <div class="lens-item">
+          <div class="lens-head"><h3>Your neurological wiring</h3><p class="lens-q">How is your nervous system built?</p></div>
+          <div class="lens-body">
+          <p>Every brain handles stress, noise, change and conversation differently. Some people reset in minutes and others need hours. Some think out loud and others need quiet. Neurotypical or neurodivergent, your wiring isn't a flaw to hide. It's information to understand, and then to explain to the people you live and work with.</p>
+          <p class="lens-links"><a href="/quick-checks.html#ladder">Check Your State</a> <a href="/wired-differently.html">Wired Differently</a> <a href="/wiring-card.html">Wiring Card</a> <a href="/signal-translator.html">Signal Translator</a> <a href="/book/chapter-3.html">Chapter III</a> <a href="/tools/frequency-calibration.html">Frequency Calibration</a></p>
+          </div>
+        </div>
+        <div class="lens-item">
+          <div class="lens-head"><h3>What you discover</h3><p class="lens-q">What patterns show up when you look?</p></div>
+          <div class="lens-body">
+          <p>Written down over a few weeks, patterns appear: the time of day you get short-tempered, the task that always slips, the conversation that always goes sideways. Seen from the outside, they stop feeling like character flaws and start looking like problems you can solve.</p>
+          <p class="lens-links"><a href="/workpapers/wp-01.html">WP-01: Daily Balance Sheet</a> <a href="/workpapers/report-01.html">REPORT-01</a> <a href="/learn/index.html">Stories from Philosophy</a></p>
+          </div>
+        </div>
+      </div>
+      <div class="layers">
+        <h3>Plain first. Technical only if you want it.</h3>
+        <p>The program has some technical parts, drawn from nervous-system science, accounting and even radio physics. You never need them. Each section is written to be understood first: the idea in everyday language, with an example you'll recognize. The technical layer comes after, for anyone who enjoys the "why" behind the "what."</p>
+        <p>Skip it entirely and the program is just as useful. The tools work the same, and everything you learn about yourself is just as real.</p>
+        <div class="layer-demo" role="group" aria-label="Example of the two layers">
+          <div class="layer is-plain">
+            <p class="layer-tag">In plain terms</p>
+            <p>Some days you're already running on empty, so a small comment hits much harder than it would on a good day. That's not about the comment; it's about the day.</p>
+          </div>
+          <div class="layer is-tech">
+            <p class="layer-tag">The technical layer <span>(optional)</span></p>
+            <p>Autonomic saturation: stress activation left over from earlier in the day lowers your threshold for reacting to a new stressor. Chapter III and WP-02 put a number on it.</p>
+          </div>
+        </div>
+      </div>
+
+      <h3 class="lens-sub">Where the static comes from</h3>
+      <p>Set two radios a hair apart on the dial and you don't get silence, you get a squeal. Neither station is broadcasting badly. The noise lives in the gap between them.</p>
+      <p>Most arguments work the same way. You say "in a minute," meaning when I finish this. The other person hears "in sixty seconds," comes back to find nothing has changed, and now there's an edge in their voice you can't account for. Nobody lied and nobody was careless. The message went out on one frequency and arrived on another, and within a minute you're both arguing about the tone instead of the dishes.</p>
+      <p>Which means no one is static-free on their own. Static isn't something a person emits; it's what happens in the space between two people. What you <em>can</em> do is know your own signal well enough to say it out loud: this is my pace, this is what my silence usually means, this is what I need when I'm running low. That's what the self-discovery half of the program gives you. Once each person can describe their own signal, the gap stops being invisible, and closing it becomes something you do on purpose instead of something you apologize for afterward.</p>
+      <p>That's the whole aim: less static between you and the people you share life with, including partners, family, friends, roommates, co-parents, coworkers and the people you care for.</p>
+
+      <h3 class="lens-sub">What it should feel like</h3>
+      <div class="spirit">
+        <p><strong>Curious, not clinical.</strong> Closer to a puzzle about yourself than a test. There's no score to pass and nothing to get right.</p>
+        <p><strong>Nothing to defend.</strong> No one is graded and no one is diagnosed. Every number here describes a situation, never a person's worth.</p>
+        <p><strong>Ethics before tools.</strong> Honesty, fairness and kindness come first. The moment a tool starts being used by one person against another, it has stopped being this program.</p>
+        <p><strong>Everything counts as evidence.</strong> Your history, your body, your wiring, your circumstances and the people around you all shape how you react. Looking at them plainly is the point, and understanding is the goal, not blame.</p>
+      </div>
+
+      <p class="lens-note"><strong>An honest note.</strong> This is a practical heuristic, not a clinical or diagnostic instrument, and no self-report is perfectly neutral. You fill it in, so your mood comes along with it. What makes it trustworthy enough to act on is repetition: the same questions, asked the same way, week after week, with your earlier answers sitting next to today's. One entry is a mood. Twelve entries are a pattern. Memory on its own can't show you that.</p>
+
+      <p class="lens-actions"><a class="lens-start" href="/quick-checks.html#ladder"><span class="start-main">Check in with yourself</span><span class="start-sub">Where are you right now? Takes 30 seconds</span></a> <a href="/book/chapter-1.html">Read Chapter I: The Radio Frequency Paradigm</a></p>
+    </section>
+
+
+  <p class="read-back"><a href="/index.html">&larr; Back to the home page</a></p>
+
+</main>
+</body>
+</html>
