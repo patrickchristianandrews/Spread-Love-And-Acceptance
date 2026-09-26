@@ -579,6 +579,16 @@
   });
 
   draw();
+
+  // A gentle welcome back, from this device's own almanac. No streaks, no "you missed".
+  (function(){
+    var a=get(); if(!a.length) return;
+    var last=a[a.length-1], today=new Date().toISOString().slice(0,10);
+    if(last.d===today || !SKY[last.sky]) return;
+    var p=document.createElement('p'); p.className='tol-welcome';
+    p.innerHTML='<img src="/assets/img/mascots/bubble-buddy.svg" alt="" width="40" height="40"><span>Welcome back. Last time it was <strong>'+SKY[last.sky].name.toLowerCase()+'</strong>. How\u2019s today looking?</span>';
+    var h=document.querySelector('.read-head'); if(h) h.parentNode.insertBefore(p,h.nextSibling);
+  })();
 })();
 </script>
 </body>

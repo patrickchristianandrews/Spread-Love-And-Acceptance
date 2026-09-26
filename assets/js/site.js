@@ -36,60 +36,60 @@
   var SECTIONS = [
     { id: 'start', title: 'Start here', blurb: 'New to the site? These pages explain the idea and let you try it in a few minutes.', items: [
       { href: '/index.html', code: '', title: 'Home', note: 'What’s new, the ways in, and the full contents' },
-      { href: '/how-it-works.html', deep: true, code: '', title: 'How it works', note: 'The outside lens in full: what the program looks at, and why the technical layer is optional' },
+      { href: '/how-it-works.html', deep: true, code: '', title: 'How it works', note: 'A friendly tour of what the program looks at, and why you can skip the technical bits' },
       { href: '/contents.html', deep: true, code: '', title: 'Contents', note: 'Everything in the program, in three parts, plus the full site directory' },
       { href: '/ways-in.html', deep: true, code: '', title: 'Ways in', note: 'Free while it’s being built: what each level opens, and what it shares' },
       { href: '/is-this-for-you.html', deep: true, code: '', title: 'Is this right for you?', note: 'What the program is and isn’t, who it helps, and a guide to every section' },
       { href: '/relationships.html', deep: true, code: '', title: 'How it fits your relationships', note: 'How every part of the program connects to yourself, partners, family, friends, roommates, co-parents, coworkers and caregivers' },
       { href: '/quick-checks.html', code: '', title: 'Today’s Weather', note: 'A one-minute read on your own conditions today, and what today is good for' },
-      { href: '/frequency-framework.html', deep: true, code: '', title: 'The Frequency Framework', note: 'Why two reasonable people can end up in a fight neither of them started' },
-      { href: '/infographic.html', code: '', title: 'Executive summary', note: 'The whole framework on one printable page, easy to share' }
+      { href: '/frequency-framework.html', deep: true, code: '', title: 'The Frequency Framework', note: 'Why two kind people can fall out of step, and how to find the same rhythm again' },
+      { href: '/infographic.html', code: '', title: 'The whole idea on one page', note: 'A printable one-page summary, easy to share' }
     ]},
     { id: 'self', title: 'Self-discovery', blurb: 'Tools for understanding yourself: your load, your wiring, your patterns. Start here, with or without anyone else.', items: [
       { href: '/night-garden.html', code: 'New', title: 'The Night Garden', note: 'A calm place to breathe, play and let your mind settle. Flowers bloom as you breathe; no timers, nothing to lose' },
       { href: '/quick-checks.html#today', code: 'Daily', title: 'Today’s Weather', note: 'One minute on your own conditions: a forecast, a talk window, what today is good for, and a private almanac of your patterns' },
       { href: '/wired-differently.html', deep: true, code: 'New', title: 'Wired Differently', note: 'How different neurotypes receive the same words, and how to talk across the difference' },
       { href: '/wiring-card.html', code: 'Tool', title: 'Wiring Card', note: 'A one-page card on how you receive words, what silence means, and what to avoid' },
-      { href: '/workpapers/wp-02-battery-stress-meter.html', deep: true, code: 'WP-02', title: 'How full is your battery?', note: 'The Battery & Stress Meter. What you’re already carrying, separate from what just happened', paid: true },
+      { href: '/workpapers/wp-02-battery-stress-meter.html', deep: true, code: 'WP-02', title: 'How full is your battery?', note: 'What you’re already carrying, separate from what just happened. Also called the Battery & Stress Meter', paid: true },
       { href: '/tools/frequency-calibration.html', code: 'Tool', title: 'Frequency Calibration', note: 'Your natural rhythms for money, decisions, check-ins and recovery', paid: true },
       { href: '/wp-11.html', deep: true, code: 'WP-11', title: 'The Calm-Down Kit', note: 'Decide in advance what settles your body', paid: true },
-      { href: '/book/chapter-3.html', deep: true, code: 'III', title: 'Full tanks and different angles', note: 'Autonomic Saturation & the 7 Ocular Vectors. Why some reactions are bigger than their cause', paid: true },
+      { href: '/book/chapter-3.html', deep: true, code: 'III', title: 'Full tanks and different angles', note: 'Why some reactions are bigger than their cause. Also called Autonomic Saturation & the 7 Ocular Vectors', paid: true },
       { href: '/learn/index.html#part-self', deep: true, code: 'Stories', title: 'Stories from Philosophy: Knowing yourself', note: 'The Second Arrow, the Ship of Theseus, What Is Up to Us' },
     ]},
-    { id: 'relationships', title: 'Relationships by type', blurb: 'Where to start in each kind of relationship, and every tool that fits. The shared relationship tools themselves are under The book, Workpapers and Tools.', items: [
+    { id: 'relationships', title: 'Relationships', blurb: 'Where to start in each kind of relationship, and every tool that fits. The shared relationship tools themselves are under The book, Workpapers and Tools.', items: [
       { href: '/turning-toward.html', deep: true, code: 'New', title: 'Turning toward', note: 'Seven small, everyday ways to build connection with anyone who matters to you' },
-      { href: '/check-ins.html', deep: true, code: 'Guide', title: 'Check-ins', note: 'How to hold a hard conversation in any relationship: a safe time and room, acknowledgement before rebuttal, a close that works for both' },
-      { href: '/relationships.html#partners', deep: true, code: '', title: 'Partners', note: 'Start with WP-01, WP-03 and WP-13' },
-      { href: '/relationships.html#family', deep: true, code: '', title: 'Family', note: 'Start with Chapter I, WP-03 and WP-09' },
-      { href: '/relationships.html#co-parents', deep: true, code: '', title: 'Co-parents', note: 'Start with WP-03, WP-09 and WP-04' },
-      { href: '/relationships.html#friends', deep: true, code: '', title: 'Friends', note: 'Start with the Carrier Wave Decoder, WP-09 and WP-01' },
-      { href: '/relationships.html#roommates', deep: true, code: '', title: 'Roommates', note: 'Start with the Lemonade Stand, WP-03 and WP-13' },
-      { href: '/relationships.html#coworkers', deep: true, code: '', title: 'Coworkers & teams', note: 'Start with WP-03, Chapter I and WP-09' },
-      { href: '/relationships.html#caregivers', deep: true, code: '', title: 'Caregivers', note: 'Start with WP-02, WP-03 and WP-11' },
-      { href: '/relationships.html#map', deep: true, code: 'Map', title: 'The full map', note: 'Every chapter, workpaper and tool against every kind of relationship' }
+      { href: '/check-ins.html', deep: true, code: 'Guide', title: 'Check-ins', note: 'How to have a tender conversation kindly: a good time and place, listening first, and an ending that feels good to both' },
+      { href: '/relationships.html#partners', deep: true, code: '', title: 'Partners', note: 'Start with who did what, one owner per job, and the daily check-in' },
+      { href: '/relationships.html#family', deep: true, code: '', title: 'Family', note: 'Start with getting back in tune, one owner per job, and saying it so it lands' },
+      { href: '/relationships.html#co-parents', deep: true, code: '', title: 'Co-parents', note: 'Start with one owner per job, saying it so it lands, and the monthly look-back' },
+      { href: '/relationships.html#friends', deep: true, code: '', title: 'Friends', note: 'Start with Turning Toward, the Conversation Reader, and saying it so it lands' },
+      { href: '/relationships.html#roommates', deep: true, code: '', title: 'Roommates', note: 'Start with the Lemonade Stand, one owner per job, and the daily check-in' },
+      { href: '/relationships.html#coworkers', deep: true, code: '', title: 'Coworkers & teams', note: 'Start with one owner per job, getting back in tune, and saying it so it lands' },
+      { href: '/relationships.html#caregivers', deep: true, code: '', title: 'Caregivers', note: 'Start with your battery, one owner per job, and the Calm-Down Kit' },
+      { href: '/relationships.html#map', deep: true, code: 'Map', title: 'The full map', note: 'Every chapter, worksheet and tool, for every kind of relationship' }
     ]},
     { id: 'book', title: 'The book', blurb: 'The manuscript, one idea per chapter. Each chapter pairs with a workpaper that puts it to use.', items: [
-      { href: '/book/preface.html', deep: true, code: 'Preface', title: 'The work nobody sees', note: 'Unbilled Debt. Why the unseen work of running a shared life builds up like a debt only one person can see' },
-      { href: '/book/chapter-1.html', deep: true, code: 'I', title: 'Why we get out of tune', note: 'The Radio Frequency Paradigm. How pace, tone and urgency knock two people out of sync, and how to get back in tune' },
-      { href: '/book/chapter-2.html', deep: true, code: 'II', title: 'Is the split working?', note: 'The Epistemic Verdict Engine & P(Solvency). A simple formula for whether the current split of work is sustainable. It judges the arrangement, never a person' },
-      { href: '/book/chapter-3.html', deep: true, code: 'III', title: 'Full tanks and different angles', note: 'Autonomic Saturation & the 7 Ocular Vectors. How much of a reaction is leftover stress, and the seven angles people argue from', paid: true },
-      { href: '/book/chapter-4.html', deep: true, code: 'IV', title: 'Two kinds of fair', note: 'Deontological Parity & Sensory Gating. Agreeing how you’ll judge fairness, and giving a comment time to land before reacting', paid: true },
-      { href: '/book/chapter-5.html', deep: true, code: 'V', title: 'The monthly look-back', note: 'The Deficit Audit. Why a monthly look back catches the problems that weekly check-ins miss', paid: true }
+      { href: '/book/preface.html', deep: true, code: 'Preface', title: 'The work nobody sees', note: 'The quiet, unseen work of running a shared life, and why it deserves to be noticed. Also called Unbilled Debt' },
+      { href: '/book/chapter-1.html', deep: true, code: 'I', title: 'Why we get out of tune', note: 'How pace, tone and urgency nudge two people out of sync, and how to get back in tune. Also called the Radio Frequency Paradigm' },
+      { href: '/book/chapter-2.html', deep: true, code: 'II', title: 'Is the split working?', note: 'A simple way to see whether the way you share the work can last. It looks at the arrangement, never at a person. Also called P(Solvency)' },
+      { href: '/book/chapter-3.html', deep: true, code: 'III', title: 'Full tanks and different angles', note: 'How much of a reaction is leftover stress, and the seven angles people see things from. Also called Autonomic Saturation & the 7 Ocular Vectors', paid: true },
+      { href: '/book/chapter-4.html', deep: true, code: 'IV', title: 'Two kinds of fair', note: 'Agreeing what fair means to you both, and giving words a moment to land. Also called Deontological Parity & Sensory Gating', paid: true },
+      { href: '/book/chapter-5.html', deep: true, code: 'V', title: 'The monthly look-back', note: 'A gentle monthly look back that catches what weekly check-ins miss. Also called the Deficit Audit', paid: true }
     ]},
-    { id: 'workpapers', title: 'Workpapers', blurb: 'Worksheets each person fills in about themselves, then reads together. Best in this order: WP-01, 02, 03, 09, 13, with WP-04 monthly.', items: [
-      { href: '/workpapers/wp-01.html', deep: true, code: 'WP-01', title: 'Who did what, and kind ways to say no', note: 'The Daily Balance Sheet & Neutral Refusals. Start here: a week’s log of who did what, plus kind scripts for saying no', paid: true },
-      { href: '/workpapers/wp-02-battery-stress-meter.html', deep: true, code: 'WP-02', title: 'How full is your battery?', note: 'The Battery & Stress Meter. A five-question self-check: how much are you already carrying today?', paid: true },
-      { href: '/workpapers/wp-03-raci-treaty.html', deep: true, code: 'WP-03', title: 'One owner per job', note: 'Domestic RACI Treaty. One named owner for every recurring task, so it stops being renegotiated', paid: true },
-      { href: '/workpapers/wp-04-deficit-audit.html', deep: true, code: 'WP-04', title: 'What keeps coming back?', note: 'Unbilled Deficit Audit. A monthly review that sorts repeat problems into their real causes', paid: true },
-      { href: '/workpapers/wp-09-tone-filter.html', deep: true, code: 'WP-09', title: 'Say it so it lands', note: 'Tone Transducer & Filter. Turn a raw reaction into fact, feeling and a clear ask before you send it', paid: true },
-      { href: '/wp-11.html', deep: true, code: 'WP-11', title: 'The Calm-Down Kit', note: 'Settle your body first, when either of you is too activated to talk', paid: true },
-      { href: '/workpapers/wp-13-pll-protocol.html', deep: true, code: 'WP-13', title: 'The 90-second daily check-in', note: 'Phase-Locked Loop Protocol. A 90-second daily check-in, with no debate, that keeps small things small', paid: true },
-      { href: '/do/index.html', code: '', title: 'Try the Workpapers', note: 'A playground for test-driving the worksheets before you commit' },
+    { id: 'workpapers', title: 'Workpapers', blurb: 'Short worksheets you each fill in about yourselves, then read together. They work best in the order listed, with the monthly look-back once a month.', items: [
+      { href: '/workpapers/wp-01.html', deep: true, code: 'WP-01', title: 'Who did what, and kind ways to say no', note: 'Start here: a week’s log of who did what, plus kind ways to say no. Also called the Daily Balance Sheet', paid: true },
+      { href: '/workpapers/wp-02-battery-stress-meter.html', deep: true, code: 'WP-02', title: 'How full is your battery?', note: 'Five quick questions: how much are you already carrying today? Also called the Battery & Stress Meter', paid: true },
+      { href: '/workpapers/wp-03-raci-treaty.html', deep: true, code: 'WP-03', title: 'One owner per job', note: 'Give every regular job one owner, so nobody has to keep asking. Also called the RACI agreement', paid: true },
+      { href: '/workpapers/wp-04-deficit-audit.html', deep: true, code: 'WP-04', title: 'What keeps coming back?', note: 'A gentle monthly look at what keeps coming up, and what’s really behind it. Also called the Deficit Audit', paid: true },
+      { href: '/workpapers/wp-09-tone-filter.html', deep: true, code: 'WP-09', title: 'Say it so it lands', note: 'Turn a big feeling into a fact, a feeling and a kind ask before you send it. Also called the Tone Filter', paid: true },
+      { href: '/wp-11.html', deep: true, code: 'WP-11', title: 'The Calm-Down Kit', note: 'Ways to settle your body first, when either of you is too wound up to talk', paid: true },
+      { href: '/workpapers/wp-13-pll-protocol.html', deep: true, code: 'WP-13', title: 'The 90-second daily check-in', note: 'Ninety seconds a day, no debating, to keep small things small. Also called the Phase-Locked Loop', paid: true },
+      { href: '/do/index.html', code: '', title: 'Try the Workpapers', note: 'A playground to try the worksheets before you commit' },
       { href: '/workpapers/fill/index.html', code: 'Fill-in', title: 'Fill-in workpapers', note: 'Type straight into the worksheets and save them as PDFs on your device' }
     ]},
-    { id: 'program', title: 'Program & record', blurb: 'For anyone who’d rather be walked through it step by step.', items: [
-      { href: '/prog-01.html', deep: true, code: 'PROG-01', title: 'Six gentle weeks', note: 'The 6-Week Program. One workpaper at a time, in order, ending with a before-and-after read', paid: true },
-      { href: '/workpapers/report-01.html', deep: true, code: 'REPORT-01', title: 'Your progress, week by week', note: 'The Full Read. Your week-by-week record, so progress builds instead of resetting', paid: true }
+    { id: 'program', title: 'Guided program', blurb: 'For anyone who’d like to be walked through it, one gentle step at a time.', items: [
+      { href: '/prog-01.html', deep: true, code: 'PROG-01', title: 'Six gentle weeks', note: 'One worksheet a week, in order, ending with a before-and-after look. Also called the 6-Week Program', paid: true },
+      { href: '/workpapers/report-01.html', deep: true, code: 'REPORT-01', title: 'Your progress, week by week', note: 'Your week-by-week record, so progress builds instead of starting over. Also called the Full Read', paid: true }
     ]},
     { id: 'tools', title: 'Tools', blurb: 'Interactive pages. Everything you type stays in your own browser.', items: [
       { href: '/conversation-reader.html', code: 'New', title: 'The Conversation Reader', note: 'Paste a text thread, chat or email exchange: see where it turned, what each of you may be hearing, and a calmer way to answer' },
@@ -97,20 +97,20 @@
       { href: '/wiring-card.html', code: 'New', title: 'Wiring Card', note: 'Make a one-page card for how you receive words, what silence means, and what to avoid' },
       { href: '/signal-translator.html', code: 'New', title: 'The Signal Translator', note: 'Test a sentence before a check-in. Pick the wiring, the room, and how it might land' },
       { href: '/carrier-wave-decoder.html', code: 'Tool', title: 'The Carrier Wave Decoder', note: 'A guided session for the moment a conversation starts going sideways' },
-      { href: '/workpapers/calculators/calc01-solvency.html', code: 'CALC-01', title: 'The Solvency Read', note: 'Enter your workpaper numbers and see whether the arrangement looks sustainable' },
-      { href: '/tools/mood-arbitrage-free.html', code: '', title: 'Mood Arbitrage: introduction', note: 'The core idea and one worked example, free' },
-      { href: '/tools/mood-arbitrage-full.html', code: '', title: 'Mood Arbitrage: full toolkit', note: 'A move generator, five scenarios and a four-week practice plan', paid: true },
-      { href: '/tools/frequency-calibration.html', code: '', title: 'Frequency Calibration Audit', note: 'Compare your natural rhythms across five areas of daily life', paid: true },
-      { href: '/tools/frequency-sync-visualizer.html', code: '', title: 'Frequency Sync Visualizer', note: 'A live picture of how the WP-13 daily check-in keeps two people in step', paid: true },
-      { href: '/snapshot/index.html', code: '', title: 'Diagnostic Snapshot', note: 'A two-minute check on where things stand right now' }
+      { href: '/workpapers/calculators/calc01-solvency.html', code: 'CALC-01', title: 'Can the load last?', note: 'Add your worksheet numbers and see whether the way you share the load can last. Also called the Solvency Read' },
+      { href: '/tools/mood-arbitrage-free.html', code: '', title: 'Mood Arbitrage: introduction', note: 'Small ways to lift a mood, with one worked example. Free' },
+      { href: '/tools/mood-arbitrage-full.html', code: '', title: 'Mood Arbitrage: full toolkit', note: 'Ideas for lifting a mood, five everyday scenarios and a four-week practice plan', paid: true },
+      { href: '/tools/frequency-calibration.html', code: '', title: 'Find your natural rhythms', note: 'Compare your rhythms across five areas of daily life. Also called Frequency Calibration', paid: true },
+      { href: '/tools/frequency-sync-visualizer.html', code: '', title: 'Watch two rhythms sync', note: 'A moving picture of how the daily check-in keeps two people in step', paid: true },
+      { href: '/snapshot/index.html', code: '', title: 'A quick snapshot', note: 'A two-minute look at how things are right now' }
     ]},
     { id: 'media', title: 'Media', blurb: 'Music, audio and conversations to go with the program.', items: [
       { href: '/soundscapes.html', code: 'Audio', title: 'Soundscape Catalog', note: 'Background audio made for settling down and focusing' },
       { href: '/echoes-of-gold.html', code: 'Album', title: 'Echoes of Gold', note: 'The companion album: the music that came before the framework' },
-      { href: '/podcast-index.html', code: 'Podcast', title: 'Observational Podcast', note: 'Conversations with Kane and Christian on the ideas behind the framework' }
+      { href: '/podcast-index.html', code: 'Podcast', title: 'The Podcast', note: 'Friendly conversations with Kane and Christian about the ideas behind it all' }
     ]},
-    { id: 'about', title: 'About & status', blurb: 'Who built this and why, exactly what’s finished, and the site’s policies.', items: [
-      { href: '/about.html', deep: true, code: '', title: 'About the creator', note: 'The auditor, the story, and why this framework exists' },
+    { id: 'about', title: 'About & status', blurb: 'Who made this and why, what’s finished so far, and the site’s policies.', items: [
+      { href: '/about.html', deep: true, code: '', title: 'About the creator', note: 'The person behind it, their story, and why this exists' },
       { href: '/program-overview.html', deep: true, code: '', title: 'Program Overview', note: 'How the chapters, workpapers and calculators fit together' },
       { href: '/suite-index.html', deep: true, code: '', title: 'Suite Index', note: 'The official list of what’s built today. If it isn’t here, it isn’t live yet' },
       { href: '/roadmap.html', code: '', title: 'Content Roadmap', note: 'What’s live, what’s being written, and what’s planned' },
@@ -284,7 +284,8 @@
 
     var bar = el('div', { class: 'tol-bar', role: 'banner' });
     bar.style.margin = (-pt) + 'px ' + (-pr) + 'px ' + pt + 'px ' + (-pl) + 'px';
-    bar.appendChild(el('a', { class: 'tol-brand', href: '/index.html' }, 'The Objective Ledger'));
+    bar.appendChild(el('a', { class: 'tol-brand', href: '/index.html' },
+      '<img class="tol-logo" src="/assets/img/mascots/two-bubbles.svg" alt="" width="36" height="36"><span>The Objective Ledger</span>'));
 
     var nav = el('div', { class: 'tol-sections', role: 'navigation', 'aria-label': 'Site sections' });
     RIBBON.forEach(function (p, n) { nav.appendChild(buildDrop(p[0], p[1], n >= RIBBON.length - 3)); });
@@ -348,7 +349,10 @@
 
     // Pastel watercolour splashes behind the page (decorative; see site.css)
     if (!body.hasAttribute('data-no-wash')) {
-      var wash = el('div', { class: 'tol-wash', 'aria-hidden': 'true' }, '<i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>');
+      // plus a few pastel bubbles and hearts drifting slowly upward
+      var floaters = '';
+      for (var f = 0; f < 10; f++) floaters += '<b class="' + (f % 3 === 1 ? 'tol-heart' : 'tol-bub') + '"></b>';
+      var wash = el('div', { class: 'tol-wash', 'aria-hidden': 'true' }, '<i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>' + floaters);
       document.documentElement.appendChild(wash);
     }
 
@@ -386,7 +390,7 @@
     var promise = current === '/dashboard.html' ? '' :
       '<p class="tol-promise">What you type into the tools and worksheets stays on your device. It is never collected or sent to us. <a href="/legal/privacy-policy.html#your-entries">How we handle your information</a></p>';
     foot.innerHTML = promise +
-      '<span>The Objective Ledger &middot; spreadloveandacceptance.com</span>' +
+      '<span class="tol-foot-brand"><img src="/assets/img/mascots/bubble-heart.svg" alt="" width="40" height="40">The Objective Ledger &middot; spreadloveandacceptance.com</span>' +
       '<span class="tol-foot-links">' +
         '<a href="/contents.html">All pages</a>' +
         '<a href="/membership.html">Membership</a>' +
@@ -395,12 +399,87 @@
         '<a href="/legal/terms-of-service.html">Terms</a>' +
         '<a href="/legal/refund-policy.html">Refunds</a>' +
         '<a href="mailto:' + CONFIG.supportEmail + '">Contact</a>' +
+        (isApp() ? '' : '<button type="button" class="tol-install-link">Add to your home screen</button>') +
       '</span>';
     body.insertBefore(foot, scrim);
+    var il = foot.querySelector('.tol-install-link');
+    if (il) il.addEventListener('click', showInstall);
+    maybeInviteInstall();
   }
 
   // ---------- Breathe with me ----------
   // Six slow breaths, in for 4 seconds and out for 6 (about six a minute). Nothing is saved.
+  // ---------- The site as an app ----------
+  // Icons, the manifest and the offline helper, added here so every page gets them.
+  function addAppMeta() {
+    var h = document.head; if (!h) return;
+    function add(tag, attrs) { var n = document.createElement(tag); for (var k in attrs) n.setAttribute(k, attrs[k]); h.appendChild(n); }
+    if (!h.querySelector('link[rel="manifest"]')) add('link', { rel: 'manifest', href: '/manifest.webmanifest' });
+    if (!h.querySelector('link[rel~="icon"]')) {
+      add('link', { rel: 'icon', href: '/assets/icons/icon.svg', type: 'image/svg+xml' });
+      add('link', { rel: 'alternate icon', href: '/assets/icons/favicon-32.png', type: 'image/png', sizes: '32x32' });
+    }
+    if (!h.querySelector('link[rel="apple-touch-icon"]')) add('link', { rel: 'apple-touch-icon', href: '/assets/icons/apple-touch-icon.png' });
+    if (!h.querySelector('meta[name="theme-color"]')) add('meta', { name: 'theme-color', content: '#F5EFDE' });
+    add('meta', { name: 'apple-mobile-web-app-capable', content: 'yes' });
+    add('meta', { name: 'mobile-web-app-capable', content: 'yes' });
+    add('meta', { name: 'apple-mobile-web-app-title', content: 'The Ledger' });
+    if (isApp()) document.documentElement.classList.add('tol-app');
+    if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) {
+      window.addEventListener('load', function () { navigator.serviceWorker.register('/sw.js').catch(function () {}); });
+    }
+  }
+  function isApp() {
+    return (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches) || window.navigator.standalone === true;
+  }
+  var installPrompt = null;
+  window.addEventListener('beforeinstallprompt', function (e) { e.preventDefault(); installPrompt = e; });
+  function lsGet(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
+  function lsSet(k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
+
+  // "Add to your home screen": the browser's own prompt where there is one, otherwise how-to steps
+  function showInstall() {
+    if (installPrompt) {
+      installPrompt.prompt();
+      installPrompt.userChoice.then(function () { installPrompt = null; }).catch(function () {});
+      return;
+    }
+    var ios = /iphone|ipad|ipod/i.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+    var steps = ios
+      ? '<li>Tap the <strong>Share</strong> button <span aria-hidden="true">(the square with an arrow)</span>.</li><li>Scroll down and tap <strong>Add to Home Screen</strong>.</li><li>Tap <strong>Add</strong>.</li>'
+      : '<li>Open your browser’s menu <span aria-hidden="true">(&#8942; or &#8943;)</span>.</li><li>Tap <strong>Add to Home screen</strong> or <strong>Install app</strong>.</li><li>Confirm, and look for the two little bubbles on your home screen.</li>';
+    var d = el('div', { class: 'tol-install', role: 'dialog', 'aria-modal': 'true', 'aria-labelledby': 'tol-install-h' },
+      '<div class="tol-install-card"><img src="/assets/icons/icon-192.png" alt="" width="72" height="72">' +
+      '<h2 id="tol-install-h">Keep us on your home screen</h2>' +
+      '<p>It opens like an app, works without a connection, and nothing you type ever leaves your phone.</p>' +
+      '<ol>' + steps + '</ol><button type="button" class="tol-install-close">Got it</button></div>');
+    function close() { d.remove(); document.removeEventListener('keydown', onKey); }
+    function onKey(e) { if (e.key === 'Escape') close(); }
+    d.addEventListener('click', function (e) { if (e.target === d || e.target.classList.contains('tol-install-close')) close(); });
+    document.addEventListener('keydown', onKey);
+    document.body.appendChild(d);
+    d.querySelector('.tol-install-close').focus();
+  }
+
+  // One gentle invitation, on a phone, on a later day's visit. "Not now" means never again.
+  function maybeInviteInstall() {
+    var today = new Date().toDateString(), days = [];
+    try { days = JSON.parse(lsGet('tol-visit-days') || '[]') || []; } catch (e) { days = []; }
+    if (days.indexOf(today) === -1) { days.push(today); lsSet('tol-visit-days', JSON.stringify(days.slice(-30))); }
+    if (isApp() || lsGet('tol-install-asked') || days.length < 2 || window.innerWidth > 760) return;
+    if (document.body.hasAttribute('data-no-breathe') || location.pathname === '/offline.html') return; // not over the garden
+    setTimeout(function () {
+      if (lsGet('tol-install-asked') || document.querySelector('.tol-breathe:not([hidden]), .tol-install')) return;
+      lsSet('tol-install-asked', '1');
+      var t = el('div', { class: 'tol-invite', role: 'status' },
+        '<img src="/assets/img/mascots/two-bubbles.svg" alt="" width="44" height="44"><p>Want us on your home screen? It opens like an app, and nothing you type leaves your phone.</p>' +
+        '<span><button type="button" class="tol-invite-yes">Show me how</button><button type="button" class="tol-invite-no">Not now</button></span>');
+      t.querySelector('.tol-invite-yes').addEventListener('click', function () { t.remove(); showInstall(); });
+      t.querySelector('.tol-invite-no').addEventListener('click', function () { t.remove(); });
+      document.body.appendChild(t);
+    }, 25000);
+  }
+
   function buildBreathe(body) {
     var moon = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z" fill="#F9D9B8" stroke="#8A7BB8" stroke-width="1.4"/></svg>';
     var btn = el('button', { type: 'button', class: 'tol-breathe-btn', 'aria-haspopup': 'dialog' }, moon + '<span>Breathe</span>');
@@ -662,6 +741,7 @@
     }
   }
 
+  addAppMeta();
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', start);
   else start();
 })();

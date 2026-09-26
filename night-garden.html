@@ -48,6 +48,24 @@
   .ng-card .ng-go:hover{ background:#FFE7CF; }
   .ng-row{ display:flex; flex-wrap:wrap; gap:.6rem; justify-content:center; }
   .ng-quote{ font-family:"Fraunces", Georgia, serif; font-style:italic; font-size:1.35rem !important; color:#FFF6E0 !important; }
+  html.ng-full .tol-bar, html.ng-full .tol-skip{ display:none !important; }
+  html.ng-full .ng-stage{ height:100vh; height:100dvh; }
+  .ng-help-btn{ pointer-events:auto; font:inherit; font-size:.88rem; color:#F4F1FA; background:rgba(28,31,58,.55); border:1px solid rgba(244,241,250,.35); border-radius:999px; padding:.45rem .9rem; cursor:pointer; backdrop-filter:blur(6px); -webkit-backdrop-filter:blur(6px); white-space:nowrap; }
+  .ng-help-btn:hover{ background:rgba(74,71,117,.75); }
+  .ng-help-btn:focus-visible{ outline:2px solid #F9D9B8; outline-offset:3px; }
+  .ng-pick-h{ font-family:"Fraunces", Georgia, serif; font-size:1.1rem !important; color:#FFF6E0 !important; margin:.4rem 0 .7rem !important; }
+  .ng-pick{ display:grid; gap:.6rem; margin:0 0 1rem; text-align:left; }
+  .ng-card button.ng-choice{ display:grid; grid-template-columns:2.4rem 1fr; column-gap:.7rem; align-items:center; text-align:left; border-radius:18px; padding:.8rem 1rem; background:rgba(28,31,58,.5); }
+  .ng-card button.ng-choice:hover{ background:rgba(249,217,184,.18); border-color:#F9D9B8; }
+  .ng-choice .ng-ico{ grid-row:span 2; font-size:1.7rem; text-align:center; }
+  .ng-choice strong{ font-family:"Fraunces", Georgia, serif; font-size:1.1rem; color:#FFF6E0; }
+  .ng-choice small{ color:#DCD6F0; font-size:.86rem; line-height:1.45; }
+  .ng-small{ font-size:.85rem !important; margin:0 !important; }
+  .ng-help-ico{ font-size:2.4rem; margin:0 0 .2rem !important; }
+  .ng-steps{ text-align:left; margin:0 0 1.2rem; padding-left:1.4rem; color:#EDE8F7; line-height:1.55; }
+  .ng-steps li{ margin:.45rem 0; }
+  .ng-steps li::marker{ color:#F9D9B8; font-weight:600; }
+  @media (max-width:560px){ .ng-card > div{ padding:1.3rem 1.1rem; max-height:calc(100% - 1rem); overflow:auto; } .ng-help-btn{ font-size:.8rem; padding:.4rem .75rem; } }
   .ng-about{ max-width:42rem; margin:0 auto; padding:2.5rem clamp(1.1rem,5vw,2rem) 1rem; }
   .ng-about h2{ font-family:"Fraunces", Georgia, serif; }
   .ng-about li{ margin:.35rem 0; }
@@ -69,6 +87,7 @@
 
     <div class="ng-top">
       <p class="ng-title">The Night Garden<small id="ng-count"></small></p>
+      <button type="button" class="ng-help-btn" id="ng-help-btn" aria-haspopup="dialog">? How to play</button>
     </div>
 
     <p class="ng-say" id="ng-say" aria-live="polite"></p>
@@ -85,15 +104,31 @@
       <button type="button" data-mode="fireflies" aria-pressed="false">&#10024; Fireflies</button>
       <button type="button" data-mode="pond" aria-pressed="false">&#128167; Lily pond</button>
       <button type="button" id="ng-sound" aria-pressed="false">&#127925; Sound off</button>
+      <button type="button" id="ng-full" aria-pressed="false">&#10530; Full screen</button>
       <button type="button" id="ng-leave">Leave gently</button>
     </div>
 
     <div class="ng-card" id="ng-welcome">
       <div>
+        <img src="/assets/img/mascots/heart-bubble.svg" alt="" width="84" height="84" style="display:block;margin:-.4rem auto .3rem;">
         <h2 id="ng-welcome-h">Welcome to the Night Garden</h2>
         <p id="ng-welcome-p">A quiet place to breathe, play and let your mind settle. There are no timers and no way to lose. Everything here stays on your device.</p>
-        <p style="font-size:.9rem;">&#127800; <strong>Breathe</strong> with the light and flowers bloom &nbsp;&middot;&nbsp; &#10024; guide <strong>fireflies</strong> into stars &nbsp;&middot;&nbsp; &#128167; float lily pads on the <strong>pond</strong></p>
-        <div class="ng-row"><button type="button" class="ng-go" id="ng-enter">Enter the garden</button></div>
+        <p class="ng-pick-h">What would you like to do?</p>
+        <div class="ng-pick">
+          <button type="button" class="ng-choice" data-enter="breathe"><span class="ng-ico">&#127800;</span><strong>Breathe</strong><small>The easiest. Breathe with a glowing light, and a flower blooms with every breath. About a minute.</small></button>
+          <button type="button" class="ng-choice" data-enter="fireflies"><span class="ng-ico">&#10024;</span><strong>Fireflies</strong><small>Draw pictures in the stars. Rest your finger on each glowing circle and a firefly lights it.</small></button>
+          <button type="button" class="ng-choice" data-enter="pond"><span class="ng-ico">&#128167;</span><strong>Lily pond</strong><small>A slow, gentle puzzle. Fit lily pads into rows and they bloom. You can’t lose.</small></button>
+        </div>
+        <p class="ng-small">You can switch any time with the buttons at the bottom. Tap <strong>How to play</strong> whenever you need a reminder.</p>
+      </div>
+    </div>
+
+    <div class="ng-card" id="ng-help" hidden role="dialog" aria-modal="true" aria-labelledby="ng-help-h">
+      <div>
+        <p class="ng-help-ico" id="ng-help-ico" aria-hidden="true"></p>
+        <h2 id="ng-help-h"></h2>
+        <ol class="ng-steps" id="ng-help-steps"></ol>
+        <div class="ng-row"><button type="button" class="ng-go" id="ng-help-ok">Got it</button></div>
       </div>
     </div>
 

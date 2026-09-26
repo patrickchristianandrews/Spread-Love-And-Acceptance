@@ -37,6 +37,11 @@ Source for The Objective Ledger (TOL-OS) site. The repo root is the site root: G
 
 - **The Night Garden** (`night-garden.html`, `assets/js/night-garden.js`): breathing, fireflies and a lily-pond puzzle on one canvas. No timers, no losing, no streaks; the garden is saved only in the visitor's browser (`tol-night-garden-v1`). Sound is off until they turn it on.
 - **Breathe button**: `site.js` adds a one-minute breathing break to every page. Pages opt out with `<body data-no-breathe>`.
+- **The logo and mascots** live in `assets/img/`: `logo.svg` (the two bubbles with the name), and one mascot per section in `assets/img/mascots/`, placed beside page titles by `site.css`. App icons and the favicon are in `assets/icons/` (rendered from `assets/icons/icon.svg`), with copies of `favicon.ico` and `apple-touch-icon.png` at the root.
+- **Drifting hearts and bubbles**: part of the watercolour wash in `site.css` (`.tol-bub`, `.tol-heart`). Bubbles are blown up, float and pop; hearts crack and heal. They stay still for visitors who ask for reduced motion.
+- **The site as an app**: `manifest.webmanifest`, `sw.js` and `offline.html` let visitors add the site to their home screen and open it offline. `site.js` adds the icon and manifest tags to every page and offers, once, on a phone and on a later day, to show how. The service worker fetches pages from the network first, so an update is never hidden behind a saved copy; bump `VERSION` in `sw.js` when its file list changes.
+- **Gentle welcome-backs**: Today’s Weather and Turning Toward greet a returning visitor using only what’s saved in their own browser. No streaks, no “you missed”.
+- **Wording**: simple pages and the menu use warm, everyday words; formal names (WP-03, the Deficit Audit and so on) stay in `.formal` spans, the small code line and the full versions.
 
 ## Rules to keep
 

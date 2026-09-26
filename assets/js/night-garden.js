@@ -254,6 +254,47 @@
     sayEl.style.opacity = text ? 1 : 0;
     clearTimeout(sayTimer); if (ms) sayTimer = setTimeout(function () { sayEl.style.opacity = 0; }, ms);
   }
+  var HELP = {
+    breathe: { ico: '&#127800;', h: 'How to breathe with the garden', steps: [
+      'Look at the soft glowing light in the sky.',
+      'As it <strong>grows</strong>, breathe in slowly through your nose. The number counts down from 4.',
+      'As it <strong>shrinks</strong>, breathe out gently. The number counts down from 6.',
+      'Every full breath plants a flower in your garden. Six breaths take about a minute.'] },
+    fireflies: { ico: '&#10024;', h: 'How to guide the fireflies', steps: [
+      'A faint picture appears in the sky, made of glowing circles.',
+      'Drag your finger (or move your mouse) onto the <strong>brightest circle</strong>, and rest there for a moment.',
+      'A firefly flies over and lights it up. A little arrow shows you where to go next.',
+      'Light every circle to finish the picture. Each new one is kept in your sky.'],
+      keys: 'On a keyboard, the arrow keys move your light.' },
+    pond: { ico: '&#128167;', h: 'How to play the lily pond', steps: [
+      'Lily pads drift slowly down the pond. The faint outline shows where they’ll land.',
+      'Move them with <strong>&#9664; &#9654;</strong>, turn them with <strong>&#10227;</strong>, and drop them with <strong>&#9660;</strong>. Or swipe sideways, tap to turn, and swipe down to drop.',
+      'Fill a whole row from side to side and it blooms into flowers for your garden.',
+      'If the pond fills up, it simply settles and starts fresh. You can’t lose.'],
+      keys: 'On a keyboard: arrow keys to move and turn, space to drop.' }
+  };
+  var helpCard = document.getElementById('ng-help');
+  function showHelp(m) {
+    var h = HELP[m || mode]; if (!h || !helpCard) return;
+    document.getElementById('ng-help-ico').innerHTML = h.ico;
+    document.getElementById('ng-help-h').textContent = h.h;
+    document.getElementById('ng-help-steps').innerHTML = h.steps.map(function (x) { return '<li>' + x + '</li>'; }).join('') +
+      (h.keys && window.matchMedia && window.matchMedia('(hover: hover)').matches ? '<li>' + h.keys + '</li>' : '');
+    helpCard.hidden = false; say('', '', 0);
+    document.getElementById('ng-help-ok').focus();
+  }
+  function hideHelp() {
+    helpCard.hidden = true;
+    if (mode === 'breathe') { breath.start = performance.now() + 600; breath.count = 0; breath.phase = ''; }
+    if (mode === 'pond') dropAt = performance.now() + 1500;
+    document.getElementById('ng-help-btn').focus();
+  }
+  if (helpCard) {
+    document.getElementById('ng-help-ok').addEventListener('click', hideHelp);
+    helpCard.addEventListener('keydown', function (e) { if (e.key === 'Escape') hideHelp(); });
+    document.getElementById('ng-help-btn').addEventListener('click', function () { showHelp(); });
+  }
+
   function setMode(m) {
     mode = m;
     document.querySelectorAll('.ng-bar [data-mode]').forEach(function (b) { b.setAttribute('aria-pressed', String(b.getAttribute('data-mode') === m)); });
@@ -263,11 +304,15 @@
     if (m === 'fireflies') { newShape(); say('Guide the fireflies', 'Touch or move over each faint point, and a firefly will settle there.', 6000); }
     if (m === 'pond') { pondReset(); say('Float the lily pads', 'Fill a row across the pond and it blooms. There’s no hurry, and no way to lose.', 6000); }
     updateCount();
+    // The first time in each activity, show how it works
+    save.seen = save.seen || {};
+    if (!save.seen[m]) { save.seen[m] = 1; persist(); showHelp(m); }
   }
 
   // Breathe: 4 seconds in, 6 seconds out
   var breath = { start: 0, count: 0, phase: '' };
   function drawBreath(t) {
+    if (helpCard && !helpCard.hidden) return;
     var el = (t - breath.start) / 1000; if (el < 0) return;
     var cyc = el % 10, n = Math.floor(el / 10);
     var k = cyc < 4 ? ease(cyc / 4) : 1 - ease((cyc - 4) / 6);
@@ -284,6 +329,18 @@
     g.addColorStop(0, 'rgba(255,238,210,' + (0.55 + 0.3 * k) + ')'); g.addColorStop(0.35, 'rgba(249,217,184,' + (0.35 + 0.2 * k) + ')'); g.addColorStop(1, 'rgba(217,200,240,0)');
     ctx.fillStyle = g; ctx.beginPath(); ctx.arc(cx, cy, R * 3, 0, Math.PI * 2); ctx.fill();
     ctx.fillStyle = 'rgba(255,248,232,0.9)'; ctx.beginPath(); ctx.arc(cx, cy, R * 0.55, 0, Math.PI * 2); ctx.fill();
+    // a ring that fills through each half of the breath, and the seconds left
+    var len = ph === 'in' ? 4 : 6, into = ph === 'in' ? cyc : cyc - 4, ringR = Math.min(W, H) * 0.075 * 1.35 + 14;
+    ctx.lineWidth = 3; ctx.lineCap = 'round';
+    ctx.strokeStyle = 'rgba(255,240,215,0.18)'; ctx.beginPath(); ctx.arc(cx, cy, ringR, 0, Math.PI * 2); ctx.stroke();
+    ctx.strokeStyle = ph === 'in' ? 'rgba(249,217,184,0.9)' : 'rgba(217,200,240,0.9)';
+    ctx.beginPath(); ctx.arc(cx, cy, ringR, -Math.PI / 2, -Math.PI / 2 + Math.PI * 2 * Math.min(1, into / len)); ctx.stroke();
+    ctx.lineCap = 'butt';
+    ctx.fillStyle = 'rgba(60,50,90,0.85)'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    ctx.font = '600 ' + Math.round(Math.max(16, R * 0.5)) + 'px Fraunces, Georgia, serif';
+    ctx.fillText(String(Math.max(1, Math.ceil(len - into))), cx, cy + 1);
+    ctx.font = '500 13px Lora, Georgia, serif'; ctx.fillStyle = 'rgba(255,246,224,0.9)';
+    ctx.fillText(ph === 'in' ? 'breathe in' : 'breathe out', cx, cy + ringR + 16);
   }
   function ease(x) { return x < 0.5 ? 2 * x * x : 1 - Math.pow(-2 * x + 2, 2) / 2; }
   function bloom() {
@@ -316,21 +373,42 @@
     var glow = shapeDone ? Math.min(1, (t - shapeDone) / 900) : 0;
     ctx.strokeStyle = 'rgba(255,240,210,' + (0.12 + glow * 0.6) + ')'; ctx.lineWidth = 1 + glow * 1.5; ctx.setLineDash(glow ? [] : [3, 6]);
     ctx.beginPath(); targets.forEach(function (p, i) { if (i) ctx.lineTo(p.x, p.y); else ctx.moveTo(p.x, p.y); }); if (shape.def.closed) ctx.closePath(); ctx.stroke(); ctx.setLineDash([]);
+    var next = nextTarget();
     targets.forEach(function (p) {
       if (p.done) return;
-      var pulse = REDUCED ? 0.5 : 0.4 + 0.3 * Math.sin(t / 500 + p.x);
-      ctx.strokeStyle = 'rgba(230,255,170,' + pulse + ')'; ctx.lineWidth = 1.5; ctx.beginPath(); ctx.arc(p.x, p.y, 9, 0, Math.PI * 2); ctx.stroke();
+      var pulse = REDUCED ? 0.7 : 0.55 + 0.3 * Math.sin(t / 500 + p.x), big = p === next;
+      ctx.fillStyle = 'rgba(230,255,170,' + (big ? 0.22 : 0.1) + ')'; ctx.beginPath(); ctx.arc(p.x, p.y, big ? 15 : 10, 0, Math.PI * 2); ctx.fill();
+      ctx.strokeStyle = 'rgba(230,255,170,' + pulse + ')'; ctx.lineWidth = big ? 2.2 : 1.5;
+      ctx.beginPath(); ctx.arc(p.x, p.y, big ? 15 + (REDUCED ? 0 : Math.sin(t / 300) * 2) : 10, 0, Math.PI * 2); ctx.stroke();
     });
+    // a soft arrow from your light toward the next circle
+    if (next && !shapeDone && wand.active && Math.hypot(next.x - wand.x, next.y - wand.y) > 60) {
+      var an = Math.atan2(next.y - wand.y, next.x - wand.x), ax = wand.x + Math.cos(an) * 34, ay = wand.y + Math.sin(an) * 34;
+      ctx.save(); ctx.translate(ax, ay); ctx.rotate(an); ctx.fillStyle = 'rgba(255,250,220,0.75)';
+      ctx.beginPath(); ctx.moveTo(8, 0); ctx.lineTo(-5, -6); ctx.lineTo(-2, 0); ctx.lineTo(-5, 6); ctx.closePath(); ctx.fill(); ctx.restore();
+    }
+    // how many are lit
+    if (!shapeDone) {
+      var lit = targets.filter(function (p) { return p.done; }).length, lowest = Math.max.apply(null, targets.map(function (p) { return p.y; }));
+      ctx.fillStyle = 'rgba(255,246,224,0.85)'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.font = '500 14px Lora, Georgia, serif';
+      ctx.fillText('\u2728 ' + lit + ' of ' + targets.length + ' lit', W / 2, lowest + 34);
+    }
     if (mode === 'fireflies' && wand.active) {
       var wg = ctx.createRadialGradient(wand.x, wand.y, 0, wand.x, wand.y, 30); wg.addColorStop(0, 'rgba(255,255,230,0.25)'); wg.addColorStop(1, 'rgba(255,255,230,0)');
       ctx.fillStyle = wg; ctx.beginPath(); ctx.arc(wand.x, wand.y, 30, 0, Math.PI * 2); ctx.fill();
     }
     if (shapeDone && t - shapeDone > 3200) newShape();
   }
+  // The unlit circle to aim for: the nearest to your light, or the first one if you haven't started
+  function nextTarget() {
+    var open = targets.filter(function (p) { return !p.done; }); if (!open.length) return null;
+    if (!wand.active) return open[0];
+    return open.reduce(function (a, b) { return Math.hypot(a.x - wand.x, a.y - wand.y) <= Math.hypot(b.x - wand.x, b.y - wand.y) ? a : b; });
+  }
   function fireflyTick(t) {
     if (mode !== 'fireflies' || !wand.active || shapeDone) return;
     var near = null;
-    targets.forEach(function (p) { if (!p.done && Math.hypot(p.x - wand.x, p.y - wand.y) < 30) near = p; });
+    targets.forEach(function (p) { if (!p.done && Math.hypot(p.x - wand.x, p.y - wand.y) < 34) near = p; });
     if (!near) { dwell = null; return; }
     if (!dwell || dwell.p !== near) { dwell = { p: near, t: t }; return; }
     if (t - dwell.t > (REDUCED ? 250 : 350)) {
@@ -407,7 +485,7 @@
       say(n > 1 ? n + ' rows bloomed.' : 'A row bloomed.', 'New flowers opened in your garden.', 2400);
       clearing = null; spawn();
     }
-    if (!clearing && t > dropAt) { step(); dropAt = t + 1100; }
+    if (!clearing && t > dropAt && (!helpCard || helpCard.hidden)) { step(); dropAt = t + 1100; }
     // water
     var w = COLS * cell, h = ROWS * cell;
     ctx.fillStyle = 'rgba(70,87,138,0.35)'; ctx.strokeStyle = 'rgba(200,210,255,0.25)'; ctx.lineWidth = 1.5;
@@ -420,7 +498,15 @@
       var fade = clearing && clearing.rows.indexOf(r) !== -1 ? 1 + (t - clearing.t) / 350 : 1;
       row.forEach(function (v, c) { if (v) lily(bx + c * cell, by + r * cell, Math.abs(v), v < 0, fade); });
     });
-    if (!clearing) piece.cells.forEach(function (c) { var y = c[1] + piece.y; if (y >= 0) lily(bx + (c[0] + piece.x) * cell, by + y * cell, piece.c, piece.hasFlower, 1, true); });
+    if (!clearing) {
+      var gy = piece.y; while (!collide(piece.cells, piece.x, gy + 1)) gy++;
+      if (gy > piece.y) {
+        ctx.strokeStyle = 'rgba(255,246,224,0.45)'; ctx.lineWidth = 1.5; ctx.setLineDash([3, 4]);
+        piece.cells.forEach(function (c) { var y = c[1] + gy; if (y >= 0) { ctx.beginPath(); ctx.arc(bx + (c[0] + piece.x) * cell + cell / 2, by + y * cell + cell / 2, cell * 0.4, 0, Math.PI * 2); ctx.stroke(); } });
+        ctx.setLineDash([]);
+      }
+      piece.cells.forEach(function (c) { var y = c[1] + piece.y; if (y >= 0) lily(bx + (c[0] + piece.x) * cell, by + y * cell, piece.c, piece.hasFlower, 1, true); });
+    }
   }
   function lily(x, y, k, flower, fade, live) {
     var r = cell * 0.44 * Math.min(1.25, fade), cx = x + cell / 2, cy = y + cell / 2, a = fade > 1 ? Math.max(0, 2 - fade) : 1;
@@ -483,7 +569,7 @@
   document.addEventListener('keydown', function (e) {
     if (/^(INPUT|TEXTAREA|SELECT)$/.test(e.target.tagName)) return;
     if (e.key === ' ' && e.target.closest && e.target.closest('button, a, summary')) return;
-    if (!closeCard.hidden || !welcome.hidden || stage.getBoundingClientRect().bottom < window.innerHeight * 0.5) return;
+    if (!closeCard.hidden || !welcome.hidden || (helpCard && !helpCard.hidden) || stage.getBoundingClientRect().bottom < window.innerHeight * 0.5) return;
     if (mode === 'pond' && ['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', ' '].indexOf(e.key) !== -1 && !/^(INPUT|TEXTAREA|SELECT)$/.test(e.target.tagName)) { e.preventDefault(); pondKey(e.key); }
     if (mode === 'fireflies' && ['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown'].indexOf(e.key) !== -1 && !/INPUT|TEXTAREA/.test(e.target.tagName)) {
       e.preventDefault(); if (!wand.active) { wand.x = W / 2; wand.y = H * 0.3; wand.active = true; }
@@ -507,6 +593,27 @@
     'Say one specific thank-you before bed.',
     'Feelings are weather. They pass.'
   ];
+  // Full screen: hide the site header (and use the browser's full screen where it has one)
+  var fullBtn = document.getElementById('ng-full');
+  function setFull(on) {
+    document.documentElement.classList.toggle('ng-full', on);
+    fullBtn.setAttribute('aria-pressed', String(on));
+    fullBtn.innerHTML = on ? '&#10530; Show the menu' : '&#10530; Full screen';
+    window.scrollTo(0, 0); resize();
+  }
+  if (fullBtn) {
+    fullBtn.addEventListener('click', function () {
+      var on = !document.documentElement.classList.contains('ng-full');
+      setFull(on);
+      var d = document.documentElement;
+      try {
+        if (on && d.requestFullscreen && !document.fullscreenElement) d.requestFullscreen().catch(function () {});
+        else if (!on && document.fullscreenElement && document.exitFullscreen) document.exitFullscreen().catch(function () {});
+      } catch (e) {}
+    });
+    document.addEventListener('fullscreenchange', function () { if (!document.fullscreenElement && document.documentElement.classList.contains('ng-full')) setFull(false); });
+  }
+
   var closeCard = document.getElementById('ng-close');
   document.getElementById('ng-leave').addEventListener('click', function () {
     document.getElementById('ng-quote').textContent = QUOTES[Math.floor(Math.random() * QUOTES.length)];
@@ -523,8 +630,8 @@
     document.getElementById('ng-welcome-p').textContent = (gifted ? 'While you were away, ' + gifted + (gifted === 1 ? ' new flower' : ' new flowers') + ' opened on their own. ' : '') +
       'Your garden has ' + save.flowers.length + (save.flowers.length === 1 ? ' flower' : ' flowers') + (save.consts.length ? ' and ' + save.consts.length + (save.consts.length === 1 ? ' constellation' : ' constellations') + ' in its sky' : '') + '. Stay as long as you like.';
   }
-  document.getElementById('ng-enter').addEventListener('click', function () {
-    welcome.hidden = true; if (save.sound) startAudio(); setMode('breathe');
+  document.querySelectorAll('[data-enter]').forEach(function (b) {
+    b.addEventListener('click', function () { welcome.hidden = true; if (save.sound) startAudio(); setMode(b.getAttribute('data-enter')); });
   });
 
   document.addEventListener('visibilitychange', function () {
