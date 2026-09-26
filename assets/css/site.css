@@ -1109,3 +1109,10 @@ html.has-garden, html.has-garden body{ background:transparent !important; }
 html.has-garden .tol-wash > i{ display:none; }   /* the garden replaces the watercolour splashes; the bubbles still float */
 html.has-garden .tol-bar{ background:rgba(245,239,222,.86); backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px); }
 @media print{ .tol-garden-bg, .tol-garden-veil{ display:none !important; } html.has-garden body{ background:#fff !important; } }
+@media (max-width:1120px) and (min-width:981px){
+  .tol-bar{ gap:.35rem; padding-left:.9rem; padding-right:.9rem; }
+  .tol-sections .tol-nav-item > button{ padding:.42rem .24rem; font-size:.8rem; }
+  .tol-nav-item > button::after{ margin-left:.18em; }
+  .tol-brand{ font-size:.9rem; }
+  .tol-bar .tol-member{ padding:.4rem .7rem; font-size:.88rem; }
+}

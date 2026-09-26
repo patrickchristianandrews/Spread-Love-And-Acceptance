@@ -46,12 +46,6 @@
       { href: '/infographic.html', code: '', title: 'The whole idea on one page', note: 'A printable one-page summary, easy to share' }
     ]},
     { id: 'self', title: 'Self-discovery', blurb: 'Tools for understanding yourself: your load, your wiring, your patterns. Start here, with or without anyone else.', items: [
-      { href: '/pause-and-play.html', code: 'New', title: 'Pause & Play', note: 'All the calm games in one place, with your petals, your streak and today’s bouquet' },
-      { href: '/night-garden.html', code: 'New', title: 'The Night Garden', note: 'A calm place to breathe, play and let your mind settle. Flowers bloom as you breathe; no timers, nothing to lose' },
-      { href: '/word-bloom.html', code: 'New', title: 'Word Bloom', note: 'Swipe across the petals to spell words. Hundreds of gentle levels, a bonus jar, and petals for playing well' },
-      { href: '/quiet-crossword.html', code: 'New', title: 'Quiet Crossword', note: 'Small, friendly crosswords with a new one every day, made for playing on a phone' },
-      { href: '/quiet-words.html', code: 'Game', title: 'Quiet Words', note: 'A gentle word search with a new theme each day. Every word you find leaves a kind thought behind' },
-      { href: '/keepsakes.html', code: 'You', title: 'Your keepsakes', note: 'Petals from every calm game unlock tile colours, Night Garden wonders and stickers' },
       { href: '/quick-checks.html#today', code: 'Daily', title: 'Today’s Weather', note: 'One minute on your own conditions: a forecast, a talk window, what today is good for, and a private almanac of your patterns' },
       { href: '/wired-differently.html', deep: true, code: 'New', title: 'Wired Differently', note: 'How different neurotypes receive the same words, and how to talk across the difference' },
       { href: '/wiring-card.html', code: 'Tool', title: 'Wiring Card', note: 'A one-page card on how you receive words, what silence means, and what to avoid' },
@@ -60,6 +54,14 @@
       { href: '/wp-11.html', deep: true, code: 'WP-11', title: 'The Calm-Down Kit', note: 'Decide in advance what settles your body', paid: true },
       { href: '/book/chapter-3.html', deep: true, code: 'III', title: 'Full tanks and different angles', note: 'Why some reactions are bigger than their cause. Also called Autonomic Saturation & the 7 Ocular Vectors', paid: true },
       { href: '/learn/index.html#part-self', deep: true, code: 'Stories', title: 'Stories from Philosophy: Knowing yourself', note: 'The Second Arrow, the Ship of Theseus, What Is Up to Us' },
+    ]},
+    { id: 'play', title: 'Play', blurb: 'Calm games for a busy mind. No timers and no way to lose, with petals for playing well.', items: [
+      { href: '/pause-and-play.html', code: 'All', title: 'Pause & Play', note: 'All the calm games in one place, with your petals, your streak and today’s bouquet' },
+      { href: '/night-garden.html', code: 'New', title: 'The Night Garden', note: 'A calm place to breathe, play and let your mind settle. Flowers bloom as you breathe; no timers, nothing to lose' },
+      { href: '/word-bloom.html', code: 'New', title: 'Word Bloom', note: 'Swipe across the petals to spell words. Hundreds of gentle levels, a bonus jar, and petals for playing well' },
+      { href: '/quiet-crossword.html', code: 'New', title: 'Quiet Crossword', note: 'Small, friendly crosswords with a new one every day, made for playing on a phone' },
+      { href: '/quiet-words.html', code: 'Game', title: 'Quiet Words', note: 'A gentle word search with a new theme each day. Every word you find leaves a kind thought behind' },
+      { href: '/keepsakes.html', code: 'You', title: 'Your keepsakes', note: 'Petals from every calm game unlock tile colours, Night Garden wonders and stickers' },
     ]},
     { id: 'relationships', title: 'Relationships', blurb: 'Where to start in each kind of relationship, and every tool that fits. The shared relationship tools themselves are under The book, Workpapers and Tools.', items: [
       { href: '/turning-toward.html', deep: true, code: 'New', title: 'Turning toward', note: 'Seven small, everyday ways to build connection with anyone who matters to you' },
@@ -216,7 +218,7 @@
 
   // The sections shown in the top bar. Each opens a short list of its pages.
   var RIBBON = [['start', 'Start here'], ['self', 'Self-discovery'], ['relationships', 'Relationships'],
-                ['book', 'Book'], ['workpapers', 'Workpapers'], ['tools', 'Tools'], ['media', 'Media'], ['about', 'About']];
+                ['book', 'Book'], ['workpapers', 'Workpapers'], ['tools', 'Tools'], ['play', 'Play'], ['media', 'Media'], ['about', 'About']];
   var openDrop = null;
 
   function closeDrop(refocus) {
