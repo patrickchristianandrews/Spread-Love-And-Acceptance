@@ -641,7 +641,7 @@
       ctx.fillStyle = L.legLow; ctx.beginPath(); ctx.ellipse(-12, -4, 7, 4, 0, 0, Math.PI * 2); ctx.fill();
       ctx.fillStyle = L.legLow; ctx.beginPath(); ctx.ellipse(18, -2.5, 8, 2.8, 0, 0, Math.PI * 2); ctx.fill();
       ctx.fillStyle = L.paw; ctx.beginPath(); ctx.ellipse(26, -2.5, 3.8, 2.7, 0, 0, Math.PI * 2); ctx.fill(); ctx.beginPath(); ctx.ellipse(23, -0.3, 3.8, 2.5, 0, 0, Math.PI * 2); ctx.fill();
-      if (L.chest === 'white') { ctx.fillStyle = WHITE; ctx.beginPath(); ctx.ellipse(12, -7, 4, 4.5, 0, 0, Math.PI * 2); ctx.fill(); }
+      if (L.chest === 'white') { ctx.fillStyle = '#F2ECE3'; ctx.beginPath(); ctx.ellipse(12.5, -7, 1.4, 2.6, 0, 0, Math.PI * 2); ctx.fill(); }
       else { ctx.fillStyle = TAN; ctx.beginPath(); ctx.ellipse(12, -7, 3.6, 3.4, 0, 0, Math.PI * 2); ctx.fill(); }
     } else {
       ctx.fillStyle = BLACK; ctx.beginPath(); ctx.ellipse(0, BY, BRX, BRY, 0, 0, Math.PI * 2); ctx.fill();
@@ -649,7 +649,7 @@
       if (L.chest === 'white') {
         ctx.fillStyle = TAN; ctx.beginPath(); ctx.ellipse(16, BY - 4, 4, 6.5, -0.45, 0, Math.PI * 2); ctx.fill();         // throat, the same fawn brown
         ctx.fillStyle = '#F2ECE3';
-        ctx.beginPath(); ctx.ellipse(14.5, BY + 2, 5, 6.5, -0.25, 0, Math.PI * 2); ctx.fill();                              // chest
+        ctx.beginPath(); ctx.ellipse(15.6, BY + 1.5, 1.5, 3.4, -0.3, 0, Math.PI * 2); ctx.fill();                           // just a small pale streak on the chest
         ctx.fillStyle = TAN; ctx.beginPath(); ctx.ellipse(12, BY + 7.5, 4.5, 2.2, 0, 0, Math.PI * 2); ctx.fill();            // tan below
       }
       else {
