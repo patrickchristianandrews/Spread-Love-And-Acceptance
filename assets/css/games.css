@@ -41,3 +41,4 @@ html[data-tiles="tiles-moon"] .gm-btns .gm-primary{ background:#F3EEFF; color:#2
 .gm-cell .gm-n{ position:absolute; left:4px; top:2px; font:500 .6rem/1 "IBM Plex Mono", monospace; color:var(--g-soft); }
 
 @media (prefers-reduced-motion: reduce){ .gm-cell.is-found{ animation:none; } }
+.gm-switch a.gm-home{ min-width:40px; justify-content:center; padding:.35rem .6rem; }

@@ -380,6 +380,7 @@
     var tipEl = $('.br-tip');
     if (tipEl && window.TOLTips) window.TOLTips.get(['calm', 'rest', 'body', 'mind', 'selftalk'], function (t) { tipEl.innerHTML = '<strong>A little tip:</strong> ' + esc(t[0]) + ' ' + esc(t[1]); tipEl.hidden = false; });
     if (window.TOLGarden) window.TOLGarden.gift('breathe');
+    if (window.TOLRewards) window.TOLRewards.earn(6, 'breathe', 'A breathing break');
     stopAll(); cur.k = ''; ov.classList.remove('is-in', 'is-out'); show('done');
     if (engine && !muted && scape !== 'off') { engine.chord(); later(function () { if (engine) engine.mute(true); }, 7000); }
     tap([10, 60, 10]);

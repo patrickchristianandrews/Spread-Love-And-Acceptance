@@ -19,12 +19,15 @@
   var sayEl = document.getElementById('ng-say'), countEl = document.getElementById('ng-count');
   var padEl = document.getElementById('ng-pad');
   var REDUCED = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  // Backdrop mode (garden-backdrop.html, behind Pause & Play): silent, no buttons, and it
+  // never changes the visitor's saved garden.
+  var AMBIENT = document.documentElement.hasAttribute('data-ambient');
 
   // ---------- Saved garden (this browser only) ----------
   var KEY = 'tol-night-garden-v1';
   var save = { flowers: [], lilies: 0, consts: [], days: [], breaths: 0, sound: true }, mutedThisVisit = false;
   try { var raw = localStorage.getItem(KEY); if (raw) { var o = JSON.parse(raw); for (var k in o) save[k] = o[k]; } } catch (e) {}
-  function persist() { try { localStorage.setItem(KEY, JSON.stringify(save)); } catch (e) {} }
+  function persist() { if (AMBIENT) return; try { localStorage.setItem(KEY, JSON.stringify(save)); } catch (e) {} }
   var today = new Date(); var todayKey = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
   // ---------- Season and moon ----------
   var month = today.getMonth(); // 0-11
@@ -38,14 +41,14 @@
   var returning = save.days.length > 0, gifted = 0, planted = null;
   try { planted = JSON.parse(localStorage.getItem('tol-garden-gifts') || 'null'); } catch (e) {}
   if (!returning && !save.flowers.length) { for (var s0 = 0; s0 < 7; s0++) addFlower(true); } // a few blooms to welcome a first visit
-  if (save.days.indexOf(todayKey) === -1) {
+  if (!AMBIENT && save.days.indexOf(todayKey) === -1) {
     // A new day: a few buds open on their own. Missing days never costs anything.
     if (returning) { gifted = Math.min(3, 1 + Math.floor(Math.random() * 3)); for (var g = 0; g < gifted; g++) addFlower(true); }
     save.days.push(todayKey); if (save.days.length > 400) save.days = save.days.slice(-400); persist();
   }
   // flowers planted by calm moments elsewhere on the site
   var plantedLine = '';
-  if (planted && planted.count > 0) {
+  if (!AMBIENT && planted && planted.count > 0) {
     for (var pg = 0; pg < Math.min(24, planted.count); pg++) addFlower(true);
     var NAMES = { breathe: ['breathing break', 'breathing breaks'], words: ['Quiet Words puzzle', 'Quiet Words puzzles'], kindness: ['kind moment', 'kind moments'], weather: ['weather check-in', 'weather check-ins'] };
     var bits = Object.keys(planted.from || {}).filter(function (k) { return NAMES[k]; }).map(function (k) { var n = planted.from[k]; return n + ' from ' + (n === 1 ? 'a ' + NAMES[k][0] : 'your ' + NAMES[k][1]); });
@@ -1186,8 +1189,11 @@
   // ---------- Main loop ----------
   var lastT = performance.now(), running = true, rafId = 0;
   function kick() { if (!rafId) rafId = requestAnimationFrame(frame); }
+  var lastDraw = 0;
   function frame(t) {
     rafId = 0;
+    if (AMBIENT && t - lastDraw < 32) { kick(); return; } // a gentle 30 frames a second is plenty behind a page
+    lastDraw = t;
     var dt = Math.min(60, t - lastT); lastT = t;
     if (!running) return;
     ctx.clearRect(0, 0, W, H);

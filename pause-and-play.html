@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-NKC6CQ9S66"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-NKC6CQ9S66');
+</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Pause &amp; Play &mdash; calm games for a busy mind &middot; The Objective Ledger</title>
+<meta name="description" content="All the calm games in one place: the Night Garden, Word Bloom, Quiet Crossword, Quiet Words and a breathing break. No timers, no way to lose, and petals for playing well.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,500&family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/css/site.css">
+<link rel="stylesheet" href="/assets/css/reading.css">
+<link rel="stylesheet" href="/assets/css/games.css">
+<style>
+  /* the Night Garden, alive behind the page, under a soft veil */
+  body.pp-page{ background:transparent !important; }
+  .pp-garden{ position:fixed; inset:0; width:100%; height:100%; border:0; z-index:-3; pointer-events:none; background:#171A34; }
+  .pp-veil{ position:fixed; inset:0; z-index:-2; pointer-events:none;
+    background:linear-gradient(180deg, rgba(250,244,232,.78) 0%, rgba(250,244,232,.66) 45%, rgba(250,244,232,.5) 100%); }
+  html:has(> body.pp-page) > .tol-wash > i{ display:none; } /* the garden replaces the watercolour splashes; bubbles still float */
+  .read a.pp-card, .read a.pp-stem, .read a.pp-stat{ text-decoration:none; }
+  .pp-hero, .pp-bouquet, .pp-card, .pp-why{ backdrop-filter:blur(6px) saturate(1.05); -webkit-backdrop-filter:blur(6px) saturate(1.05); }
+  .pp-hero{ position:relative; margin:0 0 1.4rem; padding:1.3rem 1.3rem 1.2rem; border-radius:28px; overflow:hidden;
+    background:radial-gradient(120% 90% at 20% 0%, rgba(253,238,242,.86) 0%, rgba(246,238,248,.8) 45%, rgba(238,244,250,.78) 100%); border:1px solid rgba(235,211,228,.9); }
+  .pp-hero h1{ margin:.1rem 0 .3rem; font-size:clamp(2rem, 8vw, 2.9rem); line-height:1.05; }
+  .pp-hero p{ margin:0; max-width:32rem; }
+  .pp-k{ margin:0; font-family:"IBM Plex Mono", monospace; font-size:.74rem; letter-spacing:.12em; text-transform:uppercase; color:#8A6D8F; }
+  .pp-hero-art{ position:absolute; right:-10px; top:-6px; width:7.5rem; opacity:.95; animation:tol-bob 7s ease-in-out infinite; }
+  .pp-stats{ display:flex; flex-wrap:wrap; gap:.5rem; margin-top:1rem; }
+  .pp-stat{ display:inline-flex; align-items:center; gap:.4rem; min-height:40px; padding:.35rem .9rem; border-radius:999px; background:rgba(255,255,255,.85); border:1px solid #EBD3E4; font-weight:600; font-size:.95rem; color:#4E3F6B; text-decoration:none; }
+  .pp-next{ margin-top:.8rem; font-size:.9rem; color:#6A6152; }
+  .pp-bar{ height:8px; border-radius:8px; background:#EFE6F4; overflow:hidden; margin-top:.35rem; max-width:22rem; }
+  .pp-bar i{ display:block; height:100%; border-radius:8px; background:linear-gradient(90deg, #F4A6B8, #C9A7E8); transition:width 1s; }
+
+  .pp-bouquet{ margin:0 0 1.6rem; padding:1rem 1.1rem; border-radius:24px; background:rgba(255,253,247,.8); border:1px dashed #E3CFA6; }
+  .pp-bouquet h2{ margin:0 0 .2rem; font-size:1.15rem; }
+  .pp-bouquet > p{ margin:0 0 .7rem; font-size:.93rem; color:var(--ink-soft); }
+  .pp-stems{ display:grid; grid-template-columns:repeat(3, 1fr); gap:.5rem; }
+  .pp-stem{ display:flex; flex-direction:column; align-items:center; gap:.25rem; padding:.7rem .3rem; border-radius:18px; background:rgba(248,243,234,.85); text-decoration:none; color:var(--ink); text-align:center; font-size:.85rem; line-height:1.25; transition:background-color .4s, transform .3s; }
+  .pp-stem:hover{ transform:translateY(-2px); }
+  .pp-stem .pp-flower{ font-size:1.9rem; filter:grayscale(1) opacity(.45); transition:filter .6s, transform .6s; }
+  .pp-stem.is-done{ background:#FDEEF2; }
+  .pp-stem.is-done .pp-flower{ filter:none; transform:scale(1.12); animation:gm-pop .6s cubic-bezier(.2,1.5,.4,1); }
+  .pp-stem small{ color:var(--ink-soft); }
+  .pp-bouquet.is-done{ border-style:solid; border-color:#F2B8C8; background:linear-gradient(145deg, #FFF6F8, #FFFDF7); }
+
+  .pp-games{ display:grid; grid-template-columns:1fr; gap:.8rem; margin:0 0 1.6rem; }
+  @media (min-width:640px){ .pp-games{ grid-template-columns:1fr 1fr; } .pp-card.is-wide{ grid-column:1 / -1; } }
+  .pp-card{ --c1:rgba(253,238,242,.84); --c2:rgba(246,238,248,.8); position:relative; display:grid; grid-template-columns:4.2rem 1fr; gap:.2rem .9rem; align-items:center; padding:1rem 1.1rem; min-height:6.2rem;
+    border-radius:24px; background:linear-gradient(145deg, var(--c1), var(--c2)); border:1px solid rgba(60,51,80,.08); color:var(--ink); text-decoration:none;
+    box-shadow:0 8px 24px rgba(120,90,140,.1); transition:transform .35s var(--ease-out, ease), box-shadow .35s; }
+  .pp-card:hover{ transform:translateY(-3px); box-shadow:0 14px 32px rgba(120,90,140,.18); }
+  .pp-card:focus-visible{ outline:2px solid #6B4E8A; outline-offset:3px; }
+  .pp-ico{ grid-row:span 3; display:grid; place-items:center; width:4.2rem; height:4.2rem; border-radius:50%; background:rgba(255,255,255,.8); font-size:2.1rem; box-shadow:inset 0 -4px 10px rgba(120,90,140,.08); }
+  .pp-card h3{ margin:0; font-size:1.2rem; }
+  .pp-card p{ margin:0; font-size:.9rem; line-height:1.4; color:#5A5346; }
+  .pp-card .pp-meta{ font-family:"IBM Plex Mono", monospace; font-size:.74rem; color:#8A6D8F; margin-top:.15rem; }
+  .pp-card .pp-tag{ position:absolute; top:.7rem; right:.8rem; padding:.15rem .55rem; border-radius:999px; background:#fff; font:600 .7rem/1.4 "IBM Plex Mono", monospace; color:#B5651D; }
+  .pp-card.is-garden{ --c1:rgba(46,47,92,.82); --c2:rgba(92,74,120,.78); color:#FFF6E0; }
+  .pp-card.is-garden p{ color:#DCD6F0; } .pp-card.is-garden .pp-meta{ color:#F9D9B8; } .pp-card.is-garden .pp-ico{ background:rgba(255,255,255,.14); }
+  .pp-card.is-bloom{ --c1:rgba(255,243,230,.84); --c2:rgba(253,238,242,.8); }
+  .pp-card.is-xw{ --c1:rgba(238,244,250,.84); --c2:rgba(246,238,248,.8); }
+  .pp-card.is-words{ --c1:rgba(241,249,236,.84); --c2:rgba(255,248,238,.8); }
+  .pp-card.is-breathe{ --c1:rgba(246,238,248,.84); --c2:rgba(238,244,250,.8); cursor:pointer; font:inherit; text-align:left; width:100%; }
+  .pp-card.is-keep{ --c1:rgba(255,248,222,.84); --c2:rgba(253,238,242,.8); }
+  .pp-why{ background:rgba(255,253,247,.82) !important; }
+  .pp-why{ margin-top:.4rem; }
+  @media (max-width:420px){ .pp-card{ grid-template-columns:3.4rem 1fr; padding:.9rem; } .pp-ico{ width:3.4rem; height:3.4rem; font-size:1.7rem; } .pp-hero-art{ width:5.5rem; } }
+  @media (prefers-reduced-motion: reduce){ .pp-hero-art, .pp-stem.is-done .pp-flower{ animation:none; } .pp-card, .pp-stem{ transition:none; } }
+</style>
+<script src="/assets/js/site.js" defer></script>
+<script src="/assets/js/rewards.js" defer></script>
+<script src="/assets/js/pause-and-play.js" defer></script>
+</head>
+<body class="pp-page">
+<iframe class="pp-garden" src="/garden-backdrop.html" title="The Night Garden, softly in the background" aria-hidden="true" tabindex="-1" loading="eager"></iframe>
+<div class="pp-veil" aria-hidden="true"></div>
+<main class="read">
+
+<section class="pp-hero" aria-labelledby="pp-h">
+  <img class="pp-hero-art" src="/assets/img/mascots/two-bubbles.svg" alt="">
+  <p class="pp-k">Calm games</p>
+  <h1 id="pp-h">Pause &amp; Play</h1>
+  <p>A few gentle minutes for a busy mind. No timers, no scores to beat and no way to lose. Just something small and satisfying to settle into.</p>
+  <div class="pp-stats" id="pp-stats"></div>
+  <div class="pp-next" id="pp-next"></div>
+</section>
+
+<section class="pp-bouquet" id="pp-bouquet" aria-labelledby="pp-bq-h">
+  <h2 id="pp-bq-h">Today’s bouquet</h2>
+  <p id="pp-bq-p">Pick one flower from each: a calm breath, a word game and a garden game. Finish all three today for 10 bonus petals.</p>
+  <div class="pp-stems">
+    <a class="pp-stem" data-stem="breath" href="#" data-breathe><span class="pp-flower" aria-hidden="true">&#127800;</span><strong>A calm breath</strong><small>Breathe, or the garden</small></a>
+    <a class="pp-stem" data-stem="words" href="/word-bloom.html"><span class="pp-flower" aria-hidden="true">&#127804;</span><strong>A word game</strong><small>Any of the three</small></a>
+    <a class="pp-stem" data-stem="garden" href="/night-garden.html"><span class="pp-flower" aria-hidden="true">&#127799;</span><strong>A garden game</strong><small>Fireflies or the pond</small></a>
+  </div>
+</section>
+
+<section class="pp-games" aria-label="The games">
+  <a class="pp-card is-garden is-wide" href="/night-garden.html">
+    <span class="pp-ico" aria-hidden="true">&#127769;</span>
+    <h3>The Night Garden</h3>
+    <p>Box breathing with a glowing light, fireflies that sing into constellations, and a slow lily-pond puzzle. Your garden grows every visit.</p>
+    <span class="pp-meta" data-meta="garden">A moonlit place to settle</span>
+  </a>
+  <a class="pp-card is-bloom" href="/word-bloom.html">
+    <span class="pp-tag">New</span>
+    <span class="pp-ico" aria-hidden="true">&#127804;</span>
+    <h3>Word Bloom</h3>
+    <p>Swipe across the petals to spell words and fill a little crossword.</p>
+    <span class="pp-meta" data-meta="bloom">240 gentle levels</span>
+  </a>
+  <a class="pp-card is-xw" href="/quiet-crossword.html">
+    <span class="pp-tag">New</span>
+    <span class="pp-ico" aria-hidden="true">&#9999;&#65039;</span>
+    <h3>Quiet Crossword</h3>
+    <p>A small, friendly crossword. A new one every day.</p>
+    <span class="pp-meta" data-meta="xw">Made for your phone</span>
+  </a>
+  <a class="pp-card is-words" href="/quiet-words.html">
+    <span class="pp-ico" aria-hidden="true">&#128269;</span>
+    <h3>Quiet Words</h3>
+    <p>A gentle word search. Every word leaves a kind thought behind.</p>
+    <span class="pp-meta" data-meta="words">A new theme each day</span>
+  </a>
+  <button type="button" class="pp-card is-breathe" data-breathe>
+    <span class="pp-ico" aria-hidden="true">&#129767;</span>
+    <h3>A breathing break</h3>
+    <p>One, three or five minutes of box breathing with soft sound, right here.</p>
+    <span class="pp-meta" data-meta="breathe">Headphones are lovely</span>
+  </button>
+  <a class="pp-card is-keep is-wide" href="/keepsakes.html">
+    <span class="pp-ico" aria-hidden="true">&#127873;</span>
+    <h3>Your keepsakes</h3>
+    <p>Petals unlock tile colours, new wonders in the Night Garden, and stickers for your sticker book.</p>
+    <span class="pp-meta" data-meta="keep">Open your sticker book</span>
+  </a>
+</section>
+
+<div class="try-this pp-why">
+  <p><strong>Why play?</strong> A small, absorbing game gives a worried mind one gentle job to do, and each little win feels good. A few minutes can be enough to reset before a hard conversation, or to wind down at night.</p>
+  <p><a href="/night-garden.html">Start with the Night Garden &rarr;</a></p>
+</div>
+</main>
+</body>
+</html>

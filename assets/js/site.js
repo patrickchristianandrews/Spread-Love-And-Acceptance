@@ -46,6 +46,7 @@
       { href: '/infographic.html', code: '', title: 'The whole idea on one page', note: 'A printable one-page summary, easy to share' }
     ]},
     { id: 'self', title: 'Self-discovery', blurb: 'Tools for understanding yourself: your load, your wiring, your patterns. Start here, with or without anyone else.', items: [
+      { href: '/pause-and-play.html', code: 'New', title: 'Pause & Play', note: 'All the calm games in one place, with your petals, your streak and today’s bouquet' },
       { href: '/night-garden.html', code: 'New', title: 'The Night Garden', note: 'A calm place to breathe, play and let your mind settle. Flowers bloom as you breathe; no timers, nothing to lose' },
       { href: '/word-bloom.html', code: 'New', title: 'Word Bloom', note: 'Swipe across the petals to spell words. Hundreds of gentle levels, a bonus jar, and petals for playing well' },
       { href: '/quiet-crossword.html', code: 'New', title: 'Quiet Crossword', note: 'Small, friendly crosswords with a new one every day, made for playing on a phone' },
@@ -357,6 +358,11 @@
     addPrivateNote(body);
     addTip(body);
     revealOnScroll();
+
+    // petals for calm moments anywhere on the site (rewards.js), except the locked-down workpaper pages
+    if (!window.TOLRewards && !document.querySelector('meta[http-equiv="Content-Security-Policy"]')) {
+      var rw = document.createElement('script'); rw.src = '/assets/js/rewards.js'; document.head.appendChild(rw);
+    }
 
     // mini dives: tap a term with the little water drop for a short explanation (dives.js)
     if (!body.hasAttribute('data-no-dives') && document.querySelector('main')) {

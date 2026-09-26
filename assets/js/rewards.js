@@ -7,6 +7,7 @@
    Everything is kept in this browser only. Nothing is sent anywhere. */
 (function () {
   'use strict';
+  if (window.TOLRewards) return; // already loaded on this page
   var KEY = 'tol-rewards-v1';
 
   // What unlocks, and when. After the list runs out, a new sticker arrives every 600 petals.
@@ -44,7 +45,10 @@
   function dayKey(d) { d = d || new Date(); return d.getFullYear() + '-' + ('0' + (d.getMonth() + 1)).slice(-2) + '-' + ('0' + d.getDate()).slice(-2); }
   function daysBetween(a, b) { var pa = a.split('-'), pb = b.split('-'); return Math.round((Date.UTC(+pb[0], pb[1] - 1, +pb[2]) - Date.UTC(+pa[0], pa[1] - 1, +pa[2])) / 864e5); }
 
-  var S = { petals: 0, days: [], streak: 0, best: 0, rest: '', last: '', unlocked: [], tiles: 'tiles-petal', garden: {}, from: {}, games: {} };
+  var S = { petals: 0, days: [], streak: 0, best: 0, rest: '', last: '', unlocked: [], tiles: 'tiles-petal', garden: {}, from: {}, games: {}, today: { day: '', did: {}, bouquet: false } };
+  // The daily bouquet: one calm breath, one word game and one garden game in a day
+  var BOUQUET = { breath: ['breathe'], words: ['bloom', 'crossword', 'words'], garden: ['pond', 'fireflies'] };
+  function kindOf(src) { for (var k in BOUQUET) if (BOUQUET[k].indexOf(src) !== -1) return k; return null; }
   try { var raw = localStorage.getItem(KEY); if (raw) { var o = JSON.parse(raw); for (var k in o) S[k] = o[k]; } } catch (e) {}
   function save() { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) {} }
 
@@ -78,11 +82,17 @@
     var daily = touchDay(), before = S.petals;
     S.petals += n + daily;
     if (source) S.from[source] = (S.from[source] || 0) + n;
+    // the daily bouquet
+    var tk = dayKey();
+    if (!S.today || S.today.day !== tk) S.today = { day: tk, did: {}, bouquet: false };
+    var kind = kindOf(source), bouquetNow = false;
+    if (kind) S.today.did[kind] = true;
+    if (!S.today.bouquet && S.today.did.breath && S.today.did.words && S.today.did.garden) { S.today.bouquet = true; S.petals += 10; bouquetNow = true; }
     var fresh = ALL.filter(function (u) { return u.at > before && u.at <= S.petals && S.unlocked.indexOf(u.id) === -1; });
     fresh.forEach(function (u) { S.unlocked.push(u.id); if (u.kind === 'garden') S.garden[u.id] = true; });
     save();
-    var res = { gained: n, daily: daily, total: S.petals, streak: S.streak, unlocked: fresh, next: nextUnlock() };
-    if (!opts.quiet && (n || daily)) toast(res, why);
+    var res = { gained: n + (bouquetNow ? 10 : 0), daily: daily, total: S.petals, streak: S.streak, unlocked: fresh, next: nextUnlock(), bouquet: bouquetNow };
+    if (!opts.quiet && (n || daily)) toast(res, bouquetNow ? (why ? why + ' \u00B7 ' : '') + 'Daily bouquet complete! +10' : why);
     if (fresh.length && !opts.noCard) setTimeout(function () { unlockCard(fresh[0]); }, opts.cardDelay || 1400);
     renderChips();
     return res;
@@ -199,6 +209,7 @@
     has: function (id) { return id === 'tiles-petal' || S.unlocked.indexOf(id) !== -1; },
     garden: function (id) { return S.unlocked.indexOf(id) !== -1 && S.garden[id] !== false; },
     setGarden: function (id, on) { S.garden[id] = !!on; save(); },
+    bouquet: function () { var t = S.today && S.today.day === dayKey() ? S.today : { did: {}, bouquet: false }; return { breath: !!t.did.breath, words: !!t.did.words, garden: !!t.did.garden, done: !!t.bouquet }; },
     state: function () { return { petals: S.petals, streak: S.streak, best: S.best, days: S.days.slice(), rest: S.rest, level: level(), next: nextUnlock(), prevAt: prevAt(), unlocked: S.unlocked.slice(), tiles: S.tiles, from: S.from, games: S.games }; },
     ladder: ALL, tileThemes: TILE_THEMES, dayKey: dayKey
   };
