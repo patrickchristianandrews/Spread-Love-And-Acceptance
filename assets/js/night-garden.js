@@ -464,6 +464,7 @@
     // keep them above the buttons at the bottom of the screen
     var bar = document.querySelector('.ng-bar'), barTop = bar ? bar.getBoundingClientRect().top - canvas.getBoundingClientRect().top : H;
     var groundY = Math.min(p.y, barTop - 14);
+    drawPack(t, p, s, groundY, barTop, 'back'); // dogs on the far bank pass behind the others
     critters.forEach(function (c) {
       var x = p.x + c.fx * Math.max(p.rx, W * 0.3), y = groundY + c.fy * p.ry, lift = 0, squash = 1, since = t - c.hop;
       var blink = Math.sin(t / 900 + c.fx * 7) > 0.985;
@@ -492,6 +493,140 @@
       if (c.kind === 'frog') drawFrog(blink, act, q, x, y, s); else if (c.kind === 'bunny') drawBunny(blink, act, q); else drawDuck(blink, act, q, t);
       ctx.restore();
     });
+    drawPack(t, p, s, groundY, barTop, 'front');
+  }
+
+  // Two dogs who play together by the pond. One is black and tan with white paws, a white
+  // chin and a big grin; the other is black with bold tan eyebrows, tan cheeks and chest
+  // patches, tan paws and a collar. They chase each other along the far bank, swap who's
+  // chasing, play-bow, roll over and sit side by side. In Breathe they lie down together.
+  var PUPS = [
+    { paw: '#F3EEE6', chin: '#F3EEE6', chest: 'white', ear: 'floppy', grey: true, collar: false, bridge: false, brow: 1.9 },
+    { paw: '#D9A066', chin: '#C4834A', chest: 'tan', ear: 'fold', grey: false, collar: true, bridge: true, brow: 2.4 }
+  ];
+  var pack = { u: 0.25, dir: 1, lead: 0, state: 'chase', until: 0, lastT: 0, spot: [0.3, 0.2], actor: 0 };
+  function puPos(p, groundY, RX, u) { var ang = -Math.PI * u; return { ang: ang, x: p.x + RX * Math.cos(ang), y: groundY + p.ry * 1.6 * Math.sin(ang) }; }
+  function packStep(t, dt) {
+    if (!pack.until) pack.until = t + 8000;
+    if (t > pack.until) {
+      var next = pack.state === 'chase' ? ['bow', 'sit', 'roll', 'bow'][Math.floor(Math.random() * 4)] : 'chase';
+      if (next === 'chase') { pack.lead = Math.random() < 0.5 ? 0 : 1; if (Math.random() < 0.5) pack.dir *= -1; }
+      else { var c = Math.max(0.33, Math.min(0.67, pack.u)); pack.spot = [c + 0.065, c - 0.065]; if (Math.random() < 0.5) pack.spot.reverse(); pack.actor = Math.random() < 0.5 ? 0 : 1; } // play in the middle of the far bank
+      pack.state = next; pack.t0 = t;
+      pack.until = t + (next === 'chase' ? 6000 + Math.random() * 6000 : next === 'sit' ? 3500 : 2800);
+    }
+    if (pack.state === 'chase') {
+      pack.u += pack.dir * dt / 7000;
+      var lo = W < 600 ? 0.22 : 0.13;
+      if (pack.u > 1) { pack.u = 1; pack.dir = -1; } if (pack.u < lo) { pack.u = lo; pack.dir = 1; }
+    }
+  }
+  // draw the dogs on the far bank ('back') or the near side ('front'), so they pass behind the others
+  function drawPack(t, p, s, groundY, barTop, layer) {
+    var RX = Math.max(p.rx, W * 0.3) * 1.2;
+    if (layer === 'back') { var dt = pack.lastT ? Math.min(60, t - pack.lastT) : 16; pack.lastT = t; if (mode !== 'breathe' && !REDUCED) packStep(t, dt); }
+    [0, 1].forEach(function (i) {
+      var x, y, face = 1, pose, depth = 1, prog = 0, ph = t / 90 + i * 1.7;
+      if (mode === 'breathe' || REDUCED) {
+        if (layer !== 'front') return;
+        pose = 'lie'; x = p.x + (i ? 1 : -1) * 48 * s; y = groundY - p.ry * 1.95; face = i ? -1 : 1; depth = 0.86; // nose to nose on the far bank
+      } else {
+        var u, isLead = i === pack.lead;
+        var gap = W < 600 ? 0.22 : 0.13; // more room between them on small screens
+        if (pack.state === 'chase') u = isLead ? pack.u : Math.max(0, Math.min(1, pack.u - pack.dir * gap));
+        else u = pack.spot[i];
+        var P = puPos(p, groundY, RX, u); x = P.x; y = P.y; depth = 1 + 0.16 * Math.sin(P.ang);
+        if ((Math.sin(P.ang) < -0.35) !== (layer === 'back')) return;
+        if (pack.state === 'chase') { pose = 'run'; face = pack.dir > 0 ? -1 : 1; }
+        else {
+          var other = pack.spot[1 - i]; face = other > u ? -1 : 1; // face each other
+          prog = Math.min(1, (t - pack.t0) / (pack.until - pack.t0));
+          pose = pack.state === 'sit' ? 'sit' : pack.state === 'bow' ? (i === pack.actor ? 'bow' : 'bounce') : (i === pack.actor ? 'roll' : 'sit');
+        }
+      }
+      y = Math.min(y, barTop - 12);
+      var lift = pose === 'bounce' && !REDUCED ? Math.abs(Math.sin(t / 180)) * 10 : pose === 'run' && !REDUCED ? Math.abs(Math.sin(ph)) * 4 : 0;
+      var wag = REDUCED ? 0 : Math.sin(t / (pose === 'run' ? 70 : 100) + i) * (pose === 'lie' && !(breath.phase === 'in' || breath.phase === 'top') ? 0.08 : 0.45);
+      var blink = Math.sin(t / 1000 + 2 + i * 3) > 0.985;
+      ctx.save(); ctx.translate(x, y);
+      ctx.fillStyle = 'rgba(10,15,30,0.28)'; ctx.beginPath(); ctx.ellipse(0, 2, 22 * s * depth, 4.5 * s * depth, 0, 0, Math.PI * 2); ctx.fill();
+      ctx.translate(0, -lift * s); ctx.scale(1.3 * s * depth * face, 1.3 * s * depth);
+      if (pose === 'roll') { // a silly roll onto her back, legs in the air
+        var r = Math.sin(Math.min(1, prog * 1.25) * Math.PI);
+        ctx.translate(0, -12 - 12 * r); ctx.rotate(Math.PI * 0.9 * r); ctx.translate(0, 12);
+        drawPup(PUPS[i], r > 0.5 ? 'wiggle' : 'run', ph * 2, wag, blink, t);
+      } else drawPup(PUPS[i], pose === 'bounce' ? 'run' : pose, pose === 'bounce' ? 0 : ph, wag, blink, t);
+      ctx.restore();
+    });
+  }
+  function drawPup(L, pose, ph, wag, blink, t) {
+    var BLACK = '#262220', TAN = '#C4834A', DEEP = '#A8693A', WHITE = '#F3EEE6', PINK = '#EE8FA6';
+    function leg(x0, y0, ang, len, back) {
+      ctx.save(); ctx.translate(x0, y0); ctx.rotate(ang);
+      ctx.fillStyle = back ? DEEP : TAN; ctx.beginPath(); ctx.roundRect ? ctx.roundRect(-2.6, 0, 5.2, len, 2.6) : ctx.rect(-2.6, 0, 5.2, len); ctx.fill();
+      ctx.fillStyle = L.paw; ctx.beginPath(); ctx.ellipse(0.8, len, 3.6, 2.4, 0, 0, Math.PI * 2); ctx.fill();
+      ctx.restore();
+    }
+    var lie = pose === 'lie', bow = pose === 'bow', sit = pose === 'sit', wiggle = pose === 'wiggle';
+    var bodyTilt = sit ? -0.42 : bow ? 0.3 : 0;
+    // tail
+    ctx.save(); ctx.translate(lie ? -17 : -15, lie ? -9 : sit ? -6 : bow ? -26 : -20); ctx.rotate((bow ? -1.3 : -0.9) + wag);
+    ctx.strokeStyle = BLACK; ctx.lineWidth = 4.5; ctx.lineCap = 'round'; ctx.beginPath(); ctx.moveTo(0, 0); ctx.quadraticCurveTo(-6, -6, -5, -14); ctx.stroke();
+    ctx.strokeStyle = TAN; ctx.lineWidth = 1.6; ctx.beginPath(); ctx.moveTo(1, 1); ctx.quadraticCurveTo(-4, -4, -3.5, -11); ctx.stroke(); ctx.lineCap = 'butt';
+    ctx.restore();
+    var a = Math.sin(ph) * 0.7, b = Math.sin(ph + Math.PI) * 0.7;
+    if (wiggle) { a = Math.sin(t / 60) * 0.6; b = Math.sin(t / 60 + 2) * 0.6; }
+    if (pose === 'run' || wiggle) { leg(-10, -14, b * 0.8, 13, true); leg(10, -14, a * 0.8, 13, true); }
+    else if (sit) leg(9, -16, 0.05, 15, true);
+    else if (bow) { leg(-11, -18, 0.05, 17, true); }
+    ctx.save(); ctx.rotate(bodyTilt);
+    if (lie) {
+      ctx.fillStyle = BLACK; ctx.beginPath(); ctx.ellipse(-2, -9, 19, 8.5, 0, 0, Math.PI * 2); ctx.fill();
+      ctx.fillStyle = TAN; ctx.beginPath(); ctx.ellipse(-4, -4, 15, 4, 0, 0, Math.PI * 2); ctx.fill();
+      ctx.fillStyle = TAN; ctx.beginPath(); ctx.ellipse(18, -2.5, 8, 2.8, 0, 0, Math.PI * 2); ctx.fill();
+      ctx.fillStyle = L.paw; ctx.beginPath(); ctx.ellipse(26, -2.5, 3.6, 2.6, 0, 0, Math.PI * 2); ctx.fill(); ctx.beginPath(); ctx.ellipse(23, -0.5, 3.6, 2.4, 0, 0, Math.PI * 2); ctx.fill();
+    } else {
+      ctx.fillStyle = BLACK; ctx.beginPath(); ctx.ellipse(0, -19, 18, 9.5, 0, 0, Math.PI * 2); ctx.fill();
+      ctx.fillStyle = TAN; ctx.beginPath(); ctx.ellipse(1, -13.5, 14, 4.5, 0, 0, Math.PI * 2); ctx.fill();
+      if (L.chest === 'white') { ctx.fillStyle = WHITE; ctx.beginPath(); ctx.ellipse(13, -16, 4.5, 6, -0.3, 0, Math.PI * 2); ctx.fill(); }
+      else { ctx.fillStyle = TAN; ctx.beginPath(); ctx.ellipse(12, -17, 4, 3.6, 0, 0, Math.PI * 2); ctx.fill(); ctx.beginPath(); ctx.ellipse(14, -12, 3.6, 3.2, 0, 0, Math.PI * 2); ctx.fill();
+        ctx.fillStyle = WHITE; ctx.beginPath(); ctx.arc(14.5, -14.6, 1.1, 0, Math.PI * 2); ctx.fill(); }
+      if (L.collar) { ctx.strokeStyle = '#1A1716'; ctx.lineWidth = 2.6; ctx.beginPath(); ctx.moveTo(10, -27); ctx.quadraticCurveTo(15, -20, 17, -22); ctx.stroke();
+        ctx.fillStyle = '#C9CDD6'; ctx.fillRect(13.4, -23.6, 2.6, 2.2); }
+    }
+    ctx.restore();
+    if (pose === 'run' || wiggle) { leg(-12, -15, a, 13); leg(12, -15, b, 13); }
+    else if (sit) { leg(12, -17, -0.05, 16); ctx.fillStyle = DEEP; ctx.beginPath(); ctx.ellipse(-9, -5, 8, 5, 0, 0, Math.PI * 2); ctx.fill(); ctx.fillStyle = L.paw; ctx.beginPath(); ctx.ellipse(-1, -1, 4, 2.4, 0, 0, Math.PI * 2); ctx.fill(); }
+    else if (bow) { ctx.fillStyle = TAN; ctx.beginPath(); ctx.ellipse(20, -2.5, 8, 2.8, 0, 0, Math.PI * 2); ctx.fill(); ctx.fillStyle = L.paw; ctx.beginPath(); ctx.ellipse(28, -2.5, 3.6, 2.6, 0, 0, Math.PI * 2); ctx.fill(); leg(-13, -16, 0, 16); }
+    // head
+    var hx = lie ? 18 : sit ? 17 : bow ? 21 : 20, hy = lie ? -18 : sit ? -36 : bow ? -14 : -30;
+    ctx.save(); ctx.translate(hx, hy); ctx.rotate(pose === 'run' ? Math.sin(ph) * 0.05 : bow ? -0.15 : lie ? 0.05 : 0);
+    ctx.fillStyle = BLACK; ctx.beginPath(); ctx.arc(0, 0, 9.5, 0, Math.PI * 2); ctx.fill();
+    ctx.fillStyle = TAN; ctx.beginPath(); ctx.ellipse(7.5, 3.5, 7.5, 5.2, 0.1, 0, Math.PI * 2); ctx.fill();
+    if (L.bridge) { ctx.fillStyle = BLACK; ctx.beginPath(); ctx.ellipse(9.5, 0.6, 5.5, 2, 0.1, 0, Math.PI * 2); ctx.fill(); }
+    if (L.grey) { ctx.fillStyle = '#D9C3A6'; ctx.beginPath(); ctx.ellipse(8.5, 1.8, 4.5, 2, 0.1, 0, Math.PI * 2); ctx.fill(); }
+    ctx.fillStyle = L.chin; ctx.beginPath(); ctx.ellipse(7, 7.8, 5, 2.6, 0.15, 0, Math.PI * 2); ctx.fill();
+    if (!L.grey) { ctx.fillStyle = 'rgba(220,210,195,0.8)'; ctx.beginPath(); ctx.ellipse(7, 8.6, 2.6, 1.3, 0.15, 0, Math.PI * 2); ctx.fill(); }
+    ctx.fillStyle = TAN; ctx.beginPath(); ctx.arc(3, -5.2, L.brow, 0, Math.PI * 2); ctx.fill();
+    ctx.fillStyle = '#141212'; ctx.beginPath(); ctx.ellipse(14.2, 1.6, 2.6, 2.1, 0, 0, Math.PI * 2); ctx.fill();
+    ctx.fillStyle = 'rgba(255,255,255,0.6)'; ctx.beginPath(); ctx.arc(13.6, 0.8, 0.7, 0, Math.PI * 2); ctx.fill();
+    ctx.strokeStyle = '#141212'; ctx.lineWidth = 1.2; ctx.beginPath(); ctx.moveTo(13.5, 4.3); ctx.quadraticCurveTo(10, 8.2, 5.5, 5.2); ctx.stroke();
+    var pant = REDUCED ? 0 : Math.sin(t / (pose === 'run' ? 120 : 260)) * 0.8;
+    ctx.fillStyle = PINK; ctx.beginPath(); ctx.ellipse(9.5, 8 + pant, 2.4, 3.2 + pant * 0.6, 0.2, 0, Math.PI * 2); ctx.fill();
+    if (blink) { ctx.strokeStyle = '#141212'; ctx.lineWidth = 1.2; ctx.beginPath(); ctx.moveTo(2, -2); ctx.lineTo(5.5, -2); ctx.stroke(); }
+    else { ctx.fillStyle = '#2A1C14'; ctx.beginPath(); ctx.arc(3.8, -2, 1.9, 0, Math.PI * 2); ctx.fill(); ctx.fillStyle = '#fff'; ctx.beginPath(); ctx.arc(4.4, -2.7, 0.7, 0, Math.PI * 2); ctx.fill(); }
+    ctx.fillStyle = 'rgba(247,165,185,0.55)'; ctx.beginPath(); ctx.ellipse(6, 3.5, 2.2, 1.3, 0, 0, Math.PI * 2); ctx.fill();
+    var flap = pose === 'run' && !REDUCED ? Math.sin(ph * 1.1) * 0.35 : 0;
+    ctx.save(); ctx.translate(-3, -5); ctx.rotate(0.5 + flap);
+    if (L.ear === 'floppy') {
+      ctx.fillStyle = BLACK; ctx.beginPath(); ctx.ellipse(-2, 6, 4.2, 8, 0.2, 0, Math.PI * 2); ctx.fill();
+      ctx.fillStyle = 'rgba(220,160,170,0.55)'; ctx.beginPath(); ctx.ellipse(-1.2, 1, 1.8, 3, 0.2, 0, Math.PI * 2); ctx.fill();
+    } else { // folded ears, a little smaller, with a tan edge
+      ctx.fillStyle = BLACK; ctx.beginPath(); ctx.ellipse(-1, 3, 3.8, 5.6, 0.1, 0, Math.PI * 2); ctx.fill();
+      ctx.strokeStyle = TAN; ctx.lineWidth = 1; ctx.beginPath(); ctx.ellipse(-1, 3, 3.8, 5.6, 0.1, -0.6, 0.6); ctx.stroke();
+    }
+    ctx.restore();
+    ctx.restore();
   }
   function eye(x, y, r, blink) {
     if (blink) { ctx.strokeStyle = '#2B2620'; ctx.lineWidth = 1.4; ctx.beginPath(); ctx.moveTo(x - r, y); ctx.lineTo(x + r, y); ctx.stroke(); return; }
@@ -1004,5 +1139,5 @@
   resize(); soundLabel(); updateCount();
   kick();
   // Expose a tiny hook for testing
-  window.__nightGarden = { save: save, setMode: setMode, pondKey: pondKey, get targets() { return targets; }, get mode() { return mode; }, get board() { return board; }, get piece() { return piece; }, get audio() { return audio; }, critters: critters };
+  window.__nightGarden = { save: save, setMode: setMode, pondKey: pondKey, get targets() { return targets; }, get mode() { return mode; }, get board() { return board; }, get piece() { return piece; }, get audio() { return audio; }, critters: critters, pack: pack };
 })();
