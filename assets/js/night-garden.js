@@ -643,6 +643,7 @@
       var blink = Math.sin(t / 900 + c.fx * 7) > 0.985;
       // on phones the pond's touch buttons cover the middle, so only the two at the sides come out
       if (mode === 'pond' && !padEl.hidden && W <= 560 && (c.kind === 'frog' || c.kind === 'duck')) return;
+      if (c.away) return; // off playing with the dogs
       if (c.kind === 'hedgehog') { drawBurrow(c, x, y, s, t, blink); return; }
       // silly things, now and then (less often while you breathe)
       if (!REDUCED && !c.act && t > c.next) {
@@ -685,17 +686,33 @@
   function puPos(p, groundY, RX, u) { var ang = -Math.PI * u; return { ang: ang, x: p.x + RX * Math.cos(ang), y: groundY + p.ry * 1.6 * Math.sin(ang) }; }
   // What they get up to. They never stop for long: chases and zoomies in between, and bits of
   // mischief when they meet up. In Breathe they play at a gentler pace.
-  var GAMES = ['hug', 'five', 'bow', 'roll', 'tug', 'hug', 'dig', 'spin', 'five', 'splash', 'visit', 'tug', 'zoom', 'hug', 'spin', 'visit'];
+  var GAMES = ['hug', 'five', 'bow', 'roll', 'tug', 'hug', 'dig', 'spin', 'five', 'splash', 'visit', 'tug', 'zoom', 'hug', 'spin', 'visit',
+    'cape', 'plane', 'kite', 'surf', 'ball', 'bubbles', 'butterfly', 'dance', 'leapfrog', 'float', 'cape', 'ball', 'kite', 'dance', 'plane', 'leapfrog'];
+  // the bigger adventures: how long each lasts, which ones leave the ground (1: one of them, 2: both),
+  // and which are too lively for Breathe
+  var ADV_DUR = { cape: 9000, plane: 11000, surf: 8500, float: 6500, kite: 7000, ball: 6500, bubbles: 5500, butterfly: 5500, dance: 4800, leapfrog: 6500 };
+  var FORCE_PLAY = (/[?&]play=(\w+)/.exec(location.search) || [])[1];
+  if (FORCE_PLAY && !ADV_DUR[FORCE_PLAY] && GAMES.indexOf(FORCE_PLAY) === -1) FORCE_PLAY = null;
+  var AIR = { cape: 2, plane: 2, surf: 1, float: 1 };
+  var LIVELY = { zoom: 1, splash: 1, cape: 1, plane: 1, surf: 1, float: 1, ball: 1 };
   function packStep(t, dt) {
     var calm = mode === 'breathe';
     if (!pack.until) pack.until = t + 5000;
     if (t > pack.until) {
       var next = pack.state === 'chase' || pack.state === 'zoom' ? GAMES[Math.floor(Math.random() * GAMES.length)] : 'chase';
-      if (calm && (next === 'zoom' || next === 'splash')) next = 'tug';
+      if (FORCE_PLAY && next !== 'chase') next = FORCE_PLAY; // for trying one out: ?play=kite
+      if (calm && LIVELY[next]) next = ['butterfly', 'dance', 'bubbles', 'tug'][Math.floor(Math.random() * 4)];
+      // sometimes a chase comes with a skateboard, or the frog along for the ride
+      pack.variant = next === 'chase' ? (Math.random() < 0.18 && !calm ? 'skate' : Math.random() < 0.25 ? 'ride' : null) : null;
+      if (critters[1].away !== (pack.variant === 'ride') && critters[1].sx != null) burst(critters[1].sx, critters[1].sy - 12 * (critters[1].ss || 1), 6, 120, 80);
+      critters[1].away = pack.variant === 'ride';
+      critters[0].away = next === 'leapfrog';
+      pack.whoosh = false; pack.poof = 0; pack.popped = false; pack.bub = []; pack.surfX = null; pack.bfx = null;
+      pack.fdir = (pack.cur[0] + pack.cur[1]) / 2 < 0.5 ? -1 : 1; // fly toward the middle of the screen
       if (next === 'chase' || next === 'zoom') { pack.lead = Math.random() < 0.5 ? 0 : 1; if (Math.random() < 0.5) pack.dir *= -1; }
       else { // meet up in the middle of the far bank, facing each other, without crossing over
         var c = Math.max(0.33, Math.min(0.67, (pack.cur[0] + pack.cur[1]) / 2));
-        var du = Math.max(0.03, Math.min(0.2, (next === 'tug' ? 128 : next === 'hug' ? 44 : next === 'five' ? 58 : 84) * pack.sc / 1.3 / (pack.RX * Math.PI)));
+        var du = Math.max(0.03, Math.min(0.2, ({ tug: 128, hug: 44, five: 58, dance: 52, ball: 150, kite: 110, leapfrog: 70 }[next] || 84) * pack.sc / 1.3 / (pack.RX * Math.PI)));
         if (next === 'splash') c = 0.5;
         // go and play by one of the garden's wonders: the swing tree or the blossom tree
         if (next === 'visit') {
@@ -705,10 +722,11 @@
           if (!spots.length) next = 'hug'; else { c = spots[Math.floor(Math.random() * spots.length)]; pack.visit = c; du = 70 * pack.sc / 1.3 / (pack.RX * Math.PI); }
         }
         pack.spot = pack.cur[0] > pack.cur[1] ? [c + du / 2, c - du / 2] : [c - du / 2, c + du / 2];
+        if (AIR[next]) pack.spot = pack.cur.slice(); // take off from right where they are
         pack.actor = Math.random() < 0.5 ? 0 : 1;
       }
       pack.state = next; pack.t0 = t;
-      pack.until = t + (next === 'chase' ? 4000 + Math.random() * 3500 : next === 'zoom' ? 3500 : 3200) * (calm ? 1.4 : 1);
+      pack.until = t + (next === 'chase' ? 4000 + Math.random() * 3500 : next === 'zoom' ? 3500 : ADV_DUR[next] || 3200) * (calm ? 1.4 : 1);
       pack.pops = 0;
     }
     var running = pack.state === 'chase' || pack.state === 'zoom';
@@ -723,9 +741,9 @@
   function drawPack(t, p, s, groundY, barTop, layer) {
     var RX = Math.max(p.rx, W * 0.3) * 1.2; pack.RX = RX; pack.sc = 1.3 * s;
     if (layer === 'back') { var dt = pack.lastT ? Math.min(60, t - pack.lastT) : 16; pack.lastT = t; if (!REDUCED) packStep(t, dt); }
-    var mouths = [];
+    var mouths = [], ex = [];
     [0, 1].forEach(function (i) {
-      var x, y, face = 1, pose, depth = 1, prog = 0, ph = t / 90 + i * 1.7, tilt = 0, dx = 0, rear = 0;
+      var x, y, face = 1, pose, depth = 1, prog = 0, ph = t / 90 + i * 1.7, tilt = 0, dx = 0, rear = 0, extra = null, aloft = false;
       if (REDUCED) { // still, side by side, for anyone who asks for less motion
         if (layer !== 'front') return;
         pose = 'lie'; x = p.x + (i ? 1 : -1) * 48 * s; y = groundY - p.ry * 1.95; face = i ? -1 : 1; depth = 0.86;
@@ -737,10 +755,15 @@
         var travelling = Math.abs(goal - u) > 0.012, moveDir = u - prev;
         var P = puPos(p, groundY, RX, u); x = P.x; y = P.y; depth = 1 + 0.16 * Math.sin(P.ang);
         if (pack.state === 'splash' && i === pack.actor && !travelling) y += p.ry * 0.55; // right down at the water's edge
-        if ((Math.sin(P.ang) < -0.35) !== (layer === 'back')) return;
-        var me = i === pack.actor;
+        var me = i === pack.actor, adv = !running && !travelling && ADV[pack.state];
+        aloft = adv && (AIR[pack.state] === 2 || (AIR[pack.state] === 1 && me));
+        if (aloft ? layer !== 'front' : (Math.sin(P.ang) < -0.35) !== (layer === 'back')) return;
         prog = Math.min(1, (t - pack.t0) / Math.max(1, pack.until - pack.t0));
-        if (running || travelling) { pose = 'run'; face = moveDir > 0.00005 ? -1 : moveDir < -0.00005 ? 1 : pack.face[i]; if (pack.state === 'zoom') ph *= 1.6; }
+        if (running || travelling) {
+          pose = 'run'; face = moveDir > 0.00005 ? -1 : moveDir < -0.00005 ? 1 : pack.face[i]; if (pack.state === 'zoom') ph *= 1.6;
+          if (running && isLead && pack.variant === 'skate') { ph = 0; extra = { after: drawBoard }; }
+          if (running && isLead && pack.variant === 'ride') extra = { after: frogRider(PUPS[i]) };
+        }
         else {
           var other = pack.cur[1 - i]; face = other > u ? -1 : 1; // face each other
           var st = pack.state;
@@ -763,14 +786,18 @@
           else if (st === 'splash') {
             if (me) { pose = 'bounce'; if (Math.random() < 0.25) burst(x, y - 2 * s, 3, 205, 80); }
             else { pose = prog > 0.5 ? 'shake' : 'sit'; if (prog > 0.5 && Math.random() < 0.3) burst(x, y - 20 * s, 2, 205, 82); }
+          } else if (adv) {
+            var o = adv(i, me, x, y, face, prog, t, s, p, ex);
+            if (!o) return;
+            x = o.x; y = o.y; pose = o.pose; if (o.face != null) face = o.face; rear = o.rear || 0; tilt = o.tilt || 0; if (o.ph != null) ph = o.ph; extra = o.draw || null;
           } else pose = 'sit';
         }
       }
-      y = Math.min(y, barTop - 12);
+      if (!aloft) y = Math.min(y, barTop - 12);
       var tapped = pack.tapT && t - (pack.tapT[i] || -9999) < 1100;
-      if (tapped && !REDUCED) { pose = 'bounce'; if (Math.random() < 0.3) burst(x, y - 40 * s, 1, 345, 80); }
+      if (tapped && !REDUCED && !aloft) { pose = 'bounce'; if (Math.random() < 0.3) burst(x, y - 40 * s, 1, 345, 80); }
       // turn around smoothly instead of flipping
-      if (tapped && !REDUCED) { face = Math.cos((t - pack.tapT[i]) / 120); if (Math.abs(face) < 0.12) face = face < 0 ? -0.12 : 0.12; }
+      if (tapped && !REDUCED && !aloft) { face = Math.cos((t - pack.tapT[i]) / 120); if (Math.abs(face) < 0.12) face = face < 0 ? -0.12 : 0.12; }
       else if (!REDUCED && pack.state !== 'spin') { pack.faceNow = pack.faceNow || [face, face]; pack.faceNow[i] += (face - pack.faceNow[i]) * 0.18; pack.face[i] = face; face = pack.faceNow[i]; if (Math.abs(face) < 0.12) face = face < 0 ? -0.12 : 0.12; }
       else if (!REDUCED) { pack.faceNow = pack.faceNow || [face, face]; pack.faceNow[i] = face; if (Math.abs(face) < 0.12) face = face < 0 ? -0.12 : 0.12; }
       var lift = pose === 'bounce' ? Math.abs(Math.sin(t / 180 + i)) * 10 : pose === 'run' && !REDUCED ? Math.abs(Math.sin(ph)) * 4 : 0;
@@ -781,6 +808,7 @@
       ctx.fillStyle = 'rgba(10,15,30,0.28)'; ctx.beginPath(); ctx.ellipse(0, 2, 22 * s * depth, 4.5 * s * depth, 0, 0, Math.PI * 2); ctx.fill();
       ctx.translate(0, -lift * s); ctx.scale(1.3 * s * depth * face, 1.3 * s * depth);
       if (rear) ctx.rotate(-rear); // rearing up for a hug or a high five
+      if (extra && extra.before) extra.before();
       if (pose === 'roll') { // a silly roll onto her back, legs in the air
         var r = Math.sin(Math.min(1, prog * 1.25) * Math.PI);
         ctx.translate(0, -12 - 12 * r); ctx.rotate(Math.PI * 0.9 * r); ctx.translate(0, 12);
@@ -791,8 +819,10 @@
         drawPup(PUPS[i], 'bow', 0, wag * 1.4, blink, t);
         mouths[i] = [x + dx + Math.sign(face) * 1.3 * s * depth * 37, y - 1.3 * s * depth * 7];
       } else drawPup(PUPS[i], pose === 'bounce' ? 'run' : pose, pose === 'bounce' ? 0 : ph, wag, blink, t, tilt);
+      if (extra && extra.after) extra.after();
       ctx.restore();
     });
+    ex.forEach(function (f) { f(); });
     if (!REDUCED && pack.state === 'hug' && pack.pos && pack.pos[0] && pack.pos[1]) {
       var hp = Math.min(1, (t - pack.t0) / Math.max(1, pack.until - pack.t0));
       if (hp > 0.25 && hp < 0.9) {
@@ -808,6 +838,207 @@
       var mx = (mouths[0][0] + mouths[1][0]) / 2, my = (mouths[0][1] + mouths[1][1]) / 2;
       ctx.lineWidth = 1.8 * s; ctx.beginPath(); ctx.moveTo(mx, my); ctx.lineTo(mx + 5 * s, my - 6 * s); ctx.stroke(); ctx.lineCap = 'butt';
     }
+  }
+
+  // ---------- The dogs' bigger adventures ----------
+  // Capes and a loop through the sky, a little plane with a heart banner, surfing a lily pad,
+  // floating up in a bubble, a kite, catch, bubbles, a butterfly, a dance, and leapfrog with the
+  // bunny. Each returns where to draw that dog and how (or nothing, to draw it some other way).
+  function clamp01(v) { return v < 0 ? 0 : v > 1 ? 1 : v; }
+  function ease(v) { v = clamp01(v); return v * v * (3 - 2 * v); }
+  function flightAt(q, x0, y0, dir, A, Hh) {
+    var e = clamp01(q);
+    return { x: x0 + dir * A * Math.sin(Math.PI * e), y: y0 - Hh * Math.pow(Math.sin(Math.PI * e), 0.7) - Hh * 0.22 * Math.sin(2 * Math.PI * e) };
+  }
+  function flightVel(q, x0, y0, dir, A, Hh) {
+    var a = flightAt(Math.min(q, 0.99), x0, y0, dir, A, Hh), b = flightAt(Math.min(q, 0.99) + 0.01, x0, y0, dir, A, Hh);
+    return { x: b.x - a.x, y: b.y - a.y };
+  }
+  function sound(n, v) { if (audio && save.sound) chime(n, v); }
+  var ADV = {
+    cape: function (i, me, x, y, face, prog, t, s) {
+      var q = clamp01((prog - 0.08 - (me ? 0 : 0.06)) / 0.84), L = PUPS[i], col = i ? '#7C97E8' : '#E4566E';
+      var A = Math.min(W * 0.34, 380), Hh = Math.max(60, Math.min(H * 0.42, y - 70));
+      var draw = { before: function () { drawCape(L, t, col, q > 0 && q < 1); } };
+      if (q <= 0 || q >= 1) return { x: x, y: y, pose: prog < 0.5 ? 'bow' : 'bounce', face: pack.fdir, draw: draw }; // capes on, crouch, then a happy landing
+      var a = flightAt(q, x, y, pack.fdir, A, Hh), v = flightVel(q, x, y, pack.fdir, A, Hh);
+      if (!me) a.y += 18 * s;
+      if (Math.random() < 0.3) burst(a.x - Math.sign(v.x) * 22 * s, a.y - 18 * s, 1, i ? 220 : 350, 84);
+      if (!pack.whoosh) { pack.whoosh = true; sound(3, 0.04); }
+      return { x: a.x, y: a.y, pose: 'run', face: v.x >= 0 ? 1 : -1, ph: Math.PI / 2 + Math.sin(t / 260) * 0.15,
+        rear: Math.max(-0.45, Math.min(0.45, Math.atan2(-v.y, Math.abs(v.x) + 0.001))), draw: draw };
+    },
+    plane: function (i, me, x, y, face, prog, t, s, p, ex) {
+      if (i === 1) return null; // both ride in the plane, drawn once
+      var q = clamp01((prog - 0.06) / 0.88), A = Math.min(W * 0.38, 420), Hh = Math.max(70, Math.min(H * 0.48, y - 80));
+      var a = flightAt(q, x, y, pack.fdir, A, Hh), v = q > 0 && q < 1 ? flightVel(q, x, y, pack.fdir, A, Hh) : { x: pack.fdir, y: 0 };
+      var fs = Math.max(-1, Math.min(1, v.x / Math.max(1, A * 0.02))); if (Math.abs(fs) < 0.15) fs = fs < 0 ? -0.15 : 0.15;
+      var ang = Math.max(-0.4, Math.min(0.4, Math.atan2(v.y, Math.abs(v.x) + 0.001)));
+      ex.push(function () { drawPlane(a.x, a.y, fs, 1.3 * s, t, ang); });
+      pack.pos = pack.pos || []; pack.pos[0] = [a.x + fs * 10 * s, a.y - 30 * s, s]; pack.pos[1] = [a.x - fs * 16 * s, a.y - 30 * s, s];
+      if (!pack.poof) { pack.poof = 1; burst(x, y - 20 * s, 14, 45, 86); sound(4, 0.05); }
+      if (pack.poof === 1 && prog > 0.96) { pack.poof = 2; burst(a.x, a.y - 20 * s, 14, 45, 86); sound(6, 0.05); }
+      return null;
+    },
+    surf: function (i, me, x, y, face, prog, t, s, p) {
+      if (!me) return { x: x, y: y, pose: 'bounce', face: p.x > x ? 1 : -1 }; // cheering from the bank
+      var cx = p.x, cy = p.y - p.ry * 0.1, sx, sy, jump = 0, k, onWater = prog >= 0.12 && prog <= 0.88;
+      if (prog < 0.12) { k = ease(prog / 0.12); sx = x + (cx - x) * k; sy = y + (cy - y) * k; jump = Math.sin(k * Math.PI) * 44 * s; }
+      else if (prog > 0.88) { k = ease((prog - 0.88) / 0.12); sx = cx + (x - cx) * k; sy = cy + (y - cy) * k; jump = Math.sin(k * Math.PI) * 44 * s; }
+      else { var e = (prog - 0.12) / 0.76; sx = cx + Math.sin(e * Math.PI * 2) * p.rx * 0.55; sy = cy + Math.sin(e * Math.PI * 4) * p.ry * 0.3; }
+      var f = pack.surfX == null || Math.abs(sx - pack.surfX) < 0.05 ? (pack.faceS || 1) : sx > pack.surfX ? 1 : -1; pack.surfX = sx; pack.faceS = f;
+      if (onWater && Math.random() < 0.35) burst(sx - f * 24 * s, sy, 2, 200, 88, -f);
+      return { x: sx, y: sy - jump, pose: onWater ? 'run' : 'bounce', ph: 0.55, face: f, rear: onWater ? Math.sin(t / 300) * 0.08 : 0, draw: onWater ? { before: drawPadUnder } : null };
+    },
+    float: function (i, me, x, y, face, prog, t, s, p, ex) {
+      if (!me) return { x: x, y: y, pose: 'sit', face: face, tilt: -0.4 }; // looking up in wonder
+      var inB = prog < 0.8, rise = inB ? ease(prog / 0.6) * 120 * s : 120 * s * (1 - ease((prog - 0.8) / 0.12));
+      var dx = Math.sin(t / 700) * 18 * s * Math.min(1, rise / (60 * s)), bx = x + dx, by = y - rise;
+      if (!inB && !pack.popped) { pack.popped = true; burst(bx, by - 26 * s, 16, 200, 90); sound(6, 0.05); }
+      if (inB) ex.push(function () { bubbleAt(bx, by - 26 * s, 42 * s, 1); });
+      return { x: bx, y: by, pose: inB ? 'run' : 'bounce', ph: inB ? Math.sin(t / 220) * 1.2 : null, face: Math.sin(t / 1500) >= 0 ? 1 : -1 };
+    },
+    kite: function (i, me, x, y, face, prog, t, s, p, ex) {
+      if (!me) return { x: x, y: y, pose: 'bounce', face: face, tilt: -0.3 };
+      var kx = x - face * 55 * s + Math.sin(t / 1300) * 40 * s, ky = Math.max(30, y - 175 * s + Math.sin(t / 800) * 14 * s);
+      var mx = x + face * 36 * s, my = y - 44 * s;
+      ex.push(function () { drawKite(mx, my, kx, ky, t, s); });
+      return { x: x, y: y, pose: 'sit', face: face, tilt: -0.35 };
+    },
+    ball: function (i, me, x, y, face, prog, t, s, p, ex) {
+      var per = 1500, since = t - pack.t0, k = (since % per) / per, from = Math.floor(since / per) % 2, to = 1 - from;
+      if (i === 1) ex.push(function () {
+        var A = pack.pos && pack.pos[from], B = pack.pos && pack.pos[to]; if (!A || !B) return;
+        drawBall(A[0] + (B[0] - A[0]) * k, A[1] - 8 * s + (B[1] - A[1]) * k - Math.sin(k * Math.PI) * 85 * s, s, t);
+      });
+      return { x: x, y: y, pose: i === to && k > 0.72 ? 'bounce' : i === from && k < 0.16 ? 'bow' : 'sit', face: face, tilt: i === to ? -0.25 : 0 };
+    },
+    bubbles: function (i, me, x, y, face, prog, t, s, p, ex) {
+      if (i === 1) ex.push(function () {
+        var A = pack.pos && pack.pos[0], B = pack.pos && pack.pos[1]; if (!A || !B) return;
+        var mx = (A[0] + B[0]) / 2, gy = Math.max(A[1], B[1]);
+        for (var j = 0; j < 6; j++) {
+          var age = ((t - pack.t0) + j * 433) % 2600, r = (4 + (j % 3) * 2) * s;
+          var bx = mx + (j - 2.5) * 16 * s + Math.sin(age / 300 + j) * 10 * s, by = gy - 6 * s - age / 2600 * 130 * s;
+          if (age < (pack.bub[j] || 0)) burst(bx, gy - 136 * s, 4, 200, 90);
+          pack.bub[j] = age; bubbleAt(bx, by, r, Math.min(1, age / 300));
+        }
+      });
+      return { x: x, y: y, pose: 'bounce', face: face, tilt: -0.35 };
+    },
+    butterfly: function (i, me, x, y, face, prog, t, s, p, ex) {
+      if (me) {
+        var bx = x + Math.sin(t / 900) * 60 * s, by = y - 78 * s + Math.sin(t / 430) * 20 * s; pack.bfx = bx;
+        ex.push(function () { drawButterfly(bx, by, s, t); });
+        return { x: x, y: y, pose: 'bounce', face: bx > x ? 1 : -1, tilt: -0.3 };
+      }
+      return { x: x, y: y, pose: 'sit', face: pack.bfx != null ? (pack.bfx > x ? 1 : -1) : face, tilt: -0.25 + Math.sin(t / 600) * 0.15 };
+    },
+    dance: function (i, me, x, y, face, prog, t, s, p, ex) {
+      if (i === 1) ex.push(function () {
+        var A = pack.pos && pack.pos[0], B = pack.pos && pack.pos[1]; if (!A || !B) return;
+        var mx = (A[0] + B[0]) / 2, gy = Math.min(A[1], B[1]);
+        ctx.textAlign = 'center'; ctx.font = Math.round(15 * s) + 'px Georgia, serif';
+        for (var j = 0; j < 4; j++) {
+          var age = ((t - pack.t0) + j * 700) % 2800;
+          ctx.fillStyle = 'rgba(255,228,244,' + (Math.sin(Math.PI * age / 2800) * 0.9).toFixed(2) + ')';
+          ctx.fillText(j % 2 ? '♪' : '♫', mx + (j - 1.5) * 20 * s + Math.sin(age / 400 + j) * 10 * s, gy - 40 * s - age / 2800 * 70 * s);
+        }
+      });
+      return { x: x, y: y, pose: 'sit', face: Math.cos(t / 520 + i * Math.PI), rear: 0.5 + Math.sin(t / 260 + i) * 0.12 };
+    },
+    leapfrog: function (i, me, x, y, face, prog, t, s, p, ex) {
+      if (i === 1) ex.push(function () {
+        var A = pack.pos && pack.pos[0], B = pack.pos && pack.pos[1]; if (!A || !B) return;
+        var xa = Math.min(A[0], B[0]) - 48 * s, xb = Math.max(A[0], B[0]) + 48 * s, gy = Math.max(A[1], B[1]) + 20 * s;
+        var per = 2200, since = t - pack.t0, k = (since % per) / per, dir = Math.floor(since / per) % 2 ? -1 : 1, e = dir > 0 ? k : 1 - k;
+        var bx = xa + (xb - xa) * e, near = Math.max(0, 1 - Math.min(Math.abs(bx - A[0]), Math.abs(bx - B[0])) / (44 * s));
+        var by = gy - Math.abs(Math.sin(3 * Math.PI * e)) * (16 * s + 46 * s * near);
+        ctx.save(); ctx.translate(bx, by); ctx.scale(-dir * s * 1.1, s * 1.1); drawBunny(false, { name: 'binky' }, 0); ctx.restore();
+      });
+      return { x: x, y: y, pose: 'bow', face: face };
+    }
+  };
+  function drawCape(L, t, col, flying) {
+    var BY = L.build === 'lean' ? -21 : -18.5, f = Math.sin(t / (flying ? 70 : 170)), len = flying ? 36 : 24;
+    ctx.fillStyle = col; ctx.beginPath(); ctx.moveTo(15, BY - 9);
+    ctx.quadraticCurveTo(-6, BY - 15 + f * 3, -len, BY - (flying ? 11 : 2) + f * 4);
+    ctx.lineTo(-len + 4, BY + (flying ? 3 : 11) + f * 5);
+    ctx.quadraticCurveTo(-6, BY + 2 - f * 2, 11, BY - 2); ctx.closePath(); ctx.fill();
+    ctx.fillStyle = 'rgba(255,255,255,0.22)'; ctx.beginPath(); ctx.moveTo(8, BY - 8); ctx.quadraticCurveTo(-8, BY - 12 + f * 3, -len * 0.8, BY - (flying ? 9 : 1) + f * 4); ctx.lineTo(-len * 0.7, BY - (flying ? 6 : -2) + f * 4); ctx.quadraticCurveTo(-6, BY - 8, 8, BY - 6); ctx.fill();
+    ctx.fillStyle = '#F8DC6E'; ctx.beginPath(); ctx.arc(14, BY - 6, 2.3, 0, Math.PI * 2); ctx.fill();
+  }
+  function drawBoard() {
+    ctx.fillStyle = '#F2A3B6'; ctx.beginPath(); ctx.roundRect ? ctx.roundRect(-23, 0, 46, 3.6, 1.8) : ctx.rect(-23, 0, 46, 3.6); ctx.fill();
+    ctx.fillStyle = '#FFF4F7'; ctx.fillRect(-18, 0.8, 36, 1);
+    ctx.fillStyle = '#EDE6FA'; [-14, 14].forEach(function (wx) { ctx.beginPath(); ctx.arc(wx, 6, 2.7, 0, Math.PI * 2); ctx.fill(); });
+  }
+  function frogRider(L) {
+    var BY = L.build === 'lean' ? -21 : -18.5;
+    return function () { ctx.save(); ctx.translate(19, BY - 21); ctx.scale(0.52, 0.52); drawFrog(false, null, 0, 0, 0, 1); ctx.restore(); };
+  }
+  function drawPadUnder() {
+    ctx.fillStyle = '#6FAE8A'; ctx.beginPath(); ctx.ellipse(0, 2, 27, 6.5, 0, 0.35, Math.PI * 2 - 0.05); ctx.fill();
+    ctx.strokeStyle = 'rgba(214,242,218,0.55)'; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(0, 2); ctx.lineTo(-20, 0); ctx.moveTo(0, 2); ctx.lineTo(18, 5); ctx.stroke();
+  }
+  function bubbleAt(x, y, r, a) {
+    ctx.save(); ctx.globalAlpha = a == null ? 1 : a;
+    var g = ctx.createRadialGradient(x - r * 0.3, y - r * 0.3, r * 0.1, x, y, r);
+    g.addColorStop(0, 'rgba(255,255,255,0.12)'); g.addColorStop(0.8, 'rgba(200,225,255,0.10)'); g.addColorStop(1, 'rgba(230,200,255,0.35)');
+    ctx.fillStyle = g; ctx.beginPath(); ctx.arc(x, y, r, 0, Math.PI * 2); ctx.fill();
+    ctx.strokeStyle = 'rgba(235,225,255,0.55)'; ctx.lineWidth = Math.max(1, r / 18); ctx.stroke();
+    ctx.fillStyle = 'rgba(255,255,255,0.7)'; ctx.beginPath(); ctx.ellipse(x - r * 0.38, y - r * 0.42, r * 0.22, r * 0.12, -0.6, 0, Math.PI * 2); ctx.fill();
+    ctx.restore();
+  }
+  function drawKite(mx, my, kx, ky, t, s) {
+    ctx.strokeStyle = 'rgba(255,245,230,0.6)'; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(mx, my);
+    ctx.quadraticCurveTo((mx + kx) / 2 + 20 * s, (my + ky) / 2 + 30 * s, kx, ky + 20 * s); ctx.stroke();
+    ctx.save(); ctx.translate(kx, ky); ctx.rotate(Math.sin(t / 500) * 0.2); ctx.scale(s, s);
+    ctx.fillStyle = '#F7C9D4'; ctx.beginPath(); ctx.moveTo(0, -20); ctx.lineTo(13, 0); ctx.lineTo(0, 22); ctx.closePath(); ctx.fill();
+    ctx.fillStyle = '#C6DFF4'; ctx.beginPath(); ctx.moveTo(0, -20); ctx.lineTo(-13, 0); ctx.lineTo(0, 22); ctx.closePath(); ctx.fill();
+    ctx.strokeStyle = 'rgba(255,255,255,0.6)'; ctx.beginPath(); ctx.moveTo(0, -20); ctx.lineTo(0, 22); ctx.moveTo(-13, 0); ctx.lineTo(13, 0); ctx.stroke();
+    ctx.strokeStyle = 'rgba(255,240,220,0.7)'; ctx.beginPath(); ctx.moveTo(0, 22);
+    for (var j = 1; j <= 6; j++) ctx.lineTo(Math.sin(t / 200 + j) * 5, 22 + j * 7); ctx.stroke();
+    ['#F8DC6E', '#D9C8F0', '#C7EBD6'].forEach(function (c, j) { var yy = 22 + (j + 1) * 12, xx = Math.sin(t / 200 + (j + 1) * 1.7) * 5; ctx.fillStyle = c; ctx.beginPath(); ctx.moveTo(xx, yy); ctx.lineTo(xx - 4, yy - 3); ctx.lineTo(xx - 4, yy + 3); ctx.closePath(); ctx.moveTo(xx, yy); ctx.lineTo(xx + 4, yy - 3); ctx.lineTo(xx + 4, yy + 3); ctx.closePath(); ctx.fill(); });
+    ctx.restore();
+  }
+  function drawBall(x, y, s, t) {
+    ctx.save(); ctx.translate(x, y); ctx.rotate(t / 150); ctx.scale(s, s);
+    ctx.fillStyle = '#F4A6B8'; ctx.beginPath(); ctx.arc(0, 0, 6, 0, Math.PI * 2); ctx.fill();
+    ctx.strokeStyle = '#FFF6E6'; ctx.lineWidth = 1.6; ctx.beginPath(); ctx.arc(0, 0, 6, -0.6, 0.6); ctx.stroke(); ctx.beginPath(); ctx.arc(0, 0, 6, Math.PI - 0.6, Math.PI + 0.6); ctx.stroke();
+    ctx.restore();
+  }
+  function drawButterfly(x, y, s, t) {
+    var f = 0.25 + Math.abs(Math.sin(t / 70)) * 0.75;
+    ctx.save(); ctx.translate(x, y); ctx.scale(s, s);
+    ctx.fillStyle = 'rgba(217,200,240,0.95)'; ctx.beginPath(); ctx.ellipse(-5 * f, -3, 6 * f, 5, -0.4, 0, Math.PI * 2); ctx.fill(); ctx.beginPath(); ctx.ellipse(5 * f, -3, 6 * f, 5, 0.4, 0, Math.PI * 2); ctx.fill();
+    ctx.fillStyle = 'rgba(247,201,212,0.95)'; ctx.beginPath(); ctx.ellipse(-4 * f, 4, 4 * f, 3.4, 0.4, 0, Math.PI * 2); ctx.fill(); ctx.beginPath(); ctx.ellipse(4 * f, 4, 4 * f, 3.4, -0.4, 0, Math.PI * 2); ctx.fill();
+    ctx.fillStyle = '#4A3F5E'; ctx.fillRect(-0.8, -6, 1.6, 12);
+    ctx.restore();
+  }
+  // the little plane: both of them in the cockpit, ears in the wind, pulling a heart banner
+  function drawPlane(cx, cy, fs, k, t, ang) {
+    ctx.save(); ctx.translate(cx, cy - 16 * k); ctx.scale(fs * k, k); ctx.rotate(ang);
+    var w = Math.sin(t / 120);
+    ctx.strokeStyle = 'rgba(255,245,230,0.7)'; ctx.lineWidth = 0.8; ctx.beginPath(); ctx.moveTo(-38, -3); ctx.lineTo(-58, -2 + w); ctx.stroke();
+    ctx.fillStyle = 'rgba(255,248,236,0.95)'; ctx.beginPath();
+    var bx; for (bx = 0; bx <= 46; bx += 4) ctx.lineTo(-58 - bx, -9 + Math.sin(t / 120 + bx / 7) * 2);
+    for (bx = 46; bx >= 0; bx -= 4) ctx.lineTo(-58 - bx, 6 + Math.sin(t / 120 + bx / 7) * 2);
+    ctx.closePath(); ctx.fill();
+    var hy = -1.5 + Math.sin(t / 120 + 23 / 7) * 2; ctx.fillStyle = '#EE8FA6'; ctx.beginPath(); ctx.moveTo(-81, hy + 4); ctx.bezierCurveTo(-88, hy - 1, -85, hy - 7, -81, hy - 3); ctx.bezierCurveTo(-77, hy - 7, -74, hy - 1, -81, hy + 4); ctx.fill();
+    // tail fin
+    ctx.fillStyle = '#E79AAE'; ctx.beginPath(); ctx.moveTo(-26, -6); ctx.lineTo(-38, -22); ctx.lineTo(-40, -4); ctx.closePath(); ctx.fill();
+    // the two of them, sitting in the cockpit
+    var wag = Math.sin(t / 90) * 0.5;
+    [[1, 12], [0, -12]].forEach(function (d) { ctx.save(); ctx.translate(d[1], 2); ctx.scale(0.6, 0.6); drawPup(PUPS[d[0]], 'sit', 0, wag, false, t, -0.1); ctx.restore(); });
+    // body, stripe, wing, wheels, propeller
+    ctx.fillStyle = '#F7C9D4'; ctx.beginPath(); ctx.ellipse(0, -2, 38, 10, 0, 0, Math.PI * 2); ctx.fill();
+    ctx.fillStyle = 'rgba(255,255,255,0.8)'; ctx.fillRect(-30, -3, 60, 2.2);
+    ctx.fillStyle = '#C6DFF4'; ctx.beginPath(); ctx.ellipse(4, 5, 22, 3.6, 0.05, 0, Math.PI * 2); ctx.fill();
+    ctx.fillStyle = '#4A3F5E'; [-6, 14].forEach(function (wx) { ctx.beginPath(); ctx.arc(wx, 12, 2.6, 0, Math.PI * 2); ctx.fill(); });
+    ctx.fillStyle = '#F8DC6E'; ctx.beginPath(); ctx.arc(38, -2, 3.4, 0, Math.PI * 2); ctx.fill();
+    ctx.fillStyle = 'rgba(255,248,236,0.75)'; ctx.beginPath(); ctx.ellipse(40, -2, 1.6, 2 + 12 * Math.abs(Math.sin(t / 25)), 0, 0, Math.PI * 2); ctx.fill();
+    ctx.restore();
   }
   function drawPup(L, pose, ph, wag, blink, t, tilt) {
     var BLACK = '#252120', TAN = L.tan || '#C4834A', WHITE = '#F4EFE6', PINK = '#EE8FA6';

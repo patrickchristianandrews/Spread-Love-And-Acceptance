@@ -1189,3 +1189,9 @@ button.tol-dive{ display:inline !important; width:auto !important; min-height:0 
 @media (prefers-reduced-motion: reduce){ .growing-note .growing-ic{ animation:none; } }
 /* mini dives sit above a card's stretched "Dig deeper" link, so both can be tapped */
 .tol-dive{ position:relative; z-index:2; }
+/* the dive card: the title and depth meter stay put, and the layers scroll inside */
+.tol-dive-box{ display:flex; flex-direction:column; overflow:hidden; max-height:min(80vh, 40rem); }
+.tol-dive-body{ flex:1 1 auto; min-height:4rem; overflow-y:auto; overscroll-behavior:contain; -webkit-overflow-scrolling:touch; margin:0 -.5rem; padding:0 .5rem; scrollbar-width:thin;
+  -webkit-mask-image:linear-gradient(#000 calc(100% - 1.2rem), transparent); mask-image:linear-gradient(#000 calc(100% - 1.2rem), transparent); padding-bottom:1rem; }
+.tol-dive-box > .tol-dive-k, .tol-dive-box > .tol-dive-meter, .tol-dive-box > h2, .tol-dive-wade, .tol-dive-more{ flex:none; }
+@media (max-width:560px){ .tol-dive-box{ max-height:78vh; } }

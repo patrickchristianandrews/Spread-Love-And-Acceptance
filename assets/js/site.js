@@ -643,19 +643,8 @@
   window.addEventListener('beforeinstallprompt', function (e) { e.preventDefault(); installPrompt = e; });
   // ---------- Pop the bubbles ----------
   // Tap or click anywhere a bubble is floating (not on a link or button) and it pops with a
-  // soft "plip" and a spray of droplets, then drifts back a little later. Hearts give a small
+  // spray of droplets, silently, then drifts back a little later. Hearts give a small
   // heartbeat and a few tiny hearts. Purely for fun; nothing is kept.
-  var popAC = null;
-  function plip(big) {
-    try {
-      var AC = window.AudioContext || window.webkitAudioContext; if (!AC) return;
-      popAC = popAC || new AC(); if (popAC.state !== 'running') popAC.resume();
-      var t = popAC.currentTime, o = popAC.createOscillator(), g = popAC.createGain(), f = big ? 520 : 760 + Math.random() * 240;
-      o.type = 'sine'; o.frequency.setValueAtTime(f, t); o.frequency.exponentialRampToValueAtTime(f * (big ? 1.5 : 2.2), t + 0.06);
-      g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(big ? 0.05 : 0.035, t + 0.006); g.gain.exponentialRampToValueAtTime(0.0005, t + (big ? 0.35 : 0.12));
-      o.connect(g); g.connect(popAC.destination); o.start(t); o.stop(t + 0.4);
-    } catch (e) {}
-  }
   function poplets(x, y, heart, host) {
     for (var i = 0; i < (heart ? 6 : 0); i++) {
       var s = el('span', { class: 'tol-poplet', 'aria-hidden': 'true' }, '\u2665'), a = -Math.PI / 2 + (i - 2.5) * 0.45, d = 34 + (i % 3) * 12;
@@ -676,13 +665,11 @@
       if (!hit) return;
       var r2 = hit.getBoundingClientRect(), host = hit.closest('.tol-breathe') || null;
       if (hit.classList.contains('tol-heart')) {
-        hit.classList.add('is-tapped'); plip(true); poplets(r2.left + r2.width / 2, r2.top, true, host);
-        try { if (navigator.vibrate) navigator.vibrate(12); } catch (err) {}
+        hit.classList.add('is-tapped'); poplets(r2.left + r2.width / 2, r2.top, true, host);
         setTimeout(function () { hit.classList.remove('is-tapped'); }, 480);
         return;
       }
-      hit.classList.add('is-popped'); plip(false);
-      try { if (navigator.vibrate) navigator.vibrate(8); } catch (err) {}
+      hit.classList.add('is-popped');
       setTimeout(function () { hit.classList.add('is-gone'); hit.classList.remove('is-popped'); }, 600);
       setTimeout(function () { hit.classList.remove('is-gone'); }, 5000 + Math.random() * 6000); // it floats back
     }, { passive: true });
