@@ -58,7 +58,7 @@
     S.stops = [];
     p.groups.forEach(function (g, gi) {
       g.stops.forEach(function (s, si) {
-        S.stops.push({ key: gi + '-' + si, wp: s.wp, why: s.why, again: s.again, group: g.title, groupNote: g.note, gi: gi, entries: [] });
+        S.stops.push({ key: gi + '-' + si, wp: s.wp, why: s.why, again: s.again, group: g.title, groupNote: g.note, along: g.along || [], gi: gi, entries: [] });
       });
     });
     // Hand earlier sheets back out: one per stop for that workpaper, extra ones to its last stop.
@@ -148,12 +148,18 @@
     var groups = [];
     S.stops.forEach(function (st) {
       var g = groups.filter(function (x) { return x.title === st.group; })[0];
-      if (!g) { g = { title: st.group, note: st.groupNote, stops: [] }; groups.push(g); }
+      if (!g) { g = { title: st.group, note: st.groupNote, along: st.along || [], stops: [] }; groups.push(g); }
       g.stops.push(st);
     });
     var n = 0;
     groups.forEach(function (g, gi) {
       var li = h('li', { className: 'ws-group' }, [h('p', { className: 'ws-group-title', text: g.title }), g.note ? h('p', { className: 'ws-group-note', text: g.note }) : null]);
+      // what to read and try alongside this step, so you can follow along
+      if (g.along && g.along.length) {
+        var al = h('div', { className: 'ws-along' }, [h('span', { className: 'ws-along-k', text: 'Read and try alongside' })]);
+        g.along.forEach(function (a) { al.appendChild(h('a', { className: 'ws-along-a', href: a[1], text: a[0] })); });
+        li.appendChild(al);
+      }
       var ol = h('ol', { className: 'ws-stops' });
       g.stops.forEach(function (st) {
         n++;
@@ -164,7 +170,8 @@
         var body = h('div', { className: 'ws-stop-body' }, [
           h('p', { className: 'ws-stop-code', text: st.wp + (done ? ' · ' + done + (done === 1 ? ' sheet filled' : ' sheets filled') : '') }),
           h('h3', { className: 'ws-stop-name', text: SP.nameOf(st.wp) }),
-          h('p', { className: 'ws-stop-why', text: st.why })
+          h('p', { className: 'ws-stop-why', text: st.why }),
+          PATHS.read && PATHS.read[st.wp] ? h('a', { className: 'ws-read', href: PATHS.read[st.wp], text: 'Read about ' + st.wp + ' first \u2192' }) : null
         ]);
         var list = h('div', { className: 'ws-sheets' });
         entries.forEach(function (en, i) {
@@ -363,7 +370,7 @@
     var groups = [];
     S.stops.forEach(function (st) {
       var g = groups.filter(function (x) { return x.title === st.group; })[0];
-      if (!g) { g = { title: st.group, note: st.groupNote, entries: [] }; groups.push(g); }
+      if (!g) { g = { title: st.group, note: st.groupNote, along: st.along || [], entries: [] }; groups.push(g); }
       var list = st.entries.length ? st.entries : [newEntry(st.wp)];
       list.forEach(function (en) { g.entries.push({ workpaper: en.workpaper, label: en.label, state: en.state, why: st.why }); });
     });

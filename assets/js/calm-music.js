@@ -14,7 +14,11 @@
     { pad: [43, 50, 59, 64, 69], tones: [59, 62, 64, 67, 69, 71, 74, 76, 79] }
   ];
 
-  function create(ac, out) {
+  // opts.calm: a slower, softer version for the Night Garden and Word Bloom. Chords last a whole
+  // box breath (16 seconds), the melody is sparser and rounder, and the pad breathes gently.
+  function create(ac, out, opts) {
+    opts = opts || {};
+    var CALM = !!opts.calm, CHORD_MS = CALM ? 16000 : 8000, MEL_MS = CALM ? 2600 : 1300, MEL_P = CALM ? 0.4 : 0.55;
     ac = ac || new (window.AudioContext || window.webkitAudioContext)();
     var sr = ac.sampleRate, master = ac.createGain(); master.gain.value = 0;
     if (out) master.connect(out);
@@ -27,10 +31,13 @@
     function pan(v) { if (ac.createStereoPanner) { var p = ac.createStereoPanner(); p.pan.value = v; return p; } return ac.createGain(); }
 
     // the pad: one voice pair per chord note, crossfading gently from chord to chord
-    var padBus = ac.createGain(), padLP = ac.createBiquadFilter(); padBus.gain.value = 0.09; padLP.type = 'lowpass'; padLP.frequency.value = 1300; padLP.Q.value = 0.3;
+    var padBus = ac.createGain(), padLP = ac.createBiquadFilter(); padBus.gain.value = CALM ? 0.085 : 0.09; padLP.type = 'lowpass'; padLP.frequency.value = CALM ? 950 : 1300; padLP.Q.value = 0.3;
     padBus.connect(padLP); send(padLP, 0.55);
-    var drift = ac.createOscillator(), driftG = ac.createGain(); drift.frequency.value = 0.025; driftG.gain.value = 250; drift.connect(driftG); driftG.connect(padLP.frequency); drift.start();
+    var drift = ac.createOscillator(), driftG = ac.createGain(); drift.frequency.value = 0.025; driftG.gain.value = CALM ? 180 : 250; drift.connect(driftG); driftG.connect(padLP.frequency); drift.start();
     var voices = [], stops = [drift];
+    if (CALM) { // the pad rises and falls once every box breath, like slow breathing
+      var sw = ac.createOscillator(), swG = ac.createGain(); sw.frequency.value = 1 / 16; swG.gain.value = 0.02; sw.connect(swG); swG.connect(padBus.gain); sw.start(); stops.push(sw);
+    }
     for (var v = 0; v < 5; v++) {
       var vg = ac.createGain(); vg.gain.value = v < 2 ? 0.55 : 0.4; vg.connect(padBus);
       var pair = [-1, 1].map(function (side) {
@@ -42,18 +49,20 @@
     var chordAt = 0, timers = [];
     function setChord(k, glide) {
       chordAt = k; var c = CHORDS[k], t = ac.currentTime;
-      voices.forEach(function (pair, i) { pair.forEach(function (o) { o.frequency.setTargetAtTime(hz(c.pad[i]), t, glide == null ? 1.6 : glide); }); });
+      voices.forEach(function (pair, i) { pair.forEach(function (o) { o.frequency.setTargetAtTime(hz(c.pad[i]), t, glide == null ? (CALM ? 3.2 : 1.6) : glide); }); });
     }
     setChord(0, 0.01);
 
     // a kalimba-like pluck: a soft body, a whisper of overtone, a long gentle ring
     function pluck(f, vol, when) {
       var t = ac.currentTime + (when || 0), g = ac.createGain(), p = pan(Math.random() * 0.8 - 0.4), lp = ac.createBiquadFilter();
-      lp.type = 'lowpass'; lp.frequency.value = 2600;
-      [[1, 1], [2, 0.14], [3.01, 0.04]].forEach(function (h) {
+      lp.type = 'lowpass'; lp.frequency.value = CALM ? 1800 : 2600;
+      // calm: a rounder, felt-hammer touch with a longer, softer ring
+      var att = CALM ? 0.03 : 0.012, ring = CALM ? 4.2 : 3.2;
+      [[1, 1], [2, CALM ? 0.08 : 0.14], [3.01, CALM ? 0.015 : 0.04]].forEach(function (h) {
         var o = ac.createOscillator(), og = ac.createGain(); o.type = 'sine'; o.frequency.value = f * h[0];
-        og.gain.setValueAtTime(0, t); og.gain.linearRampToValueAtTime(vol * h[1], t + 0.012); og.gain.exponentialRampToValueAtTime(0.0001, t + (h[0] === 1 ? 3.2 : 1.2));
-        o.connect(og); og.connect(lp); o.start(t); o.stop(t + 3.4);
+        og.gain.setValueAtTime(0, t); og.gain.linearRampToValueAtTime(vol * h[1], t + att); og.gain.exponentialRampToValueAtTime(0.0001, t + (h[0] === 1 ? ring : 1.2));
+        o.connect(og); og.connect(lp); o.start(t); o.stop(t + ring + 0.2);
       });
       lp.connect(p); p.connect(g); g.gain.value = 1; send(g, 0.6);
     }
@@ -62,9 +71,9 @@
     function melodyStep() {
       if (!playing) return;
       var tones = CHORDS[chordAt].tones;
-      if (Math.random() < 0.55) {
+      if (Math.random() < MEL_P) {
         mel = Math.max(0, Math.min(tones.length - 1, mel + [-2, -1, -1, 1, 1, 2][Math.floor(Math.random() * 6)]));
-        pluck(hz(tones[mel]), 0.05 + Math.random() * 0.025);
+        pluck(hz(tones[mel]), CALM ? 0.038 + Math.random() * 0.015 : 0.05 + Math.random() * 0.025);
         if (Math.random() < 0.18) pluck(hz(tones[Math.max(0, mel - 2)]), 0.03, 0.5); // now and then, a soft answer
       }
     }
@@ -75,8 +84,8 @@
       pad: padBus,
       start: function () {
         if (ac.state !== 'running' && ac.resume) ac.resume();
-        if (!playing) { playing = true; timers.push(setInterval(chordStep, 8000)); timers.push(setInterval(melodyStep, 1300)); }
-        master.gain.cancelScheduledValues(ac.currentTime); master.gain.setTargetAtTime(level, ac.currentTime, 2);
+        if (!playing) { playing = true; timers.push(setInterval(chordStep, CHORD_MS)); timers.push(setInterval(melodyStep, MEL_MS)); }
+        master.gain.cancelScheduledValues(ac.currentTime); master.gain.setTargetAtTime(level, ac.currentTime, CALM ? 3 : 2);
       },
       stop: function () { playing = false; timers.forEach(clearInterval); timers = []; master.gain.cancelScheduledValues(ac.currentTime); master.gain.setTargetAtTime(0, ac.currentTime, 0.6); },
       level: function (v) { level = v; if (playing) master.gain.setTargetAtTime(v, ac.currentTime, 0.8); },

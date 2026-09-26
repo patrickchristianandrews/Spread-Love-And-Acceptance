@@ -1,0 +1,43 @@
+/* games.css — shared look for the calm word games (Quiet Words, Word Bloom, Quiet Crossword).
+   Tile colours come from the keepsake you choose (rewards.js sets html[data-tiles]). */
+
+:root{
+  --g-board: linear-gradient(145deg, #FFF8EE 0%, #F6EEF8 55%, #EEF4FA 100%);
+  --g-edge: #E6D6EE; --g-tile: #FFFFFF; --g-ink: #3C3350; --g-soft: #8A6D8F;
+  --g-accent: #D9C8F0; --g-accent-ink: #3C3350; --g-found: #BFE3CF; --g-empty: rgba(255,255,255,.55);
+}
+html[data-tiles="tiles-rose"]{ --g-board: linear-gradient(150deg, #FFF3F5 0%, #FBE3EA 100%); --g-edge: #F2C9D4; --g-tile: #FFFAFB; --g-ink: #6B2E45; --g-soft: #A65A76; --g-accent: #F4A6B8; --g-found: #F9D3DE; }
+html[data-tiles="tiles-moon"]{ --g-board: linear-gradient(160deg, #22264C 0%, #33335F 100%); --g-edge: #4A4B85; --g-tile: #3A3F72; --g-ink: #F3EEFF; --g-soft: #C9C1EE; --g-accent: #8F7FC4; --g-accent-ink: #fff; --g-found: #5E5AA0; --g-empty: rgba(255,255,255,.08); }
+html[data-tiles="tiles-meadow"]{ --g-board: linear-gradient(150deg, #F1F9EC 0%, #DFEFD8 100%); --g-edge: #C4E0BB; --g-tile: #FBFFF8; --g-ink: #2F4A3A; --g-soft: #5D7F66; --g-accent: #A9DCB8; --g-found: #CDEBC4; }
+html[data-tiles="tiles-sunrise"]{ --g-board: linear-gradient(160deg, #FFF3E2 0%, #FFE0D0 100%); --g-edge: #F7CDB0; --g-tile: #FFFBF5; --g-ink: #6B3A22; --g-soft: #A8674A; --g-accent: #F9C08F; --g-found: #FCD9B8; }
+html[data-tiles="tiles-gold"]{ --g-board: linear-gradient(160deg, #FFF8DE 0%, #F6E3A2 100%); --g-edge: #E9D08A; --g-tile: #FFFCEF; --g-ink: #5B4410; --g-soft: #8E6F24; --g-accent: #E8C55B; --g-found: #F4DE8E; }
+
+/* the row of games at the top of each game page */
+.gm-switch{ display:flex; align-items:center; gap:.4rem; flex-wrap:wrap; margin:.2rem 0 1rem; }
+.gm-switch a.gm-tab{ display:inline-flex; align-items:center; gap:.35rem; min-height:40px; padding:.35rem .85rem; border-radius:999px; border:1px solid #E6D6EE; background:#fff; color:#4E3F6B; text-decoration:none; font-size:.9rem; font-weight:600; }
+.gm-switch a.gm-tab[aria-current="page"]{ background:#3C3350; border-color:#3C3350; color:#FFF8EE; }
+.gm-switch .gm-chip{ margin-left:auto; }
+@media (max-width:420px){ .gm-switch a.gm-tab{ padding:.3rem .65rem; font-size:.84rem; } }
+
+/* shared board */
+.gm-board{ margin:0 0 1.4rem; padding:1rem; border-radius:26px; background:var(--g-board); border:1px solid var(--g-edge); box-shadow:0 14px 40px rgba(120,90,140,.12); color:var(--g-ink); touch-action:manipulation; }
+.gm-top{ display:flex; justify-content:space-between; align-items:baseline; gap:.6rem; flex-wrap:wrap; margin:0 0 .6rem; }
+.gm-k{ margin:0; font-family:"IBM Plex Mono", ui-monospace, monospace; font-size:.72rem; letter-spacing:.1em; text-transform:uppercase; color:var(--g-soft); }
+.gm-title{ margin:0; font-family:"Fraunces", Georgia, serif; font-weight:600; font-size:1.3rem; color:var(--g-ink); }
+.gm-btns{ display:flex; flex-wrap:wrap; justify-content:center; gap:.5rem; margin-top:1rem; }
+.gm-btns button{ font:inherit; font-size:.9rem; min-height:44px; padding:.5rem 1rem; border-radius:999px; border:1px solid var(--g-edge); background:var(--g-tile); color:var(--g-ink); cursor:pointer; }
+.gm-btns .gm-primary{ background:#3C3350; border-color:#3C3350; color:#FFF8EE; }
+html[data-tiles="tiles-moon"] .gm-btns .gm-primary{ background:#F3EEFF; color:#22264C; }
+.gm-note{ min-height:2.6rem; margin:.7rem auto 0 !important; max-width:30rem; text-align:center; line-height:1.45; color:var(--g-ink); }
+.gm-note b{ font-family:"Fraunces", Georgia, serif; }
+.gm-live{ position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); }
+
+/* a crossword-style grid of letter cells (Word Bloom and Quiet Crossword) */
+.gm-grid{ display:grid; gap:4px; margin:0 auto; width:100%; }
+.gm-cell{ position:relative; aspect-ratio:1; border-radius:9px; display:grid; place-items:center; font-family:"Fraunces", Georgia, serif; font-weight:600; font-size:clamp(1rem, 5.2vw, 1.5rem); line-height:1; color:var(--g-ink); }
+.gm-cell.is-on{ background:var(--g-empty); border:1px solid var(--g-edge); }
+.gm-cell.is-found{ background:var(--g-found); border-color:transparent; animation:gm-pop .5s cubic-bezier(.2,1.5,.4,1) both; }
+@keyframes gm-pop{ 0%{ transform:scale(.6); } 100%{ transform:scale(1); } }
+.gm-cell .gm-n{ position:absolute; left:4px; top:2px; font:500 .6rem/1 "IBM Plex Mono", monospace; color:var(--g-soft); }
+
+@media (prefers-reduced-motion: reduce){ .gm-cell.is-found{ animation:none; } }

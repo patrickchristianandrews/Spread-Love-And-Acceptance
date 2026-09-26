@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-NKC6CQ9S66"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-NKC6CQ9S66');
+</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Word Bloom &mdash; a calm letter-wheel word game &middot; The Objective Ledger</title>
+<meta name="description" content="Swipe across the petals to spell words and fill a little crossword. Hundreds of gentle levels, a bonus jar, and petals for playing well. No timer, no way to lose.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,500&family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/css/site.css">
+<link rel="stylesheet" href="/assets/css/reading.css">
+<link rel="stylesheet" href="/assets/css/games.css">
+<style>
+  .wb[hidden]{ display:none; }
+  .wb{ position:relative; padding:.9rem .9rem 1.1rem; }
+  .wb-head{ display:flex; justify-content:space-between; align-items:center; gap:.5rem; margin-bottom:.5rem; }
+  .wb-head > div:first-child{ display:flex; align-items:baseline; gap:.6rem; flex-wrap:wrap; }
+  .wb-level{ margin:0; font-family:"Fraunces", Georgia, serif; font-weight:600; font-size:1.25rem; }
+  .wb-chapter{ margin:0; font-size:.82rem; color:var(--g-soft); }
+  .wb-tools{ display:flex; gap:.4rem; align-items:center; }
+  .wb-chip{ display:none; }
+  @media (max-width:520px){ .wb-chip{ display:inline-block; } }
+  .wb-tools button, .wb-side button{ width:44px; height:44px; border-radius:50%; border:1px solid var(--g-edge); background:var(--g-tile); color:var(--g-ink); font-size:1.15rem; cursor:pointer; display:grid; place-items:center; }
+  .wb-grid{ margin-bottom:.8rem; }
+  .wb-grid .gm-cell.is-hinted{ color:var(--g-soft); background:var(--g-empty); }
+  .wb-word{ min-height:2.4rem; margin:0 auto .3rem; text-align:center; font:600 1.6rem/1.5 "Fraunces", Georgia, serif; letter-spacing:.12em; color:var(--g-ink); transition:transform .3s, color .3s; }
+  .wb-word.is-good{ color:#3E8F5E; transform:scale(1.12); }
+  .wb-word.is-bonus{ color:#B5831D; transform:scale(1.12); }
+  .wb-word.is-again{ color:var(--g-soft); }
+  .wb-word.is-miss{ animation:wb-shake .4s; color:var(--g-soft); }
+  @keyframes wb-shake{ 25%{ transform:translateX(-6px); } 75%{ transform:translateX(6px); } }
+  .wb-play{ display:grid; grid-template-columns:48px 1fr 48px; align-items:center; gap:.3rem; }
+  .wb-side{ display:flex; flex-direction:column; gap:.6rem; align-items:center; }
+  .wb-wheel{ position:relative; width:min(100%, 17rem, 33vh); aspect-ratio:1; margin:0 auto; border-radius:50%; touch-action:none; user-select:none; -webkit-user-select:none;
+    background:radial-gradient(circle at 50% 50%, rgba(255,255,255,.75) 0 30%, rgba(255,255,255,.35) 31% 70%, rgba(255,255,255,0) 71%); transition:transform .25s; }
+  html[data-tiles="tiles-moon"] .wb-wheel{ background:radial-gradient(circle, rgba(255,255,255,.12) 0 30%, rgba(255,255,255,.05) 31% 70%, transparent 71%); }
+  .wb-wheel.is-spin{ transform:rotate(40deg) scale(.95); }
+  .wb-lines{ position:absolute; inset:0; width:100%; height:100%; pointer-events:none; overflow:visible; }
+  .wb-lines polyline{ fill:none; stroke:var(--g-accent); stroke-width:10; stroke-linecap:round; stroke-linejoin:round; opacity:.8; }
+  .wb-petal{ position:absolute; width:23%; aspect-ratio:1; transform:translate(-50%, -50%); border-radius:50% 50% 50% 50% / 58% 58% 42% 42%; border:0;
+    background:var(--g-tile); color:var(--g-ink); box-shadow:0 4px 12px rgba(120,90,140,.18); font:600 clamp(1.3rem, 6vw, 1.8rem)/1 "Fraunces", Georgia, serif; cursor:pointer; transition:background-color .2s, transform .2s; }
+  .wb-petal.is-on{ background:var(--g-accent); color:var(--g-accent-ink); transform:translate(-50%, -50%) scale(1.1); }
+  .wb-mid{ position:absolute; left:50%; top:50%; width:24%; aspect-ratio:1; transform:translate(-50%,-50%); border-radius:50%; border:0; background:transparent; color:var(--g-soft); font-size:1.4rem; cursor:pointer; }
+  .wb-jar{ --fill:0%; position:relative; width:44px; height:44px; border-radius:12px 12px 16px 16px; border:2px solid var(--g-edge); background:linear-gradient(to top, #F8DC6E var(--fill), var(--g-tile) var(--fill)); display:grid; place-items:center; font:600 .62rem/1 "IBM Plex Mono", monospace; color:var(--g-ink); }
+  .wb-jar.is-bump{ animation:gm-pop .5s; }
+  .wb-jar-l{ font-size:.66rem; color:var(--g-soft); text-align:center; }
+  .wb-done{ position:absolute; inset:0; z-index:5; display:grid; place-items:center; padding:1rem; border-radius:26px; background:rgba(255,248,238,.7); backdrop-filter:blur(4px); -webkit-backdrop-filter:blur(4px); }
+  html[data-tiles="tiles-moon"] .wb-done{ background:rgba(34,38,76,.75); }
+  .wb-done[hidden]{ display:none; }
+  .wb-done > div{ text-align:center; max-width:20rem; padding:1.4rem 1.2rem; border-radius:24px; background:var(--g-tile); box-shadow:0 18px 50px rgba(60,40,90,.25); animation:gm-pop .5s cubic-bezier(.2,1.5,.4,1); }
+  .wb-done-art{ font-size:3rem; margin:0; animation:tol-bob 6s ease-in-out infinite; }
+  .wb-done-h{ margin:.2rem 0; font-size:1.4rem; }
+  .wb-done-petals{ display:inline-block; margin:.2rem 0 .8rem; padding:.3rem .9rem; border-radius:999px; background:#F9E1EA; color:#7A3355; font-weight:600; }
+  .wb-next{ font:inherit; font-weight:600; font-size:1.05rem; min-height:48px; padding:.6rem 1.6rem; border-radius:999px; border:0; background:#3C3350; color:#FFF8EE; cursor:pointer; }
+  .wb[data-chapter="1"]{ --g-board: linear-gradient(150deg, #F3FAF0 0%, #F6EEF8 100%); }
+  .wb[data-chapter="2"]{ --g-board: linear-gradient(150deg, #FFF6EC 0%, #FCE9F0 100%); }
+  .wb[data-chapter="3"]{ --g-board: linear-gradient(150deg, #EEF4FA 0%, #F6EEF8 100%); }
+  .wb[data-chapter="4"]{ --g-board: linear-gradient(150deg, #FFF9E6 0%, #EFF7EE 100%); }
+  html[data-tiles]:not([data-tiles="tiles-petal"]) .wb{ --g-board: unset; background:var(--g-board); }
+  .wb-how{ font-size:.95rem; }
+  @media (max-width:520px){
+    main.read{ padding-top:.8rem; }
+    .wb-intro{ display:none; }
+    .read-head{ display:none; }
+    .gm-switch{ margin-top:0; }
+    .gm-switch .gm-chip{ display:none; }
+    .wb{ margin-left:-.4rem; margin-right:-.4rem; padding:.7rem .55rem .9rem; border-radius:22px; }
+    .wb-play{ grid-template-columns:44px 1fr 44px; }
+  }
+  @media (prefers-reduced-motion: reduce){ .wb-word, .wb-wheel, .wb-petal{ transition:none; } .wb-word.is-miss, .wb-done-art{ animation:none; } }
+</style>
+<script src="/assets/js/site.js" defer></script>
+<script src="/assets/js/calm-music.js" defer></script>
+<script src="/assets/js/rewards.js" defer></script>
+<script src="/assets/js/word-bloom-levels.js" defer></script>
+<script src="/assets/js/word-bloom.js" defer></script>
+</head>
+<body data-no-tip data-no-breathe data-no-weather>
+<main class="read">
+<header class="read-head"><p class="read-code">New &middot; a calm word game</p><h1>Word Bloom</h1></header>
+<nav class="gm-switch" aria-label="Calm word games">
+  <a class="gm-tab" href="/word-bloom.html" aria-current="page">&#127804; Bloom</a>
+  <a class="gm-tab" href="/quiet-crossword.html">&#9999;&#65039; Crossword</a>
+  <a class="gm-tab" href="/quiet-words.html">&#128269; Words</a>
+  <span class="gm-chip" data-rewards-chip></span>
+</nav>
+<p class="simple-lede wb-intro">Swipe across the petals to spell words and fill the little crossword. Other real words go in your bonus jar. No timer, no way to lose, and petals for playing well.</p>
+
+<section class="gm-board wb" id="wb" aria-label="Word Bloom" hidden>
+  <div class="wb-head">
+    <div><p class="wb-level">Level 1</p><p class="wb-chapter"></p></div>
+    <div class="wb-tools"><span class="wb-chip" data-rewards-chip></span><button type="button" class="wb-sound" aria-pressed="true">&#127925;</button></div>
+  </div>
+  <div class="gm-grid wb-grid" aria-label="The words to find"></div>
+  <p class="wb-word" aria-live="polite"></p>
+  <div class="wb-play">
+    <div class="wb-side">
+      <button type="button" class="wb-shuffle" aria-label="Shuffle the letters">&#128256;</button>
+    </div>
+    <div class="wb-wheel" role="group" aria-label="Letters. Swipe across them, or tap them one by one, then tap the middle.">
+      <svg class="wb-lines" aria-hidden="true"></svg>
+      <button type="button" class="wb-mid" aria-label="Try this word">&#10003;</button>
+    </div>
+    <div class="wb-side">
+      <button type="button" class="wb-hint" aria-label="Show me a letter">&#128161;</button>
+      <div class="wb-jar" title="Bonus jar: every 10 bonus words fills it"><span class="wb-jar-n">0/10</span></div>
+      <span class="wb-jar-l">Bonus jar</span>
+    </div>
+  </div>
+  <p class="gm-note wb-note"></p>
+  <p class="gm-live" aria-live="polite"></p>
+  <div class="wb-done" hidden role="dialog" aria-modal="true" aria-labelledby="wb-done-h">
+    <div>
+      <p class="wb-done-art" aria-hidden="true">&#127804;</p>
+      <h2 class="wb-done-h" id="wb-done-h">Level bloomed</h2>
+      <p class="wb-done-p"></p>
+      <span class="wb-done-petals"></span><br>
+      <button type="button" class="wb-next">Next level &rarr;</button>
+    </div>
+  </div>
+</section>
+
+<div class="try-this wb-how">
+  <p><strong>How to play:</strong> drag your finger from petal to petal to spell a word, then let go. Slide back to undo a letter. You can also tap petals one at a time and tap the middle, or type on a keyboard. &#128256; mixes up the letters, and &#128161; shows one letter (a level with no hints is a <em>perfect bloom</em> and earns extra petals).</p>
+  <p><a href="/keepsakes.html">See your keepsakes &rarr;</a></p>
+</div>
+</main>
+</body>
+</html>

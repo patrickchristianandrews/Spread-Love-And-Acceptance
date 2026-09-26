@@ -234,6 +234,12 @@
 .ws-group{ margin: 0 0 1.4em; }
 .ws-group-title{ margin: 0; font-family: "IBM Plex Mono", ui-monospace, monospace; font-size: .74rem; letter-spacing: .1em; text-transform: uppercase; color: var(--credit, #3E6B4C); }
 .ws-group-note{ margin: .1em 0 .6em; font-size: .9em; color: var(--ink-soft, #524B3E); }
+.ws-along{ display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin: 0 0 .8em; padding: .55em .7em; border-radius: 14px; background: #F4F9F2; border: 1px dashed #CFE0CC; }
+.ws-along-k{ width: 100%; font-family: "IBM Plex Mono", ui-monospace, monospace; font-size: .68rem; letter-spacing: .08em; text-transform: uppercase; color: var(--credit, #3E6B4C); }
+.ws-along-a{ display: inline-flex; align-items: center; min-height: 36px; padding: 4px 12px; border-radius: 999px; background: #fff; border: 1px solid #CFE0CC; color: #2F5A3D; font-size: .88rem; text-decoration: none; }
+.ws-along-a::before{ content: "\1F4D6"; margin-right: 6px; font-size: .9em; }
+.ws-along-a:hover{ background: #EAF3E7; }
+.ws-read{ display: inline-block; margin: 0 0 .6em; font-size: .88rem; color: #6B4E8A; }
 .ws-stop{ --c: #F7CAD4; position: relative; display: flex; gap: 14px; padding: 0 0 14px 0; margin: 0; }
 .ws-stop::before{ content: ""; position: absolute; left: 21px; top: 44px; bottom: 0; border-left: 2px dotted #D6BE8E; }
 .ws-stops > .ws-stop:last-child::before{ display: none; }

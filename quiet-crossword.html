@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-NKC6CQ9S66"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-NKC6CQ9S66');
+</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Quiet Crossword &mdash; small, gentle crosswords &middot; The Objective Ledger</title>
+<meta name="description" content="Small, friendly crosswords with gentle clues. A new one every day, easy to play on a phone, with petals for finishing. No timer, no way to lose.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,500&family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/css/site.css">
+<link rel="stylesheet" href="/assets/css/reading.css">
+<link rel="stylesheet" href="/assets/css/games.css">
+<style>
+  .xw[hidden]{ display:none; }
+  .xw{ position:relative; padding:.9rem .9rem 1rem; }
+  .xw-head{ display:flex; justify-content:space-between; align-items:center; gap:.5rem; margin-bottom:.6rem; }
+  .xw-head > div:first-child{ display:flex; align-items:baseline; gap:.6rem; flex-wrap:wrap; }
+  .xw-theme{ margin:0; font-family:"Fraunces", Georgia, serif; font-weight:600; font-size:1.2rem; }
+  .xw-no{ margin:0; font-size:.8rem; color:var(--g-soft); }
+  .xw-tools{ display:flex; gap:.4rem; align-items:center; }
+  .xw-tools button{ width:44px; height:44px; border-radius:50%; border:1px solid var(--g-edge); background:var(--g-tile); color:var(--g-ink); font-size:1.15rem; cursor:pointer; }
+  .xw-grid{ gap:3px; }
+  .xw-block{ visibility:hidden; }
+  .xw-cell{ border:1px solid var(--g-edge); background:var(--g-tile); cursor:pointer; padding:0; font:inherit; font-family:"Fraunces", Georgia, serif; font-weight:600; font-size:clamp(1rem, 5.4vw, 1.5rem); color:var(--g-ink); transition:background-color .2s; }
+  .xw-cell.is-word{ background:color-mix(in srgb, var(--g-accent) 38%, var(--g-tile)); }
+  .xw-cell.is-sel{ background:var(--g-accent); color:var(--g-accent-ink); box-shadow:0 0 0 2px var(--g-ink) inset; }
+  .xw-cell.is-found{ background:var(--g-found); }
+  .xw-cell.is-found.is-sel{ background:var(--g-accent); }
+  .xw-cell.is-wrong{ background:#FFD9C7; animation:wb-soft 1s ease-in-out 2; }
+  @keyframes wb-soft{ 50%{ box-shadow:0 0 0 4px rgba(249,192,143,.5); } }
+  .xw-clue{ display:flex; align-items:center; gap:.4rem; margin:.7rem 0 .5rem; }
+  .xw-clue p{ flex:1; margin:0; min-height:2.8em; display:flex; align-items:center; justify-content:center; text-align:center; padding:.4rem .6rem; border-radius:14px; background:var(--g-tile); border:1px solid var(--g-edge); font-size:.98rem; line-height:1.3; color:var(--g-ink); }
+  .xw-clue p b{ margin-right:.35rem; font-family:"IBM Plex Mono", monospace; font-size:.78rem; color:var(--g-soft); white-space:nowrap; }
+  .xw-clue button{ flex:none; width:40px; height:44px; border-radius:12px; border:1px solid var(--g-edge); background:var(--g-tile); color:var(--g-ink); font-size:1rem; cursor:pointer; }
+  .xw-len{ color:var(--g-soft); font-size:.85em; }
+  .xw-keys{ display:grid; gap:6px; max-width:32rem; margin:0 auto; user-select:none; -webkit-user-select:none; touch-action:manipulation; }
+  .xw-keys div{ display:flex; gap:5px; justify-content:center; }
+  .xw-keys button{ flex:1; max-width:2.9rem; height:48px; padding:0; border-radius:10px; border:1px solid var(--g-edge); background:var(--g-tile); color:var(--g-ink); font:600 1.08rem/1 "Fraunces", Georgia, serif; cursor:pointer; box-shadow:0 2px 0 rgba(120,90,140,.12); }
+  .xw-keys button:active{ transform:translateY(1px); background:var(--g-accent); }
+  .xw-keys button[data-k="back"]{ max-width:4.2rem; flex:1.6; font-size:1.2rem; }
+  .xw-lists{ display:grid; grid-template-columns:1fr 1fr; gap:1rem 1.4rem; margin-top:1.4rem; }
+  .xw-lists h3{ margin:0 0 .4rem; font-size:1.05rem; }
+  .xw-lists ol{ list-style:none; padding:0; margin:0; }
+  .xw-lists li{ margin:0 0 .25rem; }
+  .xw-lists button{ display:block; width:100%; text-align:left; font:inherit; font-size:.93rem; line-height:1.35; padding:.35rem .5rem; border-radius:10px; border:0; background:transparent; color:var(--ink); cursor:pointer; }
+  .xw-lists button:hover, .xw-lists button.is-active{ background:#F3EEF9; }
+  .xw-lists button.is-solved{ color:var(--ink-soft); text-decoration:line-through; text-decoration-color:rgba(60,51,80,.35); }
+  .xw-lists b{ font-family:"IBM Plex Mono", monospace; font-size:.8rem; margin-right:.3rem; }
+  .xw-done{ position:absolute; inset:0; z-index:5; display:grid; place-items:center; padding:1rem; border-radius:26px; background:rgba(255,248,238,.72); backdrop-filter:blur(4px); -webkit-backdrop-filter:blur(4px); }
+  html[data-tiles="tiles-moon"] .xw-done{ background:rgba(34,38,76,.75); }
+  .xw-done[hidden]{ display:none; }
+  .xw-done > div{ text-align:center; max-width:20rem; padding:1.4rem 1.2rem; border-radius:24px; background:var(--g-tile); color:var(--g-ink); box-shadow:0 18px 50px rgba(60,40,90,.25); animation:gm-pop .5s cubic-bezier(.2,1.5,.4,1); }
+  .xw-done-art{ font-size:3rem; margin:0; }
+  .xw-done-h{ margin:.2rem 0; font-size:1.4rem; }
+  .xw-done-petals{ display:inline-block; margin:.2rem 0 .8rem; padding:.3rem .9rem; border-radius:999px; background:#F9E1EA; color:#7A3355; font-weight:600; }
+  .xw-again{ font:inherit; font-weight:600; font-size:1.05rem; min-height:48px; padding:.6rem 1.6rem; border-radius:999px; border:0; background:#3C3350; color:#FFF8EE; cursor:pointer; }
+  .xw-chip{ display:none; }
+  @media (max-width:520px){
+    main.read{ padding-top:.8rem; }
+    .read-head, .xw-intro{ display:none; }
+    .gm-switch{ margin-top:0; } .gm-switch .gm-chip{ display:none; } .xw-chip{ display:inline-block; }
+    .xw{ margin-left:-.4rem; margin-right:-.4rem; padding:.7rem .5rem .8rem; border-radius:22px; }
+    .xw-keys button{ height:46px; }
+    .xw-lists{ grid-template-columns:1fr; }
+  }
+  @media (prefers-reduced-motion: reduce){ .xw-cell{ transition:none; } .xw-cell.is-wrong{ animation:none; } }
+</style>
+<script src="/assets/js/site.js" defer></script>
+<script src="/assets/js/calm-music.js" defer></script>
+<script src="/assets/js/rewards.js" defer></script>
+<script src="/assets/js/crossword-puzzles.js" defer></script>
+<script src="/assets/js/quiet-crossword.js" defer></script>
+</head>
+<body data-no-tip data-no-breathe data-no-weather>
+<main class="read">
+<header class="read-head"><p class="read-code">New &middot; a calm word game</p><h1>Quiet Crossword</h1></header>
+<nav class="gm-switch" aria-label="Calm word games">
+  <a class="gm-tab" href="/word-bloom.html">&#127804; Bloom</a>
+  <a class="gm-tab" href="/quiet-crossword.html" aria-current="page">&#9999;&#65039; Crossword</a>
+  <a class="gm-tab" href="/quiet-words.html">&#128269; Words</a>
+  <span class="gm-chip" data-rewards-chip></span>
+</nav>
+<p class="simple-lede xw-intro">Small crosswords with friendly clues. A new one every day, or another whenever you like. Each word glows when it’s right. No timer, and no way to lose.</p>
+
+<section class="gm-board xw" id="xw" aria-label="Quiet Crossword" hidden>
+  <div class="xw-head">
+    <div><p class="xw-theme"></p><p class="xw-no"></p></div>
+    <div class="xw-tools"><span class="xw-chip" data-rewards-chip></span><button type="button" class="xw-sound" aria-pressed="true">&#127925;</button></div>
+  </div>
+  <div class="gm-grid xw-grid" role="group" aria-label="Crossword squares"></div>
+  <div class="xw-clue">
+    <button type="button" class="xw-prev" aria-label="Previous clue">&#9664;</button>
+    <p aria-live="polite" class="xw-clue-text"></p>
+    <button type="button" class="xw-next" aria-label="Next clue">&#9654;</button>
+  </div>
+  <div class="xw-keys" aria-label="Letters">
+    <div><button type="button" data-k="Q">Q</button><button type="button" data-k="W">W</button><button type="button" data-k="E">E</button><button type="button" data-k="R">R</button><button type="button" data-k="T">T</button><button type="button" data-k="Y">Y</button><button type="button" data-k="U">U</button><button type="button" data-k="I">I</button><button type="button" data-k="O">O</button><button type="button" data-k="P">P</button></div>
+    <div><button type="button" data-k="A">A</button><button type="button" data-k="S">S</button><button type="button" data-k="D">D</button><button type="button" data-k="F">F</button><button type="button" data-k="G">G</button><button type="button" data-k="H">H</button><button type="button" data-k="J">J</button><button type="button" data-k="K">K</button><button type="button" data-k="L">L</button></div>
+    <div><button type="button" data-k="Z">Z</button><button type="button" data-k="X">X</button><button type="button" data-k="C">C</button><button type="button" data-k="V">V</button><button type="button" data-k="B">B</button><button type="button" data-k="N">N</button><button type="button" data-k="M">M</button><button type="button" data-k="back" aria-label="Delete">&#9003;</button></div>
+  </div>
+  <p class="gm-note xw-note"></p>
+  <div class="gm-btns">
+    <button type="button" class="xw-check">Check my letters</button>
+    <button type="button" class="xw-reveal">Show a letter</button>
+    <button type="button" class="xw-another">Another puzzle</button>
+  </div>
+  <p class="gm-live" aria-live="polite"></p>
+  <div class="xw-done" hidden role="dialog" aria-modal="true" aria-labelledby="xw-done-h">
+    <div>
+      <p class="xw-done-art" aria-hidden="true">&#127775;</p>
+      <h2 class="xw-done-h" id="xw-done-h">Solved</h2>
+      <p class="xw-done-p"></p>
+      <span class="xw-done-petals"></span><br>
+      <button type="button" class="xw-again">Another puzzle &rarr;</button>
+    </div>
+  </div>
+</section>
+
+<section class="xw-lists" aria-label="Clues">
+  <div><h3>Across</h3><ol class="xw-across"></ol></div>
+  <div><h3>Down</h3><ol class="xw-down"></ol></div>
+</section>
+
+<div class="try-this">
+  <p><strong>Why it helps:</strong> a small puzzle gives your mind one gentle thing to hold, and each right answer is a tiny, satisfying win. Take it slowly.</p>
+  <p><a href="/keepsakes.html">See your keepsakes &rarr;</a></p>
+</div>
+</main>
+</body>
+</html>

@@ -203,9 +203,49 @@
       var L = lanterns[i]; L.y -= L.vy * dt * (REDUCED ? 0.03 : 0.06); L.life = Math.min(1, (L.y - H * 0.05) / (H * 0.3));
       if (L.y < H * 0.05) { lanterns.splice(i, 1); continue; }
       var x = L.x + (REDUCED ? 0 : Math.sin(t / 1200 + L.ph) * 8), a = Math.max(0, L.life);
-      var g = ctx.createRadialGradient(x, L.y, 0, x, L.y, 26); g.addColorStop(0, 'rgba(255,200,130,' + (0.55 * a) + ')'); g.addColorStop(1, 'rgba(255,200,130,0)');
+      var hue = extra('garden-rainbow') ? Math.round(L.ph * 57) % 360 : null;
+      var glowC = hue == null ? '255,200,130' : hsl2rgb(hue, 0.9, 0.78);
+      var g = ctx.createRadialGradient(x, L.y, 0, x, L.y, 26); g.addColorStop(0, 'rgba(' + glowC + ',' + (0.55 * a) + ')'); g.addColorStop(1, 'rgba(' + glowC + ',0)');
       ctx.fillStyle = g; ctx.beginPath(); ctx.arc(x, L.y, 26, 0, Math.PI * 2); ctx.fill();
-      ctx.fillStyle = 'rgba(255,214,150,' + (0.95 * a) + ')'; ctx.beginPath(); ctx.roundRect ? ctx.roundRect(x - 5, L.y - 7, 10, 13, 3) : ctx.rect(x - 5, L.y - 7, 10, 13); ctx.fill();
+      ctx.fillStyle = hue == null ? 'rgba(255,214,150,' + (0.95 * a) + ')' : 'hsla(' + hue + ',90%,84%,' + (0.95 * a) + ')'; ctx.beginPath(); ctx.roundRect ? ctx.roundRect(x - 5, L.y - 7, 10, 13, 3) : ctx.rect(x - 5, L.y - 7, 10, 13); ctx.fill();
+    }
+  }
+
+  // Wonders unlocked with petals (rewards.js): koi, paper boats, an aurora, rainbow lanterns
+  function extra(id) { return !!(window.TOLRewards && window.TOLRewards.garden(id)); }
+  function hsl2rgb(h, s, l) {
+    var a = s * Math.min(l, 1 - l), f = function (n) { var k = (n + h / 30) % 12; return Math.round(255 * (l - a * Math.max(-1, Math.min(k - 3, 9 - k, 1)))); };
+    return f(0) + ',' + f(8) + ',' + f(4);
+  }
+  function drawAurora(t) {
+    if (!extra('garden-aurora')) return;
+    ctx.save(); ctx.globalCompositeOperation = 'lighter';
+    [[150, 0.07, 0], [280, 0.05, 2], [190, 0.045, 4]].forEach(function (b) {
+      var g = ctx.createLinearGradient(0, H * 0.04, 0, H * 0.34);
+      g.addColorStop(0, 'hsla(' + b[0] + ',80%,70%,0)'); g.addColorStop(0.5, 'hsla(' + b[0] + ',80%,70%,' + b[1] + ')'); g.addColorStop(1, 'hsla(' + b[0] + ',80%,70%,0)');
+      ctx.fillStyle = g; ctx.beginPath(); ctx.moveTo(0, H * 0.34);
+      for (var x = 0; x <= W; x += 16) ctx.lineTo(x, H * (0.12 + 0.05 * Math.sin(x / W * 5 + b[2] + (REDUCED ? 0 : t / 5200)) + 0.02 * Math.sin(x / W * 13 + b[2])));
+      ctx.lineTo(W, H * 0.34); ctx.closePath(); ctx.fill();
+    });
+    ctx.restore();
+  }
+  function drawPondLife(t) {
+    var p = pondShape(), tt = REDUCED ? 0 : t;
+    if (extra('garden-koi')) [[0, '#F59A5B'], [Math.PI, '#FFF1E0']].forEach(function (k, i) {
+      var a = tt / (9000 + i * 1700) + k[0], x = p.x + Math.cos(a) * p.rx * 0.55, y = p.y + Math.sin(a) * p.ry * 0.5, dir = a + Math.PI / 2;
+      ctx.save(); ctx.translate(x, y); ctx.rotate(dir); ctx.globalAlpha = 0.85;
+      ctx.fillStyle = k[1]; ctx.beginPath(); ctx.ellipse(0, 0, 11, 4.5, 0, 0, Math.PI * 2); ctx.fill();
+      ctx.beginPath(); ctx.moveTo(-9, 0); ctx.lineTo(-17, -5 + Math.sin(tt / 200) * 2); ctx.lineTo(-17, 5 + Math.sin(tt / 200) * 2); ctx.closePath(); ctx.fill();
+      if (i === 1) { ctx.fillStyle = '#F07A3E'; ctx.beginPath(); ctx.arc(3, -1, 2.4, 0, Math.PI * 2); ctx.fill(); }
+      ctx.restore(); ctx.globalAlpha = 1;
+    });
+    if (extra('garden-boats')) for (var b = 0; b < 3; b++) {
+      var q = ((tt / 60000 + b / 3) % 1), x2 = p.x - p.rx * 0.8 + q * p.rx * 1.6, y2 = p.y - p.ry * 0.2 + b * p.ry * 0.25 + Math.sin(tt / 900 + b) * 1.5;
+      var glow = ctx.createRadialGradient(x2, y2 - 8, 0, x2, y2 - 8, 16); glow.addColorStop(0, 'rgba(255,214,150,0.5)'); glow.addColorStop(1, 'rgba(255,214,150,0)');
+      ctx.fillStyle = glow; ctx.beginPath(); ctx.arc(x2, y2 - 8, 16, 0, Math.PI * 2); ctx.fill();
+      ctx.fillStyle = 'rgba(250,246,236,0.9)'; ctx.beginPath(); ctx.moveTo(x2 - 9, y2); ctx.lineTo(x2 + 9, y2); ctx.lineTo(x2 + 6, y2 + 4); ctx.lineTo(x2 - 6, y2 + 4); ctx.closePath(); ctx.fill();
+      ctx.beginPath(); ctx.moveTo(x2, y2); ctx.lineTo(x2, y2 - 9); ctx.lineTo(x2 + 6, y2); ctx.closePath(); ctx.fill();
+      ctx.fillStyle = '#FFE39A'; ctx.beginPath(); ctx.arc(x2 - 3, y2 - 3, 1.6, 0, Math.PI * 2); ctx.fill();
     }
   }
 
@@ -259,17 +299,24 @@
     verb.buffer = ir; var wet = ac.createGain(); wet.gain.value = 0.6; verb.connect(wet); wet.connect(master);
     // the music: warm chords drifting every two box-breathing counts, a soft wandering melody,
     // and every chime tuned to the chord playing now (calm-music.js)
-    var music = window.TOLMusic ? window.TOLMusic.create(ac, master) : null, pad;
+    var music = window.TOLMusic ? window.TOLMusic.create(ac, master, { calm: true }) : null, pad;
     if (music) { music.level(0.95); music.start(); pad = music.pad; }
     else { pad = ac.createGain(); pad.gain.value = 0; pad.connect(master); }
     // the night air: gentle filtered noise that rises and falls like a breeze
     var len = ac.sampleRate * 3, nb = ac.createBuffer(1, len, ac.sampleRate), d = nb.getChannelData(0), last = 0;
     for (var i = 0; i < len; i++) { last = (last + 0.02 * (Math.random() * 2 - 1)) / 1.02; d[i] = last * 3.5; }
     var air = ac.createBufferSource(); air.buffer = nb; air.loop = true;
-    var af = ac.createBiquadFilter(); af.type = 'bandpass'; af.frequency.value = 900; af.Q.value = 0.6;
-    var ag = ac.createGain(); ag.gain.value = 0.035;
-    var alfo = ac.createOscillator(), alfoG = ac.createGain(); alfo.frequency.value = 0.08; alfoG.gain.value = 0.03; alfo.connect(alfoG); alfoG.connect(ag.gain); alfo.start();
+    // a low, warm hush (no hiss), swelling slowly like distant wind in the trees
+    var af = ac.createBiquadFilter(); af.type = 'lowpass'; af.frequency.value = 420; af.Q.value = 0.3;
+    var ag = ac.createGain(); ag.gain.value = 0.03;
+    var alfo = ac.createOscillator(), alfoG = ac.createGain(); alfo.frequency.value = 0.05; alfoG.gain.value = 0.022; alfo.connect(alfoG); alfoG.connect(ag.gain); alfo.start();
     air.connect(af); af.connect(ag); ag.connect(master); air.start();
+    // and water: the soft lap of the pond, a slower breath of filtered noise
+    var wsrc = ac.createBufferSource(); wsrc.buffer = nb; wsrc.loop = true; wsrc.playbackRate.value = 0.6;
+    var wf = ac.createBiquadFilter(); wf.type = 'bandpass'; wf.frequency.value = 260; wf.Q.value = 0.9;
+    var wg = ac.createGain(); wg.gain.value = 0.018;
+    var wl = ac.createOscillator(), wlg = ac.createGain(); wl.frequency.value = 0.11; wlg.gain.value = 0.014; wl.connect(wlg); wlg.connect(wg.gain); wl.start();
+    wsrc.connect(wf); wf.connect(wg); wg.connect(master); wsrc.start();
     audio = { ctx: ac, master: master, verb: verb, pad: pad, music: music };
     if (ac.state !== 'running' && ac.resume) ac.resume();
     master.gain.setTargetAtTime(LEVEL, ac.currentTime, 0.8);
@@ -285,13 +332,13 @@
     var g2 = ac.createGain(); g2.gain.value = 0.12; o2.connect(g2); g2.connect(g);
     o.connect(g); g.connect(audio.master); g.connect(audio.verb); o.start(t); o2.start(t); o.stop(t + 3.4); o2.stop(t + 3.4);
   }
-  // a soft wooden plink, for a lily pad settling
+  // a soft water bloop, for a lily pad settling onto the pond
   function plink() {
     if (!audio || !save.sound) return;
     var ac = audio.ctx, t = ac.currentTime, o = ac.createOscillator(), g = ac.createGain();
-    o.type = 'sine'; o.frequency.setValueAtTime(700, t); o.frequency.exponentialRampToValueAtTime(420, t + 0.12);
-    g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(0.055, t + 0.015); g.gain.exponentialRampToValueAtTime(0.0005, t + 0.4);
-    o.connect(g); g.connect(audio.master); o.start(t); o.stop(t + 0.4);
+    o.type = 'sine'; o.frequency.setValueAtTime(260, t); o.frequency.exponentialRampToValueAtTime(520, t + 0.09);
+    g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(0.04, t + 0.02); g.gain.exponentialRampToValueAtTime(0.0005, t + 0.35);
+    o.connect(g); g.connect(audio.master); g.connect(audio.verb); o.start(t); o.stop(t + 0.4);
   }
   // the pad swells as you breathe in and settles as you breathe out, with a soft cue at each turn
   function padSwell(ph) {
@@ -323,8 +370,9 @@
       keys: 'On a keyboard, the arrow keys move your light.' },
     pond: { ico: '&#128167;', h: 'How to play the lily pond', steps: [
       'Lily pads drift slowly down the pond. The faint outline shows where they’ll land.',
-      'Move them with <strong>&#9664; &#9654;</strong>, turn them with <strong>&#10227;</strong>, and drop them with <strong>&#9660;</strong>. Or swipe sideways, tap to turn, and swipe down to drop.',
-      'Fill a whole row from side to side and it blooms into flowers for your garden.',
+      'On a phone, <strong>drag</strong> the pad left or right with your finger, <strong>tap</strong> to turn it, and <strong>flick down</strong> to drop it. Or use the buttons: hold &#9664; &#9654; to slide.',
+      'The little box shows which pad is coming <strong>next</strong>. When a pad lands, you have a moment to slide it into place.',
+      'Fill a whole row from side to side and it blooms into flowers. Two rows at once is a <strong>double bloom</strong>, and a rare <strong>golden lotus</strong> brings extra petals.',
       'If the pond fills up, it simply settles and starts fresh. You can’t lose.'],
       keys: 'On a keyboard: arrow keys to move and turn, space to drop.' }
   };
@@ -354,11 +402,13 @@
     mode = m;
     document.querySelectorAll('.ng-bar [data-mode]').forEach(function (b) { b.setAttribute('aria-pressed', String(b.getAttribute('data-mode') === m)); });
     padEl.hidden = m !== 'pond';
+    stage.classList.toggle('is-play', m === 'pond' || m === 'fireflies'); // the page doesn't scroll while you play
     flies.forEach(function (f) { f.home = null; });
     if (m === 'breathe' && !save.sound && !mutedThisVisit && typeof startAudio === 'function') { save.sound = true; persist(); soundLabel(); startAudio(); } // box breathing starts with sound
     if (m === 'breathe') { breath.start = performance.now() + 1500; breath.count = 0; breath.phase = ''; skyWords = []; wordAt = 0; say('Box breathing', 'In 4 · hold 4 · out 4 · hold 4. Follow the star around the square.', 0); }
     if (m === 'fireflies') { newShape(); say('Connect the stars', 'Start at 1 and follow the numbers. Each star sings a note.', 6000); }
-    if (m === 'pond') { pondReset(); say('Float the lily pads', 'Fill a row across the pond and it blooms. There’s no hurry, and no way to lose.', 6000); }
+    if (m === 'pond') { pondReset(); say('Float the lily pads', 'Drag a pad with your finger, tap to turn it, flick down to drop. Fill a row and it blooms.', 6000); }
+    hud();
     updateCount();
     // The first time in each activity, show how it works
     save.seen = save.seen || {};
@@ -807,6 +857,7 @@
   function ease(x) { return x < 0.5 ? 2 * x * x : 1 - Math.pow(-2 * x + 2, 2) / 2; }
   function bloom() {
     var f = addFlower(false); addLantern(f.x * W); save.breaths++; persist(); chime(Math.floor(Math.random() * 5), 0.1); updateCount();
+    if (window.TOLRewards && save.breaths % 4 === 0) window.TOLRewards.earn(5, 'breathe', 'Four calm breaths');
   }
 
   // Fireflies: constellations
@@ -952,6 +1003,7 @@
     if (wand.active && Math.hypot(wand.x - x, wand.y - y) < 44) {
       burst(x, y, 40, 50); [0, 2, 4, 5, 6].forEach(function (n, k) { setTimeout(function () { chime(n, 0.09); }, k * 110); });
       save.wishes = (save.wishes || 0) + 1; addFlower(false); addLantern(); persist(); updateCount();
+      if (window.TOLRewards) window.TOLRewards.earn(4, 'fireflies', 'You caught a shooting star');
       say('You caught a shooting star!', 'Make a wish for someone you love. A new flower opened in your garden.', 4000);
       shooting = null; nextShoot = t + 30000 + Math.random() * 25000;
     }
@@ -975,6 +1027,7 @@
         if (audio && audio.music && save.sound) setTimeout(function () { audio.music.reward(true); }, 350 + targets.length * 120);
         var first = save.consts.indexOf(shape.id) === -1, m = MEANING[shape.id] || ['A new constellation', ''];
         if (first) { save.consts.push(shape.id); persist(); }
+        if (window.TOLRewards) window.TOLRewards.earn(first ? 15 : 6, 'fireflies', first ? 'A new constellation' : 'A constellation sang', { cardDelay: 5200 });
         say(m[0] + (first ? ' \u2728 New!' : ''), m[1] + (first ? '  ' + save.consts.length + ' of ' + SHAPE_IDS.length + ' found.' : ''), 5200);
         updateCount();
         if (first) setTimeout(function () { askDedication(shape.id, m[0]); }, 2600);
@@ -983,24 +1036,44 @@
   }
 
   // Lily pond: slow, forgiving falling shapes
-  var COLS = 8, ROWS = 12, board = [], piece = null, cell = 30, bx = 0, by = 0, dropAt = 0, clearing = null, settleAt = 0;
+  // Drag a pad sideways with your finger, tap to turn it, flick down to drop it. A brief
+  // pause before a pad settles lets you slide it into place. Rows bloom into flowers; two or
+  // more at once are a double (or triple) bloom. Now and then a golden lotus drifts in.
+  // If the pond fills, it simply settles and starts fresh: you can't lose.
+  var COLS = 8, ROWS = 12, board = [], piece = null, nextK = null, cell = 30, bx = 0, by = 0, dropAt = 0, clearing = null, settleAt = 0;
+  var pondRows = 0, pondBest = 0, landT = 0, landMoves = 0, gold = 0;
   var PIECES = [
     [[0, 0], [1, 0], [2, 0], [3, 0]], [[0, 0], [1, 0], [0, 1], [1, 1]], [[0, 0], [1, 0], [2, 0], [1, 1]],
     [[0, 0], [0, 1], [0, 2], [1, 2]], [[1, 0], [1, 1], [1, 2], [0, 2]], [[1, 0], [2, 0], [0, 1], [1, 1]], [[0, 0], [1, 0], [1, 1], [2, 1]]
   ];
-  var LILY = ['#BFE3CF', '#C6DFF4', '#D9C8F0', '#F7C9D4', '#F8E7AE', '#F9C9B4', '#A9DCC8'];
+  var LILY = ['#BFE3CF', '#C6DFF4', '#D9C8F0', '#F7C9D4', '#F8E7AE', '#F9C9B4', '#A9DCC8', '#F6D77A'];
+  var GOLD = 8;
   function layoutPond() {
-    by = Math.round(H * 0.1);
-    var room = W <= 560 ? H - by - 200 : H * 0.6; // on phones the touch pad sits below the pond
-    cell = Math.max(14, Math.floor(Math.min(room / ROWS, H * 0.6 / ROWS, (W * 0.84) / COLS, 38)));
-    bx = Math.round(W / 2 - COLS * cell / 2);
+    var phone = W <= 560;
+    by = Math.round(phone ? 64 : H * 0.1);
+    var bottomRoom = phone ? 205 : H * 0.3; // on phones the touch pad and buttons sit below the pond
+    cell = Math.max(16, Math.floor(Math.min((H - by - bottomRoom) / ROWS, (W * (phone ? 0.7 : 0.6)) / COLS, 40)));
+    bx = Math.round(W / 2 - COLS * cell / 2 - (phone ? cell * 0.9 : 0));
+    document.documentElement.style.setProperty('--tr-top', (phone ? by + ROWS * cell + 16 : 70) + 'px');
   }
-  function pondReset() { clearing = null; board = []; for (var r = 0; r < ROWS; r++) board.push(new Array(COLS).fill(0)); spawn(); }
+  function pondReset() { clearing = null; board = []; for (var r = 0; r < ROWS; r++) board.push(new Array(COLS).fill(0)); pondRows = 0; nextK = null; spawn(); }
+  function pickK() { gold++; if (gold >= 12 && Math.random() < 0.35) { gold = 0; return -1; } return Math.floor(Math.random() * PIECES.length); }
+  function driftMs() { return Math.max(620, 1150 - Math.floor(pondRows / 8) * 70); } // a touch quicker as the pond grows, never rushed
   function spawn() {
-    var k = Math.floor(Math.random() * PIECES.length);
-    piece = { cells: PIECES[k].map(function (c) { return c.slice(); }), x: Math.floor(COLS / 2) - 1, y: 0, c: k + 1, hasFlower: Math.random() < 0.5 };
+    var k = nextK == null ? pickK() : nextK; nextK = pickK();
+    var shapeK = k < 0 ? Math.floor(Math.random() * PIECES.length) : k;
+    piece = { cells: PIECES[shapeK].map(function (c) { return c.slice(); }), x: Math.floor(COLS / 2) - 1, y: 0, c: k < 0 ? GOLD : shapeK + 1, hasFlower: k < 0 || Math.random() < 0.5 };
+    landT = 0; landMoves = 0;
     dropAt = performance.now() + 1200;
-    if (collide(piece.cells, piece.x, piece.y)) { settleAt = performance.now(); say('The pond settles.', 'Fresh water. Carry on whenever you like.', 3000); for (var r = 0; r < ROWS; r++) board[r].fill(0); }
+    if (collide(piece.cells, piece.x, piece.y)) {
+      settleAt = performance.now();
+      var best = pondRows > pondBest; pondBest = Math.max(pondBest, pondRows);
+      if (window.TOLRewards && pondRows) window.TOLRewards.record('pond', 'best', pondRows, 'max');
+      say('The pond settles.', pondRows ? pondRows + (pondRows === 1 ? ' row' : ' rows') + ' bloomed in that pond' + (best ? ', your best yet!' : '.') + ' Fresh water now.' : 'Fresh water. Carry on whenever you like.', 3600);
+      for (var r = 0; r < ROWS; r++) board[r].fill(0);
+      pondRows = 0;
+    }
+    hud();
   }
   function collide(cells, x, y) {
     for (var i = 0; i < cells.length; i++) {
@@ -1010,49 +1083,70 @@
     }
     return false;
   }
+  function moved() { if (landT && landMoves < 10) { landT = performance.now(); landMoves++; } } // a little extra time to slide it in
   function rotate() {
     var w = Math.max.apply(null, piece.cells.map(function (c) { return c[0]; }));
     var rot = piece.cells.map(function (c) { return [c[1], w - c[0]]; });
-    [0, -1, 1].some(function (dx) { if (!collide(rot, piece.x + dx, piece.y)) { piece.cells = rot; piece.x += dx; return true; } return false; });
+    [0, -1, 1, -2, 2].some(function (dx) { if (!collide(rot, piece.x + dx, piece.y)) { piece.cells = rot; piece.x += dx; moved(); softTick(); return true; } return false; });
   }
-  function move(dx) { if (!collide(piece.cells, piece.x + dx, piece.y)) piece.x += dx; }
-  function step() {
-    if (!collide(piece.cells, piece.x, piece.y + 1)) { piece.y++; return true; }
+  function move(dx) { if (!collide(piece.cells, piece.x + dx, piece.y)) { piece.x += dx; moved(); softTick(); return true; } return false; }
+  function softTick() { if (audio && save.sound && audio.music) audio.music.pluck(audio.music.note(1), 0.012); }
+  // one step down; when it can't go further it waits a moment before settling
+  function step(now) {
+    if (!collide(piece.cells, piece.x, piece.y + 1)) { piece.y++; landT = 0; return true; }
+    if (!now && landT && performance.now() - landT < 480) return false;
+    if (!now && !landT) { landT = performance.now(); return false; }
+    lock();
+    return false;
+  }
+  function lock() {
     piece.cells.forEach(function (c) { var y = c[1] + piece.y; if (y >= 0) board[y][c[0] + piece.x] = piece.c * (piece.hasFlower ? -1 : 1); });
     plink();
+    var p0 = piece; piece.cells.forEach(function (c) { if (c[1] + p0.y >= 0) ripples.push({ x: bx + (c[0] + p0.x + 0.5) * cell, y: by + (c[1] + p0.y + 0.5) * cell, t: performance.now() }); });
     var full = []; board.forEach(function (row, r) { if (row.every(Boolean)) full.push(r); });
-    if (full.length) { clearing = { rows: full, t: performance.now() }; full.forEach(function (r, i) { setTimeout(function () { chime(r + i, 0.1); }, i * 140); }); }
+    if (full.length) { clearing = { rows: full, t: performance.now(), gold: full.some(function (r) { return board[r].some(function (v) { return Math.abs(v) === GOLD; }); }) }; full.forEach(function (r, i) { setTimeout(function () { chime(r + i, 0.08); }, i * 160); }); }
     else spawn();
-    return false;
   }
   function pondKey(k) {
     if (mode !== 'pond' || !piece || clearing) return;
     if (k === 'ArrowLeft') move(-1); else if (k === 'ArrowRight') move(1); else if (k === 'ArrowUp') rotate();
-    else if (k === 'ArrowDown') { step(); dropAt = performance.now() + 900; }
-    else if (k === ' ') { while (step()) {} }
+    else if (k === 'ArrowDown') { if (!step()) { if (landT) lock(); } dropAt = performance.now() + 900; }
+    else if (k === ' ') { while (step(true)) {} }
   }
+  var ripples = [];
+  var hudEl = document.getElementById('ng-pond-hud');
+  function hud() { if (hudEl) hudEl.textContent = mode === 'pond' ? 'Rows ' + pondRows + (pondBest ? ' · best ' + pondBest : '') : ''; }
   function drawPond(t) {
     if (!piece) return;
-    if (clearing && t - clearing.t > 700) {
+    if (clearing && t - clearing.t > 800) {
       var n = clearing.rows.length;
       clearing.rows.slice().sort(function (a, b) { return a - b; }).forEach(function (r) { board.splice(r, 1); board.unshift(new Array(COLS).fill(0)); });
       for (var i = 0; i < n; i++) { addFlower(false); addLantern(); }
-      save.lilies += n; persist(); updateCount();
-      say(n > 1 ? n + ' rows bloomed.' : 'A row bloomed.', 'New flowers opened in your garden.', 2400);
-      clearing = null; spawn();
+      pondRows += n; save.lilies += n; persist(); updateCount();
+      var names = ['', 'A row bloomed.', 'Double bloom!', 'Triple bloom!', 'A whole garden bloomed!'];
+      say(names[Math.min(4, n)] + (clearing.gold ? ' ✨' : ''), clearing.gold ? 'The golden lotus opened. Extra petals for you.' : 'New flowers opened in your garden.', 2400);
+      if (n > 1 && audio && audio.music && save.sound) setTimeout(function () { audio.music.reward(n > 2); }, 300);
+      if (window.TOLRewards) window.TOLRewards.earn([0, 2, 5, 9, 14][Math.min(4, n)] + (clearing.gold ? 4 : 0), 'pond', names[Math.min(4, n)].replace(/[.!]$/, ''));
+      clearing = null; spawn(); hud();
     }
-    if (!clearing && t > dropAt && (!helpCard || helpCard.hidden)) { step(); dropAt = t + 1100; }
+    if (!clearing && t > dropAt && (!helpCard || helpCard.hidden)) { step(); dropAt = t + (landT ? 120 : driftMs()); }
     // water
     var w = COLS * cell, h = ROWS * cell;
     ctx.fillStyle = 'rgba(70,87,138,0.35)'; ctx.strokeStyle = 'rgba(200,210,255,0.25)'; ctx.lineWidth = 1.5;
     ctx.beginPath(); ctx.roundRect ? ctx.roundRect(bx - 8, by - 8, w + 16, h + 16, 18) : ctx.rect(bx - 8, by - 8, w + 16, h + 16); ctx.fill(); ctx.stroke();
+    // faint column guides make it easy to line pads up
+    ctx.strokeStyle = 'rgba(200,215,255,0.045)'; ctx.lineWidth = 1;
+    for (var cc = 1; cc < COLS; cc++) { ctx.beginPath(); ctx.moveTo(bx + cc * cell, by); ctx.lineTo(bx + cc * cell, by + h); ctx.stroke(); }
     for (var rr = 1; rr < 4; rr++) {
       var ry = by + h * (rr / 4) + (REDUCED ? 0 : Math.sin(t / 1600 + rr) * 3);
       ctx.strokeStyle = 'rgba(200,215,255,0.07)'; ctx.beginPath(); ctx.moveTo(bx, ry); ctx.quadraticCurveTo(bx + w / 2, ry + 6, bx + w, ry); ctx.stroke();
     }
+    // ripples where pads settle
+    ripples = ripples.filter(function (rp) { return t - rp.t < 900; });
+    ripples.forEach(function (rp) { var q = (t - rp.t) / 900; ctx.strokeStyle = 'rgba(220,230,255,' + (0.35 * (1 - q)) + ')'; ctx.beginPath(); ctx.ellipse(rp.x, rp.y, cell * (0.3 + q * 0.6), cell * (0.2 + q * 0.4), 0, 0, Math.PI * 2); ctx.stroke(); });
     board.forEach(function (row, r) {
-      var fade = clearing && clearing.rows.indexOf(r) !== -1 ? 1 + (t - clearing.t) / 350 : 1;
-      row.forEach(function (v, c) { if (v) lily(bx + c * cell, by + r * cell, Math.abs(v), v < 0, fade); });
+      var fade = clearing && clearing.rows.indexOf(r) !== -1 ? 1 + (t - clearing.t) / 400 : 1;
+      row.forEach(function (v, c) { if (v) lily(bx + c * cell, by + r * cell, Math.abs(v), v < 0, fade, false, t); });
     });
     if (!clearing) {
       var gy = piece.y; while (!collide(piece.cells, piece.x, gy + 1)) gy++;
@@ -1061,17 +1155,28 @@
         piece.cells.forEach(function (c) { var y = c[1] + gy; if (y >= 0) { ctx.beginPath(); ctx.arc(bx + (c[0] + piece.x) * cell + cell / 2, by + y * cell + cell / 2, cell * 0.4, 0, Math.PI * 2); ctx.stroke(); } });
         ctx.setLineDash([]);
       }
-      piece.cells.forEach(function (c) { var y = c[1] + piece.y; if (y >= 0) lily(bx + (c[0] + piece.x) * cell, by + y * cell, piece.c, piece.hasFlower, 1, true); });
+      var bob = landT ? Math.sin((t - landT) / 60) * 0.6 : 0;
+      piece.cells.forEach(function (c) { var y = c[1] + piece.y; if (y >= 0) lily(bx + (c[0] + piece.x) * cell, by + y * cell + bob, piece.c, piece.hasFlower, 1, true, t); });
+    }
+    // what's floating in next
+    if (nextK != null) {
+      var nk = nextK < 0 ? 0 : nextK, cells = PIECES[nk], s = cell * 0.5, nx = bx + w + 18, ny = by + 6;
+      ctx.fillStyle = 'rgba(28,31,58,0.45)'; ctx.beginPath(); ctx.roundRect ? ctx.roundRect(nx - 6, ny - 6, s * 4 + 12, s * 4 + 26, 12) : ctx.rect(nx - 6, ny - 6, s * 4 + 12, s * 4 + 26); ctx.fill();
+      ctx.fillStyle = 'rgba(220,214,240,0.8)'; ctx.font = '11px Lora, Georgia, serif'; ctx.textAlign = 'left'; ctx.textBaseline = 'top'; ctx.fillText('Next', nx, ny - 2);
+      var saved = cell; cell = s;
+      cells.forEach(function (c) { lily(nx + c[0] * s, ny + 14 + c[1] * s, nextK < 0 ? GOLD : nk + 1, nextK < 0, 1, false, t); });
+      cell = saved;
     }
   }
-  function lily(x, y, k, flower, fade, live) {
+  function lily(x, y, k, flower, fade, live, t) {
     var r = cell * 0.44 * Math.min(1.25, fade), cx = x + cell / 2, cy = y + cell / 2, a = fade > 1 ? Math.max(0, 2 - fade) : 1;
     ctx.globalAlpha = a;
+    if (k === GOLD) { var gg = ctx.createRadialGradient(cx, cy, 0, cx, cy, r * 1.8); gg.addColorStop(0, 'rgba(255,224,140,0.45)'); gg.addColorStop(1, 'rgba(255,224,140,0)'); ctx.fillStyle = gg; ctx.beginPath(); ctx.arc(cx, cy, r * 1.8, 0, Math.PI * 2); ctx.fill(); }
     ctx.fillStyle = LILY[(k - 1) % LILY.length];
     ctx.beginPath(); ctx.moveTo(cx, cy); ctx.arc(cx, cy, r, 0.35, Math.PI * 2 - 0.05); ctx.closePath(); ctx.fill();
     ctx.strokeStyle = live ? 'rgba(255,255,255,0.7)' : 'rgba(40,60,80,0.25)'; ctx.lineWidth = 1; ctx.stroke();
     if (flower || fade > 1) {
-      ctx.fillStyle = fade > 1 ? '#FFF3D6' : '#F7C9D4';
+      ctx.fillStyle = fade > 1 ? '#FFF3D6' : k === GOLD ? '#FFF6D8' : '#F7C9D4';
       for (var i = 0; i < 5; i++) { var an = i / 5 * Math.PI * 2; ctx.beginPath(); ctx.ellipse(cx + Math.cos(an) * r * 0.28, cy + Math.sin(an) * r * 0.28, r * 0.2, r * 0.12, an, 0, Math.PI * 2); ctx.fill(); }
       ctx.fillStyle = '#F8DC6E'; ctx.beginPath(); ctx.arc(cx, cy, r * 0.12, 0, Math.PI * 2); ctx.fill();
     }
@@ -1087,10 +1192,12 @@
     if (!running) return;
     ctx.clearRect(0, 0, W, H);
     if (bg) ctx.drawImage(bg, 0, 0, W, H);
+    drawAurora(t);
     drawSky(t);
     // pond shimmer
     var p = pondShape();
     if (!REDUCED) for (var i = 0; i < 3; i++) { ctx.strokeStyle = 'rgba(210,220,255,0.08)'; ctx.beginPath(); ctx.ellipse(p.x, p.y, p.rx * (0.4 + i * 0.2) + Math.sin(t / 1800 + i) * 6, p.ry * (0.4 + i * 0.2), 0, 0, Math.PI * 2); ctx.stroke(); }
+    drawPondLife(t);
     if (!sorted) sorted = save.flowers.slice().sort(function (a, b) { return a.y - b.y; });
     sorted.forEach(function (f) { drawFlower(f, t); });
     drawLanterns(t, dt);
@@ -1113,7 +1220,17 @@
   // ---------- Input ----------
   function pos(e) { var r = canvas.getBoundingClientRect(); var p = e.touches ? e.touches[0] : e; return { x: p.clientX - r.left, y: p.clientY - r.top }; }
   var swipe = null;
-  canvas.addEventListener('pointermove', function (e) { var p = pos(e); wand.x = p.x; wand.y = p.y; wand.active = true; });
+  canvas.addEventListener('pointermove', function (e) {
+    var p = pos(e); wand.x = p.x; wand.y = p.y; wand.active = true;
+    // pond: the pad follows your finger sideways, and down if you drag down slowly
+    if (mode === 'pond' && swipe && piece && !clearing) {
+      var dx = p.x - swipe.lx, n = Math.trunc(dx / (cell * 0.9));
+      while (n > 0) { move(1); n--; swipe.lx += cell * 0.9; swipe.moved = true; }
+      while (n < 0) { move(-1); n++; swipe.lx -= cell * 0.9; swipe.moved = true; }
+      var dy = p.y - swipe.ly;
+      if (dy > cell * 1.1 && Math.abs(p.x - swipe.x) < cell * 1.5) { swipe.ly += cell; swipe.moved = true; swipe.down = (swipe.down || 0) + 1; if (step()) dropAt = performance.now() + 700; }
+    }
+  });
   // tap an animal and it plays: the dogs bounce and spin with hearts, the others do their tricks
   var tappedAnimal = false;
   function tapAnimal(x, y) {
@@ -1135,15 +1252,15 @@
   canvas.addEventListener('pointerdown', function (e) {
     var p = pos(e); tappedAnimal = mode !== 'fireflies' && tapAnimal(p.x, p.y) || (mode === 'fireflies' && !nextTarget() ? tapAnimal(p.x, p.y) : false);
     if (mode === 'fireflies' && !tappedAnimal && p.y > H * 0.62) tappedAnimal = tapAnimal(p.x, p.y); // the animals live low; the stars are high
-    wand.x = p.x; wand.y = p.y; wand.active = true; swipe = tappedAnimal ? null : { x: p.x, y: p.y, t: performance.now() };
+    wand.x = p.x; wand.y = p.y; wand.active = true; swipe = tappedAnimal ? null : { x: p.x, y: p.y, lx: p.x, ly: p.y, t: performance.now() };
+    if (mode === 'pond' && swipe) { try { canvas.setPointerCapture(e.pointerId); } catch (err) {} }
   });
   canvas.addEventListener('pointerleave', function () { if (mode !== 'fireflies') wand.active = false; });
   canvas.addEventListener('pointerup', function (e) {
     if (!swipe || mode !== 'pond') { swipe = null; return; }
-    var p = pos(e), dx = p.x - swipe.x, dy = p.y - swipe.y;
-    if (Math.abs(dx) < 12 && Math.abs(dy) < 12) pondKey('ArrowUp');
-    else if (Math.abs(dx) > Math.abs(dy)) { var n = Math.max(1, Math.round(Math.abs(dx) / cell)); for (var i = 0; i < n; i++) pondKey(dx > 0 ? 'ArrowRight' : 'ArrowLeft'); }
-    else if (dy > 30) pondKey(' ');
+    var p = pos(e), dx = p.x - swipe.x, dy = p.y - swipe.y, quick = performance.now() - swipe.t < 280;
+    if (!swipe.moved && Math.abs(dx) < 14 && Math.abs(dy) < 14) pondKey('ArrowUp');       // a tap turns it
+    else if (quick && dy > 40 && dy > Math.abs(dx) * 1.5) pondKey(' ');                   // a quick flick down drops it
     swipe = null;
   });
   document.addEventListener('keydown', function (e) {
@@ -1156,9 +1273,28 @@
       var d = 18; if (e.key === 'ArrowLeft') wand.x -= d; if (e.key === 'ArrowRight') wand.x += d; if (e.key === 'ArrowUp') wand.y -= d; if (e.key === 'ArrowDown') wand.y += d;
     }
   });
-  padEl.querySelectorAll('button').forEach(function (b) { b.addEventListener('click', function () { pondKey(b.getAttribute('data-key')); }); });
+  // the touch pad: hold an arrow and the pad keeps sliding
+  padEl.querySelectorAll('button').forEach(function (b) {
+    var k = b.getAttribute('data-key'), rep = null, held = false;
+    function stop() { clearTimeout(rep); clearInterval(rep); rep = null; }
+    b.addEventListener('pointerdown', function (e) {
+      e.preventDefault(); held = true; pondKey(k);
+      if (k === 'ArrowLeft' || k === 'ArrowRight' || k === 'ArrowDown') rep = setTimeout(function () { rep = setInterval(function () { pondKey(k); }, k === 'ArrowDown' ? 70 : 110); }, 260);
+    });
+    ['pointerup', 'pointerleave', 'pointercancel'].forEach(function (ev) { b.addEventListener(ev, stop); });
+    b.addEventListener('click', function (e) { if (held) { held = false; return; } pondKey(k); }); // keyboard and switch access
+  });
   document.querySelectorAll('.ng-bar [data-mode]').forEach(function (b) { b.addEventListener('click', function () { setMode(b.getAttribute('data-mode')); }); });
 
+  // phones: sound, full screen and leave live behind a small "more" button
+  var moreBtn = document.getElementById('ng-more'), moreMenu = document.getElementById('ng-more-menu');
+  if (moreBtn && moreMenu) {
+    var closeMore = function () { moreMenu.classList.remove('is-open'); moreBtn.setAttribute('aria-expanded', 'false'); };
+    moreBtn.addEventListener('click', function (e) { e.stopPropagation(); var open = !moreMenu.classList.contains('is-open'); moreMenu.classList.toggle('is-open', open); moreBtn.setAttribute('aria-expanded', String(open)); if (open) moreMenu.querySelector('button').focus(); });
+    moreMenu.addEventListener('click', function () { setTimeout(closeMore, 150); });
+    document.addEventListener('pointerdown', function (e) { if (!e.target.closest('#ng-more, #ng-more-menu')) closeMore(); });
+    moreMenu.addEventListener('keydown', function (e) { if (e.key === 'Escape') { closeMore(); moreBtn.focus(); } });
+  }
   var soundBtn = document.getElementById('ng-sound');
   var soundWelcome = document.getElementById('ng-sound-welcome');
   function soundLabel() {
@@ -1244,7 +1380,11 @@
       'Your garden has ' + save.flowers.length + (save.flowers.length === 1 ? ' flower' : ' flowers') + (save.consts.length ? ' and ' + save.consts.length + (save.consts.length === 1 ? ' constellation' : ' constellations') + ' in its sky' : '') + '. Stay as long as you like.';
   }
   document.querySelectorAll('[data-enter]').forEach(function (b) {
-    b.addEventListener('click', function () { welcome.hidden = true; if (save.sound) startAudio(); setMode(b.getAttribute('data-enter')); });
+    b.addEventListener('click', function () {
+      welcome.hidden = true; if (save.sound) startAudio();
+      if (window.innerWidth <= 560 && fullBtn && !document.documentElement.classList.contains('ng-full')) setFull(true); // more room on a phone
+      setMode(b.getAttribute('data-enter'));
+    });
   });
 
   document.addEventListener('visibilitychange', function () {

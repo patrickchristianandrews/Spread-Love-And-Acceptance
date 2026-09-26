@@ -38,7 +38,15 @@
   .ng-bar button:focus-visible, .ng-pad button:focus-visible, .ng-card :focus-visible{ outline:2px solid #F9D9B8; outline-offset:3px; }
   .ng-pad{ position:absolute; right:max(1rem, env(safe-area-inset-right)); bottom:5.2rem; display:grid; grid-template-columns:repeat(4, 3rem); gap:.4rem; }
   .ng-pad[hidden]{ display:none; }
-  .ng-pad button{ padding:0; height:3rem; font-size:1.2rem; border-radius:50%; }
+  .ng-pad button{ padding:0; height:3rem; font-size:1.2rem; border-radius:50%; touch-action:none; user-select:none; -webkit-user-select:none; }
+  .ng-more{ display:contents; }
+  .ng-more-btn, .ng-short{ display:none; }
+  .ng-hud{ position:absolute; right:1rem; top:3.4rem; margin:0; font:600 .85rem/1 "IBM Plex Mono", monospace; color:#F9D9B8; text-shadow:0 1px 6px rgba(0,0,0,.5); pointer-events:none; }
+  .ng-hud:empty{ display:none; }
+  .ng-chip{ pointer-events:auto; }
+  .ng-top-r{ display:flex; gap:.4rem; align-items:center; pointer-events:none; }
+  .tr-toast{ bottom:auto !important; top:var(--tr-top, 4.2rem); }
+  .ng-stage.is-play #ng-canvas{ touch-action:none; }
   .ng-card{ position:absolute; inset:0; display:flex; align-items:center; justify-content:center; padding:1rem; background:rgba(16,18,38,.55); backdrop-filter:blur(3px); -webkit-backdrop-filter:blur(3px); }
   .ng-card[hidden]{ display:none; }
   .ng-card > div{ max-width:32rem; text-align:center; background:rgba(42,45,82,.88); border:1px solid rgba(244,241,250,.2); border-radius:24px; padding:1.8rem 1.6rem; box-shadow:0 20px 60px rgba(0,0,0,.35); }
@@ -76,13 +84,24 @@
   .ng-sources{ font-size:.9rem; color:var(--ink-soft); }
   @media (max-width:560px){
     .ng-say{ font-size:1.15rem; top:46%; }
-    .ng-pad{ left:50%; right:auto; transform:translateX(-50%); bottom:8.2rem; grid-template-columns:repeat(4, 3.2rem); }
-    .ng-pad button{ height:3.2rem; }
+    .ng-pad{ left:50%; right:auto; transform:translateX(-50%); bottom:calc(6.9rem + env(safe-area-inset-bottom, 0px)); grid-template-columns:repeat(4, 4rem); gap:.55rem; }
+    .ng-pad button{ height:4rem; font-size:1.45rem; }
+    .ng-bar{ gap:.35rem; flex-wrap:nowrap; }
+    .ng-bar button{ padding:.55rem .75rem; font-size:.86rem; min-height:44px; white-space:nowrap; }
+    .ng-long{ display:none; } .ng-short{ display:inline; }
+    .ng-more-btn{ display:inline-block; min-width:44px; font-size:1.2rem !important; line-height:1; }
+    .ng-more{ display:none; position:absolute; right:0; bottom:calc(100% + .5rem); flex-direction:column; gap:.4rem; padding:.5rem; border-radius:20px; background:rgba(28,31,58,.9); border:1px solid rgba(244,241,250,.2); box-shadow:0 12px 30px rgba(0,0,0,.35); }
+    .ng-more.is-open{ display:flex; }
+    .ng-title{ font-size:1.05rem; }
+    .ng-title small{ font-size:.72rem; }
+    html.ng-full .ng-title small{ display:none; }
+    .ng-help-btn{ padding:.4rem .6rem; }
     .ng-bar button{ padding:.5rem .8rem; font-size:.85rem; }
   }
 </style>
 <script src="/assets/js/site.js" defer></script>
 <script src="/assets/js/calm-music.js" defer></script>
+<script src="/assets/js/rewards.js" defer></script>
 <script src="/assets/js/night-garden.js" defer></script>
 </head>
 <body data-no-wash data-no-breathe data-no-private-note>
@@ -92,11 +111,12 @@
 
     <div class="ng-top">
       <p class="ng-title">The Night Garden<small id="ng-count"></small></p>
-      <button type="button" class="ng-help-btn" id="ng-help-btn" aria-haspopup="dialog">? How to play</button>
+      <div class="ng-top-r"><span class="ng-chip" data-rewards-chip></span><button type="button" class="ng-help-btn" id="ng-help-btn" aria-haspopup="dialog">? How to play</button></div>
     </div>
 
     <p class="ng-say" id="ng-say" aria-live="polite"></p>
 
+    <p class="ng-hud" id="ng-pond-hud" aria-live="polite"></p>
     <div class="ng-pad" id="ng-pad" hidden aria-label="Pond controls">
       <button type="button" data-key="ArrowLeft" aria-label="Move left">&#9664;</button>
       <button type="button" data-key="ArrowUp" aria-label="Turn">&#10227;</button>
@@ -107,10 +127,13 @@
     <div class="ng-bar" role="toolbar" aria-label="Garden">
       <button type="button" data-mode="breathe" aria-pressed="false">&#127800; Breathe</button>
       <button type="button" data-mode="fireflies" aria-pressed="false">&#10024; Fireflies</button>
-      <button type="button" data-mode="pond" aria-pressed="false">&#128167; Lily pond</button>
-      <button type="button" id="ng-sound" aria-pressed="false">&#127925; Sound off</button>
-      <button type="button" id="ng-full" aria-pressed="false">&#10530; Full screen</button>
-      <button type="button" id="ng-leave">Leave gently</button>
+      <button type="button" data-mode="pond" aria-pressed="false">&#128167; <span class="ng-long">Lily pond</span><span class="ng-short">Pond</span></button>
+      <button type="button" class="ng-more-btn" id="ng-more" aria-expanded="false" aria-controls="ng-more-menu" aria-label="More: sound, full screen, leave">&#8943;</button>
+      <div class="ng-more" id="ng-more-menu">
+        <button type="button" id="ng-sound" aria-pressed="false">&#127925; Sound off</button>
+        <button type="button" id="ng-full" aria-pressed="false">&#10530; Full screen</button>
+        <button type="button" id="ng-leave">Leave gently</button>
+      </div>
     </div>
 
     <div class="ng-card" id="ng-welcome">

@@ -1003,3 +1003,58 @@ body:has(.wpf-bar) .tol-breathe-btn{ bottom:calc(4.8rem + env(safe-area-inset-bo
 .tol-wash b:nth-of-type(22){ left:56%; top:12%; --s:20px; --d:32s; --dl:-22s; --tint:#D9C8F0; }
 @media (max-width:760px){ .tol-wash b:nth-of-type(n+20){ display:none; } }
 @media (prefers-reduced-motion: reduce){ .tol-bub::after{ display:none !important; } }
+
+/* More floating hearts and bubbles, and easier to see on phones and big screens */
+.tol-wash b:nth-of-type(23){ left:30%; top:5%;  --s:34px; --d:26s; --dl:-8s;  --tint:#F7B8C6; }
+.tol-wash b:nth-of-type(24){ left:92%; top:15%; --s:24px; --d:30s; --dl:-17s; --tint:#EFE6FA; --rim:#B9A0E0; }
+.tol-wash b:nth-of-type(25){ left:14%; top:38%; --s:32px; --d:22s; --dl:-4s;  --tint:#FDEBDF; --rim:#EBA88E; }
+.tol-wash b:nth-of-type(26){ left:66%; top:27%; --s:26px; --d:28s; --dl:-21s; --tint:#FBE3EA; }
+.tol-wash b:nth-of-type(27){ left:48%; top:42%; --s:38px; --d:26s; --dl:-12s; --tint:#EAF4FC; --rim:#96C2E8; }
+.tol-wash b:nth-of-type(28){ left:94%; top:62%; --s:28px; --d:30s; --dl:-6s;  --tint:#F9C9B4; }
+.tol-wash b:nth-of-type(29){ left:20%; top:53%; --s:24px; --d:24s; --dl:-15s; --tint:#E8F6EE; --rim:#98D2B2; }
+.tol-wash b:nth-of-type(30){ left:82%; top:74%; --s:36px; --d:26s; --dl:-2s;  --tint:#D9C8F0; }
+.tol-wash b:nth-of-type(31){ left:6%;  top:88%; --s:30px; --d:28s; --dl:-19s; --tint:#FDF3D2; --rim:#EFD27A; }
+.tol-wash b:nth-of-type(32){ left:42%; top:74%; --s:26px; --d:30s; --dl:-9s;  --tint:#F7B8C6; }
+.tol-wash b:nth-of-type(33){ left:60%; top:90%; --s:34px; --d:24s; --dl:-14s; --tint:#EFE6FA; --rim:#B9A0E0; }
+.tol-wash b:nth-of-type(34){ left:26%; top:99%; --s:22px; --d:26s; --dl:-5s;  --tint:#FBE3EA; --rim:#EDA3B6; }
+.tol-wash b{ opacity:.82; }
+.tol-wash b.tol-heart{ opacity:.88; }
+.tol-bub::before{ border-width:2px; }
+@media (max-width:760px){
+  .tol-wash b{ scale:.9; }
+  .tol-wash b:nth-of-type(n+20){ display:block; }
+  .tol-wash b:nth-of-type(n+31){ display:none; }
+}
+
+/* ---------- Mini dives: a term with a little water drop opens a short explanation ---------- */
+.tol-dive{ display:inline; padding:0 .1em; margin:0; border:0; background:linear-gradient(transparent 62%, rgba(150,194,232,.35) 62%); color:inherit; font:inherit; line-height:inherit; cursor:pointer;
+  text-decoration:underline dotted rgba(60,120,170,.55); text-decoration-thickness:1.5px; text-underline-offset:3px; border-radius:3px; transition:background-color .25s; }
+.tol-dive:hover, .tol-dive:focus-visible{ background:rgba(150,194,232,.4); }
+.tol-dive:focus-visible{ outline:2px solid #3C78AA; outline-offset:2px; }
+.tol-dive-i{ display:inline-block; width:.95em; height:.95em; margin-left:.18em; vertical-align:-.12em;
+  background:no-repeat center / contain url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 2.5C9 7 6 10.2 6 14a6 6 0 0 0 12 0c0-3.8-3-7-6-11.5z' fill='%2396C2E8'/%3E%3Cpath d='M7.2 15.2c1.2-.9 2.4-.9 3.6 0s2.4.9 3.6 0 2.4-.9 3.6 0' fill='none' stroke='%23fff' stroke-width='1.6' stroke-linecap='round'/%3E%3Cellipse cx='9.6' cy='10.8' rx='1.1' ry='1.8' fill='%23fff' opacity='.7'/%3E%3C/svg%3E"); }
+.tol-dive-card{ position:fixed; inset:0; z-index:80; display:none; align-items:center; justify-content:center; padding:16px; background:rgba(46,60,90,0); transition:background-color .25s; }
+.tol-dive-card.is-open{ display:flex; }
+.tol-dive-card.is-in{ background:rgba(46,60,90,.28); }
+.tol-dive-box{ position:relative; width:min(26rem, 100%); max-height:80vh; overflow:auto; padding:1.2rem 1.3rem 1rem; border-radius:24px;
+  background:linear-gradient(170deg, #F2F8FD 0%, #FFFDF8 55%); border:1px solid #CFE2F2; box-shadow:0 20px 50px rgba(40,70,110,.25);
+  transform:translateY(14px) scale(.97); opacity:0; transition:transform .3s var(--ease-out, ease), opacity .25s; }
+.tol-dive-card.is-in .tol-dive-box{ transform:none; opacity:1; }
+.tol-dive-k{ margin:0 0 .2rem; font:500 .72rem/1 "IBM Plex Mono", monospace; letter-spacing:.1em; text-transform:uppercase; color:#3C78AA; }
+.tol-dive-box h2{ margin:.2rem 2rem .5rem 0; font-family:"Fraunces", Georgia, serif; font-size:1.3rem; line-height:1.25; }
+.tol-dive-body p{ margin:0 0 .6rem; line-height:1.55; }
+.tol-dive-more{ margin:.2rem 0 0; }
+.tol-dive-more a{ font-weight:600; }
+.tol-dive-x{ position:absolute; top:10px; right:10px; width:40px; height:40px; border-radius:50%; border:1px solid #CFE2F2; background:#fff; font-size:1.3rem; line-height:1; cursor:pointer; color:#2B4A66; }
+@media (max-width:560px){
+  .tol-dive-card{ align-items:flex-end; padding:0; }
+  .tol-dive-box{ width:100%; border-radius:22px 22px 0 0; padding-bottom:calc(1rem + env(safe-area-inset-bottom, 0px)); transform:translateY(100%); }
+}
+@media (prefers-reduced-motion: reduce){ .tol-dive-box, .tol-dive-card{ transition:none; } }
+@media print{ .tol-dive{ background:none; text-decoration:none; } .tol-dive-i{ display:none; } }
+/* the hearts and bubbles stay with you as you scroll (behind the text), so they're always in view */
+.tol-wash b{ position:fixed; }
+@media (max-width:760px){ .tol-wash b:nth-of-type(n+23){ display:none; } }
+@media print{ .tol-wash b{ display:none; } }
+.tol-dive-card{ z-index:1000; }
+.tol-dive-more a{ color:#2F5F8A; }

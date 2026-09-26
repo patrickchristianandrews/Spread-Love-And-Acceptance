@@ -18,9 +18,17 @@
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,500&family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/assets/css/site.css">
 <link rel="stylesheet" href="/assets/css/reading.css">
+<link rel="stylesheet" href="/assets/css/games.css">
 <style>
-  .qw{ margin:1.2rem 0 2rem; padding:1.2rem; border-radius:26px; background:linear-gradient(145deg, #FFF8EE 0%, #F6EEF8 55%, #EEF4FA 100%);
-    border:1px solid #E6D6EE; box-shadow:0 14px 40px rgba(120,90,140,.12); }
+  .qw{ margin:1.2rem 0 2rem; padding:1.2rem; border-radius:26px; background:var(--g-board);
+    border:1px solid var(--g-edge); box-shadow:0 14px 40px rgba(120,90,140,.12); color:var(--g-ink); }
+  .qw-theme, .qw-tile{ color:var(--g-ink) !important; }
+  .qw-k{ color:var(--g-soft) !important; }
+  .qw-words li{ background:var(--g-tile) !important; border-color:var(--g-edge) !important; color:var(--g-ink) !important; }
+  .qw-words li.is-found{ background:var(--c) !important; color:#3C3350 !important; }
+  .qw-note{ color:var(--g-ink) !important; }
+  .qw-note-h{ color:var(--g-ink) !important; }
+  .qw-tip{ color:#3C3350; }
   .qw[hidden]{ display:none; }
   .qw-top{ display:flex; align-items:baseline; justify-content:space-between; gap:1rem; margin:0 0 .8rem; flex-wrap:wrap; }
   .qw-k{ margin:0; font-family:"IBM Plex Mono", ui-monospace, monospace; font-size:.72rem; letter-spacing:.1em; text-transform:uppercase; color:#8A6D8F; }
@@ -60,17 +68,34 @@
   .qw-done-art{ display:none; margin:0 auto .3rem; width:4.5rem; height:4.5rem; }
   .qw.is-done .qw-done-art{ display:block; animation:tol-bob 8s ease-in-out infinite; }
   @media (max-width:420px){ .qw{ padding:1rem .7rem; border-radius:20px; } .qw-grid{ gap:1px; } }
+  @media (max-width:520px){
+    main.read{ padding-top:.8rem; }
+    .read-head, .qw-intro{ display:none; }
+    .gm-switch{ margin-top:0; }
+    .qw{ margin:.4rem -.4rem 1.4rem; padding:.8rem .5rem 1rem; }
+    .qw-top{ margin-bottom:.4rem; }
+    .qw-words{ margin-top:.7rem; gap:.3rem; }
+    .qw-words li{ padding:.25rem .65rem; font-size:.86rem; }
+    .qw-btns button{ min-height:44px; }
+  }
   @media (prefers-reduced-motion: reduce){ .qw-tile, .qw-found-mark, .qw.is-done .qw-board, .qw-tile.is-hint{ transition:none; animation:none; } }
 </style>
 <script src="/assets/js/site.js" defer></script>
 <script src="/assets/js/calm-music.js" defer></script>
+<script src="/assets/js/rewards.js" defer></script>
 <script src="/assets/js/quiet-words-themes.js" defer></script>
 <script src="/assets/js/quiet-words.js" defer></script>
 </head>
-<body>
+<body data-no-breathe data-no-weather>
 <main class="read">
-<header class="read-head"><p class="read-code">New &middot; a calming game</p><h1>Quiet Words</h1></header>
-<p class="simple-lede">A gentle word search. There’s no timer, no score and no way to lose. Each word you find glows, rings softly and leaves a kind thought behind. A new theme every day.</p>
+<header class="read-head"><p class="read-code">A calming game</p><h1>Quiet Words</h1></header>
+<nav class="gm-switch" aria-label="Calm word games">
+  <a class="gm-tab" href="/word-bloom.html">&#127804; Bloom</a>
+  <a class="gm-tab" href="/quiet-crossword.html">&#9999;&#65039; Crossword</a>
+  <a class="gm-tab" href="/quiet-words.html" aria-current="page">&#128269; Words</a>
+  <span class="gm-chip" data-rewards-chip></span>
+</nav>
+<p class="simple-lede qw-intro">A gentle word search. There’s no timer, no score and no way to lose. Each word you find glows, rings softly and leaves a kind thought behind. A new theme every day.</p>
 
 <section class="qw" id="qw" aria-labelledby="qw-theme" hidden>
   <div class="qw-top">

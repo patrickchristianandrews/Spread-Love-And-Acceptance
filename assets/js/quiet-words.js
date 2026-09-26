@@ -129,7 +129,7 @@
     puzzleNo = index;
     theme = THEMES[index % THEMES.length];
     var made = build(theme); if (!made) return;
-    grid = made.grid; words = made.words; found = {};
+    grid = made.grid; words = made.words; found = {}; hinted = false;
     themeEl.textContent = theme.name;
     noteEl.innerHTML = '<span class="qw-note-h">Find the words, at your own pace.</span> Drag across the letters, or tap the first letter and then the last.';
     root.classList.remove('is-done');
@@ -234,8 +234,10 @@
     var got = line.map(function (p) { return p[0] + ',' + p[1]; });
     return cells.join('|') === got.join('|') || cells.join('|') === got.slice().reverse().join('|');
   }
+  var hinted = false;
   function finish() {
     if (window.TOLGarden) window.TOLGarden.gift('words');
+    if (window.TOLRewards) { window.TOLRewards.earn(6 + words.length + (hinted ? 0 : 4), 'words', hinted ? 'Puzzle found' : 'Every word, no hints'); window.TOLRewards.record('words', 'done'); }
     root.classList.add('is-done');
     var n = +get('tol-qw-done', '0') + 1; set('tol-qw-done', String(n));
     setTimeout(function () { var m = wake(); if (m) { m.home(); setTimeout(function () { m.reward(true); }, 600); } }, 300);
@@ -261,7 +263,7 @@
   });
   $('.qw-hint').addEventListener('click', function () {
     var left = words.filter(function (w) { return !found[w.word]; }); if (!left.length) return;
-    var w = left[Math.floor(Math.random() * left.length)], t = tile(w.r, w.c);
+    var w = left[Math.floor(Math.random() * left.length)], t = tile(w.r, w.c); hinted = true;
     t.classList.add('is-hint'); setTimeout(function () { t.classList.remove('is-hint'); }, 3200);
     say('Look near the glowing letter for a word.');
   });

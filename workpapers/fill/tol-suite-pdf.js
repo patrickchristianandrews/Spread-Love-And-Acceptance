@@ -434,6 +434,7 @@
     plan.groups.forEach(function (g, gi) {
       pen.heading(g.title, 50, PASTELS[gi % PASTELS.length]);
       if (g.note) pen.para(g.note, { size: 8.5, color: C.soft, after: 4 });
+      if (g.along && g.along.length) pen.para('Read and try alongside: ' + g.along.map(function (a) { return a[0]; }).join('  \u00B7  '), { size: 8.5, color: C.credit, after: 4 });
       g.entries.forEach(function (en) {
         var n = answers(en), res = n ? results(en).slice(0, 4) : [];
         var title = en.workpaper + '  ' + nameOf(en.workpaper) + (en.label ? '  ·  ' + en.label : '');

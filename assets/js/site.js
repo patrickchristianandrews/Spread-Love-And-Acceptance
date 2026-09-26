@@ -47,7 +47,10 @@
     ]},
     { id: 'self', title: 'Self-discovery', blurb: 'Tools for understanding yourself: your load, your wiring, your patterns. Start here, with or without anyone else.', items: [
       { href: '/night-garden.html', code: 'New', title: 'The Night Garden', note: 'A calm place to breathe, play and let your mind settle. Flowers bloom as you breathe; no timers, nothing to lose' },
-      { href: '/quiet-words.html', code: 'New', title: 'Quiet Words', note: 'A gentle word search with a new theme each day. Every word you find leaves a kind thought behind' },
+      { href: '/word-bloom.html', code: 'New', title: 'Word Bloom', note: 'Swipe across the petals to spell words. Hundreds of gentle levels, a bonus jar, and petals for playing well' },
+      { href: '/quiet-crossword.html', code: 'New', title: 'Quiet Crossword', note: 'Small, friendly crosswords with a new one every day, made for playing on a phone' },
+      { href: '/quiet-words.html', code: 'Game', title: 'Quiet Words', note: 'A gentle word search with a new theme each day. Every word you find leaves a kind thought behind' },
+      { href: '/keepsakes.html', code: 'You', title: 'Your keepsakes', note: 'Petals from every calm game unlock tile colours, Night Garden wonders and stickers' },
       { href: '/quick-checks.html#today', code: 'Daily', title: 'Today’s Weather', note: 'One minute on your own conditions: a forecast, a talk window, what today is good for, and a private almanac of your patterns' },
       { href: '/wired-differently.html', deep: true, code: 'New', title: 'Wired Differently', note: 'How different neurotypes receive the same words, and how to talk across the difference' },
       { href: '/wiring-card.html', code: 'Tool', title: 'Wiring Card', note: 'A one-page card on how you receive words, what silence means, and what to avoid' },
@@ -355,6 +358,13 @@
     addTip(body);
     revealOnScroll();
 
+    // mini dives: tap a term with the little water drop for a short explanation (dives.js)
+    if (!body.hasAttribute('data-no-dives') && document.querySelector('main')) {
+      var dg = document.createElement('script'); dg.src = '/assets/js/dives-glossary.js';
+      dg.onload = function () { var dv = document.createElement('script'); dv.src = '/assets/js/dives.js'; document.head.appendChild(dv); };
+      document.head.appendChild(dg);
+    }
+
     // "Breathe": a one-minute calm break on every page (the Night Garden has its own)
     if (!body.hasAttribute('data-no-breathe')) buildBreathe(body);
     buildWeatherNudge(body);
@@ -363,7 +373,7 @@
     if (!body.hasAttribute('data-no-wash')) {
       // plus a few pastel bubbles and hearts drifting slowly upward
       var floaters = '';
-      for (var f = 0; f < 22; f++) floaters += '<b class="' + (f % 3 === 1 ? 'tol-heart' : 'tol-bub') + '"></b>';
+      for (var f = 0; f < 34; f++) floaters += '<b class="' + (f % 3 === 1 ? 'tol-heart' : 'tol-bub') + '"></b>';
       var wash = el('div', { class: 'tol-wash', 'aria-hidden': 'true' }, '<i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>' + floaters);
       document.documentElement.appendChild(wash);
     }
