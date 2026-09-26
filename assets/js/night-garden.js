@@ -503,131 +503,205 @@
   // patches, tan paws and a collar. They chase each other along the far bank, swap who's
   // chasing, play-bow, roll over and sit side by side. In Breathe they lie down together.
   var PUPS = [
-    { paw: '#F3EEE6', chin: '#F3EEE6', chest: 'white', ear: 'floppy', grey: true, collar: false, bridge: false, brow: 1.9 },
-    { paw: '#D9A066', chin: '#C4834A', chest: 'tan', ear: 'fold', grey: false, collar: true, bridge: true, brow: 2.4 }
+    // stocky, long drop ears, tan brows running into tan cheeks, a cream-and-grey muzzle,
+    // white chin and bib, reddish-tan forelegs and big white toes
+    { build: 'stocky', ear: 'drop', legUp: '#B06A34', legLow: '#C88A4E', paw: '#F4EFE6', chest: 'white', muzzle: 'cream', collar: false, brow: 'patch', tail: 'plume' },
+    // leaner and taller, round tan brow dots, a black stripe down the nose with tan cheeks and
+    // lips, small folded ears, black legs turning tan below the knee, tan chest patches, a collar
+    { build: 'lean', ear: 'fold', legUp: '#262220', legLow: '#C98A4F', paw: '#D99E62', chest: 'tan', muzzle: 'rottie', collar: true, brow: 'dot', tail: 'short' }
   ];
-  var pack = { u: 0.25, dir: 1, lead: 0, state: 'chase', until: 0, lastT: 0, spot: [0.3, 0.2], actor: 0 };
+  var pack = { u: 0.25, dir: 1, lead: 0, state: 'chase', until: 0, lastT: 0, spot: [0.3, 0.2], actor: 0, v: 1, cur: [0.25, 0.12], face: [-1, -1] };
   function puPos(p, groundY, RX, u) { var ang = -Math.PI * u; return { ang: ang, x: p.x + RX * Math.cos(ang), y: groundY + p.ry * 1.6 * Math.sin(ang) }; }
+  // What they get up to. They never stop for long: chases and zoomies in between, and bits of
+  // mischief when they meet up. In Breathe they play at a gentler pace.
+  var GAMES = ['bow', 'roll', 'tug', 'dig', 'spin', 'splash', 'tug', 'zoom', 'spin'];
   function packStep(t, dt) {
-    if (!pack.until) pack.until = t + 8000;
+    var calm = mode === 'breathe';
+    if (!pack.until) pack.until = t + 5000;
     if (t > pack.until) {
-      var next = pack.state === 'chase' ? ['bow', 'sit', 'roll', 'bow'][Math.floor(Math.random() * 4)] : 'chase';
-      if (next === 'chase') { pack.lead = Math.random() < 0.5 ? 0 : 1; if (Math.random() < 0.5) pack.dir *= -1; }
-      else { var c = Math.max(0.33, Math.min(0.67, pack.u)); pack.spot = [c + 0.065, c - 0.065]; if (Math.random() < 0.5) pack.spot.reverse(); pack.actor = Math.random() < 0.5 ? 0 : 1; } // play in the middle of the far bank
+      var next = pack.state === 'chase' || pack.state === 'zoom' ? GAMES[Math.floor(Math.random() * GAMES.length)] : 'chase';
+      if (calm && (next === 'zoom' || next === 'splash')) next = 'tug';
+      if (next === 'chase' || next === 'zoom') { pack.lead = Math.random() < 0.5 ? 0 : 1; if (Math.random() < 0.5) pack.dir *= -1; }
+      else { // meet up in the middle of the far bank, facing each other, without crossing over
+        var c = Math.max(0.33, Math.min(0.67, (pack.cur[0] + pack.cur[1]) / 2));
+        var du = Math.max(0.05, Math.min(0.2, (next === 'tug' ? 128 : 84) * pack.sc / 1.3 / (pack.RX * Math.PI)));
+        if (next === 'splash') c = 0.5;
+        pack.spot = pack.cur[0] > pack.cur[1] ? [c + du / 2, c - du / 2] : [c - du / 2, c + du / 2];
+        pack.actor = Math.random() < 0.5 ? 0 : 1;
+      }
       pack.state = next; pack.t0 = t;
-      pack.until = t + (next === 'chase' ? 6000 + Math.random() * 6000 : next === 'sit' ? 3500 : 2800);
+      pack.until = t + (next === 'chase' ? 4000 + Math.random() * 3500 : next === 'zoom' ? 3500 : 3200) * (calm ? 1.4 : 1);
+      pack.pops = 0;
     }
-    if (pack.state === 'chase') {
-      pack.u += pack.dir * dt / 7000;
+    var running = pack.state === 'chase' || pack.state === 'zoom';
+    pack.v += ((running ? (pack.state === 'zoom' ? 2.3 : 1) : 0) - pack.v) * Math.min(1, dt * 0.003); // ease into a run and out of it
+    if (running) {
+      pack.u += pack.dir * dt / 7000 * Math.max(0.25, pack.v) * (calm ? 0.6 : 1);
       var lo = W < 600 ? 0.22 : 0.13;
       if (pack.u > 1) { pack.u = 1; pack.dir = -1; } if (pack.u < lo) { pack.u = lo; pack.dir = 1; }
     }
   }
   // draw the dogs on the far bank ('back') or the near side ('front'), so they pass behind the others
   function drawPack(t, p, s, groundY, barTop, layer) {
-    var RX = Math.max(p.rx, W * 0.3) * 1.2;
-    if (layer === 'back') { var dt = pack.lastT ? Math.min(60, t - pack.lastT) : 16; pack.lastT = t; if (mode !== 'breathe' && !REDUCED) packStep(t, dt); }
+    var RX = Math.max(p.rx, W * 0.3) * 1.2; pack.RX = RX; pack.sc = 1.3 * s;
+    if (layer === 'back') { var dt = pack.lastT ? Math.min(60, t - pack.lastT) : 16; pack.lastT = t; if (!REDUCED) packStep(t, dt); }
+    var mouths = [];
     [0, 1].forEach(function (i) {
-      var x, y, face = 1, pose, depth = 1, prog = 0, ph = t / 90 + i * 1.7;
-      if (mode === 'breathe' || REDUCED) {
+      var x, y, face = 1, pose, depth = 1, prog = 0, ph = t / 90 + i * 1.7, tilt = 0, dx = 0;
+      if (REDUCED) { // still, side by side, for anyone who asks for less motion
         if (layer !== 'front') return;
-        pose = 'lie'; x = p.x + (i ? 1 : -1) * 48 * s; y = groundY - p.ry * 1.95; face = i ? -1 : 1; depth = 0.86; // nose to nose on the far bank
+        pose = 'lie'; x = p.x + (i ? 1 : -1) * 48 * s; y = groundY - p.ry * 1.95; face = i ? -1 : 1; depth = 0.86;
       } else {
-        var u, isLead = i === pack.lead;
+        var u, isLead = i === pack.lead, running = pack.state === 'chase' || pack.state === 'zoom';
         var gap = W < 600 ? 0.22 : 0.13; // more room between them on small screens
-        if (pack.state === 'chase') u = isLead ? pack.u : Math.max(0, Math.min(1, pack.u - pack.dir * gap));
-        else u = pack.spot[i];
+        var goal = running ? (isLead ? pack.u : Math.max(0, Math.min(1, pack.u - pack.dir * gap))) : pack.spot[i];
+        var prev = pack.cur[i]; pack.cur[i] += (goal - pack.cur[i]) * 0.06; u = pack.cur[i];
+        var travelling = Math.abs(goal - u) > 0.012, moveDir = u - prev;
         var P = puPos(p, groundY, RX, u); x = P.x; y = P.y; depth = 1 + 0.16 * Math.sin(P.ang);
+        if (pack.state === 'splash' && i === pack.actor && !travelling) y += p.ry * 0.55; // right down at the water's edge
         if ((Math.sin(P.ang) < -0.35) !== (layer === 'back')) return;
-        if (pack.state === 'chase') { pose = 'run'; face = pack.dir > 0 ? -1 : 1; }
+        var me = i === pack.actor;
+        prog = Math.min(1, (t - pack.t0) / Math.max(1, pack.until - pack.t0));
+        if (running || travelling) { pose = 'run'; face = moveDir > 0.00005 ? -1 : moveDir < -0.00005 ? 1 : pack.face[i]; if (pack.state === 'zoom') ph *= 1.6; }
         else {
-          var other = pack.spot[1 - i]; face = other > u ? -1 : 1; // face each other
-          prog = Math.min(1, (t - pack.t0) / (pack.until - pack.t0));
-          pose = pack.state === 'sit' ? 'sit' : pack.state === 'bow' ? (i === pack.actor ? 'bow' : 'bounce') : (i === pack.actor ? 'roll' : 'sit');
+          var other = pack.cur[1 - i]; face = other > u ? -1 : 1; // face each other
+          var st = pack.state;
+          if (st === 'bow') pose = me ? 'bow' : 'bounce';
+          else if (st === 'roll') { pose = me ? 'roll' : 'sit'; if (!me) tilt = 0.3; }
+          else if (st === 'tug') { pose = 'bowtug'; dx = Math.sin(t / 230) * 5 * s; } // both pull, back and forth
+          else if (st === 'dig') { if (me) { pose = 'bow'; if (Math.random() < 0.35) burst(x - face * 16 * s, y - 4 * s, 2, 28, 42, -face); } else { pose = 'sit'; tilt = 0.35 + Math.sin(t / 700) * 0.1; } }
+          else if (st === 'spin') { pose = me ? 'run' : 'bounce'; if (me) { face = Math.cos(t / 140); ph = t / 60; } }
+          else if (st === 'splash') {
+            if (me) { pose = 'bounce'; if (Math.random() < 0.25) burst(x, y - 2 * s, 3, 205, 80); }
+            else { pose = prog > 0.5 ? 'shake' : 'sit'; if (prog > 0.5 && Math.random() < 0.3) burst(x, y - 20 * s, 2, 205, 82); }
+          } else pose = 'sit';
         }
       }
       y = Math.min(y, barTop - 12);
-      var lift = pose === 'bounce' && !REDUCED ? Math.abs(Math.sin(t / 180)) * 10 : pose === 'run' && !REDUCED ? Math.abs(Math.sin(ph)) * 4 : 0;
-      var wag = REDUCED ? 0 : Math.sin(t / (pose === 'run' ? 70 : 100) + i) * (pose === 'lie' && !(breath.phase === 'in' || breath.phase === 'top') ? 0.08 : 0.45);
+      // turn around smoothly instead of flipping
+      if (!REDUCED && pack.state !== 'spin') { pack.faceNow = pack.faceNow || [face, face]; pack.faceNow[i] += (face - pack.faceNow[i]) * 0.18; pack.face[i] = face; face = pack.faceNow[i]; if (Math.abs(face) < 0.12) face = face < 0 ? -0.12 : 0.12; }
+      else if (!REDUCED) { pack.faceNow = pack.faceNow || [face, face]; pack.faceNow[i] = face; if (Math.abs(face) < 0.12) face = face < 0 ? -0.12 : 0.12; }
+      var lift = pose === 'bounce' ? Math.abs(Math.sin(t / 180 + i)) * 10 : pose === 'run' && !REDUCED ? Math.abs(Math.sin(ph)) * 4 : 0;
+      var wag = REDUCED ? 0 : Math.sin(t / (pose === 'run' ? 70 : 90) + i) * (pose === 'lie' ? 0.08 : 0.5);
       var blink = Math.sin(t / 1000 + 2 + i * 3) > 0.985;
-      ctx.save(); ctx.translate(x, y);
+      ctx.save(); ctx.translate(x + dx, y);
       ctx.fillStyle = 'rgba(10,15,30,0.28)'; ctx.beginPath(); ctx.ellipse(0, 2, 22 * s * depth, 4.5 * s * depth, 0, 0, Math.PI * 2); ctx.fill();
       ctx.translate(0, -lift * s); ctx.scale(1.3 * s * depth * face, 1.3 * s * depth);
       if (pose === 'roll') { // a silly roll onto her back, legs in the air
         var r = Math.sin(Math.min(1, prog * 1.25) * Math.PI);
         ctx.translate(0, -12 - 12 * r); ctx.rotate(Math.PI * 0.9 * r); ctx.translate(0, 12);
         drawPup(PUPS[i], r > 0.5 ? 'wiggle' : 'run', ph * 2, wag, blink, t);
-      } else drawPup(PUPS[i], pose === 'bounce' ? 'run' : pose, pose === 'bounce' ? 0 : ph, wag, blink, t);
+      } else if (pose === 'shake') { // a whole-body shake after the splash
+        ctx.rotate(Math.sin(t / 45) * 0.12); drawPup(PUPS[i], 'run', 0, wag, blink, t);
+      } else if (pose === 'bowtug') {
+        drawPup(PUPS[i], 'bow', 0, wag * 1.4, blink, t);
+        mouths[i] = [x + dx + Math.sign(face) * 1.3 * s * depth * 37, y - 1.3 * s * depth * 7];
+      } else drawPup(PUPS[i], pose === 'bounce' ? 'run' : pose, pose === 'bounce' ? 0 : ph, wag, blink, t, tilt);
       ctx.restore();
     });
+    // the stick they're tugging on, held between them
+    if (mouths[0] && mouths[1]) {
+      ctx.strokeStyle = '#8A6242'; ctx.lineWidth = 3.2 * s; ctx.lineCap = 'round';
+      ctx.beginPath(); ctx.moveTo(mouths[0][0], mouths[0][1]); ctx.lineTo(mouths[1][0], mouths[1][1]); ctx.stroke();
+      var mx = (mouths[0][0] + mouths[1][0]) / 2, my = (mouths[0][1] + mouths[1][1]) / 2;
+      ctx.lineWidth = 1.8 * s; ctx.beginPath(); ctx.moveTo(mx, my); ctx.lineTo(mx + 5 * s, my - 6 * s); ctx.stroke(); ctx.lineCap = 'butt';
+    }
   }
-  function drawPup(L, pose, ph, wag, blink, t) {
-    var BLACK = '#262220', TAN = '#C4834A', DEEP = '#A8693A', WHITE = '#F3EEE6', PINK = '#EE8FA6';
+  function drawPup(L, pose, ph, wag, blink, t, tilt) {
+    var BLACK = '#252120', TAN = '#C4834A', WHITE = '#F4EFE6', PINK = '#EE8FA6';
+    var lean = L.build === 'lean', LL = lean ? 15 : 12.5, BRX = lean ? 18.5 : 18, BRY = lean ? 8.8 : 10.2, BY = lean ? -21 : -18.5;
     function leg(x0, y0, ang, len, back) {
       ctx.save(); ctx.translate(x0, y0); ctx.rotate(ang);
-      ctx.fillStyle = back ? DEEP : TAN; ctx.beginPath(); ctx.roundRect ? ctx.roundRect(-2.6, 0, 5.2, len, 2.6) : ctx.rect(-2.6, 0, 5.2, len); ctx.fill();
-      ctx.fillStyle = L.paw; ctx.beginPath(); ctx.ellipse(0.8, len, 3.6, 2.4, 0, 0, Math.PI * 2); ctx.fill();
+      var up = len * 0.5;
+      ctx.fillStyle = L.legUp; ctx.beginPath(); ctx.roundRect ? ctx.roundRect(-2.8, -2, 5.6, up + 3, 2.8) : ctx.rect(-2.8, -2, 5.6, up + 3); ctx.fill();
+      ctx.fillStyle = L.legLow; ctx.beginPath(); ctx.roundRect ? ctx.roundRect(-2.5, up, 5, len - up, 2.5) : ctx.rect(-2.5, up, 5, len - up); ctx.fill();
+      ctx.fillStyle = L.paw; ctx.beginPath(); ctx.ellipse(1, len, 3.9, 2.5, 0, 0, Math.PI * 2); ctx.fill();
+      if (L.paw === WHITE) { ctx.strokeStyle = 'rgba(0,0,0,0.18)'; ctx.lineWidth = 0.6; ctx.beginPath(); ctx.moveTo(1, len - 1.5); ctx.lineTo(1, len + 1.5); ctx.moveTo(3, len - 1.2); ctx.lineTo(3, len + 1.4); ctx.stroke(); } // little toes
+      if (back) { ctx.fillStyle = 'rgba(10,8,8,0.22)'; ctx.fillRect(-4, -2, 9, len + 4); }
       ctx.restore();
     }
-    var lie = pose === 'lie', bow = pose === 'bow', sit = pose === 'sit', wiggle = pose === 'wiggle';
+    var lie = pose === 'lie', bow = pose === 'bow', sit = pose === 'sit', wiggle = pose === 'wiggle', moving = pose === 'run' || wiggle;
     var bodyTilt = sit ? -0.42 : bow ? 0.3 : 0;
-    // tail
-    ctx.save(); ctx.translate(lie ? -17 : -15, lie ? -9 : sit ? -6 : bow ? -26 : -20); ctx.rotate((bow ? -1.3 : -0.9) + wag);
-    ctx.strokeStyle = BLACK; ctx.lineWidth = 4.5; ctx.lineCap = 'round'; ctx.beginPath(); ctx.moveTo(0, 0); ctx.quadraticCurveTo(-6, -6, -5, -14); ctx.stroke();
-    ctx.strokeStyle = TAN; ctx.lineWidth = 1.6; ctx.beginPath(); ctx.moveTo(1, 1); ctx.quadraticCurveTo(-4, -4, -3.5, -11); ctx.stroke(); ctx.lineCap = 'butt';
+    // tail: a soft plume, or a short happy stub-and-wag
+    var tlen = L.tail === 'plume' ? 15 : 10;
+    ctx.save(); ctx.translate(lie ? -18 : -16, lie ? -9 : sit ? -6 : bow ? -27 : BY - 2); ctx.rotate((bow ? -1.3 : -0.9) + wag);
+    ctx.strokeStyle = BLACK; ctx.lineWidth = L.tail === 'plume' ? 5.5 : 4.2; ctx.lineCap = 'round'; ctx.beginPath(); ctx.moveTo(0, 0); ctx.quadraticCurveTo(-6, -tlen * 0.45, -5, -tlen); ctx.stroke();
+    ctx.strokeStyle = TAN; ctx.lineWidth = 1.5; ctx.beginPath(); ctx.moveTo(1, 1); ctx.quadraticCurveTo(-4, -tlen * 0.35, -3.6, -tlen * 0.75); ctx.stroke(); ctx.lineCap = 'butt';
     ctx.restore();
     var a = Math.sin(ph) * 0.7, b = Math.sin(ph + Math.PI) * 0.7;
     if (wiggle) { a = Math.sin(t / 60) * 0.6; b = Math.sin(t / 60 + 2) * 0.6; }
-    if (pose === 'run' || wiggle) { leg(-10, -14, b * 0.8, 13, true); leg(10, -14, a * 0.8, 13, true); }
-    else if (sit) leg(9, -16, 0.05, 15, true);
-    else if (bow) { leg(-11, -18, 0.05, 17, true); }
+    if (moving) { leg(-10, BY + 5, b * 0.8, LL, true); leg(10, BY + 5, a * 0.8, LL, true); }
+    else if (sit) leg(9, -16, 0.05, LL + 2, true);
+    else if (bow) leg(-11, -18, 0.05, LL + 4, true);
+    // body
     ctx.save(); ctx.rotate(bodyTilt);
     if (lie) {
       ctx.fillStyle = BLACK; ctx.beginPath(); ctx.ellipse(-2, -9, 19, 8.5, 0, 0, Math.PI * 2); ctx.fill();
-      ctx.fillStyle = TAN; ctx.beginPath(); ctx.ellipse(-4, -4, 15, 4, 0, 0, Math.PI * 2); ctx.fill();
-      ctx.fillStyle = TAN; ctx.beginPath(); ctx.ellipse(18, -2.5, 8, 2.8, 0, 0, Math.PI * 2); ctx.fill();
-      ctx.fillStyle = L.paw; ctx.beginPath(); ctx.ellipse(26, -2.5, 3.6, 2.6, 0, 0, Math.PI * 2); ctx.fill(); ctx.beginPath(); ctx.ellipse(23, -0.5, 3.6, 2.4, 0, 0, Math.PI * 2); ctx.fill();
+      ctx.fillStyle = L.legLow; ctx.beginPath(); ctx.ellipse(-12, -4, 7, 4, 0, 0, Math.PI * 2); ctx.fill();
+      ctx.fillStyle = L.legLow; ctx.beginPath(); ctx.ellipse(18, -2.5, 8, 2.8, 0, 0, Math.PI * 2); ctx.fill();
+      ctx.fillStyle = L.paw; ctx.beginPath(); ctx.ellipse(26, -2.5, 3.8, 2.7, 0, 0, Math.PI * 2); ctx.fill(); ctx.beginPath(); ctx.ellipse(23, -0.3, 3.8, 2.5, 0, 0, Math.PI * 2); ctx.fill();
+      if (L.chest === 'white') { ctx.fillStyle = WHITE; ctx.beginPath(); ctx.ellipse(12, -7, 4, 4.5, 0, 0, Math.PI * 2); ctx.fill(); }
+      else { ctx.fillStyle = TAN; ctx.beginPath(); ctx.ellipse(12, -7, 3.6, 3.4, 0, 0, Math.PI * 2); ctx.fill(); }
     } else {
-      ctx.fillStyle = BLACK; ctx.beginPath(); ctx.ellipse(0, -19, 18, 9.5, 0, 0, Math.PI * 2); ctx.fill();
-      ctx.fillStyle = TAN; ctx.beginPath(); ctx.ellipse(1, -13.5, 14, 4.5, 0, 0, Math.PI * 2); ctx.fill();
-      if (L.chest === 'white') { ctx.fillStyle = WHITE; ctx.beginPath(); ctx.ellipse(13, -16, 4.5, 6, -0.3, 0, Math.PI * 2); ctx.fill(); }
-      else { ctx.fillStyle = TAN; ctx.beginPath(); ctx.ellipse(12, -17, 4, 3.6, 0, 0, Math.PI * 2); ctx.fill(); ctx.beginPath(); ctx.ellipse(14, -12, 3.6, 3.2, 0, 0, Math.PI * 2); ctx.fill();
-        ctx.fillStyle = WHITE; ctx.beginPath(); ctx.arc(14.5, -14.6, 1.1, 0, Math.PI * 2); ctx.fill(); }
-      if (L.collar) { ctx.strokeStyle = '#1A1716'; ctx.lineWidth = 2.6; ctx.beginPath(); ctx.moveTo(10, -27); ctx.quadraticCurveTo(15, -20, 17, -22); ctx.stroke();
-        ctx.fillStyle = '#C9CDD6'; ctx.fillRect(13.4, -23.6, 2.6, 2.2); }
+      ctx.fillStyle = BLACK; ctx.beginPath(); ctx.ellipse(0, BY, BRX, BRY, 0, 0, Math.PI * 2); ctx.fill();
+      ctx.beginPath(); ctx.ellipse(12, BY - 5, 7, 8, -0.5, 0, Math.PI * 2); ctx.fill(); // neck
+      if (L.chest === 'white') { ctx.fillStyle = WHITE; ctx.beginPath(); ctx.ellipse(14.5, BY + 2, 5, 6.5, -0.25, 0, Math.PI * 2); ctx.fill(); }
+      else {
+        ctx.fillStyle = TAN; ctx.beginPath(); ctx.ellipse(14, BY + 0.5, 4.2, 3.4, -0.3, 0, Math.PI * 2); ctx.fill(); ctx.beginPath(); ctx.ellipse(15, BY + 5.5, 3.6, 2.8, -0.2, 0, Math.PI * 2); ctx.fill();
+        ctx.fillStyle = WHITE; ctx.beginPath(); ctx.arc(15.8, BY + 3, 1.1, 0, Math.PI * 2); ctx.fill();
+      }
+      if (L.collar) { ctx.strokeStyle = '#141111'; ctx.lineWidth = 2.8; ctx.beginPath(); ctx.moveTo(9, BY - 11); ctx.quadraticCurveTo(14, BY - 3, 18, BY - 5); ctx.stroke();
+        ctx.fillStyle = '#D5D9E0'; ctx.fillRect(13.6, BY - 7.4, 2.8, 2.4); ctx.fillStyle = '#141111'; ctx.fillRect(14.4, BY - 6.8, 1.2, 1.2); }
     }
     ctx.restore();
-    if (pose === 'run' || wiggle) { leg(-12, -15, a, 13); leg(12, -15, b, 13); }
-    else if (sit) { leg(12, -17, -0.05, 16); ctx.fillStyle = DEEP; ctx.beginPath(); ctx.ellipse(-9, -5, 8, 5, 0, 0, Math.PI * 2); ctx.fill(); ctx.fillStyle = L.paw; ctx.beginPath(); ctx.ellipse(-1, -1, 4, 2.4, 0, 0, Math.PI * 2); ctx.fill(); }
-    else if (bow) { ctx.fillStyle = TAN; ctx.beginPath(); ctx.ellipse(20, -2.5, 8, 2.8, 0, 0, Math.PI * 2); ctx.fill(); ctx.fillStyle = L.paw; ctx.beginPath(); ctx.ellipse(28, -2.5, 3.6, 2.6, 0, 0, Math.PI * 2); ctx.fill(); leg(-13, -16, 0, 16); }
-    // head
-    var hx = lie ? 18 : sit ? 17 : bow ? 21 : 20, hy = lie ? -18 : sit ? -36 : bow ? -14 : -30;
-    ctx.save(); ctx.translate(hx, hy); ctx.rotate(pose === 'run' ? Math.sin(ph) * 0.05 : bow ? -0.15 : lie ? 0.05 : 0);
-    ctx.fillStyle = BLACK; ctx.beginPath(); ctx.arc(0, 0, 9.5, 0, Math.PI * 2); ctx.fill();
-    ctx.fillStyle = TAN; ctx.beginPath(); ctx.ellipse(7.5, 3.5, 7.5, 5.2, 0.1, 0, Math.PI * 2); ctx.fill();
-    if (L.bridge) { ctx.fillStyle = BLACK; ctx.beginPath(); ctx.ellipse(9.5, 0.6, 5.5, 2, 0.1, 0, Math.PI * 2); ctx.fill(); }
-    if (L.grey) { ctx.fillStyle = '#D9C3A6'; ctx.beginPath(); ctx.ellipse(8.5, 1.8, 4.5, 2, 0.1, 0, Math.PI * 2); ctx.fill(); }
-    ctx.fillStyle = L.chin; ctx.beginPath(); ctx.ellipse(7, 7.8, 5, 2.6, 0.15, 0, Math.PI * 2); ctx.fill();
-    if (!L.grey) { ctx.fillStyle = 'rgba(220,210,195,0.8)'; ctx.beginPath(); ctx.ellipse(7, 8.6, 2.6, 1.3, 0.15, 0, Math.PI * 2); ctx.fill(); }
-    ctx.fillStyle = TAN; ctx.beginPath(); ctx.arc(3, -5.2, L.brow, 0, Math.PI * 2); ctx.fill();
-    ctx.fillStyle = '#141212'; ctx.beginPath(); ctx.ellipse(14.2, 1.6, 2.6, 2.1, 0, 0, Math.PI * 2); ctx.fill();
-    ctx.fillStyle = 'rgba(255,255,255,0.6)'; ctx.beginPath(); ctx.arc(13.6, 0.8, 0.7, 0, Math.PI * 2); ctx.fill();
-    ctx.strokeStyle = '#141212'; ctx.lineWidth = 1.2; ctx.beginPath(); ctx.moveTo(13.5, 4.3); ctx.quadraticCurveTo(10, 8.2, 5.5, 5.2); ctx.stroke();
+    if (moving) { leg(-12, BY + 4, a, LL); leg(12, BY + 4, b, LL); }
+    else if (sit) { leg(12, -17, -0.05, LL + 3); ctx.fillStyle = BLACK; ctx.beginPath(); ctx.ellipse(-9, -6, 8.5, 5.5, 0, 0, Math.PI * 2); ctx.fill(); ctx.fillStyle = L.legLow; ctx.beginPath(); ctx.ellipse(-4, -2.5, 5, 2.5, 0, 0, Math.PI * 2); ctx.fill(); ctx.fillStyle = L.paw; ctx.beginPath(); ctx.ellipse(-0.5, -1, 4, 2.4, 0, 0, Math.PI * 2); ctx.fill(); }
+    else if (bow) { ctx.fillStyle = L.legLow; ctx.beginPath(); ctx.ellipse(20, -2.5, 8, 2.8, 0, 0, Math.PI * 2); ctx.fill(); ctx.fillStyle = L.paw; ctx.beginPath(); ctx.ellipse(28, -2.5, 3.8, 2.6, 0, 0, Math.PI * 2); ctx.fill(); leg(-13, -16, 0, LL + 3); }
+    // head: a little bigger than life, the way cartoons do it
+    var hx = lie ? 19 : sit ? 18 : bow ? 22 : 21, hy = lie ? -19 : sit ? -38 : bow ? -14 : BY - 12;
+    ctx.save(); ctx.translate(hx, hy); ctx.rotate((pose === 'run' ? Math.sin(ph) * 0.05 : bow ? -0.15 : lie ? 0.05 : 0) + (tilt || 0));
+    var R = 11;
+    // the ear behind the head (drop ears hang down each side)
+    if (L.ear === 'drop') { ctx.fillStyle = '#1B1817'; ctx.beginPath(); ctx.ellipse(-4, 4, 4, 8.5, 0.35, 0, Math.PI * 2); ctx.fill(); }
+    ctx.fillStyle = BLACK; ctx.beginPath(); ctx.arc(0, 0, R, 0, Math.PI * 2); ctx.fill();
+    ctx.beginPath(); ctx.ellipse(8, 2.5, 8.5, 6.2, 0.08, 0, Math.PI * 2); ctx.fill(); // snout
+    if (L.muzzle === 'cream') {
+      ctx.fillStyle = TAN; ctx.beginPath(); ctx.ellipse(6, 3, 7.5, 6.5, 0.1, 0, Math.PI * 2); ctx.fill();          // tan cheeks
+      ctx.fillStyle = '#E9DDCB'; ctx.beginPath(); ctx.ellipse(10.5, 3.2, 6.5, 4.3, 0.08, 0, Math.PI * 2); ctx.fill(); // cream muzzle
+      ctx.fillStyle = 'rgba(190,180,168,0.8)'; ctx.beginPath(); ctx.ellipse(10.5, 0.8, 5, 1.8, 0.08, 0, Math.PI * 2); ctx.fill(); // a little grey
+      ctx.fillStyle = WHITE; ctx.beginPath(); ctx.ellipse(8.5, 8.3, 5.8, 3, 0.15, 0, Math.PI * 2); ctx.fill();        // white chin
+      ctx.fillStyle = TAN; ctx.beginPath(); ctx.ellipse(3.2, -5.4, 3.4, 2.2, -0.2, 0, Math.PI * 2); ctx.fill();       // broad tan brow
+    } else {
+      ctx.fillStyle = TAN; ctx.beginPath(); ctx.ellipse(8.5, 4.5, 8, 4.8, 0.1, 0, Math.PI * 2); ctx.fill();          // tan lips and cheeks
+      ctx.beginPath(); ctx.ellipse(4, 2.5, 3.8, 3.6, 0, 0, Math.PI * 2); ctx.fill();                                   // tan cheek patch
+      ctx.fillStyle = BLACK; ctx.beginPath(); ctx.ellipse(10, 0.6, 7.5, 2.4, 0.08, 0, Math.PI * 2); ctx.fill();        // black nose bridge
+      ctx.fillStyle = 'rgba(210,200,186,0.85)'; ctx.beginPath(); ctx.ellipse(8.5, 8.4, 3.2, 1.5, 0.15, 0, Math.PI * 2); ctx.fill(); // grey chin
+      ctx.fillStyle = '#D69B5F'; ctx.beginPath(); ctx.arc(3.4, -5.6, 2.5, 0, Math.PI * 2); ctx.fill();               // round tan brow dot
+    }
+    ctx.fillStyle = '#121010'; ctx.beginPath(); ctx.ellipse(16, 1.4, 2.9, 2.3, 0, 0, Math.PI * 2); ctx.fill();       // nose
+    ctx.fillStyle = 'rgba(255,255,255,0.55)'; ctx.beginPath(); ctx.arc(15.3, 0.6, 0.8, 0, Math.PI * 2); ctx.fill();
+    // big happy open grin
+    ctx.fillStyle = '#3A1E22'; ctx.beginPath(); ctx.moveTo(15, 4.6); ctx.quadraticCurveTo(11, 10.5, 6, 6); ctx.quadraticCurveTo(11, 7.6, 15, 4.6); ctx.fill();
     var pant = REDUCED ? 0 : Math.sin(t / (pose === 'run' ? 120 : 260)) * 0.8;
-    ctx.fillStyle = PINK; ctx.beginPath(); ctx.ellipse(9.5, 8 + pant, 2.4, 3.2 + pant * 0.6, 0.2, 0, Math.PI * 2); ctx.fill();
-    if (blink) { ctx.strokeStyle = '#141212'; ctx.lineWidth = 1.2; ctx.beginPath(); ctx.moveTo(2, -2); ctx.lineTo(5.5, -2); ctx.stroke(); }
-    else { ctx.fillStyle = '#2A1C14'; ctx.beginPath(); ctx.arc(3.8, -2, 1.9, 0, Math.PI * 2); ctx.fill(); ctx.fillStyle = '#fff'; ctx.beginPath(); ctx.arc(4.4, -2.7, 0.7, 0, Math.PI * 2); ctx.fill(); }
-    ctx.fillStyle = 'rgba(247,165,185,0.55)'; ctx.beginPath(); ctx.ellipse(6, 3.5, 2.2, 1.3, 0, 0, Math.PI * 2); ctx.fill();
+    ctx.fillStyle = PINK; ctx.beginPath(); ctx.ellipse(10.5, 8.6 + pant, 2.5, 3.2 + pant * 0.6, 0.2, 0, Math.PI * 2); ctx.fill();
+    // soft, kind eye
+    if (blink) { ctx.strokeStyle = '#121010'; ctx.lineWidth = 1.3; ctx.beginPath(); ctx.moveTo(2.2, -1.6); ctx.lineTo(6.2, -1.6); ctx.stroke(); }
+    else { ctx.fillStyle = '#3A2418'; ctx.beginPath(); ctx.arc(4.2, -1.6, 2.1, 0, Math.PI * 2); ctx.fill(); ctx.fillStyle = '#fff'; ctx.beginPath(); ctx.arc(4.9, -2.4, 0.75, 0, Math.PI * 2); ctx.fill(); }
+    ctx.fillStyle = 'rgba(247,165,185,0.5)'; ctx.beginPath(); ctx.ellipse(7, 4.5, 2.2, 1.2, 0, 0, Math.PI * 2); ctx.fill();
+    // the near ear
     var flap = pose === 'run' && !REDUCED ? Math.sin(ph * 1.1) * 0.35 : 0;
-    ctx.save(); ctx.translate(-3, -5); ctx.rotate(0.5 + flap);
-    if (L.ear === 'floppy') {
-      ctx.fillStyle = BLACK; ctx.beginPath(); ctx.ellipse(-2, 6, 4.2, 8, 0.2, 0, Math.PI * 2); ctx.fill();
-      ctx.fillStyle = 'rgba(220,160,170,0.55)'; ctx.beginPath(); ctx.ellipse(-1.2, 1, 1.8, 3, 0.2, 0, Math.PI * 2); ctx.fill();
-    } else { // folded ears, a little smaller, with a tan edge
-      ctx.fillStyle = BLACK; ctx.beginPath(); ctx.ellipse(-1, 3, 3.8, 5.6, 0.1, 0, Math.PI * 2); ctx.fill();
-      ctx.strokeStyle = TAN; ctx.lineWidth = 1; ctx.beginPath(); ctx.ellipse(-1, 3, 3.8, 5.6, 0.1, -0.6, 0.6); ctx.stroke();
+    if (L.ear === 'drop') {
+      ctx.save(); ctx.translate(-2.5, -4); ctx.rotate(0.28 + flap);
+      ctx.fillStyle = BLACK; ctx.beginPath(); ctx.ellipse(-1.5, 7, 4.6, 9.5, 0.15, 0, Math.PI * 2); ctx.fill();
+      ctx.fillStyle = 'rgba(196,131,74,0.55)'; ctx.beginPath(); ctx.ellipse(0.4, 2.5, 1.6, 4, 0.15, 0, Math.PI * 2); ctx.fill();
+      ctx.strokeStyle = 'rgba(255,255,255,0.08)'; ctx.lineWidth = 1; ctx.beginPath(); ctx.ellipse(-1.5, 7, 4.6, 9.5, 0.15, -1.2, 0.3); ctx.stroke();
+      ctx.restore();
+    } else { // small folded ear up top, tipping forward, with a tan edge
+      ctx.save(); ctx.translate(-1.5, -8.5); ctx.rotate(0.35 + flap * 0.4);
+      ctx.fillStyle = BLACK; ctx.beginPath(); ctx.moveTo(-4, -1); ctx.quadraticCurveTo(1, -6, 6, 0); ctx.quadraticCurveTo(2, 4, -3, 3); ctx.closePath(); ctx.fill();
+      ctx.strokeStyle = '#B97A43'; ctx.lineWidth = 0.9; ctx.beginPath(); ctx.moveTo(-3, 2.6); ctx.quadraticCurveTo(2, 3.6, 5.6, 0.4); ctx.stroke();
+      ctx.restore();
     }
-    ctx.restore();
     ctx.restore();
   }
   function eye(x, y, r, blink) {
@@ -835,15 +909,18 @@
   // The unlit circle to aim for: the nearest to your light, or the first one if you haven't started
   // connect the dots in order: the next one is always the first unlit circle
   function nextTarget() { for (var i = 0; i < targets.length; i++) if (!targets[i].done) return targets[i]; return null; }
-  function burst(x, y, n, hue) {
+  function burst(x, y, n, hue, light, dirX) {
     if (REDUCED) return;
-    for (var i = 0; i < n; i++) { var a = Math.random() * Math.PI * 2, v = 0.6 + Math.random() * 1.6; sparks.push({ x: x, y: y, vx: Math.cos(a) * v, vy: Math.sin(a) * v - 0.4, life: 1, h: hue == null ? 40 + Math.random() * 30 : hue }); }
+    for (var i = 0; i < n; i++) {
+      var a = dirX ? (dirX > 0 ? -Math.PI * 0.3 : -Math.PI * 0.7) + (Math.random() - 0.5) * 0.9 : Math.random() * Math.PI * 2, v = 0.6 + Math.random() * 1.6;
+      sparks.push({ x: x, y: y, vx: Math.cos(a) * v, vy: Math.sin(a) * v - 0.4, life: 1, h: hue == null ? 40 + Math.random() * 30 : hue, l: light || 85 });
+    }
   }
   function drawSparks(dt) {
     for (var i = sparks.length - 1; i >= 0; i--) {
       var p = sparks[i]; p.x += p.vx * dt * 0.06; p.y += p.vy * dt * 0.06; p.vy += 0.002 * dt; p.life -= dt / 900;
       if (p.life <= 0) { sparks.splice(i, 1); continue; }
-      ctx.fillStyle = 'hsla(' + p.h + ',100%,85%,' + p.life + ')'; ctx.beginPath(); ctx.arc(p.x, p.y, 1.8 + p.life * 1.4, 0, Math.PI * 2); ctx.fill();
+      ctx.fillStyle = 'hsla(' + p.h + ',' + (p.l < 60 ? 45 : 100) + '%,' + p.l + '%,' + p.life + ')'; ctx.beginPath(); ctx.arc(p.x, p.y, 1.8 + p.life * 1.4, 0, Math.PI * 2); ctx.fill();
     }
   }
   // now and then a shooting star crosses the sky; catch it for a wish
@@ -1141,5 +1218,5 @@
   resize(); soundLabel(); updateCount();
   kick();
   // Expose a tiny hook for testing
-  window.__nightGarden = { save: save, setMode: setMode, pondKey: pondKey, get targets() { return targets; }, get mode() { return mode; }, get board() { return board; }, get piece() { return piece; }, get audio() { return audio; }, critters: critters, pack: pack };
+  window.__nightGarden = { save: save, setMode: setMode, pondKey: pondKey, get targets() { return targets; }, get mode() { return mode; }, get board() { return board; }, get piece() { return piece; }, get audio() { return audio; }, critters: critters, pack: pack, portrait: function (c2d, i, pose, tt) { var o = ctx; ctx = c2d; drawPup(PUPS[i], pose || 'run', 1.2, 0.2, false, tt || 0); ctx = o; } };
 })();
