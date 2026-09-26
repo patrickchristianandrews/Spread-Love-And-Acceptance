@@ -8,7 +8,8 @@
                  pond fills, it simply settles and starts fresh.
    The garden remembers flowers, lilies and constellations in this browser only
    (localStorage). The moon follows the real moon; the season follows the calendar.
-   Nothing is sent anywhere. Sound is off until the visitor turns it on. */
+   Nothing is sent anywhere. Sound is on by default (it starts when the visitor enters),
+   and box breathing always starts with sound unless it was switched off during the visit. */
 (function () {
   'use strict';
 
@@ -21,7 +22,7 @@
 
   // ---------- Saved garden (this browser only) ----------
   var KEY = 'tol-night-garden-v1';
-  var save = { flowers: [], lilies: 0, consts: [], days: [], breaths: 0, sound: false };
+  var save = { flowers: [], lilies: 0, consts: [], days: [], breaths: 0, sound: true }, mutedThisVisit = false;
   try { var raw = localStorage.getItem(KEY); if (raw) { var o = JSON.parse(raw); for (var k in o) save[k] = o[k]; } } catch (e) {}
   function persist() { try { localStorage.setItem(KEY, JSON.stringify(save)); } catch (e) {} }
   var today = new Date(); var todayKey = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
@@ -216,7 +217,7 @@
     });
   }
 
-  // ---------- Sound (off until turned on) ----------
+  // ---------- Sound (on by default; the Sound button turns it off) ----------
   var audio = null;
   var NOTES = [523.25, 587.33, 659.25, 783.99, 880, 1046.5, 1174.66];
   // iPhones treat web sound as "ambient" and mute it with the silent switch. Asking for
@@ -361,6 +362,7 @@
     document.querySelectorAll('.ng-bar [data-mode]').forEach(function (b) { b.setAttribute('aria-pressed', String(b.getAttribute('data-mode') === m)); });
     padEl.hidden = m !== 'pond';
     flies.forEach(function (f) { f.home = null; });
+    if (m === 'breathe' && !save.sound && !mutedThisVisit && typeof startAudio === 'function') { save.sound = true; persist(); soundLabel(); startAudio(); } // box breathing starts with sound
     if (m === 'breathe') { breath.start = performance.now() + 1500; breath.count = 0; breath.phase = ''; skyWords = []; wordAt = 0; say('Box breathing', 'In 4 · hold 4 · out 4 · hold 4. Follow the star around the square.', 0); }
     if (m === 'fireflies') { newShape(); say('Connect the stars', 'Start at 1 and follow the numbers. Each star sings a note.', 6000); }
     if (m === 'pond') { pondReset(); say('Float the lily pads', 'Fill a row across the pond and it blooms. There’s no hurry, and no way to lose.', 6000); }
@@ -1050,11 +1052,11 @@
     if (soundWelcome) { soundWelcome.setAttribute('aria-pressed', String(!!save.sound)); soundWelcome.innerHTML = save.sound ? '&#127925; Soft sound: on' : '&#127925; Soft sound: off'; }
   }
   if (soundWelcome) soundWelcome.addEventListener('click', function () {
-    save.sound = !save.sound; persist(); soundLabel();
+    save.sound = !save.sound; persist(); soundLabel(); if (!save.sound) mutedThisVisit = true;
     if (save.sound) { startAudio(); setTimeout(function () { chime(2, 0.12); }, 150); } else stopAudio();
   });
   soundBtn.addEventListener('click', function () {
-    save.sound = !save.sound; persist(); soundLabel();
+    save.sound = !save.sound; persist(); soundLabel(); if (!save.sound) mutedThisVisit = true;
     if (save.sound) { startAudio(); setTimeout(function () { chime(2, 0.12); }, 150); say('Sound on', 'If you can’t hear anything, turn your volume up' + (/iphone|ipad/i.test(navigator.userAgent) ? ' and check the silent switch.' : '.'), 3500); }
     else stopAudio();
   });

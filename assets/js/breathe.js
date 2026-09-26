@@ -392,7 +392,7 @@
     last = document.activeElement; ov.hidden = false; document.documentElement.style.overflow = 'hidden';
     ov.classList.remove('is-open', 'is-in', 'is-out'); void ov.offsetWidth; ov.classList.add('is-open');
     method = get('tol-br-method', 'box'); if (!PATTERNS[method]) method = 'box';
-    minutes = +get('tol-br-min', '1') || 1; scape = get('tol-br-scape', 'deep'); if (!SCAPES[scape] && scape !== 'off') scape = 'deep';
+    minutes = +get('tol-br-min', '1') || 1; scape = get('tol-br-scape', 'deep'); if (!SCAPES[scape]) scape = 'deep'; // always starts with sound
     muted = false; show('pick'); pickUI();
     $('.br-begin').focus();
   }
@@ -408,7 +408,7 @@
       var b = e.target.closest('button'); if (!b) return;
       if (b.hasAttribute('data-method')) { method = b.getAttribute('data-method'); set('tol-br-method', method); pickUI(); }
       if (b.hasAttribute('data-min')) { minutes = +b.getAttribute('data-min'); set('tol-br-min', String(minutes)); pickUI(); }
-      if (b.hasAttribute('data-scape')) { scape = b.getAttribute('data-scape'); set('tol-br-scape', scape); pickUI(); }
+      if (b.hasAttribute('data-scape')) { scape = b.getAttribute('data-scape'); if (scape !== 'off') set('tol-br-scape', scape); pickUI(); }
       var act = b.getAttribute('data-act');
       if (act === 'begin' || act === 'again') begin();
       if (act === 'change') { if (engine) { engine.end(); engine = null; } show('pick'); pickUI(); $('.br-begin').focus(); }
