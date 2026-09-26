@@ -150,7 +150,7 @@
     else if (r.turned === 0) story += 'The first message already carries a lot of heat. ';
     else if (r.peak < 3) story += 'It never really heats up. ';
     else story += 'The heat builds gradually rather than at one moment. ';
-    story += { shutdown: 'By the end someone has shut down. That isn’t the same as calm: it usually means they’re overwhelmed.', rising: 'By the end it’s still heating up.', cooling: 'By the end it has cooled down.', steady: 'It ends about where it has been.', short: '' }[r.trend];
+    story += { shutdown: 'By the end someone has shut down. That isn’t the same as calm: it usually means they’re overwhelmed.', rising: (r.peak < 3 && !(r.turned >= 0) ? 'It gets a little tenser toward the end.' : 'By the end it’s still heating up.'), cooling: 'By the end it has cooled down.', steady: 'It ends about where it has been.', short: '' }[r.trend];
     parts.push('<p>' + story + '</p>');
     if (r.turned > 0) parts.push('<p class="cr-note">A turn is rarely one person’s fault. It’s usually where two frequencies stopped matching. <a class="dig" href="/book/chapter-1-in-depth.html#squeal">Dig deeper: why two reasonable people end up in a fight</a></p>');
     return '<h2>What happened</h2>' + parts.join('');

@@ -98,7 +98,7 @@
     var r = Math.random, tries = 0, x, y;
     do { x = 0.03 + r() * 0.94; y = 0.7 + r() * 0.27; tries++; } while (inPond(x, y) && tries < 30);
     var f = { x: +x.toFixed(4), y: +y.toFixed(4), h: HUES[Math.floor(r() * HUES.length)] + Math.round((r() - 0.5) * 14), n: 5 + Math.floor(r() * 3), s: +(0.8 + r() * 0.5).toFixed(2), t: Date.now() };
-    save.flowers.push(f);
+    save.flowers.push(f); sorted = null;
     if (save.flowers.length > 160) save.flowers.shift();
     if (!quiet) { f.born = performance.now(); persist(); }
     return f;
@@ -106,12 +106,33 @@
   function inPond(nx, ny) {
     var dx = (nx - 0.5) / 0.3, dy = (ny - 0.875) / 0.09; return dx * dx + dy * dy < 1;
   }
+  // Grown flowers are drawn once into a small image and reused every frame; only
+  // flowers still opening are drawn from scratch.
+  var sprites = typeof WeakMap === 'function' ? new WeakMap() : null, sorted = null;
+  function flowerSize(f) { var depth = 0.55 + (f.y - 0.7) * 2.2; return 7 * f.s * depth * Math.min(1.4, W / 700 + 0.5); }
+  function flowerSprite(f) {
+    var sp = sprites && sprites.get(f);
+    if (sp && sp.W === W) return sp;
+    var size = flowerSize(f), half = Math.ceil(size * 3.3 + 2), top = Math.ceil(size * 3.2 + size * 3.3 + 2), bot = Math.ceil(size * 0.3 + 2);
+    var c = document.createElement('canvas'); c.width = Math.ceil(half * 2 * DPR); c.height = Math.ceil((top + bot) * DPR);
+    var g = c.getContext('2d'); g.setTransform(DPR, 0, 0, DPR, half * DPR, top * DPR);
+    paintFlower(g, f, size, 1);
+    sp = { c: c, half: half, top: top, w: half * 2, h: top + bot, W: W };
+    if (sprites) sprites.set(f, sp);
+    return sp;
+  }
   function drawFlower(f, t) {
-    var x = f.x * W, y = f.y * H, depth = 0.55 + (f.y - 0.7) * 2.2, size = 7 * f.s * depth * Math.min(1.4, W / 700 + 0.5);
+    var x = f.x * W, y = f.y * H, size = flowerSize(f);
     var grow = f.born ? Math.max(0.05, Math.min(1, (t - f.born) / 1800)) : 1;
     var sway = REDUCED ? 0 : Math.sin(t / 1600 + f.x * 20) * 0.08;
-    var stem = size * 3.2;
     ctx.save(); ctx.translate(x, y); ctx.rotate(sway);
+    if (grow >= 1 && sprites) { var sp = flowerSprite(f); ctx.drawImage(sp.c, -sp.half, -sp.top, sp.w, sp.h); }
+    else paintFlower(ctx, f, size, grow);
+    ctx.restore();
+  }
+  function paintFlower(ctx, f, size, grow) {
+    var stem = size * 3.2;
+    ctx.save();
     ctx.strokeStyle = 'rgba(120,170,140,0.75)'; ctx.lineWidth = Math.max(1, size * 0.18);
     ctx.beginPath(); ctx.moveTo(0, 0); ctx.quadraticCurveTo(size * 0.3, -stem * 0.5, 0, -stem * grow); ctx.stroke();
     ctx.fillStyle = 'rgba(120,170,140,0.6)';
@@ -239,7 +260,7 @@
     padEl.hidden = m !== 'pond';
     flies.forEach(function (f) { f.home = null; });
     if (m === 'breathe') { breath.start = performance.now(); breath.count = 0; say('Follow the light', 'Breathe in as it grows, out as it softens.', 0); }
-    if (m === 'fireflies') { newShape(); say('Guide the fireflies', 'Move over each faint point and a firefly will settle there.', 6000); }
+    if (m === 'fireflies') { newShape(); say('Guide the fireflies', 'Touch or move over each faint point, and a firefly will settle there.', 6000); }
     if (m === 'pond') { pondReset(); say('Float the lily pads', 'Fill a row across the pond and it blooms. There’s no hurry, and no way to lose.', 6000); }
     updateCount();
   }
@@ -336,10 +357,12 @@
   ];
   var LILY = ['#BFE3CF', '#C6DFF4', '#D9C8F0', '#F7C9D4', '#F8E7AE', '#F9C9B4', '#A9DCC8'];
   function layoutPond() {
-    cell = Math.floor(Math.min((H * 0.6) / ROWS, (W * 0.84) / COLS, 38));
-    bx = Math.round(W / 2 - COLS * cell / 2); by = Math.round(H * 0.1);
+    by = Math.round(H * 0.1);
+    var room = W <= 560 ? H - by - 200 : H * 0.6; // on phones the touch pad sits below the pond
+    cell = Math.max(14, Math.floor(Math.min(room / ROWS, H * 0.6 / ROWS, (W * 0.84) / COLS, 38)));
+    bx = Math.round(W / 2 - COLS * cell / 2);
   }
-  function pondReset() { board = []; for (var r = 0; r < ROWS; r++) board.push(new Array(COLS).fill(0)); spawn(); }
+  function pondReset() { clearing = null; board = []; for (var r = 0; r < ROWS; r++) board.push(new Array(COLS).fill(0)); spawn(); }
   function spawn() {
     var k = Math.floor(Math.random() * PIECES.length);
     piece = { cells: PIECES[k].map(function (c) { return c.slice(); }), x: Math.floor(COLS / 2) - 1, y: 0, c: k + 1, hasFlower: Math.random() < 0.5 };
@@ -414,8 +437,10 @@
   }
 
   // ---------- Main loop ----------
-  var lastT = performance.now(), running = true;
+  var lastT = performance.now(), running = true, rafId = 0;
+  function kick() { if (!rafId) rafId = requestAnimationFrame(frame); }
   function frame(t) {
+    rafId = 0;
     var dt = Math.min(60, t - lastT); lastT = t;
     if (!running) return;
     ctx.clearRect(0, 0, W, H);
@@ -424,13 +449,14 @@
     // pond shimmer
     var p = pondShape();
     if (!REDUCED) for (var i = 0; i < 3; i++) { ctx.strokeStyle = 'rgba(210,220,255,0.08)'; ctx.beginPath(); ctx.ellipse(p.x, p.y, p.rx * (0.4 + i * 0.2) + Math.sin(t / 1800 + i) * 6, p.ry * (0.4 + i * 0.2), 0, 0, Math.PI * 2); ctx.stroke(); }
-    save.flowers.slice().sort(function (a, b) { return a.y - b.y; }).forEach(function (f) { drawFlower(f, t); });
+    if (!sorted) sorted = save.flowers.slice().sort(function (a, b) { return a.y - b.y; });
+    sorted.forEach(function (f) { drawFlower(f, t); });
     drawLanterns(t, dt);
     if (mode === 'breathe') drawBreath(t);
     if (mode === 'fireflies') { fireflyTick(t); drawShape(t); }
     if (mode === 'pond') drawPond(t);
     drawFlies(t, dt);
-    requestAnimationFrame(frame);
+    kick();
   }
 
   function updateCount() {
@@ -455,6 +481,9 @@
     swipe = null;
   });
   document.addEventListener('keydown', function (e) {
+    if (/^(INPUT|TEXTAREA|SELECT)$/.test(e.target.tagName)) return;
+    if (e.key === ' ' && e.target.closest && e.target.closest('button, a, summary')) return;
+    if (!closeCard.hidden || !welcome.hidden || stage.getBoundingClientRect().bottom < window.innerHeight * 0.5) return;
     if (mode === 'pond' && ['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', ' '].indexOf(e.key) !== -1 && !/^(INPUT|TEXTAREA|SELECT)$/.test(e.target.tagName)) { e.preventDefault(); pondKey(e.key); }
     if (mode === 'fireflies' && ['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown'].indexOf(e.key) !== -1 && !/INPUT|TEXTAREA/.test(e.target.tagName)) {
       e.preventDefault(); if (!wand.active) { wand.x = W / 2; wand.y = H * 0.3; wand.active = true; }
@@ -483,7 +512,9 @@
     document.getElementById('ng-quote').textContent = QUOTES[Math.floor(Math.random() * QUOTES.length)];
     closeCard.hidden = false; stopAudio(); document.getElementById('ng-stay').focus();
   });
-  document.getElementById('ng-stay').addEventListener('click', function () { closeCard.hidden = true; if (save.sound) startAudio(); });
+  function stay() { closeCard.hidden = true; if (save.sound) startAudio(); document.getElementById('ng-leave').focus(); }
+  document.getElementById('ng-stay').addEventListener('click', stay);
+  closeCard.addEventListener('keydown', function (e) { if (e.key === 'Escape') stay(); });
 
   // Welcome, then into the garden
   var welcome = document.getElementById('ng-welcome');
@@ -498,13 +529,13 @@
 
   document.addEventListener('visibilitychange', function () {
     running = !document.hidden;
-    if (running) { lastT = performance.now(); requestAnimationFrame(frame); if (audio && save.sound) audio.ctx.resume(); }
-    else if (audio) audio.ctx.suspend();
+    if (running) { lastT = performance.now(); kick(); if (audio && save.sound) audio.ctx.resume(); }
+    else { if (rafId) { cancelAnimationFrame(rafId); rafId = 0; } if (audio) audio.ctx.suspend(); }
   });
-  window.addEventListener('resize', function () { resize(); if (mode === 'fireflies') newShape(); });
+  window.addEventListener('resize', function () { var w0 = W; resize(); if (mode === 'fireflies' && Math.abs(W - w0) > 1) newShape(); });
 
   resize(); soundLabel(); updateCount();
-  requestAnimationFrame(frame);
+  kick();
   // Expose a tiny hook for testing
   window.__nightGarden = { save: save, setMode: setMode, pondKey: pondKey, get targets() { return targets; }, get mode() { return mode; }, get board() { return board; }, get piece() { return piece; } };
 })();

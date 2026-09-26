@@ -569,7 +569,8 @@ div.tol-gate a.tol-btn, div.tol-gate button.tol-btn, div.tol-gate button{ border
 .tol-breathe-btn:hover{ background:#E1EAF8; }
 .tol-breathe-btn:focus-visible{ outline:2px solid var(--focus); outline-offset:3px; }
 .tol-breathe-btn svg{ width:1.3rem; height:1.3rem; }
-@media (max-width:560px){ .tol-breathe-btn span{ display:none; } .tol-breathe-btn{ padding:.6rem; } }
+body:has(.tol-breathe-btn){ padding-bottom:4.5rem; } /* the last thing on a page never sits under the Breathe button */
+@media (max-width:560px){ .tol-breathe-btn{ padding:.5rem .8rem .5rem .6rem; font-size:.85rem; } }
 .tol-breathe{
   position:fixed; inset:0; z-index:990; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:1.4rem;
   padding:2rem 1rem; text-align:center; color:#F4F1FA;
