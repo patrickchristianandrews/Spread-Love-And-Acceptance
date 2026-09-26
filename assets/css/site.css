@@ -1058,3 +1058,30 @@ body:has(.wpf-bar) .tol-breathe-btn{ bottom:calc(4.8rem + env(safe-area-inset-bo
 @media print{ .tol-wash b{ display:none; } }
 .tol-dive-card{ z-index:1000; }
 .tol-dive-more a{ color:#2F5F8A; }
+
+/* ---------- Glassy bubbles everywhere, like the ones in Breathe, and you can pop them ----------
+   Clear in the middle, a bright highlight, a soft coloured rim with a hint of rainbow sheen,
+   and a faint shadow so they show on light pages. Tap or click one and it pops. */
+.tol-wash .tol-bub::before, .tol-breathe-bg .tol-bub::before{
+  border:1.5px solid color-mix(in srgb, var(--rim, #EDA3B6) 70%, #fff);
+  background:
+    radial-gradient(circle at 32% 28%, rgba(255,255,255,.98) 0 8%, rgba(255,255,255,.45) 12%, rgba(255,255,255,0) 26%),
+    radial-gradient(circle at 70% 76%, rgba(255,255,255,.6) 0 5%, rgba(255,255,255,0) 13%),
+    conic-gradient(from 200deg, rgba(247,184,198,.35), rgba(185,160,224,.35), rgba(150,194,232,.35), rgba(152,210,178,.3), rgba(239,210,122,.3), rgba(247,184,198,.35)),
+    radial-gradient(circle at 50% 50%, rgba(255,255,255,.12) 0 52%, color-mix(in srgb, var(--tint, #FBE3EA) 70%, transparent) 76%, color-mix(in srgb, var(--rim, #EDA3B6) 80%, transparent) 100%);
+
+  box-shadow:inset -2px -3px 6px rgba(255,255,255,.55), inset 2px 3px 8px color-mix(in srgb, var(--rim, #EDA3B6) 35%, transparent), 0 3px 10px rgba(110,80,140,.14);
+}
+.tol-wash b.tol-bub{ opacity:.95; }
+/* popped: a quick swell, a blink, and a spray of droplets; it floats back a little later */
+.tol-bub.is-popped::before{ animation:tol-burst .32s ease-out forwards !important; }
+.tol-bub.is-popped::after{ animation:tol-spray-now .6s ease-out forwards !important; }
+.tol-bub.is-gone{ visibility:hidden; }
+@keyframes tol-burst{ 0%{ scale:1; opacity:.95; } 45%{ scale:1.22 1.14; opacity:.95; } 60%{ scale:1.3; opacity:0; } 100%{ scale:1.3; opacity:0; } }
+@keyframes tol-spray-now{ 0%{ opacity:0; scale:.6; } 25%{ opacity:1; scale:1.1; } 100%{ opacity:0; scale:2.3; translate:0 10px; } }
+.tol-heart.is-tapped{ scale:1.45; filter:drop-shadow(0 0 10px rgba(247,184,198,.9)) brightness(1.08); transition:scale .22s cubic-bezier(.2,1.6,.4,1), filter .3s; }
+.tol-heart{ transition:scale .5s ease, filter .6s; }
+.tol-poplet{ position:fixed; z-index:2; pointer-events:none; font-size:14px; line-height:1; color:#EE8FA8; animation:tol-poplet 1s ease-out forwards; }
+@keyframes tol-poplet{ 0%{ opacity:0; transform:translate(0,0) scale(.4); } 20%{ opacity:1; } 100%{ opacity:0; transform:translate(var(--dx), var(--dy)) scale(1); } }
+.tol-breathe .tol-poplet{ z-index:3; }
+@media (prefers-reduced-motion: reduce){ .tol-bub.is-popped::before, .tol-bub.is-popped::after{ animation:none !important; opacity:0; } .tol-poplet{ display:none; } }
