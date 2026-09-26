@@ -46,6 +46,7 @@
       { href: '/infographic.html', code: '', title: 'Executive summary', note: 'The whole framework on one printable page, easy to share' }
     ]},
     { id: 'self', title: 'Self-discovery', blurb: 'Tools for understanding yourself: your load, your wiring, your patterns. Start here, with or without anyone else.', items: [
+      { href: '/night-garden.html', code: 'New', title: 'The Night Garden', note: 'A calm place to breathe, play and let your mind settle. Flowers bloom as you breathe; no timers, nothing to lose' },
       { href: '/quick-checks.html#today', code: 'Daily', title: 'Today’s Weather', note: 'One minute on your own conditions: a forecast, a talk window, what today is good for, and a private almanac of your patterns' },
       { href: '/wired-differently.html', deep: true, code: 'New', title: 'Wired Differently', note: 'How different neurotypes receive the same words, and how to talk across the difference' },
       { href: '/wiring-card.html', code: 'Tool', title: 'Wiring Card', note: 'A one-page card on how you receive words, what silence means, and what to avoid' },
@@ -342,6 +343,9 @@
       }
     }
 
+    // "Breathe": a one-minute calm break on every page (the Night Garden has its own)
+    if (!body.hasAttribute('data-no-breathe')) buildBreathe(body);
+
     // Pastel watercolour splashes behind the page (decorative; see site.css)
     if (!body.hasAttribute('data-no-wash')) {
       var wash = el('div', { class: 'tol-wash', 'aria-hidden': 'true' }, '<i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>');
@@ -393,6 +397,53 @@
         '<a href="mailto:' + CONFIG.supportEmail + '">Contact</a>' +
       '</span>';
     body.insertBefore(foot, scrim);
+  }
+
+  // ---------- Breathe with me ----------
+  // Six slow breaths, in for 4 seconds and out for 6 (about six a minute). Nothing is saved.
+  function buildBreathe(body) {
+    var moon = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z" fill="#F9D9B8" stroke="#8A7BB8" stroke-width="1.4"/></svg>';
+    var btn = el('button', { type: 'button', class: 'tol-breathe-btn', 'aria-haspopup': 'dialog' }, moon + '<span>Breathe</span>');
+    btn.setAttribute('aria-label', 'Take a one-minute breathing break');
+    var ov = el('div', { class: 'tol-breathe', role: 'dialog', 'aria-modal': 'true', 'aria-label': 'One-minute breathing break', hidden: '' },
+      '<div class="tol-breathe-orb" aria-hidden="true"></div>' +
+      '<p class="tol-breathe-word" aria-live="polite">Get comfortable</p>' +
+      '<p class="tol-breathe-sub">Six slow breaths, about a minute. Follow the light: breathe in as it grows, out as it softens.</p>' +
+      '<div class="tol-breathe-row"><button type="button" data-act="close">I’m done</button><a href="/night-garden.html">Visit the Night Garden</a></div>');
+    body.appendChild(btn); body.appendChild(ov);
+    var orb = ov.querySelector('.tol-breathe-orb'), word = ov.querySelector('.tol-breathe-word'), sub = ov.querySelector('.tol-breathe-sub');
+    var timers = [], last = null;
+    function later(fn, ms) { timers.push(setTimeout(fn, ms)); }
+    function stop() { timers.forEach(clearTimeout); timers = []; }
+    function breath(n) {
+      if (n > 6) {
+        word.textContent = 'Well done.'; sub.textContent = 'That was a minute just for you. Come back any time: the button is always here.';
+        orb.classList.remove('is-out'); orb.style.transform = 'scale(.85)'; return;
+      }
+      sub.textContent = 'Breath ' + n + ' of 6';
+      word.textContent = 'Breathe in…'; orb.classList.remove('is-out'); orb.style.transform = 'scale(1.15)';
+      later(function () { word.textContent = 'And out…'; orb.classList.add('is-out'); orb.style.transform = 'scale(.7)'; }, 4000);
+      later(function () { breath(n + 1); }, 10000);
+    }
+    function open() {
+      last = document.activeElement; ov.hidden = false; document.documentElement.style.overflow = 'hidden';
+      word.textContent = 'Get comfortable'; sub.textContent = 'Six slow breaths, about a minute. Follow the light: breathe in as it grows, out as it softens.';
+      orb.classList.remove('is-out'); orb.style.transform = 'scale(.7)';
+      ov.querySelector('[data-act="close"]').focus();
+      later(function () { breath(1); }, 2500);
+    }
+    function close() { stop(); ov.hidden = true; document.documentElement.style.overflow = ''; if (last) last.focus(); }
+    btn.addEventListener('click', open);
+    ov.querySelector('[data-act="close"]').addEventListener('click', close);
+    document.addEventListener('keydown', function (e) {
+      if (ov.hidden) return;
+      if (e.key === 'Escape') close();
+      if (e.key === 'Tab') {
+        var f = ov.querySelectorAll('button, a'), first = f[0], lastEl = f[f.length - 1];
+        if (e.shiftKey && document.activeElement === first) { e.preventDefault(); lastEl.focus(); }
+        else if (!e.shiftKey && document.activeElement === lastEl) { e.preventDefault(); first.focus(); }
+      }
+    });
   }
 
   // ---------- Membership ----------

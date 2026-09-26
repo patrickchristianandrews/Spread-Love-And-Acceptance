@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-NKC6CQ9S66"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-NKC6CQ9S66');
+</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>The Night Garden — a calm place to breathe and play · The Objective Ledger</title>
+<meta name="description" content="A quiet, beautiful garden at night. Breathe with the light to make flowers bloom, guide fireflies into constellations, and float lily pads on the pond. No timers, no losing. Everything stays on your device.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,500&family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/css/site.css">
+<link rel="stylesheet" href="/assets/css/reading.css">
+<style>
+  .ng-stage{ position:relative; height:calc(100vh - var(--tol-bar-h, 64px)); height:calc(100dvh - var(--tol-bar-h, 64px)); min-height:520px; overflow:hidden; background:#1C1F3A; color:#F4F1FA; touch-action:none; user-select:none; -webkit-user-select:none; }
+  #ng-canvas{ position:absolute; inset:0; width:100%; height:100%; display:block; }
+  .ng-top{ position:absolute; left:1rem; right:1rem; top:.9rem; display:flex; justify-content:space-between; align-items:flex-start; gap:1rem; pointer-events:none; }
+  .ng-title{ font-family:"Fraunces", Georgia, serif; font-weight:500; font-size:1.25rem; margin:0; text-shadow:0 1px 8px rgba(0,0,0,.4); }
+  .ng-title small{ display:block; font-family:"Lora", Georgia, serif; font-size:.8rem; color:#CFC9E6; font-weight:400; margin-top:.15rem; }
+  .ng-say{ position:absolute; left:50%; top:52%; transform:translateX(-50%); width:min(34rem, 90%); text-align:center; pointer-events:none;
+    font-family:"Fraunces", Georgia, serif; font-size:1.35rem; line-height:1.4; text-shadow:0 2px 12px rgba(10,10,30,.8); margin:0; transition:opacity .8s; }
+  .ng-say small{ display:block; font-family:"Lora", Georgia, serif; font-size:.9rem; color:#DCD6F0; margin-top:.35rem; }
+  .ng-bar{ position:absolute; left:50%; bottom:max(1rem, env(safe-area-inset-bottom)); transform:translateX(-50%); display:flex; flex-wrap:wrap; justify-content:center; gap:.5rem; width:max-content; max-width:calc(100% - 1.5rem); }
+  .ng-bar button, .ng-pad button, .ng-card button, .ng-card a{
+    font:inherit; font-size:.92rem; color:#F4F1FA; background:rgba(28,31,58,.55); border:1px solid rgba(244,241,250,.35);
+    border-radius:999px; padding:.55rem 1rem; cursor:pointer; text-decoration:none; backdrop-filter:blur(6px); -webkit-backdrop-filter:blur(6px);
+  }
+  .ng-bar button:hover, .ng-pad button:hover, .ng-card button:hover, .ng-card a:hover{ background:rgba(74,71,117,.75); }
+  .ng-bar button[aria-pressed="true"]{ background:rgba(249,217,184,.9); color:#2A2D52; border-color:#F9D9B8; }
+  .ng-bar button:focus-visible, .ng-pad button:focus-visible, .ng-card :focus-visible{ outline:2px solid #F9D9B8; outline-offset:3px; }
+  .ng-pad{ position:absolute; right:max(1rem, env(safe-area-inset-right)); bottom:5.2rem; display:grid; grid-template-columns:repeat(4, 3rem); gap:.4rem; }
+  .ng-pad[hidden]{ display:none; }
+  .ng-pad button{ padding:0; height:3rem; font-size:1.2rem; border-radius:50%; }
+  .ng-card{ position:absolute; inset:0; display:flex; align-items:center; justify-content:center; padding:1rem; background:rgba(16,18,38,.55); backdrop-filter:blur(3px); -webkit-backdrop-filter:blur(3px); }
+  .ng-card[hidden]{ display:none; }
+  .ng-card > div{ max-width:32rem; text-align:center; background:rgba(42,45,82,.88); border:1px solid rgba(244,241,250,.2); border-radius:24px; padding:1.8rem 1.6rem; box-shadow:0 20px 60px rgba(0,0,0,.35); }
+  .ng-card h2{ font-family:"Fraunces", Georgia, serif; font-weight:500; font-size:1.8rem; margin:0 0 .6rem; color:#FFF6E0; }
+  .ng-card p{ margin:0 0 1rem; color:#DCD6F0; line-height:1.6; }
+  .ng-card .ng-go{ background:#F9D9B8; color:#2A2D52; border-color:#F9D9B8; font-weight:600; font-size:1.05rem; padding:.7rem 1.5rem; }
+  .ng-card .ng-go:hover{ background:#FFE7CF; }
+  .ng-row{ display:flex; flex-wrap:wrap; gap:.6rem; justify-content:center; }
+  .ng-quote{ font-family:"Fraunces", Georgia, serif; font-style:italic; font-size:1.35rem !important; color:#FFF6E0 !important; }
+  .ng-about{ max-width:42rem; margin:0 auto; padding:2.5rem clamp(1.1rem,5vw,2rem) 1rem; }
+  .ng-about h2{ font-family:"Fraunces", Georgia, serif; }
+  .ng-about li{ margin:.35rem 0; }
+  .ng-sources{ font-size:.9rem; color:var(--ink-soft); }
+  @media (max-width:560px){
+    .ng-say{ font-size:1.15rem; top:46%; }
+    .ng-pad{ left:50%; right:auto; transform:translateX(-50%); bottom:8.2rem; grid-template-columns:repeat(4, 3.2rem); }
+    .ng-pad button{ height:3.2rem; }
+    .ng-bar button{ padding:.5rem .8rem; font-size:.85rem; }
+  }
+</style>
+<script src="/assets/js/site.js" defer></script>
+<script src="/assets/js/night-garden.js" defer></script>
+</head>
+<body data-no-wash data-no-breathe>
+<main>
+  <section class="ng-stage" id="ng-stage" aria-label="The Night Garden">
+    <canvas id="ng-canvas" role="img" aria-label="A watercolour garden at night, with stars, a moon, fireflies and a pond."></canvas>
+
+    <div class="ng-top">
+      <p class="ng-title">The Night Garden<small id="ng-count"></small></p>
+    </div>
+
+    <p class="ng-say" id="ng-say" aria-live="polite"></p>
+
+    <div class="ng-pad" id="ng-pad" hidden aria-label="Pond controls">
+      <button type="button" data-key="ArrowLeft" aria-label="Move left">&#9664;</button>
+      <button type="button" data-key="ArrowUp" aria-label="Turn">&#10227;</button>
+      <button type="button" data-key="ArrowRight" aria-label="Move right">&#9654;</button>
+      <button type="button" data-key=" " aria-label="Float down">&#9660;</button>
+    </div>
+
+    <div class="ng-bar" role="toolbar" aria-label="Garden">
+      <button type="button" data-mode="breathe" aria-pressed="false">&#127800; Breathe</button>
+      <button type="button" data-mode="fireflies" aria-pressed="false">&#10024; Fireflies</button>
+      <button type="button" data-mode="pond" aria-pressed="false">&#128167; Lily pond</button>
+      <button type="button" id="ng-sound" aria-pressed="false">&#127925; Sound off</button>
+      <button type="button" id="ng-leave">Leave gently</button>
+    </div>
+
+    <div class="ng-card" id="ng-welcome">
+      <div>
+        <h2 id="ng-welcome-h">Welcome to the Night Garden</h2>
+        <p id="ng-welcome-p">A quiet place to breathe, play and let your mind settle. There are no timers and no way to lose. Everything here stays on your device.</p>
+        <p style="font-size:.9rem;">&#127800; <strong>Breathe</strong> with the light and flowers bloom &nbsp;&middot;&nbsp; &#10024; guide <strong>fireflies</strong> into stars &nbsp;&middot;&nbsp; &#128167; float lily pads on the <strong>pond</strong></p>
+        <div class="ng-row"><button type="button" class="ng-go" id="ng-enter">Enter the garden</button></div>
+      </div>
+    </div>
+
+    <div class="ng-card" id="ng-close" hidden>
+      <div>
+        <h2>Something to carry with you</h2>
+        <p class="ng-quote" id="ng-quote"></p>
+        <p id="ng-close-p">Come back whenever you like. Your garden will be here, and it keeps growing.</p>
+        <div class="ng-row">
+          <button type="button" id="ng-stay">Stay a little longer</button>
+          <a href="/turning-toward.html">Turning Toward</a>
+          <a href="/index.html">Back to the site</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="ng-about read" aria-labelledby="ng-about-h">
+    <h2 id="ng-about-h">Why a garden?</h2>
+    <p>The Night Garden brings together a few things that research suggests can quiet a busy mind. It isn’t treatment, and it doesn’t replace talking to someone. It’s a gentle place to land.</p>
+    <ul>
+      <li><strong>Slow breathing.</strong> Breathing at around six breaths a minute (in for 4, out for 6) is one of the most reliable ways to settle the body. The light in the garden keeps that pace for you.</li>
+      <li><strong>Gentle play.</strong> Relaxed, casual games have been linked with better mood and lower stress. There’s no score to chase here and nothing to lose.</li>
+      <li><strong>Busy hands, quiet mind.</strong> Fitting shapes together takes up the same mental room that worry loops use, which is why the lily pond can help a racing mind slow down.</li>
+      <li><strong>Soft, natural movement.</strong> Watching gently moving light, water and leaves lets tired attention rest.</li>
+    </ul>
+    <p>The garden grows as you visit: flowers you bloom stay, the moon follows the real one, and the seasons change with the calendar. Missing a day costs nothing. Everything is kept only in this browser, on this device.</p>
+    <p>If you’re struggling right now, please reach a person as well as a page: in the US, call or text <strong>988</strong>; elsewhere, <a href="https://findahelpline.com" rel="noopener">findahelpline.com</a> lists free, confidential helplines.</p>
+    <p class="ng-sources"><strong>Where this comes from:</strong> Zaccaro et al. (2018), “How breath-control can change your life”, <em>Frontiers in Human Neuroscience</em>; Russoniello, O’Brien &amp; Parks (2009), casual video games and stress, <em>Journal of CyberTherapy &amp; Rehabilitation</em>; Skorka-Brown et al. (2015), visuospatial play and cravings, <em>Addictive Behaviors</em>; Kaplan (1995), attention restoration, <em>Journal of Environmental Psychology</em>.</p>
+  </section>
+</main>
+</body>
+</html>

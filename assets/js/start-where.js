@@ -13,8 +13,8 @@
     { id:'empty', ico:'\uD83E\uDEAB', label:'I am running on empty',
       say:'That deserves attention before anything else does. Nothing in the program works well from an empty tank, and you are allowed to start by looking after yourself.',
       picks:[
+        ['/night-garden.html','The Night Garden','A calm place to breathe and play for a few minutes. No sign-up, nothing to lose.'],
         ['/quick-checks.html#today','Today\u2019s Weather','One minute, and it tells you what today is actually good for.'],
-        ['/workpapers/wp-02-battery-stress-meter.html','WP-02: the Battery','Separates what you were already carrying from this one thing.'],
         ['/wp-11.html','WP-11: the Calm-Down Kit','Decide now what settles you, so it is ready when it is needed.']
       ]},
     { id:'invisible', ico:'\uD83D\uDC41', label:'Nobody sees what I do',

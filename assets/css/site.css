@@ -3,7 +3,7 @@
    All selectors are prefixed .tol- so they never collide with page styles. */
 
 :root{
-  --paper:#F5EFDE; --paper-deep:#ECE2C4; --ink:#211D17; --ink-soft:#524B3E;
+  --paper:#F5EFDE; --paper-deep:#ECE2C4; --ink:#2B2620; --ink-soft:#5A5346;
   --line:#D9CBA3; --credit:#3E6B4C; --brass:#A8792F; --focus:#2B5B8C;
   --debit:#96412B; --radius:3px;
 }
@@ -501,14 +501,14 @@ html, body{ overflow-x:clip; }
 .tol-simple .read-head h1{ padding-right:5.4rem; }
 .tol-simple .read-head::after{
   content:""; position:absolute; right:0; bottom:1.1rem; width:4.8rem; height:4.8rem; pointer-events:none;
-  background:var(--buddy-peach) no-repeat center / contain; animation:tol-bob 3.4s ease-in-out infinite;
+  background:var(--buddy-peach) no-repeat center / contain; animation:tol-bob 9s ease-in-out infinite;
 }
 body[data-sec="self"] .read-head::after, body[data-sec="media"] .read-head::after{ background-image:var(--buddy-lavender); }
 body[data-sec="relationships"] .read-head::after{ background-image:var(--buddy-rose); }
 body[data-sec="book"] .read-head::after, body[data-sec="about"] .read-head::after{ background-image:var(--buddy-sky); }
 body[data-sec="workpapers"] .read-head::after{ background-image:var(--buddy-mint); }
 body[data-sec="program"] .read-head::after, body[data-sec="tools"] .read-head::after{ background-image:var(--buddy-butter); }
-@keyframes tol-bob{ 0%,100%{ transform:translateY(0) rotate(-4deg); } 50%{ transform:translateY(-5px) rotate(4deg); } }
+@keyframes tol-bob{ 0%,100%{ transform:translateY(0) rotate(-1.5deg); } 50%{ transform:translateY(-2px) rotate(1.5deg); } }
 
 .tol-gentle{
   display:inline-flex; align-items:center; gap:.45rem; margin:-.8rem 0 1.4rem !important; padding:.35rem .85rem;
@@ -548,3 +548,48 @@ body[data-sec="program"] .read-head::after, body[data-sec="tools"] .read-head::a
 /* The sign-up box, softened */
 div.tol-gate{ border-radius:20px !important; overflow:hidden; }
 div.tol-gate a.tol-btn, div.tol-gate button.tol-btn, div.tol-gate button{ border-radius:999px !important; }
+
+/* ---------- Calm: more breathing room, slower movement ---------- */
+.read p{ line-height:1.8; }
+.read .ideas > li{ padding:1.35rem 1.4rem 1.25rem; }
+.tol-simple .ideas > li:hover::before{ transform:none; }
+.read .ideas > li{ transition:background .6s ease; }
+.tol-wash i{ animation:tol-drift 60s ease-in-out infinite alternate; }
+.tol-wash i:nth-child(even){ animation-duration:75s; animation-direction:alternate-reverse; }
+@keyframes tol-drift{ from{ translate:0 0; } to{ translate:0 -14px; } }
+@media (prefers-reduced-motion: reduce){ .tol-wash i{ animation:none; } }
+
+/* ---------- "Breathe with me": a one-minute calm break on every page ---------- */
+.tol-breathe-btn{
+  position:fixed; right:max(1rem, env(safe-area-inset-right)); bottom:max(1rem, env(safe-area-inset-bottom)); z-index:880;
+  display:inline-flex; align-items:center; gap:.45rem; padding:.55rem .95rem .55rem .7rem;
+  font:500 .92rem/1 "Lora", Georgia, serif; color:#2F3A5C; background:rgba(234,240,250,.94);
+  border:1px solid #BFD0EA; border-radius:999px; box-shadow:0 6px 20px rgba(47,58,92,.14); cursor:pointer;
+}
+.tol-breathe-btn:hover{ background:#E1EAF8; }
+.tol-breathe-btn:focus-visible{ outline:2px solid var(--focus); outline-offset:3px; }
+.tol-breathe-btn svg{ width:1.3rem; height:1.3rem; }
+@media (max-width:560px){ .tol-breathe-btn span{ display:none; } .tol-breathe-btn{ padding:.6rem; } }
+.tol-breathe{
+  position:fixed; inset:0; z-index:990; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:1.4rem;
+  padding:2rem 1rem; text-align:center; color:#F4F1FA;
+  background:radial-gradient(ellipse at 50% 35%, #4A4775 0%, #2A2D52 55%, #1C1F3A 100%);
+}
+.tol-breathe[hidden]{ display:none; }
+.tol-breathe-orb{
+  width:9rem; height:9rem; border-radius:50%;
+  background:radial-gradient(circle at 45% 40%, #FFF6E0 0%, #F9D9B8 35%, rgba(217,200,240,.55) 70%, rgba(217,200,240,0) 100%);
+  box-shadow:0 0 60px 20px rgba(249,217,184,.25); transform:scale(.7); transition:transform 4s ease-in-out;
+}
+.tol-breathe-orb.is-out{ transition-duration:6s; }
+.tol-breathe-word{ font-family:"Fraunces", Georgia, serif; font-size:1.7rem; margin:0; min-height:2.2rem; letter-spacing:.01em; }
+.tol-breathe-sub{ margin:0; font-size:.95rem; color:#CFC9E6; max-width:24rem; }
+.tol-breathe-row{ display:flex; flex-wrap:wrap; gap:.8rem; justify-content:center; }
+.tol-breathe-row button, .tol-breathe-row a{
+  font:inherit; font-size:.92rem; padding:.55rem 1.1rem; border-radius:999px; cursor:pointer; text-decoration:none;
+  color:#F4F1FA; background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.3);
+}
+.tol-breathe-row button:hover, .tol-breathe-row a:hover{ background:rgba(255,255,255,.16); }
+.tol-breathe-row :focus-visible{ outline:2px solid #F9D9B8; outline-offset:3px; }
+@media (prefers-reduced-motion: reduce){ .tol-breathe-orb{ transition-timing-function:linear; } }
+@media print{ .tol-breathe-btn, .tol-breathe{ display:none !important; } }

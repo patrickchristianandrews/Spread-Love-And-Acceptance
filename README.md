@@ -33,6 +33,11 @@ Source for The Objective Ledger (TOL-OS) site. The repo root is the site root: G
 | `manuscript/`, `telemetry/` | Markdown sources and specs (`telemetry/calc01-solvency.md` is the current CALC-01 spec) |
 | `infrastructure/`, `notes/`, `samples/` | Internal notes and sample PDFs, not linked from the site |
 
+## Calm features
+
+- **The Night Garden** (`night-garden.html`, `assets/js/night-garden.js`): breathing, fireflies and a lily-pond puzzle on one canvas. No timers, no losing, no streaks; the garden is saved only in the visitor's browser (`tol-night-garden-v1`). Sound is off until they turn it on.
+- **Breathe button**: `site.js` adds a one-minute breathing break to every page. Pages opt out with `<body data-no-breathe>`.
+
 ## Rules to keep
 
 
