@@ -215,7 +215,7 @@
 
   // The sections shown in the top bar. Each opens a short list of its pages.
   var RIBBON = [['start', 'Start here'], ['self', 'Self-discovery'], ['relationships', 'Relationships'],
-                ['book', 'Book'], ['workpapers', 'Workpapers'], ['tools', 'Tools'], ['media', 'Media']];
+                ['book', 'Book'], ['workpapers', 'Workpapers'], ['tools', 'Tools'], ['media', 'Media'], ['about', 'About']];
   var openDrop = null;
 
   function closeDrop(refocus) {

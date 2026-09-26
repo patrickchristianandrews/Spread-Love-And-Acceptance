@@ -1085,3 +1085,16 @@ body:has(.wpf-bar) .tol-breathe-btn{ bottom:calc(4.8rem + env(safe-area-inset-bo
 @keyframes tol-poplet{ 0%{ opacity:0; transform:translate(0,0) scale(.4); } 20%{ opacity:1; } 100%{ opacity:0; transform:translate(var(--dx), var(--dy)) scale(1); } }
 .tol-breathe .tol-poplet{ z-index:3; }
 @media (prefers-reduced-motion: reduce){ .tol-bub.is-popped::before, .tol-bub.is-popped::after{ animation:none !important; opacity:0; } .tol-poplet{ display:none; } }
+
+/* eight sections (with About) on one line at every desktop width */
+.tol-bar .tol-member{ white-space:nowrap; }
+@media (max-width:1360px) and (min-width:981px){
+  .tol-brand{ font-size:1rem; }
+  .tol-bar{ gap:.5rem; }
+  .tol-sections .tol-nav-item > button{ padding:.5rem .38rem; font-size:.9rem; }
+  .tol-nav-item > button::after{ margin-left:.25em; }
+}
+@media (max-width:1120px) and (min-width:981px){
+  .tol-sections .tol-nav-item > button{ padding:.45rem .3rem; font-size:.84rem; }
+  .tol-brand{ font-size:.95rem; }
+}
