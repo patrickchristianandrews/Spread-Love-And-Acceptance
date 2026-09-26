@@ -31,6 +31,7 @@
       if (SUBS[c]) { out += SUBS[c]; continue; }
       if ((c >= 32 && c < 127) || (c >= 0xA1 && c <= 0xFF)) { out += String.fromCharCode(c); continue; }
       if (CP1252[c]) { out += String.fromCharCode(CP1252[c]); continue; }
+      if (c >= 0x2600 || (c >= 0xFE00 && c <= 0xFE0F) || c === 0x200D) continue; // emoji and symbols the standard fonts can't draw
       var base = ch.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
       var b = base.codePointAt(0);
       out += (b >= 32 && b < 127) ? base.charAt(0) : '?';
@@ -115,28 +116,197 @@
     this._op(s);
   };
 
+  // Soft shapes for covers and dividers: rounded boxes, bubbles and hearts.
+  function paint(fill, stroke, lw) {
+    var s = '';
+    if (fill) s += rgb(fill) + ' rg ';
+    if (stroke) s += rgb(stroke) + ' RG ' + num(lw || 0.5) + ' w ';
+    return { pre: s, op: fill && stroke ? 'B' : (fill ? 'f' : 'S') };
+  }
+  Doc.prototype.roundRect = function (x, y, w, h, r, fill, stroke, lw) {
+    var H = this.height, k = 0.5523 * r, p = paint(fill, stroke, lw);
+    var x2 = x + w, yt = H - y, yb = H - y - h;
+    this._op(p.pre + num(x + r) + ' ' + num(yt) + ' m ' + num(x2 - r) + ' ' + num(yt) + ' l ' +
+      num(x2 - r + k) + ' ' + num(yt) + ' ' + num(x2) + ' ' + num(yt - r + k) + ' ' + num(x2) + ' ' + num(yt - r) + ' c ' +
+      num(x2) + ' ' + num(yb + r) + ' l ' +
+      num(x2) + ' ' + num(yb + r - k) + ' ' + num(x2 - r + k) + ' ' + num(yb) + ' ' + num(x2 - r) + ' ' + num(yb) + ' c ' +
+      num(x + r) + ' ' + num(yb) + ' l ' +
+      num(x + r - k) + ' ' + num(yb) + ' ' + num(x) + ' ' + num(yb + r - k) + ' ' + num(x) + ' ' + num(yb + r) + ' c ' +
+      num(x) + ' ' + num(yt - r) + ' l ' +
+      num(x) + ' ' + num(yt - r + k) + ' ' + num(x + r - k) + ' ' + num(yt) + ' ' + num(x + r) + ' ' + num(yt) + ' c h ' + p.op);
+  };
+  Doc.prototype.circle = function (cx, cy, r, fill, stroke, lw) {
+    var y = this.height - cy, k = 0.5523 * r, p = paint(fill, stroke, lw);
+    this._op(p.pre + num(cx + r) + ' ' + num(y) + ' m ' +
+      num(cx + r) + ' ' + num(y + k) + ' ' + num(cx + k) + ' ' + num(y + r) + ' ' + num(cx) + ' ' + num(y + r) + ' c ' +
+      num(cx - k) + ' ' + num(y + r) + ' ' + num(cx - r) + ' ' + num(y + k) + ' ' + num(cx - r) + ' ' + num(y) + ' c ' +
+      num(cx - r) + ' ' + num(y - k) + ' ' + num(cx - k) + ' ' + num(y - r) + ' ' + num(cx) + ' ' + num(y - r) + ' c ' +
+      num(cx + k) + ' ' + num(y - r) + ' ' + num(cx + r) + ' ' + num(y - k) + ' ' + num(cx + r) + ' ' + num(y) + ' c h ' + p.op);
+  };
+  // A heart centred on (cx, cy), s wide.
+  Doc.prototype.heart = function (cx, cy, s, fill, stroke, lw) {
+    var y = this.height - cy, u = s / 2, p = paint(fill, stroke, lw);
+    function P(dx, dy) { return num(cx + dx * u) + ' ' + num(y - dy * u); }
+    this._op(p.pre + P(0, 0.95) + ' m ' +
+      P(-0.25, 0.7) + ' ' + P(-1, 0.25) + ' ' + P(-1, -0.25) + ' c ' +
+      P(-1, -0.72) + ' ' + P(-0.45, -0.95) + ' ' + P(0, -0.5) + ' c ' +
+      P(0.45, -0.95) + ' ' + P(1, -0.72) + ' ' + P(1, -0.25) + ' c ' +
+      P(1, 0.25) + ' ' + P(0.25, 0.7) + ' ' + P(0, 0.95) + ' c h ' + p.op);
+  };
+  // A smooth curve through points, for the road on the cover.
+  Doc.prototype.curve = function (pts, color, lw, dash) {
+    var H = this.height, s = rgb(color || '#D9CBA3') + ' RG ' + num(lw || 1) + ' w 1 J ' + (dash ? '[' + dash.join(' ') + '] 0 d ' : '');
+    s += num(pts[0][0]) + ' ' + num(H - pts[0][1]) + ' m ';
+    for (var i = 1; i < pts.length; i++) {
+      var a = pts[i - 1], b = pts[i], my = (a[1] + b[1]) / 2;
+      s += num(a[0]) + ' ' + num(H - my) + ' ' + num(b[0]) + ' ' + num(H - my) + ' ' + num(b[0]) + ' ' + num(H - b[1]) + ' c ';
+    }
+    this._op(s + 'S [] 0 d 0 J');
+  };
+
+  /* Interactive parts: form fields people can type into in any PDF app,
+     links, and bookmarks. Field boxes are drawn on the page as well, so a
+     printed copy can be filled in by hand. */
+  // opts: { name, x, y, w, h, kind: 'text'|'choice'|'check', value, multiline, size, options: [[value, label]] }
+  Doc.prototype.field = function (opts) {
+    (this.page.fields || (this.page.fields = [])).push(opts);
+  };
+  Doc.prototype.link = function (x, y, w, h, toPage, toY) {
+    (this.page.links || (this.page.links = [])).push({ x: x, y: y, w: w, h: h, page: toPage, top: toY || 0 });
+  };
+  // Bookmarks: level 0 or 1, in reading order.
+  Doc.prototype.bookmark = function (title, level) {
+    (this.marks || (this.marks = [])).push({ title: title, level: level || 0, page: this.pages.length - 1 });
+  };
+
+  // Text strings for field values: UTF-16 with a byte-order mark, so any character survives.
+  function utf16(str) {
+    var hex = 'FEFF';
+    str = String(str == null ? '' : str);
+    for (var i = 0; i < str.length; i++) hex += ('000' + str.charCodeAt(i).toString(16).toUpperCase()).slice(-4);
+    return '<' + hex + '>';
+  }
+  function lit(str) { return '(' + escapeText(encode(str)) + ')'; }
+
   // Serialize to PDF bytes.
   Doc.prototype.output = function () {
     var objs = [];
     function add(body) { objs.push(body); return objs.length; }
-    var catalogId = add(null), pagesId = add(null);
+    function reserve() { objs.push(null); return objs.length; }
+    function set(id, body) { objs[id - 1] = body; }
+    function stream(dict, data) { return '<< ' + (dict ? dict + ' ' : '') + '/Length ' + data.length + ' >>\nstream\n' + data + '\nendstream'; }
+    var catalogId = reserve(), pagesId = reserve();
     var fontIds = FONT_NAMES.map(function (name) {
       return add('<< /Type /Font /Subtype /Type1 /BaseFont /' + name + ' /Encoding /WinAnsiEncoding >>');
     });
+    var helv = fontIds[0];
     var fontDict = '<< ' + fontIds.map(function (id, i) { return '/F' + (i + 1) + ' ' + id + ' 0 R'; }).join(' ') + ' >>';
-    var self = this, kids = [];
-    this.pages.forEach(function (p) {
-      var stream = p.ops.join('\n');
-      var contentId = add('<< /Length ' + stream.length + ' >>\nstream\n' + stream + '\nendstream');
-      kids.push(add('<< /Type /Page /Parent ' + pagesId + ' 0 R /MediaBox [0 0 ' + self.width + ' ' + self.height +
-        '] /Resources << /Font ' + fontDict + ' >> /Contents ' + contentId + ' 0 R >>'));
-    });
-    objs[catalogId - 1] = '<< /Type /Catalog /Pages ' + pagesId + ' 0 R >>';
-    objs[pagesId - 1] = '<< /Type /Pages /Kids [' + kids.map(function (k) { return k + ' 0 R'; }).join(' ') + '] /Count ' + kids.length + ' >>';
-    var infoId = add('<< /Title (' + escapeText(encode(this.info.title || '')) + ') /Producer (' +
-      escapeText(encode(this.info.producer || '')) + ') /CreationDate (' + pdfDate(new Date()) + ') >>');
+    var self = this, H = this.height, kids = [], allFields = [];
+    var pageIds = this.pages.map(function () { return reserve(); });
 
-    var out = '%PDF-1.4\n%\xE2\xE3\xCF\xD3\n';
+    var blanks = {};
+    function textAppearance(f) {
+      var w = f.w, h = f.h, size = f.size || 9, lines;
+      if (f.value == null || f.value === '') {
+        var bk = num(w) + 'x' + num(h);
+        if (!blanks[bk]) blanks[bk] = add(stream('/Type /XObject /Subtype /Form /BBox [0 0 ' + num(w) + ' ' + num(h) + ']', '/Tx BMC EMC'));
+        return blanks[bk];
+      }
+      var shown = f.kind === 'choice' ? labelFor(f, f.value) : f.value;
+      if (f.multiline) lines = wrap(shown || '', 'Helvetica', size, w - 6);
+      else lines = [encode(String(shown == null ? '' : shown).replace(/\n/g, ' '))];
+      var ops = '/Tx BMC q BT /Helv ' + num(size) + ' Tf 0.13 0.11 0.09 rg ';
+      var lh = size * 1.18, y0 = f.multiline ? h - 3 - size : (h - size * 0.72) / 2;
+      lines.forEach(function (ln, i) {
+        var y = y0 - i * lh;
+        if (y < 1) return;
+        ops += '1 0 0 1 3 ' + num(y) + ' Tm (' + escapeText(ln) + ') Tj ';
+      });
+      ops += 'ET Q EMC';
+      return add(stream('/Type /XObject /Subtype /Form /BBox [0 0 ' + num(w) + ' ' + num(h) + '] /Resources << /Font << /Helv ' + helv + ' 0 R >> >>', ops));
+    }
+    function labelFor(f, v) {
+      var hit = (f.options || []).filter(function (o) { return o[0] === v; })[0];
+      return hit ? hit[1] : (v || '');
+    }
+    var checks = {};
+    function checkAppearance(f, on) {
+      var w = f.w, h = f.h, ops = '', ck = num(w) + 'x' + num(h) + on;
+      if (checks[ck]) return checks[ck];
+      if (on) {
+        var s = Math.min(w, h);
+        ops = '0.24 0.42 0.3 RG 1.6 w 1 J 1 j ' + num(w / 2 - s * 0.28) + ' ' + num(h / 2) + ' m ' + num(w / 2 - s * 0.08) + ' ' + num(h / 2 - s * 0.22) + ' l ' + num(w / 2 + s * 0.3) + ' ' + num(h / 2 + s * 0.24) + ' l S';
+      }
+      return (checks[ck] = add(stream('/Type /XObject /Subtype /Form /BBox [0 0 ' + num(w) + ' ' + num(h) + ']', ops)));
+    }
+
+    this.pages.forEach(function (p, pi) {
+      var s = p.ops.join('\n');
+      var contentId = add(stream('', s));
+      var annots = [];
+      (p.fields || []).forEach(function (f) {
+        var rect = '[' + num(f.x) + ' ' + num(H - f.y - f.h) + ' ' + num(f.x + f.w) + ' ' + num(H - f.y) + ']';
+        var common = '/Type /Annot /Subtype /Widget /F ' + (f.hidden ? 2 : 4) + ' /P ' + pageIds[pi] + ' 0 R /Rect ' + rect + ' /T ' + lit(f.name) + (f.tip ? ' /TU ' + utf16(f.tip) : '');
+        var body;
+        if (f.kind === 'check') {
+          var on = !!f.value, yes = checkAppearance(f, true), off = checkAppearance(f, false);
+          body = '<< ' + common + ' /FT /Btn /V /' + (on ? 'Yes' : 'Off') + ' /AS /' + (on ? 'Yes' : 'Off') +
+            ' /MK << /CA (4) >> /DA (/ZaDb 0 Tf 0.24 0.42 0.3 rg) /AP << /N << /Yes ' + yes + ' 0 R /Off ' + off + ' 0 R >> >> >>';
+        } else if (f.kind === 'choice') {
+          var opts = (f.options || []).map(function (o) { return '[' + utf16(o[0]) + ' ' + utf16(o[1]) + ']'; }).join(' ');
+          body = '<< ' + common + ' /FT /Ch /Ff 131072 /Opt [' + opts + '] /V ' + utf16(f.value || '') +
+            ' /DA (/Helv ' + num(f.size || 9) + ' Tf 0.13 0.11 0.09 rg) /AP << /N ' + textAppearance(f) + ' 0 R >> >>';
+        } else {
+          body = '<< ' + common + ' /FT /Tx' + (f.multiline ? ' /Ff 4096' : '') + ' /V ' + utf16(f.value || '') +
+            ' /DA (/Helv ' + num(f.size || 9) + ' Tf 0.13 0.11 0.09 rg) /AP << /N ' + textAppearance(f) + ' 0 R >> >>';
+        }
+        var id = add(body);
+        annots.push(id); allFields.push(id);
+      });
+      (p.links || []).forEach(function (l) {
+        if (!pageIds[l.page]) return;
+        annots.push(add('<< /Type /Annot /Subtype /Link /Border [0 0 0] /Rect [' + num(l.x) + ' ' + num(H - l.y - l.h) + ' ' + num(l.x + l.w) + ' ' + num(H - l.y) +
+          '] /Dest [' + pageIds[l.page] + ' 0 R /XYZ null ' + num(H - l.top) + ' null] >>'));
+      });
+      set(pageIds[pi], '<< /Type /Page /Parent ' + pagesId + ' 0 R /MediaBox [0 0 ' + self.width + ' ' + self.height +
+        '] /Resources << /Font ' + fontDict + ' >> /Contents ' + contentId + ' 0 R' +
+        (annots.length ? ' /Annots [' + annots.map(function (a) { return a + ' 0 R'; }).join(' ') + ']' : '') + ' >>');
+      kids.push(pageIds[pi]);
+    });
+
+    // Bookmarks, two levels deep.
+    var outlinesRef = '';
+    if (this.marks && this.marks.length) {
+      var rootId = reserve(), tops = [];
+      this.marks.forEach(function (m) {
+        m.id = reserve();
+        if (m.level === 0 || !tops.length) { m.kids = []; tops.push(m); } else tops[tops.length - 1].kids.push(m);
+      });
+      var link = function (list, parent) {
+        list.forEach(function (m, i) {
+          var d = '<< /Title ' + utf16(m.title) + ' /Parent ' + parent + ' 0 R /Dest [' + pageIds[m.page] + ' 0 R /XYZ null ' + H + ' null]';
+          if (i > 0) d += ' /Prev ' + list[i - 1].id + ' 0 R';
+          if (i < list.length - 1) d += ' /Next ' + list[i + 1].id + ' 0 R';
+          if (m.kids && m.kids.length) { d += ' /First ' + m.kids[0].id + ' 0 R /Last ' + m.kids[m.kids.length - 1].id + ' 0 R /Count ' + m.kids.length; link(m.kids, m.id); }
+          set(m.id, d + ' >>');
+        });
+      };
+      link(tops, rootId);
+      set(rootId, '<< /Type /Outlines /First ' + tops[0].id + ' 0 R /Last ' + tops[tops.length - 1].id + ' 0 R /Count ' + tops.length + ' >>');
+      outlinesRef = ' /Outlines ' + rootId + ' 0 R /PageMode /UseOutlines';
+    }
+
+    var acro = '';
+    if (allFields.length) {
+      var zadb = add('<< /Type /Font /Subtype /Type1 /BaseFont /ZapfDingbats >>');
+      acro = ' /AcroForm << /Fields [' + allFields.map(function (a) { return a + ' 0 R'; }).join(' ') + '] /NeedAppearances true /DA (/Helv 0 Tf 0 g) /DR << /Font << /Helv ' + helv + ' 0 R /ZaDb ' + zadb + ' 0 R >> >> >>';
+    }
+    set(catalogId, '<< /Type /Catalog /Pages ' + pagesId + ' 0 R' + outlinesRef + acro + ' /ViewerPreferences << /DisplayDocTitle true >> >>');
+    set(pagesId, '<< /Type /Pages /Kids [' + kids.map(function (k) { return k + ' 0 R'; }).join(' ') + '] /Count ' + kids.length + ' >>');
+    var infoId = add('<< /Title ' + utf16(this.info.title || '') + ' /Producer ' + lit(this.info.producer || '') +
+      (this.info.subject ? ' /Subject ' + lit(this.info.subject) : '') + ' /CreationDate (' + pdfDate(new Date()) + ') >>');
+
+    var out = '%PDF-1.5\n%\xE2\xE3\xCF\xD3\n';
     var offsets = [];
     objs.forEach(function (body, i) {
       offsets.push(out.length);

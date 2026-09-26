@@ -28,13 +28,13 @@
 
   <div class="wpf-privacy">
     <p><strong>What you type stays on this device.</strong> Nothing you enter in this worksheet is sent anywhere or stored in your browser.</p>
-    <p>When you're done, download the PDF and keep it somewhere private. To finish later, save a draft file and open it on this page next time.</p>
+    <p>When you're done, download the PDF and keep it somewhere private. To finish later, save a draft file and open it on this page next time. Or download the <strong>fillable PDF</strong>: type into it in any PDF app or print it, then open it here again to pick up where you left off.</p>
   </div>
 
   <div id="wpf-root" class="wpf-form" role="region" aria-label="WP-02 worksheet"></div>
 
   <p class="wpf-after">Using a shared computer? When you've downloaded what you need, <button type="button" id="wpf-clear" class="wpf-clear">Clear this page</button></p>
-  <p class="wpf-after"><a href="/workpapers/fill/">All fill-in workpapers</a></p>
+  <p class="wpf-after"><a href="/workpapers/fill/">All fill-in workpapers</a> &middot; <a href="/workpapers/fill/suite.html">Build your whole Workpaper Suite</a></p>
 
 </main>
 
@@ -42,16 +42,18 @@
   <div class="wpf-bar-inner">
     <p id="wpf-status" role="status" aria-live="polite"></p>
     <div class="wpf-bar-actions">
-      <button type="button" id="wpf-open" class="wpf-btn-quiet">Open draft</button>
+      <button type="button" id="wpf-open" class="wpf-btn-quiet">Open</button>
       <button type="button" id="wpf-save" class="wpf-btn-quiet">Save draft</button>
+      <button type="button" id="wpf-fillable" class="wpf-btn-quiet">Fillable PDF</button>
       <button type="button" id="wpf-pdf" class="wpf-btn">Download PDF</button>
     </div>
   </div>
 </div>
-<input type="file" id="wpf-file" accept=".json,application/json" hidden>
+<input type="file" id="wpf-file" accept=".json,application/json,.pdf,application/pdf" hidden>
 
 <script src="/workpapers/fill/tol-pdf.js"></script>
 <script src="/workpapers/fill/tol-workpaper-schemas.js"></script>
 <script src="/workpapers/fill/tol-workpaper.js"></script>
+<script src="/workpapers/fill/tol-suite-pdf.js"></script>
 </body>
 </html>

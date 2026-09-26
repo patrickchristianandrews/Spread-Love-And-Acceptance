@@ -25,7 +25,7 @@ Source for The Objective Ledger (TOL-OS) site. The repo root is the site root: G
 | root `*.html` | Public pages, plus the standalone workpaper files (`wp-01.html`, `wp-02.html`, …, `calc01-solvency.html`) that also make up the member bundle |
 | `book/` | The manuscript chapters (Preface, I–V) |
 | `workpapers/` | Workpaper pages linked from the menu, plus their `.md` sources |
-| `workpapers/fill/` | Fill-in versions that save as PDFs |
+| `workpapers/fill/` | Fill-in versions that save as PDFs and fillable PDFs, plus the Workpaper Suite (`suite.html`) |
 | `workpapers/calculators/` | CALC-01 as linked from the menu |
 | `tools/`, `snapshot/`, `learn/`, `do/`, `architecture/` | Interactive tools and explainer sections |
 | `legal/` | Privacy policy, terms, refund policy. The root copies only redirect here |
@@ -37,6 +37,7 @@ Source for The Objective Ledger (TOL-OS) site. The repo root is the site root: G
 
 - **The Night Garden** (`night-garden.html`, `assets/js/night-garden.js`): breathing, fireflies and a lily-pond puzzle on one canvas. No timers, no losing, no streaks; the garden is saved only in the visitor's browser (`tol-night-garden-v1`). Sound is on by default and box breathing always starts with sound; the Sound button turns it off.
 - **Quiet Words** (`quiet-words.html`, `assets/js/quiet-words.js`): a calming word search. Six themes of eight words, one per day plus "Another puzzle"; each word leaves a kind line. No timer or score; only a finished-puzzle count is kept in the browser.
+- **Workpaper Suite** (`workpapers/fill/suite.html`, `tol-suite.js`, `tol-suite-paths.js`, `tol-suite-pdf.js`): choose a road (yourself, each kind of relationship, or the 6-week program, defined in `tol-suite-paths.js` from the relationship map and PROG-01) and its workpapers line up in groups. Sheets are filled in on the page, or brought in from draft files, suite files or filled-in fillable PDFs (read back by `readFilled`, which also opens compressed object streams). It makes a fillable, printable PDF (real form fields, bookmarks, a cover "road") and a report grouped by the road's steps, with changes over time and a "worth keeping close" page. Every single fill-in page also has a Fillable PDF button and opens its own filled PDF. Like the other fill-in pages, nothing typed is stored or sent.
 - **Music** (`assets/js/calm-music.js`): shared by the Night Garden and Quiet Words. Soft pads drift through four chords (8 seconds each, two box-breathing counts) with a sparse kalimba-like melody; game sounds use `note(i)` so they always fit the chord playing now.
 - **Tips library** (`assets/js/tips.js`): about 300 "Little tip for today" entries in 16 topics, loaded on demand by `site.js`, which prefers topics that fit the page's section. Word-puzzle themes live in `assets/js/quiet-words-themes.js` (eight words and a kind line each).
 - **Breathe button**: `site.js` adds a breathing break to every page (1, 3 or 5 minutes): a countdown ring, one grounding prompt per breath (`FOCUS`), and soft sound made in the browser (`breathSound`: a stereo chord in a generated hall, an ocean that follows the breath, singing bowls at each turn). Sound is on by default and remembered per browser; both sounds ask iPhones for media playback so the silent switch doesn't mute them. Pages opt out with `<body data-no-breathe>`.

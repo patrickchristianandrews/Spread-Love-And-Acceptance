@@ -355,6 +355,99 @@
     ]
   };
 
+  /* ------------------------------------------------------------------ WP-11 */
+  var WP11_TACTICS = ['Asymmetric breathing (4 in, 6 out)', 'Naming the room (5-4-3)', 'Weight and pressure', 'Gating (lower the lights, step out)', 'Walking it out', 'Low, steady sound'];
+  W['wp-11'] = {
+    code: 'WP-11',
+    title: 'The Calm-Down Kit',
+    slug: 'Calm-Down-Kit',
+    purpose: 'A short, pre-decided plan for bringing your body back down far enough to have the conversation, or to postpone it honestly. Used by one person, about themselves. Fill in Part A on an ordinary day, not a hard one.',
+    people: true,
+    meta: [
+      { id: 'date', label: 'Date', type: 'date' }
+    ],
+    sections: [
+      {
+        type: 'note', pdf: false,
+        text: 'Each person fills in their own kit, about themselves. It is never something to hand to the other person.'
+      },
+      {
+        id: 'triggers', type: 'table', title: 'Part A: What tends to start it',
+        intro: 'Name the two or three that actually recur for you. Specific beats comprehensive. Then note how your body signals it first: jaw, shoulders, shallow breath, cold hands.',
+        addLabel: 'Add a trigger',
+        columns: [
+          { id: 'trigger', label: 'What tends to start it', type: 'text', w: 2.5 },
+          { id: 'body', label: 'How it shows up in my body first', type: 'text', w: 2.5 }
+        ],
+        defaultRows: [{}, {}, {}]
+      },
+      {
+        id: 'defaults', type: 'fields', title: 'Part A: My two defaults',
+        intro: 'Pick two from the list in Part B now, so in the moment you don\'t have to choose.',
+        fields: [
+          { id: 'first', label: 'First default', type: 'select', options: WP11_TACTICS },
+          { id: 'second', label: "Second, if the first isn't available", type: 'select', options: WP11_TACTICS }
+        ]
+      },
+      {
+        id: 'lines', type: 'table', title: 'Part A: My signal line',
+        intro: 'One sentence, agreed now, so a pause isn\'t mistaken for walking out. Name the state, the length and the return: "I\'m at capacity. I need ten minutes. I\'ll be back at quarter past."',
+        fixedRows: ['@A', '@B'],
+        columns: [
+          { id: 'line', label: 'Signal line', type: 'textarea', w: 4 }
+        ]
+      },
+      {
+        type: 'note', pdf: true,
+        text: 'Part B, in the moment: read where you are with WP-02, say your line, then run your default. Nothing in this kit works by cold, pain or shock, and none of it is treatment.'
+      },
+      {
+        id: 'reentry', type: 'table', title: 'Part C: Re-entry',
+        intro: 'Read WP-02 before and after. "Feeling better" is not a threshold; the number is. Under 0.50, go back in. 0.50 to 0.60, run a second cycle. Still 0.60 or above after two, postpone to a named time.',
+        addLabel: 'Add a reading',
+        columns: [
+          { id: 'time', label: 'Time', type: 'text', w: 1, placeholder: 'e.g. 7:40pm' },
+          { id: 'tactic', label: 'What I ran', type: 'select', options: WP11_TACTICS, w: 2.2 },
+          { id: 'before', label: 'WP-02 before (0–1)', type: 'number', w: 1, step: '0.01', min: 0, max: 1 },
+          { id: 'after', label: 'WP-02 after (0–1)', type: 'number', w: 1, step: '0.01', min: 0, max: 1 },
+          { id: 'change', label: 'Change', type: 'computed', w: 0.9, compute: function (r) {
+            var b = parseFloat(r.before), a = parseFloat(r.after);
+            return (b >= 0 && a >= 0) ? (a - b > 0 ? '+' : '') + fmt(a - b, 2) : '';
+          } }
+        ],
+        defaultRows: [{}]
+      },
+      {
+        id: 'next', type: 'computed', title: 'Where that leaves you',
+        compute: function (ctx) {
+          var rows = ctx.rows('reentry').filter(function (r) { return parseFloat(r.after) >= 0; });
+          if (!rows.length) return [{ label: 'Re-entry', value: 'Add a before-and-after reading to see where you are.' }];
+          var a = parseFloat(rows[rows.length - 1].after);
+          var band = a < 0.5 ? 'Under 0.50: go back in, at the time you named.'
+            : a < 0.6 ? '0.50 to 0.60: run a second cycle, the same default or the other one.'
+              : (rows.length >= 2 ? '0.60 or above after two cycles: postpone to a specific time. "Tomorrow after dinner" is a postponement; "later" is not.' : '0.60 or above: run a second cycle first.');
+          return [{ label: 'Latest reading', value: fmt(a, 2) }, { label: 'Next', value: band, note: 'Coming back, start with one small, single-focus task, like putting the dishes away.' }];
+        }
+      },
+      {
+        id: 'after', type: 'fields', title: 'Coming back',
+        fields: [
+          { id: 'nextAction', label: 'Next small action', type: 'text' },
+          { id: 'resume', label: 'If the conversation was postponed: when it resumes', type: 'text' }
+        ]
+      },
+      {
+        id: 'signoff', type: 'table', title: 'Defaults set',
+        fixedRows: ['@A', '@B'],
+        columns: [
+          { id: 'chosen', label: 'Defaults chosen', type: 'check', w: 1.3 },
+          { id: 'agreed', label: 'Signal line agreed', type: 'check', w: 1.3 },
+          { id: 'date', label: 'Date', type: 'date', w: 1.4 }
+        ]
+      }
+    ]
+  };
+
   /* ------------------------------------------------------------------ WP-13 */
   var WP13_ROWS = [];
   DAYS.forEach(function (d) { WP13_ROWS.push({ day: d, who: 'A' }); WP13_ROWS.push({ day: d, who: 'B' }); });

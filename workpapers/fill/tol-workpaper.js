@@ -35,6 +35,39 @@
     return st;
   }
 
+  // A clean copy of a saved state: only this workpaper's fields, only plain values.
+  function sanitize(schema, raw) {
+    var fresh = blankState(schema);
+    raw = raw && typeof raw === 'object' ? raw : {};
+    var values = raw.values && typeof raw.values === 'object' ? raw.values : {}, tables = raw.tables && typeof raw.tables === 'object' ? raw.tables : {};
+    Object.keys(values).forEach(function (k) { if (values[k] != null && typeof values[k] !== 'object') fresh.values[k] = values[k]; });
+    schema.sections.forEach(function (s) {
+      if (s.type !== 'table' || !Array.isArray(tables[s.id])) return;
+      var rows = tables[s.id].filter(function (r) { return r && typeof r === 'object'; }).map(function (r) {
+        var clean = {};
+        s.columns.forEach(function (c) { if (r[c.id] != null && typeof r[c.id] !== 'object') clean[c.id] = r[c.id]; });
+        return clean;
+      });
+      if (s.fixedRows) rows = s.fixedRows.map(function (_, i) { return rows[i] || {}; });
+      fresh.tables[s.id] = rows.length ? rows : [{}];
+    });
+    return fresh;
+  }
+
+  // How much of a sheet has been filled in: the number of answers given.
+  function answered(schema, state) {
+    var n = 0, blank = blankState(schema);
+    schema.sections.forEach(function (s) {
+      if (s.type === 'table') (state.tables[s.id] || []).forEach(function (r, i) {
+        var d = (blank.tables[s.id] || [])[i] || {};
+        if (s.columns.some(function (c) { return c.type !== 'computed' && !isBlank(r[c.id]) && r[c.id] !== d[c.id]; })) n++;
+      });
+      else if (s.type === 'scale' || s.type === 'checks') s.items.forEach(function (it) { if (!isBlank(state.values[s.id + '.' + it.id])) n++; });
+      else if (s.type === 'fields') s.fields.forEach(function (f) { if (!isBlank(state.values[f.id])) n++; });
+    });
+    return n;
+  }
+
   function isBlank(v) { return v === undefined || v === null || v === '' || v === false; }
 
   function rowIsEmpty(section, row) {
@@ -89,10 +122,11 @@
 
   /* ------------------------------------------------------------ PDF layout */
 
-  function Report(schema, state) {
+  // doc is optional: pass one to add this workpaper to a larger PDF (the Workpaper Suite).
+  function Report(schema, state, doc) {
     this.schema = schema;
     this.ctx = makeCtx(schema, state);
-    this.doc = new global.TOLPDF.Doc({ title: schema.code + ' ' + schema.title, producer: 'The Objective Ledger (TOL-OS) worksheet, generated on this device' });
+    this.doc = doc || new global.TOLPDF.Doc({ title: schema.code + ' ' + schema.title, producer: 'The Objective Ledger (TOL-OS) worksheet, generated on this device' });
     this.L = 54; this.R = 558; this.W = this.R - this.L;
     this.top = 54; this.bottom = 730;
     this.newPage();
@@ -105,7 +139,7 @@
     this.doc.addPage();
     this.y = this.top;
     if (this.doc.pages.length > 1) {
-      this.doc.text(this.L, this.y + 6, this.enc(this.schema.code + '  ·  ' + this.schema.title), 'Helvetica', 7.5, COLORS.soft);
+      this.doc.text(this.L, this.y + 6, this.enc(this.running || (this.schema.code + '  ·  ' + this.schema.title)), 'Helvetica', 7.5, COLORS.soft);
       this.doc.line(this.L, this.y + 12, this.R, this.y + 12, COLORS.line, 0.5);
       this.y += 26;
     }
@@ -250,9 +284,16 @@
   };
 
   function buildPdf(schema, state) {
-    var R = new Report(schema, state), ctx = R.ctx;
-
+    var R = new Report(schema, state);
     R.titleBlock();
+    renderBody(R, schema, state);
+    R.footers();
+    return R.doc.output();
+  }
+
+  // Everything after the title: names, sections, tables and results.
+  function renderBody(R, schema, state) {
+    var ctx = R.ctx;
 
     var meta = [];
     if (schema.people) meta.push(['Partner A', ctx.name('A')], ['Partner B', ctx.name('B')]);
@@ -318,9 +359,6 @@
         R.box(s.compute(ctx));
       }
     });
-
-    R.footers();
-    return R.doc.output();
   }
 
   /* ------------------------------------------------------------ the form (browser only) */
@@ -338,10 +376,12 @@
     return el;
   }
 
-  function App(root, schema) {
+  // opts (optional): { state, statusEl, onChange } — used when the Workpaper Suite hosts a sheet.
+  function App(root, schema, opts) {
     this.root = root;
     this.schema = schema;
-    this.state = blankState(schema);
+    this.opts = opts || {};
+    this.state = this.opts.state || blankState(schema);
     this.dirty = false;
     this.uid = 0;
   }
@@ -554,8 +594,13 @@
       if (t.type === 'radio' && !t.checked) return;
       this.state.values[t.getAttribute('data-key')] = val;
     } else return;
-    this.dirty = true;
+    this.changed();
     this.refresh();
+  };
+
+  A.changed = function () {
+    this.dirty = true;
+    if (this.opts.onChange) this.opts.onChange(this.state);
   };
 
   A.onClick = function (e) {
@@ -566,7 +611,7 @@
     var action = b.getAttribute('data-action');
     if (action === 'add') {
       rows.push({});
-      this.dirty = true;
+      this.changed();
       this.render();
       var inputs = this.root.querySelectorAll('[data-table="' + tbl + '"][data-row="' + (rows.length - 1) + '"]');
       if (inputs[0]) inputs[0].focus();
@@ -575,7 +620,7 @@
       if (!rowIsEmpty(sec, rows[i]) && !window.confirm('Remove this row and what is written in it?')) return;
       rows.splice(i, 1);
       if (!rows.length) rows.push({});
-      this.dirty = true;
+      this.changed();
       this.render();
     } else if (action === 'pull') {
       var have = {}, key = sec.pull.key, added = 0;
@@ -585,14 +630,14 @@
       this.state.tables[tbl] = kept.concat(fresh);
       if (!this.state.tables[tbl].length) this.state.tables[tbl].push({});
       added = fresh.length;
-      this.dirty = true;
+      this.changed();
       this.render();
       this.status(added ? 'Added ' + added + (added === 1 ? ' task.' : ' tasks.') : 'No new tasks flagged twice or more in Part A.');
     }
   };
 
   A.status = function (msg) {
-    var el = document.getElementById('wpf-status');
+    var el = this.opts.statusEl || document.getElementById('wpf-status');
     if (!el) return;
     el.textContent = '';
     setTimeout(function () { el.textContent = msg; }, 30);
@@ -628,37 +673,62 @@
     this.status('Draft file downloaded. Open it here later to keep working.');
   };
 
+  // A fillable PDF from this site, filled in on a phone or computer, opens back into the form.
+  A.openPdf = function (file) {
+    var self = this, reader = global.TOLSuitePDF && global.TOLSuitePDF.readFilled;
+    if (!reader) { this.status('Open this PDF in the Workpaper Suite.'); return; }
+    reader(file).then(function (entries) {
+      var mine = entries.filter(function (e) { return e.workpaper === self.schema.code; });
+      if (!entries.length) { self.status("That PDF doesn't have fill-in boxes from this site. Choose a fillable PDF made here."); return; }
+      if (!mine.length) { self.status('That PDF is for ' + entries[0].workpaper + '. Open it on the ' + entries[0].workpaper + ' page, or in the Workpaper Suite.'); return; }
+      self.load(mine[mine.length - 1].state, 'Opened what you filled in on the PDF.');
+    }, function () { self.status('That PDF could not be read. If it was saved from a phone app, try "Save a copy" or "Print to PDF" first.'); });
+  };
+
+  A.fillablePdf = function () {
+    try {
+      var bytes = global.TOLSuitePDF.fillable([{ workpaper: this.schema.code, state: this.state, label: '' }], { single: true });
+      download(bytes, this.fileBase() + '-fillable.pdf', 'application/pdf');
+      this.status('Fillable PDF downloaded. Type into it in any PDF app, or print it and write by hand.');
+    } catch (err) {
+      this.status('The fillable PDF could not be created. Save a draft file so nothing is lost, then try again.');
+      if (window.console) console.error(err);
+    }
+  };
+
   A.openDraft = function (file) {
     var self = this;
     if (!file) return;
+    if (/\.pdf$/i.test(file.name) || file.type === 'application/pdf') { this.openPdf(file); return; }
     if (file.size > 2 * 1024 * 1024) { this.status('That file is too large to be a workpaper draft.'); return; }
     var reader = new FileReader();
     reader.onload = function () {
       var d;
       try { d = JSON.parse(reader.result); } catch (e) { self.status("That file isn't a workpaper draft. Choose a .json file saved from this page."); return; }
+      if (d && d.format === 'tol-workpaper-suite' && Array.isArray(d.entries)) {
+        var mine = d.entries.filter(function (e) { return e && e.workpaper === self.schema.code; }).pop();
+        if (!mine) { self.status('That suite file has no ' + self.schema.code + ' in it yet.'); return; }
+        d = { format: DRAFT_FORMAT, workpaper: mine.workpaper, state: mine.state };
+      }
       if (!d || d.format !== DRAFT_FORMAT || !d.state) { self.status("That file isn't a workpaper draft. Choose a .json file saved from this page."); return; }
       if (d.workpaper !== self.schema.code) { self.status('That draft is for ' + d.workpaper + '. Open it on the ' + d.workpaper + ' page.'); return; }
       if (self.dirty && !window.confirm('Replace what is on this page with the draft?')) return;
-      var fresh = blankState(self.schema);
-      var values = d.state.values || {}, tables = d.state.tables || {};
-      Object.keys(values).forEach(function (k) { if (typeof values[k] !== 'object') fresh.values[k] = values[k]; });
-      self.schema.sections.forEach(function (s) {
-        if (s.type !== 'table' || !Array.isArray(tables[s.id])) return;
-        var rows = tables[s.id].filter(function (r) { return r && typeof r === 'object'; }).map(function (r) {
-          var clean = {};
-          s.columns.forEach(function (c) { if (r[c.id] != null && typeof r[c.id] !== 'object') clean[c.id] = r[c.id]; });
-          return clean;
-        });
-        if (s.fixedRows) rows = s.fixedRows.map(function (_, i) { return rows[i] || {}; });
-        fresh.tables[s.id] = rows.length ? rows : [{}];
-      });
-      self.state = fresh;
+      self.state = sanitize(self.schema, d.state);
       self.dirty = false;
       self.render();
       self.status('Draft opened.');
     };
     reader.onerror = function () { self.status('That file could not be read.'); };
     reader.readAsText(file);
+  };
+
+  // Take in a whole state from a draft file or a filled-in PDF, keeping only what this workpaper has.
+  A.load = function (state, msg) {
+    if (this.dirty && !window.confirm('Replace what is on this page with the one you opened?')) return;
+    this.state = sanitize(this.schema, state);
+    this.dirty = false;
+    this.render();
+    this.status(msg || 'Opened.');
   };
 
   A.clear = function () {
@@ -686,6 +756,8 @@
     document.getElementById('wpf-save').addEventListener('click', function () { app.saveDraft(); });
     document.getElementById('wpf-open').addEventListener('click', function () { fileInput.click(); });
     document.getElementById('wpf-clear').addEventListener('click', function () { app.clear(); });
+    var fill = document.getElementById('wpf-fillable');
+    if (fill) fill.addEventListener('click', function () { app.fillablePdf(); });
     fileInput.addEventListener('change', function () { app.openDraft(fileInput.files[0]); fileInput.value = ''; });
 
     window.addEventListener('beforeunload', function (e) {
@@ -695,7 +767,11 @@
     });
   }
 
-  global.TOLWorkpaper = { buildPdf: buildPdf, blankState: blankState, makeCtx: makeCtx };
+  global.TOLWorkpaper = {
+    buildPdf: buildPdf, blankState: blankState, makeCtx: makeCtx, sanitize: sanitize, answered: answered,
+    Report: Report, renderBody: renderBody, App: App, download: download, today: today, formatDate: formatDate,
+    displayCell: displayCell, rowIsEmpty: rowIsEmpty, rowLabel: rowLabel, isBlank: isBlank, COLORS: COLORS, DRAFT_FORMAT: DRAFT_FORMAT
+  };
   if (typeof document !== 'undefined') {
     if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
     else boot();

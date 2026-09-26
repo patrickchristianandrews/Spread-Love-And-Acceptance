@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self'; form-action 'none'; base-uri 'none'; object-src 'none'">
+<meta name="referrer" content="no-referrer">
+<meta name="robots" content="noindex, nofollow">
+<title>Your Workpaper Suite — The Objective Ledger</title>
+<meta name="description" content="Choose your road, fill in its workpapers in order, and make one PDF you can fill in on your phone or print, plus a report grouped the way your road goes.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,500&family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/css/site.css">
+<link rel="stylesheet" href="/assets/css/reading.css">
+<link rel="stylesheet" href="/workpapers/fill/tol-workpaper.css">
+<script src="/assets/js/site.js" defer></script>
+</head>
+<body data-no-tip>
+<main class="read ws">
+
+  <header class="read-head">
+    <p class="read-code">New · Workpaper Suite</p>
+    <h1>Your Workpaper Suite</h1>
+  </header>
+
+  <p class="ws-lede">Pick the road you’re on. Your workpapers line up in the order that helps most. Fill them in here, or in one PDF you can type into on your phone or print. Then get a report grouped the way your road goes.</p>
+
+  <div class="wpf-privacy">
+    <p><strong>What you type stays on this device.</strong> Nothing is sent anywhere or stored in your browser. It lives on this page until you close it, and in the files you choose to download.</p>
+    <p>To pick up later, save a suite file, or just bring back the PDF you filled in.</p>
+  </div>
+
+  <section class="ws-step" aria-labelledby="ws-h1">
+    <h2 id="ws-h1"><span class="ws-num" aria-hidden="true">1</span> Choose your road</h2>
+    <p class="ws-sub">Who is this for? You can switch any time; what you’ve filled in comes with you.</p>
+    <div class="ws-paths" id="ws-paths" role="radiogroup" aria-label="Your road"></div>
+    <div class="ws-names" id="ws-names" hidden>
+      <p class="ws-names-q">Who’s on this road? <span>(optional, first names or initials)</span></p>
+      <div class="ws-names-row">
+        <label><span id="ws-name-a-label">Partner A</span><input type="text" id="ws-name-a" autocomplete="off" maxlength="40"></label>
+        <label><span id="ws-name-b-label">Partner B</span><input type="text" id="ws-name-b" autocomplete="off" maxlength="40"></label>
+      </div>
+      <p class="ws-care" id="ws-care"></p>
+    </div>
+  </section>
+
+  <section class="ws-step" id="ws-step-road" aria-labelledby="ws-road-title">
+    <h2><span class="ws-num" aria-hidden="true">2</span> <span id="ws-road-title">Your road</span></h2>
+    <p class="ws-progress" id="ws-progress" aria-live="polite"></p>
+    <p class="ws-road-empty" id="ws-road-empty">Choose a road above and your workpapers appear here, in order.</p>
+    <ol class="ws-road" id="ws-road"></ol>
+    <div class="ws-add" id="ws-add"></div>
+  </section>
+
+  <section class="ws-step" aria-labelledby="ws-h3">
+    <h2 id="ws-h3"><span class="ws-num" aria-hidden="true">3</span> Bring in what you’ve filled in</h2>
+    <div class="ws-drop" id="ws-drop">
+      <p class="ws-drop-art" aria-hidden="true">&#129767;</p>
+      <p><strong>Drop files here</strong>, or <button type="button" class="ws-link" id="ws-choose">choose files</button>. Choose as many as you like at once.</p>
+      <p class="ws-drop-kinds">Draft files from any fill-in workpaper, a suite file, or a fillable PDF you filled in on your phone or computer. Each one finds its place on your road.</p>
+      <p class="ws-drop-note" id="ws-drop-note" aria-live="polite"></p>
+    </div>
+  </section>
+
+  <section class="ws-step ws-make" id="ws-make" aria-labelledby="ws-h4">
+    <h2 id="ws-h4"><span class="ws-num" aria-hidden="true">4</span> Make your PDF</h2>
+    <div class="ws-out">
+      <div class="ws-out-card">
+        <p class="ws-out-k">Fill in or print</p>
+        <h3>The fillable PDF</h3>
+        <p>Every workpaper on your road, with real boxes you can tap and type into in any PDF app, or print and fill in by hand. It opens with your road and an at-a-glance read.</p>
+        <button type="button" class="ws-go" id="ws-fillable">Download the fillable PDF</button>
+      </div>
+      <div class="ws-out-card is-report">
+        <p class="ws-out-k">Keep and share</p>
+        <h3>Your report</h3>
+        <p>Just what you’ve written, grouped the way your road goes: where things stand, how they’ve changed over time, and the kind words worth keeping close.</p>
+        <button type="button" class="ws-go" id="ws-report">Download the report</button>
+      </div>
+    </div>
+    <p class="ws-save-row"><button type="button" class="ws-link" id="ws-save">Save a suite file</button> to pick everything up next time, even on another device.</p>
+  </section>
+
+  <p class="wpf-after">Using a shared computer? When you’ve downloaded what you need, <button type="button" id="wpf-clear" class="wpf-clear">Clear this page</button></p>
+  <p class="wpf-after"><a href="/workpapers/fill/">One workpaper at a time</a> &middot; <a href="/relationships.html">How it fits your relationships</a></p>
+
+</main>
+
+<div class="ws-sheet" id="ws-sheet" role="dialog" aria-modal="true" aria-labelledby="ws-sheet-title" hidden>
+  <div class="ws-sheet-panel">
+    <div class="ws-sheet-top">
+      <div>
+        <p class="ws-sheet-code" id="ws-sheet-code"></p>
+        <h2 class="ws-sheet-title" id="ws-sheet-title" tabindex="-1"></h2>
+      </div>
+      <button type="button" class="ws-sheet-x" id="ws-sheet-x" aria-label="Close and go back to your road">&times;</button>
+    </div>
+    <div class="ws-sheet-scroll">
+      <p class="ws-sheet-why" id="ws-sheet-why"></p>
+      <label class="ws-sheet-label"><span>This sheet is for</span><input type="text" id="ws-sheet-label" autocomplete="off" maxlength="80" placeholder="e.g. First week, Tuesday, October"></label>
+      <div id="ws-sheet-root" class="wpf-form" role="region" aria-label="Worksheet"></div>
+      <p id="ws-sheet-status" class="ws-sheet-status" role="status" aria-live="polite"></p>
+    </div>
+    <div class="ws-sheet-foot">
+      <button type="button" class="wpf-btn-quiet ws-small" id="ws-sheet-draft">Save this sheet as a draft</button>
+      <button type="button" class="ws-go" id="ws-sheet-done">Done &#10084;</button>
+    </div>
+  </div>
+</div>
+
+<div class="wpf-bar" role="region" aria-label="Save and download">
+  <div class="wpf-bar-inner">
+    <p id="wpf-status" role="status" aria-live="polite"></p>
+    <div class="wpf-bar-actions">
+      <button type="button" id="wpf-open" class="wpf-btn-quiet">Open files</button>
+      <button type="button" id="wpf-save" class="wpf-btn-quiet">Save suite</button>
+      <button type="button" id="wpf-pdf" class="wpf-btn">Fillable PDF</button>
+    </div>
+  </div>
+</div>
+<input type="file" id="ws-file" accept=".json,application/json,.pdf,application/pdf" multiple hidden>
+
+<script src="/workpapers/fill/tol-pdf.js"></script>
+<script src="/workpapers/fill/tol-workpaper-schemas.js"></script>
+<script src="/workpapers/fill/tol-workpaper.js"></script>
+<script src="/workpapers/fill/tol-suite-paths.js"></script>
+<script src="/workpapers/fill/tol-suite-pdf.js"></script>
+<script src="/workpapers/fill/tol-suite.js"></script>
+</body>
+</html>
