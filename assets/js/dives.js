@@ -6,7 +6,7 @@
 (function () {
   'use strict';
   var G = window.TOL_DIVES || {};
-  var MAX = 10; // at most this many marked terms per page, so pages stay calm to read
+  var MAX = 24; // at most this many marked terms per page, so pages stay calm to read
 
   var SKIP = 'a, button, h1, h2, h3, h4, h5, h6, label, code, pre, script, style, textarea, input, select, option, summary, svg, canvas, nav, header:not(.read-head), footer, .tol-bar, .no-dive, .tol-dive, .wpf-form, .wpf-bar, .tol-index, .tol-row, .gm-board, .qw, .ng-stage, .ws-sheet, .tol-tip, .dig, [role="dialog"], [aria-hidden="true"]';
 
@@ -77,22 +77,50 @@
       box = document.createElement('div');
       box.className = 'tol-dive-card'; box.setAttribute('role', 'dialog'); box.setAttribute('aria-modal', 'true'); box.setAttribute('aria-labelledby', 'tol-dive-h');
       box.innerHTML = '<div class="tol-dive-box"><button type="button" class="tol-dive-x" aria-label="Close">&times;</button>' +
-        '<p class="tol-dive-k"><span class="tol-dive-i" aria-hidden="true"></span> Mini dive</p><h2 id="tol-dive-h"></h2><div class="tol-dive-body"></div><p class="tol-dive-more"></p></div>';
+        '<p class="tol-dive-k"><span class="tol-dive-i" aria-hidden="true"></span> Mini dive</p><ol class="tol-dive-meter" aria-hidden="true"></ol><h2 id="tol-dive-h"></h2><div class="tol-dive-body" aria-live="polite"></div><p class="tol-dive-wade"></p><p class="tol-dive-more"></p></div>';
       document.body.appendChild(box);
-      box.addEventListener('click', function (e) { if (e.target === box || e.target.closest('.tol-dive-x')) close(); });
+      box.addEventListener('click', function (e) {
+        if (e.target === box || e.target.closest('.tol-dive-x')) return close();
+        if (e.target.closest('.tol-dive-go')) wade();
+      });
       box.addEventListener('keydown', function (e) {
         if (e.key === 'Escape') close();
         if (e.key === 'Tab') { var f = box.querySelectorAll('button, a'), a = f[0], z = f[f.length - 1]; if (e.shiftKey && document.activeElement === a) { e.preventDefault(); z.focus(); } else if (!e.shiftKey && document.activeElement === z) { e.preventDefault(); a.focus(); } }
       });
     }
     box.querySelector('#tol-dive-h').textContent = d.t;
-    box.querySelector('.tol-dive-body').innerHTML = (d.d || '').split('\n').map(function (p) { return '<p>' + esc(p) + '</p>'; }).join('');
-    var more = box.querySelector('.tol-dive-more');
-    var here = d.u && (location.pathname + location.hash) === d.u;
-    more.innerHTML = d.u && !here ? '<a href="' + esc(d.u) + '">' + esc(d.l || 'Dive deeper') + ' &rarr;</a>' : '';
+    // the layers, from the shore to the deep: a line to start, then a little more, then the shallows
+    var paras = (d.d || '').split('\n').filter(Boolean);
+    layers = [d.s || paras[0], d.f || (d.s ? '' : paras[1]), d.w || (d.s ? '' : paras.slice(2).join('\n'))].filter(Boolean);
+    depth = 0; cur = d;
+    box.querySelector('.tol-dive-body').innerHTML = '';
+    paint();
     box.classList.add('is-open');
     requestAnimationFrame(function () { box.classList.add('is-in'); });
     box.querySelector('.tol-dive-x').focus();
+  }
+  var layers = [], depth = 0, cur = null;
+  var STEPS = [['\uD83C\uDFD6', 'On the shore'], ['\uD83D\uDC63', 'Toes in the water'], ['\uD83C\uDF0A', 'The shallows'], ['\uD83E\uDD3F', 'The deep']];
+  function paint() {
+    var body = box.querySelector('.tol-dive-body'), d = cur;
+    var t = layers[depth] || '';
+    body.insertAdjacentHTML('beforeend', '<div class="tol-dive-layer' + (depth ? ' is-new' : '') + '"><p class="tol-dive-step">' + STEPS[depth][0] + ' ' + STEPS[depth][1] + '</p>' +
+      t.split('\n').map(function (p) { return '<p>' + esc(p) + '</p>'; }).join('') + '</div>');
+    var here = d.u && (location.pathname + location.hash) === d.u, deep = d.u && !here;
+    var total = layers.length + (deep ? 1 : 0);
+    box.querySelector('.tol-dive-meter').innerHTML = STEPS.slice(0, layers.length).concat(deep ? [STEPS[3]] : []).map(function (st, i) {
+      return '<li class="' + (i <= depth ? 'is-on' : '') + '" title="' + st[1] + '">' + st[0] + '</li>';
+    }).join('');
+    box.querySelector('.tol-dive-meter').style.display = total > 1 ? '' : 'none';
+    var more = depth < layers.length - 1;
+    box.querySelector('.tol-dive-wade').innerHTML = more ? '<button type="button" class="tol-dive-go">' + (depth ? 'A little deeper' : 'Wade in a little') + ' ' + STEPS[depth + 1][0] + '</button>' : '';
+    box.querySelector('.tol-dive-more').innerHTML = deep ? '<a href="' + esc(d.u) + '">' + STEPS[3][0] + ' ' + esc(d.l || 'Dive deeper') + ' &rarr;</a>' : '';
+    if (depth) { var nl = body.lastElementChild; if (nl && nl.scrollIntoView) nl.scrollIntoView({ block: 'nearest', behavior: 'smooth' }); }
+  }
+  function wade() {
+    if (depth >= layers.length - 1) return;
+    depth++; paint();
+    var g = box.querySelector('.tol-dive-go'); (g || box.querySelector('.tol-dive-more a') || box.querySelector('.tol-dive-x')).focus();
   }
   function close() {
     if (!box) return;

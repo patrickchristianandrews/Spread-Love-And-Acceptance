@@ -1058,6 +1058,17 @@ body:has(.wpf-bar) .tol-breathe-btn{ bottom:calc(4.8rem + env(safe-area-inset-bo
 @media print{ .tol-wash b{ display:none; } }
 .tol-dive-card{ z-index:1000; }
 .tol-dive-more a{ color:#2F5F8A; }
+/* the depth meter and the layers, shore to deep */
+.tol-dive-meter{ display:flex; gap:.35rem; list-style:none; margin:.1rem 0 .3rem; padding:0; }
+.tol-dive-meter li{ width:1.9rem; height:1.9rem; display:grid; place-items:center; border-radius:50%; font-size:1rem; background:rgba(120,160,200,.12); opacity:.45; transition:opacity .3s, background-color .3s; }
+.tol-dive-meter li.is-on{ opacity:1; background:linear-gradient(160deg, #E4F2FB, #C9E2F4); }
+.tol-dive-step{ margin:.3rem 0 .25rem !important; font-size:.78rem; font-weight:600; letter-spacing:.04em; text-transform:uppercase; color:#4F7597; }
+.tol-dive-layer.is-new{ border-top:1px dashed rgba(79,117,151,.3); padding-top:.3rem; animation:tolWade .45s ease both; }
+@keyframes tolWade{ from{ opacity:0; transform:translateY(6px); } to{ opacity:1; transform:none; } }
+.tol-dive-wade{ margin:.1rem 0 .5rem; }
+.tol-dive-go{ font:inherit; font-weight:600; font-size:.95rem; padding:.55rem 1rem; min-height:44px; border-radius:999px; border:1px solid rgba(79,117,151,.35); background:linear-gradient(160deg, #F2F9FE, #DDEEF9); color:#2F5F8A; cursor:pointer; }
+.tol-dive-go:hover{ background:#D3E8F7; }
+@media (prefers-reduced-motion: reduce){ .tol-dive-layer.is-new{ animation:none; } }
 
 /* ---------- Glassy bubbles everywhere, like the ones in Breathe, and you can pop them ----------
    Clear in the middle, a bright highlight, a soft coloured rim with a hint of rainbow sheen,

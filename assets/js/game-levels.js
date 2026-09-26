@@ -101,7 +101,7 @@
       return '';
     }
     var keys = Object.keys(G).filter(function (k) { return G[k].u; });
-    var k = keys[(tipAt++) % keys.length], d = G[k], first = (d.d || '').split('\n')[0];
+    var k = keys[(tipAt++) % keys.length], d = G[k], first = d.s || (d.d || '').split('\n')[0];
     return '<div class="gl-tip"><p class="gl-tip-k">&#127793; From the program</p><p><b>' + esc(d.t) + ':</b> ' + esc(first) + '</p>' +
       '<p><a href="' + esc(d.u) + '">' + esc(d.l || 'Read more') + ' &rarr;</a></p></div>';
   }
