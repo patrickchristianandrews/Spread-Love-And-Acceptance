@@ -1,8 +1,7 @@
-/* rewards.js — petals, gentle streaks and a garden that grows, shared by every calm game.
-   Playing well earns petals (a word found without a hint, a row bloomed, a puzzle
-   finished). Petals never get spent or lost; they add up, and at each milestone your garden
-   grows: something new and calm appears in the living garden behind every page (a tree and
-   swing, wind chimes, a bridge, a blossom tree...), and now and then new tile colours.
+/* rewards.js — levels, gentle streaks and a background that keeps growing, shared by every
+   calm game. Each level you finish counts, and every few levels (a random two to five)
+   something new appears in the living garden behind every page: a swing, koi, wind chimes,
+   a bridge, a blossom tree... and each one plays along with the animals there.
    The streak is gentle: one missed day a week is a rest day and never breaks it.
    Everything is kept in this browser only. Nothing is sent anywhere. */
 (function () {
@@ -10,56 +9,44 @@
   if (window.TOLRewards) return; // already loaded on this page
   var KEY = 'tol-rewards-v1';
 
-  // What grows, and when.
-  var LADDER = [
-    { id: 'tiles-rose', at: 25, kind: 'tiles', name: 'Rose tiles', icon: '\uD83C\uDF39', desc: 'Warm rosy tiles for the word games.' },
-    { id: 'garden-swing', at: 60, kind: 'garden', name: 'A tree and a swing', icon: '\uD83C\uDF33', desc: 'An old tree grows by the pond, with a wooden swing that sways in the breeze.' },
-    { id: 'garden-koi', at: 120, kind: 'garden', name: 'Koi in the pond', icon: '\uD83D\uDC1F', desc: 'Two glowing koi swim slow circles in the pond.' },
-    { id: 'tiles-moon', at: 200, kind: 'tiles', name: 'Moonlight tiles', icon: '\uD83C\uDF19', desc: 'Deep blue night tiles with soft silver letters.' },
-    { id: 'garden-chimes', at: 300, kind: 'garden', name: 'Wind chimes', icon: '\uD83C\uDF90', desc: 'Chimes hang from the tree, glinting, and ring softly in the Night Garden.' },
-    { id: 'garden-boats', at: 420, kind: 'garden', name: 'Paper boats', icon: '\u26F5', desc: 'Little paper boats with candles drift across the pond.' },
-    { id: 'garden-bridge', at: 560, kind: 'garden', name: 'A little bridge', icon: '\uD83C\uDF09', desc: 'A wooden footbridge arches over the pond.' },
-    { id: 'tiles-meadow', at: 700, kind: 'tiles', name: 'Meadow tiles', icon: '\uD83C\uDF3F', desc: 'Fresh green tiles, like a summer morning.' },
-    { id: 'garden-blossom', at: 850, kind: 'garden', name: 'A blossom tree', icon: '\uD83C\uDF38', desc: 'A cherry tree blooms on the far bank, and its petals drift across every page.' },
-    { id: 'garden-aurora', at: 1000, kind: 'garden', name: 'Aurora', icon: '\uD83C\uDF0C', desc: 'Soft ribbons of light ripple across the sky.' },
-    { id: 'garden-lights', at: 1200, kind: 'garden', name: 'Fairy lights', icon: '\u2728', desc: 'Strings of warm little lights between the trees, twinkling.' },
-    { id: 'tiles-sunrise', at: 1400, kind: 'tiles', name: 'Sunrise tiles', icon: '\uD83C\uDF05', desc: 'Peach and gold, like the first light.' },
-    { id: 'garden-balloon', at: 1650, kind: 'garden', name: 'A hot-air balloon', icon: '\uD83C\uDF88', desc: 'A striped balloon drifts slowly across the sky.' },
-    { id: 'garden-hammock', at: 1950, kind: 'garden', name: 'A hammock', icon: '\uD83D\uDECF\uFE0F', desc: 'A hammock between the trees, for the laziest afternoons.' },
-    { id: 'garden-rainbow', at: 2300, kind: 'garden', name: 'Rainbow lanterns', icon: '\uD83C\uDFEE', desc: 'Your lanterns rise in every pastel colour.' },
-    { id: 'tiles-gold', at: 2700, kind: 'tiles', name: 'Golden tiles', icon: '\u2728', desc: 'Glowing gold, for a true regular.' },
-    { id: 'garden-owls', at: 3100, kind: 'garden', name: 'Sleepy owls', icon: '\uD83E\uDD89', desc: 'Two owls blink from the branches.' },
-    { id: 'garden-butterflies', at: 3600, kind: 'garden', name: 'Glowing butterflies', icon: '\uD83E\uDD8B', desc: 'Soft glowing butterflies float among the flowers.' },
-    { id: 'garden-meteors', at: 4200, kind: 'garden', name: 'A meteor shower', icon: '\uD83C\uDF20', desc: 'Now and then, a gentle shower of shooting stars.' },
-    { id: 'garden-gazebo', at: 4900, kind: 'garden', name: 'A lantern gazebo', icon: '\uD83C\uDFEF', desc: 'A little gazebo glows on the hill, the calmest spot in the garden.' }
+  // What appears in the background, in order. Every few levels (a random two to five) the
+  // next one arrives, and each one plays along with the animals and everything else there.
+  var WONDERS = [
+    ['garden-swing', 'A tree and a swing', '🌳', 'An old tree by the pond with a wooden swing. The dogs take turns on it.'],
+    ['garden-koi', 'Koi in the pond', '🐟', 'Two glowing koi swim slow circles, and leap when anyone splashes.'],
+    ['garden-chimes', 'Wind chimes', '🎐', 'Chimes hang from the tree and sparkle whenever someone runs past.'],
+    ['garden-boats', 'Paper boats', '⛵', 'Candle-lit paper boats drift across the pond. The frog hops aboard now and then.'],
+    ['garden-bridge', 'A little bridge', '🌉', 'A wooden footbridge over the pond, the best spot for a hug.'],
+    ['garden-blossom', 'A blossom tree', '🌸', 'A cherry tree on the far bank. Its petals drift across every page and land on whoever is near.'],
+    ['garden-aurora', 'Aurora', '🌌', 'Ribbons of light across the sky. Everyone stops to look up.'],
+    ['garden-lights', 'Fairy lights', '✨', 'Warm little lights between the trees that glow brighter as the animals pass beneath.'],
+    ['garden-balloon', 'A hot-air balloon', '🎈', 'A striped balloon drifts across the sky, and the plane waves hello.'],
+    ['garden-hammock', 'A hammock', '🛏️', 'A hammock between the trees, for naps after all that playing.'],
+    ['garden-rainbow', 'Rainbow lanterns', '🏮', 'The Night Garden’s lanterns rise in every pastel colour.'],
+    ['garden-owls', 'Sleepy owls', '🦉', 'Two owls in the branches whose eyes follow the fun.'],
+    ['garden-butterflies', 'Glowing butterflies', '🦋', 'Soft glowing butterflies that the dogs chase and the bunny follows.'],
+    ['garden-meteors', 'A meteor shower', '🌠', 'Now and then a shower of shooting stars, and everyone makes a wish.'],
+    ['garden-gazebo', 'A lantern gazebo', '🏯', 'A little glowing gazebo on the hill, where the dogs go to dance.']
   ];
-  // after all that, every 700 petals brings more fireflies to the garden, forever
-  var MORE = [];
-  for (var mi = 0; mi < 30; mi++) MORE.push(['\u2728', 'More fireflies']);
-  function ladder() {
-    var out = LADDER.slice(), last = LADDER[LADDER.length - 1].at;
-    MORE.forEach(function (m, i) { out.push({ id: 'garden-flies-' + i, at: last + 700 * (i + 1), kind: 'garden', name: m[1], icon: m[0], desc: 'Five more fireflies light up your garden.' }); });
-    return out;
-  }
-  var ALL = ladder();
-  var TILE_THEMES = [{ id: 'tiles-petal', name: 'Petal', icon: '🌸' }].concat(ALL.filter(function (u) { return u.kind === 'tiles'; }));
+  var LADDER = WONDERS.map(function (w) { return { id: w[0], kind: 'garden', name: w[1], icon: w[2], desc: w[3] }; });
+  // after all that, more fireflies every few levels, for as long as you like to play
+  for (var mi = 0; mi < 40; mi++) LADDER.push({ id: 'garden-flies-' + mi, kind: 'garden', name: 'More fireflies', icon: '✨', desc: 'Five more fireflies light up the background.' });
+  var ALL = LADDER;
+  var TILE_THEMES = [{ id: 'tiles-petal', name: 'Petal', icon: '🌸' }];
 
   function dayKey(d) { d = d || new Date(); return d.getFullYear() + '-' + ('0' + (d.getMonth() + 1)).slice(-2) + '-' + ('0' + d.getDate()).slice(-2); }
   function daysBetween(a, b) { var pa = a.split('-'), pb = b.split('-'); return Math.round((Date.UTC(+pb[0], pb[1] - 1, +pb[2]) - Date.UTC(+pa[0], pa[1] - 1, +pa[2])) / 864e5); }
 
-  var S = { petals: 0, days: [], streak: 0, best: 0, rest: '', last: '', unlocked: [], tiles: 'tiles-petal', garden: {}, from: {}, games: {}, today: { day: '', did: {}, bouquet: false } };
-  // The daily bouquet: one calm breath, one word game and one garden game in a day
-  var BOUQUET = { breath: ['breathe'], words: ['bloom', 'crossword', 'words'], garden: ['pond', 'fireflies'] };
-  function kindOf(src) { for (var k in BOUQUET) if (BOUQUET[k].indexOf(src) !== -1) return k; return null; }
+  var S = { lv: 0, nextAt: 0, lastAt: 0, days: [], streak: 0, best: 0, rest: '', last: '', unlocked: [], tiles: 'tiles-petal', garden: {}, from: {}, games: {}, today: { day: '', did: {}, bouquet: false } };
   try { var raw = localStorage.getItem(KEY); if (raw) { var o = JSON.parse(raw); for (var k in o) S[k] = o[k]; } } catch (e) {}
   function save() { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) {} }
-  // anything already earned (for example when the garden's list changes) is simply there
-  ALL.forEach(function (u) { if (u.at <= S.petals && S.unlocked.indexOf(u.id) === -1) S.unlocked.push(u.id); });
-  S.unlocked = S.unlocked.filter(function (id) { return id.indexOf('st-') !== 0; }); // stickers retired
-
-  function nextUnlock() { for (var i = 0; i < ALL.length; i++) if (ALL[i].at > S.petals) return ALL[i]; return null; }
-  function prevAt() { var p = 0; ALL.forEach(function (u) { if (u.at <= S.petals) p = u.at; }); return p; }
-  function level() { return 1 + ALL.filter(function (u) { return u.at <= S.petals; }).length; }
+  delete S.petals; delete S.today;
+  S.unlocked = S.unlocked.filter(function (id) { return id.indexOf('st-') !== 0 && id.indexOf('tiles-') !== 0; }); // stickers and tiles retired
+  S.tiles = 'tiles-petal';
+  function gap() { return 2 + Math.floor(Math.random() * 4); } // a surprise every two to five levels
+  if (!S.nextAt) { S.lv = S.lv || S.unlocked.length * 3; S.lastAt = S.lv; S.nextAt = S.lv + gap(); }
+  function nextUnlock() { for (var i = 0; i < ALL.length; i++) if (S.unlocked.indexOf(ALL[i].id) === -1) return ALL[i]; return null; }
+  function level() { return S.lv + 1; }
 
   // A new day: keep the streak (a missed day is forgiven once a week), and give a daily blossom.
   function touchDay() {
@@ -80,24 +67,22 @@
     return bonus;
   }
 
-  // earn(n, source, why): add petals for doing well; returns what happened, and shows it softly.
+  // earn(n, source, why): a level done. Every few levels something new appears in the
+  // background. Shows it softly; returns what happened.
   function earn(n, source, why, opts) {
     opts = opts || {};
-    n = Math.max(0, Math.round(n || 0));
-    var daily = touchDay(), before = S.petals;
-    S.petals += n + daily;
-    if (source) S.from[source] = (S.from[source] || 0) + n;
-    // the daily bouquet
-    var tk = dayKey();
-    if (!S.today || S.today.day !== tk) S.today = { day: tk, did: {}, bouquet: false };
-    var kind = kindOf(source), bouquetNow = false;
-    if (kind) S.today.did[kind] = true;
-    if (!S.today.bouquet && S.today.did.breath && S.today.did.words && S.today.did.garden) { S.today.bouquet = true; S.petals += 10; bouquetNow = true; }
-    var fresh = ALL.filter(function (u) { return u.at > before && u.at <= S.petals && S.unlocked.indexOf(u.id) === -1; });
-    fresh.forEach(function (u) { S.unlocked.push(u.id); if (u.kind === 'garden') S.garden[u.id] = true; });
+    touchDay();
+    if (source) S.from[source] = (S.from[source] || 0) + 1;
+    S.lv++;
+    var fresh = [];
+    if (S.lv >= S.nextAt) {
+      var u = nextUnlock();
+      if (u) { S.unlocked.push(u.id); S.garden[u.id] = true; fresh.push(u); }
+      S.lastAt = S.lv; S.nextAt = S.lv + gap();
+    }
     save();
-    var res = { gained: n + (bouquetNow ? 10 : 0), daily: daily, total: S.petals, streak: S.streak, unlocked: fresh, next: nextUnlock(), bouquet: bouquetNow };
-    if (!opts.quiet && (n || daily)) toast(res, bouquetNow ? (why ? why + ' \u00B7 ' : '') + 'Daily bouquet complete! +10' : why);
+    var res = { level: level(), streak: S.streak, unlocked: fresh, next: nextUnlock() };
+    if (!opts.quiet && !fresh.length) toast(res, why);
     if (fresh.length && !opts.noCard) setTimeout(function () { unlockCard(fresh[0]); }, opts.cardDelay || 1400);
     renderChips();
     return res;
@@ -128,7 +113,7 @@
       '.tr-card.is-in{opacity:1}.tr-card-box{position:relative;max-width:22rem;width:100%;text-align:center;padding:1.6rem 1.3rem 1.2rem;border-radius:26px;background:linear-gradient(160deg,#FFF8EE,#F6EEF8 60%,#EEF4FA);box-shadow:0 20px 60px rgba(40,30,70,.35);transform:scale(.85);transition:transform .5s cubic-bezier(.2,1.4,.4,1)}' +
       '.tr-card.is-in .tr-card-box{transform:scale(1)}.tr-card-k{margin:0;font:500 .72rem/1 "IBM Plex Mono",monospace;letter-spacing:.12em;text-transform:uppercase;color:#8A6D8F}' +
       '.tr-card-art{display:grid;place-items:center;width:6.5rem;height:6.5rem;margin:.8rem auto;border-radius:50%;background:radial-gradient(circle at 35% 30%,#fff,#F9E1EA 60%,#EBDDF6);font-size:3.2rem;animation:tr-bob 4s ease-in-out infinite}' +
-      '.tr-card-art img{width:70%;height:70%}.tr-card h2{margin:.2rem 0 .3rem;font:600 1.45rem/1.2 Fraunces,Georgia,serif;color:#2B2440}.tr-card p{margin:0 0 1rem;color:#5A5346;font:1rem/1.45 Lora,Georgia,serif}' +
+      '.tr-card-art img{width:70%;height:70%}.tr-card h2{margin:.2rem 0 .3rem;font:600 1.45rem/1.2 Fraunces,Georgia,serif;color:#2B2440}.tr-card-hint{font-size:.9rem !important;color:#8A6D8F !important}.tr-card p{margin:0 0 1rem;color:#5A5346;font:1rem/1.45 Lora,Georgia,serif}' +
       '.tr-card-row{display:flex;gap:.5rem;justify-content:center;flex-wrap:wrap}.tr-card-row a,.tr-card-row button{font:600 .95rem Lora,Georgia,serif;min-height:44px;padding:.55rem 1.1rem;border-radius:999px;border:1px solid #D9C8F0;background:#fff;color:#4E3F6B;text-decoration:none;cursor:pointer}' +
       '.tr-card-row .tr-go{background:#3C3350;color:#FFF8EE;border-color:#3C3350}' +
       '.tr-confetti{position:absolute;left:50%;top:40%;width:0;height:0;pointer-events:none}.tr-confetti span{position:absolute;font-size:18px;animation:tr-fly 1.6s cubic-bezier(.2,.8,.2,1) both}' +
@@ -144,13 +129,12 @@
     if (typeof document === 'undefined') return;
     style();
     if (!toastEl) { toastEl = document.createElement('div'); toastEl.className = 'tr-toast'; toastEl.setAttribute('role', 'status'); document.body.appendChild(toastEl); }
-    var nx = res.next, pct = nx ? Math.round((S.petals - prevAt()) / (nx.at - prevAt()) * 100) : 100;
-    var line = (why || 'Petals for your garden') + (res.daily ? ' · +' + res.daily + ' daily blossom' + (res.streak > 1 ? ' (' + res.streak + '-day streak)' : '') : '');
-    toastEl.innerHTML = '<b>+' + (res.gained + res.daily) + '</b><span>🌸 ' + esc(line) +
-      '<small>' + (nx ? (nx.at - S.petals) + ' more to unlock ' + esc(nx.name) : 'Every keepsake unlocked!') + '</small><span class="tr-bar"><i style="width:' + Math.max(4, pct) + '%"></i></span></span>';
+    var pct = Math.round((S.lv - S.lastAt) / Math.max(1, S.nextAt - S.lastAt) * 100);
+    toastEl.innerHTML = '<b>' + res.level + '</b><span>✨ ' + esc(why || 'Level done') +
+      '<small>' + (res.next ? 'Something new is on its way to the background' : 'Everything has arrived. Thank you for playing.') + '</small><span class="tr-bar"><i style="width:' + Math.max(6, pct) + '%"></i></span></span>';
     requestAnimationFrame(function () { toastEl.classList.add('is-in'); });
     clearTimeout(toastTimer);
-    toastTimer = setTimeout(function () { toastEl.classList.remove('is-in'); }, 3600);
+    toastTimer = setTimeout(function () { toastEl.classList.remove('is-in'); }, 3200);
   }
   function esc(t) { return String(t).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
 
@@ -159,13 +143,12 @@
   function unlockCard(u) {
     if (cardOpen || typeof document === 'undefined') return;
     style(); cardOpen = true;
-    var what = { tiles: 'New tile colours', garden: 'Your garden grew' }[u.kind] || 'Something new';
-    var action = u.kind === 'tiles' ? '<button type="button" class="tr-go" data-use="' + u.id + '">Use them now</button>'
-      : '<a class="tr-go" href="/keepsakes.html">See your garden</a>';
+    var what = 'Level ' + level() + ' · something new in the background';
+    var action = '';
     var c = document.createElement('div');
     c.className = 'tr-card'; c.setAttribute('role', 'dialog'); c.setAttribute('aria-modal', 'true'); c.setAttribute('aria-label', 'You unlocked ' + u.name);
     c.innerHTML = '<div class="tr-card-box"><div class="tr-confetti" aria-hidden="true"></div><p class="tr-card-k">✨ ' + what + ' ✨</p><div class="tr-card-art">' + artFor(u) + '</div>' +
-      '<h2>' + esc(u.name) + '</h2><p>' + esc(u.desc) + '</p><div class="tr-card-row">' + action + '<button type="button" data-close>Keep playing</button></div></div>';
+      '<h2>' + esc(u.name) + '</h2><p>' + esc(u.desc) + '</p><p class="tr-card-hint">Look behind the page to find it.</p><div class="tr-card-row">' + action + '<button type="button" class="tr-go" data-close>Keep playing</button></div></div>';
     document.body.appendChild(c);
     var conf = c.querySelector('.tr-confetti'), bits = ['🌸', '✨', '💗', '🫧', '🌟'];
     for (var i = 0; i < 18; i++) {
@@ -194,16 +177,21 @@
     return true;
   }
 
-  // Little chips that show your petals and streak, and open the keepsakes page
+  // Little chips that show your level and streak
   function renderChips() {
     if (typeof document === 'undefined') return;
     Array.prototype.forEach.call(document.querySelectorAll('[data-rewards-chip]'), function (el) {
       style();
-      el.innerHTML = '<a class="tr-chip" href="/keepsakes.html" aria-label="' + S.petals + ' petals, ' + S.streak + '-day streak. Open your keepsakes">🌸 ' + S.petals +
-        (S.streak > 1 ? ' <span class="tr-s">🔥 ' + S.streak + '</span>' : '') + '</a>';
+      el.innerHTML = '<span class="tr-chip" role="img" aria-label="Level ' + level() + (S.streak > 1 ? ', ' + S.streak + '-day streak' : '') + '">✨ ' + level() +
+        (S.streak > 1 ? ' <span class="tr-s">🔥 ' + S.streak + '</span>' : '') + '</span>';
     });
   }
 
+  // another page (or the page around the background) finished a level: pick up what's new at once
+  if (typeof window !== 'undefined' && window.addEventListener) window.addEventListener('storage', function (e) {
+    if (e.key !== KEY || !e.newValue) return;
+    try { var o = JSON.parse(e.newValue); for (var k in o) S[k] = o[k]; renderChips(); } catch (err) {}
+  });
   if (typeof document !== 'undefined') {
     document.documentElement.setAttribute('data-tiles', S.tiles || 'tiles-petal');
     if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', renderChips); else renderChips();
@@ -212,11 +200,10 @@
   window.TOLRewards = {
     earn: earn, record: record, stat: stat, setTiles: setTiles, renderChips: renderChips, unlockCard: unlockCard,
     has: function (id) { return id === 'tiles-petal' || S.unlocked.indexOf(id) !== -1; },
-    garden: function (id) { return S.unlocked.indexOf(id) !== -1 && S.garden[id] !== false; },
+    garden: function (id) { return S.unlocked.indexOf(id) !== -1; },
     extraFlies: function () { return S.unlocked.filter(function (id) { return id.indexOf('garden-flies-') === 0; }).length * 5; },
     setGarden: function (id, on) { S.garden[id] = !!on; save(); },
-    bouquet: function () { var t = S.today && S.today.day === dayKey() ? S.today : { did: {}, bouquet: false }; return { breath: !!t.did.breath, words: !!t.did.words, garden: !!t.did.garden, done: !!t.bouquet }; },
-    state: function () { return { petals: S.petals, streak: S.streak, best: S.best, days: S.days.slice(), rest: S.rest, level: level(), next: nextUnlock(), prevAt: prevAt(), unlocked: S.unlocked.slice(), tiles: S.tiles, from: S.from, games: S.games }; },
+    state: function () { return { streak: S.streak, best: S.best, days: S.days.slice(), level: level(), next: nextUnlock(), toNext: Math.max(0, S.nextAt - S.lv), progress: (S.lv - S.lastAt) / Math.max(1, S.nextAt - S.lastAt), unlocked: S.unlocked.slice(), from: S.from, games: S.games }; },
     ladder: ALL, tileThemes: TILE_THEMES, dayKey: dayKey
   };
 })();

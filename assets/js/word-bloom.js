@@ -1,7 +1,7 @@
 /* word-bloom.js — Word Bloom (/word-bloom.html): a calm, moreish letter-wheel game.
    Swipe across the petals (or tap them one by one) to spell a word. Words that belong
    in the little crossword fill it in; other real words go in the bonus jar. Every level
-   blooms into the next, with petals for doing well (see rewards.js).
+   blooms into the next, and every level counts toward something new in the background (see rewards.js).
    No timer and no way to lose. Progress stays in this browser. */
 (function () {
   'use strict';
@@ -182,11 +182,12 @@
     save();
     var m = wake(); if (m) { m.home(); setTimeout(function () { m.reward(true); }, 500); }
     if (window.TOLGarden && S.cleared % 5 === 0) window.TOLGarden.gift('words');
-    if (R) { R.earn(petalsWon, 'bloom', perfect ? 'Perfect bloom, no hints' : 'Level ' + (S.level + 1) + ' bloomed'); R.record('bloom', 'levels'); R.record('bloom', 'best', S.level + 1, 'max'); }
+    var res = null;
+    if (R) { res = R.earn(petalsWon, 'bloom', perfect ? 'Perfect bloom, no hints' : 'Level ' + (S.level + 1) + ' bloomed'); R.record('bloom', 'levels'); R.record('bloom', 'best', S.level + 1, 'max'); }
     var card = $('.wb-done');
     card.querySelector('.wb-done-h').textContent = perfect ? 'A perfect bloom!' : 'Level ' + (S.level + 1) + ' bloomed';
     card.querySelector('.wb-done-p').textContent = KIND[S.level % KIND.length] + (S.bonus.length ? ' You found ' + S.bonus.length + ' bonus ' + (S.bonus.length === 1 ? 'word' : 'words') + ' too.' : '');
-    card.querySelector('.wb-done-petals').textContent = '+' + petalsWon + ' petals';
+    card.querySelector('.wb-done-petals').textContent = (res && res.unlocked && res.unlocked.length ? '\u2728 New in the background: ' + res.unlocked[0].name : res ? '\u2728 Level ' + res.level : '');
     levels.finished(cur);
     var tip = card.querySelector('.wb-done-tip'); if (tip) tip.innerHTML = window.TOLLevels.programTip();
     card.hidden = false;

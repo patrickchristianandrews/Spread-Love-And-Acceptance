@@ -55,14 +55,13 @@
       { href: '/book/chapter-3.html', deep: true, code: 'III', title: 'Full tanks and different angles', note: 'Why some reactions are bigger than their cause. Also called Autonomic Saturation & the 7 Ocular Vectors', paid: true },
       { href: '/learn/index.html#part-self', deep: true, code: 'Stories', title: 'Stories from Philosophy: Knowing yourself', note: 'The Second Arrow, the Ship of Theseus, What Is Up to Us' },
     ]},
-    { id: 'play', title: 'Play', blurb: 'Calm games for a busy mind. No timers and no way to lose, with petals for playing well.', items: [
-      { href: '/pause-and-play.html', code: 'All', title: 'Pause & Play', note: 'All the calm games in one place, with your petals, your streak and today’s bouquet' },
+    { id: 'play', title: 'Play', blurb: 'Calm games for a busy mind. No timers and no way to lose, and something new in the background every few levels.', items: [
+      { href: '/pause-and-play.html', code: 'All', title: 'Pause & Play', note: 'All the calm games in one place, with your level and your streak' },
       { href: '/night-garden.html', code: 'New', title: 'The Night Garden', note: 'A calm place to breathe, play and let your mind settle. Flowers bloom as you breathe; no timers, nothing to lose' },
-      { href: '/word-bloom.html', code: 'New', title: 'Word Bloom', note: 'Swipe across the petals to spell words. Hundreds of gentle levels, a bonus jar, and petals for playing well' },
+      { href: '/word-bloom.html', code: 'New', title: 'Word Bloom', note: 'Swipe across the petals to spell words. Hundreds of gentle levels and a bonus jar, and every few levels something new appears in the background' },
       { href: '/quiet-crossword.html', code: 'New', title: 'Quiet Crossword', note: 'Small, friendly crosswords with a new one every day, made for playing on a phone' },
       { href: '/daily-ledger-crossword.html', code: 'New', title: 'The Daily Ledger Crossword', note: 'A newspaper-style crossword, from a quick 5x5 Mini to a Big Sunday 13x13' },
       { href: '/quiet-words.html', code: 'Game', title: 'Quiet Words', note: 'A gentle word search with a new theme each day. Every word you find leaves a kind thought behind' },
-      { href: '/keepsakes.html', code: 'You', title: 'Your garden', note: 'Petals from every calm game grow the garden behind every page: a swing, chimes, a bridge, a blossom tree and more' },
     ]},
     { id: 'relationships', title: 'Relationships', blurb: 'Where to start in each kind of relationship, and every tool that fits. The shared relationship tools themselves are under The book, Workpapers and Tools.', items: [
       { href: '/turning-toward.html', deep: true, code: 'New', title: 'Turning toward', note: 'Seven small, everyday ways to build connection with anyone who matters to you' },
@@ -374,7 +373,7 @@
       document.documentElement.classList.add('has-garden');
     }
 
-    // petals for calm moments anywhere on the site (rewards.js), except the locked-down workpaper pages
+    // levels for calm moments anywhere on the site (rewards.js), except the locked-down workpaper pages
     if (!window.TOLRewards && !document.querySelector('meta[http-equiv="Content-Security-Policy"]')) {
       var rw = document.createElement('script'); rw.src = '/assets/js/rewards.js'; document.head.appendChild(rw);
     }

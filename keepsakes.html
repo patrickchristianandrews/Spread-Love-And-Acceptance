@@ -1,106 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-NKC6CQ9S66"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'G-NKC6CQ9S66');
-</script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Your garden &mdash; petals and the wonders they grow &middot; The Objective Ledger</title>
-<meta name="description" content="Every calm game you play earns petals, and your petals grow the living garden behind every page: a tree and swing, wind chimes, a bridge, a blossom tree, fairy lights and more.">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,500&family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/assets/css/site.css">
-<link rel="stylesheet" href="/assets/css/reading.css">
-<link rel="stylesheet" href="/assets/css/games.css">
-<style>
-  .ks-hero{ display:grid; grid-template-columns:auto 1fr; gap:1rem 1.2rem; align-items:center; padding:1.2rem 1.3rem; border-radius:26px; background:linear-gradient(145deg, #FFF3F6 0%, #F6EEF8 55%, #EEF4FA 100%); border:1px solid #EBD3E4; }
-  .ks-petals{ display:grid; place-items:center; width:6.2rem; height:6.2rem; border-radius:50%; background:radial-gradient(circle at 35% 30%, #fff, #F9E1EA 60%, #EBDDF6); text-align:center; box-shadow:inset 0 -6px 12px rgba(200,150,190,.2); }
-  .ks-petals b{ display:block; font:600 1.7rem/1 Fraunces, Georgia, serif; color:#6B2E45; }
-  .ks-petals small{ font-size:.78rem; color:#8A6D8F; }
-  .ks-hero h2{ margin:0 0 .2rem; font-size:1.3rem; }
-  .ks-hero p{ margin:0; }
-  .ks-bar{ height:10px; border-radius:10px; background:#EFE6F4; overflow:hidden; margin:.5rem 0 .3rem; }
-  .ks-bar i{ display:block; height:100%; border-radius:10px; background:linear-gradient(90deg, #F4A6B8, #C9A7E8); transition:width 1s; }
-  .ks-next{ font-size:.92rem; color:var(--ink-soft); }
-  .ks-streak{ grid-column:1 / -1; display:flex; flex-wrap:wrap; align-items:center; gap:.6rem; }
-  .ks-days{ display:flex; gap:4px; }
-  .ks-days span{ width:18px; height:18px; border-radius:50%; background:#fff; border:1px solid #E6D6EE; display:grid; place-items:center; font-size:.6rem; }
-  .ks-days span.is-on{ background:#F7CAD4; border-color:#E8A5B8; }
-  .ks-days span.is-today{ outline:2px solid #C9A7E8; outline-offset:1px; }
-  .ks-sec{ margin-top:2.2rem; }
-  .ks-sec h2{ margin-bottom:.3rem; }
-  .ks-grid{ display:grid; grid-template-columns:repeat(auto-fill, minmax(118px, 1fr)); gap:10px; margin-top:.8rem; }
-  .ks-item{ position:relative; display:flex; flex-direction:column; align-items:center; text-align:center; gap:.3rem; padding:.9rem .6rem .8rem; border-radius:20px; background:#FFFDF7; border:1px solid rgba(60,51,80,.1); font:inherit; color:var(--ink); }
-  .ks-item .ks-art{ display:grid; place-items:center; width:4rem; height:4rem; border-radius:50%; background:radial-gradient(circle at 35% 30%, #fff, #F6EEF8); font-size:2rem; }
-  .ks-item .ks-art img{ width:78%; height:78%; }
-  .ks-item strong{ font-family:Fraunces, Georgia, serif; font-size:.98rem; line-height:1.2; }
-  .ks-item small{ font-size:.78rem; color:var(--ink-soft); line-height:1.3; }
-  .ks-item.is-locked{ opacity:.55; }
-  .ks-item.is-locked .ks-art{ filter:grayscale(1) blur(.5px); }
-  .ks-item.is-locked::after{ content:"\1F512"; position:absolute; top:8px; right:10px; font-size:.8rem; }
-  button.ks-item{ cursor:pointer; }
-  button.ks-item[aria-pressed="true"]{ border:2px solid #C95B7A; background:#FFF3F6; }
-  .ks-swatch{ width:4rem; height:4rem; border-radius:16px; display:grid; grid-template-columns:1fr 1fr; gap:3px; padding:6px; box-sizing:border-box; }
-  .ks-swatch i{ border-radius:5px; }
-  .ks-toggle{ margin-top:.2rem; font:inherit; font-size:.8rem; min-height:36px; padding:.25rem .8rem; border-radius:999px; border:1px solid #D9C8F0; background:#fff; cursor:pointer; }
-  .ks-toggle[aria-pressed="true"]{ background:#3C3350; color:#FFF8EE; border-color:#3C3350; }
-  .ks-earn{ list-style:none; padding:0; margin:.8rem 0 0; display:grid; gap:.5rem; }
-  .ks-earn li{ margin:0; padding:.7rem .9rem; border-radius:16px; background:#FFFDF7; border:1px solid rgba(60,51,80,.08); }
-  .ks-earn a{ font-weight:600; }
-  .ks-stats{ display:flex; flex-wrap:wrap; gap:.5rem; margin-top:.8rem; }
-  .ks-stats span{ padding:.4rem .8rem; border-radius:999px; background:#F6EEF8; font-size:.88rem; }
-  @media (max-width:440px){ .ks-hero{ grid-template-columns:1fr; justify-items:center; text-align:center; } .ks-streak{ justify-content:center; } .ks-grid{ grid-template-columns:repeat(auto-fill, minmax(100px, 1fr)); } }
-</style>
-<script src="/assets/js/site.js" defer></script>
-<script src="/assets/js/rewards.js" defer></script>
-<script src="/assets/js/keepsakes.js" defer></script>
+<title>Pause &amp; Play &middot; The Objective Ledger</title>
+<meta name="robots" content="noindex">
+<link rel="canonical" href="/pause-and-play.html">
+<meta http-equiv="refresh" content="0; url=/pause-and-play.html">
 </head>
 <body>
-<main class="read">
-<header class="read-head"><p class="read-code">Your garden</p><h1>Petals, and the garden they grow</h1></header>
-<p class="simple-lede">Every calm game you play earns petals, a few more when you play well. Petals never run out or get spent. They add up, and at each milestone your garden grows: something new and peaceful appears in the living garden behind every page on the site.</p>
-
-<section class="ks-hero" id="ks-hero" aria-live="polite"></section>
-
-<section class="ks-sec" aria-labelledby="ks-tiles-h">
-  <h2 id="ks-tiles-h">Tile colours</h2>
-  <p>For Quiet Words, Word Bloom and Quiet Crossword. Tap one to use it.</p>
-  <div class="ks-grid" id="ks-tiles"></div>
-</section>
-
-<section class="ks-sec" aria-labelledby="ks-garden-h">
-  <h2 id="ks-garden-h">Your garden’s wonders</h2>
-  <p>Each one appears in the garden behind every page, and in <a href="/night-garden.html">the Night Garden</a>, as soon as you grow it. You might spot the two dogs playing by them. You can switch any of them off.</p>
-  <div class="ks-grid" id="ks-garden"></div>
-</section>
-
-
-<section class="ks-sec" aria-labelledby="ks-earn-h">
-  <h2 id="ks-earn-h">Ways to earn petals</h2>
-  <ul class="ks-earn">
-    <li><a href="/word-bloom.html">Word Bloom</a>: petals for every level, more for a perfect bloom with no hints, and a bonus jar that pays out every ten bonus words.</li>
-    <li><a href="/quiet-crossword.html">Quiet Crossword</a>: petals for each puzzle, more when you finish without revealing letters.</li>
-    <li><a href="/quiet-words.html">Quiet Words</a>: petals for every puzzle, more when you find every word without a hint.</li>
-    <li><a href="/night-garden.html">The Night Garden</a>: petals for every four calm breaths, each constellation, shooting stars, and every row that blooms on the lily pond (double and triple blooms earn more).</li>
-    <li><strong>Today’s bouquet</strong>: one calm breath, one word game and one garden game in a day earns 10 bonus petals. See it on <a href="/pause-and-play.html">Pause &amp; Play</a>.</li>
-    <li><strong>A breathing break</strong>: finishing one anywhere on the site earns petals too.</li>
-    <li><strong>Your daily blossom</strong>: the first game each day brings a few extra petals, and a few more for each day in your streak, up to a week.</li>
-    <li><strong>A gentle streak</strong>: miss one day in a week and it counts as a rest day. Your streak carries on.</li>
-  </ul>
-  <div class="ks-stats" id="ks-stats"></div>
-</section>
-
-<div class="try-this">
-  <p><strong>Kept on this device:</strong> your petals and your garden live in this browser only. Nothing is sent anywhere, and there is nothing to buy.</p>
-  <p><a href="/word-bloom.html">Play Word Bloom &rarr;</a></p>
-</div>
-</main>
+<p><a href="/pause-and-play.html">Pause &amp; Play has moved here.</a></p>
 </body>
 </html>

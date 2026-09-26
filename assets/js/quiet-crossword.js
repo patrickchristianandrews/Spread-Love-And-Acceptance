@@ -1,7 +1,7 @@
 /* quiet-crossword.js — Quiet Crossword (/quiet-crossword.html): small, gentle crosswords.
    Tap a square (tap it again to switch between across and down) and type with the
    on-screen keys or a keyboard. Each word glows softly when it's right. There's a new
-   puzzle every day and "Another puzzle" any time; petals for finishing, more with no
+   puzzle every day and "Another puzzle" any time; every puzzle counts as a level, with a kinder note for no
    reveals (rewards.js). No timer, no way to lose. Progress stays in this browser. */
 (function () {
   'use strict';
@@ -149,12 +149,13 @@
     S.solved++; save();
     levels.finished(cur);
     var m = wake(); if (m) { m.home(); setTimeout(function () { m.reward(true); }, 500); }
-    if (R) { R.earn(won, 'crossword', perfect ? 'Solved with no reveals' : 'Crossword solved'); R.record('crossword', 'done'); }
+    var res = null;
+    if (R) { res = R.earn(won, 'crossword', perfect ? 'Solved with no reveals' : 'Crossword solved'); R.record('crossword', 'done'); }
     if (window.TOLGarden) window.TOLGarden.gift('words');
     var card = $('.xw-done');
     card.querySelector('.xw-done-h').textContent = perfect ? 'Solved, all by yourself!' : 'Solved. Lovely.';
     card.querySelector('.xw-done-p').textContent = 'You’ve finished ' + S.solved + (S.solved === 1 ? ' crossword.' : ' crosswords.') + ' Take a slow breath.';
-    card.querySelector('.xw-done-petals').textContent = '+' + won + ' petals';
+    card.querySelector('.xw-done-petals').textContent = (res && res.unlocked && res.unlocked.length ? '\u2728 New in the background: ' + res.unlocked[0].name : res ? '\u2728 Level ' + res.level : '');
     var tip = card.querySelector('.xw-done-tip'); if (tip) tip.innerHTML = window.TOLLevels.programTip();
     card.hidden = false; card.querySelector('.xw-again').focus();
   }
@@ -198,7 +199,7 @@
     var w = current(); if (!w) return;
     var k = w.cells.filter(function (x) { return S.fill[x] !== sol[x]; })[0]; if (!k) return;
     sel = k; S.reveals++; type(sol[k]);
-    noteEl.textContent = 'One letter is in. Solve a puzzle with no reveals for extra petals.';
+    noteEl.textContent = 'One letter is in. Try the next one with no reveals, just for fun.';
   });
   $('.xw-check').addEventListener('click', function () {
     var wrong = Object.keys(S.fill).filter(function (k) { return S.fill[k] && S.fill[k] !== sol[k]; });
