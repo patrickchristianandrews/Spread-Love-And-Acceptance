@@ -386,6 +386,12 @@
       document.head.appendChild(dg);
     }
 
+    // little buddies who cheer you on between the sections of a reading page (cheer.js)
+    if (!body.hasAttribute('data-no-cheer') && !body.classList.contains('is-game') && current !== '/index.html' && current !== '/' &&
+        (document.querySelector('main.read') || body.classList.contains('tol-deep')) && !document.querySelector('meta[http-equiv="Content-Security-Policy"]')) {
+      var ch = document.createElement('script'); ch.src = '/assets/js/cheer.js'; ch.defer = true; document.head.appendChild(ch);
+    }
+
     popBubbles();
 
     // "Breathe": a one-minute calm break on every page (the Night Garden has its own)
