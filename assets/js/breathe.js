@@ -376,6 +376,7 @@
   function ripple() { var r = document.createElement('i'), box = $('.tol-breathe-ripples'); box.appendChild(r); setTimeout(function () { r.remove(); }, 4200); }
 
   function finish() {
+    if (window.TOLGarden) window.TOLGarden.gift('breathe');
     stopAll(); cur.k = ''; ov.classList.remove('is-in', 'is-out'); show('done');
     if (engine && !muted && scape !== 'off') { engine.chord(); later(function () { if (engine) engine.mute(true); }, 7000); }
     tap([10, 60, 10]);

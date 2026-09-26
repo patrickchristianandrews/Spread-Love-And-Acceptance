@@ -415,6 +415,25 @@
 
   // ---------- Breathe with me ----------
   // Six slow breaths, in for 4 seconds and out for 6 (about six a minute). Nothing is saved.
+  // ---------- One garden for the whole site ----------
+  // Finishing a breathing session, a word puzzle, a Turning Toward day or a weather check-in
+  // plants a flower in the Night Garden, which blooms on the next visit. Kept in this browser.
+  window.TOLGarden = {
+    gift: function (source) {
+      var g = { count: 0, from: {} };
+      try { g = JSON.parse(lsGet('tol-garden-gifts') || '') || g; } catch (e) {}
+      g.count = Math.min(24, (g.count || 0) + 1); g.from = g.from || {}; g.from[source] = (g.from[source] || 0) + 1;
+      lsSet('tol-garden-gifts', JSON.stringify(g));
+      if (current !== '/night-garden.html') plantedNote();
+    }
+  };
+  function plantedNote() {
+    var n = el('a', { class: 'tol-planted', href: '/night-garden.html', role: 'status' }, '<span aria-hidden="true">&#127800;</span> A flower was planted in your Night Garden');
+    document.body.appendChild(n);
+    requestAnimationFrame(function () { n.classList.add('is-in'); });
+    setTimeout(function () { n.classList.remove('is-in'); setTimeout(function () { n.remove(); }, 600); }, 4200);
+  }
+
   // ---------- Things drift softly into place as you scroll to them ----------
   function revealOnScroll() {
     if (!('IntersectionObserver' in window) || (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches)) return;

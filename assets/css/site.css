@@ -941,3 +941,11 @@ body:has(.wpf-bar) .tol-breathe-btn{ bottom:calc(4.8rem + env(safe-area-inset-bo
   ::view-transition-old(root), ::view-transition-new(root){ animation:none; }
 }
 @media print{ .tol-reveal{ opacity:1 !important; transform:none !important; } }
+
+/* "A flower was planted in your Night Garden" */
+.tol-planted{ position:fixed; left:50%; top:calc(var(--tol-bar-h, 64px) + .8rem); z-index:885; transform:translate(-50%, -10px); opacity:0;
+  display:inline-flex; align-items:center; gap:.5rem; padding:.55rem 1.1rem; border-radius:999px; text-decoration:none; color:#2F5A3C; font-size:.92rem;
+  background:rgba(238,246,241,.97); border:1px solid #BFE3CF; box-shadow:0 10px 30px rgba(60,90,70,.16);
+  transition:opacity .5s var(--ease-out), transform .5s var(--ease-out); white-space:nowrap; max-width:calc(100% - 2rem); }
+.tol-planted.is-in{ opacity:1; transform:translate(-50%, 0); }
+@media (prefers-reduced-motion: reduce){ .tol-planted{ transition:none; } }

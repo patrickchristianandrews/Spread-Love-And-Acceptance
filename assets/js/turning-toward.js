@@ -228,6 +228,7 @@
       if (!e.target.matches('input[data-day]')) return;
       ticks[e.target.getAttribute('data-day')] = e.target.checked;
       set('tol-tt-7day', JSON.stringify(ticks));
+      if (e.target.checked && window.TOLGarden) window.TOLGarden.gift('kindness');
       progress();
     });
     $('tt-reset').addEventListener('click', function () {

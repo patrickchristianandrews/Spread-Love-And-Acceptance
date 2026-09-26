@@ -235,6 +235,7 @@
     return cells.join('|') === got.join('|') || cells.join('|') === got.slice().reverse().join('|');
   }
   function finish() {
+    if (window.TOLGarden) window.TOLGarden.gift('words');
     root.classList.add('is-done');
     var n = +get('tol-qw-done', '0') + 1; set('tol-qw-done', String(n));
     setTimeout(function () { [0, 2, 4, 5].forEach(function (k, i) { setTimeout(function () { bell(k); }, i * 180); }); }, 400);
