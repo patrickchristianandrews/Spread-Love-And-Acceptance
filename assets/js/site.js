@@ -344,6 +344,9 @@
       }
     }
 
+    addPrivateNote(body);
+    addTip(body);
+
     // "Breathe": a one-minute calm break on every page (the Night Garden has its own)
     if (!body.hasAttribute('data-no-breathe')) buildBreathe(body);
 
@@ -409,6 +412,91 @@
 
   // ---------- Breathe with me ----------
   // Six slow breaths, in for 4 seconds and out for 6 (about six a minute). Nothing is saved.
+  // ---------- Little tips for the day ----------
+  // One small, practical tip near the end of each content page. It changes each day, differs
+  // from page to page, and "Another tip" shows a new one.
+  var TIPS = [
+    ['Name the feeling.', 'Saying “I’m frustrated” out loud, or just in your head, takes some of the heat out of it.'],
+    ['Three breaths before you reply.', 'When a message stings, wait three slow breaths before answering. The reply you send will be kinder, and so will the one you get back.'],
+    ['Check the basics first.', 'Snapping at everyone? Ask yourself: am I hungry, thirsty, lonely or tired? Fix that first, then decide if the problem is still a problem.'],
+    ['Five minutes of daylight.', 'Step outside for a few minutes, especially in the morning. Light helps your body clock, your sleep and your mood.'],
+    ['Write tomorrow’s top three tonight.', 'Putting tomorrow’s to-dos on paper before bed helps your mind let go of them.'],
+    ['Start with what’s going well.', 'Before a hard conversation, say one thing you appreciate. It helps the other person hear the rest.'],
+    ['Try “can you help me with…”.', 'It lands much softer than “you never…”, and it asks for something they can actually do.'],
+    ['The two-minute rule.', 'If a job takes less than two minutes, do it now. Small things stop piling up.'],
+    ['Phone in another room.', 'For the first ten minutes after you get home, leave your phone somewhere else and say hello properly.'],
+    ['Ask about good news.', 'When someone shares something good, ask one question about it. It’s one of the simplest ways to feel closer.'],
+    ['Drop your shoulders.', 'Right now: let your shoulders fall away from your ears and unclench your jaw. Check again in an hour.'],
+    ['A ten-minute walk.', 'A short walk, even around the block, can lift your mood and clear your head.'],
+    ['Rest your eyes.', 'Every twenty minutes of screen time, look at something far away for twenty seconds.'],
+    ['Park a looping worry.', 'If a worry keeps circling, write it down with one small next step. Then let the paper hold it.'],
+    ['Say one small thank-you.', 'Thank someone today for something tiny and specific. It costs nothing and it’s remembered.'],
+    ['Three things that went okay.', 'Before sleep, name three things that went okay today. Small counts. It trains your attention toward the good.'],
+    ['Breathe out longer.', 'When you feel wound up, make each breath out a little longer than the breath in. It tells your body it’s safe.'],
+    ['Send a “thinking of you”.', 'Text someone you care about. No reason needed, no reply expected. It takes ten seconds.'],
+    ['Decide one thing you won’t do today.', 'Protecting your energy is easier when you choose in advance what can wait.'],
+    ['Give yourself a doorway minute.', 'Between work mode and home mode, take a few minutes to switch: a song, a walk, a cup of tea.'],
+    ['Shrink the task.', 'Overwhelmed? Ask: what’s the very next physical step? Do only that.'],
+    ['Help or an ear?', 'Before giving advice, ask: “Do you want help, or do you just want me to listen?”'],
+    ['Cool water, calm body.', 'Splashing cool water on your face can slow a racing heart when feelings run high.'],
+    ['Book the worry.', 'Give a worry ten minutes later today, instead of letting it follow you all day.'],
+    ['Name a time to come back.', 'If a talk gets too hot, say “I need a minute. Can we come back at 8?” A pause with a time is not walking away.'],
+    ['Five things you can see.', 'Feeling scattered? Name five things you can see right now. It pulls you back into the present.'],
+    ['Laugh together.', 'Sharing a laugh, even at something silly, is a small repair after a tense day.'],
+    ['Short sleep, gentle day.', 'After a poor night, go easy on big decisions and hard talks. Your battery really is lower.'],
+    ['Lower your voice.', 'When things heat up, speak a little softer and slower. People tend to match the tone they hear.'],
+    ['Make it easy to do.', 'Put the thing you want to do where you’ll see it: the book on your pillow, the water bottle on your desk.'],
+    ['Take one thing off the list.', 'On purpose. A lighter day is still a good day.'],
+    ['Drink some water.', 'Even mild thirst can make you feel tired and irritable. Have a glass before your next coffee.'],
+    ['Assume a good reason.', 'When someone is short with you, try assuming they’re having a hard day before assuming they mean it.'],
+    ['Celebrate small wins.', 'Finished something? Pause for a second and notice it before rushing on.'],
+    ['One kind word to yourself.', 'Talk to yourself the way you’d talk to a friend who’s having a rough day.'],
+    ['Stretch for a minute.', 'Stand up, reach for the ceiling, roll your neck. Your body holds the stress your mind forgets.'],
+    ['Say what you need, not what they did wrong.', '“I need ten quiet minutes” gets a better answer than “you’re so loud”.'],
+    ['Put a pause before “yes”.', 'Try “let me check and come back to you”. It saves overcommitting.'],
+    ['Hug a little longer.', 'A slow six-second hug helps both of you settle.'],
+    ['Leave it better than you found it.', 'Tidy one small spot before you leave a room. Tomorrow-you will be grateful.']
+  ];
+  var NO_TIPS = ['/index.html', '/night-garden.html', '/dashboard.html', '/404.html', '/offline.html'];
+  function addTip(body) {
+    if (body.hasAttribute('data-no-tip') || NO_TIPS.indexOf(current) !== -1 || /^\/legal\//.test(current)) return;
+    var main = document.querySelector('main'); if (!main) return;
+    var d = new Date(), seed = d.getFullYear() * 400 + d.getMonth() * 32 + d.getDate();
+    for (var i = 0; i < current.length; i++) seed = (seed * 31 + current.charCodeAt(i)) % 100003;
+    var at = seed % TIPS.length;
+    var card = el('aside', { class: 'tol-tip', 'aria-label': 'A little tip for today' },
+      '<img src="/assets/img/mascots/bubble-buddy.svg" alt="" width="52" height="52">' +
+      '<div><p class="tol-tip-k">Little tip for today</p><p class="tol-tip-h"></p><p class="tol-tip-b"></p>' +
+      '<button type="button" class="tol-tip-next">Another tip</button></div>');
+    function show() { card.querySelector('.tol-tip-h').textContent = TIPS[at][0]; card.querySelector('.tol-tip-b').textContent = TIPS[at][1]; }
+    card.querySelector('.tol-tip-next').addEventListener('click', function () {
+      at = (at + 1 + Math.floor(Math.random() * (TIPS.length - 1))) % TIPS.length; show();
+    });
+    show();
+    main.appendChild(card);
+  }
+
+  // ---------- "What you type stays on your device" ----------
+  // Shown at the top of any page where people type or tick things that stay in the browser.
+  // Never on pages that do send what's typed: sign-ups, the report form, the dashboard.
+  var SENDS = ['/index.html', '/404.html', '/membership.html', '/dashboard.html'];
+  function addPrivateNote(body) {
+    if (body.hasAttribute('data-no-private-note') || SENDS.indexOf(current) !== -1) return;
+    var main = document.querySelector('main') || body;
+    var fields = Array.prototype.filter.call(main.querySelectorAll('textarea, select, input'), function (f) {
+      var t = (f.getAttribute('type') || 'text').toLowerCase();
+      return ['email', 'hidden', 'submit', 'button', 'password'].indexOf(t) === -1 && !f.closest('.tol-gate, form[action]');
+    });
+    if (!fields.length && !body.hasAttribute('data-private-note')) return;
+    if (/Private by design|What you type stays on this device/i.test(main.textContent || '')) return; // the page already says so
+    var note = el('p', { class: 'tol-private' },
+      '<span aria-hidden="true">&#128274;</span><span><strong>Private by design.</strong> What you type or choose on this page stays on your device. It is never sent to us. ' +
+      '<a href="/legal/privacy-policy.html#your-entries">More</a></span>');
+    var head = main.querySelector('.read-head');
+    if (head && head.parentNode) head.parentNode.insertBefore(note, head.nextSibling);
+    else main.insertBefore(note, main.firstChild);
+  }
+
   // ---------- The site as an app ----------
   // Icons, the manifest and the offline helper, added here so every page gets them.
   function addAppMeta() {

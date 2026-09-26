@@ -9,14 +9,111 @@
   "background_color": "#F5EFDE",
   "theme_color": "#F5EFDE",
   "icons": [
-    { "src": "/assets/icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
-    { "src": "/assets/icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
-    { "src": "/assets/icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" },
-    { "src": "/assets/icons/icon.svg", "sizes": "any", "type": "image/svg+xml" }
+    {
+      "src": "/assets/icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/assets/icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/assets/icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/assets/icons/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
   ],
   "shortcuts": [
-    { "name": "Today’s small moment", "short_name": "Today", "url": "/turning-toward.html", "icons": [{ "src": "/assets/icons/icon-192.png", "sizes": "192x192" }] },
-    { "name": "The Night Garden", "short_name": "Garden", "url": "/night-garden.html", "icons": [{ "src": "/assets/icons/icon-192.png", "sizes": "192x192" }] },
-    { "name": "Today’s Weather", "short_name": "Weather", "url": "/quick-checks.html", "icons": [{ "src": "/assets/icons/icon-192.png", "sizes": "192x192" }] }
+    {
+      "name": "Today’s small moment",
+      "short_name": "Today",
+      "url": "/turning-toward.html",
+      "icons": [
+        {
+          "src": "/assets/icons/icon-192.png",
+          "sizes": "192x192"
+        }
+      ]
+    },
+    {
+      "name": "The Night Garden",
+      "short_name": "Garden",
+      "url": "/night-garden.html",
+      "icons": [
+        {
+          "src": "/assets/icons/icon-192.png",
+          "sizes": "192x192"
+        }
+      ]
+    },
+    {
+      "name": "Today’s Weather",
+      "short_name": "Weather",
+      "url": "/quick-checks.html",
+      "icons": [
+        {
+          "src": "/assets/icons/icon-192.png",
+          "sizes": "192x192"
+        }
+      ]
+    }
+  ],
+  "lang": "en",
+  "dir": "ltr",
+  "orientation": "portrait",
+  "categories": [
+    "health",
+    "lifestyle",
+    "education"
+  ],
+  "display_override": [
+    "standalone"
+  ],
+  "screenshots": [
+    {
+      "src": "/store/google-play/screenshots/2-night-garden.png",
+      "sizes": "1080x1920",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "The Night Garden: breathe, play and let your mind settle"
+    },
+    {
+      "src": "/store/google-play/screenshots/4-breathe.png",
+      "sizes": "1080x1920",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "A calming breathing break with soft sound"
+    },
+    {
+      "src": "/store/google-play/screenshots/5-turning-toward.png",
+      "sizes": "1080x1920",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "Today’s small moment to feel closer to someone"
+    },
+    {
+      "src": "/store/google-play/screenshots/6-conversation-reader.png",
+      "sizes": "1080x1920",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "The Conversation Reader"
+    },
+    {
+      "src": "/store/google-play/screenshots/wide-night-garden.png",
+      "sizes": "1280x800",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "The Night Garden"
+    }
   ]
 }

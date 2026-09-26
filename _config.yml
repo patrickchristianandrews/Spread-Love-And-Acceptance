@@ -1,0 +1,4 @@
+# GitHub Pages builds this site with Jekyll. Jekyll skips folders that start with a dot,
+# so this line publishes /.well-known/, where the Google Play app's ownership file
+# (assetlinks.json) must live. Nothing else about the site changes.
+include: [".well-known"]

@@ -770,3 +770,34 @@ body[data-sec="program"] .read-head::after, body[data-sec="tools"] .read-head::a
   .tol-breathe.is-open, .tol-breathe-aurora i, .tol-breathe-ripples i{ animation:none !important; }
   .tol-breathe-ripples{ display:none; }
 }
+
+/* "Private by design": shown where people type */
+.tol-private{ display:flex; align-items:flex-start; gap:.6rem; max-width:none !important; margin:0 0 1.4rem !important; padding:.65rem 1rem;
+  background:#EEF6F1; border:1px solid #BFE3CF; border-radius:16px; font-size:.92rem; line-height:1.5; color:#2F5A3C; }
+.tol-private strong{ color:#24492F; }
+.tol-private a{ color:inherit; }
+@media print{ .tol-private{ display:none; } }
+/* Fill-in worksheets have a save bar at the bottom: keep Breathe above it */
+body:has(.wpf-bar) .tol-breathe-btn{ bottom:calc(4.8rem + env(safe-area-inset-bottom, 0px)); }
+@media (max-width:560px){ body:has(.wpf-bar) .tol-breathe-btn{ bottom:calc(8.2rem + env(safe-area-inset-bottom, 0px)); } }
+@media (max-width:380px){
+  .tol-bar button, .tol-bar a.tol-member{ padding:.42rem .6rem !important; font-size:.9rem !important; }
+  .tol-bar a.tol-member{ margin-left:.25rem; }
+  .tol-brand span{ font-size:.86rem; }
+}
+@media (max-width:340px){ .tol-brand span{ position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); } .tol-logo{ width:2rem; height:2rem; } }
+
+/* Little tip for today */
+.tol-tip{ display:flex; gap:1rem; align-items:flex-start; max-width:40rem; margin:2.5rem 0 1rem; padding:1.1rem 1.25rem;
+  background:linear-gradient(135deg, #FFF8EE 0%, #F7EEF8 100%); border:1px solid #E6D6EE; border-radius:22px; box-shadow:0 8px 24px rgba(120,90,140,.08); }
+.tol-tip img{ flex:none; width:3.2rem; height:3.2rem; animation:tol-bob 9s ease-in-out infinite; }
+.tol-tip p{ margin:0; max-width:none !important; }
+.tol-tip-k{ font-family:"IBM Plex Mono", ui-monospace, monospace; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:#8A6D8F; }
+.tol-tip-h{ font-family:"Fraunces", Georgia, serif; font-weight:600; font-size:1.15rem; margin:.25rem 0 .2rem !important; color:var(--ink); }
+.tol-tip-b{ color:var(--ink-soft); line-height:1.55; }
+.tol-tip-next{ margin-top:.7rem; font:inherit; font-size:.85rem; padding:.35rem .9rem; border-radius:999px; border:1px solid #D9C8F0; background:#fff; color:#4E3F6B; cursor:pointer; }
+.tol-tip-next:hover{ background:#F3EEF9; }
+@media (max-width:560px){ .tol-tip{ padding:1rem; gap:.75rem; } .tol-tip img{ width:2.6rem; height:2.6rem; } }
+@media (prefers-reduced-motion: reduce){ .tol-tip img{ animation:none; } }
+@media print{ .tol-tip{ display:none; } }
+.tol-tip .tol-tip-b{ font-size:1rem; line-height:1.55 !important; } .tol-tip .tol-tip-h{ line-height:1.3 !important; }

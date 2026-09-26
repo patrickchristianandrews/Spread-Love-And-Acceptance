@@ -1,10 +1,10 @@
 /* sw.js — lets the site open like an app and keep working offline.
-   Pages: network first, so visitors always get the latest version; the saved copy is
-   only used when there's no connection. Styles, scripts and images: served from the
-   saved copy and refreshed in the background. Nothing a visitor types passes through
+   The site's own pages, styles, scripts and images: network first, so visitors (and the
+   store apps, which show this site) always get the latest version; the saved copy is only
+   used when there's no connection. Fonts: served from the saved copy. Nothing a visitor types passes through
    here: the tools keep entries in the browser, and this only stores the site's own files.
    Bump VERSION when the list below changes. */
-var VERSION = 'tol-v1';
+var VERSION = 'tol-v2';
 var CORE = [
   '/', '/index.html', '/offline.html',
   '/night-garden.html', '/turning-toward.html', '/quick-checks.html', '/lemonade-stand.html',
@@ -45,7 +45,15 @@ self.addEventListener('fetch', function (e) {
     return;
   }
 
-  if (isStatic(url) || isFont(url)) {
+  if (isStatic(url)) {
+    e.respondWith(fetch(req).then(function (res) {
+      if (res.ok) { var copy = res.clone(); caches.open(VERSION).then(function (c) { c.put(req, copy); }); }
+      return res;
+    }).catch(function () { return caches.match(req); }));
+    return;
+  }
+
+  if (isFont(url)) {
     e.respondWith(caches.match(req).then(function (hit) {
       var net = fetch(req).then(function (res) {
         if (res.ok || res.type === 'opaque') { var copy = res.clone(); caches.open(VERSION).then(function (c) { c.put(req, copy); }); }

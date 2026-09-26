@@ -381,8 +381,6 @@
     ctx.fillStyle = 'rgba(60,50,90,0.85)'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
     ctx.font = '600 ' + Math.round(Math.max(16, R * 0.5)) + 'px Fraunces, Georgia, serif';
     ctx.fillText(String(Math.max(1, Math.ceil(len - into))), cx, cy + 1);
-    ctx.font = '500 13px Lora, Georgia, serif'; ctx.fillStyle = 'rgba(255,246,224,0.9)';
-    ctx.fillText(ph === 'in' ? 'breathe in' : 'breathe out', cx, cy + ringR + 16);
   }
   function ease(x) { return x < 0.5 ? 2 * x * x : 1 - Math.pow(-2 * x + 2, 2) / 2; }
   function bloom() {
