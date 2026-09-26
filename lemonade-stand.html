@@ -41,12 +41,63 @@
   .bar-legend .a{ color:var(--credit); } .bar-legend .b{ color:var(--brass); }
   .balance-line{ margin-top:1rem !important; font-size:1.05rem; }
   @media (max-width:560px){ .stand-heads, .row{ grid-template-columns:1fr 4.5rem 4.5rem 2rem; } }
+
+  /* ---------- Cute lemonade-stand dressing ---------- */
+  .ls-awning{ position:relative; height:3.1rem; margin:0 0 2.2rem; border-radius:14px 14px 0 0;
+    background:repeating-linear-gradient(90deg, #F8E08A 0 2.6rem, #FFFDF6 2.6rem 5.2rem);
+    box-shadow:0 3px 0 rgba(168,121,47,.25); }
+  .ls-awning::after{ content:""; position:absolute; left:0; right:0; bottom:-1.3rem; height:1.3rem;
+    background:radial-gradient(circle at 1.3rem 0, #F8E08A 1.3rem, transparent 1.32rem) 0 0 / 5.2rem 1.3rem repeat-x,
+               radial-gradient(circle at 1.3rem 0, #FFFDF6 1.3rem, transparent 1.32rem) 2.6rem 0 / 5.2rem 1.3rem repeat-x; }
+  .ls-awning span{ position:absolute; left:50%; top:50%; transform:translate(-50%,-50%) rotate(-2deg); padding:.15rem .9rem;
+    background:#FFFDF6; border:2px solid var(--ink); border-radius:999px; font-family:"Fraunces", Georgia, serif; font-weight:600; font-size:.95rem; white-space:nowrap; }
+  .read-head h1{ display:flex; align-items:center; gap:.6rem; flex-wrap:wrap; }
+  .ls-lemon{ display:inline-block; width:3rem; height:3rem; flex:none; animation:ls-bob 3.2s ease-in-out infinite; }
+  @keyframes ls-bob{ 0%,100%{ transform:rotate(-8deg) translateY(0); } 50%{ transform:rotate(8deg) translateY(-4px); } }
+  .ls-tag{ font-family:"Fraunces", Georgia, serif; font-style:italic; font-size:1.15rem; color:var(--brass); margin:-1rem 0 1.2rem !important; }
+
+  .stand{ padding:1.2rem 1.2rem 1.4rem; background:#FFF8DB; border:2px dashed #EFD27A; border-radius:22px; }
+  .stand-heads{ border-bottom:2px dotted #EFD27A; }
+  .row{ border-bottom:1px dotted #EFD27A; transition:background .15s; border-radius:10px; padding-left:.3rem; padding-right:.3rem; }
+  .row:hover{ background:rgba(248,224,138,.25); }
+  .stand input{ border-radius:10px; border-color:#EAD9A0; background:#FFFDF6; }
+  .remove{ width:1.9rem; height:1.9rem; line-height:1; border-radius:50% !important; background:#F7D9DF !important; color:#8E3B4A !important; border:0 !important; font-size:1.1rem !important; transition:transform .15s; }
+  .remove:hover{ transform:rotate(90deg) scale(1.1); }
+  .add-row{ border-radius:999px !important; border:2px solid var(--ink) !important; background:#F8E08A !important; font-weight:600; padding:.5rem 1.1rem !important; transition:transform .15s; }
+  .add-row:hover{ transform:translateY(-2px) rotate(-1deg); background:#F5D35C !important; }
+
+  /* Two glasses of lemonade show the split */
+  .bar{ display:none !important; }
+  .ls-glasses{ display:flex; justify-content:center; gap:3.5rem; margin:1.8rem 0 .6rem; }
+  .ls-glass{ position:relative; width:5.8rem; height:8rem; border:3px solid var(--ink-soft); border-top:0; border-radius:0 0 18px 18px;
+    background:#FFFDF6; overflow:visible; }
+  .ls-juice{ position:absolute; left:0; right:0; bottom:0; height:50%; border-radius:0 0 15px 15px; transition:height .6s cubic-bezier(.34,1.56,.64,1);
+    background-image:radial-gradient(circle, rgba(255,255,255,.75) 0 2px, transparent 2.5px), radial-gradient(circle, rgba(255,255,255,.55) 0 1.5px, transparent 2px);
+    background-size:18px 22px, 13px 15px; background-position:4px 6px, 10px 2px; }
+  .ls-glass.is-a .ls-juice{ background-color:#BFE3CF; }
+  .ls-glass.is-b .ls-juice{ background-color:#F8DC6E; }
+  .ls-straw{ position:absolute; width:.55rem; height:9.6rem; right:1.1rem; bottom:.6rem; transform:rotate(14deg); transform-origin:bottom;
+    border-radius:4px; background:repeating-linear-gradient(180deg, #F2A3B6 0 .6rem, #FFFDF6 .6rem 1.2rem); border:1px solid #E58CA3; }
+  .ls-slice{ position:absolute; top:-1.15rem; left:-1rem; width:2.3rem; height:2.3rem; border-radius:50%;
+    background:conic-gradient(from 0deg, #F8DC6E 0 40deg, #FFF3B8 40deg 50deg, #F8DC6E 50deg 100deg, #FFF3B8 100deg 110deg, #F8DC6E 110deg 160deg, #FFF3B8 160deg 170deg, #F8DC6E 170deg 220deg, #FFF3B8 220deg 230deg, #F8DC6E 230deg 280deg, #FFF3B8 280deg 290deg, #F8DC6E 290deg 340deg, #FFF3B8 340deg 350deg, #F8DC6E 350deg);
+    border:3px solid #EFC53E; box-shadow:inset 0 0 0 3px #FFF8DB; }
+  .ls-glass.is-a .ls-slice{ background:conic-gradient(from 0deg, #BFE3CF 0 40deg, #EAF6EF 40deg 50deg, #BFE3CF 50deg 100deg, #EAF6EF 100deg 110deg, #BFE3CF 110deg 160deg, #EAF6EF 160deg 170deg, #BFE3CF 170deg 220deg, #EAF6EF 220deg 230deg, #BFE3CF 230deg 280deg, #EAF6EF 280deg 290deg, #BFE3CF 290deg 340deg, #EAF6EF 340deg 350deg, #BFE3CF 350deg); border-color:#8CC7A5; }
+  .ls-pct{ position:absolute; left:0; right:0; bottom:.4rem; text-align:center; font-family:"IBM Plex Mono", ui-monospace, monospace; font-size:.85rem; font-weight:600; color:var(--ink); }
+  .bar-legend{ justify-content:center !important; gap:0; }
+  .bar-legend span{ width:9.3rem; text-align:center; }
+  .balance-line{ position:relative; margin:1.4rem 0 0 !important; padding:.8rem 1rem; background:#FFFDF6; border:2px solid var(--ink); border-radius:16px; }
+  .balance-line::before{ content:""; position:absolute; top:-.7rem; left:50%; width:1.1rem; height:1.1rem; background:#FFFDF6; border-left:2px solid var(--ink); border-top:2px solid var(--ink); transform:translateX(-50%) rotate(45deg); }
+  @media (prefers-reduced-motion: reduce){ .ls-lemon{ animation:none; } .ls-juice, .remove, .add-row{ transition:none; } }
+  @media (max-width:560px){ .ls-glasses{ gap:2.5rem; } .bar-legend span{ width:8.3rem; } .ls-awning span{ font-size:.8rem; } .stand{ padding:1rem .7rem 1.2rem; } }
+  @media print{ .ls-awning, .ls-lemon, .ls-glasses{ display:none; } }
 </style>
 <script src="/assets/js/site.js" defer></script>
 </head>
 <body>
 <main class="read">
-<header class="read-head"><p class="read-code">Tool &middot; nothing leaves your device</p><h1>The Lemonade Stand</h1></header>
+<div class="ls-awning" aria-hidden="true"><span>Fresh squeezed &middot; 0¢</span></div>
+<header class="read-head"><p class="read-code">Tool &middot; nothing leaves your device</p><h1>The Lemonade Stand <svg class="ls-lemon" viewBox="0 0 64 64" aria-hidden="true"><path d="M8 34c0-13 11-24 26-24 5 0 9 1 12 3 3-2 7-2 9 0-1 3-1 6 0 9 2 3 3 7 3 11 0 14-12 23-27 23S8 47 8 34z" fill="#F8DC6E" stroke="#C9A227" stroke-width="3" stroke-linejoin="round"/><path d="M40 11c2-5 7-7 12-6-2 5-6 8-12 6z" fill="#8CC7A5" stroke="#4E8A66" stroke-width="2.5" stroke-linejoin="round"/><circle cx="24" cy="32" r="2.6" fill="#211D17"/><circle cx="38" cy="32" r="2.6" fill="#211D17"/><path d="M26 40c3 3 7 3 10 0" fill="none" stroke="#211D17" stroke-width="2.5" stroke-linecap="round"/><circle cx="19" cy="38" r="3" fill="#F2A3B6" opacity=".7"/><circle cx="43" cy="38" r="3" fill="#F2A3B6" opacity=".7"/></svg></h1></header>
+<p class="ls-tag">When life hands you chores, split the lemons.</p>
 
 <p class="simple-lede">Two people, one stand. List what it took to keep the household running this week and how many hours each of you put in. The split shows as a plain fact, not a verdict on either of you.</p>
 
@@ -58,10 +109,14 @@
       <span></span>
     </div>
     <div id="rows"></div>
-    <button class="add-row" id="add-row" type="button">Add a line item</button>
+    <button class="add-row" id="add-row" type="button">🍋 Add a line item</button>
     <div class="bar" aria-hidden="true">
       <div class="bar-a" id="bar-a" style="width:50%"></div>
       <div class="bar-b" id="bar-b" style="width:50%"></div>
+    </div>
+    <div class="ls-glasses" aria-hidden="true">
+      <div class="ls-glass is-a"><span class="ls-straw"></span><span class="ls-slice"></span><div class="ls-juice" id="juice-a"></div><span class="ls-pct" id="pct-a">50%</span></div>
+      <div class="ls-glass is-b"><span class="ls-straw"></span><span class="ls-slice"></span><div class="ls-juice" id="juice-b"></div><span class="ls-pct" id="pct-b">50%</span></div>
     </div>
     <div class="bar-legend">
       <span class="a" id="legend-a">Column A · 0h</span>
@@ -79,5 +134,22 @@
 </main>
 
 <script src="/assets/js/lemonade-calc.js"></script>
+<script>
+/* Pour the two glasses from the split the calculator already works out */
+(function () {
+  var a = document.getElementById('bar-a'), b = document.getElementById('bar-b');
+  if (!a || !b) return;
+  function pour() {
+    var pa = parseFloat(a.style.width) || 0, pb = parseFloat(b.style.width) || 0;
+    document.getElementById('juice-a').style.height = Math.max(4, pa * 0.92) + '%';
+    document.getElementById('juice-b').style.height = Math.max(4, pb * 0.92) + '%';
+    document.getElementById('pct-a').textContent = Math.round(pa) + '%';
+    document.getElementById('pct-b').textContent = Math.round(pb) + '%';
+  }
+  new MutationObserver(pour).observe(a, { attributes: true, attributeFilter: ['style'] });
+  new MutationObserver(pour).observe(b, { attributes: true, attributeFilter: ['style'] });
+  pour();
+})();
+</script>
 </body>
 </html>
