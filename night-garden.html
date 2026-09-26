@@ -61,6 +61,8 @@
   .ng-choice strong{ font-family:"Fraunces", Georgia, serif; font-size:1.1rem; color:#FFF6E0; }
   .ng-choice small{ color:#DCD6F0; font-size:.86rem; line-height:1.45; }
   .ng-small{ font-size:.85rem !important; margin:0 !important; }
+  .ng-input{ margin-top:.4rem; width:min(18rem, 100%); font:inherit; font-size:1rem; color:#2A2D52; background:#FFF8EE; border:1px solid #F9D9B8; border-radius:999px; padding:.55rem 1rem; text-align:center; }
+  .ng-input:focus-visible{ outline:2px solid #F9D9B8; outline-offset:3px; }
   .ng-help-ico{ font-size:2.4rem; margin:0 0 .2rem !important; }
   .ng-steps{ text-align:left; margin:0 0 1.2rem; padding-left:1.4rem; color:#EDE8F7; line-height:1.55; }
   .ng-steps li{ margin:.45rem 0; }
@@ -80,7 +82,7 @@
 <script src="/assets/js/site.js" defer></script>
 <script src="/assets/js/night-garden.js" defer></script>
 </head>
-<body data-no-wash data-no-breathe>
+<body data-no-wash data-no-breathe data-no-private-note>
 <main>
   <section class="ng-stage" id="ng-stage" aria-label="The Night Garden">
     <canvas id="ng-canvas" role="img" aria-label="A watercolour garden at night, with stars, a moon, fireflies and a pond."></canvas>
@@ -115,8 +117,8 @@
         <p id="ng-welcome-p">A quiet place to breathe, play and let your mind settle. There are no timers and no way to lose. Everything here stays on your device.</p>
         <p class="ng-pick-h">What would you like to do?</p>
         <div class="ng-pick">
-          <button type="button" class="ng-choice" data-enter="breathe"><span class="ng-ico">&#127800;</span><strong>Breathe</strong><small>The easiest. Breathe with a glowing light, and a flower blooms with every breath. About a minute.</small></button>
-          <button type="button" class="ng-choice" data-enter="fireflies"><span class="ng-ico">&#10024;</span><strong>Fireflies</strong><small>Draw pictures in the stars. Rest your finger on each glowing circle and a firefly lights it.</small></button>
+          <button type="button" class="ng-choice" data-enter="breathe"><span class="ng-ico">&#127800;</span><strong>Breathe</strong><small>The easiest. Box breathing with a glowing light: in 4, hold 4, out 4, hold 4. Words from the sky explain what it’s doing for you, and a flower blooms with every round.</small></button>
+          <button type="button" class="ng-choice" data-enter="fireflies"><span class="ng-ico">&#10024;</span><strong>Fireflies</strong><small>Connect the stars into pictures that sing. Collect all ten, catch shooting stars, and dedicate them to people you love.</small></button>
           <button type="button" class="ng-choice" data-enter="pond"><span class="ng-ico">&#128167;</span><strong>Lily pond</strong><small>A slow, gentle puzzle. Fit lily pads into rows and they bloom. You can’t lose.</small></button>
         </div>
         <p class="ng-row" style="margin:0 0 .8rem;"><button type="button" id="ng-sound-welcome" aria-pressed="false">&#127925; Soft sound: off</button></p>
@@ -130,6 +132,16 @@
         <h2 id="ng-help-h"></h2>
         <ol class="ng-steps" id="ng-help-steps"></ol>
         <div class="ng-row"><button type="button" class="ng-go" id="ng-help-ok">Got it</button></div>
+      </div>
+    </div>
+
+    <div class="ng-card" id="ng-dedicate" hidden role="dialog" aria-modal="true" aria-labelledby="ng-ded-title">
+      <div>
+        <p class="ng-help-ico" aria-hidden="true">&#10024;</p>
+        <h2 id="ng-ded-title">A new constellation</h2>
+        <p>Would you like to dedicate it to someone? Their name will glow beneath it in your sky. It stays on this device only.</p>
+        <p><label for="ng-ded-name" class="ng-small">Who is this one for?</label><br><input id="ng-ded-name" class="ng-input" type="text" maxlength="30" autocomplete="off" placeholder="A name, or “me”"></p>
+        <div class="ng-row"><button type="button" class="ng-go" id="ng-ded-save">Add to my sky</button><button type="button" id="ng-ded-skip">Not now</button></div>
       </div>
     </div>
 
@@ -151,7 +163,7 @@
     <h2 id="ng-about-h">Why a garden?</h2>
     <p>The Night Garden brings together a few things that research suggests can quiet a busy mind. It isn’t treatment, and it doesn’t replace talking to someone. It’s a gentle place to land.</p>
     <ul>
-      <li><strong>Slow breathing.</strong> Breathing at around six breaths a minute (in for 4, out for 6) is one of the most reliable ways to settle the body. The light in the garden keeps that pace for you.</li>
+      <li><strong>Box breathing.</strong> Breathing in, holding, breathing out and holding for four counts each slows your breath to a few breaths a minute. Slow, steady breathing like this is one of the most reliable ways to settle the body. The light in the garden keeps the count for you.</li>
       <li><strong>Gentle play.</strong> Relaxed, casual games have been linked with better mood and lower stress. There’s no score to chase here and nothing to lose.</li>
       <li><strong>Busy hands, quiet mind.</strong> Fitting shapes together takes up the same mental room that worry loops use, which is why the lily pond can help a racing mind slow down.</li>
       <li><strong>Soft, natural movement.</strong> Watching gently moving light, water and leaves lets tired attention rest.</li>
