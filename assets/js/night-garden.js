@@ -447,32 +447,50 @@
   }
 
   // ---------- Happy animals around the pond ----------
-  // a frog on a lily pad, a bunny, a duckling on the water and a hedgehog. In Breathe they
-  // hop together at the start of every breath in; otherwise they hop now and then.
+  // A bunny, a frog on a lily pad, a duckling on the water and a hedgehog in its burrow.
+  // They hop together on every breath in (Breathe), and get up to small silly things:
+  // the bunny spins, leaps and flops an ear; the frog croaks and flicks its tongue at
+  // fireflies; the duckling paddles and dives bottoms-up; the hedgehog pops in and out of
+  // its hole, and in Breathe it rises with your in-breath and ducks down as you breathe out.
   var critters = [
-    { kind: 'bunny', fx: -1.12, fy: -0.35, hop: 0, next: 0 },
-    { kind: 'frog', fx: -0.45, fy: 0.05, hop: 0, next: 0 },
-    { kind: 'duck', fx: 0.4, fy: 0.15, hop: 0, next: 0 },
-    { kind: 'hedgehog', fx: 1.12, fy: -0.3, hop: 0, next: 0 }
+    { kind: 'bunny', fx: -1.12, fy: -0.35, hop: 0, act: null, next: 0 },
+    { kind: 'frog', fx: -0.45, fy: 0.05, hop: 0, act: null, next: 0 },
+    { kind: 'duck', fx: 0.4, fy: 0.15, hop: 0, act: null, next: 0 },
+    { kind: 'hedgehog', fx: 1.12, fy: -0.3, hop: 0, act: null, next: 0, out: 0 }
   ];
-  function hopAll() { if (REDUCED) return; var now = performance.now(); critters.forEach(function (c, i) { c.hop = now + i * 140; }); }
+  var ACTS = { bunny: [['spin', 900], ['binky', 900], ['ear', 1600]], frog: [['croak', 1400], ['tongue', 650]], duck: [['dive', 1900], ['shake', 900]] };
+  function hopAll() { if (REDUCED) return; var now = performance.now(); critters.forEach(function (c, i) { if (c.kind !== 'hedgehog') c.hop = now + i * 140; }); }
   function drawCritters(t) {
     var p = pondShape(), s = Math.max(1, Math.min(1.4, Math.min(W, H) / 520));
     // keep them above the buttons at the bottom of the screen
     var bar = document.querySelector('.ng-bar'), barTop = bar ? bar.getBoundingClientRect().top - canvas.getBoundingClientRect().top : H;
     var groundY = Math.min(p.y, barTop - 14);
     critters.forEach(function (c) {
-      if (!REDUCED && mode !== 'breathe' && t > c.next) { if (c.next) c.hop = t; c.next = t + 4000 + Math.random() * 6000; }
       var x = p.x + c.fx * Math.max(p.rx, W * 0.3), y = groundY + c.fy * p.ry, lift = 0, squash = 1, since = t - c.hop;
-      if (!REDUCED && since >= 0 && since < 750) { var q = since / 750; lift = Math.sin(q * Math.PI) * 22 * s * (c.kind === 'duck' ? 0.4 : 1); squash = q < 0.1 ? 1 - q * 1.5 : q > 0.9 ? 1 - (1 - q) * 1.5 : 1.06; }
       var blink = Math.sin(t / 900 + c.fx * 7) > 0.985;
+      // on phones the pond's touch buttons cover the middle, so only the two at the sides come out
+      if (mode === 'pond' && !padEl.hidden && W <= 560 && (c.kind === 'frog' || c.kind === 'duck')) return;
+      if (c.kind === 'hedgehog') { drawBurrow(c, x, y, s, t, blink); return; }
+      // silly things, now and then (less often while you breathe)
+      if (!REDUCED && !c.act && t > c.next) {
+        if (c.next) { var opts = ACTS[c.kind]; if (mode !== 'breathe' && Math.random() < 0.3) c.hop = t; else { var o = opts[Math.floor(Math.random() * opts.length)]; c.act = { name: o[0], t0: t, dur: o[1] }; } }
+        c.next = t + (mode === 'breathe' ? 7000 + Math.random() * 7000 : 2500 + Math.random() * 4500);
+      }
+      var act = c.act && t - c.act.t0 < c.act.dur ? c.act : null; if (!act) c.act = null;
+      var q = act ? (t - act.t0) / act.dur : 0;
+      if (!REDUCED && since >= 0 && since < 750) { var hq = since / 750; lift = Math.sin(hq * Math.PI) * 22 * s * (c.kind === 'duck' ? 0.4 : 1); squash = hq < 0.1 ? 1 - hq * 1.5 : hq > 0.9 ? 1 - (1 - hq) * 1.5 : 1.06; }
+      if (act && act.name === 'binky') lift = Math.sin(q * Math.PI) * 34 * s;
+      if (c.kind === 'duck' && !REDUCED) x += Math.sin(t / 1700) * 14 * s; // paddling about
       ctx.save(); ctx.translate(x, y);
       // soft shadow or ripple
       ctx.fillStyle = c.kind === 'duck' || c.kind === 'frog' ? 'rgba(200,215,255,0.18)' : 'rgba(10,15,30,0.25)';
-      ctx.beginPath(); ctx.ellipse(0, 2, 16 * s * (1 - lift / (60 * s)), 4 * s, 0, 0, Math.PI * 2); ctx.fill();
+      ctx.beginPath(); ctx.ellipse(0, 2, 16 * s * (1 - Math.min(0.6, lift / (60 * s))), 4 * s, 0, 0, Math.PI * 2); ctx.fill();
       if (c.kind === 'frog') { ctx.fillStyle = '#6FAE8A'; ctx.beginPath(); ctx.ellipse(0, 1, 20 * s, 6 * s, 0, 0.35, Math.PI * 2 - 0.05); ctx.fill(); }
       ctx.translate(0, -lift); ctx.scale(1 / Math.sqrt(squash), squash); ctx.scale(s, s);
-      if (c.kind === 'frog') drawFrog(blink); else if (c.kind === 'bunny') drawBunny(blink); else if (c.kind === 'duck') drawDuck(blink); else drawHedgehog(blink);
+      if (act && act.name === 'spin') ctx.scale(Math.cos(q * Math.PI * 2), 1);
+      if (act && act.name === 'binky') ctx.rotate(Math.sin(q * Math.PI * 2) * 0.35);
+      if (c.kind === 'duck' && Math.cos(t / 1700) < 0) ctx.scale(-1, 1); // faces the way it paddles
+      if (c.kind === 'frog') drawFrog(blink, act, q, x, y, s); else if (c.kind === 'bunny') drawBunny(blink, act, q); else drawDuck(blink, act, q, t);
       ctx.restore();
     });
   }
@@ -483,33 +501,87 @@
   }
   function cheeks(x1, x2, y) { ctx.fillStyle = 'rgba(247,165,185,0.8)'; [x1, x2].forEach(function (x) { ctx.beginPath(); ctx.ellipse(x, y, 2.6, 1.6, 0, 0, Math.PI * 2); ctx.fill(); }); }
   function smile(x, y, w) { ctx.strokeStyle = '#2B2620'; ctx.lineWidth = 1.3; ctx.lineCap = 'round'; ctx.beginPath(); ctx.arc(x, y - w * 0.4, w, 0.25 * Math.PI, 0.75 * Math.PI); ctx.stroke(); ctx.lineCap = 'butt'; }
-  function drawFrog(b) {
+  function drawFrog(b, act, q, fx, fy, s) {
+    // a croak: the throat puffs up twice
+    if (act && act.name === 'croak') { var puff = Math.abs(Math.sin(q * Math.PI * 2)); ctx.fillStyle = 'rgba(236,250,220,0.95)'; ctx.beginPath(); ctx.ellipse(0, -4, 5 + puff * 5, 3 + puff * 4, 0, 0, Math.PI * 2); ctx.fill(); }
     ctx.fillStyle = '#9ED9A8'; ctx.beginPath(); ctx.ellipse(0, -9, 13, 10, 0, 0, Math.PI * 2); ctx.fill();
     ctx.fillStyle = '#D6F2DA'; ctx.beginPath(); ctx.ellipse(0, -6, 8, 6, 0, 0, Math.PI * 2); ctx.fill();
     ctx.fillStyle = '#9ED9A8'; [-6, 6].forEach(function (x) { ctx.beginPath(); ctx.arc(x, -18, 5, 0, Math.PI * 2); ctx.fill(); });
     ctx.fillStyle = '#fff'; [-6, 6].forEach(function (x) { ctx.beginPath(); ctx.arc(x, -18, 3.4, 0, Math.PI * 2); ctx.fill(); });
-    eye(-6, -18, 1.8, b); eye(6, -18, 1.8, b); smile(0, -10, 4); cheeks(-8, 8, -11);
+    var tongue = act && act.name === 'tongue';
+    eye(-6, -18, 1.8, b || (tongue && q > 0.2 && q < 0.6)); eye(6, -18, 1.8, b || (tongue && q > 0.2 && q < 0.6)); cheeks(-8, 8, -11);
+    if (tongue) {
+      // flick toward the nearest firefly, or up at the sky
+      var tx = 18, ty = -40, best = 160;
+      flies.forEach(function (f) { var d = Math.hypot(f.x * W - fx, f.y * H - fy); if (d < best) { best = d; tx = (f.x * W - fx) / s; ty = (f.y * H - fy) / s; } });
+      var reach = Math.sin(q * Math.PI);
+      ctx.strokeStyle = '#EE8FA6'; ctx.lineWidth = 2.2; ctx.lineCap = 'round'; ctx.beginPath(); ctx.moveTo(0, -10); ctx.lineTo(tx * reach, -10 + (ty + 10) * reach); ctx.stroke(); ctx.lineCap = 'butt';
+      ctx.fillStyle = '#EE8FA6'; ctx.beginPath(); ctx.arc(tx * reach, -10 + (ty + 10) * reach, 2.2, 0, Math.PI * 2); ctx.fill();
+    } else smile(0, -10, 4);
   }
-  function drawBunny(b) {
+  function drawBunny(b, act, q) {
+    var flop = act && act.name === 'ear' ? Math.sin(q * Math.PI) * 1.2 : 0;
     ctx.fillStyle = '#F4F1FA';
-    ctx.beginPath(); ctx.ellipse(-4, -30, 3.2, 10, -0.15, 0, Math.PI * 2); ctx.fill(); ctx.beginPath(); ctx.ellipse(4, -30, 3.2, 10, 0.15, 0, Math.PI * 2); ctx.fill();
-    ctx.fillStyle = '#F7C9D4'; ctx.beginPath(); ctx.ellipse(-4, -30, 1.4, 7, -0.15, 0, Math.PI * 2); ctx.fill(); ctx.beginPath(); ctx.ellipse(4, -30, 1.4, 7, 0.15, 0, Math.PI * 2); ctx.fill();
+    ctx.beginPath(); ctx.ellipse(-4, -30, 3.2, 10, -0.15, 0, Math.PI * 2); ctx.fill();
+    ctx.save(); ctx.translate(4, -21); ctx.rotate(0.15 + flop); ctx.beginPath(); ctx.ellipse(0, -9, 3.2, 10, 0, 0, Math.PI * 2); ctx.fill();
+    ctx.fillStyle = '#F7C9D4'; ctx.beginPath(); ctx.ellipse(0, -9, 1.4, 7, 0, 0, Math.PI * 2); ctx.fill(); ctx.restore();
+    ctx.fillStyle = '#F7C9D4'; ctx.beginPath(); ctx.ellipse(-4, -30, 1.4, 7, -0.15, 0, Math.PI * 2); ctx.fill();
     ctx.fillStyle = '#F4F1FA'; ctx.beginPath(); ctx.ellipse(0, -7, 11, 8, 0, 0, Math.PI * 2); ctx.fill(); ctx.beginPath(); ctx.arc(0, -17, 8, 0, Math.PI * 2); ctx.fill();
     ctx.beginPath(); ctx.arc(10, -7, 3, 0, Math.PI * 2); ctx.fill();
-    eye(-3, -18, 1.5, b); eye(3, -18, 1.5, b); ctx.fillStyle = '#EE8FA6'; ctx.beginPath(); ctx.arc(0, -15, 1.2, 0, Math.PI * 2); ctx.fill(); cheeks(-5.5, 5.5, -14.5);
+    var happy = act && (act.name === 'binky' || act.name === 'spin');
+    if (happy) { ctx.strokeStyle = '#2B2620'; ctx.lineWidth = 1.3; [-3, 3].forEach(function (ex) { ctx.beginPath(); ctx.arc(ex, -17.5, 1.6, Math.PI * 1.1, Math.PI * 1.9); ctx.stroke(); }); }
+    else { eye(-3, -18, 1.5, b); eye(3, -18, 1.5, b); }
+    ctx.fillStyle = '#EE8FA6'; ctx.beginPath(); ctx.arc(0, -15, 1.2, 0, Math.PI * 2); ctx.fill(); cheeks(-5.5, 5.5, -14.5);
   }
-  function drawDuck(b) {
-    ctx.fillStyle = '#F8DC6E'; ctx.beginPath(); ctx.ellipse(0, -6, 11, 7, 0, 0, Math.PI * 2); ctx.fill(); ctx.beginPath(); ctx.arc(-6, -15, 6.5, 0, Math.PI * 2); ctx.fill();
-    ctx.fillStyle = '#F2C94C'; ctx.beginPath(); ctx.ellipse(3, -7, 5, 3, -0.3, 0, Math.PI * 2); ctx.fill();
-    ctx.fillStyle = '#F4A261'; ctx.beginPath(); ctx.ellipse(-13, -14, 3.6, 1.8, 0, 0, Math.PI * 2); ctx.fill();
-    eye(-7, -16.5, 1.5, b); cheeks(-10.5, -2.5, -13);
+  function drawDuck(b, act, q, t) {
+    if (act && act.name === 'dive') {
+      // bottoms up: only the tail and little feet show, wiggling above the water
+      var wig = Math.sin(t / 90) * 0.25, depth = Math.sin(q * Math.PI);
+      ctx.save(); ctx.rotate(wig * depth);
+      ctx.fillStyle = '#F8DC6E'; ctx.beginPath(); ctx.ellipse(0, -4 * depth, 7, 5 + 3 * depth, 0, Math.PI, Math.PI * 2); ctx.fill();
+      ctx.fillStyle = '#F2C94C'; ctx.beginPath(); ctx.moveTo(-2, -8 * depth - 2); ctx.lineTo(0, -8 * depth - 8); ctx.lineTo(3, -8 * depth - 2); ctx.fill();
+      ctx.fillStyle = '#F4A261'; [-4, 4].forEach(function (fx) { ctx.beginPath(); ctx.ellipse(fx, -9 * depth - 4, 2.2, 1.2, fx * 0.1, 0, Math.PI * 2); ctx.fill(); });
+      ctx.restore();
+      ctx.strokeStyle = 'rgba(210,225,255,' + (0.5 * depth) + ')'; ctx.lineWidth = 1; ctx.beginPath(); ctx.ellipse(0, 0, 10 + 8 * q, 2.5 + 2 * q, 0, 0, Math.PI * 2); ctx.stroke();
+      return;
+    }
+    var shake = act && act.name === 'shake' ? Math.sin(q * Math.PI * 10) * 0.25 : 0;
+    ctx.fillStyle = '#F8DC6E'; ctx.beginPath(); ctx.ellipse(0, -6, 11, 7, 0, 0, Math.PI * 2); ctx.fill();
+    ctx.save(); ctx.translate(-6, -12); ctx.rotate(shake);
+    ctx.beginPath(); ctx.arc(0, -3, 6.5, 0, Math.PI * 2); ctx.fill();
+    ctx.fillStyle = '#F4A261'; ctx.beginPath(); ctx.ellipse(-7, -2, 3.6, 1.8, 0, 0, Math.PI * 2); ctx.fill();
+    eye(-1, -4.5, 1.5, b); cheeks(-4.5, 3.5, -1); ctx.restore();
+    ctx.fillStyle = '#F2C94C'; ctx.beginPath(); ctx.ellipse(3, -7, 5, 3, -0.3 + (shake ? Math.sin(q * 40) * 0.4 : 0), 0, Math.PI * 2); ctx.fill();
+    if (shake) { ctx.fillStyle = 'rgba(210,230,255,0.8)'; for (var d = 0; d < 5; d++) { var a = d / 5 * Math.PI * 2 + q * 6; ctx.beginPath(); ctx.arc(-6 + Math.cos(a) * 12, -14 + Math.sin(a) * 9, 1.2, 0, Math.PI * 2); ctx.fill(); } }
   }
-  function drawHedgehog(b) {
+  // the hedgehog's burrow: it keeps popping out, sniffing about, and ducking back in
+  function drawBurrow(c, x, y, s, t, blink) {
+    var target;
+    if (mode === 'breathe') target = breath.phase === 'in' || breath.phase === 'top' ? 1 : 0.05; // rises with your breath in
+    else { var cyc = (t / 1000 + c.fx * 3) % 7; target = cyc < 1.4 ? 0 : cyc < 1.9 ? 0.45 : cyc < 5.6 ? 1 : 0; }
+    if (REDUCED) target = 1;
+    c.out += (target - c.out) * (mode === 'breathe' ? 0.03 : 0.09);
+    ctx.save(); ctx.translate(x, y); ctx.scale(s, s);
+    // the mound and the dark hole
+    ctx.fillStyle = '#4A4A5E'; ctx.beginPath(); ctx.ellipse(0, 1, 22, 7, 0, Math.PI, Math.PI * 2); ctx.fill();
+    ctx.fillStyle = '#1C1D2E'; ctx.beginPath(); ctx.ellipse(0, 0, 13, 4.2, 0, 0, Math.PI * 2); ctx.fill();
+    // only the part above the hole shows
+    ctx.save(); ctx.beginPath(); ctx.rect(-30, -60, 60, 60); ctx.clip();
+    var rise = (1 - c.out) * 24, look = mode === 'breathe' ? 1 : (Math.sin(t / 1300 + 1) > 0 ? 1 : -1), sniff = Math.sin(t / 110) * 0.6 * (c.out > 0.8 ? 1 : 0);
+    ctx.translate(0, rise + 3); ctx.scale(look, 1);
+    drawHedgehog(blink, sniff);
+    ctx.restore();
+    // the near rim of the hole, in front
+    ctx.strokeStyle = '#5A5A70'; ctx.lineWidth = 2; ctx.beginPath(); ctx.ellipse(0, 0, 13, 4.2, 0, 0.1, Math.PI - 0.1); ctx.stroke();
+    ctx.restore();
+  }
+  function drawHedgehog(b, sniff) {
+    sniff = sniff || 0;
     ctx.fillStyle = '#9C7B63'; ctx.beginPath();
     for (var i = 0; i <= 8; i++) { var a = Math.PI + i / 8 * Math.PI, r = i % 2 ? 11 : 15; ctx.lineTo(3 + Math.cos(a) * r, -7 + Math.sin(a) * r * 0.9); }
     ctx.closePath(); ctx.fill();
     ctx.fillStyle = '#EAD7C0'; ctx.beginPath(); ctx.ellipse(-8, -6, 7, 6, 0, 0, Math.PI * 2); ctx.fill();
-    ctx.fillStyle = '#2B2620'; ctx.beginPath(); ctx.arc(-14.5, -6, 1.5, 0, Math.PI * 2); ctx.fill();
+    ctx.fillStyle = '#2B2620'; ctx.beginPath(); ctx.arc(-14.5, -6 + sniff, 1.5, 0, Math.PI * 2); ctx.fill();
     eye(-8, -8, 1.4, b); cheeks(-11, -4, -4.5);
   }
 
@@ -908,5 +980,5 @@
   resize(); soundLabel(); updateCount();
   kick();
   // Expose a tiny hook for testing
-  window.__nightGarden = { save: save, setMode: setMode, pondKey: pondKey, get targets() { return targets; }, get mode() { return mode; }, get board() { return board; }, get piece() { return piece; }, get audio() { return audio; } };
+  window.__nightGarden = { save: save, setMode: setMode, pondKey: pondKey, get targets() { return targets; }, get mode() { return mode; }, get board() { return board; }, get piece() { return piece; }, get audio() { return audio; }, critters: critters };
 })();
