@@ -22,7 +22,7 @@
       picks:[
         ['/book/preface.html','The Preface','Why unseen work builds up like a debt only one person can see.'],
         ['/workpapers/wp-01.html','WP-01: a week, written down','The record that turns an impression into something you can both read.'],
-        ['/quick-checks.html#lemonade','The Lemonade Stand','Tasks and hours side by side, in about five minutes.']
+        ['/lemonade-stand.html','The Lemonade Stand','Tasks and hours side by side, in about five minutes.']
       ]},
     { id:'went-badly', ico:'\uD83D\uDCA5', label:'A conversation just went badly',
       say:'Before you replay it another forty times: two people can both be reasonable and still produce a squeal. Working out what slipped is more useful than working out who started it.',
