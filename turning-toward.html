@@ -19,7 +19,50 @@
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,500&family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/assets/css/site.css">
 <link rel="stylesheet" href="/assets/css/reading.css">
+<style>
+  .tt-card{ position:relative; isolation:isolate; margin:0 0 2rem; padding:1.3rem 1.4rem 1.2rem; background:rgba(255,253,246,.94); border:1px solid var(--ink); border-left:6px solid var(--credit); border-radius:var(--radius); }
+  .tt-card::before{ content:""; position:absolute; z-index:-1; width:10rem; height:10rem; right:-4.5rem; top:-4rem; background:var(--wc-butter-1) no-repeat center / contain; opacity:.85; pointer-events:none; }
+  .tt-kicker{ font-family:"IBM Plex Mono", ui-monospace, monospace; font-size:.74rem; letter-spacing:.06em; color:var(--credit); margin:0 0 .3rem !important; }
+  .tt-card h2{ margin:0 0 .4rem !important; font-size:1.45rem !important; }
+  .tt-card p{ margin:0 0 .7rem !important; }
+  .tt-for{ font-size:.9rem; color:var(--ink-soft); margin:.8rem 0 .35rem !important; }
+  .tt-chips{ display:flex; flex-wrap:wrap; gap:.4rem; margin:0 0 .9rem; }
+  .tt-chip{ position:relative; }
+  .tt-chip input{ position:absolute; inset:0; opacity:0; margin:0; cursor:pointer; }
+  .tt-chip span{ display:inline-block; padding:.3rem .7rem; border:1px solid var(--line); border-radius:999px; background:var(--paper); font-size:.88rem; }
+  .tt-chip input:checked + span{ background:var(--ink); color:var(--paper); border-color:var(--ink); }
+  .tt-chip:focus-within span{ outline:2px solid var(--focus); outline-offset:2px; }
+  .tt-msg{ margin:0 0 .8rem; padding:.8rem .95rem; background:#FFFDF6; border:1px dashed var(--brass); border-radius:var(--radius); }
+  .tt-msg q{ quotes:none; display:block; font-size:1.05rem; line-height:1.55; margin:0 0 .6rem; }
+  .tt-btns{ display:flex; flex-wrap:wrap; gap:.5rem 1rem; align-items:center; }
+  .tt-btn{ font:inherit; font-weight:600; font-size:.95rem; padding:.5rem 1rem; border-radius:var(--radius); border:1px solid var(--ink); background:var(--ink); color:var(--paper); cursor:pointer; }
+  .tt-btn:hover{ background:var(--credit); border-color:var(--credit); }
+  .tt-btn.is-quiet{ background:none; color:var(--ink); }
+  .tt-btn.is-quiet:hover{ background:var(--paper-deep); }
+  .tt-btn:focus-visible{ outline:2px solid var(--focus); outline-offset:2px; }
+  .tt-note{ font-size:.85rem; color:var(--ink-soft); margin:.7rem 0 0 !important; }
+
+  .tt-week-wrap{ position:relative; isolation:isolate; margin:2.2rem 0; padding:1.3rem 1.4rem; background:var(--paper-deep); border-radius:var(--radius); }
+  .tt-week-wrap::before{ content:""; position:absolute; z-index:-1; width:9rem; height:9rem; left:-4.5rem; bottom:-3rem; background:var(--wc-lavender-2) no-repeat center / contain; opacity:.8; pointer-events:none; }
+  .tt-week-wrap h2{ margin:0 0 .3rem !important; font-size:1.35rem !important; }
+  .tt-progress{ display:flex; align-items:center; gap:.8rem; margin:.6rem 0 1rem; }
+  .tt-track{ flex:1; height:.7rem; background:#FFFDF6; border:1px solid var(--line); border-radius:999px; overflow:hidden; }
+  .tt-track b{ display:block; height:100%; width:0; background:linear-gradient(90deg, #98D2B2, #B9A0E0, #F2A98C); transition:width .3s ease; }
+  @media (prefers-reduced-motion: reduce){ .tt-track b{ transition:none; } }
+  #tt-count{ font-family:"IBM Plex Mono", ui-monospace, monospace; font-size:.8rem; color:var(--ink-soft); white-space:nowrap; }
+  #tt-week{ list-style:none; padding:0 !important; margin:0 !important; display:grid; gap:.45rem; }
+  #tt-week li{ display:flex; align-items:baseline; gap:.8rem; margin:0 !important; max-width:none !important; padding:.55rem .7rem; background:rgba(255,253,246,.85); border-radius:var(--radius); }
+  #tt-week label{ flex:1; display:flex; align-items:baseline; gap:.6rem; cursor:pointer; }
+  #tt-week input{ width:1.1rem; height:1.1rem; accent-color:var(--credit); flex:none; transform:translateY(.15rem); }
+  .tt-day{ font-family:"IBM Plex Mono", ui-monospace, monospace; font-size:.75rem; color:var(--brass); flex:none; min-width:3.2rem; }
+  #tt-week input:checked ~ .tt-task{ color:var(--ink-soft); text-decoration:line-through; text-decoration-color:var(--credit); }
+  .tt-how{ font-family:"IBM Plex Mono", ui-monospace, monospace; font-size:.75rem; color:var(--brass) !important; }
+  #tt-done{ margin:.9rem 0 0 !important; font-weight:600; color:var(--credit); }
+  @media (max-width:520px){ .tt-card, .tt-week-wrap{ padding:1.1rem 1rem; } .tt-card::before, .tt-week-wrap::before{ opacity:.5; transform:scale(.7); } }
+  @media print{ .tt-card, .tt-week-wrap{ display:none; } }
+</style>
 <script src="/assets/js/site.js" defer></script>
+<script src="/assets/js/turning-toward.js" defer></script>
 </head>
 <body>
 <main class="read">
@@ -27,6 +70,26 @@
 <p class="depth-bar"><span>Simple version</span><a class="dig" href="/turning-toward-in-depth.html">Read the full guide</a></p>
 
 <p class="simple-lede">Connection isn’t mostly built in big conversations. It’s built in small, ordinary moments, answered warmly, over and over. Here are seven easy ways to do that, with anyone who matters to you.</p>
+
+<section class="tt-card" id="tt-today" aria-labelledby="tt-title" hidden>
+  <p class="tt-kicker">TODAY’S SMALL MOMENT</p>
+  <h2 id="tt-title">Say one specific thank-you</h2>
+  <p id="tt-todo"></p>
+  <p class="tt-for">Who’s it for?</p>
+  <div class="tt-chips" id="tt-who" role="radiogroup" aria-label="Who it is for"></div>
+  <div class="tt-msg" id="tt-msg">
+    <q id="tt-msg-text"></q>
+    <div class="tt-btns">
+      <button type="button" class="tt-btn" id="tt-copy">Copy message</button>
+      <button type="button" class="tt-btn is-quiet" id="tt-share" hidden>Share</button>
+    </div>
+  </div>
+  <div class="tt-btns">
+    <button type="button" class="tt-btn is-quiet" id="tt-next">Another idea</button>
+    <a class="dig" id="tt-more" href="/turning-toward-in-depth.html">Dig deeper: why this works</a>
+  </div>
+  <p class="tt-note">Change anything in [square brackets] to fit. A new idea appears each day. Nothing you pick is sent anywhere.</p>
+</section>
 
 <div class="scene">
   <p class="scene-when">A Tuesday, nothing wrong</p>
@@ -72,6 +135,15 @@
 </ol>
 
 <p id="safety">These practices assume you’re safe with each other. Warmth isn’t owed to someone who threatens or controls you. <a href="/turning-toward-in-depth.html#when-not">When these aren’t the right tool</a>.</p>
+
+<section class="tt-week-wrap" aria-labelledby="tt-week-h">
+  <h2 id="tt-week-h">Your 7-day start</h2>
+  <p style="margin:0!important;">One small thing a day. Tick each one off when you’ve done it.</p>
+  <div class="tt-progress"><div class="tt-track" aria-hidden="true"><b id="tt-bar"></b></div><span id="tt-count" aria-live="polite">0 of 7</span></div>
+  <ol id="tt-week"></ol>
+  <p id="tt-done" hidden>You did all seven. Keep the ones that felt natural, and add them to your <a href="/workpapers/wp-13-pll-protocol.html">daily check-in</a>.</p>
+  <p class="tt-note">Your ticks are saved only in this browser, on this device. <button type="button" class="tt-btn is-quiet" id="tt-reset" style="font-size:.8rem;padding:.2rem .55rem;margin-left:.3rem;">Start over</button></p>
+</section>
 
 <div class="try-this">
   <p><strong>Try this:</strong> Today, catch one small reach from someone you care about and turn toward it. Tonight, thank one person for one specific thing.</p>
