@@ -346,6 +346,7 @@
 
     addPrivateNote(body);
     addTip(body);
+    revealOnScroll();
 
     // "Breathe": a one-minute calm break on every page (the Night Garden has its own)
     if (!body.hasAttribute('data-no-breathe')) buildBreathe(body);
@@ -413,6 +414,26 @@
 
   // ---------- Breathe with me ----------
   // Six slow breaths, in for 4 seconds and out for 6 (about six a minute). Nothing is saved.
+  // ---------- Things drift softly into place as you scroll to them ----------
+  function revealOnScroll() {
+    if (!('IntersectionObserver' in window) || (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches)) return;
+    var items = document.querySelectorAll('main .ideas > li, main .scene, main .try-this, main .tol-tip, main .tt-card, main .tt-week-wrap, main .track-card, main .live-card, main .off-list li, main .tol-welcome');
+    if (!items.length) return;
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (en) {
+        if (!en.isIntersecting) return;
+        var el = en.target, delay = +(el.getAttribute('data-reveal-i') || 0) % 4 * 90;
+        setTimeout(function () { el.classList.add('is-in'); }, delay);
+        io.unobserve(el);
+      });
+    }, { rootMargin: '0px 0px -8% 0px', threshold: 0.08 });
+    Array.prototype.forEach.call(items, function (el, i) {
+      // anything already on screen when the page opens just appears, so nothing flickers
+      var r = el.getBoundingClientRect(); if (r.top < window.innerHeight * 0.9) return;
+      el.setAttribute('data-reveal-i', i); el.classList.add('tol-reveal'); io.observe(el);
+    });
+  }
+
   // ---------- Little tips for the day ----------
   // One small, practical tip near the end of each content page. It changes each day, differs
   // from page to page, and "Another tip" shows a new one.

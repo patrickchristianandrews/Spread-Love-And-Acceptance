@@ -501,7 +501,7 @@ html, body{ overflow-x:clip; }
 .tol-simple .read-head h1{ padding-right:5.4rem; }
 .tol-simple .read-head::after{
   content:""; position:absolute; right:0; bottom:1.1rem; width:4.8rem; height:4.8rem; pointer-events:none;
-  background:var(--buddy-peach) no-repeat center / contain; animation:tol-bob 9s ease-in-out infinite;
+  background:var(--buddy-peach) no-repeat center / contain; animation:tol-bob 8s var(--ease-soft, ease-in-out) infinite;
 }
 body[data-sec="self"] .read-head::after, body[data-sec="media"] .read-head::after{ background-image:var(--buddy-lavender); }
 body[data-sec="relationships"] .read-head::after{ background-image:var(--buddy-rose); }
@@ -640,7 +640,7 @@ body[data-sec="program"] .read-head::after, body[data-sec="tools"] .read-head::a
 @keyframes tol-rise{ 0%{ translate:0 0; } 25%{ translate:28px -80px; } 55%{ translate:-22px -170px; } 83%,100%{ translate:14px -250px; } }
 @keyframes tol-pop{ 0%,81%{ opacity:0; scale:1; } 84%{ opacity:.85; scale:1.25; } 92%,100%{ opacity:0; scale:2.1; } }
 
-.tol-heart{ opacity:.7; animation:tol-bob-soft 34s ease-in-out infinite, tol-mend var(--d,26s) ease-in-out infinite; animation-delay:var(--dl,0s); }
+.tol-heart{ opacity:.7; animation:tol-bob-soft 32s var(--ease-soft, ease-in-out) infinite, tol-mend var(--d,26s) ease-in-out infinite; animation-delay:var(--dl,0s); }
 .tol-heart::before, .tol-heart::after{ content:""; position:absolute; inset:0; background:var(--tint,#F4A7BB); transform-origin:50% 95%;
   -webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 21S3 15.2 3 8.9C3 6 5.2 4 7.7 4c1.8 0 3.3 1 4.3 2.5C13 5 14.5 4 16.3 4 18.8 4 21 6 21 8.9 21 15.2 12 21 12 21z'/%3E%3C/svg%3E") center / contain no-repeat;
           mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 21S3 15.2 3 8.9C3 6 5.2 4 7.7 4c1.8 0 3.3 1 4.3 2.5C13 5 14.5 4 16.3 4 18.8 4 21 6 21 8.9 21 15.2 12 21 12 21z'/%3E%3C/svg%3E") center / contain no-repeat; }
@@ -652,22 +652,22 @@ body[data-sec="program"] .read-head::after, body[data-sec="tools"] .read-head::a
 @keyframes tol-bob-soft{ 0%,100%{ translate:0 0; } 25%{ translate:40px -30px; } 50%{ translate:10px -70px; } 75%{ translate:-35px -30px; } }
 
 /* spread across the page, drifting behind the words */
-.tol-wash b:nth-of-type(1){ left:8%; top:10%; --s:40px; --d:21s; --dl:-3s; --tint:#FBE3EA; --rim:#EDA3B6; }
-.tol-wash b:nth-of-type(2){ left:72%; top:8%; --s:30px; --d:27s; --dl:-9s; --tint:#F7B8C6; }
+.tol-wash b:nth-of-type(1){ left:8%; top:10%; --s:40px; --d:20s; --dl:-3s; --tint:#FBE3EA; --rim:#EDA3B6; }
+.tol-wash b:nth-of-type(2){ left:72%; top:8%; --s:30px; --d:28s; --dl:-9s; --tint:#F7B8C6; }
 .tol-wash b:nth-of-type(3){ left:38%; top:17%; --s:28px; --d:24s; --dl:-14s; --tint:#EAF4FC; --rim:#96C2E8; }
-.tol-wash b:nth-of-type(4){ left:84%; top:24%; --s:44px; --d:26s; --dl:-7s; --tint:#E8F6EE; --rim:#98D2B2; }
-.tol-wash b:nth-of-type(5){ left:22%; top:31%; --s:30px; --d:31s; --dl:-20s; --tint:#F9C9B4; }
-.tol-wash b:nth-of-type(6){ left:58%; top:36%; --s:36px; --d:23s; --dl:-11s; --tint:#FDF3D2; --rim:#EFD27A; }
-.tol-wash b:nth-of-type(7){ left:6%; top:45%; --s:26px; --d:25s; --dl:-2s; --tint:#EFE6FA; --rim:#B9A0E0; }
-.tol-wash b:nth-of-type(8){ left:46%; top:50%; --s:32px; --d:29s; --dl:-16s; --tint:#F7B8C6; }
-.tol-wash b:nth-of-type(9){ left:78%; top:57%; --s:34px; --d:22s; --dl:-5s; --tint:#FDEBDF; --rim:#EBA88E; }
+.tol-wash b:nth-of-type(4){ left:84%; top:24%; --s:44px; --d:24s; --dl:-7s; --tint:#E8F6EE; --rim:#98D2B2; }
+.tol-wash b:nth-of-type(5){ left:22%; top:31%; --s:30px; --d:32s; --dl:-20s; --tint:#F9C9B4; }
+.tol-wash b:nth-of-type(6){ left:58%; top:36%; --s:36px; --d:24s; --dl:-11s; --tint:#FDF3D2; --rim:#EFD27A; }
+.tol-wash b:nth-of-type(7){ left:6%; top:45%; --s:26px; --d:24s; --dl:-2s; --tint:#EFE6FA; --rim:#B9A0E0; }
+.tol-wash b:nth-of-type(8){ left:46%; top:50%; --s:32px; --d:28s; --dl:-16s; --tint:#F7B8C6; }
+.tol-wash b:nth-of-type(9){ left:78%; top:57%; --s:34px; --d:24s; --dl:-5s; --tint:#FDEBDF; --rim:#EBA88E; }
 .tol-wash b:nth-of-type(10){ left:28%; top:64%; --s:32px; --d:28s; --dl:-18s; --tint:#E8F6EE; --rim:#98D2B2; }
 .tol-wash b:nth-of-type(11){ left:64%; top:70%; --s:40px; --d:24s; --dl:-6s; --tint:#FBE3EA; --rim:#EDA3B6; }
-.tol-wash b:nth-of-type(12){ left:12%; top:77%; --s:28px; --d:30s; --dl:-12s; --tint:#D9C8F0; }
-.tol-wash b:nth-of-type(13){ left:50%; top:84%; --s:30px; --d:26s; --dl:-4s; --tint:#EAF4FC; --rim:#96C2E8; }
-.tol-wash b:nth-of-type(14){ left:86%; top:88%; --s:26px; --d:27s; --dl:-15s; --tint:#F9C9B4; }
-.tol-wash b:nth-of-type(15){ left:34%; top:93%; --s:36px; --d:23s; --dl:-9s; --tint:#FDF3D2; --rim:#EFD27A; }
-.tol-wash b:nth-of-type(16){ left:68%; top:97%; --s:28px; --d:25s; --dl:-1s; --tint:#EFE6FA; --rim:#B9A0E0; }
+.tol-wash b:nth-of-type(12){ left:12%; top:77%; --s:28px; --d:32s; --dl:-12s; --tint:#D9C8F0; }
+.tol-wash b:nth-of-type(13){ left:50%; top:84%; --s:30px; --d:24s; --dl:-4s; --tint:#EAF4FC; --rim:#96C2E8; }
+.tol-wash b:nth-of-type(14){ left:86%; top:88%; --s:26px; --d:28s; --dl:-15s; --tint:#F9C9B4; }
+.tol-wash b:nth-of-type(15){ left:34%; top:93%; --s:36px; --d:24s; --dl:-9s; --tint:#FDF3D2; --rim:#EFD27A; }
+.tol-wash b:nth-of-type(16){ left:68%; top:97%; --s:28px; --d:24s; --dl:-1s; --tint:#EFE6FA; --rim:#B9A0E0; }
 .tol-wash b{ opacity:.55; }
 .tol-wash b.tol-heart{ opacity:.6; }
 @media (max-width:760px){ .tol-wash b{ scale:.75; } }
@@ -688,15 +688,15 @@ body[data-sec="program"] .read-head::after, body[data-sec="tools"] .read-head::a
 .tol-breathe > *{ position:relative; z-index:1; }
 .tol-breathe-bg{ position:absolute !important; inset:0; z-index:0 !important; overflow:hidden; pointer-events:none; }
 .tol-breathe-bg b{ position:absolute; display:block; width:var(--s,30px); height:var(--s,30px); opacity:.7; }
-.tol-breathe-bg b:nth-of-type(1){ left:10%; top:78%; --s:38px; --d:19s; --dl:-2s;  --tint:#FBE3EA; --rim:#EDA3B6; }
+.tol-breathe-bg b:nth-of-type(1){ left:10%; top:78%; --s:38px; --d:20s; --dl:-2s;  --tint:#FBE3EA; --rim:#EDA3B6; }
 .tol-breathe-bg b:nth-of-type(2){ left:22%; top:30%; --s:28px; --d:24s; --dl:-8s;  --tint:#F7B8C6; }
-.tol-breathe-bg b:nth-of-type(3){ right:12%; top:66%; --s:32px; --d:21s; --dl:-12s; --tint:#EAF4FC; --rim:#96C2E8; }
-.tol-breathe-bg b:nth-of-type(4){ right:20%; top:22%; --s:42px; --d:26s; --dl:-5s;  --tint:#E8F6EE; --rim:#98D2B2; }
+.tol-breathe-bg b:nth-of-type(3){ right:12%; top:66%; --s:32px; --d:20s; --dl:-12s; --tint:#EAF4FC; --rim:#96C2E8; }
+.tol-breathe-bg b:nth-of-type(4){ right:20%; top:22%; --s:42px; --d:24s; --dl:-5s;  --tint:#E8F6EE; --rim:#98D2B2; }
 .tol-breathe-bg b:nth-of-type(5){ left:6%;  top:46%; --s:26px; --d:28s; --dl:-17s; --tint:#D9C8F0; }
-.tol-breathe-bg b:nth-of-type(6){ right:6%; top:44%; --s:30px; --d:22s; --dl:-9s;  --tint:#FDF3D2; --rim:#EFD27A; }
-.tol-breathe-bg b:nth-of-type(7){ left:40%; top:88%; --s:24px; --d:25s; --dl:-3s;  --tint:#EFE6FA; --rim:#B9A0E0; }
-.tol-breathe-bg b:nth-of-type(8){ right:34%; top:90%; --s:26px; --d:23s; --dl:-14s; --tint:#F9C9B4; }
-.tol-breathe-bg b:nth-of-type(9){ left:14%; top:10%; --s:30px; --d:27s; --dl:-20s; --tint:#FDEBDF; --rim:#EBA88E; }
+.tol-breathe-bg b:nth-of-type(6){ right:6%; top:44%; --s:30px; --d:24s; --dl:-9s;  --tint:#FDF3D2; --rim:#EFD27A; }
+.tol-breathe-bg b:nth-of-type(7){ left:40%; top:88%; --s:24px; --d:24s; --dl:-3s;  --tint:#EFE6FA; --rim:#B9A0E0; }
+.tol-breathe-bg b:nth-of-type(8){ right:34%; top:90%; --s:26px; --d:24s; --dl:-14s; --tint:#F9C9B4; }
+.tol-breathe-bg b:nth-of-type(9){ left:14%; top:10%; --s:30px; --d:28s; --dl:-20s; --tint:#FDEBDF; --rim:#EBA88E; }
 .tol-breathe-focus{ margin:0; max-width:26rem; min-height:3.6rem; font-family:"Fraunces", Georgia, serif; font-size:1.3rem; line-height:1.35; color:#FFF6E0; }
 .tol-breathe-focus small{ display:block; margin-top:.3rem; font-family:"Lora", Georgia, serif; font-size:.92rem; color:#CFC9E6; }
 .tol-breathe-stage{ position:relative; width:11rem; height:11rem; display:grid; place-items:center; }
@@ -799,7 +799,7 @@ body:has(.wpf-bar) .tol-breathe-btn{ bottom:calc(4.8rem + env(safe-area-inset-bo
 /* Little tip for today */
 .tol-tip{ display:flex; gap:1rem; align-items:flex-start; max-width:40rem; margin:2.5rem 0 1rem; padding:1.1rem 1.25rem;
   background:linear-gradient(135deg, #FFF8EE 0%, #F7EEF8 100%); border:1px solid #E6D6EE; border-radius:22px; box-shadow:0 8px 24px rgba(120,90,140,.08); }
-.tol-tip img{ flex:none; width:3.2rem; height:3.2rem; animation:tol-bob 9s ease-in-out infinite; }
+.tol-tip img{ flex:none; width:3.2rem; height:3.2rem; animation:tol-bob 8s var(--ease-soft, ease-in-out) infinite; }
 .tol-tip p{ margin:0; max-width:none !important; }
 .tol-tip-k{ font-family:"IBM Plex Mono", ui-monospace, monospace; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:#8A6D8F; }
 .tol-tip-h{ font-family:"Fraunces", Georgia, serif; font-weight:600; font-size:1.15rem; margin:.25rem 0 .2rem !important; color:var(--ink); }
@@ -866,10 +866,10 @@ body:has(.wpf-bar) .tol-breathe-btn{ bottom:calc(4.8rem + env(safe-area-inset-bo
 .tol-wx.is-in{ opacity:1; transform:none; }
 .tol-wx.is-bye{ opacity:0; transform:translateY(12px) scale(.96); transition-duration:.3s; }
 .tol-wx-go{ display:flex; align-items:center; gap:.55rem; padding:.45rem 2.1rem .45rem .5rem; border-radius:999px; text-decoration:none; color:var(--ink);
-  background:rgba(255,251,242,.96); border:1px solid #E6D6EE; box-shadow:0 8px 26px rgba(90,70,120,.16); animation:tol-wx-float 6s ease-in-out infinite; }
+  background:rgba(255,251,242,.96); border:1px solid #E6D6EE; box-shadow:0 8px 26px rgba(90,70,120,.16); animation:tol-wx-float 8s var(--ease-soft, ease-in-out) infinite; }
 .tol-wx-go:hover{ background:#FFF6EC; }
 .tol-wx-go svg{ width:2.7rem; height:2.2rem; flex:none; }
-.tol-wx-sun{ transform-origin:42px 17px; animation:tol-wx-peek 6s ease-in-out infinite; }
+.tol-wx-sun{ transform-origin:42px 17px; animation:tol-wx-peek 8s var(--ease-soft, ease-in-out) infinite; }
 .tol-wx-go span{ display:flex; flex-direction:column; line-height:1.2; min-width:0; }
 .tol-wx-go strong{ font-family:"Fraunces", Georgia, serif; font-weight:600; font-size:.92rem; }
 .tol-wx-go small{ font-size:.75rem; color:var(--ink-soft); }
@@ -910,3 +910,34 @@ body:has(.wpf-bar) .tol-breathe-btn{ bottom:calc(4.8rem + env(safe-area-inset-bo
   .br-how{ font-size:.85rem; min-height:2.4rem; }
 }
 @media (max-height:600px){ .br-why{ display:none; } .br-stage{ width:9rem; height:9rem; } }
+
+
+/* ---------- Motion that moves together ----------
+   One shared rhythm: every gentle loop on the site is a multiple of box breathing's
+   4-second count, and everything eases the same soft way. */
+:root{ --ease-soft:cubic-bezier(.45,0,.55,1); --ease-out:cubic-bezier(.22,.8,.3,1); --beat:4s; }
+@keyframes tol-bob{ 0%,100%{ transform:translateY(0) rotate(-1.5deg); } 50%{ transform:translateY(-3px) rotate(1.5deg); } }
+
+/* Buttons and links answer the same way everywhere: a soft ease, and a gentle press */
+:where(button, .tol-btn, .tt-btn, .tol-member, .tol-contents-btn, .br-method, .live-play, .ng-choice){
+  transition:background-color .28s var(--ease-out), border-color .28s var(--ease-out), color .28s var(--ease-out), box-shadow .28s var(--ease-out), transform .22s var(--ease-out), opacity .28s var(--ease-out);
+}
+:where(button, .tol-btn, .tt-btn, .br-method, .live-play):active{ transform:scale(.97); }
+:where(a){ transition:color .25s var(--ease-out), text-decoration-color .25s var(--ease-out), background-color .25s var(--ease-out); }
+
+/* Things drift softly into place as you reach them (added by site.js) */
+.tol-reveal{ opacity:0; transform:translateY(14px); transition:opacity .9s var(--ease-out), transform .9s var(--ease-out); }
+.tol-reveal.is-in{ opacity:1; transform:none; }
+
+/* Pages fade softly from one to the next, with the header staying put (where browsers support it) */
+@view-transition{ navigation:auto; }
+.tol-bar{ view-transition-name:tol-bar; }
+.tol-breathe-btn{ view-transition-name:tol-breathe-btn; }
+::view-transition-old(root), ::view-transition-new(root){ animation-duration:.45s; animation-timing-function:var(--ease-out); }
+
+@media (prefers-reduced-motion: reduce){
+  .tol-reveal, .tol-reveal.is-in{ opacity:1; transform:none; transition:none; }
+  :where(button, .tol-btn, .tt-btn, .br-method, .live-play):active{ transform:none; }
+  ::view-transition-old(root), ::view-transition-new(root){ animation:none; }
+}
+@media print{ .tol-reveal{ opacity:1 !important; transform:none !important; } }
