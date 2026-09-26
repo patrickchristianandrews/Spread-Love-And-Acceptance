@@ -247,7 +247,7 @@
   var LEVEL = 0.55;
   function startAudio() {
     unlockMediaAudio();
-    if (audio) { audio.ctx.resume(); audio.master.gain.setTargetAtTime(LEVEL, audio.ctx.currentTime, 0.8); return; }
+    if (audio) { audio.ctx.resume(); audio.master.gain.setTargetAtTime(LEVEL, audio.ctx.currentTime, 0.8); if (audio.music) audio.music.start(); return; }
     var AC = window.AudioContext || window.webkitAudioContext; if (!AC) return;
     var ac = new AC(), master = ac.createGain(); master.gain.value = 0;
     var comp = ac.createDynamicsCompressor(); comp.threshold.value = -18; comp.ratio.value = 3;
@@ -257,30 +257,11 @@
     var verb = ac.createConvolver(), irLen = Math.floor(ac.sampleRate * 4), ir = ac.createBuffer(2, irLen, ac.sampleRate);
     for (var ch = 0; ch < 2; ch++) { var dd = ir.getChannelData(ch); for (var k = 0; k < irLen; k++) dd[k] = (Math.random() * 2 - 1) * Math.pow(1 - k / irLen, 3.2); }
     verb.buffer = ir; var wet = ac.createGain(); wet.gain.value = 0.6; verb.connect(wet); wet.connect(master);
-    // a deep, warm bed in the style of The Breath Beneath: low C and G drones (with the octaves
-    // above them, so phone speakers carry them too), a slow heartbeat pulse every two seconds,
-    // and soft notes from the same five-note scale blooming now and then
-    var pad = ac.createGain(); pad.gain.value = 0.1; var pf = ac.createBiquadFilter(); pf.type = 'lowpass'; pf.frequency.value = 900;
-    pad.connect(pf); pf.connect(master); pf.connect(verb);
-    [[65.41, .16], [98, .12], [130.81, .3], [196, .34], [261.63, .48], [329.63, .36], [392, .26]].forEach(function (v, i) {
-      [-1, 1].forEach(function (side) {
-        var o = ac.createOscillator(); o.type = 'sine'; o.frequency.value = v[0]; o.detune.value = side * (2 + i);
-        var g = ac.createGain(); g.gain.value = v[1] * 0.5; o.connect(g);
-        if (ac.createStereoPanner) { var pn = ac.createStereoPanner(); pn.pan.value = side * (0.2 + i * 0.1); g.connect(pn); pn.connect(pad); } else g.connect(pad);
-        o.start();
-      });
-    });
-    var pulse = ac.createOscillator(), pulseG = ac.createGain(); pulse.frequency.value = 1 / 4; pulseG.gain.value = 0.014; // a slow swell on box breathing's 4-count pulse.connect(pulseG); pulseG.connect(pad.gain); pulse.start();
-    var lfo = ac.createOscillator(), lfoG = ac.createGain(); lfo.frequency.value = 0.02; lfoG.gain.value = 200; lfo.connect(lfoG); lfoG.connect(pf.frequency); lfo.start();
-    var PENTA = [261.63, 293.66, 329.63, 392, 440];
-    setInterval(function () {
-      if (!save.sound || document.hidden) return;
-      var t = ac.currentTime, f = PENTA[Math.floor(Math.random() * 5)], len = 9 + Math.random() * 4;
-      var o = ac.createOscillator(), o2 = ac.createOscillator(), g = ac.createGain(), lp = ac.createBiquadFilter();
-      o.frequency.value = f; o2.type = 'sine'; o2.frequency.value = f; o2.detune.value = 4; lp.type = 'lowpass'; lp.frequency.value = 1100;
-      g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(0.045, t + len * 0.4); g.gain.linearRampToValueAtTime(0, t + len);
-      o.connect(lp); o2.connect(lp); lp.connect(g); g.connect(master); g.connect(verb); o.start(t); o2.start(t); o.stop(t + len + 0.1); o2.stop(t + len + 0.1);
-    }, 8000);
+    // the music: warm chords drifting every two box-breathing counts, a soft wandering melody,
+    // and every chime tuned to the chord playing now (calm-music.js)
+    var music = window.TOLMusic ? window.TOLMusic.create(ac, master) : null, pad;
+    if (music) { music.level(0.95); music.start(); pad = music.pad; }
+    else { pad = ac.createGain(); pad.gain.value = 0; pad.connect(master); }
     // the night air: gentle filtered noise that rises and falls like a breeze
     var len = ac.sampleRate * 3, nb = ac.createBuffer(1, len, ac.sampleRate), d = nb.getChannelData(0), last = 0;
     for (var i = 0; i < len; i++) { last = (last + 0.02 * (Math.random() * 2 - 1)) / 1.02; d[i] = last * 3.5; }
@@ -289,13 +270,14 @@
     var ag = ac.createGain(); ag.gain.value = 0.035;
     var alfo = ac.createOscillator(), alfoG = ac.createGain(); alfo.frequency.value = 0.08; alfoG.gain.value = 0.03; alfo.connect(alfoG); alfoG.connect(ag.gain); alfo.start();
     air.connect(af); af.connect(ag); ag.connect(master); air.start();
-    audio = { ctx: ac, master: master, verb: verb, pad: pad };
+    audio = { ctx: ac, master: master, verb: verb, pad: pad, music: music };
     if (ac.state !== 'running' && ac.resume) ac.resume();
     master.gain.setTargetAtTime(LEVEL, ac.currentTime, 0.8);
   }
-  function stopAudio() { if (audio) audio.master.gain.setTargetAtTime(0, audio.ctx.currentTime, 0.4); }
+  function stopAudio() { if (audio) { audio.master.gain.setTargetAtTime(0, audio.ctx.currentTime, 0.4); if (audio.music) audio.music.stop(); } }
   function chime(i, vol) {
     if (!audio || !save.sound) return;
+    if (audio.music) { audio.music.pluck(audio.music.note(i), (vol || 0.1) * 0.9); return; } // always in tune with the chord playing now
     var ac = audio.ctx, t = ac.currentTime, f = NOTES[((i % NOTES.length) + NOTES.length) % NOTES.length];
     var o = ac.createOscillator(), o2 = ac.createOscillator(), g = ac.createGain();
     o.type = 'sine'; o2.type = 'sine'; o.frequency.value = f; o2.frequency.value = f * 2; o2.detune.value = 3;
@@ -980,7 +962,8 @@
       if (targets.every(function (p) { return p.done; })) {
         shapeDone = t;
         // the finished picture sings its whole tune back to you
-        targets.forEach(function (p, k) { setTimeout(function () { chime(k, 0.07); burst(p.x, p.y, 6); }, 250 + k * 120); });
+        targets.forEach(function (p, k) { setTimeout(function () { chime(k, 0.06); burst(p.x, p.y, 6); }, 250 + k * 120); });
+        if (audio && audio.music && save.sound) setTimeout(function () { audio.music.reward(true); }, 350 + targets.length * 120);
         var first = save.consts.indexOf(shape.id) === -1, m = MEANING[shape.id] || ['A new constellation', ''];
         if (first) { save.consts.push(shape.id); persist(); }
         say(m[0] + (first ? ' \u2728 New!' : ''), m[1] + (first ? '  ' + save.consts.length + ' of ' + SHAPE_IDS.length + ' found.' : ''), 5200);

@@ -345,6 +345,11 @@
       }
     }
 
+    // wide tables scroll inside their own box on small screens, instead of pushing the page sideways
+    Array.prototype.forEach.call(document.querySelectorAll('main table'), function (tb) {
+      if (tb.parentNode.classList && tb.parentNode.classList.contains('tol-table-scroll')) return;
+      var wrap = el('div', { class: 'tol-table-scroll' }); tb.parentNode.insertBefore(wrap, tb); wrap.appendChild(tb);
+    });
     addPrivateNote(body);
     addTip(body);
     revealOnScroll();

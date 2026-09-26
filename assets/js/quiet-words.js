@@ -78,21 +78,18 @@
   function get(k, d) { try { var v = localStorage.getItem(k); return v === null ? d : v; } catch (e) { return d; } }
   function set(k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
 
-  // ---------- sound: a soft bell ----------
-  var ac = null, soundOn = get('tol-qw-sound', 'on') !== 'off';
-  function bell(i) {
-    if (!soundOn) return;
-    try {
-      if (!ac) ac = new (window.AudioContext || window.webkitAudioContext)();
-      if (ac.state !== 'running') ac.resume();
-      var notes = [523.25, 587.33, 659.25, 783.99, 880, 1046.5], f = notes[i % notes.length], t = ac.currentTime;
-      [1, 2].forEach(function (m, k) {
-        var o = ac.createOscillator(), g = ac.createGain(); o.frequency.value = f * m; o.type = 'sine';
-        g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(k ? 0.008 : 0.05, t + 0.05); g.gain.exponentialRampToValueAtTime(0.0001, t + 3);
-        o.connect(g); g.connect(ac.destination); o.start(t); o.stop(t + 3.1);
-      });
-    } catch (e) {}
+  // ---------- sound: soft music that answers you (calm-music.js) ----------
+  // Background chords and a gentle melody; each letter you pick plays the next rising note in
+  // tune with the chord, and every found word settles with a small arpeggio.
+  var music = null, soundOn = get('tol-qw-sound', 'on') !== 'off';
+  function wake() {
+    if (!soundOn || !window.TOLMusic) return null;
+    try { if (navigator.audioSession) navigator.audioSession.type = 'playback'; } catch (e) {}
+    if (!music) { music = window.TOLMusic.create(); music.level(0.5); }
+    music.start(); return music;
   }
+  function letterNote(i) { var m = wake(); if (m) m.pluck(m.note(i + 2), 0.045); }
+  function bell(i) { var m = wake(); if (m) m.reward(false); }
 
   // ---------- making a puzzle ----------
   function build(th) {
@@ -188,15 +185,16 @@
   function markAnchor(on) { tiles.forEach(function (t) { t.classList.remove('is-anchor'); }); if (on && anchor) tile(anchor[0], anchor[1]).classList.add('is-anchor'); }
   gridEl.addEventListener('pointerdown', function (e) {
     var cell = cellFromPoint(e.clientX, e.clientY); if (!cell) return;
-    e.preventDefault(); dragging = true; moved = false;
+    e.preventDefault(); dragging = true; moved = false; wake();
     if (anchor && (anchor[0] !== cell[0] || anchor[1] !== cell[1])) { sel = lineTo(anchor, cell); drawMarks(sel); return; }
-    anchor = cell; sel = [cell]; drawMarks(sel);
+    anchor = cell; sel = [cell]; drawMarks(sel); letterNote(0);
   });
   gridEl.addEventListener('pointermove', function (e) {
     if (!dragging || !anchor) return;
     var cell = cellFromPoint(e.clientX, e.clientY); if (!cell) return;
     if (cell[0] !== anchor[0] || cell[1] !== anchor[1]) moved = true;
-    sel = lineTo(anchor, cell); drawMarks(sel);
+    var before = sel.length; sel = lineTo(anchor, cell); drawMarks(sel);
+    if (sel.length > before) letterNote(sel.length - 1); // each new letter rises a note
   });
   window.addEventListener('pointerup', function () {
     if (!dragging) return; dragging = false;
@@ -240,7 +238,7 @@
     if (window.TOLGarden) window.TOLGarden.gift('words');
     root.classList.add('is-done');
     var n = +get('tol-qw-done', '0') + 1; set('tol-qw-done', String(n));
-    setTimeout(function () { [0, 2, 4, 5].forEach(function (k, i) { setTimeout(function () { bell(k); }, i * 180); }); }, 400);
+    setTimeout(function () { var m = wake(); if (m) { m.home(); setTimeout(function () { m.reward(true); }, 600); } }, 300);
     noteEl.innerHTML = '<span class="qw-note-h">All found. Lovely.</span> Take a slow breath before you go. ' +
       (n > 1 ? 'You’ve finished ' + n + ' quiet puzzles here.' : 'Come back tomorrow for a new theme.');
     say('All the words are found.');
@@ -268,8 +266,11 @@
     say('Look near the glowing letter for a word.');
   });
   var sb = $('.qw-sound');
-  function soundLabel() { sb.setAttribute('aria-pressed', String(soundOn)); sb.innerHTML = soundOn ? '&#127925; Sound on' : '&#127925; Sound off'; }
-  sb.addEventListener('click', function () { soundOn = !soundOn; set('tol-qw-sound', soundOn ? 'on' : 'off'); soundLabel(); if (soundOn) bell(2); });
+  function soundLabel() { sb.setAttribute('aria-pressed', String(soundOn)); sb.innerHTML = soundOn ? '&#127925; Music on' : '&#127925; Music off'; }
+  sb.addEventListener('click', function () { soundOn = !soundOn; set('tol-qw-sound', soundOn ? 'on' : 'off'); soundLabel(); if (soundOn) { var m = wake(); if (m) m.reward(false); } else if (music) music.stop(); });
+  // the music starts with the first tap anywhere in the game (browsers need a tap first)
+  root.addEventListener('pointerdown', function () { wake(); }, { once: true });
+  document.addEventListener('visibilitychange', function () { if (!music) return; if (document.hidden) music.stop(); else if (soundOn) music.start(); });
   soundLabel();
   window.addEventListener('resize', function () { drawMarks(); });
 

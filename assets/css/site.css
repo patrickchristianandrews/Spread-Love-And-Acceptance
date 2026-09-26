@@ -954,3 +954,4 @@ body:has(.wpf-bar) .tol-breathe-btn{ bottom:calc(4.8rem + env(safe-area-inset-bo
 .tol-tip .is-swap .tol-tip-h, .tol-tip .is-swap .tol-tip-b{ opacity:0; transform:translateY(4px); }
 .br-tip{ margin:0; max-width:26rem; padding:.7rem 1rem; border-radius:14px; background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.14); color:#E9E4F7; font-size:.92rem; line-height:1.5; }
 .br-tip strong{ color:#FFE3C4; }
+.tol-table-scroll{ max-width:100%; overflow-x:auto; -webkit-overflow-scrolling:touch; }

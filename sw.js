@@ -9,7 +9,7 @@ var CORE = [
   '/', '/index.html', '/offline.html',
   '/night-garden.html', '/quiet-words.html', '/turning-toward.html', '/quick-checks.html', '/lemonade-stand.html',
   '/assets/css/site.css', '/assets/css/reading.css',
-  '/assets/js/site.js', '/assets/js/night-garden.js', '/assets/js/quiet-words.js', '/assets/js/quiet-words-themes.js', '/assets/js/tips.js', '/assets/js/breathe.js', '/assets/js/turning-toward.js',
+  '/assets/js/site.js', '/assets/js/night-garden.js', '/assets/js/quiet-words.js', '/assets/js/quiet-words-themes.js', '/assets/js/calm-music.js', '/assets/js/tips.js', '/assets/js/breathe.js', '/assets/js/turning-toward.js',
   '/assets/img/mascots/two-bubbles.svg', '/assets/icons/icon-192.png', '/manifest.webmanifest'
 ];
 
