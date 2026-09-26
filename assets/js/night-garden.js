@@ -164,9 +164,8 @@
     save.consts.forEach(function (id, n) {
       var shape = SHAPES[id]; if (!shape) return;
       var cx = W * (0.12 + (n % 5) * 0.18), cy = H * (0.12 + Math.floor(n / 5) * 0.12), sz = Math.min(W, H) * 0.06;
-      ctx.strokeStyle = 'rgba(255,240,210,0.16)'; ctx.lineWidth = 1; ctx.beginPath();
-      shape.pts.forEach(function (p, j) { var px = cx + (p[0] - 0.5) * sz, py = cy + (p[1] - 0.5) * sz; if (j) ctx.lineTo(px, py); else ctx.moveTo(px, py); });
-      if (shape.closed) ctx.closePath(); ctx.stroke();
+      ctx.strokeStyle = 'rgba(255,240,210,0.16)'; ctx.lineWidth = 1;
+      tracePath(shape.pts.map(function (p) { return [cx + (p[0] - 0.5) * sz, cy + (p[1] - 0.5) * sz]; }), shape.parts); ctx.stroke();
       shape.pts.forEach(function (p) { ctx.fillStyle = 'rgba(255,240,210,0.5)'; ctx.beginPath(); ctx.arc(cx + (p[0] - 0.5) * sz, cy + (p[1] - 0.5) * sz, 1.3, 0, Math.PI * 2); ctx.fill(); });
       var who = save.dedic && save.dedic[id];
       if (who) { ctx.fillStyle = 'rgba(255,240,210,0.45)'; ctx.textAlign = 'center'; ctx.textBaseline = 'top'; ctx.font = 'italic 10px Lora, Georgia, serif'; ctx.fillText(who, cx, cy + sz * 0.6); }
@@ -363,7 +362,7 @@
     padEl.hidden = m !== 'pond';
     flies.forEach(function (f) { f.home = null; });
     if (m === 'breathe') { breath.start = performance.now() + 1500; breath.count = 0; breath.phase = ''; skyWords = []; wordAt = 0; say('Box breathing', 'In 4 · hold 4 · out 4 · hold 4. Follow the star around the square.', 0); }
-    if (m === 'fireflies') { newShape(); say('Guide the fireflies', 'Touch or move over each faint point, and a firefly will settle there.', 6000); }
+    if (m === 'fireflies') { newShape(); say('Connect the stars', 'Start at 1 and follow the numbers. Each star sings a note.', 6000); }
     if (m === 'pond') { pondReset(); say('Float the lily pads', 'Fill a row across the pond and it blooms. There’s no hurry, and no way to lose.', 6000); }
     updateCount();
     // The first time in each activity, show how it works
@@ -602,8 +601,31 @@
     wave: { name: 'a wave', closed: false, pts: (function () { var a = []; for (var i = 0; i < 10; i++) a.push([0.08 + i * 0.093, 0.55 + Math.sin(i / 9 * Math.PI * 2) * 0.22]); return a; })() },
     kite: { name: 'a kite', closed: true, pts: [[0.5, 0.1], [0.78, 0.42], [0.5, 0.9], [0.22, 0.42]] },
     butterfly: { name: 'a butterfly', closed: true, pts: [[0.5, 0.3], [0.3, 0.12], [0.1, 0.22], [0.2, 0.48], [0.5, 0.52], [0.24, 0.62], [0.2, 0.86], [0.42, 0.8], [0.5, 0.6], [0.58, 0.8], [0.8, 0.86], [0.76, 0.62], [0.5, 0.52], [0.8, 0.48], [0.9, 0.22], [0.7, 0.12]] },
-    paw: { name: 'a little paw', closed: false, pts: [[0.3, 0.62], [0.36, 0.84], [0.5, 0.9], [0.64, 0.84], [0.7, 0.62], [0.5, 0.56], [0.3, 0.62], [0.18, 0.4], [0.36, 0.24], [0.5, 0.18], [0.64, 0.24], [0.82, 0.4]] }
+    paw: { name: 'two little paws', groups: [].concat(pawAt(0.25, 0.72), pawAt(0.75, 0.3)) }
   };
+  // two paw prints walking side by side: a pad, then four toes, for each
+  function pawAt(cx, cy) {
+    return [{ closed: true, pts: [[cx - 0.15, cy + 0.04], [cx - 0.07, cy + 0.15], [cx + 0.07, cy + 0.15], [cx + 0.15, cy + 0.04], [cx, cy - 0.06]] },
+      { pts: [[cx - 0.2, cy - 0.12]] }, { pts: [[cx - 0.075, cy - 0.23]] }, { pts: [[cx + 0.075, cy - 0.23]] }, { pts: [[cx + 0.2, cy - 0.12]] }];
+  }
+  // shapes are one line unless they have separate parts; either way, work from parts
+  Object.keys(SHAPES).forEach(function (id) {
+    var d = SHAPES[id];
+    if (!d.groups) d.groups = [{ closed: d.closed, pts: d.pts }];
+    d.pts = []; d.parts = [];
+    d.groups.forEach(function (g) { d.parts.push({ start: d.pts.length, len: g.pts.length, closed: !!g.closed }); d.pts = d.pts.concat(g.pts); });
+  });
+  // trace a shape's lines through its first n stars (all of them if n is left out)
+  function tracePath(xy, parts, n) {
+    if (n == null) n = xy.length;
+    ctx.beginPath();
+    parts.forEach(function (pt) {
+      var k = Math.max(0, Math.min(pt.len, n - pt.start)); if (k < 2) return;
+      ctx.moveTo(xy[pt.start][0], xy[pt.start][1]);
+      for (var i = 1; i < k; i++) ctx.lineTo(xy[pt.start + i][0], xy[pt.start + i][1]);
+      if (k === pt.len && pt.closed && pt.len > 2) ctx.closePath();
+    });
+  }
   // each constellation has a name and a kind thought to carry away
   var MEANING = {
     heart: ['The Heart', 'For everyone you carry with you.'],
@@ -615,7 +637,7 @@
     wave: ['The Wave', 'Feelings rise, and feelings pass.'],
     kite: ['The Kite', 'Lightness is allowed.'],
     butterfly: ['The Butterfly', 'Change can be gentle.'],
-    paw: ['The Paw Print', 'For the small companions who love us without words.']
+    paw: ['The Paw Prints', 'For the small companions who love us without words.']
   };
   var SHAPE_IDS = Object.keys(SHAPES), shape = null, targets = [], shapeDone = 0, dwell = null, sparks = [], shooting = null, nextShoot = 0;
   function newShape() {
@@ -632,16 +654,18 @@
     if (!shape) return;
     var glow = shapeDone ? Math.min(1, (t - shapeDone) / 900) : 0;
     ctx.strokeStyle = 'rgba(255,240,210,' + (0.12 + glow * 0.6) + ')'; ctx.lineWidth = 1 + glow * 1.5; ctx.setLineDash(glow ? [] : [3, 6]);
-    ctx.beginPath(); targets.forEach(function (p, i) { if (i) ctx.lineTo(p.x, p.y); else ctx.moveTo(p.x, p.y); }); if (shape.def.closed) ctx.closePath(); ctx.stroke(); ctx.setLineDash([]);
+    var xy = targets.map(function (p) { return [p.x, p.y]; });
+    tracePath(xy, shape.def.parts); ctx.stroke(); ctx.setLineDash([]);
     // the lines you've connected so far, glowing
     var litN = 0; while (litN < targets.length && targets[litN].done) litN++;
     if (litN > 1 && !glow) {
       ctx.save(); ctx.strokeStyle = 'rgba(255,236,190,0.85)'; ctx.lineWidth = 2.4; ctx.shadowColor = 'rgba(255,230,170,0.9)'; ctx.shadowBlur = 10; ctx.lineCap = 'round';
-      ctx.beginPath(); for (var li = 0; li < litN; li++) { if (li) ctx.lineTo(targets[li].x, targets[li].y); else ctx.moveTo(targets[li].x, targets[li].y); } ctx.stroke(); ctx.restore();
+      tracePath(xy, shape.def.parts, litN); ctx.stroke(); ctx.restore();
     }
     if (glow) { // the finished picture shimmers
       ctx.save(); ctx.strokeStyle = 'rgba(255,236,190,' + (0.5 + 0.4 * Math.sin(t / 300)) + ')'; ctx.lineWidth = 3; ctx.shadowColor = 'rgba(255,220,160,1)'; ctx.shadowBlur = 18;
-      ctx.beginPath(); targets.forEach(function (p, i) { if (i) ctx.lineTo(p.x, p.y); else ctx.moveTo(p.x, p.y); }); if (shape.def.closed) ctx.closePath(); ctx.stroke(); ctx.restore();
+      tracePath(xy, shape.def.parts); ctx.stroke();
+      ctx.fillStyle = 'rgba(255,240,200,0.9)'; targets.forEach(function (p) { ctx.beginPath(); ctx.arc(p.x, p.y, 2.6, 0, Math.PI * 2); ctx.fill(); }); ctx.restore();
     }
     var next = nextTarget();
     targets.forEach(function (p) {
