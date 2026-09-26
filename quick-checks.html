@@ -133,10 +133,11 @@
         <h2 id="ladder">The sky</h2>
         <p class="step-hint">Pick the one closest to true right now. This is a reading of you, never of anyone else.</p>
         <div class="rungs" role="group" aria-label="The sky right now">
-          <button class="rung" type="button" data-sky="clear" aria-pressed="false"><span class="ico" aria-hidden="true">&#9728;</span><strong>Clear<em>Ventral vagal</em></strong><span class="d">Breath is easy, shoulders aren&#39;t braced, and you can hear something hard without defending yourself.</span></button>
-          <button class="rung" type="button" data-sky="gusty" aria-pressed="false"><span class="ico" aria-hidden="true">&#127788;</span><strong>Gusty<em>Sympathetic</em></strong><span class="d">Heart rate&#39;s up, thoughts move fast, and small things start to feel urgent or personal.</span></button>
-          <button class="rung" type="button" data-sky="fog" aria-pressed="false"><span class="ico" aria-hidden="true">&#127787;</span><strong>Fogged in<em>Dorsal vagal</em></strong><span class="d">Flat, far away or foggy, and words are harder to find than usual.</span></button>
+          <button class="rung" type="button" data-sky="clear" aria-pressed="false"><span class="ico" aria-hidden="true">&#9728;</span><strong>Clear<em>Calm and connected</em></strong><span class="d">Breath is easy, shoulders aren&#39;t braced, and you can hear something hard without defending yourself.</span></button>
+          <button class="rung" type="button" data-sky="gusty" aria-pressed="false"><span class="ico" aria-hidden="true">&#127788;</span><strong>Gusty<em>Revved up</em></strong><span class="d">Heart rate&#39;s up, thoughts move fast, and small things start to feel urgent or personal.</span></button>
+          <button class="rung" type="button" data-sky="fog" aria-pressed="false"><span class="ico" aria-hidden="true">&#127787;</span><strong>Fogged in<em>Running on empty</em></strong><span class="d">Flat, far away or foggy, and words are harder to find than usual.</span></button>
         </div>
+        <p class="step-hint" style="font-size:.82rem;">Curious about the science? These three match what nervous-system researchers call the ventral vagal, sympathetic and dorsal vagal states. You never need the terms.</p>
       </div>
 
       <div class="step">
@@ -297,9 +298,9 @@
   function list(a){ return a.length<2 ? (a[0]||'') : a.slice(0,-1).join(', ')+' and '+a[a.length-1]; }
 
   var SKY={
-    clear:{ico:'\u2600',name:'Clear',sub:'Settled \u00b7 ventral vagal'},
-    gusty:{ico:'\uD83C\uDF2C',name:'Gusty',sub:'Mobilized \u00b7 sympathetic'},
-    fog:{ico:'\uD83C\uDF2B',name:'Fogged in',sub:'Shut down \u00b7 dorsal vagal'}
+    clear:{ico:'\u2600',name:'Clear',sub:'Calm and connected'},
+    gusty:{ico:'\uD83C\uDF2C',name:'Gusty',sub:'Revved up'},
+    fog:{ico:'\uD83C\uDF2B',name:'Fogged in',sub:'Running on empty'}
   };
   var BODYTXT={hungry:"you haven't eaten in a while",thirsty:"you're thirsty",pain:"you're in pain or unwell",
     still:"you've been still all day",noise:"there's been too much noise or light",caffeine:"you're running on caffeine",

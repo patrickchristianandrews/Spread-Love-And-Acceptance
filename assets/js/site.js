@@ -49,10 +49,10 @@
       { href: '/quick-checks.html#today', code: 'Daily', title: 'Today’s Weather', note: 'One minute on your own conditions: a forecast, a talk window, what today is good for, and a private almanac of your patterns' },
       { href: '/wired-differently.html', deep: true, code: 'New', title: 'Wired Differently', note: 'How different neurotypes receive the same words, and how to talk across the difference' },
       { href: '/wiring-card.html', code: 'Tool', title: 'Wiring Card', note: 'A one-page card on how you receive words, what silence means, and what to avoid' },
-      { href: '/workpapers/wp-02-battery-stress-meter.html', deep: true, code: 'WP-02', title: 'The Battery & Stress Meter', note: 'What you’re already carrying, separate from what just happened', paid: true },
+      { href: '/workpapers/wp-02-battery-stress-meter.html', deep: true, code: 'WP-02', title: 'How full is your battery?', note: 'The Battery & Stress Meter. What you’re already carrying, separate from what just happened', paid: true },
       { href: '/tools/frequency-calibration.html', code: 'Tool', title: 'Frequency Calibration', note: 'Your natural rhythms for money, decisions, check-ins and recovery', paid: true },
       { href: '/wp-11.html', deep: true, code: 'WP-11', title: 'The Calm-Down Kit', note: 'Decide in advance what settles your body', paid: true },
-      { href: '/book/chapter-3.html', deep: true, code: 'III', title: 'Autonomic Saturation & the 7 Ocular Vectors', note: 'Why some reactions are bigger than their cause', paid: true },
+      { href: '/book/chapter-3.html', deep: true, code: 'III', title: 'Full tanks and different angles', note: 'Autonomic Saturation & the 7 Ocular Vectors. Why some reactions are bigger than their cause', paid: true },
       { href: '/learn/index.html#part-self', deep: true, code: 'Stories', title: 'Stories from Philosophy: Knowing yourself', note: 'The Second Arrow, the Ship of Theseus, What Is Up to Us' },
     ]},
     { id: 'relationships', title: 'Relationships by type', blurb: 'Where to start in each kind of relationship, and every tool that fits. The shared relationship tools themselves are under The book, Workpapers and Tools.', items: [
@@ -68,27 +68,27 @@
       { href: '/relationships.html#map', deep: true, code: 'Map', title: 'The full map', note: 'Every chapter, workpaper and tool against every kind of relationship' }
     ]},
     { id: 'book', title: 'The book', blurb: 'The manuscript, one idea per chapter. Each chapter pairs with a workpaper that puts it to use.', items: [
-      { href: '/book/preface.html', deep: true, code: 'Preface', title: 'Unbilled Debt', note: 'Why the unseen work of running a shared life builds up like a debt only one person can see' },
-      { href: '/book/chapter-1.html', deep: true, code: 'I', title: 'The Radio Frequency Paradigm', note: 'How pace, tone and urgency knock two people out of sync, and how to get back in tune' },
-      { href: '/book/chapter-2.html', deep: true, code: 'II', title: 'The Epistemic Verdict Engine & P(Solvency)', note: 'A simple formula for whether the current split of work is sustainable. It judges the arrangement, never a person' },
-      { href: '/book/chapter-3.html', deep: true, code: 'III', title: 'Autonomic Saturation & the 7 Ocular Vectors', note: 'How much of a reaction is leftover stress, and the seven angles people argue from', paid: true },
-      { href: '/book/chapter-4.html', deep: true, code: 'IV', title: 'Deontological Parity & Sensory Gating', note: 'Agreeing how you’ll judge fairness, and giving a comment time to land before reacting', paid: true },
-      { href: '/book/chapter-5.html', deep: true, code: 'V', title: 'The Deficit Audit', note: 'Why a monthly look back catches the problems that weekly check-ins miss', paid: true }
+      { href: '/book/preface.html', deep: true, code: 'Preface', title: 'The work nobody sees', note: 'Unbilled Debt. Why the unseen work of running a shared life builds up like a debt only one person can see' },
+      { href: '/book/chapter-1.html', deep: true, code: 'I', title: 'Why we get out of tune', note: 'The Radio Frequency Paradigm. How pace, tone and urgency knock two people out of sync, and how to get back in tune' },
+      { href: '/book/chapter-2.html', deep: true, code: 'II', title: 'Is the split working?', note: 'The Epistemic Verdict Engine & P(Solvency). A simple formula for whether the current split of work is sustainable. It judges the arrangement, never a person' },
+      { href: '/book/chapter-3.html', deep: true, code: 'III', title: 'Full tanks and different angles', note: 'Autonomic Saturation & the 7 Ocular Vectors. How much of a reaction is leftover stress, and the seven angles people argue from', paid: true },
+      { href: '/book/chapter-4.html', deep: true, code: 'IV', title: 'Two kinds of fair', note: 'Deontological Parity & Sensory Gating. Agreeing how you’ll judge fairness, and giving a comment time to land before reacting', paid: true },
+      { href: '/book/chapter-5.html', deep: true, code: 'V', title: 'The monthly look-back', note: 'The Deficit Audit. Why a monthly look back catches the problems that weekly check-ins miss', paid: true }
     ]},
     { id: 'workpapers', title: 'Workpapers', blurb: 'Worksheets each person fills in about themselves, then reads together. Best in this order: WP-01, 02, 03, 09, 13, with WP-04 monthly.', items: [
-      { href: '/workpapers/wp-01.html', deep: true, code: 'WP-01', title: 'The Daily Balance Sheet & Neutral Refusals', note: 'Start here: a week’s log of who did what, plus kind scripts for saying no', paid: true },
-      { href: '/workpapers/wp-02-battery-stress-meter.html', deep: true, code: 'WP-02', title: 'The Battery & Stress Meter', note: 'A five-question self-check: how much are you already carrying today?', paid: true },
-      { href: '/workpapers/wp-03-raci-treaty.html', deep: true, code: 'WP-03', title: 'Domestic RACI Treaty', note: 'One named owner for every recurring task, so it stops being renegotiated', paid: true },
-      { href: '/workpapers/wp-04-deficit-audit.html', deep: true, code: 'WP-04', title: 'Unbilled Deficit Audit', note: 'A monthly review that sorts repeat problems into their real causes', paid: true },
-      { href: '/workpapers/wp-09-tone-filter.html', deep: true, code: 'WP-09', title: 'Tone Transducer & Filter', note: 'Turn a raw reaction into fact, feeling and a clear ask before you send it', paid: true },
+      { href: '/workpapers/wp-01.html', deep: true, code: 'WP-01', title: 'Who did what, and kind ways to say no', note: 'The Daily Balance Sheet & Neutral Refusals. Start here: a week’s log of who did what, plus kind scripts for saying no', paid: true },
+      { href: '/workpapers/wp-02-battery-stress-meter.html', deep: true, code: 'WP-02', title: 'How full is your battery?', note: 'The Battery & Stress Meter. A five-question self-check: how much are you already carrying today?', paid: true },
+      { href: '/workpapers/wp-03-raci-treaty.html', deep: true, code: 'WP-03', title: 'One owner per job', note: 'Domestic RACI Treaty. One named owner for every recurring task, so it stops being renegotiated', paid: true },
+      { href: '/workpapers/wp-04-deficit-audit.html', deep: true, code: 'WP-04', title: 'What keeps coming back?', note: 'Unbilled Deficit Audit. A monthly review that sorts repeat problems into their real causes', paid: true },
+      { href: '/workpapers/wp-09-tone-filter.html', deep: true, code: 'WP-09', title: 'Say it so it lands', note: 'Tone Transducer & Filter. Turn a raw reaction into fact, feeling and a clear ask before you send it', paid: true },
       { href: '/wp-11.html', deep: true, code: 'WP-11', title: 'The Calm-Down Kit', note: 'Settle your body first, when either of you is too activated to talk', paid: true },
-      { href: '/workpapers/wp-13-pll-protocol.html', deep: true, code: 'WP-13', title: 'Phase-Locked Loop Protocol', note: 'A 90-second daily check-in, with no debate, that keeps small things small', paid: true },
+      { href: '/workpapers/wp-13-pll-protocol.html', deep: true, code: 'WP-13', title: 'The 90-second daily check-in', note: 'Phase-Locked Loop Protocol. A 90-second daily check-in, with no debate, that keeps small things small', paid: true },
       { href: '/do/index.html', code: '', title: 'Try the Workpapers', note: 'A playground for test-driving the worksheets before you commit' },
       { href: '/workpapers/fill/index.html', code: 'Fill-in', title: 'Fill-in workpapers', note: 'Type straight into the worksheets and save them as PDFs on your device' }
     ]},
     { id: 'program', title: 'Program & record', blurb: 'For anyone who’d rather be walked through it step by step.', items: [
-      { href: '/prog-01.html', deep: true, code: 'PROG-01', title: 'The 6-Week Program', note: 'One workpaper at a time, in order, ending with a before-and-after read', paid: true },
-      { href: '/workpapers/report-01.html', deep: true, code: 'REPORT-01', title: 'The Full Read', note: 'Your week-by-week record, so progress builds instead of resetting', paid: true }
+      { href: '/prog-01.html', deep: true, code: 'PROG-01', title: 'Six gentle weeks', note: 'The 6-Week Program. One workpaper at a time, in order, ending with a before-and-after read', paid: true },
+      { href: '/workpapers/report-01.html', deep: true, code: 'REPORT-01', title: 'Your progress, week by week', note: 'The Full Read. Your week-by-week record, so progress builds instead of resetting', paid: true }
     ]},
     { id: 'tools', title: 'Tools', blurb: 'Interactive pages. Everything you type stays in your own browser.', items: [
       { href: '/conversation-reader.html', code: 'New', title: 'The Conversation Reader', note: 'Paste a text thread, chat or email exchange: see where it turned, what each of you may be hearing, and a calmer way to answer' },
@@ -318,6 +318,29 @@
         else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
       }
     });
+
+    // Simple pages get their cute dressing and a gentle reminder (see site.css)
+    if (hereSection) body.setAttribute('data-sec', hereSection.id);
+    var ideas = document.querySelector('main .ideas');
+    if (inDepth) {
+      // Full pages: the same little buddy, and permission to skim
+      body.classList.add('tol-deep');
+      var fullBar = document.querySelector('.depth-bar');
+      var fullLabel = fullBar && fullBar.querySelector('span');
+      if (fullLabel && here && here.title && /^Full version$/.test(fullLabel.textContent.trim())) fullLabel.textContent = 'Full version of “' + here.title + '”';
+      if (fullBar && !document.querySelector('.tol-gentle')) {
+        var skim = el('p', { class: 'tol-gentle is-deep' }, '<span aria-hidden="true">🌿</span> This is the full version. Skim for what you need; the simple version has the gist.');
+        fullBar.parentNode.insertBefore(skim, fullBar.nextSibling);
+      }
+    }
+    if (ideas) {
+      body.classList.add('tol-simple');
+      var depthBar = document.querySelector('main .depth-bar');
+      if (depthBar && !document.querySelector('.tol-gentle')) {
+        var gentle = el('p', { class: 'tol-gentle' }, '<span aria-hidden="true">🌱</span> Take what helps and leave the rest. Nothing here grades you.');
+        depthBar.parentNode.insertBefore(gentle, depthBar.nextSibling);
+      }
+    }
 
     // Pastel watercolour splashes behind the page (decorative; see site.css)
     if (!body.hasAttribute('data-no-wash')) {
