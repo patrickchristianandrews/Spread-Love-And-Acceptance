@@ -1187,3 +1187,5 @@ button.tol-dive{ display:inline !important; width:auto !important; min-height:0 
 .growing-note p{ margin:0 0 .35rem; } .growing-note p:last-child{ margin:0; }
 .growing-chip{ display:inline-flex; align-items:center; gap:.35rem; font-size:.85rem; padding:.2rem .7rem; border-radius:999px; background:#EAF6EF; border:1px solid #BFE3CF; color:#2F5A3C; text-decoration:none; margin-left:.4rem; }
 @media (prefers-reduced-motion: reduce){ .growing-note .growing-ic{ animation:none; } }
+/* mini dives sit above a card's stretched "Dig deeper" link, so both can be tapped */
+.tol-dive{ position:relative; z-index:2; }
