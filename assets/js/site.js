@@ -349,12 +349,13 @@
 
     // "Breathe": a one-minute calm break on every page (the Night Garden has its own)
     if (!body.hasAttribute('data-no-breathe')) buildBreathe(body);
+    buildWeatherNudge(body);
 
     // Pastel watercolour splashes behind the page (decorative; see site.css)
     if (!body.hasAttribute('data-no-wash')) {
       // plus a few pastel bubbles and hearts drifting slowly upward
       var floaters = '';
-      for (var f = 0; f < 10; f++) floaters += '<b class="' + (f % 3 === 1 ? 'tol-heart' : 'tol-bub') + '"></b>';
+      for (var f = 0; f < 16; f++) floaters += '<b class="' + (f % 3 === 1 ? 'tol-heart' : 'tol-bub') + '"></b>';
       var wash = el('div', { class: 'tol-wash', 'aria-hidden': 'true' }, '<i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>' + floaters);
       document.documentElement.appendChild(wash);
     }
@@ -568,204 +569,54 @@
     }, 25000);
   }
 
-  // ---------- Breathe: a one-minute break with sound and something to focus on ----------
-  var FOCUS = [
-    ['Notice your feet on the floor.', 'Let the ground hold you.'],
-    ['Let your shoulders drop.', 'Nothing needs holding up right now.'],
-    ['Soften your jaw and your forehead.', 'Let your face rest.'],
-    ['Feel the air: cool as it comes in, warm as it leaves.', ''],
-    ['Name one sound you can hear.', 'Just notice it. Nothing to do.'],
-    ['You’re doing enough.', 'This minute is yours.'],
-    ['Let your hands go heavy.', ''],
-    ['Picture somewhere you feel safe.', 'Stay there for a breath.'],
-    ['Breathe out a little longer than you breathed in.', 'That’s the part that calms.'],
-    ['Think of someone who makes you smile.', ''],
-    ['Let this breath be slower than the last.', ''],
-    ['Thank your body for carrying you today.', '']
-  ];
-
-  // The sound for the break, made in the browser (nothing is downloaded or sent):
-  // a slow stereo chord in a warm hall, a deep hum, an ocean that swells as you breathe in
-  // and ebbs as you breathe out, and a singing bowl at each turn.
-  function breathSound() {
-    var AC = window.AudioContext || window.webkitAudioContext; if (!AC) return null;
-    try { if (navigator.audioSession) navigator.audioSession.type = 'playback'; } catch (e) {}
-    try { // lets iPhones play it with the silent switch on
-      var n = 800, buf = new Uint8Array(44 + n), dv = new DataView(buf.buffer), w = function (o, str) { for (var i = 0; i < str.length; i++) buf[o + i] = str.charCodeAt(i); };
-      w(0, 'RIFF'); dv.setUint32(4, 36 + n, true); w(8, 'WAVEfmt '); dv.setUint32(16, 16, true); dv.setUint16(20, 1, true); dv.setUint16(22, 1, true);
-      dv.setUint32(24, 8000, true); dv.setUint32(28, 8000, true); dv.setUint16(32, 1, true); dv.setUint16(34, 8, true); w(36, 'data'); dv.setUint32(40, n, true);
-      for (var k = 44; k < 44 + n; k++) buf[k] = 128;
-      var el0 = new Audio(URL.createObjectURL(new Blob([buf], { type: 'audio/wav' }))); var pr = el0.play(); if (pr && pr.catch) pr.catch(function () {});
-    } catch (e) {}
-    var ac = new AC(), sr = ac.sampleRate, stops = [];
-    var out = ac.createGain(), comp = ac.createDynamicsCompressor();
-    comp.threshold.value = -20; comp.knee.value = 18; comp.ratio.value = 2.5; comp.attack.value = 0.02; comp.release.value = 0.4;
-    out.gain.value = 0; out.connect(comp); comp.connect(ac.destination);
-    // a warm hall: a generated stereo impulse that fades over four seconds
-    var hall = ac.createConvolver(), irLen = Math.floor(sr * 4), ir = ac.createBuffer(2, irLen, sr);
-    for (var ch = 0; ch < 2; ch++) { var dd = ir.getChannelData(ch); for (var i = 0; i < irLen; i++) dd[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / irLen, 3.2); }
-    hall.buffer = ir; var wet = ac.createGain(); wet.gain.value = 0.55; hall.connect(wet); wet.connect(out);
-    function send(node, dry) { var g = ac.createGain(); g.gain.value = dry; node.connect(g); g.connect(out); node.connect(hall); }
-    function pan(v) { if (ac.createStereoPanner) { var p = ac.createStereoPanner(); p.pan.value = v; return p; } return ac.createGain(); }
-    // the chord: each note is two gently detuned voices, one a little left and one a little right
-    var pad = ac.createGain(), pf = ac.createBiquadFilter(); pad.gain.value = 0.07; pf.type = 'lowpass'; pf.frequency.value = 1100; pf.Q.value = 0.4;
-    pad.connect(pf); send(pf, 0.6);
-    [[146.83, .5], [220, .45], [293.66, .5], [369.99, .32], [440, .28], [659.25, .14]].forEach(function (v, i) {
-      [-1, 1].forEach(function (side) {
-        var o = ac.createOscillator(), g = ac.createGain(), pn = pan(side * (0.25 + i * 0.08));
-        o.type = i < 2 ? 'sine' : 'triangle'; o.frequency.value = v[0]; o.detune.value = side * (5 + i);
-        g.gain.value = v[1] * 0.5; o.connect(g); g.connect(pn); pn.connect(pad); o.start(); stops.push(o);
-      });
+  // ---------- Today's Weather, as a small floating invitation ----------
+  // Bottom-left, a few seconds after the page loads. Tap to check in; × hides it for today,
+  // and "Don't show again" hides it for good. It stays away once today's weather is logged.
+  var SKIP_WEATHER = ['/quick-checks.html', '/night-garden.html', '/dashboard.html', '/offline.html', '/404.html'];
+  function buildWeatherNudge(body) {
+    if (SKIP_WEATHER.indexOf(current) !== -1 || body.hasAttribute('data-no-weather') || document.querySelector('.wpf-bar')) return;
+    var today = new Date().toISOString().slice(0, 10);
+    if (lsGet('tol-weather-nudge') === 'never' || lsGet('tol-weather-nudge') === today) return;
+    try { var log = JSON.parse(lsGet('tol-weather-v1') || '[]'); if (log.length && log[log.length - 1].d === today) return; } catch (e) {}
+    var art = '<svg viewBox="0 0 64 52" aria-hidden="true">' +
+      '<g class="tol-wx-sun"><circle cx="42" cy="17" r="11" fill="#F8DC6E"/><g stroke="#F3C94A" stroke-width="2.4" stroke-linecap="round"><path d="M42 1v3M56 17h3M52 6l2-2M52 28l2 2M32 6l-2-2"/></g></g>' +
+      '<path d="M14 44c-6 0-10-4-10-9s4-9 9-9c1-7 7-12 14-12 8 0 13 5 14 12 5 0 9 4 9 9s-4 9-9 9z" fill="#FFFFFF" stroke="#C9B8EC" stroke-width="2"/>' +
+      '<circle cx="22" cy="33" r="2" fill="#2B2620"/><circle cx="33" cy="33" r="2" fill="#2B2620"/><path d="M25 38c1.5 1.5 4.5 1.5 6 0" fill="none" stroke="#2B2620" stroke-width="1.8" stroke-linecap="round"/>' +
+      '<ellipse cx="18" cy="37" rx="2.6" ry="1.6" fill="#F7B8C6"/><ellipse cx="37" cy="37" rx="2.6" ry="1.6" fill="#F7B8C6"/></svg>';
+    var w = el('div', { class: 'tol-wx', role: 'complementary', 'aria-label': 'Today’s Weather' },
+      '<a class="tol-wx-go" href="/quick-checks.html#today">' + art + '<span><strong>How’s your weather today?</strong><small>A one-minute check-in</small></span></a>' +
+      '<button type="button" class="tol-wx-x" aria-label="Hide for today">&times;</button>');
+    w.querySelector('.tol-wx-x').addEventListener('click', function () {
+      lsSet('tol-weather-nudge', today);
+      w.classList.add('is-bye');
+      var t = el('div', { class: 'tol-wx tol-wx-toast', role: 'status' }, '<span>Hidden today.</span><button type="button" class="tol-wx-never">Don’t show again</button>');
+      t.querySelector('.tol-wx-never').addEventListener('click', function () { lsSet('tol-weather-nudge', 'never'); t.remove(); });
+      setTimeout(function () { w.remove(); document.body.appendChild(t); requestAnimationFrame(function () { t.classList.add('is-in'); }); }, 300);
+      setTimeout(function () { t.classList.remove('is-in'); setTimeout(function () { t.remove(); }, 400); }, 5000);
     });
-    var lfo = ac.createOscillator(), lfoG = ac.createGain(); lfo.frequency.value = 0.04; lfoG.gain.value = 380; lfo.connect(lfoG); lfoG.connect(pf.frequency); lfo.start(); stops.push(lfo);
-    // a deep, soft hum you feel more than hear (lovely on headphones)
-    var hum = ac.createOscillator(), humG = ac.createGain(); hum.frequency.value = 73.42; humG.gain.value = 0.05; hum.connect(humG); humG.connect(out); hum.start(); stops.push(hum);
-    // the ocean: two slightly different washes, left and right, plus a little foam on the in-breath
-    function noise(seconds) { var len = Math.floor(sr * seconds), nb = ac.createBuffer(1, len, sr), d = nb.getChannelData(0), l = 0; for (var i = 0; i < len; i++) { l = (l + 0.02 * (Math.random() * 2 - 1)) / 1.02; d[i] = l * 3.5; } var s = ac.createBufferSource(); s.buffer = nb; s.loop = true; return s; }
-    var sea = ac.createGain(), seaF = ac.createBiquadFilter(); sea.gain.value = 0.015; seaF.type = 'lowpass'; seaF.frequency.value = 650;
-    [[-0.6, 3.1], [0.6, 3.7]].forEach(function (v) { var ns = noise(v[1]), pn = pan(v[0]); ns.connect(pn); pn.connect(seaF); ns.start(); stops.push(ns); });
-    seaF.connect(sea); send(sea, 0.8);
-    var foam = ac.createGain(), foamF = ac.createBiquadFilter(), fs = noise(2.3); foam.gain.value = 0; foamF.type = 'bandpass'; foamF.frequency.value = 3200; foamF.Q.value = 0.7;
-    fs.connect(foamF); foamF.connect(foam); send(foam, 0.5); fs.start(); stops.push(fs);
-    // a singing bowl: a few out-of-tune partials that shimmer against each other and ring for a long time
-    function bowl(f, vol) {
-      var t = ac.currentTime, g = ac.createGain(); g.gain.value = 1; send(g, 0.7);
-      [[1, 1], [2.71, .45], [5.16, .2], [8.43, .08]].forEach(function (p, i) {
-        [0, 1.3 + i].forEach(function (beat, j) {
-          var o = ac.createOscillator(), og = ac.createGain(), pn = pan(j ? 0.35 : -0.35), decay = 7 / (1 + i * 0.9);
-          o.frequency.value = f * p[0] + beat; og.gain.setValueAtTime(0, t); og.gain.linearRampToValueAtTime(vol * p[1] * 0.5, t + 0.012);
-          og.gain.exponentialRampToValueAtTime(0.0001, t + decay);
-          o.connect(og); og.connect(pn); pn.connect(g); o.start(t); o.stop(t + decay + 0.1);
-        });
-      });
-    }
-    if (ac.state !== 'running' && ac.resume) ac.resume();
-    return {
-      on: function () { ac.resume(); out.gain.cancelScheduledValues(ac.currentTime); out.gain.setTargetAtTime(0.7, ac.currentTime, 1.4); },
-      off: function () { out.gain.cancelScheduledValues(ac.currentTime); out.gain.setTargetAtTime(0, ac.currentTime, 0.35); },
-      inhale: function () {
-        var t = ac.currentTime; bowl(440, 0.1);
-        sea.gain.setTargetAtTime(0.1, t, 1.4); seaF.frequency.setTargetAtTime(1500, t, 1.4); foam.gain.setTargetAtTime(0.02, t + 1.2, 1); pad.gain.setTargetAtTime(0.11, t, 1.5);
-      },
-      exhale: function () {
-        var t = ac.currentTime; bowl(293.66, 0.08);
-        sea.gain.setTargetAtTime(0.012, t, 2.2); seaF.frequency.setTargetAtTime(520, t, 2.2); foam.gain.setTargetAtTime(0, t, 0.8); pad.gain.setTargetAtTime(0.06, t, 2.2);
-      },
-      finish: function () { bowl(293.66, 0.1); setTimeout(function () { bowl(440, 0.07); }, 700); setTimeout(function () { bowl(587.33, 0.06); }, 1400); },
-      end: function () { out.gain.cancelScheduledValues(ac.currentTime); out.gain.setTargetAtTime(0, ac.currentTime, 0.7); setTimeout(function () { try { stops.forEach(function (o) { o.stop(); }); ac.close(); } catch (e) {} }, 3000); }
-    };
+    setTimeout(function () {
+      if (document.querySelector('.tol-invite')) return; // never alongside the home-screen invitation
+      body.appendChild(w); requestAnimationFrame(function () { w.classList.add('is-in'); });
+    }, 3500);
   }
 
+  // ---------- Breathe ----------
+  // The button is on every page; the break itself (methods, guidance and soundscapes) lives in
+  // breathe.js and loads the first time someone taps it.
   function buildBreathe(body) {
     var moon = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z" fill="#F9D9B8" stroke="#8A7BB8" stroke-width="1.4"/></svg>';
     var btn = el('button', { type: 'button', class: 'tol-breathe-btn', 'aria-haspopup': 'dialog' }, moon + '<span>Breathe</span>');
-    btn.setAttribute('aria-label', 'Take a one-minute breathing break');
-    var floaters = ''; for (var f = 0; f < 9; f++) floaters += '<b class="' + (f % 3 === 1 ? 'tol-heart' : 'tol-bub') + '"></b>';
-    var ov = el('div', { class: 'tol-breathe', role: 'dialog', 'aria-modal': 'true', 'aria-label': 'One-minute breathing break', hidden: '' },
-      '<div class="tol-breathe-aurora" aria-hidden="true"><i></i><i></i><i></i></div>' +
-      '<div class="tol-breathe-bg" aria-hidden="true">' + floaters + '</div>' +
-      '<p class="tol-breathe-focus" aria-live="polite"><span></span><small></small></p>' +
-      '<div class="tol-breathe-stage" aria-hidden="true">' +
-        '<span class="tol-breathe-halo"></span><span class="tol-breathe-ripples"></span>' +
-        '<svg class="tol-breathe-ring" viewBox="0 0 120 120"><defs><linearGradient id="tol-ring-g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FFE3C4"/><stop offset=".5" stop-color="#F7B8C6"/><stop offset="1" stop-color="#CDB8F2"/></linearGradient></defs>' +
-        '<circle cx="60" cy="60" r="56" class="track"/><circle cx="60" cy="60" r="56" class="fill"/></svg>' +
-        '<div class="tol-breathe-orb"><span class="tol-breathe-count"></span></div>' +
-      '</div>' +
-      '<p class="tol-breathe-word" aria-live="polite">Get comfortable</p>' +
-      '<p class="tol-breathe-sub">Six slow breaths, about a minute. Breathe in as the light grows, out as it softens.</p>' +
-      '<ol class="tol-breathe-dots" aria-hidden="true"><li></li><li></li><li></li><li></li><li></li><li></li></ol>' +
-      '<div class="tol-breathe-len" role="group" aria-label="How long"><button type="button" data-min="1" aria-pressed="true">1 min</button><button type="button" data-min="3" aria-pressed="false">3 min</button><button type="button" data-min="5" aria-pressed="false">5 min</button></div>' +
-      '<div class="tol-breathe-row"><button type="button" data-act="close">I’m done</button>' +
-      '<button type="button" data-act="sound" aria-pressed="true">&#127925; Sound on</button>' +
-      '<button type="button" data-act="again" hidden>Six more</button>' +
-      '<a href="/night-garden.html">Visit the Night Garden</a></div>');
-    body.appendChild(btn); body.appendChild(ov);
-    var $o = function (q) { return ov.querySelector(q); };
-    var orb = $o('.tol-breathe-orb'), word = $o('.tol-breathe-word'), sub = $o('.tol-breathe-sub'), count = $o('.tol-breathe-count');
-    var ring = $o('.tol-breathe-ring .fill'), dots = ov.querySelectorAll('.tol-breathe-dots li'), focusT = $o('.tol-breathe-focus span'), focusS = $o('.tol-breathe-focus small');
-    var soundBtn = $o('[data-act="sound"]'), againBtn = $o('[data-act="again"]');
-    var C = 2 * Math.PI * 56, timers = [], last = null, snd = null, focusStart = 0;
-    ring.style.strokeDasharray = C; ring.style.strokeDashoffset = C;
-    var soundOn = lsGet('tol-breathe-sound') !== 'off';
-    function soundLabel() { soundBtn.setAttribute('aria-pressed', String(soundOn)); soundBtn.innerHTML = soundOn ? '&#127925; Sound on' : '&#127925; Sound off'; }
-    function later(fn, ms) { timers.push(setTimeout(fn, ms)); }
-    // words fade softly from one to the next instead of jumping
-    function soft(node, text) {
-      if (node.textContent === text) return;
-      node.classList.add('is-fading');
-      setTimeout(function () { node.textContent = text; node.classList.remove('is-fading'); }, 260);
-    }
-    var ripples = $o('.tol-breathe-ripples');
-    function ripple() { var r = document.createElement('i'); ripples.appendChild(r); setTimeout(function () { r.remove(); }, 4200); }
-    function tap(ms) { try { if (navigator.vibrate) navigator.vibrate(ms); } catch (e) {} }
-    var total = 6;
-    ov.querySelectorAll('[data-min]').forEach(function (b) {
-      b.addEventListener('click', function () {
-        total = 6 * +b.getAttribute('data-min');
-        ov.querySelectorAll('[data-min]').forEach(function (x) { x.setAttribute('aria-pressed', String(x === b)); });
-        stop(); begin();
-      });
+    btn.setAttribute('aria-label', 'Take a breathing break');
+    body.appendChild(btn);
+    var loading = false;
+    btn.addEventListener('click', function () {
+      if (window.TOLBreathe) { window.TOLBreathe.open(); return; }
+      if (loading) return; loading = true;
+      var sc = document.createElement('script'); sc.src = '/assets/js/breathe.js';
+      sc.onload = function () { loading = false; if (window.TOLBreathe) window.TOLBreathe.open(); };
+      sc.onerror = function () { loading = false; };
+      document.head.appendChild(sc);
     });
-    function stop() { timers.forEach(clearTimeout); timers = []; }
-    function fillRing(to, secs) { ring.style.transition = 'stroke-dashoffset ' + secs + 's linear'; ring.style.strokeDashoffset = to; }
-    function countdown(from) { for (var i = 0; i < from; i++) (function (k) { later(function () { count.textContent = String(from - k); }, k * 1000); })(i); }
-    function breath(n, total) {
-      if (n > total) {
-        soft(word, 'Well done.'); soft(sub, (total > 6 ? 'That was a few minutes' : 'That was a minute') + ' just for you. Come back any time: the button is always here.');
-        soft(focusT, 'Notice how you feel now.'); soft(focusS, 'Even a little calmer counts.');
-        orb.classList.remove('is-out'); orb.style.transform = 'scale(.85)'; count.textContent = '♥'; fillRing(C, .6);
-        ov.classList.remove('is-in', 'is-out'); dots.forEach(function (d) { d.className = 'done'; });
-        againBtn.hidden = false; if (snd && soundOn) { snd.finish(); later(function () { if (snd) snd.off(); }, 6000); } tap([10, 60, 10]); return;
-      }
-      var fx = FOCUS[(focusStart + n - 1) % FOCUS.length];
-      soft(focusT, fx[0]); soft(focusS, fx[1]);
-      soft(sub, 'Breath ' + n + ' of ' + total);
-      dots.forEach(function (d, i) { d.className = i < ((n - 1) % 6) ? 'done' : i === ((n - 1) % 6) ? 'now' : ''; });
-      soft(word, 'Breathe in…'); orb.classList.remove('is-out'); orb.style.transform = 'scale(1.15)'; ov.classList.remove('is-out'); ov.classList.add('is-in'); ripple(); tap(12);
-      ring.style.transition = 'none'; ring.style.strokeDashoffset = C; void ring.getBoundingClientRect(); fillRing(0, 4);
-      countdown(4); if (snd && soundOn) snd.inhale();
-      later(function () {
-        soft(word, 'And out…'); orb.classList.add('is-out'); orb.style.transform = 'scale(.7)'; ov.classList.remove('is-in'); ov.classList.add('is-out'); tap(8);
-        fillRing(C, 6); countdown(6); if (snd && soundOn) snd.exhale();
-      }, 4000);
-      later(function () { breath(n + 1, total); }, 10000);
-    }
-    function begin() {
-      againBtn.hidden = true; focusStart = Math.floor(Math.random() * FOCUS.length);
-      word.textContent = 'Get comfortable'; sub.textContent = 'Six slow breaths, about a minute. Breathe in as the light grows, out as it softens.';
-      focusT.textContent = 'Sit back, and let your eyes soften.'; focusS.textContent = soundOn ? 'Soft sound is on. Headphones are lovely.' : '';
-      dots.forEach(function (d) { d.className = ''; }); count.textContent = '';
-      orb.classList.remove('is-out'); orb.style.transform = 'scale(.7)';
-      if (soundOn) { if (!snd) snd = breathSound(); if (snd) snd.on(); }
-      later(function () { breath(1, total); }, 2500);
-    }
-    function open() {
-      last = document.activeElement; ov.hidden = false; document.documentElement.style.overflow = 'hidden';
-      ov.classList.remove('is-open'); void ov.offsetWidth; ov.classList.add('is-open');
-      soundLabel(); $o('[data-act="close"]').focus(); begin();
-    }
-    function close() {
-      stop(); ov.hidden = true; document.documentElement.style.overflow = '';
-      if (snd) { snd.end(); snd = null; }
-      if (last) last.focus();
-    }
-    btn.addEventListener('click', open);
-    $o('[data-act="close"]').addEventListener('click', close);
-    againBtn.addEventListener('click', function () { stop(); begin(); });
-    soundBtn.addEventListener('click', function () {
-      soundOn = !soundOn; lsSet('tol-breathe-sound', soundOn ? 'on' : 'off'); soundLabel();
-      if (soundOn) { if (!snd) snd = breathSound(); if (snd) snd.on(); } else if (snd) snd.off();
-    });
-    document.addEventListener('keydown', function (e) {
-      if (ov.hidden) return;
-      if (e.key === 'Escape') close();
-      if (e.key === 'Tab') {
-        var f = Array.prototype.filter.call(ov.querySelectorAll('button, a'), function (x) { return !x.hidden; }), first = f[0], lastEl = f[f.length - 1];
-        if (e.shiftKey && document.activeElement === first) { e.preventDefault(); lastEl.focus(); }
-        else if (!e.shiftKey && document.activeElement === lastEl) { e.preventDefault(); first.focus(); }
-      }
-    });
-    document.addEventListener('visibilitychange', function () { if (document.hidden && !ov.hidden) close(); });
   }
 
   // ---------- Membership ----------

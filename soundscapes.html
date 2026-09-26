@@ -33,6 +33,19 @@
     gap: 24px;
   }
 
+  .phones-note{ margin:0 0 1.2rem; padding:.7rem 1rem; border-radius:14px; background:#F3EEF9; border:1px solid #D9C8F0; color:#4E3F6B; font-size:.95rem; line-height:1.5; }
+  #live{ margin-top:2.5rem; }
+  .live-h{ font-family:"Fraunces", Georgia, serif; font-size:1.5rem; margin:0 0 .5rem; }
+  .live-lede, .live-note{ color:var(--ink-soft); line-height:1.6; }
+  .live-note{ font-size:.9rem; }
+  .live-list{ display:grid; gap:.8rem; grid-template-columns:repeat(auto-fit, minmax(14rem, 1fr)); margin:1rem 0; }
+  .live-card{ padding:1rem 1.1rem; border-radius:18px; border:1px solid #E6D6EE; background:linear-gradient(135deg, #FFF8EE, #F7EEF8); }
+  .live-card p{ margin:.5rem 0 0; font-size:.92rem; color:var(--ink-soft); line-height:1.5; }
+  .live-play{ font:inherit; font-family:"Fraunces", Georgia, serif; font-weight:600; font-size:1.05rem; display:inline-flex; align-items:center; gap:.5rem;
+    padding:.5rem 1.1rem; border-radius:999px; border:1px solid #D9C8F0; background:#fff; color:var(--ink); cursor:pointer; }
+  .live-play span{ font-size:.8rem; color:#6B4F8A; }
+  .live-play[aria-pressed="true"]{ background:#EDE3F8; border-color:#B9A0E0; }
+  .live-play:focus-visible{ outline:2px solid var(--focus); outline-offset:2px; }
   .track-card{
     border: 1px solid var(--line);
     border-radius: var(--radius);
@@ -120,6 +133,8 @@
         <p><strong>What this page is, and isn't.</strong> This catalog holds functional and ambient audio only. Longer-form musical work is a separate project and does not appear here &mdash; the boundary is deliberate, so that nothing on this page can be mistaken for part of the workpaper suite. No workpaper requires audio, and none ever will.</p>
       </div>
 
+      <p class="phones-note">&#127911; <strong>Soundscapes are more beneficial with headphones.</strong> The deep, low tones and the gentle left-to-right movement are much of what makes them calming, and small speakers can’t carry them.</p>
+
       <div class="track-list">
 
         <div class="track-card">
@@ -138,6 +153,42 @@
 
       </div>
     </section>
+
+    <section id="live" aria-labelledby="live-h">
+      <h2 id="live-h" class="live-h">Live soundscapes</h2>
+      <p class="live-lede">These are made in your browser as you listen, so they never repeat and never end. <em>Deep</em> is written in the style of The Breath Beneath: the same five-note scale, warm low drones and a slow heartbeat pulse. Play one while you work, read or rest; they fade in and out gently. The same sounds play in the Breathe break on every page.</p>
+      <div class="live-list">
+        <div class="live-card"><button type="button" class="live-play" data-live="deep" aria-pressed="false"><span aria-hidden="true">&#9654;</span> Deep</button><p>Warm low drones with a heartbeat pulse, and notes that bloom now and then.</p></div>
+        <div class="live-card"><button type="button" class="live-play" data-live="ocean" aria-pressed="false"><span aria-hidden="true">&#9654;</span> Ocean</button><p>Slow waves over a soft hum. In the Breathe break, they follow your breath.</p></div>
+        <div class="live-card"><button type="button" class="live-play" data-live="rain" aria-pressed="false"><span aria-hidden="true">&#9654;</span> Soft rain</button><p>Gentle rain on a quiet evening, with a warm hum underneath.</p></div>
+        <div class="live-card"><button type="button" class="live-play" data-live="bowls" aria-pressed="false"><span aria-hidden="true">&#9654;</span> Singing bowls</button><p>Slow, ringing bowls over a soft drone.</p></div>
+      </div>
+      <p class="live-note">Nothing is downloaded or sent: the sound is made on your device.</p>
+    </section>
+    <script src="/assets/js/breathe.js" defer></script>
+    <script>
+      document.addEventListener('DOMContentLoaded', function () {
+        var eng = null, playing = '', track = document.querySelector('.track-player');
+        function label() {
+          document.querySelectorAll('[data-live]').forEach(function (b) {
+            var on = b.getAttribute('data-live') === playing;
+            b.setAttribute('aria-pressed', String(on));
+            b.querySelector('span').innerHTML = on ? '&#10074;&#10074;' : '&#9654;';
+          });
+        }
+        document.querySelectorAll('[data-live]').forEach(function (b) {
+          b.addEventListener('click', function () {
+            var name = b.getAttribute('data-live');
+            if (!window.TOLBreathe) return;
+            if (playing === name) { if (eng) { eng.end(); eng = null; } playing = ''; label(); return; }
+            if (track && !track.paused) track.pause();
+            if (!eng) { eng = window.TOLBreathe.Engine(); if (!eng) return; eng.start(name); } else eng.bed(name);
+            playing = name; label();
+          });
+        });
+        if (track) track.addEventListener('play', function () { if (eng) { eng.end(); eng = null; playing = ''; label(); } });
+      });
+    </script>
 
   </main>
 </div>
