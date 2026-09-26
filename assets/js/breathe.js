@@ -76,21 +76,21 @@
     var AC = window.AudioContext || window.webkitAudioContext; if (!AC) return null;
     unlockMediaAudio();
     var ac = new AC(), sr = ac.sampleRate, master = ac.createGain(), comp = ac.createDynamicsCompressor();
-    comp.threshold.value = -18; comp.knee.value = 18; comp.ratio.value = 2.5; comp.attack.value = 0.02; comp.release.value = 0.5;
+    comp.threshold.value = -22; comp.knee.value = 24; comp.ratio.value = 2; comp.attack.value = 0.05; comp.release.value = 0.8;
     master.gain.value = 0; master.connect(comp); comp.connect(ac.destination);
     var hall = ac.createConvolver(), irLen = Math.floor(sr * 4.5), ir = ac.createBuffer(2, irLen, sr);
     for (var ch = 0; ch < 2; ch++) { var d = ir.getChannelData(ch); for (var i = 0; i < irLen; i++) d[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / irLen, 3); }
-    hall.buffer = ir; var wet = ac.createGain(); wet.gain.value = 0.5; hall.connect(wet); wet.connect(master);
+    hall.buffer = ir; var wet = ac.createGain(); wet.gain.value = 0.62; hall.connect(wet); wet.connect(master);
     function send(node, dry) { var g = ac.createGain(); g.gain.value = dry; node.connect(g); g.connect(master); node.connect(hall); }
     function pan(v) { if (ac.createStereoPanner) { var p = ac.createStereoPanner(); p.pan.value = v; return p; } return ac.createGain(); }
     function noise(sec) { var len = Math.floor(sr * sec), nb = ac.createBuffer(1, len, sr), dd = nb.getChannelData(0), l = 0; for (var i = 0; i < len; i++) { l = (l + 0.02 * (Math.random() * 2 - 1)) / 1.02; dd[i] = l * 3.5; } var s = ac.createBufferSource(); s.buffer = nb; s.loop = true; return s; }
     function white(sec) { var len = Math.floor(sr * sec), nb = ac.createBuffer(1, len, sr), dd = nb.getChannelData(0); for (var i = 0; i < len; i++) dd[i] = Math.random() * 2 - 1; var s = ac.createBufferSource(); s.buffer = nb; s.loop = true; return s; }
     function bowl(f, vol, where) {
       var t = ac.currentTime + (where || 0), g = ac.createGain(); g.gain.value = 1; send(g, 0.6);
-      [[1, 1], [2.71, .42], [5.16, .18], [8.43, .07]].forEach(function (p, i) {
-        [0, 1.2 + i].forEach(function (beat, j) {
-          var o = ac.createOscillator(), og = ac.createGain(), pn = pan(j ? 0.35 : -0.35), dec = 8 / (1 + i * 0.9);
-          o.frequency.value = f * p[0] + beat; og.gain.setValueAtTime(0, t); og.gain.linearRampToValueAtTime(vol * p[1] * 0.5, t + 0.015);
+      [[1, 1], [2.71, .28], [5.16, .08], [8.43, .025]].forEach(function (p, i) {
+        [0, 0.35 + i * 0.15].forEach(function (beat, j) {
+          var o = ac.createOscillator(), og = ac.createGain(), pn = pan(j ? 0.35 : -0.35), dec = 9 / (1 + i * 1.2);
+          o.frequency.value = f * p[0] + beat; og.gain.setValueAtTime(0, t); og.gain.linearRampToValueAtTime(vol * p[1] * 0.5, t + 0.06);
           og.gain.exponentialRampToValueAtTime(0.0001, t + dec); o.connect(og); og.connect(pn); pn.connect(g); o.start(t); o.stop(t + dec + 0.1);
         });
       });
@@ -98,7 +98,7 @@
     // a soft, slow note that swells in and fades away (the "blooms" of the Deep soundscape)
     function bloom(f, vol, len) {
       var t = ac.currentTime, o = ac.createOscillator(), o2 = ac.createOscillator(), g = ac.createGain(), pn = pan(Math.random() * 1.2 - 0.6), lp = ac.createBiquadFilter();
-      o.type = 'sine'; o2.type = 'triangle'; o.frequency.value = f; o2.frequency.value = f; o2.detune.value = 7; lp.type = 'lowpass'; lp.frequency.value = 1400;
+      o.type = 'sine'; o2.type = 'sine'; o.frequency.value = f; o2.frequency.value = f; o2.detune.value = 4; lp.type = 'lowpass'; lp.frequency.value = 1100;
       g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(vol, t + len * 0.4); g.gain.linearRampToValueAtTime(0, t + len);
       o.connect(lp); o2.connect(lp); lp.connect(g); g.connect(pn); send(pn, 0.4); o.start(t); o2.start(t); o.stop(t + len + 0.1); o2.stop(t + len + 0.1);
     }
@@ -121,49 +121,49 @@
       if (name === 'deep' || name === 'bowls' || name === 'rain' || name === 'ocean') {
         // the warm low bed shared by every generated soundscape: C and G drones, with an octave
         // above so phone speakers can carry them, and a slow heartbeat pulse every two seconds
-        var low = ac.createGain(), lf = ac.createBiquadFilter(); lf.type = 'lowpass'; lf.frequency.value = name === 'deep' ? 1100 : 900;
+        var low = ac.createGain(), lf = ac.createBiquadFilter(); lf.type = 'lowpass'; lf.frequency.value = name === 'deep' ? 850 : 700;
         low.gain.value = name === 'deep' ? 0.24 : 0.17; low.connect(lf); send(lf, 0.8);
         [[65.41, .26], [98, .18], [130.81, .38], [196, .34], [261.63, .42], [329.63, .3], [392, .22]].forEach(function (v, i) {
           [-1, 1].forEach(function (side) {
             var o = keep(ac.createOscillator()), og = ac.createGain(), pn = pan(side * (0.2 + i * 0.1));
-            o.type = i < 2 ? 'sine' : 'triangle'; o.frequency.value = v[0]; o.detune.value = side * (3 + i * 2);
+            o.type = 'sine'; o.frequency.value = v[0]; o.detune.value = side * (2 + i);
             og.gain.value = v[1] * 0.5; o.connect(og); og.connect(pn); pn.connect(low); o.start();
           });
         });
-        var pulse = keep(ac.createOscillator()), pg = ac.createGain(); pulse.frequency.value = 1 / 2.05; pg.gain.value = name === 'deep' ? 0.07 : 0.03;
+        var pulse = keep(ac.createOscillator()), pg = ac.createGain(); pulse.frequency.value = 1 / 4; pg.gain.value = name === 'deep' ? 0.025 : 0.01; // a slow swell on box breathing's 4-count
         pulse.connect(pg); pg.connect(low.gain); pulse.start();
-        var drift = keep(ac.createOscillator()), dg = ac.createGain(); drift.frequency.value = 0.03; dg.gain.value = 260; drift.connect(dg); dg.connect(lf.frequency); drift.start();
+        var drift = keep(ac.createOscillator()), dg = ac.createGain(); drift.frequency.value = 0.02; dg.gain.value = 180; drift.connect(dg); dg.connect(lf.frequency); drift.start();
         react.low = low; react.lf = lf;
       }
       if (name === 'deep') {
-        timers.push(setInterval(function () { var f = PENTA[Math.floor(Math.random() * 5)] * (Math.random() < 0.5 ? 2 : 1); bloom(f, 0.08, 7 + Math.random() * 4); }, 4300));
-        setTimeout(function () { bloom(329.63, 0.08, 9); }, 800);
+        timers.push(setInterval(function () { var f = PENTA[Math.floor(Math.random() * 5)] * 2; bloom(f, 0.05, 9 + Math.random() * 4); }, 7000));
+        setTimeout(function () { bloom(329.63, 0.05, 11); }, 1500);
       }
       if (name === 'bowls') {
         var notes = [293.66, 329.63, 392, 440, 523.25];
-        timers.push(setInterval(function () { bowl(notes[Math.floor(Math.random() * notes.length)], 0.1); }, 5500));
-        setTimeout(function () { bowl(392, 0.1); }, 600);
+        timers.push(setInterval(function () { bowl(notes[Math.floor(Math.random() * notes.length)], 0.065); }, 9000));
+        setTimeout(function () { bowl(392, 0.065); }, 1200);
       }
       if (name === 'ocean') {
         var sea = ac.createGain(), sf = ac.createBiquadFilter(); sea.gain.value = 0.04; sf.type = 'lowpass'; sf.frequency.value = 1000;
         [[-0.6, 3.1], [0.6, 3.7]].forEach(function (v) { var ns = keep(noise(v[1])), pn = pan(v[0]); ns.connect(pn); pn.connect(sf); ns.start(); });
         sf.connect(sea); send(sea, 0.8); react.sea = sea; react.sf = sf;
-        var foam = ac.createGain(), ff = ac.createBiquadFilter(), fs = keep(noise(2.3)); foam.gain.value = 0; ff.type = 'bandpass'; ff.frequency.value = 3000; ff.Q.value = 0.7;
+        var foam = ac.createGain(), ff = ac.createBiquadFilter(), fs = keep(noise(2.3)); foam.gain.value = 0; ff.type = 'bandpass'; ff.frequency.value = 2200; ff.Q.value = 0.7;
         fs.connect(ff); ff.connect(foam); send(foam, 0.5); fs.start(); react.foam = foam;
       }
       if (name === 'rain') {
         var rn = keep(white(2.7)), hp = ac.createBiquadFilter(), bp = ac.createBiquadFilter(), rg = ac.createGain();
-        hp.type = 'highpass'; hp.frequency.value = 900; bp.type = 'lowpass'; bp.frequency.value = 5500; rg.gain.value = 0.05;
+        hp.type = 'highpass'; hp.frequency.value = 700; bp.type = 'lowpass'; bp.frequency.value = 3600; rg.gain.value = 0.04;
         rn.connect(hp); hp.connect(bp); bp.connect(rg); send(rg, 0.9); rn.start();
         var drops = ac.createGain(); drops.gain.value = 0.9; send(drops, 0.7);
         timers.push(setInterval(function () { // a few soft drops on leaves and glass
           for (var k = 0; k < 3; k++) {
-            var t = ac.currentTime + Math.random() * 0.5, o = ac.createOscillator(), og = ac.createGain(), pn = pan(Math.random() * 1.6 - 0.8), f0 = 1800 + Math.random() * 2600;
+            var t = ac.currentTime + Math.random() * 0.7, o = ac.createOscillator(), og = ac.createGain(), pn = pan(Math.random() * 1.6 - 0.8), f0 = 1400 + Math.random() * 1600;
             o.frequency.setValueAtTime(f0, t); o.frequency.exponentialRampToValueAtTime(f0 * 0.6, t + 0.05);
-            og.gain.setValueAtTime(0, t); og.gain.linearRampToValueAtTime(0.012 + Math.random() * 0.015, t + 0.003); og.gain.exponentialRampToValueAtTime(0.0001, t + 0.09);
+            og.gain.setValueAtTime(0, t); og.gain.linearRampToValueAtTime(0.006 + Math.random() * 0.008, t + 0.006); og.gain.exponentialRampToValueAtTime(0.0001, t + 0.12);
             o.connect(og); og.connect(pn); pn.connect(drops); o.start(t); o.stop(t + 0.12);
           }
-        }, 450));
+        }, 750));
       }
       return { g: g, nodes: nodes, react: react };
     }
@@ -180,15 +180,15 @@
     var CUE = { in: 392, top: 440, out: 329.63, bottom: 293.66 };
     return {
       ctx: ac,
-      start: function (name) { if (ac.state !== 'running') ac.resume(); setBed(name); master.gain.cancelScheduledValues(ac.currentTime); master.gain.setTargetAtTime(0.75, ac.currentTime, 1.2); },
+      start: function (name) { if (ac.state !== 'running') ac.resume(); setBed(name); master.gain.cancelScheduledValues(ac.currentTime); master.gain.setTargetAtTime(0.6, ac.currentTime, 2); },
       bed: setBed,
-      mute: function (m) { master.gain.cancelScheduledValues(ac.currentTime); master.gain.setTargetAtTime(m ? 0 : 0.75, ac.currentTime, m ? 0.3 : 0.8); if (media) { if (m) media.pause(); else if (bedName === 'beneath') media.play().catch(function () {}); } },
-      cue: function (k) { bowl(CUE[k] || 392, k === 'in' || k === 'out' ? 0.075 : 0.04); },
+      mute: function (m) { master.gain.cancelScheduledValues(ac.currentTime); master.gain.setTargetAtTime(m ? 0 : 0.6, ac.currentTime, m ? 0.4 : 1.2); if (media) { if (m) media.pause(); else if (bedName === 'beneath') media.play().catch(function () {}); } },
+      cue: function (k) { bowl(CUE[k] || 392, k === 'in' || k === 'out' ? 0.05 : 0.025); },
       // soundscapes that follow the breath
       phase: function (k, secs) {
         if (!bed) return; var r = bed.react, t = ac.currentTime, tc = Math.max(0.6, secs / 3);
         if (r.sea) {
-          if (k === 'in') { r.sea.gain.setTargetAtTime(0.12, t, tc); r.sf.frequency.setTargetAtTime(2400, t, tc); r.foam.gain.setTargetAtTime(0.02, t + secs * 0.3, tc); }
+          if (k === 'in') { r.sea.gain.setTargetAtTime(0.12, t, tc); r.sf.frequency.setTargetAtTime(2400, t, tc); r.foam.gain.setTargetAtTime(0.01, t + secs * 0.3, tc); }
           if (k === 'out') { r.sea.gain.setTargetAtTime(0.02, t, tc); r.sf.frequency.setTargetAtTime(800, t, tc); r.foam.gain.setTargetAtTime(0, t, 0.8); }
         }
         if (r.lf) {
@@ -196,7 +196,7 @@
           if (k === 'out') r.lf.frequency.setTargetAtTime(800, t, tc);
         }
       },
-      chord: function () { bowl(293.66, 0.09); bowl(440, 0.06, 0.7); bowl(587.33, 0.05, 1.4); },
+      chord: function () { bowl(293.66, 0.06); bowl(440, 0.04, 1); bowl(587.33, 0.03, 2); },
       end: function () {
         clearTimers(); master.gain.cancelScheduledValues(ac.currentTime); master.gain.setTargetAtTime(0, ac.currentTime, 0.8);
         setTimeout(function () { try { if (bed) { bed.nodes.forEach(function (n) { n.stop(); }); if (bed.react.stop) bed.react.stop(); } ac.close(); } catch (e) {} }, 3500);
@@ -264,6 +264,7 @@
         '<p class="br-lede">Before you go, take a moment to notice:</p>' +
         '<ul class="br-reflect"><li>Is your breathing slower than when you started?</li><li>Are your shoulders lower, your jaw softer?</li><li>Is your mind a little quieter, even by a notch?</li></ul>' +
         '<p class="br-lede">Whatever you notice is fine. Coming back to this often is what makes it work.</p>' +
+        '<p class="br-tip" hidden></p>' +
         '<div class="tol-breathe-row"><button type="button" data-act="again">Again</button><button type="button" data-act="change">Change method</button><button type="button" data-act="close">I’m done</button><a href="/night-garden.html">Visit the Night Garden</a></div>' +
       '</section>';
     document.body.appendChild(ov);
@@ -376,6 +377,8 @@
   function ripple() { var r = document.createElement('i'), box = $('.tol-breathe-ripples'); box.appendChild(r); setTimeout(function () { r.remove(); }, 4200); }
 
   function finish() {
+    var tipEl = $('.br-tip');
+    if (tipEl && window.TOLTips) window.TOLTips.get(['calm', 'rest', 'body', 'mind', 'selftalk'], function (t) { tipEl.innerHTML = '<strong>A little tip:</strong> ' + esc(t[0]) + ' ' + esc(t[1]); tipEl.hidden = false; });
     if (window.TOLGarden) window.TOLGarden.gift('breathe');
     stopAll(); cur.k = ''; ov.classList.remove('is-in', 'is-out'); show('done');
     if (engine && !muted && scape !== 'off') { engine.chord(); later(function () { if (engine) engine.mute(true); }, 7000); }

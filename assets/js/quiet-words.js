@@ -6,7 +6,7 @@
   'use strict';
   var root = document.getElementById('qw'); if (!root) return;
 
-  var THEMES = [
+  var FALLBACK = [
     { name: 'Calm', words: [
       ['CALM', 'Calm isn’t the absence of feelings. It’s a little room around them.'],
       ['BREATHE', 'Your breath is always there to come back to.'],
@@ -62,6 +62,8 @@
       ['LOYAL', 'Loyalty is love that keeps showing up.'],
       ['FETCH', 'Chase something just for the fun of it.']] }
   ];
+  // the full library of themes lives in quiet-words-themes.js; these six are the fallback
+  var THEMES = window.TOL_WORD_THEMES && window.TOL_WORD_THEMES.length >= FALLBACK.length ? window.TOL_WORD_THEMES : FALLBACK;
   var N = 9, DIRS = [[0, 1], [1, 0], [1, 1], [-1, 1]];
   var FILL = 'AEIOUAEIOULNRSTDGHMBPWY';
   // a few letter runs kept out of the grid (written backwards-shifted so they don't read as words here)
@@ -84,10 +86,10 @@
       if (!ac) ac = new (window.AudioContext || window.webkitAudioContext)();
       if (ac.state !== 'running') ac.resume();
       var notes = [523.25, 587.33, 659.25, 783.99, 880, 1046.5], f = notes[i % notes.length], t = ac.currentTime;
-      [1, 2.01].forEach(function (m, k) {
-        var o = ac.createOscillator(), g = ac.createGain(); o.frequency.value = f * m; o.type = k ? 'triangle' : 'sine';
-        g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(k ? 0.02 : 0.07, t + 0.02); g.gain.exponentialRampToValueAtTime(0.0001, t + 2.4);
-        o.connect(g); g.connect(ac.destination); o.start(t); o.stop(t + 2.5);
+      [1, 2].forEach(function (m, k) {
+        var o = ac.createOscillator(), g = ac.createGain(); o.frequency.value = f * m; o.type = 'sine';
+        g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(k ? 0.008 : 0.05, t + 0.05); g.gain.exponentialRampToValueAtTime(0.0001, t + 3);
+        o.connect(g); g.connect(ac.destination); o.start(t); o.stop(t + 3.1);
       });
     } catch (e) {}
   }
@@ -242,10 +244,23 @@
     noteEl.innerHTML = '<span class="qw-note-h">All found. Lovely.</span> Take a slow breath before you go. ' +
       (n > 1 ? 'You’ve finished ' + n + ' quiet puzzles here.' : 'Come back tomorrow for a new theme.');
     say('All the words are found.');
+    if (window.TOLTips) window.TOLTips.get(null, function (t) {
+      var p = document.createElement('span'); p.className = 'qw-tip'; p.innerHTML = '<strong>A little tip for today:</strong> ' + t[0] + ' ' + t[1];
+      noteEl.appendChild(p);
+    });
   }
 
   // ---------- buttons ----------
   $('.qw-next').addEventListener('click', function () { start(puzzleNo + 1); });
+  // choose any theme
+  var picker = $('.qw-picker'), pickBtn = $('.qw-pick');
+  picker.innerHTML = THEMES.map(function (th, i) { return '<button type="button" data-theme="' + i + '">' + th.name + '</button>'; }).join('');
+  pickBtn.addEventListener('click', function () { picker.hidden = !picker.hidden; pickBtn.setAttribute('aria-expanded', String(!picker.hidden)); });
+  picker.addEventListener('click', function (e) {
+    var b = e.target.closest('[data-theme]'); if (!b) return;
+    picker.hidden = true; pickBtn.setAttribute('aria-expanded', 'false'); start(+b.getAttribute('data-theme'));
+    root.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
   $('.qw-hint').addEventListener('click', function () {
     var left = words.filter(function (w) { return !found[w.word]; }); if (!left.length) return;
     var w = left[Math.floor(Math.random() * left.length)], t = tile(w.r, w.c);

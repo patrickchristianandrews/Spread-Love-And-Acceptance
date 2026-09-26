@@ -46,6 +46,11 @@
   .qw-words li.is-found span{ text-decoration:line-through; text-decoration-color:rgba(60,51,80,.45); }
   .qw-note{ min-height:3.4rem; max-width:30rem; margin:.6rem auto 0 !important; text-align:center; color:#5A5346; line-height:1.5; }
   .qw-note-h{ display:block; font-family:"Fraunces", Georgia, serif; font-weight:600; font-size:1.1rem; color:var(--ink); margin-bottom:.15rem; }
+  .qw-tip{ display:block; margin-top:.8rem; padding:.6rem .9rem; border-radius:14px; background:#fff; border:1px solid #E6D6EE; font-size:.9rem; text-align:left; }
+  .qw-picker{ display:flex; flex-wrap:wrap; justify-content:center; gap:.4rem; margin:1rem auto 0; max-width:34rem; }
+  .qw-picker[hidden]{ display:none; }
+  .qw-picker button{ font:inherit; font-size:.85rem; padding:.35rem .85rem; border-radius:999px; border:1px solid #E6D6EE; background:#fff; color:#4E3F6B; cursor:pointer; }
+  .qw-picker button:hover{ background:#F3EEF9; }
   .qw-btns{ display:flex; flex-wrap:wrap; justify-content:center; gap:.5rem; margin-top:1rem; }
   .qw-btns button{ font:inherit; font-size:.9rem; padding:.5rem 1.1rem; border-radius:999px; border:1px solid #D9C8F0; background:#fff; color:#4E3F6B; cursor:pointer; }
   .qw-btns button:hover{ background:#F3EEF9; }
@@ -58,6 +63,7 @@
   @media (prefers-reduced-motion: reduce){ .qw-tile, .qw-found-mark, .qw.is-done .qw-board, .qw-tile.is-hint{ transition:none; animation:none; } }
 </style>
 <script src="/assets/js/site.js" defer></script>
+<script src="/assets/js/quiet-words-themes.js" defer></script>
 <script src="/assets/js/quiet-words.js" defer></script>
 </head>
 <body>
@@ -81,8 +87,10 @@
   <div class="qw-btns">
     <button type="button" class="qw-hint">Show me a letter</button>
     <button type="button" class="qw-next">Another puzzle</button>
+    <button type="button" class="qw-pick" aria-expanded="false" aria-controls="qw-picker">Choose a theme</button>
     <button type="button" class="qw-sound" aria-pressed="true">&#127925; Sound on</button>
   </div>
+  <div class="qw-picker" id="qw-picker" hidden></div>
 </section>
 
 <div class="try-this">

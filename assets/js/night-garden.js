@@ -256,37 +256,37 @@
     // a warm hall: a generated stereo impulse that fades over four seconds
     var verb = ac.createConvolver(), irLen = Math.floor(ac.sampleRate * 4), ir = ac.createBuffer(2, irLen, ac.sampleRate);
     for (var ch = 0; ch < 2; ch++) { var dd = ir.getChannelData(ch); for (var k = 0; k < irLen; k++) dd[k] = (Math.random() * 2 - 1) * Math.pow(1 - k / irLen, 3.2); }
-    verb.buffer = ir; var wet = ac.createGain(); wet.gain.value = 0.5; verb.connect(wet); wet.connect(master);
+    verb.buffer = ir; var wet = ac.createGain(); wet.gain.value = 0.6; verb.connect(wet); wet.connect(master);
     // a deep, warm bed in the style of The Breath Beneath: low C and G drones (with the octaves
     // above them, so phone speakers carry them too), a slow heartbeat pulse every two seconds,
     // and soft notes from the same five-note scale blooming now and then
-    var pad = ac.createGain(); pad.gain.value = 0.1; var pf = ac.createBiquadFilter(); pf.type = 'lowpass'; pf.frequency.value = 1200;
+    var pad = ac.createGain(); pad.gain.value = 0.1; var pf = ac.createBiquadFilter(); pf.type = 'lowpass'; pf.frequency.value = 900;
     pad.connect(pf); pf.connect(master); pf.connect(verb);
-    [[65.41, .26], [98, .18], [130.81, .38], [196, .34], [261.63, .42], [329.63, .3], [392, .22]].forEach(function (v, i) {
+    [[65.41, .16], [98, .12], [130.81, .3], [196, .34], [261.63, .48], [329.63, .36], [392, .26]].forEach(function (v, i) {
       [-1, 1].forEach(function (side) {
-        var o = ac.createOscillator(); o.type = i < 2 ? 'sine' : 'triangle'; o.frequency.value = v[0]; o.detune.value = side * (3 + i * 2);
+        var o = ac.createOscillator(); o.type = 'sine'; o.frequency.value = v[0]; o.detune.value = side * (2 + i);
         var g = ac.createGain(); g.gain.value = v[1] * 0.5; o.connect(g);
         if (ac.createStereoPanner) { var pn = ac.createStereoPanner(); pn.pan.value = side * (0.2 + i * 0.1); g.connect(pn); pn.connect(pad); } else g.connect(pad);
         o.start();
       });
     });
-    var pulse = ac.createOscillator(), pulseG = ac.createGain(); pulse.frequency.value = 1 / 2.05; pulseG.gain.value = 0.035; pulse.connect(pulseG); pulseG.connect(pad.gain); pulse.start();
-    var lfo = ac.createOscillator(), lfoG = ac.createGain(); lfo.frequency.value = 0.03; lfoG.gain.value = 300; lfo.connect(lfoG); lfoG.connect(pf.frequency); lfo.start();
+    var pulse = ac.createOscillator(), pulseG = ac.createGain(); pulse.frequency.value = 1 / 4; pulseG.gain.value = 0.014; // a slow swell on box breathing's 4-count pulse.connect(pulseG); pulseG.connect(pad.gain); pulse.start();
+    var lfo = ac.createOscillator(), lfoG = ac.createGain(); lfo.frequency.value = 0.02; lfoG.gain.value = 200; lfo.connect(lfoG); lfoG.connect(pf.frequency); lfo.start();
     var PENTA = [261.63, 293.66, 329.63, 392, 440];
     setInterval(function () {
       if (!save.sound || document.hidden) return;
-      var t = ac.currentTime, f = PENTA[Math.floor(Math.random() * 5)] * (Math.random() < 0.3 ? 2 : 1), len = 7 + Math.random() * 4;
+      var t = ac.currentTime, f = PENTA[Math.floor(Math.random() * 5)], len = 9 + Math.random() * 4;
       var o = ac.createOscillator(), o2 = ac.createOscillator(), g = ac.createGain(), lp = ac.createBiquadFilter();
-      o.frequency.value = f; o2.type = 'triangle'; o2.frequency.value = f; o2.detune.value = 7; lp.type = 'lowpass'; lp.frequency.value = 1400;
-      g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(0.07, t + len * 0.4); g.gain.linearRampToValueAtTime(0, t + len);
+      o.frequency.value = f; o2.type = 'sine'; o2.frequency.value = f; o2.detune.value = 4; lp.type = 'lowpass'; lp.frequency.value = 1100;
+      g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(0.045, t + len * 0.4); g.gain.linearRampToValueAtTime(0, t + len);
       o.connect(lp); o2.connect(lp); lp.connect(g); g.connect(master); g.connect(verb); o.start(t); o2.start(t); o.stop(t + len + 0.1); o2.stop(t + len + 0.1);
-    }, 5600);
+    }, 8000);
     // the night air: gentle filtered noise that rises and falls like a breeze
     var len = ac.sampleRate * 3, nb = ac.createBuffer(1, len, ac.sampleRate), d = nb.getChannelData(0), last = 0;
     for (var i = 0; i < len; i++) { last = (last + 0.02 * (Math.random() * 2 - 1)) / 1.02; d[i] = last * 3.5; }
     var air = ac.createBufferSource(); air.buffer = nb; air.loop = true;
     var af = ac.createBiquadFilter(); af.type = 'bandpass'; af.frequency.value = 900; af.Q.value = 0.6;
-    var ag = ac.createGain(); ag.gain.value = 0.05;
+    var ag = ac.createGain(); ag.gain.value = 0.035;
     var alfo = ac.createOscillator(), alfoG = ac.createGain(); alfo.frequency.value = 0.08; alfoG.gain.value = 0.03; alfo.connect(alfoG); alfoG.connect(ag.gain); alfo.start();
     air.connect(af); af.connect(ag); ag.connect(master); air.start();
     audio = { ctx: ac, master: master, verb: verb, pad: pad };
@@ -298,17 +298,17 @@
     if (!audio || !save.sound) return;
     var ac = audio.ctx, t = ac.currentTime, f = NOTES[((i % NOTES.length) + NOTES.length) % NOTES.length];
     var o = ac.createOscillator(), o2 = ac.createOscillator(), g = ac.createGain();
-    o.type = 'sine'; o2.type = 'triangle'; o.frequency.value = f; o2.frequency.value = f * 2; o2.detune.value = 6;
-    g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime((vol || 0.12) * 1.8, t + 0.02); g.gain.exponentialRampToValueAtTime(0.0008, t + 2.6);
-    var g2 = ac.createGain(); g2.gain.value = 0.25; o2.connect(g2); g2.connect(g);
-    o.connect(g); g.connect(audio.master); g.connect(audio.verb); o.start(t); o2.start(t); o.stop(t + 2.8); o2.stop(t + 2.8);
+    o.type = 'sine'; o2.type = 'sine'; o.frequency.value = f; o2.frequency.value = f * 2; o2.detune.value = 3;
+    g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime((vol || 0.12) * 1.1, t + 0.05); g.gain.exponentialRampToValueAtTime(0.0008, t + 3.2);
+    var g2 = ac.createGain(); g2.gain.value = 0.12; o2.connect(g2); g2.connect(g);
+    o.connect(g); g.connect(audio.master); g.connect(audio.verb); o.start(t); o2.start(t); o.stop(t + 3.4); o2.stop(t + 3.4);
   }
   // a soft wooden plink, for a lily pad settling
   function plink() {
     if (!audio || !save.sound) return;
     var ac = audio.ctx, t = ac.currentTime, o = ac.createOscillator(), g = ac.createGain();
     o.type = 'sine'; o.frequency.setValueAtTime(700, t); o.frequency.exponentialRampToValueAtTime(420, t + 0.12);
-    g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(0.12, t + 0.005); g.gain.exponentialRampToValueAtTime(0.0005, t + 0.35);
+    g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(0.055, t + 0.015); g.gain.exponentialRampToValueAtTime(0.0005, t + 0.4);
     o.connect(g); g.connect(audio.master); o.start(t); o.stop(t + 0.4);
   }
   // the pad swells as you breathe in and settles as you breathe out, with a soft cue at each turn
@@ -1236,6 +1236,8 @@
   var closeCard = document.getElementById('ng-close');
   document.getElementById('ng-leave').addEventListener('click', function () {
     document.getElementById('ng-quote').textContent = QUOTES[Math.floor(Math.random() * QUOTES.length)];
+    var tipEl = document.getElementById('ng-tip');
+    if (tipEl && window.TOLTips) window.TOLTips.get(['sleep', 'rest', 'calm', 'kindness'], function (t) { tipEl.innerHTML = '<strong>A little tip:</strong> ' + t[0] + ' ' + t[1]; tipEl.hidden = false; });
     closeCard.hidden = false; stopAudio(); document.getElementById('ng-stay').focus();
   });
   function stay() { closeCard.hidden = true; if (save.sound) startAudio(); document.getElementById('ng-leave').focus(); }

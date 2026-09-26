@@ -4,12 +4,12 @@
    used when there's no connection. Fonts: served from the saved copy. Nothing a visitor types passes through
    here: the tools keep entries in the browser, and this only stores the site's own files.
    Bump VERSION when the list below changes. */
-var VERSION = 'tol-v3';
+var VERSION = 'tol-v4';
 var CORE = [
   '/', '/index.html', '/offline.html',
   '/night-garden.html', '/quiet-words.html', '/turning-toward.html', '/quick-checks.html', '/lemonade-stand.html',
   '/assets/css/site.css', '/assets/css/reading.css',
-  '/assets/js/site.js', '/assets/js/night-garden.js', '/assets/js/quiet-words.js', '/assets/js/breathe.js', '/assets/js/turning-toward.js',
+  '/assets/js/site.js', '/assets/js/night-garden.js', '/assets/js/quiet-words.js', '/assets/js/quiet-words-themes.js', '/assets/js/tips.js', '/assets/js/breathe.js', '/assets/js/turning-toward.js',
   '/assets/img/mascots/two-bubbles.svg', '/assets/icons/icon-192.png', '/manifest.webmanifest'
 ];
 

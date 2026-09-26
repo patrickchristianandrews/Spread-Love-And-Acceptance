@@ -68,6 +68,8 @@
   .ng-steps li{ margin:.45rem 0; }
   .ng-steps li::marker{ color:#F9D9B8; font-weight:600; }
   @media (max-width:560px){ .ng-card > div{ padding:1.3rem 1.1rem; max-height:calc(100% - 1rem); overflow:auto; } .ng-help-btn{ font-size:.8rem; padding:.4rem .75rem; } }
+  .ng-tip{ font-size:.92rem !important; color:#CFC9E6 !important; border-top:1px solid rgba(244,241,250,.15); padding-top:.8rem; }
+  .ng-tip strong{ color:#FFF6E0; }
   .ng-about{ max-width:42rem; margin:0 auto; padding:2.5rem clamp(1.1rem,5vw,2rem) 1rem; }
   .ng-about h2{ font-family:"Fraunces", Georgia, serif; }
   .ng-about li{ margin:.35rem 0; }
@@ -149,6 +151,7 @@
       <div>
         <h2>Something to carry with you</h2>
         <p class="ng-quote" id="ng-quote"></p>
+        <p class="ng-tip" id="ng-tip" hidden></p>
         <p id="ng-close-p">Come back whenever you like. Your garden will be here, and it keeps growing.</p>
         <div class="ng-row">
           <button type="button" id="ng-stay">Stay a little longer</button>

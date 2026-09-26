@@ -500,21 +500,53 @@
     ['Leave it better than you found it.', 'Tidy one small spot before you leave a room. Tomorrow-you will be grateful.']
   ];
   var NO_TIPS = ['/index.html', '/night-garden.html', '/dashboard.html', '/404.html', '/offline.html'];
+  // The full library (about 300 tips in topics) lives in tips.js and loads when a tip is shown;
+  // the short list above is the fallback. Pages lean towards topics that fit them.
+  var TIP_TOPICS = {
+    self: ['calm', 'body', 'mind', 'selftalk', 'rest', 'sleep'], relationships: ['connection', 'talking', 'family', 'friends', 'kindness'],
+    book: ['connection', 'talking', 'home', 'kindness'], workpapers: ['home', 'talking', 'work', 'connection'], program: ['home', 'talking', 'work'],
+    tools: ['focus', 'calm', 'talking', 'mind'], media: ['rest', 'calm', 'outdoors', 'sleep'], start: null, about: null
+  };
+  var tipLib = null, tipWaiting = [];
+  window.TOLTips = {
+    // cb([title, body, topicLabel]) with a tip from the library, preferring the given topics
+    get: function (topics, cb, seed) {
+      function pick() {
+        var L = tipLib, list = L.tips, pool = topics ? list.filter(function (t) { return topics.indexOf(t[0]) !== -1; }) : list;
+        if (!pool.length || (topics && Math.random() < 0.25 && seed == null)) pool = list;
+        var t = pool[seed != null ? seed % pool.length : Math.floor(Math.random() * pool.length)];
+        cb([t[1], t[2], L.cats[t[0]] || '']);
+      }
+      if (tipLib) return pick();
+      tipWaiting.push(pick);
+      if (tipWaiting.length > 1) return;
+      var sc = document.createElement('script'); sc.src = '/assets/js/tips.js';
+      sc.onload = function () { tipLib = window.TOL_TIPS && window.TOL_TIPS.tips && window.TOL_TIPS.tips.length ? window.TOL_TIPS : { cats: {}, tips: TIPS.map(function (x) { return ['', x[0], x[1]]; }) }; var w = tipWaiting; tipWaiting = []; w.forEach(function (f) { f(); }); };
+      sc.onerror = function () { tipLib = { cats: {}, tips: TIPS.map(function (x) { return ['', x[0], x[1]]; }) }; var w = tipWaiting; tipWaiting = []; w.forEach(function (f) { f(); }); };
+      document.head.appendChild(sc);
+    }
+  };
   function addTip(body) {
     if (body.hasAttribute('data-no-tip') || NO_TIPS.indexOf(current) !== -1 || /^\/legal\//.test(current)) return;
     var main = document.querySelector('main'); if (!main) return;
     var d = new Date(), seed = d.getFullYear() * 400 + d.getMonth() * 32 + d.getDate();
     for (var i = 0; i < current.length; i++) seed = (seed * 31 + current.charCodeAt(i)) % 100003;
-    var at = seed % TIPS.length;
+    var sec = body.getAttribute('data-sec'), topics = TIP_TOPICS[sec] || null;
     var card = el('aside', { class: 'tol-tip', 'aria-label': 'A little tip for today' },
       '<img src="/assets/img/mascots/bubble-buddy.svg" alt="" width="52" height="52">' +
-      '<div><p class="tol-tip-k">Little tip for today</p><p class="tol-tip-h"></p><p class="tol-tip-b"></p>' +
+      '<div><p class="tol-tip-k">Little tip for today<span class="tol-tip-topic"></span></p><p class="tol-tip-h"></p><p class="tol-tip-b"></p>' +
       '<button type="button" class="tol-tip-next">Another tip</button></div>');
-    function show() { card.querySelector('.tol-tip-h').textContent = TIPS[at][0]; card.querySelector('.tol-tip-b').textContent = TIPS[at][1]; }
+    function show(t) {
+      card.querySelector('.tol-tip-h').textContent = t[0]; card.querySelector('.tol-tip-b').textContent = t[1];
+      card.querySelector('.tol-tip-topic').textContent = t[2] ? ' · ' + t[2] : '';
+    }
+    var first = TIPS[seed % TIPS.length]; show([first[0], first[1], '']);   // shows at once, then the library takes over
+    window.TOLTips.get(topics, show, seed);
     card.querySelector('.tol-tip-next').addEventListener('click', function () {
-      at = (at + 1 + Math.floor(Math.random() * (TIPS.length - 1))) % TIPS.length; show();
+      var tip = card.querySelector('.tol-tip-h');
+      tip.parentNode.classList.add('is-swap');
+      setTimeout(function () { window.TOLTips.get(topics, function (t) { show(t); tip.parentNode.classList.remove('is-swap'); }); }, 220);
     });
-    show();
     main.appendChild(card);
   }
 
