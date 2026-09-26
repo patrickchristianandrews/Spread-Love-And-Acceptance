@@ -362,7 +362,7 @@
     if (!body.hasAttribute('data-no-wash')) {
       // plus a few pastel bubbles and hearts drifting slowly upward
       var floaters = '';
-      for (var f = 0; f < 16; f++) floaters += '<b class="' + (f % 3 === 1 ? 'tol-heart' : 'tol-bub') + '"></b>';
+      for (var f = 0; f < 22; f++) floaters += '<b class="' + (f % 3 === 1 ? 'tol-heart' : 'tol-bub') + '"></b>';
       var wash = el('div', { class: 'tol-wash', 'aria-hidden': 'true' }, '<i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>' + floaters);
       document.documentElement.appendChild(wash);
     }

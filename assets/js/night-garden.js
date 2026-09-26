@@ -499,7 +499,7 @@
   var PUPS = [
     // stocky, long drop ears, tan brows running into tan cheeks, a cream-and-grey muzzle,
     // white chin and bib, reddish-tan forelegs and big white toes
-    { build: 'stocky', ear: 'drop', legUp: '#B06A34', legLow: '#C88A4E', paw: '#F4EFE6', chest: 'white', muzzle: 'cream', collar: false, brow: 'patch', tail: 'plume' },
+    { build: 'stocky', ear: 'drop', legUp: '#A45C2E', legLow: '#B97847', paw: '#F1EADF', nails: true, tan: '#C9965F', chest: 'white', muzzle: 'cream', collar: false, brow: 'patch', tail: 'plume' },
     // leaner and taller, round tan brow dots, a black stripe down the nose with tan cheeks and
     // lips, small folded ears, black legs turning tan below the knee, tan chest patches, a collar
     { build: 'lean', ear: 'fold', legUp: '#262220', legLow: '#C98A4F', paw: '#D99E62', chest: 'tan', muzzle: 'rottie', collar: true, brow: 'dot', tail: 'short' }
@@ -606,7 +606,7 @@
     }
   }
   function drawPup(L, pose, ph, wag, blink, t, tilt) {
-    var BLACK = '#252120', TAN = '#C4834A', WHITE = '#F4EFE6', PINK = '#EE8FA6';
+    var BLACK = '#252120', TAN = L.tan || '#C4834A', WHITE = '#F4EFE6', PINK = '#EE8FA6';
     var lean = L.build === 'lean', LL = lean ? 15 : 12.5, BRX = lean ? 18.5 : 18, BRY = lean ? 8.8 : 10.2, BY = lean ? -21 : -18.5;
     function leg(x0, y0, ang, len, back) {
       ctx.save(); ctx.translate(x0, y0); ctx.rotate(ang);
@@ -614,7 +614,10 @@
       ctx.fillStyle = L.legUp; ctx.beginPath(); ctx.roundRect ? ctx.roundRect(-2.8, -2, 5.6, up + 3, 2.8) : ctx.rect(-2.8, -2, 5.6, up + 3); ctx.fill();
       ctx.fillStyle = L.legLow; ctx.beginPath(); ctx.roundRect ? ctx.roundRect(-2.5, up, 5, len - up, 2.5) : ctx.rect(-2.5, up, 5, len - up); ctx.fill();
       ctx.fillStyle = L.paw; ctx.beginPath(); ctx.ellipse(1, len, 3.9, 2.5, 0, 0, Math.PI * 2); ctx.fill();
-      if (L.paw === WHITE) { ctx.strokeStyle = 'rgba(0,0,0,0.18)'; ctx.lineWidth = 0.6; ctx.beginPath(); ctx.moveTo(1, len - 1.5); ctx.lineTo(1, len + 1.5); ctx.moveTo(3, len - 1.2); ctx.lineTo(3, len + 1.4); ctx.stroke(); } // little toes
+      if (L.nails) { // pale toes with little dark nails
+        ctx.strokeStyle = 'rgba(0,0,0,0.16)'; ctx.lineWidth = 0.6; ctx.beginPath(); ctx.moveTo(1.2, len - 1.6); ctx.lineTo(1.2, len + 1.2); ctx.moveTo(3.2, len - 1.3); ctx.lineTo(3.2, len + 1.3); ctx.stroke();
+        ctx.fillStyle = '#2A2422'; [[4.6, len + 0.8], [3.3, len + 2.1], [1.6, len + 2.4]].forEach(function (n) { ctx.beginPath(); ctx.ellipse(n[0], n[1], 0.9, 0.55, 0.5, 0, Math.PI * 2); ctx.fill(); });
+      }
       if (back) { ctx.fillStyle = 'rgba(10,8,8,0.22)'; ctx.fillRect(-4, -2, 9, len + 4); }
       ctx.restore();
     }
@@ -643,7 +646,11 @@
     } else {
       ctx.fillStyle = BLACK; ctx.beginPath(); ctx.ellipse(0, BY, BRX, BRY, 0, 0, Math.PI * 2); ctx.fill();
       ctx.beginPath(); ctx.ellipse(12, BY - 5, 7, 8, -0.5, 0, Math.PI * 2); ctx.fill(); // neck
-      if (L.chest === 'white') { ctx.fillStyle = WHITE; ctx.beginPath(); ctx.ellipse(14.5, BY + 2, 5, 6.5, -0.25, 0, Math.PI * 2); ctx.fill(); }
+      if (L.chest === 'white') {
+        ctx.fillStyle = '#F2ECE3'; ctx.beginPath(); ctx.ellipse(16, BY - 4, 4, 6.5, -0.45, 0, Math.PI * 2); ctx.fill();   // throat
+        ctx.beginPath(); ctx.ellipse(14.5, BY + 2, 5, 6.5, -0.25, 0, Math.PI * 2); ctx.fill();                              // chest
+        ctx.fillStyle = TAN; ctx.beginPath(); ctx.ellipse(12, BY + 7.5, 4.5, 2.2, 0, 0, Math.PI * 2); ctx.fill();            // tan below
+      }
       else {
         ctx.fillStyle = TAN; ctx.beginPath(); ctx.ellipse(14, BY + 0.5, 4.2, 3.4, -0.3, 0, Math.PI * 2); ctx.fill(); ctx.beginPath(); ctx.ellipse(15, BY + 5.5, 3.6, 2.8, -0.2, 0, Math.PI * 2); ctx.fill();
         ctx.fillStyle = WHITE; ctx.beginPath(); ctx.arc(15.8, BY + 3, 1.1, 0, Math.PI * 2); ctx.fill();
@@ -660,15 +667,17 @@
     ctx.save(); ctx.translate(hx, hy); ctx.rotate((pose === 'run' ? Math.sin(ph) * 0.05 : bow ? -0.15 : lie ? 0.05 : 0) + (tilt || 0));
     var R = 11;
     // the ear behind the head (drop ears hang down each side)
-    if (L.ear === 'drop') { ctx.fillStyle = '#1B1817'; ctx.beginPath(); ctx.ellipse(-4, 4, 4, 8.5, 0.35, 0, Math.PI * 2); ctx.fill(); }
+    if (L.ear === 'drop') { ctx.fillStyle = '#1B1817'; ctx.beginPath(); ctx.ellipse(-4, 2, 4, 6.5, 0.35, 0, Math.PI * 2); ctx.fill(); }
     ctx.fillStyle = BLACK; ctx.beginPath(); ctx.arc(0, 0, R, 0, Math.PI * 2); ctx.fill();
     ctx.beginPath(); ctx.ellipse(8, 2.5, 8.5, 6.2, 0.08, 0, Math.PI * 2); ctx.fill(); // snout
     if (L.muzzle === 'cream') {
-      ctx.fillStyle = TAN; ctx.beginPath(); ctx.ellipse(6, 3, 7.5, 6.5, 0.1, 0, Math.PI * 2); ctx.fill();          // tan cheeks
-      ctx.fillStyle = '#E9DDCB'; ctx.beginPath(); ctx.ellipse(10.5, 3.2, 6.5, 4.3, 0.08, 0, Math.PI * 2); ctx.fill(); // cream muzzle
-      ctx.fillStyle = 'rgba(190,180,168,0.8)'; ctx.beginPath(); ctx.ellipse(10.5, 0.8, 5, 1.8, 0.08, 0, Math.PI * 2); ctx.fill(); // a little grey
-      ctx.fillStyle = WHITE; ctx.beginPath(); ctx.ellipse(8.5, 8.3, 5.8, 3, 0.15, 0, Math.PI * 2); ctx.fill();        // white chin
-      ctx.fillStyle = TAN; ctx.beginPath(); ctx.ellipse(3.2, -5.4, 3.4, 2.2, -0.2, 0, Math.PI * 2); ctx.fill();       // broad tan brow
+      ctx.fillStyle = TAN; ctx.beginPath(); ctx.ellipse(5, 2.6, 9.4, 7.8, 0.12, 0, Math.PI * 2); ctx.fill();            // soft fawn fills the lower face
+      ctx.fillStyle = '#E3D7C6'; ctx.beginPath(); ctx.ellipse(10.8, 2.6, 6.6, 3.9, 0.06, 0, Math.PI * 2); ctx.fill();   // pale muzzle
+      ctx.fillStyle = 'rgba(176,168,158,0.75)'; ctx.beginPath(); ctx.ellipse(11.5, 0.9, 5.2, 1.7, 0.06, 0, Math.PI * 2); ctx.fill(); // a little grey on top
+      ctx.fillStyle = '#F2ECE3'; ctx.beginPath(); ctx.ellipse(7.5, 8.6, 7, 3.2, 0.12, 0, Math.PI * 2); ctx.fill();       // white chin
+      ctx.beginPath(); ctx.ellipse(2.5, 9.5, 4.5, 3.5, 0, 0, Math.PI * 2); ctx.fill();                                   // running into the throat
+      ctx.fillStyle = BLACK; ctx.beginPath(); ctx.ellipse(4.3, -1.8, 3, 2.5, -0.1, 0, Math.PI * 2); ctx.fill();           // dark rim around the eye
+      ctx.fillStyle = TAN; ctx.beginPath(); ctx.ellipse(3.4, -5.9, 3.6, 2.1, -0.25, 0, Math.PI * 2); ctx.fill();          // tan brow above it
     } else {
       ctx.fillStyle = TAN; ctx.beginPath(); ctx.ellipse(8.5, 4.5, 8, 4.8, 0.1, 0, Math.PI * 2); ctx.fill();          // tan lips and cheeks
       ctx.beginPath(); ctx.ellipse(4, 2.5, 3.8, 3.6, 0, 0, Math.PI * 2); ctx.fill();                                   // tan cheek patch
@@ -689,9 +698,9 @@
     // the near ear
     var flap = pose === 'run' && !REDUCED ? Math.sin(ph * 1.1) * 0.35 : 0;
     if (L.ear === 'drop') {
-      ctx.save(); ctx.translate(-2.5, -4); ctx.rotate(0.28 + flap);
-      ctx.fillStyle = BLACK; ctx.beginPath(); ctx.ellipse(-1.5, 7, 4.6, 9.5, 0.15, 0, Math.PI * 2); ctx.fill();
-      ctx.fillStyle = 'rgba(196,131,74,0.55)'; ctx.beginPath(); ctx.ellipse(0.4, 2.5, 1.6, 4, 0.15, 0, Math.PI * 2); ctx.fill();
+      ctx.save(); ctx.translate(-3, -6.5); ctx.rotate(0.35 + flap);
+      ctx.fillStyle = BLACK; ctx.beginPath(); ctx.ellipse(-1.5, 5.5, 4.8, 7.2, 0.15, 0, Math.PI * 2); ctx.fill();
+      ctx.fillStyle = 'rgba(214,160,150,0.5)'; ctx.beginPath(); ctx.ellipse(0.2, 1.8, 1.6, 3.2, 0.15, 0, Math.PI * 2); ctx.fill();
       ctx.strokeStyle = 'rgba(255,255,255,0.08)'; ctx.lineWidth = 1; ctx.beginPath(); ctx.ellipse(-1.5, 7, 4.6, 9.5, 0.15, -1.2, 0.3); ctx.stroke();
       ctx.restore();
     } else { // small folded ear up top, tipping forward, with a tan edge
