@@ -34,7 +34,7 @@
     border-radius:999px; padding:.55rem 1rem; cursor:pointer; text-decoration:none; backdrop-filter:blur(6px); -webkit-backdrop-filter:blur(6px);
   }
   .ng-bar button:hover, .ng-pad button:hover, .ng-card button:hover, .ng-card a:hover{ background:rgba(74,71,117,.75); }
-  .ng-bar button[aria-pressed="true"]{ background:rgba(249,217,184,.9); color:#2A2D52; border-color:#F9D9B8; }
+  .ng-card #ng-sound-welcome[aria-pressed="true"], .ng-bar button[aria-pressed="true"]{ background:rgba(249,217,184,.9); color:#2A2D52; border-color:#F9D9B8; }
   .ng-bar button:focus-visible, .ng-pad button:focus-visible, .ng-card :focus-visible{ outline:2px solid #F9D9B8; outline-offset:3px; }
   .ng-pad{ position:absolute; right:max(1rem, env(safe-area-inset-right)); bottom:5.2rem; display:grid; grid-template-columns:repeat(4, 3rem); gap:.4rem; }
   .ng-pad[hidden]{ display:none; }
@@ -119,7 +119,8 @@
           <button type="button" class="ng-choice" data-enter="fireflies"><span class="ng-ico">&#10024;</span><strong>Fireflies</strong><small>Draw pictures in the stars. Rest your finger on each glowing circle and a firefly lights it.</small></button>
           <button type="button" class="ng-choice" data-enter="pond"><span class="ng-ico">&#128167;</span><strong>Lily pond</strong><small>A slow, gentle puzzle. Fit lily pads into rows and they bloom. You can’t lose.</small></button>
         </div>
-        <p class="ng-small">You can switch any time with the buttons at the bottom. Tap <strong>How to play</strong> whenever you need a reminder.</p>
+        <p class="ng-row" style="margin:0 0 .8rem;"><button type="button" id="ng-sound-welcome" aria-pressed="false">&#127925; Soft sound: off</button></p>
+        <p class="ng-small">Headphones are lovely here. You can switch any time with the buttons at the bottom. Tap <strong>How to play</strong> whenever you need a reminder.</p>
       </div>
     </div>
 

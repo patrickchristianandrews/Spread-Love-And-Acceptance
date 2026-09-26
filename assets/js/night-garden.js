@@ -218,22 +218,51 @@
   // ---------- Sound (off until turned on) ----------
   var audio = null;
   var NOTES = [523.25, 587.33, 659.25, 783.99, 880, 1046.5, 1174.66];
+  // iPhones treat web sound as "ambient" and mute it with the silent switch. Asking for
+  // media playback (and briefly playing a silent clip) lets the garden be heard.
+  function unlockMediaAudio() {
+    try { if (navigator.audioSession) navigator.audioSession.type = 'playback'; } catch (e) {}
+    try {
+      var n = 800, buf = new Uint8Array(44 + n), dv = new DataView(buf.buffer), w = function (o, str) { for (var i = 0; i < str.length; i++) buf[o + i] = str.charCodeAt(i); };
+      w(0, 'RIFF'); dv.setUint32(4, 36 + n, true); w(8, 'WAVEfmt '); dv.setUint32(16, 16, true); dv.setUint16(20, 1, true); dv.setUint16(22, 1, true);
+      dv.setUint32(24, 8000, true); dv.setUint32(28, 8000, true); dv.setUint16(32, 1, true); dv.setUint16(34, 8, true); w(36, 'data'); dv.setUint32(40, n, true);
+      for (var i = 44; i < 44 + n; i++) buf[i] = 128;
+      var el = new Audio(URL.createObjectURL(new Blob([buf], { type: 'audio/wav' })));
+      el.setAttribute('playsinline', ''); var pr = el.play(); if (pr && pr.catch) pr.catch(function () {});
+    } catch (e) {}
+  }
+  var LEVEL = 0.55;
   function startAudio() {
-    if (audio) { audio.ctx.resume(); audio.master.gain.setTargetAtTime(0.32, audio.ctx.currentTime, 1.2); return; }
+    unlockMediaAudio();
+    if (audio) { audio.ctx.resume(); audio.master.gain.setTargetAtTime(LEVEL, audio.ctx.currentTime, 0.8); return; }
     var AC = window.AudioContext || window.webkitAudioContext; if (!AC) return;
-    var ac = new AC(), master = ac.createGain(); master.gain.value = 0; master.connect(ac.destination);
-    var verb = ac.createDelay(1); verb.delayTime.value = 0.32; var fb = ac.createGain(); fb.gain.value = 0.38;
-    var lp = ac.createBiquadFilter(); lp.type = 'lowpass'; lp.frequency.value = 2200;
-    verb.connect(lp); lp.connect(fb); fb.connect(verb); lp.connect(master);
-    var pad = ac.createGain(); pad.gain.value = 0.05; var pf = ac.createBiquadFilter(); pf.type = 'lowpass'; pf.frequency.value = 700;
-    pad.connect(pf); pf.connect(master);
-    [130.81, 196, 261.63, 329.63].forEach(function (fq, i) {
-      var o = ac.createOscillator(); o.type = i % 2 ? 'triangle' : 'sine'; o.frequency.value = fq; o.detune.value = (i - 1.5) * 4;
-      var g = ac.createGain(); g.gain.value = i === 3 ? 0.35 : 0.6; o.connect(g); g.connect(pad); o.start();
+    var ac = new AC(), master = ac.createGain(); master.gain.value = 0;
+    var comp = ac.createDynamicsCompressor(); comp.threshold.value = -18; comp.ratio.value = 3;
+    master.connect(comp); comp.connect(ac.destination);
+    // a soft echo for the chimes
+    // a warm hall: a generated stereo impulse that fades over four seconds
+    var verb = ac.createConvolver(), irLen = Math.floor(ac.sampleRate * 4), ir = ac.createBuffer(2, irLen, ac.sampleRate);
+    for (var ch = 0; ch < 2; ch++) { var dd = ir.getChannelData(ch); for (var k = 0; k < irLen; k++) dd[k] = (Math.random() * 2 - 1) * Math.pow(1 - k / irLen, 3.2); }
+    verb.buffer = ir; var wet = ac.createGain(); wet.gain.value = 0.5; verb.connect(wet); wet.connect(master);
+    // a warm pad in a range phone speakers can play, slowly opening and closing
+    var pad = ac.createGain(); pad.gain.value = 0.1; var pf = ac.createBiquadFilter(); pf.type = 'lowpass'; pf.frequency.value = 1300;
+    pad.connect(pf); pf.connect(master); pf.connect(verb);
+    [[130.81, 0.35], [261.63, 0.55], [392, 0.45], [523.25, 0.3], [659.25, 0.22]].forEach(function (v, i) {
+      var o = ac.createOscillator(); o.type = i % 2 ? 'triangle' : 'sine'; o.frequency.value = v[0]; o.detune.value = (i - 2) * 5;
+      var g = ac.createGain(); g.gain.value = v[1]; o.connect(g); g.connect(pad); o.start();
     });
-    var lfo = ac.createOscillator(), lfoG = ac.createGain(); lfo.frequency.value = 0.05; lfoG.gain.value = 250; lfo.connect(lfoG); lfoG.connect(pf.frequency); lfo.start();
+    var lfo = ac.createOscillator(), lfoG = ac.createGain(); lfo.frequency.value = 0.05; lfoG.gain.value = 450; lfo.connect(lfoG); lfoG.connect(pf.frequency); lfo.start();
+    // the night air: gentle filtered noise that rises and falls like a breeze
+    var len = ac.sampleRate * 3, nb = ac.createBuffer(1, len, ac.sampleRate), d = nb.getChannelData(0), last = 0;
+    for (var i = 0; i < len; i++) { last = (last + 0.02 * (Math.random() * 2 - 1)) / 1.02; d[i] = last * 3.5; }
+    var air = ac.createBufferSource(); air.buffer = nb; air.loop = true;
+    var af = ac.createBiquadFilter(); af.type = 'bandpass'; af.frequency.value = 900; af.Q.value = 0.6;
+    var ag = ac.createGain(); ag.gain.value = 0.05;
+    var alfo = ac.createOscillator(), alfoG = ac.createGain(); alfo.frequency.value = 0.08; alfoG.gain.value = 0.03; alfo.connect(alfoG); alfoG.connect(ag.gain); alfo.start();
+    air.connect(af); af.connect(ag); ag.connect(master); air.start();
     audio = { ctx: ac, master: master, verb: verb, pad: pad };
-    master.gain.setTargetAtTime(0.32, ac.currentTime, 1.2);
+    if (ac.state !== 'running' && ac.resume) ac.resume();
+    master.gain.setTargetAtTime(LEVEL, ac.currentTime, 0.8);
   }
   function stopAudio() { if (audio) audio.master.gain.setTargetAtTime(0, audio.ctx.currentTime, 0.4); }
   function chime(i, vol) {
@@ -241,11 +270,24 @@
     var ac = audio.ctx, t = ac.currentTime, f = NOTES[((i % NOTES.length) + NOTES.length) % NOTES.length];
     var o = ac.createOscillator(), o2 = ac.createOscillator(), g = ac.createGain();
     o.type = 'sine'; o2.type = 'triangle'; o.frequency.value = f; o2.frequency.value = f * 2; o2.detune.value = 6;
-    g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime((vol || 0.12), t + 0.02); g.gain.exponentialRampToValueAtTime(0.0008, t + 2.6);
+    g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime((vol || 0.12) * 1.8, t + 0.02); g.gain.exponentialRampToValueAtTime(0.0008, t + 2.6);
     var g2 = ac.createGain(); g2.gain.value = 0.25; o2.connect(g2); g2.connect(g);
     o.connect(g); g.connect(audio.master); g.connect(audio.verb); o.start(t); o2.start(t); o.stop(t + 2.8); o2.stop(t + 2.8);
   }
-  function padSwell(level) { if (audio && save.sound) audio.pad.gain.setTargetAtTime(0.03 + level * 0.05, audio.ctx.currentTime, 0.8); }
+  // a soft wooden plink, for a lily pad settling
+  function plink() {
+    if (!audio || !save.sound) return;
+    var ac = audio.ctx, t = ac.currentTime, o = ac.createOscillator(), g = ac.createGain();
+    o.type = 'sine'; o.frequency.setValueAtTime(700, t); o.frequency.exponentialRampToValueAtTime(420, t + 0.12);
+    g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(0.12, t + 0.005); g.gain.exponentialRampToValueAtTime(0.0005, t + 0.35);
+    o.connect(g); g.connect(audio.master); o.start(t); o.stop(t + 0.4);
+  }
+  // the pad swells as you breathe in and settles as you breathe out, with a soft cue at each turn
+  function padSwell(level) {
+    if (!audio || !save.sound) return;
+    audio.pad.gain.setTargetAtTime(0.06 + level * 0.1, audio.ctx.currentTime, level ? 1.2 : 1.8);
+    chime(level ? 0 : 4, 0.05);
+  }
 
   // ---------- Modes ----------
   var mode = null, sayTimer = null;
@@ -464,6 +506,7 @@
   function step() {
     if (!collide(piece.cells, piece.x, piece.y + 1)) { piece.y++; return true; }
     piece.cells.forEach(function (c) { var y = c[1] + piece.y; if (y >= 0) board[y][c[0] + piece.x] = piece.c * (piece.hasFlower ? -1 : 1); });
+    plink();
     var full = []; board.forEach(function (row, r) { if (row.every(Boolean)) full.push(r); });
     if (full.length) { clearing = { rows: full, t: performance.now() }; full.forEach(function (r, i) { setTimeout(function () { chime(r + i, 0.1); }, i * 140); }); }
     else spawn();
@@ -580,8 +623,20 @@
   document.querySelectorAll('.ng-bar [data-mode]').forEach(function (b) { b.addEventListener('click', function () { setMode(b.getAttribute('data-mode')); }); });
 
   var soundBtn = document.getElementById('ng-sound');
-  function soundLabel() { soundBtn.setAttribute('aria-pressed', String(!!save.sound)); soundBtn.innerHTML = save.sound ? '&#127925; Sound on' : '&#127925; Sound off'; }
-  soundBtn.addEventListener('click', function () { save.sound = !save.sound; persist(); soundLabel(); if (save.sound) startAudio(); else stopAudio(); });
+  var soundWelcome = document.getElementById('ng-sound-welcome');
+  function soundLabel() {
+    soundBtn.setAttribute('aria-pressed', String(!!save.sound)); soundBtn.innerHTML = save.sound ? '&#127925; Sound on' : '&#127925; Sound off';
+    if (soundWelcome) { soundWelcome.setAttribute('aria-pressed', String(!!save.sound)); soundWelcome.innerHTML = save.sound ? '&#127925; Soft sound: on' : '&#127925; Soft sound: off'; }
+  }
+  if (soundWelcome) soundWelcome.addEventListener('click', function () {
+    save.sound = !save.sound; persist(); soundLabel();
+    if (save.sound) { startAudio(); setTimeout(function () { chime(2, 0.12); }, 150); } else stopAudio();
+  });
+  soundBtn.addEventListener('click', function () {
+    save.sound = !save.sound; persist(); soundLabel();
+    if (save.sound) { startAudio(); setTimeout(function () { chime(2, 0.12); }, 150); say('Sound on', 'If you can’t hear anything, turn your volume up' + (/iphone|ipad/i.test(navigator.userAgent) ? ' and check the silent switch.' : '.'), 3500); }
+    else stopAudio();
+  });
 
   var QUOTES = [
     'You don’t have to fix everything tonight.',
@@ -644,5 +699,5 @@
   resize(); soundLabel(); updateCount();
   kick();
   // Expose a tiny hook for testing
-  window.__nightGarden = { save: save, setMode: setMode, pondKey: pondKey, get targets() { return targets; }, get mode() { return mode; }, get board() { return board; }, get piece() { return piece; } };
+  window.__nightGarden = { save: save, setMode: setMode, pondKey: pondKey, get targets() { return targets; }, get mode() { return mode; }, get board() { return board; }, get piece() { return piece; }, get audio() { return audio; } };
 })();
