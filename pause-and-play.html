@@ -20,12 +20,6 @@
 <link rel="stylesheet" href="/assets/css/reading.css">
 <link rel="stylesheet" href="/assets/css/games.css">
 <style>
-  /* the Night Garden, alive behind the page, under a soft veil */
-  body.pp-page{ background:transparent !important; }
-  .pp-garden{ position:fixed; inset:0; width:100%; height:100%; border:0; z-index:-3; pointer-events:none; background:#171A34; }
-  .pp-veil{ position:fixed; inset:0; z-index:-2; pointer-events:none;
-    background:linear-gradient(180deg, rgba(250,244,232,.78) 0%, rgba(250,244,232,.66) 45%, rgba(250,244,232,.5) 100%); }
-  html:has(> body.pp-page) > .tol-wash > i{ display:none; } /* the garden replaces the watercolour splashes; bubbles still float */
   .read a.pp-card, .read a.pp-stem, .read a.pp-stat{ text-decoration:none; }
   .pp-hero, .pp-bouquet, .pp-card, .pp-why{ backdrop-filter:blur(6px) saturate(1.05); -webkit-backdrop-filter:blur(6px) saturate(1.05); }
   .pp-hero{ position:relative; margin:0 0 1.4rem; padding:1.3rem 1.3rem 1.2rem; border-radius:28px; overflow:hidden;
@@ -81,8 +75,6 @@
 <script src="/assets/js/pause-and-play.js" defer></script>
 </head>
 <body class="pp-page">
-<iframe class="pp-garden" src="/garden-backdrop.html" title="The Night Garden, softly in the background" aria-hidden="true" tabindex="-1" loading="eager"></iframe>
-<div class="pp-veil" aria-hidden="true"></div>
 <main class="read">
 
 <section class="pp-hero" aria-labelledby="pp-h">

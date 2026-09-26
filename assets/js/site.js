@@ -359,6 +359,18 @@
     addTip(body);
     revealOnScroll();
 
+    // The Night Garden, softly alive behind every page, under a see-through veil.
+    // Not on the garden itself, not on the locked-down workpaper pages, and not when
+    // someone has asked their device to save data.
+    var saveData = navigator.connection && navigator.connection.saveData;
+    if (!body.hasAttribute('data-no-garden') && current !== '/night-garden.html' && current !== '/garden-backdrop.html' && !saveData &&
+        !document.querySelector('meta[http-equiv="Content-Security-Policy"]')) {
+      var gf = el('iframe', { class: 'tol-garden-bg', src: '/garden-backdrop.html', title: 'The Night Garden, softly in the background', 'aria-hidden': 'true', tabindex: '-1' });
+      body.insertBefore(el('div', { class: 'tol-garden-veil', 'aria-hidden': 'true' }), body.firstChild);
+      body.insertBefore(gf, body.firstChild);
+      document.documentElement.classList.add('has-garden');
+    }
+
     // petals for calm moments anywhere on the site (rewards.js), except the locked-down workpaper pages
     if (!window.TOLRewards && !document.querySelector('meta[http-equiv="Content-Security-Policy"]')) {
       var rw = document.createElement('script'); rw.src = '/assets/js/rewards.js'; document.head.appendChild(rw);
