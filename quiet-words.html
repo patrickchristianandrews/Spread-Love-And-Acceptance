@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-NKC6CQ9S66"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-NKC6CQ9S66');
+</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Quiet Words &mdash; a calming word search &middot; The Objective Ledger</title>
+<meta name="description" content="A gentle word search with no timer and no way to lose. Each word you find glows, rings softly and leaves a kind thought behind. A new theme every day.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,500&family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/css/site.css">
+<link rel="stylesheet" href="/assets/css/reading.css">
+<style>
+  .qw{ margin:1.2rem 0 2rem; padding:1.2rem; border-radius:26px; background:linear-gradient(145deg, #FFF8EE 0%, #F6EEF8 55%, #EEF4FA 100%);
+    border:1px solid #E6D6EE; box-shadow:0 14px 40px rgba(120,90,140,.12); }
+  .qw[hidden]{ display:none; }
+  .qw-top{ display:flex; align-items:baseline; justify-content:space-between; gap:1rem; margin:0 0 .8rem; flex-wrap:wrap; }
+  .qw-k{ margin:0; font-family:"IBM Plex Mono", ui-monospace, monospace; font-size:.72rem; letter-spacing:.1em; text-transform:uppercase; color:#8A6D8F; }
+  .qw-theme{ font-family:"Fraunces", Georgia, serif; font-weight:600; font-size:1.4rem; color:var(--ink); margin:0; }
+  .qw-board{ position:relative; width:min(100%, 30rem); margin:0 auto; touch-action:none; user-select:none; -webkit-user-select:none; }
+  .qw-marks{ position:absolute; inset:0; width:100%; height:100%; pointer-events:none; overflow:visible; }
+  .qw-marks line{ opacity:.8; }
+  .qw-found-mark{ animation:qw-in .6s var(--ease-out, ease) both; }
+  @keyframes qw-in{ from{ opacity:0; } to{ opacity:.8; } }
+  .qw-grid{ position:relative; display:grid; grid-template-columns:repeat(9, 1fr); gap:2px; }
+  .qw-tile{ aspect-ratio:1; display:grid; place-items:center; padding:0; border:0; border-radius:50%; background:transparent; cursor:pointer;
+    font-family:"Fraunces", Georgia, serif; font-weight:500; font-size:clamp(1rem, 4.6vw, 1.45rem); color:#3C3350; line-height:1;
+    transition:transform .3s var(--ease-out, ease), background-color .3s var(--ease-out, ease); }
+  .qw-tile:hover{ background:rgba(217,200,240,.3); }
+  .qw-tile:focus-visible{ outline:2px solid #B9A0E0; outline-offset:1px; }
+  .qw-tile.is-anchor{ background:rgba(217,200,240,.6); }
+  .qw-tile.is-pop{ transform:scale(1.22); }
+  .qw-tile.is-hint{ animation:qw-hint 1.6s var(--ease-soft, ease-in-out) 2; background:rgba(248,231,174,.8); }
+  @keyframes qw-hint{ 0%,100%{ box-shadow:0 0 0 0 rgba(239,210,122,.0); } 50%{ box-shadow:0 0 0 8px rgba(239,210,122,.35); } }
+  .qw-words{ list-style:none; padding:0; margin:1rem auto .4rem; display:flex; flex-wrap:wrap; justify-content:center; gap:.4rem; max-width:30rem; }
+  .qw-words li{ margin:0; padding:.3rem .8rem; border-radius:999px; border:1px solid #E6D6EE; background:#fff; font-size:.92rem; color:#5A5346; transition:background-color .5s, color .5s, border-color .5s; }
+  .qw-words li.is-found{ background:var(--c); border-color:transparent; color:#3C3350; }
+  .qw-words li.is-found span{ text-decoration:line-through; text-decoration-color:rgba(60,51,80,.45); }
+  .qw-note{ min-height:3.4rem; max-width:30rem; margin:.6rem auto 0 !important; text-align:center; color:#5A5346; line-height:1.5; }
+  .qw-note-h{ display:block; font-family:"Fraunces", Georgia, serif; font-weight:600; font-size:1.1rem; color:var(--ink); margin-bottom:.15rem; }
+  .qw-btns{ display:flex; flex-wrap:wrap; justify-content:center; gap:.5rem; margin-top:1rem; }
+  .qw-btns button{ font:inherit; font-size:.9rem; padding:.5rem 1.1rem; border-radius:999px; border:1px solid #D9C8F0; background:#fff; color:#4E3F6B; cursor:pointer; }
+  .qw-btns button:hover{ background:#F3EEF9; }
+  .qw-btns .qw-next{ background:#EDE3F8; }
+  .qw.is-done .qw-board{ animation:qw-glow 2.4s var(--ease-soft, ease-in-out) 1; }
+  @keyframes qw-glow{ 50%{ filter:drop-shadow(0 0 18px rgba(249,217,184,.9)); } }
+  .qw-done-art{ display:none; margin:0 auto .3rem; width:4.5rem; height:4.5rem; }
+  .qw.is-done .qw-done-art{ display:block; animation:tol-bob 8s ease-in-out infinite; }
+  @media (max-width:420px){ .qw{ padding:1rem .7rem; border-radius:20px; } .qw-grid{ gap:1px; } }
+  @media (prefers-reduced-motion: reduce){ .qw-tile, .qw-found-mark, .qw.is-done .qw-board, .qw-tile.is-hint{ transition:none; animation:none; } }
+</style>
+<script src="/assets/js/site.js" defer></script>
+<script src="/assets/js/quiet-words.js" defer></script>
+</head>
+<body>
+<main class="read">
+<header class="read-head"><p class="read-code">New &middot; a calming game</p><h1>Quiet Words</h1></header>
+<p class="simple-lede">A gentle word search. There’s no timer, no score and no way to lose. Each word you find glows, rings softly and leaves a kind thought behind. A new theme every day.</p>
+
+<section class="qw" id="qw" aria-labelledby="qw-theme" hidden>
+  <div class="qw-top">
+    <p class="qw-k">Today’s theme</p>
+    <p class="qw-theme" id="qw-theme"></p>
+  </div>
+  <div class="qw-board">
+    <svg class="qw-marks" aria-hidden="true"></svg>
+    <div class="qw-grid" role="group" aria-label="Letters. Choose the first letter of a word, then the last."></div>
+  </div>
+  <ul class="qw-words" aria-label="Words to find"></ul>
+  <img class="qw-done-art" src="/assets/img/mascots/bubble-heart.svg" alt="">
+  <p class="qw-note"></p>
+  <p class="qw-live visually-hidden" aria-live="polite" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);"></p>
+  <div class="qw-btns">
+    <button type="button" class="qw-hint">Show me a letter</button>
+    <button type="button" class="qw-next">Another puzzle</button>
+    <button type="button" class="qw-sound" aria-pressed="true">&#127925; Sound on</button>
+  </div>
+</section>
+
+<div class="try-this">
+  <p><strong>Why it helps:</strong> a gentle puzzle gives your mind one simple, absorbing thing to do, which leaves less room for worry. Take it slowly. Notice each word, and the thought it leaves behind.</p>
+  <p><a href="/night-garden.html">Visit the Night Garden &rarr;</a></p>
+</div>
+</main>
+</body>
+</html>
