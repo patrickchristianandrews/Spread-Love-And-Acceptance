@@ -111,7 +111,7 @@ window.TOL_DIVES = {
   suite: { t: 'The Workpaper Suite', m: ['Workpaper Suite'],
     d: 'Choose your road (just you, a kind of relationship, or the 6-week program) and your workpapers line up in the order that helps most. Fill them in on the page or in one fillable PDF, and get a report grouped the way your road goes.',
     u: '/workpapers/fill/suite.html', l: 'Build your suite' },
-  petals: { t: 'Petals and keepsakes', m: ['earns petals', 'earn petals'],
-    d: 'Every calm game you play earns petals, a few more when you play well. They never run out or get spent. At each milestone something new unlocks: tile colours, Night Garden wonders and stickers.',
-    u: '/keepsakes.html', l: 'See your keepsakes' }
+  petals: { t: 'Petals and your garden', m: ['earns petals', 'earn petals'],
+    d: 'Every calm game you play earns petals, a few more when you play well. They never run out or get spent. At each milestone your garden grows: something new and calm appears in the garden behind every page.',
+    u: '/keepsakes.html', l: 'See your garden' }
 };

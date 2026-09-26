@@ -373,3 +373,15 @@ html.ws-locked .tol-breathe-btn, html.ws-locked .tol-wx{ visibility: hidden; }
 .ws-promo-k{ font-family: "IBM Plex Mono", ui-monospace, monospace; font-size: .72rem; letter-spacing: .1em; text-transform: uppercase; color: #8A6D8F; }
 .ws-promo strong{ font-family: "Fraunces", Georgia, serif; font-size: 1.2em; margin: .2em 0 .3em; }
 .ws-promo-go{ margin-top: .5em; font-weight: 600; color: #6B4E8A; }
+
+/* the road, week by week */
+.ws-view{ display:inline-flex; gap:4px; padding:4px; margin:0 0 1em; border-radius:999px; background:#F6EEF8; }
+.ws-view button{ font:inherit; font-size:.88rem; min-height:40px; padding:6px 14px; border-radius:999px; border:0; background:transparent; color:#4E3F6B; cursor:pointer; }
+.ws-view button[aria-pressed="true"]{ background:#fff; box-shadow:0 2px 8px rgba(120,90,140,.15); font-weight:600; }
+.ws-weeks{ list-style:none; padding:0; margin:0; display:grid; gap:12px; }
+.ws-week{ margin:0; padding:14px 16px; border-radius:20px; background:#FFFDF7; border:1px solid rgba(60,51,80,.1); }
+.ws-week-k{ margin:0; font-family:"IBM Plex Mono", ui-monospace, monospace; font-size:.72rem; letter-spacing:.1em; text-transform:uppercase; color:#A8792F; }
+.ws .ws-week-h{ margin:.1em 0 .3em; font-size:1.15rem; }
+.ws-week-do{ margin:0 0 .7em; color:var(--ink, #211D17); }
+.ws-week .ws-sheets{ margin-bottom:.6em; }
+.ws-week .ws-along{ margin:0; }

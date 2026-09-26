@@ -1,8 +1,8 @@
-/* rewards.js — petals, gentle streaks and keepsakes, shared by every calm game.
+/* rewards.js — petals, gentle streaks and a garden that grows, shared by every calm game.
    Playing well earns petals (a word found without a hint, a row bloomed, a puzzle
-   finished). Petals never get spent or lost; they add up, and at each milestone something
-   new unlocks: tile colours for the word games, small wonders for the Night Garden, and
-   stickers for your sticker book (keepsakes.html).
+   finished). Petals never get spent or lost; they add up, and at each milestone your garden
+   grows: something new and calm appears in the living garden behind every page (a tree and
+   swing, wind chimes, a bridge, a blossom tree...), and now and then new tile colours.
    The streak is gentle: one missed day a week is a rest day and never breaks it.
    Everything is kept in this browser only. Nothing is sent anywhere. */
 (function () {
@@ -10,33 +10,35 @@
   if (window.TOLRewards) return; // already loaded on this page
   var KEY = 'tol-rewards-v1';
 
-  // What unlocks, and when. After the list runs out, a new sticker arrives every 600 petals.
+  // What grows, and when.
   var LADDER = [
-    { id: 'tiles-rose', at: 25, kind: 'tiles', name: 'Rose tiles', icon: '🌹', desc: 'Warm rosy tiles for the word games.' },
-    { id: 'st-bubble-heart', at: 60, kind: 'sticker', name: 'Bubble heart', img: '/assets/img/mascots/bubble-heart.svg', desc: 'The first sticker in your book.' },
-    { id: 'garden-koi', at: 120, kind: 'garden', name: 'Koi in the pond', icon: '🐟', desc: 'Two glowing koi swim slow circles in the Night Garden pond.' },
-    { id: 'tiles-moon', at: 200, kind: 'tiles', name: 'Moonlight tiles', icon: '🌙', desc: 'Deep blue night tiles with soft silver letters.' },
-    { id: 'st-two-buddies', at: 300, kind: 'sticker', name: 'Two buddies', img: '/assets/img/mascots/two-buddies.svg', desc: 'Better together.' },
-    { id: 'garden-boats', at: 420, kind: 'garden', name: 'Paper boats', icon: '⛵', desc: 'Little paper boats with candles drift across the pond.' },
-    { id: 'tiles-meadow', at: 560, kind: 'tiles', name: 'Meadow tiles', icon: '🌿', desc: 'Fresh green tiles, like a summer morning.' },
-    { id: 'st-heart-book', at: 720, kind: 'sticker', name: 'Heart book', img: '/assets/img/mascots/heart-book.svg', desc: 'For every page you have turned.' },
-    { id: 'garden-aurora', at: 900, kind: 'garden', name: 'Aurora', icon: '🌌', desc: 'Soft ribbons of light ripple across the Night Garden sky.' },
-    { id: 'tiles-sunrise', at: 1100, kind: 'tiles', name: 'Sunrise tiles', icon: '🌅', desc: 'Peach and gold, like the first light.' },
-    { id: 'st-balanced-heart', at: 1350, kind: 'sticker', name: 'Balanced heart', img: '/assets/img/mascots/balanced-heart.svg', desc: 'Steady and kind.' },
-    { id: 'garden-rainbow', at: 1650, kind: 'garden', name: 'Rainbow lanterns', icon: '🏮', desc: 'Your lanterns rise in every pastel colour.' },
-    { id: 'tiles-gold', at: 2000, kind: 'tiles', name: 'Golden tiles', icon: '✨', desc: 'Glowing gold, for a true regular.' },
-    { id: 'st-bubble-buddy', at: 2400, kind: 'sticker', name: 'Bubble buddy', img: '/assets/img/mascots/bubble-buddy.svg', desc: 'Always floating by to say hello.' },
-    { id: 'st-heart-bubble', at: 2850, kind: 'sticker', name: 'Heart bubble', img: '/assets/img/mascots/heart-bubble.svg', desc: 'Light as air.' },
-    { id: 'st-two-bubbles', at: 3350, kind: 'sticker', name: 'Two bubbles', img: '/assets/img/mascots/two-bubbles.svg', desc: 'The two of us.' },
-    { id: 'st-buddy-ledger', at: 3900, kind: 'sticker', name: 'Ledger buddy', img: '/assets/img/mascots/buddy-ledger.svg', desc: 'Keeping kind track.' }
+    { id: 'tiles-rose', at: 25, kind: 'tiles', name: 'Rose tiles', icon: '\uD83C\uDF39', desc: 'Warm rosy tiles for the word games.' },
+    { id: 'garden-swing', at: 60, kind: 'garden', name: 'A tree and a swing', icon: '\uD83C\uDF33', desc: 'An old tree grows by the pond, with a wooden swing that sways in the breeze.' },
+    { id: 'garden-koi', at: 120, kind: 'garden', name: 'Koi in the pond', icon: '\uD83D\uDC1F', desc: 'Two glowing koi swim slow circles in the pond.' },
+    { id: 'tiles-moon', at: 200, kind: 'tiles', name: 'Moonlight tiles', icon: '\uD83C\uDF19', desc: 'Deep blue night tiles with soft silver letters.' },
+    { id: 'garden-chimes', at: 300, kind: 'garden', name: 'Wind chimes', icon: '\uD83C\uDF90', desc: 'Chimes hang from the tree, glinting, and ring softly in the Night Garden.' },
+    { id: 'garden-boats', at: 420, kind: 'garden', name: 'Paper boats', icon: '\u26F5', desc: 'Little paper boats with candles drift across the pond.' },
+    { id: 'garden-bridge', at: 560, kind: 'garden', name: 'A little bridge', icon: '\uD83C\uDF09', desc: 'A wooden footbridge arches over the pond.' },
+    { id: 'tiles-meadow', at: 700, kind: 'tiles', name: 'Meadow tiles', icon: '\uD83C\uDF3F', desc: 'Fresh green tiles, like a summer morning.' },
+    { id: 'garden-blossom', at: 850, kind: 'garden', name: 'A blossom tree', icon: '\uD83C\uDF38', desc: 'A cherry tree blooms on the far bank, and its petals drift across every page.' },
+    { id: 'garden-aurora', at: 1000, kind: 'garden', name: 'Aurora', icon: '\uD83C\uDF0C', desc: 'Soft ribbons of light ripple across the sky.' },
+    { id: 'garden-lights', at: 1200, kind: 'garden', name: 'Fairy lights', icon: '\u2728', desc: 'Strings of warm little lights between the trees, twinkling.' },
+    { id: 'tiles-sunrise', at: 1400, kind: 'tiles', name: 'Sunrise tiles', icon: '\uD83C\uDF05', desc: 'Peach and gold, like the first light.' },
+    { id: 'garden-balloon', at: 1650, kind: 'garden', name: 'A hot-air balloon', icon: '\uD83C\uDF88', desc: 'A striped balloon drifts slowly across the sky.' },
+    { id: 'garden-hammock', at: 1950, kind: 'garden', name: 'A hammock', icon: '\uD83D\uDECF\uFE0F', desc: 'A hammock between the trees, for the laziest afternoons.' },
+    { id: 'garden-rainbow', at: 2300, kind: 'garden', name: 'Rainbow lanterns', icon: '\uD83C\uDFEE', desc: 'Your lanterns rise in every pastel colour.' },
+    { id: 'tiles-gold', at: 2700, kind: 'tiles', name: 'Golden tiles', icon: '\u2728', desc: 'Glowing gold, for a true regular.' },
+    { id: 'garden-owls', at: 3100, kind: 'garden', name: 'Sleepy owls', icon: '\uD83E\uDD89', desc: 'Two owls blink from the branches.' },
+    { id: 'garden-butterflies', at: 3600, kind: 'garden', name: 'Glowing butterflies', icon: '\uD83E\uDD8B', desc: 'Soft glowing butterflies float among the flowers.' },
+    { id: 'garden-meteors', at: 4200, kind: 'garden', name: 'A meteor shower', icon: '\uD83C\uDF20', desc: 'Now and then, a gentle shower of shooting stars.' },
+    { id: 'garden-gazebo', at: 4900, kind: 'garden', name: 'A lantern gazebo', icon: '\uD83C\uDFEF', desc: 'A little gazebo glows on the hill, the calmest spot in the garden.' }
   ];
-  var MORE = [['🦔', 'Sleepy hedgehog'], ['🐇', 'Hoppy bunny'], ['🐸', 'Pond frog'], ['🦆', 'Little duckling'], ['🌙', 'Crescent moon'], ['🌟', 'Wishing star'],
-    ['🌸', 'Cherry blossom'], ['🍵', 'Warm tea'], ['🕯️', 'Candle'], ['🌈', 'Rainbow'], ['🐾', 'Paw prints'], ['🫧', 'Bubbles'],
-    ['🌻', 'Sunflower'], ['🦋', 'Butterfly'], ['🍄', 'Mushroom'], ['🐝', 'Honeybee'], ['🍀', 'Lucky clover'], ['🍎', 'Apple'],
-    ['🐢', 'Slow turtle'], ['🦉', 'Wise owl'], ['🐌', 'Snail'], ['🌜', 'Sleepy moon'], ['🎵', 'Little tune'], ['💝', 'Gift of love']];
+  // after all that, every 700 petals brings more fireflies to the garden, forever
+  var MORE = [];
+  for (var mi = 0; mi < 30; mi++) MORE.push(['\u2728', 'More fireflies']);
   function ladder() {
     var out = LADDER.slice(), last = LADDER[LADDER.length - 1].at;
-    MORE.forEach(function (m, i) { out.push({ id: 'st-e' + i, at: last + 600 * (i + 1), kind: 'sticker', name: m[1], icon: m[0], desc: 'A sticker for your book.' }); });
+    MORE.forEach(function (m, i) { out.push({ id: 'garden-flies-' + i, at: last + 700 * (i + 1), kind: 'garden', name: m[1], icon: m[0], desc: 'Five more fireflies light up your garden.' }); });
     return out;
   }
   var ALL = ladder();
@@ -51,6 +53,9 @@
   function kindOf(src) { for (var k in BOUQUET) if (BOUQUET[k].indexOf(src) !== -1) return k; return null; }
   try { var raw = localStorage.getItem(KEY); if (raw) { var o = JSON.parse(raw); for (var k in o) S[k] = o[k]; } } catch (e) {}
   function save() { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) {} }
+  // anything already earned (for example when the garden's list changes) is simply there
+  ALL.forEach(function (u) { if (u.at <= S.petals && S.unlocked.indexOf(u.id) === -1) S.unlocked.push(u.id); });
+  S.unlocked = S.unlocked.filter(function (id) { return id.indexOf('st-') !== 0; }); // stickers retired
 
   function nextUnlock() { for (var i = 0; i < ALL.length; i++) if (ALL[i].at > S.petals) return ALL[i]; return null; }
   function prevAt() { var p = 0; ALL.forEach(function (u) { if (u.at <= S.petals) p = u.at; }); return p; }
@@ -154,9 +159,9 @@
   function unlockCard(u) {
     if (cardOpen || typeof document === 'undefined') return;
     style(); cardOpen = true;
-    var what = { tiles: 'New tile colours', garden: 'New in your Night Garden', sticker: 'New sticker' }[u.kind];
+    var what = { tiles: 'New tile colours', garden: 'Your garden grew' }[u.kind] || 'Something new';
     var action = u.kind === 'tiles' ? '<button type="button" class="tr-go" data-use="' + u.id + '">Use them now</button>'
-      : u.kind === 'garden' ? '<a class="tr-go" href="/night-garden.html">See it in the garden</a>' : '<a class="tr-go" href="/keepsakes.html">Open my sticker book</a>';
+      : '<a class="tr-go" href="/keepsakes.html">See your garden</a>';
     var c = document.createElement('div');
     c.className = 'tr-card'; c.setAttribute('role', 'dialog'); c.setAttribute('aria-modal', 'true'); c.setAttribute('aria-label', 'You unlocked ' + u.name);
     c.innerHTML = '<div class="tr-card-box"><div class="tr-confetti" aria-hidden="true"></div><p class="tr-card-k">✨ ' + what + ' ✨</p><div class="tr-card-art">' + artFor(u) + '</div>' +
@@ -208,6 +213,7 @@
     earn: earn, record: record, stat: stat, setTiles: setTiles, renderChips: renderChips, unlockCard: unlockCard,
     has: function (id) { return id === 'tiles-petal' || S.unlocked.indexOf(id) !== -1; },
     garden: function (id) { return S.unlocked.indexOf(id) !== -1 && S.garden[id] !== false; },
+    extraFlies: function () { return S.unlocked.filter(function (id) { return id.indexOf('garden-flies-') === 0; }).length * 5; },
     setGarden: function (id, on) { S.garden[id] = !!on; save(); },
     bouquet: function () { var t = S.today && S.today.day === dayKey() ? S.today : { did: {}, bouquet: false }; return { breath: !!t.did.breath, words: !!t.did.words, garden: !!t.did.garden, done: !!t.bouquet }; },
     state: function () { return { petals: S.petals, streak: S.streak, best: S.best, days: S.days.slice(), rest: S.rest, level: level(), next: nextUnlock(), prevAt: prevAt(), unlocked: S.unlocked.slice(), tiles: S.tiles, from: S.from, games: S.games }; },

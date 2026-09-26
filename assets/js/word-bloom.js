@@ -6,8 +6,13 @@
 (function () {
   'use strict';
   var root = document.getElementById('wb'); if (!root) return;
-  var LEVELS = window.TOL_BLOOM_LEVELS || [];
-  if (!LEVELS.length) return;
+  if (!window.TOLLevels) return;
+  // five difficulty levels, each a file of levels that climb gently (game-levels.js)
+  var levels = window.TOLLevels.create({ game: 'bloom', tiers: [
+    { id: 'gentle', name: 'Gentle', file: 'bloom-gentle' }, { id: 'easy', name: 'Easy', file: 'bloom-easy' },
+    { id: 'medium', name: 'Medium', file: 'bloom-medium' }, { id: 'hard', name: 'Hard', file: 'bloom-hard' },
+    { id: 'expert', name: 'Expert', file: 'bloom-expert' }] });
+  var cur = null;
   var R = window.TOLRewards;
   var KEY = 'tol-bloom-v1';
   var CHAPTERS = ['Seedling', 'Sprout', 'Little meadow', 'Morning dew', 'Wildflowers', 'Butterfly hill', 'Honey grove', 'Sunlit orchard', 'Willow pond', 'Moonlit meadow',
@@ -36,15 +41,18 @@
   function note(i) { var m = wake(); if (m) m.pluck(m.note(i + 1), 0.045); }
 
   // ---------- a level ----------
-  function start(n) {
-    S.level = Math.max(0, Math.min(n, LEVELS.length - 1));
-    lv = LEVELS[S.level];
-    if (S.at !== S.level) { S.at = S.level; S.found = []; S.bonus = []; S.hints = 0; S.revealed = []; }
+  function start(c) {
+    cur = c; lv = c.puzzle;
+    var key = c.tier.id + ':' + c.index;
+    S.level = (levelBase[c.tier.id] || 0) + c.index;
+    if (S.at !== key) { S.at = key; S.found = []; S.bonus = []; S.hints = 0; S.revealed = []; }
+    levels.paintBar(barEl, c);
     save();
     order = lv.l.split('');
-    var ch = Math.floor(S.level / 10);
+    var ch = Math.floor(c.index / 10);
     $('.wb-level').textContent = 'Level ' + (S.level + 1);
-    $('.wb-chapter').textContent = CHAPTERS[ch % CHAPTERS.length] + ' · ' + (S.level % 10 + 1) + ' of 10';
+    $('.wb-chapter').textContent = c.tier.name + ' · ' + CHAPTERS[Math.floor(ch + (levelBase[c.tier.id] || 0) / 10) % CHAPTERS.length];
+    if (c.movedUp) setTimeout(function () { noteEl.innerHTML = '<b>You moved up to ' + c.tier.name + '.</b> Bigger wheels, new words.'; }, 50);
     root.setAttribute('data-chapter', String(ch % 5));
     root.classList.remove('is-done');
     buildGrid(); buildWheel(); jar();
@@ -179,13 +187,21 @@
     card.querySelector('.wb-done-h').textContent = perfect ? 'A perfect bloom!' : 'Level ' + (S.level + 1) + ' bloomed';
     card.querySelector('.wb-done-p').textContent = KIND[S.level % KIND.length] + (S.bonus.length ? ' You found ' + S.bonus.length + ' bonus ' + (S.bonus.length === 1 ? 'word' : 'words') + ' too.' : '');
     card.querySelector('.wb-done-petals').textContent = '+' + petalsWon + ' petals';
+    levels.finished(cur);
+    var tip = card.querySelector('.wb-done-tip'); if (tip) tip.innerHTML = window.TOLLevels.programTip();
     card.hidden = false;
     card.querySelector('.wb-next').focus();
     say('Level complete.');
   }
 
   // ---------- buttons ----------
-  $('.wb-next').addEventListener('click', function () { $('.wb-done').hidden = true; start(S.level + 1 < LEVELS.length ? S.level + 1 : 0); });
+  $('.wb-next').addEventListener('click', function () { $('.wb-done').hidden = true; go(levels.next()); });
+  function go(p) { p.then(start, function () { noteEl.textContent = 'That level didn\u2019t load. Check your connection and try again.'; }); }
+  // the difficulty bar: switch level, a random level, or the next one
+  var barEl = $('.gl-host');
+  levels.bar(barEl, function (p) { $('.wb-done').hidden = true; go(p); });
+  // each level's number counts every easier level before it
+  var levelBase = { gentle: 0, easy: 175, medium: 475, hard: 775, expert: 1075 };
   $('.wb-shuffle').addEventListener('click', function () {
     for (var i = order.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)), t = order[i]; order[i] = order[j]; order[j] = t; }
     chosen = []; wheel.classList.add('is-spin'); setTimeout(function () { wheel.classList.remove('is-spin'); buildWheel(); drawLines(); }, 250);
@@ -206,7 +222,7 @@
   document.addEventListener('visibilitychange', function () { if (!music) return; if (document.hidden) music.stop(); else if (soundOn) music.start(); });
   window.addEventListener('resize', drawLines);
 
-  start(S.level);
+  go(levels.current());
   root.hidden = false;
   window.__wordBloom = { state: S, get level() { return lv; }, submitWord: function (w) { chosen = []; w.split('').forEach(function (ch) { var i = -1; order.forEach(function (o, j) { if (i < 0 && o === ch && chosen.indexOf(j) === -1) i = j; }); chosen.push(i); }); submit(); }, start: start };
 })();

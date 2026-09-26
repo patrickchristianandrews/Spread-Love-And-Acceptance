@@ -81,16 +81,17 @@
 <script src="/assets/js/site.js" defer></script>
 <script src="/assets/js/calm-music.js" defer></script>
 <script src="/assets/js/rewards.js" defer></script>
-<script src="/assets/js/word-bloom-levels.js" defer></script>
+<script src="/assets/js/game-levels.js" defer></script>
 <script src="/assets/js/word-bloom.js" defer></script>
 </head>
-<body data-no-tip data-no-breathe data-no-weather>
+<body class="is-game" data-no-tip data-no-breathe data-no-weather>
 <main class="read">
 <header class="read-head"><p class="read-code">New &middot; a calm word game</p><h1>Word Bloom</h1></header>
 <nav class="gm-switch" aria-label="Calm word games">
   <a class="gm-tab gm-home" href="/pause-and-play.html" aria-label="Pause and Play: all the calm games">&#10024;</a>
   <a class="gm-tab" href="/word-bloom.html" aria-current="page">&#127804; Bloom</a>
   <a class="gm-tab" href="/quiet-crossword.html">&#9999;&#65039; Crossword</a>
+  <a class="gm-tab" href="/daily-ledger-crossword.html">&#128240; Newspaper</a>
   <a class="gm-tab" href="/quiet-words.html">&#128269; Words</a>
   <span class="gm-chip" data-rewards-chip></span>
 </nav>
@@ -101,6 +102,7 @@
     <div><p class="wb-level">Level 1</p><p class="wb-chapter"></p></div>
     <div class="wb-tools"><span class="wb-chip" data-rewards-chip></span><button type="button" class="wb-sound" aria-pressed="true">&#127925;</button></div>
   </div>
+  <div class="gl-host"></div>
   <div class="gm-grid wb-grid" aria-label="The words to find"></div>
   <p class="wb-word" aria-live="polite"></p>
   <div class="wb-play">
@@ -124,7 +126,8 @@
       <p class="wb-done-art" aria-hidden="true">&#127804;</p>
       <h2 class="wb-done-h" id="wb-done-h">Level bloomed</h2>
       <p class="wb-done-p"></p>
-      <span class="wb-done-petals"></span><br>
+      <span class="wb-done-petals"></span>
+      <div class="wb-done-tip"></div>
       <button type="button" class="wb-next">Next level &rarr;</button>
     </div>
   </div>

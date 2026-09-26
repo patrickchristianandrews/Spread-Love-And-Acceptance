@@ -48,6 +48,11 @@
   <section class="ws-step" id="ws-step-road" aria-labelledby="ws-road-title">
     <h2><span class="ws-num" aria-hidden="true">2</span> <span id="ws-road-title">Your road</span></h2>
     <p class="ws-progress" id="ws-progress" aria-live="polite"></p>
+    <div class="ws-view" id="ws-view" role="group" aria-label="How to see your road" hidden>
+      <button type="button" data-view="steps" aria-pressed="true">By step</button>
+      <button type="button" data-view="weeks" aria-pressed="false">Week by week</button>
+    </div>
+    <ol class="ws-weeks" id="ws-weeks" hidden></ol>
     <p class="ws-road-empty" id="ws-road-empty">Choose a road above and your workpapers appear here, in order.</p>
     <ol class="ws-road" id="ws-road"></ol>
     <div class="ws-add" id="ws-add"></div>

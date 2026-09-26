@@ -42,3 +42,32 @@ html[data-tiles="tiles-moon"] .gm-btns .gm-primary{ background:#F3EEFF; color:#2
 
 @media (prefers-reduced-motion: reduce){ .gm-cell.is-found{ animation:none; } }
 .gm-switch a.gm-home{ min-width:40px; justify-content:center; padding:.35rem .6rem; }
+
+/* difficulty levels, Next and Random (game-levels.js) */
+.gl-bar{ margin:0 0 .8rem; }
+.gl-tiers{ display:flex; gap:.3rem; flex-wrap:wrap; margin-bottom:.45rem; }
+.gl-tiers button{ font:inherit; font-size:.82rem; min-height:36px; padding:.25rem .7rem; border-radius:999px; border:1px solid var(--g-edge); background:var(--g-tile); color:var(--g-ink); cursor:pointer; }
+.gl-tiers button[aria-pressed="true"]{ background:#3C3350; border-color:#3C3350; color:#FFF8EE; }
+html[data-tiles="tiles-moon"] .gl-tiers button[aria-pressed="true"]{ background:#F3EEFF; color:#22264C; }
+.gl-row{ display:flex; align-items:center; gap:.4rem; flex-wrap:wrap; }
+.gl-where{ flex:1 1 auto; font-family:"IBM Plex Mono", monospace; font-size:.74rem; color:var(--g-soft); }
+.gl-row button{ font:inherit; font-size:.86rem; min-height:40px; padding:.3rem .85rem; border-radius:999px; border:1px solid var(--g-edge); background:var(--g-tile); color:var(--g-ink); cursor:pointer; }
+.gl-row .gl-next{ background:var(--g-accent); color:var(--g-accent-ink); border-color:transparent; font-weight:600; }
+/* a tip from the program after each puzzle */
+.gl-tip{ margin:.8rem 0 .2rem; padding:.7rem .9rem; border-radius:16px; background:#F4F9F2; border:1px solid #CFE0CC; text-align:left; color:#2F4A3A; font-size:.9rem; line-height:1.45; }
+.gl-tip p{ margin:0 0 .25rem; }
+.gl-tip-k{ font:500 .68rem/1 "IBM Plex Mono", monospace; letter-spacing:.1em; text-transform:uppercase; color:#3E6B4C; }
+.gl-tip a{ font-weight:600; color:#2F5A3D; }
+
+/* on the game pages, let the Night Garden behind show through more */
+html.has-garden body.is-game .tol-garden-veil{ background:linear-gradient(180deg, rgba(250,244,232,.46) 0%, rgba(250,244,232,.36) 50%, rgba(250,244,232,.3) 100%); }
+html.has-garden body.is-game main > .read-head, html.has-garden body.is-game main > .simple-lede,
+html.has-garden body.is-game main > .try-this{ background:rgba(255,252,244,.82); border-radius:18px; padding:.8rem 1rem; backdrop-filter:blur(6px); -webkit-backdrop-filter:blur(6px); }
+html.has-garden body.is-game .gm-board{ background-color:rgba(255,255,255,.2); }
+html.has-garden body.is-game .gm-switch{ padding:.35rem; border-radius:999px; background:rgba(255,252,244,.6); backdrop-filter:blur(6px); -webkit-backdrop-filter:blur(6px); }
+.wb-done > div, .xw-done > div{ max-height:calc(100% - 1rem); overflow:auto; }
+/* the game tabs stay on one line; swipe for more on a small phone */
+.gm-switch{ flex-wrap:nowrap; overflow-x:auto; scrollbar-width:none; -webkit-overflow-scrolling:touch; }
+.gm-switch::-webkit-scrollbar{ display:none; }
+.gm-switch a.gm-tab{ flex:none; }
+@media (max-width:420px){ .gm-switch a.gm-tab{ padding:.3rem .6rem; font-size:.82rem; } }

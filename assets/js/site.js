@@ -60,8 +60,9 @@
       { href: '/night-garden.html', code: 'New', title: 'The Night Garden', note: 'A calm place to breathe, play and let your mind settle. Flowers bloom as you breathe; no timers, nothing to lose' },
       { href: '/word-bloom.html', code: 'New', title: 'Word Bloom', note: 'Swipe across the petals to spell words. Hundreds of gentle levels, a bonus jar, and petals for playing well' },
       { href: '/quiet-crossword.html', code: 'New', title: 'Quiet Crossword', note: 'Small, friendly crosswords with a new one every day, made for playing on a phone' },
+      { href: '/daily-ledger-crossword.html', code: 'New', title: 'The Daily Ledger Crossword', note: 'A newspaper-style crossword, from a quick 5x5 Mini to a Big Sunday 13x13' },
       { href: '/quiet-words.html', code: 'Game', title: 'Quiet Words', note: 'A gentle word search with a new theme each day. Every word you find leaves a kind thought behind' },
-      { href: '/keepsakes.html', code: 'You', title: 'Your keepsakes', note: 'Petals from every calm game unlock tile colours, Night Garden wonders and stickers' },
+      { href: '/keepsakes.html', code: 'You', title: 'Your garden', note: 'Petals from every calm game grow the garden behind every page: a swing, chimes, a bridge, a blossom tree and more' },
     ]},
     { id: 'relationships', title: 'Relationships', blurb: 'Where to start in each kind of relationship, and every tool that fits. The shared relationship tools themselves are under The book, Workpapers and Tools.', items: [
       { href: '/turning-toward.html', deep: true, code: 'New', title: 'Turning toward', note: 'Seven small, everyday ways to build connection with anyone who matters to you' },

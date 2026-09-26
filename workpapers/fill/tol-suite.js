@@ -37,7 +37,7 @@
 
   /* ------------------------------------------------------------ state (in memory only) */
 
-  var S = { path: null, names: ['', ''], stops: [], dirty: false };
+  var S = { path: null, names: ['', ''], stops: [], dirty: false, view: 'steps' };
   var uid = 0;
 
   function newEntry(code, label) {
@@ -143,7 +143,12 @@
     road.innerHTML = '';
     $('ws-step-road').classList.toggle('is-waiting', !S.path);
     empty.hidden = !!S.path;
-    if (!S.path) { renderProgress(); return; }
+    if (!S.path) { renderProgress(); $('ws-view').hidden = true; $('ws-weeks').hidden = true; return; }
+    $('ws-view').hidden = false;
+    Array.prototype.forEach.call($('ws-view').querySelectorAll('[data-view]'), function (b) { b.setAttribute('aria-pressed', String(b.getAttribute('data-view') === S.view)); });
+    var weeksEl = $('ws-weeks');
+    road.hidden = S.view === 'weeks'; weeksEl.hidden = S.view !== 'weeks';
+    if (S.view === 'weeks') renderWeeks(weeksEl);
     $('ws-road-title').textContent = S.path.label + ': your road';
     var groups = [];
     S.stops.forEach(function (st) {
@@ -204,6 +209,36 @@
       missing.forEach(function (c) { add.appendChild(h('button', { type: 'button', className: 'ws-chip', 'data-add': c, text: c + ' ' + SP.nameOf(c) })); });
     }
     renderProgress();
+  }
+
+  // Week by week: this road's own plan, with its workpapers, reading and a small practice
+  function renderWeeks(el) {
+    el.innerHTML = '';
+    (S.path.weeks || []).forEach(function (w, i) {
+      var li = h('li', { className: 'ws-week' }, [
+        h('p', { className: 'ws-week-k', text: 'Week ' + (i + 1) }),
+        h('h3', { className: 'ws-week-h', text: w[0] }),
+        w[3] ? h('p', { className: 'ws-week-do', text: w[3] }) : null
+      ]);
+      if (w[1] && w[1].length) {
+        var row = h('div', { className: 'ws-sheets' });
+        w[1].forEach(function (code) {
+          var st = S.stops.filter(function (x) { return x.wp === code; })[0];
+          if (!st) return;
+          var done = st.entries.some(filled);
+          var b = h('button', { type: 'button', className: 'ws-sheet-btn' + (done ? ' is-filled' : ''), 'data-open': st.key, 'data-entry': st.entries[0] ? st.entries[0].id : '' }, [
+            h('span', { className: 'ws-sheet-label', text: code + ' ' + SP.nameOf(code) }), h('span', { className: 'ws-sheet-meta', text: done ? '\u2713' : '\u270E' })]);
+          row.appendChild(b);
+        });
+        li.appendChild(row);
+      }
+      if (w[2] && w[2].length) {
+        var al = h('div', { className: 'ws-along' }, [h('span', { className: 'ws-along-k', text: 'Read and try this week' })]);
+        w[2].forEach(function (a) { if (a) al.appendChild(h('a', { className: 'ws-along-a', href: a[1], text: a[0] })); });
+        li.appendChild(al);
+      }
+      el.appendChild(li);
+    });
   }
 
   function renderProgress() {
@@ -445,6 +480,10 @@
     $('ws-name-a').addEventListener('input', function () { setName(0, this.value); });
     $('ws-name-b').addEventListener('input', function () { setName(1, this.value); });
 
+    $('ws-view').addEventListener('click', function (e) {
+      var b = e.target.closest('[data-view]'); if (!b) return;
+      S.view = b.getAttribute('data-view'); renderRoad();
+    });
     $('ws-step-road').addEventListener('click', function (e) {
       var o = e.target.closest('[data-open]'), a = e.target.closest('[data-again]'), add = e.target.closest('[data-add]');
       if (o) openSheet(o.getAttribute('data-open'), o.getAttribute('data-entry'));

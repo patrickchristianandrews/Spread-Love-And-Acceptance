@@ -40,6 +40,69 @@
   };
   function A() { return Array.prototype.map.call(arguments, function (k) { return L[k]; }); }
 
+
+  // Week-by-week programs, one for each road: [title, what to do (workpapers), read and try (links), a small practice]
+  var WEEKS = {
+    self: [
+      ['Notice your load', ['WP-02'], A('weather', 'ch3'), 'Each morning, one minute with the Battery Meter. Just notice; change nothing yet.'],
+      ['Know what settles you', ['WP-11'], A('garden', 'freq'), 'On a calm day, choose your two settling defaults and write your pause line.'],
+      ['How words reach you', ['WP-09'], A('wired', 'wiring'), 'Fill in a Wiring Card, and try fact, feeling and ask on one thing that stung.'],
+      ['Saying no, kindly', ['WP-01'], A('decoder', 'signal'), 'Use one neutral refusal this week: acknowledge, say your capacity, offer an alternative.'],
+      ['Look back', ['WP-02'], A('report', 'garden'), 'Compare this week’s battery with week one. What pattern do you see? Be kind about it.']
+    ],
+    partners: [
+      ['See the work', ['WP-01'], A('preface', 'ch1'), 'Each of you logs one week of who did what. No discussing it yet.'],
+      ['One owner per job', ['WP-03'], A('ch2', 'lemonade'), 'Sit down once, with the log, and give every recurring job one owner.'],
+      ['Your batteries', ['WP-02'], A('ch3', 'calc'), 'Both do the Battery Meter daily. Say your number before any hard talk.'],
+      ['Talk so it lands', ['WP-09', 'WP-11'], A('signal', 'checkins'), 'Agree your pause lines, then try one check-in using the ground rules.'],
+      ['Small daily corrections', ['WP-13'], A('toward', 'decoder'), 'Do the 90-second check-in every evening this week.'],
+      ['Make it last', ['WP-01', 'WP-04'], A('report', 'ch5'), 'Run the week log again, compare it with week one, and do your first monthly look-back.']
+    ],
+    family: [
+      ['Same page, same words', ['WP-03'], A('ch1', 'wired'), 'Write down who owns what at home, so nobody has to guess.'],
+      ['Check your own weather', ['WP-02'], A('weather', 'ch3'), 'A quick battery check before family time, especially holidays.'],
+      ['Tone before content', ['WP-09'], A('signal', 'decoder'), 'Put one charged message through fact, feeling and ask before sending.'],
+      ['A plan for heated moments', ['WP-11'], A('ch4', 'checkins'), 'Agree a pause line the whole family recognises.'],
+      ['What keeps slipping', ['WP-04', 'WP-01'], A('ch5', 'toward'), 'Log a week, then look back at what keeps coming up, kindly.']
+    ],
+    coparents: [
+      ['One owner per kid task', ['WP-03'], A('lemonade', 'calc'), 'School, health, activities: every recurring task gets exactly one owner.'],
+      ['Messages that land', ['WP-09'], A('signal', 'ground'), 'Every charged message goes through fact, feeling and ask first.'],
+      ['The weekly handoff', ['WP-13'], A('checkins'), 'A short weekly check-in between homes: load, one thanks, one ask.'],
+      ['See the load', ['WP-01', 'WP-02'], A('calc', 'weather'), 'Each log a week; each check your own battery before handoffs.'],
+      ['Calm under pressure', ['WP-11'], A('decoder'), 'Decide in advance what settles you before a hard conversation.'],
+      ['The monthly look-back', ['WP-04'], A('report', 'ch5'), 'Sort what slipped into real gaps or one-offs, and adjust the owners.']
+    ],
+    friends: [
+      ['Name what went unseen', ['WP-09'], A('preface', 'signal'), 'Write the unseen thing as one fact, one feeling, one ask. You don’t have to send it yet.'],
+      ['Kind ways to say no', ['WP-01'], A('ch1', 'decoder'), 'Practise one neutral refusal so a “no” doesn’t become a rift.'],
+      ['Your own battery first', ['WP-02', 'WP-11'], A('weather', 'garden'), 'Check your load before you bring it up, and know your pause line.'],
+      ['Say it, once, kindly', [], A('checkins', 'toward'), 'Have the one conversation, lightly. Then send a “thinking of you” later in the week.']
+    ],
+    roommates: [
+      ['Everyone sees the same picture', ['WP-01'], A('lemonade'), 'List the week’s chores and hours together, so it’s facts, not impressions.'],
+      ['A named owner for each chore', ['WP-03'], A('ch4'), 'Trash, bills, supplies, cleaning: one owner each, agreed at a house meeting.'],
+      ['The house meeting', ['WP-13'], A('checkins', 'ground'), 'A short weekly check-in: load, one thanks, one friction, one ask.'],
+      ['No call-outs', ['WP-09'], A('signal'), 'Put any point for the meeting through fact, feeling and ask first.'],
+      ['What keeps coming back', ['WP-04'], A('calc', 'ch5'), 'At the end of the month, sort the repeats and adjust the owners.']
+    ],
+    coworkers: [
+      ['Who owns what', ['WP-03'], A('ch1'), 'A named owner for each recurring team task: follow-ups, notes, reminders.'],
+      ['Messages before sending', ['WP-09'], A('signal'), 'Check one charged chat or email with fact, feeling and ask.'],
+      ['A short stand-up', ['WP-13'], A('checkins'), 'Try the 90-second check-in as a team stand-up, once a day.'],
+      ['Make the invisible visible', ['WP-01'], A('decoder'), 'For one week, log the follow-ups and reminders that usually go unseen.'],
+      ['A kind retrospective', ['WP-04', 'WP-02'], A('ch5', 'weather'), 'Look back at what slipped. And privately, check your own battery.']
+    ],
+    caregivers: [
+      ['Notice the strain', ['WP-02'], A('preface', 'weather'), 'A daily battery check. Running near empty is a signal to get support.'],
+      ['One owner for each part of the care', ['WP-03'], A('calc'), 'Appointments, medicines, calls: one name next to each, so “whenever” becomes a plan.'],
+      ['When you’re depleted', ['WP-11'], A('garden'), 'Decide what settles you, and a pause line for the hard moments.'],
+      ['Handoffs', ['WP-13'], A('checkins'), 'A short check-in between the people sharing care, each week.'],
+      ['The sibling conversation', ['WP-09'], A('signal', 'ground'), 'Test the ask before the conversation, and keep it to one topic.'],
+      ['See the whole load', ['WP-01', 'WP-04'], A('report'), 'Log a week of care, then look back at what keeps slipping.']
+    ]
+  };
+
   var PATHS = [
     {
       id: 'self', label: 'Just me', icon: '☀', color: '#F8E7AE',
@@ -235,5 +298,9 @@
     }
   ];
 
+  // the 6-week program's weeks are its groups; every other road gets its own plan above
+  PATHS.forEach(function (p) {
+    p.weeks = WEEKS[p.id] || p.groups.map(function (g) { return [g.title.replace(/^Week \d+ \u00B7 /, ''), g.stops.map(function (x) { return x.wp; }), g.along || [], g.note]; });
+  });
   global.TOL_SUITE_PATHS = { paths: PATHS, names: NAMES, read: READ };
 })(typeof window !== 'undefined' ? window : globalThis);

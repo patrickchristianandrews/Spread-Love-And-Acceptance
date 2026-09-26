@@ -1,5 +1,5 @@
 /* keepsakes.js — the keepsakes page (/keepsakes.html): petals, streak, tile colours,
-   Night Garden wonders and the sticker book, all from rewards.js. Kept in this browser. */
+   and the wonders your petals grow in the garden, all from rewards.js. Kept in this browser. */
 (function () {
   'use strict';
   var R = window.TOLRewards; if (!R) return;
@@ -35,18 +35,13 @@
     }).join('');
 
     var garden = document.getElementById('ks-garden');
-    garden.innerHTML = R.ladder.filter(function (u) { return u.kind === 'garden'; }).map(function (u) {
+    var gl = R.ladder.filter(function (u) { return u.kind === 'garden' && u.id.indexOf('garden-flies-') !== 0; });
+    garden.innerHTML = gl.map(function (u) {
       var have = R.has(u.id), on = R.garden(u.id);
       return '<div class="ks-item' + (have ? '' : ' is-locked') + '"><span class="ks-art">' + art(u) + '</span><strong>' + esc(u.name) + '</strong><small>' + (have ? esc(u.desc) : 'At ' + u.at + ' petals') + '</small>' +
         (have ? '<button type="button" class="ks-toggle" data-garden="' + u.id + '" aria-pressed="' + on + '">' + (on ? 'On' : 'Off') + '</button>' : '') + '</div>';
     }).join('');
 
-    var st = R.ladder.filter(function (u) { return u.kind === 'sticker'; }), got = st.filter(function (u) { return R.has(u.id); }).length;
-    document.getElementById('ks-sticker-count').textContent = got ? got + ' of ' + st.length + ' collected. The next one arrives at ' + (st.filter(function (u) { return !R.has(u.id); })[0] || { at: '—' }).at + ' petals.' : 'Your first sticker arrives at ' + st[0].at + ' petals.';
-    document.getElementById('ks-stickers').innerHTML = st.map(function (u) {
-      var have = R.has(u.id);
-      return '<div class="ks-item' + (have ? '' : ' is-locked') + '"><span class="ks-art">' + (have ? art(u) : '<span aria-hidden="true">?</span>') + '</span><strong>' + (have ? esc(u.name) : 'A surprise') + '</strong><small>' + (have ? esc(u.desc) : 'At ' + u.at + ' petals') + '</small></div>';
-    }).join('');
 
     var g = s.games, bits = [];
     if (g.bloom && g.bloom.best) bits.push('Word Bloom: level ' + g.bloom.best);

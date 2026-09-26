@@ -11,8 +11,8 @@
 </script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Quiet Crossword &mdash; small, gentle crosswords &middot; The Objective Ledger</title>
-<meta name="description" content="Small, friendly crosswords with gentle clues. A new one every day, easy to play on a phone, with petals for finishing. No timer, no way to lose.">
+<title>The Daily Ledger Crossword &mdash; a newspaper-style crossword &middot; The Objective Ledger</title>
+<meta name="description" content="A newspaper-style crossword, from a 5x5 Mini to a Big Sunday 13x13. Hundreds of puzzles, easy to play on a phone, with petals for finishing.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,500&family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -64,6 +64,27 @@
   .xw-done-petals{ display:inline-block; margin:.2rem 0 .8rem; padding:.3rem .9rem; border-radius:999px; background:#F9E1EA; color:#7A3355; font-weight:600; }
   .xw-again{ font:inherit; font-weight:600; font-size:1.05rem; min-height:48px; padding:.6rem 1.6rem; border-radius:999px; border:0; background:#3C3350; color:#FFF8EE; cursor:pointer; }
   .xw-chip{ display:none; }
+  /* the newspaper look */
+  .xw.is-paper{ --g-board: #FBF8F0; background:#FBF8F0 !important; border:1px solid #D8CFBD; border-radius:6px; box-shadow:0 2px 0 #E8E0CF, 0 14px 40px rgba(60,50,30,.14); color:#1D1A16; }
+  .np-mast{ display:flex; justify-content:space-between; align-items:baseline; gap:.6rem; padding:.2rem 0 .45rem; margin:0 0 .6rem; border-bottom:3px double #1D1A16; }
+  .np-mast-name{ font-family:"Fraunces", Georgia, serif; font-weight:600; font-size:clamp(1.25rem, 5.5vw, 1.8rem); letter-spacing:.02em; font-variant:small-caps; }
+  @media (max-width:520px){ .np-mast{ flex-direction:column; gap:.1rem; } }
+  .np-mast-date{ font-family:"IBM Plex Mono", monospace; font-size:.7rem; color:#5A5346; text-transform:uppercase; letter-spacing:.08em; }
+  .xw.is-paper .xw-theme{ font-family:"IBM Plex Mono", monospace; font-size:.8rem; font-weight:500; text-transform:uppercase; letter-spacing:.08em; }
+  .xw.is-paper .xw-grid{ gap:0; border:2px solid #1D1A16; background:#1D1A16; }
+  .xw.is-paper .xw-block{ visibility:visible; background:#1D1A16; border-radius:0; }
+  .xw.is-paper .xw-cell{ border-radius:0; border:1px solid #1D1A16; background:#fff; font-family:"Lora", Georgia, serif; font-weight:500; }
+  .xw.is-paper .xw-cell.is-word{ background:#E8EEF8; }
+  .xw.is-paper .xw-cell.is-sel{ background:#F7D774; color:#1D1A16; box-shadow:none; }
+  .xw.is-paper .xw-cell.is-found{ background:#E6F2E2; }
+  .xw.is-paper .xw-cell.is-found.is-sel{ background:#F7D774; }
+  .xw.is-paper .gm-n{ left:2px; top:1px; font-size:.52rem; color:#1D1A16; }
+  .xw.is-paper.is-big .xw-cell{ font-size:clamp(.8rem, 3.6vw, 1.15rem); }
+  .xw.is-paper.is-big .gm-n{ font-size:.45rem; }
+  .xw.is-paper .xw-clue p{ background:#fff; border-color:#D8CFBD; border-radius:6px; }
+  .xw.is-paper .xw-keys button{ border-radius:6px; }
+  .xw-lists{ font-family:"Lora", Georgia, serif; }
+  .xw-lists h3{ font-variant:small-caps; letter-spacing:.04em; border-bottom:1px solid #1D1A16; padding-bottom:.2rem; }
   @media (max-width:520px){
     main.read{ padding-top:.8rem; }
     .read-head, .xw-intro{ display:none; }
@@ -82,18 +103,19 @@
 </head>
 <body class="is-game" data-no-tip data-no-breathe data-no-weather>
 <main class="read">
-<header class="read-head"><p class="read-code">New &middot; a calm word game</p><h1>Quiet Crossword</h1></header>
+<header class="read-head"><p class="read-code">New &middot; a calm word game</p><h1>The Daily Ledger Crossword</h1></header>
 <nav class="gm-switch" aria-label="Calm word games">
   <a class="gm-tab gm-home" href="/pause-and-play.html" aria-label="Pause and Play: all the calm games">&#10024;</a>
   <a class="gm-tab" href="/word-bloom.html">&#127804; Bloom</a>
-  <a class="gm-tab" href="/quiet-crossword.html" aria-current="page">&#9999;&#65039; Crossword</a>
-  <a class="gm-tab" href="/daily-ledger-crossword.html">&#128240; Newspaper</a>
+  <a class="gm-tab" href="/quiet-crossword.html">&#9999;&#65039; Crossword</a>
+  <a class="gm-tab" href="/daily-ledger-crossword.html" aria-current="page">&#128240; Newspaper</a>
   <a class="gm-tab" href="/quiet-words.html">&#128269; Words</a>
   <span class="gm-chip" data-rewards-chip></span>
 </nav>
-<p class="simple-lede xw-intro">Small crosswords with friendly clues. A new one every day, or another whenever you like. Each word glows when it’s right. No timer, and no way to lose.</p>
+<p class="simple-lede xw-intro">A proper newspaper-style crossword, from a quick 5&times;5 Mini to a Big Sunday 13&times;13. Clues get a little more cryptic as you go. Each word glows when it’s right, and there’s still no timer.</p>
 
-<section class="gm-board xw" id="xw" aria-label="Quiet Crossword" hidden>
+<section class="gm-board xw is-paper" id="xw" data-mode="paper" aria-label="The Daily Ledger Crossword" hidden>
+  <div class="np-mast" aria-hidden="true"><span class="np-mast-name">The Daily Ledger</span><span class="np-mast-date" id="np-date"></span></div>
   <div class="xw-head">
     <div><p class="xw-theme"></p><p class="xw-no"></p></div>
     <div class="xw-tools"><span class="xw-chip" data-rewards-chip></span><button type="button" class="xw-sound" aria-pressed="true">&#127925;</button></div>
@@ -135,7 +157,7 @@
 </section>
 
 <div class="try-this">
-  <p><strong>Why it helps:</strong> a small puzzle gives your mind one gentle thing to hold, and each right answer is a tiny, satisfying win. Take it slowly.</p>
+  <p><strong>How it works:</strong> tap a square and type; tap it again to switch between across and down. The small numbers match the clues. Some squares belong to only one word, as in British newspaper crosswords. Short, one-word clues are the trickier kind.</p>
   <p><a href="/keepsakes.html">See your keepsakes &rarr;</a></p>
 </div>
 </main>

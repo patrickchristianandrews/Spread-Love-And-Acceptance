@@ -62,11 +62,13 @@
   .pp-card.is-garden p{ color:#DCD6F0; } .pp-card.is-garden .pp-meta{ color:#F9D9B8; } .pp-card.is-garden .pp-ico{ background:rgba(255,255,255,.14); }
   .pp-card.is-bloom{ --c1:rgba(255,243,230,.84); --c2:rgba(253,238,242,.8); }
   .pp-card.is-xw{ --c1:rgba(238,244,250,.84); --c2:rgba(246,238,248,.8); }
+  .pp-card.is-paper{ --c1:rgba(251,248,240,.9); --c2:rgba(238,232,220,.84); }
   .pp-card.is-words{ --c1:rgba(241,249,236,.84); --c2:rgba(255,248,238,.8); }
   .pp-card.is-breathe{ --c1:rgba(246,238,248,.84); --c2:rgba(238,244,250,.8); cursor:pointer; font:inherit; text-align:left; width:100%; }
   .pp-card.is-keep{ --c1:rgba(255,248,222,.84); --c2:rgba(253,238,242,.8); }
   .pp-why{ background:rgba(255,253,247,.82) !important; }
   .pp-why{ margin-top:.4rem; }
+  .pp-what{ margin:0 0 1.2rem; }
   @media (max-width:420px){ .pp-card{ grid-template-columns:3.4rem 1fr; padding:.9rem; } .pp-ico{ width:3.4rem; height:3.4rem; font-size:1.7rem; } .pp-hero-art{ width:5.5rem; } }
   @media (prefers-reduced-motion: reduce){ .pp-hero-art, .pp-stem.is-done .pp-flower{ animation:none; } .pp-card, .pp-stem{ transition:none; } }
 </style>
@@ -74,8 +76,13 @@
 <script src="/assets/js/rewards.js" defer></script>
 <script src="/assets/js/pause-and-play.js" defer></script>
 </head>
-<body class="pp-page">
+<body class="pp-page is-game">
 <main class="read">
+
+<div class="try-this pp-why pp-what">
+  <p><strong>What is Pause &amp; Play?</strong> It’s the calm corner of the site: a handful of gentle games for when your mind needs a rest. Breathe in the Night Garden, spell words in Word Bloom, solve a crossword, or find words in a quiet word search. There are no timers and no way to lose.</p>
+  <p>Every game earns petals, and your petals grow the garden you can see behind every page. A few minutes here is a lovely way to settle before a hard conversation, or to wind down at night. Nothing you do is sent anywhere.</p>
+</div>
 
 <section class="pp-hero" aria-labelledby="pp-h">
   <img class="pp-hero-art" src="/assets/img/mascots/two-bubbles.svg" alt="">
@@ -117,6 +124,13 @@
     <p>A small, friendly crossword. A new one every day.</p>
     <span class="pp-meta" data-meta="xw">Made for your phone</span>
   </a>
+  <a class="pp-card is-paper" href="/daily-ledger-crossword.html">
+    <span class="pp-tag">New</span>
+    <span class="pp-ico" aria-hidden="true">&#128240;</span>
+    <h3>The Daily Ledger Crossword</h3>
+    <p>A newspaper-style crossword, from a quick Mini to a Big Sunday.</p>
+    <span class="pp-meta" data-meta="paper">Five sizes, hundreds of puzzles</span>
+  </a>
   <a class="pp-card is-words" href="/quiet-words.html">
     <span class="pp-ico" aria-hidden="true">&#128269;</span>
     <h3>Quiet Words</h3>
@@ -131,16 +145,12 @@
   </button>
   <a class="pp-card is-keep is-wide" href="/keepsakes.html">
     <span class="pp-ico" aria-hidden="true">&#127873;</span>
-    <h3>Your keepsakes</h3>
-    <p>Petals unlock tile colours, new wonders in the Night Garden, and stickers for your sticker book.</p>
-    <span class="pp-meta" data-meta="keep">Open your sticker book</span>
+    <h3>Your garden</h3>
+    <p>Your petals grow the garden behind every page: a swing, wind chimes, a bridge, a blossom tree, fairy lights and more.</p>
+    <span class="pp-meta" data-meta="keep">See what’s growing next</span>
   </a>
 </section>
 
-<div class="try-this pp-why">
-  <p><strong>Why play?</strong> A small, absorbing game gives a worried mind one gentle job to do, and each little win feels good. A few minutes can be enough to reset before a hard conversation, or to wind down at night.</p>
-  <p><a href="/night-garden.html">Start with the Night Garden &rarr;</a></p>
-</div>
 </main>
 </body>
 </html>

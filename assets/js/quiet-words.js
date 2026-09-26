@@ -63,8 +63,18 @@
       ['FETCH', 'Chase something just for the fun of it.']] }
   ];
   // the full library of themes lives in quiet-words-themes.js; these six are the fallback
-  var THEMES = window.TOL_WORD_THEMES && window.TOL_WORD_THEMES.length >= FALLBACK.length ? window.TOL_WORD_THEMES : FALLBACK;
-  var N = 9, DIRS = [[0, 1], [1, 0], [1, 1], [-1, 1]];
+  var THEMES = (window.TOL_WORD_THEMES && window.TOL_WORD_THEMES.length >= FALLBACK.length ? window.TOL_WORD_THEMES : FALLBACK)
+    .concat((window.TOL_WORD_THEMES_MORE || []).map(function (t) { return { name: t.name, words: t.words }; }));
+  // five difficulty levels: bigger grids, more words, and more directions (backwards at the top)
+  var ALLDIRS = [[0, 1], [1, 0], [1, 1], [-1, 1], [0, -1], [-1, 0], [-1, -1], [1, -1]];
+  var TIERS = {
+    gentle: { N: 7, dirs: ALLDIRS.slice(0, 2), words: 5 }, easy: { N: 9, dirs: ALLDIRS.slice(0, 3), words: 7 },
+    medium: { N: 10, dirs: ALLDIRS.slice(0, 4), words: 8 }, hard: { N: 11, dirs: ALLDIRS, words: 10 }, expert: { N: 12, dirs: ALLDIRS, words: 12 }
+  };
+  var N = 9, DIRS = TIERS.easy.dirs, cur = null;
+  var levels = window.TOLLevels ? window.TOLLevels.create({ game: 'words', tiers: ['gentle', 'easy', 'medium', 'hard', 'expert'].map(function (id) {
+    return { id: id, name: id.charAt(0).toUpperCase() + id.slice(1), list: THEMES };
+  }) }) : null;
   var FILL = 'AEIOUAEIOULNRSTDGHMBPWY';
   // a few letter runs kept out of the grid (written backwards-shifted so they don't read as words here)
   var AVOID = ['fuvg', 'nff', 'gvg', 'cvff', 'qnza', 'uryy', 'fyhg', 'juber', 'anmv', 'ubr', 'cbea', 'cbbc'].map(function (w) {
@@ -125,10 +135,17 @@
     return !lines.some(function (ln) { var both = ln + ' ' + ln.split('').reverse().join(''); return AVOID.some(function (a) { return both.indexOf(a) !== -1; }); });
   }
 
-  function start(index) {
+  function start(index, c) {
     puzzleNo = index;
     theme = THEMES[index % THEMES.length];
-    var made = build(theme); if (!made) return;
+    // the level decides the grid size, the directions and how many of the theme's words to hide
+    var T = TIERS[c ? c.tier.id : 'easy'] || TIERS.easy;
+    N = T.N; DIRS = T.dirs; cur = c || null;
+    gridEl.style.gridTemplateColumns = 'repeat(' + N + ', 1fr)';
+    var pool = theme.words.filter(function (w) { return w[0].length <= N; });
+    for (var i = pool.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)), tmp = pool[i]; pool[i] = pool[j]; pool[j] = tmp; }
+    var made = build({ name: theme.name, words: pool.slice(0, T.words) }); if (!made) return;
+    if (levels && c) levels.paintBar(barEl, c);
     grid = made.grid; words = made.words; found = {}; hinted = false;
     themeEl.textContent = theme.name;
     noteEl.innerHTML = '<span class="qw-note-h">Find the words, at your own pace.</span> Drag across the letters, or tap the first letter and then the last.';
@@ -244,6 +261,7 @@
     noteEl.innerHTML = '<span class="qw-note-h">All found. Lovely.</span> Take a slow breath before you go. ' +
       (n > 1 ? 'You’ve finished ' + n + ' quiet puzzles here.' : 'Come back tomorrow for a new theme.');
     say('All the words are found.');
+    if (levels && cur) { levels.finished(cur); noteEl.insertAdjacentHTML('beforeend', window.TOLLevels.programTip()); }
     if (window.TOLTips) window.TOLTips.get(null, function (t) {
       var p = document.createElement('span'); p.className = 'qw-tip'; p.innerHTML = '<strong>A little tip for today:</strong> ' + t[0] + ' ' + t[1];
       noteEl.appendChild(p);
@@ -251,14 +269,19 @@
   }
 
   // ---------- buttons ----------
-  $('.qw-next').addEventListener('click', function () { start(puzzleNo + 1); });
+  function go(p) { p.then(function (c) { start(c.index, c); }); }
+  var barEl = $('.gl-host');
+  if (levels) levels.bar(barEl, function (p) { go(p); });
+  $('.qw-next').addEventListener('click', function () { if (levels) go(levels.next()); else start(puzzleNo + 1); });
   // choose any theme
   var picker = $('.qw-picker'), pickBtn = $('.qw-pick');
   picker.innerHTML = THEMES.map(function (th, i) { return '<button type="button" data-theme="' + i + '">' + th.name + '</button>'; }).join('');
   pickBtn.addEventListener('click', function () { picker.hidden = !picker.hidden; pickBtn.setAttribute('aria-expanded', String(!picker.hidden)); });
   picker.addEventListener('click', function (e) {
     var b = e.target.closest('[data-theme]'); if (!b) return;
-    picker.hidden = true; pickBtn.setAttribute('aria-expanded', 'false'); start(+b.getAttribute('data-theme'));
+    picker.hidden = true; pickBtn.setAttribute('aria-expanded', 'false');
+    var i = +b.getAttribute('data-theme');
+    if (levels) levels.current().then(function (c) { c.index = i; start(i, c); }); else start(i);
     root.scrollIntoView({ behavior: 'smooth', block: 'start' });
   });
   $('.qw-hint').addEventListener('click', function () {
@@ -276,9 +299,9 @@
   soundLabel();
   window.addEventListener('resize', function () { drawMarks(); });
 
-  // a new theme each day
-  var day = Math.floor((Date.now() - new Date(new Date().getFullYear(), 0, 0)) / 864e5);
-  start(day % THEMES.length);
+  // carry on through the levels (each one a new theme, at the difficulty you choose)
+  if (levels) go(levels.current());
+  else start(Math.floor(Date.now() / 864e5) % THEMES.length);
   root.hidden = false;
   window.__quietWords = { get words() { return words; }, get found() { return found; }, check: check, lineTo: lineTo };
 })();

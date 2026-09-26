@@ -40,7 +40,7 @@
   @keyframes qw-in{ from{ opacity:0; } to{ opacity:.8; } }
   .qw-grid{ position:relative; display:grid; grid-template-columns:repeat(9, 1fr); gap:2px; }
   .qw-tile{ aspect-ratio:1; display:grid; place-items:center; padding:0; border:0; border-radius:50%; background:transparent; cursor:pointer;
-    font-family:"Fraunces", Georgia, serif; font-weight:500; font-size:clamp(1rem, 4.6vw, 1.45rem); color:#3C3350; line-height:1;
+    font-family:"Fraunces", Georgia, serif; font-weight:500; font-size:clamp(.9rem, 4.2vw, 1.4rem); color:#3C3350; line-height:1;
     transition:transform .3s var(--ease-out, ease), background-color .3s var(--ease-out, ease); }
   .qw-tile:hover{ background:rgba(217,200,240,.3); }
   .qw-tile:focus-visible{ outline:2px solid #B9A0E0; outline-offset:1px; }
@@ -84,15 +84,18 @@
 <script src="/assets/js/calm-music.js" defer></script>
 <script src="/assets/js/rewards.js" defer></script>
 <script src="/assets/js/quiet-words-themes.js" defer></script>
+<script src="/assets/js/quiet-words-themes-more.js" defer></script>
+<script src="/assets/js/game-levels.js" defer></script>
 <script src="/assets/js/quiet-words.js" defer></script>
 </head>
-<body data-no-breathe data-no-weather>
+<body class="is-game" data-no-breathe data-no-weather>
 <main class="read">
 <header class="read-head"><p class="read-code">A calming game</p><h1>Quiet Words</h1></header>
 <nav class="gm-switch" aria-label="Calm word games">
   <a class="gm-tab gm-home" href="/pause-and-play.html" aria-label="Pause and Play: all the calm games">&#10024;</a>
   <a class="gm-tab" href="/word-bloom.html">&#127804; Bloom</a>
   <a class="gm-tab" href="/quiet-crossword.html">&#9999;&#65039; Crossword</a>
+  <a class="gm-tab" href="/daily-ledger-crossword.html">&#128240; Newspaper</a>
   <a class="gm-tab" href="/quiet-words.html" aria-current="page">&#128269; Words</a>
   <span class="gm-chip" data-rewards-chip></span>
 </nav>
@@ -100,9 +103,10 @@
 
 <section class="qw" id="qw" aria-labelledby="qw-theme" hidden>
   <div class="qw-top">
-    <p class="qw-k">Today’s theme</p>
+    <p class="qw-k">Theme</p>
     <p class="qw-theme" id="qw-theme"></p>
   </div>
+  <div class="gl-host"></div>
   <div class="qw-board">
     <svg class="qw-marks" aria-hidden="true"></svg>
     <div class="qw-grid" role="group" aria-label="Letters. Choose the first letter of a word, then the last."></div>
@@ -113,7 +117,7 @@
   <p class="qw-live visually-hidden" aria-live="polite" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);"></p>
   <div class="qw-btns">
     <button type="button" class="qw-hint">Show me a letter</button>
-    <button type="button" class="qw-next">Another puzzle</button>
+    <button type="button" class="qw-next">Next puzzle &rarr;</button>
     <button type="button" class="qw-pick" aria-expanded="false" aria-controls="qw-picker">Choose a theme</button>
     <button type="button" class="qw-sound" aria-pressed="true">&#127925; Music on</button>
   </div>
