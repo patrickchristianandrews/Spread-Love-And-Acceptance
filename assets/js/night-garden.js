@@ -647,7 +647,8 @@
       ctx.fillStyle = BLACK; ctx.beginPath(); ctx.ellipse(0, BY, BRX, BRY, 0, 0, Math.PI * 2); ctx.fill();
       ctx.beginPath(); ctx.ellipse(12, BY - 5, 7, 8, -0.5, 0, Math.PI * 2); ctx.fill(); // neck
       if (L.chest === 'white') {
-        ctx.fillStyle = '#F2ECE3'; ctx.beginPath(); ctx.ellipse(16, BY - 4, 4, 6.5, -0.45, 0, Math.PI * 2); ctx.fill();   // throat
+        ctx.fillStyle = '#E6D2B6'; ctx.beginPath(); ctx.ellipse(16, BY - 4, 4, 6.5, -0.45, 0, Math.PI * 2); ctx.fill();   // throat, very light brown
+        ctx.fillStyle = '#F2ECE3';
         ctx.beginPath(); ctx.ellipse(14.5, BY + 2, 5, 6.5, -0.25, 0, Math.PI * 2); ctx.fill();                              // chest
         ctx.fillStyle = TAN; ctx.beginPath(); ctx.ellipse(12, BY + 7.5, 4.5, 2.2, 0, 0, Math.PI * 2); ctx.fill();            // tan below
       }
@@ -672,9 +673,9 @@
     ctx.beginPath(); ctx.ellipse(8, 2.5, 8.5, 6.2, 0.08, 0, Math.PI * 2); ctx.fill(); // snout
     if (L.muzzle === 'cream') {
       ctx.fillStyle = TAN; ctx.beginPath(); ctx.ellipse(5, 2.6, 9.4, 7.8, 0.12, 0, Math.PI * 2); ctx.fill();            // soft fawn fills the lower face
-      ctx.fillStyle = '#E3D7C6'; ctx.beginPath(); ctx.ellipse(10.8, 2.6, 6.6, 3.9, 0.06, 0, Math.PI * 2); ctx.fill();   // pale muzzle
+      ctx.fillStyle = '#DEC6A6'; ctx.beginPath(); ctx.ellipse(10.8, 2.6, 6.6, 3.9, 0.06, 0, Math.PI * 2); ctx.fill();   // very light brown muzzle
       ctx.fillStyle = 'rgba(176,168,158,0.75)'; ctx.beginPath(); ctx.ellipse(11.5, 0.9, 5.2, 1.7, 0.06, 0, Math.PI * 2); ctx.fill(); // a little grey on top
-      ctx.fillStyle = '#F2ECE3'; ctx.beginPath(); ctx.ellipse(7.5, 8.6, 7, 3.2, 0.12, 0, Math.PI * 2); ctx.fill();       // white chin
+      ctx.fillStyle = '#E6D2B6'; ctx.beginPath(); ctx.ellipse(7.5, 8.6, 7, 3.2, 0.12, 0, Math.PI * 2); ctx.fill();       // very light brown chin
       ctx.beginPath(); ctx.ellipse(2.5, 9.5, 4.5, 3.5, 0, 0, Math.PI * 2); ctx.fill();                                   // running into the throat
       ctx.fillStyle = BLACK; ctx.beginPath(); ctx.ellipse(4.3, -1.8, 3, 2.5, -0.1, 0, Math.PI * 2); ctx.fill();           // dark rim around the eye
       ctx.fillStyle = TAN; ctx.beginPath(); ctx.ellipse(3.4, -5.9, 3.6, 2.1, -0.25, 0, Math.PI * 2); ctx.fill();          // tan brow above it
