@@ -45,6 +45,12 @@
     render(true);
   }
 
+  // a tidy drop-down: a title (with an optional little count) that opens to show more
+  function drop(title, body, open, count, cls) {
+    return '<details class="cr-drop' + (cls ? ' ' + cls : '') + '"' + (open ? ' open' : '') + '><summary><span class="cr-drop-t">' + title + '</span>' +
+      (count ? '<span class="cr-drop-n">' + count + '</span>' : '') + '</summary><div class="cr-drop-b">' + body + '</div></details>';
+  }
+
   function render(scroll) {
     var r = R.read(state.turns, state.me, state.form);
     var others = state.speakers.filter(function (s) { return s !== state.me; });
@@ -52,18 +58,21 @@
     var html = '';
 
     // 02 Who's who, and how it happened
-    html += '<section class="cr-step" aria-labelledby="cr-s2"><h2 id="cr-s2"><span>02</span>Who’s who, and how it happened</h2>';
-    html += '<p class="cr-hint">Which one is you?</p><div class="cr-chips" role="radiogroup" aria-label="Which one is you">';
+    var s2 = '';
+    s2 += '<p class="cr-hint">Which one is you?</p><div class="cr-chips" role="radiogroup" aria-label="Which one is you">';
     state.speakers.forEach(function (s, i) {
-      html += '<label class="cr-chip"><input type="radio" name="cr-me" value="' + i + '"' + (s === state.me ? ' checked' : '') + '><span>' + esc(s) + '</span></label>';
+      s2 += '<label class="cr-chip"><input type="radio" name="cr-me" value="' + i + '"' + (s === state.me ? ' checked' : '') + '><span>' + esc(s) + '</span></label>';
     });
-    html += '</div>';
+    s2 += '</div>';
     if (state.format === 'unlabelled') html += '<p class="cr-note">There were no names in the paste, so the Reader took turns between messages. If it got someone wrong, tap the name above that message to switch it.</p>';
-    html += '<p class="cr-hint" style="margin-top:1rem!important;">How did this conversation happen?</p><div class="cr-chips" role="radiogroup" aria-label="How it happened">';
+    s2 += '<p class="cr-hint" style="margin-top:1rem!important;">How did this conversation happen?</p><div class="cr-chips" role="radiogroup" aria-label="How it happened">';
     FORMS.forEach(function (f) {
-      html += '<label class="cr-chip"><input type="radio" name="cr-form" value="' + f[0] + '"' + (f[0] === state.form ? ' checked' : '') + '><span>' + f[1] + '</span></label>';
+      s2 += '<label class="cr-chip"><input type="radio" name="cr-form" value="' + f[0] + '"' + (f[0] === state.form ? ' checked' : '') + '><span>' + f[1] + '</span></label>';
     });
-    html += '</div></section>';
+    s2 += '</div>';
+    var formName = ({ text: 'by text', email: 'by email', person: 'in person', phone: 'on the phone' })[state.form];
+    html += '<section class="cr-step cr-who" aria-labelledby="cr-s2">' +
+      drop('<span class="cr-num">02</span><span id="cr-s2">Who’s who, and how it happened</span>', s2, state.format === 'unlabelled', esc('You: ' + state.me + ' · ' + formName)) + '</section>';
 
     // Threats or control: no rewording makes those okay
     if (r.safety) {
@@ -77,26 +86,27 @@
 
     // How to respond
     if (r.next && r.next.length) {
-      html += '<h3>How to respond</h3><ol class="cr-moves">';
+      var mv = '<ol class="cr-moves">';
       r.next.forEach(function (m, i) {
-        html += '<li' + (i === 0 ? ' class="is-first"' : '') + '><h3>' + esc(m.title) + '</h3><p>' + esc(m.say) + '</p>' +
+        mv += '<li' + (i === 0 ? ' class="is-first"' : '') + '><h3>' + esc(m.title) + '</h3><p>' + esc(m.say) + '</p>' +
           (m.script ? '<div class="cr-script"><q>' + esc(m.script) + '</q><button type="button" class="cr-btn is-quiet is-small" data-copy="' + esc(m.script) + '">Copy</button></div>' : '') +
           (m.dig ? '<a class="dig" href="' + m.dig[0] + '">Dig deeper: ' + esc(m.dig[1]) + '</a>' : '') + '</li>';
       });
-      html += '</ol>';
-      html += '<p class="cr-note">Change anything in [square brackets] to fit. Short beats perfect.</p>';
+      mv += '</ol><p class="cr-note">Change anything in [square brackets] to fit. Short beats perfect.</p>';
+      html += drop('How to respond', mv, true, '', 'is-key');
     }
 
     // The form it happened in
-    html += '<h3>Because this was ' + ({ text: 'by text', email: 'by email', person: 'in person', phone: 'on the phone' })[state.form] + '</h3><p>' + formAdvice(state.form, r) + '</p>';
+    html += drop('Because this was ' + formName, '<p>' + formAdvice(state.form, r) + '</p>', false);
 
     // Message by message
-    html += '<h3>Message by message</h3><p class="cr-hint">Marked words show what may have added heat, and what helped. Tap “What they may hear” under a message for more.</p><ol class="cr-thread">';
-    r.turns.forEach(function (t, i) { html += bubble(r, t, i); });
-    html += '</ol>';
+    var th = '<p class="cr-hint">Marked words show what may have added heat, and what helped. Tap “What they may hear” under a message for more.</p><ol class="cr-thread">';
+    r.turns.forEach(function (t, i) { th += bubble(r, t, i); });
+    html += drop('Message by message', th + '</ol>', false, plural(r.turns.length, 'message'));
 
     // Patterns on each side
-    html += patterns(r, them);
+    var pt = patterns(r, them);
+    if (pt) html += drop('Patterns on each side', pt, false);
 
     // Other things worth noticing
     var notes = [];
@@ -119,7 +129,7 @@
       var h = Math.round(g.mins / 60);
       notes.push('<strong>A long silence</strong> of about ' + plural(h, 'hour') + ' before message ' + (g.at + 1) + '. Silence after a hard message is often read as not caring, even when it means someone needed time. Saying “I need some time, I’ll reply tonight” closes that gap.');
     });
-    if (notes.length) html += '<h3>Worth noticing</h3><ul class="cr-list">' + notes.map(function (n) { return '<li>' + n + '</li>'; }).join('') + '</ul>';
+    if (notes.length) html += drop('Worth noticing', '<ul class="cr-list">' + notes.map(function (n) { return '<li>' + n + '</li>'; }).join('') + '</ul>', false, String(notes.length));
 
     html += '<p style="margin-top:1.5rem;"><a class="dig" href="/check-ins-in-depth.html#order">Dig deeper: how to hold the conversation that comes next</a></p>';
     html += '</section>';
@@ -208,7 +218,7 @@
   function patterns(r, them) {
     var rows = ORDER.filter(function (k) { return r.tallyMe[k] || r.tallyThem[k]; });
     if (!rows.length) return '';
-    var h = '<h3>Patterns on each side</h3><p class="cr-hint">How often each pattern shows up. These count words, not people: both of you are doing your best with what you were carrying.</p>' +
+    var h = '<p class="cr-hint">How often each pattern shows up. These count words, not people: both of you are doing your best with what you were carrying.</p>' +
       '<div class="cr-table-wrap"><table class="cr-table"><thead><tr><th scope="col">Pattern</th><th scope="col" class="n">You</th><th scope="col" class="n">' + esc(them.length > 14 ? 'Them' : them) + '</th></tr></thead><tbody>';
     rows.forEach(function (k) {
       h += '<tr' + (GOOD[k] ? ' class="good"' : '') + '><td>' + esc(R.KINDS[k].label) + '</td><td class="n">' + (r.tallyMe[k] || '·') + '</td><td class="n">' + (r.tallyThem[k] || '·') + '</td></tr>';

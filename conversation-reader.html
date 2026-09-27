@@ -149,6 +149,31 @@
     .cr-thread::before, .cr-thread::after, .cr-draft-step::before, .cr-draft-step::after{ opacity:.5; transform:scale(.65); }
   }
   @media print{ .read-head::before, .read-head::after, .cr-private::before, .cr-input-step::before, .cr-summary::before, .cr-summary::after, .cr-moves::before, .cr-moves::after, .cr-thread::before, .cr-thread::after, .cr-draft-step::before, .cr-draft-step::after{ display:none; } }
+  /* drop-downs keep the results tidy: open one part at a time */
+  .cr-drop{ margin:.75rem 0; border-radius:22px; border:1.5px solid transparent;
+    background:radial-gradient(120% 90% at 14% 8%, rgba(255,255,255,.9), rgba(255,255,255,0) 42%) padding-box, linear-gradient(rgba(255,253,249,.86), rgba(255,253,249,.86)) padding-box, linear-gradient(135deg, #F7C9D4, #D9C8F0 30%, #C6DFF4 55%, #C7EBD6 78%, #F8E7AE) border-box;
+    box-shadow:0 8px 22px rgba(110,90,160,.09); }
+  .cr-drop > summary{ list-style:none; display:flex; align-items:center; gap:.6rem; min-height:52px; padding:.7rem 1rem; cursor:pointer; border-radius:22px;
+    font-family:"Fraunces", Georgia, serif; font-weight:600; font-size:1.08rem; color:var(--ink); }
+  .cr-drop > summary::-webkit-details-marker{ display:none; }
+  .cr-drop > summary::after{ content:""; margin-left:auto; flex:none; width:.6rem; height:.6rem; border-right:2px solid var(--brass); border-bottom:2px solid var(--brass); transform:rotate(45deg); transition:transform .2s; }
+  .cr-drop[open] > summary::after{ transform:rotate(225deg); }
+  .cr-drop > summary:focus-visible{ outline:2px solid var(--focus); outline-offset:2px; }
+  .cr-drop-t{ display:inline-flex; align-items:center; gap:.5rem; }
+  .cr-drop-n{ font:500 .75rem/1.2 "IBM Plex Mono", monospace; color:#6A5B86; background:#F1EAF8; border-radius:999px; padding:.25rem .6rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:45%; }
+  .cr-drop-b{ padding:0 1rem 1rem; }
+  .cr-drop-b > :first-child{ margin-top:0 !important; }
+  .cr-drop.is-key{ background:radial-gradient(120% 90% at 14% 8%, rgba(255,255,255,.9), rgba(255,255,255,0) 42%) padding-box, linear-gradient(rgba(236,247,240,.9), rgba(236,247,240,.9)) padding-box, linear-gradient(135deg, #F7C9D4, #D9C8F0 30%, #C6DFF4 55%, #C7EBD6 78%, #F8E7AE) border-box; }
+  .cr-num{ display:inline-grid; place-items:center; min-width:2rem; height:2rem; border-radius:50%; background:#F9E1EA; font:600 .75rem "IBM Plex Mono", monospace; color:#7A3355; }
+  .cr-who .cr-drop{ margin-top:0; }
+  @media (max-width:560px){ .cr-drop > summary{ font-size:1rem; flex-wrap:wrap; } .cr-drop-n{ max-width:100%; margin-left:0; order:3; } }
+  @media (prefers-reduced-motion: reduce){ .cr-drop > summary::after{ transition:none; } }
+  /* the summary and the suggested moves as soft bubbles, like the rest of the site */
+  .cr-summary, .cr-moves > li, .cr-script, .cr-safety{ border:1.5px solid transparent !important; border-radius:22px !important;
+    background:radial-gradient(120% 90% at 14% 8%, rgba(255,255,255,.9), rgba(255,255,255,0) 42%) padding-box, linear-gradient(rgba(255,253,249,.88), rgba(255,253,249,.88)) padding-box, linear-gradient(135deg, #F7C9D4, #D9C8F0 30%, #C6DFF4 55%, #C7EBD6 78%, #F8E7AE) border-box !important;
+    box-shadow:0 8px 22px rgba(110,90,160,.09); }
+  .cr-moves > li.is-first{ background:radial-gradient(120% 90% at 14% 8%, rgba(255,255,255,.9), rgba(255,255,255,0) 42%) padding-box, linear-gradient(rgba(236,247,240,.92), rgba(236,247,240,.92)) padding-box, linear-gradient(135deg, #F7C9D4, #D9C8F0 30%, #C6DFF4 55%, #C7EBD6 78%, #F8E7AE) border-box !important; }
+  .cr-safety{ background:radial-gradient(120% 90% at 14% 8%, rgba(255,255,255,.9), rgba(255,255,255,0) 42%) padding-box, linear-gradient(rgba(255,241,236,.92), rgba(255,241,236,.92)) padding-box, linear-gradient(135deg, #F7C9D4, #F4A6B8 50%, #F8E7AE) border-box !important; }
 </style>
 <script src="/assets/js/site.js" defer></script>
 <script src="/assets/js/conversation-reader-engine.js" defer></script>
@@ -190,11 +215,15 @@
 <div id="cr-out" aria-live="polite"></div>
 
 <section class="cr-step cr-draft-step" id="cr-draft-step" aria-labelledby="cr-s4" hidden>
-  <h2 id="cr-s4"><span>04</span>Check your reply before you send it</h2>
-  <p class="cr-hint">Write what you’re thinking of sending. The Reader checks it the same way, as you type.</p>
-  <label for="cr-draft" style="position:absolute;left:-9999px;">Your reply</label>
-  <textarea id="cr-draft" placeholder="Write your reply here…"></textarea>
-  <div id="cr-draft-out"></div>
+  <details class="cr-drop" open>
+    <summary><span class="cr-drop-t"><span class="cr-num">04</span><span id="cr-s4">Check your reply before you send it</span></span></summary>
+    <div class="cr-drop-b">
+      <p class="cr-hint">Write what you’re thinking of sending. The Reader checks it the same way, as you type.</p>
+      <label for="cr-draft" style="position:absolute;left:-9999px;">Your reply</label>
+      <textarea id="cr-draft" placeholder="Write your reply here…"></textarea>
+      <div id="cr-draft-out"></div>
+    </div>
+  </details>
 </section>
 
 <section class="cr-limits" aria-labelledby="cr-lim">
