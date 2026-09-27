@@ -11,7 +11,7 @@
   var main = document.querySelector('main.read') || document.querySelector('main');
   if (!main) return;
 
-  var CHAT_ON = false; // the chat with the buddies (site-chat.js) switches on here once it's ready
+  var CHAT_ON = true; // the chat with the buddies (site-chat.js) switches on here once it's ready
   var COLORS = [['#F9C9B4', '#E9A088'], ['#D9C8F0', '#B9A0E0'], ['#C7EBD6', '#8FCBA8'], ['#C6DFF4', '#8FBCE3'], ['#F8E7AE', '#E6C766'], ['#F7C9D4', '#E79AAE']];
   function pick(a) { return a[Math.floor(Math.random() * a.length)]; }
   function shuffle(a) { for (var i = a.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)), t = a[i]; a[i] = a[j]; a[j] = t; } return a; }

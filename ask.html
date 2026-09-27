@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-NKC6CQ9S66"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-NKC6CQ9S66');
+</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ask the buddies — The Objective Ledger</title>
+<meta name="description" content="Ask a question in your own words and get an answer made only from this site’s pages, with a link to read more. It all happens on your device.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,500&family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/css/site.css">
+<link rel="stylesheet" href="/assets/css/reading.css">
+<script src="/assets/js/site.js" defer></script>
+<script src="/assets/js/site-chat.js" defer></script>
+</head>
+<body data-no-tip data-no-breathe>
+<main class="read">
+<header class="read-head"><p class="read-code">Ask</p><h1>Ask the buddies</h1></header>
+
+<p class="simple-lede">Type a question in your own words, like “what is Unbilled Debt?” or “how do we stop arguing about chores?”, and a buddy will answer with passages from this site, each with a link to read the whole page.</p>
+<ul>
+  <li><strong>Only from these pages.</strong> The buddies don’t make things up. If the site doesn’t cover something, they’ll say so and point you to what’s close.</li>
+  <li><strong>What you type stays on this device.</strong> Everything happens in your browser. Nothing is sent anywhere, and the conversation is forgotten when you close the tab.</li>
+  <li><strong>Not a counsellor.</strong> It’s a friendly way to find your way around the site, not advice for your situation. If you’re afraid of someone, or struggling right now, please see <a href="/relationships-in-depth.html#safety">where to get help</a>.</li>
+</ul>
+
+<div id="ask-chat"></div>
+<noscript><p>The buddies need JavaScript to run in your browser. You can still browse everything from the <a href="/contents.html">Contents</a>.</p></noscript>
+
+<p>Prefer to browse? The <a href="/contents.html">Contents</a> lists every page, and <a href="/start-here.html">Start here</a> is a gentle first step.</p>
+</main>
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    if (window.TOLChat) window.TOLChat.mount(document.getElementById('ask-chat'));
+  });
+</script>
+</body>
+</html>
