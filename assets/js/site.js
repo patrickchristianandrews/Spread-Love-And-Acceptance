@@ -38,7 +38,7 @@
       { href: '/whats-new.html', code: 'All', title: 'What’s new', note: 'Everything newly added and everything that’s grown, in one place' },
       { href: '/frequency-journey.html', code: 'New', title: 'The Frequency Journey', note: 'A calm puzzle journey through seven tone-themed worlds, with two pals' },
       { href: '/soundscapes.html', code: 'New', title: 'Four soundscapes', note: 'The Breath Beneath, One Breath to Anchor You, Nothing Needs to Change and The Road We Made' },
-      { href: '/ask.html', code: 'New', title: 'Ask the buddies', note: 'Answers made only from this site’s pages. What you type stays on your device' },
+      { href: '/ask.html', code: 'New', title: 'Chat with Professor Puddles', note: 'Small drop, big brain: answers made only from this site’s pages. What you type stays on your device' },
       { href: '/pause-and-play.html', code: 'New', title: 'Levels that grow the background', note: 'Every few levels, something new appears behind every page and joins in' },
       { href: '/book/preface.html', code: 'Deeper', title: 'Mini dives, shore to deep', note: 'Tap any word with the water drop and wade in one step at a time' },
       { href: '/workpapers/fill/suite.html', code: 'New', title: 'The Workpaper Suite', note: 'Fillable, printable PDFs for your road, with a plan for each week' }
@@ -110,7 +110,7 @@
       { href: '/workpapers/report-01.html', deep: true, code: 'REPORT-01', title: 'Your progress, week by week', note: 'Your week-by-week record, so progress builds instead of starting over. Also called the Full Read', paid: true }
     ]},
     { id: 'tools', title: 'Tools', blurb: 'Interactive pages. Everything you type stays in your own browser.', items: [
-      { href: '/ask.html', code: 'New', title: 'Ask the buddies', note: 'Ask a question in your own words and get an answer made only from this site’s pages. Nothing you type leaves your device' },
+      { href: '/ask.html', code: 'New', title: 'Chat with Professor Puddles', note: 'Ask a question in your own words and get an answer made only from this site’s pages. Nothing you type leaves your device' },
       { href: '/conversation-reader.html', code: 'New', title: 'The Conversation Reader', note: 'Paste a text thread, chat or email exchange: see where it turned, what each of you may be hearing, and a calmer way to answer' },
       { href: '/lemonade-stand.html', code: 'Tool', title: 'The Lemonade Stand', note: 'List who did what to keep the household running this week, and see the split as a plain fact' },
       { href: '/wiring-card.html', code: 'New', title: 'Wiring Card', note: 'Make a one-page card for how you receive words, what silence means, and what to avoid' },
@@ -409,6 +409,8 @@
 
     // "Breathe": a one-minute calm break on every page (the Night Garden has its own)
     if (!body.hasAttribute('data-no-breathe')) buildBreathe(body);
+    buildPuddles(body);
+    buildPuddlesCards(body);
     buildWeatherNudge(body);
 
     // Pastel watercolour splashes behind the page (decorative; see site.css)
@@ -654,6 +656,68 @@
   }
   var installPrompt = null;
   window.addEventListener('beforeinstallprompt', function (e) { e.preventDefault(); installPrompt = e; });
+  // ---------- Professor Puddles: the site's chat host, floating by, with a hello bubble up top ----------
+  var PUDDLES_SVG = '<svg viewBox="-4 -14 88 92" aria-hidden="true" focusable="false">' +
+    '<path d="M40 8C33 22 14 36 14 50c0 14 12 22 26 22s26-8 26-22C66 36 47 22 40 8z" fill="#CFE6FA" stroke="#7FB2E0" stroke-width="2.6"/>' +
+    '<ellipse cx="30" cy="30" rx="5" ry="3" fill="#fff" opacity=".6" transform="rotate(-25 30 30)"/>' +
+    '<circle cx="31" cy="46" r="6.2" fill="rgba(255,255,255,.35)" stroke="#3A3350" stroke-width="1.8"/><circle cx="49" cy="46" r="6.2" fill="rgba(255,255,255,.35)" stroke="#3A3350" stroke-width="1.8"/><path d="M37.2 46h5.6" stroke="#3A3350" stroke-width="1.8"/>' +
+    '<circle cx="31" cy="46.5" r="2.4" fill="#2B2620"/><circle cx="49" cy="46.5" r="2.4" fill="#2B2620"/><circle cx="31.9" cy="45.6" r=".8" fill="#fff"/><circle cx="49.9" cy="45.6" r=".8" fill="#fff"/>' +
+    '<path d="M35 56 Q40 60.5 45 56" fill="none" stroke="#2B2620" stroke-width="2.2" stroke-linecap="round"/>' +
+    '<ellipse cx="23" cy="55" rx="3.6" ry="2.2" fill="#F2A3B6" opacity=".85"/><ellipse cx="57" cy="55" rx="3.6" ry="2.2" fill="#F2A3B6" opacity=".85"/>' +
+    '<path d="M18 10 L40 1 L62 10 L40 19 Z" fill="#3A3350"/><path d="M29 14.5v6c3 3 19 3 22 0v-6l-11 4.5z" fill="#4A4266"/>' +
+    '<path d="M60 10 v11" stroke="#F4D26B" stroke-width="1.6"/><circle cx="60" cy="22.5" r="2.3" fill="#F4D26B"/></svg>';
+  var PUDDLES = { name: 'Professor Puddles', svg: PUDDLES_SVG, color: '#CFE6FA',
+    greeting: 'Hello! I’m Professor Puddles. Ask me anything about this site, like the book, the workpapers, check-ins or ways to calm down, and I’ll answer from its pages, with a link to read more. What you type stays on this device.' };
+  // the hello bubble, at the top of the home page only: once a day, and never again after a first chat
+  function buildPuddles(body) {
+    if (current !== '/index.html' && current !== '/') return;
+    var today = new Date().toISOString().slice(0, 10), seen = lsGet('tol-puddles-bubble');
+    if (seen === 'done' || seen === today) return;
+    var hi = el('div', { class: 'tol-puddles-hi', role: 'complementary', 'aria-label': 'Meet Professor Puddles' },
+      '<span class="tol-puddles-hi-art">' + PUDDLES_SVG + '</span>' +
+      '<p><strong>Meet Professor Puddles!</strong> Small drop, big brain. Ask anything about the program in your own words, and he’ll answer straight from these pages.</p>' +
+      '<a class="tol-puddles-hi-go" href="/ask.html">Chat about something</a>' +
+      '<button type="button" class="tol-puddles-hi-x" aria-label="Not now">&times;</button>');
+    hi.querySelector('.tol-puddles-hi-go').addEventListener('click', function () { lsSet('tol-puddles-bubble', 'done'); });
+    hi.querySelector('.tol-puddles-hi-x').addEventListener('click', function () { lsSet('tol-puddles-bubble', today); hi.classList.remove('is-in'); setTimeout(function () { hi.remove(); }, 400); });
+    var main = document.querySelector('main');
+    if (main) main.insertBefore(hi, main.firstChild); else body.appendChild(hi);
+    setTimeout(function () { hi.classList.add('is-in'); }, 600);
+  }
+
+  // A little card from Professor Puddles partway through the course pages: "chat about this?"
+  var PUD_LINES = [
+    ['Got a question bubbling up?', 'I’m a drop of pure curiosity. Let’s chat about “{t}”.'],
+    ['Want to dive in together?', 'No question is too small, and no puddle too deep. Ask me about “{t}”.'],
+    ['Pssst. Stuck on a word?', 'I read every page of this site (twice, with my glasses on). Let’s chat about “{t}”.'],
+    ['Fancy a little splash of help?', 'Ask me anything about “{t}”, in your own words.'],
+    ['Thinking about this one?', 'Me too! I’m positively drip-ping with answers about “{t}”.'],
+    ['Would a chat help it sink in?', 'I’ll answer from the pages themselves, with a link to read more. Shall we talk about “{t}”?'],
+    ['Office hours are open!', 'The Professor is in, and it’s always a good time to chat about “{t}”.']
+  ];
+  function buildPuddlesCards(body) {
+    var main = document.querySelector('main.read');
+    if (!main || body.classList.contains('is-game') || /^\/(index|ask|whats-new|pause-and-play)\.html$/.test(current) ||
+        document.querySelector('meta[http-equiv="Content-Security-Policy"]')) return;
+    var sec = body.getAttribute('data-sec') || '', course = /^\/(book|workpapers|learn)\//.test(current) || /^(book|workpapers|program|self|relationships|start|tools)$/.test(sec);
+    if (!course) return;
+    var h1 = main.querySelector('h1'); if (!h1) return;
+    var topic = h1.textContent.replace(/\s+/g, ' ').trim().replace(/[?.!]$/, '');
+    var kids = Array.prototype.filter.call(main.children, function (k) { return /^(P|DIV|OL|UL|SECTION|H2)$/.test(k.tagName) && !k.matches('.read-head, .depth-bar, .tol-gentle, .tol-private, .tol-cheer, .growing-note'); });
+    if (!kids.length) return;
+    var gate = main.querySelector(':scope > .tol-gate'), open = kids.filter(function (k) { return !k.matches('.tol-gate, .locked-section') && (!gate || (k.compareDocumentPosition(gate) & 4)); });
+    if (!open.length) return;
+    var after = open[Math.min(open.length - 1, Math.max(0, Math.floor(open.length * 0.6)))];
+    if (after.tagName === 'H2' && after.nextElementSibling && after.nextElementSibling !== gate) after = after.nextElementSibling;
+    var n = 0; for (var i = 0; i < current.length; i++) n = (n * 31 + current.charCodeAt(i)) % 997; // the same line on the same page
+    var line = PUD_LINES[n % PUD_LINES.length];
+    var card = el('aside', { class: 'tol-pud-card', 'aria-label': 'Chat with Professor Puddles' },
+      '<span class="tol-pud-card-art" aria-hidden="true">' + PUDDLES_SVG + '</span>' +
+      '<p><strong>' + esc(line[0]) + '</strong> ' + esc(line[1].replace('{t}', topic)) + '</p>' +
+      '<a class="tol-pud-card-go" href="/ask.html?about=' + encodeURIComponent(topic) + '">&#128172; Chat with Professor Puddles</a>');
+    after.parentNode.insertBefore(card, after.nextSibling);
+  }
+
   // ---------- Pop the bubbles ----------
   // Tap or click anywhere a bubble is floating (not on a link or button) and it pops with a
   // spray of droplets, silently, then drifts back a little later. Hearts give a small

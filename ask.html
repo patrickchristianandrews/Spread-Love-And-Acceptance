@@ -12,7 +12,7 @@
 </script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Ask the buddies — The Objective Ledger</title>
+<title>Chat with Professor Puddles — The Objective Ledger</title>
 <meta name="description" content="Ask a question in your own words and get an answer made only from this site’s pages, with a link to read more. It all happens on your device.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -24,11 +24,11 @@
 </head>
 <body data-no-tip data-no-breathe>
 <main class="read">
-<header class="read-head"><p class="read-code">Ask</p><h1>Ask the buddies</h1></header>
+<header class="read-head"><p class="read-code">Ask</p><h1>Chat with Professor Puddles</h1></header>
 
-<p class="simple-lede">Type a question in your own words, like “what is Unbilled Debt?” or “how do we stop arguing about chores?”, and a buddy will answer with passages from this site, each with a link to read the whole page.</p>
+<p class="simple-lede">Type a question in your own words, like “what is Unbilled Debt?” or “how do we stop arguing about chores?”, and Professor Puddles, a small drop with a big brain, will answer with passages from this site, each with a link to read the whole page.</p>
 <ul>
-  <li><strong>Only from these pages.</strong> The buddies don’t make things up. If the site doesn’t cover something, they’ll say so and point you to what’s close.</li>
+  <li><strong>Only from these pages.</strong> The Professor doesn’t make things up. If the site doesn’t cover something, he’ll say so and point you to what’s close.</li>
   <li><strong>What you type stays on this device.</strong> Everything happens in your browser. Nothing is sent anywhere, and the conversation is forgotten when you close the tab.</li>
   <li><strong>Not a counsellor.</strong> It’s a friendly way to find your way around the site, not advice for your situation. If you’re afraid of someone, or struggling right now, please see <a href="/relationships-in-depth.html#safety">where to get help</a>.</li>
 </ul>
@@ -40,7 +40,10 @@
 </main>
 <script>
   document.addEventListener('DOMContentLoaded', function () {
-    if (window.TOLChat) window.TOLChat.mount(document.getElementById('ask-chat'));
+    var about = (location.search.match(/[?&]about=([^&]*)/) || [])[1];
+    try { about = about ? decodeURIComponent(about.replace(/\+/g, ' ')).slice(0, 120) : ''; } catch (e) { about = ''; }
+    if (window.TOLChat) window.TOLChat.mount(document.getElementById('ask-chat'), about ? { topic: about,
+      greeting: 'Hello! I’m Professor Puddles. You were reading “' + about + '”, so let’s start there. Ask me anything else about it in your own words.' } : {});
   });
 </script>
 </body>
