@@ -100,7 +100,6 @@
       { href: '/book/chapter-4.html', deep: true, code: 'IV', title: 'Two kinds of fair', note: 'Agreeing on what fair means to you both, and letting words land before you react. Also called Deontological Parity & Sensory Gating', paid: true },
       { href: '/book/chapter-5.html', deep: true, code: 'V', title: 'The monthly look-back', note: 'A gentle monthly look back that catches what weekly check-ins miss. Also called the Deficit Audit', paid: true },
       { href: '/library.html', code: 'Library', title: 'The Professor’s Library', note: 'Psychology, behavioral science and conflict resolution in plain words: 233 short entries, each tied to the Five Pillars and the program' },
-      { href: '/reading.html', code: 'Reading', title: 'Something to read', note: 'Hand-picked articles from Psychology Today, Greater Good and the Gottman Institute, for you or for getting on with others' },
     ]},
     { id: 'workpapers', title: 'Workpapers', blurb: 'Short worksheets. Each of you fills in your own, then you read them together. They work best in the order listed, with the monthly look-back once a month.', items: [
       { href: '/workpapers/wp-01.html', deep: true, code: 'WP-01', title: 'Who did what, and kind ways to say no', note: 'Start here: a week’s log of who did what, plus kind ways to say no. Also called the Field Audit & Neutral Refusals', paid: true },
@@ -133,6 +132,7 @@
       { href: '/snapshot/index.html', code: '', title: 'A quick snapshot', note: 'A two-minute look at how things are right now' }
     ]},
     { id: 'media', title: 'Media', blurb: 'Music and audio for settling first (Pillar III), and conversations about all five pillars.', items: [
+      { href: '/reading.html', code: 'Articles', title: 'Articles to read', note: 'Hand-picked articles from Psychology Today, Greater Good, the Gottman Institute and more, grouped by topic and fresh every visit' },
       { href: '/soundscapes.html', code: 'Audio', title: 'Soundscape Catalog', note: 'Background audio made for settling down and focusing' },
       { href: '/echoes-of-gold.html', code: 'Album', title: 'Echoes of Gold', note: 'The companion album: the music that came before the framework, for settling first (Pillar III)' },
       { href: '/podcast-index.html', code: 'Podcast', title: 'The Podcast', note: 'Friendly conversations with Kane and Christian about the ideas behind it all' }
@@ -352,25 +352,9 @@
     // Simple pages get their cute dressing and a gentle reminder (see site.css)
     if (hereSection) body.setAttribute('data-sec', hereSection.id);
     var ideas = document.querySelector('main .ideas');
-    if (inDepth) {
-      // Full pages: the same little buddy, and permission to skim
-      body.classList.add('tol-deep');
-      var fullBar = document.querySelector('.depth-bar');
-      var fullLabel = fullBar && fullBar.querySelector('span');
-      if (fullLabel && here && here.title && /^Full version$/.test(fullLabel.textContent.trim())) fullLabel.textContent = 'Full version of “' + here.title + '”';
-      if (fullBar && !document.querySelector('.tol-gentle')) {
-        var skim = el('p', { class: 'tol-gentle is-deep' }, '<span aria-hidden="true">🌿</span> This is the full version. Skim for what you need; the simple version has the gist.');
-        fullBar.parentNode.insertBefore(skim, fullBar.nextSibling);
-      }
-    }
-    if (ideas) {
-      body.classList.add('tol-simple');
-      var depthBar = document.querySelector('main .depth-bar');
-      if (depthBar && !document.querySelector('.tol-gentle')) {
-        var gentle = el('p', { class: 'tol-gentle' }, '<span aria-hidden="true">🌱</span> Take what helps and leave the rest. Nothing here grades you.');
-        depthBar.parentNode.insertBefore(gentle, depthBar.nextSibling);
-      }
-    }
+    if (inDepth) body.classList.add('tol-deep');
+    if (ideas) body.classList.add('tol-simple');
+    buildDepthPicker(!!inDepth);
 
     // wide tables scroll inside their own box on small screens, instead of pushing the page sideways
     Array.prototype.forEach.call(document.querySelectorAll('main table'), function (tb) {
@@ -787,6 +771,50 @@
       setTimeout(function () { hit.classList.add('is-gone'); hit.classList.remove('is-popped'); }, 600);
       setTimeout(function () { hit.classList.remove('is-gone'); }, 5000 + Math.random() * 6000); // it floats back
     }, { passive: true });
+  }
+
+  // The simple / full choice at the top of pages that come in two versions: what each one is,
+  // how long it takes, who it suits, and how the mini dives and "Dig deeper" links fit in.
+  // It only remembers which one you picked last (on this device), to point it out next time.
+  function buildDepthPicker(isFull) {
+    var bar = document.querySelector('main .depth-bar');
+    if (!bar || bar.classList.contains('tol-depth')) return;
+    var label = bar.querySelector(':scope > span'), link = bar.querySelector(':scope > a[href]');
+    if (!link || !label || !/^(Simple|Full) version/.test(label.textContent.trim())) return;  // e.g. the Library's theme bars stay as they are
+    var chip = label.querySelector('.growing-chip');
+    var here = location.pathname, other = link.getAttribute('href');
+    var simpleHref = isFull ? other : here, fullHref = isFull ? here : other;
+    var main = document.querySelector('main');
+    var words = ((main && main.textContent) || '').split(/\s+/).length;
+    var mins = Math.max(1, Math.round(words / 220));
+    var pref = lsGet('tol-depth-pref');
+    function opt(kind, href, icon, name, what, who, time) {
+      var cur = (kind === 'full') === isFull;
+      return '<a class="tol-depth-opt is-' + kind + (cur ? ' is-here' : '') + '" href="' + href + '" data-depth="' + kind + '"' + (cur ? ' aria-current="page"' : '') + '>' +
+        '<span class="tol-depth-name"><span aria-hidden="true">' + icon + '</span> ' + name + (cur ? ' <small>you’re here</small>' : '') + '</span>' +
+        '<span class="tol-depth-time">' + time + '</span>' +
+        '<span class="tol-depth-what">' + what + '</span>' +
+        '<span class="tol-depth-who">' + who + '</span></a>';
+    }
+    var box = el('div', { class: 'depth-bar tol-depth', role: 'group', 'aria-label': 'Choose how deep to read' },
+      '<p class="tol-depth-q">This page comes in two versions. Pick the one that suits you right now:' + (chip ? ' ' + chip.outerHTML : '') + '</p>' +
+      '<div class="tol-depth-opts">' +
+        opt('simple', simpleHref, '🌱', 'Simple version', 'The main idea in a few short cards, one idea each, and one small thing to try.', 'Good if you’re new, short on time, or tired.', isFull ? 'a few minutes' : 'about ' + mins + ' min read') +
+        opt('full', fullHref, '🌊', 'Full version', 'The whole idea: real-life examples, the reasoning and research behind it, worked numbers, common mix-ups and answers to questions.', 'Good if you want the why, or you’re using it for a real situation.', isFull ? 'about ' + mins + ' min read' : 'a longer read') +
+      '</div>' +
+      (pref && (pref === 'full') !== isFull ? '<p class="tol-depth-pref">Last time you chose the ' + (pref === 'full' ? 'full' : 'simple') + ' version. It’s one tap away above.</p>' : '') +
+      '<details class="tol-depth-more"><summary>How the two versions, “Dig deeper” links and mini dives fit together</summary>' +
+        '<p><strong>Both versions teach the same idea.</strong> The simple one gives you the gist; the full one adds the detail. You can switch at any time, and nothing is lost or graded.</p>' +
+        '<p><strong>“Dig deeper” links</strong> on the simple cards jump straight to the matching part of the full version, so you only go deep where you want to.</p>' +
+        '<p><strong>Mini dives <span aria-hidden="true">💧</span></strong>: words with a little water drop open a short explanation right on the page. Tap one to wade in a step at a time, from the shore to the deep end, then close it and carry on where you were. The deepest step links to the page with everything on it.</p>' +
+        '<p>Stuck on anything, in either version? <a href="/ask.html">Ask Professor Puddles</a>.</p>' +
+      '</details>' +
+      '<p class="tol-gentle' + (isFull ? ' is-deep' : '') + '"><span aria-hidden="true">' + (isFull ? '🌿' : '🌱') + '</span> Take what helps and leave the rest. Nothing here grades you.</p>');
+    bar.parentNode.replaceChild(box, bar);
+    Array.prototype.forEach.call(box.querySelectorAll('.tol-depth-opt'), function (a) {
+      a.addEventListener('click', function () { lsSet('tol-depth-pref', a.getAttribute('data-depth')); });
+    });
+    if (!isFull) lsSet('tol-depth-seen', '1');
   }
 
   function lsGet(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }

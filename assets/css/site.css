@@ -1305,6 +1305,30 @@ a.tol-pud-card-go, main a.tol-pud-card-go{ color:#fff !important; text-decoratio
   color:#2F5F8A !important; font:600 .88rem "Lora", Georgia, serif; text-decoration:none !important; }
 .tol-dive-chat:hover{ background:#E1EEFA; }
 
+/* The simple / full chooser at the top of two-version pages (buildDepthPicker in site.js) */
+.depth-bar.tol-depth{ display:block; margin:-.5rem 0 1.8rem; padding:1rem 1.1rem; border:0; border-radius:22px;
+  background:rgba(255,253,248,.95); box-shadow:0 6px 20px rgba(60,40,90,.08); font:inherit; color:var(--ink); }
+.tol-depth-q{ margin:0 0 .7rem !important; font-weight:600; font-size:1rem; padding:0 !important; background:none !important; box-shadow:none !important; }
+.tol-depth-opts{ display:grid; grid-template-columns:repeat(auto-fit, minmax(230px, 1fr)); gap:.7rem; }
+.tol-depth-opt{ display:flex; flex-direction:column; gap:.25rem; padding:.85rem 1rem; border-radius:18px; text-decoration:none !important;
+  color:var(--ink) !important; background:#F7F3FB; border:2px solid transparent; transition:transform .15s, border-color .15s; }
+.tol-depth-opt:hover{ transform:translateY(-2px); border-color:#CDB8EA; }
+.tol-depth-opt:focus-visible{ outline:3px solid var(--focus, #2F5F8A); outline-offset:2px; }
+.tol-depth-opt.is-here{ background:#EEF6F0; border-color:#9CC7A8; }
+.tol-depth-opt.is-full:not(.is-here){ background:#EEF2FB; }
+.tol-depth-name{ font-family:"Fraunces", Georgia, serif; font-weight:600; font-size:1.08rem; }
+.tol-depth-name small{ font:600 .78rem/1 "Lora", Georgia, serif; margin-left:.3rem; padding:.15rem .5rem; border-radius:999px; background:#D6EDDC; color:#2F5A3C; vertical-align:.1em; }
+.tol-depth-time{ font-size:.86rem; color:#5E5470; }
+.tol-depth-what{ font-size:.95rem; line-height:1.45; }
+.tol-depth-who{ font-size:.9rem; line-height:1.4; color:#4F4760; font-style:italic; }
+.tol-depth-pref{ margin:.6rem 0 0 !important; font-size:.9rem; color:#4F4760; padding:0 !important; background:none !important; box-shadow:none !important; }
+.tol-depth-more{ margin:.8rem 0 0; padding:0 !important; background:none !important; box-shadow:none !important; }
+.tol-depth-more summary{ cursor:pointer; font-weight:600; font-size:.95rem; color:#3E5A86; min-height:44px; display:flex; align-items:center; }
+.tol-depth-more p{ font-size:.95rem; line-height:1.5; margin:.4rem 0 !important; padding:0 !important; background:none !important; box-shadow:none !important; }
+.tol-depth .tol-gentle{ margin:.8rem 0 0 !important; }
+@media (prefers-reduced-motion: reduce){ .tol-depth-opt{ transition:none; } .tol-depth-opt:hover{ transform:none; } }
+@media print{ .depth-bar.tol-depth{ display:none !important; } }
+
 /* ==========================================================================
    Every word in a bubble
    All readable text sits in a soft, near-opaque bubble so it never lies on the moving
