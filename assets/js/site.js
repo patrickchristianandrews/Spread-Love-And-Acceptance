@@ -34,6 +34,14 @@
 
   // ===== Every page on the site, in reading order =====
   var SECTIONS = [
+    { id: 'new', title: 'What’s new', blurb: 'Newly added and newly expanded, newest first.', items: [
+      { href: '/whats-new.html', code: 'All', title: 'What’s new', note: 'Everything newly added and everything that’s grown, in one place' },
+      { href: '/soundscapes.html', code: 'New', title: 'Four soundscapes', note: 'The Breath Beneath, One Breath to Anchor You, Nothing Needs to Change and The Road We Made' },
+      { href: '/ask.html', code: 'New', title: 'Ask the buddies', note: 'Answers made only from this site’s pages. What you type stays on your device' },
+      { href: '/pause-and-play.html', code: 'New', title: 'Levels that grow the background', note: 'Every few levels, something new appears behind every page and joins in' },
+      { href: '/book/preface.html', code: 'Deeper', title: 'Mini dives, shore to deep', note: 'Tap any word with the water drop and wade in one step at a time' },
+      { href: '/workpapers/fill/suite.html', code: 'New', title: 'The Workpaper Suite', note: 'Fillable, printable PDFs for your road, with a plan for each week' }
+    ]},
     { id: 'start', title: 'Start here', blurb: 'New to the site? These pages explain the idea and let you try it in a few minutes.', items: [
       { href: '/index.html', code: '', title: 'Home', note: 'What’s new, the ways in, and the full contents' },
       { href: '/how-it-works.html', deep: true, code: '', title: 'How it works', note: 'A friendly tour of what the program looks at, and why you can skip the technical bits' },
@@ -218,7 +226,7 @@
   var panel, scrim, lastFocus, memberLink;
 
   // The sections shown in the top bar. Each opens a short list of its pages.
-  var RIBBON = [['start', 'Start here'], ['self', 'Self-discovery'], ['relationships', 'Relationships'],
+  var RIBBON = [['new', 'New'], ['start', 'Start here'], ['self', 'Self-discovery'], ['relationships', 'Relationships'],
                 ['book', 'Book'], ['workpapers', 'Workpapers'], ['tools', 'Tools'], ['play', 'Play'], ['media', 'Media'], ['about', 'About']];
   var openDrop = null;
 

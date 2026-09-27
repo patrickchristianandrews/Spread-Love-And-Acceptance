@@ -21,6 +21,7 @@
 <link rel="stylesheet" href="/assets/css/games.css">
 <style>
   .read a.pp-card, .read a.pp-stem, .read a.pp-stat{ text-decoration:none; }
+  .sr-only{ position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; }
   .pp-hero, .pp-bouquet, .pp-card, .pp-why{ backdrop-filter:blur(6px) saturate(1.05); -webkit-backdrop-filter:blur(6px) saturate(1.05); }
   .pp-hero{ position:relative; margin:0 0 1.4rem; padding:1.3rem 1.3rem 1.2rem; border-radius:28px; overflow:hidden;
     background:radial-gradient(120% 90% at 20% 0%, rgba(253,238,242,.86) 0%, rgba(246,238,248,.8) 45%, rgba(238,244,250,.78) 100%); border:1px solid rgba(235,211,228,.9); }
@@ -78,20 +79,13 @@
 </head>
 <body class="pp-page is-game">
 <main class="read">
+<h1 class="sr-only">Pause &amp; Play</h1>
 
 <div class="try-this pp-why pp-what">
   <p><strong>What is Pause &amp; Play?</strong> It’s the calm corner of the site: a handful of gentle games for when your mind needs a rest. Breathe in the Night Garden, spell words in Word Bloom, solve a crossword, or find words in a quiet word search. There are no timers and no way to lose.</p>
   <p>Every level you finish counts, and every few levels something new appears in the living garden behind every page, and joins in with the animals playing there. A few minutes here is a lovely way to settle before a hard conversation, or to wind down at night. Nothing you do is sent anywhere.</p>
 </div>
 
-<section class="pp-hero" aria-labelledby="pp-h">
-  <img class="pp-hero-art" src="/assets/img/mascots/two-bubbles.svg" alt="">
-  <p class="pp-k">Calm games</p>
-  <h1 id="pp-h">Pause &amp; Play</h1>
-  <p>A few gentle minutes for a busy mind. No timers, no scores to beat and no way to lose. Just something small and satisfying to settle into.</p>
-  <div class="pp-stats" id="pp-stats"></div>
-  <div class="pp-next" id="pp-next"></div>
-</section>
 
 <section class="pp-games" aria-label="The games">
   <a class="pp-card is-garden is-wide" href="/night-garden.html">

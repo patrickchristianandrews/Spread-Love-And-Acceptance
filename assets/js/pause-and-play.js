@@ -7,12 +7,13 @@
 
   function render() {
     var R = window.TOLRewards;
-    if (R) {
+    var statsEl = document.getElementById('pp-stats'), nextEl = document.getElementById('pp-next');
+    if (R && statsEl && nextEl) {
       var s = R.state(), nx = s.next;
-      document.getElementById('pp-stats').innerHTML =
+      statsEl.innerHTML =
         '<span class="pp-stat">\u2728 Level ' + s.level + '</span>' +
         (s.streak > 1 ? '<span class="pp-stat">\uD83D\uDD25 ' + s.streak + '-day streak</span>' : '');
-      document.getElementById('pp-next').innerHTML = nx ? 'Something new is on its way to the background' + (s.unlocked.length ? ' \u00B7 ' + s.unlocked.length + ' there so far' : '') +
+      nextEl.innerHTML = nx ? 'Something new is on its way to the background' + (s.unlocked.length ? ' \u00B7 ' + s.unlocked.length + ' there so far' : '') +
         '<div class="pp-bar"><i style="width:' + Math.max(4, Math.round(s.progress * 100)) + '%"></i></div>' : 'Everything has arrived. Thank you for playing.';
     }
     var bloom = read('tol-bloom-v1'); if (bloom && bloom.level != null) meta('bloom', 'You’re on level ' + (bloom.level + 1) + (bloom.perfect ? ' · ' + bloom.perfect + ' perfect blooms' : ''));
