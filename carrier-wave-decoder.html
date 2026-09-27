@@ -1607,7 +1607,6 @@ function renderWork(){
     <div class="field wide"><label for="ff-title">Short name</label><input type="text" id="ff-title" data-f="title" maxlength="90" value="${esc(fd.title)}" placeholder="Timing requests without a named time"></div>
     <p class="lab" style="margin:16px 0 4px">Severity</p>
     <div class="sev" role="group" aria-label="Severity">${SEV.map(s=>`<button type="button" data-sev="${s.id}" aria-pressed="${fd.sev===s.id}"><b>${s.n}</b><span>${s.h}</span></button>`).join("")}</div>
-    <p class="hint" style="margin:6px 0 0">Not on this scale: anything involving fear or safety. That isn't an arrangement to fix together. Reach out to someone you trust or a local support line; in the US, the National Domestic Violence Hotline is 1-800-799-7233.</p>
     <div class="four">
       <div class="part"><label for="ff-condition">Condition</label><small>What happened, as fact: when, how often, what was said or done. No reasons and no labels.</small><textarea id="ff-condition" data-f="condition">${esc(fd.condition)}</textarea></div>
       ${full?`

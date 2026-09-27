@@ -102,7 +102,6 @@
   // ---------- The patterns ----------
   // Each kind has: how it's found, how much heat it adds, and what the other person may hear.
   var KINDS = {
-    selfharm: { label: 'Safety: self-harm', heat: 6, tone: 'alarm', safety: true },
     threat:   { label: 'Safety: a threat', heat: 6, tone: 'alarm', safety: true },
     control:  { label: 'Safety: controlling', heat: 4, tone: 'alarm', safety: true },
     withdraw: { label: 'Shutting down', heat: 2, tone: 'hot',
@@ -149,7 +148,6 @@
 
   function words(list) { return new RegExp('(?:^|[^\\w’\'])(' + list.join('|') + ')(?=$|[^\\w’\'])', 'gi'); }
   var PATTERNS = {
-    selfharm: [words(["kill myself", "killing myself", "end it all", "end my life", "take my (?:own )?life", "(?:i )?(?:just )?(?:want|wanna|going) to die", "wish i (?:was|were) dead", "don[’']?t want to (?:be alive|live|be here|exist)(?: anymore)?", "not want to be here anymore", "no reason to (?:live|go on)", "can[’']?t go on", "hurt(?:ing)? myself", "cut myself", "better off (?:without me|dead|if i (?:was|were) gone)", "suicid(?:e|al)", "won[’']?t be around (?:much longer|anymore)", "say goodbye (?:to everyone|for me)"])],
     threat: [words(["i(?:[’']?ll| will|[’']?m (?:going to|gonna)| am (?:going to|gonna)) (?:hurt|kill|hit|ruin|destroy|end) you", "you(?:[’']?ll| will) regret (?:this|it)", "you(?:[’']?ll| will) be sorry", "i(?:[’']?ll| will|[’']?m (?:going to|gonna)| am (?:going to|gonna)) make you (?:pay|sorry|regret)", "i know where you (?:are|live|work)", "watch your back", "or else", "i(?:[’']?ll| will|[’']?m (?:going to|gonna)| am (?:going to|gonna)) find you", "i(?:[’']?ll| will|[’']?m (?:going to|gonna)| am (?:going to|gonna)) take (?:the kids|the children|your kids|them)(?: away| from you)?", "you(?:[’']?ll| will) never see (?:the kids|the children|them|your kids) again", "if you (?:leave|go|tell anyone)[^.!?]{0,40}(?:i(?:[’']?ll| will|[’']?m (?:going to|gonna)| am (?:going to|gonna))|you(?:[’']?ll| will) never)", "i(?:[’']?ll| will|[’']?m (?:going to|gonna)| am (?:going to|gonna)) (?:post|send|share|show everyone) (?:your|the|those) (?:photos|pictures|messages|videos)", "i(?:[’']?ll| will|[’']?m (?:going to|gonna)| am (?:going to|gonna)) tell everyone"])],
     control: [words(["i(?:[’']?m| am) (?:checking|going through|going to check) your phone", "give me your (?:phone|password|passcode)", "what(?:[’']?s| is) your password", "(?:send|share) (?:me )?your location", "i(?:[’']?m| am) tracking you", "who were you (?:with|talking to|texting)", "answer me", "you(?:[’']?re| are) not allowed", "you (?:can[’']?t|cannot) (?:go|see|talk to|leave|have)", "you need my permission", "i forbid", "you(?:[’']?re| are) not going (?:out|anywhere)", "stop (?:seeing|talking to) your (?:friends|family|sister|brother|mom|mum|dad)", "(?:block|delete) (?:him|her|them|your friends)", "you don[’']?t get (?:any )?money", "i control the money", "you(?:[’']?ll| will) do as i say", "because i said so"])],
     verdict: [words(["you(?:[’']?re| are) (?:so |such an? |just |being |really |always |)?(?:selfish|lazy|useless|pathetic|ridiculous|crazy|insane|childish|impossible|stupid|an idiot|a joke|a liar|a mess|toxic|unbelievable|hopeless|the worst|a narcissist|dramatic|immature|clueless|heartless|cold)", "you don[’']?t care(?: about)?", "you only care about", "you(?:[’']?re| are) the problem", "what(?:[’']?s| is) wrong with you", "your problem is", "typical you", "that(?:[’']?s| is) so you", "you(?:[’']?re| are) just like your", "you make me (?:sick|crazy|miserable|feel (?:worthless|stupid|small|like (?:crap|garbage|nothing|an idiot)|bad|guilty|terrible))", "you(?:[’']?ve| have) ruined"])],
@@ -327,7 +325,7 @@
     });
 
     function any(kind) { return out.turns.some(function (t) { return t.marks.some(function (m) { return m.kind === kind; }); }); }
-    out.selfHarm = any('selfharm'); out.threat = any('threat'); out.control = any('control');
+    out.selfHarm = false; out.threat = any('threat'); out.control = any('control');
     out.safety = out.selfHarm || out.threat || out.control;
     out.bids = [];
     out.turns.forEach(function (t, i) { if (t.marks.some(function (m) { return m.kind === 'turnaway'; })) out.bids.push({ at: i - 1, reply: i }); });
@@ -385,9 +383,8 @@
     var moves = [];
 
     if (r.safety) {
-      moves.push({ key: 'safety', title: 'Put safety first',
-        say: (r.selfHarm ? 'Something in this conversation sounds like someone may be thinking about ending their life or hurting themselves. Reach out for help now, and if someone is in immediate danger, call emergency services. ' : '') +
-             (r.threat || r.control ? 'Threats, and checking or controlling what someone does, aren’t a communication problem to be worded better. The conversation tools on this site aren’t meant for that situation, and you don’t owe calm replies to them. Your safety comes first, and there are people who can help you think it through.' : ''),
+      moves.push({ key: 'safety', title: 'Step away from this one',
+        say: 'Threats, and checking or controlling what someone does, aren’t a communication problem to be worded better, and the conversation tools on this site aren’t meant for them. Step away from the conversation for now.',
         script: '' });
       return moves;
     }
@@ -467,12 +464,11 @@
     text = String(text || '');
     var marks = findMarks(text);
     var has = function (k) { return marks.some(function (m) { return m.kind === k; }); };
-    var unsafe = has('threat') || has('control') || has('selfharm');
+    var unsafe = has('threat') || has('control');
     var tidied = unsafe ? '' : tidy(text);
     return {
       marks: marks,
       unsafe: unsafe,
-      selfHarm: has('selfharm'),
       softened: tidied && tidied !== text ? tidied : '',
       shape: unsafe ? '' : 'When [what happened, one specific time], it landed as [how it felt, or what it made hard for you]. Could you [one specific thing, by when]?',
       checks: unsafe ? [] : [

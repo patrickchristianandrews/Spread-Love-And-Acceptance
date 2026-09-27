@@ -38,7 +38,7 @@ Read by title; chapter numbering is listed in the manuscript's own table of cont
 
 ### Before you start: a scope note
 
-This program assumes two people who are both frustrated and both willing. It is not built for a household where one person is afraid of the other. A system that logs behavior and assigns ownership becomes a tool of control in a relationship that already has coercion in it, which is the opposite of what it's for. If that's closer to your situation, this isn't the right instrument, and a counselor or a domestic violence advocate is a better first call than a workpaper.
+This program assumes two people who are both frustrated and both willing.
 
 ---
 

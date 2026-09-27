@@ -268,15 +268,6 @@
     [/^what is (this|this site|the objective ledger|tol)$|^what s this( site)?$/, 'The Objective Ledger shared ledger what it is', '/start-here.html']
   ];
 
-  var SAFETY = [
-    { k: 'p', x: 'I’m really glad you said something. I’m only a page, so I can’t help the way a person can, but here is what this site says:' },
-    { k: 'passage', h: 'When a relationship isn’t safe', src: 'How it fits your relationships',
-      x: ['If someone you live with, depend on or care for controls your money, phone, friends or movements, threatens you, or leaves you afraid, please put your safety first and talk to people trained for exactly this.',
-          'In the US: the National Domestic Violence Hotline is at 1-800-799-7233, or text START to 88788, or visit thehotline.org. For a child at risk, call the Childhelp National Child Abuse Hotline at 1-800-422-4453. For an older or disabled adult, the Eldercare Locator at 1-800-677-1116 can connect you with Adult Protective Services. If you’re thinking about suicide or in emotional crisis, call or text 988. If you’re in immediate danger, call 911.',
-          'If you’re struggling right now, please reach a person as well as a page: in the US, call or text 988; elsewhere, findahelpline.com lists free, confidential helplines.'],
-      u: '/relationships-in-depth.html#safety' }
-  ];
-  var CRISIS = /\b(suicid\w*|kill(ing)? my ?self|end(ing)? (my|it all|my life)|want(ed)? to die|don'?t want to (live|be alive|be here)|better off dead|self[- ]?harm\w*|hurt(ing)? my ?self|cut(ting)? my ?self|overdose|abus(e|ed|ive|ing)|hits? me|hitting me|beats? me|beat me|chok(e|ed|es|ing) me|push(es|ed)? me|threaten\w*|violen(ce|t)|rape\w*|sexual(ly)? assault\w*|assault\w*|stalk\w*|afraid of (him|her|them|my (partner|husband|wife|boyfriend|girlfriend|dad|mom|mother|father|parent|spouse))|scared of (him|her|them|my (partner|husband|wife|boyfriend|girlfriend|dad|mom|mother|father|parent|spouse))|(i'?m|i am|i feel|feel) (not safe|unsafe)|not safe at home|controls? (my money|my phone|where i go|who i see|me)|won'?t let me (leave|see|go))\b/i;
 
   // Decide what to say to one message. Returns {blocks:[...], chips:[...]} (all data, rendered later).
   function respond(state, q, chipDoc) {
@@ -288,7 +279,6 @@
       return { blocks: [{ k: 'p', x: pick(['Here you go:', 'Sure. From the site:', 'Here’s that part:']) }, passageBlock(chipDoc, res0.terms)],
         chips: moreChips(state, followUps([chipDoc], res0.hits, 2)) };
     }
-    if (CRISIS.test(q)) return { blocks: SAFETY, chips: [{ label: 'When a check-in is the wrong tool', doc: findGloss('fearof') }].filter(function (c) { return c.doc >= 0; }) };
     if (/^(hi+|hello+|hey+|hiya|howdy|yo|heya|good (morning|afternoon|evening|day)|greetings)( there)?( buddy| friend)?$/.test(f))
       return { blocks: [{ k: 'p', x: pick(['Hello! ', 'Hi there! ', 'Hey, nice to see you. ']) + 'I can share what this site says about relationships, fair sharing of the load, check-ins, different wiring and calming down. What’s on your mind?' }], chips: STARTERS };
     if (/^(thanks?( you)?( so much| a lot)?|ty|thx|cheers|thank u|appreciate it|that helps?|that was helpful|great|perfect|nice|cool|lovely|awesome)$/.test(f))

@@ -21,9 +21,6 @@
 
   var FORMS = [['text', 'Text or chat'], ['email', 'Email'], ['person', 'In person, from memory'], ['phone', 'Phone call, from memory']];
   var ORDER = ['verdict', 'absolute', 'dismiss', 'sarcasm', 'withdraw', 'demand', 'history', 'shouting', 'vague', 'short', 'turnaway', 'repair', 'feeling', 'ask'];
-  var HELP_SELF = 'If you’re thinking about ending your life or hurting yourself, or someone else is: in the US call or text <strong>988</strong> (Suicide &amp; Crisis Lifeline). If someone is in immediate danger, call <strong>911</strong>.';
-  var HELP_ABUSE = 'For threats, abuse or control from a partner or family member: in the US, the National Domestic Violence Hotline is <strong>1-800-799-7233</strong> (or text START to 88788). If anyone is in immediate danger, call <strong>911</strong>.';
-  var HELP_WORLD = 'Outside the US, <a href="https://findahelpline.com" rel="noopener">findahelpline.com</a> lists free, confidential helplines in your country, or call your local emergency number.';
   var GOOD = { repair: 1, feeling: 1, ask: 1 };
 
   var $ = function (id) { return document.getElementById(id); };
@@ -68,14 +65,10 @@
     });
     html += '</div></section>';
 
-    // Safety first
+    // Threats or control: no rewording makes those okay
     if (r.safety) {
-      var what = [r.selfHarm ? 'someone not wanting to be alive, or hurting themselves' : '', r.threat ? 'threats' : '', r.control ? 'checking, controlling or cutting someone off' : ''].filter(Boolean).join(', and ');
-      html += '<section class="cr-safety" role="alert" aria-labelledby="cr-safe"><h2 id="cr-safe">Your safety comes first</h2>' +
-        '<p>Something in this conversation sounds like ' + what + '. The Reader can’t judge that properly, and nothing here matters more than being safe.</p>' +
-        (r.threat || r.control ? '<p>Threats and control aren’t a communication problem to be worded better, and the joint exercises on this site aren’t meant for relationships where one person is afraid of the other. You don’t owe calm replies or acceptance. If you’re unsure, talking it through with a helpline is free and confidential.</p>' : '') +
-        (r.selfHarm ? '<p>' + HELP_SELF + '</p>' : '') + (r.threat || r.control ? '<p>' + HELP_ABUSE + '</p>' : '') + '<p>' + HELP_WORLD + '</p>' +
-        '<p style="margin:0!important;"><a class="dig" href="/relationships-in-depth.html#safety">Dig deeper: more places to get help</a></p></section>';
+      html += '<section class="cr-safety" role="alert" aria-labelledby="cr-safe"><h2 id="cr-safe">Step away from this one</h2>' +
+        '<p>Something in this conversation reads as a threat, or as checking, controlling or cutting someone off. That isn’t a communication problem to be worded better, and the Reader can’t judge it properly. It’s okay to step away.</p></section>';
     }
 
     // 03 The read
@@ -271,9 +264,7 @@
     d.marks.forEach(function (m) { if (kinds.indexOf(m.kind) === -1) kinds.push(m.kind); });
     if (d.unsafe) {
       draftOut.innerHTML = '<div class="cr-safety" role="alert" style="margin-top:1rem;"><h2>Please don’t send this one</h2>' +
-        (d.selfHarm ? '<p>What you’ve written sounds like you might be thinking about hurting yourself or not being alive. You deserve support right now. ' + HELP_SELF + '</p>'
-          : '<p>This reads as a threat or as controlling the other person. No rewording makes it safe to send. Step away from the conversation for now. If you’re worried about what you might do, or feel this way often, talking to someone helps.</p>') +
-        '<p style="margin:0!important;">' + HELP_WORLD + '</p></div>';
+        '<p>This reads as a threat or as controlling the other person. No rewording makes it okay to send. Step away from the conversation for now.</p></div>';
       return;
     }
     var h = '<ul class="cr-checks">' + d.checks.map(function (c) { return '<li class="' + (c.ok ? 'ok' : '') + '">' + esc(c.label) + '</li>'; }).join('') + '</ul>';
