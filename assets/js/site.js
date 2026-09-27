@@ -36,6 +36,7 @@
   var SECTIONS = [
     { id: 'new', title: 'What’s new', blurb: 'Newly added and newly expanded, newest first.', items: [
       { href: '/whats-new.html', code: 'All', title: 'What’s new', note: 'Everything newly added and everything that’s grown, in one place' },
+      { href: '/frequency-journey.html', code: 'New', title: 'The Frequency Journey', note: 'A calm puzzle journey through seven tone-themed worlds, with two pals' },
       { href: '/soundscapes.html', code: 'New', title: 'Four soundscapes', note: 'The Breath Beneath, One Breath to Anchor You, Nothing Needs to Change and The Road We Made' },
       { href: '/ask.html', code: 'New', title: 'Ask the buddies', note: 'Answers made only from this site’s pages. What you type stays on your device' },
       { href: '/pause-and-play.html', code: 'New', title: 'Levels that grow the background', note: 'Every few levels, something new appears behind every page and joins in' },
@@ -65,6 +66,7 @@
     ]},
     { id: 'play', title: 'Play', blurb: 'Calm games for a busy mind. No timers and no way to lose, and something new in the background every few levels.', items: [
       { href: '/pause-and-play.html', code: 'All', title: 'Pause & Play', note: 'All the calm games in one place, with your level and your streak' },
+      { href: '/frequency-journey.html', code: 'New', title: 'The Frequency Journey', note: 'Guide two pals through seven calm, tone-themed worlds to the Perfect Frequency, side by side' },
       { href: '/night-garden.html', code: 'New', title: 'The Night Garden', note: 'A calm place to breathe, play and let your mind settle. Flowers bloom as you breathe; no timers, nothing to lose' },
       { href: '/word-bloom.html', code: 'New', title: 'Word Bloom', note: 'Swipe across the petals to spell words. Hundreds of gentle levels and a bonus jar, and every few levels something new appears in the background' },
       { href: '/quiet-crossword.html', code: 'New', title: 'Quiet Crossword', note: 'Small, friendly crosswords with a new one every day, made for playing on a phone' },

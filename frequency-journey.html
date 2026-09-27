@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-NKC6CQ9S66"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-NKC6CQ9S66');
+</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>The Frequency Journey &mdash; a calm puzzle adventure for two pals &middot; The Objective Ledger</title>
+<meta name="description" content="Guide two pals through seven gentle, tone-themed worlds to find the Perfect Frequency. Small calm puzzles about trust, change, joy, connection, voice and seeing clearly. No timer, no way to lose.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,500&family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/css/site.css">
+<link rel="stylesheet" href="/assets/css/reading.css">
+<link rel="stylesheet" href="/assets/css/games.css">
+<style>
+  /* ---- The Frequency Journey ---- */
+  @media (min-width:760px){ main.read.fj-page{ max-width:56rem; } }
+  .fj{ --fj-ink:#3C3350; --fj-soft:#6E5F80; --fj-tile:#FFFDF9; --fj-edge:#E6D6EE; --fj-accent:#D9C8F0; --fj-deep:#3C3350;
+    position:relative; padding:.8rem .8rem 1rem; color:var(--fj-ink); overflow:hidden; }
+  body.is-game .gm-board.fj{ background-image:var(--fj-board, linear-gradient(160deg,#FFF8EE 0%,#F6EEF8 55%,#EEF4FA 100%)); }
+  .fj[data-world="1"]{ --fj-board:linear-gradient(165deg,#E9EEF2 0%,#D9E2E6 100%); --fj-accent:#F2D29B; }
+  .fj[data-world="2"]{ --fj-board:linear-gradient(165deg,#F4FAFE 0%,#E2F0F9 100%); --fj-accent:#BFE0F2; }
+  .fj[data-world="3"]{ --fj-board:linear-gradient(165deg,#FFF9E6 0%,#F6EDC4 100%); --fj-accent:#F6D77A; }
+  .fj[data-world="4"]{ --fj-board:linear-gradient(165deg,#FFF1E8 0%,#F7DCCF 100%); --fj-accent:#F4B7A2; }
+  .fj[data-world="5"]{ --fj-board:linear-gradient(165deg,#F4F0FC 0%,#E4F3EE 100%); --fj-accent:#CDB9F0; }
+  .fj[data-world="6"]{ --fj-board:linear-gradient(165deg,#E6E6F6 0%,#D6D8EE 100%); --fj-accent:#C9C3F2; }
+  .fj[data-world="7"]{ --fj-board:linear-gradient(165deg,#FFF1F5 0%,#E6F0FC 100%); --fj-accent:#F7C9D4; }
+  .fj [hidden]{ display:none !important; }
+  .fj button{ font:inherit; color:inherit; }
+  .fj button:focus-visible{ outline:3px solid #7C6BB0; outline-offset:2px; }
+
+  .fj-head{ display:flex; justify-content:space-between; align-items:flex-start; gap:.5rem; margin:0 0 .55rem; }
+  .read .fj .fj-title, .read .fj .fj-sub, .read .fj .fj-k, .read .fj-card h2, .read .fj-card p, .read .fj-panel h3, .read .fj-panel p, .read .fj p.fj-status, .read .fj p.fj-moves{ max-width:none; }
+  .read .fj h2.fj-title{ margin:.05rem 0 0 !important; font-size:1.3rem !important; line-height:1.2; }
+  .read .fj p.fj-sub, .read .fj p.fj-k{ margin:0 !important; }
+  .read .fj-card h2{ margin:.2rem 0 .5rem !important; }
+  .read .fj-panel h3{ margin:.1rem 0 .3rem !important; }
+  .fj-k{ margin:0; font:500 .7rem/1.3 "IBM Plex Mono", ui-monospace, monospace; letter-spacing:.1em; text-transform:uppercase; color:var(--fj-soft); }
+  .fj-title{ margin:.05rem 0 0; font:600 1.22rem/1.2 "Fraunces", Georgia, serif; color:var(--fj-ink); }
+  .fj-sub{ margin:.1rem 0 0; font-size:.86rem; color:var(--fj-soft); }
+  .fj-tools{ display:flex; gap:.35rem; flex:none; }
+  .fj-ic{ width:44px; height:44px; border-radius:50%; border:1px solid var(--fj-edge); background:var(--fj-tile); display:grid; place-items:center; cursor:pointer; padding:0; }
+  .fj-ic svg{ width:22px; height:22px; }
+  .fj-ic[aria-pressed="false"]{ opacity:.55; }
+  .fj-ic[aria-pressed="false"] .fj-on{ display:none; }
+  .fj-ic[aria-pressed="true"] .fj-off{ display:none; }
+
+  /* the board */
+  .fj-play{ display:grid; gap:.6rem; }
+  .fj-stage{ position:relative; display:flex; justify-content:center; }
+  .fj-canvas{ display:block; border-radius:18px; box-shadow:0 10px 30px rgba(60,40,90,.16); touch-action:none; user-select:none; -webkit-user-select:none; cursor:pointer; }
+  .fj-status{ min-height:2.7em; margin:0 !important; text-align:center; font-size:.93rem; line-height:1.4; color:var(--fj-ink); }
+  .fj-status b{ font-family:"Fraunces", Georgia, serif; }
+  .fj-controls{ display:grid; grid-template-columns:auto 1fr; gap:.7rem; align-items:center; }
+  .fj-pad{ display:grid; grid-template-columns:repeat(3, 50px); grid-template-rows:repeat(3, 50px); gap:4px; }
+  .fj-pad button{ border:1px solid var(--fj-edge); background:var(--fj-tile); border-radius:14px; cursor:pointer; display:grid; place-items:center; padding:0; touch-action:manipulation; box-shadow:0 2px 6px rgba(60,40,90,.08); }
+  .fj-pad button:active{ transform:scale(.94); background:var(--fj-accent); }
+  .fj-pad svg{ width:22px; height:22px; }
+  .fj-pad .fj-up{ grid-column:2; grid-row:1; } .fj-pad .fj-left{ grid-column:1; grid-row:2; }
+  .fj-pad .fj-right{ grid-column:3; grid-row:2; } .fj-pad .fj-down{ grid-column:2; grid-row:3; }
+  .fj-pad .fj-mid{ grid-column:2; grid-row:2; border-radius:50%; background:var(--fj-accent); }
+  .fj-acts{ display:grid; grid-template-columns:1fr 1fr; gap:.4rem; }
+  .fj-acts button{ min-height:46px; border-radius:14px; border:1px solid var(--fj-edge); background:var(--fj-tile); cursor:pointer; display:flex; align-items:center; justify-content:center; gap:.35rem; padding:.3rem .5rem; font-size:.86rem; font-weight:600; line-height:1.1; touch-action:manipulation; }
+  .fj-acts button svg{ width:18px; height:18px; flex:none; }
+  .fj-acts button[aria-pressed="true"]{ background:var(--fj-deep); border-color:var(--fj-deep); color:#FFF8EE; }
+  .fj-acts button:disabled{ opacity:.5; cursor:default; }
+  .fj-acts .fj-special{ grid-column:1 / -1; background:var(--fj-accent); border-color:transparent; }
+  .fj-moves{ margin:0; text-align:center; font:500 .74rem/1 "IBM Plex Mono", monospace; letter-spacing:.06em; color:var(--fj-soft); }
+
+  /* cards: level done, world intro, world done */
+  .fj-card{ position:fixed; inset:0; z-index:95; display:grid; place-items:center; padding:.8rem; background:rgba(255,250,244,.62); backdrop-filter:blur(5px); -webkit-backdrop-filter:blur(5px); }
+  .fj-card > div{ width:min(100%, 23rem); max-height:100%; overflow:auto; text-align:center; padding:1.3rem 1.15rem 1.15rem; border-radius:24px; background:#FFFDF9; box-shadow:0 18px 50px rgba(60,40,90,.24); animation:fj-pop .55s cubic-bezier(.2,1.4,.4,1) both; }
+  @keyframes fj-pop{ from{ transform:scale(.85); opacity:0; } to{ transform:scale(1); opacity:1; } }
+  .fj-orb{ width:4.2rem; height:4.2rem; margin:0 auto .5rem; border-radius:50%; background:radial-gradient(circle at 40% 38%, #fff 0 12%, var(--fj-accent) 45%, rgba(255,255,255,0) 72%); box-shadow:0 0 36px 8px var(--fj-accent); animation:fj-breathe 5s ease-in-out infinite; }
+  @keyframes fj-breathe{ 50%{ transform:scale(1.12); } }
+  .fj-card-k{ margin:0; font:500 .7rem/1.3 "IBM Plex Mono", monospace; letter-spacing:.1em; text-transform:uppercase; color:var(--fj-soft); }
+  .fj-card h2{ margin:.2rem 0 .5rem; font:600 1.35rem/1.2 "Fraunces", Georgia, serif; }
+  .fj-card-lesson{ margin:0 0 .6rem; font:italic 500 1.08rem/1.45 "Fraunces", Georgia, serif; color:#4E3F6B; }
+  .fj-card-p{ margin:0 0 .6rem; font-size:.93rem; line-height:1.5; color:#5A5068; }
+  .fj-card-steps{ margin:0 0 .9rem; font-size:.82rem; color:var(--fj-soft); }
+  .fj-card-btns{ display:flex; flex-wrap:wrap; justify-content:center; gap:.45rem; }
+  .fj-card-btns button{ min-height:46px; padding:.5rem 1.1rem; border-radius:999px; border:1px solid var(--fj-edge); background:#fff; cursor:pointer; font-weight:600; font-size:.92rem; }
+  .fj-card-btns .fj-go{ background:#3C3350; border-color:#3C3350; color:#FFF8EE; font-size:1rem; }
+
+  /* the journey map */
+  .fj-map{ position:relative; }
+  .fj-map-top{ display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:.5rem; margin:0 0 .6rem; }
+  .fj-progress{ margin:0; font-size:.88rem; color:var(--fj-soft); }
+  .fj-continue{ min-height:46px; padding:.5rem 1.1rem; border-radius:999px; border:0; background:#3C3350; color:#FFF8EE !important; font-weight:600; cursor:pointer; }
+  .fj-trail{ position:relative; width:100%; max-width:30rem; margin:0 auto; aspect-ratio:10 / 14; border-radius:22px; overflow:hidden; box-shadow:0 10px 30px rgba(60,40,90,.14); }
+  .fj-trail svg.fj-trail-bg{ position:absolute; inset:0; width:100%; height:100%; }
+  .fj-node{ position:absolute; transform:translate(-50%, -50%); display:flex; align-items:center; gap:.45rem; padding:0; border:0; background:none; cursor:pointer; }
+  .fj-node.is-right{ flex-direction:row-reverse; }
+  .fj-node-dot{ width:52px; height:52px; flex:none; border-radius:50%; display:grid; place-items:center; background:#FFFDF9; border:3px solid rgba(255,255,255,.85); box-shadow:0 4px 14px rgba(40,30,70,.25); }
+  .fj-node-dot svg{ width:28px; height:28px; }
+  .fj-node.is-done .fj-node-dot{ border-color:#F6D77A; box-shadow:0 0 0 4px rgba(246,215,122,.35), 0 4px 14px rgba(40,30,70,.25); }
+  .fj-node.is-here .fj-node-dot{ animation:fj-breathe 4s ease-in-out infinite; }
+  .fj-node.is-locked .fj-node-dot{ opacity:.55; filter:grayscale(.6); }
+  .fj-node-l{ display:block; white-space:nowrap; padding:.25rem .6rem; border-radius:12px; background:rgba(255,253,249,.92); text-align:left; box-shadow:0 2px 8px rgba(40,30,70,.12); max-width:9.5rem; }
+  .fj-node.is-right .fj-node-l{ text-align:right; }
+  .fj-node-l b{ display:block; font:600 .8rem/1.2 "Fraunces", Georgia, serif; color:#3C3350; }
+  .fj-node-l small{ display:block; font:500 .66rem/1.3 "IBM Plex Mono", monospace; color:#6E5F80; letter-spacing:.04em; }
+  .fj-node-l i{ font-style:normal; letter-spacing:.12em; color:#C79A2E; }
+  .fj-node.is-locked .fj-node-l{ opacity:.8; }
+  .fj-mappals{ position:absolute; pointer-events:none; transform:translate(-50%, -100%); }
+  .fj-panel{ margin:.8rem auto 0; max-width:30rem; padding:1rem 1rem .9rem; border-radius:20px; background:#FFFDF9; border:1px solid var(--fj-edge); box-shadow:0 8px 24px rgba(60,40,90,.1); }
+  .fj-panel h3{ margin:.1rem 0 .3rem; font:600 1.15rem/1.25 "Fraunces", Georgia, serif; }
+  .fj-panel p{ margin:0 0 .6rem; font-size:.92rem; line-height:1.5; color:#5A5068; }
+  .fj-panel .fj-panel-sum{ font-family:"Fraunces", Georgia, serif; font-style:italic; color:#4E3F6B; }
+  .fj-lv{ display:flex; flex-wrap:wrap; gap:.45rem; }
+  .fj-lv button{ min-height:46px; min-width:46px; padding:.4rem .9rem; border-radius:999px; border:1px solid var(--fj-edge); background:#fff; cursor:pointer; font-weight:600; font-size:.9rem; }
+  .fj-lv button.is-done{ background:#FFF3C9; border-color:#F0D680; }
+  .fj-lv button:disabled{ opacity:.5; cursor:default; }
+  .fj-note{ margin:.7rem 0 0 !important; font-size:.8rem !important; color:#7A6E86 !important; }
+
+  /* the sky */
+  .fj-skybar{ display:flex; flex-wrap:wrap; justify-content:center; gap:.45rem; }
+  .fj-skybar button{ min-height:46px; padding:.45rem 1rem; border-radius:999px; border:1px solid var(--fj-edge); background:var(--fj-tile); cursor:pointer; font-weight:600; font-size:.9rem; }
+  .fj-skybar button[aria-pressed="true"]{ background:#3C3350; border-color:#3C3350; color:#FFF8EE; }
+  .fj-breath{ position:absolute; left:0; right:0; bottom:12%; margin:0; text-align:center; pointer-events:none; font:italic 500 1.15rem/1.3 "Fraunces", Georgia, serif; color:#4E3F6B; text-shadow:0 1px 8px rgba(255,255,255,.9); transition:opacity 1.2s; }
+
+  .fj-live{ position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); }
+  .fj-how summary{ cursor:pointer; font-family:"Fraunces", Georgia, serif; font-weight:600; font-size:1.05rem; min-height:44px; display:flex; align-items:center; }
+  .fj-how ul{ margin:.4rem 0 .6rem; padding-left:1.1rem; line-height:1.55; font-size:.95rem; }
+  .fj-how li{ margin:.25rem 0; }
+  .fj-how .fj-how-note{ font-size:.86rem; color:#6A6152; }
+
+  @media (min-width:760px){
+    .fj{ padding:1.1rem 1.2rem 1.2rem; }
+    .fj-play{ grid-template-columns:1fr 13.5rem; grid-template-areas:"stage side" "status side"; align-items:start; column-gap:1.1rem; }
+    .fj-stage{ grid-area:stage; }
+    .fj-status{ grid-area:status; }
+    .fj-side{ grid-area:side; display:grid; gap:.8rem; align-content:start; padding-top:.2rem; }
+    .fj-controls{ grid-template-columns:1fr; justify-items:center; }
+    .fj-acts{ width:100%; }
+    .fj-play.is-sky{ grid-template-columns:1fr; grid-template-areas:"stage" "status" "side"; }
+  }
+  @media (max-width:759px){ .fj-side{ display:grid; gap:.5rem; } }
+  @media (max-width:520px){
+    main.read{ padding-top:.8rem; }
+    .fj-intro{ display:none; }
+    .read-head{ display:none; }
+    .gm-switch{ margin-top:0; }
+    .gm-switch .gm-chip{ display:none; }
+    .fj{ margin-left:-.5rem; margin-right:-.5rem; padding:.65rem .5rem .8rem; border-radius:22px; }
+    .read .fj h2.fj-title{ font-size:1.15rem !important; line-height:1.2; }
+    .fj-head{ margin-bottom:.45rem; }
+    .fj-pad{ grid-template-columns:repeat(3, 48px); grid-template-rows:repeat(3, 48px); }
+    .fj-controls{ gap:.5rem; }
+  }
+  @media (max-width:360px){ .fj-pad{ grid-template-columns:repeat(3, 44px); grid-template-rows:repeat(3, 44px); } .fj-acts button{ font-size:.8rem; } }
+  @media (prefers-reduced-motion: reduce){ .fj-card > div, .fj-orb, .fj-node.is-here .fj-node-dot{ animation:none; } .fj-pad button:active{ transform:none; } .fj-breath{ transition:none; } }
+</style>
+<script src="/assets/js/site.js" defer></script>
+<script src="/assets/js/journey-levels.js" defer></script>
+<script src="/assets/js/frequency-journey.js" defer></script>
+</head>
+<body class="is-game" data-no-tip data-no-breathe data-no-weather>
+<main class="read fj-page">
+<header class="read-head"><p class="read-code">New &middot; a calm puzzle journey</p><h1>The Frequency Journey</h1></header>
+<nav class="gm-switch" aria-label="Calm games">
+  <a class="gm-tab gm-home" href="/pause-and-play.html" aria-label="Pause and Play: all the calm games">&#10024;</a>
+  <a class="gm-tab" href="/frequency-journey.html" aria-current="page">&#127925; Journey</a>
+  <a class="gm-tab" href="/word-bloom.html">&#127804; Bloom</a>
+  <a class="gm-tab" href="/quiet-crossword.html">&#9999;&#65039; Crossword</a>
+  <a class="gm-tab" href="/daily-ledger-crossword.html">&#128240; Newspaper</a>
+  <a class="gm-tab" href="/quiet-words.html">&#128269; Words</a>
+  <span class="gm-chip" data-rewards-chip></span>
+</nav>
+<p class="simple-lede fj-intro"><strong>What is this?</strong> A calm puzzle journey through seven tone-themed worlds. Guide your two pals, together, all the way up to the Perfect Frequency. No timer, and no way to lose: you can always undo or start a level again.</p>
+
+<section class="gm-board fj" id="fj" data-world="1" aria-label="The Frequency Journey">
+  <div class="fj-head">
+    <div>
+      <p class="fj-k">The Frequency Journey</p>
+      <h2 class="fj-title">Journey map</h2>
+      <p class="fj-sub"></p>
+    </div>
+    <div class="fj-tools">
+      <button type="button" class="fj-ic fj-mapbtn" aria-label="Journey map" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 4 3 6.5v13L9 17l6 2.5 6-2.5v-13L15 6.5z"/><path d="M9 4v13M15 6.5v13"/></svg></button>
+      <button type="button" class="fj-ic fj-snd" aria-pressed="true" aria-label="Sound"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z"/><path class="fj-on" d="M15.5 9a4 4 0 0 1 0 6M18 6.5a7.5 7.5 0 0 1 0 11"/><path class="fj-off" d="m16 9.5 5 5m0-5-5 5"/></svg></button>
+      <button type="button" class="fj-ic fj-drone" aria-pressed="true" aria-label="Background tone"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M2.5 12c2-4 3.5-4 5 0s3 4 4.5 0 3-4 4.5 0 3 4 5 0"/><path class="fj-off" d="M4 4l16 16"/></svg></button>
+    </div>
+  </div>
+
+  <div class="fj-map">
+    <div class="fj-map-top">
+      <p class="fj-progress"></p>
+      <button type="button" class="fj-continue">Begin the journey</button>
+    </div>
+    <div class="fj-trail" role="group" aria-label="The seven worlds, from the forest up to the sky">
+      <svg class="fj-trail-bg" viewBox="0 0 100 140" preserveAspectRatio="none" aria-hidden="true"></svg>
+    </div>
+    <div class="fj-panel" aria-live="polite"></div>
+  </div>
+
+  <div class="fj-play" hidden>
+    <div class="fj-stage">
+      <canvas class="fj-canvas" role="img" aria-label="The puzzle board"></canvas>
+      <p class="fj-breath" hidden></p>
+    </div>
+    <p class="fj-status" aria-live="polite"></p>
+    <div class="fj-side">
+      <div class="fj-controls">
+        <div class="fj-pad" role="group" aria-label="Move">
+          <button type="button" class="fj-up" data-dir="0" aria-label="Up"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 14 6-6 6 6"/></svg></button>
+          <button type="button" class="fj-left" data-dir="3" aria-label="Left"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m14 6-6 6 6 6"/></svg></button>
+          <button type="button" class="fj-mid fj-switch2" aria-label="Switch pal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 7h11l-3-3M17 17H6l3 3"/></svg></button>
+          <button type="button" class="fj-right" data-dir="1" aria-label="Right"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m10 6 6 6-6 6"/></svg></button>
+          <button type="button" class="fj-down" data-dir="2" aria-label="Down"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 10 6 6 6-6"/></svg></button>
+        </div>
+        <div class="fj-acts">
+          <button type="button" class="fj-switch"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 7h11l-3-3M17 17H6l3 3"/></svg>Switch pal</button>
+          <button type="button" class="fj-together" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20s-7-4.4-7-9.5A3.8 3.8 0 0 1 12 8a3.8 3.8 0 0 1 7 2.5C19 15.6 12 20 12 20z"/></svg>Together</button>
+          <button type="button" class="fj-undo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 14 4 9l5-5"/><path d="M4 9h10.5a5.5 5.5 0 0 1 0 11H11"/></svg>Undo</button>
+          <button type="button" class="fj-restart"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12a8 8 0 1 0 2.3-5.6"/><path d="M4 4v4.5h4.5"/></svg>Restart</button>
+          <button type="button" class="fj-hint" aria-label="A gentle hint"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-3.5 10.9c.6.5 1 1.2 1 2.1h5c0-.9.4-1.6 1-2.1A6 6 0 0 0 12 3z"/></svg>Hint</button>
+          <button type="button" class="fj-special" hidden></button>
+        </div>
+      </div>
+      <p class="fj-moves" aria-live="off"></p>
+      <div class="fj-skybar" hidden>
+        <button type="button" class="fj-rest" aria-pressed="false">Rest here</button>
+        <button type="button" class="fj-clear">Clear the stars</button>
+        <button type="button" class="fj-tomap">Journey map</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="fj-card" hidden role="dialog" aria-modal="true" aria-labelledby="fj-card-h">
+    <div>
+      <div class="fj-orb" aria-hidden="true"></div>
+      <p class="fj-card-k"></p>
+      <h2 id="fj-card-h"></h2>
+      <p class="fj-card-lesson"></p>
+      <p class="fj-card-p"></p>
+      <p class="fj-card-steps"></p>
+      <div class="fj-card-btns"></div>
+    </div>
+  </div>
+  <p class="fj-live" aria-live="polite"></p>
+</section>
+
+<details class="try-this fj-how">
+  <summary>How to play</summary>
+  <ul>
+    <li><strong>Bring both pals to the glowing tone.</strong> It has room for two, and they arrive together.</li>
+    <li><strong>Move</strong> by swiping on the board, with the arrow pad, or with the arrow keys (or W A S D). Tapping near a pal also takes one step that way.</li>
+    <li><strong>Switch pal</strong> (or tap a pal, or press E) chooses who moves. <strong>Together</strong> (or T) moves both pals the same way at once.</li>
+    <li><strong>Undo</strong> (Z) and <strong>Restart</strong> (R) are always there, and <strong>A gentle hint</strong> (H) shows one good next step.</li>
+    <li>Each world adds one new idea: lanterns and thorny shadows, slippery ice and melting blocks, light to gather, bridges raised by plates, crystals that sing a melody, and stars that aren&rsquo;t quite what they seem. The last world is simply a place to rest and play.</li>
+  </ul>
+  <p class="fj-how-note">The tones are used here as calm themes for each world, not as a treatment. Your progress stays in this browser on this device.</p>
+</details>
+</main>
+</body>
+</html>
