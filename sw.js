@@ -4,7 +4,7 @@
    used when there's no connection. Fonts: served from the saved copy. Nothing a visitor types passes through
    here: the tools keep entries in the browser, and this only stores the site's own files.
    Bump VERSION when the list below changes. */
-var VERSION = 'tol-v10';
+var VERSION = 'tol-v11';
 var CORE = [
   '/', '/index.html', '/offline.html',
   '/night-garden.html', '/quiet-words.html', '/word-bloom.html', '/quiet-crossword.html', '/pause-and-play.html', '/ask.html', '/daily-ledger-crossword.html', '/garden-backdrop.html', '/turning-toward.html', '/quick-checks.html', '/lemonade-stand.html',
