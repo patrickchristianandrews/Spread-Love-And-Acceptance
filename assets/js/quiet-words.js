@@ -40,11 +40,11 @@
       ['TRUST', 'Trust is built in small, kept promises.'],
       ['SHARE', 'Share one good thing from your day.'],
       ['LAUGH', 'Laughing together is a small repair.'],
-      ['FRIEND', 'Send a friend a “thinking of you”.'],
+      ['FRIEND', 'Send a friend a “thinking of you” text.'],
       ['HOME', 'Home is often a person, not a place.'],
       ['LOVE', 'Love shows up in how we answer the little moments.']] },
     { name: 'Gratitude', words: [
-      ['GRATEFUL', 'Name three things that went okay today. Small counts.'],
+      ['GRATEFUL', 'Name three things that went okay today. Small things count.'],
       ['GIFT', 'Today is a small gift, even the plain parts.'],
       ['JOY', 'Joy is often tiny. Look for it at eye level.'],
       ['LIGHT', 'Let a little light in, even through a crack.'],
@@ -254,7 +254,7 @@
   var hinted = false;
   function finish() {
     if (window.TOLGarden) window.TOLGarden.gift('words');
-    if (window.TOLRewards) { window.TOLRewards.earn(6 + words.length + (hinted ? 0 : 4), 'words', hinted ? 'Puzzle found' : 'Every word, no hints'); window.TOLRewards.record('words', 'done'); }
+    if (window.TOLRewards) { window.TOLRewards.earn(6 + words.length + (hinted ? 0 : 4), 'words', hinted ? 'Puzzle finished' : 'Every word, no hints'); window.TOLRewards.record('words', 'done'); }
     root.classList.add('is-done');
     var n = +get('tol-qw-done', '0') + 1; set('tol-qw-done', String(n));
     setTimeout(function () { var m = wake(); if (m) { m.home(); setTimeout(function () { m.reward(true); }, 600); } }, 300);

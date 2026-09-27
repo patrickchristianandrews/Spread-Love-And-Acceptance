@@ -64,7 +64,7 @@
       s2 += '<label class="cr-chip"><input type="radio" name="cr-me" value="' + i + '"' + (s === state.me ? ' checked' : '') + '><span>' + esc(s) + '</span></label>';
     });
     s2 += '</div>';
-    if (state.format === 'unlabelled') html += '<p class="cr-note">There were no names in the paste, so the Reader took turns between messages. If it got someone wrong, tap the name above that message to switch it.</p>';
+    if (state.format === 'unlabelled') html += '<p class="cr-note">There were no names in the paste, so the Reader assumed the messages take turns between two people. If it got someone wrong, tap the name above that message to switch it.</p>';
     s2 += '<p class="cr-hint" style="margin-top:1rem!important;">How did this conversation happen?</p><div class="cr-chips" role="radiogroup" aria-label="How it happened">';
     FORMS.forEach(function (f) {
       s2 += '<label class="cr-chip"><input type="radio" name="cr-form" value="' + f[0] + '"' + (f[0] === state.form ? ' checked' : '') + '><span>' + f[1] + '</span></label>';
@@ -112,18 +112,18 @@
     var notes = [];
     r.missedRepairs.forEach(function (x) {
       var a = r.turns[x.at], b = r.turns[x.reply];
-      notes.push('<strong>A reach-out that wasn’t taken.</strong> ' + esc(a.who) + ' tried to turn it down (“' + esc(snip(a.text, 70)) + '”) and the reply stayed hot (“' + esc(snip(b.text, 50)) + '”). Noticing these is one of the most useful things you can do.');
+      notes.push('<strong>A reach-out that wasn’t taken.</strong> ' + esc(a.who) + ' tried to cool things down (“' + esc(snip(a.text, 70)) + '”) and the reply stayed hot (“' + esc(snip(b.text, 50)) + '”). Noticing these is one of the most useful things you can do.');
     });
     r.unanswered.forEach(function (u) {
       var t = r.turns[u.at];
       notes.push('<strong>A question that may not have been answered.</strong> ' + esc(t.who) + ' asked “' + esc(snip(u.q, 90)) + '”' + (u.open ? ' and it’s still open.' : ', and the reply went somewhere else.'));
     });
     r.drift.forEach(function (i) {
-      notes.push('<strong>Another topic came in</strong> at message ' + (i + 1) + ' (“' + esc(snip(r.turns[i].text, 60)) + '”). One topic at a time keeps it answerable.');
+      notes.push('<strong>Another topic came in</strong> at message ' + (i + 1) + ' (“' + esc(snip(r.turns[i].text, 60)) + '”). Sticking to one topic at a time makes it easier to answer.');
     });
     r.bids.forEach(function (b) {
       var a = r.turns[b.at], c = r.turns[b.reply];
-      notes.push('<strong>Good news met flat.</strong> ' + esc(a.mine ? 'You' : a.who) + ' shared “' + esc(snip(a.text, 60)) + '” and the reply was “' + esc(snip(c.text, 30)) + '”. Everyday moments like this build or wear down connection more than the big arguments do.');
+      notes.push('<strong>Good news met with a flat reply.</strong> ' + esc(a.mine ? 'You' : a.who) + ' shared “' + esc(snip(a.text, 60)) + '” and the reply was “' + esc(snip(c.text, 30)) + '”. Everyday moments like this build or wear down connection more than the big arguments do.');
     });
     r.gaps.forEach(function (g) {
       var h = Math.round(g.mins / 60);
@@ -153,7 +153,7 @@
     else if (r.turned === 0) story += 'The first message already carries a lot of heat. ';
     else if (r.peak < 3) story += 'It never really heats up. ';
     else story += 'The heat builds gradually rather than at one moment. ';
-    story += { shutdown: 'By the end someone has shut down. That isn’t the same as calm: it usually means they’re overwhelmed.', rising: (r.peak < 3 && !(r.turned >= 0) ? 'It gets a little tenser toward the end.' : 'By the end it’s still heating up.'), cooling: 'By the end it has cooled down.', steady: 'It ends about where it has been.', short: '' }[r.trend];
+    story += { shutdown: 'By the end someone has shut down. That isn’t the same as calm: it usually means they’re overwhelmed.', rising: (r.peak < 3 && !(r.turned >= 0) ? 'It gets a little tenser toward the end.' : 'By the end it’s still heating up.'), cooling: 'By the end it has cooled down.', steady: 'It stays about the same to the end.', short: '' }[r.trend];
     parts.push('<p>' + story + '</p>');
     if (r.turned > 0) parts.push('<p class="cr-note">A turn is rarely one person’s fault. It’s usually where two frequencies stopped matching. <a class="dig" href="/book/chapter-1-in-depth.html#squeal">Dig deeper: why two reasonable people end up in a fight</a></p>');
     return '<h2>What happened</h2>' + parts.join('');
@@ -280,7 +280,7 @@
     var h = '<ul class="cr-checks">' + d.checks.map(function (c) { return '<li class="' + (c.ok ? 'ok' : '') + '">' + esc(c.label) + '</li>'; }).join('') + '</ul>';
     var warn = kinds.filter(function (k) { return !GOOD[k] && R.KINDS[k].instead; });
     if (warn.length) h += '<ul class="cr-list cr-draft-marks">' + warn.map(function (k) { var K = R.KINDS[k]; return '<li><strong>' + esc(K.label) + ':</strong> ' + esc(K.instead) + '</li>'; }).join('') + '</ul>';
-    if (d.softened) h += '<div class="cr-soft"><p><strong>Same words, less heat</strong> (capitals, stacked punctuation and always/never tidied):</p><p>' + esc(d.softened) + '</p><button type="button" class="cr-btn is-quiet is-small" id="cr-use">Use this wording</button> <button type="button" class="cr-btn is-quiet is-small" id="cr-copy-soft">Copy</button></div>';
+    if (d.softened) h += '<div class="cr-soft"><p><strong>Same words, less heat</strong> (with the all-caps, extra punctuation and always/never toned down):</p><p>' + esc(d.softened) + '</p><button type="button" class="cr-btn is-quiet is-small" id="cr-use">Use this wording</button> <button type="button" class="cr-btn is-quiet is-small" id="cr-copy-soft">Copy</button></div>';
     if (warn.length) h += '<div class="cr-soft"><p><strong>Or write it fresh in this shape:</strong></p><p>' + esc(d.shape) + '</p><button type="button" class="cr-btn is-quiet is-small" id="cr-copy-shape">Copy</button></div>';
     else if (!d.softened) h += '<p class="cr-note">Nothing in the wording is likely to add heat. Read it once more as if you were them, then send it when you’re calm.</p>';
     h += '<p style="margin-top:.9rem;"><a class="dig" href="/signal-translator.html">Dig deeper: test one sentence against how the other person is wired</a></p>';

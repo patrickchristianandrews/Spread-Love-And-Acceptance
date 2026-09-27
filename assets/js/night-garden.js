@@ -1734,7 +1734,7 @@
       settleAt = performance.now();
       var best = pondRows > pondBest; pondBest = Math.max(pondBest, pondRows);
       if (window.TOLRewards && pondRows) window.TOLRewards.record('pond', 'best', pondRows, 'max');
-      say('The pond settles.', pondRows ? pondRows + (pondRows === 1 ? ' row' : ' rows') + ' bloomed in that pond' + (best ? ', your best yet!' : '.') + ' Fresh water now.' : 'Fresh water. Carry on whenever you like.', 3600);
+      say('The pond settles.', pondRows ? pondRows + (pondRows === 1 ? ' row' : ' rows') + ' bloomed in that pond' + (best ? ', your best yet!' : '.') + ' Fresh water now.' : 'Fresh water. Keep going whenever you like.', 3600);
       for (var r = 0; r < ROWS; r++) board[r].fill(0);
       pondRows = 0;
     }

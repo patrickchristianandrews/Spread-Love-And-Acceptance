@@ -19,9 +19,9 @@
   var PRIVACY_LINE = 'Answers come only from this site’s pages. What you type stays on this device.';
 
   var DEFAULT_CHAR = {
-    name: 'Professor Fiddlesticks',
+    name: 'Professor Puddles',
     color: '#7FA88A',
-    greeting: 'Hi, I’m Professor Fiddlesticks! Ask me about anything on this site, like the book, the workpapers, check-ins, different wiring or ways to calm down, and I’ll share what the pages say, with a link to read more.'
+    greeting: 'Hi, I’m Professor Puddles! Ask me about anything on this site, like the book, the workpapers, check-ins, different wiring or ways to calm down, and I’ll share what the pages say, with a link to read more.'
   };
 
   // ------------------------------------------------------------------ text helpers

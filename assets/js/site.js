@@ -38,10 +38,10 @@
       { href: '/whats-new.html', code: 'All', title: 'What’s new', note: 'Everything newly added and everything that’s grown, in one place' },
       { href: '/frequency-journey.html', code: 'New', title: 'The Frequency Journey', note: 'Tidbit and Sugarfoot’s calm puzzle journey: riddles, life lessons and puzzles in seven worlds' },
       { href: '/soundscapes.html', code: 'New', title: 'Four soundscapes', note: 'The Breath Beneath, One Breath to Anchor You, Nothing Needs to Change and The Road We Made' },
-      { href: '/ask.html', code: 'New', title: 'Chat with Professor Fiddlesticks', note: 'Small drop, big brain: answers made only from this site’s pages. What you type stays on your device' },
+      { href: '/ask.html', code: 'New', title: 'Chat with Professor Puddles', note: 'Small drop, big brain: answers made only from this site’s pages. What you type stays on your device' },
       { href: '/pause-and-play.html', code: 'New', title: 'Levels that grow the background', note: 'Every few levels, something new appears behind every page and joins in' },
       { href: '/book/preface.html', code: 'Deeper', title: 'Mini dives, shore to deep', note: 'Tap any word with the water drop and wade in one step at a time' },
-      { href: '/workpapers/fill/suite.html', code: 'New', title: 'The Workpaper Suite', note: 'Fillable, printable PDFs for your road, with a plan for each week' }
+      { href: '/workpapers/fill/suite.html', code: 'New', title: 'The Workpaper Suite', note: 'Fillable, printable PDFs for your situation, with a plan for each week' }
     ]},
     { id: 'start', title: 'Start here', blurb: 'New to the site? These pages explain the idea and let you try it in a few minutes.', items: [
       { href: '/index.html', code: '', title: 'Home', note: 'What’s new, the ways in, and the full contents' },
@@ -56,7 +56,7 @@
     ]},
     { id: 'self', title: 'Self-discovery', blurb: 'Tools for understanding yourself: your load, your wiring, your patterns. Start here, with or without anyone else.', items: [
       { href: '/quick-checks.html#today', code: 'Daily', title: 'Today’s Weather', note: 'One minute on your own conditions: a forecast, a talk window, what today is good for, and a private almanac of your patterns' },
-      { href: '/wired-differently.html', deep: true, code: 'New', title: 'Wired Differently', note: 'How different neurotypes receive the same words, and how to talk across the difference' },
+      { href: '/wired-differently.html', deep: true, code: 'New', title: 'Wired Differently', note: 'How differently wired people hear the same words, and how to talk across the difference' },
       { href: '/wiring-card.html', code: 'Tool', title: 'Wiring Card', note: 'A one-page card on how you receive words, what silence means, and what to avoid' },
       { href: '/workpapers/wp-02-battery-stress-meter.html', deep: true, code: 'WP-02', title: 'How full is your battery?', note: 'What you’re already carrying, separate from what just happened. Also called the Battery & Stress Meter', paid: true },
       { href: '/tools/frequency-calibration.html', code: 'Tool', title: 'Frequency Calibration', note: 'Your natural rhythms for money, decisions, check-ins and recovery', paid: true },
@@ -73,7 +73,7 @@
       { href: '/daily-ledger-crossword.html', code: 'New', title: 'The Daily Ledger Crossword', note: 'A newspaper-style crossword, from a quick 5x5 Mini to a Big Sunday 13x13' },
       { href: '/quiet-words.html', code: 'Game', title: 'Quiet Words', note: 'A gentle word search with a new theme in every puzzle. Every word you find leaves a kind thought behind' },
     ]},
-    { id: 'relationships', title: 'Relationships', blurb: 'Where to start in each kind of relationship, and every tool that fits. The shared relationship tools themselves are under The book, Workpapers and Tools.', items: [
+    { id: 'relationships', title: 'Relationships', blurb: 'Where to start in each kind of relationship, and every tool that fits. The shared tools themselves live under The book, Workpapers and Tools.', items: [
       { href: '/turning-toward.html', deep: true, code: 'New', title: 'Turning toward', note: 'Seven small, everyday ways to build connection with anyone who matters to you' },
       { href: '/check-ins.html', deep: true, code: 'Guide', title: 'Check-ins', note: 'How to have a tender conversation kindly: a good time and place, listening first, and an ending that feels good to both' },
       { href: '/relationships.html#partners', deep: true, code: '', title: 'Partners', note: 'Start with who did what, one owner per job, and the daily check-in' },
@@ -90,19 +90,19 @@
       { href: '/book/chapter-1.html', deep: true, code: 'I', title: 'Why we get out of tune', note: 'How pace, tone and urgency nudge two people out of sync, and how to get back in tune. Also called the Radio Frequency Paradigm' },
       { href: '/book/chapter-2.html', deep: true, code: 'II', title: 'Is the split working?', note: 'A simple way to see whether the way you share the work can last. It looks at the arrangement, never at a person. Also called P(Solvency)' },
       { href: '/book/chapter-3.html', deep: true, code: 'III', title: 'Full tanks and different angles', note: 'How much of a reaction is leftover stress, and the seven angles people see things from. Also called Autonomic Saturation & the 7 Ocular Vectors', paid: true },
-      { href: '/book/chapter-4.html', deep: true, code: 'IV', title: 'Two kinds of fair', note: 'Agreeing what fair means to you both, and giving words a moment to land. Also called Deontological Parity & Sensory Gating', paid: true },
+      { href: '/book/chapter-4.html', deep: true, code: 'IV', title: 'Two kinds of fair', note: 'Agreeing on what fair means to you both, and letting words land before you react. Also called Deontological Parity & Sensory Gating', paid: true },
       { href: '/book/chapter-5.html', deep: true, code: 'V', title: 'The monthly look-back', note: 'A gentle monthly look back that catches what weekly check-ins miss. Also called the Deficit Audit', paid: true }
     ]},
-    { id: 'workpapers', title: 'Workpapers', blurb: 'Short worksheets you each fill in about yourselves, then read together. They work best in the order listed, with the monthly look-back once a month.', items: [
+    { id: 'workpapers', title: 'Workpapers', blurb: 'Short worksheets. Each of you fills in your own, then you read them together. They work best in the order listed, with the monthly look-back once a month.', items: [
       { href: '/workpapers/wp-01.html', deep: true, code: 'WP-01', title: 'Who did what, and kind ways to say no', note: 'Start here: a week’s log of who did what, plus kind ways to say no. Also called the Field Audit & Neutral Refusals', paid: true },
       { href: '/workpapers/wp-02-battery-stress-meter.html', deep: true, code: 'WP-02', title: 'How full is your battery?', note: 'Five quick questions: how much are you already carrying today? Also called the Battery & Stress Meter', paid: true },
       { href: '/workpapers/wp-03-raci-treaty.html', deep: true, code: 'WP-03', title: 'One owner per job', note: 'Give every regular job one owner, so nobody has to keep asking. Also called the RACI Treaty', paid: true },
-      { href: '/workpapers/wp-04-deficit-audit.html', deep: true, code: 'WP-04', title: 'What keeps coming back?', note: 'A gentle monthly look at what keeps coming up, and what’s really behind it. Also called the Deficit Audit', paid: true },
+      { href: '/workpapers/wp-04-deficit-audit.html', deep: true, code: 'WP-04', title: 'What keeps coming back?', note: 'The monthly look-back: what keeps coming up, and what’s really behind it. Also called the Deficit Audit', paid: true },
       { href: '/workpapers/wp-09-tone-filter.html', deep: true, code: 'WP-09', title: 'Say it so it lands', note: 'Turn a big feeling into a fact, a feeling and a kind ask before you send it. Also called the Tone Filter', paid: true },
       { href: '/wp-11.html', deep: true, code: 'WP-11', title: 'The Calm-Down Kit', note: 'Ways to settle your body first, when either of you is too wound up to talk', paid: true },
       { href: '/workpapers/wp-13-pll-protocol.html', deep: true, code: 'WP-13', title: 'The 90-second daily check-in', note: 'Ninety seconds a day, no debating, to keep small things small. Also called the Phase-Locked Loop', paid: true },
       { href: '/do/index.html', code: '', title: 'Try the Workpapers', note: 'A playground to try the worksheets before you commit' },
-      { href: '/workpapers/fill/suite.html', code: 'Suite', title: 'The Workpaper Suite', note: 'New: your road, in order, as one fillable PDF and a report' },
+      { href: '/workpapers/fill/suite.html', code: 'Suite', title: 'The Workpaper Suite', note: 'New: the worksheets for your situation, in order, as one fillable PDF and a report' },
       { href: '/workpapers/fill/index.html', code: 'Fill-in', title: 'Fill-in workpapers', note: 'Type straight into the worksheets and save them as PDFs on your device' }
     ]},
     { id: 'program', title: 'Guided program', blurb: 'For anyone who’d like to be walked through it, one gentle step at a time.', items: [
@@ -110,15 +110,15 @@
       { href: '/workpapers/report-01.html', deep: true, code: 'REPORT-01', title: 'Your progress, week by week', note: 'Your week-by-week record, so progress builds instead of starting over. Also called the Full Read', paid: true }
     ]},
     { id: 'tools', title: 'Tools', blurb: 'Interactive pages. Everything you type stays in your own browser.', items: [
-      { href: '/ask.html', code: 'New', title: 'Chat with Professor Fiddlesticks', note: 'Ask a question in your own words and get an answer made only from this site’s pages. Nothing you type leaves your device' },
+      { href: '/ask.html', code: 'New', title: 'Chat with Professor Puddles', note: 'Ask a question in your own words and get an answer made only from this site’s pages. Nothing you type leaves your device' },
       { href: '/conversation-reader.html', code: 'New', title: 'The Conversation Reader', note: 'Paste a text thread, chat or email exchange: see where it turned, what each of you may be hearing, and a calmer way to answer' },
       { href: '/lemonade-stand.html', code: 'Tool', title: 'The Lemonade Stand', note: 'List who did what to keep the household running this week, and see the split as a plain fact' },
       { href: '/wiring-card.html', code: 'New', title: 'Wiring Card', note: 'Make a one-page card for how you receive words, what silence means, and what to avoid' },
       { href: '/signal-translator.html', code: 'New', title: 'The Signal Translator', note: 'Test a sentence before a check-in. Pick the wiring, the room, and how it might land' },
       { href: '/carrier-wave-decoder.html', code: 'Tool', title: 'The Carrier Wave Decoder', note: 'A guided session for the moment a conversation starts going sideways' },
       { href: '/workpapers/calculators/calc01-solvency.html', code: 'CALC-01', title: 'Can the load last?', note: 'Add your worksheet numbers and see whether the way you share the load can last. Also called the Solvency Read' },
-      { href: '/tools/mood-arbitrage-free.html', code: '', title: 'Mood Arbitrage: introduction', note: 'Small ways to lift a mood, with one worked example. Free' },
-      { href: '/tools/mood-arbitrage-full.html', code: '', title: 'Mood Arbitrage: full toolkit', note: 'Ideas for lifting a mood, five everyday scenarios and a four-week practice plan', paid: true },
+      { href: '/tools/mood-arbitrage-free.html', code: 'Tool', title: 'Mood Arbitrage', note: 'Small, kind ways to shift a heavy mood: start with the free introduction, then open the full toolkit (five everyday scenarios and a four-week practice plan)' },
+      { href: '/tools/mood-arbitrage-full.html', code: 'Tool', title: 'Mood Arbitrage: the full toolkit', note: 'Five everyday scenarios and a four-week practice plan', paid: true, menu: false },
       { href: '/tools/frequency-calibration.html', code: '', title: 'Find your natural rhythms', note: 'Compare your rhythms across five areas of daily life. Also called Frequency Calibration', paid: true },
       { href: '/tools/frequency-sync-visualizer.html', code: '', title: 'Watch two rhythms sync', note: 'A moving picture of how the daily check-in keeps two people in step', paid: true },
       { href: '/snapshot/index.html', code: '', title: 'A quick snapshot', note: 'A two-minute look at how things are right now' }
@@ -182,7 +182,7 @@
       var sec;
       if (opts.accordion) {
         // The panel shows section names only; open one to see its pages
-        var count = s.items.filter(function (i) { return i.href !== '/index.html'; }).length;
+        var count = s.items.filter(function (i) { return i.href !== '/index.html' && i.menu !== false; }).length;
         sec = el('details', { class: 'tol-index-section tol-acc', id: 'tol-sec-' + s.id });
         if (s.id === opts.open) sec.open = true;
         var hereMark = hereSection && hereSection.id === s.id ? ' <span class="tol-acc-here">you are here</span>' : '';
@@ -199,7 +199,7 @@
       if (s.blurb) sec.appendChild(el('p', null, esc(s.blurb)));
       var ol = el('ol');
       s.items.forEach(function (it) {
-        if (it.href === '/index.html') return;
+        if (it.href === '/index.html' || it.menu === false) return; // menu:false pages are reached from their parent page
         var a = el('a', { class: 'tol-row', href: it.href });
         if (it.href === current) a.setAttribute('aria-current', 'page');
         a.innerHTML =
@@ -249,7 +249,7 @@
     if (s.blurb) menu.appendChild(el('p', { class: 'tol-drop-blurb' }, esc(s.blurb)));
     var ul = el('ul');
     s.items.forEach(function (it) {
-      if (it.href === '/index.html') return;
+      if (it.href === '/index.html' || it.menu === false) return;
       var a = el('a', { href: it.href }, (it.code ? '<span class="tol-drop-code">' + esc(it.code) + '</span>' : '') + '<span>' + esc(it.title) + '</span>');
       if (it.href === current) a.setAttribute('aria-current', 'page');
       var li = el('li'); li.appendChild(a); ul.appendChild(li);
@@ -522,12 +522,12 @@
   // from page to page, and "Another tip" shows a new one.
   var TIPS = [
     ['Name the feeling.', 'Saying “I’m frustrated” out loud, or just in your head, takes some of the heat out of it.'],
-    ['Three breaths before you reply.', 'When a message stings, wait three slow breaths before answering. The reply you send will be kinder, and so will the one you get back.'],
+    ['Three breaths before you reply.', 'When a message stings, wait three slow breaths before answering. Your reply will likely be kinder, and so will the one you get back.'],
     ['Check the basics first.', 'Snapping at everyone? Ask yourself: am I hungry, thirsty, lonely or tired? Fix that first, then decide if the problem is still a problem.'],
     ['Five minutes of daylight.', 'Step outside for a few minutes, especially in the morning. Daylight helps you wake up and can lift your mood.'],
     ['Write tomorrow’s top three tonight.', 'Putting tomorrow’s to-dos on paper before bed helps your mind let go of them.'],
     ['Start with what’s going well.', 'Before a hard conversation, say one thing you appreciate. It helps the other person hear the rest.'],
-    ['Try “can you help me with…”.', 'It lands much softer than “you never…”, and it asks for something they can actually do.'],
+    ['Try “Can you help me with…?”', 'It lands much more softly than “You never…,” and it asks for something they can actually do.'],
     ['The two-minute rule.', 'If a job takes less than two minutes, do it now. Small things stop piling up.'],
     ['Phone in another room.', 'For the first ten minutes after you get home, leave your phone somewhere else and say hello properly.'],
     ['Ask about good news.', 'When someone shares something good, ask one question about it. It’s one of the simplest ways to feel closer.'],
@@ -536,35 +536,35 @@
     ['Rest your eyes.', 'Every twenty minutes of screen time, look at something far away for twenty seconds.'],
     ['Park a looping worry.', 'If a worry keeps circling, write it down with one small next step. Then let the paper hold it.'],
     ['Say one small thank-you.', 'Thank someone today for something tiny and specific. It costs nothing and it’s remembered.'],
-    ['Three things that went okay.', 'Before sleep, name three things that went okay today. Small counts. It trains your attention toward the good.'],
+    ['Three things that went okay.', 'Before sleep, name three things that went okay today. Small things count. It trains your attention toward the good.'],
     ['Breathe out longer.', 'When you feel wound up, make each breath out a little longer than the breath in. It tells your body it’s safe.'],
-    ['Send a “thinking of you”.', 'Text someone you care about. No reason needed, no reply expected. It takes ten seconds.'],
+    ['Send a “thinking of you” text.', 'Text someone you care about. No reason needed, no reply expected. It takes ten seconds.'],
     ['Decide one thing you won’t do today.', 'Protecting your energy is easier when you choose in advance what can wait.'],
-    ['Give yourself a doorway minute.', 'Between work mode and home mode, take a few minutes to switch: a song, a walk, a cup of tea.'],
+    ['Give yourself a doorway minute.', 'Between work mode and home mode, take a minute or two to switch: a song, a short walk, a cup of tea.'],
     ['Shrink the task.', 'Overwhelmed? Ask: what’s the very next physical step? Do only that.'],
     ['Help or an ear?', 'Before giving advice, ask: “Do you want help, or do you just want me to listen?”'],
     ['Cool water, calm body.', 'When feelings run high, splash some cool water on your face. It can help you feel steadier.'],
-    ['Book the worry.', 'Give a worry ten minutes later today, instead of letting it follow you all day.'],
+    ['Book the worry.', 'Set aside ten minutes for a worry later today, instead of letting it follow you around all day.'],
     ['Name a time to come back.', 'If a talk gets too hot, say “I need a minute. Can we come back at 8?” A pause with a time is not walking away.'],
     ['Five things you can see.', 'Feeling scattered? Name five things you can see right now. It pulls you back into the present.'],
     ['Laugh together.', 'Sharing a laugh, even at something silly, is a small repair after a tense day.'],
     ['Short sleep, gentle day.', 'After a poor night, go easy on big decisions and hard talks. Your battery really is lower.'],
     ['Lower your voice.', 'When things heat up, speak a little softer and slower. People tend to match the tone they hear.'],
-    ['Make it easy to do.', 'Put the thing you want to do where you’ll see it: the book on your pillow, the water bottle on your desk.'],
+    ['Make it easy to do.', 'Put what you need where you’ll see it: the book on your pillow, the water bottle on your desk.'],
     ['Take one thing off the list.', 'On purpose. A lighter day is still a good day.'],
     ['Drink some water.', 'Even mild thirst can make you feel tired and irritable. Have a glass before your next coffee.'],
     ['Assume a good reason.', 'When someone is short with you, try assuming they’re having a hard day before assuming they mean it.'],
     ['Celebrate small wins.', 'Finished something? Pause for a second and notice it before rushing on.'],
     ['One kind word to yourself.', 'Talk to yourself the way you’d talk to a friend who’s having a rough day.'],
-    ['Stretch for a minute.', 'Stand up, reach for the ceiling, roll your neck. Your body holds the stress your mind forgets.'],
-    ['Say what you need, not what they did wrong.', '“I need ten quiet minutes” gets a better answer than “you’re so loud”.'],
-    ['Put a pause before “yes”.', 'Try “let me check and come back to you”. It saves overcommitting.'],
+    ['Stretch for a minute.', 'Stand up, reach for the ceiling, roll your neck. Your body often holds on to stress your mind has moved past.'],
+    ['Say what you need, not what they did wrong.', '“I need ten quiet minutes” gets a better answer than “You’re so loud.”'],
+    ['Put a pause before “yes.”', 'Try “Let me check and get back to you.” It keeps you from saying yes to too much.'],
     ['Hug a little longer.', 'A slow six-second hug helps both of you settle.'],
     ['Leave it better than you found it.', 'Tidy one small spot before you leave a room. Tomorrow’s you will be grateful.']
   ];
   var NO_TIPS = ['/index.html', '/night-garden.html', '/dashboard.html', '/404.html', '/offline.html'];
   // The full library (about 300 tips in topics) lives in tips.js and loads when a tip is shown;
-  // the short list above is the fallback. Pages lean towards topics that fit them.
+  // the short list above is the fallback. Pages lean toward topics that fit them.
   var TIP_TOPICS = {
     self: ['calm', 'body', 'mind', 'selftalk', 'rest', 'sleep'], relationships: ['connection', 'talking', 'family', 'friends', 'kindness'],
     book: ['connection', 'talking', 'home', 'kindness'], workpapers: ['home', 'talking', 'work', 'connection'], program: ['home', 'talking', 'work'],
@@ -659,7 +659,7 @@
   }
   var installPrompt = null;
   window.addEventListener('beforeinstallprompt', function (e) { e.preventDefault(); installPrompt = e; });
-  // ---------- Professor Fiddlesticks: the site's chat host, floating by, with a hello bubble up top ----------
+  // ---------- Professor Puddles: the site's chat host, floating by, with a hello bubble up top ----------
   var PUDDLES_SVG = '<svg viewBox="-4 -14 88 92" aria-hidden="true" focusable="false">' +
     '<path d="M40 8C33 22 14 36 14 50c0 14 12 22 26 22s26-8 26-22C66 36 47 22 40 8z" fill="#CFE6FA" stroke="#7FB2E0" stroke-width="2.6"/>' +
     '<ellipse cx="30" cy="30" rx="5" ry="3" fill="#fff" opacity=".6" transform="rotate(-25 30 30)"/>' +
@@ -669,16 +669,16 @@
     '<ellipse cx="23" cy="55" rx="3.6" ry="2.2" fill="#F2A3B6" opacity=".85"/><ellipse cx="57" cy="55" rx="3.6" ry="2.2" fill="#F2A3B6" opacity=".85"/>' +
     '<path d="M18 10 L40 1 L62 10 L40 19 Z" fill="#3A3350"/><path d="M29 14.5v6c3 3 19 3 22 0v-6l-11 4.5z" fill="#4A4266"/>' +
     '<path d="M60 10 v11" stroke="#F4D26B" stroke-width="1.6"/><circle cx="60" cy="22.5" r="2.3" fill="#F4D26B"/></svg>';
-  var PUDDLES = { name: 'Professor Fiddlesticks', svg: PUDDLES_SVG, color: '#CFE6FA',
-    greeting: 'Hello! I’m Professor Fiddlesticks. Ask me anything about this site, like the book, the workpapers, check-ins or ways to calm down, and I’ll answer from its pages, with a link to read more. What you type stays on this device.' };
+  var PUDDLES = { name: 'Professor Puddles', svg: PUDDLES_SVG, color: '#CFE6FA',
+    greeting: 'Hello! I’m Professor Puddles. Ask me anything about this site, like the book, the workpapers, check-ins or ways to calm down, and I’ll answer from its pages, with a link to read more. What you type stays on this device.' };
   // the hello bubble, at the top of the home page only: once a day, and never again after a first chat
   function buildPuddles(body) {
     if (current !== '/index.html' && current !== '/') return;
     var today = new Date().toISOString().slice(0, 10), seen = lsGet('tol-puddles-bubble');
     if (seen === 'done' || seen === today) return;
-    var hi = el('div', { class: 'tol-puddles-hi', role: 'complementary', 'aria-label': 'Meet Professor Fiddlesticks' },
+    var hi = el('div', { class: 'tol-puddles-hi', role: 'complementary', 'aria-label': 'Meet Professor Puddles' },
       '<span class="tol-puddles-hi-art">' + PUDDLES_SVG + '</span>' +
-      '<p><strong>Meet Professor Fiddlesticks!</strong> Small drop, big brain. Ask anything about the program in your own words, and he’ll answer straight from these pages.</p>' +
+      '<p><strong>Meet Professor Puddles!</strong> Small drop, big brain. Ask anything about the program in your own words, and he’ll answer straight from these pages.</p>' +
       '<a class="tol-puddles-hi-go" href="/ask.html">Chat about something</a>' +
       '<button type="button" class="tol-puddles-hi-x" aria-label="Not now">&times;</button>');
     hi.querySelector('.tol-puddles-hi-go').addEventListener('click', function () { lsSet('tol-puddles-bubble', 'done'); });
@@ -688,12 +688,12 @@
     setTimeout(function () { hi.classList.add('is-in'); }, 600);
   }
 
-  // A little card from Professor Fiddlesticks partway through the course pages: "chat about this?"
+  // A little card from Professor Puddles partway through the course pages: "chat about this?"
   var PUD_LINES = [
     ['Got a question bubbling up?', 'I’m a drop of pure curiosity. Let’s chat about “{t}”.'],
     ['Want to dive in together?', 'No question is too small, and no puddle too deep. Ask me about “{t}”.'],
     ['Pssst. Stuck on a word?', 'I read every page of this site (twice, with my glasses on). Let’s chat about “{t}”.'],
-    ['Fancy a little splash of help?', 'Ask me anything about “{t}”, in your own words.'],
+    ['Want a little splash of help?', 'Ask me anything about “{t}”, in your own words.'],
     ['Thinking about this one?', 'Me too! I’m positively drip-ping with answers about “{t}”.'],
     ['Would a chat help it sink in?', 'I’ll answer from the pages themselves, with a link to read more. Shall we talk about “{t}”?'],
     ['Office hours are open!', 'The Professor is in, and it’s always a good time to chat about “{t}”.']
@@ -714,10 +714,10 @@
     if (after.tagName === 'H2' && after.nextElementSibling && after.nextElementSibling !== gate) after = after.nextElementSibling;
     var n = 0; for (var i = 0; i < current.length; i++) n = (n * 31 + current.charCodeAt(i)) % 997; // the same line on the same page
     var line = PUD_LINES[n % PUD_LINES.length];
-    var card = el('aside', { class: 'tol-pud-card', 'aria-label': 'Chat with Professor Fiddlesticks' },
+    var card = el('aside', { class: 'tol-pud-card', 'aria-label': 'Chat with Professor Puddles' },
       '<span class="tol-pud-card-art" aria-hidden="true">' + PUDDLES_SVG + '</span>' +
       '<p><strong>' + esc(line[0]) + '</strong> ' + esc(line[1].replace('{t}', topic)) + '</p>' +
-      '<a class="tol-pud-card-go" href="/ask.html?about=' + encodeURIComponent(topic) + '">&#128172; Chat with Professor Fiddlesticks</a>');
+      '<a class="tol-pud-card-go" href="/ask.html?about=' + encodeURIComponent(topic) + '">&#128172; Chat with Professor Puddles</a>');
     after.parentNode.insertBefore(card, after.nextSibling);
   }
 
@@ -912,7 +912,7 @@
         say('Unlocked. Every members page on the site is now open in this browser.', 'ok');
         applyState(true);
       } else {
-        say('That email isn’t on the members list yet. If you just subscribed, your access is usually added within a day. Questions: ' + CONFIG.supportEmail, 'error');
+        say('That email isn’t on the members list yet. If you just subscribed, your access is usually added within a day. Questions? Email ' + CONFIG.supportEmail, 'error');
       }
     }).catch(function (err) {
       say(err && err.message === 'insecure'

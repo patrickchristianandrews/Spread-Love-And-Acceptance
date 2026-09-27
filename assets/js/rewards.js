@@ -13,18 +13,18 @@
   // next one arrives, and each one plays along with the animals and everything else there.
   var WONDERS = [
     ['garden-swing', 'A tree and a swing', '🌳', 'An old tree by the pond with a wooden swing. The dogs take turns on it.'],
-    ['garden-koi', 'Koi in the pond', '🐟', 'Two glowing koi swim slow circles, and leap when anyone splashes.'],
+    ['garden-koi', 'Koi in the pond', '🐟', 'Two glowing koi swim in slow circles and leap when anyone splashes.'],
     ['garden-chimes', 'Wind chimes', '🎐', 'Chimes hang from the tree and sparkle whenever someone runs past.'],
     ['garden-boats', 'Paper boats', '⛵', 'Candle-lit paper boats drift across the pond. The frog hops aboard now and then.'],
     ['garden-bridge', 'A little bridge', '🌉', 'A wooden footbridge over the pond, the best spot for a hug.'],
     ['garden-blossom', 'A blossom tree', '🌸', 'A cherry tree on the far bank. Its petals drift across every page and land on whoever is near.'],
     ['garden-aurora', 'Aurora', '🌌', 'Ribbons of light across the sky. Everyone stops to look up.'],
-    ['garden-lights', 'Fairy lights', '✨', 'Warm little lights between the trees that glow brighter as the animals pass beneath.'],
+    ['garden-lights', 'Fairy lights', '✨', 'Warm little lights strung between the trees. They glow brighter as the animals pass underneath.'],
     ['garden-balloon', 'A hot-air balloon', '🎈', 'A striped balloon drifts across the sky, and the plane waves hello.'],
     ['garden-hammock', 'A hammock', '🛏️', 'A hammock between the trees, for naps after all that playing.'],
     ['garden-rainbow', 'Rainbow lanterns', '🏮', 'The Night Garden’s lanterns rise in every pastel color.'],
-    ['garden-owls', 'Sleepy owls', '🦉', 'Two owls in the branches whose eyes follow the fun.'],
-    ['garden-butterflies', 'Glowing butterflies', '🦋', 'Soft glowing butterflies that the dogs chase and the bunny follows.'],
+    ['garden-owls', 'Sleepy owls', '🦉', 'Two owls in the branches, watching all the fun.'],
+    ['garden-butterflies', 'Glowing butterflies', '🦋', 'Softly glowing butterflies. The dogs chase them, and the bunny follows.'],
     ['garden-meteors', 'A meteor shower', '🌠', 'Now and then a shower of shooting stars, and everyone makes a wish.'],
     ['garden-gazebo', 'A lantern gazebo', '🏯', 'A little glowing gazebo on the hill, where the dogs go to dance.']
   ];

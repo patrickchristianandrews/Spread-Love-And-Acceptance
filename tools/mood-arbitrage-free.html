@@ -313,6 +313,20 @@
   <div class="hero">
     <div class="badge">Free Introduction</div>
     <h1>Mood Arbitrage</h1>
+    <nav class="ma-steps" aria-label="Mood Arbitrage, in two parts">
+      <a href="/tools/mood-arbitrage-free.html" aria-current="page"><span>1</span> The introduction <small>free</small></a>
+      <span class="ma-arrow" aria-hidden="true">&rarr;</span>
+      <a href="/tools/mood-arbitrage-full.html"><span>2</span> The full toolkit <small>free with email</small></a>
+    </nav>
+    <style>
+      .ma-steps{ display:flex; flex-wrap:wrap; align-items:center; gap:.5rem; margin:.4rem 0 1.4rem; }
+      .ma-steps a{ display:inline-flex; align-items:center; gap:.45rem; min-height:44px; padding:.4rem .95rem; border-radius:999px; text-decoration:none; color:#3C3350;
+        background:rgba(255,253,249,.9); border:1px solid #D9C8F0; font:600 .92rem "Lora", Georgia, serif; }
+      .ma-steps a[aria-current="page"]{ background:#3C3350; color:#FFF8EE; border-color:#3C3350; }
+      .ma-steps a span{ display:inline-grid; place-items:center; width:1.5rem; height:1.5rem; border-radius:50%; background:#F9E1EA; color:#7A3355; font:600 .75rem "IBM Plex Mono", monospace; }
+      .ma-steps a small{ font-weight:400; opacity:.75; }
+      .ma-arrow{ color:#8A6D8F; }
+    </style>
     
 <p class="hero-tagline">Learn to notice how someone’s body is feeling, and gently help a tense moment soften as it happens.</p>
   </div>
@@ -341,7 +355,7 @@
 
     <div class="use-item downstream">
       <strong>Then:</strong>
-      <a href="/tools/mood-arbitrage-full.html" class="locked">Mood Arbitrage Full 🔒</a>
+      <a href="/tools/mood-arbitrage-full.html" class="locked">The full Mood Arbitrage toolkit 🔒</a>
       <p>15+ ready-made moves</p>
     </div>
   </div>

@@ -16,7 +16,7 @@
              coparent: 'Thanks for handling [the specific thing] with the kids. It made a real difference.',
              friend: 'Still thinking about [the specific thing] you did. Thank you, honestly. It meant a lot.' } },
     { key: 'bids', title: 'Catch one small reach today',
-      todo: 'When they say “look at this”, sigh, or share something small, stop what you’re doing, look, and ask one question about it.',
+      todo: 'When they say “look at this,” sigh, or share something small, stop what you’re doing, look, and ask one question about it.',
       msg: null },
     { key: 'good-news', title: 'Ask about something good',
       todo: 'Ask about a good thing in their week, then get curious: ask one more question about the answer.',
@@ -38,7 +38,7 @@
     { key: 'stress-talk', title: 'Offer an ear, not a fix',
       todo: 'Ask about the stress from outside: work, family, the world. Take their side and don’t fix it unless they ask.',
       msg: { default: 'Rough day? I’m around tonight if you want to vent. No fixing, just listening.',
-             coworker: 'This week looks heavy for you. Want to grab a coffee and offload for ten minutes?',
+             coworker: 'This week looks heavy for you. Want to grab a coffee and vent for ten minutes?',
              friend: 'How are you actually doing? Happy to just listen if you want to vent.' } },
     { key: 'rituals', title: 'Start one small ritual',
       todo: 'Suggest something small you could do together, the same way each week, whatever the mood.',
@@ -56,7 +56,7 @@
       msg: { default: 'Ha, this is so you. Where did you find it?',
              friend: 'Okay, this made me laugh out loud. How are you, by the way?' } },
     { key: 'bids', title: 'Notice a sigh',
-      todo: 'If they sigh, go quiet or look tired, ask one gentle question instead of carrying on.',
+      todo: 'If they sigh, go quiet or look tired, ask one gentle question instead of moving on.',
       msg: { default: 'You seem a bit tired today. Anything on your mind?',
              coworker: 'You seem swamped. Anything I can take off your plate?' } },
     { key: 'bids', title: 'Say yes to one invitation',
@@ -109,7 +109,7 @@
     { key: 'fondness', title: 'Tell them how they helped you',
       todo: 'Think of a time they made something easier for you. Tell them what it meant.',
       msg: { default: 'I still think about when you [what they did]. It helped more than you know.' } },
-    { key: 'fondness', title: 'Send a “this made me think of you”',
+    { key: 'fondness', title: 'Send a “this made me think of you” message',
       todo: 'When you see something that reminds you of them, send it. No reason needed.',
       msg: { default: 'Saw this and thought of you 💛',
              friend: 'This is SO you. Thinking of you!' } },
@@ -136,7 +136,7 @@
       todo: 'Hug for a slow six seconds today. It feels long, and that’s the point.', msg: null },
     { key: 'rituals', title: 'Plan something to look forward to',
       todo: 'Put one small, fun thing in the calendar together. Anticipation is half the joy.',
-      msg: { default: 'Let’s put something fun on the calendar. [A picnic / a film night / a day trip]?',
+      msg: { default: 'Let’s put something fun on the calendar. [A picnic / a movie night / a day trip]?',
              friend: 'We need a plan! [Brunch / a walk / a show] sometime in the next few weeks? I’ll bring snacks.' } },
     { key: 'rituals', title: 'Reconnect with someone drifting',
       todo: 'Think of someone you’ve lost touch with. Send one low-pressure message, with no need for a long reply.',
@@ -249,7 +249,7 @@
     var todayKey = new Date().toDateString(), lastSeen = get('tol-tt-last');
     if (n > 0 && n < 7 && lastSeen && lastSeen !== todayKey) {
       var w = document.createElement('p'); w.className = 'tol-welcome';
-      w.innerHTML = '<img src="/assets/img/mascots/two-bubbles.svg" alt="" width="40" height="40"><span>Welcome back. You’re on <strong>day ' + (n + 1) + ' of 7</strong>. Carry on whenever you like, or start fresh.</span>';
+      w.innerHTML = '<img src="/assets/img/mascots/two-bubbles.svg" alt="" width="40" height="40"><span>Welcome back. You’re on <strong>day ' + (n + 1) + ' of 7</strong>. Pick up where you left off, or start fresh.</span>';
       list.parentNode.insertBefore(w, list);
     }
     set('tol-tt-last', todayKey);

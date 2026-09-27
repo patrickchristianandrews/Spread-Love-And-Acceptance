@@ -238,7 +238,7 @@
         '<p class="br-label">How long</p>' + chips('min', [['1', '1 min'], ['3', '3 min'], ['5', '5 min']], get('tol-br-min', '1')) +
         '<p class="br-label">Sound</p>' + chips('scape', [['beneath', 'The Breath Beneath'], ['deep', 'Deep'], ['ocean', 'Ocean'], ['rain', 'Soft rain'], ['bowls', 'Singing bowls'], ['off', 'Silence']], get('tol-br-scape', 'deep')) +
         '<p class="br-scape-note"></p>' +
-        '<p class="br-phones">&#127911; Soundscapes sound best with headphones: the deep, low tones and the gentle left-to-right movement come through fully.</p>' +
+        '<p class="br-phones">&#127911; Soundscapes sound best with headphones, so the deep, low tones and the gentle left-to-right movement come through fully.</p>' +
         '<div class="tol-breathe-row"><button type="button" class="br-begin" data-act="begin">Begin</button><button type="button" data-act="close">Not now</button></div>' +
       '</section>' +
       // breathe
