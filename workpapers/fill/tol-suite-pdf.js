@@ -32,7 +32,23 @@
     'WP-11': { label: 'Latest reading', say: 'After settling', max: 1, good: 'down' }
   };
 
-  function schemaFor(code) { return (global.TOL_WORKPAPERS || {})[String(code || '').toLowerCase()]; }
+  // The road someone is on can change a worksheet's wording and rows (see TOL_WORKPAPER_VARIANT).
+  var currentRoad = null;
+  function setRoad(road) { currentRoad = road || null; }
+  function schemaFor(code, road) {
+    var key = String(code || '').toLowerCase(), r = road === undefined ? currentRoad : road;
+    var v = r && global.TOL_WORKPAPER_VARIANT ? global.TOL_WORKPAPER_VARIANT(key, r) : null;
+    return v || (global.TOL_WORKPAPERS || {})[key];
+  }
+  // What to call person i when no name is given: the road's word for them.
+  function roleOf(people, i) {
+    people = people || [];
+    if (people[i]) return people[i];
+    var last = people[people.length - 1];
+    if (!last) return 'Person ' + WPK.CODES[i];
+    if (/^(?:Partner|Parent|Person) [A-H]$/.test(last)) return last.replace(/[A-H]$/, WPK.CODES[i]);
+    return last + ' ' + i;
+  }
   function nameOf(code) { var n = global.TOL_SUITE_PATHS && global.TOL_SUITE_PATHS.names[code]; return n || (schemaFor(code) || {}).title || code; }
   function enc(t) { return PDF.encode(t); }
   function wrap(t, f, s, w) { return PDF.wrap(t, f, s, w); }
@@ -148,7 +164,7 @@
   function key(k) { return String(k).replace(/\./g, '!'); }
 
   function choiceOptions(def, ctx) {
-    if (def.type === 'person') return [['', '']].concat(['A', 'B'].concat(def.both ? ['Both'] : []).map(function (p) { return [p, ctx.name(p)]; }));
+    if (def.type === 'person') return [['', '']].concat(WPK.personOptions(ctx, def).map(function (o) { return [o.v, o.l]; }));
     return [['', '']].concat(def.options.map(function (o) { return [o, o]; }));
   }
 
@@ -184,8 +200,9 @@
 
   function sheetMeta(pen, entry, e, schema, ctx, opts) {
     var defs = [];
-    var people = opts.people || ['Partner A', 'Partner B'];
-    if (schema.people) defs.push({ id: 'partnerA', label: people[0] + ' (name)', type: 'text' }, { id: 'partnerB', label: people[1] + ' (name)', type: 'text' });
+    if (schema.people) ctx.people().forEach(function (c, i) {
+      defs.push({ id: 'partner' + c, label: (opts.people ? roleOf(opts.people, i) : WPK.labelFor(i)) + ' (name)', type: 'text' });
+    });
     defs = defs.concat(schema.meta || []);
     var colW = (W - 16) / 2;
     for (var i = 0; i < defs.length; i += 2) {
@@ -200,7 +217,8 @@
   }
 
   function sheetTable(pen, entry, e, sec, schema, ctx, opts) {
-    var rows = (entry.state.tables[sec.id] || []).slice(), fixed = !!sec.fixedRows;
+    var rows = (entry.state.tables[sec.id] || []).slice(), fixed = !!sec.fixedRows, fr = fixed ? WPK.fixedRowsFor(sec, entry.state) : null;
+    if (fixed) { rows = rows.slice(0, fr.length); while (rows.length < fr.length) rows.push({}); }
     if (!fixed) {
       var filled = rows.filter(function (r) { return !WPK.rowIsEmpty(sec, r); }).length;
       var min = Math.max((sec.defaultRows || [{}]).length, filled + (opts.blankRows == null ? 3 : opts.blankRows), 3);
@@ -234,9 +252,8 @@
       cols.forEach(function (c, ci) {
         var w = widths[ci] - 3;
         if (c.type === 'label') {
-          var lab = WPK.rowLabel(sec.fixedRows[ri], ctx);
-          if (sec.fixedRows[ri] === '@A' && !(entry.state.values.partnerA || '').trim()) lab = (opts.people || [])[0] || lab;
-          if (sec.fixedRows[ri] === '@B' && !(entry.state.values.partnerB || '').trim()) lab = (opts.people || [])[1] || lab;
+          var lab = WPK.rowLabel(fr[ri], ctx), pc = /^@([A-H])$/.exec(fr[ri]);
+          if (pc && opts.people && !String(entry.state.values['partner' + pc[1]] || '').trim()) lab = roleOf(opts.people, WPK.CODES.indexOf(pc[1]));
           pen.doc.text(x + 2, pen.y + 14, enc(lab), 'Helvetica-Bold', 9, C.ink);
         } else if (c.type === 'computed') {
           var v = c.compute(r);
@@ -380,7 +397,8 @@
     var sub = (path ? path.label + '. ' + path.blurb : 'Your workpapers, in order.');
     wrap(sub, 'Times-Italic', 11.5, W - 130).slice(0, 2).forEach(function (ln, k) { d.text(L + 22, 140 + k * 14, ln, 'Times-Italic', 11.5, C.ink); });
     pen.y = 196;
-    var who = [plan.names && plan.names[0], plan.names && plan.names[1]].filter(Boolean).join(' & ');
+    var named = (plan.names || []).map(function (n) { return String(n || '').trim(); }).filter(Boolean);
+    var who = named.length > 1 ? named.slice(0, -1).join(', ') + ' & ' + named[named.length - 1] : (named[0] || '');
     d.text(L, pen.y, enc((who ? 'For ' + who + '  ·  ' : '') + niceDate()), 'Helvetica', 9.5, C.soft);
     pen.y += 22;
 
@@ -547,7 +565,7 @@
       if (!ctx) return;
       if (en.workpaper === 'WP-13') ctx.rows('daily').forEach(function (r) { if (r.thanks) items.thanks.push([r.thanks, [r.day, ctx.name(r.who)].filter(Boolean).join(', ')]); });
       if (en.workpaper === 'WP-11') {
-        (s.tables.lines || []).forEach(function (r, i) { if (r.line) items.lines.push([r.line, ctx.name(i ? 'B' : 'A')]); });
+        (s.tables.lines || []).forEach(function (r, i) { if (r.line && WPK.CODES[i]) items.lines.push([r.line, ctx.name(WPK.CODES[i])]); });
         [s.values.first, s.values.second].forEach(function (d) { if (d) items.defaults.push([d, '']); });
       }
       if (en.workpaper === 'WP-01') ctx.rows('refusals').forEach(function (r) { var t = [r.ack, r.cap, r.alt].filter(Boolean).join(' '); if (t) items.refusals.push([t, r.kind || '']); });
@@ -786,7 +804,7 @@
       var parts = name.slice(FIELD_PREFIX.length).split('~');
       if (parts[0] === 'path') { path = found[name]; return; }
       var e = parts[0], code = parts[1];
-      if (!schemaFor(code)) return;
+      if (!schemaFor(code, path)) return;
       var en = byE[e] || (byE[e] = { workpaper: code, raw: { values: {}, tables: {} }, label: '', order: +e });
       var v = found[name];
       if (parts[2] === 'label') { en.label = typeof v === 'string' ? v.trim() : ''; return; }
@@ -799,13 +817,20 @@
       }
     });
     var entries = Object.keys(byE).map(function (k) { return byE[k]; }).sort(function (a, b) { return a.order - b.order; }).map(function (en) {
-      var schema = schemaFor(en.workpaper), raw = en.raw, names = { A: raw.values.partnerA, B: raw.values.partnerB };
+      var schema = schemaFor(en.workpaper, path || undefined), raw = en.raw, names = {};
+      WPK.CODES.forEach(function (c) { if (raw.values['partner' + c]) names[c] = String(raw.values['partner' + c]); });
       function plain(def, v) {
         if (v && typeof v === 'object') v = v.name;
         if (def.type === 'check') return !!v && v !== 'Off';
         if (v == null) return '';
         v = String(v);
-        if (def.type === 'person' && v) { if (v === names.A) return 'A'; if (v === names.B) return 'B'; }
+        if (def.type === 'person' && v) {
+          var hit = WPK.CODES.filter(function (c) { return names[c] === v; })[0];
+          if (hit) return hit;
+          var dflt = WPK.CODES.filter(function (c, i) { return WPK.labelFor(i) === v || 'Partner ' + c === v; })[0];
+          if (dflt) return dflt;
+          if (v === 'Everyone') return 'Both';
+        }
         if (def.type === 'date') return isoDate(v);
         return v;
       }
@@ -861,5 +886,5 @@
     });
   }
 
-  global.TOLSuitePDF = { fillable: fillable, report: report, readFilled: readFilled, answers: answers, results: results, metric: metric, labelOf: labelOf, nameOf: nameOf, schemaFor: schemaFor, METRICS: METRICS };
+  global.TOLSuitePDF = { fillable: fillable, report: report, readFilled: readFilled, answers: answers, results: results, metric: metric, labelOf: labelOf, nameOf: nameOf, schemaFor: schemaFor, setRoad: setRoad, roleOf: roleOf, METRICS: METRICS };
 })(typeof window !== 'undefined' ? window : globalThis);

@@ -6,10 +6,18 @@
   Privacy by design:
   - Nothing is sent anywhere. There are no network requests in this file,
     and the page's Content-Security-Policy blocks them (connect-src 'none').
-  - Nothing is stored in the browser: no cookies, localStorage or IndexedDB.
+  - Nothing is stored in the browser unless the person ticks "Keep a draft on
+    this device". Then one draft per worksheet is kept in localStorage, on this
+    device only, until they press "Erase". No cookies, no IndexedDB.
   - Inputs have autocomplete off, so the browser doesn't remember entries.
-  - The only copies are the files the person chooses to download: the PDF,
+  - The other copies are the files the person chooses to download: the PDF,
     and an optional draft file (.json) they can reopen later to keep working.
+
+  People: a worksheet with people:true holds 2 to 8 people, coded A to H.
+  Their names live in values.partnerA … values.partnerH (so drafts saved when
+  there were only "Partner A" and "Partner B" still open), and
+  values.peopleCount says how many there are. Tables whose fixed rows are
+  ['@A', '@B'] get one row per person.
 */
 (function (global) {
   'use strict';
@@ -20,6 +28,74 @@
   };
   var DRAFT_FORMAT = 'tol-workpaper-draft';
   var DRAFT_VERSION = 1;
+  var CODES = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'];
+  var MIN_PEOPLE = 2, MAX_PEOPLE = CODES.length;
+  var KEEP_PREFIX = 'tol-wpf-keep:';
+
+  /* ------------------------------------------------------------ people */
+
+  // What an unnamed person is called. The Workpaper Suite swaps in its road's words ("You", "Teammate 2").
+  var labelFor = function (i) { return 'Person ' + CODES[i]; };
+  function setDefaultLabels(fn) { labelFor = typeof fn === 'function' ? fn : function (i) { return 'Person ' + CODES[i]; }; }
+
+  function peopleCount(values) {
+    values = values || {};
+    var n = Math.max(MIN_PEOPLE, Math.min(MAX_PEOPLE, parseInt(values.peopleCount, 10) || 0));
+    CODES.forEach(function (c, i) { if (String(values['partner' + c] || '').trim()) n = Math.max(n, i + 1); });
+    return n;
+  }
+  function isPersonRows(fr) { return !!fr && fr[0] === '@A' && fr[1] === '@B'; }
+  // The fixed row labels a table shows for this state: one per person for ['@A', '@B'] tables.
+  function fixedRowsFor(sec, state) {
+    if (!sec.fixedRows) return null;
+    if (!isPersonRows(sec.fixedRows)) return sec.fixedRows;
+    return CODES.slice(0, peopleCount(state && state.values)).map(function (c) { return '@' + c; });
+  }
+  // Give every per-person table a row for each person.
+  function syncPeople(schema, state) {
+    schema.sections.forEach(function (s) {
+      if (s.type !== 'table' || !s.fixedRows) return;
+      var fr = fixedRowsFor(s, state), rows = state.tables[s.id] || (state.tables[s.id] = []);
+      while (rows.length < fr.length) rows.push({});
+    });
+  }
+  function addPerson(schema, state) {
+    var n = peopleCount(state.values);
+    if (n >= MAX_PEOPLE) return false;
+    state.values.peopleCount = n + 1;
+    if (state.values['partner' + CODES[n]] == null) state.values['partner' + CODES[n]] = '';
+    syncPeople(schema, state);
+    return true;
+  }
+  // Take person i out, and move everyone after them up one place, everywhere in the sheet.
+  function removePerson(schema, state, idx) {
+    var n = peopleCount(state.values);
+    if (n <= MIN_PEOPLE || idx < 0 || idx >= n) return false;
+    for (var k = idx; k < n - 1; k++) state.values['partner' + CODES[k]] = state.values['partner' + CODES[k + 1]] || '';
+    delete state.values['partner' + CODES[n - 1]];
+    state.values.peopleCount = n - 1;
+    function remap(v) {
+      var j = CODES.indexOf(v);
+      if (j < 0) return v;
+      return j === idx ? '' : j > idx ? CODES[j - 1] : v;
+    }
+    schema.sections.forEach(function (s) {
+      if (s.type !== 'table') return;
+      var rows = state.tables[s.id] || [];
+      if (s.fixedRows && isPersonRows(s.fixedRows)) { if (rows.length > idx) rows.splice(idx, 1); }
+      var cols = s.columns.filter(function (c) { return c.type === 'person'; });
+      if (cols.length) rows.forEach(function (r) { cols.forEach(function (c) { if (r[c.id]) r[c.id] = remap(r[c.id]); }); });
+    });
+    syncPeople(schema, state);
+    return true;
+  }
+  // Everyone who can be picked in a person drop-down, in alphabetical order, then "Both"/"Everyone".
+  function personOptions(ctx, def) {
+    var list = ctx.people().map(function (c) { return { v: c, l: ctx.name(c), person: c }; });
+    list.sort(function (a, b) { return a.l.localeCompare(b.l, undefined, { sensitivity: 'base', numeric: true }); });
+    if (def && def.both) list.push({ v: 'Both', l: ctx.name('Both'), person: 'Both' });
+    return list;
+  }
 
   /* ------------------------------------------------------------ state + ctx */
 
@@ -48,7 +124,7 @@
         s.columns.forEach(function (c) { if (r[c.id] != null && typeof r[c.id] !== 'object') clean[c.id] = r[c.id]; });
         return clean;
       });
-      if (s.fixedRows) rows = s.fixedRows.map(function (_, i) { return rows[i] || {}; });
+      if (s.fixedRows) rows = fixedRowsFor(s, fresh).map(function (_, i) { return rows[i] || {}; });
       fresh.tables[s.id] = rows.length ? rows : [{}];
     });
     return fresh;
@@ -86,16 +162,18 @@
         return (state.tables[tableId] || []).filter(function (r) { return !rowIsEmpty(s, r); });
       },
       name: function (p) {
-        if (p === 'A') return (state.values.partnerA || '').trim() || 'Partner A';
-        if (p === 'B') return (state.values.partnerB || '').trim() || 'Partner B';
-        if (p === 'Both') return 'Both';
+        var i = CODES.indexOf(p);
+        if (i >= 0) return String(state.values['partner' + p] || '').trim() || labelFor(i);
+        if (p === 'Both') return peopleCount(state.values) > 2 ? 'Everyone' : 'Both';
         return '';
-      }
+      },
+      count: function () { return peopleCount(state.values); },
+      people: function () { return CODES.slice(0, peopleCount(state.values)); }
     };
   }
 
   function rowLabel(label, ctx) {
-    return label === '@A' ? ctx.name('A') : label === '@B' ? ctx.name('B') : label;
+    return typeof label === 'string' && /^@[A-H]$/.test(label) ? ctx.name(label.slice(1)) : label;
   }
 
   function formatDate(v) {
@@ -296,7 +374,7 @@
     var ctx = R.ctx;
 
     var meta = [];
-    if (schema.people) meta.push(['Partner A', ctx.name('A')], ['Partner B', ctx.name('B')]);
+    if (schema.people) ctx.people().forEach(function (c, i) { meta.push([labelFor(i), ctx.name(c)]); });
     (schema.meta || []).forEach(function (f) {
       meta.push([f.label, f.type === 'date' ? formatDate(state.values[f.id]) : (state.values[f.id] || '')]);
     });
@@ -309,9 +387,10 @@
         var rows = state.tables[s.id] || [];
         var cells;
         if (s.fixedRows) {
-          var cols = [{ label: '', w: 1.6 }].concat(s.columns);
-          cells = rows.map(function (r, i) {
-            return [rowLabel(s.fixedRows[i], ctx)].concat(s.columns.map(function (c) { return displayCell(c, r, ctx); }));
+          var cols = [{ label: '', w: 1.6 }].concat(s.columns), fr = fixedRowsFor(s, state);
+          cells = fr.map(function (lab, i) {
+            var r = rows[i] || {};
+            return [rowLabel(lab, ctx)].concat(s.columns.map(function (c) { return displayCell(c, r, ctx); }));
           });
           R.heading(s.title, 30 + cells.length * 20);
           R.table(cols, cells);
@@ -396,10 +475,10 @@
       el = h('textarea', Object.assign(base, { rows: data.table ? 2 : 3, spellcheck: 'true' }));
       el.value = value || '';
     } else if (def.type === 'select' || def.type === 'person') {
-      el = h('select', base);
+      el = h('select', Object.assign(base, { 'data-person-select': def.type === 'person' ? (def.both ? 'both' : 'one') : null }));
       el.appendChild(h('option', { value: '', text: '—' }));
       var opts = def.type === 'person'
-        ? ['A', 'B'].concat(def.both ? ['Both'] : []).map(function (p) { return { v: p, l: self.ctx().name(p), person: p }; })
+        ? personOptions(self.ctx(), def)
         : def.options.map(function (o) { return { v: o, l: o }; });
       opts.forEach(function (o) {
         var op = h('option', { value: o.v, text: o.l, 'data-person': o.person });
@@ -429,17 +508,32 @@
     // Names and meta fields
     var metaDefs = [];
     if (s.people) {
-      metaDefs.push({ id: 'partnerA', label: 'Partner A', type: 'text', placeholder: 'First name or initial' });
-      metaDefs.push({ id: 'partnerB', label: 'Partner B', type: 'text', placeholder: 'First name or initial' });
+      syncPeople(s, st);
+      var n = peopleCount(st.values);
+      CODES.slice(0, n).forEach(function (c, i) {
+        metaDefs.push({ id: 'partner' + c, label: self.opts.personLabel ? self.opts.personLabel(i) : labelFor(i), type: 'text', placeholder: 'First name or initial', person: i });
+      });
     }
     metaDefs = metaDefs.concat(s.meta || []);
     if (metaDefs.length) {
       var grid = h('div', { className: 'wpf-meta' });
+      var canEdit = s.people && !this.opts.fixedPeople;
       metaDefs.forEach(function (f) {
         var c = self.control(f, st.values[f.id], { key: f.id });
-        grid.appendChild(h('div', { className: 'wpf-field' }, [h('label', { for: c.id, text: f.label }), c.el]));
+        var kids = [h('label', { for: c.id, text: f.label, 'data-person-label': f.person != null ? String(f.person) : null }), c.el];
+        if (canEdit && f.person != null && peopleCount(st.values) > MIN_PEOPLE) {
+          kids = [kids[0], h('div', { className: 'wpf-person-row' }, [c.el,
+            h('button', { type: 'button', className: 'wpf-person-x', 'data-action': 'remove-person', 'data-person': String(f.person), 'aria-label': 'Remove ' + (String(st.values[f.id] || '').trim() || f.label), text: '×' })])];
+        }
+        grid.appendChild(h('div', { className: 'wpf-field' + (f.person != null ? ' wpf-person' : '') }, kids));
       });
       this.root.appendChild(grid);
+      if (canEdit) {
+        var more = h('div', { className: 'wpf-people-actions' });
+        if (peopleCount(st.values) < MAX_PEOPLE) more.appendChild(h('button', { type: 'button', className: 'wpf-add', 'data-action': 'add-person', text: '+ Add a person' }));
+        more.appendChild(h('span', { className: 'wpf-help', text: 'Two to eight people. Every name shows up in the drop-downs below.' }));
+        this.root.appendChild(more);
+      }
     }
 
     s.sections.forEach(function (sec) { self.root.appendChild(self.renderSection(sec)); });
@@ -511,7 +605,8 @@
   };
 
   A.renderTable = function (sec) {
-    var self = this, rows = this.state.tables[sec.id], ctx = this.ctx();
+    var self = this, ctx = this.ctx(), fixed = fixedRowsFor(sec, this.state);
+    var rows = fixed ? this.state.tables[sec.id].slice(0, fixed.length) : this.state.tables[sec.id];
     var box = h('div', { className: 'wpf-table-box' });
     var table = h('table', { className: 'wpf-table' + (sec.fixedRows ? ' wpf-fixed' : '') });
     var headRow = h('tr');
@@ -528,7 +623,7 @@
     var body = h('tbody');
     rows.forEach(function (r, i) {
       var tr = h('tr');
-      if (sec.fixedRows) tr.appendChild(h('th', { scope: 'row', className: 'wpf-rowlabel', 'data-fixed': sec.fixedRows[i], text: rowLabel(sec.fixedRows[i], ctx) }));
+      if (sec.fixedRows) tr.appendChild(h('th', { scope: 'row', className: 'wpf-rowlabel', 'data-fixed': fixed[i], text: rowLabel(fixed[i], ctx) }));
       sec.columns.forEach(function (c) {
         var td = h('td', { 'data-label': c.label });
         if (c.type === 'computed') {
@@ -580,7 +675,23 @@
       var col = sec.columns.filter(function (c) { return c.id === p[2]; })[0];
       o.textContent = col.compute(self.state.tables[p[0]][+p[1]] || {});
     });
-    Array.prototype.forEach.call(this.root.querySelectorAll('option[data-person]'), function (o) { o.textContent = ctx.name(o.getAttribute('data-person')); });
+    // Person drop-downs: fresh names, still in alphabetical order
+    Array.prototype.forEach.call(this.root.querySelectorAll('select[data-person-select]'), function (sel) {
+      var val = sel.value;
+      var opts = Array.prototype.slice.call(sel.querySelectorAll('option[data-person]'));
+      opts.forEach(function (o) { o.textContent = ctx.name(o.getAttribute('data-person')); });
+      opts.sort(function (a, b) {
+        var ab = a.getAttribute('data-person') === 'Both', bb = b.getAttribute('data-person') === 'Both';
+        if (ab !== bb) return ab ? 1 : -1;
+        return a.textContent.localeCompare(b.textContent, undefined, { sensitivity: 'base', numeric: true });
+      });
+      opts.forEach(function (o) { sel.appendChild(o); });
+      sel.value = val;
+    });
+    Array.prototype.forEach.call(this.root.querySelectorAll('.wpf-person-x'), function (b) {
+      var i = +b.getAttribute('data-person');
+      b.setAttribute('aria-label', 'Remove ' + ctx.name(CODES[i]));
+    });
     Array.prototype.forEach.call(this.root.querySelectorAll('[data-fixed]'), function (t) { t.textContent = rowLabel(t.getAttribute('data-fixed'), ctx); });
   };
 
@@ -601,11 +712,77 @@
   A.changed = function () {
     this.dirty = true;
     if (this.opts.onChange) this.opts.onChange(this.state);
+    if (this.keep) this.keepSoon();
+  };
+
+  /* ---------- "Keep a draft on this device": opt-in, one draft per worksheet ---------- */
+  A.keepKey = function () { return KEEP_PREFIX + this.schema.code + (this.schema.road ? ':' + this.schema.road : ''); };
+  A.keepSoon = function () {
+    var self = this;
+    clearTimeout(this.keepTimer);
+    this.keepTimer = setTimeout(function () { self.keepNow(); }, 400);
+  };
+  A.keepNow = function () {
+    if (!this.keep) return false;
+    try {
+      global.localStorage.setItem(this.keepKey(), JSON.stringify({ format: DRAFT_FORMAT, version: DRAFT_VERSION, workpaper: this.schema.code, saved: new Date().toISOString(), state: this.state }));
+      this.dirty = false;
+      return true;
+    } catch (e) {
+      this.status('This browser won’t keep a draft (storage is off or full). Save a draft file instead.');
+      return false;
+    }
+  };
+  A.readKept = function () {
+    try {
+      var raw = global.localStorage.getItem(this.keepKey());
+      var d = raw ? JSON.parse(raw) : null;
+      return d && d.format === DRAFT_FORMAT && d.workpaper === this.schema.code && d.state ? d : null;
+    } catch (e) { return null; }
+  };
+  A.setKeep = function (on) {
+    this.keep = !!on;
+    if (on) {
+      if (this.keepNow()) this.status('Kept on this device. It will be here next time you open this page. Press “Erase” to remove it.');
+    } else {
+      clearTimeout(this.keepTimer);
+      try { global.localStorage.removeItem(this.keepKey()); } catch (e) {}
+      this.dirty = answered(this.schema, this.state) > 0;
+      this.status('Not kept any more. Nothing from this worksheet is stored on this device.');
+    }
+  };
+  A.eraseKept = function () {
+    clearTimeout(this.keepTimer);
+    try { global.localStorage.removeItem(this.keepKey()); } catch (e) {}
+    this.keep = false;
+    this.dirty = answered(this.schema, this.state) > 0;
+    this.status('Erased. Nothing from this worksheet is stored on this device. What is on the page stays until you close it.');
   };
 
   A.onClick = function (e) {
     var b = e.target.closest('button[data-action]');
     if (!b) return;
+    var act = b.getAttribute('data-action');
+    if (act === 'add-person') {
+      if (!addPerson(this.schema, this.state)) return;
+      this.changed();
+      this.render();
+      var n = peopleCount(this.state.values), inp = this.root.querySelector('[data-key="partner' + CODES[n - 1] + '"]');
+      if (inp) inp.focus();
+      this.status('Added a person. There are ' + n + ' on this sheet now.');
+      return;
+    }
+    if (act === 'remove-person') {
+      var pi = +b.getAttribute('data-person'), who = this.ctx().name(CODES[pi]);
+      if (!window.confirm('Take ' + who + ' off this sheet? Rows they own will go back to "—".')) return;
+      removePerson(this.schema, this.state, pi);
+      this.changed();
+      this.render();
+      this.status(who + ' is off this sheet.');
+      var add = this.root.querySelector('[data-action="add-person"]');
+      if (add) add.focus();
+      return;
+    }
     var tbl = b.getAttribute('data-table'), rows = this.state.tables[tbl];
     var sec = this.schema.sections.filter(function (s) { return s.id === tbl; })[0];
     var action = b.getAttribute('data-action');
@@ -716,6 +893,7 @@
       self.state = sanitize(self.schema, d.state);
       self.dirty = false;
       self.render();
+      if (self.keep) self.keepSoon();
       self.status('Draft opened.');
     };
     reader.onerror = function () { self.status('That file could not be read.'); };
@@ -728,6 +906,7 @@
     this.state = sanitize(this.schema, state);
     this.dirty = false;
     this.render();
+    if (this.keep) this.keepSoon();
     this.status(msg || 'Opened.');
   };
 
@@ -736,7 +915,8 @@
     this.state = blankState(this.schema);
     this.dirty = false;
     this.render();
-    this.status('Cleared. Nothing from this worksheet remains on the page.');
+    if (this.keep) { this.eraseKept(); var k = document.getElementById('wpf-keep'); if (k) k.checked = false; }
+    this.status('Cleared. Nothing from this worksheet remains on the page' + (this.keep ? '.' : ', and nothing is kept on this device.'));
   };
 
   function boot() {
@@ -744,8 +924,23 @@
     var schema = global.TOL_WORKPAPERS && global.TOL_WORKPAPERS[wp];
     var root = document.getElementById('wpf-root');
     if (!schema || !root) return;
+    // ?road=coworkers (or roommates, caregivers) shows a worksheet worded for that road
+    var road = (global.location && (global.location.search.match(/[?&]road=([a-z]+)/) || [])[1]) || '';
+    if (road && global.TOL_WORKPAPER_VARIANT) schema = global.TOL_WORKPAPER_VARIANT(wp, road) || schema;
     var app = new App(root, schema);
+
+    // "Keep a draft on this device": off unless the person turns it on
+    var keepBox = document.getElementById('wpf-keep'), eraseBtn = document.getElementById('wpf-erase');
+    var kept = app.readKept();
+    if (kept) {
+      app.state = sanitize(schema, kept.state);
+      app.keep = true;
+      if (keepBox) keepBox.checked = true;
+    }
     app.render();
+    if (kept) app.status('Picked up the draft kept on this device. Press “Erase” to remove it.');
+    if (keepBox) keepBox.addEventListener('change', function () { app.setKeep(keepBox.checked); });
+    if (eraseBtn) eraseBtn.addEventListener('click', function () { app.eraseKept(); if (keepBox) keepBox.checked = false; });
 
     root.addEventListener('input', function (e) { app.onInput(e); });
     root.addEventListener('change', function (e) { app.onInput(e); });
@@ -761,16 +956,21 @@
     fileInput.addEventListener('change', function () { app.openDraft(fileInput.files[0]); fileInput.value = ''; });
 
     window.addEventListener('beforeunload', function (e) {
+      if (app.keep) app.keepNow();
       if (!app.dirty) return;
       e.preventDefault();
-      e.returnValue = '';
+      e.returnValue = 'You have unsaved entries.';
+      return 'You have unsaved entries.';
     });
   }
 
   global.TOLWorkpaper = {
     buildPdf: buildPdf, blankState: blankState, makeCtx: makeCtx, sanitize: sanitize, answered: answered,
     Report: Report, renderBody: renderBody, App: App, download: download, today: today, formatDate: formatDate,
-    displayCell: displayCell, rowIsEmpty: rowIsEmpty, rowLabel: rowLabel, isBlank: isBlank, COLORS: COLORS, DRAFT_FORMAT: DRAFT_FORMAT
+    displayCell: displayCell, rowIsEmpty: rowIsEmpty, rowLabel: rowLabel, isBlank: isBlank, COLORS: COLORS, DRAFT_FORMAT: DRAFT_FORMAT,
+    CODES: CODES, MAX_PEOPLE: MAX_PEOPLE, peopleCount: peopleCount, fixedRowsFor: fixedRowsFor, syncPeople: syncPeople,
+    addPerson: addPerson, removePerson: removePerson, personOptions: personOptions, setDefaultLabels: setDefaultLabels,
+    labelFor: function (i) { return labelFor(i); }
   };
   if (typeof document !== 'undefined') {
     if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);

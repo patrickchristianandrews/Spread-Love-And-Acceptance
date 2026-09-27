@@ -12,7 +12,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>The Lemonade Stand &mdash; Who did what this week &middot; The Objective Ledger</title>
-<meta name="description" content="List what it took to keep the household running this week and how many hours each of you put in. See the split as a plain fact, not a verdict. Runs in your browser; nothing is sent anywhere.">
+<meta name="description" content="List what it took to keep your place running this week and how many hours each person put in, plus shared bills if you like. See the split as a plain fact, not a verdict. Runs in your browser; nothing is sent anywhere.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,500&family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -20,27 +20,54 @@
 <link rel="stylesheet" href="/assets/css/reading.css">
 <style>
   .stand{ margin:1.5rem 0; }
-  .stand-heads, .row{ display:grid; grid-template-columns:1fr 6.5rem 6.5rem 2.5rem; gap:.5rem; align-items:center; }
-  .stand-heads{ padding-bottom:.5rem; border-bottom:3px double var(--ink); font-weight:600; }
-  .row{ padding:.4rem 0; border-bottom:1px solid var(--line); }
-  .stand input{
-    width:100%; font:inherit; font-size:.98rem; color:var(--ink); background:var(--paper);
+  .stand input, .stand textarea{
+    width:100%; box-sizing:border-box; font:inherit; font-size:.98rem; color:var(--ink); background:var(--paper);
     border:1px solid var(--line); border-radius:var(--radius); padding:.4rem .5rem;
   }
-  .stand-heads input{ font-weight:600; }
-  .stand input:focus-visible, .stand button:focus-visible{ outline:2px solid var(--focus); outline-offset:1px; }
+  .stand input:focus-visible, .stand button:focus-visible, .stand textarea:focus-visible, .ls-tools button:focus-visible, .ls-keep input:focus-visible{ outline:2px solid var(--focus); outline-offset:1px; }
   .stand input[type=number]{ text-align:right; font-family:"IBM Plex Mono", ui-monospace, monospace; }
-  .remove{ font:inherit; font-size:1.2rem; background:none; border:1px solid transparent; border-radius:var(--radius); color:var(--ink-soft); cursor:pointer; }
+  .remove{ font:inherit; font-size:1.2rem; background:none; border:1px solid transparent; border-radius:var(--radius); color:var(--ink-soft); cursor:pointer; flex:none; }
   .remove:hover{ border-color:var(--line); color:var(--debit); }
   .add-row{ margin-top:.9rem; font:inherit; background:none; border:1px solid var(--ink); border-radius:var(--radius); padding:.45rem .9rem; cursor:pointer; color:var(--ink); }
   .add-row:hover{ background:var(--paper-deep); }
-  .bar{ display:flex; height:14px; margin:1.75rem 0 .5rem; border:1px solid var(--ink); }
-  .bar-a{ background:var(--credit); transition:width .2s; }
-  .bar-b{ background:var(--brass); transition:width .2s; }
-  .bar-legend{ display:flex; justify-content:space-between; font-family:"IBM Plex Mono", ui-monospace, monospace; font-size:.85rem; }
-  .bar-legend .a{ color:var(--credit); } .bar-legend .b{ color:var(--brass); }
   .balance-line{ margin-top:1rem !important; font-size:1.05rem; }
-  @media (max-width:560px){ .stand-heads, .row{ grid-template-columns:1fr 4.5rem 4.5rem 2rem; } }
+
+  /* People */
+  .ls-people{ display:flex; flex-wrap:wrap; gap:.5rem; margin:0 0 1rem; }
+  .ls-person{ display:flex; align-items:center; gap:.3rem; flex:1 1 9rem; max-width:14rem; padding:.3rem .35rem .3rem .6rem; border-radius:999px; border:2px solid var(--pc, var(--line)); background:#FFFDF6; }
+  .ls-person .dot{ width:.8rem; height:.8rem; border-radius:50%; background:var(--pc); flex:none; }
+  .ls-person input{ border:0 !important; background:transparent !important; padding:.2rem .1rem !important; min-width:0; }
+  .ls-person .remove{ width:1.6rem !important; height:1.6rem !important; font-size:.95rem !important; }
+  .ls-people-add{ margin:0 !important; }
+
+  /* Tabs */
+  .ls-tabs{ display:flex; gap:.4rem; margin:0 0 1rem; flex-wrap:wrap; }
+  .ls-tabs button{ font:inherit; font-weight:600; padding:.4rem 1rem; border-radius:999px; border:2px solid var(--ink); background:#FFFDF6; color:var(--ink); cursor:pointer; }
+  .ls-tabs button[aria-selected="true"]{ background:#F8E08A; }
+  .ls-panel[hidden]{ display:none; }
+  .ls-panel-note{ font-size:.92rem; color:var(--ink-soft); margin:0 0 .6rem !important; }
+
+  /* Job / bill rows: name on top (wraps), amounts per person below */
+  .row{ padding:.6rem .4rem; border-bottom:1px dotted #EFD27A; }
+  .row-top{ display:flex; gap:.5rem; align-items:flex-start; }
+  .row-top textarea{ resize:none; overflow:hidden; min-height:2.3rem; line-height:1.35; white-space:pre-wrap; overflow-wrap:anywhere; }
+  .row-amts{ display:grid; grid-template-columns:repeat(auto-fill, minmax(7.2rem, 1fr)); gap:.4rem; margin-top:.45rem; }
+  .row-amts label{ display:flex; flex-direction:column; gap:.1rem; font-size:.8rem; color:var(--ink-soft); min-width:0; }
+  .row-amts label span{ overflow-wrap:anywhere; }
+  .row-amts label span::before{ content:""; display:inline-block; width:.55rem; height:.55rem; border-radius:50%; background:var(--pc); margin-right:.3rem; }
+
+  .ls-example{ display:flex; flex-wrap:wrap; align-items:center; gap:.5rem .8rem; margin:0 0 1rem; padding:.55rem .8rem; border-radius:12px; background:#FFFDF6; border:1px solid #EAD9A0; font-size:.92rem; }
+  .ls-example[hidden]{ display:none; }
+  .ls-link-btn{ font:inherit; font-size:.92rem; background:none; border:0; padding:0; color:var(--focus); text-decoration:underline; cursor:pointer; }
+
+  .ls-tools{ display:flex; flex-wrap:wrap; gap:.5rem; margin:1.2rem 0 .4rem; }
+  .ls-tools button{ font:inherit; padding:.45rem .95rem; border-radius:999px; border:2px solid var(--ink); background:#FFFDF6; color:var(--ink); cursor:pointer; }
+  .ls-tools button:hover{ background:#F8E08A; }
+  .ls-keep{ display:flex; flex-wrap:wrap; align-items:center; gap:.5rem .9rem; margin:.8rem 0 0; font-size:.95rem; }
+  .ls-keep label{ display:flex; align-items:center; gap:.4rem; cursor:pointer; }
+  .ls-keep input{ width:1.1rem; height:1.1rem; }
+  .ls-status{ min-height:1.3em; font-size:.9rem; color:var(--credit); margin:.3rem 0 0 !important; }
+  .ls-money-sum{ margin:.8rem 0 0 !important; font-size:.98rem; }
 
   /* ---------- Cute lemonade-stand dressing ---------- */
   .ls-awning{ position:relative; height:3.1rem; margin:0 0 2.2rem; border-radius:14px 14px 0 0;
@@ -57,10 +84,9 @@
   .ls-tag{ font-family:"Fraunces", Georgia, serif; font-style:italic; font-size:1.15rem; color:var(--brass); margin:-1rem 0 1.2rem !important; }
 
   .stand{ padding:1.2rem 1.2rem 1.4rem; background:#FFF8DB; border:2px dashed #EFD27A; border-radius:22px; }
-  .stand-heads{ border-bottom:2px dotted #EFD27A; }
-  .row{ border-bottom:1px dotted #EFD27A; transition:background .15s; border-radius:10px; padding-left:.3rem; padding-right:.3rem; }
+  .row{ transition:background .15s; border-radius:10px; }
   .row:hover{ background:rgba(248,224,138,.25); }
-  .stand input{ border-radius:10px; border-color:#EAD9A0; background:#FFFDF6; }
+  .stand input, .stand textarea{ border-radius:10px; border-color:#EAD9A0; background:#FFFDF6; }
   .remove{ width:1.9rem; height:1.9rem; line-height:1; border-radius:50% !important; background:#F7D9DF !important; color:#8E3B4A !important; border:0 !important; font-size:1.1rem !important; transition:transform .15s; }
   .remove:hover{ transform:rotate(90deg) scale(1.1); }
   .add-row{ border-radius:999px !important; border:2px solid var(--ink) !important; background:#F8E08A !important; font-weight:600; padding:.5rem 1.1rem !important; transition:transform .15s; }
@@ -68,14 +94,21 @@
 
   /* Two glasses of lemonade show the split */
   .bar{ display:none !important; }
-  .ls-glasses{ display:flex; justify-content:center; gap:3.5rem; margin:1.8rem 0 .6rem; }
+  .ls-glasses{ display:flex; flex-wrap:wrap; justify-content:center; gap:1.2rem 2.2rem; margin:2.2rem 0 .6rem; }
+  .ls-gwrap{ display:flex; flex-direction:column; align-items:center; gap:.5rem; width:6.5rem; }
+  .ls-gname{ font-family:"IBM Plex Mono", ui-monospace, monospace; font-size:.8rem; text-align:center; overflow-wrap:anywhere; max-width:100%; }
+  .ls-glasses.is-many{ gap:1.2rem 1.4rem; }
+  .ls-glasses.is-many .ls-gwrap{ width:4.6rem; }
+  .ls-glasses.is-many .ls-glass{ width:3.8rem; height:5.6rem; }
+  .ls-glasses.is-many .ls-straw{ height:6.8rem; right:.6rem; }
+  .ls-glasses.is-many .ls-slice{ width:1.7rem; height:1.7rem; top:-.9rem; left:-.7rem; }
+  .ls-glasses.is-many .ls-pct{ font-size:.72rem; }
   .ls-glass{ position:relative; width:5.8rem; height:8rem; border:3px solid var(--ink-soft); border-top:0; border-radius:0 0 18px 18px;
     background:#FFFDF6; overflow:visible; }
   .ls-juice{ position:absolute; left:0; right:0; bottom:0; height:50%; border-radius:0 0 15px 15px; transition:height .6s cubic-bezier(.34,1.56,.64,1);
     background-image:radial-gradient(circle, rgba(255,255,255,.75) 0 2px, transparent 2.5px), radial-gradient(circle, rgba(255,255,255,.55) 0 1.5px, transparent 2px);
     background-size:18px 22px, 13px 15px; background-position:4px 6px, 10px 2px; }
-  .ls-glass.is-a .ls-juice{ background-color:#BFE3CF; }
-  .ls-glass.is-b .ls-juice{ background-color:#F8DC6E; }
+  .ls-juice{ background-color:var(--pc, #F8DC6E); }
   .ls-straw{ position:absolute; width:.55rem; height:9.6rem; right:1.1rem; bottom:.6rem; transform:rotate(14deg); transform-origin:bottom;
     border-radius:4px; background:repeating-linear-gradient(180deg, #F2A3B6 0 .6rem, #FFFDF6 .6rem 1.2rem); border:1px solid #E58CA3; }
   .ls-slice{ position:absolute; top:-1.15rem; left:-1rem; width:2.3rem; height:2.3rem; border-radius:50%;
@@ -83,13 +116,11 @@
     border:3px solid #EFC53E; box-shadow:inset 0 0 0 3px #FFF8DB; }
   .ls-glass.is-a .ls-slice{ background:conic-gradient(from 0deg, #BFE3CF 0 40deg, #EAF6EF 40deg 50deg, #BFE3CF 50deg 100deg, #EAF6EF 100deg 110deg, #BFE3CF 110deg 160deg, #EAF6EF 160deg 170deg, #BFE3CF 170deg 220deg, #EAF6EF 220deg 230deg, #BFE3CF 230deg 280deg, #EAF6EF 280deg 290deg, #BFE3CF 290deg 340deg, #EAF6EF 340deg 350deg, #BFE3CF 350deg); border-color:#8CC7A5; }
   .ls-pct{ position:absolute; left:0; right:0; bottom:.4rem; text-align:center; font-family:"IBM Plex Mono", ui-monospace, monospace; font-size:.85rem; font-weight:600; color:var(--ink); }
-  .bar-legend{ justify-content:center !important; gap:0; }
-  .bar-legend span{ width:9.3rem; text-align:center; }
   .balance-line{ position:relative; margin:1.4rem 0 0 !important; padding:.8rem 1rem; background:#FFFDF6; border:2px solid var(--ink); border-radius:16px; }
   .balance-line::before{ content:""; position:absolute; top:-.7rem; left:50%; width:1.1rem; height:1.1rem; background:#FFFDF6; border-left:2px solid var(--ink); border-top:2px solid var(--ink); transform:translateX(-50%) rotate(45deg); }
   @media (prefers-reduced-motion: reduce){ .ls-lemon{ animation:none; } .ls-juice, .remove, .add-row{ transition:none; } }
-  @media (max-width:560px){ .ls-glasses{ gap:2.5rem; } .bar-legend span{ width:8.3rem; } .ls-awning span{ font-size:.8rem; } .stand{ padding:1rem .7rem 1.2rem; } }
-  @media print{ .ls-awning, .ls-lemon, .ls-glasses{ display:none; } }
+  @media (max-width:560px){ .ls-glasses{ gap:1rem 1.4rem; } .ls-awning span{ font-size:.8rem; } .stand{ padding:1rem .7rem 1.2rem; } }
+  @media print{ .ls-awning, .ls-lemon, .ls-glasses, .ls-tools, .ls-keep, .remove, .add-row, .ls-tabs{ display:none; } }
 </style>
 <script src="/assets/js/site.js" defer></script>
 </head>
@@ -99,58 +130,58 @@
 <header class="read-head"><p class="read-code">Tool &middot; nothing leaves your device</p><h1>The Lemonade Stand <svg class="ls-lemon" viewBox="0 0 64 64" aria-hidden="true"><path d="M8 34c0-13 11-24 26-24 5 0 9 1 12 3 3-2 7-2 9 0-1 3-1 6 0 9 2 3 3 7 3 11 0 14-12 23-27 23S8 47 8 34z" fill="#F8DC6E" stroke="#C9A227" stroke-width="3" stroke-linejoin="round"/><path d="M40 11c2-5 7-7 12-6-2 5-6 8-12 6z" fill="#8CC7A5" stroke="#4E8A66" stroke-width="2.5" stroke-linejoin="round"/><circle cx="24" cy="32" r="2.6" fill="#211D17"/><circle cx="38" cy="32" r="2.6" fill="#211D17"/><path d="M26 40c3 3 7 3 10 0" fill="none" stroke="#211D17" stroke-width="2.5" stroke-linecap="round"/><circle cx="19" cy="38" r="3" fill="#F2A3B6" opacity=".7"/><circle cx="43" cy="38" r="3" fill="#F2A3B6" opacity=".7"/></svg></h1></header>
 <p class="ls-tag">When life hands you chores, split the lemons.</p>
 
-<p class="simple-lede">Two people, one stand. List what it took to keep the household running this week, and how many hours each of you put in. The split shows up as a plain fact, not a verdict on either of you.</p>
-<p class="pillar-note"><small>The Lemonade Stand puts <a href="/five-pillars.html#see-the-load">Pillar I, See the whole load</a> to work, with a nod to <a href="/five-pillars.html#quiet-incentives">Pillar V, Notice the quiet incentives</a>. In you: you count the hours you really put in, including the quiet jobs. Between you and others: you both see the same picture, and can spot work that has quietly drifted to one person.</small></p>
+<p class="simple-lede">One stand, two to eight people. List what it took to keep your place running this week, and how many hours each of you put in. If you like, add the money side too: rent, bills, shared shopping. The split shows up as a plain fact, not a verdict on anyone.</p>
+<p class="pillar-note"><small>The Lemonade Stand puts <a href="/five-pillars.html#see-the-load">Pillar I, See the whole load</a> to work, with a nod to <a href="/five-pillars.html#quiet-incentives">Pillar V, Notice the quiet incentives</a>. In you: you count the hours you really put in, including the quiet jobs. Between you and others: you all see the same picture, and can spot work that has quietly drifted to one person.</small></p>
 
-<div class="stand">
-    <div class="stand-heads">
-      <span>Job</span>
-      <input type="text" id="label-a" value="Me" aria-label="First person’s name (tap to change)">
-      <input type="text" id="label-b" value="Them" aria-label="Second person’s name (tap to change)">
-      <span></span>
+<div class="stand" id="stand">
+    <p class="ls-panel-note"><strong>Who's at the stand?</strong> Tap a name to change it.</p>
+    <div class="ls-people" id="people"></div>
+    <button class="add-row ls-people-add" id="add-person" type="button">+ Add a person</button>
+
+    <div class="ls-example" id="example-note" style="margin-top:1rem">
+      <span>The starting numbers are <strong>just an example</strong>.</span>
+      <button type="button" class="ls-link-btn" id="start-blank">Start blank</button>
     </div>
-    <div id="rows"></div>
-    <button class="add-row" id="add-row" type="button">🍋 Add a job</button>
-    <div class="bar" aria-hidden="true">
-      <div class="bar-a" id="bar-a" style="width:50%"></div>
-      <div class="bar-b" id="bar-b" style="width:50%"></div>
+
+    <div class="ls-tabs" role="tablist" aria-label="What to count" style="margin-top:1rem">
+      <button type="button" role="tab" id="tab-hours" aria-selected="true" aria-controls="panel-hours">Hours</button>
+      <button type="button" role="tab" id="tab-money" aria-selected="false" aria-controls="panel-money">Money <small>(optional)</small></button>
     </div>
-    <div class="ls-glasses" aria-hidden="true">
-      <div class="ls-glass is-a"><span class="ls-straw"></span><span class="ls-slice"></span><div class="ls-juice" id="juice-a"></div><span class="ls-pct" id="pct-a">50%</span></div>
-      <div class="ls-glass is-b"><span class="ls-straw"></span><span class="ls-slice"></span><div class="ls-juice" id="juice-b"></div><span class="ls-pct" id="pct-b">50%</span></div>
+
+    <div class="ls-panel" id="panel-hours" role="tabpanel" aria-labelledby="tab-hours">
+      <p class="ls-panel-note">One line per job. Put the hours each person spent on it this week.</p>
+      <div id="rows"></div>
+      <button class="add-row" id="add-row" type="button">🍋 Add a job</button>
     </div>
-    <div class="bar-legend">
-      <span class="a" id="legend-a">Me · 0h</span>
-      <span class="b" id="legend-b">Them · 0h</span>
+    <div class="ls-panel" id="panel-money" role="tabpanel" aria-labelledby="tab-money" hidden>
+      <p class="ls-panel-note">One line per shared cost, like rent, power, internet or groceries. Put what each person actually paid. Leave this empty if money isn't part of your picture.</p>
+      <div id="money-rows"></div>
+      <button class="add-row" id="add-bill" type="button">🍋 Add a bill</button>
+      <p class="ls-money-sum" id="money-line" aria-live="polite"></p>
     </div>
+
+    <div class="ls-glasses" id="glasses" aria-hidden="true"></div>
     <p class="balance-line" id="balance-line" aria-live="polite">Add some hours above to see how the work is split.</p>
+
+    <div class="ls-tools">
+      <button type="button" id="copy-result">Copy the result</button>
+      <button type="button" id="share-result">Share</button>
+    </div>
+    <div class="ls-keep">
+      <label><input type="checkbox" id="keep-device"> Keep this on my device</label>
+      <button type="button" class="ls-link-btn" id="erase-device">Erase</button>
+    </div>
+    <p class="ls-status" id="ls-status" role="status" aria-live="polite"></p>
   </div>
 
 
 <div class="try-this">
-  <p><strong>How to use it:</strong> Each of you fills in your own hours, ideally from a week of <a href="/workpapers/wp-01.html">the “who did what” log</a>. Then look at it together. Tap a name to change it. The totals also go into <a href="/workpapers/calculators/calc01-solvency.html">CALC-01, Can the load last?</a></p>
+  <p><strong>How to use it:</strong> Each person fills in their own hours, ideally from a week of <a href="/workpapers/wp-01.html">the “who did what” log</a>. Then look at it together. Copy the result into your group chat if that helps. The totals also go into <a href="/workpapers/calculators/calc01-solvency.html">CALC-01, Can the load last?</a></p>
   <p><a href="/workpapers/wp-03-raci-treaty.html">Next: give each job one owner &rarr;</a></p>
 </div>
-<p class="cr-note" style="font-size:.9rem;color:var(--ink-soft);">This is for the two of you to see the same picture, not a score to win with. Nothing you type is saved or sent anywhere. It stays in this browser tab.</p>
+<p class="cr-note" style="font-size:.9rem;color:var(--ink-soft);">This is for all of you to see the same picture, not a score to win with. Nothing you type is sent anywhere. It stays in this browser tab, unless you tick &ldquo;Keep this on my device&rdquo;; then it's kept in this browser only, until you press &ldquo;Erase&rdquo;.</p>
 </main>
 
 <script src="/assets/js/lemonade-calc.js"></script>
-<script>
-/* Pour the two glasses from the split the calculator already works out */
-(function () {
-  var a = document.getElementById('bar-a'), b = document.getElementById('bar-b');
-  if (!a || !b) return;
-  function pour() {
-    var pa = parseFloat(a.style.width) || 0, pb = parseFloat(b.style.width) || 0;
-    document.getElementById('juice-a').style.height = Math.max(4, pa * 0.92) + '%';
-    document.getElementById('juice-b').style.height = Math.max(4, pb * 0.92) + '%';
-    document.getElementById('pct-a').textContent = Math.round(pa) + '%';
-    document.getElementById('pct-b').textContent = Math.round(pb) + '%';
-  }
-  new MutationObserver(pour).observe(a, { attributes: true, attributeFilter: ['style'] });
-  new MutationObserver(pour).observe(b, { attributes: true, attributeFilter: ['style'] });
-  pour();
-})();
-</script>
 </body>
 </html>

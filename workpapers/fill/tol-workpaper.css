@@ -385,3 +385,38 @@ html.ws-locked .tol-breathe-btn, html.ws-locked .tol-wx{ visibility: hidden; }
 .ws-week-do{ margin:0 0 .7em; color:var(--ink, #211D17); }
 .ws-week .ws-sheets{ margin-bottom:.6em; }
 .ws-week .ws-along{ margin:0; }
+
+/* ---------- printing: just the worksheet ----------
+   The Open / Save draft / PDF bar, "Clear this page" and the add/remove row buttons are for the screen. */
+@media print{
+  .wpf-bar, .wpf-after, .wpf-clear, .wpf-add, .wpf-remove button, .wpf-table-actions{ display: none !important; }
+  .wpf-table tr{ break-inside: avoid; }
+}
+
+/* ---------- people (2 to 8) and "Keep a draft on this device" ---------- */
+.wpf-person-row{ display: flex; gap: 6px; align-items: center; }
+.wpf-person-row input{ flex: 1 1 auto; min-width: 0; }
+.wpf-person-x, .ws-name-x{
+  flex: none; width: 2rem; height: 2rem; border-radius: 50%;
+  border: 1px solid var(--line, #D9CBA3); background: #FFFDF6; color: var(--ink-soft, #524B3E);
+  font: inherit; font-size: 1.1rem; line-height: 1; cursor: pointer;
+}
+.wpf-person-x:hover, .ws-name-x:hover{ border-color: var(--debit, #96412B); color: var(--debit, #96412B); }
+.wpf-people-actions{ display: flex; flex-wrap: wrap; align-items: center; gap: 8px 14px; margin: 10px 0 0; }
+.wpf-people-actions .wpf-help{ margin: 0; }
+.wpf-keep{ display: flex; flex-wrap: wrap; align-items: center; gap: 6px 12px; margin-top: 0.7em !important; font-size: 0.95em !important; color: var(--ink, #211D17) !important; }
+.wpf-keep label{ display: inline-flex; align-items: center; gap: 6px; font-weight: 600; cursor: pointer; }
+.wpf-keep input{ width: 1.1rem; height: 1.1rem; margin: 0; }
+.wpf-erase{ font: inherit; font-size: 0.92em; padding: 3px 12px; border: 1px solid var(--ink-soft, #524B3E); border-radius: 999px; background: #FFFDF6; color: var(--ink, #211D17); cursor: pointer; }
+.wpf-erase:hover{ border-color: var(--debit, #96412B); color: var(--debit, #96412B); }
+.wpf-keep-note{ flex-basis: 100%; font-size: 0.88em; color: var(--ink-soft, #524B3E); }
+.wpf-keep input:focus-visible, .wpf-erase:focus-visible, .wpf-person-x:focus-visible, .ws-name-x:focus-visible{ outline: 2px solid var(--focus, #2B5B8C); outline-offset: 2px; }
+.ws-names-row{ grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); }
+.ws-name-cell{ display: flex; align-items: flex-end; gap: 6px; min-width: 0; }
+.ws-name-cell label{ flex: 1 1 auto; min-width: 0; }
+.ws-names-more{ display: flex; flex-wrap: wrap; align-items: center; gap: 6px 12px; margin: .8em 0 0; }
+.ws-names-count{ font-size: .88em; color: var(--ink-soft, #524B3E); }
+.ws-names-note{ margin: .5em 0 0; font-size: .88em; color: var(--ink-soft, #524B3E); }
+@media print{
+  .wpf-keep, .wpf-person-x, .wpf-people-actions, .ws-name-x, .ws-names-more{ display: none !important; }
+}

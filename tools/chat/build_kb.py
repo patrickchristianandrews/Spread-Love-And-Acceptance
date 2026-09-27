@@ -999,9 +999,60 @@ SYN_LIBRARY = {
     'handle': ['coping', 'conflict', 'disagreeing'],
     'workplace': ['work', 'coworkers', 'role ambiguity', 'psychological safety'],
 }
-for _k, _v in SYN_LIBRARY.items():
-    _cur = SYN.setdefault(_k, [])
-    _cur.extend(x for x in _v if x not in _cur)
+# Everyday words from first-time visitors' questions: exes and handoffs, teenagers, a partner who needs
+# care, roommates and bills, "how do I word it", three or more people, and teams at work.
+# Merged into SYN the same way. (site-chat.js also has REWRITES for whole questions like these.)
+SYN_GAPS = {
+    'ex': ['co-parents', 'coparenting', 'handoffs', 'two homes'],
+    'expartner': ['co-parents', 'coparenting', 'handoffs'],
+    'exhusband': ['co-parents', 'coparenting', 'handoffs'],
+    'exwife': ['co-parents', 'coparenting', 'handoffs'],
+    'custody': ['co-parents', 'parenting plan', 'handoffs', 'two homes'],
+    'handoff': ['handoffs', 'co-parents', 'exchange-day', 'owner'],
+    'handoffs': ['handoff', 'co-parents', 'exchange-day', 'owner'],
+    'dropoff': ['handoffs', 'co-parents', 'exchange-day'],
+    'pickup': ['handoffs', 'co-parents', 'exchange-day'],
+    'two homes': ['co-parents', 'handoffs', 'weekly check-in'],
+    'parenting plan': ['co-parents', 'court order', 'handoffs'],
+    'separated': ['co-parents', 'two homes'],
+    'teen': ['teenagers', 'teens', 'parenting'],
+    'teens': ['teenagers', 'parenting'],
+    'teenager': ['teenagers', 'parenting'],
+    'teenage': ['teenagers', 'parenting'],
+    'adolescent': ['teenagers'],
+    'kid': ['kids', 'children', 'parenting', 'teenagers'],
+    'child': ['children', 'kids', 'parenting'],
+    'son': ['children', 'parenting', 'teenagers'],
+    'daughter': ['children', 'parenting', 'teenagers'],
+    'surgery': ['caregivers', 'caregiving', 'partner', 'battery'],
+    'illness': ['caregivers', 'caregiving', 'battery'],
+    'ill': ['caregivers', 'caregiving'],
+    'sick': ['caregivers', 'caregiving'],
+    'carer': ['caregivers', 'caregiving', 'battery'],
+    'looking after': ['caregivers', 'caregiving', 'battery'],
+    'caring for': ['caregivers', 'caregiving', 'battery'],
+    'doing everything': ['caregivers', 'invisible', 'unbilled', 'load'],
+    'housemates': ['roommates', 'lemonade', 'house meeting'],
+    'flatmates': ['roommates', 'housemates'],
+    'rent': ['roommates', 'bills', 'shared-expenses', 'money'],
+    'bills': ['bill', 'money', 'roommates', 'shared-expenses', 'split'],
+    'bill': ['bills', 'money', 'roommates', 'shared-expenses'],
+    'venmo': ['money', 'bills', 'shared-expenses', 'roommates'],
+    'expenses': ['shared-expenses', 'bills', 'money'],
+    'utilities': ['bills', 'money', 'roommates'],
+    'wording': ['sentence', 'signal translator', 'tone filter'],
+    'phrase': ['sentence', 'signal translator', 'tone filter'],
+    'bring it up': ['soft startup', 'check-ins', 'signal translator', 'one topic'],
+    'how do i say': ['signal translator', 'tone filter', 'sentence'],
+    'group': ['more than two people', 'house meeting', 'team'],
+    'staff': ['coworkers', 'teams', 'workplace'],
+    'slack': ['coworkers', 'teams', 'message', 'tone'],
+    'office': ['coworkers', 'workplace', 'teams'],
+}
+for _src in (SYN_LIBRARY, SYN_GAPS):
+    for _k, _v in _src.items():
+        _cur = SYN.setdefault(_k, [])
+        _cur.extend(x for x in _v if x not in _cur)
 
 
 def main():

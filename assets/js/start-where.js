@@ -17,6 +17,20 @@
         ['/quick-checks.html#today','Today\u2019s Weather','One minute, and it tells you what today is actually good for.'],
         ['/wp-11.html','WP-11: the Calm-Down Kit','Decide now what settles you, so it is ready when it is needed.']
       ]},
+    { id:'caring', ico:'\uD83E\uDD1D', label:'I\u2019m looking after someone I love',
+      say:'Caring for a parent, or for a husband, wife or partner after surgery or an illness, can get heavy quietly. Start with your own battery, because you matter here too. Then try one small thing today: a one-minute break, or asking one person for one specific help, like \u201cCould you do Thursday\u2019s drive?\u201d',
+      picks:[
+        ['/relationships-in-depth.html#caregivers','Caregivers: where to start','What to notice, and how to share the care so it does not all land on you.'],
+        ['/workpapers/wp-02-battery-stress-meter.html','The battery check (WP-02)','A quick look at how full your battery is today, before you judge the day.'],
+        ['#breathe','Breathe','A one-minute calm break, right here on this page.']
+      ]},
+    { id:'home-bills', ico:'\uD83C\uDFE0', label:'We share a home and the bills',
+      say:'Shared homes run more smoothly when everyone sees the same list. Put every job and every bill on one page, agree how the rent and bills are split, and talk about money at a set time, starting with the numbers rather than with who is late. This works with three or more people, too.',
+      picks:[
+        ['/relationships-in-depth.html#roommates','Roommates: rent, bills and three or more people','A shared-expenses note, fair splits, and how to talk about money without a fight.'],
+        ['/lemonade-stand.html','The Lemonade Stand','Jobs and hours side by side. Works with more than two people.'],
+        ['/signal-translator.html','The Signal Translator','Test your opening line about money before the house meeting.']
+      ]},
     { id:'invisible', ico:'\uD83D\uDC41', label:'Nobody sees what I do',
       say:'That is the oldest problem in this program, and the reason it exists. Work that is never seen cannot be shared, and saying "you never help" rarely makes it visible. Writing it down does.',
       picks:[
@@ -86,7 +100,14 @@
       b.addEventListener('click', function () { choose(s, b); });
       opts.appendChild(b);
     });
-    var out = el('div', { class: 'sw-out', 'aria-live': 'polite', hidden: '' });
+    var out = el('div', { class: 'sw-out', 'aria-live': 'polite', tabindex: '-1', hidden: '' });
+    out.style.scrollMarginTop = '5rem';
+    out.style.outline = 'none';
+    out.addEventListener('click', function (e) {
+      var a = e.target.closest && e.target.closest('a[data-breathe]');
+      var btn = document.querySelector('.tol-breathe-btn');
+      if (a && btn) { e.preventDefault(); btn.click(); }
+    });
     wrap.appendChild(opts); wrap.appendChild(out);
     host.appendChild(wrap);
 
@@ -97,11 +118,17 @@
       btn.setAttribute('aria-pressed', 'true');
       var h = '<p class="sw-say">' + esc(s.say) + '</p><ol class="sw-picks">';
       s.picks.forEach(function (p) {
-        h += '<li><a href="' + p[0] + '">' + esc(p[1]) + '</a><span>' + esc(p[2]) + '</span></li>';
+        // '#breathe' opens the site's Breathe break (the Night Garden if that button is missing)
+        var link = p[0] === '#breathe' ? 'href="/night-garden.html" data-breathe="1"' : 'href="' + p[0] + '"';
+        h += '<li><a ' + link + '>' + esc(p[1]) + '</a><span>' + esc(p[2]) + '</span></li>';
       });
       h += '</ol><p class="sw-more">Something else going on? <a href="/contents.html">See everything in the program</a> or <a href="/relationships.html">pick by relationship</a>.</p>';
       out.innerHTML = h;
       out.hidden = false;
+      // bring the answer into view and move focus to it, so it never opens off-screen
+      var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      try { out.focus({ preventScroll: true }); } catch (e) { out.focus(); }
+      out.scrollIntoView({ block: 'start', behavior: reduce ? 'auto' : 'smooth' });
     }
   });
 })();

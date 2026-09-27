@@ -205,15 +205,16 @@ input[type=text]{width:100%;border:1px solid var(--line);background:var(--bg);bo
         return '<dt>'+esc(line.q)+'</dt><dd class="'+(empty?"empty":"")+'">'+(empty?"Not filled in yet":esc(t))+'</dd>';
       }).join("");
       return '<article class="sheet"><p class="ck">WIRING CARD &middot; NOT A DIAGNOSIS</p><h2>'+esc(name)+'</h2>'+(wire?'<p class="wire">'+esc(wire)+'</p>':'<p class="wire">Wiring not listed. That is fine.</p>')+'<dl>'+rows+'</dl><p class="fine">Applies more strictly when I am running low. Not a contract, and not a label. Change it when it stops being true. Objective Ledger &middot; spreadloveandacceptance.com/wiring-card.html</p></article>';
-    }).join("") + '<div class="actions"><button class="go" type="button" id="copy">Copy the card</button><button class="ghost" type="button" id="print">Print</button></div>';
+    }).join("") + '<div class="actions"><button class="go" type="button" id="copy">Copy the card</button><button class="ghost" type="button" id="copymd">Copy as a team snippet (Markdown)</button><button class="ghost" type="button" id="print">Print</button></div><p class="privacy" id="copymsg" role="status" aria-live="polite"></p>';
     $("#copy").addEventListener("click", copyCard);
+    $("#copymd").addEventListener("click", copyMarkdown);
     $("#print").addEventListener("click", ()=>window.print());
   }
 
   function plain(who){
     const st = state[who];
-    const name = st.name.trim() || (who==="A"?"Wiring card":"Second wiring card");
-    const lines = [name];
+    const nm = st.name.trim();
+    const lines = [nm ? "Wiring card: "+nm : (who==="A"?"Wiring card":"Second wiring card")];
     const wire = wiringLabel(who);
     if(wire) lines.push("Wiring, as I describe it: "+wire);
     LINES.forEach(line=>{
@@ -224,10 +225,45 @@ input[type=text]{width:100%;border:1px solid var(--line);background:var(--bg);bo
     return lines.join("\n");
   }
 
+  // Markdown for a Slack canvas, Notion page, team wiki or README
+  function mdEsc(s){ return String(s).replace(/([\\`*_\[\]#|<>])/g,"\\$1"); }
+  function markdown(who){
+    const st = state[who];
+    const nm = st.name.trim();
+    const out = ["### "+(nm ? "Wiring card: "+mdEsc(nm) : (who==="A"?"Wiring card":"Second wiring card"))];
+    const wire = wiringLabel(who);
+    if(wire) out.push("*Wiring, as I describe it:* "+mdEsc(wire));
+    out.push("");
+    let any = false;
+    LINES.forEach(line=>{
+      const t = lineText(who, line);
+      if(t){ out.push("- **"+mdEsc(line.q)+":** "+mdEsc(t)); any = true; }
+    });
+    if(!any) out.push("- _Not filled in yet_");
+    out.push("");
+    out.push("> Not a diagnosis, not a contract, and not a label. Applies more strictly when I am running low. Change it when it stops being true.");
+    return out.join("\n");
+  }
+
+  function copyText(text, btn, done){
+    const say = msg=>{ const m=$("#copymsg"); if(m) m.textContent = msg; };
+    const fallback = ()=>{
+      const ta = document.createElement("textarea");
+      ta.value = text; ta.setAttribute("readonly",""); ta.style.position="fixed"; ta.style.opacity="0";
+      document.body.appendChild(ta); ta.select();
+      let ok = false; try{ ok = document.execCommand("copy"); }catch(e){}
+      ta.remove();
+      say(ok ? done : "Your browser blocked copying. Select the card and copy it by hand.");
+    };
+    if(navigator.clipboard && window.isSecureContext){
+      navigator.clipboard.writeText(text).then(()=>say(done), fallback);
+    } else fallback();
+  }
   function copyCard(){
-    const text = people.map(plain).join("\n\n");
-    const btn = $("#copy");
-    (navigator.clipboard?navigator.clipboard.writeText(text):Promise.reject()).then(()=>{btn.textContent="Copied";},()=>{btn.textContent="Select the card and copy";});
+    copyText(people.map(plain).join("\n\n"), $("#copy"), "Copied as plain text.");
+  }
+  function copyMarkdown(){
+    copyText(people.map(markdown).join("\n\n---\n\n"), $("#copymd"), "Copied as Markdown. Paste it into a Slack canvas, Notion page or team wiki.");
   }
 
   function paint(){ paintSheets(); }
@@ -267,8 +303,9 @@ input[type=text]{width:100%;border:1px solid var(--line);background:var(--bg);bo
   });
   $("#forms").addEventListener("input", e=>{
     const t = e.target;
-    const who = t.dataset.who;
-    if(!who) return;
+    // the name box carries data-name="A|B"; the other boxes carry data-who
+    const who = t.dataset.who || t.dataset.name;
+    if(!who || !state[who]) return;
     if(t.dataset.name!=null) state[who].name = t.value;
     if(t.dataset.custom) state[who].custom[t.dataset.custom] = t.value;
     paint();

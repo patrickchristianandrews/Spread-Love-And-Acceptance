@@ -39,10 +39,32 @@
       draftStep.hidden = true;
       return;
     }
-    var guess = p.speakers.filter(function (s) { return /^(me|you|i|myself)$/i.test(s); })[0] ||
-                (p.speakers.length > 1 ? p.speakers[1] : p.speakers[0]);
+    // Only guess who "you" are when the paste says so ("Me:", "You:"). Otherwise, ask.
+    var guess = p.speakers.filter(function (s) { return /^(me|you|i|myself)$/i.test(s); })[0] || null;
+    if (!guess && p.speakers.length === 1) guess = p.speakers[0];
     state = { turns: p.turns, speakers: p.speakers, format: p.format, me: guess, form: p.format === 'email' ? 'email' : 'text' };
-    render(true);
+    if (state.me) render(true); else askWho();
+  }
+
+  // Names were found, but nothing says which one is you: ask before reading
+  function askWho() {
+    var FMT = { 'chat app': 'a chat app like Slack or Teams', 'chat export': 'a chat export', 'named lines': 'names at the start of lines', email: 'an email thread' };
+    var h = '<section class="cr-step cr-who cr-ask" aria-labelledby="cr-s2">' +
+      '<h2 id="cr-s2"><span>02</span>Which one is you?</h2>' +
+      '<p class="cr-hint">The Reader found ' + plural(state.speakers.length, 'name') + (FMT[state.format] ? ' (it looks like ' + FMT[state.format] + ')' : '') +
+      '. Pick yourself, so it can show what the others may be hearing from you, and the other way round.</p><div class="cr-chips cr-pick">';
+    state.speakers.forEach(function (s, i) {
+      var n = state.turns.filter(function (t) { return t.who === s; }).length;
+      h += '<button type="button" class="cr-btn is-quiet" data-pick="' + i + '">' + esc(s) + ' <small>(' + plural(n, 'message') + ')</small></button>';
+    });
+    h += '</div><p class="cr-note">Not in this conversation yourself? Pick the person you want to understand better.</p></section>';
+    out.innerHTML = h;
+    draftStep.hidden = true;
+    out.querySelectorAll('[data-pick]').forEach(function (b) {
+      b.addEventListener('click', function () { state.me = state.speakers[+b.getAttribute('data-pick')]; render(true); });
+    });
+    var first = out.querySelector('[data-pick]');
+    if (first) { var sec = out.querySelector('.cr-ask'); if (sec && sec.scrollIntoView) sec.scrollIntoView({ behavior: 'smooth', block: 'start' }); first.focus({ preventScroll: true }); }
   }
 
   // a tidy drop-down: a title (with an optional little count) that opens to show more
@@ -144,6 +166,7 @@
     var t = r.turns, parts = [];
     var level = { calm: 'calm', warm: 'tense', hot: 'heated' }[r.level];
     var chip = r.trend === 'shutdown' ? '<span class="cr-temp hot">Ends shut down</span> ' : '<span class="cr-temp ' + r.level + '">Ends ' + level + '</span> ';
+    var endsCalm = r.level === 'calm' && r.trend !== 'shutdown';
     parts.push('<p>' + chip +
       plural(t.length, 'message') + ': ' + r.mine + ' from you, ' + r.theirs + ' from ' + esc(them) + '.' +
       (r.topic ? ' It seems to be about <strong>' + esc(r.topic) + '</strong>.' : '') + '</p>');
@@ -151,9 +174,17 @@
     var story = 'It starts ' + (startWarm ? 'already tense' : 'calm') + '. ';
     if (r.turned > 0) story += 'It turns at <strong>message ' + (r.turned + 1) + '</strong>, from ' + (t[r.turned].mine ? 'you' : esc(t[r.turned].who)) + ': “' + esc(snip(t[r.turned].text, 70)) + '”. ';
     else if (r.turned === 0) story += 'The first message already carries a lot of heat. ';
-    else if (r.peak < 3) story += 'It never really heats up. ';
+    else if (r.peak < 3 && endsCalm) story += 'It never really heats up. ';
+    else if (r.peak < 3) story += 'There’s no one big turn, but some tension creeps in. ';
     else story += 'The heat builds gradually rather than at one moment. ';
-    story += { shutdown: 'By the end someone has shut down. That isn’t the same as calm: it usually means they’re overwhelmed.', rising: (r.peak < 3 && !(r.turned >= 0) ? 'It gets a little tenser toward the end.' : 'By the end it’s still heating up.'), cooling: 'By the end it has cooled down.', steady: 'It stays about the same to the end.', short: '' }[r.trend];
+    // The closing line has to agree with the "Ends …" chip above it
+    story += {
+      shutdown: 'By the end someone has shut down. That isn’t the same as calm: it usually means they’re overwhelmed.',
+      rising: r.level === 'calm' ? 'It gets a touch warmer at the end, but it still ends calm.' : (r.peak < 3 ? 'It gets a little tenser toward the end.' : 'By the end it’s still heating up.'),
+      cooling: endsCalm ? 'By the end it has cooled down.' : 'It cools a little from its hottest point, but it still ends ' + level + '.',
+      steady: endsCalm ? 'It stays calm to the end.' : 'It stays about as ' + level + ' to the end.',
+      short: ''
+    }[r.trend];
     parts.push('<p>' + story + '</p>');
     if (r.turned > 0) parts.push('<p class="cr-note">A turn is rarely one person’s fault. It’s usually where two frequencies stopped matching. <a class="dig" href="/book/chapter-1-in-depth.html#squeal">Dig deeper: why two reasonable people end up in a fight</a></p>');
     return '<h2>What happened</h2>' + parts.join('');
@@ -295,7 +326,7 @@
   $('cr-example').addEventListener('click', function () {
     input.value = EXAMPLE; start(EXAMPLE);
     // In the example, read it from Alex's side: the one whose reach-outs came back cold
-    state.me = 'Alex'; render(true);
+    if (state) { state.me = 'Alex'; render(true); }
   });
   $('cr-clear').addEventListener('click', function () {
     input.value = ''; draft.value = ''; out.innerHTML = ''; draftOut.innerHTML = ''; draftStep.hidden = true; state = null; input.focus();

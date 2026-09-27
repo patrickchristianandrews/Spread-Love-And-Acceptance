@@ -5,8 +5,13 @@
   and the PDF from these definitions.
 
   Column / field types: text, textarea, number, date, select, person, check, computed.
-  "person" columns offer Partner A, Partner B (and optionally Both), and show
-  whatever names the household typed at the top of the page.
+  "person" columns offer every person named at the top of the page (2 to 8,
+  coded A to H), in alphabetical order, and optionally "Both" (shown as
+  "Everyone" when there are more than two). Tables with fixedRows ['@A', '@B']
+  get one row per person.
+
+  TOL_WORKPAPER_VARIANT(key, road) returns a copy of a worksheet worded for a
+  road (e.g. WP-03 for coworkers, roommates or caregivers), or null.
 */
 (function (global) {
   'use strict';
@@ -44,24 +49,31 @@
       {
         id: 'totals', type: 'computed', title: "This week's totals",
         compute: function (ctx) {
-          var t = { A: 0, B: 0 }, noticed = { A: 0, B: 0 }, count = 0;
+          var people = ctx.people(), t = {}, noticed = {};
+          people.forEach(function (p) { t[p] = 0; noticed[p] = 0; });
           ctx.rows('audit').forEach(function (r) {
             var m = parseFloat(r.minutes);
             if (!r.who || !(m > 0)) return;
-            count++;
-            var share = r.who === 'Both' ? { A: m / 2, B: m / 2 } : (r.who === 'A' ? { A: m, B: 0 } : { A: 0, B: m });
-            t.A += share.A; t.B += share.B;
-            if (r.how === 'Noticed and handled') { noticed.A += share.A; noticed.B += share.B; }
+            var share = {};
+            if (r.who === 'Both') people.forEach(function (p) { share[p] = m / people.length; });
+            else if (t.hasOwnProperty(r.who)) share[r.who] = m;
+            Object.keys(share).forEach(function (p) {
+              t[p] += share[p];
+              if (r.how === 'Noticed and handled') noticed[p] += share[p];
+            });
           });
-          var total = t.A + t.B;
+          var total = people.reduce(function (a, p) { return a + t[p]; }, 0);
           if (!total) return [{ label: 'Totals', value: 'Add rows with a person and minutes to see the totals.' }];
-          var pA = t.A / total * 100, pB = t.B / total * 100;
-          var balance = 1 - Math.abs(pA - pB) / 100;
-          return [
-            { label: ctx.name('A'), value: fmt(t.A, 0) + ' minutes (' + fmt(pA, 0) + '%), of which ' + fmt(noticed.A, 0) + ' noticed and handled without being asked' },
-            { label: ctx.name('B'), value: fmt(t.B, 0) + ' minutes (' + fmt(pB, 0) + '%), of which ' + fmt(noticed.B, 0) + ' noticed and handled without being asked' },
-            { label: 'Workload balance score', value: fmt(balance, 2), note: 'Enter this as the workload balance number in CALC-01. It describes how the logged work was split this week, not either person.' }
-          ];
+          var pct = {}, maxP = 0, minP = 100;
+          people.forEach(function (p) { pct[p] = t[p] / total * 100; maxP = Math.max(maxP, pct[p]); minP = Math.min(minP, pct[p]); });
+          // 1 = an even split; 0 = one person logged everything. With two people this is 1 - |A% - B%|.
+          var balance = people.length === 2 ? 1 - Math.abs(pct.A - pct.B) / 100
+            : 1 - (maxP - minP) / 100;
+          var out = people.map(function (p) {
+            return { label: ctx.name(p), value: fmt(t[p], 0) + ' minutes (' + fmt(pct[p], 0) + '%), of which ' + fmt(noticed[p], 0) + ' noticed and handled without being asked' };
+          });
+          out.push({ label: 'Workload balance score', value: fmt(balance, 2), note: 'Enter this as the workload balance number in CALC-01. It describes how the logged work was split this week, not anyone in it.' + (people.length > 2 ? ' With more than two people, it compares the biggest and smallest shares.' : '') });
+          return out;
         }
       },
       {
@@ -206,8 +218,8 @@
         columns: [
           { id: 'date', label: 'Date', type: 'date', w: 1.1 },
           { id: 'change', label: 'What changed', type: 'textarea', w: 3.5 },
-          { id: 'initA', label: 'Initials (A)', type: 'text', w: 0.9 },
-          { id: 'initB', label: 'Initials (B)', type: 'text', w: 0.9 }
+          { id: 'initA', label: 'Initials', type: 'text', w: 0.9 },
+          { id: 'initB', label: 'More initials', type: 'text', w: 0.9 }
         ],
         defaultRows: [{}]
       },
@@ -478,11 +490,12 @@
       {
         id: 'loads', type: 'computed', title: 'Load this week',
         compute: function (ctx) {
-          var c = { A: { Low: 0, Medium: 0, High: 0 }, B: { Low: 0, Medium: 0, High: 0 } };
+          var c = {};
+          ctx.people().forEach(function (p) { c[p] = { Low: 0, Medium: 0, High: 0 }; });
           var any = false;
           ctx.rows('daily').forEach(function (r) { if (c[r.who] && c[r.who].hasOwnProperty(r.load)) { c[r.who][r.load]++; any = true; } });
           if (!any) return [{ label: 'Load', value: 'Record a load level to see the week at a glance.' }];
-          return ['A', 'B'].map(function (p) {
+          return ctx.people().map(function (p) {
             return { label: ctx.name(p), value: c[p].High + ' high, ' + c[p].Medium + ' medium, ' + c[p].Low + ' low' };
           });
         }
@@ -509,5 +522,87 @@
     ]
   };
 
+  /* ------------------------------------------------------------------ road variants */
+  // WP-03 worded and prefilled for the road someone is on. Everything else about the sheet stays the same.
+  var RACI_ROADS = {
+    coworkers: {
+      purpose: 'A living agreement that gives every recurring team task exactly one Responsible name and one Accountable name, so nobody has to guess who is following up. Responsible does the task. Accountable makes sure it happened and follows up. They can be the same person. Consulted (who gives input before it is done) and Informed (who hears when it is) are optional.',
+      note: "Fill it in together, from what a normal week actually looks like (WP-01 helps). Remove any rows that don't fit your team, and add the ones that do. It describes how the work is set up, never how well anyone is doing it.",
+      rows: [
+        { task: 'Meeting notes', freq: 'Each meeting' }, { task: 'Follow-ups after meetings', freq: 'Each meeting' },
+        { task: 'Deadlines and status reporting', freq: 'Weekly' }, { task: 'On-call or cover when someone is out', freq: 'As needed' },
+        { task: 'Team chat and shared inbox triage', freq: 'Daily' }, { task: 'Onboarding a new teammate', freq: 'As needed' }
+      ],
+      freq: ['Daily', 'Each meeting', 'Weekly', 'Monthly', 'As needed', 'Ongoing'],
+      ci: true,
+      amend: 'When the work changes, rework the agreement in writing, instead of letting tasks drift to whoever started picking them up. Anyone on the team can ask for a review at a regular check-in, or at the monthly look-back (WP-04).',
+      sign: "Initialing confirms that everyone has read the current version and agrees to who owns what, as written. It isn't a performance record, and it isn't for HR. It only means ownership is clear."
+    },
+    roommates: {
+      purpose: 'A living agreement that gives every regular shared-home job exactly one Responsible name and one Accountable name, so nobody has to re-decide who owns what every week. Responsible does the task. Accountable notices if it didn\'t get done and follows up. They can be the same person.',
+      note: "Fill it in together at a house meeting. Remove any rows that don't apply to your place, and add the ones that do. Splitting a cleaning area by week or by room is fine; just write it down.",
+      rows: [
+        { task: 'Rent: collecting and paying', freq: 'Monthly' }, { task: 'Bills (power, water, internet)', freq: 'Monthly' },
+        { task: 'Cleaning: kitchen', freq: 'Weekly' }, { task: 'Cleaning: bathroom', freq: 'Weekly' }, { task: 'Cleaning: shared living space', freq: 'Weekly' },
+        { task: 'Shared supplies (soap, paper, basics)', freq: 'As needed' }, { task: 'Trash and recycling', freq: 'Weekly' },
+        { task: 'Guests and quiet hours', freq: 'Ongoing' }
+      ],
+      amend: 'When things change (someone moves in or out, a schedule shifts), rework the agreement in writing, instead of letting jobs drift to whoever started doing more. Anyone can ask for a review at a house meeting, or at the monthly look-back (WP-04).',
+      sign: "Initialing confirms that everyone has read the current version and agrees to who owns what, as written. It doesn't mean every job feels perfectly even. It only means ownership is clear."
+    },
+    caregivers: {
+      purpose: 'A living agreement that gives every regular part of the care exactly one Responsible name and one Accountable name, so "whenever someone can" becomes a plan. Responsible does the task. Accountable notices if it didn\'t get done and follows up. They can be the same person.',
+      note: "Fill it in together with whoever shares the care. This is about who owns each task, not medical advice: for anything about health or medicines, follow the care team's instructions. Remove rows that don't apply and add the ones that do.",
+      rows: [
+        { task: 'Appointments: booking, getting there, notes', freq: 'As needed' },
+        { task: 'Medications: keeping the list and schedule up to date', freq: 'Ongoing', notes: 'As the care team directs' },
+        { task: 'Pharmacy pickups', freq: 'Weekly' }, { task: 'Bills and insurance paperwork', freq: 'Monthly' },
+        { task: 'Visits', freq: 'Weekly' }, { task: 'Overnight calls', freq: 'As needed' },
+        { task: 'Groceries and meals', freq: 'Weekly' }
+      ],
+      amend: 'When the care changes, rework the agreement in writing, instead of letting tasks drift to whoever lives closest or started doing more. Anyone sharing the care can ask for a review at a regular check-in, or at the monthly look-back (WP-04).',
+      sign: "Initialing confirms that everyone sharing the care has read the current version and agrees to who owns what, as written. It doesn't mean the load feels even. It only means ownership is clear."
+    }
+  };
+  var variants = {};
+  function variant(key, road) {
+    key = String(key || '').toLowerCase();
+    if (key !== 'wp-03' || !RACI_ROADS[road]) return null;
+    if (variants[key + ':' + road]) return variants[key + ':' + road];
+    var base = W[key], v = RACI_ROADS[road];
+    var out = {};
+    Object.keys(base).forEach(function (k) { out[k] = base[k]; });
+    out.road = road;
+    out.purpose = v.purpose;
+    out.sections = base.sections.map(function (s) {
+      var c = {};
+      Object.keys(s).forEach(function (k) { c[k] = s[k]; });
+      if (s.type === 'note' && s.pdf === false) c.text = v.note;
+      if (s.type === 'note' && s.pdf === true) c.text = v.sign;
+      if (s.id === 'amendments') c.intro = v.amend;
+      if (s.id === 'treaty') {
+        c.defaultRows = v.rows;
+        c.columns = s.columns.map(function (col) {
+          if (col.id === 'freq' && v.freq) { var f = {}; Object.keys(col).forEach(function (k) { f[k] = col[k]; }); f.options = v.freq; return f; }
+          return col;
+        });
+        if (v.ci) {
+          c.title = 'The agreement';
+          c.intro = 'R and A are one name each. Consulted and Informed are optional, and can be more than one name or a group, like "the whole team".';
+          c.columns = [
+            c.columns[0], c.columns[1], c.columns[2], c.columns[3],
+            { id: 'c', label: 'Consulted (optional)', type: 'text', w: 1.2, placeholder: 'Who gives input' },
+            { id: 'i', label: 'Informed (optional)', type: 'text', w: 1.2, placeholder: 'Who hears about it' },
+            { id: 'notes', label: 'Notes', type: 'text', w: 1.5 }
+          ];
+        }
+      }
+      return c;
+    });
+    variants[key + ':' + road] = out;
+    return out;
+  }
+
   global.TOL_WORKPAPERS = W;
+  global.TOL_WORKPAPER_VARIANT = variant;
 })(typeof window !== 'undefined' ? window : globalThis);

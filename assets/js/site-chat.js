@@ -138,6 +138,13 @@
   }
   function idf(t) { var n = IDX.df[t] || 0; return Math.log(1 + (IDX.N - n + 0.5) / (n + 0.5)); }
 
+  // prefer is one path prefix or a list of them (earlier in the list wins ties); -1 when u matches none
+  function preferRank(prefer, u) {
+    var list = typeof prefer === 'string' ? [prefer] : prefer;
+    for (var i = 0; i < list.length; i++) if (u.indexOf(list[i]) === 0) return i;
+    return -1;
+  }
+
   // Rank every passage for a query. Returns {hits:[{i,s,cov}], terms}
   function search(q, opts) {
     opts = opts || {};
@@ -174,7 +181,7 @@
       if (d.g) s *= opts.define ? 1.7 : 1.25;
       if (d.tip) s *= wantTip ? 1.6 : 0.55;
       if (d.d) s *= 0.95;
-      if (opts.prefer && d.u.indexOf(opts.prefer) === 0) s *= 3;
+      if (opts.prefer && preferRank(opts.prefer, d.u) >= 0) s *= 3 + 0.4 / (1 + preferRank(opts.prefer, d.u));
       // an everyday word whose site word is this passage's heading: a strong sign it's the right one
       var hd = IDX.head[i];
       if (d.g) for (var jj = 0; jj < terms.length; jj++) if (terms[jj].w < 1 && hd[terms[jj].t]) { s *= 1.35; break; }
@@ -274,7 +281,29 @@
     [/^(is (it|this|the site|everything) free|how much (does it|is it|does this) cost|what does it cost|is there a (fee|charge|subscription))/, 'free while the program is being built membership', '/ways-in'],
     [/^what is (this|this site|the objective ledger|tol)$|^what s this( site)?$/, 'The Objective Ledger shared ledger what it is', '/start-here.html'],
     [/\b(we|they|you) (each|both|all) think (we|they|you|i) do (more|most)|\bwho (really )?does more\b|\b(why )?(do|does) (everyone|we both|we each) (think|feel) (they|we) do more/, 'why we each think we do more egocentric bias own share', '/library/fairness.html'],
-    [/\bi (do|handle|carry|remember) (everything|it all|all of it|all the \w+|most of the \w+)|\bnobody (sees|notices|thanks me for) (what|how much) i do|\bi m the only one who\b/, 'invisible work nobody sees unbilled debt', '/book/preface']
+    [/\bi (do|handle|carry|remember) (everything|it all|all of it|all the \w+|most of the \w+)|\bnobody (sees|notices|thanks me for) (what|how much) i do|\bi m the only one who\b/, 'invisible work nobody sees unbilled debt', '/book/preface'],
+    // work and teams: "my team of seven", "my staff", "Slack", "my manager"
+    [/\b(my|our|a|the) (team|staff|crew|department|manager|boss|coworkers?|colleagues?|employees?)\b|\bteam of\b|\bat work\b|\bworkplace\b|\bwork (chat|team|friends|people|stuff)\b|\bco ?workers?\b|\bcolleagues?\b|\bslack\b|\bmicrosoft teams\b|\bstand ?ups?\b/,
+      'coworkers team of three to eight lemonade stand workpapers more than two names team chat one owner per job', ['/relationships-in-depth.html#coworkers', '/library/teams.html#raci', '/library/teams.html', '/relationships.html#coworkers']],
+    // "does X work for three people / more than two?"
+    [/\b(does|do|can|will|could|would|is)\b.*\b(work|use|used|handle|support|fit|for)\b.*(\b(three|four|five|six|seven|eight|[3-8]|several|multiple)\s*(people|persons|of us|roommates|housemates|flatmates|adults|siblings|members|names)\b|\bmore than (two|2)\b|\bgroups?\b|\bwhole (house|household|family)\b)|^(for )?(more than (two|2)|three or more|3 or more) (people|of us)\b/,
+      'works with more than two people three or more whole house lemonade stand team of three to eight', ['/relationships-in-depth.html#roommates', '/relationships-in-depth.html#coworkers', '/relationships.html#roommates']],
+    // co-parents: exes, custody, handoffs, two homes
+    [/\b(my|our|an|the|her|his) ex\b|\bex (partner|husband|wife|boyfriend|girlfriend)\b|\bex(partner|husband|wife|boyfriend|girlfriend)\b|\bcustody\b|\bhand ?offs?\b|\bexchange (day|days|time|times)\b|\b(custody|kid|child|school|weekend) exchanges?\b|\bexchanges? (is|are|go|goes|get|gets)\b|\bdrop ?offs?\b|\bpick ?ups? and drop|\btwo (homes|houses|households)\b|\bboth (homes|houses)\b|\bparenting (plan|schedule|time)\b|\bco ?parent\w*\b|\bseparated\b|\bdivorced?\b/,
+      'co-parents calmer handoffs exchange-day script short logistical kids messengers court order parenting plan', ['/relationships-in-depth.html#co-parents', '/relationships.html#co-parents', '/library/life.html#coparenting']],
+    // "how do I say / word / text / bring it up without a fight"
+    [/\bhow (do|should|can|could|would|shall) (i|we) (say(?! no\b)|word|phrase|put|tell|raise|ask|text|message|bring (it|this|that|something) up)\b|\bhow to (say(?! no\b)|word|phrase|raise|bring (it|this|that|something) up)\b|\bwhat (do|should|can) i say\b(?! no)|\bbring (it|this|that|something|\w+) up\b|\bwithout (starting )?(a|an)? ?(fight|argument|row)\b|^(text|message|email) (my|to)\b|\bword (it|this|a text|a message|an email)\b/,
+      'signal translator testing how a sentence may land before you say it tone filter fact feeling ask one topic same side', ['/signal-translator.html', '/workpapers/wp-09-tone-filter.html', '/check-ins.html#ground', '/check-ins.html']],
+    // caregivers, a spouse or partner too
+    [/\b(husband|wife|partner|spouse|boyfriend|girlfriend|mom|mum|dad|mother|father|parent|son|daughter)\b.*\b(surgery|operation|illness|ill|sick|injury|injured|hospital|recovering|recovery|diagnosis|disability|disabled)\b|\b(looking after|caring for|care for|taking care of|care of|nursing) (my|our|a|an|his|her) \w+|\bdoing everything for (him|her|them)\b|\b(carer|caregiver|caregiving)\b/,
+      'caregivers spouse partner after surgery or illness what to notice one small thing battery check breathe ask for one specific help', ['/relationships-in-depth.html#caregivers', '/relationships.html#caregivers', '/library/stress.html#caregiver-strain']],
+    // teenagers and parenting
+    [/\bteens?\b|\bteenagers?\b|\bteenage\b|\badolescen\w*|\b1[0-9] ?(year|yr|y) ?olds?\b|\bmy (kid|kids|child|children|son|daughter)\b|\b(kid|child|son|daughter) (is |seems |gets |feels )?(stressed|anxious|upset|struggling|overwhelmed|worried)\b/,
+      'talking with teenagers parenting teens ownership of household jobs autonomy stress', ['/library/life.html#teenagers', '/library/life.html#parenting-styles', '/relationships-in-depth.html#family']],
+    // roommates, rent and bills
+    [/\b(roommates?|roomates?|housemates?|flatmates?|house ?share|shared house)\b|\brent\b|\bvenmo\b|\bsplitwise\b|\bsplit\w* (the )?(bills?|rent|costs?|expenses?|money|utilities)\b|\bshared expenses?\b|\butilit(y|ies)\b|\b(electric|power|water|gas|internet|wifi) bills?\b/,
+      'roommates three or more people money rent bills split shared-expenses note house meeting talk about money without a fight', ['/relationships-in-depth.html#roommates', '/relationships.html#roommates', '/library/life.html#roommates-and-shared-homes', '/library/conflict.html#money-disagreements']],
+    [/\bbills?\b/, 'money bills split fair shared-expenses note talk about money without a fight', ['/library/conflict.html#money-disagreements', '/relationships-in-depth.html#roommates', '/library/life.html#money-meanings']]
   ];
 
 
@@ -317,6 +346,21 @@
       return { blocks: [{ k: 'p', x: 'Could you tell me a little more about what you’d like to know? A word or two about the topic is enough.' }], chips: STARTERS };
     }
     var hits = res.hits;
+    // a rewrite that names several places: lead with the best passage from each of the first two that have one
+    if (prefer && typeof prefer !== 'string' && hits.length) {
+      var pinned = [], topScore = hits[0].s;
+      prefer.forEach(function (px) {
+        if (pinned.length >= 2) return;
+        for (var j = 0; j < hits.length; j++) {
+          var dj = KB.docs[hits[j].i];
+          if (!dj.tip && dj.u.indexOf(px) === 0) { if (pinned.indexOf(hits[j]) === -1) pinned.push(hits[j]); break; }
+        }
+      });
+      if (pinned.length) {
+        hits = pinned.map(function (h) { return { i: h.i, s: topScore, cov: 1 }; })
+          .concat(hits.filter(function (h) { return pinned.indexOf(h) === -1; }));
+      }
+    }
     if (gi >= 0) {
       hits = [{ i: gi, s: (hits[0] ? hits[0].s : 1) * 2, cov: 1 }].concat(hits.filter(function (h) { return h.i !== gi; }));
     }
@@ -443,6 +487,9 @@
     '@media (min-width:720px){.tolc.is-modal{left:auto;right:24px;bottom:24px;width:400px;height:min(640px,calc(100vh - 48px));border-radius:22px;border-bottom:1px solid var(--line)}',
     ' .tolc-scrim{background:rgba(43,38,32,.12)}}',
     '.tolc.is-inline{position:relative;height:min(620px,78vh);border:1px solid var(--line);border-radius:20px;box-shadow:0 6px 24px rgba(43,38,32,.08);margin:1.5rem 0;overflow:hidden}',
+    // phones: the inline chat grows with the page (no small scroll box inside it); new answers are scrolled into view
+    '@media (max-width:719px){.tolc.is-inline{height:auto;overflow:visible}.tolc.is-inline .tolc-log{flex:none;overflow:visible;min-height:10rem;overscroll-behavior:auto}',
+    ' .tolc.is-inline .tolc-msg,.tolc.is-inline .tolc-typing{scroll-margin-top:5rem;scroll-margin-bottom:6rem}}',
     '.tolc.is-modal.is-in{animation:tolc-up .28s ease-out}',
     '@keyframes tolc-up{from{transform:translateY(24px);opacity:0}to{transform:none;opacity:1}}',
     '.tolc-head{display:flex;align-items:center;gap:.7rem;padding:.8rem .8rem .7rem 1rem;border-bottom:1px solid var(--line);background:linear-gradient(var(--c-soft),var(--paper));border-radius:inherit;border-bottom-left-radius:0;border-bottom-right-radius:0}',
@@ -648,8 +695,21 @@
     });
   };
 
+  // true when the log has no scroll box of its own (the inline chat on a phone): scroll the page instead
+  Chat.prototype.flows = function () {
+    return this.mode === 'inline' && getComputedStyle(this.log).overflowY === 'visible';
+  };
+
   Chat.prototype.scrollTo = function (el) {
     var log = this.log;
+    if (this.flows()) {
+      // only after someone has asked something, so a greeting or a restored chat never moves the page on load
+      var target = el || log.lastElementChild;
+      if (!this.asked || !target) return;
+      var r = target.getBoundingClientRect(), vh = window.innerHeight || document.documentElement.clientHeight;
+      if (r.top < 60 || r.top > vh * 0.55) target.scrollIntoView({ block: 'start', behavior: REDUCED ? 'auto' : 'smooth' });
+      return;
+    }
     if (!el) { log.scrollTop = log.scrollHeight; return; }
     var top = el.offsetTop - log.offsetTop - 8;
     log.scrollTop = Math.max(0, Math.min(top, log.scrollHeight));
@@ -679,6 +739,7 @@
 
   Chat.prototype.ask = function (text, doc) {
     var me = this;
+    this.asked = true;
     var m = { r: 'u', x: text };
     this.msgs.push(m); save(this.msgs);
     this.setChips([]);

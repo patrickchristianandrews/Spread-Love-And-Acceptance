@@ -21,6 +21,20 @@
     emailFrom: /^\s*From:\s*([^<\n]{1,60}?)\s*(?:<[^>]*>)?\s*$/i,
     header: /^\s*(Sent|To|Cc|Bcc|Subject|Date):/i,
     quoted: /^\s*>/,
+    // "[10:02] Sam: message" and "[10:02 AM] Sam: message"
+    bracketTime: /^\s*\[(\d{1,2}[:.]\d{2}(?::\d{2})?\s?(?:[AaPp]\.?[Mm]\.?)?)\]\s+([^:\[\]]{1,40}):\s?(.*)$/,
+    // iMessage-style exports: "[Jan 5, 2024 at 10:02 AM] Sam: message", "[5 Jan 2024, 10:02] Sam: message"
+    bracketDate: /^\s*\u200e?\[([^\]]{3,40}?),?\s+(?:at\s+)?(\d{1,2}[:.]\d{2}(?::\d{2})?\s?(?:[AaPp]\.?[Mm]\.?)?)\]\s+([^:\[\]]{1,40}):\s?(.*)$/,
+    // Slack / Teams copy: a "Sam Lee  10:02 AM" (or "Sam Lee, 10:02 AM") line, then the message on the next line(s)
+    headTime: /^\s*([^\s\d\[\]:@#][^\[\]:]{0,40}?)(,?\s{2,}|\t+|,\s*|\s)\[?(\d{1,2}:\d{2}(?::\d{2})?\s?(?:[AaPp]\.?[Mm]\.?)?)\]?\s*$/,
+    // Discord-style: "Sam — Today at 10:02 AM", "Sam - Yesterday at 9:15 PM", "Sam — 03/04/2024 10:02 AM"
+    headDay: /^\s*([^\s\[\]:][^\[\]:]{0,40}?)\s+[—–-]\s+((?:Today|Yesterday|(?:Mon|Tues|Wednes|Thurs|Fri|Satur|Sun)day|\d{1,4}[./-]\d{1,2}[./-]\d{1,4})(?:,)?(?:\s+at)?)\s+(\d{1,2}:\d{2}(?::\d{2})?\s?(?:[AaPp]\.?[Mm]\.?)?)\s*$/i,
+    // Teams: "[10:02 AM] Sam Lee" on its own line
+    headBracket: /^\s*\[(\d{1,2}:\d{2}(?::\d{2})?\s?(?:[AaPp]\.?[Mm]\.?)?)\]\s+([^:\[\]]{1,40}?)\s*$/,
+    // A follow-up from the same person in Slack shows only its time
+    timeOnly: /^\s*\[?(\d{1,2}:\d{2}(?::\d{2})?\s?(?:[AaPp]\.?[Mm]\.?)?)\]?\s*$/,
+    // Bits of chat-app furniture that are not messages
+    chrome: /^\s*(?:Today|Yesterday|New|New messages?|\(edited\)|edited|\d+ repl(?:y|ies)|View thread|Last reply .*|Reply|Replied to a thread.*|(?:Mon|Tues|Wednes|Thurs|Fri|Satur|Sun)day(?:,? [A-Z][a-z]+ \d{1,2}(?:st|nd|rd|th)?)?|:[a-z0-9_+-]+:\s*\d*|Seen|Delivered|Read \d.*)\s*$/i,
     noise: /^(?:<Media omitted>|<attached:.*>|This message was deleted\.?|You deleted this message\.?|Messages and calls are end-to-end encrypted.*|image omitted|sticker omitted|GIF omitted|audio omitted|video omitted)$/i
   };
   var NOT_NAMES = /^(https?|www|note|ps|p\.s|re|fwd?|subject|to|cc|date|sent|from|time|edit|update|also|and|but|ok|so|well|yes|no|like)$/i;
@@ -30,12 +44,32 @@
     var turns = [], format = 'unlabelled';
 
     // Chat exports and "Name: message" lines
-    var labelled = 0;
-    lines.forEach(function (l) { if (RX.waIOS.test(l) || RX.waAndroid.test(l) || namedMatch(l)) labelled++; });
+    var labelled = 0, heads = 0;
+    lines.forEach(function (l) {
+      if (exportMatch(l) || namedMatch(l)) labelled++;
+      else if (headMatch(l)) heads++;
+    });
     var nonEmpty = lines.filter(function (l) { return l.trim(); }).length;
     var isEmail = lines.some(function (l) { return RX.emailOn.test(l) || RX.emailFrom.test(l); });
 
-    if (isEmail) {
+    if (!isEmail && heads >= 2 && heads >= labelled) {
+      // Slack, Teams, Discord: a name-and-time line, then the message on the line(s) below
+      format = 'chat app';
+      var curT = null;
+      lines.forEach(function (l) {
+        if (!l.trim() || RX.chrome.test(l)) return;
+        var h = headMatch(l);
+        if (h) { curT = { who: h.who, text: '', time: h.time, date: h.date || '' }; turns.push(curT); return; }
+        var to = l.match(RX.timeOnly);
+        if (to && curT) { curT = { who: curT.who, text: '', time: to[1], date: curT.date }; turns.push(curT); return; }
+        var ex = exportMatch(l);
+        if (ex) { curT = null; push(ex.who, ex.text, ex.time, ex.date); return; }
+        if (!curT) { curT = { who: 'Unnamed', text: '', time: '', date: '' }; turns.push(curT); }
+        curT.text += (curT.text ? '\n' : '') + trim(l);
+      });
+      turns = turns.filter(function (t) { t.text = trim(t.text); return t.text && !RX.noise.test(t.text); });
+
+    } else if (isEmail) {
       format = 'email';
       var cur = null;
       lines.forEach(function (l) {
@@ -52,8 +86,8 @@
     } else if (labelled >= 2 && labelled >= nonEmpty * 0.4) {
       lines.forEach(function (l) {
         if (!l.trim()) return;
-        var m = l.match(RX.waIOS) || l.match(RX.waAndroid);
-        if (m) { format = 'chat export'; push(clean(m[3]), m[4], m[2], m[1]); return; }
+        var ex = exportMatch(l);
+        if (ex) { format = 'chat export'; push(ex.who, ex.text, ex.time, ex.date); return; }
         var n = namedMatch(l);
         if (n) { if (format !== 'chat export') format = 'named lines'; push(n[0], n[1]); return; }
         if (turns.length) turns[turns.length - 1].text += '\n' + l.trim();   // a message that ran onto a new line
@@ -71,6 +105,35 @@
       t = trim(t || '');
       if (!t || RX.noise.test(t)) return;
       turns.push({ who: who, text: t, time: time || '', date: date || '' });
+    }
+    function exportMatch(l) {
+      var m = l.match(RX.waIOS) || l.match(RX.waAndroid);
+      if (m) return { who: clean(m[3]), text: m[4], time: m[2], date: m[1] };
+      m = l.match(RX.bracketDate);
+      if (m) return { who: clean(m[3]), text: m[4], time: m[2], date: m[1] };
+      m = l.match(RX.bracketTime);
+      if (m && !NOT_NAMES.test(trim(m[2])) && m[2].split(/\s+/).length <= 4) return { who: clean(m[2]), text: m[3], time: m[1], date: '' };
+      return null;
+    }
+    function headMatch(l) {
+      var m = l.match(RX.headDay);
+      if (m && nameLike(m[1])) return { who: clean(m[1]), time: m[3], date: m[2].replace(/,?\s+at$/i, '') };
+      m = l.match(RX.headBracket);
+      if (m && nameLike(m[2])) return { who: clean(m[2]), time: m[1] };
+      m = l.match(RX.headTime);
+      if (m && nameLike(m[1])) {
+        // With one plain space before the time, only trust names that look like names
+        // ("Sam Lee 10:02 AM"), so "see you at 10:30" is never read as a speaker.
+        var loose = m[2] === ' ';
+        if (!loose || /^[A-ZÀ-Ý][\wÀ-ɏ.'’-]*(?:\s+[A-ZÀ-Ý][\wÀ-ɏ.'’-]*){0,3}$/.test(trim(m[1]))) return { who: clean(m[1]), time: m[3] };
+      }
+      return null;
+    }
+    function nameLike(n) {
+      n = trim(n || '');
+      if (!n || n.length > 40 || n.split(/\s+/).length > 4) return false;
+      if (NOT_NAMES.test(n) || /[?!.,]$/.test(n)) return false;
+      return !/\b(?:at|by|until|before|after|around|from|to|till|is|was|are|the|and)$/i.test(n);
     }
     function namedMatch(l) {
       var m = l.match(RX.named);
@@ -152,10 +215,10 @@
     control: [words(["i(?:[’']?m| am) (?:checking|going through|going to check) your phone", "give me your (?:phone|password|passcode)", "what(?:[’']?s| is) your password", "(?:send|share) (?:me )?your location", "i(?:[’']?m| am) tracking you", "who were you (?:with|talking to|texting)", "answer me", "you(?:[’']?re| are) not allowed", "you (?:can[’']?t|cannot) (?:go|see|talk to|leave|have)", "you need my permission", "i forbid", "you(?:[’']?re| are) not going (?:out|anywhere)", "stop (?:seeing|talking to) your (?:friends|family|sister|brother|mom|mum|dad)", "(?:block|delete) (?:him|her|them|your friends)", "you don[’']?t get (?:any )?money", "i control the money", "you(?:[’']?ll| will) do as i say", "because i said so"])],
     verdict: [words(["you(?:[’']?re| are) (?:so |such an? |just |being |really |always |)?(?:selfish|lazy|useless|pathetic|ridiculous|crazy|insane|childish|impossible|stupid|an idiot|a joke|a liar|a mess|toxic|unbelievable|hopeless|the worst|a narcissist|dramatic|immature|clueless|heartless|cold)", "you don[’']?t care(?: about)?", "you only care about", "you(?:[’']?re| are) the problem", "what(?:[’']?s| is) wrong with you", "your problem is", "typical you", "that(?:[’']?s| is) so you", "you(?:[’']?re| are) just like your", "you make me (?:sick|crazy|miserable|feel (?:worthless|stupid|small|like (?:crap|garbage|nothing|an idiot)|bad|guilty|terrible))", "you(?:[’']?ve| have) ruined"])],
     absolute: [words(["always", "never", "every (?:single )?time", "constantly", "all the time", "not once", "not even once", "nobody", "no one", "everyone", "nothing (?:ever)?", "every day"])],
-    dismiss: [words(["calm down", "just relax", "relax,", "whatever", "you(?:[’']?re| are) overreacting", "you(?:[’']?re| are) (?:too|so) sensitive", "not a big deal", "no big deal", "get over it", "chill out", "you(?:[’']?re| are) being dramatic", "i don[’']?t care", "if you say so", "here we go again", "not this again"]),
+    dismiss: [words(["calm down", "just relax", "relax,", "whatever(?=\\s*(?:$|[.,!?…;:)\\-—–]|🙄))", "ok whatever", "you(?:[’']?re| are) overreacting", "you(?:[’']?re| are) (?:too|so) sensitive", "not a big deal", "no big deal", "get over it", "chill out", "you(?:[’']?re| are) being dramatic", "i don[’']?t care", "if you say so", "here we go again", "not this again"]),
               /^(?:k|ok\.|okay\.|fine\.?|sure\.|cool\.|noted\.?)$/i],
     sarcasm: [words(["wow,? thanks", "thanks a lot", "great job,? really", "must be nice", "sure you did", "sure you are", "oh really", "as usual", "big surprise", "thanks for nothing", "real mature", "whatever you say"]), /🙄|😒|🙃/g],
-    demand: [words(["you should(?:n[’']?t)?(?: have)?", "you need to", "you have to", "you better", "why can[’']?t you", "why didn[’']?t you", "why don[’']?t you ever", "why do you always", "how hard is it", "is it too much to ask", "just do it", "do it now"])],
+    demand: [words(["you should(?:n[’']?t)?(?: have)?", "you need to", "you have to", "you better", "why can[’']?t you", "why didn[’']?t you", "why don[’']?t you ever", "why do you always", "how hard is it", "is it too much to ask", "just do it", "do it now", "(?:can|could|would|will) you (?:please )?just", "just (?:get|do) it (?:done|already)"])],
     withdraw: [words(["i[’']?m done(?: talking)?(?: about (?:this|it))?", "i am done", "leave me alone", "forget it", "never ?mind", "i don[’']?t want to talk(?: about (?:it|this))?", "stop (?:texting|messaging|calling) me", "don[’']?t (?:text|talk to|call) me", "i give up", "doesn[’']?t matter", "it doesn[’']?t matter"])],
     history: [words(["last time", "remember when", "like (?:the )?(?:last|other) time", "just like when", "you did the same", "same thing (?:as|with)", "and another thing", "while we[’']?re at it", "not to mention", "this is (?:just )?like", "again\\?", "for the (?:hundredth|millionth|thousandth) time", "back when"])],
     vague: [words(["later", "soon", "at some point", "when you get a chance", "when you can", "whenever", "in a bit", "in a minute", "sometime", "one of these days", "eventually"])],
