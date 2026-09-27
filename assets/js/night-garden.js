@@ -22,6 +22,19 @@
   // Backdrop mode (garden-backdrop.html, behind Pause & Play): silent, no buttons, and it
   // never changes the visitor's saved garden.
   var AMBIENT = document.documentElement.hasAttribute('data-ambient');
+  // Behind the pages, each part of the site has its own scene (garden, beach, lake, meadow,
+  // river, forest), lit by the visitor's own clock: dawn, day, golden hour, dusk or night.
+  // The Night Garden itself is always night.
+  var QS = (function () { var o = {}; location.search.replace(/[?&]([a-z]+)=([a-z]+)/g, function (_, k, v) { o[k] = v; }); return o; })();
+  var SCENE = AMBIENT && /^(garden|beach|lake|meadow|river|forest)$/.test(QS.scene || '') ? QS.scene : 'garden';
+  function todNow() {
+    if (!AMBIENT) return 'night';
+    if (/^(dawn|day|golden|dusk|night)$/.test(QS.tod || '')) return QS.tod;
+    var d = new Date(), h = d.getHours() + d.getMinutes() / 60;
+    return h < 5 ? 'night' : h < 7.5 ? 'dawn' : h < 16.5 ? 'day' : h < 19 ? 'golden' : h < 21 ? 'dusk' : 'night';
+  }
+  var TOD = todNow();
+  var NIGHTNESS = { night: 1, dusk: 0.7, dawn: 0.3, golden: 0.2, day: 0.08 };
 
   // ---------- Saved garden (this browser only) ----------
   var KEY = 'tol-night-garden-v1';
@@ -74,6 +87,7 @@
   function drawBackground() {
     bg = document.createElement('canvas'); bg.width = canvas.width; bg.height = canvas.height;
     var b = bg.getContext('2d'); b.setTransform(DPR, 0, 0, DPR, 0, 0);
+    if (SCENE !== 'garden' || TOD !== 'night') return drawScene(b);
     var sky = b.createLinearGradient(0, 0, 0, H * 0.7);
     sky.addColorStop(0, '#171A34'); sky.addColorStop(0.45, '#2E2F5C'); sky.addColorStop(0.8, '#5C4A78'); sky.addColorStop(1, '#C98E8E');
     b.fillStyle = sky; b.fillRect(0, 0, W, H);
@@ -106,6 +120,101 @@
     b.fillStyle = pg; b.beginPath(); b.ellipse(p.x, p.y, p.rx, p.ry, 0, 0, Math.PI * 2); b.fill();
     b.strokeStyle = 'rgba(200,210,255,0.12)'; b.lineWidth = 2; b.stroke();
   }
+
+  // ---------- Scenes and the time of day (behind the pages) ----------
+  var SKIES = {
+    dawn: ['#7482BD', '#C9A7CF', '#F6C6B8', '#FFE4C6'], day: ['#8EC5EA', '#B3D8F1', '#DAEEF9', '#F3F9F4'],
+    golden: ['#7D9BCF', '#E6B6AA', '#F6CD9F', '#FCE6C0'], dusk: ['#2F3566', '#665890', '#C38AA6', '#F0B69A'], night: ['#171A34', '#2E2F5C', '#5C4A78', '#C98E8E']
+  };
+  var TINT = { dawn: ['#E9C9D8', 0.16], day: ['#FFFFFF', 0], golden: ['#F2C48E', 0.2], dusk: ['#3A3560', 0.42], night: ['#1B1F3C', 0.62] };
+  function hexRgb(h) { h = h.replace('#', ''); return [parseInt(h.slice(0, 2), 16), parseInt(h.slice(2, 4), 16), parseInt(h.slice(4, 6), 16)]; }
+  function tint(hex) { var a = hexRgb(hex), t = TINT[TOD], c = hexRgb(t[0]), k = t[1]; return 'rgb(' + a.map(function (v, i) { return Math.round(v + (c[i] - v) * k); }).join(',') + ')'; }
+  function band(b, y0, amp, freq, ph, col) {
+    b.fillStyle = col; b.beginPath(); b.moveTo(0, H);
+    for (var x = 0; x <= W + 10; x += 10) b.lineTo(x, H * y0 + Math.sin(x / W * Math.PI * freq + ph) * H * amp + Math.sin(x / W * 11 + ph * 2) * H * 0.005);
+    b.lineTo(W, H); b.closePath(); b.fill();
+  }
+  function drawScene(b) {
+    var sk = SKIES[TOD], g = b.createLinearGradient(0, 0, 0, H * 0.7);
+    g.addColorStop(0, sk[0]); g.addColorStop(0.45, sk[1]); g.addColorStop(0.8, sk[2]); g.addColorStop(1, sk[3]);
+    b.fillStyle = g; b.fillRect(0, 0, W, H);
+    // the sun, where it is at this time of day
+    var sun = { dawn: [0.2, 0.5, '255,214,170'], day: [0.8, 0.13, '255,250,225'], golden: [0.82, 0.4, '255,196,130'], dusk: [0.74, 0.56, '255,170,140'] }[TOD];
+    if (sun) {
+      var sx = W * sun[0], sy = H * sun[1], sr = Math.min(W, H) * 0.05, sg = b.createRadialGradient(sx, sy, 0, sx, sy, sr * 6);
+      sg.addColorStop(0, 'rgba(' + sun[2] + ',0.9)'); sg.addColorStop(0.18, 'rgba(' + sun[2] + ',0.55)'); sg.addColorStop(1, 'rgba(' + sun[2] + ',0)');
+      b.fillStyle = sg; b.fillRect(0, 0, W, H);
+      if (TOD !== 'dusk') { b.fillStyle = 'rgba(' + sun[2] + ',0.95)'; b.beginPath(); b.arc(sx, sy, sr, 0, Math.PI * 2); b.fill(); }
+    }
+    var cr = rng(7), cloudC = { dawn: '255,228,236', day: '255,255,255', golden: '255,226,204', dusk: '230,180,210', night: '185,160,224' }[TOD];
+    for (var i = 0; i < 7; i++) {
+      var cx = cr() * W, cy = H * (0.1 + cr() * 0.35), rad = Math.max(W, H) * (0.1 + cr() * 0.12), cg = b.createRadialGradient(cx, cy, 0, cx, cy, rad);
+      cg.addColorStop(0, 'rgba(' + cloudC + ',' + (TOD === 'night' ? 0.1 : 0.28) + ')'); cg.addColorStop(1, 'rgba(' + cloudC + ',0)');
+      b.fillStyle = cg; b.fillRect(0, 0, W, H);
+    }
+    var r = rng(11), p = pondShape(), water = ['#9FD3EE', '#7BBBE0', '#6AA7CF'];
+    if (SCENE === 'beach') {
+      // the sea to the horizon, gentle foam, a far sailboat, then warm sand
+      var sea = b.createLinearGradient(0, H * 0.57, 0, H * 0.72);
+      sea.addColorStop(0, tint('#7DB9DA')); sea.addColorStop(1, tint('#A9DCE8'));
+      b.fillStyle = sea; b.fillRect(0, H * 0.575, W, H * 0.16);
+      b.strokeStyle = 'rgba(255,255,255,' + (TOD === 'night' ? 0.12 : 0.4) + ')'; b.lineWidth = 1.2;
+      for (var fl = 0; fl < 7; fl++) { var fy = H * (0.6 + fl * 0.016); b.beginPath(); for (var fx = 0; fx <= W; fx += 12) b.lineTo(fx, fy + Math.sin(fx / 40 + fl) * 1.5); b.globalAlpha = 0.4 + fl * 0.08; b.stroke(); b.globalAlpha = 1; }
+      var bx = W * 0.3, by = H * 0.585; b.fillStyle = tint('#F6F1E6'); b.beginPath(); b.moveTo(bx, by - 18); b.lineTo(bx, by - 2); b.lineTo(bx + 12, by - 2); b.closePath(); b.fill();
+      b.fillStyle = tint('#C9876A'); b.fillRect(bx - 7, by - 2, 18, 3);
+      band(b, 0.69, 0.012, 2.2, 0.4, tint('#F1DDB8')); band(b, 0.76, 0.01, 1.4, 1.1, tint('#EBD2A6'));
+      b.fillStyle = tint('#E6C999'); for (var sh = 0; sh < 26; sh++) { b.beginPath(); b.ellipse(r() * W, H * (0.74 + r() * 0.24), 1.6 + r() * 2.4, 1 + r(), r() * 3, 0, Math.PI * 2); b.fill(); }
+      water = ['#A6DCEB', '#86C8E0', '#72B3D2'];
+    } else if (SCENE === 'lake') {
+      // mountains with snowy tops, a wide still lake, and the near shore
+      [[tint('#9DA8C8'), 0.44, 0.1, 5], [tint('#8697B8'), 0.5, 0.08, 7]].forEach(function (m, n) {
+        b.fillStyle = m[0]; b.beginPath(); b.moveTo(0, H * 0.62); var peaks = m[3];
+        for (var k = 0; k <= peaks; k++) { var px = W * k / peaks, py = H * (m[1] + (k % 2 ? 0 : m[2]) + r() * 0.04); b.lineTo(px, py); if (n === 0 && k % 2) { b.save(); b.restore(); } }
+        b.lineTo(W, H * 0.62); b.closePath(); b.fill();
+      });
+      b.fillStyle = 'rgba(255,255,255,' + (TOD === 'night' ? 0.15 : 0.55) + ')';
+      for (var k2 = 1; k2 <= 5; k2 += 2) { var px2 = W * k2 / 5, py2 = H * 0.44 + 2; b.beginPath(); b.moveTo(px2, py2); b.lineTo(px2 - W * 0.035, py2 + H * 0.035); b.lineTo(px2 + W * 0.035, py2 + H * 0.035); b.closePath(); b.fill(); }
+      var lake = b.createLinearGradient(0, H * 0.6, 0, H * 0.7); lake.addColorStop(0, tint('#9CC8E4')); lake.addColorStop(1, tint('#7FB0D4'));
+      b.fillStyle = lake; b.fillRect(0, H * 0.6, W, H * 0.1);
+      b.strokeStyle = 'rgba(255,255,255,' + (TOD === 'night' ? 0.1 : 0.35) + ')'; b.lineWidth = 1;
+      for (var lr = 0; lr < 10; lr++) { var ly = H * (0.61 + r() * 0.08), lx = r() * W; b.beginPath(); b.moveTo(lx, ly); b.lineTo(lx + 20 + r() * 50, ly); b.stroke(); }
+      band(b, 0.69, 0.01, 2.4, 0.2, tint('#9CC79A')); band(b, 0.78, 0.012, 1.6, 1.3, tint('#86B887'));
+    } else if (SCENE === 'river') {
+      band(b, 0.55, 0.035, 1.4, 0.3, tint('#A6C4C0')); band(b, 0.6, 0.04, 2.2, 1.2, tint('#98BFA4'));
+      band(b, 0.675, 0.012, 3, 0.7, tint('#A5CF96'));
+      // the river winds down from the hills into the pond
+      var rv = b.createLinearGradient(0, H * 0.6, 0, H * 0.9); rv.addColorStop(0, tint('#B7DCEF')); rv.addColorStop(1, tint('#86C1E2'));
+      b.fillStyle = rv; b.beginPath();
+      b.moveTo(W * 0.6, H * 0.6); b.bezierCurveTo(W * 0.72, H * 0.68, W * 0.3, H * 0.72, p.x - p.rx * 0.5, p.y - p.ry * 0.3);
+      b.lineTo(p.x + p.rx * 0.5, p.y - p.ry * 0.3); b.bezierCurveTo(W * 0.5, H * 0.73, W * 0.8, H * 0.67, W * 0.62, H * 0.6); b.closePath(); b.fill();
+      b.strokeStyle = 'rgba(255,255,255,0.35)'; b.lineWidth = 1;
+      for (var rr = 0; rr < 8; rr++) { var ry = H * (0.66 + rr * 0.025), rx = W * (0.5 + Math.sin(rr) * 0.08); b.beginPath(); b.moveTo(rx, ry); b.lineTo(rx + 14, ry + 1); b.stroke(); }
+    } else if (SCENE === 'forest') {
+      band(b, 0.56, 0.03, 1.3, 0.8, tint('#9DB5B2'));
+      // rows of soft pines, far to near
+      [[0.58, '#7FA39A', 0.05, 26], [0.63, '#6B967F', 0.065, 18]].forEach(function (row) {
+        b.fillStyle = tint(row[1]);
+        for (var tx = -10; tx < W + 20; tx += row[3] + r() * row[3]) { var th = H * row[2] * (0.7 + r() * 0.6), ty = H * row[0] + r() * H * 0.02; b.beginPath(); b.moveTo(tx, ty - th); b.lineTo(tx + th * 0.32, ty); b.lineTo(tx - th * 0.32, ty); b.closePath(); b.fill(); }
+      });
+      band(b, 0.675, 0.012, 3, 0.4, tint('#97C290'));
+    } else { // garden or meadow: rolling hills and a flowery meadow
+      band(b, 0.57, 0.035, 1.3, 0, tint(SCENE === 'meadow' ? '#B3CBB4' : '#AFC0CF')); band(b, 0.61, 0.045, 2.1, 1, tint(SCENE === 'meadow' ? '#A2C79C' : '#9FBCAE'));
+      band(b, 0.655, 0.03, 3.4, 2, tint(SCENE === 'meadow' ? '#96C58A' : '#94B99A'));
+      band(b, 0.675, 0.012, 1.65, 0, tint(SCENE === 'meadow' ? '#A4D292' : '#9CC794'));
+      if (SCENE === 'meadow') for (var fdot = 0; fdot < 140; fdot++) {
+        var dx = r() * W, dy = H * (0.66 + r() * 0.33), hue = [340, 48, 280, 200, 20][fdot % 5];
+        if (inPond(dx / W, dy / H)) continue;
+        b.fillStyle = 'hsla(' + hue + ',70%,' + (TOD === 'night' ? 45 : 80) + '%,0.9)'; b.beginPath(); b.arc(dx, dy, 1.4 + r() * 1.8 * (dy / H), 0, Math.PI * 2); b.fill();
+      }
+    }
+    // the pond, in daylight colours
+    var pg = b.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.rx);
+    pg.addColorStop(0, tint(water[0])); pg.addColorStop(0.7, tint(water[1])); pg.addColorStop(1, tint(water[2]));
+    b.fillStyle = pg; b.beginPath(); b.ellipse(p.x, p.y, p.rx, p.ry, 0, 0, Math.PI * 2); b.fill();
+    b.strokeStyle = 'rgba(255,255,255,0.25)'; b.lineWidth = 2; b.stroke();
+  }
+  // check the clock now and then, so the light changes through the day
+  if (AMBIENT) setInterval(function () { var t2 = todNow(); if (t2 !== TOD) { TOD = t2; drawBackground(); } }, 5 * 60 * 1000);
   function pondShape() { return { x: W * 0.5, y: H * 0.875, rx: Math.min(W * 0.26, 360), ry: H * 0.065 }; }
 
   // ---------- Garden flowers ----------
@@ -170,8 +279,11 @@
 
   // ---------- Moon, stars, lanterns, fireflies ----------
   function drawSky(t) {
+    var NIGHT = NIGHTNESS[TOD];
+    if (NIGHT < 0.5) drawDaySky(t);
+    if (NIGHT < 0.25) return;
     for (var i = 0; i < stars.length; i++) {
-      var s = stars[i], a = REDUCED ? 0.6 : 0.45 + 0.35 * Math.sin(t / 1400 + s.p);
+      var s = stars[i], a = (REDUCED ? 0.6 : 0.45 + 0.35 * Math.sin(t / 1400 + s.p)) * (NIGHT < 1 ? NIGHT * 0.6 : 1);
       ctx.fillStyle = 'rgba(255,248,230,' + a.toFixed(2) + ')';
       ctx.beginPath(); ctx.arc(s.x * W, s.y * H, s.s, 0, Math.PI * 2); ctx.fill();
     }
@@ -187,6 +299,7 @@
     });
     // moon with its real phase
     var mx = W * 0.84, my = H * 0.15, mr = Math.min(W, H) * 0.045;
+    if (TOD !== 'night') { ctx.save(); ctx.globalAlpha = TOD === 'dusk' ? 0.55 : 0.3; mx = W * 0.2; my = H * 0.12; }
     var halo = ctx.createRadialGradient(mx, my, mr, mx, my, mr * 4);
     halo.addColorStop(0, 'rgba(255,240,210,0.22)'); halo.addColorStop(1, 'rgba(255,240,210,0)');
     ctx.fillStyle = halo; ctx.beginPath(); ctx.arc(mx, my, mr * 4, 0, Math.PI * 2); ctx.fill();
@@ -197,6 +310,24 @@
     ctx.fillStyle = 'rgba(40,44,80,0.88)';
     ctx.beginPath(); ctx.ellipse(mx + (waxing ? -1 : 1) * mr * lit * 2, my, mr * 1.02, mr * 1.02, 0, 0, Math.PI * 2); ctx.fill();
     ctx.restore();
+    if (TOD !== 'night') ctx.restore();
+  }
+  // daytime: soft clouds drifting by, a few birds, and a sparkle on the water
+  function drawDaySky(t) {
+    var tt = REDUCED ? 0 : t;
+    for (var c = 0; c < 4; c++) {
+      var cx = ((tt / (260000 + c * 60000) + c * 0.27) % 1.3 - 0.15) * W, cy = H * (0.1 + c * 0.07), cw = Math.min(W, 900) * (0.12 + (c % 2) * 0.05);
+      ctx.fillStyle = 'rgba(255,255,255,' + (TOD === 'day' ? 0.55 : 0.35) + ')';
+      [[0, 0, 1], [0.35, -0.25, 0.7], [-0.35, -0.1, 0.65], [0.65, 0.05, 0.55]].forEach(function (q) { ctx.beginPath(); ctx.ellipse(cx + q[0] * cw, cy + q[1] * cw * 0.4, cw * 0.32 * q[2], cw * 0.16 * q[2], 0, 0, Math.PI * 2); ctx.fill(); });
+    }
+    if (TOD !== 'dusk') {
+      ctx.strokeStyle = 'rgba(70,80,110,0.45)'; ctx.lineWidth = 1.3; ctx.lineCap = 'round';
+      for (var bd = 0; bd < 3; bd++) {
+        var bq = (tt / 70000 + bd * 0.13) % 1.4 - 0.2, bx = bq * W, by = H * (0.22 + bd * 0.04) + Math.sin(tt / 3000 + bd) * 6, fl = Math.sin(tt / 180 + bd) * 3;
+        ctx.beginPath(); ctx.moveTo(bx - 6, by - fl); ctx.quadraticCurveTo(bx - 3, by - 3, bx, by); ctx.quadraticCurveTo(bx + 3, by - 3, bx + 6, by - fl); ctx.stroke();
+      }
+      ctx.lineCap = 'butt';
+    }
   }
 
   var lanterns = [];
@@ -394,6 +525,7 @@
       f.x = Math.max(0.01, Math.min(0.99, f.x)); f.y = Math.max(0.05, Math.min(0.97, f.y));
       var blink = f.home ? 1 : REDUCED ? 0.7 : 0.35 + 0.65 * Math.max(0, Math.sin(t / 700 + f.ph * 3));
       var x = f.x * W, y = f.y * H;
+      if (NIGHTNESS[TOD] < 1) blink *= 0.25 + NIGHTNESS[TOD] * 0.7; // fainter by day
       var g = ctx.createRadialGradient(x, y, 0, x, y, 12); g.addColorStop(0, 'rgba(230,255,170,' + (0.8 * blink) + ')'); g.addColorStop(1, 'rgba(230,255,170,0)');
       ctx.fillStyle = g; ctx.beginPath(); ctx.arc(x, y, 12, 0, Math.PI * 2); ctx.fill();
       ctx.fillStyle = 'rgba(250,255,220,' + blink + ')'; ctx.beginPath(); ctx.arc(x, y, 1.8, 0, Math.PI * 2); ctx.fill();
