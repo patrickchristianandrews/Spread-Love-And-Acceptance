@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-NKC6CQ9S66"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-NKC6CQ9S66');
+</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Drift — a calm visualizer with binaural beats · The Objective Ledger</title>
+<meta name="description" content="Tell Drift how you feel, pop in your headphones, and let slow, deep, dreamy visuals and gentle binaural tones ease you somewhere calmer. Everything is made on your device.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,500&family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/css/site.css">
+<link rel="stylesheet" href="/assets/css/reading.css">
+<style>
+  .cv-stage{ --cv-ink:#F6F2FC; --cv-soft:#D9D2EE; --cv-peach:#F9D9B8; --cv-glass:rgba(24,22,52,.62);
+    position:relative; height:calc(100vh - var(--tol-bar-h, 64px)); height:calc(100dvh - var(--tol-bar-h, 64px)); min-height:560px;
+    overflow:hidden; background:#14163A; color:var(--cv-ink); font-family:"Lora", Georgia, serif; }
+  .cv-stage canvas{ position:absolute; inset:0; width:100%; height:100%; display:block; }
+  .cv-stage canvas[hidden]{ display:none; }
+  html.cv-full .tol-bar, html.cv-full .tol-skip{ display:none !important; }
+  html.cv-full .cv-stage{ position:fixed; inset:0; z-index:950; height:100vh; height:100dvh; min-height:0; }
+  html.cv-full body{ overflow:hidden; }
+
+  .cv-top{ position:absolute; left:max(1rem, env(safe-area-inset-left)); right:max(1rem, env(safe-area-inset-right)); top:.8rem; display:flex; justify-content:space-between; align-items:flex-start; gap:.8rem; z-index:3; pointer-events:none; }
+  .cv-title{ font-family:"Fraunces", Georgia, serif; font-weight:500; font-size:1.3rem; margin:0; color:#F4EEFF !important; text-shadow:0 1px 10px rgba(0,0,0,.45); }
+  .cv-title small{ display:block; font-family:"Lora", Georgia, serif; font-size:.8rem; color:var(--cv-soft); font-weight:400; margin-top:.1rem; }
+  .cv-top button{ pointer-events:auto; }
+
+  .cv-btn{ font:inherit; font-size:.92rem; color:var(--cv-ink); background:rgba(24,22,52,.5); border:1px solid rgba(246,242,252,.35);
+    border-radius:999px; padding:.55rem 1rem; min-height:44px; cursor:pointer; text-decoration:none; display:inline-flex; align-items:center; justify-content:center; gap:.4rem;
+    backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px); line-height:1.2; white-space:nowrap; }
+  .cv-btn:hover{ background:rgba(90,80,150,.6); }
+  .cv-btn[aria-pressed="true"]{ background:rgba(249,217,184,.92); color:#2A2D52; border-color:var(--cv-peach); }
+  .cv-stage :focus-visible{ outline:2px solid var(--cv-peach); outline-offset:3px; }
+  .cv-go{ background:linear-gradient(135deg, #FFE3C8, #F3CFEA); color:#2A2D52; border-color:#FFE3C8; font-family:"Fraunces", Georgia, serif; font-weight:600; font-size:1.1rem; padding:.75rem 1.7rem; box-shadow:0 8px 24px rgba(249,200,220,.25); }
+  .cv-go:hover{ background:linear-gradient(135deg, #FFEBD7, #F7DCF0); }
+
+  /* cards that float over the visuals */
+  .cv-card{ position:absolute; inset:0; z-index:4; display:flex; align-items:center; justify-content:center; padding:4.2rem 1rem 1rem; background:rgba(12,12,34,.28); }
+  .cv-card[hidden]{ display:none; }
+  .cv-box{ width:100%; max-width:40rem; max-height:100%; overflow:auto; overscroll-behavior:contain; background:var(--cv-glass); border:1px solid rgba(246,242,252,.2);
+    border-radius:28px; padding:1.5rem 1.4rem; box-shadow:0 24px 70px rgba(0,0,0,.35), inset 0 1px 0 rgba(255,255,255,.08);
+    backdrop-filter:blur(14px) saturate(1.15); -webkit-backdrop-filter:blur(14px) saturate(1.15); text-align:center; }
+  .cv-box h1, .cv-box h2{ font-family:"Fraunces", Georgia, serif; font-weight:500; color:#FFF6E8; margin:.2rem 0 .5rem; line-height:1.2; }
+  .cv-box h1{ font-size:clamp(1.55rem, 5vw, 2.1rem); }
+  .cv-box h2{ font-size:clamp(1.4rem, 4.4vw, 1.8rem); }
+  .cv-box p{ margin:0 0 .9rem; color:var(--cv-soft); line-height:1.55; }
+  .cv-box a{ color:#FFE3C8; }
+  .cv-phones{ display:inline-flex; align-items:center; gap:.55rem; text-align:left; margin:0 0 .9rem !important; padding:.6rem 1rem; border-radius:18px;
+    background:linear-gradient(135deg, rgba(249,217,184,.22), rgba(217,200,240,.22)); border:1px solid rgba(249,217,184,.5); color:#FFF6E8 !important; font-size:.95rem; }
+  .cv-phones > span:first-child{ font-size:1.5rem; line-height:1; }
+  .cv-small{ font-size:.86rem !important; }
+
+  .cv-feels{ display:grid; grid-template-columns:repeat(3, 1fr); gap:.6rem; margin:1rem 0 1.1rem; }
+  .cv-feel{ font:inherit; position:relative; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:.25rem; min-height:92px; padding:.8rem .6rem;
+    border-radius:22px; border:1px solid rgba(246,242,252,.25); color:#FFF6E8; cursor:pointer; text-align:center;
+    background:linear-gradient(160deg, rgba(255,255,255,.12), rgba(255,255,255,.03)); transition:transform .25s ease, background .25s ease, border-color .25s ease; }
+  .cv-feel:hover{ transform:translateY(-2px); border-color:rgba(249,217,184,.7); background:linear-gradient(160deg, rgba(249,217,184,.22), rgba(217,200,240,.1)); }
+  .cv-feel .e{ font-size:1.7rem; line-height:1; }
+  .cv-feel strong{ font-family:"Fraunces", Georgia, serif; font-weight:500; font-size:1rem; line-height:1.2; }
+  .cv-feel small{ color:var(--cv-soft); font-size:.78rem; line-height:1.3; }
+  .cv-feel .s{ display:none; }
+  .cv-feel .last{ position:absolute; top:-.45rem; right:.6rem; font-size:.66rem; letter-spacing:.03em; padding:.1rem .45rem; border-radius:999px; background:var(--cv-peach); color:#2A2D52; }
+  .cv-feels.is-end{ grid-template-columns:repeat(auto-fill, minmax(9.2rem, 1fr)); }
+  .cv-feels.is-end .cv-feel{ min-height:56px; flex-direction:row; gap:.45rem; padding:.55rem .7rem; }
+  .cv-feels.is-end .cv-feel .e{ font-size:1.2rem; }
+  .cv-feels.is-end .cv-feel strong{ font-size:.92rem; }
+  .cv-feels.is-end .cv-feel[aria-pressed="true"]{ background:rgba(249,217,184,.9); color:#2A2D52; }
+
+  /* setup */
+  .cv-back{ font-size:.85rem; padding:.4rem .9rem; margin-bottom:.4rem; }
+  .cv-kick{ font-size:2.2rem !important; margin:.2rem 0 0 !important; line-height:1; }
+  .cv-facts{ list-style:none; padding:0; margin:0 auto 1rem; max-width:32rem; display:grid; gap:.35rem; text-align:left; }
+  .cv-facts li{ display:grid; grid-template-columns:1.7rem 1fr; gap:.4rem; padding:.5rem .8rem; border-radius:14px; background:rgba(255,255,255,.06); color:#EFE9FA; font-size:.9rem; line-height:1.45; }
+  .cv-facts li span:first-child{ text-align:center; }
+  .cv-facts li span:last-child{ text-align:left; }
+  .cv-fields{ display:grid; gap:.9rem; max-width:32rem; margin:0 auto 1rem; text-align:left; }
+  .cv-field{ border:0; margin:0; padding:0; min-width:0; }
+  .cv-field > legend, .cv-lab{ display:block; font-family:"Fraunces", Georgia, serif; font-size:1rem; color:#FFF6E8; margin:0 0 .4rem; padding:0; }
+  .cv-chips{ display:flex; flex-wrap:wrap; gap:.4rem; }
+  .cv-chip{ position:relative; }
+  .cv-chip input{ position:absolute; opacity:0; width:1px; height:1px; }
+  .cv-chip > span{ display:inline-flex; align-items:center; gap:.3rem; min-height:44px; padding:.45rem .95rem; border-radius:999px; border:1px solid rgba(246,242,252,.3); background:rgba(255,255,255,.06); cursor:pointer; font-size:.9rem; color:#F2ECFA; }
+  .cv-chip input:checked + span{ background:rgba(249,217,184,.92); color:#2A2D52; border-color:var(--cv-peach); }
+  .cv-chip input:focus-visible + span{ outline:2px solid var(--cv-peach); outline-offset:2px; }
+  .cv-range{ display:grid; grid-template-columns:auto 1fr auto; align-items:center; gap:.6rem; font-size:.82rem; color:var(--cv-soft); }
+  .cv-stage input[type=range]{ width:100%; min-width:0; height:44px; margin:0; accent-color:#F3CFEA; background:transparent; cursor:pointer; }
+  .cv-ears{ display:flex; flex-wrap:wrap; gap:.4rem; align-items:center; }
+  .cv-ears p{ margin:.3rem 0 0 !important; width:100%; font-size:.85rem !important; min-height:1.3em; }
+  .cv-checks{ display:flex; flex-wrap:wrap; gap:.4rem 1rem; }
+  .cv-check{ display:inline-flex; align-items:center; gap:.5rem; min-height:44px; cursor:pointer; color:#F2ECFA; font-size:.92rem; }
+  .cv-check input{ width:1.2rem; height:1.2rem; accent-color:#F3CFEA; margin:0; }
+  .cv-safe{ font-size:.82rem !important; color:#CFC7E6 !important; margin:.8rem 0 0 !important; }
+
+  /* the session */
+  .cv-clock{ position:absolute; left:50%; top:.9rem; transform:translateX(-50%); z-index:3; text-align:center; pointer-events:none; }
+  .cv-clock[hidden]{ display:none; }
+  .cv-clock b{ display:block; font:500 .95rem/1.2 "IBM Plex Mono", monospace; color:#FFF6E8; text-shadow:0 1px 8px rgba(0,0,0,.5); }
+  .cv-clock i{ display:block; width:7rem; height:3px; margin:.35rem auto 0; border-radius:3px; background:rgba(255,255,255,.18); overflow:hidden; }
+  .cv-clock i u{ display:block; height:100%; width:0; background:linear-gradient(90deg, #FFE3C8, #D9C8F0); text-decoration:none; }
+  .cv-words{ position:absolute; left:50%; top:68%; transform:translate(-50%, -50%); z-index:2; margin:0; width:min(30rem, 90%); text-align:center; pointer-events:none;
+    font-family:"Fraunces", Georgia, serif; font-style:italic; font-size:clamp(1.4rem, 4.6vw, 2rem); color:#FFF6E8; text-shadow:0 2px 18px rgba(10,10,30,.85); opacity:0; transition:opacity 1.2s ease; }
+  .cv-words.is-on{ opacity:.92; }
+  .cv-words small{ display:block; font-family:"Lora", Georgia, serif; font-style:normal; font-size:.9rem; color:var(--cv-soft); margin-top:.3rem; }
+  .cv-ctrl{ position:absolute; left:50%; bottom:max(.9rem, env(safe-area-inset-bottom)); transform:translateX(-50%); z-index:3; width:min(44rem, calc(100% - 1.5rem));
+    display:grid; gap:.3rem; padding:.6rem .8rem .4rem; border-radius:26px; background:rgba(20,18,46,.5); border:1px solid rgba(246,242,252,.18);
+    backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px); }
+  .cv-ctrl[hidden]{ display:none; }
+  .cv-row{ display:flex; flex-wrap:wrap; gap:.4rem; justify-content:center; }
+  .cv-vol{ display:grid; grid-template-columns:auto 1fr auto; align-items:center; gap:.6rem; font-size:.85rem; color:var(--cv-soft); padding:0 .3rem; }
+  .cv-vol output{ font:500 .8rem "IBM Plex Mono", monospace; min-width:2.8rem; text-align:right; }
+  .cv-stage.is-idle .cv-ctrl, .cv-stage.is-idle .cv-top, .cv-stage.is-idle .cv-clock{ opacity:0; visibility:hidden; transition:opacity 1.4s ease, visibility 0s 1.4s; }
+  .cv-ctrl, .cv-top, .cv-clock{ transition:opacity .5s ease; }
+  .cv-stage.is-idle{ cursor:none; }
+  .cv-paused{ position:absolute; left:50%; top:50%; transform:translate(-50%,-50%); z-index:2; margin:0; padding:.6rem 1.2rem; border-radius:999px; background:rgba(20,18,46,.6);
+    font-family:"Fraunces", Georgia, serif; font-size:1.1rem; color:#FFF6E8; pointer-events:none; }
+  .cv-paused[hidden]{ display:none; }
+
+  .cv-links{ display:flex; flex-wrap:wrap; gap:.45rem; justify-content:center; margin:.4rem 0 0; padding:0; list-style:none; }
+  .cv-links a{ font-size:.88rem; }
+  .cv-msg{ color:#FFF6E8 !important; font-family:"Fraunces", Georgia, serif; font-size:1.08rem; min-height:1.5em; }
+  .cv-sr{ position:absolute !important; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; border:0; }
+
+  @media (max-width:560px){
+    .cv-card{ padding:3.8rem .6rem .6rem; align-items:flex-start; }
+    .cv-box{ padding:1.15rem .95rem; border-radius:24px; }
+    .cv-feels{ gap:.45rem; margin:.8rem 0 .9rem; }
+    .cv-feel{ min-height:80px; padding:.6rem .3rem; border-radius:20px; }
+    .cv-feel strong{ font-size:.9rem; }
+    .cv-feel small, .cv-feel .l{ display:none; }
+    .cv-feel .s{ display:inline; }
+    .cv-phones{ font-size:.88rem; padding:.5rem .8rem; }
+    .cv-feels.is-end{ grid-template-columns:repeat(2, 1fr); }
+    .cv-title{ font-size:1.1rem; }
+    .cv-title small{ font-size:.72rem; }
+    .cv-top .cv-btn{ padding:.45rem .8rem; font-size:.85rem; }
+    .cv-btn{ padding:.5rem .8rem; font-size:.86rem; }
+    .cv-ctrl{ padding:.5rem .5rem .3rem; border-radius:22px; }
+    .cv-clock{ top:4.5rem; }
+    .cv-long{ display:none; }
+  }
+  @media (max-height:640px) and (min-width:561px){ .cv-card{ align-items:flex-start; } }
+
+  /* the honest note, below the stage */
+  .cv-about{ padding-top:2.2rem; }
+  .cv-about h2:first-child{ margin-top:0; }
+  .cv-about details{ margin:1.2rem 0; border:1px solid #E3D3EE; border-radius:22px; background:linear-gradient(135deg, rgba(255,248,238,.92), rgba(247,238,248,.92)); padding:.2rem 1.2rem; }
+  .cv-about summary{ cursor:pointer; font-family:"Fraunces", Georgia, serif; font-weight:600; font-size:1.12rem; padding:.9rem 0; min-height:44px; list-style-position:outside; }
+  .cv-about details[open] summary{ border-bottom:1px dotted #D9C8F0; margin-bottom:.9rem; }
+  .cv-about details > *:last-child{ margin-bottom:1rem; }
+  .cv-about .cv-table-wrap{ overflow-x:auto; }
+  .cv-about table{ font-size:.86rem; }
+  .cv-about td, .cv-about th{ height:auto; }
+  .cv-pillar{ margin:1.4rem 0; padding:1.1rem 1.25rem .3rem; border-radius:22px; border:1px solid #D9C8F0; background:linear-gradient(135deg, rgba(243,238,249,.95), rgba(231,240,246,.95)); }
+  .cv-pillar-k{ font-family:"Fraunces", Georgia, serif; font-weight:600; font-size:1.08rem; }
+  .cv-pillar-k small{ display:block; font-family:"Lora", Georgia, serif; font-weight:400; font-size:.8rem; color:var(--ink-soft); margin-top:.15rem; }
+  .cv-next{ display:grid; gap:.6rem; grid-template-columns:repeat(auto-fit, minmax(13rem, 1fr)); padding:0 !important; list-style:none; }
+  .cv-next li{ margin:0; max-width:none; }
+  .cv-next a{ display:block; padding:.85rem 1rem; border-radius:18px; border:1px solid #E6D6EE; background:linear-gradient(135deg, #FFF8EE, #F7EEF8); text-decoration:none !important; min-height:44px; }
+  .cv-next a strong{ display:block; font-family:"Fraunces", Georgia, serif; }
+  .cv-next a span{ font-size:.88rem; color:var(--ink-soft); }
+  .cv-next a:hover{ border-color:#C9B0E6; }
+</style>
+<script src="/assets/js/site.js" defer></script>
+<script src="/assets/js/calm-visualizer.js" defer></script>
+</head>
+<body data-no-breathe data-no-garden data-no-weather data-no-private-note data-no-dives>
+<main>
+  <section class="cv-stage" id="cv-stage" aria-label="Drift, a calm visualizer">
+    <canvas id="cv-gl" role="img" aria-label="Slow, deep, softly glowing colours drifting around a breathing light."></canvas>
+    <canvas id="cv-2d" hidden aria-hidden="true"></canvas>
+
+    <div class="cv-top">
+      <p class="cv-title">Drift<small id="cv-sub">A calm visualizer</small></p>
+      <button type="button" class="cv-btn" id="cv-full" aria-pressed="false"><span aria-hidden="true">&#10530;</span> Full screen</button>
+    </div>
+
+    <div class="cv-clock" id="cv-clock" hidden><b id="cv-left">10:00 left</b><i aria-hidden="true"><u id="cv-prog"></u></i></div>
+    <p class="cv-words" id="cv-words" aria-hidden="true"></p>
+    <p class="cv-paused" id="cv-paused" hidden>Paused</p>
+
+    <!-- 1. How are you feeling? -->
+    <div class="cv-card" id="cv-pick">
+      <div class="cv-box">
+        <p class="cv-phones"><span aria-hidden="true">&#127911;</span><span><strong>Binaural beats only work with headphones.</strong> Pop them in before you begin.</span></p>
+        <h1 id="cv-pick-h" tabindex="-1">How are you feeling right now?</h1>
+        <p>Pick the closest one. There’s no wrong answer. Drift will meet you there with sound, colour and a slow breath, then ease you somewhere calmer.</p>
+        <div class="cv-feels" id="cv-feels" role="group" aria-labelledby="cv-pick-h"></div>
+        <noscript><p>Drift needs JavaScript to make its sound and pictures.</p></noscript>
+        <p class="cv-small"><a href="#cv-about">What are binaural beats?</a> &middot; Everything is made right here on your device.</p>
+      </div>
+    </div>
+
+    <!-- 2. Your session -->
+    <div class="cv-card" id="cv-setup" hidden>
+      <div class="cv-box">
+        <button type="button" class="cv-btn cv-back" id="cv-back"><span aria-hidden="true">&larr;</span> A different feeling</button>
+        <p class="cv-kick" id="cv-s-emo" aria-hidden="true"></p>
+        <h2 id="cv-s-name" tabindex="-1"></h2>
+        <p id="cv-s-desc"></p>
+        <ul class="cv-facts" id="cv-s-facts"></ul>
+        <div class="cv-fields">
+          <div class="cv-field">
+            <label class="cv-lab" for="cv-int">How strong is it right now?</label>
+            <div class="cv-range"><span>A little</span><input type="range" id="cv-int" min="1" max="5" step="1" value="3" aria-describedby="cv-int-out"><span>A lot</span></div>
+            <p class="cv-small" id="cv-int-out" style="margin:.2rem 0 0;"></p>
+          </div>
+          <fieldset class="cv-field"><legend>How long?</legend><div class="cv-chips" id="cv-len"></div></fieldset>
+          <fieldset class="cv-field"><legend>Pictures</legend><div class="cv-chips" id="cv-style"></div></fieldset>
+          <fieldset class="cv-field"><legend>Soft background sound</legend><div class="cv-chips" id="cv-bed"></div></fieldset>
+          <div class="cv-field">
+            <p class="cv-lab" id="cv-ear-h" style="margin:0 0 .4rem;">&#127911; Check your headphones</p>
+            <div class="cv-ears" role="group" aria-labelledby="cv-ear-h">
+              <button type="button" class="cv-btn" data-ear="-1">Left ear</button>
+              <button type="button" class="cv-btn" data-ear="1">Right ear</button>
+              <p id="cv-ear-msg" aria-live="polite"></p>
+            </div>
+          </div>
+          <div class="cv-field">
+            <label class="cv-lab" for="cv-vol">Volume</label>
+            <div class="cv-range"><span aria-hidden="true">&#128264;</span><input type="range" id="cv-vol" min="0" max="100" step="1" value="30"><span aria-hidden="true">&#128266;</span></div>
+            <p class="cv-small" style="margin:.2rem 0 0;">Start low. The tones should sit softly in the background, never loud.</p>
+          </div>
+          <div class="cv-checks">
+            <label class="cv-check"><input type="checkbox" id="cv-words-on" checked> Breathing words</label>
+            <label class="cv-check"><input type="checkbox" id="cv-gentle"> Gentle visuals (nearly still)</label>
+          </div>
+        </div>
+        <button type="button" class="cv-btn cv-go" id="cv-begin">Begin</button>
+        <p class="cv-safe">Not while driving or doing anything that needs your full attention. Stop anytime if it doesn’t feel good.</p>
+      </div>
+    </div>
+
+    <!-- 3. The session controls -->
+    <div class="cv-ctrl" id="cv-ctrl" hidden role="group" aria-label="Session controls">
+      <div class="cv-row">
+        <button type="button" class="cv-btn" id="cv-pause"><span aria-hidden="true">&#10074;&#10074;</span> Pause</button>
+        <button type="button" class="cv-btn" id="cv-stop"><span aria-hidden="true">&#9632;</span> End</button>
+        <button type="button" class="cv-btn" id="cv-mute" aria-pressed="false"><span aria-hidden="true">&#128263;</span> Mute</button>
+        <button type="button" class="cv-btn" id="cv-look"><span aria-hidden="true">&#127752;</span> <span id="cv-look-name">Tunnel</span></button>
+        <button type="button" class="cv-btn" id="cv-words-btn" aria-pressed="true">Words</button>
+        <button type="button" class="cv-btn" id="cv-gentle-btn" aria-pressed="false"><span>Gentle<span class="cv-long"> visuals</span></span></button>
+      </div>
+      <div class="cv-vol"><label for="cv-vol2">Volume</label><input type="range" id="cv-vol2" min="0" max="100" step="1" value="30"><output id="cv-vol-out" for="cv-vol2">30%</output></div>
+    </div>
+
+    <!-- 4. Afterwards -->
+    <div class="cv-card" id="cv-end" hidden>
+      <div class="cv-box">
+        <p class="cv-kick" aria-hidden="true">&#127800;</p>
+        <h2 id="cv-end-h" tabindex="-1">Welcome back</h2>
+        <p id="cv-end-lede">Take a moment before you move. How do you feel now?</p>
+        <div class="cv-feels is-end" id="cv-after" role="group" aria-labelledby="cv-end-h"></div>
+        <p class="cv-msg" id="cv-end-msg" aria-live="polite"></p>
+        <div class="cv-row" style="margin-bottom:1rem;">
+          <button type="button" class="cv-btn cv-go" id="cv-again">Another round</button>
+          <button type="button" class="cv-btn" id="cv-new">Choose a feeling</button>
+        </div>
+        <p class="cv-small">Noticing how you feel, before and after, is <a href="/five-pillars.html#read-your-state">Pillar III: Read your state first</a>. A settled moment like this is a kinder time for a talk you’ve been saving.</p>
+        <p class="cv-small" style="margin-bottom:.3rem;">Somewhere gentle to go next:</p>
+        <ul class="cv-links">
+          <li><a class="cv-btn" href="/night-garden.html">&#127769; Night Garden</a></li>
+          <li><a class="cv-btn" href="/soundscapes.html">&#127925; Soundscapes</a></li>
+          <li><a class="cv-btn" href="/wp-11.html">&#129530; Calm-Down Kit</a></li>
+          <li><a class="cv-btn" href="/quick-checks.html#today">&#9925; Today’s Weather</a></li>
+          <li><a class="cv-btn" href="/pause-and-play.html">&#127880; Pause &amp; Play</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <p class="cv-sr" id="cv-status" role="status" aria-live="polite"></p>
+  </section>
+
+  <section class="cv-about read" id="cv-about" aria-labelledby="cv-about-h">
+    <h2 id="cv-about-h">About Drift</h2>
+    <p>Drift is a quiet few minutes for your senses. You tell it how you feel, and it chooses a soft pair of tones, a slow breathing pace and deep, dreamy pictures to match. Then, over the first few minutes, it eases everything toward calmer.</p>
+    <p>You don’t have to do anything. Watch the light, let your breath follow it if you like, and let your thoughts drift past. When the time is up, the sound fades away on its own.</p>
+
+    <div class="cv-pillar">
+      <p class="cv-pillar-k"><span aria-hidden="true">&#127777;&#65039;</span> This is Pillar III: <a href="/five-pillars.html#read-your-state">Read your state first</a> <small>one of <a href="/five-pillars.html">the Five Pillars</a> &middot; from nervous-system science</small></p>
+      <p><strong>In you.</strong> Drift begins by asking how you feel. That small pause is the pillar: noticing whether your battery is calm, revved up or shut down before you judge the moment you’re in.</p>
+      <p><strong>Between you and others.</strong> Your state shapes how other people’s words land. The same sentence can sound like an attack when you’re wired and like a fair point when you’re settled. So if a hard talk is coming, a few minutes here first helps you hear the other person more kindly and speak more softly yourself. And if a conversation is heating up, it’s okay to say “let me take ten minutes,” settle, and come back.</p>
+    </div>
+
+    <details id="cv-note">
+      <summary>An honest note about binaural beats</summary>
+      <p><strong>What they are.</strong> When each ear hears a slightly different steady tone, say 200&nbsp;Hz on the left and 208&nbsp;Hz on the right, your brain hears a soft, slow “wah-wah” at the difference: 8 beats a second. That beat isn’t in the air. It’s made between your ears, which is why it only works with headphones.</p>
+      <p><strong>What the research says.</strong> Honestly, it’s mixed. Some studies find a small drop in how tense or anxious people feel; others find no more effect than any other relaxing sound. Many people simply find the experience relaxing, and the slow breathing, soft sound and gentle pictures do a lot of the work. Think of Drift as a relaxation aid, like a soothing playlist, not a medical treatment.</p>
+      <p><strong>Using it kindly.</strong></p>
+      <ul>
+        <li>Don’t use it while driving, cycling or operating machinery, or anywhere you need to stay alert.</li>
+        <li>Keep the volume low. The tones should sit quietly in the background.</li>
+        <li>Stop anytime if you feel dizzy, uneasy or uncomfortable in any way.</li>
+        <li>The pictures move slowly and never flash, and brightness is kept soft. If you have epilepsy or are sensitive to light or motion, you may prefer <strong>Gentle visuals</strong>, which keep the picture nearly still. Drift switches it on for you if your device asks for reduced motion. You can also just close your eyes and listen.</li>
+      </ul>
+      <p><strong>Private by design.</strong> The sound and pictures are made right here in your browser. Drift remembers your last choices on this device only, so it’s ready next time.</p>
+    </details>
+
+    <details id="cv-what">
+      <summary>What each session uses</summary>
+      <div class="cv-table-wrap" id="cv-table"></div>
+      <p class="cv-small" style="font-size:.88rem;">The beat starts near where you are and glides to its target over the first few minutes. A stronger feeling means a slightly longer glide and a slower out-breath. Only the “Scattered” session rises toward a faster beat, for calm focus; the rest settle downward.</p>
+    </details>
+
+    <h2>Somewhere gentle to go next</h2>
+    <ul class="cv-next">
+      <li><a href="/night-garden.html"><strong>The Night Garden</strong><span>Breathe with the light, catch fireflies, float lily pads.</span></a></li>
+      <li><a href="/soundscapes.html"><strong>Soundscapes</strong><span>Deep, slow ambient pieces and live sounds.</span></a></li>
+      <li><a href="/wp-11.html"><strong>The Calm-Down Kit</strong><span>Your own plan for the big moments.</span></a></li>
+      <li><a href="/quick-checks.html#today"><strong>Today’s Weather</strong><span>A one-minute check-in with yourself.</span></a></li>
+      <li><a href="/pause-and-play.html"><strong>Pause &amp; Play</strong><span>Small, gentle games for a busy mind.</span></a></li>
+    </ul>
+  </section>
+</main>
+</body>
+</html>

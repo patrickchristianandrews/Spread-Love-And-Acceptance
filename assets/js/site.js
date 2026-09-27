@@ -36,6 +36,7 @@
   var SECTIONS = [
     { id: 'new', title: 'What’s new', blurb: 'Newly added and newly expanded, newest first.', items: [
       { href: '/whats-new.html', code: 'All', title: 'What’s new', note: 'Everything newly added and everything that’s grown, in one place' },
+      { href: '/calm-visualizer.html', code: 'New', title: 'Drift: calm visualizer', note: 'Deep, slow 3D colors and binaural tones matched to how you feel' },
       { href: '/five-pillars.html', code: 'New', title: 'The Five Pillars', note: 'How every part of the program fits together, inside you and between you and others' },
       { href: '/library.html', code: 'New', title: 'The Professor’s Library', note: 'Deep, plain-language reading on psychology and conflict, and Professor Puddles can chat about all of it' },
       { href: '/reading.html', code: 'New', title: 'Something to read', note: 'Hand-picked articles from trusted sources, matched to what you’re reading' },
@@ -71,6 +72,7 @@
     { id: 'play', title: 'Play', blurb: 'Calm games for a busy mind: a gentle way to read your state and settle it (Pillar III) before you talk. No timers and no way to lose, and something new in the background every few levels.', items: [
       { href: '/pause-and-play.html', code: 'All', title: 'Pause & Play', note: 'All the calm games in one place, with your level and your streak' },
       { href: '/frequency-journey.html', code: 'New', title: 'The Frequency Journey', note: 'Guide Tidbit and Sugarfoot through seven tone-themed worlds: practice tuning in (Pillar IV) while you settle (Pillar III)' },
+      { href: '/calm-visualizer.html', code: 'New', title: 'Drift: calm visualizer', note: 'Pick how you feel. Slow, deep 3D colors and binaural tones (headphones on) ease you toward calm. Pillar III: settle first' },
       { href: '/night-garden.html', code: 'New', title: 'The Night Garden', note: 'A calm place to breathe, play and let your mind settle. Flowers bloom as you breathe; no timers, nothing to lose' },
       { href: '/word-bloom.html', code: 'New', title: 'Word Bloom', note: 'Swipe across the petals to spell words. Hundreds of gentle levels and a bonus jar, and every few levels something new appears in the background' },
       { href: '/quiet-crossword.html', code: 'New', title: 'Quiet Crossword', note: 'Small, friendly crosswords in five gentle levels, made for playing on a phone' },
