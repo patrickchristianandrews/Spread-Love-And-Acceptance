@@ -1,14 +1,36 @@
 /* cheer-words.js — what the little characters between sections say (cheer.js).
    Kind words of encouragement, growth, kindness, love and togetherness, and helpful
    pointers into the program with a link to where it's discussed. A line is either plain
-   text, or [text, link, link label]. "topics" hold lines that fit a part of the site. */
+   text, or [text, link, link label]. "topics" hold lines that fit a part of the site.
+   Style: easy American English, short, cute and kind. "start" and "mid" lines must be true
+   at any point on the page (no "you finished"); save the finishing lines for "end". */
 window.TOL_CHEER = {
   start: [
     'Hi! One idea at a time.', 'Take your time, there’s no rush.', 'So glad you’re here.', 'We’ll go slowly together.',
     'Welcome in. Get comfy.', 'You showed up for the people you love. That already counts.', 'Deep breath. We’ve got this.',
     'Oh hello! Nobody recognizes me in this.', 'Reading this is a kind thing to do for your relationships.', 'Start wherever feels easy.',
+    'Hello, friend. Pull up a chair.', 'Welcome! Grab a cozy spot and a warm drink.', 'Ready when you are. No hurry.',
+    'Oh good, you’re here! Let’s peek inside.', 'Fresh page, fresh start.', 'Hi there! I saved you a seat.',
+    'Tea-riffic to see you!', 'Hello! Curiosity looks good on you.', 'All aboard the kindness train. Choo choo!',
+    'One page, one idea, one little smile.', 'Settle in. This is a no-pressure zone.', 'Hi! I’ll be cheering from the margins.',
+    'Let’s start small. Small is mighty.', 'You bring the curiosity, I’ll bring the cheers.', 'Welcome! Skimming counts too.',
+    'Read a little or read a lot. Both are great.', 'Knock knock! It’s a new idea. Come on in.', 'Top of the page to you!',
+    'Let’s turn some pages and a few ideas over.', 'Welcome! Your comfy pace is the right pace.', 'Hi! Bring your whole self. All parts welcome.',
+    'Hey there, page-turner!', 'Let’s get cozy with a new idea.', 'Hello! Fair warning: I cheer a lot.',
+    'Welcome! There’s no test at the end. Promise.', 'You can stop anytime and come back later.', 'Good to see you. Let’s learn something kind.',
+    'Oh hi! I was just stretching my little legs.', 'Welcome! Kindness is on the menu today.', 'Let’s look at things with fresh, friendly eyes.',
+    'Hello, you! Thanks for stopping by.', 'Ready, set, read gently!', 'Welcome! Curious minds are my favorite kind.',
+    'Let’s find one idea worth keeping.', 'Here we go! One cozy step at a time.', 'Hello! Think of me as your reading buddy.',
+    'Welcome! Snacks are optional but encouraged.', 'There’s no wrong way to read this.', 'A new page! My favorite kind of adventure.',
+    'Read it for you, for your people, or for both.', 'Let’s go at the speed of comfy.', 'Hello! I brought pom-poms. Tiny ones.',
+    'Welcome in! The door is always open here.', 'Little ideas can travel a long way.', 'Every good talk starts with listening. Let’s listen.',
+    'Welcome! Your questions are welcome too.', 'Page one of something kind.', 'Hello! Let’s be gentle with our brains today.',
     ['New here? There’s a gentle first step.', '/start-here.html', 'Start here'],
-    ['Want the whole idea on one page first?', '/infographic.html', 'The one-page summary']
+    ['Want the whole idea on one page first?', '/infographic.html', 'The one-page summary'],
+    ['Five simple ideas hold this whole site up.', '/five-pillars.html', 'The Five Pillars'],
+    ['Like to browse before you dive in?', '/library.html', 'The Professor’s Library'],
+    ['Wondering if this is your kind of thing?', '/is-this-for-you.html', 'Is this right for you?'],
+    ['Curious how it all fits together?', '/how-it-works.html', 'How it works']
   ],
   mid: [
     'You’re doing great.', 'Proud of you for reading this.', 'Little steps still count.', 'Breathe out, then keep going.', 'This part is worth it.',
@@ -24,6 +46,80 @@ window.TOL_CHEER = {
     'Hearts grow when they’re cared for. Yours included.', 'This is how trust gets built: bit by bit.', 'Notice one good thing today. It helps.',
     'You can be tired and still be doing a wonderful job.', 'Growth usually feels like trying again.',
     'Tap a water drop if a word feels deep.',
+
+    // pace and puns (true at any point on the page)
+    'You’re on a roll… a cinnamon roll.', 'Tea-riffic pace!', 'Look at you, turning the page like a pro.', 'Nice pace!',
+    'Steady as a sweet little turtle.', 'Such smooth reading. Butter would be jealous.', 'Page by page, you’re doing it.',
+    'You’re a natural. Like honey on toast.', 'Holy guacamole, what focus!', 'This is going swimmingly. Blub blub.',
+    'You’re owl-some at this. Hoo knew?', 'Bee-lieve in your pace. It’s a good one.', 'Keep calm and read on.',
+    'Your brain is doing lovely stretches right now.', 'New ideas sprouting. Tiny green ones.', 'You’re one smart cookie. Chocolate chip, probably.',
+    'You’re doing grape!', 'Looking sharp! Sharp as a new crayon.', 'Snack break? Snack breaks are valid.',
+    'Shoulders down, jaw soft. Nice.', 'Steady wins the day.', 'You’re in the groove. Groovy.', 'Onward, brave reader!',
+    'Reading is slow-motion listening. You’re good at it.', 'You make this look easy.', 'Whee! Another idea down the slide.',
+    'Your curiosity is sparkling today.', 'I’d give you a gold star, but I ate it. It was a cookie.', 'Keep it up, buttercup.',
+    'Look at you go, bookworm.', 'You’re on the right page. Literally.', 'Ideas are like socks. Try one on and see.',
+    'Collecting good ideas like seashells.', 'This is your brain on kindness. Looks great.', 'Slow reading is still reading.',
+    'Pause, sip, smile, scroll.', 'Take what fits. Leave the rest.', 'If this part isn’t for you, skipping is fine.',
+    'Think of it as a menu, not a rulebook.', 'You don’t have to agree with it all to find something good.', 'Hmm, interesting, right?',
+    'Brain snack incoming.', 'Your attention is a gift. Thanks for sharing it.', 'You read with such care. It shows.',
+    'Scroll, scroll, hooray!', 'Lettuce keep going. Sorry, I love veggie puns.', 'Olive this pace you’ve got.',
+    'You’re berry good at this.', 'Donut worry, there’s no rush.', 'Peas and quiet. Just you and the page.',
+    'Words feel nicer under a cozy blanket.', 'Tiny high five!', 'Wiggle your toes. Okay, back to it.',
+    'Another idea planted. Watch it grow.', 'Mind blooming in progress.', 'A thinker and a feeler. Great combo.',
+    'Curiosity: ten out of ten.', 'Your future self says thanks for reading.', 'Reading this is a little love note to your people.',
+    'Some ideas take a second read. That’s normal.', 'Confused for a sec? That means you’re learning.', 'Questions are welcome here. Bring them all.',
+    'You’re reading like a ray of sunshine.', 'Bubbling right along. Pop pop!', 'A sip of water would love to meet you.',
+    'You and this page are getting along nicely.', 'Blink, stretch, carry on.', 'Good thinking looks a lot like this.',
+    'Every scroll is a little step forward.', 'I’m cheering quietly. Mostly.', 'Your pace, your rules.',
+    'You’re turning pages and turning toward your people.', 'Plenty of room here for your own thoughts.',
+
+    // kindness, for you and for others
+    'Kind words are free, and they’re worth a lot.', 'A little kindness goes a long, long way.', 'Kindness is catching. Pass it on!',
+    'Gentle is strong too.', 'Soft hearts make strong teams.', 'Thank-yous are tiny gifts that keep on giving.',
+    'Say one nice thing today. Easy peasy.', 'Kindness counts, even the teeny tiny kind.', 'You can be kind and still ask for what you need.',
+    'Being kind to yourself isn’t a bonus. It’s the basics.', 'Talk to yourself like you’d talk to a friend.',
+    'Your needs matter as much as anyone’s.', 'Rest is part of the plan.', 'You’re allowed to take up space.', 'Gentle with you, gentle with them.',
+    'Patience is love, slowed down.', 'A warm “good morning” can set the tone for a whole day.', 'Kindness is a muscle. You’re flexing it.',
+    'Being heard feels good. So does listening.', 'Compliments are free. Hand them out like candy.', 'Assume the kindest reason first.',
+    'A soft voice can say big things.', 'Kind is cool.', 'The world needs your kind of kind.', 'A smile is a tiny welcome mat.',
+    'Grace for them, grace for you.', 'Sweet words, sweeter days.', 'You can be honest and warm at the same time.',
+
+    // togetherness
+    'Teamwork makes the dream work. And the dishes.', 'Two heads are better than one. Two hearts too.',
+    'You’re not alone in this. We’re all learning.', 'Together is better. Like peanut butter and jelly.',
+    'On a good team, both people win.', 'It’s you and them versus the problem.', 'Every family is a team, and every team can learn.',
+    'Friends, family, roommates, coworkers: care fits everywhere.', 'Hand in hand is a good way to go.', 'Shared jobs feel lighter.',
+    'We’re better with each other.', 'Home is where the help is.', 'Good teams talk, laugh and try again.',
+    'Listening is a way of saying “you matter.”', 'Connection can start with “How was your day?”', 'Little by little, people can get each other better.',
+    'Side by side is a great place to stand.', 'The best teams notice each other.', 'Checking in is caring out loud.',
+    '“How can I help?” is a small question with big magic.', 'Every “we” starts with a little “I care.”', 'Laughing together counts as teamwork.',
+    'Different isn’t wrong. It’s just different.', 'You can love someone who thinks differently.', 'Curiosity beats guessing, every time.',
+    'Nobody reads minds. Saying it out loud helps.', 'A kind question can open a closed door.', 'Share the load, share the joy.',
+    'Many hands make light work.', 'When one person rests, the whole team gets stronger.', 'You two can be a duo worth rooting for.',
+
+    // growth
+    'Growing is messy. Messy is okay.', 'Progress, not perfection.', 'Mistakes are just practice in disguise.', 'Oops is how learning sounds.',
+    'Every expert was once a beginner.', 'Seeds don’t bloom overnight. Neither do habits.', 'Try, learn, try again. That’s the whole dance.',
+    'You’re a work in progress. So is everyone.', 'Tiny changes can make big waves.', 'You can start fresh anytime. Even right now.',
+    'New habits are shy. Give them time.', 'Change is a slow dance, not a race.', 'Learning something new? Your brain says yay.',
+    'Bit by bit, you’re building something good.', 'Plants grow toward the light. So do people.', 'A do-over is a gift. Give it freely.',
+    'Today’s small try can be tomorrow’s easy habit.', 'You don’t have to fix everything today.', 'One thing at a time is plenty.',
+    'Every day is a new chance to be kind.', 'Better, not perfect. That’s the goal.', 'Rome wasn’t built in a day. Neither are routines.',
+    'Keep watering your little ideas.', 'Growing pains are still growing.', 'Practice makes progress.',
+
+    // fairness and the Five Pillars, in plain words
+    'Fair feels good for everyone.', 'Seeing the whole load helps everyone feel seen.', 'Invisible work is still work. Let’s make it visible.',
+    'Remembering the birthdays is a job too.', 'Planning dinner counts, even before the cooking.', 'Fix the setup, not the person.',
+    'When the plan is clear, nobody has to guess.', 'One owner per job means fewer “I thought you had it” moments.',
+    'Tired brains hear things louder. Rest first.', 'Low battery? Talk later. That’s smart, not rude.', 'Hungry and tired? Maybe wait on the big talk.',
+    'One sentence, two ears, two meanings. That’s wiring.', 'Different wiring, same big heart.', 'A mismatch isn’t a flaw. It’s a tuning thing.',
+    'Say it kindly and it lands softly.', 'Spot the chores nobody signed up for.', 'A “thank you” keeps fairness steady.',
+    'Nobody’s keeping score here. We’re just looking together.', 'A clear “I’ll do it” is a gift to everyone.', 'Good setups make kindness easy.',
+    'Good habits help good intentions stick.', 'Your mood shapes your words. Check in first.', 'Calm first, then talk. Works like a charm.',
+    'Five pillars, one big idea: understanding.', 'Know yourself, then share yourself.', 'What’s easy for you might be hard for them, and that’s okay.',
+    'A shared list beats a shared grumble.', 'Clear beats clever when it comes to plans.', 'Fair and kind make a lovely pair.',
+    'Out of sight shouldn’t mean out of mind. Name the quiet jobs.', 'Blame less, plan more.',
+
     ['Feeling stretched thin? Check your battery first.', '/workpapers/wp-02-battery-stress-meter.html', 'The Battery & Stress Meter'],
     ['Want to see the work that nobody sees?', '/workpapers/wp-01.html', 'Who did what (WP-01)'],
     ['Tired of re-deciding who does what?', '/workpapers/wp-03-raci-treaty.html', 'One owner per job (WP-03)'],
@@ -44,17 +140,68 @@ window.TOL_CHEER = {
     ['All your workpapers, gathered in the order that fits you.', '/workpapers/fill/suite.html', 'The Workpaper Suite'],
     ['Got a question? Professor Puddles loves those.', '/ask.html', 'Chat with Professor Puddles'],
     ['Need a gentle break from reading?', '/pause-and-play.html', 'Pause & Play'],
-    ['A few minutes of sound can settle a busy mind.', '/soundscapes.html', 'Soundscapes']
+    ['A few minutes of sound can settle a busy mind.', '/soundscapes.html', 'Soundscapes'],
+    ['The quiet jobs count too. That’s Pillar I.', '/five-pillars.html#see-the-load', 'See the whole load'],
+    ['Less blame, better plans. That’s Pillar II.', '/five-pillars.html#fix-the-setup', 'Fix the setup, not the person'],
+    ['How full is your battery right now? It matters.', '/five-pillars.html#read-your-state', 'Read your state first'],
+    ['Same words, different ears? Let’s tune in.', '/five-pillars.html#tune-signals', 'Tune how you send and receive'],
+    ['Why do little jobs drift to one person?', '/five-pillars.html#quiet-incentives', 'Notice the quiet incentives'],
+    ['Want a cozy shelf of more to read?', '/library.html', 'The Professor’s Library'],
+    ['Hungry for more? There’s a reading list.', '/reading.html', 'Further Reading'],
+    ['Want a slow, calm minute with soft colors?', '/calm-visualizer.html', 'Drift, the calm visualizer'],
+    ['Fancy a gentle story game about tuning in?', '/frequency-journey.html', 'The Frequency Journey'],
+    ['A hard talk goes smoother in a kind order.', '/check-ins.html#order', 'The order of a check-in'],
+    ['Talk got bumpy? There’s a kind way to regroup.', '/check-ins.html#regroup', 'How to regroup'],
+    ['A simple thank-you is a big deal.', '/turning-toward.html#thanks', 'Saying thanks'],
+    ['Good news is twice as nice when someone cheers.', '/turning-toward.html#good-news', 'Cheering good news'],
+    ['Little rituals make a home feel like home.', '/turning-toward.html#rituals', 'Little rituals'],
+    ['Want a calming word search?', '/quiet-words.html', 'Quiet Words'],
+    ['Let a few words bloom for a calm minute.', '/word-bloom.html', 'Word Bloom'],
+    ['A tiny, gentle crossword for a busy brain.', '/quiet-crossword.html', 'Quiet Crossword'],
+    ['Want to read a chat with fresh, kind eyes?', '/conversation-reader.html', 'The Conversation Reader']
   ],
-  half: ['Halfway there!', 'Half done. Lovely pace.', 'Halfway! Stretch, sip some water, keep going.', 'Look at you, halfway through already.'],
+  half: [
+    'Halfway there!', 'Half done. Lovely pace.', 'Halfway! Stretch, sip some water, keep going.', 'Look at you, halfway through already.',
+    'Halfway! High five, halfway style.', 'The middle! Best seat in the house.', 'Halfway point! Stretch those arms.',
+    'Half the ideas are already in your pocket.', 'Midway magic!', 'You’re right in the heart of it.', 'The middle is where the good stuff lives.',
+    'Halfway there, and the view is lovely.', 'Halftime snack? I won’t tell.', 'Halfway! Wiggle break, anyone?', 'Smack in the middle. Nice!',
+    'Middle of the page, top of the class.', 'Halfway is a lovely place to pause.', 'Look at that, the middle already!',
+    'Halfway! The rest will wait while you sip some water.', 'Right in the middle, like the cream in a cookie.', 'Halfway point! You’re doing sweetly.',
+    'Half-baked? Nope, half-read. Big difference.', 'Mid-page check: shoulders down? Lovely.', 'Halfway! Keep your comfy pace.',
+    'Midpoint! Every idea so far is yours to keep.', 'The halfway hug. Squeeze!', 'Halfway! A fine spot for a little rest, if you like.',
+    'Halfway there! Cue the tiny trumpets.', 'Center stage! That’s you, halfway through.', 'Half full, not half empty. Like this page.',
+    'Middle of the road, in the best way.', 'Halfway, and still curious. Love that.', 'Halfway! Other half, here we come.'
+  ],
   end: [
     'You made it to the end!', 'All the way through. Well done!', 'That’s the whole thing. Be proud!',
     'You finished! Go be kind to someone, starting with you.', 'The end! Thank you for caring enough to read it all.',
     'Done! Now pick one small thing to try this week.',
+    'The end! Thanks for reading with me.', 'That’s a wrap! Go spread some kindness.', 'You reached the bottom! Time for a happy dance.',
+    'Finish line! Confetti for you.', 'All done here. Your curiosity rocks.', 'You read to the very end. That’s care.',
+    'That’s the last word. Go share a kind one.', 'The end! Pick one idea to keep in your pocket.', 'Done and dusted! Nicely done.',
+    'Page complete! Take a little bow.', 'And that’s the page! Thanks for your time.', 'You made it! Give yourself a pat on the back.',
+    'All the way down! You’re a scrolling superstar.', 'The end! May your day be full of kind moments.', 'That’s all for now. Come back anytime.',
+    'Wrapped up with a bow. Nice reading!', 'End of the page, start of something good.', 'You finished the page! Snack time?',
+    'Finished! Your brain earned a cozy break.', 'That’s it! Thanks for bringing your heart to this.', 'The end! Maybe share one idea with someone you love.',
+    'You got to the end. Tiny parade in your honor!', 'Hooray, the end! Rest those eyes a bit.', 'Last stop! Hope you found something to keep.',
+    'Finished! You’re a certified page-turner.', 'The end! Now go do one small kind thing.', 'All read! Future you says thank you.',
+    'That’s the whole page. Great job sticking with it.', 'The end. Keep the bits that felt like you.', 'Done! Time for a big, happy stretch.',
+    'The end! A little learning, a lot of heart.', 'Page finished! Gold star for you.', 'You did it! Now let it settle.',
+    'End reached! You bring such good energy.', 'And scene! Bravo, bravo.', 'The end! Talk it over with someone, if you like.',
+    'That’s the bottom! Nothing left but good vibes.', 'The end! Go hug someone who likes hugs.', 'You read it all. That’s a gift to your people.',
+    'The end! Small steps, big hearts.', 'All finished! Treat yourself to something cozy.', 'End of the road! What a lovely walk.',
+    'Thanks for reading! You’re one of the good ones.', 'Last stop on the kindness train. Choo choo!', 'That’s a wrap on this one. Well read!',
+    'The end! Sleep on it, chat about it, or just smile.', 'You got here! Hope this page felt like a friend.',
     ['Ready for the next step? Try one workpaper.', '/workpapers/fill/suite.html', 'The Workpaper Suite'],
-    ['Want to talk it over? Professor Puddles is in.', '/ask.html', 'Chat with Professor Puddles']
+    ['Want to talk it over? Professor Puddles is in.', '/ask.html', 'Chat with Professor Puddles'],
+    ['What’s next? Browse the cozy shelf.', '/library.html', 'The Professor’s Library'],
+    ['Want the big picture now?', '/five-pillars.html', 'The Five Pillars'],
+    ['Let it all settle with a slow, calm minute.', '/calm-visualizer.html', 'Drift, the calm visualizer'],
+    ['Try one small kind move today.', '/turning-toward.html', 'Turning toward'],
+    ['Looking for something to read next?', '/reading.html', 'Further Reading'],
+    ['All that reading? A calm game might feel nice.', '/pause-and-play.html', 'Pause & Play']
   ],
-  // lines that fit a part of the site (the page's section)
+  // lines that fit a part of the site (the page's section, from data-sec, or the /book/ and /workpapers/ folders)
   topics: {
     book: [
       ['This chapter pairs with a workpaper that puts it to use.', '/suite-index.html', 'The Suite Index'],
@@ -64,32 +211,103 @@ window.TOL_CHEER = {
       ['A full tank changes how everything lands.', '/book/chapter-3.html', 'Chapter III'],
       ['There’s more than one kind of fair.', '/book/chapter-4.html', 'Chapter IV'],
       ['Once a month, a kind look back.', '/book/chapter-5.html', 'Chapter V'],
-      'Books are better read slowly. You’re doing it right.', 'Each chapter is one idea. One is plenty for today.'
+      'Books are better read slowly. You’re doing it right.', 'Each chapter is one idea. One is plenty for today.',
+      'Chapter by chapter, idea by idea.', 'Dog-ear this page in your mind.', 'A book is like a long chat with a friend.',
+      'The book will be here whenever you’re ready for more.', 'Book club of one? Still a club!', 'Stories stick. So will the good bits.',
+      'Underline the parts that feel true to you.', 'This book has your back, page by page.', 'Good books are made for rereading.',
+      'Plot twist: the hero is teamwork.', 'Novel idea: read one chapter, then rest.', 'Take a chapter at a time, like a cozy snack.',
+      'Bookmark here and come back anytime.', 'Reading it together? Compare notes kindly.', 'Some pages ask you to slow down. That’s fine.',
+      ['Every chapter, all in one list.', '/contents.html', 'Contents'],
+      ['See which pillar each idea belongs to.', '/five-pillars.html', 'The Five Pillars'],
+      ['Want more to read after this?', '/library.html', 'The Professor’s Library']
     ],
     workpapers: [
       'Fill it in about yourself, never about the other person.', 'There are no wrong answers here, only honest ones.',
       'A worksheet is a conversation starter, not a scorecard.',
+      'Fill in what’s true today. It can change tomorrow.', 'Pencil it in. You can always erase.', 'Messy handwriting still counts.',
+      'Guesses are fine. Rough numbers work great.', 'You each fill in your own, then share. Easy.', 'Read them together with curiosity, not a gavel.',
+      'The goal is a clear picture, not a winner.', 'Blank spots are okay. Come back to them later.', 'Snack plus worksheet equals a good evening.',
+      'Write it down so nobody has to carry it in their head.', 'On paper, big things can feel lighter to talk about.',
+      'Worksheets are just questions in nice outfits.', 'One box at a time. You’ve got this.', 'Honest and kind can live in the same box.',
+      'Paper is patient. Take your time.', 'Surprised by an answer? That’s the good stuff.', 'Numbers can start kind talks, not end them.',
       ['Fill it in on your phone, or print it.', '/workpapers/fill/suite.html', 'The Workpaper Suite'],
-      ['Can the load last? The calculator can help.', '/workpapers/calculators/calc01-solvency.html', 'CALC-01']
+      ['Can the load last? The calculator can help.', '/workpapers/calculators/calc01-solvency.html', 'CALC-01'],
+      ['Short on time? Try the 90-second check-in.', '/workpapers/wp-13-pll-protocol.html', 'WP-13'],
+      ['Start by listing the quiet jobs.', '/workpapers/wp-01.html', 'WP-01'],
+      ['Check your battery before you fill it in.', '/workpapers/wp-02-battery-stress-meter.html', 'WP-02'],
+      ['See every workpaper in order.', '/suite-index.html', 'The Suite Index']
     ],
     relationships: [
       'Every kind of relationship deserves care: partners, family, friends, roommates, coworkers.',
       'You’re both on the same side of the table.',
+      'Every relationship is its own little team.', 'Partners, parents, pals: care looks good on everyone.',
+      'Roommates can be a great team with a clear plan.', 'Coworkers can be kind teammates too.', 'Family teams come in all shapes and sizes.',
+      'Friendship grows with little check-ins.', 'Caring for someone? Your care counts, and so do you.', 'A good question beats a good guess.',
+      'Your people are lucky you’re learning this.', 'Close doesn’t mean the same. It means caring.', 'Different rhythms can still make music together.',
+      'Kind words make home feel softer.', 'Notice what they do. Say thanks out loud.', 'Every relationship has its own weather.',
+      'Two ways of doing it? Try both and see.', 'Quality time can be five minutes. Really.',
       ['See how each part fits your kind of relationship.', '/relationships.html', 'How it fits your relationships'],
-      ['A small bid, noticed, can change a whole evening.', '/turning-toward.html#bids', 'Noticing bids']
+      ['A small bid, noticed, can change a whole evening.', '/turning-toward.html#bids', 'Noticing bids'],
+      ['Partners: a kind place to begin.', '/relationships.html#partners', 'Partners'],
+      ['Family teams can share the load too.', '/relationships.html#family', 'Family'],
+      ['Co-parenting? There’s a spot just for you.', '/relationships.html#co-parents', 'Co-parents'],
+      ['Work friends count too.', '/relationships.html#coworkers', 'Coworkers'],
+      ['Caring for someone? Here’s a gentle start.', '/relationships.html#caregivers', 'Caregivers'],
+      ['Fondness grows when you say it out loud.', '/turning-toward.html#fondness', 'Fondness and admiration']
     ],
     self: [
       'Understanding yourself is the first kindness.', 'Your needs are real, and it’s okay to say them.',
+      'Getting to know you is a lovely project.', 'You’re worth understanding.', 'Your feelings are good info, not bad news.',
+      'Notice, don’t judge. Just notice.', 'What do you need right now? Great question.', 'Your quirks are part of your charm.',
+      'Know your wiring, love your wiring.', 'Rest is productive too.', 'You get to be a beginner at being you.',
+      'Being curious about yourself is brave and fun.', 'Be your own best friend today.', 'You’re the only you. Pretty special.',
+      'Low-battery days are allowed.', 'Check on you like you’d check on a friend.', 'Saying no can be a kind yes to yourself.',
+      'You’re allowed to change your mind.', 'Your inner weather changes. That’s normal.', 'You’re a whole person, not a to-do list.',
       ['Check in on how you’re doing today.', '/quick-checks.html#today', 'Today’s Weather'],
-      ['Share how you’re wired, so words land softly.', '/wiring-card.html', 'The Wiring Card']
+      ['Share how you’re wired, so words land softly.', '/wiring-card.html', 'The Wiring Card'],
+      ['Pillar III starts with you: read your state.', '/five-pillars.html#read-your-state', 'Read your state first'],
+      ['Different wiring? Get to know yours.', '/wired-differently.html', 'Wired Differently'],
+      ['A calm minute, just for you.', '/calm-visualizer.html', 'Drift, the calm visualizer'],
+      ['See the whole load, including the part you carry.', '/five-pillars.html#see-the-load', 'See the whole load']
     ],
     program: [
       'One gentle week at a time.', 'Some weeks take longer than a week, and that’s fine.',
-      ['The six weeks, in order.', '/prog-01.html', 'PROG-01']
+      'This week is enough to think about.', 'Weekly steps, not giant leaps.', 'Skipped a day? Pick right back up.',
+      'You set the pace. The weeks will wait.', 'One small try per week is a fine plan.', 'Repeat a week if you like. That’s allowed.',
+      'Guided doesn’t mean rushed.', 'Pause anytime. The program is patient.', 'Little weekly habits add up.',
+      'Doing it with someone? Compare notes kindly.', 'Doing it solo? That counts too.', 'Missed a step? Just go back. No harm done.',
+      'Week by week, like watering a plant.', 'Celebrate small wins along the way.', 'A slow week is still a week.',
+      ['The six weeks, in order.', '/prog-01.html', 'PROG-01'],
+      ['Want the overview first?', '/program-overview.html', 'Program overview'],
+      ['The five ideas behind every week.', '/five-pillars.html', 'The Five Pillars'],
+      ['Check in kindly along the way.', '/check-ins.html', 'Check-ins']
     ],
     tools: [
       'Everything you type here stays on your device.', 'Tools are for understanding, never for winning.',
-      ['Not sure which tool fits? Ask the Professor.', '/ask.html', 'Chat with Professor Puddles']
+      'Click around. Nothing breaks.', 'Poke and play. That’s how tools work best.', 'Try it just for fun first.',
+      'Tools help you see. You decide what to do.', 'There’s no score to beat here.', 'Play with it together and chat about it.',
+      'Try it, tweak it, try again.', 'Curious buttons are for pressing.', 'Results are a starting point, not a final word.',
+      'A calm moment is a great time to try it.', 'Tools are like flashlights. They help you see.', 'Nothing is graded. Explore freely.',
+      'Share what you find, if you want to.', 'A fresh try is always welcome.',
+      ['Not sure which tool fits? Ask the Professor.', '/ask.html', 'Chat with Professor Puddles'],
+      ['Turn a tricky sentence into a softer one.', '/signal-translator.html', 'The Signal Translator'],
+      ['Who did what? See it side by side.', '/lemonade-stand.html', 'The Lemonade Stand'],
+      ['Make a card that says “here’s how I work.”', '/wiring-card.html', 'Make a Wiring Card'],
+      ['A calm picture for a busy mind.', '/calm-visualizer.html', 'Drift, the calm visualizer'],
+      ['Read a conversation with fresh eyes.', '/conversation-reader.html', 'The Conversation Reader']
+    ],
+    start: [
+      'New here? Welcome! Start anywhere.', 'No sign-up needed to look around.', 'Poke around. Every door here is friendly.',
+      'Curious is the perfect place to start.', 'You don’t need a partner to begin. Just you is great.',
+      'Try one small thing and see how it feels.', 'Big ideas, tiny first steps.',
+      ['Five ideas hold it all together.', '/five-pillars.html', 'The Five Pillars'],
+      ['Not sure it fits? There’s a quick way to tell.', '/is-this-for-you.html', 'Is this right for you?']
+    ],
+    play: [
+      'Play is a lovely way to settle.', 'No timers, no losing. Just fun.', 'A calm game can reset a busy brain.',
+      'Play first, talk later. Great plan.', 'Every level is a little breather.', 'Games are more fun with a buddy.',
+      ['Find a few quiet words, just for fun.', '/quiet-words.html', 'Quiet Words'],
+      ['A gentle journey about tuning in.', '/frequency-journey.html', 'The Frequency Journey']
     ]
   }
 };
