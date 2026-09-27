@@ -21,12 +21,22 @@
 <link rel="stylesheet" href="/assets/css/reading.css">
 <script src="/assets/js/site.js" defer></script>
 <script src="/assets/js/site-chat.js" defer></script>
+<style>
+  .ask-head h1{ font-size:clamp(1.35rem,4.5vw,1.8rem); margin-bottom:.2rem; }
+  .ask-about{ margin-top:1.4rem; }
+  .ask-about summary{ cursor:pointer; font-weight:600; min-height:44px; display:flex; align-items:center; }
+</style>
 </head>
 <body data-no-tip data-no-breathe>
 <main class="read">
-<header class="read-head"><p class="read-code">Ask</p><h1>Chat with Professor Puddles</h1></header>
+<header class="read-head ask-head"><p class="read-code">Ask</p><h1>Chat with Professor Puddles</h1></header>
 
-<p class="simple-lede">Type a question in your own words, like “how do I use the Lemonade Stand?”, “what does my battery score mean?” or “my coworker keeps interrupting me”, and Professor Puddles, a small drop with a big brain, will answer from this program, with links to the right pages.</p>
+<div id="ask-chat"></div>
+<noscript><p>The Professor needs JavaScript to run in your browser. You can still browse everything from the <a href="/contents.html">Contents</a>.</p></noscript>
+
+<details class="ask-about">
+<summary>What the Professor can help with</summary>
+<p>Type a question in your own words, like “how do I use the Lemonade Stand?”, “what does my battery score mean?” or “my coworker keeps interrupting me”, and Professor Puddles, a small drop with a big brain, will answer from this program, with links to the right pages.</p>
 <ul>
   <li><strong>Knows the whole program.</strong> Every tool, workpaper, chapter and game: what it’s for, how to use it step by step, and what your results mean. Type your Battery Meter answers or CALC-01 numbers and he’ll work out the score with you.</li>
   <li><strong>Kind next steps for what’s going on.</strong> Describe a situation, with yourself or someone else, and he’ll suggest a few steps, words you could use and a short path on the site. You know your situation best.</li>
@@ -34,9 +44,10 @@
   <li><strong>What you type stays on this device.</strong> Everything happens in your browser. Nothing is sent anywhere, and the conversation is forgotten when you close the tab.</li>
   <li><strong>Not a counselor.</strong> It’s general guidance and a friendly way around the site, not therapy or professional advice.</li>
 </ul>
+</details>
 
-<div id="ask-chat"></div>
-<noscript><p>The Professor needs JavaScript to run in your browser. You can still browse everything from the <a href="/contents.html">Contents</a>.</p></noscript>
+
+
 
 <p>Prefer to browse? The <a href="/contents.html">Contents</a> and its <a href="/contents-in-depth.html#directory">site directory</a> list every page, and <a href="/start-here.html">Start here</a> is a gentle first step.</p>
 </main>
