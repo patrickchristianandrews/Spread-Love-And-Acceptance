@@ -7,11 +7,15 @@
   'use strict';
   var root = document.getElementById('wb'); if (!root) return;
   if (!window.TOLLevels) return;
-  // five difficulty levels, each a file of levels that climb gently (game-levels.js)
+  // five difficulty levels, each a big bank of wheels that climb gently, loaded a chunk at a time
+  // (game-levels.js). Every wheel's letters are used once across all five, and once you've seen a
+  // whole bank, new wheels grow right here from the same gentle word list (grow() below).
   var levels = window.TOLLevels.create({ game: 'bloom', tiers: [
-    { id: 'gentle', name: 'Gentle', file: 'bloom-gentle' }, { id: 'easy', name: 'Easy', file: 'bloom-easy' },
-    { id: 'medium', name: 'Medium', file: 'bloom-medium' }, { id: 'hard', name: 'Hard', file: 'bloom-hard' },
-    { id: 'expert', name: 'Expert', file: 'bloom-expert' }] });
+    { id: 'gentle', name: 'Gentle', bank: 'bloom-gentle' }, { id: 'easy', name: 'Easy', bank: 'bloom-easy' },
+    { id: 'medium', name: 'Medium', bank: 'bloom-medium' }, { id: 'hard', name: 'Hard', bank: 'bloom-hard' },
+    { id: 'expert', name: 'Expert', bank: 'bloom-expert' }],
+    keyOf: function (p) { return p.l.split('').sort().join(''); },
+    generate: function (ctx) { return window.TOLLevels.script('bloom-lex').then(function () { return grow(ctx); }); } });
   var cur = null;
   var R = window.TOLRewards;
   var KEY = 'tol-bloom-v1';
@@ -44,14 +48,14 @@
   function start(c) {
     cur = c; lv = c.puzzle;
     var key = c.tier.id + ':' + c.index;
-    S.level = (levelBase[c.tier.id] || 0) + c.index;
+    S.level = (c.base || 0) + c.index;
     if (S.at !== key) { S.at = key; S.found = []; S.bonus = []; S.hints = 0; S.revealed = []; }
     levels.paintBar(barEl, c);
     save();
     order = lv.l.split('');
     var ch = Math.floor(c.index / 10);
     $('.wb-level').textContent = 'Level ' + (S.level + 1);
-    $('.wb-chapter').textContent = c.tier.name + ' · ' + CHAPTERS[Math.floor(ch + (levelBase[c.tier.id] || 0) / 10) % CHAPTERS.length];
+    $('.wb-chapter').textContent = c.tier.name + ' · ' + CHAPTERS[Math.floor(ch + (c.base || 0) / 10) % CHAPTERS.length];
     if (c.movedUp) setTimeout(function () { noteEl.innerHTML = '<b>You moved up to ' + c.tier.name + '.</b> Bigger wheels, new words.'; }, 50);
     root.setAttribute('data-chapter', String(ch % 5));
     root.classList.remove('is-done');
@@ -201,8 +205,47 @@
   // the difficulty bar: switch level, a random level, or the next one
   var barEl = $('.gl-host');
   levels.bar(barEl, function (p) { $('.wb-done').hidden = true; go(p); });
-  // each level's number counts every easier level before it
-  var levelBase = { gentle: 0, easy: 175, medium: 475, hard: 775, expert: 1075 };
+  // ---------- new wheels, grown in the browser once a whole bank has been seen ----------
+  // Like tools/word-games/make_levels.py: a base word of the level's length, every word its letters
+  // can make, the most familiar of them laid out as a little crossword, and the rest as bonus words.
+  // The word list (bloom-lex.js) is the same safe, gentle one the banks were made from.
+  var GROW = { gentle: [[4, 5], 3, 5, 0, 1], easy: [[5, 6], 4, 7, 1, 1], medium: [[6, 7], 5, 9, 1, 2], hard: [[7, 8], 6, 10, 2, 2], expert: [[8, 9], 7, 12, 2, 2] };
+  var LEX = null;
+  function lexicon() {
+    if (LEX) return LEX;
+    var src = window.TOL_BLOOM_LEX || {}; LEX = { all: [], by: {} };
+    Object.keys(src).forEach(function (L) {
+      var ws = src[L].w ? src[L].w.split(' ') : [];
+      LEX.by[L] = { w: ws, t: src[L].t };
+      ws.forEach(function (w, rank) { LEX.all.push({ w: w, n: counts(w), rank: rank, fam: rank < src[L].t[0] ? 0 : rank < src[L].t[1] ? 1 : rank < src[L].t[2] ? 2 : 3 }); });
+    });
+    return LEX;
+  }
+  function counts(w) { var c = {}; for (var i = 0; i < w.length; i++) c[w[i]] = (c[w[i]] || 0) + 1; return c; }
+  function within(a, b) { for (var k in a) if ((b[k] || 0) < a[k]) return false; return true; }
+  function grow(ctx) {
+    var g = GROW[ctx.tier.id] || GROW.easy, lens = g[0], lo = g[1], hi = g[2], baseFam = g[3], gridFam = g[4], rand = ctx.rand, X = lexicon();
+    for (var tries = 0; tries < 400; tries++) {
+      var L = lens[Math.floor(rand() * lens.length)], list = X.by[L]; if (!list) continue;
+      var top = list.t[Math.min(baseFam, 2)] || list.w.length, base = list.w[Math.floor(rand() * top)];
+      if (!base || new Set(base.split('')).size < L - (L < 7 ? 1 : 2)) continue;
+      var key = base.toUpperCase().split('').sort().join('');
+      if (ctx.recent.indexOf(key) !== -1) continue;
+      var bc = counts(base), form = X.all.filter(function (x) { return x.w.length <= L && within(x.n, bc); });
+      var pool = form.filter(function (x) { return x.w !== base && x.fam <= gridFam; });
+      if (pool.length + 1 < lo) continue;
+      // the most familiar words, with a little shuffle so two wheels from the same letters differ
+      pool.sort(function (a, b) { return (a.fam - b.fam) || (a.rank - b.rank + (rand() - 0.5) * 400); });
+      var pick = [base.toUpperCase()].concat(pool.slice(0, hi - 1).map(function (x) { return x.w.toUpperCase(); }));
+      var side = L >= 9 ? 9 : 8, lay = window.TOLLevels.place(pick, side, side, rand, 25);
+      var got = lay.w.map(function (x) { return x[0]; });
+      if (got.length < lo || got.indexOf(base.toUpperCase()) === -1) continue;
+      var letters = base.toUpperCase().split('');
+      for (var i = letters.length - 1; i > 0; i--) { var j = Math.floor(rand() * (i + 1)), t = letters[i]; letters[i] = letters[j]; letters[j] = t; }
+      return { l: letters.join(''), W: lay.W, H: lay.H, w: lay.w, b: form.map(function (x) { return x.w.toUpperCase(); }).filter(function (w) { return got.indexOf(w) === -1; }).sort(), fresh: true };
+    }
+    return null;
+  }
   $('.wb-shuffle').addEventListener('click', function () {
     for (var i = order.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)), t = order[i]; order[i] = order[j]; order[j] = t; }
     chosen = []; wheel.classList.add('is-spin'); setTimeout(function () { wheel.classList.remove('is-spin'); buildWheel(); drawLines(); }, 250);
@@ -225,5 +268,5 @@
 
   go(levels.current());
   root.hidden = false;
-  window.__wordBloom = { state: S, get level() { return lv; }, submitWord: function (w) { chosen = []; w.split('').forEach(function (ch) { var i = -1; order.forEach(function (o, j) { if (i < 0 && o === ch && chosen.indexOf(j) === -1) i = j; }); chosen.push(i); }); submit(); }, start: start };
+  window.__wordBloom = { state: S, levels: levels, grow: grow, get level() { return lv; }, submitWord: function (w) { chosen = []; w.split('').forEach(function (ch) { var i = -1; order.forEach(function (o, j) { if (i < 0 && o === ch && chosen.indexOf(j) === -1) i = j; }); chosen.push(i); }); submit(); }, start: start };
 })();

@@ -1,0 +1,2056 @@
+# Short, plain lines for Quiet Words (one per word, shown when the word is found).
+# "word: line". Written by hand for the themes in themes_bank.py; make_themes.py prefers these.
+accept: To welcome something just as it is.
+accordion: A squeezebox that sings as you pull and push it.
+ace: The top card in the deck, or a serve no one can reach.
+acrobat: A performer who tumbles, balances and flips.
+acrylic: A quick-drying paint with bright, bold colours.
+actor: Someone who brings a character to life on stage or screen.
+add: Put numbers together to find the total.
+address: Where a letter finds its way home.
+admiral: A red admiral is a black butterfly with bright red bands.
+adore: To love something very, very much.
+adventure: An exciting trip into something new.
+advice: Helpful words from someone who cares.
+afternoon: The gentle stretch of the day after lunch.
+agility: Quick, nimble movement, like a dog through a tunnel.
+air: What we breathe in, slow and deep.
+airport: Where journeys by plane begin and end.
+alarmclock: The bedside clock that wakes you in the morning.
+albatross: A great seabird that glides for days over the ocean.
+album: A book for keeping photos, stamps or songs.
+alder: A tree that loves damp riverbanks.
+alligator: A big, slow-smiling reptile of warm rivers.
+allotment: A little plot of land for growing your own vegetables.
+almond: A smooth, sweet nut from a blossoming tree.
+alpaca: A fluffy, gentle cousin of the llama.
+amber: Golden fossil resin, glowing like honey.
+amble: A slow, easy walk with nowhere to be.
+ammonite: A fossil shell curled in a perfect spiral.
+amp: A box that makes an electric guitar louder.
+ancient: Very, very old, from long ago.
+anemone: A soft sea creature that waves like a flower.
+angelfish: A graceful, striped fish in the aquarium.
+angle: The space between two lines that meet.
+anglerfish: A deep-sea fish with its own little light.
+announcement: News shared out loud for everyone to hear.
+answer: What you give back when someone asks.
+ant: A tiny, hard-working insect that lives in a colony.
+antelope: A graceful, fast-running animal of the grasslands.
+ants: Tiny helpers who carry more than their own weight.
+anvil: A cloud with a flat top, shaped like a blacksmith's block.
+applause: Clapping to say "well done".
+apples: Crunchy fruit that grows in orchards.
+apricot: A small, soft, golden fruit.
+apron: Something to wear to keep clothes clean while cooking.
+aquarium: A glass home for fish and water plants.
+arc: A gentle curve, like a rainbow.
+arch: A curved shape that holds up a bridge or doorway.
+armchair: A cosy chair with arms to rest on.
+aroma: A lovely smell, like fresh coffee or bread.
+arrival: The happy moment of getting there.
+artist: Someone who makes pictures, music or things of beauty.
+ash: A tall tree with smooth grey bark.
+ask: To put a question to someone.
+assist: To lend a helping hand.
+aster: A starry flower that blooms in late summer.
+asteroid: A small rocky world that orbits the sun.
+astronaut: A traveller who journeys into space.
+atlas: A book full of maps of the world.
+atom: The tiny building block of everything.
+attic: The room at the very top of the house, under the roof.
+attract: To pull towards, as a magnet does.
+audience: The people who come to watch and listen.
+aunt: Your mum's or dad's sister.
+aurora: Shimmering curtains of coloured light in the night sky.
+author: The person who wrote the book.
+avocado: A creamy green fruit with a big stone inside.
+aware: Noticing what is happening, right now.
+axis: The line the Earth spins around.
+babble: The happy chatter of a little stream.
+baby: A tiny new person.
+bacon: Crispy slices for a weekend breakfast.
+bacteria: Tiny living things, many of them helpful.
+badge: A little pin or patch that shows what you've done.
+badger: A striped woodland animal that comes out at night.
+bag: Something to carry your things in.
+bagel: A chewy bread roll with a hole in the middle.
+baguette: A long, thin French loaf with a crisp crust.
+baker: Someone who makes bread and cakes.
+bakery: A shop that smells of fresh bread.
+baking: Making cakes, bread and biscuits in the oven.
+balance: Staying steady, without tipping one way or the other.
+balcony: A little platform outside an upstairs window.
+ballet: Graceful dance on the tips of the toes.
+balloon: A bright, floating bubble on a string.
+bamboo: A tall, fast-growing grass with hollow stems.
+bananas: Curved yellow fruit that come in bunches.
+band: A group of friends who play music together.
+bank: The grassy edge of a river.
+banner: A long strip of cloth with words or colours.
+barbecue: Cooking outdoors over glowing coals.
+barge: A long, flat boat on a slow canal.
+barley: A grain that sways golden in summer fields.
+barn: A big farm building for hay and animals.
+barnacle: A little shell that clings to rocks and boats.
+barometer: An instrument that helps forecast the weather.
+barrow: A one-wheeled cart for the garden.
+basalt: A dark rock made from cooled lava.
+base: The bottom part that everything rests on.
+basket: A woven container for picnics or shopping.
+bass: The deep, low sound in music.
+bassoon: A long woodwind with a warm, low voice.
+bat: A little night flyer that finds its way by echoes.
+batch: A trayful of things baked together.
+baton: The slim stick a conductor waves.
+batsman: The cricket player holding the bat.
+batter: A runny mix for pancakes, or the player at bat.
+batting: The soft layer inside a quilt.
+bay: A curve of coast where the sea comes in.
+bead: A little ball with a hole, for threading.
+beak: A bird's hard mouth for pecking seeds.
+beaker: A glass jug for experiments, or a cup.
+beam: A shaft of light shining through.
+bean: A seed in a pod, good in soup and stew.
+beanie: A snug, round knitted hat.
+beanstalk: The giant plant Jack climbed in the story.
+beat: The steady pulse of music you can tap along to.
+bed: A soft place to rest and sleep.
+bedroom: Your own quiet room for sleeping.
+bedtime: Time to curl up and drift off.
+beech: A tree with smooth grey bark and copper autumn leaves.
+beef: Meat from cattle, slow-cooked in a stew.
+beep: A short, friendly electronic sound.
+beet: A deep red root vegetable.
+beetle: An insect with shiny hard wing covers.
+beetroot: A deep red root, sweet and earthy.
+begin: To start something new.
+belay: To hold the rope safely for a climbing friend.
+believe: To trust that something is true, or will be.
+bell: It rings a clear, bright note.
+bells: They ring out for celebrations.
+belt: A strap to hold up your trousers.
+bench: A long seat in the park.
+bend: A curve in the road or river.
+beret: A soft, round, flat cap.
+berth: A snug bed on a train or boat.
+bicycle: Two wheels, two pedals, and the open road.
+big: Large in size.
+bike: A bicycle, for rides along the lane.
+bin: A container for rubbish or recycling.
+bird: Feathers, wings and a song for the morning.
+birdsong: The music birds make at dawn.
+birthday: The day to celebrate the year you were born.
+biryani: A fragrant, spiced rice dish.
+biscuit: A crisp little treat, perfect with tea.
+bishop: A chess piece that moves on the diagonals.
+bison: A big, shaggy animal of the prairie.
+bisque: A smooth, creamy soup.
+bit: A small piece.
+black: The colour of a starless night.
+blackberry: A juicy dark berry from the hedgerow.
+blackbird: A songbird with glossy black feathers and a golden beak.
+blade: A single leaf of grass, or the edge of a skate.
+blender: A kitchen machine that whizzes food smooth.
+blissful: Completely happy and at ease.
+blocks: Wooden shapes for building towers.
+blossom: Flowers on a tree in spring.
+blue: The colour of a clear sky.
+bluebell: A nodding blue flower of spring woodlands.
+blueberry: A small, sweet, dark blue berry.
+blues: Soulful music with a gentle ache.
+blur: A soft, fuzzy shape.
+board: A flat piece for games, or for chopping.
+boarding: Getting on the plane, train or ship.
+boater: A flat straw summer hat.
+bog: Soft, wet, spongy ground with mosses.
+bolt: A metal pin that holds things fast.
+bond: A link that holds things, or people, together.
+bone: A treat for a happy dog.
+bonfire: A big outdoor fire that crackles and glows.
+bonnet: A soft hat tied under the chin.
+bookcase: Shelves full of books.
+bookend: A weight that keeps books standing tall.
+bookmark: It keeps your place in a book.
+books: Stories and ideas between two covers.
+boot: A sturdy shoe that covers the ankle.
+boots: Sturdy shoes for muddy walks.
+border: The edge around a picture, garden or quilt.
+bottle: A container for drinks.
+bough: A big branch of a tree.
+boulder: A very large rock.
+bouquet: A bunch of flowers, wrapped as a gift.
+bowl: A round dish for soup or cereal.
+bowler: The cricket player who delivers the ball.
+box: A container with sides and a lid.
+bracelet: A pretty band worn around the wrist.
+brake: What slows the bike down.
+bramble: A prickly bush where blackberries grow.
+branch: An arm of a tree.
+breakfast: The first meal of the day.
+bream: A deep-bodied freshwater fish.
+breath: The air going in and out, slow and steady.
+breathe: Let the air in slowly, and let it go.
+brick: A block for building walls.
+bride: A woman on her wedding day.
+bridge: A way across the river.
+bridle: The straps that go on a horse's head.
+bright: Full of light.
+brilliant: Very bright, or very clever.
+brioche: A soft, buttery French bread.
+broad: Wide.
+brooch: A pretty pin worn on a coat.
+broom: A brush with a long handle for sweeping.
+broth: A light, clear soup.
+brother: A boy in your family, sharing your parents.
+brown: The colour of chocolate and tree bark.
+brunch: A late breakfast and early lunch in one.
+brush: Bristles for painting, sweeping or tidying hair.
+bubbles: Round, shimmering pockets of air.
+bubbly: Full of cheerful fizz.
+bucket: A pail for carrying water or sand.
+buckle: The clasp on a belt or shoe.
+buddy: A good friend.
+budgie: A small, chatty pet parakeet.
+buffalo: A large, strong animal with curved horns.
+build: To make something, piece by piece.
+builder: Someone who makes houses and walls.
+bulb: A flower waiting underground, or a light.
+bumpy: Full of little lumps.
+bun: A small, soft, round bread roll.
+bunk: A bed stacked above another.
+bunker: A sandy hollow on a golf course.
+bunting: Little flags strung up for a party.
+burger: A round patty in a soft bun.
+burrow: A cosy tunnel home underground.
+bus: A big vehicle that carries many passengers.
+buttercup: A small shiny yellow meadow flower.
+butterfly: An insect with bright, patterned wings.
+button: A little disc that fastens a coat.
+buzz: The hum of a busy bee.
+cabbage: A round leafy vegetable.
+cabin: A little wooden house, or a room on a ship.
+cable: A strong rope of wire.
+cactus: A spiky plant that stores water in the desert.
+caddy: Someone who carries a golfer's clubs.
+cafe: A cosy place for coffee and cake.
+cairn: A little pile of stones marking a path.
+calculator: A little machine that does sums.
+calendar: A chart of the days, weeks and months.
+calf: A baby cow.
+call: A bird's clear cry, or a phone chat.
+calligraphy: Beautiful, flowing handwriting.
+camel: A desert animal with a hump.
+camera: It captures a moment in a picture.
+camp: A place to pitch tents under the stars.
+campion: A pink wildflower of hedgerows.
+can: A metal tin, or a watering can.
+canal: A calm, man-made waterway.
+canary: A little yellow songbird.
+canoe: A light, narrow boat you paddle.
+canopy: The leafy roof of the forest.
+canter: A horse's easy, rocking pace.
+canvas: Cloth that artists paint on.
+canyon: A deep valley with steep rock walls.
+cap: A soft hat with a peak.
+cape: A cloak, or a point of land in the sea.
+cappuccino: Coffee topped with frothy milk.
+capsule: The small cabin of a spacecraft.
+captain: The person in charge of a ship or team.
+caption: The words under a picture.
+car: A vehicle with four wheels.
+caramel: Sweet, golden, melted sugar.
+caravan: A home on wheels for holidays.
+carbon: An element found in every living thing.
+card: A folded note for sending kind words.
+cardigan: A soft knitted jacket with buttons.
+caribou: A reindeer of the far north.
+caring: Showing kindness and concern.
+carnation: A frilly flower, often worn in a buttonhole.
+carousel: A merry-go-round with painted horses.
+carp: A big, calm fish of ponds and lakes.
+carpet: A soft covering for the floor.
+carriage: A railway car for passengers.
+carrot: An orange root vegetable, loved by rabbits.
+carrots: Orange roots, crunchy and sweet.
+carry: To hold and take something along.
+cart: A small wagon.
+cascade: Water tumbling down in steps.
+case: A box or bag for keeping things in.
+cashew: A curved, buttery nut.
+cashmere: Very soft wool from goats.
+casserole: A slow-cooked dish from the oven.
+cast: The actors in a play.
+castle: A grand old stone home with towers.
+catalog: A list of things, like books in a library.
+caterpillar: A little crawler that becomes a butterfly.
+catmint: A soft purple plant that cats adore.
+cave: A hollow in the side of a hill.
+cavern: A large cave.
+cedar: A tall evergreen with fragrant wood.
+celebration: A happy gathering to mark something special.
+celeriac: A knobbly root that tastes of celery.
+celery: Crunchy green stalks.
+cell: The tiny unit every living thing is made of.
+cello: A large string instrument with a deep, warm voice.
+cement: Grey paste that sets hard between bricks.
+centipede: A little creature with lots of legs.
+century: One hundred years.
+cereal: Crunchy grains for breakfast.
+chain: Linked metal loops, like on a bike.
+chalet: A wooden house in the mountains.
+chalk: Soft white rock, or sticks for drawing on paths.
+chamber: A room, often a grand one.
+chameleon: A lizard that can change colour.
+chamomile: A daisy-like herb for calming tea.
+change: Something becoming different.
+chanterelle: A golden woodland mushroom.
+charcoal: Black sticks for drawing, or for the barbecue.
+charger: It fills a phone with power again.
+chart: A picture of information, or a map of the stars.
+chat: A friendly, easy talk.
+chatter: Quick, happy talk.
+check: A chess move that threatens the king.
+checkers: A board game of hopping pieces.
+cheddar: A firm, tangy cheese.
+cheerful: Bright and happy.
+cheese: Made from milk, lovely with crackers.
+cheetah: The fastest runner on land.
+chef: A cook in a restaurant kitchen.
+cherish: To hold something dear.
+chest: A big box for treasures.
+chestnut: A shiny brown nut, lovely roasted.
+chicken: A farm bird that lays eggs.
+chickpea: A round, nutty bean used in hummus.
+child: A young boy or girl.
+childhood: The years of being a child.
+chili: A hot little pepper, or a warming stew.
+chill: A cool feeling in the air.
+chime: A soft ringing sound.
+chip: A small piece, or a hot fried potato.
+chirp: A short, bright bird sound.
+chirpy: Cheerful and lively.
+chisel: A tool for shaping wood.
+chives: A mild, oniony herb.
+chlorophyll: What makes leaves green.
+chocolate: A sweet treat made from cocoa.
+choir: A group of people singing together.
+chop: To cut into pieces.
+chopsticks: A pair of sticks for eating.
+chord: Several notes played together.
+chorus: The part of the song everyone sings.
+chowder: A thick, creamy soup.
+chrysalis: The case where a caterpillar changes.
+chub: A plump river fish.
+church: A building with a tall spire and bells.
+chutney: A sweet and tangy relish.
+cinema: Where films are shown on a big screen.
+cinnamon: A warm, sweet spice.
+circle: A perfectly round shape.
+circuit: A loop for electricity to flow around.
+circus: A big-top show with acrobats and clowns.
+cirrus: High, wispy clouds like feathers.
+citrus: Oranges, lemons and limes.
+city: A big, busy town.
+clamp: A tool that holds things tight while glue dries.
+clarinet: A woodwind with a smooth, mellow sound.
+class: A group learning together.
+clean: Fresh and tidy.
+cleaner: Someone who keeps places neat and fresh.
+clear: Easy to see through, like a still pond.
+clef: The sign at the start of a line of music.
+clementine: A small, sweet, easy-to-peel orange.
+click: A tiny sound, like a key in a lock.
+climate: The usual weather of a place.
+climb: To go up, step by step.
+climber: A plant that climbs walls and trellises.
+clip: Something that holds papers together.
+clock: It tells the time.
+clog: A wooden shoe.
+cloth: Woven fabric.
+cloudy: A sky full of clouds.
+clove: A little spice bud, warm and sweet.
+clown: A funny performer with a big red nose.
+club: A group of people who share a hobby.
+cluck: The sound a hen makes.
+clue: A hint that helps you solve a puzzle.
+coat: A warm layer for chilly days.
+cobble: A rounded stone in an old street.
+cockatoo: A crested parrot.
+cockle: A small shellfish with a ridged shell.
+coconut: A big hairy nut with sweet milk inside.
+cocoon: A silky case spun by a caterpillar.
+cod: A fish of the cold northern seas.
+code: Instructions written for a computer.
+coffee: A warm drink made from roasted beans.
+coin: A small round piece of money.
+collar: A band around the neck of a shirt, or a pet.
+colleague: Someone you work with.
+collect: To gather things together.
+color: Red, blue, yellow and all the rest.
+colors: All the hues of the rainbow.
+colour: Red, blue, yellow and all the rest.
+column: A tall pillar, or a newspaper article.
+comb: A tool with teeth for tidying hair.
+comedy: A funny play or film.
+comfort: A feeling of ease and calm.
+compact: Small and neat.
+companion: A friend who keeps you company.
+compass: It always points north.
+compliment: Kind words about someone.
+compost: Garden scraps that turn into rich soil.
+compound: Two or more elements joined together.
+computer: A machine for work, games and messages.
+condense: To turn from vapour into droplets.
+condor: A huge bird that soars over mountains.
+conductor: The person who leads the orchestra.
+cone: A pine cone, or an ice cream holder.
+confetti: Tiny paper pieces thrown at celebrations.
+congee: A soft, comforting rice porridge.
+cook: To make a meal.
+cookbook: A book of recipes.
+coot: A black water bird with a white face.
+corduroy: Soft ribbed fabric.
+core: The middle of an apple.
+coriander: A fresh, leafy herb.
+cormorant: A dark seabird that dives for fish.
+corn: Sweet yellow kernels on a cob.
+corner: Where two edges meet.
+cornflower: A bright blue wildflower.
+costume: Clothes for a play or a party.
+cot: A baby's bed.
+cottage: A small, cosy house in the country.
+cotton: Soft fabric from a fluffy plant.
+count: To say numbers in order.
+countdown: Counting backwards to the big moment.
+counter: A game piece, or a shop's serving top.
+country: The countryside, with fields and farms.
+courgette: A green summer squash.
+courier: Someone who delivers parcels.
+course: The ground a golf game is played on.
+court: Where tennis is played.
+cousin: The child of your aunt or uncle.
+cove: A small, sheltered bay.
+cover: The front of a book.
+cow: A farm animal that gives milk.
+cowslip: A yellow spring flower of meadows.
+crackers: Crisp biscuits for cheese.
+cranberry: A tart red berry.
+crane: A tall bird with long legs, or a tall machine.
+crater: A round hollow on the moon.
+creamy: Smooth and rich.
+crease: A fold line.
+credits: The names at the end of a film.
+crepe: A thin French pancake.
+crescent: The thin curve of a new moon.
+crew: A team working together.
+cricket: A bat-and-ball game, or a chirping insect.
+crisp: Fresh and cool, like an autumn morning.
+crisps: Thin, crunchy potato slices.
+croak: The deep sound a frog makes.
+crocodile: A big reptile of warm rivers.
+crocus: A small cup-shaped spring flower.
+croissant: A flaky, buttery pastry.
+crossword: A puzzle of words that cross.
+crouton: A crunchy cube of toast for soup.
+crowd: Lots of people together.
+crown: A king's or queen's golden headpiece.
+crumb: A tiny piece of bread or cake.
+crumble: A fruit pudding with a crunchy topping.
+crunch: The sound of autumn leaves underfoot.
+crust: The crisp outside of bread or pie.
+crystal: A clear, sparkling stone.
+cub: A baby bear, lion or fox.
+cube: A shape with six square faces.
+cucumber: A cool green salad vegetable.
+cuddle: A warm, snug hug.
+cumin: An earthy, warm spice.
+cumulus: Puffy white clouds like cotton wool.
+cup: Something to drink from.
+cupboard: A cabinet with shelves and a door.
+cupcake: A little cake with icing on top.
+curl: A soft spiral, like a sleeping cat.
+currant: A tiny dried grape, or a little berry.
+current: The flow of water, or electricity.
+curry: A warmly spiced dish.
+curtain: Fabric drawn across a window or stage.
+curve: A gentle bend.
+cushion: A soft pillow for a chair.
+cushy: Comfortable and easy.
+custard: A sweet, creamy sauce.
+cutting: A snip of a plant to grow a new one.
+cycle: To ride a bike, or a circle that repeats.
+dace: A small silvery river fish.
+daffodil: A yellow spring trumpet flower.
+dainty: Small, light and delicate.
+damp: A little bit wet.
+dancer: Someone who moves to music.
+data: Facts and figures.
+date: A sweet, sticky fruit from a palm tree.
+daydream: Pleasant thoughts that drift along.
+daylight: The light of the day.
+dazzle: To shine brightly.
+dazzling: Brilliantly bright.
+deadline: The time something needs to be finished by.
+deal: To hand out the cards.
+deck: A ship's floor, or a pack of cards.
+deep: Going a long way down.
+delicate: Fine and gentle.
+delight: Great pleasure.
+delighted: Very pleased.
+deliver: To bring something to someone.
+delphinium: A tall spire of blue flowers.
+den: A cosy hideaway.
+denim: The sturdy cotton that jeans are made of.
+departure: Setting off on a journey.
+desert: A dry, sandy land.
+design: A plan or pattern.
+desk: A table for writing and working.
+dessert: The sweet course at the end of a meal.
+detail: A small part of the whole.
+dial: The face of a clock.
+diamond: A sparkling gem, or a card suit.
+diary: A book to write your days in.
+dice: Little cubes with dots, for games.
+dictionary: A book of words and their meanings.
+dig: To turn over the soil.
+digger: A big machine that scoops earth.
+dill: A feathery herb.
+dingo: A wild dog of Australia.
+dinosaur: A giant creature from long, long ago.
+dip: A creamy sauce for dunking.
+discover: To find something new.
+dish: A plate or bowl, or the food in it.
+display: A show of things to see.
+distance: How far it is from here to there.
+dive: To go head first into the water.
+diver: Someone who swims deep under the sea.
+divide: To share out into equal parts.
+dock: Where boats tie up.
+doctor: Someone who helps us get well.
+doily: A lacy paper mat under a cake.
+doll: A little toy person.
+domino: A tile with spots, for a game of matching.
+donkey: A gentle, long-eared animal of the farm and beach.
+doodle: A little drawing made while thinking.
+doorbell: It rings when a visitor arrives.
+dormouse: A sleepy little mouse with a fluffy tail.
+dough: Soft mix of flour and water for bread.
+dove: A soft grey bird of peace.
+downy: Soft and fluffy, like a chick.
+doze: A light, easy sleep.
+dozen: Twelve of something.
+draft: A first try at writing something.
+dragon: A friendly beast of fairy tales and paper parades.
+dragonfly: A shimmering insect that darts over ponds.
+draughts: A board game of hopping pieces.
+drawbridge: A castle bridge that can be raised.
+drawer: A box that slides out of a cupboard.
+drawing: A picture made with pencil or pen.
+dress: A one-piece outfit.
+dresser: A cupboard with shelves for plates.
+dressing: A tangy sauce for salad.
+drift: To float slowly along.
+driftwood: Wood smoothed by the sea and washed ashore.
+drip: A single falling drop.
+drive: To steer a car along the road.
+driver: The person who steers the car or bus.
+drizzle: Very light, fine rain.
+drone: The steady hum of a bee.
+droplet: A tiny drop of water.
+drums: Instruments you tap to keep the beat.
+dry: Not wet at all.
+dryer: A machine that dries the washing.
+duckling: A fluffy baby duck.
+duet: A song for two.
+dumpling: A soft parcel of dough.
+dunk: To dip a biscuit in tea.
+dust: Tiny specks that settle on shelves.
+duvet: A soft, warm quilt for the bed.
+dwarf: A small planet, or a little tree.
+eagle: A great bird that soars high.
+ear: What you hear with.
+earl: Earl Grey is a tea scented with bergamot.
+early: Near the start of the day.
+earmuffs: Fluffy covers to keep ears warm.
+earring: A pretty thing worn on the ear.
+earrings: A matching pair of jewels for the ears.
+earth: Soil for growing, or our home planet.
+easel: A stand that holds a painting.
+east: Where the sun rises.
+ebb: The tide going out.
+echidna: A spiny little animal of Australia.
+echo: A sound that answers back.
+eclair: A long pastry filled with cream.
+edge: The outside rim of something.
+editor: Someone who polishes the writing.
+eel: A long, slippery fish.
+effort: Trying your best.
+eggs: Laid by hens, lovely for breakfast.
+egret: A white heron of the wetlands.
+eight: One more than seven.
+elated: Full of happy excitement.
+elderberry: Small dark berries from the elder tree.
+element: A pure substance, like gold or oxygen.
+elephant: A huge, gentle animal with a trunk.
+elm: A tall tree of hedgerows.
+email: A message sent by computer.
+embroidery: Pictures sewn with coloured thread.
+emerald: A green gemstone.
+empathy: Feeling alongside someone else.
+emu: A tall bird of Australia that runs but can't fly.
+energy: The power to move, warm and light things.
+engine: The part that makes a vehicle go.
+enormous: Very, very big.
+envelope: A paper cover for a letter.
+equal: The same amount.
+equinox: When day and night are the same length.
+eraser: A rubber for undoing pencil marks.
+espresso: A small, strong coffee.
+essay: A piece of writing about a topic.
+eucalyptus: A tree with fresh-smelling leaves.
+evaporate: When water turns into vapour.
+evening: The quiet end of the day.
+excited: Full of happy energy.
+exercise: Moving your body to stay well.
+exhibit: Something on show in a museum.
+experiment: A test to find something out.
+explore: To look around somewhere new.
+explorer: Someone who travels to discover.
+eyes: What we see the world with.
+fabric: Cloth for sewing.
+face: The front of a clock.
+fair: A fun day of rides and stalls.
+fairway: The smooth grass of a golf course.
+falafel: Crispy balls of spiced chickpeas.
+falcon: A swift bird of prey.
+fall: Autumn, when the leaves come down.
+family: The people who love you most.
+fan: Something to cool you on a warm day.
+fans: Supporters who cheer the team on.
+farm: Where crops grow and animals live.
+farmer: Someone who grows food and cares for animals.
+feast: A big, happy meal.
+feather: A soft part of a bird's wing.
+feathery: Light and soft like a feather.
+feeder: A tray or tube of seeds for birds.
+feel: To notice through touch or the heart.
+felt: A soft, thick fabric for crafts.
+fence: A wooden boundary around a garden.
+fennel: A crunchy vegetable with a sweet taste.
+ferry: A boat that carries people across water.
+festival: A big celebration with music and food.
+fetch: A game of throw and bring back.
+fete: A summer fair with stalls and games.
+fiber: A fine thread.
+fiction: Made-up stories.
+field: An open stretch of grass.
+fig: A soft, sweet fruit full of seeds.
+figure: A small model person.
+file: A folder of papers, or of computer data.
+filling: What goes inside a pie or sandwich.
+film: A story told on screen.
+filter: Something that lets water through and catches the rest.
+finch: A small songbird with a strong beak.
+find: To discover something.
+finger: One of five on each hand.
+fir: An evergreen tree with soft needles.
+fireengine: A red truck that races to help.
+firefighter: Someone brave who puts out fires.
+firefly: A little beetle that glows at night.
+fireplace: Where a cosy fire burns.
+fish: Swims with fins in the sea or river.
+fisherman: Someone who fishes.
+fit: The right size.
+five: One more than four.
+flag: A coloured cloth on a pole.
+flake: A single piece of falling snow.
+flamingo: A pink bird that stands on one leg.
+flannel: A soft cloth for washing.
+flash: A quick burst of light.
+flask: A bottle that keeps drinks warm.
+flat: Level and even.
+flax: A plant used to make linen.
+fleece: A soft, warm jacket, or a sheep's wool.
+flicker: A light that dances.
+flight: A journey by plane.
+flint: A hard stone that sparks.
+flip: To toss a pancake over.
+floor: What you walk on inside.
+florist: Someone who arranges flowers.
+floss: Candyfloss, spun from sugar.
+flour: Ground wheat for baking.
+flourish: A grand, curly stroke of the pen.
+flow: To move along smoothly.
+flower: A bloom of colour on a plant.
+flowers: Blooms that brighten a garden.
+fluffy: Soft and light.
+flutter: Quick, light wing beats.
+fly: To soar through the air.
+foal: A baby horse.
+foam: Frothy bubbles.
+focus: To give all your attention.
+fog: A thick, soft cloud near the ground.
+foggy: Full of mist.
+foil: Thin metal sheet for wrapping food.
+fold: To bend paper over itself.
+folder: A cover for keeping papers.
+food: What we eat.
+football: A game of kicking a ball into a goal.
+footprint: A mark left by a foot.
+forecast: What the weather is expected to do.
+forget: Forget-me-nots are tiny blue flowers.
+fork: A tool for eating, or for digging.
+fort: A den made of cushions and blankets.
+fossil: The stony trace of ancient life.
+fountain: Water leaping up in a park.
+four: One more than three.
+foxglove: A tall flower with bell-shaped blooms.
+fraction: A part of a whole.
+frame: The border around a picture.
+freezer: A very cold cupboard.
+fresh: New and clean.
+fridge: It keeps food cool.
+friendly: Kind and welcoming.
+friends: The people who make life brighter.
+friendship: The warmth between friends.
+front: A line where warm and cold air meet.
+fruit: Sweet food that grows on plants.
+fry: To cook in a pan.
+fuel: What makes an engine go.
+full: With no room for more.
+fulmar: A seabird that glides along cliffs.
+fun: Enjoyment and play.
+fungus: Mushrooms and toadstools.
+fuzzy: Soft and fluffy.
+gallery: A place where art is shown.
+gallop: A horse's fastest run.
+games: Things we play together.
+gannet: A seabird that dives like an arrow.
+garage: Where the car sleeps.
+gardener: Someone who tends a garden.
+garland: A ring of flowers or leaves.
+garlic: A strong-flavoured bulb for cooking.
+gas: Something like air, with no fixed shape.
+gate: The way into a garden or field.
+gear: Part of what makes a bike go.
+gecko: A little lizard that climbs walls.
+gem: A precious stone.
+generous: Happy to give and share.
+giant: Very, very big.
+giggle: A light, happy laugh.
+gill: Part of a mushroom, or a fish.
+ginger: A warm, spicy root.
+giraffe: The tallest animal, with a long neck.
+glacier: A great river of ice.
+glass: See-through, like a window.
+glasses: They help you see clearly.
+glaze: A shiny coat on pottery or buns.
+gleam: A soft shine.
+gleaming: Shining brightly.
+glee: Great delight.
+glide: To move smoothly and easily.
+glider: A plane with no engine that rides the wind.
+glimmer: A faint, flickering light.
+glint: A quick sparkle.
+glitter: Tiny sparkly pieces.
+globe: A round map of the world.
+glove: A warm cover for the hand.
+gloves: They keep hands warm.
+glowing: Shining softly.
+glue: Sticky stuff for crafts.
+goal: What you aim for.
+goggles: Glasses for swimming or skiing.
+gold: A warm, shining yellow metal.
+golden: The colour of sunshine and honey.
+goldfish: A little orange pet fish.
+golf: A game of hitting a ball into a hole.
+gong: A big metal disc that rings deeply.
+gooseberry: A tart green berry.
+gorge: A narrow valley between cliffs.
+gorilla: A gentle, strong ape.
+gosling: A baby goose.
+gossamer: Fine, silky spider thread.
+gossip: Friendly chatter about others.
+grain: Wheat, oats and rice.
+gram: A small unit of weight.
+grand: Big and splendid.
+grandma: Your mum's or dad's mum.
+grandpa: Your mum's or dad's dad.
+granite: A hard, speckled rock.
+grapefruit: A big, tangy citrus fruit.
+grapes: Small round fruits in bunches.
+graph: A chart with lines or bars.
+grasshopper: An insect that jumps and chirps.
+grater: A tool for shredding cheese.
+gratitude: Feeling thankful.
+gravel: Small stones on a path.
+gravity: The pull that keeps our feet on the ground.
+gravy: A rich sauce for a roast dinner.
+great: Very good.
+grebe: A diving water bird.
+green: The colour of leaves and grass.
+greenhouse: A glass house for plants.
+greetings: Friendly hellos.
+grey: The colour of rain clouds.
+grid: A pattern of squares.
+griddle: A flat pan for pancakes.
+grill: To cook under a hot heat.
+grin: A big, wide smile.
+grind: To crush coffee beans into powder.
+grip: To hold on tightly.
+groom: A man on his wedding day, or to brush a horse.
+group: People together.
+guava: A sweet, pink tropical fruit.
+guest: Someone who visits.
+guide: Someone who shows the way.
+guillemot: A black and white seabird.
+guineapig: A small, squeaky pet.
+guitar: A string instrument you strum.
+gulf: A large bay of the sea.
+gum: A tree of Australia, or a sweet to chew.
+guppy: A small, colourful aquarium fish.
+gush: A sudden rush of water.
+gust: A sudden puff of wind.
+habitat: The natural home of an animal or plant.
+haddock: A fish of the North Atlantic.
+hail: Little balls of ice falling from the sky.
+hair: What grows on your head.
+half: One of two equal parts.
+hall: A big room, or the entrance to a house.
+halo: A ring of light.
+ham: Cured meat, lovely in a sandwich.
+hammer: A tool for tapping in nails.
+hammock: A swinging bed between two trees.
+hamster: A small, cheek-pouched pet.
+hand: A helping hand is always welcome.
+handler: The person who shows a dog.
+hands: Helping hands make light work.
+hare: A long-eared runner of the fields.
+harmony: Notes that sound lovely together.
+harness: Safety straps for a climber.
+harp: A tall instrument with many strings.
+hat: Something to wear on your head.
+hawk: A sharp-eyed bird of prey.
+hay: Dried grass for animals.
+haze: A soft blur in the air.
+hazel: A tree with catkins and nuts.
+hazelnut: A small round nut.
+headland: A point of land jutting into the sea.
+headline: The big title of a news story.
+heal: To get well again.
+health: Being well in body and mind.
+hear: To listen with your ears.
+heat: Warmth.
+heaven: A feeling of perfect happiness.
+hedgehog: A spiny little night visitor.
+heel: The back of your foot, or a shoe.
+hefty: Big and heavy.
+helicopter: An aircraft with spinning blades.
+hello: A friendly greeting.
+helmet: A hard hat for safety.
+hem: The folded edge of fabric.
+herbal: Made from herbs.
+herbs: Fragrant plants for cooking.
+heron: A tall grey bird that waits by water.
+highlighter: A bright pen for marking notes.
+highway: A big road.
+hike: A long walk in the countryside.
+hinge: What lets a door swing.
+hippo: A big animal that loves to wallow.
+hiss: The sound of a kettle about to boil.
+history: The story of the past.
+hive: A home for bees.
+hold: To keep in your hands.
+hole: The cup on a golf green.
+holiday: Time off to rest and play.
+holly: A shiny green bush with red berries.
+hollyhock: A tall cottage-garden flower.
+homework: Schoolwork done at home.
+hoof: A horse's hard foot.
+hoop: A ring for games.
+hoopla: A fairground game of throwing rings.
+hop: A little jump on one foot.
+hopeful: Looking forward to good things.
+horizon: Where the sky meets the land or sea.
+horn: A brass instrument, or a foghorn.
+hose: A long tube for watering.
+host: Someone who welcomes guests.
+hotel: A place to stay on a trip.
+hour: Sixty minutes.
+howl: The wind's long, low sound.
+huge: Very big.
+hum: A soft, steady sound.
+humble: Modest and unassuming.
+humidity: How much water is in the air.
+hummus: A creamy dip of chickpeas.
+hundred: Ten times ten.
+hush: A soft request for quiet.
+husky: A sled dog with bright eyes.
+hut: A small, simple shelter.
+hutch: A home for a pet rabbit.
+hyacinth: A fragrant spring flower.
+hydrogen: The lightest element.
+hymn: A song of praise.
+ibex: A mountain goat with curved horns.
+ibis: A wading bird with a curved beak.
+icecream: A cold, sweet treat.
+icelolly: Frozen juice on a stick.
+icing: Sweet topping for a cake.
+igloo: A dome-shaped house made of snow.
+iguana: A large, calm lizard.
+imprint: A mark pressed into something.
+improvise: To make up music as you go.
+indigo: A deep blue colour of the rainbow.
+ink: Coloured liquid for pens.
+inn: A cosy country pub with rooms.
+interval: A short break in a show.
+interview: A conversation with questions and answers.
+iris: A tall flower of blue or purple.
+iron: A tool for smoothing clothes.
+jacket: A light coat.
+jaguar: A spotted big cat of the rainforest.
+jar: A glass pot with a lid.
+jasmine: A sweet-scented flower.
+jay: A colourful bird of the woods.
+jeep: A sturdy car for rough tracks.
+jelly: A wobbly, fruity dessert.
+jewel: A precious stone.
+jigsaw: A puzzle of pieces that fit together.
+jingle: A light ringing sound.
+jive: A lively dance.
+join: To come together.
+journal: A book for thoughts and days.
+journey: A trip from one place to another.
+joyful: Full of joy.
+judge: The person who picks the winner at a show.
+jug: A pitcher for pouring.
+juggler: Someone who keeps balls in the air.
+juice: A drink squeezed from fruit.
+juicy: Full of juice.
+jumbo: Extra large.
+jump: To leap up.
+jumper: A warm knitted top.
+kale: A curly, leafy green.
+kangaroo: A hopping animal with a pouch.
+kebab: Food cooked on a skewer.
+keeper: Someone who looks after bees, or a goal.
+keepgoing: Keep going: one small step at a time.
+keepsake: Something kept to remember a moment.
+kelp: A tall seaweed forest.
+kennel: A little house for a dog.
+ketchup: A tomato sauce.
+key: It opens a lock.
+keyboard: Keys for typing or playing music.
+keys: Keys unlock doors, and piano notes.
+kick: To strike a ball with your foot.
+kid: A baby goat.
+kiln: An oven for firing pottery.
+kindness: Being warm and caring.
+king: The tallest piece in chess.
+kingdom: A land ruled by a king or queen.
+kingfisher: A bright blue bird that dives for fish.
+kiss: A gentle sign of love.
+kit: A set of parts to build something.
+kitchen: Where meals are made.
+kittiwake: A small, gentle gull.
+kiwi: A fuzzy brown fruit, green inside.
+knead: To press and fold bread dough.
+knife: A kitchen tool for cutting.
+knight: A chess piece that moves in an L shape.
+knock: A tap on the door.
+knot: A tie in a rope.
+label: A tag with a name on it.
+laboratory: A room for experiments.
+lace: Delicate, patterned fabric.
+ladder: Steps for climbing up.
+ladle: A big spoon for soup.
+ladybird: A little red beetle with spots.
+lagoon: A calm pool of sea behind a reef.
+landscape: A wide view of land.
+lane: A narrow country road.
+lantern: A lamp you can carry.
+lap: Once around the pool or track.
+laptop: A small, folding computer.
+larch: A tree whose needles turn gold.
+large: Big.
+lark: A bird that sings high in the sky.
+lasagne: Layers of pasta, sauce and cheese.
+latte: Coffee with lots of warm milk.
+laugh: The happy sound of joy.
+laughter: The sound of people having fun.
+launch: A rocket's lift-off.
+laundry: Clothes to be washed.
+lava: Molten rock from a volcano.
+lavender: A purple herb with a calming scent.
+lawn: A stretch of mown grass.
+layer: One level on top of another.
+lead: A strap for walking the dog.
+leap: A big jump.
+learn: To find out something new.
+ledge: A narrow shelf of rock.
+leek: A long, mild onion.
+legend: The key on a map.
+lemonade: A sweet, lemony drink.
+lemonbalm: A lemon-scented garden herb.
+lemur: A ring-tailed animal from Madagascar.
+lens: Curved glass that focuses light.
+lentil: A small bean for soups.
+leopard: A spotted big cat.
+lesson: Time spent learning.
+letter: A written message.
+lettuce: Leafy greens for salad.
+level: A tool that shows if a shelf is straight.
+librarian: Someone who looks after a library.
+library: A place to borrow books.
+licorice: A black, chewy sweet.
+lid: The top of a jar.
+lie: A lie-in: staying snug in bed a little longer.
+lift: An elevator going up.
+light: What makes things bright.
+lightbulb: A glass bulb that glows.
+lighthouse: A tower whose light guides ships.
+lights: Twinkling lights of celebration.
+lime: A small green citrus fruit.
+limpet: A small shell clinging to rocks.
+line: A line for hanging washing, or fishing.
+linen: A cool, crisp fabric.
+lion: A big cat with a golden mane.
+liquid: Something that flows, like water.
+list: Things written one after another.
+little: Small.
+lizard: A small reptile basking in the sun.
+loaf: A whole bread.
+loafer: A comfortable slip-on shoe.
+loan: A book borrowed from the library.
+lobby: The entrance hall of a hotel.
+lobster: A blue-shelled creature of the sea.
+lock: A lock on a canal lets boats up and down.
+locket: A little case on a necklace, holding a picture.
+lodge: A cabin in the woods.
+log: A section of a tree trunk.
+logic: Clear thinking.
+lollipop: A sweet on a stick.
+loon: A diving bird with a haunting call.
+loop: A circle of rope or string.
+lorry: A big truck.
+lotion: A soft cream for the skin.
+loud: Big and noisy.
+lounge: A comfy room to relax in.
+luggage: Bags for travelling.
+lullaby: A soft song to sing someone to sleep.
+luminous: Softly glowing.
+lupin: A tall spire of colourful flowers.
+luster: A soft, gentle shine.
+lychee: A sweet fruit with a rough pink skin.
+lynx: A wild cat with tufted ears.
+lyrics: The words of a song.
+macaron: A light, colourful almond biscuit.
+macaroni: Little tubes of pasta.
+macaw: A big, bright parrot.
+machine: Something with parts that does a job.
+magic: Wonder and surprise.
+magma: Hot, melted rock deep underground.
+magnet: It pulls metal towards it.
+magnifier: A glass that makes small things look big.
+magnify: To make something look bigger.
+magpie: A black and white bird that loves shiny things.
+mail: Letters and parcels.
+major: A bright, happy-sounding musical key.
+mane: The long hair on a horse's neck.
+map: A picture of a place, to find your way.
+marble: A glass ball for games, or a smooth stone.
+march: To walk in step.
+mare: A mother horse.
+market: A place of stalls and fresh food.
+marmalade: A jam made with oranges.
+marmot: A furry mountain animal that whistles.
+marshmallow: A soft, pillowy sweet.
+massive: Very big.
+mast: The tall pole that holds a sail.
+mat: A small rug.
+match: A game between two teams.
+mate: A friend.
+mayonnaise: A creamy sauce.
+maze: A puzzle of winding paths.
+meadowlark: A songbird of the grasslands.
+meal: Food eaten together.
+measure: To find out how big or heavy.
+meat: Food from animals, for a hearty dinner.
+meeting: People getting together.
+melody: A tune.
+melt: To turn soft and runny when warm.
+memory: Something you remember.
+mend: To fix.
+menu: The list of dishes to choose from.
+meow: What a cat says.
+meringue: A light, crisp puff of sugar and egg white.
+mermaid: A sea maiden with a fish's tail.
+mesa: A flat-topped hill in the desert.
+message: Words sent to someone.
+metal: Hard, shiny material, like iron or copper.
+meteor: A shooting star.
+metronome: A ticker that keeps time for music.
+microscope: It shows tiny things up close.
+midnight: The middle of the night.
+mighty: Very strong.
+mild: Gentle, not too strong.
+mile: A measure of distance.
+milkshake: A cold, creamy drink.
+mill: A building where grain is ground into flour.
+millet: A tiny grain.
+mindful: Paying calm attention.
+mineral: A natural substance, like quartz.
+mini: Small.
+miniature: A very small version.
+minnow: A tiny river fish.
+minor: A gentle, wistful musical key.
+minute: Sixty seconds.
+mirage: A shimmer in the desert that looks like water.
+mirror: Glass that shows your reflection.
+miso: A savoury paste for soup.
+mission: A special journey with a goal.
+mittens: Cosy gloves without fingers.
+moat: Water around a castle.
+mocha: Coffee with chocolate.
+model: A small copy of something.
+molecule: Atoms joined together.
+moment: A short time, right now.
+monarch: A big orange butterfly.
+monkey: A playful animal that swings through trees.
+moo: What a cow says.
+moonlight: The soft light of the moon.
+moorhen: A water bird with a red beak.
+moose: A big deer with wide antlers.
+mop: A floor cleaner on a stick.
+morning: The start of the day.
+motel: A roadside place to stay.
+moth: A night-flying cousin of the butterfly.
+mountain: A very high hill.
+move: To change place.
+mow: To cut the grass.
+mozzarella: A soft, mild cheese.
+mud: Wet, squishy earth.
+muffled: Soft and hushed.
+mulberry: A dark, juicy berry.
+multiply: To add a number to itself many times.
+murmur: A soft, low sound.
+museum: A place to see treasures from the past.
+mushroom: A woodland fungus with a cap.
+music: Sounds that make a song.
+mussel: A blue-black shellfish.
+mustard: A tangy yellow sauce.
+mute: Silent.
+mutter: To speak quietly.
+naan: A soft, oven-baked bread.
+nail: A metal pin for hammering.
+name: What someone is called.
+napkin: A cloth to wipe your hands at the table.
+narrow: Thin, not wide.
+narwhal: A whale with one long tusk.
+natter: A long, friendly chat.
+nature: The living world around us.
+neat: Tidy.
+necklace: A string of jewels for the neck.
+nectar: The sweet drink inside flowers.
+nectarine: A smooth-skinned peach.
+needle: For sewing, knitting, or a pine tree's leaf.
+neigh: What a horse says.
+neighbor: Someone who lives nearby.
+net: A mesh for catching or for tennis.
+neutron: A particle in the middle of an atom.
+news: What's happening in the world.
+newspaper: Pages of news.
+newt: A small, spotted pond creature.
+nib: The tip of a pen.
+nightingale: A bird that sings at night.
+nimbus: A grey rain cloud.
+nine: One more than eight.
+noodle: A long strand of pasta.
+nook: A cosy little corner.
+noon: The middle of the day.
+north: The way the compass points.
+note: A single sound in music, or a short letter.
+notebook: A book for jotting things down.
+notes: Short written reminders.
+notice: To see or become aware of.
+nougat: A chewy sweet with nuts.
+novel: A long story.
+number: One, two, three, and on.
+nurse: Someone who cares for the unwell.
+nut: A seed in a hard shell.
+nuthatch: A little bird that walks down tree trunks.
+nutmeg: A warm, sweet spice.
+oasis: A green spot in the desert with water.
+oat: A grain for porridge.
+oats: Grains for porridge and flapjacks.
+oboe: A woodwind with a clear, sweet voice.
+octave: Eight notes from one to the next.
+octopus: A sea creature with eight arms.
+offer: To give or hold out.
+office: A place of desks and work.
+oil: For cooking, or for painting.
+oink: What a pig says.
+olive: A small green or black fruit.
+omelette: Eggs beaten and cooked in a pan.
+one: The first number.
+onion: A bulb that adds flavour.
+open: Not closed.
+opener: A tool to open tins.
+opening: The first moves in a game of chess.
+orange: A juicy citrus fruit.
+orca: A black and white whale.
+orchard: A field of fruit trees.
+oregano: A fragrant herb for pizza.
+organ: A big instrument with pipes.
+origami: The art of folding paper.
+ostrich: The biggest bird of all.
+ounce: A small unit of weight.
+outline: The line around the edge of a shape.
+oval: An egg shape.
+over: Six balls bowled in cricket.
+owlet: A baby owl.
+oxygen: The part of air we need to breathe.
+pace: How fast you walk.
+pack: To fill a suitcase.
+packet: A small parcel.
+pad: A paper notepad, or a knee pad.
+paddle: A short oar for a canoe.
+padlock: A lock with a loop.
+paella: A Spanish rice dish.
+page: One side of a sheet in a book.
+painting: A picture made with paint.
+pair: Two that go together.
+pajamas: Soft clothes for sleeping in.
+pal: A friend.
+palette: A board for mixing paints.
+palm: A tall tree with big leaves.
+pan: A pan for cooking.
+pancake: A flat cake from the pan.
+panel: A flat sheet, like a solar panel.
+papaya: A sweet orange tropical fruit.
+paper: Sheets for writing and drawing.
+paprika: A red, smoky spice.
+par: The usual number of shots for a golf hole.
+parade: A procession of people.
+parcel: A wrapped package.
+park: A green space with trees and paths.
+parrot: A colourful bird that can talk.
+parsley: A leafy green herb.
+parsnip: A pale, sweet root vegetable.
+partner: Someone you do things with.
+party: A happy get-together.
+pass: To kick the ball to a teammate.
+passage: A corridor or narrow way.
+passenger: Someone riding along.
+passionfruit: A wrinkly fruit full of sweet seeds.
+passport: A little book for travelling abroad.
+pastel: Soft, gentle colours.
+pastry: Dough for pies and tarts.
+pasture: A field for grazing.
+pat: A gentle tap.
+patch: A piece of fabric, or a bit of garden.
+patience: Waiting calmly.
+patio: A paved area in the garden.
+patter: The soft sound of rain.
+pattern: Shapes that repeat.
+pause: A little stop.
+pawn: The smallest piece in chess.
+pea: A little green seed in a pod.
+peacock: A bird with a fan of bright feathers.
+peak: The top of a mountain.
+peanut: A nut in a papery shell.
+peas: Little green balls in a pod.
+pecan: A sweet, buttery nut.
+peck: A quick tap of a beak.
+pedal: The part you push on a bike.
+peel: The skin of a fruit.
+peeler: A tool for peeling vegetables.
+peg: A clip for hanging washing.
+pelican: A bird with a big pouched beak.
+pen: For writing with ink.
+pencil: For writing and drawing.
+pendulum: A weight that swings in a clock.
+penguin: A bird that waddles and swims.
+penne: Short tubes of pasta.
+pepper: A spice, or a crunchy vegetable.
+perch: A place for a bird to rest.
+perforation: The little holes around a stamp.
+periwinkle: A small sea snail, or a blue flower.
+pesto: A green basil sauce.
+pet: An animal friend at home.
+petite: Small and dainty.
+petrel: A seabird that skims the waves.
+phase: A stage of the moon.
+phlox: A cluster of scented garden flowers.
+phone: For calling and chatting.
+pick: A small plectrum for guitar strings.
+pickle: A crunchy vegetable in vinegar.
+picture: A drawing, painting or photo.
+piece: One part of a puzzle.
+pieces: Bits that fit together.
+pig: A pink farm animal.
+pigeon: A plump bird that coos.
+piglet: A baby pig.
+pika: A small, round mountain animal.
+pike: A long river fish.
+pilaf: Rice cooked in broth.
+pile: A heap.
+pillowcase: A cover for a pillow.
+pilot: The person who flies the plane.
+pin: A small sharp holder for fabric.
+pineapple: A spiky tropical fruit.
+pink: The colour of blossom.
+pinks: Little scented cottage flowers.
+pirouette: A spin on one foot.
+pistachio: A little green nut.
+pitch: The field where a game is played.
+place: A spot.
+plain: A flat, open land.
+plan: An idea of what to do.
+plane: An aircraft, or a tool for smoothing wood.
+plank: A long flat piece of wood.
+plant: A living thing that grows.
+plantain: A starchy cooking banana.
+plants: Green things that grow.
+plastic: A light, bendy material.
+plate: A flat dish.
+platform: Where you wait for the train.
+platypus: A duck-billed animal from Australia.
+player: Someone in a game.
+playful: Full of fun.
+playground: A place with swings and slides.
+pleased: Happy.
+pliers: A tool for gripping.
+plot: The story of a book, or a patch of land.
+plush: Soft and velvety.
+poach: To cook gently in water.
+pocket: A pouch in your clothes.
+pod: A case for peas and beans.
+point: A score in a game.
+polarbear: A white bear of the Arctic.
+pole: A long stick, or the top of the Earth.
+polish: To make something shine.
+polite: Having good manners.
+pollen: Yellow flower dust.
+pond: A small pool of still water.
+pool: A place to swim.
+popcorn: Puffed-up corn, crunchy and light.
+popsicle: Frozen juice on a stick.
+pork: Meat from a pig.
+porridge: Warm oats for breakfast.
+port: A harbour town.
+porter: Someone who carries bags at a hotel.
+portrait: A picture of a person.
+pose: A yoga shape.
+possum: A tree-climbing animal of Australia.
+post: Letters and parcels.
+postbox: A red box for posting letters.
+postcard: A picture card sent from a trip.
+postman: The person who brings the post.
+postmark: The stamp that shows where a letter was posted.
+potato: A starchy root for mash and chips.
+potatoes: Roots for mashing, roasting and baking.
+potter: Someone who makes pottery.
+pottery: Pots made from clay.
+pour: To tip liquid out.
+powder: Soft fresh snow.
+power: Energy for lights and machines.
+practice: Doing something again to get better.
+prairie: A wide, grassy plain.
+pram: A baby's pushchair.
+present: A gift.
+press: A machine for printing.
+pretzel: A twisted, salty bread.
+price: How much something costs.
+prickly: Covered in little spikes.
+primrose: A pale yellow spring flower.
+prince: A king's son.
+princess: A king's daughter.
+print: To put words on paper.
+printer: A machine that prints pages.
+prism: Glass that splits light into a rainbow.
+prize: Something won.
+program: Instructions for a computer.
+progress: Moving forward.
+prune: To trim a plant.
+pudding: A sweet dessert.
+puddle: A little pool after rain.
+puff: A little cloud of air.
+puffball: A round white mushroom.
+puffin: A seabird with a colourful beak.
+pull: To draw towards you.
+puma: A big wild cat.
+pump: It fills bike tyres with air.
+punnet: A small basket of berries.
+pupil: A student.
+puppet: A doll moved by hand or strings.
+purl: A knitting stitch.
+purple: The colour of lavender.
+purse: A small bag for coins.
+putt: A gentle golf shot on the green.
+quack: What a duck says.
+quarter: One of four equal parts.
+quartz: A clear crystal.
+quest: A journey to find something.
+queue: A line of people waiting.
+raccoon: A masked animal of the night.
+racket: For hitting the ball in tennis.
+radiance: A warm, bright glow.
+radiant: Shining with light or happiness.
+radio: For listening to music and news.
+radish: A crunchy red salad vegetable.
+rail: A metal track for trains.
+rainbow: Arcs of colour after rain.
+rainforest: A lush, warm, rainy forest.
+rainy: Full of rain.
+raisin: A dried grape.
+rally: A long exchange of shots in tennis.
+ramble: A long, leisurely walk.
+rambler: A rose that scrambles over walls.
+ramp: A slope for rolling or skating.
+ranch: A big farm for cattle and horses.
+range: A line of mountains.
+rare: Not often found.
+raspberry: A soft red berry.
+rat: A clever little animal with a long tail.
+rattle: A baby's shaking toy.
+ravioli: Little pasta parcels.
+ray: A beam of light.
+razorbill: A black and white seabird.
+read: To take in words on a page.
+reading: Losing yourself in a book.
+recipe: Instructions for cooking.
+recital: A performance of music.
+record: A disc of music.
+recycle: To use again.
+red: The colour of strawberries.
+reed: A tall grass by water.
+reef: Coral ridges under the sea.
+reel: The spool on a fishing rod.
+reflection: What you see in still water.
+register: The list of names called at school.
+rehearse: To practise before a show.
+reindeer: A deer of the snowy north.
+relaxed: Calm and at ease.
+relish: A tangy sauce.
+remember: To keep in mind.
+repair: To fix.
+reply: An answer.
+reporter: Someone who writes the news.
+repot: To move a plant to a bigger pot.
+reptile: A scaly, sun-loving animal.
+resin: Sticky sap from pine trees.
+resolution: A promise for the new year.
+resolve: A firm decision.
+restful: Peaceful and calm.
+result: What you find out.
+return: To bring back.
+reuse: To use again.
+revise: To go over what you've learned.
+rhino: A big animal with a horn.
+rhythm: The beat of music.
+ribbon: A strip of pretty fabric.
+rich: Full of flavour.
+riddle: A puzzling question.
+ride: A trip on a bike or horse.
+ridge: The long top of a hill.
+ring: A circle, or a sound of bells.
+ringmaster: The host of the circus.
+rink: A place for ice skating.
+ripple: A small wave on water.
+rise: To go up, like bread in the oven.
+risotto: A creamy rice dish.
+road: A way for cars.
+roar: The rush of a waterfall.
+roast: To cook in the oven.
+robe: A soft dressing gown.
+robot: A machine that moves on its own.
+rock: A big stone.
+rocket: A ship for space, or a peppery salad leaf.
+rod: A pole for fishing.
+role: A part in a play.
+roll: A small bread.
+roller: A tool for painting walls.
+rook: A chess piece shaped like a castle tower.
+rooster: A male chicken that crows at dawn.
+rope: Strong twisted cord.
+rosemary: A fragrant herb.
+rosette: A ribbon award.
+rough: Bumpy, not smooth.
+round: Shaped like a circle.
+roundabout: A playground ride that spins.
+route: The way to go.
+row: A line of things side by side.
+rubber: An eraser, or bouncy material.
+ruby: A red gemstone.
+ruler: A straight edge for measuring.
+rumble: A low, rolling sound.
+run: To move fast on your feet.
+runway: Where planes take off and land.
+rush: A reed-like plant, or to hurry.
+rustle: The soft sound of leaves.
+rye: A grain for dark bread.
+saddle: The seat on a horse or bike.
+saffron: A golden spice.
+sage: A soft grey-green herb.
+salmon: A pink fish that swims upstream.
+salsa: A fresh tomato sauce, or a lively dance.
+salty: Tasting of salt.
+samosa: A crispy, spiced pastry triangle.
+sample: A small bit for testing.
+sandal: An open summer shoe.
+sandals: Open shoes for summer.
+sandpit: A box of sand to play in.
+sandwich: Two slices of bread with a filling.
+sap: The juice inside a tree.
+sapphire: A blue gemstone.
+sat: Sat still: rested for a while.
+satellite: A craft that circles the Earth.
+satin: Smooth, shiny fabric.
+satsuma: A small, easy-peel orange.
+sauce: A tasty liquid for food.
+saucer: A small plate under a cup.
+saunter: A slow, easy stroll.
+sausage: A savoury link, lovely for breakfast.
+savanna: Grassland with scattered trees.
+save: To keep safe.
+savory: Salty or tasty, not sweet.
+saw: A tool for cutting wood.
+saxophone: A brass-bodied woodwind with a smooth sound.
+say: To speak.
+scaffold: A frame around a building being built.
+scale: Notes going up in order.
+scales: For weighing flour.
+scallion: A spring onion.
+scene: A part of a play.
+scent: A pleasant smell.
+school: Where children learn.
+scientist: Someone who asks questions and tests them.
+scissors: For cutting paper.
+scoop: A round spoonful of ice cream.
+scooter: A little ride with a board and handlebars.
+score: The points in a game.
+scramble: To mix eggs in a pan.
+scrapbook: A book of pictures and memories.
+screen: Where films are shown.
+screwdriver: A tool for turning screws.
+script: The words of a play.
+sculpture: Art shaped from stone or clay.
+seam: Where two pieces of fabric are sewn.
+seashell: A shell from the beach.
+seaside: The coast, for a day of sun and sand.
+seaweed: Plants of the sea.
+second: A tiny moment of time.
+secret: Something special kept quiet.
+seedling: A tiny new plant.
+seesaw: A plank that goes up and down.
+segment: One slice of an orange.
+sense: Sight, hearing, touch, taste or smell.
+sensor: A part that notices light or touch.
+sentence: A group of words that make sense.
+sequel: The next part of a story.
+sequin: A tiny shiny disc on clothes.
+series: A set of things in order.
+serrated: With a saw-toothed edge.
+serve: To start a point in tennis.
+set: A group of games in tennis.
+seven: One more than six.
+shade: A cool place out of the sun.
+shadow: The dark shape made by blocking light.
+shampoo: Soap for washing your hair.
+shape: The outline of something.
+shavings: Curls of wood from a plane.
+sheen: A soft shine.
+sheet: A cotton cover for the bed.
+shelter: A safe, dry place.
+sherbet: A fizzy, sweet powder.
+shimmer: A soft, wavering shine.
+shingle: Small pebbles on the beach.
+shining: Giving off light.
+shirt: A top with buttons and a collar.
+shoe: Something to wear on your foot.
+shoes: A pair for walking in.
+shop: A place to buy things.
+short: Not long.
+shortbread: A rich, buttery biscuit.
+shorts: Short trousers for summer.
+show: A performance to watch.
+shower: A light fall of rain, or a wash.
+shrimp: A small sea creature.
+shrub: A small, bushy plant.
+shuffle: To mix the cards.
+shutter: The part of a camera that clicks.
+sibling: A brother or sister.
+sign: A board with words or arrows.
+signpost: A post that points the way.
+silent: Completely quiet.
+silhouette: A dark shape against a bright sky.
+silk: Smooth, shining fabric.
+silky: Soft and smooth.
+sill: The shelf at the bottom of a window.
+silver: A soft grey shine, like the moon.
+singer: Someone who sings.
+sink: A basin with taps.
+sister: A girl in your family, sharing your parents.
+six: One more than five.
+size: How big something is.
+skate: To glide on ice or wheels.
+skateboard: A board with wheels.
+skates: Boots with blades or wheels.
+ski: To slide down the snow.
+skink: A smooth, shiny lizard.
+skip: To hop along happily.
+skirt: A garment that hangs from the waist.
+skua: A big brown seabird.
+slate: A flat grey stone.
+sleeper: A train with beds.
+sleepingbag: A snug bag to sleep in when camping.
+sleepover: A night at a friend's house.
+sleigh: A sledge pulled over the snow.
+slice: A thin piece of cake or bread.
+slide: A slope to slip down in the playground.
+slight: Small and slim.
+slippers: Soft shoes for indoors.
+sloth: A slow, sleepy animal that hangs in trees.
+slow: Not in a hurry.
+slush: Half-melted snow.
+small: Little.
+smell: What your nose notices.
+smooth: Even and soft to touch.
+snake: A long, legless reptile.
+snap: A card game of matching.
+sneaker: A soft sports shoe.
+sniff: A little smell.
+snooze: A short nap.
+snowdrop: A small white flower in late winter.
+snowman: A figure made of snow.
+snowy: Covered in snow.
+soap: For washing.
+soar: To fly high.
+sock: A soft cover for the foot.
+socks: A pair to keep feet warm.
+soda: A fizzy drink.
+soft: Gentle to touch.
+solar: Of the sun.
+sole: The bottom of a shoe.
+solid: Firm, keeping its shape.
+solo: A part played alone.
+solstice: The longest or shortest day of the year.
+solve: To find the answer.
+sonar: Sound used to find things underwater.
+soon: In a little while.
+sorbet: A fruity frozen treat.
+sort: To put things in groups.
+sound: Something you hear.
+sour: Sharp tasting, like lemon.
+sourdough: A tangy, chewy bread.
+south: Opposite of north.
+sow: To plant seeds.
+soy: Soy sauce: salty and savoury.
+space: The vastness beyond the sky.
+spaghetti: Long, thin pasta.
+spanner: A tool for turning nuts.
+spark: A tiny flash of light.
+sparkle: To shine with little flashes.
+sparkler: A handheld firework that fizzes.
+sparrow: A small brown bird.
+spat: A rhyme for cat.
+spatula: A flat tool for turning food.
+speak: To talk.
+speaker: It plays music out loud.
+species: A kind of living thing.
+spectrum: All the colours of light.
+spell: A magic charm in a story.
+spice: A flavour for food.
+spicy: Hot and full of spice.
+spider: A little spinner of webs.
+spin: To turn round and round.
+spinach: A dark leafy green.
+spinningtop: A toy that twirls on its point.
+spiral: A curling shape.
+splash: The sound of jumping into water.
+splat: A squishy sound.
+sponge: A soft cake, or a squishy cleaner.
+spongy: Soft and springy.
+spool: A reel of thread.
+spoon: For stirring and eating soup.
+spore: A tiny seed of a mushroom or fern.
+spray: Fine drops of sea water.
+sprinkles: Tiny sweets on top of a cake.
+spruce: A tall evergreen tree.
+square: A shape with four equal sides.
+squash: A plump vegetable, or a fruit drink.
+squeeze: To press juice from fruit.
+squid: A sea creature with ten arms.
+squirrel: A bushy-tailed nut collector.
+stable: A home for horses.
+stack: A neat pile.
+stage: Where the show happens.
+stair: One step.
+stairs: Steps going up.
+stalactite: A stone icicle in a cave.
+stall: A market table.
+stallion: A male horse.
+stamp: A little picture you stick on a letter.
+stamps: Little pictures for posting letters.
+stapler: A tool that clips paper together.
+starfish: A sea creature with five arms.
+starling: A speckled bird that flies in swirling flocks.
+stars: Twinkling lights in the night sky.
+start: The beginning.
+station: Where trains stop.
+statue: A figure made of stone or metal.
+steam: Warm mist from a kettle.
+steep: Sharply sloping.
+stegosaurus: A dinosaur with plates on its back.
+step: One move forward.
+steps: Stairs, or one foot after another.
+stick: A fallen twig for a dog to fetch.
+sticker: A little picture that sticks.
+sticky: Gluey.
+stile: Steps over a fence.
+stir: To mix with a spoon.
+stitch: One loop of thread.
+stoat: A small, quick animal of the hedgerows.
+stock: A broth for soup.
+stocks: Sweet-scented cottage flowers.
+stop: To pause.
+stork: A tall bird with long legs.
+stove: For cooking on.
+strand: A single thread.
+stratus: A flat grey layer of cloud.
+straw: A tube for drinking, or dried stalks.
+strawberry: A sweet red summer berry.
+stream: A small river.
+streamer: A long paper ribbon for parties.
+street: A road with houses.
+strength: Being strong.
+stretch: To reach out long.
+stride: A long step.
+string: A thin cord.
+stroke: A swimming move, or a brush of paint.
+stroll: A slow walk.
+studio: A room where art is made.
+study: To learn about something.
+stuffing: The savoury filling for a roast.
+stump: One of three sticks in cricket.
+submarine: A boat that travels underwater.
+subtract: To take away.
+succulent: A plump-leaved plant.
+sudoku: A number puzzle in a grid.
+suet: Fat for bird feeders and puddings.
+suit: A matching jacket and trousers.
+suitcase: A case for travelling.
+sum: The answer when you add up.
+summit: The very top of a mountain.
+sunbeam: A ray of sunshine.
+sundae: Ice cream with sauce and toppings.
+sunflower: A tall flower that follows the sun.
+sunglasses: Dark glasses for sunny days.
+sunhat: A wide hat for the sun.
+sunlight: The light of the sun.
+sunrise: The sun coming up.
+sunscreen: Cream that protects skin from the sun.
+sunset: The sun going down.
+sunshine: Warm, bright light from the sun.
+supper: A light evening meal.
+support: To help and hold up.
+surge: A rush of water.
+surprise: Something unexpected and lovely.
+sushi: Rice and fish in neat rolls.
+swallow: A swooping bird of summer.
+swamp: Wet, marshy land.
+swap: To trade.
+swarm: A big group of bees.
+sway: To move gently side to side.
+sweater: A warm knitted top.
+swede: A round, sweet root vegetable.
+sweep: To brush clean.
+sweet: Sugary and nice.
+sweetpea: A scented climbing flower.
+sweets: Little sugary treats.
+swift: A fast bird that barely lands.
+swimsuit: What you wear to swim.
+swirl: A twisting shape.
+switch: For turning lights on and off.
+syrup: A thick, sweet liquid.
+system: Parts that work together, like the planets.
+tablecloth: A cloth that covers the table.
+tag: A game of chase.
+tail: What a happy dog wags.
+talk: To speak with someone.
+tall: High.
+talon: The claw of an owl or hawk.
+tambourine: A little drum with jingles.
+tangerine: A small orange.
+tango: A dance with sharp, graceful steps.
+tangy: Sharp and fresh tasting.
+tank: A glass home for fish.
+tap: Where water comes from.
+tape: A sticky strip.
+tarragon: A herb with a gentle aniseed taste.
+tartar: A creamy sauce for fish.
+taste: What your tongue notices.
+tawny: A warm golden brown.
+teach: To help someone learn.
+teacher: Someone who helps us learn.
+teal: A blue-green colour.
+team: People working together.
+teddy: A soft toy bear.
+tee: The little peg a golf ball sits on.
+teeny: Very small.
+telephone: For calling people.
+telescope: For looking at faraway stars.
+television: A screen for shows.
+tell: To share news.
+temperature: How warm or cold it is.
+tempo: The speed of music.
+tempura: Crispy, light battered vegetables.
+ten: One more than nine.
+tennis: A game with rackets and a net.
+tent: A shelter for camping.
+terminal: A building at the airport.
+tern: A graceful seabird.
+testtube: A glass tube for experiments.
+tetra: A tiny, bright aquarium fish.
+theatre: A place for plays.
+thermal: Warm clothing for cold days.
+thermometer: It measures temperature.
+thimble: A little cap to protect a finger when sewing.
+thistle: A prickly purple wildflower.
+thorn: A sharp point on a rose stem.
+thoughtful: Kind and considerate.
+thousand: Ten hundreds.
+three: One more than two.
+thrush: A speckled songbird.
+thunder: The rumble after lightning.
+thyme: A tiny-leaved herb.
+tick: The sound of a clock.
+ticket: A pass to get in.
+tickle: A light touch that makes you laugh.
+tidy: Neat and in order.
+tiger: A striped big cat.
+tile: A flat square piece.
+till: The cash drawer in a shop.
+tiller: The handle that steers a boat.
+tilt: A slight lean.
+timber: Wood for building.
+time: Minutes, hours and days.
+timer: A clock that counts down.
+timetable: A list of times.
+timpani: Big kettle drums.
+tin: A metal can.
+tinsel: Sparkly decoration.
+tiny: Very small.
+tip: The very end of something.
+tiptoe: To walk quietly on your toes.
+toaster: It makes toast.
+toffee: A chewy, buttery sweet.
+tofu: Soft curd made from soya beans.
+together: With each other.
+token: A counter in a board game.
+tomato: A red, juicy fruit.
+tongs: A tool for picking up food.
+tool: Something that helps you do a job.
+toothbrush: For cleaning your teeth.
+toothpaste: Minty paste for brushing.
+torch: A light you carry.
+tortilla: A flat, soft bread.
+tortoise: A slow reptile with a shell.
+total: The whole amount.
+toucan: A bird with a huge, bright beak.
+tower: A tall, narrow building.
+town: A place with homes and shops.
+towpath: A path beside a canal.
+track: A path for trains.
+tractor: A farm machine.
+trailer: A preview of a film.
+train: A line of carriages on a track.
+trainer: A sports shoe.
+tram: A street train.
+trampoline: A bouncy mat.
+tranquil: Calm and peaceful.
+trapeze: A swing high in the circus tent.
+travel: To go on a journey.
+tray: A flat board for carrying.
+treasure: Something precious.
+treat: Something special and nice.
+treble: High notes in music.
+trek: A long walk.
+trellis: A frame for climbing plants.
+trench: A deep valley in the ocean floor.
+triangle: A shape with three sides.
+triceratops: A dinosaur with three horns.
+trick: A clever bit of magic.
+trickle: A thin stream of water.
+trifle: Layers of sponge, fruit, custard and cream.
+trill: A fluttering bird song.
+trilobite: An ancient sea creature, now a fossil.
+tripod: A three-legged stand for a camera.
+trolley: A cart with wheels.
+trombone: A brass instrument with a slide.
+trot: A horse's bouncy pace.
+trough: A long container for plants or water.
+trout: A speckled river fish.
+truck: A big vehicle for carrying things.
+truffle: A soft chocolate sweet.
+trumpet: A bright brass instrument.
+trunk: The main stem of a tree, or a big box.
+try: To have a go.
+tuba: The biggest brass instrument.
+tumble: A somersault.
+tuna: A big fish of the open sea.
+tundra: A cold, treeless plain.
+tune: A melody.
+tuner: A tool that helps tune an instrument.
+tunnel: A passage through a hill.
+turbine: A wind turbine turns breeze into power.
+turmeric: A golden spice.
+turn: Your go in a game.
+turnip: A round white root vegetable.
+turret: A small castle tower.
+tutu: A frilly ballet skirt.
+tweed: A warm, woolly fabric.
+tweet: A little bird call.
+tweezers: A tiny tool for picking things up.
+twilight: The soft light after sunset.
+twin: One of two born together.
+twine: Garden string.
+twins: Two born together.
+twirl: To spin round.
+twist: To turn.
+two: One more than one.
+typewriter: An old machine for typing.
+ultraviolet: Light just beyond violet.
+umbrella: It keeps you dry in the rain.
+umpire: The referee in tennis or cricket.
+uncle: Your mum's or dad's brother.
+underground: Beneath the ground.
+unfold: To open out.
+unity: Being together as one.
+unpack: To take things out of a case.
+uplift: To raise someone's spirits.
+usher: Someone who shows you to your seat.
+van: A small truck.
+vanilla: A sweet flavour from a pod.
+vapor: Water as a gas.
+varnish: A shiny coat for wood.
+vast: Huge.
+vat: A big tub.
+vegetable: A plant we eat.
+veil: A light cover worn by a bride.
+velvet: Soft, rich fabric.
+velvety: Soft like velvet.
+verse: A part of a song or poem.
+vest: A sleeveless top.
+vet: An animal doctor.
+vetch: A little purple wildflower.
+view: What you can see.
+village: A small country town.
+vinaigrette: Oil and vinegar dressing.
+vine: A climbing plant.
+vinegar: A sour liquid for chips.
+viola: A string instrument a little bigger than a violin.
+violin: A string instrument played with a bow.
+visitor: Someone who comes to see.
+visor: A shade for the eyes.
+vivid: Bright and strong.
+voice: The sound you make when you speak or sing.
+volcano: A mountain that can pour out lava.
+vole: A small round-faced animal.
+volt: A measure of electricity.
+volunteer: Someone who helps freely.
+vow: A promise.
+voyage: A long journey by sea.
+wafer: A thin crispy biscuit.
+wagon: A cart.
+waiter: Someone who serves food.
+wake: To stop sleeping.
+walk: To go on foot.
+wall: A side of a room, or a stone boundary.
+wallaby: A small kangaroo.
+wallet: A holder for money.
+wallpaper: Patterned paper for walls.
+walnut: A nut with a wrinkly shell.
+walrus: A big sea animal with tusks.
+waltz: A graceful dance in three.
+wand: A magic stick.
+wander: To walk with no hurry.
+wardrobe: A cupboard for clothes.
+warmth: Cosy heat.
+warren: Rabbit burrows.
+wasabi: A hot green paste.
+wash: To clean with water.
+washer: A washing machine.
+washing: Clothes to be cleaned.
+wasp: A striped flying insect.
+watch: A small clock for your wrist.
+watercolor: Paint mixed with water.
+waterfall: Water falling over rocks.
+watermelon: A big melon, red inside.
+wax: Soft material for candles.
+waxy: Smooth and shiny like wax.
+weather: Sun, rain, wind and snow.
+weave: To interlace threads.
+web: A spider's silky net.
+website: Pages on the internet.
+wedding: A marriage celebration.
+wee: Tiny.
+weekend: Saturday and Sunday.
+weigh: To find out how heavy.
+welcome: A warm greeting.
+west: Where the sun sets.
+wheat: A grain for flour.
+wheel: A round thing that turns.
+wheelbarrow: A garden cart with one wheel.
+whelk: A sea snail with a spiral shell.
+whisk: A tool for beating eggs.
+whisper: A soft, quiet voice.
+whistle: A high, clear sound.
+white: The colour of snow.
+whizz: A rushing sound.
+wholemeal: Bread made from the whole grain.
+wicket: The stumps in cricket.
+wide: Broad.
+wildflower: A flower growing free.
+win: To come first.
+wind: Moving air.
+windmill: A mill turned by the wind.
+windy: Blowy.
+wing: What a bird flies with.
+wings: A pair for flying.
+wipe: To clean with a cloth.
+wire: A thin metal thread.
+wisdom: Good sense, earned over time.
+wisp: A thin curl of cloud or smoke.
+wolf: A wild relative of the dog.
+wombat: A sturdy, burrowing Australian animal.
+wonder: A feeling of amazement.
+wonton: A little dumpling.
+wood: A small forest, or timber.
+woodlouse: A little grey creature under logs.
+woodpecker: A bird that taps on trees.
+wool: Soft yarn from sheep.
+woolly: Made of wool.
+word: A single unit of language.
+workbench: A strong table for making things.
+worker: A busy bee, or someone at work.
+worm: A garden helper that makes rich soil.
+wrap: To cover in paper.
+wreath: A ring of leaves on a door.
+write: To put words on paper.
+yak: A long-haired animal of the mountains.
+yam: A sweet, starchy root.
+yarrow: A wildflower with flat white clusters.
+yeast: What makes bread rise.
+yellow: The colour of sunshine.
+yew: A dark evergreen tree.
+yoga: Gentle stretches and breathing.
+yogurt: A creamy food made from milk.
+yolk: The yellow middle of an egg.
+zebra: A striped horse of Africa.
+zero: Nothing at all.
+zest: Grated peel of a lemon or orange.
+zesty: Fresh and lively.
+zoom: To make a picture bigger.

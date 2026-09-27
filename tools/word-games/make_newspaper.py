@@ -1,10 +1,13 @@
-"""Makes the newspaper-style crosswords: assets/js/puzzles/np-<level>.js
+"""Makes the newspaper-style crosswords: assets/js/puzzles/np-<level>-<k>.js (chunks, see bank.py)
 
 Dense grids with rotationally symmetric black squares, every white square part of an
 across and a down word of 3+ letters, numbered the usual way. Five levels, from a 5x5
 mini with the friendliest words and clues to a 13x13 with trickier words and short,
 newspaper-style clues.
-Run from the repo root:  python3 tools/word-games/make_newspaper.py [count per level]
+The puzzles from before the banks grew stay first (bank.legacy). New ones must not share more than a
+few answers with any other puzzle in the level, no answer is used too often, and the same answer is
+clued in different words from puzzle to puzzle (clue_variants.py).
+Run from the repo root:  python3 tools/word-games/make_newspaper.py [level ...]
 """
 import json
 import os
@@ -15,17 +18,23 @@ from multiprocessing import Pool
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
-from vocab import words  # noqa: E402
+from vocab import words, lex  # noqa: E402
+from bank import legacy, write_bank, ClueRotor  # noqa: E402
+from clue_variants import build as build_variants, variants  # noqa: E402
+from make_levels import Spread, reclue  # noqa: E402
 
 OUT = os.path.join(HERE, '..', '..', 'assets', 'js', 'puzzles')
-# id, name, size, black squares (min, max), familiarity floor, share of short "hard" clues
+# id, name, size, black squares (min, max), familiarity floor, clue kinds in order of preference
 LEVELS = [
-    ('mini', 'Mini', 5, (4, 8), 3.0, 0.0),
-    ('small', 'Easy', 7, (6, 10), 3.6, 0.1),
-    ('daily', 'Daily', 9, (12, 18), 3.3, 0.35),
-    ('weekend', 'Weekend', 11, (18, 26), 3.0, 0.6),
-    ('sunday', 'Big Sunday', 13, (24, 34), 2.8, 0.75),
+    ('mini', 'Mini', 5, (4, 8), 3.0, ['h', 'd']),
+    ('small', 'Easy', 7, (6, 10), 3.6, ['h', 'd', 'x']),
+    ('daily', 'Daily', 9, (12, 18), 3.3, ['d', 's', 'x', 'h', 'k']),
+    ('weekend', 'Weekend', 11, (18, 26), 3.0, ['s', 'd', 'x', 'k', 'h']),
+    ('sunday', 'Big Sunday', 13, (24, 34), 2.8, ['s', 'k', 'x', 'd', 'h']),
 ]
+# how many new puzzles, how many answers two puzzles may share, how often one answer may appear
+COUNTS = {'mini': (800, 2, 16), 'small': (1200, 3, 16), 'daily': (1100, 4, 20), 'weekend': (1000, 5, 24), 'sunday': (900, 6, 28)}
+NOISE = {5: 6.0, 7: 3.0, 9: 1.8, 11: 1.4, 13: 1.4}   # how freely the filler strays from the most familiar words
 
 
 def slots_of(grid, n):
@@ -107,12 +116,13 @@ class Filler:
     """Fills a grid fast: each (length, position, letter) keeps a bitmask of the words that fit,
     so finding what fits a slot is a few AND operations. Most familiar words get the lowest
     bits, with a little shuffling so every puzzle comes out different."""
-    def __init__(self, vocab, rng):
-        self.rng = rng
+    def __init__(self, vocab, rng, n=9):
+        self.rng, self.n = rng, n
         self.lists, self.index, self.all = {}, {}, {}
         for L in range(3, 16):
             ws = [w for w in vocab if len(w) == L]
-            ws.sort(key=lambda w: -(vocab[w][2] + (1.2 if vocab[w][3] else 0) + rng.random() * 1.4))
+            noise = NOISE.get(max(5, min(13, getattr(self, 'n', 9))), 1.4)
+            ws.sort(key=lambda w: -(vocab[w][2] + (1.2 if vocab[w][3] else 0) + rng.random() * noise))
             self.lists[L] = ws
             self.all[L] = (1 << len(ws)) - 1
             for k, w in enumerate(ws):
@@ -167,7 +177,9 @@ class Filler:
                 low = m & -m
                 picks.append(low.bit_length() - 1)
                 m ^= low
-            self.rng.shuffle(picks[:4])
+            head = picks[:4]
+            self.rng.shuffle(head)
+            picks[:4] = head
             for k in picks:
                 w = self.lists[L][k]
                 saved = [grid[r][c] for (r, c) in cells[best]]
@@ -242,10 +254,10 @@ def slots_of_all(grid, n):
 
 def one(args):
     level, seed, per_try = args
-    lid, name, n, (lo, hi), minz, hard_share = level
+    lid, name, n, (lo, hi), minz, prefer = level
     rng = random.Random(seed)
     vocab = VOCAB[lid]
-    f = Filler(vocab, rng)
+    f = Filler(vocab, rng, n)
     for _ in range(40):
         if n <= 5:
             pat, sl = make_pattern(n, lo, hi, rng), None
@@ -256,11 +268,7 @@ def one(args):
         got = f.fill(pat, time.time() + per_try, sl)
         if got:
             grid, assigned = got
-            words_out = []
-            for (d, r, c, L), w in assigned.items():
-                easy, hard, z, g = vocab[w]
-                clue = hard if (rng.random() < hard_share and hard) else easy
-                words_out.append([w.upper(), r, c, d, clue])
+            words_out = [[w.upper(), r, c, d] for (d, r, c, L), w in assigned.items()]
             return {'n': n, 'g': [''.join(ch if ch == '#' else '.' for ch in row) for row in grid], 'w': words_out}
     return None
 
@@ -269,30 +277,57 @@ VOCAB = {}
 
 
 def main():
-    per = int(sys.argv[1]) if len(sys.argv) > 1 else 120
-    os.makedirs(OUT, exist_ok=True)
+    which = sys.argv[1:] or [lv[0] for lv in LEVELS]
+    V = build_variants()
+    Lx = lex()
+    for level in LEVELS:
+        lid, n = level[0], level[2]
+        # only words we can clue in their own right
+        VOCAB[lid] = {w: v for w, v in words(min_z=level[4], plurals=True, lengths=range(3, n + 1)).items() if variants(w, V, Lx)}
     for level in LEVELS:
         lid, name, n = level[0], level[1], level[2]
-        VOCAB[lid] = words(min_z=level[4], plurals=True, lengths=range(3, n + 1))
-    for level in LEVELS:
-        lid, name, n = level[0], level[1], level[2]
+        if lid not in which:
+            continue
+        count, shared, uses = COUNTS[lid]
         per_try = {5: 3, 7: 3, 9: 4, 11: 6, 13: 8}[n]
-        seeds = [(level, 1000 * n + i, per_try) for i in range(int(per * (10 if n <= 5 else 1.6)))]
+        rng = random.Random(4242 + n)
+        rotor = ClueRotor(V, Lx, level[5], rng)
+        old = legacy('np-' + lid)
+        spread = Spread(max_shared=shared, max_uses=uses)
+        for p in old:
+            spread.add([w[0].lower() for w in p['w']])
+            for w in p['w']:
+                rotor.uses[w[0].lower()] = rotor.uses.get(w[0].lower(), 0) + 1
+        fixed = reclue(old, rotor, V, Lx)
         t0 = time.time()
-        with Pool() as pool:
-            made = [p for p in pool.imap_unordered(one, seeds) if p]
-        seen, uniq = set(), []
-        for p in made:
-            key = tuple(sorted(w[0] for w in p['w']))
-            if key not in seen:
-                seen.add(key)
-                uniq.append(p)
-        uniq = uniq[:per]
-        with open(os.path.join(OUT, 'np-' + lid + '.js'), 'w') as fh:
-            fh.write('/* np-%s.js: newspaper-style crosswords (%s, %dx%d), made by tools/word-games/make_newspaper.py.\n'
-                     '   Clues adapted from Open English WordNet (CC BY 4.0). Do not edit by hand. */\n' % (lid, name, n, n))
-            fh.write('(window.TOL_PUZZLES = window.TOL_PUZZLES || {})["np-%s"] = ' % lid + json.dumps(uniq, separators=(',', ':'), ensure_ascii=False) + ';\n')
-        print(lid, len(uniq), 'puzzles in', round(time.time() - t0), 's', flush=True)
+        made, seed = [], 500000 + 1000 * n
+        while len(made) < count and time.time() - t0 < 3600:
+            seeds = [(level, seed + i, per_try) for i in range(240)]
+            seed += 240
+            try:
+                with Pool() as pool:  # a fresh pool per batch, with a timeout, so a lost worker can't stall the run
+                    batch = pool.map_async(one, seeds, chunksize=4).get(timeout=per_try * 40 * 60)
+            except Exception as e:  # noqa: BLE001
+                print('  batch skipped:', e, flush=True)
+                continue
+            for p in batch:
+                if not p or len(made) >= count:
+                    continue
+                ws = [w[0].lower() for w in p['w']]
+                if not spread.ok(ws):
+                    continue
+                spread.add(ws)
+                for w in p['w']:
+                    w.append(rotor.clue(w[0].lower(), VOCAB[lid][w[0].lower()][0]))
+                zs = [VOCAB[lid][x][2] for x in ws]
+                p['_z'] = sum(zs) / len(zs)
+                made.append(p)
+            print('  %s: %d / %d' % (lid, len(made), count), flush=True)
+        # a gentle climb within the level: the most familiar fills first
+        made.sort(key=lambda p: -p.pop('_z'))
+        bank = old + made
+        write_bank('np-' + lid, bank, 'The Daily Ledger Crossword, %s (%dx%d). Clues adapted from Open English WordNet (CC BY 4.0)' % (name, n, n))
+        print(lid, len(old), '->', len(bank), 'in', round(time.time() - t0), 's (%d old clues refreshed)' % fixed, flush=True)
 
 
 if __name__ == '__main__':

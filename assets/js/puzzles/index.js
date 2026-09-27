@@ -1,0 +1,4 @@
+/* index.js: how many puzzles each bank holds and how they are split into chunk files
+   (assets/js/puzzles/<bank>-<chunk>.js, puzzle i in chunk floor(i / per)). Made by
+   tools/word-games/bank.py. Do not edit by hand. */
+window.TOL_PUZZLE_INDEX = {"bloom-easy":{"n":1290,"per":153,"c":9},"bloom-expert":{"n":2500,"per":39,"c":65},"bloom-gentle":{"n":795,"per":253,"c":4},"bloom-hard":{"n":1842,"per":64,"c":29},"bloom-medium":{"n":1705,"per":92,"c":19},"np-daily":{"n":1250,"per":34,"c":37},"np-mini":{"n":743,"per":44,"c":17},"np-small":{"n":1350,"per":45,"c":30},"np-sunday":{"n":1050,"per":20,"c":53},"np-weekend":{"n":1150,"per":26,"c":45},"qw-themes":{"n":484,"per":41,"c":12},"xw-easy":{"n":2000,"per":56,"c":36},"xw-expert":{"n":2000,"per":54,"c":38},"xw-gentle":{"n":1492,"per":65,"c":23},"xw-hard":{"n":2000,"per":51,"c":40},"xw-medium":{"n":2000,"per":51,"c":40}};

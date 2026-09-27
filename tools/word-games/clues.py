@@ -372,6 +372,7 @@ THEMES = {
         'chess': 'A board game with kings and queens',
         'cards': 'A deck for playing games',
         'quilt': 'Patchwork you can sleep under',
+        'checkers': 'A board game of hopping pieces',
     },
 }
 

@@ -62,9 +62,11 @@
       ['LOYAL', 'Loyalty is love that keeps showing up.'],
       ['FETCH', 'Chase something just for the fun of it.']] }
   ];
-  // the full library of themes lives in quiet-words-themes.js; these six are the fallback
-  var THEMES = (window.TOL_WORD_THEMES && window.TOL_WORD_THEMES.length >= FALLBACK.length ? window.TOL_WORD_THEMES : FALLBACK)
-    .concat((window.TOL_WORD_THEMES_MORE || []).map(function (t) { return { name: t.name, words: t.words }; }));
+  // The themes live in a big bank (assets/js/puzzles/qw-themes-<k>.js, over 400 of them), loaded a
+  // chunk at a time by game-levels.js; these six are only for when that can't load. Every level keeps
+  // its own record of the themes you've seen, and once you've seen them all, new puzzles mix two
+  // themes together (mix() below), so there's always a fresh one.
+  var THEMES = FALLBACK;
   // five difficulty levels: bigger grids, more words, and more directions (backwards at the top)
   var ALLDIRS = [[0, 1], [1, 0], [1, 1], [-1, 1], [0, -1], [-1, 0], [-1, -1], [1, -1]];
   var TIERS = {
@@ -73,8 +75,22 @@
   };
   var N = 9, DIRS = TIERS.easy.dirs, cur = null;
   var levels = window.TOLLevels ? window.TOLLevels.create({ game: 'words', tiers: ['gentle', 'easy', 'medium', 'hard', 'expert'].map(function (id) {
-    return { id: id, name: id.charAt(0).toUpperCase() + id.slice(1), list: THEMES };
-  }) }) : null;
+    return { id: id, name: id.charAt(0).toUpperCase() + id.slice(1), bank: 'qw-themes' };
+  }), shareSeen: true, keyOf: function (t) { return t.name; }, generate: mix }) : null;
+  function mix(ctx) {
+    var a = Math.floor(ctx.rand() * ctx.chunks), b = Math.floor(ctx.rand() * ctx.chunks);
+    return Promise.all([ctx.chunk(a), ctx.chunk(b)]).then(function (l) {
+      var T = TIERS[ctx.tier.id] || TIERS.easy, pool = l[0].concat(l[1]).filter(function (t) { return ctx.recent.indexOf(t.name) === -1 && t.words.filter(function (w) { return w[0].length <= T.N; }).length >= 5; });
+      if (pool.length < 2) pool = l[0].concat(l[1]);
+      var x = pool[Math.floor(ctx.rand() * pool.length)], y = x;
+      for (var k = 0; k < 20 && (y === x || y.name === x.name); k++) y = pool[Math.floor(ctx.rand() * pool.length)];
+      var words = [], seen = {};
+      function take(t) { var ws = t.words.slice(); for (var i = ws.length - 1; i > 0; i--) { var j = Math.floor(ctx.rand() * (i + 1)), s = ws[i]; ws[i] = ws[j]; ws[j] = s; } return ws; }
+      var wx = take(x), wy = take(y);
+      for (var i = 0; words.length < 18 && (i < wx.length || i < wy.length); i++) [wx[i], wy[i]].forEach(function (w) { if (w && !seen[w[0]]) { seen[w[0]] = 1; words.push(w); } });
+      return { name: x.name + ' & ' + y.name, words: words, fresh: true };
+    });
+  }
   var FILL = 'AEIOUAEIOULNRSTDGHMBPWY';
   // a few letter runs kept out of the grid (written backwards-shifted so they don't read as words here)
   var AVOID = ['fuvg', 'nff', 'gvg', 'cvff', 'qnza', 'uryy', 'fyhg', 'juber', 'anmv', 'ubr', 'cbea', 'cbbc'].map(function (w) {
@@ -122,29 +138,46 @@
         if (!done) ok = false;
       }
       if (!ok) continue;
+      var own = g.map(function (row) { return row.map(function (ch) { return !!ch; }); });
       for (r = 0; r < N; r++) for (var c = 0; c < N; c++) if (!g[r][c]) g[r][c] = FILL[Math.floor(Math.random() * FILL.length)];
-      if (clean(g)) return { grid: g, words: placed };
+      if (clean(g, own)) return { grid: g, words: placed };
     }
     return null;
   }
-  function clean(g) {
-    var lines = [];
-    for (var r = 0; r < N; r++) lines.push(g[r].join(''));
-    for (var c = 0; c < N; c++) { var col = ''; for (r = 0; r < N; r++) col += g[r][c]; lines.push(col); }
-    for (var s = -N + 1; s < N; s++) { var d1 = '', d2 = ''; for (r = 0; r < N; r++) { var c1 = r + s; if (c1 >= 0 && c1 < N) d1 += g[r][c1]; var c2 = s + N - 1 - r; if (c2 >= 0 && c2 < N) d2 += g[r][c2]; } lines.push(d1, d2); }
-    return !lines.some(function (ln) { var both = ln + ' ' + ln.split('').reverse().join(''); return AVOID.some(function (a) { return both.indexOf(a) !== -1; }); });
+  // no unkind letter runs in the grid. A run that lies wholly inside the hidden words is fine (SHELL,
+  // GLASS and HELLO are gentle words); only one that touches a random filler letter is rejected.
+  function clean(g, own) {
+    var lines = [], r, c, k;
+    function add(cells) { lines.push(cells); }
+    for (r = 0; r < N; r++) { var row = []; for (c = 0; c < N; c++) row.push([r, c]); add(row); }
+    for (c = 0; c < N; c++) { var col = []; for (r = 0; r < N; r++) col.push([r, c]); add(col); }
+    for (var s = -N + 1; s < N; s++) { var d1 = [], d2 = []; for (r = 0; r < N; r++) { var c1 = r + s; if (c1 >= 0 && c1 < N) d1.push([r, c1]); var c2 = s + N - 1 - r; if (c2 >= 0 && c2 < N) d2.push([r, c2]); } add(d1); add(d2); }
+    return !lines.some(function (cells) {
+      return [cells, cells.slice().reverse()].some(function (cs) {
+        var text = cs.map(function (p) { return g[p[0]][p[1]]; }).join('');
+        return AVOID.some(function (a) {
+          for (var at = text.indexOf(a); at !== -1; at = text.indexOf(a, at + 1)) {
+            for (k = at; k < at + a.length; k++) if (!own[cs[k][0]][cs[k][1]]) return true;
+          }
+          return false;
+        });
+      });
+    });
   }
 
+
   function start(index, c) {
-    puzzleNo = index;
-    theme = THEMES[index % THEMES.length];
+    var th = c && c.puzzle ? c.puzzle : THEMES[index % THEMES.length];
     // the level decides the grid size, the directions and how many of the theme's words to hide
-    var T = TIERS[c ? c.tier.id : 'easy'] || TIERS.easy;
-    N = T.N; DIRS = T.dirs; cur = c || null;
-    gridEl.style.gridTemplateColumns = 'repeat(' + N + ', 1fr)';
-    var pool = theme.words.filter(function (w) { return w[0].length <= N; });
+    var T = TIERS[c ? c.tier.id : 'easy'] || TIERS.easy, was = [N, DIRS];
+    N = T.N; DIRS = T.dirs;
+    var pool = th.words.filter(function (w) { return w[0].length <= N; });
     for (var i = pool.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)), tmp = pool[i]; pool[i] = pool[j]; pool[j] = tmp; }
-    var made = build({ name: theme.name, words: pool.slice(0, T.words) }); if (!made) return;
+    var made = null;
+    for (var want = T.words; !made && want >= 3; want--) made = build({ name: th.name, words: pool.slice(0, want) });
+    if (!made) { N = was[0]; DIRS = was[1]; return; } // keep the puzzle on screen as it was
+    puzzleNo = index; theme = th; cur = c || null;
+    gridEl.style.gridTemplateColumns = 'repeat(' + N + ', 1fr)';
     if (levels && c) levels.paintBar(barEl, c);
     grid = made.grid; words = made.words; found = {}; hinted = false;
     themeEl.textContent = theme.name;
@@ -152,6 +185,7 @@
     root.classList.remove('is-done');
     render();
   }
+
 
   // ---------- drawing ----------
   var tiles = [];
@@ -269,19 +303,27 @@
   }
 
   // ---------- buttons ----------
-  function go(p) { p.then(function (c) { start(c.index, c); }); }
+  function go(p) { p.then(function (c) { start(c.index, c); }, function () { noteEl.textContent = 'That puzzle didn\u2019t load. Check your connection and try again.'; }); }
   var barEl = $('.gl-host');
   if (levels) levels.bar(barEl, function (p) { go(p); });
   $('.qw-next').addEventListener('click', function () { if (levels) go(levels.next()); else start(puzzleNo + 1); });
-  // choose any theme
+  // choose any theme (the list of names loads the first time it's opened)
   var picker = $('.qw-picker'), pickBtn = $('.qw-pick');
-  picker.innerHTML = THEMES.map(function (th, i) { return '<button type="button" data-theme="' + i + '">' + th.name + '</button>'; }).join('');
-  pickBtn.addEventListener('click', function () { picker.hidden = !picker.hidden; pickBtn.setAttribute('aria-expanded', String(!picker.hidden)); });
+  function fillPicker(names) { picker.innerHTML = names.map(function (n, i) { return '<button type="button" data-theme="' + i + '">' + esc(n) + '</button>'; }).join(''); }
+  function esc(t) { return String(t).replace(/[&<>"]/g, function (ch) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[ch]; }); }
+  if (!levels) fillPicker(THEMES.map(function (t) { return t.name; }));
+  pickBtn.addEventListener('click', function () {
+    picker.hidden = !picker.hidden; pickBtn.setAttribute('aria-expanded', String(!picker.hidden));
+    if (levels && !picker.hidden && !picker.children.length) {
+      picker.innerHTML = '<p>Loading the themes…</p>';
+      window.TOLLevels.script('qw-names').then(function () { fillPicker(window.TOL_QW_NAMES || []); }, function () { picker.innerHTML = '<p>The themes didn’t load. Check your connection and try again.</p>'; });
+    }
+  });
   picker.addEventListener('click', function (e) {
     var b = e.target.closest('[data-theme]'); if (!b) return;
     picker.hidden = true; pickBtn.setAttribute('aria-expanded', 'false');
     var i = +b.getAttribute('data-theme');
-    if (levels) levels.current().then(function (c) { c.index = i; start(i, c); }); else start(i);
+    if (levels) go(levels.pick(i)); else start(i);
     root.scrollIntoView({ behavior: 'smooth', block: 'start' });
   });
   $('.qw-hint').addEventListener('click', function () {
@@ -303,5 +345,5 @@
   if (levels) go(levels.current());
   else start(Math.floor(Date.now() / 864e5) % THEMES.length);
   root.hidden = false;
-  window.__quietWords = { get words() { return words; }, get found() { return found; }, check: check, lineTo: lineTo };
+  window.__quietWords = { levels: levels, mix: mix, get theme() { return theme; }, get words() { return words; }, get found() { return found; }, check: check, lineTo: lineTo };
 })();

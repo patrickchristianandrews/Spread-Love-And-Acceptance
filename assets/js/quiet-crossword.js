@@ -9,11 +9,68 @@
   if (!window.TOLLevels) return;
   // one engine, two kinds of crossword: the friendly free-form ones, and newspaper-style grids
   var PAPER = root.getAttribute('data-mode') === 'paper';
+  // Each level is a big bank of puzzles, loaded a chunk at a time (game-levels.js). Once you've seen a
+  // whole bank, new puzzles are made right here (make() below) from the answers and clues in the bank.
   var levels = window.TOLLevels.create(PAPER ? { game: 'paper', tiers: [
-    { id: 'mini', name: 'Mini', file: 'np-mini' }, { id: 'small', name: 'Easy', file: 'np-small' }, { id: 'daily', name: 'Daily', file: 'np-daily' },
-    { id: 'weekend', name: 'Weekend', file: 'np-weekend' }, { id: 'sunday', name: 'Big Sunday', file: 'np-sunday' }] } : { game: 'crossword', tiers: [
-    { id: 'gentle', name: 'Gentle', file: 'xw-gentle' }, { id: 'easy', name: 'Easy', file: 'xw-easy' }, { id: 'medium', name: 'Medium', file: 'xw-medium' },
-    { id: 'hard', name: 'Hard', file: 'xw-hard' }, { id: 'expert', name: 'Expert', file: 'xw-expert' }] });
+    { id: 'mini', name: 'Mini', bank: 'np-mini' }, { id: 'small', name: 'Easy', bank: 'np-small' }, { id: 'daily', name: 'Daily', bank: 'np-daily' },
+    { id: 'weekend', name: 'Weekend', bank: 'np-weekend' }, { id: 'sunday', name: 'Big Sunday', bank: 'np-sunday' }], keyOf: keyOf, generate: make } : { game: 'crossword', tiers: [
+    { id: 'gentle', name: 'Gentle', bank: 'xw-gentle' }, { id: 'easy', name: 'Easy', bank: 'xw-easy' }, { id: 'medium', name: 'Medium', bank: 'xw-medium' },
+    { id: 'hard', name: 'Hard', bank: 'xw-hard' }, { id: 'expert', name: 'Expert', bank: 'xw-expert' }], keyOf: keyOf, generate: make });
+  // two puzzles are "alike" if they share a theme (Gentle) or the very same answers
+  function keyOf(p) { return p.t && !/^(Easy|Medium|Hard|Expert)$/.test(p.t) ? 'theme:' + p.t : p.w.map(function (w) { return w[0]; }).sort().join(' '); }
+
+  // ---------- new puzzles, made in the browser once a whole bank has been seen ----------
+  // The answers and clues come from a few chunks of the same bank (so they're the same gentle words,
+  // clued the same careful way), shuffled into a brand-new grid: a free-form crossword like the bank's
+  // own, or for the newspaper, a fresh fill of one of the bank's patterns.
+  var SIZE = { easy: [8, 6, 9], medium: [9, 9, 12], hard: [10, 10, 14], expert: [10, 10, 16], gentle: [8, 6, 11],
+    mini: [5, 4, 8], small: [7, 6, 12], daily: [9, 9, 16], weekend: [11, 12, 22], sunday: [13, 14, 28] };
+  function make(ctx) {
+    var rand = ctx.rand, ks = [], want = Math.min(ctx.chunks, PAPER ? 4 : 3);
+    while (ks.length < want) { var k = Math.floor(rand() * ctx.chunks); if (ks.indexOf(k) === -1) ks.push(k); }
+    return Promise.all(ks.map(ctx.chunk)).then(function (lists) {
+      var all = [].concat.apply([], lists), clues = {};
+      all.forEach(function (p) { p.w.forEach(function (w) { (clues[w[0]] = clues[w[0]] || []).push(w[4]); }); });
+      function clue(w) { var c = clues[w]; return c[Math.floor(rand() * c.length)]; }
+      if (PAPER) return paper(ctx, all, clues, clue) || free(ctx, Object.keys(clues), clue, SIZE[ctx.tier.id] || SIZE.daily, ctx.tier.name + ' crossword');
+      if (ctx.tier.id === 'gentle') {
+        // a theme: every answer that theme has in these chunks
+        var by = {};
+        all.forEach(function (p) { p.w.forEach(function (w) { (by[p.t] = by[p.t] || {})[w[0]] = 1; }); });
+        var names = Object.keys(by).filter(function (n) { return Object.keys(by[n]).length >= 8 && ctx.recent.indexOf('theme:' + n) === -1; });
+        if (!names.length) names = Object.keys(by);
+        for (var tries = 0; tries < 6; tries++) {
+          var name = names[Math.floor(rand() * names.length)], got = free(ctx, Object.keys(by[name]), clue, SIZE.gentle, name);
+          if (got) return got;
+        }
+        return null;
+      }
+      return free(ctx, Object.keys(clues), clue, SIZE[ctx.tier.id] || SIZE.easy, ctx.tier.name);
+    });
+  }
+  function free(ctx, words, clue, size, title) {
+    var rand = ctx.rand, n = size[0], lo = size[1], hi = size[2];
+    words = words.filter(function (w) { return w.length >= 3 && w.length <= n; });
+    for (var tries = 0; tries < 30; tries++) {
+      for (var i = words.length - 1; i > 0; i--) { var j = Math.floor(rand() * (i + 1)), t = words[i]; words[i] = words[j]; words[j] = t; }
+      var lay = window.TOLLevels.place(words.slice(0, lo >= 10 ? 90 : 40), n, n, rand, 8);
+      if (lay.w.length < lo) continue;
+      var w = lay.w.slice(0, hi), minr = Math.min.apply(null, w.map(function (x) { return x[1]; })), minc = Math.min.apply(null, w.map(function (x) { return x[2]; }));
+      w = w.map(function (x) { return [x[0], x[1] - minr, x[2] - minc, x[3], clue(x[0])]; });
+      var W = Math.max.apply(null, w.map(function (x) { return x[2] + (x[3] === 'a' ? x[0].length : 1); })), H = Math.max.apply(null, w.map(function (x) { return x[1] + (x[3] === 'd' ? x[0].length : 1); }));
+      return { t: title, W: W, H: H, w: w, fresh: true };
+    }
+    return null;
+  }
+  function paper(ctx, all, clues, clue) {
+    var words = Object.keys(clues);
+    for (var tries = 0; tries < 4; tries++) {
+      var pat = all[Math.floor(ctx.rand() * all.length)];
+      var got = window.TOLLevels.fill(pat.g, words, ctx.rand, pat.n <= 7 ? 1200 : 2000);
+      if (got) return { n: pat.n, g: pat.g, w: got.map(function (x) { return x.concat([clue(x[0])]); }), fresh: true };
+    }
+    return null;
+  }
   var cur = null;
   var R = window.TOLRewards, KEY = PAPER ? 'tol-np-v1' : 'tol-xw-v1';
   var S = { at: -1, fill: {}, reveals: 0, done: [], solved: 0 };
@@ -222,5 +279,5 @@
   // carry on where you left off
   go(levels.current());
   root.hidden = false;
-  window.__crossword = { get words() { return words; }, type: type, get sel() { return sel; }, set sel(v) { sel = v; }, start: start, get sol() { return sol; } };
+  window.__crossword = { levels: levels, make: make, get words() { return words; }, type: type, get sel() { return sel; }, set sel(v) { sel = v; }, start: start, get sol() { return sol; } };
 })();

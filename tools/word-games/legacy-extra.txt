@@ -1,0 +1,270 @@
+# More words for the older Quiet Words themes that had fewer than 12, so every theme has 12+.
+# "Theme|WORD|line". The lines keep the same gentle voice as the theme's own. Used by make_themes.py.
+Calm|HUSH|Hush is a gift you can give a busy mind.
+Calm|PEACE|Peace can be as small as one slow breath.
+Calm|SERENE|Serene is a lake with no wind. You can visit it any time.
+Calm|SETTLE|Let your shoulders settle. They've worked hard today.
+Calm|GENTLE|Be gentle with the pace of this moment.
+Kindness|SHARE|Sharing makes the good things go further.
+Kindness|LISTEN|Listening closely is one of the kindest gifts.
+Kindness|COMFORT|A little comfort can change someone's whole day.
+Kindness|PATIENT|Patience is kindness that takes its time.
+Kindness|FRIEND|Be the friend you'd love to have.
+Night Garden|OWL|The owl keeps watch while the garden rests.
+Night Garden|MOTH|Moths find the light. So can you.
+Night Garden|LANTERN|A small lantern is enough to find the path.
+Night Garden|DEW|Dew arrives quietly, and so does rest.
+Night Garden|HUSH|The garden at night knows how to hush.
+Connection|HUG|A hug says what words sometimes can't.
+Connection|CHAT|A short chat can make a long day lighter.
+Connection|VISIT|A visit, even a quick one, is a gift.
+Connection|BOND|Bonds grow stronger with small, kind moments.
+Connection|WELCOME|Make someone feel welcome today.
+Gratitude|THANKS|Say thanks for one small thing.
+Gratitude|BLESSING|Count one quiet blessing before you sleep.
+Gratitude|SMILE|A smile is a thank-you without words.
+Gratitude|SHARE|Gratitude grows when it's shared.
+Gratitude|WARMTH|Notice the warmth around you today.
+Paws|BARK|A happy bark means "you're home!"
+Paws|NUZZLE|A nuzzle is a small way of saying "I love you".
+Paws|COLLAR|A collar with a name says "you belong here".
+Paws|WHISKERS|Whiskers twitch with curiosity. Stay curious too.
+Paws|BALL|Throw the ball once more. Play is good for you both.
+Morning|SUNRISE|Every sunrise is a fresh start.
+Morning|KETTLE|Put the kettle on. The day can wait a moment.
+Morning|YAWN|A slow yawn is a gentle way to begin.
+Morning|DEW|Morning dew: the world washed fresh.
+Morning|HELLO|Say a warm hello to the day.
+Evening|LAMP|Switch on a soft lamp and let the day go.
+Evening|BATH|A warm bath can wash the day away.
+Evening|STARS|The first stars mean it's time to rest.
+Evening|QUIET|Let the evening grow quiet around you.
+Evening|MOON|The moon comes out to keep you company.
+Seaside|SAND|Feel the sand between your toes.
+Seaside|SHORE|The shore is where busy thoughts can wash away.
+Seaside|SPLASH|A little splash wakes up the whole day.
+Seaside|BUCKET|A bucket and spade: the simplest kind of fun.
+Seaside|SALT|Salt air is good for the soul.
+Forest|BARK|Touch the bark of a tree and take a slow breath.
+Forest|LEAF|Every leaf turns toward the light.
+Forest|SQUIRREL|Squirrels save a little for later. So can you.
+Forest|OWL|The owl knows the value of a quiet night.
+Forest|PATH|The path is kinder when you walk it slowly.
+Rainy Day|DRIP|Listen to the drip. It's a kind of music.
+Rainy Day|BOOTS|Pull on your boots and meet the rain.
+Rainy Day|SPLASH|Splash in one puddle, just because.
+Rainy Day|BLANKET|Rain on the window, a blanket on your knees.
+Rainy Day|TEA|Rainy days were made for a pot of tea.
+Snow Day|SNOWBALL|A gentle snowball: play is allowed.
+Snow Day|BOOTS|Boots on. Every snowy step crunches.
+Snow Day|SLED|A slow sled ride down a little hill.
+Snow Day|HAT|A woolly hat keeps the cold at bay.
+Snow Day|FIRE|Come in from the snow and warm up by the fire.
+Spring|BUD|Every bud holds a flower waiting its turn.
+Spring|RAIN|Spring rain helps everything grow, including you.
+Spring|ROBIN|The robin sings as if the whole day is new.
+Spring|GREEN|Notice all the shades of new green.
+Spring|BLOOM|You'll bloom in your own time.
+Summer|SWIM|A cool swim on a warm day.
+Summer|PICNIC|A picnic on the grass is a little holiday.
+Summer|SUNHAT|Wear a sunhat and take things slowly.
+Summer|BREEZE|Wait for the breeze. It always comes.
+Summer|BERRIES|Summer berries: small, sweet and worth the wait.
+Autumn|ACORN|Big oaks start as little acorns.
+Autumn|SCARF|Wrap up warm and go for a walk.
+Autumn|GOLDEN|Autumn light makes everything golden.
+Autumn|MIST|Morning mist lifts slowly. Let your worries lift too.
+Autumn|CHESTNUT|Roasted chestnuts warm hands and hearts.
+Winter|SNOW|Snow makes the whole world hush.
+Winter|MITTENS|Warm hands, warm heart.
+Winter|COCOA|A mug of cocoa is winter's hug.
+Winter|CANDLE|A candle in the window lights the long evening.
+Winter|QUILT|Curl up under a quilt and rest.
+Tea Time|MILK|A splash of milk, just how you like it.
+Tea Time|SUGAR|One lump or two? Treat yourself.
+Tea Time|CAKE|Tea tastes better with a slice of cake and company.
+Tea Time|STEAM|Watch the steam rise and slow down with it.
+Tea Time|CUP|A warm cup, held in both hands.
+Baking|BUTTER|Softened butter makes everything better.
+Baking|SUGAR|A little sweetness goes a long way.
+Baking|EGGS|Crack the eggs and start something new.
+Baking|BOWL|Mix it all in one big bowl.
+Baking|CAKE|A cake shared is joy doubled.
+Garden|SPADE|Turn the soil, and let your thoughts turn over too.
+Garden|WORM|Worms quietly make the soil rich.
+Garden|WATER|Water the plants, and drink some water too.
+Garden|BUD|A bud is a promise of colour.
+Garden|BENCH|Sit on the bench and simply look.
+Birds|BLACKBIRD|The blackbird sings from the rooftop at dusk.
+Birds|THRUSH|The thrush sings each phrase twice, to be sure.
+Birds|FINCH|Finches chatter together in the hedge.
+Birds|NEST|Every nest is built one twig at a time.
+Birds|WING|Stretch your wings a little today.
+Butterflies|CATERPILLAR|Every butterfly was once a caterpillar.
+Butterflies|MEADOW|A meadow is a butterfly's favourite place.
+Butterflies|COLOUR|Wings full of colour, and you are too.
+Butterflies|BLOSSOM|Blossom and butterflies arrive together.
+Butterflies|SUMMER|Summer days are made for fluttering.
+Ocean Life|OCTOPUS|The clever octopus hugs with eight arms.
+Ocean Life|CRAB|Crabs carry their homes wherever they go.
+Ocean Life|JELLYFISH|The jellyfish simply drifts. Drifting is fine.
+Ocean Life|PUFFIN|Puffins return to the same cliffs every year.
+Ocean Life|REEF|A reef is a whole town under the sea.
+Stars and Sky|MOON|The moon shines with borrowed light. We all help each other shine.
+Stars and Sky|STAR|Wish on the first star you see.
+Stars and Sky|TWINKLE|Twinkle, twinkle: some things never grow old.
+Stars and Sky|SUNSET|A sunset is the sky saying "well done".
+Stars and Sky|TELESCOPE|Look up. There's always more to wonder at.
+Music|SONG|Hum a song that makes you happy.
+Music|DRUM|Tap a gentle beat on the table.
+Music|FLUTE|A flute sounds like a breeze with a tune.
+Music|VIOLIN|A violin can sing without words.
+Music|CHOIR|Voices together sound bigger than alone.
+Colours|BLUE|Blue skies are always there above the clouds.
+Colours|GREEN|Green is the colour of growing things.
+Colours|YELLOW|Yellow is sunshine you can hold.
+Colours|CORAL|Coral is warm like a summer evening.
+Colours|CREAM|Soft cream, like a cosy blanket.
+Home|DOOR|The door is always open to those you love.
+Home|KETTLE|Home is the sound of the kettle going on.
+Home|GARDEN|A little garden makes a house a home.
+Home|WINDOW|Look out of the window and let your eyes rest.
+Home|HEARTH|The hearth is the warm heart of a home.
+Cosy|BLANKET|Wrap yourself up. You deserve comfort.
+Cosy|CANDLE|A candle's glow makes any room cosy.
+Cosy|COCOA|Warm cocoa for cold hands.
+Cosy|SLIPPERS|Slippers on. You're home now.
+Cosy|QUILT|A patchwork quilt holds many stories.
+Friendship|FRIEND|A friend makes the good times brighter and the hard times lighter.
+Friendship|LAUGH|Laughing together is a kind of glue.
+Friendship|SHARE|Share a snack, share a story.
+Friendship|HUG|A friend's hug is a safe place.
+Friendship|TRUST|Trust grows slowly, like a tree.
+Family|HOME|Family is where you can simply be yourself.
+Family|HUG|A family hug has room for everyone.
+Family|MEAL|Sharing a meal is sharing time.
+Family|PHOTO|Old photos keep the stories alive.
+Family|GRANDPA|Grandpa's stories are treasures.
+Self-Kindness|REST|Rest is not a reward. It's a need.
+Self-Kindness|GENTLE|Speak to yourself as you would to a friend.
+Self-Kindness|ENOUGH|You are enough, just as you are.
+Self-Kindness|BREATHE|Breathe in kindness, breathe out worry.
+Self-Kindness|CARE|Take care of the one who takes care of everything.
+Hope|DAWN|Dawn always comes, even after the longest night.
+Hope|SPRING|Spring follows winter. It always has.
+Hope|RAINBOW|After rain, look for the rainbow.
+Hope|DREAM|Keep a small dream in your pocket.
+Hope|LIGHT|A little light is enough to take the next step.
+Courage|LION|Courage can be quiet, like a lion at rest.
+Courage|SPEAK|Your voice matters. Use it kindly.
+Courage|STAND|Stand tall. You've come so far.
+Courage|LEAP|Sometimes a small leap is all it takes.
+Courage|HERO|Everyday heroes do small brave things.
+Patience|SEED|A seed takes its time. So can you.
+Patience|SLOW|Slow and steady is still moving forward.
+Patience|CALM|Calm waiting is a quiet strength.
+Patience|GROW|Things grow at their own pace.
+Patience|STEADY|Steady steps get there in the end.
+Joy|LAUGH|Laugh out loud at something small today.
+Joy|SMILE|A smile can light up a whole room.
+Joy|SING|Sing, even if it's just to yourself.
+Joy|PLAY|Play isn't only for children.
+Joy|CHEER|Cheer someone on today.
+Laughter|FUNNY|Find one funny thing today.
+Laughter|CLOWN|Everyone can be a little bit of a clown.
+Laughter|SMILE|Smiles are catching. Pass one on.
+Laughter|GLEE|Glee: the happiest kind of laugh.
+Laughter|HAPPY|Happiness often starts with a laugh.
+Rest|SLEEP|Sleep is when your body mends itself.
+Rest|SOFA|Sink into the sofa. You've earned it.
+Rest|QUIET|A quiet moment is a small holiday.
+Rest|BREATHE|Breathe out slowly and let your shoulders drop.
+Rest|CALM|Calm is always there, underneath.
+Sleep|DREAM|Sweet dreams are waiting.
+Sleep|BLANKET|Tuck yourself in. Tomorrow can wait.
+Sleep|MOON|The moon keeps watch while you sleep.
+Sleep|LULLABY|Everyone deserves a lullaby.
+Sleep|NIGHT|Night is the world's way of resting.
+Travel|TICKET|A ticket to somewhere new.
+Travel|PLANE|From up high, worries look very small.
+Travel|ADVENTURE|Every trip is a small adventure.
+Travel|COMPASS|You'll always find your way back.
+Travel|BOAT|Let the boat rock you gently.
+Picnic|BLANKET|Spread the blanket and stay a while.
+Picnic|LEMONADE|Cool lemonade on a warm day.
+Picnic|APPLE|A crisp apple tastes better outdoors.
+Picnic|CAKE|Bring cake. Picnics are for treats.
+Picnic|SUNSHINE|Sunshine makes every sandwich taste better.
+Little Wins|SMILED|You smiled today. That counts.
+Little Wins|RESTED|You rested. That's a win too.
+Little Wins|WATERED|You watered the plants, and yourself.
+Little Wins|CALLED|You called a friend. Lovely.
+Little Wins|LEARNED|You learned something new today.
+Words of Comfort|CALM|Calm is on its way.
+Words of Comfort|GENTLE|Be gentle with yourself right now.
+Words of Comfort|HUG|Here's a hug, in word form.
+Words of Comfort|REST|It's okay to rest.
+Words of Comfort|HOPE|There is always hope.
+Kind Words|THANKS|Thanks is a small word that means a lot.
+Kind Words|WELL|Well done, you.
+Kind Words|KIND|That was kind of you.
+Kind Words|AMAZING|You're doing an amazing job.
+Kind Words|BRILLIANT|Brilliant work, truly.
+Mindful Moments|BREATHE|Notice one breath, all the way in and out.
+Mindful Moments|LISTEN|Listen to the quietest sound you can hear.
+Mindful Moments|STILL|Be still for a moment. Just this one.
+Mindful Moments|TASTE|Taste your next sip slowly.
+Mindful Moments|CALM|Calm lives in the present moment.
+Nature Walks|HILL|Climb a small hill and look at the view.
+Nature Walks|MEADOW|Walk through a meadow and slow right down.
+Nature Walks|BIRDSONG|Stop and listen to the birdsong.
+Nature Walks|FERN|Ferns unfurl slowly, one curl at a time.
+Nature Walks|BREEZE|Let the breeze carry your thoughts away.
+Whiskers|MEOW|A soft meow says "notice me".
+Whiskers|PAW|A gentle paw on your hand says "I'm here".
+Whiskers|NAP|Cats know the value of a good nap.
+Whiskers|MOUSE|A little toy mouse, the best game ever.
+Whiskers|CUDDLE|Small creatures give big cuddles.
+Sweet Treats|CAKE|Cake is better shared.
+Sweet Treats|COOKIE|A warm cookie is a little hug.
+Sweet Treats|CHOCOLATE|A square of chocolate, savoured slowly.
+Sweet Treats|CUSTARD|Warm custard is comfort in a bowl.
+Sweet Treats|HONEY|A spoon of honey sweetens the day.
+Crafts|GLUE|Glue holds things together. So does kindness.
+Crafts|PAINT|Paint something just for fun.
+Crafts|BUTTON|A button can turn into anything.
+Crafts|RIBBON|Tie a ribbon on something you love.
+Crafts|BEAD|Thread the beads one at a time.
+Reading|BOOK|A good book is a friend who never tires.
+Reading|READ|Read a page just for yourself.
+Reading|CHAIR|A comfy chair and a good story.
+Reading|LAMP|A reading lamp makes a cosy circle of light.
+Reading|SHELF|A shelf of books is a shelf of friends.
+Dreams|DREAM|Dream big, dream small, just keep dreaming.
+Dreams|STAR|Reach for a star, or simply admire it.
+Dreams|CLOUD|Float away on a daydream cloud.
+Dreams|MOON|The moon is a nightlight for dreamers.
+Dreams|HOPE|Every dream begins with a little hope.
+Little creatures|LADYBIRD|Ladybirds are tiny garden helpers.
+Little creatures|BEE|Bees keep the flowers blooming.
+Little creatures|BEETLE|Beetles wear shiny little coats.
+Gems and stones|RUBY|A ruby glows a warm, deep red.
+Gems and stones|SAPPHIRE|A sapphire is a little piece of blue sky.
+Gems and stones|QUARTZ|Quartz is clear and bright.
+Sweet things|FUDGE|Fudge: soft, sweet and made to share.
+Sweet things|TOFFEE|Chewy toffee takes its time.
+Sweet things|MERINGUE|Meringue is light as a cloud.
+Sweet things|CUSTARD|Warm custard, poured over pudding.
+The bakery|LOAF|A fresh loaf fills the whole shop with warmth.
+The bakery|SCONE|A scone with jam and cream.
+Around the house|SHELF|A shelf for favourite things.
+Shapes|CIRCLE|A circle has no corners at all.
+Shapes|SQUARE|Four equal sides, as steady as can be.
+Stories and poems|STORY|Everyone has a story worth hearing.
+Stories and poems|FABLE|A fable is a little story with a big lesson.
+Stories and poems|VERSE|A verse can say a lot in a few lines.
+Stories and poems|RHYME|A rhyme is a small, happy echo.
+Jewelry box|RING|A ring is a circle of love.
+Jewelry box|LOCKET|A locket keeps someone close.
+Jewelry box|BRACELET|A bracelet of beads, each one a memory.
+Jewelry box|CHARM|A little charm for good luck.
