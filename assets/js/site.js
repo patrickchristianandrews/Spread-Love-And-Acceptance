@@ -315,7 +315,7 @@
     var bar = el('div', { class: 'tol-bar', role: 'banner' });
     bar.style.margin = (-pt) + 'px ' + (-pr) + 'px ' + pt + 'px ' + (-pl) + 'px';
     bar.appendChild(el('a', { class: 'tol-brand', href: '/index.html' },
-      '<img class="tol-logo" src="/assets/img/mascots/two-bubbles.svg" alt="" width="36" height="36"><span>The Objective Ledger</span>'));
+      '<img class="tol-logo" src="/assets/img/logo-mark.svg" alt="" width="36" height="36"><span>The Objective Ledger</span>'));
 
     var nav = el('div', { class: 'tol-sections', role: 'navigation', 'aria-label': 'Site sections' });
     RIBBON.forEach(function (p, n) { nav.appendChild(buildDrop(p[0], p[1], n >= RIBBON.length - 3)); });
@@ -481,7 +481,7 @@
     var promise = current === '/dashboard.html' ? '' :
       '<p class="tol-promise">What you type into the tools and worksheets stays on your device. It is never collected or sent to us. <a href="/legal/privacy-policy.html#your-entries">How we handle your information</a></p>';
     foot.innerHTML = promise +
-      '<span class="tol-foot-brand"><img src="/assets/img/mascots/bubble-heart.svg" alt="" width="40" height="40">The Objective Ledger &middot; spreadloveandacceptance.com</span>' +
+      '<span class="tol-foot-brand"><img src="/assets/img/logo-mark.svg" alt="" width="40" height="40">The Objective Ledger &middot; spreadloveandacceptance.com</span>' +
       '<span class="tol-foot-links">' +
         '<a href="/contents.html">All pages</a>' +
         '<a href="/membership.html">Membership</a>' +
@@ -665,8 +665,9 @@
     if (!h.querySelector('link[rel~="icon"]')) {
       add('link', { rel: 'icon', href: '/assets/icons/icon.svg', type: 'image/svg+xml' });
       add('link', { rel: 'alternate icon', href: '/assets/icons/favicon-32.png', type: 'image/png', sizes: '32x32' });
+      add('link', { rel: 'alternate icon', href: '/assets/icons/favicon-16.png', type: 'image/png', sizes: '16x16' });
     }
-    if (!h.querySelector('link[rel="apple-touch-icon"]')) add('link', { rel: 'apple-touch-icon', href: '/assets/icons/apple-touch-icon.png' });
+    if (!h.querySelector('link[rel="apple-touch-icon"]')) add('link', { rel: 'apple-touch-icon', href: '/assets/icons/apple-touch-icon-180.png', sizes: '180x180' });
     if (!h.querySelector('meta[name="theme-color"]')) add('meta', { name: 'theme-color', content: '#F5EFDE' });
     add('meta', { name: 'apple-mobile-web-app-capable', content: 'yes' });
     add('meta', { name: 'mobile-web-app-capable', content: 'yes' });
@@ -862,7 +863,7 @@
       if (lsGet('tol-install-asked') || document.querySelector('.tol-breathe:not([hidden]), .tol-install')) return;
       lsSet('tol-install-asked', '1');
       var t = el('div', { class: 'tol-invite', role: 'status' },
-        '<img src="/assets/img/mascots/two-bubbles.svg" alt="" width="44" height="44"><p>Want us on your home screen? It opens like an app, and nothing you type leaves your phone.</p>' +
+        '<img src="/assets/img/logo-mark.svg" alt="" width="44" height="44"><p>Want us on your home screen? It opens like an app, and nothing you type leaves your phone.</p>' +
         '<span><button type="button" class="tol-invite-yes">Show me how</button><button type="button" class="tol-invite-no">Not now</button></span>');
       t.querySelector('.tol-invite-yes').addEventListener('click', function () { t.remove(); showInstall(); });
       t.querySelector('.tol-invite-no').addEventListener('click', function () { t.remove(); });
