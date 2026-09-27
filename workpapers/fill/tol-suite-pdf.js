@@ -406,7 +406,8 @@
 
     var how = opts.fillable
       ? ['How to use it', 'Tap any box to type, in Adobe Acrobat Reader, your phone\'s Files app, Preview or a browser. Or print it and write by hand.', 'To pick up later, save the PDF, then open it in the Workpaper Suite on the website. Everything you typed comes back in, and the report works itself out.']
-      : ['What this is', 'A keepsake of what you\'ve written, grouped the way your road goes. Page 2 has the at-a-glance read.', 'It came from files on your own device and was never sent anywhere.'];
+      : (path && path.report ? ['What this report is', path.report.what, 'Page 2 has the at-a-glance read, then how to read it on your road. It came from files on your own device and was never sent anywhere.']
+        : ['What this is', 'A keepsake of what you\'ve written, grouped the way your road goes. Page 2 has the at-a-glance read.', 'It came from files on your own device and was never sent anywhere.']);
     pen.room(90);
     d.roundRect(L, pen.y, W, 78, 12, '#FFFFFF', C.line, 0.6);
     d.text(L + 14, pen.y + 18, enc(how[0]), 'Times-Bold', 12, C.ink);
@@ -429,7 +430,8 @@
     for (var i = 0; i < total; i++) pen.doc.circle(L + 7 + i * 17, pen.y + 7, 6.5, i < doneN ? PASTELS[i % PASTELS.length] : '#FFFFFF', C.brass, 0.7);
     pen.doc.text(L + total * 17 + 8, pen.y + 10, enc(doneN + ' of ' + total + ' sheets started'), 'Helvetica', 9, C.soft);
     pen.y += 26;
-    pen.para('Each read describes how things are set up and shared, never either person. Use it to start a conversation, not to end one.', { font: 'Times-Italic', size: 9.5, color: C.soft, after: 8 });
+    var RP = plan.path && plan.path.report;
+    pen.para(RP ? RP.lens : 'Each read describes how things are set up and shared, never either person. Use it to start a conversation, not to end one.', { font: 'Times-Italic', size: 9.5, color: C.soft, after: 8 });
 
     plan.groups.forEach(function (g, gi) {
       pen.heading(g.title, 50, PASTELS[gi % PASTELS.length]);
@@ -449,6 +451,8 @@
           var lines = wrap(it.label + ':  ' + String(it.value).replace(/\n/g, '  ·  '), 'Helvetica', 8.5, W - 40).slice(0, 3);
           lines.forEach(function (ln) { pen.room(12); pen.doc.text(L + 26, pen.y + 8, ln, 'Helvetica', 8.5, C.soft); pen.y += 11.5; });
         });
+        var q = RP && RP.ask && RP.ask[en.workpaper];
+        if (q) wrap((plan.path.id === 'self' ? 'Ask yourself: ' : 'Talk about: ') + q, 'Times-Italic', 9, W - 40).slice(0, 2).forEach(function (ln) { pen.room(12); pen.doc.text(L + 26, pen.y + 9, ln, 'Times-Italic', 9, C.credit); pen.y += 12; });
         pen.y += 6;
       });
     });
@@ -483,6 +487,58 @@
     }
   }
 
+  // Reading it on your road: how to read it, what to look for, what to talk about, and the week plan
+  function roadPage(pen, plan, entries) {
+    var path = plan.path, RP = path && path.report;
+    if (!RP) return;
+    pen.page('Reading it on your road');
+    pen.doc.bookmark('Reading it on your road', 0);
+    sprinkle(pen.doc, 5, false);
+    pen.kicker('READING IT ON YOUR ROAD  ·  ' + path.label.toUpperCase());
+    pen.doc.text(L, pen.y + 18, enc(RP.together[0]), 'Times-Bold', 20, C.ink);
+    pen.y += 32;
+    pen.para(RP.together[1], { size: 9.5, after: 10 });
+
+    pen.heading('What to look for', 40, path.color || C.pink);
+    RP.look.forEach(function (t) {
+      var lines = wrap(t, 'Helvetica', 9.5, W - 34);
+      pen.room(lines.length * 13 + 4);
+      pen.doc.circle(L + 20, pen.y + 6, 2.4, C.brass);
+      lines.forEach(function (ln) { pen.doc.text(L + 30, pen.y + 9, ln, 'Helvetica', 9.5, C.ink); pen.y += 13; });
+      pen.y += 3;
+    });
+
+    pen.heading(path.id === 'self' ? 'Questions to sit with' : 'Conversation starters', 60, C.lav);
+    pen.para(path.id === 'self' ? 'One at a time, whenever you have a quiet minute.' : 'Pick one. One topic per sitting is plenty.', { size: 8.5, color: C.soft, after: 4 });
+    RP.talk.forEach(function (t, i) {
+      var lines = wrap('“' + t + '”', 'Times-Italic', 10.5, W - 60), h = lines.length * 13.5 + 14;
+      pen.room(h);
+      pen.doc.roundRect(L + 12, pen.y, W - 12, h - 4, 10, '#FFFFFF', PASTELS[i % PASTELS.length], 1);
+      lines.forEach(function (ln, k) { pen.doc.text(L + 26, pen.y + 15 + k * 13.5, ln, 'Times-Italic', 10.5, C.ink); });
+      pen.y += h;
+    });
+
+    // the week plan for this road, with a tick where a week's sheets have been started
+    if (path.weeks && path.weeks.length) {
+      pen.heading('Your weeks on this road', 60, C.mint);
+      var startedWp = {};
+      entries.forEach(function (en) { if (answers(en) > 0) startedWp[en.workpaper] = true; });
+      path.weeks.forEach(function (wk, i) {
+        var wps = wk[1] || [], done = wps.length && wps.every(function (w) { return startedWp[w]; }), some = wps.some(function (w) { return startedWp[w]; });
+        var prac = wrap(wk[3] || '', 'Helvetica', 8.5, W - 70), h = 20 + prac.length * 11;
+        pen.room(h + 4);
+        pen.doc.circle(L + 18, pen.y + 9, 9, done ? C.mint : some ? C.butter : '#FFFFFF', C.brass, 0.8);
+        if (done) pen.doc.heart(L + 18, pen.y + 9.5, 9, C.rose);
+        else pen.doc.text(L + 18 - tw(String(i + 1), 'Helvetica-Bold', 8) / 2, pen.y + 12, enc(String(i + 1)), 'Helvetica-Bold', 8, C.brass);
+        pen.doc.text(L + 36, pen.y + 12, enc('Week ' + (i + 1) + ' · ' + wk[0] + (wps.length ? '   (' + wps.join(', ') + ')' : '')), 'Helvetica-Bold', 9.5, C.ink);
+        var yy = pen.y + 24;
+        prac.forEach(function (ln) { pen.doc.text(L + 36, yy, ln, 'Helvetica', 8.5, C.soft); yy += 11; });
+        pen.y += h + 4;
+      });
+      pen.para('A heart means every sheet for that week has been started; a yellow circle means some have.', { size: 8, color: C.soft, font: 'Times-Italic', after: 4 });
+    }
+  }
+
   // The kind words worth keeping close: appreciations, pause lines, gentle no's, messages.
   function keepClose(pen, plan, entries) {
     var items = { thanks: [], lines: [], refusals: [], messages: [], defaults: [] };
@@ -513,7 +569,7 @@
     pen.doc.bookmark('Worth keeping close', 0);
     sprinkle(pen.doc, 11, false);
     pen.kicker('WORTH KEEPING CLOSE');
-    pen.doc.text(L, pen.y + 18, enc('The kind words, in one place'), 'Times-Bold', 20, C.ink);
+    pen.doc.text(L, pen.y + 18, enc(plan.path && plan.path.report && plan.path.report.keep || 'The kind words, in one place'), 'Times-Bold', 20, C.ink);
     pen.y += 34;
     groups.forEach(function (g) {
       pen.heading(g[0], 40, g[3]);
@@ -534,7 +590,7 @@
     if (!plan.path) return;
     pen.room(130);
     pen.y += 10;
-    var tip = plan.tip, h = 64 + (tip ? 50 : 0);
+    var tip = plan.tip, closeLn = plan.path.report && plan.path.report.close ? wrap(plan.path.report.close, 'Times-Italic', 10, W - 50) : [], h = 64 + (tip ? 50 : 0) + closeLn.length * 13 + (closeLn.length ? 8 : 0);
     pen.doc.roundRect(L, pen.y, W, h, 14, C.butter);
     pen.doc.heart(L + 22, pen.y + 22, 16, C.rose);
     pen.doc.text(L + 38, pen.y + 26, enc('Your next small step'), 'Times-Bold', 13, C.ink);
@@ -545,6 +601,7 @@
       pen.doc.text(L + 38, y, enc('A little tip: ' + tip[1]), 'Helvetica-Bold', 8.5, C.ink); y += 12;
       wrap(tip[2], 'Helvetica', 8.5, W - 50).slice(0, 2).forEach(function (ln) { pen.doc.text(L + 38, y, ln, 'Helvetica', 8.5, C.soft); y += 11; });
     }
+    if (closeLn.length) { y += 8; closeLn.forEach(function (ln) { pen.doc.text(L + 38, y, ln, 'Times-Italic', 10, C.ink); y += 13; }); }
     pen.y += h + 8;
   }
 
@@ -576,6 +633,7 @@
         cover(fp, plan, { fillable: opts.fillable, offset: offset });
         front.bookmark('Cover and your road', 0);
         glance(fp, plan, entries, opts);
+        if (!opts.fillable) roadPage(fp, plan, entries);
         keepClose(fp, plan, entries);
         closing(fp, plan);
         offset = front.pages.length;

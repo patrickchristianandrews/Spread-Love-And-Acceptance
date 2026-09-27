@@ -103,6 +103,101 @@
     ]
   };
 
+  // The report, told for each road: what it is, how to read it, what to look for, what to talk
+  // about, one question per workpaper, and a closing line.
+  var REPORT = {
+    self: {
+      what: 'A kind record of your own load, what settles you, and how words reach you. It is for you first; share any page only if you want to.',
+      lens: 'Each read describes your conditions and your setup, never your worth. Notice patterns the way you’d notice the weather.',
+      together: ['How to read it', 'Read it on a calm day, with something warm to drink. Look for patterns across days, not verdicts about any one day. If a page stings, put it down and come back.'],
+      look: ['Days when your battery was already low before anything happened.', 'The settling defaults you actually reached for, and whether they helped.', 'Words that landed harder than they were meant to, and what that tells you about your wiring.', 'Where a kind “no” would have protected your energy.'],
+      talk: ['What drains me that nobody else can see?', 'Which of my two settling defaults works best, and when?', 'What would I like the people close to me to know about how I’m wired?', 'What is one thing I can say no to this week, kindly?'],
+      ask: { 'WP-02': 'What was already in the tank before today began?', 'WP-11': 'Did your defaults help? Would you change one?', 'WP-09': 'Which part was hardest to write: the fact, the feeling or the ask?', 'WP-01': 'Which refusal felt kindest to say out loud?' },
+      keep: 'Kind words to keep close',
+      close: 'You are allowed to be as gentle with yourself as you are with the people you love.'
+    },
+    partners: {
+      what: 'A shared picture of how the two of you run your life together: who does what, who owns what, how full each battery is, and how you talk about it.',
+      lens: 'Each read describes the arrangement between you, never either of you. It is where a conversation starts, not where one ends.',
+      together: ['How to read it together', 'Pick a calm evening when neither battery is low. Each read the at-a-glance page on your own first, then share one thing that surprised you and one thing you appreciated. One topic per sitting.'],
+      look: ['Jobs that appear in one log but not the other: the unseen work.', 'Recurring jobs with no clear owner, or an owner who isn’t the one doing it.', 'Weeks when one battery stayed low while the other recovered.', 'Things that came up again in the monthly look-back.'],
+      talk: ['What did you do this month that I didn’t see?', 'Which job would you most like to hand over, and to whom?', 'When your battery is low, what helps most from me?', 'What is one small thing we could change this week?'],
+      ask: { 'WP-01': 'What surprised each of you in the other’s log?', 'WP-03': 'Which owner would you like to swap, and what would make that fair?', 'WP-13': 'Which appreciation meant the most this week?', 'WP-02': 'Whose battery needs protecting this week, and how?', 'WP-09': 'Did the ask land the way it was meant?', 'WP-11': 'Do you both recognise each other’s pause line?', 'WP-04': 'Which repeat problem is a real gap, and which was a one-off?' },
+      keep: 'Kind words between the two of you',
+      close: 'The numbers describe the arrangement. The two of you decide what to do with it, together.'
+    },
+    family: {
+      what: 'A calm picture of how your family shares the load and the conversations: who owns what at home, how tone lands, and what keeps slipping.',
+      lens: 'Each read describes how the family has set things up, never any one person, and never a child.',
+      together: ['How to read it as a family', 'Share only with the adults it concerns. Choose a quiet time, not a holiday table. Start with what’s working, then pick one thing to change.'],
+      look: ['Tasks where “helping out” means different things to different people.', 'Messages where tone carried more than the words.', 'Leftover stress from long before this week.', 'The same thing slipping every month.'],
+      talk: ['Which job do we each assume someone else is doing?', 'How would we like to be told when something bothers us?', 'What is our pause line when a family talk heats up?', 'What would make the next gathering easier for everyone?'],
+      ask: { 'WP-03': 'Does everyone agree on the owner, or only the person who wrote it down?', 'WP-09': 'Which old family pattern made this message hard to send?', 'WP-02': 'What history came into the room with you?', 'WP-11': 'Will everyone recognise the pause line when it’s used?', 'WP-01': 'Where does “helping out” mean different things?', 'WP-04': 'What keeps coming back, and whose job is it really?' },
+      keep: 'Kind words in the family',
+      close: 'Families change slowly. One owner, one kinder message, one pause at a time is real progress.'
+    },
+    coparents: {
+      what: 'A steady, factual picture of how two parents share the care of a child: owners for every kid task, messages that land, and handoffs that go smoothly.',
+      lens: 'Each read describes the arrangement between two homes, never either parent. It is never evidence and never for building a case.',
+      together: ['How to read it as co-parents', 'Read it separately first. Meet (or message) about one topic only: usually the next handoff or one slipping task. Keep the child out of it, and keep it short.'],
+      look: ['Kid tasks with no owner, or two owners.', 'Handoffs where the same thing gets missed.', 'Messages that went better after fact, feeling and ask.', 'Weeks when one home carried most of the load.'],
+      talk: ['Which kid task keeps falling between our homes?', 'What would make handoff day calmer for our child?', 'How would you like me to raise something that worries me?', 'Which owner should we swap for the next month?'],
+      ask: { 'WP-03': 'Is every school, health and activity task owned by exactly one parent?', 'WP-09': 'Would this message read calmly if our child saw it one day?', 'WP-04': 'Which slip is a real gap, and which was a busy week?', 'WP-01': 'Is the load lopsided across the two homes?', 'WP-13': 'What is one thanks for the other home this week?', 'WP-02': 'What was your battery before the handoff?', 'WP-11': 'Does the other parent know your pause line?' },
+      keep: 'Kind words between two homes',
+      close: 'Your child benefits from every calm handoff. A parenting plan or court order always comes first.'
+    },
+    friends: {
+      what: 'A light-touch record of the give and take in a friendship: what went unseen, how to say it kindly, and how to say no without a rift.',
+      lens: 'This isn’t a ledger of favours. Each read helps you name one thing, once, kindly.',
+      together: ['How to read it', 'Read it on your own. If something needs saying, choose one sentence and a relaxed moment. You don’t have to share the report itself.'],
+      look: ['The one thing that went unseen and still matters to you.', 'Where a kind “no” would have protected the friendship.', 'Days when your own battery was the real story.'],
+      talk: ['I noticed I’ve been doing more of the planning. Could we share it?', 'I can’t make it this time, and I’d love to see you next week.', 'Is there anything I’ve missed that mattered to you?'],
+      ask: { 'WP-09': 'Is this one sentence you could say over coffee?', 'WP-01': 'Which kind no would you like to have ready?', 'WP-02': 'Was it the friendship, or was your battery low?', 'WP-11': 'What settles you before a tricky talk?' },
+      keep: 'Kind words for your friendship',
+      close: 'Good friendships can hold one honest sentence. Say it lightly, and let it be enough.'
+    },
+    roommates: {
+      what: 'A shared, factual picture of a shared home: who does which chore, who owns what, and the things that keep coming back.',
+      lens: 'Each read describes the house setup, never a housemate. Facts, not impressions.',
+      together: ['How to read it at a house meeting', 'Bring the at-a-glance page to the next house meeting. Start with one thanks each, then one chore to rebalance. No call-outs: every point goes through fact, feeling and ask.'],
+      look: ['Chores with no named owner.', 'Chores that one person always ends up doing.', 'The problem that comes back every month.', 'Points that would land better as fact, feeling and ask.'],
+      talk: ['Which chore should rotate, and how often?', 'What is one thing a housemate did this week that helped?', 'What house rule would make evenings easier?', 'What keeps coming back, and who will own it?'],
+      ask: { 'WP-03': 'Did everyone agree to their chore at the meeting?', 'WP-13': 'What was each person’s one thanks this week?', 'WP-01': 'What does the log show that nobody mentioned?', 'WP-04': 'Which repeat problem needs a new owner?', 'WP-09': 'Would this point land as a request, not a call-out?', 'WP-02': 'Was it the house, or your own battery?', 'WP-11': 'What settles you when the house is noisy?' },
+      keep: 'Kind words around the house',
+      close: 'A home runs well when everyone can see the same picture. You’ve drawn it together.'
+    },
+    coworkers: {
+      what: 'A team-level picture of the work around the work: who owns each recurring task, which messages land, and what slips between people.',
+      lens: 'Each read describes how the team is set up, never an individual. Never use it to rate anyone or as HR documentation.',
+      together: ['How to read it as a team', 'Share only with teammates who agreed to try this. Use it in a short retrospective: what went well, what slipped, and one owner to change. Keep your battery pages private.'],
+      look: ['Follow-ups and reminders that nobody owned.', 'Messages that read harsher than intended.', 'The same task slipping in every sprint or month.', 'Your own battery before hard meetings (private).'],
+      talk: ['Which recurring task should have a named owner?', 'Which messages would read better with fact, feeling and ask?', 'What unseen work kept the team moving this month?', 'What is one change for the next cycle?'],
+      ask: { 'WP-03': 'Does each recurring team task have exactly one owner?', 'WP-09': 'Would this message read calmly to someone having a hard day?', 'WP-13': 'Did the stand-up surface anything early?', 'WP-04': 'What slipped more than once, and why?', 'WP-01': 'Which follow-ups were invisible until now?', 'WP-02': 'What was your battery before the meeting? (Private)', 'WP-11': 'What settles you at work?' },
+      keep: 'Kind words on the team',
+      close: 'Good teams make the invisible work visible, then share it. That’s what this report is for.'
+    },
+    caregivers: {
+      what: 'A caring, factual picture of the care you share: each part of the care and its owner, the strain on the people giving it, and the handoffs between you.',
+      lens: 'Each read describes how the care is shared, never how much anyone loves the person they care for.',
+      together: ['How to read it with a sibling or co-carer', 'Read the strain pages first, gently. Then look at the care owners together and choose one part of the care to rebalance. Running near empty is a signal to get more support, not a failing.'],
+      look: ['Parts of the care with no clear owner.', 'Batteries running near empty for more than a few days.', 'Handoffs where something got missed.', 'What keeps slipping every month.'],
+      talk: ['Which part of the care is heaviest right now, and who could share it?', 'What support could we ask for from outside the family?', 'How should we hand over between visits?', 'What does each of us need to keep going?'],
+      ask: { 'WP-02': 'How many days this week was a battery near empty?', 'WP-03': 'Does every appointment, medicine and call have one name next to it?', 'WP-11': 'What settles you when you’re too tired to talk well?', 'WP-13': 'What should the next person know at handoff?', 'WP-01': 'What does a full week of care actually involve?', 'WP-09': 'Is this ask one topic, kindly put?', 'WP-04': 'What keeps slipping, and what help would fix it?' },
+      keep: 'Kind words among the carers',
+      close: 'Caring for someone is love made practical. Caring for each other while you do it counts too.'
+    },
+    program: {
+      what: 'Your six weeks, week by week: what you saw, what you changed, and how the same log compares from Week 1 to Week 6.',
+      lens: 'Each read describes the arrangement, never either person. Six weeks is a sensible order, not a test.',
+      together: ['How to read it at the end of the program', 'Read Week 1 and Week 6 side by side. Name one thing that changed, one that didn’t, and one to keep practising. Some weeks take longer than a week, and that’s fine.'],
+      look: ['How the Week 1 and Week 6 logs compare.', 'Jobs that found an owner in Week 2 and stayed owned.', 'Battery patterns from Week 3.', 'Which check-in habits stuck after Week 5.'],
+      talk: ['What changed most between Week 1 and Week 6?', 'Which habit do we want to keep?', 'What still needs an owner?', 'What would we like to try in the next six weeks?'],
+      ask: { 'WP-01': 'How does this log compare with the other week’s?', 'WP-03': 'Are the owners from Week 2 still true?', 'WP-02': 'What pattern showed up across the week?', 'WP-09': 'Did the ask land?', 'WP-11': 'Did you use your pause line?', 'WP-13': 'Did the check-in become a habit?', 'WP-04': 'What keeps coming back?' },
+      keep: 'Kind words from your six weeks',
+      close: 'Six weeks of small, honest steps. Keep the ones that helped, and come back whenever you need to.'
+    }
+  };
+
   var PATHS = [
     {
       id: 'self', label: 'Just me', icon: '☀', color: '#F8E7AE',
@@ -300,6 +395,7 @@
 
   // the 6-week program's weeks are its groups; every other road gets its own plan above
   PATHS.forEach(function (p) {
+    p.report = REPORT[p.id] || null;
     p.weeks = WEEKS[p.id] || p.groups.map(function (g) { return [g.title.replace(/^Week \d+ \u00B7 /, ''), g.stops.map(function (x) { return x.wp; }), g.along || [], g.note]; });
   });
   global.TOL_SUITE_PATHS = { paths: PATHS, names: NAMES, read: READ };
