@@ -6,6 +6,9 @@
 (function () {
   'use strict';
   var G = window.TOL_DIVES || {};
+  // names of tools, workpapers, pages and programs aren't marked: mini dives are for terms and topics
+  var NAMES = { solvency: 1, deficit: 1, field: 1, battery: 1, raci: 1, tone: 1, pll: 1, kit: 1, checkins: 1, translator: 1, reader: 1, freq: 1, framework: 1,
+    mood: 1, lemonade: 1, weather: 1, card: 1, report: 1, prog: 1, suite: 1, workpapers: 1, garden: 1, petals: 1, soundscapes: 1, stories: 1, wired: 1, verdict: 1 };
   var MAX = 24; // at most this many marked terms per page, so pages stay calm to read
 
   var SKIP = 'a, button, h1, h2, h3, h4, h5, h6, label, code, pre, script, style, textarea, input, select, option, summary, svg, canvas, nav, header:not(.read-head), footer, .tol-bar, .no-dive, .tol-dive, .wpf-form, .wpf-bar, .tol-index, .tol-row, .gm-board, .qw, .ng-stage, .ws-sheet, .tol-tip, .dig, [role="dialog"], [aria-hidden="true"]';
@@ -19,7 +22,7 @@
     var keys = Object.keys(G), used = {}, count = 0;
     // longer phrases first, so "Battery & Stress Meter" wins over "Battery"
     var terms = [];
-    keys.forEach(function (k) { (G[k].m || []).forEach(function (p) { terms.push([p, k]); }); });
+    keys.forEach(function (k) { if (NAMES[k] || G[k].name) return; (G[k].m || []).forEach(function (p) { terms.push([p, k]); }); });
     terms.sort(function (a, b) { return b[0].length - a[0].length; });
     if (!terms.length) return;
     var walker = document.createTreeWalker(main, NodeFilter.SHOW_TEXT, {
