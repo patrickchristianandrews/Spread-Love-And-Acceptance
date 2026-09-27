@@ -121,5 +121,152 @@ Object.values(E.NT).forEach(nt=>Object.entries(nt.receive).forEach(([fid,v])=>{
   ok(!/\b(?:all autistic|all adhd|always will|diagnos)/i.test(y), `${nt.name}/${fid}: over-general wording`);
 }));
 
-console.log(`${FIX.length} phrase fixtures, ${pass} checks passed, ${fail} failed`);
+/* ============================================================
+   First-time user review (a team manager testing Slack messages)
+   ============================================================ */
+const WORK = [];
+const all = rw => [rw.main].concat(rw.variants.map(v=>v.text));
+const lowIncl = (s,k) => s.toLowerCase().includes(k.toLowerCase());
+const rwOf = (t, o) => E.rewrite(E.analyze(t,{channel:(o&&o.channel)||"chat"}), Object.assign({wirings:[]}, o||{}));
+const W_ALL = [[], ["general"], ["autistic"], ["adhd"], ["anxiety"], ["nt"], ["autistic","adhd"]];
+function review(t, fn){ WORK.push(t); fn(E.analyze(t,{channel:"chat"}), t); }
+
+// acronyms are not shouting, and are never lowercased
+review("Per my last message, the deck is due EOD.", (an,t)=>{
+  ok(an.found.pointed, `"${t}": expected pointed`);
+  ok(!an.found.shout, `"${t}": EOD is an acronym, not shouting`);
+  ok(!an.found.nowhen && !an.missing.when, `"${t}": EOD is a when`);
+  W_ALL.forEach(W=>{ const r=E.rewrite(an,{wirings:W}); all(r).forEach(s=>{
+    ok(/\bEOD\b/.test(s), `"${t}" [${W}]: EOD lost or lowercased in "${s}"`);
+    ok(lowIncl(s,"the deck is due"), `"${t}" [${W}]: the fact was dropped in "${s}"`);
+    ok(!/per my last message/i.test(s), `"${t}" [${W}]: pointer still in "${s}"`);
+  }); });
+});
+{ const t="Please send the PR by EOD, FYI the ETA is Q3 and the KPI doc is TBD. OOO on Monday, ping me on the 1:1 URL or the PDF.";
+  const an=E.analyze(t,{channel:"chat"});
+  ok(!an.found.shout, `"${t}": acronyms read as shouting`);
+  W_ALL.forEach(W=>all(E.rewrite(an,{wirings:W})).forEach(s=>["PR","EOD","FYI","ETA","Q3","KPI","TBD","OOO","1:1","URL","PDF"].forEach(a=>ok(new RegExp("(^|[^A-Za-z0-9])"+a.replace(/[.:]/g,"\\$&")+"($|[^A-Za-z0-9])").test(s), `"${t}" [${W}]: ${a} lost or lowercased in "${s}"`)))); }
+ok(E.analyze("Send it ASAP!!!").found.shout, "stacked !!! should still read as shouting");
+ok(E.analyze("You forgot AGAIN?").found.shout, "AGAIN is a word in capitals, so it reads as shouting");
+ok(E.analyze("WHY IS THIS NOT DONE").found.shout, "a message mostly in capitals reads as shouting");
+ok(!E.analyze("Can you check the SOW and the QBR deck?").found.shout, "SOW and QBR are acronyms");
+
+// "Going forward" is a standing request, not a missing time
+review("I noticed the client email went out without review. Going forward, please send drafts to me first.", (an,t)=>{
+  ok(an.found.standing, `"${t}": expected standing request`);
+  ok(!an.found.nowhen && !an.missing.when, `"${t}": a standing request should not need a time`);
+  ok(!an.found.impera, `"${t}": "please send" is a polite request`);
+  W_ALL.forEach(W=>all(E.rewrite(an,{wirings:W})).forEach(s=>{
+    ok(!/\[a time\]/.test(s), `"${t}" [${W}]: added a time to a standing request: "${s}"`);
+    ok(lowIncl(s,"send drafts to me first") && lowIncl(s,"client email"), `"${t}" [${W}]: content dropped in "${s}"`);
+  }));
+});
+
+// vague timing for literal listeners
+review("Hey, can you take a look at this when you get a sec? No rush.", (an,t)=>{
+  ok(an.found.vtime, `"${t}": "when you get a sec" is vague timing`);
+  W_ALL.forEach(W=>{ const r=E.rewrite(an,{wirings:W});
+    ok(/\[a time\]/.test(r.main) && !/when you get a sec/i.test(r.main), `"${t}" [${W}]: no real time suggested in "${r.main}"`);
+    all(r).forEach(s=>ok(lowIncl(s,"take a look at this"), `"${t}" [${W}]: ask lost in "${s}"`)); });
+});
+review("Can you review the budget? No rush.", (an,t)=>{
+  ok(an.found.vtime, `"${t}": "no rush" on an ask with no time is vague for literal listeners`);
+  ok(/\[a time\]/.test(E.rewrite(an,{}).main), `"${t}": expected a real time`);
+});
+
+// don't add feelings the speaker didn't express; "ok" and "k thx" are treated the same way
+["ok","OK","k","okay","k thx","ok thanks","Ok."].forEach(t=>{
+  const an=E.analyze(t,{channel:"chat"}); const r=E.rewrite(an,{wirings:["anxiety"]});
+  ok(an.found.minimal, `"${t}": expected minimal reply`);
+  all(r).forEach(s=>{ ok(/^Okay, got it\./.test(s), `"${t}": expected a plain acknowledgment, got "${s}"`); ok(!/sounds good|happy to|!|love|great/i.test(s), `"${t}": added a feeling in "${s}"`); });
+});
+
+// meeting requests with no topic are anxiety triggers: name the topic and how serious
+["Can we hop on a quick call?","Can you come to my office?","Can I grab you for a minute?"].forEach(t=>review(t,(an)=>{
+  ok(an.found.ominous, `"${t}": expected opener with no topic`);
+  ok(an.asks.length>0 && an.sentences.every(se=>se.ask), `"${t}": "the ask: none" must not be said for a request`);
+  W_ALL.forEach(W=>{ const r=E.rewrite(an,{wirings:W}); ok(/\[the topic\]/.test(r.main) && /serious|\[a time\]/.test(r.main), `"${t}" [${W}]: topic/seriousness not asked for in "${r.main}"`); });
+}));
+ok(!E.analyze("Can we hop on a quick call about the budget at 3?").found.ominous, "a call with a topic is not ominous");
+{ const r=rwOf("Can we hop on a quick call tomorrow?"); ok(/tomorrow/.test(r.main), `a time the speaker gave must be kept: "${r.main}"`); }
+
+// "Why is this still not done??" -> where is it at, and a request with a time
+review("Why is this still not done??", (an,t)=>{
+  ok(an.found.blameq, `"${t}": expected blame question`);
+  ok(an.asks.length>0, `"${t}": expected an ask`);
+  W_ALL.forEach(W=>{ const r=E.rewrite(an,{wirings:W});
+    ok(/Where is .+ at\?/.test(r.main) && /Could you .+ by \[a time\]\?/.test(r.main), `"${t}" [${W}]: expected where/could-you/by-when, got "${r.main}"`);
+    all(r).forEach(s=>ok(!/\bwhy\b|still|\?\?/i.test(s.replace(/\[[^\]]*\]/g,"")), `"${t}" [${W}]: accusatory wording kept in "${s}"`)); });
+});
+{ const r=rwOf("Why isn't the report finished?"); ok(/Where is the report at\?/.test(r.main), `expected "Where is the report at?", got "${r.main}"`); }
+
+// leftover sarcasm and hostility is removed in every version
+review("Lately it's felt like you don't do the dishes and I'm sick of it. Can you actually clean for once?", (an,t)=>{
+  ok(an.found.heat, `"${t}": expected heat words`);
+  W_ALL.forEach(W=>{ const r=E.rewrite(an,{wirings:W, rel:"partner"});
+    all(r).forEach(s=>{ ok(!/\bactually\b|for once|sick of|seriously/i.test(s), `"${t}" [${W}]: hostility kept in "${s}"`); ok(lowIncl(s,"dishes"), `"${t}" [${W}]: the dishes were dropped in "${s}"`); });
+    ok(/\[a time\]/.test(r.main), `"${t}" [${W}]: expected a time on the ask in "${r.main}"`); });
+});
+["Seriously, can you just send it?","Could you actually reply for once?","I'm sick of this. Please fix the build."].forEach(t=>all(rwOf(t,{wirings:["adhd"]})).forEach(s=>ok(!/\bactually\b|for once|sick of|seriously/i.test(s), `"${t}": hostility kept in "${s}"`)));
+
+// rewrites never drop content: every task and every deadline survives, in every version
+{ const t="Reminder: timesheets are due Friday. Please also update the tracker, reply to the funder, and book the room for Tuesday.";
+  const an=E.analyze(t,{channel:"chat"}); WORK.push(t);
+  ok(!an.found.impera, `"${t}": "Please also update" is a polite request, not a bare command`);
+  ok(an.found.multi, `"${t}": expected several asks`);
+  const clauses=["timesheets","Friday","update the tracker","reply to the funder","book the room for Tuesday"];
+  W_ALL.forEach(W=>{ const r=E.rewrite(an,{wirings:W});
+    all(r).concat(r.list?[r.list]:[]).forEach(s=>clauses.forEach(c=>ok(lowIncl(s,c), `"${t}" [${W}]: "${c}" dropped from "${s.replace(/\n/g," / ")}"`)));
+    if(r.list){ const items=r.list.split("\n").filter(l=>/^\d+\. /.test(l)).join(" ");
+      clauses.forEach(c=>ok(lowIncl(items,c), `"${t}" [${W}]: "${c}" missing from the numbered list "${items}"`)); } });
+}
+ok(!E.analyze("Please also update the tracker.").found.impera, "\"Please also update…\" is a polite request, not a bare command");
+
+// nudges and pointed phrases
+[["Any update?","nudge"],["Circling back on this.","nudge"],["Just checking in.","nudge"],["As previously stated, the budget is final.","pointed"],["Per my previous email, the invoice is attached.","pointed"]].forEach(([t,id])=>review(t,(an)=>{
+  ok(an.found[id], `"${t}": expected ${id}`);
+  const r=E.rewrite(an,{});
+  ok(!r.unchanged, `"${t}": expected a softer version`);
+  if(id==="nudge"){ ok(an.asks.length>0, `"${t}": "the ask: none" must not be said for a nudge`); ok(/\[a time\]/.test(r.main) && /\[the specific thing\]/.test(r.main), `"${t}": expected the thing and a time in "${r.main}"`); }
+  if(/budget/.test(t)) all(r).forEach(s=>ok(lowIncl(s,"the budget is final"), `"${t}": fact dropped in "${s}"`));
+}));
+ok(!E.analyze("Any update on the Q3 report before Friday?").found.nudge, "a follow-up with a topic and a time is fine");
+
+// "Please do this ASAP" keeps the request polite and asks for a time and a reason
+{ const r=rwOf("Please do this ASAP."); ok(/\[a time\]/.test(r.main) && /because \[the reason\]/.test(r.main) && !/asap/i.test(r.main), `ASAP: got "${r.main}"`); }
+
+// "We're okay." only between close people, never at work or from a manager
+{ const an0=E.analyze("You need to clean your room.");
+  [undefined,"","coworker","manager","roommate"].forEach(rel=>["anxiety","adhd","trauma","hsp"].forEach(w=>{ const r=E.rewrite(an0,{wirings:[w], rel, bond:true}); all(r).forEach(s=>ok(!/we're okay/i.test(s), `rel=${rel} [${w}]: "We're okay" added in "${s}"`)); }));
+  const rp=E.rewrite(an0,{wirings:["anxiety"], rel:"partner"}); ok(rp.variants.some(v=>/We're okay/.test(v.text) && /if it's true/i.test(v.why)), "partners: warm version keeps \"We're okay\" with the only-if-true note");
+  ok(E.rewrite(an0,{wirings:["anxiety"], rel:"coworker"}).primary.id==="warm", "anxious listener at work still gets the warm version first"); }
+
+// the headline agrees with the flags
+FIX.map(f=>f.t).concat(WORK).forEach(t=>{
+  const an=E.analyze(t,{channel:"chat"});
+  [["general"],["nt"],["autistic"]].forEach(W=>{ const sc=E.score(an,W,"chat","v");
+    if(an.staticIds.length) ok(sc.level[0]!=="clear" && !/clear/i.test(sc.level[1]), `"${t}" [${W}]: says "${sc.level[1]}" while ${an.staticIds.join(",")} is flagged`); });
+});
+// "Not sure" gives a general reading for anything flagged
+WORK.forEach(t=>{ const an=E.analyze(t,{channel:"chat"}); const g=E.readings(an,["general"],"chat").general;
+  an.staticIds.forEach(id=>ok(g.some(e=>e.fid===id && e.w>=1), `"${t}": general reading missing for ${id}`)); });
+
+// chat and group channels are written channels
+ok(E.analyze("Ok.",{channel:"chat"}).found.period || E.analyze("Fine.",{channel:"group"}).found.minimal, "chat/group should read like text");
+ok(E.chBase("chat")==="text" && E.chBase("group")==="text" && E.chBase("person")==="person", "chBase maps chat and group to text");
+
+// every deadline and time in any input survives in every version
+const TIME_RE=/\b(?:(?:mon|tues|wednes|thurs|fri|satur|sun)day|tonight|tomorrow|today|EOD|EOW|\d{1,2}(?::\d{2})?(?:\s*[ap]m)?)\b/gi;
+FIX.map(f=>f.t).concat(WORK).forEach(t=>{
+  const times=(t.match(TIME_RE)||[]); if(!times.length) return;
+  const an=E.analyze(t,{channel:"chat"});
+  W_ALL.forEach(W=>{ const r=E.rewrite(an,{wirings:W}); all(r).forEach(s=>times.forEach(x=>ok(lowIncl(s,x), `"${t}" [${W}]: time "${x}" dropped in "${s.replace(/\n/g," / ")}"`))); });
+});
+// the review cases also pass the general checks (no broken blanks, reasons for every change)
+WORK.forEach(t=>{ const an=E.analyze(t,{channel:"chat"}); W_ALL.forEach(W=>{ const r=E.rewrite(an,{wirings:W});
+  all(r).forEach(s=>{ ok(!/\b(?:by|at|because|about)\s*[,.?!]/.test(s.replace(/\[[^\]]*\]/g,"X").replace(/\bWhere (?:is|are) [^?]+ at\?/g,"")), `"${t}" [${W}]: broken blank in "${s}"`); ok(!/\[\s*\]/.test(s), `"${t}": empty placeholder`); });
+  r.changes.forEach(c=>ok(c.why && c.why.length>20, `"${t}": change ${c.id} has no reason`)); });
+  an.staticIds.forEach(id=>ok(E.FBY[id].what && E.FBY[id].fix, `feature ${id} missing what/fix`)); });
+
+console.log(`${FIX.length} phrase fixtures + ${WORK.length} workplace review cases, ${pass} checks passed, ${fail} failed`);
 if(fail){ console.log(errs.slice(0,40).join("\n")); process.exit(1); }

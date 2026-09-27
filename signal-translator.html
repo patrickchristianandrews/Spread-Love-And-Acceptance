@@ -12,8 +12,8 @@
 </script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>The Signal Translator — The Objective Ledger (TOL-OS)</title>
-<meta name="description" content="Pick how you and the other person are wired, from neurotypical, autistic, ADHD, dyslexic and more, type a phrase, and see how it might land, what it might sound like, and a clearer way to say it. Free, and nothing you type leaves your browser.">
+<title>The Signal Translator — The Objective Ledger</title>
+<meta name="description" content="Type a sentence, a text or a work message and see how it might land, what it might sound like, and a clearer way to say it. Optionally pick how the other person is wired. Free, and nothing you type leaves your browser.">
 <meta property="og:title" content="The Signal Translator — The Objective Ledger">
 <meta property="og:description" content="Same words, different receivers. See how a phrase might land for someone wired differently than you.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -97,7 +97,7 @@ h1{font-family:var(--display);font-weight:700;font-size:clamp(2rem,5.5vw,3.4rem)
 	.note-tools label{font-size:.82rem;color:var(--muted)}
 	.note-tools select{display:block;margin-top:2px;font:inherit;padding:4px 6px}
 	.fullread{margin-top:8px}
-	@media(max-width:720px){.s4split{grid-template-columns:1fr}}
+	@media(max-width:720px){.s4split{grid-template-columns:minmax(0,1fr)}}
 h2{font-family:var(--display);font-weight:600;font-size:1.3rem;margin:0 0 10px;line-height:1.25}
 h3{font-family:var(--display);font-weight:600;font-size:1.08rem;margin:0 0 6px;line-height:1.3}
 .panel{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:22px clamp(16px,3vw,30px) 24px;margin-top:22px}
@@ -106,7 +106,9 @@ h3{font-family:var(--display);font-weight:600;font-size:1.08rem;margin:0 0 6px;l
 
 /* People */
 .people{display:grid;grid-template-columns:1fr auto 1fr;gap:18px;align-items:start}
-@media (max-width:860px){.people{grid-template-columns:1fr}}
+@media (max-width:860px){.people{grid-template-columns:minmax(0,1fr)}}
+.person,.s4box,.field,.wrow{min-width:0}
+.field select,.field input,.wrow select,.s4panel textarea,.s4box textarea{box-sizing:border-box}
 .person{background:var(--sheet);border:1px solid var(--line);border-top:4px solid var(--pc);border-radius:var(--radius);padding:16px 16px 12px}
 .person.pa{--pc:var(--a)} .person.pb{--pc:var(--b)}
 .person .who{display:flex;align-items:baseline;justify-content:space-between;gap:8px;flex-wrap:wrap;margin-bottom:6px}
@@ -164,6 +166,41 @@ textarea{width:100%;min-height:96px;margin-top:4px;border:1px solid var(--line);
 .ghost{background:none;border:1.5px solid var(--line);border-radius:var(--radius);padding:9px 16px;font-family:var(--display);font-size:.9rem}
 .ghost:hover{border-color:var(--ink)}
 .msg{font-size:.88rem;color:var(--a)}
+/* Drop-downs */
+.skip{position:absolute;left:12px;top:-60px;z-index:50;background:var(--ink);color:var(--bg);padding:10px 14px;border-radius:var(--radius);font-family:var(--display);text-decoration:none}
+.skip:focus{top:12px}
+.s4panel h2{font-size:1.45rem;margin-bottom:4px}
+.s4panel h2 label{cursor:pointer}
+.s4panel textarea#phrase{min-height:7.5rem;background:#fff;border:2px solid var(--ink)}
+textarea[aria-invalid="true"]{border-color:var(--a)!important;box-shadow:0 0 0 2px color-mix(in srgb,var(--a) 25%,transparent)}
+.field{display:flex;flex-direction:column;gap:4px;min-width:0}
+.field label,.wrow label{font-family:var(--display);font-weight:600;font-size:.92rem}
+.field select,.field input[type=text]{width:100%;max-width:100%;min-height:44px;padding:8px 36px 8px 10px;border:1.5px solid var(--line);border-radius:var(--radius);background-color:var(--sheet);font-size:1rem;color:var(--ink)}
+.field input[type=text]{padding-right:10px}
+.field select{appearance:none;-webkit-appearance:none;background-image:linear-gradient(45deg,transparent 50%,var(--brass) 50%),linear-gradient(135deg,var(--brass) 50%,transparent 50%);background-position:calc(100% - 18px) 50%,calc(100% - 12px) 50%;background-size:6px 6px,6px 6px;background-repeat:no-repeat;text-overflow:ellipsis}
+.field select:hover,.field input[type=text]:hover{border-color:var(--muted)}
+.presetrow{margin-top:10px}
+.quick{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px 18px;margin-top:20px;padding-top:16px;border-top:1px solid var(--line)}
+.grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px 18px}
+@media (max-width:640px){.quick,.grid2{grid-template-columns:minmax(0,1fr)}}
+.wfield{gap:8px}
+.wrow{display:flex;flex-direction:column;gap:4px}
+.wrow + .wrow{margin-top:2px}
+.wrow select{width:100%;min-height:44px;padding:8px 36px 8px 10px;border:1.5px solid var(--line);border-radius:var(--radius);background-color:var(--sheet);font-size:1rem;appearance:none;-webkit-appearance:none;background-image:linear-gradient(45deg,transparent 50%,var(--brass) 50%),linear-gradient(135deg,var(--brass) 50%,transparent 50%);background-position:calc(100% - 18px) 50%,calc(100% - 12px) 50%;background-size:6px 6px,6px 6px;background-repeat:no-repeat}
+.linkbtn{align-self:flex-start;background:none;border:0;padding:6px 0;min-height:36px;font-family:var(--display);font-size:.9rem;color:var(--b);text-decoration:underline;text-underline-offset:3px}
+.wfield .picked{margin:0}
+details.fine{margin-top:18px;border:1.5px solid var(--line);border-radius:var(--radius);background:var(--sheet)}
+details.fine > summary{cursor:pointer;list-style:none;display:flex;align-items:center;gap:8px;min-height:48px;padding:10px 14px;font-family:var(--display);font-weight:600;font-size:1.02rem}
+details.fine > summary::-webkit-details-marker{display:none}
+details.fine > summary::after{content:"";margin-left:auto;width:.55rem;height:.55rem;border-right:2px solid var(--brass);border-bottom:2px solid var(--brass);transform:rotate(45deg);transition:transform .2s}
+details.fine[open] > summary::after{transform:rotate(225deg)}
+.fine-b{padding:0 14px 16px}
+.fine-b h3{margin:18px 0 8px}
+.person h4{font-family:var(--display);font-weight:600;font-size:1.05rem;margin:0;color:var(--pc)}
+.person .field{margin-top:10px}
+details.fits > summary{cursor:pointer;font-family:var(--display);font-weight:600;font-size:1.05rem}
+details.fits > summary .step{display:inline;margin-right:8px}
+@media (prefers-reduced-motion:reduce){details.fine > summary::after{transition:none}}
 
 /* Results */
 #results{margin-top:28px}
@@ -279,202 +316,112 @@ q.w{quotes:"\201C" "\201D";font-family:var(--mono);font-size:.8rem;background:co
 <script src="/assets/js/site.js" defer></script>
 </head>
 <body>
+<a class="skip" href="#phrase">Jump to your sentence</a>
 <div class="wrap">
   <div class="sitebar">
-    <a class="mark" href="index.html">The Objective Ledger<small>TOL&#8209;OS &middot; TOOLS</small></a>
+    <a class="mark" href="index.html">The Objective Ledger<small>TOOLS</small></a>
     <a class="back" href="wired-differently.html">&larr; Read: Wired Differently</a>
   </div>
 
+  <main id="main">
   <header class="top">
     <div class="kicker">Tool &middot; Pairs with <a href="wired-differently.html">Wired Differently</a> and <a href="book/chapter-1.html">Chapter I</a></div>
     <h1>The Signal Translator</h1>
-    <p class="lede">This tool shows the mechanics of a sentence. How you may be interpreted. How you may interpret someone else. And a matching sentence both of you are more likely to receive the same way.</p>
-    <p class="pillar-note">Part of the <a href="five-pillars.html">Five Pillars</a>: this is <a href="five-pillars.html#tune-signals">Pillar IV, Tune how you send and receive</a>. It looks at how a sentence is built (pressure words, questions that carry a complaint, absolutes, hints, a missing when) and how that structure may land for someone wired differently. Timing and state are <a href="five-pillars.html#read-your-state">Pillar III, Read your state first</a>.</p>
-    <p class="privacy">Runs entirely in your browser. Nothing you type is saved, stored or sent anywhere. Talking notes live only in this tab until you save the PDF.</p>
-    <aside class="use-banner" aria-labelledby="bestUse">
-      <p class="eyebrow" id="bestUse">WHERE IT FITS</p>
-      <p class="big">Use it anywhere a sentence has to cross from one person to another. Inside the program, or with no program at all.</p>
-      <ul class="use-list">
-        <li><strong>In the program.</strong> A check-in, a weekly resync, a WP-09 message, the line you wish you had used, or the sentence you will say when you come back from a pause. After the ladder says you can hear. Once a wiring card exists, test the sentence, not the person.</li>
-        <li><strong>Outside it.</strong> A text or email you have not sent. A note to a coworker, a teacher, a landlord, a doctor, or a friend. A family dinner, a co-parent handoff, a meeting. Or just learning how you hear, with no conversation planned.</li>
-      </ul>
-      <p class="sub">Do not read a score out loud at the other person. You can add more than one sentence to the <a href="#notes">talking notes</a>. How to build them, and when the list is getting heavy, is on <a href="check-ins.html#notes">Check-ins</a>.</p>
-      <div class="jobs">
-        <article><strong>How you are interpreted</strong><p>You speak. The read shows what the other person's wiring may do with those words.</p></article>
-        <article><strong>How you interpret them</strong><p>Paste their reply, or try the reverse. The same sentence can be a different signal on the way back.</p></article>
-        <article><strong>A matching language</strong><p>A sentence that keeps the fact and the ask, and drops the part only one wiring can hear.</p></article>
-      </div>
-    </aside>
+    <p class="lede">Type what you plan to say or send. See how it may land, and get a clearer version that keeps your ask. Everything else is optional.</p>
+    <p class="pillar-note">This is <a href="five-pillars.html#tune-signals">Pillar IV, Tune how you send and receive</a>, one of the <a href="five-pillars.html">Five Pillars</a>.</p>
   </header>
 
-  
-<section class="panel" aria-labelledby="whenH">
-    <span class="step">BEFORE YOU START</span>
-    <h2 id="whenH">When are you using this?</h2>
-    <p class="hint">The translator is a preparation tool. The best time is before the conversation, when both of you can still choose the room. Pick the use. The note under the buttons says what to do with it.</p>
-    <div class="seg rel" id="use" role="group" aria-labelledby="whenH">
-      <button type="button" data-use="checkin" aria-pressed="true">Before a planned talk<small>A check-in, a resync, or any named time.</small></button>
-      <button type="button" data-use="talk" aria-pressed="false">Before a hard conversation<small>Planned. Not in the spike.</small></button>
-      <button type="button" data-use="send" aria-pressed="false">Before you send it<small>A text, email, or note.</small></button>
-      <button type="button" data-use="after" aria-pressed="false">After a miss, before you answer<small>You already have their words.</small></button>
-      <button type="button" data-use="learn" aria-pressed="false">To learn the mechanics<small>How you are heard, and how you hear.</small></button>
-      <button type="button" data-use="now" aria-pressed="false">It is already a fight<small>Do not open this in their face.</small></button>
-    </div>
-    <p class="hint" id="useNote" style="margin-top:12px"></p>
-  </section>
-
-  <!-- STEP 1: PEOPLE -->
-  <section class="panel" aria-labelledby="s1">
-    <span class="step">STEP 1</span>
-    <h2 id="s1">Who's talking to whom?</h2>
-    <p class="hint">Pick everything that fits each person. Combinations are common. Autism and ADHD, for example, often occur together. If you're not sure, choose what you know and leave the rest blank. The last two groups aren't neurotypes in the strict sense, but they change how words land just as much.</p>
-    <div class="people">
-      <div class="person pa" id="personA">
-        <div class="who"><h3 id="whoA">You</h3><span class="role">THE SPEAKER · SENDS THE MESSAGE</span></div>
-        <label class="namefield">Name (optional) <input type="text" id="nameA" maxlength="24" placeholder="You" autocomplete="off"></label>
-        <div data-chips="A"></div>
-        <p class="picked" id="pickedA" aria-live="polite"></p>
-      </div>
-      <div class="swapcol"><button class="swap" id="swap" type="button" title="Swap you and the other person">&#8646; Swap</button></div>
-      <div class="person pb" id="personB">
-        <div class="who"><h3>Person B</h3><span class="role">THE LISTENER · RECEIVES THE MESSAGE</span></div>
-        <label class="namefield">Name (optional) <input type="text" id="nameB" maxlength="24" placeholder="Person B" autocomplete="off"></label>
-        <div data-chips="B"></div>
-        <p class="picked" id="pickedB" aria-live="polite"></p>
-      </div>
-    </div>
-  </section>
-
-  <!-- STEP 2: CONTEXT -->
-  <section class="panel" aria-labelledby="s2">
-    <span class="step">STEP 2</span>
-    <h2 id="s2">How, when, and in what relationship?</h2>
-    <div class="ctx">
-      <div class="relrow">
-        <span class="lab" id="relLab">Relationship</span>
-        <p class="hint">Optional. The same sentence can be a loose plan between friends and a broken agreement between partners. <a href="wired-differently.html#dynamics">What these dynamics are, and why they exist</a>.</p>
-        <div class="seg rel" id="rel" role="group" aria-labelledby="relLab">
-          <button type="button" data-rel="partner" aria-pressed="false">Partners<small>Sharing a life</small></button>
-          <button type="button" data-rel="family" aria-pressed="false">Family<small>Kin and shared history</small></button>
-          <button type="button" data-rel="coparent" aria-pressed="false">Co-parents<small>Raising a child</small></button>
-          <button type="button" data-rel="friend" aria-pressed="false">Friends<small>Chosen, no contract</small></button>
-          <button type="button" data-rel="roommate" aria-pressed="false">Roommates<small>A home, not a life</small></button>
-          <button type="button" data-rel="coworker" aria-pressed="false">Coworkers<small>Shared work</small></button>
-          <button type="button" data-rel="caregiver" aria-pressed="false">Caregivers<small>Shared care</small></button>
-        </div>
-      </div>
-      <div>
-        <span class="lab" id="chLab">Channel</span>
-        <div class="seg" id="channel" role="group" aria-labelledby="chLab">
-          <button type="button" data-ch="person" aria-pressed="true">In person</button>
-          <button type="button" data-ch="phone" aria-pressed="false">Phone or video</button>
-          <button type="button" data-ch="text" aria-pressed="false">Text message</button>
-          <button type="button" data-ch="email" aria-pressed="false">Email or long note</button>
-        </div>
-      </div>
-      <div>
-        <span class="lab" id="stLab">Listener's state right now</span>
-        <div class="states" id="state" role="group" aria-labelledby="stLab">
-          <button type="button" class="st" data-s="v" aria-pressed="true"><span class="n">Settled</span><span class="h">Calm, connected, can take things in</span></button>
-          <button type="button" class="st" data-s="s" aria-pressed="false"><span class="n">Mobilized</span><span class="h">Stressed, on edge, braced</span></button>
-          <button type="button" class="st" data-s="d" aria-pressed="false"><span class="n">Shut down</span><span class="h">Flat, overloaded, far away</span></button>
-        </div>
-        <p class="hint" style="margin:6px 0 0">This is Pillar III, Read your state first: the same words land harder on a braced or shut-down body. Not sure? The <a href="quick-checks.html#ladder">Nervous System Ladder</a> takes thirty seconds.</p>
-      </div>
-    </div>
-  </section>
-
-  <section class="panel" aria-labelledby="s2b">
-    <span class="step">STEP 3</span>
-    <h2 id="s2b">What is the situation, and where are you?</h2>
-    <p class="hint">The words are only part of it. A calm kitchen and a parking lot after a fight are different rooms, even with the same sentence. Leave a row blank if you are not sure. <a href="wired-differently.html#situation">How to settle a hard moment without erasing either person</a>.</p>
-    <div class="relrow" style="margin-bottom:16px">
-      <span class="lab" id="sitLab">Situation</span>
-      <div class="seg rel" id="sit" role="group" aria-labelledby="sitLab">
-        <button type="button" data-sit="ordinary" aria-pressed="false">Ordinary exchange<small>A normal ask or update</small></button>
-        <button type="button" data-sit="repair" aria-pressed="false">Repair<small>Coming back after a miss</small></button>
-        <button type="button" data-sit="argument" aria-pressed="false">Active argument<small>It is happening now</small></button>
-        <button type="button" data-sit="after" aria-pressed="false">Just after a blow-up<small>The spike already happened</small></button>
-        <button type="button" data-sit="decision" aria-pressed="false">A decision is due<small>Someone needs an answer</small></button>
-        <button type="button" data-sit="bond" aria-pressed="false">Bond feels at risk<small>Fear of losing the person</small></button>
-        <button type="button" data-sit="news" aria-pressed="false">Bad news or a crisis<small>A fact, not a score</small></button>
-      </div>
-    </div>
-    <div class="relrow" style="margin-bottom:16px">
-      <span class="lab" id="envLab">Environment</span>
-      <div class="seg rel" id="env" role="group" aria-labelledby="envLab">
-        <button type="button" data-env="calm" aria-pressed="false">Private and calm<small>A room that can hold it</small></button>
-        <button type="button" data-env="charged" aria-pressed="false">Private but charged<small>Door closed, air not</small></button>
-        <button type="button" data-env="public" aria-pressed="false">Public<small>An audience is present</small></button>
-        <button type="button" data-env="kids" aria-pressed="false">Around children<small>They borrow the alarm</small></button>
-        <button type="button" data-env="work" aria-pressed="false">At work<small>Task channel, not a therapy room</small></button>
-        <button type="button" data-env="depleted" aria-pressed="false">Depleted<small>Late, hungry, tired, overloaded</small></button>
-        <button type="button" data-env="apart" aria-pressed="false">Apart<small>Different rooms, or not together</small></button>
-        <button type="button" data-env="substances" aria-pressed="false">Substances<small>Alcohol or anything altering</small></button>
-      </div>
-    </div>
-    <span class="lab">What each person needs in a hard moment</span>
-    <p class="hint">These can differ. One person may need the bond confirmed now, because silence feels like losing you. The other may need space before they can think. Both can be cared for. Neither cancels the other. A hug is never owed.</p>
-    <div class="needrow">
-      <div>
-        <span class="lab" id="needALab">You need</span>
-        <div class="seg rel" id="needA" role="group" aria-labelledby="needALab">
-          <button type="button" data-need="now" aria-pressed="false">To resolve it now</button>
-          <button type="button" data-need="bond" aria-pressed="false">A signal the bond is okay</button>
-          <button type="button" data-need="space" aria-pressed="false">Space before talking</button>
-          <button type="button" data-need="heard" aria-pressed="false">To be heard first</button>
-          <button type="button" data-need="plan" aria-pressed="false">A concrete plan</button>
-          <button type="button" data-need="quiet" aria-pressed="false">Quiet company</button>
-          <button type="button" data-need="touch" aria-pressed="false">A gesture, if welcome</button>
-        </div>
-      </div>
-      <div>
-        <span class="lab" id="needBLab">Person B needs</span>
-        <div class="seg rel" id="needB" role="group" aria-labelledby="needBLab">
-          <button type="button" data-need="now" aria-pressed="false">To resolve it now</button>
-          <button type="button" data-need="bond" aria-pressed="false">A signal the bond is okay</button>
-          <button type="button" data-need="space" aria-pressed="false">Space before talking</button>
-          <button type="button" data-need="heard" aria-pressed="false">To be heard first</button>
-          <button type="button" data-need="plan" aria-pressed="false">A concrete plan</button>
-          <button type="button" data-need="quiet" aria-pressed="false">Quiet company</button>
-          <button type="button" data-need="touch" aria-pressed="false">A gesture, if welcome</button>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- STEP 4: PHRASE -->
-  <section class="panel" aria-labelledby="s3">
-    <span class="step">STEP 4</span>
-    <h2 id="s3">Write the sentence you plan to say</h2>
-    <p class="s4lead">Steps 1 to 3 set the people and the room. This step is the words, and you can run it again for every sentence you might say. Translate one, add it to the page you take in, then write the next. The people and the room stay. Only the sentence clears.</p>
-    <div class="s4main">
-      <span class="n req">REQUIRED</span>
-      <label for="phrase" class="lab" id="phraseLab">The sentence</label>
-      <p class="hint" id="phraseHint">Type it the way it would actually come out. One sentence is enough. Add the ask in a second sentence if you need to.</p>
-      <textarea id="phrase" placeholder="The exact words, as they would be said or sent." maxlength="1500"></textarea>
-      <div class="presets" id="presets" aria-label="Example phrases"></div>
-    </div>
-    <p class="s4note">Two optional notes. Skip both if you only have the sentence.</p>
-    <div class="s4split">
-      <div class="s4box">
-        <span class="n">OPTIONAL</span>
-        <label for="facts" class="lab" id="factsLab">What happened</label>
-        <p class="hint">The event, in plain facts, so the sentence is about one thing. This is not the sentence that gets translated. "The dishes were still in the sink" is a fact. "You never help" is a criticism of the person.</p>
-        <textarea id="facts" class="short" placeholder="One or two plain sentences. Leave blank if you do not need it." maxlength="800"></textarea>
-      </div>
-      <div class="s4box">
-        <span class="n">OPTIONAL</span>
-        <label for="reply" class="lab" id="replyLab">What they already said</label>
-        <p class="hint" id="replyHint">Only if they have already answered. One reply, not the thread. After you translate, Try the reverse shows how you may interpret them.</p>
-        <textarea id="reply" class="short" placeholder="Paste one reply, or leave this blank." maxlength="1500"></textarea>
-      </div>
+  <!-- THE SENTENCE (first) -->
+  <section class="panel s4panel" aria-labelledby="s3">
+    <h2 id="s3"><label for="phrase" id="phraseLab">Type your sentence</label></h2>
+    <p class="hint" id="phraseHint">Type it the way it would actually come out. A text, a Slack message, or something you plan to say out loud.</p>
+    <textarea id="phrase" placeholder="The exact words, as they would be said or sent." maxlength="1500" aria-describedby="phraseHint msg"></textarea>
+    <div class="field presetrow">
+      <label for="presetSel">Or try an example</label>
+      <select id="presetSel"></select>
     </div>
     <div class="actions">
-      <button class="go" id="go" type="button">Translate the sentence</button>
+      <button class="go" id="go" type="button">Translate</button>
       <button class="ghost" id="reset" type="button">Start over</button>
       <span class="msg" id="msg" role="alert"></span>
     </div>
+
+    <div class="quick">
+      <div class="field">
+        <label for="useSel">What is this for?</label>
+        <select id="useSel"></select>
+      </div>
+      <div class="field wfield" data-wiring="B"></div>
+      <div class="field">
+        <label for="relSel">Relationship</label>
+        <select id="relSel"></select>
+      </div>
+      <div class="field">
+        <label for="chSel">Channel</label>
+        <select id="chSel"></select>
+      </div>
+    </div>
+    <p class="hint" id="useNote" style="margin:10px 0 0"></p>
+
+    <details class="fine" id="fine">
+      <summary>Fine-tune (optional)</summary>
+      <div class="fine-b">
+        <p class="hint">Leave any of these on "Not sure / skip". Each one only sharpens the reading. <a href="wired-differently.html#dynamics">What the relationships mean</a> &middot; <a href="wired-differently.html#situation">Situation and room</a>.</p>
+        <h3>The people</h3>
+        <div class="people">
+          <div class="person pa" id="personA">
+            <div class="who"><h4 id="whoA">You</h4><span class="role">THE SPEAKER &middot; SENDS THE MESSAGE</span></div>
+            <div class="field"><label for="nameA">Your name (optional)</label><input type="text" id="nameA" maxlength="24" placeholder="You" autocomplete="off"></div>
+            <div class="field wfield" data-wiring="A"></div>
+          </div>
+          <div class="swapcol"><button class="swap" id="swap" type="button" title="Swap you and the other person">&#8646; Swap speaker and listener</button></div>
+          <div class="person pb" id="personB">
+            <div class="who"><h4 id="whoB">Person B</h4><span class="role">THE LISTENER &middot; RECEIVES THE MESSAGE</span></div>
+            <div class="field"><label for="nameB">Their name (optional)</label><input type="text" id="nameB" maxlength="24" placeholder="Person B" autocomplete="off"></div>
+            <p class="small">Their wiring is set above, under "Listener's wiring".</p>
+          </div>
+        </div>
+        <h3>The moment</h3>
+        <div class="grid2">
+          <div class="field">
+            <label for="stateSel">Listener's state right now</label>
+            <select id="stateSel"></select>
+            <p class="hint" style="margin:4px 0 0">This is <a href="five-pillars.html#read-your-state">Pillar III, Read your state first</a>: the same words land harder on someone who is stressed or worn out. Not sure? The <a href="quick-checks.html#ladder">thirty-second state check</a> helps.</p>
+          </div>
+          <div class="field">
+            <label for="sitSel">Situation</label>
+            <select id="sitSel"></select>
+          </div>
+          <div class="field">
+            <label for="envSel">Where you are</label>
+            <select id="envSel"></select>
+          </div>
+          <div class="field">
+            <label for="needASel" id="needALab">What you need in a hard moment</label>
+            <select id="needASel"></select>
+          </div>
+          <div class="field">
+            <label for="needBSel" id="needBLab">What Person B needs in a hard moment</label>
+            <select id="needBSel"></select>
+          </div>
+        </div>
+        <p class="hint">Needs can differ. One person may need the bond confirmed now. The other may need space before they can think. Both can be cared for. A hug is never owed.</p>
+        <h3>Two optional notes</h3>
+        <div class="s4split">
+          <div class="s4box">
+            <label for="facts" class="lab" id="factsLab">What happened</label>
+            <p class="hint" id="factsHint">The event, in plain facts, so the sentence is about one thing. "The dishes were still in the sink" is a fact. "You never help" is a criticism of the person.</p>
+            <textarea id="facts" class="short" placeholder="One or two plain sentences. Leave blank if you do not need it." maxlength="800" aria-describedby="factsHint"></textarea>
+          </div>
+          <div class="s4box">
+            <label for="reply" class="lab" id="replyLab">What they already said</label>
+            <p class="hint" id="replyHint">Only if they have already answered. One reply, not the thread. After you translate, Try the reverse shows how you may read them.</p>
+            <textarea id="reply" class="short" placeholder="Paste one reply, or leave this blank." maxlength="1500" aria-describedby="replyHint"></textarea>
+          </div>
+        </div>
+        <div class="actions"><button class="go" id="go2" type="button">Translate</button></div>
+      </div>
+    </details>
   </section>
 
   <!-- RESULTS -->
@@ -483,7 +430,7 @@ q.w{quotes:"\201C" "\201D";font-family:var(--mono);font-size:.8rem;background:co
   <section class="panel" id="notes" aria-labelledby="sheetH">
     <span class="step">TAKE THIS INTO THE ROOM</span>
     <h2 id="sheetH">Talking notes</h2>
-    <p class="s4lead">Run Step 4 once for each sentence. Add it here, then write the next. This page is what you print. The score stays off it. How to choose what belongs on the list is on <a href="check-ins.html#notes">Check-ins</a>.</p>
+    <p class="s4lead">Translate one sentence at a time. Add it here, then write the next. This page is what you print. The score stays off it. How to choose what belongs on the list is on <a href="check-ins.html#notes">Check-ins</a>.</p>
     <div class="actions">
       <button class="go" id="writeNext" type="button">Write the next sentence</button>
       <button class="ghost" id="sortNotes" type="button">Put say-first, lighter ones on top</button>
@@ -495,7 +442,7 @@ q.w{quotes:"\201C" "\201D";font-family:var(--mono);font-size:.8rem;background:co
       <p>"We will start with one sentence. I am not against you. I do not think you meant harm. If we pause, we come back at a time we name now."</p>
       <p>Return time, if you need it: _______________</p>
     </div>
-    <p class="hint" id="agendaEmpty">No sentences yet. Translate one in Step 4, add it, then use Write the next sentence for the one after that.</p>
+    <p class="hint" id="agendaEmpty">No sentences yet. Translate one above, add it, then use Write the next sentence for the one after that.</p>
     <div id="agendaList"></div>
     <p class="load-note" id="loadNote" hidden></p>
     <div class="sheet-card">
@@ -507,7 +454,7 @@ q.w{quotes:"\201C" "\201D";font-family:var(--mono);font-size:.8rem;background:co
         <li>They name how it landed. You say it back. "That can make sense" means you heard them. It does not mean you are guilty, and it does not mean they have to drop it.</li>
         <li>Switch. Same moves the other way. One side heard is not a conversation. Do not skip their turn because you already know what you meant.</li>
         <li>Only then, if a fact is still missing: "Your fact, as I heard it. My part. One fact I want added. I am not asking you to cancel how it landed."</li>
-        <li>One ask that works for both. One owner. One time. Then stop. If another sentence is on this page, ask whether both bodies can hold it. If not, park it.</li>
+        <li>One ask that works for both. One owner. One time. Then stop. If another sentence is on this page, ask whether both of you can still take it in. If not, park it.</li>
       </ol>
       <p>Do not invalidate. "You're too sensitive," "that isn't what happened," and "I didn't mean it, so it doesn't count" end the hearing. Intent can be said after they have been mirrored, not instead of it. The longer order is on <a href="check-ins.html">Check-ins</a>. The mirror-before-answer step is the speaker-listener order (<a href="https://www.family-institute.org/behavioral-health-resources/trouble-communicating-your-partner-top-five-tips-couples-therapist">Family Institute</a>). Complain about the event, not the person (<a href="https://www.gottman.com/blog/manage-conflict-the-six-skills/">Gottman Institute</a>).</p>
     </div>
@@ -515,7 +462,7 @@ q.w{quotes:"\201C" "\201D";font-family:var(--mono);font-size:.8rem;background:co
       <article>
         <h3>Check-in</h3>
         <ul>
-          <li>Named time. Settled bodies. One room.</li>
+          <li>Named time. Both of you settled. One room.</li>
           <li>Start with sentence 1. Stop.</li>
           <li>Mirror before any answer.</li>
           <li>Then their turn, the same way.</li>
@@ -528,7 +475,7 @@ q.w{quotes:"\201C" "\201D";font-family:var(--mono);font-size:.8rem;background:co
         <ul>
           <li>The event, not the person. No always, no never.</li>
           <li>Hearing them is not losing.</li>
-          <li>If the voice rises or a second topic arrives to win, stop.</li>
+          <li>If it gets heated, or a second topic arrives to win, stop.</li>
           <li>Pause. Name a return. Do not build the case.</li>
           <li>Come back to the same sentence.</li>
         </ul>
@@ -550,26 +497,45 @@ q.w{quotes:"\201C" "\201D";font-family:var(--mono);font-size:.8rem;background:co
     </div>
     <div class="sheet-card">
       <span class="sheet-k">WHEN TO REDIRECT, AND WHEN TO STOP</span>
-      <p><b>Redirect</b> when the voice rises, a second topic shows up to win, or they heard a verdict you did not mean. Say once: "That's real. We are still on this sentence. I am not against you." Then say the chosen sentence again, and stop.</p>
-      <p><b>Stop</b> when you repeat yourself, you go blank, they shut down, the room is not safe, or a note on this page says Stop. Say: "I need a pause. I am not leaving this. We are okay. I will come back at [time]." Do not finish the point.</p>
+      <p><b>Redirect</b> when it gets heated (a raised voice, or sharp replies in a thread), a second topic shows up to win, or they heard a verdict you did not mean. Say once: "That's real. We are still on this sentence. I am not against you." Then say the chosen sentence again, and stop.</p>
+      <p><b>Stop</b> when you repeat yourself, you go blank, they shut down or stop replying, the room is not safe, or a note on this page says Stop. Say: "I need a pause. I am not leaving this. We are okay. I will come back at [time]." Do not finish the point.</p>
     </div>
     <div class="sheet-card" id="derailCard">
       <span class="sheet-k">5. IF IT STARTS TO DERAIL</span>
       <p>Stop the topic. Do not finish the point.</p>
-      <p>Say: "I need a pause. I am not leaving this. We are okay. I will come back at [time]."</p>
-      <p>A flooded body often needs at least 20 minutes, and the return should not slip past the next day (<a href="https://www.gottman.com/blog/flooding-and-conflict-avoidance/">Gottman Institute</a>). Come back to the same topic. Do not open with what happened during the pause.</p>
+      <p>Say: "I need a pause. I am not leaving this. We are okay. I will come back at [time]." Say "we are okay" only if it's true. At work: "I'd like to pick this up at [time]."</p>
+      <p>Someone who is flooded often needs at least 20 minutes, and the return should not slip past the next day (<a href="https://www.gottman.com/blog/flooding-and-conflict-avoidance/">Gottman Institute</a>). Come back to the same topic. Do not open with what happened during the pause.</p>
       <p>Care does not require a solution. Lower your voice. Sit down. Get water. Put the phones away. If they asked for space, do not follow them, and do not send a stack of messages. One line is the signal. The return is the care.</p>
     </div>
     <p class="hint">Nothing on this sheet is stored. If you close the tab before you save the PDF, the sentences are gone. Leave the score at home. Write the next sentence does not erase what is already here.</p>
   </section>
 
+  <details class="panel fits" id="fits">
+    <summary><span class="step">WHERE IT FITS</span> When to use this tool, and what it is for</summary>
+    <p class="pillar-note">It looks at how a sentence is built (pressure words, questions that carry a complaint, absolutes, hints, a missing when) and how that structure may land for someone wired differently. That is <a href="five-pillars.html#tune-signals">Pillar IV, Tune how you send and receive</a>. Timing and state are <a href="five-pillars.html#read-your-state">Pillar III, Read your state first</a>. Inside you, it shows how you send. Between you and others, it helps the message you meant be the one that arrives.</p>
+    <div class="use-banner">
+      
+      <p class="big">Use it anywhere a sentence has to cross from one person to another. Inside the program, or with no program at all.</p>
+      <ul class="use-list">
+        <li><strong>In the program.</strong> A check-in, a weekly catch-up, a WP-09 message, the line you wish you had used, or the sentence you will say when you come back from a pause. Once you have both checked your state and can listen. Once a wiring card exists, test the sentence, not the person.</li>
+        <li><strong>Outside it.</strong> A text, email or Slack message you have not sent. A note to a coworker, a manager, a teacher, a landlord, a doctor, or a friend. A family dinner, a co-parent handoff, a meeting. Or just learning how you hear, with no conversation planned.</li>
+      </ul>
+      <p class="sub">Do not read a score out loud at the other person. You can add more than one sentence to the <a href="#notes">talking notes</a>. How to build them, and when the list is getting heavy, is on <a href="check-ins.html#notes">Check-ins</a>.</p>
+      <div class="jobs">
+        <article><strong>How you are interpreted</strong><p>You speak. The read shows what the other person's wiring may do with those words.</p></article>
+        <article><strong>How you interpret them</strong><p>Paste their reply, or try the reverse. The same sentence can be a different signal on the way back.</p></article>
+        <article><strong>A matching language</strong><p>A sentence that keeps the fact and the ask, and drops the part only one wiring can hear.</p></article>
+      </div>
+    </div>
+  </details>
   <div class="note">
     <b>What this tool is, and isn't.</b> It uses rules built from published research and lived-experience guidance, collected in <a href="wired-differently.html">Wired Differently</a>. It looks for patterns in the words, like hints, sarcasm, vague timing and labels, that commonly cause static for particular wirings. It can't hear tone, see faces or know your history, and it can't diagnose anyone. Every reading starts with "may" for a reason: people vary widely within every group. The best use is to find the question worth asking each other. It scores the wording, never the person.
   </div>
+  </main>
 </div>
 
 <footer class="sitefoot">
-  TOL&#8209;OS &middot; spreadloveandacceptance.com
+  The Objective Ledger &middot; spreadloveandacceptance.com
   <div class="links">
     <a href="index.html">Home</a>
     <a href="about.html">About</a>
@@ -639,14 +605,13 @@ const SRC = {
    ============================================================ */
 const E = window.SignalEngine;
 const F = E.F, FBY = E.FBY, NT = E.NT, CHECK = E.CHECK;
-const GROUPS = [
-  {id:"nd", label:"Neurodevelopmental", ids:["nt","autistic","adhd","dyslexic","dyspraxic","apd","dld","tourette"]},
-  {id:"trait", label:"Traits across wirings", ids:["alex","hsp"]},
-  {id:"cond", label:"Conditions that change how words land", ids:["anxiety","trauma","ocd"]}
-];
 const ND_DIVERGENT = ["autistic","adhd","dyslexic","dyspraxic","apd","dld","tourette"];
+/* every drop-down lists its choices in alphabetical order by what people see */
+const byLabel = (a,b)=>a.label.localeCompare(b.label, undefined, {sensitivity:"base"});
+const WIRING_IDS = Object.keys(NT).filter(id=>id!=="general").map(id=>({id, label:NT[id].name})).sort(byLabel).map(x=>x.id);
 
 const PRESETS = [
+  // home
   "You need to clean your room.",
   "Why didn't you tell me?",
   "We need to talk.",
@@ -661,36 +626,95 @@ const PRESETS = [
   "If you don't clean up, I'm leaving.",
   "Great job on dinner, but the kitchen is a mess.",
   "Oh great, that's just perfect.",
-  "I felt hurt when you missed dinner. Could you text me by 6 if you'll be late?"
-];
+  "I felt hurt when you missed dinner. Could you text me by 6 if you'll be late?",
+  "Lately it's felt like you don't do the dishes and I'm sick of it. Can you actually clean for once?",
+  // work
+  "Any update?",
+  "As previously stated, the budget is final.",
+  "Can we hop on a quick call?",
+  "Can you come to my office?",
+  "Circling back on this.",
+  "Going forward, please send drafts to me first.",
+  "Hey, can you take a look at this when you get a sec? No rush.",
+  "Just checking in.",
+  "ok",
+  "Per my last message, the deck is due EOD.",
+  "Please do this ASAP.",
+  "Reminder: timesheets are due Friday. Please also update the tracker, reply to the funder, and book the room for Tuesday.",
+  "Why is this still not done??"
+].map(t=>({value:t, label:t})).sort(byLabel);
+
+const USES = [
+  {value:"after", label:"After a miss, before you answer"},
+  {value:"talk", label:"Before a hard conversation"},
+  {value:"checkin", label:"Before a planned talk or check-in"},
+  {value:"send", label:"Before you send a message"},
+  {value:"now", label:"It's already a fight"},
+  {value:"learn", label:"To learn how it works"},
+  {value:"work", label:"Work message (Slack, Teams, email)"}
+].sort(byLabel);
+const CHANNELS = [
+  {value:"chat", label:"Chat (Slack / Teams)"},
+  {value:"email", label:"Email or long note"},
+  {value:"group", label:"Group channel (many listeners)"},
+  {value:"person", label:"In person"},
+  {value:"phone", label:"Phone or video"},
+  {value:"text", label:"Text / chat"}
+].sort(byLabel);
+const STATES = [
+  {value:"s", label:"Mobilized: stressed, on edge, braced"},
+  {value:"v", label:"Settled: calm, can take things in"},
+  {value:"d", label:"Shut down: flat, overloaded, far away"}
+].sort(byLabel);
+const WRITTEN = E.WRITTEN || ["text","chat","email","group"];
+const isWritten = ()=>WRITTEN.includes(channel);
+const isWork = ()=>relId==="coworker" || relId==="manager" || useId==="work" || envId==="work" || channel==="chat" || channel==="group";
 
 /* ============================================================
    STATE + UI
    ============================================================ */
 const sel = {A:new Set(), B:new Set()};
-let channel = "person", bstate = "v", relId = "", sitId = "", envId = "", needA = "", needB = "", useId = "checkin";
+let channel = "text", bstate = "v", stateKnown = false, relId = "", sitId = "", envId = "", needA = "", needB = "", useId = "send";
+let relTouched = false, chTouched = false;
 let agenda = [], lastTopic = null;
 const $ = s=>document.querySelector(s);
 const esc = s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[c]));
+function fillSelect(id, list, neutral){
+  $(id).innerHTML = (neutral?'<option value="">'+esc(neutral)+'</option>':'') + list.map(o=>'<option value="'+esc(o.value)+'">'+esc(o.label)+'</option>').join("");
+}
 
-function buildChips(who){
-  const host = document.querySelector('[data-chips="'+who+'"]');
-  host.innerHTML = GROUPS.map(g=>'<div class="grp">'+esc(g.label)+'</div><div class="chips" role="group" aria-label="'+esc(g.label)+' for Person '+who+'">'+
-    g.ids.map(id=>'<button type="button" class="chip" data-who="'+who+'" data-id="'+id+'" aria-pressed="false">'+esc(NT[id].name)+'</button>').join("")+'</div>').join("");
-  host.addEventListener("click",e=>{
-    const b=e.target.closest(".chip"); if(!b) return;
-    toggle(who,b.dataset.id);
+/* Wiring: one drop-down, plus up to two more with "+ Add another" (for
+   combinations such as autistic and ADHD). Same rules as before: picking
+   Neurotypical clears the neurodivergent picks, and the other way round. */
+function buildWiring(who){
+  const host = document.querySelector('[data-wiring="'+who+'"]');
+  const lab = who==="B" ? "Listener's wiring" : "Your wiring (the speaker)";
+  const opts = '<option value="">Not sure / skip</option>'+WIRING_IDS.map(id=>'<option value="'+id+'">'+esc(NT[id].name)+'</option>').join("");
+  host.innerHTML = [0,1,2].map(i=>'<div class="wrow'+(i?' extra':'')+'"'+(i?' hidden':'')+'><label for="w'+who+i+'">'+(i?'Also':lab)+'</label><select id="w'+who+i+'" data-who="'+who+'">'+opts+'</select></div>').join("")
+    +'<button type="button" class="linkbtn" id="add'+who+'">+ Add another</button><p class="picked" id="picked'+who+'" aria-live="polite"></p>';
+  host.addEventListener("change", e=>{ const s=e.target.closest("select"); if(s) readWiring(who, s); });
+  $("#add"+who).addEventListener("click", ()=>{
+    const hid=[...host.querySelectorAll(".extra")].find(x=>x.hidden);
+    if(hid){ hid.hidden=false; hid.querySelector("select").focus(); }
+    $("#add"+who).hidden = ![...host.querySelectorAll(".extra")].some(x=>x.hidden);
   });
 }
-function toggle(who,id){
-  const s=sel[who];
-  if(s.has(id)) s.delete(id);
-  else{
-    s.add(id);
-    if(id==="nt") ND_DIVERGENT.forEach(x=>s.delete(x));
-    if(ND_DIVERGENT.includes(id)) s.delete("nt");
+function wSelects(who){ return [0,1,2].map(i=>$("#w"+who+i)); }
+function readWiring(who, changed){
+  const sels = wSelects(who), v = changed.value;
+  if(v){
+    sels.forEach(s=>{ if(s!==changed && s.value===v) s.value=""; });
+    if(v==="nt") sels.forEach(s=>{ if(s!==changed && ND_DIVERGENT.includes(s.value)) s.value=""; });
+    if(ND_DIVERGENT.includes(v)) sels.forEach(s=>{ if(s!==changed && s.value==="nt") s.value=""; });
   }
-  sync();
+  sel[who] = new Set(sels.map(s=>s.value).filter(Boolean));
+  sync(); rerun();
+}
+function paintWiring(who){
+  const vals=[...sel[who]];
+  wSelects(who).forEach((s,i)=>{ s.value = vals[i]||""; if(i && vals[i]) s.parentNode.hidden=false; });
+  const host=document.querySelector('[data-wiring="'+who+'"]');
+  $("#add"+who).hidden = ![...host.querySelectorAll(".extra")].some(x=>x.hidden);
 }
 function nm(who){ const v=$("#name"+who).value.trim(); return v||(who==="A"?"You":"Person B"); }
 function listNames(set){
@@ -699,39 +723,30 @@ function listNames(set){
   if(arr.length===1) return arr[0];
   return arr.slice(0,-1).join(", ")+" and "+arr[arr.length-1];
 }
+const USE_NOTES = {
+  checkin:"Write the sentence, translate it, and add it to the talking notes. Add the next one the same way. Take the PDF in. Leave the score here.",
+  talk:"Use it the day of, or the day before, not in the doorway. One sentence on the sheet. If either of you is stressed or shut down, postpone.",
+  send:"Put the unsent message in the box. If the read is heavy, send the clearer version, or wait. Do not send the score.",
+  work:"Paste the Slack, Teams or email message before you send it. The reading assumes a coworker on a chat channel. Change the relationship if you are their manager.",
+  after:"Put their reply in the optional box (under Fine-tune) before you answer. The way back is where most second blow-ups start. Match their fact before you add yours.",
+  learn:"You do not need a meeting. Swap the people and run the same sentence both ways. Each listener is built for a different signal.",
+  now:"Do not build a case while it is happening. Close this, or save only the pause card. A score in the middle of a fight is a weapon. Care is the pause, the signal, and the return."
+};
 function sync(){
   ["A","B"].forEach(w=>{
-    document.querySelectorAll('.chip[data-who="'+w+'"]').forEach(b=>b.setAttribute("aria-pressed",sel[w].has(b.dataset.id)?"true":"false"));
     const s=sel[w];
-    $("#picked"+w).innerHTML = s.size ? "Selected: <b>"+esc(listNames(s))+"</b>"+(s.has("autistic")&&s.has("adhd")?" (AuDHD)":"") : "Nothing selected yet.";
+    $("#picked"+w).innerHTML = s.size ? "Reading for: <b>"+esc(listNames(s))+"</b>"+(s.has("autistic")&&s.has("adhd")?" (AuDHD)":"") : (w==="B" ? "Not sure: you'll get a general reading for most listeners." : "Not sure: that's fine.");
   });
   $("#whoA").textContent = nm("A");
-  $("#needALab").textContent = nm("A")+" need"+(nm("A")==="You"?"":"s");
+  $("#whoB").textContent = nm("B");
+  $("#needALab").textContent = (nm("A")==="You" ? "What you need" : "What "+nm("A")+" needs")+" in a hard moment";
+  $("#needBLab").textContent = "What "+nm("B")+" needs in a hard moment";
   const aSay = nm("A")==="You" ? "you" : nm("A");
-  $("#phraseLab").textContent = "The sentence "+aSay+" might say";
-  $("#s3").textContent = "Write the sentence you plan to say";
-  $("#phraseHint").textContent = "Type it the way "+aSay+" would actually say it to "+nm("B")+". Translate shows how "+nm("B")+" may receive it, and a matching sentence.";
   $("#replyLab").textContent = "What "+nm("B")+" already said";
-  $("#replyHint").textContent = "Only if "+nm("B")+" has already answered. One reply. After you translate, Try the reverse shows how "+aSay+" may interpret it.";
-  const notes={
-    checkin:"Write the sentence, translate it, and add it to the talking notes. Add the next one the same way. Take the PDF in. Leave the score here.",
-    talk:"Use it the day of, or the day before, not in the doorway. One sentence on the sheet. If either body is mobilized or shut down, postpone.",
-    send:"Put the unsent message in the sentence box. If the read is heavy, send the matching sentence, or wait. Do not send the score.",
-    after:"Put their reply in the optional box before you answer. The way back is where most second spikes start. Match their fact before you add yours.",
-    learn:"You do not need a meeting. Swap the people and run the same sentence both ways. That is the mechanic: each receiver is built for a different signal.",
-    now:"Do not build a case while it is happening. Close this, or save only the pause card. A score in the middle of a fight is a weapon. Care is the pause, the signal, and the return."
-  };
-  $("#useNote").textContent = notes[useId]||notes.checkin;
+  $("#replyHint").textContent = "Only if "+nm("B")+" has already answered. One reply. After you translate, Try the reverse shows how "+aSay+" may read it.";
+  $("#useNote").textContent = USE_NOTES[useId]||USE_NOTES.send;
 }
-
-function segBind(hostSel, attr, cb){
-  const host=$(hostSel);
-  host.addEventListener("click",e=>{
-    const b=e.target.closest("button"); if(!b) return;
-    host.querySelectorAll("button").forEach(x=>x.setAttribute("aria-pressed", x===b?"true":"false"));
-    cb(b.dataset[attr]);
-  });
-}
+function rerun(){ if(!$("#results").hidden && $("#phrase").value.trim()) run(); }
 
 /* ============================================================
    ANALYSIS
@@ -845,6 +860,14 @@ const REL = {
     fallback:"At work, a neutral sentence can still land as an instruction or a judgment of competence. Power changes the volume, even when the speaker didn't mean to use it.",
     say:"Put the ask, the owner and the deadline in the first lines. Separate the task from the person's worth.",
     care:"Use this among peers who agree to it. It is not a way for a manager to evaluate someone, and nothing here should become a performance record or HR note about anyone."
+  },
+  manager:{
+    label:"Manager and team member", anchor:"coworkers",
+    what:"One person leads or reviews the other's work. The words travel down (or up) a line of power, on a work channel, often in writing.",
+    why:"This dynamic exists because work needs someone to set priorities and check quality. The power is real even when the manager is kind: a short message from a manager can sound like a performance note, and a vague one can sound like trouble. A team member may not feel safe asking what it meant. Managers often write quickly between meetings, so the missing topic, time and reason get filled in by the reader.",
+    fallback:"From a manager, even a neutral sentence can land as an instruction or a mark against someone. A short message leaves room for the worst reading, because the reader can't easily ask.",
+    say:"Put the topic, the ask, the deadline and how serious it is in the first line. Say \"nothing's wrong\" when nothing is. Keep feedback about the work, not the person.",
+    care:"This is for writing clearer messages, not for evaluating anyone. Nothing here should become a performance record or HR note."
   },
   caregiver:{
     label:"Caregivers", anchor:"caregivers",
@@ -1026,7 +1049,8 @@ const REL_ORDER = ["hint","vtime","vstd","critic","label","blameq","ominous","mi
 function relHits(id, found){
   const lines=[];
   REL_ORDER.forEach(fid=>{
-    if(found[fid] && REL_LAND[fid] && REL_LAND[fid][id]) lines.push({fid, text:REL_LAND[fid][id]});
+    const land = REL_LAND[fid] && (REL_LAND[fid][id] || (id==="manager" ? REL_LAND[fid].coworker : null));
+    if(found[fid] && land) lines.push({fid, text:land});
   });
   return lines;
 }
@@ -1038,8 +1062,8 @@ function relHits(id, found){
 const SIT = {
   ordinary:{label:"Ordinary exchange", hot:0, note:"A low-stakes moment. Say the real ask. You do not need a repair ritual."},
   repair:{label:"Repair after a miss", hot:1, note:"Something already landed wrong. Lead with what you meant, then one ask. Do not add a new complaint."},
-  argument:{label:"Active argument", hot:2, note:"Both bodies are likely loud. The sentence will be heard at full volume. Settle bodies before you settle the point."},
-  after:{label:"Just after a blow-up", hot:2, note:"The spike already happened. The next sentence is either a bridge or a second hit. Keep it to one or two lines."},
+  argument:{label:"Active argument", hot:2, note:"You are both likely running hot. The sentence will be heard at full volume. Calm down together before you settle the point."},
+  after:{label:"Just after a blow-up", hot:2, note:"The blow-up already happened. The next sentence is either a bridge or a second hit. Keep it to one or two lines."},
   decision:{label:"A decision is due", hot:1, note:"Someone needs an answer, not a feeling-talk. Name the decision, the deadline, and what can wait."},
   bond:{label:"The bond feels at risk", hot:2, note:"Someone is reading this moment as 'I might lose you.' Ambiguous silence will land as abandonment, even if the other person only needed a minute."},
   news:{label:"Bad news or a crisis", hot:2, note:"This is not the moment to score the relationship. Say the fact, the next step, and whether you are still here."}
@@ -1050,18 +1074,18 @@ const ENV = {
   public:{label:"Public, or with an audience", hot:2, note:"Do not do the real conversation here. An audience makes people perform, and a public correction lands as shame."},
   kids:{label:"Around children", hot:2, note:"Children borrow the alarm. Move the adult talk. Tell them, in one plain sentence, that they are not in trouble and the adults will sort it."},
   work:{label:"At work", hot:2, note:"Keep it to the task. No hug, no therapy, no character read. A personal rupture does not belong on a work channel."},
-  depleted:{label:"Late, tired, hungry, or overloaded", hot:1, note:"A body this low cannot do a fair talk. Water, food, a lower light, or sleep will change the landing more than a better sentence."},
+  depleted:{label:"Late, tired, hungry, or overloaded", hot:1, note:"Running this low, nobody can do a fair talk. Water, food, a lower light, or sleep will change the landing more than a better sentence."},
   apart:{label:"Apart", hot:1, note:"You cannot offer a hand or a glass of water from another room. The return time has to be in the words, or the gap gets filled in as rejection."},
   substances:{label:"Alcohol or other substances", hot:3, note:"Do not resolve a relationship while anyone is altered. A sentence said now will be heard wrong, and may be used later. Name that you care, name the morning, and stop."}
 };
 const NEED = {
-  now:{label:"to resolve it now"},
-  bond:{label:"a signal the bond is okay"},
-  space:{label:"space before talking"},
-  heard:{label:"to be heard first"},
-  plan:{label:"a concrete plan"},
-  quiet:{label:"quiet company"},
-  touch:{label:"a settling gesture, if it is welcome"}
+  now:{label:"to resolve it now", pick:"To resolve it now"},
+  bond:{label:"a signal the bond is okay", pick:"A signal the bond is okay"},
+  space:{label:"space before talking", pick:"Space before talking"},
+  heard:{label:"to be heard first", pick:"To be heard first"},
+  plan:{label:"a concrete plan", pick:"A concrete plan"},
+  quiet:{label:"quiet company", pick:"Quiet company"},
+  touch:{label:"a settling gesture, if it is welcome", pick:"A gesture, if welcome"}
 };
 const NEED_GIVE = {
   now:"Finish one point only. Write the decision down so it does not have to be re-argued.",
@@ -1074,7 +1098,7 @@ const NEED_GIVE = {
 };
 
 function touchOk(){
-  if(envId==="work" || envId==="substances" || envId==="public" || envId==="kids" || relId==="coworker") return false;
+  if(envId==="work" || envId==="substances" || envId==="public" || envId==="kids" || relId==="coworker" || relId==="manager") return false;
   if(channel!=="person") return false;
   return true;
 }
@@ -1108,7 +1132,7 @@ function settleHTML(A, B){
   h += '<div class="box tone-v"><h3>How to settle this, on both sides<span class="sub">CARE FOR THEIR CONFLICT NEED, AND KEEP YOURS</span></h3>';
   if(sit) h += '<p><b>Situation.</b> '+esc(sit.label)+'. '+esc(sit.note)+'</p>';
   if(env) h += '<p><b>Environment.</b> '+esc(env.label)+'. '+esc(env.note)+'</p>';
-  if(!sit && !env) h += '<p class="small">Pick a situation and an environment in Step 3 to tailor this. The bridge below still applies whenever one person needs the bond confirmed and the other needs space.</p>';
+  if(!sit && !env) h += '<p class="small">Pick a situation and where you are, under Fine-tune, to tailor this. The bridge below still applies whenever one person needs the bond confirmed and the other needs space.</p>';
 
   h += '<p>Regulation is a two-person job. '+esc(A)+' can lower the volume, send one sentence, and not add a new complaint. '+esc(B)+' can name which need is loudest, instead of making the other person guess. Neither person has to abandon their need so the other can be comfortable. The skill is to meet the smaller need first, so the larger one becomes possible.</p>';
 
@@ -1143,15 +1167,15 @@ function settleHTML(A, B){
   if(envId==="substances") add("Stop the topic. Say you care and name the morning. Nothing decided now counts.");
   if(envId==="public") add("Leave the audience. 'Not here. Ten minutes, in the car or the other room.'");
   if(envId==="kids") add("One sentence to the children: 'You are not in trouble. The adults are going to talk and then come back.' Then leave the room.");
-  if(envId==="work" || relId==="coworker") add("At work, the settle is logistical: 'Let's take the task offline at [time], just the two of us.' No hug. No character read.");
-  if(envId==="depleted") add("Before more words: water, a snack, sitting down, or a lower light. A depleted body hears every sentence as an attack.");
-  if(envId==="apart" || channel==="text" || channel==="phone") add("From a distance, the little thing is a return time in the message itself. 'I am not done with you. I will reply at 8.' Then do it.");
+  if(envId==="work" || relId==="coworker" || relId==="manager") add("At work, the settle is logistical: 'Let's take the task offline at [time], just the two of us.' No hug. No character read.");
+  if(envId==="depleted" && !isWritten()) add("Before more words: water, a snack, sitting down, or a lower light. A depleted body hears every sentence as an attack.");
+  if(envId==="apart" || channel!=="person") add("From a distance, the little thing is a return time in the message itself. 'I am not done with you. I will reply at 8.' Then do it.");
   if(bstate==="d") add(B+" is shut down. No questions, no list, no 'why.' Offer quiet and a later time. Guidance on shutdowns is to wait until the person has recovered.");
-  if(bstate==="s") add(B+" is mobilized. Shorten it, slow it, and lead with reassurance, or wait. A braced body cannot audit a paragraph.");
-  if(sel.B.has("autistic") || sel.A.has("autistic")) add("Make the return literal: a clock time, not 'later.' 'I will be back at 8:15, in this room.'");
+  if(bstate==="s") add(B+" is stressed. Shorten it, slow it, and lead with reassurance, or wait. Someone braced for trouble cannot take in a paragraph.");
+  if(sel.B.has("autistic") || sel.A.has("autistic")) add(isWritten() ? "Make the return literal: a clock time, not 'later.' 'I will reply at 8:15.'" : "Make the return literal: a clock time, not 'later.' 'I will be back at 8:15, in this room.'");
   if(sel.B.has("adhd") || sel.A.has("adhd")) add("Write the return time where it will be seen. A spoken 'later' often becomes never, which then feels like rejection.");
   if(sel.B.has("anxiety") || sel.B.has("trauma") || sel.A.has("anxiety") || sel.A.has("trauma")) add("Close the loop before any pause. 'This is not me leaving' has to be said. Silence is the loudest signal for this wiring.");
-  if(sel.B.has("hsp") || sel.A.has("hsp")) add("Drop the volume and the overhead light if you can. For a highly sensitive nervous system, the room is part of the sentence.");
+  if((sel.B.has("hsp") || sel.A.has("hsp")) && !isWritten()) add("Drop the volume and the overhead light if you can. For a highly sensitive nervous system, the room is part of the sentence.");
   if(sel.B.has("alex") || sel.A.has("alex")) add("Skip 'how do you feel?' Offer a body choice: water, a walk, space, or company.");
   if(sel.B.has("ocd") || sel.A.has("ocd")) add("If you mean 'we are ok,' say it once, clearly. Do not hedge it. If you do not mean it, do not fake it. Agree later how repeat questions will be handled.");
   if(sitId==="decision") add("Settle the decision, not the whole relationship. One choice, one owner, one time. Feelings can have a second meeting.");
@@ -1160,12 +1184,12 @@ function settleHTML(A, B){
   if(relId==="coparent") add("If a child is the stake, keep the other parent out of the character judgment. Lead with the child's need, not the score.");
   if(relId==="caregiver") add("If someone is near empty from care, the settle is more support, not a sharper sentence. A pause is not a failing.");
   if(relId==="roommate") add("In a shared house, skip the hug unless that closeness already exists. The settle is the chore, the time, and a closed kitchen door.");
-  add("A stated pause is not the silent treatment. Name it, soothe during it, and come back. A flooded body often needs at least 20 minutes, and the return should not slip past the next day.");
-  if(!touchOk() && (needA==="touch" || needB==="touch" || sitId==="bond")) add("Touch is off the table in this room, or it cannot be assumed. Use words: 'We are ok. This is a pause.'");
-  else if(touchOk()) add("A hug, a hand on a shoulder, or a glass of water can settle a body faster than an explanation. Offer it. Do not take it if the answer is no, a flinch, or silence.");
+  add("A stated pause is not the silent treatment. Name it, soothe during it, and come back. Someone who is flooded often needs at least 20 minutes, and the return should not slip past the next day.");
+  if(!touchOk() && (needA==="touch" || needB==="touch" || sitId==="bond")) add(isWork() ? "At work, the signal is in words: 'This is a pause, not a problem between us. I'll come back to it at [time].'" : "Touch is off the table in this room, or it cannot be assumed. Use words: 'We are ok. This is a pause.' Only if it's true.");
+  else if(touchOk()) add("A hug, a hand on a shoulder, or a glass of water can settle someone faster than an explanation. Offer it. Do not take it if the answer is no, a flinch, or silence.");
 
   h += '<h3 style="margin-top:14px">Little things that settle the room</h3><ul class="ul">'+moves.slice(0,7).map(t=>'<li>'+esc(t)+'</li>').join("")+'</ul>';
-  h += '<p class="small">Your need counts too. Caring for someone else\'s fear of losing you does not mean you skip the pause your body requires. Their fear is real. Your limit is real. The nurture is the signal plus the return, not one person disappearing into the other\'s need. The <a href="quick-checks.html#ladder">Nervous System Ladder</a> and <a href="wp-11.html">WP-11</a> are for the body. The <a href="https://www.gottman.com/blog/flooding-and-conflict-avoidance/" target="_blank" rel="noopener">Gottman Institute</a> describes naming the break and coming back, rather than walking out in silence.</p>';
+  h += '<p class="small">Your need counts too. Caring for someone else\'s fear of losing you does not mean you skip the pause your body requires. Their fear is real. Your limit is real. The nurture is the signal plus the return, not one person disappearing into the other\'s need. The <a href="quick-checks.html#ladder">thirty-second state check</a> and <a href="wp-11.html">WP-11</a> help with that part. The <a href="https://www.gottman.com/blog/flooding-and-conflict-avoidance/" target="_blank" rel="noopener">Gottman Institute</a> describes naming the break and coming back, rather than walking out in silence.</p>';
   h += '<p class="small"><a href="wired-differently.html#situation">More on situation, environment, and caring for both needs</a></p>';
   h += '</div>';
   return h;
@@ -1173,7 +1197,7 @@ function settleHTML(A, B){
 
 function dynHTML(id, found, A, B){
   if(!id || !REL[id]){
-    return '<div class="box"><h3>The relationship changes the read<span class="sub">OPTIONAL, IN STEP 2</span></h3><p class="small">Wiring says how '+esc(B)+' may take the words in. The relationship says what those words threaten, or protect. The same sentence can be a loose plan between friends and a broken agreement between partners, because the cost of being direct is not the same in every arrangement. People often speak indirectly when they are not sure the other person agrees, to avoid a conflict that could strain the bond (<a href="'+SRC.achim[1]+'" target="_blank" rel="noopener">Achimova, Franke &amp; Butz, 2025</a>). Pick a relationship above to see how this phrase may land in that dynamic, what the dynamic is, and why it exists.</p></div>';
+    return '<div class="box"><h3>The relationship changes the read<span class="sub">OPTIONAL, PICK A RELATIONSHIP ABOVE</span></h3><p class="small">Wiring says how '+esc(B)+' may take the words in. The relationship says what those words threaten, or protect. The same sentence can be a loose plan between friends and a broken agreement between partners, because the cost of being direct is not the same in every arrangement. People often speak indirectly when they are not sure the other person agrees, to avoid a conflict that could strain the bond (<a href="'+SRC.achim[1]+'" target="_blank" rel="noopener">Achimova, Franke &amp; Butz, 2025</a>). Pick a relationship above to see how this phrase may land in that dynamic, what the dynamic is, and why it exists.</p></div>';
   }
   const r=REL[id];
   const hits=relHits(id, found).slice(0,3);
@@ -1190,7 +1214,7 @@ function dynHTML(id, found, A, B){
   h+='<p><b>A clearer way to say it here.</b> '+esc(r.say)+'</p>';
   const others=Object.keys(REL).filter(k=>k!==id).slice(0,3);
   // pick three contrasts that are most different: prefer ones with a hit, else the first three others is weak.
-  const prefer={partner:["friend","coworker","family"],family:["roommate","partner","friend"],coparent:["friend","partner","coworker"],friend:["partner","coworker","coparent"],roommate:["partner","family","friend"],coworker:["partner","friend","family"],caregiver:["friend","roommate","partner"]};
+  const prefer={partner:["friend","coworker","family"],family:["roommate","partner","friend"],coparent:["friend","partner","coworker"],friend:["partner","coworker","coparent"],roommate:["partner","family","friend"],coworker:["partner","friend","family"],manager:["coworker","friend","partner"],caregiver:["friend","roommate","partner"]};
   const show=(prefer[id]||others).slice(0,3);
   h+='<h3 style="margin-top:14px">How the same words can land elsewhere</h3>';
   h+='<ul class="dyn-list">'+show.map(oid=>{
@@ -1244,7 +1268,7 @@ function replyHTML(reply, A, B, phraseFound, phrase){
   h += '<p class="marked">'+markup(reply, spans)+'</p>';
   if(fids.length) h += '<ul class="flist">'+fids.map(id=>'<li>'+esc(FBY[id].name)+'</li>').join("")+'</ul>';
   if(lvl) h += '<p style="margin-top:10px"><b>'+lvl[1]+'</b> for '+esc(A)+'\'s wiring. This assumes '+esc(A)+' is settled. It may land harder if they are not.</p>';
-  else h += '<p class="small" style="margin-top:10px">Pick '+esc(A)+'\'s wiring in Step 1 to see how this reply may land for them.</p>';
+  else h += '<p class="small" style="margin-top:10px">Pick '+esc(A)+'\'s wiring under Fine-tune to see how this reply may land for them.</p>';
   const strongest = top.sort((x,y)=>y.w-x.w).filter((e,i,arr)=>arr.findIndex(z=>z.h===e.h)===i).slice(0,3);
   if(strongest.length){
     h += '<ul class="land">'+strongest.map(e=>'<li class="w'+e.w+'"><span class="fx">AS '+esc(NT[e.a].short.toUpperCase())+' · '+esc(FBY[e.fid].name.toUpperCase())+'</span><span class="heard">&ldquo;'+esc(e.h)+'&rdquo;</span><span class="y">'+esc(e.y)+'</span></li>').join("")+'</ul>';
@@ -1265,29 +1289,39 @@ function sayOptions(text, rw){
   const opts=[];
   const push=(o)=>{ if(!o.say) return; if(opts.some(x=>x.say.toLowerCase()===o.say.toLowerCase())) return; opts.push(o); };
   if(bstate==="d"||useId==="now"||envId==="substances"){
-    push({id:"wait", fit:"Do not say it now", why:"This state, or this room, cannot hold the sentence. The care is the pause and the return.", say:"I need a pause. I am not leaving this. We are okay. I will come back at [a time]."});
+    push({id:"wait", fit:isWritten()?"Do not send it now":"Do not say it now", why:"This state, or this room, cannot hold the sentence. The care is the pause and the return.", say:pauseLine()});
   }
   rw.variants.forEach(v=>push({id:v.id, fit:v.label, why:v.why, say:cleanSay(v.text)}));
   if(!rw.unchanged) push({id:"yours", fit:"Keep your own words", why:"Only if the versions above drop something you still mean. The static noted below may still get through.", say:text});
   return opts.slice(0,5);
 }
+/* the pause line fits the relationship: "we are okay" only between close people */
+function pauseLine(){
+  if(isWork()) return "I'd like to pick this up at [a time], when I can give it proper attention.";
+  const close = ["partner","family","friend","coparent"].includes(relId);
+  return "I need a pause. I am not leaving this. "+(close?"We are okay. ":"")+"I will come back at [a time].";
+}
 function cueFor(lvlId){
   const stop = useId==="now" || bstate==="d" || envId==="substances" || (lvlId==="heavy" && (bstate==="s" || sitId==="argument"));
   const redirect = !stop && (lvlId!=="clear" || sitId==="argument" || sitId==="bond" || (needA&&needB&&needA!==needB));
+  const w = isWritten();
+  const onSide = isWork() ? "I want to get this right." : "I am not against you.";
   if(stop) return {
     id:"stop", label:"Stop",
-    when:"Stop before the next sentence if a body has left the talk, the room is not safe, or you are already in the fight.",
-    how:"Say: I need a pause. I am not leaving this. We are okay. I will come back at [a time]. Do not finish the point. Do not follow if they asked for space."
+    when: w ? "Stop before sending more if the thread is heating up, they asked for space, or you are already in the fight."
+            : "Stop before the next sentence if either of you has checked out, the room is not safe, or you are already in the fight.",
+    how: (w ? "Send one line: " : "Say: ")+pauseLine()+(w ? " Then stop typing. Do not send a stack of messages." : " Do not finish the point. Do not follow if they asked for space.")
   };
   if(redirect) return {
     id:"redirect", label:"Redirect",
-    when:"Redirect if the voice rises, a second topic shows up to win, or they heard a verdict you did not mean.",
-    how:"Say once: That's real. We are still on this sentence. I am not against you. Then say the chosen sentence again, and stop."
+    when: w ? "Redirect if the reply turns sharp, a second topic shows up to win, or they read a verdict you did not mean."
+            : "Redirect if it gets heated, a second topic shows up to win, or they heard a verdict you did not mean.",
+    how: (w ? "Reply once: " : "Say once: ")+"That's fair. I'd like to stay on this one thing. "+onSide+" Then restate the clearer version, and stop."
   };
   return {
     id:"go", label:"Go",
-    when:"The words and the room can hold this sentence. Still stop if a body leaves.",
-    how:"Say the sentence you chose. Stop. Let them say what they heard before you add anything."
+    when: w ? "The words can carry this. If they go quiet or the reply turns sharp, pause and check in." : "The words and the room can hold this sentence. If either of you checks out, pause.",
+    how: w ? "Send the version you chose. Give them time to reply before you add anything." : "Say the sentence you chose. Stop. Let them say what they heard before you add anything."
   };
 }
 function drop(title, count, body, open, key){
@@ -1302,24 +1336,27 @@ const WIRING_SHORT = id=>NT[id] ? NT[id].short : id;
 function run(){
   const text=$("#phrase").value.trim();
   const msg=$("#msg"); msg.textContent="";
-  if(!sel.B.size){ msg.textContent="Pick at least one wiring for "+nm("B")+" (the listener) in Step 1."; $("#personB").scrollIntoView({behavior:"smooth",block:"center"}); return; }
-  if(!text){ msg.textContent="Type a sentence, or pick one of the examples."; $("#phrase").focus(); return; }
+  // the only thing needed is a sentence; "Not sure" wiring gives a general reading
+  if(!text){ msg.textContent="Type a sentence, or pick one of the examples."; $("#phrase").setAttribute("aria-invalid","true"); $("#phrase").focus(); return; }
+  $("#phrase").removeAttribute("aria-invalid");
 
   const A=nm("A"), B=nm("B");
   const an = E.analyze(text, {channel});
   const found = an.found, spans = an.spans, words = an.words;
   const fids = Object.keys(found);
-  const Bids=[...sel.B], Aids=[...sel.A];
+  const Bids = sel.B.size ? [...sel.B] : ["general"], Aids=[...sel.A];
+  const general = !sel.B.size;
   const sc = E.score(an, Bids, channel, bstate);
   const lvl = sc.level, pct = sc.pct;
   const strongest = sc.top;                       // readings with weight >= 1, loudest first
   const perB = E.readings(an, Bids, channel);
-  const rw = E.rewrite(an, {wirings:Bids, channel, bond: needB==="bond"||sitId==="bond"});
+  const rw = E.rewrite(an, {wirings:Bids, channel, rel:relId, bond: needB==="bond"||sitId==="bond"});
 
-  const chName={person:"in person",phone:"by phone or video",text:"by text",email:"by email or long note"}[channel];
+  const chName={person:"in person",phone:"by phone or video",text:"by text or chat",chat:"on a work chat (Slack or Teams)",group:"in a group channel",email:"by email or long note"}[channel];
+  const bWiring = general ? "wiring not chosen, general reading" : listNames(sel.B);
   const relName = relId && REL[relId] ? REL[relId].label.toLowerCase() : "";
   const ctxBits = [relName, sitId&&SIT[sitId]?SIT[sitId].label.toLowerCase():"", envId&&ENV[envId]?ENV[envId].label.toLowerCase():""].filter(Boolean);
-  const pairLine = '<p class="pair"><span class="pa">'+esc(A)+(Aids.length?' ('+esc(listNames(sel.A))+')':'')+'</span> &rarr; <span class="pb">'+esc(B)+' ('+esc(listNames(sel.B))+')</span>'+(ctxBits.length?' &middot; '+esc(ctxBits.join(", ")):'')+' &middot; '+chName+' &middot; '+esc(B)+' is '+STATE_NOTE[bstate][0].toLowerCase()+'</p>';
+  const pairLine = '<p class="pair"><span class="pa">'+esc(A)+(Aids.length?' ('+esc(listNames(sel.A))+')':'')+'</span> &rarr; <span class="pb">'+esc(B)+' ('+esc(bWiring)+')</span>'+(ctxBits.length?' &middot; '+esc(ctxBits.join(", ")):'')+' &middot; '+chName+(stateKnown?' &middot; '+esc(B)+' is '+STATE_NOTE[bstate][0].toLowerCase():'')+'</p>';
 
   /* ---------- 1. the sentence, taken apart ---------- */
   const staticIds = an.staticIds, goodIds = an.goodIds;
@@ -1357,23 +1394,27 @@ function run(){
   const whyBits=[];
   whyBits.push(staticIds.length ? staticIds.length+" pattern"+(staticIds.length>1?"s":"")+" that may add static." : "No known static patterns in the words.");
   if(goodIds.length) whyBits.push(goodIds.length+" thing"+(goodIds.length>1?"s":"")+" worth keeping.");
-  if(strongest.length) whyBits.push("Loudest for "+WIRING_SHORT(strongest[0].b)+": "+FBY[strongest[0].fid].name.toLowerCase()+".");
+  if(strongest.length) whyBits.push("Loudest"+(general?"":" for "+WIRING_SHORT(strongest[0].b))+": "+FBY[strongest[0].fid].name.toLowerCase()+".");
   if(bstate!=="v") whyBits.push(B+" is "+STATE_NOTE[bstate][0].toLowerCase()+", which makes everything land harder.");
   let p2 = '<div class="meter"><span class="lvl lvl-'+lvl[0]+'">'+lvl[1]+'</span><div class="track" role="img" aria-label="Static level: '+lvl[1]+'"><div class="fill lvl-'+lvl[0]+'" data-w="'+pct+'"></div></div><p class="why">'+esc(whyBits.join(" "))+'</p></div>';
   p2 += '<p class="small">Each reading is a <i>may</i>. People vary widely inside every wiring, and only '+esc(B)+' knows how it actually landed.</p>';
   Bids.forEach(b=>{
     const list=perB[b]||[];
-    p2+='<div class="receiver"><h4>If '+esc(B)+' is '+esc(WIRING_SHORT(b))+'</h4>';
+    p2+='<div class="receiver"><h4>'+(b==="general" ? 'For most listeners (wiring not chosen)' : 'If '+esc(B)+' is '+esc(WIRING_SHORT(b)))+'</h4>';
     if(list.length){
       p2+='<ul class="land">'+list.slice(0,7).map(e=>'<li class="w'+e.w+'"><span class="fx">'+esc(e.name.toUpperCase())+(e.words&&e.words.length&&!["multi","long","questions","nowhen"].includes(e.fid)?' &middot; &ldquo;'+esc(e.words[0])+'&rdquo;':'')+(e.w===0?' &middot; LIKELY LANDS AS MEANT':e.w===3?' &middot; HEAVY STATIC':e.w===2?' &middot; SOME STATIC':'')+'</span><span class="heard">&ldquo;'+esc(e.h)+'&rdquo;</span><span class="y">'+esc(e.y)+'</span></li>').join("")+'</ul>';
     } else {
       p2+='<p class="small">Nothing in these words is a known trouble spot for this wiring. '+esc(NT[b].sum)+'</p>';
     }
-    if(NT[b].ch && NT[b].ch[channel]) p2+='<p class="small"><b>About the channel:</b> '+esc(NT[b].ch[channel])+'</p>';
+    const chKey = E.chBase(channel);
+    if(NT[b].ch && NT[b].ch[chKey]) p2+='<p class="small"><b>About the channel:</b> '+esc(NT[b].ch[chKey])+'</p>';
     p2+='</div>';
   });
   combos(sel.B,"B").forEach(c=>{ p2+='<div class="receiver"><h4>'+esc(c[0])+'</h4><p class="small">'+esc(c[1])+'</p></div>'; });
-  p2+='<p class="small" style="margin-top:12px"><b>'+esc(STATE_NOTE[bstate][0])+':</b> '+esc(STATE_NOTE[bstate][1])+' <a href="five-pillars.html#read-your-state">Pillar III, Read your state first</a>.</p>';
+  if(channel==="group") p2+='<p class="small"><b>Many listeners:</b> in a group channel, everyone reads it, and each person hears it through their own wiring. A correction or a nudge can land as a public call-out. Keep the group message to the facts and the ask, and send anything about one person to them privately.</p>';
+  else if(channel==="chat") p2+='<p class="small"><b>Work chat:</b> short messages get read fast, between other things. Put the topic, the ask and the time in the first line.</p>';
+  if(stateKnown) p2+='<p class="small" style="margin-top:12px"><b>'+esc(STATE_NOTE[bstate][0])+':</b> '+esc(STATE_NOTE[bstate][1])+' <a href="five-pillars.html#read-your-state">Pillar III, Read your state first</a>.</p>';
+  else p2+='<p class="small" style="margin-top:12px">This assumes '+esc(B)+' is settled. If they are stressed or worn out, the same words land harder. You can set their state under Fine-tune. <a href="five-pillars.html#read-your-state">Pillar III, Read your state first</a>.</p>';
 
   /* ---------- 3. what changed ---------- */
   let p3 = '';
@@ -1394,7 +1435,7 @@ function run(){
   /* ---------- 4. what A may have meant ---------- */
   let p4='';
   if(!Aids.length){
-    p4+='<p class="small">Pick '+esc(A)+'\'s wiring in Step 1 to see how their wiring might shape what they meant.</p>';
+    p4+='<p class="small">Pick '+esc(A)+'\'s wiring under Fine-tune to see how their wiring might shape what they meant.</p>';
   } else {
     Aids.forEach(a=>{
       const notes=[]; fids.forEach(fid=>{ const m=NT[a].meant&&NT[a].meant[fid]; if(m && !notes.includes(m)) notes.push(m); });
@@ -1405,10 +1446,12 @@ function run(){
   p4+='<p class="small">Only '+esc(A)+' knows what they meant. This is a starting guess to check, not a verdict.</p>';
 
   /* ---------- 5. tips and check-backs ---------- */
-  const tips=[]; Bids.forEach(b=>NT[b].tips.slice(0,3).forEach(t=>{ if(!tips.includes(t)) tips.push(t); }));
+  const IN_PERSON = /\b(?:volume|voice|face|faces|eye contact|hug|touch|approach|behind|lip|mouth|sit down|lower light|the room|pace|pauses? happen|show rather)\b/i;
+  const tips=[]; Bids.forEach(b=>NT[b].tips.filter(t=>!(isWritten() && IN_PERSON.test(t))).slice(0,3).forEach(t=>{ if(!tips.includes(t)) tips.push(t); }));
+  if(isWritten() && !tips.length) tips.push("Put the ask, the time and the reason in the first line.");
   const checks=[]; strongest.forEach(e=>{ const c=CHECK[e.fid]; if(c && !checks.includes(c)) checks.push(c); });
   staticIds.forEach(fid=>{ const c=CHECK[fid]; if(c && !checks.includes(c)) checks.push(c); });
-  let p5 = '<div class="two"><div class="box"><h3>Speaking to '+esc(B)+'\'s wiring<span class="sub">WORKS BEYOND THIS ONE SENTENCE</span></h3><ul class="ul">'+tips.slice(0,9).map(t=>'<li>'+esc(t)+'</li>').join("")+'</ul></div>';
+  let p5 = '<div class="two"><div class="box"><h3>'+(general?'Writing for most listeners':'Speaking to '+esc(B)+'\'s wiring')+'<span class="sub">WORKS BEYOND THIS ONE SENTENCE</span></h3><ul class="ul">'+tips.slice(0,9).map(t=>'<li>'+esc(t)+'</li>').join("")+'</ul></div>';
   p5 += '<div class="box"><h3>If you\'re '+esc(B)+': a check-back<span class="sub">ASK INSTEAD OF DECODING</span></h3>';
   p5 += checks.length ? '<ul class="ul">'+checks.slice(0,3).map(c=>'<li>'+esc(c)+'</li>').join("")+'</ul>' : '<p class="small">"Here\'s what I heard: ___. Is that what you meant?"</p>';
   p5 += '<p class="small" style="margin-top:8px">A check-back is not an accusation. It\'s the fastest way to find out which reading was right.</p></div></div>';
@@ -1424,9 +1467,9 @@ function run(){
       srcKeys.push("nasDE","crompton","nature25");
     }
   } else {
-    p6+='<p class="small">Pick '+esc(A)+'\'s wiring too, and this shows how the static runs both ways.</p>';
+    p6+='<p class="small">Pick '+esc(A)+'\'s wiring under Fine-tune too, and this shows how the static runs both ways.</p>';
   }
-  Bids.concat(Aids).forEach(id=>srcKeys=srcKeys.concat(NT[id].src||[]));
+  Bids.concat(Aids).forEach(id=>srcKeys=srcKeys.concat((NT[id]&&NT[id].src)||[]));
   if(sel.B.has("autistic")&&sel.B.has("adhd")) srcKeys.push("autistica");
   if(bstate==="d") srcKeys.push("lpt");
   if(relId) srcKeys.push("achim");
@@ -1438,7 +1481,7 @@ function run(){
   const cue = cueFor(lvl[0]);
   const seenH=new Set(); const heard=strongest.filter(e=>{ if(seenH.has(e.h)) return false; seenH.add(e.h); return true; }).slice(0,3);
   const heardLines=heard.map(e=>e.h).slice(0,2);
-  const cond=[listNames(sel.B), STATE_NOTE[bstate][0].toLowerCase(), relName, sitId&&SIT[sitId]?SIT[sitId].label.toLowerCase():"", envId&&ENV[envId]?ENV[envId].label.toLowerCase():"", chName].filter(Boolean);
+  const cond=[general?"":bWiring, stateKnown?STATE_NOTE[bstate][0].toLowerCase():"", relName, sitId&&SIT[sitId]?SIT[sitId].label.toLowerCase():"", envId&&ENV[envId]?ENV[envId].label.toLowerCase():"", chName].filter(Boolean);
   const meantBits=[];
   Aids.forEach(a=>{
     const notes=[]; fids.forEach(fid=>{ const m=NT[a].meant&&NT[a].meant[fid]; if(m && !notes.includes(m)) notes.push(m); });
@@ -1446,7 +1489,8 @@ function run(){
   });
   const top = heard[0];
   const heardWhy = top ? top.y : (goodIds.length ? "The structure is clear: "+goodIds.map(id=>FBY[id].name.toLowerCase()).join(", ")+"." : "Nothing in the words is a known trouble spot for this wiring.");
-  const perceived = top ? top.h : "Close to what you meant.";
+  // the headline agrees with the flags: never "close to what you meant" while static is flagged
+  const perceived = top ? top.h : (staticIds.length ? "Mostly as you meant it, with a rough spot or two worth a look." : "Close to what you meant.");
   lastTopic={
     fact:$("#facts").value.trim(),
     phrase:text,
@@ -1464,9 +1508,9 @@ function run(){
   };
   let sum='<div class="takeaway" id="takeaway">';
   sum+='<div class="rhead"><h2 id="rTitle">The takeaway</h2>'+pairLine+'</div>';
-  sum+='<div class="tk-heard"><span class="tk-k">HOW IT MAY BE HEARD'+(top?' &middot; IF '+esc(B.toUpperCase())+' IS '+esc(WIRING_SHORT(top.b).toUpperCase()):'')+'</span><p class="quote">&ldquo;'+esc(perceived)+'&rdquo;</p><p class="small"><b>Why:</b> '+esc(heardWhy)+'</p>';
+  sum+='<div class="tk-heard"><span class="tk-k">HOW IT MAY BE HEARD'+(top?(top.b==="general"?' &middot; BY MOST LISTENERS':' &middot; IF '+esc(B.toUpperCase())+' IS '+esc(WIRING_SHORT(top.b).toUpperCase())):'')+'</span><p class="quote">&ldquo;'+esc(perceived)+'&rdquo;</p><p class="small"><b>Why:</b> '+esc(heardWhy)+'</p>';
   if(heard.length>1) sum+='<p class="small"><b>Also possible:</b> '+heard.slice(1).map(e=>'&ldquo;'+esc(e.h)+'&rdquo; ('+esc(FBY[e.fid].name.toLowerCase())+')').join(" &middot; ")+'</p>';
-  sum+='<p class="small">That uses '+esc(B)+'\'s wiring and the conditions you set: '+esc(cond.join(", "))+'. It is a may, not a verdict.</p></div>';
+  sum+='<p class="small">That uses '+(general?'a general reading':esc(B)+'\'s wiring')+' and the conditions you set: '+esc(cond.join(", "))+'. It is a may, not a verdict.'+(general?' Pick the listener\'s wiring above to sharpen it.':'')+'</p></div>';
   const askBits=[];
   if(an.asks.length) askBits.push('<span><b>The ask:</b> &ldquo;'+esc(an.asks[0].text)+'&rdquo;</span>');
   if(an.asks.length) askBits.push('<span><b>When:</b> '+(an.missing.when?'missing':'given')+'</span>');
@@ -1490,7 +1534,7 @@ function run(){
   h += drop("What "+esc(A)+" may have meant", Aids.length?"":"pick "+A+"'s wiring", p4, false, false);
   h += drop("In this relationship", relName||"optional", dynHTML(relId, found, A, B), false, false);
   h += drop("The room, and what each of you needs", "Pillar III", settleHTML(A, B), false, false);
-  h += drop("Speaking to "+esc(B)+"'s wiring, and checking back", "", p5, false, false);
+  h += drop(general ? "Writing for most listeners, and checking back" : "Speaking to "+esc(B)+"'s wiring, and checking back", "", p5, false, false);
   h += drop("The static runs both ways, and sources", "", p6, false, false);
   h += '<p class="small pillars">This tool is <a href="five-pillars.html#tune-signals">Pillar IV, Tune how you send and receive</a>: know how you send, and translate across wiring so the message you meant is the one that arrives. Stuck on the wording? <a href="ask.html">Ask Professor Puddles</a>.</p>';
   h += '<div class="rfoot"><button class="go" type="button" id="addTopic">'+(useId==="now"?"Save the pause card, not this read":"Add the sentence I chose, then write the next")+'</button><button class="ghost" type="button" id="again">Try the reverse</button><button class="ghost" type="button" id="copy">Copy the full read</button><button class="ghost" type="button" id="print">Print</button><a class="ghost" href="check-ins.html" style="text-decoration:none">Check-in order</a></div>';
@@ -1528,52 +1572,60 @@ function swap(){
   const na=$("#nameA").value; $("#nameA").value=$("#nameB").value; $("#nameB").value=na;
   const rp=$("#phrase").value; $("#phrase").value=$("#reply").value; $("#reply").value=rp;
   const nn=needA; needA=needB; needB=nn;
-  ["needA","needB"].forEach(id=>{
-    const val=id==="needA"?needA:needB;
-    $("#"+id).querySelectorAll("button").forEach(x=>x.setAttribute("aria-pressed", x.dataset.need===val?"true":"false"));
-  });
+  $("#needASel").value=needA; $("#needBSel").value=needB;
+  paintWiring("A"); paintWiring("B");
   sync();
 }
 
 /* ============================================================
    INIT
    ============================================================ */
-buildChips("A"); buildChips("B");
-$("#presets").innerHTML='<span class="lab" style="width:100%;font-size:.82rem">Or try an example:</span>'+PRESETS.map(p=>'<button type="button">'+esc(p)+'</button>').join("");
-$("#presets").addEventListener("click",e=>{ const b=e.target.closest("button"); if(!b) return; $("#phrase").value=b.textContent; $("#phrase").focus(); });
-segBind("#channel","ch",v=>{ channel=v; if(!$("#results").hidden) run(); });
-  $("#rel").addEventListener("click",e=>{
-    const b=e.target.closest("button"); if(!b) return;
-    relId = relId===b.dataset.rel ? "" : b.dataset.rel;
-    $("#rel").querySelectorAll("button").forEach(x=>x.setAttribute("aria-pressed", x.dataset.rel===relId?"true":"false"));
-    if(!$("#results").hidden && sel.B.size && $("#phrase").value.trim()) run();
-  });
-  function tog(hostSel, attr, get, set){
-    $(hostSel).addEventListener("click",e=>{
-      const b=e.target.closest("button"); if(!b) return;
-      const id=b.dataset[attr];
-      set(get()===id?"":id);
-      $(hostSel).querySelectorAll("button").forEach(x=>x.setAttribute("aria-pressed", x.dataset[attr]===get()?"true":"false"));
-      if(!$("#results").hidden && sel.B.size && $("#phrase").value.trim()) run();
-    });
-  }
-  tog("#sit","sit",()=>sitId,v=>{sitId=v});
-  tog("#env","env",()=>envId,v=>{envId=v});
-  tog("#needA","need",()=>needA,v=>{needA=v});
-  tog("#needB","need",()=>needB,v=>{needB=v});
-segBind("#state","s",v=>{ bstate=v; document.documentElement.style.setProperty("--state","var(--"+v+")"); if(!$("#results").hidden) run(); });
-$("#swap").addEventListener("click",()=>{ swap(); if(!$("#results").hidden && sel.B.size && $("#phrase").value.trim()) run(); });
+buildWiring("A"); buildWiring("B");
+fillSelect("#presetSel", PRESETS, "Choose an example…");
+fillSelect("#useSel", USES);
+fillSelect("#relSel", Object.keys(REL).map(k=>({value:k, label:REL[k].label})).sort(byLabel), "Not sure / skip");
+fillSelect("#chSel", CHANNELS);
+fillSelect("#stateSel", STATES, "Not sure / skip");
+fillSelect("#sitSel", Object.keys(SIT).map(k=>({value:k, label:SIT[k].label})).sort(byLabel), "Not sure / skip");
+fillSelect("#envSel", Object.keys(ENV).map(k=>({value:k, label:ENV[k].label})).sort(byLabel), "Not sure / skip");
+const NEED_LIST = Object.keys(NEED).map(k=>({value:k, label:NEED[k].pick})).sort(byLabel);
+fillSelect("#needASel", NEED_LIST, "Not sure / skip");
+fillSelect("#needBSel", NEED_LIST, "Not sure / skip");
+function applyDefaults(){
+  useId="send"; channel="text"; relId=""; bstate="v"; stateKnown=false; sitId=""; envId=""; needA=""; needB="";
+  relTouched=false; chTouched=false;
+  $("#useSel").value=useId; $("#chSel").value=channel; $("#relSel").value=""; $("#stateSel").value="";
+  ["#sitSel","#envSel","#needASel","#needBSel","#presetSel"].forEach(id=>$(id).value="");
+}
+applyDefaults();
+$("#presetSel").addEventListener("change",e=>{ if(!e.target.value) return; $("#phrase").value=e.target.value; $("#phrase").removeAttribute("aria-invalid"); $("#msg").textContent=""; });
+$("#useSel").addEventListener("change",e=>{
+  useId=e.target.value;
+  // the use case sets a sensible relationship and channel, unless you already chose them
+  if(!relTouched){ relId = useId==="work" ? "coworker" : ""; $("#relSel").value=relId; }
+  if(!chTouched){ channel = useId==="work" ? "chat" : "text"; $("#chSel").value=channel; }
+  sync(); rerun();
+});
+$("#relSel").addEventListener("change",e=>{ relId=e.target.value; relTouched=true; rerun(); });
+$("#chSel").addEventListener("change",e=>{ channel=e.target.value; chTouched=true; rerun(); });
+$("#stateSel").addEventListener("change",e=>{ bstate=e.target.value||"v"; stateKnown=!!e.target.value; document.documentElement.style.setProperty("--state","var(--"+bstate+")"); rerun(); });
+$("#sitSel").addEventListener("change",e=>{ sitId=e.target.value; rerun(); });
+$("#envSel").addEventListener("change",e=>{ envId=e.target.value; rerun(); });
+$("#needASel").addEventListener("change",e=>{ needA=e.target.value; rerun(); });
+$("#needBSel").addEventListener("change",e=>{ needB=e.target.value; rerun(); });
+$("#swap").addEventListener("click",()=>{ swap(); rerun(); });
 $("#go").addEventListener("click",run);
+$("#go2").addEventListener("click",run);
 $("#phrase").addEventListener("keydown",e=>{ if(e.key==="Enter"&&(e.ctrlKey||e.metaKey)){ e.preventDefault(); run(); } });
+$("#phrase").addEventListener("input",()=>{ if($("#phrase").value.trim()){ $("#phrase").removeAttribute("aria-invalid"); } });
 ["nameA","nameB"].forEach(id=>$("#"+id).addEventListener("input",sync));
 $("#reset").addEventListener("click",()=>{
   sel.A.clear(); sel.B.clear(); $("#phrase").value=""; $("#facts").value=""; $("#reply").value=""; $("#nameA").value=""; $("#nameB").value="";
-    relId=""; $("#rel").querySelectorAll("button").forEach(x=>x.setAttribute("aria-pressed","false"));
-    sitId=""; envId=""; needA=""; needB="";
-    ["sit","env","needA","needB"].forEach(id=>$("#"+id).querySelectorAll("button").forEach(x=>x.setAttribute("aria-pressed","false")));
+  applyDefaults(); paintWiring("A"); paintWiring("B");
+  $("#phrase").removeAttribute("aria-invalid");
   $("#results").hidden=true; $("#results").innerHTML=""; $("#msg").textContent=""; sync(); window.scrollTo({top:0});
 });
-const USE_LABEL={checkin:"Before a check-in",talk:"Before a hard conversation",send:"Before you send it",after:"After a miss, before you answer",learn:"To learn the mechanics",now:"It is already a fight"};
+const USE_LABEL={checkin:"Before a planned talk",talk:"Before a hard conversation",send:"Before you send it",work:"A work message",after:"After a miss, before you answer",learn:"To learn how it works",now:"It is already a fight"};
 function loadAdvice(n){
   if(n<=0) return "";
   if(n===1) return "One sentence is a light load. You can add another. Translate the next one, then add it the same way.";
@@ -1650,12 +1702,12 @@ function sheetLines(){
   lines.push("Only then, if a fact is missing: their fact, your part, one fact to add.");
   lines.push("Do not ask them to cancel how it landed.");
   lines.push("One ask that works for both. One owner. One time. Then stop.");
-  lines.push("Another sentence only if both bodies can still hear. If not, park it.");
+  lines.push("Another sentence only if both of you can still take it in. If not, park it.");
   lines.push("Do not say: you are too sensitive. That is not what happened. I did not mean it, so it does not count.");
   lines.push("Owner: ____________________   By: ____________________");
   lines.push("");
   lines.push("Cheat sheet");
-  lines.push("Check-in: named time, settled bodies, start with sentence 1, mirror before any answer, then their turn, one owner, one time.");
+  lines.push("Check-in: named time, both of you settled, start with sentence 1, mirror before any answer, then their turn, one owner, one time.");
   lines.push("Conflict: the event, not the person. No always, no never. Hearing them is not losing. If the voice rises, pause, name a return, do not build the case, come back to the same sentence.");
   lines.push("Any conversation: one clear ask. Check what they heard if it matters. A text gets the matching sentence, not the score. Do not read this page at them. If it is already a fight, close this.");
   lines.push("");
@@ -1740,12 +1792,6 @@ function savePdf(){
   document.body.appendChild(a); a.click(); a.remove();
   setTimeout(()=>URL.revokeObjectURL(a.href), 1500);
 }
-$("#use").addEventListener("click",e=>{
-  const b=e.target.closest("button"); if(!b) return;
-  useId=b.dataset.use;
-  $("#use").querySelectorAll("button").forEach(x=>x.setAttribute("aria-pressed", x===b?"true":"false"));
-  sync();
-});
 function addCurrent(){
   if(!lastTopic) return false;
   agenda.push(Object.assign({who:nm("A")+" to "+nm("B")}, lastTopic));

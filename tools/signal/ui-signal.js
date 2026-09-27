@@ -1,49 +1,137 @@
-/* UI check for /signal-translator.html. Serve the repo root on :8765 first (python3 -m http.server 8765).
-   Run: node tools/signal/ui-signal.js   (set PW to the playwright module path if it isn't resolvable) */
+/* UI check for /signal-translator.html (drop-down layout).
+   Serve the repo root first: python3 -m http.server 8783   (or set PORT)
+   Run: node tools/signal/ui-signal.js   (PW = playwright module path, SHOTS = screenshot folder)
+   Checks, at 390x844 and 1280x800: translate with no choices, drop-downs change the read,
+   every drop-down is labelled and alphabetical, no console errors, no horizontal overflow,
+   Tab count from the sentence box to Translate, focus on errors and results. */
 const { chromium } = require(process.env.PW || '/opt/node22/lib/node_modules/playwright');
-const S=process.env.SHOTS || require('os').tmpdir()+'/';
-const CASES=[
- ["You need to clean your room.",["autistic"],{}],
- ["Why can't you just be normal?",["adhd"],{}],
- ["We need to talk.",["anxiety"],{ch:"text"}],
- ["I can't talk about this right now. I need an hour.",["nt"],{A:["autistic","adhd"],rel:"partner",ch:"text"}],
- ["If you don't clean up, I'm leaving.",["trauma"],{}],
- ["I need you to call the dentist, pay the bill and pick up the kids.",["adhd"],{}],
- ["Seriously?? You forgot AGAIN?",["hsp","adhd"],{state:"s"}],
- ["No offense, but your cooking is bland.",["nt"],{}],
- ["It would be nice if the dishes got done.",["autistic","alex"],{rel:"roommate"}],
- ["I felt hurt when you missed dinner. Could you text me by 6 if you'll be late?",["anxiety"],{reply:"Fine."}],
-];
+const S = process.env.SHOTS || require('os').tmpdir()+'/';
+const URL = 'http://localhost:'+(process.env.PORT||8783)+'/signal-translator.html';
+let pass=0, fail=0; const errsOut=[];
+const ok=(c,m)=>{ if(c) pass++; else { fail++; errsOut.push(m); } };
+const NEUTRAL = /^(Not sure \/ skip|Choose an example…)$/;
+async function overflow(p){ return p.evaluate(()=>document.documentElement.scrollWidth - document.documentElement.clientWidth); }
+async function fullText(p){ return p.evaluate(()=>{ document.querySelectorAll('#results details').forEach(d=>d.open=true); return document.querySelector('#results').innerText; }); }
+async function translate(p){ await p.click('#go'); await p.waitForSelector('#takeaway'); await p.waitForTimeout(120); }
+
 (async()=>{
   const b=await chromium.launch();
-  for(const vw of [390,1280]){
-    const p=await b.newPage({viewport:{width:vw,height:900}});
-    const errs=[]; p.on('pageerror',e=>errs.push(e.message)); p.on('console',m=>{ if(m.type()==='error' && !/Failed to load resource/.test(m.text())) errs.push('console: '+m.text()); });
-    await p.goto('http://localhost:8765/signal-translator.html');
-    let i=0;
-    for(const [t,Bw,o] of CASES){
-      i++;
-      await p.click('#reset');
-      for(const w of Bw) await p.click(`.chip[data-who="B"][data-id="${w}"]`);
-      for(const w of (o.A||[])) await p.click(`.chip[data-who="A"][data-id="${w}"]`);
-      if(o.rel) await p.click(`#rel button[data-rel="${o.rel}"]`);
-      await p.click(`#channel button[data-ch="${o.ch||'person'}"]`);
-      await p.click(`#state button[data-s="${o.state||'v'}"]`);
-      if(o.reply) await p.fill('#reply',o.reply);
-      await p.fill('#phrase',t); await p.click('#go'); await p.waitForTimeout(150);
-      const r=await p.evaluate(()=>({
-        heard:document.querySelector('.tk-heard')?.innerText.replace(/\s+/g,' ').slice(0,260),
-        opt:[...document.querySelectorAll('#takeaway .opt')].map(x=>x.querySelector('b').innerText+': '+x.querySelector('.saytext').innerText.replace(/\s+/g,' ')).slice(0,3),
-        overflow: document.documentElement.scrollWidth - document.documentElement.clientWidth,
-        blanks: /\bby ,|\bat \?|because \./.test(document.querySelector('#results').innerText)
-      }));
-      if(vw===390){ console.log(`#${i} ${t}\n  ${r.heard}\n  ${r.opt.join('\n  ')}\n  overflow=${r.overflow} brokenBlanks=${r.blanks}`); }
-      else console.log(`#${i} @1280 overflow=${r.overflow} brokenBlanks=${r.blanks}`);
-      if(i===1||i===4||i===6) await p.screenshot({path:S+`shot-${vw}-${i}.png`,fullPage:false, clip: undefined});
-      if(i===1){ const el=await p.$('#results'); await el.screenshot({path:S+`res-${vw}-1.png`}); }
+  for(const [w,h] of [[390,844],[1280,800]]){
+    const tag=w+'x'+h;
+    const p=await b.newPage({viewport:{width:w,height:h}});
+    const errs=[]; p.on('pageerror',e=>errs.push('pageerror: '+e.message)); p.on('console',m=>{ if(m.type()==='error' && !/Failed to load resource/.test(m.text())) errs.push('console: '+m.text()); });
+    await p.goto(URL); await p.waitForLoadState('load');
+
+    // landmarks, skip link, title
+    const meta = await p.evaluate(()=>({main:!!document.querySelector('main'), skip:document.querySelector('a.skip')?.getAttribute('href'), title:document.title, selects:document.querySelectorAll('select').length}));
+    ok(meta.main, `${tag}: no <main> landmark`);
+    ok(meta.skip==='#phrase', `${tag}: skip link should jump to the sentence`);
+    ok(!/TOL-OS/.test(meta.title), `${tag}: title still says TOL-OS`);
+
+    // every select has a visible label and alphabetical options
+    const sels = await p.evaluate(()=>[...document.querySelectorAll('select')].map(s=>({id:s.id, label:(s.labels&&s.labels[0]?s.labels[0].textContent.trim():''), opts:[...s.options].map(o=>o.text)})));
+    for(const s of sels){
+      if(/^pick(Pri|Care)$|^$/.test(s.id)) continue;
+      ok(s.label.length>0, `${tag}: select #${s.id} has no visible label`);
+      const body = s.opts.filter((t,i)=>!(i===0 && NEUTRAL.test(t)));
+      const sorted = await p.evaluate(list=>list.slice().sort((a,b)=>a.localeCompare(b, undefined, {sensitivity:"base"})), body);
+      ok(JSON.stringify(body)===JSON.stringify(sorted), `${tag}: #${s.id} not alphabetical: ${body.join(' | ')}`);
+      if(/^w[AB]\d$/.test(s.id)) ok(s.opts[0]==='Not sure / skip', `${tag}: #${s.id} should start with "Not sure / skip"`);
+      if(/^(relSel|stateSel|sitSel|envSel|needASel|needBSel)$/.test(s.id)) ok(s.opts[0]==='Not sure / skip', `${tag}: #${s.id} should start with "Not sure / skip"`);
+      if(s.id==='presetSel') ok(s.opts[0]==='Choose an example…', `${tag}: presets should start with "Choose an example…"`);
     }
-    console.log('ERRORS',vw,errs);
+    ok(sels.find(s=>s.id==='chSel').opts.includes('Chat (Slack / Teams)') && sels.find(s=>s.id==='chSel').opts.includes('Group channel (many listeners)'), `${tag}: channel options missing chat/group`);
+    ok(await p.$eval('#chSel', s=>s.options[s.selectedIndex].text)==='Text / chat', `${tag}: default channel should be Text / chat`);
+    ok(await p.$eval('#wB0', s=>s.value)==='', `${tag}: default wiring should be Not sure`);
+    const chipCount = await p.evaluate(()=>document.querySelectorAll('.chip, .seg button, .presets button, .st').length);
+    ok(chipCount===0, `${tag}: ${chipCount} old toggle chips remain`);
+    ok(await overflow(p)<=0, `${tag}: horizontal overflow on load`);
+
+    // empty sentence: focus goes to the sentence box
+    await p.click('#go'); await p.waitForTimeout(80);
+    const inval = await p.evaluate(()=>({id:document.activeElement.id, inv:document.querySelector('#phrase').getAttribute('aria-invalid')}));
+    ok(inval.id==='phrase' && inval.inv==='true', `${tag}: empty translate should focus the sentence box (got ${inval.id}, ${inval.inv})`);
+
+    // Tab presses from the sentence box to Translate
+    await p.focus('#phrase'); let tabs=0, id='phrase';
+    while(id!=='go' && tabs<15){ await p.keyboard.press('Tab'); tabs++; id=await p.evaluate(()=>document.activeElement.id); }
+    ok(id==='go' && tabs<=3, `${tag}: Translate is ${tabs} tabs from the sentence box`);
+    console.log(`${tag}: Tab presses from sentence box to Translate = ${tabs}`);
+
+    // type a sentence and translate with no other choices
+    await p.fill('#phrase','Per my last message, the deck is due EOD.');
+    await translate(p);
+    const r1 = await p.evaluate(()=>({focus:document.activeElement.id, head:document.querySelector('.tk-heard .quote').innerText, lvl:document.querySelector('.meter .lvl').innerText, opt:document.querySelector('#takeaway .opt .saytext').innerText}));
+    ok(r1.focus==='results', `${tag}: results should get focus`);
+    ok(/EOD/.test(r1.opt) && /the deck is due/.test(r1.opt) && !/per my last/i.test(r1.opt), `${tag}: rewrite "${r1.opt}"`);
+    ok(!/clear signal|close to what you meant/i.test(r1.lvl+' '+r1.head), `${tag}: headline says clear while static flagged: ${r1.lvl} / ${r1.head}`);
+    ok(await overflow(p)<=0, `${tag}: overflow after translate`);
+    await p.screenshot({path:S+`st2-${tag}-1-first-read.png`, fullPage:false});
+    await (await p.$('#takeaway')).screenshot({path:S+`st2-${tag}-1-takeaway.png`});
+
+    // "the ask: none" must not show for a meeting request, and advice is channel-aware
+    await p.fill('#phrase','Can we hop on a quick call?'); await translate(p);
+    let t = await fullText(p);
+    ok(!/none in this sentence/.test(t), `${tag}: "none in this sentence" shown for a call request`);
+    ok(/The ask:/.test(t), `${tag}: no ask line for a call request`);
+    ok(!/voice rises|a body (?:leaves|has left)|spike|ladder|resync/i.test(t), `${tag}: in-person or jargon wording on a text channel`);
+
+    // change drop-downs: work message, listener autistic + ADHD, group channel
+    await p.selectOption('#useSel','work'); await p.waitForTimeout(60);
+    ok(await p.$eval('#relSel', s=>s.value)==='coworker' && await p.$eval('#chSel', s=>s.value)==='chat', `${tag}: work use case should set coworker + chat`);
+    await p.selectOption('#wB0','autistic');
+    await p.click('#addB'); await p.selectOption('#wB1','adhd');
+    await p.selectOption('#relSel','manager');
+    await p.selectOption('#chSel','group');
+    await p.selectOption('#presetSel','Reminder: timesheets are due Friday. Please also update the tracker, reply to the funder, and book the room for Tuesday.');
+    ok(/timesheets/.test(await p.$eval('#phrase', e=>e.value)), `${tag}: preset did not fill the box`);
+    await translate(p);
+    t = await fullText(p);
+    const opts = await p.$$eval('#takeaway .opt .saytext', xs=>xs.map(x=>x.innerText));
+    ok(/Autistic and ADHD/.test(await p.$eval('.pair', e=>e.innerText)), `${tag}: pair line should show the listener's two wirings`);
+    opts.forEach(o=>["timesheets","Friday","update the tracker","reply to the funder","book the room for Tuesday"].forEach(c=>ok(o.toLowerCase().includes(c.toLowerCase()), `${tag}: "${c}" dropped from option "${o}"`)));
+    ok(/Many listeners/.test(t), `${tag}: group channel note missing`);
+    ok(!/we're okay|we are okay/i.test(opts.join(' ')), `${tag}: "We're okay" offered at work`);
+    ok(!/voice rises|a body (?:leaves|has left)|hug/i.test(t.replace(/No hug\./g,'')), `${tag}: in-person advice on a group channel`);
+    ok(await overflow(p)<=0, `${tag}: overflow after changing drop-downs`);
+    await p.screenshot({path:S+`st2-${tag}-2-work.png`, fullPage:false});
+
+    // fine-tune: state, situation, place, needs, speaker wiring, swap
+    await p.click('#fine > summary');
+    await p.selectOption('#stateSel','s'); await p.selectOption('#sitSel','decision'); await p.selectOption('#envSel','work');
+    await p.selectOption('#needASel','plan'); await p.selectOption('#needBSel','space');
+    await p.selectOption('#wA0','nt');
+    await p.selectOption('#chSel','person'); await p.selectOption('#relSel','partner');
+    await p.fill('#phrase','Lately it\'s felt like you don\'t do the dishes and I\'m sick of it. Can you actually clean for once?');
+    await translate(p);
+    const o3 = await p.$$eval('#takeaway .opt', xs=>xs.filter(x=>x.querySelector('input').value!=='yours').map(x=>x.querySelector('.saytext').innerText).join(' || '));
+    ok(!/\bactually\b|for once|sick of/i.test(o3), `${tag}: hostility kept: ${o3}`);
+    ok(/is stressed|mobilized/i.test(await p.$eval('.pair', e=>e.innerText)), `${tag}: state not reflected`);
+    // neurotypical clears neurodivergent picks on the same person
+    await p.selectOption('#wB2','nt').catch(async()=>{ await p.click('#addB'); await p.selectOption('#wB2','nt'); });
+    const bVals = await p.evaluate(()=>[0,1,2].map(i=>document.querySelector('#wB'+i).value));
+    ok(bVals.filter(Boolean).join()==='nt', `${tag}: neurotypical should clear other picks, got ${bVals}`);
+    await p.click('#swap'); await p.waitForTimeout(60);
+    ok(await p.$eval('#wA0', s=>s.value)==='nt', `${tag}: swap should move wiring`);
+    ok(await overflow(p)<=0, `${tag}: overflow with fine-tune open`);
+    const spill = await p.evaluate(()=>[...document.querySelectorAll('select,textarea,input')].filter(e=>e.offsetParent).map(e=>{ const box=e.closest('.s4box,.person,.field')||e.closest('.panel'); if(!box) return null; const r=e.getBoundingClientRect(), c=box.getBoundingClientRect(); return r.right>c.right+1 ? (e.id||e.name) : null; }).filter(Boolean));
+    ok(spill.length===0, `${tag}: controls spill out of their box: ${spill.join(',')}`);
+    await p.screenshot({path:S+`st2-${tag}-3-finetune.png`, fullPage:true});
+
+    // "ok" does not gain a feeling
+    await p.click('#reset'); await p.fill('#phrase','ok'); await translate(p);
+    const okOpt = await p.$eval('#takeaway .opt .saytext', e=>e.innerText);
+    ok(!/sounds good|!/.test(okOpt), `${tag}: "ok" became "${okOpt}"`);
+
+    // page-wide jargon check
+    const all = await p.evaluate(()=>{ document.querySelectorAll('details').forEach(d=>d.open=true); return document.title+' '+document.body.innerText; });
+    ok(!/\bspike\b|TOL-OS|TOL‑OS|\bladder\b|resync|a body leaves/i.test(all), `${tag}: jargon on the page: ${(all.match(/.{30}(?:spike|TOL.OS|ladder|resync|a body leaves).{30}/i)||[''])[0]}`);
+    ok(await overflow(p)<=0, `${tag}: overflow with everything open`);
+
+    ok(errs.length===0, `${tag}: console errors: ${errs.join(' | ')}`);
     await p.close();
   }
   await b.close();
+  console.log(`UI: ${pass} checks passed, ${fail} failed`);
+  if(fail){ console.log(errsOut.join('\n')); process.exit(1); }
 })();
