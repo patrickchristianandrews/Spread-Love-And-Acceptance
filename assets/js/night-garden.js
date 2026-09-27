@@ -825,7 +825,8 @@
   // mischief when they meet up. In Breathe they play at a gentler pace.
   var GAMES = ['hug', 'five', 'bow', 'roll', 'tug', 'hug', 'dig', 'spin', 'five', 'splash', 'visit', 'tug', 'zoom', 'hug', 'spin', 'visit',
     'cape', 'plane', 'kite', 'surf', 'ball', 'bubbles', 'butterfly', 'dance', 'leapfrog', 'float', 'cape', 'ball', 'kite', 'dance', 'plane', 'leapfrog',
-    'swingride', 'bridge', 'nap', 'gazebo', 'stargaze', 'swingride', 'bridge', 'nap', 'gazebo', 'stargaze'];
+    'swingride', 'bridge', 'nap', 'gazebo', 'stargaze', 'swingride', 'bridge', 'nap', 'gazebo', 'stargaze',
+    'space', 'squirt', 'balloons', 'swim', 'space', 'squirt', 'balloons', 'swim'];
   // games that need something in the background first (it arrives as levels are finished)
   var NEEDS = { swingride: ['garden-swing'], nap: ['garden-swing', 'garden-hammock'], bridge: ['garden-bridge'], gazebo: ['garden-gazebo'] };
   function canPlay(g) {
@@ -834,11 +835,11 @@
   }
   // the bigger adventures: how long each lasts, which ones leave the ground (1: one of them, 2: both),
   // and which are too lively for Breathe
-  var ADV_DUR = { swingride: 8000, bridge: 5200, nap: 9000, gazebo: 7000, stargaze: 6000, cape: 9000, plane: 11000, surf: 8500, float: 6500, kite: 7000, ball: 6500, bubbles: 5500, butterfly: 5500, dance: 4800, leapfrog: 6500 };
+  var ADV_DUR = { space: 10000, squirt: 6500, balloons: 6500, swim: 9000, swingride: 8000, bridge: 5200, nap: 9000, gazebo: 7000, stargaze: 6000, cape: 9000, plane: 11000, surf: 8500, float: 6500, kite: 7000, ball: 6500, bubbles: 5500, butterfly: 5500, dance: 4800, leapfrog: 6500 };
   var FORCE_PLAY = (/[?&]play=(\w+)/.exec(location.search) || [])[1];
   if (FORCE_PLAY && !ADV_DUR[FORCE_PLAY] && GAMES.indexOf(FORCE_PLAY) === -1) FORCE_PLAY = null;
-  var AIR = { cape: 2, plane: 2, surf: 1, float: 1, swingride: 2, bridge: 2, nap: 2, gazebo: 2 };
-  var LIVELY = { zoom: 1, splash: 1, cape: 1, plane: 1, surf: 1, float: 1, ball: 1 };
+  var AIR = { space: 2, swim: 2, cape: 2, plane: 2, surf: 1, float: 1, swingride: 2, bridge: 2, nap: 2, gazebo: 2 };
+  var LIVELY = { space: 1, squirt: 1, balloons: 1, zoom: 1, splash: 1, cape: 1, plane: 1, surf: 1, float: 1, ball: 1 };
   function packStep(t, dt) {
     var calm = mode === 'breathe';
     if (!pack.until) pack.until = t + 5000;
@@ -857,7 +858,7 @@
       if (next === 'chase' || next === 'zoom') { pack.lead = Math.random() < 0.5 ? 0 : 1; if (Math.random() < 0.5) pack.dir *= -1; }
       else { // meet up in the middle of the far bank, facing each other, without crossing over
         var c = Math.max(0.33, Math.min(0.67, (pack.cur[0] + pack.cur[1]) / 2));
-        var du = Math.max(0.03, Math.min(0.2, ({ tug: 128, hug: 44, five: 58, dance: 52, ball: 150, kite: 110, leapfrog: 70 }[next] || 84) * pack.sc / 1.3 / (pack.RX * Math.PI)));
+        var du = Math.max(0.03, Math.min(0.2, ({ squirt: 170, balloons: 170, tug: 128, hug: 44, five: 58, dance: 52, ball: 150, kite: 110, leapfrog: 70 }[next] || 84) * pack.sc / 1.3 / (pack.RX * Math.PI)));
         if (next === 'splash') c = 0.5;
         // go and play by one of the garden's wonders: the swing tree or the blossom tree
         if (next === 'visit') {
@@ -1001,6 +1002,59 @@
   }
   function sound(n, v) { if (audio && save.sound) chime(n, v); }
   var ADV = {
+    // flying saucers: each in its own little ship, zooming loops around the sky
+    space: function (i, me, x, y, face, prog, t, s, p, ex) {
+      var q = clamp01((prog - 0.06 - i * 0.04) / 0.86), A = Math.min(W * 0.36, 400), Hh = Math.max(80, Math.min(H * 0.5, y - 70));
+      var a = flightAt(q, x, y, pack.fdir, A, Hh), v = q > 0 && q < 1 ? flightVel(q, x, y, pack.fdir, A, Hh) : { x: 0, y: 0 };
+      if (q > 0 && q < 1) { a.x += (i ? -1 : 1) * 48 * s + Math.sin(t / 400 + i * 2) * 22 * s; a.y += Math.cos(t / 520 + i * 2) * 16 * s + (i ? 30 * s : -10 * s); }
+      var tilt2 = Math.max(-0.35, Math.min(0.35, v.x / Math.max(1, A * 0.02) * 0.25));
+      ex.push(function () { drawSaucer(a.x, a.y, i, 1.3 * s, t, tilt2, q > 0 && q < 1); });
+      pack.pos = pack.pos || []; pack.pos[i] = [a.x, a.y - 24 * s, s];
+      if (!pack.poof && i === 1) { pack.poof = 1; burst(x, y - 20 * s, 12, 190, 86); sound(5, 0.04); }
+      if (q > 0 && q < 1 && Math.random() < 0.25) burst(a.x - Math.sign(v.x || 1) * 22 * s, a.y + 4 * s, 1, i ? 190 : 300, 84);
+      return null;
+    },
+    // water guns: squirting each other across a gap, and a shake when you're hit
+    squirt: function (i, me, x, y, face, prog, t, s, p, ex) {
+      var per = 1600, since = t - pack.t0, k = (since % per) / per, from = Math.floor(since / per) % 2, to = 1 - from;
+      if (i === 1) ex.push(function () {
+        var A = pack.pos && pack.pos[from], B = pack.pos && pack.pos[to]; if (!A || !B || k > 0.7) return;
+        var sx = A[0] + (B[0] > A[0] ? 1 : -1) * 34 * s, sy = A[1] - 4 * s;
+        for (var d = 0; d < 14; d++) {
+          var f = Math.max(0, Math.min(1, k / 0.55 - d * 0.04)); if (f <= 0) continue;
+          var dx = sx + (B[0] - sx) * f, dy = sy + (B[1] - 6 * s - sy) * f - Math.sin(f * Math.PI) * 28 * s;
+          ctx.fillStyle = 'rgba(190,225,255,' + (0.85 - d * 0.04) + ')'; ctx.beginPath(); ctx.arc(dx, dy, (2.4 - d * 0.1) * s, 0, Math.PI * 2); ctx.fill();
+        }
+        if (k > 0.5 && k < 0.56) burst(B[0], B[1] - 6 * s, 3, 205, 88);
+      });
+      var hit = i === to && k > 0.55 && k < 0.95;
+      return { x: x, y: y, pose: hit ? 'shake' : i === from && k < 0.6 ? 'bow' : 'bounce', face: face, draw: { after: squirter(i) } };
+    },
+    // water balloons: lobbed back and forth, bursting with a splash
+    balloons: function (i, me, x, y, face, prog, t, s, p, ex) {
+      var per = 1800, since = t - pack.t0, k = (since % per) / per, from = Math.floor(since / per) % 2, to = 1 - from;
+      if (i === 1) ex.push(function () {
+        var A = pack.pos && pack.pos[from], B = pack.pos && pack.pos[to]; if (!A || !B) return;
+        if (k < 0.62) {
+          var f = k / 0.62, bx = A[0] + (B[0] - A[0]) * f, by = A[1] - 10 * s + (B[1] - A[1]) * f - Math.sin(f * Math.PI) * 95 * s;
+          ctx.save(); ctx.translate(bx, by); ctx.rotate(Math.sin(t / 120) * 0.3); ctx.scale(s, s);
+          ctx.fillStyle = ['#F7A1B8', '#9FCBF0', '#F8DC6E', '#B9A0E0'][Math.floor(since / per) % 4]; ctx.beginPath(); ctx.ellipse(0, 0, 6, 7.5, 0, 0, Math.PI * 2); ctx.fill();
+          ctx.fillStyle = 'rgba(255,255,255,0.6)'; ctx.beginPath(); ctx.ellipse(-2, -3, 1.8, 2.6, -0.4, 0, Math.PI * 2); ctx.fill();
+          ctx.restore();
+        } else if (k < 0.66) burst(B[0], B[1] - 10 * s, 5, 205, 88);
+      });
+      var wet = i === to && k > 0.62 && k < 0.95;
+      return { x: x, y: y, pose: wet ? 'shake' : i === from && k < 0.14 ? 'bow' : 'sit', face: face, tilt: i === to && k < 0.62 ? -0.3 : 0 };
+    },
+    // a swim: doggy paddle laps around the pond
+    swim: function (i, me, x, y, face, prog, t, s, p) {
+      var e = clamp01((prog - 0.12) / 0.76), ang = e * Math.PI * 2 + i * 1.3, cx = p.x + Math.cos(ang - Math.PI / 2) * p.rx * 0.55, cy = p.y + Math.sin(ang - Math.PI / 2) * p.ry * 0.45 + 4 * s;
+      var h = hopTo(x, y, cx, cy, prog < 0.12 ? prog : prog > 0.88 ? prog : 0.5, s, 0.9);
+      var inWater = !h.moving;
+      var dir = Math.cos(ang) >= 0 ? 1 : -1;
+      if (inWater && Math.random() < 0.2) burst(h.x - dir * 20 * s, h.y, 1, 205, 88);
+      return { x: h.x, y: h.y + (inWater ? Math.sin(t / 260 + i) * 1.5 * s : 0), pose: inWater ? 'run' : 'bounce', ph: inWater ? t / 70 : null, face: inWater ? dir : h.dir, depth: h.depth, draw: inWater ? { after: waterline } : null };
+    },
     // playing with what's grown in the background
     swingride: function (i, me, x, y, face, prog, t, s) {
       var A = bank(0.12), ws = wScale(), sw = REDUCED ? 0 : Math.sin(t / 1300) * 0.28, px = A.x - 26 * ws, py = A.y - 62 * ws, len = 44 * ws;
@@ -1156,6 +1210,34 @@
   }
   // is one of the dogs near this point? (for things that react to them)
   function dogNear(x, y, r) { var hit = null; (pack.pos || []).forEach(function (q) { if (q && Math.hypot(q[0] - x, q[1] - y) < r) hit = q; }); return hit; }
+  // the water up to their shoulders while they swim, with a ripple
+  function waterline() {
+    ctx.fillStyle = TOD === 'night' || TOD === 'dusk' ? 'rgba(62,80,130,0.92)' : 'rgba(120,170,220,0.9)'; ctx.beginPath(); ctx.ellipse(2, -8, 30, 11, 0, 0, Math.PI * 2); ctx.fill();
+    ctx.strokeStyle = 'rgba(235,245,255,0.7)'; ctx.lineWidth = 1.2; ctx.beginPath(); ctx.ellipse(2, -12, 30, 5, 0, Math.PI * 1.05, Math.PI * 1.95); ctx.stroke();
+  }
+  // a bright little water blaster held up by the chin
+  function squirter(i) {
+    return function () {
+      ctx.save(); ctx.translate(24, -14); ctx.rotate(-0.15);
+      ctx.fillStyle = i ? '#8FC8F2' : '#F7A1B8'; ctx.beginPath(); ctx.roundRect ? ctx.roundRect(-4, -4, 18, 7, 3) : ctx.rect(-4, -4, 18, 7); ctx.fill();
+      ctx.fillStyle = '#F8DC6E'; ctx.beginPath(); ctx.arc(2, -7, 3.6, 0, Math.PI * 2); ctx.fill();
+      ctx.fillStyle = i ? '#6FA9D8' : '#E27D98'; ctx.fillRect(-2, 2, 4, 6); ctx.fillRect(12, -2.5, 4, 3);
+      ctx.restore();
+    };
+  }
+  // a little flying saucer with its pilot under a glass dome
+  function drawSaucer(cx, cy, i, k, t, tilt, flying) {
+    ctx.save(); ctx.translate(cx, cy - 10 * k); ctx.rotate(tilt); ctx.scale(k, k);
+    if (flying) { var bg = ctx.createLinearGradient(0, 8, 0, 40); bg.addColorStop(0, 'rgba(255,245,200,0.35)'); bg.addColorStop(1, 'rgba(255,245,200,0)'); ctx.fillStyle = bg; ctx.beginPath(); ctx.moveTo(-10, 6); ctx.lineTo(10, 6); ctx.lineTo(20, 40); ctx.lineTo(-20, 40); ctx.closePath(); ctx.fill(); }
+    ctx.save(); ctx.beginPath(); ctx.ellipse(0, -8, 17, 17, 0, Math.PI, 0); ctx.closePath(); ctx.clip();
+    ctx.translate(-2, 6); ctx.scale(0.5, 0.5); drawPup(PUPS[i], 'sit', 0, Math.sin(t / 90) * 0.5, false, t, -0.1); ctx.restore();
+    ctx.fillStyle = 'rgba(210,235,255,0.28)'; ctx.beginPath(); ctx.ellipse(0, -8, 17, 17, 0, Math.PI, 0); ctx.fill();
+    ctx.strokeStyle = 'rgba(255,255,255,0.6)'; ctx.lineWidth = 1.2; ctx.beginPath(); ctx.ellipse(0, -8, 17, 17, 0, Math.PI * 1.15, Math.PI * 1.45); ctx.stroke();
+    ctx.fillStyle = i ? '#B9C8F2' : '#F2B9CF'; ctx.beginPath(); ctx.ellipse(0, -4, 30, 8, 0, 0, Math.PI * 2); ctx.fill();
+    ctx.fillStyle = i ? '#8FA3DD' : '#DD8FAE'; ctx.beginPath(); ctx.ellipse(0, -1, 22, 5, 0, 0, Math.PI); ctx.fill();
+    for (var l = -2; l <= 2; l++) { ctx.fillStyle = 'hsla(' + ((t / 8 + l * 60) % 360) + ',90%,82%,' + (0.6 + 0.4 * Math.sin(t / 200 + l)) + ')'; ctx.beginPath(); ctx.arc(l * 11, -3, 2, 0, Math.PI * 2); ctx.fill(); }
+    ctx.restore();
+  }
   function drawCape(L, t, col, flying) {
     var BY = L.build === 'lean' ? -21 : -18.5, f = Math.sin(t / (flying ? 70 : 170)), len = flying ? 36 : 24;
     ctx.fillStyle = col; ctx.beginPath(); ctx.moveTo(15, BY - 9);
