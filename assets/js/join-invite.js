@@ -1,0 +1,136 @@
+/* join-invite.js — "Join our newsletter to unlock all areas for free".
+   site.js loads this only for visitors who haven't signed up. It adds:
+   - a banner at the very top of the home page, and
+   - now and then, a small invitation while browsing other pages
+     (about 1 in 3 page views, at most once a visit, never two page views in a row,
+     never early in reading, and never on top of another invitation or dialog).
+   Both disappear the moment someone signs up (the site sends a "tol-member" event).
+   Sign-up uses the site's own free sign-up (window.TOL.signUp). The email is sent to the
+   newsletter service only when the person presses Join; nothing else is collected. */
+(function () {
+  'use strict';
+  var TOL = window.TOL || {};
+  if (!TOL.signUp || (TOL.isMember && TOL.isMember())) return;
+
+  function ss(k, v) { try { if (v === undefined) return sessionStorage.getItem(k); sessionStorage.setItem(k, v); } catch (e) { return null; } }
+  function ls(k, v) { try { if (v === undefined) return localStorage.getItem(k); localStorage.setItem(k, v); } catch (e) { return null; } }
+  var path = location.pathname;
+  var isHome = path === '/' || path === '/index.html';
+
+  var css = document.createElement('style');
+  css.textContent =
+    '.tol-join{box-sizing:border-box;border-radius:22px;background:linear-gradient(135deg,#FFF3F7,#EEF2FB);box-shadow:0 8px 24px rgba(60,40,90,.12);color:#2B2620;font-family:"Lora",Georgia,serif}' +
+    '.tol-join h2{margin:0 0 .3rem;font:600 1.18rem/1.3 "Fraunces",Georgia,serif;color:#2B2620}' +
+    '.tol-join p{margin:0 0 .7rem;font-size:.97rem;line-height:1.5;color:#3F384A;max-width:none;padding:0;background:none;box-shadow:none}' +
+    '.tol-join form{display:flex;flex-wrap:wrap;gap:.5rem;margin:0}' +
+    '.tol-join input[type=email]{box-sizing:border-box;flex:1 1 13rem;min-width:0;min-height:46px;padding:.55rem .85rem;border:1.5px solid #B9A8D6;border-radius:999px;background:#fff;font:inherit;color:#2B2620}' +
+    '.tol-join input[type=email]:focus-visible{outline:3px solid #2F5F8A;outline-offset:2px}' +
+    '.tol-join button{min-height:46px;padding:.5rem 1.2rem;border:0;border-radius:999px;cursor:pointer;font:600 1rem "Lora",Georgia,serif}' +
+    '.tol-join .tol-join-go{background:#2F5F8A;color:#fff}.tol-join .tol-join-go:hover{background:#264E73}' +
+    '.tol-join button:focus-visible{outline:3px solid #2F5F8A;outline-offset:2px}' +
+    '.tol-join .tol-join-small{margin:.55rem 0 0;font-size:.86rem;color:#4F4760}' +
+    '.tol-join .tol-msg{margin:.5rem 0 0;font-size:.92rem}.tol-join .tol-msg.is-error{color:#9B2C3C}.tol-join .tol-msg.is-ok{color:#2F5A3C}' +
+    '.tol-join-x{position:absolute;top:.35rem;right:.35rem;width:44px;height:44px;min-height:0!important;padding:0!important;background:none;color:#5E5470;font-size:1.4rem!important;line-height:1}' +
+    '.tol-join-x:hover{background:rgba(0,0,0,.05)!important}' +
+    '.tol-join-banner{position:relative;margin:0 0 1.4rem;padding:1.1rem 1.2rem}' +
+    '.tol-join-banner .tol-join-k{display:inline-block;margin:0 0 .35rem;padding:.15rem .6rem;border-radius:999px;background:#EAF6EF;color:#2F5A3C;font:600 .8rem/1.6 "Lora",Georgia,serif}' +
+    '.tol-join-pop{position:fixed;left:50%;bottom:5.2rem;z-index:60;width:min(26rem,calc(100vw - 32px));transform:translateX(-50%);padding:1.1rem 1.1rem 1rem;opacity:0;transition:opacity .35s,transform .35s}' +
+    '.tol-join-pop.is-in{opacity:1;transform:translateX(-50%) translateY(-4px)}' +
+    '.tol-join-pop h2{padding-right:2.4rem}' +
+    '.tol-join-later{background:none;color:#3E5A86;text-decoration:underline;text-underline-offset:3px}' +
+    '@media (prefers-reduced-motion:reduce){.tol-join-pop{transition:none}}' +
+    '@media print{.tol-join{display:none!important}}';
+  document.head.appendChild(css);
+
+  function form(idp) {
+    return '<form novalidate>' +
+      '<label class="sr-only" for="' + idp + '-email" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)">Your email</label>' +
+      '<input type="email" id="' + idp + '-email" name="email" autocomplete="email" placeholder="you@example.com" required>' +
+      '<button type="submit" class="tol-join-go">Join free</button>' +
+      '</form><p class="tol-msg" role="status" aria-live="polite"></p>';
+  }
+  function wire(box) {
+    var f = box.querySelector('form'), msg = box.querySelector('.tol-msg');
+    f.addEventListener('submit', function (e) {
+      e.preventDefault();
+      TOL.signUp(f.querySelector('input').value, msg);
+    });
+  }
+
+  // ---------- the home page banner ----------
+  function banner() {
+    var main = document.querySelector('main');
+    if (!main || document.querySelector('.tol-join-banner')) return;
+    var b = document.createElement('section');
+    b.className = 'tol-join tol-join-banner';
+    b.setAttribute('aria-labelledby', 'tol-join-h');
+    b.innerHTML =
+      '<span class="tol-join-k">Free</span>' +
+      '<h2 id="tol-join-h">Join our newsletter to unlock every area, free</h2>' +
+      '<p>Pop in your email and every chapter, workpaper and tool opens right away in this browser. You’ll get a short, friendly note when something new arrives. No payment, and you can unsubscribe any time.</p>' +
+      form('tol-join-b') +
+      '<p class="tol-join-small">Already joined on another device? Enter the same email here to open everything.</p>';
+    main.insertBefore(b, main.firstElementChild);
+    wire(b);
+  }
+
+  // ---------- the occasional invitation on other pages ----------
+  var SKIP = /^\/(ask|offline|404|brand)\.html$|^\/legal\/|^\/workpapers\/fill\/|^\/frequency-journey|^\/calm-visualizer/;
+  function busy() {
+    return document.querySelector('[role=dialog]:not([hidden]), dialog[open], .tol-wx, .tol-install, .pci, .tol-join-pop, #tol-panel:not([hidden])');
+  }
+  function popup() {
+    if (document.querySelector('.tol-join-pop')) return;
+    var p = document.createElement('aside');
+    p.className = 'tol-join tol-join-pop';
+    p.setAttribute('aria-labelledby', 'tol-join-ph');
+    p.innerHTML =
+      '<button type="button" class="tol-join-x" aria-label="Close this invitation">&times;</button>' +
+      '<h2 id="tol-join-ph">Unlock every area, free</h2>' +
+      '<p>Join our newsletter and everything on the site opens up in this browser: every chapter, workpaper and tool. No payment, unsubscribe any time.</p>' +
+      form('tol-join-p') +
+      '<p class="tol-join-small"><button type="button" class="tol-join-later">Maybe later</button></p>';
+    document.body.appendChild(p);
+    wire(p);
+    function close() { p.classList.remove('is-in'); setTimeout(function () { if (p.parentNode) p.parentNode.removeChild(p); }, 350); document.removeEventListener('keydown', onKey); }
+    function onKey(e) { if (e.key === 'Escape' && !e.defaultPrevented) close(); }
+    p.querySelector('.tol-join-x').addEventListener('click', close);
+    p.querySelector('.tol-join-later').addEventListener('click', close);
+    document.addEventListener('keydown', onKey);
+    requestAnimationFrame(function () { p.classList.add('is-in'); });
+  }
+  function maybePopup() {
+    if (isHome || SKIP.test(path) || document.body.classList.contains('is-game') || document.querySelector('meta[http-equiv="Content-Security-Policy"]')) return;
+    var force = /[?&]join-pop=1\b/.test(location.search);
+    var prev = ls('tol-join-pop-prev'); ls('tol-join-pop-prev', '0');
+    if (!force && (ss('tol-join-pop') || prev === '1' || Math.random() >= 0.34)) return;
+    var started = Date.now(), scrolled = false, fired = false;
+    function onScroll() { if (window.scrollY > window.innerHeight) scrolled = true; }
+    window.addEventListener('scroll', onScroll, { passive: true });
+    function tick() {
+      if (fired) return;
+      var t = Date.now() - started;
+      var ready = force ? t > 1200 : (t > 45000 || (scrolled && t > 15000));
+      if (!ready || document.hidden || busy()) { setTimeout(tick, 2000); return; }
+      fired = true;
+      window.removeEventListener('scroll', onScroll);
+      ss('tol-join-pop', '1'); ls('tol-join-pop-prev', '1');
+      popup();
+    }
+    setTimeout(tick, 2000);
+  }
+
+  // ---------- gone the moment someone signs up ----------
+  function removeAll() {
+    Array.prototype.forEach.call(document.querySelectorAll('.tol-join'), function (n) {
+      var ok = n.querySelector('.tol-msg.is-ok');
+      if (ok && n.classList.contains('tol-join-pop')) { setTimeout(function () { if (n.parentNode) n.parentNode.removeChild(n); }, 2600); return; } // let them read "You're in" first
+      if (ok) { n.innerHTML = '<p class="tol-msg is-ok" role="status">' + ok.textContent + '</p>'; setTimeout(function () { if (n.parentNode) n.parentNode.removeChild(n); }, 6000); return; }
+      if (n.parentNode) n.parentNode.removeChild(n);
+    });
+  }
+  document.addEventListener('tol-member', function (e) { if (e.detail && e.detail.member) removeAll(); });
+
+  if (isHome) banner();
+  maybePopup();
+})();

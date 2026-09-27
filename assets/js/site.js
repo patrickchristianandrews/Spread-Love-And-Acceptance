@@ -947,6 +947,7 @@
     });
     document.querySelectorAll('.tol-gate').forEach(function (g) { g.hidden = member; });
     renderPlaceholders();
+    try { document.dispatchEvent(new CustomEvent('tol-member', { detail: { member: member } })); } catch (e) {}
   }
 
   function signUpFree(email, msgEl) {
@@ -1109,7 +1110,7 @@
   }
 
   // Read-only access for pages that need the page list (e.g. 404.html)
-  window.TOL = { sections: SECTIONS, config: CONFIG };
+  window.TOL = { sections: SECTIONS, config: CONFIG, signUp: signUpFree, isMember: function () { return isMember; } };
 
   // ---------- Start ----------
   function start() {
@@ -1120,6 +1121,8 @@
     buildChrome();
     installGates();
     applyState(isMember);
+    // not signed up yet: the "join free to unlock everything" banner on the home page and the occasional invitation elsewhere
+    if (!isMember && CONFIG.freePreview) { var ji = document.createElement('script'); ji.src = '/assets/js/join-invite.js'; ji.defer = true; document.head.appendChild(ji); }
     if (location.hash) { var t = document.getElementById(location.hash.slice(1)); if (t) t.scrollIntoView(); }
 
     if (stored && !CONFIG.freePreview) {
