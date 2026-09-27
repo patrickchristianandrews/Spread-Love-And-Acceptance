@@ -885,6 +885,7 @@
   }
   // draw the dogs on the far bank ('back') or the near side ('front'), so they pass behind the others
   function drawPack(t, p, s, groundY, barTop, layer) {
+    if (QS.pals === 'off') return;
     var RX = Math.max(p.rx, W * 0.3) * 1.2; pack.RX = RX; pack.sc = 1.3 * s;
     if (layer === 'back') { var dt = pack.lastT ? Math.min(60, t - pack.lastT) : 16; pack.lastT = t; if (!REDUCED) packStep(t, dt); }
     var mouths = [], ex = [];

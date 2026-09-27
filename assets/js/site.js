@@ -381,6 +381,7 @@
       // each part of the site has its own scene, lit by the visitor's clock; the games stay in the Night Garden
       var SCENES = { start: 'garden', about: 'garden', self: 'beach', media: 'beach', relationships: 'lake', book: 'meadow', workpapers: 'river', program: 'forest', tools: 'forest' };
       var secId = (current === '/relationships.html' && 'relationships') || (hereSection && hereSection.id) || (/^\/book\//.test(current) ? 'book' : /^\/workpapers\//.test(current) ? 'workpapers' : /^\/(learn|legal)\//.test(current) ? 'about' : ''), sceneQ = secId === 'play' || body.classList.contains('is-game') ? '?scene=garden&tod=night' : '?scene=' + (SCENES[secId] || 'garden');
+      if (body.hasAttribute('data-garden-nopals')) sceneQ += (sceneQ ? '&' : '?') + 'pals=off'; // the page has its own pals running about
       var gf = el('iframe', { class: 'tol-garden-bg', src: '/garden-backdrop.html' + sceneQ, title: 'The Night Garden, softly in the background', 'aria-hidden': 'true', tabindex: '-1' });
       body.insertBefore(el('div', { class: 'tol-garden-veil', 'aria-hidden': 'true' }), body.firstChild);
       body.insertBefore(gf, body.firstChild);
