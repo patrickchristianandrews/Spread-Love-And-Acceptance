@@ -423,7 +423,7 @@
 
     // "Something to read": one hand-picked article that fits this reading page, near the end (reading-suggest.js)
     var readMain = document.querySelector('main.read');
-    if (readMain && !body.hasAttribute('data-no-reading') && !/^\/(index|reading|library|whats-new|contents|contents-in-depth|roadmap|telemetry|404|offline)\.html$|^\/legal\//.test(current)) {
+    if (readMain && !body.hasAttribute('data-no-reading') && !document.querySelector('meta[http-equiv="Content-Security-Policy"]') && !/^\/(index|reading|library|whats-new|contents|contents-in-depth|roadmap|telemetry|404|offline)\.html$|^\/legal\//.test(current)) {
       var rl = document.createElement('script'); rl.src = '/assets/js/reading-list.js';
       rl.onload = function () {
         var rs = document.createElement('script'); rs.src = '/assets/js/reading-suggest.js';

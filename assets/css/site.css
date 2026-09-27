@@ -1304,3 +1304,251 @@ a.tol-pud-card-go, main a.tol-pud-card-go{ color:#fff !important; text-decoratio
 .tol-dive-chat{ display:inline-flex; align-items:center; gap:.35rem; min-height:40px; padding:.35rem .95rem; border-radius:999px; background:#EEF5FC; border:1px solid #BFD8EE;
   color:#2F5F8A !important; font:600 .88rem "Lora", Georgia, serif; text-decoration:none !important; }
 .tol-dive-chat:hover{ background:#E1EEFA; }
+
+/* ==========================================================================
+   Every word in a bubble
+   All readable text sits in a soft, near-opaque bubble so it never lies on the moving
+   garden. One kind of bubble everywhere: a cream fill, a whisper of a pastel rim, a
+   gentle drop shadow, round corners. No frames behind or around a bubble.
+   - Paragraphs, lists and small print that follow each other melt into ONE bubble
+     (the pieces touch and share their corners); a heading starts a new one, so each
+     section reads as one card.
+   - A block on its own shrinks to fit what it holds: a short note is a small bubble,
+     a long one grows wide.
+   Pieces tune the bubble through --bb-* variables rather than fighting its !important.
+   ========================================================================== */
+:root{
+  --bb-fill:rgba(255,253,248,.94);
+  --bb-edge:linear-gradient(90deg, #F2CAD5, #DCCDF0 35%, #C9DFF3 66%, #CBEAD8);
+  --bb-shadow:0 14px 26px -18px rgba(80,60,130,.42), 0 3px 8px -6px rgba(80,60,130,.22);
+  --bb-r:clamp(18px, 1rem + 1vw, 28px);
+  --bb-px:clamp(1rem, .7rem + 1.6vw, 1.55rem);
+  --bb-py:clamp(.75rem, .55rem + .8vw, 1.05rem);
+  --bb-gap:clamp(.9rem, .6rem + 1vw, 1.3rem);
+  --bb-seam:.45rem;
+}
+/* the one bubble */
+.bb, :is(main.read, main.read > :is(section, article, div):not([class]), main.read > section.wn-group, main.read > div.locked-section, main.read > header.hero, main.read > div.chapter-body, main.read > section.home-contents, main:not([class]) > :is(section, article):not([class]), main:not([class])) > :is(p, ul, ol, dl, h1, h2, h3, h4, h5, details, figure, .table-wrap, table, address, pre):not(.simple-lede, .depth-bar, .ideas, .tol-gentle, .tol-tip, .tol-warning, .announce-bar, .wn-card, .roadmap-callout, .cr-safety, .tol-private, .try-this, .scene, .growing-note, .tol-pud-card, .tol-puddles-hi, .tol-cheer, .wn-list, .sr-only, .visually-hidden, .no-bubble, [hidden]){
+  box-sizing:border-box; max-width:100% !important; width:var(--bb-w, fit-content);
+  margin:var(--bb-mt, 0) 0 var(--bb-mb, var(--bb-gap)) !important;
+  padding:var(--bb-pt, var(--bb-py)) var(--bb-pr, var(--bb-px)) var(--bb-pb, var(--bb-py)) var(--bb-pl, var(--bb-px)) !important;
+  border:1.5px solid transparent !important; border-top-width:var(--bb-bt, 1.5px) !important; border-bottom-width:var(--bb-bbw, 1.5px) !important;
+  border-radius:var(--bb-tl, var(--bb-r)) var(--bb-tr, var(--bb-r)) var(--bb-br, var(--bb-r)) var(--bb-bl, var(--bb-r)) !important;
+  background:linear-gradient(var(--bb-fill), var(--bb-fill)) padding-box, var(--bb-edge) border-box !important;
+  box-shadow:var(--bb-shadow) !important;
+}
+/* a little playful variety in the corners */
+main.read > p:nth-of-type(3n+2){ --bb-tl:calc(var(--bb-r) + 7px); --bb-br:calc(var(--bb-r) + 4px); }
+main.read > p:nth-of-type(3n){ --bb-tr:calc(var(--bb-r) + 7px); --bb-bl:calc(var(--bb-r) + 3px); }
+/* lists keep their bullets inside */
+:is(main.read, main.read > :is(section, article, div):not([class]), main.read > section.wn-group, main.read > div.locked-section, main.read > header.hero, main.read > div.chapter-body, main.read > section.home-contents, main:not([class]) > :is(section, article):not([class]), main:not([class])) > :is(ul, ol):not(.simple-lede, .depth-bar, .ideas, .tol-gentle, .tol-tip, .tol-warning, .announce-bar, .wn-card, .roadmap-callout, .cr-safety, .tol-private, .try-this, .scene, .growing-note, .tol-pud-card, .tol-puddles-hi, .tol-cheer, .wn-list, .sr-only, .visually-hidden, .no-bubble, [hidden]){ --bb-pl:calc(var(--bb-px) + 1.3rem); }
+:is(main.read, main.read > :is(section, article, div):not([class]), main.read > section.wn-group, main.read > div.locked-section, main.read > header.hero, main.read > div.chapter-body, main.read > section.home-contents, main:not([class]) > :is(section, article):not([class]), main:not([class])) > :is(ul, ol):not(.simple-lede, .depth-bar, .ideas, .tol-gentle, .tol-tip, .tol-warning, .announce-bar, .wn-card, .roadmap-callout, .cr-safety, .tol-private, .try-this, .scene, .growing-note, .tol-pud-card, .tol-puddles-hi, .tol-cheer, .wn-list, .sr-only, .visually-hidden, .no-bubble, [hidden]) > li{ max-width:none; }
+:is(main.read, main.read > :is(section, article, div):not([class]), main.read > section.wn-group, main.read > div.locked-section, main.read > header.hero, main.read > div.chapter-body, main.read > section.home-contents, main:not([class]) > :is(section, article):not([class]), main:not([class])) > :is(ul, ol):not(.simple-lede, .depth-bar, .ideas, .tol-gentle, .tol-tip, .tol-warning, .announce-bar, .wn-card, .roadmap-callout, .cr-safety, .tol-private, .try-this, .scene, .growing-note, .tol-pud-card, .tol-puddles-hi, .tol-cheer, .wn-list, .sr-only, .visually-hidden, .no-bubble, [hidden]) > li:first-child{ margin-top:0; }
+:is(main.read, main.read > :is(section, article, div):not([class]), main.read > section.wn-group, main.read > div.locked-section, main.read > header.hero, main.read > div.chapter-body, main.read > section.home-contents, main:not([class]) > :is(section, article):not([class]), main:not([class])) > :is(ul, ol):not(.simple-lede, .depth-bar, .ideas, .tol-gentle, .tol-tip, .tol-warning, .announce-bar, .wn-card, .roadmap-callout, .cr-safety, .tol-private, .try-this, .scene, .growing-note, .tol-pud-card, .tol-puddles-hi, .tol-cheer, .wn-list, .sr-only, .visually-hidden, .no-bubble, [hidden]) > li:last-child{ margin-bottom:0; }
+:is(main.read, main.read > :is(section, article, div):not([class]), main.read > section.wn-group, main.read > div.locked-section, main.read > header.hero, main.read > div.chapter-body, main.read > section.home-contents, main:not([class]) > :is(section, article):not([class]), main:not([class])) > :is(p, details, figure, dl):not(.simple-lede, .depth-bar, .ideas, .tol-gentle, .tol-tip, .tol-warning, .announce-bar, .wn-card, .roadmap-callout, .cr-safety, .tol-private, .try-this, .scene, .growing-note, .tol-pud-card, .tol-puddles-hi, .tol-cheer, .wn-list, .sr-only, .visually-hidden, .no-bubble, [hidden]) > :last-child{ margin-bottom:0; }
+/* a heading on its own is a small pill bubble */
+:is(main.read, main.read > :is(section, article, div):not([class]), main.read > section.wn-group, main.read > div.locked-section, main.read > header.hero, main.read > div.chapter-body, main.read > section.home-contents, main:not([class]) > :is(section, article):not([class]), main:not([class])) > :is(h2, h3, h4, h5):not(.simple-lede, .depth-bar, .ideas, .tol-gentle, .tol-tip, .tol-warning, .announce-bar, .wn-card, .roadmap-callout, .cr-safety, .tol-private, .try-this, .scene, .growing-note, .tol-pud-card, .tol-puddles-hi, .tol-cheer, .wn-list, .sr-only, .visually-hidden, .no-bubble, [hidden]){ --bb-r:1.35rem; --bb-pt:.5rem; --bb-pb:.5rem; --bb-pl:1.15rem; --bb-pr:1.15rem; line-height:1.25; }
+:is(main.read, main.read > :is(section, article, div):not([class]), main.read > section.wn-group, main.read > div.locked-section, main.read > header.hero, main.read > div.chapter-body, main.read > section.home-contents, main:not([class]) > :is(section, article):not([class]), main:not([class])) > :is(h2, h3):not(.simple-lede, .depth-bar, .ideas, .tol-gentle, .tol-tip, .tol-warning, .announce-bar, .wn-card, .roadmap-callout, .cr-safety, .tol-private, .try-this, .scene, .growing-note, .tol-pud-card, .tol-puddles-hi, .tol-cheer, .wn-list, .sr-only, .visually-hidden, .no-bubble, [hidden]){ --bb-mt:calc(var(--bb-gap) * 1.7); }
+:is(main.read, main.read > :is(section, article, div):not([class]), main.read > section.wn-group, main.read > div.locked-section, main.read > header.hero, main.read > div.chapter-body, main.read > section.home-contents, main:not([class]) > :is(section, article):not([class]), main:not([class])) > :is(h2, h3):not(.simple-lede, .depth-bar, .ideas, .tol-gentle, .tol-tip, .tol-warning, .announce-bar, .wn-card, .roadmap-callout, .cr-safety, .tol-private, .try-this, .scene, .growing-note, .tol-pud-card, .tol-puddles-hi, .tol-cheer, .wn-list, .sr-only, .visually-hidden, .no-bubble, [hidden]):first-child{ --bb-mt:0px; }
+/* tables inside their bubble: no heavy grid, just soft rows */
+:is(main.read, main.read > :is(section, article, div):not([class]), main.read > section.wn-group, main.read > div.locked-section, main.read > header.hero, main.read > div.chapter-body, main.read > section.home-contents, main:not([class]) > :is(section, article):not([class]), main:not([class])) > :is(.table-wrap, table):not(.simple-lede, .depth-bar, .ideas, .tol-gentle, .tol-tip, .tol-warning, .announce-bar, .wn-card, .roadmap-callout, .cr-safety, .tol-private, .try-this, .scene, .growing-note, .tol-pud-card, .tol-puddles-hi, .tol-cheer, .wn-list, .sr-only, .visually-hidden, .no-bubble, [hidden]){ overflow-x:auto; --bb-w:100%; }
+:is(main.read, main.read > :is(section, article, div):not([class]), main.read > section.wn-group, main.read > div.locked-section, main.read > header.hero, main.read > div.chapter-body, main.read > section.home-contents, main:not([class]) > :is(section, article):not([class]), main:not([class])) > table:not(.simple-lede, .depth-bar, .ideas, .tol-gentle, .tol-tip, .tol-warning, .announce-bar, .wn-card, .roadmap-callout, .cr-safety, .tol-private, .try-this, .scene, .growing-note, .tol-pud-card, .tol-puddles-hi, .tol-cheer, .wn-list, .sr-only, .visually-hidden, .no-bubble, [hidden]){ display:block; border-collapse:collapse; }
+main :is(.table-wrap table, .read > table) :is(th, td){ border:0 !important; border-bottom:1px solid rgba(160,135,205,.25) !important; background:transparent; }
+main :is(.table-wrap table, .read > table) th{ border-bottom:2px solid rgba(160,135,205,.45) !important; }
+main :is(.table-wrap table, .read > table) tr:last-child td{ border-bottom:0 !important; }
+/* pieces that follow each other melt into one bubble */
+:is(main.read, main.read > :is(section, article, div):not([class]), main.read > section.wn-group, main.read > div.locked-section, main.read > header.hero, main.read > div.chapter-body, main.read > section.home-contents, main:not([class]) > :is(section, article):not([class]), main:not([class])) > :is(p, ul, ol, dl, h1, h2, h3, h4, h5, details, figure, .table-wrap, table, address, pre):not(.simple-lede, .depth-bar, .ideas, .tol-gentle, .tol-tip, .tol-warning, .announce-bar, .wn-card, .roadmap-callout, .cr-safety, .tol-private, .try-this, .scene, .growing-note, .tol-pud-card, .tol-puddles-hi, .tol-cheer, .wn-list, .sr-only, .visually-hidden, .no-bubble, [hidden]):has(+ :is(p, ul, ol, dl, h1, h4, h5, details, figure, .table-wrap, address, pre):not(.simple-lede, .depth-bar, .ideas, .tol-gentle, .tol-tip, .tol-warning, .announce-bar, .wn-card, .roadmap-callout, .cr-safety, .tol-private, .try-this, .scene, .growing-note, .tol-pud-card, .tol-puddles-hi, .tol-cheer, .wn-list, .sr-only, .visually-hidden, .no-bubble, [hidden])){ --bb-w:auto; --bb-br:0px; --bb-bl:0px; --bb-mb:0px; --bb-pb:var(--bb-seam); --bb-bbw:0px; }
+:is(main.read, main.read > :is(section, article, div):not([class]), main.read > section.wn-group, main.read > div.locked-section, main.read > header.hero, main.read > div.chapter-body, main.read > section.home-contents, main:not([class]) > :is(section, article):not([class]), main:not([class])) > :is(p, ul, ol, dl, h1, h2, h3, h4, h5, details, figure, .table-wrap, table, address, pre):not(.simple-lede, .depth-bar, .ideas, .tol-gentle, .tol-tip, .tol-warning, .announce-bar, .wn-card, .roadmap-callout, .cr-safety, .tol-private, .try-this, .scene, .growing-note, .tol-pud-card, .tol-puddles-hi, .tol-cheer, .wn-list, .sr-only, .visually-hidden, .no-bubble, [hidden]) + :is(p, ul, ol, dl, h1, h4, h5, details, figure, .table-wrap, address, pre):not(.simple-lede, .depth-bar, .ideas, .tol-gentle, .tol-tip, .tol-warning, .announce-bar, .wn-card, .roadmap-callout, .cr-safety, .tol-private, .try-this, .scene, .growing-note, .tol-pud-card, .tol-puddles-hi, .tol-cheer, .wn-list, .sr-only, .visually-hidden, .no-bubble, [hidden]){ --bb-w:auto; --bb-tl:0px; --bb-tr:0px; --bb-mt:0px; --bb-pt:var(--bb-seam); --bb-bt:0px; }
+:is(main.read, main.read > :is(section, article, div):not([class]), main.read > section.wn-group, main.read > div.locked-section, main.read > header.hero, main.read > div.chapter-body, main.read > section.home-contents, main:not([class]) > :is(section, article):not([class]), main:not([class])) > :is(h2, h3, h4, h5):not(.simple-lede, .depth-bar, .ideas, .tol-gentle, .tol-tip, .tol-warning, .announce-bar, .wn-card, .roadmap-callout, .cr-safety, .tol-private, .try-this, .scene, .growing-note, .tol-pud-card, .tol-puddles-hi, .tol-cheer, .wn-list, .sr-only, .visually-hidden, .no-bubble, [hidden]):has(+ :is(p, ul, ol, dl, h1, h4, h5, details, figure, .table-wrap, address, pre):not(.simple-lede, .depth-bar, .ideas, .tol-gentle, .tol-tip, .tol-warning, .announce-bar, .wn-card, .roadmap-callout, .cr-safety, .tol-private, .try-this, .scene, .growing-note, .tol-pud-card, .tol-puddles-hi, .tol-cheer, .wn-list, .sr-only, .visually-hidden, .no-bubble, [hidden])){ --bb-pt:calc(var(--bb-py) + .1rem); --bb-pb:.2rem; --bb-pl:var(--bb-px); --bb-pr:var(--bb-px); --bb-r:clamp(18px, 1rem + 1vw, 28px); }
+@media print{ :is(main.read, main.read > :is(section, article, div):not([class]), main.read > section.wn-group, main.read > div.locked-section, main.read > header.hero, main.read > div.chapter-body, main.read > section.home-contents, main:not([class]) > :is(section, article):not([class]), main:not([class])) > :is(p, ul, ol, dl, h1, h2, h3, h4, h5, details, figure, .table-wrap, table, address, pre):not(.simple-lede, .depth-bar, .ideas, .tol-gentle, .tol-tip, .tol-warning, .announce-bar, .wn-card, .roadmap-callout, .cr-safety, .tol-private, .try-this, .scene, .growing-note, .tol-pud-card, .tol-puddles-hi, .tol-cheer, .wn-list, .sr-only, .visually-hidden, .no-bubble, [hidden]), .bb{ background:#fff !important; box-shadow:none !important; border-color:transparent !important; } }
+/* the title of each page: one bubble, sized to the title, no ruled line under it */
+main.read > header.read-head{
+  width:fit-content; max-width:100%; box-sizing:border-box; margin:0 0 var(--bb-gap); padding:var(--bb-py) calc(var(--bb-px) + .2rem) calc(var(--bb-py) + .1rem);
+  border:1.5px solid transparent !important; border-radius:calc(var(--bb-r) + 6px) calc(var(--bb-r) + 2px) calc(var(--bb-r) + 8px) var(--bb-r);
+  background:linear-gradient(var(--bb-fill), var(--bb-fill)) padding-box, var(--bb-edge) border-box; box-shadow:var(--bb-shadow);
+}
+main.read > header.read-head .read-code{ color:#86601F; }
+main.read > header.read-head > :last-child{ margin-bottom:0; }
+.tol-deep main.read > header.read-head::after, .tol-simple main.read > header.read-head::after{ right:.8rem; bottom:.7rem; }
+/* "Simple version / Read the full page": a slim pill */
+main.read > p.depth-bar, main:not([class]) > p.depth-bar{
+  margin:0 0 var(--bb-gap); padding:.45rem 1.1rem; border:1.5px solid transparent; border-radius:999px;
+  background:linear-gradient(var(--bb-fill), var(--bb-fill)) padding-box, var(--bb-edge) border-box; box-shadow:var(--bb-shadow); color:#5A5244;
+}
+main > p.depth-bar a:not(.dig){ color:#5A5244; }
+main > p.depth-bar .dig{ color:#86601F !important; }
+/* dividers between bubbles are just a breath of space */
+main.read > hr, main:not([class]) > hr{ border:0 !important; height:0; margin:calc(var(--bb-gap) * 1.2) 0 !important; background:none; }
+/* the older one-off bubbles share the same cream and stay fully opaque enough to read */
+.read .simple-lede, .read .scene, .scene, .try-this, .read .ideas > li, .tol-tip, .growing-note, .tol-pud-card, .read blockquote, .tol-warning,
+.announce-bar, .read a.next-card, .read .roadmap-callout, .wn-card, .tol-private, .cr-safety{ -webkit-backdrop-filter:none; backdrop-filter:none; }
+.read .simple-lede{ --bub-fill:rgba(255,248,230,.95); }
+.read .scene, .scene{ --bub-fill:rgba(248,243,253,.95); }
+.try-this, .growing-note{ --bub-fill:rgba(240,249,243,.95); }
+.read .ideas > li, .read blockquote, .wn-card, .read a.next-card, .tol-tip, .tol-private{ --bub-fill:rgba(255,253,248,.94); }
+.read .ideas > li{ height:auto; align-self:start; }
+.read .ideas{ align-items:start; }
+/* previous / next: two little bubbles, no rule above them */
+.tol-pager{ border-top:0; gap:var(--bb-gap); }
+.tol-pager a{ padding:.7rem 1.1rem; border:1.5px solid transparent; border-radius:22px; width:fit-content; max-width:100%; box-sizing:border-box;
+  background:linear-gradient(var(--bb-fill), var(--bb-fill)) padding-box, var(--bb-edge) border-box; box-shadow:var(--bb-shadow); transition:transform .2s ease; }
+.tol-pager .is-next{ justify-self:end; }
+.tol-pager a:hover{ transform:translateY(-2px); }
+/* the footer: one soft, wide bubble; room below it for the floating Breathe and weather pills */
+.tol-foot{ border-top:0; border-radius:28px 28px 0 0; background:rgba(255,253,248,.95); box-shadow:0 -10px 26px -18px rgba(80,60,130,.35);
+  padding-bottom:calc(2.5rem + 4.5rem + env(safe-area-inset-bottom, 0px)); }
+.tol-foot .tol-promise{ border-bottom:0; }
+@media (prefers-reduced-motion: reduce){ .tol-pager a, .read .ideas > li{ transition:none !important; } .tol-pager a:hover, .read .ideas > li:hover{ transform:none !important; } }
+
+/* ---------- Boxes that hold a whole block become one bubble (no frame, no ruled edges) ---------- */
+:is(main.read, main:not([class]), main.read > :is(section, article, div):not([class]), main:not([class]) > :is(section, article):not([class])) > :is(section, div, article, aside, form, nav, details, figure, fieldset)[class]:not(.simple-lede, .scene, .try-this, .growing-note, .tol-pud-card, .tol-puddles-hi, .tol-cheer, .tol-tip, .tol-warning, .announce-bar, .wn-card, .roadmap-callout, .cr-safety, .tol-private, .tol-gentle, .tol-read-wrap, .tol-pillars, .announce-stack, .tol-cols, .next-grid, .sw-opts, .tiers, .steps, .wn-group, .locked-section, .chapter-body, .home-contents, .hero, .ls-awning, .pc-launch-row, .tol-read-host, .kicker, .no-bubble, .sr-only, .visually-hidden, .depth-bar, .tol-dive-card, [class*='gm-'], [class*='xw-'], [class*='jl-'], [class*='lib-'], [class*='pp-'], [class*='ng-'], .qw, [hidden]),
+body nav.tol-pillars,
+main.read > section.fit-callout, main.read > section.free-strip, main.read > div.tol-aside, main.read > div.tol-index,
+main.read > section.tt-card, main.read > section.tt-week-wrap, main.read > div.cr-private, main.read > section.cr-limits, main.read > section.cr-step,
+main.read > div.included, main.read > div.wpf-privacy, main.read > section.ws-step, main.read > div.stand,
+main.read .tol-cols > .tol-col, main.read .tiers > .tier, main.read .steps > .step, main.read .forecast, main.read .almanac,
+main.read div.tol-gate, main div.tol-gate, main.read section.lens{
+  box-sizing:border-box; max-width:100% !important;
+  margin:0 0 var(--bb-gap) !important; padding:calc(var(--bb-py) + .15rem) var(--bb-px) !important;
+  border:1.5px solid transparent !important; border-radius:var(--bb-r) !important;
+  background:linear-gradient(var(--bb-fill), var(--bb-fill)) padding-box, var(--bb-edge) border-box !important;
+  box-shadow:var(--bb-shadow) !important; color:var(--ink, #2B2620);
+}
+/* a few keep a soft tint of their own so they still read as a note, a warning or a sign-up */
+main.read > div.cr-private, main.read > div.wpf-privacy, main.read > section.free-strip, main.read div.tol-gate, main div.tol-gate{ --bb-fill:rgba(238,246,252,.95); }
+main.read > section.fit-callout, main.read > div.tol-aside{ --bb-fill:rgba(240,249,243,.95); }
+main.read > div.tol-index, body nav.tol-pillars{ --bb-fill:rgba(255,251,240,.95); }
+body nav.tol-pillars{ width:fit-content; }
+body nav.tol-pillars .tp-chip:not(.is-on){ background:rgba(255,255,255,.7); }
+main.read .tol-cols > .tol-col.paid{ --bb-fill:rgba(250,244,229,.95); }
+/* wrappers that only arrange bubbles stay invisible */
+main.read .tol-cols, main.read .tiers, main.read .steps{ background:none !important; border:0 !important; box-shadow:none !important; padding:0 !important; }
+main.read .tol-cols{ align-items:start; gap:var(--bb-gap); }
+
+/* ---------- Inside a bubble: soft rows instead of ruled boxes ---------- */
+/* Start here: names, the four questions, the journal, the chain */
+main.read .tol-names, main.read .tol-journal{ border-top:0 !important; }
+main.read .tol-names div:last-child, main.read .tol-journal > li:last-child{ border-bottom:0 !important; }
+main.read .tol-names div, main.read .tol-journal > li, main.read .tol-items li{ border-bottom-color:rgba(160,135,205,.22) !important; }
+main.read .tol-four, main.read .tol-chain{ background:none !important; border:0 !important; gap:0 1.2rem; }
+main.read .tol-four li, main.read .tol-chain li{ background:none !important; border:0 !important; border-bottom:1px solid rgba(160,135,205,.22) !important; padding:.7rem 0 !important; }
+main.read .tol-four li:last-child, main.read .tol-chain li:last-child{ border-bottom:0 !important; }
+main.read .tol-journal > li.tol-gate{ margin:.3rem 0 !important; padding:.8rem .9rem !important; border:0 !important; border-radius:18px !important;
+  background:rgba(252,236,232,.9) !important; box-shadow:none !important; max-width:none !important; }
+main.read .tol-journal > li.tol-gate + li{ border-top:0; }
+main.read .tol-group-head{ border-bottom-color:rgba(160,135,205,.35); }
+main.read .tol-status.planned{ border-color:rgba(160,135,205,.45); }
+/* What's new: the group title and blurb share a bubble, the cards line up flush */
+main.read .wn-list{ padding:0 !important; }
+/* Quick checks (Today's Weather): each step its own bubble, soft ladder, round chips */
+main.read .steps > .step{ margin-top:0 !important; }
+main.read .rungs{ border:0 !important; border-radius:18px !important; overflow:hidden; background:rgba(246,241,252,.6); }
+main.read .rungs .rung{ background:transparent; border-bottom-color:rgba(160,135,205,.22); }
+main.read .rungs .rung:hover, main.read .rungs .rung[aria-pressed="true"]{ background:rgba(236,226,248,.8); }
+main.read .step .chip, main.read .step .btn, main.read .forecast .btn{ border-radius:999px; }
+main.read .forecast .cols{ border:0 !important; gap:.6rem; background:none; }
+main.read .forecast .col{ border:0 !important; border-radius:16px; background:rgba(246,241,252,.7); }
+main.read .forecast .say{ border-left:0 !important; border-radius:16px; background:rgba(255,246,226,.9); }
+main.read .almanac .pattern, main.read p.why{ border-left:0 !important; padding-left:0; }
+main.read p.why{ padding-left:var(--bb-px) !important; }
+/* Lemonade stand: the stand keeps its lemon colour, without the dashed frame; the answer is a soft speech bubble */
+main.read > div.stand{ --bb-fill:rgba(255,248,219,.96); }
+main.read .stand .balance-line{ border:0 !important; box-shadow:0 8px 20px -12px rgba(120,100,40,.45); }
+main.read .stand .balance-line::before{ border:0 !important; box-shadow:-2px -2px 4px -2px rgba(120,100,40,.18); }
+main.read .stand .stand-heads{ border-bottom-color:rgba(200,170,80,.35) !important; }
+main.read .stand .row{ border-bottom-color:rgba(200,170,80,.22) !important; }
+/* Conversation Reader: steps are bubbles; the example and privacy notes lose their side rules */
+main.read > section.cr-step h2, main.read > section.cr-limits > details > summary{ margin-top:0; }
+/* Privacy and the other legal pages: sections are just spacing, their text sits in bubbles */
+main:not([class]) > section{ background:none !important; border:0 !important; box-shadow:none !important; padding-left:0 !important; padding-right:0 !important; padding-top:0 !important; }
+main:not([class]) > section > .kicker{ display:inline-block; margin:0 0 .5rem; padding:.15rem .7rem; border-radius:999px; background:var(--bb-fill); box-shadow:var(--bb-shadow); }
+/* Wiring Card (a tool page with its own frame) */
+.wrap:has(> .sitebar) > .sitebar, .wrap:has(> .sitebar) > header, .wrap:has(> .sitebar) > .note, .wrap:has(> .sitebar) .panel, .wrap:has(> .sitebar) .sheet{
+  box-sizing:border-box; border:1.5px solid transparent !important; border-radius:var(--bb-r) !important;
+  background:linear-gradient(var(--bb-fill), var(--bb-fill)) padding-box, var(--bb-edge) border-box !important; box-shadow:var(--bb-shadow) !important;
+  padding:var(--bb-py) var(--bb-px) !important; margin-bottom:var(--bb-gap) !important; color:var(--ink);
+}
+.wrap:has(> .sitebar) > .sitebar{ margin-top:1rem; padding-top:.6rem !important; padding-bottom:.6rem !important; border-radius:999px !important; }
+.wrap:has(> .sitebar) > header{ margin-top:var(--bb-gap); }
+.wrap:has(> .sitebar) > header .privacy.pillar-note{ margin-bottom:0; }
+.wrap:has(> .sitebar) > .note{ max-width:70ch; color:#4A4336; }
+.wrap:has(> .sitebar) .sheet .fine{ border-top-color:rgba(160,135,205,.3); }
+.wrap:has(> .sitebar) .chips button, .wrap:has(> .sitebar) .go, .wrap:has(> .sitebar) .ghost{ border-radius:999px; }
+/* The in-depth Frequency Framework (its own layout): each section a bubble, inner panels a soft tint, no rules */
+body > .container > :is(.use-with-block, .domain-indicator, .section, .footer, .embody-section), body > .container > .locked-section > .section, body > .next-steps, body > .context-opening > .context-box,
+body > .container > .hero > :is(h1, p:not(.depth-bar)){
+  box-sizing:border-box; border:1.5px solid transparent !important; border-radius:var(--bb-r) !important;
+  background:linear-gradient(var(--bb-fill), var(--bb-fill)) padding-box, var(--bb-edge) border-box !important; box-shadow:var(--bb-shadow) !important;
+  padding:calc(var(--bb-py) + .2rem) var(--bb-px) !important; margin-bottom:var(--bb-gap) !important;
+}
+body > .container > .hero{ border:0 !important; background:none !important; box-shadow:none !important; padding-left:0 !important; padding-right:0 !important; }
+body > .container > .hero > :is(h1, p:not(.depth-bar)){ width:fit-content; max-width:100%; margin-left:auto; margin-right:auto; }
+body > .container > .hero > p.hero-tagline + p, body > .container > .hero > p + p.pillar-note{ margin-top:0; }
+body > .container > .hero > .depth-bar{ border:1.5px solid transparent !important; border-radius:999px; padding:.45rem 1.1rem !important;
+  background:linear-gradient(var(--bb-fill), var(--bb-fill)) padding-box, var(--bb-edge) border-box; box-shadow:var(--bb-shadow); }
+body > .context-opening > .context-box{ border-left-width:1.5px !important; }
+body > .container, body > .context-opening, body > .next-steps{ --brass:#86601F; }
+body > .next-steps{ margin-left:clamp(16px, 4vw, 2rem) !important; margin-right:clamp(16px, 4vw, 2rem) !important; }
+body > .container :is(.section h2, .use-with-block h4, .domain-indicator h4){ border-bottom:0 !important; }
+body > .container :is(.note-box, .domain-card, .use-item, .vis-container, .controls){ border:0 !important; border-radius:16px !important; }
+body > .container :is(.note-box, .domain-card, .use-item){ background:rgba(246,241,252,.75) !important; }
+body > .container .domain-example{ border-left:0 !important; }
+/* plain sections only group their bubbles; they draw nothing themselves */
+main.read > :is(section, article, div):not([class]){ border:0 !important; background:none !important; box-shadow:none !important; padding:0 !important; }
+/* Home: "Start where you are" choices are little bubbles you can tap */
+main.read .sw-opts{ gap:.55rem; margin-bottom:var(--bb-gap); }
+main.read .sw-opt{ border:1.5px solid transparent; border-radius:20px; background:linear-gradient(var(--bb-fill), var(--bb-fill)) padding-box, var(--bb-edge) border-box;
+  box-shadow:var(--bb-shadow); align-items:center; transition:transform .2s ease, box-shadow .2s ease; }
+main.read .sw-opt:hover{ background:linear-gradient(#FFF7EC, #FFF7EC) padding-box, var(--bb-edge) border-box; transform:translateY(-2px); }
+main.read .sw-opt[aria-pressed="true"]{ background:#2B2620; color:#FFFDF7; border-color:#2B2620; }
+main.read .sw-out{ border-left:0; border-radius:var(--bb-r); background:linear-gradient(var(--bb-fill), var(--bb-fill)) padding-box, var(--bb-edge) border-box; border:1.5px solid transparent; box-shadow:var(--bb-shadow); }
+main.read .sw-more{ border-top-color:rgba(160,135,205,.25); }
+/* Home: "Where to go next" cards float apart */
+main.read .next-grid{ background:none !important; border:0 !important; overflow:visible !important; gap:var(--bb-gap) !important; align-items:start; }
+main.read .next-grid a.next-card{ transition:transform .2s ease; }
+main.read .next-grid a.next-card:hover{ transform:translateY(-2px); }
+/* Home: the outside-lens rules become soft rows */
+main.read .lens-grid, main.read .layer-demo{ border-top:0 !important; border-bottom:0 !important; }
+main.read .lens-item + .lens-item, main.read .layer + .layer{ border-color:rgba(160,135,205,.25) !important; }
+main.read .spirit p, main.read .lens-note{ border-left:0 !important; padding-left:0 !important; }
+/* the note under "Something to read" */
+main .tol-read-wrap > .tol-read-note{ width:fit-content; max-width:100%; box-sizing:border-box; margin:.55rem 0 0 !important; padding:.4rem .9rem;
+  border-radius:999px; background:var(--bb-fill); box-shadow:var(--bb-shadow); }
+@media (max-width:560px){ main .tol-read-wrap > .tol-read-note{ border-radius:18px; } }
+@media (prefers-reduced-motion: reduce){ main.read .sw-opt, main.read .next-grid a.next-card{ transition:none; } main.read .sw-opt:hover, main.read .next-grid a.next-card:hover{ transform:none; } }
+/* lists drawn without bullets don't need the bullet gutter */
+main.read > :is(.fp-jump, .ci-jump, .nt-jump, .off-list, .fp-cycle, .fp-start, .fp-pairs, .nt-rules, .tol-journal, .tol-chain, .tol-four, .dig-list){ --bb-pl:var(--bb-px) !important; }
+/* small brass labels inside bubbles: a shade deeper so they pass 4.5:1 on the cream */
+main, .wrap:has(> .sitebar){ --brass:#86601F; }
+/* page indexes (roadmap, start here) inside their bubble: soft rules, and phone rows that don't squash */
+main.read > div.tol-index .tol-index-section > h3{ border-bottom:1px solid rgba(160,135,205,.35); }
+main.read > div.tol-index .tol-row{ border-bottom:1px solid rgba(160,135,205,.2); }
+main.read > div.tol-index .tol-index-section:first-child{ margin-top:0; }
+@media (max-width:520px){ main .tol-index .tol-row{ grid-template-columns:1fr auto; } main .tol-index .tol-code{ grid-column:1 / -1; } }
+/* Home: the opening is not a box; its title, notes and actions are bubbles of their own */
+main.read > header.hero{ border:0 !important; background:none !important; padding:0 !important; box-shadow:none !important; }
+main.read > header.hero > .announce-stack{ margin:0 0 var(--bb-gap); }
+/* the dark call-to-action button keeps light words, and gets a rounder shape to match */
+main.read a.tol-button{ color:#FFFDF7 !important; text-decoration:none; border-radius:999px; padding:.6rem 1.2rem; }
+main.read a.tol-button:hover{ color:#FFFDF7 !important; }
+main.read .cr-btn{ border-radius:999px; }
+/* Legal and other two-column pages: the contents sidebar floats as a bubble, no ruled divider */
+.frame > .sidebar{ box-sizing:border-box; margin:1rem .75rem 1rem 0; height:auto; max-height:calc(100vh - var(--tol-bar-h, 64px) - 2rem); top:calc(var(--tol-bar-h, 64px) + 1rem);
+  padding:1.3rem 1.2rem 1.4rem; border:1.5px solid transparent; border-radius:var(--bb-r);
+  background:linear-gradient(var(--bb-fill), var(--bb-fill)) padding-box, var(--bb-edge) border-box; box-shadow:var(--bb-shadow); --brass:#86601F; }
+.frame > .rule{ visibility:hidden; }
+.frame > .sidebar nav ol, .frame > .sidebar nav li{ border-color:rgba(160,135,205,.22) !important; }
+@media (max-width:860px){ .frame > .sidebar{ margin:1rem 16px 0; top:auto; max-height:none; } }
+main:not([class]) > p.last-updated{ opacity:1 !important; color:#5A5244; }
+/* a bubble inside a whole-block bubble drops its own frame and shadow and keeps only a soft tint */
+:is(main.read, main:not([class]), main.read > :is(section, article, div):not([class]), main:not([class]) > :is(section, article):not([class])) > :is(section, div, article, aside, form, nav, details, figure, fieldset)[class]:not(.simple-lede, .scene, .try-this, .growing-note, .tol-pud-card, .tol-puddles-hi, .tol-cheer, .tol-tip, .tol-warning, .announce-bar, .wn-card, .roadmap-callout, .cr-safety, .tol-private, .tol-gentle, .tol-read-wrap, .tol-pillars, .announce-stack, .tol-cols, .next-grid, .sw-opts, .tiers, .steps, .wn-group, .locked-section, .chapter-body, .home-contents, .hero, .ls-awning, .pc-launch-row, .tol-read-host, .kicker, .no-bubble, .sr-only, .visually-hidden, .depth-bar, .tol-dive-card, [class*='gm-'], [class*='xw-'], [class*='jl-'], [class*='lib-'], [class*='pp-'], [class*='ng-'], .qw, [hidden]) :is(.scene, .try-this, .simple-lede, blockquote, .tol-tip, .tol-warning, .tol-aside, .growing-note){
+  box-shadow:none !important; border-color:transparent !important; background:rgba(246,241,252,.7) !important; -webkit-backdrop-filter:none; backdrop-filter:none; }
+:is(main.read, main:not([class]), main.read > :is(section, article, div):not([class]), main:not([class]) > :is(section, article):not([class])) > :is(section, div, article, aside, form, nav, details, figure, fieldset)[class]:not(.simple-lede, .scene, .try-this, .growing-note, .tol-pud-card, .tol-puddles-hi, .tol-cheer, .tol-tip, .tol-warning, .announce-bar, .wn-card, .roadmap-callout, .cr-safety, .tol-private, .tol-gentle, .tol-read-wrap, .tol-pillars, .announce-stack, .tol-cols, .next-grid, .sw-opts, .tiers, .steps, .wn-group, .locked-section, .chapter-body, .home-contents, .hero, .ls-awning, .pc-launch-row, .tol-read-host, .kicker, .no-bubble, .sr-only, .visually-hidden, .depth-bar, .tol-dive-card, [class*='gm-'], [class*='xw-'], [class*='jl-'], [class*='lib-'], [class*='pp-'], [class*='ng-'], .qw, [hidden]) :is(.table-wrap, table){ border:0 !important; box-shadow:none !important; }
+:is(main.read, main:not([class]), main.read > :is(section, article, div):not([class]), main:not([class]) > :is(section, article):not([class])) > :is(section, div, article, aside, form, nav, details, figure, fieldset)[class]:not(.simple-lede, .scene, .try-this, .growing-note, .tol-pud-card, .tol-puddles-hi, .tol-cheer, .tol-tip, .tol-warning, .announce-bar, .wn-card, .roadmap-callout, .cr-safety, .tol-private, .tol-gentle, .tol-read-wrap, .tol-pillars, .announce-stack, .tol-cols, .next-grid, .sw-opts, .tiers, .steps, .wn-group, .locked-section, .chapter-body, .home-contents, .hero, .ls-awning, .pc-launch-row, .tol-read-host, .kicker, .no-bubble, .sr-only, .visually-hidden, .depth-bar, .tol-dive-card, [class*='gm-'], [class*='xw-'], [class*='jl-'], [class*='lib-'], [class*='pp-'], [class*='ng-'], .qw, [hidden]) :is(th, td){ border-left:0 !important; border-right:0 !important; border-top:0 !important; border-bottom:1px solid rgba(160,135,205,.25) !important; }
+:is(main.read, main:not([class]), main.read > :is(section, article, div):not([class]), main:not([class]) > :is(section, article):not([class])) > :is(section, div, article, aside, form, nav, details, figure, fieldset)[class]:not(.simple-lede, .scene, .try-this, .growing-note, .tol-pud-card, .tol-puddles-hi, .tol-cheer, .tol-tip, .tol-warning, .announce-bar, .wn-card, .roadmap-callout, .cr-safety, .tol-private, .tol-gentle, .tol-read-wrap, .tol-pillars, .announce-stack, .tol-cols, .next-grid, .sw-opts, .tiers, .steps, .wn-group, .locked-section, .chapter-body, .home-contents, .hero, .ls-awning, .pc-launch-row, .tol-read-host, .kicker, .no-bubble, .sr-only, .visually-hidden, .depth-bar, .tol-dive-card, [class*='gm-'], [class*='xw-'], [class*='jl-'], [class*='lib-'], [class*='pp-'], [class*='ng-'], .qw, [hidden]) tr:last-child td{ border-bottom:0 !important; }
+/* inside a whole-block bubble: inner boxes lose their frames (a soft tint and round corners are enough),
+   and any rules left between rows turn to a faint lavender hairline */
+:is(main.read, main:not([class]), main.read > :is(section, article, div):not([class]), main:not([class]) > :is(section, article):not([class])) > :is(section, div, article, aside, form, nav, details, figure, fieldset)[class]:not(.simple-lede, .scene, .try-this, .growing-note, .tol-pud-card, .tol-puddles-hi, .tol-cheer, .tol-tip, .tol-warning, .announce-bar, .wn-card, .roadmap-callout, .cr-safety, .tol-private, .tol-gentle, .tol-read-wrap, .tol-pillars, .announce-stack, .tol-cols, .next-grid, .sw-opts, .tiers, .steps, .wn-group, .locked-section, .chapter-body, .home-contents, .hero, .ls-awning, .pc-launch-row, .tol-read-host, .kicker, .no-bubble, .sr-only, .visually-hidden, .depth-bar, .tol-dive-card, [class*='gm-'], [class*='xw-'], [class*='jl-'], [class*='lib-'], [class*='pp-'], [class*='ng-'], .qw, [hidden]) :is(div, aside, blockquote, section, figure, article, details)[class]:not([class*="drop"], .tol-cheer, .tol-cheer *, .chips, .gauge-track){
+  border-color:transparent !important; border-radius:16px; }
+:is(main.read, main:not([class]), main.read > :is(section, article, div):not([class]), main:not([class]) > :is(section, article):not([class])) > :is(section, div, article, aside, form, nav, details, figure, fieldset)[class]:not(.simple-lede, .scene, .try-this, .growing-note, .tol-pud-card, .tol-puddles-hi, .tol-cheer, .tol-tip, .tol-warning, .announce-bar, .wn-card, .roadmap-callout, .cr-safety, .tol-private, .tol-gentle, .tol-read-wrap, .tol-pillars, .announce-stack, .tol-cols, .next-grid, .sw-opts, .tiers, .steps, .wn-group, .locked-section, .chapter-body, .home-contents, .hero, .ls-awning, .pc-launch-row, .tol-read-host, .kicker, .no-bubble, .sr-only, .visually-hidden, .depth-bar, .tol-dive-card, [class*='gm-'], [class*='xw-'], [class*='jl-'], [class*='lib-'], [class*='pp-'], [class*='ng-'], .qw, [hidden]) :is(p, ul, ol, li, dl, dt, dd, h2, h3, h4, hr){ border-color:rgba(160,135,205,.25) !important; }
+main .wpf-computed dl{ border-left:0 !important; border-radius:16px; }
