@@ -10,7 +10,8 @@
   var WORLDS = J.WORLDS, KEY = 'tol-journey-v1';
   var REDUCED = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
   var DPR = Math.min(2, window.devicePixelRatio || 1);
-  // the two pals, in the order of PAL: Sugarfoot, the stocky one with long drop ears and the big smile, and Tidbit, the leaner one with the collar
+  // the two pals, in the order of PAL: Sugarfoot, the leaner one with the collar, tan eyebrow dots and a gentle wag,
+  // and Tidbit, the stocky one with long drop ears, white toes and the big smile. Both have a big heart of gold.
   var PAL = ['Sugarfoot', 'Tidbit'];
   var DIRWORD = ['up', 'right', 'down', 'left'];
 
@@ -126,8 +127,8 @@
 
   /* ------------------------------------------------------------------ the two pals (drawn like the garden's pair) */
   var PUPS = [
-    { build: 'stocky', ear: 'drop', legUp: '#A45C2E', legLow: '#B97847', paw: '#F1EADF', nails: true, tan: '#C9965F', chest: 'white', muzzle: 'cream', collar: false, tail: 'plume' },
-    { build: 'lean', ear: 'fold', legUp: '#262220', legLow: '#C98A4F', paw: '#D99E62', chest: 'tan', muzzle: 'rottie', collar: true, tail: 'short' }
+    { build: 'lean', ear: 'fold', legUp: '#262220', legLow: '#C98A4F', paw: '#D99E62', chest: 'tan', muzzle: 'rottie', collar: true, tail: 'short' },
+    { build: 'stocky', ear: 'drop', legUp: '#A45C2E', legLow: '#B97847', paw: '#F1EADF', nails: true, tan: '#C9965F', chest: 'white', muzzle: 'cream', collar: false, tail: 'plume' }
   ];
   function rr(c, x, y, w, h, r) { c.beginPath(); if (c.roundRect) c.roundRect(x, y, w, h, r); else c.rect(x, y, w, h); }
   function drawPup(c, L, pose, ph, wag, blink, t, tilt) {

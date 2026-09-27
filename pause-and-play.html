@@ -27,7 +27,7 @@
     background:radial-gradient(120% 90% at 20% 0%, rgba(253,238,242,.86) 0%, rgba(246,238,248,.8) 45%, rgba(238,244,250,.78) 100%); border:1px solid rgba(235,211,228,.9); }
   .pp-hero h1{ margin:.1rem 0 .3rem; font-size:clamp(2rem, 8vw, 2.9rem); line-height:1.05; }
   .pp-hero p{ margin:0; max-width:32rem; }
-  .pp-k{ margin:0; font-family:"IBM Plex Mono", monospace; font-size:.74rem; letter-spacing:.12em; text-transform:uppercase; color:#8A6D8F; }
+  .pp-k{ margin:0; font-family:"IBM Plex Mono", monospace; font-size:.875rem; letter-spacing:.12em; text-transform:uppercase; color:#8A6D8F; }
   .pp-hero-art{ position:absolute; right:-10px; top:-6px; width:7.5rem; opacity:.95; animation:tol-bob 7s ease-in-out infinite; }
   .pp-stats{ display:flex; flex-wrap:wrap; gap:.5rem; margin-top:1rem; }
   .pp-stat{ display:inline-flex; align-items:center; gap:.4rem; min-height:40px; padding:.35rem .9rem; border-radius:999px; background:rgba(255,255,255,.85); border:1px solid #EBD3E4; font-weight:600; font-size:.95rem; color:#4E3F6B; text-decoration:none; }
@@ -57,8 +57,8 @@
   .pp-ico{ grid-row:span 3; display:grid; place-items:center; width:4.2rem; height:4.2rem; border-radius:50%; background:rgba(255,255,255,.8); font-size:2.1rem; box-shadow:inset 0 -4px 10px rgba(120,90,140,.08); }
   .pp-card h3{ margin:0; font-size:1.2rem; }
   .pp-card p{ margin:0; font-size:.9rem; line-height:1.4; color:#5A5346; }
-  .pp-card .pp-meta{ font-family:"IBM Plex Mono", monospace; font-size:.74rem; color:#8A6D8F; margin-top:.15rem; }
-  .pp-card .pp-tag{ position:absolute; top:.7rem; right:.8rem; padding:.15rem .55rem; border-radius:999px; background:#fff; font:600 .7rem/1.4 "IBM Plex Mono", monospace; color:#B5651D; }
+  .pp-card .pp-meta{ font-family:"IBM Plex Mono", monospace; font-size:.875rem; color:#6E5373; margin-top:.15rem; }
+  .pp-card .pp-tag{ position:absolute; top:.7rem; right:.8rem; padding:.15rem .55rem; border-radius:999px; background:#fff; font:600 .875rem/1.4 "IBM Plex Mono", monospace; color:#8A4A12; }
   .pp-card.is-garden{ --c1:rgba(46,47,92,.82); --c2:rgba(92,74,120,.78); color:#FFF6E0; }
   .pp-card.is-garden p{ color:#DCD6F0; } .pp-card.is-garden .pp-meta{ color:#F9D9B8; } .pp-card.is-garden .pp-ico{ background:rgba(255,255,255,.14); }
   .pp-card.is-bloom{ --c1:rgba(255,243,230,.84); --c2:rgba(253,238,242,.8); }
@@ -71,6 +71,8 @@
   .pp-why{ background:rgba(255,253,247,.82) !important; }
   .pp-why{ margin-top:.4rem; }
   .pp-what{ margin:0 0 1.2rem; }
+  .pp-head h1{ margin:0; }
+  .pp-sub{ margin:.3rem 0 0 !important; font-size:1.05rem; color:#5A5346; }
   @media (max-width:420px){ .pp-card{ grid-template-columns:3.4rem 1fr; padding:.9rem; } .pp-ico{ width:3.4rem; height:3.4rem; font-size:1.7rem; } .pp-hero-art{ width:5.5rem; } }
   @media (prefers-reduced-motion: reduce){ .pp-hero-art, .pp-stem.is-done .pp-flower{ animation:none; } .pp-card, .pp-stem{ transition:none; } }
 </style>
@@ -80,7 +82,7 @@
 </head>
 <body class="pp-page is-game">
 <main class="read">
-<h1 class="sr-only">Pause &amp; Play</h1>
+<header class="read-head pp-head"><h1>Pause &amp; Play</h1><p class="pp-sub">Calm games for a busy mind</p></header>
 
 <div class="try-this pp-why pp-what">
   <p><strong>What is Pause &amp; Play?</strong> It’s the calm corner of the site: a handful of gentle games for when your mind needs a rest. Breathe in the Night Garden, take the Frequency Journey, spell words in Word Bloom, solve a crossword, or find words in a quiet word search. There are no timers and no way to lose.</p>
@@ -88,59 +90,60 @@
 </div>
 
 
-<section class="pp-games" aria-label="The games">
-  <a class="pp-card is-garden is-wide" href="/calm-visualizer.html">
-    <span class="pp-tag">New</span>
+<h2 id="pp-games-h">The games</h2>
+<section class="pp-games" aria-labelledby="pp-games-h">
+  <a class="pp-card is-garden is-wide" href="/calm-visualizer.html" aria-labelledby="pp-t1" aria-describedby="pp-n1 pp-d1 pp-m1">
+    <span class="pp-tag" id="pp-n1">New</span>
     <span class="pp-ico" aria-hidden="true">&#127744;</span>
-    <h3>Drift: the calm visualizer</h3>
-    <p>Tell it how you feel, pop on headphones, and float through slow, deep 3D colors while soft binaural tones and your breath ease you toward calm.</p>
-    <span class="pp-meta">5 to 20 minutes, nothing to do</span>
+    <h3 id="pp-t1">Drift: the calm visualizer</h3>
+    <p id="pp-d1">Tell it how you feel, pop on headphones, and float through slow, deep 3D colors while soft binaural tones and your breath ease you toward calm.</p>
+    <span id="pp-m1" class="pp-meta">5 to 20 minutes, nothing to do</span>
   </a>
-  <a class="pp-card is-garden is-wide" href="/night-garden.html">
+  <a class="pp-card is-garden is-wide" href="/night-garden.html" aria-labelledby="pp-t2" aria-describedby="pp-d2 pp-m2">
     <span class="pp-ico" aria-hidden="true">&#127769;</span>
-    <h3>The Night Garden</h3>
-    <p>Box breathing with a glowing light, fireflies that sing into constellations, and a slow lily-pond puzzle. It grows as you play.</p>
-    <span class="pp-meta" data-meta="garden">A moonlit place to settle</span>
+    <h3 id="pp-t2">The Night Garden</h3>
+    <p id="pp-d2">Box breathing with a glowing light, fireflies that sing into constellations, and a slow lily-pond puzzle. It grows as you play.</p>
+    <span id="pp-m2" class="pp-meta" data-meta="garden">A moonlit place to settle</span>
   </a>
-  <a class="pp-card is-journey is-wide" href="/frequency-journey.html">
-    <span class="pp-tag">New</span>
+  <a class="pp-card is-journey is-wide" href="/frequency-journey.html" aria-labelledby="pp-t3" aria-describedby="pp-n3 pp-d3 pp-m3">
+    <span class="pp-tag" id="pp-n3">New</span>
     <span class="pp-ico" aria-hidden="true">&#127925;</span>
-    <h3>The Frequency Journey</h3>
-    <p>Guide two best friends through a stormy forest, melting glaciers, a golden meadow, a canyon, singing valleys and a starry summit, all the way up to an open sky where there’s nothing to do but rest.</p>
-    <span class="pp-meta">Riddles, life lessons and puzzles, a new kind every level</span>
+    <h3 id="pp-t3">The Frequency Journey</h3>
+    <p id="pp-d3">Guide two best friends through a stormy forest, melting glaciers, a golden meadow, a canyon, singing valleys and a starry summit, all the way up to an open sky where there’s nothing to do but rest.</p>
+    <span id="pp-m3" class="pp-meta">Riddles, life lessons and puzzles, a new kind every level</span>
   </a>
-  <a class="pp-card is-bloom" href="/word-bloom.html">
-    <span class="pp-tag">New</span>
+  <a class="pp-card is-bloom" href="/word-bloom.html" aria-labelledby="pp-t4" aria-describedby="pp-n4 pp-d4 pp-m4">
+    <span class="pp-tag" id="pp-n4">New</span>
     <span class="pp-ico" aria-hidden="true">&#127804;</span>
-    <h3>Word Bloom</h3>
-    <p>Swipe across the petals to spell words and fill a little crossword.</p>
-    <span class="pp-meta" data-meta="bloom">240 gentle levels</span>
+    <h3 id="pp-t4">Word Bloom</h3>
+    <p id="pp-d4">Swipe across the petals to spell words and fill a little crossword.</p>
+    <span id="pp-m4" class="pp-meta" data-meta="bloom">240 gentle levels</span>
   </a>
-  <a class="pp-card is-xw" href="/quiet-crossword.html">
-    <span class="pp-tag">New</span>
+  <a class="pp-card is-xw" href="/quiet-crossword.html" aria-labelledby="pp-t5" aria-describedby="pp-n5 pp-d5 pp-m5">
+    <span class="pp-tag" id="pp-n5">New</span>
     <span class="pp-ico" aria-hidden="true">&#9999;&#65039;</span>
-    <h3>Quiet Crossword</h3>
-    <p>A small, friendly crossword. A new one every day.</p>
-    <span class="pp-meta" data-meta="xw">Made for your phone</span>
+    <h3 id="pp-t5">Quiet Crossword</h3>
+    <p id="pp-d5">A small, friendly crossword. A new one every day.</p>
+    <span id="pp-m5" class="pp-meta" data-meta="xw">Made for your phone</span>
   </a>
-  <a class="pp-card is-paper" href="/daily-ledger-crossword.html">
-    <span class="pp-tag">New</span>
+  <a class="pp-card is-paper" href="/daily-ledger-crossword.html" aria-labelledby="pp-t6" aria-describedby="pp-n6 pp-d6 pp-m6">
+    <span class="pp-tag" id="pp-n6">New</span>
     <span class="pp-ico" aria-hidden="true">&#128240;</span>
-    <h3>The Daily Ledger Crossword</h3>
-    <p>A newspaper-style crossword, from a quick Mini to a Big Sunday.</p>
-    <span class="pp-meta" data-meta="paper">Five sizes, hundreds of puzzles</span>
+    <h3 id="pp-t6">The Daily Ledger Crossword</h3>
+    <p id="pp-d6">A newspaper-style crossword, from a quick Mini to a Big Sunday.</p>
+    <span id="pp-m6" class="pp-meta" data-meta="paper">Five sizes, hundreds of puzzles</span>
   </a>
-  <a class="pp-card is-words" href="/quiet-words.html">
+  <a class="pp-card is-words" href="/quiet-words.html" aria-labelledby="pp-t7" aria-describedby="pp-d7 pp-m7">
     <span class="pp-ico" aria-hidden="true">&#128269;</span>
-    <h3>Quiet Words</h3>
-    <p>A gentle word search. Every word leaves a kind thought behind.</p>
-    <span class="pp-meta" data-meta="words">A new theme each day</span>
+    <h3 id="pp-t7">Quiet Words</h3>
+    <p id="pp-d7">A gentle word search. Every word leaves a kind thought behind.</p>
+    <span id="pp-m7" class="pp-meta" data-meta="words">A new theme each day</span>
   </a>
-  <button type="button" class="pp-card is-breathe" data-breathe>
+  <button type="button" class="pp-card is-breathe" data-breathe aria-labelledby="pp-t8" aria-describedby="pp-d8 pp-m8">
     <span class="pp-ico" aria-hidden="true">&#129767;</span>
-    <h3>A breathing break</h3>
-    <p>One, three or five minutes of box breathing with soft sound, right here.</p>
-    <span class="pp-meta" data-meta="breathe">Headphones are lovely</span>
+    <h3 id="pp-t8">A breathing break</h3>
+    <p id="pp-d8">One, three or five minutes of box breathing with soft sound, right here.</p>
+    <span id="pp-m8" class="pp-meta" data-meta="breathe">Headphones are lovely</span>
   </button>
 </section>
 

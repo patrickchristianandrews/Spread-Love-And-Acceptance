@@ -342,16 +342,16 @@
       [['The night', 'Yes. Even the longest night ends, and the stars keep you company till then.'],
        ['A tunnel', 'Tunnels usually get lighter near the end, not darker.'],
        ['A movie', 'A movie can end in the dark, but it doesn’t always.']]),
-    R('r56', 1, 1, 'I’m soft and furry, with floppy ears, white toes and a great big smile, and I’m walking through this forest right now. Who am I?',
-      'Not the one with the collar.',
-      [['Tidbit', 'Yes! Tidbit has the collar and the tan eyebrow dots.'],
-       ['Sugarfoot', 'Sugarfoot is the one with the floppy ears, the white toes and the big smile.'],
+    R('r56', 1, 1, 'I’m soft and furry, I have a great big smile and a big heart of gold, and I’m walking through this forest right now. Who am I?',
+      'Look for the biggest smile in the forest.',
+      [['Tidbit', 'Yes! Tidbit is the one with the big smile, and a big heart of gold.'],
+       ['Sugarfoot', 'Sugarfoot has a big heart of gold too, but she’s the one with the gentle wag.'],
        ['A teddy bear', 'Soft and furry, yes, but a teddy bear doesn’t go walking.']]),
-    R('r57', 1, 1, 'I wear a collar, I have two tan dots like little eyebrows, and I’m braver with my pal beside me. Who am I?',
-      'Not the one with the floppy ears.',
-      [['Sugarfoot', 'Yes! Sugarfoot has the floppy ears, the white toes and the big smile.'],
-       ['Tidbit', 'Tidbit is the one with the collar and the tan eyebrow dots.'],
-       ['The lantern', 'The lantern is bright, but it has no eyebrows at all.']]),
+    R('r57', 1, 1, 'My tail says hello with a gentle wag, my heart is big and golden, and I’m braver with my pal beside me. Who am I?',
+      'Watch for the gentlest wag.',
+      [['Sugarfoot', 'Yes! Sugarfoot is the one with the gentle wag, and a big heart of gold.'],
+       ['Tidbit', 'Tidbit has a big heart of gold too, but she’s the one with the big smile.'],
+       ['The lantern', 'The lantern is bright, but it has no tail to wag at all.']]),
     R('r62', 3, 6, 'I say what happened with no adjectives and no guesses about why, and anyone standing there would agree with me. What am I?',
       'It’s the first of three: then the feeling, then the ask.',
       [['A plain fact', 'Yes. “The sink was full at seven” is a plain fact. It starts a conversation, not a fight.'],
@@ -1647,10 +1647,16 @@
   P.breath = [
     { id: 'br46', g: 1, inhale: 4, exhale: 6 },
     { id: 'br35', g: 1, inhale: 3, exhale: 5 },
+    { id: 'br34', g: 1, inhale: 3, exhale: 4 },
+    { id: 'br45', g: 1, inhale: 4, exhale: 5 },
     { id: 'br47', g: 2, inhale: 4, exhale: 7 },
     { id: 'br36', g: 2, inhale: 3, exhale: 6 },
     { id: 'br57', g: 2, inhale: 5, exhale: 7 },
-    { id: 'br48', g: 3, inhale: 4, exhale: 8 }
+    { id: 'br56', g: 2, inhale: 5, exhale: 6 },
+    { id: 'br37', g: 2, inhale: 3, exhale: 7 },
+    { id: 'br48', g: 3, inhale: 4, exhale: 8 },
+    { id: 'br58', g: 3, inhale: 5, exhale: 8 },
+    { id: 'br38', g: 3, inhale: 3, exhale: 8 }
   ];
 
   /* ------------------------------------------------------------------ pillars for the riddles and the moments */
@@ -1664,6 +1670,26 @@
     'c15:1w c16:2w c17:5w c18:4s c19:1w c20:2w c21:3s c22:2w c23:4w c24:5w c25:5w c26:3w c27:4w c28:2w c29:4w c30:3s ' +
     'c31:5w c32:4w c33:4s c34:2w c35:4w c36:4w c37:1s c38:3s c39:5w c40:3w c41:5w c42:5w');
 
-  if (typeof module !== 'undefined' && module.exports) module.exports = P;
-  else root.TOLJourneyPools = P;
+  /* ------------------------------------------------------------------ the rest of every pool
+     The pools grow in chunks (journey-pools-2.js …) so the first load stays light: journey-levels.js
+     fetches them once the page is idle, and in Node they are required right here. Each chunk calls
+     P.extend(name, fn) and adds to these same lists with these same helpers (R, C, S, W, M, Q, L, SP,
+     B, F, FS); tagged(item, 'Nx') gives an item its pillar and angle. */
+  P.make = { o: o, tagged: tagged, tag: tag, R: R, C: C, S: S, W: W, M: M, Q: Q, L: L, SP: SP, B: B, F: F, FS: FS };
+  P.chunks = ['journey-pools-2.js', 'journey-pools-3.js', 'journey-pools-4.js', 'journey-pools-5.js'];
+  P.loaded = {};
+  P.extend = function (name, fn) {
+    if (P.loaded[name]) return;
+    P.loaded[name] = true;
+    fn(P, P.make);
+  };
+
+  if (typeof module !== 'undefined' && module.exports) {
+    module.exports = P;
+    P.chunks.forEach(function (f) { require('./' + f); });
+  } else {
+    root.TOLJourneyPools = P;
+    // a chunk that arrived before this file (it shouldn't, but just in case) waits in a queue
+    (root.TOLJourneyPoolsQueue || []).forEach(function (q) { P.extend(q[0], q[1]); });
+  }
 })(this);

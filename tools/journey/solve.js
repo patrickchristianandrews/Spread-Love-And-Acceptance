@@ -5,8 +5,10 @@
    Each walk level has several boards (its own, plus the variants in assets/js/journey-pools.js, one picked per
    play). Every board must be solvable in exactly its stated min, and must really need its level's idea:
    without the thorny shadow, the ice blocks, or either bridge, it can't be done.
-   Then a generator self-test: 200 random meadows (lights-out, 3x3 and 4x4) and 200 random "Calls in the dark"
-   paths, each made the way the game makes them, and each proven solvable by search and by replaying it.
+   Then a generator self-test: 300 random meadows (lights-out, 3x3, 4x4 and 5x5), 300 random "Calls in the dark"
+   paths in every size the game uses, 280 tunes (every tune shape, 6 to 8 notes) and 300 fresh fair-shares sets
+   from the job banks, each made the way the game makes them and each proven fair or solvable, by search and
+   by replaying it. New boards for the walk levels come from tools/journey/gen-walk.js.
    The other kinds of challenge (riddles, sorting…) are checked by tools/journey/check-content.js.
 
    node tools/journey/solve.js            check all boards and generators, print a table
@@ -76,18 +78,20 @@ J.WORLDS.forEach(function (w) {
 /* ------------------------------------------------------------------ generator self-test */
 if (!only) {
   var r = J.rng(20260927), t1 = Date.now(), gb = 0, bl = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0], seenB = {};
-  for (var i = 0; i < 200; i++) {
-    var n = i % 2 ? 4 : 3, m = J.genBloom(n, n, r);
+  for (var i = 0; i < 300; i++) {
+    var n = 3 + i % 3, m = J.genBloom(n, n, r);
     if (!m) { bad++; console.log('!! meadow ' + i + ': the generator gave up'); continue; }
     var bits = J.bloomBits(m.start), sol = J.bloomSolve(bits, n), b2 = bits;
     if (sol) sol.forEach(function (c) { b2 = J.bloomTap(b2, c, n); });
     if (!sol || !b2.every(Boolean) || bits.every(Boolean) || sol.length !== m.min || m.min < n) { bad++; console.log('!! meadow ' + i + ' ' + m.start.join('/') + ' is not a fair puzzle'); continue; }
     gb++; bl[Math.min(9, m.min)]++; seenB[m.start.join('/')] = 1;
   }
-  console.log('meadows: ' + gb + ' of 200 solvable (3x3 and 4x4), fewest taps ' + bl.map(function (c, k) { return c ? k + ':' + c : ''; }).filter(Boolean).join(' ') + ', ' + Object.keys(seenB).length + ' different · ' + (Date.now() - t1) + 'ms');
+  console.log('meadows: ' + gb + ' of 300 solvable (3x3, 4x4 and 5x5), fewest taps ' + bl.map(function (c, k) { return c ? k + ':' + c : ''; }).filter(Boolean).join(' ') + ', ' + Object.keys(seenB).length + ' different · ' + (Date.now() - t1) + 'ms');
   var t2 = Date.now(), gm = 0, calls = {}, seenM = {};
-  for (i = 0; i < 200; i++) {
-    var lo = i % 2 ? 7 : 6, hi = i % 2 ? 9 : 8, z = J.genMaze(lo, hi, r, 6);
+  var SIZES = [[7, 8], [6, 8], [7, 9], [8, 8], [8, 9]], bySize = {};
+  for (i = 0; i < 300; i++) {
+    var lo = i % 2 ? 7 : 6, hi = i % 2 ? 9 : 8, sz = SIZES[i % SIZES.length], z = J.genMaze(lo, hi, r, 6, sz[0], sz[1]);
+    if (z) bySize[sz.join('x')] = (bySize[sz.join('x')] || 0) + 1;
     if (!z) { bad++; console.log('!! maze ' + i + ': the generator gave up'); continue; }
     var L = J.mazeParse({ rows: z.rows }), ms = J.mazeSolve(L, 6), errs = [];
     if (L.a < 0 || L.b < 0 || L.goal.length !== 2 || J.cheb(L, L.goal[0], L.goal[1]) !== 1 || L.a >= L.W || L.goal[1] >= L.W) errs.push('bad shape');
@@ -102,10 +106,32 @@ if (!only) {
     if (errs.length) { bad++; console.log('!! maze ' + i + ': ' + errs.join('; ') + '\n   ' + z.rows.join('\n   ')); continue; }
     gm++; calls[ms.length] = (calls[ms.length] || 0) + 1; seenM[z.rows.join('/')] = 1;
   }
-  console.log('dark paths: ' + gm + ' of 200 solvable, fewest calls ' + Object.keys(calls).map(function (k) { return k + ':' + calls[k]; }).join(' ') + ', ' + Object.keys(seenM).length + ' different · ' + (Date.now() - t2) + 'ms');
-  var t3 = Date.now(), gs = 0;
-  for (i = 0; i < 200; i++) { var sg = J.genSong(6 + i % 2, r); if (sg.length === 6 + i % 2 && sg.every(function (x, k) { return x >= 1 && x <= 5 && x !== sg[k - 1]; })) gs++; else bad++; }
-  console.log('tunes: ' + gs + ' of 200 good · ' + (Date.now() - t3) + 'ms');
+  console.log('dark paths: ' + gm + ' of 300 solvable (' + Object.keys(bySize).map(function (k) { return k + ' ' + bySize[k]; }).join(', ') + '), fewest calls ' + Object.keys(calls).map(function (k) { return k + ':' + calls[k]; }).join(' ') + ', ' + Object.keys(seenM).length + ' different · ' + (Date.now() - t2) + 'ms');
+  var t3 = Date.now(), gs = 0, tunes = {};
+  for (i = 0; i < 280; i++) {
+    var len = 6 + i % 3, shape = J.SONG_SHAPES[i % J.SONG_SHAPES.length], sg = J.genSong(len, r, shape);
+    var kinds = sg.filter(function (x, k) { return sg.indexOf(x) === k; }).length;
+    if (sg.length === len && kinds >= 4 && sg.every(function (x, k) { return x >= 1 && x <= 5 && x !== sg[k - 1]; })) { gs++; tunes[sg.join('')] = 1; }
+    else { bad++; console.log('!! tune ' + shape + ' ' + sg.join('')); }
+  }
+  console.log('tunes: ' + gs + ' of 280 good (' + J.SONG_SHAPES.length + ' shapes, 6-8 notes), ' + Object.keys(tunes).length + ' different · ' + (Date.now() - t3) + 'ms');
+  // fresh fair-shares sets from the job banks
+  var t4 = Date.now(), gf = 0, fairKeys = {}, splits = [];
+  for (i = 0; i < 300; i++) {
+    var f = J.genFair(P.fairBank, r, 2 + i % 2, []), errs2 = [];
+    if (!f) { bad++; console.log('!! fair ' + i + ': the generator gave up'); continue; }
+    var tot = f.jobs.reduce(function (s2, j) { return s2 + j.w; }, 0), nj = f.jobs.length, ways = 0;
+    for (var mm = 0; mm < 1 << nj; mm++) { var a2 = 0; for (var k2 = 0; k2 < nj; k2++) if (!(mm >> k2 & 1)) a2 += f.jobs[k2].w; if (a2 === f.cap[0]) ways++; }
+    if (tot !== f.cap[0] + f.cap[1]) errs2.push('jobs ' + tot + ' ≠ batteries ' + (f.cap[0] + f.cap[1]));
+    if (!ways) errs2.push('no fair split');
+    if (nj > 10 || nj < 7) errs2.push(nj + ' jobs');
+    if (f.jobs.filter(function (j) { return j.hidden; }).length < 2) errs2.push('too little invisible work');
+    if (new Set(f.jobs.map(function (j) { return j.t; })).size !== nj) errs2.push('repeated job');
+    if (!(f.p >= 1 && f.p <= 5) || f.capNote.length !== 2) errs2.push('pillar or notes');
+    if (errs2.length) { bad++; console.log('!! fair ' + f.id + ': ' + errs2.join('; ')); continue; }
+    gf++; fairKeys[f.id] = 1; splits.push(ways);
+  }
+  console.log('fair shares: ' + gf + ' of 300 fair (' + P.fairBank.sets.length + ' settings), ' + Object.keys(fairKeys).length + ' different, fair splits ' + Math.min.apply(null, splits) + '-' + Math.max.apply(null, splits) + ' · ' + (Date.now() - t4) + 'ms');
 }
 if (process.argv.indexOf('--write') >= 0 && !only) {
   fs.writeFileSync(path.join(__dirname, 'solutions.json'), JSON.stringify(out, null, 0).replace(/\],"/g, '],\n"') + '\n');

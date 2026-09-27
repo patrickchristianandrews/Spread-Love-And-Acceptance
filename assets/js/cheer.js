@@ -4,6 +4,8 @@
    grins, winks or hops, and either says a kind word or shares a "did you know?" from the
    program that fits the page. Some of them are happy to chat (site-chat.js), answering only
    from this site's own pages. Tap one for another. site.js loads this on reading pages.
+   They're decoration: hidden from screen readers (aria-hidden) and never a tab stop, and they
+   sit beside lists rather than inside them, so a list's item count stays true.
    Nothing is stored or sent. */
 (function () {
   'use strict';
@@ -69,7 +71,7 @@
   }
   function lineHtml(w) {
     if (typeof w === 'string') return esc(w);
-    return esc(w[0]) + ' <a class="tol-cheer-more tol-cheer-link" href="' + esc(w[1]) + '">' + esc(w[2]) + ' &rarr;</a>';
+    return esc(w[0]) + ' <a class="tol-cheer-more tol-cheer-link" tabindex="-1" href="' + esc(w[1]) + '">' + esc(w[2]) + ' &rarr;</a>';
   }
   function lineKey(w) { return typeof w === 'string' ? w : w[0]; }
 
@@ -114,12 +116,12 @@
   var blocks = [], kids = main.children;
   for (var i = 0; i < kids.length; i++) {
     var k = kids[i], tag = k.tagName;
-    if (k.matches('.read-head, .depth-bar, .tol-gentle, .tol-private, .tol-tip, .tol-welcome, nav, script, style, .tol-cheer, [hidden], .no-cheer')) continue;
+    if (k.matches('.read-head, .depth-bar, .tol-gentle, .tol-private, .tol-tip, .tol-welcome, nav, script, style, .tol-cheer, [hidden], .no-cheer, .tol-gate, .locked-section') || !k.getClientRects().length) continue;
     if (/^(P|DIV|OL|UL|H2|H3|SECTION|BLOCKQUOTE|FIGURE|ASIDE|TABLE|DETAILS)$/.test(tag)) blocks.push(k);
   }
   var spots = [];
   blocks.forEach(function (b) {
-    if (b.matches('ol.ideas') && b.children.length > 2) { Array.prototype.forEach.call(b.children, function (li) { spots.push({ el: li, inList: true }); }); }
+    if (b.matches('ol.ideas') && b.children.length > 2) { Array.prototype.forEach.call(b.children, function (li) { spots.push({ el: li, inList: true, list: b }); }); }
     else spots.push({ el: b });
   });
   var textLen = (main.textContent || '').length;
@@ -132,13 +134,19 @@
     while (at < spots.length - 1 && /^H[23]$/.test(spots[at].el.tagName)) at++;
     if (chosen.indexOf(at) === -1 && at > 0) chosen.push(at);
   }
+  // a buddy never goes inside a list: one that falls within a list sits just after the whole list
+  function anchorOf(s) { return s.inList ? s.list : s.el; }
   var last = spots[spots.length - 1], made = [], kinds = shuffle(KIND_KEYS.slice()), dzs = shuffle(DZ_KEYS.slice());
+  var usedAnchors = [anchorOf(last)];
   chosen.forEach(function (at, idx) {
-    var s = spots[at]; if (s === last) return;
+    var s = spots[at], a = anchorOf(s); if (s === last || usedAnchors.indexOf(a) !== -1) return;
+    usedAnchors.push(a);
     var kind = idx === 0 && at < spots.length / 3 ? 'start' : (Math.abs(at - spots.length / 2) <= step / 2 && !made.some(function (m) { return m.kind === 'half'; }) ? 'half' : 'mid');
-    made.push(place(s, kind, idx));
+    made.push(place({ el: a }, kind, made.length));
   });
-  made.push(place({ el: last.inList ? last.el.parentNode : last.el }, 'end', made.length));
+  // no "you finished" while part of the page is still locked behind the sign-up box
+  var gated = !!main.querySelector('.tol-gate:not([hidden])');
+  made.push(place({ el: anchorOf(last) }, gated ? 'mid' : 'end', made.length));
 
   function place(s, kind, idx) {
     var who = kinds[idx % kinds.length], K = KINDS[who], c = K.col || COLORS[(idx + Math.floor(Math.random() * 6)) % COLORS.length];
@@ -148,9 +156,10 @@
       beret: [' the Artiste', ' Picasso'], party: [' the Life of the Party'], shades: [' the Cool'], nose: [' the Honkable'], flowers: [' Blossomcrown'] };
     var titled = !!(dz && TITLES[dz] && Math.random() < 0.6), name = pick(K.name) + (titled ? pick(TITLES[dz]) : '');
     var role = kind === 'end' ? 'cheer' : (idx % 3 === 1 ? 'fact' : idx % 3 === 2 && CHAT_ON ? 'chat' : 'cheer');
-    var w = document.createElement(s.inList ? 'li' : 'div');
+    var w = document.createElement('div');
     w.className = 'tol-cheer ' + (idx % 2 ? 'is-right' : 'is-left') + (kind === 'end' ? ' is-end' : '') + ' is-' + role;
-    w.innerHTML = '<button type="button" class="tol-cheer-b" aria-label="' + esc(name) + (dz ? ', ' + DISGUISES[dz].title : '') + '. Tap for another.">' + buddy(who, c, dz) + '</button>' +
+    w.setAttribute('aria-hidden', 'true'); // decoration: not read aloud, and nothing inside is a tab stop
+    w.innerHTML = '<button type="button" class="tol-cheer-b" tabindex="-1" title="Tap for another">' + buddy(who, c, dz) + '</button>' +
       '<div class="tol-cheer-say"><span class="tol-cheer-name">' + esc(name) + (dz && !titled ? ' <em>' + esc(DISGUISES[dz].title) + '</em>' : '') + '</span><span class="tol-cheer-line"></span></div>';
     s.el.parentNode.insertBefore(w, s.el.nextSibling);
     var o = { el: w, kind: kind, role: role, name: name, who: who, c: c, dz: dz };
@@ -172,23 +181,36 @@
     document.head.appendChild(sc);
   }
 
+  // the reader has reached the end: the end buddy is on screen and nothing of main's text lies below the fold
+  function atEnd(o) {
+    var r = o.el.getBoundingClientRect();
+    return r.top < window.innerHeight && r.bottom > 0 && (window.scrollY > 0 || document.documentElement.scrollHeight <= window.innerHeight + 4);
+  }
   var used = {};
   function say(o) {
     var line = o.el.querySelector('.tol-cheer-line');
     if (o.role === 'fact') {
       var f = nextFact();
-      if (f) { line.innerHTML = '<b>&#128161; Did you know?</b> <strong>' + esc(f.t) + ':</strong> ' + esc(f.s) + ' <button type="button" class="tol-cheer-more" data-cheer-dive="' + esc(f.key) + '">Wade in &rarr;</button>'; return; }
+      if (f) { line.innerHTML = '<b><span aria-hidden="true">&#128161;</span> Did you know?</b> <strong>' + esc(f.t) + ':</strong> ' + esc(f.s) + ' <button type="button" class="tol-cheer-more" tabindex="-1" data-cheer-dive="' + esc(f.key) + '">Wade in &rarr;</button>'; return; }
     }
-    var list = o.kind === 'mid' && TOPIC.length && Math.random() < 0.4 ? TOPIC : WORDS[o.kind], w, tries = 0;
+    var kind = o.kind === 'end' && !atEnd(o) ? 'mid' : o.kind;
+    var list = kind === 'mid' && TOPIC.length && Math.random() < 0.4 ? TOPIC : WORDS[kind], w, tries = 0;
     do { w = pick(list); tries++; } while (used[lineKey(w)] && tries < 12);
     used[lineKey(w)] = true;
-    line.innerHTML = lineHtml(w) + (o.role === 'chat' ? ' <button type="button" class="tol-cheer-more" data-cheer-chat="">&#128172; Ask me something</button>' : '');
+    line.innerHTML = lineHtml(w) + (o.role === 'chat' ? ' <button type="button" class="tol-cheer-more" tabindex="-1" data-cheer-chat=""><span aria-hidden="true">&#128172;</span> Ask me something</button>' : '');
   }
-  var MOVES = ['wave', 'hop', 'wink', 'grin', 'heart', 'sway', 'clap', 'spin', 'peek'];
+  var MOVES = ['wave', 'hop', 'wink', 'grin', 'heart', 'sway', 'clap', 'spin', 'peek', 'wiggle', 'bounce', 'lean'];
+  var WAKE = ['hop', 'wiggle', 'wave', 'hop', 'wave', 'peek', 'sway', 'wink'];   // a little hello as they come into view
+  // no movement at all when the visitor asks for less motion, or has "Keep the page still" on
+  function still() {
+    return document.documentElement.classList.contains('tol-still') ||
+      !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+  }
   function cheer(o, tapped) {
     var w = o.el;
+    o.t = Date.now();
     say(o);
-    var move = o.kind === 'end' ? (tapped ? pick(['clap', 'hop', 'heart', 'spin']) : 'clap') : pick(MOVES);
+    var move = tapped ? pick(['bounce', 'bounce', 'clap', 'heart']) : o.kind === 'end' ? 'clap' : pick(WAKE);
     MOVES.forEach(function (m) { w.classList.remove('do-' + m); });
     void w.offsetWidth;
     w.classList.add('is-awake', 'do-' + move);
@@ -211,26 +233,53 @@
     }
   }
 
+  function waitEnd(o) {
+    if (o.waiting) return; o.waiting = true;
+    function check() {
+      if (!atEnd(o)) return;
+      window.removeEventListener('scroll', check);
+      if (typeof io !== 'undefined') io.unobserve(o.el);
+      setTimeout(function () { cheer(o, false); }, 250);
+    }
+    window.addEventListener('scroll', check, { passive: true });
+  }
   // wake each one as it scrolls into view, and blink now and then while awake
+  // is-seen marks the ones on screen right now: only those bob, blink or lean, so nothing moves out of sight
   if ('IntersectionObserver' in window) {
+    var seen = new IntersectionObserver(function (es) {
+      es.forEach(function (e) { e.target.classList.toggle('is-seen', e.isIntersecting); });
+    }, { threshold: 0 });
+    made.forEach(function (o) { seen.observe(o.el); });
     var io = new IntersectionObserver(function (es) {
       es.forEach(function (e) {
         if (!e.isIntersecting) return;
-        io.unobserve(e.target);
         var o = made.filter(function (m) { return m.el === e.target; })[0];
+        // the end buddy waits until the reader has really scrolled to it (not a jump of the layout while loading)
+        if (o && o.kind === 'end' && !atEnd(o)) { waitEnd(o); return; }
+        io.unobserve(e.target);
         if (o) setTimeout(function () { cheer(o, false); }, 250);
       });
     }, { rootMargin: '0px 0px -22% 0px', threshold: 0.6 });
     made.forEach(function (o) { io.observe(o.el); });
   } else made.forEach(function (o) { cheer(o, false); });
 
+  function onScreen(o) { return o.el.classList.contains('is-awake') && (!('IntersectionObserver' in window) || o.el.classList.contains('is-seen')); }
   setInterval(function () {
-    if (document.hidden) return;
+    if (document.hidden || still()) return;
     made.forEach(function (o) {
-      if (!o.el.classList.contains('is-awake') || Math.random() > 0.35) return;
+      if (!onScreen(o) || Math.random() > 0.35) return;
       o.el.classList.remove('is-blink'); void o.el.offsetWidth; o.el.classList.add('is-blink');
     });
   }, 3200);
+  // now and then one leans in toward the words, as if reading along
+  setInterval(function () {
+    if (document.hidden || still()) return;
+    made.forEach(function (o) {
+      if (!onScreen(o) || Math.random() > 0.2 || Date.now() - (o.t || 0) < 2500) return;
+      o.el.classList.remove('is-lean'); void o.el.offsetWidth; o.el.classList.add('is-lean');
+      setTimeout(function () { o.el.classList.remove('is-lean'); }, 2600);
+    });
+  }, 7000);
 
   window.TOLCheer = { count: made.length, chat: function (topic) { openChat(made[0] || { name: 'Bloop', who: 'blob', c: COLORS[0], dz: null }, topic); } };
 })();

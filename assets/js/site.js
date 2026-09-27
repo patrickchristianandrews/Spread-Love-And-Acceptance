@@ -338,6 +338,10 @@
     panel.appendChild(head);
     panel.appendChild(el('p', { class: 'tol-panel-intro' }, 'Open a section to see its pages.' +
       (CONFIG.freePreview ? ' Pages marked <em>free · email</em> open once you sign up with your email.' : '')));
+    var tools = el('div', { class: 'tol-panel-tools' });
+    tools.appendChild(stillButton());
+    tools.appendChild(joinLink('tol-member tol-panel-join'));
+    panel.appendChild(tools);
     panel.appendChild(buildIndex({ accordion: true }));
 
     document.addEventListener('keydown', function (e) {
@@ -371,16 +375,28 @@
     // Not on the garden itself, not on the locked-down workpaper pages, and not when
     // someone has asked their device to save data.
     var saveData = navigator.connection && navigator.connection.saveData;
-    if (!body.hasAttribute('data-no-garden') && current !== '/night-garden.html' && current !== '/garden-backdrop.html' && !saveData &&
-        !document.querySelector('meta[http-equiv="Content-Security-Policy"]')) {
+    var gardenParts = null;
+    function makeGarden() {
+      if (gardenParts || stillOn) return;
       // each part of the site has its own scene, lit by the visitor's clock; the games stay in the Night Garden
       var SCENES = { start: 'garden', about: 'garden', self: 'beach', media: 'beach', relationships: 'lake', book: 'meadow', workpapers: 'river', program: 'forest', tools: 'forest' };
       var secId = (current === '/relationships.html' && 'relationships') || (hereSection && hereSection.id) || (/^\/book\//.test(current) ? 'book' : /^\/workpapers\//.test(current) ? 'workpapers' : /^\/(learn|legal)\//.test(current) ? 'about' : ''), sceneQ = secId === 'play' || body.classList.contains('is-game') ? '?scene=garden&tod=night' : '?scene=' + (SCENES[secId] || 'garden');
       if (body.hasAttribute('data-garden-nopals')) sceneQ += (sceneQ ? '&' : '?') + 'pals=off'; // the page has its own pals running about
       var gf = el('iframe', { class: 'tol-garden-bg', src: '/garden-backdrop.html' + sceneQ, title: 'The Night Garden, softly in the background', 'aria-hidden': 'true', tabindex: '-1' });
-      body.insertBefore(el('div', { class: 'tol-garden-veil', 'aria-hidden': 'true' }), body.firstChild);
+      var veil = el('div', { class: 'tol-garden-veil', 'aria-hidden': 'true' });
+      body.insertBefore(veil, body.firstChild);
       body.insertBefore(gf, body.firstChild);
       document.documentElement.classList.add('has-garden');
+      gardenParts = [gf, veil];
+    }
+    if (!body.hasAttribute('data-no-garden') && current !== '/night-garden.html' && current !== '/garden-backdrop.html' && !saveData &&
+        !document.querySelector('meta[http-equiv="Content-Security-Policy"]')) {
+      makeGarden();
+      // "Keep the page still" takes the garden away entirely (nothing keeps moving out of sight), and brings it back
+      stillHooks.push(function (on) {
+        if (on && gardenParts) { gardenParts.forEach(function (n) { n.remove(); }); gardenParts = null; document.documentElement.classList.remove('has-garden'); }
+        else if (!on) makeGarden();
+      });
     }
 
     // levels for calm moments anywhere on the site (rewards.js), except the locked-down workpaper pages
@@ -437,6 +453,7 @@
     buildPuddles(body);
     buildPuddlesCards(body);
     buildWeatherNudge(body);
+    palCamHooks(body); // pal cam: "Check in on Tidbit & Sugarfoot" from anywhere (see below)
 
     // Pastel watercolour splashes behind the page (decorative; see site.css)
     if (!body.hasAttribute('data-no-wash')) {
@@ -452,8 +469,29 @@
     body.insertBefore(bar, body.firstChild);
     body.insertBefore(skip, body.firstChild);
     if (document.querySelector('aside.sidebar')) document.documentElement.classList.add('tol-own-side');
-    function barHeight() { document.documentElement.style.setProperty('--tol-bar-h', bar.offsetHeight + 'px'); }
+    // Big text or zoom: nothing in the bar is ever pushed off the side. Step by step, the section
+    // buttons fold into Menu, then Join moves into the menu panel, then the name wraps onto two lines.
+    function fitBar() {
+      var html = document.documentElement;
+      html.classList.toggle('tol-bigtext', parseFloat(getComputedStyle(html).fontSize) >= 20);
+      bar.classList.remove('is-narrow', 'is-tight', 'is-tighter');
+      var name = bar.querySelector('.tol-brand span');
+      function crowded() { return bar.scrollWidth > bar.clientWidth + 1 || (name && name.scrollWidth > name.clientWidth + 1); }
+      ['is-narrow', 'is-tight', 'is-tighter'].forEach(function (c) { if (crowded()) bar.classList.add(c); });
+    }
+    function barHeight() { fitBar(); document.documentElement.style.setProperty('--tol-bar-h', bar.offsetHeight + 'px'); }
     barHeight(); window.addEventListener('resize', barHeight);
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(barHeight);
+    // When the bar takes a big share of a short screen (a phone on its side, zoom, large text), it tucks
+    // away as you scroll down and comes straight back when you scroll up or move focus into it.
+    var lastY = window.scrollY;
+    window.addEventListener('scroll', function () {
+      var y = window.scrollY, h = bar.offsetHeight, big = h > window.innerHeight * 0.1;
+      if (big && y > lastY + 6 && y > h * 2 && !bar.contains(document.activeElement) && !openDrop && panel.hidden) bar.classList.add('is-tucked');
+      else if (!big || y < lastY - 6 || y < h) bar.classList.remove('is-tucked');
+      lastY = y;
+    }, { passive: true });
+    bar.addEventListener('focusin', function () { bar.classList.remove('is-tucked'); });
     body.appendChild(scrim);
     body.appendChild(panel);
 
@@ -492,6 +530,7 @@
         '<a href="mailto:' + CONFIG.supportEmail + '">Contact</a>' +
         (isApp() ? '' : '<button type="button" class="tol-install-link">Add to your home screen</button>') +
       '</span>';
+    foot.querySelector('.tol-foot-links').appendChild(stillButton());
     body.insertBefore(foot, scrim);
     var il = foot.querySelector('.tol-install-link');
     if (il) il.addEventListener('click', showInstall);
@@ -708,6 +747,7 @@
     hi.querySelector('.tol-puddles-hi-x').addEventListener('click', function () {
       try { sessionStorage.setItem('tol-puddles-small', '1'); } catch (e) {}
       hi.classList.add('is-small');
+      hi.querySelector('.tol-puddles-hi-go').focus();
     });
     var main = document.querySelector('main');
     if (main) main.insertBefore(hi, main.firstChild); else body.appendChild(hi);
@@ -743,7 +783,7 @@
     var card = el('aside', { class: 'tol-pud-card', 'aria-label': 'Chat with Professor Puddles' },
       '<span class="tol-pud-card-art" aria-hidden="true">' + PUDDLES_SVG + '</span>' +
       '<p><strong>' + esc(line[0]) + '</strong> ' + esc(line[1].replace('{t}', topic)) + '</p>' +
-      '<a class="tol-pud-card-go" href="/ask.html?about=' + encodeURIComponent(topic) + '">&#128172; Chat with Professor Puddles</a>');
+      '<a class="tol-pud-card-go" href="/ask.html?about=' + encodeURIComponent(topic) + '"><span aria-hidden="true">&#128172;</span> Chat with Professor Puddles</a>');
     after.parentNode.insertBefore(card, after.nextSibling);
   }
 
@@ -827,6 +867,39 @@
 
   function lsGet(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
   function lsSet(k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
+  function ssGet(k) { try { return sessionStorage.getItem(k); } catch (e) { return null; } }
+  function ssSet(k, v) { try { sessionStorage.setItem(k, v); } catch (e) {} }
+
+  // ---------- Keep the page still ----------
+  // One switch (in the menu panel and in the footer) that takes away the moving garden behind the
+  // page and the floating bubbles and hearts, and stops the little buddies moving. It starts on by
+  // itself when the device asks for less motion, and this browser remembers the choice.
+  // Other scripts can read window.TOLStill.on() or listen for the 'tol-still' event.
+  var STILL_KEY = 'tol-still', stillHooks = [];
+  var stillOn = (function () {
+    var v = lsGet(STILL_KEY);
+    if (v === '1' || v === '0') return v === '1';
+    return !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+  })();
+  document.documentElement.classList.toggle('tol-still', stillOn);
+  function setStill(on) {
+    stillOn = !!on; lsSet(STILL_KEY, stillOn ? '1' : '0');
+    document.documentElement.classList.toggle('tol-still', stillOn);
+    document.querySelectorAll('.tol-still-btn').forEach(function (b) {
+      b.setAttribute('aria-pressed', String(stillOn));
+      b.querySelector('.tol-still-state').textContent = stillOn ? 'On' : 'Off';
+    });
+    stillHooks.forEach(function (f) { try { f(stillOn); } catch (e) {} });
+    try { document.dispatchEvent(new CustomEvent('tol-still', { detail: { on: stillOn } })); } catch (e) {}
+  }
+  function stillButton() {
+    var b = el('button', { type: 'button', class: 'tol-still-btn', 'aria-pressed': String(stillOn) },
+      '<span class="tol-still-track" aria-hidden="true"><span></span></span>Keep the page still' +
+      '<span class="tol-still-state" aria-hidden="true">' + (stillOn ? 'On' : 'Off') + '</span>');
+    b.addEventListener('click', function () { setStill(!stillOn); });
+    return b;
+  }
+  window.TOLStill = { on: function () { return stillOn; }, set: setStill };
 
   // "Add to your home screen": the browser's own prompt where there is one, otherwise how-to steps
   function showInstall() {
@@ -859,47 +932,112 @@
     if (days.indexOf(today) === -1) { days.push(today); lsSet('tol-visit-days', JSON.stringify(days.slice(-30))); }
     if (isApp() || lsGet('tol-install-asked') || days.length < 2 || window.innerWidth > 760) return;
     if (document.body.hasAttribute('data-no-breathe') || location.pathname === '/offline.html') return; // not over the garden
+    if (ssGet('tol-invite-seen')) return; // at most once a visit
     setTimeout(function () {
-      if (lsGet('tol-install-asked') || document.querySelector('.tol-breathe:not([hidden]), .tol-install')) return;
-      lsSet('tol-install-asked', '1');
+      if (lsGet('tol-install-asked') || ssGet('tol-invite-seen') || document.querySelector('.tol-breathe:not([hidden]), .tol-install, .tol-wx')) return;
+      lsSet('tol-install-asked', '1'); ssSet('tol-invite-seen', '1');
       var t = el('div', { class: 'tol-invite', role: 'status' },
         '<img src="/assets/img/logo-mark.svg" alt="" width="44" height="44"><p>Want us on your home screen? It opens like an app, and nothing you type leaves your phone.</p>' +
         '<span><button type="button" class="tol-invite-yes">Show me how</button><button type="button" class="tol-invite-no">Not now</button></span>');
       t.querySelector('.tol-invite-yes').addEventListener('click', function () { t.remove(); showInstall(); });
       t.querySelector('.tol-invite-no').addEventListener('click', function () { t.remove(); });
       document.body.appendChild(t);
-    }, 25000);
+    }, 120000);
   }
 
   // ---------- Today's Weather, as a small floating invitation ----------
-  // Bottom-left, a few seconds after the page loads. Tap to check in; × hides it for today,
-  // and "Don't show again" hides it for good. It stays away once today's weather is logged.
+  // Bottom-left, and never while someone has only just started reading: at most once a visit, after
+  // a minute on the page or once they've scrolled a real way down. Tap to check in; × hides it for
+  // today, and "Don't show again" (right beside it) hides it for good. It stays away once today's
+  // weather is logged.
   var SKIP_WEATHER = ['/quick-checks.html', '/night-garden.html', '/dashboard.html', '/offline.html', '/404.html'];
   function buildWeatherNudge(body) {
     if (SKIP_WEATHER.indexOf(current) !== -1 || body.hasAttribute('data-no-weather') || document.querySelector('.wpf-bar')) return;
     var today = new Date().toISOString().slice(0, 10);
     if (lsGet('tol-weather-nudge') === 'never' || lsGet('tol-weather-nudge') === today) return;
     try { var log = JSON.parse(lsGet('tol-weather-v1') || '[]'); if (log.length && log[log.length - 1].d === today) return; } catch (e) {}
+    if (ssGet('tol-wx-seen')) return; // once a visit is plenty
     var art = '<svg viewBox="0 0 64 52" aria-hidden="true">' +
       '<g class="tol-wx-sun"><circle cx="42" cy="17" r="11" fill="#F8DC6E"/><g stroke="#F3C94A" stroke-width="2.4" stroke-linecap="round"><path d="M42 1v3M56 17h3M52 6l2-2M52 28l2 2M32 6l-2-2"/></g></g>' +
       '<path d="M14 44c-6 0-10-4-10-9s4-9 9-9c1-7 7-12 14-12 8 0 13 5 14 12 5 0 9 4 9 9s-4 9-9 9z" fill="#FFFFFF" stroke="#C9B8EC" stroke-width="2"/>' +
       '<circle cx="22" cy="33" r="2" fill="#2B2620"/><circle cx="33" cy="33" r="2" fill="#2B2620"/><path d="M25 38c1.5 1.5 4.5 1.5 6 0" fill="none" stroke="#2B2620" stroke-width="1.8" stroke-linecap="round"/>' +
       '<ellipse cx="18" cy="37" rx="2.6" ry="1.6" fill="#F7B8C6"/><ellipse cx="37" cy="37" rx="2.6" ry="1.6" fill="#F7B8C6"/></svg>';
+    // the link keeps its full name even when a small or zoomed screen shows only the little cloud
     var w = el('div', { class: 'tol-wx', role: 'complementary', 'aria-label': 'Today’s Weather' },
-      '<a class="tol-wx-go" href="/quick-checks.html#today">' + art + '<span><strong>How’s your weather today?</strong><small>A one-minute check-in</small></span></a>' +
+      '<a class="tol-wx-go" href="/quick-checks.html#today" aria-label="How’s your weather today? A one-minute check-in">' + art + '<span><strong>How’s your weather today?</strong><small>A one-minute check-in</small></span></a>' +
+      '<button type="button" class="tol-wx-never">Don’t show again</button>' +
       '<button type="button" class="tol-wx-x" aria-label="Hide for today">&times;</button>');
-    w.querySelector('.tol-wx-x').addEventListener('click', function () {
-      lsSet('tol-weather-nudge', today);
+    function bye(mode) {
+      lsSet('tol-weather-nudge', mode);
+      var back = w.contains(document.activeElement);
       w.classList.add('is-bye');
-      var t = el('div', { class: 'tol-wx tol-wx-toast', role: 'status' }, '<span>Hidden today.</span><button type="button" class="tol-wx-never">Don’t show again</button>');
-      t.querySelector('.tol-wx-never').addEventListener('click', function () { lsSet('tol-weather-nudge', 'never'); t.remove(); });
-      setTimeout(function () { w.remove(); document.body.appendChild(t); requestAnimationFrame(function () { t.classList.add('is-in'); }); }, 300);
-      setTimeout(function () { t.classList.remove('is-in'); setTimeout(function () { t.remove(); }, 400); }, 5000);
-    });
-    setTimeout(function () {
-      if (document.querySelector('.tol-invite')) return; // never alongside the home-screen invitation
+      setTimeout(function () { w.remove(); }, 300);
+      if (back) { var m = document.getElementById('tol-main'); if (m) m.focus({ preventScroll: true }); }
+    }
+    w.querySelector('.tol-wx-x').addEventListener('click', function () { bye(today); });
+    w.querySelector('.tol-wx-never').addEventListener('click', function () { bye('never'); });
+    var t0 = Date.now(), timer = null, done = false;
+    function show() {
+      if (done) return;
+      if (document.hidden) { timer = setTimeout(show, 5000); return; }            // wait until the page is being looked at
+      if (document.querySelector('.tol-invite, .tol-install, .tol-breathe:not([hidden])')) { timer = setTimeout(show, 15000); return; } // never alongside another invitation
+      done = true; clearTimeout(timer); window.removeEventListener('scroll', onScroll);
+      ssSet('tol-wx-seen', '1');
       body.appendChild(w); requestAnimationFrame(function () { w.classList.add('is-in'); });
-    }, 3500);
+    }
+    // a real scroll: more than a screen's worth down the page, at least 15 seconds in
+    function onScroll() { if (window.scrollY > window.innerHeight && Date.now() - t0 > 15000) show(); }
+    window.addEventListener('scroll', onScroll, { passive: true });
+    timer = setTimeout(show, 60000);
+  }
+
+  // ---------- Pal cam (the Frequency Journey's Tidbit & Sugarfoot), openable from any page ----------
+  // Nothing loads until it's asked for: a [data-palcam-open] link, or the occasional "Peek?"
+  // invitation (pals-cam-invite.js, fetched only on the page views that roll it). The Journey pages
+  // load the cam themselves. Nothing is sent anywhere; the invitation's memory is sessionStorage.
+  var PALCAM_FILES = ['/assets/js/pups.js', '/assets/js/pals-cam-acts.js', '/assets/js/pals-cam-more.js', '/assets/js/pals-cam-tricks.js', '/assets/js/pals-cam.js'];
+  var palCamP = null;
+  function loadScript(src) { return new Promise(function (ok, no) { var s = document.createElement('script'); s.src = src; s.onload = ok; s.onerror = no; document.head.appendChild(s); }); }
+  function loadPalCam() {
+    if (window.TOLPalsCam) return Promise.resolve(window.TOLPalsCam);
+    if (!palCamP) {
+      palCamP = PALCAM_FILES.reduce(function (p, src) { return p.then(function () { return src === PALCAM_FILES[0] && window.TOLPups ? null : loadScript(src); }); }, Promise.resolve())
+        .then(function () { return window.TOLPalsCam; });
+      palCamP.catch(function () { palCamP = null; });
+    }
+    return palCamP;
+  }
+  window.TOLPalCam = {
+    load: loadPalCam,
+    open: function (opts) { return loadPalCam().then(function (c) { if (c) c.open(opts || {}); }); },
+    invite: function () { return loadScript('/assets/js/pals-cam-invite.js').then(function () { if (window.TOLPalCamInvite) window.TOLPalCamInvite.show(true); }); }
+  };
+  function palCamHooks(body) {
+    Array.prototype.forEach.call(document.querySelectorAll('[data-palcam-row][hidden]'), function (r) { r.hidden = false; });
+    var top = document.querySelector('main [data-palcam-top]'); // the home page's link stays first, above anything added to the top of main
+    if (top && top.parentNode.firstElementChild !== top) top.parentNode.insertBefore(top, top.parentNode.firstElementChild);
+    document.addEventListener('click', function (e) {
+      var b = e.target.closest && e.target.closest('[data-palcam-open]');
+      if (!b || window.TOLPalsCam) return; // on the Journey pages the cam handles its own buttons
+      e.preventDefault(); window.TOLPalCam.open({ opener: b });
+    });
+    // the invitation: about 1 in 4 page views, 15-40 s in, once a visit, never two page views running
+    var p = location.pathname, force = /[?&]palcam-pop=1\b/.test(location.search);
+    var skip = /^\/(frequency-journey(-play)?\.html|calm-visualizer\.html|ask\.html|privacy-policy\.html|refund-policy\.html|terms-of-service\.html|offline\.html|404\.html)$/.test(p) ||
+      /^\/(workpapers\/fill|legal)\//.test(p) || body.classList.contains('is-game') || !!document.querySelector('meta[http-equiv="Content-Security-Policy"]');
+    if (skip) return;
+    var prev = lsGet('tol-palcam-pop-prev'); lsSet('tol-palcam-pop-prev', '0');
+    if (!force && (ssGet('tol-palcam-pop') || prev === '1' || Math.random() >= 0.25)) return;
+    function still() { return !!(window.TOLStill && window.TOLStill.on()); }
+    if (force) { setTimeout(function () { if (!still()) window.TOLPalCam.invite(); }, 1200); return; }
+    // like the weather pill: not in the first minute of reading, unless they've scrolled a real way
+    // down and been here 15 s; never in "Keep the page still" mode (pals-cam-invite.js also waits for
+    // the weather pill and the home-screen invite to be gone)
+    var t0 = Date.now(), done = false, timer = null;
+    function go() { if (done || still()) return; done = true; clearTimeout(timer); window.removeEventListener('scroll', onScroll); window.TOLPalCam.invite(); }
+    function onScroll() { if (window.scrollY > window.innerHeight && Date.now() - t0 > 15000) go(); }
+    window.addEventListener('scroll', onScroll, { passive: true });
+    timer = setTimeout(go, 60000 + Math.random() * 30000);
   }
 
   // ---------- Breathe ----------
@@ -908,7 +1046,7 @@
   function buildBreathe(body) {
     var moon = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z" fill="#F9D9B8" stroke="#8A7BB8" stroke-width="1.4"/></svg>';
     var btn = el('button', { type: 'button', class: 'tol-breathe-btn', 'aria-haspopup': 'dialog' }, moon + '<span>Breathe</span>');
-    btn.setAttribute('aria-label', 'Take a breathing break');
+    btn.setAttribute('aria-label', 'Breathe: take a breathing break');
     body.appendChild(btn);
     var loading = false;
     btn.addEventListener('click', function () {

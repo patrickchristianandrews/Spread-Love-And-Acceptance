@@ -533,6 +533,8 @@
     $('cv-ctrl').hidden = false; $('cv-clock').hidden = false; $('cv-paused').hidden = true;
     $('cv-sub').textContent = f.full;
     setPauseBtn(); updClock(); wake(true); poke();
+    // keyboard and screen-reader users land on the session controls, not on the page top
+    try { $('cv-pause').focus({ preventScroll: true }); } catch (e) { $('cv-pause').focus(); }
     saved.feel = f.id; saved.len = S.len; saved.bed = S.bed; saved.style = S.style; saved.intensity = S.intensity; save();
     say('Session started: ' + f.full + ', ' + S.len + ' minutes. ' + (A ? 'The sound fades in slowly.' : 'Sound isn’t available in this browser, but the pictures and breathing still work.'));
     clearInterval(tick); tick = setInterval(onTick, 250);
@@ -642,6 +644,7 @@
       '<li><span aria-hidden="true">🎨</span><span>Colours: ' + f.cols + '</span></li>';
     var labels = ['', 'A little. A short, easy glide.', 'Some.', 'Medium.', 'Quite strong. A longer glide and a slower out-breath.', 'A lot. The longest glide and the slowest out-breath. Go easy on yourself.'];
     $('cv-int-out').textContent = labels[S.intensity];
+    $('cv-int').setAttribute('aria-valuetext', ['', 'A little', 'Some', 'Medium', 'Quite strong', 'A lot'][S.intensity] || '');
     $('cv-begin').textContent = 'Begin · ' + S.len + ' min';
     V.breath = br;
   }
@@ -741,6 +744,11 @@
   document.addEventListener('fullscreenchange', function () { if (!document.fullscreenElement && document.documentElement.classList.contains('cv-full')) setFull(false); });
   document.addEventListener('keydown', function (e) {
     if (e.key === 'Escape' && document.documentElement.classList.contains('cv-full') && !document.fullscreenElement) setFull(false);
+    // Escape during a session pauses it and puts you on Pause / Resume
+    if (e.key === 'Escape' && run && !run.done) {
+      if (!run.paused) pause(true);
+      try { $('cv-pause').focus({ preventScroll: true }); } catch (x) { $('cv-pause').focus(); }
+    }
     var tag = (e.target && e.target.tagName) || '';
     if ((e.key === ' ' || e.key === 'k') && run && !/INPUT|BUTTON|SELECT|TEXTAREA|A|SUMMARY/.test(tag)) { e.preventDefault(); pause(!run.paused); }
   });

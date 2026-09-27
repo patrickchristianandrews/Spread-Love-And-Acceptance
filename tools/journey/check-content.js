@@ -323,6 +323,24 @@ report('walk', Object.keys(P.walk).map(function (k) { return k + ': ' + (P.walk[
 need(linkOk(P.pillarPage), 'pillars', 'the Five Pillars link must resolve: ' + P.pillarPage);
 P.pillars.slice(1).forEach(function (pl) { need(linkOk(P.pillarPage.split('#')[0] + '#' + pl.id), 'pillars', 'Pillar ' + pl.roman + ' link must resolve: ' + P.pillarPage + '#' + pl.id); });
 
+/* ------------------------------------------------------------------ the chunks, and the pals' looks */
+// the pools grow in chunks that the play page fetches once it's idle; the first file must stay light
+(P.chunks || []).forEach(function (f) { need(P.loaded && P.loaded[f], 'chunks', f + ' did not register (P.extend)'); });
+var coreKB = fs.statSync(path.join(ROOT, 'assets/js/journey-pools.js')).size / 1024;
+need(coreKB < 400, 'chunks', 'journey-pools.js is ' + Math.round(coreKB) + ' KB; move new items into a chunk');
+console.log('  chunks    journey-pools.js ' + Math.round(coreKB) + ' KB first, then ' + (P.chunks || []).map(function (f) { return f + ' ' + Math.round(fs.statSync(path.join(ROOT, 'assets/js', f)).size / 1024) + ' KB'; }).join(', ') + ' when idle');
+// the owner's description: Tidbit is the one with the big smile, Sugarfoot the one with the gentle wag
+var looks = 0;
+Object.keys(P).forEach(function (k) {
+  if (!Array.isArray(P[k])) return;
+  JSON.stringify(P[k]).split(/(?<=[.!?])\s+|","/).forEach(function (sent) {
+    if (/Sugarfoot/.test(sent) && /big smile/.test(sent) && !/Tidbit/.test(sent)) { need(false, 'pals', 'the big smile is Tidbit’s: ' + sent.slice(0, 90)); }
+    if (/Tidbit/.test(sent) && /gentle wag/.test(sent) && !/Sugarfoot/.test(sent)) { need(false, 'pals', 'the gentle wag is Sugarfoot’s: ' + sent.slice(0, 90)); }
+    if (/big smile|gentle wag/.test(sent)) looks++;
+  });
+});
+console.log('  pals      ' + looks + ' mentions of the big smile or the gentle wag, all on the right pal');
+
 /* ------------------------------------------------------------------ the draw: 60 plays of every level */
 console.log('\ndraws (60 plays of each level, seeded)');
 var PER = { riddle: ['riddles', 3], unscramble: ['words', 3], match: ['pairs', 6], reframe: ['items', 4], sort: ['items', 10], fill: ['lines', 6], spot: ['scenes', 2], choose: ['items', 4] };

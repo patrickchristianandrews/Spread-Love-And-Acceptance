@@ -1576,3 +1576,182 @@ main:not([class]) > p.last-updated{ opacity:1 !important; color:#5A5244; }
   border-color:transparent !important; border-radius:16px; }
 :is(main.read, main:not([class]), main.read > :is(section, article, div):not([class]), main:not([class]) > :is(section, article):not([class])) > :is(section, div, article, aside, form, nav, details, figure, fieldset)[class]:not(.simple-lede, .scene, .try-this, .growing-note, .tol-pud-card, .tol-puddles-hi, .tol-cheer, .tol-tip, .tol-warning, .announce-bar, .wn-card, .roadmap-callout, .cr-safety, .tol-private, .tol-gentle, .tol-read-wrap, .tol-pillars, .announce-stack, .tol-cols, .next-grid, .sw-opts, .tiers, .steps, .wn-group, .locked-section, .chapter-body, .home-contents, .hero, .ls-awning, .pc-launch-row, .tol-read-host, .kicker, .no-bubble, .sr-only, .visually-hidden, .depth-bar, .tol-dive-card, [class*='gm-'], [class*='xw-'], [class*='jl-'], [class*='lib-'], [class*='pp-'], [class*='ng-'], .qw, [hidden]) :is(p, ul, ol, li, dl, dt, dd, h2, h3, h4, hr){ border-color:rgba(160,135,205,.25) !important; }
 main .wpf-computed dl{ border-left:0 !important; border-radius:16px; }
+
+/* ==========================================================================
+   Easier for everyone: big text, small labels, floating pills, a still page,
+   high-contrast (forced colours) and printing.
+   ========================================================================== */
+
+/* ---------- The top bar with big text or zoom (site.js adds the classes when things don't fit) ---------- */
+.tol-bar.is-narrow .tol-sections{ display:none; }
+.tol-bar.is-narrow .tol-contents-btn{ display:inline-block; margin-left:auto; border-color:var(--ink-soft) !important; font-weight:600; }
+.tol-bar.is-tight a.tol-member{ display:none; }               /* Join is in the menu panel instead */
+.tol-bar.is-tight .tol-brand{ min-width:0; flex:1 1 auto; white-space:normal; }
+.tol-bar.is-tight .tol-brand span{ white-space:normal; overflow:visible; text-overflow:clip; line-height:1.1; overflow-wrap:anywhere; }
+.tol-bar.is-tighter .tol-brand span{ position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; }
+.tol-bar .tol-contents-btn{ flex:none; white-space:nowrap; }
+/* a short screen (a phone on its side, a small laptop at 150%): a slimmer bar that tucks away while you scroll down */
+@media (max-height:600px){
+  .tol-bar{ padding-top:.3rem !important; padding-bottom:.3rem !important; }
+  .tol-logo{ width:1.7rem; height:1.7rem; }
+}
+html.tol-bigtext .tol-bar{ padding-top:.25rem !important; padding-bottom:.25rem !important; gap:.5rem; }
+html.tol-bigtext .tol-bar button, html.tol-bigtext .tol-bar a.tol-member{ padding:.2rem .55rem !important; font-size:.85rem !important; line-height:1.15; }
+html.tol-bigtext .tol-brand{ font-size:.95rem !important; }
+html.tol-bigtext .tol-brand span{ font-size:inherit !important; }
+html.tol-bigtext .tol-logo{ width:1.5rem; height:1.5rem; }
+.tol-bar{ transition:transform .25s ease; }
+.tol-bar.is-tucked{ transform:translateY(-110%); }
+@media (prefers-reduced-motion: reduce){ .tol-bar{ transition:none; } }
+
+/* ---------- The menu panel: "Keep the page still" and Join ---------- */
+.tol-panel-tools{ display:flex; flex-wrap:wrap; align-items:center; gap:.6rem .8rem; margin:.9rem 0 0; }
+.tol-panel a.tol-panel-join{ display:inline-flex; align-items:center; min-height:40px; padding:.4rem 1rem; border:1px solid var(--ink); border-radius:999px;
+  color:var(--ink); text-decoration:none; font-weight:600; }
+.tol-panel a.tol-panel-join:hover{ background:var(--ink); color:var(--paper); }
+.tol-panel a.tol-panel-join.is-member{ border-color:var(--credit); color:var(--credit); }
+
+/* the switch */
+.tol-still-btn{ display:inline-flex; align-items:center; gap:.5rem; min-height:40px; padding:.35rem .9rem .35rem .5rem; cursor:pointer;
+  font:inherit; font-size:.95rem; line-height:1.2; color:var(--ink); background:rgba(255,253,248,.9); border:1px solid #8C826E; border-radius:999px; }
+.tol-still-btn:hover{ background:var(--paper-deep); }
+.tol-still-btn:focus-visible{ outline:2px solid var(--focus); outline-offset:2px; }
+.tol-still-track{ position:relative; flex:none; width:2.2rem; height:1.25rem; border-radius:999px; background:#E9E2D2; border:1px solid #6B6353; box-sizing:border-box; }
+.tol-still-track > span{ position:absolute; top:50%; left:.12rem; width:.85rem; height:.85rem; margin-top:-.425rem; border-radius:50%; background:#6B6353; transition:transform .2s ease; }
+.tol-still-btn[aria-pressed="true"] .tol-still-track{ background:#3E6B4C; border-color:#3E6B4C; }
+.tol-still-btn[aria-pressed="true"] .tol-still-track > span{ background:#fff; transform:translateX(.9rem); }
+.tol-still-state{ font:600 .875rem/1 "IBM Plex Mono", ui-monospace, monospace; color:#4A4439; padding-left:.15rem; }
+.tol-still-btn[aria-pressed="true"] .tol-still-state{ color:#2F5A3C; }
+.tol-foot .tol-still-btn{ font-size:.9rem; min-height:36px; padding-top:.2rem; padding-bottom:.2rem; }
+.tol-foot-links{ align-items:center; }
+@media (prefers-reduced-motion: reduce){ .tol-still-track > span{ transition:none; } }
+@media print{ .tol-still-btn{ display:none !important; } }
+
+/* ---------- Keep the page still (html.tol-still) ----------
+   The garden is taken away by site.js; the floating bubbles and hearts go; the buddies and mascots stop. */
+html.tol-still .tol-wash b, html.tol-still .tol-garden-bg, html.tol-still .tol-garden-veil, html.tol-still .tol-poplet,
+html.tol-still .tol-cheer-heart, html.tol-still .tol-cheer-dot{ display:none !important; }
+html.tol-still .tol-wash i,
+html.tol-still .tol-cheer, html.tol-still .tol-cheer *,
+html.tol-still .read-head::after, html.tol-still .tol-puddles-hi-art, html.tol-still .tol-pud-card-art,
+html.tol-still .tol-wx-go, html.tol-still .tol-wx-sun, html.tol-still .tol-tip img, html.tol-still .growing-note .growing-ic,
+html.tol-still .pp-hero-art, html.tol-still .tol-logo{ animation:none !important; transition:none !important; }
+html.tol-still .tol-reveal{ opacity:1 !important; transform:none !important; }
+html.tol-still .tol-cheer-b, html.tol-still .tol-cheer-say{ opacity:1 !important; transform:none !important; }
+
+/* ---------- The cheering buddies, gently alive (cheer.js) ----------
+   Only while awake and on screen (is-seen): a slow bob, a hello as they arrive, blinks, a happy
+   bounce when tapped, and now and then a lean toward the words. Transform only; nothing flashes. */
+.tol-cheer.is-awake.is-seen .tol-cheer-b{ animation:cbIdle 5.6s ease-in-out infinite; }
+.tol-cheer.is-right.is-awake.is-seen .tol-cheer-b{ animation-duration:6.4s; animation-delay:-2.2s; }
+@keyframes cbIdle{ 0%,100%{ transform:translateY(0) rotate(0); } 50%{ transform:translateY(-3px) rotate(1.4deg); } }
+.tol-cheer:not(.is-seen), .tol-cheer:not(.is-seen) *{ animation-play-state:paused !important; }
+.tol-cheer.do-wiggle .tol-cheer-b svg{ animation:cbWiggle .9s ease-in-out; }
+@keyframes cbWiggle{ 20%{ transform:rotate(-7deg); } 40%{ transform:rotate(6deg); } 60%{ transform:rotate(-4deg); } 80%{ transform:rotate(2deg); } }
+.tol-cheer.do-bounce .tol-cheer-b svg{ animation:cbBounce .8s cubic-bezier(.3,.7,.4,1) 2; }
+@keyframes cbBounce{ 0%,100%{ transform:translateY(0) scale(1,1); } 20%{ transform:translateY(0) scale(1.1,.9); } 50%{ transform:translateY(-12px) scale(.95,1.06); } 80%{ transform:translateY(0) scale(1.04,.96); } }
+.tol-cheer.do-bounce .cb-eyes{ opacity:0; } .tol-cheer.do-bounce .cb-happy{ opacity:1; }
+.tol-cheer.do-bounce .cb-smile{ opacity:0; } .tol-cheer.do-bounce .cb-grin{ opacity:1; }
+.tol-cheer.is-left{ --cb-lean:7deg; --cb-lean-x:3px; } .tol-cheer.is-right{ --cb-lean:-7deg; --cb-lean-x:-3px; }
+.tol-cheer.is-lean .tol-cheer-b svg{ animation:cbLean 2.6s ease-in-out; }
+@keyframes cbLean{ 0%,100%{ transform:none; } 35%,70%{ transform:translateX(var(--cb-lean-x)) rotate(var(--cb-lean)); } }
+/* the decorative buddy button is never a tab stop, so it needs no focus ring; the pointer still gets a hand */
+.tol-cheer-b{ cursor:pointer; }
+@media (prefers-reduced-motion: reduce){ .tol-cheer, .tol-cheer *{ animation:none !important; transition:none !important; } }
+
+/* ---------- Today's Weather and Breathe: never over the words ---------- */
+html{ scroll-padding-bottom:5.5rem; }       /* whatever gets keyboard focus scrolls clear of the floating pills */
+.tol-wx{ gap:.35rem; }
+.tol-wx-go{ padding-right:.95rem; min-width:0; }
+.tol-wx-x, .tol-wx-never{ flex:none; box-sizing:border-box; min-height:2.25rem; border-radius:999px; background:rgba(255,251,242,.97); border:1px solid #D9C8E6;
+  box-shadow:0 6px 18px rgba(90,70,120,.14); cursor:pointer; }
+.tol-wx-x{ position:static; margin:0; width:2.25rem; height:2.25rem; font-size:1.3rem; color:#4A4439; }
+.tol-wx-never{ padding:.25rem .75rem; font:600 .875rem/1.2 "Lora", Georgia, serif; color:#5B3F7A; text-decoration:underline; text-underline-offset:2px; white-space:nowrap; }
+.tol-wx-never:hover, .tol-wx-x:hover{ background:#F4ECF7; color:var(--ink); }
+.tol-wx-go small{ font-size:.875rem; color:#4A4439; }
+.tol-wx{ max-width:calc(100% - 9.5rem); }
+/* small, short or big-text screens: the pills shrink to their little pictures (their names stay for screen readers) */
+@media (max-width:560px), (max-height:600px){
+  .tol-wx-go > span{ display:none; }
+  .tol-wx-go{ padding:.35rem .45rem; }
+  .tol-wx{ max-width:calc(100% - 5.5rem); }
+  .tol-breathe-btn > span{ position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; }
+  .tol-breathe-btn{ padding:.6rem !important; }
+  .tol-breathe-btn svg{ width:1.45rem; height:1.45rem; }
+}
+html.tol-bigtext .tol-wx-go > span, html.tol-bigtext .tol-breathe-btn > span{ position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; }
+html.tol-bigtext .tol-wx-go{ padding:.35rem .45rem; }
+html.tol-bigtext .tol-wx{ max-width:calc(100% - 5.5rem); }
+html.tol-bigtext .tol-breathe-btn{ padding:.6rem !important; }
+/* room under the last words for the pills */
+.tol-foot{ padding-bottom:calc(2.5rem + 5rem + env(safe-area-inset-bottom, 0px)); }
+
+/* ---------- Small labels: at least about 14px, and dark enough to read (4.5:1) ---------- */
+.depth-bar, .depth-bar span, .depth-bar a, .dig, .scene-when, details.deeper > summary,
+.tol-code, .tol-drop-code, .tol-acc-count, .tol-acc-here, .tol-bar .tol-drop .tol-drop-all, .tol-index li > .tol-dig,
+.tol-read-k, .tol-read-src, .tol-read-note, .tol-tip-k, .tol-tip-topic, .tol-tip-next, .tol-read-next, .tol-pager-dir,
+.tol-cheer-name, .growing-chip, .announce-tag, .next-kicker, .start-sub, .wn-tag, .fp-num, .fp-field, .fp-tags a, .step-n, .step-n .opt,
+.step-hint, .fc-sub, .fc-head .window, body .jl-pal .jl-tagline, body .jl-k, body .jl-hz, body .jl-note,
+.cv-small, .cv-feel small, .cv-title small, .cv-pillar-k small, .wpf-list .code, .ws-week-k{ font-size:.875rem !important; }
+.read-code .formal{ font-size:max(.875rem, .66em) !important; }
+.cv-small, .step-hint, .jl-note, .tol-read-note, .fp-field{ font-size:.9rem !important; }
+details.deeper > summary::after{ font-size:.875rem !important; }
+.read .ideas > li::before{ font-size:.875rem !important; }
+/* the idea numbers and codes are a little wider now */
+.tol-row{ grid-template-columns:5.4rem 1fr auto; }
+.tol-panel .tol-row{ grid-template-columns:5.6rem 1fr auto; }
+.tol-index li > .tol-dig{ margin-left:calc(6.3rem + 3px); }
+.tol-panel .tol-index li > .tol-dig{ margin-left:calc(6.6rem + 3px); }
+@media (max-width:520px){ .tol-row, .tol-panel .tol-row{ grid-template-columns:1fr auto; } .tol-index li > .tol-dig, .tol-panel .tol-index li > .tol-dig{ margin-left:.55rem; } }
+.tol-drop-code{ min-width:4.6rem; }
+/* deeper colours for the small labels */
+.tol-cheer-name{ color:#6E5373; }
+.tol-cheer-name em{ color:#6E5373; }
+.tol-code, .tol-acc-count, .tol-bar .tol-drop .tol-drop-all{ color:#4A4439; }
+.tol-drop-code, .tol-acc-here, .tol-panel .tol-code{ color:#7A5518; }
+.scene-when, details.deeper > summary{ color:#7A5518; }
+details.deeper > summary::after{ color:#4A4439; }
+.depth-bar, main > p.depth-bar a:not(.dig){ color:#4A4439; }
+body .jl-pal .jl-tagline{ color:#6E5373; }
+.tol-tip-k, .tol-read-k, .tol-tip-topic, body .jl-k{ color:#6E5373 !important; }
+.tol-read-p, .rung strong em, .fp-tags b, .read .fp-jump a, .read .fp-jump a b, .tol-fine, .lib-pillar h3 small,
+.tt-kicker, .tt-day, .tt-how, .tt-note, .tt-progress span, .tt-btn.is-quiet{ font-size:.875rem !important; }
+
+/* ---------- High contrast (Windows and other forced-colour modes) ----------
+   Plain text on a plain background: no garden, no bubbles or hearts, no mascots or buddies. */
+@media (forced-colors: active){
+  .tol-garden-bg, .tol-garden-veil, .tol-wash, .tol-breathe-bg, .tol-cheer, .tol-poplet,
+  .tol-puddles-hi-art, .tol-pud-card-art, .tol-tip img, .pp-hero-art{ display:none !important; }
+  .read-head::after, .tol-simple .read-head::after, .tol-deep .read-head::after{ content:none !important; display:none !important; }
+  html.has-garden, html.has-garden body, body{ background:Canvas !important; color:CanvasText; }
+  .tol-bar, .tol-panel, .tol-foot, .tol-drop{ background:Canvas !important; backdrop-filter:none !important; -webkit-backdrop-filter:none !important; }
+  .tol-still-track{ forced-color-adjust:none; background:Canvas; border-color:CanvasText; }
+  .tol-still-track > span{ forced-color-adjust:none; background:CanvasText; }
+  .tol-still-btn[aria-pressed="true"] .tol-still-track{ background:Highlight; border-color:Highlight; }
+  .tol-still-btn[aria-pressed="true"] .tol-still-track > span{ background:HighlightText; }
+  .tol-wx-go, .tol-wx-x, .tol-wx-never, .tol-breathe-btn{ border:1px solid ButtonText; }
+}
+
+/* ---------- Printing ---------- */
+@media print{
+  main .announce-stack, main .announce-bar{ display:none !important; }   /* the "New" notices are for the screen */
+  .tol-cheer, .tol-panel-tools{ display:none !important; }
+}
+
+/* Pal cam launcher ("Check in" link at the top of the home page). The cam itself and its own styles
+   load on demand from site.js; these few rules just let the link look right before then. */
+.pc-launch{display:inline-flex;align-items:center;justify-content:center;gap:.55rem;min-height:48px;padding:.55rem 1.15rem .55rem .7rem;border-radius:999px;border:2px solid #F3C6D3;background:linear-gradient(135deg,#FFF6E8,#FBE6F0 60%,#E9E2FB);color:#3C3350;font:600 1rem/1.2 Lora,Georgia,serif;cursor:pointer;box-shadow:0 6px 18px rgba(92,74,134,.16);text-decoration:none;touch-action:manipulation;max-width:100%;box-sizing:border-box}
+.pc-launch:hover{box-shadow:0 10px 24px rgba(92,74,134,.22);background:linear-gradient(135deg,#FFF1DC,#F9DCE9 60%,#E2D8FA)}
+.pc-launch:focus-visible{outline:3px solid #7C6BB0;outline-offset:3px}
+.pc-launch .pc-paw{flex:none;display:grid;place-items:center;width:34px;height:34px;border-radius:50%;background:#3C3350;color:#FFF3D6}
+.pc-launch .pc-paw svg{width:20px;height:20px}
+.pc-launch small{display:block;font:500 14px/1.25 Lora,Georgia,serif;letter-spacing:0;color:#6E5A86;white-space:nowrap}
+.pc-launch-row{position:relative;z-index:97;display:flex;justify-content:center;margin:.2rem 0 .9rem}
+.pc-launch-row[hidden]{display:none}
+.pc-launch .pc-lt{display:block}
+.pc-launch small .pc-dot{display:inline-block;margin-right:.35rem;vertical-align:1px}
+.pc-launch .pc-dot{width:8px;height:8px;border-radius:50%;background:#E4566E;box-shadow:0 0 0 3px rgba(228,86,110,.2);animation:pcDot 2s ease-in-out infinite}
+@keyframes pcDot{50%{opacity:.35}}
+@media (prefers-reduced-motion: reduce){ .pc-launch .pc-dot{ animation:none; } }
+
+html.tol-still .pc-launch .pc-dot{ animation:none; }

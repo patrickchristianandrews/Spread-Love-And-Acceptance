@@ -595,22 +595,40 @@
     return out;
   }
   function bloomBits(rows) { return rows.join('').split('').map(Number); }
-  // fewest taps from here to a meadow in full bloom (null if it can't be done)
+  // fewest taps from here to a meadow in full bloom (null if it can't be done). Taps can be made in any
+  // order and a flower tapped twice is as if untapped, so this solves it as equations over on/off
+  // (Gaussian elimination mod 2) and tries every free choice for the smallest set of taps. It stays
+  // instant on 5x5 meadows, where a search through every state would not.
   function bloomSolve(bits, n) {
-    n = n || 3; var N = n * n, full = (1 << N) - 1;
-    function enc(b) { var v = 0; b.forEach(function (x, i) { if (x) v |= 1 << i; }); return v; }
-    var masks = []; for (var i = 0; i < N; i++) { var z = []; for (var k = 0; k < N; k++) z.push(0); masks.push(enc(bloomTap(z, i, n))); }
-    var s0 = enc(bits); if (s0 === full) return [];
-    var prev = new Map(); prev.set(s0, null); var q = [s0], h = 0;
-    while (h < q.length) {
-      var s = q[h++];
-      for (i = 0; i < N; i++) {
-        var t = s ^ masks[i]; if (prev.has(t)) continue; prev.set(t, [s, i]);
-        if (t === full) { var out = [], c = t; while (prev.get(c)) { out.unshift(prev.get(c)[1]); c = prev.get(c)[0]; } return out; }
-        q.push(t);
-      }
+    n = n || 3; var N = n * n, i, j, k;
+    if (bits.every(Boolean)) return [];
+    var A = [];
+    for (j = 0; j < N; j++) { // cell j is flipped by a tap on itself or a neighbor
+      var row = []; for (i = 0; i < N; i++) row.push(0);
+      var x = j % n, y = j / n | 0;
+      [[0, 0], [0, -1], [1, 0], [0, 1], [-1, 0]].forEach(function (o) { var xx = x + o[0], yy = y + o[1]; if (xx >= 0 && yy >= 0 && xx < n && yy < n) row[yy * n + xx] = 1; });
+      row.push(bits[j] ? 0 : 1); A.push(row);
     }
-    return null;
+    var piv = [], r = 0;
+    for (var c = 0; c < N && r < N; c++) {
+      var p = -1; for (k = r; k < N; k++) if (A[k][c]) { p = k; break; }
+      if (p < 0) continue;
+      var t = A[p]; A[p] = A[r]; A[r] = t;
+      for (k = 0; k < N; k++) if (k !== r && A[k][c]) for (i = c; i <= N; i++) A[k][i] ^= A[r][i];
+      piv.push(c); r++;
+    }
+    for (k = r; k < N; k++) if (A[k][N]) return null; // no way to open every flower
+    var free = []; for (c = 0; c < N; c++) if (piv.indexOf(c) < 0) free.push(c);
+    if (free.length > 12) free = free.slice(0, 12);
+    var best = null;
+    for (var m = 0; m < 1 << free.length; m++) {
+      var xs = []; for (i = 0; i < N; i++) xs.push(0);
+      free.forEach(function (fc, q) { xs[fc] = m >> q & 1; });
+      for (k = r - 1; k >= 0; k--) { var v = A[k][N]; for (i = piv[k] + 1; i < N; i++) if (A[k][i] && xs[i]) v ^= 1; xs[piv[k]] = v; }
+      var taps = []; xs.forEach(function (b, q) { if (b) taps.push(q); });
+      if (!best || taps.length < best.length) best = taps;
+    }
+    return best;
   }
 
   // "Calls in the dark": the calling pal (A) waits on the lookout, which counts as one of the two tone tiles.
@@ -684,20 +702,20 @@
   var DRAW = {
     '1-1': { pool: 'riddle', mix: [1, 1, 2], again: [1, 2, 3] },
     '1-2': { p: [3] }, '2-2': { p: [2] }, '4-3': { p: [2] },      // grid boards: variants from the pools; p = the pillar they practise
-    '1-3': { pool: 'breath', mix: [1], again: [2] },
+    '1-3': { pool: 'breath', mix: [2], again: [2] },         // grade 2 reaches every pattern (1-3) before any repeats
     '2-1': { pool: 'word', mix: [1, 2, 2], again: [2, 2, 3] },
     '2-3': { pool: 'seq', mix: [2], again: [3] },
     '3-1': { pool: 'pair', mix: [1, 1, 2, 2, 2, 3], again: [1, 2, 2, 3, 3, 3] },
     '3-2': { pool: 'reframe', mix: [1, 2, 2, 3], again: [2, 2, 3, 3] },
-    '3-3': { bloom: [3, 3], again: [4, 4] },        // [size, fewest taps at least]
+    '3-3': { bloom: [[3, 3], [4, 4]], again: [[4, 5], [5, 5]] },        // [size, fewest taps at least], one picked per play
     '4-1': { pool: 'bids', mix: [2], again: [3] },
-    '4-2': { pool: 'fair', mix: [2], again: [3] },
-    '5-1': { song: [6, 3], again: [7, 3] },          // [notes, first round]
+    '4-2': { pool: 'fair', mix: [2], again: [3], gen: 0.45 },            // gen: share of plays made fresh from the job banks
+    '5-1': { song: [[6, 3], [7, 3]], again: [[7, 3], [8, 3]] },          // [notes, first round]
     '5-2': { sort: [[1, 2, 3], [2, 3]], again: [[2, 3, 3], [3, 3]] },
     '5-3': { pool: 'fill', mix: [1, 2, 2, 2, 3, 3], again: [2, 2, 3, 3, 3, 3] },
     '6-1': { pool: 'spot', mix: [2, 3], again: [3, 3] },
     '6-2': { pool: 'choose', mix: [2, 2, 3, 3], again: [2, 3, 3, 3] },
-    '6-3': { maze: [6, 8], again: [7, 9] }           // [fewest calls, from … to]
+    '6-3': { maze: [6, 8], again: [7, 9], size: [[7, 8], [6, 8], [7, 9]], againSize: [[7, 8], [8, 8], [7, 9], [8, 9]] } // [fewest calls, from … to]; [width, height]
   };
 
   // a small seeded random number generator (mulberry32), for tests and the checker
@@ -727,8 +745,8 @@
   function pick(name, items, mix, seen, r, ok) {
     var used = seenList(seen, name), out = [];
     mix.forEach(function (g) {
-      var it = pickOne(items, g, used, out, r, ok);
-      if (!it) { // this player has seen everything near this grade: start the pool over
+      var it = pickOne(items, g, used, out, r, ok) || pickOne(items, g, used, out, r, ok, true); // nearest grade first, then anything unseen
+      if (!it) { // this player has seen everything: start the pool over
         used.length = 0; out.forEach(function (x) { used.push(x.id); });
         it = pickOne(items, g, used, out, r, ok) || pickOne(items, g, used, out, r, ok, true) || pickOne(items, g, [], out, r, ok, true);
       }
@@ -763,21 +781,36 @@
     }
     return null;
   }
-  // echo the valley: a new tune, notes 1-5, never the same note twice in a row, at least four different notes
-  function genSong(len, r) {
-    for (var t = 0; t < 100; t++) {
-      var s = [];
-      while (s.length < len) { var n = 1 + Math.floor(r() * 5); if (n !== s[s.length - 1]) s.push(n); }
+  // echo the valley: a new tune, notes 1-5, never the same note twice in a row, at least four different notes.
+  // Each tune follows one of several shapes (a wander, gentle steps, an arch, a question and answer, a
+  // mirror, little leaps), so tunes feel different from play to play, not just shuffled.
+  var SONG_SHAPES = ['wander', 'steps', 'arch', 'answer', 'mirror', 'leaps', 'valley'];
+  function genSong(len, r, shape) {
+    shape = shape || SONG_SHAPES[Math.floor(r() * SONG_SHAPES.length)];
+    function note() { return 1 + Math.floor(r() * 5); }
+    function clampN(n) { return n < 1 ? 2 : n > 5 ? 4 : n; }
+    for (var t = 0; t < 200; t++) {
+      var s = [], k;
+      if (shape === 'steps') { s.push(note()); while (s.length < len) { var st = s[s.length - 1] + (r() < 0.5 ? -1 : 1) * (r() < 0.8 ? 1 : 2); s.push(clampN(st)); } }
+      else if (shape === 'arch') { var top = Math.ceil(len / 2), lo0 = 1 + Math.floor(r() * 2); for (k = 0; k < len; k++) s.push(clampN(k < top ? lo0 + k + (r() < 0.25 ? 1 : 0) : s[s.length - 1] - 1 - (r() < 0.3 ? 1 : 0))); }
+      else if (shape === 'valley') { var hi0 = 4 + Math.floor(r() * 2); for (k = 0; k < len; k++) s.push(clampN(k < Math.ceil(len / 2) ? hi0 - k - (r() < 0.25 ? 1 : 0) : s[s.length - 1] + 1 + (r() < 0.3 ? 1 : 0))); }
+      else if (shape === 'answer') { var half = Math.floor(len / 2); while (s.length < half) s.push(note()); for (k = 0; s.length < len; k++) s.push(k < half - 1 ? s[k] : note()); }
+      else if (shape === 'mirror') { var h2 = Math.ceil(len / 2); while (s.length < h2) s.push(note()); for (k = len - h2 - 1; k >= 0 && s.length < len; k--) s.push(6 - s[k]); }
+      else if (shape === 'leaps') { s.push(note()); while (s.length < len) { var lp = s[s.length - 1] + (r() < 0.5 ? -1 : 1) * (2 + Math.floor(r() * 3)); s.push(lp >= 1 && lp <= 5 ? lp : note()); } }
+      else { while (s.length < len) s.push(note()); }
+      s = s.slice(0, len);
+      if (s.some(function (n, i) { return n < 1 || n > 5 || n === s[i - 1]; })) continue;
       var kinds = s.filter(function (n, i) { return s.indexOf(n) === i; }).length;
       if (kinds >= Math.min(4, len)) return s;
     }
-    return [1, 3, 2, 5, 4, 2, 3].slice(0, len);
+    if (shape !== 'wander') return genSong(len, r, 'wander');
+    return [1, 3, 2, 5, 4, 2, 3, 1].slice(0, len);
   }
   // calls in the dark: carve a winding real path from the walker (B, bottom) up to the tone (O, top, beside
   // the lookout A), then add dead ends, hidden ground (h), illusions (x) and rocks (#). The breadth-first
   // mazeSolve counts the fewest calls; only mazes inside the level's range are kept.
-  function genMaze(lo, hi, r, maxRun) {
-    var W = 7, H = 8; maxRun = maxRun || 6; lo = lo || 6; hi = hi || 8;
+  function genMaze(lo, hi, r, maxRun, W, H) {
+    W = W || 7; H = H || 8; maxRun = maxRun || 6; lo = lo || 6; hi = hi || 8;
     function at(x, y) { return y * W + x; }
     function inner(x, y) { return x >= 1 && x <= W - 2 && y >= 1 && y <= H - 2; }
     for (var tries = 0; tries < 600; tries++) {
@@ -807,7 +840,7 @@
       path.forEach(function (p) { g[p] = '.'; });
       g[path[0]] = 'B'; g[at(ox, 0)] = 'O'; g[at(ax, 0)] = 'A';
       // dead ends off the path
-      var mids = shuffle(path.slice(2, -1), r).slice(0, 3);
+      var mids = shuffle(path.slice(2, -1), r).slice(0, 2 + Math.floor(r() * 3));
       mids.forEach(function (p) {
         var d = Math.floor(r() * 4), x = p % W, y = p / W | 0;
         for (var s = 0; s < 1 + Math.floor(r() * 2); s++) {
@@ -819,7 +852,7 @@
         }
       });
       // hidden ground along the real path; illusions and rocks beside it
-      shuffle(path.slice(2, -1), r).slice(0, 2).forEach(function (p) { g[p] = 'h'; });
+      shuffle(path.slice(2, -1), r).slice(0, 1 + Math.floor(r() * 3)).forEach(function (p) { g[p] = 'h'; });
       var edge = []; g.forEach(function (c, j) { var x = j % W, y = j / W | 0; if (c !== '_' || !inner(x, y)) return; for (var q = 0; q < 4; q++) { var x2 = x + DIRS[q][0], y2 = y + DIRS[q][1]; if (x2 >= 0 && y2 >= 0 && x2 < W && y2 < H && '.h'.indexOf(g[at(x2, y2)]) >= 0) { edge.push(j); return; } } });
       edge = shuffle(edge, r);
       edge.slice(0, 3 + Math.floor(r() * 2)).forEach(function (j) { g[j] = 'x'; });
@@ -833,6 +866,42 @@
       return { rows: rows, minCalls: sol.length, sol: sol };
     }
     return null;
+  }
+
+  // fair shares, made fresh: a setting from the job banks in journey-pools.js, seven to nine of its jobs
+  // (always some invisible work), and two batteries that at least one split fits exactly. Harder sets
+  // have fewer fair splits to find. Returns an item shaped like the fair pool's, or null.
+  function genFair(bank, r, g, avoid) {
+    if (!bank || !bank.sets || !bank.sets.length) return null;
+    avoid = avoid || [];
+    var sets = bank.sets.filter(function (st) { return !avoid.some(function (k) { return k.indexOf('fg:' + st.id + ':') === 0; }); });
+    if (!sets.length) sets = bank.sets;
+    for (var t = 0; t < 80; t++) {
+      var st = sets[Math.floor(r() * sets.length)], n = (g >= 3 ? 8 : 7) + Math.floor(r() * 2);
+      var idx = shuffle(st.jobs.map(function (_, i) { return i; }), r).slice(0, Math.min(n, st.jobs.length, 10));
+      var jobs = idx.map(function (i) { var j = st.jobs[i], o2 = { t: j[0], w: j[1] }; if (j[2]) o2.hidden = true; return o2; });
+      if (jobs.filter(function (j) { return j.hidden; }).length < 2) continue;
+      var total = jobs.reduce(function (a, j) { return a + j.w; }, 0), ways = {};
+      for (var m = 0; m < 1 << jobs.length; m++) { var a2 = 0; for (var i = 0; i < jobs.length; i++) if (m >> i & 1) a2 += jobs[i].w; ways[a2] = (ways[a2] || 0) + 1; }
+      var caps = Object.keys(ways).map(Number).filter(function (v) { return v >= total * 0.36 && v <= total * 0.64; });
+      if (!caps.length) continue;
+      caps.sort(function (x, y) { return g >= 3 ? ways[x] - ways[y] : ways[y] - ways[x]; });
+      var c0 = caps[Math.floor(r() * Math.min(3, caps.length))], c1 = total - c0;
+      var hi = bank.more[Math.floor(r() * bank.more.length)], lo = bank.less[Math.floor(r() * bank.less.length)], ev = bank.even[Math.floor(r() * bank.even.length)];
+      var notes = c0 > c1 ? [hi, lo] : c0 < c1 ? [lo, hi] : [ev, ev];
+      var key = 'fg:' + st.id + ':' + idx.slice().sort(function (x, y) { return x - y; }).join('.') + ':' + c0;
+      if (avoid.indexOf(key) >= 0) continue;
+      return { id: key, g: g >= 3 ? 3 : 2, title: st.title, cap: [c0, c1], capNote: notes, jobs: jobs, p: st.p, an: st.an, gen: true };
+    }
+    return null;
+  }
+  // make something fresh with a generator, skipping anything this player has already been given
+  function fresh(seen, name, make, keyOf) {
+    var used = seenList(seen, name), it = null;
+    for (var t = 0; t < 40; t++) { it = make(); if (!it || used.indexOf(keyOf(it)) < 0) break; }
+    if (it) used.push(keyOf(it));
+    if (used.length > 150) used.splice(0, used.length - 150); // generated keys are long; the newest 150 are plenty to avoid repeats
+    return it;
   }
 
   function drawLevel(w, l, seen, o) {
@@ -889,7 +958,7 @@
         lv.items = take('reframe', P.reframe).sort(byG).map(function (it) { return withShuffled(it, r); });
         break;
       case 'bloom': {
-        var bs = again ? D.again : D.bloom, m = genBloom(bs[0], bs[1], r);
+        var bss = again ? D.again : D.bloom, m = fresh(seen, 'bloom', function () { var bs = bss[Math.floor(r() * bss.length)]; return genBloom(bs[0], bs[1], r); }, function (x) { return 'bloom:' + x.start.join('/'); });
         if (m) { lv.n = m.n; lv.start = m.start; lv.minTaps = m.min; lv.set = ['bloom:' + m.start.join('/')]; }
         lv.pillars = [5];
         break;
@@ -901,13 +970,16 @@
         break;
       }
       case 'balance': {
-        var f = take('fair', P.fair)[0];
+        var fg = mix[0], left = P.fair.filter(function (it) { return seenList(seen, 'fair').indexOf(it.id) < 0; }).length, f = null;
+        if (P.fairBank && (r() < (D.gen || 0) || !left)) f = fresh(seen, 'fairgen', function () { return genFair(P.fairBank, r, fg, seenList(seen, 'fairgen').slice(-12)); }, function (x) { return x.id; });
+        if (f) use([f]); else f = take('fair', P.fair)[0];
         lv.jobs = shuffle(f.jobs, r); lv.cap = f.cap; lv.capNote = f.capNote; lv.fairTitle = f.title;
         break;
       }
       case 'echo': {
-        var sg = again ? D.again : D.song;
-        lv.song = genSong(sg[0], r); lv.first = sg[1]; lv.set = ['song:' + lv.song.join('')]; lv.pillars = [4];
+        var sgs = again ? D.again : D.song, sg = sgs[Math.floor(r() * sgs.length)];
+        lv.song = fresh(seen, 'song', function () { return genSong(sg[0], r); }, function (x) { return 'song:' + x.join(''); });
+        lv.first = sg[1]; lv.set = ['song:' + lv.song.join('')]; lv.pillars = [4];
         break;
       }
       case 'sort': {
@@ -932,7 +1004,8 @@
         lv.items = take('choose', P.choose).sort(byG).map(function (it) { return withShuffled(it, r); });
         break;
       case 'maze': {
-        var mz = again ? D.again : D.maze, z = genMaze(mz[0], mz[1], r, base.maxRun);
+        var mz = again ? D.again : D.maze, szs = (again ? D.againSize : D.size) || [[7, 8]];
+        var z = fresh(seen, 'maze', function () { var sz = szs[Math.floor(r() * szs.length)]; return genMaze(mz[0], mz[1], r, base.maxRun, sz[0], sz[1]) || genMaze(mz[0], mz[1], r, base.maxRun); }, function (x) { return 'maze:' + x.rows.join('/'); });
         if (z) { lv.rows = z.rows; lv.minCalls = z.minCalls; lv.set = ['maze:' + z.rows.join('/')]; }
         lv.pillars = [4];
         break;
@@ -948,7 +1021,27 @@
     bloomTap: bloomTap, bloomBits: bloomBits, bloomSolve: bloomSolve, mazeParse: mazeParse, mazeWalk: mazeWalk, mazeSolve: mazeSolve,
     norm: norm, fillMatch: fillMatch, levelOf: levelOf,
     drawLevel: drawLevel, DRAW: DRAW, pools: pools, pick: pick, rng: rng, shuffle: shuffle, scramble: scramble,
-    genBloom: genBloom, genSong: genSong, genMaze: genMaze };
+    genBloom: genBloom, genSong: genSong, genMaze: genMaze, genFair: genFair, SONG_SHAPES: SONG_SHAPES };
   if (typeof module !== 'undefined' && module.exports) module.exports = api;
   else root.TOLJourney = api;
+
+  /* ------------------------------------------------------------------ the rest of the pools, a little later
+     journey-pools.js holds the first part of every pool. The rest (P.chunks: journey-pools-2.js …) is
+     fetched once the page has finished loading and the browser is idle, so the first load stays light.
+     Until a chunk arrives, draws simply use what's already here; each chunk adds to the same lists. */
+  if (typeof document !== 'undefined' && !(typeof module !== 'undefined' && module.exports)) {
+    var here = (document.currentScript && document.currentScript.src) || '';
+    var loadMore = function () {
+      var P = pools(); if (!P || !P.chunks || loadMore.done) return;
+      loadMore.done = true;
+      var base = here ? here.replace(/[^\/]*$/, '') : '/assets/js/';
+      P.chunks.forEach(function (f, i) {
+        if (P.loaded && P.loaded[f]) return;
+        setTimeout(function () { var sc = document.createElement('script'); sc.src = base + f; sc.async = true; document.head.appendChild(sc); }, i * 150);
+      });
+    };
+    api.loadMore = loadMore;
+    var later = function () { (root.requestIdleCallback || function (fn) { return setTimeout(fn, 400); })(loadMore, { timeout: 3000 }); };
+    if (document.readyState === 'complete') later(); else root.addEventListener('load', later);
+  }
 })(this);
