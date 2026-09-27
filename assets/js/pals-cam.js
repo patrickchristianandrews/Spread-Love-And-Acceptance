@@ -12,7 +12,7 @@
    - a watchdog eases them home and moves on if an activity overruns, throws, or strays off stage.
 
    The setting rotates each time it opens (a shuffled bag), and the light follows the viewer's own
-   clock. The tally of what they've done today is kept in this browser only (localStorage), as a
+   clock. What the cam remembers (no-repeat bags, story progress) is kept in this browser only (localStorage), as a
    small convenience. Nothing is sent anywhere. */
 (function () {
   'use strict';
@@ -918,8 +918,6 @@
         '<p class="pc-cap" id="pc-cap"><span class="pc-main"></span><span class="pc-punch"></span></p>' +
         '<div class="pc-btns"><button type="button" class="pc-b is-main pc-next">Next!</button><button type="button" class="pc-b is-sur pc-sur">Surprise me</button><button type="button" class="pc-b pc-pause" aria-pressed="false">Pause</button></div>' +
         '<div class="pc-trs"><button type="button" class="pc-tr" data-trick="0">Tidbit, do a trick!</button><button type="button" class="pc-tr" data-trick="1">Sugarfoot, do a trick!</button></div>' +
-        '<details class="pc-tally"><summary><span aria-hidden="true">What they’ve done today <b class="pc-n">0</b> of <span class="pc-tot">0</span></span><span class="pc-sr pc-tsr"></span></summary>' +
-          '<ul class="pc-chips"></ul><p class="pc-note">Tap a pal for a happy trick. This list is kept in this browser only, just for you, and starts fresh each day.</p></details>' +
         '<details class="pc-tally pc-facts"><summary>Pal facts <span class="pc-fnote">three new ones each visit</span></summary><div class="pc-fgrid"><div><h3>Tidbit</h3><ul class="pc-fl"></ul></div><div><h3>Sugarfoot</h3><ul class="pc-fl"></ul></div></div></details>' +
         '<p class="pc-sr pc-live" aria-live="polite"></p>' +
       '</div>';
