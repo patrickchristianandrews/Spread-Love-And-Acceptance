@@ -41,6 +41,23 @@
   var save = { flowers: [], lilies: 0, consts: [], days: [], breaths: 0, sound: true }, mutedThisVisit = false;
   try { var raw = localStorage.getItem(KEY); if (raw) { var o = JSON.parse(raw); for (var k in o) save[k] = o[k]; } } catch (e) {}
   function persist() { if (AMBIENT) return; try { localStorage.setItem(KEY, JSON.stringify(save)); } catch (e) {} }
+  // ---------- Variety: what this browser has already seen ----------
+  // Every picture, pond layout, breathing pattern, sky word, parting thought and kind of night is chosen
+  // so it doesn't repeat what this visitor saw recently. The lists live in the same saved garden
+  // (this browser only), trimmed so they stay small.
+  if (!save.variety || typeof save.variety !== 'object' || Array.isArray(save.variety)) save.variety = {};
+  function seenList(k) { var v = save.variety; if (!Array.isArray(v[k])) v[k] = []; return v[k]; }
+  function markSeen(k, key, cap) { var l = seenList(k), i = l.indexOf(key); if (i >= 0) l.splice(i, 1); l.push(key); cap = cap || 300; if (l.length > cap) l.splice(0, l.length - cap); persist(); }
+  function mulberry(a) { a = a >>> 0; return function () { a = (a + 0x6D2B79F5) | 0; var t = Math.imul(a ^ (a >>> 15), 1 | a); t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t; return ((t ^ (t >>> 14)) >>> 0) / 4294967296; }; }
+  var vr = mulberry((Date.now() ^ Math.floor(Math.random() * 4294967295)) >>> 0);
+  // pick from a list, preferring things not among the most recent `recent` seen under key k
+  function pickFresh(list, k, idOf, recent) {
+    var l = seenList(k), rec = l.slice(-(recent == null ? Math.floor(list.length / 2) : recent));
+    var pool = list.filter(function (x) { return rec.indexOf(idOf(x)) < 0; });
+    if (!pool.length) pool = list;
+    return pool[Math.floor(vr() * pool.length)];
+  }
+  function hashStr(str) { var h = 2166136261; for (var i = 0; i < str.length; i++) { h ^= str.charCodeAt(i); h = Math.imul(h, 16777619); } return h >>> 0; }
   var today = new Date(); var todayKey = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
   // ---------- Season and moon ----------
   var month = today.getMonth(); // 0-11
@@ -82,7 +99,21 @@
 
   // Seeded randomness so stars and hills stay put between visits
   function rng(seed) { return function () { seed = (seed * 16807) % 2147483647; return (seed - 1) / 2147483646; }; }
-  var stars = (function () { var r = rng(42), a = []; for (var i = 0; i < 170; i++) a.push({ x: r(), y: r() * 0.58, s: 0.4 + r() * 1.3, p: r() * 6.28 }); return a; })();
+  // a different sky every night: the stars and the soft clouds are seeded by the date
+  var NIGHT_SEED = hashStr(todayKey + (AMBIENT ? QS.scene || '' : ''));
+  // and a different kind of night on each visit, never the same as the last two
+  var TONIGHTS = [
+    { id: 'clear', line: 'Tonight the sky is clear and full of stars.' },
+    { id: 'mist', line: 'Tonight a soft mist is resting over the meadow.' },
+    { id: 'motes', line: 'Tonight little lights are drifting up from the grass.' },
+    { id: 'twinkle', line: 'Tonight the stars are twinkling brightly.' },
+    { id: 'meteors', line: 'Tonight is a night for shooting stars. Keep an eye on the sky.' },
+    { id: 'breeze', line: 'Tonight a gentle breeze is carrying petals across the garden.' }
+  ];
+  var TONIGHT = AMBIENT && (SCENE !== 'garden' || TOD !== 'night') ? TONIGHTS[0] : pickFresh(TONIGHTS, 'a', function (x) { return x.id; }, 2);
+  if (!AMBIENT) markSeen('a', TONIGHT.id, 12);
+  var SHOOT = TONIGHT.id === 'meteors' ? 0.45 : 1;
+  var stars = (function () { var r = rng(1 + NIGHT_SEED % 2147483645), a = [], n = 150 + NIGHT_SEED % 50; for (var i = 0; i < n; i++) a.push({ x: r(), y: r() * 0.58, s: 0.4 + r() * 1.3, p: r() * 6.28 }); return a; })();
 
   function drawBackground() {
     bg = document.createElement('canvas'); bg.width = canvas.width; bg.height = canvas.height;
@@ -92,7 +123,7 @@
     sky.addColorStop(0, '#171A34'); sky.addColorStop(0.45, '#2E2F5C'); sky.addColorStop(0.8, '#5C4A78'); sky.addColorStop(1, '#C98E8E');
     b.fillStyle = sky; b.fillRect(0, 0, W, H);
     // soft watercolour clouds
-    var cr = rng(7);
+    var cr = rng(1 + (NIGHT_SEED >>> 3) % 2147483645);
     for (var i = 0; i < 7; i++) {
       var cx = cr() * W, cy = H * (0.1 + cr() * 0.4), rad = Math.max(W, H) * (0.12 + cr() * 0.15);
       var cg = b.createRadialGradient(cx, cy, 0, cx, cy, rad);
@@ -283,14 +314,14 @@
     if (NIGHT < 0.5) drawDaySky(t);
     if (NIGHT < 0.25) return;
     for (var i = 0; i < stars.length; i++) {
-      var s = stars[i], a = (REDUCED ? 0.6 : 0.45 + 0.35 * Math.sin(t / 1400 + s.p)) * (NIGHT < 1 ? NIGHT * 0.6 : 1);
+      var s = stars[i], a = (REDUCED ? 0.6 : TONIGHT.id === 'twinkle' ? 0.4 + 0.5 * Math.sin(t / 650 + s.p * 3) : 0.45 + 0.35 * Math.sin(t / 1400 + s.p)) * (NIGHT < 1 ? NIGHT * 0.6 : 1);
       ctx.fillStyle = 'rgba(255,248,230,' + a.toFixed(2) + ')';
       ctx.beginPath(); ctx.arc(s.x * W, s.y * H, s.s, 0, Math.PI * 2); ctx.fill();
     }
     // constellations earned on earlier visits, faintly
     save.consts.forEach(function (id, n) {
       var shape = SHAPES[id]; if (!shape) return;
-      var cx = W * (0.12 + (n % 5) * 0.18), cy = H * (0.12 + Math.floor(n / 5) * 0.12), sz = Math.min(W, H) * 0.06;
+      var cx = W * (0.08 + (n % 7) * 0.14), cy = H * (0.08 + Math.floor(n / 7) * 0.075), sz = Math.min(W, H) * 0.045;
       ctx.strokeStyle = 'rgba(255,240,210,0.16)'; ctx.lineWidth = 1;
       tracePath(shape.pts.map(function (p) { return [cx + (p[0] - 0.5) * sz, cy + (p[1] - 0.5) * sz]; }), shape.parts); ctx.stroke();
       shape.pts.forEach(function (p) { ctx.fillStyle = 'rgba(255,240,210,0.5)'; ctx.beginPath(); ctx.arc(cx + (p[0] - 0.5) * sz, cy + (p[1] - 0.5) * sz, 1.3, 0, Math.PI * 2); ctx.fill(); });
@@ -629,7 +660,8 @@
       'A faint picture appears in the sky, made of numbered circles.',
       'Drag your finger (or move your mouse) to circle <strong>1</strong> and rest there. A firefly lights it, and it sings a note.',
       'Go to the next number, and the next. Each one joins the line and sings the next note of a little tune.',
-      'Finish the picture to hear its whole song and learn what it means. There are ten to collect, and you can dedicate each new one to someone you love.',
+      'Finish the picture to hear its whole song and learn what it means. There are {N} to collect, and you can dedicate each new one to someone you love. No picture ever comes back exactly the same: each time it is turned, stretched or started from a new star.',
+      'Once you have found a few, <strong>wild constellations</strong> appear too: new shapes the sky makes just for you, each with its own name.',
       'Now and then a <strong>shooting star</strong> crosses the sky. Catch it for a wish and a new flower.'],
       keys: 'On a keyboard, the arrow keys move your light.' },
     pond: { ico: '&#128167;', h: 'How to play the lily pond', steps: [
@@ -643,9 +675,17 @@
   var helpCard = document.getElementById('ng-help');
   function showHelp(m) {
     var h = HELP[m || mode]; if (!h || !helpCard) return;
+    if ((m || mode) === 'breathe') {
+      var bp = chooseBreath();
+      h = { ico: HELP.breathe.ico, h: bp.name + ' in the garden', steps: [
+        'Watch the glowing light. A little star travels around ' + bp.shape + ', one part of the path for each part of the breath.',
+        'Tonight’s pattern: <strong>' + breathDesc(bp) + '</strong>. The number in the light counts down each part for you.',
+        'The garden has several calm patterns and brings a different one on most visits. Every one breathes out for at least as long as it breathes in, and any holds are short and easy. If a pattern ever feels like a strain, just breathe your own way and watch the light.',
+        'Words drift down from the sky to keep you company. Each full round plants a flower, and the animals by the pond hop along with you.'] };
+    }
     document.getElementById('ng-help-ico').innerHTML = h.ico;
     document.getElementById('ng-help-h').textContent = h.h;
-    document.getElementById('ng-help-steps').innerHTML = h.steps.map(function (x) { return '<li>' + x + '</li>'; }).join('') +
+    document.getElementById('ng-help-steps').innerHTML = h.steps.map(function (x) { return '<li>' + x.replace('{N}', SHAPE_IDS.length) + '</li>'; }).join('') +
       (h.keys && window.matchMedia && window.matchMedia('(hover: hover)').matches ? '<li>' + h.keys + '</li>' : '');
     helpCard.hidden = false; say('', '', 0);
     document.getElementById('ng-help-ok').focus();
@@ -669,9 +709,9 @@
     stage.classList.toggle('is-play', m === 'pond' || m === 'fireflies'); // the page doesn't scroll while you play
     flies.forEach(function (f) { f.home = null; });
     if (m === 'breathe' && !save.sound && !mutedThisVisit && typeof startAudio === 'function') { save.sound = true; persist(); soundLabel(); startAudio(); } // box breathing starts with sound
-    if (m === 'breathe') { breath.start = performance.now() + 1500; breath.count = 0; breath.phase = ''; skyWords = []; wordAt = 0; say('Box breathing', 'In 4 · hold 4 · out 4 · hold 4. Follow the star around the square.', 0); }
+    if (m === 'breathe') { var bp = chooseBreath(); breath.start = performance.now() + 1500; breath.count = 0; breath.phase = ''; skyWords = []; wordAt = 0; say(bp.name, breathDesc(bp).replace(/^./, function (c) { return c.toUpperCase(); }) + '. Follow the star around ' + bp.shape + '.', 0); }
     if (m === 'fireflies') { newShape(); say('Connect the stars', 'Start at 1 and follow the numbers. Each star sings a note.', 6000); }
-    if (m === 'pond') { pondReset(); say('Float the lily pads', 'Drag a pad with your finger, tap to turn it, flick down to drop. Fill a row and it blooms.', 6000); }
+    if (m === 'pond') { pondReset(); say('Float the lily pads', layout ? 'Old lilies are waiting at the bottom tonight, with gaps to fill. The first pads to drift in fit them.' : 'Drag a pad with your finger, tap to turn it, flick down to drop it. Fill a row and it blooms.', 6000); }
     hud();
     updateCount();
     // The first time in each activity, show how it works
@@ -679,14 +719,34 @@
     if (!save.seen[m]) { save.seen[m] = 1; persist(); showHelp(m); }
   }
 
-  // Breathe: 4 seconds in, 6 seconds out
+  // Breathe: a light that grows as you breathe in and softens as you breathe out.
+  // Each visit brings one of several calm patterns (never the one from the last few visits; the very
+  // first visit is box breathing). Every pattern breathes out for at least as long as it breathes in,
+  // and holds are short and easy.
   var breath = { start: 0, count: 0, phase: '' };
-  // Box breathing: in 4, hold 4, out 4, hold 4. The light grows, rests, softens, rests.
-  var BOX = [['in', 4, 'Breathe in…'], ['top', 4, 'Hold…'], ['out', 4, 'Breathe out…'], ['bottom', 4, 'Hold…']];
+  var BREATHS = [
+    { id: 'box', name: 'Box breathing', shape: 'a square', steps: [['in', 4], ['top', 4], ['out', 4], ['bottom', 4]] },
+    { id: 'box3', name: 'A gentle box', shape: 'a small square', steps: [['in', 3], ['top', 3], ['out', 3], ['bottom', 3]] },
+    { id: 'long-out', name: 'The long breath out', shape: 'a circle', steps: [['in', 4], ['out', 6]] },
+    { id: 'triangle', name: 'Triangle breathing', shape: 'a triangle', steps: [['in', 4], ['top', 4], ['out', 4]] },
+    { id: 'wave', name: 'The slow wave', shape: 'a square', steps: [['in', 4], ['top', 2], ['out', 6], ['bottom', 2]] },
+    { id: 'even', name: 'Even breathing', shape: 'a circle', steps: [['in', 5], ['out', 5]] },
+    { id: 'rest-triangle', name: 'The resting triangle', shape: 'a triangle', steps: [['in', 4], ['out', 6], ['bottom', 2]] },
+    { id: 'three-five', name: 'In three, out five', shape: 'a circle', steps: [['in', 3], ['out', 5]] },
+    { id: 'tide', name: 'The tide', shape: 'a triangle', steps: [['in', 5], ['top', 2], ['out', 7]] }
+  ];
+  var BREATH = null;
+  function breathDesc(bp) { return bp.steps.map(function (st) { return (st[0] === 'in' ? 'in ' : st[0] === 'out' ? 'out ' : st[0] === 'top' ? 'hold ' : 'rest ') + st[1]; }).join(' · '); }
+  function chooseBreath() {
+    if (BREATH) return BREATH;
+    BREATH = seenList('b').length || AMBIENT ? pickFresh(BREATHS, 'b', function (x) { return x.id; }, 4) : BREATHS[0];
+    markSeen('b', BREATH.id, 20);
+    return BREATH;
+  }
+  var BOX_SAY = { in: 'Breathe in…', top: 'Hold…', out: 'Breathe out…', bottom: 'Rest…' };
   var BOX_SUB = { in: 'Slowly, through your nose', top: 'Gently. No strain.', out: 'Slow and warm, through your mouth', bottom: 'Rest, empty and easy' };
-  // words that drift down from the sky, one each round: what box breathing is doing for you
+  // words that drift down from the sky, one each round: a large, shuffled set, least recently seen first
   var SKY_WORDS = [
-    'Box breathing: in for 4, hold for 4, out for 4, hold for 4.',
     'Slow, even breaths are a quiet signal that you can ease off.',
     'Let each breath out be soft and unhurried.',
     'The pauses stretch each breath, so your whole rhythm calms down.',
@@ -695,12 +755,57 @@
     'Let your shoulders drop. Let your jaw soften.',
     'Notice your hands. Warmer? Heavier? That’s your body relaxing.',
     'If a thought pulls you away, that’s okay. Come back to the count.',
-    'Steady breathing helps your body settle, and your mind follows.',
-    'Nurses, athletes and first responders breathe this way to stay steady.',
-    'You’re doing it. One calm square at a time.'
+    'You’re doing it. One calm round at a time.',
+    'There is nothing to get right here. Just follow the light.',
+    'Let the out-breath be a little longer, like a sigh.',
+    'Your feet are on the ground. The ground is holding you.',
+    'This moment only needs this breath.',
+    'Let your forehead smooth out.',
+    'Unclench your hands, one finger at a time.',
+    'Whatever today carried, you can set it down for a few breaths.',
+    'Noticing how you feel is the first step, and you’re taking it.',
+    'Your battery fills a little with every slow round.',
+    'Breathing slowly is something you can take with you anywhere.',
+    'Let your tummy rise as you breathe in.',
+    'Feel the air: cool on the way in, warm on the way out.',
+    'The light will wait for you. There’s no hurry.',
+    'Let your eyes go soft. Look at the glow, not through it.',
+    'If you lose count, just start again at one.',
+    'Some rounds feel easy and some feel fidgety. Both are fine.',
+    'You don’t have to fix anything tonight.',
+    'Let the next breath be a kind one.',
+    'Rest is part of the rhythm too.',
+    'A calmer you makes calmer talks possible, later.',
+    'Your state shapes how the day’s words land. This helps it settle.',
+    'Imagine putting today’s list on a shelf. It will be there tomorrow.',
+    'Let your tongue rest gently behind your teeth.',
+    'Breathe in something you’re glad about. Breathe out something you can leave.',
+    'Each flower in the garden is a breath you took.',
+    'Slow is still moving.',
+    'You are allowed to take up this space and this time.',
+    'Feel your back against the chair, or the floor, or the bed.',
+    'Let the sounds around you come and go.',
+    'Nothing needs an answer right now.',
+    'Kind to yourself, one breath at a time.',
+    'Tomorrow can wait until tomorrow.',
+    'Picture the pond: still, and a little silver.'
   ];
+  var wordOrder = null;
+  function nextWord() {
+    if (!wordOrder || !wordOrder.length) {
+      var rec = seenList('w').slice(-24), fresh = [], old = [];
+      SKY_WORDS.forEach(function (w, i) { (rec.indexOf(i) < 0 ? fresh : old).push(i); });
+      function shuf(a) { for (var i = a.length - 1; i > 0; i--) { var j = Math.floor(vr() * (i + 1)), x = a[i]; a[i] = a[j]; a[j] = x; } return a; }
+      wordOrder = shuf(fresh).concat(shuf(old));
+    }
+    var k = wordOrder.shift(); markSeen('w', k, 40);
+    return SKY_WORDS[k];
+  }
   var skyWords = [], wordAt = 0;
-  function dropWord(t) { skyWords.push({ text: SKY_WORDS[wordAt % SKY_WORDS.length], born: t, x: 0.5 + (Math.random() - 0.5) * 0.08 }); wordAt++; }
+  function dropWord(t) {
+    var bp = chooseBreath(), text = wordAt === 0 ? bp.name + ': ' + breathDesc(bp) + '.' : nextWord();
+    skyWords.push({ text: text, born: t, x: 0.5 + (Math.random() - 0.5) * 0.08 }); wordAt++;
+  }
   function drawSkyWords(t) {
     skyWords = skyWords.filter(function (w) { return t - w.born < 14000; });
     var size = Math.round(Math.max(15, Math.min(22, W / 26)));
@@ -723,34 +828,46 @@
   function drawBreath(t) {
     if (helpCard && !helpCard.hidden) return;
     var el = (t - breath.start) / 1000; if (el < 0) return;
-    var cyc = el % 16, n = Math.floor(el / 16), step = Math.min(3, Math.floor(cyc / 4)), into = cyc - step * 4;
-    var ph = BOX[step][0];
-    var k = ph === 'in' ? ease(into / 4) : ph === 'top' ? 1 : ph === 'out' ? 1 - ease(into / 4) : 0;
-    if (ph !== breath.phase) {
-      breath.phase = ph;
-      if (ph === 'in' && n > 0 && n > breath.count) { breath.count = n; bloom(); }
-      if (ph === 'in') { dropWord(t); hopAll(); }
-      if (breath.count >= 4 && breath.count % 4 === 0 && ph === 'in') say('Four calm squares. Lovely.', 'Keep going as long as you like.', 0);
-      else say(BOX[step][2], BOX_SUB[ph] + (breath.count ? ' · ' + breath.count + (breath.count === 1 ? ' round' : ' rounds') + ' tonight' : ''), 0);
-      padSwell(ph);
+    var bp = chooseBreath(), steps = bp.steps, cycle = steps.reduce(function (a, st) { return a + st[1]; }, 0);
+    var cyc = el % cycle, n = Math.floor(el / cycle), step = 0, into = cyc;
+    while (step < steps.length - 1 && into >= steps[step][1]) { into -= steps[step][1]; step++; }
+    var ph = steps[step][0], dur = steps[step][1];
+    var k = ph === 'in' ? ease(into / dur) : ph === 'top' ? 1 : ph === 'out' ? 1 - ease(into / dur) : 0;
+    var phKey = step + ph;
+    if (phKey !== breath.phase) {
+      breath.phase = phKey;
+      if (step === 0 && n > 0 && n > breath.count) { breath.count = n; bloom(); }
+      if (step === 0) { dropWord(t); hopAll(); }
+      if (breath.count >= 4 && breath.count % 4 === 0 && step === 0) say('Four calm rounds. Lovely.', 'Keep going as long as you like.', 0);
+      else say(BOX_SAY[ph], BOX_SUB[ph] + (breath.count ? ' · ' + breath.count + (breath.count === 1 ? ' round' : ' rounds') + ' tonight' : ''), 0);
+      padSwell(ph === 'bottom' ? 'bottom' : ph);
     }
     var cx = W * 0.5, cy = H * 0.36, R = Math.min(W, H) * 0.075 * (0.7 + 0.5 * k);
     var g = ctx.createRadialGradient(cx, cy, 0, cx, cy, R * 3);
     g.addColorStop(0, 'rgba(255,238,210,' + (0.55 + 0.3 * k) + ')'); g.addColorStop(0.35, 'rgba(249,217,184,' + (0.35 + 0.2 * k) + ')'); g.addColorStop(1, 'rgba(217,200,240,0)');
     ctx.fillStyle = g; ctx.beginPath(); ctx.arc(cx, cy, R * 3, 0, Math.PI * 2); ctx.fill();
     ctx.fillStyle = 'rgba(255,248,232,0.9)'; ctx.beginPath(); ctx.arc(cx, cy, R * 0.55, 0, Math.PI * 2); ctx.fill();
-    // the box: a soft square the light travels around, one side per step
-    var half = Math.min(W, H) * 0.075 * 1.35 + 16, x0 = cx - half, y0 = cy - half, side = half * 2;
-    ctx.lineWidth = 2; ctx.strokeStyle = 'rgba(255,240,215,0.16)'; ctx.strokeRect(x0, y0, side, side);
-    var pts = [[x0, y0 + side], [x0, y0], [x0 + side, y0], [x0 + side, y0 + side], [x0, y0 + side]];
-    ctx.lineWidth = 3; ctx.lineCap = 'round'; ctx.strokeStyle = 'rgba(249,217,184,0.9)'; ctx.beginPath(); ctx.moveTo(pts[0][0], pts[0][1]);
-    for (var i = 0; i < step; i++) ctx.lineTo(pts[i + 1][0], pts[i + 1][1]);
-    var f = into / 4, dx = pts[step][0] + (pts[step + 1][0] - pts[step][0]) * f, dy = pts[step][1] + (pts[step + 1][1] - pts[step][1]) * f;
-    ctx.lineTo(dx, dy); ctx.stroke(); ctx.lineCap = 'butt';
+    // the path the little star travels: one side for each part of the breath (a circle for in-and-out)
+    var half = Math.min(W, H) * 0.075 * 1.35 + 16, f = into / dur, dx, dy;
+    ctx.lineWidth = 2; ctx.strokeStyle = 'rgba(255,240,215,0.16)';
+    if (steps.length === 2) {
+      var rr = half * 1.1, a0 = Math.PI / 2, a1 = a0 + (step === 0 ? f : 1 + f) * Math.PI; // up the left side, then down the right
+      ctx.beginPath(); ctx.arc(cx, cy, rr, 0, Math.PI * 2); ctx.stroke();
+      ctx.lineWidth = 3; ctx.lineCap = 'round'; ctx.strokeStyle = 'rgba(249,217,184,0.9)'; ctx.beginPath(); ctx.arc(cx, cy, rr, a0, a1); ctx.stroke(); ctx.lineCap = 'butt';
+      dx = cx + Math.cos(a1) * rr; dy = cy + Math.sin(a1) * rr;
+    } else {
+      var pts = steps.length === 3 ? [[cx - half * 1.1, cy + half * 0.8], [cx, cy - half * 1.1], [cx + half * 1.1, cy + half * 0.8]] : [[cx - half, cy + half], [cx - half, cy - half], [cx + half, cy - half], [cx + half, cy + half]];
+      pts.push(pts[0]);
+      ctx.beginPath(); ctx.moveTo(pts[0][0], pts[0][1]); for (var q = 1; q < pts.length; q++) ctx.lineTo(pts[q][0], pts[q][1]); ctx.closePath(); ctx.stroke();
+      ctx.lineWidth = 3; ctx.lineCap = 'round'; ctx.strokeStyle = 'rgba(249,217,184,0.9)'; ctx.beginPath(); ctx.moveTo(pts[0][0], pts[0][1]);
+      for (var i = 0; i < step; i++) ctx.lineTo(pts[i + 1][0], pts[i + 1][1]);
+      dx = pts[step][0] + (pts[step + 1][0] - pts[step][0]) * f; dy = pts[step][1] + (pts[step + 1][1] - pts[step][1]) * f;
+      ctx.lineTo(dx, dy); ctx.stroke(); ctx.lineCap = 'butt';
+    }
     ctx.fillStyle = '#FFF6E6'; ctx.shadowColor = 'rgba(255,236,214,0.95)'; ctx.shadowBlur = 12; ctx.beginPath(); ctx.arc(dx, dy, 5, 0, Math.PI * 2); ctx.fill(); ctx.shadowBlur = 0;
     ctx.fillStyle = 'rgba(60,50,90,0.85)'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
     ctx.font = '600 ' + Math.round(Math.max(16, R * 0.5)) + 'px Fraunces, Georgia, serif';
-    ctx.fillText(String(Math.max(1, Math.ceil(4 - into))), cx, cy + 1);
+    ctx.fillText(String(Math.max(1, Math.ceil(dur - into))), cx, cy + 1);
     drawSkyWords(t);
   }
 
@@ -1544,6 +1661,37 @@
     return [{ closed: true, pts: [[cx - 0.15, cy + 0.04], [cx - 0.07, cy + 0.15], [cx + 0.07, cy + 0.15], [cx + 0.15, cy + 0.04], [cx, cy - 0.06]] },
       { pts: [[cx - 0.2, cy - 0.12]] }, { pts: [[cx - 0.075, cy - 0.23]] }, { pts: [[cx + 0.075, cy - 0.23]] }, { pts: [[cx + 0.2, cy - 0.12]] }];
   }
+  // more pictures to find: a star map that keeps growing
+  function arcPts(cx, cy, r, a0, a1, n, ry) { var a = []; for (var i = 0; i < n; i++) { var t = a0 + (a1 - a0) * i / (n - 1); a.push([cx + Math.cos(t) * r, cy + Math.sin(t) * (ry || r)]); } return a; }
+  function heartPts(cx, cy, k, n) { var a = []; for (var i = 0; i < n; i++) { var t = i / n * Math.PI * 2; a.push([cx + k * 16 * Math.pow(Math.sin(t), 3), cy - k * (13 * Math.cos(t) - 5 * Math.cos(2 * t) - 2 * Math.cos(3 * t) - Math.cos(4 * t))]); } return a; }
+  var MORE_SHAPES = {
+    tree: { name: 'a little pine tree', closed: true, pts: [[0.5, 0.08], [0.72, 0.4], [0.61, 0.4], [0.82, 0.7], [0.55, 0.7], [0.55, 0.9], [0.45, 0.9], [0.45, 0.7], [0.18, 0.7], [0.39, 0.4], [0.28, 0.4]] },
+    cloud: { name: 'a cloud', closed: true, pts: [[0.14, 0.64], [0.1, 0.52], [0.2, 0.41], [0.32, 0.43], [0.4, 0.3], [0.55, 0.26], [0.66, 0.34], [0.72, 0.44], [0.84, 0.45], [0.9, 0.57], [0.83, 0.67], [0.5, 0.69]] },
+    bird: { name: 'a bird in flight', closed: false, pts: [[0.08, 0.42], [0.28, 0.32], [0.44, 0.42], [0.5, 0.56], [0.56, 0.42], [0.72, 0.32], [0.92, 0.42]] },
+    fish: { name: 'a fish', closed: true, pts: [[0.12, 0.5], [0.3, 0.3], [0.56, 0.3], [0.72, 0.5], [0.9, 0.32], [0.88, 0.68], [0.72, 0.5], [0.56, 0.7], [0.3, 0.7]] },
+    cup: { name: 'a warm cup', groups: [{ pts: [[0.22, 0.3], [0.27, 0.8], [0.63, 0.8], [0.68, 0.3]] }, { pts: [[0.68, 0.4], [0.84, 0.44], [0.84, 0.6], [0.66, 0.66]] }, { pts: [[0.4, 0.14]] }, { pts: [[0.52, 0.1]] }] },
+    bell: { name: 'a bell', groups: [{ closed: true, pts: [[0.5, 0.12], [0.66, 0.24], [0.7, 0.54], [0.84, 0.74], [0.16, 0.74], [0.3, 0.54], [0.34, 0.24]] }, { pts: [[0.5, 0.88]] }] },
+    umbrella: { name: 'an umbrella', groups: [{ pts: arcPts(0.5, 0.5, 0.4, Math.PI, Math.PI * 2, 7, 0.34) }, { pts: [[0.5, 0.18], [0.5, 0.84], [0.4, 0.9]] }] },
+    boat: { name: 'a little sailboat', groups: [{ closed: true, pts: [[0.12, 0.68], [0.88, 0.68], [0.74, 0.86], [0.26, 0.86]] }, { closed: true, pts: [[0.5, 0.12], [0.5, 0.6], [0.24, 0.6]] }] },
+    mountain: { name: 'a mountain', closed: false, pts: [[0.04, 0.84], [0.28, 0.42], [0.42, 0.6], [0.62, 0.18], [0.78, 0.5], [0.96, 0.84]] },
+    candle: { name: 'a candle', groups: [{ closed: true, pts: [[0.4, 0.42], [0.6, 0.42], [0.6, 0.9], [0.4, 0.9]] }, { closed: true, pts: [[0.5, 0.1], [0.58, 0.25], [0.5, 0.34], [0.42, 0.25]] }] },
+    feather: { name: 'a feather', closed: true, pts: [[0.18, 0.9], [0.32, 0.62], [0.52, 0.36], [0.82, 0.1], [0.72, 0.42], [0.52, 0.64], [0.3, 0.78]] },
+    snail: { name: 'a snail', groups: [{ pts: (function () { var a = []; for (var i = 0; i < 9; i++) { var t = i / 8 * Math.PI * 3.2, r = 0.3 - i * 0.03; a.push([0.52 + Math.cos(t + Math.PI) * r, 0.5 + Math.sin(t + Math.PI) * r]); } return a; })() }, { pts: [[0.08, 0.84], [0.9, 0.84], [0.95, 0.72]] }] },
+    sun: { name: 'the sun', groups: [{ closed: true, pts: arcPts(0.5, 0.5, 0.22, 0, Math.PI * 2 * 7 / 8, 8) }, { pts: [[0.5, 0.1]] }, { pts: [[0.9, 0.5]] }, { pts: [[0.5, 0.9]] }, { pts: [[0.1, 0.5]] }] },
+    rainbow: { name: 'a rainbow', groups: [{ pts: arcPts(0.5, 0.78, 0.42, Math.PI, Math.PI * 2, 6) }, { pts: arcPts(0.5, 0.78, 0.26, Math.PI * 2, Math.PI, 5) }] },
+    raindrop: { name: 'a raindrop', closed: true, pts: [[0.5, 0.1], [0.64, 0.4], [0.7, 0.6], [0.62, 0.78], [0.5, 0.84], [0.38, 0.78], [0.3, 0.6], [0.36, 0.4]] },
+    mushroom: { name: 'a mushroom', groups: [{ closed: true, pts: [[0.12, 0.5], [0.24, 0.28], [0.5, 0.16], [0.76, 0.28], [0.88, 0.5]] }, { pts: [[0.4, 0.5], [0.38, 0.86], [0.62, 0.86], [0.6, 0.5]] }] },
+    twohearts: { name: 'two hearts', groups: [{ closed: true, pts: heartPts(0.32, 0.36, 0.014, 8) }, { closed: true, pts: heartPts(0.68, 0.62, 0.014, 8) }] },
+    infinity: { name: 'an infinity loop', closed: true, pts: (function () { var a = []; for (var i = 0; i < 12; i++) { var t = i / 12 * Math.PI * 2, d = 1 + Math.pow(Math.sin(t), 2); a.push([0.5 + 0.42 * Math.cos(t) / d, 0.5 + 0.42 * Math.sin(t) * Math.cos(t) / d]); } return a; })() },
+    gem: { name: 'a gem', closed: true, pts: [[0.3, 0.2], [0.7, 0.2], [0.88, 0.4], [0.5, 0.88], [0.12, 0.4]] },
+    teapot: { name: 'a teapot', groups: [{ closed: true, pts: [[0.32, 0.4], [0.68, 0.4], [0.78, 0.6], [0.68, 0.8], [0.32, 0.8], [0.22, 0.6]] }, { pts: [[0.23, 0.56], [0.1, 0.42], [0.06, 0.34]] }, { pts: [[0.5, 0.28]] }] },
+    bridge: { name: 'a little bridge', closed: false, pts: [[0.04, 0.72], [0.2, 0.52], [0.38, 0.42], [0.62, 0.42], [0.8, 0.52], [0.96, 0.72]] },
+    lantern: { name: 'a lantern', groups: [{ closed: true, pts: [[0.34, 0.32], [0.66, 0.32], [0.72, 0.78], [0.28, 0.78]] }, { pts: [[0.4, 0.32], [0.5, 0.14], [0.6, 0.32]] }] },
+    cat: { name: 'a sleepy cat', closed: true, pts: [[0.2, 0.3], [0.3, 0.1], [0.42, 0.28], [0.58, 0.28], [0.7, 0.1], [0.8, 0.3], [0.8, 0.64], [0.5, 0.84], [0.2, 0.64]] },
+    acorn: { name: 'an acorn', groups: [{ closed: true, pts: [[0.24, 0.38], [0.34, 0.22], [0.66, 0.22], [0.76, 0.38]] }, { pts: [[0.3, 0.38], [0.32, 0.62], [0.5, 0.86], [0.68, 0.62], [0.7, 0.38]] }, { pts: [[0.5, 0.1]] }] },
+    crown: { name: 'a daisy crown', closed: true, pts: [[0.14, 0.76], [0.14, 0.3], [0.32, 0.52], [0.5, 0.2], [0.68, 0.52], [0.86, 0.3], [0.86, 0.76]] }
+  };
+  Object.keys(MORE_SHAPES).forEach(function (id) { SHAPES[id] = MORE_SHAPES[id]; });
   // shapes are one line unless they have separate parts; either way, work from parts
   Object.keys(SHAPES).forEach(function (id) {
     var d = SHAPES[id];
@@ -1573,18 +1721,149 @@
     wave: ['The Wave', 'Feelings rise, and feelings pass.'],
     kite: ['The Kite', 'Lightness is allowed.'],
     butterfly: ['The Butterfly', 'Change can be gentle.'],
-    paw: ['The Paw Prints', 'For the small companions who love us without words.']
+    paw: ['The Paw Prints', 'For the small companions who love us without words.'],
+    tree: ['The Evergreen', 'Some things stay steady through every season.'],
+    cloud: ['The Cloud', 'Thoughts drift by. You don’t have to follow each one.'],
+    bird: ['The Swallow', 'You can travel far and still come home.'],
+    fish: ['The Fish', 'Go with the current when you can.'],
+    cup: ['The Warm Cup', 'A small pause, held in both hands.'],
+    bell: ['The Bell', 'A clear, kind word carries a long way.'],
+    umbrella: ['The Umbrella', 'You can’t stop the rain, but you can share the shelter.'],
+    boat: ['The Sailboat', 'Change the sails, not the whole sea.'],
+    mountain: ['The Mountain', 'The view gets wider, one step at a time.'],
+    candle: ['The Candle', 'A small light is still a light.'],
+    feather: ['The Feather', 'Hold your worries lightly tonight.'],
+    snail: ['The Snail', 'Slow is still moving.'],
+    sun: ['The Sun', 'Morning always comes back round.'],
+    rainbow: ['The Rainbow', 'Something bright often follows the rain.'],
+    raindrop: ['The Raindrop', 'Small things add up to a whole river.'],
+    mushroom: ['The Mushroom', 'Quiet growth happens where nobody is looking.'],
+    twohearts: ['The Two Hearts', 'Two hearts of gold, side by side, like Tidbit and Sugarfoot.'],
+    infinity: ['The Loop', 'Kindness comes back around.'],
+    gem: ['The Gem', 'You notice what matters. That is a gift.'],
+    teapot: ['The Teapot', 'Make a pot for two, and ask how their day was.'],
+    bridge: ['The Bridge', 'Reach across the gap. Someone may be reaching back.'],
+    lantern: ['The Lantern', 'Light the next few steps. That’s enough.'],
+    cat: ['The Sleepy Cat', 'Rest is not a prize. It’s a need.'],
+    acorn: ['The Acorn', 'Big things start very small.'],
+    crown: ['The Daisy Crown', 'Everyone deserves to be celebrated for something.']
   };
+  // wild constellations: new every time, drawn from the night itself, with a name and a kind thought
+  var WILD_ADJ = ['Quiet', 'Gentle', 'Wandering', 'Sleepy', 'Patient', 'Brave', 'Little', 'Silver', 'Faithful', 'Hopeful', 'Humming', 'Dancing', 'Kindly', 'Steady', 'Dreaming', 'Curious', 'Lantern-lit', 'Midnight', 'Morning', 'Laughing', 'Listening', 'Golden'];
+  var WILD_NOUN = ['Heron', 'Path', 'River', 'Kettle', 'Harp', 'Fox', 'Owl', 'Garden Gate', 'Ladder', 'Kite String', 'Hedgehog', 'Willow', 'Map', 'Staircase', 'Firefly', 'Violin', 'Swan', 'Walking Stick', 'Hill Path', 'Wren', 'Comet Tail', 'Pebble Trail', 'Dragonfly', 'Otter', 'Moth', 'Signpost'];
+  var WILD_THOUGHT = [
+    'Nobody has ever drawn this one before. Neither has anyone ever been quite like you.',
+    'A path made of small lights. Most good days are, too.',
+    'Some shapes only appear when you slow down enough to see them.',
+    'Every star here was already shining. You just joined them up.',
+    'The sky keeps making new pictures. There is always more to find.',
+    'Name it after someone who makes you feel at home.',
+    'Connecting one small thing to the next is how a lot of good work gets done.',
+    'Look how far you came, one star at a time.',
+    'Stars don’t hurry, and they still cross the whole sky.',
+    'Tonight’s sky made this just for you.',
+    'A winding line is still a line that arrives.',
+    'You noticed something nobody else saw tonight.'
+  ];
   var SHAPE_IDS = Object.keys(SHAPES), shape = null, targets = [], shapeDone = 0, dwell = null, sparks = [], shooting = null, nextShoot = 0;
-  function newShape() {
-    // pictures you haven't found yet come first, so the collection keeps growing
-    var unfound = SHAPE_IDS.filter(function (id) { return save.consts.indexOf(id) === -1 && (!shape || id !== shape.id); });
-    var pool = unfound.length ? unfound : SHAPE_IDS.filter(function (id) { return !shape || id !== shape.id; });
-    var id = pool[Math.floor(Math.random() * pool.length)];
-    shape = { id: id, def: SHAPES[id] }; shapeDone = 0;
+  // One picture, one of endless variations: mirrored or not, a slight turn and stretch, a different
+  // first star and direction, parts in a different order, and a little natural wobble. Each variation
+  // has a key; the keys this browser has seen are kept, so the same puzzle never comes round twice.
+  function variantOf(id, r) {
+    var d = SHAPES[id], mir = r() < 0.5, ang = (r() - 0.5) * 0.5, sx = 0.9 + r() * 0.18, sy = 0.9 + r() * 0.18, sig = [];
+    var groups = d.parts.map(function (pt, gi) {
+      var pts = d.pts.slice(pt.start, pt.start + pt.len).map(function (q) { return q.slice(); });
+      if (pt.closed && pts.length > 2) { var st = Math.floor(r() * pts.length); pts = pts.slice(st).concat(pts.slice(0, st)); if (r() < 0.5) pts = [pts[0]].concat(pts.slice(1).reverse()); sig.push(gi + 's' + st + (pts.length > 1 ? pts[1][0].toFixed(2) : '')); }
+      else if (pts.length > 1 && r() < 0.5) { pts.reverse(); sig.push(gi + 'r'); }
+      return { closed: pt.closed, pts: pts, gi: gi };
+    });
+    for (var i = groups.length - 1; i > 0; i--) { var j = Math.floor(r() * (i + 1)), tmp = groups[i]; groups[i] = groups[j]; groups[j] = tmp; }
+    var ca = Math.cos(ang), sa = Math.sin(ang), all = [], parts = [];
+    groups.forEach(function (g) {
+      parts.push({ start: all.length, len: g.pts.length, closed: !!g.closed });
+      g.pts.forEach(function (q) {
+        var x = (q[0] - 0.5) * sx * (mir ? -1 : 1), y = (q[1] - 0.5) * sy;
+        all.push([x * ca - y * sa + (r() - 0.5) * 0.024, x * sa + y * ca + (r() - 0.5) * 0.024]);
+      });
+    });
+    fitUnit(all);
+    return { id: id, pts: all, parts: parts, key: id + ':' + (mir ? 'm' : 'n') + ':' + Math.round(ang * 24) + ':' + Math.round(sx * 20) + Math.round(sy * 20) + ':' + groups.map(function (g) { return g.gi; }).join('') + ':' + sig.join(',') };
+  }
+  // scale and centre points into the unit square with a little margin, keeping their shape
+  function fitUnit(all) {
+    var x0 = Infinity, x1 = -Infinity, y0 = Infinity, y1 = -Infinity;
+    all.forEach(function (q) { x0 = Math.min(x0, q[0]); x1 = Math.max(x1, q[0]); y0 = Math.min(y0, q[1]); y1 = Math.max(y1, q[1]); });
+    var k = 0.88 / Math.max(x1 - x0, y1 - y0, 0.3), mx = (x0 + x1) / 2, my = (y0 + y1) / 2;
+    all.forEach(function (q) { q[0] = 0.5 + (q[0] - mx) * k; q[1] = 0.5 + (q[1] - my) * k; });
+  }
+  function segHit(a, b, c, d) {
+    function o(p, q, r2) { return (q[0] - p[0]) * (r2[1] - p[1]) - (q[1] - p[1]) * (r2[0] - p[0]); }
+    return o(a, b, c) * o(a, b, d) < 0 && o(c, d, a) * o(c, d, b) < 0;
+  }
+  // a wild constellation: a winding line of six to nine stars that never crosses itself
+  function wildShape(r) {
+    for (var t = 0; t < 300; t++) {
+      var n = 6 + Math.floor(r() * 4), pts = [[0.2 + r() * 0.6, 0.2 + r() * 0.6]], ang = r() * Math.PI * 2, ok = true;
+      while (pts.length < n && ok) {
+        ok = false;
+        for (var k = 0; k < 40 && !ok; k++) {
+          var a = ang + (r() - 0.5) * 2.4, dd = 0.2 + r() * 0.2, last = pts[pts.length - 1], q = [last[0] + Math.cos(a) * dd, last[1] + Math.sin(a) * dd];
+          if (q[0] < 0.06 || q[0] > 0.94 || q[1] < 0.06 || q[1] > 0.94) continue;
+          if (pts.some(function (p2) { return Math.hypot(p2[0] - q[0], p2[1] - q[1]) < 0.14; })) continue;
+          var cross = false; for (var i = 0; i + 1 < pts.length - 1; i++) if (segHit(pts[i], pts[i + 1], last, q)) cross = true;
+          if (cross) continue;
+          pts.push(q); ang = a; ok = true;
+        }
+      }
+      if (!ok) continue;
+      var closed = n >= 7 && r() < 0.35;
+      if (closed) { var L2 = pts.length - 1; for (var j = 1; j + 1 < L2; j++) if (segHit(pts[j], pts[j + 1], pts[L2], pts[0])) closed = false; }
+      fitUnit(pts);
+      var name = 'The ' + WILD_ADJ[Math.floor(r() * WILD_ADJ.length)] + ' ' + WILD_NOUN[Math.floor(r() * WILD_NOUN.length)];
+      return { id: 'wild', wild: true, name: name, meaning: WILD_THOUGHT[Math.floor(r() * WILD_THOUGHT.length)], pts: pts, parts: [{ start: 0, len: pts.length, closed: closed }], key: 'wild:' + name };
+    }
+    return null;
+  }
+  // where the stars go on this screen; a puzzle is only used if every star is on the sky, clear of the
+  // title and the buttons, and far enough from the others to reach one at a time
+  function placeTargets(def) {
     var sz = Math.min(W, H) * 0.36, cx = W * 0.5, cy = H * 0.3;
-    targets = SHAPES[id].pts.map(function (p) { return { x: cx + (p[0] - 0.5) * sz, y: cy + (p[1] - 0.5) * sz, done: false }; });
+    var ts = def.pts.map(function (p) { return { x: cx + (p[0] - 0.5) * sz, y: cy + (p[1] - 0.5) * sz, done: false }; });
+    var ok = ts.every(function (p) { return p.x > 18 && p.x < W - 18 && p.y > 56 && p.y < H * 0.62; });
+    for (var i = 0; i < ts.length && ok; i++) for (var j = i + 1; j < ts.length; j++) {
+      var dist = Math.hypot(ts[i].x - ts[j].x, ts[i].y - ts[j].y);
+      if (dist < (j === i + 1 ? 22 : 16)) { ok = false; break; }
+    }
+    return ok ? ts : null;
+  }
+  function puzzleOK(def) { return !!(def && placeTargets(def)); }
+  function chooseId() {
+    var unfound = SHAPE_IDS.filter(function (id) { return save.consts.indexOf(id) === -1 && (!shape || id !== shape.id); });
+    if (unfound.length) return unfound[Math.floor(vr() * unfound.length)];
+    // everything found: the pictures you've seen least recently come first
+    return pickFresh(SHAPE_IDS.filter(function (id) { return !shape || id !== shape.id; }), 'cs', function (x) { return x; }, Math.floor(SHAPE_IDS.length * 0.6));
+  }
+  function newShape() {
+    var seen = seenList('c'), allFound = save.consts.length >= SHAPE_IDS.length;
+    var wildTurn = save.consts.length >= 3 && vr() < (allFound ? 0.45 : 0.18), def = null, ts = null;
+    for (var t = 0; t < 60 && !ts; t++) {
+      def = wildTurn && t < 40 ? wildShape(vr) : variantOf(chooseId(), vr);
+      if (!def || (seen.indexOf(def.key) >= 0 && t < 50)) { def = null; continue; }
+      ts = placeTargets(def);
+    }
+    if (!ts) { var id0 = chooseId(), d0 = SHAPES[id0]; def = { id: id0, pts: d0.pts, parts: d0.parts, key: id0 + ':plain:' + Date.now() }; ts = placeTargets(def) || def.pts.map(function (p) { return { x: W * 0.5 + (p[0] - 0.5) * Math.min(W, H) * 0.36, y: H * 0.3 + (p[1] - 0.5) * Math.min(W, H) * 0.36, done: false }; }); }
+    shape = { id: def.id, def: def, key: def.key, wild: !!def.wild, name: def.name, meaning: def.meaning }; shapeDone = 0;
+    targets = ts;
+    markSeen('c', def.key, 500);
+    if (!def.wild) markSeen('cs', def.id, 60);
+    save.variety.pics = (save.variety.pics || 0) + 1;
     flies.forEach(function (f) { f.home = null; });
+  }
+  // the same puzzle, laid out again for a new screen size (keeps the stars you've lit)
+  function relayoutShape() {
+    if (!shape) return;
+    var ts = placeTargets(shape.def); if (!ts) return;
+    ts.forEach(function (p, i) { p.done = !!(targets[i] && targets[i].done); }); targets = ts;
   }
   function drawShape(t) {
     if (!shape) return;
@@ -1622,7 +1901,7 @@
     if (!shapeDone) {
       var lit = targets.filter(function (p) { return p.done; }).length, lowest = Math.max.apply(null, targets.map(function (p) { return p.y; }));
       ctx.fillStyle = 'rgba(255,246,224,0.85)'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.font = '500 14px Lora, Georgia, serif';
-      ctx.fillText('\u2728 ' + lit + ' of ' + targets.length + ' lit  \u00b7  ' + save.consts.length + ' of ' + SHAPE_IDS.length + ' pictures found', W / 2, lowest + 34);
+      ctx.fillText('\u2728 ' + lit + ' of ' + targets.length + ' lit  \u00b7  ' + (shape.wild ? 'a wild one, never seen before' : save.consts.length + ' of ' + SHAPE_IDS.length + ' pictures found'), W / 2, lowest + 34);
     }
     if (mode === 'fireflies' && wand.active) {
       var wg = ctx.createRadialGradient(wand.x, wand.y, 0, wand.x, wand.y, 30); wg.addColorStop(0, 'rgba(255,255,230,0.25)'); wg.addColorStop(1, 'rgba(255,255,230,0)');
@@ -1656,10 +1935,10 @@
   // now and then a shooting star crosses the sky; catch it for a wish
   function drawShooting(t) {
     if (mode !== 'fireflies' || REDUCED) return;
-    if (!nextShoot) nextShoot = t + 15000 + Math.random() * 15000;
+    if (!nextShoot) nextShoot = t + (15000 + Math.random() * 15000) * SHOOT;
     if (!shooting && t > nextShoot) { var fromLeft = Math.random() < 0.5; shooting = { t0: t, x0: fromLeft ? W * 0.05 : W * 0.95, y0: H * (0.06 + Math.random() * 0.1), dx: (fromLeft ? 1 : -1) * W * 0.7, dy: H * 0.22, caught: false }; }
     if (!shooting) return;
-    var q = (t - shooting.t0) / 3200; if (q >= 1) { shooting = null; nextShoot = t + 25000 + Math.random() * 25000; return; }
+    var q = (t - shooting.t0) / 3200; if (q >= 1) { shooting = null; nextShoot = t + (25000 + Math.random() * 25000) * SHOOT; return; }
     var x = shooting.x0 + shooting.dx * q, y = shooting.y0 + shooting.dy * q;
     var g = ctx.createLinearGradient(x, y, x - shooting.dx * 0.12, y - shooting.dy * 0.12);
     g.addColorStop(0, 'rgba(255,250,230,0.95)'); g.addColorStop(1, 'rgba(255,250,230,0)');
@@ -1690,10 +1969,11 @@
         // the finished picture sings its whole tune back to you
         targets.forEach(function (p, k) { setTimeout(function () { chime(k, 0.06); burst(p.x, p.y, 6); }, 250 + k * 120); });
         if (audio && audio.music && save.sound) setTimeout(function () { audio.music.reward(true); }, 350 + targets.length * 120);
-        var first = save.consts.indexOf(shape.id) === -1, m = MEANING[shape.id] || ['A new constellation', ''];
+        var first = !shape.wild && save.consts.indexOf(shape.id) === -1, m = shape.wild ? [shape.name, shape.meaning] : MEANING[shape.id] || ['A new constellation', ''];
         if (first) { save.consts.push(shape.id); persist(); }
-        if (window.TOLRewards) window.TOLRewards.earn(first ? 15 : 6, 'fireflies', first ? 'A new constellation' : 'A constellation sang', { cardDelay: 5200 });
-        say(m[0] + (first ? ' \u2728 New!' : ''), m[1] + (first ? '  ' + save.consts.length + ' of ' + SHAPE_IDS.length + ' found.' : ''), 5200);
+        if (shape.wild) { save.wild = (save.wild || 0) + 1; persist(); }
+        if (window.TOLRewards) window.TOLRewards.earn(first ? 15 : shape.wild ? 8 : 6, 'fireflies', first ? 'A new constellation' : shape.wild ? 'A wild constellation' : 'A constellation sang', { cardDelay: 5200 });
+        say(m[0] + (first ? ' \u2728 New!' : shape.wild ? ' \u2728' : ''), m[1] + (first ? '  ' + save.consts.length + ' of ' + SHAPE_IDS.length + ' found.' : shape.wild ? '  Wild constellations found: ' + save.wild + '.' : ''), 5200);
         updateCount();
         if (first) setTimeout(function () { askDedication(shape.id, m[0]); }, 2600);
       }
@@ -1711,8 +1991,69 @@
     [[0, 0], [1, 0], [2, 0], [3, 0]], [[0, 0], [1, 0], [0, 1], [1, 1]], [[0, 0], [1, 0], [2, 0], [1, 1]],
     [[0, 0], [0, 1], [0, 2], [1, 2]], [[1, 0], [1, 1], [1, 2], [0, 2]], [[1, 0], [2, 0], [0, 1], [1, 1]], [[0, 0], [1, 0], [1, 1], [2, 1]]
   ];
-  var LILY = ['#BFE3CF', '#C6DFF4', '#D9C8F0', '#F7C9D4', '#F8E7AE', '#F9C9B4', '#A9DCC8', '#F6D77A'];
-  var GOLD = 8;
+  var LILY = ['#BFE3CF', '#C6DFF4', '#D9C8F0', '#F7C9D4', '#F8E7AE', '#F9C9B4', '#A9DCC8', '#F6D77A', '#9FB9C4'];
+  var GOLD = 8, OLD = 9; // OLD: the old lilies a pond layout starts with
+
+  // Pond layouts: most ponds start with a few rows of old lilies with gaps in them. Each layout is made
+  // by starting from full rows and lifting pads out, one shape at a time, only ever lifting a pad
+  // with open water straight above it. So the same pads, dropped back in the reverse order, always
+  // fit: the first few pads to drift in are exactly those, and the layout is always solvable.
+  // Every layout is checked by dropping them back before it's used, and seen layouts aren't repeated.
+  var queue = [], layout = null;
+  function rotCells(cells, k) { var c = cells.map(function (x) { return x.slice(); }); for (var i = 0; i < k; i++) { var w = Math.max.apply(null, c.map(function (x) { return x[0]; })); c = c.map(function (x) { return [x[1], w - x[0]]; }); } return c; }
+  function makeLayout(r) {
+    for (var t = 0; t < 400; t++) {
+      var rowsN = 2 + Math.floor(r() * 3), top = ROWS - rowsN, g = [], y, x;
+      for (y = 0; y < ROWS; y++) g.push(new Array(COLS).fill(y >= top ? 1 : 0));
+      var plan = [];
+      for (var tries = 0; tries < 500 && plan.length < 9; tries++) {
+        var sk = Math.floor(r() * PIECES.length), rk = Math.floor(r() * 4), cells = rotCells(PIECES[sk], rk);
+        var ox = Math.floor(r() * COLS), oy = top - 1 + Math.floor(r() * (rowsN + 1)), ok = true, mine = {};
+        cells.forEach(function (c) { mine[(c[1] + oy) + ',' + (c[0] + ox)] = 1; });
+        cells.forEach(function (c) {
+          var cx = c[0] + ox, cy = c[1] + oy;
+          if (cx < 0 || cx >= COLS || cy < top || cy >= ROWS || !g[cy][cx]) { ok = false; return; }
+          for (var yy = 0; yy < cy; yy++) if (g[yy][cx] && !mine[yy + ',' + cx]) ok = false; // open water straight above
+        });
+        if (!ok) continue;
+        cells.forEach(function (c) { g[c[1] + oy][c[0] + ox] = 0; });
+        plan.push({ s: sk, r: rk, x: ox, y: oy });
+        var filled = 0; for (y = top; y < ROWS; y++) for (x = 0; x < COLS; x++) filled += g[y][x];
+        var everyRowOpen = true; for (y = top; y < ROWS; y++) if (g[y].every(Boolean)) everyRowOpen = false;
+        if (plan.length >= 2 && everyRowOpen && filled / (rowsN * COLS) <= 0.72 && (filled / (rowsN * COLS) >= 0.45 || plan.length >= 5)) break;
+      }
+      var rowsOk = true; for (y = top; y < ROWS; y++) if (g[y].every(Boolean) || !g[y].some(Boolean)) rowsOk = false;
+      if (!rowsOk || plan.length < 2) continue;
+      var start = g.slice(top).map(function (row) { return row.slice(); });
+      var L = { rows: start, plan: plan.slice().reverse(), key: start.map(function (row) { return row.join(''); }).join('/') };
+      if (layoutSolvable(L)) return L;
+    }
+    return null;
+  }
+  // drop the planned pads back in, from where they appear, straight down: every starting row must fill
+  function layoutSolvable(L) {
+    var g = [], y;
+    for (y = 0; y < ROWS - L.rows.length; y++) g.push(new Array(COLS).fill(0));
+    L.rows.forEach(function (row) { g.push(row.slice()); });
+    function hit(cells, x, yy) { return cells.some(function (c) { var cx = c[0] + x, cy = c[1] + yy; return cx < 0 || cx >= COLS || cy >= ROWS || (cy >= 0 && g[cy][cx]); }); }
+    var ok = L.plan.every(function (p) {
+      var cells = rotCells(PIECES[p.s], p.r);
+      if (hit(cells, Math.floor(COLS / 2) - 1, 0) || hit(cells, p.x, 0)) return false;
+      var yy = 0; while (!hit(cells, p.x, yy + 1)) yy++;
+      if (yy !== p.y) return false;
+      cells.forEach(function (c) { g[c[1] + yy][c[0] + p.x] = 1; });
+      return true;
+    });
+    for (y = ROWS - L.rows.length; y < ROWS && ok; y++) if (!g[y].every(Boolean)) ok = false;
+    return ok;
+  }
+  function pickLayout() {
+    if (!seenList('p').length && !save.lilies) { markSeen('p', 'open', 300); return null; } // the very first pond is open water
+    if (vr() < 0.2) return null;                                                          // and now and then, open water again
+    var seen = seenList('p');
+    for (var t = 0; t < 30; t++) { var L = makeLayout(vr); if (L && seen.indexOf(L.key) < 0) { markSeen('p', L.key, 300); return L; } }
+    return null;
+  }
   function layoutPond() {
     var phone = W <= 560;
     by = Math.round(phone ? 64 : H * 0.1);
@@ -1721,8 +2062,16 @@
     bx = Math.round(W / 2 - COLS * cell / 2 - (phone ? cell * 0.9 : 0));
     document.documentElement.style.setProperty('--tr-top', (phone ? by + ROWS * cell + 16 : 70) + 'px');
   }
-  function pondReset() { clearing = null; board = []; for (var r = 0; r < ROWS; r++) board.push(new Array(COLS).fill(0)); pondRows = 0; nextK = null; spawn(); }
-  function pickK() { gold++; if (gold >= 12 && Math.random() < 0.35) { gold = 0; return -1; } return Math.floor(Math.random() * PIECES.length); }
+  function pondReset() {
+    clearing = null; board = []; for (var r = 0; r < ROWS; r++) board.push(new Array(COLS).fill(0)); pondRows = 0; nextK = null;
+    layout = pickLayout(); queue = [];
+    if (layout) {
+      layout.rows.forEach(function (row, i) { row.forEach(function (v, c) { if (v) board[ROWS - layout.rows.length + i][c] = vr() < 0.3 ? -OLD : OLD; }); });
+      queue = layout.plan.map(function (p) { return p.s; }); layout.cleared = false;
+    }
+    spawn();
+  }
+  function pickK() { if (queue.length) return queue.shift(); gold++; if (gold >= 12 && Math.random() < 0.35) { gold = 0; return -1; } return Math.floor(Math.random() * PIECES.length); }
   function driftMs() { return Math.max(620, 1150 - Math.floor(pondRows / 8) * 70); } // a touch quicker as the pond grows, never rushed
   function spawn() {
     var k = nextK == null ? pickK() : nextK; nextK = pickK();
@@ -1736,7 +2085,7 @@
       if (window.TOLRewards && pondRows) window.TOLRewards.record('pond', 'best', pondRows, 'max');
       say('The pond settles.', pondRows ? pondRows + (pondRows === 1 ? ' row' : ' rows') + ' bloomed in that pond' + (best ? ', your best yet!' : '.') + ' Fresh water now.' : 'Fresh water. Keep going whenever you like.', 3600);
       for (var r = 0; r < ROWS; r++) board[r].fill(0);
-      pondRows = 0;
+      pondRows = 0; layout = null; queue = [];
     }
     hud();
   }
@@ -1792,7 +2141,14 @@
       say(names[Math.min(4, n)] + (clearing.gold ? ' ✨' : ''), clearing.gold ? 'The golden lotus opened. How lovely.' : 'New flowers opened in your garden.', 2400);
       if (n > 1 && audio && audio.music && save.sound) setTimeout(function () { audio.music.reward(n > 2); }, 300);
       if (window.TOLRewards) window.TOLRewards.earn([0, 2, 5, 9, 14][Math.min(4, n)] + (clearing.gold ? 4 : 0), 'pond', names[Math.min(4, n)].replace(/[.!]$/, ''));
-      clearing = null; spawn(); hud();
+      clearing = null;
+      if (layout && !layout.cleared && !board.some(function (row) { return row.some(function (v) { return Math.abs(v) === OLD; }); })) {
+        layout.cleared = true; addFlower(false); addLantern();
+        save.variety.ponds = (save.variety.ponds || 0) + 1; persist();
+        setTimeout(function () { say('The old lilies all bloomed.', 'Every gap is filled. The pond is yours now.', 3200); }, 2500);
+        if (window.TOLRewards) window.TOLRewards.earn(6, 'pond', 'The old lilies bloomed');
+      }
+      spawn(); hud();
     }
     if (!clearing && t > dropAt && (!helpCard || helpCard.hidden)) { step(); dropAt = t + (landT ? 120 : driftMs()); }
     // water
@@ -1862,11 +2218,13 @@
     if (bg) ctx.drawImage(bg, 0, 0, W, H);
     drawAurora(t);
     drawSky(t);
+    drawTonight(t, 'sky');
     drawWonders(t, 'sky');
     // pond shimmer
     var p = pondShape();
     if (!REDUCED) for (var i = 0; i < 3; i++) { ctx.strokeStyle = 'rgba(210,220,255,0.08)'; ctx.beginPath(); ctx.ellipse(p.x, p.y, p.rx * (0.4 + i * 0.2) + Math.sin(t / 1800 + i) * 6, p.ry * (0.4 + i * 0.2), 0, 0, Math.PI * 2); ctx.stroke(); }
     drawPondLife(t);
+    drawTonight(t, 'low');
     drawWonders(t, 'bank');
     if (!sorted) sorted = save.flowers.slice().sort(function (a, b) { return a.y - b.y; });
     sorted.forEach(function (f) { drawFlower(f, t); });
@@ -1876,9 +2234,43 @@
     if (mode === 'pond') drawPond(t);
     drawCritters(t);
     drawFlies(t, dt);
+    drawTonight(t, 'air', dt);
     drawWonders(t, 'air');
     drawSparks(dt);
     kick();
+  }
+
+  // the kind of night: a low mist, drifting lights or petals, or faint shooting stars
+  var motes = [], meteor = null;
+  function drawTonight(t, layer, dt) {
+    var id = TONIGHT.id; dt = dt || 16;
+    if (layer === 'low' && id === 'mist') {
+      for (var i = 0; i < 3; i++) {
+        var y = H * (0.6 + i * 0.045), x = W * 0.5 + (REDUCED ? 0 : Math.sin(t / 9000 + i * 2.1) * W * 0.18), rx = W * 0.6;
+        var g = ctx.createRadialGradient(x, y, 0, x, y, rx); g.addColorStop(0, 'rgba(225,228,248,0.11)'); g.addColorStop(1, 'rgba(225,228,248,0)');
+        ctx.fillStyle = g; ctx.beginPath(); ctx.ellipse(x, y, rx, H * 0.07, 0, 0, Math.PI * 2); ctx.fill();
+      }
+    }
+    if (layer === 'air' && (id === 'motes' || id === 'breeze') && !REDUCED) {
+      var want = id === 'motes' ? 18 : 12;
+      while (motes.length < want) motes.push({ x: Math.random(), y: id === 'motes' ? 0.72 + Math.random() * 0.26 : Math.random() * 0.62, s: 0.6 + Math.random(), p: Math.random() * 6.28, h: HUES[Math.floor(Math.random() * HUES.length)] });
+      motes.forEach(function (m) {
+        if (id === 'motes') { m.y -= dt * 0.00002 * m.s; m.x += Math.sin(t / 1800 + m.p) * 0.0002; if (m.y < 0.35) { m.y = 0.95; m.x = Math.random(); } }
+        else { m.x += dt * 0.000025 * m.s; m.y += Math.sin(t / 1300 + m.p) * 0.0004; if (m.x > 1.05) { m.x = -0.05; m.y = Math.random() * 0.62; } }
+        var a = 0.35 + 0.3 * Math.sin(t / 700 + m.p);
+        ctx.fillStyle = id === 'motes' ? 'rgba(255,244,200,' + a.toFixed(2) + ')' : 'hsla(' + m.h + ',70%,85%,' + (a * 0.9).toFixed(2) + ')';
+        ctx.beginPath();
+        if (id === 'motes') ctx.arc(m.x * W, m.y * H, 1.4 * m.s, 0, Math.PI * 2); else ctx.ellipse(m.x * W, m.y * H, 3 * m.s, 1.6 * m.s, Math.sin(t / 900 + m.p), 0, Math.PI * 2);
+        ctx.fill();
+      });
+    }
+    if (layer === 'sky' && id === 'meteors' && !REDUCED && mode !== 'fireflies') {
+      if (!meteor && Math.random() < 0.0035) meteor = { t0: t, x: W * (0.1 + Math.random() * 0.6), y: H * (0.05 + Math.random() * 0.2), d: Math.random() < 0.5 ? 1 : -1 };
+      if (meteor) {
+        var q = (t - meteor.t0) / 1100; if (q >= 1) meteor = null;
+        else { var mx = meteor.x + meteor.d * q * W * 0.2, my = meteor.y + q * H * 0.07; ctx.strokeStyle = 'rgba(255,250,230,' + (0.6 * (1 - q)).toFixed(2) + ')'; ctx.lineWidth = 1.5; ctx.beginPath(); ctx.moveTo(mx, my); ctx.lineTo(mx - meteor.d * W * 0.04, my - H * 0.014); ctx.stroke(); }
+      }
+    }
   }
 
   function updateCount() {
@@ -1990,7 +2382,29 @@
     'Be as kind to yourself as you’d be to a friend.',
     'Rest is part of the work.',
     'Say one specific thank-you before bed.',
-    'Feelings are weather. They pass.'
+    'Feelings are weather. They pass.',
+    'Tomorrow is a fresh page.',
+    'You carried a lot today. It’s okay to set it down now.',
+    'Someone is glad you exist. Probably more than one someone.',
+    'Small, steady steps still get you there.',
+    'You don’t have to be ready. You only have to be willing.',
+    'Tonight, let good enough be enough.',
+    'Say what you need plainly, and kindly. It usually helps.',
+    'The people who love you would want you to rest.',
+    'A pause is not a stop. It’s a breath before the next part.',
+    'Notice what went well today, even if it was small.',
+    'You can come back to the hard thing tomorrow, with a fuller battery.',
+    'Kindness counts double when it’s aimed at yourself.',
+    'The garden will be here. So will you.',
+    'Most of life is ordinary Tuesdays. Make one a little kinder.',
+    'You are allowed to ask for help.',
+    'Let one worry go tonight. It can find its own way home.',
+    'Thank one person tomorrow for one specific thing.',
+    'Being tired is information, not a failing.',
+    'Slow down enough to hear what you actually think.',
+    'A quiet mind grows from quiet minutes.',
+    'You did more today than anyone saw.',
+    'Hold your plans lightly and your people closely.'
   ];
   // Full screen: hide the site header (and use the browser's full screen where it has one)
   var fullBtn = document.getElementById('ng-full');
@@ -2034,7 +2448,8 @@
 
   var closeCard = document.getElementById('ng-close');
   document.getElementById('ng-leave').addEventListener('click', function () {
-    document.getElementById('ng-quote').textContent = QUOTES[Math.floor(Math.random() * QUOTES.length)];
+    var qi = pickFresh(QUOTES.map(function (_, i) { return i; }), 'q', function (x) { return x; }, 20); markSeen('q', qi, 40);
+    document.getElementById('ng-quote').textContent = QUOTES[qi];
     var tipEl = document.getElementById('ng-tip');
     if (tipEl && window.TOLTips) window.TOLTips.get(['sleep', 'rest', 'calm', 'kindness'], function (t) { tipEl.innerHTML = '<strong>A little tip:</strong> ' + t[0] + ' ' + t[1]; tipEl.hidden = false; });
     closeCard.hidden = false; stopAudio(); document.getElementById('ng-stay').focus();
@@ -2050,6 +2465,8 @@
     document.getElementById('ng-welcome-p').textContent = plantedLine + (gifted ? 'While you were away, ' + gifted + (gifted === 1 ? ' new flower' : ' new flowers') + ' opened on their own. ' : '') +
       'Your garden has ' + save.flowers.length + (save.flowers.length === 1 ? ' flower' : ' flowers') + (save.consts.length ? ' and ' + save.consts.length + (save.consts.length === 1 ? ' constellation' : ' constellations') + ' in its sky' : '') + '. Stay as long as you like.';
   }
+  var wp = document.getElementById('ng-welcome-p');
+  if (wp && !AMBIENT) wp.textContent += ' ' + TONIGHT.line;
   document.querySelectorAll('[data-enter]').forEach(function (b) {
     b.addEventListener('click', function () {
       welcome.hidden = true; if (save.sound) startAudio();
@@ -2063,10 +2480,25 @@
     if (running) { lastT = performance.now(); kick(); if (audio && save.sound) audio.ctx.resume(); }
     else { if (rafId) { cancelAnimationFrame(rafId); rafId = 0; } if (audio) audio.ctx.suspend(); }
   });
-  window.addEventListener('resize', function () { var w0 = W; resize(); if (mode === 'fireflies' && Math.abs(W - w0) > 1) newShape(); });
+  window.addEventListener('resize', function () { var w0 = W, h0 = H; resize(); if (mode === 'fireflies' && (Math.abs(W - w0) > 1 || Math.abs(H - h0) > 1)) relayoutShape(); });
 
   resize(); soundLabel(); updateCount();
   kick();
   // Expose a tiny hook for testing
-  window.__nightGarden = { save: save, setMode: setMode, pondKey: pondKey, get targets() { return targets; }, get mode() { return mode; }, get board() { return board; }, get piece() { return piece; }, get audio() { return audio; }, critters: critters, pack: pack, portrait: function (c2d, i, pose, tt) { var o = ctx; ctx = c2d; drawPup(PUPS[i], pose || 'run', 1.2, 0.2, false, tt || 0); ctx = o; } };
+  window.__nightGarden = {
+    // variety, for tests: the current puzzle, a new one, solving it with the light as a visitor would
+    puzzle: function () { return shape ? { key: shape.key, id: shape.id, wild: shape.wild, name: shape.wild ? shape.name : (MEANING[shape.id] || [''])[0], stars: targets.length, done: shapeDone > 0, fits: targets.every(function (p) { return p.x > 0 && p.x < W && p.y > 0 && p.y < H; }) } : null; },
+    nextPuzzle: function () { newShape(); return this.puzzle(); },
+    solvePuzzle: function () {
+      var t = performance.now() + 1000, guard = 0;
+      while (!shapeDone && guard++ < 200) { var nx = nextTarget(); if (!nx) break; wand.x = nx.x; wand.y = nx.y; wand.active = true; fireflyTick(t); t += 200; fireflyTick(t); t += 20; }
+      return shapeDone > 0;
+    },
+    pondLayout: function () { return layout ? { key: layout.key, rows: layout.rows.length, pads: layout.plan.length, solvable: layoutSolvable(layout) } : null; },
+    newPond: function () { pondReset(); return this.pondLayout(); },
+    breath: function () { var b = chooseBreath(); return { id: b.id, name: b.name, desc: breathDesc(b) }; },
+    tonight: function () { return TONIGHT.id; },
+    variety: function () { return JSON.parse(JSON.stringify(save.variety)); },
+    shapes: SHAPE_IDS.length,
+    save: save, setMode: setMode, pondKey: pondKey, get targets() { return targets; }, get mode() { return mode; }, get board() { return board; }, get piece() { return piece; }, get audio() { return audio; }, critters: critters, pack: pack, portrait: function (c2d, i, pose, tt) { var o = ctx; ctx = c2d; drawPup(PUPS[i], pose || 'run', 1.2, 0.2, false, tt || 0); ctx = o; } };
 })();

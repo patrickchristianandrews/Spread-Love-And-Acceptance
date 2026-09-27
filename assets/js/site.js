@@ -36,8 +36,10 @@
   var SECTIONS = [
     { id: 'new', title: 'What’s new', blurb: 'Newly added and newly expanded, newest first.', items: [
       { href: '/whats-new.html', code: 'All', title: 'What’s new', note: 'Everything newly added and everything that’s grown, in one place' },
+      { href: '/quest.html', code: 'New', title: 'Your quest map', note: 'Little “Check yourself” moments on reading pages, and a map that lights up as you learn' },
       { href: '/calm-visualizer.html', code: 'New', title: 'Drift: calm visualizer', note: 'Deep, slow 3D colors and binaural tones matched to how you feel' },
       { href: '/five-pillars.html', code: 'New', title: 'The Five Pillars', note: 'How every part of the program fits together, inside you and between you and others' },
+      { href: '/quest.html', code: 'New', title: 'Your quest map', note: 'Find the little “Check yourself” moments on each page, light a lantern for every trail you finish, and watch your explorer level grow' },
       { href: '/library.html', code: 'New', title: 'The Professor’s Library', note: 'Deep, plain-language reading on psychology and conflict, and Professor Puddles can chat about all of it' },
       { href: '/reading.html', code: 'New', title: 'Something to read', note: 'Hand-picked articles from trusted sources, matched to what you’re reading' },
       { href: '/frequency-journey.html', code: 'New', title: 'The Frequency Journey', note: 'Tidbit and Sugarfoot’s calm puzzle journey: riddles, life lessons and puzzles in seven worlds' },
@@ -399,6 +401,11 @@
       var cw = document.createElement('script'); cw.src = '/assets/js/cheer-words.js';
       cw.onload = cw.onerror = function () { var ch = document.createElement('script'); ch.src = '/assets/js/cheer.js'; document.head.appendChild(ch); };
       document.head.appendChild(cw);
+    }
+
+    // playful learning layer: "Check yourself" moments, a learning trail and the quest map (learn-play.js)
+    if (!body.hasAttribute('data-no-learnplay') && !document.querySelector('meta[http-equiv="Content-Security-Policy"]')) {
+      var lp = document.createElement('script'); lp.src = '/assets/js/learn-play.js'; document.head.appendChild(lp);
     }
 
     // which of the Five Pillars this page puts to work, as a small strip under the title (pillars.js)
