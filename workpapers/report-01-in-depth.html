@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>REPORT-01 in depth — The Full Read</title>
-<meta name="description" content="The compilation layer: one place to record each week's figures, and an auto-written report on how they intersect.">
+<meta name="description" content="Where all your worksheets come together: one place to record each week's numbers, and a report written for you on how they fit together.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,500&family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -168,9 +168,10 @@
   <header class="sheet-header">
     <p class="wp-num">REPORT-01</p>
     <h1 class="sheet-mark">The Full Read
-      <small>THE COMPILATION LAYER &middot; WHERE EVERYTHING MEETS</small>
+      <small>WHERE ALL YOUR WORKSHEETS COME TOGETHER</small>
     </h1>
-    <p class="sheet-tagline">One place to record what the worksheets produced, and a report that reads them against each other rather than one at a time.</p>
+    <p class="sheet-tagline">One place to record what your worksheets produced, and a report that reads them side by side instead of one at a time.</p>
+      <p class="sheet-tagline pillar-note">This report brings all <a href="/five-pillars.html">Five Pillars</a> together: the load (I), how the setup is holding (II), your battery scores (III), how repair is going (IV), and the jobs that quietly slip back (V). In you: you see your own patterns over time. Between you and others: you get one shared picture of the setup, never a verdict on either person.</p>
   </header>
     <p class="depth-bar" style="margin:0 0 28px;"><span>Full version</span><a href="/workpapers/report-01.html">&larr; Back to the simple version</a></p>
     <p class="no-print" style="margin:0 0 28px;font-size:.9rem;">Where the numbers come from: <a href="/workpapers/fill/">the fill-in workpapers</a> &middot; <a href="/workpapers/calculators/calc01-solvency.html">CALC-01</a> &middot; <a href="/workpapers/fill/suite.html">Build your Workpaper Suite</a></p>
@@ -178,13 +179,13 @@
 
   
 <div class="intro-note">
-    <p>Each workpaper answers one question well and is blind to the others. WP-01 can't see whether the load is owned. WP-03 can't see whether it's shared. CALC-01 reads three of them and still can't see whether last month's fixes held.</p>
-    <p><strong>This page is where they're read together.</strong> Type in what the worksheets produced &mdash; a minute a week &mdash; and it writes the part no single instrument can: where the figures agree, where they contradict each other, and which contradiction matters.</p>
+    <p>Each worksheet answers one question well, but it can't see the others. WP-01 can't see whether each job has an owner. WP-03 can't see whether the work is shared fairly. CALC-01 reads three of them and still can't see whether last month's fixes held.</p>
+    <p><strong>This page is where they're read together.</strong> Type in what your worksheets produced. It takes about a minute a week. The page then writes what no single worksheet can: where the numbers agree, where they disagree, and which disagreement matters.</p>
   </div>
 
   <div class="privacy" id="privacy">
-    <p><strong>Your ledger is a file, not a login.</strong> Nothing here is stored in this browser and nothing is sent anywhere. Press <em>Save ledger</em> to download a small file; press <em>Load ledger</em> next week to pick up where you left off.</p>
-    <p>That's deliberate. A household's records shouldn't be sitting in the browser of a machine two people share &mdash; and a file you keep is one you can put somewhere private, copy, or delete outright.</p>
+    <p><strong>Your ledger is a file, not a login.</strong> Nothing here is stored in this browser, and nothing is sent anywhere. Press <em>Save ledger</em> to download a small file. Next week, press <em>Load ledger</em> to pick up where you left off.</p>
+    <p>That's on purpose. A household's records shouldn't sit in the browser of a computer two people share. A file you keep is one you can put somewhere private, copy, or delete completely.</p>
   </div>
 
   <!-- ================= WHO ================= -->
@@ -218,7 +219,7 @@
 
     <div class="panel">
       <h3>From the weekly closing</h3>
-      <p class="hint">Everything here comes off a worksheet you've already filled in. Leave anything blank that you didn't run &mdash; the report handles gaps rather than guessing.</p>
+      <p class="hint">Everything here comes from a worksheet you've already filled in. Leave blank anything you didn't do this week. The report works around gaps instead of guessing.</p>
 
       <div class="grid">
         <div class="field">
@@ -236,19 +237,19 @@
           <div class="sub">Field Audit total</div>
         </div>
         <div class="field">
-          <label for="w-unasked">Noticed &amp; handled, unasked</label>
+          <label for="w-unasked">Noticed &amp; handled without being asked</label>
           <input type="number" id="w-unasked" min="0" step="1" placeholder="—">
           <div class="sub">Count, either person</div>
         </div>
         <div class="field">
           <label for="w-as-a">WP-02 battery &middot; A</label>
           <input type="number" id="w-as-a" min="0" max="1" step="0.05" placeholder="0.00–1.00">
-          <div class="sub">Sum of 5 &divide; 20</div>
+          <div class="sub">Five scores added, &divide; 20</div>
         </div>
         <div class="field">
           <label for="w-as-b">WP-02 battery &middot; B</label>
           <input type="number" id="w-as-b" min="0" max="1" step="0.05" placeholder="0.00–1.00">
-          <div class="sub">Sum of 5 &divide; 20</div>
+          <div class="sub">Five scores added, &divide; 20</div>
         </div>
         <div class="field">
           <label for="w-oc-owned">WP-03 tasks owned</label>
@@ -273,7 +274,7 @@
           <input type="number" id="w-loops" min="0" max="7" step="1" placeholder="0–7">
         </div>
         <div class="field">
-          <label for="w-promos">WP-13 items promoted</label>
+          <label for="w-promos">WP-13 items moved on</label>
           <input type="number" id="w-promos" min="0" step="1" placeholder="—">
           <div class="sub">To WP-03 or WP-09</div>
         </div>
@@ -283,7 +284,7 @@
           <div class="sub">Times this week</div>
         </div>
         <div class="field">
-          <label for="w-amend">WP-03 amendments</label>
+          <label for="w-amend">WP-03 treaty changes</label>
           <input type="number" id="w-amend" min="0" step="1" placeholder="—">
           <div class="sub">Treaty changes logged</div>
         </div>
@@ -316,6 +317,7 @@
           <tr><td colspan="10" class="empty">No weeks recorded yet.</td></tr>
         </tbody>
       </table>
+      <p class="hint">Key: WB = workload balance (WP-01). OC = ownership clarity (WP-03). AS = autonomic saturation, how stretched you both are (WP-02). RF = retuning frequency (WP-09). Solv. = solvency, how well the setup holds up (CALC-01). &Delta; = change in solvency since the week before. Apex = solvency plus how well you repair after friction. Loops = daily check-ins done (WP-13).</p>
     </div>
   </section>
 
@@ -329,7 +331,7 @@
 
     <div class="panel">
       <h3>From WP-04, the Deficit Audit</h3>
-      <p class="hint">Run monthly. The recurrence figure is the one that matters most here &mdash; a falling gap count with a high recurrence rate is a different situation from a falling count without one.</p>
+      <p class="hint">Do this once a month. The "recurring" number matters most here. A falling gap count where old gaps keep coming back is very different from a falling count where they don't.</p>
 
       <div class="grid">
         <div class="field">
@@ -401,7 +403,7 @@
     </div>
 
     <h3 style="margin-top:28px;">What the figures say to each other</h3>
-    <p class="hint" style="font-size:.86rem;color:var(--ink-soft);max-width:72ch;">Each finding below comes from two or more instruments read together. A single worksheet cannot produce any of them.</p>
+    <p class="hint" style="font-size:.86rem;color:var(--ink-soft);max-width:72ch;">Each finding below comes from reading two or more worksheets together. No single worksheet could produce any of them.</p>
     <div id="findings"></div>
 
     <h3 style="margin-top:28px;">The shape of it so far</h3>
@@ -419,29 +421,30 @@
       <h2>How This Report Is Written</h2>
     </div>
 
-    <p>Nothing here is a model, a prediction, or an opinion. Every finding is a stated rule applied to figures you entered, and each rule is listed below so the output can be checked rather than trusted.</p>
+    <p>Nothing here is a model, a prediction or an opinion. Every finding comes from a written rule applied to the numbers you entered. Each rule is listed below, so you can check the report instead of just trusting it.</p>
 
     <table>
       <thead>
         <tr><th style="width:190px;">Finding</th><th>Rule</th><th style="width:110px;">Reads from</th></tr>
       </thead>
       <tbody>
-        <tr><td>Clarity without parity</td><td>Ownership clarity at or above 0.85 while workload balance sits at or below 0.60 &mdash; the treaty is clear and the split is not.</td><td class="mono">WP-01 + WP-03</td></tr>
-        <tr><td>Structure holding, repair not</td><td>Solvency exceeds apex by more than 0.08 &mdash; friction is being absorbed rather than processed.</td><td class="mono">CALC-01 + WP-09</td></tr>
-        <tr><td>Repair carrying the structure</td><td>Apex exceeds solvency by more than 0.08 &mdash; good communication compensating for an arrangement that keeps generating the need for it.</td><td class="mono">CALC-01 + WP-09</td></tr>
-        <tr><td>Load isn't the driver</td><td>Saturation rising across three or more weeks while workload balance stays flat &mdash; something outside the chore split is doing it.</td><td class="mono">WP-01 + WP-02</td></tr>
-        <tr><td>Drift rule</td><td>Three consecutive apex drops greater than 0.10 &mdash; a scheduled treaty review, not an emergency.</td><td class="mono">CALC-01</td></tr>
-        <tr><td>Fixes aren't holding</td><td>Recurrence rate above 50% across the recorded months &mdash; the same gaps being re-fixed rather than closed.</td><td class="mono">WP-04</td></tr>
-        <tr><td>Treaty gone quiet</td><td>Six or more weeks recorded with no amendments logged &mdash; a living agreement that hasn't changed probably isn't being used.</td><td class="mono">WP-03 + WP-13</td></tr>
-        <tr><td>The loop isn't feeding forward</td><td>Friction recorded across three or more weeks with nothing promoted &mdash; the daily loop is running and going nowhere.</td><td class="mono">WP-13 + WP-09</td></tr>
-        <tr><td>Kit doing its job</td><td>The Calm-Down Kit used in a week where saturation fell &mdash; the intervention and the drop line up.</td><td class="mono">WP-11 + WP-02</td></tr>
-        <tr><td>Invisible work surfacing</td><td>Ownership clarity falls while the task list grows &mdash; the score drops because hidden work got named, which is the score behaving correctly.</td><td class="mono">WP-03 + WP-04</td></tr>
+        <tr><td>Clarity without parity</td><td>Ownership clarity is 0.85 or higher while workload balance is 0.60 or lower. The treaty is clear, but the split is not.</td><td class="mono">WP-01 + WP-03</td></tr>
+        <tr><td>Structure holding, repair not</td><td>Solvency is more than 0.08 above apex. Friction is being swallowed instead of talked through.</td><td class="mono">CALC-01 + WP-09</td></tr>
+        <tr><td>Repair carrying the structure</td><td>Apex is more than 0.08 above solvency. Good communication is making up for a setup that keeps causing the friction in the first place.</td><td class="mono">CALC-01 + WP-09</td></tr>
+        <tr><td>Load isn't the driver</td><td>Saturation rises for three or more weeks while workload balance stays flat. Something outside the chore split is causing it.</td><td class="mono">WP-01 + WP-02</td></tr>
+        <tr><td>Drift rule</td><td>Apex drops by more than 0.10 three weeks in a row. Time for a planned treaty review, not an emergency.</td><td class="mono">CALC-01</td></tr>
+        <tr><td>Fixes aren't holding</td><td>More than half of fixed gaps come back, across the recorded months. The same gaps are being patched again instead of truly closed.</td><td class="mono">WP-04</td></tr>
+        <tr><td>Treaty gone quiet</td><td>Six or more weeks recorded with no treaty changes logged. A living agreement that never changes probably isn't being used.</td><td class="mono">WP-03 + WP-13</td></tr>
+        <tr><td>The loop isn't feeding forward</td><td>Friction logged over three or more weeks, with nothing moved on to another worksheet. The daily check-in is running but going nowhere.</td><td class="mono">WP-13 + WP-09</td></tr>
+        <tr><td>Kit doing its job</td><td>The Calm-Down Kit was used in a week when saturation fell. Using the kit and the drop line up.</td><td class="mono">WP-11 + WP-02</td></tr>
+        <tr><td>Invisible work surfacing</td><td>Ownership clarity falls while the task list grows. The score drops because hidden work got named, which is the score working as it should.</td><td class="mono">WP-03 + WP-04</td></tr>
+        <tr><td>The habit is holding</td><td>The daily check-in ran at least five days a week, three weeks in a row.</td><td class="mono">WP-13</td></tr>
       </tbody>
     </table>
 
     <div class="privacy">
-      <p><strong>What this report will never contain:</strong> a judgment about either person, a comparison between the two of you, or a recommendation about the relationship's future. It reads an arrangement across time. That is its whole scope.</p>
-      <p>None of it is a validated clinical or statistical instrument. If a finding here is used to end a conversation rather than start one, it is being misused.</p>
+      <p><strong>What this report will never contain:</strong> a judgment about either person, a comparison between the two of you, or advice about the relationship's future. It reads how your setup changes over time. That is all it does.</p>
+      <p>None of it is a tested clinical or statistical tool. If a finding here is used to end a conversation instead of starting one, it is being misused.</p>
     </div>
   </section>
 
@@ -566,7 +569,7 @@
     if(last && last.oc!==null && last.wb!==null && last.oc>=0.85 && last.wb<=0.60){
       var heavier = last.pctA>50 ? nA : nB;
       out.push(finding("warn","WP-01 + WP-03 \u00b7 clarity without parity",
-        "Ownership is clear (" + last.oc.toFixed(2) + ") and the split is not (" + last.wb.toFixed(2) + "). Every task has a name on it, and most of those names are " + heavier + "'s. This is a household that has written down exactly how lopsided it is \u2014 a real first step, and not the last one. Clarity and fairness are separate measurements, and only one of them is currently good."));
+        "Ownership is clear (" + last.oc.toFixed(2) + ") and the split is not (" + last.wb.toFixed(2) + "). Every task has a name on it, and most of those names are " + heavier + "'s. This household has written down exactly how lopsided things are. That's a real first step, but not the last one. Clarity and fairness are measured separately, and right now only one of them is good."));
     }
 
     /* 2 & 3. solvency vs apex */
@@ -574,10 +577,10 @@
       var gap=last.sol-last.apex;
       if(gap>=0.08){
         out.push(finding("warn","CALC-01 + WP-09 \u00b7 structure holding, repair not",
-          "Solvency is running " + gap.toFixed(2) + " above apex. The arrangement works on paper and the repair isn't happening \u2014 friction is being absorbed rather than processed, which holds for a while and then doesn't. The lever here is WP-09, not the treaty."));
+          "Solvency is running " + gap.toFixed(2) + " above apex. The setup works on paper, but repair after friction isn't happening. Friction is being swallowed instead of talked through, which holds for a while and then stops holding. The place to work on is WP-09, not the treaty."));
       } else if(gap<=-0.08){
         out.push(finding("warn","CALC-01 + WP-09 \u00b7 repair carrying the structure",
-          "Apex is running " + Math.abs(gap).toFixed(2) + " above solvency. You're repairing well around a structure that keeps generating the need for repair. Good communication is compensating for an arrangement that isn't working, and that's expensive to maintain. The lever here is the treaty, not the scripts."));
+          "Apex is running " + Math.abs(gap).toFixed(2) + " above solvency. You're repairing well, but the setup keeps creating the friction you have to repair. Good communication is making up for an arrangement that isn't working, and that's tiring to keep up. The place to work on is the treaty, not the scripts."));
       }
     }
 
@@ -589,7 +592,7 @@
         var wbFlat = Math.abs(t[2].wb-t[0].wb)<0.08;
         if(asUp && wbFlat){
           out.push(finding("warn","WP-01 + WP-02 \u00b7 the load isn't the driver",
-            "Saturation has risen three weeks running while the workload split has barely moved. Whatever is costing you isn't the chore arrangement \u2014 renegotiating the treaty won't touch it. Worth naming what's actually outside the house before rebalancing what's inside it."));
+            "Saturation (how stretched you both are) has risen three weeks in a row, while the workload split has barely moved. Whatever is wearing you down isn't the chore setup, so reworking the treaty won't touch it. It's worth naming what's going on outside the house before rebalancing what's inside it."));
         }
       }
     }
@@ -602,7 +605,7 @@
       }
       if(drops>=3){
         out.push(finding("warn","CALC-01 \u00b7 drift rule triggered",
-          "Three consecutive weekly apex drops greater than 0.10. That's a structural signal rather than a bad run, and it calls for a scheduled WP-03 review \u2014 not an emergency conversation. Structure is the fixable kind of problem."));
+          "Apex has dropped by more than 0.10 three weeks in a row. That points to the setup, not just a bad run, and it calls for a planned WP-03 review, not an emergency conversation. The setup is the kind of problem you can fix."));
       }
     }
 
@@ -611,7 +614,7 @@
     ledger.months.forEach(function(m){ if(m.gaps!==null){g+=m.gaps;} if(m.recur!==null){r+=m.recur;} });
     if(g>0 && (r/g)>0.5){
       out.push(finding("warn","WP-04 \u00b7 the fixes aren't holding",
-        Math.round(r/g*100)+"% of structural gaps have come back after being fixed. A falling gap count means little at that rate \u2014 it's the same problems being re-closed. A fix that keeps failing usually means the owner was assigned but the conditions weren't: no trigger, no time, no realistic slot in the week. Ask what would have to be true for it to happen, not who should have made it happen."));
+        Math.round(r/g*100)+"% of structural gaps have come back after being fixed. At that rate, a falling gap count means little: the same problems keep being patched. When a fix keeps failing, it usually means the owner was named but the conditions weren't set up: no reminder, no time, no realistic slot in the week. Ask what would have to be true for it to happen, not who should have made it happen."));
     }
 
     /* 7. treaty gone quiet */
@@ -619,7 +622,7 @@
       var amend=ws.reduce(function(a,w){ return a+(w.amend||0); },0);
       if(amend===0){
         out.push(finding("warn","WP-03 \u00b7 the treaty has gone quiet",
-          "Six or more weeks recorded and not one amendment logged. The treaty is meant to be a living agreement; one that never changes is usually one nobody is consulting. Worth checking whether it still describes who actually does what."));
+          "Six or more weeks recorded, and not one treaty change logged. The treaty is meant to be a living agreement, and one that never changes is usually one nobody is looking at. It's worth checking whether it still describes who actually does what."));
       }
     }
 
@@ -630,7 +633,7 @@
       var pr=recent.reduce(function(a,w){ return a+(w.promos||0); },0);
       if(fr>=3 && pr===0){
         out.push(finding("warn","WP-13 + WP-09 \u00b7 the loop isn't feeding forward",
-          "Friction has been logged across the last three weeks and nothing has been promoted out of the daily loop. The loop is running and going nowhere \u2014 its whole purpose is that a repeated friction point becomes a treaty row or a tone problem instead of staying an ambient irritation."));
+          "Friction has been logged across the last three weeks, and nothing has been moved on from the daily check-in. The check-in is running but going nowhere. Its whole purpose is that a sore spot that keeps coming up becomes a treaty row or a tone check, instead of staying a low-level irritation."));
       }
     }
 
@@ -639,7 +642,7 @@
       var li=ds.length-1;
       if((ws[li].kit||0)>0 && ds[li].as!==null && ds[li-1].as!==null && ds[li].as<ds[li-1].as-0.05){
         out.push(finding("good","WP-11 + WP-02 \u00b7 the kit is doing its job",
-          "The Calm-Down Kit was used this week and saturation fell by " + (ds[li-1].as-ds[li].as).toFixed(2) + ". One week isn't proof of anything, but the intervention and the drop line up, which is worth noticing rather than assuming."));
+          "The Calm-Down Kit was used this week and saturation fell by " + (ds[li-1].as-ds[li].as).toFixed(2) + ". One week isn't proof of anything, but using the kit and the drop line up. That's worth noticing, without assuming too much."));
       }
     }
 
@@ -650,7 +653,7 @@
         var oa=derive(a).oc, ob=derive(b).oc;
         if(oa!==null && ob!==null && ob<oa){
           out.push(finding("good","WP-03 + WP-04 \u00b7 invisible work surfacing",
-            "Ownership clarity fell from " + oa.toFixed(2) + " to " + ob.toFixed(2) + ", and the task list grew by " + (b.ocTotal-a.ocTotal) + " at the same time. That's the score behaving correctly, not the household getting worse \u2014 it was previously measuring a treaty that didn't know those tasks existed. A lower honest number beats a higher one computed from an incomplete list."));
+            "Ownership clarity fell from " + oa.toFixed(2) + " to " + ob.toFixed(2) + ", and the task list grew by " + (b.ocTotal-a.ocTotal) + " at the same time. That's the score working as it should, not the household getting worse. Before, it was measuring a treaty that didn't know those tasks existed. A lower, honest number beats a higher one worked out from an incomplete list."));
         }
       }
     }
@@ -660,13 +663,13 @@
       var lp=ws.slice(-3).map(function(w){ return w.loops; }).filter(function(v){ return v!==null; });
       if(lp.length===3 && lp.every(function(v){ return v>=5; })){
         out.push(finding("good","WP-13 \u00b7 the habit is holding",
-          "The daily loop has run at least five days a week for three weeks. That's the one habit meant to outlive the rest of the system, and keeping it is a good sign the framework will still be in use in six months \u2014 not because the loop is powerful, but because a household that keeps it is a household still talking on ordinary days."));
+          "The daily check-in has run at least five days a week for three weeks. It's the one habit meant to outlast everything else, and keeping it is a good sign you'll still be using the program in six months. Not because the check-in is powerful, but because a household that keeps it is still talking on ordinary days."));
       }
     }
 
     if(!out.length){
       out.push(finding("","nothing to flag",
-        "No rule has fired. Either the figures are agreeing with each other, or there isn't enough recorded yet for a pattern to be visible \u2014 most rules need three or more weeks. Neither is a problem."));
+        "No rule has been triggered. Either the numbers agree with each other, or there isn't enough recorded yet to see a pattern. Most rules need three or more weeks. Neither is a problem."));
     }
     return out.join("");
   }
@@ -680,17 +683,17 @@
 
     if(!last || last.sol===null){
       v.textContent="Waiting on data.";
-      vb.textContent = ds.length ? "Weeks are recorded, but none yet has all three of workload, ownership and both batteries \u2014 the read needs all three." : "Add at least one week above and this writes itself.";
+      vb.textContent = ds.length ? "Weeks are recorded, but none has all three yet: workload, ownership, and both battery scores. The report needs all three." : "Add at least one week above and this writes itself.";
     } else {
       var band = last.sol>=0.70 ? "The arrangement is carrying its own weight."
                : last.sol>=0.40 ? "Something is drifting."
-               : "Not sustainable as currently structured.";
+               : "This setup can't last as it is.";
       v.textContent = band;
       var first=ds.find(function(d){ return d.sol!==null; });
       var moved = (first && ds.length>1) ? last.sol-first.sol : null;
-      vb.innerHTML = "Latest solvency read <strong>"+last.sol.toFixed(2)+"</strong>, apex <strong>"+(last.apex===null?"\u2014":last.apex.toFixed(2))+"</strong>, across "+ds.length+" recorded week"+(ds.length===1?"":"s")+
+      vb.innerHTML = "Latest solvency score <strong>"+last.sol.toFixed(2)+"</strong>, apex <strong>"+(last.apex===null?"\u2014":last.apex.toFixed(2))+"</strong>, across "+ds.length+" recorded week"+(ds.length===1?"":"s")+
         (moved===null?"." : ". Since the first complete read it has moved <strong>"+(moved>=0?"+":"")+moved.toFixed(2)+"</strong>.")+
-        " This describes an arrangement, not either person.";
+        " This describes your setup, not either person.";
     }
 
     $("findings").innerHTML = buildFindings();
@@ -698,7 +701,7 @@
     /* trend summary */
     var sb=$("summary-block");
     if(ds.length<2){
-      sb.innerHTML='<p class="empty">Two or more weeks are needed before a trend means anything.</p>';
+      sb.innerHTML='<p class="empty">You need two or more weeks before a trend means anything.</p>';
     } else {
       var rows=[["Workload balance","wb"],["Ownership clarity","oc"],["Autonomic saturation","as"],["Retuning frequency","rf"],["Solvency","sol"],["Apex","apex"]];
       var html='<table><thead><tr><th>Measure</th><th class="num">First</th><th class="num">Latest</th><th class="num">Change</th><th style="width:74px;">Trend</th></tr></thead><tbody>';
@@ -712,7 +715,7 @@
         html+='<tr><td>'+r[0]+'</td><td class="num">'+f.toFixed(2)+'</td><td class="num">'+l.toFixed(2)+
               '</td><td class="num" style="color:'+col+';">'+(ch>=0?"+":"")+ch.toFixed(2)+'</td><td>'+sparkline(series)+'</td></tr>';
       });
-      html+='</tbody></table><p style="font-size:.82rem;color:var(--ink-soft);margin-top:10px;">Saturation is the one measure where a fall is the improvement.</p>';
+      html+='</tbody></table><p style="font-size:.82rem;color:var(--ink-soft);margin-top:10px;">Saturation is the one measure where going down is the improvement.</p>';
       sb.innerHTML=html;
     }
 
@@ -727,8 +730,8 @@
     var w0=terms[0];
     nb.innerHTML='<div class="finding'+(last.sol>=0.70?" good":"")+'"><span class="tag">largest shortfall</span><p>'+
       (last.sol>=0.70
-        ? "Nothing structural needs changing. The largest remaining gap is "+w0.n+", costing "+w0.short.toFixed(3)+" of the available points \u2014 worth knowing, not worth acting on this week. Keep the rhythm and protect the rest windows."
-        : "Start with "+w0.n+" \u2014 "+w0.fix+". It is costing "+w0.short.toFixed(3)+" of the available points, more than anything else. Start there rather than with whatever happened most recently.")+
+        ? "Nothing in the setup needs changing. The biggest remaining gap is "+w0.n+", costing "+w0.short.toFixed(3)+" of the available points. That's worth knowing, but not worth acting on this week. Keep up your routine and protect your rest time."
+        : "Start with "+w0.n+" \u2014 "+w0.fix+". It is costing "+w0.short.toFixed(3)+" of the available points, more than anything else. Start there, not with whatever happened most recently.")+
       '</p></div>';
   }
 

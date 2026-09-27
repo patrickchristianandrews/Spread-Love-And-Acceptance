@@ -277,7 +277,7 @@
       d.setPage(i);
       d.line(self.L, 744, self.R, 744, COLORS.line, 0.5);
       d.text(self.L, 756, self.enc('Created on this device, ' + created + '. Nothing entered was sent to or stored by the website. Keep this file somewhere private.'), 'Helvetica', 7, COLORS.soft);
-      d.text(self.L, 766, self.enc('A heuristic self-reflection worksheet, not a clinical instrument. It describes the arrangement, never either person.'), 'Helvetica', 7, COLORS.soft);
+      d.text(self.L, 766, self.enc('A self-reflection worksheet, not a clinical tool. It describes the arrangement, never either person.'), 'Helvetica', 7, COLORS.soft);
       var pg = self.enc('Page ' + (i + 1) + ' of ' + n);
       d.text(self.R - global.TOLPDF.textWidth(pg, 'Helvetica', 7), 766, pg, 'Helvetica', 7, COLORS.soft);
     }

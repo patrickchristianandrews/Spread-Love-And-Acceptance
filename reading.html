@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-NKC6CQ9S66"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-NKC6CQ9S66');
+</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Further Reading — The Objective Ledger</title>
+<meta name="description" content="Hand-picked articles from Psychology Today, Greater Good Magazine, The Gottman Institute and other trusted sources, sorted by topic and by the Five Pillars, for understanding yourself and getting along with others.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,500&family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/css/site.css">
+<link rel="stylesheet" href="/assets/css/reading.css">
+<script src="/assets/js/site.js" defer></script>
+<script src="/assets/js/reading-list.js" defer></script>
+<script src="/assets/js/reading-suggest.js" defer></script>
+<script src="/assets/js/reading-page.js" defer></script>
+<style>
+  /* Further Reading: filter chips and the grouped list */
+  .rl-intro p{ max-width:65ch; }
+  .rl-filters{ margin:1.75rem 0 1rem; padding:1.1rem 1.25rem .4rem; }
+  .rl-filters fieldset{ border:0; margin:0 0 1rem; padding:0; min-width:0; }
+  .rl-filters legend{ padding:0; margin:0 0 .45rem; font-family:"IBM Plex Mono", ui-monospace, monospace; font-size:.74rem; letter-spacing:.08em; text-transform:uppercase; color:#8A6D8F; }
+  .rl-more{ margin:0 0 1rem; }
+  .rl-more > summary{ display:flex; flex-wrap:wrap; align-items:center; gap:.2rem .6rem; min-height:44px; cursor:pointer; list-style:none; border-radius:14px; }
+  .rl-more > summary::-webkit-details-marker{ display:none; }
+  .rl-more > summary::after{ content:"\25BE"; margin-left:auto; color:#8A6D8F; font-size:.9rem; transition:transform .15s ease; }
+  .rl-more[open] > summary::after{ transform:rotate(180deg); }
+  .rl-more > summary:focus-visible{ outline:2px solid var(--focus); outline-offset:2px; }
+  .rl-sum-k{ font-family:"IBM Plex Mono", ui-monospace, monospace; font-size:.74rem; letter-spacing:.08em; text-transform:uppercase; color:#8A6D8F; }
+  .rl-sum-v{ font-size:.92rem; color:var(--ink); }
+  .rl-more[open] .rl-sum-v{ display:none; }
+  .rl-more fieldset{ margin:.2rem 0 0; }
+  .rl-chips{ display:flex; flex-wrap:wrap; gap:.4rem; }
+  .rl-chip{ font:inherit; font-size:.88rem; line-height:1.2; min-height:44px; padding:.45rem .95rem; border-radius:999px; cursor:pointer;
+    border:1px solid #D9C8F0; background:rgba(255,255,255,.8); color:#4E3F6B; text-align:left; transition:background .15s ease, border-color .15s ease; }
+  .rl-chip:hover{ background:#F3EEF9; }
+  .rl-chip[aria-pressed="true"]{ background:#EDE4F8; border-color:#B9A0E0; color:#3B2F55; font-weight:600; }
+  .rl-chip[aria-pressed="true"]::before{ content:"\2713\00a0"; }
+  .rl-chip small{ font-size:.78em; opacity:.8; font-weight:400; }
+  .rl-chip:focus-visible, .rl-item a:focus-visible, .rl-reset:focus-visible{ outline:2px solid var(--focus); outline-offset:2px; }
+  .rl-status{ display:flex; flex-wrap:wrap; align-items:center; gap:.5rem 1rem; margin:.25rem 0 1.5rem; font-size:.95rem; color:var(--ink-soft); }
+  .rl-status p{ margin:0; }
+  .rl-reset{ font:inherit; font-size:.88rem; min-height:44px; padding:.45rem .95rem; border-radius:999px; border:1px dashed #B9A0E0; background:none; color:#4E3F6B; cursor:pointer; }
+  .rl-reset:hover{ background:#F3EEF9; }
+  .rl-filters, .rl-group{ border:1.5px solid transparent; border-radius:28px;
+    --rl-fill:rgba(255,253,249,.84);
+    background:radial-gradient(120% 90% at 14% 8%, rgba(255,255,255,.9), rgba(255,255,255,0) 42%) padding-box, linear-gradient(var(--rl-fill), var(--rl-fill)) padding-box,
+      linear-gradient(135deg, #F7C9D4, #D9C8F0 30%, #C6DFF4 55%, #C7EBD6 78%, #F8E7AE) border-box;
+    box-shadow:0 10px 28px rgba(110,90,160,.10), inset 0 -8px 18px rgba(185,160,224,.10), inset 0 2px 0 rgba(255,255,255,.75); }
+  .rl-status{ padding:0 .4rem; }
+  .rl-group{ margin:0 0 1.5rem; padding:1.1rem 1.25rem .6rem; border:1.5px solid transparent; border-radius:28px;
+    --rl-fill:rgba(255,253,249,.82);
+    background:radial-gradient(120% 90% at 14% 8%, rgba(255,255,255,.9), rgba(255,255,255,0) 42%) padding-box, linear-gradient(var(--rl-fill), var(--rl-fill)) padding-box,
+      linear-gradient(135deg, #F7C9D4, #D9C8F0 30%, #C6DFF4 55%, #C7EBD6 78%, #F8E7AE) border-box;
+    box-shadow:0 10px 28px rgba(110,90,160,.10), inset 0 -8px 18px rgba(185,160,224,.10), inset 0 2px 0 rgba(255,255,255,.75); }
+  .read .rl-group h2{ margin:0 0 .35rem; font-size:1.35rem; }
+  .rl-group h2 .rl-n{ font-family:"IBM Plex Mono", ui-monospace, monospace; font-size:.8rem; font-weight:400; color:var(--ink-soft); }
+  .rl-list{ list-style:none; padding:0 !important; margin:0 !important; }
+  .rl-item{ max-width:none !important; margin:0 !important; padding:.9rem 0; border-top:1px dotted var(--line); }
+  .rl-item:first-child{ border-top:0; }
+  .rl-src{ display:inline-block; font-family:"IBM Plex Mono", ui-monospace, monospace; font-size:.72rem; letter-spacing:.03em; padding:.18rem .6rem; border-radius:999px;
+    background:rgba(199,235,214,.55); color:#2F5A40; border:1px solid rgba(152,210,178,.8); }
+  .rl-src[data-src="pt"]{ background:rgba(198,223,244,.55); color:#28506F; border-color:rgba(150,194,232,.8); }
+  .rl-src[data-src="gottman"]{ background:rgba(247,201,212,.5); color:#7A3346; border-color:rgba(237,163,182,.8); }
+  .rl-src[data-src="gg"]{ background:rgba(248,231,174,.6); color:#6B5418; border-color:rgba(239,210,122,.9); }
+  .read .rl-item h3{ margin:.4rem 0 .15rem; font-size:1.1rem; line-height:1.35; overflow-wrap:anywhere; }
+  .read .rl-item h3 a{ text-decoration-color:var(--brass); }
+  .rl-item p{ margin:0 !important; font-size:.98rem; line-height:1.55; }
+  .rl-by{ font-size:.86rem !important; font-style:italic; color:var(--ink-soft); }
+  .rl-sum{ color:var(--ink-soft); margin-top:.2rem !important; }
+  .rl-meta{ margin-top:.4rem !important; font-size:.8rem !important; color:#6B5A78; }
+  .rl-meta a{ color:inherit !important; text-decoration-color:#D9C8F0 !important; }
+  .rl-sr{ position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; border:0; }
+  .rl-empty{ padding:1rem 0; color:var(--ink-soft); }
+  .rl-fine{ font-size:.88rem; color:var(--ink-soft); }
+  @media (max-width:560px){ .rl-group, .rl-filters{ padding:1rem 1rem .5rem; border-radius:24px; } .rl-chip{ font-size:.85rem; } }
+  @media print{ .rl-filters, .rl-status, .tol-read-wrap{ display:none; } .rl-group{ background:#fff; border:1px solid #ccc; box-shadow:none; } }
+</style>
+</head>
+<body>
+<main class="read">
+<header class="read-head"><p class="read-code">Further reading</p><h1>Articles worth your time</h1></header>
+
+<div class="rl-intro">
+<p class="simple-lede">A short, hand-picked library of articles that go with this program: some help you understand yourself, and some help you get along with the people you share time, space, work or care with.</p>
+<p>They come from sources we trust: Psychology Today, Greater Good Magazine from UC Berkeley, The Gottman Institute, Harvard Health, ADDitude, CHADD and the National Autistic Society. Each one is sorted by topic and by <a href="/five-pillars.html">the Five Pillars</a> it belongs to. The one-line summaries are ours; the articles open on the publisher’s site in a new tab.</p>
+</div>
+
+<div id="rl-suggest" aria-label="A suggestion to start with"></div>
+
+<section class="rl-filters no-dive" aria-labelledby="rl-filters-h">
+  <h2 id="rl-filters-h" class="rl-sr">Filter the list</h2>
+  <fieldset>
+    <legend>Who it’s for</legend>
+    <div class="rl-chips" id="rl-aud"></div>
+  </fieldset>
+  <details class="rl-more" id="rl-more-pillars" open>
+    <summary><span class="rl-sum-k">The Five Pillars</span> <span class="rl-sum-v" id="rl-pillar-now">All pillars</span></summary>
+    <fieldset>
+      <legend class="rl-sr">The Five Pillars</legend>
+      <div class="rl-chips" id="rl-pillars"></div>
+    </fieldset>
+  </details>
+  <details class="rl-more" id="rl-more-topics" open>
+    <summary><span class="rl-sum-k">Topic</span> <span class="rl-sum-v" id="rl-topic-now">All topics</span></summary>
+    <fieldset>
+      <legend class="rl-sr">Topic</legend>
+      <div class="rl-chips" id="rl-topics"></div>
+    </fieldset>
+  </details>
+</section>
+
+<div class="rl-status no-dive">
+  <p id="rl-count" aria-live="polite">Loading the list…</p>
+  <button type="button" class="rl-reset" id="rl-reset" hidden>Show everything</button>
+</div>
+
+<div id="rl-list" class="no-dive no-cheer">
+  <noscript><p>This list needs JavaScript to show. Every article is also listed in <a href="/assets/js/reading-list.js">the reading list file</a>.</p></noscript>
+</div>
+
+<p class="rl-fine">Articles are chosen for this program and open on the publisher’s site. They are for everyday understanding, not medical advice. Found a link that no longer works? It gets checked and refreshed from time to time.</p>
+</main>
+</body>
+</html>

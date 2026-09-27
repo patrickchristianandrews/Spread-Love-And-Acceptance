@@ -1,0 +1,292 @@
+#slug: fairness
+#title: Fairness and the load
+#pillars: I, V
+#blurb: Equity, the second shift, the mental load, invisible work, and why we each think we do more.
+#pillarnote: Fairness and the load is Pillar I, See the whole load, with Pillar V, Notice the quiet incentives. In you, it asks you to notice everything you carry, including planning, remembering and smoothing things over. Between you, it puts that work on one shared page so nobody has to argue about whose work counts, and it watches for the quiet drift that sends unclaimed jobs to the same person.
+#intro: At the heart of the program is a simple observation: work that nobody sees still has to be done, and when it builds up unevenly, it quietly turns into resentment. Sociologists and psychologists have been studying this for decades. These entries set out what they found, including a few surprises about how our own memories tilt the picture.
+
+@@ equity-theory | Equity theory
+pillars: I, V
+aka: equity, fairness in relationships, getting back what you put in, Adams
+nut: Equity theory says people feel most comfortable when what they get out of a relationship is in proportion to what they put in, compared with the other person. Feeling under-benefited leads to resentment; feeling over-benefited can lead to guilt.
+deep:
+J. Stacy Adams developed equity theory to explain feelings about pay at work: people compare their ratio of inputs (effort, skill, time) to outcomes (pay, recognition) with someone else’s. When the ratios don’t match, they feel tension and try to restore balance, by working less, asking for more, or changing how they see things.
+
+Elaine Hatfield (writing as Elaine Walster) and colleagues applied the idea to close relationships. They found that people who felt under-benefited reported anger and resentment, while those who felt over-benefited sometimes reported guilt. Both kinds of imbalance were associated with less satisfaction than feeling things were roughly fair.
+
+In a household, the “inputs” include paid work, chores, planning, emotional support and more, and different people weigh them differently. That is why fairness conversations work better when both people’s full picture of contributions is on the table.
+research:
+Adams published the theory in 1965; Walster, Walster and Berscheid’s *Equity: Theory and Research* appeared in 1978. Equity theory is well supported in workplace research. In close relationships, the evidence is more mixed: some researchers argue that in loving relationships people focus less on tallies and more on meeting each other’s needs (see communal relationships), and that intense scorekeeping is itself a sign of trouble.
+links:
+/book/chapter-4.html | Two kinds of fair (Chapter IV)
+/lemonade-stand.html | The Lemonade Stand
+/book/preface.html | Preface: writing it down isn’t keeping score
+talk:
+- What counts as a “contribution” in our home? Is anything left off the list?
+- Have you ever felt over-benefited, and how did that feel?
+- How do we keep an eye on fairness without keeping score?
+
+@@ communal-exchange | Communal and exchange relationships
+pillars: I, V
+aka: keeping score, tit for tat, communal relationships, exchange relationships, Clark and Mills
+nut: In exchange relationships, people give expecting something back. In communal relationships, people give because the other person has a need. Close relationships tend to work better on communal lines, but fairness still matters underneath.
+deep:
+Margaret Clark and Judson Mills noticed that people behave differently with friends and family than with acquaintances or business partners. In communal relationships, people respond to needs without tracking who owes what; being paid back immediately can even feel insulting.
+
+This helps explain why keeping score in a relationship feels wrong. But communal doesn’t mean anything goes. Communal relationships rely on both people being responsive to each other’s needs. When one person keeps giving and the other doesn’t notice, the communal spirit wears thin.
+
+The program’s approach tries to respect both truths: writing down who did what isn’t about tallying debts, it is about making needs and effort visible so that both people can respond to them.
+research:
+Clark and Mills published their key paper in 1979 and have continued to refine the theory. Experimental studies support the distinction: in communal settings, people track each other’s needs rather than contributions. Later research suggests that in long-term relationships, a background sense of fairness still matters for satisfaction.
+links:
+/book/preface.html | Preface: writing it down isn’t keeping score
+/workpapers/wp-01.html | Who did what (WP-01)
+talk:
+- Where in our life do we give freely, and where do we track?
+- When does noticing effort feel like care, and when does it feel like accounting?
+- What needs of each other’s might be going unnoticed?
+
+@@ second-shift | The second shift
+pillars: I
+aka: second shift, working parents, housework after work, Hochschild
+nut: The second shift is sociologist Arlie Hochschild’s name for the unpaid work at home (housework and childcare) that many working people, historically women, do after their paid job ends.
+deep:
+Hochschild and Anne Machung interviewed dual-earner couples in the 1980s and found that in many, women did considerably more of the housework and childcare, adding up to a substantial extra load over a year. Many of these couples believed they shared fairly; Hochschild described the stories couples told themselves to avoid confronting the imbalance.
+
+Since then, men’s share of domestic work has grown in many countries, and the picture varies a lot across households. But large time-use surveys still commonly find gaps, particularly in routine daily tasks and childcare.
+
+The point for any household, whatever its makeup, is that unpaid work is real work, and that couples can drift into arrangements neither person consciously chose.
+research:
+*The Second Shift* was published in 1989 and remains influential. Its methods were qualitative (in-depth interviews and home observations), so its figures describe its sample. Large-scale time-use studies since then confirm that gaps have narrowed but persist in many countries, with differences by country, class and family type. Research on same-sex couples finds they tend to divide work more evenly, which suggests gender norms rather than inevitable differences play a big role.
+links:
+/book/preface.html | Preface: unseen work quietly adds up
+/workpapers/wp-01.html | Who did what (WP-01)
+/relationships.html#partners | How it fits: partners
+talk:
+- What does our “second shift” look like after work?
+- Were there assumptions about housework in the families we grew up in?
+- Is there any part of our arrangement that neither of us really chose?
+
+@@ mental-load | The mental load
+pillars: I
+aka: mental load, cognitive load at home, remembering everything, household manager, default parent
+nut: The mental load is the ongoing work of remembering, planning and keeping track of what a household needs. It is often invisible, because it happens in someone’s head rather than with their hands.
+deep:
+Doing the laundry takes an hour. Noticing the laundry basket is full, remembering that school uniforms need to be clean by Monday, checking there is detergent and planning when to fit it in is a different kind of work, and it doesn’t stop when the washing machine does.
+
+The term spread widely after a 2017 comic by the French artist Emma, which showed a woman as the household “project manager” whose partner helped when asked. The comic resonated because being asked is itself part of the load: someone had to notice, plan and delegate.
+
+People carrying the mental load often describe feeling that they can never switch off. The person who helps when asked often feels unfairly criticised, because they are doing tasks and don’t see the invisible part. Both perspectives make sense, which is why making the thinking work visible can be such a relief.
+research:
+Allison Daminger’s 2019 study (below) gives the concept research grounding. Survey research has also found that many people, particularly mothers in heterosexual couples, report doing most of the planning and organising in their households. The popular term “mental load” overlaps with research concepts like cognitive labour and invisible work, but isn’t itself a formal construct.
+links:
+/workpapers/wp-03-raci-treaty.html | One owner per job: two names per job (WP-03)
+/workpapers/wp-01.html | Who did what: log the small jobs too (WP-01)
+/book/preface.html | Preface: unseen work quietly adds up
+talk:
+- What do each of us keep track of that the other might not see?
+- Which jobs involve a lot of remembering or planning?
+- How would it feel to hand over a whole job, thinking and all?
+
+@@ cognitive-labour | Cognitive labour: anticipate, identify, decide, monitor
+pillars: I, II
+aka: cognitive labor, Daminger, planning work, household planning, thinking work
+nut: Sociologist Allison Daminger broke household “thinking work” into four stages: anticipating needs, identifying options, deciding, and monitoring results. In her study, one partner often did more of the anticipating and monitoring.
+deep:
+Daminger interviewed couples in detail about how they managed everyday life. She found that cognitive labour could be divided into distinct parts. Anticipating means noticing a need before it becomes urgent (the child will need new shoes soon). Identifying means researching options. Deciding means choosing. Monitoring means checking that it happened and worked.
+
+Deciding was often shared, and was the most visible part. Anticipating and monitoring were often done mostly by one person, frequently the woman in the heterosexual couples she studied, and were the least visible. This meant a couple could feel they “made decisions together” while one person carried most of the thinking.
+
+This maps neatly onto the program’s idea of ownership: a job isn’t fully handed over until the new owner also does the noticing and checking.
+research:
+Daminger’s paper “The Cognitive Dimension of Household Labor” was published in the *American Sociological Review* in 2019. It was based on in-depth interviews with 35 couples, mostly college-educated, so it offers a detailed picture rather than population estimates. Later survey work by Daminger and others has explored the same dimensions in larger samples.
+links:
+/workpapers/wp-03-raci-treaty.html | One owner per job (WP-03)
+/workpapers/wp-04-deficit-audit.html | What keeps coming back? (WP-04)
+talk:
+- For our trickiest jobs, who anticipates, who researches, who decides and who checks?
+- Which stage is the most tiring for you?
+- What would handing over a job “all four stages” look like?
+
+@@ invisible-work | Invisible work
+pillars: I
+aka: invisible labour, invisible labor, unseen work, unpaid work, unrecognised effort
+nut: Invisible work is effort that is necessary but goes unnoticed, often because it prevents problems rather than creating something visible. When it is noticed at all, it is usually when it stops being done.
+deep:
+Sociologist Arlene Kaplan Daniels coined the term for work that is done but not recognised as work, such as volunteering, hosting and much of the care that keeps families and communities running. The concept has since been applied to many kinds of effort: keeping peace in a family, remembering birthdays, making a team function smoothly.
+
+A defining feature of invisible work is that success looks like nothing happening. The fridge never runs out; the birthday card arrives; the argument doesn’t happen. So the effort isn’t seen, and can easily be undervalued even by the person doing it.
+
+The program calls this unbilled work. Writing it down isn’t about claiming credit. It is about making the full picture visible so that decisions about sharing can be based on reality.
+research:
+Daniels published “Invisible Work” in *Social Problems* in 1987. The concept is widely used in sociology, including in research on housework, care work and workplace “office housework.” It is a conceptual framework supported by many qualitative studies rather than a single measurable variable.
+links:
+/book/preface.html | Preface: unseen work quietly adds up
+/workpapers/wp-01.html | Who did what (WP-01)
+/lemonade-stand.html | The Lemonade Stand
+talk:
+- What invisible work does each of us do that would only be noticed if it stopped?
+- What unseen work at home might we be undervaluing, including our own?
+- How could we notice each other’s invisible work more often?
+
+@@ emotional-labour | Emotional labour
+pillars: I
+aka: emotional labor, managing feelings, keeping the peace, emotion work, Hochschild
+nut: Emotional labour originally meant managing your feelings as part of a job, like a flight attendant staying cheerful. The term is now also used, more loosely, for the work of managing relationships and moods at home.
+deep:
+Arlie Hochschild introduced the term in *The Managed Heart*, studying flight attendants who were trained to display warmth regardless of how they felt. She distinguished surface acting (faking a feeling) from deep acting (trying to actually feel it), and argued that both could be tiring. She used “emotion work” for similar efforts in private life.
+
+In popular use, emotional labour now also covers things like remembering what people like, smoothing tensions, anticipating moods and keeping everyone happy. Some writers, including Hochschild herself, have cautioned that stretching the term too far can blur useful distinctions.
+
+Whatever the label, the effort is real. The person who always notices when someone is upset, or who manages family relationships, is doing work that deserves to be seen and shared.
+research:
+*The Managed Heart* was published in 1983. Workplace research since then, including meta-analyses, links surface acting with emotional exhaustion more than deep acting. Research on “emotion work” in families is smaller but supports the idea that it is often unevenly shared and linked to feelings of fairness.
+links:
+/book/preface.html | Preface: unseen work quietly adds up
+/turning-toward.html | Turning Toward
+talk:
+- Who in our household tends to manage everyone’s moods?
+- Is there emotional work that feels like it is taken for granted?
+- How could this kind of effort be shared?
+
+@@ egocentric-bias | Why we each think we do more
+pillars: I, V
+aka: egocentric bias, overestimating your own share, responsibility bias, Ross and Sicoly, who does more
+nut: When couples each estimate their share of household work, their estimates usually add up to more than 100 percent. We remember our own efforts more easily than other people’s, so we tend to overestimate our share without meaning to.
+deep:
+This isn’t about dishonesty. You were there for every one of your own tasks: you remember the effort, the timing, the inconvenience. You only saw some of the other person’s tasks, and you didn’t feel the effort of any of them. So your memory is richer for your own contributions.
+
+The effect has been found in many settings: couples, sports teams, co-authors of research papers. In one study of academic authors, the sum of each author’s estimated share on a paper was often well over 100 percent.
+
+This is one of the strongest arguments for writing things down. A shared log corrects the natural tilt of memory, gently and without blaming anyone. It also means that when both people feel they do more, both can be honest and still be partly mistaken.
+research:
+Michael Ross and Fiore Sicoly published the classic study in 1979: spouses’ estimates of their own responsibility for household activities typically summed to more than 100 percent. The bias has been replicated in many contexts, including Eugene Caruso, Nicholas Epley and Max Bazerman’s 2006 studies of academic co-authors. Research also suggests that considering the other person’s contributions in detail reduces the bias.
+links:
+/workpapers/wp-01.html | Who did what: write it down before it becomes a story (WP-01)
+/lemonade-stand.html | The Lemonade Stand
+/book/chapter-2.html | Is the split working? (Chapter II)
+talk:
+- If we each guessed our share of the housework, would it add up to more than 100?
+- Which of the other person’s jobs happen when you aren’t there to see?
+- How might writing it down change the conversation?
+
+@@ division-of-labour-satisfaction | Housework, fairness and satisfaction
+pillars: I, V
+aka: division of household labour, household labor, who does the housework, fair split, 50 50
+nut: Research consistently links the division of housework to relationship satisfaction. What seems to matter most is not an exact 50/50 split but whether both people feel the arrangement is fair.
+deep:
+Different couples arrive at different arrangements, and many uneven splits feel fine to both people, for example when one partner works much longer paid hours, or genuinely prefers certain jobs. Resentment tends to grow when one person feels the arrangement is unfair, unchosen or unacknowledged.
+
+Several things seem to shape perceived fairness: whether the arrangement was discussed, whether each person’s contributions are appreciated, whether the split matches what each thinks is right, and whether the less enjoyable jobs are shared.
+
+This is why the program focuses less on hours and more on visibility, ownership and conversation. Seeing the full picture and agreeing it together are what make an arrangement feel fair.
+research:
+A long line of studies, in the United States and elsewhere, finds associations between perceived fairness in housework and marital satisfaction, conflict and wellbeing. Research by Sanjiv Gupta, Scott Coltrane, Paula England and others has explored how gender, income and time shape the division. A 2016 study by Daniel Carlson and colleagues found that egalitarian arrangements were associated with higher relationship and sexual satisfaction than they had been in older data. Most of this research is correlational.
+links:
+/book/chapter-2.html | Is the split working? (Chapter II)
+/workpapers/wp-03-raci-treaty.html | One owner per job (WP-03)
+/lemonade-stand.html | The Lemonade Stand
+talk:
+- Does our current arrangement feel fair to each of us? Did we ever discuss it on purpose?
+- Which jobs do we each actually enjoy, or at least not mind?
+- What would make the arrangement feel more chosen?
+
+@@ gatekeeping | Gatekeeping: when standards keep others out
+pillars: II, V
+aka: maternal gatekeeping, doing it my way, micromanaging chores, standards, redoing tasks
+nut: Gatekeeping describes how the person who usually does a job can, without meaning to, discourage others from doing it: by redoing it, criticising the method, or holding tight to a particular standard.
+deep:
+Imagine one person always packs the children’s lunches. When the other tries, they are told the sandwich is wrong and the snack is missing. Next time, the second person doesn’t bother. The first person then feels they have to do everything. Both are frustrated, and neither intended this.
+
+Gatekeeping can come from caring a lot about how something is done, from identity (“this is my area”), or from worry. It can also be positive, as “gate opening,” when the experienced person actively invites and supports the other.
+
+The program’s approach to ownership helps here: once a job has an owner, the owner decides how it is done, within agreed “good enough” standards. Handing over a job means handing over the method too.
+research:
+Sarah Allen and Alan Hawkins described maternal gatekeeping in 1999. Later research, including work by Sarah Schoppe-Sullivan and colleagues, has refined the concept to include both gate-closing and gate-opening behaviours and found links with fathers’ involvement. Researchers caution against using the concept to blame mothers; gatekeeping is shaped by expectations on both partners and by wider social norms.
+links:
+/workpapers/wp-03-raci-treaty.html | One owner per job (WP-03)
+/book/chapter-4.html | Once a job has an owner, look to the owner (Chapter IV)
+talk:
+- Are there jobs where one of us redoes the other’s work?
+- What does “good enough” look like for our most-contested chores?
+- Which job would you be willing to hand over, method and all?
+
+@@ strategic-incompetence | “Weaponised incompetence” and learned helplessness at home
+pillars: II, V
+aka: weaponized incompetence, strategic incompetence, pretending not to know how, doing it badly on purpose
+nut: “Weaponised incompetence” is a popular term for doing a task badly so you won’t be asked again. It names something real, but it is not a research concept, and it is often a misreading of inexperience or mismatched standards.
+deep:
+The idea spread on social media: someone shrinks the jumper in the wash, and so never gets asked to do the laundry again. It resonated because many people have experienced tasks drifting back to them.
+
+But it is worth being careful with the label. Often what looks deliberate is actually inexperience (the person hasn’t built the skill), unclear standards (nobody said how it should be done), or gatekeeping (their attempts were corrected until they stopped trying). Assigning bad intent tends to make conversations defensive.
+
+A more useful approach is practical: agree on the standard, allow a learning period, hand over the whole job including the thinking, and let the owner own it. If the pattern continues after that, it is a conversation about fairness, not about skill.
+research:
+There is no established research literature on “weaponised incompetence” as such. Related concepts include social loafing (reduced effort in groups), research on gender and housework skills, and gatekeeping. Attribution research warns that assuming bad intentions from others’ behaviour is a common and often mistaken bias.
+links:
+/workpapers/wp-03-raci-treaty.html | One owner per job (WP-03)
+/workpapers/wp-04-deficit-audit.html | What keeps coming back? (WP-04)
+talk:
+- Are there jobs one of us has never really learned? What would it take?
+- Have we agreed what “done” means for the jobs that go wrong?
+- How can we talk about this without assuming bad intent?
+
+@@ default-parent | The default person
+pillars: II, V
+aka: default parent, go-to person, the one who always handles it, primary caregiver
+nut: In many households one person becomes the default: the one the school calls, who knows the dentist’s number, who everyone asks where things are. Being the default is a quiet, constant load.
+deep:
+Default status often starts for practical reasons: one person was home more, or took parental leave, or is simply the one who remembers. Over time it becomes self-reinforcing: the default knows more, so they get asked more, so they know even more.
+
+Being the default can feel like being permanently on call. It also affects careers and rest, because interruptions land on one person.
+
+Changing it takes deliberate steps: giving the other person whole areas to own, updating contact lists, and sometimes letting things wobble while the new owner learns. The program’s ownership worksheet is designed partly for exactly this.
+research:
+“Default parent” is a popular phrase rather than a research term, but it describes patterns that research on cognitive labour, the mental load and time use has documented, such as one partner doing more planning, monitoring and interruption-absorbing. Studies of work interruptions show that frequent switching carries a cost to focus and energy.
+links:
+/workpapers/wp-03-raci-treaty.html | One owner per job (WP-03)
+/relationships.html#co-parents | How it fits: co-parents
+talk:
+- Who is the default in our household for which areas?
+- Which area could move to the other person as a whole?
+- What would we need to accept while the new owner learns?
+
+@@ anticipation-and-noticing | Noticing: the first step of every job
+pillars: I, II
+aka: noticing what needs doing, seeing mess, different thresholds, not noticing
+nut: People differ in when they notice something needs doing: some see crumbs immediately; others genuinely don’t register them until much later. Different noticing thresholds cause a lot of household friction.
+deep:
+If one person notices mess at a lower threshold, they will almost always be the one who deals with it first. Over time they do more, feel resentful, and may assume the other person is lazy. The other person, genuinely not seeing the mess yet, feels nagged about something that doesn’t seem urgent.
+
+Thresholds can be influenced by upbringing, personality, neurotype and what each person has been responsible for in the past. They can shift with practice and ownership: people tend to notice what they are responsible for.
+
+This is why assigning ownership often works better than asking someone to “notice more.” An owner has a reason to look. Schedules, lists and visible cues also help by taking noticing out of anyone’s head.
+research:
+Differences in standards and noticing are discussed in sociological research on housework, including Daminger’s anticipation stage of cognitive labour. Research on attention shows that people notice what is relevant to their goals, which supports the practical value of ownership. The idea of a personal “mess threshold” is a helpful description rather than a formal measure.
+links:
+/workpapers/wp-03-raci-treaty.html | One owner per job (WP-03)
+/workpapers/wp-04-deficit-audit.html | What keeps coming back? (WP-04)
+talk:
+- Who notices mess first in our home? Does it depend on the room?
+- What things does each of us notice that the other doesn’t?
+- Which visible cues or schedules could take noticing out of our heads?
+
+@@ appreciation-and-recognition | Recognition and appreciation
+pillars: V, I
+aka: feeling appreciated, recognition, being thanked, unappreciated, acknowledgement
+nut: Feeling that your contributions are seen and valued is one of the strongest predictors of feeling that things are fair. Recognition costs little and changes a lot.
+deep:
+People often put up with a lot of work when they feel appreciated for it. The same load, unacknowledged, feels much heavier. Recognition can be a thank-you, a specific comment (“I noticed you sorted the car insurance, thank you”), or simply the other person knowing what was done.
+
+Specific appreciation tends to land better than general praise. It shows the effort was actually seen.
+
+Appreciation isn’t a substitute for fair sharing, though. Thanking someone for carrying everything while leaving the arrangement unchanged can start to feel hollow. The best results come from both: seeing the work and sharing it.
+research:
+Research by Amie Gordon and colleagues (2012) found that people who felt more appreciated by their partners were more appreciative in return and more committed to their relationships. Workplace research also links recognition with engagement. Studies of household labour suggest that appreciation is one of the factors shaping whether an uneven split feels fair.
+links:
+/turning-toward.html#thanks | Turning Toward: saying thanks
+/lemonade-stand.html | The Lemonade Stand
+talk:
+- When did you last feel really appreciated for something unseen?
+- What is one specific thing you could thank the other person for this week?
+- Is there anywhere appreciation has started to feel like a substitute for help?

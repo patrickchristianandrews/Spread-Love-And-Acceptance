@@ -1,0 +1,321 @@
+#slug: connection
+#title: Kindness and connection
+#pillars: V, IV
+#blurb: Gratitude, good news, self-compassion, loneliness, friendship, kindness and the small rituals that keep people close.
+#pillarnote: Kindness and connection belong mostly to Pillar V, Notice the quiet incentives, with Pillar IV, Tune how you send and receive. In you, it means noticing what is good, treating yourself kindly and knowing what connection you need. Between you, it is the small, steady thanks, interest and rituals that keep things from quietly sliding back, and the way you respond to each other’s good news and hard days.
+#intro: Much of what keeps people close is small and ordinary: a thank-you, real interest in someone’s good news, time together that isn’t about logistics. Positive psychology and relationship science have studied these small things carefully. Some findings are robust; some popular claims are larger than the evidence. These entries try to keep both in view.
+
+@@ gratitude | Gratitude
+pillars: V
+aka: gratitude, being thankful, gratitude journal, counting blessings, thankfulness
+nut: Gratitude is noticing and appreciating the good things in life and the people behind them. Studies of gratitude practices, like writing down things you’re thankful for, show modest benefits for mood on average.
+deep:
+Robert Emmons and Michael McCullough asked people to write weekly about things they were grateful for, hassles, or neutral events. The gratitude group reported somewhat more positive feelings and optimism. This helped launch a large field of research.
+
+Gratitude seems to work partly by shifting attention: it counters the negativity bias by deliberately noticing what is going well. It also connects people, because gratitude is often about someone else’s kindness.
+
+Gratitude practice isn’t a cure-all. Some people find forced gratitude feels hollow, especially during hard times, and gratitude shouldn’t be used to dismiss real problems (“you should be grateful you have a partner at all”). It works best as an invitation to notice, not a duty.
+research:
+Emmons and McCullough published their studies in 2003. Meta-analyses since then, for example by Lukas Dickens in 2017 and by David Davis and colleagues in 2016, have found small positive effects of gratitude interventions compared with neutral activities, and smaller or inconsistent effects compared with other positive activities.
+links:
+/turning-toward.html#thanks | Turning Toward: saying thanks
+/lemonade-stand.html | The Lemonade Stand
+talk:
+- What is something small you’re grateful for today?
+- Does gratitude practice feel natural or forced for you?
+- How can we notice the good without ignoring what’s hard?
+
+@@ find-remind-bind | Gratitude in relationships: find, remind, bind
+pillars: V, I
+aka: find remind bind, Algoe, gratitude in couples, thanking your partner, appreciation
+nut: Sara Algoe’s find-remind-bind theory suggests gratitude helps people find good relationship partners, reminds them of the value of existing relationships, and binds them closer together.
+deep:
+When someone does something kind and you feel grateful, the feeling points you toward that person: it signals they are responsive to your needs. Expressing it tells them their effort was seen, which encourages more.
+
+Algoe and colleagues found that in couples, everyday moments of gratitude were associated with feeling more connected and satisfied the next day, for both the thanker and the thanked. She described these moments as a kind of “booster shot” for relationships.
+
+This supports the program’s emphasis on seeing unseen work. Thanking someone specifically (“thank you for sorting out the car insurance; I know that was tedious”) combines recognition and gratitude, and helps both people.
+research:
+Algoe set out find-remind-bind in 2012. Algoe, Shelly Gable and Natalya Maisel (2010) found daily gratitude in couples predicted increases in relationship connection. Amie Gordon and colleagues (2012) linked feeling appreciated with greater commitment. The research is mostly correlational and diary-based, with some experimental work.
+links:
+/turning-toward.html#thanks | Turning Toward: saying thanks
+/turning-toward.html#fondness | Turning Toward: fondness
+talk:
+- When did you last feel really thanked by the other person?
+- What specific thing could each of us thank the other for this week?
+- Does thanking feel easy or awkward for you?
+
+@@ capitalization | Responding to good news
+pillars: IV
+aka: capitalization, capitalisation, active constructive responding, sharing good news, celebrating together
+nut: How people respond when you share good news matters as much as how they respond to bad news. Enthusiastic, engaged responses (active-constructive) are linked with closer relationships.
+deep:
+Shelly Gable described four ways of responding to good news. Active-constructive: enthusiastic and engaged (“That’s brilliant! Tell me how it happened!”). Passive-constructive: quiet support (“That’s nice”). Active-destructive: pointing out downsides (“That’ll mean more work”). Passive-destructive: ignoring or changing the subject (“What’s for dinner?”).
+
+Only active-constructive responses were consistently associated with better relationships. The other three, even the mildly supportive one, left people feeling less understood.
+
+This is easy to practise. When someone shares good news, put down what you’re doing, ask questions, and let them relive it a little. It costs little and means a lot.
+research:
+Gable, Harry Reis, Emily Impett and Evan Asher published the key study in 2004, and Gable, Gian Gonzaga and Amy Strachman followed up in 2006. The finding has been replicated in several studies, mostly correlational, and is widely used in positive psychology programmes.
+links:
+/turning-toward.html#good-news | Turning Toward: sharing good news
+talk:
+- How do each of us usually respond when the other shares good news?
+- What response would feel best to you?
+- Is there good news one of us shared recently that deserved more celebration?
+
+@@ self-compassion | Self-compassion
+pillars: III, V
+aka: self compassion, being kind to yourself, self criticism, inner critic, Neff
+nut: Self-compassion means treating yourself with the kindness you would offer a friend when you’re struggling or make a mistake. Kristin Neff describes three parts: self-kindness, common humanity and mindfulness.
+deep:
+Self-kindness means being warm rather than harshly critical toward yourself. Common humanity means recognising that everyone struggles and makes mistakes; you are not uniquely flawed. Mindfulness here means noticing painful feelings without ignoring or exaggerating them.
+
+A common worry is that self-compassion will make people lazy or complacent. Research suggests the opposite: people who respond to mistakes with self-compassion are often more motivated to improve, because they aren’t paralysed by shame.
+
+In relationships, self-compassion may help people own mistakes without becoming defensive, since admitting a mistake doesn’t feel like a verdict on their worth. It also helps people stay kind to others when stressed.
+research:
+Neff published her definition and scale in 2003. Juliana Breines and Serena Chen (2012) found that self-compassion increased motivation to improve after a failure. Neff and Christopher Germer developed Mindful Self-Compassion training, with trials showing benefits. Some researchers, for example Peter Muris, have questioned whether the scale mixes self-compassion with low self-criticism, and debate continues about its structure.
+links:
+/relationships.html#yourself | How it fits: yourself
+/wp-11.html | The Calm-Down Kit: it is for you (WP-11)
+talk:
+- How do you talk to yourself when you make a mistake?
+- What would you say to a friend in the same situation?
+- How might being kinder to yourself change how you handle conflict?
+
+@@ loneliness | Loneliness
+pillars: IV, III
+aka: loneliness, lonely, isolation, social isolation, feeling alone, Cacioppo
+nut: Loneliness is the painful feeling that your relationships don’t meet your needs for connection. It is different from being alone, and it is possible to feel lonely in a crowd or in a relationship.
+deep:
+John Cacioppo described loneliness as a signal, like hunger, that prompts us to seek connection. But when it lasts, it can make people more alert to social threat, more likely to interpret others negatively, and more likely to withdraw, which can deepen the loneliness.
+
+Loneliness within a relationship is common and painful. Two people can share a home, divide chores and still feel disconnected if conversations are all logistics. Small, regular moments of real interest and warmth can make a significant difference.
+
+Research on reducing loneliness suggests that changing how people interpret social situations (for example, noticing when they expect rejection) can be as helpful as increasing contact.
+research:
+Cacioppo and William Patrick published *Loneliness* in 2008. The UCLA Loneliness Scale, developed by Daniel Russell and colleagues in 1978 and revised later, is widely used. Julianne Holt-Lunstad and colleagues’ meta-analyses (2010 and 2015) linked social connection with longevity. In 2023 the US Surgeon General issued an advisory on loneliness and isolation. A 2011 meta-analysis by Christopher Masi and colleagues found that interventions addressing unhelpful social thinking had larger effects than other approaches.
+links:
+/turning-toward.html | Turning Toward
+/relationships.html#friends | How it fits: friends
+talk:
+- When have you felt lonely even when you weren’t alone?
+- What small things make you feel connected on a busy day?
+- Is there anyone in our lives we’d like to reconnect with?
+
+@@ friendship | Making and keeping friends
+pillars: IV, V
+aka: friendship, friends, making friends as an adult, keeping in touch, how long to make a friend
+nut: Friendships are built through time together and kept through regular contact. One estimate suggests it takes many dozens of hours of shared time to move from acquaintance to friend, and much more to become close.
+deep:
+Jeffrey Hall studied adults who had recently moved and students starting university. He estimated that roughly 50 hours of time together were associated with moving from acquaintance to casual friend, around 90 hours to friend, and over 200 hours to close friend. The kind of time mattered too: hanging out and talking built friendships more than working together.
+
+Adult friendships often fade not because of conflict but because of time: jobs, children and moves crowd them out. Maintaining them takes some intention: regular calls, shared rituals, turning up.
+
+Friends also matter for couples. Having other sources of support means a partner isn’t the only person meeting every social need, which can relieve pressure on the relationship.
+research:
+Hall published his study in 2019 in the *Journal of Social and Personal Relationships*. The hour estimates come from specific samples and should be seen as rough guides. Robin Dunbar’s research describes layers of friendship, with fewer people in closer layers. Research on friendship maintenance behaviours (such as by Debra Oswald) finds that positivity, support, openness and interaction all help keep friendships going.
+links:
+/relationships.html#friends | How it fits: friends
+talk:
+- Which friendships would each of us like to invest more time in?
+- How could we support each other in keeping friendships going?
+- What kind of time together builds friendship best for you?
+
+@@ dunbar-number | Dunbar’s number and circles of friendship
+pillars: V
+aka: Dunbar's number, 150 friends, social circles, circles of intimacy
+nut: Robin Dunbar proposed that people can maintain roughly 150 meaningful relationships, arranged in layers of increasing closeness. The idea is popular; the exact number is debated.
+deep:
+Dunbar linked brain size in primates to group size, and predicted a human group size of around 150. He later described layers: around five intimate relationships, fifteen close friends, fifty good friends and 150 meaningful contacts, with each layer requiring less time investment.
+
+The practical insight is that time and emotional energy are limited, so closeness requires focus. When a new baby, a new job or caring responsibilities arrive, the inner circle often shrinks.
+
+The number itself has been challenged. A 2021 reanalysis by Patrik Lindenfors and colleagues found the statistical estimate had very wide uncertainty, making a precise number hard to defend. The idea of layers with limited capacity is more robust than the specific figure.
+research:
+Dunbar published the original proposal in 1992 and has elaborated it since. Studies of phone records and social networks have found layered structures roughly consistent with his model. The Lindenfors reanalysis questioned the precision of 150. It is best treated as a rough and interesting heuristic.
+links:
+/relationships.html | How It Fits Your Relationships
+talk:
+- Who is in each of our inner circles right now?
+- Has our circle changed with life stages?
+- Who would we like to bring closer?
+
+@@ weak-ties | Weak ties and small everyday connections
+pillars: IV
+aka: weak ties, acquaintances, small talk, chatting to strangers, Granovetter
+nut: Casual acquaintances (weak ties) matter more than people think. They bring new information and opportunities, and small everyday interactions with them are linked to better mood.
+deep:
+Mark Granovetter found that people often got jobs through acquaintances rather than close friends, because acquaintances move in different circles and hear about different opportunities. He called this “the strength of weak ties.”
+
+Gillian Sandstrom and Elizabeth Dunn found that people felt happier on days they had more interactions with weak ties, like the barista, a neighbour or a classmate. Other research found that people underestimate how much they will enjoy talking to strangers.
+
+For people who spend a lot of time at home or feel stretched thin, these small interactions can be an easy source of connection. They also take some pressure off a partner as the only source of social contact.
+research:
+Granovetter published “The Strength of Weak Ties” in 1973. Sandstrom and Dunn published in 2014. Nicholas Epley and Juliana Schroeder (2014) found commuters enjoyed talking to strangers more than they predicted. A large 2022 LinkedIn experiment (Karthik Rajkumar and colleagues) supported the value of moderately weak ties for job mobility.
+links:
+/relationships.html#friends | How it fits: friends
+talk:
+- Who are the weak ties in our daily lives?
+- Do you enjoy small talk, or find it draining?
+- Could we build more small connections into our week?
+
+@@ kindness | Acts of kindness
+pillars: V
+aka: kindness, acts of kindness, random acts of kindness, helping others, being kind
+nut: Doing kind things for others is linked with small improvements in the giver’s wellbeing. The effect is real but modest, and it depends on the kindness being freely chosen.
+deep:
+Sonja Lyubomirsky and colleagues found that people asked to do several acts of kindness in a day reported somewhat greater wellbeing than a control group. Later studies have found similar small effects.
+
+Kindness seems to work best when it is chosen, varied and connected to real people. Kindness done under pressure or out of obligation seems to have less benefit.
+
+In close relationships, small kindnesses (making someone a cup of tea, taking over a chore when they are tired) are also bids for connection, and part of what keeps goodwill in the account.
+research:
+Oliver Scott Curry and colleagues’ 2018 meta-analysis found a small-to-medium effect of kindness on the giver’s wellbeing, while noting concerns about study quality. Lyubomirsky, Kennon Sheldon and David Schkade (2005) proposed that about 40 percent of happiness is under intentional control; Nicholas Brown and Julia Rohrer (2020) showed that figure was not justified by the data, so it should not be quoted as fact.
+links:
+/turning-toward.html | Turning Toward
+/lemonade-stand.html | The Lemonade Stand
+talk:
+- What small kindness from the other person means the most to you?
+- When does kindness feel like a choice, and when like an obligation?
+- Could we each do one unexpected kind thing this week?
+
+@@ prosocial-spending | Spending on others
+pillars: V
+aka: prosocial spending, giving, generosity, money and happiness, spending on others
+nut: Studies suggest people tend to feel a little happier when they spend money on others rather than on themselves. The effect is modest and depends on context, but it appears across many countries.
+deep:
+Elizabeth Dunn, Lara Aknin and Michael Norton gave people small amounts of money to spend either on themselves or on others. Those who spent on others reported greater happiness later that day.
+
+Cross-cultural research by Aknin and colleagues found similar patterns in many countries, including poorer ones. The effect seems stronger when the giving is freely chosen, when it connects people, and when givers can see its impact.
+
+For couples, this relates to small gestures: treating each other, or giving together to others. It also offers a gentler lens on money conversations: spending can be a source of connection, not just a source of conflict.
+research:
+Dunn, Aknin and Norton published in *Science* in 2008. Aknin and colleagues published cross-cultural evidence in 2013. Some replications have found smaller effects than the original, so the finding is best described as a modest but fairly consistent pattern.
+links:
+/frequency-framework.html | The Frequency Framework
+talk:
+- When has giving something made you happier than getting something?
+- Are there ways we could be generous together?
+- How does money feel different when spent on others?
+
+@@ savoring | Savouring good moments
+pillars: V, III
+aka: savoring, savouring, enjoying the moment, appreciating good times, Bryant
+nut: Savouring means deliberately noticing and extending good experiences, looking forward to them, enjoying them fully in the moment, and remembering them afterwards.
+deep:
+Fred Bryant and Joseph Veroff described savouring as the positive counterpart to coping. Where coping deals with bad events, savouring amplifies good ones.
+
+Savouring techniques include sharing good moments with others, taking a mental snapshot, slowing down, and reminiscing together. Couples who reminisce about good times often report feeling closer.
+
+Savouring is a natural antidote to negativity bias and busy routines. It doesn’t require new experiences, just more attention to the good ones that are already happening.
+research:
+Bryant and Veroff’s *Savoring* was published in 2007. Studies link savouring tendencies with greater wellbeing, and some interventions show small benefits. Research on shared reminiscence in couples, for example by Bryant and colleagues, suggests it can increase positive feelings.
+links:
+/turning-toward.html#good-news | Turning Toward: good news
+/pause-and-play.html | Pause and play
+talk:
+- What good moment from this week could we savour together?
+- Is there a happy memory we could reminisce about?
+- How could we slow down enough to enjoy the good moments?
+
+@@ awe | Awe
+pillars: III
+aka: awe, wonder, nature, feeling small, vastness, Keltner
+nut: Awe is the feeling of being in the presence of something vast that challenges your understanding: a starry sky, a piece of music, a great act of kindness. Research links awe with feeling more connected and less self-focused.
+deep:
+Dacher Keltner and Jonathan Haidt defined awe as involving vastness and a need to adjust your understanding. It can come from nature, art, ideas or people.
+
+One effect of awe is what researchers call the “small self”: feeling less focused on personal concerns and more part of something larger. Some studies suggest this makes people more generous and less caught up in day-to-day worries.
+
+Awe doesn’t require grand trips. Looking at the sky, listening to music, or watching a child learn can all evoke it. Sharing awe with someone may deepen connection.
+research:
+Keltner and Haidt published their conceptual paper in 2003. Paul Piff and colleagues (2015) found awe was associated with more generous behaviour. Keltner’s *Awe* (2023) summarises the research. The field is growing, with many studies using brief lab inductions, so real-world effects are less well known.
+links:
+/night-garden.html | The Night Garden
+/soundscapes.html | Soundscapes
+talk:
+- When did you last feel awe?
+- What experiences could we share that might evoke it?
+- Does feeling small in a big world ease worries for you?
+
+@@ rituals-of-connection | Rituals of connection
+pillars: II, V
+aka: rituals, routines, family rituals, traditions, goodbye and hello, rituals of connection
+nut: Rituals of connection are small, repeated moments that signal closeness: a goodbye kiss, a Sunday walk, a nightly check-in. Research on families suggests routines and rituals are linked with stability and wellbeing.
+deep:
+Barbara Fiese distinguished routines (practical, repeated tasks) from rituals (symbolic, emotionally meaningful practices). A dinner routine gets food on the table; a dinner ritual, where everyone shares one good thing, builds connection.
+
+Gottman describes “rituals of connection” in couples: how you greet each other, how you say goodbye, how you mark special days. These small predictable moments build a sense of shared life.
+
+Rituals are especially valuable in busy seasons, because they don’t depend on having free time. A ninety-second check-in or a goodnight message can keep connection going when other things are crowded out.
+research:
+Fiese and colleagues published a review of family routines and rituals in 2002, finding associations with family functioning and children’s wellbeing. Gottman’s rituals of connection come from clinical observation. Research on rituals more broadly, for example by Michael Norton and Francesca Gino, suggests rituals can reduce anxiety and increase enjoyment.
+links:
+/turning-toward.html#rituals | Turning Toward: rituals
+/workpapers/wp-13-pll-protocol.html | The 90-second daily check-in (WP-13)
+talk:
+- What rituals do we already have, even small ones?
+- How do we greet each other at the end of the day?
+- What new ritual might we try?
+
+@@ social-support | Social support and wellbeing
+pillars: III, IV
+aka: social support, support network, having people, relationships and health, connection matters
+nut: People with strong social connections tend to do better on many measures of wellbeing. Research suggests that the quality of relationships matters as much as their number.
+deep:
+A large body of research links social connection with many measures of wellbeing, and the association is one of the most consistent in the social sciences. Feeling that there are people you can turn to seems to change how demanding life’s problems feel.
+
+Support comes in different forms: emotional, practical, informational. It also comes from different sources: partners, family, friends, communities. Relying on just one source can put strain on that relationship.
+
+The quality of close relationships matters too. Research suggests that tense or conflict-filled relationships may add stress rather than relieve it, which is one reason working on how we treat each other is time well spent.
+research:
+Holt-Lunstad, Timothy Smith and Bradley Layton published their meta-analysis in 2010, covering 148 studies. The research is correlational, so it can’t fully separate cause and effect, but the association is robust. The quality of relationships has been studied in work by Holt-Lunstad and others on ambivalent relationships.
+links:
+/relationships.html | How It Fits Your Relationships
+/turning-toward.html | Turning Toward
+talk:
+- Who do each of us go to for different kinds of support?
+- Is either of us relying on the other for almost everything?
+- How can we strengthen our wider network?
+
+@@ compassion-fatigue | Empathic distress and compassion
+pillars: III, I
+aka: compassion fatigue, empathy fatigue, empathic distress, caring too much, burnout from caring
+nut: Constantly feeling others’ pain can lead to exhaustion, sometimes called compassion fatigue. Research suggests that compassion, warm concern with some emotional steadiness, may be more sustainable than sharing every feeling.
+deep:
+Tania Singer and Olga Klimecki distinguished empathic distress (feeling the other person’s pain as your own, which can be overwhelming) from compassion (caring about their suffering and wanting to help, from a steadier place). In brain-imaging studies, the two engaged different networks.
+
+People in caring roles, including parents, partners of people who are struggling, and healthcare workers, are vulnerable to empathic distress. It can lead to withdrawal, which is painful for everyone.
+
+Compassion training, which focuses on warmth and goodwill rather than on sharing distress, appeared to increase positive feelings and helping in some studies. This suggests it is possible to care deeply without being overwhelmed.
+research:
+Klimecki, Singer and colleagues published a series of studies from around 2013 onward; Singer and Klimecki’s 2014 review summarises them. The term “compassion fatigue” came from healthcare research, including Charles Figley’s work in the 1990s. The research on compassion training is promising but based on relatively small samples.
+links:
+/relationships.html#caregivers | How it fits: caregivers
+/workpapers/wp-02-battery-stress-meter.html | How full is your battery? (WP-02)
+talk:
+- When has caring about someone left you drained?
+- What helps you care without being overwhelmed?
+- How can we support each other when one of us is struggling?
+
+@@ play | Play and fun for adults
+pillars: III, V
+aka: play, fun, playfulness, having fun together, games, leisure
+nut: Play isn’t just for children. Adults who make time for playful activity, alone or together, tend to report more positive emotions, and couples who have fun together often feel closer.
+deep:
+Play is activity done for its own sake: games, jokes, silliness, creative projects. It often involves novelty and shared laughter, both of which support connection.
+
+Many adults find that play gets squeezed out by responsibilities. Yet playful moments can be small: a silly song while washing up, a quick game, a shared joke. They don’t need to be planned events.
+
+Play also has a place in conflict: playful teasing (when both enjoy it) and shared laughter can be powerful repair attempts. Research on playfulness in adults links it with relationship satisfaction.
+research:
+René Proyer and colleagues have developed measures of adult playfulness since the 2010s and found associations with wellbeing and relationship satisfaction. Research on shared laughter (Kurtz and Algoe, 2015) supports its role in connection. The field of adult play research is smaller than research on children’s play.
+links:
+/pause-and-play.html | Pause and play
+/daily-ledger-crossword.html | The Daily Ledger crossword
+talk:
+- What did you love to play as a child?
+- What small moments of play could we add to our week?
+- Do we laugh together often enough?

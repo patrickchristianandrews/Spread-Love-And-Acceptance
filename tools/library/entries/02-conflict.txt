@@ -1,0 +1,579 @@
+#slug: conflict
+#title: Conflict and how to resolve it
+#pillars: II, IV
+#blurb: Negotiation, de-escalation, repair, apology, mediation and fair process, from research and practice.
+#pillarnote: Conflict resolution sits across Pillar II, Fix the setup, not the person, and Pillar IV, Tune how you send and receive. In you, it means knowing your own interests, your usual conflict style and your early signs of heat. Between you, it means turning a fight about who is right into a shared problem with a fair process, clear agreements and a way back. Timeouts and flooding belong to Pillar III, Read your state first, and fairness rules to Pillar I, See the whole load.
+#intro: Conflict isn’t a sign that something is broken. It is what happens when two people with real needs share a life, a house or a job. The fields of negotiation, mediation and couples research have learned a lot about how disagreements go well or badly. These entries gather the most useful ideas, from the first sentence of a hard conversation to the repair afterwards, and end with some common flashpoints: chores, money, time, family and work.
+
+@@ conflict-is-normal | Why conflict is normal, and what makes it harmful
+pillars: II, IV
+aka: disagreement, arguing, is fighting normal, healthy conflict
+nut: Disagreement is a normal part of any close relationship. What tends to cause harm is not conflict itself but how it is handled: contempt, escalation, and conflicts that never get repaired or resolved.
+deep:
+It is easy to assume that happy couples, families or teams don’t argue. Research doesn’t support that. Many stable relationships have plenty of disagreement. What they tend to have alongside it is warmth, respect and a way back afterwards.
+
+Conflict can even be useful. It brings hidden needs into the open, forces unfair arrangements to be renegotiated, and can leave people understanding each other better. Avoiding every disagreement can mean problems pile up unseen, which is one reason the program encourages writing things down early rather than waiting for an explosion.
+
+What tends to make conflict harmful is a set of recognisable patterns: attacks on character rather than on problems, contempt, escalating tit-for-tat, stonewalling, and fights that are repeated but never resolved. The good news is that each of these has a learnable alternative.
+research:
+Couples researchers including John Gottman, Thomas Bradbury and Frank Fincham have long reported that the way conflict is handled predicts relationship outcomes better than how often it happens. Organisational researchers have made a similar distinction between task conflict (about the work) and relationship conflict (personal friction); a 2003 meta-analysis by Carsten De Dreu and Laurie Weingart found both were associated with lower team performance on average, which later work has refined, suggesting task conflict can help in some conditions, especially where trust is high.
+links:
+/book/chapter-1.html | Why we get out of tune (Chapter I)
+/check-ins.html | Check-ins
+talk:
+- How was conflict handled in the homes we grew up in?
+- What does a disagreement that went well look like for us?
+- Is there anything we avoid talking about because it feels too risky?
+
+@@ interests-vs-positions | Interests versus positions
+pillars: II, IV
+aka: principled negotiation, Getting to Yes, Fisher and Ury, needs behind positions
+nut: A position is what someone says they want; an interest is why they want it. Negotiators Roger Fisher and William Ury argued that looking beneath positions to interests opens up solutions that satisfy both people.
+deep:
+“I want the window open” and “I want it closed” are positions. Behind them might be interests: fresh air for one, no draught for the other. Once the interests are clear, options appear that neither position allowed, like opening a window in the next room.
+
+At home this matters a lot. “You need to do the dishes straight after dinner” may be about not waking up to a messy kitchen, or about feeling that one person always ends up doing it. “I’ll do them later” may be about needing to rest after a long day. Arguing about timing rarely helps; talking about the underlying needs often does.
+
+Useful questions for finding interests are “What would that give you?”, “What worries you about the other option?” and “What matters most to you about this?” Asking with real curiosity, not as a trap, is the key.
+research:
+Fisher and Ury’s *Getting to Yes* (1981; later editions with Bruce Patton) came out of the Harvard Negotiation Project and became one of the most influential books on negotiation. Its approach is widely taught and fits research on integrative negotiation, which shows that parties often leave value on the table when they fixate on positions. Critics note that it can underplay power differences and that some conflicts really are about fixed resources, so not every problem has a win–win answer.
+links:
+/check-ins.html#leverage | Check-ins: finding leverage
+/signal-translator.html | The Signal Translator
+/workpapers/wp-03-raci-treaty.html | One owner per job (WP-03)
+talk:
+- On a recent disagreement, what was each person’s position, and what might the interests have been?
+- Which question helps you most to explain what you really need?
+- Is there a recurring argument where we’ve only ever traded positions?
+
+@@ principled-negotiation | The four principles of principled negotiation
+pillars: II, I
+aka: separate the people from the problem, invent options, objective criteria, mutual gain
+nut: Getting to Yes sets out four principles: separate the people from the problem, focus on interests not positions, invent options for mutual gain, and use fair, objective criteria.
+deep:
+Separating the people from the problem means treating the relationship and the issue as two different things. You can be warm to the person and firm about the issue. At home, this sounds like “I love you, and I still need us to sort out the bins.”
+
+Inventing options means brainstorming before judging. Many disagreements are stuck because the first two ideas on the table were the only ones considered. Listing five or six possibilities, including silly ones, loosens things up.
+
+Objective criteria are standards both people can accept, independent of who pushes hardest: time spent, the cost, what a fair outsider would say, what you agreed last time. In the program, writing down who actually did what plays this role: it gives both people shared facts to reason from.
+
+Together, the principles aim for agreements that are wise (they meet real interests), efficient, and that improve or at least don’t damage the relationship.
+research:
+These principles come from Fisher, Ury and Patton’s *Getting to Yes* and the Harvard Negotiation Project’s work since the late 1970s. They are best described as a practitioner framework informed by research rather than a single tested theory. Studies of integrative bargaining (for example by Dean Pruitt and colleagues) support the value of exploring interests and generating options, and research on procedural justice supports the value of agreed standards.
+links:
+/workpapers/wp-01.html | Who did what (WP-01)
+/lemonade-stand.html | The Lemonade Stand
+/book/chapter-4.html | Two kinds of fair (Chapter IV)
+talk:
+- What is one issue where it would help to separate how we feel about each other from the problem itself?
+- Could we list six options for a current sticking point before picking one?
+- What would count as a fair standard for dividing a job neither of us likes?
+
+@@ batna | BATNA: knowing your alternatives
+pillars: II, III
+aka: best alternative to a negotiated agreement, walk away option, fallback
+nut: BATNA stands for “best alternative to a negotiated agreement”: what you will do if you can’t agree. Knowing it helps people negotiate calmly rather than out of fear.
+deep:
+In business, a BATNA might be another supplier. In everyday life, it is the fallback: if we can’t agree who cooks on weekdays, the fallback might be simple meals, or taking turns by default. Thinking about the fallback in advance reduces panic and makes it easier to be generous.
+
+At home it is important to use the idea gently. The point isn’t to threaten (“fine, I’ll just stop cooking”). It is to notice that most household disagreements have reasonable fallbacks, which lowers the stakes. A sensible shared fallback can even be agreed in advance, like a default rota that applies whenever a week gets chaotic.
+
+It can also help to think about the other person’s alternatives. If their fallback is really poor (for example, they have no time at all on weekdays), that is information about what a fair deal needs to include.
+research:
+The term was introduced in *Getting to Yes* (1981). Negotiation research generally finds that parties with better alternatives achieve better outcomes and that thinking about alternatives helps people avoid agreeing to deals worse than no deal. In close relationships, researchers would stress that framing matters: fallbacks framed as threats tend to damage trust.
+links:
+/workpapers/wp-03-raci-treaty.html | One owner per job: changing it on purpose (WP-03)
+/wp-11.html | The Calm-Down Kit: deciding while calm (WP-11)
+talk:
+- What is our default when a week gets too busy for the usual plan?
+- Is there a fallback we could agree on now, while calm?
+- How can we talk about alternatives without it sounding like a threat?
+
+@@ thomas-kilmann | The five conflict modes (Thomas–Kilmann)
+pillars: IV, II
+aka: conflict styles, competing, collaborating, compromising, avoiding, accommodating, dual concern
+nut: Kenneth Thomas and Ralph Kilmann described five ways people handle conflict, based on how much they push for their own concerns and how much they attend to the other person’s: competing, collaborating, compromising, avoiding and accommodating.
+deep:
+Imagine two dials: assertiveness (how much I pursue what I need) and cooperativeness (how much I help you get what you need). High on both is collaborating: working to meet both sets of needs. High assertiveness with low cooperation is competing. Low assertiveness with high cooperation is accommodating. Low on both is avoiding. Somewhere in the middle is compromising: each gives a little.
+
+None of these is always right. Avoiding can be wise for trivial things or when someone is flooded. Accommodating is kind when the issue matters much more to the other person. Competing makes sense in emergencies. Collaborating takes time, so it suits important, recurring issues, like how a household shares its work.
+
+Trouble tends to come when someone uses the same mode for everything, or when two people’s habits clash: a habitual accommodator with a habitual competitor, for example, can drift into a lopsided arrangement neither intended.
+research:
+Thomas and Kilmann published their instrument in 1974, building on Robert Blake and Jane Mouton’s managerial grid from the 1960s. Dean Pruitt and Jeffrey Rubin developed a closely related dual concern model. The five modes are widely used in training. The instrument measures preferences at a point in time rather than fixed traits, and the evidence for it is mostly about describing styles rather than predicting outcomes.
+links:
+/check-ins-in-depth.html#both | Check-ins: both sides at once
+/frequency-framework.html | The Frequency Framework
+talk:
+- Which mode does each of us fall into most often at home? At work?
+- Which of our recurring topics deserve the time that collaborating takes?
+- Is anyone accommodating so often that it’s becoming a pattern?
+
+@@ integrative-distributive | Win–win and fixed-pie thinking
+pillars: II, V
+aka: integrative negotiation, distributive negotiation, fixed pie bias, logrolling, win-win
+nut: Some disagreements are about dividing a fixed amount (distributive). Many more have room to create value for both (integrative). People often wrongly assume the pie is fixed, which is called the fixed-pie bias.
+deep:
+If there is one slice of cake left, it is a fixed pie. But most household disagreements aren’t like that, because people value different things differently. One person might hate cleaning the bathroom but not mind ironing; the other the reverse. Trading on differences like this, sometimes called logrolling, leaves both better off.
+
+The fixed-pie bias makes people assume that whatever is good for the other person must be bad for them. It shows up when someone resists a proposal just because the other person suggested it, a pattern researchers call reactive devaluation.
+
+A useful habit is to ask “What do you care about most, and what do you care about least?” Differences in priorities are raw material for good deals.
+research:
+Richard Walton and Robert McKersie distinguished distributive and integrative bargaining in 1965. Max Bazerman, Leigh Thompson and others documented the fixed-pie perception in negotiation experiments in the 1980s and 1990s. Lee Ross and colleagues described reactive devaluation in the 1990s. These are well-replicated findings in negotiation research, mostly from lab and classroom studies.
+links:
+/workpapers/wp-03-raci-treaty.html | One owner per job (WP-03)
+/lemonade-stand.html | The Lemonade Stand
+talk:
+- Which chores does each of us mind most, and which least?
+- Have we ever dismissed a good idea just because of who suggested it?
+- Where have we assumed a fixed pie that might not be fixed?
+
+@@ soft-startup | Soft startup: how the first minutes shape a conversation
+pillars: III, IV
+aka: harsh startup, gentle startup, starting a hard conversation, how to bring something up
+nut: How a difficult conversation begins strongly predicts how it ends. A harsh startup (accusation, sarcasm, a verdict) tends to lead somewhere bad; a soft startup (describe, feel, ask) tends to lead somewhere better.
+deep:
+A harsh startup might sound like “You’ve left the kitchen a mess again; you just don’t care.” A soft startup might be “I’m feeling frazzled about the kitchen tonight. Could we sort it out together?” The facts are the same; the first starts a fight and the second starts a conversation.
+
+Soft startups often share a few features: start with “I” and a feeling, describe the situation rather than the person, state a positive need (what you want, not only what you don’t), and be polite. Complaints are fine; criticism is the problem.
+
+Timing is part of it too. Bringing up a sore topic when someone has just walked in the door, is hungry or is already stressed makes a harsh landing more likely, however carefully the words are chosen.
+research:
+Sybil Carrère and John Gottman’s 1999 study found that how newlywed couples began a conflict discussion (the first three minutes) predicted later divorce in their sample. It is a striking finding from one research group’s observational data. The broader principle that openings set the tone is consistent with research on negative reciprocity: negative behaviour tends to be returned in kind.
+links:
+/workpapers/wp-09-tone-filter.html | Say it so it lands (WP-09)
+/quick-checks.html#today | Today’s Weather: is now a good time?
+/workpapers/wp-02-battery-stress-meter.html | How full is your battery? (WP-02)
+talk:
+- What does a harsh startup sound like from each of us, honestly?
+- What are the worst times of day to raise a hard topic in our home?
+- Could we rewrite a recent complaint as a soft startup?
+
+@@ escalation | How arguments escalate, and how to step off the escalator
+pillars: III, IV
+aka: escalation, conflict spiral, tit for tat, negative reciprocity, heated argument
+nut: Arguments often escalate through a spiral of matching and raising: a sharp remark gets a sharper reply. Recognising the spiral, and deliberately not matching, is one of the most powerful moves in conflict.
+deep:
+Negotiation researchers describe conflict spirals, where each side responds to the other’s last move with something a bit stronger. In couples, this shows up as negative reciprocity: negativity from one person makes negativity from the other more likely, often within seconds.
+
+The spiral runs on a few fuels: raised voices, bringing in old grievances, bigger words (“always,” “never”), and a shift from the issue to the person. Each step feels justified because it is a response to the last one.
+
+Stepping off needs only one person to decline to match. Lowering your voice, acknowledging a fair point, taking a pause, or naming what’s happening (“we’re both getting louder”) can all break the chain. This is easier to do if agreed in advance, so that it feels like a shared tool rather than a tactic.
+research:
+Dean Pruitt and Sung Hee Kim describe escalation and conflict spirals in *Social Conflict* (third edition, 2004). Couples researchers, including Gottman and Gayla Margolin, documented negative reciprocity in observational studies from the 1970s onward, finding it more pronounced in distressed couples. These are well-established patterns.
+links:
+/wp-11.html | The Calm-Down Kit (WP-11)
+/check-ins.html#ground | Check-ins: ground rules
+/book/chapter-1-in-depth.html#squeal | Chapter I in depth: the squeal
+talk:
+- What are our usual “fuel” moves when an argument heats up?
+- Which de-escalation move would feel most natural to each of us?
+- Can we agree on a phrase that means “let’s not match each other right now”?
+
+@@ timeouts | Taking a timeout that helps
+pillars: III
+aka: time out, taking a break in an argument, walking away, pausing a fight, cooling off
+nut: A good timeout is a planned pause during an argument, with a clear time to come back. It gives both bodies a chance to settle so the conversation can continue usefully.
+deep:
+Timeouts get a bad name when they look like walking out. The difference is in how they are done. A helpful timeout is announced (“I’m getting too worked up to listen well”), has a return time (“Can we come back to this at eight?”), and is used to calm down rather than to rehearse arguments.
+
+What you do during the break matters. Replaying the argument keeps the body stirred up. Something absorbing and calming, like a walk, music, a shower, or a simple task, gives the stress response time to fade.
+
+The return is as important as the pause. Coming back when promised builds trust that timeouts are not a way of avoiding the topic. If one person is still not ready, a second, shorter extension is fine; indefinite postponement isn’t.
+research:
+Timeouts are a standard technique in couples therapy and anger-management programmes. Gottman’s physiological research supports the idea that flooding impairs listening and that it takes time to recover; he recommends breaks of at least around twenty minutes. The effectiveness of timeouts has mostly been studied as part of broader programmes rather than alone, so evidence for the technique on its own is limited but consistent with what is known about stress physiology.
+links:
+/wp-11.html | The Calm-Down Kit (WP-11)
+/wp-11-in-depth.html#reentry | The Calm-Down Kit in depth: coming back
+/night-garden.html | The Night Garden: a calm place to breathe
+talk:
+- What words would each of us use to ask for a timeout?
+- What calms each of us best during a break?
+- What would make a timeout feel safe rather than like being left?
+
+@@ managing-flooding | Managing flooding in the moment
+pillars: III
+aka: too angry to think, overwhelmed during an argument, calming down mid-argument, heart racing
+nut: When you notice signs of flooding (racing heart, tight chest, heat, tunnel vision), the most useful move is to pause and calm the body before trying to solve anything.
+deep:
+Flooding is less a thought than a body state, so body-level tools tend to work better than willpower. Slowing the breath, especially lengthening the out-breath, relaxing the shoulders and jaw, sitting down, or stepping into a different room are all ways of telling the body that the threat has passed.
+
+It helps to know your own early warning signs, because by the time you are fully flooded it is hard to notice anything. Some people get hot; some go cold and quiet; some start talking fast. Writing these down while calm, as the program suggests, means you can recognise them sooner.
+
+It is also worth agreeing that either person can call a pause without it being treated as a loss. Flooding is not a character flaw. It is a body doing what bodies do under stress.
+research:
+Gottman’s lab measured physiological arousal in conflict, and research on the stress response broadly supports the idea that high arousal narrows attention and makes flexible thinking harder. Slow breathing has modest evidence for reducing feelings of stress and arousal in the short term. The specific signs and thresholds vary a lot between people.
+links:
+/wp-11.html | The Calm-Down Kit (WP-11)
+/quick-checks.html#ladder | The nervous-system self-check
+/workpapers/wp-02-battery-stress-meter.html | How full is your battery? (WP-02)
+talk:
+- What are each of our earliest signs of flooding?
+- Which calming moves could we use right where we are, without leaving?
+- How can we make calling a pause feel normal rather than dramatic?
+
+@@ reflective-listening | Reflective listening and summarising
+pillars: IV
+aka: paraphrasing, summarising, reflecting back, mirroring, active listening in conflict
+nut: Reflective listening means saying back, in your own words, what you understood the other person to mean, and checking you got it right, before you give your own view.
+deep:
+In a heated conversation, people often stop listening and start preparing their reply. Reflective listening interrupts that. Before responding, you summarise: “So what you’re saying is that you feel the weekends are all errands and no rest. Is that right?” The other person can correct or confirm.
+
+Summarising does several things at once. It shows the speaker they were heard, it catches misunderstandings early, and it slows the pace, which lowers heat. It also changes the listener: putting someone’s view into your own words tends to make it more understandable.
+
+It is easy to overdo. Parroting word for word can feel robotic, and summarising in a sarcastic tone defeats the point. A brief, genuine summary once or twice in a conversation is often enough. Understanding is not the same as agreeing; you can say “I get why that bothered you” and still have a different view.
+research:
+Reflective listening comes from Carl Rogers’ person-centred approach and was popularised by Rogers and Richard Farson’s 1957 essay on active listening. It is a core skill in counselling and mediation. Interestingly, a 1998 study by Gottman and colleagues found that paraphrasing was uncommon in happy couples’ real conflicts and didn’t predict outcomes, which suggests its value may lie in structured moments rather than as a constant technique. Studies of conversation generally find that people who feel understood are more satisfied and less defensive.
+links:
+/check-ins-in-depth.html#acknowledge | Check-ins: acknowledging first
+/conversation-reader.html | The Conversation Reader
+talk:
+- When do you most want the other person to say back what they heard?
+- Can you summarise the other person’s view on a current disagreement in a way they’d agree with?
+- What makes a summary feel genuine rather than mechanical?
+
+@@ speaker-listener | The speaker–listener technique
+pillars: IV, II
+aka: PREP, holding the floor, taking turns to talk, structured conversation
+nut: In the speaker–listener technique, one person holds “the floor” (sometimes a physical object) and speaks in short chunks; the other paraphrases before they swap. It slows hot conversations down enough for both to be heard.
+deep:
+The rules are simple. The speaker talks about their own feelings and view, in small pieces, without mind-reading. The listener paraphrases what they heard, without rebutting. Then the floor passes. Problem-solving comes later, as a separate step, once both people feel understood.
+
+The technique can feel awkward, even silly, and that is partly the point: the structure does the work that tired, stressed people can’t do on their own. Many couples use it only for their hardest topics.
+
+The separation between understanding and solving is useful beyond the technique. A lot of conflict goes wrong because people jump to solutions before the problem has been fully heard.
+research:
+The technique is part of PREP (the Prevention and Relationship Education Program), developed by Howard Markman, Scott Stanley and colleagues in the 1980s, and described in *Fighting for Your Marriage* (1994). PREP has been tested in a number of trials, with some positive effects on communication and some mixed findings on longer-term outcomes, which is common for relationship education programmes.
+links:
+/check-ins.html#order | Check-ins: taking turns in order
+/check-ins.html#room | Check-ins: making room to talk
+talk:
+- Is there a topic hard enough that a structured turn-taking tool would help?
+- What could we use as “the floor”?
+- Do we tend to jump to solutions before we’ve both been heard?
+
+@@ one-topic | One topic at a time: avoiding kitchen-sinking
+pillars: II, IV
+aka: kitchen sinking, bringing up the past, piling on, sticking to the point
+nut: Kitchen-sinking means pulling every grievance into one argument. It makes the conversation impossible to resolve. Keeping to one topic at a time gives each issue a fair chance.
+deep:
+When someone feels hurt, related memories come flooding in: “and last month you…,” “and your mother…” It is understandable, but each extra item widens the argument until nothing can be settled.
+
+A helpful habit is to name the topic at the start (“I want to talk about the school run on Thursdays”) and to park anything else that comes up on a list for later. Parking is not dismissing. It says “that matters too, and it deserves its own time.”
+
+If old issues keep flooding into new arguments, that is itself information: there may be unresolved hurts that need their own conversation, possibly with help.
+research:
+The phrase has been used in couples therapy writing since at least the 1960s, including George Bach and Peter Wyden’s *The Intimate Enemy* (1969). Sticking to one issue is a standard recommendation in couples programmes and mediation. It is a practice principle rather than a separately tested finding, but it is consistent with research linking “overgeneralising” and bringing in unrelated grievances to escalation.
+links:
+/check-ins.html#ground | Check-ins: one topic at a time
+/workpapers/wp-04-deficit-audit.html | What keeps coming back? (WP-04)
+talk:
+- Do we have a “parking list” for issues that come up mid-argument?
+- Which old issues keep sneaking into new arguments?
+- Would it help to name the topic out loud at the start?
+
+@@ intent-impact | Intent and impact
+pillars: IV
+aka: intent versus impact, I didn't mean it, you hurt me, good intentions
+nut: What someone meant (intent) and how it landed (impact) can be very different. Many conflicts stall because one person defends their intent while the other is describing an impact. Both can be true.
+deep:
+“I didn’t mean it that way” and “but it hurt” are both honest statements. Trouble starts when each person treats their own as the only one that counts. The speaker feels accused of something they didn’t intend; the listener feels their hurt is being denied.
+
+A useful sequence is to acknowledge impact first (“I can see that came across as dismissive, and I’m sorry it hurt”) and then, if needed, share intent (“I was trying to get us out the door on time”). Leading with intent tends to sound like a defence.
+
+It works in the other direction too: when hurt, it can help to say how it landed without assuming the worst about why. “When you said that, I felt brushed off” leaves room for a different intention.
+research:
+The distinction is central to *Difficult Conversations* by Douglas Stone, Bruce Patton and Sheila Heen (1999), from the Harvard Negotiation Project. It is a practitioner framework rather than a single tested theory, but it connects to research on attribution biases, which shows that people judge themselves by intentions and others by actions.
+links:
+/workpapers/wp-09-tone-filter.html | Say it so it lands (WP-09)
+/signal-translator.html | The Signal Translator
+talk:
+- Can you remember a time when your intent and your impact didn’t match?
+- Is it easier for you to acknowledge impact, or to hear someone’s intent?
+- How could we remind each other to lead with impact?
+
+@@ three-conversations | The three conversations inside every difficult conversation
+pillars: II, IV
+aka: difficult conversations, what happened, feelings conversation, identity conversation
+nut: Stone, Patton and Heen suggest every hard conversation contains three: the “what happened” conversation (facts and blame), the feelings conversation, and the identity conversation (what this says about me).
+deep:
+The “what happened” layer is where most arguing happens: who said what, whose fault it was. The authors suggest shifting from blame to contribution: what did each of us do that led here? This makes it easier for everyone to own a part.
+
+The feelings layer is often left unspoken, but it leaks into tone. Naming feelings, carefully, usually makes the conversation easier rather than harder.
+
+The identity layer is subtle and powerful. A conversation about chores can quietly become “am I a good partner?” or “am I being taken for granted?” When identity feels at stake, people defend hard. Recognising this, in yourself and the other person, explains a lot of apparent overreaction.
+research:
+This framework comes from *Difficult Conversations* (1999; revised 2010), based on the authors’ work at the Harvard Negotiation Project. It is widely used in workplaces, schools and mediation. It is a practice model, well grounded in negotiation experience, rather than one built from controlled studies.
+links:
+/book/preface.html | Preface: the borrowed words take the blame away
+/check-ins-in-depth.html#both | Check-ins: both sides
+talk:
+- In our last hard conversation, what was the identity question for each of us?
+- What would shifting from blame to contribution look like on a current issue?
+- Which feelings tend to go unspoken in our arguments?
+
+@@ apology-research | What makes an apology work
+pillars: II, IV
+aka: apology, how to apologise, saying sorry, sorry, a good apology
+nut: Research on apologies suggests the most important elements are acknowledging responsibility and offering to repair. Explanations help less, and apologies that shift blame (“sorry you feel that way”) tend to backfire.
+deep:
+An apology can include several parts: expressing regret, explaining what happened, acknowledging responsibility, saying you’ll do better, offering to repair, and asking for forgiveness. Not all parts carry equal weight. Owning what you did and offering to put it right tend to matter most.
+
+Non-apologies are familiar: “I’m sorry if you were offended,” “Mistakes were made,” “I’m sorry, but…” They focus on the other person’s reaction or on excuses, and tend to leave people feeling more hurt.
+
+Timing matters too. An apology that comes before the hurt person has had a chance to explain how they feel can feel premature. Listening first, then apologising, often works better.
+research:
+A 2016 study by Roy Lewicki, Beth Polin and Robert Lount tested six apology components and found acknowledgement of responsibility was rated most important, followed by an offer of repair, while a request for forgiveness mattered least. Cynthia Frantz and Courtney Bennigson (2005) found that apologies were more effective when they came later in a conversation, after the hurt person felt heard. These are experimental studies, often using written scenarios, so real-life effects may differ.
+links:
+/check-ins.html#regroup | Check-ins: regrouping
+/workpapers/wp-09-tone-filter.html | Say it so it lands (WP-09)
+talk:
+- What does a real apology sound like to you?
+- Which is harder for you: giving an apology or accepting one?
+- Is there an apology either of us has been waiting for?
+
+@@ forgiveness | Forgiveness
+pillars: IV, V
+aka: forgive, letting go, grudges, holding a grudge
+nut: Forgiveness is usually described as letting go of resentment and the wish to get even, and moving toward goodwill. It is not the same as excusing, forgetting or pretending it didn’t matter.
+deep:
+Researchers distinguish forgiveness (an inner change toward the other person) from reconciliation (restoring the relationship), and both from condoning (deciding the act was fine). You can forgive and still expect things to change.
+
+Forgiveness is often a process rather than a moment, and it doesn’t follow a timetable. Feelings may come back when reminded. That doesn’t mean forgiveness failed.
+
+Everyday forgiveness matters in close relationships because small hurts are constant. Holding onto each one, like a ledger of wrongs, tends to make future conflicts harsher. Letting small things go, while speaking up about patterns, is a balance most long-lasting relationships seem to strike.
+research:
+Michael McCullough, Everett Worthington, Robert Enright and others have studied forgiveness since the 1990s. Worthington’s REACH model and Enright’s process model are the best-known structured approaches, and meta-analyses (for example by Nathaniel Wade and colleagues in 2014) found that forgiveness interventions increase forgiveness compared with no intervention. Researchers emphasise that forgiveness should not be pressured and that it is not appropriate to expect in every circumstance.
+links:
+/book/preface.html | Preface: writing it down isn’t keeping score
+/workpapers/wp-04-deficit-audit.html | What keeps coming back? Nobody owes anything (WP-04)
+talk:
+- What is the difference for you between forgiving and forgetting?
+- Are there small things we could agree to let go more easily?
+- What helps you let go of a hurt?
+
+@@ restorative-conversations | Restorative conversations
+pillars: II
+aka: restorative justice, restorative questions, making things right, repairing harm
+nut: Restorative approaches focus on repairing harm rather than assigning punishment. A restorative conversation asks what happened, who was affected, and what is needed to make things right.
+deep:
+The restorative movement grew in criminal justice and schools, but its questions work well in families and teams. Typical questions include: What happened? What were you thinking and feeling at the time? Who has been affected, and how? What do you think needs to happen to make things right?
+
+The emphasis is on understanding and repair, not on finding a villain. Everyone gets a chance to speak and be heard. The outcome is an agreement about what happens next.
+
+This fits the spirit of the program: writing down what happened and sorting problems by type is meant to replace blame with repair. A missed chore is something to put right, not a verdict on anyone.
+research:
+Howard Zehr’s *Changing Lenses* (1990) is a foundational text on restorative justice, and John Braithwaite’s work on reintegrative shaming (1989) influenced the field. Evaluations of restorative justice programmes, including randomised trials led by Lawrence Sherman and Heather Strang, have found higher victim satisfaction and some reductions in reoffending, with variation across settings. Restorative practice in schools has mixed evaluation results. Its use in families is mostly practice-based.
+links:
+/workpapers/wp-04-deficit-audit.html | What keeps coming back? (WP-04)
+/book/chapter-5.html | It’s not a review of either person (Chapter V)
+talk:
+- After a rough patch, which restorative question would help us most?
+- What does “making it right” look like in our home?
+- How can we talk about impact without turning it into blame?
+
+@@ mediation-basics | Mediation basics
+pillars: II, IV
+aka: mediator, third party, outside help, facilitation, neutral person
+nut: Mediation brings in a neutral third person to help people in conflict talk and reach their own agreement. Mediators don’t decide who is right; they structure the conversation so both can be heard.
+deep:
+Mediators often follow stages: setting ground rules, letting each person tell their story uninterrupted, identifying the issues and interests, generating options, and writing down agreements. Much of their skill lies in summarising, reframing heated language into neutral terms, and keeping things moving.
+
+Two broad styles are often described. Facilitative mediators help people communicate and find their own solutions. Evaluative mediators give more direct opinions about what is fair or likely. Many mix the two.
+
+Even without a professional, mediation’s tools can help: agreed ground rules, one person speaking at a time, summarising, and writing down what was agreed. Sometimes a trusted friend can play a light version of the role for small disputes, as long as both people accept them as fair.
+research:
+Leonard Riskin’s 1996 grid of mediator orientations popularised the facilitative–evaluative distinction. Research on family and community mediation generally finds high satisfaction and reasonable agreement rates, though outcomes depend on the setting and on whether participants chose mediation freely. Mediation is not appropriate in every situation, particularly where one person cannot speak freely.
+links:
+/check-ins.html | Check-ins
+/signal-translator.html | The Signal Translator: a neutral third view
+talk:
+- Is there a recurring issue where a neutral helper would make a difference?
+- What ground rules would we want if we were mediating ourselves?
+- Who in our lives do we both see as fair?
+
+@@ procedural-justice | Fair process: why how we decide matters
+pillars: II, V
+aka: procedural justice, voice, fair process, being heard, fairness heuristic
+nut: People care not only about outcomes but about whether the process was fair: whether they had a voice, were treated respectfully, and could see how decisions were made. A fair process makes even disappointing outcomes easier to accept.
+deep:
+In studies of courts, workplaces and families, people who felt heard were more accepting of decisions, even ones that went against them. This is sometimes called the voice effect.
+
+Fair process has a few recognisable features: everyone gets a say, the same rules apply to everyone, decisions are based on accurate information, there is a way to correct mistakes, and people are treated with dignity.
+
+At home, this suggests that how chores or money decisions are made matters as much as the split itself. A rota imposed by one person may be resented even if it is objectively fair; the same rota agreed together is more likely to hold.
+research:
+John Thibaut and Laurens Walker introduced procedural justice research in 1975. Allan Lind and Tom Tyler developed it further, and Lind’s fairness heuristic theory (2001) suggests people use fair treatment as a shortcut for deciding whether to trust an authority or group. The effect of perceived procedural fairness on acceptance of outcomes is one of the more robust findings in social and organisational psychology.
+links:
+/workpapers/wp-03-raci-treaty.html | One owner per job: signing means clear (WP-03)
+/book/chapter-4.html | Two kinds of fair (Chapter IV)
+/book/chapter-2-in-depth.html#limits | Chapter II in depth: what the number is not
+talk:
+- Who usually decides how things are done at home, and how?
+- Has there been a decision where the outcome was fine but the process felt unfair?
+- What would a fair process look like for our next big decision?
+
+@@ fairness-rules | Equality, equity and need: three kinds of fair
+pillars: I, V
+aka: equal split, fair share, distributive justice, what is fair, fifty fifty
+nut: People use different rules for what counts as fair: equality (the same for each), equity (in proportion to what each puts in), and need (according to what each requires). Disagreements often come from using different rules without realising it.
+deep:
+Imagine a household where one person works longer paid hours. One person thinks chores should be split 50/50 (equality). The other thinks the one with more free time should do more (equity). A third view says whoever is struggling most right now should get more support (need). Each is a legitimate idea of fair.
+
+Arguments about “fair” often go in circles because each person is quietly applying a different rule. Naming the rule can be clarifying: “Are we aiming for equal time, or equal free time, or something else?”
+
+Different rules can apply to different areas, and they can change over time. A household might use need during an illness, equity during busy work seasons, and equality as the default.
+research:
+Morton Deutsch described equality, equity and need as distinct justice principles in 1975, suggesting that people favour equality in close, cooperative relationships, equity in economic ones, and need in caring ones. Research broadly supports that the chosen principle depends on context and relationship type. Equity theory (Adams, 1965) developed the proportional idea in detail.
+links:
+/book/chapter-4.html | Two kinds of fair (Chapter IV)
+/book/chapter-4-in-depth.html#parity | Chapter IV in depth: parity
+/lemonade-stand.html | The Lemonade Stand
+talk:
+- When you say “fair,” do you usually mean equal, proportional, or based on need?
+- Is there an area of our life where we’re using different rules?
+- Which rule fits our situation this season?
+
+@@ culture-and-conflict | Culture, family and conflict styles
+pillars: IV
+aka: cultural differences, face, high context, low context, direct and indirect communication, family background
+nut: People learn how to disagree in their families and cultures. Some value directness; others value harmony and saving face. Many clashes are really clashes of style, not of values.
+deep:
+Edward Hall described high-context cultures, where much meaning lies in context, tone and relationship, and low-context cultures, where meaning is carried mainly in explicit words. Stella Ting-Toomey’s face-negotiation theory describes how concern for one’s own and others’ dignity (face) shapes how people handle conflict: some styles protect the relationship by being indirect; others protect clarity by being direct.
+
+Families work like small cultures. In one, raised voices are normal and quickly forgotten; in another, a raised voice is alarming. In one, problems are discussed immediately; in another, they are left to cool. Partners from different families can misread each other badly: one hears the other’s directness as aggression, or the other’s indirectness as dishonesty.
+
+Talking openly about these backgrounds turns misreadings into information. It also fits the program’s idea of a family script: patterns we inherited and can choose to keep or change.
+research:
+Hall introduced high- and low-context communication in *Beyond Culture* (1976). Ting-Toomey developed face-negotiation theory from 1988 onward, with cross-cultural studies supporting links between cultural values and conflict styles. Researchers caution that national-level generalisations don’t describe individuals well, and that variation within cultures is large.
+links:
+/frequency-framework.html | The Frequency Framework
+/wired-differently.html#dynamics | Wired Differently: dynamics
+/book/chapter-3.html | Full tanks and different angles (Chapter III)
+talk:
+- What did disagreement sound like in each of our families growing up?
+- Are there things one of us finds normal in an argument that the other finds alarming?
+- Which inherited habits do we want to keep, and which to change?
+
+@@ acceptance-and-change | Acceptance alongside change
+pillars: II, IV
+aka: integrative behavioral couple therapy, IBCT, accepting differences, acceptance, letting go of changing someone
+nut: Not every difference can or should be changed. Some approaches to couples conflict pair efforts to change with efforts to accept, and suggest that more acceptance often makes change easier too.
+deep:
+Traditional approaches to relationship conflict focused on changing behaviour: better communication, clearer agreements. Andrew Christensen and Neil Jacobson noticed that some differences stayed put however much people tried. They developed an approach that also helps partners accept each other’s differences, and even see them with some understanding or humour.
+
+Acceptance doesn’t mean resignation. It means seeing a difference as part of who someone is, understanding where it comes from, and softening the fight against it. Oddly, when people feel accepted, they often become more willing to change.
+
+This connects to Gottman’s perpetual problems: some issues are managed rather than solved. Knowing which is which saves a lot of energy.
+research:
+Integrative behavioural couple therapy was developed by Jacobson and Christensen in the 1990s. A large randomised trial led by Christensen (reported in 2004, with five-year follow-up in 2010) found that both integrative and traditional behavioural couple therapy helped many couples, with some evidence that gains after integrative therapy were more durable. It is one of the better-tested couples therapies.
+links:
+/frequency-framework.html | The Frequency Framework: agree when you’ll meet
+/workpapers/wp-04-deficit-audit.html | What keeps coming back? (WP-04)
+talk:
+- Which differences between us are we still trying to change that might be better accepted?
+- Which ones really do need to change?
+- Can you think of a difference you’ve come to appreciate?
+
+@@ chores-disagreements | Disagreeing about chores
+pillars: I, II
+aka: arguing about housework, chores fight, cleaning arguments, household tasks
+nut: Chore arguments are rarely about the dishes alone. They tend to carry deeper questions about fairness, respect and being noticed. They go better when the invisible work is made visible and each job has a clear owner.
+deep:
+A common pattern: one person notices what needs doing, plans it, reminds others, and ends up feeling like the manager. The other person helps when asked and feels nagged. Both feel unappreciated.
+
+A few things tend to help. First, writing down everything that actually happens, including planning and remembering, gives both people the same picture. Second, giving each job a single owner (who notices, plans and does it) removes the need for reminders. Third, talking about standards openly: “clean” means different things to different people, and agreeing on “good enough” prevents quiet resentment.
+
+Finally, chore conversations go better with the conflict basics: soft startup, one topic at a time, interests over positions, and a regular check-in rather than an explosion.
+research:
+Research on the division of household labour consistently finds that perceived unfairness is associated with lower relationship satisfaction and more conflict, and that the planning and monitoring side of the work is often unevenly shared (see Allison Daminger’s 2019 study of cognitive labour). Studies also suggest that perceived fairness predicts satisfaction better than the exact split of hours.
+links:
+/workpapers/wp-03-raci-treaty.html | One owner per job (WP-03)
+/workpapers/wp-01.html | Who did what (WP-01)
+/lemonade-stand.html | The Lemonade Stand
+talk:
+- Which chores cause the most friction, and why do you think that is?
+- Do we have the same idea of “clean” or “done”?
+- Which jobs need a clear single owner?
+
+@@ money-disagreements | Disagreeing about money
+pillars: I, IV
+aka: money fights, arguing about money, finances, spending, saving, budget arguments
+nut: Money arguments tend to be more intense and more recurring than many other disagreements, partly because money carries values, security and history. Talking about what money means to each person often helps more than arguing about numbers.
+deep:
+For one person, saving may mean safety; for another, spending on experiences may mean living fully. These views often come from childhood: growing up with scarcity, or with a parent who worried constantly, leaves a mark.
+
+Practical structures help reduce friction: agreeing categories where each person has discretion, a threshold above which purchases are discussed, and a regular calm money check-in rather than conversations triggered by a surprising bill.
+
+Money talks also benefit from the general conflict tools: separating the person from the problem, looking for interests behind positions, and remembering that some differences in money style are perpetual and need managing rather than winning.
+research:
+Lauren Papp, Mark Cummings and Marcie Goeke-Morey (2009) found in diary studies that money conflicts were more pervasive, problematic and recurrent than conflicts about other topics, and were more likely to remain unresolved. Jeffrey Dew and colleagues (2012) found financial disagreements were a relatively strong predictor of later divorce in a US sample. These are correlational findings.
+links:
+/frequency-framework.html | The Frequency Framework
+/workpapers/wp-13-pll-protocol.html | The 90-second daily check-in (WP-13)
+/relationships.html#partners | How it fits: partners
+talk:
+- What did money mean in each of our families growing up?
+- Would a regular, calm money check-in suit us?
+- Above what amount would each of us like to be consulted?
+
+@@ time-disagreements | Disagreeing about time
+pillars: IV, III
+aka: time together, time apart, not enough time, quality time, busy schedules
+nut: Disagreements about time (how much together, how much alone, how much with friends or family) are often about competing needs for connection and autonomy. Both are healthy; the question is balance.
+deep:
+Researchers describe a tension in close relationships between wanting closeness and wanting independence. Most people want both, in different proportions and at different times. When one person wants more togetherness and the other more space, each can feel the other is rejecting them.
+
+Practical conversations help: what does each person need in a typical week? What counts as quality time for each (being in the same room, or doing something together)? What is non-negotiable (a weekly class, time with a friend)?
+
+Timing preferences also differ: morning people and night people, planners and spontaneous types. The program’s idea of rhythms applies here: agreeing when to meet can matter more than changing anyone’s pace.
+research:
+Leslie Baxter and Barbara Montgomery’s relational dialectics theory (1996) describes ongoing tensions like connection versus autonomy as normal features of relationships rather than problems to be solved. Research on autonomy in relationships, including from self-determination theory, suggests that supporting each other’s independence is associated with greater closeness, not less.
+links:
+/frequency-framework.html | The Frequency Framework: agree when you’ll meet
+/turning-toward.html#rituals | Turning Toward: rituals
+talk:
+- What does a good week look like for each of us, in terms of together and apart?
+- What counts as quality time for you?
+- Are there regular commitments that each of us wants protected?
+
+@@ family-disagreements | Disagreeing about family and in-laws
+pillars: II, IV
+aka: in-laws, extended family, holidays with family, family visits, loyalty conflicts
+nut: Disagreements about extended family often involve loyalty: each partner feels caught between their family and the other. They tend to go better when the couple agrees a shared position first and each person takes the lead with their own family.
+deep:
+Families differ in how close, involved and expressive they are. What feels like normal contact to one person can feel intrusive to another. Holidays, grandparent involvement and financial help are common flashpoints.
+
+A widely taught approach is to treat the couple as a team: talk privately first, agree what you both can live with, and then present it together, with each person handling conversations with their own family. This protects the partner from being cast as the villain.
+
+It also helps to be curious about the other person’s family culture rather than judging it, and to recognise that loyalty to a parent is not disloyalty to a partner. Both relationships matter.
+research:
+Family systems thinkers, including Murray Bowen, described how tension between two people can be routed through a third (triangulation), which is common in in-law conflicts. Empirical research on in-law relationships is smaller than on couples, but studies generally link in-law conflict to lower marital satisfaction and suggest that partner support in managing in-law relationships is protective.
+links:
+/relationships.html#family | How it fits: family
+/book/chapter-3.html | Full tanks and different angles (Chapter III)
+talk:
+- What does “close family” mean in each of our backgrounds?
+- Which family situations need us to agree a shared position first?
+- How can each of us support the other with our own family?
+
+@@ work-disagreements | Disagreeing at work
+pillars: II
+aka: workplace conflict, coworker conflict, conflict with boss, team disagreement
+nut: Workplace conflicts often stem from unclear roles, competing priorities or different working styles rather than bad people. Clarifying who owns what and talking about the work rather than the person helps a lot.
+deep:
+Research on role ambiguity shows that not knowing exactly what you are responsible for is stressful and a common source of friction. Two people who both think a task is theirs, or both think it is the other’s, are set up to clash.
+
+Conflicts go better when kept to the work (“the report was late, which affected the client”) rather than character (“you’re unreliable”), when raised early and privately, and when both people look for the underlying interests: deadlines, quality, recognition, workload.
+
+Many of the program’s tools came from workplace practice, like assigning single owners and holding regular reviews. They work at home for the same reasons they work at work.
+research:
+Robert Kahn and colleagues’ 1964 research on role conflict and ambiguity, and later meta-analyses, link unclear roles to job stress and lower satisfaction. Research on task versus relationship conflict (for example by Karen Jehn) suggests that conflict about personal matters tends to harm teams more than disagreement about the work itself.
+links:
+/workpapers/wp-03-raci-treaty.html | One owner per job (WP-03)
+/relationships.html#coworkers | How it fits: coworkers
+talk:
+- Where at work is it unclear who owns what?
+- How do you usually raise a problem with a colleague?
+- Which home tools might work at work, and the other way round?

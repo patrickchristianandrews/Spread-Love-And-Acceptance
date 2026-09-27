@@ -31,7 +31,8 @@ VOID = {'area', 'base', 'br', 'col', 'embed', 'hr', 'img', 'input', 'link', 'met
 SKIP_TAGS = {'script', 'style', 'noscript', 'template', 'svg', 'nav', 'button', 'select',
              'textarea', 'option', 'canvas', 'audio', 'video', 'iframe', 'pre', 'dialog', 'head'}
 SKIP_CLASSES = {'depth-bar', 'dig', 'read-code', 'tol-bar', 'tol-panel', 'skip', 'sr-only',
-                'visually-hidden', 'announce-tag', 'tol-private', 'print-only', 'tol-index', 'tol-access'}
+                'visually-hidden', 'announce-tag', 'tol-private', 'print-only', 'tol-index', 'tol-access',
+                'lib-top', 'lib-note', 'lib-aka', 'lib-pillar-list'}
 INLINE = {'span', 'a', 'small', 'strong', 'em', 'b', 'i', 'code', 'abbr', 'sup', 'sub', 'mark', 'time', 'label', 'kbd', 'q', 'cite'}
 
 
@@ -72,6 +73,7 @@ class PageParser(HTMLParser):
         self.sections = []       # dicts: h, level, a, s (sentences)
         self.cur = {'h': '', 'level': 1, 'a': '', 's': []}
         self.redirect = False
+        self.library = False     # a Professor's Library page: every h3 is a part of its entry (h2)
 
     # ---- helpers
     def active(self):
@@ -167,6 +169,8 @@ class PageParser(HTMLParser):
                     self.levels[lv] = h
                     # a bare heading like "Start with" or "Partner B" reads better with its parent's name
                     shown = parent + ': ' + h if parent and lv > 1 and len(h.split()) <= 2 and parent != h else h
+                    if self.library and lv == 3 and parent:
+                        shown = parent + ': ' + h[0].lower() + h[1:]  # "Attachment theory: in a nutshell"
                     self.cur = {'h': shown, 'level': lv, 'a': self.head_id, 's': [], 'raw': h}
             elif self.skip == 0 and (fr[0] in BLOCK) and self.active():
                 self.flush()
@@ -344,6 +348,43 @@ def load_tips():
     for m in re.finditer(r"\['(\w+)', '((?:[^'\\]|\\.)*)', '((?:[^'\\]|\\.)*)'\]", src):
         tips.append((m.group(1), m.group(2).replace("\\'", "'"), m.group(3).replace("\\'", "'")))
     return cats, tips
+
+
+# ---------------------------------------------------------------- library definitions
+# Each entry in the Professor's Library (/library/*.html, built by tools/library/build_library.py) also becomes a
+# definition entry, like the mini-dive glossary: its title and other names answer "what is X" directly, and the
+# answer is the entry's nutshell plus the start of "Going deeper", with a link to the full entry.
+LIB_GENERIC = set('''stress anger angry money grief kindness habits habit goals goal values trust boundaries feedback
+emotions feelings feeling mood fun play rest breaks focus sleep tired forgive fairness fair love friends friendship
+loneliness lonely gratitude listening family work change memory personality phones clutter'''.split())
+
+
+def library_definitions():
+    out = []
+    lib_dir = os.path.join(ROOT, 'library')
+    if not os.path.isdir(lib_dir):
+        return out
+    for fn in sorted(os.listdir(lib_dir)):
+        if not fn.endswith('.html'):
+            continue
+        raw = open(os.path.join(lib_dir, fn), encoding='utf-8').read()
+        for m in re.finditer(r'<article class="lib-entry" id="([^"]+)" data-k="([^"]*)">(.*?)</article>', raw, re.S):
+            aid, k, body = m.group(1), unescape(m.group(2)), m.group(3)
+            title = unescape(re.sub(r'<[^>]+>', '', re.search(r'<h2>(.*?)</h2>', body).group(1)))
+            names = [x.strip() for x in k.split(',')[1:] if x.strip()]
+            nut = re.search(r'<div class="lib-nut">(.*?)</div>', body, re.S).group(1)
+            nut = norm_space(unescape(re.sub(r'<[^>]+>', ' ', re.sub(r'<h3>.*?</h3>', '', nut))))
+            deep = re.search(r'<h3>Going deeper</h3>\s*<p>(.*?)</p>', body, re.S)
+            deep = norm_space(unescape(re.sub(r'<[^>]+>', '', deep.group(1)))) if deep else ''
+            deep2 = ' '.join(re.split(r'(?<=[.!?])\s+', deep)[:2])
+            m_names = [title] + [n for n in names if (' ' in n or '-' in n or len(n) >= 9) and n.lower() not in LIB_GENERIC]
+            out.append({
+                'id': 'lib:' + aid, 't': title, 'h': title, 'u': '/library/%s#%s' % (fn, aid),
+                'x': nut + ('\n' + deep2 if deep2 else ''),
+                'k': norm_space(' '.join([title] + names)),
+                'm': m_names, 'l': 'Read the full entry in the Professor’s Library', 'g': 1,
+            })
+    return out
 
 
 # ---------------------------------------------------------------- keywords
@@ -589,6 +630,380 @@ SYN = {
 }
 
 
+# Everyday words mapped to the vocabulary of the Professor's Library (/library/*.html).
+# Merged into SYN below (lists are combined, nothing above is replaced).
+SYN_LIBRARY = {
+    'attachment': ['bowlby', 'ainsworth', 'secure', 'anxious', 'avoidant', 'hazan'],
+    'attached': ['attachment', 'secure', 'anxious', 'avoidant'],
+    'clingy': ['attachment', 'anxious', 'reassurance', 'pursue'],
+    'needy': ['attachment', 'anxious', 'reassurance', 'pursue'],
+    'avoidant': ['attachment', 'avoidance', 'withdraw', 'pursue'],
+    'secure': ['attachment', 'safe haven', 'secure base'],
+    'insecure': ['attachment', 'anxious', 'reassurance', 'self-esteem'],
+    'reassurance': ['attachment', 'anxious', 'jealousy'],
+    'abandonment': ['attachment', 'anxious', 'rejection'],
+    'withdraws': ['pursue', 'withdraw', 'demand-withdraw', 'stonewalling'],
+    'withdraw': ['pursue', 'demand-withdraw', 'stonewalling'],
+    'chase': ['pursue', 'withdraw', 'demand-withdraw'],
+    'pursuer': ['pursue', 'withdraw', 'demand-withdraw'],
+    'stonewall': ['four horsemen', 'flooding', 'self-soothing'],
+    'stonewalling': ['four horsemen', 'flooding', 'self-soothing'],
+    'horsemen': ['criticism', 'contempt', 'defensiveness', 'stonewalling', 'antidotes'],
+    'gottman': ['bids', 'horsemen', 'repair', 'flooding', 'perpetual'],
+    'gratitude': ['grateful', 'thankful', 'find remind bind', 'algoe', 'emmons'],
+    'grateful': ['gratitude', 'thanks', 'appreciation'],
+    'thankful': ['gratitude', 'thanks', 'appreciation'],
+    'bias': ['attribution', 'confirmation', 'negativity', 'heuristic', 'thinking traps'],
+    'biases': ['bias', 'attribution', 'confirmation', 'negativity', 'heuristic'],
+    'biased': ['bias', 'naive realism', 'blind spot'],
+    'assume': ['attribution', 'mind-reading', 'hostile', 'fundamental attribution error'],
+    'assuming': ['attribution', 'mind-reading', 'hostile'],
+    'worst': ['attribution', 'negativity', 'catastrophising', 'hostile'],
+    'overthinking': ['rumination', 'catastrophising', 'worry'],
+    'overthink': ['rumination', 'catastrophising', 'worry'],
+    'mindset': ['growth mindset', 'dweck', 'fixed'],
+    'habit': ['habits', 'lally', 'cues', 'automatic', 'implementation intentions'],
+    'habits': ['habit', 'lally', 'cues', 'automatic', 'routine'],
+    'routine': ['habits', 'rituals', 'cues'],
+    'motivation': ['self-determination', 'intrinsic', 'autonomy', 'rewards'],
+    'motivated': ['motivation', 'self-determination', 'intrinsic'],
+    'unmotivated': ['motivation', 'procrastination', 'burnout'],
+    'lazy': ['procrastination', 'inertia', 'executive function', 'attribution'],
+    'procrastinate': ['procrastination', 'avoidance', 'inertia'],
+    'procrastinating': ['procrastination', 'avoidance', 'inertia'],
+    'perfectionist': ['perfectionism', 'standards', 'self-criticism'],
+    'perfect': ['perfectionism', 'good enough', 'standards'],
+    'willpower': ['self-control', 'ego depletion', 'habits'],
+    'goals': ['goal setting', 'implementation intentions', 'woop'],
+    'goal': ['goal setting', 'implementation intentions', 'woop'],
+    'change': ['transitions', 'readiness', 'habits', 'stages of change'],
+    'confidence': ['self-efficacy', 'self-esteem'],
+    'confident': ['self-efficacy', 'self-esteem'],
+    'worth': ['self-esteem', 'self-worth', 'self-compassion'],
+    'values': ['values', 'meaning', 'acceptance and commitment'],
+    'meaning': ['values', 'purpose'],
+    'selfcompassion': ['self-compassion', 'neff'],
+    'kind': ['kindness', 'self-compassion', 'compassion'],
+    'kindness': ['kind', 'compassion', 'generosity'],
+    'critic': ['self-compassion', 'self-criticism', 'shame'],
+    'shame': ['guilt', 'self-compassion', 'tangney'],
+    'guilt': ['shame', 'apology', 'repair'],
+    'guilty': ['guilt', 'shame', 'apology'],
+    'ashamed': ['shame', 'guilt', 'self-compassion'],
+    'embarrassed': ['shame', 'spotlight effect'],
+    'forgive': ['forgiveness', 'grudges', 'repair'],
+    'forgiveness': ['forgive', 'grudges', 'reconciliation'],
+    'grudge': ['forgiveness', 'resentment', 'letting go'],
+    'grudges': ['forgiveness', 'resentment'],
+    'jealousy': ['jealous', 'insecurity', 'reassurance', 'trust'],
+    'envy': ['jealousy', 'social comparison'],
+    'cheating': ['trust', 'jealousy', 'repair'],
+    'lie': ['trust', 'honesty'],
+    'lying': ['trust', 'honesty'],
+    'honest': ['trust', 'honesty'],
+    'reliable': ['trust', 'dependability', 'owner'],
+    'negotiate': ['negotiation', 'interests', 'positions', 'batna', 'getting to yes'],
+    'negotiation': ['interests', 'positions', 'batna', 'principled', 'win-win'],
+    'compromise': ['negotiation', 'interests', 'conflict modes', 'win-win', 'compromising'],
+    'compromising': ['compromise', 'conflict modes', 'thomas-kilmann'],
+    'winwin': ['integrative', 'interests', 'win-win'],
+    'mediation': ['mediator', 'third party', 'neutral'],
+    'mediator': ['mediation', 'third party'],
+    'escalate': ['escalation', 'spiral', 'de-escalate', 'flooding'],
+    'escalating': ['escalation', 'spiral', 'de-escalate'],
+    'deescalate': ['escalation', 'de-escalation', 'timeout', 'calm'],
+    'timeout': ['time out', 'break', 'pause', 'flooding'],
+    'break': ['timeout', 'pause', 'breaks', 'recovery'],
+    'walk away': ['timeout', 'break', 'flooding'],
+    'cool off': ['timeout', 'break', 'flooding'],
+    'heated': ['escalation', 'flooding', 'timeout'],
+    'resolve': ['conflict resolution', 'negotiation', 'repair', 'solvable'],
+    'resolution': ['conflict', 'negotiation', 'repair'],
+    'solve': ['solvable', 'problem solving', 'interests'],
+    'unsolvable': ['perpetual', 'gridlock', 'acceptance'],
+    'gridlock': ['perpetual', 'dreams within conflict'],
+    'accept': ['acceptance', 'accepting influence', 'differences'],
+    'acceptance': ['accept', 'differences', 'integrative behavioral'],
+    'influence': ['accepting influence', 'persuaded'],
+    'stubborn': ['accepting influence', 'positions', 'naive realism'],
+    'win': ['positions', 'interests', 'motivated reasoning'],
+    'blame': ['attribution', 'blameless', 'personalisation', 'contribution'],
+    'blaming': ['blame', 'attribution', 'personalisation'],
+    'fault': ['blame', 'contribution', 'blameless'],
+    'mistake': ['mistakes', 'blameless', 'psychological safety', 'apology'],
+    'mistakes': ['mistake', 'blameless', 'just culture'],
+    'feedback': ['sbi', 'criticism', 'feedback sandwich'],
+    'complain': ['complaint', 'criticism', 'soft startup'],
+    'complaining': ['complaint', 'criticism', 'soft startup'],
+    'startup': ['soft startup', 'harsh startup', 'first three minutes'],
+    'bring up': ['soft startup', 'timing', 'complaint'],
+    'raise': ['soft startup', 'complaint'],
+    'kitchen sink': ['kitchen-sinking', 'one topic'],
+    'past': ['kitchen-sinking', 'memory', 'bringing up the past'],
+    'intent': ['intent', 'impact', 'meant'],
+    'meant': ['intent', 'impact'],
+    'difficult conversation': ['three conversations', 'difficult conversations', 'soft startup'],
+    'hard conversation': ['difficult conversations', 'soft startup', 'battery'],
+    'restorative': ['restorative', 'repair', 'making things right'],
+    'culture': ['cultural', 'face', 'high context', 'family script'],
+    'cultural': ['culture', 'face', 'high context'],
+    'fair': ['equity', 'equality', 'procedural justice', 'fair process'],
+    'fairness': ['equity', 'equality', 'need', 'procedural justice'],
+    'equal': ['equality', 'equity', 'fifty'],
+    'equity': ['equity theory', 'adams', 'fairness'],
+    'mental load': ['cognitive labour', 'mental load', 'anticipate', 'monitor', 'invisible'],
+    'mental': ['mental load', 'cognitive labour'],
+    'emotional labor': ['emotional labour', 'hochschild', 'emotion work'],
+    'emotional labour': ['hochschild', 'emotion work'],
+    'second shift': ['hochschild', 'housework', 'second shift'],
+    'default': ['default parent', 'default person', 'go-to'],
+    'incompetence': ['weaponised incompetence', 'strategic incompetence', 'gatekeeping'],
+    'weaponized': ['weaponised incompetence', 'incompetence'],
+    'weaponised': ['weaponised incompetence', 'incompetence'],
+    'micromanage': ['gatekeeping', 'standards', 'owner'],
+    'standards': ['gatekeeping', 'good enough', 'perfectionism', 'noticing'],
+    'mess': ['noticing', 'threshold', 'clutter', 'standards'],
+    'messy': ['mess', 'clutter', 'noticing', 'threshold'],
+    'clutter': ['mess', 'environment', 'clutter'],
+    'tidy': ['mess', 'standards', 'clutter'],
+    'notice': ['noticing', 'threshold', 'anticipate'],
+    'appreciate': ['appreciation', 'recognition', 'gratitude'],
+    'recognition': ['appreciation', 'recognised', 'thanks'],
+    'stress': ['stress response', 'allostatic', 'appraisal', 'cortisol'],
+    'cortisol': ['stress response', 'hpa', 'stress'],
+    'adrenaline': ['stress response', 'fight or flight'],
+    'fight or flight': ['stress response', 'cannon', 'sympathetic'],
+    'hungry': ['hangry', 'hunger', 'halt'],
+    'hangry': ['hunger', 'halt'],
+    'halt': ['hungry angry lonely tired'],
+    'sleep': ['sleep deprivation', 'tired', 'chronotype'],
+    'insomnia': ['sleep', 'tired'],
+    'body': ['interoception', 'body signals', 'stress response'],
+    'window': ['window of tolerance', 'hyperarousal', 'hypoarousal'],
+    'numb': ['hypoarousal', 'window of tolerance', 'shutdown'],
+    'porges': ['polyvagal'],
+    'polyvagal': ['porges', 'vagus', 'criticisms'],
+    'vagal': ['polyvagal', 'vagus'],
+    'caregiving': ['caregiver', 'ageing parents', 'sandwich generation'],
+    'emotion': ['emotions', 'feelings', 'regulation'],
+    'emotions': ['emotion', 'feelings', 'regulation', 'granularity'],
+    'feelings': ['emotions', 'affect labelling', 'granularity', 'alexithymia'],
+    'feeling': ['emotions', 'affect labelling'],
+    'regulate': ['emotion regulation', 'reappraisal', 'calm'],
+    'regulation': ['emotion regulation', 'reappraisal', 'gross'],
+    'bottle': ['suppression', 'hiding feelings'],
+    'bottling': ['suppression', 'hiding feelings'],
+    'hide': ['suppression', 'masking'],
+    'reframe': ['reappraisal', 'reframing'],
+    'name': ['affect labelling', 'naming feelings'],
+    'venting': ['anger', 'catharsis', 'co-rumination'],
+    'vent': ['anger', 'venting', 'catharsis'],
+    'rage': ['anger', 'flooding'],
+    'irritable': ['hangry', 'sleep', 'mood', 'halt'],
+    'grumpy': ['mood', 'hangry', 'sleep'],
+    'rumination': ['overthinking', 'replaying', 'co-rumination'],
+    'replaying': ['rumination', 'overthinking'],
+    'journal': ['expressive writing', 'writing it down', 'diary'],
+    'journaling': ['expressive writing', 'writing it down'],
+    'diary': ['expressive writing', 'writing it down'],
+    'grief': ['grieving', 'loss', 'bereavement', 'dual process'],
+    'grieving': ['grief', 'loss', 'bereavement'],
+    'loss': ['grief', 'ambiguous loss'],
+    'died': ['grief', 'loss', 'bereavement'],
+    'death': ['grief', 'loss', 'bereavement'],
+    'resilience': ['resilient', 'coping', 'ordinary magic'],
+    'resilient': ['resilience', 'coping'],
+    'cope': ['coping', 'resilience', 'appraisal'],
+    'coping': ['cope', 'resilience', 'appraisal'],
+    'happy': ['happiness', 'positive emotions', 'wellbeing'],
+    'happiness': ['positive emotions', 'wellbeing', 'savouring'],
+    'safe': ['emotional safety', 'psychological safety', 'safe haven'],
+    'safety': ['emotional safety', 'psychological safety'],
+    'empathy': ['empathy', 'sympathy', 'compassion', 'double empathy'],
+    'sympathy': ['empathy', 'compassion'],
+    'compassion': ['self-compassion', 'empathy', 'compassion fatigue'],
+    'validate': ['validation', 'validating'],
+    'validating': ['validation', 'invalidation'],
+    'invalidated': ['validation', 'invalidation'],
+    'dismissed': ['validation', 'invalidation', 'responsiveness'],
+    'dismissive': ['validation', 'invalidation', 'capitalization'],
+    'faces': ['facial expressions', 'nonverbal', 'emotions'],
+    'expression': ['facial expressions', 'nonverbal'],
+    'body language': ['nonverbal', 'tone', 'facial expressions'],
+    'eye contact': ['nonverbal', 'autistic'],
+    'mind reading': ['mind-reading', 'jumping to conclusions', 'guess'],
+    'mindreading': ['mind-reading', 'guess'],
+    'read my mind': ['mind-reading', 'illusion of transparency'],
+    'should have known': ['mind-reading', 'illusion of transparency'],
+    'obvious': ['illusion of transparency', 'curse of knowledge'],
+    'catastrophize': ['catastrophising', 'worst case'],
+    'catastrophizing': ['catastrophising', 'worst case'],
+    'always': ['all-or-nothing', 'overgeneralisation'],
+    'never': ['all-or-nothing', 'overgeneralisation'],
+    'should': ['should statements', 'expectations'],
+    'shoulds': ['should statements'],
+    'expectations': ['should statements', 'expectations', 'role ambiguity'],
+    'personally': ['personalisation', 'taking things personally'],
+    'distortions': ['cognitive distortions', 'thinking traps'],
+    'distortion': ['cognitive distortions', 'thinking traps'],
+    'cbt': ['cognitive distortions', 'beck', 'burns'],
+    'remember': ['memory', 'availability', 'recall'],
+    'memory': ['reconstructed', 'availability', 'recall', 'transactive'],
+    'forgot': ['memory', 'reminders', 'cognitive offloading'],
+    'forgetful': ['memory', 'adhd', 'cognitive offloading', 'reminders'],
+    'late': ['planning fallacy', 'time', 'adhd'],
+    'lateness': ['planning fallacy', 'time'],
+    'objective': ['naive realism', 'bias blind spot'],
+    'listening': ['active listening', 'reflective', 'rogers'],
+    'listen': ['active listening', 'reflective listening', 'rogers'],
+    'paraphrase': ['reflective listening', 'summarising'],
+    'questions': ['asking questions', 'curiosity', 'follow-up'],
+    'curious': ['curiosity', 'questions'],
+    'nvc': ['nonviolent communication', 'rosenberg'],
+    'nonviolent': ['nonviolent communication', 'rosenberg'],
+    'statements': ['i-statements', 'you-statements'],
+    'assertive': ['assertiveness', 'passive', 'aggressive'],
+    'passive': ['assertiveness', 'passive-aggressive'],
+    'aggressive': ['assertiveness', 'passive-aggressive'],
+    'no': ['saying no', 'boundaries', 'refusal'],
+    'humor': ['humour', 'laughter', 'play'],
+    'humour': ['laughter', 'play', 'jokes'],
+    'jokes': ['humour', 'laughter'],
+    'sarcasm': ['humour', 'contempt'],
+    'advice': ['support', 'fixing', 'listening'],
+    'fix': ['advice', 'support', 'fixing'],
+    'fixing': ['advice', 'support'],
+    'support': ['social support', 'advice', 'invisible support'],
+    'email': ['texting', 'tone', 'channel'],
+    'emoji': ['texting', 'tone'],
+    'meetings': ['workplace', 'retrospectives', 'communication at work'],
+    'work': ['workplace', 'work-family', 'role ambiguity'],
+    'colleague': ['coworkers', 'workplace'],
+    'colleagues': ['coworkers', 'workplace'],
+    'manager': ['workplace', 'feedback', 'psychological safety'],
+    'team': ['teams', 'psychological safety', 'retrospective', 'raci'],
+    'teams': ['team', 'psychological safety', 'raci'],
+    'teamwork': ['team', 'teams', 'coparenting'],
+    'responsible': ['raci', 'ownership', 'diffusion of responsibility'],
+    'responsibility': ['raci', 'ownership', 'diffusion of responsibility'],
+    'owner': ['ownership', 'raci', 'one owner per job'],
+    'ownership': ['owner', 'raci'],
+    'retro': ['retrospective', 'look-back'],
+    'review': ['retrospective', 'look-back', 'blameless'],
+    'checklist': ['checklists', 'gawande'],
+    'list': ['checklists', 'cognitive offloading', 'lists'],
+    'calendar': ['cognitive offloading', 'transactive memory'],
+    'reminders': ['cognitive offloading', 'reminding'],
+    'metrics': ["goodhart's law", 'measures'],
+    'measure': ["goodhart's law", 'metrics'],
+    'experiment': ['plan do study act', 'small experiments'],
+    'autism': ['monotropism', 'masking', 'alexithymia', 'inertia', 'stimming'],
+    'autistic': ['monotropism', 'masking', 'stimming', 'inertia'],
+    'stim': ['stimming', 'fidgeting'],
+    'stimming': ['stim', 'fidgeting', 'self-regulation'],
+    'fidget': ['stimming', 'fidgeting'],
+    'fidgeting': ['stimming', 'fidget'],
+    'focus': ['monotropism', 'flow', 'attention', 'hyperfocus'],
+    'hyperfocus': ['monotropism', 'flow', 'adhd'],
+    'interrupt': ['interruptions', 'task switching', 'monotropism'],
+    'interrupted': ['interruptions', 'task switching', 'monotropism'],
+    'interruptions': ['task switching', 'multitasking'],
+    'stuck': ['inertia', 'procrastination', 'gridlock'],
+    'executive': ['executive function', 'adhd'],
+    'rsd': ['rejection sensitivity', 'rejection sensitive dysphoria'],
+    'hsp': ['highly sensitive person', 'sensory processing sensitivity'],
+    'introvert': ['introversion', 'extraversion', 'alone time'],
+    'introverted': ['introvert', 'introversion'],
+    'extrovert': ['extraversion', 'introversion'],
+    'extravert': ['extraversion', 'introversion'],
+    'personality': ['big five', 'traits', 'temperament'],
+    'mbti': ['myers-briggs', 'personality', 'big five'],
+    'morning': ['chronotype', 'lark'],
+    'night owl': ['chronotype', 'owl'],
+    'uncertainty': ['intolerance of uncertainty', 'plans', 'change of plan'],
+    'plans': ['uncertainty', 'planning fallacy', 'implementation intentions'],
+    'spoons': ['spoon theory', 'energy'],
+    'energy': ['spoon theory', 'battery', 'recovery'],
+    'breathing': ['slow breathing', 'box breathing', 'cyclic sighing'],
+    'sigh': ['physiological sigh', 'cyclic sighing'],
+    'grounding': ['5 4 3 2 1', 'present moment'],
+    'mindfulness': ['meditation', 'present', 'kabat-zinn'],
+    'nature': ['attention restoration', 'outdoors', 'walk'],
+    'outside': ['nature', 'attention restoration'],
+    'walk': ['nature', 'timeout', 'attention restoration'],
+    'phone': ['phubbing', 'technoference', 'phones'],
+    'phones': ['phubbing', 'technoference'],
+    'screen': ['phubbing', 'screen time'],
+    'distracted': ['mind-wandering', 'phubbing', 'task switching'],
+    'multitasking': ['task switching', 'interruptions'],
+    'bored': ['boredom', 'novelty', 'self-expansion'],
+    'boring': ['boredom', 'novelty', 'self-expansion'],
+    'rest': ['recovery', 'breaks', 'downtime'],
+    'fun': ['play', 'humour', 'novelty'],
+    'play': ['fun', 'playfulness'],
+    'friends': ['friendship', 'weak ties', 'dunbar'],
+    'friendship': ['friends', 'hall', 'maintenance'],
+    'lonely': ['loneliness', 'isolation', 'connection'],
+    'loneliness': ['lonely', 'isolation', 'cacioppo'],
+    'isolated': ['loneliness', 'isolation'],
+    'good news': ['capitalization', 'active constructive'],
+    'celebrate': ['capitalization', 'good news', 'savouring'],
+    'generous': ['kindness', 'prosocial spending', 'generosity'],
+    'giving': ['prosocial spending', 'kindness'],
+    'ritual': ['rituals', 'rituals of connection', 'traditions'],
+    'traditions': ['rituals', 'holidays'],
+    'wonder': ['awe'],
+    'in-laws': ['in-laws', 'extended family'],
+    'inlaws': ['in-laws', 'extended family'],
+    'in laws': ['in-laws', 'extended family', 'mother-in-law'],
+    'mother in law': ['in-laws', 'extended family'],
+    'baby': ['transition to parenthood', 'new parents', 'co-parenting'],
+    'pregnant': ['transition to parenthood', 'baby'],
+    'newborn': ['transition to parenthood', 'baby'],
+    'stepfamily': ['stepfamilies', 'blended family', 'stepparent'],
+    'stepkids': ['stepfamilies', 'stepchildren', 'stepparent'],
+    'stepparent': ['stepfamilies', 'blended family'],
+    'blended': ['stepfamilies', 'blended family'],
+    'aging': ['ageing parents', 'older adults'],
+    'ageing': ['ageing parents', 'older adults'],
+    'elderly': ['ageing parents', 'caregiving'],
+    'siblings': ['ageing parents', 'family systems'],
+    'holiday': ['holidays', 'family gatherings'],
+    'christmas': ['holidays', 'family gatherings'],
+    'moving': ['transitions', 'moving house', 'four s'],
+    'move': ['transitions', 'moving house'],
+    'transition': ['transitions', 'schlossberg', 'change'],
+    'retirement': ['transitions', 'lifespan'],
+    'spending': ['money meanings', 'saver', 'spender'],
+    'budget': ['money', 'money meanings'],
+    'debt': ['money', 'financial stress'],
+    'comparison': ['social comparison', 'social media'],
+    'instagram': ['social comparison', 'social media'],
+    'social media': ['social comparison', 'phubbing'],
+    'decision': ['decisions', 'decision fatigue', 'joint decisions'],
+    'decisions': ['decision fatigue', 'joint decisions', 'choice overload'],
+    'decide': ['decisions', 'joint decisions'],
+    'choices': ['choice overload', 'decision fatigue'],
+    'dinner': ['decision fatigue', 'chores'],
+    'balance': ['work-family', 'work life balance', 'fairness'],
+    'overtime': ['work-family', 'spillover'],
+    'research': ['evidence', 'study', 'studies'],
+    'science': ['research', 'evidence', 'library'],
+    'psychology': ['research', 'library', 'science'],
+    'evidence': ['research', 'study', 'studies'],
+    'true': ['evidence', 'research', 'criticisms'],
+    'myth': ['evidence', 'criticisms', 'replication'],
+    'library': ["professor's library", 'research'],
+    'boss': ['workplace', 'manager', 'work disagreements', 'feedback', 'role ambiguity'],
+    'deal with': ['coping', 'handle', 'conflict', 'disagreeing'],
+    'handle': ['coping', 'conflict', 'disagreeing'],
+    'workplace': ['work', 'coworkers', 'role ambiguity', 'psychological safety'],
+}
+for _k, _v in SYN_LIBRARY.items():
+    _cur = SYN.setdefault(_k, [])
+    _cur.extend(x for x in _v if x not in _cur)
+
+
 def main():
     meta = site_sections()
     pages = [p for p in find_pages()]
@@ -609,11 +1024,17 @@ def main():
             'm': list(e.get('m', [])), 'l': e.get('l', ''), 'g': 1,
         })
 
+    docs += library_definitions()
+
     for path in pages:
         fp = os.path.join(ROOT, path.lstrip('/'))
         raw = open(fp, encoding='utf-8', errors='replace').read()
         pp = PageParser()
         pp.has_main = bool(re.search(r"<main[\s>]", raw))
+        pp.library = path.startswith('/library/')
+        # library entries carry their title and other names in data-k: use them as keywords
+        lib_k = {m.group(1): unescape(m.group(2)).replace(',', ' ')
+                 for m in re.finditer(r'<article class="lib-entry" id="([^"]+)" data-k="([^"]*)"', raw)}
         try:
             pp.feed(raw)
             pp.close()
@@ -633,6 +1054,10 @@ def main():
         secs, carry = [], None
         for s in pp.sections:
             if re.search(r'sign-?off|prepared (&|and) reviewed|signatures?$', s.get('raw', s['h']), re.I):
+                continue
+            if pp.library and s.get('raw') == 'To talk about' and secs and secs[-1]['a'] == s['a']:
+                # discussion questions read better attached to the entry's links than as an answer of their own
+                secs[-1] = dict(secs[-1], s=secs[-1]['s'] + ['Questions to talk about together:'] + s['s'])
                 continue
             if carry:
                 s = {'h': s['h'] or carry['h'], 'level': s['level'], 'a': s['a'] or carry['a'],
@@ -659,7 +1084,7 @@ def main():
                 h = s['h'] or title
                 docs.append({
                     'id': '%s#%d.%d' % (path, si, ci), 't': title, 'h': h, 'u': u, 'x': c,
-                    'k': norm_space(page_k + ' ' + ' '.join(keywords(c))),
+                    'k': norm_space(page_k + ' ' + lib_k.get(anchor, '') + ' ' + ' '.join(keywords(c))),
                     'd': 1 if depth else 0,
                 })
 
@@ -687,8 +1112,8 @@ def main():
     print('wrote %s (%.1f KB)' % (os.path.relpath(OUT, ROOT), size / 1024))
     for p, why in skipped:
         print('  skipped %s (%s)' % (p, why))
-    if size > 1.5 * 1024 * 1024:
-        print('WARNING: file is over 1.5 MB', file=sys.stderr)
+    if size > 4 * 1024 * 1024:
+        print('WARNING: file is over 4 MB', file=sys.stderr)
 
 
 if __name__ == '__main__':

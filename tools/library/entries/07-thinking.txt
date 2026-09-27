@@ -1,0 +1,428 @@
+#slug: thinking
+#title: Thinking traps
+#pillars: V, IV
+#blurb: The biases and mental shortcuts that make us assume the worst, remember selectively and misread each other.
+#pillarnote: Thinking traps belong mostly to Pillar V, Notice the quiet incentives: the mental shortcuts and defaults that steer judgements without our noticing. In you, it means catching your own biases, like remembering your efforts more than anyone else’s. Between you, it means seeing how those shortcuts turn a situation into a story about someone’s character. Many entries also point to Pillar II, Fix the setup, not the person, and Pillar IV, Tune how you send and receive.
+#intro: Human minds take shortcuts. Most of the time they work well enough, but in close relationships they can quietly tilt the picture: we judge others by their actions and ourselves by our intentions, remember our own efforts better than anyone else’s, and assume the worst when we’re tired. Knowing the common traps doesn’t make anyone immune, but it makes them easier to spot, in ourselves first.
+
+@@ fundamental-attribution-error | The fundamental attribution error
+pillars: II, V
+aka: fundamental attribution error, correspondence bias, blaming character, assuming the worst about people, why do we assume the worst
+nut: People tend to explain others’ behaviour by their character (“they’re careless”) and underweight the situation (“they were rushing to pick up the kids”). It is one of the most studied biases in social psychology.
+deep:
+When someone cuts you off in traffic, it is easy to think “what a rude person” rather than “maybe they’re rushing to hospital.” With our own behaviour, we usually know the circumstances, so we explain it by the situation.
+
+In close relationships, this bias can do a lot of damage. A forgotten errand becomes “you don’t care” rather than “you had a hard day.” Over time, these character explanations add up to a story about who the other person is, which then colours every new event.
+
+A useful habit is to ask “what situation would make a reasonable person do this?” It doesn’t excuse everything, but it often reveals a less damning explanation, and it lets the conversation be about the situation, which can actually be changed.
+research:
+Edward Jones and Victor Harris’s 1967 study, in which people judged essay writers’ opinions even when told the writers had been assigned a side, is a classic demonstration. Lee Ross named the “fundamental attribution error” in 1977. The effect is robust in many studies, though researchers have found it is weaker in some cultures that emphasise context, and that people can correct for it when they have time and motivation.
+links:
+/workpapers/wp-09-tone-filter.html | Say it so it lands: weigh what you heard (WP-09)
+/book/chapter-2.html | It judges the setup, never a person (Chapter II)
+/how-it-works.html#situation | How It Works: your situation
+talk:
+- When did you last assume something about someone’s character that turned out to be about their situation?
+- What situations make each of us act in ways that could be misread?
+- How can we remind each other to look at the situation first?
+
+@@ actor-observer | Actor–observer asymmetry
+pillars: II, V
+aka: actor observer bias, my situation your character, double standard
+nut: The actor–observer idea says we explain our own actions by the situation and others’ by their character. It is intuitive and often described, but research suggests the effect is smaller and more patchy than once thought.
+deep:
+Edward Jones and Richard Nisbett proposed in 1971 that actors (doing the behaviour) and observers (watching it) explain behaviour differently. The actor sees the situation; the observer sees the person.
+
+The idea rings true in everyday life: “I was late because of traffic; you were late because you’re disorganised.” Yet when Bertram Malle reviewed the research, he found the asymmetry was small on average and appeared only under certain conditions, for example with negative events or when the actor was a close other.
+
+So it is fair to say that people sometimes judge themselves more kindly than others, especially for negative events, but not that this happens universally. The more useful takeaway may be simply to notice when you are using different standards for yourself and for someone else.
+research:
+Jones and Nisbett proposed the asymmetry in 1971. Malle’s 2006 meta-analysis of 173 studies found little overall support for the classic hypothesis, with effects depending on factors like whether events were positive or negative. Related findings, such as the self-serving bias (taking credit for good outcomes and blaming circumstances for bad ones), are better supported.
+links:
+/workpapers/wp-09-tone-filter.html | Say it so it lands (WP-09)
+/book/chapter-3-in-depth.html#vectors | Chapter III in depth: seven angles
+talk:
+- Do you tend to go easier on yourself or on others?
+- Is there a behaviour we each excuse in ourselves but not in the other?
+- What would a fair standard for both of us look like?
+
+@@ negativity-bias | Negativity bias: why bad weighs more than good
+pillars: V, I
+aka: negativity bias, bad is stronger than good, remembering the bad, dwelling on negatives
+nut: Negative events, feelings and information tend to have a stronger effect on us than equally sized positive ones. This is one reason a single harsh comment can outweigh a day of kindness.
+deep:
+Roy Baumeister and colleagues reviewed evidence from many areas of psychology and concluded that “bad is stronger than good”: negative feedback affects people more than positive feedback; bad events are remembered in more detail; negative impressions form faster and are harder to change.
+
+There are plausible evolutionary reasons: missing a threat was more costly than missing an opportunity. But in modern relationships the bias can distort the picture: a partner’s irritable moment looms larger than their many small kindnesses.
+
+The practical lesson isn’t to suppress negatives but to deliberately notice positives, which don’t register as easily. It also explains why repair and appreciation matter so much: they help rebalance a naturally tilted scale.
+research:
+Baumeister, Ellen Bratslavsky, Catrin Finkenauer and Kathleen Vohs published “Bad Is Stronger Than Good” in 2001; Paul Rozin and Edward Royzman published a similar review the same year. The general pattern is widely accepted. Some researchers note exceptions (for example, people often remember the past more positively over time, sometimes called fading affect bias).
+links:
+/turning-toward.html#thanks | Turning Toward: thanks
+/workpapers/wp-01.html | Who did what: log the small jobs too (WP-01)
+talk:
+- Is there a negative moment you remember far more clearly than many good ones?
+- What positive things do we tend to overlook?
+- How could we help each other notice the good more?
+
+@@ confirmation-bias | Confirmation bias
+pillars: V, I
+aka: confirmation bias, seeing what you expect, selective attention, only noticing evidence that fits
+nut: Confirmation bias is the tendency to notice, seek and remember information that fits what we already believe, and to discount information that doesn’t. Once we have a story about someone, we tend to see evidence for it everywhere.
+deep:
+If you believe your housemate never cleans, you will notice every dirty mug and overlook the times the kitchen was spotless. The belief shapes attention, and attention shapes memory.
+
+This makes stories about other people self-sealing. The more we believe them, the more evidence we collect. It is one reason recurring conflicts can harden: each person has a well-stocked file of examples.
+
+Writing things down as they happen, rather than relying on memory, is one of the best antidotes. So is deliberately asking “what would I expect to see if I were wrong?” and looking for it.
+research:
+Peter Wason’s experiments in the 1960s (including the 2-4-6 task) showed people test hypotheses in ways that confirm rather than challenge them. Raymond Nickerson’s 1998 review described confirmation bias as ubiquitous. It is one of the most robust findings in cognitive psychology, though researchers debate how much is about reasoning and how much about motivation.
+links:
+/workpapers/wp-01.html | Who did what: write it down before it becomes a story (WP-01)
+/workpapers/wp-04-deficit-audit.html | What keeps coming back? (WP-04)
+talk:
+- What story might each of us have about the other that collects evidence too easily?
+- What would you expect to see if that story were wrong?
+- How could a written record help us check our stories?
+
+@@ cognitive-distortions | Cognitive distortions (the CBT list)
+pillars: V, III
+aka: cognitive distortions, thinking errors, unhelpful thinking styles, Beck, Burns, CBT
+nut: Cognitive distortions are common patterns of biased thinking identified in cognitive therapy, like all-or-nothing thinking, mind-reading and catastrophising. Everyone uses them sometimes; noticing them can take the sting out of hard moments.
+deep:
+Aaron Beck, the founder of cognitive therapy, noticed that people with low mood often had automatic thoughts that followed predictable patterns. David Burns later popularised a list of ten in *Feeling Good*. The list includes all-or-nothing thinking, overgeneralisation, mental filter, disqualifying the positive, jumping to conclusions (mind-reading and fortune-telling), magnification or minimisation, emotional reasoning, should statements, labelling, and personalisation.
+
+These aren’t signs of anything wrong with a person. They are shortcuts everyone’s mind takes, especially when tired or stressed. In relationships, they often show up as “you always,” “you never,” “you obviously don’t care,” or “this is going to be a disaster.”
+
+The CBT approach is not to force positive thoughts but to check thoughts against evidence: is it really always? What else could explain this? What would I say to a friend thinking this?
+research:
+Beck described cognitive distortions in the 1960s and 1970s, and Burns’ *Feeling Good* was published in 1980. Cognitive behavioural therapy has a large evidence base for several conditions. The specific list of distortions is a clinical teaching tool; research supports the general idea that certain thinking patterns are linked with low mood and anxiety, though the categories overlap and are not precise scientific constructs.
+links:
+/workpapers/wp-09-tone-filter.html | Say it so it lands (WP-09)
+/signal-translator.html | The Signal Translator
+talk:
+- Which thinking trap do you fall into most when you’re stressed?
+- Do “always” and “never” come up in our conversations?
+- What question helps you check a thought against the evidence?
+
+@@ mind-reading | Mind-reading
+pillars: IV
+aka: mind reading, assuming what someone thinks, jumping to conclusions, how to stop mind reading, you should have known
+nut: Mind-reading means assuming you know what someone else is thinking or feeling, usually something negative, without checking. It is one of the most common thinking traps in close relationships.
+deep:
+“She didn’t reply, so she must be annoyed with me.” “He’s quiet, so he’s angry about last night.” These guesses feel like knowledge, especially with someone we know well. But they are often wrong, and they tend to lean negative.
+
+Mind-reading works in two directions. We guess others’ thoughts (“you think I’m lazy”), and we expect others to guess ours (“you should have known I wanted help”). Both cause trouble: the first leads to reacting to things that weren’t there; the second leads to disappointment when unspoken needs go unmet.
+
+How to stop mind-reading: first, notice the guess as a guess (“I’m telling myself she’s annoyed”). Second, check it gently (“You seem quiet. Is something up, or just tired?”). Third, say your own needs out loud rather than expecting them to be guessed. It feels less romantic, but it works much better.
+research:
+Mind-reading is one of the jumping-to-conclusions distortions in Beck’s and Burns’ work. Research on empathic accuracy by William Ickes and colleagues found that people are only moderately accurate at inferring what others are thinking, and that close partners are not always as accurate as they assume. Research on the illusion of transparency (below) shows the other side: people overestimate how clear their own feelings are to others.
+links:
+/workpapers/wp-13-pll-protocol.html | The daily check-in: one sentence each (WP-13)
+/check-ins.html | Check-ins
+/wired-differently.html#double-empathy | Wired Differently: double empathy
+talk:
+- What is a common guess you make about what the other person is thinking?
+- Is there a need you expect the other person to guess? Could you say it instead?
+- What phrase could we use to check a guess gently?
+
+@@ catastrophising | Catastrophising and all-or-nothing thinking
+pillars: III, V
+aka: catastrophizing, catastrophising, worst case thinking, all or nothing thinking, black and white thinking, always and never
+nut: Catastrophising jumps to the worst possible outcome; all-or-nothing thinking sees things as total success or total failure. Both make ordinary problems feel much bigger than they are.
+deep:
+One bad conversation becomes “our relationship is falling apart.” One forgotten job becomes “you never do anything.” These leaps happen quickly and feel convincing, especially when tired or stressed.
+
+All-or-nothing thinking shows up in words like “always,” “never,” “completely” and “ruined.” It removes the middle ground, where most of real life happens.
+
+Useful questions: What is the most likely outcome, not just the worst? What would I tell a friend? Is it really always, or just often, or just recently? Looking at a month of records rather than one bad evening, as the program suggests, is a practical way to find the middle ground.
+research:
+Catastrophising and dichotomous thinking are standard distortions in cognitive therapy. Catastrophising has been studied especially in pain research, where it is linked to greater distress. Research on relationships links global, stable negative attributions (“you always”) with lower satisfaction.
+links:
+/book/chapter-2.html | Look at the month, not last night (Chapter II)
+/workpapers/wp-04-deficit-audit.html | What keeps coming back? (WP-04)
+talk:
+- What words signal all-or-nothing thinking in our conversations?
+- When did a worst-case prediction of yours not come true?
+- How could looking at a month instead of a day change the story?
+
+@@ should-statements | Should statements
+pillars: V, II
+aka: should, shoulds, must, ought to, rigid expectations, tyranny of the shoulds
+nut: Should statements are rigid rules about how you or others ought to behave. They often lead to guilt when turned inward, and to resentment when aimed at others.
+deep:
+“He should know I need help.” “I should be able to handle this.” “A good partner would…” Shoulds hide expectations inside rules, and rules feel non-negotiable.
+
+Karen Horney wrote about the “tyranny of the shoulds” in the 1950s, and Albert Ellis criticised rigid demands (“musts”) in his rational emotive behaviour therapy. Both saw these rules as a source of needless distress.
+
+Turning a should into a preference or a request helps: “I’d really like help with this; could you take it on?” It makes the expectation visible and discussable. With self-directed shoulds, asking “says who?” and “what would be good enough?” can loosen the grip.
+research:
+Should statements are one of the distortions in Burns’ list. Ellis developed rational emotive behaviour therapy from the 1950s; it has supportive evidence, though less than mainstream CBT. Research on unspoken expectations in relationships (for example, studies of relationship beliefs by Roy Eidelson and Norman Epstein in 1982) links rigid beliefs such as “partners should read each other’s minds” with lower satisfaction.
+links:
+/workpapers/wp-03-raci-treaty.html | One owner per job: expectations written down (WP-03)
+/check-ins.html#ground | Check-ins: ground rules
+talk:
+- What shoulds do you carry about being a good partner, parent or friend?
+- Is there a should about the other person that could become a request?
+- Where did some of our shoulds come from?
+
+@@ personalisation | Personalisation and blame
+pillars: II
+aka: personalization, taking things personally, self blame, blaming others, it is all my fault
+nut: Personalisation means assuming you are the cause of events that have many causes; its twin, blaming, means assuming someone else is solely responsible. Both skip over the situation.
+deep:
+If your partner is grumpy after work, personalisation says “what did I do?” Blaming says “they’re taking it out on me on purpose.” The more likely explanation (a bad day) gets lost.
+
+Personalisation can lead to constant apologising and anxiety. Blaming can lead to anger and defensiveness. Both make it harder to solve problems, because they locate the issue in a person rather than in circumstances that could be changed.
+
+The program’s habit of looking at systems (unclear ownership, overloaded weeks, mismatched rhythms) rather than at people is partly designed to counter this. Most household problems have several causes and no villain.
+research:
+Personalisation is one of Beck’s original distortions. Research on attributions in relationships, particularly by Thomas Bradbury and Frank Fincham, consistently finds that blaming attributions for a partner’s behaviour predict lower satisfaction and more conflict over time, with some evidence that the effect runs in both directions.
+links:
+/book/chapter-5.html | It’s not a review of either person (Chapter V)
+/workpapers/wp-04-deficit-audit.html | What keeps coming back? Nobody owes anything (WP-04)
+talk:
+- Do you lean more toward blaming yourself or blaming others?
+- What recent problem had several causes and no villain?
+- How could we talk about causes without looking for fault?
+
+@@ emotional-reasoning | Emotional reasoning
+pillars: III, V
+aka: emotional reasoning, I feel it so it must be true, feelings as facts
+nut: Emotional reasoning is treating a feeling as proof: “I feel unappreciated, so I must be unappreciated.” Feelings are real information about us, but they aren’t always accurate information about the world.
+deep:
+Feelings are important, and they should be taken seriously. But a feeling of being ignored might come from being ignored, or from being tired, or from a bad day at work, or from an old memory. The feeling is real; its explanation needs checking.
+
+This matters in conflict because both people’s feelings are valid and yet can point to incompatible stories. “I feel you don’t care” and “I feel I do everything for you” can both be sincerely felt.
+
+A gentle approach is to hold feelings as starting points: “I’m feeling unappreciated; can we look at what’s been happening?” That keeps the feeling central while leaving room for the facts.
+research:
+Emotional reasoning is one of the distortions described by Beck and Burns. Research on affect-as-information (Norbert Schwarz and Gerald Clore, 1983) showed that people use their mood as information when making judgements, for example rating life satisfaction lower on rainy days, unless the mood is attributed to its real cause. Some later replications of the weather finding were weaker, but the broader principle is well supported.
+links:
+/workpapers/wp-01.html | Who did what (WP-01)
+/workpapers/wp-02-battery-stress-meter.html | How full is your battery? (WP-02)
+talk:
+- When has a strong feeling turned out to have a different cause than you thought?
+- How can we honour feelings while still checking the facts?
+- What else might be colouring how you feel today?
+
+@@ spotlight-effect | The spotlight effect and the illusion of transparency
+pillars: IV
+aka: spotlight effect, illusion of transparency, everyone is watching me, they should know how I feel
+nut: The spotlight effect is our tendency to overestimate how much others notice us. The illusion of transparency is overestimating how clearly others can read our feelings. Both lead to assuming people know more than they do.
+deep:
+Thomas Gilovich and colleagues had students wear an embarrassing T-shirt into a room; the wearers greatly overestimated how many people noticed it. In other studies, people who were nervous while giving a speech thought their nerves were much more obvious than observers did.
+
+In relationships, the illusion of transparency is important. You feel hurt, and it seems obvious. You assume your partner can see it, and when they don’t respond, it seems like they don’t care. Often they simply didn’t notice.
+
+The practical implication is simple: say it. What feels obvious inside you is usually much less visible from outside.
+research:
+Gilovich, Victoria Medvec and Kenneth Savitsky published the spotlight effect studies in 2000, and Gilovich, Savitsky and Medvec published on the illusion of transparency in 1998. Both findings have been replicated and extended. The effects are moderate and vary with context.
+links:
+/workpapers/wp-13-pll-protocol.html | The daily check-in (WP-13)
+/wired-differently.html#double-empathy | Wired Differently: double empathy
+talk:
+- Have you ever been sure someone could see how you felt, when they couldn’t?
+- What feelings do you tend to assume are obvious?
+- How could we make saying it out loud a habit?
+
+@@ naive-realism | Naive realism: “I see things as they are”
+pillars: IV, V
+aka: naive realism, bias blind spot, I'm objective, they're biased, seeing things as they are
+nut: Naive realism is the sense that we see the world objectively, so people who disagree must be uninformed, irrational or biased. It makes disagreements feel like the other person is being unreasonable.
+deep:
+Lee Ross and Andrew Ward described naive realism as three quiet assumptions: I see things as they really are; reasonable people will agree with me once they have the same information; if they don’t, they must be ignorant, lazy or biased.
+
+A related finding, the bias blind spot, is that people readily see biases in others but not in themselves. Almost everyone rates themselves as less biased than average.
+
+In a household disagreement, both people can feel they are simply describing reality. The program’s idea of seven angles on the same moment is an invitation to question this: each person sees from a different position, and neither view is the whole picture.
+research:
+Ross and Ward described naive realism in 1996. Emily Pronin, Daniel Lin and Ross published research on the bias blind spot in 2002. These findings are well replicated in social psychology and help explain why conflicts between groups, as well as individuals, can feel so intractable.
+links:
+/book/chapter-3.html | There are seven angles on the same moment (Chapter III)
+/book/chapter-3-in-depth.html#vectors | Chapter III in depth: seven angles
+talk:
+- In a current disagreement, what might the other person see that you don’t?
+- Do you ever assume someone would agree with you if they just understood?
+- What bias would you guess you’re blind to?
+
+@@ false-consensus | The false consensus effect
+pillars: IV
+aka: false consensus, everyone thinks like me, projection, assuming others agree
+nut: People tend to overestimate how many others share their opinions, preferences and habits. It makes differences in households feel surprising, and sometimes wrong.
+deep:
+If you like a tidy kitchen, you may assume most people do, so someone who doesn’t seems odd or careless. If you like quiet evenings, a partner who wants to go out may seem restless.
+
+Lee Ross, David Greene and Pamela House found that people who agreed to wear a sandwich-board sign around campus thought most others would agree too; those who refused thought most would refuse.
+
+Recognising false consensus makes differences less personal. Your partner isn’t unusual for not caring about the towels; they may be perfectly typical in a way you aren’t. Neither preference is the default.
+research:
+Ross, Greene and House published the false consensus studies in 1977. Many studies have replicated the effect, though its size varies. It is related to projection and naive realism.
+links:
+/frequency-framework.html | The Frequency Framework
+/wired-differently.html#dynamics | Wired Differently: dynamics
+talk:
+- What preference of yours did you assume was universal until you met the other person?
+- Which household differences feel like one of us is “wrong”?
+- How can we treat differences as differences, not faults?
+
+@@ hostile-attribution | Hostile attribution bias
+pillars: III, IV
+aka: hostile attribution, assuming bad intent, reading hostility, taking things the wrong way
+nut: Hostile attribution bias is the tendency to interpret ambiguous actions as hostile. It is stronger when people are stressed, tired or have been hurt before.
+deep:
+Someone bumps into you in a crowd. Was it deliberate? Most people assume not, but under stress, or with a history of being treated badly, the same bump can feel like an attack.
+
+In couples, a neutral comment like “did you buy milk?” can be heard as “you forgot again, didn’t you.” Once hostility is assumed, the natural response is defensive or hostile, which then confirms the other person’s view that you’re being difficult.
+
+Checking before reacting (“I heard that as a criticism; did you mean it that way?”) breaks the chain. So does being aware that tiredness and stress make everyone more prone to reading hostility.
+research:
+Kenneth Dodge studied hostile attribution bias in children from 1980, and a large body of research links it to aggression. Research in adults, including couples, shows similar patterns. Stress and negative mood increase the tendency.
+links:
+/workpapers/wp-09-tone-filter.html | Say it so it lands (WP-09)
+/conversation-reader.html | The Conversation Reader
+talk:
+- What neutral comments do you sometimes hear as criticism?
+- Are there times of day when we’re more likely to read hostility?
+- How could we check before reacting?
+
+@@ availability-heuristic | The availability heuristic and memory
+pillars: I, V
+aka: availability heuristic, recent events, vivid memories, what comes to mind, recency
+nut: The availability heuristic means we judge how often something happens by how easily examples come to mind. Recent, vivid and emotional events are easier to recall, so they feel more common than they are.
+deep:
+Amos Tversky and Daniel Kahneman showed that people estimate frequency by ease of recall. If you can quickly think of several times your partner was late, lateness feels constant, even if most times they were punctual.
+
+Last week’s argument is more available than last month’s calm. The one time the bins were forgotten is more vivid than the fifty times they weren’t. This skews conversations about patterns.
+
+Records correct for this. A simple log of what happened over a month gives a more balanced picture than memory alone, and is kinder to both people.
+research:
+Tversky and Kahneman published on availability in 1973. It is one of the foundational heuristics in judgement and decision-making research. Later work, for example by Norbert Schwarz, showed that the subjective ease of recall itself influences judgements.
+links:
+/workpapers/wp-01.html | Who did what (WP-01)
+/book/chapter-5.html | Weekly check-ins miss patterns (Chapter V)
+talk:
+- What recent event is colouring your view of a bigger pattern?
+- How could we check our impressions against a record?
+- What good patterns might we be forgetting because they’re not vivid?
+
+@@ memory-reconstruction | Memory is reconstructed
+pillars: I
+aka: memory, remembering differently, false memory, disagreeing about what happened, who said what
+nut: Memories aren’t recordings. Each time we recall an event, we rebuild it, and details shift. Two people can honestly remember the same conversation very differently.
+deep:
+Frederic Bartlett showed in the 1930s that people reshape stories to fit their expectations when they recall them. Elizabeth Loftus later showed that the wording of questions can change what people remember seeing.
+
+In relationships, this means arguments about “what you said” are often unwinnable. Both people may be sincere and both partly wrong. Emotion also shapes memory: we tend to remember the gist and the feeling more reliably than exact words.
+
+It helps to focus less on reconstructing the exact words and more on how each person experienced the moment, and what to do next. For things that matter, writing them down soon after is the best defence against drift.
+research:
+Bartlett’s *Remembering* was published in 1932. Loftus and John Palmer’s 1974 car-crash study showed that question wording altered speed estimates and memory. Research on memory reconstruction is extensive and robust. Studies of couples’ memories suggest partners often remember shared events differently, in ways that fit their current feelings about the relationship.
+links:
+/workpapers/wp-01.html | Log what happened, not what should have (WP-01)
+/check-ins.html#notes | Check-ins: talking notes
+talk:
+- Have we ever remembered the same conversation completely differently?
+- Could we agree not to argue over exact words?
+- What is worth writing down soon after it happens?
+
+@@ peak-end-rule | The peak–end rule
+pillars: V
+aka: peak end rule, how we remember experiences, endings matter, last impressions
+nut: People tend to judge a past experience mostly by its most intense moment and how it ended, rather than by its total. This has interesting implications for how conversations and days are remembered.
+deep:
+Daniel Kahneman and colleagues found that people’s memories of unpleasant experiences depended largely on the peak and the end. In one study, people preferred a longer unpleasant experience with a milder ending over a shorter one that ended at its worst.
+
+For relationships, this suggests two things. A single intense moment can dominate the memory of an otherwise good evening. And endings matter: finishing a hard conversation with warmth, even briefly, may colour how the whole conversation is remembered.
+
+It is another reason to close check-ins on a kind note, and to repair after a rough moment even if the rest of the day was fine.
+research:
+Kahneman, Barbara Fredrickson, Charles Schreiber and Donald Redelmeier published the cold-water study in 1993. Redelmeier and Kahneman found a similar pattern in medical procedures in 1996. The effect is well replicated in lab settings, though some studies find the “end” matters less for more complex or longer experiences.
+links:
+/check-ins.html#regroup | Check-ins: regrouping
+/workpapers/wp-13-pll-protocol.html | The daily check-in (WP-13)
+talk:
+- How do our conversations usually end?
+- Is there a peak moment that dominates your memory of a good day?
+- What could a warm ending to a hard talk look like?
+
+@@ planning-fallacy | The planning fallacy
+pillars: V, II
+aka: planning fallacy, underestimating time, everything takes longer, optimism bias, running late
+nut: People reliably underestimate how long tasks will take, even when they know similar tasks took longer before. This causes a lot of household friction around lateness and unfinished jobs.
+deep:
+“It’ll only take ten minutes” is a familiar promise. The planning fallacy says that when we plan, we imagine the task going smoothly and underweight the interruptions and complications that usually happen.
+
+When one person consistently underestimates, the other may feel let down or think they are being careless. Often it is simply optimism about time.
+
+Helpful fixes: look at how long similar tasks actually took before; break tasks into parts; add a buffer; and agree on realistic times together. Writing down how long jobs really take is useful data for future planning.
+research:
+Kahneman and Tversky described the planning fallacy in 1979. Roger Buehler, Dale Griffin and Michael Ross (1994) found students consistently underestimated how long their projects would take, even when asked to consider past experiences. The effect is robust, though it is weaker when people take an outside view (considering how long such tasks usually take).
+links:
+/workpapers/wp-01.html | Who did what (WP-01)
+/frequency-framework.html | The Frequency Framework
+talk:
+- What jobs does each of us consistently underestimate?
+- Would it help to track how long some chores really take?
+- How can we plan with buffers without it sounding like criticism?
+
+@@ curse-of-knowledge | The curse of knowledge
+pillars: IV, II
+aka: curse of knowledge, it's obvious, assuming others know, explaining badly
+nut: Once we know something, it is hard to imagine not knowing it. This makes us assume others share our knowledge, and explain things less clearly than we think.
+deep:
+In a well-known study, people tapped out the rhythm of familiar songs and predicted how many listeners would guess the song. They expected many would; very few did. The tappers heard the melody in their heads; the listeners heard only knocking.
+
+At home, the person who usually does a job knows all its hidden steps. When they hand it over (“just do the shopping”), they may not realise how much they know that the other person doesn’t: which brand, which shop, what’s running low.
+
+Writing down the full steps of a job when handing it over, as the program’s ownership sheet encourages, helps a lot.
+research:
+Colin Camerer, George Loewenstein and Martin Weber named the curse of knowledge in 1989. Elizabeth Newton’s 1990 dissertation study with song tapping is the famous illustration. Related research on hindsight bias and perspective-taking supports the general effect.
+links:
+/workpapers/wp-03-raci-treaty.html | One owner per job (WP-03)
+/workpapers/wp-01.html | Who did what (WP-01)
+talk:
+- Which of your jobs has hidden steps the other person might not know?
+- When has something “obvious” turned out not to be obvious?
+- What would a handover note for one of our jobs include?
+
+@@ motivated-reasoning | Motivated reasoning
+pillars: V
+aka: motivated reasoning, believing what we want, rationalising, defending our position
+nut: Motivated reasoning is reasoning toward a conclusion we want to reach. We scrutinise evidence we dislike more harshly than evidence we like, often without realising.
+deep:
+Ziva Kunda described how people are motivated both to be accurate and to reach particular conclusions. When the stakes feel personal (“am I a good partner?”), the second motive tends to win, and we find reasons to support what we already want to believe.
+
+In conflict, this means both people build strong cases for their own side. Each piece of counter-evidence gets examined closely; each supporting piece is accepted readily.
+
+It helps to lower the stakes. When a conversation isn’t about who is a better person, there is less need to win. The program frames problems as system gaps rather than personal failures partly for this reason.
+research:
+Kunda published a key review in 1990. Research by Peter Ditto and others has shown that people require more evidence for unwelcome conclusions. Motivated reasoning is well established, and is studied widely in politics and health as well as personal life.
+links:
+/book/chapter-2.html | It judges the setup, never a person (Chapter II)
+/book/preface.html | The borrowed words take the blame away (Preface)
+talk:
+- On what topics are you most likely to reason toward what you want?
+- How can we lower the stakes of a disagreement?
+- What evidence would change your mind on a current issue?
+
+@@ halo-effect | The halo and horns effects
+pillars: V
+aka: halo effect, horns effect, first impressions, one trait colours everything
+nut: The halo effect is when one positive trait colours our view of everything else about a person. The horns effect is the negative version. Both affect how we judge partners, colleagues and family.
+deep:
+Edward Thorndike noticed in 1920 that officers rating soldiers tended to rate them similarly across unrelated qualities: a soldier seen as good-looking was also rated as intelligent and loyal.
+
+In long relationships, halos and horns can shift over time. Early on, a partner’s habits may seem charming; later, when resentment has built up, the same habits seem irritating. The behaviour hasn’t changed; the lens has.
+
+Noticing this helps separate the person from the pattern. If everything the other person does feels irritating, it may be the lens (and the unresolved resentment behind it) that needs attention.
+research:
+Thorndike described the halo effect in 1920. Richard Nisbett and Timothy Wilson (1977) showed that people are often unaware of halo effects in their own judgements. The effect is well documented, though its size varies across contexts.
+links:
+/book/chapter-1.html | Why we get out of tune (Chapter I)
+/workpapers/wp-04-deficit-audit.html | What keeps coming back? (WP-04)
+talk:
+- Is there a habit of the other person that used to charm you and now irritates you?
+- When everything feels irritating, what might be underneath?
+- What qualities in each other do we still see clearly?

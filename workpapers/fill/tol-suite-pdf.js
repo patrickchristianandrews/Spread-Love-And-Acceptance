@@ -102,7 +102,7 @@
       doc.text(L, 761, enc(opts.fillable
         ? 'Tap any box to type, in any PDF app. Or print it and write by hand. Made on your device ' + made + '; nothing was sent anywhere.'
         : 'Made on your device ' + made + '. Nothing entered was sent to or stored by the website. Keep this file somewhere private.'), 'Helvetica', 6.8, C.soft);
-      doc.text(L, 770, enc('A self-reflection worksheet, not a clinical instrument. It describes the arrangement, never either person.'), 'Helvetica', 6.8, C.soft);
+      doc.text(L, 770, enc('A self-reflection worksheet, not a clinical tool. It describes the arrangement, never either person.'), 'Helvetica', 6.8, C.soft);
       var pg = enc('Page ' + (i + 1) + ' of ' + n);
       doc.text(R - PDF.textWidth(pg, 'Helvetica', 6.8), 770, pg, 'Helvetica', 6.8, C.soft);
     }
@@ -304,7 +304,7 @@
     var lines = [];
     if (live.length) live.forEach(function (it) { lines.push(['b', it.label + ': ']); lines.push(['v', it.value]); if (it.note) lines.push(['n', it.note]); });
     else lines.push(['n', items[0] ? items[0].value : '']);
-    lines.push(['n', 'Worked out for you on the website. After filling in this PDF, open it in the Workpaper Suite and this updates.']);
+    lines.push(['n', 'Worked out for you on the website. After you fill in this PDF, open it in the Workpaper Suite to update this part.']);
     var blocks = lines.map(function (l) { return { k: l[0], t: wrap(l[1], l[0] === 'b' ? 'Helvetica-Bold' : (l[0] === 'n' ? 'Times-Italic' : 'Helvetica'), l[0] === 'n' ? 8.5 : 9.5, W - 24) }; });
     var h = blocks.reduce(function (a, b) { return a + b.t.length * 12 + (b.k === 'v' ? 4 : 0); }, 0) + 16;
     pen.room(Math.min(h, 300));
@@ -557,7 +557,7 @@
       ['Kind words you said', 'From your daily check-ins. Worth reading again on a hard day.', items.thanks, C.pink],
       ['Your pause lines', 'Said before a break, so it is never mistaken for walking out.', items.lines, C.lav],
       ['What settles you', 'Your two defaults, decided on a calm day.', items.defaults, C.mint],
-      ['Gentle ways to say no', 'Acknowledge, state your capacity, offer an alternative.', items.refusals, C.butter],
+      ['Gentle ways to say no', 'Say why the request is fair, say what you have left, and offer something instead.', items.refusals, C.butter],
       ['Said so it lands', 'Fact, feeling and a clear ask.', items.messages, C.sky]
     ].filter(function (g) {
       var seen = {};

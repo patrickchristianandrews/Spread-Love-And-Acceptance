@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-NKC6CQ9S66"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-NKC6CQ9S66');
+</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Five Pillars — The Objective Ledger</title>
+<meta name="description" content="The five ideas under everything on this site: see the whole load, fix the setup not the person, read your state first, tune how you send and receive, and notice the quiet incentives. How each works inside you and between you and others, and where each one shows up in the chapters, workpapers, tools and games.">
+<meta property="og:title" content="The Five Pillars — The Objective Ledger">
+<meta property="og:description" content="Five simple ideas, each starting inside you and then showing up between you and the people you share life with.">
+<meta property="og:type" content="article">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,500&family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/css/site.css">
+<link rel="stylesheet" href="/assets/css/reading.css">
+<script src="/assets/js/site.js" defer></script>
+<style>
+  .fp-jump{ list-style:none; padding:0 !important; margin:0 0 2rem !important; display:flex; flex-wrap:wrap; gap:.4rem; }
+  .fp-jump li{ margin:0; max-width:none; }
+  .read .fp-jump a{ display:inline-block; padding:.35rem .7rem; border:1px solid var(--line); border-radius:999px; background:var(--paper); font:500 .8rem/1.3 "IBM Plex Mono", ui-monospace, monospace; text-decoration:none; }
+  .read .fp-jump a:hover{ border-color:var(--brass); color:var(--ink); }
+  .fp-jump b{ color:var(--brass); font-weight:500; margin-right:.3rem; }
+
+  .fp-pillar{ margin:2.5rem 0 0; padding:1.2rem 1.2rem 1rem; background:var(--paper); border:1px solid var(--line); border-top:4px solid var(--brass); border-radius:var(--radius); scroll-margin-top:5rem; }
+  .fp-pillar:target{ box-shadow:0 0 0 2px var(--focus); }
+  .fp-num{ margin:0 0 .2rem; font:500 .74rem/1 "IBM Plex Mono", ui-monospace, monospace; letter-spacing:.08em; color:#7A5A1E; }
+  .read .fp-pillar h2{ margin:0 0 .15rem; font-size:1.45rem; }
+  .fp-field{ margin:0 0 1rem !important; font:400 .78rem/1.3 "IBM Plex Mono", ui-monospace, monospace; color:var(--ink-soft); }
+  .fp-two{ display:grid; grid-template-columns:1fr 1fr; gap:.75rem; margin:0 0 1rem; }
+  .fp-two > div{ padding:.75rem .9rem; background:var(--paper-deep); border-radius:var(--radius); }
+  .fp-two h3{ margin:0 0 .3rem !important; font-size:1rem !important; font-weight:600 !important; }
+  .fp-two p{ margin:0 !important; font-size:.97rem; line-height:1.55; }
+  .fp-eg{ margin:0 0 1rem !important; padding:.2rem 0 .2rem .9rem; border-left:3px solid var(--credit); font-style:italic; color:var(--ink-soft); }
+  .fp-work{ margin:0 0 .6rem !important; font-size:.95rem; line-height:1.9; }
+  .fp-work strong{ font-family:"Fraunces", Georgia, serif; margin-right:.3rem; }
+  .fp-work a{ white-space:nowrap; margin-right:.25rem; }
+  @media (max-width:560px){ .fp-two{ grid-template-columns:1fr; } .fp-work a{ white-space:normal; } }
+
+  .fp-cycle{ list-style:none; counter-reset:cy; padding:0 !important; margin:1rem 0 1.25rem !important; display:grid; grid-template-columns:repeat(5, 1fr); gap:.5rem; }
+  .fp-cycle li{ counter-increment:cy; margin:0; max-width:none; padding:.75rem .7rem; background:var(--paper); border:1px solid var(--line); border-radius:var(--radius); font-size:.92rem; line-height:1.45; }
+  .fp-cycle li::before{ content:counter(cy, upper-roman); display:block; font:500 .72rem/1 "IBM Plex Mono", monospace; color:#7A5A1E; margin-bottom:.3rem; }
+  .fp-cycle strong{ display:block; font-family:"Fraunces", Georgia, serif; font-size:1.02rem; margin-bottom:.2rem; }
+  @media (max-width:760px){ .fp-cycle{ grid-template-columns:1fr; } }
+
+  .fp-start{ list-style:none; padding:0 !important; margin:1rem 0 1.5rem !important; display:grid; gap:.5rem; }
+  .fp-start li{ margin:0; max-width:none; padding:.7rem .9rem; background:var(--paper); border:1px solid var(--line); border-radius:var(--radius); }
+  .fp-start em{ display:block; font-style:normal; color:var(--ink-soft); font-size:.92rem; }
+
+  .fp-map h3{ font-size:1.05rem !important; margin:1.6rem 0 .4rem !important; }
+  .fp-map ul{ list-style:none; padding:0 !important; margin:0 !important; border-top:1px solid var(--line); }
+  .fp-map li{ margin:0; max-width:none; display:flex; flex-wrap:wrap; justify-content:space-between; gap:.2rem .75rem; padding:.45rem 0; border-bottom:1px solid var(--line); }
+  .fp-map li > a{ flex:1 1 14rem; }
+  .fp-tags{ display:flex; flex-wrap:wrap; gap:.25rem; }
+  .fp-tags a{ display:inline-block; min-width:2.1rem; text-align:center; padding:.15rem .4rem; border-radius:999px; background:var(--ink); color:var(--paper) !important; font:500 .7rem/1.3 "IBM Plex Mono", monospace; text-decoration:none !important; }
+  .fp-tags a:hover{ background:var(--credit); }
+  .fp-key{ font-size:.92rem; color:var(--ink-soft); }
+</style>
+</head>
+<body data-no-pillars>
+<main class="read">
+<header class="read-head"><p class="read-code">Start here</p><h1>The Five Pillars</h1></header>
+<p class="depth-bar"><span>Simple version</span><a class="dig" href="/five-pillars-in-depth.html">Read the full page</a></p>
+
+<p class="simple-lede">Everything on this site rests on five simple ideas. Each one starts inside you, as a way to understand yourself. Then it shows up between you and the people you share life with: partners, family, friends, roommates, coworkers and caregivers.</p>
+
+<div class="scene">
+  <p class="scene-when">Tuesday, 7 p.m.</p>
+  <p>The sink is full again. You could say “you never help.” Or you could see everything you both did today (I), notice the dishes have no owner (II), check that you are too tired to talk well right now (III), say it later in a way that lands (IV), and notice that whoever sees the mess first has quietly become the one who always cleans it (V). That is all five pillars in one evening.</p>
+</div>
+
+<ul class="fp-jump" aria-label="Jump to a pillar">
+  <li><a href="#see-the-load"><b>I</b>See the whole load</a></li>
+  <li><a href="#fix-the-setup"><b>II</b>Fix the setup</a></li>
+  <li><a href="#read-your-state"><b>III</b>Read your state first</a></li>
+  <li><a href="#tune-signals"><b>IV</b>Tune how you send and receive</a></li>
+  <li><a href="#quiet-incentives"><b>V</b>Notice the quiet incentives</a></li>
+  <li><a href="#together">How they fit</a></li>
+  <li><a href="#start">Where to start</a></li>
+  <li><a href="#map">The full map</a></li>
+</ul>
+
+<section class="fp-pillar" id="see-the-load" aria-labelledby="p1-h">
+  <p class="fp-num">PILLAR I</p>
+  <h2 id="p1-h">See the whole load</h2>
+  <p class="fp-field">Borrowed from ledger accounting</p>
+  <div class="fp-two">
+    <div><h3>In you</h3><p>Notice everything you carry, including the unseen parts: remembering, planning, worrying, keeping the peace.</p></div>
+    <div><h3>Between you and others</h3><p>Put it all on one shared, fair page, so nobody has to argue about whose work “counts.”</p></div>
+  </div>
+  <p class="fp-eg">You remember the dentist, the birthday card and the gas bill. None of it looks like “doing the dishes,” so none of it gets seen. One week written down changes that, for partners, roommates and caregivers alike.</p>
+  <p class="fp-work"><strong>Put to work in:</strong>
+    <a href="/book/preface.html">Preface: the work nobody sees</a> ·
+    <a href="/book/chapter-2.html">Chapter II: is the split working?</a> ·
+    <a href="/workpapers/wp-01.html">WP-01: who did what</a> ·
+    <a href="/lemonade-stand.html">The Lemonade Stand</a> ·
+    <a href="/workpapers/calculators/calc01-solvency.html">CALC-01: can the load last?</a> ·
+    <a href="/workpapers/report-01.html">REPORT-01: your progress</a>
+  </p>
+  <a class="dig" href="/five-pillars-in-depth.html#see-the-load">Dig deeper: why a ledger, and what it is not</a>
+</section>
+
+<section class="fp-pillar" id="fix-the-setup" aria-labelledby="p2-h">
+  <p class="fp-num">PILLAR II</p>
+  <h2 id="p2-h">Fix the setup, not the person</h2>
+  <p class="fp-field">Borrowed from systems thinking</p>
+  <div class="fp-two">
+    <div><h3>In you</h3><p>See your habits and routines as a setup you can redesign, not a flaw in your character.</p></div>
+    <div><h3>Between you and others</h3><p>Agree clear owners, handoffs and routines (one owner per job) instead of blame.</p></div>
+  </div>
+  <p class="fp-eg">The bins get missed every week. Instead of “you never remember,” the bins get one owner and a Tuesday reminder. The same move works for a team’s follow-ups or a family’s school forms.</p>
+  <p class="fp-work"><strong>Put to work in:</strong>
+    <a href="/workpapers/wp-03-raci-treaty.html">WP-03: one owner per job</a> ·
+    <a href="/book/chapter-5.html">Chapter V: the monthly look-back</a> ·
+    <a href="/workpapers/wp-04-deficit-audit.html">WP-04: what keeps coming back?</a> ·
+    <a href="/book/chapter-4.html">Chapter IV: two kinds of fair</a> ·
+    <a href="/relationships.html">How it fits your relationships</a> ·
+    <a href="/prog-01.html">Six gentle weeks</a>
+  </p>
+  <a class="dig" href="/five-pillars-in-depth.html#fix-the-setup">Dig deeper: why the setup, and where you still matter</a>
+</section>
+
+<section class="fp-pillar" id="read-your-state" aria-labelledby="p3-h">
+  <p class="fp-num">PILLAR III</p>
+  <h2 id="p3-h">Read your state first</h2>
+  <p class="fp-field">Borrowed from nervous-system science</p>
+  <div class="fp-two">
+    <div><h3>In you</h3><p>Know how full your battery is (calm, revved up or shut down) before you judge a moment.</p></div>
+    <div><h3>Between you and others</h3><p>Pick the timing. Pause and come back. Your state shapes how the other person’s words land, and theirs shapes how yours land.</p></div>
+  </div>
+  <p class="fp-eg">At 6 p.m. you are running on empty, and a simple “what’s for dinner?” sounds like criticism. You check in with yourself, say “give me twenty minutes,” and come back ready to hear it as a question.</p>
+  <p class="fp-work"><strong>Put to work in:</strong>
+    <a href="/quick-checks.html">Today’s Weather</a> ·
+    <a href="/workpapers/wp-02-battery-stress-meter.html">WP-02: how full is your battery?</a> ·
+    <a href="/wp-11.html">WP-11: the Calm-Down Kit</a> ·
+    <a href="/book/chapter-3.html">Chapter III: full tanks</a> ·
+    <a href="/carrier-wave-decoder.html">The Carrier Wave Decoder</a> ·
+    <a href="/tools/mood-arbitrage-free.html">Mood Arbitrage</a> ·
+    <a href="/pause-and-play.html">Pause &amp; Play</a> ·
+    <a href="/soundscapes.html">Soundscapes</a>
+  </p>
+  <a class="dig" href="/five-pillars-in-depth.html#read-your-state">Dig deeper: why state comes before words</a>
+</section>
+
+<section class="fp-pillar" id="tune-signals" aria-labelledby="p4-h">
+  <p class="fp-num">PILLAR IV</p>
+  <h2 id="p4-h">Tune how you send and receive</h2>
+  <p class="fp-field">Borrowed from signal theory (the Frequency Framework)</p>
+  <div class="fp-two">
+    <div><h3>In you</h3><p>Know your own wiring: your pace, your tone, and how you hear things.</p></div>
+    <div><h3>Between you and others</h3><p>Translate across different wiring and tone. A mismatch is a tuning problem, not a moral failing.</p></div>
+  </div>
+  <p class="fp-eg">You text “ok.” and mean “fine, thanks.” Your sister reads “I’m upset with you.” Neither of you did anything wrong. You are tuned to different stations, and you can learn each other’s.</p>
+  <p class="fp-work"><strong>Put to work in:</strong>
+    <a href="/frequency-framework.html">The Frequency Framework</a> ·
+    <a href="/book/chapter-1.html">Chapter I: why we get out of tune</a> ·
+    <a href="/wired-differently.html">Wired Differently</a> ·
+    <a href="/wiring-card.html">Wiring Card</a> ·
+    <a href="/workpapers/wp-09-tone-filter.html">WP-09: say it so it lands</a> ·
+    <a href="/signal-translator.html">The Signal Translator</a> ·
+    <a href="/conversation-reader.html">The Conversation Reader</a> ·
+    <a href="/workpapers/wp-01.html">WP-01: kind ways to say no</a> ·
+    <a href="/workpapers/wp-13-pll-protocol.html">WP-13: the 90-second check-in</a> ·
+    <a href="/check-ins.html">Check-ins</a>
+  </p>
+  <a class="dig" href="/five-pillars-in-depth.html#tune-signals">Dig deeper: why tuning, not blame</a>
+</section>
+
+<section class="fp-pillar" id="quiet-incentives" aria-labelledby="p5-h">
+  <p class="fp-num">PILLAR V</p>
+  <h2 id="p5-h">Notice the quiet incentives</h2>
+  <p class="fp-field">Borrowed from behavioral economics</p>
+  <div class="fp-two">
+    <div><h3>In you</h3><p>Spot the defaults and shortcuts that steer your own choices, often without you deciding anything.</p></div>
+    <div><h3>Between you and others</h3><p>See how unclaimed jobs drift to one person, and how fairness and thanks keep things steady.</p></div>
+  </div>
+  <p class="fp-eg">Whoever notices the milk is low first ends up buying it, every time, for years. Nobody chose that. It drifted. A named owner and a specific thank-you stop the drift, between friends as much as partners.</p>
+  <p class="fp-work"><strong>Put to work in:</strong>
+    <a href="/book/chapter-4.html">Chapter IV: two kinds of fair</a> ·
+    <a href="/workpapers/wp-13-pll-protocol.html">WP-13: the 90-second check-in</a> ·
+    <a href="/workpapers/wp-03-raci-treaty.html">WP-03: one owner per job</a> ·
+    <a href="/workpapers/wp-04-deficit-audit.html">WP-04: what keeps coming back?</a> ·
+    <a href="/turning-toward.html">Turning Toward</a> ·
+    <a href="/lemonade-stand.html">The Lemonade Stand</a>
+  </p>
+  <a class="dig" href="/five-pillars-in-depth.html#quiet-incentives">Dig deeper: why incentives, without accusing anyone</a>
+</section>
+
+<h2 id="together">How they fit together</h2>
+<p>The pillars work as a loop. You can start anywhere, but they tend to run in this order:</p>
+<ol class="fp-cycle">
+  <li><strong>See</strong>the whole load, yours and theirs.</li>
+  <li><strong>Fix</strong>the setup around it, not the person.</li>
+  <li><strong>Read</strong>your state before you talk.</li>
+  <li><strong>Tune</strong>the message so it lands.</li>
+  <li><strong>Notice</strong>the quiet pulls that let things slide back, then see the load again.</li>
+</ol>
+<p>Each pillar starts inside you and then shows up between you and other people. You can use every one of them alone, as a way to understand yourself. When two people use them together, the same five ideas become a shared language: facts instead of scores, owners instead of blame, timing instead of ambushes, translation instead of “you always,” and thanks instead of drift.</p>
+
+<h2 id="start">Start with one pillar</h2>
+<p>You don’t need all five at once. Find the line that sounds most like today.</p>
+<ul class="fp-start">
+  <li><strong>“I do so much and nobody sees it.”</strong> Start with Pillar I. <a href="/workpapers/wp-01.html">Log one week with WP-01</a> or <a href="/lemonade-stand.html">try the Lemonade Stand</a>.<em>Alone: see your own load. Together: compare two logs as facts.</em></li>
+  <li><strong>“We keep having the same argument.”</strong> Start with Pillar II. <a href="/workpapers/wp-03-raci-treaty.html">Give each job one owner with WP-03</a>.<em>Alone: spot the jobs you hold without saying so. Together: agree who owns what.</em></li>
+  <li><strong>“I’m too wound up to talk right now.”</strong> Start with Pillar III. <a href="/quick-checks.html#today">Check today’s weather</a>, then <a href="/wp-11.html">the Calm-Down Kit</a>.<em>Alone: know your battery. Together: agree to pause and come back.</em></li>
+  <li><strong>“It came out wrong,” or “that’s not what I meant.”</strong> Start with Pillar IV. <a href="/workpapers/wp-09-tone-filter.html">Say it so it lands with WP-09</a> or <a href="/wiring-card.html">make a Wiring Card</a>.<em>Alone: learn how you hear things. Together: translate across wiring.</em></li>
+  <li><strong>“Somehow it always ends up being me.”</strong> Start with Pillar V. <a href="/turning-toward.html">Turning Toward</a> and <a href="/book/chapter-4.html">Chapter IV</a>.<em>Alone: spot your defaults. Together: name owners and say specific thanks.</em></li>
+</ul>
+
+<h2 id="map">The full map</h2>
+<p class="fp-key">Every chapter, workpaper, tool and guide, with the pillars it puts to work. Tap a numeral to jump to that pillar.</p>
+<div class="fp-map">
+  <h3>The book</h3>
+  <ul>
+    <li><a href="/book/preface.html">Preface: the work nobody sees</a><span class="fp-tags"><a href="#see-the-load">I</a><a href="#quiet-incentives">V</a></span></li>
+    <li><a href="/book/chapter-1.html">Chapter I: why we get out of tune</a><span class="fp-tags"><a href="#read-your-state">III</a><a href="#tune-signals">IV</a></span></li>
+    <li><a href="/book/chapter-2.html">Chapter II: is the split working?</a><span class="fp-tags"><a href="#see-the-load">I</a><a href="#fix-the-setup">II</a><a href="#read-your-state">III</a></span></li>
+    <li><a href="/book/chapter-3.html">Chapter III: full tanks and different angles</a><span class="fp-tags"><a href="#read-your-state">III</a><a href="#tune-signals">IV</a></span></li>
+    <li><a href="/book/chapter-4.html">Chapter IV: two kinds of fair</a><span class="fp-tags"><a href="#fix-the-setup">II</a><a href="#read-your-state">III</a><a href="#quiet-incentives">V</a></span></li>
+    <li><a href="/book/chapter-5.html">Chapter V: the monthly look-back</a><span class="fp-tags"><a href="#see-the-load">I</a><a href="#fix-the-setup">II</a><a href="#quiet-incentives">V</a></span></li>
+  </ul>
+  <h3>Workpapers</h3>
+  <ul>
+    <li><a href="/workpapers/wp-01.html">WP-01: who did what, and kind ways to say no</a><span class="fp-tags"><a href="#see-the-load">I</a><a href="#tune-signals">IV</a></span></li>
+    <li><a href="/workpapers/wp-02-battery-stress-meter.html">WP-02: how full is your battery?</a><span class="fp-tags"><a href="#read-your-state">III</a></span></li>
+    <li><a href="/workpapers/wp-03-raci-treaty.html">WP-03: one owner per job</a><span class="fp-tags"><a href="#fix-the-setup">II</a><a href="#quiet-incentives">V</a></span></li>
+    <li><a href="/workpapers/wp-04-deficit-audit.html">WP-04: what keeps coming back?</a><span class="fp-tags"><a href="#fix-the-setup">II</a><a href="#quiet-incentives">V</a></span></li>
+    <li><a href="/workpapers/wp-09-tone-filter.html">WP-09: say it so it lands</a><span class="fp-tags"><a href="#tune-signals">IV</a></span></li>
+    <li><a href="/wp-11.html">WP-11: the Calm-Down Kit</a><span class="fp-tags"><a href="#read-your-state">III</a></span></li>
+    <li><a href="/workpapers/wp-13-pll-protocol.html">WP-13: the 90-second daily check-in</a><span class="fp-tags"><a href="#tune-signals">IV</a><a href="#quiet-incentives">V</a></span></li>
+    <li><a href="/workpapers/report-01.html">REPORT-01: your progress, week by week</a><span class="fp-tags"><a href="#see-the-load">I</a><a href="#fix-the-setup">II</a></span></li>
+    <li><a href="/prog-01.html">PROG-01: six gentle weeks</a><span class="fp-tags"><a href="#see-the-load">I</a><a href="#fix-the-setup">II</a><a href="#read-your-state">III</a><a href="#tune-signals">IV</a><a href="#quiet-incentives">V</a></span></li>
+    <li><a href="/workpapers/fill/suite.html">The Workpaper Suite</a><span class="fp-tags"><a href="#see-the-load">I</a><a href="#fix-the-setup">II</a><a href="#read-your-state">III</a><a href="#tune-signals">IV</a><a href="#quiet-incentives">V</a></span></li>
+  </ul>
+  <h3>Tools</h3>
+  <ul>
+    <li><a href="/lemonade-stand.html">The Lemonade Stand</a><span class="fp-tags"><a href="#see-the-load">I</a><a href="#quiet-incentives">V</a></span></li>
+    <li><a href="/workpapers/calculators/calc01-solvency.html">CALC-01: can the load last?</a><span class="fp-tags"><a href="#see-the-load">I</a><a href="#fix-the-setup">II</a></span></li>
+    <li><a href="/snapshot/index.html">A quick snapshot</a><span class="fp-tags"><a href="#see-the-load">I</a><a href="#fix-the-setup">II</a><a href="#read-your-state">III</a></span></li>
+    <li><a href="/quick-checks.html">Today’s Weather</a><span class="fp-tags"><a href="#read-your-state">III</a></span></li>
+    <li><a href="/carrier-wave-decoder.html">The Carrier Wave Decoder</a><span class="fp-tags"><a href="#read-your-state">III</a><a href="#tune-signals">IV</a></span></li>
+    <li><a href="/tools/mood-arbitrage-free.html">Mood Arbitrage</a><span class="fp-tags"><a href="#read-your-state">III</a><a href="#tune-signals">IV</a></span></li>
+    <li><a href="/wiring-card.html">Wiring Card</a><span class="fp-tags"><a href="#tune-signals">IV</a></span></li>
+    <li><a href="/signal-translator.html">The Signal Translator</a><span class="fp-tags"><a href="#read-your-state">III</a><a href="#tune-signals">IV</a></span></li>
+    <li><a href="/conversation-reader.html">The Conversation Reader</a><span class="fp-tags"><a href="#read-your-state">III</a><a href="#tune-signals">IV</a></span></li>
+    <li><a href="/tools/frequency-calibration.html">Find your natural rhythms</a><span class="fp-tags"><a href="#read-your-state">III</a><a href="#tune-signals">IV</a></span></li>
+    <li><a href="/tools/frequency-sync-visualizer.html">Watch two rhythms sync</a><span class="fp-tags"><a href="#fix-the-setup">II</a><a href="#tune-signals">IV</a></span></li>
+    <li><a href="/ask.html">Chat with Professor Puddles</a><span class="fp-tags"><a href="#see-the-load">I</a><a href="#fix-the-setup">II</a><a href="#read-your-state">III</a><a href="#tune-signals">IV</a><a href="#quiet-incentives">V</a></span></li>
+  </ul>
+  <h3>Guides</h3>
+  <ul>
+    <li><a href="/frequency-framework.html">The Frequency Framework</a><span class="fp-tags"><a href="#tune-signals">IV</a></span></li>
+    <li><a href="/wired-differently.html">Wired Differently</a><span class="fp-tags"><a href="#tune-signals">IV</a></span></li>
+    <li><a href="/check-ins.html">Check-ins</a><span class="fp-tags"><a href="#read-your-state">III</a><a href="#tune-signals">IV</a></span></li>
+    <li><a href="/turning-toward.html">Turning Toward</a><span class="fp-tags"><a href="#tune-signals">IV</a><a href="#quiet-incentives">V</a></span></li>
+    <li><a href="/learn/index.html">Stories from Philosophy</a><span class="fp-tags"><a href="#see-the-load">I</a><a href="#fix-the-setup">II</a><a href="#read-your-state">III</a><a href="#tune-signals">IV</a><a href="#quiet-incentives">V</a></span></li>
+    <li><a href="/relationships.html">How it fits your relationships</a><span class="fp-tags"><a href="#see-the-load">I</a><a href="#fix-the-setup">II</a></span></li>
+    <li><a href="/how-it-works.html">How it works</a><span class="fp-tags"><a href="#see-the-load">I</a><a href="#fix-the-setup">II</a><a href="#read-your-state">III</a><a href="#tune-signals">IV</a><a href="#quiet-incentives">V</a></span></li>
+    <li><a href="/infographic.html">The whole idea on one page</a><span class="fp-tags"><a href="#see-the-load">I</a><a href="#fix-the-setup">II</a><a href="#read-your-state">III</a><a href="#tune-signals">IV</a><a href="#quiet-incentives">V</a></span></li>
+  </ul>
+  <h3>Calm games and sound</h3>
+  <ul>
+    <li><a href="/pause-and-play.html">Pause &amp; Play and every calm game</a><span class="fp-tags"><a href="#read-your-state">III</a></span></li>
+    <li><a href="/frequency-journey.html">The Frequency Journey</a><span class="fp-tags"><a href="#read-your-state">III</a><a href="#tune-signals">IV</a></span></li>
+    <li><a href="/night-garden.html">The Night Garden</a><span class="fp-tags"><a href="#read-your-state">III</a></span></li>
+    <li><a href="/soundscapes.html">Soundscapes</a><span class="fp-tags"><a href="#read-your-state">III</a></span></li>
+    <li><a href="/podcast-index.html">The Podcast</a><span class="fp-tags"><a href="#see-the-load">I</a><a href="#fix-the-setup">II</a><a href="#read-your-state">III</a><a href="#tune-signals">IV</a><a href="#quiet-incentives">V</a></span></li>
+  </ul>
+</div>
+
+<div class="try-this">
+  <p><strong>Try this:</strong> Pick the pillar that sounds most like today. Try it on yourself first, then with one person you share life with.</p>
+  <p><a href="/quick-checks.html#today">Start by reading your state &rarr;</a> <a href="/five-pillars-in-depth.html">Read the full page</a></p>
+</div>
+</main>
+</body>
+</html>

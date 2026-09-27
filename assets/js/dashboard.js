@@ -75,9 +75,9 @@
   ];
 
   var STATES = {
-    ventral: { name: 'Ventral vagal', sub: 'Safe & social' },
-    sympathetic: { name: 'Sympathetic', sub: 'Mobilized' },
-    dorsal: { name: 'Dorsal vagal', sub: 'Shutdown' }
+    ventral: { name: 'Calm & connected', sub: 'Ventral vagal' },
+    sympathetic: { name: 'Revved up', sub: 'Sympathetic' },
+    dorsal: { name: 'Shut down', sub: 'Dorsal vagal' }
   };
 
   var STARTER_LEDGER = ['Groceries & meal planning', 'Dishes', 'Laundry', 'Bills & scheduling', 'Emotional check-ins'];
@@ -96,15 +96,15 @@
   }
 
   function asiReading(score) {
-    if (score < 0.3) return 'Low load. Whatever comes up is probably actually about the thing itself.';
-    if (score < 0.6) return 'Moderate. Worth naming out loud before a hard conversation: \u201cheads up, I\u2019m carrying more than usual today.\u201d';
-    return 'High. A signal to postpone anything that doesn\u2019t need deciding in the next hour \u2014 a postponement, not an exit.';
+    if (score < 0.3) return 'Low load. Whatever comes up is probably about the thing itself.';
+    if (score < 0.6) return 'Medium. Before a hard conversation, it\u2019s worth saying out loud: \u201cHeads up, I\u2019m carrying more than usual today.\u201d';
+    return 'High. Put off anything that doesn\u2019t need deciding in the next hour. It\u2019s a pause, not a way out.';
   }
 
   function solvencyBand(s) {
-    if (s >= 0.7) return { cls: 'high', text: 'The current arrangement is carrying its own weight. Keep the same rhythm of check-ins.' };
-    if (s >= 0.4) return { cls: 'mid', text: 'Something in the arrangement is drifting \u2014 usually ownership clarity first. Revisit the ownership treaty below.' };
-    return { cls: 'low', text: 'The workload as currently structured doesn\u2019t look sustainable. That\u2019s a statement about the arrangement, not about either person.' };
+    if (s >= 0.7) return { cls: 'high', text: 'The current setup is carrying its own weight. Keep the same rhythm of check-ins.' };
+    if (s >= 0.4) return { cls: 'mid', text: 'Something in the setup is drifting, usually ownership clarity first. Revisit the ownership treaty below.' };
+    return { cls: 'low', text: 'The workload, as it\u2019s set up now, doesn\u2019t look like it can last. That\u2019s a statement about the setup, not about either person.' };
   }
 
   /* ------------------------------------------------------------------ */
@@ -160,11 +160,11 @@
     var as = mine && theirs ? (asiScore(mine) + asiScore(theirs)) / 2 : null;
 
     var missing = [];
-    if (wb === null) missing.push('Log some hours in this week\u2019s register.');
+    if (wb === null) missing.push('Log some hours in this week\u2019s hours list.');
     if (oc === null) missing.push('Add at least one task to the ownership treaty.');
-    if (!p) missing.push('Invite your partner. The read always needs both people.');
+    if (!p) missing.push('Invite the other person. The read always needs both of you.');
     else {
-      if (!mine) missing.push('Complete your saturation check.');
+      if (!mine) missing.push('Fill in your battery check (WP-02).');
       if (!theirs) missing.push('Waiting on ' + p.display_name + '\u2019s saturation check.');
     }
 
@@ -824,7 +824,7 @@
     el.innerHTML =
       sectionHead('This Week', 'Solvency Read',
         'The three inputs below, pulled into one number for ' + esc(fmtWeek(S.weekStart).replace('Week of ', 'the week of ')) +
-        '. It scores the workload arrangement, never either person.') +
+        '. It scores how the workload is set up, never either person.') +
       phase('P(Solvency)', badgeHtml,
         '<div class="db-scroll"><table class="db-read-ledger">' +
           '<thead><tr><th scope="col">Input</th><th scope="col">Score</th><th scope="col">Weight</th><th scope="col">Amount</th></tr></thead>' +
@@ -841,7 +841,7 @@
           ? '<p class="db-read-band is-' + band.cls + '">' + esc(band.text) + '</p>'
           : '<p class="db-read-band">The read fills in once every input is in:</p><ul class="roadmap-list">' +
               r.missing.map(function (m) { return '<li class="tbd">' + esc(m) + '</li>'; }).join('') + '</ul>') +
-        '<p class="db-fine">A heuristic worksheet, not a validated instrument. It covers this one week\u2019s workload structure, never either person or the relationship as a whole.</p>');
+        '<p class="db-fine">A rule-of-thumb worksheet, not a tested tool. It covers how this one week\u2019s workload is set up, never either person or the relationship as a whole.</p>');
   }
 
   /* ---------- the register (Lemonade Stand) ---------- */
@@ -874,7 +874,7 @@
     el.innerHTML =
       sectionHead('Tool', 'The Lemonade Stand',
         'Two people, one stand. List what it took to keep the household running this week and the hours each of you put in. Either of you can edit it. It\u2019s one shared page.') +
-      phase('This week\u2019s register', closed ? badge('planned', 'Closed') : badge('live', 'Open'),
+      phase('This week\u2019s hours', closed ? badge('planned', 'Closed') : badge('live', 'Open'),
         (S.ledger.length
           ? '<div class="db-ledger">' +
               '<div class="db-ledger-head"><span>Line item</span><span>' + esc(seatName('a')) + '</span><span>' + esc(seatName('b')) + '</span><span></span></div>' +
@@ -955,14 +955,14 @@
     var nameA = seatName('a'), nameB = seatName('b');
     var line;
     if (r.total === 0) {
-      line = 'Add some hours above to see the register.';
+      line = 'Add some hours above to see how the work is split.';
     } else {
       var leader = r.totalA >= r.totalB ? nameA : nameB;
       var other = r.totalA >= r.totalB ? nameB : nameA;
       var pct = Math.round(Math.max(r.pctA, r.pctB));
-      if (pct >= 90) line = leader + ' is carrying nearly all of what\u2019s listed here (' + pct + '%). That\u2019s worth a direct conversation about redistributing, not just noting.';
-      else if (pct >= 60) line = 'This week, ' + leader + ' shows about ' + pct + '% of the visible hours. That\u2019s not a verdict on either of you \u2014 it\u2019s just what\u2019s written down. Worth talking through together.';
-      else line = 'Fairly close split this week \u2014 ' + leader + ' at ' + pct + '%, ' + other + ' close behind. Keep checking in as things change.';
+      if (pct >= 90) line = leader + ' is carrying nearly all of what\u2019s listed here (' + pct + '%). That\u2019s worth an honest conversation about sharing it out differently, not just a note.';
+      else if (pct >= 60) line = 'This week, ' + leader + ' shows about ' + pct + '% of the visible hours. That\u2019s not a verdict on either of you. It\u2019s just what\u2019s written down, and worth talking through together.';
+      else line = 'Fairly close split this week: ' + leader + ' at ' + pct + '%, ' + other + ' close behind. Keep checking in as things change.';
     }
     el.innerHTML =
       '<div class="db-bar" aria-hidden="true"><span class="db-bar-a" style="width:' + r.pctA + '%"></span><span class="db-bar-b" style="width:' + r.pctB + '%"></span></div>' +
@@ -1010,13 +1010,13 @@
 
     el.innerHTML =
       sectionHead('WP-02', 'The Battery &amp; Stress Meter',
-        'Score how the last 24\u201348 hours have actually gone for you, from 0 (not at all) to 4 (maximally true). Fill it in about yourself only, never about your partner.') +
+        'Score how the last 24\u201348 hours have actually gone for you, from 0 (not at all) to 4 (very true). Fill it in about yourself only, never about the other person.') +
       phase('Your check-in', mine ? badge('live', 'Complete') : badge('progress', 'Not yet'),
         '<div class="db-asi">' + rows + '</div>' +
         (myScore !== null
           ? '<p class="db-asi-result"><span class="db-asi-score">' + fix2(myScore) + '</span> ' + esc(asiReading(myScore)) + '</p>'
           : '<p class="db-muted db-asi-result">Answer all five to get your battery score.</p>') +
-        '<p class="db-fine">Your partner can see your check-in. It feeds the saturation line in the Solvency Read.</p>') +
+        '<p class="db-fine">The other person can see your check-in. It goes into the battery (saturation) line of the Solvency Read.</p>') +
       phase(p ? esc(p.display_name) + '\u2019s check-in' : 'Partner\u2019s check-in', partnerBadge, partnerBody);
 
     if (closed) return;
@@ -1077,7 +1077,7 @@
 
     el.innerHTML =
       sectionHead('WP-03', 'RACI Treaty',
-        'One Responsible (does it) and one Accountable (notices if it didn\u2019t happen) for every recurring task. The treaty carries over week to week. Amend it together at the weekly close, not silently.') +
+        'One Responsible (does it) and one Accountable (notices if it didn\u2019t get done) for every regular task. The treaty carries over from week to week. Change it together at the weekly close, never quietly.') +
       phase('The treaty', '<span id="raci-badge">' + badgeHtml + '</span>',
         (S.raci.length
           ? '<p class="db-raci-score" id="raci-score">' + raciScoreText(r) + '</p>' +
@@ -1160,7 +1160,7 @@
 
     el.innerHTML =
       sectionHead('Tool', 'Check Your State',
-        'Before you open the register, check which state you\u2019re reading it from. Pick the rung that\u2019s closest to true right now.') +
+        'Before you look at this week\u2019s numbers, check what state you\u2019re in. Pick the step that feels closest to how you are right now.') +
       phase('Right now', badge('planned', 'Private'),
         '<div class="db-rungs" role="group" aria-label="Your current state">' +
           Object.keys(STATES).map(function (k) {
@@ -1216,13 +1216,13 @@
       thisWeek = phase(esc(fmtWeek(S.weekStart)), badge('live', 'Open'),
         '<div class="db-form">' +
           '<label for="close-note">Closing note</label>' +
-          '<textarea id="close-note" rows="3" maxlength="2000" placeholder="What changed, what you agreed to try, any treaty amendments"></textarea>' +
+          '<textarea id="close-note" rows="3" maxlength="2000" placeholder="What changed, what you agreed to try, any changes to the treaty"></textarea>' +
           '<div class="db-actions">' +
             '<button type="button" class="db-btn" id="week-close">Close the books for this week</button>' +
           '</div>' +
           '<p class="db-fine">' + (r.solvency !== null
-            ? 'Saves this week\u2019s read of ' + fix2(r.solvency) + ' and freezes the register and check-ins.'
-            : 'The read isn\u2019t complete, so no score will be saved. The register and check-ins will still be frozen.') + '</p>' +
+            ? 'Saves this week\u2019s read of ' + fix2(r.solvency) + ' and locks this week\u2019s hours and check-ins.'
+            : 'The read isn\u2019t complete, so no score will be saved. This week\u2019s hours and check-ins will still be locked.') + '</p>' +
         '</div>');
     }
 
@@ -1242,7 +1242,7 @@
 
     el.innerHTML =
       sectionHead('Weekly', 'Close the Books',
-        'Once a week, together: review the register, amend the treaty if needed, and close the week.') +
+        'Once a week, together: look over the hours, update the treaty if needed, and close the week.') +
       thisWeek +
       phase('Past weeks', hist.length ? badge('live', hist.length + ' closed') : '', histHtml);
 
@@ -1308,7 +1308,7 @@
       phase('Leave or delete', '',
         '<details class="db-danger">' +
           '<summary>Show options</summary>' +
-          '<p><strong>Leaving</strong> removes you and your battery check-ins from the household. The shared register, treaty, and closed weeks stay with the household for your partner. Your private state log stays with your account.</p>' +
+          '<p><strong>Leaving</strong> removes you and your battery check-ins from the household. The shared hours, the treaty and the closed weeks stay with the household for the other person. Your private state log stays with your account.</p>' +
           '<button type="button" class="db-btn db-btn--danger" id="acct-leave">Leave household</button>' +
           '<p><strong>Deleting your account</strong> does all of that, and also permanently erases your private state log and your sign-in. This can\u2019t be undone. Type DELETE to confirm.</p>' +
           '<div class="db-inline"><label class="db-sr" for="delete-confirm">Type DELETE to confirm</label>' +
@@ -1321,7 +1321,7 @@
       var code = S.household.invite_code;
       (navigator.clipboard ? navigator.clipboard.writeText(code) : Promise.reject())
         .then(function () { setStatus('Invite code copied', 'ok'); })
-        .catch(function () { setStatus('Select the code and copy it manually', 'ok'); });
+        .catch(function () { setStatus('Select the code and copy it by hand', 'ok'); });
     });
 
     $('#rename-form', el).addEventListener('submit', function (e) {

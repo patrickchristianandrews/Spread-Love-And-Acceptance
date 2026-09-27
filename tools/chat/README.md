@@ -14,7 +14,7 @@ Run this after changing page text, the glossary (`assets/js/dives-glossary.js`) 
     python3 tools/chat/build_kb.py
 
 The script uses only the Python 3 standard library. It prints the page count, the number of
-passages and the file size, and warns if the file goes over 1.5 MB. Commit the regenerated
+passages and the file size, and warns if the file goes over 4 MB. Commit the regenerated
 `assets/js/chat-kb.js` along with your page changes.
 
 What it reads:

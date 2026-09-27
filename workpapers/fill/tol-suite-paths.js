@@ -47,12 +47,12 @@
       ['Notice your load', ['WP-02'], A('weather', 'ch3'), 'Each morning, one minute with the Battery Meter. Just notice; change nothing yet.'],
       ['Know what settles you', ['WP-11'], A('garden', 'freq'), 'On a calm day, choose your two settling defaults and write your pause line.'],
       ['How words reach you', ['WP-09'], A('wired', 'wiring'), 'Fill in a Wiring Card, and try fact, feeling and ask on one thing that stung.'],
-      ['Saying no, kindly', ['WP-01'], A('decoder', 'signal'), 'Use one neutral refusal this week: acknowledge, say your capacity, offer an alternative.'],
+      ['Saying no, kindly', ['WP-01'], A('decoder', 'signal'), 'Try one kind “no” this week: say why the request is fair, say what you have left, and offer something instead.'],
       ['Look back', ['WP-02'], A('report', 'garden'), 'Compare this week’s battery with week one. What pattern do you see? Be kind about it.']
     ],
     partners: [
       ['See the work', ['WP-01'], A('preface', 'ch1'), 'Each of you logs one week of who did what. No discussing it yet.'],
-      ['One owner per job', ['WP-03'], A('ch2', 'lemonade'), 'Sit down once, with the log, and give every recurring job one owner.'],
+      ['One owner per job', ['WP-03'], A('ch2', 'lemonade'), 'Sit down once, with the log, and give every regular job one owner.'],
       ['Your batteries', ['WP-02'], A('ch3', 'calc'), 'Both do the Battery Meter daily. Say your number before any hard talk.'],
       ['Talk so it lands', ['WP-09', 'WP-11'], A('signal', 'checkins'), 'Agree on your pause lines, then try one check-in using the ground rules.'],
       ['Small daily corrections', ['WP-13'], A('toward', 'decoder'), 'Do the 90-second check-in every evening this week.'],
@@ -69,7 +69,7 @@
       ['One owner per kid task', ['WP-03'], A('lemonade', 'calc'), 'School, health, activities: every recurring task gets exactly one owner.'],
       ['Messages that land', ['WP-09'], A('signal', 'ground'), 'Every charged message goes through fact, feeling and ask first.'],
       ['The weekly handoff', ['WP-13'], A('checkins'), 'A short weekly check-in between homes: load, one thanks, one ask.'],
-      ['See the load', ['WP-01', 'WP-02'], A('calc', 'weather'), 'Each log a week; each check your own battery before handoffs.'],
+      ['See the load', ['WP-01', 'WP-02'], A('calc', 'weather'), 'Each of you logs a week, and checks your own battery before handoffs.'],
       ['Calm under pressure', ['WP-11'], A('decoder'), 'Decide in advance what settles you before a hard conversation.'],
       ['The monthly look-back', ['WP-04'], A('report', 'ch5'), 'Sort what slipped into real gaps or one-offs, and adjust the owners.']
     ],
@@ -212,7 +212,7 @@
           { wp: 'WP-09', why: 'Turn a raw reaction into fact, feeling and a clear ask.', again: 'Another message' }
         ] },
         { along: A('freq','decoder'), title: 'Also helpful', note: 'Kind, ready-made ways to say no.', stops: [
-          { wp: 'WP-01', why: 'Part B has neutral refusals: acknowledge, state your capacity, offer an alternative.' }
+          { wp: 'WP-01', why: 'Part B has kind ways to say no: say why the request is fair, say what you have left, and offer something instead.' }
         ] }
       ],
       next: 'Take one minute each morning with WP-02. Patterns show up within a week, and naming them is half the work.',
@@ -225,7 +225,7 @@
       groups: [
         { along: A('preface','ch1','lemonade'), title: 'Start here', note: 'See the work that is already happening.', stops: [
           { wp: 'WP-01', why: 'A week of who actually did what, written down by each of you.', again: 'Another week' },
-          { wp: 'WP-03', why: 'One owner for every recurring task, so it stops being renegotiated.' },
+          { wp: 'WP-03', why: 'One owner for every regular task, so you stop re-deciding it every week.' },
           { wp: 'WP-13', why: '90 seconds a day that keeps small things small.', again: 'Another week' }
         ] },
         { along: A('ch2','calc','checkins','signal'), title: 'Then', note: 'For your own state, and for the hard conversations.', stops: [
@@ -249,7 +249,7 @@
           { wp: 'WP-03', why: 'Write down who owns what, so nobody has to guess.' },
           { wp: 'WP-09', why: 'Old family patterns make tone land hard; this slows it down.', again: 'Another message' }
         ] },
-        { along: A('ch3','ch4','decoder'), title: 'Then', note: 'Helpful with small adjustments.', stops: [
+        { along: A('ch3','ch4','decoder'), title: 'Then', note: 'These help too, with small changes for family life.', stops: [
           { wp: 'WP-02', why: 'Leftover stress can carry years of history. Check your own first.', again: 'Another day' },
           { wp: 'WP-11', why: 'Your pause line, agreed before the holiday table.' },
           { wp: 'WP-01', why: 'A week of who did what, when "helping out" means different things.', again: 'Another week' }
@@ -368,15 +368,15 @@
       people: ['Partner A', 'Partner B'],
       groups: [
         { along: A('preface','ch1','weather'), title: 'Week 1 · See the work', note: 'Just observe. No fixing anything yet.', stops: [
-          { wp: 'WP-01', why: "Log a week of who does what, before memory hardens into a story." }
+          { wp: 'WP-01', why: "Log a week of who does what, before memory turns it into a story." }
         ] },
-        { along: A('ch2','calc'), title: 'Week 2 · One owner per job', note: 'Informed by what actually happened.', stops: [
+        { along: A('ch2','calc'), title: 'Week 2 · One owner per job', note: 'Based on what your Week 1 log showed.', stops: [
           { wp: 'WP-03', why: 'Name one owner for each regular job.' }
         ] },
         { along: A('ch3','ch4'), title: 'Week 3 · Your batteries', note: 'Each day for a week, each about yourself.', stops: [
           { wp: 'WP-02', why: 'Look for patterns: who is carrying more, and when.', again: 'Another day' }
         ] },
-        { along: A('signal','decoder','wired'), title: 'Week 4 · Talk about it kindly', note: 'Retune before responding.', stops: [
+        { along: A('signal','decoder','wired'), title: 'Week 4 · Talk about it kindly', note: 'Retune before you respond.', stops: [
           { wp: 'WP-09', why: 'Turn a raw reaction into fact, feeling and a clear ask.', again: 'Another message' },
           { wp: 'WP-11', why: 'Your pause line, agreed on a calm day.' }
         ] },

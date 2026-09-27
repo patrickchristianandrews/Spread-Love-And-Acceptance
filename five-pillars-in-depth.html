@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-NKC6CQ9S66"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-NKC6CQ9S66');
+</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Five Pillars in depth — The Objective Ledger</title>
+<meta name="description" content="The five fields The Objective Ledger borrows from, why each one, how the pillars work together as a loop, how each starts inside you and shows up between you and others, common mix-ups, and a full map of every chapter, workpaper, tool and guide to its pillars.">
+<meta property="og:title" content="The Five Pillars in depth — The Objective Ledger">
+<meta property="og:description" content="Why each field, how the pillars interact, common mix-ups, and the full map.">
+<meta property="og:type" content="article">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,500&family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/css/site.css">
+<link rel="stylesheet" href="/assets/css/reading.css">
+<script src="/assets/js/site.js" defer></script>
+<style>
+  .read h2, .read h3{ scroll-margin-top:5rem; }
+  .fp-lede{ font-size:1.12rem; line-height:1.7; }
+  .fp-jump{ list-style:none; padding:0 !important; margin:1rem 0 2rem !important; display:flex; flex-wrap:wrap; gap:.4rem; }
+  .fp-jump li{ margin:0; max-width:none; }
+  .read .fp-jump a{ display:inline-block; padding:.35rem .7rem; border:1px solid var(--line); border-radius:999px; background:var(--paper); font:500 .8rem/1.3 "IBM Plex Mono", ui-monospace, monospace; text-decoration:none; }
+  .read .fp-jump a:hover{ border-color:var(--brass); color:var(--ink); }
+  .fp-jump b{ color:#7A5A1E; font-weight:500; margin-right:.3rem; }
+
+  .fp-pillar{ margin:3rem 0 0; padding-top:1.2rem; border-top:3px double var(--ink); scroll-margin-top:5rem; }
+  .fp-num{ margin:0 0 .2rem; font:500 .74rem/1 "IBM Plex Mono", ui-monospace, monospace; letter-spacing:.08em; color:#7A5A1E; }
+  .read .fp-pillar > h2{ margin:0 0 .15rem; }
+  .fp-field{ margin:0 0 1rem !important; font:400 .8rem/1.3 "IBM Plex Mono", ui-monospace, monospace; color:var(--ink-soft); }
+  .fp-two{ display:grid; grid-template-columns:1fr 1fr; gap:.75rem; margin:1rem 0; }
+  .fp-two > div{ padding:.8rem 1rem; background:var(--paper-deep); border-radius:var(--radius); }
+  .read .fp-two h3{ margin:0 0 .3rem; font-size:1.02rem; font-weight:600; }
+  .fp-two p{ margin:0 0 .5rem !important; font-size:.97rem; line-height:1.55; }
+  .fp-two p:last-child{ margin-bottom:0 !important; }
+  .fp-eg{ margin:0 0 1rem !important; padding:.2rem 0 .2rem .9rem; border-left:3px solid var(--credit); font-style:italic; color:var(--ink-soft); }
+  .fp-where{ padding-left:1.2rem !important; }
+  .fp-where li{ margin:.35rem 0; }
+  .fp-mix{ margin:1rem 0 0; padding:.8rem 1rem; border:1px dashed var(--line); border-radius:var(--radius); background:var(--paper); }
+  .read .fp-mix h3{ margin:0 0 .4rem; font-size:1rem; font-weight:600; }
+  .fp-mix p{ margin:0 0 .5rem !important; font-size:.96rem; }
+  .fp-mix p:last-child{ margin-bottom:0 !important; }
+  @media (max-width:560px){ .fp-two{ grid-template-columns:1fr; } }
+
+  .fp-cycle{ list-style:none; counter-reset:cy; padding:0 !important; margin:1rem 0 1.25rem !important; display:grid; grid-template-columns:repeat(5, 1fr); gap:.5rem; }
+  .fp-cycle li{ counter-increment:cy; margin:0; max-width:none; padding:.75rem .7rem; background:var(--paper); border:1px solid var(--line); border-radius:var(--radius); font-size:.92rem; line-height:1.45; }
+  .fp-cycle li::before{ content:counter(cy, upper-roman); display:block; font:500 .72rem/1 "IBM Plex Mono", monospace; color:#7A5A1E; margin-bottom:.3rem; }
+  .fp-cycle strong{ display:block; font-family:"Fraunces", Georgia, serif; font-size:1.02rem; margin-bottom:.2rem; }
+  @media (max-width:760px){ .fp-cycle{ grid-template-columns:1fr; } }
+
+  .fp-pairs{ list-style:none; padding:0 !important; }
+  .fp-pairs li{ margin:.6rem 0; padding:.6rem .9rem; background:var(--paper); border-left:3px solid var(--brass); border-radius:var(--radius); }
+  .fp-pairs b{ font-family:"IBM Plex Mono", monospace; font-weight:500; font-size:.8rem; color:#7A5A1E; margin-right:.35rem; }
+
+  .read table.fp-table{ font-size:.9rem; background:var(--paper); }
+  .read table.fp-table thead th + th, .read table.fp-table td{ width:2.6rem; padding-left:.2rem; padding-right:.2rem; }
+  @media (max-width:560px){ .read table.fp-table{ font-size:.84rem; } .read table.fp-table thead th + th, .read table.fp-table td{ width:2rem; } }
+  .read table.fp-table th, .read table.fp-table td{ height:auto; padding:.45rem .45rem; vertical-align:middle; }
+  .read table.fp-table thead th{ text-align:center; font-family:"Fraunces", Georgia, serif; }
+  .read table.fp-table thead th:first-child{ text-align:left; }
+  .read table.fp-table tbody th{ font-weight:600; text-align:left; border-bottom:1px solid var(--line); }
+  .read table.fp-table tbody th small{ display:block; font-weight:400; color:var(--ink-soft); font-size:.8rem; line-height:1.35; }
+  .read table.fp-table td{ text-align:center; color:var(--credit); font-weight:600; }
+  .read table.fp-table tr.group th{ font-family:"IBM Plex Mono", ui-monospace, monospace; font-size:.72rem; color:#7A5A1E; font-weight:500; padding-top:.9rem; }
+  .fp-sr{ position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; }
+  .fp-key{ font-size:.92rem; color:var(--ink-soft); }
+  .fp-rel dt{ font-family:"Fraunces", Georgia, serif; font-weight:600; margin:1rem 0 .2rem; }
+  .fp-rel dd{ margin:0 0 .3rem; max-width:65ch; }
+</style>
+</head>
+<body data-no-pillars>
+<main class="read">
+
+<header class="read-head"><p class="read-code">Start here</p><h1>The Five Pillars</h1></header>
+<p class="depth-bar"><span>Full version</span><a href="/five-pillars.html">&larr; Back to the simple version</a></p>
+
+<p class="fp-lede">The Objective Ledger is built on five pillars. Each one borrows from a field that is good at describing how a system really works without deciding who is to blame. Each one starts as a way to understand yourself, and then becomes a way to understand what happens between you and other people.</p>
+<p>Plain names come first on this site. The field names are here so you can see where the ideas come from, not because you need them. If a word ever gets in the way, skip it. The idea underneath is always simple.</p>
+
+<ul class="fp-jump" aria-label="Jump to a section">
+  <li><a href="#see-the-load"><b>I</b>See the whole load</a></li>
+  <li><a href="#fix-the-setup"><b>II</b>Fix the setup</a></li>
+  <li><a href="#read-your-state"><b>III</b>Read your state first</a></li>
+  <li><a href="#tune-signals"><b>IV</b>Tune how you send and receive</a></li>
+  <li><a href="#quiet-incentives"><b>V</b>Notice the quiet incentives</a></li>
+  <li><a href="#together">How they fit together</a></li>
+  <li><a href="#interact">How they lean on each other</a></li>
+  <li><a href="#relationships">In each relationship</a></li>
+  <li><a href="#start">Where to start</a></li>
+  <li><a href="#map">The full map</a></li>
+</ul>
+
+<section class="fp-pillar" id="see-the-load" aria-labelledby="p1-h">
+  <p class="fp-num">PILLAR I</p>
+  <h2 id="p1-h">See the whole load</h2>
+  <p class="fp-field">Field: ledger accounting</p>
+  <p><strong>Why this field.</strong> A ledger does one thing well: it writes down what actually happened, in shared units, on a page both sides can read. It doesn’t ask who is a good person. It asks what the record shows. That makes it a calm way to talk about work that is usually invisible: remembering, planning, noticing, smoothing things over.</p>
+  <div class="fp-two">
+    <div><h3>In you</h3><p>You notice everything you carry, including the load that never looks like a task: the worry about a parent, the list in your head, the effort of staying pleasant on a hard day.</p><p>Seeing it clearly is often a relief on its own. It explains why you feel tired when “nothing happened.”</p></div>
+    <div><h3>Between you and others</h3><p>You put it on one shared, fair page, so nobody has to argue about whose work “counts.” Two records side by side replace two memories in conflict.</p><p>Partners compare a week of logs. Roommates list the chores. A caregiving sibling group writes down who handles appointments, pickups and calls.</p></div>
+  </div>
+  <p class="fp-eg">Two coworkers both feel they carry the team. Once each lists a week of follow-ups, reminders and meeting notes, it turns out one does most of the chasing and the other most of the writing. Neither was imagining it; they were each seeing half.</p>
+  <h3>Where it lives</h3>
+  <ul class="fp-where">
+    <li><a href="/book/preface.html">Preface: the work nobody sees</a> names the unseen work and why it deserves to be counted.</li>
+    <li><a href="/book/chapter-2.html">Chapter II: is the split working?</a> asks whether the way you share the load can last.</li>
+    <li><a href="/workpapers/wp-01.html">WP-01: who did what</a> is the week-long log that starts everything.</li>
+    <li><a href="/lemonade-stand.html">The Lemonade Stand</a> shows the split as a plain fact, with no blame.</li>
+    <li><a href="/workpapers/calculators/calc01-solvency.html">CALC-01: can the load last?</a> and <a href="/workpapers/report-01.html">REPORT-01</a> add the numbers up and keep them week by week.</li>
+  </ul>
+  <div class="fp-mix">
+    <h3>Common mix-ups</h3>
+    <p><strong>“So it’s scorekeeping.”</strong> No. A score says who is winning. A ledger says what is there. The goal is a picture you both agree on, not a verdict.</p>
+    <p><strong>“If it’s not on the list, it doesn’t matter.”</strong> The list is how unseen work becomes visible, not a limit on what counts. If something is missing, add it.</p>
+  </div>
+</section>
+
+<section class="fp-pillar" id="fix-the-setup" aria-labelledby="p2-h">
+  <p class="fp-num">PILLAR II</p>
+  <h2 id="p2-h">Fix the setup, not the person</h2>
+  <p class="fp-field">Field: systems thinking</p>
+  <p><strong>Why this field.</strong> Systems thinking looks at how a result is produced: who does what, when, with which handoffs. When the same problem keeps happening with different people, it is usually the setup, not the people. That moves the question from “what is wrong with you?” to “what would make this work?”</p>
+  <div class="fp-two">
+    <div><h3>In you</h3><p>You see your habits and routines as a setup you can redesign, not proof of a flaw. Forgetting the recycling every week says more about where the bin lives than about your character.</p><p>This takes the shame out of change. You adjust the setup and let it carry you.</p></div>
+    <div><h3>Between you and others</h3><p>You agree clear owners, handoffs and routines instead of blame. One owner per job means nobody has to keep asking and nobody has to keep guessing.</p><p>Co-parents give each school form one owner. A team names who sends the follow-up. Friends decide who books the next dinner.</p></div>
+  </div>
+  <p class="fp-eg">A family argues every Sunday about the week’s groceries. Nobody is lazy; nobody owns the list. Once one person owns the list and another owns the shop, the Sunday argument simply stops happening.</p>
+  <h3>Where it lives</h3>
+  <ul class="fp-where">
+    <li><a href="/workpapers/wp-03-raci-treaty.html">WP-03: one owner per job</a> gives every regular job a single named owner.</li>
+    <li><a href="/book/chapter-4.html">Chapter IV: two kinds of fair</a> builds a shared idea of fair into how you run things.</li>
+    <li><a href="/book/chapter-5.html">Chapter V</a> and <a href="/workpapers/wp-04-deficit-audit.html">WP-04</a> find what keeps coming back and fix the cause.</li>
+    <li><a href="/book/chapter-2.html">Chapter II</a> and <a href="/workpapers/calculators/calc01-solvency.html">CALC-01</a> read the arrangement, never a person.</li>
+    <li><a href="/relationships.html">How it fits your relationships</a> shows which owners and routines suit each kind of relationship.</li>
+    <li><a href="/prog-01.html">Six gentle weeks</a> is the whole setup, in order, one step a week.</li>
+  </ul>
+  <div class="fp-mix">
+    <h3>Common mix-ups</h3>
+    <p><strong>“So nobody is responsible.”</strong> The opposite. A good setup makes responsibility clear: one named owner. What it removes is blame, not accountability.</p>
+    <p><strong>“Fixing the setup means a big overhaul.”</strong> Usually it means one small change that you keep, like a reminder, a handoff or a single owner.</p>
+  </div>
+</section>
+
+<section class="fp-pillar" id="read-your-state" aria-labelledby="p3-h">
+  <p class="fp-num">PILLAR III</p>
+  <h2 id="p3-h">Read your state first</h2>
+  <p class="fp-field">Field: nervous-system science</p>
+  <p><strong>Why this field.</strong> Our bodies shift between being calm, revved up and shut down, often before we notice. The state you are in changes what you hear and how you answer. The same sentence can land three different ways depending only on how full your battery is. Reading that state first is not an excuse. It is information.</p>
+  <div class="fp-two">
+    <div><h3>In you</h3><p>You check how full your battery is before you judge a moment. A snap at 4 p.m. may be leftover stress from the day, not a verdict on the person in front of you.</p><p>Knowing your state lets you choose: talk now, or wait and come back.</p></div>
+    <div><h3>Between you and others</h3><p>You pick the timing. You pause and come back. Your state shapes how their words land, and their state shapes how yours land.</p><p>A caregiver says “not tonight, tomorrow at ten.” A roommate asks “is now a good time?” A partner uses the Calm-Down Kit before a hard talk.</p></div>
+  </div>
+  <p class="fp-eg">A friend replies with one word to your long message. On a full battery you read it as “busy.” On an empty one you read it as “annoyed.” Checking your own state first saves you from answering a message they never sent.</p>
+  <h3>Where it lives</h3>
+  <ul class="fp-where">
+    <li><a href="/quick-checks.html">Today’s Weather</a> is a one-minute read on your own conditions, with a talk window.</li>
+    <li><a href="/workpapers/wp-02-battery-stress-meter.html">WP-02: how full is your battery?</a> asks five quick questions before a hard conversation.</li>
+    <li><a href="/wp-11.html">WP-11: the Calm-Down Kit</a> decides in advance what settles you.</li>
+    <li><a href="/book/chapter-3.html">Chapter III: full tanks</a> explains why some reactions are bigger than their cause.</li>
+    <li><a href="/book/chapter-4.html">Chapter IV</a> is about letting words land before you react.</li>
+    <li><a href="/carrier-wave-decoder.html">The Carrier Wave Decoder</a> and <a href="/tools/mood-arbitrage-free.html">Mood Arbitrage</a> help in the moment a talk starts to slide.</li>
+    <li><a href="/pause-and-play.html">Pause &amp; Play</a>, <a href="/night-garden.html">the Night Garden</a> and <a href="/soundscapes.html">Soundscapes</a> give you a calm place to settle first.</li>
+  </ul>
+  <div class="fp-mix">
+    <h3>Common mix-ups</h3>
+    <p><strong>“I was overloaded, so it doesn’t count.”</strong> Your state explains a reaction. It doesn’t cancel its impact. Both can be true: “I was running on empty, and I can see that landed hard.”</p>
+    <p><strong>“Pausing means avoiding.”</strong> A pause has a time to come back. A pause without one feels like a door closing, so always name when.</p>
+  </div>
+</section>
+
+<section class="fp-pillar" id="tune-signals" aria-labelledby="p4-h">
+  <p class="fp-num">PILLAR IV</p>
+  <h2 id="p4-h">Tune how you send and receive</h2>
+  <p class="fp-field">Field: signal theory (the Frequency Framework)</p>
+  <p><strong>Why this field.</strong> Signal theory describes what happens when two things run at slightly different frequencies: you get static, even though nothing is broken. People are the same. Different pace, tone and urgency make static between two kind, reasonable people. Calling it tuning, not a moral failing, makes it something you can fix together.</p>
+  <div class="fp-two">
+    <div><h3>In you</h3><p>You learn your own wiring: how fast you decide, what a short reply means to you, what silence feels like, and which words land hard.</p><p>This is self-knowledge you can hand to others, as on a Wiring Card.</p></div>
+    <div><h3>Between you and others</h3><p>You translate across different wiring and tone. You say it so it lands, and you check what was heard, not just what was said.</p><p>Families with different pace, friends who text differently, teammates who need detail versus the headline: all of it is tuning.</p></div>
+  </div>
+  <p class="fp-eg">One partner wants to decide about the holiday tonight. The other needs a few days. Neither is stalling or rushing. Once they agree “we’ll decide on Sunday,” the static goes.</p>
+  <h3>Where it lives</h3>
+  <ul class="fp-where">
+    <li><a href="/frequency-framework.html">The Frequency Framework</a> explains the five rhythms and where static comes from.</li>
+    <li><a href="/book/chapter-1.html">Chapter I: why we get out of tune</a> is the full idea, and <a href="/book/chapter-3.html">Chapter III</a> adds the seven angles people see from.</li>
+    <li><a href="/wired-differently.html">Wired Differently</a> and the <a href="/wiring-card.html">Wiring Card</a> map how you receive words.</li>
+    <li><a href="/workpapers/wp-09-tone-filter.html">WP-09: say it so it lands</a> turns a big feeling into a fact, a feeling and a kind ask.</li>
+    <li><a href="/signal-translator.html">The Signal Translator</a> and <a href="/conversation-reader.html">the Conversation Reader</a> test how words may land before and after you send them.</li>
+    <li><a href="/check-ins.html">Check-ins</a> and <a href="/turning-toward.html">Turning Toward</a> put tuning into everyday talk.</li>
+    <li><a href="/workpapers/wp-01.html">WP-01</a> has kind, neutral ways to say no, and <a href="/workpapers/wp-13-pll-protocol.html">WP-13</a> is ninety seconds a day of staying in step.</li>
+    <li><a href="/tools/frequency-calibration.html">Frequency Calibration</a> finds your natural rhythms, including how long you need to settle.</li>
+    <li><a href="/tools/frequency-sync-visualizer.html">Watch two rhythms sync</a> shows how a small daily routine keeps two people in step.</li>
+  </ul>
+  <div class="fp-mix">
+    <h3>Common mix-ups</h3>
+    <p><strong>“Tuning means I have to change who I am.”</strong> No. You keep your wiring. You agree on a meeting point, like when you’ll talk and how, so both of you can be heard.</p>
+    <p><strong>“If I meant well, how it landed doesn’t matter.”</strong> Intent and impact are both real. Tuning is about closing the gap between them, not choosing one.</p>
+  </div>
+</section>
+
+<section class="fp-pillar" id="quiet-incentives" aria-labelledby="p5-h">
+  <p class="fp-num">PILLAR V</p>
+  <h2 id="p5-h">Notice the quiet incentives</h2>
+  <p class="fp-field">Field: behavioral economics</p>
+  <p><strong>Why this field.</strong> Behavioral economics studies how defaults, shortcuts and small rewards steer choices, usually without anyone deciding. In a shared life, the biggest quiet pull is simple: whoever notices a job first tends to become its owner for good. Naming that pull stops it working in the dark.</p>
+  <div class="fp-two">
+    <div><h3>In you</h3><p>You spot the defaults and shortcuts that steer your own choices. Maybe you say yes because saying no feels expensive, or you pick up a job because waiting feels worse.</p><p>Seeing the pull gives you back the choice.</p></div>
+    <div><h3>Between you and others</h3><p>You see how unclaimed jobs drift to one person, and how fairness and specific thanks keep things steady.</p><p>A friend who always plans, a coworker who always takes notes, a sibling who always drives Mom to appointments: each started with one “I’ll just do it.”</p></div>
+  </div>
+  <p class="fp-eg">A roommate buys the toilet paper once, then again, and now it is “their job” without anyone agreeing to it. A named owner, a kind no, or a rotation turns the drift back into a choice.</p>
+  <h3>Where it lives</h3>
+  <ul class="fp-where">
+    <li><a href="/book/preface.html">The Preface</a> shows how unbilled work quietly builds up.</li>
+    <li><a href="/book/chapter-4.html">Chapter IV: two kinds of fair</a> is about agreeing what fair means to you both.</li>
+    <li><a href="/workpapers/wp-03-raci-treaty.html">WP-03</a> names an owner before a job drifts.</li>
+    <li><a href="/workpapers/wp-04-deficit-audit.html">WP-04</a> and <a href="/workpapers/wp-13-pll-protocol.html">WP-13</a> catch the slow slide back to old habits.</li>
+    <li><a href="/turning-toward.html">Turning Toward</a> shows how specific thanks keeps the unseen work steady.</li>
+    <li><a href="/lemonade-stand.html">The Lemonade Stand</a> shows where the load quietly piles up.</li>
+  </ul>
+  <div class="fp-mix">
+    <h3>Common mix-ups</h3>
+    <p><strong>“So they’re taking advantage of me.”</strong> Usually not. Drift happens between kind people because nobody chose. The point is to notice the pull, not to find someone guilty.</p>
+    <p><strong>“Thanks is just being polite.”</strong> Specific thanks is how unseen work gets seen. It is one of the cheapest ways to keep a fair split steady.</p>
+  </div>
+</section>
+
+<h2 id="together">How they fit together</h2>
+<p>The five pillars work as a loop. You can step in anywhere, but they tend to run in this order, and the last one leads back to the first.</p>
+<ol class="fp-cycle">
+  <li><strong>See</strong>the whole load, yours and theirs, on one page.</li>
+  <li><strong>Fix</strong>the setup around what you see, not the person.</li>
+  <li><strong>Read</strong>your state before you talk about it.</li>
+  <li><strong>Tune</strong>the message so it lands the way you mean it.</li>
+  <li><strong>Notice</strong>the quiet pulls that let things slide back, and look at the load again.</li>
+</ol>
+<p>Each pillar starts inside you. You can see your own load, redesign your own routines, read your own state, learn your own wiring and spot your own defaults without anyone else involved. Then each one shows up between you and others, where the same idea becomes something you can agree on together. The program is built so that every chapter, workpaper and tool serves at least one pillar, from both sides.</p>
+
+<h2 id="interact">How they lean on each other</h2>
+<p>No pillar works well alone for long. These are the pairings that come up most:</p>
+<ul class="fp-pairs">
+  <li><b>I → II</b>You can’t redesign what you can’t see. The log from WP-01 is what WP-03 uses to name owners.</li>
+  <li><b>II ↔ V</b>A named owner removes the quiet pull. Without one, the job drifts back to whoever notices first.</li>
+  <li><b>III → IV</b>State comes before signal. The kindest sentence still lands badly on an empty battery, so check your state before you tune the words.</li>
+  <li><b>IV ↔ III</b>Tone changes state. A harsh opening can empty someone’s battery in a sentence; a soft one can keep it steady.</li>
+  <li><b>I ↔ V</b>Seeing the load is how you catch the drift. Monthly look-backs (WP-04) show what quietly moved.</li>
+  <li><b>V → I</b>Thanks keeps the unseen work visible, which keeps the ledger honest.</li>
+</ul>
+<p>When one pillar feels stuck, the answer is often in its neighbor. An argument that won’t shift with better words (IV) may need an owner (II). A setup that keeps slipping (II) may need a look at the quiet incentives (V). A talk that keeps going wrong at the same hour may need a state check (III), not a new topic.</p>
+
+<h2 id="relationships">Inside you, then between you and others</h2>
+<p>The pillars are the same in every relationship. What changes is what’s being shared.</p>
+<dl class="fp-rel">
+  <dt>Yourself</dt>
+  <dd>Start with III (your state) and I (your load). Knowing both makes every other relationship easier to read.</dd>
+  <dt>Partners</dt>
+  <dd>I and II lead: a week’s log, then one owner per job. IV keeps the daily talk in tune; V catches the drift.</dd>
+  <dt>Family</dt>
+  <dd>IV often leads: families clash on tone and pace more than on the task. II names who owns what, so nobody has to guess.</dd>
+  <dt>Friends</dt>
+  <dd>A light touch: IV for how you text and talk, V for noticing who always plans, and specific thanks.</dd>
+  <dt>Roommates</dt>
+  <dd>I and II: the same picture of the chores, then a named owner for trash, bills and cleaning.</dd>
+  <dt>Coworkers and teams</dt>
+  <dd>II and V: clear owners and handoffs, and noticing who quietly does the follow-ups. Use these among peers who agree to them, never to rate anyone.</dd>
+  <dt>Caregivers</dt>
+  <dd>III and I: your battery and the load you carry, then II to share the care out with one owner per part.</dd>
+</dl>
+<p>For every relationship in detail, see <a href="/relationships-in-depth.html">How it fits your relationships</a>.</p>
+
+<h2 id="start">Start with one pillar</h2>
+<p>You don’t need all five at once. Pick the situation that sounds most like today.</p>
+<ul>
+  <li><strong>“I do so much and nobody sees it.”</strong> Pillar I. Log one week with <a href="/workpapers/wp-01.html">WP-01</a> or the <a href="/lemonade-stand.html">Lemonade Stand</a>. Alone, it shows you your own load. Together, it gives you two logs to compare as facts.</li>
+  <li><strong>“We keep having the same argument.”</strong> Pillar II. Give the job one owner with <a href="/workpapers/wp-03-raci-treaty.html">WP-03</a>, then keep the <a href="/workpapers/wp-13-pll-protocol.html">90-second check-in</a>.</li>
+  <li><strong>“I’m too wound up to talk right now.”</strong> Pillar III. <a href="/quick-checks.html#today">Check today’s weather</a>, then use <a href="/wp-11.html">the Calm-Down Kit</a>. Name a time to come back.</li>
+  <li><strong>“It came out wrong.”</strong> Pillar IV. Run it through <a href="/workpapers/wp-09-tone-filter.html">WP-09</a> or the <a href="/signal-translator.html">Signal Translator</a>, and share a <a href="/wiring-card.html">Wiring Card</a>.</li>
+  <li><strong>“Somehow it always ends up being me.”</strong> Pillar V. Read <a href="/book/chapter-4.html">Chapter IV</a>, name an owner with <a href="/workpapers/wp-03-raci-treaty.html">WP-03</a>, and try <a href="/turning-toward.html">Turning Toward</a>.</li>
+  <li><strong>“I want the whole picture.”</strong> All five, in order: <a href="/prog-01.html">Six gentle weeks</a>.</li>
+</ul>
+
+<h2 id="map">The full map</h2>
+<p class="fp-key">Every chapter, workpaper, tool and guide, with the pillars it puts to work. A dot means the page uses that pillar.</p>
+<table class="fp-table">
+  <thead>
+    <tr><th scope="col">Page</th><th scope="col"><abbr title="See the whole load">I</abbr></th><th scope="col"><abbr title="Fix the setup, not the person">II</abbr></th><th scope="col"><abbr title="Read your state first">III</abbr></th><th scope="col"><abbr title="Tune how you send and receive">IV</abbr></th><th scope="col"><abbr title="Notice the quiet incentives">V</abbr></th></tr>
+  </thead>
+  <tbody>
+    <tr class="group"><th scope="rowgroup" colspan="6">THE BOOK</th></tr>
+    <tr><th scope="row"><a href="/book/preface.html">Preface</a><small>The work nobody sees</small></th><td><span aria-hidden="true">●</span><span class="fp-sr">Yes</span></td><td></td><td></td><td></td><td><span aria-hidden="true">●</span><span class="fp-sr">Yes</span></td></tr>
+    <tr><th scope="row"><a href="/book/chapter-1.html">Chapter I</a><small>Why we get out of tune</small></th><td></td><td></td><td><span aria-hidden="true">●</span><span class="fp-sr">Yes</span></td><td><span aria-hidden="true">●</span><span class="fp-sr">Yes</span></td><td></td></tr>
+    <tr><th scope="row"><a href="/book/chapter-2.html">Chapter II</a><small>Is the split working?</small></th><td><span aria-hidden="true">●</span><span class="fp-sr">Yes</span></td><td><span aria-hidden="true">●</span><span class="fp-sr">Yes</span></td><td><span aria-hidden="true">●</span><span class="fp-sr">Yes</span></td><td></td><td></td></tr>
+    <tr><th scope="row"><a href="/book/chapter-3.html">Chapter III</a><small>Full tanks and different angles</small></th><td></td><td></td><td><span aria-hidden="true">●</span><span class="fp-sr">Yes</span></td><td><span aria-hidden="true">●</span><span class="fp-sr">Yes</span></td><td></td></tr>
+    <tr><th scope="row"><a href="/book/chapter-4.html">Chapter IV</a><small>Two kinds of fair</small></th><td></td><td><span aria-hidden="true">●</span><span class="fp-sr">Yes</span></td><td><span aria-hidden="true">●</span><span class="fp-sr">Yes</span></td><td></td><td><span aria-hidden="true">●</span><span class="fp-sr">Yes</span></td></tr>
+    <tr><th scope="row"><a href="/book/chapter-5.html">Chapter V</a><small>The monthly look-back</small></th><td><span aria-hidden="true">●</span><span class="fp-sr">Yes</span></td><td><span aria-hidden="true">●</span><span class="fp-sr">Yes</span></td><td></td><td></td><td><span aria-hidden="true">●</span><span class="fp-sr">Yes</span></td></tr>
+    <tr class="group"><th scope="rowgroup" colspan="6">WORKPAPERS AND PROGRAM</th></tr>
+    <tr><th scope="row"><a href="/workpapers/wp-01.html">WP-01</a><small>Who did what, and kind ways to say no</small></th><td><span aria-hidden="true">●</span><span class="fp-sr">Yes</span></td><td></td><td></td><td><span aria-hidden="true">●</span><span class="fp-sr">Yes</span></td><td></td></tr>
+    <tr><th scope="row"><a href="/workpapers/wp-02-battery-stress-meter.html">WP-02</a><small>How full is your battery?</small></th><td></td><td></td><td><span aria-hidden="true">●</span><span class="fp-sr">Yes</span></td><td></td><td></td></tr>
+    <tr><th scope="row"><a href="/workpapers/wp-03-raci-treaty.html">WP-03</a><small>One owner per job</small></th><td></td><td><span aria-hidden="true">●</span><span class="fp-sr">Yes</span></td><td></td><td></td><td><span aria-hidden="true">●</span><span class="fp-sr">Yes</span></td></tr>
+    <tr><th scope="row"><a href="/workpapers/wp-04-deficit-audit.html">WP-04</a><small>What keeps coming back?</small></th><td></td><td><span aria-hidden="true">●</span><span class="fp-sr">Yes</span></td><td></td><td></td><td><span aria-hidden="true">●</span><span class="fp-sr">Yes</span></td></tr>
+    <tr><th scope="row"><a href="/workpapers/wp-09-tone-filter.html">WP-09</a><small>Say it so it lands</small></th><td></td><td></td><td></td><td><span aria-hidden="true">●</span><span class="fp-sr">Yes</span></td><td></td></tr>
+    <tr><th scope="row"><a href="/wp-11.html">WP-11</a><small>The Calm-Down Kit</small></th><td></td><td></td><td><span aria-hidden="true">●</span><span class="fp-sr">Yes</span></td><td></td><td></td></tr>
+    <tr><th scope="row"><a href="/workpapers/wp-13-pll-protocol.html">WP-13</a><small>The 90-second daily check-in</small></th><td></td><td></td><td></td><td><span aria-hidden="true">●</span><span class="fp-sr">Yes</span></td><td><span aria-hidden="true">●</span><span class="fp-sr">Yes</span></td></tr>
+    <tr><th scope="row"><a href="/workpapers/report-01.html">REPORT-01</a><small>Your progress, week by week</small></th><td><span aria-hidden="true">●</span><span class="fp-sr">Yes</span></td><td><span aria-hidden="true">●</span><span class="fp-sr">Yes</span></td><td></td><td></td><td></td></tr>
+    <tr><th scope="row"><a href="/prog-01.html">PROG-01</a><small>Six gentle weeks</small></th><td><span aria-hidden="true">●</span><span class="fp-sr">Yes</span></td><td><span aria-hidden="true">●</span><span class="fp-sr">Yes</span></td><td><span aria-hidden="true">●</span><span class="fp-sr">Yes</span></td><td><span aria-hidden="true">●</span><span class="fp-sr">Yes</span></td><td><span aria-hidden="true">●</span><span class="fp-sr">Yes</span></td></tr>
+    <tr><th scope="row"><a href="/workpapers/fill/suite.html">The Workpaper Suite</a><small>Fillable PDFs for your situation</small></th><td><span aria-hidden="true">●</span><span class="fp-sr">Yes</span></td><td><span aria-hidden="true">●</span><span class="fp-sr">Yes</span></td><td><span aria-hidden="true">●</span><span class="fp-sr">Yes</span></td><td><span aria-hidden="true">●</span><span class="fp-sr">Yes</span></td><td><span aria-hidden="true">●</span><span class="fp-sr">Yes</span></td></tr>
+    <tr class="group"><th scope="rowgroup" colspan="6">TOOLS</th></tr>
+    <tr><th scope="row"><a href="/lemonade-stand.html">The Lemonade Stand</a><small>Who did what this week</small></th><td><span aria-hidden="true">●</span><span class="fp-sr">Yes</span></td><td></td><td></td><td></td><td><span aria-hidden="true">●</span><span class="fp-sr">Yes</span></td></tr>
+    <tr><th scope="row"><a href="/workpapers/calculators/calc01-solvency.html">CALC-01</a><small>Can the load last?</small></th><td><span aria-hidden="true">●</span><span class="fp-sr">Yes</span></td><td><span aria-hidden="true">●</span><span class="fp-sr">Yes</span></td><td></td><td></td><td></td></tr>
+    <tr><th scope="row"><a href="/snapshot/index.html">A quick snapshot</a><small>How things are right now</small></th><td><span aria-hidden="true">●</span><span class="fp-sr">Yes</span></td><td><span aria-hidden="true">●</span><span class="fp-sr">Yes</span></td><td><span aria-hidden="true">●</span><span class="fp-sr">Yes</span></td><td></td><td></td></tr>
+    <tr><th scope="row"><a href="/quick-checks.html">Today’s Weather</a><small>Your conditions today</small></th><td></td><td></td><td><span aria-hidden="true">●</span><span class="fp-sr">Yes</span></td><td></td><td></td></tr>
+    <tr><th scope="row"><a href="/carrier-wave-decoder.html">Carrier Wave Decoder</a><small>When a talk goes sideways</small></th><td></td><td></td><td><span aria-hidden="true">●</span><span class="fp-sr">Yes</span></td><td><span aria-hidden="true">●</span><span class="fp-sr">Yes</span></td><td></td></tr>
+    <tr><th scope="row"><a href="/tools/mood-arbitrage-free.html">Mood Arbitrage</a><small>Small ways to shift a heavy mood</small></th><td></td><td></td><td><span aria-hidden="true">●</span><span class="fp-sr">Yes</span></td><td><span aria-hidden="true">●</span><span class="fp-sr">Yes</span></td><td></td></tr>
+    <tr><th scope="row"><a href="/wiring-card.html">Wiring Card</a><small>How you receive words</small></th><td></td><td></td><td></td><td><span aria-hidden="true">●</span><span class="fp-sr">Yes</span></td><td></td></tr>
+    <tr><th scope="row"><a href="/signal-translator.html">Signal Translator</a><small>Test a sentence first</small></th><td></td><td></td><td><span aria-hidden="true">●</span><span class="fp-sr">Yes</span></td><td><span aria-hidden="true">●</span><span class="fp-sr">Yes</span></td><td></td></tr>
+    <tr><th scope="row"><a href="/conversation-reader.html">Conversation Reader</a><small>Where a thread turned</small></th><td></td><td></td><td><span aria-hidden="true">●</span><span class="fp-sr">Yes</span></td><td><span aria-hidden="true">●</span><span class="fp-sr">Yes</span></td><td></td></tr>
+    <tr><th scope="row"><a href="/tools/frequency-calibration.html">Frequency Calibration</a><small>Your natural rhythms</small></th><td></td><td></td><td><span aria-hidden="true">●</span><span class="fp-sr">Yes</span></td><td><span aria-hidden="true">●</span><span class="fp-sr">Yes</span></td><td></td></tr>
+    <tr><th scope="row"><a href="/tools/frequency-sync-visualizer.html">Watch two rhythms sync</a><small>The check-in, in motion</small></th><td></td><td><span aria-hidden="true">●</span><span class="fp-sr">Yes</span></td><td></td><td><span aria-hidden="true">●</span><span class="fp-sr">Yes</span></td><td></td></tr>
+    <tr class="group"><th scope="rowgroup" colspan="6">GUIDES</th></tr>
+    <tr><th scope="row"><a href="/frequency-framework.html">The Frequency Framework</a><small>Five rhythms and the static between them</small></th><td></td><td></td><td></td><td><span aria-hidden="true">●</span><span class="fp-sr">Yes</span></td><td></td></tr>
+    <tr><th scope="row"><a href="/wired-differently.html">Wired Differently</a><small>How the same words land differently</small></th><td></td><td></td><td></td><td><span aria-hidden="true">●</span><span class="fp-sr">Yes</span></td><td></td></tr>
+    <tr><th scope="row"><a href="/check-ins.html">Check-ins</a><small>A tender conversation, kindly</small></th><td></td><td></td><td><span aria-hidden="true">●</span><span class="fp-sr">Yes</span></td><td><span aria-hidden="true">●</span><span class="fp-sr">Yes</span></td><td></td></tr>
+    <tr><th scope="row"><a href="/turning-toward.html">Turning Toward</a><small>Small, everyday connection</small></th><td></td><td></td><td></td><td><span aria-hidden="true">●</span><span class="fp-sr">Yes</span></td><td><span aria-hidden="true">●</span><span class="fp-sr">Yes</span></td></tr>
+    <tr><th scope="row"><a href="/learn/index.html">Stories from Philosophy</a><small>Knowing yourself and others</small></th><td><span aria-hidden="true">●</span><span class="fp-sr">Yes</span></td><td><span aria-hidden="true">●</span><span class="fp-sr">Yes</span></td><td><span aria-hidden="true">●</span><span class="fp-sr">Yes</span></td><td><span aria-hidden="true">●</span><span class="fp-sr">Yes</span></td><td><span aria-hidden="true">●</span><span class="fp-sr">Yes</span></td></tr>
+    <tr><th scope="row"><a href="/relationships.html">How it fits your relationships</a><small>Every kind of relationship</small></th><td><span aria-hidden="true">●</span><span class="fp-sr">Yes</span></td><td><span aria-hidden="true">●</span><span class="fp-sr">Yes</span></td><td></td><td></td><td></td></tr>
+    <tr class="group"><th scope="rowgroup" colspan="6">CALM GAMES AND SOUND</th></tr>
+    <tr><th scope="row"><a href="/pause-and-play.html">Pause &amp; Play</a><small>Every calm game</small></th><td></td><td></td><td><span aria-hidden="true">●</span><span class="fp-sr">Yes</span></td><td></td><td></td></tr>
+    <tr><th scope="row"><a href="/frequency-journey.html">The Frequency Journey</a><small>Tone-themed puzzle worlds</small></th><td></td><td></td><td><span aria-hidden="true">●</span><span class="fp-sr">Yes</span></td><td><span aria-hidden="true">●</span><span class="fp-sr">Yes</span></td><td></td></tr>
+    <tr><th scope="row"><a href="/night-garden.html">The Night Garden</a><small>Breathe and settle</small></th><td></td><td></td><td><span aria-hidden="true">●</span><span class="fp-sr">Yes</span></td><td></td><td></td></tr>
+    <tr><th scope="row"><a href="/soundscapes.html">Soundscapes</a><small>Audio for settling and focus</small></th><td></td><td></td><td><span aria-hidden="true">●</span><span class="fp-sr">Yes</span></td><td></td><td></td></tr>
+  </tbody>
+</table>
+
+<div class="try-this">
+  <p><strong>Try this:</strong> Pick one pillar. Use it on yourself for a week, then try it once with one person you share life with. Notice what changed on both sides.</p>
+  <p><a href="/quick-checks.html#today">Start by reading your state &rarr;</a> <a href="/five-pillars.html">Back to the simple version</a></p>
+</div>
+</main>
+</body>
+</html>

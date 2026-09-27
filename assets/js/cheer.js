@@ -128,7 +128,7 @@
   var want = Math.max(2, Math.min(8, Math.round(textLen / 1400) + 1));
   var chosen = [], step = spots.length / (want + 0.5);
   for (var n = 1; n <= want; n++) {
-    var at = Math.min(spots.length - 1, Math.round(step * n) - 1);
+    var at = Math.max(0, Math.min(spots.length - 1, Math.round(step * n) - 1));
     while (at < spots.length - 1 && /^H[23]$/.test(spots[at].el.tagName)) at++;
     if (chosen.indexOf(at) === -1 && at > 0) chosen.push(at);
   }

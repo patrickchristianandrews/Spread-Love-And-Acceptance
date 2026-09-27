@@ -22,7 +22,7 @@
     code: 'WP-01',
     title: 'Field Audit & Neutral Refusals',
     slug: 'Field-Audit',
-    purpose: "Capture what actually happened this week before either person's memory of it hardens into a story. Fill this in together, or independently and compare. Don't fill it in about the other person.",
+    purpose: "Write down what actually happened this week, before either of you starts remembering it as a story. Fill it in together, or each on your own and then compare. Each of you writes only your own side, never the other person's.",
     people: true,
     meta: [
       { id: 'weekOf', label: 'Week beginning', type: 'date' }
@@ -30,7 +30,7 @@
     sections: [
       {
         id: 'audit', type: 'table', title: 'Part A: Field Audit',
-        intro: 'A raw log kept for 5–7 days, before any interpretation gets added. One row per task noticed or done. Log what happened, not what should have happened.',
+        intro: 'A plain log kept for 5–7 days, written down before anyone decides what it means. Add one row for each task noticed or done. Log what happened, not what should have happened.',
         addLabel: 'Add a row',
         columns: [
           { id: 'day', label: 'Day', type: 'select', options: DAYS, w: 0.7, prefill: true },
@@ -60,13 +60,13 @@
           return [
             { label: ctx.name('A'), value: fmt(t.A, 0) + ' minutes (' + fmt(pA, 0) + '%), of which ' + fmt(noticed.A, 0) + ' noticed and handled without being asked' },
             { label: ctx.name('B'), value: fmt(t.B, 0) + ' minutes (' + fmt(pB, 0) + '%), of which ' + fmt(noticed.B, 0) + ' noticed and handled without being asked' },
-            { label: 'Workload balance score', value: fmt(balance, 2), note: 'Enter this as the workload balance input in CALC-01. It describes how the logged work was split this week — not either person.' }
+            { label: 'Workload balance score', value: fmt(balance, 2), note: 'Enter this as the workload balance number in CALC-01. It describes how the logged work was split this week, not either person.' }
           ];
         }
       },
       {
         id: 'refusals', type: 'table', title: 'Part B: Neutral refusals we want to try', optional: true,
-        intro: 'Optional. Draft a refusal for a real situation using the three-part shape: acknowledge the request, state your capacity honestly, offer an alternative.',
+        intro: 'Optional. Draft a "not right now" for a real situation in three steps: say why the request is fair, say honestly what you have left, and offer something instead.',
         addLabel: 'Add a refusal',
         columns: [
           { id: 'kind', label: 'Type', type: 'select', options: ['Capacity check', 'Delegation pivot', 'Time commitment'], w: 1.2 },
@@ -107,7 +107,7 @@
     code: 'WP-02',
     title: 'The Battery & Stress Meter',
     slug: 'Battery-Stress-Meter',
-    purpose: 'A self-report checklist, filled in by each person about themselves, that separates "how much stress am I already carrying" from "how upset am I about this specific thing." Not a clinical instrument — a structured gut-check.',
+    purpose: 'A short checklist that each of you fills in about yourself. It separates "How much stress am I already carrying?" from "How upset am I about this one thing?" It is not a clinical test, just a structured gut-check.',
     people: false,
     meta: [
       { id: 'name', label: 'Your name', type: 'text' },
@@ -116,12 +116,12 @@
     sections: [
       {
         type: 'note', pdf: false,
-        text: "Fill this in on your own, about yourself only. Don't fill it in about your partner."
+        text: "Fill this in on your own, about yourself only. Don't fill it in about the other person."
       },
       {
         id: 'factors', type: 'scale', title: 'The checklist',
-        intro: 'Score each row for how the last 24–48 hours have actually gone.',
-        min: 0, max: 4, anchors: ['Not at all', 'Maximally true'],
+        intro: 'Score each row based on how the last 24–48 hours have actually gone.',
+        min: 0, max: 4, anchors: ['Not at all', 'Very true'],
         items: WP02_FACTORS
       },
       {
@@ -129,13 +129,13 @@
         compute: function (ctx) {
           var s = wp02Score(ctx);
           if (s === null) return [{ label: 'Score', value: 'Answer all five rows to see your score.' }];
-          var band = s < 0.3 ? 'Low load. Whatever is coming up is probably actually about the thing itself.'
-            : s < 0.6 ? 'Moderate. Worth naming out loud before a hard conversation: "heads up, I\'m carrying more than usual today."'
-              : 'High. A signal to postpone anything that doesn\'t need deciding in the next hour. If you need to settle first, the Calm-Down Kit (WP-11) is built for this.';
-          var out = [{ label: 'Battery score', value: fmt(s, 2) + ' (sum of the five scores ÷ 20)' }, { label: 'Reading', value: band }];
+          var band = s < 0.3 ? 'Low load. Whatever is coming up is probably about the thing itself.'
+            : s < 0.6 ? 'Medium. Before a hard conversation, it\'s worth saying out loud: "Heads up, I\'m carrying more than usual today."'
+              : 'High. Put off anything that doesn\'t need deciding in the next hour. If you need to settle first, the Calm-Down Kit (WP-11) is made for this.';
+          var out = [{ label: 'Battery score', value: fmt(s, 2) + ' (the five scores added up, then divided by 20)' }, { label: 'Reading', value: band }];
           var p = parseFloat(ctx.value('partnerScore'));
           if (p >= 0 && p <= 1) {
-            out.push({ label: 'Average for CALC-01', value: fmt((s + p) / 2, 2), note: 'The mean of both scores is the autonomic saturation input in CALC-01. It is never computed from one person alone.' });
+            out.push({ label: 'Average for CALC-01', value: fmt((s + p) / 2, 2), note: 'The average of both scores is the "autonomic saturation" number in CALC-01 (how stretched you both are). It is never worked out from one person alone.' });
           }
           return out;
         }
@@ -143,13 +143,13 @@
       {
         id: 'extra', type: 'fields', title: 'Optional',
         fields: [
-          { id: 'partnerScore', label: "Your partner's score, if they've shared it (0–1)", type: 'number', step: '0.01', min: 0, max: 1 },
+          { id: 'partnerScore', label: "The other person's score, if they've shared it (0–1)", type: 'number', step: '0.01', min: 0, max: 1 },
           { id: 'note', label: 'Anything you want to name before talking', type: 'textarea' }
         ]
       },
       {
         type: 'note', pdf: true,
-        text: 'A high score is a postponement tool, not an exit. It means "let\'s revisit this tomorrow," not "this doesn\'t need to happen."'
+        text: 'A high score is a way to press pause, not a way out. It means "let\'s come back to this tomorrow," not "this doesn\'t need to happen."'
       }
     ]
   };
@@ -159,7 +159,7 @@
     code: 'WP-03',
     title: 'RACI Treaty',
     slug: 'RACI-Treaty',
-    purpose: 'A living agreement assigning exactly one Responsible and one Accountable name to every recurring household task, so ownership stops getting renegotiated by default every week. Responsible does the task. Accountable notices if it didn\'t happen and follows up, and can be the same person.',
+    purpose: 'A living agreement that gives every regular household job exactly one Responsible name and one Accountable name, so you stop re-deciding who owns what every week. Responsible does the task. Accountable notices if it didn\'t get done and follows up. They can be the same person.',
     people: true,
     meta: [
       { id: 'reviewDate', label: 'Treaty date', type: 'date' }
@@ -167,7 +167,7 @@
     sections: [
       {
         type: 'note', pdf: false,
-        text: "Use this after your first full week of the Field Audit (WP-01), and fill it in from what that week's log actually showed. Remove any rows that don't apply to your household."
+        text: "Use this after your first full week of the Field Audit (WP-01), and fill it in from what that week's log actually showed. Remove any rows that don't apply to your household, and add the ones that do."
       },
       {
         id: 'treaty', type: 'table', title: 'The treaty',
@@ -194,15 +194,15 @@
           if (!rows.length) return [{ label: 'Ownership clarity score', value: 'Add tasks to see the score.' }];
           var clear = rows.filter(function (r) { return r.r && r.a; });
           var missing = rows.filter(function (r) { return !(r.r && r.a); }).map(function (r) { return r.task; });
-          var out = [{ label: 'Ownership clarity score', value: fmt(clear.length / rows.length, 2) + ' (' + clear.length + ' of ' + rows.length + ' tasks have both names)', note: 'Enter this as the ownership clarity input in CALC-01.' }];
+          var out = [{ label: 'Ownership clarity score', value: fmt(clear.length / rows.length, 2) + ' (' + clear.length + ' of ' + rows.length + ' tasks have both names)', note: 'Enter this as the ownership clarity number in CALC-01.' }];
           if (missing.length) out.push({ label: 'Still needs an owner', value: missing.join(', ') });
           return out;
         }
       },
       {
-        id: 'amendments', type: 'table', title: 'Amendments', optional: true,
-        intro: 'Renegotiate when life changes, in writing, rather than letting ownership drift to whoever started doing more. Either person can call for a review at the weekly closing, or at the monthly Deficit Audit (WP-04).',
-        addLabel: 'Add an amendment',
+        id: 'amendments', type: 'table', title: 'Changes to the treaty', optional: true,
+        intro: 'When life changes, rework the treaty in writing, instead of letting jobs drift to whoever started doing more. Either of you can ask for a review at the weekly closing, or at the monthly Deficit Audit (WP-04).',
+        addLabel: 'Add a change',
         columns: [
           { id: 'date', label: 'Date', type: 'date', w: 1.1 },
           { id: 'change', label: 'What changed', type: 'textarea', w: 3.5 },
@@ -213,10 +213,10 @@
       },
       {
         type: 'note', pdf: true,
-        text: 'Initialing confirms both people have read the current version and agree to the ownership as written — not that every task feels perfectly fair, only that ownership is clear.'
+        text: 'Initialing confirms that you have both read the current version and agree to who owns what, as written. It doesn\'t mean every task feels perfectly fair. It only means ownership is clear.'
       },
       {
-        id: 'ratify', type: 'table', title: 'Ratification',
+        id: 'ratify', type: 'table', title: 'Signing off',
         fixedRows: ['@A', '@B'],
         columns: [
           { id: 'initials', label: 'Initials', type: 'text', w: 1.5 },
@@ -232,15 +232,15 @@
     code: 'WP-04',
     title: 'Deficit Audit',
     slug: 'Deficit-Audit',
-    purpose: 'A monthly reconciliation, done together, across four weeks of Field Audits (WP-01) and the RACI Treaty (WP-03). It looks for tasks that keep becoming deficits — not to tally what anyone owes, but to find where the household\'s structure needs a fix.',
+    purpose: 'A monthly look-back, done together, across four weeks of Field Audits (WP-01) and your RACI Treaty (WP-03). It looks for the tasks that keep slipping. The goal is not to tally what anyone owes, but to find where the household\'s setup needs a fix.',
     people: true,
     meta: [
       { id: 'month', label: 'Month', type: 'text', placeholder: 'e.g. September 2026' }
     ],
     sections: [
       {
-        id: 'raw', type: 'table', title: "Part A: Pull the month's raw data",
-        intro: 'From your four Field Audits, list every task logged as noticed-but-undone, or done only after being raised more than once. Tick each week it came up. A task flagged 3–4 times is a genuine deficit, not a fluke.',
+        id: 'raw', type: 'table', title: "Part A: Gather the month's notes",
+        intro: 'From your four Field Audits, list every task that was logged as noticed but not done, or done only after being raised more than once. Check off each week it came up. A task flagged 3–4 times is a real pattern, not a fluke.',
         addLabel: 'Add a task',
         columns: [
           { id: 'task', label: 'Task', type: 'text', w: 3 },
@@ -253,8 +253,8 @@
         defaultRows: [{}, {}, {}]
       },
       {
-        id: 'classify', type: 'table', title: 'Part B: Classify each deficit',
-        intro: 'For every task flagged twice or more: a structural gap has no clear owner, or the named owner isn\'t the one actually handling it (fix the RACI Treaty this session). A capacity issue has an owner who can\'t keep up (schedule a direct conversation). A one-off has a temporary cause (note it and move on).',
+        id: 'classify', type: 'table', title: 'Part B: Sort each gap',
+        intro: 'Sort every task flagged twice or more. A structural gap has no clear owner, or the named owner isn\'t the one who actually handles it (fix the RACI Treaty in this session). A capacity issue has an owner who can\'t keep up (set a time for an honest conversation). A one-off has a temporary cause (note it and move on).',
         addLabel: 'Add a task',
         pull: {
           label: 'Bring in tasks flagged twice or more from Part A',
@@ -272,21 +272,21 @@
         defaultRows: [{}]
       },
       {
-        id: 'close', type: 'computed', title: 'Part C: Close the audit',
+        id: 'close', type: 'computed', title: 'Part C: Wrap up the audit',
         compute: function (ctx) {
           var c = { 'Structural gap': 0, 'Capacity issue': 0, 'One-off, no action': 0 };
           ctx.rows('classify').forEach(function (r) { if (r.task && c.hasOwnProperty(r.kind)) c[r.kind]++; });
           return [
-            { label: 'Structural gaps found', value: String(c['Structural gap']), note: c['Structural gap'] ? 'Update the RACI Treaty (WP-03) for each of these this session.' : '' },
-            { label: 'Capacity issues found', value: String(c['Capacity issue']), note: c['Capacity issue'] ? 'Schedule the conversation. This audit surfaces it; it doesn\'t replace it.' : '' },
+            { label: 'Structural gaps found', value: String(c['Structural gap']), note: c['Structural gap'] ? 'Update the RACI Treaty (WP-03) for each of these in this session.' : '' },
+            { label: 'Capacity issues found', value: String(c['Capacity issue']), note: c['Capacity issue'] ? 'Set a time for the conversation. This audit brings it to light, but it doesn\'t replace it.' : '' },
             { label: 'One-offs', value: String(c['One-off, no action']) },
-            { label: 'Reading the count', value: 'A falling number of structural gaps month over month is the clearest sign the framework is working. A rising one means something bigger changed.' }
+            { label: 'Reading the count', value: 'A number of structural gaps that falls month after month is the clearest sign the program is working. A rising number means something bigger changed.' }
           ];
         }
       },
       {
         type: 'note', pdf: true,
-        text: 'Not a retroactive bill, and not a performance review. A task with no owner is a gap in the treaty, not a verdict on the person who kept covering it.'
+        text: 'Not a bill for the past, and not a performance review. A task with no owner is a gap in the treaty, not a verdict on the person who kept covering it.'
       },
       {
         id: 'signoff', type: 'table', title: 'Sign-off',
@@ -304,7 +304,7 @@
     code: 'WP-09',
     title: 'Tone Filter',
     slug: 'Tone-Filter',
-    purpose: 'A self-check applied by each person to their own next message: converting a raw reaction into something the other person can actually receive, and weighing an incoming message before reacting to it. Nothing here records or analyzes anyone\'s voice.',
+    purpose: 'A self-check each of you uses on your own side of a conversation. It helps you turn a raw reaction into something the other person can actually take in, and weigh a message you received before you react to it. Nothing here records or analyzes anyone\'s voice.',
     people: false,
     meta: [
       { id: 'name', label: 'Your name', type: 'text' },
@@ -315,7 +315,7 @@
         id: 'transducer', type: 'fields', title: 'The transducer: before you speak or send',
         intro: 'Use it on one thing that actually stung.',
         fields: [
-          { id: 'raw', label: 'Raw reaction', type: 'textarea', help: 'Optional, and just for you. It is left out of the PDF unless you tick the box.', privateOptIn: 'Include the raw reaction in the PDF' },
+          { id: 'raw', label: 'Raw reaction', type: 'textarea', help: 'Optional, and just for you. It is left out of the PDF unless you check the box.', privateOptIn: 'Include the raw reaction in the PDF' },
           { id: 'fact', label: "What's the fact underneath this? (One sentence, no adjectives.)", type: 'textarea' },
           { id: 'feeling', label: "What's the feeling underneath this? (Frustrated, tired, unseen, rushed…)", type: 'textarea' },
           { id: 'ask', label: "What's the actual ask? (What do you want to happen next, specifically?)", type: 'textarea' }
@@ -325,7 +325,7 @@
         id: 'filter', type: 'checks', title: 'The filter: before you react to what they said',
         items: [
           { id: 'specific', label: 'Is this about a specific, nameable task or event?', options: ['Yes', 'No'] },
-          { id: 'saturation', label: "Would I read this the same way if I weren't already at high saturation (WP-02)?", options: ['Yes', 'No', 'Not sure'] },
+          { id: 'saturation', label: "Would I read this the same way if my battery weren't already running high (WP-02)?", options: ['Yes', 'No', 'Not sure'] },
           { id: 'neutral', label: 'Is there a neutral interpretation that also fits what was said?', options: ['Yes', 'No'] },
           { id: 'pattern', label: 'Am I responding to their words, or to a pattern from a past conversation?', options: ['Their words', 'A past pattern'] }
         ]
@@ -343,11 +343,11 @@
           if (!(sat || neu || pat || spec)) {
             out.push({ label: 'Filter', value: 'Answer the four checks to see a suggestion.' });
           } else if (pause) {
-            out.push({ label: 'Suggestion', value: 'Pause before continuing. Use a neutral refusal or a pause script (WP-01), and come back when saturation is lower or the neutral reading has been ruled out.' });
+            out.push({ label: 'Suggestion', value: 'Pause before you go on. Use a neutral refusal or a "not right now" script (WP-01). Come back when your battery score is lower, or once you\'ve ruled out the neutral reading.' });
           } else if (spec === 'No') {
-            out.push({ label: 'Suggestion', value: 'Name the specific task or event first. A message about a pattern is much harder to receive than one about a thing.' });
+            out.push({ label: 'Suggestion', value: 'Name the specific task or event first. A message about a pattern is much harder to hear than one about a single thing.' });
           } else {
-            out.push({ label: 'Suggestion', value: 'Clear to respond, built from fact, feeling and ask.' });
+            out.push({ label: 'Suggestion', value: 'You\'re clear to respond. Build your reply from the fact, the feeling and the ask.' });
           }
           return out;
         }
@@ -361,7 +361,7 @@
     code: 'WP-11',
     title: 'The Calm-Down Kit',
     slug: 'Calm-Down-Kit',
-    purpose: 'A short, pre-decided plan for bringing your body back down far enough to have the conversation, or to postpone it honestly. Used by one person, about themselves. Fill in Part A on an ordinary day, not a hard one.',
+    purpose: 'A short plan, made ahead of time, for calming your body down enough to have the conversation, or to put it off honestly. One person uses it, about themselves. Fill in Part A on an ordinary day, not a hard one.',
     people: true,
     meta: [
       { id: 'date', label: 'Date', type: 'date' }
@@ -373,7 +373,7 @@
       },
       {
         id: 'triggers', type: 'table', title: 'Part A: What tends to start it',
-        intro: 'Name the two or three that actually recur for you. Specific beats comprehensive. Then note how your body signals it first: jaw, shoulders, shallow breath, cold hands.',
+        intro: 'Name the two or three that actually keep coming up for you. Be specific rather than broad. Then note where your body feels it first: jaw, shoulders, shallow breathing, cold hands.',
         addLabel: 'Add a trigger',
         columns: [
           { id: 'trigger', label: 'What tends to start it', type: 'text', w: 2.5 },
@@ -383,7 +383,7 @@
       },
       {
         id: 'defaults', type: 'fields', title: 'Part A: My two defaults',
-        intro: 'Pick two from the list now, so in the moment you don\'t have to choose.',
+        intro: 'Pick two calming steps from the list now, so you don\'t have to choose in the moment.',
         fields: [
           { id: 'first', label: 'First default', type: 'select', options: WP11_TACTICS },
           { id: 'second', label: "Second, if the first isn't available", type: 'select', options: WP11_TACTICS }
@@ -391,7 +391,7 @@
       },
       {
         id: 'lines', type: 'table', title: 'Part A: My signal line',
-        intro: 'One sentence, agreed now, so a pause isn\'t mistaken for walking out. Name the state, the length and the return: "I\'m at capacity. I need ten minutes. I\'ll be back at quarter past."',
+        intro: 'One sentence, agreed now, so a pause isn\'t mistaken for walking out. Say how you are, how long you need, and when you\'ll be back: "I\'m at capacity. I need ten minutes. I\'ll be back at quarter past."',
         fixedRows: ['@A', '@B'],
         columns: [
           { id: 'line', label: 'Signal line', type: 'textarea', w: 4 }
@@ -399,15 +399,15 @@
       },
       {
         type: 'note', pdf: true,
-        text: 'Part B, in the moment: read where you are with WP-02, say your line, then run your default. Nothing in this kit works by cold, pain or shock, and none of it is treatment.'
+        text: 'Part B, in the moment: check where you are with WP-02, say your line, then do your first calming step. Nothing in this kit works by cold, pain or shock, and none of it is treatment.'
       },
       {
-        id: 'reentry', type: 'table', title: 'Part C: Re-entry',
-        intro: 'Read WP-02 before and after. "Feeling better" is not a threshold; the number is. Under 0.50, go back in. 0.50 to 0.60, run a second cycle. Still 0.60 or above after two, postpone to a named time.',
+        id: 'reentry', type: 'table', title: 'Part C: Coming back',
+        intro: 'Take WP-02 before and after. "Feeling better" is not the test; the number is. Under 0.50, go back in. Between 0.50 and 0.60, do a second round. Still 0.60 or above after two rounds? Put it off to a named time.',
         addLabel: 'Add a reading',
         columns: [
           { id: 'time', label: 'Time', type: 'text', w: 1, placeholder: 'e.g. 7:40pm' },
-          { id: 'tactic', label: 'What I ran', type: 'select', options: WP11_TACTICS, w: 2.2 },
+          { id: 'tactic', label: 'What I did', type: 'select', options: WP11_TACTICS, w: 2.2 },
           { id: 'before', label: 'WP-02 before (0–1)', type: 'number', w: 1, step: '0.01', min: 0, max: 1 },
           { id: 'after', label: 'WP-02 after (0–1)', type: 'number', w: 1, step: '0.01', min: 0, max: 1 },
           { id: 'change', label: 'Change', type: 'computed', w: 0.9, compute: function (r) {
@@ -421,19 +421,19 @@
         id: 'next', type: 'computed', title: 'Where that leaves you',
         compute: function (ctx) {
           var rows = ctx.rows('reentry').filter(function (r) { return parseFloat(r.after) >= 0; });
-          if (!rows.length) return [{ label: 'Re-entry', value: 'Add a before-and-after reading to see where you are.' }];
+          if (!rows.length) return [{ label: 'Coming back', value: 'Add a before-and-after reading to see where you are.' }];
           var a = parseFloat(rows[rows.length - 1].after);
           var band = a < 0.5 ? 'Under 0.50: go back in, at the time you named.'
-            : a < 0.6 ? '0.50 to 0.60: run a second cycle, the same default or the other one.'
-              : (rows.length >= 2 ? '0.60 or above after two cycles: postpone to a specific time. "Tomorrow after dinner" is a postponement; "later" is not.' : '0.60 or above: run a second cycle first.');
-          return [{ label: 'Latest reading', value: fmt(a, 2) }, { label: 'Next', value: band, note: 'Coming back, start with one small, single-focus task, like putting the dishes away.' }];
+            : a < 0.6 ? '0.50 to 0.60: do a second round, with the same calming step or the other one.'
+              : (rows.length >= 2 ? '0.60 or above after two rounds: put it off to a specific time. "Tomorrow after dinner" is a real plan; "later" is not.' : '0.60 or above: do a second round first.');
+          return [{ label: 'Latest reading', value: fmt(a, 2) }, { label: 'Next', value: band, note: 'When you come back, start with one small, simple task, like putting the dishes away.' }];
         }
       },
       {
         id: 'after', type: 'fields', title: 'Coming back',
         fields: [
           { id: 'nextAction', label: 'Next small action', type: 'text' },
-          { id: 'resume', label: 'If the conversation was postponed: when it resumes', type: 'text' }
+          { id: 'resume', label: 'If you put the conversation off: when you\'ll pick it back up', type: 'text' }
         ]
       },
       {
@@ -455,7 +455,7 @@
     code: 'WP-13',
     title: 'Phase-Locked Loop',
     slug: 'Phase-Locked-Loop',
-    purpose: 'A 90-second daily check-in that keeps two people in step through small, constant corrections instead of occasional large ones. Each person answers each prompt in one sentence. No debate, no solving, no rebuttal.',
+    purpose: 'A 90-second daily check-in that keeps two people in step with small, steady corrections instead of occasional big ones. Each of you answers each prompt in one sentence. No debating, no solving, no arguing back.',
     people: true,
     meta: [
       { id: 'weekOf', label: 'Week beginning', type: 'date' }
@@ -463,7 +463,7 @@
     sections: [
       {
         id: 'daily', type: 'table', title: 'The daily loop',
-        intro: 'Load: "Today I was at about low / medium / high capacity." Appreciation: one specific thing you appreciated about the other person today. Friction and ask are optional. Anything that needs real discussion waits for the weekly resync.',
+        intro: 'Load: "Today I was at about low / medium / high capacity." Appreciation: one specific thing you appreciated about the other person today. The other two columns are optional. Anything that needs a real discussion waits for the weekly catch-up.',
         addLabel: 'Add a row',
         columns: [
           { id: 'day', label: 'Day', type: 'select', options: DAYS, w: 0.7, prefill: true },
@@ -488,13 +488,13 @@
         }
       },
       {
-        id: 'resync', type: 'table', title: 'The weekly resync', optional: true,
-        intro: 'Once a week, alongside closing the books: skim the daily notes for anything that repeated more than twice, and promote it rather than letting it stay an ambient irritation.',
+        id: 'resync', type: 'table', title: 'The weekly catch-up', optional: true,
+        intro: 'Once a week, when you do your weekly closing, skim the daily notes for anything that came up more than twice. Move it to the right worksheet, instead of letting it stay a low-level irritation.',
         addLabel: 'Add an item',
         columns: [
-          { id: 'item', label: 'Repeated friction point', type: 'text', w: 3 },
+          { id: 'item', label: 'Sore spot that keeps coming up', type: 'text', w: 3 },
           { id: 'times', label: 'Times this week', type: 'number', w: 0.9 },
-          { id: 'to', label: 'Promote to', type: 'select', options: ['RACI Treaty (WP-03)', 'Tone Filter (WP-09)', 'Keep watching'], w: 1.8 }
+          { id: 'to', label: 'Move to', type: 'select', options: ['RACI Treaty (WP-03)', 'Tone Filter (WP-09)', 'Keep watching'], w: 1.8 }
         ],
         defaultRows: [{}]
       },

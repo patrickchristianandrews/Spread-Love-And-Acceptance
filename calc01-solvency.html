@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CALC-01 — The Solvency Read</title>
-<meta name="description" content="CALC-01: the full solvency instrument. Derives all four sub-matrices from their source workpapers, computes P(Solvency) and the apex score, and documents the scoring system in full.">
+<title>Can the load last? (CALC-01) — The Objective Ledger</title>
+<meta name="description" content="CALC-01, Can the load last? The full calculator works out all four inputs from your worksheets, gives you the solvency and apex scores, and explains exactly how the scoring works.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,500&family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -367,12 +367,13 @@
 
   <header class="sheet-header">
     <p class="wp-num">CALC-01</p>
-    <h1 class="sheet-mark">The Solvency Read
+    <h1 class="sheet-mark">Can the Load Last? The Solvency Read
       <small>WB &middot; OC &middot; AS &middot; RF &rarr; P(Solvency) &middot; Apex</small>
     </h1>
-    <p class="sheet-tagline">Scores one narrow thing: whether the current workload arrangement, as logged, looks sustainable. Not either person. Not the relationship.</p>
-    <p class="sheet-tagline" style="color:var(--debit);margin-top:8px;"><strong>A diagnostic starting point, not an exit script.</strong> A low score doesn't assign blame, and a high score doesn't silence a partner.</p>
-    <p class="sheet-tagline" style="margin-top:8px;">Read about it in <a href="/book/chapter-2.html">Chapter II</a>. The inputs come from <a href="/workpapers/wp-01.html">WP-01</a>, <a href="/workpapers/wp-02-battery-stress-meter.html">WP-02</a>, <a href="/workpapers/wp-03-raci-treaty.html">WP-03</a> and <a href="/workpapers/wp-09-tone-filter.html">WP-09</a>. Want the quick version? Try the <a href="/workpapers/calculators/calc01-solvency.html">three-slider Solvency Read</a>. To follow it week by week, use <a href="/workpapers/report-01.html">REPORT-01</a>.</p>
+    <p class="sheet-tagline">This scores one narrow thing: whether the way you share the work right now, as logged, can keep going. It doesn't score either person, or the relationship. ("Solvency" here simply means the setup can carry its own weight.)</p>
+    <p class="sheet-tagline" style="color:var(--debit);margin-top:8px;"><strong>A place to start, not a way out.</strong> A low score doesn't blame anyone, and a high score doesn't mean either of you should stop speaking up.</p>
+    <p class="sheet-tagline pillar-note" style="margin-top:8px;">CALC-01 puts <a href="/five-pillars.html#see-the-load">Pillar I, See the whole load</a> and <a href="/five-pillars.html#fix-the-setup">Pillar II, Fix the setup, not the person</a> to work, and Step Zero uses <a href="/five-pillars.html#read-your-state">Pillar III, Read your state first</a>. In you: you see the whole load you carry, and check your state before you read the number. Between you and others: you get one fair read of the setup, never a score on either person.</p>
+    <p class="sheet-tagline" style="margin-top:8px;">Read about it in <a href="/book/chapter-2.html">Chapter II</a>. The inputs come from <a href="/workpapers/wp-01.html">WP-01</a>, <a href="/workpapers/wp-02-battery-stress-meter.html">WP-02</a>, <a href="/workpapers/wp-03-raci-treaty.html">WP-03</a> and <a href="/workpapers/wp-09-tone-filter.html">WP-09</a>. Want a quicker version? Try the <a href="/workpapers/calculators/calc01-solvency.html">three-slider Solvency Read</a>. To follow it week by week, use <a href="/workpapers/report-01.html">REPORT-01</a>.</p>
     <div class="toc no-print">
       <a href="#state">Check Your State</a>
       <a href="#wb">Workload Balance</a>
@@ -393,23 +394,23 @@
       <h2>Check Your State</h2>
     </div>
 
-    <p>Before you read a number about your household, check which state you're reading it from. The same number lands differently depending on where your body is. This is a self-check, not a measurement of anyone else.</p>
+    <p>Before you read a number about your household, check what state you're in. The same number lands differently depending on how your body feels right now. This is a check on yourself, not a measurement of anyone else.</p>
 
     <div class="ladder" role="group" aria-label="Select your current nervous system state">
       <button type="button" class="rung" data-state="ventral" aria-pressed="false">
-        <b>Ventral vagal</b><span>SAFE &amp; SOCIAL</span>
+        <b>Calm &amp; connected</b><span>VENTRAL VAGAL</span>
       </button>
       <button type="button" class="rung" data-state="sympathetic" aria-pressed="false">
-        <b>Sympathetic</b><span>MOBILIZED</span>
+        <b>Revved up</b><span>SYMPATHETIC</span>
       </button>
       <button type="button" class="rung" data-state="dorsal" aria-pressed="false">
-        <b>Dorsal vagal</b><span>SHUTDOWN</span>
+        <b>Shut down</b><span>DORSAL VAGAL</span>
       </button>
     </div>
 
     <div class="state-readout" id="state-readout" aria-live="polite">
       <span class="lbl">Current reading</span>
-      <span id="state-text">Pick the rung that's closest to true right now. Your answer doesn't change the score — it changes whether tonight is the night to act on it.</span>
+      <span id="state-text">Pick the step that's closest to how you feel right now. Your answer doesn't change the score. It changes whether tonight is the night to act on it.</span>
     </div>
   </section>
 
@@ -418,10 +419,10 @@
   <section id="how">
     <div class="section-head">
       <p class="part-label">Architecture</p>
-      <h2>How the Instrument Works</h2>
+      <h2>How the Calculator Works</h2>
     </div>
 
-    <p>Four sub-matrices feed two outputs. Each sub-matrix is derived here from the same raw entries its source workpaper asks for — you never type in a 0&ndash;1 score, because a hand-estimated score is just a mood with a decimal point on it.</p>
+    <p>Four inputs feed two scores. Each input is worked out here from the same raw entries its worksheet asks for. You never type in a 0&ndash;1 score yourself, because a score you estimate by hand is just a mood with a decimal point on it.</p>
 
     <div class="pipeline">
       <div class="pipe-cell">
@@ -438,7 +439,7 @@
       </div>
       <div class="pipe-cell">
         <span class="src">WP-02 &middot; Battery Meter</span>
-        Five self-rated factors, each person
+        Five things each person rates about themselves
         <div class="pipe-arrow">&darr;</div>
         <span class="var">AS</span> Autonomic Saturation
       </div>
@@ -451,8 +452,8 @@
     </div>
 
     <div class="intro-note">
-      <p><strong>Two outputs, two different questions.</strong> <code>P(Solvency)</code> uses WB, OC and AS, and asks the narrow question: <em>is this week's workload sustainable as structured?</em> The <code>apex score</code> adds RF and asks the wider one: <em>is the whole system working, including repair?</em></p>
-      <p>They can disagree, and the disagreement is the useful part. A household can have a balanced, well-owned workload and still be failing to repair after friction — solvency high, apex low. The read below shows both, and names the gap when they diverge.</p>
+      <p><strong>Two outputs, two different questions.</strong> <code>P(Solvency)</code> uses WB, OC and AS, and asks a narrow question: <em>is this week's workload sustainable as structured?</em> The <code>apex score</code> adds RF and asks a wider one: <em>is the whole system working, including repair?</em></p>
+      <p>The two scores can disagree, and that disagreement is the useful part. A household can have a balanced workload with clear owners and still not be repairing things after friction: solvency high, apex low. The read below shows both, and names the gap when they differ.</p>
     </div>
   </section>
 
@@ -469,7 +470,7 @@
         <h3>The week's ledger</h3>
         <span class="src-tag">WP-01 Part A &rarr; WB</span>
       </div>
-      <p class="panel-note">Enter this week's rough hours per line item, per person. Rough is fine — the split is what matters, and precision to the minute would be false precision.</p>
+      <p class="panel-note">Enter this week's rough hours for each item, for each person. Rough is fine. The split is what matters, and counting to the minute would only look precise.</p>
 
       <table>
         <thead>
@@ -504,7 +505,7 @@
       </div>
     </div>
 
-    <p style="font-size:0.88rem;color:var(--ink-soft);">A perfectly even split scores 1.00. A fully one-sided week scores 0.00. The scale is symmetric on purpose: it doesn't matter to the arithmetic <em>which</em> person is carrying more, only that the load isn't shared.</p>
+    <p style="font-size:0.88rem;color:var(--ink-soft);">A perfectly even split scores 1.00. A completely one-sided week scores 0.00. The scale works the same in both directions on purpose: it doesn't matter to the math <em>which</em> person is carrying more, only that the load isn't shared.</p>
   </section>
 
   <!-- ================= OC ================= -->
@@ -517,10 +518,10 @@
 
     <div class="panel">
       <div class="panel-head">
-        <h3>The treaty roll-call</h3>
+        <h3>The treaty, job by job</h3>
         <span class="src-tag">WP-03 &rarr; OC</span>
       </div>
-      <p class="panel-note">For each recurring task, set who is <strong>Responsible</strong> (does it) and who is <strong>Accountable</strong> (notices if it didn't happen). They can be the same person. A row counts toward clarity only when both are named.</p>
+      <p class="panel-note">For each regular task, choose who is <strong>Responsible</strong> (does it) and who is <strong>Accountable</strong> (notices if it didn't get done). They can be the same person. A row only counts toward clarity when both are named.</p>
 
       <table>
         <thead>
@@ -548,7 +549,7 @@
     </div>
 
     <div class="warn-box">
-      <p><strong>Don't game this one by shortening the list.</strong> Deleting the three tasks nobody owns raises OC and changes nothing in the house. If a task is real and unowned, it belongs on the list as an unowned row — that's the row the score exists to surface.</p>
+      <p><strong>Don't game this one by shortening the list.</strong> Deleting the three tasks nobody owns raises OC and changes nothing at home. If a task is real and has no owner, keep it on the list as a row with no owner. Bringing that row to light is the whole point of this score.</p>
     </div>
   </section>
 
@@ -565,7 +566,7 @@
         <h3>Both batteries</h3>
         <span class="src-tag">WP-02 &rarr; AS</span>
       </div>
-      <p class="panel-note">Each person fills in their own column, about themselves, for how the last 24&ndash;48 hours have actually gone. 0 = not at all, 4 = maximally true. Guessing on someone else's behalf turns a reflection tool into a surveillance tool, and the read below will refuse to compute without both columns.</p>
+      <p class="panel-note">Each person fills in their own column, about themselves, based on how the last 24&ndash;48 hours have actually gone. 0 = not at all, 4 = very true. Guessing for someone else turns a tool for reflection into a way of watching them, so the read below won't work without both columns.</p>
 
       <div class="sat-grid">
         <div class="sat-col">
@@ -591,13 +592,13 @@
       </div>
 
       <div class="derive" aria-live="polite">
-        <div class="formula">AS = mean of both partners' scores</div>
+        <div class="formula">AS = the average of both people's scores</div>
         <div class="formula" id="as-work">&nbsp;</div>
         <div><span class="out" id="as-out">&mdash;</span> <span class="formula">average_autonomic_saturation</span></div>
       </div>
     </div>
 
-    <p style="font-size:0.88rem;color:var(--ink-soft);">AS is the only input that enters the formula inverted, as <code>(1 &minus; AS)</code>. High saturation subtracts from solvency because a workload that only works when both people are rested isn't a workload that works.</p>
+    <p style="font-size:0.88rem;color:var(--ink-soft);">AS is the only input that goes into the formula flipped, as <code>(1 &minus; AS)</code>. High saturation lowers solvency, because a workload that only works when both people are well rested isn't a workload that works.</p>
   </section>
 
   <!-- ================= RF ================= -->
@@ -610,10 +611,10 @@
 
     <div class="panel">
       <div class="panel-head">
-        <h3>Repair, tallied</h3>
+        <h3>Counting repairs</h3>
         <span class="src-tag">WP-09 &rarr; RF</span>
       </div>
-      <p class="panel-note">Count the week's friction events — moments where something landed badly enough to notice — and how many of them actually got run through the transducer before responding. This is the one input that measures what you <em>did</em> about the friction rather than how much there was.</p>
+      <p class="panel-note">Count the week's friction events (moments when something landed badly enough to notice). Then count how many you actually ran through the WP-09 transducer (fact, feeling, ask) before you responded. This is the one input that measures what you <em>did</em> about the friction, not how much there was.</p>
 
       <table>
         <tbody>
@@ -622,7 +623,7 @@
             <td class="num" style="width:110px;"><input type="number" id="friction" min="0" step="1" value="0" aria-label="Friction events logged this week"></td>
           </tr>
           <tr>
-            <td>Of those, how many got retuned before responding</td>
+            <td>Of those, how many you retuned before responding</td>
             <td class="num"><input type="number" id="retunes" min="0" step="1" value="0" aria-label="Retunes used"></td>
           </tr>
         </tbody>
@@ -636,7 +637,7 @@
     </div>
 
     <div class="intro-note">
-      <p><strong>Zero friction events is not a zero.</strong> If nothing landed badly this week, RF is undefined rather than 0.00 — there was nothing to repair, which is not the same as failing to repair. When RF is undefined the apex score is computed on the remaining three inputs with their weights renormalized, and the read says so.</p>
+      <p><strong>Zero friction events is not a zero.</strong> If nothing landed badly this week, RF has no value, rather than 0.00. There was nothing to repair, which is not the same as failing to repair. When RF has no value, the apex score uses the other three inputs, with their weights rebalanced to add up to 1, and the read tells you so.</p>
     </div>
   </section>
 
@@ -665,7 +666,7 @@
       <div class="contrib">
         <h4>Where the points came from</h4>
         <div id="contrib-rows"></div>
-        <p style="font-size:0.8rem;color:var(--ink-soft);margin-top:10px;max-width:none;">Each bar shows points earned against points available at that weight. The shortfall, not the score, is the thing you can act on.</p>
+        <p style="font-size:0.8rem;color:var(--ink-soft);margin-top:10px;max-width:none;">Each bar shows the points earned out of the points available for that input. The shortfall, not the score, is what you can act on.</p>
       </div>
 
       <div id="divergence" style="display:none;"></div>
@@ -679,8 +680,8 @@
     </div>
 
     <details class="no-print">
-      <summary>Optional: compress the scale toward its ends (sigmoid)</summary>
-      <p style="font-size:0.88rem;">The scoring spec allows passing the same weighted sum through a logistic curve centered at 0.5: <code>1 / (1 + e^(-6 &times; (raw &minus; 0.5)))</code>. This pushes middling reads further from the middle. It adds no predictive power — there is no fitted model behind either version — and it makes your numbers incomparable to any read taken without it. Off by default.</p>
+      <summary>Optional: push scores toward the ends of the scale (sigmoid)</summary>
+      <p style="font-size:0.88rem;">The scoring rules allow you to run the same weighted total through an S-shaped curve centered at 0.5: <code>1 / (1 + e^(-6 &times; (raw &minus; 0.5)))</code>. This pushes middling reads further from the middle. It doesn't make the score any better at predicting anything, since there's no fitted model behind either version. It also means your numbers can't be compared with any read taken without it. It's off by default.</p>
       <label style="font-size:0.88rem;display:flex;gap:8px;align-items:center;">
         <input type="checkbox" id="sigmoid" style="width:auto;"> Apply the sigmoid transform
       </label>
@@ -688,7 +689,7 @@
 
     <details class="no-print">
       <summary>Advanced: edit the weights</summary>
-      <p style="font-size:0.88rem;">These weights are editorial priors, not fitted coefficients — they encode a judgment that an unbalanced workload matters somewhat more than an unclear one, and that both matter more than baseline stress. If you change them, every previous read becomes non-comparable, and the change should be written down in your own copy of the scoring spec before you use it twice.</p>
+      <p style="font-size:0.88rem;">These weights are a judgment call, not numbers worked out from data. They say that an unbalanced workload matters a bit more than unclear ownership, and that both matter more than everyday stress. If you change them, you can no longer compare new reads with old ones. Write the change down in your own copy of the scoring rules before you use it a second time.</p>
       <table>
         <thead><tr><th>Term</th><th class="num">Solvency</th><th class="num">Apex</th></tr></thead>
         <tbody>
@@ -699,7 +700,7 @@
         </tbody>
       </table>
       <p id="weight-warn" style="font-size:0.82rem;color:var(--debit);margin-top:10px;"></p>
-      <div class="btn-row"><button type="button" class="btn" id="reset-weights">Restore published weights</button></div>
+      <div class="btn-row"><button type="button" class="btn" id="reset-weights">Restore the original weights</button></div>
     </details>
   </section>
 
@@ -711,7 +712,7 @@
       <h2>Trend Log</h2>
     </div>
 
-    <p>A single read tells you about one week's operations. The trend is what tells you whether anything is actually moving. Add each week's read here as you take it.</p>
+    <p>A single read tells you about one week. The trend tells you whether anything is actually changing. Add each week's read here as you take it.</p>
 
     <div class="panel">
       <table>
@@ -744,8 +745,8 @@
     </div>
 
     <div class="warn-box">
-      <p><strong>Nothing on this page is saved.</strong> The site's privacy policy commits to nothing being transmitted or stored beyond your current browser session, and this instrument keeps that promise — which means closing the tab clears the log. Print or screenshot it to keep it.</p>
-      <p>That's a deliberate trade. A shared household computer is exactly the place where an automatically saved ledger of one person's stress scores stops being a reflection tool.</p>
+      <p><strong>Nothing on this page is saved.</strong> The site's privacy policy promises that nothing is sent or stored beyond your current browser session, and this calculator keeps that promise. That means closing the tab clears the log. Print it or take a screenshot to keep it.</p>
+      <p>That's on purpose. On a shared household computer, an automatically saved record of one person's stress scores would stop being a tool for reflection.</p>
     </div>
   </section>
 
@@ -762,11 +763,11 @@
 <pre>P(Solvency) = (WB &times; 0.40) + (OC &times; 0.35) + ((1 &minus; AS) &times; 0.25)
 
 apex_score  = (WB &times; 0.35) + (OC &times; 0.30) + ((1 &minus; AS) &times; 0.20) + (RF &times; 0.15)</pre>
-      <p>Both are linear weighted sums, not fitted models. Each weight set sums to 1.00, and every term is bounded 0&ndash;1, so each output is bounded 0&ndash;1 by construction. There is no training data behind either one and no coefficient was estimated from an observed outcome. The word "probability" in P(Solvency) is a naming convention inherited from the manuscript, not a claim about likelihood.</p>
+      <p>Both are simple weighted totals, not fitted models. Each set of weights adds up to 1.00, and every input runs from 0 to 1, so each score also runs from 0 to 1. No data was used to build either one, and no weight was estimated from real-world outcomes. The "P" (probability) in P(Solvency) is just a name carried over from the book, not a claim about how likely anything is.</p>
     </div>
 
     <div class="spec-block">
-      <h3>The four inputs, defined precisely</h3>
+      <h3>The four inputs, defined exactly</h3>
       <table>
         <thead>
           <tr><th>Variable</th><th>Definition</th><th>Source</th><th class="num">Range</th></tr>
@@ -780,19 +781,19 @@ apex_score  = (WB &times; 0.35) + (OC &times; 0.30) + ((1 &minus; AS) &times; 0.
           </tr>
           <tr>
             <td class="mono" style="font-size:0.78rem;">OC</td>
-            <td><code>tasks with both R and A &divide; total tasks</code><br>Counts clarity of ownership, not fairness of it</td>
+            <td><code>tasks with both R and A &divide; total tasks</code><br>Measures how clear ownership is, not how fair it is</td>
             <td>WP-03 RACI Treaty</td>
             <td class="num">0&ndash;1</td>
           </tr>
           <tr>
             <td class="mono" style="font-size:0.78rem;">AS</td>
-            <td><code>mean of both partners' (sum of 5 factors &divide; 20)</code><br>Enters inverted as <code>1 &minus; AS</code></td>
+            <td><code>average of both people's scores (5 factors added up, &divide; 20)</code><br>Goes in flipped, as <code>1 &minus; AS</code></td>
             <td>WP-02 Battery Meter</td>
             <td class="num">0&ndash;1</td>
           </tr>
           <tr>
             <td class="mono" style="font-size:0.78rem;">RF</td>
-            <td><code>retunes used &divide; friction events</code><br>Undefined when friction events = 0</td>
+            <td><code>retunes used &divide; friction events</code><br>No value when friction events = 0</td>
             <td>WP-09 Tone Filter</td>
             <td class="num">0&ndash;1</td>
           </tr>
@@ -802,14 +803,14 @@ apex_score  = (WB &times; 0.35) + (OC &times; 0.30) + ((1 &minus; AS) &times; 0.
 
     <div class="spec-block">
       <h3>Why these weights</h3>
-      <p>The weights are a stated editorial judgment about which failures compound fastest. They are adjustable and they are not derived from evidence.</p>
+      <p>The weights are an openly stated judgment about which problems build up fastest. You can adjust them, and they don't come from research.</p>
       <table>
         <thead><tr><th>Term</th><th class="num">Solvency</th><th class="num">Apex</th><th>Reasoning</th></tr></thead>
         <tbody>
-          <tr><td>WB</td><td class="num">0.40</td><td class="num">0.35</td><td>Weighted highest because an unshared load is the failure that accumulates whether or not anyone notices it. It's also the input with the most observable evidence behind it.</td></tr>
-          <tr><td>OC</td><td class="num">0.35</td><td class="num">0.30</td><td>Close behind, because unclear ownership is what turns a fixable imbalance into a recurring one. Unowned work defaults to whoever notices first, every time.</td></tr>
-          <tr><td>1 &minus; AS</td><td class="num">0.25</td><td class="num">0.20</td><td>Lowest of the three because it's the most volatile week to week and the most self-reported. It matters, but a single bad-sleep week shouldn't dominate the read.</td></tr>
-          <tr><td>RF</td><td class="num">&mdash;</td><td class="num">0.15</td><td>Apex only. Small weight, because it's a tally rather than a measurement, and because repair behavior is the input most easily inflated by the person filling it in.</td></tr>
+          <tr><td>WB</td><td class="num">0.40</td><td class="num">0.35</td><td>Weighted highest, because an unshared load keeps building up whether or not anyone notices it. It's also the input with the most visible evidence behind it.</td></tr>
+          <tr><td>OC</td><td class="num">0.35</td><td class="num">0.30</td><td>Close behind, because unclear ownership turns a fixable imbalance into one that keeps coming back. Work with no owner falls to whoever notices it first, every time.</td></tr>
+          <tr><td>1 &minus; AS</td><td class="num">0.25</td><td class="num">0.20</td><td>Lowest of the three, because it changes the most from week to week and relies most on how people rate themselves. It matters, but one week of bad sleep shouldn't dominate the read.</td></tr>
+          <tr><td>RF</td><td class="num">&mdash;</td><td class="num">0.15</td><td>Apex only. A small weight, because it's a simple count rather than a measurement, and because it's the input people most easily overstate about themselves.</td></tr>
         </tbody>
       </table>
     </div>
@@ -819,12 +820,12 @@ apex_score  = (WB &times; 0.35) + (OC &times; 0.30) + ((1 &minus; AS) &times; 0.
       <table>
         <thead><tr><th class="num" style="width:100px;">Range</th><th>Reading</th><th>First move</th></tr></thead>
         <tbody>
-          <tr><td class="num mono">&ge; 0.70</td><td>The arrangement is carrying its own weight.</td><td>Change nothing structural. Keep the same rhythm of check-ins.</td></tr>
-          <tr><td class="num mono">0.40&ndash;0.69</td><td>Something is drifting.</td><td>Go to the shortfall bar with the largest gap. That's usually ownership clarity, but read it rather than assuming it.</td></tr>
-          <tr><td class="num mono">&lt; 0.40</td><td>Not sustainable as currently structured.</td><td>A full treaty renegotiation, not another one-off patch. Arrangements get renegotiated all the time; this is a statement about the arrangement.</td></tr>
+          <tr><td class="num mono">&ge; 0.70</td><td>The arrangement is carrying its own weight.</td><td>Don't change the setup. Keep the same rhythm of check-ins.</td></tr>
+          <tr><td class="num mono">0.40&ndash;0.69</td><td>Something is drifting.</td><td>Look at the shortfall bar with the biggest gap. It's usually ownership clarity, but check rather than assume.</td></tr>
+          <tr><td class="num mono">&lt; 0.40</td><td>This setup can't last as it is.</td><td>Rework the whole treaty, not another one-off patch. People rework arrangements all the time. This is a statement about the setup, not about anyone.</td></tr>
         </tbody>
       </table>
-      <p>Band boundaries are round numbers chosen for legibility. A 0.69 and a 0.70 are the same week; treat the bands as regions, not thresholds, and don't let a decimal point carry the weight of a decision.</p>
+      <p>The band edges are round numbers, chosen to be easy to read. A 0.69 and a 0.70 are really the same week. Treat the bands as rough areas, not hard lines, and don't let a decimal point make a decision for you.</p>
     </div>
 
     <div class="spec-block">
@@ -832,10 +833,10 @@ apex_score  = (WB &times; 0.35) + (OC &times; 0.30) + ((1 &minus; AS) &times; 0.
       <table>
         <thead><tr><th style="width:200px;">Pattern</th><th>What it usually means</th></tr></thead>
         <tbody>
-          <tr><td><strong>Both high</strong></td><td>Workload is shared and owned, and friction is getting repaired. Keep going.</td></tr>
-          <tr><td><strong>Solvency high, apex low</strong></td><td>The structure is fine and the repair isn't happening. Friction is being absorbed rather than processed — which holds for a while and then doesn't. WP-09 is the lever, not the treaty.</td></tr>
-          <tr><td><strong>Solvency low, apex higher</strong></td><td>You're repairing well around a structure that keeps generating the need for repair. Good communication is compensating for a bad arrangement. The treaty is the lever.</td></tr>
-          <tr><td><strong>Both low</strong></td><td>Structure and repair are both under water. This is the state where a single conversation won't be enough, and it's worth considering outside help rather than another worksheet.</td></tr>
+          <tr><td><strong>Both high</strong></td><td>The workload is shared and owned, and friction is getting repaired. Keep going.</td></tr>
+          <tr><td><strong>Solvency high, apex low</strong></td><td>The setup is fine, but repair after friction isn't happening. Friction is being swallowed instead of talked through, which holds for a while and then stops holding. WP-09 is the place to work on, not the treaty.</td></tr>
+          <tr><td><strong>Solvency low, apex higher</strong></td><td>You're repairing well, but the setup keeps creating the friction you have to repair. Good communication is making up for a poor arrangement. The treaty is the place to work on.</td></tr>
+          <tr><td><strong>Both low</strong></td><td>The setup and the repair are both struggling. This is when a single conversation won't be enough, and it's worth considering outside help rather than another worksheet.</td></tr>
         </tbody>
       </table>
     </div>
@@ -843,37 +844,37 @@ apex_score  = (WB &times; 0.35) + (OC &times; 0.30) + ((1 &minus; AS) &times; 0.
     <div class="spec-block">
       <h3>Defined edge cases</h3>
       <ul class="plain">
-        <li><strong>No hours logged.</strong> WB is undefined, not 1.00. An empty ledger is not a perfectly even week.</li>
-        <li><strong>No tasks listed.</strong> OC is undefined, not 0.00. An empty treaty has no clarity to measure.</li>
-        <li><strong>Only one partner's battery filled in.</strong> No read is produced at all. The spec's hard limit — never computed from one partner's inputs alone — is enforced here rather than trusted.</li>
-        <li><strong>No friction events.</strong> RF is undefined. Apex is computed on the remaining three weights, renormalized to sum to 1.00, and the readout says so.</li>
-        <li><strong>Retunes exceed friction events.</strong> RF is capped at 1.00. More repairs than problems means the tally is counting something else.</li>
+        <li><strong>No hours logged.</strong> WB has no value, rather than 1.00. An empty log is not a perfectly even week.</li>
+        <li><strong>No tasks listed.</strong> OC has no value, rather than 0.00. An empty treaty has no clarity to measure.</li>
+        <li><strong>Only one partner's battery filled in.</strong> No read is produced at all. The rule that a score is never worked out from one person's answers alone is built into the page, not left to trust.</li>
+        <li><strong>No friction events.</strong> RF has no value. Apex uses the other three weights, rebalanced to add up to 1.00, and the readout says so.</li>
+        <li><strong>Retunes exceed friction events.</strong> RF stops at 1.00. More repairs than problems means the count is including something else.</li>
       </ul>
     </div>
 
     <div class="spec-block">
       <h3>Drift rule</h3>
-      <p>From the scoring spec: three consecutive weekly drops of more than 0.10 in the apex score trigger a treaty review — not an emergency conversation. The trend log above watches for this and says so when it happens. A single large drop is usually a week, not a pattern.</p>
+      <p>From the scoring rules: if the apex score drops by more than 0.10 three weeks in a row, it's time for a treaty review, not an emergency conversation. The trend log above watches for this and tells you when it happens. A single large drop is usually just one week, not a pattern.</p>
     </div>
 
     <div class="warn-box">
-      <p><strong>What this instrument will never take as an input.</strong> Tone of voice, recordings, message sentiment, response timestamps, or anything describing one partner without their direct participation in entering it. Every number on this page comes from shared, observable things that both people enter about their own week.</p>
-      <p>If a future version proposes adding one of those inputs, that's a signal to stop and reconsider the feature, not to design around this note.</p>
+      <p><strong>What this calculator will never use as an input.</strong> Tone of voice, recordings, the mood of messages, how fast someone replies, or anything describing one person that they didn't help enter themselves. Every number on this page comes from shared, visible things that both people enter about their own week.</p>
+      <p>If a future version ever suggests adding one of those inputs, that's a signal to stop and rethink the feature, not to find a way around this note.</p>
     </div>
 
     <div class="spec-block">
       <h3>What the number is not</h3>
       <ul class="plain">
-        <li>Not a relationship-compatibility score, and not a fairness verdict about who is the better partner.</li>
-        <li>Not a validated clinical or statistical instrument. It was not trained on anything and predicts nothing.</li>
-        <li>Not a basis for a decision about the relationship's future. It evaluates workload structure, over the scope of one week.</li>
-        <li>Not an argument-ender. If it gets used to close a conversation — "well, the number says" — it is being misused. Its only job is to give two people a low-drama place to start.</li>
+        <li>Not a compatibility score, and not a verdict on who is the better partner.</li>
+        <li>Not a tested clinical or statistical tool. It wasn't built from data, and it predicts nothing.</li>
+        <li>Not a basis for deciding the relationship's future. It looks at how the workload is set up, one week at a time.</li>
+        <li>Not an argument-ender. If it gets used to close a conversation ("well, the number says..."), it is being misused. Its only job is to give two people a calm place to start.</li>
       </ul>
     </div>
   </section>
 
   <footer class="sheet-footer">
-    The Objective Ledger&trade; &middot; CALC-01 &middot; Heuristic worksheet, not a validated instrument &middot; Runs locally; nothing saved or sent
+    The Objective Ledger&trade; &middot; CALC-01 &middot; A rule-of-thumb worksheet, not a tested tool &middot; Runs locally; nothing saved or sent
   </footer>
 
 </main>
@@ -915,15 +916,15 @@ apex_score  = (WB &times; 0.35) + (OC &times; 0.30) + ((1 &minus; AS) &times; 0.
 
   var STATE_COPY = {
     ventral: {
-      text: "Breath is easy, shoulders aren't braced, and feedback can land without an immediate defense. These are good conditions to read a number in. Proceed.",
+      text: "Your breathing is easy, your shoulders aren't braced, and feedback can land without you jumping to defend yourself. These are good conditions for reading a number. Go ahead.",
       mode: "go"
     },
     sympathetic: {
-      text: "Mobilized — the body is already prepared for a fight it hasn't had yet. A read taken in this state tends to get argued with rather than used. Take the number, write it down, and hold the conversation until the mobilization drops.",
+      text: "Revved up: your body is already braced for a fight that hasn't happened. A number read in this state tends to get argued with instead of used. Write the number down, and hold off on the conversation until you've calmed down.",
       mode: "hold"
     },
     dorsal: {
-      text: "Shut down — flat, distant, or past caring. This is the state where a low score reads as a verdict about you rather than about an arrangement. Record the number and stop here. Nothing on this page needs deciding tonight.",
+      text: "Shut down: flat, distant, or past caring. In this state, a low score feels like a verdict on you instead of on the setup. Write the number down and stop here. Nothing on this page needs deciding tonight.",
       mode: "stop"
     }
   };
@@ -954,7 +955,7 @@ apex_score  = (WB &times; 0.35) + (OC &times; 0.30) + ((1 &minus; AS) &times; 0.
       });
       $("state-text").textContent = currentState
         ? STATE_COPY[currentState].text
-        : "Pick the rung that's closest to true right now. Your answer doesn't change the score \u2014 it changes whether tonight is the night to act on it.";
+        : "Pick the step that's closest to how you feel right now. Your answer doesn't change the score. It changes whether tonight is the night to act on it.";
       recalc();
     });
   });
@@ -994,7 +995,7 @@ apex_score  = (WB &times; 0.35) + (OC &times; 0.30) + ((1 &minus; AS) &times; 0.
       $("bar-a").style.width = "50%"; $("bar-b").style.width = "50%";
       $("legend-a").textContent = nameA + " \u00b7 0h";
       $("legend-b").textContent = nameB + " \u00b7 0h";
-      $("wb-work").innerHTML = "&nbsp;no hours logged \u2014 undefined, not 1.00";
+      $("wb-work").innerHTML = "&nbsp;no hours logged, so no value yet (not 1.00)";
       var o = $("wb-out"); o.textContent = "\u2014"; o.className = "out na";
       return { value: null, a: ta, b: tb, nameA: nameA, nameB: nameB };
     }
@@ -1055,7 +1056,7 @@ apex_score  = (WB &times; 0.35) + (OC &times; 0.30) + ((1 &minus; AS) &times; 0.
 
     var out = $("oc-out");
     if(total === 0){
-      $("oc-work").innerHTML = "&nbsp;no tasks listed \u2014 undefined, not 0.00";
+      $("oc-work").innerHTML = "&nbsp;no tasks listed, so no value yet (not 0.00)";
       out.textContent = "\u2014"; out.className = "out na";
       return null;
     }
@@ -1110,7 +1111,7 @@ apex_score  = (WB &times; 0.35) + (OC &times; 0.30) + ((1 &minus; AS) &times; 0.
 
     if(a === null || b === null){
       var which = (a === null && b === null) ? "both columns" : (a === null ? "Partner A's column" : "Partner B's column");
-      $("as-work").innerHTML = "&nbsp;waiting on " + which + " \u2014 never computed from one partner alone";
+      $("as-work").innerHTML = "&nbsp;waiting on " + which + " (never worked out from one person alone)";
       out.textContent = "\u2014"; out.className = "out na";
       return null;
     }
@@ -1129,7 +1130,7 @@ apex_score  = (WB &times; 0.35) + (OC &times; 0.30) + ((1 &minus; AS) &times; 0.
     var out = $("rf-out");
 
     if(f <= 0){
-      $("rf-work").innerHTML = "&nbsp;no friction events \u2014 undefined (nothing to repair is not a failure to repair)";
+      $("rf-work").innerHTML = "&nbsp;no friction events, so no value (nothing to repair is not a failure to repair)";
       out.textContent = "n/a"; out.className = "out na";
       return null;
     }
@@ -1155,8 +1156,8 @@ apex_score  = (WB &times; 0.35) + (OC &times; 0.30) + ((1 &minus; AS) &times; 0.
     var s = w.sol.wb + w.sol.oc + w.sol.as;
     var a = w.apex.wb + w.apex.oc + w.apex.as + w.apex.rf;
     var msgs = [];
-    if(Math.abs(s - 1) > 0.001) msgs.push("Solvency weights sum to " + s.toFixed(2) + ", not 1.00 \u2014 the output is no longer bounded 0\u20131.");
-    if(Math.abs(a - 1) > 0.001) msgs.push("Apex weights sum to " + a.toFixed(2) + ", not 1.00 \u2014 the output is no longer bounded 0\u20131.");
+    if(Math.abs(s - 1) > 0.001) msgs.push("The solvency weights add up to " + s.toFixed(2) + ", not 1.00, so the score can now fall outside 0\u20131.");
+    if(Math.abs(a - 1) > 0.001) msgs.push("The apex weights add up to " + a.toFixed(2) + ", not 1.00, so the score can now fall outside 0\u20131.");
     $("weight-warn").textContent = msgs.join(" ");
     return msgs.length === 0;
   }
@@ -1179,7 +1180,7 @@ apex_score  = (WB &times; 0.35) + (OC &times; 0.30) + ((1 &minus; AS) &times; 0.
   function bandFor(v){
     if(v >= 0.70) return { cls: "", label: "Carrying its own weight." };
     if(v >= 0.40) return { cls: "mid", label: "Something is drifting." };
-    return { cls: "low", label: "Not sustainable as currently structured." };
+    return { cls: "low", label: "This setup can't last as it is." };
   }
 
   function renderContrib(terms){
@@ -1220,7 +1221,7 @@ apex_score  = (WB &times; 0.35) + (OC &times; 0.30) + ((1 &minus; AS) &times; 0.
     var derived = core.filter(function(v){ return v !== null; }).length + (rf !== null ? 1 : 0);
     $("completeness").innerHTML = "Inputs derived: " + derived + " of 4." +
       (missing.length ? " Missing: <b>" + missing.join(", ") + "</b>." : "") +
-      (rf === null ? " RF undefined (no friction events logged)." : "");
+      (rf === null ? " RF has no value (no friction events logged)." : "");
 
     var solvencyEl = $("solvency-val"), apexEl = $("apex-val");
     var nextBox = $("next-box"), nextText = $("next-text");
@@ -1229,8 +1230,8 @@ apex_score  = (WB &times; 0.35) + (OC &times; 0.30) + ((1 &minus; AS) &times; 0.
     if(missing.length || !weightsOk){
       solvencyEl.textContent = "\u2014"; solvencyEl.className = "val na";
       apexEl.textContent = "\u2014"; apexEl.className = "val na";
-      $("solvency-band").textContent = weightsOk ? "Waiting on inputs." : "Weights don't sum to 1.00.";
-      $("apex-band").textContent = weightsOk ? "Waiting on inputs." : "Weights don't sum to 1.00.";
+      $("solvency-band").textContent = weightsOk ? "Waiting on inputs." : "The weights don't add up to 1.00.";
+      $("apex-band").textContent = weightsOk ? "Waiting on inputs." : "The weights don't add up to 1.00.";
       renderContrib([
         { name: "WB", value: wb, earned: 0, available: w.sol.wb },
         { name: "OC", value: oc, earned: 0, available: w.sol.oc },
@@ -1241,7 +1242,7 @@ apex_score  = (WB &times; 0.35) + (OC &times; 0.30) + ((1 &minus; AS) &times; 0.
       nextBox.className = "next-box hold";
       nextText.textContent = weightsOk
         ? "No read yet. Still needed: " + missing.join(", ") + "."
-        : "Restore the published weights, or make them sum to 1.00, before reading anything off this.";
+        : "Restore the original weights, or make them add up to 1.00, before you read anything from this.";
       lastRead = null;
       return;
     }
@@ -1257,7 +1258,7 @@ apex_score  = (WB &times; 0.35) + (OC &times; 0.30) + ((1 &minus; AS) &times; 0.
       apexRaw = partial > 0
         ? ((wb * w.apex.wb) + (oc * w.apex.oc) + ((1 - as) * w.apex.as)) / partial
         : 0;
-      renormNote = " Computed on three inputs, renormalized \u2014 no friction to repair this week.";
+      renormNote = " Worked out from three inputs, rebalanced, because there was no friction to repair this week.";
     } else {
       apexRaw = (wb * w.apex.wb) + (oc * w.apex.oc) + ((1 - as) * w.apex.as) + (rf * w.apex.rf);
     }
@@ -1290,8 +1291,8 @@ apex_score  = (WB &times; 0.35) + (OC &times; 0.30) + ((1 &minus; AS) &times; 0.
       divergence.style.display = "";
       divergence.className = "intro-note";
       divergence.innerHTML = gap > 0
-        ? "<p><strong>Solvency is running " + gap.toFixed(2) + " above apex.</strong> The structure is holding and the repair isn't. Friction is being absorbed rather than processed, which works until it doesn't. The lever here is WP-09, not the treaty.</p>"
-        : "<p><strong>Apex is running " + Math.abs(gap).toFixed(2) + " above solvency.</strong> You're repairing well around a structure that keeps generating the need for repair. Good communication is compensating for an arrangement that isn't working. The lever here is the treaty, not the scripts.</p>";
+        ? "<p><strong>Solvency is running " + gap.toFixed(2) + " above apex.</strong> The setup is holding, but repair isn't happening. Friction is being swallowed instead of talked through, which works until it doesn't. The place to work on is WP-09, not the treaty.</p>"
+        : "<p><strong>Apex is running " + Math.abs(gap).toFixed(2) + " above solvency.</strong> You're repairing well, but the setup keeps creating the friction you have to repair. Good communication is making up for an arrangement that isn't working. The place to work on is the treaty, not the scripts.</p>";
     } else {
       divergence.style.display = "none";
     }
@@ -1299,14 +1300,14 @@ apex_score  = (WB &times; 0.35) + (OC &times; 0.30) + ((1 &minus; AS) &times; 0.
     /* what to do next — gated by state, not scored by it */
     var base;
     if(sol >= 0.70){
-      base = "The arrangement is carrying its own weight. Nothing structural needs changing this week \u2014 keep the same rhythm of check-ins and log the read.";
+      base = "The setup is carrying its own weight. Nothing in it needs changing this week. Keep the same rhythm of check-ins, and log the read.";
     } else if(sol >= 0.40){
-      base = "Something is drifting. The largest single shortfall is " + worst.fix + ", costing " + worst.shortfall.toFixed(3) + " of the available points. Start there rather than with whatever happened most recently.";
+      base = "Something is drifting. The biggest single shortfall is " + worst.fix + ", costing " + worst.shortfall.toFixed(3) + " of the available points. Start there, not with whatever happened most recently.";
       if(worst.name === "OC"){
-        base += " The load isn't failing \u2014 the ownership is blurry. An ambiguous task defaults to whoever notices first, every time, and that compounds quietly.";
+        base += " The load itself isn't the problem; the ownership is blurry. A task with no clear owner falls to whoever notices it first, every time, and that quietly adds up.";
       }
     } else {
-      base = "The arrangement isn't sustainable as currently structured. This reads the setup, not anyone's affection or character \u2014 the largest shortfall is " + worst.fix + ". What it calls for is structural relief and renegotiation, not a defense of either person.";
+      base = "This setup can't last as it is. This reads the setup, not anyone's love or character. The biggest shortfall is " + worst.fix + ". What it calls for is real relief and reworking the setup, not defending either person.";
     }
 
     var mode = currentState ? STATE_COPY[currentState].mode : "go";
@@ -1315,14 +1316,14 @@ apex_score  = (WB &times; 0.35) + (OC &times; 0.30) + ((1 &minus; AS) &times; 0.
       nextText.textContent = base;
     } else if(mode === "hold"){
       nextBox.className = "next-box hold";
-      nextText.textContent = "Read, but don't act tonight. " + base + " You marked yourself as mobilized \u2014 log the number, and bring it to the weekly closing instead of to the next conversation.";
+      nextText.textContent = "Read, but don't act tonight. " + base + " You marked yourself as revved up. Log the number, and bring it to the weekly closing instead of the next conversation.";
     } else {
       nextBox.className = "next-box stop";
-      nextText.textContent = "Stop here for tonight. Write the number down if you want to keep it; it will still be true tomorrow. You marked yourself as shut down, and a low read in that state gets heard as a verdict about you rather than about an arrangement \u2014 which it isn't, and never was.";
+      nextText.textContent = "Stop here for tonight. Write the number down if you want to keep it; it will still be true tomorrow. You marked yourself as shut down, and in that state a low read sounds like a verdict on you instead of on the setup. It isn't, and it never was.";
     }
 
     if(sol < 0.40 && apex < 0.40){
-      nextText.textContent += " Both scores are under water at once. That's the pattern where another worksheet is unlikely to be the thing that helps \u2014 worth considering outside support, like a counselor.";
+      nextText.textContent += " Both scores are low at the same time. In that pattern, another worksheet probably isn't what will help. It's worth considering outside support, like a counselor.";
     }
 
     lastRead = {
@@ -1385,7 +1386,7 @@ apex_score  = (WB &times; 0.35) + (OC &times; 0.30) + ((1 &minus; AS) &times; 0.
     if(drops >= 3){
       alert.style.display = "";
       alert.className = "warn-box";
-      alert.innerHTML = "<p><strong>Drift rule triggered.</strong> Three consecutive weekly drops of more than 0.10 in the apex score. Per the scoring spec this calls for a treaty review \u2014 a scheduled WP-03 session, not an emergency conversation. Three weeks of decline is a structural signal, and structure is fixable.</p>";
+      alert.innerHTML = "<p><strong>Drift rule triggered.</strong> The apex score has dropped by more than 0.10 three weeks in a row. The scoring rules call for a treaty review: a planned WP-03 session, not an emergency conversation. Three weeks of decline points to the setup, and the setup can be fixed.</p>";
     } else {
       alert.style.display = "none";
     }
@@ -1393,7 +1394,7 @@ apex_score  = (WB &times; 0.35) + (OC &times; 0.30) + ((1 &minus; AS) &times; 0.
 
   $("add-trend").addEventListener("click", function(){
     if(!lastRead){
-      window.alert("No complete read to log yet \u2014 fill in the missing inputs first.");
+      window.alert("There's no complete read to log yet. Fill in the missing inputs first.");
       return;
     }
     var d = $("trend-date").value;

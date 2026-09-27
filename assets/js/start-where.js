@@ -7,7 +7,7 @@
       say:'Then the argument probably is not about the dishes, the money or the calendar. A thing that comes back every week is usually a gap in the arrangement, and arrangements can be changed without anybody being at fault.',
       picks:[
         ['/workpapers/wp-03-raci-treaty.html','WP-03: one owner per job','Most repeat fights live in jobs nobody formally owns.'],
-        ['/workpapers/wp-04-deficit-audit.html','WP-04: the monthly look back','Sorts what keeps going wrong into a broken system, no capacity, or a one-off.'],
+        ['/workpapers/wp-04-deficit-audit.html','WP-04: the monthly look-back','Sorts what keeps going wrong into a gap in the setup, too little time or energy, or a one-off.'],
         ['/check-ins.html','Check-ins','How to raise it once, properly, instead of ten times badly.']
       ]},
     { id:'empty', ico:'\uD83E\uDEAB', label:'I am running on empty',
@@ -25,7 +25,7 @@
         ['/lemonade-stand.html','The Lemonade Stand','Tasks and hours side by side, in about five minutes.']
       ]},
     { id:'went-badly', ico:'\uD83D\uDCA5', label:'A conversation just went badly',
-      say:'Before you replay it another forty times: two people can both be reasonable and still produce a squeal. Working out what slipped is more useful than working out who started it.',
+      say:'Before you replay it another forty times: two people can both be reasonable and still end up out of tune. Working out what slipped is more useful than working out who started it.',
       picks:[
         ['/carrier-wave-decoder.html','The Carrier Wave Decoder','A guided walk back through what actually happened.'],
         ['/workpapers/wp-09-tone-filter.html','WP-09: the Tone Filter','Turns the thing you want to say into fact, feeling and ask.'],
@@ -48,7 +48,7 @@
     { id:'know-myself', ico:'\uD83E\uDDED', label:'I want to understand myself better',
       say:'That is the half of the program you can do entirely alone, and it is the half everything else rests on. No partner, no permission, nothing to negotiate.',
       picks:[
-        ['/quick-checks.html#today','Today\u2019s Weather','Start today. The almanac shows your patterns within a fortnight.'],
+        ['/quick-checks.html#today','Today\u2019s Weather','Start today. Within two weeks, the almanac shows your patterns.'],
         ['/tools/frequency-calibration.html','Frequency Calibration','Your natural pace for decisions, contact and recovery.'],
         ['/learn/index.html','Stories from Philosophy','Twelve old stories that work as honest mirrors.']
       ]},

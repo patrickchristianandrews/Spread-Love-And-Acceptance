@@ -1,0 +1,387 @@
+#slug: motivation
+#title: Motivation, habits and change
+#pillars: V, II
+#blurb: Why people do things, how habits form, procrastination, perfectionism, mindset, self-esteem, values and making change stick.
+#pillarnote: Motivation, habits and change sit in Pillar V, Notice the quiet incentives, and Pillar II, Fix the setup, not the person. In you, they help you spot the defaults, rewards and feelings that steer your own choices, and redesign routines instead of blaming yourself. Between you, they explain how shared habits form, how pressure backfires, and how clear plans and visible progress keep things going.
+#intro: Knowing what would help is the easy part. Doing it, day after day, is harder. Psychologists have studied motivation, habits and behaviour change for a long time, and some of the most useful findings are surprisingly practical: plan the when and where, start small, make progress visible, and be kind to yourself when you slip. These entries also flag some popular ideas that turned out weaker than first thought.
+
+@@ self-determination-theory | Self-determination theory
+pillars: V, II
+aka: self determination theory, SDT, autonomy, competence, relatedness, intrinsic motivation, Deci and Ryan
+nut: Self-determination theory says people thrive when three basic needs are met: autonomy (feeling you have a choice), competence (feeling capable) and relatedness (feeling connected). Motivation that comes from within tends to last longer than motivation driven by pressure.
+deep:
+Edward Deci and Richard Ryan distinguished between different kinds of motivation. Intrinsic motivation is doing something because it is interesting or satisfying. Extrinsic motivation ranges from doing something only for reward or to avoid punishment, to doing it because you genuinely value its purpose. The more internalised the reason, the more lasting and satisfying the behaviour tends to be.
+
+For households, this has practical implications. Chores done because someone is nagging (pressure) tend to feel resentful and slip. Chores done because both people agreed they matter, chose how to divide them, and feel competent at them tend to be more stable.
+
+Autonomy also matters between partners. Research suggests that supporting each other’s autonomy, by offering choices, explaining reasons and acknowledging feelings, is associated with better relationships than controlling each other.
+research:
+Deci and Ryan developed self-determination theory from the 1970s, with a major statement in 1985 and an influential 2000 review. It is one of the best-supported theories of motivation, tested across education, work, health and relationships, including many cross-cultural studies. C. Raymond Knee and colleagues have applied it to romantic relationships.
+links:
+/workpapers/wp-03-raci-treaty.html | One owner per job (WP-03)
+/book/chapter-4.html | Two kinds of fair (Chapter IV)
+talk:
+- Which of our household jobs do we each feel real ownership of?
+- When do you feel most capable at home, and least?
+- How could we offer each other more choice?
+
+@@ overjustification | Rewards and intrinsic motivation
+pillars: V
+aka: overjustification effect, rewards, bribes, extrinsic rewards, paying for chores, incentives
+nut: Rewarding people for doing something they already enjoy can sometimes reduce their interest in doing it for its own sake. This is called the overjustification effect, and it depends a lot on how the reward is given.
+deep:
+In a classic study, children who liked drawing were promised a certificate for drawing. Later, when no rewards were on offer, they drew less than children who hadn’t been promised anything. The reward seemed to turn play into work.
+
+This doesn’t mean all rewards are bad. Unexpected rewards, and praise that gives information about competence, don’t seem to harm motivation. Rewards for boring tasks that nobody enjoys can help get them done. The risk is highest when a reward feels controlling and replaces a reason people already had.
+
+At home, this is worth considering with children and chores, and with adults too: turning every contribution into a transaction may erode the sense of doing things for each other.
+research:
+Mark Lepper, David Greene and Richard Nisbett published the drawing study in 1973. A 1999 meta-analysis by Deci, Richard Koestner and Ryan found that expected, tangible rewards contingent on doing a task reduced intrinsic motivation. Judy Cameron and David Pierce argued the effects were smaller and more limited. The overall picture: the effect is real under specific conditions.
+links:
+/lemonade-stand.html | The Lemonade Stand
+/book/preface.html | Writing it down isn’t keeping score (Preface)
+talk:
+- Is there anything you used to enjoy that became a chore once it was expected?
+- When do rewards help, and when do they feel controlling?
+- How can we recognise effort without turning it into payment?
+
+@@ implementation-intentions | Implementation intentions: if–then plans
+pillars: II, V
+aka: implementation intentions, if then plans, when then plans, planning, Gollwitzer, follow through
+nut: An implementation intention is a specific plan of the form “When X happens, I will do Y.” Research shows such plans make people noticeably more likely to follow through on their goals.
+deep:
+Goals like “I’ll help more with dinner” are vague. An implementation intention makes them concrete: “When I get home on weekdays, I’ll start the vegetables.” The situation becomes a cue that triggers the action, reducing the need to remember or decide in the moment.
+
+These plans work partly because they hand control to the environment. You don’t need to rely on motivation, which fluctuates; the cue does the work.
+
+They can also be used for difficult moments: “If I notice I’m getting flooded, I’ll say ‘pause’ and go for a walk.” This is essentially what a calm-down plan made in advance does.
+research:
+Peter Gollwitzer introduced the concept in 1999. A 2006 meta-analysis by Gollwitzer and Paschal Sheeran of 94 studies found a medium-to-large average effect on goal attainment. It is one of the more robust findings in behaviour change research, though effects vary by task and setting.
+links:
+/wp-11.html | The Calm-Down Kit: decide now, while you’re calm (WP-11)
+/workpapers/wp-13-pll-protocol.html | The daily check-in (WP-13)
+talk:
+- Is there a vague goal we could turn into an if–then plan?
+- What cues in our day could trigger helpful habits?
+- What if–then plan would help in a hard moment?
+
+@@ habit-formation | How long does it take to form a habit?
+pillars: V, II
+aka: habits, habit formation, 21 days, 66 days, Lally, building habits, how long does a habit take
+nut: The popular “21 days” figure isn’t based on research. In one well-known study, the median time for a new daily habit to become automatic was about 66 days, with a very wide range between people and habits.
+deep:
+Phillippa Lally and colleagues asked volunteers to pick a new daily behaviour, such as drinking water with lunch or doing a short exercise, and to report each day how automatic it felt. On average, automaticity rose steeply at first and then levelled off. The median time to reach that plateau was around 66 days, but individual times ranged from under three weeks to over eight months.
+
+The study also found that missing a day now and then didn’t derail habit formation much. That is encouraging: a slip isn’t a failure.
+
+Simpler behaviours became automatic faster. Complex habits, like regular exercise, took longer. Habits also form best when tied to a consistent cue, such as a time, place or preceding action.
+research:
+The study by Lally, Cornelia van Jaarsveld, Henry Potts and Jane Wardle was published in the *European Journal of Social Psychology* (online in 2009, in print in 2010). It had 96 participants, so its numbers should be taken as illustrative rather than precise. The “21 days” idea seems to come from a 1960 book by plastic surgeon Maxwell Maltz about adjusting to changes in appearance, not from habit research. Wendy Wood’s research supports the importance of stable cues.
+links:
+/workpapers/wp-13-pll-protocol.html | The daily check-in: small and often (WP-13)
+/workpapers/wp-03-raci-treaty.html | One owner per job (WP-03)
+talk:
+- What habit would we most like to build together?
+- What cue could it be tied to?
+- How can we be kind to ourselves about missed days?
+
+@@ habits-and-cues | Habits, cues and environments
+pillars: II, V
+aka: habit loop, cues, environment design, friction, making it easy, habit stacking
+nut: Habits are behaviours triggered automatically by cues in our environment. Changing the environment, by making good behaviours easier and unwanted ones harder, often works better than relying on willpower.
+deep:
+Wendy Wood’s research suggests that a large share of daily behaviour is habitual: done in the same context, often without much thought. When the context changes, habits can be disrupted, which is why moving house or starting a new job is a good time to form new ones.
+
+Small amounts of friction make a big difference. Putting the laundry basket where clothes come off, keeping a shared list on the fridge, or setting a calendar reminder reduces the effort of doing the right thing. Adding friction (like logging out of an app) makes unwanted habits harder.
+
+“Habit stacking,” attaching a new habit to an existing one (“after I make my morning coffee, I check the family calendar”), is a popular technique that draws on the same principle as implementation intentions.
+research:
+Wood, Jeffrey Quinn and Deborah Kashy (2002) used diaries to estimate that a large proportion of daily behaviours were habitual. Wood and Dennis Rünger reviewed the psychology of habit in 2016. “Habit stacking” is a popular term, notably from James Clear’s *Atomic Habits* (2018), rather than a research term, but it fits research on cues and implementation intentions.
+links:
+/workpapers/wp-13-pll-protocol.html | The daily check-in (WP-13)
+/lemonade-stand.html | The Lemonade Stand
+talk:
+- What small changes to our home would make good habits easier?
+- Which existing routine could a new habit attach to?
+- Where could a bit of friction help?
+
+@@ small-wins | Small wins and the progress principle
+pillars: V, I
+aka: small wins, progress principle, motivation from progress, Amabile, momentum
+nut: Making progress on meaningful work, even small progress, is one of the strongest boosts to motivation and mood at work. Small wins build momentum.
+deep:
+Teresa Amabile and Steven Kramer analysed thousands of daily diary entries from people working on creative projects. On days when people felt they made progress on meaningful work, they reported better moods and more motivation. Setbacks had an even larger effect in the other direction.
+
+Karl Weick had earlier argued that big problems are often better tackled as a series of small wins: concrete, manageable steps that show progress and reduce overwhelm.
+
+For households, this suggests that making progress visible, such as crossing items off a shared list or noticing how much has improved over a month, matters. It also suggests starting with small, achievable changes rather than an overhaul.
+research:
+Amabile and Kramer published *The Progress Principle* in 2011, based on diary data from 238 knowledge workers. Weick’s article on small wins appeared in 1984. The diary research is observational, and the sample was of professional workers, but the finding fits other research on goal progress and motivation.
+links:
+/book/chapter-5.html | The monthly look-back (Chapter V)
+/workpapers/wp-04-deficit-audit.html | What keeps coming back? Wrap it up and keep count (WP-04)
+talk:
+- What small win could we aim for this week?
+- How could we make progress more visible?
+- Which setbacks affect our mood most?
+
+@@ growth-mindset | Growth mindset, and its replication problems
+pillars: II, V
+aka: growth mindset, fixed mindset, Dweck, mindset, can people change
+nut: Growth mindset is Carol Dweck’s idea that believing abilities can be developed helps people learn and persist. It became hugely popular, but large studies have found its effects are smaller and more limited than first claimed.
+deep:
+Dweck distinguished a fixed mindset (abilities are set) from a growth mindset (abilities can be developed). Her early studies suggested that students praised for effort rather than intelligence were more willing to take on challenges.
+
+The idea spread widely in schools and workplaces. Then larger studies arrived. Meta-analyses found that the relationship between mindset and achievement was weak on average, and that mindset interventions had small effects, perhaps meaningful only for certain groups, such as lower-achieving students in supportive schools.
+
+The core insight still has value in relationships: believing that people and relationships can grow, rather than being fixed as good or bad, may help people work through difficulties. Research on “implicit theories of relationships” by Raymond Knee found that people who believed relationships are grown through effort coped better with conflict than those who believed partners are simply compatible or not.
+research:
+Dweck’s *Mindset* was published in 2006. Victoria Sisk and colleagues’ 2018 meta-analyses found weak average effects. David Yeager and colleagues’ 2019 national study found small positive effects for lower-achieving students. Brooke Macnamara and Alexander Burgoyne’s 2023 meta-analysis raised concerns about study quality. Knee published on relationship beliefs in 1998.
+links:
+/book/chapter-1.html | Get back in tune (Chapter I)
+/relationships.html#yourself | How it fits: yourself
+talk:
+- Do you tend to see relationships as grown or as a matter of fit?
+- What skill have you developed that you once thought you couldn’t?
+- How can we hold “people can change” without pressuring each other to?
+
+@@ goal-setting | Goal setting
+pillars: II
+aka: goals, goal setting, SMART goals, specific goals, Locke and Latham
+nut: Research shows that specific, challenging goals tend to lead to better performance than vague goals like “do your best,” as long as people are committed and get feedback.
+deep:
+Edwin Locke and Gary Latham summarised decades of research: goals direct attention, energise effort, increase persistence and encourage finding strategies. Specific goals work better than vague ones because they make progress clear.
+
+In household terms, “we’ll share more” is vague. “Each of us will cook three nights a week” is specific. The second is easier to follow and to check.
+
+Goals can also backfire. Very narrow goals can make people ignore things that aren’t measured, and goals that feel imposed can undermine motivation. Goals work best when agreed together and reviewed kindly.
+research:
+Locke and Latham’s goal-setting theory was summarised in their 1990 book and a 2002 review. It is one of the most replicated theories in organisational psychology. The SMART acronym (specific, measurable, achievable, relevant, time-bound) comes from management writing, notably George Doran in 1981, rather than directly from the research. Lisa Ordóñez and colleagues (2009) discussed the side effects of goal setting.
+links:
+/book/chapter-2.html | Is the split working? (Chapter II)
+/workpapers/wp-03-raci-treaty.html | One owner per job (WP-03)
+talk:
+- Which of our shared goals could be more specific?
+- What would we want to review each month?
+- Are there goals that feel imposed rather than chosen?
+
+@@ procrastination | Procrastination
+pillars: V, III
+aka: procrastination, procrastinating, procrastinate, putting things off, avoidance, delay, can’t get started, last minute
+nut: Procrastination is voluntarily delaying something despite expecting to be worse off. Research increasingly sees it as a way of avoiding unpleasant feelings rather than as laziness or poor time management.
+deep:
+Tim Pychyl and Fuschia Sirois describe procrastination as short-term mood repair: the task makes us feel anxious, bored or inadequate, so we do something else to feel better now, at the cost of later.
+
+This explains why productivity tips often don’t work: the problem isn’t knowing what to do, but how the task feels. Approaches that address the feeling tend to help, such as breaking the task into a tiny first step, making it more pleasant, or doing it alongside someone.
+
+Self-compassion also seems to help. In one study, students who forgave themselves for procrastinating on the first exam procrastinated less on the next. Harsh self-criticism tends to increase the bad feelings that drive avoidance.
+
+Procrastination is also more common with ADHD and depression, where it may reflect executive function or energy rather than choice.
+research:
+Piers Steel’s 2007 meta-analysis reviewed procrastination research and linked it to task aversiveness, impulsiveness and low self-efficacy. Sirois and Pychyl published on mood repair in 2013. Michael Wohl, Pychyl and Shannon Bennett published the self-forgiveness study in 2010. The research is substantial, mostly with student samples.
+links:
+/workpapers/wp-04-deficit-audit.html | What keeps coming back? (WP-04)
+/wired-differently-in-depth.html#adhd | Wired Differently in depth: ADHD
+talk:
+- Which tasks do you put off, and what feeling do they bring up?
+- What would a tiny first step look like for one of them?
+- How do we respond to each other’s procrastination?
+
+@@ perfectionism | Perfectionism
+pillars: V, II
+aka: perfectionism, perfectionist, high standards, fear of failure, never good enough
+nut: Perfectionism combines very high standards with harsh self-criticism when they aren’t met. Researchers distinguish striving for excellence, which can be healthy, from perfectionistic concerns, which are linked to stress and burnout.
+deep:
+Paul Hewitt and Gordon Flett described three types: self-oriented (demanding perfection of yourself), other-oriented (demanding it of others) and socially prescribed (believing others demand it of you). Each affects relationships differently. Other-oriented perfectionism, for example, can make it hard to share tasks, because others’ efforts never seem good enough.
+
+Later research separated perfectionistic strivings (high standards) from perfectionistic concerns (fear of mistakes, self-criticism, doubt). The concerns side is more consistently linked with distress.
+
+At home, perfectionism often shows up as difficulty handing over tasks, redoing others’ work, exhaustion from doing everything “properly,” and procrastination (because starting feels risky if it can’t be done perfectly). Agreeing on “good enough” standards can ease pressure on everyone.
+research:
+Hewitt and Flett published their multidimensional model in 1991; Randy Frost and colleagues published another in 1990. Joachim Stoeber and Kathleen Otto (2006) reviewed the strivings–concerns distinction. Thomas Curran and Andrew Hill (2019) found that perfectionism scores among college students rose between 1989 and 2016. Research on perfectionism is extensive, with some debate about whether strivings are ever fully healthy.
+links:
+/workpapers/wp-03-raci-treaty.html | One owner per job: signing means clear, not perfect (WP-03)
+/book/chapter-4.html | Once a job has an owner, look to the owner (Chapter IV)
+talk:
+- Where does each of us hold perfectionist standards?
+- What does “good enough” look like for our most-contested tasks?
+- Does perfectionism ever make it harder to share jobs?
+
+@@ self-efficacy | Self-efficacy
+pillars: V
+aka: self efficacy, confidence, believing you can, Bandura, can do
+nut: Self-efficacy is your belief in your ability to succeed at a specific task. Albert Bandura found it shapes what people attempt, how hard they try and how long they persist.
+deep:
+Self-efficacy is task-specific: you might feel confident cooking but not managing money. Bandura identified four sources: mastery experiences (doing it successfully), vicarious experience (seeing similar people succeed), verbal persuasion (encouragement) and emotional states (how you feel when attempting it).
+
+Mastery experiences are the strongest. This is why giving someone a whole task to own and learn, rather than constantly helping or correcting, can build confidence. It is also why early small successes matter.
+
+In couples, a person with low self-efficacy in a domain (say, planning meals) may avoid it, leaving it to the other. Building confidence through practice, rather than criticism, can gradually shift the balance.
+research:
+Bandura introduced self-efficacy in 1977 and developed it in *Self-Efficacy: The Exercise of Control* (1997). It is among the most studied concepts in psychology, with strong evidence linking it to motivation and performance across many domains. Some researchers debate its causal role versus simply reflecting past performance.
+links:
+/workpapers/wp-03-raci-treaty.html | One owner per job (WP-03)
+/relationships.html#yourself | How it fits: yourself
+talk:
+- In which household areas do each of us feel most and least confident?
+- What would help build confidence in a weaker area?
+- How can we encourage without taking over?
+
+@@ fresh-start-effect | The fresh start effect
+pillars: V
+aka: fresh start effect, new beginnings, New Year's resolutions, Mondays, new start
+nut: People are more likely to start new goals after landmark dates like a new year, a birthday or even a Monday. These “fresh starts” create a psychological break from past failures.
+deep:
+Hengchen Dai, Katherine Milkman and Jason Riis found that searches for “diet,” gym visits and commitments to goals rose after temporal landmarks. The idea is that landmarks separate the old self from the new, making past failures feel less relevant.
+
+For households, this suggests timing: the start of a month, a new season, or returning from holiday can be good moments to try a new arrangement. The program’s monthly look-back offers a natural fresh-start point.
+
+Fresh starts also help after setbacks. If a new habit has slipped, choosing a landmark to restart can make it easier than feeling you’ve already failed.
+research:
+Dai, Milkman and Riis published their paper in 2014 in *Management Science*. Follow-up studies have replicated the pattern in several contexts. Effects are about starting goals, not necessarily keeping them.
+links:
+/book/chapter-5.html | The monthly look-back (Chapter V)
+talk:
+- What landmark could we use to start something new?
+- Is there a habit that slipped that we could restart at a fresh start?
+- Do fresh starts motivate you, or feel like pressure?
+
+@@ temptation-bundling | Temptation bundling
+pillars: V
+aka: temptation bundling, making chores fun, pairing tasks, podcasts while cleaning
+nut: Temptation bundling means pairing something you enjoy with something you should do but tend to avoid, like listening to a favourite podcast only while doing the ironing.
+deep:
+Katherine Milkman and colleagues gave gym-goers audiobooks they could only access at the gym. Those in the bundled group visited the gym more often, at least initially.
+
+At home, bundling can make chores more pleasant: music while cleaning, a favourite show while folding laundry, a chat while cooking together. It works on the feeling side of motivation, which is often what gets in the way.
+
+Doing chores together can itself be a bundle: the task becomes time together. Many couples find a shared tidy-up with music is more pleasant than two separate ones.
+research:
+Milkman, Julia Minson and Kevin Volpp published the gym study in 2014. The effect declined over time and a later large study found smaller effects, so it is a useful nudge rather than a transformation.
+links:
+/soundscapes.html | Soundscapes
+/lemonade-stand.html | The Lemonade Stand
+talk:
+- Which chore could be paired with something we enjoy?
+- Would doing some chores together make them more pleasant?
+- What is your favourite thing to listen to while doing a task?
+
+@@ mental-contrasting | Mental contrasting and WOOP
+pillars: II, V
+aka: WOOP, mental contrasting, wish outcome obstacle plan, positive thinking, Oettingen
+nut: Mental contrasting means imagining a desired future and then the obstacles in the way. Combined with if–then plans (WOOP: Wish, Outcome, Obstacle, Plan), it tends to work better than positive fantasy alone.
+deep:
+Gabriele Oettingen found that simply fantasising about a positive future can reduce the energy people put into achieving it, as if the mind treats the fantasy as partly achieved. Contrasting the wish with realistic obstacles helps people commit to goals that are feasible and let go of ones that aren’t.
+
+WOOP combines this with implementation intentions: What is my wish? What is the best outcome? What is the main obstacle inside me? What is my plan when that obstacle shows up (if–then)?
+
+For couples, WOOP can structure a goal conversation: “We wish for calmer evenings. The best outcome is time to relax together. The obstacle is we both get home tired and irritable. Plan: if we get home after six, we’ll eat first and talk later.”
+research:
+Oettingen’s *Rethinking Positive Thinking* (2014) summarises research on mental contrasting. Studies have found WOOP helps with various goals, though effects vary and many studies are small. It fits with the stronger evidence for implementation intentions.
+links:
+/wp-11.html | The Calm-Down Kit: decide now, while you’re calm (WP-11)
+/book/chapter-5.html | The monthly look-back (Chapter V)
+talk:
+- What is one wish we share for our home life?
+- What obstacle inside us most often gets in the way?
+- What if–then plan could handle that obstacle?
+
+@@ willpower-ego-depletion | Willpower and “ego depletion”
+pillars: V, III
+aka: willpower, ego depletion, self control, decision fatigue, running out of willpower
+nut: The idea that willpower is a limited resource that runs out with use (ego depletion) was hugely influential, but large replication efforts have found little or no effect. Tiredness is real; the specific depletion theory is in doubt.
+deep:
+Roy Baumeister and colleagues proposed in 1998 that self-control draws on a limited resource, so exerting it on one task leaves less for the next. Hundreds of studies seemed to support this.
+
+Then replication studies arrived. A large, pre-registered, multi-lab project in 2016 found an effect close to zero. Later large replications found mixed or small effects. The glucose explanation (that self-control uses up blood sugar) has also not held up well.
+
+What does seem true is that people feel tired after demanding days and are more likely to take shortcuts when fatigued or stressed. Beliefs about willpower may also matter: some research suggests people who believe willpower is limited show more depletion-like effects. Either way, relying on willpower alone is a weak strategy; habits, environment and planning are more dependable.
+research:
+Baumeister, Ellen Bratslavsky, Mark Muraven and Dianne Tice published the original study in 1998. Martin Hagger and colleagues’ 2016 multi-lab registered replication found a very small effect, not reliably different from zero. Veronika Job, Carol Dweck and Gregory Walton (2010) studied beliefs about willpower. The topic remains debated.
+links:
+/workpapers/wp-02-battery-stress-meter.html | How full is your battery? (WP-02)
+/workpapers/wp-13-pll-protocol.html | The daily check-in (WP-13)
+talk:
+- Do you notice being less patient at the end of the day?
+- Which of our routines rely on willpower rather than habit?
+- How could we make evenings less demanding?
+
+@@ decision-fatigue | Decision fatigue and choice overload
+pillars: V, I
+aka: decision fatigue, too many choices, choice overload, what's for dinner, deciding everything
+nut: Making lots of decisions can feel draining, and having too many options can sometimes make choosing harder. Both ideas are popular; the research is more mixed than headlines suggest.
+deep:
+A famous study found that parole judges granted fewer favourable rulings as sessions went on, rising again after breaks. It was widely cited as evidence of decision fatigue. Critics pointed out that case order wasn’t random, which could explain the pattern.
+
+The jam study by Sheena Iyengar and Mark Lepper found shoppers were more likely to buy when offered six jams than twenty-four. Later meta-analyses found the “too much choice” effect averages close to zero, but appears under certain conditions, such as when options are hard to compare or people don’t know what they want.
+
+Whatever the precise mechanism, many people carrying the mental load describe exhaustion from constant small decisions: what’s for dinner, which plumber, what gift. Sharing decision-making, not just doing tasks, and creating defaults (like a weekly meal rota) can reduce the load.
+research:
+Shai Danziger, Jonathan Levav and Liora Avnaim-Pesso published the parole study in 2011; Keren Weinshall-Margel and John Shapard challenged it. Iyengar and Lepper published the jam study in 2000. Benjamin Scheibehenne, Rainer Greifeneder and Peter Todd’s 2010 meta-analysis found a mean effect near zero; Alexander Chernev and colleagues (2015) identified conditions that make choice overload more likely.
+links:
+/workpapers/wp-03-raci-treaty.html | One owner per job (WP-03)
+/book/preface.html | Unseen work quietly adds up (Preface)
+talk:
+- Who makes most of the small decisions in our home?
+- Which decisions could become defaults?
+- Would it help to take turns owning certain decisions?
+
+@@ self-esteem | Self-esteem
+pillars: III, V
+aka: self esteem, self worth, confidence, feeling good about yourself, contingent self worth
+nut: Self-esteem is how you evaluate your own worth. Research suggests high self-esteem feels good but does less than once thought to cause success; what may matter more is whether your sense of worth depends on constant success.
+deep:
+In the 1980s and 1990s, raising self-esteem was widely promoted as a route to better outcomes. A major review found that self-esteem was only weakly linked to causing things like better performance or better relationships; often success raised self-esteem rather than the reverse.
+
+Jennifer Crocker and colleagues studied contingent self-worth: when self-worth depends on specific outcomes (appearance, approval, achievement), people’s mood rises and falls with those outcomes, and they may become defensive when challenged.
+
+In relationships, fragile self-worth can make criticism feel threatening, which makes conflict harder. Self-compassion, treating yourself kindly regardless of outcomes, is increasingly seen as a steadier foundation.
+research:
+Roy Baumeister, Jennifer Campbell, Joachim Krueger and Kathleen Vohs published an influential review in 2003. Crocker and Connie Wolfe described contingencies of self-worth in 2001. Later work by Ulrich Orth and Richard Robins suggests self-esteem does have some prospective links with outcomes like relationships and wellbeing, so the picture is nuanced.
+links:
+/relationships.html#yourself | How it fits: yourself
+/about.html | About
+talk:
+- What does your sense of worth tend to depend on?
+- How does criticism affect you when you’re feeling low?
+- How could we support each other’s sense of worth without empty praise?
+
+@@ values | Values: what matters most
+pillars: V, IV
+aka: values, what matters, meaning, priorities, acceptance and commitment therapy, ACT
+nut: Values are the qualities you want your actions to reflect, like kindness, fairness or curiosity. Unlike goals, they are never finished. Clarifying values can guide choices when things get hard.
+deep:
+Acceptance and commitment therapy (ACT) makes values central. A goal is something you achieve (clean the house); a value is a direction you move in (caring for our shared space). Values give meaning to effortful tasks.
+
+Couples often discover that they share deep values but express them differently. Both may value family, but one shows it by working long hours to provide and the other by being present. Seeing the shared value behind different behaviours can soften conflict.
+
+Values also help with trade-offs. When there isn’t time for everything, knowing what matters most makes it easier to choose, and to let go of the rest without guilt.
+research:
+Steven Hayes, Kirk Strosahl and Kelly Wilson developed ACT from the late 1980s; their book appeared in 1999. Meta-analyses show ACT is effective for several conditions, comparable to other established therapies. Research on values affirmation (writing about important values) by Geoffrey Cohen and David Sherman shows effects in some contexts, with mixed replications.
+links:
+/book/chapter-3.html | Full tanks and different angles (Chapter III)
+/relationships.html | How It Fits Your Relationships
+talk:
+- What are three values you want your home life to reflect?
+- Do we share values that we express differently?
+- Which tasks feel meaningful when connected to a value?
+
+@@ stages-of-change | Readiness to change
+pillars: V, IV
+aka: stages of change, transtheoretical model, readiness, ambivalence, motivational interviewing, change talk
+nut: People often feel ambivalent about change: part of them wants it, part doesn’t. Approaches like motivational interviewing work with this ambivalence rather than pushing against it.
+deep:
+The transtheoretical model, developed by James Prochaska and Carlo DiClemente, describes stages: precontemplation (not considering change), contemplation (thinking about it), preparation, action and maintenance. The idea that people are at different points of readiness is useful, though the specific stages have been criticised.
+
+Motivational interviewing, developed by William Miller and Stephen Rollnick, suggests that pushing someone to change often increases resistance. Instead, it uses open questions and reflective listening to help people explore their own reasons for change, known as “change talk.”
+
+In relationships, this is a helpful reminder: lecturing a partner about why they should change tends to provoke defensiveness. Asking what they would like to be different, and why, often works better.
+research:
+Prochaska and DiClemente published the model in 1983. Robert West (2005) and others have criticised the stages as arbitrary. Miller and Rollnick’s *Motivational Interviewing* was first published in 1991; meta-analyses show modest positive effects across many behaviours, particularly in health settings.
+links:
+/check-ins.html#leverage | Check-ins: leverage
+/workpapers/wp-13-pll-protocol.html | The daily check-in (WP-13)
+talk:
+- Is there a change one of us is ambivalent about?
+- What questions help you explore your own reasons for change?
+- How can we support each other’s change without lecturing?

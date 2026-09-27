@@ -43,12 +43,14 @@
       .replace(/([a-z0-9])-(?=[a-z0-9])/g, '$1')
       .replace(/'s\b/g, '').replace(/'/g, '');
   }
+  // put back a dropped silent e on short stems, so "caring" is care (not car) and "hoping" is hope
+  function silentE(w) { return /^[^aeiou]*[aeiou][^aeiouwxy]$/.test(w) ? w + 'e' : w; }
   function stem(w) {
     if (w.length <= 3 || /\d/.test(w)) return w;
     if (/ies$/.test(w) && w.length > 4) return w.slice(0, -3) + 'y';
     if (/(ss|us|is)$/.test(w)) return w;
-    if (/ing$/.test(w) && w.length > 5) { w = w.slice(0, -3); if (/([^lsz])\1$/.test(w)) w = w.slice(0, -1); }
-    else if (/ed$/.test(w) && w.length > 4) { w = w.slice(0, -2); if (/([^lsz])\1$/.test(w)) w = w.slice(0, -1); }
+    if (/ing$/.test(w) && w.length > 5) { w = w.slice(0, -3); if (/([^lsz])\1$/.test(w)) w = w.slice(0, -1); else w = silentE(w); }
+    else if (/ed$/.test(w) && w.length > 4) { w = w.slice(0, -2); if (/([^lsz])\1$/.test(w)) w = w.slice(0, -1); else w = silentE(w); }
     else if (/(sh|ch|x|z)es$/.test(w)) w = w.slice(0, -2);
     else if (/s$/.test(w)) w = w.slice(0, -1);
     if (/[^aeiou]ly$/.test(w) && w.length >= 6) w = w.slice(0, -2);
@@ -127,7 +129,12 @@
       var t2 = d.t.split(/[:(]/)[0]; names.push(t2);
       names.forEach(function (n) { var k = phraseKey(n); if (k && !(k in gloss)) gloss[k] = i; });
     });
-    IDX = { N: N, df: df, tf: tf, len: len, head: head, avg: total / N, syn: syn, gloss: gloss };
+    // the site's own topic words: anything in a heading, a title or a synonym list
+    var domain = {};
+    docs.forEach(function (d, i) { Object.keys(head[i]).forEach(function (t) { domain[t] = 1; }); tokens(d.t).forEach(function (t) { domain[t] = 1; }); });
+    Object.keys(syn).forEach(function (k) { if (k.charAt(0) !== ' ') domain[k] = 1; syn[k].forEach(function (t) { domain[t] = 1; }); });
+    Object.keys(domain).forEach(function (t) { if (t.length >= 7) domain['~' + t.slice(0, 7)] = 1; });  // procrastinating ~ procrastination
+    IDX = { N: N, df: df, tf: tf, len: len, head: head, avg: total / N, syn: syn, gloss: gloss, domain: domain };
   }
   function idf(t) { var n = IDX.df[t] || 0; return Math.log(1 + (IDX.N - n + 0.5) / (n + 0.5)); }
 
@@ -265,7 +272,9 @@
     [/^(where|how) (do|should|can|shall) (i|we) (start|begin)|^(i m |im )?new here|^first time|^where to (start|begin)|^what should i (read|do) first|^how do i get started/, 'start here what to do first', '/start-here.html'],
     [/\bwho (made|makes|created|built|wrote|writes|runs|is behind|started)\b|\bwho are you guys\b|\b(the )?(author|creator|founder)\b/, 'Christian auditor creator', '/about'],
     [/^(is (it|this|the site|everything) free|how much (does it|is it|does this) cost|what does it cost|is there a (fee|charge|subscription))/, 'free while the program is being built membership', '/ways-in'],
-    [/^what is (this|this site|the objective ledger|tol)$|^what s this( site)?$/, 'The Objective Ledger shared ledger what it is', '/start-here.html']
+    [/^what is (this|this site|the objective ledger|tol)$|^what s this( site)?$/, 'The Objective Ledger shared ledger what it is', '/start-here.html'],
+    [/\b(we|they|you) (each|both|all) think (we|they|you|i) do (more|most)|\bwho (really )?does more\b|\b(why )?(do|does) (everyone|we both|we each) (think|feel) (they|we) do more/, 'why we each think we do more egocentric bias own share', '/library/fairness.html'],
+    [/\bi (do|handle|carry|remember) (everything|it all|all of it|all the \w+|most of the \w+)|\bnobody (sees|notices|thanks me for) (what|how much) i do|\bi m the only one who\b/, 'invisible work nobody sees unbilled debt', '/book/preface']
   ];
 
 
@@ -318,16 +327,40 @@
       hits = fuller ? [fuller].concat(hits.filter(function (h) { return h !== fuller; })) : [];
     }
     var top = hits[0];
-    var weak = !top || top.cov < 0.42 || top.s < 2.2;
+    // a question mostly about things this site never covers ("fix my car", "write a resume") gets a polite no,
+    // even when a word or two happens to turn up somewhere in a passage
+    var own = (res.base || []).filter(function (t, j, a) { return a.indexOf(t) === j && !ROLE[t]; });
+    function inDomain(t) { return IDX.domain[t] || (t.length >= 7 && IDX.domain['~' + t.slice(0, 7)]); }
+    var wAll = 0, wAway = 0;
+    own.forEach(function (t) { var w = idf(t); wAll += w; if (!inDomain(t)) wAway += w; });
+    var offTopic = gi < 0 && !prefer && wAll > 0 && wAway * 2 >= wAll;
+    var weak = offTopic || !top || top.cov < 0.42 || top.s < 2.2;
     state.last = { q: q, res: { hits: hits, terms: res.terms }, shown: {} };
     if (weak) {
-      var near = hits.filter(function (h) { return !KB.docs[h.i].tip && h.cov >= 0.34 && h.s >= 1.6; }).slice(0, 8);
-      var chips = [], pagesSeen = {};
-      near.forEach(function (h) { var d = KB.docs[h.i], p = d.u.split('#')[0]; if (chips.length < 3 && !pagesSeen[p]) { pagesSeen[p] = 1; chips.push({ label: d.h.length > 48 ? d.h.slice(0, 46).replace(/\s+\S*$/, '') + '…' : d.h, doc: h.i }); } });
+      // No direct answer. If a passage still shares a real part of the question, show the closest one or two,
+      // clearly labelled as the nearest match rather than an answer; otherwise say so and offer starters.
+      var near = offTopic ? [] : res.hits.filter(function (h) { return !KB.docs[h.i].tip && h.cov >= 0.4 && h.s >= 1.4; }).slice(0, 8);  // the full ranking, before the short-question filter above
+      var closest = [], seenKey = {};
+      near.forEach(function (h) {
+        var d = KB.docs[h.i], key = d.u.split('#')[0] + '|' + d.h.split(':')[0];
+        if (closest.length < 2 && !seenKey[key] && (!closest.length || h.s >= near[0].s * 0.6)) { seenKey[key] = 1; closest.push(h.i); }
+      });
+      if (closest.length) {
+        var blocks = [{ k: 'p', x: pick(['I couldn’t find an exact answer to that, but here’s the closest I have:', 'I don’t have a page that answers that directly. This is the nearest thing I found:', 'Nothing here answers that exactly, but this part of the site comes closest:']) }];
+        closest.forEach(function (i, n) {
+          state.last.shown[i] = 1;
+          if (n > 0) blocks.push({ k: 'p', x: 'This may be related too:' });
+          blocks.push(passageBlock(i, res.terms));
+        });
+        var more0 = [], pagesSeen0 = {};
+        closest.forEach(function (i) { pagesSeen0[KB.docs[i].u.split('#')[0]] = 1; });
+        near.forEach(function (h) { var d = KB.docs[h.i], p = d.u.split('#')[0]; if (more0.length < 2 && !pagesSeen0[p]) { pagesSeen0[p] = 1; more0.push({ label: d.h.length > 48 ? d.h.slice(0, 46).replace(/\s+\S*$/, '') + '…' : d.h, doc: h.i }); } });
+        return { blocks: blocks, chips: (more0.length ? more0 : STARTERS.slice(0, 2)).concat([{ label: 'Ask something else', q: 'What can I ask?' }]).slice(0, 3) };
+      }
       state.last = null;
       return { blocks: [{ k: 'p', x: pick(['I looked through the site’s pages and couldn’t find anything that really answers that.', 'I’m sorry, I couldn’t find that in the site’s pages.', 'That one isn’t covered on this site, as far as I can find.']) +
-        ' I can only share what’s written here, so I’d rather not guess.' + (chips.length ? ' These might be close:' : ' Here are some things I can help with:') }],
-        chips: chips.length ? chips : STARTERS };
+        ' I can only share what’s written here, so I’d rather not guess. Here are some things I can help with:' }],
+        chips: STARTERS };
     }
     return answerFrom(state, hits, res.terms, true);
   }

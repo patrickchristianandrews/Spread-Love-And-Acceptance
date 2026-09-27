@@ -123,7 +123,8 @@
   </header>
 
   <p class="lede">People have inner weather. Some mornings are clear, some are gusty, some are fogged in, and it changes without asking your permission. This is a one-minute reading of today&#39;s conditions: the sky, the pressure, the ground underneath, and what&#39;s blowing in.</p>
-  <p class="why">Weather is the point of the metaphor. It isn&#39;t a grade, a diagnosis or a verdict on you, any more than rain is a verdict on a town. Conditions pass. Knowing them just tells you what today is good for, and what to leave until the front moves through.</p>
+  <p class="why">We use weather on purpose. Weather isn&#39;t a grade, a diagnosis or a verdict on you, any more than rain is a verdict on a town. Conditions pass. Knowing them just tells you what today is good for, and what to leave until the front moves through.</p>
+  <p class="pillar-note"><strong>Where this fits:</strong> This page belongs to <a href="/five-pillars.html#read-your-state">Pillar III, Read your state first</a>, part of the <a href="/five-pillars.html">Five Pillars</a>. <strong>In you:</strong> know how full your battery is (calm, revved up or shut down) before you judge a moment. <strong>Between you and others:</strong> your state shapes how other people&#39;s words land, so pick your timing, and pause and come back when you need to.</p>
 
   <section id="today">
     <div class="steps">
@@ -181,7 +182,7 @@
       <div class="step">
         <p class="step-n">Step 5 of 7 <span class="opt">optional</span></p>
         <h2>People load</h2>
-        <p class="step-hint">How much peopling has today already asked of you?</p>
+        <p class="step-hint">How much time with other people has today already asked of you?</p>
         <div class="chips" role="group" aria-label="People load">
           <button class="chip" type="button" data-people="none" aria-pressed="false">Barely any</button>
           <button class="chip" type="button" data-people="some" aria-pressed="false">A normal amount</button>
@@ -342,7 +343,7 @@
     if(body.still||need.move) r.push('Two minutes on your feet: stairs, the garden, once around the block. Movement burns off what the gusts leave behind.');
     if(body.noise||need.quiet) r.push('Find the quietest room in the building and close the door for five minutes.');
     if(body.screens) r.push('Look at something more than twenty feet away for a minute. Let your eyes reach their real range.');
-    if(sleep==='bad'||sleep==='short'||need.sleep) r.push('If you can lie down for ten minutes, do. If you can\u2019t, decide now what time tonight ends.');
+    if(sleep==='bad'||sleep==='short'||need.sleep) r.push('If you can lie down for ten minutes, do. If you can\u2019t, decide now what time you will wind down tonight.');
     if(body.caffeine) r.push('Skip the next coffee. Caffeine on a gusty day mostly adds wind.');
     if(sky!=='clear' && !r.length) r.push('Slow the breath out rather than in: the long exhale is the part that settles you.');
     return r.slice(0,4);
@@ -371,7 +372,7 @@
   function nextSteps(){
     var d=[];
     if(sky==='clear'){
-      d.push('Use the order in <a href="/check-ins.html">Check-ins</a> so a good window doesn\u2019t get wasted.');
+      d.push('Follow the steps in <a href="/check-ins.html">Check-ins</a> so a good window doesn\u2019t get wasted.');
       d.push('Test your opening line in the <a href="/signal-translator.html">Signal Translator</a> before you say it.');
       d.push('Log this week in <a href="/workpapers/wp-01.html">WP-01</a> while you can see it clearly.');
     } else if(sky==='gusty'){
@@ -401,8 +402,8 @@
   function paragraphs(i){
     var p=[], s=SKY[sky];
     var lead={clear:'The sky is clear. Your body isn\u2019t braced, which means you can hear something hard without treating it as a threat. This is the weather the rest of the site is designed for.',
-      gusty:'It\u2019s gusty. Your system is mobilized: useful energy for doing something physical, poor conditions for deciding anything about another person.',
-      fog:'You\u2019re fogged in. Flat, far away or foggy, and words are further off than usual. Nothing decided in this weather gets decided well.'}[sky];
+      gusty:'It\u2019s gusty. Your system is revved up. That energy is useful for doing something physical, but it is poor weather for deciding anything about another person.',
+      fog:'You\u2019re fogged in. Flat, far away or foggy, and words are harder to reach than usual. Nothing decided in this weather gets decided well.'}[sky];
     p.push(lead);
 
     var b=on(body).map(function(k){ return BODYTXT[k]; });
@@ -411,7 +412,7 @@
     else if(sleep==='short') groundBits.push('it was a short night');
     groundBits=groundBits.concat(b);
     if(people==='nonstop') groundBits.push('there\u2019s been no gap between people all day');
-    else if(people==='lots') groundBits.push('today has asked a lot of peopling from you');
+    else if(people==='lots') groundBits.push('today has asked a lot of you socially');
     if(groundBits.length){
       p.push('The ground underneath: '+list(groundBits)+'. That is not a side note. It is most of why today feels the way it does, and it is fixable in a way that character is not.');
     }
@@ -428,7 +429,7 @@
     var n=on(need).map(function(k){ return NEEDTXT[k]; });
     if(n.length) p.push('You said what would help is '+list(n)+'. Arrange that before anything else. It is a reasonable thing to ask for out loud, and asking is cheaper than the argument you get by not asking.');
 
-    p.push('Overall: '+band(i).toLowerCase()+', at '+i+' out of 100 on the pressure reading. '+(i<45?'There is room in the day.':i<65?'There is less room than usual today; spend it deliberately.':'There is very little room today. Protect what is left rather than spending it on a debate.'));
+    p.push('Overall: '+band(i).toLowerCase()+', at '+i+' out of 100 on the pressure reading. '+(i<45?'There is room in the day.':i<65?'There is less room than usual today. Spend it carefully.':'There is very little room today. Protect what is left rather than spending it on a debate.'));
     return p;
   }
 
@@ -492,7 +493,7 @@
     if(ft && fc[ft]>=3) out.push('The front that keeps returning is '+FRONTTXT[ft]+', '+fc[ft]+' times. A front that never clears is usually structural: <a href="/workpapers/wp-04-deficit-audit.html">WP-04</a> is built for exactly that.');
     var nc={}; a.forEach(function(e){ (e.need||[]).forEach(function(k){ nc[k]=(nc[k]||0)+1; }); });
     var nt=Object.keys(nc).sort(function(x,y){ return nc[y]-nc[x]; })[0];
-    if(nt && nc[nt]>=3) out.push('What you ask for most is '+NEEDTXT[nt]+', '+nc[nt]+' times. If nobody around you knows that, a <a href="/wiring-card.html">wiring card</a> says it once so you don\u2019t have to keep saying it.');
+    if(nt && nc[nt]>=3) out.push('What you ask for most is '+NEEDTXT[nt]+', '+nc[nt]+' times. If nobody around you knows that, a <a href="/wiring-card.html">Wiring Card</a> says it once so you don\u2019t have to keep saying it.');
     var peoplish=a.filter(function(e){ return e.people==='lots'||e.people==='nonstop'; });
     var peoplishRough=peoplish.filter(function(e){ return e.sky!=='clear'; });
     if(peoplish.length>=3 && peoplishRough.length/peoplish.length>=0.6) out.push('Heavy people days and rough weather travel together for you: '+peoplishRough.length+' of '+peoplish.length+'. That is a capacity fact, not an attitude problem.');

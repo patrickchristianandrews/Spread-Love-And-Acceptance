@@ -1,0 +1,299 @@
+#slug: stress
+#title: Stress and the body
+#pillars: III
+#blurb: The stress response, allostatic load, the window of tolerance, polyvagal theory and its critics, sleep, hunger and burnout.
+#pillarnote: Stress and the body is Pillar III, Read your state first. In you, it means knowing how full your battery is, and whether you are calm, revved up or shut down, before you judge a moment. Between you, it means choosing the timing, pausing and coming back, and remembering that your state shapes how the other person’s words land, and theirs shapes how yours land.
+#intro: A lot of what goes wrong between people starts in the body: a short night, a skipped lunch, a week that has used up every reserve. The program’s battery and weather checks are built on this idea. These entries explain the science behind it, including where the popular explanations go further than the evidence.
+
+@@ stress-response | The stress response
+pillars: III
+aka: fight or flight, stress, adrenaline, cortisol, HPA axis, freeze
+nut: When the brain detects a threat, the body gets ready to act: heart rate and breathing speed up, energy is released, and attention narrows. This response is protective in short bursts, but tiring when it runs for too long.
+deep:
+Walter Cannon described the “fight or flight” response in the early twentieth century. There are two main systems involved. The fast one is the sympathetic nervous system, which releases adrenaline within seconds. The slower one is the hypothalamic–pituitary–adrenal (HPA) axis, which releases cortisol over minutes and helps sustain energy.
+
+Threats don’t have to be physical. A sharp email, a looming deadline or a tense silence at home can trigger the same system. The body doesn’t distinguish very well between a tiger and a difficult conversation.
+
+In the short term, this response can sharpen focus. When it is triggered too often, or doesn’t switch off, people tend to feel tired, irritable and less patient. That is one reason why the same comment can seem minor on a good day and unbearable on a bad one.
+
+People also respond with freezing or going quiet, not just fighting or fleeing, and with seeking company, which some researchers call “tend and befriend.”
+research:
+Cannon’s work dates from the 1910s and 1920s; Hans Selye developed the concept of stress and the general adaptation syndrome from the 1930s. The physiology of the sympathetic system and HPA axis is well established. Shelley Taylor and colleagues proposed tend-and-befriend in 2000, suggesting that seeking social connection is also a common stress response. How stress affects a particular person varies widely.
+links:
+/workpapers/wp-02-battery-stress-meter.html | How full is your battery? (WP-02)
+/book/chapter-3-in-depth.html#saturation | Chapter III in depth: saturation
+/quick-checks.html#today | Today’s Weather
+talk:
+- What does stress feel like in your body before you notice it in your mind?
+- Is your usual stress response to fight, flee, freeze or reach for people?
+- What small stresses stack up in a typical week for each of us?
+
+@@ appraisal | Stress appraisal: why the same event stresses people differently
+pillars: III
+aka: appraisal, Lazarus, coping, perceived stress, transactional model
+nut: Richard Lazarus and Susan Folkman proposed that stress depends not only on events but on how we appraise them: is this a threat, and do I have what I need to cope? The same event can feel manageable or overwhelming.
+deep:
+According to the transactional model, we make two quick appraisals. The first asks whether something matters and whether it is a threat, a loss or a challenge. The second asks whether we have the resources to deal with it. Stress is highest when something matters a lot and resources feel low.
+
+This helps explain why battery levels matter so much. The same request (“could you call the plumber?”) is an easy yes when resources are full and a heavy burden when they are depleted.
+
+It also suggests two ways of reducing stress: changing the situation, or increasing resources (rest, help, time, information). Reappraising a situation, seeing it as a challenge rather than a threat, can also help, although not every situation should be reappraised.
+research:
+Lazarus and Folkman set out the model in *Stress, Appraisal, and Coping* (1984). It remains one of the most influential frameworks in stress research. Later work on “challenge versus threat” appraisals, for example by Jim Blascovich and Jeremy Jamieson, has found that seeing stress as a challenge can change physiological responses, though effects vary.
+links:
+/workpapers/wp-02-battery-stress-meter.html | How full is your battery? (WP-02)
+/book/chapter-3.html | Full tanks and different angles (Chapter III)
+talk:
+- What resources help you feel able to cope: sleep, time, help, information?
+- Is there something that stresses one of us much more than the other? Why might that be?
+- Which of our current stresses could be changed, and which need more support?
+
+@@ allostatic-load | Allostatic load: the cost of carrying stress
+pillars: III
+aka: allostasis, allostatic load, chronic stress, wear and tear, McEwen
+nut: Allostasis is the body’s way of adjusting to demands. Allostatic load is the wear and tear that builds up when those adjustments are needed too often or for too long.
+deep:
+Peter Sterling and Joseph Eyer introduced allostasis in 1988 to describe how the body keeps stability through change: raising blood pressure when you stand up, releasing energy when you need to run. Bruce McEwen developed the idea of allostatic load: when stress responses are repeatedly triggered, or don’t switch off, the cumulative strain can affect many systems.
+
+In everyday terms, this is the difference between a hard day and a hard year. A single stressful event, followed by recovery, is normal. Many small stresses without recovery, such as ongoing money worries, caring for someone, broken sleep or constant friction at home, can add up.
+
+This is one reason the program pays attention to recurring patterns rather than single incidents, and to recovery as well as effort. Rest isn’t a luxury in this picture; it is part of the system.
+research:
+McEwen published his influential review in 1998 and continued the work for decades. Researchers have measured allostatic load using combinations of biological markers, and studies link higher scores to various outcomes, but there is no single agreed way of measuring it, and it is best treated as a helpful framework rather than a precise test. The concept is used to describe populations, not to diagnose individuals.
+links:
+/workpapers/wp-02-battery-stress-meter.html | How full is your battery? (WP-02)
+/how-it-works.html#situation | How It Works: your life situation
+/book/chapter-5.html | The monthly look-back (Chapter V)
+talk:
+- Which stresses in our life are ongoing rather than one-off?
+- What does real recovery look like for each of us?
+- Is there a load we could reduce, rather than just cope with?
+
+@@ window-of-tolerance | The window of tolerance
+pillars: III
+aka: window of tolerance, hyperarousal, hypoarousal, Siegel, overwhelmed or shut down
+nut: The window of tolerance is a metaphor for the zone where you can feel strong emotions and still think and respond flexibly. Above it you may feel flooded or panicky; below it, numb or shut down.
+deep:
+Daniel Siegel introduced the phrase to describe the range of arousal in which people function well. Inside the window, you can feel upset and still listen, reason and choose your words. Push beyond the top edge (hyperarousal) and you may feel panicky, angry or overwhelmed. Drop below the bottom edge (hypoarousal) and you may feel flat, foggy or shut down.
+
+Windows vary between people and from day to day. Tiredness, hunger, illness, sensory overload and ongoing stress can narrow the window, so it takes less to push someone outside it. Rest, safety and connection can widen it.
+
+The idea is useful for couples because it explains why a conversation that would be fine one day can go badly the next. It also suggests a practical rule: if either person is outside their window, pause and settle before continuing.
+research:
+Siegel introduced the concept in *The Developing Mind* (1999). It is widely used by therapists, particularly in trauma-informed practice, as a teaching metaphor. It is not a measured scientific construct with its own body of experimental evidence, but it fits well with established research on arousal, attention and emotion regulation.
+links:
+/quick-checks.html#ladder | The nervous-system self-check
+/wp-11.html | The Calm-Down Kit (WP-11)
+/workpapers/wp-02-battery-stress-meter.html | How full is your battery? (WP-02)
+talk:
+- What pushes each of us toward the top or bottom of our window?
+- What helps widen your window on a hard week?
+- How could we signal to each other that we’re outside our window?
+
+@@ polyvagal-theory | Polyvagal theory, and the criticisms
+pillars: III
+aka: polyvagal, vagus nerve, ventral vagal, dorsal vagal, Porges, social engagement system, is polyvagal theory true
+nut: Polyvagal theory, proposed by Stephen Porges, describes three nervous-system states (safe and social, mobilised, and shut down). It is popular with therapists and in self-help, but many of its specific biological claims have been strongly challenged by other scientists.
+deep:
+Porges proposed in the 1990s that the vagus nerve has two branches with different evolutionary histories. In his account, a newer “ventral vagal” branch supports calm social engagement, the sympathetic system supports fight-or-flight, and an older “dorsal vagal” branch produces shutdown or freezing. He also coined “neuroception” for the body’s unconscious sense of safety or danger.
+
+Many people find this language helpful. It gives a non-blaming way to talk about why someone might go quiet, or snap, or need to feel safe before they can talk. The program uses a simple three-rung ladder in this spirit, as a metaphor for different states.
+
+However, researchers in physiology and evolutionary biology have raised serious objections. Critics argue that the evolutionary story is not accurate (other vertebrates also have similar vagal pathways), that the measure Porges uses as an index of vagal activity (respiratory sinus arrhythmia) doesn’t mean what the theory claims, and that the proposed shutdown mechanism is not supported. Some say the useful parts of the theory, such as the importance of safety and connection, don’t depend on its disputed anatomy.
+
+A fair summary: the everyday idea that people have different states, and that feeling safe helps connection, is reasonable and consistent with lots of research. The specific polyvagal explanation of how this works is contested and should not be presented as settled science.
+research:
+Porges published the theory in 1995 and his book *The Polyvagal Theory* in 2011. Paul Grossman and Edwin Taylor critiqued its assumptions in 2007, and Grossman published a detailed critique in 2023 arguing that its core premises are not supported. Porges and colleagues have responded. The theory has limited direct experimental testing, and it is best treated as a clinical metaphor rather than established physiology.
+links:
+/quick-checks.html#ladder | The nervous-system self-check (the ladder)
+/wp-11.html | The Calm-Down Kit (WP-11)
+talk:
+- Is the idea of different “states” useful for you, whatever the biology?
+- What helps you feel safe enough to talk openly?
+- How do we hold helpful metaphors lightly when the science is disputed?
+
+@@ halt | HALT: hungry, angry, lonely, tired
+pillars: III
+aka: HALT, hungry angry lonely tired, check before you talk
+nut: HALT is a quick self-check: am I hungry, angry, lonely or tired? It comes from recovery communities, not from research, but it neatly captures states that make hard conversations go worse.
+deep:
+The idea is simple: before making a decision or starting a hard conversation, check these four states. If any are high, deal with them first if you can: eat, calm down, connect with someone, rest.
+
+HALT is a folk heuristic rather than a scientific model. It doesn’t cover everything (pain, illness, sensory overload and worry are also big factors). But it is memorable, and each part is supported by separate research on mood and self-control.
+
+In practice, many couples find the most useful parts are hunger and tiredness, simply because they are so easy to overlook and so easy to fix.
+research:
+HALT originates in addiction recovery communities, and its exact origin is unclear. There is no research on HALT as a tool in itself. Related research does support links between hunger and irritability, sleep loss and emotional reactivity, and loneliness and threat sensitivity, so it is a reasonable, if informal, reminder.
+links:
+/workpapers/wp-02-battery-stress-meter.html | How full is your battery? (WP-02)
+/quick-checks.html#today | Today’s Weather
+talk:
+- Which of the four states affects you most?
+- Could we agree to check HALT before bringing up hard topics?
+- What else would you add to the list for yourself?
+
+@@ hangry | Hunger and mood
+pillars: III
+aka: hangry, hungry and irritable, low blood sugar, eating and mood
+nut: Being hungry can make people more irritable and more likely to read situations negatively. The popular word “hangry” turns out to have some research support, though effects are modest.
+deep:
+When we are hungry, we are more likely to notice unpleasant feelings and attribute them to the situation around us, including the people we are with. A comment that would be fine after dinner can feel sharp before it.
+
+This is useful to know partly because hunger is so easy to miss, especially when busy. It is also easy to fix. A snack before a difficult conversation is a simple, practical step.
+
+The popular claim that low blood sugar directly reduces willpower (the glucose model of self-control) has not held up well in research, so the effect is probably more about mood and interpretation than about fuel running out.
+research:
+Jennifer MacCormack and Kristen Lindquist (2019) found that hungry people rated situations more negatively when they were not paying attention to their own feelings. Viren Swami and colleagues (2022) used an experience-sampling study and found that hunger was associated with greater anger and irritability in daily life. Research on the glucose model of willpower has had replication problems.
+links:
+/workpapers/wp-02-battery-stress-meter.html | How full is your battery? (WP-02)
+/quick-checks.html#today | Today’s Weather
+talk:
+- Do either of us get “hangry”? What are the signs?
+- Are there times of day when we should avoid hard topics because we’re hungry?
+- Could a snack be part of our check-in routine?
+
+@@ sleep-and-mood | Sleep, mood and conflict
+pillars: III
+aka: sleep, tired, sleep deprivation, irritability, bad night, insomnia and mood
+nut: Short or poor sleep makes people more emotionally reactive, less patient and worse at seeing other people’s points of view. Studies of couples suggest poor sleep is linked to more conflict the next day.
+deep:
+After a bad night, the brain’s threat-detection systems tend to be more reactive, while the systems that help regulate emotions work less well. The practical result: small irritations feel bigger, and it’s harder to step back.
+
+Sleep also affects empathy and perspective-taking. Tired people are less accurate at reading others’ emotions and more likely to interpret neutral expressions negatively.
+
+In couples, sleep can become a shared issue: one person’s restlessness affects the other’s sleep. Talking about sleep needs, routines and practical arrangements is a kind of relationship maintenance, not just health advice.
+research:
+Seung-Schik Yoo, Matthew Walker and colleagues (2007) found greater amygdala reactivity to negative images after sleep deprivation. Amie Gordon and Serena Chen (2014) found that poor sleep was associated with more conflict in couples and with less ability to resolve it. These are lab and diary studies; effects vary between people, and occasional short nights are a normal part of life.
+links:
+/workpapers/wp-02-battery-stress-meter.html | How full is your battery? (WP-02)
+/night-garden.html | The Night Garden
+/quick-checks.html#today | Today’s Weather
+talk:
+- How does a bad night change how you react to things?
+- Are there any sleep habits that affect both of us?
+- Could we agree to postpone hard talks after a bad night?
+
+@@ burnout | Burnout
+pillars: III
+aka: burnout, burnt out, burned out, exhausted, cynicism, Maslach, parental burnout
+nut: Burnout is a state of exhaustion, detachment and reduced sense of effectiveness that develops from long-term stress, usually at work, though parental and caregiver burnout are also described. It is recognised by the World Health Organization as an occupational phenomenon, not a medical condition.
+deep:
+Christina Maslach described burnout as having three parts: emotional exhaustion (feeling drained), depersonalisation or cynicism (feeling detached or negative about the work or people), and reduced personal accomplishment (feeling ineffective).
+
+Burnout isn’t simply tiredness; rest alone doesn’t always fix it, because the conditions causing it are still there. Research points to workload, lack of control, insufficient reward, poor community, unfairness and value conflicts as drivers.
+
+At home, parental and caregiver burnout can look similar: exhaustion, emotional distance from the people you are caring for, and a sense of doing it badly. Recognising it isn’t a failing; it is a signal that the load and the resources are out of balance.
+research:
+Maslach and Susan Jackson published the Maslach Burnout Inventory in 1981. The World Health Organization included burnout in ICD-11 (2019) as an occupational phenomenon, not a medical diagnosis. Research on parental burnout, led by Isabelle Roskam and Moïra Mikolajczak from around 2017, has grown quickly. Burnout overlaps with depression in some measures, and researchers continue to debate the boundary.
+links:
+/workpapers/wp-02-battery-stress-meter.html | How full is your battery? (WP-02)
+/relationships.html#caregivers | How it fits: caregivers
+/book/chapter-3-in-depth.html#saturation | Chapter III in depth: saturation
+talk:
+- Which of Maslach’s six drivers show up in our work or home life?
+- What would reduce the load, rather than just help us cope with it?
+- What early signs of burnout should we watch for in each other?
+
+@@ caregiver-strain | Caring for others and your own battery
+pillars: III, I
+aka: caregiver, caregiving, looking after a parent, caring for someone, sandwich generation
+nut: Looking after a child with extra needs, an ill partner or an ageing parent is meaningful and demanding. Research consistently finds that caregivers carry more stress, and that support, breaks and shared responsibility matter.
+deep:
+Caregiving combines practical work, emotional work and a lot of planning. It often comes on top of paid work and other family responsibilities. The “sandwich generation,” people caring for both children and parents, can feel squeezed from both sides.
+
+Caregivers often neglect their own needs, partly from guilt and partly because there simply isn’t time. Yet the ability to keep caring depends on some recovery. Respite, even short, and sharing specific tasks with others can make a difference.
+
+In couples, one partner’s caregiving role often changes the division of other work. Talking openly about what has shifted, and adjusting other responsibilities, helps prevent resentment on both sides.
+research:
+A 2003 meta-analysis by Martin Pinquart and Silvia Sörensen found that caregivers reported more stress and lower wellbeing than non-caregivers on average, with larger differences for dementia caregivers. Research also shows positive aspects of caregiving, such as a sense of meaning. Support interventions show modest benefits.
+links:
+/relationships.html#caregivers | How it fits: caregivers
+/workpapers/wp-02-battery-stress-meter.html | How full is your battery? (WP-02)
+/workpapers/wp-03-raci-treaty.html | One owner per job (WP-03)
+talk:
+- Is either of us caring for someone in a way that the other might not fully see?
+- What would a real break look like for the caregiver?
+- Which tasks could be shared or handed on?
+
+@@ co-regulation | Co-regulation: calming together
+pillars: III, IV
+aka: coregulation, co-regulation, calming each other, hand holding, social baseline, soothing
+nut: Co-regulation is the way people help settle each other’s emotional and physical states, through tone of voice, presence, touch and shared rhythm. It starts in infancy and continues throughout life.
+deep:
+A crying baby calms when held by a calm caregiver. Adults do something similar: a steady voice, a hand on the shoulder or simply sitting together can help a stressed person settle.
+
+James Coan’s social baseline theory suggests that the brain expects to have trusted people nearby, and treats situations as less demanding when they are. In one well-known study, people facing a mild threat showed less threat-related brain activity when holding their partner’s hand, more so in higher-quality relationships.
+
+Co-regulation also works in reverse: stress spreads. If both people are stressed, they can escalate each other. This is why calming yourself first often helps the other person too.
+research:
+James Coan, Hillary Schaefer and Richard Davidson published the hand-holding study in 2006. Coan and David Sbarra set out social baseline theory in 2015. Emily Butler and Ashley Randall reviewed emotional co-regulation in couples in 2013. Most studies are small and lab-based, but the overall pattern is consistent.
+links:
+/check-ins.html | Check-ins
+/wp-11.html | The Calm-Down Kit (WP-11)
+/night-garden.html | The Night Garden
+talk:
+- What helps you settle when you’re with someone you trust?
+- When one of us is stressed, does the other get stressed too?
+- What kind of presence or touch is welcome when you’re upset, and what isn’t?
+
+@@ interoception | Interoception: noticing your body’s signals
+pillars: III
+aka: interoception, body awareness, noticing hunger, noticing tiredness, internal signals
+nut: Interoception is the sense of the body’s internal state: heartbeat, breathing, hunger, fullness, tiredness, needing the toilet. People vary a lot in how clearly they notice these signals.
+deep:
+Some people notice early when they are getting hungry, tired or tense. Others only notice when the signal is very strong, for instance when they are suddenly starving or already snapping at someone.
+
+Interoception connects to emotions: many emotional experiences start as body sensations (a tight chest, a hot face). Difficulty noticing or interpreting these signals can make it harder to name feelings, which connects to alexithymia.
+
+Differences in interoception are common in some neurotypes, including autism and ADHD. For people who don’t notice signals early, external cues can help: regular meals, reminders to rest, checking a battery score at set times.
+research:
+Bud Craig’s work (2002) helped define interoception in neuroscience. Sahib Khalsa and colleagues published a consensus review in 2018. Research by Sarah Garfinkel and others has studied interoception in autism, with mixed findings depending on how it is measured. The field is active and still developing reliable measures.
+links:
+/quick-checks.html#ladder | The nervous-system self-check
+/workpapers/wp-02-battery-stress-meter.html | How full is your battery? (WP-02)
+/wired-differently.html#alexithymia | Wired Differently: alexithymia
+talk:
+- Which body signals do you notice early, and which do you miss?
+- Would regular check-ins with yourself (like a battery score) help?
+- How do body sensations turn into feelings for you?
+
+@@ yerkes-dodson | Arousal and performance: the inverted U
+pillars: III
+aka: Yerkes Dodson, performance under pressure, optimal stress, too much stress
+nut: The popular “inverted U” says performance improves with arousal up to a point, then declines. It is a helpful picture but a loose version of the original 1908 research.
+deep:
+A little pressure can sharpen focus: a deadline helps some people start. Too much makes it hard to think clearly. The inverted U describes this: too little arousal and you are bored; too much and you are overwhelmed; somewhere in the middle is best.
+
+The optimal level is thought to depend on the task: simple tasks tolerate more arousal, complex tasks less. Conversations about feelings are complex tasks, which is why they suffer early when people are stressed.
+
+The picture also varies between people. Some people perform well under pressure; others need calm. Knowing your own curve is more useful than the general rule.
+research:
+Robert Yerkes and John Dodson’s 1908 study was about mice learning to discriminate between boxes under different strengths of electric shock. The generalised “inverted U” for human stress and performance developed later and has been criticised as too simple. Research on arousal and attention does support the idea that high stress impairs complex thinking, which is the part most relevant here.
+links:
+/workpapers/wp-02-battery-stress-meter.html | How full is your battery? (WP-02)
+/quick-checks.html#today | Today’s Weather
+talk:
+- Do you do better with a bit of pressure, or with none?
+- Where is your tipping point from focused to overwhelmed?
+- Which of our conversations need the calmest conditions?
+
+@@ sensory-load | Sensory load and stress
+pillars: III, IV
+aka: sensory overload, noise, too much noise, bright lights, crowded, overstimulation
+nut: Noise, clutter, light, crowds and interruptions add to the load the nervous system carries. For some people, sensory load is a major factor in stress and irritability.
+deep:
+Sensory input takes processing. For most people, a busy environment is manageable for a while. For people with sensory sensitivities, which are common in autism, ADHD and in highly sensitive people, the same environment can be exhausting quickly.
+
+Sensory overload can look like irritability, withdrawal or a sudden need to leave. It is easy to misread as rudeness or disinterest.
+
+Practical changes help: quieter spaces for difficult conversations, headphones, lower lighting, fewer interruptions, and building in recovery time after busy events. Treating sensory needs as practical requirements, rather than preferences, reduces friction.
+research:
+Research on environmental stressors, such as noise, has linked chronic noise exposure with stress and reduced concentration. Winnie Dunn’s model of sensory processing (1997) describes how people differ in thresholds and responses. Research on sensory differences in autism is extensive, and sensory differences were added to autism diagnostic criteria in DSM-5 (2013).
+links:
+/wired-differently.html#sensitive | Wired Differently: sensitivity
+/book/chapter-4-in-depth.html#gating | Chapter IV in depth: sensory gating
+/soundscapes.html | Soundscapes
+talk:
+- Which sensory things drain each of us fastest?
+- Where in our home is calmest for a hard conversation?
+- How can we plan recovery time after busy events?

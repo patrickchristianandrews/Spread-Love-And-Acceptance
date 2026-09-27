@@ -1,0 +1,353 @@
+#slug: wiring
+#title: Differences in wiring
+#pillars: IV
+#blurb: Neurodiversity, the double empathy problem, autism, ADHD, sensitivity, personality and chronotype.
+#pillarnote: Differences in wiring are Pillar IV, Tune how you send and receive. In you, it means knowing your own wiring, pace, senses and how you process the world. Between you, it means treating a mismatch as tuning rather than a moral failing, and translating across different neurotypes, energies and body clocks. Sensory and energy entries also draw on Pillar III, Read your state first.
+#intro: People process the world differently: how much sensory input they can take, how they communicate, how they manage time and attention, when in the day they are at their best. The program treats these differences as information, not flaws. These entries explain the research and the community ideas behind that view, with honest notes on where terms are formal diagnoses and where they are community language.
+
+@@ double-empathy | The double empathy problem
+pillars: IV
+aka: double empathy, autistic communication, mutual misunderstanding, Milton
+nut: The double empathy problem, described by autistic researcher Damian Milton, says that misunderstandings between autistic and non-autistic people run both ways. It isn’t that one side lacks empathy; each finds the other hard to read.
+deep:
+For decades, autism was described as a deficit in social understanding, as if autistic people alone struggled to read others. Milton pointed out that non-autistic people also misread autistic people, often badly. The difficulty lies in the gap between different ways of communicating and perceiving.
+
+Supporting research found that autistic people often communicate effectively with each other, and that mixed pairs have more difficulty. Non-autistic people also tend to form quick negative first impressions of autistic people, based on differences in style rather than content.
+
+This reframe has broad value. Any two people with different wiring, whether autistic and non-autistic, ADHD and not, sensitive and not, can struggle to read each other. The gap belongs to both, and so does the work of bridging it.
+research:
+Milton published the idea in 2012. A 2020 study by Catherine Crompton and colleagues used a “diffusion chain” (passing information along a line of people) and found autistic-only chains passed information as effectively as non-autistic-only chains, while mixed chains lost more. Noah Sasson and colleagues (2017) found non-autistic observers formed less favourable first impressions of autistic people from brief clips. The research base is growing but still relatively young.
+links:
+/wired-differently.html#double-empathy | Wired Differently: the double empathy problem
+/wiring-card.html | The wiring card
+/signal-translator.html | The Signal Translator
+talk:
+- Where do we most often misread each other?
+- What does each of us wish the other understood about how we communicate?
+- How can we share the work of bridging the gap?
+
+@@ neurodiversity | The neurodiversity paradigm
+pillars: IV
+aka: neurodiversity, neurodivergent, neurotypical, neurotype, Judy Singer
+nut: Neurodiversity is the idea that variation in how human brains work is natural, like biodiversity. The neurodiversity paradigm treats conditions like autism and ADHD as differences with strengths and challenges, not only as disorders.
+deep:
+The term is usually credited to Australian sociologist Judy Singer in the late 1990s, and was popularised by journalist Harvey Blume. Autistic writers and activists developed it into a movement, with Nick Walker among those articulating the “neurodiversity paradigm.”
+
+Common terms: neurodiverse describes a group with varied neurotypes; neurodivergent describes an individual whose brain works differently from the norm; neurotypical describes someone whose brain works in the typical way.
+
+The paradigm doesn’t deny that people face real difficulties. It shifts attention to fit: many difficulties arise from environments built for one kind of brain. Changing the environment, such as clearer communication, quieter spaces or flexible schedules, can make as much difference as changing the person.
+
+Some parents, clinicians and autistic people with high support needs have argued that the paradigm can underplay serious impairments. The conversation continues, and many people hold both views: difference is natural, and some people need significant support.
+research:
+Singer’s honours thesis dates from 1998. The neurodiversity movement is a social and political movement as much as a scientific position. Research informed by it, such as the double empathy work and participatory research with autistic people, has grown substantially. The social model of disability, which it draws on, comes from disability studies.
+links:
+/wired-differently.html | Wired Differently
+/how-it-works.html | How It Works: your wiring is information, not a flaw
+talk:
+- Which parts of our environment suit one of us more than the other?
+- What strengths come with each of our wirings?
+- What changes to our home would help both of us?
+
+@@ autism-basics | Autism: a plain-language overview
+pillars: IV
+aka: autism, autistic, ASD, autism spectrum, Asperger's, autistic adults
+nut: Autism is a lifelong neurodevelopmental difference affecting social communication, sensory processing and a preference for predictability and focused interests. It is very varied, and many autistic adults were identified late or not at all.
+deep:
+Current diagnostic manuals describe autism as involving differences in social communication and interaction, along with restricted or repetitive patterns of behaviour, interests or activities, including sensory differences. Since 2013, previous labels such as Asperger’s syndrome have been folded into a single autism spectrum diagnosis in the DSM.
+
+Autistic people often prefer direct communication, find unpredictable changes stressful, experience sensory input more or less intensely, and have deep interests. Many also have co-occurring traits or conditions, such as ADHD, anxiety or alexithymia.
+
+In adulthood, autistic people may have learned to mask their traits to fit in, which can be exhausting. Late identification is common, particularly among women and people who didn’t fit older stereotypes. Many adults describe identification as bringing relief and a new way of understanding their past.
+research:
+Autism diagnostic criteria are set out in DSM-5 (2013) and ICD-11. Research into adult autism, late diagnosis and autistic wellbeing has expanded rapidly, including participatory research that involves autistic people. Estimates of prevalence have risen over time, largely due to broader criteria and better recognition.
+links:
+/wired-differently-in-depth.html#autistic | Wired Differently in depth: autistic
+/about.html | About: my brain speaks a different language
+talk:
+- What would you want someone new to understand about how you process the world?
+- Which everyday situations are most draining for each of us?
+- What small changes at home would make life more predictable?
+
+@@ monotropism | Monotropism
+pillars: IV
+aka: monotropism, attention tunnel, deep focus, hyperfocus, special interests
+nut: Monotropism is a theory, developed by autistic researchers, that autistic minds tend to focus attention intensely on a few things at a time. It explains both deep interests and the difficulty of switching tasks.
+deep:
+Dinah Murray, Mike Lesser and Wenn Lawson proposed that attention works like a limited resource: some minds spread it across many things (polytropism), others concentrate it on a few (monotropism). A monotropic mind can go very deep into an interest, but switching away, or being interrupted, is costly.
+
+This helps explain why being interrupted mid-task can be so distressing for some people, and why they might not hear a question asked while they are focused. It isn’t rudeness; attention is fully committed elsewhere.
+
+Practical ideas: warnings before transitions (“in ten minutes can we talk?”), agreeing signals for interruptions, and respecting deep-focus time. These help people of any neurotype who find switching hard.
+research:
+Murray, Lesser and Lawson published the theory in 2005. It has been influential in the autistic community and in participatory research, and a monotropism questionnaire has been developed more recently. It has less experimental testing than mainstream cognitive theories of autism, but it fits many autistic people’s descriptions of their experience.
+links:
+/wired-differently-in-depth.html#autistic | Wired Differently in depth: autistic
+/frequency-framework.html | The Frequency Framework
+talk:
+- How do interruptions feel to each of us?
+- Would warnings before switching topics help?
+- When is the best time to catch each other for a chat?
+
+@@ masking | Masking and camouflaging
+pillars: IV, III
+aka: masking, camouflaging, hiding who you are, fitting in, autistic masking
+nut: Masking means hiding or suppressing natural traits to fit social expectations, like forcing eye contact or scripting conversations. It is common among autistic and ADHD people and is often exhausting.
+deep:
+Many neurodivergent people learn early that their natural way of being draws criticism. They adapt: copying others’ expressions, rehearsing small talk, suppressing movements that help them self-regulate. This can work in the moment, but it takes constant effort.
+
+People who mask may seem fine at work or in company and then be completely drained at home. Partners sometimes see only the “after” and wonder why the energy runs out.
+
+Having at least some places where masking isn’t needed seems to matter a great deal. Home is often the most important. Being able to drop the mask with a partner is a sign of trust, not of making less effort.
+research:
+Laura Hull and colleagues published a qualitative study of autistic adults’ camouflaging in 2017 and developed the Camouflaging Autistic Traits Questionnaire in 2019. Studies have linked camouflaging with exhaustion and poorer mental health, though causation is hard to establish. Research on masking in ADHD is newer.
+links:
+/about.html | About: hiding it took a lot out of me
+/wired-differently.html | Wired Differently
+talk:
+- Where does each of us feel we have to perform or hide something?
+- What would it look like to be fully unmasked at home?
+- How can we protect each other’s recovery time after a day of masking?
+
+@@ adhd-basics | ADHD: attention, time and executive function
+pillars: II, IV
+aka: ADHD, ADD, attention deficit, executive function, forgetfulness, distractibility, adult ADHD
+nut: ADHD is a neurodevelopmental difference involving attention regulation, impulsivity and, often, differences in executive function, such as planning, starting tasks and keeping track of time. It is not a lack of effort or caring.
+deep:
+The name suggests a deficit of attention, but many people with ADHD describe something different: difficulty directing attention where it is needed, alongside intense focus on things that interest them. Starting boring tasks, remembering appointments and estimating time can be genuinely hard.
+
+Russell Barkley has argued that ADHD is fundamentally a difference in self-regulation and executive function, including how people sense time passing. Many adults describe “time blindness”: the future feels vague until it is suddenly now.
+
+In households, ADHD often shows up in chores and planning: things are started and not finished, reminders are missed, mess builds unnoticed. The partner can end up as a manager and feel like a nag. External systems help both people: visible lists, reminders, clear ownership, routines, and breaking tasks into small steps.
+research:
+ADHD is defined in DSM-5 and ICD-11, and is one of the most studied conditions in psychiatry. Barkley’s theory of ADHD as a disorder of behavioural inhibition and executive function was set out in 1997. Research supports differences in time perception on average, though “time blindness” is a popular description rather than a formal term. Emotional dysregulation is common in ADHD but not part of the formal criteria.
+links:
+/wired-differently-in-depth.html#adhd | Wired Differently in depth: ADHD
+/workpapers/wp-03-raci-treaty.html | One owner per job (WP-03)
+talk:
+- Which kinds of tasks are hardest to start for each of us?
+- What external reminders or systems actually work in our home?
+- How can we avoid one person becoming the other’s manager?
+
+@@ rejection-sensitivity | Rejection sensitivity and RSD
+pillars: IV
+aka: rejection sensitivity, rejection sensitive dysphoria, RSD, fear of rejection, sensitive to criticism
+nut: Rejection sensitivity is a well-studied tendency to anxiously expect, readily notice and strongly react to rejection. “Rejection sensitive dysphoria” is a popular term, often linked to ADHD, but it isn’t a formal diagnosis.
+deep:
+Geraldine Downey and Scott Feldman described rejection sensitivity in 1996 as a pattern of anxiously expecting rejection, perceiving it readily in ambiguous situations, and reacting intensely. It is found across the general population and is linked with relationship difficulties.
+
+“Rejection sensitive dysphoria” is a term used by some clinicians, notably William Dodson, to describe very intense emotional pain in response to perceived rejection or criticism, which many people with ADHD recognise. It isn’t in the diagnostic manuals, and research specifically on RSD is limited, although emotional dysregulation in ADHD is well studied.
+
+Whatever the label, strong reactions to criticism are real and painful. Practical approaches include being clear and warm when giving feedback, checking interpretations before reacting, and agreeing in calm moments how to raise difficult things.
+research:
+Downey and Feldman’s 1996 paper introduced the Rejection Sensitivity Questionnaire, and research since then is substantial. RSD, by contrast, has little direct research; it is best described as a clinical and community term. Research on emotional dysregulation in ADHD, including meta-analyses, supports that intense emotional reactions are more common in ADHD.
+links:
+/wired-differently-in-depth.html#adhd | Wired Differently in depth: ADHD
+/workpapers/wp-09-tone-filter.html | Say it so it lands (WP-09)
+talk:
+- What kinds of comments hit hardest for each of us?
+- How could feedback be framed so it feels less like rejection?
+- What helps when one of us is stung by something the other said?
+
+@@ sensory-processing-sensitivity | Highly sensitive people (sensory processing sensitivity)
+pillars: IV, III
+aka: highly sensitive person, HSP, sensory processing sensitivity, sensitive, overstimulated, Aron
+nut: Sensory processing sensitivity is a personality trait described by Elaine and Arthur Aron, involving deeper processing of information, stronger emotional reactions and greater sensitivity to subtle stimuli. People high in it are often called highly sensitive people.
+deep:
+The Arons estimated that a substantial minority of people, often put at around 15 to 20 percent, are highly sensitive. Such people tend to notice subtle details, be moved by art and music, be affected by others’ moods, and become overwhelmed more easily by noise, crowds or busy schedules.
+
+Sensitivity cuts both ways. Research on “differential susceptibility” suggests that sensitive people may be more affected by bad environments but also benefit more from good ones.
+
+In a relationship, a sensitive partner may need more quiet time, find conflict more draining and pick up on tension sooner. A less sensitive partner may find this puzzling. Treating it as a difference in wiring rather than fragility makes compromise easier.
+research:
+Elaine and Arthur Aron published the Highly Sensitive Person Scale in 1997. Jay Belsky and Michael Pluess developed differential susceptibility in 2009, and Pluess and colleagues’ 2018 work suggested people fall into roughly three groups of low, medium and high sensitivity. The trait is a personality dimension, not a diagnosis; it overlaps with neuroticism and introversion, and researchers continue to debate how distinct it is.
+links:
+/wired-differently.html#sensitive | Wired Differently: sensitivity
+/book/chapter-4-in-depth.html#gating | Chapter IV in depth: sensory gating
+/soundscapes.html | Soundscapes
+talk:
+- Is either of us more sensitive to noise, mood or busyness?
+- What environments help each of us feel settled?
+- How can a sensitive and a less sensitive person share a home comfortably?
+
+@@ sensory-profiles | Sensory profiles: seekers and avoiders
+pillars: IV, III
+aka: sensory seeking, sensory avoiding, sensory processing, Winnie Dunn, sensory needs
+nut: Occupational therapist Winnie Dunn described how people differ in sensory thresholds and in how they respond: some seek sensation, some avoid it, some notice everything, and some miss things others notice.
+deep:
+Dunn’s model crosses two dimensions: threshold (does it take a lot or a little input to register?) and response (do you act to match it or go with it?). The result is four patterns: low registration (missing input), sensation seeking (looking for more), sensory sensitivity (noticing a lot) and sensation avoiding (limiting input).
+
+Most people are a mix, and profiles can differ across senses. One person may seek loud music but avoid scratchy clothing.
+
+In a shared home, sensory profiles can clash: one likes the TV on for background, the other finds it unbearable; one loves a busy kitchen, the other needs quiet. Naming these as sensory needs rather than preferences helps find practical solutions like headphones, separate spaces or agreed quiet times.
+research:
+Dunn published her model in 1997, and her Sensory Profile questionnaires are widely used, especially with children and in autism research. The model has reasonable support as a descriptive framework, though the evidence for some sensory-based interventions is weaker.
+links:
+/wired-differently.html#sensitive | Wired Differently: sensitivity
+/soundscapes.html | Soundscapes
+talk:
+- Which senses matter most to each of us at home?
+- Is either of us a seeker in one sense and an avoider in another?
+- What sensory compromises could we try?
+
+@@ stimming | Stimming and self-regulation
+pillars: III, IV
+aka: stimming, fidgeting, rocking, self-stimulatory behaviour, fidget
+nut: Stimming means repetitive movements or sounds, like rocking, tapping, fidgeting or humming, that many people, especially autistic and ADHD people, use to regulate their senses and emotions.
+deep:
+Everyone stims a little: tapping a pen, bouncing a knee, twirling hair. For many neurodivergent people, stimming is more frequent and more important, helping them focus, calm down or express joy.
+
+Historically, stimming was often treated as something to stop. Many autistic adults describe being told to sit still as children and the stress this caused. The current view in the autistic community, and increasingly among clinicians, is that harmless stimming should be allowed.
+
+At home, understanding stimming as regulation rather than restlessness can reduce friction. If a particular stim bothers someone else (a noise, for example), a swap to a quieter one can be negotiated, the way any shared-space habit is.
+research:
+Research on stimming from autistic perspectives, for example a 2019 qualitative study by Steven Kapp and colleagues, describes it as a coping and self-regulation mechanism. Research on fidgeting and attention in ADHD suggests movement may help some people concentrate. The evidence base is largely qualitative.
+links:
+/wired-differently.html | Wired Differently
+/wp-11.html | The Calm-Down Kit (WP-11)
+talk:
+- What small movements help each of us think or calm down?
+- Are there any habits that bother the other person? Could we find a swap?
+- Were you ever told to stop a habit that actually helped you?
+
+@@ autistic-inertia | Inertia and task switching
+pillars: IV, II
+aka: autistic inertia, can't get started, stuck, task initiation, transitions, switching tasks
+nut: Many neurodivergent people describe inertia: difficulty starting, stopping or switching activities, even ones they want to do. It isn’t laziness; it is a real difference in how action is started and changed.
+deep:
+Autistic people often describe being “stuck” before starting a task, or unable to stop once engaged. People with ADHD describe difficulty initiating boring tasks. Both can look like procrastination or unwillingness from outside.
+
+Transitions are especially hard: leaving the house, switching from work to family time, moving from one conversation to another. A request that seems small (“can you just quickly…”) can mean a costly switch.
+
+Helpful supports include warnings before transitions, visual schedules, body-doubling (doing a task alongside someone), and starting with a tiny first step. Understanding inertia as a real phenomenon, not a choice, reduces a lot of frustration.
+research:
+Autistic inertia is primarily a community term. A 2021 study by Karen Buckle and colleagues was among the first to explore it formally, based on autistic adults’ accounts. Research on task-switching costs in general cognitive psychology, and on executive function in autism and ADHD, supports that switching can be effortful. Body-doubling is widely reported to help but is not well researched.
+links:
+/frequency-framework.html | The Frequency Framework
+/wired-differently-in-depth.html#adhd | Wired Differently in depth: ADHD
+talk:
+- Which transitions in our day are hardest for each of us?
+- Would warnings before switching help?
+- Are there chores that would be easier if done side by side?
+
+@@ big-five | Personality: the Big Five
+pillars: IV
+aka: personality, Big Five, OCEAN, openness, conscientiousness, extraversion, agreeableness, neuroticism, MBTI
+nut: The Big Five is the most widely supported model of personality: openness, conscientiousness, extraversion, agreeableness and neuroticism (emotional sensitivity). Each is a spectrum, not a type.
+deep:
+Openness describes curiosity and enjoyment of new ideas. Conscientiousness covers organisation and follow-through. Extraversion is about sociability and energy from company. Agreeableness is warmth and cooperation. Neuroticism, sometimes called emotional stability in reverse, is the tendency to feel negative emotions strongly.
+
+Differences in these traits explain many household frictions. A highly conscientious person may find a less conscientious partner’s approach stressful; an extravert may want more social plans than an introvert. Neither is wrong.
+
+Personality tends to shift gradually across life, typically becoming more conscientious, more agreeable and more emotionally stable with age. It is also partly situational: people behave differently at work and home.
+
+Popular type tests, like the Myers–Briggs, sort people into boxes. Research suggests personality is better described with continuous dimensions, and type tests have weaker reliability.
+research:
+The Big Five emerged from lexical research by Lewis Goldberg and others, and from questionnaire research by Robert McCrae and Paul Costa, from the 1980s. Brent Roberts and colleagues’ 2006 meta-analysis showed average personality change across adulthood. The MBTI is widely used in workplaces but has been criticised for test–retest reliability and for forcing continuous traits into types.
+links:
+/wiring-card.html | The wiring card
+/frequency-framework.html | The Frequency Framework
+talk:
+- Where do each of us sit on the five traits?
+- Which trait difference causes the most friction between us?
+- How have our personalities changed over time?
+
+@@ introversion | Introversion and extraversion
+pillars: IV
+aka: introvert, extravert, extrovert, social battery, needing alone time, recharging
+nut: Introversion and extraversion describe how people tend to respond to social stimulation. Extraverts often feel energised by company; introverts often need quiet to recharge. Most people are somewhere in between.
+deep:
+Introversion isn’t shyness (which is about social anxiety) or dislike of people. Introverts can enjoy company very much and still need time alone afterwards.
+
+In relationships, differences can be misread. An extravert may feel rejected when an introvert partner wants a quiet evening; the introvert may feel pressured by a full social calendar. Agreeing on a rhythm, such as some evenings in, some out, and recovery time after big events, helps.
+
+Interestingly, research suggests that most people, including introverts, often feel good when acting in more extraverted ways, at least in the short term. But constantly acting against type can be tiring, which fits many introverts’ experience.
+research:
+Extraversion is one of the Big Five traits and one of the most studied. Susan Cain’s *Quiet* (2012) popularised introversion. William Fleeson and colleagues’ research (for example 2002) found that acting extraverted was associated with positive feelings for most people. Later work found that sustained extraverted behaviour can be tiring for introverts.
+links:
+/frequency-framework.html | The Frequency Framework
+/workpapers/wp-02-battery-stress-meter.html | How full is your battery? (WP-02)
+talk:
+- Where are each of us on the introvert–extravert scale?
+- How much alone time does each of us need after a busy week?
+- How could we plan social time that suits both of us?
+
+@@ chronotypes | Chronotypes: morning larks and night owls
+pillars: IV, III
+aka: chronotype, morning person, night owl, lark, social jetlag, body clock
+nut: Chronotype is your natural preference for when to sleep and when you are most alert. People really do differ, partly for biological reasons, and mismatched chronotypes can make shared schedules tricky.
+deep:
+Some people are naturally alert early and sleepy early; others come alive in the evening. These preferences are partly genetic and change with age: teenagers tend to be later types; older adults tend to be earlier.
+
+Social jetlag describes the mismatch between a person’s body clock and their schedule. Night owls forced into early starts can feel chronically short of sleep.
+
+In a household, chronotype affects when conversations go well. A morning person may raise topics at breakfast when the night owl is barely awake; the night owl may want to talk at eleven when the morning person is fading. Agreeing on good talking times is a simple, kind adjustment.
+research:
+The Morningness–Eveningness Questionnaire was developed by James Horne and Olov Östberg in 1976. Till Roenneberg and colleagues introduced social jetlag in 2006 (with Marc Wittmann). Research supports genetic contributions to chronotype and links social jetlag with poorer wellbeing, though causal direction is still studied.
+links:
+/frequency-framework.html | The Frequency Framework: agree when you’ll meet
+/quick-checks.html#today | Today’s Weather
+talk:
+- Are we both larks, both owls, or one of each?
+- When is each of us at our best for a serious conversation?
+- Does our schedule fit our body clocks?
+
+@@ intolerance-of-uncertainty | Intolerance of uncertainty
+pillars: III, IV
+aka: uncertainty, need for certainty, not knowing, worry, anxiety about plans, changes of plan
+nut: Intolerance of uncertainty is a tendency to find not knowing especially distressing. It is linked with worry and anxiety, and it helps explain why sudden changes of plan can hit some people much harder than others.
+deep:
+Some people shrug off an unexpected change: “okay, we’ll go tomorrow instead.” For others, uncertainty feels deeply uncomfortable, and they may ask lots of questions, want firm plans or feel unsettled for hours.
+
+Intolerance of uncertainty is common in anxiety, OCD and autism, though it is a spectrum in the general population too. It isn’t about control for its own sake; it is about reducing a genuinely unpleasant feeling.
+
+Practical support can include sharing plans early, giving warnings before changes, being clear about what is known and unknown, and agreeing a default when plans are uncertain. For the person themselves, gradually practising tolerating small uncertainties is a common therapeutic approach.
+research:
+Michel Dugas, Mark Freeston and Robert Ladouceur developed the concept in the 1990s, initially in research on generalised anxiety. Nicholas Carleton (2016) argued it is a fundamental fear across many anxiety-related conditions. Studies link it to autism too, and some researchers suggest it may explain part of the link between autism and anxiety.
+links:
+/wired-differently-in-depth.html#anxiety | Wired Differently in depth: anxiety
+/wired-differently-in-depth.html#ocd | Wired Differently in depth: OCD
+talk:
+- How does each of us react to sudden changes of plan?
+- What information helps when plans are uncertain?
+- Could we agree on defaults for uncertain situations?
+
+@@ spoon-theory | Spoon theory and energy budgets
+pillars: III, I
+aka: spoon theory, spoons, spoonie, energy accounting, limited energy
+nut: Spoon theory is a metaphor, written by Christine Miserandino, for living with limited daily energy. Each activity costs spoons, and when they run out, they run out. Many people with chronic illness or neurodivergence find it useful.
+deep:
+Miserandino explained her experience of living with lupus to a friend using spoons from a café table: each task, like getting dressed or making lunch, cost a spoon, and she only had so many each day. It captured something hard to explain: energy that is limited, has to be budgeted, and doesn’t always come back overnight.
+
+The metaphor spread widely, particularly in chronic illness and disabled communities, and among neurodivergent people who find that social and sensory demands drain energy fast. A related idea, energy accounting, involves tracking what drains and what restores energy.
+
+The program’s battery meter works in a similar spirit: a quick way of saying “I have this much today,” so that plans and conversations can fit.
+research:
+Miserandino published “The Spoon Theory” online in 2003. It is a community metaphor rather than a research model. Research on fatigue in chronic illness and autism supports the underlying experience of limited, variable energy.
+links:
+/workpapers/wp-02-battery-stress-meter.html | How full is your battery? (WP-02)
+/quick-checks.html#today | Today’s Weather
+talk:
+- What costs you the most spoons in a typical day?
+- What restores your energy best?
+- Could we share our energy levels in a quick, simple way each day?
+
+@@ mixed-neurotype-couples | When two different wirings share a home
+pillars: IV
+aka: neurodiverse couples, mixed neurotype, autistic and non-autistic partners, ADHD relationships
+nut: When partners have different neurotypes, many everyday frictions come from mismatched needs and communication styles, not from lack of love. Naming the differences and designing around them often helps more than trying harder.
+deep:
+Common patterns include one person needing more directness and the other using hints; one needing quiet and the other enjoying busy; one relying on routines and the other on spontaneity; one managing the household systems and the other struggling with executive function.
+
+Each person’s natural way can feel like a default that the other is failing to meet. Seeing both as valid, with neither as the norm, is a big shift.
+
+Practical tools that help include written agreements, clear ownership of tasks, planned times for important talks, sensory accommodations, explicit communication about needs, and plenty of appreciation for effort that the other might not see. These are also good ideas for any couple.
+research:
+Research on neurodiverse couples is limited but growing, mostly qualitative. Studies of couples where one partner has ADHD report common patterns around household tasks and emotional regulation. The double empathy framework offers a useful lens for mutual misunderstanding.
+links:
+/wired-differently.html#dynamics | Wired Differently: dynamics
+/wiring-card.html | The wiring card
+/relationships.html#partners | How it fits: partners
+talk:
+- Which of our frictions might be about wiring rather than caring?
+- What would each of us put on a card about how we work best?
+- Which accommodations would help both of us?

@@ -1,0 +1,306 @@
+#slug: calm
+#title: Calm and attention
+#pillars: III
+#blurb: Slow breathing, mindfulness, nature, music, breaks, phones, mind-wandering and flow, with modest, honest claims.
+#pillarnote: Calm and attention is Pillar III, Read your state first. In you, it offers ways to notice and shift your state: slow breathing, grounding, rest and attention. Between you, it helps you choose better moments to talk, protect each other’s recovery time and be present rather than half-listening.
+#intro: The program has a calm-down kit, a night garden and a soundscape library. These entries set out what research says about the ideas behind them: some tools have reasonable evidence for short-term calm, some are popular but little studied, and none are treatments. The aim is to help you choose what might suit you, knowing what is established and what is simply pleasant.
+
+@@ slow-breathing | Slow breathing
+pillars: III
+aka: slow breathing, breathing exercises, deep breathing, resonance breathing, long exhale, calm breathing
+nut: Breathing slowly, often around six breaths a minute, with a longer out-breath, is one of the simplest ways to feel calmer in the moment. Evidence suggests modest short-term effects on feelings of stress and relaxation.
+deep:
+Breathing is unusual: it runs automatically but can also be controlled. Slowing it down, particularly lengthening the out-breath, is associated with changes in heart-rate patterns linked with relaxation.
+
+Many techniques exist: counting breaths, breathing in for four and out for six, or following a visual guide. Research on “resonance” breathing, around six breaths per minute, has explored why this pace seems to have particular effects on heart-rate variability.
+
+Slow breathing is useful because it can be done anywhere, quickly, without anyone noticing. It won’t solve the problem that caused the stress, but it can make it easier to think clearly enough to deal with it.
+research:
+A 2018 systematic review by Andrea Zaccaro and colleagues found that slow breathing was associated with changes in heart-rate variability and with increased comfort, relaxation and alertness, and reduced arousal, though many studies were small. Paul Lehrer and Richard Gevirtz (2014) reviewed resonance-frequency breathing and biofeedback. Effects are real but modest, and most studies measure short-term changes.
+links:
+/wp-11.html | The Calm-Down Kit (WP-11)
+/night-garden.html | The Night Garden
+talk:
+- Have you ever tried slow breathing when stressed? Did it help?
+- Which breathing pace feels comfortable to you?
+- When could we use a few slow breaths before a hard talk?
+
+@@ box-breathing | Box breathing
+pillars: III
+aka: box breathing, square breathing, four four four four, tactical breathing
+nut: Box breathing means breathing in, holding, breathing out and holding again, each for a count of about four. It is popular in the military and among first responders; specific research on it is limited.
+deep:
+Box breathing gives the mind a simple task (counting) and slows breathing down. Some people find the holds calming and the structure helpful; others find holding the breath uncomfortable, especially when anxious.
+
+It is a form of paced breathing, so its effects probably come from the same mechanisms as slow breathing in general. If the holds feel uncomfortable, a simple pattern with a longer out-breath and no holds may suit better.
+
+As with all breathing tools, it helps to practise when calm, so it is familiar when needed.
+research:
+Box breathing is widely taught but has little direct research compared with slow breathing more generally. A 2023 study by Melis Yilmaz Balban and colleagues compared several breathing practices and mindfulness over a month and found all improved mood, with cyclic sighing (a longer exhale) showing somewhat larger effects than box breathing in that small study.
+links:
+/wp-11.html | The Calm-Down Kit (WP-11)
+/night-garden.html | The Night Garden
+talk:
+- Does holding your breath feel calming or uncomfortable?
+- Would you prefer counting or a simpler long out-breath?
+- When could you practise so it’s ready when needed?
+
+@@ physiological-sigh | The long exhale and cyclic sighing
+pillars: III
+aka: physiological sigh, cyclic sighing, double inhale, long exhale, sighing
+nut: A physiological sigh is a double in-breath followed by a long, slow out-breath. Practising it, called cyclic sighing, showed calming effects on mood in one small study; it is a simple tool worth trying.
+deep:
+People sigh naturally, often without noticing, especially when stressed or when breathing has been shallow. Researchers have studied the brain circuits that produce sighs.
+
+Cyclic sighing turns this into a practice: inhale through the nose, take a second short inhale to fill the lungs, then exhale slowly through the mouth. Repeat for a few minutes.
+
+It has become popular partly through podcasts. The research behind it is promising but limited, so it is best treated as one option among several calming tools.
+research:
+Peng Li and colleagues, including Jack Feldman and Mark Krasnow, identified brain circuits that control sighing in mice (2016). Balban and colleagues’ 2023 study in *Cell Reports Medicine* randomised about a hundred participants to five minutes a day of cyclic sighing, box breathing, cyclic hyperventilation or mindfulness meditation for a month; all groups improved in mood, with cyclic sighing showing the greatest improvement in positive feelings. It is one study, and replication is needed.
+links:
+/wp-11.html | The Calm-Down Kit (WP-11)
+/quick-checks.html#ladder | The nervous-system self-check
+talk:
+- Do you notice yourself sighing when stressed?
+- Would you like to try a few minutes of cyclic sighing together?
+- Which calming tools feel most natural to you?
+
+@@ grounding | Grounding: coming back to the present
+pillars: III
+aka: grounding, 5 4 3 2 1, five senses, grounding techniques, present moment
+nut: Grounding techniques bring attention back to the here and now, often through the senses. The popular 5-4-3-2-1 exercise (five things you see, four you hear, and so on) is widely taught, though it has little direct research.
+deep:
+When someone is swept up in worry or strong emotion, their attention is often in the past or future. Grounding shifts attention to what is happening now: the feel of feet on the floor, sounds in the room, the temperature of the air.
+
+The 5-4-3-2-1 exercise asks you to notice five things you can see, four you can touch, three you can hear, two you can smell and one you can taste. It is simple, memorable and can be done anywhere.
+
+Other grounding methods include holding something cold, naming objects in the room, or describing surroundings aloud. Different people find different methods helpful.
+research:
+Grounding techniques are widely used by therapists, but specific methods like 5-4-3-2-1 have little direct research. They draw on principles from mindfulness and attentional control, which have more evidence. They are best seen as practical, low-risk tools.
+links:
+/wp-11.html | The Calm-Down Kit (WP-11)
+/night-garden.html | The Night Garden
+talk:
+- Which senses help you feel most present?
+- Would a simple grounding exercise help during tense moments?
+- What objects around us could be grounding reminders?
+
+@@ progressive-muscle-relaxation | Progressive muscle relaxation
+pillars: III
+aka: progressive muscle relaxation, PMR, tensing and relaxing muscles, body relaxation, Jacobson
+nut: Progressive muscle relaxation involves tensing and then releasing muscle groups one by one. It was developed in the 1930s and has a reasonable evidence base for reducing feelings of tension.
+deep:
+Edmund Jacobson observed that physical tension and anxiety go together, and that learning to release muscle tension can help people feel calmer. His original method was long; shorter versions were developed later.
+
+A simple version: starting with the feet, tense each muscle group for a few seconds, then let go and notice the difference. Move up through the body.
+
+PMR can be helpful before sleep or after a stressful day. It also builds awareness of where you hold tension, which can help you notice stress earlier.
+research:
+Jacobson published *Progressive Relaxation* in 1938. Research over decades, including meta-analyses, supports PMR for reducing self-reported anxiety and stress, with moderate effects in many studies. It is often used as part of broader stress-management programmes.
+links:
+/wp-11.html | The Calm-Down Kit (WP-11)
+/night-garden.html | The Night Garden
+talk:
+- Where in your body do you hold tension?
+- Could PMR fit into an evening routine?
+- Do you notice tension before or after you feel stressed?
+
+@@ mindfulness | Mindfulness
+pillars: III
+aka: mindfulness, meditation, being present, MBSR, mindful, awareness
+nut: Mindfulness means paying attention to the present moment, on purpose and without judgement. Research suggests mindfulness programmes have modest benefits for stress and wellbeing, and warns against the hype.
+deep:
+Jon Kabat-Zinn adapted meditation practices into Mindfulness-Based Stress Reduction (MBSR) in 1979, and mindfulness has since spread into healthcare, schools and workplaces.
+
+Mindfulness practice often involves attending to the breath, body sensations or sounds, and gently returning attention when it wanders. The aim isn’t to empty the mind but to notice thoughts and feelings without being carried away by them.
+
+Mindfulness can support relationships by helping people notice their reactions before acting on them. But it isn’t for everyone; some people find sitting with their thoughts unpleasant, and more active forms of practice may suit them better.
+research:
+A 2014 meta-analysis by Madhav Goyal and colleagues found moderate evidence that meditation programmes improved anxiety, depression and pain, with effects similar to other active approaches rather than superior. Nicholas Van Dam and colleagues’ 2018 paper “Mind the Hype” warned about overstated claims and inconsistent definitions. Research on mindfulness in couples is limited but generally positive.
+links:
+/night-garden.html | The Night Garden
+/wp-11.html | The Calm-Down Kit (WP-11)
+talk:
+- Have you tried mindfulness? What was it like?
+- Does sitting still with your thoughts help or make things worse for you?
+- Could a few minutes of quiet together be a ritual?
+
+@@ attention-restoration | Attention restoration and nature
+pillars: III
+aka: attention restoration theory, nature, green space, walks in nature, Kaplan, being outdoors
+nut: Attention restoration theory suggests that nature helps restore the kind of focused attention that gets tired with effortful work. Research on nature and wellbeing is encouraging but mixed in its details.
+deep:
+Rachel and Stephen Kaplan distinguished directed attention (effortful focus, like work or managing household logistics) from effortless attention (being drawn to something interesting, like leaves moving or water flowing). Nature, they argued, engages the second kind, giving the first a rest.
+
+Another view, Roger Ulrich’s stress reduction theory, suggests nature reduces stress directly because humans evolved in natural settings.
+
+For households, this suggests that a walk outside, time in a park or even plants and window views might help people recover after demanding days. The effects are not dramatic, but the cost is low.
+research:
+The Kaplans published *The Experience of Nature* in 1989; Stephen Kaplan developed the theory in 1995. Marc Berman, John Jonides and Kaplan (2008) found improvements in attention after a nature walk compared with an urban walk. Ulrich’s 1984 study found hospital patients with a view of trees recovered somewhat differently from those facing a wall. A 2016 review by Heather Ohly and colleagues found mixed evidence for attention restoration effects.
+links:
+/night-garden.html | The Night Garden
+/soundscapes.html | Soundscapes
+talk:
+- Does time outside help you feel restored?
+- Could a regular walk together fit into our week?
+- What natural things could we bring into our home?
+
+@@ music-and-mood | Music and mood
+pillars: III
+aka: music, listening to music, music and stress, calming music, soundscapes, songs
+nut: Listening to music can change mood and help people relax. Research suggests modest effects on stress, which vary with personal preference and context.
+deep:
+Music affects people through several routes: its rhythm can influence arousal, its associations can bring back memories, and it can evoke emotions directly. What works depends on the person: one person finds classical music calming; another finds it boring.
+
+Patrik Juslin and Daniel Västfjäll described several mechanisms, including brainstem reflexes, rhythmic entrainment, emotional contagion, memories and expectations.
+
+Music can also be a shared ritual: cooking together to a playlist, or listening quietly in the evening. It can help set a mood for a conversation, or signal a transition from work to home.
+research:
+Juslin and Västfjäll published their mechanisms framework in 2008. A 2020 meta-analysis by Martina de Witte and colleagues found small-to-moderate effects of music on reducing stress-related measures. Effects depend on the music, the listener and the setting, and many studies are small.
+links:
+/soundscapes.html | Soundscapes
+/echoes-of-gold.html | Echoes of Gold
+talk:
+- What music calms you, and what lifts your mood?
+- Could music help us transition from work to home?
+- Do we have music we both enjoy?
+
+@@ breaks | Breaks and recovery
+pillars: III
+aka: breaks, micro breaks, rest, recovery, taking a break, downtime
+nut: Short breaks during demanding work are linked with feeling more energetic and less tired. Recovery, time when demands are switched off, matters for wellbeing.
+deep:
+Sabine Sonnentag has studied recovery from work, identifying experiences that help: psychological detachment (not thinking about work), relaxation, mastery (learning something new) and control over free time.
+
+For people whose home life is also demanding, recovery can be scarce. The person carrying the mental load may never fully detach, because home tasks are always there.
+
+Protecting some recovery time for each person, and making sure it is shared fairly, is part of fair division of household labour. Rest isn’t laziness; it is part of keeping going.
+research:
+Sonnentag and Charlotte Fritz published a recovery experience questionnaire in 2007. A 2022 meta-analysis by Patricia Albulescu and colleagues found that micro-breaks had small positive effects on vigour and reduced fatigue. Research on recovery is extensive and generally consistent.
+links:
+/workpapers/wp-02-battery-stress-meter.html | How full is your battery? (WP-02)
+/pause-and-play.html | Pause and play
+talk:
+- When does each of us get real downtime?
+- Is recovery time shared fairly between us?
+- What helps you detach from work, or from household tasks?
+
+@@ task-switching | Task switching and multitasking
+pillars: I, III
+aka: multitasking, task switching, interruptions, divided attention, doing two things at once
+nut: The brain doesn’t truly do two demanding things at once; it switches between them, and each switch has a cost. Frequent interruptions make tasks take longer and feel more tiring.
+deep:
+Research on task switching shows that moving from one task to another takes time and reduces accuracy, especially for complex tasks. What feels like multitasking is often rapid switching.
+
+In households, the person who is constantly interrupted, answering questions, finding things, reminding, often ends the day exhausted even if they didn’t do anything large. This is part of the mental load.
+
+Reducing interruptions helps: batching questions, using shared lists rather than asking, and protecting focused time for each person.
+research:
+Joshua Rubinstein, David Meyer and Jeffrey Evans published on task-switching costs in 2001. Eyal Ophir, Clifford Nass and Anthony Wagner (2009) found that heavy media multitaskers performed worse on some attention tasks, though later studies found mixed results. Research by Gloria Mark on workplace interruptions found people often take a long time to return to an interrupted task.
+links:
+/book/preface.html | Unseen work quietly adds up (Preface)
+/workpapers/wp-03-raci-treaty.html | One owner per job (WP-03)
+talk:
+- Who gets interrupted most in our home?
+- Could we batch questions or use a shared list instead?
+- When does each of us need uninterrupted time?
+
+@@ phones-and-presence | Phones and presence
+pillars: IV, V
+aka: phubbing, phones, screen time, distracted by phone, technoference, being present
+nut: “Phubbing” means ignoring someone in favour of your phone. Research links it with lower relationship satisfaction. The effect of phones merely being present is less certain.
+deep:
+Brandon McDaniel and Sarah Coyne coined “technoference” for everyday interruptions by technology in couples’ time together. James Roberts and Meredith David studied partner phubbing and found it was associated with more conflict and lower satisfaction.
+
+Phones also compete with bids for connection. A partner who looks up to share something and finds the other absorbed in a screen may stop trying.
+
+Some couples find simple agreements helpful: no phones at meals, phones away during check-ins, or a signal to put phones down when one person wants to talk.
+research:
+McDaniel and Coyne published on technoference in 2016; Roberts and David published on partner phubbing in 2016. Andrew Przybylski and Netta Weinstein (2013) reported that the mere presence of a phone reduced closeness in conversations, but later replication attempts had mixed results. Most phubbing research is correlational.
+links:
+/turning-toward.html#bids | Turning Toward: bids
+/workpapers/wp-13-pll-protocol.html | The daily check-in (WP-13)
+talk:
+- Do phones get in the way of our time together?
+- What phone agreements might suit us?
+- How could we signal “I’d like your full attention”?
+
+@@ mind-wandering | Mind-wandering
+pillars: III
+aka: mind wandering, daydreaming, distracted, wandering mind, not present
+nut: People’s minds wander a lot, by one estimate close to half of waking time. In one large study, people were less happy when their minds wandered than when focused, though mind-wandering also has benefits.
+deep:
+Matthew Killingsworth and Daniel Gilbert used a phone app to ask people at random moments what they were doing, whether they were thinking about it, and how they felt. Minds wandered frequently, and people tended to report lower happiness while wandering, especially to unpleasant topics.
+
+Mind-wandering isn’t all bad. It supports planning, creativity and making sense of experiences. Problems arise when it turns into rumination.
+
+In relationships, a wandering mind during conversation can look like disinterest. Noticing and gently returning attention is a small act of care.
+research:
+Killingsworth and Gilbert published in *Science* in 2010, with data from thousands of people. Jonathan Smallwood and Jonathan Schooler have reviewed the costs and benefits of mind-wandering. The happiness finding is correlational, and later work suggests the content of wandering thoughts matters.
+links:
+/night-garden.html | The Night Garden
+/turning-toward.html#bids | Turning Toward: bids
+talk:
+- Where does your mind go when it wanders?
+- Do you notice when you drift in conversations?
+- When is mind-wandering helpful for you?
+
+@@ flow | Flow
+pillars: III
+aka: flow, in the zone, absorbed, deep focus, Csikszentmihalyi
+nut: Flow is the state of being fully absorbed in a challenging but manageable activity, so that time seems to disappear. Mihaly Csikszentmihalyi found it is one of the most enjoyable states people describe.
+deep:
+Flow tends to happen when the challenge of a task matches the person’s skill, goals are clear, and feedback is immediate. Too easy and it is boring; too hard and it is anxious.
+
+People find flow in many places: work, sport, music, games, crafts, cooking. Sharing flow activities can be a way of connecting.
+
+Flow also relates to how interruptions feel. Being pulled out of flow can be jarring, which can cause friction when one person is absorbed and the other needs something. Agreeing on signals and timing helps.
+research:
+Csikszentmihalyi published *Flow* in 1990, based on decades of research including experience sampling. Flow is widely studied in sport, education and work. It is a well-established concept, although measuring it precisely is difficult.
+links:
+/pause-and-play.html | Pause and play
+/frequency-framework.html | The Frequency Framework
+talk:
+- When do you most often experience flow?
+- How does it feel to be interrupted in flow?
+- Is there an activity we could share that brings flow for both of us?
+
+@@ boredom-and-rest | Doing nothing, boredom and rest
+pillars: III
+aka: boredom, doing nothing, quiet time, being alone with thoughts, stillness
+nut: Many people find it surprisingly hard to sit quietly with their thoughts. Yet some unstructured time seems to help people recover and think.
+deep:
+Timothy Wilson and colleagues found that many participants, left alone in a room for several minutes, preferred to give themselves a mild electric shock rather than just think. The study became famous for showing how uncomfortable doing nothing can be.
+
+Boredom isn’t always bad. It can signal that something needs to change, and it can prompt creativity. Constant stimulation, from phones and screens, leaves little room for this.
+
+Some couples value quiet time together: reading in the same room, sitting outside without talking. For people who find silence uncomfortable, gentle activities like walking can provide similar space.
+research:
+Wilson and colleagues published their study in *Science* in 2014. Research on boredom, by James Danckert, John Eastwood and others, describes it as a signal to seek engagement. Research on the benefits of unstructured time is still developing.
+links:
+/night-garden.html | The Night Garden
+/pause-and-play.html | Pause and play
+talk:
+- How do you feel about doing nothing?
+- Could we enjoy quiet time together more often?
+- What happens when you let yourself be bored?
+
+@@ environment-and-mood | Home environment and mood
+pillars: III, II
+aka: clutter, messy home, tidy home, home environment, space, cluttered house
+nut: Our surroundings can affect how we feel. Some research links a cluttered home with higher stress for some people, though the effect depends a lot on the person.
+deep:
+Darby Saxbe and Rena Repetti found that women who described their homes with more words about clutter and unfinished projects showed stress-hormone patterns associated with more stress, while this pattern wasn’t found in men in the same study. The study was small, but it fits many people’s experience.
+
+People differ widely in how much mess bothers them, which is a common source of household friction. For some, clutter is background noise; for others, it is a constant low-level alarm.
+
+Agreeing on some calm spaces, even just one room or corner that stays tidy, can be a practical compromise between different thresholds.
+research:
+Saxbe and Repetti published their study in 2010, based on a small sample of dual-earner couples. Research on environmental psychology more broadly shows that surroundings can influence mood and stress, but effects vary. It is best seen as a helpful observation rather than a strong general rule.
+links:
+/workpapers/wp-03-raci-treaty.html | One owner per job (WP-03)
+/book/chapter-4-in-depth.html#gating | Chapter IV in depth: sensory gating
+talk:
+- Does clutter affect how you feel?
+- Is there a space in our home that could be kept calm?
+- How do our thresholds for mess differ?

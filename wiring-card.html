@@ -94,7 +94,8 @@ input[type=text]{width:100%;border:1px solid var(--line);background:var(--bg);bo
     <p class="kicker">Tool &middot; Pairs with <a href="wired-differently.html#card">the wiring card</a> in Wired Differently</p>
     <h1>Wiring Card</h1>
     <p class="lede">Fill in how you actually receive words. The card on the right updates as you go. Print it, or copy it, and give it to the people you live and work with before a hard conversation, not during one.</p>
-    <p class="privacy">Runs in your browser. Nothing you type is saved, stored, or sent. This is not a diagnosis, and it is not a contract. When you are depleted, every line gets stricter.</p>
+    <p class="privacy">Runs in your browser. Nothing you type is saved, stored, or sent. This is not a diagnosis, and it is not a contract. When you are running low, every line applies more strictly.</p>
+    <p class="privacy pillar-note">The Wiring Card puts <a href="/five-pillars.html#tune-signals">Pillar IV, Tune how you send and receive</a> to work. In you: you name your own wiring, pace and how you hear things. Between you and others: people learn how to send a request so it lands, and a mismatch becomes tuning, not a moral failing.</p>
   </header>
 
   <div class="layout">
@@ -103,7 +104,7 @@ input[type=text]{width:100%;border:1px solid var(--line);background:var(--bg);bo
   </div>
 
   <div class="note">
-    <b>What this is for.</b> A card is a receipt, not a label, and not a license to criticize or proof of bad intent. One topic still applies. The <a href="check-ins.html#ground">ground rules</a> are how the room uses what you wrote here. It tells someone how to send a request so it arrives. It does not obligate them to manage you, and it does not obligate you to stay available in every state. Pair it with the <a href="signal-translator.html">Signal Translator</a> when you want to test one sentence, and with <a href="check-ins.html">Check-ins</a> when the topic itself needs a safe room. The explanations are in <a href="wired-differently.html">Wired Differently</a>.
+    <b>What this is for.</b> A card is a simple note about how you take in words. It is not a label, not permission to criticize, and not proof of bad intent. It tells someone how to send a request so it gets through. It doesn't make them responsible for managing you, and it doesn't mean you have to be available no matter how you feel. Stick to one topic at a time. The <a href="check-ins.html#ground">ground rules</a> explain how to use what you wrote here in a conversation. Pair the card with the <a href="signal-translator.html">Signal Translator</a> when you want to test one sentence, and with <a href="check-ins.html">Check-ins</a> when the topic needs a calm, safe space. <a href="wired-differently.html">Wired Differently</a> explains the ideas behind it.
   </div>
 </div>
 <script>
@@ -124,7 +125,7 @@ input[type=text]{width:100%;border:1px solid var(--line);background:var(--bg);bo
     {id:"upset", q:"When I'm upset, I need", opts:[["space","Space first, then a return time"],["company","Quiet company"],["talk","To talk it through"],["plan","A written plan"],["hug","A gesture, only if I ask"],["signal","A signal that we are still okay"]]},
     {id:"avoid", q:"Please avoid", opts:[["sarcasm","Sarcasm when it matters"],["calm","\"Calm down\""],["loud","Loud voices"],["long","Long texts or many topics at once"],["hints","Hints instead of the ask"],["always","Always, never, and labels"],["public","Correcting me in public"],["surprise","A hard topic with no warning"]]},
     {id:"ask", q:"A request lands best as", opts:[["could","\"Could you ___ by ___?\""],["list","One written list, not a stack of hints"],["headline","The ask in the first sentence"],["choice","Two clear options, not an open guess"]]},
-    {id:"depleted", q:"When I'm depleted, tighten this", opts:[["shorter","Shorter messages"],["writing","Writing only"],["volume","Lower volume and fewer people"],["notopic","Don't add a second topic"],["return","Name a return time, then give space"]]}
+    {id:"depleted", q:"When I'm running low, what helps", opts:[["shorter","Shorter messages"],["writing","Writing only"],["volume","Lower volume and fewer people"],["notopic","Don't add a second topic"],["return","Name a return time, then give space"]]}
   ];
 
   const people = ["A"];
@@ -158,7 +159,7 @@ input[type=text]{width:100%;border:1px solid var(--line);background:var(--bg);bo
     const title = who==="A" ? "Your card" : "The other person's card";
     let h = '<section class="panel" data-who="'+who+'">';
     h += '<h2>'+title+'</h2>';
-    h += '<p class="hint">Pick what is usually true. Add a few words where the chips are not enough. Leave a line blank if it does not apply.</p>';
+    h += '<p class="hint">Pick what is usually true for you. Add a few words where the buttons are not enough. Leave a line blank if it does not apply.</p>';
     h += '<label class="lab" for="name'+who+'">Name on the card, optional</label>';
     h += '<input id="name'+who+'" data-name="'+who+'" type="text" maxlength="60" placeholder="Alex" value="'+esc(st.name)+'">';
     h += '<span class="lab">How I describe my wiring, optional</span>';
@@ -203,7 +204,7 @@ input[type=text]{width:100%;border:1px solid var(--line);background:var(--bg);bo
         const empty = !t;
         return '<dt>'+esc(line.q)+'</dt><dd class="'+(empty?"empty":"")+'">'+(empty?"Not filled in yet":esc(t))+'</dd>';
       }).join("");
-      return '<article class="sheet"><p class="ck">WIRING CARD &middot; NOT A DIAGNOSIS</p><h2>'+esc(name)+'</h2>'+(wire?'<p class="wire">'+esc(wire)+'</p>':'<p class="wire">Wiring not listed. That is fine.</p>')+'<dl>'+rows+'</dl><p class="fine">Stricter when depleted. Not a contract, and not a label. Change it when it stops being true. Objective Ledger &middot; spreadloveandacceptance.com/wiring-card.html</p></article>';
+      return '<article class="sheet"><p class="ck">WIRING CARD &middot; NOT A DIAGNOSIS</p><h2>'+esc(name)+'</h2>'+(wire?'<p class="wire">'+esc(wire)+'</p>':'<p class="wire">Wiring not listed. That is fine.</p>')+'<dl>'+rows+'</dl><p class="fine">Applies more strictly when I am running low. Not a contract, and not a label. Change it when it stops being true. Objective Ledger &middot; spreadloveandacceptance.com/wiring-card.html</p></article>';
     }).join("") + '<div class="actions"><button class="go" type="button" id="copy">Copy the card</button><button class="ghost" type="button" id="print">Print</button></div>';
     $("#copy").addEventListener("click", copyCard);
     $("#print").addEventListener("click", ()=>window.print());
@@ -219,7 +220,7 @@ input[type=text]{width:100%;border:1px solid var(--line);background:var(--bg);bo
       const t = lineText(who, line);
       if(t) lines.push(line.q+": "+t);
     });
-    lines.push("Not a diagnosis. Stricter when depleted. Not a contract.");
+    lines.push("Not a diagnosis. Applies more strictly when I am running low. Not a contract.");
     return lines.join("\n");
   }
 
