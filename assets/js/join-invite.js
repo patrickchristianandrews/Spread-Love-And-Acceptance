@@ -70,7 +70,8 @@
       '<p>Pop in your email and every chapter, workpaper and tool opens right away in this browser. You’ll get a short, friendly note when something new arrives. No payment, and you can unsubscribe any time.</p>' +
       form('tol-join-b') +
       '<p class="tol-join-small">Already joined on another device? Enter the same email here to open everything.</p>';
-    main.insertBefore(b, main.firstElementChild);
+    var intro = main.querySelector('[data-home-intro]'); // right under the one-line "what this is"
+    main.insertBefore(b, intro ? intro.nextElementSibling : main.firstElementChild);
     wire(b);
   }
 

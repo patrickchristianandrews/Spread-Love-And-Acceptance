@@ -750,7 +750,8 @@
       hi.querySelector('.tol-puddles-hi-go').focus();
     });
     var main = document.querySelector('main');
-    if (main) main.insertBefore(hi, main.firstChild); else body.appendChild(hi);
+    var after = main && (main.querySelector('[data-palcam-top]') || main.querySelector('[data-home-intro]')); // below the "what this is" line and the pal cam link
+    if (main) main.insertBefore(hi, after ? after.nextSibling : main.firstChild); else body.appendChild(hi);
     setTimeout(function () { hi.classList.add('is-in'); }, small ? 0 : 600);
   }
 
@@ -1015,7 +1016,9 @@
   function palCamHooks(body) {
     Array.prototype.forEach.call(document.querySelectorAll('[data-palcam-row][hidden]'), function (r) { r.hidden = false; });
     var top = document.querySelector('main [data-palcam-top]'); // the home page's link stays first, above anything added to the top of main
-    if (top && top.parentNode.firstElementChild !== top) top.parentNode.insertBefore(top, top.parentNode.firstElementChild);
+    var intro = document.querySelector('main [data-home-intro]'); // the one-line "what this is" stays at the very top, then the pal cam link
+    var anchorEl = intro ? intro.nextElementSibling : (top && top.parentNode.firstElementChild);
+    if (top && anchorEl !== top) top.parentNode.insertBefore(top, anchorEl);
     document.addEventListener('click', function (e) {
       var b = e.target.closest && e.target.closest('[data-palcam-open]');
       if (!b || window.TOLPalsCam) return; // on the Journey pages the cam handles its own buttons
