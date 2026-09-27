@@ -14,9 +14,9 @@
    Helpers on A: t, dur, cx, span, x0, x1, G, W, H, e(a,b) eased 0..1, p(a,b) linear, out(a,b), back(a,b) overshoot,
    bump(a,b), in(a,b), osc(period, amp, phase), walk(d, from, to, a, b), hop(d, t0, dur, h), flip(d, t0, dur, h, turns, dir),
    spin(d, t0, dur, turns), say(d, text, a, b), once(t), tick(period, from, to), burst(x, y, n, kind, opts), shake(px),
-   head(i), mouth(i), pos(i), headL(i), pup(g, 'drop'|'collar', x, y, scale, face, pose), U (drawing helpers),
+   head(i), mouth(i), pos(i), headL(i), pup(g, 'collar'|'drop', x, y, scale, face, pose), U (drawing helpers),
    dark (it's dusk or night), water, snow, setting, R (reduced motion).
-   Tidbit is T (index 0, looks.drop), Sugarfoot is S (index 1, looks.collar). */
+   Tidbit is T (index 0, looks.collar), Sugarfoot is S (index 1, looks.drop). */
 (function () {
   'use strict';
   var PI = Math.PI, TAU = PI * 2;
@@ -186,9 +186,9 @@
       A.say(S, 'My turn!', 3000, 3700);
       if (A.t >= 3500) { S.x = mix(A.x1, c + 24, A.e(3500, 4300)); A.hop(S, 3500, 800, 54); if (A.t > 4300) { S.pose = 'sit'; S.dy = 4; } }
       if (A.t > 4600 && A.t < 6400) { A.hop(T, 4700, 300, 14); A.hop(S, 5000, 300, 14); A.hop(T, 5300, 300, 14); A.hop(S, 5600, 300, 14); T.wag = S.wag = 3; }
-      if (A.once(1700)) { A.burst(c, A.G - 4, 26, 'drop', { speed: 0.22, spread: 2.2 }); A.shake(2.5); }
-      if (A.once(4300)) A.burst(c, A.G - 4, 22, 'drop', { speed: 0.2, spread: 2.2 });
-      if (A.tick(300, 4700, 6400)) A.burst(c, A.G - 4, 5, 'drop', { speed: 0.12 });
+      if (A.once(1700)) { A.burst(c, A.G - 4, 26, 'collar', { speed: 0.22, spread: 2.2 }); A.shake(2.5); }
+      if (A.once(4300)) A.burst(c, A.G - 4, 22, 'collar', { speed: 0.2, spread: 2.2 });
+      if (A.tick(300, 4700, 6400)) A.burst(c, A.G - 4, 5, 'collar', { speed: 0.12 });
       if (A.t > 6200) A.say(T, 'Ha!', 6300, 7200);
     },
     back: function (g, A) { puddle(g, A.U, A.cx, A.G + 4, 46 + A.bump(1700, 2300) * 8); },
@@ -720,7 +720,7 @@
       g.save(); g.translate(cx, cy); g.rotate(-0.05);
       U.rr(g, -w / 2 - 2, -h / 2 + 3, w + 4, h, 4, 'rgba(40,30,60,.2)'); U.rr(g, -w / 2, -h / 2, w, h, 3, '#FFFFFF');
       g.save(); g.beginPath(); g.rect(-w / 2 + 6, -h / 2 + 6, w - 12, h * 0.72); g.clip(); U.rr(g, -w / 2 + 6, -h / 2 + 6, w - 12, h * 0.72, 0, '#CFE8F7'); U.rr(g, -w / 2 + 6, -h / 2 + 6 + h * 0.55, w - 12, h * 0.2, 0, '#9AD17F');
-      A.pup(g, 'drop', -14 * p, -h / 2 + 6 + h * 0.62, 0.6 * p, 1, 'sit'); A.pup(g, 'collar', 18 * p, -h / 2 + 6 + h * 0.62, 0.6 * p, -1, 'sit'); U.heart(g, 2 * p, -h / 2 + 18 * p, 5 * p, '#E4566E'); g.restore();
+      A.pup(g, 'collar', -14 * p, -h / 2 + 6 + h * 0.62, 0.6 * p, 1, 'sit'); A.pup(g, 'drop', 18 * p, -h / 2 + 6 + h * 0.62, 0.6 * p, -1, 'sit'); U.heart(g, 2 * p, -h / 2 + 18 * p, 5 * p, '#E4566E'); g.restore();
       U.text(g, 'best friends', 0, h / 2 - 12 * p, 9 * p, '#5B4A86', '600'); g.restore();
     } });
 
@@ -886,7 +886,7 @@
         g.save(); g.beginPath(); g.rect(x - 30, y - 90, 60, 69); g.clip();
         U.ell(g, x, by, 9, 8, '#FFFFFF'); U.ell(g, x - 4, by - 12, 2.6, 7, '#FFFFFF', -0.2); U.ell(g, x + 4, by - 12, 2.6, 7, '#FFFFFF', 0.2); U.ell(g, x - 4, by - 12, 1.2, 5, '#F7C9D4', -0.2); U.ell(g, x + 4, by - 12, 1.2, 5, '#F7C9D4', 0.2); U.circle(g, x - 3, by - 1, 1.2, '#3C3350'); U.circle(g, x + 3, by - 1, 1.2, '#3C3350'); U.circle(g, x, by + 2, 1.1, '#F28AA8');
         g.restore();
-        if (A.t > 2600) { var hx = x + 14, hy = by + 2 - A.e(2600, 3000) * 4; U.hat(g, hx, hy, 0.35); if (A.t > 3400) { var tdy = hy - A.back(3400, 3900) * 12, bo = A.t > 4400 && A.t < 5200 ? A.bump(4400, 5200) : 0; g.save(); g.translate(hx, tdy - bo * 16); if (A.in(4400, 5200)) g.rotate(-TAU * A.e(4400, 5200)); A.pup(g, 'drop', 0, 0, 0.24, -1, A.t > 6400 ? 'bow' : 'sit'); g.restore(); } }
+        if (A.t > 2600) { var hx = x + 14, hy = by + 2 - A.e(2600, 3000) * 4; U.hat(g, hx, hy, 0.35); if (A.t > 3400) { var tdy = hy - A.back(3400, 3900) * 12, bo = A.t > 4400 && A.t < 5200 ? A.bump(4400, 5200) : 0; g.save(); g.translate(hx, tdy - bo * 16); if (A.in(4400, 5200)) g.rotate(-TAU * A.e(4400, 5200)); A.pup(g, 'collar', 0, 0, 0.24, -1, A.t > 6400 ? 'bow' : 'sit'); g.restore(); } }
       }
       g.save(); g.translate(x, y - 20); U.hat(g, 0, 0, 1.0); g.restore();
     } });
@@ -941,7 +941,7 @@
       if ((t > 2800 && t < 4600) || (t > 7800 && t < 9300)) U.flame(g, 0, 0, 1.4, A.now);
       U.rr(g, -16, -60, 32, 58, 12, '#F4EFE6'); g.fillStyle = '#E4566E'; g.beginPath(); g.moveTo(-16, -48); g.quadraticCurveTo(0, -84, 16, -48); g.closePath(); g.fill();
       g.fillStyle = '#E4566E'; g.beginPath(); g.moveTo(-16, -18); g.lineTo(-26, -2); g.lineTo(-16, -6); g.closePath(); g.fill(); g.beginPath(); g.moveTo(16, -18); g.lineTo(26, -2); g.lineTo(16, -6); g.closePath(); g.fill();
-      [[-6, -38, 'drop'], [7, -24, 'collar']].forEach(function (w) { U.circle(g, w[0], w[1], 6.5, '#7FB8F0'); g.save(); g.beginPath(); g.arc(w[0], w[1], 5.5, 0, TAU); g.clip(); if (t > 1300) A.pup(g, w[2], w[0] - 10, w[1] + 16, 0.42, 1, 'sit'); g.restore(); });
+      [[-6, -38, 'collar'], [7, -24, 'drop']].forEach(function (w) { U.circle(g, w[0], w[1], 6.5, '#7FB8F0'); g.save(); g.beginPath(); g.arc(w[0], w[1], 5.5, 0, TAU); g.clip(); if (t > 1300) A.pup(g, w[2], w[0] - 10, w[1] + 16, 0.42, 1, 'sit'); g.restore(); });
       g.restore();
     } });
 
@@ -965,7 +965,7 @@
       g.save(); g.beginPath();
       for (var i = 0; i < 8; i++) { var p = clamp(rev * 8 - i, 0, 1); if (p > 0) g.rect(x - w / 2, top + i * h / 8, w * p, h / 8 + 0.5); }
       g.clip(); U.rr(g, x - w / 2, top, w, h, 0, '#CFE8F7'); U.rr(g, x - w / 2, top + h * 0.72, w, h * 0.28, 0, '#9AD17F'); U.circle(g, x + 18, top + 12, 6, '#FFE68A');
-      A.pup(g, 'drop', x - 4, top + h * 0.86, 0.62, 1, 'sit', 0.2); g.restore();
+      A.pup(g, 'collar', x - 4, top + h * 0.86, 0.62, 1, 'sit', 0.2); g.restore();
       if (A.t > 6000) { var f = A.back(6000, 6500); g.strokeStyle = '#E3AE2F'; g.lineWidth = 4 * f; g.strokeRect(x - w / 2 - 2, top - 2, w + 4, h + 4); }
     } });
 

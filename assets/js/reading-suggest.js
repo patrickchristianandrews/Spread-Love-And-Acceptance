@@ -248,7 +248,7 @@
     opts = opts || {};
     injectStyle();
     var d = data(), n = ++uid;
-    var state = { audience: opts.audience === 'self' || opts.audience === 'others' ? opts.audience : '', item: null };
+    var state = { audience: '', item: null };  // no 'for me / with others' choice on the card: every article fits both
     if (opts.scan !== false) opts._scanned = scanPage();
     var level = Math.min(6, Math.max(2, parseInt(opts.heading, 10) || 3));
 
@@ -263,7 +263,6 @@
     var bSelf = el('button', '', 'For understanding yourself'); bSelf.type = 'button'; bSelf.setAttribute('data-aud', 'self');
     var bOthers = el('button', '', 'For getting along with others'); bOthers.type = 'button'; bOthers.setAttribute('data-aud', 'others');
     aud.appendChild(bSelf); aud.appendChild(bOthers);
-    box.appendChild(aud);
 
     var body = el('div', 'tol-read-body');
     body.setAttribute('aria-live', 'polite');

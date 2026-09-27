@@ -579,7 +579,7 @@
     g.translate(r.x, y); g.scale(fs, 1);
     if (r.rot) { var px = r.pivot === 'hind' ? -12 * sc : 0, py = r.pivot === 'hind' ? 0 : -22 * sc; g.translate(px, py); g.rotate(r.rot); g.translate(-px, -py); }
     g.scale(fa * sc * r.sx * (1 + pop * 0.6), sc * r.sy * (1 - pop));
-    var L = P.looks[i ? 'collar' : 'drop'];
+    var L = P.looks[i ? 'drop' : 'collar'];
     if (r.underPrev && r.prevA > 0) { g.save(); g.globalAlpha *= r.prevA; safeCall(r.underPrev, i); g.restore(); }
     if (r.under) safeCall(r.under, i);
     if (r.cape) P.cape(g, L, clock, r.cape, r.capeFly);

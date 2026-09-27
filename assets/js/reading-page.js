@@ -26,7 +26,6 @@
       var h = (window.location.hash || '').replace(/^#/, '');
       h.split('&').forEach(function (kv) {
         var p = kv.split('='), k = p[0], v = decodeURIComponent(p[1] || '');
-        if (k === 'for' && (v === 'me' || v === 'others')) state.aud = v;
         if (k === 'pillar' && pillars[v]) state.pillar = v;
         if (k === 'topic' && tags[v]) state.topic = v;
       });
@@ -98,10 +97,10 @@
       if (it.author) li.appendChild(el('p', 'rl-by', 'By ' + it.author));
       li.appendChild(el('p', 'rl-sum', it.summary));
       var meta = el('p', 'rl-meta');
-      meta.appendChild(document.createTextNode(it.audience === 'self' ? 'For me' : it.audience === 'others' ? 'With others' : 'For me and with others'));
+
       (it.pillars || []).forEach(function (k) {
         var pd = pillars[k]; if (!pd) return;
-        meta.appendChild(document.createTextNode(' · '));
+        if (meta.childNodes.length) meta.appendChild(document.createTextNode(' · '));
         var pa = el('a', '', 'Pillar ' + k + ': ' + pd.name); pa.href = '/five-pillars.html#' + pd.anchor;
         meta.appendChild(pa);
       });
@@ -139,7 +138,7 @@
 
     document.getElementById('rl-reset').addEventListener('click', function () {
       state = { aud: '', pillar: '', topic: '' }; writeHash(); buildChips(); render();
-      var first = document.querySelector('#rl-aud .rl-chip'); if (first) first.focus();
+      var first = document.querySelector('#rl-pillars .rl-chip'); if (first) first.focus();
     });
     window.addEventListener('hashchange', function () { state = { aud: '', pillar: '', topic: '' }; readHash(); buildChips(); render(); });
 

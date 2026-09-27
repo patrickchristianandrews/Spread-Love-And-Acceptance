@@ -13,8 +13,8 @@
   resize(); addEventListener('resize', resize);
 
   var PALS = [
-    { name: 'Tidbit', look: P.looks.drop, cape: '#7C97E8', x: 0, y: 0, face: 1, tag: 0 },
-    { name: 'Sugarfoot', look: P.looks.collar, cape: '#E4566E', x: 0, y: 0, face: 1, tag: 0 }
+    { name: 'Tidbit', look: P.looks.collar, cape: '#7C97E8', x: 0, y: 0, face: 1, tag: 0 },
+    { name: 'Sugarfoot', look: P.looks.drop, cape: '#E4566E', x: 0, y: 0, face: 1, tag: 0 }
   ];
   function sc() { return W < 600 ? 0.72 : 0.95; }
   var ACTS = ['hug', 'five', 'bow', 'roll', 'spin', 'nap', 'dig', 'hug', 'five', 'cape', 'chase', 'wiggle'];
