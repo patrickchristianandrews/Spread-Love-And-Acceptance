@@ -1,0 +1,411 @@
+{
+  "issues": {
+    "motivation": {
+      "label": "getting started on things",
+      "match": [
+        [
+          "cant get myself to|can t get myself to|cant make myself|can t make myself|cant bring myself to|can t bring myself to|cant start|can t start|cant get started|can t get started|procrastinat*|keep putting (it|things) off|putting off|avoiding (it|the)|no motivation|unmotivated|cant motivate|can t motivate|keep avoiding|so lazy|feel lazy|stuck on starting",
+          5
+        ],
+        [
+          "start|motivat*|lazy|stuck",
+          1
+        ]
+      ],
+      "selfFirst": true,
+      "reflect": "Not being able to make yourself start something is so common, and so frustrating. It rarely means you’re lazy.",
+      "going": "This is Pillar II, Fix the setup, not the person, with Pillar III, Read your state first. Starting is often the hardest part: the task feels bigger in your head than it is, your battery may be low, or your wiring may make switching tasks genuinely harder (common with ADHD and for many autistic people). Willpower isn’t the lever. A smaller first step and a better setup usually are.",
+      "steps": [
+        "Check your battery first. If it’s low, pick a tiny version of the task, or rest first on purpose.",
+        "Shrink the start: “put on gloves and wash three plates”, not “do the dishes”. Set a five-minute timer.",
+        "Tie it to a cue you already have (“after I make tea, I…”) and make the first step obvious, like leaving the gloves by the sink.",
+        "Be kind to yourself about yesterday. Beating yourself up uses the energy you need to start."
+      ],
+      "scripts": {
+        "default": [
+          "Just five minutes. I can stop after that if I want.",
+          "Future me will be glad. Three plates, then I’ll decide."
+        ]
+      },
+      "scriptLabel": "Something to tell yourself",
+      "path": [
+        [
+          "Today’s Weather: what is today good for?",
+          "/quick-checks.html#today"
+        ],
+        [
+          "WP-02: How full is your battery?",
+          "/workpapers/wp-02-battery-stress-meter.html"
+        ],
+        [
+          "Procrastination (Library)",
+          "/library/motivation.html#procrastination"
+        ]
+      ],
+      "deeper": [
+        "procrastination",
+        "What is procrastination?"
+      ],
+      "ex": "Leo couldn’t face the dishes. He told himself, “Just the glasses,” put on a podcast, and set a five-minute timer. He ended up doing half the sink. The next night he left the gloves out by the tap as a cue, and starting got a little easier.",
+      "reflect_other": "It can be hard to watch {them} struggle to get started, especially when it affects you too.",
+      "going_other": "This is Pillar II, Fix the setup, not the person, and Pillar III, Read your state first. Trouble starting is rarely laziness. The task may feel huge, {their} battery may be low, or {their} wiring may make switching tasks genuinely harder. Pushing or reminding tends to add pressure without adding energy. A smaller first step and a clearer setup usually help more.",
+      "steps_other": [
+        "Ask what makes it hard to start, with curiosity rather than blame.",
+        "Help shrink the first step, or offer to do the first five minutes together.",
+        "Agree on one clear owner and a time for the job, so it isn’t a daily negotiation."
+      ],
+      "scripts_other": [
+        "I’ve noticed this one is hard to get going on. What would make starting easier? Want to do the first bit together?",
+        "No pressure on the whole thing. Could we just do ten minutes of it after dinner?"
+      ]
+    },
+    "overreact": {
+      "label": "reacting more strongly than you want to",
+      "match": [
+        [
+          "i (overreact|over react|snap at everyone|get so (angry|mad|upset|irritated)|blow up|explode|lose it|cry at everything)|small things (set me off|make me (angry|upset|cry))|little things (set me off|make me)|why do i (react|get so)|so reactive|short fuse|quick temper|my temper|i get (triggered|irritable)",
+          5
+        ],
+        [
+          "overreact*|react*|temper|triggered|irritable",
+          1
+        ]
+      ],
+      "selfFirst": true,
+      "reflect": "Noticing that your reactions are bigger than you’d like is a real step, and it says you care about the people around you.",
+      "going": "This is Pillar III, Read your state first. Most big reactions come from three places at once: your wiring (how you’re built), patterns life has taught you, and today’s conditions (sleep, hunger, stress, a full battery). When the battery is already full, a small thing tips it over, so the reaction is often about everything else, not just the moment.",
+      "steps": [
+        "Next time it happens, pause and ask: is this about the thing, or about what I was already carrying?",
+        "Do the one-minute battery check (WP-02) a few times this week, and notice when your reactions spike.",
+        "On a calm day, plan what settles you (two calming steps and a pause line), so the plan is ready when you need it.",
+        "Repair quickly when you slip. That matters more than never slipping."
+      ],
+      "scripts": {
+        "default": [
+          "Heads up, I’m running low today, so if I seem short, it isn’t about you.",
+          "That came out bigger than I meant. Give me a minute and let me try again."
+        ]
+      },
+      "path": [
+        [
+          "WP-02: How full is your battery?",
+          "/workpapers/wp-02-battery-stress-meter.html"
+        ],
+        [
+          "WP-11: The Calm-Down Kit",
+          "/wp-11.html"
+        ],
+        [
+          "Know your own wiring",
+          "/know-yourself.html"
+        ]
+      ],
+      "deeper": [
+        "where big reactions come from",
+        "Why do I react this way?"
+      ],
+      "ex": "Ren noticed she snapped most often at 5 p.m. on workdays. The battery check showed her running high by then. She started having a snack and ten quiet minutes in the car before walking in, and the evening snaps dropped a lot.",
+      "reflect_other": "It’s hard to be around big reactions to small things, and hard to know what to say.",
+      "going_other": "This is Pillar III, Read your state first. When someone’s battery is already full (tired, stressed, carrying a lot), a small thing can tip it over, so the size of the reaction is often about everything else. That explains it without making it okay to take it out on you. Timing and a shared pause plan help both of you.",
+      "steps_other": [
+        "In the moment, don’t argue the point. Stay calm, and suggest a pause with a time to come back.",
+        "Later, at a calm time, mention the pattern gently, with one example, and ask what’s been weighing on {them}.",
+        "Agree a pause line you both can use when things heat up."
+      ],
+      "scripts_other": [
+        "That seemed to hit hard. Want to take a few minutes and come back to it?",
+        "I’ve noticed small things have been setting you off lately. Is something weighing on you? I’m on your side."
+      ]
+    },
+    "overwhelm": {
+      "label": "feeling stretched thin",
+      "match": [
+        [
+          "overwhelm*|stretched (too )?thin|too much on my plate|so much on my plate|drowning|underwater|cant cope|can t cope|cant keep up|can t keep up|running on empty|burn(ed|t|ing) out|burnout|no time for (me|myself)|spread (too )?thin|exhausted all the time|too much going on|falling apart|at my limit|end of my rope",
+          5
+        ],
+        [
+          "tired|exhausted|stressed|stress|busy",
+          1
+        ]
+      ],
+      "selfFirst": true,
+      "reflect": "Feeling stretched this thin is hard, and it’s a sign about your load, not a sign that you’re failing.",
+      "going": "This is Pillar I (see the whole load) and Pillar III (read your state first). When everything feels like too much, it usually is too much: visible work, invisible work and worry all add up, and a full battery makes each new thing feel heavier. The goal isn’t to cope harder. It’s to see the whole load, drop or hand off what you can, and protect a little recovery.",
+      "steps": [
+        "Write down everything on your plate, including the invisible stuff, so it’s out of your head and on paper.",
+        "Mark each item: must do this week, can wait, or someone else could own it. Hand off or drop one item today.",
+        "Protect one small recovery moment daily (a walk, a quiet cup of tea, ten minutes in the Night Garden).",
+        "If this has lasted a long time or is affecting your health, it’s worth talking to a qualified professional."
+      ],
+      "scripts": {
+        "default": [
+          "I’m at my limit this week. Could you take the school run on Tuesday and Thursday?",
+          "I can’t take that on right now. Could we look at it again next month?"
+        ],
+        "coworker": [
+          "I’m at capacity this sprint. If this is a priority, which of my current tasks should move?"
+        ]
+      },
+      "path": [
+        [
+          "WP-02: How full is your battery?",
+          "/workpapers/wp-02-battery-stress-meter.html"
+        ],
+        [
+          "The Lemonade Stand (see the whole load)",
+          "/lemonade-stand.html"
+        ],
+        [
+          "The Night Garden",
+          "/night-garden.html"
+        ]
+      ],
+      "deeper": [
+        "burnout and recovery",
+        "What is burnout?"
+      ],
+      "ex": "Nia listed everything she was carrying and found 31 things, 11 of them invisible. She handed two whole jobs to her partner, dropped one committee, and kept a ten-minute walk after lunch. It didn’t fix everything, but the list stopped living in her head.",
+      "reflect_other": "It sounds like {them} is stretched really thin, and you want to help without adding to the pile.",
+      "going_other": "This is Pillar I (see the whole load) and Pillar III (read your state first). Overwhelm is usually a load problem, not a character problem. The most helpful support tends to be practical and specific, not advice about coping better.",
+      "steps_other": [
+        "Ask what would help most this week, and offer one concrete thing.",
+        "Take a whole job off {their} plate, noticing included, rather than helping with pieces of it.",
+        "Keep hard conversations for a calmer week unless they can’t wait."
+      ],
+      "scripts_other": [
+        "You’ve got so much on. Can I take the school run and dinner on Thursday off your plate this week?",
+        "What’s one thing I could fully take over for you this month?"
+      ]
+    },
+    "worry": {
+      "label": "overthinking and replaying",
+      "match": [
+        [
+          "overthink*|over think*|cant stop thinking|can t stop thinking|replay*|keep thinking about|ruminat*|going over (it|and over)|worry (about|so much)|worried (about|sick)|keeps? me up at night|lie awake|lying awake|spiral*|what if",
+          5
+        ],
+        [
+          "worry|worried|anxious|thinking",
+          1
+        ]
+      ],
+      "selfFirst": true,
+      "reflect": "Replaying things over and over is exhausting, and you’re far from alone in it.",
+      "going": "This is Pillar III, Read your state first, with a nod to Pillar IV. A brain that’s tired or on alert tends to loop on problems, trying to solve them by going over them again. Replaying rarely brings new answers, though. It mostly keeps the body revved up. Getting the thought out of your head and choosing a time to act on it usually helps more than more thinking.",
+      "steps": [
+        "Write the worry down in one or two sentences, plus the next small action, if there is one.",
+        "Give it a time slot: “I’ll think about this at 5 p.m. for ten minutes.” When it pops up earlier, remind yourself it has a slot.",
+        "Settle your body first: a slow breath out, a short walk, or the Night Garden’s box breathing.",
+        "If worry is taking over your days or your sleep for weeks, a qualified professional can really help."
+      ],
+      "scripts": {
+        "default": [
+          "That’s a 5 p.m. thought. I’ve written it down, and it’ll keep until then.",
+          "I don’t have to solve this tonight."
+        ]
+      },
+      "scriptLabel": "Something to tell yourself",
+      "path": [
+        [
+          "The Night Garden (box breathing)",
+          "/night-garden.html"
+        ],
+        [
+          "WP-11: The Calm-Down Kit",
+          "/wp-11.html"
+        ],
+        [
+          "Rumination (Library)",
+          "/library/emotions.html#rumination"
+        ]
+      ],
+      "deeper": [
+        "rumination",
+        "What is rumination?"
+      ],
+      "ex": "Omar replayed a tense work meeting every night. He started writing one line (“I’m worried I sounded dismissive; next step: message Jo tomorrow”) and closing the notebook. He sent the message, Jo said it was fine, and the loop quieted.",
+      "reflect_other": "Watching someone you care about get stuck in worry is hard, and it can be tiring for you too.",
+      "going_other": "This is Pillar III, Read your state first. When someone is looping on a worry, reassurance often helps for a moment and then the loop starts again. Calm company and a concrete next step usually help more than arguing with the worry.",
+      "steps_other": [
+        "Listen and reflect the feeling first, before offering solutions.",
+        "Help turn the worry into one small next action, if there is one.",
+        "If worry is taking over {their} days for a long time, gently encourage talking to a qualified professional."
+      ],
+      "scripts_other": [
+        "That sounds really stressful. Is there one small thing we could do about it tomorrow?",
+        "I’m here. Want to write it down together and pick one next step?"
+      ]
+    },
+    "selfcrit": {
+      "label": "being hard on yourself",
+      "match": [
+        [
+          "hard on myself|so critical of myself|hate myself|i m a failure|im a failure|feel like a failure|not good enough|never good enough|i m useless|im useless|i m stupid|im stupid|i m the problem|im the problem|always my fault|beat myself up|beating myself up|inner critic|i m a bad (mom|dad|parent|partner|friend)|im a bad (mom|dad|parent|partner|friend)",
+          5
+        ],
+        [
+          "failure|fault|critic|ashamed|shame",
+          1
+        ]
+      ],
+      "selfFirst": true,
+      "reflect": "It sounds like the voice in your head is being really tough on you right now. That’s painful, and you deserve kinder company, including your own.",
+      "going": "This is Pillar II, Fix the setup, not the person, turned inward. The program’s whole idea is that problems usually live in the setup (the load, the timing, unclear owners), not in anyone’s character, and that includes yours. Harsh self-criticism feels like it should motivate change, but it mostly drains the energy change needs. Treating yourself the way you’d treat a friend is a skill, and it can be practiced.",
+      "steps": [
+        "Notice the critical thought and name it: “there’s the critic again.”",
+        "Ask what you’d say to a friend in exactly this spot, and say it to yourself.",
+        "Look for the setup piece: what load, timing or missing help made this hard?",
+        "If these thoughts are heavy and constant, please talk with someone you trust or a qualified professional."
+      ],
+      "scripts": {
+        "default": [
+          "This is hard, and I’m doing my best with a lot on my plate.",
+          "One rough moment doesn’t make me a bad person. What’s one small thing I can do next?"
+        ]
+      },
+      "scriptLabel": "Something to tell yourself",
+      "path": [
+        [
+          "Know your own wiring",
+          "/know-yourself.html"
+        ],
+        [
+          "Today’s Weather",
+          "/quick-checks.html#today"
+        ],
+        [
+          "Self-compassion (Library)",
+          "/library/connection.html#self-compassion"
+        ]
+      ],
+      "deeper": [
+        "self-compassion",
+        "What is self-compassion?"
+      ],
+      "ex": "After forgetting a school form, Maya told herself she was a terrible mom. Then she asked, “What would I tell my sister?” (“You had a brutal week and one form slipped.”) She set a phone reminder for forms and gave herself the same kindness she’d give anyone else.",
+      "reflect_other": "It’s painful to hear someone you care about be so hard on themselves.",
+      "going_other": "This is Pillar II, Fix the setup, not the person. People who are hard on themselves often can’t hear reassurance right away. Pointing to the setup (the load, the timing, the missing help) can be easier for them to accept than being told they’re wonderful.",
+      "steps_other": [
+        "Listen first, without rushing to argue them out of it.",
+        "Point gently to the setup: what load or circumstance made this hard?",
+        "If these thoughts seem heavy and constant, encourage {them} to talk with someone they trust or a qualified professional."
+      ],
+      "scripts_other": [
+        "You had a really heavy week. One slip doesn’t say anything bad about who you are.",
+        "I don’t see a failure. I see someone carrying a lot. What would help?"
+      ]
+    },
+    "peoplepleasing": {
+      "label": "saying yes when you mean no",
+      "match": [
+        [
+          "cant say no|can t say no|hard to say no|say yes to everything|always say yes|people pleas*|agree to everything|dont want to let (anyone|people|them) down|don t want to let (anyone|people|them) down|feel guilty saying no|guilty for saying no|how (do|can) i say no|want to say no",
+          5
+        ],
+        [
+          "say no|guilty",
+          1
+        ]
+      ],
+      "selfFirst": true,
+      "reflect": "Saying yes when you’re already full is such a common habit, and it often comes from caring about people.",
+      "going": "This is Pillar V, Notice the quiet incentives, and Pillar IV. Saying yes is often the easy default in the moment: it avoids an awkward pause and makes someone happy right now. The cost comes later, as overload and quiet resentment. A kind “no” that offers something else is fairer to everyone, including the person asking.",
+      "steps": [
+        "Buy time: “Let me check and get back to you” gives you a moment to see your battery and calendar.",
+        "Use the three calm steps: say why the request is fair, say honestly what you have left, and offer something instead.",
+        "Start small: one kind no this week, to someone safe."
+      ],
+      "scripts": {
+        "default": [
+          "That makes total sense to ask. I don’t have room this week, but I could help next Tuesday.",
+          "I’d love to help, and I’m at my limit right now. Could someone else take it, or could I do just the first part?"
+        ],
+        "coworker": [
+          "I can see why this matters. I’m fully booked until Friday. Could it wait until then, or should something else move?"
+        ],
+        "family": [
+          "I can’t make Sunday this time, and I’d love to see you. How about Saturday lunch instead?"
+        ]
+      },
+      "path": [
+        [
+          "WP-01: Kind ways to say no",
+          "/workpapers/wp-01.html"
+        ],
+        [
+          "WP-02: How full is your battery?",
+          "/workpapers/wp-02-battery-stress-meter.html"
+        ],
+        [
+          "Saying no (Library)",
+          "/library/communication.html#saying-no"
+        ]
+      ],
+      "deeper": [
+        "saying no kindly",
+        "How do I say no kindly?"
+      ],
+      "ex": "Sam was asked to organize another office party. Instead of an automatic yes, Sam said, “Great idea. I’m full this month, but I could send the list from last time to whoever takes it.” Someone else happily picked it up.",
+      "reflect_other": "It’s hard to watch someone say yes to everyone, and end up running on empty.",
+      "going_other": "This is Pillar V, Notice the quiet incentives. Saying yes is the easy default in the moment. You can help by making “no” safe with you, and by not being one more person who relies on their yes.",
+      "steps_other": [
+        "Make it easy for {them} to say no to you: ask, and mean it when you say “it’s fine if not.”",
+        "Notice and appreciate when they protect their time.",
+        "Offer to help them practice a kind no."
+      ],
+      "scripts_other": [
+        "Totally fine to say no to this. I’ll ask someone else if you’re full.",
+        "You’ve taken on a lot lately. Want help working out what to hand back?"
+      ]
+    },
+    "credit": {
+      "label": "credit and recognition at work",
+      "match": [
+        [
+          "takes? credit|took credit|stole my idea|steals? my (idea|ideas|work)|my idea (but|and) (they|he|she)|presents? my work|passes? off my|no credit|didnt get credit|didn t get credit|not getting credit|gets? the credit",
+          5
+        ],
+        [
+          "credit|idea",
+          1
+        ]
+      ],
+      "only": [
+        "coworker"
+      ],
+      "reflect": "Watching someone else get credit for your work is genuinely frustrating, and it’s fair to want your contribution seen.",
+      "going": "This is Pillar I (see the whole load) and Pillar V (notice the quiet incentives). At work, contributions often blur in shared meetings and documents, and people remember their own part more vividly than others’. {They} may not realize {they} are doing it. Making contributions visible as a normal habit protects you without needing a confrontation.",
+      "steps": [
+        "Make your work visible as you go: a short written summary after meetings, with who did what.",
+        "Raise it privately and calmly with the person, using one specific example.",
+        "If it continues, bring it to your manager as a question about how contributions are tracked, not as an accusation."
+      ],
+      "scripts": {
+        "default": [
+          "I noticed the proposal was presented as yours in the meeting, and a lot of it came from my draft. Could we make sure both our names are on it going forward?",
+          "Quick recap from today: I’ll finish the analysis (my section), Jo will do the slides. Shout if I’ve missed anything."
+        ]
+      },
+      "path": [
+        [
+          "The Signal Translator",
+          "/signal-translator.html"
+        ],
+        [
+          "WP-03: One owner per job",
+          "/workpapers/wp-03-raci-treaty.html"
+        ],
+        [
+          "Where coworkers and teams start",
+          "/relationships-in-depth.html#coworkers"
+        ]
+      ],
+      "deeper": [
+        "workplace communication",
+        "Tell me about workplace communication"
+      ],
+      "ex": "Dev’s idea kept showing up in a teammate’s updates. Dev started sending short recap messages after meetings (“I’ll take the pricing model”), then mentioned it once privately. The teammate apologized, and the recaps made credit clear for everyone."
+    }
+  }
+}

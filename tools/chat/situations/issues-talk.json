@@ -1,0 +1,209 @@
+{
+  "issues": {
+    "tone": {
+      "label": "tone and how things land",
+      "match": [["tone|snippy|snappy|short with me|curt|rude|harsh|sarcas*|condescending|passive aggressive|attitude|(took|takes|take|read|reads) (it|my text|my message|things|everything) (the )?wrong way|misread*|misunderstood|comes? out wrong|came out wrong|sounds? (angry|mad|cold|rude)|seemed? (angry|mad|cold|rude)|how (i|they|he|she) (say|said) (it|things)|the way (i|they|he|she) (say|said)", 4], ["text|texts|message|messages|email|slack|said|says|words", 1]],
+      "reflect": "It’s so frustrating when the words were fine but the way they landed wasn’t, on either side.",
+      "reflect_self": "It sounds like things you say sometimes land differently than you meant.",
+      "going": "This is Pillar IV, Tune how you send and receive. The same words carry very differently depending on pace, tone, the channel (text strips out most of it) and the state each person is in. A mismatch here is usually tuning, not a moral failing. {They} may hear “harsh” where you meant “efficient”, or the other way around.",
+      "going_self": "This is Pillar IV, Tune how you send and receive, and Pillar III, Read your state first. When you’re tired or rushed, words come out shorter and sharper than you intend, and people read the tone before the content. Your wiring matters too: some people are naturally direct, and others hear directness as coldness.",
+      "steps": ["Before replying to something that stung, sort it into three things: the fact, how it felt, and what you’d like to happen next.", "Check the channel: if a text thread is getting tense, suggest a quick call or talking in person.", "Ask, don’t assume: “When you said that, did you mean…?” clears up a lot of mix-ups."],
+      "steps_self": ["Before sending anything important, try it in the Signal Translator to see how it may land.", "Add one softener when you’re direct: a “thanks”, a “when you get a chance”, or the reason behind the ask.", "Tell people how you mean things, on a calm day: “I’m blunt when I’m busy, it’s never personal.”"],
+      "scripts": {
+        "default": ["When you said that earlier, it landed as a bit sharp for me. Did you mean it that way, or am I reading too much into it?", "I think my message came out harsher than I meant. What I was trying to say is: could we sort out the plan for Saturday?"],
+        "coworker": ["I want to make sure I read your message right. Did you mean the report needs changes, or just the summary?", "Rereading my last message, it came across more abruptly than I intended. Happy to talk it through."],
+        "self": ["I’m direct when I’m busy. It’s never meant as cold, and I’m happy to slow down if it lands that way.", "Let me try that again, more kindly."]
+      },
+      "path": [["The Signal Translator", "/signal-translator.html"], ["WP-09: Say it so it lands", "/workpapers/wp-09-tone-filter.html"], ["Wired Differently", "/wired-differently.html"]],
+      "deeper": ["why tone gets lost", "Tell me about texting and tone"],
+      "ex": "Alex texted “Fine.” and meant “Sounds good.” Jamie read the period as a door slamming. When they compared notes, Alex added, “I type short when I’m busy, it’s not a mood.” Jamie now asks “all good?” instead of stewing, and Alex adds an emoji when it matters."
+    },
+    "timing": {
+      "label": "timing and state",
+      "match": [["(brings?|brought) (it|things|stuff|this) up (at|when|right)|as soon as i (walk|get) in|right before bed|late at night|when im (tired|exhausted|hungry|stressed)|when i m (tired|exhausted|hungry|stressed)|at the worst (time|moment)|bad timing|wrong time|not the right time|middle of (dinner|work|the night)|when (i|we) (get|got) home", 4], ["tired|hungry|timing|stressed|exhausted", 1]],
+      "reflect": "It makes sense that hard conversations go sideways when they start at the worst possible moment.",
+      "going": "This is Pillar III, Read your state first. The same topic can go fine at 10 a.m. and badly at 10 p.m., because a tired, hungry or stressed body hears everything as sharper. {They} may bring things up when {they} finally get a quiet moment, which happens to be when you have nothing left. Nobody’s wrong. The timing is.",
+      "steps": ["On a calm day, agree on good times for real talks (and bad ones, like right after work or late at night).", "When something comes up at a bad moment, say your battery out loud and name a time to come back.", "Keep a short ‘parking lot’ note, so topics wait safely instead of getting lost."],
+      "scripts": {
+        "default": ["I want to talk about this properly, and I’m running on empty right now. Can we do it tomorrow after breakfast?", "Heads up, I’m carrying more than usual today. Could we save the big stuff for the weekend?"],
+        "coworker": ["I’d like to give this proper attention. Could we find fifteen minutes tomorrow morning instead of end of day?"],
+        "kid": ["I want to hear this properly. Can we talk in the car on the way to practice?"]
+      },
+      "path": [["Today’s Weather: a one-minute state check", "/quick-checks.html#today"], ["WP-02: How full is your battery?", "/workpapers/wp-02-battery-stress-meter.html"], ["Check-ins: a good time and place", "/check-ins.html#room"]],
+      "deeper": ["reading your state", "What are the three states in Today’s Weather?"],
+      "ex": "Every evening at 9:30, Chris raised the week’s to-do list and Pat snapped. They agreed on Sunday mornings for planning, with a sticky note on the fridge for anything that came up in between. The same topics, handled at a better time, stopped turning into fights."
+    },
+    "pattern": {
+      "label": "the same argument again and again",
+      "match": [["same (fight|argument|thing|conversation) (again|over and over|every)|same fights?|same argument|keeps? happening|keeps? coming (back|up)|over and over|again and again|every (week|time|day|weekend)|round in circles|going in circles|never changes|nothing changes|groundhog", 4], ["again|always|keeps?|pattern|cycle|loop", 1]],
+      "reflect": "Having the same argument again and again is exhausting, and it can start to feel like nothing will ever change.",
+      "going": "This is Pillar II, Fix the setup, not the person, with a nod to Pillar V. A repeating argument is usually a sign the setup keeps producing the same problem, like a job with no owner, a clash in rhythms, or a bad time of day. Arguing harder about each instance doesn’t fix the machine that keeps making them. Some differences are also simply lasting, and those go better with understanding than with winning.",
+      "steps": ["Write down the last three times it happened: when, what set it off, and what state you were both in.", "Look for the setup behind it: an unowned job, a timing clash, a different pace or standard.", "Change one thing in the setup and try it for a month, then look back together."],
+      "scripts": {
+        "default": ["I don’t think either of us is the problem. I think something in how we’ve set things up keeps causing this. Could we look at it together on Sunday?", "This keeps coming up, so it clearly matters to both of us. Can we try one change for a month and see what happens?"],
+        "coworker": ["This issue keeps coming back in our retros. Can we find the process gap behind it and give the fix one owner?"]
+      },
+      "path": [["WP-04: What keeps coming back?", "/workpapers/wp-04-deficit-audit.html"], ["WP-03: One owner per job", "/workpapers/wp-03-raci-treaty.html"], ["Chapter V: The monthly look-back", "/book/chapter-5.html"]],
+      "deeper": ["problems that keep coming back", "What are perpetual problems?"],
+      "ex": "A couple fought about the laundry every Sunday. Their monthly look-back showed it wasn’t really laundry: nobody owned “putting it away”, so it piled up. One owner for that single step, and the Sunday fight went away."
+    },
+    "repair": {
+      "label": "repairing after a rough moment",
+      "match": [["i (snapped|yelled|shouted|screamed|lost it|lost my temper|blew up|exploded|was (rude|mean|harsh)|said something (mean|hurtful|awful|terrible))|snapped at|yelled at|shouted at|lost my temper|blew up at|was mean to|hurt (his|her|their) feelings|i messed up|i screwed up|my fault|how (do|can|should) i apologi[sz]e|want to apologi[sz]e|say sorry|make (it|things) right|make up (with|after)", 5], ["apolog*|sorry|repair|regret", 2]],
+      "reflect": "Snapping at someone you care about, and then feeling it afterward, is so human. Everyone has moments like that.",
+      "going": "This is Pillar III (read your state first) and Pillar IV (tune how you send and receive). A snap is usually leftover load leaking out: tiredness, stress, or a full battery from something else entirely. That explains it without excusing it. What matters most for the relationship isn’t never slipping. It’s repairing well afterward, and {they} will likely remember the repair more than the snap.",
+      "steps": ["Take a breath and check your battery first, so the repair comes from a calm place, not a guilty rush.", "Apologize for the specific thing, without a “but”: name what you did and how it may have landed.", "Say what you’ll do differently, and if there’s a real issue underneath, offer a better time to talk about it."],
+      "scripts": {
+        "default": ["I’m sorry I snapped at you this morning. That wasn’t fair to you. I was running on empty, and that’s mine to handle, not yours.", "I’m sorry for how I said that earlier. You didn’t deserve it. Can I try again, more kindly?"],
+        "roommate": ["Hey, I’m sorry I snapped at you this morning. That wasn’t about you. I was stressed, and I shouldn’t have taken it out on you."],
+        "coworker": ["I want to apologize for how I came across in the meeting. I was frustrated with the deadline, not with you, and I should have said it better."],
+        "kid": ["I’m sorry I yelled. You didn’t deserve that. I was tired and I got loud, and I’m going to work on it."]
+      },
+      "path": [["WP-11: The Calm-Down Kit", "/wp-11.html"], ["WP-09: Say it so it lands", "/workpapers/wp-09-tone-filter.html"], ["What makes an apology work (Library)", "/library/conflict.html#apology-research"]],
+      "deeper": ["what makes an apology work", "What makes a good apology?"],
+      "ex": "After snapping at a roommate over the dishes, Robin waited an hour, then said: “I’m sorry I snapped this morning. That wasn’t about you, it was a rough night. Can we sort out the dish thing on Sunday when I’m less fried?” The roommate said thanks, and the Sunday talk went fine."
+    },
+    "shutdown": {
+      "label": "shutting down or going quiet",
+      "match": [["(i|we) (shut down|go quiet|freeze|go blank|go silent|clam up|can t think|cant think|go numb|dissociate|check out)|shuts? down|goes? quiet|stonewall*|silent treatment|won t (answer|respond|engage)|wont (answer|respond|engage)|walks? (away|off|out) (in the middle|mid)|raises? (their|his|her) voice|raised (their|his|her) voice|when (they|he|she) (yells?|shouts?|gets? loud)|flooded|overwhelmed in (the )?argument", 5], ["quiet|freeze|yell*|shout*|loud", 1]],
+      "reflect": "Shutting down when voices rise isn’t weakness or not caring. It’s often your body protecting you from overload.",
+      "going": "This is Pillar III, Read your state first. When a conversation heats up, some people’s bodies go into a revved-up state (louder, faster) and others go into a shut-down state (blank, far away, words gone). Both are automatic, and neither is a choice to hurt the other. {They} may read your quiet as not caring, and you may read {their} volume as danger. A pause with a clear time to come back helps both of you.",
+      "going_self": "This is Pillar III, Read your state first. Going blank or quiet in a hard moment is a common stress response: the body turns down to protect you. It isn’t a character flaw, and it usually passes once you feel settled again. The key is to pause in a way the other person can trust, with a clear time to come back.",
+      "steps": ["On a calm day, agree on a pause line and a return time, so a break is never mistaken for walking out.", "In the moment, say the line, take at least 20 minutes to settle your body (a walk, slow breathing), and don’t rehearse the argument.", "Come back at the time you said, and start with one small, easy thing before the hard topic."],
+      "scripts": {
+        "default": ["I’m starting to shut down and I want to really hear you. Can we take twenty minutes and come back at 8?", "When voices get loud, my brain goes blank. It’s not that I don’t care. Could we keep it quieter, or take a break and come back?"],
+        "self": ["I need a short pause so I can actually think. I’ll be back in twenty minutes, and I want to finish this.", "My brain just went blank. Give me a moment, I’m still here."]
+      },
+      "path": [["WP-11: The Calm-Down Kit", "/wp-11.html"], ["The Carrier Wave Decoder", "/carrier-wave-decoder.html"], ["Flooding (Library)", "/library/relationships.html#flooding"]],
+      "deeper": ["flooding and taking a break", "What is flooding?"],
+      "ex": "Whenever Dana’s partner got loud, Dana went silent, which made the partner louder. On a calm Sunday they agreed a pause line: “I’m flooding, back at 8.” The next time, Dana said it, walked round the block, and came back at 8. The talk went differently because both knew the pause wasn’t an exit."
+    },
+    "interrupt": {
+      "label": "being interrupted or not heard",
+      "match": [["interrupt*|talks? over me|talked over me|cuts? me off|cut me off|doesnt let me finish|doesn t let me finish|won t let me (finish|speak|talk)|wont let me (finish|speak|talk)|doesnt listen|doesn t listen|never listens?|not listening|ignores? (what i say|me|my ideas)|dismiss*|not heard|dont feel heard|don t feel heard|steamroll*|speaks? over", 5], ["meetings?|listen*|heard", 1]],
+      "needsOther": true,
+      "reflect": "It’s really deflating to keep getting cut off, as if what you were saying didn’t matter.",
+      "going": "This is Pillar IV, Tune how you send and receive. People have very different conversation rhythms: some think out loud and jump in fast, others need a pause to finish a thought. {They} may experience overlapping as enthusiasm, while you experience it as being erased. Naming the pattern kindly, and agreeing a small signal, usually works better than waiting for them to notice.",
+      "steps": ["Name the pattern privately and kindly, at a calm moment, not in the middle of it.", "Ask for something specific: “let me finish my point, then I’d love your take.”", "In the moment, use a friendly, steady line to hold your turn, and keep going."],
+      "scripts": {
+        "default": ["I’ve noticed I sometimes get cut off before I finish. It’s probably not on purpose, but I’d love to get my whole thought out before you jump in.", "Hang on, let me finish this bit, and then I really want to hear what you think."],
+        "coworker": ["In meetings, I sometimes lose my point when I get interrupted. Could you give me a moment to finish? I’ll do the same for you.", "I’d like to finish this point, and then I’m keen to hear your view.", "Could we use a round-robin in the next meeting so everyone gets a full turn?"],
+        "kid": ["I want to hear all of what you’re saying. Can we take turns: you finish, then me?"]
+      },
+      "path": [["The Signal Translator", "/signal-translator.html"], ["Check-ins: hear it back before you answer", "/check-ins.html"], ["Workplace communication (Library)", "/library/communication.html#workplace-communication"]],
+      "deeper": ["active listening", "What is active listening?"],
+      "ex": "Priya kept getting interrupted in team meetings. She caught her coworker afterward: “I lose my thread when I get cut off. Could you give me a beat to finish?” In the next meeting she used, “Let me finish this point, then I want your take.” It took two tries, and then the coworker started waiting."
+    },
+    "criticism": {
+      "label": "feeling criticized",
+      "match": [["critici[sz]*|nitpick*|picks? on me|always complain(s|ing)? about me|finds? fault|nothing i do is (good enough|right)|never good enough|puts? me down|judg(es|ing|y|mental)|corrects? me|mocks? me|makes fun of me|eye roll*|rolls? (their|his|her) eyes", 5], ["complain*|blame*|fault", 1]],
+      "reflect": "Feeling picked at all the time is draining. It can make home or work feel like somewhere you have to brace.",
+      "going": "This is Pillar IV (tune how you send and receive) and Pillar II (fix the setup). Often a complaint about one thing (“the dishes aren’t done”) comes out as criticism of the person (“you never help”). That lands as an attack, even when {they} mean it as a request. There may be a real, fixable need underneath, and a different way of saying it could get it met without the sting.",
+      "steps": ["At a calm moment, say how it lands, using one specific example rather than “always”.", "Ask {them} to turn the complaint into a request: what would {they} like to happen?", "If the same complaint keeps coming, look at the setup behind it: maybe that job needs one clear owner."],
+      "scripts": {
+        "default": ["When I hear ‘you never’, I get defensive and miss what you actually need. Could you tell me the one thing you’d like me to do, instead?", "I want to get this right. Can you tell me what would help, rather than what I did wrong?"],
+        "coworker": ["I’d find specific feedback easier to act on. Could you show me which part of the report needs changing, and what good looks like?"],
+        "family": ["I know you care, and I’d like to hear it without the criticism. Could you tell me what you’d like, instead of what I’m doing wrong?"]
+      },
+      "path": [["WP-09: Say it so it lands", "/workpapers/wp-09-tone-filter.html"], ["Check-ins", "/check-ins.html"], ["Complaints vs criticism (Library)", "/library/communication.html#complaints-vs-criticism"]],
+      "deeper": ["complaints versus criticism", "What is the difference between a complaint and criticism?"],
+      "ex": "“You never clean up after yourself” became, after a talk, “The pans were left out last night. Could you soak them before bed?” Same need, no attack, and the pans got soaked."
+    },
+    "raise": {
+      "label": "bringing up something hard",
+      "match": [["how (do|should|can) i (bring (it|this|that) up|raise (it|this|that)|tell (him|her|them|my)|talk to (him|her|them|my)|ask (him|her|them|my))|dont know how to (bring|tell|say|ask|talk)|don t know how to (bring|tell|say|ask|talk)|(afraid|scared|nervous|dreading) to (bring|tell|say|ask|talk)|need to have a (hard|difficult|tough) (talk|conversation)|want to talk to (him|her|them|my) about|bring (it|this|that|something) up", 4], ["conversation|talk about", 1]],
+      "reflect": "Working out how to raise something hard, before you say a word, is already a caring thing to do.",
+      "going": "This is Pillar III (read your state) and Pillar IV (tune how you send and receive). How a hard talk starts shapes how it ends, so the first sentence matters a lot. A soft, specific opening at a good time, with one topic and “we’re on the same side” out loud, gives {them} the best chance to actually hear you rather than defend.",
+      "steps": ["Pick a good time and place: private, calm, not hungry or rushed. Ask for it rather than springing it.", "Prepare one sentence with three parts: the fact, how it felt, and a kind ask.", "Start by saying you’re on the same side, keep to one topic, and let {them} say it back before you go on."],
+      "scripts": {
+        "default": ["There’s something small I’d like to talk about. Is now okay, or would tonight after dinner be better?", "I’m not upset with you, I just want to sort out one thing together: the weekend plans. Can we talk about it?"],
+        "coworker": ["Do you have fifteen minutes this week? I’d like to talk through how we split the project handoffs."],
+        "kid": ["Nothing’s wrong, I just want to talk about one thing. Want to grab a snack and chat?"]
+      },
+      "path": [["The Signal Translator (test your opening line)", "/signal-translator.html"], ["Check-ins", "/check-ins.html"], ["Soft startup (Library)", "/library/conflict.html#soft-startup"]],
+      "deeper": ["starting softly", "What is a soft startup?"],
+      "ex": "Instead of “We need to talk” (which makes anyone’s stomach drop), Sam said, “Can we find ten minutes tonight? Nothing bad, I just want us to sort out the bills together.” The talk started calmer because nobody was braced."
+    },
+    "decisions": {
+      "label": "plans and decisions made without you",
+      "match": [["(makes?|made|making) (plans|decisions?) without (asking|me|telling|checking)|without asking me|without checking with me|without consulting|doesnt ask me|doesn t ask me|never asks me|decides? (everything|for me|without me)|decided without me|books? (things|stuff|trips?|dinners?) without|signs? (me|us) up (for|without)|volunteers? me|invited people without|surprise (plans|dinner|guests)", 5], ["plans?|decid*|decision*|without asking", 1]],
+      "needsOther": true,
+      "reflect": "It’s frustrating to find out plans were made for you, as if your time and say didn’t count.",
+      "going": "This is Pillar IV (tune how you send and receive) and Pillar II (fix the setup). People have different rhythms for decisions: some decide fast and share later, others need to talk it through first. {They} may think {they} are being helpful or spontaneous, and may have no idea it lands as being left out. A simple agreement about which decisions need a check-in usually solves most of it.",
+      "steps": ["Name one or two recent examples, calmly, and how it felt, without “always”.", "Agree which kinds of plans need a quick check first (evenings, weekends, money, guests) and which don’t.", "Offer a fast way to check in, like a quick text, so it’s easy for {them} to say yes to."],
+      "scripts": {
+        "default": ["I love doing things together, and I also need a say in my own time. Could you check with me before making plans that include me?", "When plans get made before I hear about them, I feel left out. Could we agree to run weekend plans past each other first?"],
+        "family": ["I’d love to come, and next time could you check with me before booking? My weekends fill up, and I want to say yes when I can.", "It means a lot that you include me. A quick text before plans are set would really help."],
+        "coworker": ["Could we agree that decisions affecting my workload get a quick check with me first? Even a short message would help me plan."],
+        "partner": ["Could we have a rule that any evening or weekend plans for both of us get a quick ‘is this okay?’ first?"]
+      },
+      "path": [["Frequency Calibration (decision rhythms)", "/tools/frequency-calibration.html"], ["WP-09: Say it so it lands", "/workpapers/wp-09-tone-filter.html"], ["Joint decisions (Library)", "/library/life.html#joint-decisions"]],
+      "deeper": ["deciding together", "Tell me about making decisions together"],
+      "ex": "Tara’s sister kept booking family dinners without asking. Tara said, “I love our dinners, and I also need a say in my weekends. Could you text me before you book?” Her sister hadn’t realized. Now there’s a family group text for dates first."
+    },
+    "boundaries": {
+      "label": "boundaries",
+      "match": [["boundar*|overstep*|crosses? the line|oversteps? my|drops? (by|in) (unannounced|without)|shows? up unannounced|without (calling|asking|warning)|borrows? (my|things|stuff) without|goes? through my (things|stuff|phone)|calls? (me )?(constantly|all the time|every day)|texts? (me )?(constantly|all the time)|too much (contact|pressure)|pressur* me|guilt trip*|wont take no|won t take no|doesnt respect my|doesn t respect my|invades? my|no privacy|space", 4], ["respect|privacy|space|alone time", 1]],
+      "reflect": "It’s hard when someone keeps stepping past a line you care about, especially someone you love.",
+      "going": "This is Pillar IV (tune how you send and receive) and Pillar II (fix the setup). A boundary is about what you will do, not about controlling {them}. People often cross lines they don’t know are there, because families, friendships and workplaces all have different unwritten rules. Saying the line clearly and kindly, then following through calmly, is usually more effective than hinting or getting angry.",
+      "steps": ["Get clear, for yourself, on the specific line and what you’ll do if it’s crossed.", "Say it once, kindly and plainly, with the reason if you want to give one: “I need…” or “I’m not able to…”.", "Follow through calmly and consistently. You don’t need to argue or re-justify it each time."],
+      "scripts": {
+        "default": ["I love seeing you, and I need a heads-up before visits. Could you text first so I can make sure it’s a good time?", "I’m not able to take calls during work hours. I’ll call you back in the evening."],
+        "family": ["I know you mean well, and I need to make this decision myself. I’ll let you know if I want advice.", "I’d love to see you. Could you check with me before coming over, so I can be properly there for you?"],
+        "coworker": ["I’m not available for messages after 7. If it’s urgent, call me, otherwise I’ll pick it up first thing tomorrow."],
+        "roommate": ["Please ask before borrowing my things. I’m happy to share most of it, I just like to know."]
+      },
+      "path": [["WP-01: Kind ways to say no", "/workpapers/wp-01.html"], ["The Wiring Card", "/wiring-card.html"], ["Boundaries (Library)", "/library/communication.html#boundaries"]],
+      "deeper": ["setting boundaries kindly", "What are boundaries?"],
+      "ex": "Jess’s mum dropped by unannounced several times a week. Jess said, “I love seeing you, Mum. Can you text before you come, so I can make time?” The first few times Jess gently repeated it. By the third week, the texts started arriving."
+    },
+    "distance": {
+      "label": "feeling distant or disconnected",
+      "match": [["wont talk to me|won t talk to me|doesnt talk to me|doesn t talk to me|barely talks?|never talk anymore|dont talk anymore|don t talk anymore|shuts? me out|distant|drifting( apart)?|drifted apart|growing apart|feel disconnected|not close|dont feel close|don t feel close|like roommates|like strangers|lonely in|feel alone with|stays? in (their|his|her) room|one word answers|grunts", 5], ["talk|close|connect*|lonely|miss (him|her|them|us)", 1]],
+      "reflect": "Feeling far from someone you care about is lonely, and it’s brave to want to close the gap.",
+      "going": "This is Pillar IV (tune how you send and receive) and Pillar V (notice the quiet incentives). Closeness is built mostly in tiny, everyday moments: a joke, a “look at this”, a question about their day. When life gets busy, those small moments get missed on both sides, often without anyone noticing. {They} may feel the distance too, or may be going through something of {their} own.",
+      "steps": ["Notice {their} small reaches for you (a comment, a sigh, a share) and turn toward them warmly, even briefly.", "Offer low-pressure time together without an agenda: a walk, a coffee, a shared show.", "Say it simply and without blame: that you miss them, and that you’d like more small moments together."],
+      "scripts": {
+        "default": ["I’ve been missing you lately. No big talk needed. Want to go for a walk this weekend?", "I feel like we’ve been ships passing in the night. Could we have ten minutes after dinner, phones down, to catch up?"],
+        "kid": ["No pressure to talk. I’m making hot chocolate, want one?", "I’m heading to the store, want to come? You can pick the music."],
+        "partner": ["I miss us. Could we have one small ritual that’s just ours, like coffee together before work?"],
+        "friend": ["I miss you! No pressure, but I’d love to catch up. Walk or coffee sometime next week?"]
+      },
+      "path": [["Turning Toward", "/turning-toward.html"], ["WP-13: The 90-second daily check-in", "/workpapers/wp-13-pll-protocol.html"], ["Bids for connection (Library)", "/library/relationships.html#bids-for-connection"]],
+      "deeper": ["bids for connection", "What are bids for connection?"],
+      "ex": "A dad’s 15-year-old gave only one-word answers. Instead of more questions, he started offering drives to practice and letting her pick the music. A few weeks in, she began talking in the car, and he mostly just listened."
+    },
+    "phone": {
+      "label": "phones and distraction",
+      "match": [["(always|constantly) on (their|his|her|my) phone|on (their|his|her) phone (all|the whole)|glued to (their|his|her) phone|scroll* (all|the whole)|phone at dinner|screens?|screen time|video games?|gaming (all|every)|doesnt look up|doesn t look up|half listening|distracted when i talk", 5], ["phone|scroll*|tablet|tv", 1]],
+      "reflect": "It’s hard to feel close to someone whose attention keeps drifting to a screen.",
+      "going": "This is Pillar V, Notice the quiet incentives. Phones are designed to pull attention, so reaching for them becomes a default without anyone deciding to ignore anyone. {They} may not notice how often it happens. Small, shared agreements about when phones go away tend to work better than criticizing the habit.",
+      "steps": ["Pick one or two phone-free moments together (like meals or the first ten minutes after work) rather than a big rule.", "Say how it feels, not what {they} are doing wrong.", "Make it mutual: put your own phone away too, somewhere out of reach."],
+      "scripts": {
+        "default": ["I miss having your full attention sometimes. Could we try phones away during dinner this week, both of us?", "Could we have the first ten minutes when we get home without phones? I’d love to hear about your day."],
+        "kid": ["Let’s try a phones-in-the-basket dinner this week, mine included. You can pick what we talk about."]
+      },
+      "path": [["Turning Toward", "/turning-toward.html"], ["WP-13: The 90-second daily check-in", "/workpapers/wp-13-pll-protocol.html"], ["Phones and presence (Library)", "/library/calm.html#phones-and-presence"]],
+      "deeper": ["phones and presence", "Tell me about phones and presence"],
+      "ex": "A family tried a phone basket at dinner for one week, parents included. The first two nights were awkward. By Friday the kids were telling stories, and they kept it for weekday dinners."
+    },
+    "wiring": {
+      "label": "different wiring",
+      "match": [["adhd|autis*|audhd|neurodiver*|neurotypical|asperger*|dyslexi*|sensory|highly sensitive|hsp|different(ly)? wired|different wiring|wired differently|takes? (things|everything) (too )?literally|needs? time to process|processing time|needs? (things|it) in writing|misses? hints|doesnt get hints|doesn t get hints|noise bothers|too loud for me", 5], ["wiring|wired|literal|overstimulat*|meltdown|shutdown", 1]],
+      "reflect": "Being wired differently from someone you’re close to can make ordinary conversations feel like a translation job.",
+      "reflect_self": "It sounds like your wiring shapes how things land for you, and that’s worth understanding rather than fighting.",
+      "going": "This is Pillar IV, Tune how you send and receive. Different brains take in words, tone, noise and time differently. Researchers call the two-way mix-up between differently wired people the double empathy problem: it isn’t one person’s fault, because each is decoding with a receiver built for their own kind of signal. A mismatch is tuning, not a moral failing.",
+      "going_self": "This is Pillar IV (tune how you send and receive) and Pillar III (read your state). Your wiring (your temperament, sensory makeup, pace and how you take in words) is part of you, not a flaw to fix. You can understand it, plan around it and explain it. It also helps to tell your lasting wiring apart from learned patterns and from how today is going.",
+      "steps": ["Each of you fill in a Wiring Card on a calm day: how you receive words, what silence means, what to avoid.", "Swap cards and read them before a hard conversation, not during one.", "Agree small translations: written follow-ups, a quiet room, a clear ask instead of a hint, time to process."],
+      "steps_self": ["Fill in a Wiring Card about yourself, on a calm day.", "Sort a recent reaction: was it your lasting wiring, a learned pattern, or just today’s conditions?", "Share one thing from your card with someone close: “If I go quiet, I’m processing, not upset.”"],
+      "scripts": {
+        "default": ["I think we take in words really differently. Could we both fill in a Wiring Card and swap them? I’d love to know how to say things so they land for you.", "When I go quiet, I’m processing, not upset. If you can give me a few minutes, I’ll come back with a real answer."],
+        "self": ["I’m wired to take things literally, so a direct ask works best for me. It’s not about you.", "I need a bit of quiet to process. Give me ten minutes and I’ll be back."],
+        "coworker": ["I work best with requests in writing, with a deadline. Could you drop the details in a message after we talk?"]
+      },
+      "path": [["The Wiring Card", "/wiring-card.html"], ["Wired Differently", "/wired-differently.html"], ["Know your own wiring", "/know-yourself.html"]],
+      "deeper": ["the double empathy problem", "What is the double empathy problem?"],
+      "ex": "Kim, who is autistic, heard “we should clean the garage sometime” as a passing thought. Her partner meant it as a request. They swapped Wiring Cards, and now he says, “Could you help me clean the garage Saturday at 10?” It got done, and nobody felt ignored."
+    }
+  }
+}

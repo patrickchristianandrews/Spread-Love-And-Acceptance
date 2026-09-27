@@ -1,0 +1,459 @@
+{
+  "_about": "Who a situation involves. nouns are captured (so 'my sister' becomes 'your sister' in the reply); cues only detect. Patterns use the small matching language described in tools/chat/README.md: | separates choices, * ends a word stem, .. allows a few words in between, <a|b> captures. Text may use {them}, {Them}, {they}, {their}.",
+  "who": {
+    "self": {
+      "them": "yourself",
+      "nouns": "",
+      "cues": "",
+      "fit": "Everything in the program starts with you. You can do all of this on your own: check your own weather, learn your wiring, and plan what settles you. Here’s a gentle path for just you.",
+      "path": [
+        [
+          "Today’s Weather: a one-minute check on yourself",
+          "/quick-checks.html#today"
+        ],
+        [
+          "WP-02: How full is your battery?",
+          "/workpapers/wp-02-battery-stress-meter.html"
+        ],
+        [
+          "Know your own wiring",
+          "/know-yourself.html"
+        ]
+      ],
+      "read": [
+        "Know your own wiring",
+        "/know-yourself.html"
+      ],
+      "step": "Check your battery before you judge yourself: is this about the thing, or about everything else you’re carrying today?",
+      "chips": [
+        [
+          "I can’t get myself to start things",
+          "I can’t get myself to start things I need to do"
+        ],
+        [
+          "I overreact to small things",
+          "I overreact to small things and then feel bad"
+        ],
+        [
+          "I feel stretched thin",
+          "I feel stretched thin"
+        ],
+        [
+          "Why do I react this way?",
+          "Why do I react this way?"
+        ]
+      ]
+    },
+    "partner": {
+      "them": "your partner",
+      "nouns": "partner|husband|wife|boyfriend|girlfriend|spouse|fiance|fiancee|bf|gf|other half|hubby|significant other",
+      "cues": "we re married|we are married|my marriage|our marriage|our relationship",
+      "fit": "With a partner, the unseen work is often the heaviest part. Start by seeing who does what, then give each regular job one owner, then keep small things small with a short daily check-in.",
+      "path": [
+        [
+          "WP-01: Who did what (a week’s log)",
+          "/workpapers/wp-01.html"
+        ],
+        [
+          "WP-03: One owner per job",
+          "/workpapers/wp-03-raci-treaty.html"
+        ],
+        [
+          "WP-13: The 90-second daily check-in",
+          "/workpapers/wp-13-pll-protocol.html"
+        ]
+      ],
+      "read": [
+        "Where partners start",
+        "/relationships-in-depth.html#partners"
+      ],
+      "step": "Pick a calm time you both agree on, not the middle of a busy evening, and keep it to one topic.",
+      "steps": {
+        "distance": "Try one small ritual that’s just yours: ten minutes after dinner, phones down, to catch up on each other’s day.",
+        "load": "Suggest you each log one ordinary week in WP-01, separately, and only then compare."
+      },
+      "chips": [
+        [
+          "We keep arguing about chores",
+          "My partner and I keep arguing about chores"
+        ],
+        [
+          "Things said the wrong way",
+          "My partner and I keep misreading each other’s tone"
+        ],
+        [
+          "I want to feel closer",
+          "My partner and I feel distant lately"
+        ],
+        [
+          "Show me where partners start",
+          "Which tools should partners start with?"
+        ]
+      ]
+    },
+    "family": {
+      "them": "your family member",
+      "nouns": "sister|brother|sibling|siblings|sis|bro|mom|mum|mother|dad|father|parents|parent|grandma|grandmother|grandpa|grandfather|aunt|uncle|cousin|in laws|inlaws|motherinlaw|fatherinlaw|mother in law|father in law|sisterinlaw|brotherinlaw|stepmom|stepdad|stepmother|stepfather|stepsister|stepbrother|family",
+      "cues": "my family|our family|family dinner|family group chat|at the holidays|at christmas|at thanksgiving",
+      "fit": "Families often clash on tone and urgency more than on the task itself. Agree who owns what, so nobody has to guess, and test tricky messages before you send them.",
+      "path": [
+        [
+          "WP-03: One owner per job",
+          "/workpapers/wp-03-raci-treaty.html"
+        ],
+        [
+          "The Signal Translator",
+          "/signal-translator.html"
+        ],
+        [
+          "Where families start",
+          "/relationships-in-depth.html#family"
+        ]
+      ],
+      "read": [
+        "Where families start",
+        "/relationships-in-depth.html#family"
+      ],
+      "step": "Remember that old family roles show up fast. It’s okay to respond as the adult you are now, not the role you had growing up.",
+      "chips": [
+        [
+          "They make plans without asking",
+          "My family always makes plans without asking me"
+        ],
+        [
+          "We clash on tone",
+          "My family and I clash about how things are said"
+        ],
+        [
+          "Holidays get tense",
+          "Family holidays get tense and I dread them"
+        ],
+        [
+          "Show me where families start",
+          "Which tools should families start with?"
+        ]
+      ]
+    },
+    "kid": {
+      "them": "your kid",
+      "nouns": "kid|kids|child|children|son|daughter|teen|teens|teenager|teenagers|toddler|stepson|stepdaughter|stepkid|stepkids|little one|youngest|oldest|1[0-9] year old|[0-9] year old",
+      "cues": "my 1[0-9] yo|our 1[0-9] yo|adolescent",
+      "fit": "With kids and teens, keep it warm, short and practical. Give them real, age-sized jobs they own, notice their bids for attention, and never ask a child to keep track of what the adults do.",
+      "path": [
+        [
+          "Turning Toward: seven small ways to connect",
+          "/turning-toward.html"
+        ],
+        [
+          "WP-03: One owner per job (age-sized jobs)",
+          "/workpapers/wp-03-raci-treaty.html"
+        ],
+        [
+          "Talking with teenagers (Library)",
+          "/library/life.html#teenagers"
+        ]
+      ],
+      "read": [
+        "Talking with teenagers (Library)",
+        "/library/life.html#teenagers"
+      ],
+      "step": "Talk side by side, not face to face: in the car, on a walk, while cooking. It lowers the pressure for a lot of kids and teens.",
+      "steps": {
+        "distance": "Be around without an agenda: hang out where they are, and let them bring things up.",
+        "mess": "Agree on a small, clear standard for their space and one shared job they fully own."
+      },
+      "chips": [
+        [
+          "My teen won’t talk to me",
+          "My teen won’t talk to me"
+        ],
+        [
+          "My kid won’t do their chores",
+          "My kid won’t do their chores"
+        ],
+        [
+          "We clash about screens",
+          "My kid is always on their phone"
+        ],
+        [
+          "Show me where families start",
+          "Which tools should families start with?"
+        ]
+      ],
+      "bonus": {
+        "distance": 1
+      }
+    },
+    "coparent": {
+      "them": "your co-parent",
+      "nouns": "ex|exes|expartner|exwife|exhusband|exboyfriend|exgirlfriend|ex partner|ex wife|ex husband|ex boyfriend|ex girlfriend|coparent|coparents|co parent|babys dad|babys mom|kids dad|kids mom|childrens father|childrens mother",
+      "cues": "custody|handoff*|handover*|hand off*|exchange day|exchanges|drop off*|dropoff*|pickups|pick ups|parenting plan|parenting schedule|two homes|both houses|coparenting|co parenting|separated|divorced|divorce",
+      "fit": "A court order or parenting plan always comes first. Inside it, keep handoffs short and calm, keep messages about logistics, give each task one owner, and never use the kids as messengers.",
+      "path": [
+        [
+          "WP-03: One owner per job (who handles what)",
+          "/workpapers/wp-03-raci-treaty.html"
+        ],
+        [
+          "WP-09: Say it so it lands",
+          "/workpapers/wp-09-tone-filter.html"
+        ],
+        [
+          "Where co-parents start",
+          "/relationships-in-depth.html#co-parents"
+        ]
+      ],
+      "read": [
+        "Where co-parents start",
+        "/relationships-in-depth.html#co-parents"
+      ],
+      "step": "Keep messages brief, factual and about the kids’ logistics. Save anything bigger for a planned conversation, never at the handoff and never through the kids.",
+      "chips": [
+        [
+          "Handoffs are tense",
+          "Handoffs with my ex are tense"
+        ],
+        [
+          "They change plans last minute",
+          "My co-parent keeps changing the schedule last minute"
+        ],
+        [
+          "Messages turn into fights",
+          "Texts with my ex always turn into fights"
+        ],
+        [
+          "Show me where co-parents start",
+          "Which tools should co-parents start with?"
+        ]
+      ],
+      "bonus": {
+        "handoffs": 1
+      }
+    },
+    "roommate": {
+      "them": "your roommate",
+      "nouns": "roommate|roommates|roomate|roomates|housemate|housemates|flatmate|flatmates|roomie|roomies",
+      "cues": "house share|shared house|shared apartment|shared flat|house meeting",
+      "fit": "Roommates do best with a shared picture and clear owners. List the week’s jobs on the Lemonade Stand (it works for two to eight people), give each job one owner, and hold a short house meeting now and then.",
+      "path": [
+        [
+          "The Lemonade Stand (2 to 8 people)",
+          "/lemonade-stand.html"
+        ],
+        [
+          "WP-03: One owner per job",
+          "/workpapers/wp-03-raci-treaty.html"
+        ],
+        [
+          "Where roommates start",
+          "/relationships-in-depth.html#roommates"
+        ]
+      ],
+      "read": [
+        "Where roommates start",
+        "/relationships-in-depth.html#roommates"
+      ],
+      "step": "Make it about the house, not the person: “our kitchen”, “our bills”, with a short list everyone can see.",
+      "steps": {
+        "money": "Put shared costs on the Lemonade Stand’s money side, so everyone sees the same numbers.",
+        "group": "With three or more of you, hold a 20-minute house meeting with one short list, and give every job one owner before you leave the room."
+      },
+      "chips": [
+        [
+          "Chores aren’t split fairly",
+          "My roommates don’t do their share of chores"
+        ],
+        [
+          "Bills and rent",
+          "My roommate always pays their share of the bills late"
+        ],
+        [
+          "There are three or more of us",
+          "There are three of us roommates and nobody agrees on chores"
+        ],
+        [
+          "Show me where roommates start",
+          "Which tools should roommates start with?"
+        ]
+      ]
+    },
+    "coworker": {
+      "them": "your coworker",
+      "nouns": "coworker|coworkers|colleague|colleagues|boss|manager|supervisor|team lead|teammate|teammates|team|employee|employees|direct report|direct reports|staff|client|clients",
+      "cues": "at work|in meetings|in the meeting|meetings|standup|stand up|slack|microsoft teams|the office|work chat|my job|at my job|workplace|team of [0-9]+|team of (three|four|five|six|seven|eight)",
+      "fit": "At work, the same ideas fit with lighter words. Give every recurring task one clear owner, test tricky messages before you send them, and keep repair quick and professional. The Lemonade Stand and one-owner-per-job both work for teams of two to eight.",
+      "path": [
+        [
+          "WP-03: One owner per job",
+          "/workpapers/wp-03-raci-treaty.html"
+        ],
+        [
+          "The Signal Translator",
+          "/signal-translator.html"
+        ],
+        [
+          "Where coworkers and teams start",
+          "/relationships-in-depth.html#coworkers"
+        ]
+      ],
+      "read": [
+        "Where coworkers and teams start",
+        "/relationships-in-depth.html#coworkers"
+      ],
+      "step": "Keep it about the work and the process, and put what you agree in a short written note afterward so nobody has to remember it the same way.",
+      "steps": {
+        "group": "For a team, run a short retro: what went well, what slipped, and one owner for each fix. RACI (one owner per job) scales to a team of seven easily."
+      },
+      "chips": [
+        [
+          "They interrupt me in meetings",
+          "My coworker keeps interrupting me in meetings"
+        ],
+        [
+          "Nobody owns the task",
+          "On my team nobody owns anything and things fall through the cracks"
+        ],
+        [
+          "They take credit for my work",
+          "My coworker takes credit for my work"
+        ],
+        [
+          "Show me where teams start",
+          "Which tools should coworkers and teams start with?"
+        ]
+      ]
+    },
+    "friend": {
+      "them": "your friend",
+      "nouns": "friend|friends|best friend|bestie|bff|buddy|pal|pals|friend group",
+      "cues": "our friendship|my friendship",
+      "fit": "Friendships run on small, freely given moments. Notice when they reach for you, say what you mean kindly, and check texts before a tone misunderstanding grows.",
+      "path": [
+        [
+          "Turning Toward",
+          "/turning-toward.html"
+        ],
+        [
+          "The Conversation Reader (for text threads)",
+          "/conversation-reader.html"
+        ],
+        [
+          "Where friends start",
+          "/relationships-in-depth.html#friends"
+        ]
+      ],
+      "read": [
+        "Where friends start",
+        "/relationships-in-depth.html#friends"
+      ],
+      "step": "Friendships have no rulebook, so say what you’d like plainly and kindly. Most friends are glad to know.",
+      "chips": [
+        [
+          "We’re drifting apart",
+          "My friend and I are drifting apart"
+        ],
+        [
+          "They always cancel",
+          "My friend keeps cancelling plans"
+        ],
+        [
+          "A text went wrong",
+          "My friend took my text the wrong way"
+        ],
+        [
+          "Show me where friends start",
+          "Which tools should friends start with?"
+        ]
+      ]
+    },
+    "caregiving": {
+      "them": "the person you care for",
+      "nouns": "",
+      "cues": "(caring|care) for (my |our |an? )?<mom|mum|mother|dad|father|parent|parents|husband|wife|partner|spouse|son|daughter|grandma|grandpa|grandmother|grandfather|sister|brother>|(looking after|taking care of|nursing) (my |our )?<mom|mum|mother|dad|father|parent|parents|husband|wife|partner|spouse|son|daughter|grandma|grandpa|sister|brother>|<mom|mum|mother|dad|father|husband|wife|partner|spouse|parent|grandma|grandpa>s? (surgery|operation|illness|hospital stay|recovery|diagnosis|dementia|disability|injury)|<husband|wife|partner|spouse|mom|dad|mother|father> .. (surgery|operation|illness|recovering|recovery|diagnos*|injur*|disabilit*|hospital)|caregiver|caregivers|caregiving|carer|carers|care giver|doing everything for (him|her|them)",
+      "fit": "Caregiving is real work, and it’s easy to stop noticing your own battery. Check your own state first, give care tasks named owners (other family, friends, services), and plan what settles you before the hard days.",
+      "path": [
+        [
+          "WP-02: How full is your battery?",
+          "/workpapers/wp-02-battery-stress-meter.html"
+        ],
+        [
+          "WP-03: One owner per job (share the care tasks)",
+          "/workpapers/wp-03-raci-treaty.html"
+        ],
+        [
+          "Where caregivers start",
+          "/relationships-in-depth.html#caregivers"
+        ]
+      ],
+      "read": [
+        "Where caregivers start",
+        "/relationships-in-depth.html#caregivers"
+      ],
+      "step": "Ask for one specific kind of help, with a time: “Could you take Thursday’s appointment?” lands much better than “I need more help.”",
+      "chips": [
+        [
+          "I’m running on empty",
+          "I’m caring for my mom and running on empty"
+        ],
+        [
+          "Siblings don’t help",
+          "I do all the caregiving and my siblings don’t help"
+        ],
+        [
+          "Caring for my partner",
+          "I’m caring for my husband after surgery and doing everything"
+        ],
+        [
+          "Show me where caregivers start",
+          "Which tools should caregivers start with?"
+        ]
+      ],
+      "bonus": {
+        "care": 2
+      }
+    },
+    "other": {
+      "them": "the other person",
+      "nouns": "",
+      "cues": "",
+      "fit": "Whoever it is, the same order helps: see the whole load, fix the setup rather than the person, check your state, and say it so it lands.",
+      "path": [
+        [
+          "The Lemonade Stand",
+          "/lemonade-stand.html"
+        ],
+        [
+          "WP-03: One owner per job",
+          "/workpapers/wp-03-raci-treaty.html"
+        ],
+        [
+          "How it fits your relationships",
+          "/relationships.html"
+        ]
+      ],
+      "read": [
+        "How it fits your relationships",
+        "/relationships.html"
+      ],
+      "step": "Start from “we’re on the same side, against the problem”, and keep it to one topic at a time.",
+      "chips": [
+        [
+          "We argue about chores",
+          "We keep arguing about chores"
+        ],
+        [
+          "I do everything at home",
+          "I feel like I do everything at home"
+        ],
+        [
+          "Things said the wrong way",
+          "Things keep coming out the wrong way between us"
+        ],
+        [
+          "Which tool fits me?",
+          "Which tool fits my situation?"
+        ]
+      ]
+    }
+  }
+}

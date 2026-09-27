@@ -17,7 +17,9 @@ from html import unescape
 from html.parser import HTMLParser
 
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..'))
+HERE = os.path.dirname(os.path.abspath(__file__))
 OUT = os.path.join(ROOT, 'assets', 'js', 'chat-kb.js')
+OUT_BG = os.path.join(ROOT, 'assets', 'js', 'chat-kb-bg.js')
 
 # Pages that are not reading content, or not public.
 SKIP_FILES = {'garden-backdrop.html', 'offline.html', '404.html', 'dashboard.html', 'ask.html'}
@@ -1055,6 +1057,206 @@ for _src in (SYN_LIBRARY, SYN_GAPS):
         _cur.extend(x for x in _v if x not in _cur)
 
 
+# ---------------------------------------------------------------- program cards, situations, background notes
+def dsl(p):
+    """The small matching language used by situations/*.json (see README): | separates choices, a trailing *
+    ends a word stem, ' .. ' allows up to four words in between, <a|b> captures (for the who-nouns), and
+    (a|b) groups without capturing. Matched against the chat's normalised text: lowercase letters, digits
+    and single spaces, with apostrophes and in-word hyphens removed."""
+    out = p.replace(' .. ', '(?: [a-z0-9]+){0,4} ')
+    out = re.sub(r'\((?!\?)', '(?:', out)
+    out = out.replace('*', '[a-z0-9]*').replace('<', '(').replace('>', ')')
+    return '(?:^| )(?:' + out + ')(?= |$)'
+
+
+def check_js_regex(src, where):
+    try:
+        re.compile(src.replace('(?<', '(?P<') if False else src)
+    except re.error as ex:
+        raise SystemExit('bad pattern in %s: %s (%s)' % (where, src, ex))
+
+
+def link_ok(u):
+    path = u.split('#')[0]
+    if not path.startswith('/'):
+        return False
+    fp = os.path.join(ROOT, path.lstrip('/'))
+    return os.path.isfile(fp) or os.path.isfile(fp + '.html') or os.path.isfile(os.path.join(fp, 'index.html'))
+
+
+BANNED = re.compile(r'\b(suicid\w*|self[- ]?harm\w*|hotlines?|crisis lines?|domestic violence|abus(e|ive|er)|analytics|kill (yourself|myself))\b', re.I)
+
+
+def check_text(obj, where, warnings):
+    """No banned topics, and every link points at a real page."""
+    if isinstance(obj, dict):
+        for k, v in obj.items():
+            if k in ('match', 'pat', 'nouns', 'cues', 'keys', '_about'):
+                continue
+            check_text(v, where + '.' + k, warnings)
+    elif isinstance(obj, list):
+        if len(obj) == 2 and all(isinstance(x, str) for x in obj) and obj[1].startswith('/'):
+            if not link_ok(obj[1]):
+                warnings.append('%s: link %s does not exist' % (where, obj[1]))
+        for i, v in enumerate(obj):
+            check_text(v, '%s[%d]' % (where, i), warnings)
+    elif isinstance(obj, str):
+        if BANNED.search(obj):
+            raise SystemExit('banned topic in %s: %r' % (where, BANNED.search(obj).group(0)))
+
+
+def load_cards(warnings):
+    fp = os.path.join(HERE, 'program-cards.json')
+    if not os.path.isfile(fp):
+        return [], []
+    data = json.load(open(fp, encoding='utf-8'))
+    cards, seen = [], set()
+    for c in data.get('cards', []):
+        if c['id'] in seen:
+            raise SystemExit('duplicate card id ' + c['id'])
+        seen.add(c['id'])
+        if c.get('pat'):
+            check_js_regex(c['pat'], 'card ' + c['id'])
+        check_text(c, 'card ' + c['id'], warnings)
+        cards.append({k: v for k, v in c.items() if not k.startswith('_')})
+    clar = []
+    for c in data.get('clarify', []):
+        check_js_regex(c['pat'], 'clarify')
+        check_text(c, 'clarify', warnings)
+        clar.append(c)
+    return cards, clar
+
+
+def load_situations(warnings):
+    sdir = os.path.join(HERE, 'situations')
+    merged = {'who': {}, 'issues': {}, 'combos': {}}
+    if not os.path.isdir(sdir):
+        return merged, 0, 0
+    for fn in sorted(os.listdir(sdir)):
+        if not fn.endswith('.json'):
+            continue
+        data = json.load(open(os.path.join(sdir, fn), encoding='utf-8'))
+        for part in ('who', 'issues', 'combos'):
+            for k, v in data.get(part, {}).items():
+                if k in merged[part]:
+                    raise SystemExit('%s: duplicate %s %s' % (fn, part, k))
+                merged[part][k] = v
+    for k, w in merged['who'].items():
+        alts = []
+        if w.get('nouns'):
+            alts.append(r'(?:^| )(?:(?:my|our|the|his|her|their|a|an|your) )?(' + re.sub(r'\((?!\?)', '(?:', w['nouns']).replace('*', '[a-z0-9]*') + r')(?= |$)')
+        if w.get('cues'):
+            alts.append(dsl(w['cues']))
+        w['match'] = '|'.join(alts) or '$^'
+        check_js_regex(w['match'], 'who ' + k)
+        for f in ('nouns', 'cues'):
+            w.pop(f, None)
+        check_text(w, 'who ' + k, warnings)
+    for k, iss in merged['issues'].items():
+        iss['match'] = [[dsl(m[0]), m[1]] for m in iss['match']]
+        for m in iss['match']:
+            check_js_regex(m[0], 'issue ' + k)
+        check_text(iss, 'issue ' + k, warnings)
+    for k, c in merged['combos'].items():
+        who, issue = k.split('+')
+        if who not in merged['who'] or issue not in merged['issues']:
+            warnings.append('combo %s names an unknown who or issue' % k)
+        check_text(c, 'combo ' + k, warnings)
+    # how many playbooks the templates can compose: every allowed who × issue pair
+    n = 0
+    for ik, iss in merged['issues'].items():
+        for wk in merged['who']:
+            if iss.get('only') and wk not in iss['only']:
+                continue
+            if wk == 'self' and not (iss.get('selfFirst') or any(iss.get(f + '_self') for f in ('reflect', 'going', 'steps'))
+                                     or (iss.get('scripts') or {}).get('self')):
+                continue
+            if wk != 'self' and iss.get('needsOther') is None and False:
+                continue
+            n += 1
+    return merged, n, len(merged['combos'])
+
+
+def slug(t):
+    return re.sub(r'[^a-z0-9]+', '-', unescape(t).lower().replace('’', '').replace("'", '')).strip('-')
+
+
+def load_background(warnings):
+    """tools/chat/background/*.md → a list of entries. Format (see README):
+    ## Title / aka: / see: / go: /page.html#x | Label / evidence: / try: / paragraphs / Program: …"""
+    bdir = os.path.join(HERE, 'background')
+    entries, by_slug, alias_slug = [], {}, {}
+    if not os.path.isdir(bdir):
+        return entries
+    for fn in sorted(os.listdir(bdir)):
+        if not fn.endswith('.md'):
+            continue
+        topic = fn[:-3]
+        text = open(os.path.join(bdir, fn), encoding='utf-8').read()
+        for block in re.split(r'^## ', text, flags=re.M)[1:]:
+            lines = block.strip('\n').split('\n')
+            title = lines[0].strip()
+            e = {'id': slug(title), 't': title, 'a': [], 'x': [], 'p': '', 'go': None, 'see': [], 'ev': '', 'ex': '', 'f': topic}
+            paras, cur = [], []
+            for ln in lines[1:]:
+                m = re.match(r'^(aka|see|go|evidence|try|program):\s*(.*)$', ln.strip(), re.I)
+                if m:
+                    key, val = m.group(1).lower(), m.group(2).strip()
+                    if key == 'aka':
+                        e['a'] = [x.strip() for x in re.split(r'[;,]', val) if x.strip()]
+                    elif key == 'see':
+                        e['see'] = [x.strip() for x in val.split(';') if x.strip()]
+                    elif key == 'go':
+                        u, _, lab = val.partition('|')
+                        e['go'] = [u.strip(), lab.strip() or 'Put it into practice on the site']
+                    elif key == 'evidence':
+                        e['ev'] = val
+                    elif key == 'try':
+                        e['ex'] = val
+                    elif key == 'program':
+                        e['p'] = val
+                    continue
+                if not ln.strip():
+                    if cur:
+                        paras.append(' '.join(cur))
+                        cur = []
+                    continue
+                cur.append(ln.strip())
+            if cur:
+                paras.append(' '.join(cur))
+            e['x'] = paras
+            if e['id'] in by_slug:
+                raise SystemExit('duplicate background entry: ' + title)
+            if not 2 <= len(paras) <= 4:
+                warnings.append('background %s: %d paragraphs (want 2 to 4)' % (title, len(paras)))
+            if not e['go'] or not link_ok(e['go'][0]):
+                warnings.append('background %s: missing or broken go: link %s' % (title, e['go']))
+            if not e['ev']:
+                warnings.append('background %s: no evidence note' % title)
+            if not e['p']:
+                warnings.append('background %s: no Program: line' % title)
+            whole = ' '.join([title] + e['a'] + paras + [e['p'], e['ev'], e['ex']])
+            if BANNED.search(whole):
+                raise SystemExit('banned topic in background entry %s: %r' % (title, BANNED.search(whole).group(0)))
+            by_slug[e['id']] = e
+            for a in e['a']:
+                alias_slug.setdefault(slug(a), e['id'])
+            entries.append(e)
+    for e in entries:
+        ids = []
+        for s_ in e['see']:
+            k = slug(s_)
+            k = k if k in by_slug else alias_slug.get(k)
+            if k and k != e['id']:
+                ids.append(k)
+            else:
+                warnings.append('background %s: see "%s" not found' % (e['t'], s_))
+        e['see'] = ids
+        for k in [k for k, v in e.items() if not v and k not in ('x',)]:
+            del e[k]
+    return entries
+
+
 def main():
     meta = site_sections()
     pages = [p for p in find_pages()]
@@ -1150,7 +1352,12 @@ def main():
         if not d.get('d'):
             d.pop('d', None)
 
-    kb = {'v': 1, 'docs': docs, 'syn': SYN}
+    warnings = []
+    cards, clar = load_cards(warnings)
+    sit, n_play, n_combo = load_situations(warnings)
+    bg = load_background(warnings)
+    bgi = [[e['id'], e['t'], e.get('a', [])] for e in bg]
+    kb = {'v': 2, 'docs': docs, 'syn': SYN, 'cards': cards, 'clar': clar, 'sit': sit, 'bgi': bgi}
     js = ('/* chat-kb.js — generated by tools/chat/build_kb.py. Do not edit by hand.\n'
           '   The on-device chat answers only from these passages of the site. */\n'
           'window.TOL_CHAT_KB = ' + json.dumps(kb, ensure_ascii=False, separators=(',', ':')) + ';\n')
@@ -1165,6 +1372,25 @@ def main():
         print('  skipped %s (%s)' % (p, why))
     if size > 4 * 1024 * 1024:
         print('WARNING: file is over 4 MB', file=sys.stderr)
+    print('program cards: %d (%d tools, %d common questions), clarifying prompts: %d' % (
+        len(cards), sum(1 for c in cards if c.get('kind') == 'tool'), sum(1 for c in cards if c.get('kind') == 'intent'), len(clar)))
+    print('situations: %d kinds of relationship x %d issues = %d playbooks (%d hand-tuned pairs)' % (
+        len(sit['who']), len(sit['issues']), n_play, n_combo))
+    bgjs = ('/* chat-kb-bg.js — generated by tools/chat/build_kb.py from tools/chat/background/*.md. Do not edit by hand.\n'
+            '   The Professor\u2019s background notes: related reading that is not a page on this site.\n'
+            '   site-chat.js loads this only when the site\u2019s own pages don\u2019t answer a question. */\n'
+            'window.TOL_CHAT_BG = ' + json.dumps({'v': 1, 'docs': bg}, ensure_ascii=False, separators=(',', ':')) + ';\n')
+    with open(OUT_BG, 'w', encoding='utf-8') as f:
+        f.write(bgjs)
+    bsize = os.path.getsize(OUT_BG)
+    topics = {}
+    for e in bg:
+        topics[e['f']] = topics.get(e['f'], 0) + 1
+    print('background notes: %d entries in %d topics, wrote %s (%.1f KB)' % (len(bg), len(topics), os.path.relpath(OUT_BG, ROOT), bsize / 1024))
+    if bsize > 2 * 1024 * 1024:
+        print('WARNING: background file is over 2 MB', file=sys.stderr)
+    for w in warnings:
+        print('  check: ' + w)
 
 
 if __name__ == '__main__':

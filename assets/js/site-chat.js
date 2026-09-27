@@ -14,14 +14,16 @@
 
   var SELF = document.currentScript && document.currentScript.src;
   var KB_URL = SELF ? SELF.replace(/site-chat\.js(\?.*)?$/, 'chat-kb.js') : '/assets/js/chat-kb.js';
+  // the background notes: related reading that isn't a page on this site, fetched only when needed
+  var BG_URL = KB_URL.replace(/chat-kb\.js$/, 'chat-kb-bg.js');
   var STORE_KEY = 'tol-chat-v1';
   var REDUCED = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  var PRIVACY_LINE = 'Answers come only from this site’s pages. What you type stays on this device.';
+  var PRIVACY_LINE = 'Answers come from this site’s pages and the Professor’s notes. What you type stays on this device.';
 
   var DEFAULT_CHAR = {
     name: 'Professor Puddles',
     color: '#7FA88A',
-    greeting: 'Hi, I’m Professor Puddles! Ask me about anything on this site, like the book, the workpapers, check-ins, different wiring or ways to calm down, and I’ll share what the pages say, with a link to read more.'
+    greeting: 'Hi, I’m Professor Puddles! Ask me about anything in the program, like a tool, a workpaper or what a score means. Or tell me what’s going on, with yourself or someone else, and I’ll suggest a few kind next steps, with links to the right pages.'
   };
 
   // ------------------------------------------------------------------ text helpers
@@ -134,7 +136,85 @@
     docs.forEach(function (d, i) { Object.keys(head[i]).forEach(function (t) { domain[t] = 1; }); tokens(d.t).forEach(function (t) { domain[t] = 1; }); });
     Object.keys(syn).forEach(function (k) { if (k.charAt(0) !== ' ') domain[k] = 1; syn[k].forEach(function (t) { domain[t] = 1; }); });
     Object.keys(domain).forEach(function (t) { if (t.length >= 7) domain['~' + t.slice(0, 7)] = 1; });  // procrastinating ~ procrastination
-    IDX = { N: N, df: df, tf: tf, len: len, head: head, avg: total / N, syn: syn, gloss: gloss, domain: domain };
+    // the background notes' names (the notes themselves load later): "what is X" can find them, and their
+    // topic words count as on-topic, so a question about, say, emotional granularity isn't turned away
+    var bgNames = {};
+    (KB.bgi || []).forEach(function (e) {
+      [e[1]].concat(e[2] || []).forEach(function (n) { var k = phraseKey(n); if (k && !(k in bgNames)) bgNames[k] = e[0]; });
+      tokens(e[1]).forEach(function (t) { domain[t] = 1; });
+    });
+    // program cards: their names, and every word in them, are the program's own vocabulary
+    var cardKeys = [];
+    (KB.cards || []).forEach(function (c, ci) {
+      (c.keys || []).forEach(function (k) {
+        var broad = k.charAt(0) === '~', w = words(broad ? k.slice(1) : k).join(' ');
+        if (w) cardKeys.push({ k: ' ' + w + ' ', n: w.length, c: ci, broad: broad, t: tokens(w, true) });
+      });
+      (c.keys || []).concat([c.name || '']).forEach(function (k) { tokens(k).forEach(function (t) { domain[t] = 1; }); });
+      if (c.pat) { try { c.re = new RegExp(c.pat); } catch (e) { c.re = null; } }
+    });
+    cardKeys.sort(function (a, b) { return b.n - a.n; });
+    var sit = KB.sit || { who: {}, issues: {}, combos: {} };
+    Object.keys(sit.who).forEach(function (k) { try { sit.who[k].re = new RegExp(sit.who[k].match); } catch (e) { sit.who[k].re = /$^/; } });
+    Object.keys(sit.issues).forEach(function (k) {
+      sit.issues[k].res = (sit.issues[k].match || []).map(function (m) { try { return [new RegExp(m[0]), m[1]]; } catch (e) { return [/$^/, 0]; } });
+    });
+    (KB.clar || []).forEach(function (c) { try { c.re = new RegExp(c.pat); } catch (e) { c.re = /$^/; } });
+    IDX = { N: N, df: df, tf: tf, len: len, head: head, avg: total / N, syn: syn, gloss: gloss, domain: domain,
+      bgNames: bgNames, cardKeys: cardKeys, sit: sit, bg: null };
+  }
+
+  // ------------------------------------------------------------------ background notes (lazy)
+  var bgWaiting = [], bgTried = false;
+  function loadBG(cb) {
+    if (IDX && IDX.bg) return cb(true);
+    if (bgTried && !bgWaiting.length) return cb(false);
+    bgWaiting.push(cb);
+    if (bgWaiting.length > 1) return;
+    bgTried = true;
+    function done() {
+      if (window.TOL_CHAT_BG && IDX && !IDX.bg) buildBG(window.TOL_CHAT_BG);
+      var w = bgWaiting; bgWaiting = []; w.forEach(function (f) { f(!!(IDX && IDX.bg)); });
+    }
+    if (window.TOL_CHAT_BG) return done();
+    var sc = document.createElement('script');
+    sc.src = BG_URL; sc.async = true;
+    sc.onload = done; sc.onerror = done;
+    document.head.appendChild(sc);
+  }
+  function buildBG(data) {
+    var docs = data.docs || [], df = {}, tf = [], len = [], total = 0, byId = {};
+    docs.forEach(function (d, i) {
+      var f = {};
+      function add(list, w) { list.forEach(function (t) { f[t] = (f[t] || 0) + w; }); }
+      var body = tokens(d.x.join(' '));
+      add(body, 1); add(tokens(d.t), 4); add(tokens((d.a || []).join(' ')), 2.5); add(tokens(d.p || ''), 0.4);
+      tf.push(f); len.push(body.length); total += body.length; byId[d.id] = i;
+      Object.keys(f).forEach(function (t) { df[t] = (df[t] || 0) + 1; });
+    });
+    IDX.bg = { docs: docs, df: df, tf: tf, len: len, avg: total / Math.max(1, docs.length), N: docs.length, byId: byId };
+  }
+  function bgSearch(q) {
+    var B = IDX.bg, base = tokens(q), terms = [], seen = {};
+    base.forEach(function (t) { if (!seen[t]) { seen[t] = 1; terms.push({ t: t, w: 1, src: t }); } });
+    base.forEach(function (t) { (IDX.syn[t] || []).forEach(function (s) { if (!seen[s]) { seen[s] = 1; terms.push({ t: s, w: 0.4, src: t }); } }); });
+    function bidf(t) { var n = B.df[t] || 0; return Math.log(1 + (B.N - n + 0.5) / (n + 0.5)); }
+    var baseIdf = 0; base.forEach(function (t, j) { if (base.indexOf(t) === j && !ROLE[t]) baseIdf += bidf(t); });
+    var hits = [];
+    for (var i = 0; i < B.N; i++) {
+      var f = B.tf[i], s = 0, covered = {};
+      terms.forEach(function (tt) {
+        var n = f[tt.t]; if (!n) return;
+        s += tt.w * bidf(tt.t) * (n * 2.3) / (n + 1.3 * (0.3 + 0.7 * B.len[i] / B.avg));
+        if (!ROLE[tt.src]) covered[tt.src] = Math.max(covered[tt.src] || 0, tt.w >= 1 ? 1 : 0.6);
+      });
+      if (!s) continue;
+      var cov = 0; Object.keys(covered).forEach(function (src) { cov += covered[src] * bidf(src); });
+      cov = baseIdf ? cov / baseIdf : 0;
+      hits.push({ i: i, s: s * (0.5 + 0.7 * cov), cov: cov });
+    }
+    hits.sort(function (a, b) { return b.s - a.s; });
+    return hits;
   }
   function idf(t) { var n = IDX.df[t] || 0; return Math.log(1 + (IDX.N - n + 0.5) / (n + 0.5)); }
 
@@ -271,8 +351,11 @@
     { label: 'What is Unbilled Debt?', q: 'What is Unbilled Debt?' },
     { label: 'We keep arguing about chores', q: 'How do we stop fighting about chores?' },
     { label: 'Where do I start?', q: 'Where should I start?' },
-    { label: 'Surprise me', q: 'Surprise me' }
+    { label: 'Which tool fits me?', q: 'Which tool fits my situation?' }
   ];
+
+  // Topics this helper never takes on, however a word or two might overlap with the notes
+  var OFF_TOPIC = /\b(car|cars|engine|tires?|tyres?|oil change|brakes?|mechanic|transmission|resumes?|cv|cover letter|job application|recipes?|bake|baking|coding|javascript|python|programming|homework|stocks?|crypto|bitcoin|forecast|football|basketball|baseball|soccer|movie times|flights?|hotels?|translate)\b/;
 
   // A few everyday questions that need the site's own words for them
   var REWRITES = [
@@ -312,9 +395,473 @@
   ];
 
 
-  // Decide what to say to one message. Returns {blocks:[...], chips:[...]} (all data, rendered later).
+  function norm(q) { return fold(q).replace(/[^a-z0-9\s]/g, ' ').replace(/\s+/g, ' ').trim(); }
+  function fill(s, ctx) {
+    return String(s || '').replace(/\{(them|Them|they|They|their|Their)\}/g, function (m, k) {
+      var v = ctx[k.toLowerCase()] || '';
+      return k.charAt(0) === k.charAt(0).toUpperCase() ? v.charAt(0).toUpperCase() + v.slice(1) : v;
+    });
+  }
+  function safeLinks(list) { return (list || []).filter(function (l) { return l && safePath(l[1]); }); }
+
+  // ------------------------------------------------------------------ safety first
+  // Anything that sounds like danger or harm gets a short, kind "this is beyond me", never advice.
+  var DANGER = new RegExp([
+    '\\b(hits?|hitting|slapp?(s|ed|ing)?|punch(es|ed|ing)?|chok(e|es|ed|ing)|kick(s|ed|ing)?|strangl\\w*|grabb?(ed|ing) me by) (me|us|my (kids?|children|son|daughter|baby))\\b',
+    '\\b(shoved|shoves|pushed|pushes) me (down|over|into|against|around)\\b', '\\bbeats? me up\\b',
+    '\\babus(e|es|ed|ive|er|ers|ing)\\b', '\\bdomestic (violence|abuse)\\b', '\\bviolen(t|ce)\\b',
+    '\\bsuicid\\w*', '\\bkill(ing)? (my ?self|me|him|her|them|everyone)\\b', '\\b(want|wants|wanted|going) to die\\b',
+    '\\bend (it all|my life)\\b', '\\bself ?harm\\w*', '\\b(hurt|hurting|harm|harming|cut|cutting) my ?self\\b', '\\bno reason to (live|go on)\\b',
+    '\\bthreat(en|ens|ened|ening)\\w* (to )?(hurt|kill|harm)\\b', '\\b(threatens|threatened) me\\b',
+    '\\b(afraid|scared|frightened|terrified) (of|for) (him|her|my (life|safety)|my (partner|husband|wife|boyfriend|girlfriend|spouse|ex|dad|father|mom|mum|mother|stepdad|stepmom))\\b',
+    '\\bnot safe (at home|with (him|her|them|my))\\b', '\\bfeel unsafe\\b', '\\b(rape|raped|sexual(ly)? assault\\w*|assault(ed|s)? me)\\b',
+    '\\bstalk(s|ed|ing|er)?\\b', '\\b(gun|knife|weapon)\\b', '\\boverdos\\w*'
+  ].join('|'));
+  function safetyReply() {
+    return { blocks: [
+      { k: 'p', x: 'I’m really glad you said something. What you’re describing sounds serious, and it’s beyond what a small helper like me can help with. You deserve real support from a person.' },
+      { k: 'p', x: 'Please reach out to someone you trust, or to a qualified professional who can help with this properly.' }],
+      chips: [], kind: 'safety' };
+  }
+
+  // ------------------------------------------------------------------ small calculators, worked out right here
+  function numList(s) {
+    return (s.match(/\d*\.?\d+%?/g) || []).map(function (n) { return n.slice(-1) === '%' ? parseFloat(n) / 100 : parseFloat(n); });
+  }
+  function r2(v) { return (Math.round(v * 100 + 1e-7) / 100).toFixed(2); }  // 0.565 → 0.57, not 0.56 from float error
+  function r3(v) { return String(Math.round(v * 1000) / 1000); }
+  var NOT_VERDICT = 'It’s a gut-check that starts a conversation, not a verdict on you or anyone else.';
+  var WP02_ITEMS = ['sleep', 'workload elsewhere', 'unresolved conflict', 'how your body feels', 'time pressure today'];
+  function wp02Band(v) {
+    if (v < 0.3) return 'Under 0.3: whatever comes up right now is probably about the thing itself. Your battery isn’t adding much extra weight to it.';
+    if (v <= 0.6) return 'Between 0.3 and 0.6: you’re carrying more than usual. Before a hard talk, the page suggests saying it out loud: “Heads up, I’m carrying more than usual today.”';
+    return 'Over 0.6: be gentle with yourself, and put off anything that doesn’t need deciding in the next hour. A high score means “later,” not “never.”';
+  }
+  function calcBand(v) {
+    if (v >= 0.7) return ['0.70 or more: the setup is carrying its own weight.', 'Don’t change the setup. Keep the same rhythm of check-ins.'];
+    if (v >= 0.4) return ['0.40 to 0.69: something in the setup is drifting.', 'Look at the input with the biggest gap. It’s often ownership clarity, but check rather than assume.'];
+    return ['Under 0.40: the setup, as it stands, doesn’t look like it can last.', 'Rework the whole agreement, not another one-off patch. That’s a statement about the setup, not about anyone.'];
+  }
+  function calculators(q, f) {
+    var low = String(q).toLowerCase().replace(/[’']/g, '');
+    var isWp02 = /\b(battery|batteries|wp ?-? ?0?2|stress meter)\b/.test(low);
+    var isCalc = /\b(calc ?-? ?0?1|solvency|can the load last)\b/.test(low);
+    if (isWp02 && !isCalc) {
+      var body = low.replace(/\bwp ?-? ?0?2\b/g, ' ');
+      var n = numList(body);
+      var ints = n.filter(function (x) { return x === Math.floor(x); });
+      if (n.length >= 5 && ints.length === n.length) {
+        var five = n.slice(0, 5);
+        if (n.length > 5 || five.some(function (x) { return x > 4; })) {
+          return { blocks: [{ k: 'p', x: 'I’d love to work that out. The Battery Meter takes exactly five answers, each from 0 (not at all) to 4 (very true): ' + WP02_ITEMS.join(', ') + '. Could you send me five numbers like that, for example “my battery answers are 2, 1, 3, 0, 2”?' }],
+            chips: [{ label: 'How does the Battery Meter work?', q: 'How do I use WP-02?' }], kind: 'calc' };
+        }
+        var sum = five.reduce(function (a, b) { return a + b; }, 0), v = sum / 20;
+        var mx = Math.max.apply(null, five), top = [];
+        five.forEach(function (x, i) { if (x === mx && mx >= 3) top.push(WP02_ITEMS[i]); });
+        var blocks = [
+          { k: 'p', x: 'Let’s add it up: ' + five.join(' + ') + ' = ' + sum + '. Then divide by 20: ' + sum + ' ÷ 20 = ' + r2(v) + '.' },
+          { k: 'p', x: wp02Band(v) }];
+        if (top.length) blocks.push({ k: 'p', x: 'If you answered in the page’s order, the heaviest part right now is ' + top.join(' and ') + '. That’s worth naming, even just to yourself.' });
+        blocks.push({ k: 'note', x: 'This is Pillar III, Read your state first. ' + NOT_VERDICT + ' It isn’t a medical test.' });
+        blocks.push({ k: 'links', x: safeLinks([['WP-02: How full is your battery?', '/workpapers/wp-02-battery-stress-meter.html'],
+          v >= 0.3 ? ['WP-11: The Calm-Down Kit', '/wp-11.html'] : ['Today’s Weather', '/quick-checks.html#today']]) });
+        return { blocks: blocks, chips: [{ label: 'What helps when my battery is low?', q: 'What helps when my battery is low?' }, { label: 'How does this feed CALC-01?', q: 'How does CALC-01 work?' }], kind: 'calc', topic: 'battery score' };
+      }
+      var one = n.filter(function (x) { return x <= 1; });
+      if (n.length === 1 && one.length === 1 && n[0] !== Math.floor(n[0]) || (n.length === 1 && n[0] === 0)) {
+        return { blocks: [{ k: 'p', x: 'A battery score of ' + r2(n[0]) + ' reads like this. ' + wp02Band(n[0]) }, { k: 'note', x: NOT_VERDICT },
+          { k: 'links', x: [['WP-02: How full is your battery?', '/workpapers/wp-02-battery-stress-meter.html']] }],
+          chips: [{ label: 'How is it worked out?', q: 'Show me the math for WP-02' }], kind: 'calc', topic: 'battery score' };
+      }
+      if (/\banswers?\b|\bscored?\b/.test(low) && n.length >= 2 && n.length < 5) {
+        return { blocks: [{ k: 'p', x: 'I can work that out for you, but I need all five answers, each from 0 to 4: ' + WP02_ITEMS.join(', ') + '. Try “my battery answers are 3, 2, 4, 1, 2”.' }], chips: [], kind: 'calc' };
+      }
+      return null;
+    }
+    // CALC-01: named inputs (balance, ownership, stress/battery), or three numbers after "CALC-01"
+    function named(re) { var m = low.match(re); if (!m) return null; var v = parseFloat(m[2]); if (m[2].slice(-1) === '%' || v > 1) v = v / 100; return v; }
+    var wb = named(/\b(workload balance|balance|wb)\b[^0-9]{0,24}?(\d*\.?\d+%?)/);
+    var oc = named(/\b(ownership clarity|ownership|clarity|oc)\b[^0-9]{0,24}?(\d*\.?\d+%?)/);
+    var as = named(/\b(autonomic saturation|saturation|battery|stress|as)\b[^0-9]{0,24}?(\d*\.?\d+%?)/);
+    var rf = named(/\b(retuning frequency|retuning|repairs?|rf)\b[^0-9]{0,24}?(\d*\.?\d+%?)/);
+    var hasNamed = [wb, oc, as].filter(function (x) { return x != null; }).length;
+    if (isCalc && hasNamed < 3) {
+      var n3 = numList(low.replace(/\bcalc ?-? ?0?1\b/g, ' ')).map(function (v) { return v > 1 ? v / 100 : v; });
+      if (n3.length === 3 && !hasNamed) { wb = n3[0]; oc = n3[1]; as = n3[2]; hasNamed = 3; }
+      else if (n3.length === 1 && !hasNamed) {
+        var b1 = calcBand(n3[0]);
+        return { blocks: [{ k: 'p', x: 'A Solvency Read of ' + r2(n3[0]) + ' falls in this band. ' + b1[0] + ' First move: ' + b1[1] }, { k: 'note', x: 'It reads the setup, never a person. ' + NOT_VERDICT },
+          { k: 'links', x: [['CALC-01: Can the load last?', '/workpapers/calculators/calc01-solvency.html']] }],
+          chips: [{ label: 'Show me the math', q: 'Show me the math for CALC-01' }], kind: 'calc', topic: 'solvency read' };
+      }
+    }
+    if ((isCalc || hasNamed >= 2) && hasNamed >= 2 && !(hasNamed === 2 && !isCalc && !/\b(balance|ownership)\b/.test(low))) {
+      if (hasNamed < 3) {
+        return { blocks: [{ k: 'p', x: 'I can run a quick CALC-01 read, but I need all three numbers, each from 0 to 1: workload balance, ownership clarity, and the average battery score. Something like “CALC-01: balance 0.6, ownership 0.5, battery 0.4”.' }],
+          chips: [{ label: 'Where do the numbers come from?', q: 'How does CALC-01 work?' }], kind: 'calc' };
+      }
+      var bad = [wb, oc, as].concat(rf != null ? [rf] : []).some(function (x) { return isNaN(x) || x < 0 || x > 1; });
+      if (bad) return { blocks: [{ k: 'p', x: 'Each CALC-01 input runs from 0 to 1 (or 0% to 100%). Could you check the numbers and send them again?' }], chips: [], kind: 'calc' };
+      var tW = 0.4 * wb, tO = 0.35 * oc, tA = 0.25 * (1 - as), sol = tW + tO + tA, band = calcBand(sol);
+      var gaps = [['workload balance', 0.4 - tW, 'the Lemonade Stand or WP-01', '/lemonade-stand.html'], ['ownership clarity', 0.35 - tO, 'WP-03, One owner per job', '/workpapers/wp-03-raci-treaty.html'], ['the batteries (stress)', 0.25 - tA, 'WP-02 and the Calm-Down Kit', '/workpapers/wp-02-battery-stress-meter.html']];
+      gaps.sort(function (a, b) { return b[1] - a[1]; });
+      var out = [
+        { k: 'p', x: 'Here’s the Solvency Read with your numbers: 0.40 × ' + r2(wb) + ' (balance) + 0.35 × ' + r2(oc) + ' (ownership) + 0.25 × (1 − ' + r2(as) + ') (battery, flipped) = ' + r3(tW) + ' + ' + r3(tO) + ' + ' + r3(tA) + ' = ' + r2(sol) + '.' },
+        { k: 'p', x: band[0] + ' First move: ' + band[1] }];
+      if (gaps[0][1] > 0.02) out.push({ k: 'p', x: 'The biggest gap is ' + gaps[0][0] + ' (' + r2(gaps[0][1]) + ' of the points available went unearned), so ' + gaps[0][2] + ' is the place to look first.' });
+      if (rf != null) {
+        var apex = 0.35 * wb + 0.30 * oc + 0.20 * (1 - as) + 0.15 * rf;
+        out.push({ k: 'p', x: 'With repair included (retuning ' + r2(rf) + '), the apex score is 0.35 × ' + r2(wb) + ' + 0.30 × ' + r2(oc) + ' + 0.20 × (1 − ' + r2(as) + ') + 0.15 × ' + r2(rf) + ' = ' + r2(apex) + '.' +
+          (sol - apex > 0.1 ? ' Solvency is higher than apex, which usually means friction is being swallowed rather than repaired: WP-09 is the place to work on.' : '') });
+      }
+      out.push({ k: 'note', x: 'Pillars I and II: it reads the setup, never a person. The weights are an openly stated judgment call, not a fitted model, and ' + NOT_VERDICT.charAt(0).toLowerCase() + NOT_VERDICT.slice(1) });
+      out.push({ k: 'links', x: safeLinks([['CALC-01: Can the load last?', '/workpapers/calculators/calc01-solvency.html'], [gaps[0][2], gaps[0][3]]]) });
+      return { blocks: out, chips: [{ label: 'Where do these numbers come from?', q: 'How does CALC-01 work?' }, { label: 'What does apex mean?', q: 'What is the apex score in CALC-01?' }], kind: 'calc', topic: 'solvency read' };
+    }
+    // two people's hours → workload balance
+    var hrs = low.match(/(\d+(?:\.\d+)?)\s*(?:hours?|hrs?)\b.*?(\d+(?:\.\d+)?)\s*(?:hours?|hrs?)\b/);
+    if (hrs && /\b(balance|split|lemonade|wb|even|fair)\b/.test(low) && !/\b(three|four|five|six|seven|eight|[3-8]) (of us|people|roommates|housemates)\b/.test(low)) {
+      var a = parseFloat(hrs[1]), b = parseFloat(hrs[2]);
+      if (a + b > 0) {
+        var pa = 100 * a / (a + b), pb = 100 - pa, wbv = 1 - Math.abs(pa - pb) / 100;
+        return { blocks: [
+          { k: 'p', x: 'Out of ' + (a + b) + ' hours, that’s ' + Math.round(pa) + '% and ' + Math.round(pb) + '%. Workload balance is 1 − |' + Math.round(pa) + ' − ' + Math.round(pb) + '| ÷ 100 = ' + r2(wbv) + ' (1.00 means perfectly even, 0.00 means completely one-sided).' },
+          { k: 'p', x: 'The math doesn’t care who carries more, only that the load isn’t shared. For three or more people, the Lemonade Stand and CALC-01 work it out from everyone’s hours for you.' },
+          { k: 'note', x: 'Pillar I, See the whole load. ' + NOT_VERDICT },
+          { k: 'links', x: [['The Lemonade Stand', '/lemonade-stand.html'], ['CALC-01: Can the load last?', '/workpapers/calculators/calc01-solvency.html']] }],
+          chips: [{ label: 'What do I do with this?', q: 'How does CALC-01 work?' }], kind: 'calc', topic: 'workload balance' };
+      }
+    }
+    return null;
+  }
+
+  // ------------------------------------------------------------------ program cards: how-to, what for, what it means
+  function cardAspect(f) {
+    if (/\b(math|formula|formulas|weights?|weighted|calculat\w*|computed?|worked out|scored|scoring|add(ed)? up|divide)\b/.test(f)) return 'math';
+    if (/\b(mean|means|meaning|result|results|scores?|reading|band|bands|number|high|low|interpret\w*)\b/.test(f)) return 'results';
+    if (/\bhow (do|does|can|should|would) (i|we|you|one)\b|\bhow to\b|\bsteps?\b|\binstructions?\b|\bwalk me through\b|\bguide me\b|\bfill\b|\buse\b|\bplay\b|\bstart\b|\bbegin\b/.test(f)) return 'how';
+    return 'about';
+  }
+  // words that say what kind of answer is wanted, not what it's about
+  var ASPECT = {};
+  'use work mean result score read math formula step start begin play fill tell show help good best way get go find open try page tool thing number band high low weight calcul worked scor add divide do does doing mine my our we i'
+    .split(' ').forEach(function (w) { ASPECT[stem(w)] = 1; ASPECT[w] = 1; });
+  function matchCard(f) {
+    var fw = ' ' + f + ' ', cards = KB.cards || [], qt = null;
+    var fw2 = fw.replace(/(\d)([a-z])/g, '$1 $2').replace(/ checkin(s?) /g, ' check in$1 ');  // "6-week", "90-second check-in"
+    for (var i = 0; i < IDX.cardKeys.length; i++) {
+      var ck = IDX.cardKeys[i];
+      if (fw.indexOf(ck.k) === -1 && fw2.indexOf(ck.k) === -1) continue;
+      if (ck.broad) {
+        // a broad name ("the library", "battery", "drift") only counts when the question is about the thing itself
+        qt = qt || tokens(f);
+        var rest = qt.filter(function (t) { return ck.t.indexOf(t) === -1 && !ASPECT[t] && !ROLE[t]; });
+        if (rest.length > 0) continue;
+      }
+      return cards[ck.c];
+    }
+    for (var j = 0; j < cards.length; j++) if (cards[j].re && cards[j].re.test(f)) return cards[j];
+    return null;
+  }
+  function cardReply(state, c, aspect) {
+    var b = [], chips = [];
+    if (c.kind === 'intent') aspect = 'about';
+    if (aspect === 'math' && !c.math) aspect = c.results ? 'results' : 'about';
+    if (aspect === 'results' && !c.results) aspect = 'about';
+    if (aspect === 'how' && !(c.how && c.how.length)) aspect = 'about';
+    if (aspect === 'math') { b.push({ k: 'p', x: c.math }); if (c.results) b.push({ k: 'p', x: c.results }); }
+    else if (aspect === 'results') { b.push({ k: 'p', x: c.results }); }
+    else if (aspect === 'how') { b.push({ k: 'p', x: 'Here’s how to use ' + c.name + ', step by step:' }); b.push({ k: 'list', x: c.how }); }
+    else {
+      (Array.isArray(c.what) ? c.what : [c.what]).forEach(function (x) { if (x) b.push({ k: 'p', x: x }); });
+      if (c.how && c.how.length && c.kind !== 'intent') { b.push({ k: 'h', x: 'How to use it' }); b.push({ k: 'list', x: c.how.slice(0, 4) }); }
+      else if (c.how && c.how.length) b.push({ k: 'list', x: c.how });
+    }
+    if (c.pillar && aspect !== 'math') b.push({ k: 'note', x: c.pillar });
+    var links = safeLinks(c.links).slice(0, 3);
+    if (links.length) b.push({ k: 'links', x: links });
+    if (aspect !== 'how' && c.how && c.how.length && c.kind !== 'intent') chips.push({ label: 'How do I use it?', q: 'How do I use ' + c.name + '?' });
+    if (aspect !== 'results' && c.results) chips.push({ label: 'What do the results mean?', q: 'What do the results of ' + c.name + ' mean?' });
+    if (aspect !== 'math' && c.math) chips.push({ label: 'Show me the math', q: 'Show me the math for ' + c.name });
+    (c.chips || []).forEach(function (x) { chips.push({ label: x[0], q: x[1] }); });
+    if (c.ex) chips.push({ label: 'Give me an example', q: 'Give me an example' });
+    state.last = { kind: 'card', card: c.id, q: c.name, topic: c.name, u: links[0] && links[0][1] };
+    return { blocks: b, chips: chips.slice(0, 3), kind: 'card', id: c.id };
+  }
+  function cardById(id) { var cs = KB.cards || []; for (var i = 0; i < cs.length; i++) if (cs[i].id === id) return cs[i]; return null; }
+
+  // ------------------------------------------------------------------ situations: advice for what's going on
+  var WHO_ORDER = ['coparent', 'kid', 'caregiving', 'coworker', 'roommate', 'partner', 'family', 'friend'];
+  var SELF_ISSUES = null;
+  var FEELS = [
+    [/\b(awful|terrible|horrible|guilty|so bad|really bad|ashamed|like a jerk|like a monster)\b/, 'Feeling awful afterward usually means you care how it landed. That’s something to build on, not a verdict on you.'],
+    [/\b(furious|angry|mad|livid|irritated|annoyed|frustrated|fed up|sick of it)\b/, 'That frustration makes sense. It usually points at something that matters to you.'],
+    [/\b(hurt|sad|upset|heartbroken|crushed|gutted)\b/, 'Feeling hurt by that is completely understandable.'],
+    [/\b(exhausted|tired|drained|worn out|wiped out|burn(ed|t) out|running on empty|depleted)\b/, 'Being this worn down makes everything feel heavier, so go gently with yourself.'],
+    [/\b(overwhelmed|swamped|drowning|stretched thin|underwater)\b/, 'Feeling overwhelmed is a signal about load, not a sign you’re failing.'],
+    [/\b(anxious|nervous|worried|scared|dreading|dread|on edge)\b/, 'Feeling nervous about it is normal. It often means the relationship matters to you.'],
+    [/\b(lonely|invisible|unseen|ignored|taken for granted|unappreciated|unnoticed)\b/, 'Feeling unseen is one of the heaviest parts of this, and it deserves to be taken seriously.'],
+    [/\b(resent\w*|bitter)\b/, 'Resentment is often a sign that something has gone unnoticed for a while. It’s information, not a character flaw.'],
+    [/\b(stuck|lost|confused|dont know what to do|no idea what to do)\b/, 'Feeling stuck is a very normal place to start from.'],
+    [/\b(embarrassed|humiliated)\b/, 'Embarrassment stings, and it fades faster than it feels like it will.'],
+    [/\b(jealous|envious)\b/, 'Jealousy is a normal feeling, and it usually points at a need worth naming.']
+  ];
+  function firstGroup(m) { for (var i = 1; i < m.length; i++) if (m[i]) return m[i].trim(); return ''; }
+  function detectSituation(f) {
+    var S = IDX.sit, best = null, bs = 0, second = 0;
+    var who = null, noun = '';
+    for (var i = 0; i < WHO_ORDER.length; i++) {
+      var w = S.who[WHO_ORDER[i]]; if (!w) continue;
+      var m = w.re.exec(f);
+      if (m) { who = WHO_ORDER[i]; noun = firstGroup(m); break; }
+    }
+    var bonus = (who && S.who[who].bonus) || {};
+    Object.keys(S.issues).forEach(function (k) {
+      var sc = 0; S.issues[k].res.forEach(function (r) { if (r[0].test(f)) sc += r[1]; });
+      if (sc && bonus[k]) sc += bonus[k];
+      if (sc > bs) { second = bs; bs = sc; best = k; } else if (sc > second) second = sc;
+    });
+    var personal = /\b(i|im|ive|id|me|my|we|us|our|myself|mine)\b/.test(f);
+    if (best && !who) {
+      var iss = S.issues[best];
+      var hasSelf = iss.selfFirst || iss.reflect_self || iss.going_self || iss.steps_self;
+      if (iss.selfFirst || (hasSelf && !/\b(we|us|our|home|house|household)\b/.test(f) && !iss.needsOther)) who = 'self';
+      else who = 'other';
+    }
+    if (best && S.issues[best].only && S.issues[best].only.indexOf(who) === -1) {
+      who = S.issues[best].only.indexOf('other') !== -1 ? 'other' : S.issues[best].only[0];
+    }
+    var feel = '';
+    for (var j = 0; j < FEELS.length; j++) if (FEELS[j][0].test(f)) { feel = FEELS[j][1]; break; }
+    return { issue: best, score: bs, who: who, noun: noun, personal: personal, feel: feel };
+  }
+  function whoCtx(who, noun) {
+    var W = IDX.sit.who[who] || IDX.sit.who.other;
+    var them = noun ? 'your ' + noun.replace(/^(my|our|the|a|an)\s+/, '') : W.them;
+    return { them: them, they: 'they', their: 'their', who: who, W: W };
+  }
+  function sitParts(issueKey, who, noun) {
+    var S = IDX.sit, I = S.issues[issueKey], C = S.combos[who + '+' + issueKey] || {}, ctx = whoCtx(who, noun), W = ctx.W;
+    var self = who === 'self', other = !self && I.selfFirst;
+    function pickF(field) {
+      if (C[field] != null) return C[field];
+      if (self && I[field + '_self'] != null) return I[field + '_self'];
+      if (other && I[field + '_other'] != null) return I[field + '_other'];
+      return I[field];
+    }
+    var steps = (pickF('steps') || []).slice(0, 3);
+    var wstep = (W.steps && W.steps[issueKey]) || W.step;
+    if (wstep && !C.steps && steps.length < 4 && (!self || I.selfFirst) && !(self && steps.some(function (x) { return /battery/.test(x); }))) steps.push(wstep);
+    var scripts = C.scripts || [];
+    if (!scripts.length) {
+      var sx = I.scripts || {};
+      scripts = (sx[who] || []).concat(other ? (I.scripts_other || []) : self ? (sx.self || sx['default'] || []) : (sx['default'] || []));
+    }
+    var path = (C.path || (self && I.path_self) || I.path || []).slice(0, 2);
+    var read = C.read || (W.read && !self ? W.read : null) || (I.path_self && self ? null : (I.path || [])[2]) || (self ? ['Know your own wiring', '/know-yourself.html'] : null);
+    if (read && path.every(function (p) { return p[1] !== read[1]; })) path.push(read);
+    return { I: I, C: C, ctx: ctx, reflect: pickF('reflect'), going: pickF('going'), steps: steps, scripts: scripts, path: safeLinks(path).slice(0, 3), ex: pickF('ex'), more: pickF('more') };
+  }
+  function sitReply(state, issueKey, who, noun, feel, variant) {
+    var P = sitParts(issueKey, who, noun), ctx = P.ctx, I = P.I;
+    var reflect = fill(Array.isArray(P.reflect) ? P.reflect[0] : P.reflect, ctx);
+    var b = [{ k: 'p', x: reflect + (feel ? ' ' + feel : '') }];
+    b.push({ k: 'h', x: 'What might be going on' });
+    b.push({ k: 'p', x: fill(P.going, ctx) });
+    b.push({ k: 'h', x: who === 'self' ? 'Small steps for today' : 'Try this today' });
+    b.push({ k: 'list', x: P.steps.map(function (s) { return fill(s, ctx); }) });
+    if (P.scripts.length) b.push({ k: 'script', l: (I.scriptLabel && (who === 'self' || !I.selfFirst)) ? I.scriptLabel : 'Words you could use', x: fill(P.scripts[(variant || 0) % P.scripts.length], ctx) });
+    if (P.path.length) { b.push({ k: 'h', x: 'A short path on the site' }); b.push({ k: 'links', x: P.path }); }
+    b.push({ k: 'note', x: 'You know your situation best. This is general guidance from the program, not counseling or a professional opinion.' });
+    state.last = { kind: 'sit', issue: issueKey, who: who, noun: noun, v: variant || 0, q: I.label, topic: I.label, u: P.path[0] && P.path[0][1] };
+    var chips = [];
+    if (I.deeper) chips.push({ label: 'Go deeper: ' + I.deeper[0], q: I.deeper[1] });
+    if (P.scripts.length > 1) chips.push({ label: 'Another way to say it', q: 'Another way to say it' });
+    if (P.ex) chips.push({ label: 'Give me an example', q: 'Give me an example' });
+    else chips.push({ label: 'How do I start?', q: 'How do I start?' });
+    return { blocks: b, chips: chips.slice(0, 3), kind: 'sit', id: who + '+' + issueKey };
+  }
+  // "which tools for roommates?" → the road for that kind of relationship
+  function roadReply(state, who, noun) {
+    var ctx = whoCtx(who, noun), W = ctx.W;
+    var b = [{ k: 'p', x: fill(W.fit || ('Here’s a short path for you and ' + ctx.them + '.'), ctx) }];
+    if (W.path && W.path.length) { b.push({ k: 'h', x: 'A short path' }); b.push({ k: 'links', x: safeLinks(W.path).slice(0, 3) }); }
+    if (W.read) b.push({ k: 'links', x: safeLinks([W.read]) });
+    state.last = { kind: 'road', who: who, noun: noun, q: W.them, topic: W.them, u: W.path && W.path[0] && W.path[0][1] };
+    var chips = (W.chips || []).slice(0, 3).map(function (c) { return { label: c[0], q: c[1] }; });
+    return { blocks: b, chips: chips, kind: 'road', id: who };
+  }
+  function whoOnly(f) {
+    var rest = f.replace(/\b(my|our|the|a|an|with|about|for|and|me|i|help|advice|issues?|problems?|stuff|trouble|situation|dealing|deal)\b/g, ' ').trim();
+    if (!rest || rest.split(' ').length > 2) return null;
+    var S = IDX.sit;
+    for (var i = 0; i < WHO_ORDER.length; i++) { var w = S.who[WHO_ORDER[i]]; var m = w && w.re.exec(f); if (m && m[0].trim().split(' ').length >= rest.split(' ').length) return { who: WHO_ORDER[i], noun: firstGroup(m) }; }
+    return null;
+  }
+  function clarifyWho(state, who, noun) {
+    var ctx = whoCtx(who, noun), W = ctx.W;
+    state.last = null;
+    return { blocks: [{ k: 'p', x: fill('Happy to help with {them}. What’s it mostly about? Pick one of these, or tell me in your own words.', ctx) }],
+      chips: (W.chips || []).slice(0, 4).map(function (c) { return { label: fill(c[0], ctx), q: fill(c[1], ctx) }; }), kind: 'clarify' };
+  }
+
+  // ------------------------------------------------------------------ background notes: answers
+  function bgReply(state, i, part) {
+    var B = IDX.bg, d = B.docs[i];
+    var b = [{ k: 'note', x: 'From the Professor’s background notes (not a page on this site):' }];
+    var cut = d.x.length <= 2 ? 1 : 2;
+    var paras = part === 'more' ? d.x.slice(cut) : d.x.slice(0, cut);
+    if (!paras.length) paras = d.x.slice(-1);
+    b.push({ k: 'bg', h: d.t, x: paras, ev: d.ev || '' });
+    if (d.p) b.push({ k: 'p', x: 'To put it into practice here: ' + d.p });
+    if (d.go && safePath(d.go[0])) b.push({ k: 'links', x: [[d.go[1] || 'Read more on the site', d.go[0]]] });
+    state.last = { kind: 'bg', bg: i, part: part || 'first', q: d.t, topic: d.t, u: d.go && d.go[0] };
+    var chips = [];
+    if (part !== 'more' && d.x.length > 1) chips.push({ label: 'Tell me more', q: 'Tell me more' });
+    if (d.ex) chips.push({ label: 'Give me an example', q: 'Give me an example' });
+    (d.see || []).forEach(function (sid) { var j = B.byId[sid]; if (j != null && chips.length < 3) chips.push({ label: B.docs[j].t, q: 'Explain ' + B.docs[j].t }); });
+    return { blocks: b, chips: chips.slice(0, 3), kind: 'bg', id: d.id };
+  }
+  // a background note named (by a phrase of two or more words) somewhere in a question
+  var DEFN_SITE = /\b(wp ?\d+|calc ?01|prog ?01|report ?01|lemonade|pillar|chapter|preface)\b/;
+  function bgPhraseIn(q) {
+    var k = ' ' + phraseKey(q) + ' ', best = null, n = 0;
+    Object.keys(IDX.bgNames).forEach(function (name) {
+      if (name.indexOf(' ') === -1 || name.length <= n) return;
+      if (k.indexOf(' ' + name + ' ') !== -1 && glossaryFor(name) < 0) { best = IDX.bgNames[name]; n = name.length; }
+    });
+    return best;
+  }
+  function bgByName(phrase) {
+    if (!phrase) return -1;
+    var id = IDX.bgNames[phraseKey(phrase)];
+    if (id == null || !IDX.bg) return -1;
+    var i = IDX.bg.byId[id];
+    return i == null ? -1 : i;
+  }
+
+  // ------------------------------------------------------------------ follow-ups: "tell me more", "an example", "what about coworkers?"
+  var FU_MORE = /^(ok |okay |and |so |hmm |yes |yes please )?(tell me more|more|some more|more please|go on|continue|keep going|say more|go deeper|deeper|more on that|more about (that|this|it)|tell me more about (that|this|it)|what else|anything else|and then|then what|next|another|why|how so|why does (that|it|this) (work|help)|whats the (science|evidence|research)( on (that|this|it))?)( please)?$/;
+  var FU_EX = /^(can you |could you )?(please )?(give me |show me |got |have you got |share )?(an |one |another |a )?(example|examples|sample|instance|script|line)( please| of (that|this|it))?$|^(for example|like what|such as|what would that look like|what does that look like|what would i say|what do i say|what could i say|how would i say (it|that)|how do i say (it|that)|(give me )?another way to (say|put|word) (it|that)|say it another way|different words|other words|another script|another line)\??$/;
+  var FU_START = /^(so |ok |okay |and )?(how (do|should|would|can) (i|we) (start|begin|get started|use (it|this|that)|do (it|this|that))|where (do|should) (i|we) (start|begin)|what (do|should) (i|we) do first|first step|whats the first step|what is the first step|how do i begin|where to start)( with (it|this|that))?$/;
+  var FU_WHO = /^(and |but |ok |okay |so )?((what|how) about|and|and for|and with|for|with|what if its|what if it s|same (thing )?(for|with)|does (this|that|it) (work|help|apply) (for|with)|would (this|that|it) (work|help) (for|with)|can i use (this|that|it) (for|with))\s+(.{2,40})$/;
+  function followUp(state, f, q) {
+    var L = state.last;
+    if (!L) return null;
+    if (FU_EX.test(f)) {
+      var anotherWay = /another|different|other/.test(f);
+      if (L.kind === 'sit') {
+        var P = sitParts(L.issue, L.who, L.noun);
+        if (anotherWay || !P.ex) {
+          if (P.scripts.length > 1) { var v = (L.v || 0) + 1; state.last.v = v; return { blocks: [{ k: 'p', x: 'Sure, here’s another way to put it:' }, { k: 'script', l: 'Words you could use', x: fill(P.scripts[v % P.scripts.length], P.ctx) }, { k: 'note', x: 'Change any word so it sounds like you. Your own words beat a perfect script.' }], chips: [{ label: 'Another one', q: 'Another way to say it' }, { label: 'How do I start?', q: 'How do I start?' }], kind: 'sit-more' }; }
+        }
+        if (P.ex) return { blocks: [{ k: 'p', x: 'Here’s an example of how it might go:' }, { k: 'p', x: fill(P.ex, P.ctx) }], chips: [{ label: 'Another way to say it', q: 'Another way to say it' }, { label: 'How do I start?', q: 'How do I start?' }], kind: 'sit-more' };
+      }
+      if (L.kind === 'card') { var c = cardById(L.card); if (c && c.ex) return { blocks: [{ k: 'p', x: 'Here’s an example:' }, { k: 'p', x: c.ex }], chips: [{ label: 'How do I start?', q: 'How do I start?' }], kind: 'card-more' }; }
+      if (L.kind === 'bg' && IDX.bg) { var d = IDX.bg.docs[L.bg]; if (d.ex) return { blocks: [{ k: 'p', x: 'Here’s an example:' }, { k: 'script', l: d.t, x: d.ex }], chips: [{ label: 'Tell me more', q: 'Tell me more' }], kind: 'bg-more' }; }
+      if (L.q) return { redirect: L.q + ' example for instance' };
+      return null;
+    }
+    if (FU_MORE.test(f)) {
+      if (L.kind === 'sit') { var I = IDX.sit.issues[L.issue]; if (I.deeper) return { redirect: I.deeper[1] }; }
+      if (L.kind === 'card') {
+        var c2 = cardById(L.card);
+        if (c2 && c2.more && !L.moreShown) { state.last.moreShown = 1; return { blocks: [{ k: 'p', x: c2.more }].concat(c2.links && c2.links.length ? [{ k: 'links', x: safeLinks(c2.links).slice(0, 2) }] : []), chips: [{ label: 'How do I start?', q: 'How do I start?' }], kind: 'card-more' }; }
+        if (c2) return { redirect: c2.name, prefer: c2.links && c2.links[0] && c2.links[0][1].split('#')[0] };
+      }
+      if (L.kind === 'bg') {
+        if (!IDX.bg) return { needBG: true };
+        if (L.part !== 'more') return bgReply(state, L.bg, 'more');
+        var sd = IDX.bg.docs[L.bg], nx = (sd.see || []).map(function (s) { return IDX.bg.byId[s]; }).filter(function (j) { return j != null; })[0];
+        if (nx != null) { var rr = bgReply(state, nx); rr.blocks.splice(1, 0, { k: 'p', x: 'That’s all my notes say on that. A close cousin of it:' }); return rr; }
+      }
+      if (L.kind === 'search' || !L.kind) return { more: true };
+      if (L.q) return { redirect: L.q };
+      return null;
+    }
+    if (FU_START.test(f)) {
+      if (L.kind === 'card') {
+        var c3 = cardById(L.card);
+        if (c3 && (c3.start || c3.how)) return { blocks: [{ k: 'p', x: 'Here’s a simple way to start with ' + c3.name + ':' }, { k: 'list', x: (c3.start || c3.how).slice(0, 4) }, { k: 'links', x: safeLinks(c3.links).slice(0, 1) }], chips: [], kind: 'card-more' };
+      }
+      if (L.kind === 'sit') {
+        var P2 = sitParts(L.issue, L.who, L.noun);
+        var first = P2.path[0];
+        return { blocks: [{ k: 'p', x: 'Start small. Today, just do this one thing: ' + fill(P2.steps[0], P2.ctx).replace(/^./, function (ch) { return ch.toLowerCase(); }) },
+          first ? { k: 'p', x: 'Then, when you have ten calm minutes, open ' + first[0] + '. It’s the first stop on your short path.' } : { k: 'p', x: 'Then come back and tell me how it went.' },
+          { k: 'links', x: first ? [first] : [] }], chips: [{ label: 'Another way to say it', q: 'Another way to say it' }], kind: 'sit-more' };
+      }
+      if (L.kind === 'bg' && IDX.bg) { var d2 = IDX.bg.docs[L.bg]; if (d2.go) return { blocks: [{ k: 'p', x: 'The easiest way to start is on the site: ' + (d2.p || 'try it in a small, low-stakes moment first.') }, { k: 'links', x: safeLinks([[d2.go[1], d2.go[0]]]) }], chips: [], kind: 'bg-more' }; }
+      if (L.kind === 'road') { var W = IDX.sit.who[L.who]; if (W && W.path) return { blocks: [{ k: 'p', x: 'Start with the first stop: ' + W.path[0][0] + '. Give it one ordinary week before judging it.' }, { k: 'links', x: safeLinks([W.path[0]]) }], chips: [], kind: 'road-more' }; }
+      return null;
+    }
+    var mw = f.match(FU_WHO);
+    if (mw) {
+      var target = mw[mw.length - 1], S = IDX.sit, nw = null, noun = '';
+      for (var i = 0; i < WHO_ORDER.length; i++) { var m2 = S.who[WHO_ORDER[i]].re.exec(target); if (m2) { nw = WHO_ORDER[i]; noun = firstGroup(m2); break; } }
+      if (!nw && /\b(me|myself|just me|on my own|alone)\b/.test(target)) nw = 'self';
+      if (!nw) return null;
+      if (L.kind === 'sit') {
+        var ok = !S.issues[L.issue].only || S.issues[L.issue].only.indexOf(nw) !== -1;
+        if (ok) return sitReply(state, L.issue, nw, noun, '', 0);
+      }
+      var rr2 = roadReply(state, nw, noun);
+      if (L.topic && L.kind !== 'road') rr2.blocks.unshift({ k: 'p', x: 'Good question. Everything here works in any relationship, and ' + L.topic + ' is no exception.' });
+      return rr2;
+    }
+    return null;
+  }
+
+  // Decide what to say to one message. Returns {blocks:[...], chips:[...]} (all data, rendered later),
+  // or {needBG:true} when the background notes should be fetched first (reply() then asks again).
   function respond(state, q, chipDoc) {
-    var f = fold(q).replace(/[^a-z0-9\s]/g, ' ').replace(/\s+/g, ' ').trim();
+    var f = norm(q);
+    if (chipDoc == null) {
+      if (DANGER.test(f)) { state.last = null; return safetyReply(); }
+      var fu = followUp(state, f, q);
+      if (fu && fu.needBG) return fu;
+      if (fu && fu.more) return more(state);
+      if (fu && fu.redirect) { var keep = state.last; var r0 = respondSite(state, fu.redirect, null, fu.prefer); if (r0.needBG) state.last = keep; return r0; }
+      if (fu) return fu;
+      var calc = calculators(q, f);
+      if (calc) { state.last = { kind: 'calc', q: calc.topic || 'calculator', topic: calc.topic }; return calc; }
+      var bgForce = f.match(/^(?:(?:your |the )?(?:background )?notes (?:on|about)|(?:tell me )?more about|go deeper (?:on|into)|deeper on)\s+(.+)$/);
+      var defn = definitionTarget(q);
+      var target = bgForce ? bgForce[1] : defn;
+      var inGloss = target && glossaryFor(target) >= 0;
+      if (target && !inGloss && IDX.bgNames[phraseKey(target)] != null && !matchCard(norm(target))) {
+        if (!IDX.bg) return { needBG: true };
+        var bi = bgByName(target);
+        if (bi >= 0) return bgReply(state, bi);
+      }
+      var named = !target && /^(what|whats|how|hows|can|could|should|tell me|explain|any tips|tips)\b/.test(f) ? bgPhraseIn(q) : null;
+      if (named && !matchCard(f) && !DEFN_SITE.test(f)) {
+        if (!IDX.bg) return { needBG: true };
+        var bj = IDX.bg.byId[named];
+        if (bj != null) return bgReply(state, bj);
+      }
+      var wo = whoOnly(f);
+      if (wo) return clarifyWho(state, wo.who, wo.noun);
+      for (var ci = 0; ci < (KB.clar || []).length; ci++) {
+        var cl = KB.clar[ci];
+        if (cl.re.test(f)) { state.last = null; return { blocks: [{ k: 'p', x: cl.x }], chips: cl.chips.map(function (c) { return { label: c[0], q: c[1] }; }), kind: 'clarify' }; }
+      }
+      var sit = detectSituation(f);
+      var card = matchCard(f);
+      var asksAbout = /^(what|whats|how|hows|where|which|when|why|is|are|does|do|can|could|should|tell me|explain|show me|define|who)\b/.test(f) && !/\b(when|if) (my|our|i|we|he|she|they)\b|\b(my|our) (partner|husband|wife|boyfriend|girlfriend|spouse|roommates?|housemates?|coworkers?|colleagues?|boss|manager|team|sister|brother|mom|mum|dad|mother|father|parents?|kids?|son|daughter|teen|teenager|friends?|ex)\b.*\b(keeps?|always|never|wont|doesnt|wont|wants?|says?|makes?|leaves?|forgets?)\b/.test(f);
+      var road = /\b(path|road|which (tools?|workpapers?|pages?)|what (tools?|workpapers?|pages?)|where (do|should|can) (we|i) (start|begin)|start with|best tool|good tool|tool for|tools for)\b/.test(f);
+      if (road && sit.who && sit.who !== 'self' && sit.who !== 'other' && !card && (!sit.issue || sit.score < 3 || /^(which|what|where)\b/.test(f))) return roadReply(state, sit.who, sit.noun);
+      var sitOk = sit.issue && sit.score >= 2 && sit.personal && !(defn && !/\b(my|our|i|we|me)\b/.test(norm(defn)));
+      if (card && (!sitOk || asksAbout || sit.score < 3)) return cardReply(state, card, cardAspect(f));
+      if (sitOk) return sitReply(state, sit.issue, sit.who, sit.noun, sit.feel, 0);
+    }
+    return respondSite(state, q, chipDoc);
+  }
+
+  // The site's own pages, ranked (the original chat), with the background notes as a second shelf.
+  function respondSite(state, q, chipDoc, preferIn) {
+    var f = norm(q);
     if (chipDoc != null && KB.docs[chipDoc]) {
       var res0 = search(KB.docs[chipDoc].h + ' ' + (KB.docs[chipDoc].m || []).join(' '));
       state.last = { q: KB.docs[chipDoc].h, res: res0, shown: {} };
@@ -330,8 +877,11 @@
       return { blocks: [{ k: 'p', x: 'Take care. I’ll be here if you want to look something up again.' }], chips: [] };
     if (/\b(what can you do|what do you do|how do(es)? (this|you) work|who are you|what are you|help me use|what can i ask|how can you help|are you (an? )?(ai|bot|robot|human|real))\b/.test(f) || f === 'help')
       return { blocks: [
-        { k: 'p', x: 'I’m a small helper that looks things up in this site’s own pages: the book, the workpapers, the guides and the glossary. I share the most relevant passages, with a link so you can read the whole thing.' },
-        { k: 'p', x: 'I don’t make things up and I’m not a counselor, so if the pages don’t cover something, I’ll say so. Everything happens in your browser. What you type stays on this device.' }],
+        { k: 'p', x: 'I’m Professor Puddles, a small helper that knows this program inside out. I can explain any tool, workpaper, chapter or game, and walk you through how to use it and what your results mean.' },
+        { k: 'list', x: ['Tell me what’s going on, with yourself or someone else, and I’ll suggest a few kind steps, words you could use, and a short path on the site.',
+          'Type your Battery Meter answers (like “my battery answers are 3, 2, 4, 1, 2”) or your CALC-01 numbers, and I’ll work out the score with you.',
+          'Ask “what is…” about any term, and say “tell me more” or “give me an example” to keep going.'] },
+        { k: 'p', x: 'When the site doesn’t cover something, I have some background notes, and I’ll always say when an answer comes from them. I’m not a counselor, and I won’t guess. Everything happens in your browser: what you type stays on this device.' }],
         chips: STARTERS };
     if (/\b(surprise me|random|anything interesting|tell me something|teach me something|something new|inspire me)\b/.test(f)) return surprise(state);
     if (/^(give me |got |share )?(a |another |one )?(little |quick |small )?(tip|tips)( please)?( for today)?$/.test(f)) return tip(state);
@@ -340,8 +890,8 @@
     if (about && !/^(that|this|it)$/.test(about[1])) { q = about[1]; f = about[1]; }
     else if (moreQ) return more(state);
 
-    var prefer = null;
-    for (var r = 0; r < REWRITES.length; r++) if (REWRITES[r][0].test(f)) { q = REWRITES[r][1]; prefer = REWRITES[r][2]; f = fold(q); break; }
+    var prefer = preferIn || null;
+    if (!prefer) for (var r = 0; r < REWRITES.length; r++) if (REWRITES[r][0].test(f)) { q = REWRITES[r][1]; prefer = REWRITES[r][2]; f = fold(q); break; }
     var defn = definitionTarget(q);
     var gi = glossaryFor(defn);
     if (gi < 0 && tokens(q).length <= 4) gi = glossaryFor(q);
@@ -382,9 +932,17 @@
     function inDomain(t) { return IDX.domain[t] || (t.length >= 7 && IDX.domain['~' + t.slice(0, 7)]); }
     var wAll = 0, wAway = 0;
     own.forEach(function (t) { var w = idf(t); wAll += w; if (!inDomain(t)) wAway += w; });
-    var offTopic = gi < 0 && !prefer && wAll > 0 && wAway * 2 >= wAll;
+    var offTopic = gi < 0 && !prefer && ((wAll > 0 && wAway * 2 >= wAll) || OFF_TOPIC.test(f));
     var weak = offTopic || !top || top.cov < 0.42 || top.s < 2.2;
-    state.last = { q: q, res: { hits: hits, terms: res.terms }, shown: {} };
+    // not on a page, but maybe in the background notes (never for off-topic questions)
+    if (!offTopic && (weak || (top && top.cov < 0.6)) && !state.noBG) {
+      if (!IDX.bg && !bgTried) return { needBG: true };
+      if (IDX.bg) {
+        var bh = bgSearch(q)[0];
+        if (bh && bh.cov >= 0.6 && bh.s >= 3 && (weak || bh.cov > top.cov + 0.25)) return bgReply(state, bh.i);
+      }
+    }
+    state.last = { kind: 'search', q: q, res: { hits: hits, terms: res.terms }, shown: {} };
     if (weak) {
       // No direct answer. If a passage still shares a real part of the question, show the closest one or two,
       // clearly labelled as the nearest match rather than an answer; otherwise say so and offer starters.
@@ -407,9 +965,11 @@
         return { blocks: blocks, chips: (more0.length ? more0 : STARTERS.slice(0, 2)).concat([{ label: 'Ask something else', q: 'What can I ask?' }]).slice(0, 3) };
       }
       state.last = null;
-      return { blocks: [{ k: 'p', x: pick(['I looked through the site’s pages and couldn’t find anything that really answers that.', 'I’m sorry, I couldn’t find that in the site’s pages.', 'That one isn’t covered on this site, as far as I can find.']) +
-        ' I can only share what’s written here, so I’d rather not guess. Here are some things I can help with:' }],
-        chips: STARTERS };
+      if (offTopic) return { blocks: [{ k: 'p', x: pick(['That one’s outside my little pond, I’m afraid!', 'Ooh, I’d only be guessing on that one, and I’d rather not.', 'That’s not something I know about, sorry!']) +
+        ' I stick to this program: sharing the load, getting along, check-ins, different wiring and calming down. Here are some things I can help with:' }], chips: STARTERS, kind: 'offtopic' };
+      return { blocks: [{ k: 'p', x: pick(['I looked through the site’s pages and my notes, and couldn’t find anything that really answers that.', 'I’m sorry, I couldn’t find that in the site’s pages or my notes.', 'That one isn’t covered here, as far as I can find.']) +
+        ' I’d rather not guess. You could tell me a bit more, or pick one of these:' }],
+        chips: STARTERS, kind: 'none' };
     }
     return answerFrom(state, hits, res.terms, true);
   }
@@ -456,8 +1016,18 @@
   function more(state) {
     var L = state.last;
     if (!L) return { blocks: [{ k: 'p', x: 'Happy to. What would you like to hear more about?' }], chips: STARTERS };
-    var hits = L.res.hits.filter(function (h) { return !L.shown[h.i] && h.cov >= 0.45; });
-    if (!hits.length) return { blocks: [{ k: 'p', x: 'That’s all I could find on that. Want to try something else?' }], chips: STARTERS.slice(0, 3) };
+    var hits = L.res ? L.res.hits.filter(function (h) { return !L.shown[h.i] && h.cov >= 0.45; }) : [];
+    if (!hits.length) {
+      // the pages have nothing more: the background notes may
+      if (L.q && !IDX.bg && !bgTried) return { needBG: true };
+      var bh = L.q && IDX.bg ? bgSearch(L.q)[0] : null;
+      if (bh && bh.cov >= 0.5 && bh.s >= 2.5) {
+        var rb = bgReply(state, bh.i);
+        rb.blocks.unshift({ k: 'p', x: 'That’s everything the site’s pages say on that. My background notes add a little more:' });
+        return rb;
+      }
+      return { blocks: [{ k: 'p', x: 'That’s all I could find on that. Want to try something else?' }], chips: STARTERS.slice(0, 3) };
+    }
     return answerFrom(state, hits.slice(0, 1).map(function (h) { return { i: h.i, s: h.s, cov: 1 }; }).concat(hits.slice(1)), L.res.terms, false);
   }
 
@@ -477,6 +1047,25 @@
     if (!pool.length) return surprise(state);
     var i = pick(pool);
     return { blocks: [{ k: 'p', x: 'Here’s a little tip from the site’s collection:' }, passageBlock(i, [])], chips: [{ label: 'Another tip', q: 'Give me a tip' }, { label: 'Surprise me', q: 'Surprise me' }] };
+  }
+
+  // One message in, one reply out; fetches the background notes first when an answer needs them.
+  function reply(state, q, doc, cb) {
+    var r;
+    function safe(fn) {
+      try { return fn(); }
+      catch (e) { return { blocks: [{ k: 'p', x: 'Sorry, something went wrong on my side. Could you try asking another way?' }], chips: STARTERS }; }
+    }
+    r = safe(function () { return respond(state, q, doc); });
+    if (r && r.needBG) {
+      loadBG(function () {
+        var r2 = safe(function () { return respond(state, q, doc); });
+        if (r2 && r2.needBG) r2 = { blocks: [{ k: 'p', x: 'I couldn’t open my background notes just now. Could you try again in a moment?' }], chips: STARTERS };
+        cb(r2);
+      });
+      return;
+    }
+    cb(r);
   }
 
   // ------------------------------------------------------------------ styles
@@ -523,6 +1112,13 @@
     '.tolc-card p{font-size:.95rem}',
     '.tolc a.tolc-more{display:inline-flex;align-items:center;min-height:44px;color:var(--ink);font-weight:600;font-size:.9rem;text-decoration:underline;text-decoration-color:var(--c);text-decoration-thickness:2px;text-underline-offset:4px}',
     '.tolc a.tolc-more:hover{color:var(--focus)}',
+    '.tolc .tolc-h{font-family:"Fraunces",Georgia,serif;font-weight:600;font-size:.92rem;margin:.7rem 0 .2rem;color:var(--ink)}',
+    '.tolc .tolc-fine{font-size:.8rem;color:var(--ink-soft);font-style:italic;margin:.5rem 0 .3rem}',
+    '.tolc-list{margin:.2rem 0 .5rem;padding-left:1.15rem}.tolc-list li{margin:.2rem 0;font-size:.95rem}',
+    '.tolc-links{margin:.1rem 0 .3rem;padding-left:1.3rem}.tolc-links li{margin:0}.tolc-links a.tolc-more{min-height:40px}',
+    '.tolc-script{margin:.5rem 0 .6rem;padding:.55rem .75rem;border-radius:12px;background:var(--c-soft);border-left:3px solid var(--c)}',
+    '.tolc-script p{font-size:.95rem;margin:0}.tolc-script .tolc-src{font-style:normal;font-weight:600;margin-bottom:.2rem !important}',
+    '.tolc-bgcard{background:#FFFDF6;border-left-style:dashed}',
     '.tolc-chips{display:flex;flex-wrap:wrap;gap:.45rem;padding:.2rem .9rem .5rem}',
     '.tolc-chips:empty{display:none}',
     '@media (max-width:719px){.tolc-chips{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;padding-bottom:.6rem}.tolc-chips::-webkit-scrollbar{display:none}.tolc-chip{flex:0 0 auto;white-space:nowrap}}',
@@ -598,7 +1194,7 @@
       root.setAttribute('aria-labelledby', uid + '-name');
     }
     root.innerHTML =
-      '<div class="tolc-head"><div class="tolc-av"></div><div class="tolc-who"><p class="tolc-name" id="' + uid + '-name"></p><p class="tolc-sub">Answers from this site’s pages</p></div>' +
+      '<div class="tolc-head"><div class="tolc-av"></div><div class="tolc-who"><p class="tolc-name" id="' + uid + '-name"></p><p class="tolc-sub">Your guide to the whole program</p></div>' +
       '<button type="button" class="tolc-hbtn tolc-reset">Start over</button>' +
       (mode === 'modal' ? '<button type="button" class="tolc-hbtn tolc-x" aria-label="Close chat">&times;</button>' : '') + '</div>' +
       '<div class="tolc-log" role="log" aria-live="polite" aria-relevant="additions" tabindex="0" aria-label="Conversation"></div>' +
@@ -674,6 +1270,35 @@
       var sr2 = document.createElement('span'); sr2.className = 'tolc-sr'; sr2.textContent = (m.n || 'Buddy') + ' says: '; el.appendChild(sr2);
       (m.b || []).forEach(function (b) {
         if (b.k === 'p') { var p2 = document.createElement('p'); p2.textContent = b.x; el.appendChild(p2); return; }
+        if (b.k === 'h' || b.k === 'note') { var ph = document.createElement('p'); ph.className = b.k === 'h' ? 'tolc-h' : 'tolc-fine'; ph.textContent = b.x; el.appendChild(ph); return; }
+        if (b.k === 'list') {
+          var ul = document.createElement('ul'); ul.className = 'tolc-list';
+          (b.x || []).forEach(function (t) { var li = document.createElement('li'); li.textContent = t; ul.appendChild(li); });
+          el.appendChild(ul); return;
+        }
+        if (b.k === 'script') {
+          var sc = document.createElement('div'); sc.className = 'tolc-script';
+          if (b.l) { var sl = document.createElement('p'); sl.className = 'tolc-src'; sl.textContent = b.l; sc.appendChild(sl); }
+          var sp = document.createElement('p'); sp.textContent = '“' + String(b.x).replace(/^[“"]|[”"]$/g, '') + '”'; sc.appendChild(sp);
+          el.appendChild(sc); return;
+        }
+        if (b.k === 'links') {
+          var ol = document.createElement('ol'); ol.className = 'tolc-links';
+          (b.x || []).forEach(function (l) {
+            if (!l || !safePath(l[1])) return;
+            var li2 = document.createElement('li'), a2 = document.createElement('a');
+            a2.className = 'tolc-more'; a2.href = l[1]; a2.textContent = l[0] + ' →'; li2.appendChild(a2); ol.appendChild(li2);
+          });
+          if (ol.children.length) el.appendChild(ol);
+          return;
+        }
+        if (b.k === 'bg') {
+          var bc = document.createElement('div'); bc.className = 'tolc-card tolc-bgcard';
+          var bh3 = document.createElement('h3'); bh3.textContent = b.h; bc.appendChild(bh3);
+          (b.x || []).forEach(function (t) { var bp = document.createElement('p'); bp.textContent = t; bc.appendChild(bp); });
+          if (b.ev) { var be = document.createElement('p'); be.className = 'tolc-src'; be.textContent = 'How sure is this? ' + b.ev; bc.appendChild(be); }
+          el.appendChild(bc); return;
+        }
         var card = document.createElement('div'); card.className = 'tolc-card';
         var h = document.createElement('h3'); h.textContent = b.h; card.appendChild(h);
         if (b.src && b.src !== b.h) { var s = document.createElement('p'); s.className = 'tolc-src'; s.textContent = 'From “' + b.src + '”'; card.appendChild(s); }
@@ -751,11 +1376,10 @@
     this.scrollTo(this.render(m, true));
     loadKB(function (ok) {
       if (!ok) { me.say([{ k: 'p', x: 'Sorry, I couldn’t open the site’s pages just now. Please try again in a moment.' }], [], 300); return; }
-      var r;
-      try { r = respond(me.state, text, doc); }
-      catch (e) { r = { blocks: [{ k: 'p', x: 'Sorry, something went wrong on my side. Could you try asking another way?' }], chips: STARTERS }; }
-      var len = r.blocks.reduce(function (n, b) { return n + wc(b.x && b.x.join ? b.x.join(' ') : b.x || ''); }, 0);
-      me.say(r.blocks, r.chips, REDUCED ? 250 : Math.min(1300, 450 + len * 6));
+      reply(me.state, text, doc, function (r) {
+        var len = r.blocks.reduce(function (n, b) { return n + wc(b.x && b.x.join ? b.x.join(' ') : b.x || ''); }, 0);
+        me.say(r.blocks, r.chips, REDUCED ? 250 : Math.min(1300, 450 + len * 6));
+      });
     });
   };
 
@@ -822,9 +1446,13 @@
       return inline;
     },
     // for tests and tooling: rank passages without showing anything
-    _ask: function (q, cb) { loadKB(function () { cb(respond({ last: null }, q)); }); },
+    _ask: function (q, cb) { loadKB(function () { reply({ last: null }, q, null, cb); }); },
+    // a conversation that remembers the last topic, for testing follow-ups
+    _session: function () { var st = { last: null }; return { ask: function (q, cb) { loadKB(function () { reply(st, q, null, cb); }); }, state: st }; },
+    _bgLoaded: function () { return !!(IDX && IDX.bg); },
     _search: function (q, cb) { loadKB(function () { cb(search(q).hits.slice(0, 6).map(function (h) { return [KB.docs[h.i].h, +h.s.toFixed(2), +h.cov.toFixed(2)]; })); }); }
   };
+  api._sit = function (q) { var f = norm(q), d = detectSituation(f), sc = {}; Object.keys(IDX.sit.issues).forEach(function (k) { var n = 0; IDX.sit.issues[k].res.forEach(function (r) { if (r[0].test(f)) n += r[1]; }); if (n) sc[k] = n; }); d.all = sc; return d; };
   api._debug = function (q) { return { tokens: tokens(q), top: search(q).hits.slice(0, 3).map(function (h) { return [KB.docs[h.i].h, +h.s.toFixed(2), +h.cov.toFixed(2)]; }), terms: search(q).terms }; };
   window.TOLChat = api;
 

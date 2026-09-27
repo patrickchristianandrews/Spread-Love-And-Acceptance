@@ -1,0 +1,2864 @@
+{
+ "_about": "Curated answers for the program's own pieces (kind: tool) and the most common questions (kind: intent). keys are names people type (matched as whole words, longest first); pat is an optional pattern for intent cards (same small language as the situations). A tool card can answer 'what is it' (what + how), 'how do I use it' (how), 'what does it mean' (results) and 'show me the math' (math). See tools/chat/README.md.",
+ "cards": [
+  {
+   "id": "lemonade",
+   "kind": "tool",
+   "name": "the Lemonade Stand",
+   "keys": [
+    "lemonade stand",
+    "lemonade",
+    "lemonade stand heuristic"
+   ],
+   "what": "The Lemonade Stand is a free tool for seeing how the work of keeping a place running is split. It works for two to eight people: partners, roommates, family or a small team. You list the week’s jobs and each person’s hours (and, if you like, shared bills), and the split shows up as a plain fact, not a verdict on anyone.",
+   "how": [
+    "Add everyone who shares the place (two to eight names).",
+    "Add one line per job, with the hours each person really spent on it this week, the quiet jobs included. The “who did what” log (WP-01) is the best source.",
+    "Optionally, add shared costs on the money side: what each person actually paid.",
+    "Look at the split together, calmly. Copy or share the result if that helps.",
+    "Next step: give each job one owner with WP-03, and use the totals in CALC-01."
+   ],
+   "results": "The result shows each person’s share of the hours (and money, if you added it). An even split isn’t the goal in itself: what matters is whether everyone sees the same picture and agrees the split works. A lopsided split is a fact about the setup, often jobs that quietly drifted to whoever notices first, never a judgment of anyone.",
+   "math": "Each person’s share is their hours divided by everyone’s total hours. For two people, CALC-01 turns that into workload balance: 1 minus the difference between the two percentages, divided by 100, so an even split is 1.00 and a completely one-sided week is 0.00. With more people, the tool works the balance out from everyone’s hours for you.",
+   "ex": "Three roommates listed 14 jobs. The split came out 52%, 30% and 18%, mostly because one person always bought the shared groceries and cleaned the bathroom. They gave those two jobs new owners, and the next month it was much closer.",
+   "pillar": "Pillar I, See the whole load, with a nod to Pillar V, Notice the quiet incentives.",
+   "links": [
+    [
+     "The Lemonade Stand",
+     "/lemonade-stand.html"
+    ],
+    [
+     "WP-03: One owner per job",
+     "/workpapers/wp-03-raci-treaty.html"
+    ]
+   ]
+  },
+  {
+   "id": "wp01",
+   "kind": "tool",
+   "name": "WP-01, Who did what (the Field Audit)",
+   "keys": [
+    "wp01",
+    "wp 01",
+    "field audit",
+    "who did what",
+    "neutral refusals",
+    "workpaper 1",
+    "workpaper one"
+   ],
+   "what": "WP-01 is a one-week log of who did what at home, plus kind ways to say no. It catches what actually happened before memory turns the week into a story. It’s the usual first worksheet in the program.",
+   "how": [
+    "For seven days, each of you logs your own tasks: the day, what it was, who did it, rough minutes, and whether someone asked or it was just noticed and handled.",
+    "Log the small and invisible jobs too, like noticing the milk is low.",
+    "Log what happened, not what should have: one honest row per task.",
+    "Don’t discuss it until the week is done. Then compare, calmly, or put the totals into the Lemonade Stand.",
+    "For saying no: say why the request is fair, say honestly what you have left, then offer something instead."
+   ],
+   "results": "WP-01 doesn’t give a score. It gives you both the same facts: total minutes per person, and how much was noticed versus asked for. Those totals feed the Lemonade Stand and CALC-01’s workload balance.",
+   "ex": "“Tuesday, noticed we’re out of dish soap, bought it on the way home, 15 min, noticed (not asked).” That one row is the invisible work WP-01 is designed to catch.",
+   "start": [
+    "Pick a start day, like tomorrow morning.",
+    "Keep the log somewhere easy: the fill-in version on screen, a printed sheet, or your phone’s notes.",
+    "Log just your own side for seven days, small jobs included, and don’t compare until the week is done."
+   ],
+   "pillar": "Pillar I, See the whole load. Its kind ways to say no use Pillar IV.",
+   "links": [
+    [
+     "WP-01: Who did what",
+     "/workpapers/wp-01.html"
+    ],
+    [
+     "Fill it in on screen",
+     "/workpapers/fill/wp-01.html"
+    ],
+    [
+     "The Lemonade Stand",
+     "/lemonade-stand.html"
+    ]
+   ]
+  },
+  {
+   "id": "wp02",
+   "kind": "tool",
+   "name": "WP-02, the Battery & Stress Meter",
+   "keys": [
+    "wp02",
+    "wp 02",
+    "battery meter",
+    "battery and stress meter",
+    "battery stress meter",
+    "stress meter",
+    "how full is your battery",
+    "battery score",
+    "workpaper 2",
+    "workpaper two",
+    "~battery"
+   ],
+   "what": "WP-02 is a quick, kind check on yourself that separates how much you’re already carrying from how upset you are about one thing. Sometimes a small thing feels huge because the rest of the day was heavy. It’s a gut-check, not a medical test.",
+   "how": [
+    "Fill it in only about yourself, thinking about the last day or two.",
+    "Score five things from 0 (not at all) to 4 (very true): sleep, workload elsewhere, any unresolved conflict, how your body feels, and time pressure today.",
+    "Add them up and divide by 20.",
+    "Use the result to pace a hard talk, not to dodge one. You can also type your five answers to me and I’ll work it out."
+   ],
+   "results": "Under 0.3: whatever comes up is probably about the thing itself. From 0.3 to 0.6: say out loud, “Heads up, I’m carrying more than usual today.” Over 0.6: be gentle with yourself and put off anything that doesn’t need deciding in the next hour. A high score means “later”, not “never”. It describes your state today, not a verdict on you.",
+   "math": "Five answers, each 0 to 4, so the most you can score is 20. Add them up and divide by 20 to get a number from 0 to 1. For example, 3 + 2 + 4 + 1 + 2 = 12, and 12 ÷ 20 = 0.60. In CALC-01, the average of everyone’s battery scores becomes the stress input, and it goes in flipped, as (1 − the score), so more stress lowers the read.",
+   "ex": "Answers of 3, 2, 4, 1 and 2 add up to 12, and 12 ÷ 20 = 0.60, the top of the middle band: a good day to say “Heads up, I’m carrying more than usual today” before anything hard.",
+   "pillar": "Pillar III, Read your state first.",
+   "chips": [
+    [
+     "Work out my score",
+     "My battery answers are 3, 2, 4, 1, 2"
+    ]
+   ],
+   "links": [
+    [
+     "WP-02: How full is your battery?",
+     "/workpapers/wp-02-battery-stress-meter.html"
+    ],
+    [
+     "Fill it in on screen",
+     "/workpapers/fill/wp-02.html"
+    ],
+    [
+     "WP-11: The Calm-Down Kit",
+     "/wp-11.html"
+    ]
+   ]
+  },
+  {
+   "id": "wp03",
+   "kind": "tool",
+   "name": "WP-03, One owner per job (the RACI Treaty)",
+   "keys": [
+    "wp03",
+    "wp 03",
+    "raci treaty",
+    "~raci",
+    "one owner per job",
+    "ownership clarity",
+    "workpaper 3",
+    "workpaper three"
+   ],
+   "what": "WP-03 gives every regular job one clear owner, so nobody has to keep asking and nothing is left vaguely shared. It works for two people or a group (it’s the same idea teams use, called RACI).",
+   "how": [
+    "Sit down once, ideally with a week of the WP-01 log.",
+    "List the regular jobs: groceries, dishes, bills, the family calendar, and your own.",
+    "For each, write how often it happens and two names: the Responsible person (does it) and the Accountable person (notices if it didn’t get done). They can be the same person.",
+    "Both initial it. Signing means clear, not perfect.",
+    "Change it on purpose at the weekly closing, never by drift."
+   ],
+   "results": "Count the jobs with both names filled in and divide by the total number of jobs. That’s your ownership clarity, from 0 to 1. Keep unowned jobs on the list: seeing them is the whole point. Higher clarity means fewer “I thought you were doing it” moments.",
+   "math": "Ownership clarity = jobs with both a Responsible and an Accountable name ÷ all jobs listed. Eight fully owned jobs out of ten gives 0.80. It measures how clear ownership is, not how fair it is, and it feeds CALC-01 with a weight of 0.35.",
+   "ex": "“Bins: weekly, Responsible Jordan, Accountable Jordan.” “Dentist appointments: as needed, Responsible Sam, Accountable Sam.” Two rows, and two jobs nobody has to ask about again.",
+   "pillar": "Pillar II, Fix the setup, not the person, with a nod to Pillar V.",
+   "links": [
+    [
+     "WP-03: One owner per job",
+     "/workpapers/wp-03-raci-treaty.html"
+    ],
+    [
+     "Fill it in on screen",
+     "/workpapers/fill/wp-03.html"
+    ],
+    [
+     "RACI in plain words (Library)",
+     "/library/teams.html#raci"
+    ]
+   ]
+  },
+  {
+   "id": "wp04",
+   "kind": "tool",
+   "name": "WP-04, What keeps coming back? (the Deficit Audit)",
+   "keys": [
+    "wp04",
+    "wp 04",
+    "deficit audit",
+    "monthly look back",
+    "monthly lookback",
+    "what keeps coming back",
+    "workpaper 4",
+    "workpaper four"
+   ],
+   "what": "WP-04 is a gentle monthly look back, done together, to find the jobs that keep slipping and fix the setup instead of patching the same problem again.",
+   "how": [
+    "Once a month, bring your four weekly WP-01 logs and your WP-03 job list.",
+    "List every job that was noticed but not done, or only done after being raised more than once. Check off each week it happened.",
+    "Three or four checks is a pattern, not a fluke.",
+    "Sort each repeat: no clear owner (update WP-03), the owner can’t keep up (a kind, honest talk), or a temporary cause like illness or travel (note it and move on).",
+    "Make the changes, and write down how many structural gaps you found."
+   ],
+   "results": "The number to watch is structural gaps: jobs with no clear owner. Fewer each month means it’s working. More means the setup needs another look, not that anyone failed.",
+   "pillar": "Pillar II, Fix the setup, not the person, with a nod to Pillar V.",
+   "links": [
+    [
+     "WP-04: What keeps coming back?",
+     "/workpapers/wp-04-deficit-audit.html"
+    ],
+    [
+     "Chapter V: The monthly look-back",
+     "/book/chapter-5.html"
+    ]
+   ]
+  },
+  {
+   "id": "wp09",
+   "kind": "tool",
+   "name": "WP-09, Say it so it lands (the Tone Filter)",
+   "keys": [
+    "wp09",
+    "wp 09",
+    "tone filter",
+    "say it so it lands",
+    "fact feeling ask",
+    "fact feeling and ask",
+    "workpaper 9",
+    "workpaper nine"
+   ],
+   "what": "WP-09 is a quick self-check to run before you answer something that stung, so what you say is something the other person can actually hear. It only looks at your own next message.",
+   "how": [
+    "Before you speak, find three things: the fact, in one sentence with no adjectives; the feeling underneath, like tired or unseen; and the ask, what you want to happen next.",
+    "If your sentence is a judgment on the person (“you always…”), swap it for one fact and one ask.",
+    "Before you react, weigh what you heard: is it about a specific task? Would it read the same if you weren’t stretched? Could a neutral meaning fit?",
+    "If you’re stretched or unsure, pause first."
+   ],
+   "results": "There’s no score. The result is a better sentence. In CALC-01, the share of friction moments you ran through fact, feeling and ask becomes retuning frequency, which feeds the apex score.",
+   "ex": "“You never think about anyone but yourself” becomes: “The bin wasn’t out before pickup. I feel a bit unseen. Can we pick a fixed day for it?”",
+   "pillar": "Pillar IV, Tune how you send and receive.",
+   "links": [
+    [
+     "WP-09: Say it so it lands",
+     "/workpapers/wp-09-tone-filter.html"
+    ],
+    [
+     "The Signal Translator",
+     "/signal-translator.html"
+    ]
+   ]
+  },
+  {
+   "id": "wp11",
+   "kind": "tool",
+   "name": "WP-11, the Calm-Down Kit",
+   "keys": [
+    "wp11",
+    "wp 11",
+    "calm down kit",
+    "calmdown kit",
+    "pause line",
+    "workpaper 11",
+    "sound toolkit"
+   ],
+   "what": "WP-11 is a plan you make while calm for bringing your body back down in a heated moment, so you can finish the conversation or honestly put it off. It’s for you, never something to hand to the other person.",
+   "how": [
+    "On an ordinary, calm day, write what tends to set you off and where you feel it first.",
+    "Pick two calming steps (like breathing in for four and out for six, or a slow walk).",
+    "Write one pause line: how you feel, how long, when you’ll be back.",
+    "In the moment: check your battery, say your line, do your first calming step.",
+    "Check your battery again before going back."
+   ],
+   "results": "It uses your WP-02 battery score to decide when to go back: under 0.50, go back at the time you said; between 0.50 and 0.60, do another round; still 0.60 or more after two rounds, pick a new time and say when. When you go back, start with one small, simple task first.",
+   "ex": "A pause line: “I’m getting too wound up to listen well. I’m going for a ten-minute walk, and I’ll be back at 7:30 to finish this.”",
+   "pillar": "Pillar III, Read your state first.",
+   "links": [
+    [
+     "WP-11: The Calm-Down Kit",
+     "/wp-11.html"
+    ],
+    [
+     "The Night Garden (box breathing)",
+     "/night-garden.html"
+    ]
+   ]
+  },
+  {
+   "id": "wp13",
+   "kind": "tool",
+   "name": "WP-13, the 90-second daily check-in",
+   "keys": [
+    "wp13",
+    "wp 13",
+    "90 second check in",
+    "90 second checkin",
+    "ninety second check in",
+    "90 second daily check in",
+    "daily check in",
+    "daily checkin",
+    "phase locked loop",
+    "~pll",
+    "pll protocol",
+    "workpaper 13"
+   ],
+   "what": "WP-13 is a 90-second daily check-in that makes small corrections every day, so little things don’t pile up into a big weekend argument. Small and often beats big and rare.",
+   "how": [
+    "Pick a regular moment, like after dinner.",
+    "Each of you says one sentence each on: how full you were today (low, medium or high), one thing you appreciated about the other, and optionally one small thing that didn’t feel great and one thing that would help tomorrow.",
+    "One speaks, the other just listens. No debating, and nothing gets solved here.",
+    "Once a week, skim the notes: anything that came up more than twice moves to WP-03 or WP-09."
+   ],
+   "results": "No score. The sign it’s working is fewer surprises: small things get mentioned while they’re small, and a daily thank-you keeps things steady.",
+   "ex": "“Medium today. I appreciated you handling the vet call. The sink pile got to me a bit. Tomorrow it’d help if we did the dishes right after dinner.” That’s the whole thing, about 30 seconds.",
+   "pillar": "Pillar IV, Tune how you send and receive, with a nod to Pillar V.",
+   "links": [
+    [
+     "WP-13: The 90-second daily check-in",
+     "/workpapers/wp-13-pll-protocol.html"
+    ],
+    [
+     "Watch two rhythms sync",
+     "/tools/frequency-sync-visualizer.html"
+    ]
+   ]
+  },
+  {
+   "id": "calc01",
+   "kind": "tool",
+   "name": "CALC-01, Can the load last? (the Solvency Read)",
+   "keys": [
+    "calc01",
+    "calc 01",
+    "~calculator",
+    "solvency read",
+    "~solvency",
+    "can the load last",
+    "p solvency",
+    "psolvency",
+    "apex score",
+    "~apex"
+   ],
+   "what": "CALC-01 gives one read on whether the way you share the work right now can keep going. It scores the setup, never a person, and it isn’t a compatibility test. There’s a quick three-slider version and a full version that works each input out from your worksheets and keeps a trend log. It works for households and teams of two to eight people.",
+   "how": [
+    "Before reading any number, check your own state (Step Zero).",
+    "Workload balance: enter the week’s hours per person from WP-01 or the Lemonade Stand.",
+    "Ownership clarity: list the regular jobs from WP-03 and who is Responsible and Accountable for each.",
+    "Battery: each person enters their own five WP-02 answers, about themselves only.",
+    "Optionally, count friction moments and how many you retuned with WP-09 (for the apex score).",
+    "Read the result together, calmly, and look at the biggest shortfall first."
+   ],
+   "results": "0.70 or more: the setup is carrying its own weight, so keep the same rhythm of check-ins. 0.40 to 0.69: something is drifting; look at the input with the biggest gap (often ownership clarity, but check). Under 0.40: the setup can’t last as it is, so rework the whole agreement rather than patching. The band edges are round numbers: 0.69 and 0.70 are really the same week. It’s a starting point, not a verdict.",
+   "math": "Solvency = 0.40 × workload balance + 0.35 × ownership clarity + 0.25 × (1 − average battery score). Each input runs from 0 to 1, so the read does too. The battery goes in flipped, because a setup that only works when everyone is well rested isn’t working. The apex score adds repair: 0.35 × balance + 0.30 × ownership + 0.20 × (1 − battery) + 0.15 × retuning frequency. The weights are an openly stated judgment call, not numbers fitted to data. For exact details (and how it handles more than two people), the full CALC-01 page shows every formula.",
+   "ex": "Balance 0.60, ownership 0.50 and battery 0.40 give 0.40 × 0.60 + 0.35 × 0.50 + 0.25 × 0.60 = 0.24 + 0.175 + 0.15 = 0.57: something is drifting, and ownership has the biggest gap. You can type your own numbers to me, like “CALC-01: balance 0.6, ownership 0.5, battery 0.4”.",
+   "pillar": "Pillar I, See the whole load, and Pillar II, Fix the setup, not the person. Step Zero uses Pillar III.",
+   "chips": [
+    [
+     "Work out my read",
+     "CALC-01: balance 0.6, ownership 0.5, battery 0.4"
+    ]
+   ],
+   "links": [
+    [
+     "CALC-01: the full calculator",
+     "/calc01-solvency.html"
+    ],
+    [
+     "The quick three-slider version",
+     "/workpapers/calculators/calc01-solvency.html"
+    ],
+    [
+     "Chapter II: Is the split working?",
+     "/book/chapter-2.html"
+    ]
+   ]
+  },
+  {
+   "id": "report01",
+   "kind": "tool",
+   "name": "REPORT-01, Your progress, week by week (the Full Read)",
+   "keys": [
+    "report01",
+    "report 01",
+    "full read",
+    "progress report",
+    "week by week report"
+   ],
+   "what": "REPORT-01 is one place to type in what your worksheets produced each week, and a report that reads them side by side to show where they agree and where they don’t. It brings all Five Pillars together, and reads the setup, never a person.",
+   "how": [
+    "Once a week, after your short end-of-week review, copy in the figures from the worksheets you ran: WP-01 minutes, WP-02 scores, WP-03 counts and so on. Leave blank what you didn’t run.",
+    "Once a month, add your WP-04 look-back: the gaps you found, and how many came back after being fixed.",
+    "Press Save ledger to download a small file, and Load ledger next week to carry on. Nothing is stored in the browser or sent anywhere."
+   ],
+   "results": "The report says where things stand, how the numbers fit together, and what to do next, following written rules you can check. The repeat count from the monthly look-back matters most: problems that come back after being fixed point to the setup.",
+   "pillar": "All Five Pillars together.",
+   "links": [
+    [
+     "REPORT-01",
+     "/workpapers/report-01.html"
+    ],
+    [
+     "The Workpaper Suite",
+     "/workpapers/fill/suite.html"
+    ]
+   ]
+  },
+  {
+   "id": "prog01",
+   "kind": "tool",
+   "name": "PROG-01, Six gentle weeks",
+   "keys": [
+    "prog01",
+    "prog 01",
+    "six gentle weeks",
+    "6 week program",
+    "six week program",
+    "~6 week",
+    "~six weeks",
+    "~curriculum",
+    "the program week by week",
+    "implementation roadmap",
+    "guided implementation",
+    "the 6 week program"
+   ],
+   "what": "PROG-01 is a six-week path through the program, one step at a time. It works best with the other person, but you can do it on your own.",
+   "how": [
+    "Week 1, see the work: read the Preface and Chapter I, check your state with Today’s Weather, and log a week in WP-01.",
+    "Week 2, one owner per job: read Chapter II, fill in WP-03, and get a first read from CALC-01.",
+    "Week 3, your batteries: read Chapters III and IV, and do the WP-02 Battery Meter daily.",
+    "Week 4, talk about it kindly: WP-09 and your Calm-Down Kit (WP-11).",
+    "Week 5, get back in step: the 90-second daily check-in (WP-13).",
+    "Week 6, make it last: log another week, compare with week one, and do your first monthly look-back (WP-04)."
+   ],
+   "pillar": "All Five Pillars, in order.",
+   "links": [
+    [
+     "PROG-01: Six gentle weeks",
+     "/prog-01.html"
+    ],
+    [
+     "The Workpaper Suite (week by week)",
+     "/workpapers/fill/suite.html"
+    ],
+    [
+     "The curriculum (the order, week by week)",
+     "/curriculum.html"
+    ]
+   ]
+  },
+  {
+   "id": "suite",
+   "kind": "tool",
+   "name": "the Workpaper Suite",
+   "keys": [
+    "workpaper suite",
+    "~the suite",
+    "~suite",
+    "~roads",
+    "~your road",
+    "fillable pdf",
+    "suite file"
+   ],
+   "what": "The Workpaper Suite lines up the workpapers for your road in the order that helps most. Pick who it’s for (just you, partners, family, co-parents, friends, roommates, coworkers, caregivers, or the 6-week program), fill the sheets in on screen, then download one fillable PDF and a report written for your road.",
+   "how": [
+    "Choose your road, and optionally add the first names of the people on it (they appear in every owner drop-down).",
+    "Work through your road by step, or week by week.",
+    "Bring in anything you’ve already filled in: draft files, a suite file, or a fillable PDF.",
+    "Download the fillable PDF to type into on your phone or print, and the report for your road.",
+    "Save a suite file to pick up next time, even on another device."
+   ],
+   "results": "The report tells your road’s story from what you wrote: where things stand, a question to talk about for each sheet, what to look for, conversation starters, your weeks, and kind words worth keeping close.",
+   "more": "Each road has its own order. Partners start with who did what (WP-01), then one owner per job (WP-03), batteries (WP-02), talking so it lands (WP-09 and WP-11), the daily check-in (WP-13) and the monthly look-back (WP-04). Just you starts with your battery, what settles you, and how words reach you. Roommates and coworkers lean on the Lemonade Stand and one owner per job. The whole road, every sheet in order, comes out as one fillable PDF plus the report: that’s the full-path package.",
+   "pillar": "Every road uses all Five Pillars, starting inside you and then between you and others.",
+   "links": [
+    [
+     "Build your Workpaper Suite",
+     "/workpapers/fill/suite.html"
+    ],
+    [
+     "Fill in one workpaper at a time",
+     "/workpapers/fill/index.html"
+    ]
+   ]
+  },
+  {
+   "id": "fullpath",
+   "kind": "tool",
+   "name": "the full-path package",
+   "keys": [
+    "full path package",
+    "~full path",
+    "whole road",
+    "everything as one pdf",
+    "~one pdf"
+   ],
+   "what": "The full-path package is the Workpaper Suite’s way of giving you your whole road in one go: every workpaper on your road, in order, as one fillable PDF, plus a report written from what you filled in.",
+   "how": [
+    "Open the Workpaper Suite and choose your road.",
+    "Fill in what you can on screen, or bring in drafts and PDFs you’ve already filled in.",
+    "Download the fillable PDF (every sheet on your road, ready to type into or print) and the report.",
+    "Save a suite file if you want to pick it up later."
+   ],
+   "pillar": "All Five Pillars, in your road’s order.",
+   "links": [
+    [
+     "The Workpaper Suite",
+     "/workpapers/fill/suite.html"
+    ]
+   ]
+  },
+  {
+   "id": "fillin",
+   "kind": "tool",
+   "name": "the fill-in workpapers",
+   "keys": [
+    "fill in workpapers",
+    "fillin workpapers",
+    "fill in workpaper",
+    "fillable workpapers",
+    "fill in version",
+    "type into the worksheets",
+    "save as pdf"
+   ],
+   "what": "Every workpaper has a fill-in version: type your entries on screen and download a finished PDF to keep. Nothing is stored unless you turn on “Keep a draft on this device”, and you can erase it any time.",
+   "how": [
+    "Open the fill-in page and pick a workpaper (the usual order is WP-01, WP-02, WP-03, WP-09, WP-11 and WP-13, with WP-04 once a month).",
+    "Type your entries.",
+    "Download the PDF, or keep a draft on this device if it’s your own device.",
+    "Or do them all at once, in your road’s order, in the Workpaper Suite."
+   ],
+   "pillar": "Each workpaper names its own pillar.",
+   "links": [
+    [
+     "Fill-in workpapers",
+     "/workpapers/fill/index.html"
+    ],
+    [
+     "The Workpaper Suite",
+     "/workpapers/fill/suite.html"
+    ]
+   ]
+  },
+  {
+   "id": "playground",
+   "kind": "tool",
+   "name": "the Workpaper Playground",
+   "keys": [
+    "workpaper playground",
+    "~playground",
+    "try the workpapers",
+    "~sandbox"
+   ],
+   "what": "The Workpaper Playground lets you try three core tools in a few minutes, with real calculations and nothing saved: WP-01 (who’s doing what), WP-03 (one owner per job) and CALC-01 (can the load last).",
+   "how": [
+    "Open the Playground.",
+    "Try a quick week in WP-01, a few jobs in WP-03, and see how they feed CALC-01.",
+    "When it clicks, move to the real fill-in workpapers or the Workpaper Suite."
+   ],
+   "pillar": "Pillar I, See the whole load, and Pillar II, Fix the setup, not the person.",
+   "links": [
+    [
+     "Try the Workpapers",
+     "/do/index.html"
+    ],
+    [
+     "The Playground",
+     "/do/workpaper-playground.html"
+    ]
+   ]
+  },
+  {
+   "id": "weather",
+   "kind": "tool",
+   "name": "Today’s Weather",
+   "keys": [
+    "todays weather",
+    "today s weather",
+    "~quick check",
+    "~quick checks",
+    "weather check",
+    "inner weather",
+    "talk window",
+    "almanac",
+    "today weather",
+    "~weather",
+    "~forecast"
+   ],
+   "what": "Today’s Weather is a free, one-minute reading of your own conditions today: the sky, the pressure, the ground underneath, and what’s blowing in. It tells you what today is good for, and what to leave until the front moves through. It’s a reading of you, never of anyone else.",
+   "how": [
+    "Step 1 (the only required one): pick the sky closest to true right now: Clear (calm and connected), Gusty (revved up) or Fogged in (running on empty).",
+    "Optionally add who you’ll be around, how much you were already carrying, body needs, last night’s sleep, people load, what’s on your mind, and what would help in the next hour.",
+    "Read your forecast: good hours for, what to leave for later, a talk window, and sixty seconds that might help.",
+    "Keep a private almanac on your device if you’d like to spot patterns."
+   ],
+   "results": "The forecast is a rough tally of what you told it, not a measurement. The sky sets the starting point, and heavy pressure, a short night, lots of people time, body needs and open worries each add a little. A closed talk window means “not now”, never “never”. Weather isn’t a grade or a diagnosis: conditions pass.",
+   "ex": "Gusty sky, heavy pressure and a short night might give you: good hours for simple tasks and a walk; leave the budget talk until tomorrow; say “I’m running low today, can we talk tomorrow?”",
+   "pillar": "Pillar III, Read your state first.",
+   "links": [
+    [
+     "Today’s Weather",
+     "/quick-checks.html#today"
+    ],
+    [
+     "WP-02: How full is your battery?",
+     "/workpapers/wp-02-battery-stress-meter.html"
+    ]
+   ]
+  },
+  {
+   "id": "snapshot",
+   "kind": "tool",
+   "name": "the 2-minute Snapshot",
+   "keys": [
+    "snapshot",
+    "2 minute snapshot",
+    "two minute snapshot",
+    "~quadrant",
+    "~quadrants"
+   ],
+   "what": "The Snapshot is seven quick questions about how a shared load is set up, and how it bends when things get heavy. It shows which of four areas you’re in right now, what’s shaping it, and one small step for this week. It looks through all Five Pillars.",
+   "how": [
+    "Pick who shares the load with you (partner, family, roommates, shared care, a team, someone else).",
+    "Answer the seven questions honestly, for today.",
+    "Read your area and the one thing to try this week.",
+    "It works best when each person takes it on their own, then you compare."
+   ],
+   "results": "Four areas: Steady (clear setup, bends well), Ready to readjust (blurry setup, bends well), Stuck pattern (clear setup, hard to bend) and Stretched thin (blurry setup, hard to bend). It’s one moment from one point of view, not a verdict, so try it again in a month.",
+   "pillar": "All Five Pillars: questions 1 to 3 look at the setup (Pillars I and II), 4 to 6 at how it bends (III, IV and V).",
+   "links": [
+    [
+     "The 2-minute Snapshot",
+     "/snapshot/index.html"
+    ],
+    [
+     "Take the Snapshot",
+     "/snapshot/snapshot-diagnostic-snapshot-interactive.html"
+    ]
+   ]
+  },
+  {
+   "id": "wiringcard",
+   "kind": "tool",
+   "name": "the Wiring Card",
+   "keys": [
+    "wiring card",
+    "wiringcard"
+   ],
+   "what": "The Wiring Card is a one-page card on how you actually receive words: what silence means for you, what helps, and what to avoid. You give it to people you live or work with before a hard conversation, not during one. It isn’t a diagnosis, a label or a contract, and nothing you type is saved.",
+   "how": [
+    "On a calm day, fill in how you take in words, pace and tone. The card updates as you go.",
+    "Print or copy it.",
+    "Give it to the people you live and work with, before a hard conversation.",
+    "Pair it with the Signal Translator to test a sentence, and with Check-ins when the topic needs a calm space."
+   ],
+   "results": "The card tells someone how to send a request so it gets through. It doesn’t make them responsible for managing you, and it doesn’t mean you must be available however you feel. When you’re running low, every line applies more strictly.",
+   "pillar": "Pillar IV, Tune how you send and receive.",
+   "links": [
+    [
+     "The Wiring Card",
+     "/wiring-card.html"
+    ],
+    [
+     "Wired Differently",
+     "/wired-differently.html"
+    ]
+   ]
+  },
+  {
+   "id": "signal",
+   "kind": "tool",
+   "name": "the Signal Translator",
+   "keys": [
+    "signal translator",
+    "~translator",
+    "~test a sentence",
+    "test my sentence"
+   ],
+   "what": "The Signal Translator lets you type what you plan to say or send, see how it may land, and get a clearer version that keeps your ask. Everything besides the sentence is optional.",
+   "how": [
+    "Type your sentence the way it would really come out: a text, a Slack message, or something you’ll say out loud.",
+    "Optionally pick the relationship, the channel, the listener’s wiring and state, and the situation.",
+    "Press Translate to see how it may land and a clearer version.",
+    "Try the reverse to see how you might read their reply.",
+    "Add sentences to your talking notes and print them for a check-in."
+   ],
+   "results": "It shows how the sentence may land for that listener, what might sting, and a clearer version with the same ask. It’s a guide, not a verdict on your words or on them. Acknowledgement isn’t agreement, and hearing how it landed doesn’t cancel your fact.",
+   "ex": "“You never help with the kids’ stuff” might come back as: “The school forms were due today and I did them last night. I felt stretched. Could you take the forms from now on?”",
+   "pillar": "Pillar IV, Tune how you send and receive.",
+   "links": [
+    [
+     "The Signal Translator",
+     "/signal-translator.html"
+    ],
+    [
+     "WP-09: Say it so it lands",
+     "/workpapers/wp-09-tone-filter.html"
+    ]
+   ]
+  },
+  {
+   "id": "decoder",
+   "kind": "tool",
+   "name": "the Carrier Wave Decoder",
+   "keys": [
+    "carrier wave decoder",
+    "carrier wave",
+    "~decoder",
+    "~retune"
+   ],
+   "what": "The Carrier Wave Decoder is a guided session for the moment a conversation starts going sideways, with anyone. You work out what was out of sync, check your state, retune your body, practice with a guided script, and keep notes on what works. It puts Chapter I’s radio idea into practice.",
+   "how": [
+    "Start a session and pick the state closest to how you feel: calm, revved up, or shut down.",
+    "Decode the moment: for pace, tone and timing, mark where you were and your best guess at where they were.",
+    "Do a one-minute retune (a long exhale if you’re keyed up, looking around if you’ve gone flat).",
+    "Practice a no-blame sentence, then run a private tone check on your draft before you send it.",
+    "Save what worked to your journal on this device."
+   ],
+   "results": "It shows which channel slipped out of sync (pace, tone or timing) and gives you a way to name it without blame. It isn’t a verdict on who was right. Save anything hard for a planned check-in.",
+   "pillar": "Pillar IV, Tune how you send and receive; the state check uses Pillar III.",
+   "links": [
+    [
+     "The Carrier Wave Decoder",
+     "/carrier-wave-decoder.html"
+    ],
+    [
+     "Chapter I: Why we get out of tune",
+     "/book/chapter-1.html"
+    ]
+   ]
+  },
+  {
+   "id": "reader",
+   "kind": "tool",
+   "name": "the Conversation Reader",
+   "keys": [
+    "conversation reader",
+    "~reader",
+    "paste a text thread",
+    "~text thread"
+   ],
+   "what": "The Conversation Reader lets you paste a text thread, chat or email exchange and see where it turned, what each of you may be hearing, and a calmer way to answer. It runs entirely in your browser: what you paste is never saved or sent.",
+   "how": [
+    "Copy the messages from your phone, chat app or email and paste them in. Names at the start of lines help but aren’t required.",
+    "Tell it which person is you, if there are names.",
+    "Read where it got heated and what each of you may be hearing.",
+    "Write your reply, and let the Reader check it as you type before you send."
+   ],
+   "results": "It looks for patterns in words (absolutes like “always” and “never”, sentences about who someone is, dismissals, sarcasm, repair attempts, clear asks, unanswered questions) and weighs them to show where it heated up. It can’t hear tone of voice or know your history, so use it to slow down and prepare, never as proof of who was right.",
+   "pillar": "Pillar IV, Tune how you send and receive.",
+   "links": [
+    [
+     "The Conversation Reader",
+     "/conversation-reader.html"
+    ],
+    [
+     "The Signal Translator",
+     "/signal-translator.html"
+    ]
+   ]
+  },
+  {
+   "id": "freqcal",
+   "kind": "tool",
+   "name": "Frequency Calibration",
+   "keys": [
+    "frequency calibration",
+    "~calibration",
+    "~natural rhythms",
+    "coherence audit",
+    "~five rhythms",
+    "~five frequencies"
+   ],
+   "what": "Frequency Calibration maps the natural rhythms two people run on across five areas (money, rest and recovery, decisions, talking, and big-picture values), shows where you’re out of step, and suggests simple shared habits to get back in line. It isn’t a diagnosis or a compatibility test.",
+   "how": [
+    "Add both names (optional) and how you’re connected.",
+    "Person A picks what feels natural in each area; then Person B does the same.",
+    "Compare your rhythms to see the gap in each area.",
+    "Try one agreement at a time, starting with the biggest gap, for two weeks before judging it.",
+    "Run it again every few months as life changes."
+   ],
+   "results": "Each gap is how many steps apart your answers are. A big gap doesn’t mean anyone is wrong: you’re running at different speeds, and a shared agreement usually closes most of it. Agreement you schedule tends to hold better than agreement you assume.",
+   "pillar": "Pillar IV, Tune how you send and receive, with a nod to Pillar III.",
+   "links": [
+    [
+     "Frequency Calibration",
+     "/tools/frequency-calibration.html"
+    ],
+    [
+     "The Frequency Framework",
+     "/frequency-framework.html"
+    ]
+   ]
+  },
+  {
+   "id": "syncviz",
+   "kind": "tool",
+   "name": "the Frequency Sync Visualizer",
+   "keys": [
+    "sync visualizer",
+    "frequency sync",
+    "watch two rhythms sync",
+    "~two rhythms"
+   ],
+   "what": "The Frequency Sync Visualizer is a moving picture of two rhythms, yours and another person’s. When they drift apart, the picture gets choppy; tap “Check in” and they settle into step, the way the 90-second daily check-in does. It’s a picture of an idea, not a measurement of anyone.",
+   "how": [
+    "Set your rhythm and theirs (beats a second).",
+    "Watch the gap, and bring them closer or tap Check in.",
+    "Turn sound on with headphones to hear each rhythm in one ear."
+   ],
+   "pillar": "Pillar IV, Tune how you send and receive.",
+   "links": [
+    [
+     "Watch two rhythms sync",
+     "/tools/frequency-sync-visualizer.html"
+    ],
+    [
+     "WP-13: The 90-second daily check-in",
+     "/workpapers/wp-13-pll-protocol.html"
+    ]
+   ]
+  },
+  {
+   "id": "mood",
+   "kind": "tool",
+   "name": "Mood Arbitrage",
+   "keys": [
+    "mood arbitrage",
+    "~arbitrage",
+    "~mood frequencies"
+   ],
+   "what": "Mood Arbitrage is about noticing the state someone’s body is in and gently helping a tense moment soften, starting with calming your own body first. It isn’t forced cheerfulness. The free introduction shows the core idea and one full example; the full toolkit adds five everyday scenarios, 15-plus ready-made moves and a four-week practice plan.",
+   "how": [
+    "Start with the free introduction and its worked example.",
+    "Notice the state first: calm, revved up or shut down.",
+    "Settle your own body before anything else.",
+    "Choose one small move or phrase that fits their state, like a circuit breaker.",
+    "Then open the full toolkit for the scenarios and the four-week plan."
+   ],
+   "pillar": "Pillar III, Read your state first, and Pillar IV, Tune how you send and receive.",
+   "links": [
+    [
+     "Mood Arbitrage: free introduction",
+     "/tools/mood-arbitrage-free.html"
+    ],
+    [
+     "The full toolkit",
+     "/tools/mood-arbitrage-full.html"
+    ]
+   ]
+  },
+  {
+   "id": "drift",
+   "kind": "tool",
+   "name": "Drift, the calm visualizer",
+   "keys": [
+    "~drift",
+    "calm visualizer",
+    "calm visualiser",
+    "~binaural",
+    "binaural beats"
+   ],
+   "what": "Drift is a quiet few minutes for your senses. You tell it how you feel, and it picks a soft pair of tones, a slow breathing pace and deep, dreamy 3D colors to match, then eases everything toward calmer over the first few minutes. Everything is made on your device.",
+   "how": [
+    "Put headphones on (binaural tones only work with headphones), and start the volume low.",
+    "Pick the feeling closest to how you are, how strong it is, and how long you’d like (about 5 to 20 minutes).",
+    "Choose pictures, background sound and breathing words, or gentle, nearly still visuals.",
+    "Press Begin, and just breathe along. Stop anytime if it doesn’t feel good.",
+    "Not while driving or doing anything that needs your full attention."
+   ],
+   "results": "At the end it asks how you feel now. Noticing how you feel before and after is Pillar III in action, and a settled moment is a kinder time for a talk you’ve been saving. It’s a relaxing experience, not a treatment.",
+   "pillar": "Pillar III, Read your state first.",
+   "links": [
+    [
+     "Drift: the calm visualizer",
+     "/calm-visualizer.html"
+    ],
+    [
+     "The Night Garden",
+     "/night-garden.html"
+    ]
+   ]
+  },
+  {
+   "id": "garden",
+   "kind": "tool",
+   "name": "the Night Garden",
+   "keys": [
+    "night garden",
+    "~garden",
+    "~fireflies",
+    "~lily pond",
+    "box breathing game"
+   ],
+   "what": "The Night Garden is a calm place to breathe, play and let your mind settle. There are no timers and no way to lose, and it keeps growing as you visit.",
+   "how": [
+    "Breathe: box breathing with a glowing light (in 4, hold 4, out 4, hold 4); a flower blooms with every round.",
+    "Fireflies: connect stars into singing constellations and dedicate each one to someone you love (kept on this device only).",
+    "Lily pond: a slow, gentle puzzle where lily pads bloom as you fit them into rows.",
+    "Switch between them anytime; headphones are lovely here."
+   ],
+   "pillar": "Pillar III, Read your state first.",
+   "links": [
+    [
+     "The Night Garden",
+     "/night-garden.html"
+    ],
+    [
+     "Pause & Play",
+     "/pause-and-play.html"
+    ]
+   ]
+  },
+  {
+   "id": "pauseplay",
+   "kind": "tool",
+   "name": "Pause & Play",
+   "keys": [
+    "pause and play",
+    "pause play",
+    "~games",
+    "~game",
+    "calm games",
+    "levels that grow the background",
+    "living garden"
+   ],
+   "what": "Pause & Play is the calm corner of the site: gentle games for when your mind needs a rest. Drift, the Night Garden, the Frequency Journey, Word Bloom, Quiet Crossword, the Daily Ledger Crossword and Quiet Words. No timers, no way to lose, and every few levels something new appears in the living garden behind every page.",
+   "how": [
+    "Pick a game that fits your mood: breathing (Night Garden, Drift), words (Word Bloom, Quiet Words, the crosswords) or a gentle journey (the Frequency Journey).",
+    "Play a few minutes to settle before a hard conversation, or to wind down at night.",
+    "Your level and streak are kept on this device only."
+   ],
+   "pillar": "Mostly Pillar III, Read your state first: settle, then talk.",
+   "links": [
+    [
+     "Pause & Play",
+     "/pause-and-play.html"
+    ],
+    [
+     "The Frequency Journey",
+     "/frequency-journey.html"
+    ]
+   ]
+  },
+  {
+   "id": "wordbloom",
+   "kind": "tool",
+   "name": "Word Bloom",
+   "keys": [
+    "word bloom",
+    "wordbloom",
+    "~petals",
+    "~bonus jar"
+   ],
+   "what": "Word Bloom is a calm word game: swipe across the petals to spell words and fill a little crossword. Other real words go in your bonus jar. There are hundreds of gentle levels, no timer and no way to lose.",
+   "how": [
+    "Drag your finger from petal to petal to spell a word, then let go. Slide back to undo a letter.",
+    "Or tap petals one at a time and tap the middle, or type on a keyboard.",
+    "The shuffle button mixes up the letters and the hint button shows one letter.",
+    "Finish a level without hints for a perfect bloom."
+   ],
+   "pillar": "Pillar III, Read your state first: one gentle thing to hold.",
+   "links": [
+    [
+     "Word Bloom",
+     "/word-bloom.html"
+    ]
+   ]
+  },
+  {
+   "id": "quietcross",
+   "kind": "tool",
+   "name": "the Quiet Crossword",
+   "keys": [
+    "quiet crossword"
+   ],
+   "what": "The Quiet Crossword is a small, friendly crossword made for playing on a phone, from gentle to expert. Each word glows when it’s right, and there’s no timer.",
+   "how": [
+    "Tap a square and type; tap again to switch between across and down.",
+    "Use “Check my letters” or “Show a letter” whenever you like.",
+    "Play the next one, or pick a random one."
+   ],
+   "pillar": "Pillar III: a small puzzle gives your mind one gentle thing to hold.",
+   "links": [
+    [
+     "Quiet Crossword",
+     "/quiet-crossword.html"
+    ],
+    [
+     "The Daily Ledger Crossword",
+     "/daily-ledger-crossword.html"
+    ]
+   ]
+  },
+  {
+   "id": "dailycross",
+   "kind": "tool",
+   "name": "the Daily Ledger Crossword",
+   "keys": [
+    "daily ledger crossword",
+    "daily ledger",
+    "newspaper crossword",
+    "big sunday"
+   ],
+   "what": "The Daily Ledger Crossword is a real newspaper-style crossword, from a quick 5×5 Mini to a Big Sunday 13×13. The grids grow bigger and the clues a little trickier as you go, and there’s still no timer.",
+   "how": [
+    "Tap a square and type; tap it again to switch between across and down.",
+    "The small numbers match the clues. Some squares belong to only one word, as in British newspaper crosswords.",
+    "The short, one-word clues are the trickier ones."
+   ],
+   "pillar": "Pillar III: a calm puzzle before or after a busy day.",
+   "links": [
+    [
+     "The Daily Ledger Crossword",
+     "/daily-ledger-crossword.html"
+    ],
+    [
+     "Quiet Crossword",
+     "/quiet-crossword.html"
+    ]
+   ]
+  },
+  {
+   "id": "quietwords",
+   "kind": "tool",
+   "name": "Quiet Words",
+   "keys": [
+    "quiet words",
+    "word search",
+    "wordsearch"
+   ],
+   "what": "Quiet Words is a gentle word search with a new theme in every puzzle. There’s no timer, no score and no way to lose. Each word you find glows, rings softly and leaves a kind thought behind.",
+   "how": [
+    "Choose a theme, or take the next puzzle.",
+    "Find the words at your own pace; “Show me a letter” helps if you’re stuck.",
+    "Notice each word, and the thought it leaves behind."
+   ],
+   "pillar": "Pillar III, Read your state first.",
+   "links": [
+    [
+     "Quiet Words",
+     "/quiet-words.html"
+    ]
+   ]
+  },
+  {
+   "id": "journey",
+   "kind": "tool",
+   "name": "the Frequency Journey",
+   "keys": [
+    "frequency journey",
+    "~journey",
+    "~tidbit",
+    "~sugarfoot",
+    "tidbit and sugarfoot",
+    "perfect frequency",
+    "~seven worlds",
+    "~7 worlds"
+   ],
+   "what": "The Frequency Journey is a calm puzzle journey with two best friends, Tidbit and Sugarfoot, through seven tone-themed worlds, all the way up to the Perfect Frequency. Every level is a different small challenge: riddles, puzzles, breathing, sorting, a little singing. No timer, and no way to lose.",
+   "how": [
+    "Press Begin the journey, or see the seven worlds first.",
+    "Each level is a new kind of challenge, fitted to its world, and they grow a little harder as you climb (the leaves show how challenging each is).",
+    "Use Hint, Undo or Rest here whenever you like.",
+    "A new set is drawn each time you play, skipping ones you’ve already seen on this device."
+   ],
+   "more": "The worlds each carry a little life lesson, like “It’s easier to be brave next to someone you trust” in the stormy forest, or “Letting go of the old way can open a new one” in the melting glaciers. Along the way you practice tuning in (Pillar IV) while you settle (Pillar III). On the Journey pages you can also open the pal cam to check in on Tidbit and Sugarfoot and see what they’re up to.",
+   "pillar": "Pillar IV, Tune how you send and receive, while you settle with Pillar III.",
+   "links": [
+    [
+     "The Frequency Journey",
+     "/frequency-journey.html"
+    ],
+    [
+     "Play the Journey",
+     "/frequency-journey-play.html"
+    ]
+   ]
+  },
+  {
+   "id": "palcam",
+   "kind": "tool",
+   "name": "the pal cam",
+   "keys": [
+    "pal cam",
+    "pals cam",
+    "palcam",
+    "check in on tidbit",
+    "check in on tidbit and sugarfoot",
+    "see what they re up to",
+    "what are tidbit and sugarfoot doing",
+    "see what theyre up to"
+   ],
+   "what": "The pal cam is a little full-screen window on the Frequency Journey pages where you can check in on Tidbit and Sugarfoot and see what they’re up to. They act out small scripted activities, the setting changes each time you open it, and the light follows your own clock.",
+   "how": [
+    "Open the Frequency Journey page.",
+    "Tap “Check in on Tidbit & Sugarfoot”.",
+    "Watch for a while; close it whenever you like. The tally of what they’ve done today stays in this browser only."
+   ],
+   "pillar": "A calm moment with the pals: Pillar III, Read your state first.",
+   "links": [
+    [
+     "The Frequency Journey",
+     "/frequency-journey.html"
+    ]
+   ]
+  },
+  {
+   "id": "soundscapes",
+   "kind": "tool",
+   "name": "the soundscapes",
+   "keys": [
+    "~soundscapes",
+    "~soundscape",
+    "the breath beneath",
+    "one breath to anchor you",
+    "nothing needs to change",
+    "the road we made",
+    "~40 hz",
+    "~audio"
+   ],
+   "what": "The Soundscape Catalog has four produced tracks, in the order they’re best used: The Breath Beneath, One Breath to Anchor You, Nothing Needs to Change and The Road We Made. They’re ambient audio for settling down and focusing, not a clinical tool.",
+   "how": [
+    "Put on good headphones: the deep, low tones and gentle left-to-right movement carry the effect.",
+    "Pick the track that fits, like The Breath Beneath as a bridge out of intense work before you walk in the door.",
+    "No workpaper requires audio; any pairing is only a suggestion."
+   ],
+   "pillar": "Pillar III, Read your state first.",
+   "links": [
+    [
+     "Four soundscapes",
+     "/soundscapes.html"
+    ],
+    [
+     "Echoes of Gold",
+     "/echoes-of-gold.html"
+    ]
+   ]
+  },
+  {
+   "id": "album",
+   "kind": "tool",
+   "name": "Echoes of Gold",
+   "keys": [
+    "echoes of gold",
+    "~album",
+    "the christian project",
+    "loves journey"
+   ],
+   "what": "Echoes of Gold is the companion album: 11 songs (about 41 minutes) that Christian made, performing as Loves Journey, before The Objective Ledger had a single worksheet. The workpapers make the practical side easy to read; the album carries what the numbers were never going to reach.",
+   "how": [
+    "Listen on Spotify or Apple Music from the album page.",
+    "Use it for settling first (Pillar III), before a talk or at the end of the day."
+   ],
+   "pillar": "Pillar III, Read your state first.",
+   "links": [
+    [
+     "Echoes of Gold",
+     "/echoes-of-gold.html"
+    ]
+   ]
+  },
+  {
+   "id": "podcast",
+   "kind": "tool",
+   "name": "the podcast",
+   "keys": [
+    "podcast",
+    "kane and christian",
+    "~episodes",
+    "~episode"
+   ],
+   "what": "The Kane and Christian Experience explores the program through stories, real-life examples and conversation. Each episode dives into one workpaper, chapter or theme; listen in any order or follow the path matched to the PROG-01 weeks. Episodes marked Live are out now; the rest are in production or planned.",
+   "how": [
+    "Open the podcast page and filter by theme (foundation, diagnostics, communication, resonance).",
+    "Start with Episode 1 on Unbilled Debt, or pick the one matching your current week."
+   ],
+   "pillar": "Each episode names its chapter or workpaper, and so its pillar.",
+   "links": [
+    [
+     "The Podcast",
+     "/podcast-index.html"
+    ]
+   ]
+  },
+  {
+   "id": "turning",
+   "kind": "tool",
+   "name": "Turning Toward",
+   "keys": [
+    "turning toward",
+    "turning towards",
+    "turn toward",
+    "~bids",
+    "~small moments"
+   ],
+   "what": "Turning Toward is a guide to seven small, everyday ways to build connection with anyone who matters to you: a partner, a friend, family, a roommate or a coworker. Closeness is built mostly in tiny moments, like a joke, a sigh or a “look at this”, and in how you answer them.",
+   "how": [
+    "Try today’s small moment (a new idea appears each day), like saying one specific thank-you.",
+    "Pick who it’s for, copy the message if you like, and change anything in [brackets] to fit.",
+    "Notice when someone reaches for you, and reach back, even briefly.",
+    "Track your week of small moments on your device."
+   ],
+   "pillar": "Pillar IV, Tune how you send and receive, and Pillar V, Notice the quiet incentives.",
+   "links": [
+    [
+     "Turning Toward",
+     "/turning-toward.html"
+    ],
+    [
+     "Bids for connection (Library)",
+     "/library/relationships.html#bids-for-connection"
+    ]
+   ]
+  },
+  {
+   "id": "checkins",
+   "kind": "tool",
+   "name": "the Check-ins guide",
+   "keys": [
+    "check ins guide",
+    "checkins guide",
+    "check in guide",
+    "checkin guide",
+    "~ground rules",
+    "hard conversation guide",
+    "tender conversation"
+   ],
+   "what": "A check-in is a short, agreed talk about one hard topic, at a time that works for both of you. The Check-ins guide covers picking a good moment, the ground rules (one topic, same side), hearing it back before you answer, and ending well.",
+   "how": [
+    "Agree on a time, not the middle of a stressful moment: private, phones down, nobody hungry.",
+    "Open with: “I’m not against you. I don’t think you meant harm. I want to sort out this one thing.”",
+    "One person says one fact and how it landed; the other says back what they heard and asks, “Did I get that?” Then swap.",
+    "If either of you gets too wound up or flat, pause and name a time to come back.",
+    "End with one ask, one owner, one time."
+   ],
+   "pillar": "Pillar III, Read your state first, and Pillar IV, Tune how you send and receive.",
+   "links": [
+    [
+     "Check-ins",
+     "/check-ins.html"
+    ],
+    [
+     "The ground rules",
+     "/check-ins.html#ground"
+    ]
+   ]
+  },
+  {
+   "id": "knowyourself",
+   "kind": "tool",
+   "name": "Know your own wiring",
+   "keys": [
+    "know your own wiring",
+    "know yourself",
+    "~three layers",
+    "wiring patterns conditions"
+   ],
+   "what": "Know your own wiring helps with “why do I react this way?”. Most reactions come from three places at once: your wiring (how you’re built, which stays), patterns life has taught you (which can shift with practice), and today’s conditions (sleep, stress, load, which pass). Knowing which is which helps you understand yourself and explain yourself to others.",
+   "how": [
+    "Think of a recent reaction that surprised you.",
+    "Sort it: how much was wiring, how much a learned pattern, how much today’s conditions?",
+    "Work on what can change, plan around what stays, and go easy on yourself about what’s just today.",
+    "Tell people what’s lasting, what you’re working on and what today needs."
+   ],
+   "pillar": "Mainly Pillar III and Pillar IV, with help from Pillars I and II.",
+   "links": [
+    [
+     "Know your own wiring",
+     "/know-yourself.html"
+    ],
+    [
+     "The full guide",
+     "/know-yourself-in-depth.html"
+    ],
+    [
+     "The Wiring Card",
+     "/wiring-card.html"
+    ]
+   ]
+  },
+  {
+   "id": "wired",
+   "kind": "tool",
+   "name": "Wired Differently",
+   "keys": [
+    "wired differently",
+    "different wiring guide",
+    "14 wirings"
+   ],
+   "what": "Wired Differently explains how differently wired people hear the same words, and how to talk across the difference. A mix-up usually runs both ways, so it’s tuning, not anyone’s fault. The full guide walks through 14 wirings one by one, like highly sensitive people, autistic people, ADHD and people who find feelings hard to name.",
+   "how": [
+    "Read the short version for the main ideas: the double empathy problem, sensitivity, and finding words for feelings.",
+    "Find the wirings that sound like you or someone close, in the full guide.",
+    "Make a Wiring Card, and test one sentence in the Signal Translator."
+   ],
+   "pillar": "Pillar IV, Tune how you send and receive.",
+   "links": [
+    [
+     "Wired Differently",
+     "/wired-differently.html"
+    ],
+    [
+     "The full guide",
+     "/wired-differently-in-depth.html"
+    ],
+    [
+     "The Wiring Card",
+     "/wiring-card.html"
+    ]
+   ]
+  },
+  {
+   "id": "pillars",
+   "kind": "tool",
+   "name": "the Five Pillars",
+   "keys": [
+    "five pillars",
+    "5 pillars",
+    "~the pillars",
+    "~pillars",
+    "~pillar"
+   ],
+   "what": "Everything in the program rests on five simple ideas. Each starts inside you, as a way to understand yourself, then shows up between you and the people you share life with. I, See the whole load. II, Fix the setup, not the person. III, Read your state first. IV, Tune how you send and receive. V, Notice the quiet incentives.",
+   "how": [
+    "You see the load (I): notice everything you carry, then put it on one shared, fair page.",
+    "You redesign the setup around it (II): habits are a setup, not a character flaw; one owner per job instead of blame.",
+    "You check your state before you talk (III): calm, revved up or shut down; pick your timing.",
+    "You tune the message so it lands (IV): know your wiring, and translate across different wiring.",
+    "You watch for the quiet pulls that let things slide back (V): defaults, and how unclaimed jobs drift to one person."
+   ],
+   "ex": "Tuesday, 7 p.m., the sink is full again. You could say “you never help.” Or you could see everything you both did today (I), notice the dishes have no owner (II), check you’re too tired to talk well right now (III), say it later in a way that lands (IV), and notice that whoever sees the mess first has quietly become the one who always cleans it (V).",
+   "pillar": "They borrow, in order, from ledger accounting, systems thinking, nervous-system science, signal theory and behavioral economics.",
+   "chips": [
+    [
+     "Pillar III in more detail",
+     "What is Pillar III, Read your state first?"
+    ]
+   ],
+   "links": [
+    [
+     "The Five Pillars",
+     "/five-pillars.html"
+    ],
+    [
+     "The whole idea on one page",
+     "/infographic.html"
+    ]
+   ]
+  },
+  {
+   "id": "pillar1",
+   "kind": "tool",
+   "name": "Pillar I, See the whole load",
+   "keys": [
+    "pillar i",
+    "pillar 1",
+    "pillar one",
+    "see the whole load",
+    "ledger accounting"
+   ],
+   "what": "Pillar I, See the whole load, borrows from ledger accounting. In you: notice everything you carry, including the invisible, mental and emotional load (remembering, planning, worrying, keeping the peace). Between you and others: put it on one shared, fair page, so nobody has to argue about whose work “counts”.",
+   "how": [
+    "Log one week of who did what (WP-01).",
+    "Put it on the Lemonade Stand.",
+    "Read the Preface on the work nobody sees."
+   ],
+   "links": [
+    [
+     "Pillar I",
+     "/five-pillars.html#see-the-load"
+    ],
+    [
+     "Preface: The work nobody sees",
+     "/book/preface.html"
+    ],
+    [
+     "The Lemonade Stand",
+     "/lemonade-stand.html"
+    ]
+   ]
+  },
+  {
+   "id": "pillar2",
+   "kind": "tool",
+   "name": "Pillar II, Fix the setup, not the person",
+   "keys": [
+    "pillar ii",
+    "pillar 2",
+    "pillar two",
+    "fix the setup",
+    "fix the setup not the person",
+    "systems thinking"
+   ],
+   "what": "Pillar II, Fix the setup, not the person, borrows from systems thinking. In you: see your habits and routines as a setup you can redesign, not a character flaw. Between you and others: clear owners, handoffs and agreements (one owner per job) instead of blame.",
+   "how": [
+    "Give each regular job one owner (WP-03).",
+    "Once a month, look for what keeps coming back (WP-04).",
+    "Read Chapter II on whether the split is working."
+   ],
+   "links": [
+    [
+     "Pillar II",
+     "/five-pillars.html#fix-the-setup"
+    ],
+    [
+     "WP-03: One owner per job",
+     "/workpapers/wp-03-raci-treaty.html"
+    ],
+    [
+     "Chapter II",
+     "/book/chapter-2.html"
+    ]
+   ]
+  },
+  {
+   "id": "pillar3",
+   "kind": "tool",
+   "name": "Pillar III, Read your state first",
+   "keys": [
+    "pillar iii",
+    "pillar 3",
+    "pillar three",
+    "read your state",
+    "read your state first",
+    "nervous system science"
+   ],
+   "what": "Pillar III, Read your state first, borrows from nervous-system science. In you: know how full your battery is (calm, revved up or shut down) before you judge a moment. Between you and others: pick the timing, pause and come back; your state shapes how the other person’s words land.",
+   "how": [
+    "Check Today’s Weather or your WP-02 battery before a hard talk.",
+    "Plan what settles you in the Calm-Down Kit (WP-11).",
+    "Read Chapter III on full tanks."
+   ],
+   "links": [
+    [
+     "Pillar III",
+     "/five-pillars.html#read-your-state"
+    ],
+    [
+     "Today’s Weather",
+     "/quick-checks.html#today"
+    ],
+    [
+     "Chapter III",
+     "/book/chapter-3.html"
+    ]
+   ]
+  },
+  {
+   "id": "pillar4",
+   "kind": "tool",
+   "name": "Pillar IV, Tune how you send and receive",
+   "keys": [
+    "pillar iv",
+    "pillar 4",
+    "pillar four",
+    "tune how you send and receive",
+    "tune how you send",
+    "signal theory"
+   ],
+   "what": "Pillar IV, Tune how you send and receive, borrows from signal theory (the Frequency Framework). In you: know your own wiring, pace and how you hear things. Between you and others: translate across different wiring and tone; a mismatch is tuning, not a moral failing.",
+   "how": [
+    "Make a Wiring Card.",
+    "Test a sentence in the Signal Translator, or use fact, feeling and ask (WP-09).",
+    "Read Chapter I on why we get out of tune."
+   ],
+   "links": [
+    [
+     "Pillar IV",
+     "/five-pillars.html#tune-signals"
+    ],
+    [
+     "The Signal Translator",
+     "/signal-translator.html"
+    ],
+    [
+     "Chapter I",
+     "/book/chapter-1.html"
+    ]
+   ]
+  },
+  {
+   "id": "pillar5",
+   "kind": "tool",
+   "name": "Pillar V, Notice the quiet incentives",
+   "keys": [
+    "pillar v",
+    "pillar 5",
+    "pillar five",
+    "notice the quiet incentives",
+    "quiet incentives",
+    "behavioral economics",
+    "behavioural economics"
+   ],
+   "what": "Pillar V, Notice the quiet incentives, borrows from behavioral economics. In you: spot the defaults and shortcuts that steer your own choices. Between you and others: see how unclaimed jobs drift to one person, and how fairness and thanks keep things steady.",
+   "how": [
+    "Notice which jobs you do only because you notice first.",
+    "Say one specific thank-you a day (Turning Toward, WP-13).",
+    "Read Chapter IV on two kinds of fair and Chapter V on the monthly look-back."
+   ],
+   "links": [
+    [
+     "Pillar V",
+     "/five-pillars.html#quiet-incentives"
+    ],
+    [
+     "Turning Toward",
+     "/turning-toward.html"
+    ],
+    [
+     "Chapter IV",
+     "/book/chapter-4.html"
+    ]
+   ]
+  },
+  {
+   "id": "freqframe",
+   "kind": "tool",
+   "name": "the Frequency Framework",
+   "keys": [
+    "frequency framework",
+    "radio frequency paradigm",
+    "radio frequency",
+    "beat frequency",
+    "~squeal",
+    "~out of tune"
+   ],
+   "what": "The Frequency Framework explains why two kind people can fall out of step: like two radios tuned to slightly different stations, small differences in pace, tone and urgency create a “squeal” neither person made alone. It’s tuning, not a character problem, and small regular check-ins bring you back in step.",
+   "how": [
+    "Read the Frequency Framework and Chapter I.",
+    "Map your rhythms with Frequency Calibration.",
+    "Use the 90-second daily check-in (WP-13) as your shared rhythm."
+   ],
+   "pillar": "Pillar IV, Tune how you send and receive.",
+   "links": [
+    [
+     "The Frequency Framework",
+     "/frequency-framework.html"
+    ],
+    [
+     "Chapter I: Why we get out of tune",
+     "/book/chapter-1.html"
+    ]
+   ]
+  },
+  {
+   "id": "preface",
+   "kind": "tool",
+   "name": "the Preface, The work nobody sees",
+   "keys": [
+    "preface",
+    "the work nobody sees"
+   ],
+   "what": "The Preface is about the work nobody sees: remembering appointments, noticing the milk is low, calming a tense moment. None of it shows up on a calendar, so it rarely gets a thank-you, and over months it piles up. The book calls that pile unbilled debt. It’s free to read.",
+   "how": [
+    "Read the simple version first, then the full preface if you want the detail.",
+    "Try a week of WP-01 to see your own unbilled work.",
+    "Listen to podcast Episode 1 if you like a human voice with the ideas."
+   ],
+   "pillar": "Mostly Pillar I, See the whole load, with Pillar V.",
+   "links": [
+    [
+     "Preface: The work nobody sees",
+     "/book/preface.html"
+    ],
+    [
+     "WP-01: Who did what",
+     "/workpapers/wp-01.html"
+    ]
+   ]
+  },
+  {
+   "id": "ch1",
+   "kind": "tool",
+   "name": "Chapter I, Why we get out of tune",
+   "keys": [
+    "chapter i",
+    "chapter 1",
+    "chapter one",
+    "why we get out of tune"
+   ],
+   "what": "Chapter I explains why two kind, reasonable people can end up in a tangle neither started, and how to get back in step. The tangle often isn’t about the words but the tone underneath: like two radios slightly out of tune, making a crackle neither makes alone. It’s free to read.",
+   "how": [
+    "Read the simple version, then the full chapter.",
+    "Try the Carrier Wave Decoder the next time a conversation squeals."
+   ],
+   "pillar": "Mostly Pillar IV, with help from Pillar III.",
+   "links": [
+    [
+     "Chapter I",
+     "/book/chapter-1.html"
+    ],
+    [
+     "The Carrier Wave Decoder",
+     "/carrier-wave-decoder.html"
+    ]
+   ]
+  },
+  {
+   "id": "ch2",
+   "kind": "tool",
+   "name": "Chapter II, Is the split working?",
+   "keys": [
+    "chapter ii",
+    "chapter 2",
+    "chapter two",
+    "is the split working",
+    "epistemic verdict engine"
+   ],
+   "what": "Chapter II asks one gentle question: can the way you share the work keep going, or is one of you quietly running on empty? It looks at the month, not last night, using what you both wrote down, and it introduces the three numbers behind CALC-01. It looks at the arrangement, never at a person. It’s free to read.",
+   "how": [
+    "Read the chapter, then fill in WP-01 and WP-03.",
+    "Get a first read in CALC-01."
+   ],
+   "pillar": "Pillar I and Pillar II, with help from Pillar III.",
+   "links": [
+    [
+     "Chapter II",
+     "/book/chapter-2.html"
+    ],
+    [
+     "CALC-01",
+     "/workpapers/calculators/calc01-solvency.html"
+    ]
+   ]
+  },
+  {
+   "id": "ch3",
+   "kind": "tool",
+   "name": "Chapter III, Full tanks and different angles",
+   "keys": [
+    "chapter iii",
+    "chapter 3",
+    "chapter three",
+    "full tanks",
+    "full tanks and different angles",
+    "autonomic saturation",
+    "ocular vectors",
+    "7 ocular vectors",
+    "seven angles"
+   ],
+   "what": "Chapter III explains why some reactions are bigger than their cause (a full tank overflows) and why two people can see the same moment so differently: the seven angles people see things from. Anything decided while a tank is overflowing is worth coming back to. It opens free with your email.",
+   "how": [
+    "Read the chapter, then try the WP-02 Battery Meter daily for a week.",
+    "Plan your pause in the Calm-Down Kit (WP-11)."
+   ],
+   "pillar": "Mostly Pillar III, with help from Pillar IV.",
+   "links": [
+    [
+     "Chapter III",
+     "/book/chapter-3.html"
+    ],
+    [
+     "WP-02",
+     "/workpapers/wp-02-battery-stress-meter.html"
+    ]
+   ]
+  },
+  {
+   "id": "ch4",
+   "kind": "tool",
+   "name": "Chapter IV, Two kinds of fair",
+   "keys": [
+    "chapter iv",
+    "chapter 4",
+    "chapter four",
+    "two kinds of fair",
+    "deontological parity",
+    "sensory gating"
+   ],
+   "what": "Chapter IV is about agreeing what “fair” means before you argue about it, and giving a comment a moment to land before you answer. One kind of fair asks “did everything get done?”, the other “did each of us do what we said?”. Both are reasonable; friction starts when you’re each using a different one. It opens free with your email.",
+   "how": [
+    "Talk about which kind of fair each of you uses, on a calm day.",
+    "Practice letting a comment land (WP-09) before you answer."
+   ],
+   "pillar": "Pillar II and Pillar V, with help from Pillar III.",
+   "links": [
+    [
+     "Chapter IV",
+     "/book/chapter-4.html"
+    ],
+    [
+     "WP-09",
+     "/workpapers/wp-09-tone-filter.html"
+    ]
+   ]
+  },
+  {
+   "id": "ch5",
+   "kind": "tool",
+   "name": "Chapter V, The monthly look-back",
+   "keys": [
+    "chapter v",
+    "chapter 5",
+    "chapter five",
+    "the monthly look back chapter"
+   ],
+   "what": "Chapter V is about looking back once a month for the problems that keep coming back, and fixing the setup instead of having the same argument again. One missed job is a fluke; the same job missed four weeks running is a pattern you only see across the month. It opens free with your email.",
+   "how": [
+    "Bring four weekly logs and your job list.",
+    "Run WP-04, the monthly look-back."
+   ],
+   "pillar": "Pillar II and Pillar V, with help from Pillar I.",
+   "links": [
+    [
+     "Chapter V",
+     "/book/chapter-5.html"
+    ],
+    [
+     "WP-04",
+     "/workpapers/wp-04-deficit-audit.html"
+    ]
+   ]
+  },
+  {
+   "id": "book",
+   "kind": "tool",
+   "name": "the book",
+   "keys": [
+    "~the book",
+    "~book",
+    "~chapters",
+    "manuscript",
+    "the chapters"
+   ],
+   "what": "The book has a preface and five chapters so far, each pairing with a workpaper. Preface: the work nobody sees. I: why we get out of tune. II: is the split working? III: full tanks and different angles. IV: two kinds of fair. V: the monthly look-back. The Preface and Chapters I and II are free to read; Chapters III to V open free with your email.",
+   "how": [
+    "Start with the Preface.",
+    "Each chapter has a simple version and a full, in-depth version.",
+    "Tap any word with the water drop for a mini dive, one step at a time."
+   ],
+   "pillar": "Each chapter names its main pillar.",
+   "links": [
+    [
+     "Preface",
+     "/book/preface.html"
+    ],
+    [
+     "Contents",
+     "/contents.html"
+    ]
+   ]
+  },
+  {
+   "id": "library",
+   "kind": "tool",
+   "name": "the Professor’s Library",
+   "keys": [
+    "professors library",
+    "professor s library",
+    "~the library",
+    "~library",
+    "professor library"
+   ],
+   "what": "The Professor’s Library is 233 short, plain-language entries on psychology, behavioral science and conflict resolution, each tied to the Five Pillars and the program. Every entry has the same parts: in a nutshell, going deeper, what the research says and its limits, how it connects to the program, and questions to talk about. It’s general education, not diagnosis or therapy.",
+   "how": [
+    "Pick a theme that fits what’s going on: relationships, conflict, talking and listening, emotions, stress, wiring, thinking traps, teams, fairness and more.",
+    "Read one entry a day, or ask me “what is…” about any of them."
+   ],
+   "links": [
+    [
+     "The Professor’s Library",
+     "/library.html"
+    ]
+   ]
+  },
+  {
+   "id": "reading",
+   "kind": "tool",
+   "name": "Something to read",
+   "keys": [
+    "something to read",
+    "reading list",
+    "~articles",
+    "further reading"
+   ],
+   "what": "Something to read is a hand-picked list of articles from trusted sources (Psychology Today, Greater Good, the Gottman Institute, Harvard Health and others), sorted by topic and by the Five Pillars. The summaries are the site’s; the articles open on the publisher’s site.",
+   "how": [
+    "Filter by pillar or topic.",
+    "Open an article in a new tab; they’re for everyday understanding, not medical advice."
+   ],
+   "links": [
+    [
+     "Something to read",
+     "/reading.html"
+    ]
+   ]
+  },
+  {
+   "id": "relationships",
+   "kind": "tool",
+   "name": "How it fits your relationships",
+   "keys": [
+    "how it fits your relationships",
+    "relationship map",
+    "the full map",
+    "relationships page"
+   ],
+   "what": "The program starts with you, then gives any two or more people who share time, space, work or care a fair way to see what each carries. The relationships page shows where to start for yourself, partners, family, co-parents, friends, roommates, coworkers and teams, and caregivers.",
+   "how": [
+    "Find your kind of relationship.",
+    "Start with the two or three tools it suggests.",
+    "Each person also brings their own Part 1 tools (your battery, your wiring, what settles you)."
+   ],
+   "links": [
+    [
+     "How it fits your relationships",
+     "/relationships.html"
+    ],
+    [
+     "The full map",
+     "/relationships-in-depth.html#map"
+    ]
+   ]
+  },
+  {
+   "id": "infographic",
+   "kind": "tool",
+   "name": "the one-page summary",
+   "keys": [
+    "infographic",
+    "one page summary",
+    "whole idea on one page",
+    "executive summary",
+    "printable summary",
+    "asymmetric extraction cycle"
+   ],
+   "what": "The whole idea on one page: a printable summary of the program, easy to share, including the Five Pillars and the Asymmetric Extraction Cycle (how unseen work quietly flows one way until someone runs dry).",
+   "how": [
+    "Open it and print or save it as a PDF to share."
+   ],
+   "links": [
+    [
+     "The whole idea on one page",
+     "/infographic.html"
+    ]
+   ]
+  },
+  {
+   "id": "whatsnew",
+   "kind": "tool",
+   "name": "What’s new",
+   "keys": [
+    "whats new",
+    "what s new",
+    "new stuff",
+    "~latest",
+    "what new"
+   ],
+   "what": "What’s new lists everything newly added and everything that’s grown, newest first: recently the Five Pillars page, Drift, the Library, Something to read, the Frequency Journey, the soundscapes and this chat.",
+   "links": [
+    [
+     "What’s new",
+     "/whats-new.html"
+    ]
+   ]
+  },
+  {
+   "id": "contents",
+   "kind": "tool",
+   "name": "the Contents",
+   "keys": [
+    "~contents",
+    "site directory",
+    "table of contents",
+    "~every page",
+    "~sitemap"
+   ],
+   "what": "The Contents lists everything in the program in three parts: tools for understanding yourself, tools for any two people, and where to start in your kind of relationship. The in-depth version has the full site directory.",
+   "links": [
+    [
+     "Contents",
+     "/contents.html"
+    ],
+    [
+     "The site directory",
+     "/contents-in-depth.html#directory"
+    ]
+   ]
+  },
+  {
+   "id": "roadmap",
+   "kind": "tool",
+   "name": "the roadmap and what’s built",
+   "keys": [
+    "roadmap",
+    "suite index",
+    "rollout status",
+    "telemetry",
+    "whats live",
+    "what s live",
+    "~what is built",
+    "~coming soon",
+    "~planned",
+    "what live"
+   ],
+   "what": "Five of twelve planned chapters, seven of fifteen workpapers (WP-01, 02, 03, 04, 09, 11 and 13) and one of seven calculators (CALC-01) are live, plus the six-week program and the free tools. The Suite Index is the official list: if something isn’t on it, it isn’t live yet. The Roadmap shows what’s being written and planned (estimates, not promises).",
+   "links": [
+    [
+     "Suite Index",
+     "/suite-index.html"
+    ],
+    [
+     "Content Roadmap",
+     "/roadmap.html"
+    ],
+    [
+     "Rollout Status",
+     "/telemetry.html"
+    ]
+   ]
+  },
+  {
+   "id": "about",
+   "kind": "tool",
+   "name": "the creator",
+   "keys": [
+    "~christian",
+    "about the creator",
+    "who made this",
+    "~founder",
+    "~creator",
+    "~author"
+   ],
+   "what": "The program was made by Christian, who spent fifteen years as a government auditor and audit manager and a lifetime studying how people work: psychology, philosophy, neurobiology and more. He’s autistic, with ADHD, OCD and anxiety in the mix, and built the program from what he learned about his own wiring and about systems.",
+   "links": [
+    [
+     "About the creator",
+     "/about.html"
+    ]
+   ]
+  },
+  {
+   "id": "ask",
+   "kind": "tool",
+   "name": "this chat",
+   "keys": [
+    "professor puddles",
+    "~the chat",
+    "this chat",
+    "~ask page"
+   ],
+   "what": "I’m Professor Puddles, the site’s chat helper: a small drop with a big brain. I answer from the site’s pages, the Library and my background notes (always labelled), I can walk you through any tool, work out a Battery Meter or CALC-01 score, and suggest a short path for what’s going on. Everything runs in your browser; what you type stays on this device.",
+   "links": [
+    [
+     "Chat with Professor Puddles",
+     "/ask.html"
+    ]
+   ]
+  },
+  {
+   "id": "start",
+   "kind": "intent",
+   "name": "where to start",
+   "keys": [
+    "where do i start",
+    "where should i start",
+    "where to start",
+    "how do i get started",
+    "im new",
+    "i m new",
+    "new here",
+    "first time here",
+    "start here",
+    "what should i do first",
+    "what do i do first",
+    "where do we start",
+    "where should we start",
+    "how do i begin",
+    "how do we begin"
+   ],
+   "what": [
+    "Welcome! A gentle way in: start with yourself, then add the other person when you’re ready.",
+    "If you’re sharing a home, the usual first step is one ordinary week of who did what (WP-01), before you discuss anything."
+   ],
+   "how": [
+    "One minute on Today’s Weather to see how you’re doing today.",
+    "Read the Preface, The work nobody sees (free).",
+    "Log one week in WP-01, or put the week on the Lemonade Stand if there are several of you.",
+    "Then follow the Workpaper Suite for your road, or the six gentle weeks (PROG-01)."
+   ],
+   "links": [
+    [
+     "Start here",
+     "/start-here.html"
+    ],
+    [
+     "Today’s Weather",
+     "/quick-checks.html#today"
+    ],
+    [
+     "The Workpaper Suite",
+     "/workpapers/fill/suite.html"
+    ]
+   ],
+   "chips": [
+    [
+     "Which tool fits me?",
+     "Which tool fits my situation?"
+    ],
+    [
+     "Can I do this alone?",
+     "Can I do this on my own?"
+    ]
+   ]
+  },
+  {
+   "id": "whichtool",
+   "kind": "intent",
+   "name": "which tool fits",
+   "keys": [
+    "which tool fits",
+    "which tool should i use",
+    "what tool should i use",
+    "which tool",
+    "which workpaper",
+    "what should i use",
+    "which tool fits my situation",
+    "recommend a tool"
+   ],
+   "what": [
+    "Happy to help you pick. Who is it mostly about? Tap one below, or just tell me what’s going on in your own words and I’ll suggest a short path."
+   ],
+   "how": [
+    "Arguing about chores or who does more: the Lemonade Stand, then WP-03 (one owner per job).",
+    "Things said the wrong way: the Signal Translator or WP-09 (say it so it lands).",
+    "Getting too wound up to talk: WP-02 (your battery) and WP-11 (the Calm-Down Kit).",
+    "Different wiring: the Wiring Card and Wired Differently.",
+    "Feeling distant: Turning Toward and the 90-second daily check-in (WP-13)."
+   ],
+   "links": [
+    [
+     "How it fits your relationships",
+     "/relationships.html"
+    ],
+    [
+     "The Workpaper Suite",
+     "/workpapers/fill/suite.html"
+    ]
+   ],
+   "chips": [
+    [
+     "Just me",
+     "Which tools should I start with just for me?"
+    ],
+    [
+     "Partners",
+     "Which tools should partners start with?"
+    ],
+    [
+     "Roommates",
+     "Which tools should roommates start with?"
+    ],
+    [
+     "Coworkers",
+     "Which tools should coworkers start with?"
+    ]
+   ]
+  },
+  {
+   "id": "alone",
+   "kind": "intent",
+   "name": "doing it on your own",
+   "pat": "(can|could|should) i (do|use|try|start) (this|it|the program|this program|these|the tools|the workpapers)? ?(alone|on my own|by myself|without (my|them|him|her|the other)|solo)|my (partner|husband|wife|boyfriend|girlfriend|roommates?|family) (wont|won t|doesnt want to|doesn t want to|refuses to|isnt interested|is not interested) (do|join|use|try)|(do|does) (both|we both|everyone) (have to|need to)|without my partner|just for me",
+   "keys": [
+    "can i do this alone",
+    "do this alone",
+    "~on my own",
+    "~by myself",
+    "~just me",
+    "partner wont join",
+    "partner won t join"
+   ],
+   "what": [
+    "Yes, absolutely. Everything starts with you: your own battery, your own wiring, what settles you, and seeing your own load. Many people start alone, and the change in them is often what invites the other person in later."
+   ],
+   "how": [
+    "Check Today’s Weather and the WP-02 battery for yourself.",
+    "Learn your wiring (Know your own wiring, the Wiring Card).",
+    "Plan your Calm-Down Kit (WP-11).",
+    "Log your own side of the week (WP-01). Only fill in worksheets about yourself, never about someone else."
+   ],
+   "links": [
+    [
+     "The road for just you",
+     "/workpapers/fill/suite.html"
+    ],
+    [
+     "Know your own wiring",
+     "/know-yourself.html"
+    ],
+    [
+     "Where to start with yourself",
+     "/relationships-in-depth.html#yourself"
+    ]
+   ]
+  },
+  {
+   "id": "group3",
+   "kind": "intent",
+   "name": "three or more people",
+   "pat": "(work|use|works|for|handle|fit|with|do).{0,30}(three|four|five|six|seven|eight|[3-8]|several|multiple) (people|persons|of us|roommates|housemates|flatmates|adults|siblings|members|names|coworkers|colleagues)|more than (two|2) (people|of us)|three or more|3 or more|(whole|entire) (house|household|family|team)|(is|it s|its) (only|just) for (couples|two people|partners)",
+   "keys": [
+    "more than two people",
+    "three or more",
+    "3 or more",
+    "3 people",
+    "three people",
+    "team of seven",
+    "more than 2 people"
+   ],
+   "what": [
+    "Yes. The ideas work for any group that shares a home, work or care. The Lemonade Stand and one-owner-per-job (WP-03) handle two to eight people, CALC-01 works for households and teams of two to eight, and the Workpaper Suite has roads for roommates, families, coworkers and caregivers. Some pages are written for two people, but the same steps scale up."
+   ],
+   "how": [
+    "Put everyone’s jobs and hours on the Lemonade Stand (two to eight names).",
+    "Hold one short meeting to give every regular job one owner (WP-03).",
+    "Each person does their own battery check (WP-02), about themselves only.",
+    "Look back once a month (WP-04) for what keeps slipping."
+   ],
+   "links": [
+    [
+     "The Lemonade Stand",
+     "/lemonade-stand.html"
+    ],
+    [
+     "Roommates and groups",
+     "/relationships-in-depth.html#roommates"
+    ],
+    [
+     "Coworkers and teams",
+     "/relationships-in-depth.html#coworkers"
+    ]
+   ]
+  },
+  {
+   "id": "therapy",
+   "kind": "intent",
+   "name": "whether this is therapy",
+   "pat": "(is|are) (this|it|you|the program|this program|these tools) (a )?(therapy|therapist|counsel*|counselor|counsellor|a substitute for|instead of|replace|diagnos*|medical|treatment|clinical)|(replace|instead of) (therapy|counseling|counselling|a therapist)|(do|should) i (need|see|get) (a )?(therapist|counselor|counsellor|therapy)|couples (therapy|counseling|counselling)",
+   "keys": [
+    "is this therapy",
+    "is this counseling",
+    "is this counselling",
+    "is this a diagnosis",
+    "are you a therapist",
+    "are you a counselor",
+    "instead of therapy"
+   ],
+   "what": [
+    "No. The Objective Ledger isn’t therapy, counseling, diagnosis or treatment, and I’m not a counselor. It’s a shared, practical way to see the load, fix the setup and talk more kindly, built on ideas from psychology and systems. Every score describes the setup, never a person, and none of it is a clinical tool.",
+    "It can sit happily alongside professional support. If things feel heavy, unsafe or stuck, or have lasted a long time, please talk with a qualified professional."
+   ],
+   "links": [
+    [
+     "Is this right for you?",
+     "/is-this-for-you.html"
+    ],
+    [
+     "What it is and isn’t",
+     "/is-this-for-you-in-depth.html"
+    ]
+   ]
+  },
+  {
+   "id": "free",
+   "kind": "intent",
+   "name": "cost and access",
+   "pat": "(is (it|this|the site|everything) free)|(how much (does|is) (it|this))|(what does it cost)|(do i (have to|need to) pay)|(is there a (fee|charge|subscription|paywall))|(paid (membership|version|plan))|(sign ?up|signup|membership|member)",
+   "keys": [
+    "is it free",
+    "is this free",
+    "how much does it cost",
+    "~membership",
+    "~sign up",
+    "free access",
+    "ways in",
+    "paid membership"
+   ],
+   "what": [
+    "Everything is free while the program is being built. Most of the site needs nothing from you. Entering your email once opens the rest (Chapters III to V, all seven live workpapers, REPORT-01, PROG-01 and the full tools) in that browser, with no account or password.",
+    "Paid membership comes later. Nothing is charged now, and everyone on the email list will hear before anything changes."
+   ],
+   "links": [
+    [
+     "Ways in",
+     "/ways-in.html"
+    ],
+    [
+     "Membership",
+     "/membership.html"
+    ]
+   ]
+  },
+  {
+   "id": "privacy",
+   "kind": "intent",
+   "name": "privacy",
+   "pat": "(privacy|private|my data|data (stored|saved|collected|sent)|(is|are) (it|this|my (answers|entries|info|information)) (saved|stored|sent|shared|safe|private)|who (can )?sees? (what|my)|do you (save|store|collect|track|send)|tracking|cookies|where does (my|it) go)",
+   "keys": [
+    "~privacy",
+    "is my data private",
+    "privacy policy",
+    "is this private"
+   ],
+   "what": [
+    "What you type or choose in the tools, worksheets, check-ins and calculators stays in your browser, on your own device. It isn’t sent to the site or anyone else. Some tools, like Today’s Weather and the Carrier Wave Decoder, can keep entries in your browser so you can come back; clearing your browser data removes them.",
+    "The only things that reach the site are what you choose to send: your email address if you sign up (held by the newsletter service), a message if you write in, and entries you save in the optional household dashboard. This chat works the same way: everything happens on your device."
+   ],
+   "links": [
+    [
+     "Privacy policy",
+     "/legal/privacy-policy.html"
+    ],
+    [
+     "Ways in: what each level shares",
+     "/ways-in-in-depth.html"
+    ]
+   ]
+  },
+  {
+   "id": "scoremean",
+   "kind": "intent",
+   "name": "what a score means",
+   "pat": "^(what does|what do|whats|what s|how do i read|how should i read|how do i understand|explain) (my|the|a|this|these) (score|scores|number|numbers|result|results|reading|read)( mean)?$|^what do my (results|scores|numbers) mean$|^(my|the) (score|result|number)$",
+   "keys": [
+    "what does my score mean",
+    "what do my results mean",
+    "what does my result mean",
+    "what does my number mean",
+    "what do the scores mean"
+   ],
+   "what": [
+    "Every score here describes a setup or a state, never a person, and none of them is a verdict. Which one do you mean? Tap it, or type your numbers and I’ll work them out with you (for example, “my battery answers are 3, 2, 4, 1, 2”)."
+   ],
+   "links": [
+    [
+     "WP-02: How full is your battery?",
+     "/workpapers/wp-02-battery-stress-meter.html"
+    ],
+    [
+     "CALC-01: Can the load last?",
+     "/workpapers/calculators/calc01-solvency.html"
+    ]
+   ],
+   "chips": [
+    [
+     "My battery score (WP-02)",
+     "What does my battery score mean?"
+    ],
+    [
+     "My CALC-01 read",
+     "What does my CALC-01 score mean?"
+    ],
+    [
+     "My Snapshot result",
+     "What do the Snapshot results mean?"
+    ],
+    [
+     "Today’s Weather",
+     "What does my Today’s Weather forecast mean?"
+    ]
+   ]
+  },
+  {
+   "id": "order",
+   "kind": "intent",
+   "name": "the order to use things in",
+   "pat": "(what|which) order|in what order|(order|sequence) (of|for) the (workpapers|worksheets|tools)|(all|every) (the )?workpapers at once|how do the (workpapers|tools|pieces) fit together|how does it all fit together",
+   "keys": [
+    "what order",
+    "which order",
+    "in what order",
+    "how does it all fit together",
+    "program overview"
+   ],
+   "what": [
+    "Use them in order, not all at once. The usual path is WP-01 (see the work), then WP-03 (one owner per job), WP-02 (your batteries), WP-09 and WP-11 (talk so it lands, and pause well), and WP-13 (the daily check-in), with WP-04 once a month. CALC-01 reads what WP-01, WP-02 and WP-03 produce, and REPORT-01 keeps it week by week."
+   ],
+   "links": [
+    [
+     "Program Overview",
+     "/program-overview.html"
+    ],
+    [
+     "PROG-01: Six gentle weeks",
+     "/prog-01.html"
+    ],
+    [
+     "The Workpaper Suite",
+     "/workpapers/fill/suite.html"
+    ]
+   ]
+  },
+  {
+   "id": "howlong",
+   "kind": "intent",
+   "name": "how long it takes",
+   "pat": "how (long|much time) (does|will|would) (it|this|the program|each|a workpaper) take|how much time (do|will) i need|time commitment",
+   "keys": [
+    "how long does it take",
+    "how long will it take",
+    "time commitment"
+   ],
+   "what": [
+    "Not long, on purpose. Today’s Weather takes about a minute, the Battery Meter a minute or two, the daily check-in 90 seconds, and a week of WP-01 a few minutes a day. WP-03 is one sit-down, and the monthly look-back maybe half an hour. The guided program runs six gentle weeks, one worksheet a week."
+   ],
+   "links": [
+    [
+     "PROG-01: Six gentle weeks",
+     "/prog-01.html"
+    ],
+    [
+     "Start here",
+     "/start-here.html"
+    ]
+   ]
+  },
+  {
+   "id": "simpledeep",
+   "kind": "intent",
+   "name": "simple and in-depth versions",
+   "pat": "(simple|short) (version|and|vs|or) (in depth|indepth|full|long)|in depth (version|pages?)|indepth (version|pages?)|dig deeper|mini dives?|water drop",
+   "keys": [
+    "simple version",
+    "in depth version",
+    "indepth version",
+    "dig deeper",
+    "mini dive",
+    "mini dives",
+    "water drop"
+   ],
+   "what": [
+    "Most pages come in two versions: a simple one with the main ideas in plain words, and an in-depth one with the detail, research and worked examples. The “Dig deeper” links jump from a simple point to the full section. Words marked with the little water drop open mini dives: tap them to wade in one step at a time, from shore to deep."
+   ],
+   "links": [
+    [
+     "Contents",
+     "/contents.html"
+    ],
+    [
+     "Mini dives, shore to deep",
+     "/book/preface.html"
+    ]
+   ]
+  },
+  {
+   "id": "save",
+   "kind": "intent",
+   "name": "saving and printing",
+   "pat": "(how (do|can) i )?(save|print|download|keep|export) (my|the|a|this) (work|answers|entries|worksheet|workpaper|progress|pdf|results)|(can|does) (it|this) (save|remember)|(lose|lost) my (work|answers|progress)|offline",
+   "keys": [
+    "save my work",
+    "print it",
+    "download a pdf",
+    "save my progress",
+    "~offline"
+   ],
+   "what": [
+    "Nothing is saved automatically, on purpose. To keep your work: download the PDF from any fill-in workpaper, turn on “Keep a draft on this device” (best on your own device), save a suite file in the Workpaper Suite, or save a ledger file in REPORT-01. Most pages also have a Print or Save as PDF button."
+   ],
+   "links": [
+    [
+     "Fill-in workpapers",
+     "/workpapers/fill/index.html"
+    ],
+    [
+     "The Workpaper Suite",
+     "/workpapers/fill/suite.html"
+    ]
+   ]
+  },
+  {
+   "id": "tol",
+   "kind": "intent",
+   "name": "what The Objective Ledger is",
+   "pat": "^what (is|s) (this|this site|the objective ledger|tol|tol os|tolos|spread love and acceptance)$|^whats (this|this site)$|^what is this (program|place|website)$",
+   "keys": [
+    "the objective ledger",
+    "tol os",
+    "tolos",
+    "what is this site",
+    "spread love and acceptance"
+   ],
+   "what": [
+    "The Objective Ledger is a free, plain-language program on understanding yourself and getting along with the people you share life with. It gives you a calm, shared way to see the work of running a life (including the invisible parts), fix the setup instead of blaming people, read your state before hard talks, and say things so they land.",
+    "It rests on the Five Pillars, and it works for yourself, partners, family, co-parents, friends, roommates, coworkers and caregivers. The ledger records the arrangement; it never puts anyone on trial."
+   ],
+   "links": [
+    [
+     "Home",
+     "/index.html"
+    ],
+    [
+     "Start here",
+     "/start-here.html"
+    ],
+    [
+     "The Five Pillars",
+     "/five-pillars.html"
+    ],
+    [
+     "How it works",
+     "/how-it-works.html"
+    ]
+   ]
+  },
+  {
+   "id": "howitworks",
+   "kind": "tool",
+   "name": "How it works",
+   "keys": [
+    "how it works",
+    "~outside lens"
+   ],
+   "what": "How it works is a friendly tour of what the program looks at: your life situation (a new baby, a move or an illness can shrink what you can carry), your wiring (information, not a flaw), the patterns that show up when you write things down, and the static that lives between two people. It all rests on the Five Pillars.",
+   "links": [
+    [
+     "How it works",
+     "/how-it-works.html"
+    ],
+    [
+     "The full version",
+     "/how-it-works-in-depth.html"
+    ]
+   ]
+  },
+  {
+   "id": "forme",
+   "kind": "tool",
+   "name": "Is this right for you?",
+   "keys": [
+    "is this right for you",
+    "is this for me",
+    "is it right for me",
+    "who is this for",
+    "who is it for"
+   ],
+   "what": "It’s a shared ledger, not a scorecard. Each person fills in worksheets about themselves, then you read them together. It isn’t therapy, a diagnosis or a way to prove who’s right. It fits when the same disagreements keep coming back, or when one person carries work the other can’t see, and you can also start on your own.",
+   "links": [
+    [
+     "Is this right for you?",
+     "/is-this-for-you.html"
+    ],
+    [
+     "The full version",
+     "/is-this-for-you-in-depth.html"
+    ]
+   ]
+  },
+  {
+   "id": "architecture",
+   "kind": "tool",
+   "name": "the system architecture",
+   "keys": [
+    "system architecture",
+    "architecture review",
+    "architecture",
+    "~tol os architecture"
+   ],
+   "what": "The architecture pages explain why the program is built the way it is: how the chapters, workpapers and calculators connect, and the design choices behind them (for example, that no score ever comes from one person alone, and nothing reads tone of voice or messages).",
+   "links": [
+    [
+     "System Architecture",
+     "/architecture/index.html"
+    ],
+    [
+     "Architecture Review",
+     "/architecture/architecture.html"
+    ],
+    [
+     "Program Overview",
+     "/program-overview.html"
+    ]
+   ]
+  },
+  {
+   "id": "lib-calm",
+   "kind": "tool",
+   "name": "Calm and attention (the Library)",
+   "keys": [
+    "calm and attention",
+    "calm and attention library"
+   ],
+   "what": "The Professor’s Library It’s one of the themes in the Professor’s Library: short, plain-language entries with what the research says and its limits, how each connects to the program, and questions to talk about.",
+   "links": [
+    [
+     "Calm and attention (Library)",
+     "/library/calm.html"
+    ],
+    [
+     "The whole Library",
+     "/library.html"
+    ]
+   ]
+  },
+  {
+   "id": "lib-communication",
+   "kind": "tool",
+   "name": "Talking and listening (the Library)",
+   "keys": [
+    "talking and listening",
+    "talking and listening library"
+   ],
+   "what": "The Professor’s Library It’s one of the themes in the Professor’s Library: short, plain-language entries with what the research says and its limits, how each connects to the program, and questions to talk about.",
+   "links": [
+    [
+     "Talking and listening (Library)",
+     "/library/communication.html"
+    ],
+    [
+     "The whole Library",
+     "/library.html"
+    ]
+   ]
+  },
+  {
+   "id": "lib-conflict",
+   "kind": "tool",
+   "name": "Conflict and how to resolve it (the Library)",
+   "keys": [
+    "conflict and how to resolve it",
+    "conflict and how to resolve it library"
+   ],
+   "what": "The Professor’s Library It’s one of the themes in the Professor’s Library: short, plain-language entries with what the research says and its limits, how each connects to the program, and questions to talk about.",
+   "links": [
+    [
+     "Conflict and how to resolve it (Library)",
+     "/library/conflict.html"
+    ],
+    [
+     "The whole Library",
+     "/library.html"
+    ]
+   ]
+  },
+  {
+   "id": "lib-connection",
+   "kind": "tool",
+   "name": "Kindness and connection (the Library)",
+   "keys": [
+    "kindness and connection",
+    "kindness and connection library"
+   ],
+   "what": "The Professor’s Library It’s one of the themes in the Professor’s Library: short, plain-language entries with what the research says and its limits, how each connects to the program, and questions to talk about.",
+   "links": [
+    [
+     "Kindness and connection (Library)",
+     "/library/connection.html"
+    ],
+    [
+     "The whole Library",
+     "/library.html"
+    ]
+   ]
+  },
+  {
+   "id": "lib-emotions",
+   "kind": "tool",
+   "name": "Feelings and emotions (the Library)",
+   "keys": [
+    "feelings and emotions",
+    "feelings and emotions library"
+   ],
+   "what": "The Professor’s Library It’s one of the themes in the Professor’s Library: short, plain-language entries with what the research says and its limits, how each connects to the program, and questions to talk about.",
+   "links": [
+    [
+     "Feelings and emotions (Library)",
+     "/library/emotions.html"
+    ],
+    [
+     "The whole Library",
+     "/library.html"
+    ]
+   ]
+  },
+  {
+   "id": "lib-fairness",
+   "kind": "tool",
+   "name": "Fairness and the load (the Library)",
+   "keys": [
+    "fairness and the load",
+    "fairness and the load library"
+   ],
+   "what": "The Professor’s Library It’s one of the themes in the Professor’s Library: short, plain-language entries with what the research says and its limits, how each connects to the program, and questions to talk about.",
+   "links": [
+    [
+     "Fairness and the load (Library)",
+     "/library/fairness.html"
+    ],
+    [
+     "The whole Library",
+     "/library.html"
+    ]
+   ]
+  },
+  {
+   "id": "lib-life",
+   "kind": "tool",
+   "name": "Family, money and life changes (the Library)",
+   "keys": [
+    "family, money and life changes",
+    "family, money and life changes library"
+   ],
+   "what": "The Professor’s Library It’s one of the themes in the Professor’s Library: short, plain-language entries with what the research says and its limits, how each connects to the program, and questions to talk about.",
+   "links": [
+    [
+     "Family, money and life changes (Library)",
+     "/library/life.html"
+    ],
+    [
+     "The whole Library",
+     "/library.html"
+    ]
+   ]
+  },
+  {
+   "id": "lib-motivation",
+   "kind": "tool",
+   "name": "Motivation, habits and change (the Library)",
+   "keys": [
+    "motivation, habits and change",
+    "motivation, habits and change library"
+   ],
+   "what": "The Professor’s Library It’s one of the themes in the Professor’s Library: short, plain-language entries with what the research says and its limits, how each connects to the program, and questions to talk about.",
+   "links": [
+    [
+     "Motivation, habits and change (Library)",
+     "/library/motivation.html"
+    ],
+    [
+     "The whole Library",
+     "/library.html"
+    ]
+   ]
+  },
+  {
+   "id": "lib-relationships",
+   "kind": "tool",
+   "name": "How relationships work (the Library)",
+   "keys": [
+    "how relationships work",
+    "how relationships work library"
+   ],
+   "what": "The Professor’s Library It’s one of the themes in the Professor’s Library: short, plain-language entries with what the research says and its limits, how each connects to the program, and questions to talk about.",
+   "links": [
+    [
+     "How relationships work (Library)",
+     "/library/relationships.html"
+    ],
+    [
+     "The whole Library",
+     "/library.html"
+    ]
+   ]
+  },
+  {
+   "id": "lib-stress",
+   "kind": "tool",
+   "name": "Stress and the body (the Library)",
+   "keys": [
+    "stress and the body",
+    "stress and the body library"
+   ],
+   "what": "The Professor’s Library It’s one of the themes in the Professor’s Library: short, plain-language entries with what the research says and its limits, how each connects to the program, and questions to talk about.",
+   "links": [
+    [
+     "Stress and the body (Library)",
+     "/library/stress.html"
+    ],
+    [
+     "The whole Library",
+     "/library.html"
+    ]
+   ]
+  },
+  {
+   "id": "lib-teams",
+   "kind": "tool",
+   "name": "Systems and teams (the Library)",
+   "keys": [
+    "systems and teams",
+    "systems and teams library"
+   ],
+   "what": "The Professor’s Library It’s one of the themes in the Professor’s Library: short, plain-language entries with what the research says and its limits, how each connects to the program, and questions to talk about.",
+   "links": [
+    [
+     "Systems and teams (Library)",
+     "/library/teams.html"
+    ],
+    [
+     "The whole Library",
+     "/library.html"
+    ]
+   ]
+  },
+  {
+   "id": "lib-thinking",
+   "kind": "tool",
+   "name": "Thinking traps (the Library)",
+   "keys": [
+    "thinking traps",
+    "thinking traps library"
+   ],
+   "what": "The Professor’s Library It’s one of the themes in the Professor’s Library: short, plain-language entries with what the research says and its limits, how each connects to the program, and questions to talk about.",
+   "links": [
+    [
+     "Thinking traps (Library)",
+     "/library/thinking.html"
+    ],
+    [
+     "The whole Library",
+     "/library.html"
+    ]
+   ]
+  },
+  {
+   "id": "lib-wiring",
+   "kind": "tool",
+   "name": "Differences in wiring (the Library)",
+   "keys": [
+    "differences in wiring",
+    "differences in wiring library"
+   ],
+   "what": "The Professor’s Library It’s one of the themes in the Professor’s Library: short, plain-language entries with what the research says and its limits, how each connects to the program, and questions to talk about.",
+   "links": [
+    [
+     "Differences in wiring (Library)",
+     "/library/wiring.html"
+    ],
+    [
+     "The whole Library",
+     "/library.html"
+    ]
+   ]
+  }
+ ],
+ "clarify": [
+  {
+   "pat": "^(help|i need help|need help|help me|advice|i need advice|need advice|problem|i have a problem|its complicated|it s complicated|relationship|relationships|relationship help|relationship advice|what should i do|i dont know what to do|i don t know what to do|im struggling|i m struggling)$",
+   "x": "I’m here. Is this mostly about you, or about you and someone else? Pick one, or just tell me what’s going on in a sentence or two.",
+   "chips": [
+    [
+     "It’s about me",
+     "Which tools should I start with just for me?"
+    ],
+    [
+     "It’s about someone else",
+     "Which tool fits my situation?"
+    ],
+    [
+     "Where do I start?",
+     "Where should I start?"
+    ],
+    [
+     "Something happened today",
+     "Something happened today and I want to handle it better"
+    ]
+   ]
+  },
+  {
+   "pat": "^(check ?ins?|checkin|checkins|the check ?in|check in)$",
+   "x": "There are two kinds of check-in here. Which one do you mean?",
+   "chips": [
+    [
+     "The 90-second daily check-in (WP-13)",
+     "What is WP-13?"
+    ],
+    [
+     "A check-in for one hard topic",
+     "What is the Check-ins guide?"
+    ],
+    [
+     "Today’s Weather (a check on me)",
+     "What is Today’s Weather?"
+    ]
+   ]
+  },
+  {
+   "pat": "^(score|scores|my score|the score|results|my results|number|my number|reading)$",
+   "x": "Which score do you mean? Every one of them describes a setup or a state, never a person.",
+   "chips": [
+    [
+     "My battery score (WP-02)",
+     "What does my battery score mean?"
+    ],
+    [
+     "My CALC-01 read",
+     "What does my CALC-01 score mean?"
+    ],
+    [
+     "My Snapshot result",
+     "What do the Snapshot results mean?"
+    ]
+   ]
+  },
+  {
+   "pat": "^(crossword|crosswords|puzzle|puzzles)$",
+   "x": "There are two crosswords and a few other gentle puzzles. Which sounds good?",
+   "chips": [
+    [
+     "Quiet Crossword (small, friendly)",
+     "What is the Quiet Crossword?"
+    ],
+    [
+     "The Daily Ledger (newspaper-style)",
+     "What is the Daily Ledger Crossword?"
+    ],
+    [
+     "Word Bloom",
+     "What is Word Bloom?"
+    ],
+    [
+     "All the calm games",
+     "What is Pause & Play?"
+    ]
+   ]
+  },
+  {
+   "pat": "^(calculator|calculators|calc|the math|math|formula|formulas)$",
+   "x": "Which numbers would you like to work out?",
+   "chips": [
+    [
+     "CALC-01: can the load last?",
+     "Show me the math for CALC-01"
+    ],
+    [
+     "WP-02: my battery",
+     "Show me the math for WP-02"
+    ],
+    [
+     "Workload balance from hours",
+     "How is workload balance worked out?"
+    ]
+   ]
+  },
+  {
+   "pat": "^(something happened today and i want to handle it better|something happened)$",
+   "x": "I’m glad you want to handle it well. Tell me a little about what happened and who it was with, like “I snapped at my roommate this morning” or “my coworker keeps interrupting me”, and I’ll suggest a few steps.",
+   "chips": [
+    [
+     "I snapped at someone",
+     "I snapped at someone I care about and feel awful"
+    ],
+    [
+     "Someone said something hurtful",
+     "Someone said something that really hurt"
+    ],
+    [
+     "We had the same fight again",
+     "We had the same fight again"
+    ]
+   ]
+  },
+  {
+   "pat": "^(someone said something that really hurt)$",
+   "x": "I’m sorry, that stings. Who was it with? Knowing whether it was a partner, family, a friend, a roommate or a coworker helps me suggest the right next step.",
+   "chips": [
+    [
+     "My partner",
+     "My partner said something that hurt and I felt criticized"
+    ],
+    [
+     "Family",
+     "My family member keeps criticizing me"
+    ],
+    [
+     "A coworker",
+     "My coworker criticizes my work in front of people"
+    ],
+    [
+     "A friend",
+     "My friend took my text the wrong way"
+    ]
+   ]
+  }
+ ]
+}

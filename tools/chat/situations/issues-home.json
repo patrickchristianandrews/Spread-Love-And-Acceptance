@@ -1,0 +1,583 @@
+{
+  "issues": {
+    "load": {
+      "label": "carrying the invisible load",
+      "match": [
+        [
+          "i do everything|i do it all|i do all of it|i do all the|i do most of the|i handle everything|i carry everything|i carry it all|i remember everything|nobody sees what i do|nobody notices what i do|no one notices what i do|no one sees what i do|nobody sees how much i do|i m the only one who|im the only one who|doing everything|do everything at home|all on me|all falls on me|falls on me",
+          4
+        ],
+        [
+          "mental load|invisible (work|load|labor|labour)|unseen work|emotional labor|emotional labour|default parent|the default|keep track of everything|remember all the",
+          3
+        ],
+        [
+          "everything at home|around the house|household",
+          1
+        ]
+      ],
+      "reflect": "It sounds like you’re carrying a lot, and much of it is the kind of work nobody sees: remembering, planning, noticing.",
+      "reflect_self": "It sounds like you’re carrying a lot, and much of it is the kind of work nobody sees: remembering, planning, noticing.",
+      "going": "This is Pillar I, See the whole load. Invisible work (the remembering, the planning, the noticing) doesn’t look like “doing the dishes”, so it rarely gets counted, by {them} or even by you. Often it isn’t that {they} don’t care. They may simply not see it, because you catch it first. And the job quietly becomes yours because you notice it first (that’s Pillar V, the quiet pull of defaults).",
+      "steps": [
+        "For one ordinary week, write down everything you do, including the thinking jobs: remembering the dentist, noticing the milk is low, planning the weekend.",
+        "Ask {them} to log their own week too, separately, without comparing yet.",
+        "Then sit down at a calm time, put both lists side by side, and give each regular job one owner, the noticing included."
+      ],
+      "steps_self": [
+        "Write down one ordinary day of everything you carry, including the invisible parts: remembering, planning, worrying, smoothing things over.",
+        "Circle the jobs that exist only because you noticed first. Those are the ones that drifted to you.",
+        "Pick one to hand off completely, owner and all, rather than asking for help with it."
+      ],
+      "scripts": {
+        "default": [
+          "I’ve realized a lot of what I do doesn’t show up, like remembering and planning. Could we each write down one week of who does what, and look at it together on Sunday?",
+          "I’m not keeping score. I just want us both to see the whole picture, because right now I’m carrying more than I can keep up with.",
+          "Could you take over the grocery list completely, noticing when we’re low included, starting this week?"
+        ],
+        "coworker": [
+          "A lot of the coordinating on this project is invisible, like tracking deadlines and chasing updates. Could we list who owns each of those, so it isn’t all defaulting to me?",
+          "Can we add ‘tracking the follow-ups’ as its own task with a named owner? It’s taking more of my time than it looks like."
+        ],
+        "roommate": [
+          "Can we list everything it takes to keep the place running this week, even the small stuff like buying soap, and see how it splits? I think a lot of it has drifted to me without anyone meaning it to."
+        ],
+        "self": [
+          "I’m carrying more than it looks like, and that’s allowed to be true.",
+          "Heads up, I’m running low today because there’s a lot on my plate that you might not see."
+        ]
+      },
+      "path": [
+        [
+          "The Lemonade Stand",
+          "/lemonade-stand.html"
+        ],
+        [
+          "WP-01: Who did what",
+          "/workpapers/wp-01.html"
+        ],
+        [
+          "Preface: The work nobody sees",
+          "/book/preface.html"
+        ]
+      ],
+      "path_self": [
+        [
+          "WP-01: Who did what",
+          "/workpapers/wp-01.html"
+        ],
+        [
+          "WP-02: How full is your battery?",
+          "/workpapers/wp-02-battery-stress-meter.html"
+        ],
+        [
+          "Preface: The work nobody sees",
+          "/book/preface.html"
+        ]
+      ],
+      "deeper": [
+        "the mental load",
+        "What is the mental load?"
+      ],
+      "ex": "Sam felt they did “everything”. After a week of logging, it turned out Sam did about 60% of the hours, but nearly all of the remembering: birthdays, bills, the vet. They moved “notice when we’re low on groceries” to Alex as a whole job, noticing included. The hours barely changed, but Sam’s head felt much lighter."
+    },
+    "fairness": {
+      "label": "sharing chores fairly",
+      "match": [
+        [
+          "(not|isnt|isn t) fair|unfair|doesnt do (their|his|her|any|anything)|doesn t do (their|his|her|any)|dont do their share|don t do their share|doesnt pull (their|his|her) weight|not pulling (their|his|her) weight|do their share|does (nothing|less)|never helps?|doesnt help|doesn t help|won t help|wont help|lazy",
+          4
+        ],
+        [
+          "chores?|housework|dishes|laundry|cleaning|trash|bins?|vacuum*|tidy*|split",
+          2
+        ],
+        [
+          "argu*|fight*|fought|resent*|keep score|keeping score",
+          1
+        ]
+      ],
+      "reflect": "It sounds like the split of work between you and {them} doesn’t feel fair right now, and that can wear on everything else.",
+      "reflect_self": "It sounds like the way the work gets shared doesn’t feel fair right now.",
+      "going": "This touches Pillar I (see the whole load) and Pillar II (fix the setup, not the person). Most chore fights aren’t about laziness or not caring. Usually each person counts different things, remembers their own effort better than the other’s (almost everyone does), and the jobs with no clear owner fall to whoever minds first. On {their} side, {they} may honestly believe it’s roughly even.",
+      "steps": [
+        "Before any talk, log one week of who does what, with rough minutes. Facts calm this conversation down fast.",
+        "Put the week on the Lemonade Stand so you both see the same picture, as a plain fact rather than a verdict.",
+        "Give each regular job one owner, including the noticing part, and agree to look again in a month."
+      ],
+      "scripts": {
+        "default": [
+          "I don’t want to argue about who does more. Could we each log one week and then look at it together, so we’re working from the same facts?",
+          "I’d like us to give each regular job one owner, so neither of us has to keep asking. Could we try it for a month?"
+        ],
+        "roommate": [
+          "Can we put all the house jobs on one list and each take a few as our own? Then nobody has to be the one who nags.",
+          "Could we do a quick 20-minute house meeting on Sunday to split the chores? I’ll bring a list."
+        ],
+        "kid": [
+          "You’re old enough to own a real job in this house. Which of these three would you like to be yours?"
+        ],
+        "coworker": [
+          "Could we write down who owns each recurring task on this project? I think some things are falling to whoever notices first."
+        ]
+      },
+      "path": [
+        [
+          "The Lemonade Stand",
+          "/lemonade-stand.html"
+        ],
+        [
+          "WP-03: One owner per job",
+          "/workpapers/wp-03-raci-treaty.html"
+        ],
+        [
+          "Chapter II: Is the split working?",
+          "/book/chapter-2.html"
+        ]
+      ],
+      "deeper": [
+        "why we each think we do more",
+        "Why do we each think we do more?"
+      ],
+      "ex": "Jordan and Casey argued about dishes every few days. They logged a week, then gave dishes to Casey (owner) with Jordan as the one who notices if they pile up. The arguments stopped because nobody had to decide, every night, whose turn it was."
+    },
+    "ownership": {
+      "label": "jobs nobody owns",
+      "match": [
+        [
+          "nobody owns|no one owns|nobody takes (responsibility|ownership)|no one takes (responsibility|ownership)|falls? through the cracks|slips through|nobody follows up|no one follows up|who s responsible|whos responsible|nobody knows who|i have to (keep )?ask(ing)?|have to remind|keep reminding|always reminding|constantly reminding|nag*|have to tell (him|her|them) every",
+          4
+        ],
+        [
+          "drops? the ball|dropped balls?|forgot again|slipped again|unclear who|not clear who|no owner|ownership",
+          2
+        ]
+      ],
+      "reflect": "It sounds tiring to be the one who keeps asking and reminding, or to watch things slip because nobody’s quite sure whose job it is.",
+      "going": "This is Pillar II, Fix the setup, not the person. When a job has no named owner, it falls to whoever notices first, and that person slowly becomes the reminder, which feels like nagging on one side and being nagged on the other. Neither of you is the problem. The missing owner is.",
+      "steps": [
+        "List the regular jobs that keep slipping. Just the list, no blame.",
+        "For each one, name one person who does it and one person who keeps an eye on it (it can be the same person).",
+        "Write it down where everyone can see it, and agree to change it on purpose, not by drift."
+      ],
+      "scripts": {
+        "default": [
+          "I don’t want to keep being the reminder. Could we give this job one owner, so it’s fully yours and I don’t have to ask?",
+          "Can we sit down for fifteen minutes and put a name next to each regular job? I think we’re both tired of the asking."
+        ],
+        "coworker": [
+          "Can we agree who owns this, start to finish? I’d like one name in the tracker so it stops falling between us.",
+          "For each of these recurring tasks, could we name one person who does it and one who checks it? Happy to draft the list."
+        ],
+        "kid": [
+          "This is your job now, all of it, including remembering. If it isn’t done by 7, that’s on you, not on me reminding you."
+        ]
+      },
+      "path": [
+        [
+          "WP-03: One owner per job",
+          "/workpapers/wp-03-raci-treaty.html"
+        ],
+        [
+          "The Lemonade Stand",
+          "/lemonade-stand.html"
+        ],
+        [
+          "RACI in plain words (Library)",
+          "/library/teams.html#raci"
+        ]
+      ],
+      "deeper": [
+        "one owner per job (RACI)",
+        "What is the RACI Treaty?"
+      ],
+      "ex": "A team of seven kept missing the weekly client update. They gave it one Responsible person (Priya) and one Accountable person (the lead), and wrote it in the team tracker. The update went out on time for six weeks straight, and nobody had to ask."
+    },
+    "mess": {
+      "label": "different standards of tidy",
+      "match": [
+        [
+          "messy|mess|clutter*|leaves? (their|his|her) (stuff|things|clothes|dishes)|leaves dishes|dirty dishes|never cleans?|doesnt clean|doesn t clean|slob|pigsty|filthy|gross kitchen|standards? of clean|clean enough",
+          4
+        ],
+        [
+          "tidy|tidying|clean up|cleaning up|pile up|piles up|sink",
+          1
+        ]
+      ],
+      "reflect": "Living with a different idea of “clean enough” can be really grating, especially when you’re the one who notices first.",
+      "going": "This is mostly Pillar V, Notice the quiet incentives. People honestly notice mess at different levels. Whoever notices first ends up cleaning first, and over time that becomes their job without anyone agreeing to it. {Them} may simply not see the mess you see, which isn’t the same as not caring.",
+      "steps": [
+        "Agree on a “good enough” standard for shared spaces, in plain words, like “sink empty by bedtime”.",
+        "Give each shared space or job one owner, instead of “whoever minds most”.",
+        "Keep your own space to your own standard, and let the shared standard be a middle one you both can live with."
+      ],
+      "scripts": {
+        "default": [
+          "I think we notice mess at different levels, and I end up cleaning because I see it first. Could we agree what ‘clean enough’ means for the kitchen, and who owns it?",
+          "Could we pick one clear rule for shared spaces, like dishes done before bed? It would save us both a lot of back and forth."
+        ],
+        "kid": [
+          "Your room is your space, within reason. The living room is shared, so let’s agree what ‘tidy enough’ looks like there, and one job that’s yours."
+        ],
+        "roommate": [
+          "Can we agree on a simple standard for the kitchen and bathroom, and a rota for who owns each week? I’ll write it up."
+        ]
+      },
+      "path": [
+        [
+          "WP-03: One owner per job",
+          "/workpapers/wp-03-raci-treaty.html"
+        ],
+        [
+          "The Lemonade Stand",
+          "/lemonade-stand.html"
+        ],
+        [
+          "Why whoever notices first does it (Library)",
+          "/library/fairness.html#anticipation-and-noticing"
+        ]
+      ],
+      "deeper": [
+        "noticing thresholds",
+        "Why does whoever notices first end up doing it?"
+      ],
+      "ex": "Two roommates fought about the kitchen weekly. They agreed on one rule (sink empty by 10 p.m.) and alternated owner weeks. The one with the higher standard also agreed not to re-clean on the other’s week. Most of the friction faded within a month."
+    },
+    "money": {
+      "label": "money and shared costs",
+      "match": [
+        [
+          "money|bills?|rent|venmo|splitwise|expenses?|spending|spends? too much|budget*|debt|pay (me )?back|pays? late|owes? me|utilities|groceries cost|shared costs?|paycheck|salary|savings",
+          4
+        ],
+        [
+          "split|afford|cost|price|pay",
+          1
+        ]
+      ],
+      "reflect": "Money conversations can feel loaded fast, because money often stands for bigger things like safety, fairness and freedom.",
+      "going": "This touches Pillar I (see the whole load, including the money side) and Pillar IV (tune how you send and receive). People grow up with very different money habits and feelings, so the same purchase can feel sensible to one person and alarming to another. Clear, visible numbers usually calm things more than arguing about any single purchase.",
+      "steps": [
+        "Put the shared costs somewhere everyone can see them, like the money side of the Lemonade Stand.",
+        "Agree a simple rule ahead of time: when bills are due, how you split them, and a spending amount that needs a quick check first.",
+        "Pick a calm, regular time for money talk, not the moment a bill arrives."
+      ],
+      "scripts": {
+        "default": [
+          "Could we set up a regular ten-minute money check-in, maybe on the first of the month, so it doesn’t come up in the middle of other things?",
+          "I’d feel better if we agreed on a rule for bigger purchases, like checking in first for anything over an amount we pick together."
+        ],
+        "roommate": [
+          "Can we put rent and bills in one shared list with due dates, and agree everyone pays by the 1st? It’ll save us chasing each other.",
+          "Hey, the power bill is due Friday and I’m still waiting on your share. Could you send it by Thursday?"
+        ],
+        "partner": [
+          "Could we each say what money means to us, like safety or freedom, before we talk about the budget? I think we’re coming at it from different places."
+        ]
+      },
+      "path": [
+        [
+          "The Lemonade Stand (money side)",
+          "/lemonade-stand.html"
+        ],
+        [
+          "WP-09: Say it so it lands",
+          "/workpapers/wp-09-tone-filter.html"
+        ],
+        [
+          "Money disagreements (Library)",
+          "/library/conflict.html#money-disagreements"
+        ]
+      ],
+      "deeper": [
+        "money conversations",
+        "How do we talk about money without fighting?"
+      ],
+      "ex": "Three housemates kept arguing about who owed what. They listed every shared cost on the Lemonade Stand’s money side, agreed everything was due by the 1st, and set a reminder. The numbers did the talking, and the arguments mostly stopped."
+    },
+    "reliability": {
+      "label": "follow-through and flaking",
+      "match": [
+        [
+          "flake*|flakes on me|always cancel*|keeps? cancel*|cancels? (on me|plans|last minute)|last minute|doesnt follow through|doesn t follow through|never follows? through|says (they|he|she) will and (doesnt|never)|forgets? (everything|things|to)|always late|never on time|running late|breaks? promises|unreliable|stood me up|ghost*",
+          4
+        ],
+        [
+          "forgot|late|reliable|promise*|changes? (the )?plans?",
+          1
+        ]
+      ],
+      "reflect": "It’s frustrating to count on someone and then have plans fall through, especially when it keeps happening.",
+      "going": "This touches Pillar II (fix the setup) and Pillar III (read your state). Follow-through problems are very often about setup and capacity rather than caring: overloaded calendars, no written plan, time blindness, or a different sense of how firm a plan is. That said, your frustration is real, and it’s fair to ask for something steadier.",
+      "steps": [
+        "Pick the one pattern that matters most (for example, last-minute cancelling), rather than listing everything.",
+        "Ask for a specific, small change with a time attached, like a heads-up by noon.",
+        "Make the plan visible: a shared calendar entry, a reminder, or a quick written confirmation the day before."
+      ],
+      "scripts": {
+        "default": [
+          "When plans change last minute, I’m left scrambling. Could you give me a heads-up by noon if something’s up?",
+          "I really value our time together. Could we put plans in a shared calendar so they feel a bit more solid for both of us?"
+        ],
+        "friend": [
+          "I miss you when plans fall through! Could we pick a day that works and both put it in our calendars?",
+          "No stress about last time, but a quick heads-up earlier would really help me plan."
+        ],
+        "coworker": [
+          "To keep us on track, could we write down who does what by when after each meeting? A quick note in the channel would be enough."
+        ],
+        "coparent": [
+          "Schedule changes are hard on the kids. Could we agree on at least 48 hours’ notice for changes, except emergencies, and confirm by text?"
+        ]
+      },
+      "path": [
+        [
+          "WP-03: One owner per job",
+          "/workpapers/wp-03-raci-treaty.html"
+        ],
+        [
+          "WP-09: Say it so it lands",
+          "/workpapers/wp-09-tone-filter.html"
+        ],
+        [
+          "The planning fallacy (Library)",
+          "/library/thinking.html#planning-fallacy"
+        ]
+      ],
+      "deeper": [
+        "why plans slip",
+        "What is the planning fallacy?"
+      ],
+      "ex": "A friend kept cancelling last minute. Instead of stewing, Mia said, “I miss you, and cancellations are hard for me. Could we plan a little lighter, like a walk, so it’s easier to keep?” Shorter plans turned out to be easier to keep for both of them."
+    },
+    "appreciation": {
+      "label": "feeling taken for granted",
+      "match": [
+        [
+          "never (says )?thank*|no thanks|doesnt (appreciate|thank|notice)|doesn t (appreciate|thank|notice)|dont feel appreciated|don t feel appreciated|unappreciated|taken for granted|take me for granted|takes me for granted|nobody thanks|no one thanks|feel invisible|feel unseen|no recognition|not recognized|not recognised",
+          4
+        ],
+        [
+          "appreciat*|thank*|notice what i do",
+          1
+        ]
+      ],
+      "reflect": "Feeling taken for granted hurts, especially when you’re putting in a lot of quiet effort.",
+      "going": "This is Pillar V, Notice the quiet incentives, with a bit of Pillar I. When work runs smoothly, it becomes invisible, and people stop thanking what they no longer notice. It usually isn’t ingratitude. It’s habit. Specific thanks, going both ways, is one of the simplest ways to keep things steady.",
+      "steps": [
+        "Say what you’d like plainly: most people don’t know thanks matters to you until you tell them.",
+        "Model it: thank {them} for one specific thing today, and say what it made easier for you.",
+        "Consider making thanks a tiny daily habit, like the appreciation line in the 90-second check-in."
+      ],
+      "scripts": {
+        "default": [
+          "It would mean a lot to me if you noticed some of the behind-the-scenes stuff I do, like sorting the bills. A quick thanks goes a long way for me.",
+          "Thank you for taking the bins out today. It meant I could get to bed earlier."
+        ],
+        "coworker": [
+          "I’d appreciate a quick shout-out in the team update when I’ve done the coordinating. It helps people know who to come to.",
+          "Thanks for jumping in on the client call. It made the deadline much easier for me."
+        ],
+        "kid": [
+          "I noticed you unloaded the dishwasher without being asked. Thank you, that really helped me tonight."
+        ]
+      },
+      "path": [
+        [
+          "Turning Toward (say one specific thank-you)",
+          "/turning-toward.html"
+        ],
+        [
+          "WP-13: The 90-second daily check-in",
+          "/workpapers/wp-13-pll-protocol.html"
+        ],
+        [
+          "Appreciation and recognition (Library)",
+          "/library/fairness.html#appreciation-and-recognition"
+        ]
+      ],
+      "deeper": [
+        "why specific thanks works",
+        "What is gratitude in relationships?"
+      ],
+      "ex": "Lee told their partner, “I don’t need a medal, but I’d love it if you noticed the planning I do.” They added one line to their evening check-in: one thing you appreciated today. Within a couple of weeks it went both ways, and Lee said the load felt lighter even though it hadn’t changed much."
+    },
+    "group": {
+      "label": "three or more people sharing",
+      "match": [
+        [
+          "(three|four|five|six|seven|eight|[3-8]) (of us|people|roommates|housemates|flatmates|adults|siblings|kids)|team of (three|four|five|six|seven|eight|[3-8])|more than two (people|of us)|whole house|whole household|everyone in the house|house meeting|group chat|nobody agrees|no one agrees",
+          4
+        ],
+        [
+          "group|everyone|all of us",
+          1
+        ]
+      ],
+      "only": [
+        "roommate",
+        "coworker",
+        "family",
+        "friend",
+        "kid",
+        "other",
+        "caregiving"
+      ],
+      "reflect": "Sharing with three or more people gets complicated fast, because every job can become “somebody’s” and so nobody’s.",
+      "going": "This is Pillar II and Pillar V. In a group, the pull to wait for someone else is strong (researchers call it diffusion of responsibility), so unowned jobs drift to the one or two people who mind most. The fix is the same as with two people, just more deliberate: one shared picture and one owner per job. The Lemonade Stand and one-owner-per-job both work for two to eight people.",
+      "steps": [
+        "Put the whole week on one shared list: everyone adds their own jobs and hours to the Lemonade Stand.",
+        "Hold a short meeting (20 minutes, one list, one topic) and give every regular job one owner before anyone leaves.",
+        "Post the list where everyone sees it, and check it again in a month rather than arguing in between."
+      ],
+      "scripts": {
+        "default": [
+          "Could we all take 20 minutes on Sunday to list the jobs and give each one an owner? I’ll bring the list, and nobody’s in trouble.",
+          "I think things are slipping because they belong to everyone. Can we each take a few jobs as fully ours?"
+        ],
+        "coworker": [
+          "Can we spend ten minutes in the next standup naming one owner for each recurring task? I’ll share a draft list first.",
+          "Let’s run a quick retro: what slipped, and who owns each fix going forward."
+        ],
+        "family": [
+          "With all of us busy, I’d love one list of family jobs with a name next to each. Can we do it after dinner Sunday?"
+        ]
+      },
+      "path": [
+        [
+          "The Lemonade Stand (2 to 8 people)",
+          "/lemonade-stand.html"
+        ],
+        [
+          "WP-03: One owner per job",
+          "/workpapers/wp-03-raci-treaty.html"
+        ],
+        [
+          "Diffusion of responsibility (Library)",
+          "/library/teams.html#diffusion-of-responsibility"
+        ]
+      ],
+      "deeper": [
+        "why groups drop the ball",
+        "What is diffusion of responsibility?"
+      ],
+      "ex": "Three roommates argued about the bins for months. At one 20-minute house meeting they listed 14 jobs on the Lemonade Stand, and each took ownership of a few. The bins now have one owner, a backup for holidays, and nobody has had to ask since."
+    },
+    "handoffs": {
+      "label": "tense handoffs between homes",
+      "match": [
+        [
+          "handoff*|hand off*|handover*|exchange (day|days|time)|drop ?offs?|pick ?ups?|custody|switch (day|days)|his weekend|her weekend|my weekend|their weekend|parenting (plan|schedule|time)|two homes|between (our |the )?(two )?(homes|houses)",
+          4
+        ],
+        [
+          "schedule|changes? plans?|last minute|the kids",
+          1
+        ]
+      ],
+      "only": [
+        "coparent"
+      ],
+      "reflect": "Handoffs between two homes can be some of the tensest minutes of the week, for you and for the kids.",
+      "going": "This is Pillar III (read your state) and Pillar II (fix the setup). Handoffs pack old feelings, time pressure and the kids’ big emotions into a few minutes at the door, which is the worst setup for any real conversation. The aim is calm and predictable, not perfect. A court order or parenting plan always comes first.",
+      "steps": [
+        "Keep the handoff itself short and friendly: hello, the bag, one line about anything the kids need, goodbye.",
+        "Move everything else to a planned, written channel, like a short weekly logistics message.",
+        "Give each recurring task one owner (school forms, medicines, clothes going back and forth), so there’s less to negotiate at the door."
+      ],
+      "scripts": {
+        "default": [
+          "Let’s keep handoffs short for the kids’ sake. Anything bigger, can we handle by message on Sunday evenings?",
+          "Quick note for this week: Maya has a school trip Thursday and her inhaler is in the front pocket. Thanks."
+        ]
+      },
+      "path": [
+        [
+          "WP-03: One owner per job (who handles what)",
+          "/workpapers/wp-03-raci-treaty.html"
+        ],
+        [
+          "WP-09: Say it so it lands",
+          "/workpapers/wp-09-tone-filter.html"
+        ],
+        [
+          "Where co-parents start",
+          "/relationships-in-depth.html#co-parents"
+        ]
+      ],
+      "deeper": [
+        "co-parenting logistics",
+        "Tell me about co-parenting logistics"
+      ],
+      "ex": "Two co-parents used to argue at the door every Friday. They switched to a two-minute handoff (bag, hello, one kid-related note) and a Sunday logistics text using the same simple format each week. The Friday tension dropped, and the kids stopped dreading the switch."
+    },
+    "care": {
+      "label": "caregiving strain",
+      "match": [
+        [
+          "caregiv*|carer|caring for|looking after|taking care of|care for (my|our|him|her)|doing everything for (him|her|them)",
+          4
+        ],
+        [
+          "siblings? .. (dont|wont|never|refuse to) help|nobody helps? with (the )?(care|caregiving)|no one helps? with (the )?(care|caregiving)",
+          3
+        ],
+        [
+          "after (his|her|their) (surgery|operation)|since (his|her|their) (surgery|diagnosis|stroke|fall)",
+          2
+        ],
+        [
+          "appointments?|meds|medication|hospital|recovering|recovery",
+          1
+        ]
+      ],
+      "only": [
+        "caregiving",
+        "self",
+        "family",
+        "partner"
+      ],
+      "selfFirst": false,
+      "reflect": "Caring for someone is real, demanding work, and it’s very easy to stop noticing your own battery while you do it.",
+      "going": "This is Pillar III (read your state first) and Pillar I (see the whole load). Caregiving piles up invisible jobs: appointments, calls, forms, worry, and the emotional work of staying steady for someone else. Running on empty isn’t a failure of love. It’s a sign the load needs more hands and more structure, and that your own battery counts too.",
+      "steps": [
+        "Check your own battery today (the WP-02 five questions take a minute). If it’s high, that’s a reason to ask for help, not to push harder.",
+        "List the care jobs and give each one a named owner, including other family, friends or services where you can.",
+        "Ask for one specific kind of help, with a time, rather than “more help”."
+      ],
+      "scripts": {
+        "default": [
+          "I’m running low. Could you take Thursday’s appointment and the pharmacy run this week? That would really help.",
+          "Could we make a list of the care tasks and each take some as ours? I can’t hold all of it by myself anymore."
+        ],
+        "family": [
+          "I love Mom and I want to keep helping, but I can’t do all of it. Could you own the weekly phone calls and the paperwork, starting this month?"
+        ],
+        "self": [
+          "Taking care of me is part of taking care of them.",
+          "I’m doing a lot, and it’s okay to need help with it."
+        ]
+      },
+      "path": [
+        [
+          "WP-02: How full is your battery?",
+          "/workpapers/wp-02-battery-stress-meter.html"
+        ],
+        [
+          "WP-03: One owner per job (share the care tasks)",
+          "/workpapers/wp-03-raci-treaty.html"
+        ],
+        [
+          "Where caregivers start",
+          "/relationships-in-depth.html#caregivers"
+        ]
+      ],
+      "deeper": [
+        "caregiving logistics",
+        "Tell me about caregiving logistics"
+      ],
+      "ex": "After her husband’s surgery, Ana was doing everything. She listed the care jobs, then texted her brother: “Could you own Tuesday and Thursday dinners for the next three weeks?” and asked a friend to handle pharmacy pickups. Having named owners meant she stopped carrying the whole list in her head."
+    }
+  }
+}

@@ -1,0 +1,68 @@
+{
+  "_about": "Curated playbooks for common pairs, keyed who+issue. Any field given here replaces the composed one.",
+  "combos": {
+    "kid+distance": {
+      "reflect": "It’s hard when {them} goes quiet on you. Lots of parents of teens know that closed-door feeling, and it doesn’t mean the connection is gone.",
+      "going": "This is Pillar IV (tune how you send and receive) and Pillar III (read your state first). For many teens, pulling back is a normal part of growing up: they’re working out who they are apart from you. Direct questions can feel like pressure, especially when they’re tired or stressed. Being steadily available, without an agenda, keeps the door open for when they’re ready.",
+      "steps": ["Be around without a mission: drives, cooking, walking the dog. Side-by-side time lowers the pressure.", "When they do share something small, turn toward it warmly and resist the urge to fix or lecture.", "Keep one small, reliable ritual, like a weekly breakfast out, that’s about being together, not about talking.", "If you’re worried about their safety or wellbeing, reach out to someone who can help, like their school or a qualified professional."],
+      "scripts": ["No need to talk. I’m going for a drive to get snacks, want to come? You can pick the music.", "I’m around if you ever want to talk, no pressure. And I’m proud of you."],
+      "read": ["Talking with teenagers (Library)", "/library/life.html#teenagers"]
+    },
+    "kid+fairness": {
+      "reflect": "Getting kids to pitch in without a daily battle is one of the most common family struggles there is.",
+      "going": "This is Pillar II, Fix the setup, not the person. Kids and teens resist jobs that feel random or nagged, and do better with a few real jobs they fully own, with clear standards and a set time. Reminding every day turns you into the job’s real owner.",
+      "steps": ["Give each kid one or two real, age-sized jobs that are fully theirs, noticing included.", "Agree the standard and the time together (“bins out by 8 on Tuesday”), and write it where everyone sees it.", "Let natural consequences and a calm check-in do the work, rather than repeated reminders."],
+      "scripts": ["You’re old enough to own a real job in this house. Which of these would you like to be yours?", "The deal was bins out by 8. It’s 8:15. What do you need to make it happen?"]
+    },
+    "coworker+interrupt": {
+      "going": "This is Pillar IV, Tune how you send and receive. In meetings, fast thinkers often jump in to build on an idea, and may not notice it cuts someone off. Quieter, more careful speakers lose their thread and their turn. It’s a mismatch in conversational rhythm, and it can be fixed with a small agreement rather than a confrontation."
+    },
+    "partner+shutdown": {
+      "reflect": "Shutting down when your partner raises their voice isn’t weakness or not caring. It’s often your body protecting you from overload.",
+      "steps": ["On a calm day, tell your partner what happens in your body when voices rise, and agree a pause line and a return time.", "In the moment, say the line, take at least 20 minutes to settle (a walk, slow breathing), and don’t rehearse the argument.", "Come back at the time you said. Your partner may need reassurance that the pause isn’t you leaving."]
+    },
+    "roommate+repair": {
+      "steps": ["Give yourself a little time to settle, so the apology comes from a calm place.", "Keep it short and specific, with no “but”: what you did, that it wasn’t fair, and that it wasn’t about them.", "If there’s a real house issue underneath, offer a better time to sort it out, maybe with the Lemonade Stand."]
+    },
+    "family+decisions": {
+      "going": "This is Pillar IV (tune how you send and receive) and Pillar II (fix the setup). In families, one person often becomes the planner, and deciding for everyone starts to feel like helping. Old family roles make it even more automatic. {Them} may have no idea it feels like being left out, rather than looked after."
+    },
+    "coparent+tone": {
+      "going": "This is Pillar IV, Tune how you send and receive. After a separation, old hurts ride along on every message, so a neutral text can read as an attack. Short, factual, friendly and about the kids’ logistics is the safest shape for co-parenting messages.",
+      "steps": ["Keep messages brief, factual and friendly, about the kids’ logistics only.", "Before sending, check it: would it read the same to a neutral stranger?", "Don’t answer a heated message right away. Wait, settle, then reply to the logistics only."],
+      "scripts": ["Thanks for letting me know. I’ll have Maya ready at 5 on Friday with her school bag.", "Got it. For the dentist on the 12th, could you take her? If not, I can move my shift."]
+    },
+    "coworker+group": {
+      "reflect": "Things falling through the cracks on a team is so common, and it’s rarely because anyone isn’t trying.",
+      "going": "This is Pillar II (fix the setup) and Pillar V (notice the quiet incentives). On a team, work that belongs to everyone tends to belong to no one, and it drifts to the people who mind most. One owner per recurring task, written where everyone sees it, works for a team of seven just as well as for two."
+    },
+    "caregiving+overwhelm": {
+      "reflect": "Caring for someone while carrying everything else is a lot, and running on empty is a sign the load needs more hands, not that you’re doing it wrong.",
+      "steps": ["Check your own battery today. A high score is a reason to ask for help, not to push harder.", "List the care jobs and give each one a named owner: family, friends, or services where possible.", "Protect one small daily break that’s just for you.", "If this has gone on a long time, a qualified professional or a caregiver support service can help you plan."]
+    },
+    "partner+load": {
+      "steps": ["For one ordinary week, each of you writes down everything you do, including the thinking jobs: remembering, planning, noticing.", "Compare the lists at a calm time, as facts rather than a scorecard.", "Give each regular job one owner, the noticing included, and look again in a month."]
+    },
+    "self+tone": {
+      "reflect": "It sounds like what you say sometimes lands harder than you mean it to. Noticing that is a good start."
+    },
+    "friend+distance": {
+      "going": "This is Pillar IV and Pillar V. Friendships usually fade through small missed moments rather than big fights: busy weeks, moves, new jobs. It often isn’t personal. Friends may feel the distance too and be waiting for someone to reach out first."
+    },
+    "roommate+money": {
+      "steps": ["Put rent and every shared bill in one list with due dates, where everyone can see it.", "Agree the split and one due date for everything (like the 1st), and set a shared reminder.", "Talk about it at a short, calm house meeting, not when a bill arrives."]
+    },
+    "family+boundaries": {
+      "going": "This is Pillar IV (tune how you send and receive) and Pillar II (fix the setup). Families often run on old, unspoken rules, like dropping by any time or giving advice freely. {Them} may be acting on those rules out of love. A boundary is about what you will do, said kindly and kept calmly, not about changing who they are."
+    },
+    "coworker+criticism": {
+      "reflect": "Getting picked apart at work is draining, and it can make every task feel like a test."
+    },
+    "partner+money": {
+      "going": "This is Pillar I and Pillar IV. Couples often have different money rhythms and feelings: one saves for safety, one spends for freedom, and both are reasonable. Many money fights are really about those meanings, not the purchase. Seeing the numbers together, at a calm time, helps more than arguing about any one bill."
+    },
+    "self+load": {
+      "going": "This is Pillar I, See the whole load. Invisible work (remembering, planning, noticing, worrying) doesn’t look like a task, so it’s easy even for you to leave it off your own list, and then wonder why you’re so tired. Seeing it clearly is the first step to sharing it, or to going easier on yourself."
+    }
+  }
+}
