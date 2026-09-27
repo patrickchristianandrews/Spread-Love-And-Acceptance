@@ -1247,3 +1247,51 @@ a.tol-pud-card-go:hover{ background:#264E73; }
 
 a.tol-puddles-hi-go, .read a.tol-puddles-hi-go, main a.tol-puddles-hi-go{ color:#fff !important; text-decoration:none !important; }
 a.tol-pud-card-go, main a.tol-pud-card-go{ color:#fff !important; text-decoration:none !important; }
+
+/* ---------- Bubble boxes ----------
+   Text boxes across the site look like the glassy bubbles floating about: very round, a
+   see-through pearly fill with a soft shine in the corner, a faint rainbow rim, and a little depth. */
+:root{
+  --bub-shine:radial-gradient(120% 90% at 14% 8%, rgba(255,255,255,.9), rgba(255,255,255,0) 42%);
+  --bub-rim:linear-gradient(135deg, #F7C9D4, #D9C8F0 30%, #C6DFF4 55%, #C7EBD6 78%, #F8E7AE);
+  --bub-shadow:0 10px 28px rgba(110,90,160,.10), inset 0 -8px 18px rgba(185,160,224,.10), inset 0 2px 0 rgba(255,255,255,.75);
+}
+.read .simple-lede, .read .scene, .scene, .try-this, .read .ideas > li, .tol-tip, .growing-note, .tol-pud-card, .read blockquote, .tol-warning,
+.announce-bar, .read a.next-card, .read .roadmap-callout, .wn-card, .tol-cheer-say, .tol-private, .tol-gentle, .cr-safety{
+  --bub-fill:rgba(255,253,249,.8);
+  border:1.5px solid transparent !important;
+  background:var(--bub-shine) padding-box, linear-gradient(var(--bub-fill), var(--bub-fill)) padding-box, var(--bub-rim) border-box !important;
+  border-radius:28px !important; box-shadow:var(--bub-shadow);
+  -webkit-backdrop-filter:blur(6px) saturate(1.08); backdrop-filter:blur(6px) saturate(1.08);
+}
+/* each kind keeps a soft tint of its own */
+.read .simple-lede{ --bub-fill:rgba(255,246,222,.84); }
+.read .scene, .scene{ --bub-fill:rgba(246,240,252,.84); }
+.try-this{ --bub-fill:rgba(236,247,240,.86); }
+.growing-note{ --bub-fill:rgba(236,247,240,.86); }
+.tol-pud-card{ --bub-fill:rgba(234,244,253,.88); }
+.tol-warning{ --bub-fill:rgba(255,241,236,.86); }
+.announce-bar{ --bub-fill:rgba(255,246,226,.86); }
+.tol-cheer.is-fact .tol-cheer-say{ --bub-fill:rgba(236,246,255,.9); }
+.tol-gentle{ border-radius:999px !important; --bub-fill:rgba(234,246,239,.9); }
+.tol-cheer-say{ border-radius:20px !important; }
+/* the idea cards float apart as separate bubbles */
+.read .ideas{ gap:.9rem !important; background:none !important; border:0 !important; overflow:visible !important; border-radius:0 !important; }
+.read .ideas > li{ transition:transform .2s ease, box-shadow .2s ease !important; }
+.read .ideas > li:hover, .read .ideas > li:focus-within{ transform:translateY(-2px); box-shadow:0 14px 32px rgba(110,90,160,.16), inset 0 -8px 18px rgba(185,160,224,.12), inset 0 2px 0 rgba(255,255,255,.8); }
+.read .ideas > li:target{ box-shadow:0 0 0 3px rgba(185,160,224,.45), var(--bub-shadow); }
+.read blockquote{ padding:.9rem 1.2rem !important; }
+.try-this, .read .simple-lede, .read .scene, .scene{ padding-left:1.35rem !important; padding-right:1.35rem !important; }
+@media (max-width:560px){
+  .read .simple-lede, .read .scene, .scene, .try-this, .read .ideas > li, .tol-tip, .growing-note, .tol-pud-card, .read blockquote, .tol-warning,
+  .announce-bar, .read a.next-card, .read .roadmap-callout, .wn-card{ border-radius:24px !important; }
+}
+@media print{
+  .read .simple-lede, .read .scene, .scene, .try-this, .read .ideas > li, .tol-tip, .growing-note, .read blockquote, .tol-warning{ background:#fff !important; border:1px solid #ccc !important; box-shadow:none !important; }
+}
+/* the cheering buddies in an idea grid keep just their own little speech bubble */
+.read .ideas > li.tol-cheer{ grid-column:1 / -1; padding:0 !important; background:none !important; border:0 !important; box-shadow:none !important;
+  -webkit-backdrop-filter:none; backdrop-filter:none; transform:none !important; min-height:0; }
+.read .ideas > li.tol-cheer:hover{ box-shadow:none !important; }
+.read .ideas{ grid-auto-flow:row dense; }
+.read .ideas > li.tol-cheer{ counter-increment:none !important; }
