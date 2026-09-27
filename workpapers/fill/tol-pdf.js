@@ -240,13 +240,73 @@
       return (checks[ck] = add(stream('/Type /XObject /Subtype /Form /BBox [0 0 ' + num(w) + ' ' + num(h) + ']', ops)));
     }
 
+    // Radio buttons: a filled dot when on, nothing when off (the ring is drawn on the page itself).
+    var radios = {};
+    function radioAppearance(w, h, on) {
+      var ck = num(w) + 'x' + num(h) + on;
+      if (radios[ck]) return radios[ck];
+      var ops = '';
+      if (on) {
+        var r = Math.min(w, h) * 0.26, cx = w / 2, cy = h / 2, k = 0.5523 * r;
+        ops = '0.24 0.42 0.3 rg ' + num(cx + r) + ' ' + num(cy) + ' m ' +
+          num(cx + r) + ' ' + num(cy + k) + ' ' + num(cx + k) + ' ' + num(cy + r) + ' ' + num(cx) + ' ' + num(cy + r) + ' c ' +
+          num(cx - k) + ' ' + num(cy + r) + ' ' + num(cx - r) + ' ' + num(cy + k) + ' ' + num(cx - r) + ' ' + num(cy) + ' c ' +
+          num(cx - r) + ' ' + num(cy - k) + ' ' + num(cx - k) + ' ' + num(cy - r) + ' ' + num(cx) + ' ' + num(cy - r) + ' c ' +
+          num(cx + k) + ' ' + num(cy - r) + ' ' + num(cx + r) + ' ' + num(cy - k) + ' ' + num(cx + r) + ' ' + num(cy) + ' c f';
+      }
+      return (radios[ck] = add(stream('/Type /XObject /Subtype /Form /BBox [0 0 ' + num(w) + ' ' + num(h) + ']', ops)));
+    }
+    // A PDF name for an export value (radio options): plain letters and digits, anything else escaped.
+    function pdfName(v) {
+      return '/' + String(v).replace(/[^A-Za-z0-9_.\-]/g, function (c) { return '#' + ('0' + (c.charCodeAt(0) & 0xFF).toString(16)).slice(-2); });
+    }
+
+    // Names with dots ("tol.v1.wp02.p1.q3") become a real field tree: one parent node per part,
+    // so every PDF app sees the same fully qualified name. Names without dots stay flat.
+    var nodes = {}, roots = [];
+    function nodeFor(parts) {
+      var key = parts.join('.');
+      if (nodes[key]) return nodes[key].id;
+      var parentKey = parts.length > 1 ? parts.slice(0, -1).join('.') : null;
+      var parentId = parentKey ? nodeFor(parts.slice(0, -1)) : null;
+      var id = reserve();
+      nodes[key] = { id: id, t: parts[parts.length - 1], parent: parentId, kids: [] };
+      if (parentKey) nodes[parentKey].kids.push(id); else roots.push(id);
+      return id;
+    }
+    // The /T (and /Parent) entries for a field, and where to list it.
+    function naming(name) {
+      var parts = String(name).split('.');
+      if (parts.length < 2) return { t: ' /T ' + lit(name), attach: function (id) { allFields.push(id); } };
+      var parentKey = parts.slice(0, -1).join('.'), parentId = nodeFor(parts.slice(0, -1));
+      return { t: ' /T ' + lit(parts[parts.length - 1]) + ' /Parent ' + parentId + ' 0 R', attach: function (id) { nodes[parentKey].kids.push(id); } };
+    }
+
     this.pages.forEach(function (p, pi) {
       var s = p.ops.join('\n');
       var contentId = add(stream('', s));
       var annots = [];
       (p.fields || []).forEach(function (f) {
+        var nm = naming(f.name);
+        if (f.kind === 'radio') {
+          // opts.options: [{ v: export value, x, y, w, h }], all on this page
+          var groupId = reserve(), kidIds = [], chosen = null;
+          (f.options || []).forEach(function (o) {
+            var on = f.value != null && f.value !== '' && String(f.value) === String(o.v);
+            if (on) chosen = o.v;
+            var rr = '[' + num(o.x) + ' ' + num(H - o.y - o.h) + ' ' + num(o.x + o.w) + ' ' + num(H - o.y) + ']';
+            var kid = add('<< /Type /Annot /Subtype /Widget /F 4 /P ' + pageIds[pi] + ' 0 R /Parent ' + groupId + ' 0 R /Rect ' + rr +
+              ' /AS ' + (on ? pdfName(o.v) : '/Off') + ' /MK << /CA (l) >> /DA (/ZaDb 0 Tf 0.24 0.42 0.3 rg)' +
+              ' /AP << /N << ' + pdfName(o.v) + ' ' + radioAppearance(o.w, o.h, true) + ' 0 R /Off ' + radioAppearance(o.w, o.h, false) + ' 0 R >> >> >>');
+            kidIds.push(kid); annots.push(kid);
+          });
+          set(groupId, '<< /FT /Btn /Ff 49152' + nm.t + (f.tip ? ' /TU ' + utf16(f.tip) : '') + ' /V ' + (chosen != null ? pdfName(chosen) : '/Off') +
+            ' /Kids [' + kidIds.map(function (k) { return k + ' 0 R'; }).join(' ') + '] >>');
+          nm.attach(groupId);
+          return;
+        }
         var rect = '[' + num(f.x) + ' ' + num(H - f.y - f.h) + ' ' + num(f.x + f.w) + ' ' + num(H - f.y) + ']';
-        var common = '/Type /Annot /Subtype /Widget /F ' + (f.hidden ? 2 : 4) + ' /P ' + pageIds[pi] + ' 0 R /Rect ' + rect + ' /T ' + lit(f.name) + (f.tip ? ' /TU ' + utf16(f.tip) : '');
+        var common = '/Type /Annot /Subtype /Widget /F ' + (f.hidden ? 2 : 4) + ' /P ' + pageIds[pi] + ' 0 R /Rect ' + rect + nm.t + (f.tip ? ' /TU ' + utf16(f.tip) : '');
         var body;
         if (f.kind === 'check') {
           var on = !!f.value, yes = checkAppearance(f, true), off = checkAppearance(f, false);
@@ -261,7 +321,7 @@
             ' /DA (/Helv ' + num(f.size || 9) + ' Tf 0.13 0.11 0.09 rg) /AP << /N ' + textAppearance(f) + ' 0 R >> >>';
         }
         var id = add(body);
-        annots.push(id); allFields.push(id);
+        annots.push(id); nm.attach(id);
       });
       (p.links || []).forEach(function (l) {
         if (!pageIds[l.page]) return;
@@ -295,6 +355,13 @@
       set(rootId, '<< /Type /Outlines /First ' + tops[0].id + ' 0 R /Last ' + tops[tops.length - 1].id + ' 0 R /Count ' + tops.length + ' >>');
       outlinesRef = ' /Outlines ' + rootId + ' 0 R /PageMode /UseOutlines';
     }
+
+    // the field tree's parent nodes
+    Object.keys(nodes).forEach(function (k) {
+      var n = nodes[k];
+      set(n.id, '<< /T ' + lit(n.t) + (n.parent ? ' /Parent ' + n.parent + ' 0 R' : '') + ' /Kids [' + n.kids.map(function (c) { return c + ' 0 R'; }).join(' ') + '] >>');
+    });
+    allFields = allFields.concat(roots);
 
     var acro = '';
     if (allFields.length) {

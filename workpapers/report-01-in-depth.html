@@ -463,7 +463,10 @@
 
   function $(id){ return document.getElementById(id); }
   function val(id){ var v=parseFloat($(id).value); return isNaN(v)?null:v; }
-  function fmt(v){ return v===null||v===undefined ? "\u2014" : v.toFixed(2); }
+  // Rounded the CALC-01 way (calc01-core.js): bands are read from the score rounded to two decimals,
+  // so the number shown and the band shown always agree.
+  function r2(v){ return Math.round(v*100+1e-7)/100; }
+  function fmt(v){ return v===null||v===undefined ? "\u2014" : r2(v).toFixed(2); }
   function esc(s){ var d=document.createElement("div"); d.textContent=String(s); return d.innerHTML; }
   function clamp01(v){ return Math.max(0,Math.min(1,v)); }
 
@@ -685,13 +688,13 @@
       v.textContent="Waiting on data.";
       vb.textContent = ds.length ? "Weeks are recorded, but none has all three yet: workload, ownership, and both battery scores. The report needs all three." : "Add at least one week above and this writes itself.";
     } else {
-      var band = last.sol>=0.70 ? "The arrangement is carrying its own weight."
-               : last.sol>=0.40 ? "Something is drifting."
+      var band = r2(last.sol)>=0.70 ? "The arrangement is carrying its own weight."
+               : r2(last.sol)>=0.40 ? "Something is drifting."
                : "This setup can't last as it is.";
       v.textContent = band;
       var first=ds.find(function(d){ return d.sol!==null; });
       var moved = (first && ds.length>1) ? last.sol-first.sol : null;
-      vb.innerHTML = "Latest solvency score <strong>"+last.sol.toFixed(2)+"</strong>, apex <strong>"+(last.apex===null?"\u2014":last.apex.toFixed(2))+"</strong>, across "+ds.length+" recorded week"+(ds.length===1?"":"s")+
+      vb.innerHTML = "Latest solvency score <strong>"+fmt(last.sol)+"</strong>, apex <strong>"+fmt(last.apex)+"</strong>, across "+ds.length+" recorded week"+(ds.length===1?"":"s")+
         (moved===null?"." : ". Since the first complete read it has moved <strong>"+(moved>=0?"+":"")+moved.toFixed(2)+"</strong>.")+
         " This describes your setup, not either person.";
     }
@@ -728,8 +731,8 @@
       {n:"baseline load",v:1-last.as,short:last.as*W.sol.as,fix:"WP-02, and what's driving it"}
     ].sort(function(a,b){ return b.short-a.short; });
     var w0=terms[0];
-    nb.innerHTML='<div class="finding'+(last.sol>=0.70?" good":"")+'"><span class="tag">largest shortfall</span><p>'+
-      (last.sol>=0.70
+    nb.innerHTML='<div class="finding'+(r2(last.sol)>=0.70?" good":"")+'"><span class="tag">largest shortfall</span><p>'+
+      (r2(last.sol)>=0.70
         ? "Nothing in the setup needs changing. The biggest remaining gap is "+w0.n+", costing "+w0.short.toFixed(3)+" of the available points. That's worth knowing, but not worth acting on this week. Keep up your routine and protect your rest time."
         : "Start with "+w0.n+" \u2014 "+w0.fix+". It is costing "+w0.short.toFixed(3)+" of the available points, more than anything else. Start there, not with whatever happened most recently.")+
       '</p></div>';

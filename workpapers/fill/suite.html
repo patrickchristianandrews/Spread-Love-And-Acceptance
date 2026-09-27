@@ -14,6 +14,7 @@
 <link rel="stylesheet" href="/assets/css/site.css">
 <link rel="stylesheet" href="/assets/css/reading.css">
 <link rel="stylesheet" href="/workpapers/fill/tol-workpaper.css">
+<link rel="stylesheet" href="/workpapers/fill/tol-fullpath.css">
 <script src="/assets/js/site.js" defer></script>
 </head>
 <body data-no-tip>
@@ -31,6 +32,8 @@
     <p>To pick up later, save a suite file, bring back the PDF you filled in, or keep a draft on this device.</p>
     <p class="wpf-keep"><label><input type="checkbox" id="ws-keep"> Keep a draft on this device</label> <button type="button" class="wpf-erase" id="ws-erase">Erase</button><span class="wpf-keep-note">Kept in this browser only, never sent. Best on your own device, not a shared one.</span></p>
   </div>
+
+  <p class="ws-full-promo"><strong>New: the Full path package.</strong> One fillable PDF with every workpaper for your road, and one comprehensive report. <a href="#full-path">Go to the Full path package &darr;</a></p>
 
   <section class="ws-step" aria-labelledby="ws-h1">
     <h2 id="ws-h1"><span class="ws-num" aria-hidden="true">1</span> Choose your road</h2>
@@ -87,6 +90,41 @@
     <p class="ws-save-row"><button type="button" class="ws-link" id="ws-save">Save a suite file</button> to pick everything up next time, even on another device.</p>
   </section>
 
+  <section class="fp" id="full-path" aria-labelledby="fp-h">
+    <h2 id="fp-h"><span class="ws-num" aria-hidden="true">&#9733;</span> Full path package</h2>
+    <p class="fp-lede">One fillable PDF for your whole road: a cover and how-to, who&rsquo;s on the road, every workpaper, the CALC-01 inputs, optional self-notes (your Wiring Card and a weather log) and a &ldquo;Ready for your report&rdquo; page. Fill it in any PDF app, bring it back, and get one comprehensive report written for your road. Or type it all in here.</p>
+    <p class="fp-private"><strong>Everything runs on this device.</strong> Nothing is sent anywhere. The PDF is made in your browser, a filled one is read in your browser, and the report is written in your browser.</p>
+    <div class="fp-three">
+      <div class="fp-card">
+        <p class="fp-k">One</p>
+        <h3>Download the full path PDF</h3>
+        <p>Choose your road. Every page for it, in a sensible order, with page numbers and a contents page.</p>
+        <label for="fp-road">Your road <select id="fp-road"></select></label>
+        <label for="fp-count" id="fp-count-wrap">How many people <select id="fp-count"></select></label>
+        <label for="fp-names" id="fp-names-label">Names (optional, separated by commas) <input type="text" id="fp-names" autocomplete="off" maxlength="330"></label>
+        <button type="button" class="ws-go" id="fp-download">Download the full path PDF</button>
+      </div>
+      <div class="fp-card fp-drop" id="fp-drop">
+        <p class="fp-k">Two</p>
+        <h3>Upload your filled package</h3>
+        <p>Bring back the PDF you filled in, or a backup file. It is read right here, you see what was read and what is missing, and you can fix anything before your report.</p>
+        <p class="fp-upload-note" id="fp-upload-note" aria-live="polite"></p>
+        <button type="button" class="ws-go" id="fp-upload">Choose your filled PDF</button>
+        <input type="file" id="fp-file" accept=".pdf,application/pdf,.json,application/json" hidden>
+      </div>
+      <div class="fp-card">
+        <p class="fp-k">Three</p>
+        <h3>Or fill it in here</h3>
+        <p>A guided form, page by page, just like the PDF. Save a small backup file whenever you like, and download your answers as a filled PDF.</p>
+        <button type="button" class="ws-go" id="fp-start">Start filling it in</button>
+      </div>
+    </div>
+    <p class="fp-status" id="fp-status" role="status" aria-live="polite"></p>
+    <div class="fp-panel" id="fp-preview" hidden></div>
+    <div class="fp-panel" id="fp-form" hidden></div>
+    <div class="fp-panel" id="fp-report" hidden></div>
+  </section>
+
   <p class="wpf-after">Using a shared computer? When you’ve downloaded what you need, <button type="button" id="wpf-clear" class="wpf-clear">Clear this page</button></p>
   <p class="wpf-after"><a href="/workpapers/fill/">One workpaper at a time</a> &middot; <a href="/relationships.html">How it fits your relationships</a></p>
 
@@ -127,10 +165,14 @@
 <input type="file" id="ws-file" accept=".json,application/json,.pdf,application/pdf" multiple hidden>
 
 <script src="/workpapers/fill/tol-pdf.js"></script>
+<script src="/assets/js/calc01-core.js"></script>
 <script src="/workpapers/fill/tol-workpaper-schemas.js"></script>
 <script src="/workpapers/fill/tol-workpaper.js"></script>
 <script src="/workpapers/fill/tol-suite-paths.js"></script>
 <script src="/workpapers/fill/tol-suite-pdf.js"></script>
 <script src="/workpapers/fill/tol-suite.js"></script>
+<script src="/workpapers/fill/tol-fullpath-model.js"></script>
+<script src="/workpapers/fill/tol-fullpath-pdf.js"></script>
+<script src="/workpapers/fill/tol-fullpath-ui.js"></script>
 </body>
 </html>

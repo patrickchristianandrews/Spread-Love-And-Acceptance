@@ -18,7 +18,18 @@
 
   var DAYS = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
 
-  function fmt(n, d) { return (Math.round(n * Math.pow(10, d)) / Math.pow(10, d)).toFixed(d); }
+  // Rounded the CALC-01 way (see /assets/js/calc01-core.js), so a number and its band always agree.
+  function fmt(n, d) { return (Math.round(n * Math.pow(10, d) + 1e-7) / Math.pow(10, d)).toFixed(d); }
+  function r2(n) { return Math.round(n * 100 + 1e-7) / 100; }
+  // CALC-01 balance for 2 to 8 people against an even split. Uses the shared calc01-core.js when the
+  // page loads it; the fallback below is the same formula: 1 − (½Σ|share − 1/n|) ÷ (1 − 1/n).
+  function balanceOf(amounts) {
+    if (global.TOLCalc01) return global.TOLCalc01.balance(amounts).value;
+    var n = amounts.length, total = amounts.reduce(function (a, b) { return a + b; }, 0);
+    if (n < 2 || !(total > 0)) return null;
+    var moved = amounts.reduce(function (a, x) { return a + Math.abs(x / total - 1 / n); }, 0) / 2;
+    return Math.max(0, Math.min(1, 1 - moved / (1 - 1 / n)));
+  }
 
   var W = {};
 
@@ -64,15 +75,15 @@
           });
           var total = people.reduce(function (a, p) { return a + t[p]; }, 0);
           if (!total) return [{ label: 'Totals', value: 'Add rows with a person and minutes to see the totals.' }];
-          var pct = {}, maxP = 0, minP = 100;
-          people.forEach(function (p) { pct[p] = t[p] / total * 100; maxP = Math.max(maxP, pct[p]); minP = Math.min(minP, pct[p]); });
-          // 1 = an even split; 0 = one person logged everything. With two people this is 1 - |A% - B%|.
-          var balance = people.length === 2 ? 1 - Math.abs(pct.A - pct.B) / 100
-            : 1 - (maxP - minP) / 100;
+          var pct = {};
+          people.forEach(function (p) { pct[p] = t[p] / total * 100; });
+          // 1 = an even split; 0 = one person logged everything. With two people this is 1 - |A% - B%|;
+          // with more, 1 - (the share of time that would have to change hands) / (the most it could be).
+          var balance = balanceOf(people.map(function (p) { return t[p]; }));
           var out = people.map(function (p) {
             return { label: ctx.name(p), value: fmt(t[p], 0) + ' minutes (' + fmt(pct[p], 0) + '%), of which ' + fmt(noticed[p], 0) + ' noticed and handled without being asked' };
           });
-          out.push({ label: 'Workload balance score', value: fmt(balance, 2), note: 'Enter this as the workload balance number in CALC-01. It describes how the logged work was split this week, not anyone in it.' + (people.length > 2 ? ' With more than two people, it compares the biggest and smallest shares.' : '') });
+          out.push({ label: 'Workload balance score', value: fmt(balance, 2), note: 'Enter this as the workload balance number in CALC-01. It describes how the logged work was split this week, not anyone in it.' + (people.length > 2 ? ' With more than two people, it is 1 minus the share of the week\'s time that would have to change hands for an even split, divided by the most that could ever be.' : '') });
           return out;
         }
       },
@@ -141,13 +152,16 @@
         compute: function (ctx) {
           var s = wp02Score(ctx);
           if (s === null) return [{ label: 'Score', value: 'Answer all five rows to see your score.' }];
-          var band = s < 0.3 ? 'Low load. Whatever is coming up is probably about the thing itself.'
-            : s < 0.6 ? 'Medium. Before a hard conversation, it\'s worth saying out loud: "Heads up, I\'m carrying more than usual today."'
+          var sb = r2(s);
+          var band = sb < 0.3 ? 'Low load. Whatever is coming up is probably about the thing itself.'
+            : sb < 0.6 ? 'Medium. Before a hard conversation, it\'s worth saying out loud: "Heads up, I\'m carrying more than usual today."'
               : 'High. Put off anything that doesn\'t need deciding in the next hour. If you need to settle first, the Calm-Down Kit (WP-11) is made for this.';
           var out = [{ label: 'Battery score', value: fmt(s, 2) + ' (the five scores added up, then divided by 20)' }, { label: 'Reading', value: band }];
-          var p = parseFloat(ctx.value('partnerScore'));
-          if (p >= 0 && p <= 1) {
-            out.push({ label: 'Average for CALC-01', value: fmt((s + p) / 2, 2), note: 'The average of both scores is the "autonomic saturation" number in CALC-01 (how stretched you both are). It is never worked out from one person alone.' });
+          // everyone else's shared scores ("0.4, 0.55, 0.3"); the average covers everyone
+          var others = String(ctx.value('partnerScore') || '').split(/[,;\s]+/).filter(Boolean).map(parseFloat);
+          if (others.length && others.every(function (p) { return p >= 0 && p <= 1; })) {
+            var all = [s].concat(others), avg = all.reduce(function (a, b) { return a + b; }, 0) / all.length;
+            out.push({ label: 'Average for CALC-01', value: fmt(avg, 2) + ' (' + all.length + ' people)', note: 'The average of everyone\'s scores is the stress number in CALC-01 (how stretched you all are). Make sure every person on the road is included: it is never worked out while anyone\'s is missing, or from one person alone.' });
           }
           return out;
         }
@@ -155,7 +169,7 @@
       {
         id: 'extra', type: 'fields', title: 'Optional',
         fields: [
-          { id: 'partnerScore', label: "The other person's score, if they've shared it (0–1)", type: 'number', step: '0.01', min: 0, max: 1 },
+          { id: 'partnerScore', label: "Everyone else's scores, if they've shared them (0–1 each, separated by commas)", type: 'text', placeholder: 'e.g. 0.45, 0.30' },
           { id: 'note', label: 'Anything you want to name before talking', type: 'textarea' }
         ]
       },
