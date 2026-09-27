@@ -6,186 +6,30 @@
 <title>Frequency Sync Visualizer — The Objective Ledger</title>
 <meta name="description" content="A calm picture of two rhythms drifting into step: the idea behind the 90-second check-in (WP-13).">
 <style>
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-  
-  html, body {
-    width: 100%;
-    height: 100%;
-    background: #0a0e13;
-    font-family: "Lora", serif;
-    color: #f5efde;
-    overflow: hidden;
-  }
-
-  #canvas {
-    display: block;
-    width: 100%;
-    height: 100%;
-  }
-
-  .ui-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    pointer-events: none;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    padding: 2rem;
-  }
-
-  .header {
-    pointer-events: auto;
-    text-align: center;
-  }
-
-  .header h1 {
-    font-size: 1.8rem;
-    margin-bottom: 0.5rem;
-    font-family: "Fraunces", serif;
-    font-weight: 600;
-  }
-
-  .header p {
-    font-size: 0.95rem;
-    color: #a8a8a8;
-  }
-
-  .controls-panel {
-    pointer-events: auto;
-    display: flex;
-    gap: 1.5rem;
-    justify-content: center;
-    flex-wrap: wrap;
-  }
-
-  .control-group {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    background: rgba(42, 91, 140, 0.15);
-    border: 1px solid rgba(42, 91, 140, 0.3);
-    padding: 0.75rem 1.25rem;
-    border-radius: 8px;
-  }
-
-  .control-group label {
-    font-size: 0.9rem;
-    color: #c9c9c9;
-    font-weight: 500;
-  }
-
-  .control-group input[type="range"] {
-    width: 120px;
-    height: 6px;
-    cursor: pointer;
-  }
-
-  .control-group input[type="number"] {
-    width: 70px;
-    padding: 0.5rem;
-    background: rgba(10, 14, 19, 0.8);
-    border: 1px solid rgba(42, 91, 140, 0.5);
-    color: #f5efde;
-    border-radius: 4px;
-    font-size: 0.9rem;
-  }
-
-  .control-group button {
-    padding: 0.6rem 1.25rem;
-    background: #3e6b4c;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-family: "IBM Plex Mono", monospace;
-    font-size: 0.85rem;
-    font-weight: 600;
-    transition: all 0.2s;
-  }
-
-  .control-group button:hover {
-    background: #2d5240;
-  }
-
-  .stats-panel {
-    pointer-events: auto;
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 1.5rem;
-    max-width: 600px;
-    margin: 0 auto;
-  }
-
-  .stat-box {
-    background: rgba(62, 107, 76, 0.1);
-    border: 1px solid rgba(62, 107, 76, 0.3);
-    padding: 1rem;
-    border-radius: 8px;
-    text-align: center;
-  }
-
-  .stat-label {
-    font-size: 0.8rem;
-    color: #8a9ba8;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    margin-bottom: 0.5rem;
-  }
-
-  .stat-value {
-    font-size: 1.4rem;
-    font-weight: 600;
-    color: #3e6b4c;
-    font-family: "IBM Plex Mono", monospace;
-  }
-
-  .coherence-indicator {
-    font-size: 0.85rem;
-    color: #8a9ba8;
-    margin-top: 0.5rem;
-  }
-
-  .footer {
-    pointer-events: auto;
-    text-align: center;
-    font-size: 0.85rem;
-    color: #666;
-  }
-
-  .footer a {
-    color: #2b5b8c;
-    text-decoration: none;
-  }
-
-  .footer a:hover {
-    text-decoration: underline;
-  }
-
-  @media (max-width: 768px) {
-    .ui-overlay {
-      padding: 1rem;
-    }
-
-    .header h1 {
-      font-size: 1.3rem;
-    }
-
-    .stats-panel {
-      grid-template-columns: 1fr;
-    }
-
-    .controls-panel {
-      gap: 1rem;
-    }
-
-    .control-group {
-      flex-direction: column;
-      align-items: flex-start;
-    }
-  }
+  .fsv{ max-width:980px; margin:0 auto; padding:1.25rem 16px 2rem; color:#f5efde; font-family:"Lora", serif; }
+  .fsv-card{ background:#0d1219; border-radius:22px; padding:1.25rem; box-shadow:0 14px 40px rgba(10,14,19,.25); }
+  .fsv h1{ font-family:"Fraunces", serif; font-weight:600; font-size:clamp(1.4rem,4vw,2rem); margin:0 0 .35rem; text-align:center; color:#f5efde; }
+  .fsv-lede{ text-align:center; color:#c9c9c9; margin:0 auto 1rem; max-width:40rem; font-size:.98rem; }
+  .fsv-stage{ position:relative; height:clamp(260px,48vh,460px); border-radius:16px; overflow:hidden; background:#0a0e13; }
+  .fsv-stage canvas{ display:block; width:100%; height:100%; }
+  .fsv-stats{ display:grid; grid-template-columns:repeat(3,1fr); gap:.6rem; margin:1rem 0; }
+  .stat-box{ background:rgba(62,107,76,.12); border:1px solid rgba(62,107,76,.35); padding:.7rem .5rem; border-radius:12px; text-align:center; }
+  .stat-label{ font:500 .72rem/1.3 "IBM Plex Mono", monospace; color:#9fb0bd; text-transform:uppercase; letter-spacing:.08em; }
+  .stat-value{ font:600 1.25rem/1.4 "IBM Plex Mono", monospace; color:#9fd3ae; }
+  .coherence-indicator{ font-size:.85rem; color:#c9c9c9; }
+  .fsv-controls{ display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:.75rem; }
+  .control-group{ display:flex; flex-wrap:wrap; align-items:center; gap:.5rem .75rem; background:rgba(42,91,140,.15); border:1px solid rgba(42,91,140,.35); padding:.75rem 1rem; border-radius:12px; }
+  .control-group label{ flex:1 0 100%; font-size:.92rem; color:#e0e0e0; }
+  .control-group input[type="range"]{ flex:1; min-width:0; accent-color:#6fa8dc; }
+  .control-group input[type="number"]{ width:4.6rem; padding:.4rem; background:#0a0e13; border:1px solid rgba(42,91,140,.6); color:#f5efde; border-radius:6px; font-size:.95rem; }
+  .fsv-buttons{ display:flex; flex-wrap:wrap; gap:.6rem; justify-content:center; margin-top:1rem; }
+  .fsv-buttons button{ padding:.6rem 1.1rem; border:0; border-radius:999px; cursor:pointer; font:600 .85rem "IBM Plex Mono", monospace; background:#2b5b8c; color:#fff; }
+  .fsv-buttons button[aria-pressed="true"]{ background:#3e6b4c; }
+  .fsv-buttons button:focus-visible{ outline:3px solid #f5d27a; outline-offset:2px; }
+  .fsv-note{ color:#c9c9c9; font-size:.92rem; margin:1rem 0 0; text-align:center; }
+  .fsv-note a, .footer a{ color:#9cc4ec; }
+  .footer{ text-align:center; font-size:.88rem; color:#a8a8a8; margin-top:1rem; }
+  @media (max-width:600px){ .fsv-card{ padding:.9rem; } .stat-value{ font-size:1.05rem; } }
 
   /* ===== PAYWALL SYSTEM CSS ===== */
   .locked-section { display: none; }
@@ -329,342 +173,200 @@
 <body>
 
 <div class="locked-section">
-<canvas id="canvas"></canvas>
+<main class="fsv">
+<div class="fsv-card">
+  <h1>Frequency Sync Visualizer</h1>
+  <p class="fsv-lede">Two rhythms, one for you and one for the other person. When they drift apart, the picture gets choppy. Bring them closer, or tap “Check in” to let them settle into step, like the 90-second check-in does.</p>
 
-<div class="ui-overlay">
-  <div class="header">
-    <h1>Frequency Sync Visualizer</h1>
-    <p>A calm picture of two rhythms drifting into step, the idea behind the 90-second check-in</p>
+  <div class="fsv-stage"><canvas id="canvas" role="img" aria-label="Two moving waves, one per person, and the wave they make together"></canvas></div>
+
+  <div class="fsv-stats" aria-live="polite">
+    <div class="stat-box"><div class="stat-label">You</div><div class="stat-value" id="stat-freq-a">—</div><div class="coherence-indicator">beats a second</div></div>
+    <div class="stat-box"><div class="stat-label">Gap</div><div class="stat-value" id="stat-delta">—</div><div class="coherence-indicator" id="stat-delta-status"></div></div>
+    <div class="stat-box"><div class="stat-label">Other person</div><div class="stat-value" id="stat-freq-b">—</div><div class="coherence-indicator">beats a second</div></div>
   </div>
 
-  <div style="flex: 1; display: flex; align-items: center; justify-content: center;">
-    <div class="stats-panel">
-      <div class="stat-box">
-        <div class="stat-label">Freq A</div>
-        <div class="stat-value" id="stat-freq-a">—</div>
-        <div class="coherence-indicator" id="stat-freq-a-label"></div>
-      </div>
-      <div class="stat-box">
-        <div class="stat-label">Delta</div>
-        <div class="stat-value" id="stat-delta">—</div>
-        <div class="coherence-indicator" id="stat-delta-status"></div>
-      </div>
-      <div class="stat-box">
-        <div class="stat-label">Freq B</div>
-        <div class="stat-value" id="stat-freq-b">—</div>
-        <div class="coherence-indicator" id="stat-freq-b-label"></div>
-      </div>
+  <div class="fsv-controls">
+    <div class="control-group">
+      <label for="freq-a">Your rhythm (beats a second)</label>
+      <input type="range" id="freq-a" min="0.2" max="3" step="0.05" value="0.8" aria-describedby="stat-freq-a">
+      <input type="number" id="freq-a-input" min="0.2" max="3" step="0.05" value="0.80" aria-label="Your rhythm, exact value">
+    </div>
+    <div class="control-group">
+      <label for="freq-b">Their rhythm (beats a second)</label>
+      <input type="range" id="freq-b" min="0.2" max="3" step="0.05" value="1.6" aria-describedby="stat-freq-b">
+      <input type="number" id="freq-b-input" min="0.2" max="3" step="0.05" value="1.60" aria-label="Their rhythm, exact value">
     </div>
   </div>
 
-  <div>
-    <div class="controls-panel">
-      <div class="control-group">
-        <label>You (Hz)</label>
-        <input type="range" id="freq-a" min="0.5" max="3" step="0.1" value="1.5">
-        <input type="number" id="freq-a-input" min="0.5" max="3" step="0.1" value="1.5">
-      </div>
-      <div class="control-group">
-        <label>Other person (Hz)</label>
-        <input type="range" id="freq-b" min="0.5" max="3" step="0.1" value="1.5">
-        <input type="number" id="freq-b-input" min="0.5" max="3" step="0.1" value="1.5">
-      </div>
-      <div class="control-group">
-        <button id="audio-toggle">🔊 Audio On</button>
-      </div>
-    </div>
+  <div class="fsv-buttons">
+    <button type="button" id="sync-btn" aria-pressed="false">Check in: drift into step</button>
+    <button type="button" id="audio-toggle" aria-pressed="false">Sound: off</button>
+  </div>
+  <p class="fsv-note">Sound plays a soft tone for each person, you in the left ear and them in the right, each pulsing at its own rhythm. Headphones help. It’s a picture of an idea, not a measurement of anyone.</p>
 
-    <div class="footer">
-      Goes with <a href="/workpapers/wp-13-pll-protocol.html">WP-13, the 90-second check-in</a> • <a href="/frequency-framework.html">Frequency Framework</a> • <a href="/index.html">Home</a>
-    </div>
+  <div class="footer">
+    Goes with <a href="/workpapers/wp-13-pll-protocol.html">the 90-second check-in (WP-13)</a> • <a href="/frequency-framework.html">The Frequency Framework</a>
   </div>
 </div>
+</main>
 </div>
 
 <script>
+(function(){
 const canvas = document.getElementById('canvas');
 const ctx = canvas.getContext('2d');
-
-// Resize canvas
-function resizeCanvas() {
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight;
+const stage = canvas.parentElement;
+let W = 0, H = 0;
+function resizeCanvas(){
+  const dpr = Math.min(window.devicePixelRatio || 1, 2);
+  W = stage.clientWidth; H = stage.clientHeight;
+  canvas.width = Math.round(W * dpr); canvas.height = Math.round(H * dpr);
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 }
 resizeCanvas();
 window.addEventListener('resize', resizeCanvas);
 
-// Frequency controls
-const freqARange = document.getElementById('freq-a');
-const freqAInput = document.getElementById('freq-a-input');
-const freqBRange = document.getElementById('freq-b');
-const freqBInput = document.getElementById('freq-b-input');
-const audioToggleBtn = document.getElementById('audio-toggle');
+const MIN = 0.2, MAX = 3;
+const aRange = document.getElementById('freq-a'), aInput = document.getElementById('freq-a-input');
+const bRange = document.getElementById('freq-b'), bInput = document.getElementById('freq-b-input');
+const statA = document.getElementById('stat-freq-a'), statB = document.getElementById('stat-freq-b');
+const statDelta = document.getElementById('stat-delta'), statStatus = document.getElementById('stat-delta-status');
+const syncBtn = document.getElementById('sync-btn'), audioBtn = document.getElementById('audio-toggle');
+const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-// Stats
-const statFreqA = document.getElementById('stat-freq-a');
-const statFreqB = document.getElementById('stat-freq-b');
-const statDelta = document.getElementById('stat-delta');
-const statDeltaStatus = document.getElementById('stat-delta-status');
+let freqA = parseFloat(aRange.value), freqB = parseFloat(bRange.value);
+let phaseA = 0, phaseB = 0, syncing = false;
+const clamp = v => Math.min(MAX, Math.max(MIN, v));
 
-// Audio
-let audioCtx;
-let oscA, oscB, gainA, gainB, masterGain;
-let audioEnabled = false;
-
-function initAudio() {
-  if (audioCtx) return;
-  audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-  masterGain = audioCtx.createGain();
-  masterGain.gain.value = 0.08;
-  masterGain.connect(audioCtx.destination);
-
-  oscA = audioCtx.createOscillator();
-  gainA = audioCtx.createGain();
-  oscA.connect(gainA);
-  gainA.connect(masterGain);
-  oscA.type = 'sine';
-  gainA.gain.value = 0.3;
-  oscA.start();
-
-  oscB = audioCtx.createOscillator();
-  gainB = audioCtx.createGain();
-  oscB.connect(gainB);
-  gainB.connect(masterGain);
-  oscB.type = 'sine';
-  gainB.gain.value = 0.3;
-  oscB.start();
-
-  audioEnabled = true;
+// ---- sound: one soft tone per person, panned left/right, each pulsing at its own rhythm ----
+let ac = null, voices = null, soundOn = false;
+function makeVoice(pitch, pan){
+  const osc = ac.createOscillator(), amp = ac.createGain(), lfo = ac.createOscillator(), depth = ac.createGain();
+  osc.type = 'sine'; osc.frequency.value = pitch;
+  amp.gain.value = 0.5; depth.gain.value = 0.5;       // gain swings 0..1 at the rhythm rate
+  lfo.frequency.value = 1; lfo.connect(depth); depth.connect(amp.gain);
+  let out = amp;
+  if (ac.createStereoPanner){ const p = ac.createStereoPanner(); p.pan.value = pan; amp.connect(p); out = p; }
+  osc.connect(amp); out.connect(master);
+  osc.start(); lfo.start();
+  return { lfo };
+}
+let master = null;
+function startSound(){
+  if (!ac){
+    const AC = window.AudioContext || window.webkitAudioContext; if (!AC) return false;
+    ac = new AC();
+    master = ac.createGain(); master.gain.value = 0; master.connect(ac.destination);
+    voices = [makeVoice(196, -0.8), makeVoice(247, 0.8)];
+  }
+  if (ac.state === 'suspended') ac.resume();
+  master.gain.setTargetAtTime(0.09, ac.currentTime, 0.3);
+  return true;
+}
+function stopSound(){ if (ac) master.gain.setTargetAtTime(0, ac.currentTime, 0.2); }
+function syncSound(){
+  if (!ac) return;
+  voices[0].lfo.frequency.setTargetAtTime(freqA, ac.currentTime, 0.1);
+  voices[1].lfo.frequency.setTargetAtTime(freqB, ac.currentTime, 0.1);
 }
 
-function stopAudio() {
-  if (!audioCtx) return;
-  try {
-    oscA.stop();
-    oscB.stop();
-    masterGain.disconnect();
-  } catch (e) {}
-  audioCtx = null;
-  audioEnabled = false;
+function render(){
+  aRange.value = freqA; bRange.value = freqB;
+  if (document.activeElement !== aInput) aInput.value = freqA.toFixed(2);
+  if (document.activeElement !== bInput) bInput.value = freqB.toFixed(2);
+  const gap = Math.abs(freqA - freqB);
+  statA.textContent = freqA.toFixed(2);
+  statB.textContent = freqB.toFixed(2);
+  statDelta.textContent = gap < 0.03 ? 'in step' : gap.toFixed(2);
+  statStatus.textContent = gap < 0.03 ? 'Together' : gap < 0.4 ? 'Close' : 'Drifting apart';
+  statStatus.style.color = gap < 0.03 ? '#9fd3ae' : gap < 0.4 ? '#f0c987' : '#f0a07a';
+  syncSound();
+}
+function setA(v){ if (!isNaN(v)){ freqA = clamp(v); stopSync(); render(); } }
+function setB(v){ if (!isNaN(v)){ freqB = clamp(v); stopSync(); render(); } }
+aRange.addEventListener('input', () => setA(parseFloat(aRange.value)));
+bRange.addEventListener('input', () => setB(parseFloat(bRange.value)));
+aInput.addEventListener('change', () => setA(parseFloat(aInput.value)));
+bInput.addEventListener('change', () => setB(parseFloat(bInput.value)));
+aInput.addEventListener('blur', render); bInput.addEventListener('blur', render);
+
+function stopSync(){ syncing = false; syncBtn.setAttribute('aria-pressed', 'false'); syncBtn.textContent = 'Check in: drift into step'; }
+syncBtn.addEventListener('click', () => {
+  if (syncing){ stopSync(); return; }
+  syncing = true; syncBtn.setAttribute('aria-pressed', 'true'); syncBtn.textContent = 'Checking in… (tap to stop)';
+});
+audioBtn.addEventListener('click', () => {
+  if (soundOn){ stopSound(); soundOn = false; }
+  else { soundOn = startSound(); syncSound(); }
+  audioBtn.setAttribute('aria-pressed', String(soundOn));
+  audioBtn.textContent = soundOn ? 'Sound: on' : 'Sound: off';
+});
+
+let last = performance.now();
+function frame(now){
+  const dt = Math.min(0.05, (now - last) / 1000); last = now;
+  if (syncing){
+    // both meet in the middle, a little each second, the way a daily check-in works
+    const mid = (freqA + freqB) / 2, k = Math.min(1, dt * 1.4);
+    freqA += (mid - freqA) * k; freqB += (mid - freqB) * k;
+    // and their timing lines up too
+    let d = Math.atan2(Math.sin(phaseB - phaseA), Math.cos(phaseB - phaseA));
+    phaseA += d * k * 0.5; phaseB -= d * k * 0.5;
+    if (Math.abs(freqA - freqB) < 0.01 && Math.abs(d) < 0.05){ freqA = freqB = +mid.toFixed(2); stopSync(); syncBtn.textContent = 'In step. Tap to try again'; }
+    render();
+  }
+  const speed = reduce ? 0.35 : 1;
+  phaseA += 2 * Math.PI * freqA * dt * speed;
+  phaseB += 2 * Math.PI * freqB * dt * speed;
+  draw();
+  requestAnimationFrame(frame);
 }
 
-// Particle system
-class Particle {
-  constructor(x, y, vx, vy, color, life) {
-    this.x = x;
-    this.y = y;
-    this.vx = vx;
-    this.vy = vy;
-    this.color = color;
-    this.life = life;
-    this.maxLife = life;
-    this.size = Math.random() * 3 + 1;
-  }
+function draw(){
+  const gap = Math.abs(freqA - freqB);
+  const together = Math.max(0, 1 - gap / 1.2);            // 1 = in step, 0 = far apart
+  const align = (1 + Math.cos(phaseA - phaseB)) / 2;       // 1 when the beats land together
+  ctx.fillStyle = '#0a0e13'; ctx.fillRect(0, 0, W, H);
+  const g = ctx.createRadialGradient(W/2, H/2, 0, W/2, H/2, Math.max(W, H) * 0.6);
+  g.addColorStop(0, `rgba(${60 + 40 * (1 - together)}, ${90 + 60 * together}, ${120 + 40 * together}, ${0.25 + 0.25 * together * align})`);
+  g.addColorStop(1, 'rgba(10,14,19,0)');
+  ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
 
-  update() {
-    this.x += this.vx;
-    this.y += this.vy;
-    this.life--;
-  }
-
-  draw(ctx) {
-    ctx.globalAlpha = this.life / this.maxLife;
-    ctx.fillStyle = this.color;
-    ctx.beginPath();
-    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-    ctx.fill();
-    ctx.globalAlpha = 1;
-  }
-}
-
-let particles = [];
-
-// Main animation loop
-let time = 0;
-let freqA = 1.5;
-let freqB = 1.5;
-
-function updateFrequencies() {
-  freqA = parseFloat(freqARange.value);
-  freqAInput.value = freqA.toFixed(1);
-  freqBRange.value = freqA;
-
-  freqB = parseFloat(freqBRange.value);
-  freqBInput.value = freqB.toFixed(1);
-  freqARange.value = freqB;
-
-  // Update audio
-  if (audioEnabled && audioCtx) {
-    const baseFreq = 110;
-    oscA.frequency.setTargetAtTime(baseFreq * freqA, audioCtx.currentTime, 0.05);
-    oscB.frequency.setTargetAtTime(baseFreq * freqB, audioCtx.currentTime, 0.05);
-
-    const delta = Math.abs(freqA - freqB) < 0.05 ? 0 : Math.max(freqA, freqB) / Math.min(freqA, freqB);
-    if (delta < 1.2) {
-      gainA.gain.setTargetAtTime(0.3, audioCtx.currentTime, 0.05);
-      gainB.gain.setTargetAtTime(0.3, audioCtx.currentTime, 0.05);
-    } else {
-      const beatFreq = Math.abs(freqA - freqB) * 2;
-      const beatPhase = Math.sin(audioCtx.currentTime * beatFreq * Math.PI * 2);
-      gainA.gain.setTargetAtTime(0.15 + beatPhase * 0.15, audioCtx.currentTime, 0.05);
-      gainB.gain.setTargetAtTime(0.15 - beatPhase * 0.15, audioCtx.currentTime, 0.05);
-    }
-  }
-
-  // Update stats
-  const delta = Math.abs(freqA - freqB) < 0.05 ? 0 : Math.max(freqA, freqB) / Math.min(freqA, freqB);
-  statFreqA.textContent = freqA.toFixed(1);
-  statFreqB.textContent = freqB.toFixed(1);
-  statDelta.textContent = delta < 0.05 ? '✓' : delta.toFixed(2) + 'x';
-  
-  if (delta < 0.1) {
-    statDeltaStatus.textContent = 'Aligned';
-    statDeltaStatus.style.color = '#3e6b4c';
-  } else if (delta < 1.5) {
-    statDeltaStatus.textContent = 'Close';
-    statDeltaStatus.style.color = '#a8792f';
-  } else {
-    statDeltaStatus.textContent = 'Diverging';
-    statDeltaStatus.style.color = '#8b6f47';
-  }
-}
-
-freqARange.addEventListener('input', () => {
-  freqA = parseFloat(freqARange.value);
-  freqAInput.value = freqA.toFixed(1);
-  updateFrequencies();
-});
-
-freqAInput.addEventListener('input', () => {
-  freqA = parseFloat(freqAInput.value);
-  freqARange.value = freqA;
-  updateFrequencies();
-});
-
-freqBRange.addEventListener('input', () => {
-  freqB = parseFloat(freqBRange.value);
-  freqBInput.value = freqB.toFixed(1);
-  updateFrequencies();
-});
-
-freqBInput.addEventListener('input', () => {
-  freqB = parseFloat(freqBInput.value);
-  freqBRange.value = freqB;
-  updateFrequencies();
-});
-
-audioToggleBtn.addEventListener('click', () => {
-  if (audioEnabled) {
-    stopAudio();
-    audioToggleBtn.textContent = '🔇 Audio Off';
-    audioToggleBtn.style.background = '#8b6f47';
-  } else {
-    initAudio();
-    updateFrequencies();
-    audioToggleBtn.textContent = '🔊 Audio On';
-    audioToggleBtn.style.background = '#3e6b4c';
-  }
-});
-
-function animate() {
-  time += 0.016; // ~60fps
-
-  const w = canvas.width;
-  const h = canvas.height;
-  const centerX = w / 2;
-  const centerY = h / 2;
-
-  // Get current frequency delta
-  const delta = Math.abs(freqA - freqB) < 0.05 ? 0 : Math.max(freqA, freqB) / Math.min(freqA, freqB);
-
-  // Color scheme based on coherence
-  let bgColor, waveColor, particleColor;
-  
-  if (delta < 0.1) {
-    // Aligned: cool, calm blues
-    bgColor = '#0a0e13';
-    waveColor = '#2b5b8c';
-    particleColor = '#3e6b4c';
-  } else if (delta < 1.5) {
-    // Moderate: transition to warmer
-    const t = (delta - 0.1) / 1.4;
-    bgColor = `rgb(${10 + t * 20}, ${14 + t * 10}, ${19 + t * 10})`;
-    waveColor = `rgb(${43 + t * 100}, ${91 + t * 80}, ${140 - t * 100})`;
-    particleColor = `rgb(${62 + t * 80}, ${107 - t * 40}, ${76 + t * 40})`;
-  } else {
-    // Diverging: warm, alert reds
-    bgColor = '#1a0e0a';
-    waveColor = '#a85a3a';
-    particleColor = '#d97a4a';
-  }
-
-  // Clear with gradient
-  const gradient = ctx.createLinearGradient(0, 0, 0, h);
-  gradient.addColorStop(0, bgColor);
-  gradient.addColorStop(1, '#0a0e13');
-  ctx.fillStyle = gradient;
-  ctx.fillRect(0, 0, w, h);
-
-  // Draw concentric circles based on frequencies
-  ctx.strokeStyle = waveColor;
-  ctx.globalAlpha = 0.3;
-
-  for (let i = 0; i < 4; i++) {
-    const radius = 50 + i * 80 + Math.sin(time * freqA) * 30 + Math.cos(time * freqB) * 30;
-    ctx.lineWidth = 2;
-    ctx.beginPath();
-    ctx.arc(centerX, centerY, radius, 0, Math.PI * 2);
-    ctx.stroke();
-  }
-
-  // Draw wave patterns
-  ctx.globalAlpha = 0.5;
-  ctx.strokeStyle = waveColor;
-  ctx.lineWidth = 1.5;
-  
-  for (let y = 0; y < h; y += 40) {
-    ctx.beginPath();
-    for (let x = 0; x < w; x += 5) {
-      const waveA = Math.sin((x / 100 + time * freqA) * Math.PI * 2) * 20;
-      const waveB = Math.sin((x / 100 + time * freqB) * Math.PI * 2) * 20;
-      const py = y + waveA + waveB;
-      if (x === 0) ctx.moveTo(x, py);
-      else ctx.lineTo(x, py);
-    }
-    ctx.stroke();
-  }
-
-  // Emit particles when frequencies align
-  if (delta < 0.2 && Math.random() < 0.3) {
-    for (let i = 0; i < 3; i++) {
-      const angle = Math.random() * Math.PI * 2;
-      const speed = Math.random() * 2 + 1;
-      particles.push(new Particle(
-        centerX,
-        centerY,
-        Math.cos(angle) * speed,
-        Math.sin(angle) * speed,
-        particleColor,
-        60
-      ));
-    }
-  }
-
-  // Update and draw particles
-  ctx.globalAlpha = 1;
-  particles = particles.filter(p => p.life > 0);
-  particles.forEach(p => {
-    p.update();
-    p.draw(ctx);
+  // pulsing circles: yours on the left, theirs on the right; they overlap more as you get in step
+  const r = Math.min(W, H) * 0.16, spread = Math.min(W, H) * 0.14 * (1 - together * 0.85);
+  const pulse = (ph) => 0.8 + 0.2 * (1 + Math.sin(ph)) / 2;
+  ctx.globalCompositeOperation = 'lighter';
+  [[W/2 - spread, phaseA, '111,168,220'], [W/2 + spread, phaseB, '240,160,122']].forEach(([x, ph, c]) => {
+    const rr = r * pulse(ph);
+    const cg = ctx.createRadialGradient(x, H/2, 0, x, H/2, rr);
+    cg.addColorStop(0, `rgba(${c},.55)`); cg.addColorStop(1, `rgba(${c},0)`);
+    ctx.fillStyle = cg; ctx.beginPath(); ctx.arc(x, H/2, rr, 0, Math.PI * 2); ctx.fill();
   });
+  ctx.globalCompositeOperation = 'source-over';
 
-  ctx.globalAlpha = 1;
+  // three waves: you (top), them (bottom), and together (middle)
+  const wave = (y, amp, fn, color, width) => {
+    ctx.strokeStyle = color; ctx.lineWidth = width; ctx.beginPath();
+    for (let x = 0; x <= W; x += 4){ const py = y + fn(x / W) * amp; x ? ctx.lineTo(x, py) : ctx.moveTo(x, py); }
+    ctx.stroke();
+  };
+  const cycles = 3, amp = H * 0.08;
+  const fa = u => Math.sin(u * cycles * 2 * Math.PI * freqA - phaseA);
+  const fb = u => Math.sin(u * cycles * 2 * Math.PI * freqB - phaseB);
+  wave(H * 0.2, amp, fa, 'rgba(111,168,220,.85)', 2);
+  wave(H * 0.8, amp, fb, 'rgba(240,160,122,.85)', 2);
+  wave(H * 0.5, amp * 0.9, u => (fa(u) + fb(u)) / 2, `rgba(${Math.round(200 - 60 * together)},${Math.round(200 + 30 * together)},${Math.round(190 + 20 * together)},.95)`, 3);
 
-  requestAnimationFrame(animate);
+  ctx.font = '12px "IBM Plex Mono", monospace'; ctx.fillStyle = 'rgba(245,239,222,.7)';
+  ctx.fillText('you', 10, H * 0.2 - amp - 6);
+  ctx.fillText('together', 10, H * 0.5 - amp - 6);
+  ctx.fillText('them', 10, H * 0.8 - amp - 6);
 }
 
-animate();
-updateFrequencies();
+render();
+requestAnimationFrame(frame);
+})();
 </script>
 
 

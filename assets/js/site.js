@@ -671,21 +671,24 @@
     '<path d="M60 10 v11" stroke="#F4D26B" stroke-width="1.6"/><circle cx="60" cy="22.5" r="2.3" fill="#F4D26B"/></svg>';
   var PUDDLES = { name: 'Professor Puddles', svg: PUDDLES_SVG, color: '#CFE6FA',
     greeting: 'Hello! I’m Professor Puddles. Ask me anything about this site, like the book, the workpapers, check-ins or ways to calm down, and I’ll answer from its pages, with a link to read more. What you type stays on this device.' };
-  // the hello bubble, at the top of the home page only: once a day, and never again after a first chat
+  // the hello bubble, at the top of the home page on every visit (phone and laptop alike);
+  // "Not now" shrinks it to a small chip for the rest of the visit, so it's never lost
   function buildPuddles(body) {
     if (current !== '/index.html' && current !== '/') return;
-    var today = new Date().toISOString().slice(0, 10), seen = lsGet('tol-puddles-bubble');
-    if (seen === 'done' || seen === today) return;
-    var hi = el('div', { class: 'tol-puddles-hi', role: 'complementary', 'aria-label': 'Meet Professor Puddles' },
+    var small = false;
+    try { small = sessionStorage.getItem('tol-puddles-small') === '1'; } catch (e) {}
+    var hi = el('div', { class: 'tol-puddles-hi' + (small ? ' is-small' : ''), role: 'complementary', 'aria-label': 'Meet Professor Puddles' },
       '<span class="tol-puddles-hi-art">' + PUDDLES_SVG + '</span>' +
-      '<p><strong>Meet Professor Puddles!</strong> Small drop, big brain. Ask anything about the program in your own words, and he’ll answer straight from these pages.</p>' +
+      '<p><strong>Meet Professor Puddles!</strong> <span class="tol-puddles-hi-more">Small drop, big brain. Ask anything about the program in your own words, and he’ll answer straight from these pages.</span></p>' +
       '<a class="tol-puddles-hi-go" href="/ask.html">Chat about something</a>' +
-      '<button type="button" class="tol-puddles-hi-x" aria-label="Not now">&times;</button>');
-    hi.querySelector('.tol-puddles-hi-go').addEventListener('click', function () { lsSet('tol-puddles-bubble', 'done'); });
-    hi.querySelector('.tol-puddles-hi-x').addEventListener('click', function () { lsSet('tol-puddles-bubble', today); hi.classList.remove('is-in'); setTimeout(function () { hi.remove(); }, 400); });
+      '<button type="button" class="tol-puddles-hi-x" aria-label="Make smaller">&times;</button>');
+    hi.querySelector('.tol-puddles-hi-x').addEventListener('click', function () {
+      try { sessionStorage.setItem('tol-puddles-small', '1'); } catch (e) {}
+      hi.classList.add('is-small');
+    });
     var main = document.querySelector('main');
     if (main) main.insertBefore(hi, main.firstChild); else body.appendChild(hi);
-    setTimeout(function () { hi.classList.add('is-in'); }, 600);
+    setTimeout(function () { hi.classList.add('is-in'); }, small ? 0 : 600);
   }
 
   // A little card from Professor Puddles partway through the course pages: "chat about this?"

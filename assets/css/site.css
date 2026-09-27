@@ -1231,6 +1231,10 @@ button.tol-dive{ display:inline !important; width:auto !important; min-height:0 
 .tol-puddles-hi-x{ position:absolute; top:.35rem; right:.4rem; width:36px; height:36px; border:0; background:none; font-size:1.3rem; color:#6A6152; cursor:pointer; border-radius:50%; }
 .tol-puddles-hi-x:hover{ background:rgba(0,0,0,.05); }
 @media (max-width:560px){ .tol-puddles-hi{ width:100%; } }
+.tol-puddles-hi.is-small{ width:auto; display:inline-grid; grid-template-columns:auto auto; gap:.2rem .6rem; padding:.45rem .9rem .45rem .5rem; }
+.tol-puddles-hi.is-small .tol-puddles-hi-art{ grid-row:auto; width:2.2rem; height:2.2rem; }
+.tol-puddles-hi.is-small p, .tol-puddles-hi.is-small .tol-puddles-hi-x, .tol-puddles-hi.is-small::before{ display:none; }
+.tol-puddles-hi.is-small .tol-puddles-hi-go{ min-height:36px; padding:.3rem .9rem; }
 @media (prefers-reduced-motion: reduce){ .tol-puddles-hi-art, .tol-pud-card-art{ animation:none; } .tol-puddles-hi{ transition:none; } }
 @media print{ .tol-puddles-hi, .tol-pud-card{ display:none !important; } }
 
