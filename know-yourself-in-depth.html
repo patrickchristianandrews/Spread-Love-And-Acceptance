@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-NKC6CQ9S66"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-NKC6CQ9S66');
+</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Know Your Own Wiring in depth — Wiring, Learned Patterns and Today’s Conditions · The Objective Ledger</title>
+<meta name="description" content="A plain-language guide to why you react the way you do: lasting wiring, patterns shaped by life and hard experiences, and today’s conditions. How to find where a feeling comes from, explain yourself to others, help them explain themselves, and agree on a calm way to live and work together.">
+<meta property="og:title" content="Know Your Own Wiring — The Objective Ledger">
+<meta property="og:description" content="What’s you, what’s learned, and what can change. Understand your reactions and explain them kindly.">
+<meta property="og:type" content="article">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,500&family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/css/site.css">
+<link rel="stylesheet" href="/assets/css/reading.css">
+<link rel="stylesheet" href="/assets/css/tol-pages.css">
+<script src="/assets/js/site.js" defer></script>
+<style>
+  :root{ --paper:#F5EFDE; --paper-deep:#ECE2C4; --ink:#211D17; --ink-soft:#524B3E; --line:#D9CBA3; --credit:#3E6B4C; --brass:#8A5E1E; --focus:#2B5B8C; --debit:#96412B; --radius:3px; }
+  .read.is-wide{ max-width:58rem; }
+  .read p, .read li{ max-width:68ch; }
+  .ky-lede{ font-size:1.15rem; color:var(--ink-soft); }
+  .read h2[id], .read section[id]{ scroll-margin-top:5rem; }
+
+  .ky-jump{ list-style:none; padding:0; margin:1rem 0 0; display:flex; flex-wrap:wrap; gap:.4rem; }
+  .ky-jump li{ margin:0; max-width:none; }
+  .ky-jump a{ display:inline-block; font-family:"IBM Plex Mono", ui-monospace, monospace; font-size:.78rem; padding:.3rem .6rem; border:1px solid var(--line); border-radius:var(--radius); text-decoration:none !important; background:var(--paper); }
+  .ky-jump a:hover{ background:var(--paper-deep); color:var(--ink) !important; }
+
+  .ky-part{ margin:3rem 0 0; padding-top:1.1rem; border-top:3px double var(--ink); }
+  .ky-part > h2{ margin:0 0 .15rem; }
+  .ky-tag{ display:inline-block; font-family:"IBM Plex Mono", ui-monospace, monospace; font-size:.72rem; color:var(--brass); letter-spacing:.04em; margin:0 0 .9rem; }
+  .ky-part h3{ font-family:"Fraunces", Georgia, serif; font-weight:600; font-size:1.08rem; margin:1.5rem 0 .4rem; }
+  .ky-note{ font-size:.92rem; color:var(--ink-soft); }
+
+  .ky-layers{ display:grid; grid-template-columns:repeat(auto-fit, minmax(230px, 1fr)); gap:1rem; margin:1rem 0 0; }
+  .ky-layers > div{ padding:1rem 1.1rem; border:1px solid var(--line); border-radius:var(--radius); background:var(--paper); }
+  .ky-layers > div:nth-child(1){ border-top:3px solid var(--focus); }
+  .ky-layers > div:nth-child(2){ border-top:3px solid var(--brass); }
+  .ky-layers > div:nth-child(3){ border-top:3px solid var(--credit); }
+  .ky-layers h3{ margin:0 0 .4rem !important; }
+  .ky-layers p{ margin:.35rem 0; font-size:.96rem; }
+
+  .ky-ex{ width:100%; border-collapse:collapse; font-size:.95rem; line-height:1.5; margin:.4rem 0 1rem; }
+  .ky-ex th{ text-align:left; font-weight:600; padding:.45rem .6rem; border-bottom:3px double var(--ink); font-family:"Fraunces", Georgia, serif; }
+  .ky-ex td{ padding:.6rem .6rem; border-bottom:1px solid var(--line); vertical-align:top; height:auto; }
+  .ky-ex td:first-child{ font-style:italic; width:22%; }
+  .ky-ex td + td, .ky-ex th + th{ border-left:1px dotted var(--line); }
+  @media (max-width:640px){
+    .ky-ex, .ky-ex tbody, .ky-ex tr, .ky-ex td{ display:block; width:auto !important; }
+    .ky-ex thead{ display:none; }
+    .ky-ex tr{ border-bottom:1px solid var(--line); padding:.5rem 0; }
+    .ky-ex td{ border:0 !important; padding:.15rem 0; }
+    .ky-ex td::before{ content:attr(data-h); display:block; font-family:"IBM Plex Mono", monospace; font-style:normal; font-size:.7rem; color:var(--brass); }
+  }
+
+  .ky-steps{ counter-reset:r; list-style:none; padding:0; }
+  .ky-steps > li{ counter-increment:r; position:relative; padding:.8rem 0 .8rem 2.6rem; border-bottom:1px dotted var(--line); margin:0; max-width:none; }
+  .ky-steps > li::before{ content:counter(r); position:absolute; left:0; top:.7rem; font-family:"Fraunces", Georgia, serif; font-size:1.5rem; color:var(--brass); line-height:1; }
+  .ky-steps strong{ font-family:"Fraunces", Georgia, serif; }
+
+  .ky-script{ margin:1.2rem 0 0; padding:1rem 1.2rem 1.1rem; background:var(--paper-deep); border-left:3px solid var(--brass); }
+  .ky-script h3{ margin:0 0 .4rem !important; }
+  .ky-script p{ margin:.4rem 0; }
+  .ky-script .say{ font-family:"Fraunces", Georgia, serif; font-size:1.08rem; }
+
+  .ky-plain{ margin:.8rem 0; }
+  .ky-plain b{ font-family:"IBM Plex Mono", monospace; font-weight:500; font-size:.72rem; color:var(--brass); display:block; letter-spacing:.05em; }
+  .ky-evidence{ font-size:.95rem; }
+  .ky-evidence li{ margin:.5rem 0; }
+  @media print{ .ky-jump{ display:none; } }
+</style>
+</head>
+<body>
+<main class="read is-wide" id="main">
+
+  <header class="read-head">
+    <p class="read-code">Self-discovery · Know yourself</p>
+    <h1>Know your own wiring: what’s you, what’s learned, and what can change</h1>
+    <p class="ky-lede" style="margin:.6rem 0 0">Why you react the way you do, where a feeling is coming from, and how to explain it kindly to yourself and to the people you share a life with.</p>
+  </header>
+  <p class="depth-bar"><span>Full version</span><a href="/know-yourself.html">&larr; Back to the simple version</a></p>
+
+<div class="scene">
+  <p class="scene-when">Friday, 6:40pm</p>
+  <p>“Surprise! I booked us dinner with my cousins tonight.” They meant it as a gift. You felt your chest tighten and heard yourself say “Great” in a flat voice. Later you wonder: is that just me, is it something from years ago, or am I simply wiped out after this week? Probably a bit of all three.</p>
+</div>
+
+  <p>Most of us were never taught to take our own reactions apart. We just react, and then either defend it (“That’s just how I am”) or blame ourselves (“What’s wrong with me?”). Neither helps much. This guide offers a third way: look at a reaction as a mix of three layers, work out which layer is doing most of the work, and then choose the right response for that layer. Once you can do that for yourself, you can explain it to someone else, and help them do the same.</p>
+
+  <p class="pillar-note"><strong>Where this fits:</strong> This page mainly uses <a href="/five-pillars.html#read-your-state">Pillar III, Read your state first</a>, and <a href="/five-pillars.html#tune-signals">Pillar IV, Tune how you send and receive</a>, with help from <a href="/five-pillars.html#see-the-load">Pillar I, See the whole load</a>, and <a href="/five-pillars.html#fix-the-setup">Pillar II, Fix the setup, not the person</a>. They are all part of the <a href="/five-pillars.html">Five Pillars</a>. <strong>In you:</strong> know where a feeling is coming from before you act on it. <strong>Between you and others:</strong> tell people what’s lasting, what you’re working on and what today needs, so your ways of working can meet in a calm middle.</p>
+
+  <aside class="tol-aside" aria-labelledby="honest">
+    <h3 id="honest">An honest note before you read on</h3>
+    <p>This page is general education, not diagnosis, therapy or treatment. It can’t tell you whether you’re autistic, have ADHD or anything else, and it can’t tell you what someone else has. The three layers are a thinking tool, not a scientific category system. Real people are messier than any model, and the layers overlap. If you want to understand yourself more deeply, a qualified professional, such as a psychologist, counselor or doctor, can help, if and when that’s something you want.</p>
+  </aside>
+
+  <p><strong>Jump to a section:</strong></p>
+  <ul class="ky-jump" aria-label="Jump to a section">
+    <li><a href="#layers">Three layers</a></li>
+    <li><a href="#wiring">Wiring</a></li>
+    <li><a href="#patterns">Shaped patterns</a></li>
+    <li><a href="#conditions">Conditions</a></li>
+    <li><a href="#work">On, with, around</a></li>
+    <li><a href="#sort">Sorting table</a></li>
+    <li><a href="#source">Where’s it from?</a></li>
+    <li><a href="#explain">Explaining yourself</a></li>
+    <li><a href="#others">Helping others</a></li>
+    <li><a href="#match">Meeting in the middle</a></li>
+    <li><a href="#pillars">Five Pillars</a></li>
+    <li><a href="#temperament">Temperament research</a></li>
+    <li><a href="#neurodiversity">Neurodiversity</a></li>
+    <li><a href="#shaping">How experience shapes us</a></li>
+    <li><a href="#adversity">Hard experiences</a></li>
+    <li><a href="#change">How change happens</a></li>
+    <li><a href="#mix-ups">Common mix-ups</a></li>
+    <li><a href="#faq">Questions</a></li>
+    <li><a href="#limits">Limits</a></li>
+  </ul>
+
+  <!-- ============ THREE LAYERS ============ -->
+  <section class="ky-part" id="layers">
+    <h2>Three layers of “why I react this way”</h2>
+    <p class="ky-tag">THE CORE IDEA</p>
+    <p>Think of any reaction, from a flash of irritation to going quiet for an hour, as a sound coming through a radio. Some of the sound is the radio itself: how it was built. Some is the way it has been tuned over the years. And some is the weather outside today, adding static. You hear all three at once, and they are easy to confuse.</p>
+    <div class="ky-layers">
+      <div><h3>1. Wiring</h3><p><strong>The lasting part.</strong> Temperament, neurotype, sensory profile, pace, how you process words and feelings.</p><p><em>Changes:</em> very little. <em>Response:</em> understand it and work with it.</p></div>
+      <div><h3>2. Shaped patterns</h3><p><strong>The learned part.</strong> Settings left by family, culture, relationships, work and hard experiences.</p><p><em>Changes:</em> often, slowly. <em>Response:</em> work on it, with patience.</p></div>
+      <div><h3>3. Today’s conditions</h3><p><strong>The passing part.</strong> Sleep, stress, hunger, load, the room, timing.</p><p><em>Changes:</em> hour to hour. <em>Response:</em> work around it.</p></div>
+    </div>
+    <p>Most real reactions have some of each. The goal isn’t to put every feeling into exactly one box. It’s to notice which layer is carrying most of the weight <em>this time</em>, because each layer needs something different.</p>
+  </section>
+
+  <section class="ky-part" id="wiring">
+    <h2>Layer one: wiring, the lasting part</h2>
+    <p class="ky-tag">WORK WITH IT</p>
+    <p>Your wiring is the basic way you are built to take in and respond to the world. It includes:</p>
+    <ul>
+      <li><strong>Temperament:</strong> how strongly you react, how quickly you warm up to new things, how active you are, how easily you settle. These show up early in life.</li>
+      <li><strong>Neurotype:</strong> the general way your brain handles information. Autistic, ADHD, dyslexic and highly sensitive people, among others, are wired in ways that differ from what most social customs were designed around. <a href="/wired-differently-in-depth.html">Wired Differently</a> walks through fourteen of these, one by one.</li>
+      <li><strong>Sensory profile:</strong> how much sound, light, touch, smell and busyness you can take in before it becomes too much, and how much you need before you feel settled.</li>
+      <li><strong>Pace:</strong> how fast you like to talk, decide and switch between tasks, and how long you need to recover.</li>
+      <li><strong>How you process words and feelings:</strong> literally or through tone, spoken or written, right away or after a while, with easy names for feelings or with a lot of searching.</li>
+    </ul>
+    <p>Wiring <strong>stays</strong>. You may learn skills, and its effects can look different at different ages, but the underlying setup tends to stay with you. That’s not a problem to be solved. It can be <strong>understood</strong> (you know your own patterns), <strong>supported</strong> (routines, tools, reminders), <strong>accommodated</strong> (the people around you adjust a little), and <strong>worked with</strong> (you shape your days to fit it). For some people, that support also includes professional or medical help they choose for themselves. Whether to seek that is your call.</p>
+    <div class="ky-plain"><b>IN PLAIN WORDS</b>Wiring isn’t a flaw to fix. It’s the shape of the radio. You don’t yell at a radio for being AM. You learn which station it gets.</div>
+  </section>
+
+  <section class="ky-part" id="patterns">
+    <h2>Layer two: shaped patterns, the learned part</h2>
+    <p class="ky-tag">WORK ON IT, KINDLY AND SLOWLY</p>
+    <p>Life teaches all of us what to expect. The home you grew up in, your culture, school, friendships, past partners, bosses and hard or adverse experiences all leave behind settings, a bit like presets on a radio. Some common ones:</p>
+    <ul>
+      <li><strong>An early alarm.</strong> A raised voice, a closed door or a short text sets off worry before you’ve had time to think.</li>
+      <li><strong>Pleasing.</strong> You say yes before you’ve checked if you can, because keeping others happy once kept things calm.</li>
+      <li><strong>Shutting down.</strong> You go quiet and far away when things get tense, because speaking up used to make it worse.</li>
+      <li><strong>Bracing.</strong> Good news makes you wait for the catch, because the catch used to come.</li>
+      <li><strong>Doing it all yourself.</strong> Asking for help feels risky, because help wasn’t reliable before.</li>
+    </ul>
+    <p>These settings are <strong>real and understandable</strong>. They were good answers to the situation you were in at the time. The trouble is that they can keep running in situations where they no longer fit. Many of them <strong>can soften over time</strong> with awareness, safety and practice: noticing the alarm, checking the facts, trying a new response and seeing that it goes okay. Some people find a counselor or therapist helps with this; others do it through relationships, reading or reflection. Some patterns never fully go away and leave a <strong>lasting sensitivity</strong>, a spot that stays tender. You can still learn to carry that and explain it, so it doesn’t run the show.</p>
+    <p class="ky-note">Wiring and patterns also shape each other. A highly sensitive child in a noisy, tense home may learn stronger alarms than a less sensitive sibling in the same house. That’s why the same family can produce very different adults.</p>
+  </section>
+
+  <section class="ky-part" id="conditions">
+    <h2>Layer three: today’s conditions, the passing part</h2>
+    <p class="ky-tag">WORK AROUND IT</p>
+    <p>This is the weather: how much sleep you got, whether you’ve eaten, how stressed you are, how much you’re carrying for other people, how loud and crowded the room is, what time it is. Conditions amplify the other two layers. A mild wiring need (“I prefer a heads-up”) becomes a hard limit when you’re exhausted. An old alarm that stays quiet on good days goes off at full volume on bad ones.</p>
+    <p>Because conditions change fastest, they’re the easiest layer to adjust, and the first place to look. <a href="/book/chapter-3-in-depth.html#leftover">Chapter III</a> explains the difference between leftover stress (carried in from elsewhere) and this-moment stress (caused by what’s in front of you). Three tools help you take a reading:</p>
+    <ul>
+      <li><a href="/quick-checks.html">Today’s Weather</a>, a one-minute reading of your conditions (clear, gusty or fogged in).</li>
+      <li>The <a href="/workpapers/wp-02-battery-stress-meter.html">Battery Check (WP-02)</a>, which scores how full your tank is.</li>
+      <li>The <a href="/wp-11.html">Calm-Down Kit (WP-11)</a>, for settling before you talk.</li>
+    </ul>
+    <p>You might also know the old <a href="/library/stress.html#halt">HALT check</a>: am I hungry, angry, lonely or tired? It’s a quick way to spot the conditions layer.</p>
+  </section>
+
+  <!-- ============ WORK ON / WITH / AROUND ============ -->
+  <section class="ky-part" id="work">
+    <h2>Work on it, work with it, or work around it</h2>
+    <p class="ky-tag">THE THREE MOVES</p>
+    <p>Once you have a sense of which layer is doing the work, you can choose the move that fits it:</p>
+    <ul>
+      <li><strong>Work on it</strong> (mostly for patterns): notice it, get curious about where it came from, and practice a new response in small, safe steps. Expect progress to be slow and uneven. That’s normal.</li>
+      <li><strong>Work with it</strong> (mostly for wiring): stop fighting it and build a setup that suits it. Written plans, quiet time after work, a heads-up before changes, noise-reducing headphones, a visible calendar.</li>
+      <li><strong>Work around it</strong> (mostly for conditions): don’t make big decisions while the weather is bad. Eat, sleep, step outside, or move the talk to tomorrow.</li>
+    </ul>
+    <p>A lot of frustration comes from using the wrong move. Trying to <em>work on</em> your wiring (“I’ll just force myself to like surprises”) tends to wear you out. <em>Working around</em> a pattern forever (“I’ll just never bring up money”) can leave something in place that might have eased. And treating a bad day as if it were your permanent self (“I’m always like this”) makes a passing storm feel like the climate.</p>
+    <div class="ky-plain"><b>A KIND RULE OF THUMB</b>Change the conditions today. Work with the wiring always. Work on the patterns over time.</div>
+  </section>
+
+  <section class="ky-part" id="sort">
+    <h2>Sorting common reactions</h2>
+    <p class="ky-tag">GUESSES, NOT RULES</p>
+    <p>Here’s how some everyday reactions often sort. The same reaction can come from a different layer for a different person, so treat these as starting points for your own sorting.</p>
+    <div class="table-wrap">
+    <table class="ky-ex">
+      <thead><tr><th>Reaction</th><th>Most likely layer</th><th>The move</th><th>What might help</th></tr></thead>
+      <tbody>
+        <tr><td data-h="REACTION">Hates surprise plans</td><td data-h="MOST LIKELY LAYER">Wiring (a need for predictability, common in autistic and anxious wiring), or a pattern (plans used to fall apart)</td><td data-h="THE MOVE">Work with it. If it’s a pattern, work on it too.</td><td data-h="WHAT MIGHT HELP">A “heads-up rule”: new plans get mentioned at least a few hours ahead, with a way to say “not tonight.”</td></tr>
+        <tr><td data-h="REACTION">Snaps when hungry</td><td data-h="MOST LIKELY LAYER">Conditions</td><td data-h="THE MOVE">Work around it</td><td data-h="WHAT MIGHT HELP">Eat first, then talk. A snack by the door. No big topics before dinner.</td></tr>
+        <tr><td data-h="REACTION">Goes quiet in conflict</td><td data-h="MOST LIKELY LAYER">A pattern (speaking up once made things worse) plus wiring (needs time to process)</td><td data-h="THE MOVE">Work on the pattern, work with the pace</td><td data-h="WHAT MIGHT HELP">“I’m not leaving, I need twenty minutes.” Agree on a time to come back. Writing it down can help.</td></tr>
+        <tr><td data-h="REACTION">Needs things in writing</td><td data-h="MOST LIKELY LAYER">Wiring (ADHD working memory, dyslexia, auditory processing, or just a written processor)</td><td data-h="THE MOVE">Work with it</td><td data-h="WHAT MIGHT HELP">Text the plan after you say it. A shared list or calendar.</td></tr>
+        <tr><td data-h="REACTION">Says yes, then resents it</td><td data-h="MOST LIKELY LAYER">A pattern (pleasing kept things calm)</td><td data-h="THE MOVE">Work on it</td><td data-h="WHAT MIGHT HELP">A standard pause: “Let me check and get back to you tonight.”</td></tr>
+        <tr><td data-h="REACTION">Reads a short text as anger</td><td data-h="MOST LIKELY LAYER">A pattern, made louder by conditions</td><td data-h="THE MOVE">Work on it, and check your battery</td><td data-h="WHAT MIGHT HELP">Ask before assuming: “Quick check, are we okay?” The <a href="/signal-translator.html">Signal Translator</a> shows how the same words land differently.</td></tr>
+        <tr><td data-h="REACTION">Wiped out after a party</td><td data-h="MOST LIKELY LAYER">Wiring (sensory load, introversion), plus conditions</td><td data-h="THE MOVE">Work with it</td><td data-h="WHAT MIGHT HELP">Plan a quiet morning after. Agree on a leaving signal.</td></tr>
+        <tr><td data-h="REACTION">“Later” quietly disappears</td><td data-h="MOST LIKELY LAYER">Wiring (ADHD time and memory)</td><td data-h="THE MOVE">Work with it</td><td data-h="WHAT MIGHT HELP">A clock time instead of “later.” A reminder set right then.</td></tr>
+        <tr><td data-h="REACTION">Braces at a raised voice, even a happy one</td><td data-h="MOST LIKELY LAYER">A pattern, sometimes a lasting sensitivity</td><td data-h="THE MOVE">Work on it slowly, and ask others to help</td><td data-h="WHAT MIGHT HELP">“Loud voices put me on alert, even when you’re excited. It helps if you tell me it’s good news.”</td></tr>
+        <tr><td data-h="REACTION">Everything is too much after a bad night</td><td data-h="MOST LIKELY LAYER">Conditions</td><td data-h="THE MOVE">Work around it</td><td data-h="WHAT MIGHT HELP">Say “low-battery day,” keep the day small, and save decisions for tomorrow.</td></tr>
+      </tbody>
+    </table>
+    </div>
+  </section>
+
+  <!-- ============ SOURCE ============ -->
+  <section class="ky-part" id="source">
+    <h2>Where is this feeling coming from?</h2>
+    <p class="ky-tag">A FOUR-STEP SELF-CHECK</p>
+    <p>You can do this in a minute, in your head, on a walk or in a notebook. It works best once the first wave has passed a little.</p>
+    <ol class="ky-steps">
+      <li><strong>Name it.</strong> Pick a word or two, even rough ones: “tight and annoyed,” “flat,” “jumpy,” “hurt, a bit scared.” Research on putting feelings into words (sometimes called <a href="/library/emotions.html#affect-labeling">affect labeling</a>) suggests that naming a feeling can take a little of its edge off. If words are hard to find, that’s common, and <a href="/library/emotions.html#alexithymia">some people are wired that way</a>. Start with the body instead (see below).</li>
+      <li><strong>Is it about now, or does it feel older?</strong> Ask: <em>“Is this the size of the moment?”</em> If a small thing brought a big feeling, some of it is probably leftover, either from earlier today (conditions) or from much longer ago (a pattern). <a href="/book/chapter-3-in-depth.html#leftover">Chapter III</a> calls this leftover stress versus this-moment stress. A feeling that seems familiar, like an old song, is often a pattern.</li>
+      <li><strong>Which layer is it?</strong> Wiring (“This always bothers me, even on good days”), pattern (“This reminds me of something”), or conditions (“I’d probably shrug this off after a good night’s sleep”)? Usually it’s a mix, so pick the biggest one. Chapter III’s <a href="/book/chapter-3-in-depth.html#vectors">seven angles</a>, like history and family script, can help you spot patterns.</li>
+      <li><strong>What does it need?</strong> Food, rest or space (conditions). A heads-up, quiet or a written plan (wiring). Reassurance, a fact check, or a slower try at a new response (pattern). Sometimes it needs a real conversation, later, when you’re both settled.</li>
+    </ol>
+    <h3>Body cues, in plain words</h3>
+    <p>Feelings often show up in the body before they reach words. Paying attention to these signals is sometimes called <a href="/library/stress.html#interoception">interoception</a>. Common ones people describe:</p>
+    <ul>
+      <li><strong>Revving up:</strong> a hot face, a tight jaw or fists, fast breathing, a racing mind, wanting to talk fast or move.</li>
+      <li><strong>Bracing:</strong> tight shoulders, a knot in the stomach, holding your breath, scanning the room.</li>
+      <li><strong>Shutting down:</strong> heavy arms and legs, a foggy head, feeling far away, words suddenly hard to find.</li>
+      <li><strong>Settled:</strong> easy breathing, loose shoulders, able to listen without planning your answer.</li>
+    </ul>
+    <p class="ky-note">Everyone’s body cues are a little different, and they aren’t a medical reading of anything. They’re just early clues about your state. The <a href="/quick-checks.html#ladder">Nervous System Ladder</a> uses the same three everyday states.</p>
+  </section>
+
+  <!-- ============ EXPLAIN ============ -->
+  <section class="ky-part" id="explain">
+    <h2>Explaining yourself to others</h2>
+    <p class="ky-tag">SHARE WHAT HELPS, NOT YOUR WHOLE STORY</p>
+    <p>When people don’t know which layer they’re seeing, they fill in the gap themselves, often unkindly: “She’s being difficult,” “He doesn’t care.” A short explanation can change that. Three scripts cover most situations:</p>
+    <div class="ky-script">
+      <h3>For wiring</h3>
+      <p class="say">“This is how I’m wired. It won’t change, but here’s what helps.”</p>
+      <p>Example: “My ADHD means ‘later’ really does vanish for me. It isn’t that I don’t care. If you ask me to set a reminder while we’re talking, I’ll get it done.” Or: “I need a few hours’ notice before plans change. It isn’t about you. A heads-up text makes a big difference.”</p>
+    </div>
+    <div class="ky-script">
+      <h3>For a pattern</h3>
+      <p class="say">“This is an old alarm. I’m working on it. Here’s what helps in the moment.”</p>
+      <p>Example: “When someone goes quiet, I tend to assume I did something wrong. That comes from way back, and I’m working on it. If you’re just tired, telling me ‘I’m fine, just tired’ helps a lot.”</p>
+    </div>
+    <div class="ky-script">
+      <h3>For conditions</h3>
+      <p class="say">“Today’s a low-battery day.”</p>
+      <p>Example: “I slept badly and work was a lot. I want to talk about the trip, just not tonight. Can we do tomorrow after breakfast?” Naming a time keeps a pause from feeling like a brush-off.</p>
+    </div>
+    <h3 id="how-much">How much to share, with whom, and when</h3>
+    <ul>
+      <li><strong>You never owe anyone your history.</strong> “It’s an old alarm” is enough. You don’t have to say where it came from, to anyone.</li>
+      <li><strong>Share the need, not necessarily the reason.</strong> At work, “I do my best with written instructions” is often plenty. A partner or close friend may get more of the story, if and when you want.</li>
+      <li><strong>Match the depth to the trust.</strong> A little with acquaintances and coworkers, more with people who have shown they handle it with care.</li>
+      <li><strong>Pick a calm moment.</strong> Explaining your wiring during an argument can sound like an excuse. Explaining it on an ordinary Tuesday sounds like useful information.</li>
+      <li><strong>Pair every explanation with a “here’s what helps.”</strong> It turns “this is my problem” into “here’s how we make it work.”</li>
+    </ul>
+    <p>The <a href="/wiring-card.html">Wiring Card</a> puts the wiring part on one page you can print or copy. The <a href="/signal-translator.html">Signal Translator</a> lets you test how a sentence might land on someone wired differently before you send it.</p>
+  </section>
+
+  <!-- ============ OTHERS ============ -->
+  <section class="ky-part" id="others">
+    <h2>Helping someone else understand theirs</h2>
+    <p class="ky-tag">CURIOUS QUESTIONS, NOT LABELS</p>
+    <p>Once you’ve got the hang of the three layers, it’s tempting to sort other people. Go gently. You can’t see inside someone else, and a label from the outside (“You’re just anxious,” “That’s your trauma talking,” “You’re so ADHD”) usually lands as a judgment, even when it’s meant kindly.</p>
+    <p>Instead, offer questions that help them sort it for themselves:</p>
+    <ul>
+      <li>“Is this a today thing, or a usually thing?”</li>
+      <li>“Does this feel like it’s about what just happened, or does it feel older?”</li>
+      <li>“What would help most right now: space, company, food, or a plan?”</li>
+      <li>“Is there anything you’d like me to know about how this lands for you?”</li>
+      <li>“Would it help to talk now, or later?”</li>
+    </ul>
+    <p>A few ground rules:</p>
+    <ul>
+      <li><strong>Don’t diagnose.</strong> Even if you’re sure, it’s their story to name.</li>
+      <li><strong>Don’t argue with their experience.</strong> “That shouldn’t upset you” never helps. You can disagree about facts and still accept that it felt the way it felt.</li>
+      <li><strong>Remember it runs both ways.</strong> The <a href="/wired-differently-in-depth.html#double-empathy">double empathy problem</a> describes how two people wired differently misread each other in both directions. You may be misreading them as much as they’re misreading you. Ask what they meant before deciding what they meant.</li>
+      <li><strong>Offer, don’t push.</strong> Some people don’t want to look at where things come from, or not yet. That’s allowed.</li>
+    </ul>
+  </section>
+
+  <!-- ============ MATCH ============ -->
+  <section class="ky-part" id="match">
+    <h2>Matching frameworks for a calm frequency</h2>
+    <p class="ky-tag">WHEN TWO PEOPLE’S LAYERS MEET</p>
+    <p>Every person brings all three layers into every room. When two people’s layers bump, the <a href="/frequency-framework.html">Frequency Framework</a> would call it static: two reasonable people tuned slightly apart. You don’t have to become the same. You just need a way to meet. A good order:</p>
+    <ol class="ky-steps">
+      <li><strong>Adjust conditions first.</strong> They’re the quickest win. Eat, rest, lower the noise, pick a better time. Many “us” problems shrink once both people are fed and rested.</li>
+      <li><strong>Agree on accommodations for wiring.</strong> These are small, lasting changes to the setup so nobody has to fight their own build. Write them down.</li>
+      <li><strong>Give patterns time and grace.</strong> Each person works on their own patterns, and the other person makes it a little easier. Progress, not perfection.</li>
+    </ol>
+    <p>Small agreements often work better than big promises. Some examples:</p>
+    <div class="table-wrap">
+    <table class="ky-ex">
+      <thead><tr><th>Who</th><th>A small agreement</th><th>Which layer it helps</th></tr></thead>
+      <tbody>
+        <tr><td data-h="WHO">Partners</td><td data-h="A SMALL AGREEMENT">“No big topics after 9 p.m. or before dinner. If one of us needs a break, we say when we’ll come back.”</td><td data-h="WHICH LAYER IT HELPS">Conditions, and a pattern of shutting down</td></tr>
+        <tr><td data-h="WHO">Partners</td><td data-h="A SMALL AGREEMENT">“Plans get texted, not just said. ‘Later’ gets a clock time.”</td><td data-h="WHICH LAYER IT HELPS">Wiring (ADHD, written processing)</td></tr>
+        <tr><td data-h="WHO">Family</td><td data-h="A SMALL AGREEMENT">“At holidays, anyone can take a quiet break in the back room, no questions asked.”</td><td data-h="WHICH LAYER IT HELPS">Wiring (sensory load)</td></tr>
+        <tr><td data-h="WHO">Roommates</td><td data-h="A SMALL AGREEMENT">“Guests get a heads-up by noon. Quiet hours start at 11.”</td><td data-h="WHICH LAYER IT HELPS">Wiring (predictability) and conditions (sleep)</td></tr>
+        <tr><td data-h="WHO">Coworkers</td><td data-h="A SMALL AGREEMENT">“Big asks come in writing, with a deadline. Quick questions are fine in person.”</td><td data-h="WHICH LAYER IT HELPS">Wiring (processing style)</td></tr>
+        <tr><td data-h="WHO">Caregivers</td><td data-h="A SMALL AGREEMENT">“We check each other’s battery at handoff, and the fuller one takes the harder task.”</td><td data-h="WHICH LAYER IT HELPS">Conditions, and seeing the whole load</td></tr>
+        <tr><td data-h="WHO">Anyone</td><td data-h="A SMALL AGREEMENT">“If I say ‘old alarm,’ you don’t need to fix anything. Just tell me we’re okay.”</td><td data-h="WHICH LAYER IT HELPS">A pattern</td></tr>
+      </tbody>
+    </table>
+    </div>
+    <p>To make agreements that last, use <a href="/check-ins.html">Check-ins</a> for one topic at a time in a calm setting, and <a href="/workpapers/wp-13-pll-protocol.html">WP-13</a> for a short daily check that keeps small mismatches small. The <a href="/frequency-framework-in-depth.html#five">five frequencies</a> (money, rest, decisions, talking and values) are good places to look for where your rhythms differ.</p>
+  </section>
+
+  <!-- ============ PILLARS ============ -->
+  <section class="ky-part" id="pillars">
+    <h2>How this uses the Five Pillars</h2>
+    <p class="ky-tag">INSIDE YOU, AND BETWEEN YOU</p>
+    <ul>
+      <li><strong><a href="/five-pillars.html#read-your-state">Pillar III, Read your state first</a>.</strong> <em>In you:</em> check the conditions layer before you judge a reaction. <em>Between you:</em> pick the timing, and say “low-battery day” instead of making people guess.</li>
+      <li><strong><a href="/five-pillars.html#tune-signals">Pillar IV, Tune how you send and receive</a>.</strong> <em>In you:</em> know your own wiring and the patterns that color how you hear things. <em>Between you:</em> translate across different wiring, and treat a mismatch as tuning, not a moral failing.</li>
+      <li><strong><a href="/five-pillars.html#see-the-load">Pillar I, See the whole load</a>.</strong> <em>In you:</em> count hidden effort, like masking, holding down an old alarm or pushing through sensory overload, as real load. <em>Between you:</em> make that invisible effort visible so it can be shared fairly.</li>
+      <li><strong><a href="/five-pillars.html#fix-the-setup">Pillar II, Fix the setup, not the person</a>.</strong> <em>In you:</em> treat your wiring as something to design around, not a character flaw. <em>Between you:</em> turn accommodations into clear, shared agreements instead of blame.</li>
+    </ul>
+    <p>See <a href="/five-pillars.html">the Five Pillars</a> for how they fit together.</p>
+  </section>
+
+  <!-- ============ DEEPER: TEMPERAMENT ============ -->
+  <section class="ky-part" id="temperament">
+    <h2>Going deeper: what research says about temperament</h2>
+    <p class="ky-tag">THE WIRING LAYER, WITH HONEST LIMITS</p>
+    <p>The idea that babies arrive with their own styles is old, but it was studied carefully starting in the mid-twentieth century. A few landmarks:</p>
+    <ul class="ky-evidence">
+      <li><strong>Thomas and Chess.</strong> Starting in the 1950s, psychiatrists Alexander Thomas and Stella Chess followed a group of children from infancy in the New York Longitudinal Study. They described temperament along several dimensions, such as activity level, regularity, how a child approaches new things, adaptability, intensity and mood. Their most lasting idea is <strong>“goodness of fit”</strong>: how well a child’s temperament matches what their surroundings expect of them. Many struggles came less from the temperament itself than from a poor fit. That idea carries straight into adult life, and into this page’s advice to change the setup.</li>
+      <li><strong>Kagan.</strong> Psychologist Jerome Kagan studied <strong>behavioral inhibition</strong>, the tendency of some toddlers to be wary and quiet around unfamiliar people and things. He found some continuity over years, but also that many inhibited children became noticeably less so as they grew. Temperament is a starting point, not a script.</li>
+      <li><strong>Aron.</strong> Psychologist Elaine Aron and Arthur Aron described <strong>sensory processing sensitivity</strong> in 1997: a trait involving deeper processing, stronger reactions to stimulation and more awareness of subtle details. Aron estimates it in roughly 15 to 20 percent of people. It’s a trait, not a diagnosis, and researchers still debate how best to measure it. See <a href="/library/wiring.html#sensory-processing-sensitivity">the library entry</a> and the <a href="/wired-differently-in-depth.html#sensitive">highly sensitive profile</a>.</li>
+      <li><strong>Sensitive to the good, too.</strong> Researchers such as Jay Belsky and Michael Pluess describe <strong>differential susceptibility</strong>: some people seem more affected by their surroundings in both directions, struggling more in hard settings and benefiting more in supportive ones. The evidence is still developing, but it’s a hopeful angle on sensitivity.</li>
+      <li><strong>Traits can shift.</strong> Twin studies suggest personality is partly inherited, and also that much of it isn’t. Large reviews led by Brent Roberts found that, on average, people’s traits keep changing through adulthood, often becoming calmer and more conscientious with age, and a 2017 review of intervention studies found measurable shifts in traits, especially emotional stability. So even the “lasting” layer has some give, just not on demand.</li>
+    </ul>
+    <p class="ky-note">Honest limits: temperament research describes groups and averages. It can’t tell you exactly how much of your own personality is “built in.” The wiring/pattern line is fuzzy in real life, and that’s okay. The point is to choose useful responses, not to win an argument about origins.</p>
+  </section>
+
+  <section class="ky-part" id="neurodiversity">
+    <h2>Neurodiversity and the double empathy problem</h2>
+    <p class="ky-tag">WIRING AS DIFFERENCE, NOT DEFECT</p>
+    <p><strong>Neurodiversity</strong> is the idea that human brains naturally vary, like any other trait, and that conditions such as autism, ADHD and dyslexia are part of that variety. The term came out of the autistic community in the late 1990s and is often credited to sociologist Judy Singer. It doesn’t deny that these differences can be disabling, especially in a world not built for them. It shifts the question from “What’s wrong with this person?” to “What does this person need, and what in the setup is making it harder?” See <a href="/library/wiring.html#neurodiversity">the library entry on neurodiversity</a>.</p>
+    <p>The <strong>double empathy problem</strong>, named by autistic researcher Damian Milton in 2012, says that when two people with very different ways of experiencing the world interact, the misunderstanding runs both ways. It isn’t only the neurodivergent person who struggles to read the other. Research testing the idea has been mixed in its details, and <a href="/wired-differently-in-depth.html#double-empathy">Wired Differently</a> summarizes it honestly. For this page, the practical lesson is simple: when you explain your wiring, it helps to ask about theirs too. Understanding goes both ways.</p>
+    <p>Many neurodivergent people also <strong><a href="/library/wiring.html#masking">mask</a></strong>, hiding or covering their natural ways of being to fit in. Masking can blur the line between wiring and pattern, because the mask itself is learned. Many people describe it as tiring. Knowing your wiring can make it easier to decide where you’d like to mask less.</p>
+  </section>
+
+  <section class="ky-part" id="shaping">
+    <h2>How experiences shape our expectations</h2>
+    <p class="ky-tag">THE PATTERN LAYER, UP CLOSE</p>
+    <h3>Learning, in the everyday sense</h3>
+    <p>Our brains are built to learn what predicts what. If a certain tone of voice was often followed by trouble, the tone alone can start to set off the alarm, long after the trouble has stopped. That’s ordinary learning, the same kind that makes your mouth water at the smell of a favorite food. Research on how learned fears fade (psychologist Mark Bouton’s work is well known here) suggests that new, safer learning usually gets layered <em>on top of</em> the old, rather than erasing it. That’s why an old alarm can come back when you’re stressed, tired or somewhere new, even after it has quieted for a long time. It isn’t failure. It’s how learning works, and the new learning is still there.</p>
+    <h3>Attachment patterns</h3>
+    <p>Attachment theory, begun by John Bowlby and Mary Ainsworth, describes how early relationships shape our expectations of closeness: whether people will be there, and whether it’s safe to need them. Researchers later applied it to adult relationships, describing styles like secure, anxious and avoidant. These are best seen as tendencies that can shift across relationships and over time, not fixed types. Many people move toward more security through steady, trustworthy relationships, a change sometimes called “earned security.” See the library on <a href="/library/relationships.html#attachment-theory">attachment theory</a> and <a href="/library/relationships.html#adult-attachment">adult attachment</a>.</p>
+    <h3>The window of tolerance</h3>
+    <p>Psychiatrist Dan Siegel described a <strong><a href="/library/stress.html#window-of-tolerance">window of tolerance</a></strong>: a zone where you can feel strong feelings and still think clearly. Above it you’re revved up; below it you’re shut down. It’s a useful picture rather than a measured thing. Wiring affects how wide your window tends to be, patterns affect what pushes you out of it, and conditions widen or narrow it day to day. All three layers meet here.</p>
+    <h3>A note on polyvagal theory</h3>
+    <p>You may hear that people have three nervous-system states named after the vagus nerve. That comes from Stephen Porges’s <a href="/library/stress.html#polyvagal-theory">polyvagal theory</a>. Many people find its three states useful as everyday labels, and this site uses plain versions of them (calm, revved up, shut down). But parts of the theory’s biology are debated by scientists, so treat it as a helpful picture, not settled fact.</p>
+  </section>
+
+  <section class="ky-part" id="adversity">
+    <h2>Hard and adverse experiences</h2>
+    <p class="ky-tag">GENERAL TERMS, AND A HOPEFUL READING</p>
+    <p>Many people carry experiences that were hard: losing someone important, a lot of moves, money worries at home, illness in the family, being left out or picked on, a home that was often tense or unpredictable, or a stretch of life that was simply too much. Some people call the lasting effects trauma. Others don’t use that word, and that’s their choice.</p>
+    <p>These experiences can leave strong patterns: alarms that go off early, a habit of staying on guard, difficulty trusting calm. Those responses made sense at the time. They were a way of coping.</p>
+    <p>You may have heard of the <strong>ACEs</strong> (adverse childhood experiences) research. The original CDC–Kaiser Permanente study, published by Vincent Felitti, Robert Anda and colleagues in 1998, surveyed thousands of adults and found that, across the population, more reported childhood adversity went along with higher rates of later health and life difficulties. Two things matter here:</p>
+    <ul>
+      <li><strong>It’s about population risk, not personal destiny.</strong> The study’s own authors have cautioned that an ACE score is not a good tool for predicting what will happen to any one person. Plenty of people with many hard experiences do well, and people’s paths vary a lot.</li>
+      <li><strong>Good experiences count too.</strong> Later research on positive childhood experiences, such as feeling supported by family, having a trusted adult, or feeling you belonged at school, found they are linked with better adult well-being, including among people who also had adversity. Protective relationships matter, at any age.</li>
+    </ul>
+    <p>Psychologist Ann Masten called resilience “ordinary magic”: it usually comes not from rare inner strength but from ordinary things like relationships, routines, skills and a sense of meaning. See <a href="/library/emotions.html#resilience">the library entry on resilience</a>.</p>
+    <p class="ky-note">If hard experiences feel heavy for you, working with a qualified professional who understands them can help, if and when you want that. You don’t need to share any of your story with anyone to use this page, and you never owe it to anyone.</p>
+  </section>
+
+  <section class="ky-part" id="change">
+    <h2>How change actually happens</h2>
+    <p class="ky-tag">GROWTH WITHOUT HYPE</p>
+    <p>Your brain keeps changing with experience throughout life. This is often called <strong>neuroplasticity</strong>, and it’s real. But the word gets oversold. It doesn’t mean you can rewire anything in a weekend, or that effort alone can change your wiring. In everyday terms, it means:</p>
+    <ul>
+      <li><strong>Practice builds paths.</strong> A new response gets easier the more often you use it, in the same way any skill does.</li>
+      <li><strong>Safety helps learning.</strong> People tend to learn new patterns better when they feel reasonably safe and settled, which is one more reason to fix conditions first.</li>
+      <li><strong>Change is slow and uneven.</strong> Old patterns can come back under stress. A step back isn’t starting over.</li>
+      <li><strong>Relationships help.</strong> A steady person who responds kindly again and again gives your alarm new evidence that it can relax.</li>
+      <li><strong>Wiring changes the least.</strong> Skills and setups grow around it, and that’s often where most of the progress shows up.</li>
+    </ul>
+  </section>
+
+  <section class="ky-part" id="mix-ups">
+    <h2>Common mix-ups</h2>
+    <p class="ky-tag">THINGS PEOPLE OFTEN GET WRONG</p>
+    <ul>
+      <li><strong>“Calling it wiring is just an excuse.”</strong> An explanation isn’t an excuse. Saying “I’m wired to need notice” comes with a responsibility: to say so ahead of time and to suggest what helps. Explanation plus a plan is the opposite of an excuse. Repair still matters when you get it wrong.</li>
+      <li><strong>“You can change anything if you try hard enough.”</strong> Effort helps with patterns, and conditions can change quickly. But pushing hard against your wiring usually wears you out, much like trying to make yourself taller. Working with it is not giving up.</li>
+      <li><strong>“It’s all trauma.”</strong> Not every strong reaction comes from a hard past. Many come from wiring or from a bad day. Treating everything as trauma can make ordinary tiredness feel heavier than it is, and can miss a simple fix like food or sleep.</li>
+      <li><strong>“It’s all just a bad mood.”</strong> The flip side. Dismissing a lasting pattern as “you’re just tired” can leave someone feeling unheard.</li>
+      <li><strong>“If it’s wiring, other people have to fix it.”</strong> Accommodations are shared. Both people adjust, and both people’s needs count. The <a href="/wiring-card.html">Wiring Card</a> says this plainly: it’s not a contract, and it doesn’t make anyone responsible for managing you.</li>
+      <li><strong>“Understanding a pattern should make it go away.”</strong> Insight helps, but patterns usually shift through repeated new experiences, not a single “aha.”</li>
+    </ul>
+    <p>Related thinking traps are in the library, such as <a href="/library/thinking.html#fundamental-attribution-error">the fundamental attribution error</a> (blaming someone’s character for what was really their situation) and <a href="/library/thinking.html#mind-reading">mind-reading</a>.</p>
+  </section>
+
+  <section class="ky-part" id="faq">
+    <h2>Questions people often ask</h2>
+    <h3>How do I tell wiring from a pattern?</h3>
+    <p>Ask how long it has been true and how widely. Wiring tends to show up across most of your life and most settings, often from early on, and it shows up even on good days. Patterns are often tied to certain people, topics or situations, and they sometimes feel like an echo of something older. Many reactions are both. If you can’t tell, treat it as wiring for now (work with it) while you watch for signs that it can ease.</p>
+    <h3>How do I explain my ADHD, autism or sensitivity to my partner?</h3>
+    <p>Pick a calm moment, not the middle of a disagreement. Name one or two specific effects, not the whole label: “When you tell me three things at once, I’ll catch one.” Then say what helps: “Text me the list.” Ask them about their wiring too. The <a href="/wiring-card.html">Wiring Card</a> and <a href="/wired-differently.html">Wired Differently</a> can do some of the explaining for you.</p>
+    <h3>Do I need a diagnosis to use this?</h3>
+    <p>No. You can describe what helps you without any label. Some people find a formal assessment useful and some don’t. That’s a personal choice, and this page can’t make it for you.</p>
+    <h3>What if someone uses my explanation against me?</h3>
+    <p>Share less with that person, and share only needs, not reasons. How much you tell someone should follow how carefully they’ve handled it before.</p>
+    <h3>What if we both have needs that clash?</h3>
+    <p>That’s common: one of you needs to talk now, the other needs quiet. Both needs are real. Look for an agreement that serves both, like “twenty minutes of quiet, then we talk.” <a href="/check-ins.html">Check-ins</a> and the <a href="/frequency-framework.html">Frequency Framework</a> help here.</p>
+    <h3>Where can I talk this through?</h3>
+    <p><a href="/ask.html">Professor Puddles</a>, the site’s friendly chat host, can help you sort a reaction into layers or find the right tool.</p>
+  </section>
+
+  <aside class="tol-warning" aria-labelledby="limits">
+    <h3 id="limits">Limits and cautions</h3>
+    <ul>
+      <li>This page is not diagnostic, and it isn’t therapy or treatment. It can’t tell you what you or anyone else has, and it can’t fix anything on its own.</li>
+      <li>The three layers are a helpful way to think, not scientific categories. They overlap, and the lines between them are fuzzy.</li>
+      <li>Research mentioned here describes groups and averages. Your own path may look very different.</li>
+      <li>Use the layers to understand yourself and to ask better questions of others, never to label, diagnose or win an argument.</li>
+      <li>If you want deeper help, a qualified professional can offer it, if and when you choose.</li>
+    </ul>
+  </aside>
+
+  <h2 id="connects">Where it connects</h2>
+  <ul>
+    <li><a href="/wired-differently.html"><strong>Wired Differently</strong></a> goes deep on the wiring layer: fourteen wirings and how each takes in words.</li>
+    <li><a href="/wiring-card.html"><strong>The Wiring Card</strong></a> turns your wiring into a short card to share.</li>
+    <li><a href="/signal-translator.html"><strong>The Signal Translator</strong></a> tests a sentence against both people’s wiring.</li>
+    <li><a href="/quick-checks.html"><strong>Today’s Weather</strong></a> and <a href="/workpapers/wp-02-battery-stress-meter.html">WP-02</a> read the conditions layer.</li>
+    <li><a href="/book/chapter-3.html">Chapter III</a> covers full tanks, leftover stress and the seven angles.</li>
+    <li>The library entries on <a href="/library/wiring.html">wiring</a>, <a href="/library/emotions.html">emotions</a>, <a href="/library/stress.html">stress</a> and <a href="/library/thinking.html">thinking traps</a> explain the research behind this page.</li>
+  </ul>
+
+</main>
+</body>
+</html>
