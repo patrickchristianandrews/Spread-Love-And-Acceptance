@@ -1,6 +1,8 @@
 /* frequency-journey.js — The Frequency Journey: two pals, seven calm worlds, one Perfect Frequency.
-   Levels and rules live in journey-levels.js (window.TOLJourney). Progress is kept in this
-   browser only (localStorage 'tol-journey-v1'). No timers, no way to lose, no fail sounds. */
+   Levels, content and rules live in journey-levels.js (window.TOLJourney). Every level is a different
+   kind of challenge (riddles, puzzles, breathing, sorting, a little singing…), and they grow a little
+   harder as the pals climb. Progress is kept in this browser only (localStorage 'tol-journey-v1').
+   No timers, no way to lose, no fail sounds: a "not yet" just gets a gentle why and another try. */
 (function () {
   'use strict';
   var J = window.TOLJourney, root = document.getElementById('fj');
@@ -8,8 +10,8 @@
   var WORLDS = J.WORLDS, KEY = 'tol-journey-v1';
   var REDUCED = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
   var DPR = Math.min(2, window.devicePixelRatio || 1);
-  var PAL = ['the pal with the floppy ears', 'the pal with the collar'];
-  var PAL_SHORT = ['floppy ears', 'the collar'];
+  // the two pals: the stocky one with long drop ears, and the leaner one with the collar
+  var PAL = ['Sugarfoot', 'Tidbit'];
   var DIRWORD = ['up', 'right', 'down', 'left'];
 
   function $(s) { return root.querySelector(s); }
@@ -26,6 +28,9 @@
     if (!s.done || typeof s.done !== 'object') s.done = {};
     s.sound = s.sound !== false; s.drone = s.drone !== false; s.intro = !!s.intro;
     if (!s.worldIntro || typeof s.worldIntro !== 'object') s.worldIntro = {};
+    // version 2: every level became a different kind of challenge. Anything already finished stays finished.
+    if (s.v !== 2) { Object.keys(s.done).forEach(function (k) { if (!/^[1-6]-[1-3]$/.test(k)) delete s.done[k]; else s.done[k] = 1; }); s.v = 2; }
+    if (!Array.isArray(s.harmony) || s.harmony.length !== 3) s.harmony = null;
     return s;
   })();
   function persist() { try { localStorage.setItem(KEY, JSON.stringify(save)); } catch (e) { /* private mode: fine */ } }
@@ -238,6 +243,7 @@
   var btnMap = $('.fj-mapbtn'), btnSnd = $('.fj-snd'), btnDrone = $('.fj-drone');
   var btnTog = $('.fj-together'), btnSpecial = $('.fj-special'), btnHint = $('.fj-hint');
   var controls = $('.fj-controls'), skybar = $('.fj-skybar'), breathEl = $('.fj-breath');
+  var chalEl = $('.fj-chal'), callsEl = $('.fj-calls'), sideEl = $('.fj-side'), myStarsEl = $('.fj-mystars');
   var bg = document.createElement('canvas'), bctx = bg.getContext('2d');
   var fog = document.createElement('canvas'), fctx = fog.getContext('2d');
   var mode = 'map', raf = 0;
@@ -249,33 +255,47 @@
 
   function palView(i, face) { return { i: i, path: null, t0: 0, seg: 150, face: face, blinkAt: now() + 1500 + Math.random() * 3000, bounce: null, happy: 0, bump: null }; }
 
+  function curLevel() { var W = WORLDS[G.w - 1]; return W && W.levels[G.l - 1]; }
   function startLevel(w, l, keepHist) {
     var W = WORLDS[w - 1], lv = W.levels[l - 1];
-    G.w = w; G.l = l; G.L = J.parse(lv, w); G.S = J.init(G.L); G.view = J.clone(G.S);
-    if (!keepHist) G.hist = [];
-    G.sel = 0; G.moves = 0; G.won = false; G.block = null; G.hint = null; G.glow = {}; G.lifts = {}; G.murkFade = 0; G.parts = [];
-    G.pv = [palView(G.L.a, 1), palView(G.L.b, 1)];
-    var n = G.L.W * G.L.H; G.lit = new Float32Array(n); G.mem = new Uint8Array(n); G.visited = {}; G.revealed = {};
-    G.visited[G.L.a] = now() - 2000; G.visited[G.L.b] = now() - 2000;
-    G.lookUntil = 0; G.lookReadyAt = 0; G.toldApart = false;
+    if (!lv) return;
+    clearTimers(); C = null; G.maze = false; G.won = false;
+    G.w = w; G.l = l;
     save.last = w + '-' + l; persist();
     root.setAttribute('data-world', w);
-    setMode('play');
     titleK.textContent = 'World ' + w + ' · ' + W.hz + ' Hz · ' + W.theme;
     titleH.textContent = W.name;
-    titleSub.textContent = 'Level ' + l + ' of ' + W.levels.length + (isDone(w, l) ? ' · finished before' : '');
-    // the world's own button
-    btnSpecial.hidden = !(W.mech === 'valleys' || W.mech === 'summit');
-    if (W.mech === 'valleys') btnSpecial.innerHTML = icon('listen') + 'Listen to the melody';
-    if (W.mech === 'summit') btnSpecial.innerHTML = icon('eye') + 'Look closely';
-    btnSpecial.disabled = false;
-    updateTogether();
-    resize(); paintStatic(); updateMoves(); describe();
-    say(lv.tip || W.intro);
+    titleSub.innerHTML = 'Level ' + l + ' of ' + W.levels.length + ' · ' + esc(lv.kind) + ' ' + leaves(lv.d) + (isDone(w, l) ? ' <span class="fj-again">· finished before</span>' : '');
+    if (lv.type === 'walk' || lv.type === 'maze') startGrid(w, l, keepHist); else startChal(w, l);
     drone();
     bringIntoView();
-    if (W.mech === 'valleys') setTimeout(playMelody, 900);
     if (!save.worldIntro[w] && l === 1) showWorldIntro(w);
+  }
+  // the grid levels: walking the pals (and "Calls in the dark", which plans a walk)
+  function startGrid(w, l, keepHist) {
+    var W = WORLDS[w - 1], lv = W.levels[l - 1];
+    G.maze = lv.type === 'maze';
+    G.L = G.maze ? J.mazeParse(lv) : J.parse(lv, w); G.S = J.init(G.L); G.view = J.clone(G.S);
+    if (!keepHist) G.hist = [];
+    G.sel = G.maze ? 1 : 0; G.together = false; G.moves = 0; G.won = false; G.block = null; G.hint = null; G.glow = {}; G.lifts = {}; G.murkFade = 0; G.parts = [];
+    G.pv = [palView(G.L.a, 1), palView(G.L.b, 1)];
+    var n = G.L.W * G.L.H; G.lit = new Float32Array(n); G.mem = new Uint8Array(n); G.visited = {}; G.revealed = {};
+    // from the lookout, the calling pal sees everything as it really is
+    if (G.maze) G.L.g.forEach(function (c, i) { if (c === 'x' || c === 'h') G.revealed[i] = true; });
+    G.visited[G.L.a] = now() - 2000; G.visited[G.L.b] = now() - 2000;
+    G.lookUntil = 0; G.lookReadyAt = 0; G.toldApart = false;
+    setMode('play');
+    // a level's own button, if it has singing crystals or illusions
+    var hasLook = !G.maze && G.L.g.some(function (c) { return c === 'x' || c === 'h'; });
+    btnSpecial.hidden = !(G.L.melody.length || hasLook);
+    if (G.L.melody.length) btnSpecial.innerHTML = icon('listen') + 'Listen to the melody';
+    else if (hasLook) btnSpecial.innerHTML = icon('eye') + 'Look closely';
+    btnSpecial.disabled = false;
+    updateTogether();
+    if (G.maze) mazeUI();
+    resize(); paintStatic(); updateMoves(); describe();
+    say(lv.tip || lv.ask);
+    if (G.L.melody.length) setTimeout(playMelody, 900);
   }
   function bringIntoView() {
     var r = root.getBoundingClientRect();
@@ -292,7 +312,7 @@
   function finishAnims() { G.pv.forEach(function (p) { p.path = null; }); G.block = null; G.view = J.clone(G.S); G.viewAt = 0; paintStatic(); }
 
   function move(d, whoOverride) {
-    if (mode !== 'play' || G.won || !cardEl.hidden) return;
+    if (mode !== 'play' || G.won || G.maze || !cardEl.hidden) return;
     wake();
     if (animating()) finishAnims();
     var who = whoOverride != null ? whoOverride : (G.together ? 2 : G.sel);
@@ -405,13 +425,18 @@
     wake();
     if (G.together) { G.together = false; updateTogether(); }
     G.sel = to != null ? to : 1 - G.sel;
-    G.pv[G.sel].happy = now();
+    G.pv[G.sel].happy = now(); updateTogether();
     say('Now guiding ' + PAL[G.sel] + '.');
   }
   function updateTogether() {
     btnTog.setAttribute('aria-pressed', G.together ? 'true' : 'false');
+    // the switch buttons name who you'd switch to
+    var sw = $('.fj-switch'), other = PAL[1 - G.sel];
+    if (sw.lastChild && sw.lastChild.nodeType === 3) sw.lastChild.nodeValue = other; else sw.appendChild(document.createTextNode(other));
+    sw.setAttribute('aria-label', 'Switch to ' + other); $('.fj-switch2').setAttribute('aria-label', 'Switch to ' + other);
   }
   function updateMoves() {
+    if (G.maze) return;
     movesEl.textContent = G.moves ? G.moves + (G.moves === 1 ? ' step' : ' steps') : '';
   }
 
@@ -419,6 +444,7 @@
   function hint() {
     wake();
     if (mode !== 'play' || G.won) return;
+    if (G.maze) { mazeHint(); return; }
     if (animating()) finishAnims();
     say('Having a little think…');
     setTimeout(function () {
@@ -474,25 +500,33 @@
 
   /* ------------------------------------------------------------------ the celebration */
   function winLevel() {
-    var W = WORLDS[G.w - 1], id = G.w + '-' + G.l, first = !isDone(G.w, G.l);
-    var best = save.done[id]; save.done[id] = best == null ? G.moves : Math.min(best, G.moves); persist();
-    var t = now(); G.pv.forEach(function (p) { p.happy = t; });
-    var o = orbCenter(); burst(o[0], o[1], REDUCED ? 8 : 26, ['#FFE3AE', '#F7C9D4', '#D9C8F0', '#C7EBD6', '#FFFFFF'], 'spark');
+    var W = WORLDS[G.w - 1], lv = curLevel(), id = G.w + '-' + G.l, grid = lv.type === 'walk' || lv.type === 'maze';
+    save.done[id] = lv.type === 'walk' ? G.moves : 1; persist();
+    if (grid) {
+      var t = now(); G.pv.forEach(function (p) { p.happy = t; });
+      var o = orbCenter(); burst(o[0], o[1], REDUCED ? 8 : 26, ['#FFE3AE', '#F7C9D4', '#D9C8F0', '#C7EBD6', '#FFFFFF'], 'spark');
+    }
     pad(W.hz, 0.075);
     if (window.TOLRewards && typeof window.TOLRewards.earn === 'function') {
       try { window.TOLRewards.earn(8, 'journey', 'World ' + G.w + ' · level ' + G.l); } catch (e) { }
     }
-    var min = levelMin(G.w, G.l), last = G.l === W.levels.length;
+    var last = G.l === W.levels.length, min = lv.min, nc = G.calls ? G.calls.length : 0;
+    var steps = lv.type === 'walk' ? G.moves + ' steps' + (min ? (G.moves <= min ? ' · a beautifully neat path' : ' · the neatest path is ' + min) : '')
+      : lv.type === 'maze' ? nc + (nc === 1 ? ' call' : ' calls') + (nc <= lv.minCalls ? ' · beautifully clear' : ' · it can be done in ' + lv.minCalls) : '';
+    var wl = G.w, ll = G.l;
     setTimeout(function () {
       showCard({
-        k: 'World ' + G.w + ' · ' + W.hz + ' Hz · Level ' + G.l,
-        h: ['You arrived together', 'Side by side', 'Found the tone'][G.l - 1] || 'You arrived together',
-        lesson: W.lessons[G.l - 1],
-        steps: G.moves + ' steps' + (min ? (G.moves <= min ? ' · a beautifully neat path' : ' · the neatest path is ' + min) : ''),
-        btns: last ? [['World complete →', function () { worldCard(G.w); }, true], ['Play again', function () { hideCard(); startLevel(G.w, G.l); }]]
-          : [['Next level →', function () { hideCard(); startLevel(G.w, G.l + 1); }, true], ['Journey map', function () { hideCard(); showMap(G.w); }], ['Play again', function () { hideCard(); startLevel(G.w, G.l); }]]
+        k: 'World ' + wl + ' · ' + W.hz + ' Hz · Level ' + ll,
+        h: lv.done || 'You arrived together',
+        meta: lv,
+        lesson: lv.lesson,
+        p: lv.why,
+        steps: steps,
+        more: lv.more,
+        btns: last ? [['World complete →', function () { worldCard(wl); }, true], ['Play again', function () { hideCard(); startLevel(wl, ll); }]]
+          : [['Next level →', function () { hideCard(); startLevel(wl, ll + 1); }, true], ['Journey map', function () { hideCard(); showMap(wl); }], ['Play again', function () { hideCard(); startLevel(wl, ll); }]]
       });
-    }, REDUCED ? 300 : 1100);
+    }, grid ? (REDUCED ? 300 : 1100) : 0);
   }
   function worldCard(w) {
     var W = WORLDS[w - 1], nx = WORLDS[w];
@@ -510,16 +544,20 @@
     var W = WORLDS[w - 1];
     save.worldIntro[w] = 1; persist();
     showCard({ k: 'World ' + w + ' · ' + W.hz + ' Hz', h: W.name, lesson: W.theme, p: W.intro,
-      btns: [['Begin', function () { hideCard(); if (W.mech === 'valleys') playMelody(); }, true]] });
+      btns: [['Begin', function () { hideCard(); }, true]] });
   }
   var cardReturn = null;
   function showCard(o) {
     cardReturn = document.activeElement;
     cardEl.querySelector('.fj-card-k').textContent = o.k || '';
     cardEl.querySelector('h2').textContent = o.h || '';
+    var me = cardEl.querySelector('.fj-card-meta'); me.innerHTML = o.meta ? esc(o.meta.kind) + ' ' + leaves(o.meta.d) : ''; me.hidden = !o.meta;
     var le = cardEl.querySelector('.fj-card-lesson'); le.textContent = o.lesson || ''; le.hidden = !o.lesson;
     var pe = cardEl.querySelector('.fj-card-p'); pe.textContent = o.p || ''; pe.hidden = !o.p;
     var se = cardEl.querySelector('.fj-card-steps'); se.textContent = o.steps || ''; se.hidden = !o.steps;
+    var mo = cardEl.querySelector('.fj-card-more'), ma = mo.querySelector('a');
+    if (o.more) { ma.href = o.more[0]; ma.textContent = 'Read more: ' + o.more[1] + ' →'; }
+    mo.hidden = !o.more;
     var bx = cardEl.querySelector('.fj-card-btns'); bx.innerHTML = '';
     (o.btns || []).forEach(function (b) { var x = el('button', b[2] ? 'fj-go' : ''); x.type = 'button'; x.textContent = b[0]; x.addEventListener('click', b[1]); bx.appendChild(x); });
     cardEl.hidden = false;
@@ -533,6 +571,11 @@
   function resize() {
     if (mode === 'map') return;
     var sw = stage.clientWidth || 320, vh = window.innerHeight || 700;
+    if (mode === 'chal') {
+      var cw = Math.min(sw, 640), chh = C && C.type === 'breath' ? clamp(Math.round(cw * 0.5), 180, 250) : clamp(Math.round(cw * 0.3), 116, 156);
+      setCanvas(cw, chh); G.T = chh * 0.4;
+      return;
+    }
     var maxH = clamp(vh * (window.innerWidth >= 760 ? 0.68 : 0.56), 250, 620);
     if (mode === 'sky') {
       var w = Math.min(sw, 620), h = clamp(Math.round(w * 1.05), 260, Math.max(300, vh * (window.innerWidth >= 760 ? 0.56 : 0.62)));
@@ -761,7 +804,7 @@
     raf = 0;
     if (mode === 'map' || document.hidden) return;
     var t = now();
-    if (mode === 'play') drawPlay(t); else if (mode === 'sky') drawSky(t);
+    if (mode === 'play') drawPlay(t); else if (mode === 'sky') drawSky(t); else if (mode === 'chal') drawScene(t);
     raf = requestAnimationFrame(frame);
   }
   function kick() { if (!raf && mode !== 'map') raf = requestAnimationFrame(frame); }
@@ -772,10 +815,10 @@
     if (!p.path) return { x: xy(p.i)[0], y: xy(p.i)[1], hop: 0, moving: false };
     var n = p.path.length - 1, q = (t - p.t0) / p.seg;
     if (q >= n) { p.path = null; return { x: xy(p.i)[0], y: xy(p.i)[1], hop: 0, moving: false }; }
-    q = Math.max(0, q);
+    if (q < 0) { var s0 = xy(p.path[0]); return { x: s0[0], y: s0[1], hop: 0, moving: false }; }
     var k = Math.floor(q), f = q - k, A = xy(p.path[k]), B = xy(p.path[k + 1]);
-    var e = n > 1 ? f : f * f * (3 - 2 * f);
-    return { x: A[0] + (B[0] - A[0]) * e, y: A[1] + (B[1] - A[1]) * e, hop: n > 1 || REDUCED ? 0 : Math.sin(f * Math.PI), moving: true, slide: n > 1 };
+    var sl = n > 1 && !p.walk, e = sl ? f : f * f * (3 - 2 * f);
+    return { x: A[0] + (B[0] - A[0]) * e, y: A[1] + (B[1] - A[1]) * e, hop: sl || REDUCED ? 0 : Math.sin(f * Math.PI), moving: true, slide: sl };
   }
 
   function drawPlay(t) {
@@ -802,6 +845,7 @@
     L.blocks.length && drawBlocks(c, t);
     // the hint arrow
     if (G.hint) drawHint(c, t);
+    if (G.maze) drawRoute(c, t);
     // pals (the lower one drawn last)
     var P = G.pv.map(function (p, k) { var q = palPos(p, t); q.k = k; return q; });
     if (P[0].y > P[1].y) P.reverse();
@@ -1013,16 +1057,1018 @@
     if (!G.L) return;
     var L = G.L, S = G.S, bits = [];
     bits.push('World ' + G.w + ', level ' + G.l + '. A ' + L.W + ' by ' + L.H + ' board.');
-    bits.push('The pal with the floppy ears is at ' + rc(S.a) + '. The pal with the collar is at ' + rc(S.b) + '.');
+    bits.push(PAL[0] + ' is at ' + rc(S.a) + '. ' + PAL[1] + ' is at ' + rc(S.b) + '.');
     bits.push('The glowing tone is at ' + rc(L.goal[0]) + ' and ' + rc(L.goal[1]) + '.');
+    if (G.maze) { var open = []; L.g.forEach(function (c, i) { if ('.hBO'.indexOf(c) >= 0 && i !== S.a) open.push(rc(i)); }); bits.push('Real ground at: ' + open.join('; ') + '.'); }
     if (L.frags.length) bits.push(popcount(S.fm) + ' of ' + L.frags.length + ' light fragments gathered.');
     if (L.melody.length) bits.push(S.mc ? 'The murk is clear.' : 'Melody: ' + L.melody.join(', ') + '. ' + S.pr + ' notes sung so far.');
+    if (G.maze) bits.push(PAL[0] + ' waits on the lookout, beside the tone, and ' + PAL[1] + ' walks where she is called. ' + (G.calls && G.calls.length ? 'Calls planned: ' + G.calls.map(callWords).join(', ') + '.' : 'No calls planned yet.'));
     cv.setAttribute('aria-label', bits.join(' '));
+  }
+
+  /* ------------------------------------------------------------------ the challenges: every level a different kind
+     The pals sit in a little scene above each challenge (drawScene) and react: a hop for a good answer,
+     a curious head tilt and a nuzzle for a "not yet", and a hug when the level is done. */
+  var C = null;
+  var LEAF = '<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M2.5 13.5C2.5 7 7 2.5 13.5 2.5c0 6.5-4.5 11-11 11z"/><path class="v" d="M3 13 10 6"/></svg>';
+  function esc(s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;'); }
+  function leaves(d) {
+    var h = '<span class="fj-leaves" role="img" aria-label="Difficulty ' + d + ' of 5">';
+    for (var k = 1; k <= 5; k++) h += '<i class="' + (k <= d ? 'on' : '') + '">' + LEAF + '</i>';
+    return h + '</span>';
+  }
+  function txt(tag, cls, t) { var e = el(tag, cls); e.textContent = t; return e; }
+  function btn(cls, label, fn, aria) { var b = txt('button', cls, label); b.type = 'button'; if (aria) b.setAttribute('aria-label', aria); b.addEventListener('click', function (e) { wake(); fn(e); }); return b; }
+  function shuffled(arr, seed) {
+    var a = arr.map(function (x, i) { return { x: x, k: hash(i + 7, seed) }; });
+    a.sort(function (p, q) { return p.k - q.k; });
+    var out = a.map(function (p) { return p.x; });
+    if (out.every(function (x, i) { return x === arr[i]; })) out.push(out.shift());
+    return out;
+  }
+  function focusFirst(box, sel) { var f = box.querySelector(sel || 'button:not([disabled])'); if (f) { try { f.focus({ preventScroll: true }); } catch (e) { f.focus(); } } }
+
+  // gentle sounds
+  function chime(n) { note(WORLDS[G.w - 1].hz, n == null ? 4 : n, 0.06); }
+  function hmmTone() { var hz = WORLDS[G.w - 1].hz; tone(soft(hz) * 0.75, 0, 0.5, 0.022); tone(soft(hz) * 0.9, 0.12, 0.5, 0.016); }
+
+  // the pals react
+  function react(k, who) {
+    var t = now(); G.react = { k: k, t0: t, who: who };
+    var w = cv._w || 300, h = cv._h || 140;
+    if (k === 'yay') burst(w / 2, h * 0.42, REDUCED ? 5 : 12, ['#FFE3AE', '#F7C9D4', '#D9C8F0', '#FFFFFF'], 'spark');
+    if (k === 'hug') { burst(w / 2, h * 0.4, REDUCED ? 6 : 22, ['#FFE3AE', '#F7C9D4', '#D9C8F0', '#C7EBD6', '#FFFFFF'], 'spark'); }
+    kick();
+  }
+
+  function startChal(w, l) {
+    var W = WORLDS[w - 1], lv = W.levels[l - 1];
+    C = { type: lv.type, lv: lv, hearts: 3, useHearts: lv.d >= 4 && ['echo', 'sort', 'spot', 'choose'].indexOf(lv.type) >= 0, done: false, timers: [] };
+    G.react = null; G.parts = [];
+    setMode('chal'); resize(); paintScene();
+    chalEl.innerHTML = '';
+    C.askEl = txt('p', 'fj-ask', lv.ask); chalEl.appendChild(C.askEl);
+    C.body = el('div', 'fj-cbody'); chalEl.appendChild(C.body);
+    C.fb = el('p', 'fj-fb'); C.fb.setAttribute('aria-live', 'polite'); C.fb.setAttribute('role', 'status'); chalEl.appendChild(C.fb);
+    var bar = el('div', 'fj-cbar');
+    C.heartsEl = el('span', 'fj-hearts'); C.heartsEl.hidden = !C.useHearts; bar.appendChild(C.heartsEl);
+    var tools = el('span', 'fj-cbar-tools');
+    tools.appendChild(btn('fj-soft fj-chint', 'Hint', function () { if (C && !C.done && C.hint) C.hint(); }, 'A gentle hint'));
+    tools.appendChild(btn('fj-soft', 'Start again', function () { startLevel(G.w, G.l); }));
+    bar.appendChild(tools); chalEl.appendChild(bar);
+    renderHearts();
+    (BUILD[lv.type] || function () {})();
+    cv.setAttribute('aria-label', PAL[0] + ' and ' + PAL[1] + ', sitting together and watching the challenge.');
+  }
+  function clearTimers() { if (C) C.timers.forEach(clearTimeout); }
+  function later(fn, ms) { var id = setTimeout(fn, ms); if (C) C.timers.push(id); return id; }
+  function fb(msg, kind) { C.fb.textContent = msg || ''; C.fb.className = 'fj-fb' + (kind ? ' is-' + kind : ''); }
+  function renderHearts() {
+    if (!C || !C.useHearts) return;
+    var h = '';
+    for (var k = 0; k < 3; k++) h += '<svg viewBox="0 0 24 24" class="' + (k < C.hearts ? 'on' : '') + '" aria-hidden="true"><path d="M12 20s-7-4.4-7-9.5A3.8 3.8 0 0 1 12 8a3.8 3.8 0 0 1 7 2.5C19 15.6 12 20 12 20z"/></svg>';
+    C.heartsEl.innerHTML = h; C.heartsEl.setAttribute('role', 'img'); C.heartsEl.setAttribute('aria-label', 'Gentle tries: ' + C.hearts + ' of 3');
+  }
+  // a "not yet": one heart rests; when they're all resting they simply fill up again
+  function useHeart(msg) {
+    hmmTone(); react('hmm');
+    if (!C.useHearts) { fb(msg, 'soft'); return false; }
+    C.hearts--; renderHearts();
+    if (C.hearts <= 0) {
+      C.hearts = 3; later(renderHearts, 700);
+      fb(msg + ' The pals sit close for a moment, and your hearts fill up again.', 'soft');
+      return true;
+    }
+    fb(msg, 'soft');
+    return false;
+  }
+  function finish() {
+    if (C.done) return; C.done = true;
+    react('hug'); pad(WORLDS[G.w - 1].hz, 0.05);
+    setTimeout(function () { if (mode === 'chal') winLevel(); }, REDUCED ? 500 : 1500);
+  }
+  function nextBtn(label, fn) {
+    var b = btn('fj-primary fj-next', label, fn);
+    C.body.appendChild(b);
+    setTimeout(function () { try { b.focus({ preventScroll: true }); } catch (e) { } }, 40);
+    return b;
+  }
+
+  // one question with options: used by riddles, kinder words, "what would help most?" and the bid reply
+  function choiceQ(o) {
+    C.body.innerHTML = ''; fb('');
+    if (o.k) C.body.appendChild(txt('p', 'fj-ck', o.k));
+    if (o.pre) C.body.appendChild(o.pre);
+    var q = txt('p', 'fj-q', o.q); q.id = 'fj-q-' + (++qid); C.body.appendChild(q);
+    var box = el('div', 'fj-opts'); box.setAttribute('role', 'group'); box.setAttribute('aria-labelledby', q.id);
+    C.opts = [];
+    o.options.forEach(function (op, i) {
+      var b = btn('fj-opt', op.t, function () {
+        if (b.disabled || C.answered) return;
+        if (op.ok) {
+          C.answered = true; b.classList.add('is-yes');
+          C.opts.forEach(function (x) { x.disabled = true; });
+          fb(op.why, 'good'); react('yay'); chime(2 + (o.idx || 0) % 4);
+          if (o.showAll) {
+            var dl = el('div', 'fj-whys'); dl.appendChild(txt('p', 'fj-ck', 'Why each one'));
+            o.options.forEach(function (x) { var p = el('p', x.ok ? 'is-yes' : ''); p.appendChild(txt('b', '', x.ok ? '✓ ' : '· ')); p.appendChild(document.createTextNode(x.t + ' ')); p.appendChild(txt('span', '', x.why)); dl.appendChild(p); });
+            C.body.appendChild(dl);
+          }
+          nextBtn(o.nextLabel || 'Next →', o.onRight);
+        } else {
+          b.classList.add('is-no'); b.disabled = true;
+          var refilled = useHeart(op.why + ' ' + (o.again || 'Try another.'));
+          if (refilled && o.hintText) fb(C.fb.textContent + ' Hint: ' + o.hintText, 'soft');
+        }
+      });
+      b.setAttribute('data-i', i); C.opts.push(b); box.appendChild(b);
+    });
+    C.body.appendChild(box);
+    C.answered = false;
+    C.hint = function () {
+      if (o.hintText && !C.saidHint) { C.saidHint = true; fb('Hint: ' + o.hintText, 'hint'); return; }
+      var wrong = o.options.map(function (x, i) { return x.ok || C.opts[i].disabled ? -1 : i; }).filter(function (i) { return i >= 0; });
+      if (!wrong.length) { fb('Only one left. You’ve got this.', 'hint'); return; }
+      var i = wrong[0]; C.opts[i].classList.add('is-no'); C.opts[i].disabled = true;
+      fb('Hint: not “' + o.options[i].t + '”. ' + o.options[i].why, 'hint');
+    };
+    C.saidHint = false;
+  }
+  var qid = 0;
+
+  var BUILD = {};
+
+  /* ---- riddles */
+  BUILD.riddle = function () { C.i = 0; riddleStep(); };
+  function riddleStep() {
+    var R = C.lv.riddles, r = R[C.i], last = C.i === R.length - 1;
+    choiceQ({ k: 'Riddle ' + (C.i + 1) + ' of ' + R.length, q: r.q, options: r.options, hintText: r.hint, idx: C.i,
+      nextLabel: last ? 'Light the lantern →' : 'Next riddle →',
+      onRight: function () { if (last) finish(); else { C.i++; riddleStep(); focusFirst(C.body, '.fj-opt'); } } });
+    G.lanterns = C.i;
+  }
+
+  /* ---- kinder, truer words */
+  BUILD.reframe = function () { C.i = 0; reframeStep(); };
+  function reframeStep() {
+    var I = C.lv.items, it = I[C.i], last = C.i === I.length - 1;
+    var pre = el('div', 'fj-harsh'); pre.appendChild(txt('span', 'fj-ck', 'A harsh thought')); pre.appendChild(txt('p', '', '“' + it.harsh + '”'));
+    choiceQ({ k: 'Thought ' + (C.i + 1) + ' of ' + I.length, pre: pre, q: 'Which is kinder, and still true?', options: it.options, idx: C.i,
+      nextLabel: last ? 'Finish →' : 'Next thought →',
+      onRight: function () { if (last) finish(); else { C.i++; reframeStep(); focusFirst(C.body, '.fj-opt'); } } });
+  }
+
+  /* ---- what would help most? (with a why for every option) */
+  BUILD.choose = function () { C.i = 0; chooseStep(); };
+  function chooseStep() {
+    var I = C.lv.items, it = I[C.i], last = C.i === I.length - 1;
+    choiceQ({ k: 'Moment ' + (C.i + 1) + ' of ' + I.length, q: it.q, options: it.options, idx: C.i, showAll: true,
+      nextLabel: last ? 'Finish →' : 'Next moment →',
+      onRight: function () { if (last) finish(); else { C.i++; chooseStep(); focusFirst(C.body, '.fj-opt'); } } });
+  }
+
+  /* ---- the slow lantern: a breathing rhythm, tapped in time (very forgiving) */
+  BUILD.breath = function () {
+    var lv = C.lv; C.hits = 0; C.t0 = 0; C.last = ''; C.miss = 0; C.cue = '';
+    C.body.innerHTML = '';
+    C.cueEl = txt('p', 'fj-breathcue', 'When you’re ready, tap Begin and breathe along.'); C.cueEl.setAttribute('aria-hidden', 'true'); C.body.appendChild(C.cueEl);
+    C.dots = el('div', 'fj-dots'); C.dots.setAttribute('role', 'img'); C.body.appendChild(C.dots); breathDots();
+    C.tapBtn = btn('fj-primary fj-breathbtn', 'Begin', breathTap); C.body.appendChild(C.tapBtn);
+    C.hint = function () { C.showNow = true; fb('Hint: watch the words under the lantern. Tap right as they say “full” or “empty”. Space or Enter works too.', 'hint'); };
+    C.key = function (e) { if ((e.key === ' ' || e.key === 'Enter') && document.activeElement !== C.tapBtn) { e.preventDefault(); breathTap(); return true; } };
+  };
+  function breathDots() {
+    var h = ''; for (var k = 0; k < C.lv.need; k++) h += '<i class="' + (k < C.hits ? 'on' : '') + '"></i>';
+    C.dots.innerHTML = h; C.dots.setAttribute('aria-label', C.hits + ' of ' + C.lv.need + ' lanterns lit');
+  }
+  // where are we in the breath? e = 0 (empty) to 1 (full)
+  function breathAt(t) {
+    var lv = C.lv, cyc = lv.inhale + lv.exhale, s = (t - C.t0) / 1000, p = ((s % cyc) + cyc) % cyc, inh = p < lv.inhale;
+    var e = inh ? p / lv.inhale : 1 - (p - lv.inhale) / lv.exhale;
+    if (REDUCED) e = Math.round(e * 6) / 6;
+    return { s: s, p: p, inh: inh, e: 0.5 - Math.cos(e * Math.PI) / 2, count: inh ? Math.floor(p) + 1 : Math.floor(p - lv.inhale) + 1 };
+  }
+  function breathTarget(s) {
+    var lv = C.lv, cyc = lv.inhale + lv.exhale;
+    var kt = Math.round((s - lv.inhale) / cyc), top = lv.inhale + kt * cyc, kb = Math.round(s / cyc), bot = kb * cyc;
+    var dt = s - top, db = s - bot;
+    if (bot <= 0) db = 99;
+    return Math.abs(dt) <= Math.abs(db) ? { id: 'T' + kt, d: dt, top: true } : { id: 'B' + kb, d: db, top: false };
+  }
+  function breathTap() {
+    if (C.done) return;
+    if (!C.t0) { C.t0 = now(); C.tapBtn.textContent = 'Tap with the lantern'; fb('Breathe in as the lantern grows, and out as it softens. Tap at the fullest and the smallest.'); return; }
+    var s = (now() - C.t0) / 1000, tg = breathTarget(s), win = C.lv.window;
+    if (Math.abs(tg.d) <= win) {
+      if (C.last === tg.id) { fb('That turn is already counted. Wait for the next one.', 'soft'); return; }
+      C.last = tg.id; C.hits++; breathDots(); chime(C.hits); react('yay');
+      if (C.hits >= C.lv.need) { fb('Five slow breaths, and every lantern is lit.', 'good'); C.tapBtn.disabled = true; finish(); return; }
+      fb(tg.top ? 'Full. Lovely. Now breathe out, slowly.' : 'Empty. Lovely. Now breathe in.', 'good');
+    } else {
+      C.miss++; react('hmm');
+      var b = breathAt(now());
+      fb(tg.d < 0 && Math.abs(tg.d) < 2.2 ? 'A touch early. Let the breath finish; there’s no rush.' : tg.d > 0 && Math.abs(tg.d) < 2.2 ? 'A touch late. Catch the next turn.' : b.inh ? 'Still breathing in… tap when the lantern is fullest.' : 'Breathing out, slowly… tap when it’s smallest.', 'soft');
+      if (C.miss >= 3) C.showNow = true;
+    }
+  }
+  function breathCue(t) {
+    if (!C || C.type !== 'breath' || !C.t0 || !C.cueEl) return;
+    var b = breathAt(t), tg = breathTarget(b.s), near = Math.abs(tg.d) <= C.lv.window * 0.8, s;
+    if (C.done) s = 'All lit.';
+    else if (near) s = tg.top ? (C.showNow ? 'Full. Tap now.' : 'Full…') : (C.showNow ? 'Empty. Tap now.' : 'Empty…');
+    else s = (b.inh ? 'Breathe in… ' : 'and out… ') + b.count;
+    if (s !== C.cue) { C.cue = s; C.cueEl.textContent = s; }
+  }
+
+  /* ---- thawing words */
+  BUILD.unscramble = function () { C.i = 0; wordStep(); };
+  function wordStep() {
+    var W = C.lv.words, wd = W[C.i];
+    C.ans = []; C.lock = 0; C.solved = false;
+    C.body.innerHTML = ''; fb('');
+    C.body.appendChild(txt('p', 'fj-ck', 'Word ' + (C.i + 1) + ' of ' + W.length));
+    C.body.appendChild(txt('p', 'fj-q', wd.clue));
+    C.slots = el('div', 'fj-slots'); C.slots.setAttribute('role', 'group'); C.slots.setAttribute('aria-label', 'Your word'); C.body.appendChild(C.slots);
+    C.tiles = el('div', 'fj-tiles'); C.tiles.setAttribute('role', 'group'); C.tiles.setAttribute('aria-label', 'Frozen letters'); C.body.appendChild(C.tiles);
+    wd.mix.split('').forEach(function (ch, i) {
+      var b = btn('fj-tile', ch, function () { placeLetter(i); }, 'Letter ' + ch); b.setAttribute('data-i', i); C.tiles.appendChild(b);
+    });
+    wordRender();
+    C.hint = function () {
+      if (C.solved) return;
+      var w = C.lv.words[C.i].w, mix = C.lv.words[C.i].mix, k = 0;
+      while (k < C.ans.length && mix[C.ans[k]] === w[k]) k++;
+      C.ans = C.ans.slice(0, k);
+      if (k >= w.length) return;
+      for (var i = 0; i < mix.length; i++) if (mix[i] === w[k] && C.ans.indexOf(i) < 0) { C.ans.push(i); break; }
+      C.lock = Math.max(C.lock, C.ans.length);
+      fb('Hint: the word begins “' + w.slice(0, C.ans.length) + '”.', 'hint');
+      wordRender(); wordCheck();
+    };
+    C.key = function (e) {
+      if (C.solved) return;
+      if (/^[a-z]$/i.test(e.key)) {
+        var mix = C.lv.words[C.i].mix, up = e.key.toUpperCase();
+        for (var i = 0; i < mix.length; i++) if (mix[i] === up && C.ans.indexOf(i) < 0) { placeLetter(i); return true; }
+        return true;
+      }
+      if (e.key === 'Backspace' && C.ans.length > C.lock) { e.preventDefault(); C.ans.pop(); wordRender(); return true; }
+    };
+  }
+  function placeLetter(i) {
+    if (C.solved || C.ans.indexOf(i) >= 0) return;
+    C.ans.push(i); tone(soft(WORLDS[G.w - 1].hz) * SCALE[C.ans.length % 6], 0, 0.3, 0.02); wordRender(); wordCheck();
+  }
+  function wordRender() {
+    var wd = C.lv.words[C.i];
+    C.slots.innerHTML = '';
+    for (var k = 0; k < wd.w.length; k++) {
+      var has = k < C.ans.length, ch = has ? wd.mix[C.ans[k]] : '';
+      (function (k) {
+        var b = btn('fj-slot' + (has ? ' is-full' : '') + (k < C.lock ? ' is-lock' : '') + (C.solved ? ' is-yes' : ''), ch || ' ', function () {
+          if (C.solved || k >= C.ans.length || k < C.lock) return;
+          C.ans.splice(k, 1); wordRender();
+        }, has ? 'Letter ' + ch + ', place ' + (k + 1) + (k < C.lock ? '' : '. Tap to send it back.') : 'Empty place ' + (k + 1));
+        if (!has || C.solved) b.tabIndex = -1;
+        C.slots.appendChild(b);
+      })(k);
+    }
+    Array.prototype.forEach.call(C.tiles.children, function (b, i) { var used = C.ans.indexOf(i) >= 0; b.disabled = used || C.solved; b.classList.toggle('is-used', used); });
+  }
+  function wordCheck() {
+    var wd = C.lv.words[C.i];
+    if (C.ans.length < wd.w.length) return;
+    var got = C.ans.map(function (i) { return wd.mix[i]; }).join('');
+    if (got === wd.w) {
+      C.solved = true; wordRender(); react('yay'); chime(C.i + 2);
+      fb(wd.w.charAt(0) + wd.w.slice(1).toLowerCase() + '. ' + wd.clue, 'good');
+      var last = C.i === C.lv.words.length - 1;
+      nextBtn(last ? 'Finish →' : 'Next word →', function () { if (last) finish(); else { C.i++; wordStep(); focusFirst(C.tiles); } });
+    } else {
+      react('hmm'); hmmTone();
+      fb('“' + got + '” isn’t quite it. Tap a letter in your word to send it back, or ask for a hint.', 'soft');
+    }
+  }
+
+  /* ---- find your footing: put the steps in order */
+  BUILD.sequence = function () {
+    var n = C.lv.steps.length;
+    C.slotv = []; for (var k = 0; k < n; k++) C.slotv.push(-1);
+    C.locked = []; C.pool = shuffled(C.lv.steps.map(function (_, i) { return i; }), 31);
+    seqRender();
+    C.hint = function () {
+      var j = C.slotv.findIndex(function (v, k) { return !C.locked[k]; }); if (j < 0) return;
+      var at = C.slotv.indexOf(j); if (at >= 0) C.slotv[at] = -1;
+      if (C.slotv[j] >= 0 && C.slotv[j] !== j) C.slotv[j] = -1;
+      C.slotv[j] = j; C.locked[j] = true;
+      fb('Hint: step ' + (j + 1) + ' is “' + C.lv.steps[j].t + '” ' + C.lv.steps[j].why, 'hint');
+      seqRender(); seqMaybeWin();
+    };
+  };
+  function seqRender() {
+    var S = C.lv.steps, n = S.length;
+    C.body.innerHTML = '';
+    C.body.appendChild(txt('p', 'fj-ck', 'Your order'));
+    var ol = el('ol', 'fj-seq');
+    C.slotv.forEach(function (v, k) {
+      var li = el('li');
+      if (v < 0) { li.appendChild(txt('span', 'fj-seq-empty', 'Step ' + (k + 1))); }
+      else {
+        var b = btn('fj-seq-item' + (C.locked[k] ? ' is-yes' : ''), (C.locked[k] ? '✓ ' : '') + S[v].t, function () {
+          if (C.locked[k]) return; C.slotv[k] = -1; seqRender();
+        }, (C.locked[k] ? 'Step ' + (k + 1) + ', in place: ' : 'Step ' + (k + 1) + ': ') + S[v].t + (C.locked[k] ? '' : '. Tap to take it back.'));
+        if (C.locked[k]) b.setAttribute('aria-disabled', 'true');
+        li.appendChild(b);
+      }
+      ol.appendChild(li);
+    });
+    C.body.appendChild(ol);
+    var left = C.pool.filter(function (i) { return C.slotv.indexOf(i) < 0; });
+    if (left.length) {
+      C.body.appendChild(txt('p', 'fj-ck', 'Tap the step that comes next'));
+      var pool = el('div', 'fj-pool');
+      left.forEach(function (i) {
+        pool.appendChild(btn('fj-opt', S[i].t, function () {
+          var j = C.slotv.indexOf(-1); if (j < 0) return; C.slotv[j] = i; tone(soft(WORLDS[G.w - 1].hz) * SCALE[j + 1], 0, 0.3, 0.02); seqRender();
+          var nx = C.body.querySelector('.fj-pool .fj-opt') || C.body.querySelector('.fj-check'); if (nx) try { nx.focus({ preventScroll: true }); } catch (e) { }
+        }));
+      });
+      C.body.appendChild(pool);
+    } else if (!C.done) {
+      C.body.appendChild(btn('fj-primary fj-check', 'Check the order', seqCheck));
+    }
+  }
+  function seqCheck() {
+    var S = C.lv.steps, wrong = -1, right = 0;
+    C.slotv.forEach(function (v, k) { if (v === k) { C.locked[k] = true; right++; } else if (wrong < 0) wrong = v; });
+    if (right === S.length) { seqRender(); seqMaybeWin(); return; }
+    var msg = (right ? right + ' of ' + S.length + (right === 1 ? ' is' : ' are') + ' in the right place (marked ✓). ' : 'None are in place yet, and that’s fine. ') + 'Not yet: “' + S[wrong].t + '” ' + S[wrong].why;
+    C.slotv = C.slotv.map(function (v, k) { return C.locked[k] ? v : -1; });
+    seqRender(); useHeart(msg); focusFirst(C.body, '.fj-pool .fj-opt');
+  }
+  function seqMaybeWin() {
+    if (C.locked.filter(Boolean).length === C.lv.steps.length) { fb('That’s the order. Notice, name it, check yourself, slow down, then back to the topic.', 'good'); react('yay'); chime(4); finish(); }
+  }
+
+  /* ---- what would help? a memory match of feelings and what helps */
+  BUILD.match = function () {
+    var cards = [];
+    C.lv.pairs.forEach(function (p, i) { cards.push({ p: i, s: 'a' }); cards.push({ p: i, s: 'b' }); });
+    C.cards = shuffled(cards, 53); C.up = []; C.got = {}; C.found = 0;
+    C.body.innerHTML = '';
+    C.grid = el('div', 'fj-mem'); C.grid.setAttribute('role', 'group'); C.grid.setAttribute('aria-label', 'Twelve cards');
+    C.cards.forEach(function (cd, i) {
+      var b = el('button', 'fj-card-m'); b.type = 'button'; b.setAttribute('data-i', i); b.setAttribute('data-pair', cd.p);
+      b.innerHTML = '<span class="fj-mb" aria-hidden="true"></span><span class="fj-mf"><small>' + (cd.s === 'a' ? 'Feeling' : 'What helps') + '</small>' + esc(cd.s === 'a' ? C.lv.pairs[cd.p].a : C.lv.pairs[cd.p].b) + '</span>';
+      b.classList.add(cd.s === 'a' ? 'is-feel' : 'is-help');
+      b.addEventListener('click', function () { wake(); flip(i); });
+      C.grid.appendChild(b);
+    });
+    C.body.appendChild(C.grid); memLabels();
+    C.hint = function () {
+      var one = C.up.length === 1 ? C.up[0] : -1, p;
+      if (one >= 0) {
+        p = C.cards[one].p;
+        C.cards.forEach(function (cd, i) { if (i !== one && cd.p === p) { var b = C.grid.children[i]; b.classList.add('is-hint'); later(function () { b.classList.remove('is-hint'); }, 1800); } });
+        fb('Hint: its partner is glowing.', 'hint');
+        return;
+      }
+      p = C.lv.pairs.findIndex(function (_, i) { return !C.got[i]; }); if (p < 0) return;
+      C.cards.forEach(function (cd, i) { if (cd.p === p) { var b = C.grid.children[i]; b.classList.add('is-peek'); later(function () { b.classList.remove('is-peek'); }, 1500); } });
+      fb('Hint: a quick peek at one pair.', 'hint');
+    };
+  };
+  function memLabels() {
+    C.cards.forEach(function (cd, i) {
+      var b = C.grid.children[i], open = C.up.indexOf(i) >= 0 || C.got[cd.p];
+      b.classList.toggle('is-up', !!open); b.classList.toggle('is-got', !!C.got[cd.p]);
+      b.setAttribute('aria-label', 'Card ' + (i + 1) + (open ? ': ' + (cd.s === 'a' ? 'feeling, ' + C.lv.pairs[cd.p].a : 'what helps, ' + C.lv.pairs[cd.p].b) + (C.got[cd.p] ? ', matched' : '') : ', face down'));
+      b.setAttribute('aria-pressed', open ? 'true' : 'false');
+    });
+  }
+  function flip(i) {
+    if (C.done) return;
+    var cd = C.cards[i];
+    if (C.got[cd.p] || C.up.indexOf(i) >= 0) return;
+    if (C.up.length === 2) { clearTimeout(C.wait); C.up = []; }
+    C.up.push(i); tone(soft(WORLDS[G.w - 1].hz) * SCALE[1 + C.up.length], 0, 0.25, 0.02);
+    if (C.up.length === 2) {
+      var a = C.cards[C.up[0]], b = C.cards[C.up[1]];
+      if (a.p === b.p && a.s !== b.s) {
+        C.got[a.p] = true; C.found++; C.up = [];
+        var P = C.lv.pairs[a.p];
+        fb(P.a + ' → ' + P.b + '. ' + P.why, 'good'); react('yay'); chime(C.found);
+        if (C.found === C.lv.pairs.length) { memLabels(); finish(); return; }
+      } else {
+        fb('Not a pair this time. They’ll turn back over; you’ll remember where they are.', 'soft');
+        C.wait = later(function () { C.up = []; memLabels(); }, 1300);
+        if (C.found < 2) react('hmm');
+      }
+    }
+    memLabels();
+  }
+
+  /* ---- let the meadow bloom (a small lights-out puzzle; any tap can be undone by tapping it again) */
+  BUILD.bloom = function () {
+    C.bits = J.bloomBits(C.lv.start); C.taps = 0;
+    C.body.innerHTML = '';
+    C.grid = el('div', 'fj-bloom'); C.grid.setAttribute('role', 'group'); C.grid.setAttribute('aria-label', 'Nine flowers');
+    for (var i = 0; i < 9; i++) (function (i) {
+      var b = el('button', 'fj-flower'); b.type = 'button';
+      b.innerHTML = '<svg viewBox="0 0 40 40" aria-hidden="true"><g class="pet"><circle cx="20" cy="10" r="7"/><circle cx="29.5" cy="17" r="7"/><circle cx="26" cy="28" r="7"/><circle cx="14" cy="28" r="7"/><circle cx="10.5" cy="17" r="7"/></g><circle class="mid" cx="20" cy="20" r="5.5"/><path class="bud" d="M20 32c-6-3-7-11 0-18 7 7 6 15 0 18z"/><path class="stem" d="M20 32v6"/></svg>';
+      b.addEventListener('click', function () { wake(); bloomTap(i); });
+      C.grid.appendChild(b);
+    })(i);
+    C.body.appendChild(C.grid);
+    C.body.appendChild(C.tapsEl = txt('p', 'fj-ck fj-taps', ''));
+    bloomRender();
+    C.hint = function () {
+      var sol = J.bloomSolve(C.bits); if (!sol || !sol.length) return;
+      var i = sol[0], b = C.grid.children[i]; b.classList.add('is-hint'); later(function () { b.classList.remove('is-hint'); }, 2200);
+      fb('Hint: try the flower in row ' + ((i / 3 | 0) + 1) + ', column ' + (i % 3 + 1) + '. (About ' + sol.length + ' taps to go.)', 'hint');
+    };
+  };
+  function bloomTap(i) {
+    if (C.done) return;
+    C.bits = J.bloomTap(C.bits, i); C.taps++;
+    var open = C.bits.filter(Boolean).length;
+    tone(soft(WORLDS[G.w - 1].hz) * SCALE[open % 8], 0, 0.5, 0.03);
+    bloomRender();
+    if (open === 9) { fb('Every flower is open. The whole meadow blooms.', 'good'); react('yay'); finish(); }
+    else if (open >= 7) fb(open + ' of 9 open. So close.');
+    else fb('');
+  }
+  function bloomRender() {
+    Array.prototype.forEach.call(C.grid.children, function (b, i) {
+      var on = !!C.bits[i]; b.classList.toggle('is-open', on);
+      b.setAttribute('aria-label', 'Flower, row ' + ((i / 3 | 0) + 1) + ', column ' + (i % 3 + 1) + (on ? ': open' : ': a closed bud'));
+      b.setAttribute('aria-pressed', on ? 'true' : 'false');
+    });
+    C.tapsEl.textContent = C.taps ? C.taps + (C.taps === 1 ? ' tap' : ' taps') + ' · ' + C.bits.filter(Boolean).length + ' of 9 open' : C.bits.filter(Boolean).length + ' of 9 open';
+  }
+
+  /* ---- small reaches: notice the bids, then turn toward one */
+  BUILD.bids = function () {
+    C.mark = C.lv.scene.map(function () { return false; }); C.ok = C.lv.scene.map(function () { return false; });
+    bidsRender();
+    C.hint = function () {
+      var i = C.lv.scene.findIndex(function (s, k) { return s.bid && !C.ok[k] && !C.mark[k]; });
+      if (i < 0) i = C.lv.scene.findIndex(function (s, k) { return !s.bid && C.mark[k]; });
+      if (i < 0) { fb('Hint: everything looks right. Tap Check.', 'hint'); return; }
+      var b = C.body.querySelectorAll('.fj-bid')[i]; b.classList.add('is-hint'); later(function () { b.classList.remove('is-hint'); }, 2200);
+      fb('Hint: look again at “' + C.lv.scene[i].t + '”', 'hint');
+    };
+  };
+  function bidsRender() {
+    C.body.innerHTML = '';
+    C.body.appendChild(txt('p', 'fj-ck', 'A Tuesday evening'));
+    var box = el('div', 'fj-scene-list'); box.setAttribute('role', 'group'); box.setAttribute('aria-label', 'Moments in the evening');
+    C.lv.scene.forEach(function (s, i) {
+      var b = btn('fj-bid' + (C.ok[i] ? ' is-yes' : C.mark[i] ? ' is-on' : ''), s.t, function () {
+        if (C.ok[i] || C.phase2) return; C.mark[i] = !C.mark[i]; b.classList.toggle('is-on', C.mark[i]); b.setAttribute('aria-pressed', C.mark[i] ? 'true' : 'false');
+        tone(soft(WORLDS[G.w - 1].hz) * SCALE[C.mark[i] ? 3 : 1], 0, 0.25, 0.02);
+      });
+      b.setAttribute('aria-pressed', C.mark[i] || C.ok[i] ? 'true' : 'false');
+      if (C.ok[i]) b.setAttribute('aria-disabled', 'true');
+      box.appendChild(b);
+    });
+    C.body.appendChild(box);
+    C.body.appendChild(btn('fj-primary fj-check', 'Check', bidsCheck));
+  }
+  function bidsCheck() {
+    var S = C.lv.scene, wrong = -1, missed = 0, total = 0;
+    S.forEach(function (s, i) {
+      if (s.bid) { total++; if (C.mark[i] || C.ok[i]) C.ok[i] = true; else missed++; }
+      else if (C.mark[i]) { if (wrong < 0) wrong = i; C.mark[i] = false; }
+    });
+    var found = total - missed;
+    bidsRender();
+    if (wrong < 0 && !missed) {
+      fb('You found all ' + total + ' small reaches.', 'good'); react('yay'); chime(4);
+      C.body.querySelector('.fj-check').remove();
+      nextBtn('Now answer one →', bidsReply);
+      return;
+    }
+    var msg = wrong >= 0 ? '“' + S[wrong].t + '” ' + S[wrong].why + (missed ? ' And ' + (missed === 1 ? 'one reach is' : missed + ' reaches are') + ' still waiting to be noticed.' : '')
+      : 'You’ve found ' + found + ' of ' + total + '. Look again for the quiet ones: a touch, an offer, a sigh.';
+    useHeart(msg);
+  }
+  function bidsReply() {
+    C.phase2 = true;
+    var r = C.lv.reply;
+    choiceQ({ k: 'Turning toward', q: r.q, options: r.options, showAll: true, nextLabel: 'Finish →', onRight: finish });
+    focusFirst(C.body, '.fj-opt');
+  }
+
+  /* ---- fair shares: give every job one owner, so each load fits that pal's battery */
+  BUILD.balance = function () {
+    C.own = C.lv.jobs.map(function () { return -1; });
+    C.body.innerHTML = '';
+    C.meters = el('div', 'fj-meters'); C.body.appendChild(C.meters);
+    var list = el('ul', 'fj-jobs'); C.list = list;
+    C.lv.jobs.forEach(function (j, i) {
+      var li = el('li', 'fj-job' + (j.hidden ? ' is-hidden' : ''));
+      var lab = el('div', 'fj-job-l');
+      lab.appendChild(txt('b', '', j.t));
+      var meta = el('small'); meta.innerHTML = '<span class="fj-w" aria-label="effort ' + j.w + '">' + new Array(j.w + 1).join('●') + '</span> ' + j.w + (j.hidden ? ' · <span class="fj-inv"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12s3.6-6.5 10-6.5S22 12 22 12s-3.6 6.5-10 6.5S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg>invisible work</span>' : '');
+      lab.appendChild(meta); li.appendChild(lab);
+      var bx = el('div', 'fj-own'); bx.setAttribute('role', 'group'); bx.setAttribute('aria-label', 'Who owns: ' + j.t);
+      PAL.forEach(function (nm, who) {
+        var b = btn('fj-ownb', nm, function () { C.own[i] = C.own[i] === who ? -1 : who; tone(soft(WORLDS[G.w - 1].hz) * SCALE[who ? 3 : 1], 0, 0.3, 0.025); balRender(true); }, j.t + ': ' + PAL[who]);
+        b.setAttribute('data-who', who); bx.appendChild(b);
+      });
+      li.appendChild(bx); list.appendChild(li);
+    });
+    C.body.appendChild(list);
+    balRender(false);
+    C.hint = function () {
+      var best = null, bd = 99, J2 = C.lv.jobs, n = J2.length;
+      for (var m = 0; m < 1 << n; m++) {
+        var ld = [0, 0], d = 0;
+        for (var i = 0; i < n; i++) { var w = m >> i & 1; ld[w] += J2[i].w; if (C.own[i] >= 0 && C.own[i] !== w) d++; }
+        if (ld[0] === C.lv.cap[0] && ld[1] === C.lv.cap[1] && d < bd) { bd = d; best = m; }
+      }
+      if (best == null) return;
+      for (var k = 0; k < n; k++) { var want = best >> k & 1; if (C.own[k] !== want) { fb('Hint: try giving “' + J2[k].t + '” to ' + PAL[want] + '.', 'hint'); var li = C.list.children[k]; li.classList.add('is-hint'); later(function () { li.classList.remove('is-hint'); }, 2200); return; } }
+    };
+  };
+  function balRender(changed) {
+    var ld = [0, 0], left = 0;
+    C.lv.jobs.forEach(function (j, i) { if (C.own[i] >= 0) ld[C.own[i]] += j.w; else left++; });
+    C.meters.innerHTML = '';
+    [0, 1].forEach(function (who) {
+      var cap = C.lv.cap[who], m = el('div', 'fj-meter' + (ld[who] > cap ? ' is-over' : ld[who] === cap ? ' is-full' : ''));
+      m.appendChild(txt('b', '', PAL[who]));
+      m.appendChild(txt('small', '', C.lv.capNote[who] + ' · battery fits ' + cap));
+      var bar = el('span', 'fj-bar'); bar.setAttribute('role', 'img'); bar.setAttribute('aria-label', ld[who] + ' of ' + cap);
+      for (var k = 0; k < Math.max(cap, ld[who]); k++) bar.appendChild(el('i', k < ld[who] ? (k < cap ? 'on' : 'over') : ''));
+      m.appendChild(bar);
+      m.appendChild(txt('span', 'fj-meter-n', ld[who] + ' / ' + cap));
+      C.meters.appendChild(m);
+    });
+    Array.prototype.forEach.call(C.list.children, function (li, i) {
+      li.querySelectorAll('.fj-ownb').forEach(function (b) { b.setAttribute('aria-pressed', C.own[i] === +b.getAttribute('data-who') ? 'true' : 'false'); });
+      li.classList.toggle('is-set', C.own[i] >= 0);
+    });
+    if (!changed || C.done) return;
+    var over = ld[0] > C.lv.cap[0] ? 0 : ld[1] > C.lv.cap[1] ? 1 : -1;
+    if (!left && over < 0) { fb('Every job has one owner, and each load fits. That’s fair for this week.', 'good'); react('yay'); chime(4); finish(); return; }
+    if (over >= 0) { fb(PAL[over] + ' is carrying ' + ld[over] + ', and her battery fits ' + C.lv.cap[over] + ' this week. Could a job move across?', 'soft'); if (!left) react('hmm'); return; }
+    fb(left ? left + (left === 1 ? ' job still needs' : ' jobs still need') + ' an owner.' : '');
+  }
+  function cap1(s) { return s.charAt(0).toUpperCase() + s.slice(1); }
+
+  /* ---- echo the valley: listen, then sing it back (a growing tune) */
+  var CRYSTAL = ['rose', 'amber', 'green', 'blue', 'violet'];
+  BUILD.echo = function () {
+    C.len = C.lv.first; C.pos = 0; C.playing = false; C.slow = false;
+    C.body.innerHTML = '';
+    C.roundEl = txt('p', 'fj-ck', ''); C.body.appendChild(C.roundEl);
+    C.row = el('div', 'fj-crystals'); C.row.setAttribute('role', 'group'); C.row.setAttribute('aria-label', 'Five singing crystals');
+    CRYSTAL.forEach(function (nm, i) {
+      var b = el('button', 'fj-crys'); b.type = 'button'; b.setAttribute('data-n', i + 1); b.style.setProperty('--c', NOTE_COL[i]);
+      b.innerHTML = '<span class="gem" aria-hidden="true"></span><span class="nm">' + (i + 1) + ' ' + nm + '</span>';
+      b.setAttribute('aria-label', cap1(nm) + ' crystal, note ' + (i + 1));
+      b.addEventListener('click', function () { wake(); sing(i + 1); });
+      C.row.appendChild(b);
+    });
+    C.body.appendChild(C.row);
+    C.body.appendChild(btn('fj-soft fj-listen', 'Listen again', function () { if (!C.playing) playTune(); }));
+    echoRound();
+    // wait for any card (like the world's welcome) to close before the first tune
+    later(function first() { if (!cardEl.hidden) { later(first, 400); return; } playTune(); }, 800);
+    C.hint = function () { if (C.playing) return; fb('Hint: the next note is the ' + CRYSTAL[C.lv.song[C.pos] - 1] + ' crystal (' + C.lv.song[C.pos] + ').', 'hint'); flash(C.lv.song[C.pos], 900); };
+    C.key = function (e) { if (/^[1-5]$/.test(e.key)) { sing(+e.key); return true; } if (e.key === 'l' || e.key === 'L') { if (!C.playing) playTune(); return true; } };
+  };
+  function echoRound() { C.roundEl.textContent = 'Round ' + (C.len - C.lv.first + 1) + ' of ' + (C.lv.song.length - C.lv.first + 1) + ' · ' + C.len + ' notes'; }
+  function flash(n, ms) { var b = C.row.children[n - 1]; b.classList.add('is-lit'); later(function () { b.classList.remove('is-lit'); }, ms || 420); }
+  function playTune() {
+    if (C.done) return;
+    C.playing = true; C.pos = 0; C.row.classList.add('is-busy');
+    var gap = C.slow ? 900 : 640, seq = C.lv.song.slice(0, C.len), said = [];
+    fb('Listen…');
+    seq.forEach(function (n, k) {
+      later(function () {
+        flash(n, gap * 0.7); chime(n - 1); G.react = { k: 'note', t0: now(), who: k % 2 };
+        said.push(CRYSTAL[n - 1]); fb('Listen: ' + said.join(', ') + '…');
+      }, k * gap);
+    });
+    later(function () { C.playing = false; C.row.classList.remove('is-busy'); fb('Your turn. Sing it back.'); }, seq.length * gap + 150);
+  }
+  function sing(n) {
+    if (C.done) return;
+    if (C.playing) { fb('Listening first… your turn is coming.', 'soft'); return; }
+    flash(n); chime(n - 1); G.react = { k: 'note', t0: now(), who: C.pos % 2 };
+    if (C.lv.song[C.pos] === n) {
+      C.pos++;
+      if (C.pos === C.len) {
+        if (C.len === C.lv.song.length) { fb('The whole tune, sung back. The valley echoes.', 'good'); react('yay'); finish(); return; }
+        C.len++; echoRound(); react('yay');
+        fb('Lovely. One more note this time… listen.', 'good');
+        later(playTune, 1300);
+      } else fb('♪ ' + C.pos + ' of ' + C.len);
+    } else {
+      var refill = useHeart('That crystal sings a different note. Listen once more.');
+      if (refill) C.slow = true;
+      C.pos = 0; later(playTune, 1500);
+    }
+  }
+
+  /* ---- fact, feeling, ask (or a verdict): sort one sentence at a time */
+  var NOTFIT = {
+    fact: 'A fact is something anyone could see or count, with no judgement in it.',
+    feeling: 'A feeling is how it landed for me, usually starting with “I”.',
+    ask: 'An ask requests something for next time.',
+    verdict: 'A verdict judges the person, not the event.'
+  };
+  BUILD.sort = function () {
+    C.i = 0; C.count = {}; C.lv.buckets.forEach(function (b) { C.count[b.k] = 0; });
+    C.body.innerHTML = '';
+    C.cardEl = el('div', 'fj-sortcard'); C.cardEl.setAttribute('aria-live', 'off'); C.body.appendChild(C.cardEl);
+    C.bk = el('div', 'fj-buckets'); C.bk.setAttribute('role', 'group'); C.bk.setAttribute('aria-label', 'Where does it go?');
+    C.lv.buckets.forEach(function (b) {
+      var x = el('button', 'fj-bucket'); x.type = 'button'; x.setAttribute('data-k', b.k);
+      x.innerHTML = '<b>' + esc(b.t) + '</b><small>' + esc(b.d) + '</small><span class="n">0</span>';
+      x.addEventListener('click', function () { wake(); sortPick(b.k, x); });
+      C.bk.appendChild(x);
+    });
+    C.body.appendChild(C.bk);
+    sortCard();
+    C.hint = function () {
+      var k = C.lv.items[C.i].k, x = C.bk.querySelector('[data-k="' + k + '"]');
+      x.classList.add('is-hint'); later(function () { x.classList.remove('is-hint'); }, 2000);
+      fb('Hint: ask yourself: ' + { fact: 'could anyone see or count this?', feeling: 'is this how it landed for me?', ask: 'is it asking for something next?', verdict: 'does it judge who the person is?' }[k], 'hint');
+    };
+  };
+  function sortCard() {
+    var it = C.lv.items[C.i];
+    C.cardEl.innerHTML = '<small>Sentence ' + (C.i + 1) + ' of ' + C.lv.items.length + '</small><p>“' + esc(it.t) + '”</p>';
+    C.cardEl.classList.remove('is-away'); void C.cardEl.offsetWidth; C.cardEl.classList.add('is-in');
+    C.bk.setAttribute('aria-label', 'Where does “' + it.t + '” go?');
+  }
+  function sortPick(k, x) {
+    if (C.done || C.busy) return;
+    var it = C.lv.items[C.i];
+    if (k === it.k) {
+      C.count[k]++; x.querySelector('.n').textContent = C.count[k];
+      x.classList.add('is-yes'); later(function () { x.classList.remove('is-yes'); }, 500);
+      var B = C.lv.buckets.filter(function (b) { return b.k === k; })[0];
+      fb('✓ ' + B.t + '. ' + it.why, 'good'); chime(C.i % 5); if (C.i % 3 === 2) react('yay'); else G.react = { k: 'note', t0: now(), who: C.i % 2 };
+      C.i++;
+      if (C.i >= C.lv.items.length) { C.cardEl.classList.add('is-away'); react('yay'); finish(); return; }
+      C.busy = true; C.cardEl.classList.add('is-away');
+      later(function () { C.busy = false; sortCard(); }, REDUCED ? 60 : 260);
+    } else {
+      useHeart('Not quite. ' + NOTFIT[k]);
+    }
+  }
+
+  /* ---- finish the line: type the missing word (forgiving), with a clue and then a word bank */
+  BUILD.fill = function () { C.i = 0; fillStep(); };
+  function fillStep() {
+    var ln = C.lv.lines[C.i], last = C.i === C.lv.lines.length - 1;
+    C.tries = 0; C.hintLvl = 0; C.solved = false;
+    C.body.innerHTML = ''; fb('');
+    C.body.appendChild(txt('p', 'fj-ck', 'Line ' + (C.i + 1) + ' of ' + C.lv.lines.length));
+    var p = el('p', 'fj-line'); p.appendChild(document.createTextNode(ln.before));
+    var inp = el('input', 'fj-in'); inp.type = 'text'; inp.setAttribute('autocomplete', 'off'); inp.setAttribute('autocapitalize', 'off'); inp.setAttribute('spellcheck', 'false'); inp.setAttribute('enterkeyhint', 'done');
+    inp.setAttribute('aria-label', 'Missing word: ' + ln.before + ' blank ' + ln.after);
+    inp.size = 9; C.inp = inp;
+    // keep the quote marks and punctuation hugging the gap, so they never wrap away from it
+    var pre = (ln.before.match(/[“"‘(]$/) || [''])[0], post = (ln.after.match(/^[”"’.,!?)]+/) || [''])[0];
+    p.firstChild.nodeValue = ln.before.slice(0, ln.before.length - pre.length);
+    var gap = el('span', 'fj-gap'); gap.appendChild(document.createTextNode(pre)); gap.appendChild(inp); gap.appendChild(document.createTextNode(post));
+    p.appendChild(gap); p.appendChild(document.createTextNode(ln.after.slice(post.length)));
+    C.body.appendChild(p);
+    C.bank = el('div', 'fj-bank'); C.bank.hidden = true; C.body.appendChild(C.bank);
+    var go = btn('fj-primary fj-check', 'Check', fillCheck); C.body.appendChild(go);
+    inp.addEventListener('keydown', function (e) { if (e.key === 'Enter') { e.preventDefault(); fillCheck(); } });
+    C.hint = function () {
+      if (C.solved) return;
+      C.hintLvl++;
+      if (C.hintLvl === 1) fb('Hint: ' + ln.hint + ' It starts with “' + ln.a[0].charAt(0) + '”.', 'hint');
+      else { fbBank(); fb('Hint: choose from these three.', 'hint'); }
+    };
+    C.onRight = function () { if (last) finish(); else { C.i++; fillStep(); try { C.inp.focus({ preventScroll: true }); } catch (e) { } } };
+  }
+  function fbBank() {
+    var ln = C.lv.lines[C.i];
+    C.bank.innerHTML = ''; C.bank.hidden = false;
+    ln.choices.forEach(function (ch) { C.bank.appendChild(btn('fj-soft fj-chip', ch, function () { if (C.solved) return; C.inp.value = ch; fillCheck(); })); });
+  }
+  function fillCheck() {
+    if (C.solved) return;
+    var ln = C.lv.lines[C.i], v = C.inp.value;
+    if (!J.norm(v)) { fb('Type the missing word, then Check. A hint is always there.', 'soft'); try { C.inp.focus({ preventScroll: true }); } catch (e) { } return; }
+    if (J.fillMatch(ln, v)) {
+      C.solved = true; C.inp.value = ln.a[0]; C.inp.readOnly = true; C.inp.classList.add('is-yes'); C.bank.hidden = true;
+      var c = C.body.querySelector('.fj-check'); if (c) c.remove();
+      fb('Yes: “' + ln.a[0] + '”. ' + ln.why, 'good'); react('yay'); chime(C.i % 5);
+      nextBtn(C.i === C.lv.lines.length - 1 ? 'Finish →' : 'Next line →', C.onRight);
+    } else {
+      C.tries++;
+      useHeart('Not quite. “' + v.trim() + '” doesn’t fit this line.' + (C.tries >= 2 && C.hintLvl < 2 ? '' : ' Try another word, or tap Hint.'));
+      if (C.tries >= 2 && C.hintLvl < 1) { C.hintLvl = 1; fb(C.fb.textContent + ' Clue: ' + ln.hint, 'soft'); }
+      else if (C.tries >= 3 && C.hintLvl < 2) { C.hintLvl = 2; fbBank(); }
+      try { C.inp.select(); } catch (e) { }
+    }
+  }
+
+  /* ---- seen, or assumed? tap the parts that are stories */
+  BUILD.spot = function () { C.j = 0; spotStep(); };
+  function spotStep() {
+    var sc = C.lv.scenes[C.j], last = C.j === C.lv.scenes.length - 1;
+    C.mark = sc.bits.map(function () { return false; }); C.ok = sc.bits.map(function () { return false; });
+    C.body.innerHTML = ''; fb('');
+    C.body.appendChild(txt('p', 'fj-ck', 'Scene ' + (C.j + 1) + ' of ' + C.lv.scenes.length + ' · ' + sc.title));
+    C.chips = el('p', 'fj-spot'); C.chips.setAttribute('role', 'group'); C.chips.setAttribute('aria-label', 'Tap the stories');
+    sc.bits.forEach(function (b, i) {
+      var x = btn('fj-bit', b.t, function () {
+        if (C.ok[i] || C.solved) return; C.mark[i] = !C.mark[i]; spotRender();
+        tone(soft(WORLDS[G.w - 1].hz) * SCALE[C.mark[i] ? 4 : 2], 0, 0.25, 0.02);
+      });
+      C.chips.appendChild(x); C.chips.appendChild(document.createTextNode(' '));
+    });
+    C.body.appendChild(C.chips);
+    C.body.appendChild(btn('fj-primary fj-check', 'Check', spotCheck));
+    C.solved = false; spotRender();
+    C.hint = function () {
+      var i = sc.bits.findIndex(function (b, k) { return b.story && !C.ok[k]; });
+      if (i < 0) { fb('Hint: every story is found. Anything else you marked is something you saw. Tap Check.', 'hint'); return; }
+      C.ok[i] = true; C.mark[i] = true; spotRender();
+      fb('Hint: “' + sc.bits[i].t + '” ' + sc.bits[i].why, 'hint');
+    };
+    C.next = function () { if (last) finish(); else { C.j++; spotStep(); focusFirst(C.chips); } };
+  }
+  function spotRender() {
+    var bits = C.chips.querySelectorAll('.fj-bit');
+    C.lv.scenes[C.j].bits.forEach(function (b, i) {
+      var x = bits[i]; x.classList.toggle('is-on', !!(C.mark[i] && !C.ok[i])); x.classList.toggle('is-story', !!C.ok[i]);
+      x.setAttribute('aria-pressed', C.mark[i] || C.ok[i] ? 'true' : 'false');
+      x.setAttribute('aria-label', b.t + (C.ok[i] ? ' (a story, found)' : C.mark[i] ? ' (marked as a story)' : ''));
+    });
+  }
+  function spotCheck() {
+    var sc = C.lv.scenes[C.j], wrong = -1, missed = 0, total = 0;
+    sc.bits.forEach(function (b, i) {
+      if (b.story) { total++; if (C.mark[i]) C.ok[i] = true; else missed++; }
+      else if (C.mark[i]) { if (wrong < 0) wrong = i; C.mark[i] = false; }
+    });
+    spotRender();
+    if (wrong < 0 && !missed) {
+      C.solved = true; fb('All ' + total + ' stories found. The rest is what you actually saw and heard.', 'good'); react('yay'); chime(C.j + 3);
+      var c = C.body.querySelector('.fj-check'); if (c) c.remove();
+      nextBtn(C.j === C.lv.scenes.length - 1 ? 'Finish →' : 'Next scene →', C.next);
+      return;
+    }
+    useHeart(wrong >= 0 ? 'That one really happened: “' + sc.bits[wrong].t + '” ' + sc.bits[wrong].why + (missed ? ' ' + (total - missed) + ' of ' + total + ' stories found so far.' : '')
+      : (total - missed) + ' of ' + total + ' stories found. Look for words that guess at why, or at what’s inside someone.');
+  }
+
+  /* ---- the Harmony moment: choose the three lessons that meant most; they become stars in the sky */
+  function allStars() {
+    var out = [];
+    WORLDS.forEach(function (W) { W.levels.forEach(function (lv, i) { out.push({ id: W.n + '-' + (i + 1), w: W.n, t: lv.star, lesson: lv.lesson }); }); });
+    return out;
+  }
+  function starById(id) { return allStars().filter(function (s) { return s.id === id; })[0]; }
+  function startHarmony() {
+    clearTimers();
+    G.w = 7; root.setAttribute('data-world', 7);
+    C = { type: 'harmony', picks: (save.harmony || []).filter(starById), timers: [], done: false };
+    G.react = null; G.parts = [];
+    setMode('chal'); resize(); paintScene();
+    titleK.textContent = 'World 7 · 963 Hz · Harmony';
+    titleH.textContent = 'Before you rest';
+    titleSub.textContent = PAL[0] + ' and ' + PAL[1] + ' made it. One gentle last step.';
+    chalEl.innerHTML = '';
+    chalEl.appendChild(txt('p', 'fj-ask', 'Look back along the path. Which three lessons meant the most to you? Choose three, and they’ll become stars in the sky.'));
+    C.body = el('div', 'fj-cbody'); chalEl.appendChild(C.body);
+    C.fb = el('p', 'fj-fb'); C.fb.setAttribute('aria-live', 'polite'); C.fb.setAttribute('role', 'status'); chalEl.appendChild(C.fb);
+    var list = el('div', 'fj-harm'); list.setAttribute('role', 'group'); list.setAttribute('aria-label', 'Eighteen lessons');
+    var lastW = 0;
+    allStars().forEach(function (s) {
+      if (s.w !== lastW) { lastW = s.w; list.appendChild(txt('p', 'fj-ck fj-harm-w', WORLDS[s.w - 1].short + ' · ' + WORLDS[s.w - 1].hz + ' Hz')); }
+      var b = btn('fj-harm-b', s.t, function () {
+        var k = C.picks.indexOf(s.id);
+        if (k >= 0) C.picks.splice(k, 1);
+        else if (C.picks.length < 3) { C.picks.push(s.id); note(963, C.picks.length + 2, 0.05); }
+        else { fb('Three stars are chosen. Tap one of them to let it go first.', 'soft'); return; }
+        harmRender();
+      }, null);
+      b.setAttribute('data-id', s.id); b.title = s.lesson;
+      list.appendChild(b);
+    });
+    C.body.appendChild(list);
+    var bar = el('div', 'fj-cbar');
+    C.count = txt('span', 'fj-ck', ''); bar.appendChild(C.count);
+    var tools = el('span', 'fj-cbar-tools');
+    tools.appendChild(btn('fj-soft', 'Not now', function () { startSky(true); }));
+    C.go = btn('fj-primary', 'Place them in the sky', function () {
+      if (C.picks.length !== 3) return;
+      save.harmony = C.picks.slice(); persist();
+      if (SKY) SKY.special = null;
+      react('hug'); pad(963, 0.06);
+      setTimeout(function () { startSky(true); say('Your three stars are shining. Tap one to hear it again, or tap anywhere to add more.'); }, REDUCED ? 300 : 1300);
+    });
+    tools.appendChild(C.go); bar.appendChild(tools); chalEl.appendChild(bar);
+    C.hint = null;
+    harmRender();
+    cv.setAttribute('aria-label', PAL[0] + ' and ' + PAL[1] + ', sitting together under the evening sky.');
+    bringIntoView();
+  }
+  function harmRender() {
+    C.body.querySelectorAll('.fj-harm-b').forEach(function (b) {
+      var k = C.picks.indexOf(b.getAttribute('data-id'));
+      b.setAttribute('aria-pressed', k >= 0 ? 'true' : 'false');
+      b.classList.toggle('is-on', k >= 0);
+    });
+    C.count.textContent = C.picks.length + ' of 3 chosen';
+    C.go.disabled = C.picks.length !== 3;
+    fb(C.picks.length === 3 ? 'Three stars, ready to shine.' : '');
+  }
+
+  /* ---- the pals' little scene, above every challenge */
+  function paintScene() {
+    if (mode !== 'chal') return;
+    var w = cv._w, h = cv._h, th = THEME[G.w], c = bctx;
+    bg.width = Math.round(w * DPR); bg.height = Math.round(h * DPR); c.setTransform(DPR, 0, 0, DPR, 0, 0);
+    var gr = c.createLinearGradient(0, 0, 0, h); gr.addColorStop(0, th.sky[0]); gr.addColorStop(1, th.sky[1]); c.fillStyle = gr; c.fillRect(0, 0, w, h);
+    var s;
+    if (G.w === 6 || G.w === 1) for (s = 0; s < 60; s++) blob(c, hash(s, 3) * w, hash(s, 5) * h * 0.7, 0.4 + hash(s, 7) * 1.1, '#FFFFFF', G.w === 6 ? 0.25 + hash(s, 9) * 0.55 : 0.08);
+    if (G.w === 7) for (s = 0; s < 5; s++) cloud(c, hash(s, 21) * w, h * (0.12 + hash(s, 22) * 0.35), w * 0.06 * (0.6 + hash(s, 23)), 0.7);
+    var gy = h * 0.74, T = Math.min(h * 0.44, 64);
+    // soft hills
+    c.fillStyle = G.w === 7 ? 'rgba(255,255,255,0.9)' : th.g2; c.beginPath(); c.moveTo(0, gy + 4); c.quadraticCurveTo(w * 0.25, gy - h * 0.1, w * 0.55, gy - 2); c.quadraticCurveTo(w * 0.8, gy + 4, w, gy - h * 0.06); c.lineTo(w, h); c.lineTo(0, h); c.fill();
+    c.fillStyle = G.w === 7 ? '#FFFFFF' : th.g1; c.beginPath(); c.moveTo(0, gy + h * 0.06); c.quadraticCurveTo(w * 0.5, gy - h * 0.04, w, gy + h * 0.07); c.lineTo(w, h); c.lineTo(0, h); c.fill();
+    for (s = 0; s < 18; s++) blob(c, hash(s, 31) * w, gy + h * 0.08 + hash(s, 32) * h * 0.16, 3 + hash(s, 33) * 8, G.w === 7 ? '#F4ECFA' : th.g2, 0.5);
+    if (G.w === 3) for (s = 0; s < 22; s++) { var fx = hash(s, 41) * w, fy = gy + h * 0.06 + hash(s, 42) * h * 0.2; blob(c, fx, fy, 2.4, ['#F7A8C0', '#FFFFFF', '#FFD86E', '#C9B0F0'][s % 4], 0.95); blob(c, fx, fy, 0.9, '#F6C24A', 1); }
+    // the world's own things, at both edges
+    if (G.w <= 6) {
+      var spots = w > 460 ? [0.02, 0.12, 0.8, 0.9] : [-0.02, 0.1, 0.78, 0.9];
+      spots.forEach(function (fx, k) { var sc = k === 1 || k === 2 ? 0.8 : 1; paintWall(c, 40 + k * 7, fx * w, gy - T * sc * 0.86, T * sc, th); });
+    }
+    if (G.w === 4) { // a little bridge in the distance
+      c.strokeStyle = 'rgba(160,110,90,0.45)'; c.lineWidth = 2; c.beginPath(); c.moveTo(w * 0.62, gy - h * 0.1); c.quadraticCurveTo(w * 0.7, gy - h * 0.04, w * 0.78, gy - h * 0.1); c.stroke();
+    }
+    c.save(); c.globalAlpha = th.dark ? 0.05 : 0.08; c.globalCompositeOperation = 'multiply'; c.fillStyle = c.createPattern(paper(), 'repeat'); c.fillRect(0, 0, w, h); c.restore();
+  }
+  var sceneBlink = [0, 0];
+  function drawScene(t) {
+    var c = ctx, w = cv._w, h = cv._h; if (!w) return;
+    c.setTransform(DPR, 0, 0, DPR, 0, 0); c.clearRect(0, 0, w, h);
+    c.drawImage(bg, 0, 0, w, h);
+    var R = G.react, age = R ? t - R.t0 : 1e9, s = clamp(h / 132, 0.85, 1.15), base = h * 0.9;
+    var hug = R && R.k === 'hug' && age < 3200, yay = R && R.k === 'yay' && age < 1300, hmm = R && R.k === 'hmm' && age < 1700, sing = R && R.k === 'note' && age < 600;
+    var breath = C && C.type === 'breath' && C.t0 ? breathAt(t) : null;
+    // a warm light behind the pals in the dark worlds
+    if (THEME[G.w].dark) { var lg = c.createRadialGradient(w / 2, base - 26 * s, 4, w / 2, base - 26 * s, 90 * s); lg.addColorStop(0, 'rgba(255,220,160,0.42)'); lg.addColorStop(1, 'rgba(255,220,160,0)'); c.fillStyle = lg; c.fillRect(0, 0, w, h); }
+    // the slow lantern
+    if (C && C.type === 'breath') {
+      var e = breath ? breath.e : 0.35, cx = w / 2, cy = h * 0.3, rMin = h * 0.07, rMax = h * 0.2, r = rMin + (rMax - rMin) * e;
+      var lg2 = c.createRadialGradient(cx, cy, 2, cx, cy, r * 2.2); lg2.addColorStop(0, 'rgba(255,230,170,0.75)'); lg2.addColorStop(1, 'rgba(255,230,170,0)'); c.fillStyle = lg2; c.fillRect(cx - r * 2.3, cy - r * 2.3, r * 4.6, r * 4.6);
+      c.setLineDash([3, 5]); c.strokeStyle = 'rgba(255,236,190,0.5)'; c.lineWidth = 1.4;
+      c.beginPath(); c.arc(cx, cy, rMax, 0, Math.PI * 2); c.stroke(); c.beginPath(); c.arc(cx, cy, rMin, 0, Math.PI * 2); c.stroke(); c.setLineDash([]);
+      var g3 = c.createRadialGradient(cx - r * 0.3, cy - r * 0.3, 1, cx, cy, r); g3.addColorStop(0, '#FFFDF4'); g3.addColorStop(0.55, '#FFE3AE'); g3.addColorStop(1, '#F2C06A');
+      c.fillStyle = g3; c.beginPath(); c.arc(cx, cy, r, 0, Math.PI * 2); c.fill();
+      if (C.hits) for (var k = 0; k < C.hits; k++) { var a = -Math.PI / 2 + k * Math.PI * 2 / C.lv.need; blob(c, cx + Math.cos(a) * (rMax + 10), cy + Math.sin(a) * (rMax + 10), 4, '#FFE3AE', 0.95); }
+    }
+    // the harmony sky: three stars rising
+    if (C && C.type === 'harmony') {
+      C.picks.forEach(function (id, k) { var px = w * [0.3, 0.5, 0.7][k], py = h * [0.28, 0.16, 0.28][k], tw = REDUCED ? 1 : 0.85 + 0.15 * Math.sin(t / 400 + k); blob(c, px, py, 12, '#FFF3C4', 0.4); star(c, px, py, 8 * tw, ['#F7C9D4', '#FFE3AE', '#D9C8F0'][k], 0.2); });
+    }
+    var gap = (hug ? 17 : 34) * s, ease = hug ? Math.min(1, age / 500) : 0;
+    gap = 34 * s - (34 - 17) * s * (hug ? (0.5 - Math.cos(ease * Math.PI) / 2) : 0);
+    for (var who = 0; who < 2; who++) {
+      var face = who ? -1 : 1, x = w / 2 + (who ? gap : -gap), hop = 0, tilt = 0.08, rear = 0;
+      if (yay && !REDUCED) hop = Math.abs(Math.sin(age / 150 + who * 0.6)) * 12 * s * (1 - age / 1300);
+      if (sing && R.who === who && !REDUCED) hop = Math.sin(age / 600 * Math.PI) * 6 * s;
+      if (hmm) tilt = 0.08 + 0.28 * Math.sin(Math.min(1, age / 350) * Math.PI / 2) * (age > 1300 ? (1700 - age) / 400 : 1);
+      if (hug) rear = Math.sin(Math.min(1, age / 450) * Math.PI / 2) * 0.32 * (age > 2800 ? (3200 - age) / 400 : 1);
+      if (breath && !REDUCED) hop += breath.e * 2.5 * s;
+      if (t > sceneBlink[who] + 150) sceneBlink[who] = t + 2000 + Math.random() * 3500;
+      var blink = t > sceneBlink[who] && t < sceneBlink[who] + 140;
+      var wag = REDUCED ? 0.1 : Math.sin(t / (yay || hug ? 80 : 190) + who) * (yay || hug ? 0.6 : 0.3);
+      c.fillStyle = THEME[G.w].dark ? 'rgba(0,0,0,0.3)' : 'rgba(60,40,70,0.16)';
+      c.beginPath(); c.ellipse(x, base + 1, 20 * s * (1 - hop / 60), 4 * s, 0, 0, Math.PI * 2); c.fill();
+      c.save(); c.translate(x - face * 6 * s, base - hop); c.scale(face * s * (who ? 0.96 : 1), s * (who ? 1.02 : 0.98)); c.rotate(-rear);
+      drawPup(c, PUPS[who], 'sit', 0, wag, blink, t, tilt);
+      c.restore();
+    }
+    if (hug && !REDUCED) { var q = (age % 1400) / 1400; heart(c, w / 2, base - 70 * s - q * 26 * s, 1.5 * s, '#EE8FA6', 0.95 * (1 - q)); }
+    else if (hug) heart(c, w / 2, base - 72 * s, 1.5 * s, '#EE8FA6', 0.95);
+    if (hmm) { var q2 = Math.min(1, age / 1200); heart(c, w / 2 + gap * (1 - q2 * 1.4), base - 56 * s - q2 * 10 * s, 0.9 * s, '#EE8FA6', 0.9 * (1 - q2 * 0.6)); }
+    if (!hug && !hmm && !yay && Math.abs(gap) < 40 * s) { var bob = REDUCED ? 0 : Math.sin(t / 700) * 2; heart(c, w / 2, base - 64 * s + bob, 0.75 * s, '#EE8FA6', 0.55); }
+    drawParts(c, t);
+    breathCue(t);
+  }
+
+  /* ---- calls in the dark: plan clear calls from the lookout, then call them out */
+  var ARW = ['↑', '→', '↓', '←'];
+  function callWords(cl) { return DIRWORD[cl[0]] + ' ' + cl[1]; }
+  function mazeUI() {
+    G.calls = []; G.walking = false; G.badCall = -1;
+    callsEl.innerHTML = '';
+    callsEl.appendChild(txt('p', 'fj-ck', 'Your calls, from the lookout'));
+    G.callList = el('ol', 'fj-calllist'); G.callList.setAttribute('aria-label', 'Your planned calls'); callsEl.appendChild(G.callList);
+    var padx = el('div', 'fj-callpad'); padx.setAttribute('role', 'group'); padx.setAttribute('aria-label', 'Add a call');
+    [3, 0, 2, 1].forEach(function (d) { padx.appendChild(btn('fj-cd', ARW[d], function () { addCall(d); }, 'Add a call: ' + DIRWORD[d])); });
+    callsEl.appendChild(padx);
+    var acts = el('div', 'fj-callacts');
+    acts.appendChild(btn('fj-soft', 'Remove last', removeCall));
+    acts.appendChild(btn('fj-soft fj-clearcalls', 'Clear', function () { if (G.walking) return; G.calls = []; G.badCall = -1; callsRender(); }));
+    acts.appendChild(btn('fj-soft', 'Hint', mazeHint, 'A gentle hint'));
+    callsEl.appendChild(acts);
+    G.goBtn = btn('fj-primary fj-callgo', 'Call them out', mazeGo); callsEl.appendChild(G.goBtn);
+    callsRender();
+  }
+  function addCall(d) {
+    if (G.walking || G.won) return;
+    wake();
+    var lv = curLevel(), last = G.calls[G.calls.length - 1];
+    if (last && last[0] === d) { if (last[1] < lv.maxRun) last[1]++; else { say('Six steps is the longest single call. Add another call after it.'); return; } }
+    else if (G.calls.length < lv.maxCalls) G.calls.push([d, 1]);
+    else { say('That’s ' + lv.maxCalls + ' calls, as many as ' + PAL[1] + ' can hold in mind at once. Try fewer, longer calls.'); return; }
+    G.badCall = -1; tone(soft(852) * SCALE[G.calls.length % 6], 0, 0.25, 0.02); callsRender();
+  }
+  function removeCall() {
+    if (G.walking || !G.calls.length) return;
+    var last = G.calls[G.calls.length - 1]; if (last[1] > 1) last[1]--; else G.calls.pop();
+    G.badCall = -1; callsRender();
+  }
+  function callsRender() {
+    var lv = curLevel();
+    G.callList.innerHTML = '';
+    G.calls.forEach(function (cl, i) {
+      var li = el('li');
+      li.appendChild(btn('fj-callchip' + (i === G.badCall ? ' is-bad' : ''), ARW[cl[0]] + ' ' + cl[1], function () {
+        if (G.walking) return; cl[1] = cl[1] % lv.maxRun + 1; G.badCall = -1; callsRender();
+      }, 'Call ' + (i + 1) + ': ' + DIRWORD[cl[0]] + ' ' + cl[1] + (cl[1] === 1 ? ' step' : ' steps') + '. Tap for one more step.'));
+      G.callList.appendChild(li);
+    });
+    if (!G.calls.length) G.callList.appendChild(txt('li', 'fj-callnone', 'No calls yet. Tap an arrow: tap it again for more steps.'));
+    movesEl.textContent = G.calls.length + ' of ' + lv.maxCalls + ' calls';
+    G.goBtn.disabled = !G.calls.length || G.walking;
+    describe();
+  }
+  function mazeGo() {
+    if (G.walking || G.won || !G.calls.length || mode !== 'play') return;
+    wake();
+    var res = J.mazeWalk(G.L, G.calls), p = G.pv[1], t = now(), seg = REDUCED ? 80 : 190, lead = REDUCED ? 100 : 450;
+    G.walking = true; G.badCall = -1; callsRender();
+    G.pv[0].happy = t;
+    say('“' + G.calls.map(callWords).map(cap1).join('. ') + '!”');
+    tone(soft(852) * 1.5, 0, 0.6, 0.03);
+    p.walk = true; p.t0 = t + lead; p.seg = seg; p.path = res.path.length > 1 ? res.path : null; p.i = res.path[res.path.length - 1];
+    res.path.forEach(function (_, k) { if (k) setTimeout(function () { tone(soft(852) * SCALE[k % 6], 0, 0.22, 0.014); }, lead + seg * k); });
+    setTimeout(function () {
+      if (mode !== 'play' || !G.maze) return;
+      p.walk = false;
+      if (res.won) { G.S = res.s; G.view = J.clone(G.S); G.won = true; G.walking = false; winLevel(); return; }
+      var bounce = res.ev.some(function (e) { return e.t === 'bounce'; });
+      if (res.stop >= 0) {
+        var d = G.calls[res.stop][0];
+        if (bounce) p.bounce = { t0: now(), d: d }; else if (!REDUCED) p.bump = { t0: now(), d: d };
+        G.badCall = res.stop;
+        say('Call ' + (res.stop + 1) + ' (' + callWords(G.calls[res.stop]) + ') led ' + (bounce ? 'onto a star that isn’t really there' : 'off the path') + '. ' + PAL[1] + ' hops safely back to the start. Change that call and try again.');
+      } else say('The calls ran out before the tone. Add a few more; ' + PAL[1] + ' hops back to the start to listen again.');
+      hmmTone();
+      setTimeout(function () {
+        if (mode !== 'play' || !G.maze) return;
+        G.S = J.init(G.L); G.view = J.clone(G.S); p.path = null; p.i = G.S.b; p.bounce = null; p.bump = null;
+        G.walking = false; callsRender(); paintStatic();
+      }, REDUCED ? 500 : 1300);
+    }, lead + seg * (res.path.length - 1) + 80);
+  }
+  function mazeHint() {
+    if (G.walking || G.won) return;
+    wake();
+    var lv = curLevel(), res = J.mazeWalk(G.L, G.calls), upto = res.stop >= 0 ? res.stop : G.calls.length;
+    if (res.won) { say('Those calls will do it. Tap “Call them out”.'); return; }
+    var pre = J.mazeWalk(G.L, G.calls.slice(0, upto)), sol = J.mazeSolve(G.L, lv.maxRun, pre.s);
+    if (!sol || !sol.length) { sol = J.mazeSolve(G.L, lv.maxRun); upto = 0; }
+    if (!sol || !sol.length) return;
+    if (res.stop >= 0) { G.badCall = res.stop; say('Hint: call ' + (res.stop + 1) + ' could be “' + callWords(sol[0]) + '”. Dashed stars aren’t really there.'); }
+    else if (!G.calls.length) say('Hint: start with “' + callWords(sol[0]) + '”. About ' + sol.length + ' calls in all.');
+    else say('Hint: after your calls, try “' + callWords(sol[0]) + '”.');
+    callsRender();
+  }
+  // the planned route, drawn as the calling pal imagines it
+  function drawRoute(c, t) {
+    if (!G.calls || !G.calls.length || G.walking) return;
+    var L = G.L, T = G.T, x = L.b % L.W, y = L.b / L.W | 0, pts = [[x, y]];
+    G.calls.forEach(function (cl) { for (var k = 0; k < cl[1]; k++) { x = clamp(x + J.DIRS[cl[0]][0], 0, L.W - 1); y = clamp(y + J.DIRS[cl[0]][1], 0, L.H - 1); pts.push([x, y]); } });
+    c.save(); c.strokeStyle = 'rgba(255,236,170,0.8)'; c.lineWidth = Math.max(2, T * 0.06); c.setLineDash([T * 0.1, T * 0.12]); c.lineCap = 'round'; c.lineJoin = 'round';
+    c.lineDashOffset = REDUCED ? 0 : -t / 60;
+    c.beginPath(); pts.forEach(function (p, k) { var px = p[0] * T + T / 2, py = p[1] * T + T / 2; if (k) c.lineTo(px, py); else c.moveTo(px, py); }); c.stroke();
+    c.setLineDash([]); var e = pts[pts.length - 1]; blob(c, e[0] * T + T / 2, e[1] * T + T / 2, T * 0.14, '#FFE9A8', 0.9);
+    c.restore();
   }
 
   /* ------------------------------------------------------------------ the Infinite Sky */
   var SKY = null;
-  function startSky() {
+  function startSky(force) {
+    if (!force && !save.harmony) { startHarmony(); return; }
     save.skySeen = 1; persist();
     G.w = 7; root.setAttribute('data-world', 7);
     setMode('sky');
@@ -1032,13 +2078,22 @@
     SKY = SKY || { stars: [], pals: [{ x: 0.36, y: 0.6, vx: 0, vy: 0, tx: 0.36, ty: 0.6, face: 1 }, { x: 0.62, y: 0.62, vx: 0, vy: 0, tx: 0.62, ty: 0.62, face: -1 }], turn: 0, rest: false, restT0: 0, hugAt: 0, calmSince: now(), clouds: [] , t0: now() };
     if (!SKY.clouds.length) for (var k = 0; k < 9; k++) SKY.clouds.push({ x: Math.random(), y: 0.12 + Math.random() * 0.8, s: 0.6 + Math.random() * 0.9, v: 0.000004 + Math.random() * 0.000008, a: 0.5 + Math.random() * 0.4 });
     resize(); drone();
+    myStars(); bringIntoView();
     say('Tap anywhere in the sky to place a star that chimes. The pals will float over to play.');
-    cv.setAttribute('aria-label', 'The Infinite Sky: soft clouds, and your two pals floating together. Tap to place chiming stars.');
+    cv.setAttribute('aria-label', 'The Infinite Sky: soft clouds, and Sugarfoot and Tidbit floating together. Tap to place chiming stars.');
     if (!save.worldIntro[7]) { save.worldIntro[7] = 1; persist(); showCard({ k: 'World 7 · 963 Hz', h: 'The Infinite Sky', lesson: W.lessons[0], p: W.intro, btns: [['Float up', function () { hideCard(); }, true]] }); }
   }
+  var SPECIAL = [[0.2, 0.13], [0.8, 0.15], [0.5, 0.37]];
   function skyTap(fx, fy) {
     wake();
     var S = SKY; if (!S) return;
+    var mine = (save.harmony || []).map(starById);
+    for (var k = 0; k < mine.length; k++) {
+      if (mine[k] && Math.hypot((fx - SPECIAL[k][0]) * cv._w, (fy - SPECIAL[k][1]) * cv._h) < 26) {
+        note(963, 4 + k, 0.07); S.glowAt = now(); S.glowK = k;
+        say('★ ' + mine[k].t + '. A star from ' + WORLDS[mine[k].w - 1].name + '.'); return;
+      }
+    }
     var n = Math.round((1 - fy) * 9);
     S.stars.push({ x: fx, y: fy, t0: now(), n: n, rot: Math.random() }); if (S.stars.length > 28) S.stars.shift();
     note(963, clamp(n, 0, 9), 0.06);
@@ -1048,6 +2103,16 @@
     setTimeout(function () { var side = o.x < p.tx ? -1 : 1; o.tx = clamp(p.tx + side * 0.13, 0.08, 0.92); o.ty = clamp(p.ty + 0.02, 0.15, 0.9); }, REDUCED ? 0 : 500);
     S.calmSince = now();
     if (S.rest) { /* in rest, stars still twinkle; the pals stay snuggled */ p.tx = p.x; p.ty = p.y; }
+  }
+  function myStars() {
+    var mine = (save.harmony || []).map(starById).filter(Boolean);
+    myStarsEl.innerHTML = '';
+    if (!mine.length) { myStarsEl.hidden = true; return; }
+    myStarsEl.appendChild(txt('p', 'fj-ck', 'Your three stars'));
+    var ul = el('ul');
+    mine.forEach(function (s) { ul.appendChild(txt('li', '', s.t)); });
+    myStarsEl.appendChild(ul);
+    myStarsEl.hidden = mode !== 'sky';
   }
   function setRest(on) {
     var S = SKY; if (!S) return;
@@ -1093,6 +2158,19 @@
       star(c, s.x * W, s.y * H, 7 * grow * tw, ['#F7C9D4', '#FFE3AE', '#D9C8F0', '#C7EBD6', '#C6DFF4'][s.n % 5], s.rot);
       star(c, s.x * W, s.y * H, 3 * grow, '#FFFFFF', s.rot);
     });
+    // the three stars chosen in the Harmony moment
+    var mine = (save.harmony || []).map(starById).filter(Boolean);
+    if (mine.length) {
+      c.strokeStyle = 'rgba(214,176,120,0.45)'; c.lineWidth = 1.2; c.setLineDash([2, 4]); c.beginPath();
+      mine.forEach(function (_, k) { var p = SPECIAL[k]; if (k) c.lineTo(p[0] * W, p[1] * H); else c.moveTo(p[0] * W, p[1] * H); });
+      if (mine.length === 3) c.closePath(); c.stroke(); c.setLineDash([]);
+      mine.forEach(function (_, k) {
+        var p = SPECIAL[k], x = p[0] * W, y = p[1] * H, tw = REDUCED ? 1 : 0.88 + 0.12 * Math.sin(t / 600 + k * 2), gl = S.glowK === k && t - S.glowAt < 1200 ? 1 - (t - S.glowAt) / 1200 : 0;
+        blob(c, x, y, 20 + gl * 14, '#FFF3C4', 0.45 + gl * 0.3);
+        star(c, x, y, 11 * tw + gl * 4, ['#F7B7C8', '#F6CB7A', '#C3A8F0'][k], 0.15);
+        star(c, x, y, 4.5, '#FFFFFF', 0.15);
+      });
+    }
     // the pals
     var A = S.pals[0], B = S.pals[1], dt = 1;
     S.pals.forEach(function (p) {
@@ -1202,12 +2280,15 @@
       var box = el('div', 'fj-lv');
       if (!W.levels.length) {
         var sb = el('button', 'fj-go', 'Enter the sky'); sb.type = 'button'; sb.addEventListener('click', function () { startSky(); }); box.appendChild(sb);
+        if (save.harmony) { var hb = el('button', '', 'Choose your three stars again'); hb.type = 'button'; hb.addEventListener('click', function () { wake(); startHarmony(); }); box.appendChild(hb); }
       }
-      W.levels.forEach(function (_, l) {
-        var b = el('button', isDone(w, l + 1) ? 'is-done' : '', (isDone(w, l + 1) ? '✓ ' : '') + 'Level ' + (l + 1)); b.type = 'button';
-        b.disabled = !levelOpen(w, l + 1);
-        b.setAttribute('aria-label', 'Level ' + (l + 1) + (isDone(w, l + 1) ? ', finished, play again' : levelOpen(w, l + 1) ? '' : ', not open yet'));
-        b.addEventListener('click', function () { startLevel(w, l + 1); });
+      W.levels.forEach(function (lv, l) {
+        var dn = isDone(w, l + 1), open = levelOpen(w, l + 1), b = el('button', 'fj-lvb' + (dn ? ' is-done' : ''));
+        b.type = 'button';
+        b.innerHTML = '<span class="fj-lvn">' + (dn ? '✓ ' : '') + 'Level ' + (l + 1) + '</span><span class="fj-lvk">' + esc(lv.kind) + '</span>' + leaves(lv.d);
+        b.disabled = !open;
+        b.setAttribute('aria-label', 'Level ' + (l + 1) + ': ' + lv.kind + ', difficulty ' + lv.d + ' of 5' + (dn ? ', finished, play again' : open ? '' : ', not open yet'));
+        b.addEventListener('click', function () { wake(); startLevel(w, l + 1); });
         box.appendChild(b);
       });
       panel.appendChild(box);
@@ -1219,24 +2300,28 @@
     setMode('map');
     root.setAttribute('data-world', focusWorld || nextUp()[0]);
     titleK.textContent = 'The Frequency Journey';
-    titleH.textContent = 'Journey map'; titleSub.textContent = 'Two pals, seven worlds, one Perfect Frequency.';
+    titleH.textContent = 'Journey map'; titleSub.textContent = 'Sugarfoot and Tidbit: seven worlds, one Perfect Frequency.';
     buildMap();
     showPanel(focusWorld || nextUp()[0]);
     if (!save.intro) {
       save.intro = true; persist();
       showCard({ k: 'The Frequency Journey', h: 'Two pals set out together',
         lesson: 'Somewhere above the clouds is the Perfect Frequency.',
-        p: 'Your two pals are going to find it: through a stormy forest, over melting glaciers, across a golden meadow, a canyon, a singing valley and a starry summit. They’ll get there as themselves, and as pals, side by side.',
+        p: 'Sugarfoot and Tidbit are going to find it: through a stormy forest, over melting glaciers, across a golden meadow, a canyon, a singing valley and a starry summit. Every level is a different small challenge, from riddles to breathing to sorting out a tricky moment, and each one grows a little wiser. They’ll get there as themselves, and as pals, side by side.',
         btns: [['Begin', function () { hideCard(); startLevel(1, 1); }, true], ['Look at the map first', hideCard]] });
     }
   }
 
   function setMode(m) {
+    if (m !== 'chal' && C) { clearTimers(); C = null; }
     mode = m;
     mapEl.hidden = m !== 'map'; playEl.hidden = m === 'map';
     btnMap.hidden = m === 'map';
-    controls.hidden = m !== 'play'; movesEl.hidden = m !== 'play'; skybar.hidden = m !== 'sky';
-    playEl.classList.toggle('is-sky', m === 'sky');
+    controls.hidden = !(m === 'play' && !G.maze); callsEl.hidden = !(m === 'play' && G.maze);
+    movesEl.hidden = m !== 'play'; skybar.hidden = m !== 'sky';
+    chalEl.hidden = m !== 'chal'; statusEl.hidden = m === 'chal'; sideEl.hidden = m === 'chal';
+    myStarsEl.hidden = !(m === 'sky' && save.harmony);
+    playEl.classList.toggle('is-sky', m === 'sky'); playEl.classList.toggle('is-chal', m === 'chal');
     breathEl.hidden = !(m === 'sky' && SKY && SKY.rest);
     if (m === 'map') stopDrone();
     kick();
@@ -1258,7 +2343,8 @@
     if (!down || down.id !== e.pointerId) return;
     var dx = e.clientX - down.x, dy = e.clientY - down.y, r = cv.getBoundingClientRect(); down = null;
     if (mode === 'sky') { skyTap((e.clientX - r.left) / r.width, (e.clientY - r.top) / r.height); return; }
-    if (mode !== 'play') return;
+    if (mode === 'chal') { G.react = { k: 'note', t0: now(), who: (e.clientX - r.left) / r.width < 0.5 ? 0 : 1 }; return; }
+    if (mode !== 'play' || G.maze) return;
     if (Math.hypot(dx, dy) >= 22) { move(Math.abs(dx) > Math.abs(dy) ? (dx > 0 ? 1 : 3) : (dy > 0 ? 2 : 0)); return; }
     // a tap: on a pal selects it; elsewhere, one step toward the tap
     var px = (e.clientX - r.left) / r.width * G.L.W, py = (e.clientY - r.top) / r.height * G.L.H;
@@ -1276,12 +2362,13 @@
   $('.fj-undo').addEventListener('click', undo);
   $('.fj-restart').addEventListener('click', restart);
   btnHint.addEventListener('click', hint);
-  btnSpecial.addEventListener('click', function () { if (G.w === 5) playMelody(); else if (G.w === 6) lookClosely(); });
+  btnSpecial.addEventListener('click', function () { if (G.L && G.L.melody.length) playMelody(); else lookClosely(); });
   btnMap.addEventListener('click', function () { hideCard(); showMap(G.w); });
   $('.fj-continue').addEventListener('click', function () { wake(); var nx = nextUp(); if (nx[0] === 7) startSky(); else startLevel(nx[0], nx[1]); });
   $('.fj-rest').addEventListener('click', function () { wake(); setRest(!(SKY && SKY.rest)); });
   $('.fj-clear').addEventListener('click', function () { if (SKY) SKY.stars = []; say('A clear sky again.'); });
   $('.fj-tomap').addEventListener('click', function () { showMap(7); });
+  $('.fj-stars3').addEventListener('click', function () { wake(); startHarmony(); });
   function setToggle(b, on) { b.setAttribute('aria-pressed', on ? 'true' : 'false'); }
   setToggle(btnSnd, save.sound); setToggle(btnDrone, save.drone);
   btnSnd.addEventListener('click', function () {
@@ -1297,9 +2384,17 @@
     var tg = e.target, tag = tg && tg.tagName;
     if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT' || (tg && tg.isContentEditable)) return;
     if (!cardEl.hidden) { if (e.key === 'Escape') { var bb = cardEl.querySelectorAll('.fj-card-btns button'); if (bb.length) bb[bb.length - 1].click(); } return; }
-    if (mode !== 'play') return;
     var r = root.getBoundingClientRect(); if (r.bottom < 0 || r.top > window.innerHeight) return;
+    if (mode === 'chal') { if (C && C.key && !C.done && C.key(e)) e.preventDefault(); return; }
+    if (mode !== 'play') return;
     var k = e.key, map = { ArrowUp: 0, ArrowRight: 1, ArrowDown: 2, ArrowLeft: 3, w: 0, d: 1, s: 2, a: 3, W: 0, D: 1, S: 2, A: 3 };
+    if (G.maze) {
+      if (k in map) { e.preventDefault(); addCall(map[k]); return; }
+      if (k === 'Enter' && tag !== 'BUTTON') { e.preventDefault(); mazeGo(); return; }
+      if (k === 'Backspace' || k === 'z' || k === 'Z') { e.preventDefault(); removeCall(); return; }
+      if (k === 'h' || k === 'H') mazeHint();
+      return;
+    }
     if (k in map) { e.preventDefault(); move(map[k]); return; }
     if (k === 'e' || k === 'E' || k === 'q' || k === 'Q') { switchPal(); return; }
     if (k === 't' || k === 'T') { btnTog.click(); return; }
@@ -1309,18 +2404,35 @@
     if (k === 'l' || k === 'L') { if (!btnSpecial.hidden) btnSpecial.click(); }
   });
   var rt = 0;
-  window.addEventListener('resize', function () { clearTimeout(rt); rt = setTimeout(function () { if (mode === 'play') { resize(); paintStatic(); } else if (mode === 'sky') resize(); }, 120); });
+  window.addEventListener('resize', function () { clearTimeout(rt); rt = setTimeout(function () { if (mode === 'play') { resize(); paintStatic(); } else if (mode === 'sky') resize(); else if (mode === 'chal') { resize(); paintScene(); } }, 120); });
   document.addEventListener('visibilitychange', function () { if (!document.hidden) kick(); else if (AC && AC.state === 'running') { /* the browser quiets it */ } });
 
   // A small hook for testing and for curious people: nothing is sent anywhere.
   window.TOLJourneyGame = {
-    state: function () { return { mode: mode, w: G.w, l: G.l, a: G.S && G.S.a, b: G.S && G.S.b, moves: G.moves, won: G.won, together: G.together, sel: G.sel, card: !cardEl.hidden, hist: G.hist.length }; },
+    state: function () {
+      var lv = G.w <= 6 ? curLevel() : null;
+      return { mode: mode, w: G.w, l: G.l, type: lv && lv.type, kind: lv && lv.kind, d: lv && lv.d, a: G.S && G.S.a, b: G.S && G.S.b, moves: G.moves, won: G.won,
+        together: G.together, sel: G.sel, card: !cardEl.hidden, hist: G.hist.length, calls: G.maze && G.calls ? G.calls.map(function (c) { return c.slice(); }) : null, walking: !!G.walking,
+        chal: C ? { type: C.type, done: C.done, hearts: C.hearts, i: C.i, j: C.j, len: C.len, pos: C.pos, playing: !!C.playing, hits: C.hits, picks: C.picks } : null,
+        harmony: save.harmony, done: Object.keys(save.done).length };
+    },
     act: function (who, d) { if (animating()) finishAnims(); move(d, who); },
-    start: startLevel, map: showMap, sky: startSky,
-    finish: function () { if (animating()) finishAnims(); }
+    start: startLevel, map: showMap, sky: function (force) { startSky(force); }, harmony: function () { startHarmony(); },
+    finish: function () { if (animating()) finishAnims(); },
+    // ms until the next "full" or "empty" moment of the slow lantern
+    breathNext: function () {
+      if (!C || C.type !== 'breath' || !C.t0) return null;
+      var lv = C.lv, cyc = lv.inhale + lv.exhale, s = (now() - C.t0) / 1000, p = ((s % cyc) + cyc) % cyc;
+      return Math.min(p <= lv.inhale ? lv.inhale - p : cyc - p + lv.inhale, cyc - p) * 1000;
+    }
   };
 
   /* ------------------------------------------------------------------ begin */
   root.hidden = false;
-  showMap();
+  // ?world=N opens straight at that world (its next unfinished level), if the pals have reached it
+  var qw = parseInt((location.search.match(/[?&]world=(\d+)/) || [])[1], 10);
+  if (qw >= 1 && qw <= 7 && save.intro && worldOpen(qw)) {
+    if (qw === 7) startSky();
+    else { var ql = 1; while (ql <= 3 && isDone(qw, ql)) ql++; startLevel(qw, ql > 3 ? 1 : ql); }
+  } else showMap(qw >= 1 && qw <= 7 ? qw : undefined);
 })();

@@ -1,7 +1,9 @@
 #!/usr/bin/env node
-/* Checks every level of The Frequency Journey (assets/js/journey-levels.js) with a
-   breadth-first search: each one must be solvable, and we record the fewest moves.
+/* Checks every grid level ("walk" levels) of The Frequency Journey (assets/js/journey-levels.js)
+   with a breadth-first search: each one must be solvable, and we record the fewest moves.
    A "move" is one step of one pal, or one step of both pals together.
+   The other kinds of challenge (riddles, sorting, the "Calls in the dark" maze…) are checked by
+   tools/journey/check-content.js.
 
    node tools/journey/solve.js            check all levels, print a table
    node tools/journey/solve.js --write    also save solutions to tools/journey/solutions.json
@@ -31,6 +33,7 @@ function checkShape(L, id) {
 J.WORLDS.forEach(function (w) {
   w.levels.forEach(function (lv, li) {
     var id = w.n + '-' + (li + 1);
+    if (lv.type !== 'walk') return;
     if (only && only !== id) return;
     var L = J.parse(lv, w.n), errs = checkShape(L, id), t0 = Date.now();
     var sol = J.solve(L, null, 3e6), ms = Date.now() - t0;
@@ -58,5 +61,5 @@ if (process.argv.indexOf('--write') >= 0 && !only) {
   fs.writeFileSync(path.join(__dirname, 'solutions.json'), JSON.stringify(out, null, 0).replace(/\],"/g, '],\n"') + '\n');
   console.log('wrote tools/journey/solutions.json');
 }
-console.log(bad ? bad + ' problem(s)' : 'All levels solvable.');
+console.log(bad ? bad + ' problem(s)' : 'All grid levels solvable.');
 process.exit(bad ? 1 : 0);

@@ -7,258 +7,148 @@
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
+
   gtag('config', 'G-NKC6CQ9S66');
 </script>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>The Frequency Journey &mdash; a calm puzzle adventure for two pals &middot; The Objective Ledger</title>
-<meta name="description" content="Guide two pals through seven gentle, tone-themed worlds to find the Perfect Frequency. Small calm puzzles about trust, change, joy, connection, voice and seeing clearly. No timer, no way to lose.">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Frequency Journey — Tidbit and Sugarfoot’s search for the Perfect Frequency</title>
+<meta name="description" content="Join Tidbit and Sugarfoot on a calm puzzle journey through seven tone-themed worlds, from the Whispering Shadows to the Infinite Sky. Riddles, little life lessons and gentle challenges, with no timers and no way to lose.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,500&family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/assets/css/site.css">
 <link rel="stylesheet" href="/assets/css/reading.css">
-<link rel="stylesheet" href="/assets/css/games.css">
-<style>
-  /* ---- The Frequency Journey ---- */
-  @media (min-width:760px){ main.read.fj-page{ max-width:56rem; } }
-  .fj{ --fj-ink:#3C3350; --fj-soft:#6E5F80; --fj-tile:#FFFDF9; --fj-edge:#E6D6EE; --fj-accent:#D9C8F0; --fj-deep:#3C3350;
-    position:relative; padding:.8rem .8rem 1rem; color:var(--fj-ink); overflow:hidden; }
-  body.is-game .gm-board.fj{ background-image:var(--fj-board, linear-gradient(160deg,#FFF8EE 0%,#F6EEF8 55%,#EEF4FA 100%)); }
-  .fj[data-world="1"]{ --fj-board:linear-gradient(165deg,#E9EEF2 0%,#D9E2E6 100%); --fj-accent:#F2D29B; }
-  .fj[data-world="2"]{ --fj-board:linear-gradient(165deg,#F4FAFE 0%,#E2F0F9 100%); --fj-accent:#BFE0F2; }
-  .fj[data-world="3"]{ --fj-board:linear-gradient(165deg,#FFF9E6 0%,#F6EDC4 100%); --fj-accent:#F6D77A; }
-  .fj[data-world="4"]{ --fj-board:linear-gradient(165deg,#FFF1E8 0%,#F7DCCF 100%); --fj-accent:#F4B7A2; }
-  .fj[data-world="5"]{ --fj-board:linear-gradient(165deg,#F4F0FC 0%,#E4F3EE 100%); --fj-accent:#CDB9F0; }
-  .fj[data-world="6"]{ --fj-board:linear-gradient(165deg,#E6E6F6 0%,#D6D8EE 100%); --fj-accent:#C9C3F2; }
-  .fj[data-world="7"]{ --fj-board:linear-gradient(165deg,#FFF1F5 0%,#E6F0FC 100%); --fj-accent:#F7C9D4; }
-  .fj [hidden]{ display:none !important; }
-  .fj button{ font:inherit; color:inherit; }
-  .fj button:focus-visible{ outline:3px solid #7C6BB0; outline-offset:2px; }
-
-  .fj-head{ display:flex; justify-content:space-between; align-items:flex-start; gap:.5rem; margin:0 0 .55rem; }
-  .read .fj .fj-title, .read .fj .fj-sub, .read .fj .fj-k, .read .fj-card h2, .read .fj-card p, .read .fj-panel h3, .read .fj-panel p, .read .fj p.fj-status, .read .fj p.fj-moves{ max-width:none; }
-  .read .fj h2.fj-title{ margin:.05rem 0 0 !important; font-size:1.3rem !important; line-height:1.2; }
-  .read .fj p.fj-sub, .read .fj p.fj-k{ margin:0 !important; }
-  .read .fj-card h2{ margin:.2rem 0 .5rem !important; }
-  .read .fj-panel h3{ margin:.1rem 0 .3rem !important; }
-  .fj-k{ margin:0; font:500 .7rem/1.3 "IBM Plex Mono", ui-monospace, monospace; letter-spacing:.1em; text-transform:uppercase; color:var(--fj-soft); }
-  .fj-title{ margin:.05rem 0 0; font:600 1.22rem/1.2 "Fraunces", Georgia, serif; color:var(--fj-ink); }
-  .fj-sub{ margin:.1rem 0 0; font-size:.86rem; color:var(--fj-soft); }
-  .fj-tools{ display:flex; gap:.35rem; flex:none; }
-  .fj-ic{ width:44px; height:44px; border-radius:50%; border:1px solid var(--fj-edge); background:var(--fj-tile); display:grid; place-items:center; cursor:pointer; padding:0; }
-  .fj-ic svg{ width:22px; height:22px; }
-  .fj-ic[aria-pressed="false"]{ opacity:.55; }
-  .fj-ic[aria-pressed="false"] .fj-on{ display:none; }
-  .fj-ic[aria-pressed="true"] .fj-off{ display:none; }
-
-  /* the board */
-  .fj-play{ display:grid; gap:.6rem; }
-  .fj-stage{ position:relative; display:flex; justify-content:center; }
-  .fj-canvas{ display:block; border-radius:18px; box-shadow:0 10px 30px rgba(60,40,90,.16); touch-action:none; user-select:none; -webkit-user-select:none; cursor:pointer; }
-  .fj-status{ min-height:2.7em; margin:0 !important; text-align:center; font-size:.93rem; line-height:1.4; color:var(--fj-ink); }
-  .fj-status b{ font-family:"Fraunces", Georgia, serif; }
-  .fj-controls{ display:grid; grid-template-columns:auto 1fr; gap:.7rem; align-items:center; }
-  .fj-pad{ display:grid; grid-template-columns:repeat(3, 50px); grid-template-rows:repeat(3, 50px); gap:4px; }
-  .fj-pad button{ border:1px solid var(--fj-edge); background:var(--fj-tile); border-radius:14px; cursor:pointer; display:grid; place-items:center; padding:0; touch-action:manipulation; box-shadow:0 2px 6px rgba(60,40,90,.08); }
-  .fj-pad button:active{ transform:scale(.94); background:var(--fj-accent); }
-  .fj-pad svg{ width:22px; height:22px; }
-  .fj-pad .fj-up{ grid-column:2; grid-row:1; } .fj-pad .fj-left{ grid-column:1; grid-row:2; }
-  .fj-pad .fj-right{ grid-column:3; grid-row:2; } .fj-pad .fj-down{ grid-column:2; grid-row:3; }
-  .fj-pad .fj-mid{ grid-column:2; grid-row:2; border-radius:50%; background:var(--fj-accent); }
-  .fj-acts{ display:grid; grid-template-columns:1fr 1fr; gap:.4rem; }
-  .fj-acts button{ min-height:46px; border-radius:14px; border:1px solid var(--fj-edge); background:var(--fj-tile); cursor:pointer; display:flex; align-items:center; justify-content:center; gap:.35rem; padding:.3rem .5rem; font-size:.86rem; font-weight:600; line-height:1.1; touch-action:manipulation; }
-  .fj-acts button svg{ width:18px; height:18px; flex:none; }
-  .fj-acts button[aria-pressed="true"]{ background:var(--fj-deep); border-color:var(--fj-deep); color:#FFF8EE; }
-  .fj-acts button:disabled{ opacity:.5; cursor:default; }
-  .fj-acts .fj-special{ grid-column:1 / -1; background:var(--fj-accent); border-color:transparent; }
-  .fj-moves{ margin:0; text-align:center; font:500 .74rem/1 "IBM Plex Mono", monospace; letter-spacing:.06em; color:var(--fj-soft); }
-
-  /* cards: level done, world intro, world done */
-  .fj-card{ position:fixed; inset:0; z-index:95; display:grid; place-items:center; padding:.8rem; background:rgba(255,250,244,.62); backdrop-filter:blur(5px); -webkit-backdrop-filter:blur(5px); }
-  .fj-card > div{ width:min(100%, 23rem); max-height:100%; overflow:auto; text-align:center; padding:1.3rem 1.15rem 1.15rem; border-radius:24px; background:#FFFDF9; box-shadow:0 18px 50px rgba(60,40,90,.24); animation:fj-pop .55s cubic-bezier(.2,1.4,.4,1) both; }
-  @keyframes fj-pop{ from{ transform:scale(.85); opacity:0; } to{ transform:scale(1); opacity:1; } }
-  .fj-orb{ width:4.2rem; height:4.2rem; margin:0 auto .5rem; border-radius:50%; background:radial-gradient(circle at 40% 38%, #fff 0 12%, var(--fj-accent) 45%, rgba(255,255,255,0) 72%); box-shadow:0 0 36px 8px var(--fj-accent); animation:fj-breathe 5s ease-in-out infinite; }
-  @keyframes fj-breathe{ 50%{ transform:scale(1.12); } }
-  .fj-card-k{ margin:0; font:500 .7rem/1.3 "IBM Plex Mono", monospace; letter-spacing:.1em; text-transform:uppercase; color:var(--fj-soft); }
-  .fj-card h2{ margin:.2rem 0 .5rem; font:600 1.35rem/1.2 "Fraunces", Georgia, serif; }
-  .fj-card-lesson{ margin:0 0 .6rem; font:italic 500 1.08rem/1.45 "Fraunces", Georgia, serif; color:#4E3F6B; }
-  .fj-card-p{ margin:0 0 .6rem; font-size:.93rem; line-height:1.5; color:#5A5068; }
-  .fj-card-steps{ margin:0 0 .9rem; font-size:.82rem; color:var(--fj-soft); }
-  .fj-card-btns{ display:flex; flex-wrap:wrap; justify-content:center; gap:.45rem; }
-  .fj-card-btns button{ min-height:46px; padding:.5rem 1.1rem; border-radius:999px; border:1px solid var(--fj-edge); background:#fff; cursor:pointer; font-weight:600; font-size:.92rem; }
-  .fj-card-btns .fj-go{ background:#3C3350; border-color:#3C3350; color:#FFF8EE; font-size:1rem; }
-
-  /* the journey map */
-  .fj-map{ position:relative; }
-  .fj-map-top{ display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:.5rem; margin:0 0 .6rem; }
-  .fj-progress{ margin:0; font-size:.88rem; color:var(--fj-soft); }
-  .fj-continue{ min-height:46px; padding:.5rem 1.1rem; border-radius:999px; border:0; background:#3C3350; color:#FFF8EE !important; font-weight:600; cursor:pointer; }
-  .fj-trail{ position:relative; width:100%; max-width:30rem; margin:0 auto; aspect-ratio:10 / 14; border-radius:22px; overflow:hidden; box-shadow:0 10px 30px rgba(60,40,90,.14); }
-  .fj-trail svg.fj-trail-bg{ position:absolute; inset:0; width:100%; height:100%; }
-  .fj-node{ position:absolute; transform:translate(-50%, -50%); display:flex; align-items:center; gap:.45rem; padding:0; border:0; background:none; cursor:pointer; }
-  .fj-node.is-right{ flex-direction:row-reverse; }
-  .fj-node-dot{ width:52px; height:52px; flex:none; border-radius:50%; display:grid; place-items:center; background:#FFFDF9; border:3px solid rgba(255,255,255,.85); box-shadow:0 4px 14px rgba(40,30,70,.25); }
-  .fj-node-dot svg{ width:28px; height:28px; }
-  .fj-node.is-done .fj-node-dot{ border-color:#F6D77A; box-shadow:0 0 0 4px rgba(246,215,122,.35), 0 4px 14px rgba(40,30,70,.25); }
-  .fj-node.is-here .fj-node-dot{ animation:fj-breathe 4s ease-in-out infinite; }
-  .fj-node.is-locked .fj-node-dot{ opacity:.55; filter:grayscale(.6); }
-  .fj-node-l{ display:block; white-space:nowrap; padding:.25rem .6rem; border-radius:12px; background:rgba(255,253,249,.92); text-align:left; box-shadow:0 2px 8px rgba(40,30,70,.12); max-width:9.5rem; }
-  .fj-node.is-right .fj-node-l{ text-align:right; }
-  .fj-node-l b{ display:block; font:600 .8rem/1.2 "Fraunces", Georgia, serif; color:#3C3350; }
-  .fj-node-l small{ display:block; font:500 .66rem/1.3 "IBM Plex Mono", monospace; color:#6E5F80; letter-spacing:.04em; }
-  .fj-node-l i{ font-style:normal; letter-spacing:.12em; color:#C79A2E; }
-  .fj-node.is-locked .fj-node-l{ opacity:.8; }
-  .fj-mappals{ position:absolute; pointer-events:none; transform:translate(-50%, -100%); }
-  .fj-panel{ margin:.8rem auto 0; max-width:30rem; padding:1rem 1rem .9rem; border-radius:20px; background:#FFFDF9; border:1px solid var(--fj-edge); box-shadow:0 8px 24px rgba(60,40,90,.1); }
-  .fj-panel h3{ margin:.1rem 0 .3rem; font:600 1.15rem/1.25 "Fraunces", Georgia, serif; }
-  .fj-panel p{ margin:0 0 .6rem; font-size:.92rem; line-height:1.5; color:#5A5068; }
-  .fj-panel .fj-panel-sum{ font-family:"Fraunces", Georgia, serif; font-style:italic; color:#4E3F6B; }
-  .fj-lv{ display:flex; flex-wrap:wrap; gap:.45rem; }
-  .fj-lv button{ min-height:46px; min-width:46px; padding:.4rem .9rem; border-radius:999px; border:1px solid var(--fj-edge); background:#fff; cursor:pointer; font-weight:600; font-size:.9rem; }
-  .fj-lv button.is-done{ background:#FFF3C9; border-color:#F0D680; }
-  .fj-lv button:disabled{ opacity:.5; cursor:default; }
-  .fj-note{ margin:.7rem 0 0 !important; font-size:.8rem !important; color:#7A6E86 !important; }
-
-  /* the sky */
-  .fj-skybar{ display:flex; flex-wrap:wrap; justify-content:center; gap:.45rem; }
-  .fj-skybar button{ min-height:46px; padding:.45rem 1rem; border-radius:999px; border:1px solid var(--fj-edge); background:var(--fj-tile); cursor:pointer; font-weight:600; font-size:.9rem; }
-  .fj-skybar button[aria-pressed="true"]{ background:#3C3350; border-color:#3C3350; color:#FFF8EE; }
-  .fj-breath{ position:absolute; left:0; right:0; bottom:12%; margin:0; text-align:center; pointer-events:none; font:italic 500 1.15rem/1.3 "Fraunces", Georgia, serif; color:#4E3F6B; text-shadow:0 1px 8px rgba(255,255,255,.9); transition:opacity 1.2s; }
-
-  .fj-live{ position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); }
-  .fj-how summary{ cursor:pointer; font-family:"Fraunces", Georgia, serif; font-weight:600; font-size:1.05rem; min-height:44px; display:flex; align-items:center; }
-  .fj-how ul{ margin:.4rem 0 .6rem; padding-left:1.1rem; line-height:1.55; font-size:.95rem; }
-  .fj-how li{ margin:.25rem 0; }
-  .fj-how .fj-how-note{ font-size:.86rem; color:#6A6152; }
-
-  @media (min-width:760px){
-    .fj{ padding:1.1rem 1.2rem 1.2rem; }
-    .fj-play{ grid-template-columns:1fr 13.5rem; grid-template-areas:"stage side" "status side"; align-items:start; column-gap:1.1rem; }
-    .fj-stage{ grid-area:stage; }
-    .fj-status{ grid-area:status; }
-    .fj-side{ grid-area:side; display:grid; gap:.8rem; align-content:start; padding-top:.2rem; }
-    .fj-controls{ grid-template-columns:1fr; justify-items:center; }
-    .fj-acts{ width:100%; }
-    .fj-play.is-sky{ grid-template-columns:1fr; grid-template-areas:"stage" "status" "side"; }
-  }
-  @media (max-width:759px){ .fj-side{ display:grid; gap:.5rem; } }
-  @media (max-width:520px){
-    main.read{ padding-top:.8rem; }
-    .fj-intro{ display:none; }
-    .read-head{ display:none; }
-    .gm-switch{ margin-top:0; }
-    .gm-switch .gm-chip{ display:none; }
-    .fj{ margin-left:-.5rem; margin-right:-.5rem; padding:.65rem .5rem .8rem; border-radius:22px; }
-    .read .fj h2.fj-title{ font-size:1.15rem !important; line-height:1.2; }
-    .fj-head{ margin-bottom:.45rem; }
-    .fj-pad{ grid-template-columns:repeat(3, 48px); grid-template-rows:repeat(3, 48px); }
-    .fj-controls{ gap:.5rem; }
-  }
-  @media (max-width:360px){ .fj-pad{ grid-template-columns:repeat(3, 44px); grid-template-rows:repeat(3, 44px); } .fj-acts button{ font-size:.8rem; } }
-  @media (prefers-reduced-motion: reduce){ .fj-card > div, .fj-orb, .fj-node.is-here .fj-node-dot{ animation:none; } .fj-pad button:active{ transform:none; } .fj-breath{ transition:none; } }
-</style>
 <script src="/assets/js/site.js" defer></script>
-<script src="/assets/js/journey-levels.js" defer></script>
-<script src="/assets/js/frequency-journey.js" defer></script>
+<script src="/assets/js/pups.js" defer></script>
+<script src="/assets/js/journey-pals.js" defer></script>
+<style>
+  .jp-canvas{ position:fixed; inset:0; width:100vw; height:100vh; z-index:40; pointer-events:none; }
+  .jl main.read{ max-width:52rem; }
+  .jl .read > *{ max-width:none; }
+  .jl-hero{ position:relative; margin:.5rem 0 2.2rem; padding:2rem 1.4rem 1.8rem; border-radius:30px; text-align:center; overflow:hidden;
+    background:radial-gradient(circle at 50% 0%, rgba(255,241,201,.95), rgba(233,222,247,.92) 55%, rgba(206,226,244,.92)); border:1px solid rgba(217,200,240,.9); }
+  .jl-sun{ width:5.5rem; height:5.5rem; margin:0 auto .6rem; border-radius:50%; background:radial-gradient(circle at 40% 35%, #FFFBEA, #F8DC6E 55%, rgba(248,220,110,0) 72%); animation:jlGlow 5s ease-in-out infinite; }
+  @keyframes jlGlow{ 50%{ transform:scale(1.08); filter:brightness(1.06); } }
+  .jl-k{ margin:0; font:500 .75rem/1 "IBM Plex Mono", monospace; letter-spacing:.14em; text-transform:uppercase; color:#8A6D8F; }
+  .jl-hero h1{ margin:.35rem 0 .4rem; font-size:clamp(2.1rem, 8vw, 3.2rem); line-height:1.05; }
+  .jl-hero .jl-sub{ margin:0 auto 1.2rem; max-width:34rem; font-family:"Fraunces", Georgia, serif; font-style:italic; font-size:1.12rem; color:#4E3F6B; }
+  .jl-go{ display:inline-flex; align-items:center; gap:.5rem; min-height:48px; padding:.7rem 1.5rem; border-radius:999px; background:#3C3350; color:#FFF8EE !important; text-decoration:none !important;
+    font:600 1.05rem "Lora", Georgia, serif; box-shadow:0 10px 24px rgba(60,51,80,.25); transition:transform .15s; }
+  .jl-go:hover{ transform:translateY(-2px); }
+  .jl-go.is-soft{ background:#fff; color:#3C3350 !important; border:1px solid #D9C8F0; box-shadow:none; }
+  .jl-actions{ display:flex; gap:.6rem; justify-content:center; flex-wrap:wrap; }
+  .jl-sec{ margin:2.4rem 0 1rem; }
+  .jl-sec > h2{ text-align:center; margin:0 0 .3rem; }
+  .jl-sec > p.jl-intro{ text-align:center; margin:0 auto 1.1rem; max-width:34rem; color:var(--ink-soft); }
+  .jl-pals{ display:grid; gap:1rem; grid-template-columns:1fr; }
+  @media (min-width:640px){ .jl-pals{ grid-template-columns:1fr 1fr; } }
+  .jl-pal{ display:grid; grid-template-columns:auto 1fr; gap:.2rem 1rem; align-items:center; padding:1.1rem 1.2rem; border-radius:24px; background:rgba(255,253,248,.92); border:1px solid rgba(217,200,240,.8); }
+  .jl-pal canvas{ grid-row:span 3; width:96px; height:88px; }
+  .jl-pal h3{ margin:0; font-size:1.35rem; }
+  .jl-pal .jl-tagline{ margin:0; font:500 .72rem/1.3 "IBM Plex Mono", monospace; letter-spacing:.06em; text-transform:uppercase; color:#8A6D8F; }
+  .jl-pal p{ margin:0; font-size:.95rem; line-height:1.5; }
+  .jl-worlds{ list-style:none; margin:0; padding:0; display:grid; gap:.9rem; grid-template-columns:1fr; counter-reset:w; }
+  @media (min-width:640px){ .jl-worlds{ grid-template-columns:1fr 1fr; } .jl-worlds li:last-child{ grid-column:1 / -1; } }
+  .jl-world{ position:relative; display:block; padding:1rem 1.1rem 1rem 4.6rem; border-radius:22px; text-decoration:none !important; color:inherit !important; min-height:5.6rem;
+    background:linear-gradient(150deg, var(--w1), var(--w2)); border:1px solid rgba(0,0,0,.05); transition:transform .15s, box-shadow .15s; }
+  .jl-world:hover{ transform:translateY(-2px); box-shadow:0 10px 26px rgba(60,40,90,.12); }
+  .jl-world .jl-hz{ position:absolute; left:.9rem; top:1rem; display:grid; place-items:center; width:3rem; height:3rem; border-radius:50%; background:rgba(255,255,255,.75); font:600 .78rem/1 "IBM Plex Mono", monospace; color:#3C3350; }
+  .jl-world h3{ margin:0 0 .15rem; font-size:1.12rem; }
+  .jl-world p{ margin:0; font-size:.92rem; line-height:1.45; }
+  .jl-world .jl-lesson{ display:block; margin-top:.35rem; font:italic .88rem/1.4 "Fraunces", Georgia, serif; color:#5B4A86; }
+  .jl-world.is-night{ color:#FFF6E0 !important; } .jl-world.is-night p, .jl-world.is-night .jl-lesson{ color:#E6DDF6; }
+  .jl-how{ display:grid; gap:.8rem; grid-template-columns:1fr; }
+  @media (min-width:640px){ .jl-how{ grid-template-columns:1fr 1fr 1fr; } }
+  .jl-how div{ padding:1rem 1.1rem; border-radius:20px; background:rgba(255,253,248,.9); border:1px solid rgba(217,200,240,.7); }
+  .jl-how strong{ display:block; font-family:"Fraunces", Georgia, serif; font-size:1.05rem; margin-bottom:.2rem; }
+  .jl-how p{ margin:0; font-size:.93rem; }
+  .jl-end{ margin:2.6rem 0 1rem; padding:1.6rem 1.3rem; border-radius:28px; text-align:center; background:linear-gradient(160deg, rgba(46,47,92,.9), rgba(92,74,120,.88)); color:#FFF6E0; }
+  .jl-end h2{ color:#FFF6E0; margin:0 0 .4rem; }
+  .jl-end p{ margin:0 auto 1.1rem; max-width:32rem; color:#E6DDF6; }
+  .jl-note{ text-align:center; font-size:.85rem; color:var(--ink-soft); margin:1rem auto; max-width:34rem; }
+  @media (prefers-reduced-motion: reduce){ .jl-sun{ animation:none; } }
+</style>
 </head>
-<body class="is-game" data-no-tip data-no-breathe data-no-weather>
-<main class="read fj-page">
-<header class="read-head"><p class="read-code">New &middot; a calm puzzle journey</p><h1>The Frequency Journey</h1></header>
-<nav class="gm-switch" aria-label="Calm games">
-  <a class="gm-tab gm-home" href="/pause-and-play.html" aria-label="Pause and Play: all the calm games">&#10024;</a>
-  <a class="gm-tab" href="/frequency-journey.html" aria-current="page">&#127925; Journey</a>
-  <a class="gm-tab" href="/word-bloom.html">&#127804; Bloom</a>
-  <a class="gm-tab" href="/quiet-crossword.html">&#9999;&#65039; Crossword</a>
-  <a class="gm-tab" href="/daily-ledger-crossword.html">&#128240; Newspaper</a>
-  <a class="gm-tab" href="/quiet-words.html">&#128269; Words</a>
-  <span class="gm-chip" data-rewards-chip></span>
-</nav>
-<p class="simple-lede fj-intro"><strong>What is this?</strong> A calm puzzle journey through seven tone-themed worlds. Guide your two pals, together, all the way up to the Perfect Frequency. No timer, and no way to lose: you can always undo or start a level again.</p>
+<body class="jl" data-no-cheer data-garden-nopals>
+<main class="read">
 
-<section class="gm-board fj" id="fj" data-world="1" aria-label="The Frequency Journey">
-  <div class="fj-head">
-    <div>
-      <p class="fj-k">The Frequency Journey</p>
-      <h2 class="fj-title">Journey map</h2>
-      <p class="fj-sub"></p>
-    </div>
-    <div class="fj-tools">
-      <button type="button" class="fj-ic fj-mapbtn" aria-label="Journey map" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 4 3 6.5v13L9 17l6 2.5 6-2.5v-13L15 6.5z"/><path d="M9 4v13M15 6.5v13"/></svg></button>
-      <button type="button" class="fj-ic fj-snd" aria-pressed="true" aria-label="Sound"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z"/><path class="fj-on" d="M15.5 9a4 4 0 0 1 0 6M18 6.5a7.5 7.5 0 0 1 0 11"/><path class="fj-off" d="m16 9.5 5 5m0-5-5 5"/></svg></button>
-      <button type="button" class="fj-ic fj-drone" aria-pressed="true" aria-label="Background tone"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M2.5 12c2-4 3.5-4 5 0s3 4 4.5 0 3-4 4.5 0 3 4 5 0"/><path class="fj-off" d="M4 4l16 16"/></svg></button>
-    </div>
+<section class="jl-hero" data-romp aria-labelledby="jl-h">
+  <div class="jl-sun" aria-hidden="true"></div>
+  <p class="jl-k">A calm puzzle journey</p>
+  <h1 id="jl-h">The Frequency Journey</h1>
+  <p class="jl-sub">Somewhere above the clouds is the Perfect Frequency. Tidbit and Sugarfoot are going to find it, together.</p>
+  <div class="jl-actions">
+    <a class="jl-go" href="/frequency-journey-play.html">&#9654; Begin the journey</a>
+    <a class="jl-go is-soft" href="#worlds">See the seven worlds</a>
   </div>
-
-  <div class="fj-map">
-    <div class="fj-map-top">
-      <p class="fj-progress"></p>
-      <button type="button" class="fj-continue">Begin the journey</button>
-    </div>
-    <div class="fj-trail" role="group" aria-label="The seven worlds, from the forest up to the sky">
-      <svg class="fj-trail-bg" viewBox="0 0 100 140" preserveAspectRatio="none" aria-hidden="true"></svg>
-    </div>
-    <div class="fj-panel" aria-live="polite"></div>
-  </div>
-
-  <div class="fj-play" hidden>
-    <div class="fj-stage">
-      <canvas class="fj-canvas" role="img" aria-label="The puzzle board"></canvas>
-      <p class="fj-breath" hidden></p>
-    </div>
-    <p class="fj-status" aria-live="polite"></p>
-    <div class="fj-side">
-      <div class="fj-controls">
-        <div class="fj-pad" role="group" aria-label="Move">
-          <button type="button" class="fj-up" data-dir="0" aria-label="Up"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 14 6-6 6 6"/></svg></button>
-          <button type="button" class="fj-left" data-dir="3" aria-label="Left"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m14 6-6 6 6 6"/></svg></button>
-          <button type="button" class="fj-mid fj-switch2" aria-label="Switch pal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 7h11l-3-3M17 17H6l3 3"/></svg></button>
-          <button type="button" class="fj-right" data-dir="1" aria-label="Right"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m10 6 6 6-6 6"/></svg></button>
-          <button type="button" class="fj-down" data-dir="2" aria-label="Down"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 10 6 6 6-6"/></svg></button>
-        </div>
-        <div class="fj-acts">
-          <button type="button" class="fj-switch"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 7h11l-3-3M17 17H6l3 3"/></svg>Switch pal</button>
-          <button type="button" class="fj-together" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20s-7-4.4-7-9.5A3.8 3.8 0 0 1 12 8a3.8 3.8 0 0 1 7 2.5C19 15.6 12 20 12 20z"/></svg>Together</button>
-          <button type="button" class="fj-undo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 14 4 9l5-5"/><path d="M4 9h10.5a5.5 5.5 0 0 1 0 11H11"/></svg>Undo</button>
-          <button type="button" class="fj-restart"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12a8 8 0 1 0 2.3-5.6"/><path d="M4 4v4.5h4.5"/></svg>Restart</button>
-          <button type="button" class="fj-hint" aria-label="A gentle hint"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-3.5 10.9c.6.5 1 1.2 1 2.1h5c0-.9.4-1.6 1-2.1A6 6 0 0 0 12 3z"/></svg>Hint</button>
-          <button type="button" class="fj-special" hidden></button>
-        </div>
-      </div>
-      <p class="fj-moves" aria-live="off"></p>
-      <div class="fj-skybar" hidden>
-        <button type="button" class="fj-rest" aria-pressed="false">Rest here</button>
-        <button type="button" class="fj-clear">Clear the stars</button>
-        <button type="button" class="fj-tomap">Journey map</button>
-      </div>
-    </div>
-  </div>
-
-  <div class="fj-card" hidden role="dialog" aria-modal="true" aria-labelledby="fj-card-h">
-    <div>
-      <div class="fj-orb" aria-hidden="true"></div>
-      <p class="fj-card-k"></p>
-      <h2 id="fj-card-h"></h2>
-      <p class="fj-card-lesson"></p>
-      <p class="fj-card-p"></p>
-      <p class="fj-card-steps"></p>
-      <div class="fj-card-btns"></div>
-    </div>
-  </div>
-  <p class="fj-live" aria-live="polite"></p>
 </section>
 
-<details class="try-this fj-how">
-  <summary>How to play</summary>
-  <ul>
-    <li><strong>Bring both pals to the glowing tone.</strong> It has room for two, and they arrive together.</li>
-    <li><strong>Move</strong> by swiping on the board, with the arrow pad, or with the arrow keys (or W A S D). Tapping near a pal also takes one step that way.</li>
-    <li><strong>Switch pal</strong> (or tap a pal, or press E) chooses who moves. <strong>Together</strong> (or T) moves both pals the same way at once.</li>
-    <li><strong>Undo</strong> (Z) and <strong>Restart</strong> (R) are always there, and <strong>A gentle hint</strong> (H) shows one good next step.</li>
-    <li>Each world adds one new idea: lanterns and thorny shadows, slippery ice and melting blocks, light to gather, bridges raised by plates, crystals that sing a melody, and stars that aren&rsquo;t quite what they seem. The last world is simply a place to rest and play.</li>
-  </ul>
-  <p class="fj-how-note">The tones are used here as calm themes for each world, not as a treatment. Your progress stays in this browser on this device.</p>
-</details>
+<section class="jl-sec" aria-labelledby="jl-meet">
+  <h2 id="jl-meet">Meet the pals</h2>
+  <p class="jl-intro">Two best friends, each wonderful in her own way. They get there as themselves, and they get there side by side.</p>
+  <div class="jl-pals">
+    <div class="jl-pal" data-romp>
+      <canvas data-pal="collar" width="192" height="176" aria-hidden="true"></canvas>
+      <p class="jl-tagline">The one with the collar</p>
+      <h3>Tidbit</h3>
+      <p>Quick, curious and always a step ahead, with round tan eyebrows that go up when she’s thinking. She notices the small things, keeps an eye on her pal, and is first in line for a high five.</p>
+    </div>
+    <div class="jl-pal" data-romp>
+      <canvas data-pal="drop" width="192" height="176" aria-hidden="true"></canvas>
+      <p class="jl-tagline">The one with the floppy ears</p>
+      <h3>Sugarfoot</h3>
+      <p>Soft ears, big white toes and an even bigger heart. She’s steady, brave in the dark and the best hugger there is, and she’s happiest right beside Tidbit.</p>
+    </div>
+  </div>
+</section>
+
+<section class="jl-sec" id="worlds" aria-labelledby="jl-worlds-h">
+  <h2 id="jl-worlds-h">Seven worlds, one song</h2>
+  <p class="jl-intro">Each world is tuned to its own tone, with its own kind of challenge and its own little lesson. The climb gets gently harder as you go.</p>
+  <ol class="jl-worlds">
+    <li><a class="jl-world is-night" data-romp href="/frequency-journey-play.html?world=1" style="--w1:rgba(46,52,86,.92);--w2:rgba(74,66,112,.9)"><span class="jl-hz">396</span><h3>The Whispering Shadows</h3><p>A stormy forest where the path only shows when the pals stay close.</p><span class="jl-lesson">It’s easier to be brave next to someone you trust.</span></a></li>
+    <li><a class="jl-world" data-romp href="/frequency-journey-play.html?world=2" style="--w1:rgba(226,240,250,.95);--w2:rgba(206,228,246,.92)"><span class="jl-hz">417</span><h3>The Melting Glaciers</h3><p>Old ice gives way to new streams, and frozen paths become ways through.</p><span class="jl-lesson">Letting go of the old way can open a new one.</span></a></li>
+    <li><a class="jl-world" data-romp href="/frequency-journey-play.html?world=3" style="--w1:rgba(255,243,200,.95);--w2:rgba(255,228,190,.92)"><span class="jl-hz">528</span><h3>The Golden Meadow</h3><p>Flowers bloom wherever they run, and little lights wait to be gathered.</p><span class="jl-lesson">Kindness to yourself makes room for joy.</span></a></li>
+    <li><a class="jl-world" data-romp href="/frequency-journey-play.html?world=4" style="--w1:rgba(247,222,214,.95);--w2:rgba(236,214,232,.92)"><span class="jl-hz">639</span><h3>The Bridge of Echoes</h3><p>A canyon where Tidbit and Sugarfoot take separate paths and help each other across.</p><span class="jl-lesson">What one of us does changes the way for the other.</span></a></li>
+    <li><a class="jl-world" data-romp href="/frequency-journey-play.html?world=5" style="--w1:rgba(214,238,240,.95);--w2:rgba(222,214,246,.92)"><span class="jl-hz">741</span><h3>The Singing Valleys</h3><p>Crystals hum and wind chimes sing, and clarity comes from listening.</p><span class="jl-lesson">Say it clearly and kindly, and it can be heard.</span></a></li>
+    <li><a class="jl-world is-night" data-romp href="/frequency-journey-play.html?world=6" style="--w1:rgba(34,38,76,.94);--w2:rgba(58,52,100,.92)"><span class="jl-hz">852</span><h3>The Starry Summit</h3><p>A night climb over constellations, where not everything is what it seems.</p><span class="jl-lesson">Look again: what you can see is not always what you assumed.</span></a></li>
+    <li><a class="jl-world" data-romp href="/frequency-journey-play.html?world=7" style="--w1:rgba(255,246,230,.95);--w2:rgba(214,230,250,.92)"><span class="jl-hz">963</span><h3>The Infinite Sky</h3><p>The top of the journey: an open sky to rest in, place stars and simply be, together.</p><span class="jl-lesson">The Perfect Frequency was the two of you, in tune.</span></a></li>
+  </ol>
+</section>
+
+<section class="jl-sec" aria-labelledby="jl-how-h">
+  <h2 id="jl-how-h">How the journey works</h2>
+  <div class="jl-how">
+    <div data-romp><strong>A new challenge every level</strong><p>Riddles, little life lessons, sorting, memory, melodies, logic and path puzzles, each one different from the last.</p></div>
+    <div data-romp><strong>No timers, no losing</strong><p>A wrong answer just gets a kind explanation and another try. Hints are always there, and so are undo and restart.</p></div>
+    <div data-romp><strong>Something to take with you</strong><p>Every level ends with a small lesson from the program, and a link to read more if you’d like to.</p></div>
+  </div>
+</section>
+
+<section class="jl-end" data-romp aria-labelledby="jl-end-h">
+  <h2 id="jl-end-h">Ready when you are</h2>
+  <p>Put your headphones on if you have them. Each world plays its tone softly, and the pals are already waiting at the edge of the forest.</p>
+  <a class="jl-go is-soft" href="/frequency-journey-play.html">&#9654; Begin the journey</a>
+</section>
+
+<p class="jl-note">The tones are used here as calm themes for each world, not as a treatment. Your progress stays in this browser.</p>
 </main>
+<script>
+  // little portraits of the pals on their cards
+  window.addEventListener('load', function () {
+    if (!window.TOLPups) return;
+    Array.prototype.forEach.call(document.querySelectorAll('canvas[data-pal]'), function (c) {
+      var g = c.getContext('2d'), L = window.TOLPups.looks[c.getAttribute('data-pal')], t0 = performance.now();
+      function draw(t) {
+        g.setTransform(1, 0, 0, 1, 0, 0); g.clearRect(0, 0, c.width, c.height);
+        g.setTransform(2, 0, 0, 2, 0, 0); g.translate(48, 80); g.scale(1.25, 1.25);
+        window.TOLPups.draw(g, L, 'sit', 0, window.TOLPups.reduced ? 0 : Math.sin(t / 120) * 0.5, Math.sin(t / 1000) > 0.985, t, 0);
+        if (!window.TOLPups.reduced) requestAnimationFrame(draw);
+      }
+      requestAnimationFrame(draw);
+    });
+  });
+</script>
 </body>
 </html>

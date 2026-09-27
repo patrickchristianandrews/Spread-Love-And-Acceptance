@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-NKC6CQ9S66"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-NKC6CQ9S66');
+</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Play The Frequency Journey &mdash; a calm adventure for Sugarfoot and Tidbit &middot; The Objective Ledger</title>
+<meta name="description" content="Guide Sugarfoot and Tidbit through seven gentle, tone-themed worlds to find the Perfect Frequency. A different small challenge at every level: riddles, puzzles, breathing, sorting and more, about trust, change, joy, connection, voice and seeing clearly. No timer, no way to lose.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,500&family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/css/site.css">
+<link rel="stylesheet" href="/assets/css/reading.css">
+<link rel="stylesheet" href="/assets/css/games.css">
+<style>
+  /* ---- The Frequency Journey ---- */
+  @media (min-width:760px){ main.read.fj-page{ max-width:56rem; } }
+  .fj{ --fj-ink:#3C3350; --fj-soft:#6E5F80; --fj-tile:#FFFDF9; --fj-edge:#E6D6EE; --fj-accent:#D9C8F0; --fj-deep:#3C3350;
+    position:relative; padding:.8rem .8rem 1rem; color:var(--fj-ink); overflow:hidden; }
+  body.is-game .gm-board.fj{ background-image:var(--fj-board, linear-gradient(160deg,#FFF8EE 0%,#F6EEF8 55%,#EEF4FA 100%)); }
+  .fj[data-world="1"]{ --fj-board:linear-gradient(165deg,#E9EEF2 0%,#D9E2E6 100%); --fj-accent:#F2D29B; }
+  .fj[data-world="2"]{ --fj-board:linear-gradient(165deg,#F4FAFE 0%,#E2F0F9 100%); --fj-accent:#BFE0F2; }
+  .fj[data-world="3"]{ --fj-board:linear-gradient(165deg,#FFF9E6 0%,#F6EDC4 100%); --fj-accent:#F6D77A; }
+  .fj[data-world="4"]{ --fj-board:linear-gradient(165deg,#FFF1E8 0%,#F7DCCF 100%); --fj-accent:#F4B7A2; }
+  .fj[data-world="5"]{ --fj-board:linear-gradient(165deg,#F4F0FC 0%,#E4F3EE 100%); --fj-accent:#CDB9F0; }
+  .fj[data-world="6"]{ --fj-board:linear-gradient(165deg,#E6E6F6 0%,#D6D8EE 100%); --fj-accent:#C9C3F2; }
+  .fj[data-world="7"]{ --fj-board:linear-gradient(165deg,#FFF1F5 0%,#E6F0FC 100%); --fj-accent:#F7C9D4; }
+  .fj [hidden]{ display:none !important; }
+  :where(.fj) button{ font:inherit; color:inherit; }
+  .fj button:focus-visible{ outline:3px solid #7C6BB0; outline-offset:2px; }
+
+  .fj-head{ display:flex; justify-content:space-between; align-items:flex-start; gap:.5rem; margin:0 0 .55rem; }
+  .read .fj .fj-title, .read .fj .fj-sub, .read .fj .fj-k, .read .fj-card h2, .read .fj-card p, .read .fj-panel h3, .read .fj-panel p, .read .fj p.fj-status, .read .fj p.fj-moves{ max-width:none; }
+  .read .fj h2.fj-title{ margin:.05rem 0 0 !important; font-size:1.3rem !important; line-height:1.2; }
+  .read .fj p.fj-sub, .read .fj p.fj-k{ margin:0 !important; }
+  .read .fj-card h2{ margin:.2rem 0 .5rem !important; }
+  .read .fj-panel h3{ margin:.1rem 0 .3rem !important; }
+  .fj-k{ margin:0; font:500 .7rem/1.3 "IBM Plex Mono", ui-monospace, monospace; letter-spacing:.1em; text-transform:uppercase; color:var(--fj-soft); }
+  .fj-title{ margin:.05rem 0 0; font:600 1.22rem/1.2 "Fraunces", Georgia, serif; color:var(--fj-ink); }
+  .fj-sub{ margin:.1rem 0 0; font-size:.86rem; color:var(--fj-soft); }
+  .fj-tools{ display:flex; gap:.35rem; flex:none; }
+  .fj-ic{ width:44px; height:44px; border-radius:50%; border:1px solid var(--fj-edge); background:var(--fj-tile); display:grid; place-items:center; cursor:pointer; padding:0; }
+  .fj-ic svg{ width:22px; height:22px; }
+  .fj-ic[aria-pressed="false"]{ opacity:.55; }
+  .fj-ic[aria-pressed="false"] .fj-on{ display:none; }
+  .fj-ic[aria-pressed="true"] .fj-off{ display:none; }
+
+  /* the board */
+  .fj-play{ display:grid; gap:.6rem; }
+  .fj-stage{ position:relative; display:flex; justify-content:center; }
+  .fj-canvas{ display:block; border-radius:18px; box-shadow:0 10px 30px rgba(60,40,90,.16); touch-action:none; user-select:none; -webkit-user-select:none; cursor:pointer; }
+  .fj-status{ min-height:2.7em; margin:0 !important; text-align:center; font-size:.93rem; line-height:1.4; color:var(--fj-ink); }
+  .fj-status b{ font-family:"Fraunces", Georgia, serif; }
+  .fj-controls{ display:grid; grid-template-columns:auto 1fr; gap:.7rem; align-items:center; }
+  .fj-pad{ display:grid; grid-template-columns:repeat(3, 50px); grid-template-rows:repeat(3, 50px); gap:4px; }
+  .fj-pad button{ border:1px solid var(--fj-edge); background:var(--fj-tile); border-radius:14px; cursor:pointer; display:grid; place-items:center; padding:0; touch-action:manipulation; box-shadow:0 2px 6px rgba(60,40,90,.08); }
+  .fj-pad button:active{ transform:scale(.94); background:var(--fj-accent); }
+  .fj-pad svg{ width:22px; height:22px; }
+  .fj-pad .fj-up{ grid-column:2; grid-row:1; } .fj-pad .fj-left{ grid-column:1; grid-row:2; }
+  .fj-pad .fj-right{ grid-column:3; grid-row:2; } .fj-pad .fj-down{ grid-column:2; grid-row:3; }
+  .fj-pad .fj-mid{ grid-column:2; grid-row:2; border-radius:50%; background:var(--fj-accent); }
+  .fj-acts{ display:grid; grid-template-columns:1fr 1fr; gap:.4rem; }
+  .fj-acts button{ min-height:46px; border-radius:14px; border:1px solid var(--fj-edge); background:var(--fj-tile); cursor:pointer; display:flex; align-items:center; justify-content:center; gap:.35rem; padding:.3rem .5rem; font-size:.86rem; font-weight:600; line-height:1.1; touch-action:manipulation; }
+  .fj-acts button svg{ width:18px; height:18px; flex:none; }
+  .fj-acts button[aria-pressed="true"]{ background:var(--fj-deep); border-color:var(--fj-deep); color:#FFF8EE; }
+  .fj-acts button:disabled{ opacity:.5; cursor:default; }
+  .fj-acts .fj-special{ grid-column:1 / -1; background:var(--fj-accent); border-color:transparent; }
+  .fj-moves{ margin:0; text-align:center; font:500 .74rem/1 "IBM Plex Mono", monospace; letter-spacing:.06em; color:var(--fj-soft); }
+
+  /* cards: level done, world intro, world done */
+  .fj-card{ position:fixed; inset:0; z-index:95; display:grid; place-items:center; padding:.8rem; background:rgba(255,250,244,.62); backdrop-filter:blur(5px); -webkit-backdrop-filter:blur(5px); }
+  .fj-card > div{ width:min(100%, 23rem); max-height:100%; overflow:auto; text-align:center; padding:1.3rem 1.15rem 1.15rem; border-radius:24px; background:#FFFDF9; box-shadow:0 18px 50px rgba(60,40,90,.24); animation:fj-pop .55s cubic-bezier(.2,1.4,.4,1) both; }
+  @keyframes fj-pop{ from{ transform:scale(.85); opacity:0; } to{ transform:scale(1); opacity:1; } }
+  .fj-orb{ width:4.2rem; height:4.2rem; margin:0 auto .5rem; border-radius:50%; background:radial-gradient(circle at 40% 38%, #fff 0 12%, var(--fj-accent) 45%, rgba(255,255,255,0) 72%); box-shadow:0 0 36px 8px var(--fj-accent); animation:fj-breathe 5s ease-in-out infinite; }
+  @keyframes fj-breathe{ 50%{ transform:scale(1.12); } }
+  .fj-card-k{ margin:0; font:500 .7rem/1.3 "IBM Plex Mono", monospace; letter-spacing:.1em; text-transform:uppercase; color:var(--fj-soft); }
+  .fj-card h2{ margin:.2rem 0 .5rem; font:600 1.35rem/1.2 "Fraunces", Georgia, serif; }
+  .fj-card-lesson{ margin:0 0 .6rem; font:italic 500 1.08rem/1.45 "Fraunces", Georgia, serif; color:#4E3F6B; }
+  .fj-card-p{ margin:0 0 .6rem; font-size:.93rem; line-height:1.5; color:#5A5068; }
+  .fj-card-steps{ margin:0 0 .9rem; font-size:.82rem; color:var(--fj-soft); }
+  .fj-card-btns{ display:flex; flex-wrap:wrap; justify-content:center; gap:.45rem; }
+  .fj-card-btns button{ min-height:46px; padding:.5rem 1.1rem; border-radius:999px; border:1px solid var(--fj-edge); background:#fff; cursor:pointer; font-weight:600; font-size:.92rem; }
+  .fj-card-btns .fj-go{ background:#3C3350; border-color:#3C3350; color:#FFF8EE; font-size:1rem; }
+
+  /* the journey map */
+  .fj-map{ position:relative; }
+  .fj-map-top{ display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:.5rem; margin:0 0 .6rem; }
+  .fj-progress{ margin:0; font-size:.88rem; color:var(--fj-soft); }
+  .fj-continue{ min-height:46px; padding:.5rem 1.1rem; border-radius:999px; border:0; background:#3C3350; color:#FFF8EE !important; font-weight:600; cursor:pointer; }
+  .fj-trail{ position:relative; width:100%; max-width:30rem; margin:0 auto; aspect-ratio:10 / 14; border-radius:22px; overflow:hidden; box-shadow:0 10px 30px rgba(60,40,90,.14); }
+  .fj-trail svg.fj-trail-bg{ position:absolute; inset:0; width:100%; height:100%; }
+  .fj-node{ position:absolute; transform:translate(-50%, -50%); display:flex; align-items:center; gap:.45rem; padding:0; border:0; background:none; cursor:pointer; }
+  .fj-node.is-right{ flex-direction:row-reverse; }
+  .fj-node-dot{ width:52px; height:52px; flex:none; border-radius:50%; display:grid; place-items:center; background:#FFFDF9; border:3px solid rgba(255,255,255,.85); box-shadow:0 4px 14px rgba(40,30,70,.25); }
+  .fj-node-dot svg{ width:28px; height:28px; }
+  .fj-node.is-done .fj-node-dot{ border-color:#F6D77A; box-shadow:0 0 0 4px rgba(246,215,122,.35), 0 4px 14px rgba(40,30,70,.25); }
+  .fj-node.is-here .fj-node-dot{ animation:fj-breathe 4s ease-in-out infinite; }
+  .fj-node.is-locked .fj-node-dot{ opacity:.55; filter:grayscale(.6); }
+  .fj-node-l{ display:block; white-space:nowrap; padding:.25rem .6rem; border-radius:12px; background:rgba(255,253,249,.92); text-align:left; box-shadow:0 2px 8px rgba(40,30,70,.12); max-width:9.5rem; }
+  .fj-node.is-right .fj-node-l{ text-align:right; }
+  .fj-node-l b{ display:block; font:600 .8rem/1.2 "Fraunces", Georgia, serif; color:#3C3350; }
+  .fj-node-l small{ display:block; font:500 .66rem/1.3 "IBM Plex Mono", monospace; color:#6E5F80; letter-spacing:.04em; }
+  .fj-node-l i{ font-style:normal; letter-spacing:.12em; color:#C79A2E; }
+  .fj-node.is-locked .fj-node-l{ opacity:.8; }
+  .fj-mappals{ position:absolute; pointer-events:none; transform:translate(-50%, -100%); }
+  .fj-panel{ margin:.8rem auto 0; max-width:30rem; padding:1rem 1rem .9rem; border-radius:20px; background:#FFFDF9; border:1px solid var(--fj-edge); box-shadow:0 8px 24px rgba(60,40,90,.1); }
+  .fj-panel h3{ margin:.1rem 0 .3rem; font:600 1.15rem/1.25 "Fraunces", Georgia, serif; }
+  .fj-panel p{ margin:0 0 .6rem; font-size:.92rem; line-height:1.5; color:#5A5068; }
+  .fj-panel .fj-panel-sum{ font-family:"Fraunces", Georgia, serif; font-style:italic; color:#4E3F6B; }
+  .fj-lv{ display:flex; flex-wrap:wrap; gap:.45rem; }
+  .fj-lv button{ min-height:46px; min-width:46px; padding:.4rem .9rem; border-radius:999px; border:1px solid var(--fj-edge); background:#fff; cursor:pointer; font-weight:600; font-size:.9rem; }
+  .fj-lv button.is-done{ background:#FFF3C9; border-color:#F0D680; }
+  .fj-lv button:disabled{ opacity:.5; cursor:default; }
+  .fj-note{ margin:.7rem 0 0 !important; font-size:.8rem !important; color:#7A6E86 !important; }
+
+  /* the sky */
+  .fj-skybar{ display:flex; flex-wrap:wrap; justify-content:center; gap:.45rem; }
+  .fj-skybar button{ min-height:46px; padding:.45rem 1rem; border-radius:999px; border:1px solid var(--fj-edge); background:var(--fj-tile); cursor:pointer; font-weight:600; font-size:.9rem; }
+  .fj-skybar button[aria-pressed="true"]{ background:#3C3350; border-color:#3C3350; color:#FFF8EE; }
+  .fj-breath{ position:absolute; left:0; right:0; bottom:12%; margin:0; text-align:center; pointer-events:none; font:italic 500 1.15rem/1.3 "Fraunces", Georgia, serif; color:#4E3F6B; text-shadow:0 1px 8px rgba(255,255,255,.9); transition:opacity 1.2s; }
+
+  .fj-live{ position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); }
+  .fj-how summary{ cursor:pointer; font-family:"Fraunces", Georgia, serif; font-weight:600; font-size:1.05rem; min-height:44px; display:flex; align-items:center; }
+  .fj-how ul{ margin:.4rem 0 .6rem; padding-left:1.1rem; line-height:1.55; font-size:.95rem; }
+  .fj-how li{ margin:.25rem 0; }
+  .fj-how .fj-how-note{ font-size:.86rem; color:#6A6152; }
+
+  @media (min-width:760px){
+    .fj{ padding:1.1rem 1.2rem 1.2rem; }
+    .fj-play{ grid-template-columns:1fr 13.5rem; grid-template-areas:"stage side" "status side"; align-items:start; column-gap:1.1rem; }
+    .fj-stage{ grid-area:stage; }
+    .fj-status{ grid-area:status; }
+    .fj-side{ grid-area:side; display:grid; gap:.8rem; align-content:start; padding-top:.2rem; }
+    .fj-controls{ grid-template-columns:1fr; justify-items:center; }
+    .fj-acts{ width:100%; }
+    .fj-play.is-sky{ grid-template-columns:1fr; grid-template-areas:"stage" "status" "side"; }
+  }
+  @media (max-width:759px){ .fj-side{ display:grid; gap:.5rem; } }
+  @media (max-width:520px){
+    main.read{ padding-top:.8rem; }
+    .fj-intro{ display:none; }
+    .read-head{ display:none; }
+    .gm-switch{ margin-top:0; }
+    .gm-switch .gm-chip{ display:none; }
+    .fj{ margin-left:-.5rem; margin-right:-.5rem; padding:.65rem .5rem .8rem; border-radius:22px; }
+    .read .fj h2.fj-title{ font-size:1.15rem !important; line-height:1.2; }
+    .fj-head{ margin-bottom:.45rem; }
+    .fj-pad{ grid-template-columns:repeat(3, 48px); grid-template-rows:repeat(3, 48px); }
+    .fj-controls{ gap:.5rem; }
+  }
+  @media (max-width:360px){ .fj-pad{ grid-template-columns:repeat(3, 44px); grid-template-rows:repeat(3, 44px); } .fj-acts button{ font-size:.8rem; } }
+  @media (prefers-reduced-motion: reduce){ .fj-card > div, .fj-orb, .fj-node.is-here .fj-node-dot{ animation:none; } .fj-pad button:active{ transform:none; } .fj-breath{ transition:none; } }
+
+  /* ---- every level a different challenge ---- */
+  .fj-sub .fj-leaves{ margin-left:.15rem; }
+  .fj-again{ color:#8A7F92; }
+  .fj-leaves{ display:inline-flex; gap:1px; vertical-align:-2px; }
+  .fj-leaves i{ display:inline-block; width:13px; height:13px; color:#D5CCDD; }
+  .fj-leaves i.on{ color:#6FAE7E; }
+  .fj-leaves svg{ display:block; width:100%; height:100%; }
+  .fj-leaves path{ fill:currentColor; }
+  .fj-leaves path.v{ fill:none; stroke:#fff; stroke-width:1.1; opacity:.75; }
+  .fj-play.is-chal{ grid-template-columns:1fr; grid-template-areas:"stage" "chal"; }
+  .fj-play.is-chal .fj-canvas{ cursor:default; border-radius:20px; }
+  .fj-chal{ grid-area:chal; width:100%; max-width:40rem; margin:0 auto; }
+  .read .fj-chal p{ max-width:none; }
+  .fj-ask{ margin:0 0 .75rem !important; font-size:.95rem; line-height:1.45; color:var(--fj-soft); text-align:center; text-wrap:balance; }
+  .fj-cbody{ display:grid; gap:.6rem; }
+  .fj-ck{ margin:0 !important; font:500 .7rem/1.35 "IBM Plex Mono", ui-monospace, monospace; letter-spacing:.08em; text-transform:uppercase; color:var(--fj-soft); }
+  .fj-q{ margin:0 !important; font:500 1.13rem/1.45 "Fraunces", Georgia, serif; color:var(--fj-ink); }
+  .fj-opts, .fj-pool{ display:grid; gap:.5rem; }
+  .fj-opt{ width:100%; text-align:left; min-height:50px; padding:.7rem .95rem; border-radius:16px; border:1px solid var(--fj-edge); background:var(--fj-tile); cursor:pointer; font-size:.96rem; line-height:1.38; box-shadow:0 2px 8px rgba(60,40,90,.07); transition:transform .15s, background-color .25s, border-color .25s; touch-action:manipulation; }
+  .fj-opt:hover{ background:#fff; border-color:#D6C4E4; }
+  .fj-opt:active{ transform:scale(.985); }
+  .fj-opt:disabled{ cursor:default; }
+  .fj-opt.is-yes{ background:#EAF6EC; border-color:#9FCFAA; color:#24502F; font-weight:600; }
+  .fj-opt.is-no{ background:rgba(255,255,255,.4); color:#978CA0; border-style:dashed; box-shadow:none; }
+  .fj-fb{ margin:.75rem 0 0 !important; padding:.65rem .85rem; border-radius:14px; background:rgba(255,253,249,.85); font-size:.93rem; line-height:1.45; border-left:4px solid var(--fj-accent); color:var(--fj-ink); }
+  .fj-fb:empty{ padding:0; margin:0 !important; border:0; }
+  .fj-fb.is-good{ border-left-color:#8FCB9E; background:#F1FAF3; }
+  .fj-fb.is-soft{ border-left-color:#F2B8C6; background:#FFF6F8; }
+  .fj-fb.is-hint{ border-left-color:#E8C56A; background:#FFFAEB; }
+  .fj-cbar{ display:flex; align-items:center; justify-content:space-between; gap:.5rem; flex-wrap:wrap; margin-top:.8rem; }
+  .fj-cbar-tools{ display:flex; gap:.4rem; margin-left:auto; flex-wrap:wrap; justify-content:flex-end; }
+  .fj-soft{ min-height:44px; padding:.45rem 1rem; border-radius:999px; border:1px solid var(--fj-edge); background:var(--fj-tile); cursor:pointer; font-weight:600; font-size:.88rem; touch-action:manipulation; }
+  .fj-soft:hover{ background:#fff; }
+  .fj-primary{ min-height:48px; padding:.55rem 1.35rem; border-radius:999px; border:0; background:#3C3350; color:#FFF8EE; cursor:pointer; font-weight:600; font-size:.98rem; justify-self:center; touch-action:manipulation; box-shadow:0 6px 16px rgba(60,40,90,.2); }
+  .fj .fj-primary{ color:#FFF8EE; }
+  .fj-primary:hover:not(:disabled){ background:#4E4266; }
+  .fj-primary:disabled{ opacity:.45; cursor:default; box-shadow:none; }
+  .fj-next{ margin-top:.15rem; }
+  .fj-hearts{ display:inline-flex; gap:.2rem; align-items:center; }
+  .fj-hearts svg{ width:22px; height:22px; fill:rgba(255,255,255,.6); stroke:#E58DA4; stroke-width:1.8; transition:fill .4s; }
+  .fj-hearts svg.on{ fill:#F29CB2; }
+  .is-hint{ animation:fj-glow 1.1s ease-in-out infinite; }
+  @keyframes fj-glow{ 50%{ box-shadow:0 0 0 4px rgba(246,215,122,.7), 0 0 18px 4px rgba(246,215,122,.55); } }
+  .fj-whys{ padding:.5rem .8rem .7rem; border-radius:14px; background:rgba(255,255,255,.55); }
+  .read .fj-whys p{ margin:.4rem 0 0 !important; font-size:.86rem; line-height:1.42; color:#5A5068; }
+  .fj-whys p span{ color:#7A6E86; font-style:italic; }
+  .read .fj-whys p.is-yes{ color:#24502F; }
+  .fj-harsh{ padding:.7rem .95rem; border-radius:18px; background:rgba(90,80,110,.08); }
+  .read .fj-harsh p{ margin:.2rem 0 0 !important; font:italic 500 1.08rem/1.4 "Fraunces", Georgia, serif; color:#5A4E6E; }
+
+  /* the slow lantern */
+  .read .fj-chal .fj-breathcue{ margin:0 !important; text-align:center; font:italic 500 1.25rem/1.3 "Fraunces", Georgia, serif; color:var(--fj-ink); min-height:1.3em; }
+  .fj-dots{ display:flex; justify-content:center; gap:.5rem; }
+  .fj-dots i{ width:16px; height:16px; border-radius:50%; border:2px solid #E6C77E; background:rgba(255,255,255,.5); transition:background-color .4s, box-shadow .4s; }
+  .fj-dots i.on{ background:#F6C24A; border-color:#F6C24A; box-shadow:0 0 10px 2px rgba(255,200,100,.75); }
+  .fj-breathbtn{ width:100%; min-height:64px; font-size:1.05rem; }
+
+  /* thawing words */
+  .fj-slots, .fj-tiles{ display:flex; justify-content:center; flex-wrap:wrap; gap:.4rem; }
+  .fj-slot{ width:44px; height:52px; padding:0; border:0; border-bottom:3px solid #9CC6E0; border-radius:10px 10px 4px 4px; background:rgba(255,255,255,.55); font:600 1.35rem/1 "Fraunces", Georgia, serif; color:var(--fj-ink); cursor:pointer; }
+  .fj-slot.is-lock{ border-bottom-color:#E8C56A; }
+  .fj-slot.is-yes{ background:#FFF3C9; border-bottom-color:#E0B54A; }
+  .fj-tile{ width:48px; height:52px; padding:0; border-radius:12px; border:1px solid #BCDCEE; background:linear-gradient(180deg,#F4FBFF,#D8ECF8); font:600 1.35rem/1 "Fraunces", Georgia, serif; color:#2F5570; cursor:pointer; box-shadow:0 3px 8px rgba(60,110,150,.14); touch-action:manipulation; transition:transform .15s, opacity .2s; }
+  .fj-tile:active{ transform:scale(.94); }
+  .fj-tile.is-used{ opacity:.25; box-shadow:none; }
+
+  /* find your footing */
+  .fj-seq{ list-style:none; margin:0 !important; padding:0 !important; display:grid; gap:.4rem; counter-reset:seq; }
+  .read .fj-seq li{ margin:0; max-width:none; display:grid; grid-template-columns:1.8rem 1fr; align-items:center; gap:.4rem; counter-increment:seq; }
+  .fj-seq li::before{ content:counter(seq); display:grid; place-items:center; width:1.8rem; height:1.8rem; border-radius:50%; background:var(--fj-accent); font:600 .85rem/1 "IBM Plex Mono", monospace; color:var(--fj-ink); }
+  .fj-seq-empty{ display:flex; align-items:center; min-height:48px; padding:0 .9rem; border-radius:16px; border:1.5px dashed #C8D8E6; color:#9AA8B8; font-size:.88rem; }
+  .fj-seq-item{ width:100%; text-align:left; min-height:48px; padding:.6rem .9rem; border-radius:16px; border:1px solid var(--fj-edge); background:#fff; cursor:pointer; font-size:.94rem; line-height:1.35; }
+  .fj-seq-item.is-yes{ background:#EAF6EC; border-color:#9FCFAA; color:#24502F; cursor:default; }
+
+  /* memory match */
+  .fj-mem{ display:grid; grid-template-columns:repeat(3, 1fr); gap:.5rem; }
+  .fj-card-m{ position:relative; min-height:84px; padding:0; border:0; border-radius:16px; background:none; cursor:pointer; perspective:600px; touch-action:manipulation; }
+  .fj-card-m > span{ position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:.2rem; padding:.4rem; border-radius:16px; backface-visibility:hidden; -webkit-backface-visibility:hidden; transition:transform .45s cubic-bezier(.3,1.3,.5,1); text-align:center; font-weight:600; font-size:.92rem; line-height:1.2; }
+  .fj-mb{ background:radial-gradient(circle at 50% 50%, #FFF6D0 0 14%, transparent 15%), repeating-radial-gradient(circle at 50% 50%, #F7E3A6 0 7px, #FAEDC4 7px 14px); border:2px solid #fff; box-shadow:0 4px 12px rgba(150,120,40,.18); }
+  .fj-mf{ transform:rotateY(180deg); background:#fff; border:1px solid var(--fj-edge); box-shadow:0 4px 12px rgba(60,40,90,.1); color:var(--fj-ink); }
+  .fj-mf small{ font:500 .6rem/1 "IBM Plex Mono", monospace; letter-spacing:.08em; text-transform:uppercase; color:#8A7F92; font-weight:500; }
+  .fj-card-m.is-feel .fj-mf{ background:#FFF1F4; border-color:#F2C4D0; }
+  .fj-card-m.is-help .fj-mf{ background:#EFF8F0; border-color:#BFE0C6; }
+  .fj-card-m.is-up .fj-mb, .fj-card-m.is-peek .fj-mb{ transform:rotateY(-180deg); }
+  .fj-card-m.is-up .fj-mf, .fj-card-m.is-peek .fj-mf{ transform:rotateY(0); }
+  .fj-card-m.is-got .fj-mf{ box-shadow:0 0 0 3px rgba(246,215,122,.65); }
+  .fj-card-m:focus-visible{ outline:3px solid #7C6BB0; outline-offset:2px; }
+
+  /* the meadow */
+  .fj-bloom{ display:grid; grid-template-columns:repeat(3, 1fr); gap:.5rem; width:100%; max-width:19rem; margin:0 auto; }
+  .fj-flower{ aspect-ratio:1; min-height:76px; padding:8%; border-radius:22px; border:1px solid #D7E8BE; background:linear-gradient(180deg,#F8FCEB,#E6F2CD); cursor:pointer; touch-action:manipulation; transition:transform .15s, background-color .3s; }
+  .fj-flower:active{ transform:scale(.95); }
+  .fj-flower svg{ display:block; width:100%; height:100%; overflow:visible; }
+  .fj-flower .pet circle{ fill:#F4B6C8; transform-origin:20px 20px; transform:scale(.25); opacity:0; transition:transform .45s cubic-bezier(.3,1.5,.5,1), opacity .3s; }
+  .fj-flower .mid{ fill:#F6C24A; transform-origin:20px 20px; transform:scale(0); transition:transform .4s; }
+  .fj-flower .bud{ fill:#9CCB85; transition:opacity .3s; }
+  .fj-flower .stem{ stroke:#86B874; stroke-width:2.2; stroke-linecap:round; }
+  .fj-flower.is-open{ background:linear-gradient(180deg,#FFFBE8,#FDEFC4); border-color:#F2DC95; }
+  .fj-flower.is-open .pet circle{ transform:scale(1); opacity:1; }
+  .fj-flower.is-open .mid{ transform:scale(1); }
+  .fj-flower.is-open .bud{ opacity:0; }
+  .fj-bloom .fj-flower:nth-child(3n+2).is-open .pet circle{ fill:#C9B0F0; }
+  .fj-bloom .fj-flower:nth-child(3n).is-open .pet circle{ fill:#F9B98F; }
+  .fj-taps{ text-align:center; }
+
+  /* small reaches */
+  .fj-scene-list{ display:grid; gap:.45rem; }
+  .fj-bid{ position:relative; width:100%; text-align:left; min-height:50px; padding:.65rem .95rem .65rem 2.6rem; border-radius:16px; border:1px solid var(--fj-edge); background:var(--fj-tile); cursor:pointer; font-size:.95rem; line-height:1.38; touch-action:manipulation; }
+  .fj-bid::before{ content:""; position:absolute; left:.85rem; top:50%; width:1.1rem; height:1.1rem; margin-top:-.55rem; border-radius:50%; border:2px solid #CDB9E4; background:#fff; }
+  .fj-bid.is-on{ background:#F4EEFC; border-color:#C7B3EA; }
+  .fj-bid.is-on::before{ background:#9C84CC; border-color:#9C84CC; box-shadow:inset 0 0 0 3px #fff; }
+  .fj-bid.is-yes{ background:#EAF6EC; border-color:#9FCFAA; cursor:default; }
+  .fj-bid.is-yes::before{ content:"✓"; display:grid; place-items:center; color:#fff; font-size:.7rem; font-weight:700; background:#6FAE7E; border-color:#6FAE7E; }
+
+  /* fair shares */
+  .fj-meters{ display:grid; grid-template-columns:1fr 1fr; gap:.5rem; }
+  .fj-meter{ padding:.55rem .7rem .6rem; border-radius:16px; background:#fff; border:1px solid var(--fj-edge); display:grid; gap:.15rem; }
+  .fj-meter b{ font:600 .98rem/1.2 "Fraunces", Georgia, serif; }
+  .fj-meter small{ font-size:.72rem; color:#7A6E86; line-height:1.25; }
+  .fj-bar{ display:flex; flex-wrap:wrap; gap:2px; margin-top:.25rem; }
+  .fj-bar i{ flex:1 0 8%; max-width:14px; height:12px; border-radius:4px; background:#EEE8F2; }
+  .fj-bar i.on{ background:#9ED6AE; }
+  .fj-bar i.over{ background:#F2B8A0; }
+  .fj-meter.is-full .fj-bar i.on{ background:#6FAE7E; }
+  .fj-meter.is-over{ border-color:#F2B8A0; background:#FFF7F2; }
+  .fj-meter-n{ font:500 .75rem/1 "IBM Plex Mono", monospace; color:#6E5F80; }
+  .fj-jobs{ list-style:none; margin:0 !important; padding:0 !important; display:grid; gap:.4rem; }
+  .read .fj-jobs li{ margin:0; max-width:none; }
+  .fj-job{ display:grid; grid-template-columns:1fr auto; align-items:center; gap:.5rem; padding:.45rem .5rem .45rem .8rem; border-radius:16px; background:rgba(255,255,255,.7); border:1px solid var(--fj-edge); }
+  .fj-job.is-hidden{ border-style:dashed; background:rgba(255,255,255,.5); }
+  .fj-job.is-set{ background:#fff; }
+  .fj-job-l b{ display:block; font-size:.93rem; line-height:1.25; }
+  .fj-job-l small{ font-size:.74rem; color:#7A6E86; }
+  .fj-w{ letter-spacing:.05em; color:#C79A2E; }
+  .fj-inv{ display:inline-flex; align-items:center; gap:.2rem; color:#7C6BB0; }
+  .fj-inv svg{ width:13px; height:13px; fill:none; stroke:currentColor; stroke-width:2; }
+  .fj-own{ display:flex; gap:.3rem; }
+  .fj-ownb{ min-height:44px; min-width:44px; padding:.3rem .7rem; border-radius:999px; border:1px solid var(--fj-edge); background:#fff; cursor:pointer; font-size:.8rem; font-weight:600; touch-action:manipulation; }
+  .fj-ownb[aria-pressed="true"]{ background:#3C3350; border-color:#3C3350; color:#FFF8EE; }
+
+  /* echo the valley */
+  .fj-crystals{ display:grid; grid-template-columns:repeat(5, 1fr); gap:.4rem; }
+  .fj-crys{ --c:#ccc; display:grid; justify-items:center; gap:.3rem; min-height:96px; padding:.5rem .1rem .4rem; border-radius:18px; border:1px solid var(--fj-edge); background:rgba(255,255,255,.65); cursor:pointer; touch-action:manipulation; transition:transform .12s, background-color .2s, box-shadow .2s; }
+  .fj-crys .gem{ width:30px; height:52px; background:linear-gradient(160deg, #fff 0 18%, var(--c) 40%); clip-path:polygon(50% 0, 100% 22%, 100% 100%, 0 100%, 0 22%); opacity:.85; transition:transform .2s, opacity .2s; }
+  .fj-crys .nm{ font:500 .66rem/1.1 "IBM Plex Mono", monospace; color:#6E5F80; text-align:center; }
+  .fj-crys.is-lit{ background:#fff; box-shadow:0 0 0 3px var(--c), 0 0 22px 4px var(--c); transform:translateY(-3px); }
+  .fj-crys.is-lit .gem{ opacity:1; transform:scale(1.12); }
+  .fj-crys:active{ transform:scale(.96); }
+  .fj-crystals.is-busy .fj-crys{ cursor:default; }
+  .fj-listen{ justify-self:center; }
+
+  /* fact, feeling, ask */
+  .fj-sortcard{ padding:.9rem 1rem 1rem; border-radius:20px; background:#fff; border:1px solid var(--fj-edge); box-shadow:0 8px 22px rgba(60,40,90,.1); text-align:center; transition:transform .25s ease, opacity .25s ease; }
+  .fj-sortcard small{ font:500 .66rem/1 "IBM Plex Mono", monospace; letter-spacing:.08em; text-transform:uppercase; color:#8A7F92; }
+  .read .fj-sortcard p{ margin:.35rem 0 0 !important; font:500 1.12rem/1.4 "Fraunces", Georgia, serif; }
+  .fj-sortcard.is-away{ transform:translateY(18px) scale(.94); opacity:0; }
+  .fj-buckets{ display:grid; grid-template-columns:1fr 1fr; gap:.45rem; }
+  .fj-bucket{ position:relative; display:grid; gap:.1rem; text-align:left; min-height:64px; padding:.55rem .8rem; padding-right:2.2rem; border-radius:16px; border:1px solid var(--fj-edge); background:var(--fj-tile); cursor:pointer; touch-action:manipulation; transition:background-color .25s, transform .12s; }
+  .fj-bucket:active{ transform:scale(.97); }
+  .fj-bucket b{ font:600 1rem/1.2 "Fraunces", Georgia, serif; }
+  .fj-bucket small{ font-size:.74rem; line-height:1.25; color:#7A6E86; }
+  .fj-bucket .n{ position:absolute; right:.6rem; top:.55rem; min-width:1.5rem; height:1.5rem; border-radius:999px; display:grid; place-items:center; background:var(--fj-accent); font:600 .75rem/1 "IBM Plex Mono", monospace; }
+  .fj-bucket.is-yes{ background:#EAF6EC; border-color:#9FCFAA; }
+  .fj-bucket[data-k="verdict"]{ background:#FBF3F6; }
+
+  /* finish the line */
+  .read .fj-chal .fj-line{ margin:0 !important; font:500 1.15rem/1.9 "Fraunces", Georgia, serif; }
+  .fj-in{ width:8.5em; max-width:60vw; font:600 1rem/1.2 "Lora", Georgia, serif; font-size:max(16px, 1rem); min-height:44px; padding:.55rem .5rem; margin:0 .15rem; border:0; border-bottom:2px solid #B9A6DA; border-radius:8px 8px 2px 2px; background:rgba(255,255,255,.8); color:var(--fj-ink); text-align:center; }
+  .fj-in:focus{ outline:3px solid #7C6BB0; outline-offset:2px; }
+  .fj-in.is-yes{ background:#EAF6EC; border-bottom-color:#6FAE7E; }
+  .fj-gap{ white-space:nowrap; }
+  .fj-bank{ display:flex; flex-wrap:wrap; justify-content:center; gap:.4rem; }
+  .fj-check{ justify-self:center; }
+
+  /* seen, or assumed? */
+  .read .fj-chal .fj-spot{ margin:0 !important; display:flex; flex-wrap:wrap; gap:.4rem; }
+  .fj-bit{ min-height:44px; padding:.55rem .7rem; border-radius:12px; border:1px solid var(--fj-edge); background:#fff; cursor:pointer; font-size:.97rem; line-height:1.3; text-align:left; touch-action:manipulation; }
+  .fj-bit.is-on{ background:#EFE7FB; border:1.5px dashed #9C84CC; }
+  .fj-bit.is-story{ background:#E6DDF8; border:1.5px dashed #7C6BB0; color:#4E3F6B; font-style:italic; cursor:default; }
+
+  /* calls in the dark */
+  .fj-calls{ display:grid; gap:.5rem; }
+  .fj-calllist{ list-style:none; margin:0 !important; padding:0 !important; display:flex; flex-wrap:wrap; gap:.3rem; min-height:44px; align-items:center; }
+  .read .fj-calllist li{ margin:0; }
+  .fj-callnone{ font-size:.84rem; color:#7A6E86; }
+  .fj-callchip{ min-height:44px; min-width:52px; padding:.3rem .6rem; border-radius:12px; border:1px solid #C9C3F2; background:#fff; font:600 .95rem/1 "IBM Plex Mono", monospace; cursor:pointer; }
+  .fj-callchip.is-bad{ background:#FFF1F4; border-color:#F2A7BB; box-shadow:0 0 0 3px rgba(242,167,187,.4); }
+  .fj-callpad{ display:grid; grid-template-columns:repeat(4, 1fr); gap:.35rem; }
+  .fj-cd{ min-height:52px; border-radius:14px; border:1px solid var(--fj-edge); background:var(--fj-tile); font-size:1.3rem; cursor:pointer; touch-action:manipulation; }
+  .fj-cd:active{ transform:scale(.95); background:var(--fj-accent); }
+  .fj-callacts{ display:flex; flex-wrap:wrap; gap:.35rem; }
+  .fj-callacts .fj-soft{ flex:1 1 auto; }
+  .fj-callgo{ width:100%; }
+
+  /* the Harmony moment */
+  .fj-harm{ display:grid; gap:.4rem; }
+  .fj-harm-w{ margin-top:.35rem !important; }
+  .fj-harm-b{ position:relative; width:100%; text-align:left; min-height:46px; padding:.55rem .9rem .55rem 2.4rem; border-radius:14px; border:1px solid var(--fj-edge); background:var(--fj-tile); cursor:pointer; font-size:.94rem; line-height:1.3; touch-action:manipulation; }
+  .fj-harm-b::before{ content:"☆"; position:absolute; left:.85rem; top:50%; transform:translateY(-52%); font-size:1.1rem; color:#C8A95A; }
+  .fj-harm-b.is-on{ background:#FFF6D9; border-color:#EFD27E; font-weight:600; }
+  .fj-harm-b.is-on::before{ content:"★"; color:#E3AE2F; }
+  .fj-mystars{ margin:.2rem auto 0; max-width:30rem; padding:.6rem .9rem; border-radius:16px; background:rgba(255,253,249,.8); border:1px solid var(--fj-edge); text-align:center; }
+  .fj-mystars ul{ list-style:none; margin:.3rem 0 0 !important; padding:0 !important; }
+  .read .fj-mystars li{ margin:.15rem 0; max-width:none; font:italic 500 .98rem/1.35 "Fraunces", Georgia, serif; color:#4E3F6B; }
+  .fj-mystars li::before{ content:"★ "; color:#E3AE2F; font-style:normal; }
+
+  /* map panel levels and the lesson card */
+  .fj-lv{ display:grid; grid-template-columns:1fr; gap:.45rem; }
+  .fj-lv button.fj-lvb{ display:grid; grid-template-columns:auto 1fr auto; align-items:center; gap:.2rem .6rem; text-align:left; border-radius:16px; padding:.5rem .8rem; min-height:52px; }
+  .fj-lvn{ font:500 .72rem/1.2 "IBM Plex Mono", monospace; letter-spacing:.04em; color:#6E5F80; white-space:nowrap; }
+  .fj-lvk{ font:600 .95rem/1.25 "Fraunces", Georgia, serif; color:#3C3350; }
+  .fj-lv .fj-go{ background:#3C3350; border-color:#3C3350; color:#FFF8EE; }
+  .fj-card-meta{ margin:.25rem 0 0 !important; font-size:.8rem; color:var(--fj-soft); }
+  .fj-card-more{ margin:0 0 .9rem !important; font-size:.9rem; }
+  .fj-card-more a{ color:#5E4E8C; font-weight:600; text-underline-offset:3px; }
+  @media (min-width:560px){
+    .fj-mem{ grid-template-columns:repeat(4, 1fr); }
+    .fj-harm{ grid-template-columns:1fr 1fr; }
+    .fj-harm-w{ grid-column:1 / -1; }
+  }
+  @media (min-width:760px){
+    .fj-play.is-chal{ grid-template-columns:1fr; grid-template-areas:"stage" "chal"; }
+    .fj-play.is-chal .fj-stage{ max-width:40rem; width:100%; margin:0 auto; }
+  }
+  @media (max-width:520px){
+    .fj-job{ padding-left:.65rem; gap:.35rem; }
+    .fj-ownb{ padding:.3rem .55rem; font-size:.76rem; }
+    .fj-crys{ min-height:88px; }
+    .fj-crys .nm{ font-size:.6rem; }
+    .fj-q{ font-size:1.06rem; }
+  }
+  @media (prefers-reduced-motion: reduce){
+    .fj-card-m > span, .fj-sortcard, .fj-flower .pet circle, .fj-flower .mid, .fj-tile, .fj-opt, .fj-crys, .fj-crys .gem, .fj-dots i{ transition:none; }
+    .is-hint{ animation:none; box-shadow:0 0 0 4px rgba(246,215,122,.8); }
+  }
+</style>
+<script src="/assets/js/site.js" defer></script>
+<script src="/assets/js/journey-levels.js" defer></script>
+<script src="/assets/js/frequency-journey.js" defer></script>
+</head>
+<body class="is-game" data-no-tip data-no-breathe data-no-weather>
+<main class="read fj-page">
+<header class="read-head"><p class="read-code"><a href="/frequency-journey.html">The Frequency Journey</a> &middot; play</p><h1>The Frequency Journey</h1></header>
+<nav class="gm-switch" aria-label="Calm games">
+  <a class="gm-tab gm-home" href="/pause-and-play.html" aria-label="Pause and Play: all the calm games">&#10024;</a>
+  <a class="gm-tab" href="/frequency-journey-play.html" aria-current="page">&#127925; Journey</a>
+  <a class="gm-tab" href="/word-bloom.html">&#127804; Bloom</a>
+  <a class="gm-tab" href="/quiet-crossword.html">&#9999;&#65039; Crossword</a>
+  <a class="gm-tab" href="/daily-ledger-crossword.html">&#128240; Newspaper</a>
+  <a class="gm-tab" href="/quiet-words.html">&#128269; Words</a>
+  <span class="gm-chip" data-rewards-chip></span>
+</nav>
+<p class="simple-lede fj-intro"><strong>What is this?</strong> A calm journey through seven tone-themed worlds with Sugarfoot and Tidbit, all the way up to the Perfect Frequency. Every level is a different small challenge: riddles, puzzles, breathing, sorting, a little singing. No timer, and no way to lose. <a href="/frequency-journey.html">About the journey</a></p>
+
+<section class="gm-board fj" id="fj" data-world="1" aria-label="The Frequency Journey">
+  <div class="fj-head">
+    <div>
+      <p class="fj-k">The Frequency Journey</p>
+      <h2 class="fj-title">Journey map</h2>
+      <p class="fj-sub"></p>
+    </div>
+    <div class="fj-tools">
+      <button type="button" class="fj-ic fj-mapbtn" aria-label="Journey map" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 4 3 6.5v13L9 17l6 2.5 6-2.5v-13L15 6.5z"/><path d="M9 4v13M15 6.5v13"/></svg></button>
+      <button type="button" class="fj-ic fj-snd" aria-pressed="true" aria-label="Sound"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z"/><path class="fj-on" d="M15.5 9a4 4 0 0 1 0 6M18 6.5a7.5 7.5 0 0 1 0 11"/><path class="fj-off" d="m16 9.5 5 5m0-5-5 5"/></svg></button>
+      <button type="button" class="fj-ic fj-drone" aria-pressed="true" aria-label="Background tone"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M2.5 12c2-4 3.5-4 5 0s3 4 4.5 0 3-4 4.5 0 3 4 5 0"/><path class="fj-off" d="M4 4l16 16"/></svg></button>
+    </div>
+  </div>
+
+  <div class="fj-map">
+    <div class="fj-map-top">
+      <p class="fj-progress"></p>
+      <button type="button" class="fj-continue">Begin the journey</button>
+    </div>
+    <div class="fj-trail" role="group" aria-label="The seven worlds, from the forest up to the sky">
+      <svg class="fj-trail-bg" viewBox="0 0 100 140" preserveAspectRatio="none" aria-hidden="true"></svg>
+    </div>
+    <div class="fj-panel" aria-live="polite"></div>
+  </div>
+
+  <div class="fj-play" hidden>
+    <div class="fj-stage">
+      <canvas class="fj-canvas" role="img" aria-label="The puzzle board"></canvas>
+      <p class="fj-breath" hidden></p>
+    </div>
+    <p class="fj-status" aria-live="polite"></p>
+    <div class="fj-chal" hidden></div>
+    <div class="fj-side">
+      <div class="fj-controls">
+        <div class="fj-pad" role="group" aria-label="Move">
+          <button type="button" class="fj-up" data-dir="0" aria-label="Up"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 14 6-6 6 6"/></svg></button>
+          <button type="button" class="fj-left" data-dir="3" aria-label="Left"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m14 6-6 6 6 6"/></svg></button>
+          <button type="button" class="fj-mid fj-switch2" aria-label="Switch to Tidbit"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 7h11l-3-3M17 17H6l3 3"/></svg></button>
+          <button type="button" class="fj-right" data-dir="1" aria-label="Right"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m10 6 6 6-6 6"/></svg></button>
+          <button type="button" class="fj-down" data-dir="2" aria-label="Down"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 10 6 6 6-6"/></svg></button>
+        </div>
+        <div class="fj-acts">
+          <button type="button" class="fj-switch" aria-label="Switch to Tidbit"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 7h11l-3-3M17 17H6l3 3"/></svg>Tidbit</button>
+          <button type="button" class="fj-together" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20s-7-4.4-7-9.5A3.8 3.8 0 0 1 12 8a3.8 3.8 0 0 1 7 2.5C19 15.6 12 20 12 20z"/></svg>Together</button>
+          <button type="button" class="fj-undo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 14 4 9l5-5"/><path d="M4 9h10.5a5.5 5.5 0 0 1 0 11H11"/></svg>Undo</button>
+          <button type="button" class="fj-restart"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12a8 8 0 1 0 2.3-5.6"/><path d="M4 4v4.5h4.5"/></svg>Restart</button>
+          <button type="button" class="fj-hint" aria-label="A gentle hint"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-3.5 10.9c.6.5 1 1.2 1 2.1h5c0-.9.4-1.6 1-2.1A6 6 0 0 0 12 3z"/></svg>Hint</button>
+          <button type="button" class="fj-special" hidden></button>
+        </div>
+      </div>
+      <div class="fj-calls" hidden></div>
+      <p class="fj-moves" aria-live="off"></p>
+      <div class="fj-skybar" hidden>
+        <button type="button" class="fj-rest" aria-pressed="false">Rest here</button>
+        <button type="button" class="fj-stars3">Your three stars</button>
+        <button type="button" class="fj-clear">Clear the stars</button>
+        <button type="button" class="fj-tomap">Journey map</button>
+      </div>
+      <div class="fj-mystars" hidden></div>
+    </div>
+  </div>
+
+  <div class="fj-card" hidden role="dialog" aria-modal="true" aria-labelledby="fj-card-h">
+    <div>
+      <div class="fj-orb" aria-hidden="true"></div>
+      <p class="fj-card-k"></p>
+      <p class="fj-card-meta"></p>
+      <h2 id="fj-card-h"></h2>
+      <p class="fj-card-lesson"></p>
+      <p class="fj-card-p"></p>
+      <p class="fj-card-steps"></p>
+      <p class="fj-card-more" hidden><a href="/frequency-journey.html"></a></p>
+      <div class="fj-card-btns"></div>
+    </div>
+  </div>
+  <p class="fj-live" aria-live="polite"></p>
+</section>
+
+<details class="try-this fj-how">
+  <summary>How to play</summary>
+  <ul>
+    <li><strong>Every level is a different challenge.</strong> Eighteen of them across six worlds, each one fitted to its world: lantern riddles, a walk through the dark, a slow breath, thawing words, ice and water, putting steps in order, a feelings memory match, kinder words, a meadow to bloom, spotting small reaches, sharing the load fairly, bridge plates, echoing a tune, sorting fact, feeling and ask, finishing a line, telling what you saw from the story you added, choosing what would help most, and guiding a friend in the dark.</li>
+    <li><strong>They grow a little harder as you climb.</strong> The leaves on each level (one to five) show how thoughtful it is: easy and short in the forest, genuinely thoughtful at the summit.</li>
+    <li><strong>There’s no way to lose.</strong> A wrong answer just gets a gentle why and another try. Harder levels have three hearts that simply fill up again. <strong>Hint</strong> and <strong>Start again</strong> are always there.</li>
+    <li><strong>Walking levels:</strong> bring Sugarfoot and Tidbit to the glowing tone together. Swipe, use the arrow pad or arrow keys (or W A S D). <strong>Switch</strong> (E) chooses who moves, <strong>Together</strong> (T) moves both, <strong>Undo</strong> (Z), <strong>Restart</strong> (R), <strong>Hint</strong> (H).</li>
+    <li><strong>Everything works by tap or keyboard.</strong> Tab to any button; type letters for thawing words, press 1 to 5 to sing the crystals, and plan calls in the dark with the arrow keys and Enter.</li>
+    <li>After each level, a small lesson card, with a link to read more on this site. At the very top, choose the three lessons that meant most to you, and they become stars in the Infinite Sky: a place to rest and play.</li>
+  </ul>
+  <p class="fj-how-note">The tones are used here as calm themes for each world, not as a treatment. The lessons are everyday ideas, not clinical advice. Your progress stays in this browser on this device.</p>
+</details>
+</main>
+</body>
+</html>
