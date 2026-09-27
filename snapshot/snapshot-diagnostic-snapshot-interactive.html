@@ -5,150 +5,280 @@
 <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-NKC6CQ9S66');</script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Diagnostic Snapshot Interactive — TOL-OS</title>
+<title>The 2-minute snapshot — The Objective Ledger</title>
+<meta name="description" content="Seven quick questions about how a shared load is set up and how it bends under pressure. You get one of four areas, the scoring shown openly, and one small step for this week. Not a test and not a diagnosis.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,500&family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/assets/css/book-layout.css">
 <link rel="stylesheet" href="/assets/css/site.css">
 <style>
-.snapshot-question { margin: 2rem 0; padding: 1.5rem; background: var(--paper-deep); border-radius: var(--radius); }
-.snapshot-question h3 { margin-top: 0; font-size: 1.1em; }
-.snapshot-question label { display: block; margin: 0.75rem 0; cursor: pointer; }
-.snapshot-question input[type="radio"] { margin-right: 0.5rem; }
-.snapshot-results { margin-top: 3rem; padding: 2rem; background: linear-gradient(135deg, var(--paper-deep) 0%, var(--paper) 100%); border-left: 4px solid var(--brass); border-radius: var(--radius); display: none; }
-.snapshot-results.active { display: block; }
-.quadrant-name { font-size: 1.5em; font-weight: 600; color: var(--brass); margin-bottom: 1rem; }
-.quadrant-description { line-height: 1.7; margin-bottom: 1rem; }
-.next-steps { margin-top: 1.5rem; padding: 1rem; background: rgba(255,255,255,0.5); border-radius: 3px; }
-.next-steps strong { color: var(--brass); }
+:root{ --brass-ink:#7A5720; }
+main a{ color:var(--focus); }
+.cta-button{ display:inline-flex; align-items:center; justify-content:center; min-height:44px; padding:10px 20px; border:0; border-radius:999px; background:var(--ink); color:var(--paper); font:500 0.9rem "IBM Plex Mono", monospace; cursor:pointer; text-decoration:none; }
+.cta-button:hover{ background:var(--ink-soft); }
+.btn{ display:inline-flex; align-items:center; min-height:44px; padding:8px 16px; border:1px solid var(--ink); border-radius:999px; background:transparent; color:var(--ink); font:500 0.82rem "IBM Plex Mono", monospace; cursor:pointer; }
+.btn:hover{ background:var(--ink); color:var(--paper); }
+.who{ margin:1.2rem 0; padding:1rem 1.2rem; background:var(--paper-deep); border-radius:var(--radius); }
+.who label{ font-weight:600; display:block; margin-bottom:6px; }
+.who select{ font:inherit; min-height:44px; padding:6px 10px; border:1px solid #8F8468; border-radius:var(--radius); background:#FFFDF6; max-width:100%; }
+fieldset.q{ margin:1.4rem 0; padding:1.2rem 1.3rem; background:var(--paper-deep); border:1px solid var(--line); border-radius:var(--radius); }
+fieldset.q.missing{ border-color:var(--debit); box-shadow:inset 0 0 0 1px var(--debit); }
+fieldset.q legend{ float:left; width:100%; padding:0; margin:0 0 0.4rem; font-family:"Fraunces", serif; font-weight:600; font-size:1.05rem; line-height:1.3; }
+fieldset.q legend + *{ clear:both; }
+.q .tag{ display:block; font:500 0.72rem "IBM Plex Mono", monospace; letter-spacing:0.05em; color:var(--brass-ink); margin-bottom:0.4rem; clear:both; }
+.q label{ display:flex; align-items:flex-start; gap:10px; min-height:44px; padding:8px 10px; margin:4px 0; border-radius:var(--radius); cursor:pointer; line-height:1.4; }
+.q label:hover{ background:rgba(255,255,255,0.55); }
+.q input[type="radio"]{ width:22px; height:22px; margin:1px 0 0; flex:none; accent-color:var(--credit); }
+.q label:has(input:checked){ background:#FFFDF6; box-shadow:inset 0 0 0 1px var(--brass); }
+.form-msg{ color:var(--debit); font-weight:600; min-height:1.5em; }
+.snapshot-results{ margin-top:2.5rem; padding:1.6rem; background:#FFFDF6; border:2px solid var(--brass); border-radius:var(--radius); }
+.snapshot-results:focus{ outline:3px solid var(--focus); outline-offset:3px; }
+.quadrant-name{ font-family:"Fraunces", serif; font-size:1.5em; font-weight:600; color:var(--ink); margin:0 0 0.6rem; }
+.lbl{ font:500 0.72rem "IBM Plex Mono", monospace; letter-spacing:0.06em; text-transform:uppercase; color:var(--brass-ink); }
+.map{ display:grid; grid-template-columns:auto 1fr 1fr; grid-template-rows:1fr 1fr auto; gap:6px; max-width:420px; margin:1rem 0; font-size:0.82rem; }
+.map .cell{ border:1px solid var(--line); border-radius:var(--radius); padding:10px; min-height:64px; background:var(--paper-deep); }
+.map .cell.here{ background:var(--credit-soft, #E4EDE3); border:2px solid var(--credit); font-weight:600; }
+.map .axis-y{ writing-mode:vertical-rl; transform:rotate(180deg); text-align:center; font:500 0.7rem "IBM Plex Mono", monospace; color:var(--ink-soft); }
+.map .axis-x{ grid-column:2 / 4; text-align:center; font:500 0.7rem "IBM Plex Mono", monospace; color:var(--ink-soft); }
+.scores{ font-family:"IBM Plex Mono", monospace; font-size:0.85rem; background:var(--paper-deep); border-radius:var(--radius); padding:10px 14px; margin:1rem 0; }
+.next-steps{ margin-top:1.2rem; padding:1rem 1.2rem; background:#E4EDE3; border-left:4px solid var(--credit); border-radius:var(--radius); }
+.next-steps strong{ color:var(--ink); }
+.mismatch{ margin-top:1rem; padding:0.9rem 1.1rem; border-left:4px solid var(--focus); background:#E7EEF4; border-radius:var(--radius); }
+.status{ color:var(--credit); min-height:1.4em; font-size:0.9rem; }
+.copy-out{ width:100%; min-height:160px; font:0.8rem "IBM Plex Mono", monospace; padding:8px; margin-top:8px; }
+.btn-row{ display:flex; flex-wrap:wrap; gap:8px; margin-top:1.2rem; }
+@media print{
+  .sidebar, .rule, footer, #snapshot-form, .who, .no-print, .tol-bar, .tol-breathe-btn{ display:none !important; }
+  .frame{ display:block; }
+  .snapshot-results{ border:1px solid #999; }
+}
 </style>
 <script src="/assets/js/site.js" defer></script>
 </head>
 <body>
 <div class="frame">
 <aside class="sidebar">
-<div class="mark">2-Minute Snapshot<small>TOL&#8209;OS &middot; ASSESSMENT</small></div>
-<p class="tagline">Quick, honest read on where you are.</p>
-<a class="back-link" href="index.html">&larr; Back to Snapshot</a>
+<div class="mark">2-Minute Snapshot<small>THE OBJECTIVE LEDGER &middot; QUICK CHECK</small></div>
+<p class="tagline">A quick, honest look at where things are.</p>
+<a class="back-link" href="index.html">&larr; Back to the snapshot</a>
 <div class="sidebar-foot">spreadloveandacceptance.com</div>
 </aside>
 <div class="rule" aria-hidden="true"></div>
-<main>
-<div class="kicker">Assessment</div>
-<h2>Diagnostic Snapshot</h2>
-<p class="lede">2 minutes to understand where your relationship is right now.</p>
-<p class="pillar-note"><small>The Snapshot puts <a href="/five-pillars.html#see-the-load">Pillar I, See the whole load</a> and <a href="/five-pillars.html#fix-the-setup">Pillar II, Fix the setup, not the person</a> to work. In you: you take an honest look at what you carry. Between you and others: you see the pattern as a setup you can change, not a fault in anyone.</small></p>
+<main id="main">
+<div class="kicker">Quick check</div>
+<h1 style="font-size:1.8rem;">The 2-minute snapshot</h1>
+<p class="lede">Seven questions about how a shared load is set up, and how it bends when things get heavy.</p>
+<p class="pillar-note"><small>The snapshot looks through all <a href="/five-pillars.html">Five Pillars</a>. Questions 1 to 3 are about the setup: <a href="/five-pillars.html#see-the-load">Pillar I, See the whole load</a> and <a href="/five-pillars.html#fix-the-setup">Pillar II, Fix the setup, not the person</a>. Questions 4 to 6 are about how it bends: <a href="/five-pillars.html#read-your-state">Pillar III, Read your state first</a>, <a href="/five-pillars.html#tune-signals">Pillar IV, Tune how you send and receive</a> and <a href="/five-pillars.html#quiet-incentives">Pillar V, Notice the quiet incentives</a>. In you: an honest look at what you carry. Between you and others: a pattern you can change together, not a fault in anyone.</small></p>
+<p>This is not a test and not a diagnosis. It's your view, today. It works best when each person takes it on their own and then you compare. Nothing you pick is saved or sent.</p>
 
-<form id="snapshot-form">
-<div class="snapshot-question">
-<h3>1. How would you describe the general pattern in your household right now?</h3>
-<label><input type="radio" name="workload" value="clear"> Work is visibly divided &mdash; both of you know who's responsible for what</label>
-<label><input type="radio" name="workload" value="unclear"> It's unclear who's doing what &mdash; tasks drift from person to person</label>
-<label><input type="radio" name="workload" value="lopsided"> One person is clearly carrying more, and it shows</label>
-<label><input type="radio" name="workload" value="invisible"> The work is invisible &mdash; nobody's keeping score, but someone's paying a price</label>
+<div class="who">
+  <label for="group">Who shares this load with you?</label>
+  <select id="group">
+    <option value="partner">A partner</option>
+    <option value="family">Family at home</option>
+    <option value="roommates">Roommates</option>
+    <option value="carers">People sharing care for someone</option>
+    <option value="team">A team at work</option>
+    <option value="other">Someone else</option>
+  </select>
 </div>
 
-<div class="snapshot-question">
-<h3>2. How often do you talk about the workload you're each carrying?</h3>
-<label><input type="radio" name="communication" value="regular"> Every week or every other week</label>
-<label><input type="radio" name="communication" value="crisis"> Only when someone hits a breaking point</label>
-<label><input type="radio" name="communication" value="never"> Almost never &mdash; it just is what it is</label>
-<label><input type="radio" name="communication" value="brief"> Occasionally, but the conversation is strained</label>
-</div>
-
-<div class="snapshot-question">
-<h3>3. When the workload gets heavy, what usually happens?</h3>
-<label><input type="radio" name="resilience" value="adjust"> You adjust the workload together or ask for help</label>
-<label><input type="radio" name="resilience" value="resentment"> Someone pushes through but resentment builds</label>
-<label><input type="radio" name="resilience" value="shutdown"> One person shuts down or withdraws</label>
-<label><input type="radio" name="resilience" value="conflict"> It usually sparks a fight</label>
-</div>
-
-<div class="snapshot-question">
-<h3>4. When you think about your relationship right now, which word fits best?</h3>
-<label><input type="radio" name="feeling" value="stable"> Stable &mdash; we've got this figured out</label>
-<label><input type="radio" name="feeling" value="urgent"> Urgent &mdash; things need to change soon</label>
-<label><input type="radio" name="feeling" value="rigid"> Rigid &mdash; the pattern is stuck and changing feels impossible</label>
-<label><input type="radio" name="feeling" value="brittle"> Brittle &mdash; one thing going wrong would unravel everything</label>
-</div>
-
-<button type="submit" class="cta-button">See Your Results</button>
+<form id="snapshot-form" novalidate>
+<div id="questions"></div>
+<p class="form-msg" id="form-msg" role="alert"></p>
+<button type="submit" class="cta-button">See my snapshot</button>
 </form>
 
-<div id="snapshot-results" class="snapshot-results">
-<div class="quadrant-name" id="result-quadrant"></div>
-<div class="quadrant-description" id="result-description"></div>
+<section id="snapshot-results" class="snapshot-results" hidden tabindex="-1" aria-labelledby="result-quadrant">
+<p class="lbl">Your snapshot, today</p>
+<h2 class="quadrant-name" id="result-quadrant"></h2>
+<p id="result-description"></p>
+<div class="map" id="map" role="img"></div>
+<div class="scores" id="result-scores"></div>
+<div id="result-mismatch"></div>
 <div class="next-steps">
-<strong>One thing you could try this week:</strong>
-<div id="result-action"></div>
+<strong>One thing to try this week:</strong>
+<p id="result-action" style="margin:0.4rem 0 0;"></p>
+<p id="result-pillar" style="margin:0.4rem 0 0;font-size:0.9rem;"></p>
 </div>
-<hr style="margin: 2rem 0; border: none; border-top: 1px solid var(--line);">
-<p><strong>Want to go deeper?</strong></p>
-<div id="result-links"></div>
+<p style="margin-top:1.4rem;"><strong>Want to go further?</strong></p>
+<ul id="result-links"></ul>
+<p style="font-size:0.88rem;color:var(--ink-soft);">This is a snapshot of one moment from one point of view, not a verdict. Answers change as the setup changes, so try it again in a month.</p>
+<div class="btn-row no-print">
+  <button type="button" class="cta-button" id="copy">Copy my snapshot</button>
+  <button type="button" class="btn" id="print">Print or save as PDF</button>
+  <button type="button" class="btn" id="again">Start over</button>
 </div>
+<p class="status" id="copy-status" role="status"></p>
+<textarea class="copy-out no-print" id="copy-out" readonly hidden aria-label="Snapshot text to copy"></textarea>
+</section>
 
 </main>
 </div>
 
 <footer>
-TOL&#8209;OS &middot; Baseline v1.0.4 &middot; spreadloveandacceptance.com
+The Objective Ledger &middot; spreadloveandacceptance.com
 <div class="footer-links">
-<a href="/index.html">Home</a> | <a href="index.html">Back</a> | <a href="/learn/index.html">Learn</a> | <a href="/do/index.html">Try It</a>
+<a href="/index.html">Home</a> | <a href="index.html">Back</a> | <a href="/learn/index.html">Learn</a> | <a href="/do/index.html">Try the workpapers</a>
 </div>
 </footer>
 
 <script>
-const results = {
-stable: {
-name: 'Stable — You\'ve Got This Figured Out',
-desc: 'Your work is clearly divided, you talk about it regularly, and you adjust when things get heavy. This isn\'t effortless (no household is), but it\'s sustainable. You\'re making space for each other.',
-action: 'Keep doing what you\'re doing — and protect it. A rhythm like this takes care to keep. Write down what\'s working so you remember it when things get stressful.'
-},
-urgent: {
-name: 'Urgent — Time to Readjust',
-desc: 'The pattern you\'re in now isn\'t working, and both of you feel it. Something needs to change — likely soon. Good news: once you name what isn\'t working, it gets much easier to change.',
-action: 'Set aside time for a planned conversation about the workload this week. Use the Lemonade Stand or a week of the Who did what log (WP-01): something that makes the work visible to both of you at the same time.'
-},
-rigid: {
-name: 'Rigid — The Pattern Is Stuck',
-desc: 'You know what the problem is, but changing it feels impossible. The way you share the work has stayed the same for so long that it almost feels like it can\'t change. It can.',
-action: 'Flip one small thing this week — swap responsibilities for just one task, just for 7 days. You\'ll learn whether it\'s actually impossible to change, or just uncomfortable.'
-},
-brittle: {
-name: 'Brittle — You\'re Carrying Risk',
-desc: 'The current arrangement feels like it\'s barely holding together. One unexpected event could unravel everything. This can\'t last as it is, but it\'s not permanent. It just needs attention now.',
-action: 'Find the one task that would cause the biggest problem if it didn\'t get done. Who\'s carrying that? Talk about it this week. That conversation might be uncomfortable, but avoiding it costs more.'
-}
+(function(){
+"use strict";
+function $(id){ return document.getElementById(id); }
+function esc(s){ var d = document.createElement("div"); d.textContent = s; return d.innerHTML; }
+
+// Each answer scores 0 to 2 on one of two axes. Setup = questions 1-3, Flex = questions 4-6 (0 to 6 each).
+// 4 or more is the steadier side. Question 7 is not scored: it's your own word, shown next to the result.
+var QUESTIONS = [
+  { id: "owners", axis: "setup", tag: "The setup · Pillar II", q: "1. Who does what?", a: [
+    ["Everyone knows who owns each regular job", 2],
+    ["Mostly clear, but a few jobs float around", 1],
+    ["It's unclear: jobs drift from person to person", 0],
+    ["Much of the work is invisible (planning, remembering, noticing), so it's hard to say", 0] ] },
+  { id: "share", axis: "setup", tag: "The setup · Pillar I", q: "2. How is the load shared right now?", a: [
+    ["About the way we've agreed", 2],
+    ["A bit uneven, but it evens out over a few weeks", 1],
+    ["One person is clearly carrying more", 0],
+    ["Honestly, I don't know", 0] ] },
+  { id: "missed", axis: "setup", tag: "The setup · Pillar V", q: "3. When a job gets missed, what usually happens?", a: [
+    ["The person who owns it notices and handles it", 2],
+    ["Whoever notices first picks it up", 1],
+    ["It sits undone, or it turns into an argument", 0] ] },
+  { id: "talk", axis: "flex", tag: "How it bends · Pillar IV", q: "4. How often do you talk about who's carrying what?", a: [
+    ["Regularly, at a planned time", 2],
+    ["Now and then, and it goes okay", 1],
+    ["Now and then, but it gets tense", 0],
+    ["Only when someone hits a limit, or almost never", 0] ] },
+  { id: "heavy", axis: "flex", tag: "How it bends · Pillar II", q: "5. When things get heavy, what usually happens?", a: [
+    ["We adjust the load together, or ask for help", 2],
+    ["Someone quietly pushes through", 1],
+    ["Someone pulls back or goes quiet", 0],
+    ["It turns into a fight", 0] ] },
+  { id: "state", axis: "flex", tag: "How it bends · Pillar III", q: "6. Before a hard conversation, do you check how everyone is doing first (tired, rushed, wound up)?", a: [
+    ["Usually", 2],
+    ["Sometimes", 1],
+    ["Rarely", 0] ] },
+  { id: "word", axis: null, tag: "Your own word · not scored", q: "7. Which word fits how it feels to you right now?", a: [
+    ["Steady: we've mostly got this", "steady"],
+    ["Urgent: something needs to change soon", "readjust"],
+    ["Stuck: the pattern won't budge", "stuck"],
+    ["Fragile: one bad week could tip it over", "stretched"] ] }
+];
+
+var GROUP = {
+  partner: "the two of you", family: "your family", roommates: "your household",
+  carers: "the people sharing the care", team: "your team", other: "the people you share the load with"
 };
 
-document.getElementById('snapshot-form').addEventListener('submit', function(e) {
-e.preventDefault();
-const workload = document.querySelector('input[name="workload"]:checked').value;
-const communication = document.querySelector('input[name="communication"]:checked').value;
-const resilience = document.querySelector('input[name="resilience"]:checked').value;
-const feeling = document.querySelector('input[name="feeling"]:checked').value;
+var AREAS = {
+  steady: {
+    name: "Steady",
+    desc: function(g){ return "The setup is fairly clear and it bends when it needs to. For " + g + ", that's worth protecting: no shared load is effortless, but this one looks like it can keep going."; },
+    action: "Write down what's working: who owns what, and when you check in. It's easier to keep a rhythm you can see, especially in a busy month.",
+    pillar: "This protects Pillar II, Fix the setup, not the person: the setup is the thing that's working.",
+    links: [["The 90-second daily check-in (WP-13)", "/workpapers/fill/wp-13.html"], ["Check-ins", "/check-ins.html"], ["CALC-01, Can the load last?", "/workpapers/calculators/calc01-solvency.html"]]
+  },
+  readjust: {
+    name: "Ready to readjust",
+    desc: function(g){ return "You talk and adapt well, but the setup itself is blurry or uneven. That's good news: " + g + " already have the hard part, which is being able to talk about it. What's missing is a clear, fair setup."; },
+    action: "Log one ordinary week in WP-01 (who did what, roughly how long, including the invisible planning). Then sit down once and give every regular job a named owner in WP-03.",
+    pillar: "This is Pillar I, See the whole load, then Pillar II, Fix the setup.",
+    links: [["WP-01, Who did what", "/workpapers/fill/wp-01.html"], ["WP-03, One owner per job", "/workpapers/fill/wp-03.html"], ["The Lemonade Stand", "/lemonade-stand.html"]]
+  },
+  stuck: {
+    name: "Stuck pattern",
+    desc: function(g){ return "The setup is fairly clear, but it's hard to talk about or change. For " + g + ", the jobs may be settled while the conversation about them isn't. A pattern that's been the same for a long time can feel fixed. It isn't."; },
+    action: "Swap one small job for just seven days, then talk for ten minutes about how it went. Use one sentence each: a fact, a feeling, an ask.",
+    pillar: "This is Pillar IV, Tune how you send and receive, with Pillar III: pick a calm time, not a tired one.",
+    links: [["WP-09, The tone filter (fact, feeling, ask)", "/workpapers/fill/wp-09.html"], ["The 90-second daily check-in (WP-13)", "/workpapers/fill/wp-13.html"], ["The Signal Translator", "/signal-translator.html"]]
+  },
+  stretched: {
+    name: "Stretched thin",
+    desc: function(g){ return "The setup is unclear or uneven, and it's hard to adjust when things get heavy. For " + g + ", that's a lot to hold at once. It says nothing about anyone's effort or worth; it says the setup needs attention first."; },
+    action: "Start small. Each person does the two-minute battery check (WP-02) so you pick a calm moment. Then name the one job that would cause the biggest problem if it were missed, and agree who owns it this week.",
+    pillar: "This starts with Pillar III, Read your state first, then Pillar II, one owner per job.",
+    links: [["WP-02, The battery check", "/workpapers/fill/wp-02.html"], ["WP-03, One owner per job", "/workpapers/fill/wp-03.html"], ["The Calm-Down Kit (WP-11)", "/wp-11.html"]]
+  }
+};
 
-let quadrant = 'stable';
-if (workload !== 'clear' && resilience !== 'adjust') quadrant = 'brittle';
-else if (communication === 'never' || resilience === 'shutdown') quadrant = 'rigid';
-else if (workload === 'lopsided' || communication === 'crisis') quadrant = 'urgent';
+// build the form
+$("questions").innerHTML = QUESTIONS.map(function(q){
+  return '<fieldset class="q" id="q-' + q.id + '"><legend>' + esc(q.q) + '</legend><span class="tag">' + esc(q.tag) + '</span>' +
+    q.a.map(function(a, i){ return '<label><input type="radio" name="' + q.id + '" value="' + i + '"> <span>' + esc(a[0]) + '</span></label>'; }).join("") + '</fieldset>';
+}).join("");
 
-const result = results[quadrant];
-document.getElementById('result-quadrant').textContent = result.name;
-document.getElementById('result-description').textContent = result.desc;
-document.getElementById('result-action').textContent = result.action;
-document.getElementById('result-links').innerHTML = 
-'<ul>' +
-'<li><a href="/learn/index.html">Read the stories from philosophy behind this</a></li>' +
-'<li><a href="/do/index.html">Try the Workpaper Playground</a></li>' +
-'<li><a href="/workpapers/wp-01.html">Start with WP-01: Who did what</a></li>' +
-'<li><a href="/workpapers/fill/suite.html">Build your Workpaper Suite</a></li>' +
-'<li><a href="/architecture/index.html">Understand how the system works</a></li>' +
-'</ul>';
-document.getElementById('snapshot-results').classList.add('active');
+document.addEventListener("change", function(e){
+  if (e.target.type === "radio"){ var fs = e.target.closest("fieldset"); if (fs) fs.classList.remove("missing"); }
 });
-</script>
 
+var copyText = "";
+function areaFor(setup, flex){
+  if (setup >= 4 && flex >= 4) return "steady";
+  if (setup < 4 && flex >= 4) return "readjust";
+  if (setup >= 4 && flex < 4) return "stuck";
+  return "stretched";
+}
+
+$("snapshot-form").addEventListener("submit", function(e){
+  e.preventDefault();
+  var missing = [], picks = {};
+  QUESTIONS.forEach(function(q){
+    var c = document.querySelector('input[name="' + q.id + '"]:checked');
+    $("q-" + q.id).classList.toggle("missing", !c);
+    if (!c) missing.push(q); else picks[q.id] = q.a[+c.value];
+  });
+  if (missing.length){
+    $("form-msg").textContent = "Please answer " + (missing.length === 1 ? "question " + missing[0].q.split(".")[0] : "questions " + missing.map(function(q){ return q.q.split(".")[0]; }).join(", ")) + " first.";
+    var first = document.querySelector('#q-' + missing[0].id + ' input');
+    first.focus();
+    return;
+  }
+  $("form-msg").textContent = "";
+  var setup = 0, flex = 0;
+  QUESTIONS.forEach(function(q){ if (q.axis === "setup") setup += picks[q.id][1]; if (q.axis === "flex") flex += picks[q.id][1]; });
+  var key = areaFor(setup, flex), A = AREAS[key], g = GROUP[$("group").value];
+  $("result-quadrant").textContent = A.name;
+  $("result-description").textContent = A.desc(g);
+  $("result-action").textContent = A.action;
+  $("result-pillar").textContent = A.pillar;
+  $("result-scores").innerHTML = "The setup (questions 1–3): <b>" + setup + " of 6</b><br>How it bends (questions 4–6): <b>" + flex + " of 6</b><br><span style=\"color:var(--ink-soft)\">4 or more counts as the steadier side. Each answer is worth 0, 1 or 2.</span>";
+  var cells = { stuck: ["Stuck pattern", "clear setup, hard to bend"], steady: ["Steady", "clear setup, bends well"], stretched: ["Stretched thin", "blurry setup, hard to bend"], readjust: ["Ready to readjust", "blurry setup, bends well"] };
+  var order = ["stuck", "steady", "stretched", "readjust"];
+  var m = $("map");
+  m.setAttribute("aria-label", "Four areas: setup clear or blurry, and bends well or hard to bend. You are in " + A.name + ".");
+  m.innerHTML = '<div class="axis-y" style="grid-row:1 / 3;">the setup &uarr; clearer</div>' +
+    order.map(function(k){ return '<div class="cell' + (k === key ? " here" : "") + '">' + cells[k][0] + (k === key ? " ← you" : "") + '<br><span style="font-weight:400;color:var(--ink-soft)">' + cells[k][1] + '</span></div>'; }).join("") +
+    '<div class="axis-x">how it bends &rarr; more easily</div>';
+  var word = picks.word[1], mm = $("result-mismatch");
+  if (word !== key){
+    mm.innerHTML = '<div class="mismatch"><p style="margin:0;"><strong>Worth noticing:</strong> your answers point to <em>' + esc(A.name) + '</em>, but the word you picked was closer to <em>' + esc(AREAS[word].name) + '</em>. Feelings and patterns don’t always line up. That gap is a good thing to bring up gently with the others, especially if they take the snapshot too.</p></div>';
+  } else mm.innerHTML = "";
+  $("result-links").innerHTML = A.links.map(function(l){ return '<li><a href="' + l[1] + '">' + esc(l[0]) + '</a></li>'; }).join("") +
+    '<li><a href="/five-pillars.html">The Five Pillars, in plain words</a></li><li><a href="/do/workpaper-playground.html">Practice in the Workpaper Playground</a></li>';
+  var L = ["My 2-minute snapshot (The Objective Ledger)", "About: " + $("group").options[$("group").selectedIndex].text, "", "Area: " + A.name, A.desc(g), "",
+    "The setup: " + setup + " of 6. How it bends: " + flex + " of 6.", "My word: " + picks.word[0], "", "My answers:"];
+  QUESTIONS.forEach(function(q){ L.push("- " + q.q + " " + picks[q.id][0]); });
+  L.push("", "One thing to try this week: " + A.action, "", "A snapshot of one moment from one point of view, not a verdict.");
+  copyText = L.join("\n");
+  var res = $("snapshot-results");
+  res.hidden = false; $("copy-status").textContent = ""; $("copy-out").hidden = true;
+  res.focus();
+});
+
+document.addEventListener("click", function(e){
+  var t = e.target.closest("button"); if (!t) return;
+  if (t.id === "print") window.print();
+  else if (t.id === "again"){ $("snapshot-form").reset(); $("snapshot-results").hidden = true; document.querySelector("#questions input").focus(); }
+  else if (t.id === "copy"){
+    var ta = $("copy-out"), st = $("copy-status");
+    var fb = function(){ ta.value = copyText; ta.hidden = false; ta.focus(); ta.select(); st.textContent = "Your browser blocked copying. The text is selected below: copy it from there."; };
+    try { if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(copyText).then(function(){ st.textContent = "Copied. Paste it wherever you like."; ta.hidden = true; }, fb); else fb(); } catch (err){ fb(); }
+  }
+});
+})();
+</script>
 </body>
 </html>

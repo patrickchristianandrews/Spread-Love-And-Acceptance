@@ -73,7 +73,7 @@
   .rl-src[data-src="gottman"]{ background:rgba(247,201,212,.5); color:#7A3346; border-color:rgba(237,163,182,.8); }
   .rl-src[data-src="gg"]{ background:rgba(248,231,174,.6); color:#6B5418; border-color:rgba(239,210,122,.9); }
   .read .rl-item h3{ margin:.4rem 0 .15rem; font-size:1.1rem; line-height:1.35; overflow-wrap:anywhere; }
-  .read .rl-item h3 a{ text-decoration-color:var(--brass); }
+  .read .rl-item h3 a{ display:flex; align-items:center; min-height:44px; text-decoration-color:var(--brass); }
   .rl-item p{ margin:0 !important; font-size:.98rem; line-height:1.55; }
   .rl-by{ font-size:.86rem !important; font-style:italic; color:var(--ink-soft); }
   .rl-sum{ color:var(--ink-soft); margin-top:.2rem !important; }
@@ -82,24 +82,89 @@
   .rl-sr{ position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; border:0; }
   .rl-empty{ padding:1rem 0; color:var(--ink-soft); }
   .rl-fine{ font-size:.88rem; color:var(--ink-soft); }
-  @media (max-width:560px){ .rl-group, .rl-filters{ padding:1rem 1rem .5rem; border-radius:24px; } .rl-chip{ font-size:.85rem; } }
-  @media print{ .rl-filters, .rl-status, .tol-read-wrap{ display:none; } .rl-group{ background:#fff; border:1px solid #ccc; box-shadow:none; } }
+  .rl-meta a{ display:inline-flex; align-items:center; min-height:44px; }
+
+  /* Tabs: Fresh picks / Browse all */
+  .rl-tabs{ display:flex; flex-wrap:wrap; gap:.5rem; margin:2rem 0 1.25rem; padding:.35rem; border-radius:999px; background:rgba(255,255,255,.55); border:1px solid #D9C8F0; width:max-content; max-width:100%; }
+  .rl-tab{ font:inherit; font-size:.95rem; min-height:44px; padding:.5rem 1.2rem; border-radius:999px; border:1px solid transparent; background:none; color:#4E3F6B; cursor:pointer; }
+  .rl-tab:hover{ background:#F3EEF9; }
+  .rl-tab[aria-selected="true"]{ background:#EDE4F8; border-color:#B9A0E0; color:#3B2F55; font-weight:600; }
+  .rl-tab:focus-visible, .af-btn:focus-visible, .af-more:focus-visible, .af-jump a:focus-visible, .af-all:focus-visible, .af-card a:focus-visible{ outline:2px solid var(--focus); outline-offset:2px; }
+
+  /* Fresh picks */
+  .af-bar{ display:flex; flex-wrap:wrap; align-items:center; gap:.5rem .6rem; margin:0 0 .5rem; }
+  .af-btn{ font:inherit; font-size:.9rem; line-height:1.2; min-height:44px; padding:.45rem 1rem; border-radius:999px; cursor:pointer; border:1px solid #D9C8F0; background:rgba(255,255,255,.85); color:#4E3F6B; }
+  .af-btn:hover{ background:#F3EEF9; }
+  .af-btn[aria-pressed="true"]{ background:#EDE4F8; border-color:#B9A0E0; font-weight:600; }
+  .read .af-state{ margin:0 0 .4rem; font-size:.9rem; color:var(--ink-soft); max-width:60ch; }
+  .read .af-status{ margin:0 0 1rem; min-height:1.4em; font-size:.9rem; color:#4E3F6B; }
+  .af-jump-wrap{ margin:0 0 1.5rem; }
+  .read .af-jump{ display:flex; flex-wrap:wrap; gap:.35rem; list-style:none; padding:0; margin:0; }
+  .read .af-jump li{ margin:0; max-width:none; }
+  .af-jump a{ display:inline-flex; align-items:center; min-height:44px; padding:.35rem .85rem; border-radius:999px; font-size:.85rem; line-height:1.2; background:rgba(255,255,255,.7); border:1px solid #E6DCF3; text-decoration:none !important; color:#4E3F6B !important; }
+  .af-jump a:hover{ background:#F3EEF9; }
+  .af-head{ display:flex; flex-wrap:wrap; align-items:flex-start; justify-content:space-between; gap:.4rem 1rem; margin-bottom:.35rem; }
+  .af-hw{ flex:1 1 18rem; min-width:0; }
+  .read .af-group h2{ margin:0 0 .15rem; font-size:1.35rem; }
+  .read .af-blurb{ margin:0 !important; font-size:.95rem; line-height:1.5; color:var(--ink-soft); }
+  .af-more{ font:inherit; font-size:.85rem; line-height:1.2; min-height:44px; padding:.4rem .9rem; border-radius:999px; cursor:pointer; border:1px dashed #B9A0E0; background:none; color:#4E3F6B; flex:0 0 auto; }
+  .af-more:hover{ background:#F3EEF9; }
+  .read .af-list{ list-style:none; padding:0; margin:.4rem 0 0; display:grid; grid-template-columns:repeat(auto-fill, minmax(15.5rem, 1fr)); gap:.75rem; transition:opacity .32s ease; }
+  .af-list.is-swap{ opacity:0; }
+  .read .af-card{ margin:0; max-width:none; padding:.8rem .95rem .85rem; border-radius:18px; background:rgba(255,255,255,.7); border:1px solid #EDE4F8; min-width:0; }
+  .read .af-from{ margin:0 !important; display:flex; flex-wrap:wrap; align-items:center; gap:.2rem .5rem; font-size:.75rem; line-height:1.3; }
+  .af-newtab{ font-family:"IBM Plex Mono", ui-monospace, monospace; font-size:.72rem; color:#6B5A78; }
+  .read .af-t{ margin:.3rem 0 .1rem; font-size:1.05rem; line-height:1.35; font-weight:600; overflow-wrap:anywhere; }
+  .read .af-t a{ display:flex; align-items:center; min-height:44px; text-decoration-color:var(--brass); }
+  .read .af-sum{ margin:0 !important; font-size:.93rem; line-height:1.5; color:var(--ink-soft); }
+  .read .af-foot{ margin:.6rem 0 0 !important; font-size:.88rem; }
+  .af-all{ display:inline-flex; align-items:center; min-height:44px; color:#4E3F6B !important; text-decoration-color:#D9C8F0 !important; }
+  @media (prefers-reduced-motion: reduce){ .af-list{ transition:none; } }
+  html.tol-still .af-list{ transition:none; }
+
+  @media (max-width:560px){ .rl-group, .rl-filters{ padding:1rem 1rem .5rem; border-radius:24px; } .rl-chip{ font-size:.85rem; }
+    .rl-tabs{ width:100%; } .rl-tab{ flex:1 1 0; padding:.5rem .6rem; } .read .af-list{ grid-template-columns:1fr; } }
+  @media print{ .rl-filters, .rl-status, .tol-read-wrap, .rl-tabs, .af-bar, .af-state, .af-status, .af-jump-wrap, .af-more{ display:none; } .rl-group{ background:#fff; border:1px solid #ccc; box-shadow:none; } }
 </style>
 </head>
 <body>
-<main class="read">
-<header class="read-head"><p class="read-code">Further reading</p><h1>Articles worth your time</h1></header>
+<main class="read is-wide">
+<header class="read-head"><p class="read-code">Articles</p><h1>Articles worth your time</h1></header>
 
 <div class="rl-intro">
-<p class="simple-lede">A short, hand-picked library of articles that go with this program: some help you understand yourself, and some help you get along with the people you share time, space, work or care with.</p>
-<p>They come from sources we trust: Psychology Today, Greater Good Magazine from UC Berkeley, The Gottman Institute, Harvard Health, ADDitude, CHADD and the National Autistic Society. Each one is sorted by topic and by <a href="/five-pillars.html">the Five Pillars</a> it belongs to. The one-line summaries are ours; the articles open on the publisher’s site in a new tab.</p>
+<p class="simple-lede">A hand-picked library of articles that go with this program: some help you understand yourself, and some help you get along with the people you share time, space, work or care with.</p>
+<p>They come from sources we trust: Psychology Today, Greater Good Magazine from UC Berkeley, The Gottman Institute, Harvard Health, ADDitude, CHADD and the National Autistic Society. Each one is sorted by topic and by <a href="/five-pillars.html">the Five Pillars</a> it belongs to. The one-line summaries are ours; the articles open on the publishers’ sites in a new tab.</p>
+<p class="rl-fine">Nothing you do on this page is sent anywhere. The only thing kept is a short list of the articles you’ve opened, in this browser, so new picks can skip them.</p>
 </div>
 
-<div id="rl-suggest" aria-label="A suggestion to start with"></div>
+<div class="rl-tabs no-dive" id="rl-tabs" role="tablist" aria-label="How to see the articles">
+  <button type="button" class="rl-tab" role="tab" id="rl-tab-fresh" aria-controls="rl-panel-fresh" aria-selected="true">Fresh picks</button>
+  <button type="button" class="rl-tab" role="tab" id="rl-tab-all" aria-controls="rl-panel-all" aria-selected="false" tabindex="-1">Browse all</button>
+</div>
 
-<section class="rl-filters no-dive" aria-labelledby="rl-filters-h">
-  <h2 id="rl-filters-h" class="rl-sr">Filter the list</h2>
-  <div hidden id="rl-aud"></div>
+<section id="rl-panel-fresh" role="tabpanel" aria-labelledby="rl-tab-fresh" class="no-dive no-cheer">
+  <h2 class="rl-sr">Fresh picks, grouped by topic</h2>
+  <p class="af-state" id="af-state">A few articles from each topic, picked at random each time you visit.</p>
+  <div class="af-bar">
+    <button type="button" class="af-btn" id="af-pause" aria-pressed="false">Pause new articles</button>
+    <button type="button" class="af-btn" id="af-shuffle">Shuffle everything</button>
+  </div>
+  <p class="af-status" id="af-status" role="status" aria-live="polite"></p>
+  <nav class="af-jump-wrap" aria-label="Jump to a topic">
+    <details class="rl-more" id="af-jump-more" open>
+      <summary><span class="rl-sum-k">Jump to a topic</span></summary>
+      <ul class="af-jump" id="af-jump"></ul>
+    </details>
+  </nav>
+  <div id="af-groups">
+    <noscript><p>The fresh picks need JavaScript. Every article is also listed in <a href="/assets/js/reading-list.js">the reading list file</a>.</p></noscript>
+  </div>
+</section>
+
+<section id="rl-panel-all" role="tabpanel" aria-labelledby="rl-tab-all" hidden>
+<h2 class="rl-sr">Browse all the articles</h2>
+<div class="rl-filters no-dive" role="group" aria-labelledby="rl-filters-h">
+  <p id="rl-filters-h" class="rl-sr">Filter the list</p>
   <details class="rl-more" id="rl-more-pillars" open>
     <summary><span class="rl-sum-k">The Five Pillars</span> <span class="rl-sum-v" id="rl-pillar-now">All pillars</span></summary>
     <fieldset>
@@ -114,7 +179,7 @@
       <div class="rl-chips" id="rl-topics"></div>
     </fieldset>
   </details>
-</section>
+</div>
 
 <div class="rl-status no-dive">
   <p id="rl-count" aria-live="polite">Loading the list…</p>
@@ -124,8 +189,9 @@
 <div id="rl-list" class="no-dive no-cheer">
   <noscript><p>This list needs JavaScript to show. Every article is also listed in <a href="/assets/js/reading-list.js">the reading list file</a>.</p></noscript>
 </div>
+</section>
 
-<p class="rl-fine">Articles are chosen for this program and open on the publisher’s site. They are for everyday understanding, not medical advice. Found a link that no longer works? It gets checked and refreshed from time to time.</p>
+<p class="rl-fine">Every article is hand-picked for this program and opens on the publisher’s site. They are for everyday understanding, not medical advice. Found a link that no longer works? They get checked and refreshed from time to time.</p>
 </main>
 </body>
 </html>

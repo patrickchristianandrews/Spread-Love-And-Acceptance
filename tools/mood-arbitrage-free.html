@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Mood Arbitrage: Free Introduction — The Objective Ledger</title>
-<meta name="description" content="Learn to notice the state someone’s body is in and gently help a tense moment soften. A free introduction; the full toolkit is free with email while it’s being built.">
+<title>Mood Arbitrage, Level 1: The Free Introduction — The Objective Ledger</title>
+<meta name="description" content="Level 1 of Mood Arbitrage: settle yourself first, read the state someone else is in (wound up, shut down or scattered), and choose one small move that helps. A free introduction with a quick move finder; level 2 adds a printable plan builder.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,500&family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -284,285 +284,197 @@
 </style>
 <link rel="stylesheet" href="/assets/css/site.css">
 <script src="/assets/js/site.js" defer></script>
+<style>
+  /* Loaded after site.css so these win. */
+  .sr-only{ position:absolute !important; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; border:0; }
+  .section h2, .step-box h3, .frequency-card .what, .scenario-box h4{ color:#7A5620; }
+  .scenario-box h4{ color:var(--focus); }
+  a{ color:#7A5620; text-decoration:underline; }
+  .hero .badge{ color:#7A5620; }
+  .ma-steps{ display:flex; flex-wrap:wrap; align-items:center; justify-content:center; gap:.5rem; margin:.4rem 0 1.4rem; }
+  .ma-steps a{ display:inline-flex; align-items:center; gap:.45rem; min-height:44px; padding:.4rem .95rem; border-radius:999px; text-decoration:none; color:#3C3350;
+    background:rgba(255,253,249,.9); border:1px solid #D9C8F0; font:600 .92rem "Lora", Georgia, serif; }
+  .ma-steps a[aria-current="page"]{ background:#3C3350; color:#FFF8EE; border-color:#3C3350; }
+  .ma-steps a span{ display:inline-grid; place-items:center; width:1.5rem; height:1.5rem; border-radius:50%; background:#F9E1EA; color:#7A3355; font:600 .75rem "IBM Plex Mono", monospace; }
+  .ma-steps a small{ font-weight:400; }
+  .ma-arrow{ color:#6E5A73; }
+  .frequency-card .tag{ font-family:"IBM Plex Mono",monospace; font-size:.72rem; color:var(--ink-soft); font-weight:400; }
+  .picker{ border:1px solid var(--line); border-radius:var(--radius); padding:1rem; margin:1rem 0 0; }
+  .picker legend{ font-family:"Fraunces","Lora",serif; font-weight:600; padding:0 .3rem; }
+  .picker label{ display:flex; align-items:center; gap:.6rem; min-height:44px; padding:.35rem .6rem; border:1px solid var(--line); border-radius:var(--radius); margin:.4rem 0; cursor:pointer; background:#fff; }
+  .picker label:has(input:checked){ border-color:var(--ink); box-shadow:inset 0 0 0 1px var(--ink); }
+  .picker input{ width:1.1rem; height:1.1rem; accent-color:var(--ink); }
+  .pick-out{ margin:1rem 0 0; padding:1rem 1.1rem; background:rgba(43,91,140,.08); border-left:4px solid var(--focus); border-radius:var(--radius); }
+  .pick-out:empty{ display:none; }
+  .pick-out h3{ margin:0 0 .4rem; color:var(--focus); }
+  .pick-out:focus{ outline:none; } .pick-out:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
+  .paywall-cta .btn{ min-height:44px; }
+  .use-with-block a.locked{ text-decoration:underline; }
+  @media (max-width:600px){ .scenario-box{ padding:1rem; } .step-box{ padding:1rem; } .frequency-card{ padding:1rem; } th, td{ padding:.5rem; } }
+</style>
 </head>
 <body>
 
-<!-- TOL-OS UNIFIED HEADER -->
-
-
-<!-- BREADCRUMB NAVIGATION -->
-
-
-<!-- CONTEXT: Where you are -->
 <div class="context-opening">
   <div class="context-box">
-    <h3>You're here in TOL-OS</h3>
-    <p>
-      You've learned that people who share a life run on five different rhythms, or frequencies. Now you'll see those frequencies <strong>in action, in a real moment when feelings run high</strong>.
-    </p>
-    <p>
-      <strong>This page is free.</strong> It shows you the core principle and one complete example. The full interactive version, with five worked scenarios and a library of 15+ ready-made moves, comes with the full toolkit.
-    </p>
-    <p><em>Next step after this: Measure your actual five frequencies with <strong>Frequency Calibration</strong>.</em></p>
+    <h3>You&#39;re at level 1 of 2</h3>
+    <p>Mood Arbitrage is one tool in two levels. <strong>Level 1, this page, is free:</strong> the idea, the three states, the four steps, one complete example and a quick move finder. <strong>Level 2, the full toolkit</strong>, adds a plan builder you can print, five worked scenarios, what to do when a move doesn&#39;t land, and a four-week practice plan. It&#39;s free with an email while the site is being built.</p>
+    <p><em>Goes well with: <a href="/tools/frequency-calibration.html">Frequency Calibration</a>, which compares your everyday rhythms with someone else&#39;s.</em></p>
   </div>
 </div>
 
 <div class="container">
 
-  <!-- HERO -->
   <div class="hero">
-    <div class="badge">Free Introduction</div>
+    <div class="badge">Level 1 &middot; Free introduction</div>
     <h1>Mood Arbitrage</h1>
-    <nav class="ma-steps" aria-label="Mood Arbitrage, in two parts">
+    <nav class="ma-steps" aria-label="Mood Arbitrage, two levels of one tool">
       <a href="/tools/mood-arbitrage-free.html" aria-current="page"><span>1</span> The introduction <small>free</small></a>
       <span class="ma-arrow" aria-hidden="true">&rarr;</span>
       <a href="/tools/mood-arbitrage-full.html"><span>2</span> The full toolkit <small>free with email</small></a>
     </nav>
-    <style>
-      .ma-steps{ display:flex; flex-wrap:wrap; align-items:center; gap:.5rem; margin:.4rem 0 1.4rem; }
-      .ma-steps a{ display:inline-flex; align-items:center; gap:.45rem; min-height:44px; padding:.4rem .95rem; border-radius:999px; text-decoration:none; color:#3C3350;
-        background:rgba(255,253,249,.9); border:1px solid #D9C8F0; font:600 .92rem "Lora", Georgia, serif; }
-      .ma-steps a[aria-current="page"]{ background:#3C3350; color:#FFF8EE; border-color:#3C3350; }
-      .ma-steps a span{ display:inline-grid; place-items:center; width:1.5rem; height:1.5rem; border-radius:50%; background:#F9E1EA; color:#7A3355; font:600 .75rem "IBM Plex Mono", monospace; }
-      .ma-steps a small{ font-weight:400; opacity:.75; }
-      .ma-arrow{ color:#8A6D8F; }
-    </style>
-    
-<p class="hero-tagline">Learn to notice how someone’s body is feeling, and gently help a tense moment soften as it happens.</p>
-<p class="hero-tagline pillar-note"><small>The name borrows from finance, where “arbitrage” means spotting a gap and putting it to good use. Here, the gap is between how a moment feels and how it could feel. This page puts <a href="/five-pillars.html#read-your-state">Pillar III, Read your state first</a> and <a href="/five-pillars.html#tune-signals">Pillar IV, Tune how you send and receive</a> to work. In you: you calm your own body first. Between you and others: you read the other person’s state, and choose a move that helps it settle.</small></p>
+    <p class="hero-tagline">Settle yourself first, read the state someone else is in, and choose one small move that helps a tense moment soften.</p>
+    <p class="hero-tagline pillar-note"><small>The name borrows from finance, where &ldquo;arbitrage&rdquo; means spotting a gap and putting it to good use. Here, the gap is between how a moment feels and how it could feel. This tool puts <a href="/five-pillars.html#read-your-state">Pillar III, Read your state first</a> and <a href="/five-pillars.html#tune-signals">Pillar IV, Tune how you send and receive</a> to work, part of <a href="/five-pillars.html">the Five Pillars</a>. <strong>In you:</strong> you notice and settle your own state before you act. <strong>Between you and others:</strong> you read the other person&#39;s state and pick a move that helps it settle, instead of arguing with it.</small></p>
   </div>
 
-  <!-- USE WITH BLOCK (floating) -->
   <div class="use-with-block">
-    <h4>Use With</h4>
-    
-    <div class="use-item upstream">
-      <strong>Before this:</strong>
-      <a href="/frequency-framework.html">Frequency Framework</a>
-      <p>Understand the five rhythms</p>
-    </div>
-
-    <div class="use-item parallel">
-      <strong>Right now:</strong>
-      <a href="/tools/mood-arbitrage-free.html">This Page</a>
-      <p>See frequencies in a real disagreement</p>
-    </div>
-
-    <div class="use-item downstream">
-      <strong>Next:</strong>
-      <a href="/tools/frequency-calibration.html" class="locked">Frequency Calibration 🔒</a>
-      <p>Measure your five domains</p>
-    </div>
-
-    <div class="use-item downstream">
-      <strong>Then:</strong>
-      <a href="/tools/mood-arbitrage-full.html" class="locked">The full Mood Arbitrage toolkit 🔒</a>
-      <p>15+ ready-made moves</p>
-    </div>
+    <h4>Use with</h4>
+    <div class="use-item upstream"><strong>Before this:</strong> <a href="/frequency-framework.html">Frequency Framework</a><p>Why two reasonable people can fall out of tune</p></div>
+    <div class="use-item parallel"><strong>For yourself first:</strong> <a href="/wp-11.html">WP-11, the Calm-Down Kit</a><p>Your own plan for settling</p></div>
+    <div class="use-item downstream"><strong>Next:</strong> <a href="/tools/mood-arbitrage-full.html" class="locked">Level 2: the full toolkit</a><p>Build and print your own plan</p></div>
   </div>
 
-  <!-- DOMAIN INDICATORS -->
-  <div class="domain-indicator">
-    <h4>Frequencies Covered</h4>
-    <div class="domains">
-      <span class="domain autonomic">Autonomic</span>
-      <span class="domain communicational">Communicational</span>
-    </div>
-  </div>
-
-  <!-- CORE PRINCIPLE -->
   <div class="section">
-    <h2>The Core Principle</h2>
-    <p>Turning a tense moment into a better one is not about forced cheerfulness. It's about <strong>calming your own body on purpose</strong> (autonomic regulation), so the mood between you settles and what you want to say can land safely. <a href="/check-ins.html#leverage">Check-ins</a> has the longer version of this move, for a planned conversation: keep the real cost in view, then turn it into one action you can repeat. Test your sentence in the <a href="/signal-translator.html">Signal Translator</a>, so the shift doesn't soften the fact into a compliment, and doesn't turn into a pile of complaints, blame, or criticism of the person. Stick to one topic. The <a href="/check-ins.html#ground">ground rules</a> show how.</p>
+    <h2>The core idea</h2>
+    <p>Turning a tense moment into a better one isn&#39;t about forced cheerfulness, and it isn&#39;t about brushing aside how someone feels. It starts with <strong>settling your own state on purpose</strong>, then offering the other person one small thing that matches the state they&#39;re in. The real topic still matters. It just waits until you&#39;re both steadier.</p>
+    <p>Moods tend to be catching. When one person slows down, lowers their voice and stops pushing, the other often has room to do the same. That&#39;s the whole move, and it works with a partner, family, a co-parent, a roommate, a coworker, someone you care for, or a friend.</p>
     <div class="note-box">
-      <strong>The science, simply:</strong> Our bodies pick up whether we feel safe long before we make sense of the words. When someone you're close to is overwhelmed, logic usually doesn't reach them. What helps is changing the feeling in the room, so their body can settle and feel close again.
+      <strong>When you do want to talk it through:</strong> do it later, in a <a href="/check-ins.html">check-in</a>, one topic at a time, with no blame. The <a href="/check-ins.html#ground">ground rules</a> show how, and the <a href="/signal-translator.html">Signal Translator</a> helps you test your opening line.
     </div>
   </div>
 
-  <!-- THE THREE FREQUENCIES -->
   <div class="section">
-    <h2>The Three Mood Frequencies</h2>
-    <p style="color: var(--ink-soft); margin-bottom: 1.5rem;">What does their body tell you? Look at their physical state before you decode their words.</p>
+    <h2>Three states to look for</h2>
+    <p style="color: var(--ink-soft);">Look at how they seem before you decode their words. It&#39;s a guess, so stay ready to be wrong, and when you can&#39;t tell, ask.</p>
 
     <div class="frequency-card">
-      <h3>
-        <span class="frequency-dot dot-sympathetic"></span>
-        Sympathetic (Wound Up / On Guard)
-      </h3>
-      <p class="markers"><strong>Signs you might see:</strong> Tight jaw • Rapid speech • Narrow eyes • Rigid posture • Words getting louder or sharper</p>
-      <p style="color: var(--brass); font-size: 0.95rem;"><strong>What's happening:</strong> Their body is on guard. Part of them feels unsafe, and the alarm part of the brain (the amygdala) is doing the talking. Logic tends to make this harder right now.</p>
+      <h3><span class="frequency-dot dot-sympathetic" aria-hidden="true"></span> Wound up (on guard)</h3>
+      <p class="markers"><strong>Signs you might see:</strong> tight jaw, fast or sharp words, braced shoulders, everything suddenly urgent.</p>
+      <p><strong>What it usually means:</strong> part of them feels under pressure or criticized. Facts and arguments tend to bounce off right now.</p>
     </div>
 
     <div class="frequency-card">
-      <h3>
-        <span class="frequency-dot dot-dorsal"></span>
-        Dorsal (Shut Down / Frozen)
-      </h3>
-      <p class="markers"><strong>Signs you might see:</strong> Blank face • Slow or no speech • Looking away or down • Body feels heavy • Withdrawal</p>
-      <p style="color: var(--brass); font-size: 0.95rem;"><strong>What's happening:</strong> Their body has run out of steam and pulled back to rest. Fixing things won't help yet. What they need is your calm company.</p>
+      <h3><span class="frequency-dot dot-dorsal" aria-hidden="true"></span> Shut down (flat, far away)</h3>
+      <p class="markers"><strong>Signs you might see:</strong> a blank face, few or no words, looking away, moving slowly.</p>
+      <p><strong>What it usually means:</strong> they&#39;ve run out of steam for now. Fixing things won&#39;t help yet; calm company usually does.</p>
     </div>
 
     <div class="frequency-card">
-      <h3>
-        <span class="frequency-dot dot-anxious"></span>
-        Anxious (Helicopter Brain / Racing Thoughts)
-      </h3>
-      <p class="markers"><strong>Signs you might see:</strong> Rapid thoughts (darting eyes) • Can't settle attention • Multiple concerns spilling out • Fidgeting • Higher voice</p>
-      <p style="color: var(--brass); font-size: 0.95rem;"><strong>What's happening:</strong> The planning part of their brain (the prefrontal cortex) is overloaded. Too many threads, no clear priority, so their energy keeps bouncing around.</p>
+      <h3><span class="frequency-dot dot-anxious" aria-hidden="true"></span> Scattered (too many threads)</h3>
+      <p class="markers"><strong>Signs you might see:</strong> worries spilling out one after another, can&#39;t settle on one thing, fidgety, jumping ahead.</p>
+      <p><strong>What it usually means:</strong> too much at once and no clear first step. One thread at a time helps.</p>
     </div>
+    <p style="font-size:.88rem;color:var(--ink-soft);">Where the names come from: &ldquo;wound up&rdquo; and &ldquo;shut down&rdquo; are loosely borrowed from polyvagal theory, a popular but debated idea about the nervous system (it calls them &ldquo;sympathetic&rdquo; and &ldquo;dorsal&rdquo;). &ldquo;Scattered&rdquo; is just an everyday description. Here they&#39;re plain labels for what you notice, not measurements or diagnoses.</p>
   </div>
 
-  <!-- THE FOUR-STEP SEQUENCE -->
   <div class="section">
-    <h2>The Four-Step Sequence</h2>
-    <p style="color: var(--ink-soft); margin-bottom: 1.5rem;">Every gentle mood shift follows these steps.</p>
-
+    <h2>The four steps</h2>
+    <div class="step-box"><h3>Step 1: Settle yourself first</h3><p>Check your own state. If you&#39;re wound up or running low too, take a few slow breaths first, or say you&#39;ll come back in a few minutes. You can only lend calm you actually have.</p></div>
+    <div class="step-box"><h3>Step 2: Read their state</h3><p>Wound up, shut down or scattered? Name it to yourself without judging it. If you can&#39;t tell, asking is a perfectly good move.</p></div>
     <div class="step-box">
-      <h3>Step 1: Notice the Current Frequency</h3>
-      <p>Calm yourself first. Take three deep breaths. Notice their body language. Gently notice which state they're in, without judgment.</p>
+      <h3>Step 3: Choose one move that matches</h3>
+      <div class="table-scroll" role="region" aria-label="Which move fits which state" tabindex="0"><table>
+        <tr><th scope="col">Their state</th><th scope="col">Your goal</th><th scope="col">The move</th></tr>
+        <tr><td><strong>Wound up</strong></td><td>Help them feel you&#39;re on the same side</td><td><em>Lower the temperature</em></td></tr>
+        <tr><td><strong>Shut down</strong></td><td>Show they&#39;re not alone, with no demands</td><td><em>Steady company</em></td></tr>
+        <tr><td><strong>Scattered</strong></td><td>Find the one next step</td><td><em>One thread at a time</em></td></tr>
+        <tr><td><strong>Not sure</strong></td><td>Let them choose</td><td><em>Ask first</em></td></tr>
+      </table></div>
     </div>
-
-    <div class="step-box">
-      <h3>Step 2: Choose the Right Move</h3>
-      <p>Each frequency calls for a different move. Logic doesn't soothe someone who's on guard. Busy activity doesn't reach someone who's shut down. You need the right feeling to match.</p>
-      <table>
-        <tr>
-          <th>Frequency</th>
-          <th>Your Goal</th>
-          <th>Move (Free Teaser)</th>
-        </tr>
-        <tr>
-          <td><strong>Sympathetic</strong></td>
-          <td>Help them feel safe</td>
-          <td><em>Absurdity Pivot</em> (see below)</td>
-        </tr>
-        <tr>
-          <td><strong>Dorsal</strong></td>
-          <td>Offer a steady sense of safety</td>
-          <td><em>Structural Containment</em> (full toolkit)</td>
-        </tr>
-        <tr>
-          <td><strong>Anxious</strong></td>
-          <td>Clear one thread</td>
-          <td><em>Priority Anchor</em> (full toolkit)</td>
-        </tr>
-      </table>
-    </div>
-
-    <div class="step-box">
-      <h3>Step 3: Try the Move</h3>
-      <p>Use clear words, your body language and your calm presence together. The move isn't only about what you say. It's about the feeling you bring with you.</p>
-    </div>
-
-    <div class="step-box">
-      <h3>Step 4: Hold the New Frequency</h3>
-      <p>It may take a moment to settle. Stay calm and steady. Give it at least 30 seconds of steady presence. Bodies usually settle more slowly than words, and connection often comes back once they do.</p>
-    </div>
+    <div class="step-box"><h3>Step 4: Stay with it</h3><p>Give it a few minutes of steady presence. Don&#39;t rush back to the topic. Come back to it later, at a set time, when you&#39;re both steadier.</p></div>
   </div>
 
-  <!-- FULL SCENARIO (THE FREE EXAMPLE) -->
+  <div class="section" id="finder">
+    <h2>Quick move finder</h2>
+    <p>Think of someone in a hard moment, now or recently. Pick the state that fits best.</p>
+    <fieldset class="picker">
+      <legend>Which state are they in?</legend>
+      <label><input type="radio" name="st" value="up"> Wound up (on guard)</label>
+      <label><input type="radio" name="st" value="down"> Shut down (flat, far away)</label>
+      <label><input type="radio" name="st" value="scattered"> Scattered (too many threads)</label>
+      <label><input type="radio" name="st" value="unsure"> Not sure</label>
+    </fieldset>
+    <div class="pick-out" id="pick-out" tabindex="-1" aria-live="polite"></div>
+    <p style="font-size:.9rem;color:var(--ink-soft);">Want the full version, with your own state, the situation and the relationship built in, and a plan you can print? That&#39;s <a href="/tools/mood-arbitrage-full.html#builder">the plan builder in level 2</a>.</p>
+  </div>
+
   <div class="section">
-    <h2>The Complete Example: The Messy Kitchen</h2>
-    <p style="color: var(--ink-soft); margin-bottom: 1rem;">
-      <strong>The setup:</strong> You come home to find the kitchen in a mess. Dishes are everywhere. Your roommate has had a stressful day and hasn't gotten to it.
-    </p>
-    <p style="color: var(--ink-soft); margin-bottom: 2rem;">
-      Your first reaction might be frustration, criticism or pulling away. That's normal. But let's try a different move.
-    </p>
+    <h2>A complete example: the messy kitchen</h2>
+    <p style="color: var(--ink-soft);"><strong>The setup:</strong> You come home to a kitchen full of dishes. Your roommate has had a stressful day and hasn&#39;t gotten to it. Your first reaction might be frustration, criticism or pulling away. That&#39;s normal. Here&#39;s a different path.</p>
 
     <div class="scenario-box">
-      <h4>🔴 They're in sympathetic (on guard)</h4>
-      <p><strong>Their body language:</strong> Tight shoulders. Sharp voice. Getting defensive before you've said a word: "I know, I know—it was a terrible day and I just couldn't—"</p>
-      <p><strong>The trap:</strong> If you go into lecture mode ("We agreed on kitchen standards..."), their body feels more on guard, and it's easy to get stuck in an argument.</p>
-      <p><strong>The move: Absurdity Pivot</strong></p>
-      <div class="move-name">ABSURDITY PIVOT</div>
-      <p><strong>What you do:</strong> Gently break the tension with unexpected lightness. Not sarcasm. Not mockery. Real, warm absurdity.</p>
-      <p style="background: white; padding: 1rem; border-left: 3px solid var(--sympathetic); border-radius: 3px; margin: 1rem 0; font-style: italic;">
-        <strong>You:</strong> "Okay, I have a theory. These lonely mugs? They're staging a rebellion. Look—they've abandoned their post. Tiny ceramic boats just left adrift on the counter."
-      </p>
-      <p><strong>Why this works:</strong> Your body just signaled "I'm on your side." You shifted from criticism to teamwork. Your roommate's alarm system gets the chance to settle, and they start to soften.</p>
-      <p><strong>What happens next:</strong> Sometimes they laugh. Sometimes they roll their eyes and smile. Sometimes they say "Yeah, it's a disaster." But now you're no longer two people bracing against each other. You're two people looking at the same problem together.</p>
-      <p><strong>Then you can actually help:</strong> "Want company while you handle this? Or do you need space first?" Now they can tell you the truth without defense.</p>
+      <h4>If they&#39;re wound up</h4>
+      <p><strong>What you see:</strong> tight shoulders, a sharp voice, defending before you&#39;ve said a word: &ldquo;I know, I know, it was a terrible day and I just couldn&#39;t&mdash;&rdquo;</p>
+      <p><strong>The trap:</strong> lecture mode (&ldquo;We agreed on kitchen standards&hellip;&rdquo;) makes them brace harder, and you&#39;re in an argument.</p>
+      <div class="move-name">LOWER THE TEMPERATURE</div>
+      <p><strong>Step 1, you:</strong> one slow breath before you speak. <strong>The move:</strong> slow down, stand beside them, and take the heat out. If light humor is normal between you two, one warm line about the situation (never about them) can help:</p>
+      <p style="background: white; padding: 1rem; border-left: 3px solid var(--sympathetic); border-radius: 3px; margin: 1rem 0; font-style: italic;"><strong>You:</strong> &ldquo;Rough day, huh? I think these mugs have staged a rebellion. Want company while we deal with them, or do you need ten minutes first?&rdquo;</p>
+      <p><strong>Why it tends to help:</strong> you&#39;ve signaled you&#39;re on their side, not on the dishes&#39; side. Now they can tell you what they actually need, without defending.</p>
+      <p><strong>If it doesn&#39;t land:</strong> drop the joke at once. &ldquo;Sorry, not the moment. What would help?&rdquo;</p>
+      <p><strong>Later:</strong> at a calm time, agree who owns the dishes on busy days. (<a href="/workpapers/wp-03-raci-treaty.html">WP-03</a> gives each job one owner.)</p>
     </div>
 
     <div class="scenario-box">
-      <h4>🔵 If they were in dorsal instead (shut down)</h4>
-      <p><strong>Their body language:</strong> Blank face. No response. Withdrawn. "I don't know. Whatever."</p>
-      <p><strong>The move:</strong> Not "Absurdity Pivot"—that could feel like teasing to someone who has already pulled back. Instead: <strong>Structural Containment</strong> (in the full toolkit).</p>
-      <p style="background: white; padding: 1rem; border-left: 3px solid var(--dorsal); border-radius: 3px; margin: 1rem 0; font-style: italic;">
-        You: "The dishes aren't going anywhere. Neither am I. Let's just sit for a minute. I'm not mad. I'm just here."
-      </p>
-      <p><strong>Why this works:</strong> You're not trying to fix or manage. You're just offering calm, steady company. Their body hears: "You're not alone in this." Often that's all someone who has pulled away needs to start coming back.</p>
+      <h4>If they were shut down instead</h4>
+      <p><strong>What you see:</strong> a blank face, no real answer. &ldquo;I don&#39;t know. Whatever.&rdquo;</p>
+      <div class="move-name">STEADY COMPANY</div>
+      <p>Humor could feel like teasing to someone who&#39;s already pulled back. Offer calm company instead:</p>
+      <p style="background: white; padding: 1rem; border-left: 3px solid var(--dorsal); border-radius: 3px; margin: 1rem 0; font-style: italic;"><strong>You:</strong> &ldquo;The dishes aren&#39;t going anywhere. I&#39;m not upset. I&#39;ll make us some tea.&rdquo;</p>
+      <p><strong>Why it tends to help:</strong> you&#39;re not trying to fix or manage anything. You&#39;re letting them know they&#39;re not in trouble and not alone, which is often what someone needs before they can come back.</p>
     </div>
   </div>
 
-  <!-- PAYWALL CTA -->
   <div class="paywall-cta">
-    <h3>Ready for the Full Toolkit?</h3>
-    <p>
-      This page shows you the principle and one complete scenario. The full version includes five worked scenarios, a move generator with 15+ moves, and simple practice checklists.
-    </p>
-
+    <h3>Level 2: the full toolkit</h3>
+    <p>Everything on this page, plus the tools to use it on a real day.</p>
     <div class="paywall-features">
-      <div class="paywall-feature">
-        <strong>5 Complete Scenarios</strong>
-        <p>Kitchen, late-night shutdown, a hard day at work, old hurts resurfacing, feeling overwhelmed in public</p>
-      </div>
-      <div class="paywall-feature">
-        <strong>Interactive Generator</strong>
-        <p>Pick a frequency and a scenario, and get the move that fits.</p>
-      </div>
-      <div class="paywall-feature">
-        <strong>Variations</strong>
-        <p>ADHD, autism, anxious attachment, avoidant, high-conflict</p>
-      </div>
-      <div class="paywall-feature">
-        <strong>When It Doesn't Land</strong>
-        <p>What to do if a move falls flat, and how to reconnect</p>
-      </div>
-      <div class="paywall-feature">
-        <strong>Neuroscience</strong>
-        <p>The ideas behind it: safety signals, beat frequency, grounding</p>
-      </div>
-      <div class="paywall-feature">
-        <strong>4-Week Practice</strong>
-        <p>Practice one move per week. Build the skill gently.</p>
-      </div>
+      <div class="paywall-feature"><strong>Plan builder</strong><p>Your state, their state, the situation and the relationship, turned into one plan you can print or copy.</p></div>
+      <div class="paywall-feature"><strong>Five worked scenarios</strong><p>A roommate, a partner, a sister, a parent and a friend, each start to finish.</p></div>
+      <div class="paywall-feature"><strong>Every relationship</strong><p>How the moves change with coworkers, co-parents, family and caregiving.</p></div>
+      <div class="paywall-feature"><strong>When it doesn&#39;t land</strong><p>What to do if a move falls flat, and how to reconnect.</p></div>
+      <div class="paywall-feature"><strong>Four-week practice</strong><p>A printable checklist to build the skill gently.</p></div>
     </div>
-
-    <p><strong>Free while it’s being built:</strong> sign up with your email to open the full toolkit. Paid membership is coming soon.</p>
-    <p style="font-size: 0.9rem; color: var(--ink-soft);">Includes the full Mood Arbitrage, Frequency Calibration, WP-02, WP-13, the Frequency Sync Visualizer and more</p>
-    
-    <a href="/membership.html" class="btn">Open everything free</a>
-
-    <p style="font-size: 0.85rem; color: var(--ink-soft); margin-top: 1.5rem;">
-      Questions? Check the <a href="/index.html">TOL-OS Index</a> or read the full <a href="/frequency-framework.html">Frequency Framework</a>.
-    </p>
+    <p><strong>Free while it&#39;s being built:</strong> sign up with your email to open it.</p>
+    <a href="/tools/mood-arbitrage-full.html" class="btn">Go to level 2</a>
   </div>
 
 </div>
 
-<!-- NEXT STEPS SECTION -->
 <div class="next-steps">
   <div class="container">
-    <h3>Your Next Move</h3>
-    <p>
-      Understanding the three mood frequencies gets you halfway there. The other half is gently checking your own five rhythms: rest and recovery, money, decisions, talking, and big-picture values.
-    </p>
-    <p>
-      <strong>Frequency Calibration</strong> is the fuller check-in. It shows where you and someone close to you might be a little out of sync.
-    </p>
-    <p>
-      <a href="/tools/frequency-calibration.html" class="btn">Go to Frequency Calibration 🔒</a>
-    </p>
-    <p style="font-size: 0.9rem; color: var(--ink-soft); margin-top: 1.5rem;">
-      (Free with email while it’s being built. <a href="/membership.html" style="color: var(--brass);">Get access to the full toolkit.</a>)
-    </p>
+    <h3>Your next move</h3>
+    <p>Mood Arbitrage is for the moment itself. For the everyday rhythms underneath (how often you each like to check in, decide, talk money or take a break), try <strong>Frequency Calibration</strong>. It shows where you and someone close to you might be out of step, and suggests one agreement for each gap.</p>
+    <p><a href="/tools/frequency-calibration.html" class="btn">Go to Frequency Calibration</a></p>
+    <p style="font-size: 0.9rem; color: var(--ink-soft); margin-top: 1.5rem;">A rule of thumb for everyday friction between people who feel safe with each other. Not a clinical tool, and nothing you pick here is saved or sent.</p>
   </div>
 </div>
 
-<!-- TOL-OS UNIFIED FOOTER -->
-
-
+<script src="/assets/js/mood-arbitrage.js"></script>
+<script>
+(function(){
+  var M=window.TOLMood, out=document.getElementById('pick-out');
+  document.querySelectorAll('input[name="st"]').forEach(function(r){
+    r.addEventListener('change', function(){
+      var k=r.value, m=M.MOVES[k], s=M.STATES[k];
+      out.innerHTML='<h3>'+M.esc(m.title)+'</h3>'+
+        '<p><strong>They seem '+M.esc(s.name.toLowerCase())+'.</strong> '+M.esc(m.goal)+'</p>'+
+        '<p>'+M.esc(m.how)+'</p>'+
+        '<p><strong>Try saying:</strong> '+M.esc(m.words[0])+'</p>'+
+        '<p><strong>Avoid:</strong> '+m.avoid.map(M.esc).join('; ')+'.</p>'+
+        '<p><strong>First, though:</strong> check your own state. If you&#39;re wound up too, settle for a few minutes before you try.</p>';
+    });
+  });
+})();
+</script>
 </body>
 </html>

@@ -1,233 +1,168 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>WP-11 Companion &mdash; Sound Toolkit Generator</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Sound Toolkit (WP-11 companion) — The Objective Ledger</title>
+  <meta name="description" content="Three simple background sounds you can try as part of your Calm-Down Kit: a low hum, a soft flutter and brown noise. A matter of taste, not a treatment.">
+  <link rel="stylesheet" href="/assets/css/site.css">
   <style>
     :root {
-      --paper: #F5EFDE;
-      --paper-deep: #ECE2C4;
-      --ink: #211D17;
-      --ink-soft: #524B3E;
-      --brass: #A8792F;
-      --line: #D9CBA3;
-      --focus: #2B5B8C;
+      --paper: #F5EFDE; --paper-deep: #ECE2C4; --ink: #211D17; --ink-soft: #524B3E;
+      --brass: #A8792F; --brass-ink: #7A5720; --line: #D9CBA3; --focus: #2B5B8C;
     }
-    body {
-      background: var(--paper);
-      color: var(--ink);
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-      padding: 30px 20px;
-      display: flex;
-      justify-content: center;
-    }
-    .stem-rack {
-      max-width: 680px;
-      width: 100%;
-      background: var(--paper-deep);
-      border: 2px solid var(--line);
-      border-radius: 16px;
-      padding: 24px;
-    }
-    h2 { margin-top: 0; color: var(--brass); }
-    .note {
-      background: #E7EEF4;
-      border-left: 4px solid var(--focus);
-      border-radius: 6px;
-      padding: 14px 16px;
-      font-size: 0.85rem;
-      margin-bottom: 20px;
-      line-height: 1.5;
-    }
-    .note p { margin: 0 0 8px 0; }
-    .note p:last-child { margin-bottom: 0; }
-    .stem-track {
-      background: var(--paper);
-      border: 1px solid var(--line);
-      border-radius: 10px;
-      padding: 16px;
-      margin-bottom: 14px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 12px;
-    }
-    .track-meta { font-size: 0.88rem; }
+    *{ box-sizing: border-box; }
+    body { background: var(--paper); color: var(--ink); font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; margin: 0; line-height: 1.5; }
+    .wrap { display: flex; justify-content: center; padding: 30px 16px 60px; }
+    .stem-rack { max-width: 680px; width: 100%; background: var(--paper-deep); border: 2px solid var(--line); border-radius: 16px; padding: 24px; }
+    h1 { margin-top: 0; color: var(--brass-ink); font-size: 1.5rem; }
+    a { color: var(--focus); }
+    :focus-visible { outline: 3px solid var(--focus); outline-offset: 3px; }
+    .note { background: #E7EEF4; border-left: 4px solid var(--focus); border-radius: 6px; padding: 14px 16px; font-size: 0.92rem; margin-bottom: 20px; }
+    .note p { margin: 0 0 8px 0; } .note p:last-child { margin-bottom: 0; }
+    .stem-track { background: var(--paper); border: 1px solid var(--line); border-radius: 10px; padding: 16px; margin-bottom: 14px; display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+    .track-meta { font-size: 0.92rem; }
     .track-meta strong { display: block; font-size: 1rem; margin-bottom: 2px; }
     .track-meta span { color: var(--ink-soft); }
-    button {
-      background: var(--brass);
-      color: #fff;
-      border: none;
-      padding: 10px 18px;
-      border-radius: 6px;
-      cursor: pointer;
-      font-weight: 600;
-      flex-shrink: 0;
-    }
-    button.active { background: #825c21; }
-    .master-controls {
-      margin-top: 20px;
-      display: flex;
-      gap: 12px;
-      justify-content: flex-end;
-    }
-    .volume-warning {
-      font-size: 0.78rem;
-      color: var(--ink-soft);
-      margin-top: 16px;
-      text-align: center;
-    }
+    button { background: var(--ink); color: #fff; border: none; min-height: 44px; min-width: 80px; padding: 10px 18px; border-radius: 999px; cursor: pointer; font-weight: 600; flex-shrink: 0; }
+    button[aria-pressed="true"] { background: #3E6B4C; }
+    .master-controls { margin-top: 20px; display: flex; flex-wrap: wrap; gap: 12px; align-items: center; justify-content: space-between; }
+    .master-controls label { display: flex; align-items: center; gap: 10px; font-size: 0.92rem; flex: 1 1 220px; }
+    .master-controls input[type="range"] { flex: 1; min-height: 44px; accent-color: #3E6B4C; }
+    .volume-warning { font-size: 0.86rem; color: var(--ink-soft); margin-top: 16px; text-align: center; }
+    @media (max-width: 480px) { .stem-track { flex-direction: column; align-items: stretch; } .stem-rack { padding: 16px; } }
   </style>
+  <script src="/assets/js/site.js" defer></script>
 </head>
 <body>
-
+<main class="wrap" id="main">
 <div class="stem-rack">
-  <h2>WP-11 Companion &mdash; Sound Toolkit</h2>
+  <h1>The Sound Toolkit</h1>
+  <p style="margin-top:-6px;color:var(--ink-soft);font-size:0.92rem;">A companion to <a href="/wp-11.html">the Calm-Down Kit (WP-11)</a></p>
 
   <div class="note">
-    <p>These are three simple sounds: a steady bass tone, a steady click pattern, and brown noise. Some people find one or more of them calming as part of their own toolkit. Others don't, and that's useful to know too. Nothing here is a proven way to relieve stress or calm the nervous system. It's a matter of personal preference, not a treatment. If a sound does nothing for you, one of the other settling steps in <a href="/wp-11-in-depth.html#moment">the Calm-Down Kit (WP-11)</a> will serve you better.</p>
-    <p>This kit puts <a href="/five-pillars.html#read-your-state">Pillar III, Read your state first</a> to work.</p>
-    <p>Try one at a time, at a comfortable volume, and notice how it actually feels to you.</p>
+    <p>Three simple background sounds: a low hum, a soft flutter and brown noise. Some people like one of them in the background while they settle; others don't, and that's useful to know too. This is a matter of taste, not a treatment. Nothing here is shown to relieve stress or change how your body works. If a sound does nothing for you, the other settling steps in <a href="/wp-11-in-depth.html#moment">the Calm-Down Kit</a> will serve you better.</p>
+    <p class="pillar-note">This kit puts <a href="/five-pillars.html#read-your-state">Pillar III, Read your state first</a> to work. In you: you learn which surroundings help you settle. Between you and others: you can say "I'm taking ten minutes with some quiet sound, then I'll come back," and keep the promise. See <a href="/five-pillars.html">the Five Pillars</a>.</p>
+    <p>Try one at a time, at a low volume, and notice how it actually feels to you.</p>
   </div>
 
-  <!-- Stem 1 -->
   <div class="stem-track">
     <div class="track-meta">
-      <strong>Steady Bass Tone (40 Hz)</strong>
-      <span>A low, continuous hum some people describe as physically grounding.</span>
+      <strong id="t-sub">Low hum</strong>
+      <span>A steady, very low tone (40 vibrations a second, written 40&nbsp;Hz). Phone and laptop speakers often can't play a tone this low, so you may need headphones to hear it.</span>
     </div>
-    <button onclick="toggleStem('sub', this)">Start</button>
+    <button type="button" data-stem="sub" aria-pressed="false" aria-describedby="t-sub">Start</button>
   </div>
 
-  <!-- Stem 2 -->
   <div class="stem-track">
     <div class="track-meta">
-      <strong>Steady Pulse (40 Hz Click Pattern)</strong>
-      <span>An evenly repeating pulse. It's optional: some people enjoy it, but no specific effect has been shown.</span>
+      <strong id="t-pulse">Soft flutter</strong>
+      <span>A mid tone that switches on and off 40 times a second, so it sounds like a fast, even flutter. Some people enjoy it; no particular effect has been shown.</span>
     </div>
-    <button onclick="toggleStem('gamma', this)">Start</button>
+    <button type="button" data-stem="pulse" aria-pressed="false" aria-describedby="t-pulse">Start</button>
   </div>
 
-  <!-- Stem 3 -->
   <div class="stem-track">
     <div class="track-meta">
-      <strong>Brown Noise</strong>
-      <span>A smooth, low-pitched hiss that can cover up uneven background sounds.</span>
+      <strong id="t-brown">Brown noise</strong>
+      <span>A smooth, low hiss, a bit like distant surf. It can cover uneven background sounds.</span>
     </div>
-    <button onclick="toggleStem('brown', this)">Start</button>
+    <button type="button" data-stem="brown" aria-pressed="false" aria-describedby="t-brown">Start</button>
   </div>
 
   <div class="master-controls">
-    <button onclick="stopAll()" style="background: #64748b;">Stop All</button>
+    <label for="vol">Volume <input type="range" id="vol" min="0" max="1" step="0.05" value="0.5"></label>
+    <button type="button" id="stop-all" style="background:#524B3E;">Stop all</button>
   </div>
+  <p class="status" id="status" role="status" style="font-size:0.9rem;min-height:1.4em;"></p>
 
-  <p class="volume-warning">Start at a low volume, especially with headphones. Bass tones can feel stronger than you expect.</p>
-  <p class="volume-warning"><a href="/wp-11.html">&larr; Back to the Calm-Down Kit (WP-11)</a> &middot; <a href="/workpapers/fill/wp-11.html">Fill in your kit</a></p>
+  <p class="volume-warning">Start low, especially with headphones: low tones can feel stronger than you expect. Sounds stop when you leave or hide this page.</p>
+  <p class="volume-warning"><a href="/wp-11.html">&larr; Back to the Calm-Down Kit (WP-11)</a> &middot; <a href="/workpapers/fill/wp-11.html">Fill in your kit</a> &middot; <a href="/soundscapes.html">Soundscapes</a></p>
 </div>
+</main>
 
 <script>
-  let ctx = null;
-  const nodes = { sub: null, gamma: null, brown: null };
+(function(){
+  "use strict";
+  var ctx = null, master = null;
+  var nodes = { sub: null, pulse: null, brown: null };
+  var NAMES = { sub: "Low hum", pulse: "Soft flutter", brown: "Brown noise" };
+  var vol = document.getElementById("vol"), status = document.getElementById("status");
 
-  function initAudio() {
-    if (!ctx) ctx = new (window.AudioContext || window.webkitAudioContext)();
-    if (ctx.state === 'suspended') ctx.resume();
+  function initAudio(){
+    var AC = window.AudioContext || window.webkitAudioContext;
+    if (!AC) return false;
+    if (!ctx){ ctx = new AC(); master = ctx.createGain(); master.gain.value = parseFloat(vol.value); master.connect(ctx.destination); }
+    if (ctx.state === "suspended") ctx.resume();
+    return true;
   }
 
-  function toggleStem(type, btn) {
-    initAudio();
-    if (nodes[type]) {
-      nodes[type].stop();
-      nodes[type] = null;
-      btn.textContent = 'Start';
-      btn.classList.remove('active');
-    } else {
-      nodes[type] = startGenerator(type);
-      btn.textContent = 'Stop';
-      btn.classList.add('active');
-    }
+  // Each sound fades in and out over a fraction of a second, so nothing starts with a click.
+  function fadeOut(gain, stopFns){
+    var t = ctx.currentTime;
+    gain.gain.cancelScheduledValues(t);
+    gain.gain.setTargetAtTime(0, t, 0.05);
+    setTimeout(function(){ stopFns.forEach(function(f){ try { f(); } catch (e) {} }); }, 300);
   }
 
-  function startGenerator(type) {
-    if (type === 'sub') {
-      const osc = ctx.createOscillator();
-      const gain = ctx.createGain();
-      osc.type = 'sine';
-      osc.frequency.setValueAtTime(40, ctx.currentTime);
-      gain.gain.setValueAtTime(0.25, ctx.currentTime);
-      osc.connect(gain);
-      gain.connect(ctx.destination);
-      osc.start();
-      return { stop: () => { osc.stop(); osc.disconnect(); } };
+  function startGenerator(type){
+    var out = ctx.createGain();
+    out.gain.value = 0;
+    out.connect(master);
+    if (type === "sub"){
+      var osc = ctx.createOscillator();
+      osc.type = "sine"; osc.frequency.value = 40;
+      osc.connect(out); osc.start();
+      out.gain.setTargetAtTime(0.5, ctx.currentTime, 0.1);
+      return { stop: function(){ fadeOut(out, [function(){ osc.stop(); osc.disconnect(); out.disconnect(); }]); } };
     }
-
-    if (type === 'gamma') {
-      const carrier = ctx.createOscillator();
-      const mod = ctx.createOscillator();
-      const modGain = ctx.createGain();
-      const masterGain = ctx.createGain();
-
-      carrier.type = 'sine';
-      carrier.frequency.setValueAtTime(200, ctx.currentTime);
-
-      mod.type = 'square';
-      mod.frequency.setValueAtTime(40, ctx.currentTime);
-
-      modGain.gain.setValueAtTime(1, ctx.currentTime);
-      masterGain.gain.setValueAtTime(0.1, ctx.currentTime);
-
-      mod.connect(modGain.gain);
-      carrier.connect(masterGain);
-      masterGain.connect(ctx.destination);
-
-      carrier.start();
-      mod.start();
-      return {
-        stop: () => {
-          carrier.stop();
-          mod.stop();
-          carrier.disconnect();
-          mod.disconnect();
-        }
-      };
+    if (type === "pulse"){
+      // A 200 Hz tone whose loudness is switched on and off 40 times a second by a square wave.
+      var carrier = ctx.createOscillator(), gate = ctx.createGain(), mod = ctx.createOscillator(), depth = ctx.createGain();
+      carrier.type = "sine"; carrier.frequency.value = 200;
+      mod.type = "square"; mod.frequency.value = 40;
+      gate.gain.value = 0.5; depth.gain.value = 0.5;     // gate swings between 0 and 1
+      mod.connect(depth); depth.connect(gate.gain);
+      carrier.connect(gate); gate.connect(out);
+      carrier.start(); mod.start();
+      out.gain.setTargetAtTime(0.18, ctx.currentTime, 0.1);
+      return { stop: function(){ fadeOut(out, [function(){ carrier.stop(); mod.stop(); carrier.disconnect(); mod.disconnect(); gate.disconnect(); out.disconnect(); }]); } };
     }
-
-    if (type === 'brown') {
-      const bufferSize = ctx.sampleRate * 2;
-      const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
-      const data = buffer.getChannelData(0);
-      let lastOut = 0.0;
-      for (let i = 0; i < bufferSize; i++) {
-        const white = Math.random() * 2 - 1;
-        data[i] = (lastOut + (0.02 * white)) / 1.02;
-        lastOut = data[i];
-        data[i] *= 3.0;
-      }
-      const noise = ctx.createBufferSource();
-      noise.buffer = buffer;
-      noise.loop = true;
-      const gain = ctx.createGain();
-      gain.gain.setValueAtTime(0.15, ctx.currentTime);
-      noise.connect(gain);
-      gain.connect(ctx.destination);
-      noise.start();
-      return { stop: () => { noise.stop(); noise.disconnect(); } };
-    }
+    // brown noise: each sample drifts a little from the last one
+    var size = ctx.sampleRate * 2, buffer = ctx.createBuffer(1, size, ctx.sampleRate), data = buffer.getChannelData(0), lastOut = 0;
+    for (var i = 0; i < size; i++){ var white = Math.random() * 2 - 1; data[i] = (lastOut + 0.02 * white) / 1.02; lastOut = data[i]; data[i] *= 3.0; }
+    var noise = ctx.createBufferSource();
+    noise.buffer = buffer; noise.loop = true;
+    noise.connect(out); noise.start();
+    out.gain.setTargetAtTime(0.3, ctx.currentTime, 0.1);
+    return { stop: function(){ fadeOut(out, [function(){ noise.stop(); noise.disconnect(); out.disconnect(); }]); } };
   }
 
-  function stopAll() {
-    for (let key in nodes) {
-      if (nodes[key]) {
-        nodes[key].stop();
-        nodes[key] = null;
-      }
-    }
-    document.querySelectorAll('.stem-track button').forEach(b => {
-      b.textContent = 'Start';
-      b.classList.remove('active');
-    });
+  function setButton(type, on){
+    var b = document.querySelector('[data-stem="' + type + '"]');
+    b.setAttribute("aria-pressed", String(on));
+    b.textContent = on ? "Stop" : "Start";
   }
+
+  function toggle(type){
+    if (nodes[type]){ nodes[type].stop(); nodes[type] = null; setButton(type, false); status.textContent = NAMES[type] + " stopped."; return; }
+    if (!initAudio()){ status.textContent = "This browser can't play generated sound."; return; }
+    nodes[type] = startGenerator(type); setButton(type, true);
+    status.textContent = NAMES[type] + " playing.";
+  }
+
+  function stopAll(){
+    var any = false;
+    Object.keys(nodes).forEach(function(k){ if (nodes[k]){ nodes[k].stop(); nodes[k] = null; any = true; } setButton(k, false); });
+    if (any) status.textContent = "All sounds stopped.";
+  }
+
+  document.querySelectorAll("[data-stem]").forEach(function(b){ b.addEventListener("click", function(){ toggle(b.getAttribute("data-stem")); }); });
+  document.getElementById("stop-all").addEventListener("click", stopAll);
+  vol.addEventListener("input", function(){ if (master) master.gain.setTargetAtTime(parseFloat(vol.value), ctx.currentTime, 0.05); });
+  document.addEventListener("visibilitychange", function(){ if (document.hidden) stopAll(); });
+  window.addEventListener("pagehide", stopAll);
+})();
 </script>
 </body>
 </html>

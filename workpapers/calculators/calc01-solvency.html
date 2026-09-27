@@ -4,127 +4,296 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Can the load last? (CALC-01) — The Objective Ledger</title>
-<link rel="stylesheet" href="/assets/css/book-layout.css">
-<style>
-  .calc-wrap{ display:flex; justify-content:center; padding: 60px 20px; }
-  .card{
-    max-width: 620px; width:100%;
-    background: var(--paper-deep);
-    border: 1px solid var(--line);
-    border-radius: var(--radius);
-    padding: 32px;
-  }
-  .card h1{ font-size: 1.6rem; }
-  .field{ margin: 22px 0; }
-  .field label{ display:flex; justify-content: space-between; font-size: 0.9rem; margin-bottom: 6px; }
-  .field .hint{ color: var(--ink-soft); font-size: 0.8rem; margin-top: 4px; }
-  input[type="range"]{ width: 100%; }
-  .readout{
-    margin-top: 30px;
-    padding: 20px;
-    background: var(--paper);
-    border: 1px solid var(--line);
-    border-radius: var(--radius);
-  }
-  .readout .score{
-    font-family: "IBM Plex Mono", monospace;
-    font-size: 2.2rem;
-    color: var(--credit);
-  }
-  .readout .score.mid{ color: var(--brass); }
-  .readout .score.low{ color: var(--debit); }
-  .disclaimer{
-    font-size: 0.8rem;
-    color: var(--ink-soft);
-    margin-top: 24px;
-    border-top: 1px solid var(--line);
-    padding-top: 16px;
-  }
-</style>
+<meta name="description" content="The quick CALC-01: type in the totals from your worksheets, for 2 to 8 people, and see whether the way you share the load can last, with every step of the math shown.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,500&family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/assets/css/site.css">
+<style>
+  :root{
+    --paper:#F5EFDE; --paper-deep:#ECE2C4; --ink:#211D17; --ink-soft:#524B3E; --line:#D9CBA3;
+    --credit:#3E6B4C; --credit-soft:#E4EDE3; --debit:#96412B; --debit-soft:#F2E2DB;
+    --brass:#A8792F; --brass-ink:#7A5720; --focus:#2B5B8C; --radius:3px;
+  }
+  *{ box-sizing:border-box; }
+  body{ margin:0; background:var(--paper); color:var(--ink); font-family:"Lora", Georgia, serif; font-size:16px; line-height:1.6; }
+  h1,h2,h3{ font-family:"Fraunces", serif; font-weight:600; line-height:1.2; }
+  a{ color:var(--focus); }
+  :focus-visible{ outline:3px solid var(--focus); outline-offset:3px; }
+  .sr-only{ position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; }
+  code,.mono{ font-family:"IBM Plex Mono", monospace; }
+  code{ font-size:0.84em; background:var(--paper-deep); padding:1px 5px; border-radius:var(--radius); }
+  .calc-wrap{ display:flex; justify-content:center; padding:40px 16px 60px; }
+  .card{ max-width:720px; width:100%; background:var(--paper-deep); border:1px solid var(--line); border-radius:var(--radius); padding:28px; }
+  .kicker{ font-family:"IBM Plex Mono", monospace; font-size:0.74rem; letter-spacing:0.08em; text-transform:uppercase; color:var(--brass-ink); }
+  .card h1{ font-size:1.7rem; margin:4px 0 10px; }
+  .step{ background:#FFFDF6; border:1px solid var(--line); border-radius:var(--radius); padding:16px 18px; margin:18px 0; }
+  .step h2{ font-size:1.1rem; margin:0 0 4px; }
+  .step h2 small{ font-family:"IBM Plex Mono", monospace; font-weight:400; font-size:0.66rem; color:var(--ink-soft); margin-left:6px; }
+  .hint{ color:var(--ink-soft); font-size:0.86rem; margin:4px 0 10px; }
+  .grid{ display:grid; grid-template-columns:repeat(auto-fill, minmax(140px,1fr)); gap:10px; }
+  .grid label, .pair label{ display:block; font-size:0.82rem; color:var(--ink-soft); }
+  input[type="text"], input[type="number"], select{ font-family:inherit; font-size:0.95rem; color:var(--ink); background:#fff; border:1px solid #8F8468; border-radius:var(--radius); padding:6px 8px; width:100%; min-height:44px; }
+  input[type="number"]{ font-family:"IBM Plex Mono", monospace; text-align:right; }
+  input[type="radio"], input[type="checkbox"]{ width:22px; height:22px; accent-color:var(--credit); margin:0; flex:none; }
+  .check{ display:flex; align-items:center; gap:10px; min-height:44px; font-size:0.92rem; cursor:pointer; }
+  fieldset{ border:0; padding:0; margin:8px 0 0; }
+  legend{ font-size:0.9rem; font-weight:600; padding:0; }
+  .pair{ display:grid; grid-template-columns:1fr 1fr; gap:10px; max-width:420px; }
+  .work{ font-family:"IBM Plex Mono", monospace; font-size:0.8rem; color:var(--ink-soft); margin-top:10px; overflow-wrap:anywhere; }
+  .work b{ color:var(--ink); }
+  .work .err{ color:var(--debit); }
+  .btn{ font-family:"IBM Plex Mono", monospace; font-size:0.8rem; min-height:44px; padding:8px 16px; border:1px solid var(--ink); border-radius:var(--radius); background:transparent; color:var(--ink); cursor:pointer; }
+  .btn:hover{ background:var(--ink); color:var(--paper); }
+  .btn-solid{ background:var(--ink); color:var(--paper); }
+  .btn-row{ display:flex; flex-wrap:wrap; gap:8px; margin-top:12px; }
+  .readout{ margin-top:24px; padding:20px; background:#FFFDF6; border:2px solid var(--brass); border-radius:var(--radius); }
+  .readout:focus{ outline:3px solid var(--focus); outline-offset:3px; }
+  .readout .lbl{ font-family:"IBM Plex Mono", monospace; font-size:0.72rem; letter-spacing:0.06em; color:var(--brass-ink); text-transform:uppercase; }
+  .readout .score{ font-family:"IBM Plex Mono", monospace; font-size:2.4rem; line-height:1.1; color:var(--credit); }
+  .readout .score.mid{ color:#7A5720; } .readout .score.low{ color:var(--debit); } .readout .score.na{ color:var(--ink-soft); font-size:1.4rem; }
+  .math{ font-family:"IBM Plex Mono", monospace; font-size:0.8rem; line-height:1.8; background:var(--paper-deep); border:1px solid var(--line); border-radius:var(--radius); padding:10px 14px; overflow-x:auto; white-space:pre; margin:12px 0; }
+  table{ width:100%; border-collapse:collapse; font-size:0.86rem; }
+  th{ text-align:left; font-family:"IBM Plex Mono", monospace; font-size:0.68rem; text-transform:uppercase; color:var(--brass-ink); border-bottom:2px solid var(--line); padding:4px 6px 6px 0; }
+  td{ border-bottom:1px solid var(--line); padding:6px 6px 6px 0; }
+  td.num, th.num{ text-align:right; font-family:"IBM Plex Mono", monospace; }
+  .moves{ padding-left:20px; font-size:0.92rem; } .moves li{ margin-bottom:6px; }
+  .gain{ font-family:"IBM Plex Mono", monospace; font-size:0.8rem; color:var(--credit); }
+  .status{ font-size:0.86rem; color:var(--credit); min-height:1.4em; margin:6px 0 0; }
+  .copy-out{ width:100%; min-height:160px; font-family:"IBM Plex Mono", monospace; font-size:0.78rem; margin-top:8px; padding:8px; }
+  .disclaimer{ font-size:0.84rem; color:var(--ink-soft); margin-top:20px; border-top:1px solid var(--line); padding-top:14px; }
+  @media (max-width:600px){ .card{ padding:18px 14px; } .step{ padding:14px 12px; } .pair{ grid-template-columns:1fr; } }
+  @media print{ .no-print, .tol-bar, .tol-breathe-btn{ display:none !important; } body{ background:#fff; } .card{ border:0; } input, select{ border:0; min-height:0; } }
+</style>
 <script src="/assets/js/site.js" defer></script>
+<script src="/assets/js/calc01-core.js"></script>
 </head>
 <body>
-<div class="calc-wrap">
+<main class="calc-wrap" id="main">
   <div class="card">
-    <div class="kicker">Workpaper &middot; CALC-01 &middot; Solvency Read</div>
+    <div class="kicker">CALC-01 &middot; The quick read</div>
     <h1>Can the load last?</h1>
-    
-<p>This calculator uses the three numbers described in <a href="/book/chapter-2.html">Chapter II</a>. It scores how you currently share the <strong>workload</strong>, not either person, and not the relationship as a whole. ("Solvency" here simply means whether the current setup can keep going.)</p>
-<p class="pillar-note"><small>CALC-01 puts <a href="/five-pillars.html#see-the-load">Pillar I, See the whole load</a> and <a href="/five-pillars.html#fix-the-setup">Pillar II, Fix the setup, not the person</a> to work. In you: you see the whole load you carry as one number. Between you and others: you get one fair read of the setup, never a score on either person.</small></p>
+    <p>Type in the totals from your worksheets and see whether the way you share the load right now can keep going. It scores the <strong>setup</strong>, never a person, and never the relationship as a whole. It works for partners, families, roommates, co-carers and small teams: 2 to 8 people. ("Solvency" just means the setup can carry its own weight.)</p>
+    <p class="pillar-note"><small>CALC-01 puts <a href="/five-pillars.html#see-the-load">Pillar I, See the whole load</a> and <a href="/five-pillars.html#fix-the-setup">Pillar II, Fix the setup, not the person</a> to work, with a battery check from <a href="/five-pillars.html#read-your-state">Pillar III, Read your state first</a>. In you: you see the whole load you carry as one number. Between you and others: you get one fair read of the setup, never a score on anyone.</small></p>
+    <p style="font-size:0.9rem;">Want each input worked out from your raw entries, the apex score and a trend log? Use <a href="/calc01-solvency.html">the full CALC-01</a>. The math is the same on both pages.</p>
 
-    <div class="field">
-      <label for="workload">Workload balance score <span id="workload-val">0.50</span></label>
-      <input type="range" id="workload" min="0" max="1" step="0.01" value="0.5">
-      <div class="hint">From the <a href="/lemonade-stand.html">Lemonade Stand</a> or the <a href="/workpapers/fill/wp-01.html">WP-01</a> totals: how evenly the week's time was split (1 means perfectly even).</div>
+    <div class="step">
+      <h2><label for="people-count">Who's sharing the load?</label></h2>
+      <select id="people-count" style="max-width:140px;"></select>
+      <div class="grid" id="names" style="margin-top:10px;"></div>
+      <div class="btn-row no-print">
+        <button type="button" class="btn" data-example="book">Try the book's example</button>
+        <button type="button" class="btn" data-example="three">Try three roommates</button>
+        <button type="button" class="btn" data-example="clear">Clear</button>
+      </div>
     </div>
 
-    <div class="field">
-      <label for="ownership">Ownership clarity score <span id="ownership-val">0.50</span></label>
-      <input type="range" id="ownership" min="0" max="1" step="0.01" value="0.5">
-      <div class="hint">From <a href="/workpapers/fill/wp-03.html">WP-03</a>: the share of tasks that have both a Responsible and an Accountable name.</div>
+    <div class="step" id="s-wb">
+      <h2>1. Balance: how the hours split <small>workload balance &middot; weight 0.40</small></h2>
+      <p class="hint">From <a href="/workpapers/fill/wp-01.html">WP-01, Who did what</a> or the <a href="/lemonade-stand.html">Lemonade Stand</a>: each person's total hours (or minutes) for the week.</p>
+      <fieldset>
+        <legend>I have&hellip;</legend>
+        <label class="check"><input type="radio" name="wb-mode" value="hours" checked> Each person's hours</label>
+        <label class="check"><input type="radio" name="wb-mode" value="score"> A balance score already worked out (0 to 1)</label>
+      </fieldset>
+      <div id="wb-hours"><div class="grid" id="hours"></div>
+        <label class="check"><input type="checkbox" id="agreed"> Compare with a split we agreed on, instead of an even share</label>
+        <div class="grid" id="targets" hidden></div>
+      </div>
+      <div id="wb-score" hidden><div class="pair"><div><label for="wb-direct">Balance score</label><input type="number" id="wb-direct" min="0" max="1" step="0.01" inputmode="decimal"></div></div></div>
+      <div class="work" id="wb-work" aria-live="polite"></div>
     </div>
 
-    <div class="field">
-      <label for="saturation">Average battery score (autonomic saturation) <span id="saturation-val">0.50</span></label>
-      <input type="range" id="saturation" min="0" max="1" step="0.01" value="0.5">
-      <div class="hint">From <a href="/workpapers/fill/wp-02.html">WP-02</a>: the average of both people's battery scores this week (how stretched you both are).</div>
+    <div class="step" id="s-oc">
+      <h2>2. Ownership: does each job have a name? <small>ownership clarity &middot; weight 0.35</small></h2>
+      <p class="hint">From <a href="/workpapers/fill/wp-03.html">WP-03, One owner per job</a>: count every regular job, including the ones nobody owns yet, and how many have both a Responsible and an Accountable name.</p>
+      <div class="pair">
+        <div><label for="jobs-total">Jobs on the list</label><input type="number" id="jobs-total" min="0" step="1" inputmode="numeric"></div>
+        <div><label for="jobs-owned">Jobs with both names</label><input type="number" id="jobs-owned" min="0" step="1" inputmode="numeric"></div>
+      </div>
+      <div class="work" id="oc-work" aria-live="polite"></div>
     </div>
 
-    <div class="readout">
-      <div class="label" style="font-family:'IBM Plex Mono',monospace;font-size:0.7rem;color:var(--ink-soft);">SOLVENCY READ</div>
-      <div class="score" id="score">0.50</div>
-      <p id="score-text">Something in the setup is drifting. Revisit the RACI Treaty (WP-03) before anything else.</p>
+    <div class="step" id="s-as">
+      <h2>3. Stress: how full each battery is <small>autonomic saturation &middot; weight 0.25</small></h2>
+      <p class="hint">From <a href="/workpapers/fill/wp-02.html">WP-02, the battery check</a>: each person's own score, their five 0&ndash;4 answers added up and divided by 20. Everyone fills in their own; nobody guesses for someone else.</p>
+      <div class="grid" id="batteries"></div>
+      <div class="work" id="as-work" aria-live="polite"></div>
     </div>
 
-    <p class="disclaimer">This is a rule-of-thumb worksheet, not a tested statistical model or a compatibility test. It only reflects what you enter above. It does not, and should not, decide whether a relationship is worth continuing. That's not a question a formula can answer.</p>
-    <p class="disclaimer">Want every input worked out from the raw entries, plus the apex score and a trend log? Open <a href="/calc01-solvency.html">the full CALC-01</a>. To keep the numbers week by week, use <a href="/workpapers/report-01.html">REPORT-01</a> or <a href="/workpapers/fill/suite.html">build your Workpaper Suite</a>.</p>
+    <div class="readout" id="readout" tabindex="-1">
+      <div class="lbl">Solvency read</div>
+      <div class="score na" id="score">&mdash;</div>
+      <p id="score-text">Fill in the three steps above to see a read.</p>
+      <p class="sr-only" id="announce" role="status" aria-live="polite"></p>
+      <div id="details" hidden>
+        <h3 style="font-size:1rem;margin:14px 0 0;">The math, step by step</h3>
+        <div class="math" id="math" tabindex="0" role="region" aria-label="The math, step by step"></div>
+        <table>
+          <thead><tr><th>Part</th><th class="num">Could earn</th><th class="num">Earned</th><th class="num">Shortfall</th></tr></thead>
+          <tbody id="short-rows"></tbody>
+        </table>
+        <h3 style="font-size:1rem;margin:16px 0 4px;">What would move the score</h3>
+        <ul class="moves" id="moves"></ul>
+        <p id="next" style="font-size:0.94rem;"></p>
+      </div>
+      <div class="btn-row no-print">
+        <button type="button" class="btn btn-solid" id="copy">Copy a summary</button>
+        <button type="button" class="btn" id="print">Print or save as PDF</button>
+      </div>
+      <p class="status" id="copy-status" role="status"></p>
+      <textarea class="copy-out no-print" id="copy-out" readonly hidden aria-label="Summary text to copy"></textarea>
+    </div>
+
+    <p class="disclaimer"><strong>Bands:</strong> 0.70 or more, holding. 0.40 up to 0.70, drifting. Below 0.40, time for a kind rethink of the setup. Read from the score rounded to two decimals, so the number and the band always agree. This is a rule-of-thumb worksheet, not a tested model or a compatibility test. It only reflects what you enter, and it can't decide whether a relationship is worth continuing. Nothing you type is saved or sent.</p>
+    <p class="disclaimer">Read the reasoning in <a href="/book/chapter-2-in-depth.html">Chapter II</a>. Keep the numbers week by week in <a href="/workpapers/report-01.html">REPORT-01</a>, or <a href="/workpapers/fill/suite.html">build your Workpaper Suite</a>.</p>
   </div>
+</main>
 
 <script>
 (function(){
-  var workload = document.getElementById('workload');
-  var ownership = document.getElementById('ownership');
-  var saturation = document.getElementById('saturation');
-  var workloadVal = document.getElementById('workload-val');
-  var ownershipVal = document.getElementById('ownership-val');
-  var saturationVal = document.getElementById('saturation-val');
-  var scoreEl = document.getElementById('score');
-  var scoreText = document.getElementById('score-text');
+  "use strict";
+  var C = window.TOLCalc01, f2 = C.f2, fg = C.fg, f1 = C.f1;
+  function $(id){ return document.getElementById(id); }
+  function esc(s){ var d = document.createElement("div"); d.textContent = s == null ? "" : String(s); return d.innerHTML; }
+  var n = 2, names = ["", ""], hours = ["", ""], targets = ["", ""], bats = ["", ""];
+  var copyText = "", hasRead = false;
 
-  function recalc(){
-    var w = parseFloat(workload.value);
-    var o = parseFloat(ownership.value);
-    var s = parseFloat(saturation.value);
+  var EX = {
+    book: { names: ["Sam", "Alex"], hours: [14, 6], total: 10, owned: 8, bats: [0.55, 0.25] },
+    three: { names: ["Jordan", "Priya", "Lee"], hours: [12, 6, 2], total: 8, owned: 6, bats: [0.40, 0.60, 0.20] },
+    clear: { names: ["", ""], hours: ["", ""], total: "", owned: "", bats: ["", ""] }
+  };
 
-    workloadVal.textContent = w.toFixed(2);
-    ownershipVal.textContent = o.toFixed(2);
-    saturationVal.textContent = s.toFixed(2);
+  function nameOf(i){ return (names[i] || "").trim() || ("Person " + (i + 1)); }
+  function fit(a, fill){ a = a.slice(0, n); while (a.length < n) a.push(fill); return a; }
 
-    var solvency = (w * 0.4) + (o * 0.35) + ((1 - s) * 0.25);
-    scoreEl.textContent = solvency.toFixed(2);
-
-    scoreEl.classList.remove('mid','low');
-    if(solvency >= 0.7){
-      scoreText.textContent = 'The current setup is carrying its own weight. Keep up the same rhythm of check-ins.';
-    } else if(solvency >= 0.4){
-      scoreEl.classList.add('mid');
-      scoreText.textContent = 'Something in the setup is drifting, usually ownership clarity first. Revisit the RACI Treaty (WP-03).';
-    } else {
-      scoreEl.classList.add('low');
-      scoreText.textContent = 'The workload, as it\u2019s set up now, doesn\u2019t look like it can last. That\u2019s a statement about the setup, not about either person.';
-    }
+  function render(){
+    var sel = $("people-count");
+    if (!sel.options.length) for (var i = C.MIN_PEOPLE; i <= C.MAX_PEOPLE; i++) sel.insertAdjacentHTML("beforeend", '<option value="' + i + '">' + i + ' people</option>');
+    sel.value = String(n);
+    names = fit(names, ""); hours = fit(hours, ""); targets = fit(targets, ""); bats = fit(bats, "");
+    $("names").innerHTML = names.map(function(v, i){ return '<div><label for="nm-' + i + '">Person ' + (i + 1) + ' (optional)</label><input type="text" id="nm-' + i + '" data-k="names" data-i="' + i + '" autocomplete="off" placeholder="Person ' + (i + 1) + '" value="' + esc(v) + '"></div>'; }).join("");
+    $("hours").innerHTML = hours.map(function(v, i){ return '<div><label for="h-' + i + '" data-lab="' + i + '">' + esc(nameOf(i)) + ', hours</label><input type="number" id="h-' + i + '" data-k="hours" data-i="' + i + '" min="0" step="0.5" inputmode="decimal" value="' + esc(v) + '"></div>'; }).join("");
+    $("targets").innerHTML = targets.map(function(v, i){ return '<div><label for="t-' + i + '" data-lab="' + i + '">' + esc(nameOf(i)) + ', agreed %</label><input type="number" id="t-' + i + '" data-k="targets" data-i="' + i + '" min="0" max="100" step="1" inputmode="decimal" value="' + esc(v) + '"></div>'; }).join("");
+    $("batteries").innerHTML = bats.map(function(v, i){ return '<div><label for="b-' + i + '" data-lab="' + i + '">' + esc(nameOf(i)) + ', battery (0 to 1)</label><input type="number" id="b-' + i + '" data-k="bats" data-i="' + i + '" min="0" max="1" step="0.05" inputmode="decimal" value="' + esc(v) + '"></div>'; }).join("");
   }
 
-  [workload, ownership, saturation].forEach(function(el){
-    el.addEventListener('input', recalc);
+  function relabel(){
+    Array.prototype.forEach.call(document.querySelectorAll("[data-lab]"), function(l){
+      var i = +l.dataset.lab, suffix = l.textContent.slice(l.textContent.lastIndexOf(","));
+      l.textContent = nameOf(i) + suffix;
+    });
+  }
+
+  function recalc(){
+    var mode = document.querySelector('input[name="wb-mode"]:checked').value;
+    var agreed = $("agreed").checked;
+    $("wb-hours").hidden = mode !== "hours"; $("wb-score").hidden = mode !== "score";
+    $("targets").hidden = !agreed;
+
+    // 1. balance
+    var b = null, wb = null, w = $("wb-work");
+    if (mode === "hours"){
+      b = C.balance(hours, agreed ? targets : null);
+      wb = b.value;
+      if (wb === null) w.innerHTML = '<span class="err">' + esc(b.error) + '</span>';
+      else w.innerHTML = "Shares: " + b.shares.map(function(s, i){ return esc(nameOf(i)) + " " + C.pct(s); }).join(", ") +
+        ". Target: " + (b.mode === "agreed" ? "your agreed split" : "an even share, " + C.pct(1 / n) + " each") +
+        ". About " + f1(b.movedHours) + " of " + f1(b.total) + " hours would have to change hands (moved = " + b.moved.toFixed(3) + "; most = " + b.most.toFixed(3) + ")." +
+        "<br>Balance = 1 − " + b.moved.toFixed(3) + " ÷ " + b.most.toFixed(3) + " = <b>" + f2(wb) + "</b>" +
+        (n === 2 && !agreed ? " (the book's 1 − |" + C.pct(b.shares[0]) + " − " + C.pct(b.shares[1]) + "| ÷ 100)" : "");
+    } else {
+      var d = C.num($("wb-direct").value);
+      if (d === null) w.textContent = "Type the balance score from WP-01.";
+      else if (d < 0 || d > 1) w.innerHTML = '<span class="err">A balance score runs from 0 to 1.</span>';
+      else { wb = d; w.innerHTML = "Balance = <b>" + f2(wb) + "</b> (as worked out on your worksheet)."; }
+    }
+
+    // 2. ownership
+    var ownedBlank = $("jobs-owned").value === "";
+    var o = C.ownership(ownedBlank ? null : $("jobs-owned").value, $("jobs-total").value), oc = ownedBlank ? null : o.value;
+    $("oc-work").innerHTML = oc === null ? ($("jobs-total").value === "" ? "Type how many jobs are on the list." : ownedBlank ? "Type how many of them have both names (0 is fine)." : '<span class="err">' + esc(o.error) + '</span>')
+      : "Ownership = " + o.owned + " ÷ " + o.total + " = <b>" + f2(oc) + "</b>" + (o.total - o.owned ? " (" + (o.total - o.owned) + " job" + (o.total - o.owned === 1 ? "" : "s") + " still without both names)" : "");
+
+    // 3. stress
+    var s = C.stress(bats), as = s.value;
+    if (as === null){
+      var bad = s.error && s.error.indexOf("runs from") >= 0;
+      $("as-work").innerHTML = bad ? '<span class="err">' + esc(s.error) + '</span>' : "Waiting on " + s.missing.map(nameOf).map(esc).join(", ") + ".";
+    } else {
+      $("as-work").innerHTML = "Stress = (" + bats.map(function(x){ return f2(C.num(x)); }).join(" + ") + ") ÷ " + n + " = <b>" + f2(as) + "</b>, counted as 1 − " + f2(as) + " = " + f2(1 - as) +
+        "<br>" + bats.map(function(x, i){ return esc(nameOf(i)) + ": " + C.wp02Band(C.num(x)).label; }).join(" · ");
+    }
+
+    var sc = $("score"), txt = $("score-text");
+    if (wb === null || oc === null || as === null){
+      sc.textContent = "—"; sc.className = "score na"; $("details").hidden = true; hasRead = false;
+      var miss = []; if (wb === null) miss.push("balance"); if (oc === null) miss.push("ownership"); if (as === null) miss.push("everyone's battery");
+      setText("No read yet. Still needed: " + miss.join(", ") + ".");
+      return;
+    }
+    var sol = C.solvency(wb, oc, as), bd = C.band(sol.value);
+    sc.textContent = f2(sol.value); sc.className = "score " + bd.cls; hasRead = true;
+    setText(f2(sol.value) + ". " + bd.label);
+    $("details").hidden = false;
+    $("math").textContent =
+      "balance     " + f2(wb) + " × 0.40 = " + fg(sol.parts.wb) + "\n" +
+      "ownership   " + f2(oc) + " × 0.35 = " + fg(sol.parts.oc) + "\n" +
+      "1 − stress  (1 − " + f2(as) + ") × 0.25 = " + fg(sol.parts.as) + "\n" +
+      "total       " + fg(sol.parts.wb) + " + " + fg(sol.parts.oc) + " + " + fg(sol.parts.as) + " = " + sol.value.toFixed(4) + "\n" +
+      "shown as    " + f2(sol.value) + " → " + bd.short;
+    var sf = C.shortfalls(wb, oc, as);
+    $("short-rows").innerHTML = sf.map(function(r){ return "<tr><td>" + r.name + '</td><td class="num">' + fg(r.could) + '</td><td class="num">' + fg(r.earned) + '</td><td class="num">' + fg(r.short) + "</td></tr>"; }).join("");
+    var worst = sf.slice().sort(function(x, y){ return y.short - x.short; })[0];
+    var moves = C.suggestions({ wb: wb, oc: oc, as: as, balance: b, ownership: o, names: names.map(function(_, i){ return nameOf(i); }) });
+    $("moves").innerHTML = moves.length ? moves.map(function(m){ return "<li>" + esc(m.text) + (m.gain > 0 && !m.full ? ' <span class="gain">+' + fg(m.gain) + "</span>" : "") + (m.link ? ' <a href="' + m.link[1] + '">' + esc(m.link[0]) + "</a>" : "") + "</li>"; }).join("") : "<li>Every part is at its best. Keep the rhythm.</li>";
+    $("next").innerHTML = bd.key === "high"
+      ? "<strong>Next:</strong> nothing in the setup needs changing this week. Keep the same rhythm of <a href=\"/check-ins.html\">check-ins</a>."
+      : "<strong>Next:</strong> start with the biggest shortfall, <strong>" + esc(worst.name.toLowerCase()) + "</strong>, not with whatever happened most recently. Bring the first suggestion above to the others as a question, not a ruling." +
+        (bd.key === "low" ? " A calm session to rework the <a href=\"/workpapers/fill/wp-03.html\">job list</a> together will do more than another one-off fix." : "");
+    var L = ["CALC-01 quick read (The Objective Ledger)", "People: " + names.map(function(_, i){ return nameOf(i); }).join(", "), "",
+      "Solvency read: " + f2(sol.value) + " (" + bd.short + ")",
+      "Balance " + f2(wb) + (b ? " (" + (b.mode === "agreed" ? "against our agreed split" : "against an even share") + ")" : " (from WP-01)") + " x 0.40 = " + fg(sol.parts.wb),
+      "Ownership " + f2(oc) + " (" + o.owned + " of " + o.total + " jobs) x 0.35 = " + fg(sol.parts.oc),
+      "1 - stress (1 - " + f2(as) + ") x 0.25 = " + fg(sol.parts.as), ""];
+    if (moves.length){ L.push("What would move the score:"); moves.forEach(function(m){ L.push("- " + m.text); }); L.push(""); }
+    L.push("This reads the setup, not any person. A place to start a conversation, not a verdict.");
+    copyText = L.join("\n");
+  }
+  var last = "", timer = null;
+  function setText(t){ $("score-text").textContent = t; if (t === last) return; last = t; clearTimeout(timer); timer = setTimeout(function(){ $("announce").textContent = "Solvency read: " + t; }, 600); }
+
+  document.addEventListener("input", function(e){
+    var t = e.target, k = t.dataset.k;
+    if (k){ ({ names: names, hours: hours, targets: targets, bats: bats })[k][+t.dataset.i] = t.value; if (k === "names") relabel(); recalc(); }
+    else if (t.name === "wb-mode" || t.id === "wb-direct" || t.id === "jobs-total" || t.id === "jobs-owned") recalc();
+    else if (t.id === "agreed"){
+      if (t.checked && targets.every(function(x){ return x === ""; })){ var ev = Math.floor(100 / n); targets = names.map(function(_, i){ return String(i === 0 ? 100 - ev * (n - 1) : ev); }); render(); }
+      recalc();
+    }
   });
-  recalc();
+  $("people-count").addEventListener("change", function(){ n = +this.value; render(); recalc(); });
+  document.addEventListener("click", function(e){
+    var t = e.target.closest("button"); if (!t) return;
+    if (t.dataset.example){
+      var ex = EX[t.dataset.example];
+      n = ex.names.length; names = ex.names.slice(); hours = ex.hours.map(String); bats = ex.bats.map(String); targets = names.map(function(){ return ""; });
+      $("jobs-total").value = ex.total; $("jobs-owned").value = ex.owned; $("wb-direct").value = "";
+      document.querySelector('input[name="wb-mode"][value="hours"]').checked = true; $("agreed").checked = false;
+      render(); recalc();
+      if (t.dataset.example !== "clear") $("readout").focus();
+    } else if (t.id === "print") window.print();
+    else if (t.id === "copy"){
+      var ta = $("copy-out"), st = $("copy-status");
+      if (!hasRead){ st.textContent = "There's no complete read to copy yet."; return; }
+      var fb = function(){ ta.value = copyText; ta.hidden = false; ta.focus(); ta.select(); st.textContent = "Your browser blocked copying. The summary is selected below: copy it from there."; };
+      try { if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(copyText).then(function(){ st.textContent = "Copied. Paste it into a message or your notes."; ta.hidden = true; }, fb); else fb(); } catch (err){ fb(); }
+    }
+  });
+
+  render(); recalc();
 })();
 </script>
-</div>
 </body>
 </html>

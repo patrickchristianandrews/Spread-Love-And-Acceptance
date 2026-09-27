@@ -5,75 +5,220 @@
 <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-NKC6CQ9S66');</script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Workpaper Playground — TOL-OS</title>
+<title>Workpaper Playground — The Objective Ledger</title>
+<meta name="description" content="Practice the core worksheets on a worked example: log a week (WP-01), check a battery (WP-02), name owners (WP-03) and see if the load can last (CALC-01). Nothing is saved.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,500&family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../assets/css/book-layout.css">
 <link rel="stylesheet" href="/assets/css/site.css">
 <style>
-.playground-section { margin-bottom: 3rem; padding: 2rem; background: var(--paper-deep); border-radius: 3px; }
-.playground-section h3 { margin-top: 0; font-size: 1.2em; color: var(--brass); }
-.playground-intro { font-size: 0.95em; line-height: 1.6; margin-bottom: 1.5rem; color: var(--ink-soft); }
-.try-button { display: inline-block; margin-top: 1rem; padding: 0.75rem 1.5rem; background: var(--brass); color: white; border-radius: 3px; text-decoration: none; transition: background 0.2s; }
-.try-button:hover { background: #8B6B24; }
-.status-badge { display: inline-block; padding: 0.25rem 0.75rem; background: rgba(43, 91, 140, 0.1); color: var(--focus); border-radius: 2px; font-size: 0.85em; margin-top: 0.5rem; }
+:root{ --brass-ink:#7A5720; }
+main a{ color:var(--focus); }
+.playground-section{ margin-bottom:2.4rem; padding:1.4rem 1.4rem 1.6rem; background:var(--paper-deep); border:1px solid var(--line); border-radius:var(--radius); }
+.playground-section h2{ margin-top:0; font-size:1.25rem; }
+.tag{ display:block; font:500 0.72rem "IBM Plex Mono", monospace; letter-spacing:0.05em; color:var(--brass-ink); margin-bottom:0.3rem; }
+.playground-intro{ font-size:0.95em; line-height:1.6; margin:0 0 1rem; color:var(--ink-soft); }
+.try-button{ display:inline-flex; align-items:center; min-height:44px; margin:1rem 8px 0 0; padding:0.6rem 1.2rem; background:var(--ink); color:var(--paper) !important; border-radius:999px; text-decoration:none; font:500 0.85rem "IBM Plex Mono", monospace; }
+.try-button:hover{ background:var(--ink-soft); }
+.try-button.quiet{ background:transparent; color:var(--ink) !important; border:1px solid var(--ink); }
+.btn{ min-height:44px; padding:8px 14px; border:1px solid var(--ink); border-radius:999px; background:transparent; color:var(--ink); font:500 0.8rem "IBM Plex Mono", monospace; cursor:pointer; }
+.btn:hover{ background:var(--ink); color:var(--paper); }
+.scroll-x{ overflow-x:auto; position:relative; }
+table{ width:100%; border-collapse:collapse; font-size:0.9rem; }
+th{ text-align:left; font:500 0.7rem "IBM Plex Mono", monospace; text-transform:uppercase; color:var(--brass-ink); border-bottom:2px solid var(--line); padding:4px 8px 6px 0; }
+td{ border-bottom:1px solid var(--line); padding:5px 8px 5px 0; }
+input[type="text"], input[type="number"], select{ font:inherit; font-size:0.92rem; width:100%; min-height:44px; padding:6px 8px; border:1px solid #8F8468; border-radius:var(--radius); background:#FFFDF6; color:var(--ink); }
+input[type="number"]{ font-family:"IBM Plex Mono", monospace; text-align:right; }
+td.min{ width:100px; } td.who{ min-width:120px; }
+.out{ margin-top:1rem; padding:0.9rem 1.1rem; background:#FFFDF6; border:1px solid var(--line); border-radius:var(--radius); font-size:0.92rem; }
+.out .big{ font:500 1.6rem "IBM Plex Mono", monospace; color:var(--credit); }
+.out .big.mid{ color:#7A5720; } .out .big.low{ color:#96412B; }
+.out .mono{ font-family:"IBM Plex Mono", monospace; font-size:0.82rem; color:var(--ink-soft); overflow-wrap:anywhere; }
+.bat{ display:grid; grid-template-columns:1fr 90px; gap:8px; align-items:center; max-width:520px; margin:6px 0; font-size:0.92rem; }
+.people{ display:grid; grid-template-columns:repeat(auto-fill,minmax(140px,1fr)); gap:10px; }
+.people label{ font-size:0.85rem; color:var(--ink-soft); display:block; }
+.sr-only{ position:absolute; left:0; top:0; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; }
+.path{ counter-reset:step; list-style:none; padding:0; }
+.path li{ counter-increment:step; position:relative; padding:0.6rem 0 0.6rem 2.6rem; border-bottom:1px solid var(--line); }
+.path li::before{ content:counter(step); position:absolute; left:0; top:0.55rem; width:1.9rem; height:1.9rem; border-radius:50%; background:var(--ink); color:var(--paper); display:flex; align-items:center; justify-content:center; font:500 0.85rem "IBM Plex Mono", monospace; }
 </style>
 <script src="/assets/js/site.js" defer></script>
+<script src="/assets/js/calc01-core.js"></script>
 </head>
 <body>
 <div class="frame">
 <aside class="sidebar">
-<div class="mark">Workpaper Playground<small>TOL&#8209;OS &middot; INTERACTIVE</small></div>
-<p class="tagline">Test-drive the tools with zero commitment.</p>
-<a class="back-link" href="index.html">&larr; Back to Try It</a>
-<nav aria-label="Navigation"><ol><li><a href="#wp01">WP-01: Field Audit</a></li><li><a href="#wp03">WP-03: RACI Treaty</a></li><li><a href="#calc01">CALC-01: Solvency</a></li></ol></nav>
+<div class="mark">Workpaper Playground<small>THE OBJECTIVE LEDGER &middot; PRACTICE</small></div>
+<p class="tagline">Try the tools on an example before you use your own week.</p>
+<a class="back-link" href="index.html">&larr; Back to Try the Workpapers</a>
+<nav aria-label="On this page"><ol><li><a href="#wp01">WP-01: Who did what</a></li><li><a href="#wp02">WP-02: The battery check</a></li><li><a href="#wp03">WP-03: One owner per job</a></li><li><a href="#calc01">CALC-01: Can the load last?</a></li><li><a href="#next">Your real worksheets</a></li></ol></nav>
 <div class="sidebar-foot">spreadloveandacceptance.com</div>
 </aside>
 <div class="rule" aria-hidden="true"></div>
-<main>
+<main id="main">
 
-<div class="kicker">Interactive Sandbox</div>
-<h2>Workpaper Playground</h2>
-<p class="lede">Three tools. Real calculations. Nothing saved. Just explore.</p>
-<p class="pillar-note"><small>WP-01 puts <a href="/five-pillars.html#see-the-load">Pillar I, See the whole load</a> to work, and WP-03 and CALC-01 put <a href="/five-pillars.html#fix-the-setup">Pillar II, Fix the setup, not the person</a> to work. In you: you notice what you really carry. Between you and others: clear owners replace blame.</small></p>
+<div class="kicker">Practice space</div>
+<h1 style="font-size:1.8rem;">Workpaper Playground</h1>
+<p class="lede">Four tools, one worked example, real math. Change anything and watch the numbers move. Nothing is saved.</p>
+<p class="pillar-note"><small>WP-01 is <a href="/five-pillars.html#see-the-load">Pillar I, See the whole load</a>. WP-02 is <a href="/five-pillars.html#read-your-state">Pillar III, Read your state first</a>. WP-03 and CALC-01 are <a href="/five-pillars.html#fix-the-setup">Pillar II, Fix the setup, not the person</a>. In you: you notice what you really carry, and how full your battery is. Between you and others: clear owners replace blame.</small></p>
 
-<div class="playground-section" id="wp01">
-<h3>WP-01: Field Audit — Map Your Workload</h3>
-<p class="playground-intro">See who's actually doing what in your household right now. The Field Audit is a simple log: every task, who did it, and roughly how long it took. No judgment, just a clear picture.</p>
-<p class="playground-intro"><strong>What you'll do:</strong> Over one week, jot down the things that actually take time in your household, with rough minutes. The totals show you the split.</p>
-<p class="playground-intro">This is the first step. You can't fix what you can't see.</p>
-<a href="/workpapers/fill/wp-01.html" class="try-button">Open WP-01 Demo</a>
-<div class="status-badge">Live Now</div>
+<p>The example is three roommates. Rename them if you like, or pretend they're your partner, your family or your team: the worksheets work the same way for 2 to 8 people.</p>
+<div class="people" id="names"></div>
+<p style="margin-top:0.8rem;"><button type="button" class="btn" id="reset">Put the example back</button></p>
+
+<section class="playground-section" id="wp01" aria-labelledby="wp01-h">
+<span class="tag">WP-01 &middot; Pillar I</span>
+<h2 id="wp01-h">Who did what: see the whole load</h2>
+<p class="playground-intro">For one ordinary week, jot down what took time, who did it and roughly how many minutes. Include the invisible work: planning, remembering, noticing. "Shared" splits the minutes evenly.</p>
+<div class="scroll-x" tabindex="0" role="region" aria-label="Example week, scrolls sideways">
+<table><thead><tr><th>Job</th><th>Who</th><th>Minutes</th></tr></thead><tbody id="log"></tbody></table>
 </div>
+<div class="out" id="wp01-out" aria-live="polite"></div>
+<a href="/workpapers/fill/wp-01.html" class="try-button">Open the real WP-01</a>
+</section>
 
-<div class="playground-section" id="wp03">
-<h3>WP-03: RACI Treaty — One Owner per Job</h3>
-<p class="playground-intro">A shared list that gives every regular job one clear owner, so you stop re-deciding who does what every week. It's not about being perfect. It's for people who are tired of arguing over the same chores.</p>
-<p class="playground-intro"><strong>What you'll do:</strong> Sit down once, with your Field Audit, and put a Responsible and an Accountable name next to each job. Want to follow your numbers over time? <a href="/workpapers/report-01.html">REPORT-01</a> does that week by week.</p>
-<a href="/workpapers/fill/wp-03.html" class="try-button">Open WP-03 Demo</a>
-<div class="status-badge">Live Now</div>
+<section class="playground-section" id="wp02" aria-labelledby="wp02-h">
+<span class="tag">WP-02 &middot; Pillar III</span>
+<h2 id="wp02-h">The battery check: read your state first</h2>
+<p class="playground-intro">Score five things about yourself for the last day or two, from 0 (not at all) to 4 (very true). Add them up and divide by 20. It's a self-check, not a health measure, and only ever filled in about yourself.</p>
+<div id="bat"></div>
+<div class="out" id="wp02-out" aria-live="polite"></div>
+<a href="/workpapers/fill/wp-02.html" class="try-button">Open the real WP-02</a>
+</section>
+
+<section class="playground-section" id="wp03" aria-labelledby="wp03-h">
+<span class="tag">WP-03 &middot; Pillar II</span>
+<h2 id="wp03-h">One owner per job: fix the setup, not the person</h2>
+<p class="playground-intro">For each regular job, name who is <strong>Responsible</strong> (does it) and who is <strong>Accountable</strong> (notices if it didn't happen). Leave unowned jobs on the list; they're the ones that matter most.</p>
+<div class="scroll-x" tabindex="0" role="region" aria-label="Example job list, scrolls sideways">
+<table><thead><tr><th>Job</th><th>Responsible</th><th>Accountable</th></tr></thead><tbody id="raci"></tbody></table>
 </div>
+<div class="out" id="wp03-out" aria-live="polite"></div>
+<a href="/workpapers/fill/wp-03.html" class="try-button">Open the real WP-03</a>
+</section>
 
-<div class="playground-section" id="calc01">
-<h3>CALC-01: Can the Load Last? — The Solvency Read</h3>
-<p class="playground-intro">Put in your workload numbers from the Field Audit, plus your ownership clarity score and your battery scores (how stretched you both are). The calculator gives you a single number, P(Solvency): a score from 0 to 1 for whether the way you share the work can carry its own weight. Despite the name, it isn't a probability.</p>
-<p class="playground-intro"><strong>What you'll get:</strong> A number between 0.0 and 1.0. Above 0.70 means the setup can last. Below 0.40 means something needs to change. In between means something is drifting.</p>
-<a href="/workpapers/calculators/calc01-solvency.html" class="try-button">Open CALC-01 Demo</a>
-<div class="status-badge">Live Now</div>
-</div>
+<section class="playground-section" id="calc01" aria-labelledby="calc01-h">
+<span class="tag">CALC-01 &middot; Pillars I and II together</span>
+<h2 id="calc01-h">Can the load last?</h2>
+<p class="playground-intro">CALC-01 puts the three together: balance from WP-01, ownership from WP-03, and the average of everyone's battery from WP-02. Each person fills in their own battery, so here the example roommates' scores are typed in for them.</p>
+<div class="people" id="bats3"></div>
+<div class="out" id="calc-out" aria-live="polite"></div>
+<a href="/workpapers/calculators/calc01-solvency.html" class="try-button">Use the quick CALC-01</a>
+<a href="/calc01-solvency.html" class="try-button quiet">Open the full CALC-01</a>
+</section>
 
-<hr style="margin: 3rem 0; border: none; border-top: 1px solid var(--line);">
-
-<p><strong>What happens to your data?</strong> Nothing. This is a practice space. Nothing you enter is saved, and no emails are collected. You're just exploring. If it feels useful, the full versions are in the <a href="/workpapers/fill/">fill-in workpapers</a> and the <a href="/workpapers/fill/suite.html">Workpaper Suite</a>.</p>
+<section id="next" aria-labelledby="next-h">
+<h2 id="next-h" style="font-size:1.3rem;">From practice to your real week</h2>
+<ol class="path">
+<li>Each person does the two-minute <a href="/workpapers/fill/wp-02.html">battery check (WP-02)</a> before you start, so you pick a calm moment.</li>
+<li>Log one ordinary week in <a href="/workpapers/fill/wp-01.html">WP-01</a> (or the <a href="/lemonade-stand.html">Lemonade Stand</a>).</li>
+<li>Sit down once and fill in <a href="/workpapers/fill/wp-03.html">WP-03</a> together.</li>
+<li>Put the numbers into <a href="/workpapers/calculators/calc01-solvency.html">CALC-01</a> and start with the biggest shortfall.</li>
+<li>Keep the weeks side by side in <a href="/workpapers/report-01.html">REPORT-01</a>, or <a href="/workpapers/fill/suite.html">build your whole Workpaper Suite</a>.</li>
+</ol>
+<p><strong>What happens to what you type here?</strong> Nothing. This page doesn't save or send anything. The real worksheets only keep a draft on your device if you tick the box that says so, and they let you erase it.</p>
+</section>
 
 </main>
 </div>
 <footer>
-TOL&#8209;OS &middot; Baseline v1.0.4 &middot; spreadloveandacceptance.com
+The Objective Ledger &middot; spreadloveandacceptance.com
 <div class="footer-links">
-<a href="../index.html">Home</a> | <a href="index.html">Back</a> | <a href="../snapshot/index.html">Snapshot</a> | <a href="../architecture/index.html">Architecture</a>
+<a href="../index.html">Home</a> | <a href="index.html">Back</a> | <a href="../snapshot/index.html">Snapshot</a> | <a href="/workpapers/fill/">All the fill-in workpapers</a>
 </div>
 </footer>
+
+<script>
+(function(){
+"use strict";
+var C = window.TOLCalc01, f2 = C.f2, fg = C.fg, f1 = C.f1;
+function $(id){ return document.getElementById(id); }
+function esc(s){ var d = document.createElement("div"); d.textContent = s == null ? "" : String(s); return d.innerHTML; }
+var FACTORS = ["Sleep: less rested than usual", "Workload elsewhere (job, school, caregiving)", "An unsettled disagreement (with anyone)", "Body: hungry, unwell or sore", "Time pressure today"];
+
+var EX = {
+  names: ["Jordan", "Priya", "Lee"],
+  log: [["Cooking and dishes", "0", 300], ["Shared groceries", "0", 150], ["Bathroom", "1", 120], ["Trash and recycling", "shared", 90], ["Bills and landlord", "0", 60], ["Noticing we're out of things", "0", 30], ["Living room tidy", "2", 60]],
+  bat: ["2", "1", "0", "1", "2"],
+  raci: [["Kitchen", "0", "0"], ["Groceries", "0", "1"], ["Bathroom", "1", "1"], ["Trash", "shared", "2"], ["Rent and bills", "0", "0"], ["Landlord messages", "1", "0"], ["Living room", "", ""], ["Supplies (soap, paper)", "", ""]],
+  bats3: ["0.40", "0.60", "0.20"]
+};
+var S;
+function reset(){ S = JSON.parse(JSON.stringify(EX)); render(); calc(); }
+function nm(i){ return (S.names[i] || "").trim() || ("Person " + (i + 1)); }
+function whoOpts(v, allowShared){
+  var o = '<option value="">— nobody yet</option>';
+  S.names.forEach(function(_, i){ o += '<option value="' + i + '"' + (String(v) === String(i) ? " selected" : "") + '>' + esc(nm(i)) + '</option>'; });
+  if (allowShared) o += '<option value="shared"' + (v === "shared" ? " selected" : "") + '>Shared</option>';
+  return o;
+}
+function render(){
+  $("names").innerHTML = S.names.map(function(n, i){ return '<div><label for="n-' + i + '">Roommate ' + (i + 1) + '</label><input type="text" id="n-' + i + '" data-name="' + i + '" autocomplete="off" value="' + esc(n) + '"></div>'; }).join("");
+  $("log").innerHTML = S.log.map(function(r, i){ return '<tr><td><input type="text" data-log="' + i + '" data-f="0" aria-label="Job ' + (i + 1) + '" value="' + esc(r[0]) + '"></td><td class="who"><select data-log="' + i + '" data-f="1" aria-label="' + esc("Who did " + r[0]) + '">' + whoOpts(r[1], true) + '</select></td><td class="min"><input type="number" min="0" step="5" inputmode="numeric" data-log="' + i + '" data-f="2" aria-label="' + esc("Minutes for " + r[0]) + '" value="' + esc(r[2]) + '"></td></tr>'; }).join("");
+  $("bat").innerHTML = FACTORS.map(function(f, k){ var o = '<option value="">—</option>'; for (var x = 0; x <= 4; x++) o += '<option value="' + x + '"' + (S.bat[k] === String(x) ? " selected" : "") + '>' + x + '</option>'; return '<div class="bat"><label for="bt-' + k + '">' + f + '</label><select id="bt-' + k + '" data-bat="' + k + '">' + o + '</select></div>'; }).join("");
+  $("raci").innerHTML = S.raci.map(function(r, i){ return '<tr><td><input type="text" data-raci="' + i + '" data-f="0" aria-label="Job ' + (i + 1) + '" value="' + esc(r[0]) + '"></td><td class="who"><select data-raci="' + i + '" data-f="1" aria-label="' + esc("Responsible for " + r[0]) + '">' + whoOpts(r[1], true) + '</select></td><td class="who"><select data-raci="' + i + '" data-f="2" aria-label="' + esc("Accountable for " + r[0]) + '">' + whoOpts(r[2], true) + '</select></td></tr>'; }).join("");
+  $("bats3").innerHTML = S.bats3.map(function(v, i){ return '<div><label for="b3-' + i + '" data-b3lab="' + i + '">' + esc(nm(i)) + '’s battery (0 to 1)</label><input type="number" id="b3-' + i + '" data-b3="' + i + '" min="0" max="1" step="0.05" inputmode="decimal" value="' + esc(v) + '"></div>'; }).join("");
+}
+var last = {};
+function calc(){
+  // WP-01
+  var mins = S.names.map(function(){ return 0; });
+  S.log.forEach(function(r){ var m = parseFloat(r[2]); if (!(m > 0) || r[1] === "") return; if (r[1] === "shared") mins.forEach(function(_, i){ mins[i] += m / mins.length; }); else mins[+r[1]] += m; });
+  var b = C.balance(mins, null);
+  last.b = b;
+  $("wp01-out").innerHTML = b.value === null ? esc(b.error) :
+    "<div>" + mins.map(function(m, i){ return "<strong>" + esc(nm(i)) + "</strong> " + f1(m / 60) + " h (" + C.pct(b.shares[i]) + ")"; }).join(" · ") + "</div>" +
+    '<div class="mono">An even share is ' + C.pct(1 / mins.length) + ' each. About ' + f1(b.movedHours / 60) + ' of ' + f1(b.total / 60) + ' hours would have to change hands to even it out. Balance = 1 − ' + b.moved.toFixed(3) + ' ÷ ' + b.most.toFixed(3) + '</div>' +
+    '<div>Balance: <span class="big' + (b.value < 0.5 ? " low" : b.value < 0.7 ? " mid" : "") + '">' + f2(b.value) + '</span> <span class="mono">(1 = even, 0 = one person did it all)</span></div>';
+  // WP-02
+  var bt = C.battery(S.bat);
+  $("wp02-out").innerHTML = !bt ? "Answer all five to see the score." :
+    '<div class="mono">' + S.bat.join(" + ") + " = " + bt.points + " points ÷ 20</div>" +
+    '<div>Your battery: <span class="big' + (bt.value >= 0.6 ? " low" : bt.value >= 0.3 ? " mid" : "") + '">' + f2(bt.value) + '</span> ' + C.wp02Band(bt.value).label + '</div>' +
+    "<div>" + ({ low: "Whatever comes up is probably about the thing itself. A fine time to talk.", mid: "Before a hard conversation, say it out loud: “Heads up, I’m carrying more than usual today.”", high: "Put off anything that doesn’t need deciding in the next hour. Pick a time to come back. The <a href=\"/wp-11.html\">Calm-Down Kit (WP-11)</a> helps." })[C.wp02Band(bt.value).key] + "</div>" +
+    '<div class="mono">Bands: under 0.30 low, 0.30 up to 0.60 medium, 0.60 or more high.</div>';
+  // WP-03
+  var owned = S.raci.filter(function(r){ return r[1] !== "" && r[2] !== ""; }).length;
+  var sharedA = S.raci.filter(function(r){ return r[2] === "shared"; }).length;
+  var o = C.ownership(owned, S.raci.length);
+  last.o = o;
+  $("wp03-out").innerHTML = o.value === null ? esc(o.error) :
+    '<div class="mono">' + owned + " of " + S.raci.length + " jobs have both names</div>" +
+    '<div>Ownership: <span class="big' + (o.value < 0.4 ? " low" : o.value < 0.7 ? " mid" : "") + '">' + f2(o.value) + '</span></div>' +
+    (S.raci.length - owned ? "<div>Try giving the " + (S.raci.length - owned) + " unowned job" + (S.raci.length - owned === 1 ? "" : "s") + " a name and watch this rise. Deleting them instead would raise the number and change nothing at home.</div>" : "<div>Every job has an owner.</div>") +
+    (sharedA ? "<div>" + sharedA + " job" + (sharedA === 1 ? " is" : "s are") + " “shared” for noticing. That counts, but a job everyone notices is often a job nobody notices.</div>" : "");
+  // CALC-01
+  var s = C.stress(S.bats3);
+  var out = $("calc-out");
+  if (b.value === null || o.value === null || s.value === null){ out.innerHTML = "Fill in the pieces above: " + [b.value === null ? "the week log" : "", o.value === null ? "the job list" : "", s.value === null ? (s.error || "the batteries") : ""].filter(Boolean).map(esc).join(", ") + "."; return; }
+  var sol = C.solvency(b.value, o.value, s.value), bd = C.band(sol.value);
+  var sf = C.shortfalls(b.value, o.value, s.value).sort(function(x, y){ return y.short - x.short; })[0];
+  var mv = C.suggestions({ wb: b.value, oc: o.value, as: s.value, balance: b, ownership: o, names: S.names.map(function(_, i){ return nm(i); }) })[0];
+  out.innerHTML = '<div class="mono">(' + f2(b.value) + " × 0.40) + (" + f2(o.value) + " × 0.35) + ((1 − " + f2(s.value) + ") × 0.25) = " + fg(sol.parts.wb) + " + " + fg(sol.parts.oc) + " + " + fg(sol.parts.as) + " = " + sol.value.toFixed(4) + "</div>" +
+    '<div>Solvency read: <span class="big ' + bd.cls + '">' + f2(sol.value) + "</span> " + esc(bd.short) + "</div>" +
+    "<div>" + esc(bd.label) + (bd.key !== "high" ? " The biggest shortfall is <strong>" + esc(sf.name.toLowerCase()) + "</strong>." : "") + "</div>" +
+    (mv ? "<div><strong>What would move it:</strong> " + esc(mv.text) + "</div>" : "") +
+    '<div class="mono">Bands: 0.70 or more holding · 0.40 up to 0.70 drifting · below 0.40 time for a kind rethink. It reads the setup, never a person.</div>';
+}
+document.addEventListener("input", function(e){
+  var t = e.target, d = t.dataset;
+  if (d.name !== undefined){
+    S.names[+d.name] = t.value;
+    var i = +d.name;
+    Array.prototype.forEach.call(document.querySelectorAll('#log option[value="' + i + '"], #raci option[value="' + i + '"]'), function(op){ op.textContent = nm(i); });
+    var l = document.querySelector('[data-b3lab="' + i + '"]'); if (l) l.textContent = nm(i) + "’s battery (0 to 1)";
+  }
+  else if (d.log !== undefined) S.log[+d.log][+d.f] = t.value;
+  else if (d.raci !== undefined) S.raci[+d.raci][+d.f] = t.value;
+  else if (d.bat !== undefined) S.bat[+d.bat] = t.value;
+  else if (d.b3 !== undefined) S.bats3[+d.b3] = t.value;
+  else return;
+  calc();
+});
+$("reset").addEventListener("click", reset);
+reset();
+})();
+</script>
 </body>
 </html>

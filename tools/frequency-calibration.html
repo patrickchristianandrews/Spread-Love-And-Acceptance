@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Frequency Calibration &amp; Coherence Audit — The Objective Ledger</title>
-<meta name="description" content="A worksheet for mapping the rhythms you each run on for money, rest, decisions, talking and values, then finding the gaps and the tools that help close them.">
+<title>Frequency Calibration: Are Your Rhythms in Step? — The Objective Ledger</title>
+<meta name="description" content="A worksheet for two people (partners, family, co-parents, roommates, coworkers, friends) to map their rhythms for money, recovery, decisions, check-ins and the big picture, see what each rhythm means, and pick one agreement to close each gap.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,500&family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -575,565 +575,400 @@
 </style>
 <link rel="stylesheet" href="/assets/css/site.css">
 <script src="/assets/js/site.js" defer></script>
+<style>
+  /* Loaded after site.css so these win. */
+  .sr-only{ position:absolute !important; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; border:0; }
+  .print-bar button{ min-height:44px; }
+  .print-bar button:focus-visible, .fc-btn:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
+  .wp-num, .sheet-mark small, .delta-domain-name, .frequency-domain h3, .action-block h4{ color:#7A5620; }
+  fieldset.frequency-domain{ margin:0; min-width:0; }
+  fieldset.frequency-domain legend{ font-family:"Fraunces","Lora",serif; font-weight:600; font-size:1rem; color:#7A5620; padding:0 .3rem; }
+  .frequency-domain select{ min-height:44px; }
+  .setup-grid{ display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:14px 18px; margin:0 0 10px; }
+  .setup-grid label{ display:block; font-size:.9rem; font-weight:500; margin-bottom:4px; }
+  .setup-grid input, .setup-grid select{ width:100%; min-height:44px; padding:8px 10px; border:1px solid #B9A77A; border-radius:var(--radius); font-family:"Lora",serif; font-size:.95rem; background:var(--paper); color:var(--ink); }
+  .rel-note{ font-size:.88rem; color:var(--ink-soft); margin:6px 0 0; }
+  .rel-note:empty{ display:none; }
+  .fc-btn{ font-family:"IBM Plex Mono",monospace; font-size:.8rem; min-height:44px; padding:10px 18px; border:1px solid var(--ink); border-radius:var(--radius); background:var(--ink); color:var(--paper); cursor:pointer; }
+  .fc-btn.ghost{ background:var(--paper); color:var(--ink); }
+  .fc-btn:hover{ background:var(--focus); color:#fff; border-color:var(--focus); }
+  .btn-row{ display:flex; flex-wrap:wrap; gap:10px; margin:16px 0 0; }
+  .mean{ font-size:.9rem; margin:10px 0 0; padding:10px 12px; background:var(--paper); border-left:3px solid var(--focus); border-radius:var(--radius); }
+  .mean:empty{ display:none; }
+  .delta-value{ flex-wrap:wrap; gap:6px 14px; }
+  .delta-num.high{ color:#96412B; } .delta-num.med{ color:#7A5620; } .delta-num.low{ color:var(--credit); }
+  .delta-num{ font-size:1.05rem; }
+  .track{ position:relative; height:26px; margin:8px 10px 2px; }
+  .track::before{ content:""; position:absolute; left:0; right:0; top:50%; height:2px; background:var(--line); }
+  .track .pt{ position:absolute; top:50%; width:22px; height:22px; margin:-11px 0 0 -11px; border-radius:50%; display:grid; place-items:center; font:600 .7rem "IBM Plex Mono",monospace; color:#fff; }
+  .track .pa{ background:var(--focus); } .track .pb{ background:#96412B; }
+  .track .pt.same{ box-shadow:0 0 0 3px var(--paper-deep); }
+  .track-ends{ display:flex; justify-content:space-between; font-size:.72rem; color:var(--ink-soft); margin:0 0 4px; }
+  .delta-help p{ margin:4px 0; }
+  .coherence-recommendation p{ margin:0 0 6px; }
+  .coherence-recommendation p:last-child{ margin:0; }
+  .agree-line{ font-style:italic; }
+  .gapmap{ list-style:none; margin:0; padding:0; display:grid; gap:8px; }
+  .gapmap li{ display:grid; grid-template-columns:minmax(0,11rem) 1fr auto; gap:10px; align-items:center; font-size:.9rem; }
+  .gapmap .gm-bar{ height:12px; background:var(--paper); border:1px solid var(--line); border-radius:99px; overflow:hidden; }
+  .gapmap .gm-bar i{ display:block; height:100%; }
+  .gapmap .gm-lab{ font-family:"IBM Plex Mono",monospace; font-size:.74rem; }
+  @media (max-width:520px){ .gapmap li{ grid-template-columns:1fr auto; } .gapmap .gm-bar{ grid-column:1 / -1; grid-row:2; } }
+  .agreements{ margin:10px 0 0; padding-left:1.3rem; }
+  .agreements li{ margin:0 0 10px; }
+  .agreements li small{ display:block; color:var(--ink-soft); }
+  .fc-msg{ font-size:.9rem; color:var(--credit); min-height:1.3em; margin:8px 0 0; }
+  .ab-tip{ font-size:.9rem; color:var(--ink-soft); }
+  #results h2:focus{ outline:none; } #results h2:focus-visible{ outline:3px solid var(--focus); outline-offset:3px; }
+  @media (max-width:520px){ .sheet{ padding:18px 14px; } .intro-note, .delta-readout, .action-block{ padding:14px; } .frequency-domain{ padding:14px; } }
+  @media print{
+    .locked-section{ border:0 !important; padding:0 !important; background:none !important; }
+    .locked-section::before, .btn-row, .no-print{ display:none !important; }
+    select{ border:0 !important; appearance:none; -webkit-appearance:none; padding:0 !important; }
+  }
+</style>
 </head>
 <body>
 
 <div class="print-bar">
-  <span>Tool &middot; Frequency Calibration &amp; Coherence Audit</span>
-  <button onclick="window.print()">Print this worksheet</button>
+  <span>Tool &middot; Frequency Calibration</span>
+  <button type="button" onclick="window.print()">Print this worksheet</button>
 </div>
 
-<div class="sheet">
+<main class="sheet">
 
   <div class="sheet-header">
     <div class="wp-num">WORKSHEET TOOL</div>
-    <h1 class="sheet-mark">Frequency Calibration: Are Your Rhythms in Step?<small>TOL-FREQ-SPEC-V1.0</small></h1>
-    
-<p class="sheet-tagline">Map the natural rhythms each of you runs on, see where they're out of step, and find simple shared habits that bring them back in line.</p>
-<p class="sheet-tagline pillar-note" style="font-size:.9rem;">This tool puts <a href="/five-pillars.html#tune-signals">Pillar IV, Tune how you send and receive</a> to work, with a nod to <a href="/five-pillars.html#read-your-state">Pillar III, Read your state first</a>. In you: you learn your own natural pace for money, rest, decisions, talking and big-picture questions. Between you and others: you treat a mismatch in rhythm as something to tune, not a moral failing.</p>
-<p class="sheet-tagline" style="font-size:.9rem;">Builds on <a href="/frequency-framework.html">the Frequency Framework</a> and <a href="/book/chapter-1.html">Chapter I</a>. Goes with <a href="/workpapers/wp-13-pll-protocol.html">the 90-second check-in (WP-13)</a> and <a href="/tools/mood-arbitrage-free.html">Mood Arbitrage</a>.</p>
+    <h1 class="sheet-mark">Frequency Calibration: Are Your Rhythms in Step?<small>TOL-FREQ-SPEC-V1.1</small></h1>
+    <p class="sheet-tagline">Map the natural rhythms you and one other person each run on, see where they&#39;re out of step, and pick one small agreement that brings each back in line.</p>
+    <p class="sheet-tagline pillar-note" style="font-size:.9rem;">This tool puts <a href="/five-pillars.html#tune-signals">Pillar IV, Tune how you send and receive</a> to work, with help from <a href="/five-pillars.html#read-your-state">Pillar III, Read your state first</a> and <a href="/five-pillars.html#fix-the-setup">Pillar II, Fix the setup, not the person</a>. Part of <a href="/five-pillars.html">the Five Pillars</a>. <strong>In you:</strong> you learn your own natural pace for money, recovery, decisions, check-ins and big-picture questions. <strong>Between you and others:</strong> you treat a mismatch in rhythm as something to tune, and settle it with a shared agreement instead of blame.</p>
+    <p class="sheet-tagline" style="font-size:.9rem;">Builds on <a href="/frequency-framework.html">the Frequency Framework</a> and <a href="/book/chapter-1.html">Chapter I</a>. Goes with <a href="/workpapers/wp-13-pll-protocol.html">the 90-second check-in (WP-13)</a> and <a href="/tools/mood-arbitrage-free.html">Mood Arbitrage</a>.</p>
   </div>
 
   <div class="intro-note">
-    <p><strong>What this measures:</strong> Two people sharing a life each run on their own rhythms, a bit like two radios tuned to slightly different stations. When the rhythms match, things feel clear. When they drift apart, you get static and a "squeal." (In radio, that squeal is called the beat frequency.) Money, rest and recovery, decisions, talking, and big-picture values each have their own rhythm. A lot of friction turns out to be a mismatch in rhythm, not a clash of values.</p>
-    <p><strong>The good news:</strong> Mismatched rhythms aren't a failure. They're information. Once you both know your rhythms, you can build simple shared habits (a regular money check-in, a set review day, a daily check-in) that keep you in step.</p>
-    <p><strong>What this is not:</strong> This is not a diagnosis, a compatibility test, or a prediction about the relationship's future. It's a look at how your shared routines are running right now, so you can both choose, on purpose, which rhythms to bring into line.</p>
+    <p><strong>What this looks at:</strong> Any two people who share part of their lives (partners, family, co-parents, roommates, coworkers, a carer and the person they help, close friends) each run on their own rhythms, a bit like two radios tuned to slightly different stations. When the rhythms match, things feel clear. When they drift apart, you get static. (In radio, the squeal between two nearby stations is called the beat frequency.) A lot of everyday friction turns out to be a mismatch in rhythm, not a clash of values.</p>
+    <p><strong>How to use it:</strong> Each person picks their own answers, ideally without looking at the other&#39;s first. Then read the comparison together. You can also do Person A alone to learn your own rhythms.</p>
+    <p><strong>What this is not:</strong> Not a diagnosis, a compatibility test, or a prediction. It&#39;s a look at how your shared routines run right now. <strong>Privacy:</strong> nothing you pick or type here is saved or sent anywhere. Print or copy your agreements before you leave the page.</p>
   </div>
 
   <div class="locked-section">
-  <section id="person-a">
-    <h2>Person A: Operating Frequencies</h2>
-    <p style="color: var(--ink-soft); font-size: 0.95rem;">For each area, write how often this person naturally checks in on it or revisits it. Use days, hours or cycles (for example, "every 2 days," "weekly" or "each conversation").</p>
 
-    <div class="domain-grid">
-
-      <div class="frequency-domain">
-        <h3>Money rhythm (financial)</h3>
-        <div class="definition">How often bills, payments, or money decisions get checked, discussed, or revised.</div>
-        <div class="field-group">
-          <label for="a-fin">Your natural financial check-in cycle</label>
-          <input type="text" id="a-fin" placeholder="e.g., Weekly, Every 2 weeks, Monthly" value="">
-          <div class="hint-text">When do you prefer to look at spending, bills, or budget?</div>
-        </div>
-      </div>
-
-      <div class="frequency-domain">
-        <h3>Rest and recovery rhythm (autonomic)</h3>
-        <div class="definition">How often you naturally need a break to reset and settle when you're stressed.</div>
-        <div class="field-group">
-          <label for="a-auto">How often you need a reset</label>
-          <input type="text" id="a-auto" placeholder="e.g., Every 90 seconds, Every few minutes, Every hour" value="">
-          <div class="hint-text">When do you feel you need to unwind, settle down, or step away?</div>
-        </div>
-      </div>
-
-      <div class="frequency-domain">
-        <h3>Decision rhythm</h3>
-        <div class="definition">How often decisions get revisited, revised, or reconsidered before they're treated as final.</div>
-        <div class="field-group">
-          <label for="a-dec">How often do you revisit decisions?</label>
-          <input type="text" id="a-dec" placeholder="e.g., Immediately, After a night's sleep, Weekly review" value="">
-          <div class="hint-text">Do you settle decisions quickly, or do you like to keep revisiting them?</div>
-        </div>
-      </div>
-
-      <div class="frequency-domain">
-        <h3>Talking rhythm (communication)</h3>
-        <div class="definition">How often you like to have check-in conversations and updates, the small talks that keep a relationship running (see WP-13, the 90-second check-in).</div>
-        <div class="field-group">
-          <label for="a-comm">Your preferred check-in rhythm</label>
-          <input type="text" id="a-comm" placeholder="e.g., Daily 90-second pulse, Weekly sit-down, As-needed" value="">
-          <div class="hint-text">How often do you want to sync up with the other person?</div>
-        </div>
-      </div>
-
-      <div class="frequency-domain">
-        <h3>Big-picture rhythm (values)</h3>
-        <div class="definition">How often you like to check that you still agree on values and goals, and that the relationship still matches what you both want.</div>
-        <div class="field-group">
-          <label for="a-phil">How often do you want a big-picture check?</label>
-          <input type="text" id="a-phil" placeholder="e.g., Quarterly, Yearly, Never (implicit)" value="">
-          <div class="hint-text">When do you want to step back and ask: are we still on the same page about what this is for?</div>
-        </div>
-      </div>
-
+  <section id="setup" aria-labelledby="setup-h">
+    <h2 id="setup-h">Before you start</h2>
+    <div class="setup-grid">
+      <div><label for="name-a">First person&#39;s name (optional)</label><input id="name-a" type="text" maxlength="24" autocomplete="off" placeholder="Person A"></div>
+      <div><label for="name-b">Second person&#39;s name (optional)</label><input id="name-b" type="text" maxlength="24" autocomplete="off" placeholder="Person B"></div>
+      <div><label for="rel">How you two are connected</label>
+        <select id="rel">
+          <option value="partner">Partners</option>
+          <option value="family">Family</option>
+          <option value="coparent">Co-parents</option>
+          <option value="roommates">Roommates</option>
+          <option value="coworkers">Coworkers</option>
+          <option value="care">Carer and the person they help</option>
+          <option value="friends">Friends</option>
+        </select></div>
     </div>
+    <p class="rel-note" id="rel-note" aria-live="polite"></p>
   </section>
 
-  <section id="person-b">
-    <h2>Person B: Operating Frequencies</h2>
-    <p style="color: var(--ink-soft); font-size: 0.95rem;">The same five areas, from the other person's point of view. If you're doing this alone, skip this section for now and come back when you can both fill it in.</p>
-
-    <div class="domain-grid">
-
-      <div class="frequency-domain">
-        <h3>Money rhythm (financial)</h3>
-        <div class="definition">How often bills, payments, or money decisions get checked, discussed, or revised.</div>
-        <div class="field-group">
-          <label for="b-fin">Your natural financial check-in cycle</label>
-          <input type="text" id="b-fin" placeholder="e.g., Weekly, Every 2 weeks, Monthly" value="">
-          <div class="hint-text">When do you prefer to look at spending, bills, or budget?</div>
-        </div>
-      </div>
-
-      <div class="frequency-domain">
-        <h3>Rest and recovery rhythm (autonomic)</h3>
-        <div class="definition">How often you naturally need a break to reset and settle when you're stressed.</div>
-        <div class="field-group">
-          <label for="b-auto">How often you need a reset</label>
-          <input type="text" id="b-auto" placeholder="e.g., Every 90 seconds, Every few minutes, Every hour" value="">
-          <div class="hint-text">When do you feel you need to unwind, settle down, or step away?</div>
-        </div>
-      </div>
-
-      <div class="frequency-domain">
-        <h3>Decision rhythm</h3>
-        <div class="definition">How often decisions get revisited, revised, or reconsidered before they're treated as final.</div>
-        <div class="field-group">
-          <label for="b-dec">How often do you revisit decisions?</label>
-          <input type="text" id="b-dec" placeholder="e.g., Immediately, After a night's sleep, Weekly review" value="">
-          <div class="hint-text">Do you settle decisions quickly, or do you like to keep revisiting them?</div>
-        </div>
-      </div>
-
-      <div class="frequency-domain">
-        <h3>Talking rhythm (communication)</h3>
-        <div class="definition">How often you like to have check-in conversations and updates, the small talks that keep a relationship running (see WP-13, the 90-second check-in).</div>
-        <div class="field-group">
-          <label for="b-comm">Your preferred check-in rhythm</label>
-          <input type="text" id="b-comm" placeholder="e.g., Daily 90-second pulse, Weekly sit-down, As-needed" value="">
-          <div class="hint-text">How often do you want to sync up with the other person?</div>
-        </div>
-      </div>
-
-      <div class="frequency-domain">
-        <h3>Big-picture rhythm (values)</h3>
-        <div class="definition">How often you like to check that you still agree on values and goals, and that the relationship still matches what you both want.</div>
-        <div class="field-group">
-          <label for="b-phil">How often do you want a big-picture check?</label>
-          <input type="text" id="b-phil" placeholder="e.g., Quarterly, Yearly, Never (implicit)" value="">
-          <div class="hint-text">When do you want to step back and ask: are we still on the same page about what this is for?</div>
-        </div>
-      </div>
-
-    </div>
+  <section id="person-a" aria-labelledby="pa-h">
+    <h2 id="pa-h"><span data-name="a">Person A</span>: your rhythms</h2>
+    <p class="ab-tip">Pick what feels natural to you, not what you think you should want. Under each answer you&#39;ll see what it tends to mean for you.</p>
+    <div class="domain-grid" id="grid-a"></div>
   </section>
 
-  <section id="coherence-deltas">
-    <h2>Where Your Rhythms Differ</h2>
-    <p style="color: var(--ink-soft); font-size: 0.95rem;">The five results below show where your rhythms don't match. Each "delta" is the gap between you, shown as how many times faster one rhythm is than the other. A large gap doesn't mean someone is wrong. It means you're running at different speeds, and that creates friction.</p>
+  <section id="person-b" aria-labelledby="pb-h">
+    <h2 id="pb-h"><span data-name="b">Person B</span>: your rhythms</h2>
+    <p class="ab-tip">The same five areas, from the other person&#39;s side. Doing this alone? Skip this part for now and come back when you can both fill it in.</p>
+    <div class="domain-grid" id="grid-b"></div>
+    <div class="btn-row"><button class="fc-btn" type="button" id="compare">Compare our rhythms</button><button class="fc-btn ghost" type="button" id="clear">Clear all answers</button></div>
+  </section>
+
+  <section id="results" aria-labelledby="res-h">
+    <h2 id="res-h" tabindex="-1">Where your rhythms differ</h2>
+    <p class="sr-only" id="res-status" role="status" aria-live="polite" aria-atomic="true"></p>
+    <p style="color: var(--ink-soft); font-size: 0.95rem;">Each gap is how many steps apart your two answers are on that area&#39;s scale. A big gap doesn&#39;t mean anyone is wrong. It means you&#39;re running at different speeds, and a shared agreement usually closes most of it.</p>
 
     <div class="delta-readout">
-      <h3>Delta Summary</h3>
-
-      <div class="delta-item">
-        <div class="delta-domain-name">Money rhythm</div>
-        <div class="delta-value">
-          <span><span class="person-a" id="delta-fin-display">A: —</span> vs <span class="person-b" id="delta-fin-b-display">B: —</span></span>
-          <span class="delta-num" id="delta-fin-score">—</span>
-        </div>
-        <div class="delta-help" id="delta-fin-help">Fill in both people's rhythms above to see how well they match.</div>
-        <div class="coherence-recommendation" id="delta-fin-rec" style="margin-top: 10px; display: none;">
-          <strong>Why this matters:</strong> You check on money at different rhythms, so one of you may feel surprised by bills while the other feels nagged. <strong>Action:</strong> Agree on one shared money check-in, weekly or monthly, and give bills and scheduling a named owner in the <span class="tool-ref">WP-03</span> RACI Treaty. Set it to whichever rhythm causes the least friction.
-        </div>
-      </div>
-
-      <div class="delta-item">
-        <div class="delta-domain-name">Rest and recovery rhythm</div>
-        <div class="delta-value">
-          <span><span class="person-a" id="delta-auto-display">A: —</span> vs <span class="person-b" id="delta-auto-b-display">B: —</span></span>
-          <span class="delta-num" id="delta-auto-score">—</span>
-        </div>
-        <div class="delta-help" id="delta-auto-help">Fill in both people's rhythms above to see how well they match.</div>
-        <div class="coherence-recommendation" id="delta-auto-rec" style="margin-top: 10px; display: none;">
-          <strong>Why this matters (urgent):</strong> You need breaks at very different rhythms. One of you may need to step away within minutes; the other can keep going for hours. While one resets, the other can feel left mid-conversation. <strong>Start here:</strong> (1) Both complete <span class="tool-ref">WP-02</span> independently. (2) Start <span class="tool-ref">WP-13</span>, the 90-second daily check-in, so small things get said early. (3) Each fill in the Calm-Down Kit (<span class="tool-ref">WP-11</span>), with a signal line that names when you'll be back.
-        </div>
-      </div>
-
-      <div class="delta-item">
-        <div class="delta-domain-name">Decision rhythm</div>
-        <div class="delta-value">
-          <span><span class="person-a" id="delta-dec-display">A: —</span> vs <span class="person-b" id="delta-dec-b-display">B: —</span></span>
-          <span class="delta-num" id="delta-dec-score">—</span>
-        </div>
-        <div class="delta-help" id="delta-dec-help">Fill in both people's rhythms above to see how well they match.</div>
-        <div class="coherence-recommendation" id="delta-dec-rec" style="margin-top: 10px; display: none;">
-          <strong>Why this matters:</strong> One person settles decisions right away; the other naturally keeps revisiting them. This causes conflict because one of you thinks it's "decided" while the other is still "revisiting." <strong>Action:</strong> Use the RACI Treaty (<span class="tool-ref">WP-03</span>) to give each recurring decision one owner, and agree which decisions are final and which get revisited weekly. Use <span class="tool-ref">WP-13</span>'s weekly cycle as your shared time to revisit decisions.
-        </div>
-      </div>
-
-      <div class="delta-item">
-        <div class="delta-domain-name">Talking rhythm</div>
-        <div class="delta-value">
-          <span><span class="person-a" id="delta-comm-display">A: —</span> vs <span class="person-b" id="delta-comm-b-display">B: —</span></span>
-          <span class="delta-num" id="delta-comm-score">—</span>
-        </div>
-        <div class="delta-help" id="delta-comm-help">Fill in both people's rhythms above to see how well they match.</div>
-        <div class="coherence-recommendation" id="delta-comm-rec" style="margin-top: 10px; display: none;">
-          <strong>Why this matters:</strong> You like to check in at very different intervals. One person feels left alone after hours without a check-in; the other feels smothered by daily check-ins. <strong>Action (this week):</strong> Start the 90-second check-in (<span class="tool-ref">WP-13</span>) together. It gives you one shared rhythm: a short daily loop both of you can count on, plus a weekly catch-up for anything bigger.
-        </div>
-      </div>
-
-      <div class="delta-item">
-        <div class="delta-domain-name">Big-picture rhythm</div>
-        <div class="delta-value">
-          <span><span class="person-a" id="delta-phil-display">A: —</span> vs <span class="person-b" id="delta-phil-b-display">B: —</span></span>
-          <span class="delta-num" id="delta-phil-score">—</span>
-        </div>
-        <div class="delta-help" id="delta-phil-help">Fill in both people's rhythms above to see how well they match.</div>
-        <div class="coherence-recommendation" id="delta-phil-rec" style="margin-top: 10px; display: none;">
-          <strong>Why this matters:</strong> One person wants to check in on shared values and goals regularly; the other assumes you're on the same page. Over time, slowly drifting apart on the big picture gets hard to undo. <strong>Action:</strong> Put a quarterly alignment conversation in the calendar, a longer version of the <span class="tool-ref">WP-13</span> weekly resync. Pick one person's natural revisit cycle and make it the shared one. Even "never" + "yearly" can coexist if you lock the "yearly" into the calendar.
-        </div>
-      </div>
-
+      <h3>At a glance</h3>
+      <ul class="gapmap" id="gapmap"></ul>
+      <p id="summary" style="margin:14px 0 0;"></p>
     </div>
 
-    <div style="margin-top: 30px; padding: 20px; background: rgba(168, 121, 47, 0.08); border: 1px solid var(--line); border-radius: var(--radius);">
-      <h3 style="font-size: 1rem; margin: 0 0 16px 0;">Visual Frequency Map</h3>
-      <p style="font-size: 0.9rem; color: var(--ink-soft); margin: 0 0 16px 0;">Once you've entered your rhythms above, this chart shows your gaps. Wider waves mean more static.</p>
-      <canvas id="delta-chart" width="600" height="200" style="width: 100%; height: auto; background: var(--paper); border-radius: var(--radius); border: 0.5px solid var(--line);"></canvas>
-      <p style="font-size: 0.8rem; color: var(--ink-soft); margin: 12px 0 0 0;">Left to right: money, rest and recovery, decisions, talking, big picture. Taller waves mean bigger gaps.</p>
+    <div class="delta-readout" style="margin-top:20px;">
+      <h3>Area by area</h3>
+      <div id="deltas"></div>
     </div>
-
   </section>
 
-  <section id="action-plan">
-    <h2>Your Plan to Get Back in Step</h2>
-    <p style="color: var(--ink-soft); font-size: 0.95rem;">The areas with the tallest waves in the chart above are your main friction points. Work through them in this order: rest and recovery (autonomic) first, since it's most urgent, then talking, then decisions, then money, and finally big-picture values.</p>
+  <section id="action-plan" aria-labelledby="plan-h">
+    <h2 id="plan-h">Your plan to get back in step</h2>
 
     <div class="action-block">
-      <h4>Immediate (This Week)</h4>
+      <h4>This week: one agreement to try</h4>
+      <p id="first-step" style="margin:0 0 10px;">Fill in both sets of rhythms and your first agreement appears here.</p>
+      <h4 style="margin-top:14px;">All your agreements</h4>
+      <ol class="agreements" id="agreements"><li>None yet.</li></ol>
+      <div class="btn-row no-print"><button class="fc-btn" type="button" id="copy-agree">Copy our agreements</button><button class="fc-btn ghost" type="button" onclick="window.print()">Print this plan</button></div>
+      <p class="fc-msg" id="copy-msg" role="status" aria-live="polite"></p>
+    </div>
+
+    <div class="action-block" style="margin-top: 16px;">
+      <h4>This month</h4>
       <ul>
-        <li>Sit down together with both sets of rhythms filled in. Look at the chart above: where are the tallest waves?</li>
-        <li>Start with any mismatch in rest and recovery (the most urgent), and read the suggestion for that area.</li>
-        <li>If the rest-and-recovery gap is above 1.5x, start the <span style="font-family: 'IBM Plex Mono', monospace; font-weight: 600;">WP-13</span> 90-second daily check-in right away. Small, frequent check-ins keep the gap from building.</li>
+        <li>Try one agreement at a time, starting with the biggest gap. Give it two weeks before you judge it.</li>
+        <li><strong>Check-ins:</strong> put the <a href="/workpapers/wp-13-pll-protocol.html">90-second check-in (WP-13)</a> in your calendar. It gives you one shared talking rhythm to hang everything else on.</li>
+        <li><strong>Decisions and money:</strong> use the <a href="/workpapers/wp-03-raci-treaty.html">RACI Treaty (WP-03)</a> to give each recurring decision or bill one named owner, so nobody has to guess whose turn it is.</li>
+        <li><strong>Recovery:</strong> each fill in a <a href="/wp-11.html">Calm-Down Kit (WP-11)</a>, with a line that says when you&#39;ll be back, so a pause never feels like a door closing.</li>
       </ul>
     </div>
 
     <div class="action-block" style="margin-top: 16px;">
-      <h4>This Month</h4>
+      <h4>Every few months</h4>
       <ul>
-        <li>For each medium or large gap (yellow or red in the chart), follow the suggestion above. Each one names the tool that helps bring that rhythm into step.</li>
-        <li><strong>Communicational first:</strong> Put the <span style="font-family: 'IBM Plex Mono', monospace; font-weight: 600;">WP-13</span> 90-second check-in into your calendar. This gives you one shared check-in rhythm.</li>
-        <li><strong>Then decisional:</strong> Use the RACI Treaty (<span style="font-family: 'IBM Plex Mono', monospace; font-weight: 600;">WP-03</span>) to name an owner for each recurring decision, and agree which ones are final and which get revisited.</li>
-        <li><strong>Then financial:</strong> Hold your shared money check-in on the same day each week or month, with bills owned by one named person.</li>
+        <li>Run this check again. Life changes (a new job, a move, the seasons, a new stage of life), and rhythms shift with it. Notice whether your gaps are getting smaller or bigger.</li>
+        <li>If one of you picked &ldquo;rarely&rdquo; for the big picture, put one short big-picture talk in the calendar anyway, so &ldquo;rarely&rdquo; becomes &ldquo;once in a while, on purpose.&rdquo; Agreement you schedule tends to hold better than agreement you assume.</li>
       </ul>
     </div>
-
-    <div class="action-block" style="margin-top: 16px;">
-      <h4>Every Quarter</h4>
-      <ul>
-        <li>Run this check again. Life changes (a new job, illness, the seasons, a new stage of life), and your rhythms may shift. Notice whether your gaps are getting smaller or bigger.</li>
-        <li>If philosophical frequency was "never," put a quarterly alignment conversation in the calendar (a longer <span style="font-family: 'IBM Plex Mono', monospace; font-weight: 600;">WP-13</span> weekly catch-up) so "never" becomes "once a quarter," on purpose. Unspoken agreement drifts. Agreement you schedule holds.</li>
-      </ul>
-    </div>
-
   </section>
   </div>
 
   <p class="disclaimer">
-    <strong>Important:</strong> This is a rule-of-thumb tool based on what you each report, not a tested diagnostic tool. It describes the rhythms you notice, not anything wrong with either person, and not whether you're compatible. Big gaps in rhythm are normal in every kind of relationship. They're not a sign of failure. What matters is whether you both know about them and are willing to build shared habits around them. This tool only works if you each fill it in on your own, then sit down and compare notes with real curiosity.
+    <strong>Important:</strong> This is a rule-of-thumb worksheet based on what you each report, not a tested assessment. It describes the rhythms you notice, not anything wrong with either person, and not whether you&#39;re compatible. Big gaps in rhythm are normal in every kind of relationship. What matters is whether you both know about them and are willing to build a shared habit around them. It works best if you each answer on your own, then compare notes with real curiosity.
   </p>
 
-</div>
+</main>
 
 <script>
 (function(){
-  // All input fields
-  var inputs = {
-    'a-fin': document.getElementById('a-fin'),
-    'b-fin': document.getElementById('b-fin'),
-    'a-auto': document.getElementById('a-auto'),
-    'b-auto': document.getElementById('b-auto'),
-    'a-dec': document.getElementById('a-dec'),
-    'b-dec': document.getElementById('b-dec'),
-    'a-comm': document.getElementById('a-comm'),
-    'b-comm': document.getElementById('b-comm'),
-    'a-phil': document.getElementById('a-phil'),
-    'b-phil': document.getElementById('b-phil')
+  var DOMAINS=[
+    {id:'money', name:'Money rhythm', plain:'How often you like to look at money: bills, spending, shared costs',
+     q:'How often do you like to look at money together?',
+     opts:['Every day or two','About once a week','Every two weeks','About once a month','Every few months','Only when something comes up'], special:5,
+     cad:['every couple of days','once a week','every two weeks','once a month','every few months'],
+     mean:['You like money in close view. Long gaps between looks may leave you uneasy even when nothing is wrong.',
+       'A weekly look suits you. It keeps surprises small without money taking over the week.',
+       'Every couple of weeks, often lined up with paydays, feels about right to you.',
+       'A monthly look is enough for you. Checking more often can feel like fussing.',
+       'You’re comfortable leaving money alone for a while. Frequent money talks may feel like pressure.',
+       'You’d rather deal with money when something needs deciding. A standing money talk may feel like a chore to you.'],
+     why:'When one person checks money far more often than the other, one tends to feel surprised by bills while the other feels nagged. Neither is careless or controlling; you’re looking at different intervals.',
+     tool:'<a href="/workpapers/wp-03-raci-treaty.html">WP-03, the RACI Treaty</a>, gives the bills one named owner.',
+     agree:function(sh){ return 'We’ll look at money together '+sh+', for no more than twenty minutes, and one named person keeps track of the bills in between.'; },
+     agreeSpecial:function(sh){ return 'We’ll keep a short standing money check-in '+sh+', and either of us can call an extra one when something comes up.'; }},
+    {id:'rest', name:'Recovery rhythm', plain:'How long you need to settle after a tense or stressful moment',
+     q:'After a tense moment, how long before you’re ready to talk again?',
+     opts:['A few minutes','About 20 to 30 minutes','An hour or two','Until the next day','A day or more'], special:-1,
+     cad:['a few minutes','half an hour','a couple of hours','the next day','a day or two'],
+     mean:['You settle quickly. You may be ready to talk again while the other person is still catching their breath, and their silence can feel like a door closing.',
+       'You need a short break, about the length of a walk or a cup of tea, before a hard conversation can go well.',
+       'You need a real pause, an hour or two, before you can hear the other side fairly.',
+       'You tend to do your best thinking after a night’s sleep. Being pushed to talk the same evening tends to go badly.',
+       'You need a good stretch of time before a hard topic feels safe to reopen. Being rushed tends to shut you down.'],
+     why:'When one person settles in minutes and the other needs hours, the quick one can feel shut out and keep pushing, while the slower one feels chased. It’s timing, not caring more or less.',
+     tool:'<a href="/wp-11.html">WP-11, the Calm-Down Kit</a>, and the <a href="/check-ins.html#ground">check-in ground rules</a> cover how to pause and come back.',
+     agree:function(sh){ return 'When either of us needs a break, we’ll say ‘I need a pause, and I’ll come back by [time],’ and the other will wait. For us, that’s usually about '+sh+'. Whoever settles first writes their thought down instead of chasing.'; }},
+    {id:'dec', name:'Decision rhythm', plain:'How long before a shared decision feels final to you',
+     q:'How long do you like before a shared decision feels final?',
+     opts:['Decide on the spot','Sleep on it for a night','A few days','A week or more','I like to keep decisions open to change'], special:4,
+     cad:['on the spot','one night','a few days','a week'],
+     mean:['You like to decide and move on. Reopening a settled decision can feel like going backwards.',
+       'You want one night on it. A decision made in the moment may not feel like yours yet.',
+       'You like a few days to turn it over. Being asked for an answer today can feel like pressure.',
+       'You take your time with decisions, and may still be weighing one after others think it’s done.',
+       'You like to keep decisions open as you learn more. “Final” can feel like a trap to you.'],
+     why:'One of you thinks it’s decided while the other is still thinking. That can look like going back on your word, or like being steamrolled, when it’s really two different decision speeds.',
+     tool:'<a href="/workpapers/wp-03-raci-treaty.html">WP-03</a> names who decides what, and <a href="/workpapers/wp-13-pll-protocol.html">WP-13</a>’s weekly catch-up is a good time to revisit.',
+     agree:function(sh){ return 'For decisions that are hard to undo, we’ll give it '+sh+' before calling it final, and we’ll say out loud whether something is ‘decided’ or ‘still thinking.’'; },
+     agreeSpecial:function(sh){ return 'We’ll mark each shared decision as ‘final’ or ‘open until [date],’ so we both know which is which, and give hard-to-undo ones at least '+sh+'.'; }},
+    {id:'talk', name:'Talking rhythm', plain:'How often you like a quick check-in: how are things, what’s coming up',
+     q:'How often do you like a quick check-in with them?',
+     opts:['Several times a day','Once a day','A few times a week','About once a week','Every few weeks','Only when something comes up'], special:5,
+     cad:['a couple of times a day','once a day','a few times a week','once a week','every couple of weeks'],
+     mean:['Frequent small check-ins help you feel connected. A long quiet stretch can start to feel like distance.',
+       'A daily touchpoint suits you. Without it, small things may pile up.',
+       'A few check-ins a week feels right. Daily ones may feel like a lot.',
+       'A weekly catch-up is enough for you. More than that can feel like being checked on.',
+       'You’re happy with occasional catch-ups, and may not notice when a while has gone by.',
+       'You’d rather talk when there’s something to talk about. Scheduled check-ins may feel forced.'],
+     why:'One person feels left alone after a day with no check-in; the other feels crowded by daily ones. Both are reasonable. A small, predictable rhythm you both agree on usually settles it.',
+     tool:'<a href="/workpapers/wp-13-pll-protocol.html">WP-13, the 90-second check-in</a>, is built for exactly this.',
+     agree:function(sh){ var weeklyOrSlower=/^(once a week|every couple of weeks)/.test(sh); return 'We’ll do a short check-in '+sh+': two minutes on how things are and what’s coming up'+(weeklyOrSlower?', with room for anything bigger.':', plus a longer catch-up once a week for anything bigger.'); },
+     agreeSpecial:function(sh){ return 'We’ll keep one short, predictable check-in '+sh+', and either of us can ask for an extra one when something comes up.'; }},
+    {id:'big', name:'Big-picture rhythm', plain:'How often you like to check you still want the same things: goals, plans, how you share the load',
+     q:'How often do you like a big-picture check?',
+     opts:['About once a month','Every few months','Twice a year','Once a year','Rarely: we’ll talk if something changes'], special:4,
+     cad:['once a month','every few months','twice a year','once a year'],
+     mean:['You like to check direction often. Going months without it can leave you wondering whether you’re still on the same page.',
+       'A check every season or so feels right to you.',
+       'A couple of times a year is plenty for you.',
+       'A yearly look back and ahead suits you.',
+       'You assume you’re aligned unless something changes, and frequent “where are we going” talks may feel heavy.'],
+     why:'One person wants to check direction regularly; the other assumes you’re aligned. Small drifts in what you each want are easy to fix early and harder to undo late.',
+     tool:'A longer version of the <a href="/workpapers/wp-13-pll-protocol.html">WP-13</a> weekly catch-up works well for this.',
+     agree:function(sh){ return 'We’ll put a big-picture talk in the calendar '+sh+', with three questions: what’s working, what’s changed, and what we each want next.'; },
+     agreeSpecial:function(sh){ return 'We’ll put one big-picture talk in the calendar '+sh+', and either of us can ask for an extra one if something changes.'; }}
+  ];
+  var REL_NOTE={
+    partner:'',
+    family:'For family, read “money” as shared costs, gifts or help for a relative, and “big picture” as plans for holidays, care or where everyone is headed.',
+    coparent:'For co-parents, read “money” as shared costs for the kids, and “big picture” as the plans you share for them.',
+    roommates:'For roommates, read “money” as rent, bills and shared shopping, and “big picture” as how the household runs and how long the arrangement suits you both.',
+    coworkers:'For coworkers, read “money” as budgets and shared expenses, and “big picture” as team goals and how the work is shared.',
+    care:'In a caring relationship, read “money” as care costs and paperwork, and “big picture” as what care is needed and who else helps.',
+    friends:'For friends, read “money” as shared costs and plans, and “big picture” as what you each want from the friendship.'
   };
 
-  // Delta display and scoring elements
-  var deltas = {
-    'fin': {
-      aDisplay: document.getElementById('delta-fin-display'),
-      bDisplay: document.getElementById('delta-fin-b-display'),
-      score: document.getElementById('delta-fin-score'),
-      help: document.getElementById('delta-fin-help'),
-      rec: document.getElementById('delta-fin-rec')
-    },
-    'auto': {
-      aDisplay: document.getElementById('delta-auto-display'),
-      bDisplay: document.getElementById('delta-auto-b-display'),
-      score: document.getElementById('delta-auto-score'),
-      help: document.getElementById('delta-auto-help'),
-      rec: document.getElementById('delta-auto-rec')
-    },
-    'dec': {
-      aDisplay: document.getElementById('delta-dec-display'),
-      bDisplay: document.getElementById('delta-dec-b-display'),
-      score: document.getElementById('delta-dec-score'),
-      help: document.getElementById('delta-dec-help'),
-      rec: document.getElementById('delta-dec-rec')
-    },
-    'comm': {
-      aDisplay: document.getElementById('delta-comm-display'),
-      bDisplay: document.getElementById('delta-comm-b-display'),
-      score: document.getElementById('delta-comm-score'),
-      help: document.getElementById('delta-comm-help'),
-      rec: document.getElementById('delta-comm-rec')
-    },
-    'phil': {
-      aDisplay: document.getElementById('delta-phil-display'),
-      bDisplay: document.getElementById('delta-phil-b-display'),
-      score: document.getElementById('delta-phil-score'),
-      help: document.getElementById('delta-phil-help'),
-      rec: document.getElementById('delta-phil-rec')
-    }
-  };
+  function $(id){ return document.getElementById(id); }
+  function esc(s){ return String(s).replace(/[&<>"']/g,function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]; }); }
+  function nameA(){ return ($('name-a').value.trim())||'Person A'; }
+  function nameB(){ return ($('name-b').value.trim())||'Person B'; }
 
-  // Map input labels to days for scoring
-  function parseToDays(text) {
-    if (!text || text.trim() === '') return null;
-    text = text.toLowerCase().trim();
-
-    // Match patterns like "90 seconds", "every 2 days", "daily", "weekly", etc.
-    if (text.match(/90\s*seconds?|90s/)) return 0.0625; // 90 sec ≈ 0.0625 days
-    if (text.match(/\beveryday\b|\bdaily\b|every\s*1?\s*day/)) return 1;
-    if (text.match(/\bweekly?\b|every\s*7?\s*days?|once\s*a\s*week/)) return 7;
-    if (text.match(/bi.?weekly|every\s*2\s*weeks?/)) return 14;
-    if (text.match(/monthly|every\s*30?\s*days?|once\s*a\s*month/)) return 30;
-    if (text.match(/quarterly|every\s*3\s*months?/)) return 90;
-    if (text.match(/yearly|annually|once\s*a\s*year/)) return 365;
-    if (text.match(/never|implicit|as.?needed|on.?demand|immediate/)) return 0;
-    if (text.match(/after\s*a\s*night|overnight|next\s*day/)) return 1;
-    if (text.match(/several\s*minutes?|few\s*minutes?|every\s*few\s*minutes?/)) return 0.01; // ~15 min
-    if (text.match(/every\s*hour?|hourly/)) return 0.04; // 1 hour
-    if (text.match(/every\s*\d+\s*hours?/)) {
-      var match = text.match(/every\s*(\d+)\s*hours?/);
-      return parseInt(match[1]) / 24;
-    }
-    if (text.match(/every\s*(\d+)\s*days?/)) {
-      var match = text.match(/every\s*(\d+)\s*days?/);
-      return parseInt(match[1]);
-    }
-
-    // If we can't parse, return null (unknown)
-    return null;
-  }
-
-  function calcDelta(dayA, dayB) {
-    // Returns null if either is unparseable
-    if (dayA === null || dayB === null) return null;
-
-    // If both are "never/implicit/as-needed" (0), delta is 0 (they match)
-    if (dayA === 0 && dayB === 0) return 0;
-
-    // If one is 0 and other isn't, the delta is the non-zero value (maximal mismatch)
-    if (dayA === 0 || dayB === 0) {
-      return Math.max(dayA, dayB);
-    }
-
-    // Otherwise, calculate ratio (higher frequency vs lower frequency)
-    var ratio = Math.max(dayA, dayB) / Math.min(dayA, dayB);
-    return ratio; // Ratio > 1 indicates mismatch
-  }
-
-  function updateDeltas() {
-    // Financial
-    var aFin = parseToDays(inputs['a-fin'].value);
-    var bFin = parseToDays(inputs['b-fin'].value);
-    updateDeltaDisplay('fin', inputs['a-fin'].value, inputs['b-fin'].value, aFin, bFin);
-
-    // Autonomic
-    var aAuto = parseToDays(inputs['a-auto'].value);
-    var bAuto = parseToDays(inputs['b-auto'].value);
-    updateDeltaDisplay('auto', inputs['a-auto'].value, inputs['b-auto'].value, aAuto, bAuto);
-
-    // Decisional
-    var aDec = parseToDays(inputs['a-dec'].value);
-    var bDec = parseToDays(inputs['b-dec'].value);
-    updateDeltaDisplay('dec', inputs['a-dec'].value, inputs['b-dec'].value, aDec, bDec);
-
-    // Communicational
-    var aComm = parseToDays(inputs['a-comm'].value);
-    var bComm = parseToDays(inputs['b-comm'].value);
-    updateDeltaDisplay('comm', inputs['a-comm'].value, inputs['b-comm'].value, aComm, bComm);
-
-    // Philosophical
-    var aPhil = parseToDays(inputs['a-phil'].value);
-    var bPhil = parseToDays(inputs['b-phil'].value);
-    updateDeltaDisplay('phil', inputs['a-phil'].value, inputs['b-phil'].value, aPhil, bPhil);
-  }
-
-  function updateDeltaDisplay(key, aText, bText, aDays, bDays) {
-    var delta = deltas[key];
-
-    // Display what was entered
-    delta.aDisplay.textContent = 'A: ' + (aText || '—');
-    delta.bDisplay.textContent = 'B: ' + (bText || '—');
-
-    // Calculate and display delta
-    var deltaVal = calcDelta(aDays, bDays);
-
-    if (deltaVal === null) {
-      delta.score.textContent = '—';
-      delta.score.className = 'delta-num';
-      delta.help.textContent = 'Fill in both boxes to see how well your rhythms match.';
-      delta.rec.style.display = 'none';
-    } else {
-      // Domain-specific thresholds (they have different urgency profiles)
-      var thresholdGreen = 1.2;
-      var thresholdYellow = 2.0;
-      var thresholdRed = 4.0;
-
-      // Autonomic is more urgent: smaller mismatches create real stress
-      if (key === 'auto') {
-        thresholdGreen = 1.3;
-        thresholdYellow = 1.7;
-        thresholdRed = 2.5;
-      }
-
-      // Communicational has moderate urgency
-      if (key === 'comm') {
-        thresholdGreen = 1.5;
-        thresholdYellow = 2.5;
-        thresholdRed = 4.0;
-      }
-
-      // Philosophical has lowest urgency (long cycles are normal)
-      if (key === 'phil') {
-        thresholdGreen = 2.0;
-        thresholdYellow = 4.0;
-        thresholdRed = 10.0;
-      }
-
-      // Format the delta as a ratio or difference
-      if (deltaVal === 0) {
-        delta.score.textContent = '✓ Perfect sync';
-        delta.score.className = 'delta-num low';
-        delta.help.textContent = 'Your rhythms match. No static here.';
-      } else if (deltaVal <= thresholdGreen) {
-        delta.score.textContent = Math.round(deltaVal * 10) / 10 + 'x';
-        delta.score.className = 'delta-num low';
-        delta.help.textContent = 'Close match. A little drift, easy to manage.';
-      } else if (deltaVal <= thresholdYellow) {
-        delta.score.textContent = Math.round(deltaVal * 10) / 10 + 'x';
-        delta.score.className = 'delta-num med';
-        delta.help.textContent = 'Noticeable gap. You\'re running at different rates, and that can cause friction. See the suggestion below.';
-      } else {
-        delta.score.textContent = Math.round(deltaVal * 10) / 10 + 'x';
-        delta.score.className = 'delta-num high';
-        delta.help.textContent = 'Big gap. This is likely where a lot of the friction comes from. Start with the suggestion below.';
-      }
-
-      delta.rec.style.display = 'block';
-    }
-  }
-
-  // Delta chart rendering
-  var chartCanvas = document.getElementById('delta-chart');
-  var chartCtx = chartCanvas.getContext('2d');
-
-  function renderDeltaChart() {
-    var deltas_arr = [
-      { key: 'fin', label: 'Fin' },
-      { key: 'auto', label: 'Auto' },
-      { key: 'dec', label: 'Dec' },
-      { key: 'comm', label: 'Comm' },
-      { key: 'phil', label: 'Phil' }
-    ];
-
-    // Get current delta values
-    var aFin = parseToDays(inputs['a-fin'].value);
-    var bFin = parseToDays(inputs['b-fin'].value);
-    var deltaFin = calcDelta(aFin, bFin);
-
-    var aAuto = parseToDays(inputs['a-auto'].value);
-    var bAuto = parseToDays(inputs['b-auto'].value);
-    var deltaAuto = calcDelta(aAuto, bAuto);
-
-    var aDec = parseToDays(inputs['a-dec'].value);
-    var bDec = parseToDays(inputs['b-dec'].value);
-    var deltaDec = calcDelta(aDec, bDec);
-
-    var aComm = parseToDays(inputs['a-comm'].value);
-    var bComm = parseToDays(inputs['b-comm'].value);
-    var deltaComm = calcDelta(aComm, bComm);
-
-    var aPhil = parseToDays(inputs['a-phil'].value);
-    var bPhil = parseToDays(inputs['b-phil'].value);
-    var deltaPhil = calcDelta(aPhil, bPhil);
-
-    var delta_values = [deltaFin, deltaAuto, deltaDec, deltaComm, deltaPhil];
-
-    // Clear canvas
-    chartCtx.fillStyle = 'var(--paper)';
-    chartCtx.fillRect(0, 0, chartCanvas.width, chartCanvas.height);
-
-    // Draw waveforms for each domain
-    var barWidth = chartCanvas.width / (deltas_arr.length * 2);
-    var centerY = chartCanvas.height / 2;
-    var maxHeight = chartCanvas.height * 0.35;
-
-    for (var i = 0; i < deltas_arr.length; i++) {
-      var deltaVal = delta_values[i];
-      if (deltaVal === null || deltaVal === 0) continue;
-
-      var x = (i * 2.5 + 1) * barWidth;
-      var waveHeight = Math.min(deltaVal * 8, maxHeight); // Scale delta to visual height
-      
-      // Determine color based on delta magnitude
-      var color = 'var(--brass)'; // medium
-      if (deltaVal < 1.3 && deltas_arr[i].key !== 'auto') color = 'var(--credit)'; // low
-      if (deltaVal > 3 || (deltas_arr[i].key === 'auto' && deltaVal > 2)) color = 'var(--warning)'; // high
-
-      // Draw oscillation pattern (sine wave showing beat frequency)
-      chartCtx.strokeStyle = color;
-      chartCtx.lineWidth = 2;
-      chartCtx.beginPath();
-      
-      for (var px = 0; px < barWidth * 1.5; px += 2) {
-        var angle = (px / (barWidth * 1.5)) * Math.PI * 2;
-        var yOffset = Math.sin(angle) * waveHeight;
-        var pixelY = centerY - yOffset;
-        
-        if (px === 0) {
-          chartCtx.moveTo(x + px, pixelY);
-        } else {
-          chartCtx.lineTo(x + px, pixelY);
-        }
-      }
-      chartCtx.stroke();
-
-      // Label
-      chartCtx.font = '11px IBM Plex Mono';
-      chartCtx.fillStyle = 'var(--ink)';
-      chartCtx.textAlign = 'center';
-      chartCtx.fillText(deltas_arr[i].label, x + barWidth * 0.75, chartCanvas.height - 8);
-
-      // Delta value above
-      chartCtx.font = '9px IBM Plex Mono';
-      chartCtx.fillStyle = color;
-      chartCtx.fillText((Math.round(deltaVal * 10) / 10) + 'x', x + barWidth * 0.75, 12);
-    }
-  }
-
-  // Attach input listeners
-  Object.keys(inputs).forEach(function(key) {
-    inputs[key].addEventListener('input', function() {
-      updateDeltas();
-      renderDeltaChart();
+  // Build the two sets of questions.
+  ['a','b'].forEach(function(who){
+    var grid=$('grid-'+who);
+    DOMAINS.forEach(function(d){
+      var fs=document.createElement('fieldset'); fs.className='frequency-domain';
+      var sid=who+'-'+d.id;
+      fs.innerHTML='<legend>'+esc(d.name)+'</legend>'+
+        '<div class="definition" id="'+sid+'-def">'+esc(d.plain)+'.</div>'+
+        '<div class="field-group"><label for="'+sid+'">'+esc(d.q)+'</label>'+
+        '<select id="'+sid+'" aria-describedby="'+sid+'-def"><option value="">Choose one…</option>'+
+        d.opts.map(function(o,i){ return '<option value="'+i+'">'+esc(o)+'</option>'; }).join('')+'</select></div>'+
+        '<p class="mean" id="'+sid+'-mean" aria-live="polite"></p>';
+      grid.appendChild(fs);
     });
   });
 
-  // Initial render
-  updateDeltas();
-  renderDeltaChart();
+  function val(who,d){ var v=$(who+'-'+d.id).value; return v===''?null:+v; }
+  function isSpecial(d,v){ return v!==null && v===d.special; }
+
+  // Compare two answers. Returns {kind, steps, label, cls, score}
+  function gap(d,a,b){
+    if(a===null||b===null) return null;
+    var sa=isSpecial(d,a), sb=isSpecial(d,b);
+    if(sa&&sb) return {kind:'same',steps:0,label:'In step',cls:'low',score:0};
+    if(sa||sb) return {kind:'style',steps:null,label:'Different styles',cls:'med',score:2};
+    var s=Math.abs(a-b);
+    if(s===0) return {kind:'same',steps:0,label:'In step',cls:'low',score:0};
+    if(s===1) return {kind:'close',steps:1,label:'Close: 1 step apart',cls:'low',score:1};
+    if(s===2) return {kind:'gap',steps:2,label:'Noticeable gap: 2 steps apart',cls:'med',score:2};
+    return {kind:'big',steps:s,label:'Big gap: '+s+' steps apart',cls:'high',score:s};
+  }
+
+  // A shared setting both can live with.
+  function shared(d,a,b){
+    var sa=isSpecial(d,a), sb=isSpecial(d,b), n=d.cad.length;
+    if(d.id==='rest') return d.cad[Math.max(a,b)];               // wait for the slower settler
+    if(d.id==='dec'){ var x=sa?b:sb?a:Math.max(a,b); if(sa&&sb) x=1; return d.cad[Math.min(x,n-1)]; }
+    if(sa&&sb) return d.cad[n-1];
+    if(sa||sb){ var sched=sa?b:a; return d.cad[Math.min(sched+1,n-1)]; }   // ease the scheduled rhythm one step
+    return d.cad[Math.floor((a+b)/2)];                          // meet in the middle
+  }
+  function agreement(d,a,b){
+    var sh=shared(d,a,b);
+    if((isSpecial(d,a)||isSpecial(d,b)) && d.agreeSpecial) return d.agreeSpecial(sh);
+    return d.agree(sh);
+  }
+
+  function track(d,a,b){
+    var n=d.opts.length-(d.special>=0?1:0);
+    function pos(v){ return n<=1?50:(v/(n-1))*100; }
+    if(isSpecial(d,a)||isSpecial(d,b)) return '';
+    var same=a===b;
+    return '<div class="track" aria-hidden="true"><span class="pt pa'+(same?' same':'')+'" style="left:'+pos(a)+'%">A</span><span class="pt pb" style="left:'+pos(b)+'%;'+(same?'margin-top:-11px;margin-left:-2px;':'')+'">B</span></div>'+
+      '<div class="track-ends" aria-hidden="true"><span>'+esc(d.opts[0])+'</span><span>'+esc(d.opts[n-1])+'</span></div>';
+  }
+
+  var lastStatus='';
+  function update(){
+    var A=nameA(), B=nameB();
+    document.querySelectorAll('[data-name="a"]').forEach(function(s){ s.textContent=A; });
+    document.querySelectorAll('[data-name="b"]').forEach(function(s){ s.textContent=B; });
+    $('rel-note').textContent=REL_NOTE[$('rel').value]||'';
+
+    var rows=[], cards=[], agrees=[], counts={same:0,close:0,gap:0,big:0,style:0}, filledBoth=0, filledA=0;
+    DOMAINS.forEach(function(d){
+      var a=val('a',d), b=val('b',d);
+      $('a-'+d.id+'-mean').textContent=a===null?'':'What this means for you: '+d.mean[a];
+      $('b-'+d.id+'-mean').textContent=b===null?'':'What this means for you: '+d.mean[b];
+      if(a!==null) filledA++;
+      var g=gap(d,a,b);
+      var html='<div class="delta-item"><div class="delta-domain-name">'+esc(d.name)+'</div>'+
+        '<div class="delta-value"><span><span class="person-a">'+esc(A)+': '+(a===null?'—':esc(d.opts[a]))+'</span> &middot; <span class="person-b">'+esc(B)+': '+(b===null?'—':esc(d.opts[b]))+'</span></span>'+
+        '<span class="delta-num '+(g?g.cls:'')+'">'+(g?esc(g.label):'—')+'</span></div>';
+      if(!g){
+        html+='<div class="delta-help">'+(a!==null&&b===null?'<p><strong>For '+esc(A)+':</strong> '+esc(d.mean[a])+'</p><p>Waiting for '+esc(B)+'’s answer to compare.</p>':'Fill in both people’s answers to see how well this rhythm matches.')+'</div></div>';
+        cards.push(html); rows.push({d:d,g:null}); return;
+      }
+      filledBoth++; counts[g.kind]++;
+      var ag=agreement(d,a,b);
+      html+=track(d,a,b)+
+        '<div class="delta-help"><p><strong>For '+esc(A)+':</strong> '+esc(d.mean[a])+'</p><p><strong>For '+esc(B)+':</strong> '+esc(d.mean[b])+'</p></div>'+
+        '<div class="coherence-recommendation" style="margin-top:10px;">'+
+        (g.kind==='same'?'<p><strong>In step.</strong> You already run this rhythm at the same pace. Say so out loud; it’s worth knowing what works.</p>':
+         '<p><strong>Why the gap matters:</strong> '+esc(d.why)+'</p>')+
+        (g.kind==='same'?'':'<p><strong>One agreement to try:</strong> <span class="agree-line">“'+esc(ag)+'”</span></p>')+
+        '<p><strong>Helps:</strong> '+d.tool+'</p></div></div>';
+      cards.push(html); rows.push({d:d,g:g,ag:ag});
+      if(g.kind!=='same') agrees.push({d:d,g:g,ag:ag});
+    });
+
+    // Gap map
+    $('gapmap').innerHTML=rows.map(function(r){
+      var w=r.g?Math.min(100,r.g.score*25):0, col=r.g?(r.g.cls==='high'?'#96412B':r.g.cls==='med'?'#7A5620':'#3E6B4C'):'transparent';
+      return '<li><span>'+esc(r.d.name)+'</span><span class="gm-bar" aria-hidden="true"><i style="width:'+(r.g&&r.g.score===0?4:w)+'%;background:'+col+'"></i></span><span class="gm-lab">'+(r.g?esc(r.g.label):'not filled in')+'</span></li>';
+    }).join('');
+    $('deltas').innerHTML=cards.join('');
+
+    agrees.sort(function(x,y){ return y.g.score-x.g.score; });
+    var summary;
+    if(!filledBoth) summary=filledA?'You’ve filled in your side. Read what each rhythm means for you above, then hand it over to '+esc(B)+'.':'Nothing to compare yet. Start with the first person’s rhythms.';
+    else summary=filledBoth+' of 5 areas compared: '+counts.same+' in step, '+counts.close+' close, '+(counts.gap+counts.style)+' with a noticeable gap, '+counts.big+' with a big gap.'+(agrees.length?' Start with '+agrees[0].d.name.toLowerCase()+'.':' You’re well in step. Keep doing what you’re doing.');
+    $('summary').innerHTML=summary;
+
+    $('first-step').innerHTML=agrees.length?'<strong>'+esc(agrees[0].d.name)+'</strong> has your biggest gap. Try this for two weeks: <span class="agree-line">“'+esc(agrees[0].ag)+'”</span>':(filledBoth?'No gaps to close. Pick one rhythm you both value and say out loud that it works.':'Fill in both sets of rhythms and your first agreement appears here.');
+    $('agreements').innerHTML=agrees.length?agrees.map(function(x){ return '<li><strong>'+esc(x.d.name)+'</strong> ('+esc(x.g.label.toLowerCase())+')<br>“'+esc(x.ag)+'”</li>'; }).join(''):'<li>None yet.</li>';
+
+    var st=filledBoth?summary.replace(/<[^>]+>/g,''):'';
+    if(st!==lastStatus){ lastStatus=st; clearTimeout(update.t); update.t=setTimeout(function(){ $('res-status').textContent=st; },600); }
+    update.agrees=agrees;
+  }
+
+  function copyText(t){
+    function ok(){ $('copy-msg').textContent='Agreements copied.'; }
+    function fb(){
+      try{ var ta=document.createElement('textarea'); ta.value=t; ta.setAttribute('readonly',''); ta.style.position='fixed'; ta.style.top='-1000px'; document.body.appendChild(ta); ta.select(); var r=document.execCommand('copy'); document.body.removeChild(ta); $('copy-msg').textContent=r?'Agreements copied.':'Copying isn’t available here. Use Print instead.'; }
+      catch(e){ $('copy-msg').textContent='Copying isn’t available here. Use Print instead.'; }
+    }
+    if(navigator.clipboard&&navigator.clipboard.writeText) navigator.clipboard.writeText(t).then(ok,fb); else fb();
+  }
+  $('copy-agree').addEventListener('click', function(){
+    var ag=update.agrees||[];
+    if(!ag.length){ $('copy-msg').textContent='Fill in both sets of rhythms first. Agreements appear where your rhythms differ.'; return; }
+    var t='Our rhythm agreements ('+nameA()+' and '+nameB()+')\n\n'+ag.map(function(x,i){ return (i+1)+'. '+x.d.name+': '+x.ag; }).join('\n')+'\n\nTry one at a time, for two weeks each. From Frequency Calibration, The Objective Ledger.';
+    copyText(t);
+  });
+  $('compare').addEventListener('click', function(){
+    update(); var h=$('res-h'); h.focus({preventScroll:true});
+    h.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'start'});
+  });
+  var clearArm=null;
+  $('clear').addEventListener('click', function(){
+    var b=$('clear');
+    if(!clearArm){ b.textContent='Tap again to clear'; clearArm=setTimeout(function(){ clearArm=null; b.textContent='Clear all answers'; },4000); return; }
+    clearTimeout(clearArm); clearArm=null; b.textContent='Clear all answers';
+    document.querySelectorAll('.locked-section select:not(#rel)').forEach(function(s){ s.value=''; });
+    $('name-a').value=''; $('name-b').value=''; $('copy-msg').textContent='';
+    update(); $('res-status').textContent='All answers cleared.'; $('a-money').focus();
+  });
+
+  document.querySelector('.locked-section').addEventListener('input', update);
+  document.querySelector('.locked-section').addEventListener('change', update);
+  update();
 })();
 </script>
-
-
 
 </body>
 </html>

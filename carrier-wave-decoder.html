@@ -320,6 +320,21 @@ textarea{width:100%;min-height:90px;margin-top:6px;border:1px solid var(--line);
 .sevguide dd{margin:0}
 @media (max-width:560px){.sevguide dl{grid-template-columns:1fr;gap:2px}.sevguide dd{margin-bottom:8px}}
 .play:disabled,.ghost:disabled{opacity:.45;cursor:not-allowed}
+/* Touch targets and small-screen tabs */
+.tab,.play,.ghost,.seg button,.opts button,.pbtn,.intent button,.sb-steps li button,.st,.scn,.choice,.sev button,.field input,.settle input,#fwork select,#fwork input[type=text],#fwork input[type=date]{min-height:44px}
+.hint button,.sb-top button,.sb-hint button,.tc-head button{min-height:32px;padding:4px 2px}
+@media (max-width:700px){.tabs{flex-wrap:wrap;overflow-x:visible;gap:2px 4px}.tab{padding:8px 10px;font-size:.92rem}}
+.sr-only{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
+.consent{border:1.5px solid var(--line);background:var(--sheet);border-radius:var(--radius);padding:12px 16px;margin:0 0 18px;display:grid;gap:8px;font-size:.93rem}
+.consent p{margin:0;max-width:75ch}
+.examples{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0 0}
+.ex-note{font-size:.92rem;margin:10px 0 0;padding:10px 14px;border-left:3px solid var(--b);background:var(--sheet);border-radius:0 var(--radius) var(--radius) 0;max-width:68ch}
+.ex-note:empty{display:none}
+.decprog{font-family:var(--mono);font-size:.8rem;color:var(--muted);margin:0}
+.dec > div:first-child,#chans{background:var(--sheet);border:1px solid var(--line);border-radius:var(--radius);padding:14px 16px}
+#chans .chan:last-child{border-bottom:0;padding-bottom:0}
+.tgrid > div:first-child,[data-panel="journal"] > div{background:var(--sheet);border:1px solid var(--line);border-radius:var(--radius);padding:14px 16px}
+.st .tech{display:block;font-family:var(--mono);font-size:.66rem;color:var(--muted);margin-top:2px}
 @media print{
   body{background:#fff}
   .sitebar,header,.scope,.readout,.tabs,.sessbar,.note,.sitefoot,[data-panel]:not([data-panel="close"]){display:none!important}
@@ -327,7 +342,6 @@ textarea{width:100%;min-height:90px;margin-top:6px;border:1px solid var(--line);
   [data-panel="close"]{display:block!important}
   .wrap{padding:0;max-width:none}
   #printout{box-shadow:none;background:#fff;padding:0 6mm}
-}
 }
 @media (prefers-reduced-motion:reduce){.bar i,.script li,.orb{transition:none!important}}
 </style>
@@ -367,6 +381,7 @@ textarea{width:100%;min-height:90px;margin-top:6px;border:1px solid var(--line);
     <button class="tab" role="tab" data-tab="learn" aria-selected="false">Learn</button>
   </div>
 
+  <div class="consent" id="consent" role="region" aria-label="Saving on this device"></div>
   <div class="sessbar" id="sessbar" hidden></div>
 
   <!-- START -->
@@ -391,11 +406,11 @@ textarea{width:100%;min-height:90px;margin-top:6px;border:1px solid var(--line);
         <h3 id="title"></h3>
         <p class="setup" id="setup"></p>
         <div class="states" role="group" aria-label="Your state right now">
-          <button class="st" data-s="v" aria-pressed="true"><span class="n">Ventral</span><span class="h">Calm and connected</span></button>
-          <button class="st" data-s="s" aria-pressed="false"><span class="n">Sympathetic</span><span class="h">Revved up, braced</span></button>
-          <button class="st" data-s="d" aria-pressed="false"><span class="n">Dorsal</span><span class="h">Shut down, far away</span></button>
+          <button class="st" data-s="v" aria-pressed="true"><span class="n">Steady</span><span class="h">Calm and connected</span><span class="tech" aria-hidden="true">(&ldquo;ventral&rdquo;)</span></button>
+          <button class="st" data-s="s" aria-pressed="false"><span class="n">Revved up</span><span class="h">Keyed up, braced</span><span class="tech" aria-hidden="true">(&ldquo;sympathetic&rdquo;)</span></button>
+          <button class="st" data-s="d" aria-pressed="false"><span class="n">Shut down</span><span class="h">Flat, far away</span><span class="tech" aria-hidden="true">(&ldquo;dorsal&rdquo;)</span></button>
         </div>
-        <p class="hint">Pick the state that feels closest to how you are right now. Not sure? <button data-go="check">Check your state</button>.</p>
+        <p class="hint">Pick the state that feels closest to how you are right now. Not sure? <button data-go="check">Check your state</button>. The small labels in brackets come from polyvagal theory, a popular but debated model; here they&#39;re only names, not measurements.</p>
         <div class="controls">
           <button class="play" id="play">Play</button>
           <button class="ghost" id="voice" aria-pressed="true">Voice on</button>
@@ -418,9 +433,18 @@ textarea{width:100%;min-height:90px;margin-top:6px;border:1px solid var(--line);
     <div class="dec">
       <div>
         <h3>What was out of sync?</h3>
-        <p class="hint" style="margin:0">Think of one recent moment that started to squeal. For each channel, mark where you were and your best guess at where they were.</p>
+        <p class="hint" style="margin:0">Think of one recent moment that started to squeal, with anyone: a partner, family, a co-parent, a roommate, a coworker, a friend. For each of the three channels, tap where <b>you</b> were, then your best guess at where <b>they</b> were. <b>Pace</b> is how fast you were talking and expecting replies. <b>Tone</b> is what sat underneath the words. <b>Timing</b> is how soon it needed to happen.</p>
+        <p class="lab" style="margin:14px 0 0">Not sure how it works? Load a worked example:</p>
+        <div class="examples" role="group" aria-label="Worked examples">
+          <button class="ghost" type="button" data-ex="0">Roommates: &ldquo;when you get a chance&rdquo;</button>
+          <button class="ghost" type="button" data-ex="1">Coworkers: the fast meeting</button>
+          <button class="ghost" type="button" data-ex="2">Co-parents: the pickup text</button>
+        </div>
+        <p class="ex-note" id="exnote"></p>
       </div>
       <div id="chans"></div>
+      <p class="decprog" id="decprog" aria-hidden="true"></p>
+      <p class="sr-only" id="decstatus" role="status" aria-live="polite" aria-atomic="true"></p>
       <div class="panel dec" style="gap:14px">
         <p class="verdict" id="verdict">In tune</p>
         <ul class="reads" id="reads"></ul>
@@ -435,6 +459,7 @@ textarea{width:100%;min-height:90px;margin-top:6px;border:1px solid var(--line);
         <div class="row">
           <button class="play" id="decsave">Save to journal</button>
           <button class="ghost" id="deccopy">Copy the sentence</button>
+          <button class="ghost" id="decall">Copy the whole reading</button>
           <button class="ghost" id="decreset">Start over</button>
         </div>
       </div>
@@ -572,7 +597,7 @@ textarea{width:100%;min-height:90px;margin-top:6px;border:1px solid var(--line);
   <section data-panel="journal" role="tabpanel" hidden>
     <div style="max-width:760px">
       <h3>Your journal</h3>
-      <p class="hint">Notes from your practices and moments you've decoded. Everything stays in this browser on this device, so anyone else who uses this browser can see it too.</p>
+      <p class="hint">Notes from your practices and moments you've decoded. When saving is on, everything stays in this browser on this device (never on a server), so anyone else who uses this browser can see it too. Turn saving on or off in the box near the top of the page.</p>
       <ul class="entries" id="entries"></ul>
       <div class="row" style="margin-top:24px"><button class="ghost" id="wipe">Clear all my data</button></div>
     </div>
@@ -590,7 +615,7 @@ textarea{width:100%;min-height:90px;margin-top:6px;border:1px solid var(--line);
     <a href="podcast-index.html">Podcast</a>
     <a href="suite-index.html">Suite Index</a>
     <a href="program-overview.html">Program Overview</a>
-    <a href="telemetry.html">Telemetry</a>
+    <a href="telemetry.html">Rollout status</a>
     <a href="snapshot/">Snapshot</a>
     <a href="do/">Try It</a>
     <a href="architecture/">Architecture</a>
@@ -602,31 +627,31 @@ textarea{width:100%;min-height:90px;margin-top:6px;border:1px solid var(--line);
 
 <script>
 const P="~";
-const SN={v:"Ventral",s:"Sympathetic",d:"Dorsal"};
+const SN={v:"Steady",s:"Revved up",d:"Shut down"};
 const RATE={v:.95,s:.86,d:.88}, PAUSE={v:2200,s:3000,d:3400};
 
 const SCEN=[
- {id:"chance",title:"“When you get a chance”",channel:"Urgency",
+ {id:"chance",title:"“When you get a chance”",channel:"Timing",
   setup:"You asked for something “when you get a chance.” Three hours later it hasn't happened, and you can feel the squeal starting.",
   v:["You're steady right now. That makes this a good time to tune, not to argue.",P,"Notice the phrase you used: when you get a chance. To you, it may have meant today, before dinner.","To the person you said it to, it may have meant sometime this week.","Neither window is wrong. They just weren't on the same frequency.",P,"Try saying the window out loud. Something like: I realize I didn't say when. Could this happen before six?",P,"Then listen for their window. If the two don't match, you've found the real conversation. It's a scheduling question, not a character question."],
-  s:["Your body is mobilized. You might feel heat, speed, a readiness to make a point.","Before anything else, slow your exhale. Longer out than in. Do that three times.",P,"The story forming right now may sound like: they never listen. Set that story down for a moment. You can pick it back up later if it still fits.","What's true is smaller: a window wasn't named.",P,"When your voice feels a little slower, try one sentence. I didn't say when I needed it. Can we pick a time?","Keep it short. Mobilized voices get long."],
+  s:["You're revved up. You might feel heat, speed, a readiness to make a point.","Before anything else, slow your exhale. Longer out than in. Do that three times.",P,"The story forming right now may sound like: they never listen. Set that story down for a moment. You can pick it back up later if it still fits.","What's true is smaller: a window wasn't named.",P,"When your voice feels a little slower, try one sentence. I didn't say when I needed it. Can we pick a time?","Keep it short. Revved-up sentences get long."],
   d:["You may feel flat, far away, or like it isn't worth bringing up.","That's okay. We're not going to fix anything yet.",P,"Feel your feet. Press them gently into the floor. Look around and find three things that are blue.",P,"When a little more of you is here, notice one thing you'd like. Maybe just that the task happens today.","You don't have to say it now. You could write it down, or say: can we talk about this later tonight?","Naming that you'll come back to it counts. It keeps the item on the shared books."]},
- {id:"status",title:"The status update",channel:"Register",
+ {id:"status",title:"The status update",channel:"Tone",
   setup:"You said “the trash is still full,” meaning it as information. It landed as an accusation. Or you were the one who heard it that way.",
-  v:["You're settled enough to hear two things at once. Let's use that.","A sentence carries a fact and a tone. The trash is still full is the fact. The register is what the other person heard underneath it.",P,"If you said it, you might add the part you meant: I'm not upset, I'm flagging it so we can decide who takes it.","If you heard it, you might ask: is that a heads up, or are you frustrated?",P,"Either question lets the other person retune without losing face."],
-  s:["Something in you is braced. Maybe it felt like being caught.","Let your shoulders drop an inch. Unclench your jaw. Exhale slowly.",P,"Mobilized ears hear criticism in almost everything. That's your body doing its job, not proof about the other person.","Treat the sentence as data for a moment. The trash is full. That's all the words actually said.",P,"If you need to respond, try: that landed hard for me. Did you mean it as a heads up?","Asking is slower than defending, and slower is what you need right now."],
-  d:["You might want to disappear from this conversation. That's the shutdown response, trying to protect you.",P,"Let's come back just a little. Wiggle your fingers. Take one breath that's slightly deeper than the last.",P,"You don't have to decide what the sentence meant. You only have to notice that it stung.","If you can, say something small and true: I need a minute, then let's figure out who takes it.","A minute is allowed. Leaving and coming back is different from leaving."]},
+  v:["You're settled enough to hear two things at once. Let's use that.","A sentence carries a fact and a tone. The trash is still full is the fact. The tone is what the other person heard underneath it.",P,"If you said it, you might add the part you meant: I'm not upset, I'm flagging it so we can decide who takes it.","If you heard it, you might ask: is that a heads up, or are you frustrated?",P,"Either question lets the other person retune without losing face."],
+  s:["Something in you is braced. Maybe it felt like being caught.","Let your shoulders drop an inch. Unclench your jaw. Exhale slowly.",P,"When you're revved up, almost anything can sound like criticism. That's the state talking, not proof about the other person.","Treat the sentence as data for a moment. The trash is full. That's all the words actually said.",P,"If you need to respond, try: that landed hard for me. Did you mean it as a heads up?","Asking is slower than defending, and slower is what you need right now."],
+  d:["You might want to disappear from this conversation. That's a common reaction when something stings.",P,"Let's come back just a little. Wiggle your fingers. Take one breath that's slightly deeper than the last.",P,"You don't have to decide what the sentence meant. You only have to notice that it stung.","If you can, say something small and true: I need a minute, then let's figure out who takes it.","A minute is allowed. Leaving and coming back is different from leaving."]},
  {id:"pause",title:"The long pause",channel:"Pace",
   setup:"You asked a question and they went quiet to think. Or you're the quiet one, and the other person is reading your silence as stonewalling.",
   v:["You have room right now to notice pace.","Some people answer while they think. Others think, then answer. Neither is avoidance by default.",P,"If you're the one pausing, narrate it: I'm thinking, give me a second. Five words that change how the silence reads.","If you're the one waiting, count slowly to ten before filling the gap.",P,"Later, at a calm time, talk about pace directly. How long do you usually need? What does a pause feel like from your side?"],
-  s:["The silence may feel unbearable. Your body might read it as rejection, or as a door closing.","Put a hand on your chest or stomach. Breathe into it, and let the exhale be long.",P,"Mobilized people speed up and read pauses as stonewalling. Your clock is running faster than theirs right now.",P,"Try saying: I'll wait. Take your time. Then actually wait.","If waiting is too hard, say that instead: I'm getting anxious in the quiet. Can you tell me you're thinking?"],
+  s:["The silence may feel unbearable. Your body might read it as rejection, or as a door closing.","Put a hand on your chest or stomach. Breathe into it, and let the exhale be long.",P,"When you're revved up, you tend to speed up and read pauses as stonewalling. Your clock is running faster than theirs right now.",P,"Try saying: I'll wait. Take your time. Then actually wait.","If waiting is too hard, say that instead: I'm getting anxious in the quiet. Can you tell me you're thinking?"],
   d:["You may be the one who's gone quiet, and it may not feel like thinking. It may feel blank.","That's okay. Blank is a state, not a choice you're making to hurt anyone.",P,"Look for the edges of the room. Notice where the light is coming from.",P,"If words are hard, a gesture can carry the signal. A nod. A raised hand that means: not yet.","When you can, a short sentence helps: I'm shut down, not ignoring you. I'll come back to this.","That keeps the channel open even while you're off the air."]},
  {id:"reminder",title:"The invisible reminder",channel:"Unseen work",
   setup:"You're the one who remembered the dentist appointment, the birthday card, the milk. Again. And nobody noticed.",
   v:["You're steady, so this is a good time to make the invisible visible without turning it into a verdict.","Remembering is work. Tracking something three weeks out is work. It doesn't show up anywhere unless someone writes it down.",P,"Try adding it to the shared register. Not as a complaint, as a line item: household calendar, about an hour a week.",P,"Then invite the other person in: I've been carrying this. Should it stay with me, or move?","The goal isn't a thank you. It's shared books."],
   s:["Resentment might be humming. It often builds quietly, then arrives all at once.","Before you speak, breathe out slowly. Twice.",P,"Notice the difference between: you never remember anything, and: I've been remembering everything, and I'm tired.","The first starts a trial. The second starts a conversation.",P,"Pick one item, just one, to hand over this week. Name it specifically: can you own the dentist appointments from now on?"],
   d:["Maybe it feels like there's no point. Nobody will notice anyway.","That heaviness is real. Let's not argue with it.",P,"Lift your gaze a little. Let your eyes rest on something far away, a window or a doorway.",P,"Here's one small action: write down one thing you carried this week. Just one line.","You don't have to show anyone yet. Writing it down is the first entry on the books, and it counts."]},
- {id:"late",title:"Running late",channel:"Urgency",
+ {id:"late",title:"Running late",channel:"Timing",
   setup:"Plans changed at the last minute. A text arrived: running late. Dinner is cooling, or you're the one stuck in traffic, knowing it'll be a thing.",
   v:["You're steady, which means you can hold two things at once: the plan changed, and nobody did it at you.",P,"If you're waiting, what's the actual cost? Cold food? A missed start time? Name the specific thing.","If you're the one who's late, give a real number, not soon. Twenty minutes is easier to live with than a question mark.",P,"Later, when things are calm, you might agree on a shared rule: a heads up by a set time, with a real estimate."],
   s:["Your body might be pacing, even if you're sitting still.","Plant your feet. Breathe out long. Let your hands open.",P,"Urgency spreads. If you're both in a hurry, you'll both hear blame.","When the two of you are in the same room, start with arrival, not the ledger: hi, I'm glad you're here. Give it two minutes.",P,"Then name the cost plainly: I was hungry and the timing threw me off. That's information, not an indictment."],
@@ -635,17 +660,22 @@ const SCEN=[
   setup:"You're telling them about your day and their eyes are on a phone. Or you're the one scrolling, and you can feel the air change.",
   v:["You're steady, so you can treat this as a signal problem, not a love problem.",P,"Divided attention sounds like disinterest, even when it isn't.","If you're the one talking, ask for the channel directly: can I have you for two minutes? This matters to me.","If you're the one on the screen, put it face down and say so: okay, I'm here now.",P,"Later, it may help to agree on a small signal that means: I need your full attention."],
   s:["You may feel a spike of hurt or irritation. That's your body noticing a disconnection.","Exhale slowly. Let your voice come back down before you use it.",P,"The quick story might be: they don't care. A slower one might be: they're somewhere else right now.",P,"Try: I'm noticing I don't have your attention, and I want it. Is now a bad time?","That gives them a real choice, instead of a test."],
-  d:["Maybe you've just stopped talking, trailing off mid-sentence.","That makes sense. It's the body saying: no one's receiving.",P,"Bring yourself back first. Notice your hands. Notice the sound furthest away from you.",P,"When you can, one sentence is enough: I stopped because I didn't feel heard. Can I try again later?","Coming back to finish the story is a repair, even if it happens tomorrow."]},
- {id:"correct",title:"The helpful correction",channel:"Register",
+  d:["Maybe you've just stopped talking, trailing off mid-sentence.","That makes sense. It can feel like no one's receiving.",P,"Bring yourself back first. Notice your hands. Notice the sound furthest away from you.",P,"When you can, one sentence is enough: I stopped because I didn't feel heard. Can I try again later?","Coming back to finish the story is a repair, even if it happens tomorrow."]},
+ {id:"correct",title:"The helpful correction",channel:"Tone",
   setup:"“That's not how you load the dishwasher.” Meant as a tip. Landed as a grade.",
   v:["You're steady, so this is a good moment to look at what corrections carry.","A correction carries information, and it can also carry a ranking: my way, your mistake.",P,"If you gave the correction, ask whether the difference actually matters. Sometimes it does. Often it's preference.","If it matters, frame it as a shared problem: the bowls keep coming out dirty on the top rack. Any ideas?",P,"If you received it, you can ask: is this a must, or a preference? Both answers are useful."],
-  s:["You might feel judged, or frustrated that it isn't done right. Either way, your body is up.","Let your breath out slowly. Twice.",P,"Mobilized, a small tip can feel like a verdict on your competence.","It isn't. It's one data point about one dishwasher.",P,"Try: I want to get this right, and the way you said it stung. Can you show me what you mean?"],
+  s:["You might feel judged, or frustrated that it isn't done right. Either way, your body is up.","Let your breath out slowly. Twice.",P,"When you're revved up, a small tip can feel like a verdict on your competence.","It isn't. It's one data point about one dishwasher.",P,"Try: I want to get this right, and the way you said it stung. Can you show me what you mean?"],
   d:["Maybe you just walked away, or went quiet and let them redo it.","Giving up the task can feel easier than defending it. It also quietly moves work onto one person's books.",P,"Feel the weight of your body where you're sitting or standing. Take one slower breath.",P,"When you're ready, a small sentence keeps you in it: I still want to do this job. Let's talk about how, later."]},
  {id:"repair",title:"After the fight",channel:"Repair",
-  setup:"The argument is over, or paused. The house is quiet in that tense way, and someone has to make the first move.",
+  setup:"The argument is over, or paused. Things have gone quiet in that tense way, and someone has to make the first move.",
   v:["You've come back to steady. That's what makes repair possible.",P,"Repair doesn't need a winner. It needs one person to reach across.","You might start with your own part, just one piece: I got sharp when you mentioned money. I'm sorry for that.","Then leave room. Don't bundle an apology with a new argument.",P,"If they're not ready, that's information too. Ask: when would be a good time to reconnect?"],
-  s:["You may still be buzzing, replaying the best lines you didn't say.","Put a hand where you feel it most. Breathe out long, three times.",P,"If you try to repair while you're still mobilized, it can turn into round two.","It's okay to wait until your voice is slower. Repair can wait twenty minutes.",P,"When you're ready, keep it short: I don't like how that went. I want us on the same side."],
-  d:["You might feel emptied out, or far away from the person you were just arguing with.","That distance is the body resting after too much. It isn't the end of anything.",P,"Notice something warm near you, or make something warm. A cup of tea. A blanket.",P,"When a little energy returns, you could send a small signal. A touch on the shoulder. A text: still here. Still us.","Small signals count as repair."]},
+  s:["You may still be buzzing, replaying the best lines you didn't say.","Put a hand where you feel it most. Breathe out long, three times.",P,"If you try to repair while you're still revved up, it can turn into round two.","It's okay to wait until your voice is slower. Repair can wait twenty minutes.",P,"When you're ready, keep it short: I don't like how that went. I want us on the same side."],
+  d:["You might feel emptied out, or far away from the person you were just arguing with.","That distance is common after a hard moment. It isn't the end of anything.",P,"Notice something warm near you, or make something warm. A cup of tea. A blanket.",P,"When a little energy returns, you could send a small signal. A touch on the shoulder. A text: still here. Still us.","Small signals count as repair."]},
+ {id:"short",title:"The one-word reply",channel:"Tone",
+  setup:"You sent a careful message to a coworker, a co-parent or someone in the family, and got back “Fine.” Or you sent the short reply, and can feel it landed badly.",
+  v:["You're steady, so you can read this as a signal question, not a verdict.",P,"A short reply carries very little tone, so the reader fills the gap, usually with whatever they were braced for.","If you received it, you might ask: just checking, is fine good, or is something up?","If you sent it, you might add the missing tone: sorry, that was quick. I'm fine with it, just busy.",P,"Later, it may help to agree that a one-word reply means busy, not upset."],
+  s:["A one-word reply can land like a door shutting, and you may feel yourself revving up.","Before you answer, breathe out slowly, twice.",P,"The story forming may be: they're annoyed, or they don't care. The only fact is that the reply was short.","Wait a few minutes before you write back. Revved-up replies tend to get long.",P,"If you need to check, keep it light and short: all good? Happy to talk it through later."],
+  d:["Maybe you've stopped replying altogether, and it feels easier to let the thread go quiet.","That's okay for a little while.",P,"Put the phone face down. Notice three sounds around you.",P,"When you're ready, one short line keeps the channel open: got it. I'll reply properly tomorrow.","A short reply with a time attached reads very differently from silence."]},
  {id:"books",title:"Closing the books",channel:"Weekly check-in",
   setup:"It's the end of the week, time to look at the shared register together, and something about it already feels charged.",
   v:["You're in a good state to close the books. That's worth noticing.",P,"Start with what went right. One thing each person handled that made the week easier.","Then look at the hours together. Not to find a winner, but to see whether the arrangement is carrying its own weight.",P,"If something is drifting, it's usually ownership. Ask: which items don't have a name next to them?","End by choosing one change for next week. Only one."],
@@ -655,8 +685,8 @@ const SCEN=[
 
 const CHANNELS=[
  {id:"pace",name:"Pace",hint:"How fast each of you was talking and expecting replies",opts:["Slow","Steady","Fast"]},
- {id:"reg",name:"Register",hint:"The tone underneath the words",opts:["Just info","Warm","Sharp"]},
- {id:"urg",name:"Urgency",hint:"How soon it needed to happen",opts:["Whenever","Today","Right now"]}
+ {id:"reg",name:"Tone",hint:"What sat underneath the words, from softest to sharpest",opts:["Warm","Just info","Sharp"]},
+ {id:"urg",name:"Timing",hint:"How soon it needed to happen",opts:["Whenever","Today","Right now"]}
 ];
 
 const QUESTIONS=[
@@ -668,16 +698,16 @@ const QUESTIONS=[
 ];
 const RESULT_TEXT={
  v:"You're reading from a steady place. This is the best state for naming a mismatch and sorting it out together. Practice will feel like planning more than coping.",
- s:"Your body is mobilized. That's useful energy, but it tends to speed you up and make tone sound sharper than it is. Slowing your exhale first will help everything else land.",
- d:"You may be running low or feeling far away. That's the body conserving energy, not a failure. Small steps count here: orient to the room, and let yourself set a time to come back."
+ s:"You're revved up. That's useful energy, but it tends to speed you up and make tone sound sharper than it is. Slowing your exhale first may help everything else land.",
+ d:"You may be running low or feeling far away. That's a common state, not a failure. Small steps count here: orient to the room, and let yourself set a time to come back."
 };
 
 const LESSONS=[
- {t:"Why reasonable people collide",p:["Tune two radios close together but not to the same frequency, and you get a squeal: two signals that almost match, beating against each other.","Plenty of household arguments work the same way. Each person says something reasonable, shaped by their own tiredness or hurry, and together it comes out as a fight nobody meant to start.","The useful shift is from asking who's wrong to asking where the signals are apart. That's a question two people can answer together, without either one having to lose."]},
- {t:"The three channels",p:["Pace is speed. A fast talker can read a thoughtful pause as stonewalling, and a slow thinker can feel steamrolled by quick replies.","Register is tone. The same words can arrive as a status update or as an accusation, depending on what's underneath them and what the listener is braced for.","Urgency is timing. When you get a chance can mean before dinner to one person and this week to the other. Neither is wrong, but the gap between them is where the friction lives."]},
- {t:"The state you're listening from",p:["This tool borrows a simple ladder from polyvagal theory: a steady, social state; a mobilized, braced state; and a shut-down, far-away state. People move between rungs many times a day.","The same sentence lands differently depending on which rung you're on. Mobilized ears hear criticism. Shut-down ears barely hear anything at all.","Polyvagal theory is a popular model, and some of its physiology is debated by researchers. Here it's used as a practical vocabulary for noticing yourself, not as a measurement of anyone."]},
+ {t:"Why reasonable people collide",p:["Tune two radios close together but not to the same frequency, and you get a squeal: two signals that almost match, beating against each other.","Plenty of everyday arguments, at home or at work, work the same way. Each person says something reasonable, shaped by their own tiredness or hurry, and together it comes out as a fight nobody meant to start.","The useful shift is from asking who's wrong to asking where the signals are apart. That's a question two people can answer together, without either one having to lose."]},
+ {t:"The three channels",p:["Pace is speed. A fast talker can read a thoughtful pause as stonewalling, and a slow thinker can feel steamrolled by quick replies.","Tone is what sits under the words. The same words can arrive as a status update or as an accusation, depending on what's underneath them and what the listener is braced for.","Timing is how soon something needs to happen. When you get a chance can mean before dinner to one person and this week to the other. Neither is wrong, but the gap between them is where the friction lives."]},
+ {t:"The state you're listening from",p:["This tool borrows a simple ladder from polyvagal theory: a steady, social state; a revved-up, braced state; and a shut-down, far-away state. People move between rungs many times a day.","The same sentence lands differently depending on which rung you're on. Revved-up ears hear criticism. Shut-down ears barely hear anything at all.","Polyvagal theory is a popular model, and some of its physiology is debated by researchers. Here it's used as a practical vocabulary for noticing yourself, not as a measurement of anyone."]},
  {t:"Retuning in four moves",p:["First, name the mismatch out loud without blame: I think we're on different timelines here.","Second, check your own state. You can only change your own dial.","Third, slow the pace on purpose. Longer exhales, shorter sentences, real pauses.","Fourth, return to the actual content. Most of the time the original question was small and solvable once the static cleared."]},
- {t:"Before you send: the tone check",p:["The Tone check tab works like a spell-checker for tone. You say how you mean a message to come across, and it marks wording that tends to land harder than that: absolutes, labels, blame questions, orders, and vague timing.","It is private by design. It reads only your own draft, only in your browser. It never reads the other person's words, never saves what you typed, and never stops you from sending. You decide.","The shape that tends to work is the WP-09 transducer: the fact, the feeling, and one specific ask with a real time, opened with appreciation or a shared goal if you have one."]},
+ {t:"Before you send: the tone check",p:["The Tone check tab works like a spell-checker for tone. You say how you mean a message to come across, and it marks wording that tends to land harder than that: absolutes, labels, blame questions, orders, and vague timing.","It is private by design. It reads only your own draft, only in your browser. It never reads the other person's words, never saves what you typed, and never stops you from sending. You decide.","The shape that tends to work comes from WP-09, the tone filter: the fact, the feeling, and one specific ask with a real time, opened with appreciation or a shared goal if you have one."]},
  {t:"Findings: separating what's material",p:["Most friction is noise. A finding is for the thing that keeps coming back or clearly costs something. Severity runs from observation, through deficiency and significant deficiency, up to material weakness.","From deficiency up, a finding is written in four parts: the condition, what happened; the criteria, what was expected; the cause, what in the arrangement let it happen; and the effect, what it cost. Keeping the fact apart from the cause is what stops a finding from turning into an accusation.","Before a corrective action plan can start, the other person logs a response: agree, partly agree, or disagree, in their own words. A plan closes only after it holds through a monthly review, and closed findings become strengths."]},
  {t:"Keeping shared books",p:["A lot of household work is invisible: remembering, tracking, noticing the milk is low. Invisible work can't be thanked, and it can't be shared.","Writing it down as a line item makes it visible to both people in the same units at the same time, so conversations start from shared facts instead of competing impressions.","Once a week, look at the books together. Start with what went right, check which tasks have no owner, and choose one change. The ledger describes the arrangement, never either person's worth."]}
 ];
@@ -692,7 +722,19 @@ store.doneAt=store.doneAt||{}; store.people=Object.assign({me:"",them:""},store.
 store.letter=Object.assign({notes:true,work:false,state:false,msg:"",find:false},store.letter||{});
 if(!Array.isArray(store.findings)) store.findings=[];
 store.findSeq=Math.max(store.findSeq||0,...store.findings.map(f=>f.n||0));
-function save(){try{localStorage.setItem(KEY,JSON.stringify(store));}catch(e){}}
+// Tone order changed from [Just info, Warm, Sharp] to [Warm, Just info, Sharp] so a higher number
+// always means sharper. Older saved answers are swapped once so they keep their meaning.
+if(store.v!==2){
+  const sw=a=>{if(Array.isArray(a)&&(a[1]===0||a[1]===1))a[1]=1-a[1];};
+  store.log.forEach(e=>{const r=e&&e.raw;if(!r)return; if(r.me){sw(r.me);sw(r.them);} if(r.A){sw(r.A.self);sw(r.A.guess);sw(r.B.self);sw(r.B.guess);}});
+  if(store.pending&&store.pending.a){sw(store.pending.a.self);sw(store.pending.a.guess);}
+  store.v=2;
+}
+// Saving is opt-in. Someone who already has saved work from before is treated as having opted in.
+const CKEY="cwd-consent";
+let saving=false;
+try{const c=localStorage.getItem(CKEY); saving=c==="yes"||(c===null&&localStorage.getItem(KEY)!==null);}catch(e){}
+function save(){if(!saving)return;try{localStorage.setItem(KEY,JSON.stringify(store));}catch(e){}}
 
 const $=id=>document.getElementById(id);
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
@@ -736,7 +778,7 @@ function runLines(lines,o){
 // ---------- tabs ----------
 function go(t){
   stopAll(); stopPacer(); tab=t;
-  document.querySelectorAll(".tab").forEach(b=>b.setAttribute("aria-selected",b.dataset.tab===t?"true":"false"));
+  document.querySelectorAll(".tab").forEach(b=>{b.setAttribute("aria-selected",b.dataset.tab===t?"true":"false");b.tabIndex=b.dataset.tab===t?0:-1;});
   document.querySelectorAll("[data-panel]").forEach(p=>p.hidden=p.dataset.panel!==t);
   if(t==="practice"){setStateColor(st);renderPanel();}
   if(t==="journal") renderJournal();
@@ -751,7 +793,15 @@ function go(t){
   if(t==="retune") setStateColor(mode==="breath"?"s":"d");
   if(t==="decode"||t==="check"||t==="learn") setStateColor(st);
 }
-document.querySelectorAll(".tab").forEach(b=>b.onclick=()=>go(b.dataset.tab));
+const TABS=[...document.querySelectorAll(".tab")];
+TABS.forEach(b=>{const t=b.dataset.tab,pn=document.querySelector(`[data-panel="${t}"]`);
+  b.id="tab-"+t; b.setAttribute("aria-controls","panel-"+t); b.tabIndex=b.getAttribute("aria-selected")==="true"?0:-1;
+  if(pn){pn.id="panel-"+t; pn.setAttribute("aria-labelledby","tab-"+t);}
+  b.onclick=()=>go(t);
+  b.onkeydown=e=>{const i=TABS.indexOf(b);let j=null;
+    if(e.key==="ArrowRight")j=(i+1)%TABS.length; else if(e.key==="ArrowLeft")j=(i-1+TABS.length)%TABS.length; else if(e.key==="Home")j=0; else if(e.key==="End")j=TABS.length-1;
+    if(j!==null){e.preventDefault();TABS[j].focus();go(TABS[j].dataset.tab);}};
+});
 document.querySelectorAll("[data-go]").forEach(b=>b.onclick=()=>go(b.dataset.go));
 
 // ---------- practice ----------
@@ -809,7 +859,14 @@ $("play").onclick=()=>{
 };
 
 // ---------- decode ----------
-let dec={pace:[1,1],reg:[1,1],urg:[1,1]};
+const blankDec=()=>({pace:[null,null],reg:[null,null],urg:[null,null]});
+let dec=blankDec();
+const done=c=>dec[c.id][0]!==null&&dec[c.id][1]!==null;
+const EX=[
+ {set:{pace:[1,1],reg:[1,1],urg:[1,0]},note:"Roommates. You asked your roommate to take the recycling out “when you get a chance.” You meant today; they heard this week. Pace and tone were fine. The gap is timing."},
+ {set:{pace:[2,0],reg:[1,1],urg:[2,1]},note:"Coworkers. You fired questions through a quick planning chat while your coworker was still thinking. You needed answers right now; they assumed later today was fine. The gaps are pace and timing."},
+ {set:{pace:[1,1],reg:[1,2],urg:[1,1]},note:"Co-parents. You texted “Pickup is at 5.” as plain information, and the reply that came back felt sharp. Pace and timing matched. The gap is tone, and it's worth checking before you react."}
+];
 function renderChans(){
   const box=$("chans"); box.innerHTML="";
   CHANNELS.forEach(c=>{
@@ -818,10 +875,14 @@ function renderChans(){
     row.innerHTML=`<div class="lab">${c.name}<small>${c.hint}</small></div>${seg("You",0)}${seg("Them",1)}`;
     box.appendChild(row);
   });
-  box.querySelectorAll("button").forEach(b=>b.onclick=()=>{dec[b.dataset.c][+b.dataset.w]=+b.dataset.i;renderChans();renderDecode();});
+  box.querySelectorAll("button").forEach(b=>b.onclick=()=>{
+    dec[b.dataset.c][+b.dataset.w]=+b.dataset.i; renderChans(); renderDecode();
+    const nb=box.querySelector(`[data-c="${b.dataset.c}"][data-w="${b.dataset.w}"][data-i="${b.dataset.i}"]`); if(nb) nb.focus();
+  });
 }
-function decTotal(){return CHANNELS.reduce((a,c)=>a+Math.abs(dec[c.id][0]-dec[c.id][1]),0);}
+function decTotal(){return CHANNELS.reduce((a,c)=>a+(done(c)?Math.abs(dec[c.id][0]-dec[c.id][1]):0),0);}
 function readFor(c){
+  if(!done(c)) return null;
   const [m,t]=dec[c.id], gap=Math.abs(m-t); if(!gap) return null;
   const big=gap===2, me=c.opts[m].toLowerCase(), th=c.opts[t].toLowerCase();
   if(c.id==="pace") return m>t
@@ -835,24 +896,46 @@ function readFor(c){
     : `They were at “${th}” and you were closer to “${me}.” Ask for their actual deadline, then offer yours.`;
 }
 function decodeSentence(){
-  const off=CHANNELS.filter(c=>dec[c.id][0]!==dec[c.id][1]).map(c=>c.name.toLowerCase());
+  const off=CHANNELS.filter(c=>done(c)&&dec[c.id][0]!==dec[c.id][1]).map(c=>c.name.toLowerCase());
   if(!off.length) return "It sounds like we were on the same wavelength here. Is there something else going on that we haven't named yet?";
   const list=off.length===1?off[0]:off.slice(0,-1).join(", ")+" and "+off[off.length-1];
-  return `I think we got out of sync on ${list}, not on whether we care. Can we slow down and sort that part out first?`;
+  return `I think we got out of sync on ${list}, not on whether we're on the same side. Can we slow down and sort that part out first?`;
 }
 function verdictFor(n){return n===0?"In tune":n<=2?"A slight beat":n<=4?"An audible squeal":"Full squeal";}
+let decT=null;
 function renderDecode(){
-  const n=decTotal();
-  $("verdict").textContent=verdictFor(n);
-  const rs=CHANNELS.map(c=>{const r=readFor(c);return r?`<li><b>${c.name}.</b> ${esc(r)}</li>`:""}).join("");
-  $("reads").innerHTML=rs||`<li>No gap on these three channels. If it still felt off, the static may be coming from somewhere else: tiredness, an older issue, or something neither of you has said yet.</li>`;
-  $("say").textContent=decodeSentence();
+  const n=decTotal(), k=CHANNELS.filter(done).length, all=k===CHANNELS.length;
+  $("decprog").textContent=`${k} of ${CHANNELS.length} channels marked`;
+  if(!k){
+    $("verdict").textContent="Not decoded yet";
+    $("reads").innerHTML=`<li>Tap where you were and where they were on at least one channel, or load a worked example above.</li>`;
+    $("say").textContent="Your sentence appears here.";
+  }else{
+    $("verdict").textContent=verdictFor(n)+(all?"":" so far");
+    const rs=CHANNELS.map(c=>{const r=readFor(c);return r?`<li><b>${c.name}.</b> ${esc(r)}</li>`:""}).join("");
+    const pend=CHANNELS.filter(c=>!done(c)).map(c=>c.name.toLowerCase());
+    $("reads").innerHTML=(rs||`<li>No gap on ${all?"these three channels":"the channels marked so far"}. If it still felt off, the static may be coming from somewhere else: tiredness, an older issue, or something neither of you has said yet.</li>`)+(pend.length?`<li>Still to mark: ${esc(joinList(pend))}.</li>`:"");
+    $("say").textContent=decodeSentence();
+  }
+  $("decsave").disabled=!all; $("decsave").title=all?"":"Mark all three channels to save";
+  clearTimeout(decT); decT=setTimeout(()=>{$("decstatus").textContent=k?`${$("verdict").textContent}. ${k} of 3 channels marked.`:"";},500);
 }
+function decodeText(){
+  const lines=CHANNELS.filter(done).map(c=>`${c.name}: you ${c.opts[dec[c.id][0]].toLowerCase()}, them ${c.opts[dec[c.id][1]].toLowerCase()}.${readFor(c)?" "+readFor(c):" No gap."}`);
+  const note=$("decnote").value.trim();
+  return `Decoded moment: ${$("verdict").textContent}\n${note?"What happened: "+note+"\n":""}\n${lines.join("\n")}\n\nA way to name it without blame: ${decodeSentence()}\n\nFrom the Carrier Wave Decoder, The Objective Ledger.`;
+}
+document.querySelectorAll("[data-ex]").forEach(b=>b.onclick=()=>{
+  const ex=EX[+b.dataset.ex]; dec={pace:[...ex.set.pace],reg:[...ex.set.reg],urg:[...ex.set.urg]};
+  $("exnote").textContent="Worked example. "+ex.note+" Read the result below, then press Start over to decode your own moment.";
+  renderChans(); renderDecode();
+});
 $("decsave").onclick=()=>{
+  if(!CHANNELS.every(done)) return;
   const summary=CHANNELS.map(c=>`${c.name}: you ${c.opts[dec[c.id][0]].toLowerCase()}, them ${c.opts[dec[c.id][1]].toLowerCase()}`).join(" · ");
   store.log.unshift({t:Date.now(),kind:"decode",verdict:verdictFor(decTotal()),summary,say:decodeSentence(),note:$("decnote").value.trim(),
     raw:{me:CHANNELS.map(c=>dec[c.id][0]),them:CHANNELS.map(c=>dec[c.id][1])},settled:false,agreed:""});
-  save(); $("decsave").textContent="Saved ✓"; setTimeout(()=>$("decsave").textContent="Save to journal",1800);
+  save(); $("decsave").textContent=saving?"Saved ✓":"Added (saving is off)"; setTimeout(()=>$("decsave").textContent="Save to journal",2200);
 };
 $("deccopy").onclick=async()=>{
   const txt=decodeSentence(); let ok=false;
@@ -861,7 +944,8 @@ $("deccopy").onclick=async()=>{
   $("deccopy").textContent=ok?"Copied ✓":"Selected, press copy";
   setTimeout(()=>$("deccopy").textContent="Copy the sentence",1800);
 };
-$("decreset").onclick=()=>{dec={pace:[1,1],reg:[1,1],urg:[1,1]};$("decnote").value="";renderChans();renderDecode();};
+$("decreset").onclick=()=>{dec=blankDec();$("decnote").value="";$("exnote").textContent="";renderChans();renderDecode();};
+$("decall").onclick=()=>{if(!CHANNELS.some(done)) return; copyText(decodeText(),$("decall"),$("reads"));};
 
 // ---------- check ----------
 let answers=Array(QUESTIONS.length).fill(null), suggested="v", checkRecorded=false;
@@ -876,7 +960,7 @@ function renderResult(){
   suggested=top[0];
   $("result").hidden=false;
   $("rstate").textContent=top.length>1?`A mix of ${top.map(k=>SN[k].toLowerCase()).join(" and ")}`:`Mostly ${SN[suggested].toLowerCase()}`;
-  $("rtext").textContent=(top.length>1?"Mixed readings are common, especially mid-conversation. Start with the more activated side. ":"")+RESULT_TEXT[suggested];
+  $("rtext").textContent=(top.length>1?"Mixed readings are common, especially mid-conversation. Start with the less settled side. ":"")+RESULT_TEXT[suggested];
   setStateColor(suggested);
   if(checkRecorded&&store.checks[0]) store.checks[0].state=suggested;
   else{store.checks.unshift({t:Date.now(),state:suggested});checkRecorded=true;}
@@ -974,14 +1058,34 @@ function renderJournal(){
   $("entries").querySelectorAll("[data-lfe]").forEach(b=>b.onclick=()=>findingFromEntry(+b.dataset.lfe));
   $("entries").querySelectorAll("[data-open]").forEach(b=>b.onclick=()=>{const [id,s]=b.dataset.open.split(":");cur=id;st=s;renderList();go("practice");});
 }
-let wipeArm=null;
-$("wipe").onclick=()=>{
-  if(!wipeArm){$("wipe").textContent="Tap again to erase everything";wipeArm=setTimeout(()=>{wipeArm=null;$("wipe").textContent="Clear all my data";},4000);return;}
-  clearTimeout(wipeArm); wipeArm=null;
-  store={done:{},notes:{},voice:hasSpeech,log:[],doneAt:{},checks:[],retunes:[],people:{me:"",them:""},letter:{notes:true,work:false,state:false,msg:"",find:false},findings:[],findSeq:0}; save(); togReset(); fdraft=null; fresp=null;
-  $("wipe").textContent="Cleared ✓"; setTimeout(()=>$("wipe").textContent="Clear all my data",1800);
-  renderList(); renderJournal();
-};
+function wipeAll(){
+  store={done:{},notes:{},voice:hasSpeech,log:[],doneAt:{},checks:[],retunes:[],people:{me:"",them:""},letter:{notes:true,work:false,state:false,msg:"",find:false},findings:[],findSeq:0,v:2};
+  try{localStorage.removeItem(KEY);}catch(e){}
+  save(); togReset(); fdraft=null; fresp=null;
+  renderList(); renderJournal(); if(tab!=="journal") go(tab);
+}
+function armButton(btn,armedText,restText,fn){
+  let arm=null;
+  btn.onclick=()=>{
+    if(!arm){btn.textContent=armedText;arm=setTimeout(()=>{arm=null;btn.textContent=restText;},4000);return;}
+    clearTimeout(arm); arm=null; fn(); btn.textContent="Cleared ✓"; setTimeout(()=>btn.textContent=restText,1800);
+  };
+}
+armButton($("wipe"),"Tap again to erase everything","Clear all my data",wipeAll);
+function renderConsent(){
+  const el=$("consent");
+  el.innerHTML=saving
+    ?`<p><b>Saving is on.</b> Your journal, practice progress, findings and names are kept in this browser only (its local storage). They are never sent to us or anyone else. Anyone who uses this browser could see them.</p>
+      <div class="row"><button class="ghost" type="button" id="c-off">Stop saving and remove my saved copy</button><button class="ghost" type="button" id="c-erase">Erase everything</button></div>`
+    :`<p><b>Saving is off.</b> Nothing you do on this page is kept after you close it. To keep a journal, practice progress and findings between visits, turn saving on. They would be kept in this browser only, never sent anywhere, and you can erase them at any time.</p>
+      <div class="row"><button class="ghost" type="button" id="c-on">Keep my work on this device</button></div>`;
+  if(saving){
+    $("c-off").onclick=()=>{try{localStorage.removeItem(KEY);localStorage.setItem(CKEY,"no");}catch(e){} saving=false; renderConsent(); $("consent").querySelector("button").focus();};
+    armButton($("c-erase"),"Tap again to erase everything","Erase everything",()=>{wipeAll();});
+  }else{
+    $("c-on").onclick=()=>{saving=true; try{localStorage.setItem(CKEY,"yes");}catch(e){} save(); renderConsent(); $("consent").querySelector("button").focus();};
+  }
+}
 
 
 // ---------- together (two-person mode) ----------
@@ -1083,7 +1187,7 @@ function renderTog(){
       <p>Text it or message it. They'll open this same page, choose “I got a code,” and answer for themselves. Your answers aren't shown to them until the reveal.</p>
       <div class="code" id="mycode">${esc(code)}</div>
       <div class="row"><button class="ghost" id="ccopy">Copy code</button></div>
-      <p>When they finish, they'll get a reply code. Come back to this tab and enter it to see the reveal on your side too. This page remembers your answers until then.</p>
+      <p>When they finish, they'll get a reply code. Come back to this tab and enter it to see the reveal on your side too. ${saving?"This page remembers your answers until then.":"Saving is off, so keep this tab open until then."}</p>
       <div class="row"><button class="play" id="cnext">I have their reply</button><button class="ghost" id="tback">Done for now</button></div>`;
     $("ccopy").onclick=()=>copyText(code,$("ccopy"),$("mycode"));
     $("cnext").onclick=()=>{tog.step="replycode";renderTog();};
@@ -1209,7 +1313,8 @@ function rawOf(e){
   if(e.kind==="decode"&&e.summary){
     const me=[],th=[]; let ok=true;
     CHANNELS.forEach((c,ci)=>{
-      const m=e.summary.match(new RegExp(c.name+": you ([a-z ]+?), them ([a-z ]+?)(?: ·|$)"));
+      const old={Tone:"Register",Timing:"Urgency"}[c.name]||c.name;
+      const m=e.summary.match(new RegExp("(?:"+c.name+"|"+old+"): you ([a-z ]+?), them ([a-z ]+?)(?: ·|$)"));
       const lo=c.opts.map(x=>x.toLowerCase());
       if(!m){ok=false;return;} me[ci]=lo.indexOf(m[1]); th[ci]=lo.indexOf(m[2]); if(me[ci]<0||th[ci]<0) ok=false;});
     return ok?{me,them:th}:null;
@@ -1333,7 +1438,7 @@ function renderLetter(r){
       ?`Our books balance for ${per}. Every moment I logged (${r.items.length} in all) has been talked through and settled. Thank you for that.`
       :`We're not quite balanced yet. I logged ${r.items.length} moment${r.items.length===1?"":"s"}${r.open.length?`, and ${r.open.length} ${r.open.length===1?"is":"are"} still open`:""}. There are a few things I'd like us to look at together.`}</p>`);
     if(chans.length){
-      parts.push(`<h2>What's been coming up</h2><ul>${chans.map(f=>{const d=r.ch[f.c].dir;return `<li><b>${CHANNELS[f.c].name === "Register" ? "Tone" : CHANNELS[f.c].name === "Urgency" ? "Timing" : "Pace"}.</b> ${esc(d>0?ASK[f.c].up:d<0?ASK[f.c].down:ASK[f.c].even)}</li>`;}).join("")}</ul>`);
+      parts.push(`<h2>What's been coming up</h2><ul>${chans.map(f=>{const d=r.ch[f.c].dir;return `<li><b>${CHANNELS[f.c].name}.</b> ${esc(d>0?ASK[f.c].up:d<0?ASK[f.c].down:ASK[f.c].even)}</li>`;}).join("")}</ul>`);
     }else parts.push(`<h2>What's been coming up</h2><p>When I compared where each of us was, we were closer than it felt in the moment. The friction may have come from tiredness or something neither of us has said yet.</p>`);
     if(r.avgAcc!==null) parts.push(`<p>${r.avgAcc>=4?"When we compared notes side by side, we mostly read each other accurately. That's worth holding on to.":"When we compared notes side by side, we often guessed wrong about where the other person was. I'd like us both to ask a little more before assuming."}</p>`);
     const openItems=r.open;
@@ -1656,7 +1761,7 @@ function renderResp(){
     $("rp-x").onclick=()=>{fresp=null;renderWork();};
     return;
   }
-  w.innerHTML=`<h3>Management response to ${fid(f)}</h3>
+  w.innerHTML=`<h3>Response to ${fid(f)}</h3>
     <p class="hint" style="margin:0 0 10px">${esc(f.to)}, read ${esc(f.by)}'s finding, then give your response in your own words.</p>
     <div class="resp"><b>${esc(f.title)}</b> <span class="tag sev-${f.sev}">${sevName(f.sev)}</span>${partsHTML(f)}${capHTML(f)}</div>
     <p class="lab" style="margin:14px 0 4px">Your response</p>
@@ -1675,7 +1780,7 @@ function renderResp(){
     if(fresp.sign.trim().toLowerCase()!==f.to.trim().toLowerCase()) e.push(`Sign with the receiving person's name as it appears on the finding (${f.to}). If that name is wrong, the finding can be revised.`);
     if(e.length){$("rp-errs").innerHTML=e.map(x=>`<li>${esc(x)}</li>`).join("");$("rp-errs").hidden=false;$("rp-errs").focus();return;}
     const now=Date.now(); f.response={by:f.to,stance:fresp.stance,view:fresp.view.trim().slice(0,1200),t:now};
-    f.hist.push({t:now,ev:`Management response logged: ${STANCE[fresp.stance]}`,by:f.to});
+    f.hist.push({t:now,ev:`Response logged: ${STANCE[fresp.stance]}`,by:f.to});
     respTone.ignored.clear(); respTone.open=false; fresp=null; save(); renderFindings();
   };
 }
@@ -1700,7 +1805,7 @@ function cardHTML(f){
   let resp="", act="";
   if(!obs){
     resp=f.response
-      ?`<div class="resp"><p class="lab" style="margin:0 0 4px">Management response · ${esc(f.response.by)} · ${esc(fmtDay(f.response.t))}</p><p style="margin:0 0 4px"><span class="tag ${f.response.stance==="agree"?"ok":"open"}">${STANCE[f.response.stance]}</span></p><p style="margin:0;white-space:pre-wrap">${esc(f.response.view)}</p>
+      ?`<div class="resp"><p class="lab" style="margin:0 0 4px">Response · ${esc(f.response.by)} · ${esc(fmtDay(f.response.t))}</p><p style="margin:0 0 4px"><span class="tag ${f.response.stance==="agree"?"ok":"open"}">${STANCE[f.response.stance]}</span></p><p style="margin:0;white-space:pre-wrap">${esc(f.response.view)}</p>
         ${f.response.stance==="disagree"&&f.status==="open"?`<p class="hint" style="margin:8px 0 0">${esc(f.by)} can start the plan as written or revise the finding. Revising asks ${esc(f.to)} to respond again.</p>`:""}</div>`
       :`<div class="resp await"><p style="margin:0 0 8px"><b>Awaiting ${esc(f.to)}'s response.</b> The plan can't move to In progress until ${esc(f.to)} logs Agree, Partly agree, or Disagree, with their view.</p><button class="ghost" data-resp="${f.id}">Log ${esc(f.to)}'s response</button></div>`;
     if(f.status==="open"){
@@ -1791,7 +1896,7 @@ requestAnimationFrame(draw);
 if(reduceMotion) setInterval(()=>requestAnimationFrame(draw),500);
 
 // ---------- init ----------
-renderList(); renderPanel(); renderStart(); renderChans(); renderDecode(); renderQs(); renderLessons(); setMode("breath"); setStateColor(st);
+save(); renderConsent(); renderList(); renderPanel(); renderStart(); renderChans(); renderDecode(); renderQs(); renderLessons(); setMode("breath"); setStateColor(st);
 </script>
 </body>
 </html>

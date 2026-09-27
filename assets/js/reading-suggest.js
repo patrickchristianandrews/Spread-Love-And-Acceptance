@@ -355,5 +355,6 @@
     return c;
   }
 
-  window.TOLReading = { card: card, suggest: suggest, mount: mount, _normPath: normPath, _scan: scanPage };
+  // opened() → ids the reader has opened (this browser only); markOpened(id) adds one. Used by /reading.html.
+  window.TOLReading = { card: card, suggest: suggest, mount: mount, opened: readOpened, markOpened: markOpened, _normPath: normPath, _scan: scanPage };
 })();

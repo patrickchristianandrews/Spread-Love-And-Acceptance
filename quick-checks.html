@@ -12,7 +12,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Today&#39;s Weather &mdash; A 60-second read on your own conditions &middot; The Objective Ledger</title>
-<meta name="description" content="Check your inner weather in about a minute: the sky, the pressure, the ground conditions, sleep, people load and what is pressing. You get a forecast, a talk window, what today is good for, what to leave, and a private almanac of your own patterns.">
+<meta name="description" content="Check your inner weather in about a minute: the sky, the pressure, the ground conditions, sleep, people load and what is pressing. You get a forecast, a talk window, what today is good for, what to leave, an optional 7-day log with a simple trend, and a heads-up you can share.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,500&family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -21,23 +21,25 @@
 <script>/* The Lemonade Stand moved to its own page: send old links there */ (function () { function go() { if (location.hash === "#lemonade") location.replace("/lemonade-stand.html"); } go(); window.addEventListener("hashchange", go); })();</script>
 <script src="/assets/js/site.js" defer></script>
 <style>
+  .sr-only{ position:absolute !important; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; border:0; }
   .steps{ counter-reset:step; }
   .step{ margin:1.5rem 0 0; padding-top:1.1rem; border-top:1px solid var(--line); }
   .step:first-child{ border-top:0; }
-  .step-n{ font-family:"IBM Plex Mono", ui-monospace, monospace; font-size:.7rem; letter-spacing:.08em; color:var(--brass); margin:0 0 .15rem; }
+  .step-n{ font-family:"IBM Plex Mono", ui-monospace, monospace; font-size:.7rem; letter-spacing:.08em; color:#7A5620; margin:0 0 .15rem; }
   .read .step h2{ font-size:1.18rem; margin:0 0 .15rem; }
   .step-hint{ font-size:.9rem; color:var(--ink-soft); margin:0 0 .55rem; max-width:62ch; }
+  .step-fine{ font-size:.82rem; color:var(--ink-soft); margin:.55rem 0 0; max-width:62ch; }
   .opt{ font-family:"IBM Plex Mono", ui-monospace, monospace; font-size:.66rem; color:var(--ink-soft); text-transform:none; margin-left:.4rem; }
 
   .rungs{ display:grid; gap:0; border:1px solid var(--ink); border-radius:var(--radius); margin:.2rem 0 0; }
   .rung{
-    font:inherit; text-align:left; background:var(--paper); color:var(--ink); cursor:pointer;
+    font:inherit; text-align:left; background:var(--paper); color:var(--ink); cursor:pointer; min-height:44px;
     border:0; border-bottom:1px solid var(--line); padding:.8rem 1.05rem; display:grid; grid-template-columns:2.2rem 11rem 1fr; gap:.9rem; align-items:baseline;
   }
   .rung:last-child{ border-bottom:0; }
   .rung .ico{ font-size:1.3rem; line-height:1; }
   .rung strong{ font-family:"Fraunces", Georgia, serif; font-weight:600; font-size:1.02rem; }
-  .rung em{ display:block; font-style:normal; font-family:"IBM Plex Mono", ui-monospace, monospace; font-size:.66rem; color:var(--brass); margin-top:.15rem; }
+  .rung em{ display:block; font-style:normal; font-family:"IBM Plex Mono", ui-monospace, monospace; font-size:.7rem; color:#7A5620; margin-top:.15rem; }
   .rung span.d{ color:var(--ink-soft); font-size:.94rem; }
   .rung:hover{ background:var(--paper-deep); }
   .rung[aria-pressed="true"]{ background:var(--paper-deep); box-shadow:inset 4px 0 0 var(--brass); }
@@ -45,25 +47,28 @@
   @media (max-width:600px){ .rung{ grid-template-columns:2rem 1fr; } .rung span.d{ grid-column:2; } }
 
   .chips{ display:flex; flex-wrap:wrap; gap:.45rem; margin:.2rem 0 0; }
-  .chip{ font:inherit; font-size:.94rem; cursor:pointer; padding:.45rem .85rem; background:var(--paper); color:var(--ink); border:1px solid var(--line); border-radius:var(--radius); }
+  .chip{ font:inherit; font-size:.94rem; cursor:pointer; min-height:44px; padding:.45rem .85rem; background:var(--paper); color:var(--ink); border:1px solid #B9A77A; border-radius:var(--radius); }
   .chip:hover{ background:var(--paper-deep); }
   .chip[aria-pressed="true"]{ background:var(--ink); color:var(--paper); border-color:var(--ink); }
+  .chip[aria-pressed="true"]::before{ content:"\2713\00a0"; }
   .chip:focus-visible{ outline:2px solid var(--focus); outline-offset:2px; }
 
   .forecast{ margin:2.2rem 0 0; border-top:3px double var(--ink); border-bottom:1px solid var(--ink); padding:1.3rem 0 1.4rem; }
   .fc-head{ display:flex; align-items:center; gap:1rem; flex-wrap:wrap; }
   .fc-ico{ font-size:2.6rem; line-height:1; }
-  .fc-titles{ flex:1 1 16rem; }
+  .fc-titles{ flex:1 1 14rem; min-width:0; }
   .read .fc-titles h2{ font-size:1.55rem; margin:0 0 .15rem; }
-  .fc-sub{ font-family:"IBM Plex Mono", ui-monospace, monospace; font-size:.74rem; color:var(--brass); margin:0; }
-  .window{ display:inline-block; padding:.22rem .75rem; border-radius:3px; font-family:"IBM Plex Mono", ui-monospace, monospace; font-size:.74rem; color:#FFFDF7; white-space:nowrap; }
-  .w-open{ background:var(--credit); } .w-short{ background:var(--credit); opacity:.8; }
-  .w-wait{ background:var(--brass); } .w-closed{ background:var(--debit); }
+  .read .fc-titles h2:focus{ outline:none; }
+  .read .fc-titles h2:focus-visible{ outline:2px solid var(--focus); outline-offset:3px; }
+  .fc-sub{ font-family:"IBM Plex Mono", ui-monospace, monospace; font-size:.76rem; color:#7A5620; margin:0; }
+  .window{ display:inline-block; padding:.22rem .75rem; border-radius:3px; font-family:"IBM Plex Mono", ui-monospace, monospace; font-size:.76rem; color:#FFFDF7; white-space:normal; }
+  .w-open{ background:var(--credit); } .w-short{ background:#2F5A3C; }
+  .w-wait{ background:#7A5620; } .w-closed{ background:var(--debit); }
 
   .gauge{ margin:1.1rem 0 .2rem; }
   .gauge-track{ height:12px; background:var(--paper-deep); border:1px solid var(--line); border-radius:99px; overflow:hidden; }
   .gauge-fill{ height:100%; width:0; background:var(--credit); transition:width .3s ease, background .3s ease; }
-  .gauge-line{ display:flex; justify-content:space-between; font-family:"IBM Plex Mono", ui-monospace, monospace; font-size:.7rem; color:var(--ink-soft); margin-top:.3rem; }
+  .gauge-line{ display:flex; justify-content:space-between; gap:.6rem; flex-wrap:wrap; font-family:"IBM Plex Mono", ui-monospace, monospace; font-size:.72rem; color:var(--ink-soft); margin-top:.3rem; }
   .fc-body{ font-size:1.04rem; line-height:1.7; max-width:62ch; margin:1rem 0 0; }
   .fc-body p{ margin:0 0 .7rem; }
 
@@ -82,36 +87,43 @@
   .read .fc-sec h3{ font-family:"Fraunces", Georgia, serif; font-weight:600; font-size:1.02rem; margin:0 0 .35rem; }
   .do-list{ list-style:none; margin:0; padding:0; }
   .do-list li{ margin:.4rem 0; padding-left:1.15rem; position:relative; font-size:.97rem; line-height:1.55; }
-  .do-list li::before{ content:"\2192"; position:absolute; left:0; color:var(--brass); }
+  .do-list li::before{ content:"\2192"; position:absolute; left:0; color:#7A5620; }
   .do-list a{ font-weight:600; }
   .say{ margin:.35rem 0 0; padding:.8rem 1rem; background:var(--paper-deep); border-left:4px solid var(--brass); border-radius:var(--radius); }
   .say p{ margin:0; font-style:italic; }
+  .rel-tip{ margin:.35rem 0 0; padding:.8rem 1rem; background:#E8F0E6; border-left:4px solid var(--credit); border-radius:var(--radius); }
+  .rel-tip p{ margin:0; }
   .actions{ margin:1.1rem 0 0; display:flex; flex-wrap:wrap; gap:.5rem; }
-  .btn{ font:inherit; font-size:.92rem; cursor:pointer; padding:.5rem .95rem; border-radius:var(--radius); border:1px solid var(--ink); background:var(--paper); color:var(--ink); }
+  .btn{ font:inherit; font-size:.92rem; cursor:pointer; min-height:44px; padding:.5rem .95rem; border-radius:var(--radius); border:1px solid var(--ink); background:var(--paper); color:var(--ink); }
   .btn:hover{ background:var(--ink); color:var(--paper); }
   .btn.is-primary{ background:var(--ink); color:var(--paper); font-weight:600; }
   .btn.is-primary:hover{ background:var(--credit); }
   .btn:focus-visible{ outline:2px solid var(--focus); outline-offset:2px; }
-  .btn[disabled]{ opacity:.5; cursor:default; }
+  .btn[disabled]{ opacity:.55; cursor:default; }
   .msg{ font-size:.9rem; color:var(--credit); min-height:1.3em; margin:.5rem 0 0 !important; }
+  .save-note{ font-size:.86rem; color:var(--ink-soft); margin:.6rem 0 0; max-width:62ch; }
+  .see-fc{ margin:1.6rem 0 0; }
+  details.how{ margin:1rem 0 0; font-size:.92rem; color:var(--ink-soft); max-width:62ch; }
+  details.how summary{ cursor:pointer; min-height:44px; display:flex; align-items:center; color:var(--ink); font-weight:600; }
+  details.how ul{ margin:.3rem 0 0; padding-left:1.2rem; }
 
   .almanac{ margin:1.8rem 0 0; padding:1.15rem 1.25rem 1.3rem; background:var(--paper-deep); border-radius:var(--radius); }
   .read .almanac h2{ font-size:1.18rem; margin:0 0 .3rem; }
   .almanac p{ font-size:.94rem; margin:0 0 .5rem; max-width:62ch; }
-  .strip{ display:flex; gap:3px; flex-wrap:wrap; margin:.8rem 0 .4rem; }
-  .cell{ width:30px; height:30px; border-radius:2px; border:1px solid var(--line); display:flex; align-items:center; justify-content:center; font-size:.95rem; background:var(--paper); }
-  .cell.s-clear{ background:#E8F0E6; border-color:var(--credit); }
-  .cell.s-gusty{ background:#F6EBD5; border-color:var(--brass); }
-  .cell.s-fog{ background:#F1E3E0; border-color:var(--debit); }
-  .strip-key{ font-family:"IBM Plex Mono", ui-monospace, monospace; font-size:.7rem; color:var(--ink-soft); display:flex; gap:1.1rem; flex-wrap:wrap; margin:0 0 .3rem; }
+  .week{ list-style:none; display:grid; grid-template-columns:repeat(7,minmax(0,1fr)); gap:4px; margin:.8rem 0 .4rem; padding:0; }
+  .week li{ display:grid; grid-template-rows:auto 64px auto; justify-items:center; gap:3px; margin:0; padding:0; }
+  .week .dn{ font-family:"IBM Plex Mono", ui-monospace, monospace; font-size:.68rem; color:var(--ink-soft); }
+  .week .bar{ width:100%; max-width:34px; height:64px; background:var(--paper); border:1px solid var(--line); border-radius:3px; display:flex; align-items:flex-end; overflow:hidden; }
+  .week .bar i{ display:block; width:100%; }
+  .week .bar i.s-clear{ background:var(--credit); } .week .bar i.s-gusty{ background:#7A5620; } .week .bar i.s-fog{ background:var(--debit); }
+  .week .ic{ font-size:1rem; min-height:1.3em; line-height:1.3; }
+  .week li.today .dn{ color:var(--ink); font-weight:600; }
+  .strip-key{ font-family:"IBM Plex Mono", ui-monospace, monospace; font-size:.72rem; color:var(--ink-soft); display:flex; gap:1.1rem; flex-wrap:wrap; margin:0 0 .3rem; }
+  .trend{ font-weight:600; color:var(--ink); }
   .pattern{ border-left:3px solid var(--brass); padding-left:1rem; margin:.9rem 0 0; }
   .pattern p{ margin:0 0 .4rem; font-size:.97rem; }
   .why{ font-size:.92rem; color:var(--ink-soft); border-left:3px solid var(--line); padding-left:1rem; margin-top:1.4rem; max-width:62ch; }
-    width:100%; font:inherit; font-size:.98rem; color:var(--ink); background:var(--paper);
-    border:1px solid var(--line); border-radius:var(--radius); padding:.4rem .5rem;
-  }
-  .remove{ font:inherit; font-size:1.2rem; background:none; border:1px solid transparent; border-radius:var(--radius); color:var(--ink-soft); cursor:pointer; }
-  .remove:hover{ border-color:var(--line); color:var(--debit); }
+  @media print{ .steps, .actions, .see-fc, .almanac .actions, .tol-welcome{ display:none !important; } }
 </style>
 </head>
 <body data-private-note>
@@ -124,28 +136,45 @@
 
   <p class="lede">People have inner weather. Some mornings are clear, some are gusty, some are fogged in, and it changes without asking your permission. This is a one-minute reading of today&#39;s conditions: the sky, the pressure, the ground underneath, and what&#39;s blowing in.</p>
   <p class="why">We use weather on purpose. Weather isn&#39;t a grade, a diagnosis or a verdict on you, any more than rain is a verdict on a town. Conditions pass. Knowing them just tells you what today is good for, and what to leave until the front moves through.</p>
-  <p class="pillar-note"><strong>Where this fits:</strong> This page belongs to <a href="/five-pillars.html#read-your-state">Pillar III, Read your state first</a>, part of the <a href="/five-pillars.html">Five Pillars</a>. <strong>In you:</strong> know how full your battery is (calm, revved up or shut down) before you judge a moment. <strong>Between you and others:</strong> your state shapes how other people&#39;s words land, so pick your timing, and pause and come back when you need to.</p>
+  <p class="pillar-note"><strong>Where this fits:</strong> This page belongs to <a href="/five-pillars.html#read-your-state">Pillar III, Read your state first</a>, part of the <a href="/five-pillars.html">Five Pillars</a>. <strong>In you:</strong> know how full your battery is (calm, revved up or running on empty) before you judge a moment. <strong>Between you and others:</strong> your state shapes how other people&#39;s words land, so pick your timing, give people a heads-up, and pause and come back when you need to.</p>
 
-  <section id="today">
+  <section id="today" aria-labelledby="today-h">
+    <h2 id="today-h" class="sr-only">Check today&#39;s weather</h2>
     <div class="steps">
 
       <div class="step">
-        <p class="step-n">Step 1 of 7 &middot; required</p>
+        <p class="step-n">Step 1 of 8 &middot; required</p>
         <h2 id="ladder">The sky</h2>
-        <p class="step-hint">Pick the one closest to true right now. This is a reading of you, never of anyone else.</p>
-        <div class="rungs" role="group" aria-label="The sky right now">
+        <p class="step-hint" id="ladder-hint">Pick the one closest to true right now. This is a reading of you, never of anyone else.</p>
+        <div class="rungs" role="group" aria-labelledby="ladder" aria-describedby="ladder-hint">
           <button class="rung" type="button" data-sky="clear" aria-pressed="false"><span class="ico" aria-hidden="true">&#9728;</span><strong>Clear<em>Calm and connected</em></strong><span class="d">Breath is easy, shoulders aren&#39;t braced, and you can hear something hard without defending yourself.</span></button>
-          <button class="rung" type="button" data-sky="gusty" aria-pressed="false"><span class="ico" aria-hidden="true">&#127788;</span><strong>Gusty<em>Revved up</em></strong><span class="d">Heart rate&#39;s up, thoughts move fast, and small things start to feel urgent or personal.</span></button>
+          <button class="rung" type="button" data-sky="gusty" aria-pressed="false"><span class="ico" aria-hidden="true">&#127788;</span><strong>Gusty<em>Revved up</em></strong><span class="d">You feel keyed up, thoughts move fast, and small things start to feel urgent or personal.</span></button>
           <button class="rung" type="button" data-sky="fog" aria-pressed="false"><span class="ico" aria-hidden="true">&#127787;</span><strong>Fogged in<em>Running on empty</em></strong><span class="d">Flat, far away or foggy, and words are harder to find than usual.</span></button>
         </div>
-        <p class="step-hint" style="font-size:.82rem;">Curious about the science? These three match what nervous-system researchers call the ventral vagal, sympathetic and dorsal vagal states. You never need the terms.</p>
+        <p class="step-fine">Curious where these three come from? They&#39;re loosely borrowed from polyvagal theory, a popular idea about the nervous system that researchers still debate (it calls them the ventral vagal, sympathetic and dorsal vagal states). Here they&#39;re only everyday labels for how you feel, not a measurement of your body.</p>
       </div>
 
       <div class="step">
-        <p class="step-n">Step 2 of 7 <span class="opt">optional</span></p>
-        <h2>The pressure</h2>
-        <p class="step-hint">How much were you already carrying before whatever just happened?</p>
-        <div class="chips" role="group" aria-label="Pressure">
+        <p class="step-n">Step 2 of 8 <span class="opt">optional</span></p>
+        <h2 id="h-rel">Who you&#39;ll mostly be around today</h2>
+        <p class="step-hint" id="hint-rel">Pick one, and the forecast words its advice for them. Any kind of relationship counts.</p>
+        <div class="chips" role="group" aria-labelledby="h-rel" aria-describedby="hint-rel">
+          <button class="chip" type="button" data-rel="partner" aria-pressed="false">A partner</button>
+          <button class="chip" type="button" data-rel="family" aria-pressed="false">Family</button>
+          <button class="chip" type="button" data-rel="coparent" aria-pressed="false">A co-parent</button>
+          <button class="chip" type="button" data-rel="roommates" aria-pressed="false">Roommates</button>
+          <button class="chip" type="button" data-rel="coworkers" aria-pressed="false">Coworkers</button>
+          <button class="chip" type="button" data-rel="care" aria-pressed="false">Someone I care for</button>
+          <button class="chip" type="button" data-rel="friends" aria-pressed="false">Friends</button>
+          <button class="chip" type="button" data-rel="solo" aria-pressed="false">Mostly on my own</button>
+        </div>
+      </div>
+
+      <div class="step">
+        <p class="step-n">Step 3 of 8 <span class="opt">optional</span></p>
+        <h2 id="h-load">The pressure</h2>
+        <p class="step-hint" id="hint-load">How much were you already carrying before whatever just happened?</p>
+        <div class="chips" role="group" aria-labelledby="h-load" aria-describedby="hint-load">
           <button class="chip" type="button" data-load="light" aria-pressed="false">Light</button>
           <button class="chip" type="button" data-load="building" aria-pressed="false">Building</button>
           <button class="chip" type="button" data-load="heavy" aria-pressed="false">Heavy</button>
@@ -153,10 +182,10 @@
       </div>
 
       <div class="step">
-        <p class="step-n">Step 3 of 7 <span class="opt">optional</span></p>
-        <h2>Ground conditions</h2>
-        <p class="step-hint">The body underneath the mood. Tap anything true today.</p>
-        <div class="chips" role="group" aria-label="Ground conditions">
+        <p class="step-n">Step 4 of 8 <span class="opt">optional</span></p>
+        <h2 id="h-body">Ground conditions</h2>
+        <p class="step-hint" id="hint-body">The body underneath the mood. Tap anything true today.</p>
+        <div class="chips" role="group" aria-labelledby="h-body" aria-describedby="hint-body">
           <button class="chip" type="button" data-body="hungry" aria-pressed="false">Haven&#39;t eaten in a while</button>
           <button class="chip" type="button" data-body="thirsty" aria-pressed="false">Thirsty</button>
           <button class="chip" type="button" data-body="pain" aria-pressed="false">In pain or unwell</button>
@@ -168,10 +197,10 @@
       </div>
 
       <div class="step">
-        <p class="step-n">Step 4 of 7 <span class="opt">optional</span></p>
-        <h2>Last night&#39;s sleep</h2>
-        <p class="step-hint">Roughly. This is the single strongest signal in the whole check.</p>
-        <div class="chips" role="group" aria-label="Sleep last night">
+        <p class="step-n">Step 5 of 8 <span class="opt">optional</span></p>
+        <h2 id="h-sleep">Last night&#39;s sleep</h2>
+        <p class="step-hint" id="hint-sleep">Roughly. Sleep counts for a lot in this reading, because a short night makes almost everything feel heavier.</p>
+        <div class="chips" role="group" aria-labelledby="h-sleep" aria-describedby="hint-sleep">
           <button class="chip" type="button" data-sleep="bad" aria-pressed="false">Barely slept</button>
           <button class="chip" type="button" data-sleep="short" aria-pressed="false">Short night</button>
           <button class="chip" type="button" data-sleep="ok" aria-pressed="false">About enough</button>
@@ -180,10 +209,10 @@
       </div>
 
       <div class="step">
-        <p class="step-n">Step 5 of 7 <span class="opt">optional</span></p>
-        <h2>People load</h2>
-        <p class="step-hint">How much time with other people has today already asked of you?</p>
-        <div class="chips" role="group" aria-label="People load">
+        <p class="step-n">Step 6 of 8 <span class="opt">optional</span></p>
+        <h2 id="h-people">People load</h2>
+        <p class="step-hint" id="hint-people">How much time with other people has today already asked of you?</p>
+        <div class="chips" role="group" aria-labelledby="h-people" aria-describedby="hint-people">
           <button class="chip" type="button" data-people="none" aria-pressed="false">Barely any</button>
           <button class="chip" type="button" data-people="some" aria-pressed="false">A normal amount</button>
           <button class="chip" type="button" data-people="lots" aria-pressed="false">A lot</button>
@@ -192,10 +221,10 @@
       </div>
 
       <div class="step">
-        <p class="step-n">Step 6 of 7 <span class="opt">optional</span></p>
-        <h2>What&#39;s blowing in</h2>
-        <p class="step-hint">The fronts on the horizon. Tap any that are sitting on you today.</p>
-        <div class="chips" role="group" aria-label="What is pressing today">
+        <p class="step-n">Step 7 of 8 <span class="opt">optional</span></p>
+        <h2 id="h-front">What&#39;s blowing in</h2>
+        <p class="step-hint" id="hint-front">The fronts on the horizon. Tap any that are sitting on you today.</p>
+        <div class="chips" role="group" aria-labelledby="h-front" aria-describedby="hint-front">
           <button class="chip" type="button" data-front="work" aria-pressed="false">Work</button>
           <button class="chip" type="button" data-front="money" aria-pressed="false">Money</button>
           <button class="chip" type="button" data-front="kids" aria-pressed="false">Kids or caring</button>
@@ -208,10 +237,10 @@
       </div>
 
       <div class="step">
-        <p class="step-n">Step 7 of 7 <span class="opt">optional</span></p>
-        <h2>What would actually help in the next hour?</h2>
-        <p class="step-hint">Pick as many as fit. Naming it is most of the work.</p>
-        <div class="chips" role="group" aria-label="What would help">
+        <p class="step-n">Step 8 of 8 <span class="opt">optional</span></p>
+        <h2 id="h-need">What would actually help in the next hour?</h2>
+        <p class="step-hint" id="hint-need">Pick as many as fit. Naming it is most of the work.</p>
+        <div class="chips" role="group" aria-labelledby="h-need" aria-describedby="hint-need">
           <button class="chip" type="button" data-need="space" aria-pressed="false">Space</button>
           <button class="chip" type="button" data-need="food" aria-pressed="false">Food or water</button>
           <button class="chip" type="button" data-need="sleep" aria-pressed="false">Rest</button>
@@ -225,18 +254,21 @@
       </div>
     </div>
 
-    <div class="forecast" id="forecast" aria-live="polite">
+    <p class="see-fc"><button class="btn is-primary" type="button" id="see-fc">See my forecast</button></p>
+    <p class="sr-only" id="fc-status" role="status" aria-live="polite" aria-atomic="true"></p>
+
+    <div class="forecast" id="forecast">
       <div class="fc-head">
         <span class="fc-ico" id="fc-ico" aria-hidden="true">&#9925;</span>
         <div class="fc-titles">
-          <h2 id="fc-head">Your forecast appears here</h2>
+          <h2 id="fc-head" tabindex="-1">Your forecast appears here</h2>
           <p class="fc-sub" id="fc-sub">Pick the sky in step 1 to begin</p>
         </div>
         <span class="window w-wait" id="fc-window" hidden>Waiting</span>
       </div>
 
       <div class="gauge" id="gauge" hidden>
-        <div class="gauge-track"><div class="gauge-fill" id="gauge-fill"></div></div>
+        <div class="gauge-track" aria-hidden="true"><div class="gauge-fill" id="gauge-fill"></div></div>
         <div class="gauge-line"><span id="gauge-label">Pressure reading</span><span id="gauge-num"></span></div>
       </div>
 
@@ -248,8 +280,13 @@
           <div class="col later"><h3>Leave until the front passes</h3><ul id="col-later"></ul></div>
         </div>
 
+        <div class="fc-sec" id="sec-rel" hidden>
+          <h3 id="rel-h">Between you and others today</h3>
+          <div class="rel-tip"><p id="rel-tip"></p></div>
+        </div>
+
         <div class="fc-sec" id="sec-reset" hidden>
-          <h3>Sixty seconds that would help right now</h3>
+          <h3>Sixty seconds that might help right now</h3>
           <ul class="do-list" id="fc-reset"></ul>
         </div>
 
@@ -263,27 +300,36 @@
           <div class="say"><p id="fc-say"></p></div>
         </div>
 
+        <details class="how">
+          <summary>How this reading works</summary>
+          <p>It&#39;s a rough tally of what you told it, not a measurement. The sky sets the starting point. Heavy pressure, a short night, a lot of people time, body needs and open worries each add a little. A step you skip counts as a small, middle amount. The talk window mostly follows the sky: clear skies are good for talking, gusty skies say wait a little, and fog says leave it for another day.</p>
+        </details>
+
         <div class="actions">
           <button class="btn" type="button" id="copy-say">Copy the sentence</button>
+          <button class="btn" type="button" id="copy-share">Share my forecast</button>
           <button class="btn" type="button" id="copy-all">Copy the whole forecast</button>
-          <button class="btn is-primary" type="button" id="save">Log today&#39;s weather</button>
+          <button class="btn is-primary" type="button" id="save">Save today to my 7-day log</button>
           <button class="btn" type="button" id="reset">Start over</button>
         </div>
-        <p class="msg" id="msg" aria-live="polite"></p>
+        <p class="save-note">&ldquo;Share my forecast&rdquo; copies a short heads-up you can paste into a message yourself; nothing is sent from this page. The 7-day log is optional: it keeps this reading in this browser only (in its local storage), never on a server, and you can erase it at any time.</p>
+        <p class="msg" id="msg" role="status" aria-live="polite"></p>
       </div>
     </div>
 
-    <section class="almanac" id="almanac" hidden>
-      <h2>Your almanac</h2>
-      <p id="al-intro">Kept on this device only. Nothing is uploaded, and no one else can see it.</p>
-      <div class="strip" id="strip" role="img" aria-label="Your recent weather"></div>
-      <p class="strip-key"><span>&#9728; Clear</span><span>&#127788; Gusty</span><span>&#127787; Fogged in</span></p>
+    <section class="almanac" id="almanac" aria-labelledby="al-h" hidden>
+      <h2 id="al-h">Your 7-day log</h2>
+      <p id="al-intro">Kept in this browser only. Nothing is uploaded, and no one else can see it.</p>
+      <ol class="week" id="week"></ol>
+      <p class="strip-key" aria-hidden="true"><span>&#9728; Clear</span><span>&#127788; Gusty</span><span>&#127787; Fogged in</span><span>Taller bar = more pressure</span></p>
+      <p class="trend" id="trend"></p>
       <div class="pattern" id="pattern"></div>
-      <div class="actions"><button class="btn" type="button" id="erase">Erase my almanac</button></div>
+      <div class="actions"><button class="btn" type="button" id="erase">Erase my log</button></div>
+      <p class="msg" id="al-msg" role="status" aria-live="polite"></p>
     </section>
 
-    <p class="why"><strong>What this is not.</strong> It isn&#39;t a diagnosis, a score or a judgment. It describes a few hours of conditions, and conditions change. A heavy reading is information about a day, not a failing in a person.</p>
-    <p class="why">See also: <a href="/know-yourself.html">Know your own wiring</a>, for telling today’s conditions apart from lasting wiring and older patterns.</p>
+    <p class="why"><strong>What this is not.</strong> It isn&#39;t a diagnosis, a score or a judgment, and it can&#39;t tell you anything about your health. It describes a few hours of conditions, and conditions change. A heavy reading is information about a day, not a failing in a person.</p>
+    <p class="why">See also: <a href="/know-yourself.html">Know your own wiring</a>, for telling today&#39;s conditions apart from lasting wiring and older patterns, and the <a href="/carrier-wave-decoder.html">Carrier Wave Decoder</a>, for a moment that has already gone sideways.</p>
   </section>
 
   <p class="why" style="margin-top:2.5rem;">Looking for the Lemonade Stand, the weekly tally of who did what? It has <a href="/lemonade-stand.html">its own page</a>.</p>
@@ -292,25 +338,66 @@
 
 <script>
 (function(){
-  var KEY='tol-weather-v1', MAX=14;
-  var sky=null, load=null, sleep=null, people=null;
+  var KEY='tol-weather-v1', MAX_DAYS=14;
+  var sky=null, load=null, sleep=null, people=null, rel=null;
   var body={}, front={}, need={};
   function $(id){ return document.getElementById(id); }
   function on(o){ return Object.keys(o).filter(function(k){ return o[k]; }); }
   function list(a){ return a.length<2 ? (a[0]||'') : a.slice(0,-1).join(', ')+' and '+a[a.length-1]; }
+  function pad(n){ return (n<10?'0':'')+n; }
+  function localDay(d){ d=d||new Date(); return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate()); }
 
   var SKY={
-    clear:{ico:'\u2600',name:'Clear',sub:'Calm and connected'},
-    gusty:{ico:'\uD83C\uDF2C',name:'Gusty',sub:'Revved up'},
-    fog:{ico:'\uD83C\uDF2B',name:'Fogged in',sub:'Running on empty'}
+    clear:{ico:'☀',name:'Clear',sub:'Calm and connected'},
+    gusty:{ico:'🌬',name:'Gusty',sub:'Revved up'},
+    fog:{ico:'🌫',name:'Fogged in',sub:'Running on empty'}
   };
   var BODYTXT={hungry:"you haven't eaten in a while",thirsty:"you're thirsty",pain:"you're in pain or unwell",
     still:"you've been still all day",noise:"there's been too much noise or light",caffeine:"you're running on caffeine",
     screens:"you've been on screens since you woke"};
   var FRONTTXT={work:'work',money:'money',kids:'kids or caring',health:'health',family:'family',home:'the house',
     convo:'one conversation',unnamed:"something you can't name yet"};
+  var NEEDME={space:'some space',food:'food or water',sleep:'rest',move:'a chance to move',heard:'being heard',plan:'a plan',
+    company:'company',quiet:'quiet',help:'someone taking one thing off my plate'};
   var NEEDTXT={space:'space',food:'food or water',sleep:'rest',move:'to move',heard:'to be heard',plan:'a plan',
     company:'company',quiet:'quiet',help:'someone to take something off you'};
+
+  // Relationship wording: who, when "later" means, and one tip per sky.
+  var REL={
+    partner:{who:'your partner',later:'tonight',tip:{
+      clear:'A good window for the talk you two keep putting off. Pick one topic and keep it to twenty minutes.',
+      gusty:'Tell your partner it’s weather, not them, before they have to guess. A short heads-up saves a long argument.',
+      fog:'Ask for company or for quiet, whichever you need, and say roughly when you’ll be back to yourself.'}},
+    family:{who:'your family',later:'tomorrow',tip:{
+      clear:'A good day to settle one shared plan: who’s driving, who’s calling whom, who’s hosting.',
+      gusty:'Family buttons get pushed fast on gusty days. Keep calls short and save old topics for another time.',
+      fog:'“Can I call you tomorrow?” is a fine answer today. A time is kinder than silence.'}},
+    coparent:{who:'your co-parent',later:'tomorrow',tip:{
+      clear:'A good window to settle one practical detail: a pickup time, a school form, a weekend swap.',
+      gusty:'Keep handoffs short, friendly and factual today. Put anything bigger in a message you send tomorrow.',
+      fog:'Stick to logistics today. “Got it, thanks” is a complete reply.'}},
+    roommates:{who:'your roommates',later:'tomorrow',tip:{
+      clear:'A good day to agree one house thing: the dishes rule, quiet hours, the shared shopping.',
+      gusty:'Leave the note about the sink until tomorrow. Today, do your own part and let the rest wait.',
+      fog:'A closed door and a “just resting” is enough. You don’t owe anyone a full explanation.'}},
+    coworkers:{who:'your coworkers',later:'tomorrow morning',tip:{
+      clear:'A good window for the tricky email or the question you’ve been sitting on. Ask it plainly.',
+      gusty:'Write replies, wait ten minutes, then send. Short and factual beats fast and sharp.',
+      fog:'Protect your focus: pick the one task that matters most, and tell people when you’ll get back to them.'}},
+    care:{who:'the person you care for',later:'tomorrow',tip:{
+      clear:'A good day to plan ahead together: appointments, meals, and what help is coming this week.',
+      gusty:'Slow the pace on purpose. Slow hands and a slow voice make caring easier on both of you.',
+      fog:'Do the essentials kindly and let the rest go. If anyone can cover one thing today, ask them.'}},
+    friends:{who:'your friends',later:'another day',tip:{
+      clear:'A good day to reach out to the friend you’ve been meaning to call.',
+      gusty:'It’s fine to reschedule. “Can we do Thursday instead?” keeps the friendship and your evening.',
+      fog:'A short text like “thinking of you, low on words today” keeps the thread going without asking much of you.'}},
+    solo:{who:'yourself',later:'tomorrow',tip:{
+      clear:'Use the calm to write down what’s been on your mind, before a busy day buries it.',
+      gusty:'Burn off the gusts with something physical before you reply to anyone.',
+      fog:'Keep today small: food, water, rest, and one finishable thing.'}}
+  };
+  function laterWord(){ return rel&&REL[rel] ? REL[rel].later : 'tomorrow'; }
 
   function index(){
     var s=0;
@@ -323,49 +410,49 @@
     return Math.max(0,Math.min(100,Math.round(s)));
   }
 
+  // The band describes how much room is left in the day, so it never contradicts the sky.
   function band(i){
-    if(i<25) return 'Settled conditions';
-    if(i<45) return 'Breezy';
-    if(i<65) return 'Building front';
-    if(i<82) return 'Storm conditions';
-    return 'Whiteout';
+    if(i<25) return 'Plenty of room';
+    if(i<45) return 'Some room';
+    if(i<65) return 'Less room than usual';
+    if(i<82) return 'Little room';
+    return 'Very little room';
   }
 
   function talkWindow(i){
-    if(sky==='fog') return ['Window closed','w-closed'];
-    if(sky==='gusty') return i>=60?['Not tonight','w-closed']:['Wait 20 minutes','w-wait'];
-    return i>=50?['Open, keep it short','w-short']:['Window open','w-open'];
+    if(sky==='fog') return ['Talk window: closed for today','w-closed'];
+    if(sky==='gusty') return i>=60?['Talk window: not today','w-closed']:['Talk window: wait 20 minutes','w-wait'];
+    return i>=50?['Talk window: open, keep it short','w-short']:['Talk window: open','w-open'];
   }
 
-  function reset(){
+  function resetIdeas(){
     var r=[];
-    if(body.thirsty||need.food) r.push('Drink a full glass of water. Dehydration reads as irritation more often than anyone expects.');
-    if(body.hungry) r.push('Eat something, even something small. An empty tank makes every sentence land harder.');
-    if(body.still||need.move) r.push('Two minutes on your feet: stairs, the garden, once around the block. Movement burns off what the gusts leave behind.');
-    if(body.noise||need.quiet) r.push('Find the quietest room in the building and close the door for five minutes.');
-    if(body.screens) r.push('Look at something more than twenty feet away for a minute. Let your eyes reach their real range.');
-    if(sleep==='bad'||sleep==='short'||need.sleep) r.push('If you can lie down for ten minutes, do. If you can\u2019t, decide now what time you will wind down tonight.');
-    if(body.caffeine) r.push('Skip the next coffee. Caffeine on a gusty day mostly adds wind.');
-    if(sky!=='clear' && !r.length) r.push('Slow the breath out rather than in: the long exhale is the part that settles you.');
+    if(body.thirsty||need.food) r.push('Have a full glass of water. Small body needs can make everything else feel sharper.');
+    if(body.hungry) r.push('Eat something, even something small. It’s hard to be patient on an empty tank.');
+    if(body.pain) r.push('Go easy on yourself today. Lower the bar for what counts as a good day, and let people know you’re not at full strength.');
+    if(body.still||need.move) r.push('Two minutes on your feet: stairs, the yard, once around the block. Moving can shake off some of what the gusts leave behind.');
+    if(body.noise||need.quiet) r.push('Find the quietest room you can and close the door for five minutes.');
+    if(body.screens) r.push('Look at something far away for a minute, out a window if you can.');
+    if(sleep==='bad'||sleep==='short'||need.sleep) r.push('If you can lie down for ten minutes, do. If you can’t, decide now what time you’ll wind down tonight.');
+    if(body.caffeine) r.push('Maybe skip the next coffee. On a gusty day it can add to the wind.');
+    if(sky!=='clear' && !r.length) r.push('Breathe out slowly, a little longer than you breathe in, a few times. Many people find the slow exhale is the settling part.');
     return r.slice(0,4);
   }
 
   function goodAndLater(i){
     var good=[], later=[];
     if(sky==='clear'){
-      good.push('The conversation you\u2019ve been putting off');
-      good.push('Agreeing who owns what, while nobody is defending');
-      good.push('Writing down this week honestly');
-      later.push('Nothing much. Use the window.');
-      if(i>=50){ later=['Anything that needs a long attention span','Big, irreversible decisions']; good=['One short, honest conversation','Something practical and physical','Writing it down for later']; }
+      good=['The conversation you’ve been putting off','Agreeing who owns what, while nobody is defending','Writing down this week honestly'];
+      later=['Nothing much. Use the window.'];
+      if(i>=50){ later=['Anything that needs a long attention span','Big decisions that are hard to undo']; good=['One short, honest conversation','Something practical and physical','Writing it down for later']; }
     } else if(sky==='gusty'){
       good=['Physical jobs: dishes, laundry, a walk','Writing the thing down instead of saying it','Short factual messages, nothing weighty'];
-      later=['Deciding who does more','Anything about money','Replying to the message that stung','Any sentence beginning "you always"'];
+      later=['Deciding who does more','Anything about money','Replying to the message that stung','Any sentence beginning “you always”'];
     } else {
       good=['Warmth, water, food, lying down','Nothing that needs deciding','One small finishable thing, if any'];
-      later=['Every conversation that can wait until tomorrow','Any promise you\u2019d have to keep','Reading meaning into anyone\u2019s tone tonight'];
+      later=['Every conversation that can wait until '+laterWord(),'Any promise you’d have to keep','Reading meaning into anyone’s tone today'];
     }
-    if(front.money) later.push('Money talk, specifically. It never goes well under pressure.');
+    if(front.money && later.indexOf('Anything about money')<0) later.push('Money talk, if it can wait. It rarely goes well under pressure.');
     if(front.convo && sky!=='clear') later.push('That one conversation, until the sky changes.');
     return [good,later];
   }
@@ -373,65 +460,80 @@
   function nextSteps(){
     var d=[];
     if(sky==='clear'){
-      d.push('Follow the steps in <a href="/check-ins.html">Check-ins</a> so a good window doesn\u2019t get wasted.');
+      d.push('Follow the steps in <a href="/check-ins.html">Check-ins</a> so a good window doesn’t get wasted.');
       d.push('Test your opening line in the <a href="/signal-translator.html">Signal Translator</a> before you say it.');
       d.push('Log this week in <a href="/workpapers/wp-01.html">WP-01</a> while you can see it clearly.');
     } else if(sky==='gusty'){
       d.push('<a href="/wp-11.html">WP-11, the Calm-Down Kit</a> is the two-minute version of settling.');
-      d.push('<a href="/workpapers/wp-02-battery-stress-meter.html">WP-02</a> separates today\u2019s load from this one thing.');
+      d.push('<a href="/workpapers/wp-02-battery-stress-meter.html">WP-02</a> separates today’s load from this one thing.');
       d.push('If something must be said now, run it through <a href="/workpapers/wp-09-tone-filter.html">WP-09</a>: fact, feeling, ask.');
     } else {
       d.push('<a href="/wp-11.html">WP-11</a> holds the list you already decided on for exactly this.');
       d.push('Tell someone a time rather than a reason. <a href="/check-ins.html">Check-ins</a> has the words.');
-      d.push('When you\u2019re back up, <a href="/workpapers/wp-04-deficit-audit.html">WP-04</a> is for what keeps knocking you down.');
+      d.push('When you’re back up, <a href="/workpapers/wp-04-deficit-audit.html">WP-04</a> is for what keeps knocking you down.');
     }
+    if(front.convo && sky!=='clear') d.push('If that one conversation already went sideways, the <a href="/carrier-wave-decoder.html">Carrier Wave Decoder</a> helps you work out where it slipped.');
     if(need.heard) d.push('If you mostly need to be heard, say that first: <a href="/wired-differently.html">Wired Differently</a> covers why people answer with fixes instead.');
-    if(need.help) d.push('Handing something over is a structural fix, not a favor: <a href="/workpapers/wp-03-raci-treaty.html">WP-03</a> gives every recurring task one owner.');
+    if(need.help) d.push('Handing something over is a fix to the setup, not a favor: <a href="/workpapers/wp-03-raci-treaty.html">WP-03</a> gives every recurring task one owner.');
     return d.slice(0,4);
   }
 
   function sentence(){
-    if(need.space||need.quiet) return 'I need a bit of space before we get into this. Not forever, just now. Can we talk at [time]?';
-    if(need.heard) return 'I don\u2019t need it solved. I just need you to hear this for a few minutes first.';
-    if(need.help) return 'I\u2019m at the end of what I can carry today. Could you take [one thing] off me tonight?';
-    if(need.plan && sky!=='fog') return 'I think we\u2019re stuck because there isn\u2019t a plan yet. Ten minutes to make one?';
-    if(sky==='clear') return 'I\u2019m in a decent place to talk. Is now good for you?';
-    if(sky==='gusty') return 'I\u2019m running hot, and it isn\u2019t about you. Give me twenty minutes and I\u2019ll come find you.';
-    return 'I\u2019ve got nothing left in the tank tonight. I\u2019m not shutting you out. Can we pick this up tomorrow?';
+    var cw = rel==='coworkers', later=laterWord();
+    if(need.space||need.quiet) return 'I need a bit of space before we get into this. Not forever, just for now. Can we pick it up at [time]?';
+    if(need.heard) return 'I don’t need it solved. I just need you to hear this for a few minutes first.';
+    if(need.help) return cw ? 'I’m stretched thin today. Could you take [one task] off my list?' : 'I’m at the end of what I can carry today. Could you take [one thing] off me?';
+    if(need.plan && sky!=='fog') return 'I think we’re stuck because there isn’t a plan yet. Ten minutes to make one?';
+    if(sky==='clear') return 'I’m in a decent place to talk. Is now good for you?';
+    if(sky==='gusty') return 'I’m running hot, and it isn’t about you. Give me twenty minutes and I’ll come back to this.';
+    return cw ? 'I’m running low today, so I’ll keep to the essentials. Can we pick this up '+later+'?'
+              : 'I’ve got nothing left in the tank today. I’m not shutting you out. Can we pick this up '+later+'?';
   }
 
   function paragraphs(i){
-    var p=[], s=SKY[sky];
-    var lead={clear:'The sky is clear. Your body isn\u2019t braced, which means you can hear something hard without treating it as a threat. This is the weather the rest of the site is designed for.',
-      gusty:'It\u2019s gusty. Your system is revved up. That energy is useful for doing something physical, but it is poor weather for deciding anything about another person.',
-      fog:'You\u2019re fogged in. Flat, far away or foggy, and words are harder to reach than usual. Nothing decided in this weather gets decided well.'}[sky];
+    var p=[];
+    var lead={clear:'The sky is clear. Your body isn’t braced, which means you can hear something hard without treating it as a threat. This is the weather the rest of the site is designed for.',
+      gusty:'It’s gusty. You’re revved up. That energy is useful for doing something physical, but it is poor weather for deciding anything about another person.',
+      fog:'You’re fogged in. Flat, far away or foggy, and words are harder to reach than usual. Nothing decided in this weather gets decided well.'}[sky];
     p.push(lead);
+    if(sky==='clear' && i>=50) p.push('The sky is clear, but the ground is heavy. You’re calm right now, and there’s less in reserve than usual, so keep anything important short.');
 
     var b=on(body).map(function(k){ return BODYTXT[k]; });
     var groundBits=[];
     if(sleep==='bad') groundBits.push('you barely slept');
     else if(sleep==='short') groundBits.push('it was a short night');
     groundBits=groundBits.concat(b);
-    if(people==='nonstop') groundBits.push('there\u2019s been no gap between people all day');
+    if(people==='nonstop') groundBits.push('there’s been no gap between people all day');
     else if(people==='lots') groundBits.push('today has asked a lot of you socially');
     if(groundBits.length){
-      p.push('The ground underneath: '+list(groundBits)+'. That is not a side note. It is most of why today feels the way it does, and it is fixable in a way that character is not.');
+      p.push('The ground underneath: '+list(groundBits)+'. That isn’t a side note. It’s likely a big part of why today feels the way it does, and it’s easier to change than character is.');
     }
 
     var f=on(front).map(function(k){ return FRONTTXT[k]; });
     if(f.length){
-      p.push('Blowing in: '+list(f)+'. Weather from one front lands on whoever is nearest, which is usually the person who had nothing to do with it. Worth saying out loud before it does.');
+      p.push('Blowing in: '+list(f)+'. Weather from one front tends to land on whoever is nearest, often someone who had nothing to do with it. Worth saying out loud before it does.');
     }
 
     if(load==='heavy'&&sky!=='clear') p.push('You were already carrying a heavy day before this. Treat the size of your reaction as a reading on the day, not on whoever is in front of you.');
     if(load==='light'&&sky==='gusty') p.push('Your day has been light, which makes this worth a second look. Whatever stirred the air may matter more than its size suggests.');
-    if(sleep==='good'&&sky==='gusty') p.push('You slept well, so this isn\u2019t exhaustion talking. Something real is pushing, and it deserves a proper hearing rather than a quick fix.');
+    if(sleep==='good'&&sky==='gusty') p.push('You slept well, so this probably isn’t tiredness talking. Something real may be pushing, and it deserves a proper hearing rather than a quick fix.');
 
     var n=on(need).map(function(k){ return NEEDTXT[k]; });
-    if(n.length) p.push('You said what would help is '+list(n)+'. Arrange that before anything else. It is a reasonable thing to ask for out loud, and asking is cheaper than the argument you get by not asking.');
+    if(n.length) p.push('You said what would help is '+list(n)+'. Arrange that before anything else. It’s a reasonable thing to ask for out loud, and asking is cheaper than the argument you get by not asking.');
 
-    p.push('Overall: '+band(i).toLowerCase()+', at '+i+' out of 100 on the pressure reading. '+(i<45?'There is room in the day.':i<65?'There is less room than usual today. Spend it carefully.':'There is very little room today. Protect what is left rather than spending it on a debate.'));
+    p.push('Overall: '+band(i).toLowerCase()+' in the day, at '+i+' out of 100 on the pressure reading. '+(i<45?'There is room in the day.':i<65?'There is less room than usual today. Spend it carefully.':'There is very little room today. Protect what is left rather than spending it on a debate.'));
     return p;
+  }
+
+  function relTip(){ return rel&&REL[rel] ? REL[rel].tip[sky] : ''; }
+
+  var statusT=null;
+  function announce(i){
+    clearTimeout(statusT);
+    statusT=setTimeout(function(){
+      if(!sky) return;
+      $('fc-status').textContent='Forecast updated: '+SKY[sky].name+', '+band(i).toLowerCase()+'. '+talkWindow(i)[0]+'.';
+    },500);
   }
 
   function render(){
@@ -439,49 +541,89 @@
     var i=index(), s=SKY[sky], w=talkWindow(i), gl=goodAndLater(i);
     $('fc-ico').textContent=s.ico;
     $('fc-head').textContent=s.name+' today';
-    $('fc-sub').textContent=s.sub+' \u00b7 '+band(i);
+    $('fc-sub').textContent=s.sub+' · '+band(i);
     var win=$('fc-window'); win.hidden=false; win.className='window '+w[1]; win.textContent=w[0];
     $('gauge').hidden=false;
     $('gauge-fill').style.width=i+'%';
-    $('gauge-fill').style.background=i<45?'var(--credit)':i<65?'var(--brass)':'var(--debit)';
-    $('gauge-label').textContent='Pressure reading \u00b7 '+band(i);
+    $('gauge-fill').style.background=i<45?'var(--credit)':i<65?'#7A5620':'var(--debit)';
+    $('gauge-label').textContent='Pressure reading · '+band(i);
     $('gauge-num').textContent=i+' / 100';
     var fb=$('fc-body'); fb.innerHTML='';
     paragraphs(i).forEach(function(t){ var el=document.createElement('p'); el.textContent=t; fb.appendChild(el); });
     function fill(id,arr,html){ var ul=$(id); ul.innerHTML=''; arr.forEach(function(t){ var li=document.createElement('li'); if(html){ li.innerHTML=t; } else { li.textContent=t; } ul.appendChild(li); }); }
     fill('col-good',gl[0],false); fill('col-later',gl[1],false);
-    var r=reset();
+    var tip=relTip();
+    $('sec-rel').hidden=!tip;
+    if(tip){ $('rel-h').textContent=rel==='solo'?'For a day mostly on your own':'Between you and '+REL[rel].who+' today'; $('rel-tip').textContent=tip; }
+    var r=resetIdeas();
     $('sec-reset').hidden=!r.length; if(r.length) fill('fc-reset',r,false);
     fill('fc-do',nextSteps(),true);
     $('fc-say').textContent=sentence();
     $('fc-extra').hidden=false;
-    $('msg').textContent=''; $('save').disabled=false; $('save').textContent="Log today\u2019s weather";
+    $('msg').textContent='';
+    var today=get().filter(function(e){ return e.d===localDay(); })[0];
+    $('save').disabled=false; $('save').textContent=today?'Update today in my log':'Save today to my 7-day log';
+    announce(i);
   }
 
   function plain(){
     var i=index();
-    var t='Today\u2019s weather: '+SKY[sky].name+' \u00b7 '+band(i)+' \u00b7 pressure '+i+'/100\n\n';
-    t+=paragraphs(i).join('\n\n')+'\n\nSentence: '+sentence();
+    var t='Today’s weather: '+SKY[sky].name+' · '+band(i)+' · pressure '+i+'/100\n'+talkWindow(i)[0]+'\n\n';
+    t+=paragraphs(i).join('\n\n');
+    var gl=goodAndLater(i);
+    t+='\n\nGood hours for:\n- '+gl[0].join('\n- ')+'\n\nLeave until the front passes:\n- '+gl[1].join('\n- ');
+    if(relTip()) t+='\n\n'+relTip();
+    t+='\n\nIf I need to say something: '+sentence();
     return t;
   }
 
-  // ---------- almanac ----------
-  function get(){ try{ return JSON.parse(localStorage.getItem(KEY)||'[]'); }catch(e){ return []; } }
-  function put(a){ try{ localStorage.setItem(KEY, JSON.stringify(a.slice(-MAX))); }catch(e){} }
+  function shareText(){
+    var i=index(), n=on(need).map(function(k){ return NEEDME[k]; });
+    var when = sky==='clear' ? 'now is a decent time to talk' : sky==='gusty' ? (i>=60 ? 'better to leave big talks until '+laterWord() : 'give me about 20 minutes before anything big') : 'let’s leave anything big until '+laterWord();
+    var t='A heads-up from me: my weather today is '+SKY[sky].name.toLowerCase()+' ('+band(i).toLowerCase()+' in the day). '+when.charAt(0).toUpperCase()+when.slice(1)+'.';
+    if(n.length) t+=' What would help: '+list(n)+'.';
+    if(sky!=='clear') t+=' It isn’t about you.';
+    return t;
+  }
+
+  // ---------- 7-day log (opt-in, this browser only) ----------
+  function get(){
+    var a=[];
+    try{ a=JSON.parse(localStorage.getItem(KEY)||'[]'); }catch(e){ a=[]; }
+    if(!Array.isArray(a)) a=[];
+    // One entry per day: keep the latest reading for each date.
+    var byDay={}; a.forEach(function(e){ if(e&&e.d&&SKY[e.sky]) byDay[e.d]=e; });
+    return Object.keys(byDay).sort().map(function(k){ return byDay[k]; }).slice(-MAX_DAYS);
+  }
+  function put(a){ try{ localStorage.setItem(KEY, JSON.stringify(a.slice(-MAX_DAYS))); return true; }catch(e){ return false; } }
   function bucket(h){ return h<12?'mornings':h<17?'afternoons':'evenings'; }
+
+  function lastSeven(a){
+    var days=[], now=new Date();
+    for(var k=6;k>=0;k--){ var d=new Date(now.getFullYear(),now.getMonth(),now.getDate()-k); days.push(d); }
+    var map={}; a.forEach(function(e){ map[e.d]=e; });
+    return days.map(function(d){ return {date:d, key:localDay(d), e:map[localDay(d)]||null}; });
+  }
+
+  function trend(a){
+    var wk=lastSeven(a).filter(function(x){ return x.e; }).map(function(x){ return x.e; });
+    if(wk.length<3) return wk.length ? 'Log on at least three different days this week to see a trend.' : 'Nothing logged in the last seven days yet.';
+    var h=Math.floor(wk.length/2), avg=function(x){ return Math.round(x.reduce(function(s,e){ return s+(e.i||0); },0)/x.length); };
+    var first=avg(wk.slice(0,h)), second=avg(wk.slice(wk.length-h));
+    var c={clear:0,gusty:0,fog:0}; wk.forEach(function(e){ c[e.sky]++; });
+    var skies=[c.clear+' clear',c.gusty+' gusty',c.fog+' fogged in'].join(', ');
+    if(second-first>=8) return 'This week: pressure has been building, from about '+first+' to '+second+'. ('+skies+'.) Worth lightening one thing before the weekend.';
+    if(first-second>=8) return 'This week: pressure has been easing, from about '+first+' to '+second+'. ('+skies+'.) Whatever changed, it may be worth keeping.';
+    return 'This week: holding fairly steady, around '+avg(wk)+' out of 100. ('+skies+'.)';
+  }
 
   function patterns(a){
     var out=[];
-    if(a.length<2){ out.push('One reading is a mood. Come back a few times and the shape of your weeks starts to show.'); return out; }
-    var last=a.slice(-7), c={};
-    last.forEach(function(e){ c[e.sky]=(c[e.sky]||0)+1; });
-    var top=Object.keys(c).sort(function(x,y){ return c[y]-c[x]; })[0];
-    if(c[top]>=2) out.push(c[top]+' of your last '+last.length+' readings were '+SKY[top].name.toLowerCase()+'.');
-
+    if(a.length<2){ out.push('One reading is a mood. Come back on a few different days and the shape of your weeks starts to show.'); return out; }
     var rough=a.filter(function(e){ return e.sky!=='clear'; });
     var badSleep=rough.filter(function(e){ return e.sleep==='bad'||e.sleep==='short'; });
     if(rough.length>=3 && badSleep.length/rough.length>=0.6){
-      out.push('Sleep is doing most of the work here: '+badSleep.length+' of your '+rough.length+' rough days followed a short night. That makes bedtime a relationship tool, which is an odd sentence and a true one.');
+      out.push('Sleep seems to be doing a lot of the work here: '+badSleep.length+' of your '+rough.length+' rough days followed a short night. That makes bedtime a relationship tool, which is an odd sentence and a fair one.');
     }
     var heavy=a.filter(function(e){ return e.i>=60; });
     if(heavy.length>=3){
@@ -491,31 +633,38 @@
     }
     var fc={}; a.forEach(function(e){ (e.front||[]).forEach(function(k){ fc[k]=(fc[k]||0)+1; }); });
     var ft=Object.keys(fc).sort(function(x,y){ return fc[y]-fc[x]; })[0];
-    if(ft && fc[ft]>=3) out.push('The front that keeps returning is '+FRONTTXT[ft]+', '+fc[ft]+' times. A front that never clears is usually structural: <a href="/workpapers/wp-04-deficit-audit.html">WP-04</a> is built for exactly that.');
+    if(ft && fc[ft]>=3 && FRONTTXT[ft]) out.push('The front that keeps returning is '+FRONTTXT[ft]+', '+fc[ft]+' times. A front that never clears is usually about the setup, not you: <a href="/workpapers/wp-04-deficit-audit.html">WP-04</a> is built for exactly that.');
     var nc={}; a.forEach(function(e){ (e.need||[]).forEach(function(k){ nc[k]=(nc[k]||0)+1; }); });
     var nt=Object.keys(nc).sort(function(x,y){ return nc[y]-nc[x]; })[0];
-    if(nt && nc[nt]>=3) out.push('What you ask for most is '+NEEDTXT[nt]+', '+nc[nt]+' times. If nobody around you knows that, a <a href="/wiring-card.html">Wiring Card</a> says it once so you don\u2019t have to keep saying it.');
+    if(nt && nc[nt]>=3 && NEEDTXT[nt]) out.push('What you ask for most is '+NEEDTXT[nt]+', '+nc[nt]+' times. If nobody around you knows that, a <a href="/wiring-card.html">Wiring Card</a> says it once so you don’t have to keep saying it.');
     var peoplish=a.filter(function(e){ return e.people==='lots'||e.people==='nonstop'; });
     var peoplishRough=peoplish.filter(function(e){ return e.sky!=='clear'; });
-    if(peoplish.length>=3 && peoplishRough.length/peoplish.length>=0.6) out.push('Heavy people days and rough weather travel together for you: '+peoplishRough.length+' of '+peoplish.length+'. That is a capacity fact, not an attitude problem.');
+    if(peoplish.length>=3 && peoplishRough.length/peoplish.length>=0.6) out.push('Heavy people days and rough weather travel together for you: '+peoplishRough.length+' of '+peoplish.length+'. That’s a fact about your capacity, not an attitude problem.');
     var avg=Math.round(a.reduce(function(s,e){ return s+(e.i||0); },0)/a.length);
-    out.push('Your average pressure across '+a.length+' reading'+(a.length===1?'':'s')+' is '+avg+' out of 100.'+(avg>=60?' That is a lot to be running at. <a href="/workpapers/wp-02-battery-stress-meter.html">WP-02</a> puts firmer numbers on it, and <a href="/relationships.html">the relationships page</a> shows where the weight usually hides.':''));
+    out.push('Your average pressure across '+a.length+' logged day'+(a.length===1?'':'s')+' is '+avg+' out of 100.'+(avg>=60?' That is a lot to be running at. <a href="/workpapers/wp-02-battery-stress-meter.html">WP-02</a> puts firmer numbers on it, and <a href="/relationships.html">the relationships page</a> shows where the weight usually hides.':''));
     return out;
   }
 
+  var DAYN=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
   function draw(){
     var a=get();
     if(!a.length){ $('almanac').hidden=true; return; }
     $('almanac').hidden=false;
-    var strip=$('strip'); strip.innerHTML='';
-    a.slice(-MAX).forEach(function(e){
-      var d=document.createElement('span');
-      d.className='cell s-'+(e.sky==='clear'?'clear':e.sky==='gusty'?'gusty':'fog');
-      d.textContent=SKY[e.sky]?SKY[e.sky].ico:'';
-      d.title=e.d+' \u2014 '+(SKY[e.sky]?SKY[e.sky].name:'')+', pressure '+(e.i||0)+'/100';
-      strip.appendChild(d);
+    var week=$('week'); week.innerHTML='';
+    var todayKey=localDay();
+    lastSeven(a).forEach(function(x){
+      var li=document.createElement('li'); if(x.key===todayKey) li.className='today';
+      var e=x.e, dn=DAYN[x.date.getDay()];
+      var label=x.date.toLocaleDateString(undefined,{weekday:'long',month:'short',day:'numeric'})+': '+(e?SKY[e.sky].name+', pressure '+(e.i||0)+' out of 100':'nothing logged');
+      li.innerHTML='<span class="dn" aria-hidden="true"></span><span class="bar" aria-hidden="true"><i></i></span><span class="ic" aria-hidden="true"></span><span class="sr-only"></span>';
+      li.querySelector('.dn').textContent=x.key===todayKey?'Today':dn;
+      li.querySelector('.sr-only').textContent=label;
+      var bar=li.querySelector('.bar i');
+      if(e){ bar.className='s-'+e.sky; bar.style.height=Math.max(6,e.i||0)+'%'; li.querySelector('.ic').textContent=SKY[e.sky].ico; }
+      week.appendChild(li);
     });
-    $('al-intro').textContent=a.length+' reading'+(a.length===1?'':'s')+' kept on this device only. Nothing is uploaded, and no one else can see it.';
+    $('al-intro').textContent=a.length+' day'+(a.length===1?'':'s')+' logged, kept in this browser only. Nothing is uploaded, and no one else can see it. The log keeps your last '+MAX_DAYS+' days so this week can be compared with the one before.';
+    $('trend').textContent=trend(a);
     var p=$('pattern'); p.innerHTML='';
     patterns(a).forEach(function(t){ var el=document.createElement('p'); el.innerHTML=t; p.appendChild(el); });
   }
@@ -527,7 +676,7 @@
       b.setAttribute('aria-pressed','true'); sky=b.dataset.sky; render();
     });
   });
-  [['data-load',function(v){ load=v; }],['data-sleep',function(v){ sleep=v; }],['data-people',function(v){ people=v; }]].forEach(function(pair){
+  [['data-load',function(v){ load=v; }],['data-sleep',function(v){ sleep=v; }],['data-people',function(v){ people=v; }],['data-rel',function(v){ rel=v; }]].forEach(function(pair){
     var attr=pair[0], set=pair[1];
     document.querySelectorAll('['+attr+']').forEach(function(c){
       c.addEventListener('click', function(){
@@ -538,58 +687,90 @@
       });
     });
   });
-  [['data-body',body],['data-front',front],['data-need',need]].forEach(function(pair){
+  [['data-body',function(){ return body; }],['data-front',function(){ return front; }],['data-need',function(){ return need; }]].forEach(function(pair){
     document.querySelectorAll('['+pair[0]+']').forEach(function(c){
       c.addEventListener('click', function(){
         var was=c.getAttribute('aria-pressed')==='true';
         c.setAttribute('aria-pressed', was?'false':'true');
-        pair[1][c.getAttribute(pair[0])]=!was; render();
+        pair[1]()[c.getAttribute(pair[0])]=!was; render();
       });
     });
   });
 
-  function copy(text,ok){
-    if(navigator.clipboard){ navigator.clipboard.writeText(text).then(function(){ $('msg').textContent=ok; },function(){ $('msg').textContent='Select the text to copy it.'; }); }
-    else { $('msg').textContent='Select the text to copy it.'; }
+  $('see-fc').addEventListener('click', function(){
+    if(!sky){
+      $('fc-status').textContent='Pick the sky in step 1 first.';
+      var first=document.querySelector('[data-sky]'); if(first) first.focus();
+      return;
+    }
+    render();
+    var h=$('fc-head'); h.focus({preventScroll:true});
+    h.scrollIntoView({behavior: matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth', block:'start'});
+  });
+
+  function fallbackCopy(text){
+    try{
+      var ta=document.createElement('textarea'); ta.value=text; ta.setAttribute('readonly','');
+      ta.style.position='fixed'; ta.style.top='-1000px'; document.body.appendChild(ta); ta.select();
+      var ok=document.execCommand('copy'); document.body.removeChild(ta); return ok;
+    }catch(e){ return false; }
   }
-  $('copy-say').addEventListener('click', function(){ copy($('fc-say').textContent,'Sentence copied.'); });
-  $('copy-all').addEventListener('click', function(){ copy(plain(),'Forecast copied.'); });
+  function copy(text,ok){
+    var done=function(){ $('msg').textContent=ok; }, fail=function(){ $('msg').textContent=fallbackCopy(text)?ok:'Copying isn’t available here. Select the text on the page and copy it yourself.'; };
+    if(navigator.clipboard && navigator.clipboard.writeText){ navigator.clipboard.writeText(text).then(done,fail); } else fail();
+  }
+  $('copy-say').addEventListener('click', function(){ if(sky) copy($('fc-say').textContent,'Sentence copied.'); });
+  $('copy-all').addEventListener('click', function(){ if(sky) copy(plain(),'Forecast copied.'); });
+  $('copy-share').addEventListener('click', function(){ if(sky) copy(shareText(),'Heads-up copied. Paste it into a message to whoever you like: “'+shareText()+'”'); });
 
   $('save').addEventListener('click', function(){
     if(!sky) return;
-    var now=new Date(), a=get();
-    a.push({ d: now.toISOString().slice(0,10), t: now.getHours(), sky: sky, i: index(), load: load,
+    var now=new Date(), day=localDay(now), a=get(), had=a.some(function(e){ return e.d===day; });
+    a=a.filter(function(e){ return e.d!==day; });
+    a.push({ d: day, t: now.getHours(), sky: sky, i: index(), load: load, rel: rel,
              sleep: sleep, people: people, body: on(body), front: on(front), need: on(need) });
-    put(a); draw();
+    if(!put(a)){ $('msg').textContent='This browser isn’t allowing saved data (a private window, perhaps), so nothing was saved.'; return; }
+    draw();
     if (window.TOLGarden) window.TOLGarden.gift('weather');
-    $('msg').textContent='Logged on this device. Erase it any time below.';
-    $('save').disabled=true; $('save').textContent='Logged';
+    $('msg').textContent=(had?'Updated today in your log':'Saved to your 7-day log')+', in this browser only. Erase it any time below.';
+    $('save').textContent='Saved';
+    $('save').disabled=true;
   });
 
   $('reset').addEventListener('click', function(){
-    sky=load=sleep=people=null; body={}; front={}; need={};
-    document.querySelectorAll('[aria-pressed]').forEach(function(x){ x.setAttribute('aria-pressed','false'); });
+    clearTimeout(statusT); sky=load=sleep=people=rel=null; body={}; front={}; need={};
+    document.querySelectorAll('#today [aria-pressed]').forEach(function(x){ x.setAttribute('aria-pressed','false'); });
     $('fc-extra').hidden=true; $('gauge').hidden=true; $('fc-window').hidden=true;
-    $('fc-ico').textContent='\u26C5'; $('fc-head').textContent='Your forecast appears here';
+    $('fc-ico').textContent='⛅'; $('fc-head').textContent='Your forecast appears here';
     $('fc-sub').textContent='Pick the sky in step 1 to begin';
     $('fc-body').innerHTML='<p>Answer step 1 and the forecast fills in. Every extra step sharpens it, and none of them are required.</p>';
-    window.scrollTo({top:document.getElementById('today').offsetTop-70, behavior:'smooth'});
+    $('msg').textContent=''; $('fc-status').textContent='Cleared. Start again at step 1.';
+    var first=document.querySelector('[data-sky]');
+    if(first){ first.focus({preventScroll:true}); first.scrollIntoView({block:'center'}); }
   });
 
+  var eraseArm=null;
   $('erase').addEventListener('click', function(){
+    var b=$('erase');
+    if(!eraseArm){ b.textContent='Tap again to erase your log'; eraseArm=setTimeout(function(){ eraseArm=null; b.textContent='Erase my log'; },4000); return; }
+    clearTimeout(eraseArm); eraseArm=null; b.textContent='Erase my log';
     try{ localStorage.removeItem(KEY); }catch(e){}
-    $('almanac').hidden=true; $('msg').textContent='Almanac erased.';
+    $('al-msg').textContent='';
+    $('almanac').hidden=true;
+    $('fc-status').textContent='Your 7-day log was erased from this browser.';
+    if(sky){ $('save').disabled=false; $('save').textContent='Save today to my 7-day log'; $('msg').textContent='Your 7-day log was erased from this browser.'; }
   });
 
   draw();
 
-  // A gentle welcome back, from this device's own almanac. No streaks, no "you missed".
+  // A gentle welcome back, from this browser's own log. No streaks, no "you missed".
   (function(){
     var a=get(); if(!a.length) return;
-    var last=a[a.length-1], today=new Date().toISOString().slice(0,10);
-    if(last.d===today || !SKY[last.sky]) return;
+    var last=a[a.length-1];
+    if(last.d===localDay() || !SKY[last.sky]) return;
     var p=document.createElement('p'); p.className='tol-welcome';
-    p.innerHTML='<img src="/assets/img/mascots/bubble-buddy.svg" alt="" width="40" height="40"><span>Welcome back. Last time it was <strong>'+SKY[last.sky].name.toLowerCase()+'</strong>. How\u2019s today looking?</span>';
+    p.innerHTML='<img src="/assets/img/mascots/bubble-buddy.svg" alt="" width="40" height="40"><span>Welcome back. Last time it was <strong></strong>. How’s today looking?</span>';
+    p.querySelector('strong').textContent=SKY[last.sky].name.toLowerCase();
     var h=document.querySelector('.read-head'); if(h) h.parentNode.insertBefore(p,h.nextSibling);
   })();
 })();
