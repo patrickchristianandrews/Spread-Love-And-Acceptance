@@ -373,6 +373,10 @@
   .fj-card-meta{ margin:.25rem 0 0 !important; font-size:.8rem; color:var(--fj-soft); }
   .fj-card-more{ margin:0 0 .9rem !important; font-size:.9rem; }
   .fj-card-more a{ color:#5E4E8C; font-weight:600; text-underline-offset:3px; }
+  .fj-card-pillars{ margin:-.3rem 0 .7rem !important; font-size:.84rem; line-height:1.45; color:#6E5F80; }
+  .fj-card-pillars a{ color:#5E4E8C; font-weight:600; text-underline-offset:3px; }
+  .fj-fresh{ margin:.7rem 0 0 !important; padding:.5rem .7rem; border-radius:12px; background:#F6F0FB; font-size:.86rem !important; line-height:1.45; color:#5A4E6E !important; }
+  .fj-bloom.is-big .fj-flower{ min-height:62px; border-radius:18px; }
   @media (min-width:560px){
     .fj-mem{ grid-template-columns:repeat(4, 1fr); }
     .fj-harm{ grid-template-columns:1fr 1fr; }
@@ -395,8 +399,10 @@
   }
 </style>
 <script src="/assets/js/site.js" defer></script>
+<script src="/assets/js/journey-pools.js" defer></script>
 <script src="/assets/js/journey-levels.js" defer></script>
 <script src="/assets/js/frequency-journey.js" defer></script>
+<!-- pal cam hook --><script src="/assets/js/pups.js" defer></script><script src="/assets/js/pals-cam-acts.js" defer></script><script src="/assets/js/pals-cam.js" defer></script>
 </head>
 <body class="is-game" data-no-tip data-no-breathe data-no-weather>
 <main class="read fj-page">
@@ -410,6 +416,9 @@
   <a class="gm-tab" href="/quiet-words.html">&#128269; Words</a>
   <span class="gm-chip" data-rewards-chip></span>
 </nav>
+<!-- pal cam hook (pals-cam.js): check in on Tidbit & Sugarfoot -->
+<div class="pc-launch-row" data-palcam-row hidden><button type="button" class="pc-launch" data-palcam-open><span class="pc-paw"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><ellipse cx="12" cy="16.2" rx="4.6" ry="3.8"/><circle cx="6" cy="10.8" r="2.1"/><circle cx="9.6" cy="6.8" r="2.1"/><circle cx="14.4" cy="6.8" r="2.1"/><circle cx="18" cy="10.8" r="2.1"/></svg></span><span><span class="pc-lt">Check in on Tidbit &amp; Sugarfoot</span><small><i class="pc-dot" aria-hidden="true"></i>See what they&rsquo;re up to right now</small></span></button></div>
+<!-- /pal cam hook -->
 <p class="simple-lede fj-intro"><strong>What is this?</strong> A calm journey through seven tone-themed worlds with Sugarfoot and Tidbit, all the way up to the Perfect Frequency. Every level is a different small challenge: riddles, puzzles, breathing, sorting, a little singing. No timer, and no way to lose. <a href="/frequency-journey.html">About the journey</a></p>
 
 <section class="gm-board fj" id="fj" data-world="1" aria-label="The Frequency Journey">
@@ -420,6 +429,7 @@
       <p class="fj-sub"></p>
     </div>
     <div class="fj-tools">
+      <button type="button" class="fj-ic pc-ic" data-palcam-open hidden aria-label="Check in on Tidbit and Sugarfoot" title="Check in on Tidbit &amp; Sugarfoot"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><ellipse cx="12" cy="16.2" rx="4.6" ry="3.8"/><circle cx="6" cy="10.8" r="2.1"/><circle cx="9.6" cy="6.8" r="2.1"/><circle cx="14.4" cy="6.8" r="2.1"/><circle cx="18" cy="10.8" r="2.1"/></svg></button><!-- pal cam hook -->
       <button type="button" class="fj-ic fj-mapbtn" aria-label="Journey map" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 4 3 6.5v13L9 17l6 2.5 6-2.5v-13L15 6.5z"/><path d="M9 4v13M15 6.5v13"/></svg></button>
       <button type="button" class="fj-ic fj-snd" aria-pressed="true" aria-label="Sound"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z"/><path class="fj-on" d="M15.5 9a4 4 0 0 1 0 6M18 6.5a7.5 7.5 0 0 1 0 11"/><path class="fj-off" d="m16 9.5 5 5m0-5-5 5"/></svg></button>
       <button type="button" class="fj-ic fj-drone" aria-pressed="true" aria-label="Background tone"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M2.5 12c2-4 3.5-4 5 0s3 4 4.5 0 3-4 4.5 0 3 4 5 0"/><path class="fj-off" d="M4 4l16 16"/></svg></button>
@@ -495,6 +505,7 @@
   <ul>
     <li><strong>Every level is a different challenge.</strong> Eighteen of them across the first six worlds, each one fitted to its world: lantern riddles, a walk through the dark, a slow breath, thawing words, ice and water, putting steps in order, a feelings memory match, kinder words, a meadow to bloom, spotting small reaches, sharing the load fairly, bridge plates, echoing a tune, sorting fact, feeling and ask, finishing a line, telling what you saw from the story you added, choosing what would help most, and guiding a friend in the dark.</li>
     <li><strong>They grow a little harder as you climb.</strong> The leaves on each level (one to five) show how challenging it is: short and easy in the first world, more thoughtful at the summit.</li>
+    <li><strong>A new set each time you play.</strong> The riddles, words, scenes, sentences and questions are drawn fresh from big pools every time, skipping ones you’ve already seen on this device; the meadow, the tune and the dark path are made new each play, and the walking levels pick one of several boards. Each set is spread across the Five Pillars, with things to notice in yourself and between you and other people. Replay a level you’ve finished and it leans a little more thoughtful.</li>
     <li><strong>There’s no way to lose.</strong> A wrong answer just gets a gentle why and another try. Harder levels have three hearts that simply fill up again. <strong>Hint</strong> and <strong>Start again</strong> (or <strong>Restart</strong> on walking levels) are always there.</li>
     <li><strong>Walking levels:</strong> bring Sugarfoot (the one with the collar) and Tidbit (the one with the big smile and floppy ears) to the glowing tone together. Swipe, use the arrow pad or arrow keys (or W A S D). <strong>Switch</strong> (E) chooses who moves and <strong>Together</strong> (T) moves both. <strong>Undo</strong> is Z, <strong>Restart</strong> is R and <strong>Hint</strong> is H.</li>
     <li><strong>Everything works by tap or keyboard.</strong> Tab to any button; type letters for thawing words, press 1 to 5 to sing the crystals, and plan calls in the dark with the arrow keys and Enter.</li>

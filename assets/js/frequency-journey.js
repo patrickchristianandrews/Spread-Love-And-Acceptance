@@ -31,6 +31,12 @@
     // version 2: every level became a different kind of challenge. Anything already finished stays finished.
     if (s.v !== 2) { Object.keys(s.done).forEach(function (k) { if (!/^[1-6]-[1-3]$/.test(k)) delete s.done[k]; else s.done[k] = 1; }); s.v = 2; }
     if (!Array.isArray(s.harmony) || s.harmony.length !== 3) s.harmony = null;
+    // what this player has already seen, per pool (so every play brings a new set); older saves simply start empty
+    if (!s.seen || typeof s.seen !== 'object' || Array.isArray(s.seen)) s.seen = {};
+    Object.keys(s.seen).forEach(function (k) {
+      if (!Array.isArray(s.seen[k])) { delete s.seen[k]; return; }
+      s.seen[k] = s.seen[k].filter(function (x) { return typeof x === 'string'; }).slice(-400);
+    });
     return s;
   })();
   function persist() { try { localStorage.setItem(KEY, JSON.stringify(save)); } catch (e) { /* private mode: fine */ } }
@@ -255,10 +261,21 @@
 
   function palView(i, face) { return { i: i, path: null, t0: 0, seg: 150, face: face, blinkAt: now() + 1500 + Math.random() * 3000, bounce: null, happy: 0, bump: null }; }
 
-  function curLevel() { var W = WORLDS[G.w - 1]; return W && W.levels[G.l - 1]; }
-  function startLevel(w, l, keepHist) {
-    var W = WORLDS[w - 1], lv = W.levels[l - 1];
-    if (!lv) return;
+  // the level being played right now: a fresh set drawn for this play (journey-levels.js drawLevel)
+  function curLevel() {
+    if (G.lv && G.lv.id === G.w + '-' + G.l) return G.lv;
+    var W = WORLDS[G.w - 1]; return W && W.levels[G.l - 1];
+  }
+  // keepSet: "Restart" and "Start again" keep the same set; everything else (a new visit, Next, Play again) draws a new one
+  function startLevel(w, l, keepHist, keepSet) {
+    var W = WORLDS[w - 1], base = W.levels[l - 1];
+    if (!base) return;
+    if (!(keepSet && G.lv && G.lv.id === w + '-' + l)) {
+      var drawn = null;
+      try { drawn = J.drawLevel ? J.drawLevel(w, l, save.seen, { again: isDone(w, l) }) : null; } catch (e) { drawn = null; }
+      G.lv = drawn || base; if (!G.lv.id) G.lv = Object.assign({}, base, { id: w + '-' + l, set: [], pillars: [] });
+    }
+    var lv = G.lv;
     clearTimers(); C = null; G.maze = false; G.won = false;
     G.w = w; G.l = l;
     save.last = w + '-' + l; persist();
@@ -273,7 +290,7 @@
   }
   // the grid levels: walking the pals (and "Calls in the dark", which plans a walk)
   function startGrid(w, l, keepHist) {
-    var W = WORLDS[w - 1], lv = W.levels[l - 1];
+    var lv = G.lv;
     G.maze = lv.type === 'maze';
     G.L = G.maze ? J.mazeParse(lv) : J.parse(lv, w); G.S = J.init(G.L); G.view = J.clone(G.S);
     if (!keepHist) G.hist = [];
@@ -418,7 +435,7 @@
     wake();
     if (!cardEl.hidden) return;
     if (G.moves) G.hist.push(snapshot());
-    var keep = G.hist; startLevel(G.w, G.l, true); G.hist = keep;
+    var keep = G.hist; startLevel(G.w, G.l, true, true); G.hist = keep;
     say('A fresh start. (Undo brings back where you were.)');
   }
   function switchPal(to) {
@@ -523,8 +540,9 @@
         p: lv.why,
         steps: steps,
         more: lv.more,
-        btns: last ? [['World complete →', function () { worldCard(wl); }, true], ['Play again', function () { hideCard(); startLevel(wl, ll); }]]
-          : [['Next level →', function () { hideCard(); startLevel(wl, ll + 1); }, true], ['Journey map', function () { hideCard(); showMap(wl); }], ['Play again', function () { hideCard(); startLevel(wl, ll); }]]
+        pillars: lv.pillars,
+        btns: last ? [['World complete →', function () { worldCard(wl); }, true], ['Play again: a new set', function () { hideCard(); startLevel(wl, ll); }]]
+          : [['Next level →', function () { hideCard(); startLevel(wl, ll + 1); }, true], ['Journey map', function () { hideCard(); showMap(wl); }], ['Play again: a new set', function () { hideCard(); startLevel(wl, ll); }]]
       });
     }, grid ? (REDUCED ? 300 : 1100) : 0);
   }
@@ -558,6 +576,21 @@
     var mo = cardEl.querySelector('.fj-card-more'), ma = mo.querySelector('a');
     if (o.more) { ma.href = o.more[0]; ma.textContent = 'Read more: ' + o.more[1] + ' →'; }
     mo.hidden = !o.more;
+    // which of the Five Pillars this set practised, in plain words, with a link to where they're explained
+    var pe2 = cardEl.querySelector('.fj-card-pillars');
+    if (!pe2) { pe2 = el('p', 'fj-card-pillars'); mo.parentNode.insertBefore(pe2, mo); }
+    var PP = window.TOLJourneyPools, ps = (o.pillars || []).filter(function (n) { return PP && PP.pillars && PP.pillars[n]; });
+    pe2.innerHTML = '';
+    if (ps.length) {
+      var pa = el('a'); pa.href = PP.pillarPage + (ps.length === 1 && PP.pillars[ps[0]].id ? '#' + PP.pillars[ps[0]].id : ''); pa.textContent = ps.length === 1 ? 'Five Pillars' : 'the Five Pillars';
+      pe2.appendChild(document.createTextNode(ps.length === 1 ? 'This is Pillar ' + PP.pillars[ps[0]].roman + ', ' + PP.pillars[ps[0]].name + ', one of the ' : 'This set practised '));
+      if (ps.length === 1) { pe2.appendChild(pa); pe2.appendChild(document.createTextNode('.')); }
+      else {
+        pe2.appendChild(document.createTextNode(ps.map(function (n) { return PP.pillars[n].roman + ' ' + PP.pillars[n].name; }).join(' · ') + ', from '));
+        pe2.appendChild(pa); pe2.appendChild(document.createTextNode('.'));
+      }
+    }
+    pe2.hidden = !ps.length;
     var bx = cardEl.querySelector('.fj-card-btns'); bx.innerHTML = '';
     (o.btns || []).forEach(function (b) { var x = el('button', b[2] ? 'fj-go' : ''); x.type = 'button'; x.textContent = b[0]; x.addEventListener('click', b[1]); bx.appendChild(x); });
     cardEl.hidden = false;
@@ -565,7 +598,7 @@
   }
   function hideCard() { cardEl.hidden = true; if (cardReturn && cardReturn.focus && document.contains(cardReturn) && !cardReturn.closest('.fj-card')) { try { cardReturn.focus({ preventScroll: true }); } catch (e) { } } }
 
-  function levelMin(w, l) { var lv = WORLDS[w - 1].levels[l - 1]; return lv && lv.min; }
+  function levelMin(w, l) { var lv = G.lv && G.lv.id === w + '-' + l ? G.lv : WORLDS[w - 1].levels[l - 1]; return lv && lv.min; }
 
   /* ------------------------------------------------------------------ layout */
   function resize() {
@@ -1102,7 +1135,7 @@
   }
 
   function startChal(w, l) {
-    var W = WORLDS[w - 1], lv = W.levels[l - 1];
+    var lv = G.lv;
     C = { type: lv.type, lv: lv, hearts: 3, useHearts: lv.d >= 4 && ['echo', 'sort', 'spot', 'choose'].indexOf(lv.type) >= 0, done: false, timers: [] };
     G.react = null; G.parts = [];
     setMode('chal'); resize(); paintScene();
@@ -1114,7 +1147,7 @@
     C.heartsEl = el('span', 'fj-hearts'); C.heartsEl.hidden = !C.useHearts; bar.appendChild(C.heartsEl);
     var tools = el('span', 'fj-cbar-tools');
     tools.appendChild(btn('fj-soft fj-chint', 'Hint', function () { if (C && !C.done && C.hint) C.hint(); }, 'A gentle hint'));
-    tools.appendChild(btn('fj-soft', 'Start again', function () { startLevel(G.w, G.l); }));
+    tools.appendChild(btn('fj-soft', 'Start again', function () { startLevel(G.w, G.l, false, true); }));
     bar.appendChild(tools); chalEl.appendChild(bar);
     renderHearts();
     (BUILD[lv.type] || function () {})();
@@ -1202,7 +1235,7 @@
   BUILD.riddle = function () { C.i = 0; riddleStep(); };
   function riddleStep() {
     var R = C.lv.riddles, r = R[C.i], last = C.i === R.length - 1;
-    choiceQ({ k: 'Riddle ' + (C.i + 1) + ' of ' + R.length, q: r.q, options: r.options, hintText: r.hint, idx: C.i,
+    choiceQ({ k: 'Riddle ' + (C.i + 1) + ' of ' + R.length + (r.w && WORLDS[r.w - 1] ? ' · from the ' + WORLDS[r.w - 1].short : ''), q: r.q, options: r.options, hintText: r.hint, idx: C.i,
       nextLabel: last ? 'Light the lantern →' : 'Next riddle →',
       onRight: function () { if (last) finish(); else { C.i++; riddleStep(); focusFirst(C.body, '.fj-opt'); } } });
     G.lanterns = C.i;
@@ -1262,7 +1295,7 @@
     if (Math.abs(tg.d) <= win) {
       if (C.last === tg.id) { fb('That turn is already counted. Wait for the next one.', 'soft'); return; }
       C.last = tg.id; C.hits++; breathDots(); chime(C.hits); react('yay');
-      if (C.hits >= C.lv.need) { fb('Five slow breaths, and every lantern is lit.', 'good'); C.tapBtn.disabled = true; finish(); return; }
+      if (C.hits >= C.lv.need) { fb(cap1(NUMW[C.lv.need] || String(C.lv.need)) + ' slow breaths, and every lantern is lit.', 'good'); C.tapBtn.disabled = true; finish(); return; }
       fb(tg.top ? 'Full. Lovely. Now breathe out, slowly.' : 'Empty. Lovely. Now breathe in.', 'good');
     } else {
       C.miss++; react('hmm');
@@ -1279,6 +1312,8 @@
     else s = (b.inh ? 'Breathe in… ' : 'and out… ') + b.count;
     if (s !== C.cue) { C.cue = s; C.cueEl.textContent = s; }
   }
+
+  var NUMW = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten'];
 
   /* ---- thawing words */
   BUILD.unscramble = function () { C.i = 0; wordStep(); };
@@ -1354,7 +1389,7 @@
   BUILD.sequence = function () {
     var n = C.lv.steps.length;
     C.slotv = []; for (var k = 0; k < n; k++) C.slotv.push(-1);
-    C.locked = []; C.pool = shuffled(C.lv.steps.map(function (_, i) { return i; }), 31);
+    C.locked = []; C.pool = shuffled(C.lv.steps.map(function (_, i) { return i; }), 1 + Math.floor(Math.random() * 1e6));
     seqRender();
     C.hint = function () {
       var j = C.slotv.findIndex(function (v, k) { return !C.locked[k]; }); if (j < 0) return;
@@ -1368,7 +1403,7 @@
   function seqRender() {
     var S = C.lv.steps, n = S.length;
     C.body.innerHTML = '';
-    C.body.appendChild(txt('p', 'fj-ck', 'Your order'));
+    C.body.appendChild(txt('p', 'fj-ck', (C.lv.seqTitle ? C.lv.seqTitle + ' · ' : '') + 'your order'));
     var ol = el('ol', 'fj-seq');
     C.slotv.forEach(function (v, k) {
       var li = el('li');
@@ -1407,19 +1442,19 @@
     seqRender(); useHeart(msg); focusFirst(C.body, '.fj-pool .fj-opt');
   }
   function seqMaybeWin() {
-    if (C.locked.filter(Boolean).length === C.lv.steps.length) { fb('That’s the order. Notice, name it, check yourself, slow down, then back to the topic.', 'good'); react('yay'); chime(4); finish(); }
+    if (C.locked.filter(Boolean).length === C.lv.steps.length) { fb('That’s the order. ' + (C.lv.win || 'Notice, name it, check yourself, slow down, then back to the topic.'), 'good'); react('yay'); chime(4); finish(); }
   }
 
   /* ---- what would help? a memory match of feelings and what helps */
   BUILD.match = function () {
     var cards = [];
     C.lv.pairs.forEach(function (p, i) { cards.push({ p: i, s: 'a' }); cards.push({ p: i, s: 'b' }); });
-    C.cards = shuffled(cards, 53); C.up = []; C.got = {}; C.found = 0;
+    C.cards = shuffled(cards, 1 + Math.floor(Math.random() * 1e6)); C.up = []; C.got = {}; C.found = 0;
     C.body.innerHTML = '';
-    C.grid = el('div', 'fj-mem'); C.grid.setAttribute('role', 'group'); C.grid.setAttribute('aria-label', 'Twelve cards');
+    C.grid = el('div', 'fj-mem'); C.grid.setAttribute('role', 'group'); C.grid.setAttribute('aria-label', (NUMW[cards.length] ? cap1(NUMW[cards.length]) : cards.length) + ' cards');
     C.cards.forEach(function (cd, i) {
       var b = el('button', 'fj-card-m'); b.type = 'button'; b.setAttribute('data-i', i); b.setAttribute('data-pair', cd.p);
-      b.innerHTML = '<span class="fj-mb" aria-hidden="true"></span><span class="fj-mf"><small>' + (cd.s === 'a' ? 'Feeling' : 'What helps') + '</small>' + esc(cd.s === 'a' ? C.lv.pairs[cd.p].a : C.lv.pairs[cd.p].b) + '</span>';
+      b.innerHTML = '<span class="fj-mb" aria-hidden="true"></span><span class="fj-mf"><small>' + esc(memSide(cd)) + '</small>' + esc(cd.s === 'a' ? C.lv.pairs[cd.p].a : C.lv.pairs[cd.p].b) + '</span>';
       b.classList.add(cd.s === 'a' ? 'is-feel' : 'is-help');
       b.addEventListener('click', function () { wake(); flip(i); });
       C.grid.appendChild(b);
@@ -1438,11 +1473,16 @@
       fb('Hint: a quick peek at one pair.', 'hint');
     };
   };
+  // each card says what kind of card it is: "Feeling" and "What helps", "Need" and "How to ask", …
+  function memSide(cd) {
+    var P = C.lv.pairs[cd.p], K = C.lv.kinds && P.c && C.lv.kinds[P.c];
+    return K ? K[cd.s === 'a' ? 0 : 1] : cd.s === 'a' ? 'Feeling' : 'What helps';
+  }
   function memLabels() {
     C.cards.forEach(function (cd, i) {
       var b = C.grid.children[i], open = C.up.indexOf(i) >= 0 || C.got[cd.p];
       b.classList.toggle('is-up', !!open); b.classList.toggle('is-got', !!C.got[cd.p]);
-      b.setAttribute('aria-label', 'Card ' + (i + 1) + (open ? ': ' + (cd.s === 'a' ? 'feeling, ' + C.lv.pairs[cd.p].a : 'what helps, ' + C.lv.pairs[cd.p].b) + (C.got[cd.p] ? ', matched' : '') : ', face down'));
+      b.setAttribute('aria-label', 'Card ' + (i + 1) + (open ? ': ' + memSide(cd).toLowerCase() + ', ' + (cd.s === 'a' ? C.lv.pairs[cd.p].a : C.lv.pairs[cd.p].b) + (C.got[cd.p] ? ', matched' : '') : ', face down'));
       b.setAttribute('aria-pressed', open ? 'true' : 'false');
     });
   }
@@ -1470,10 +1510,12 @@
 
   /* ---- let the meadow bloom (a small lights-out puzzle; any tap can be undone by tapping it again) */
   BUILD.bloom = function () {
+    C.n = C.lv.n || 3; C.N = C.n * C.n;
     C.bits = J.bloomBits(C.lv.start); C.taps = 0;
     C.body.innerHTML = '';
-    C.grid = el('div', 'fj-bloom'); C.grid.setAttribute('role', 'group'); C.grid.setAttribute('aria-label', 'Nine flowers');
-    for (var i = 0; i < 9; i++) (function (i) {
+    C.grid = el('div', 'fj-bloom'); C.grid.setAttribute('role', 'group'); C.grid.setAttribute('aria-label', cap1(NUMW[C.N] || C.N + '') + ' flowers');
+    if (C.n !== 3) { C.grid.style.gridTemplateColumns = 'repeat(' + C.n + ', 1fr)'; C.grid.style.maxWidth = (C.n * 5.4) + 'rem'; C.grid.classList.add('is-big'); }
+    for (var i = 0; i < C.N; i++) (function (i) {
       var b = el('button', 'fj-flower'); b.type = 'button';
       b.innerHTML = '<svg viewBox="0 0 40 40" aria-hidden="true"><g class="pet"><circle cx="20" cy="10" r="7"/><circle cx="29.5" cy="17" r="7"/><circle cx="26" cy="28" r="7"/><circle cx="14" cy="28" r="7"/><circle cx="10.5" cy="17" r="7"/></g><circle class="mid" cx="20" cy="20" r="5.5"/><path class="bud" d="M20 32c-6-3-7-11 0-18 7 7 6 15 0 18z"/><path class="stem" d="M20 32v6"/></svg>';
       b.addEventListener('click', function () { wake(); bloomTap(i); });
@@ -1483,28 +1525,28 @@
     C.body.appendChild(C.tapsEl = txt('p', 'fj-ck fj-taps', ''));
     bloomRender();
     C.hint = function () {
-      var sol = J.bloomSolve(C.bits); if (!sol || !sol.length) return;
+      var sol = J.bloomSolve(C.bits, C.n); if (!sol || !sol.length) return;
       var i = sol[0], b = C.grid.children[i]; b.classList.add('is-hint'); later(function () { b.classList.remove('is-hint'); }, 2200);
-      fb('Hint: try the flower in row ' + ((i / 3 | 0) + 1) + ', column ' + (i % 3 + 1) + '. (About ' + sol.length + ' taps to go.)', 'hint');
+      fb('Hint: try the flower in row ' + ((i / C.n | 0) + 1) + ', column ' + (i % C.n + 1) + '. (About ' + sol.length + ' taps to go.)', 'hint');
     };
   };
   function bloomTap(i) {
     if (C.done) return;
-    C.bits = J.bloomTap(C.bits, i); C.taps++;
+    C.bits = J.bloomTap(C.bits, i, C.n); C.taps++;
     var open = C.bits.filter(Boolean).length;
     tone(soft(WORLDS[G.w - 1].hz) * SCALE[open % 8], 0, 0.5, 0.03);
     bloomRender();
-    if (open === 9) { fb('Every flower is open. The whole meadow blooms.', 'good'); react('yay'); finish(); }
-    else if (open >= 7) fb(open + ' of 9 open. So close.');
+    if (open === C.N) { fb('Every flower is open. The whole meadow blooms.', 'good'); react('yay'); finish(); }
+    else if (open >= C.N - 2) fb(open + ' of ' + C.N + ' open. So close.');
     else fb('');
   }
   function bloomRender() {
     Array.prototype.forEach.call(C.grid.children, function (b, i) {
       var on = !!C.bits[i]; b.classList.toggle('is-open', on);
-      b.setAttribute('aria-label', 'Flower, row ' + ((i / 3 | 0) + 1) + ', column ' + (i % 3 + 1) + (on ? ': open' : ': a closed bud'));
+      b.setAttribute('aria-label', 'Flower, row ' + ((i / C.n | 0) + 1) + ', column ' + (i % C.n + 1) + (on ? ': open' : ': a closed bud'));
       b.setAttribute('aria-pressed', on ? 'true' : 'false');
     });
-    C.tapsEl.textContent = C.taps ? C.taps + (C.taps === 1 ? ' tap' : ' taps') + ' · ' + C.bits.filter(Boolean).length + ' of 9 open' : C.bits.filter(Boolean).length + ' of 9 open';
+    C.tapsEl.textContent = (C.taps ? C.taps + (C.taps === 1 ? ' tap' : ' taps') + ' · ' : '') + C.bits.filter(Boolean).length + ' of ' + C.N + ' open';
   }
 
   /* ---- small reaches: notice the bids, then turn toward one */
@@ -1521,7 +1563,7 @@
   };
   function bidsRender() {
     C.body.innerHTML = '';
-    C.body.appendChild(txt('p', 'fj-ck', 'A Tuesday evening'));
+    C.body.appendChild(txt('p', 'fj-ck', C.lv.sceneTitle || 'A Tuesday evening'));
     var box = el('div', 'fj-scene-list'); box.setAttribute('role', 'group'); box.setAttribute('aria-label', 'Moments in the evening');
     C.lv.scene.forEach(function (s, i) {
       var b = btn('fj-bid' + (C.ok[i] ? ' is-yes' : C.mark[i] ? ' is-on' : ''), s.t, function () {
@@ -1564,6 +1606,7 @@
   BUILD.balance = function () {
     C.own = C.lv.jobs.map(function () { return -1; });
     C.body.innerHTML = '';
+    if (C.lv.fairTitle) C.body.appendChild(txt('p', 'fj-ck', C.lv.fairTitle));
     C.meters = el('div', 'fj-meters'); C.body.appendChild(C.meters);
     var list = el('ul', 'fj-jobs'); C.list = list;
     C.lv.jobs.forEach(function (j, i) {
@@ -2293,6 +2336,7 @@
       });
       panel.appendChild(box);
     }
+    if (worldOpen(w) && W.levels.length) panel.appendChild(el('p', 'fj-fresh', '<b>New set each time you play.</b> Fresh riddles, puzzles and boards on every visit, spread across the Five Pillars. Replay a level you’ve finished and it leans a little more thoughtful.'));
     panel.appendChild(el('p', 'fj-note', 'The tones are used here as calm themes for each world, not as a treatment.'));
     panel.hidden = false;
   }
@@ -2414,8 +2458,11 @@
       return { mode: mode, w: G.w, l: G.l, type: lv && lv.type, kind: lv && lv.kind, d: lv && lv.d, a: G.S && G.S.a, b: G.S && G.S.b, moves: G.moves, won: G.won,
         together: G.together, sel: G.sel, card: !cardEl.hidden, hist: G.hist.length, calls: G.maze && G.calls ? G.calls.map(function (c) { return c.slice(); }) : null, walking: !!G.walking,
         chal: C ? { type: C.type, done: C.done, hearts: C.hearts, i: C.i, j: C.j, len: C.len, pos: C.pos, playing: !!C.playing, hits: C.hits, picks: C.picks } : null,
-        harmony: save.harmony, done: Object.keys(save.done).length };
+        harmony: save.harmony, done: Object.keys(save.done).length, set: G.lv && G.lv.id === G.w + '-' + G.l ? G.lv.set.slice() : null };
     },
+    // the set drawn for this play (a copy), and what this browser has seen so far
+    level: function () { return G.lv ? JSON.parse(JSON.stringify(G.lv)) : null; },
+    seen: function () { return JSON.parse(JSON.stringify(save.seen || {})); },
     act: function (who, d) { if (animating()) finishAnims(); move(d, who); },
     start: startLevel, map: showMap, sky: function (force) { startSky(force); }, harmony: function () { startHarmony(); },
     finish: function () { if (animating()) finishAnims(); },

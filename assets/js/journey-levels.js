@@ -314,13 +314,13 @@
           why: 'Say the request as a request, put a real time on it, and keep to one thing at a time.',
           star: 'Plain words, clearly said',
           more: ['/wired-differently.html', 'Wired Differently: words that arrive'],
-          lines: [
-            { before: '“Tomorrow after dinner” is a return time. “', after: '” isn’t.', a: ['later'], choices: ['Later', 'Tonight', 'Soon'], hint: 'It’s the vaguest word for “not now”.', why: 'A return time names when. “Later” leaves the other person waiting and wondering.' },
-            { before: 'A complaint is about the event. Criticism is about the ', after: '.', a: ['person'], choices: ['weather', 'person', 'money'], hint: 'Criticism aims at who someone is.', why: '“The sink was full” is about the event. “You’re careless” is about the person.' },
-            { before: 'What you meant and how it ', after: ' can both be true.', a: ['landed', 'lands', 'felt'], choices: ['started', 'landed', 'ended'], hint: 'Think of a plane arriving.', why: 'Good intent doesn’t cancel the impact. You can hold both.' },
-            { before: 'Work that belongs to everyone ends up belonging to ', after: '.', a: ['no one', 'noone', 'nobody', 'no-one'], choices: ['no one', 'someone', 'the kids'], hint: 'Two words: the opposite of everyone.', why: 'Shared jobs with no named owner quietly land on whoever notices first.' },
-            { before: 'Regulate first, ', after: ' second.', a: ['negotiate'], choices: ['apologise', 'negotiate', 'celebrate'], hint: 'It’s what you do when you work out a deal together.', why: 'A calm body can hear a hard sentence. A revved-up one hears an attack.' },
-            { before: '“Thanks for everything” is nice. A ', after: ' thank-you is better.', a: ['specific'], choices: ['loud', 'quick', 'specific'], hint: 'It names the exact thing someone did.', why: '“Thanks for sorting the school forms on your lunch break” shows you noticed.' }
+          lines: [ // the fallback set (journey-pools.js has many more); every line appears on the site word for word
+            { id: 'l01', before: 'One ', a: ['topic'], after: ', and you’re on the same side.', choices: ['topic', 'voice', 'rule'], hint: 'A check-in keeps to just one of these.', why: 'One topic at a time, and both on the same side of it.' },
+            { id: 'l09', before: 'A specific thank-you is how invisible effort finally gets ', a: ['seen'], after: '.', choices: ['seen', 'lost', 'paid'], hint: 'The opposite of invisible.', why: 'Naming the exact thing shows you noticed.' },
+            { id: 'l24', before: 'The fact, in one sentence with no ', a: ['adjectives'], after: '.', choices: ['adjectives', 'verbs', 'names'], hint: 'Describing words, like “lazy” or “huge”.', why: 'A plain fact has no describing words in it.' },
+            { id: 'l35', before: 'The tangle often isn’t about the ', a: ['words'], after: '.', choices: ['words', 'weather', 'washing'], hint: 'What was actually said.', why: 'It’s often the tone underneath, not the words.' },
+            { id: 'l41', before: 'A mix-up usually runs both ', a: ['ways'], after: '.', choices: ['ways', 'miles', 'days'], hint: 'Directions.', why: 'When two people misread each other, it’s rarely one person’s fault.' },
+            { id: 'l44', before: 'Postponing with a return time is not ', a: ['avoidance'], after: '.', choices: ['avoidance', 'kindness', 'planning'], hint: 'Dodging something.', why: 'A pause with a time on it is a promise, not an escape.' }
           ] }
       ] },
 
@@ -664,10 +664,291 @@
 
   function levelOf(w, l) { var W = WORLDS[w - 1]; return W && W.levels[l - 1]; }
 
+
+  /* ------------------------------------------------------------------ a new set every play
+     drawLevel(w, l, seen, { again, rng }) returns a fresh copy of a level, with its content drawn from the
+     pools in journey-pools.js (or made fresh by a generator), at that level's difficulty. The challenge
+     type and the difficulty stay the same; only the questions, puzzles and boards change.
+       seen   the player's { poolName: [ids already seen] } (the game keeps it in localStorage). Items the
+              player has seen are skipped; when a pool runs out it simply starts over.
+       again  true when the level was finished before: the set leans a little more thoughtful.
+     lv.set lists the ids used (so tests can see that two plays differ); lv.pillars lists the Five Pillars
+     the set touches. If journey-pools.js isn't loaded, the level's own content is used. */
+  var POOLS = null;
+  function pools() {
+    if (POOLS) return POOLS;
+    try { POOLS = typeof module !== 'undefined' && module.exports ? require('./journey-pools.js') : root.TOLJourneyPools; } catch (e) { POOLS = null; }
+    return POOLS || null;
+  }
+  // mix: the grade (1 easy · 2 medium · 3 hard) of each item drawn; again: the mix for a replay
+  var DRAW = {
+    '1-1': { pool: 'riddle', mix: [1, 1, 2], again: [1, 2, 3] },
+    '1-2': { p: [3] }, '2-2': { p: [2] }, '4-3': { p: [2] },      // grid boards: variants from the pools; p = the pillar they practise
+    '1-3': { pool: 'breath', mix: [1], again: [2] },
+    '2-1': { pool: 'word', mix: [1, 2, 2], again: [2, 2, 3] },
+    '2-3': { pool: 'seq', mix: [2], again: [3] },
+    '3-1': { pool: 'pair', mix: [1, 1, 2, 2, 2, 3], again: [1, 2, 2, 3, 3, 3] },
+    '3-2': { pool: 'reframe', mix: [1, 2, 2, 3], again: [2, 2, 3, 3] },
+    '3-3': { bloom: [3, 3], again: [4, 4] },        // [size, fewest taps at least]
+    '4-1': { pool: 'bids', mix: [2], again: [3] },
+    '4-2': { pool: 'fair', mix: [2], again: [3] },
+    '5-1': { song: [6, 3], again: [7, 3] },          // [notes, first round]
+    '5-2': { sort: [[1, 2, 3], [2, 3]], again: [[2, 3, 3], [3, 3]] },
+    '5-3': { pool: 'fill', mix: [1, 2, 2, 2, 3, 3], again: [2, 2, 3, 3, 3, 3] },
+    '6-1': { pool: 'spot', mix: [2, 3], again: [3, 3] },
+    '6-2': { pool: 'choose', mix: [2, 2, 3, 3], again: [2, 3, 3, 3] },
+    '6-3': { maze: [6, 8], again: [7, 9] }           // [fewest calls, from … to]
+  };
+
+  // a small seeded random number generator (mulberry32), for tests and the checker
+  function rng(seed) {
+    var a = seed >>> 0;
+    return function () { a = (a + 0x6D2B79F5) | 0; var t = Math.imul(a ^ (a >>> 15), 1 | a); t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t; return ((t ^ (t >>> 14)) >>> 0) / 4294967296; };
+  }
+  function shuffle(arr, r) { var a = arr.slice(); for (var i = a.length - 1; i > 0; i--) { var j = Math.floor(r() * (i + 1)), t = a[i]; a[i] = a[j]; a[j] = t; } return a; }
+  function byG(a, b) { return (a.g || 1) - (b.g || 1); }
+  function seenList(seen, name) { if (!Array.isArray(seen[name])) seen[name] = []; return seen[name]; }
+
+  // one item near grade g that this player hasn't seen, spreading the set across the pillars and both angles
+  function pickOne(items, g, used, out, r, ok, any) {
+    var free = items.filter(function (it) { return used.indexOf(it.id) < 0 && out.indexOf(it) < 0 && (!ok || ok(it, out)); });
+    var best = null;
+    for (var d = 0; d <= (any ? 9 : 1) && !best; d++) {
+      var c = free.filter(function (it) { return Math.abs((it.g || 1) - g) === d; });
+      if (c.length) best = c;
+    }
+    if (!best) return null;
+    var ps = out.map(function (x) { return x.p; }), self = out.filter(function (x) { return x.an === 'self'; }).length, others = out.length - self;
+    function score(it) { return (it.p && ps.indexOf(it.p) < 0 ? 2 : 0) + (it.an === 'self' ? (self <= others ? 1 : 0) : (others <= self ? 1 : 0)); }
+    var top = Math.max.apply(null, best.map(score));
+    best = best.filter(function (it) { return score(it) === top; });
+    return best[Math.floor(r() * best.length)];
+  }
+  function pick(name, items, mix, seen, r, ok) {
+    var used = seenList(seen, name), out = [];
+    mix.forEach(function (g) {
+      var it = pickOne(items, g, used, out, r, ok);
+      if (!it) { // this player has seen everything near this grade: start the pool over
+        used.length = 0; out.forEach(function (x) { used.push(x.id); });
+        it = pickOne(items, g, used, out, r, ok) || pickOne(items, g, used, out, r, ok, true) || pickOne(items, g, [], out, r, ok, true);
+      }
+      if (it) { out.push(it); if (used.indexOf(it.id) < 0) used.push(it.id); }
+    });
+    return out;
+  }
+  function withShuffled(it, r) { var c = {}; for (var k in it) c[k] = it[k]; if (it.options) c.options = shuffle(it.options, r); return c; }
+
+  // thawing words: freeze the letters in a new order (never the word itself, and not starting the same way)
+  function scramble(w, r) {
+    var out = w;
+    for (var t = 0; t < 60; t++) {
+      out = shuffle(w.split(''), r).join('');
+      if (out !== w && (w.length < 4 || out.slice(0, 2) !== w.slice(0, 2))) return out;
+    }
+    return out === w ? w.slice(1) + w.charAt(0) : out;
+  }
+  // the meadow: start from full bloom and close some flowers with random taps, so it can always be solved
+  function genBloom(n, minTaps, r) {
+    n = n || 3; minTaps = minTaps || 3;
+    for (var t = 0; t < 300; t++) {
+      var N = n * n, bits = [], k = minTaps + Math.floor(r() * 3), cells = shuffle(Array.apply(null, Array(N)).map(function (_, i) { return i; }), r).slice(0, Math.min(N, k));
+      for (var i = 0; i < N; i++) bits.push(1);
+      cells.forEach(function (c) { bits = bloomTap(bits, c, n); });
+      if (bits.every(Boolean)) continue;
+      var sol = bloomSolve(bits, n);
+      if (sol && sol.length >= minTaps) {
+        var rows = []; for (var y = 0; y < n; y++) rows.push(bits.slice(y * n, y * n + n).join(''));
+        return { n: n, start: rows, min: sol.length };
+      }
+    }
+    return null;
+  }
+  // echo the valley: a new tune, notes 1-5, never the same note twice in a row, at least four different notes
+  function genSong(len, r) {
+    for (var t = 0; t < 100; t++) {
+      var s = [];
+      while (s.length < len) { var n = 1 + Math.floor(r() * 5); if (n !== s[s.length - 1]) s.push(n); }
+      var kinds = s.filter(function (n, i) { return s.indexOf(n) === i; }).length;
+      if (kinds >= Math.min(4, len)) return s;
+    }
+    return [1, 3, 2, 5, 4, 2, 3].slice(0, len);
+  }
+  // calls in the dark: carve a winding real path from the walker (B, bottom) up to the tone (O, top, beside
+  // the lookout A), then add dead ends, hidden ground (h), illusions (x) and rocks (#). The breadth-first
+  // mazeSolve counts the fewest calls; only mazes inside the level's range are kept.
+  function genMaze(lo, hi, r, maxRun) {
+    var W = 7, H = 8; maxRun = maxRun || 6; lo = lo || 6; hi = hi || 8;
+    function at(x, y) { return y * W + x; }
+    function inner(x, y) { return x >= 1 && x <= W - 2 && y >= 1 && y <= H - 2; }
+    for (var tries = 0; tries < 600; tries++) {
+      var g = []; for (var i = 0; i < W * H; i++) g.push('_');
+      var ox = 1 + Math.floor(r() * (W - 2)), ax = ox + (ox === 1 ? 1 : ox === W - 2 ? -1 : r() < 0.5 ? -1 : 1);
+      var bx = 1 + Math.floor(r() * (W - 2)), goal = at(ox, 1);
+      // a randomized depth-first corridor that never touches itself (so there are no shortcuts)
+      var path = [at(bx, H - 1), at(bx, H - 2)], onPath = {}; onPath[path[0]] = 1; onPath[path[1]] = 1;
+      var found = (function dfs(guard) {
+        var cur = path[path.length - 1];
+        if (cur === goal) return true;
+        if (guard > 400) return false;
+        var cx = cur % W, cy = cur / W | 0, ds = shuffle([0, 1, 2, 3], r);
+        for (var k = 0; k < 4; k++) {
+          var nx = cx + DIRS[ds[k]][0], ny = cy + DIRS[ds[k]][1], ni = at(nx, ny);
+          if (!inner(nx, ny) || onPath[ni]) continue;
+          var touches = false;
+          for (var q = 0; q < 4; q++) { var tx = nx + DIRS[q][0], ty = ny + DIRS[q][1], ti = at(tx, ty); if (ti !== cur && tx >= 0 && ty >= 0 && tx < W && ty < H && onPath[ti]) touches = true; }
+          if (touches) continue;
+          path.push(ni); onPath[ni] = 1;
+          if (dfs(guard + 1)) return true;
+          path.pop(); delete onPath[ni];
+        }
+        return false;
+      })(0);
+      if (!found || path.length < 9) continue;
+      path.forEach(function (p) { g[p] = '.'; });
+      g[path[0]] = 'B'; g[at(ox, 0)] = 'O'; g[at(ax, 0)] = 'A';
+      // dead ends off the path
+      var mids = shuffle(path.slice(2, -1), r).slice(0, 3);
+      mids.forEach(function (p) {
+        var d = Math.floor(r() * 4), x = p % W, y = p / W | 0;
+        for (var s = 0; s < 1 + Math.floor(r() * 2); s++) {
+          x += DIRS[d][0]; y += DIRS[d][1]; var j = at(x, y);
+          if (!inner(x, y) || g[j] !== '_') break;
+          var near = 0; for (var q = 0; q < 4; q++) { var nx2 = x + DIRS[q][0], ny2 = y + DIRS[q][1]; if (nx2 >= 0 && ny2 >= 0 && nx2 < W && ny2 < H && g[at(nx2, ny2)] !== '_') near++; }
+          if (near > 1) break;
+          g[j] = '.';
+        }
+      });
+      // hidden ground along the real path; illusions and rocks beside it
+      shuffle(path.slice(2, -1), r).slice(0, 2).forEach(function (p) { g[p] = 'h'; });
+      var edge = []; g.forEach(function (c, j) { var x = j % W, y = j / W | 0; if (c !== '_' || !inner(x, y)) return; for (var q = 0; q < 4; q++) { var x2 = x + DIRS[q][0], y2 = y + DIRS[q][1]; if (x2 >= 0 && y2 >= 0 && x2 < W && y2 < H && '.h'.indexOf(g[at(x2, y2)]) >= 0) { edge.push(j); return; } } });
+      edge = shuffle(edge, r);
+      edge.slice(0, 3 + Math.floor(r() * 2)).forEach(function (j) { g[j] = 'x'; });
+      edge.slice(5, 6 + Math.floor(r() * 2)).forEach(function (j) { g[j] = '#'; });
+      var rows = []; for (var y = 0; y < H; y++) rows.push(g.slice(y * W, y * W + W).join(''));
+      var L = mazeParse({ rows: rows }), sol = mazeSolve(L, maxRun);
+      if (!sol || sol.length < lo || sol.length > hi) continue;
+      if (mazeWalk(L, [[0, 1]]).won) continue;
+      // the call pad joins two calls in the same direction into one, so the best route must always turn
+      if (sol.some(function (c, j) { return j && c[0] === sol[j - 1][0]; })) continue;
+      return { rows: rows, minCalls: sol.length, sol: sol };
+    }
+    return null;
+  }
+
+  function drawLevel(w, l, seen, o) {
+    o = o || {}; seen = seen || {};
+    var base = levelOf(w, l); if (!base) return null;
+    var P = pools(), r = o.rng || Math.random, id = w + '-' + l, D = DRAW[id] || {}, again = !!o.again;
+    var lv = {}, k; for (k in base) lv[k] = base[k];
+    lv.id = id; lv.set = []; lv.pillars = (D.p || []).slice(); lv.fresh = !!P;
+    var mix = again && D.again ? D.again : D.mix;
+    function use(items) { items.forEach(function (it) { lv.set.push(it.id); if (it.p && lv.pillars.indexOf(it.p) < 0) lv.pillars.push(it.p); }); return items; }
+    function take(name, list, m, ok) { return use(pick(name, list, m || mix, seen, r, ok)); }
+    if (!P) { lv.set = [id + ':own']; return lv; }
+    switch (base.type) {
+      case 'riddle':
+        lv.riddles = take('riddle', P.riddle).sort(byG).map(function (it) { return withShuffled(it, r); });
+        break;
+      case 'walk': {
+        var vs = [{ id: id + 'a', g: 1, rows: base.rows, min: base.min }].concat(P.walk[id] || []);
+        var v = take('walk:' + id, vs, [1])[0];
+        lv.rows = v.rows; lv.min = v.min;
+        break;
+      }
+      case 'breath': {
+        var b = take('breath', P.breath)[0];
+        lv.inhale = b.inhale; lv.exhale = b.exhale; lv.need = again ? 6 : 5;
+        lv.window = Math.min(1.1, Math.min(b.inhale, b.exhale) / 2 - 0.25);
+        lv.ask = base.ask + ' This time: in for ' + b.inhale + ', out for ' + b.exhale + '.';
+        lv.why = 'Breathing out for longer than you breathe in, like four in and six out, is one of the settling steps in the Calm-Down Kit. Today the lantern breathed in for ' + b.inhale + ' and out for ' + b.exhale + '.';
+        lv.pillars = [3];
+        break;
+      }
+      case 'unscramble':
+        lv.words = take('word', P.word).sort(function (a, b2) { return a.w.length - b2.w.length; })
+          .map(function (it) { return { id: it.id, w: it.w, clue: it.clue, mix: scramble(it.w, r), p: it.p }; });
+        break;
+      case 'sequence': {
+        var q = take('seq', P.seq)[0];
+        lv.steps = q.steps; lv.seqTitle = q.title; lv.win = q.win;
+        lv.ask = q.q + ' Tap each step in turn, then check.';
+        if (q.lesson) lv.lesson = q.lesson; if (q.why) lv.why = q.why; if (q.more) lv.more = q.more;
+        break;
+      }
+      case 'match': {
+        var pairs = take('pair', P.pair, null, function (it, out) {
+          return out.every(function (x) { return x.x !== it.x && x.a !== it.b && x.b !== it.a; });
+        });
+        lv.pairs = pairs; lv.kinds = P.pairKinds;
+        var names = { fh: 'a feeling with what helps', na: 'a need with how to ask for it', mt: 'a small reach with a way to turn toward it', st: 'your state with what fits it now', sf: 'something that keeps happening with a fix for the setup' };
+        var cs = []; pairs.forEach(function (p) { if (cs.indexOf(p.c) < 0) cs.push(p.c); });
+        lv.ask = 'Turn over two cards at a time. Match each card with its partner: ' + listWords(cs.map(function (c) { return names[c]; })) + '.';
+        break;
+      }
+      case 'reframe':
+        lv.items = take('reframe', P.reframe).sort(byG).map(function (it) { return withShuffled(it, r); });
+        break;
+      case 'bloom': {
+        var bs = again ? D.again : D.bloom, m = genBloom(bs[0], bs[1], r);
+        if (m) { lv.n = m.n; lv.start = m.start; lv.minTaps = m.min; lv.set = ['bloom:' + m.start.join('/')]; }
+        lv.pillars = [5];
+        break;
+      }
+      case 'bids': {
+        var s = take('bids', P.bids)[0];
+        lv.scene = s.scene; lv.reply = { q: s.reply.q, options: shuffle(s.reply.options, r) }; lv.sceneTitle = s.title;
+        lv.ask = s.setting + ' Tap each moment where ' + s.who + ' reaches out for connection, then check.';
+        break;
+      }
+      case 'balance': {
+        var f = take('fair', P.fair)[0];
+        lv.jobs = shuffle(f.jobs, r); lv.cap = f.cap; lv.capNote = f.capNote; lv.fairTitle = f.title;
+        break;
+      }
+      case 'echo': {
+        var sg = again ? D.again : D.song;
+        lv.song = genSong(sg[0], r); lv.first = sg[1]; lv.set = ['song:' + lv.song.join('')]; lv.pillars = [4];
+        break;
+      }
+      case 'sort': {
+        var plan = again ? D.again : D.sort, counts = shuffle([3, 3, 2, 2], r), all = [];
+        base.buckets.forEach(function (bk, i) {
+          var list = P.sort.filter(function (it) { return it.k === bk.k; });
+          all = all.concat(take('sort', list, counts[i] === 3 ? plan[0] : plan[1]));
+        });
+        for (var t = 0; t < 40; t++) { // no more than two of the same kind in a row
+          lv.items = shuffle(all, r);
+          if (lv.items.every(function (it, i) { return i < 2 || it.k !== lv.items[i - 1].k || it.k !== lv.items[i - 2].k; })) break;
+        }
+        break;
+      }
+      case 'fill':
+        lv.lines = take('fill', P.fill).sort(byG).map(function (it) { var c = withShuffled(it, r); c.choices = shuffle(it.choices, r); return c; });
+        break;
+      case 'spot':
+        lv.scenes = take('spot', P.spot).sort(byG);
+        break;
+      case 'choose':
+        lv.items = take('choose', P.choose).sort(byG).map(function (it) { return withShuffled(it, r); });
+        break;
+      case 'maze': {
+        var mz = again ? D.again : D.maze, z = genMaze(mz[0], mz[1], r, base.maxRun);
+        if (z) { lv.rows = z.rows; lv.minCalls = z.minCalls; lv.set = ['maze:' + z.rows.join('/')]; }
+        lv.pillars = [4];
+        break;
+      }
+    }
+    lv.pillars.sort();
+    return lv;
+  }
+  function listWords(a) { return a.length < 2 ? a.join('') : a.slice(0, -1).join(', ') + (a.length > 2 ? ',' : '') + ' or ' + a[a.length - 1]; }
+
   var api = { WORLDS: WORLDS, DIRS: DIRS, parse: parse, init: init, clone: clone, key: key, step: step, won: won, allFrags: allFrags,
     solve: solve, ground: ground, melted: melted, pressed: pressed, nb: nb, cheb: cheb,
     bloomTap: bloomTap, bloomBits: bloomBits, bloomSolve: bloomSolve, mazeParse: mazeParse, mazeWalk: mazeWalk, mazeSolve: mazeSolve,
-    norm: norm, fillMatch: fillMatch, levelOf: levelOf };
+    norm: norm, fillMatch: fillMatch, levelOf: levelOf,
+    drawLevel: drawLevel, DRAW: DRAW, pools: pools, pick: pick, rng: rng, shuffle: shuffle, scramble: scramble,
+    genBloom: genBloom, genSong: genSong, genMaze: genMaze };
   if (typeof module !== 'undefined' && module.exports) module.exports = api;
   else root.TOLJourney = api;
 })(this);

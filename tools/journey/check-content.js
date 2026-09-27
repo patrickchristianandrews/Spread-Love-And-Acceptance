@@ -13,17 +13,40 @@
      - the meadow (lights-out) puzzle can be solved; the fair-shares puzzle has a fair split
      - "Finish the line": the word bank has exactly one answer the forgiving matcher accepts
      - "Calls in the dark" can be walked in the stated number of calls
+   And every item in the pools (assets/js/journey-pools.js) that gives each play a new set:
+     - unique ids; a grade (1-3), a Five Pillars number (1-5) and an angle (self / with others) on every item;
+       each multi-item pool covers all five pillars and both angles
+     - riddles and moments: exactly one intended answer, a why for every option, riddle answers all different
+     - sort sentences sit in real buckets, with enough of each; thawing words are real anagram-free words
+     - memory faces are unique; sequences have unique steps in a size that matches the grade
+     - fair-share sets add up and have at least one fair split
+     - "Finish the line": every line appears on the site word for word (tools/journey/site-text.js), and the
+       word bank holds exactly one accepted answer
+     - every "Read more" link resolves (the page exists, and so does its #anchor)
+     - no forbidden words (no healing, treatment or clinical words, nothing about crisis or analytics)
+     - the draw itself: 60 plays of every level make valid sets, and nothing repeats until a pool runs out
 
    node tools/journey/check-content.js                                                         */
 'use strict';
 var path = require('path'), fs = require('fs');
 var J = require(path.join(__dirname, '../../assets/js/journey-levels.js'));
 var ROOT = path.join(__dirname, '../..');
+var P = require(path.join(__dirname, '../../assets/js/journey-pools.js'));
+var SITE = require(path.join(__dirname, 'site-text.js'));
+var FORBID = /\bheal|\bcure|\btreatment|\btherap|\bdiagnos|\bdisorder|\btrauma|\babus|\bviolen|\bsuicid|self-harm|\bcrisis|\banalytics|\bclinical|\bmedica|\bsymptom/;
 var bad = 0, lines = [];
 
 function need(cond, id, msg) { if (!cond) { bad++; lines.push('  !! ' + id + ': ' + msg); } return cond; }
 function str(x) { return typeof x === 'string' && x.trim().length > 0; }
 function unique(arr) { return new Set(arr).size === arr.length; }
+// a same-site link: the page must exist, and so must its #anchor if it has one
+function linkOk(href) {
+  if (!/^\//.test(href || '')) return false;
+  var parts = href.split('#'), file = path.join(ROOT, parts[0]);
+  if (!fs.existsSync(file) || fs.statSync(file).isDirectory()) return false;
+  if (parts[1]) { var html = fs.readFileSync(file, 'utf8'); return html.indexOf('id="' + parts[1] + '"') >= 0 || html.indexOf("id='" + parts[1] + "'") >= 0; }
+  return true;
+}
 function oneRight(opts, id, what) {
   need(Array.isArray(opts) && opts.length >= 3, id, what + ' needs at least three options');
   if (!Array.isArray(opts)) return;
@@ -124,6 +147,7 @@ var CHECK = {
       need(unique(ln.choices.map(function (c) { return J.norm(c); })), id, w + ': word bank choices must differ');
       need(str(ln.hint) && str(ln.why), id, w + ' needs a hint and a why');
       need(!J.fillMatch(ln, 'xyz') && !J.fillMatch(ln, ''), id, w + ': the matcher is too forgiving');
+      need(SITE.find(ln.before + ln.a[0] + ln.after).length > 0, id, w + ' doesn’t appear on the site word for word: ' + ln.before + ln.a[0] + ln.after);
     });
     return lv.lines.length + ' lines';
   },
@@ -160,11 +184,10 @@ J.WORLDS.forEach(function (W) {
     need(lv.d >= 1 && lv.d <= 5 && lv.d === Math.floor(lv.d), id, 'difficulty must be 1 to 5');
     need(str(lv.star) && lv.star.length <= 40, id, 'the star phrase should be short (40 characters or fewer)');
     if (need(Array.isArray(lv.more) && str(lv.more[0]) && str(lv.more[1]), id, 'needs a Read more link')) {
-      var file = path.join(ROOT, lv.more[0].split('#')[0]);
-      need(/^\//.test(lv.more[0]) && fs.existsSync(file), id, 'Read more page not found: ' + lv.more[0]);
+      need(linkOk(lv.more[0]), id, 'Read more page (or its #anchor) not found: ' + lv.more[0]);
     }
     var all = JSON.stringify(lv).toLowerCase();
-    need(!/\bheal|\bcure|\btreatment|\btherap/.test(all), id, 'keep it to everyday ideas: no healing or treatment words');
+    need(!FORBID.test(all), id, 'keep it to everyday ideas: no healing, treatment, clinical or crisis words (' + (all.match(FORBID) || [''])[0] + ')');
     if (need(!!CHECK[lv.type], id, 'unknown type ' + lv.type)) { try { extra = CHECK[lv.type](lv, id); } catch (e) { need(false, id, 'crashed: ' + e.message); } }
     types.push(lv.type + (lv.type === 'walk' ? ':' + W.mech : '')); ds.push(lv.d); stars.push(lv.star);
     console.log(id + '  d' + lv.d + '  ' + (lv.type + '          ').slice(0, 11) + (lv.kind + '                         ').slice(0, 24) + extra);
@@ -178,6 +201,171 @@ need(unique(stars), 'journey', 'star phrases must differ');
 var nonGrid = J.WORLDS.reduce(function (n, W) { return n + W.levels.filter(function (lv) { return lv.type !== 'walk' && lv.type !== 'maze'; }).length; }, 0);
 need(nonGrid >= 10, 'journey', 'at least ten levels should be something other than a grid (found ' + nonGrid + ')');
 console.log('difficulty: ' + ds.join(' ') + ' · ' + nonGrid + ' non-grid levels');
+
+/* ------------------------------------------------------------------ the pools */
+console.log('\npools');
+var allIds = {};
+function common(name, list, opts) {
+  opts = opts || {};
+  var id = 'pool ' + name, ps = {}, as = {};
+  need(Array.isArray(list) && list.length >= (opts.min || 1), id, 'needs at least ' + (opts.min || 1) + ' items (has ' + (list ? list.length : 0) + ')');
+  list.forEach(function (it) {
+    var iid = id + ' ' + it.id;
+    need(str(it.id) && !allIds[it.id], iid, 'ids must be present and unique across every pool');
+    allIds[it.id] = 1;
+    need([1, 2, 3].indexOf(it.g) >= 0, iid, 'grade must be 1, 2 or 3');
+    if (!opts.noPillar) {
+      need(it.p >= 1 && it.p <= 5, iid, 'needs a Five Pillars number (1-5)');
+      need(it.an === 'self' || it.an === 'with', iid, 'needs an angle: self or with others');
+      ps[it.p] = 1; as[it.an] = 1;
+    }
+    var js = JSON.stringify(it).toLowerCase();
+    need(!FORBID.test(js), iid, 'forbidden word: ' + (js.match(FORBID) || [''])[0]);
+    need(!/sugarfoot[^.]{0,40}\b(he|his|him)\b|tidbit[^.]{0,40}\b(he|his|him)\b/i.test(JSON.stringify(it)), iid, 'Sugarfoot and Tidbit are both she/her');
+  });
+  if (opts.cover) {
+    need(Object.keys(ps).length === 5, id, 'should cover all five pillars (covers ' + Object.keys(ps).sort().join(',') + ')');
+    if (opts.cover === 2) need(as.self && as.with, id, 'should include both angles: in you, and with others');
+  }
+  var g = [0, 0, 0, 0]; list.forEach(function (it) { g[it.g]++; });
+  return list.length + ' items (easy ' + g[1] + ', medium ' + g[2] + ', hard ' + g[3] + ')' + (opts.noPillar ? '' : ' · pillars ' + [1, 2, 3, 4, 5].map(function (n) { return list.filter(function (it) { return it.p === n; }).length; }).join('/'));
+}
+function report(name, msg) { console.log('  ' + (name + '             ').slice(0, 10) + msg); }
+
+report('riddle', common('riddle', P.riddle, { min: 60, cover: 2 }));
+P.riddle.forEach(function (r) { var id = 'riddle ' + r.id; need(str(r.q) && str(r.hint) && r.w >= 1 && r.w <= 6, id, 'needs a question, a hint and a world (1-6)'); oneRight(r.options, id, 'the riddle'); need(r.options.length === 3, id, 'three choices'); });
+var ans = P.riddle.map(function (r) { return J.norm(r.options.filter(function (o) { return o.ok; })[0].t); });
+need(unique(ans), 'riddle', 'riddle answers should all differ, so a set never has two with the same answer');
+need([1, 2, 3, 4, 5, 6].every(function (w) { return P.riddle.some(function (r) { return r.w === w; }); }), 'riddle', 'riddles should fit every world');
+
+report('choose', common('choose', P.choose, { min: 40, cover: 2 }));
+P.choose.forEach(function (c) { need(str(c.q), 'choose ' + c.id, 'needs a moment'); oneRight(c.options, 'choose ' + c.id, 'the moment'); need(c.options.length === 4, 'choose ' + c.id, 'four options'); });
+
+report('reframe', common('reframe', P.reframe, { min: 20, cover: 2 }));
+P.reframe.forEach(function (k) { need(str(k.harsh), 'reframe ' + k.id, 'needs a harsh thought'); oneRight(k.options, 'reframe ' + k.id, 'the thought'); });
+
+var BUCKETS = J.levelOf(5, 2).buckets.map(function (b) { return b.k; });
+report('sort', common('sort', P.sort, { min: 80, cover: 2 }) + ' · ' + BUCKETS.map(function (k) { return k + ' ' + P.sort.filter(function (s) { return s.k === k; }).length; }).join(', '));
+P.sort.forEach(function (s) { need(BUCKETS.indexOf(s.k) >= 0 && str(s.t) && str(s.why), 'sort ' + s.id, 'needs a real bucket, words and a why'); });
+need(unique(P.sort.map(function (s) { return J.norm(s.t); })), 'sort', 'sentences must differ');
+BUCKETS.forEach(function (k) { need(P.sort.filter(function (s) { return s.k === k; }).length >= 12, 'sort', 'bucket ' + k + ' needs at least 12 sentences, so sets stay fresh'); });
+
+report('word', common('word', P.word, { min: 60, cover: 2 }));
+var sig = {};
+P.word.forEach(function (w) {
+  var id = 'word ' + w.w;
+  need(/^[A-Z]{3,10}$/.test(w.w), id, 'capital letters, 3 to 10 of them (so the tiles fit a phone)');
+  need(str(w.clue), id, 'needs a clue');
+  var k = w.w.split('').sort().join(''); need(!sig[k], id, 'is an anagram of ' + sig[k] + ': the answer would be ambiguous'); sig[k] = w.w;
+  var rr = J.rng(w.w.length * 7 + 3);
+  for (var t = 0; t < 20; t++) { var m = J.scramble(w.w, rr); need(m !== w.w && m.split('').sort().join('') === k, id, 'scrambling must keep the letters and never give the word itself'); }
+});
+
+report('pair', common('pair', P.pair, { min: 30, cover: 2 }) + ' · kinds ' + Object.keys(P.pairKinds).map(function (c) { return c + ' ' + P.pair.filter(function (p) { return p.c === c; }).length; }).join(', '));
+var faces = []; P.pair.forEach(function (p) { faces.push(J.norm(p.a), J.norm(p.b)); need(!!P.pairKinds[p.c] && str(p.a) && str(p.b) && str(p.why) && str(p.x), 'pair ' + p.id, 'needs a kind, two faces, a why and an x'); });
+need(unique(faces), 'pair', 'every memory face must be different across the whole pool');
+
+report('seq', common('seq', P.seq, { min: 12, cover: 2 }));
+P.seq.forEach(function (q) {
+  var id = 'seq ' + q.id;
+  need(q.steps.length === q.g + 3, id, 'grade ' + q.g + ' means ' + (q.g + 3) + ' steps');
+  need(unique(q.steps.map(function (s) { return J.norm(s.t); })), id, 'steps must be unique');
+  need(q.steps.every(function (s) { return str(s.t) && str(s.why); }), id, 'every step needs words and a why');
+  need(str(q.title) && str(q.q) && str(q.win) && str(q.lesson) && str(q.why), id, 'needs a title, a question, a win line, a lesson and a why');
+  need(Array.isArray(q.more) && linkOk(q.more[0]) && str(q.more[1]), id, 'Read more link not found: ' + (q.more && q.more[0]));
+});
+
+report('fill', common('fill', P.fill, { min: 40, cover: 2 }));
+P.fill.forEach(function (ln) {
+  var id = 'fill ' + ln.id, full = ln.before + ln.a[0] + ln.after;
+  need(ln.a.length >= 1 && ln.a.every(function (a) { return J.fillMatch(ln, a); }), id, 'every accepted answer must match itself');
+  var hits = ln.choices.filter(function (c) { return J.fillMatch(ln, c); });
+  need(ln.choices.length === 3 && hits.length === 1, id, 'the word bank must hold three words, exactly one accepted (holds ' + hits.length + ')');
+  need(unique(ln.choices.map(J.norm)), id, 'word bank choices must differ');
+  need(str(ln.hint) && str(ln.why), id, 'needs a hint and a why');
+  need(!J.fillMatch(ln, 'xyz') && !J.fillMatch(ln, ''), id, 'the matcher is too forgiving');
+  need(SITE.find(full).length > 0, id, 'doesn’t appear on the site word for word: ' + full);
+});
+need(unique(P.fill.map(function (l) { return J.norm(l.before + l.a[0] + l.after); })), 'fill', 'lines must differ');
+
+report('spot', common('spot', P.spot, { min: 20, cover: 2 }));
+P.spot.forEach(function (sc) {
+  var id = 'spot ' + sc.id, st = sc.bits.filter(function (b) { return b.story; }).length;
+  need(str(sc.title) && st >= 1 && st < sc.bits.length, id, 'needs a title, and some stories and some things seen');
+  need(sc.bits.every(function (b) { return str(b.t) && str(b.why); }) && unique(sc.bits.map(function (b) { return b.t; })), id, 'every part needs a why, and parts must differ');
+});
+
+report('bids', common('bids', P.bids, { min: 20 }));
+P.bids.forEach(function (b) {
+  var id = 'bids ' + b.id, n = b.scene.filter(function (s) { return s.bid; }).length;
+  need(str(b.title) && str(b.who) && str(b.setting), id, 'needs a title, a who and a setting');
+  need(n >= 2 && n < b.scene.length, id, 'needs some reaches and some ordinary moments');
+  need(b.scene.every(function (s) { return str(s.t) && str(s.why); }) && unique(b.scene.map(function (s) { return s.t; })), id, 'every moment needs a why, and moments must differ');
+  need(str(b.reply.q), id, 'needs a reply question'); oneRight(b.reply.options, id, 'the reply');
+});
+
+report('fair', common('fair', P.fair, { min: 12 }));
+P.fair.forEach(function (f) {
+  var id = 'fair ' + f.id, n = f.jobs.length, total = f.jobs.reduce(function (s, j) { return s + j.w; }, 0), fair = 0;
+  need(str(f.title) && f.cap.length === 2 && f.capNote.length === 2, id, 'needs a title, two batteries and two notes');
+  need(total === f.cap[0] + f.cap[1], id, 'jobs (' + total + ') must add up to both batteries (' + (f.cap[0] + f.cap[1]) + ')');
+  need(f.jobs.every(function (j) { return str(j.t) && j.w >= 1 && j.w <= 5; }) && unique(f.jobs.map(function (j) { return j.t; })), id, 'jobs need names, weights 1-5, and must differ');
+  need(f.jobs.some(function (j) { return j.hidden; }), id, 'include some invisible work');
+  need(n <= 10, id, 'ten jobs at most, so it fits a phone');
+  for (var m = 0; m < 1 << n; m++) { var a = 0; for (var i = 0; i < n; i++) if (!(m >> i & 1)) a += f.jobs[i].w; if (a === f.cap[0]) fair++; }
+  need(fair > 0, id, 'there is no fair split');
+});
+
+report('breath', common('breath', P.breath, { min: 4, noPillar: true }));
+P.breath.forEach(function (b) { need(b.exhale > b.inhale && b.inhale >= 3 && b.exhale <= 8, 'breath ' + b.id, 'a calm pattern breathes out for longer than in, at an easy pace'); });
+
+report('walk', Object.keys(P.walk).map(function (k) { return k + ': ' + (P.walk[k].length + 1) + ' boards'; }).join(', ') + ' (solve.js checks them)');
+need(linkOk(P.pillarPage), 'pillars', 'the Five Pillars link must resolve: ' + P.pillarPage);
+P.pillars.slice(1).forEach(function (pl) { need(linkOk(P.pillarPage.split('#')[0] + '#' + pl.id), 'pillars', 'Pillar ' + pl.roman + ' link must resolve: ' + P.pillarPage + '#' + pl.id); });
+
+/* ------------------------------------------------------------------ the draw: 60 plays of every level */
+console.log('\ndraws (60 plays of each level, seeded)');
+var PER = { riddle: ['riddles', 3], unscramble: ['words', 3], match: ['pairs', 6], reframe: ['items', 4], sort: ['items', 10], fill: ['lines', 6], spot: ['scenes', 2], choose: ['items', 4] };
+J.WORLDS.forEach(function (W) {
+  W.levels.forEach(function (base, k) {
+    var id = W.n + '-' + (k + 1), seen = {}, rr = J.rng(1000 + W.n * 10 + k), sets = [], firstRepeat = -1, used = {}, perDraw = 1;
+    for (var t = 0; t < 60; t++) {
+      var lv = J.drawLevel(W.n, k + 1, seen, { rng: rr, again: t % 3 === 2 });
+      need(lv && lv.type === base.type && lv.d === base.d && lv.star === base.star, id, 'a drawn level must keep its type, difficulty and star');
+      if (!lv) continue;
+      var tag = id + ' draw ' + (t + 1);
+      if (PER[base.type]) {
+        var list = lv[PER[base.type][0]]; perDraw = PER[base.type][1];
+        need(list && list.length === perDraw, tag, 'expected ' + perDraw + ' items, got ' + (list && list.length));
+        need(unique(lv.set), tag, 'a set must not repeat an item');
+      }
+      if (base.type === 'match') {
+        var f2 = []; lv.pairs.forEach(function (p) { f2.push(p.a, p.b); });
+        need(unique(f2) && unique(lv.pairs.map(function (p) { return p.x; })), tag, 'pairs in one game must not be mix-up-able');
+      }
+      if (base.type === 'sort') BUCKETS.forEach(function (b) { need(lv.items.filter(function (s) { return s.k === b; }).length >= 2, tag, 'every bucket needs at least two sentences'); });
+      if (base.type === 'riddle' || base.type === 'choose' || base.type === 'reframe') (lv.riddles || lv.items).forEach(function (q) { need(q.options.filter(function (o) { return o.ok; }).length === 1, tag, 'shuffled options must keep one answer'); });
+      if (base.type === 'unscramble') lv.words.forEach(function (w) { need(w.mix !== w.w && w.mix.split('').sort().join('') === w.w.split('').sort().join(''), tag, 'bad scramble for ' + w.w); });
+      if (base.type === 'bloom') { var sol = J.bloomSolve(J.bloomBits(lv.start), lv.n); need(sol && sol.length === lv.minTaps && !J.bloomBits(lv.start).every(Boolean), tag, 'the meadow must be solvable and not already open'); }
+      if (base.type === 'maze') { var L = J.mazeParse(lv), ms = J.mazeSolve(L, lv.maxRun); need(ms && ms.length === lv.minCalls && ms.length <= lv.maxCalls - 1, tag, 'the dark path must be walkable in its fewest calls, with room to spare'); }
+      if (base.type === 'walk') need(!!lv.min && Array.isArray(lv.rows), tag, 'a board and its fewest moves');
+      if (base.type === 'breath') need(lv.window < Math.min(lv.inhale, lv.exhale) / 2, tag, 'tap window too wide');
+      if (base.type === 'echo') need(lv.song.every(function (n, i) { return n >= 1 && n <= 5 && n !== lv.song[i - 1]; }), tag, 'tune notes 1-5, no note twice in a row');
+      need(lv.pillars.length >= 1, tag, 'every set should name at least one pillar');
+      lv.set.forEach(function (x) { if (used[x] && firstRepeat < 0) firstRepeat = t; used[x] = 1; });
+      sets.push(lv.set.join(','));
+    }
+    var distinct = new Set(sets).size;
+    need(distinct >= 3, id, 'plays should differ (only ' + distinct + ' different sets in 60)');
+    var poolName = (J.DRAW[id] || {}).pool, size = poolName ? P[poolName].length : 0;
+    if (poolName && size) {
+      var safe = Math.floor(size / perDraw / 2);
+      need(firstRepeat < 0 || firstRepeat >= safe, id, 'something repeated after only ' + firstRepeat + ' plays (pool of ' + size + ')');
+    }
+    report(id, (base.type + '          ').slice(0, 11) + distinct + ' different sets in 60 plays' + (poolName ? ' · first repeat after ' + (firstRepeat < 0 ? 'none' : firstRepeat) + ' plays · ' + Object.keys(used).length + ' of ' + size + ' used' : ''));
+  });
+});
+
 lines.forEach(function (l) { console.log(l); });
 console.log(bad ? bad + ' problem(s)' : 'All content checks passed.');
 process.exit(bad ? 1 : 0);

@@ -1,7 +1,9 @@
 /* pups.js — the two pals, drawn exactly as they are in the Night Garden (night-garden.js),
    for pages that want them running about: the Frequency Journey's landing page.
    TOLPups.draw(ctx, look, pose, phase, wag, blink, t, tilt): pose is 'run', 'sit', 'bow', 'lie' or 'wiggle';
-   draw at the paws (0,0), facing right; scale and flip the context first. */
+   draw at the paws (0,0), facing right; scale and flip the context first.
+   An optional 9th argument, opts, is used by the pal cam (pals-cam.js): { ear: radians added to the
+   near ear (a flick), noEar: true to leave the ears off (when they turn into helicopter blades). */
 (function () {
   'use strict';
   var REDUCED = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -12,7 +14,8 @@
     // leaner and taller, round tan brow dots, tan cheeks and lips, folded ears, tan lower legs, a collar
     collar: { build: 'lean', ear: 'fold', legUp: '#262220', legLow: '#C98A4F', paw: '#D99E62', chest: 'tan', muzzle: 'rottie', collar: true, brow: 'dot', tail: 'short' }
   };
-  function drawPup(L, pose, ph, wag, blink, t, tilt) {
+  function drawPup(L, pose, ph, wag, blink, t, tilt, o) {
+    var earX = (o && o.ear) || 0, noEar = !!(o && o.noEar);
     var BLACK = '#252120', TAN = L.tan || '#C4834A', WHITE = '#F4EFE6', PINK = '#EE8FA6';
     var lean = L.build === 'lean', LL = lean ? 15 : 12.5, BRX = lean ? 18.5 : 18, BRY = lean ? 8.8 : 10.2, BY = lean ? -21 : -18.5;
     function leg(x0, y0, ang, len, back) {
@@ -75,7 +78,7 @@
     ctx.save(); ctx.translate(hx, hy); ctx.rotate((pose === 'run' ? Math.sin(ph) * 0.05 : bow ? -0.15 : lie ? 0.05 : 0) + (tilt || 0));
     var R = 11;
     // the ear behind the head (drop ears hang down each side)
-    if (L.ear === 'drop') { ctx.fillStyle = '#1B1817'; ctx.beginPath(); ctx.ellipse(-4, 2, 4, 6.5, 0.35, 0, Math.PI * 2); ctx.fill(); }
+    if (L.ear === 'drop' && !noEar) { ctx.fillStyle = '#1B1817'; ctx.beginPath(); ctx.ellipse(-4, 2, 4, 6.5, 0.35, 0, Math.PI * 2); ctx.fill(); }
     ctx.fillStyle = BLACK; ctx.beginPath(); ctx.arc(0, 0, R, 0, Math.PI * 2); ctx.fill();
     ctx.beginPath(); ctx.ellipse(8, 2.5, 8.5, 6.2, 0.08, 0, Math.PI * 2); ctx.fill(); // snout
     if (L.muzzle === 'cream') {
@@ -104,14 +107,15 @@
     ctx.fillStyle = 'rgba(247,165,185,0.5)'; ctx.beginPath(); ctx.ellipse(7, 4.5, 2.2, 1.2, 0, 0, Math.PI * 2); ctx.fill();
     // the near ear
     var flap = pose === 'run' && !REDUCED ? Math.sin(ph * 1.1) * 0.35 : 0;
-    if (L.ear === 'drop') {
-      ctx.save(); ctx.translate(-3, -6.5); ctx.rotate(0.35 + flap);
+    if (noEar) { /* the pal cam draws them itself */ }
+    else if (L.ear === 'drop') {
+      ctx.save(); ctx.translate(-3, -6.5); ctx.rotate(0.35 + flap + earX);
       ctx.fillStyle = BLACK; ctx.beginPath(); ctx.ellipse(-1.5, 5.5, 4.8, 7.2, 0.15, 0, Math.PI * 2); ctx.fill();
       ctx.fillStyle = 'rgba(214,160,150,0.5)'; ctx.beginPath(); ctx.ellipse(0.2, 1.8, 1.6, 3.2, 0.15, 0, Math.PI * 2); ctx.fill();
       ctx.strokeStyle = 'rgba(255,255,255,0.08)'; ctx.lineWidth = 1; ctx.beginPath(); ctx.ellipse(-1.5, 7, 4.6, 9.5, 0.15, -1.2, 0.3); ctx.stroke();
       ctx.restore();
     } else { // small folded ear up top, tipping forward, with a tan edge
-      ctx.save(); ctx.translate(-1.5, -8.5); ctx.rotate(0.35 + flap * 0.4);
+      ctx.save(); ctx.translate(-1.5, -8.5); ctx.rotate(0.35 + flap * 0.4 + earX * 0.6);
       ctx.fillStyle = BLACK; ctx.beginPath(); ctx.moveTo(-4, -1); ctx.quadraticCurveTo(1, -6, 6, 0); ctx.quadraticCurveTo(2, 4, -3, 3); ctx.closePath(); ctx.fill();
       ctx.strokeStyle = '#B97A43'; ctx.lineWidth = 0.9; ctx.beginPath(); ctx.moveTo(-3, 2.6); ctx.quadraticCurveTo(2, 3.6, 5.6, 0.4); ctx.stroke();
       ctx.restore();
@@ -130,7 +134,7 @@
   window.TOLPups = {
     looks: LOOKS,
     reduced: REDUCED,
-    draw: function (c, L, pose, ph, wag, blink, t, tilt) { ctx = c; drawPup(L, pose, ph, wag, blink, t, tilt); },
+    draw: function (c, L, pose, ph, wag, blink, t, tilt, opts) { ctx = c; drawPup(L, pose, ph, wag, blink, t, tilt, opts); },
     cape: function (c, L, t, col, flying) { ctx = c; drawCape(L, t, col, flying); }
   };
 })();
