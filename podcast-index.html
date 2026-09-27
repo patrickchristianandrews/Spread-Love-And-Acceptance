@@ -279,11 +279,11 @@
 
     <nav aria-label="Podcast sections">
       <ol>
-        <li><a href="#all" data-target="all">All Episodes</a></li>
-        <li><a href="#foundation" data-target="foundation">Foundation (Ep 1&ndash;3)</a></li>
-        <li><a href="#diagnostics" data-target="diagnostics">Diagnostics (Ep 4&ndash;7)</a></li>
-        <li><a href="#communication" data-target="communication">Communication (Ep 8&ndash;9)</a></li>
-        <li><a href="#resonance" data-target="resonance">Resonance (Ep 10&ndash;11)</a></li>
+        <li><a href="#episodes-grid" data-target="all">All Episodes</a></li>
+        <li><a href="#episodes-grid" data-target="foundation">Foundation (Ep 1&ndash;3)</a></li>
+        <li><a href="#episodes-grid" data-target="diagnostics">Diagnostics (Ep 4&ndash;5)</a></li>
+        <li><a href="#episodes-grid" data-target="communication">Communication (Ep 6&ndash;7)</a></li>
+        <li><a href="#episodes-grid" data-target="resonance">Resonance (Ep 8&ndash;11)</a></li>
       </ol>
 
       <div class="nav-group-label">Resources</div>
@@ -307,8 +307,8 @@
     <p class="lede">The Kane and Christian Experience. Exploring The Objective Ledger&trade; framework through narrative, real-world application, and dialogue.</p>
 
   <div class="intro-callout">
-    <p><strong>About the podcast:</strong> Each episode is a deep dive into one workpaper, chapter, or thematic area. Listen in any order, or follow the episode path matched to the PROG-01 curriculum weeks. Parallel listening while you read or use the tools deepens comprehension and provides voice context for the framework's emotional texture.</p>
-    <p><strong>Hosted by Kane and Christian</strong> with rotating guests, real couple interviews, and listener questions. All episodes are available to paid members.</p>
+    <p><strong>About the podcast:</strong> Each episode is a deep dive into one workpaper, chapter, or thematic area. Listen in any order, or follow the episode path matched to the PROG-01 curriculum weeks. Listening while you read or use the tools can add a human voice to the ideas.</p>
+    <p><strong>Hosted by Kane and Christian</strong> with rotating guests, real couple interviews, and listener questions. Episodes marked Live are out now; the rest are in production or planned.</p>
   </div>
 
   <div class="filter-section">
@@ -340,7 +340,7 @@
     </div>
 
     <!-- Episode 2 -->
-    <div class="episode-card" data-filter="foundation" data-prog-week="1">
+    <div class="episode-card" data-filter="foundation" data-prog-week="2">
       <div class="episode-number">Episode 2</div>
       <h3 class="episode-title">The Radio Frequency Paradigm in Action</h3>
       <div class="episode-duration">31 minutes</div>
@@ -362,7 +362,7 @@
       <p class="episode-desc">A direct deep-dive into the foundational heuristic. One person makes the lemonade. One sells it. Both are necessary. Why does shared accounting change everything?</p>
       <div class="episode-tags">
         <span class="episode-tag">Foundation</span>
-        <span class="episode-tag">Chapter III</span>
+        <span class="episode-tag">The Lemonade Stand</span>
         <span class="episode-tag">PROG Week 2</span>
       </div>
       <div class="status-badge status-live">Live</div>
@@ -422,7 +422,7 @@
       <p class="episode-desc">A deep linguistic dive into WP-09. Why tone is data. How to hear it without defensiveness. How to notice your own inflection and separate the message from the carrier wave.</p>
       <div class="episode-tags">
         <span class="episode-tag">Communication</span>
-        <span class="episode-tag">WP-09 (Tone Transducer)</span>
+        <span class="episode-tag">WP-09 (Tone Filter)</span>
         <span class="episode-tag">PROG Week 4</span>
       </div>
       <div class="status-badge status-production">In Production</div>
@@ -449,7 +449,7 @@
       <div class="episode-number">Episode 9</div>
       <h3 class="episode-title">The Phase-Locked Loop: Getting In Sync When You're Out of Sync</h3>
       <div class="episode-duration">26 minutes</div>
-      <p class="episode-desc">A practical walkthrough of WP-13. How to use structured turn-taking and validation loops to lock back into resonance. Includes real dialogue examples from couples who've practiced this.</p>
+      <p class="episode-desc">A practical walkthrough of WP-13. Ninety seconds a day (load, appreciation, friction, ask) with no debate, and how that small habit keeps two people in step. Includes real examples from couples who've practiced it.</p>
       <div class="episode-tags">
         <span class="episode-tag">Resonance</span>
         <span class="episode-tag">WP-13 (PLL)</span>
@@ -493,7 +493,7 @@
 
   <div class="section-title" style="margin-top: 3.5rem;">Subscribe &amp; Stay Updated</div>
   <div class="intro-callout">
-    <p>New episodes release <strong>every two weeks</strong> on Spotify, Apple Podcasts, and here on spreadloveandacceptance.com. Already a paid member? Episodes are included in your membership.</p>
+    <p>New episodes will appear on Spotify, Apple Podcasts, and here on spreadloveandacceptance.com as they&rsquo;re finished. Everything is free while the program is being built; paid membership comes later.</p>
     <p><strong>Not signed up yet?</strong> <a href="/membership.html" style="color: var(--brass); text-decoration: none; font-weight: 600;">Sign up free with your email to open PROG-01 and all the workpapers &rarr;</a></p>
   </div>
 
@@ -541,6 +541,11 @@
     link.addEventListener('click', function() {
       links.forEach(function(l) { l.classList.remove('active'); });
       this.classList.add('active');
+      var t = this.getAttribute('data-target');
+      if (t) {
+        var btn = document.querySelector('.filter-btn[data-filter="' + t + '"]');
+        if (btn) btn.click();
+      }
     });
   });
 })();

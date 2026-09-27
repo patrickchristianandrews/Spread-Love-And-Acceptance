@@ -10,7 +10,7 @@
   var WORLDS = J.WORLDS, KEY = 'tol-journey-v1';
   var REDUCED = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
   var DPR = Math.min(2, window.devicePixelRatio || 1);
-  // the two pals: the stocky one with long drop ears, and the leaner one with the collar
+  // the two pals, in the order of PAL: Sugarfoot, the leaner one with the collar, and Tidbit, the stocky one with long drop ears and the big smile
   var PAL = ['Sugarfoot', 'Tidbit'];
   var DIRWORD = ['up', 'right', 'down', 'left'];
 
@@ -120,8 +120,8 @@
 
   /* ------------------------------------------------------------------ the two pals (drawn like the garden's pair) */
   var PUPS = [
-    { build: 'stocky', ear: 'drop', legUp: '#A45C2E', legLow: '#B97847', paw: '#F1EADF', nails: true, tan: '#C9965F', chest: 'white', muzzle: 'cream', collar: false, tail: 'plume' },
-    { build: 'lean', ear: 'fold', legUp: '#262220', legLow: '#C98A4F', paw: '#D99E62', chest: 'tan', muzzle: 'rottie', collar: true, tail: 'short' }
+    { build: 'lean', ear: 'fold', legUp: '#262220', legLow: '#C98A4F', paw: '#D99E62', chest: 'tan', muzzle: 'rottie', collar: true, tail: 'short' },
+    { build: 'stocky', ear: 'drop', legUp: '#A45C2E', legLow: '#B97847', paw: '#F1EADF', nails: true, tan: '#C9965F', chest: 'white', muzzle: 'cream', collar: false, tail: 'plume' }
   ];
   function rr(c, x, y, w, h, r) { c.beginPath(); if (c.roundRect) c.roundRect(x, y, w, h, r); else c.rect(x, y, w, h); }
   function drawPup(c, L, pose, ph, wag, blink, t, tilt) {
@@ -1676,7 +1676,7 @@
 
   /* ---- fact, feeling, ask (or a verdict): sort one sentence at a time */
   var NOTFIT = {
-    fact: 'A fact is something anyone could see or count, with no judgement in it.',
+    fact: 'A fact is something anyone could see or count, with no judgment in it.',
     feeling: 'A feeling is how it landed for me, usually starting with “I”.',
     ask: 'An ask requests something for next time.',
     verdict: 'A verdict judges the person, not the event.'
@@ -2307,7 +2307,7 @@
       save.intro = true; persist();
       showCard({ k: 'The Frequency Journey', h: 'Two pals set out together',
         lesson: 'Somewhere above the clouds is the Perfect Frequency.',
-        p: 'Sugarfoot and Tidbit are going to find it: through a stormy forest, over melting glaciers, across a golden meadow, a canyon, a singing valley and a starry summit. Every level is a different small challenge, from riddles to breathing to sorting out a tricky moment, and each one grows a little wiser. They’ll get there as themselves, and as pals, side by side.',
+        p: 'Sugarfoot and Tidbit are going to find it: through a stormy forest, over melting glaciers, across a golden meadow, a canyon, a singing valley and a starry summit. Every level is a different small challenge, from riddles to breathing to sorting out a tricky moment, and with each one they grow a little wiser. They’ll get there as themselves, and as pals, side by side.',
         btns: [['Begin', function () { hideCard(); startLevel(1, 1); }, true], ['Look at the map first', hideCard]] });
     }
   }

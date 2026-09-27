@@ -1,8 +1,8 @@
 /* quiet-crossword.js — Quiet Crossword (/quiet-crossword.html): small, gentle crosswords.
    Tap a square (tap it again to switch between across and down) and type with the
-   on-screen keys or a keyboard. Each word glows softly when it's right. There's a new
-   puzzle every day and "Another puzzle" any time; every puzzle counts as a level, with a kinder note for no
-   reveals (rewards.js). No timer, no way to lose. Progress stays in this browser. */
+   on-screen keys or a keyboard. Each word glows softly when it's right. "Next" goes on
+   in order, "Random" (or "A random one") picks one you haven't played, and you can change the difficulty
+   any time (game-levels.js). Every puzzle counts as a level, with a kinder note for no reveals (rewards.js). No timer, no way to lose. Progress stays in this browser. */
 (function () {
   'use strict';
   var root = document.getElementById('xw'); if (!root) return;

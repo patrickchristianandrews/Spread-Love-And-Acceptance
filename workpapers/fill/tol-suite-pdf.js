@@ -5,7 +5,7 @@
   - fillable(): every workpaper on your road as a real form. Tap a box and type
     in any PDF app, or print it and write by hand. Whatever is already filled
     in on the website is in the boxes.
-  - report(): a keepsake of what you've written, grouped the way your road is,
+  - report(): a record of what you've written, grouped the way your road is,
     with an at-a-glance read, changes over time and the kind words worth keeping.
   - readFilled(): opens a fillable PDF from this site after it has been filled
     in, and hands back what was typed, so the website can pick up from there.
@@ -407,7 +407,7 @@
     var how = opts.fillable
       ? ['How to use it', 'Tap any box to type, in Adobe Acrobat Reader, your phone\'s Files app, Preview or a browser. Or print it and write by hand.', 'To pick up later, save the PDF, then open it in the Workpaper Suite on the website. Everything you typed comes back in, and the report works itself out.']
       : (path && path.report ? ['What this report is', path.report.what, 'Page 2 has the at-a-glance read, then how to read it on your road. It came from files on your own device and was never sent anywhere.']
-        : ['What this is', 'A keepsake of what you\'ve written, grouped the way your road goes. Page 2 has the at-a-glance read.', 'It came from files on your own device and was never sent anywhere.']);
+        : ['What this is', 'A record of what you\'ve written, grouped the way your road goes. Page 2 has the at-a-glance read.', 'It came from files on your own device and was never sent anywhere.']);
     pen.room(90);
     d.roundRect(L, pen.y, W, 78, 12, '#FFFFFF', C.line, 0.6);
     d.text(L + 14, pen.y + 18, enc(how[0]), 'Times-Bold', 12, C.ink);

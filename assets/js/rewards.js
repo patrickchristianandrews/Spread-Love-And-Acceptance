@@ -22,7 +22,7 @@
     ['garden-lights', 'Fairy lights', '✨', 'Warm little lights between the trees that glow brighter as the animals pass beneath.'],
     ['garden-balloon', 'A hot-air balloon', '🎈', 'A striped balloon drifts across the sky, and the plane waves hello.'],
     ['garden-hammock', 'A hammock', '🛏️', 'A hammock between the trees, for naps after all that playing.'],
-    ['garden-rainbow', 'Rainbow lanterns', '🏮', 'The Night Garden’s lanterns rise in every pastel colour.'],
+    ['garden-rainbow', 'Rainbow lanterns', '🏮', 'The Night Garden’s lanterns rise in every pastel color.'],
     ['garden-owls', 'Sleepy owls', '🦉', 'Two owls in the branches whose eyes follow the fun.'],
     ['garden-butterflies', 'Glowing butterflies', '🦋', 'Soft glowing butterflies that the dogs chase and the bunny follows.'],
     ['garden-meteors', 'A meteor shower', '🌠', 'Now and then a shower of shooting stars, and everyone makes a wish.'],
@@ -48,7 +48,7 @@
   function nextUnlock() { for (var i = 0; i < ALL.length; i++) if (S.unlocked.indexOf(ALL[i].id) === -1) return ALL[i]; return null; }
   function level() { return S.lv + 1; }
 
-  // A new day: keep the streak (a missed day is forgiven once a week), and give a daily blossom.
+  // A new day: keep the streak (a missed day is forgiven once a week).
   function touchDay() {
     var today = dayKey();
     if (S.last === today) return 0;
@@ -88,7 +88,7 @@
     return res;
   }
 
-  // Remember a game's personal bests and counts (for the keepsakes page).
+  // Remember a game's personal bests and counts (kept with the rest of your progress in this browser).
   function record(game, key, value, mode) {
     var g = S.games[game] = S.games[game] || {};
     if (mode === 'max') { var was = g[key] || 0; if (value > was) { g[key] = value; save(); return true; } return false; }

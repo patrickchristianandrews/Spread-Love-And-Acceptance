@@ -16,7 +16,7 @@
   var R = window.TOLRewards;
   var KEY = 'tol-bloom-v1';
   var CHAPTERS = ['Seedling', 'Sprout', 'Little meadow', 'Morning dew', 'Wildflowers', 'Butterfly hill', 'Honey grove', 'Sunlit orchard', 'Willow pond', 'Moonlit meadow',
-    'Lantern lane', 'Firefly field', 'Starlight garden', 'Rose arbour', 'Lavender path', 'Maple hollow', 'Cloud orchard', 'Aurora glade', 'Golden hour', 'Evergreen'];
+    'Lantern lane', 'Firefly field', 'Starlight garden', 'Rose arbor', 'Lavender path', 'Maple hollow', 'Cloud orchard', 'Aurora glade', 'Golden hour', 'Evergreen'];
   var KIND = ['Lovely. Take a slow breath.', 'Beautifully done.', 'Your garden grows.', 'That felt good, didn’t it?', 'One more little bloom.', 'Gently does it.',
     'You found them all.', 'A small win is still a win.', 'Your mind has had a lovely stretch.', 'Well played. Rest your eyes a moment.'];
 
@@ -163,7 +163,7 @@
     } else if (lv.b.indexOf(w) !== -1) {
       S.bonus.push(w); S.jar++; save(); feedback('is-bonus'); jar(true);
       var mm = wake(); if (mm) mm.pluck(mm.note(6), 0.05);
-      noteEl.innerHTML = '<b>' + cap(w) + '</b> is a bonus word ✨ ' + (10 - S.jar % 10 === 10 ? '' : (10 - S.jar % 10) + ' more fills the jar.');
+      noteEl.innerHTML = '<b>' + cap(w) + '</b> is a bonus word ✨ ' + (10 - S.jar % 10 === 10 ? '' : (10 - S.jar % 10) + (10 - S.jar % 10 === 1 ? ' more fills the jar.' : ' more fill the jar.'));
       if (S.jar % 10 === 0 && R) R.earn(10, 'bloom', 'Bonus jar full');
     } else {
       feedback('is-miss'); noteEl.textContent = 'Not this time. Try another.';

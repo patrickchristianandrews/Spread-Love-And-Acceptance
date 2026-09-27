@@ -53,33 +53,34 @@
     <div class="kicker">Workpaper &middot; CALC-01</div>
     <h1>Solvency Read</h1>
     
-<p>Pulls the three ledger inputs described in Chapter II. This scores the current <strong>workload arrangement</strong> — not either person, and not the relationship as a whole.</p>
+<p>Pulls the three ledger inputs described in <a href="/book/chapter-2.html">Chapter II</a>. This scores the current <strong>workload arrangement</strong> — not either person, and not the relationship as a whole.</p>
 
     <div class="field">
       <label for="workload">Workload balance score <span id="workload-val">0.50</span></label>
       <input type="range" id="workload" min="0" max="1" step="0.01" value="0.5">
-      <div class="hint">From the Lemonade Stand: how evenly hours were split this week (1 = perfectly even).</div>
+      <div class="hint">From the <a href="/lemonade-stand.html">Lemonade Stand</a> or the <a href="/workpapers/fill/wp-01.html">WP-01</a> totals: how evenly the week's time was split (1 = perfectly even).</div>
     </div>
 
     <div class="field">
       <label for="ownership">Ownership clarity score <span id="ownership-val">0.50</span></label>
       <input type="range" id="ownership" min="0" max="1" step="0.01" value="0.5">
-      <div class="hint">From WP-03: share of tasks with both a named Responsible and Accountable.</div>
+      <div class="hint">From <a href="/workpapers/fill/wp-03.html">WP-03</a>: the share of tasks with both a named Responsible and Accountable.</div>
     </div>
 
     <div class="field">
       <label for="saturation">Average autonomic saturation <span id="saturation-val">0.50</span></label>
       <input type="range" id="saturation" min="0" max="1" step="0.01" value="0.5">
-      <div class="hint">From WP-02: average of both people's saturation scores this week.</div>
+      <div class="hint">From <a href="/workpapers/fill/wp-02.html">WP-02</a>: the average of both people's battery scores this week.</div>
     </div>
 
     <div class="readout">
       <div class="label" style="font-family:'IBM Plex Mono',monospace;font-size:0.7rem;color:var(--ink-soft);">SOLVENCY READ</div>
       <div class="score" id="score">0.50</div>
-      <p id="score-text">Something in the arrangement is drifting. Revisit the RACI treaty before anything else.</p>
+      <p id="score-text">Something in the arrangement is drifting. Revisit the RACI Treaty (WP-03) before anything else.</p>
     </div>
 
     <p class="disclaimer">This is a heuristic worksheet, not a validated statistical model or a relationship-compatibility test. It only reflects what's entered above. It does not, and should not, make a determination about whether a relationship is worth continuing — that's not a question a formula can answer.</p>
+    <p class="disclaimer">Want every input worked out from the raw entries, plus the apex score and a trend log? Open <a href="/calc01-solvency.html">the full CALC-01</a>. To keep the numbers week by week, use <a href="/workpapers/report-01.html">REPORT-01</a> or <a href="/workpapers/fill/suite.html">build your Workpaper Suite</a>.</p>
   </div>
 
 <script>
@@ -110,7 +111,7 @@
       scoreText.textContent = 'The current arrangement is carrying its own weight. Keep the same rhythm of check-ins.';
     } else if(solvency >= 0.4){
       scoreEl.classList.add('mid');
-      scoreText.textContent = 'Something in the arrangement is drifting \u2014 usually ownership clarity first. Revisit the RACI treaty (WP-03).';
+      scoreText.textContent = 'Something in the arrangement is drifting \u2014 usually ownership clarity first. Revisit the RACI Treaty (WP-03).';
     } else {
       scoreEl.classList.add('low');
       scoreText.textContent = 'The workload as currently structured doesn\u2019t look sustainable. That\u2019s a statement about the arrangement, not about either person.';

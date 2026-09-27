@@ -114,7 +114,8 @@
     box.querySelector('.tol-dive-meter').style.display = total > 1 ? '' : 'none';
     var more = depth < layers.length - 1;
     box.querySelector('.tol-dive-wade').innerHTML = more ? '<button type="button" class="tol-dive-go">' + (depth === 0 ? 'Wade in a little' : depth === 1 ? 'A little deeper' : 'Wade in to your waist') + ' ' + STEPS[depth + 1][0] + '</button>' : '';
-    box.querySelector('.tol-dive-more').innerHTML = deep ? '<a href="' + esc(d.u) + '">' + DEEP[0] + ' ' + esc(d.l || 'Dive deeper') + ' &rarr;</a>' : '';
+    box.querySelector('.tol-dive-more').innerHTML = (deep ? '<a href="' + esc(d.u) + '">' + DEEP[0] + ' ' + esc(d.l || 'Dive deeper') + ' &rarr;</a>' : '') +
+      '<a class="tol-dive-chat" href="/ask.html?about=' + encodeURIComponent(d.t) + '">&#128172; Chat it out with Professor Fiddlesticks</a>';
     if (depth) { var nl = body.lastElementChild; if (nl) body.scrollTo ? body.scrollTo({ top: nl.offsetTop - body.offsetTop - 8, behavior: 'smooth' }) : (body.scrollTop = nl.offsetTop); }
     else body.scrollTop = 0;
   }

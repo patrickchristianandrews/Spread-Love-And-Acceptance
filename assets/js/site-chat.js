@@ -19,9 +19,9 @@
   var PRIVACY_LINE = 'Answers come only from this site’s pages. What you type stays on this device.';
 
   var DEFAULT_CHAR = {
-    name: 'Professor Puddles',
+    name: 'Professor Fiddlesticks',
     color: '#7FA88A',
-    greeting: 'Hi, I’m Professor Puddles! Ask me about anything on this site, like the book, the workpapers, check-ins, different wiring or ways to calm down, and I’ll share what the pages say, with a link to read more.'
+    greeting: 'Hi, I’m Professor Fiddlesticks! Ask me about anything on this site, like the book, the workpapers, check-ins, different wiring or ways to calm down, and I’ll share what the pages say, with a link to read more.'
   };
 
   // ------------------------------------------------------------------ text helpers
@@ -288,7 +288,7 @@
     if (/\b(what can you do|what do you do|how do(es)? (this|you) work|who are you|what are you|help me use|what can i ask|how can you help|are you (an? )?(ai|bot|robot|human|real))\b/.test(f) || f === 'help')
       return { blocks: [
         { k: 'p', x: 'I’m a small helper that looks things up in this site’s own pages: the book, the workpapers, the guides and the glossary. I share the most relevant passages, with a link so you can read the whole thing.' },
-        { k: 'p', x: 'I don’t make things up and I’m not a counsellor, so if the pages don’t cover something, I’ll say so. Everything happens in your browser. What you type stays on this device.' }],
+        { k: 'p', x: 'I don’t make things up and I’m not a counselor, so if the pages don’t cover something, I’ll say so. Everything happens in your browser. What you type stays on this device.' }],
         chips: STARTERS };
     if (/\b(surprise me|random|anything interesting|tell me something|teach me something|something new|inspire me)\b/.test(f)) return surprise(state);
     if (/^(give me |got |share )?(a |another |one )?(little |quick |small )?(tip|tips)( please)?( for today)?$/.test(f)) return tip(state);
@@ -460,6 +460,7 @@
     '.tolc-msg.is-new{animation:tolc-in .25s ease-out}',
     '@keyframes tolc-in{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}',
     'html.tolc-lock,html.tolc-lock body{overflow:hidden}',
+    '.tolc[hidden],.tolc-scrim[hidden]{display:none !important}',
     '@media (min-width:720px){html.tolc-lock,html.tolc-lock body{overflow:auto}}',
     '@media (prefers-reduced-motion:reduce){.tolc *,.tolc{animation:none !important;transition:none !important;scroll-behavior:auto !important}}'
   ].join('\n');

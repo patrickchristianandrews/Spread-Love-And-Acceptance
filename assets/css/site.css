@@ -1295,3 +1295,8 @@ a.tol-pud-card-go, main a.tol-pud-card-go{ color:#fff !important; text-decoratio
 .read .ideas > li.tol-cheer:hover{ box-shadow:none !important; }
 .read .ideas{ grid-auto-flow:row dense; }
 .read .ideas > li.tol-cheer{ counter-increment:none !important; }
+/* in every mini dive: talk the term over with the Professor */
+.tol-dive-more{ display:flex; flex-direction:column; align-items:flex-start; gap:.55rem; }
+.tol-dive-chat{ display:inline-flex; align-items:center; gap:.35rem; min-height:40px; padding:.35rem .95rem; border-radius:999px; background:#EEF5FC; border:1px solid #BFD8EE;
+  color:#2F5F8A !important; font:600 .88rem "Lora", Georgia, serif; text-decoration:none !important; }
+.tol-dive-chat:hover{ background:#E1EEFA; }

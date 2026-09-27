@@ -779,7 +779,7 @@
     ['solvency', 'Solvency Read'],
     ['register', 'The Lemonade Stand'],
     ['battery', 'Battery & Stress Meter'],
-    ['treaty', 'Domestic RACI Treaty'],
+    ['treaty', 'RACI Treaty'],
     ['state', 'Check Your State'],
     ['close', 'Close the Books'],
     ['household', 'Household & Account']
@@ -1044,7 +1044,7 @@
     });
   }
 
-  /* ---------- Domestic RACI Treaty (WP-03) ---------- */
+  /* ---------- RACI Treaty (WP-03) ---------- */
 
   function renderRaci() {
     var el = document.getElementById('treaty');
@@ -1076,7 +1076,7 @@
       : badge('progress', (S.raci.length - r.withBoth) + ' unowned');
 
     el.innerHTML =
-      sectionHead('WP-03', 'Domestic RACI Treaty',
+      sectionHead('WP-03', 'RACI Treaty',
         'One Responsible (does it) and one Accountable (notices if it didn\u2019t happen) for every recurring task. The treaty carries over week to week. Amend it together at the weekly close, not silently.') +
       phase('The treaty', '<span id="raci-badge">' + badgeHtml + '</span>',
         (S.raci.length

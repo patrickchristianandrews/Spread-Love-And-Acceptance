@@ -1,7 +1,7 @@
 /* quiet-words.js — Quiet Words (/quiet-words.html): a calming word search.
    No timer, no score, no losing. Drag across letters (or tap the first letter, then the
    last) to find a word; it glows, rings softly and leaves a kind line behind.
-   A new theme each day; "Another puzzle" any time. Progress stays in this browser. */
+   Every puzzle has its own theme; "Next" and "Random" pick the next one (game-levels.js). Progress stays in this browser. */
 (function () {
   'use strict';
   var root = document.getElementById('qw'); if (!root) return;
@@ -259,7 +259,7 @@
     var n = +get('tol-qw-done', '0') + 1; set('tol-qw-done', String(n));
     setTimeout(function () { var m = wake(); if (m) { m.home(); setTimeout(function () { m.reward(true); }, 600); } }, 300);
     noteEl.innerHTML = '<span class="qw-note-h">All found. Lovely.</span> Take a slow breath before you go. ' +
-      (n > 1 ? 'You’ve finished ' + n + ' quiet puzzles here.' : 'Come back tomorrow for a new theme.');
+      (n > 1 ? 'You’ve finished ' + n + ' quiet puzzles here.' : 'A new theme is waiting under Next whenever you’re ready.');
     say('All the words are found.');
     if (levels && cur) { levels.finished(cur); noteEl.insertAdjacentHTML('beforeend', window.TOLLevels.programTip()); }
     if (window.TOLTips) window.TOLTips.get(null, function (t) {

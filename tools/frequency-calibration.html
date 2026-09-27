@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>WP-04 / Frequency Calibration &amp; Coherence Audit</title>
-<meta name="description" content="Working Paper WP-04: A unified systems audit mapping operating frequencies across finance, autonomics, decision-making, communication, and philosophy—then identifying coherence deltas and recommending resolution tools.">
+<title>Frequency Calibration &amp; Coherence Audit — The Objective Ledger</title>
+<meta name="description" content="A worksheet tool: a systems audit mapping operating frequencies across finance, autonomics, decision-making, communication, and philosophy—then identifying coherence deltas and recommending resolution tools.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,500&family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -579,21 +579,22 @@
 <body>
 
 <div class="print-bar">
-  <span>WP-04 / Frequency Calibration &amp; Coherence Audit</span>
+  <span>Tool &middot; Frequency Calibration &amp; Coherence Audit</span>
   <button onclick="window.print()">Print this worksheet</button>
 </div>
 
 <div class="sheet">
 
   <div class="sheet-header">
-    <div class="wp-num">WORKING PAPER</div>
-    <h1 class="sheet-mark">Frequency Calibration &amp; Coherence Audit<small>TOL-WP04-SPEC-V1.0</small></h1>
+    <div class="wp-num">WORKSHEET TOOL</div>
+    <h1 class="sheet-mark">Frequency Calibration &amp; Coherence Audit<small>TOL-FREQ-SPEC-V1.0</small></h1>
     
 <p class="sheet-tagline">Map the operating frequencies where the partnership runs. Identify where they're out of sync. Suggest coherence mechanisms to align them.</p>
+<p class="sheet-tagline" style="font-size:.9rem;">Builds on <a href="/frequency-framework.html">the Frequency Framework</a> and <a href="/book/chapter-1.html">Chapter I</a>. Goes with <a href="/workpapers/wp-13-pll-protocol.html">the 90-second check-in (WP-13)</a> and <a href="/tools/mood-arbitrage-free.html">Mood Arbitrage</a>.</p>
   </div>
 
   <div class="intro-note">
-    <p><strong>What this measures:</strong> A partnership is a system made of overlapping oscillators—think of it like two radios running at slightly different frequencies. When they're in sync, there's clarity. When they drift out of phase, they create interference and a "squeal" (the beat frequency). Finance, autonomics, decisions, communication, and philosophy all oscillate at their own rates. Every friction point is usually a frequency mismatch, not a values conflict.</p>
+    <p><strong>What this measures:</strong> A partnership is a system made of overlapping oscillators—think of it like two radios running at slightly different frequencies. When they're in sync, there's clarity. When they drift out of phase, they create interference and a "squeal" (the beat frequency). Finance, autonomics, decisions, communication, and philosophy all oscillate at their own rates. Many friction points turn out to be a frequency mismatch, not a values conflict.</p>
     <p><strong>The good news:</strong> Mismatched frequencies aren't a failure—they're information. If you both know the frequencies, you can build coherence mechanisms (shared rhythms, locked cycles, synchronized check-ins) to synchronize the oscillators.</p>
     <p><strong>What this is not:</strong> This is not a diagnostic tool, a compatibility test, or a predictor of relationship viability. It's a systems audit: a description of how the machine is currently running, so you can both make deliberate choices about which frequencies need to align.</p>
   </div>
@@ -637,7 +638,7 @@
 
       <div class="frequency-domain">
         <h3>Communicational Frequency</h3>
-        <div class="definition">How often you prefer to have check-in conversations, updates, or relational maintenance (from WP-13, Phase-Locked Loop Protocol).</div>
+        <div class="definition">How often you prefer to have check-in conversations, updates, or relational maintenance (see WP-13, the 90-second check-in).</div>
         <div class="field-group">
           <label for="a-comm">Your preferred check-in rhythm</label>
           <input type="text" id="a-comm" placeholder="e.g., Daily 90-second pulse, Weekly sit-down, As-needed" value="">
@@ -696,7 +697,7 @@
 
       <div class="frequency-domain">
         <h3>Communicational Frequency</h3>
-        <div class="definition">How often you prefer to have check-in conversations, updates, or relational maintenance (from WP-13, Phase-Locked Loop Protocol).</div>
+        <div class="definition">How often you prefer to have check-in conversations, updates, or relational maintenance (see WP-13, the 90-second check-in).</div>
         <div class="field-group">
           <label for="b-comm">Your preferred check-in rhythm</label>
           <input type="text" id="b-comm" placeholder="e.g., Daily 90-second pulse, Weekly sit-down, As-needed" value="">
@@ -719,7 +720,7 @@
 
   <section id="coherence-deltas">
     <h2>Frequency Deltas &amp; Coherence Status</h2>
-    <p style="color: var(--ink-soft); font-size: 0.95rem;">The following six calculations show where your frequencies are misaligned. A large delta doesn't mean someone is wrong—it means you're oscillating at different rates, and the system is producing friction.</p>
+    <p style="color: var(--ink-soft); font-size: 0.95rem;">The following five calculations show where your frequencies are misaligned. A large delta doesn't mean someone is wrong—it means you're oscillating at different rates, and the system is producing friction.</p>
 
     <div class="delta-readout">
       <h3>Delta Summary</h3>
@@ -732,7 +733,7 @@
         </div>
         <div class="delta-help" id="delta-fin-help">Enter values above to see coherence status.</div>
         <div class="coherence-recommendation" id="delta-fin-rec" style="margin-top: 10px; display: none;">
-          <strong>Why this matters:</strong> Your bill cycles and income cycles are out of sync, creating cash-flow interference. <strong>Action:</strong> Run <span class="tool-ref">CALC-01</span> (Solvency Read) weekly. It measures financial stress load and tells you whether the current arrangement is sustainable. Align your check-in cycle to match whichever frequency creates the least friction.
+          <strong>Why this matters:</strong> You check on money at different rhythms, so one of you may feel surprised by bills while the other feels nagged. <strong>Action:</strong> Agree on one shared money check-in, weekly or monthly, and give bills and scheduling a named owner in the <span class="tool-ref">WP-03</span> RACI Treaty. Align the check-in to whichever rhythm creates the least friction.
         </div>
       </div>
 
@@ -744,7 +745,7 @@
         </div>
         <div class="delta-help" id="delta-auto-help">Enter values above to see coherence status.</div>
         <div class="coherence-recommendation" id="delta-auto-rec" style="margin-top: 10px; display: none;">
-          <strong>Why this matters (urgent):</strong> Your nervous systems are creating a beat frequency. One person needs regulation every 90 seconds; the other goes hours. While one resets, the other escalates. <strong>Start immediately:</strong> (1) Both complete <span class="tool-ref">WP-02</span> independently. (2) Implement <span class="tool-ref">WP-13</span> (Phase-Locked Loop)—shared 90-second pulses sync you both. (3) Use <span class="tool-ref">WP-11</span> (Somatosensory Sanctuary) audio during high-friction moments for instant coherence.
+          <strong>Why this matters (urgent):</strong> You need breaks at very different rhythms. One of you may need to step away within minutes; the other can keep going for hours. While one resets, the other can feel left mid-conversation. <strong>Start here:</strong> (1) Both complete <span class="tool-ref">WP-02</span> independently. (2) Start <span class="tool-ref">WP-13</span>, the 90-second daily check-in, so small things get said early. (3) Each fill in the Calm-Down Kit (<span class="tool-ref">WP-11</span>), with a signal line that names when you'll be back.
         </div>
       </div>
 
@@ -756,7 +757,7 @@
         </div>
         <div class="delta-help" id="delta-dec-help">Enter values above to see coherence status.</div>
         <div class="coherence-recommendation" id="delta-dec-rec" style="margin-top: 10px; display: none;">
-          <strong>Why this matters:</strong> One person locks decisions immediately; the other naturally iterates. This mismatch creates conflict because "decided" and "revisiting" are oscillating asynchronously. <strong>Action:</strong> Complete <span class="tool-ref">WP-03</span> (Domestic RACI Treaty) to explicitly define which decisions lock now vs. which get revisited weekly. Use <span class="tool-ref">WP-13</span>'s weekly cycle as your mutual revision window.
+          <strong>Why this matters:</strong> One person locks decisions immediately; the other naturally iterates. This mismatch creates conflict because "decided" and "revisiting" are oscillating asynchronously. <strong>Action:</strong> Use the RACI Treaty (<span class="tool-ref">WP-03</span>) to give each recurring decision one owner, and agree which decisions are final and which get revisited weekly. Use <span class="tool-ref">WP-13</span>'s weekly cycle as your mutual revision window.
         </div>
       </div>
 
@@ -768,7 +769,7 @@
         </div>
         <div class="delta-help" id="delta-comm-help">Enter values above to see coherence status.</div>
         <div class="coherence-recommendation" id="delta-comm-rec" style="margin-top: 10px; display: none;">
-          <strong>Why this matters:</strong> You're checking in at incompatible intervals. One person feels abandoned if there's no sync for hours; the other feels suffocated by daily check-ins. <strong>Action (do this this week):</strong> Complete <span class="tool-ref">WP-13</span> (Phase-Locked Loop Protocol) together. It synchronizes your communication frequency: 90-second daily pulses that both of you can lock onto, plus a structured weekly alignment window. This is the coherence mechanism.
+          <strong>Why this matters:</strong> You're checking in at incompatible intervals. One person feels abandoned if there's no sync for hours; the other feels suffocated by daily check-ins. <strong>Action (this week):</strong> Start the 90-second check-in (<span class="tool-ref">WP-13</span>) together. It gives you one shared rhythm: a short daily loop both of you can count on, plus a weekly resync for anything bigger.
         </div>
       </div>
 
@@ -780,7 +781,7 @@
         </div>
         <div class="delta-help" id="delta-phil-help">Enter values above to see coherence status.</div>
         <div class="coherence-recommendation" id="delta-phil-rec" style="margin-top: 10px; display: none;">
-          <strong>Why this matters:</strong> One person wants to audit mission and values regularly; the other treats alignment as implicit. Over time, slow philosophical drift becomes hard to recover from. <strong>Action:</strong> Use <span class="tool-ref">WP-13</span>'s quarterly alignment blocks as your synchronization points. Pick one person's natural revisit cycle and make it the shared one. Even "never" + "yearly" can coexist if you lock the "yearly" into the calendar.
+          <strong>Why this matters:</strong> One person wants to audit mission and values regularly; the other treats alignment as implicit. Over time, slow philosophical drift becomes hard to recover from. <strong>Action:</strong> Put a quarterly alignment conversation in the calendar, a longer version of the <span class="tool-ref">WP-13</span> weekly resync. Pick one person's natural revisit cycle and make it the shared one. Even "never" + "yearly" can coexist if you lock the "yearly" into the calendar.
         </div>
       </div>
 
@@ -804,7 +805,7 @@
       <ul>
         <li>Sit down together with both frequency maps filled in. Look at the visual chart above—where are the tallest oscillations?</li>
         <li>Starting with any autonomic mismatches (highest urgency), read the coherence recommendation for that domain.</li>
-        <li>If autonomic delta is above 1.5x, implement <span style="font-family: 'IBM Plex Mono', monospace; font-weight: 600;">WP-13</span> (Phase-Locked Loop) 90-second syncs immediately. This is your beat-frequency dampener.</li>
+        <li>If the autonomic delta is above 1.5x, start the <span style="font-family: 'IBM Plex Mono', monospace; font-weight: 600;">WP-13</span> 90-second daily check-in right away. Small, frequent check-ins keep the gap from building.</li>
       </ul>
     </div>
 
@@ -812,9 +813,9 @@
       <h4>This Month</h4>
       <ul>
         <li>For each medium-to-large delta (yellow/red in the chart), follow the specific coherence recommendation above. Each one names the tool that synchronizes that oscillator.</li>
-        <li><strong>Communicational first:</strong> Lock <span style="font-family: 'IBM Plex Mono', monospace; font-weight: 600;">WP-13</span> (Phase-Locked Loop Protocol) into your calendar. This synchronizes check-in frequency.</li>
-        <li><strong>Then decisional:</strong> Complete <span style="font-family: 'IBM Plex Mono', monospace; font-weight: 600;">WP-03</span> (Domestic RACI Treaty) to define which decisions lock immediately vs. revisit cycles.</li>
-        <li><strong>Then financial:</strong> Run <span style="font-family: 'IBM Plex Mono', monospace; font-weight: 600;">CALC-01</span> (Solvency Read) every Friday to track whether your cash-flow rhythm is sustainable.</li>
+        <li><strong>Communicational first:</strong> Put the <span style="font-family: 'IBM Plex Mono', monospace; font-weight: 600;">WP-13</span> 90-second check-in into your calendar. This gives you one shared check-in rhythm.</li>
+        <li><strong>Then decisional:</strong> Use the RACI Treaty (<span style="font-family: 'IBM Plex Mono', monospace; font-weight: 600;">WP-03</span>) to name an owner for each recurring decision, and agree which ones are final and which get revisited.</li>
+        <li><strong>Then financial:</strong> Hold your shared money check-in on the same day each week or month, with bills owned by one named person.</li>
       </ul>
     </div>
 
@@ -822,7 +823,7 @@
       <h4>Every Quarter</h4>
       <ul>
         <li>Re-run this audit. Circumstances change (new job, illness, seasons, life stage), and your frequencies may shift. Track whether your deltas are converging or diverging.</li>
-        <li>If philosophical frequency was "never," use <span style="font-family: 'IBM Plex Mono', monospace; font-weight: 600;">WP-13</span>'s quarterly alignment blocks to make it "once per quarter" explicitly. Implicit alignment drifts. Scheduled alignment holds.</li>
+        <li>If philosophical frequency was "never," put a quarterly alignment conversation in the calendar (a longer <span style="font-family: 'IBM Plex Mono', monospace; font-weight: 600;">WP-13</span> weekly resync) to make it "once per quarter" explicitly. Implicit alignment drifts. Scheduled alignment holds.</li>
       </ul>
     </div>
 
@@ -830,7 +831,7 @@
   </div>
 
   <p class="disclaimer">
-    <strong>Important:</strong> This is a heuristic self-report tool, not a validated diagnostic instrument. It describes observed operating frequencies, not underlying pathology or incompatibility. Large frequency deltas are normal in every kind of relationship; they're not a sign of failure. What matters is whether you both know about them and are willing to build coherence mechanisms. This tool is only useful if both people fill it in independently, then sit down and compare notes with genuine curiosity.
+    <strong>Important:</strong> This is a heuristic self-report tool, not a validated diagnostic instrument. It describes observed operating frequencies, not anything wrong with either person, and not incompatibility. Large frequency deltas are normal in every kind of relationship; they're not a sign of failure. What matters is whether you both know about them and are willing to build coherence mechanisms. This tool is only useful if both people fill it in independently, then sit down and compare notes with genuine curiosity.
   </p>
 
 </div>
@@ -1018,11 +1019,11 @@
       } else if (deltaVal <= thresholdYellow) {
         delta.score.textContent = Math.round(deltaVal * 10) / 10 + 'x';
         delta.score.className = 'delta-num med';
-        delta.help.textContent = 'Noticeable interference. You\'re oscillating at different rates. Friction is building. See coherence mechanism below.';
+        delta.help.textContent = 'Noticeable gap. You\'re running at different rates, and that can cause friction. See the suggestion below.';
       } else {
         delta.score.textContent = Math.round(deltaVal * 10) / 10 + 'x';
         delta.score.className = 'delta-num high';
-        delta.help.textContent = 'Heavy interference. These frequencies are creating significant conflict. The coherence mechanism below is urgent.';
+        delta.help.textContent = 'Big gap. This is likely where a lot of the friction comes from. Start with the suggestion below.';
       }
 
       delta.rec.style.display = 'block';

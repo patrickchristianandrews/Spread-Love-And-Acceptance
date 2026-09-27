@@ -61,7 +61,7 @@
               options: [
                 { t: 'A coin', why: 'Give a coin away and it’s gone. This one grows when you share it.' },
                 { t: 'A smile', ok: true, why: 'Yes. Give a smile away and you still have it, and now there are two.' },
-                { t: 'The last biscuit', why: 'That would be a real gift! But once it’s given, it’s gone.' }
+                { t: 'The last cookie', why: 'That would be a real gift! But once it’s given, it’s gone.' }
               ] },
             { q: 'I’m lighter than a feather, yet nobody can hold me for more than a minute or two. When you’re scared, I get short and quick. What am I?',
               hint: 'You’re doing it right now.',
@@ -98,7 +98,7 @@
       ] },
 
     { n: 2, hz: 417, name: 'The Melting Glaciers', theme: 'Welcoming change', short: 'Glaciers', mech: 'glaciers',
-      intro: 'A frozen land, starting to thaw. Words soften, ice melts into new paths, and Sugarfoot and Tidbit practise finding their footing when a talk starts to slide.',
+      intro: 'A frozen land, starting to thaw. Words soften, ice melts into new paths, and Sugarfoot and Tidbit practice finding their footing when a talk starts to slide.',
       summary: 'Welcoming change: what was frozen can soften and carry you somewhere new.',
       levels: [
         { type: 'unscramble', kind: 'Thawing words', d: 2,
@@ -107,7 +107,7 @@
           lesson: 'Change starts small: one brave, steady, curious step.',
           why: 'You don’t have to feel ready. Most new paths begin with a small step taken a little scared.',
           star: 'Brave, steady, curious steps',
-          more: ['/quick-checks.html', 'Quick checks: how are you today?'],
+          more: ['/quick-checks.html', 'Today’s Weather: how are you today?'],
           words: [
             { w: 'BRAVE', mix: 'VRAEB', clue: 'Doing the new thing while you’re still a little scared.' },
             { w: 'STEADY', mix: 'DYSEAT', clue: 'How a good friend helps you feel when the ice is slippery.' },
@@ -119,7 +119,7 @@
           lesson: 'Old ways of doing things can melt into new paths.',
           why: 'Even the plan for who does what can change. Agreements are allowed to be updated as life does.',
           star: 'Old ways can melt into new paths',
-          more: ['/wp-03.html', 'One owner per job (and changing the plan)'],
+          more: ['/workpapers/wp-03-raci-treaty.html', 'One owner per job (and changing the plan)'],
           rows: [
             'A..#...',
             '.b.#.OO',
@@ -146,7 +146,7 @@
       ] },
 
     { n: 3, hz: 528, name: 'The Golden Meadow', theme: 'Joy, and being kind to yourself', short: 'Meadow', mech: 'meadow',
-      intro: 'A sunny field full of flowers. Here Sugarfoot and Tidbit practise being kind to themselves: matching feelings with what helps, finding kinder words, and letting the whole meadow bloom.',
+      intro: 'A sunny field full of flowers. Here Sugarfoot and Tidbit practice being kind to themselves: matching feelings with what helps, finding kinder words, and letting the whole meadow bloom.',
       summary: 'Joy and self-kindness: you deserve the same warmth you give to others.',
       levels: [
         { type: 'match', kind: 'What would help?', d: 3,
@@ -198,7 +198,7 @@
               ] }
           ] },
         { type: 'bloom', kind: 'Let the meadow bloom', d: 3,
-          ask: 'Tap a flower to open it. Each tap also touches its neighbours above, below and beside it. Can you open them all?',
+          ask: 'Tap a flower to open it. Each tap also touches its neighbors above, below and beside it. Can you open them all?',
           done: 'The whole meadow blooms',
           lesson: 'Little moments of light add up, and each kindness reaches the ones around it.',
           why: 'Small, specific things done often, like a real hello or a thank-you, change how a whole week feels.',
@@ -208,7 +208,7 @@
       ] },
 
     { n: 4, hz: 639, name: 'The Bridge of Echoes', theme: 'Connection', short: 'Bridge', mech: 'bridge',
-      intro: 'A deep canyon with echoes on the wind. Here Sugarfoot and Tidbit practise connection: noticing small reaches, sharing the load fairly, and holding steady for each other.',
+      intro: 'A deep canyon with echoes on the wind. Here Sugarfoot and Tidbit practice connection: noticing small reaches, sharing the load fairly, and holding steady for each other.',
       summary: 'Connection: we each walk our own path, and we make each other’s paths possible.',
       levels: [
         { type: 'bids', kind: 'Small reaches', d: 3,
@@ -224,7 +224,7 @@
             { t: 'Ren holds up their phone: “Look at this dog in a raincoat.”', bid: true, why: '“Look at this” is one of the clearest bids there is.' },
             { t: 'The rain gets heavier against the window.', why: 'Just the weather. Nobody is reaching here.' },
             { t: 'Ren asks, “Do you want a tea? I’m making one.”', bid: true, why: 'An offer is a bid too. It’s a small way of saying “I’m thinking of you”.' },
-            { t: 'Ren sits down and opens the post.', why: 'Ren is busy with the post here, not reaching for you.' },
+            { t: 'Ren sits down and opens the mail.', why: 'Ren is busy with the mail here, not reaching for you.' },
             { t: 'On the way past, Ren rests a hand on your shoulder.', bid: true, why: 'A touch in passing is a quiet bid for connection.' }
           ],
           reply: { q: 'Ren sighs, “What a day.” Which answer turns toward the bid?',
@@ -240,14 +240,14 @@
           lesson: 'Fair isn’t always 50/50. It’s every job with one clear owner, and a load that fits you both this week.',
           why: 'Work that belongs to everyone ends up belonging to no one. And the noticing and remembering is work too.',
           star: 'One clear owner, a load that fits',
-          more: ['/wp-03.html', 'One owner per job (WP-03)'],
+          more: ['/workpapers/wp-03-raci-treaty.html', 'One owner per job (WP-03)'],
           cap: [10, 8], capNote: ['a quieter week', 'a busy week at work'],
           jobs: [
             { t: 'Cooking dinners', w: 4 },
-            { t: 'Washing up', w: 2 },
+            { t: 'Doing the dishes', w: 2 },
             { t: 'Laundry', w: 3 },
             { t: 'Evening walks', w: 3 },
-            { t: 'Taking out the bins', w: 1 },
+            { t: 'Taking out the trash', w: 1 },
             { t: 'School forms and the calendar', w: 2, hidden: true },
             { t: 'Noticing the milk is low', w: 1, hidden: true },
             { t: 'Remembering birthdays', w: 2, hidden: true }
@@ -271,7 +271,7 @@
       ] },
 
     { n: 5, hz: 741, name: 'The Singing Valleys', theme: 'Finding your voice', short: 'Valleys', mech: 'valleys',
-      intro: 'Giant crystals hum in the valley wind. Here Sugarfoot and Tidbit practise their voice: listening first, sorting what to say, and finishing the lines that help words land.',
+      intro: 'Giant crystals hum in the valley wind. Here Sugarfoot and Tidbit practice finding their voice: listening first, sorting what to say, and finishing the lines that help words land.',
       summary: 'Finding your voice: listen closely, speak clearly, and the fog lifts.',
       levels: [
         { type: 'echo', kind: 'Echo the valley', d: 4,
@@ -288,24 +288,24 @@
           lesson: 'Say it so it lands: a fact without adjectives, the feeling underneath, and a clear ask.',
           why: 'A verdict like “you never help” is about the person, and it starts a fight about who they are. A fact, a feeling and an ask start a conversation.',
           star: 'Fact, feeling, ask',
-          more: ['/wp-09.html', 'Say it so it lands (WP-09)'],
+          more: ['/workpapers/wp-09-tone-filter.html', 'Say it so it lands (WP-09)'],
           buckets: [
             { k: 'fact', t: 'Fact', d: 'What happened, no adjectives' },
             { k: 'feeling', t: 'Feeling', d: 'How it landed for me' },
             { k: 'ask', t: 'Ask', d: 'What I’d like next' },
-            { k: 'verdict', t: 'Verdict', d: 'A judgement of the person' }
+            { k: 'verdict', t: 'Verdict', d: 'A judgment of the person' }
           ],
           items: [
             { t: 'The sink was full at seven this morning.', k: 'fact', why: 'It’s something anyone could have seen. No adjectives, no blame.' },
             { t: 'I felt let down, and a bit alone with it.', k: 'feeling', why: 'It says how it landed for you. Nobody can argue with that.' },
             { t: 'Could we clear the sink before bed?', k: 'ask', why: 'A clear, doable request about what happens next.' },
-            { t: 'You never help with anything.', k: 'verdict', why: '“Never” and “anything” turn one event into a judgement of the person.' },
+            { t: 'You never help with anything.', k: 'verdict', why: '“Never” and “anything” turn one event into a judgment of the person.' },
             { t: 'The call we planned for eight didn’t happen.', k: 'fact', why: 'Plain and checkable: what was planned, and what happened.' },
             { t: 'I got anxious when the plan changed.', k: 'feeling', why: 'It names your own feeling, starting with “I”.' },
             { t: 'Can we pick a time for the call tomorrow?', k: 'ask', why: 'It asks for something specific, with a real time in it.' },
             { t: 'You obviously don’t care about this.', k: 'verdict', why: 'It guesses at what’s inside the other person and calls it obvious.' },
-            { t: 'Would you take the bins out on Thursdays?', k: 'ask', why: 'A clear ask, with a day in it. Easy to say yes or no to.' },
-            { t: 'The bins went out late twice this week.', k: 'fact', why: 'It counts what happened, without saying what it means about anyone.' }
+            { t: 'Would you take the trash out on Thursdays?', k: 'ask', why: 'A clear ask, with a day in it. Easy to say yes or no to.' },
+            { t: 'The trash went out late twice this week.', k: 'fact', why: 'It counts what happened, without saying what it means about anyone.' }
           ] },
         { type: 'fill', kind: 'Finish the line', d: 5,
           ask: 'Each line is from the program, with one word missing. Type the word. A hint is always there.',
@@ -325,7 +325,7 @@
       ] },
 
     { n: 6, hz: 852, name: 'The Starry Summit', theme: 'Seeing clearly', short: 'Summit', mech: 'summit',
-      intro: 'A night climb on paths made of constellations. Here Sugarfoot and Tidbit practise seeing clearly: telling what you saw from the story you added, choosing well when it’s hard, and trusting clear calls in the dark.',
+      intro: 'A night climb on paths made of constellations. Here Sugarfoot and Tidbit practice seeing clearly: telling what you saw from the story you added, choosing well when it’s hard, and trusting clear calls in the dark.',
       summary: 'Seeing clearly: looking past what seems true to what is true.',
       levels: [
         { type: 'spot', kind: 'Seen, or assumed?', d: 5,
@@ -350,8 +350,8 @@
             { title: 'One word',
               bits: [
                 { t: 'The reply says “Fine.”', why: 'Those are the actual words. Seen.' },
-                { t: 'It ends with a full stop.', why: 'The full stop is really there.' },
-                { t: 'That means they’re upset.', story: true, why: 'For some people a full stop is just a full stop. This is a reading, not a fact.' },
+                { t: 'It ends with a period.', why: 'The period is really there.' },
+                { t: 'That means they’re upset.', story: true, why: 'For some people a period is just a period. This is a reading, not a fact.' },
                 { t: 'They replied within two minutes.', why: 'The time is on the screen. Seen.' },
                 { t: 'They’re only being polite so I’ll drop it.', story: true, why: 'A guess about their reasons. You could ask instead.' }
               ] }
@@ -585,7 +585,7 @@
   /* ------------------------------------------------------------------ helpers for the other challenges
      (shared with tools/journey/check-content.js, so the checker tests the same rules the game uses) */
 
-  // "Let the meadow bloom": a tap opens or closes a flower and its neighbours above, below and beside it.
+  // "Let the meadow bloom": a tap opens or closes a flower and its neighbors above, below and beside it.
   function bloomTap(bits, i, n) {
     n = n || 3; var out = bits.slice(), x = i % n, y = i / n | 0;
     [[0, 0], [0, -1], [1, 0], [0, 1], [-1, 0]].forEach(function (o) {

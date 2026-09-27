@@ -372,6 +372,7 @@
     </h1>
     <p class="sheet-tagline">Scores one narrow thing: whether the current workload arrangement, as logged, looks sustainable. Not either person. Not the relationship.</p>
     <p class="sheet-tagline" style="color:var(--debit);margin-top:8px;"><strong>A diagnostic starting point, not an exit script.</strong> A low score doesn't assign blame, and a high score doesn't silence a partner.</p>
+    <p class="sheet-tagline" style="margin-top:8px;">Read about it in <a href="/book/chapter-2.html">Chapter II</a>. The inputs come from <a href="/workpapers/wp-01.html">WP-01</a>, <a href="/workpapers/wp-02-battery-stress-meter.html">WP-02</a>, <a href="/workpapers/wp-03-raci-treaty.html">WP-03</a> and <a href="/workpapers/wp-09-tone-filter.html">WP-09</a>. Want the quick version? Try the <a href="/workpapers/calculators/calc01-solvency.html">three-slider Solvency Read</a>. To follow it week by week, use <a href="/workpapers/report-01.html">REPORT-01</a>.</p>
     <div class="toc no-print">
       <a href="#state">Check Your State</a>
       <a href="#wb">Workload Balance</a>
@@ -442,7 +443,7 @@
         <span class="var">AS</span> Autonomic Saturation
       </div>
       <div class="pipe-cell">
-        <span class="src">WP-09 &middot; Tone Transducer</span>
+        <span class="src">WP-09 &middot; Tone Filter</span>
         Retunes used &divide; friction events
         <div class="pipe-arrow">&darr;</div>
         <span class="var">RF</span> Retuning Frequency
@@ -679,7 +680,7 @@
 
     <details class="no-print">
       <summary>Optional: compress the scale toward its ends (sigmoid)</summary>
-      <p style="font-size:0.88rem;">The telemetry spec allows passing the same weighted sum through a logistic curve centered at 0.5: <code>1 / (1 + e^(-6 &times; (raw &minus; 0.5)))</code>. This pushes middling reads further from the middle. It adds no predictive power — there is no fitted model behind either version — and it makes your numbers incomparable to any read taken without it. Off by default.</p>
+      <p style="font-size:0.88rem;">The scoring spec allows passing the same weighted sum through a logistic curve centered at 0.5: <code>1 / (1 + e^(-6 &times; (raw &minus; 0.5)))</code>. This pushes middling reads further from the middle. It adds no predictive power — there is no fitted model behind either version — and it makes your numbers incomparable to any read taken without it. Off by default.</p>
       <label style="font-size:0.88rem;display:flex;gap:8px;align-items:center;">
         <input type="checkbox" id="sigmoid" style="width:auto;"> Apply the sigmoid transform
       </label>
@@ -687,7 +688,7 @@
 
     <details class="no-print">
       <summary>Advanced: edit the weights</summary>
-      <p style="font-size:0.88rem;">These weights are editorial priors, not fitted coefficients — they encode a judgment that an unbalanced workload matters somewhat more than an unclear one, and that both matter more than baseline stress. If you change them, every previous read becomes non-comparable, and the change should be written down in your own copy of the telemetry spec before you use it twice.</p>
+      <p style="font-size:0.88rem;">These weights are editorial priors, not fitted coefficients — they encode a judgment that an unbalanced workload matters somewhat more than an unclear one, and that both matter more than baseline stress. If you change them, every previous read becomes non-comparable, and the change should be written down in your own copy of the scoring spec before you use it twice.</p>
       <table>
         <thead><tr><th>Term</th><th class="num">Solvency</th><th class="num">Apex</th></tr></thead>
         <tbody>
@@ -792,7 +793,7 @@ apex_score  = (WB &times; 0.35) + (OC &times; 0.30) + ((1 &minus; AS) &times; 0.
           <tr>
             <td class="mono" style="font-size:0.78rem;">RF</td>
             <td><code>retunes used &divide; friction events</code><br>Undefined when friction events = 0</td>
-            <td>WP-09 Tone Transducer</td>
+            <td>WP-09 Tone Filter</td>
             <td class="num">0&ndash;1</td>
           </tr>
         </tbody>
@@ -808,7 +809,7 @@ apex_score  = (WB &times; 0.35) + (OC &times; 0.30) + ((1 &minus; AS) &times; 0.
           <tr><td>WB</td><td class="num">0.40</td><td class="num">0.35</td><td>Weighted highest because an unshared load is the failure that accumulates whether or not anyone notices it. It's also the input with the most observable evidence behind it.</td></tr>
           <tr><td>OC</td><td class="num">0.35</td><td class="num">0.30</td><td>Close behind, because unclear ownership is what turns a fixable imbalance into a recurring one. Unowned work defaults to whoever notices first, every time.</td></tr>
           <tr><td>1 &minus; AS</td><td class="num">0.25</td><td class="num">0.20</td><td>Lowest of the three because it's the most volatile week to week and the most self-reported. It matters, but a single bad-sleep week shouldn't dominate the read.</td></tr>
-          <tr><td>RF</td><td class="num">&mdash;</td><td class="num">0.15</td><td>Apex only. Small weight, because it's a tally rather than a measurement, and because repair behaviour is the input most easily inflated by the person filling it in.</td></tr>
+          <tr><td>RF</td><td class="num">&mdash;</td><td class="num">0.15</td><td>Apex only. Small weight, because it's a tally rather than a measurement, and because repair behavior is the input most easily inflated by the person filling it in.</td></tr>
         </tbody>
       </table>
     </div>
@@ -852,7 +853,7 @@ apex_score  = (WB &times; 0.35) + (OC &times; 0.30) + ((1 &minus; AS) &times; 0.
 
     <div class="spec-block">
       <h3>Drift rule</h3>
-      <p>From the telemetry spec: three consecutive weekly drops of more than 0.10 in the apex score triggers a treaty review — not an emergency conversation. The trend log above watches for this and says so when it happens. A single large drop is usually a week, not a pattern.</p>
+      <p>From the scoring spec: three consecutive weekly drops of more than 0.10 in the apex score trigger a treaty review — not an emergency conversation. The trend log above watches for this and says so when it happens. A single large drop is usually a week, not a pattern.</p>
     </div>
 
     <div class="warn-box">
@@ -914,7 +915,7 @@ apex_score  = (WB &times; 0.35) + (OC &times; 0.30) + ((1 &minus; AS) &times; 0.
 
   var STATE_COPY = {
     ventral: {
-      text: "Breath is easy, shoulders aren't braced, and feedback can land without an immediate defence. These are good conditions to read a number in. Proceed.",
+      text: "Breath is easy, shoulders aren't braced, and feedback can land without an immediate defense. These are good conditions to read a number in. Proceed.",
       mode: "go"
     },
     sympathetic: {
@@ -1177,8 +1178,8 @@ apex_score  = (WB &times; 0.35) + (OC &times; 0.30) + ((1 &minus; AS) &times; 0.
 
   function bandFor(v){
     if(v >= 0.70) return { cls: "", label: "Carrying its own weight." };
-    if(v >= 0.40) return { cls: "mid", label: "Structural drift." };
-    return { cls: "low", label: "Operating in overdraft." };
+    if(v >= 0.40) return { cls: "mid", label: "Something is drifting." };
+    return { cls: "low", label: "Not sustainable as currently structured." };
   }
 
   function renderContrib(terms){
@@ -1305,7 +1306,7 @@ apex_score  = (WB &times; 0.35) + (OC &times; 0.30) + ((1 &minus; AS) &times; 0.
         base += " The load isn't failing \u2014 the ownership is blurry. An ambiguous task defaults to whoever notices first, every time, and that compounds quietly.";
       }
     } else {
-      base = "The system is operating in overdraft. This is an audit of the operational setup, not of anyone's affection or character \u2014 the largest shortfall is " + worst.fix + ". What it calls for is structural relief and renegotiation, not emotional defence.";
+      base = "The arrangement isn't sustainable as currently structured. This reads the setup, not anyone's affection or character \u2014 the largest shortfall is " + worst.fix + ". What it calls for is structural relief and renegotiation, not a defense of either person.";
     }
 
     var mode = currentState ? STATE_COPY[currentState].mode : "go";
@@ -1317,11 +1318,11 @@ apex_score  = (WB &times; 0.35) + (OC &times; 0.30) + ((1 &minus; AS) &times; 0.
       nextText.textContent = "Read, but don't act tonight. " + base + " You marked yourself as mobilized \u2014 log the number, and bring it to the weekly closing instead of to the next conversation.";
     } else {
       nextBox.className = "next-box stop";
-      nextText.textContent = "Stop here for tonight. The number is recorded above and it will still be there tomorrow. You marked yourself as shut down, and a low read in that state gets heard as a verdict about you rather than about an arrangement \u2014 which it isn't, and never was.";
+      nextText.textContent = "Stop here for tonight. Write the number down if you want to keep it; it will still be true tomorrow. You marked yourself as shut down, and a low read in that state gets heard as a verdict about you rather than about an arrangement \u2014 which it isn't, and never was.";
     }
 
     if(sol < 0.40 && apex < 0.40){
-      nextText.textContent += " Both scores are under water at once. That's the pattern where another worksheet is unlikely to be the thing that helps \u2014 worth considering a couples counselor.";
+      nextText.textContent += " Both scores are under water at once. That's the pattern where another worksheet is unlikely to be the thing that helps \u2014 worth considering outside support, like a counselor.";
     }
 
     lastRead = {
@@ -1384,7 +1385,7 @@ apex_score  = (WB &times; 0.35) + (OC &times; 0.30) + ((1 &minus; AS) &times; 0.
     if(drops >= 3){
       alert.style.display = "";
       alert.className = "warn-box";
-      alert.innerHTML = "<p><strong>Drift rule triggered.</strong> Three consecutive weekly drops of more than 0.10 in the apex score. Per the telemetry spec this calls for a treaty review \u2014 a scheduled WP-03 session, not an emergency conversation. Three weeks of decline is a structural signal, and structure is fixable.</p>";
+      alert.innerHTML = "<p><strong>Drift rule triggered.</strong> Three consecutive weekly drops of more than 0.10 in the apex score. Per the scoring spec this calls for a treaty review \u2014 a scheduled WP-03 session, not an emergency conversation. Three weeks of decline is a structural signal, and structure is fixable.</p>";
     } else {
       alert.style.display = "none";
     }

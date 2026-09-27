@@ -28,14 +28,14 @@
       say:'Before you replay it another forty times: two people can both be reasonable and still produce a squeal. Working out what slipped is more useful than working out who started it.',
       picks:[
         ['/carrier-wave-decoder.html','The Carrier Wave Decoder','A guided walk back through what actually happened.'],
-        ['/workpapers/wp-09-tone-filter.html','WP-09: the Tone Transducer','Turns the thing you want to say into fact, feeling and ask.'],
+        ['/workpapers/wp-09-tone-filter.html','WP-09: the Tone Filter','Turns the thing you want to say into fact, feeling and ask.'],
         ['/check-ins.html','Check-ins','How to reopen it in a room that can hold it.']
       ]},
     { id:'say-hard', ico:'\u2709', label:'I need to say something hard',
       say:'Good. Saying it badly and saying nothing are both worse. It is worth testing the words first, because the same sentence lands very differently depending on who is receiving it.',
       picks:[
         ['/signal-translator.html','The Signal Translator','Type your sentence and see where it might land badly.'],
-        ['/workpapers/wp-09-tone-filter.html','WP-09: the Tone Transducer','Fact, feeling, ask. Same content, far less damage.'],
+        ['/workpapers/wp-09-tone-filter.html','WP-09: the Tone Filter','Fact, feeling, ask. Same content, far less damage.'],
         ['/check-ins.html','Check-ins','Pick the time and the room before you pick the words.']
       ]},
     { id:'past-each-other', ico:'\uD83D\uDCE1', label:'We talk past each other',

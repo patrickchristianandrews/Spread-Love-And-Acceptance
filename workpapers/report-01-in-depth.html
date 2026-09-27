@@ -173,6 +173,7 @@
     <p class="sheet-tagline">One place to record what the worksheets produced, and a report that reads them against each other rather than one at a time.</p>
   </header>
     <p class="depth-bar" style="margin:0 0 28px;"><span>Full version</span><a href="/workpapers/report-01.html">&larr; Back to the simple version</a></p>
+    <p class="no-print" style="margin:0 0 28px;font-size:.9rem;">Where the numbers come from: <a href="/workpapers/fill/">the fill-in workpapers</a> &middot; <a href="/workpapers/calculators/calc01-solvency.html">CALC-01</a> &middot; <a href="/workpapers/fill/suite.html">Build your Workpaper Suite</a></p>
 
 
   
@@ -227,12 +228,12 @@
         <div class="field">
           <label for="w-mins-a">WP-01 minutes &middot; A</label>
           <input type="number" id="w-mins-a" min="0" step="1" placeholder="—">
-          <div class="sub">Field audit total</div>
+          <div class="sub">Field Audit total</div>
         </div>
         <div class="field">
           <label for="w-mins-b">WP-01 minutes &middot; B</label>
           <input type="number" id="w-mins-b" min="0" step="1" placeholder="—">
-          <div class="sub">Field audit total</div>
+          <div class="sub">Field Audit total</div>
         </div>
         <div class="field">
           <label for="w-unasked">Noticed &amp; handled, unasked</label>
@@ -327,7 +328,7 @@
     </div>
 
     <div class="panel">
-      <h3>From WP-04, the deficit audit</h3>
+      <h3>From WP-04, the Deficit Audit</h3>
       <p class="hint">Run monthly. The recurrence figure is the one that matters most here &mdash; a falling gap count with a high recurrence rate is a different situation from a falling count without one.</p>
 
       <div class="grid">
@@ -433,7 +434,7 @@
         <tr><td>Fixes aren't holding</td><td>Recurrence rate above 50% across the recorded months &mdash; the same gaps being re-fixed rather than closed.</td><td class="mono">WP-04</td></tr>
         <tr><td>Treaty gone quiet</td><td>Six or more weeks recorded with no amendments logged &mdash; a living agreement that hasn't changed probably isn't being used.</td><td class="mono">WP-03 + WP-13</td></tr>
         <tr><td>The loop isn't feeding forward</td><td>Friction recorded across three or more weeks with nothing promoted &mdash; the daily loop is running and going nowhere.</td><td class="mono">WP-13 + WP-09</td></tr>
-        <tr><td>Kit doing its job</td><td>The calm-down kit used in a week where saturation fell &mdash; the intervention and the drop line up.</td><td class="mono">WP-11 + WP-02</td></tr>
+        <tr><td>Kit doing its job</td><td>The Calm-Down Kit used in a week where saturation fell &mdash; the intervention and the drop line up.</td><td class="mono">WP-11 + WP-02</td></tr>
         <tr><td>Invisible work surfacing</td><td>Ownership clarity falls while the task list grows &mdash; the score drops because hidden work got named, which is the score behaving correctly.</td><td class="mono">WP-03 + WP-04</td></tr>
       </tbody>
     </table>
@@ -638,7 +639,7 @@
       var li=ds.length-1;
       if((ws[li].kit||0)>0 && ds[li].as!==null && ds[li-1].as!==null && ds[li].as<ds[li-1].as-0.05){
         out.push(finding("good","WP-11 + WP-02 \u00b7 the kit is doing its job",
-          "The calm-down kit was used this week and saturation fell by " + (ds[li-1].as-ds[li].as).toFixed(2) + ". One week isn't proof of anything, but the intervention and the drop line up, which is worth noticing rather than assuming."));
+          "The Calm-Down Kit was used this week and saturation fell by " + (ds[li-1].as-ds[li].as).toFixed(2) + ". One week isn't proof of anything, but the intervention and the drop line up, which is worth noticing rather than assuming."));
       }
     }
 
@@ -659,7 +660,7 @@
       var lp=ws.slice(-3).map(function(w){ return w.loops; }).filter(function(v){ return v!==null; });
       if(lp.length===3 && lp.every(function(v){ return v>=5; })){
         out.push(finding("good","WP-13 \u00b7 the habit is holding",
-          "The daily loop has run at least five days a week for three weeks. That's the one habit meant to outlive the rest of the system, and it is the single best predictor in this suite that the framework will still be in use in six months \u2014 not because the loop is powerful, but because a household that keeps it is a household still talking on ordinary days."));
+          "The daily loop has run at least five days a week for three weeks. That's the one habit meant to outlive the rest of the system, and keeping it is a good sign the framework will still be in use in six months \u2014 not because the loop is powerful, but because a household that keeps it is a household still talking on ordinary days."));
       }
     }
 
@@ -681,9 +682,9 @@
       v.textContent="Waiting on data.";
       vb.textContent = ds.length ? "Weeks are recorded, but none yet has all three of workload, ownership and both batteries \u2014 the read needs all three." : "Add at least one week above and this writes itself.";
     } else {
-      var band = last.sol>=0.70 ? "The structure is carrying its own weight."
-               : last.sol>=0.40 ? "Structural drift."
-               : "Operating in overdraft.";
+      var band = last.sol>=0.70 ? "The arrangement is carrying its own weight."
+               : last.sol>=0.40 ? "Something is drifting."
+               : "Not sustainable as currently structured.";
       v.textContent = band;
       var first=ds.find(function(d){ return d.sol!==null; });
       var moved = (first && ds.length>1) ? last.sol-first.sol : null;

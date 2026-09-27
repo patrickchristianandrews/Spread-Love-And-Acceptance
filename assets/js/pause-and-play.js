@@ -16,15 +16,15 @@
       nextEl.innerHTML = nx ? 'Something new is on its way to the background' + (s.unlocked.length ? ' \u00B7 ' + s.unlocked.length + ' there so far' : '') +
         '<div class="pp-bar"><i style="width:' + Math.max(4, Math.round(s.progress * 100)) + '%"></i></div>' : 'Everything has arrived. Thank you for playing.';
     }
-    var bloom = read('tol-bloom-v1'); if (bloom && bloom.level != null) meta('bloom', 'You’re on level ' + (bloom.level + 1) + (bloom.perfect ? ' · ' + bloom.perfect + ' perfect blooms' : ''));
-    var xw = read('tol-xw-v1'); if (xw && xw.solved) meta('xw', xw.solved + (xw.solved === 1 ? ' crossword solved' : ' crosswords solved') + ' · a new one today');
-    var qw = +(localStorage.getItem('tol-qw-done') || 0); if (qw) meta('words', qw + (qw === 1 ? ' puzzle found' : ' puzzles found') + ' · a new theme today');
+    var bloom = read('tol-bloom-v1'); if (bloom && bloom.level != null) meta('bloom', 'You’re on level ' + (bloom.level + 1) + (bloom.perfect ? ' · ' + bloom.perfect + (bloom.perfect === 1 ? ' perfect bloom' : ' perfect blooms') : ''));
+    var xw = read('tol-xw-v1'); if (xw && xw.solved) meta('xw', xw.solved + (xw.solved === 1 ? ' crossword solved' : ' crosswords solved'));
+    var qw = +(localStorage.getItem('tol-qw-done') || 0); if (qw) meta('words', qw + (qw === 1 ? ' puzzle finished' : ' puzzles finished'));
     var g = read('tol-night-garden-v1');
-    if (g && g.flowers) meta('garden', g.flowers.length + ' flowers' + (g.consts && g.consts.length ? ' · ' + g.consts.length + ' constellations' : '') + (g.lilies ? ' · ' + g.lilies + ' lily rows' : ''));
+    if (g && g.flowers) meta('garden', g.flowers.length + (g.flowers.length === 1 ? ' flower' : ' flowers') + (g.consts && g.consts.length ? ' · ' + g.consts.length + (g.consts.length === 1 ? ' constellation' : ' constellations') : '') + (g.lilies ? ' · ' + g.lilies + (g.lilies === 1 ? ' lily row' : ' lily rows') : ''));
     var br = +(localStorage.getItem('tol-br-count') || 0); if (br) meta('breathe', br + (br === 1 ? ' breathing break so far' : ' breathing breaks so far'));
   }
 
-  // "A calm breath" opens the site's breathing break right here
+  // "A breathing break" opens the site's breathing break right here
   document.addEventListener('click', function (e) {
     var b = e.target.closest('[data-breathe]'); if (!b) return;
     var open = document.querySelector('.tol-breathe-btn');

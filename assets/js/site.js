@@ -38,7 +38,7 @@
       { href: '/whats-new.html', code: 'All', title: 'What’s new', note: 'Everything newly added and everything that’s grown, in one place' },
       { href: '/frequency-journey.html', code: 'New', title: 'The Frequency Journey', note: 'Tidbit and Sugarfoot’s calm puzzle journey: riddles, life lessons and puzzles in seven worlds' },
       { href: '/soundscapes.html', code: 'New', title: 'Four soundscapes', note: 'The Breath Beneath, One Breath to Anchor You, Nothing Needs to Change and The Road We Made' },
-      { href: '/ask.html', code: 'New', title: 'Chat with Professor Puddles', note: 'Small drop, big brain: answers made only from this site’s pages. What you type stays on your device' },
+      { href: '/ask.html', code: 'New', title: 'Chat with Professor Fiddlesticks', note: 'Small drop, big brain: answers made only from this site’s pages. What you type stays on your device' },
       { href: '/pause-and-play.html', code: 'New', title: 'Levels that grow the background', note: 'Every few levels, something new appears behind every page and joins in' },
       { href: '/book/preface.html', code: 'Deeper', title: 'Mini dives, shore to deep', note: 'Tap any word with the water drop and wade in one step at a time' },
       { href: '/workpapers/fill/suite.html', code: 'New', title: 'The Workpaper Suite', note: 'Fillable, printable PDFs for your road, with a plan for each week' }
@@ -69,9 +69,9 @@
       { href: '/frequency-journey.html', code: 'New', title: 'The Frequency Journey', note: 'Guide Tidbit and Sugarfoot through seven tone-themed worlds, with a new kind of challenge every level' },
       { href: '/night-garden.html', code: 'New', title: 'The Night Garden', note: 'A calm place to breathe, play and let your mind settle. Flowers bloom as you breathe; no timers, nothing to lose' },
       { href: '/word-bloom.html', code: 'New', title: 'Word Bloom', note: 'Swipe across the petals to spell words. Hundreds of gentle levels and a bonus jar, and every few levels something new appears in the background' },
-      { href: '/quiet-crossword.html', code: 'New', title: 'Quiet Crossword', note: 'Small, friendly crosswords with a new one every day, made for playing on a phone' },
+      { href: '/quiet-crossword.html', code: 'New', title: 'Quiet Crossword', note: 'Small, friendly crosswords in five gentle levels, made for playing on a phone' },
       { href: '/daily-ledger-crossword.html', code: 'New', title: 'The Daily Ledger Crossword', note: 'A newspaper-style crossword, from a quick 5x5 Mini to a Big Sunday 13x13' },
-      { href: '/quiet-words.html', code: 'Game', title: 'Quiet Words', note: 'A gentle word search with a new theme each day. Every word you find leaves a kind thought behind' },
+      { href: '/quiet-words.html', code: 'Game', title: 'Quiet Words', note: 'A gentle word search with a new theme in every puzzle. Every word you find leaves a kind thought behind' },
     ]},
     { id: 'relationships', title: 'Relationships', blurb: 'Where to start in each kind of relationship, and every tool that fits. The shared relationship tools themselves are under The book, Workpapers and Tools.', items: [
       { href: '/turning-toward.html', deep: true, code: 'New', title: 'Turning toward', note: 'Seven small, everyday ways to build connection with anyone who matters to you' },
@@ -94,9 +94,9 @@
       { href: '/book/chapter-5.html', deep: true, code: 'V', title: 'The monthly look-back', note: 'A gentle monthly look back that catches what weekly check-ins miss. Also called the Deficit Audit', paid: true }
     ]},
     { id: 'workpapers', title: 'Workpapers', blurb: 'Short worksheets you each fill in about yourselves, then read together. They work best in the order listed, with the monthly look-back once a month.', items: [
-      { href: '/workpapers/wp-01.html', deep: true, code: 'WP-01', title: 'Who did what, and kind ways to say no', note: 'Start here: a week’s log of who did what, plus kind ways to say no. Also called the Daily Balance Sheet', paid: true },
+      { href: '/workpapers/wp-01.html', deep: true, code: 'WP-01', title: 'Who did what, and kind ways to say no', note: 'Start here: a week’s log of who did what, plus kind ways to say no. Also called the Field Audit & Neutral Refusals', paid: true },
       { href: '/workpapers/wp-02-battery-stress-meter.html', deep: true, code: 'WP-02', title: 'How full is your battery?', note: 'Five quick questions: how much are you already carrying today? Also called the Battery & Stress Meter', paid: true },
-      { href: '/workpapers/wp-03-raci-treaty.html', deep: true, code: 'WP-03', title: 'One owner per job', note: 'Give every regular job one owner, so nobody has to keep asking. Also called the RACI agreement', paid: true },
+      { href: '/workpapers/wp-03-raci-treaty.html', deep: true, code: 'WP-03', title: 'One owner per job', note: 'Give every regular job one owner, so nobody has to keep asking. Also called the RACI Treaty', paid: true },
       { href: '/workpapers/wp-04-deficit-audit.html', deep: true, code: 'WP-04', title: 'What keeps coming back?', note: 'A gentle monthly look at what keeps coming up, and what’s really behind it. Also called the Deficit Audit', paid: true },
       { href: '/workpapers/wp-09-tone-filter.html', deep: true, code: 'WP-09', title: 'Say it so it lands', note: 'Turn a big feeling into a fact, a feeling and a kind ask before you send it. Also called the Tone Filter', paid: true },
       { href: '/wp-11.html', deep: true, code: 'WP-11', title: 'The Calm-Down Kit', note: 'Ways to settle your body first, when either of you is too wound up to talk', paid: true },
@@ -110,7 +110,7 @@
       { href: '/workpapers/report-01.html', deep: true, code: 'REPORT-01', title: 'Your progress, week by week', note: 'Your week-by-week record, so progress builds instead of starting over. Also called the Full Read', paid: true }
     ]},
     { id: 'tools', title: 'Tools', blurb: 'Interactive pages. Everything you type stays in your own browser.', items: [
-      { href: '/ask.html', code: 'New', title: 'Chat with Professor Puddles', note: 'Ask a question in your own words and get an answer made only from this site’s pages. Nothing you type leaves your device' },
+      { href: '/ask.html', code: 'New', title: 'Chat with Professor Fiddlesticks', note: 'Ask a question in your own words and get an answer made only from this site’s pages. Nothing you type leaves your device' },
       { href: '/conversation-reader.html', code: 'New', title: 'The Conversation Reader', note: 'Paste a text thread, chat or email exchange: see where it turned, what each of you may be hearing, and a calmer way to answer' },
       { href: '/lemonade-stand.html', code: 'Tool', title: 'The Lemonade Stand', note: 'List who did what to keep the household running this week, and see the split as a plain fact' },
       { href: '/wiring-card.html', code: 'New', title: 'Wiring Card', note: 'Make a one-page card for how you receive words, what silence means, and what to avoid' },
@@ -403,7 +403,9 @@
     // little buddies who cheer you on between the sections of a reading page (cheer.js)
     if (!body.hasAttribute('data-no-cheer') && !body.classList.contains('is-game') && current !== '/index.html' && current !== '/' &&
         (document.querySelector('main.read') || body.classList.contains('tol-deep')) && !document.querySelector('meta[http-equiv="Content-Security-Policy"]')) {
-      var ch = document.createElement('script'); ch.src = '/assets/js/cheer.js'; ch.defer = true; document.head.appendChild(ch);
+      var cw = document.createElement('script'); cw.src = '/assets/js/cheer-words.js';
+      cw.onload = cw.onerror = function () { var ch = document.createElement('script'); ch.src = '/assets/js/cheer.js'; document.head.appendChild(ch); };
+      document.head.appendChild(cw);
     }
 
     popBubbles();
@@ -522,7 +524,7 @@
     ['Name the feeling.', 'Saying “I’m frustrated” out loud, or just in your head, takes some of the heat out of it.'],
     ['Three breaths before you reply.', 'When a message stings, wait three slow breaths before answering. The reply you send will be kinder, and so will the one you get back.'],
     ['Check the basics first.', 'Snapping at everyone? Ask yourself: am I hungry, thirsty, lonely or tired? Fix that first, then decide if the problem is still a problem.'],
-    ['Five minutes of daylight.', 'Step outside for a few minutes, especially in the morning. Light helps your body clock, your sleep and your mood.'],
+    ['Five minutes of daylight.', 'Step outside for a few minutes, especially in the morning. Daylight helps you wake up and can lift your mood.'],
     ['Write tomorrow’s top three tonight.', 'Putting tomorrow’s to-dos on paper before bed helps your mind let go of them.'],
     ['Start with what’s going well.', 'Before a hard conversation, say one thing you appreciate. It helps the other person hear the rest.'],
     ['Try “can you help me with…”.', 'It lands much softer than “you never…”, and it asks for something they can actually do.'],
@@ -541,7 +543,7 @@
     ['Give yourself a doorway minute.', 'Between work mode and home mode, take a few minutes to switch: a song, a walk, a cup of tea.'],
     ['Shrink the task.', 'Overwhelmed? Ask: what’s the very next physical step? Do only that.'],
     ['Help or an ear?', 'Before giving advice, ask: “Do you want help, or do you just want me to listen?”'],
-    ['Cool water, calm body.', 'Splashing cool water on your face can slow a racing heart when feelings run high.'],
+    ['Cool water, calm body.', 'When feelings run high, splash some cool water on your face. It can help you feel steadier.'],
     ['Book the worry.', 'Give a worry ten minutes later today, instead of letting it follow you all day.'],
     ['Name a time to come back.', 'If a talk gets too hot, say “I need a minute. Can we come back at 8?” A pause with a time is not walking away.'],
     ['Five things you can see.', 'Feeling scattered? Name five things you can see right now. It pulls you back into the present.'],
@@ -558,7 +560,7 @@
     ['Say what you need, not what they did wrong.', '“I need ten quiet minutes” gets a better answer than “you’re so loud”.'],
     ['Put a pause before “yes”.', 'Try “let me check and come back to you”. It saves overcommitting.'],
     ['Hug a little longer.', 'A slow six-second hug helps both of you settle.'],
-    ['Leave it better than you found it.', 'Tidy one small spot before you leave a room. Tomorrow-you will be grateful.']
+    ['Leave it better than you found it.', 'Tidy one small spot before you leave a room. Tomorrow’s you will be grateful.']
   ];
   var NO_TIPS = ['/index.html', '/night-garden.html', '/dashboard.html', '/404.html', '/offline.html'];
   // The full library (about 300 tips in topics) lives in tips.js and loads when a tip is shown;
@@ -657,7 +659,7 @@
   }
   var installPrompt = null;
   window.addEventListener('beforeinstallprompt', function (e) { e.preventDefault(); installPrompt = e; });
-  // ---------- Professor Puddles: the site's chat host, floating by, with a hello bubble up top ----------
+  // ---------- Professor Fiddlesticks: the site's chat host, floating by, with a hello bubble up top ----------
   var PUDDLES_SVG = '<svg viewBox="-4 -14 88 92" aria-hidden="true" focusable="false">' +
     '<path d="M40 8C33 22 14 36 14 50c0 14 12 22 26 22s26-8 26-22C66 36 47 22 40 8z" fill="#CFE6FA" stroke="#7FB2E0" stroke-width="2.6"/>' +
     '<ellipse cx="30" cy="30" rx="5" ry="3" fill="#fff" opacity=".6" transform="rotate(-25 30 30)"/>' +
@@ -667,16 +669,16 @@
     '<ellipse cx="23" cy="55" rx="3.6" ry="2.2" fill="#F2A3B6" opacity=".85"/><ellipse cx="57" cy="55" rx="3.6" ry="2.2" fill="#F2A3B6" opacity=".85"/>' +
     '<path d="M18 10 L40 1 L62 10 L40 19 Z" fill="#3A3350"/><path d="M29 14.5v6c3 3 19 3 22 0v-6l-11 4.5z" fill="#4A4266"/>' +
     '<path d="M60 10 v11" stroke="#F4D26B" stroke-width="1.6"/><circle cx="60" cy="22.5" r="2.3" fill="#F4D26B"/></svg>';
-  var PUDDLES = { name: 'Professor Puddles', svg: PUDDLES_SVG, color: '#CFE6FA',
-    greeting: 'Hello! I’m Professor Puddles. Ask me anything about this site, like the book, the workpapers, check-ins or ways to calm down, and I’ll answer from its pages, with a link to read more. What you type stays on this device.' };
+  var PUDDLES = { name: 'Professor Fiddlesticks', svg: PUDDLES_SVG, color: '#CFE6FA',
+    greeting: 'Hello! I’m Professor Fiddlesticks. Ask me anything about this site, like the book, the workpapers, check-ins or ways to calm down, and I’ll answer from its pages, with a link to read more. What you type stays on this device.' };
   // the hello bubble, at the top of the home page only: once a day, and never again after a first chat
   function buildPuddles(body) {
     if (current !== '/index.html' && current !== '/') return;
     var today = new Date().toISOString().slice(0, 10), seen = lsGet('tol-puddles-bubble');
     if (seen === 'done' || seen === today) return;
-    var hi = el('div', { class: 'tol-puddles-hi', role: 'complementary', 'aria-label': 'Meet Professor Puddles' },
+    var hi = el('div', { class: 'tol-puddles-hi', role: 'complementary', 'aria-label': 'Meet Professor Fiddlesticks' },
       '<span class="tol-puddles-hi-art">' + PUDDLES_SVG + '</span>' +
-      '<p><strong>Meet Professor Puddles!</strong> Small drop, big brain. Ask anything about the program in your own words, and he’ll answer straight from these pages.</p>' +
+      '<p><strong>Meet Professor Fiddlesticks!</strong> Small drop, big brain. Ask anything about the program in your own words, and he’ll answer straight from these pages.</p>' +
       '<a class="tol-puddles-hi-go" href="/ask.html">Chat about something</a>' +
       '<button type="button" class="tol-puddles-hi-x" aria-label="Not now">&times;</button>');
     hi.querySelector('.tol-puddles-hi-go').addEventListener('click', function () { lsSet('tol-puddles-bubble', 'done'); });
@@ -686,7 +688,7 @@
     setTimeout(function () { hi.classList.add('is-in'); }, 600);
   }
 
-  // A little card from Professor Puddles partway through the course pages: "chat about this?"
+  // A little card from Professor Fiddlesticks partway through the course pages: "chat about this?"
   var PUD_LINES = [
     ['Got a question bubbling up?', 'I’m a drop of pure curiosity. Let’s chat about “{t}”.'],
     ['Want to dive in together?', 'No question is too small, and no puddle too deep. Ask me about “{t}”.'],
@@ -712,10 +714,10 @@
     if (after.tagName === 'H2' && after.nextElementSibling && after.nextElementSibling !== gate) after = after.nextElementSibling;
     var n = 0; for (var i = 0; i < current.length; i++) n = (n * 31 + current.charCodeAt(i)) % 997; // the same line on the same page
     var line = PUD_LINES[n % PUD_LINES.length];
-    var card = el('aside', { class: 'tol-pud-card', 'aria-label': 'Chat with Professor Puddles' },
+    var card = el('aside', { class: 'tol-pud-card', 'aria-label': 'Chat with Professor Fiddlesticks' },
       '<span class="tol-pud-card-art" aria-hidden="true">' + PUDDLES_SVG + '</span>' +
       '<p><strong>' + esc(line[0]) + '</strong> ' + esc(line[1].replace('{t}', topic)) + '</p>' +
-      '<a class="tol-pud-card-go" href="/ask.html?about=' + encodeURIComponent(topic) + '">&#128172; Chat with Professor Puddles</a>');
+      '<a class="tol-pud-card-go" href="/ask.html?about=' + encodeURIComponent(topic) + '">&#128172; Chat with Professor Fiddlesticks</a>');
     after.parentNode.insertBefore(card, after.nextSibling);
   }
 

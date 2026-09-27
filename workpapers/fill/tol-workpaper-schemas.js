@@ -157,7 +157,7 @@
   /* ------------------------------------------------------------------ WP-03 */
   W['wp-03'] = {
     code: 'WP-03',
-    title: 'Domestic RACI Treaty',
+    title: 'RACI Treaty',
     slug: 'RACI-Treaty',
     purpose: 'A living agreement assigning exactly one Responsible and one Accountable name to every recurring household task, so ownership stops getting renegotiated by default every week. Responsible does the task. Accountable notices if it didn\'t happen and follows up, and can be the same person.',
     people: true,
@@ -230,7 +230,7 @@
   function flagged(r) { return ['w1', 'w2', 'w3', 'w4'].filter(function (k) { return r[k]; }).length; }
   W['wp-04'] = {
     code: 'WP-04',
-    title: 'Unbilled Deficit Audit',
+    title: 'Deficit Audit',
     slug: 'Deficit-Audit',
     purpose: 'A monthly reconciliation, done together, across four weeks of Field Audits (WP-01) and the RACI Treaty (WP-03). It looks for tasks that keep becoming deficits — not to tally what anyone owes, but to find where the household\'s structure needs a fix.',
     people: true,
@@ -302,7 +302,7 @@
   /* ------------------------------------------------------------------ WP-09 */
   W['wp-09'] = {
     code: 'WP-09',
-    title: 'Tone Transducer & Filter',
+    title: 'Tone Filter',
     slug: 'Tone-Filter',
     purpose: 'A self-check applied by each person to their own next message: converting a raw reaction into something the other person can actually receive, and weighing an incoming message before reacting to it. Nothing here records or analyzes anyone\'s voice.',
     people: false,
@@ -383,7 +383,7 @@
       },
       {
         id: 'defaults', type: 'fields', title: 'Part A: My two defaults',
-        intro: 'Pick two from the list in Part B now, so in the moment you don\'t have to choose.',
+        intro: 'Pick two from the list now, so in the moment you don\'t have to choose.',
         fields: [
           { id: 'first', label: 'First default', type: 'select', options: WP11_TACTICS },
           { id: 'second', label: "Second, if the first isn't available", type: 'select', options: WP11_TACTICS }
@@ -453,9 +453,9 @@
   DAYS.forEach(function (d) { WP13_ROWS.push({ day: d, who: 'A' }); WP13_ROWS.push({ day: d, who: 'B' }); });
   W['wp-13'] = {
     code: 'WP-13',
-    title: 'Phase-Locked Loop Protocol',
+    title: 'Phase-Locked Loop',
     slug: 'Phase-Locked-Loop',
-    purpose: 'A 90-second daily check-in that keeps two people in step through small, constant corrections instead of occasional large ones. Each person answers in one sentence each. No debate, no solving, no rebuttal.',
+    purpose: 'A 90-second daily check-in that keeps two people in step through small, constant corrections instead of occasional large ones. Each person answers each prompt in one sentence. No debate, no solving, no rebuttal.',
     people: true,
     meta: [
       { id: 'weekOf', label: 'Week beginning', type: 'date' }

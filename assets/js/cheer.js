@@ -43,7 +43,7 @@
     party: { title: 'ready for a party', svg: '<g class="cb-dz"><path d="M40 -6l11 24H29z" fill="#C6DFF4" stroke="#8FBCE3" stroke-width="1.4" stroke-linejoin="round"/><circle cx="36" cy="10" r="1.8" fill="#F7C9D4"/><circle cx="43" cy="5" r="1.8" fill="#F8E7AE"/><circle cx="40" cy="-6" r="3" fill="#F2A3B6"/></g>' },
     shades: { title: 'too cool for school', svg: '<g class="cb-dz"><rect x="23" y="35" width="15" height="10" rx="4" fill="#2B2620"/><rect x="42" y="35" width="15" height="10" rx="4" fill="#2B2620"/><path d="M38 38h4" stroke="#2B2620" stroke-width="2"/><path d="M26 37l5 0" stroke="#fff" stroke-width="1.4" opacity=".6"/></g>', hideEyes: true },
     chef: { title: 'cooking up something good', svg: '<g class="cb-dz"><path d="M26 18c-6 0-8-8-2-11 1-6 9-7 12-3 3-4 11-3 12 3 6 3 4 11-2 11z" fill="#FFFFFF" stroke="#D9D2E6" stroke-width="1.6"/><rect x="27" y="16" width="26" height="5" rx="1.5" fill="#FFFFFF" stroke="#D9D2E6" stroke-width="1.4"/></g>' },
-    wizard: { title: 'practising a little magic', svg: '<g class="cb-dz"><path d="M40 -10l14 28H24z" fill="#7C6CC4"/><ellipse cx="40" cy="18" rx="20" ry="4" fill="#6A5AB0"/><path d="M36 2l1.2 2.5 2.6.3-1.9 1.8.5 2.6-2.4-1.3-2.4 1.3.5-2.6-1.9-1.8 2.6-.3z" fill="#F8E7AE"/></g>' },
+    wizard: { title: 'practicing a little magic', svg: '<g class="cb-dz"><path d="M40 -10l14 28H24z" fill="#7C6CC4"/><ellipse cx="40" cy="18" rx="20" ry="4" fill="#6A5AB0"/><path d="M36 2l1.2 2.5 2.6.3-1.9 1.8.5 2.6-2.4-1.3-2.4 1.3.5-2.6-1.9-1.8 2.6-.3z" fill="#F8E7AE"/></g>' },
     pirate: { title: 'sailing the seven seas', svg: '<g class="cb-dz"><path d="M18 22q22-16 44 0z" fill="#D5586F"/><circle cx="55" cy="18" r="2" fill="#fff"/><path d="M22 34l36 10" stroke="#2B2620" stroke-width="1.4"/><ellipse cx="49" cy="40" rx="5.5" ry="5" fill="#2B2620"/></g>', hideRightEye: true },
     nose: { title: 'honk honk', svg: '<g class="cb-dz"><circle cx="40" cy="46" r="4.6" fill="#E4566E"/><circle cx="38.6" cy="44.6" r="1.3" fill="#fff" opacity=".7"/></g>' },
     flowers: { title: 'wearing a flower crown', svg: '<g class="cb-dz"><path d="M20 20q20-10 40 0" stroke="#8FCBA8" stroke-width="2" fill="none"/><circle cx="22" cy="19" r="3.4" fill="#F7C9D4"/><circle cx="31" cy="15" r="3.4" fill="#F8E7AE"/><circle cx="40" cy="14" r="3.6" fill="#D9C8F0"/><circle cx="49" cy="15" r="3.4" fill="#C6DFF4"/><circle cx="58" cy="19" r="3.4" fill="#F7C9D4"/></g>' }
@@ -51,13 +51,27 @@
   var DZ_KEYS = Object.keys(DISGUISES);
 
   var WORDS = {
-    start: ['Hi! One idea at a time.', 'Take your time, there’s no rush.', 'So glad you’re here.', 'We’ll go slowly together.', 'Oh hello! Nobody recognises me in this.'],
-    mid: ['You’re doing lovely.', 'Proud of you for reading this.', 'Little steps still count.', 'Breathe out, then keep going.', 'This part is worth it.',
+    start: ['Hi! One idea at a time.', 'Take your time, there’s no rush.', 'So glad you’re here.', 'We’ll go slowly together.', 'Oh hello! Nobody recognizes me in this.'],
+    mid: ['You’re doing beautifully.', 'Proud of you for reading this.', 'Little steps still count.', 'Breathe out, then keep going.', 'This part is worth it.',
       'You’re getting the hang of it.', 'Nice and steady.', 'Curious is a great way to be.', 'A small break is fine too.', 'You and your people are worth this.',
       'Tap a water drop if a word feels deep.', 'Look how far you’ve come!', 'I’m not a character in a disguise. Who said that?'],
     half: ['Halfway there!', 'Half done. Lovely pace.'],
     end: ['You made it to the end!', 'All the way through. Well done!', 'That’s the whole thing. Be proud!']
   };
+
+  // the bigger set of lines (cheer-words.js): encouragement, kindness and togetherness, plus pointers into the program
+  var MORE = window.TOL_CHEER || null, TOPIC = [];
+  if (MORE) {
+    ['start', 'mid', 'half', 'end'].forEach(function (k) { if (MORE[k] && MORE[k].length) WORDS[k] = WORDS[k].concat(MORE[k]); });
+    var sec = document.body.getAttribute('data-sec') || '', path = location.pathname;
+    var tk = /^\/book\//.test(path) ? 'book' : /^\/workpapers\//.test(path) ? 'workpapers' : sec;
+    TOPIC = (MORE.topics && MORE.topics[tk]) || [];
+  }
+  function lineHtml(w) {
+    if (typeof w === 'string') return esc(w);
+    return esc(w[0]) + ' <a class="tol-cheer-more tol-cheer-link" href="' + esc(w[1]) + '">' + esc(w[2]) + ' &rarr;</a>';
+  }
+  function lineKey(w) { return typeof w === 'string' ? w : w[0]; }
 
   function buddy(kind, c, dz) {
     var K = KINDS[kind], D = dz ? DISGUISES[dz] : {}, up = K.eyesUp ? -16 : 0;
@@ -165,10 +179,10 @@
       var f = nextFact();
       if (f) { line.innerHTML = '<b>&#128161; Did you know?</b> <strong>' + esc(f.t) + ':</strong> ' + esc(f.s) + ' <button type="button" class="tol-cheer-more" data-cheer-dive="' + esc(f.key) + '">Wade in &rarr;</button>'; return; }
     }
-    var list = WORDS[o.kind], w, tries = 0;
-    do { w = pick(list); tries++; } while (used[w] && tries < 8);
-    used[w] = true;
-    line.innerHTML = esc(w) + (o.role === 'chat' ? ' <button type="button" class="tol-cheer-more" data-cheer-chat="">&#128172; Ask me something</button>' : '');
+    var list = o.kind === 'mid' && TOPIC.length && Math.random() < 0.4 ? TOPIC : WORDS[o.kind], w, tries = 0;
+    do { w = pick(list); tries++; } while (used[lineKey(w)] && tries < 12);
+    used[lineKey(w)] = true;
+    line.innerHTML = lineHtml(w) + (o.role === 'chat' ? ' <button type="button" class="tol-cheer-more" data-cheer-chat="">&#128172; Ask me something</button>' : '');
   }
   var MOVES = ['wave', 'hop', 'wink', 'grin', 'heart', 'sway', 'clap', 'spin', 'peek'];
   function cheer(o, tapped) {

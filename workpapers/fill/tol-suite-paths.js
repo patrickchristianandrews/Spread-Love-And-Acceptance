@@ -28,9 +28,9 @@
   };
   // the chapters, tools and guides to read and try alongside each step: [label, link]
   var L = {
-    weather: ['Today\u2019s Weather', '/quick-checks.html#today'], preface: ['Preface: Unbilled Debt', '/book/preface.html'],
-    ch1: ['Ch. I: Radio Frequency', '/book/chapter-1.html'], ch2: ['Ch. II: P(Solvency)', '/book/chapter-2.html'], ch3: ['Ch. III: Autonomic Saturation', '/book/chapter-3.html'],
-    ch4: ['Ch. IV: Parity & Gating', '/book/chapter-4.html'], ch5: ['Ch. V: The Deficit Audit', '/book/chapter-5.html'],
+    weather: ['Today\u2019s Weather', '/quick-checks.html#today'], preface: ['Preface: The work nobody sees', '/book/preface.html'],
+    ch1: ['Ch. I: Why we get out of tune', '/book/chapter-1.html'], ch2: ['Ch. II: Is the split working?', '/book/chapter-2.html'], ch3: ['Ch. III: Full tanks and different angles', '/book/chapter-3.html'],
+    ch4: ['Ch. IV: Two kinds of fair', '/book/chapter-4.html'], ch5: ['Ch. V: The monthly look-back', '/book/chapter-5.html'],
     lemonade: ['The Lemonade Stand', '/lemonade-stand.html'], calc: ['CALC-01: Can the load last?', '/workpapers/calculators/calc01-solvency.html'],
     decoder: ['Carrier Wave Decoder', '/carrier-wave-decoder.html'], freq: ['Frequency Calibration', '/tools/frequency-calibration.html'],
     mood: ['Mood Arbitrage', '/tools/mood-arbitrage-free.html'], wired: ['Wired Differently', '/wired-differently.html'], wiring: ['Wiring Card', '/wiring-card.html'],
@@ -54,7 +54,7 @@
       ['See the work', ['WP-01'], A('preface', 'ch1'), 'Each of you logs one week of who did what. No discussing it yet.'],
       ['One owner per job', ['WP-03'], A('ch2', 'lemonade'), 'Sit down once, with the log, and give every recurring job one owner.'],
       ['Your batteries', ['WP-02'], A('ch3', 'calc'), 'Both do the Battery Meter daily. Say your number before any hard talk.'],
-      ['Talk so it lands', ['WP-09', 'WP-11'], A('signal', 'checkins'), 'Agree your pause lines, then try one check-in using the ground rules.'],
+      ['Talk so it lands', ['WP-09', 'WP-11'], A('signal', 'checkins'), 'Agree on your pause lines, then try one check-in using the ground rules.'],
       ['Small daily corrections', ['WP-13'], A('toward', 'decoder'), 'Do the 90-second check-in every evening this week.'],
       ['Make it last', ['WP-01', 'WP-04'], A('report', 'ch5'), 'Run the week log again, compare it with week one, and do your first monthly look-back.']
     ],
@@ -62,7 +62,7 @@
       ['Same page, same words', ['WP-03'], A('ch1', 'wired'), 'Write down who owns what at home, so nobody has to guess.'],
       ['Check your own weather', ['WP-02'], A('weather', 'ch3'), 'A quick battery check before family time, especially holidays.'],
       ['Tone before content', ['WP-09'], A('signal', 'decoder'), 'Put one charged message through fact, feeling and ask before sending.'],
-      ['A plan for heated moments', ['WP-11'], A('ch4', 'checkins'), 'Agree a pause line the whole family recognises.'],
+      ['A plan for heated moments', ['WP-11'], A('ch4', 'checkins'), 'Agree on a pause line the whole family recognizes.'],
       ['What keeps slipping', ['WP-04', 'WP-01'], A('ch5', 'toward'), 'Log a week, then look back at what keeps coming up, kindly.']
     ],
     coparents: [
@@ -75,7 +75,7 @@
     ],
     friends: [
       ['Name what went unseen', ['WP-09'], A('preface', 'signal'), 'Write the unseen thing as one fact, one feeling, one ask. You don’t have to send it yet.'],
-      ['Kind ways to say no', ['WP-01'], A('ch1', 'decoder'), 'Practise one neutral refusal so a “no” doesn’t become a rift.'],
+      ['Kind ways to say no', ['WP-01'], A('ch1', 'decoder'), 'Practice one neutral refusal so a “no” doesn’t become a rift.'],
       ['Your own battery first', ['WP-02', 'WP-11'], A('weather', 'garden'), 'Check your load before you bring it up, and know your pause line.'],
       ['Say it, once, kindly', [], A('checkins', 'toward'), 'Have the one conversation, lightly. Then send a “thinking of you” later in the week.']
     ],
@@ -122,7 +122,7 @@
       together: ['How to read it together', 'Pick a calm evening when neither battery is low. Each read the at-a-glance page on your own first, then share one thing that surprised you and one thing you appreciated. One topic per sitting.'],
       look: ['Jobs that appear in one log but not the other: the unseen work.', 'Recurring jobs with no clear owner, or an owner who isn’t the one doing it.', 'Weeks when one battery stayed low while the other recovered.', 'Things that came up again in the monthly look-back.'],
       talk: ['What did you do this month that I didn’t see?', 'Which job would you most like to hand over, and to whom?', 'When your battery is low, what helps most from me?', 'What is one small thing we could change this week?'],
-      ask: { 'WP-01': 'What surprised each of you in the other’s log?', 'WP-03': 'Which owner would you like to swap, and what would make that fair?', 'WP-13': 'Which appreciation meant the most this week?', 'WP-02': 'Whose battery needs protecting this week, and how?', 'WP-09': 'Did the ask land the way it was meant?', 'WP-11': 'Do you both recognise each other’s pause line?', 'WP-04': 'Which repeat problem is a real gap, and which was a one-off?' },
+      ask: { 'WP-01': 'What surprised each of you in the other’s log?', 'WP-03': 'Which owner would you like to swap, and what would make that fair?', 'WP-13': 'Which appreciation meant the most this week?', 'WP-02': 'Whose battery needs protecting this week, and how?', 'WP-09': 'Did the ask land the way it was meant?', 'WP-11': 'Do you both recognize each other’s pause line?', 'WP-04': 'Which repeat problem is a real gap, and which was a one-off?' },
       keep: 'Kind words between the two of you',
       close: 'The numbers describe the arrangement. The two of you decide what to do with it, together.'
     },
@@ -132,7 +132,7 @@
       together: ['How to read it as a family', 'Share only with the adults it concerns. Choose a quiet time, not a holiday table. Start with what’s working, then pick one thing to change.'],
       look: ['Tasks where “helping out” means different things to different people.', 'Messages where tone carried more than the words.', 'Leftover stress from long before this week.', 'The same thing slipping every month.'],
       talk: ['Which job do we each assume someone else is doing?', 'How would we like to be told when something bothers us?', 'What is our pause line when a family talk heats up?', 'What would make the next gathering easier for everyone?'],
-      ask: { 'WP-03': 'Does everyone agree on the owner, or only the person who wrote it down?', 'WP-09': 'Which old family pattern made this message hard to send?', 'WP-02': 'What history came into the room with you?', 'WP-11': 'Will everyone recognise the pause line when it’s used?', 'WP-01': 'Where does “helping out” mean different things?', 'WP-04': 'What keeps coming back, and whose job is it really?' },
+      ask: { 'WP-03': 'Does everyone agree on the owner, or only the person who wrote it down?', 'WP-09': 'Which old family pattern made this message hard to send?', 'WP-02': 'What history came into the room with you?', 'WP-11': 'Will everyone recognize the pause line when it’s used?', 'WP-01': 'Where does “helping out” mean different things?', 'WP-04': 'What keeps coming back, and whose job is it really?' },
       keep: 'Kind words in the family',
       close: 'Families change slowly. One owner, one kinder message, one pause at a time is real progress.'
     },
@@ -148,7 +148,7 @@
     },
     friends: {
       what: 'A light-touch record of the give and take in a friendship: what went unseen, how to say it kindly, and how to say no without a rift.',
-      lens: 'This isn’t a ledger of favours. Each read helps you name one thing, once, kindly.',
+      lens: 'This isn’t a ledger of favors. Each read helps you name one thing, once, kindly.',
       together: ['How to read it', 'Read it on your own. If something needs saying, choose one sentence and a relaxed moment. You don’t have to share the report itself.'],
       look: ['The one thing that went unseen and still matters to you.', 'Where a kind “no” would have protected the friendship.', 'Days when your own battery was the real story.'],
       talk: ['I noticed I’ve been doing more of the planning. Could we share it?', 'I can’t make it this time, and I’d love to see you next week.', 'Is there anything I’ve missed that mattered to you?'],
@@ -189,7 +189,7 @@
     program: {
       what: 'Your six weeks, week by week: what you saw, what you changed, and how the same log compares from Week 1 to Week 6.',
       lens: 'Each read describes the arrangement, never either person. Six weeks is a sensible order, not a test.',
-      together: ['How to read it at the end of the program', 'Read Week 1 and Week 6 side by side. Name one thing that changed, one that didn’t, and one to keep practising. Some weeks take longer than a week, and that’s fine.'],
+      together: ['How to read it at the end of the program', 'Read Week 1 and Week 6 side by side. Name one thing that changed, one that didn’t, and one to keep practicing. Some weeks take longer than a week, and that’s fine.'],
       look: ['How the Week 1 and Week 6 logs compare.', 'Jobs that found an owner in Week 2 and stayed owned.', 'Battery patterns from Week 3.', 'Which check-in habits stuck after Week 5.'],
       talk: ['What changed most between Week 1 and Week 6?', 'Which habit do we want to keep?', 'What still needs an owner?', 'What would we like to try in the next six weeks?'],
       ask: { 'WP-01': 'How does this log compare with the other week’s?', 'WP-03': 'Are the owners from Week 2 still true?', 'WP-02': 'What pattern showed up across the week?', 'WP-09': 'Did the ask land?', 'WP-11': 'Did you use your pause line?', 'WP-13': 'Did the check-in become a habit?', 'WP-04': 'What keeps coming back?' },
@@ -231,13 +231,13 @@
         { along: A('ch2','calc','checkins','signal'), title: 'Then', note: 'For your own state, and for the hard conversations.', stops: [
           { wp: 'WP-02', why: 'How much each of you is already carrying, filled in about yourself.', again: 'Another day' },
           { wp: 'WP-09', why: 'Fact, feeling and ask, before you send it.', again: 'Another message' },
-          { wp: 'WP-11', why: 'If either of you starts using the numbers to win, stop and come back here.' }
+          { wp: 'WP-11', why: 'A plan for settling when a talk heats up. If either of you starts using the numbers to win, pause and come back here.' }
         ] },
         { along: A('ch5','report','toward'), title: 'Once a month', note: 'Catch what keeps coming back.', stops: [
           { wp: 'WP-04', why: 'Sort repeat problems into real gaps and one-offs.', again: 'Another month' }
         ] }
       ],
-      next: 'Pick one evening this week for the 90-second check-in, and each start a Who did what log.',
+      next: 'Start the 90-second check-in one evening this week, and each begin a Who did what log.',
       care: 'The tools describe the arrangement, never the person.'
     },
     {
@@ -373,7 +373,7 @@
         { along: A('ch2','calc'), title: 'Week 2 · One owner per job', note: 'Informed by what actually happened.', stops: [
           { wp: 'WP-03', why: 'Name one owner for each regular job.' }
         ] },
-        { along: A('ch4','ch3'), title: 'Week 3 · Your batteries', note: 'Each day for a week, each about yourself.', stops: [
+        { along: A('ch3','ch4'), title: 'Week 3 · Your batteries', note: 'Each day for a week, each about yourself.', stops: [
           { wp: 'WP-02', why: 'Look for patterns: who is carrying more, and when.', again: 'Another day' }
         ] },
         { along: A('signal','decoder','wired'), title: 'Week 4 · Talk about it kindly', note: 'Retune before responding.', stops: [

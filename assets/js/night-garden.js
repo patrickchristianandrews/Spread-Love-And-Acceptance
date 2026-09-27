@@ -687,11 +687,11 @@
   // words that drift down from the sky, one each round: what box breathing is doing for you
   var SKY_WORDS = [
     'Box breathing: in for 4, hold for 4, out for 4, hold for 4.',
-    'Slow, even breaths tell your nervous system that you are safe.',
-    'Every slow breath out gently slows your heart.',
+    'Slow, even breaths are a quiet signal that you can ease off.',
+    'Let each breath out be soft and unhurried.',
     'The pauses stretch each breath, so your whole rhythm calms down.',
     'Counting gives a busy mind one simple job to do.',
-    'Your body is shifting into “rest and digest”.',
+    'Let your body settle toward rest.',
     'Let your shoulders drop. Let your jaw soften.',
     'Notice your hands. Warmer? Heavier? That’s your body relaxing.',
     'If a thought pulls you away, that’s okay. Come back to the count.',
