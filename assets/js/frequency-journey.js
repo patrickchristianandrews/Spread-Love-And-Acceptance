@@ -11,7 +11,7 @@
   var REDUCED = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
   var DPR = Math.min(2, window.devicePixelRatio || 1);
   // the two pals, in the order of PAL: Sugarfoot, the stocky one with long drop ears and white feet (the gentle wag),
-  // and Tidbit, the leaner one with the tan mask (the big smile). Both have a big heart of gold.
+  // and Tidbit, the leaner one with the black mask (the big smile). Both have a big heart of gold.
   var PAL = ['Sugarfoot', 'Tidbit'];
   var DIRWORD = ['up', 'right', 'down', 'left'];
 

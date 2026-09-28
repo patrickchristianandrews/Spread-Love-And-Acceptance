@@ -23,7 +23,7 @@
   function motionMode() { RM = RM0 || stillNow(); SPEED = RM ? 0.72 : 1; PMAX = RM ? 50 : 140; if (typeof A !== 'undefined' && A) { A.R = RM; AO.R = RM; AP.R = RM; AT.R = RM; } }
   motionMode();
   document.addEventListener('tol-still', function () { motionMode(); });
-  var NAMES = ['Tidbit', 'Sugarfoot'], LOOKS = ['collar', 'drop']; // Tidbit: the tan mask (looks.collar); Sugarfoot: the white feet (looks.drop)
+  var NAMES = ['Tidbit', 'Sugarfoot'], LOOKS = ['collar', 'drop']; // Tidbit: the black mask (looks.collar); Sugarfoot: the white feet (looks.drop)
   function leanOf(i) { var P = window.TOLPups; return !!(P && P.looks[LOOKS[i]] && P.looks[LOOKS[i]].build === 'lean'); }
   var LEAN = [false, true];
   // who they are, in how they fidget: Tidbit quick and busy, Sugarfoot slow, steady and leaning on her pal
