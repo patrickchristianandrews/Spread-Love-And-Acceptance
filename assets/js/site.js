@@ -434,6 +434,12 @@
       var pj = document.createElement('script'); pj.src = '/assets/js/pillars.js'; document.head.appendChild(pj);
     }
 
+    // Tidbit & Sugarfoot pop by now and then with a tip or a little love (pup-visits.js; the pups and their words load only when a visit is about to happen)
+    if (document.querySelector('main.read') && !body.hasAttribute('data-no-pupvisits') && !body.classList.contains('is-game') && !document.querySelector('meta[http-equiv="Content-Security-Policy"]') &&
+        !/^\/(frequency-journey(-play)?|calm-visualizer|ask|404|offline|privacy-policy|refund-policy|terms-of-service)\.html$|^\/(legal|workpapers\/fill)\//.test(current)) {
+      var pv = document.createElement('script'); pv.src = '/assets/js/pup-visits.js'; document.head.appendChild(pv);
+    }
+
     // "Put it all together": a short pointer to the full path package and report on the self, relationship,
     // workpaper and program pages, just above the end of the reading
     var fpMain = document.querySelector('main.read');

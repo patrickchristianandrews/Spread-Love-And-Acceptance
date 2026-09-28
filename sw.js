@@ -7,7 +7,7 @@
    below: they're saved the first time a game loads them (cache on use, via isStatic), so a puzzle
    you've opened once keeps working offline.
    Bump VERSION when the list below changes. */
-var VERSION = 'tol-v16';
+var VERSION = 'tol-v17';
 var CORE = [
   '/', '/index.html', '/offline.html',
   '/night-garden.html', '/quiet-words.html', '/word-bloom.html', '/quiet-crossword.html', '/pause-and-play.html', '/ask.html', '/whats-new.html', '/frequency-journey.html', '/frequency-journey-play.html', '/daily-ledger-crossword.html', '/garden-backdrop.html', '/turning-toward.html', '/quick-checks.html', '/lemonade-stand.html',
@@ -16,7 +16,7 @@ var CORE = [
   '/assets/js/rewards.js', '/assets/js/pause-and-play.js', '/assets/js/site-chat.js', '/assets/js/frequency-journey.js', '/assets/js/journey-levels.js', '/assets/js/pups.js', '/assets/js/journey-pals.js', '/assets/js/chat-kb.js', '/assets/js/word-bloom.js', '/assets/js/quiet-crossword.js', '/assets/js/game-levels.js',
   '/assets/js/pals-cam.js', '/assets/js/pals-cam-acts.js', '/assets/js/pals-cam-more.js', '/assets/js/pals-cam-tricks.js', '/assets/js/pals-cam-invite.js', '/assets/js/pals-cam-pack-scenes.js', '/assets/js/pals-cam-pack-extra.js',
   '/assets/js/journey-pools.js', '/assets/js/journey-pools-2.js', '/assets/js/journey-pools-3.js', '/assets/js/journey-pools-4.js', '/assets/js/journey-pools-5.js',
-  '/assets/js/learn-play.js', '/assets/js/learn-play-data.js', '/assets/js/join-invite.js', '/assets/js/calc01-core.js', '/assets/js/mood-arbitrage.js',
+  '/assets/js/learn-play.js', '/assets/js/learn-play-data.js', '/assets/js/join-invite.js', '/assets/js/pup-visits.js', '/assets/js/pup-visits-lines.js', '/assets/js/calc01-core.js', '/assets/js/mood-arbitrage.js',
   '/reading.html', '/assets/js/reading-page.js', '/assets/js/reading-list.js', '/assets/js/reading-suggest.js',
   '/assets/img/mascots/two-bubbles.svg', '/assets/img/logo-mark.svg', '/assets/img/logo-mark-wink.svg', '/assets/img/logo-mark-dark.svg', '/assets/img/logo-mark.png', '/assets/img/logo-mark-wink.png', '/assets/icons/icon-192.png', '/manifest.webmanifest'
 ];
