@@ -32,7 +32,6 @@
   .tv-start[hidden] { display: none; }
   .tv-cast { display: flex; align-items: center; gap: .6rem; padding: .5rem 1.1rem .5rem .7rem; border-radius: 999px; background: rgba(255,248,238,.14); cursor: pointer; font: 600 1.05rem Lora, Georgia, serif; color: #FFF8EE; border: 1.5px solid rgba(255,248,238,.5); min-height: 48px; box-sizing: border-box; }
   .tv-cast[hidden] { display: none; }
-  .tv-cast google-cast-launcher { display: block; width: 30px; height: 30px; --connected-color: #F2CAD5; --disconnected-color: #FFF8EE; }
   .tv-cast-state { font-size: .92rem; color: #D8CFF0; min-height: 1.2em; }
   /* TV mode: the cam fills the whole screen, nothing else */
   .pc-ov.is-tv { padding: 0 !important; align-items: stretch !important; background: #000; }
@@ -51,7 +50,7 @@
   <h1>Pal Cam TV</h1>
   <p>Tidbit and Sugarfoot on the big screen, all day. Press start and leave it running. The scene changes every so often, and the light follows the real time of day, so evenings get cozy and nights get dark.</p>
   <button type="button" class="tv-go" id="tv-go" autofocus>Start Pal Cam TV</button>
-  <button type="button" class="tv-cast" id="tv-cast" hidden><google-cast-launcher></google-cast-launcher><span>Cast to your TV</span></button>
+  <button type="button" class="tv-cast" id="tv-cast" hidden><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" aria-hidden="true"><path d="M3 8V6a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2h-6"/><path d="M3 12a8 8 0 0 1 8 8M3 16a4 4 0 0 1 4 4"/><circle cx="3.5" cy="19.5" r=".6" fill="currentColor"/></svg><span>Cast to your TV</span></button>
   <p class="tv-cast-state" id="tv-cast-state" aria-live="polite"></p>
   <ul>
     <li>Press <b>Esc</b> (or <b>Back</b> on a TV remote) to come back to this screen.</li>
@@ -156,19 +155,34 @@
     };
     window.addEventListener('load', function () { setTimeout(begin, 300); });
   } else if (CAST_APP_ID) {
-    var castBtn = document.getElementById('tv-cast'), castState = document.getElementById('tv-cast-state');
+    // The button always shows; the line under it says what's happening or what's missing.
+    var castBtn = document.getElementById('tv-cast'), castState = document.getElementById('tv-cast-state'), castReady = false, ctx = null;
+    var TAB_TIP = ' You can also use Chrome’s own menu (⋮, then Cast…) to send this whole tab to the TV.';
+    castBtn.hidden = false;
+    function noCast() {
+      castState.textContent = /iPhone|iPad|iPod/.test(navigator.userAgent)
+        ? 'Casting from this page needs Chrome on a computer or an Android phone. On an iPhone, open the Google Home app, tap your Chromecast and choose Cast my screen.'
+        : 'Casting from this page needs Google Chrome on a computer or an Android phone. Open this page in Chrome and the button will work.';
+    }
+    castBtn.addEventListener('click', function () {
+      if (!castReady) { noCast(); return; }
+      if (ctx.getCastState() === cast.framework.CastState.NO_DEVICES_AVAILABLE) {
+        castState.textContent = 'No Chromecast found yet. Check that this device is on the same Wi-Fi as the Chromecast. If you registered the Chromecast in the last few minutes, wait 15 minutes, unplug it for 10 seconds, then reload this page.' + TAB_TIP;
+      }
+      ctx.requestSession().catch(function () {});
+    });
+    setTimeout(function () { if (!castReady) noCast(); }, 6000);
     window.__onGCastApiAvailable = function (ok) {
-      if (!ok || !window.cast || !cast.framework) return;
-      var ctx = cast.framework.CastContext.getInstance();
+      if (!ok || !window.cast || !cast.framework) { noCast(); return; }
+      castReady = true; ctx = cast.framework.CastContext.getInstance();
       ctx.setOptions({ receiverApplicationId: CAST_APP_ID, autoJoinPolicy: chrome.cast.AutoJoinPolicy.ORIGIN_SCOPED });
       function sync() {
-        var st = ctx.getCastState();
-        castBtn.hidden = st === cast.framework.CastState.NO_DEVICES_AVAILABLE;
-        var ses = ctx.getCurrentSession();
-        castState.textContent = st === cast.framework.CastState.CONNECTED && ses ? 'Playing on ' + ses.getCastDevice().friendlyName + '. You can close this page; the TV keeps going.' : '';
+        var st = ctx.getCastState(), ses = ctx.getCurrentSession();
+        castState.textContent = st === cast.framework.CastState.CONNECTED && ses ? 'Playing on ' + ses.getCastDevice().friendlyName + '. You can close this page; the TV keeps going.'
+          : st === cast.framework.CastState.CONNECTING ? 'Connecting…'
+          : st === cast.framework.CastState.NO_DEVICES_AVAILABLE ? 'Looking for your Chromecast on this Wi-Fi…' : 'Ready. Tap Cast to your TV and pick your Chromecast.';
       }
       ctx.addEventListener(cast.framework.CastContextEventType.CAST_STATE_CHANGED, sync); sync();
-      castBtn.addEventListener('click', function (e) { if (e.target === castBtn || e.target.tagName === 'SPAN') ctx.requestSession().catch(function () {}); });
     };
     addScript('https://www.gstatic.com/cv/js/sender/v1/cast_sender.js?loadCastFramework=1');
   }
