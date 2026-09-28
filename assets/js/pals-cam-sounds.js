@@ -1,7 +1,7 @@
 /* pals-cam-sounds.js — soft, real sounds for the pal cam.
    Recorded sounds (all CC0, free to use), cleaned up and level-matched, in /assets/audio/palcam/:
    - Tidbit's barks: a small, yappy pup ("Dog bark2.wav" by MisterTood, freesound 9032)
-   - Sugarfoot's barks: a mini dachshund and a poodle ("Miniature Dachshund Bark - Indoors" by Ligidium,
+   - Sugarfoot's barks: a mini dachshund and a poodle (plus softer "boof" versions of the same recordings) ("Miniature Dachshund Bark - Indoors" by Ligidium,
      freesound 192236; "one bark of a poodle dog" by fabiopx, freesound 170015)
    - chimes, plucks and little tunes from Kenney's Interface Sounds and Music Jingles (kenney.nl)
    - a real slide whistle, boings and soft swishes (Bluezone/"bb" sample packs and 100 CC0 SFX, via
@@ -15,7 +15,8 @@
   var BASE = '/assets/audio/palcam/';
   var FILES = {
     barkT: ['tidbit-bark-1', 'tidbit-bark-2', 'tidbit-bark-3', 'tidbit-bark-4'],
-    barkS: ['sugarfoot-bark-1', 'sugarfoot-bark-2', 'sugarfoot-bark-3'],
+    barkS: ['sugarfoot-bark-1', 'sugarfoot-bark-2', 'sugarfoot-bark-3', 'sugarfoot-bark-4', 'sugarfoot-bark-5'],
+    yipT: ['tidbit-yip-1', 'tidbit-yip-2', 'tidbit-yip-3'], boofS: ['sugarfoot-boof-1', 'sugarfoot-boof-2', 'sugarfoot-boof-3'],
     chime: ['chime-1', 'chime-2'], pluck: ['pluck-1', 'pluck-2'], ding: ['ding'], curious: ['curious'], plip: ['plip'], sparkle: ['sparkle'],
     tune: ['tune-1', 'tune-2', 'tune-3', 'tune-4', 'tune-5'], sweet: ['sweet-1', 'sweet-2', 'sweet-3'],
     slide: ['slide-up-1', 'slide-up-2'], wobble: ['slide-wobble', 'slide-fall-rise'], boing: ['boing-1', 'boing-2'],
@@ -58,7 +59,7 @@
     if (!enabled || document.hidden || !FILES[group]) return false;
     if (!ensure()) return false;
     var now = ctx.currentTime;
-    if (!force && now - lastAt < 2.2) return false; // plenty of quiet between sounds
+    if (!force && now - lastAt < (/^bark|^yip|^boof/.test(group) ? 1.3 : 2.2)) return false; // plenty of quiet between sounds
     var list = FILES[group].filter(function (n) { return bufs[n] && (FILES[group].length < 2 || n !== lastName); });
     if (!list.length) return false;
     var name = pick(list), s = ctx.createBufferSource(), g = ctx.createGain();
@@ -66,10 +67,32 @@
     s.playbackRate.value = 0.97 + Math.random() * 0.06; // a touch of variety, never chipmunky
     g.gain.value = vol == null ? 1 : vol;
     s.connect(g); g.connect(out); s.start(now + 0.02 + (delay || 0));
-    lastAt = now + (delay || 0); lastName = name; nextAmb = Math.max(nextAmb, clockMs + 9000);
+    lastAt = now + (delay || 0); lastName = name; nextAmb = Math.max(nextAmb, clockMs + 6000);
     return true;
   }
-  function bark(who, vol, force, delay) { return play(who === 1 ? 'barkS' : 'barkT', vol, force, delay); }
+  // one "bark moment", in her own style: a single bark, a quick double, a little burst, or a soft yip/boof
+  function bark(who, vol, force, delay) {
+    var d = delay || 0, v = vol == null ? 1 : vol, r = Math.random();
+    if (who === 1) { // Sugarfoot: steady and soft
+      if (r < 0.2) return play('boofS', v, force, d);
+      if (!play('barkS', v, force, d)) return false;
+      if (r < 0.45) play('barkS', v * 0.9, true, d + 0.5 + Math.random() * 0.15);
+      else if (r < 0.55) play('boofS', v * 0.85, true, d + 0.55);
+      return true;
+    }
+    // Tidbit: quick and bouncy
+    if (r < 0.2) { if (!play('yipT', v, force, d)) return false; play('yipT', v * 0.9, true, d + 0.22 + Math.random() * 0.06); return true; }
+    if (!play('barkT', v, force, d)) return false;
+    if (r < 0.5) play('barkT', v * 0.92, true, d + 0.24 + Math.random() * 0.08);
+    else if (r < 0.62) { play('barkT', v * 0.9, true, d + 0.23); play('yipT', v * 0.8, true, d + 0.47); }
+    return true;
+  }
+  // the two of them "talking": one barks, the other answers
+  function chat(first) {
+    if (!bark(first, 0.8)) return false;
+    bark(1 - first, 0.75, true, 0.75 + Math.random() * 0.35);
+    return true;
+  }
 
   // a speech bubble just appeared over one of them
   function bubble(who, text) {
@@ -77,7 +100,8 @@
     var key = who + '|' + text, t = Date.now();
     if (key === lastKey && t - lastKeyAt < 3000) return; lastKey = key; lastKeyAt = t;
     var s = String(text || '').toLowerCase();
-    if (/^!+$/.test(s) || /woof|arf|bark|ruff|yay|wow|hooray/.test(s)) { if (Math.random() < 0.6) bark(who, 0.85); }
+    if (/^!+$/.test(s) || /woof|arf|bark|ruff|yay|wow|hooray|yes|ooh|whee/.test(s)) { if (Math.random() < 0.72) bark(who, 0.85); }
+    else if (s.length > 3 && Math.random() < 0.2) bark(who, 0.7); // now and then she barks along with what she says
     else if (/^\?+!?$/.test(s)) play('curious', 0.7);
     else if (s === '<3' || s.indexOf('♥') !== -1 || s.indexOf('❤') !== -1) play('chime', 0.7);
   }
@@ -100,7 +124,9 @@
   ];
   var BY_KIND = { silly: 'wobble', cool: 'tune', sweet: 'sweet', surprising: 'sparkle' };
   function act(a) {
-    if (!a || a.interlude || Math.random() < 0.55) return; // most activities are quiet
+    if (!a || a.interlude) return;
+    if (Math.random() < 0.22) { var w = Math.random() < 0.5 ? 0 : 1; if (Math.random() < 0.35) chat(w); else bark(w, 0.8, false, 0.4); return; } // a happy bark to start
+    if (Math.random() < 0.5) return; // plenty of activities stay quiet
     var key = (a.id + ' ' + (a.name || '')).toLowerCase(), g = null;
     for (var i = 0; i < ACT_SOUNDS.length && !g; i++) if (ACT_SOUNDS[i][0].test(key)) g = ACT_SOUNDS[i][1];
     play(g || BY_KIND[a.kind] || 'chime', 0.75, false, 0.5);
@@ -109,10 +135,11 @@
   function tick(dt, running) {
     if (!running || !enabled) return;
     clockMs += dt;
-    if (!nextAmb) nextAmb = clockMs + 20000 + Math.random() * 15000;
+    if (!nextAmb) nextAmb = clockMs + 8000 + Math.random() * 6000;
     if (clockMs < nextAmb) return;
-    nextAmb = clockMs + 30000 + Math.random() * 30000;
-    if (Math.random() < 0.7) bark(Math.random() < 0.5 ? 0 : 1, 0.7); else play(pick(['pluck', 'chime', 'sweet']), 0.6);
+    nextAmb = clockMs + 15000 + Math.random() * 14000;
+    var r = Math.random(), w = Math.random() < 0.5 ? 0 : 1;
+    if (r < 0.55) bark(w, 0.72); else if (r < 0.8) chat(w); else play(pick(['pluck', 'chime', 'sweet']), 0.6);
   }
   function hush() { if (ctx && ctx.state === 'running' && ctx.suspend) { try { var pr = ctx.suspend(); if (pr && pr.catch) pr.catch(function () {}); } catch (e) {} } }
   function wake() { if (enabled && ctx && ctx.state === 'suspended') ensure(); }
