@@ -54,7 +54,7 @@
   <p class="tv-cast-state" id="tv-cast-state" aria-live="polite"></p>
   <ul>
     <li>Press <b>Esc</b> (or <b>Back</b> on a TV remote) to come back to this screen.</li>
-    <li>Press <b>C</b> to show or hide the captions.</li>
+    <li>Press <b>C</b> to show or hide the captions, and <b>S</b> to turn the pups’ soft sounds on or off.</li>
     <li>For all-day use, plug the device in and turn off its sleep and screen saver too.</li>
   </ul>
   <p><a href="/">Back to the site</a></p>
@@ -143,6 +143,7 @@
   window.addEventListener('keydown', function (e) {
     if (!on) return;
     if (e.key === 'Escape' || e.key === 'GoBack' || e.key === 'BrowserBack') { e.preventDefault(); e.stopImmediatePropagation(); end(); }
+    else if ((e.key === 's' || e.key === 'S') && window.TOLPalsCamSounds) { var so = window.TOLPalsCamSounds.toggle(); say(so ? 'Sounds on' : 'Sounds off'); e.stopImmediatePropagation(); }
     else if (e.key === 'c' || e.key === 'C') { capsOff = !capsOff; styleCam(); say(capsOff ? 'Captions hidden' : 'Captions showing'); e.stopImmediatePropagation(); }
   }, true);
   // if the cam gets closed some other way (a click outside the stage), bring it straight back
@@ -161,6 +162,14 @@
   // for troubleshooting: ?castapp=CC1AD845 tries Google's built-in receiver, which every Chromecast has
   var castTest = /[?&]castapp=([A-F0-9]{8})\b/i.exec(location.search);
   if (castTest) CAST_APP_ID = castTest[1].toUpperCase();
+  // The backup: if a Chromecast can't see the live Pal Cam TV app yet, cast a looping video of the
+  // pups with Google's built-in receiver instead (every Chromecast has it).
+  var DEFAULT_RX = 'CC1AD845', VIDEO = location.origin + '/assets/video/pal-cam-loop.webm', POSTER = location.origin + '/assets/video/pal-cam-poster.jpg';
+  function ssGet(k) { try { return sessionStorage.getItem(k); } catch (e) { return null; } }
+  function ssSet(k, v) { try { sessionStorage.setItem(k, v); } catch (e) {} }
+  var videoMode = /[?&]cast=video\b/.test(location.search) || (!castTest && ssGet('tv-cast-video') === '1') || (castTest && CAST_APP_ID === DEFAULT_RX);
+  if (/[?&]cast=live\b/.test(location.search)) { videoMode = false; ssSet('tv-cast-video', '0'); }
+  if (videoMode) CAST_APP_ID = DEFAULT_RX;
   function addScript(src) { var sc = document.createElement('script'); sc.src = src; document.head.appendChild(sc); return sc; }
   if (receiver) {
     addScript('https://www.gstatic.com/cast/sdk/libs/caf_receiver/v3/cast_receiver_framework.js').onload = function () {
@@ -195,12 +204,31 @@
       ctx.setOptions({ receiverApplicationId: CAST_APP_ID, autoJoinPolicy: chrome.cast.AutoJoinPolicy.ORIGIN_SCOPED });
       function sync() {
         var st = ctx.getCastState(), ses = ctx.getCurrentSession();
-        castState.textContent = st === cast.framework.CastState.CONNECTED && ses ? 'Playing on ' + ses.getCastDevice().friendlyName + '. You can close this page; the TV keeps going.'
+        castState.textContent = st === cast.framework.CastState.CONNECTED && ses ? 'Playing on ' + ses.getCastDevice().friendlyName + (videoMode ? ' (the video version, on repeat)' : '') + '. You can close this page; the TV keeps going.'
           : st === cast.framework.CastState.CONNECTING ? 'Connecting…'
           : st === cast.framework.CastState.NO_DEVICES_AVAILABLE ? 'Looking for your Chromecast on this Wi-Fi…' : 'Ready. Tap Cast to your TV and pick your Chromecast.';
         if (castTest) castState.textContent += ' [test: app ' + CAST_APP_ID + ', state ' + st + ']';
       }
       ctx.addEventListener(cast.framework.CastContextEventType.CAST_STATE_CHANGED, sync); sync();
+      // the live app isn't visible to any Chromecast yet: switch this page to the video version
+      if (!videoMode && !castTest) setTimeout(function () {
+        if (ctx.getCastState() !== cast.framework.CastState.NO_DEVICES_AVAILABLE) return;
+        ssSet('tv-cast-video', '1'); castState.textContent = 'Switching to the video version, which works on every Chromecast…';
+        setTimeout(function () { location.reload(); }, 900);
+      }, 7000);
+      if (videoMode) ctx.addEventListener(cast.framework.CastContextEventType.SESSION_STATE_CHANGED, function (ev) {
+        if (ev.sessionState !== cast.framework.SessionState.SESSION_STARTED) return;
+        try {
+          var mi = new chrome.cast.media.MediaInfo(VIDEO, 'video/webm');
+          mi.streamType = chrome.cast.media.StreamType.BUFFERED;
+          mi.metadata = new chrome.cast.media.GenericMediaMetadata();
+          mi.metadata.title = 'Pal Cam TV'; mi.metadata.subtitle = 'Tidbit & Sugarfoot, all day';
+          mi.metadata.images = [new chrome.cast.Image(POSTER)];
+          var item = new chrome.cast.media.QueueItem(mi); item.autoplay = true;
+          var q = new chrome.cast.media.QueueLoadRequest([item]); q.repeatMode = chrome.cast.media.RepeatMode.SINGLE;
+          ev.session.getSessionObj().queueLoad(q, function () {}, function (err) { castState.textContent = 'The TV couldn’t start the video (' + (err && (err.description || err.code) || 'unknown') + '). Try again.'; });
+        } catch (e) { castState.textContent = 'The TV couldn’t start the video (' + e.message + ').'; }
+      });
     };
     addScript('https://www.gstatic.com/cv/js/sender/v1/cast_sender.js?loadCastFramework=1');
   }

@@ -611,6 +611,7 @@
     if (liveEl) liveEl.textContent = trick.label;
     stats.tricks = (stats.tricks || 0) + 1; trickLog.push(i + ':' + def.id); if (trickLog.length > 400) trickLog.shift();
     var h = headPos(i); burst(h.x, h.y - 10, 4, 'heart'); burst(h.x, h.y - 6, 5, 'spark');
+    if (SND()) SND().trick(i);
     return true;
   }
 
@@ -685,6 +686,7 @@
   function drawBubbles() {
     for (var j = 0; j < bubbles.length; j++) {
       var b = bubbles[j], pos = typeof b.who === 'number' ? headPos(b.who) : b.who;
+      if (b.p < 80 && typeof b.who === 'number' && SND()) SND().bubble(b.who, b.text);
       var pin = RM ? clamp(b.p / 200, 0, 1) : eback(clamp(b.p / 260, 0, 1)), fade = clamp(b.rem / 180, 0, 1), s = RM ? 1 : pin;
       if (s <= 0.01) continue;
       var txt = b.text, heart = txt === '<3', big = txt.length <= 2;
@@ -817,9 +819,28 @@
     ambientStep(dt);
     step(dt);
     draw();
+    if (SND()) SND().tick(dt, true);
   }
-  function run() { if (!raf && isOpen && !paused && !document.hidden) { last = 0; raf = requestAnimationFrame(loop); } }
-  function halt() { if (raf) cancelAnimationFrame(raf); raf = 0; last = 0; }
+  function run() { if (!raf && isOpen && !paused && !document.hidden) { last = 0; raf = requestAnimationFrame(loop); if (SND()) SND().wake(); } }
+  function halt() { if (raf) cancelAnimationFrame(raf); raf = 0; last = 0; if (SND()) SND().hush(); }
+
+  // ---------- sounds: soft, synthesized dog noises (pals-cam-sounds.js, fetched the first time the cam opens) ----------
+  function SND() { return window.TOLPalsCamSounds || null; }
+  var sndP = null;
+  function soundOn() { try { return localStorage.getItem('tol-palcam-sound') !== 'off'; } catch (e) { return true; } }
+  function primeSound() {
+    // made inside the tap that opens the cam, so the browser lets it play
+    var AC = window.AudioContext || window.webkitAudioContext;
+    if (AC && soundOn()) { try { if (!window.__pcAudio) window.__pcAudio = new AC(); if (window.__pcAudio.state === 'suspended') window.__pcAudio.resume(); } catch (e) {} }
+    if (!sndP && !SND()) sndP = new Promise(function (ok) { var sc = document.createElement('script'); sc.src = '/assets/js/pals-cam-sounds.js'; sc.onload = sc.onerror = function () { ok(); syncSndBtn(); }; document.head.appendChild(sc); });
+    syncSndBtn();
+  }
+  function syncSndBtn() {
+    var b = ov && ov.querySelector('.pc-snd'); if (!b) return;
+    var on = SND() ? SND().on() : soundOn();
+    b.setAttribute('aria-pressed', on ? 'true' : 'false'); b.innerHTML = (on ? '🔊' : '🔈') + '<span> Sound ' + (on ? 'on' : 'off') + '</span>';
+    b.setAttribute('aria-label', on ? 'Sound is on. Turn the pups’ sounds off' : 'Sound is off. Turn the pups’ sounds on');
+  }
 
   // ---------- the overlay ----------
   var CSS = '' +
@@ -839,6 +860,7 @@
     '@keyframes pcDot{50%{opacity:.35}}' +
     '.pc-ov{position:fixed;inset:0;z-index:10000;display:flex;align-items:stretch;justify-content:center;background:#4A3F63;padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);box-sizing:border-box;overscroll-behavior:contain}' +
     '.pc-ov[hidden]{display:none}' +
+    '.pc-tr8{display:flex;align-items:center;gap:.4rem;flex:none}.pc-snd{min-height:44px;padding:.35rem .75rem;border-radius:999px;border:1px solid #E6D6EE;background:#fff;color:#3C3350;font:600 .9rem Lora,Georgia,serif;cursor:pointer;white-space:nowrap}.pc-snd:focus-visible{outline:3px solid #7C6BB0;outline-offset:2px}@media (max-width:420px){.pc-snd span{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}}' +
     '.pc-tvl{flex:none;margin:0;text-align:center;font-size:.88rem}.pc-tvl a{color:#5B4A86}.pc-ov.is-tv .pc-tvl{display:none}' +
     '.pc-box{display:flex;flex-direction:column;width:100%;max-width:1000px;height:100%;background:#FFFBF4;color:#3C3350;box-sizing:border-box;padding:.6rem .7rem .7rem;gap:.5rem;overflow:hidden;font-family:Lora,Georgia,serif}' +
     '@media (max-width:759px){.pc-box{justify-content:center}}' +
@@ -915,7 +937,8 @@
     ov.innerHTML =
       '<div class="pc-box">' +
         '<div class="pc-top"><div><p class="pc-k" id="pc-where">Pal cam</p><h2 id="pc-h">Checking in on Tidbit &amp; Sugarfoot</h2></div>' +
-        '<button type="button" class="pc-x" aria-label="Close the pal cam"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>Close</button></div>' +
+        '<div class="pc-tr8"><button type="button" class="pc-snd" aria-pressed="true">🔊<span> Sound on</span></button>' +
+        '<button type="button" class="pc-x" aria-label="Close the pal cam"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>Close</button></div></div>' +
         '<div class="pc-stage"><canvas class="pc-cv" role="img" aria-label="Tidbit and Sugarfoot playing"></canvas><span class="pc-rec" aria-hidden="true"><i></i>PAL CAM</span><span class="pc-badge" hidden></span></div>' +
         '<p class="pc-cap" id="pc-cap"><span class="pc-main"></span><span class="pc-punch"></span></p>' +
         '<div class="pc-btns"><button type="button" class="pc-b is-main pc-next">Next!</button><button type="button" class="pc-b is-sur pc-sur">Surprise me</button><button type="button" class="pc-b pc-pause" aria-pressed="false">Pause</button></div>' +
@@ -930,6 +953,7 @@
     liveEl = ov.querySelector('.pc-live'); factLists = ov.querySelectorAll('.pc-fl');
     badge = ov.querySelector('.pc-badge'); tallyN = ov.querySelector('.pc-n'); tallyTot = ov.querySelector('.pc-tot'); chips = ov.querySelector('.pc-chips'); btnPause = ov.querySelector('.pc-pause');
     ov.querySelector('.pc-x').addEventListener('click', close);
+    ov.querySelector('.pc-snd').addEventListener('click', function () { primeSound(); if (SND()) SND().toggle(); else { try { localStorage.setItem('tol-palcam-sound', soundOn() ? 'off' : 'on'); } catch (e) {} } syncSndBtn(); });
     ov.querySelector('.pc-next').addEventListener('click', function () { next(false); });
     ov.querySelector('.pc-sur').addEventListener('click', function () { next(true); });
     btnPause.addEventListener('click', function () { setPaused(!paused); });
@@ -1013,6 +1037,7 @@
     build();
     if (isOpen) return;
     openerEl = opts.opener || document.activeElement;
+    primeSound();
     ov.hidden = false; isOpen = true; document.documentElement.classList.add('pc-lock'); resize();
     setPaused(false); ov.querySelector('.pc-x').focus();
     if (!packsDone) {
