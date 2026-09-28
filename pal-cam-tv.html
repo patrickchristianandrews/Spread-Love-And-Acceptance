@@ -144,6 +144,9 @@
      from registering this page in the Google Cast SDK Developer Console) and a Cast device is nearby.
      Casting works from Chrome on a computer or an Android phone. */
   var CAST_APP_ID = '26DCEDE9';
+  // for troubleshooting: ?castapp=CC1AD845 tries Google's built-in receiver, which every Chromecast has
+  var castTest = /[?&]castapp=([A-F0-9]{8})\b/i.exec(location.search);
+  if (castTest) CAST_APP_ID = castTest[1].toUpperCase();
   function addScript(src) { var sc = document.createElement('script'); sc.src = src; document.head.appendChild(sc); return sc; }
   if (receiver) {
     addScript('https://www.gstatic.com/cast/sdk/libs/caf_receiver/v3/cast_receiver_framework.js').onload = function () {
@@ -181,6 +184,7 @@
         castState.textContent = st === cast.framework.CastState.CONNECTED && ses ? 'Playing on ' + ses.getCastDevice().friendlyName + '. You can close this page; the TV keeps going.'
           : st === cast.framework.CastState.CONNECTING ? 'Connecting…'
           : st === cast.framework.CastState.NO_DEVICES_AVAILABLE ? 'Looking for your Chromecast on this Wi-Fi…' : 'Ready. Tap Cast to your TV and pick your Chromecast.';
+        if (castTest) castState.textContent += ' [test: app ' + CAST_APP_ID + ', state ' + st + ']';
       }
       ctx.addEventListener(cast.framework.CastContextEventType.CAST_STATE_CHANGED, sync); sync();
     };
