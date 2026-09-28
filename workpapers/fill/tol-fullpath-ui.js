@@ -504,7 +504,7 @@
       var sd = m.self, sb = [h('p', { text: sd.intro })];
       sd.layers.forEach(function (ly) { sb.push(h('p', { className: 'fp-sub', text: ly[0] })); sb.push(ulOf(ly[1])); });
       sb.push(h('h4', { className: 'fp-h4', text: 'Which layer is it?' })); sb.push(ulOf(sd.sorting));
-      sb.push(h('h4', { className: 'fp-h4', text: 'Explaining yourself to others' }));
+      sb.push(h('h4', { className: 'fp-h4', text: 'Putting yourself into words' }));
       if (sd.explain.to) sb.push(h('p', { className: 'fp-note', text: 'You named: ' + sd.explain.to + '.' }));
       sb.push(sd.explain.card ? h('p', { className: 'fp-callout is-lav fp-quote', text: sd.explain.card }) : h('p', { className: 'fp-note', text: 'Once your Wiring Card has a few lines, this becomes a short note you can share.' }));
       sb.push(h('p', { className: 'fp-sub', text: 'Lines you could use' })); sb.push(ulOf(sd.explain.scripts, 'fp-quotes'));
@@ -525,19 +525,19 @@
     all.push(sec('road', rp.heading, false, road));
 
     // 8. The Five Pillars
-    var pv = m.pillars, pil = [];
-    if (pv.strongest) pil.push(h('p', { className: 'fp-callout is-mint' }, [h('strong', { text: 'Looks strongest: Pillar ' + pv.strongest.n + ', ' + pv.strongest.name + '. ' }), 'In you: ' + pv.strongest.inYouI + ' Between you and others: ' + pv.strongest.betweenI]));
-    if (pv.care && pv.care !== pv.strongest && !pv.note) pil.push(h('p', { className: 'fp-callout is-peach' }, [h('strong', { text: 'Needs the most care: Pillar ' + pv.care.n + ', ' + pv.care.name + '. ' }), 'In you: ' + pv.care.inYouI + ' Between you and others: ' + pv.care.betweenI]));
+    var pv = m.pillars, pil = [], soloP = m.road === 'self', withLbl = soloP ? ' With others, if you like: ' : ' Between you and others: ';
+    if (pv.strongest) pil.push(h('p', { className: 'fp-callout is-mint' }, [h('strong', { text: 'Looks strongest: Pillar ' + pv.strongest.n + ', ' + pv.strongest.name + '. ' }), 'In you: ' + pv.strongest.inYouI + withLbl + pv.strongest.betweenI]));
+    if (pv.care && pv.care !== pv.strongest && !pv.note) pil.push(h('p', { className: 'fp-callout is-peach' }, [h('strong', { text: 'Needs the most care: Pillar ' + pv.care.n + ', ' + pv.care.name + '. ' }), 'In you: ' + pv.care.inYouI + withLbl + pv.care.betweenI]));
     if (pv.note) pil.push(h('p', { className: 'fp-note', text: pv.note }));
     pil.push(barsEl({ title: 'Rough readings, 0 to 1 (higher is steadier)', items: pv.rows.map(function (r) { return { label: 'Pillar ' + r.n + ': ' + r.name, value: r.value || 0, max: 1, text: r.value != null ? FP.fmt(r.value) : 'not filled in' }; }) }));
     var pt = h('ul', { className: 'fp-pillar-list' });
     pv.rows.forEach(function (r) {
       pt.appendChild(h('li', {}, [h('a', { href: '/five-pillars.html#' + r.anchor, text: 'Pillar ' + r.n + ': ' + r.name }), h('span', { className: 'fp-pillar-v', text: r.value != null ? ' · reads ' + FP.fmt(r.value) : ' · not filled in' }),
-        dlOf([['The data shows', r.shows], ['In you', r.inYouI], ['Between you', r.betweenI], ['A practice', r.practice]], 'fp-kv-tight')]));
+        dlOf([['The data shows', r.shows], ['In you', r.inYouI], [soloP ? 'With others' : 'Between you', r.betweenI], ['A practice', r.practice]], 'fp-kv-tight')]));
     });
     pil.push(pt);
     pil.push(h('p', { className: 'fp-note', text: 'Rough readings from what you entered, not scores on anyone.' }));
-    all.push(sec('pillars', 'The Five Pillars view', true, [h('p', {}, ['How the ', h('a', { href: '/five-pillars.html', text: 'Five Pillars' }), ' show up in your answers: each starts inside you, then shows up between you and others.'])].concat(pil)));
+    all.push(sec('pillars', 'The Five Pillars view', true, [h('p', {}, ['How the ', h('a', { href: '/five-pillars.html', text: 'Five Pillars' }), ' show up in your answers: each starts inside you, ' + (soloP ? 'and can show up with the people around you.' : 'then shows up between you and others.')])].concat(pil)));
 
     // 9. Discussion guide
     var g = m.guide, qs = h('ol', { className: 'fp-questions' });

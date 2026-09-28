@@ -669,7 +669,7 @@
       'Start with the summary: the headline numbers, what is working, and the top three things to work on.',
       'Then read only the sections you need. Each one says what was entered, what it shows, what it suggests and what it can’t tell you.',
       '"Connections" links the pages together; "Worth a second look" flags numbers that may be typos; "Recommendations" turns it all into steps for now, this week and this month.',
-      m.persons ? 'Each person has a short page of their own. They are not scorecards, and they are never a ranking.' : 'There is a section on your wiring, your patterns and your conditions, and on explaining yourself to others.',
+      m.persons ? 'Each person has a short page of their own. They are not scorecards, and they are never a ranking.' : 'There is a section on your wiring, your patterns and your conditions, and on putting yourself into words, if you ever want to share it.',
       'The discussion guide at the end has questions and ground rules for ' + (m.road === 'self' ? 'reading it on your own.' : 'reading it together.')
     ], { size: 9 });
     lay.callout('How much weight to give it: ' + m.confidence.level, [m.confidence.text, m.confidence.weight], C.head, { size: 8.8, titleColor: C.ink });
@@ -821,7 +821,7 @@
       sd.layers.forEach(function (ly) { sub(lay, ly[0]); lay.bullets(ly[1], { size: 9 }); });
       lay.h2('Which layer is it?', 50, C.sky);
       lay.bullets(sd.sorting, { size: 9 });
-      lay.h2('Explaining yourself to others', 60, C.lav);
+      lay.h2('Putting yourself into words', 60, C.lav);
       if (sd.explain.to) lay.para('You named: ' + sd.explain.to + '.', { size: 9, color: C.soft });
       if (sd.explain.card) lay.callout('A note you could share, in your own words', [sd.explain.card], C.lav, { font: 'Times-Italic', size: 10, titleColor: C.ink });
       else lay.para('Once your Wiring Card has a few lines, this becomes a short note you can share.', { size: 9, color: C.soft, font: 'Times-Italic' });
@@ -845,16 +845,17 @@
     // 10. The Five Pillars
     section('The Five Pillars', '8  The Five Pillars view');
     lay.kicker('The Five Pillars');
-    lay.h1('Where you’re strong, and what needs care', 'Each pillar starts inside you, then shows up between you and others');
+    var solo = m.road === 'self', withLbl = solo ? 'With others, if you like: ' : 'Between you and others: ';
+    lay.h1('Where you’re strong, and what needs care', solo ? 'Each pillar starts inside you, and can show up with the people around you' : 'Each pillar starts inside you, then shows up between you and others');
     var pv = m.pillars;
-    if (pv.strongest) lay.callout('Looks strongest: Pillar ' + pv.strongest.n + ', ' + pv.strongest.name, ['In you: ' + pv.strongest.inYouI, 'Between you and others: ' + pv.strongest.betweenI], C.mint, { size: 9, titleColor: C.ink });
-    if (pv.care && pv.care !== pv.strongest && !pv.note) lay.callout('Needs the most care: Pillar ' + pv.care.n + ', ' + pv.care.name, ['In you: ' + pv.care.inYouI, 'Between you and others: ' + pv.care.betweenI], C.peach, { size: 9, titleColor: C.ink });
+    if (pv.strongest) lay.callout('Looks strongest: Pillar ' + pv.strongest.n + ', ' + pv.strongest.name, ['In you: ' + pv.strongest.inYouI, withLbl + pv.strongest.betweenI], C.mint, { size: 9, titleColor: C.ink });
+    if (pv.care && pv.care !== pv.strongest && !pv.note) lay.callout('Needs the most care: Pillar ' + pv.care.n + ', ' + pv.care.name, ['In you: ' + pv.care.inYouI, withLbl + pv.care.betweenI], C.peach, { size: 9, titleColor: C.ink });
     if (pv.note) lay.para(pv.note, { font: 'Times-Italic', size: 9.4, color: C.soft });
     barChart(lay, { title: 'Rough readings, 0 to 1 (higher is steadier)', items: pv.rows.map(function (r) { return { label: 'Pillar ' + r.n + ' ' + r.name, value: r.value || 0, max: 1, text: r.value != null ? FP.fmt(r.value) : 'not filled in' }; }) });
     pv.rows.forEach(function (r, i) {
       lay.h2('Pillar ' + r.n + '  ' + r.name, 90, PASTELS[i % PASTELS.length]);
       lay.para((r.value != null ? 'Reads ' + FP.fmt(r.value) + ', from ' : 'Not filled in yet (') + r.from + (r.value != null ? '.' : ').'), { size: 8.2, color: C.soft, after: 3 });
-      labelled(lay, [['The data shows', r.shows], ['In you', r.inYouI], ['Between you', r.betweenI], ['A practice', r.practice]], { kw: 96 });
+      labelled(lay, [['The data shows', r.shows], ['In you', r.inYouI], [solo ? 'With others' : 'Between you', r.betweenI], ['A practice', r.practice]], { kw: 96 });
     });
     lay.para('Rough readings from what you entered, not scores on anyone. Read more at spreadloveandacceptance.com/five-pillars.html.', { size: 8.2, color: C.soft, font: 'Times-Italic' });
 

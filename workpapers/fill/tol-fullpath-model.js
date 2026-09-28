@@ -165,7 +165,7 @@
     { id: 'time', q: 'Give me time to answer', o: [['sec', 'A few seconds'], ['min', 'A few minutes'], ['tomorrow', 'Until tomorrow'], ['write', 'Write it down so I can answer later']] },
     { id: 'quiet', q: 'If I go quiet, it means', o: [['think', 'I’m thinking'], ['load', 'I’m overloaded'], ['space', 'I need space'], ['upset', 'I’m upset and don’t have words yet'], ['fine', 'Nothing is wrong']] },
     { id: 'texts', q: 'Short texts from me mean', o: [['brief', 'Nothing. I’m just brief'], ['wrong', 'Something is wrong'], ['minute', 'I need a minute'], ['done', 'I’m done for now, not done with you']] },
-    { id: 'upset', q: 'When I’m upset, I need', o: [['space', 'Space first, then a return time'], ['company', 'Quiet company'], ['talk', 'To talk it through'], ['plan', 'A written plan'], ['signal', 'A signal that we are still okay']] },
+    { id: 'upset', q: 'When I’m upset, I need', o: [['space', 'Space first, then a return time'], ['company', 'Quiet company'], ['talk', 'To talk it through'], ['plan', 'A written plan'], ['signal', 'A sign that things are still okay']] },
     { id: 'avoid', q: 'Please avoid', o: [['sarcasm', 'Sarcasm when it matters'], ['calm', '“Calm down”'], ['loud', 'Loud voices'], ['long', 'Long texts or many topics at once'], ['hints', 'Hints instead of the ask'], ['always', 'Always, never, and labels'], ['public', 'Correcting me in public'], ['surprise', 'A hard topic with no warning']] },
     { id: 'ask', q: 'A request lands best as', o: [['could', '“Could you ___ by ___?”'], ['list', 'One written list, not a stack of hints'], ['headline', 'The ask in the first sentence'], ['choice', 'Two clear options, not an open guess']] },
     { id: 'depleted', q: 'When I’m running low, what helps', o: [['shorter', 'Shorter messages'], ['writing', 'Writing only'], ['volume', 'Lower volume and fewer people'], ['notopic', 'Don’t add a second topic'], ['return', 'Name a return time, then give space']] }
@@ -187,7 +187,7 @@
     var more = [f('who.started', 'Date you started', 'date', { half: true })];
     if (R.solo) {
       more.push(f('who.context', 'What would you most like to understand about yourself?', 'textarea', { optional: true }));
-      more.push(f('who.others', 'Who would you like to explain yourself to? (Optional: a partner, a friend, your team. First names or roles.)', 'text', { optional: true }));
+      more.push(f('who.others', 'Is there anyone you’d like to share what you learn with someday? (Optional. Leave it blank if this is just for you.)', 'text', { optional: true }));
     } else {
       more.push(f('who.context', 'In a few words, what brings you here?', 'textarea', { optional: true }));
     }
@@ -237,7 +237,7 @@
     var sc = schemaFor('WP-02'), items = section(sc, 'factors').items, blocks = [];
     var scale = opts(['0', '1', '2', '3', '4']);
     var privateRoad = ctx.roadId === 'coworkers' || ctx.roadId === 'roommates';
-    blocks.push({ kind: 'note', text: 'Each person fills in their own, about themselves only, based on the last 24 to 48 hours. 0 = not at all, 4 = very true. It is a gut-check, not a clinical test.' +
+    blocks.push({ kind: 'note', text: (ctx.road.solo ? 'Answer about yourself, based on the last 24 to 48 hours.' : 'Each person fills in their own, about themselves only, based on the last 24 to 48 hours.') + ' 0 = not at all, 4 = very true. It is a gut-check, not a clinical test.' +
       (ctx.n > 1 ? ' If you’d rather keep your answers private, write just your score in the last box instead (it is the five numbers added up, divided by 20).' : '') +
       (privateRoad ? ' On this road, battery pages stay private unless you choose to share.' : '') });
     for (var i = 0; i < ctx.n; i++) {
@@ -245,7 +245,7 @@
       var fl = [f(p + 'date', 'Date', 'date', { half: true })];
       items.forEach(function (it, k) { fl.push(f(p + 'q' + (k + 1), it.label, 'radio', { options: scale, scale: true })); });
       if (ctx.n > 1) fl.push(f(p + 'score', 'Or just your score (0 to 1), if you’d rather not share the five answers', 'number', { min: 0, max: 1, optional: true }));
-      fl.push(f(p + 'note', 'Anything you want to name before talking (optional)', 'textarea', { small: true, optional: true }));
+      fl.push(f(p + 'note', ctx.road.solo ? 'Anything else on your mind right now (optional)' : 'Anything you want to name before talking (optional)', 'textarea', { small: true, optional: true }));
       blocks.push({ kind: 'scale', title: ctx.labels[i] + (ctx.n > 1 ? '’s battery' : ''), person: i, fields: fl });
     }
     blocks.push({ kind: 'derived', title: 'Worked out for you', lines: ['Each battery score = the five numbers added up, divided by 20. Under 0.30 is a low load, 0.30 to 0.59 is medium, 0.60 and up is high.', ctx.n > 1 ? 'The average across everyone becomes the stress input to CALC-01. It waits until everyone\u2019s battery is in; it is never worked out for someone else.' : 'On this road it is your own reading, week by week.'] });
@@ -326,14 +326,15 @@
       f('wp09.ask', 'What’s the actual ask? (What do you want to happen next, specifically?)', 'textarea', { small: true })
     ] });
     var filt = section(sc, 'filter');
-    blocks.push({ kind: 'fields', title: filt.title, fields: filt.items.map(function (it) { return f('wp09.filter.' + it.id, it.label, 'radio', { options: opts(it.options) }); }) });
+    var soloFilt = { pattern: 'Am I reacting to what happened just now, or to an old pattern?' };
+    blocks.push({ kind: 'fields', title: ctx.road.solo ? 'The filter: before you react' : filt.title, fields: filt.items.map(function (it) { return f('wp09.filter.' + it.id, (ctx.road.solo && soloFilt[it.id]) || it.label, 'radio', { options: ctx.road.solo && it.id === 'pattern' ? opts(it.options).map(function (o, k) { o.label = o.short = ['What just happened', 'An old pattern'][k] || o.label; return o; }) : opts(it.options) }); }) });
     blocks.push({ kind: 'derived', title: 'Worked out for you', lines: ['Your message in order (fact, feeling, ask), and whether the four checks suggest you’re clear to respond or better off pausing first.'] });
     return { id: 'wp09', code: 'WP-09', title: sc.title, blocks: blocks };
   }
 
   function pageWp11(ctx) {
     var sc = schemaFor('WP-11'), blocks = [], i;
-    blocks.push({ kind: 'note', text: 'Each person’s kit is about themselves. Fill in Part A on an ordinary day, not a hard one. Nothing here works by cold, pain or shock, and none of it is treatment.' });
+    blocks.push({ kind: 'note', text: (ctx.road.solo ? 'This kit is all about you.' : 'Each person’s kit is about themselves.') + ' Fill in Part A on an ordinary day, not a hard one. Nothing here works by cold, pain or shock, and none of it is treatment.' });
     blocks.push({ kind: 'fields', fields: [f('wp11.date', 'Date', 'date', { half: true })] });
     var tr = [];
     for (i = 0; i < 3; i++) tr.push({ fields: [f('wp11.triggers.r' + (i + 1) + '.trigger', 'What tends to start it', 'text', { w: 2.5 }), f('wp11.triggers.r' + (i + 1) + '.body', 'Where my body feels it first', 'text', { w: 2.5 })] });
@@ -342,15 +343,15 @@
     blocks.push({ kind: 'fields', title: 'Part A: My two defaults', intro: 'Pick two now, so you don’t have to choose in the moment.', fields: [f('wp11.first', 'First default', 'radio', { options: tac, stack: true }), f('wp11.second', 'Second, if the first isn’t available', 'radio', { options: tac, stack: true })] });
     var lines = [];
     for (i = 0; i < ctx.n; i++) lines.push({ label: ctx.labels[i], fields: [f('wp11.lines.p' + (i + 1) + '.line', 'Pause line', 'textarea', { small: true })] });
-    blocks.push({ kind: 'cards', title: 'Part A: ' + (ctx.n > 1 ? 'Pause lines' : 'My pause line'), intro: section(sc, 'lines').intro, rows: lines });
+    blocks.push({ kind: 'cards', title: 'Part A: ' + (ctx.n > 1 ? 'Pause lines' : 'My pause line'), intro: ctx.road.solo ? 'One sentence, ready ahead of time, for when you need a break from a hard moment, so stepping away feels planned instead of like giving up. Say how you are, how long you need, and what you’ll do next: "I’m at capacity. I’m taking ten minutes, then I’ll come back to this."' : section(sc, 'lines').intro, rows: lines });
     var re = [];
     for (i = 0; i < 3; i++) {
       var p = 'wp11.reentry.r' + (i + 1) + '.';
       re.push({ fields: [f(p + 'time', 'Time', 'text', { w: 1 }), f(p + 'tactic', 'What I did (1 to 6 from the list, or its name)', 'text', { w: 2.6 }), f(p + 'before', 'Battery before (0 to 1)', 'number', { min: 0, max: 1, w: 1.1 }), f(p + 'after', 'Battery after (0 to 1)', 'number', { min: 0, max: 1, w: 1.1 })] });
     }
-    blocks.push({ kind: 'grid', title: 'Part C: Coming back', intro: 'Take WP-02 before and after. Under 0.50, go back in. Between 0.50 and 0.60, do a second round. Still 0.60 or above after two rounds? Put it off to a named time. The list: 1 breathing, 2 naming the room, 3 weight and pressure, 4 gating, 5 walking it out, 6 low, steady sound.', rows: re });
-    blocks.push({ kind: 'fields', fields: [f('wp11.nextAction', 'Next small action', 'text'), f('wp11.resume', 'If you put the conversation off: when you’ll pick it back up', 'text')] });
-    blocks.push(personSignoff(ctx, 'wp11.signoff', 'Defaults set', [['chosen', 'Defaults chosen', 'check'], ['agreed', 'Pause line agreed', 'check'], ['date', 'Date', 'date']]));
+    blocks.push({ kind: 'grid', title: 'Part C: Coming back', intro: (ctx.road.solo ? 'Take WP-02 before and after. Under 0.50, go back to what you were doing.' : 'Take WP-02 before and after. Under 0.50, go back in.') + ' Between 0.50 and 0.60, do a second round. Still 0.60 or above after two rounds? Put it off to a named time. The list: 1 breathing, 2 naming the room, 3 weight and pressure, 4 gating, 5 walking it out, 6 low, steady sound.', rows: re });
+    blocks.push({ kind: 'fields', fields: [f('wp11.nextAction', 'Next small action', 'text'), f('wp11.resume', ctx.road.solo ? 'If you put it off: when you’ll pick it back up' : 'If you put the conversation off: when you’ll pick it back up', 'text')] });
+    blocks.push(personSignoff(ctx, 'wp11.signoff', 'Defaults set', [['chosen', 'Defaults chosen', 'check'], ['agreed', ctx.road.solo ? 'Pause line written' : 'Pause line agreed', 'check'], ['date', 'Date', 'date']]));
     return { id: 'wp11', code: 'WP-11', title: sc.title, blocks: blocks };
   }
 
@@ -389,7 +390,7 @@
     var R = ctx.road, blocks = [];
     blocks.push({ kind: 'note', text: R.calc
       ? 'CALC-01 reads one narrow thing: whether the way ' + (ctx.n > 2 ? R.groupN : R.group2) + ' share ' + R.work + ' right now can keep going. It reads the setup, never a person. Most of it is worked out for you from the pages before this one.'
-      : 'CALC-01 reads how a workload is shared between people, so on this road the full read isn’t worked out. Two parts still fit: checking your state before you read anything, and counting how often you retuned a message before you answered.' });
+      : 'On this road, CALC-01 looks at two things about you: how you’re doing before you read anything, and how often you paused to rework a reply before answering.' });
     blocks.push({ kind: 'fields', title: 'Step zero: check your state', intro: 'Pick the one closest to true as you fill this in. It doesn’t change any number. It changes whether today is the day to act on them.', fields: [f('calc.state', 'Right now I’m', 'radio', { options: STATES, stack: true })] });
     if (R.calc) {
       blocks.push({ kind: 'derived', title: 'Worked out for you when you bring this back', lines: [
@@ -414,7 +415,7 @@
 
   function pageNotes(ctx) {
     var blocks = [];
-    blocks.push({ kind: 'note', text: 'Optional, and about you. The Wiring Card says how words reach you, so the people around you can send things in a way that lands. It is not a label and not a diagnosis. The weather log is four quick weekly check-ins.' });
+    blocks.push({ kind: 'note', text: 'Optional, and about you. The Wiring Card says how words reach you best' + (ctx.road.solo ? '. Keep it for yourself, or share it with anyone you choose.' : ', so the people around you can send things in a way that lands.') + ' It is not a label and not a diagnosis. The weather log is four quick weekly check-ins.' });
     blocks.push({ kind: 'fields', fields: [f('self.wiring.name', 'Name on the card', 'text', { half: true, optional: true })] });
     blocks.push({ kind: 'checks', title: 'My Wiring Card', intro: 'Tick anything true, and add your own words where the list misses.', groups: WIRING.map(function (line) {
       return { label: line.q, fields: line.o.map(function (o) { return f('self.wiring.' + line.id + '.' + o[0], o[1], 'check', { optional: true }); }).concat([f('self.wiring.' + line.id + '.own', 'In my own words', 'text', { optional: true })]) };
@@ -473,6 +474,7 @@
     R.wps.forEach(function (code) {
       var p = BUILDERS[code](ctx);
       p.name = NAMES[code];
+      if (R.solo && code === 'WP-01') { p.name = 'Kind ways to say no'; p.title = 'Neutral Refusals'; }
       p.why = whyOf(roadId, code);
       pages.push(p);
     });
@@ -880,23 +882,23 @@
     { n: 'I', name: 'See the whole load', anchor: 'see-the-load', field: 'Ledger accounting',
       inYou: 'Notice everything you carry, including the invisible, mental and emotional load.',
       between: 'Put {work} on one shared, fair page, so nobody has to argue about whose work counts.',
-      betweenSelf: 'When you explain your load to the people around you, show them the page, not a complaint.' },
+      betweenSelf: 'If you ever explain your load to someone, show them the page, not a complaint.' },
     { n: 'II', name: 'Fix the setup, not the person', anchor: 'fix-the-setup', field: 'Systems thinking',
       inYou: 'See your habits and routines as a setup you can redesign, not a character flaw.',
       between: 'Give each {task} one owner, with clear handoffs and agreements, instead of blame.',
-      betweenSelf: 'Ask for clear owners and handoffs where your load overlaps with someone else’s.' },
+      betweenSelf: 'Where your load overlaps with anyone else’s, ask for a clear owner instead of quietly taking it on.' },
     { n: 'III', name: 'Read your state first', anchor: 'read-your-state', field: 'Nervous-system science',
       inYou: 'Know how full your battery is (calm, revved up, shut down) before you judge a moment.',
       between: 'Pick the timing, pause and come back; your state shapes how the other person’s words land.',
-      betweenSelf: 'Say your number before a hard talk, so the other person knows what they’re talking to.' },
+      betweenSelf: 'When you’re running low around other people, it’s okay to say so simply: “I’m running low today.”' },
     { n: 'IV', name: 'Tune how you send and receive', anchor: 'tune-signals', field: 'Signal theory',
       inYou: 'Know your own wiring, pace and how you hear things.',
       between: 'Translate across different wiring and tone; a mismatch is tuning, not a moral failing.',
-      betweenSelf: 'Share your Wiring Card, so people can send things in a way that reaches you.' },
+      betweenSelf: 'If you like, share your Wiring Card, so people can send things in a way that reaches you.' },
     { n: 'V', name: 'Notice the quiet incentives', anchor: 'quiet-incentives', field: 'Behavioral economics',
       inYou: 'Spot the defaults and shortcuts that steer your own choices.',
       between: 'Watch how unclaimed {tasks} drift to one person, and keep fairness and thanks steady.',
-      betweenSelf: 'Notice which jobs quietly drift to you, and say so kindly before they settle there.' }
+      betweenSelf: 'Notice which jobs quietly drift to you, and speak up kindly before they settle there.' }
   ];
 
   function vocab(c) {
@@ -965,7 +967,7 @@
     model.self = selfDiscovery(F, v);
     model.pillars = pillars2(model.pillars, F, fired, v);
     model.guide = guide(fired, F, v, RP);
-    model.glossary = GLOSSARY;
+    model.glossary = R.solo ? GLOSSARY.filter(function (g) { return !SOLO_SKIP_TERMS[g[0]]; }) : GLOSSARY;
     model.method = method(F);
     model.confidence = confidence(F, checks);
     model.completeness = completeness(data);
@@ -979,6 +981,7 @@
     } else model.calcSection.moves = [];
     model.calcSection.link = linkOf('CALC-01');
     model.fair.push('Everything stays on your device. The report was made in your browser and nothing was sent anywhere.');
+    if (R.solo) soloWords(model);
     return model;
   }
 
@@ -1027,7 +1030,7 @@
     if (c.wp09 && c.wp09.advice === 'pause') add(5, 'Your Tone Filter checks suggest pausing before you answer that message' + (c.wp09.pattern ? ': it may be touching an older pattern, not just these words.' : '.'));
     if (c.wp13 && c.wp13.thanks.length) add(4, plural(c.wp13.thanks.length, 'appreciation') + ' written down in the daily check-ins. Those are worth reading again on a harder day.');
     if (c.wp11 && c.wp11.filled && !(c.wp11.first || c.wp11.second)) add(3, 'The Calm-Down Kit is started, but no settling defaults are chosen yet. Picking two on a calm day is what makes it work in the moment.');
-    if (R.solo && c.notes.wiringLines) add(5, 'Your Wiring Card has ' + c.notes.wiringLines + ' of 9 lines filled in. That is the start of a short, kind way to explain yourself to others.');
+    if (R.solo && c.notes.wiringLines) add(5, 'Your Wiring Card has ' + c.notes.wiringLines + ' of 9 lines filled in. That is the start of a short, kind way to explain yourself, whenever you want to share it.');
     if (R.solo && c.notes.weather.length >= 2) {
       var wb2 = c.notes.weather.filter(function (w) { return w.battery != null; });
       if (wb2.length >= 2) { var d = wb2[wb2.length - 1].battery - wb2[0].battery; add(6, 'Across your weather log, your battery went from ' + fmt(wb2[0].battery) + ' to ' + fmt(wb2[wb2.length - 1].battery) + (Math.abs(d) < 0.05 ? ': holding steady.' : d < 0 ? ': lighter. Notice what helped.' : ': heavier. Be kind about it, and look at what changed.')); }
@@ -1211,7 +1214,7 @@
     function sug(t) { out.suggestions.push(t); }
     if (R.solo) {
       out.heading = 'Just you: understanding yourself';
-      out.paras.push('This road is about you: how full your battery runs, how you’re wired, the patterns in your weeks, what is in your control, and how to explain yourself to the people around you. It is for you first; share any page only if you want to.');
+      out.paras.push('This road is about you: how full your battery runs, how you’re wired, the patterns in your weeks, what is in your control, and, if you ever want to, how to explain yourself to the people around you. It is for you first; share any page only if you want to.');
       var b = c.battery[0];
       out.blocks = [];
       out.blocks.push(['Your battery', b.score != null ? 'It reads ' + fmt(b.score) + ' (' + b.band.label.toLowerCase() + ').' + (topFactors(c).length ? ' The biggest contributors right now: ' + list(topFactors(c).map(function (x) { return x.toLowerCase(); })) + '.' : '') : 'Not filled in yet. One minute with WP-02 is the best first step.']);
@@ -1239,7 +1242,7 @@
       ctrl.push('how you phrase it: fact, feeling, ask');
       out.blocks.push(['What’s in your control', 'Not how anyone else feels or answers. But ' + list(ctrl) + '.']);
       var card = explainCard(c);
-      out.blocks.push(['Explaining yourself to others', card ? 'A few lines you could share' + (c.who.others ? ' (you named: ' + c.who.others + ')' : '') + ', in your own words: ' + card : 'Once your Wiring Card has a few lines, the report turns them into a short note you can share, in your own words.']);
+      out.blocks.push(['Putting yourself into words', card ? 'A few lines you could share' + (c.who.others ? ' (you named: ' + c.who.others + ')' : '') + ', in your own words: ' + card : 'Once your Wiring Card has a few lines, the report turns them into a short note you can share, in your own words.']);
       out.links = [['Know yourself', '/know-yourself.html'], ['Make a Wiring Card', '/wiring-card.html'], ['Today’s Weather', '/quick-checks.html#today'], ['The Five Pillars', '/five-pillars.html']];
       if (b.score != null && b.band.key === 'high') sug('Your battery is high. This week, protect it: one kind no, one early night, and no big decisions that can wait.');
       if (!c.notes.wiringLines) sug('Fill in the Wiring Card. It is the fastest way to explain yourself without having to explain everything.');
@@ -2681,6 +2684,46 @@
     return { questions: qs.slice(0, 12), rules: rules, hard: hard };
   }
 
+  /* ---------- the Individual road: words for one person, never a second one */
+
+  var SOLO_SKIP_TERMS = { 'Workload balance (WB)': 1, 'Ownership clarity (OC)': 1, 'Average battery (AS)': 1, 'Solvency': 1, 'Apex': 1, 'Responsible': 1, 'Accountable': 1,
+    'Consulted and Informed': 1, 'Noticed and handled': 1, 'Structural gap': 1, 'Capacity issue': 1, 'Pattern': 1 };
+  var SOLO_WORDS = [
+    [/“([^”]*?)\s*Can we pick this up ([^”?]*)\?”/g, '“$1 I’ll pick this up $2.”'],
+    [/Can we pick this up ([^?”]*)\?/g, 'I’ll pick this up $1.'],
+    [/Can we do this tomorrow instead\?/g, 'I’ll do this tomorrow instead.'],
+    [/Worth agreeing on out loud before reading together\./g, 'Worth ticking before you read it.'],
+    [/the other person has to guess what would help/g, 'whoever hears it has to guess what would help'],
+    [/Can we find twenty minutes this week to ([^?”]*)\? No rush today\./g, 'I’ll find twenty minutes this week to $1. No rush today.'],
+    [/Can we look at one thing from it on ([^?”]*)\?/g, 'I’ll look at one thing from it on $1.'],
+    [/Don’t schedule a hard conversation after a short night\./g, 'Don’t take on anything hard after a short night.'],
+    [/before (?:any|a) hard (?:talk|conversation)/g, 'before anything hard'],
+    [/before the hard talks/g, 'before hard things'],
+    [/Hard conversations go better/g, 'Hard things go better'],
+    [/after a hard conversation/g, 'after a hard day'],
+    [/when you have a hard conversation/g, 'when you take on something hard'],
+    [/pick up any hard conversation/g, 'pick up anything hard'],
+    [/(?:any|a|the next) hard (?:talk|conversation)/g, 'anything hard'],
+    [/Say your number out loud/g, 'Say your number to yourself'],
+    [/say your number out loud/g, 'say your number to yourself'],
+    [/so nobody has to decide in the moment/g, 'so you don’t have to decide in the moment'],
+    [/It checks your side of the conversation only\./g, 'It only looks at your side of things.'],
+    [/responding to a pattern from a past conversation/g, 'reacting to an old pattern'],
+    [/Am I responding to their words, or to a pattern from a past conversation\?/g, 'Am I reacting to what happened just now, or to an old pattern?'],
+    [/How does each of us take in a hard message best/g, 'How do you take in a hard message best'],
+    [/Bring one point to [^.]+ on a calmer day\./g, 'Come back to one point on a calmer day.'],
+    [/Each pillar starts inside you, then shows up between you and others/g, 'Each pillar starts inside you, and can show up with the people around you']
+  ];
+  function soloText(t) { SOLO_WORDS.forEach(function (w) { t = t.replace(w[0], w[1]); }); return t; }
+  function soloWords(root) {
+    var seen = [];
+    (function walk(o) {
+      if (!o || typeof o !== 'object' || o instanceof Date || seen.indexOf(o) !== -1) return;
+      seen.push(o);
+      Object.keys(o).forEach(function (k) { if (typeof o[k] === 'string') o[k] = soloText(o[k]); else walk(o[k]); });
+    })(root);
+  }
+
   /* ---------- glossary, method and how complete the data is */
 
   var GLOSSARY = [
@@ -2725,6 +2768,11 @@
       'Nothing is guessed. A blank page says "not filled in", and a score waits until everything it needs is there.',
       'All of it is worked out on this device. Nothing is sent anywhere.'
     ];
+    if (F.solo) {
+      out = out.filter(function (t) { return !/^(Workload balance|Ownership clarity|Solvency|Bands for solvency|Patterns \(WP-04\))/.test(t); });
+      out.splice(1, 0, 'Retuning (CALC-01): friction moments you ran through fact, feeling and ask before answering, divided by all friction moments. On this road CALC-01 only looks at you, so there is no shared-workload score.',
+        'Weather log: your battery week by week, read next to your sky, pressure and sleep to show what tends to make a week heavier or lighter.');
+    }
     return out;
   }
 
