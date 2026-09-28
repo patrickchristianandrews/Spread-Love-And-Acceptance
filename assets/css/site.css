@@ -1329,6 +1329,14 @@ a.tol-pud-card-go, main a.tol-pud-card-go{ color:#fff !important; text-decoratio
 @media (prefers-reduced-motion: reduce){ .tol-depth-opt{ transition:none; } .tol-depth-opt:hover{ transform:none; } }
 @media print{ .depth-bar.tol-depth{ display:none !important; } }
 
+
+/* "Put it all together": the full path package pointer on self, relationship, workpaper and program pages */
+.tol-fp-note{ margin:2rem 0 1rem; padding:1rem 1.15rem; border-radius:20px; background:linear-gradient(135deg,#EEF6F0,#EEF2FB); box-shadow:0 6px 18px rgba(60,40,90,.08); }
+.tol-fp-note p{ margin:.25rem 0 !important; padding:0 !important; background:none !important; box-shadow:none !important; max-width:none; }
+.tol-fp-note .tol-fp-k{ font-weight:600; color:#2F5A3C; }
+.tol-fp-note a{ display:inline-flex; align-items:center; min-height:44px; }
+@media print{ .tol-fp-note{ display:none !important; } }
+
 /* ==========================================================================
    Every word in a bubble
    All readable text sits in a soft, near-opaque bubble so it never lies on the moving
