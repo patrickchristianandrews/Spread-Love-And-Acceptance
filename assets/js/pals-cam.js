@@ -453,6 +453,7 @@
   function startAct(act) {
     cur = { act: act, t: 0, prevT: -1, fired: {}, counted: false, lastD: null };
     mode = 'act'; if (!act.interlude) lastActId = act.id; stats.acts++;
+    if (SND()) SND().act(act);
   }
   function finishAct() {
     var a = cur && cur.act, next = null, combo = false;
