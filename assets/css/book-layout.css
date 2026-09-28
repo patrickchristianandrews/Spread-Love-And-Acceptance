@@ -93,7 +93,7 @@ h1,h2,h3{
   font-weight: 400;
   font-size: 0.62rem;
   letter-spacing: 0.12em;
-  color: var(--brass);
+  color: var(--brass-ink, #7A5620);
   margin-top: 6px;
 }
 
@@ -131,7 +131,7 @@ nav a::before{
   content: counter(chapter, upper-roman);
   font-family: "IBM Plex Mono", monospace;
   font-size: 0.72rem;
-  color: var(--brass);
+  color: var(--brass-ink, #7A5620);
   min-width: 1.6em;
 }
 
@@ -167,7 +167,7 @@ section + section{
 .kicker{
   font-family: "IBM Plex Mono", monospace;
   font-size: 0.72rem;
-  color: var(--brass);
+  color: var(--brass-ink, #7A5620);
   margin-bottom: 14px;
 }
 

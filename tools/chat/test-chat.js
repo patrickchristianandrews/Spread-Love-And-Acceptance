@@ -181,6 +181,9 @@ s('My partner and I feel distant lately', 'partner+distance');
 s('My brother keeps borrowing my stuff without asking', 'family+boundaries');
 s('I yelled at my kids and feel guilty', 'kid+repair');
 s('My partner procrastinates on everything', 'partner+motivation', { text: /hard to watch|struggle to get started/ });
+// "roommates" said about a partner means drifting apart, not sharing a flat
+s("I feel like we're roommates", 'partner+distance', { link: '/turning-toward.html', not: /your roommate/i });
+s("My husband and I are just roommates now", 'partner+distance', { link: '/turning-toward.html', text: /turn toward|ritual/i, not: /your roommate/i });
 
 // ---------------------------------------------------------------- situation routing: a short path for a kind of relationship
 t('routing', 'Which tools should roommates start with?', { kind: 'road', id: 'roommate', link: '/lemonade-stand.html' });

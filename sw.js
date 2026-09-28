@@ -3,15 +3,22 @@
    store apps, which show this site) always get the latest version; the saved copy is only
    used when there's no connection. Fonts: served from the saved copy. Nothing a visitor types passes through
    here: the tools keep entries in the browser, and this only stores the site's own files.
+   The word-game puzzle chunks (/assets/js/puzzles/, about 500 small files) are not in the list
+   below: they're saved the first time a game loads them (cache on use, via isStatic), so a puzzle
+   you've opened once keeps working offline.
    Bump VERSION when the list below changes. */
-var VERSION = 'tol-v15';
+var VERSION = 'tol-v16';
 var CORE = [
   '/', '/index.html', '/offline.html',
   '/night-garden.html', '/quiet-words.html', '/word-bloom.html', '/quiet-crossword.html', '/pause-and-play.html', '/ask.html', '/whats-new.html', '/frequency-journey.html', '/frequency-journey-play.html', '/daily-ledger-crossword.html', '/garden-backdrop.html', '/turning-toward.html', '/quick-checks.html', '/lemonade-stand.html',
   '/assets/css/site.css', '/assets/css/reading.css', '/assets/css/games.css',
-  '/assets/js/site.js', '/assets/js/night-garden.js', '/assets/js/quiet-words.js', '/assets/js/quiet-words-themes.js', '/assets/js/calm-music.js', '/assets/js/tips.js', '/assets/js/breathe.js', '/assets/js/turning-toward.js',
-  '/assets/js/rewards.js', '/assets/js/pause-and-play.js', '/assets/js/site-chat.js', '/assets/js/frequency-journey.js', '/assets/js/journey-levels.js', '/assets/js/pups.js', '/assets/js/journey-pals.js', '/assets/js/chat-kb.js', '/assets/js/word-bloom.js', '/assets/js/quiet-crossword.js', '/assets/js/game-levels.js', '/assets/js/quiet-words-themes-more.js',
-  '/assets/img/mascots/two-bubbles.svg', '/assets/img/logo-mark.svg', '/assets/img/logo-mark-wink.svg', '/assets/icons/icon-192.png', '/manifest.webmanifest'
+  '/assets/js/site.js', '/assets/js/night-garden.js', '/assets/js/quiet-words.js', '/assets/js/calm-music.js', '/assets/js/tips.js', '/assets/js/breathe.js', '/assets/js/turning-toward.js',
+  '/assets/js/rewards.js', '/assets/js/pause-and-play.js', '/assets/js/site-chat.js', '/assets/js/frequency-journey.js', '/assets/js/journey-levels.js', '/assets/js/pups.js', '/assets/js/journey-pals.js', '/assets/js/chat-kb.js', '/assets/js/word-bloom.js', '/assets/js/quiet-crossword.js', '/assets/js/game-levels.js',
+  '/assets/js/pals-cam.js', '/assets/js/pals-cam-acts.js', '/assets/js/pals-cam-more.js', '/assets/js/pals-cam-tricks.js', '/assets/js/pals-cam-invite.js', '/assets/js/pals-cam-pack-scenes.js', '/assets/js/pals-cam-pack-extra.js',
+  '/assets/js/journey-pools.js', '/assets/js/journey-pools-2.js', '/assets/js/journey-pools-3.js', '/assets/js/journey-pools-4.js', '/assets/js/journey-pools-5.js',
+  '/assets/js/learn-play.js', '/assets/js/learn-play-data.js', '/assets/js/join-invite.js', '/assets/js/calc01-core.js', '/assets/js/mood-arbitrage.js',
+  '/reading.html', '/assets/js/reading-page.js', '/assets/js/reading-list.js', '/assets/js/reading-suggest.js',
+  '/assets/img/mascots/two-bubbles.svg', '/assets/img/logo-mark.svg', '/assets/img/logo-mark-wink.svg', '/assets/img/logo-mark-dark.svg', '/assets/img/logo-mark.png', '/assets/img/logo-mark-wink.png', '/assets/icons/icon-192.png', '/manifest.webmanifest'
 ];
 
 self.addEventListener('install', function (e) {
@@ -27,6 +34,7 @@ self.addEventListener('activate', function (e) {
 });
 
 function isStatic(url) {
+  // Covers every same-origin script, including the puzzle chunks under /assets/js/puzzles/.
   return url.origin === self.location.origin && /\.(?:css|js|svg|png|jpg|jpeg|webp|gif|ico|webmanifest|woff2?)$/i.test(url.pathname);
 }
 function isFont(url) { return url.hostname === 'fonts.googleapis.com' || url.hostname === 'fonts.gstatic.com'; }
@@ -63,5 +71,5 @@ self.addEventListener('fetch', function (e) {
       return hit || net;
     }));
   }
-  // Everything else (members list, sign-up, analytics, the dashboard's database) goes straight to the network.
+  // Everything else (members list, sign-up, other sites' scripts, the dashboard's database) goes straight to the network.
 });

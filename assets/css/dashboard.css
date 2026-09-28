@@ -40,7 +40,7 @@
   white-space: nowrap;
 }
 :where(.status-live){ color: var(--credit); }
-:where(.status-progress){ color: var(--brass); }
+:where(.status-progress){ color: var(--brass-ink, #7A5620); }
 :where(.status-planned){ color: var(--ink-soft); }
 :where(.roadmap-list){ margin: 0; padding-left: 1.2em; }
 :where(.roadmap-list li){ margin-bottom: 6px; }
@@ -200,7 +200,7 @@
   font-size: 0.68rem;
   letter-spacing: 0.06em;
   text-transform: uppercase;
-  color: var(--brass);
+  color: var(--brass-ink, #7A5620);
   border-bottom-color: var(--ink-soft);
 }
 .db-read-ledger thead th:not(:first-child){ text-align: right; }
@@ -225,7 +225,7 @@
   padding-top: 12px !important;
 }
 .db-read-total.is-high{ color: var(--credit); }
-.db-read-total.is-mid{ color: var(--brass); }
+.db-read-total.is-mid{ color: var(--brass-ink, #7A5620); }
 .db-read-total.is-low{ color: var(--debit); }
 .db-read-total.is-pending{ color: var(--ink-soft); }
 
@@ -250,7 +250,7 @@
   font-size: 0.68rem;
   letter-spacing: 0.06em;
   text-transform: uppercase;
-  color: var(--brass);
+  color: var(--brass-ink, #7A5620);
   padding-bottom: 6px;
   border-bottom: 1px solid var(--ink-soft);
   margin-bottom: 8px;
@@ -296,7 +296,7 @@
   font-size: 0.78rem;
 }
 .db-bar-legend .a{ color: var(--credit); }
-.db-bar-legend .b{ color: var(--brass); }
+.db-bar-legend .b{ color: var(--brass-ink, #7A5620); }
 
 /* ------------------------------------------------------------------ */
 /* Battery & Stress Meter                                              */
@@ -366,7 +366,7 @@
   font-size: 0.68rem;
   letter-spacing: 0.06em;
   text-transform: uppercase;
-  color: var(--brass);
+  color: var(--brass-ink, #7A5620);
   padding: 0 8px 6px 0;
   border-bottom: 1px solid var(--ink-soft);
 }
@@ -416,7 +416,7 @@
   white-space: nowrap;
 }
 .db-state-item.is-ventral::marker{ color: var(--credit); }
-.db-state-item.is-sympathetic::marker{ color: var(--brass); }
+.db-state-item.is-sympathetic::marker{ color: var(--brass-ink, #7A5620); }
 .db-state-item.is-dorsal::marker{ color: var(--ink-soft); }
 
 /* ------------------------------------------------------------------ */
@@ -441,7 +441,7 @@
 .db-history-bar .is-low{ background: var(--debit); }
 .db-history-val{ font-family: "IBM Plex Mono", monospace; font-size: 0.85rem; text-align: right; }
 .db-history-val.is-high{ color: var(--credit); }
-.db-history-val.is-mid{ color: var(--brass); }
+.db-history-val.is-mid{ color: var(--brass-ink, #7A5620); }
 .db-history-val.is-low{ color: var(--debit); }
 .db-history-val.is-pending{ color: var(--ink-soft); }
 .db-history-note{ grid-column: 2 / -1; font-size: 0.85rem; color: var(--ink-soft); }

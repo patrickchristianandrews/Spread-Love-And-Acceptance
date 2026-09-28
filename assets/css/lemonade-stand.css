@@ -34,7 +34,7 @@
   font-size: 0.7rem;
   letter-spacing: 0.06em;
   text-transform: uppercase;
-  color: var(--brass);
+  color: var(--brass-ink, #7A5620);
 }
 
 #lemonade #rows .row{ margin-bottom: 6px; }
@@ -59,7 +59,7 @@
   text-align: right;
 }
 #lemonade #label-a{ color: var(--credit); }
-#lemonade #label-b{ color: var(--brass); }
+#lemonade #label-b{ color: var(--brass-ink, #7A5620); }
 
 #lemonade #rows .hours-a,
 #lemonade #rows .hours-b{
@@ -121,7 +121,7 @@
   font-size: 0.78rem;
 }
 #lemonade .ls-legend-a{ color: var(--credit); }
-#lemonade .ls-legend-b{ color: var(--brass); text-align: right; }
+#lemonade .ls-legend-b{ color: var(--brass-ink, #7A5620); text-align: right; }
 
 #lemonade .ls-balance{ margin: 12px 0 0 0; }
 

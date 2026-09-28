@@ -743,6 +743,307 @@ window.TOLLearnPlayData = {
           s: 'Anything that came up more than ___ in a week moves to your job list or your tone check.', o: ['twice', 'once', 'ten times'], a: 0,
           say: 'Yes! Instead of just hanging around, it gets a home.' }
       ]
+    },
+
+    /* ------------------------------------------------------------ more guides, the full pages and the Library */
+    '/is-this-for-you.html': {
+      t: 'Is this right for you?', g: 'harbor', n: '/how-it-works.html',
+      m: [
+        { at: 'shared ledger, not a scorecard', k: 'sort', q: 'Is it, or isn’t it?', bins: ['It is', 'It isn’t'],
+          items: [['Worksheets each person fills in about themselves, then reads together', 0], ['A way to prove who’s right', 1, 'It isn’t. Every score describes how things are shared, never a person.'],
+                  ['Therapy or a diagnosis', 1, 'It isn’t. It’s a practical way to see what each of you carries.'], ['A fair way for two people to see what each one carries', 0]] },
+        { at: 'same disagreements keep coming back', k: 'quiz', q: 'When does it fit best?',
+          o: [['When the same disagreements keep coming back, and you’re both willing to write down your own side honestly', true, 'Yes! That’s the sweet spot. And you can also start on your own.'],
+              ['Only when both people sign up on day one', false, 'Close! Here’s the twist: you can start on your own. The shared tools just work best with both of you.'],
+              ['When you want a verdict on the other person', false, 'Close! Here’s the twist: it never gives a verdict on a person, only a picture of how things are shared.']] },
+        { at: 'all of it is free', k: 'gap', q: 'Fill the gap with the page’s own word.',
+          s: 'Some pages open with no sign-up, and the rest open once you enter your ___.', o: ['email', 'card number', 'password'], a: 0,
+          say: 'Yes, just your email. Nothing is charged right now.' },
+        { at: 'Every page is listed', k: 'wyr', q: 'You’re new and not sure where to begin. Would you rather…',
+          o: [['Open random pages until something fits', 'You might find a gem, but it’s easy to get lost and give up.'],
+              ['Read how it fits the relationship on your mind, then pick one tool', 'That’s the page’s own tip: one relationship, one tool, one small start.']] }
+      ]
+    },
+
+    '/is-this-for-you-in-depth.html': {
+      t: 'Is this right for you? (full)', g: 'harbor', n: '/how-it-works-in-depth.html',
+      m: [
+        { at: 'What it is, and what it isn', k: 'quiz', q: 'The page says a ledger only one person reads is…',
+          o: [['Just a grudge with better formatting', true, 'Yes! A ledger works because both people read it, together.'],
+              ['A good start on your own', false, 'Close! Here’s the twist: the self-discovery half is for you alone, but a shared ledger read by one person turns into a grudge.'],
+              ['The safest way to keep score', false, 'Close! Here’s the twist: this isn’t a scorecard at all. It describes the arrangement, never a person.']] },
+        { at: 'Who it’s for', k: 'sort', q: 'Good fit right now, or probably not?', bins: ['Likely a good fit', 'Probably not right now'],
+          items: [['You want to understand why some moments hit harder than they should', 0], ['The same “who does more” argument keeps coming back', 0],
+                  ['You’re hoping for proof that you’re right', 1, 'The page says this is the time to wait: it never gives a verdict on anyone.'],
+                  ['Lists, numbers and clear steps make hard topics easier for you', 0]] },
+        { at: 'Ways in', k: 'match', q: 'Match each way in to what it means.',
+          pairs: [['Open access', 'Start right away, with nothing asked of you'], ['Free with email', 'Enter your email once and the rest opens in that browser'],
+                  ['Paid membership', 'Coming later, and nothing is charged now']] },
+        { at: 'Where everything is', k: 'quiz', q: 'The workpapers work best in an order. Where do you start?',
+          o: [['WP-01, the week’s log of who did what', true, 'Yes! WP-01 → WP-02 → WP-03 → WP-09 → WP-13, with WP-04 once a month.'],
+              ['WP-04, the monthly look-back', false, 'Close! Here’s the twist: WP-04 comes once a month, after the others have had time to work.'],
+              ['Any of them, all at once', false, 'Close! Here’s the twist: one at a time, in order. If things feel urgent, start with WP-11 or WP-02.']] }
+      ]
+    },
+
+    '/how-it-works-in-depth.html': {
+      t: 'How it works (full)', g: 'harbor', n: '/five-pillars-in-depth.html',
+      m: [
+        { at: 'Your life situation', k: 'sort', q: 'Which of the three things is this?', bins: ['Your life situation', 'Your wiring', 'What you discover'],
+          items: [['A move, a new baby and a job change in one season', 0], ['You need hours of quiet to reset after a busy day', 1],
+                  ['Written down for a few weeks: you get short-tempered around 5 p.m.', 2], ['Caring for a parent while working full time', 0],
+                  ['You think out loud, and your roommate needs quiet to think', 1]] },
+        { at: 'Plain first', k: 'flip', q: 'Tap each card to see the plain version.',
+          cards: [['Autonomic saturation', 'Stress left over from earlier in the day makes you react faster to the next thing.', 'On a running-on-empty day, say “it’s the day, not you.”'],
+                  ['The technical layer', 'Optional. The tools work the same without it.', 'Read the plain version first, and the technical part only if you’re curious.'],
+                  ['A heuristic', 'A practical rule of thumb, not a clinical or diagnostic tool.', 'Treat the numbers as a starting point for a talk.']] },
+        { at: 'Where the static comes from', k: 'quiz', q: 'You say “in a minute,” meaning “when I finish this.” They hear “in sixty seconds.” Where does the static live?',
+          o: [['In the gap between the two of you', true, 'Yes! Nobody lied and nobody was careless. The message went out on one frequency and arrived on another.'],
+              ['In the person who said “in a minute”', false, 'Close! Here’s the twist: no one creates static alone. It happens in the space between two people.'],
+              ['In the person who got upset', false, 'Close! Here’s the twist: they heard a reasonable meaning, just not the one you sent.']] },
+        { at: 'What it should feel like', k: 'gap', q: 'Fill the gap with the page’s own word.',
+          s: 'One entry is a mood. Twelve entries are a ___.', o: ['pattern', 'verdict', 'score'], a: 0,
+          say: 'Yes, a pattern. Repetition is what makes it trustworthy enough to act on.' }
+      ]
+    },
+
+    '/program-overview.html': {
+      t: 'Program Overview', g: 'harbor', n: '/book/preface.html',
+      m: [
+        { at: 'Each chapter pairs', k: 'quiz', q: 'What does a chapter do, and what does its workpaper do?',
+          o: [['The chapter shares one idea; the workpaper is where you put it to use', true, 'Yes! Read the idea, then use the matching worksheet.'],
+              ['The chapter gives a score; the workpaper explains it', false, 'Close! Here’s the twist: chapters explain ideas. Worksheets are where you do something with them.'],
+              ['They’re two versions of the same thing', false, 'Close! Here’s the twist: they pair up, but one explains and the other puts it to use.']] },
+        { at: 'feed one number', k: 'match', q: 'Match each piece to what it does.',
+          pairs: [['WP-01, WP-02 and WP-03', 'Feed the Solvency Read'], ['CALC-01', 'One read on whether the way you share things can last'],
+                  ['WP-13', 'A 90-second daily check-in with no debate']] },
+        { at: 'No score ever comes from one person', k: 'wyr', q: 'Your number comes back lower than you hoped. Would you rather…',
+          o: [['Show it as proof that something is wrong with them', 'That ends a conversation. A number should start one, and no score comes from one person alone.'],
+              ['Use it to open a calm talk about the setup', 'That’s the page’s rule: a number should start a conversation, never end one.']] },
+        { at: 'designed, not built', k: 'gap', q: 'Fill the gap with the page’s own words.',
+          s: 'If this page and the ___ ever differ, go with the ___.', o: ['Suite Index', 'newest chapter', 'loudest opinion'], a: 0,
+          say: 'Yes, the Suite Index. It lists exactly what is built today.' }
+      ]
+    },
+
+    '/ways-in.html': {
+      t: 'Ways in', g: 'harbor', n: '/start-here.html',
+      m: [
+        { at: 'open to anyone', k: 'sort', q: 'Open to anyone, or opens with your free email?', bins: ['Open to anyone', 'Opens with your email'],
+          items: [['The Signal Translator and the Wiring Card', 0], ['All seven live workpapers', 1], ['The Preface and Chapters I and II', 0], ['Chapters III to V', 1], ['The Carrier Wave Decoder', 0]] },
+        { at: 'Your email opens the rest', k: 'quiz', q: 'What do you need to open everything else?',
+          o: [['Just your email, once', true, 'Yes! No account and no password.'],
+              ['An account and a password', false, 'Close! Here’s the twist: there’s no account and no password. Your email is enough.'],
+              ['A paid membership', false, 'Close! Here’s the twist: paid membership comes later, and nothing is charged now.']] },
+        { at: 'You share very little', k: 'quiz', q: 'Where does what you type into the tools go?',
+          o: [['It stays in your own browser', true, 'Exactly. If you sign up, the newsletter service holds only your email address.'],
+              ['It’s saved to your account', false, 'Close! Here’s the twist: there’s no account. It stays in your browser.'],
+              ['It’s shared with advertisers', false, 'Close! Here’s the twist: nothing is sold or used for advertising.']] }
+      ]
+    },
+
+    '/relationships-in-depth.html': {
+      t: 'How it fits your relationships (full)', g: 'p1', n: '/check-ins-in-depth.html',
+      m: [
+        { at: 'The map', k: 'match', q: 'Match each word on the map to what it means.',
+          pairs: [['Core', 'Built for this, or one of the first things to reach for'], ['Helpful', 'Works with small adjustments'], ['A dash', 'Usually not the right tool']] },
+        { at: 'Partners', k: 'quiz', q: 'One partner tracks every birthday and bill. The other hears “you never help” as unfair. Why?',
+          o: [['From where they stand, it is unfair: they genuinely don’t know that work exists', true, 'Yes! That’s why WP-01 comes first: a week of who did what, written down by each of you.'],
+              ['They’re pretending not to notice', false, 'Close! Here’s the twist: the page says they genuinely don’t see it. Unseen work isn’t the same as ignored work.'],
+              ['The tracker is exaggerating', false, 'Close! Here’s the twist: the work is real, it’s just invisible. Writing it down makes it visible to both of you.']] },
+        { at: 'Co-parents', k: 'wyr', q: 'Handoff day, and something bigger comes up. Would you rather…',
+          o: [['Settle it right there at the door', 'Handoffs are not the place to settle anything, and the kids are never the messengers.'],
+              ['Say “Can we put that on Thursday’s check-in?”', 'That’s the exchange-day script: short, logistical, and the same every time.']] },
+        { at: 'Three or more people', k: 'quiz', q: 'Three roommates, and the bills feel uneven. What comes first?',
+          o: [['Agree on the rule for rent and bills, and write it down', true, 'Yes! Deciding how “fair” will be judged comes before arguing about whether something was.'],
+              ['Work out who has been late the most', false, 'Close! Here’s the twist: start with the numbers, not with who is late. Talk about the setup, not the person.'],
+              ['Sort it out late at night in the group chat', false, 'Ha, close! Here’s the twist: raise it at a house meeting, not late at night in the group chat.']] },
+        { at: 'Caregivers', k: 'flip', q: 'Caring for your partner for a while? Tap each card.',
+          cards: [['What to notice', 'The jobs moved to you without either of you choosing it.', 'Name it together as a setup that changed for a while, not a debt.'],
+                  ['One small thing today', 'Check your battery, take a one-minute break, or ask for one specific help.', 'Try: “Could you do Thursday’s drive to the appointment?”'],
+                  ['When you’re both ready', 'Write the week’s jobs on one page together.', 'Some jobs move back as they’re able, and some go to friends or family, each with one owner.']] }
+      ]
+    },
+
+    '/know-yourself-in-depth.html': {
+      t: 'Know your own wiring (full)', g: 'p3', n: '/wired-differently-in-depth.html',
+      m: [
+        { at: 'Three layers', k: 'sort', q: 'Which layer is carrying most of the weight?', bins: ['Wiring', 'Shaped pattern', 'Today’s conditions'],
+          items: [['You take words literally, and always have', 0], ['You say yes before you’ve checked if you can', 1, 'A learned setting: pleasing once kept things calm.'],
+                  ['You slept badly and skipped lunch', 2], ['Good news makes you wait for the catch', 1], ['You like a heads-up before plans change, on every kind of day', 0]] },
+        { at: 'Work on it, work with it', k: 'match', q: 'Match each layer to its move.',
+          pairs: [['Wiring', 'Work with it, always'], ['Shaped patterns', 'Work on them over time'], ['Today’s conditions', 'Work around them today']] },
+        { at: 'Sorting common reactions', k: 'quiz', q: '“Later” quietly disappears. What might help?',
+          o: [['A clock time instead of “later,” and a reminder set right then', true, 'Yes! For ADHD time and memory, work with it: a real time and a reminder.'],
+              ['Trying harder to remember next time', false, 'Close! Here’s the twist: pushing against wiring tends to wear you out. A setup that suits it works better.'],
+              ['Never agreeing to anything later', false, 'Close! Here’s the twist: you don’t need to avoid it, just give “later” a clock time.']] },
+        { at: 'Explaining yourself to others', k: 'gap', q: 'Fill the gap with the page’s own words.',
+          s: 'For conditions, one short line covers it: “Today’s a ___ day.”', o: ['low-battery', 'bad', 'lost'], a: 0,
+          say: 'Yes, a low-battery day. Naming a time to talk keeps the pause from feeling like a brush-off.' },
+        { at: 'Common mix-ups', k: 'flip', q: 'Tap each common mix-up to flip it.',
+          cards: [['“Calling it wiring is just an excuse.”', 'An explanation plus a plan is the opposite of an excuse. Repair still matters.', 'Say what you need ahead of time, and what helps.'],
+                  ['“You can change anything if you try hard enough.”', 'Effort helps with patterns. Pushing against wiring usually just wears you out.', 'Work with the wiring instead.'],
+                  ['“Understanding a pattern should make it go away.”', 'Insight helps, but patterns shift through repeated new experiences.', 'Try one new response, and notice that it goes okay.']] }
+      ]
+    },
+
+    '/wired-differently-in-depth.html': {
+      t: 'Wired Differently (full)', g: 'p4', n: '/check-ins-in-depth.html',
+      m: [
+        { at: 'The problem runs in both directions', k: 'quiz', q: 'A message goes wrong between two different wirings. What does the page suggest?',
+          o: [['Assume two decoders, both partly accurate, and compare notes', true, 'Yes! The breakdown in understanding runs both ways, so nobody opens a case against anyone.'],
+              ['Work out which person has trouble communicating', false, 'Close! Here’s the twist: the double empathy idea says the misunderstanding is mutual, not inside one person.'],
+              ['Stop talking about anything important', false, 'Close! Here’s the twist: compare notes instead. Mixed pairs can pass facts along fine.']] },
+        { at: 'Three channels', k: 'match', q: 'Match each channel to what it carries.',
+          pairs: [['Pace', 'Speed and timing'], ['Register', 'The tone underneath the words'], ['Urgency', 'How soon something matters']] },
+        { at: 'Same words, many receivers', k: 'wyr', q: 'You want the kitchen tidied tonight. Would you rather say…',
+          o: [['“Can you clean up a bit when you get a chance?”', 'Some hear “today,” some hear “sometime,” and some wonder if you’re upset. It’s easy to miss.'],
+              ['“Could you clear the counter and run the dishwasher before 8 tonight?”', 'That’s the page’s clearer version: what, and by when. Almost every wiring gets it.']] },
+        { at: 'Ten rules', k: 'sort', q: 'Does this follow the ten rules?', bins: ['Follows the rules', 'Doesn’t'],
+          items: [['“Could you pay the bill by Friday?”', 0], ['“It would be nice if someone paid the bill.”', 1, 'Say the request as a request, with a real time.'],
+                  ['“You’re so irresponsible.”', 1, 'Describe the behavior, never the person.'], ['“What did you take from that?”', 0], ['A sarcastic joke in a serious talk', 1, 'Leave sarcasm out of anything serious.']] },
+        { at: 'Make a Wiring Card', k: 'quiz', q: 'When is the best time to share a Wiring Card?',
+          o: [['On an ordinary day, before a hard conversation', true, 'Yes! Tell each other how you’re built before a hard talk, not during one.'],
+              ['In the middle of an argument, to prove your point', false, 'Close! Here’s the twist: it isn’t a contract or evidence. Share it on a calm day.'],
+              ['Only once, and never update it', false, 'Close! Here’s the twist: it changes with your state. When you’re depleted, every line gets stricter.']] }
+      ]
+    },
+
+    '/check-ins-in-depth.html': {
+      t: 'Check-ins (full)', g: 'p3', n: '/turning-toward-in-depth.html',
+      m: [
+        { at: 'Ground rules', k: 'sort', q: 'Before a check-in, sort your list into three piles.', bins: ['Today', 'A system problem', 'Can wait'],
+          items: [['Something that will still be wrong tomorrow if you don’t touch it', 0], ['The bins have no owner and keep getting missed', 1, 'That goes to WP-03 or the weekly review, not into a speech.'],
+                  ['A real worry about the holidays, with a date to look at it', 2], ['A task with no owner', 1]] },
+        { at: 'The setting has to be right', k: 'quiz', q: 'Which of these is a check-in, not an ambush?',
+          o: [['“Can we use twenty minutes at 8, after dinner, for the kitchen thing?”', true, 'Yes! Named in advance, one topic, and a time when nobody is rushing out.'],
+              ['Bringing it up while they’re walking out the door', false, 'Close! Here’s the twist: a hard topic squeezed in before someone leaves teaches people to rush or to hide.'],
+              ['Raising it in front of the kids so it gets settled', false, 'Close! Here’s the twist: private first. Children pick up the tension even when the words are careful.']] },
+        { at: 'Acknowledgment, before any answer', k: 'gap', q: 'Fill the gap with the page’s own word.',
+          s: '“I hear you, but…” The “but” deletes the sentence in front of it. If you need a second sentence, use “___.”', o: ['and', 'however', 'actually'], a: 0,
+          say: 'Yes, “and.” Acknowledgment is proof of receipt, not agreement.' },
+        { at: 'How to rebut', k: 'wyr', q: 'You have a fact they may not know. Would you rather say…',
+          o: [['“I hear you, but you never notice what I did do.”', 'That erases the mirror and turns one event into a verdict.'],
+              ['“I got the part about the dishes. My part: I said I’d do them and didn’t. What I want on the record is that I did the lunch boxes.”', 'That keeps it: their fact survives, you own your part, and you add one fact.']] },
+        { at: 'How to build the talking notes', k: 'slider', q: 'Drag to see how the load note reads your list.', label: 'Sentences you plan to say',
+          min: 1, max: 4, step: 1, start: 1, fmt: 'int',
+          zones: [[1, 'Light', 'One sentence. A good size for a check-in.', '🪶'],
+                  [2, 'Can fit', 'Two can fit if both are small and you’re both settled.', '🙂'],
+                  [3, 'Getting heavy', 'Keep the sentence that, if settled, makes the others smaller.', '🎒'],
+                  [4, 'A list', 'Four is a list, not a conversation. Park the rest with a date.', '📋']], need: 3 }
+      ]
+    },
+
+    '/library.html': {
+      t: 'The Professor’s Library', g: 'harbor', n: '/library/fairness.html',
+      m: [
+        { at: 'The themes', k: 'quiz', q: 'What is the Library?',
+          o: [['General education about how people tend to think, feel and get along', true, 'Yes! It says where the evidence is strong, and where it’s thin or argued about.'],
+              ['A place to get a diagnosis', false, 'Close! Here’s the twist: it isn’t diagnosis, therapy or treatment, and it can’t know your situation.'],
+              ['A list of rules to win arguments with', false, 'Close! Here’s the twist: treat every idea as something to talk about, not a rule to win with.']] },
+        { at: 'The Five Pillars, and how', k: 'pillar', q: 'Which pillar is this?',
+          items: [['Noticing the invisible, mental and emotional load', 1], ['Clear owners and handoffs instead of blame', 2], ['Checking how full your battery is before you judge a moment', 3],
+                  ['Translating across different wiring and tone', 4], ['Seeing how unclaimed jobs drift to one person', 5]] },
+        { at: 'How to tie any topic', k: 'gap', q: 'Fill the gap with the page’s own word.',
+          s: 'Research describes ___ across many people. You and the people you live with are not ___.', o: ['averages', 'rules', 'guarantees'], a: 0,
+          say: 'Yes, averages. Use what fits, and question what doesn’t.' }
+      ]
+    },
+
+    '/learn/index.html': {
+      t: 'Stories from Philosophy', g: 'harbor', n: '/five-pillars.html',
+      m: [
+        { at: 'Start with yourself', k: 'quiz', q: 'In the story of the second arrow, what is the second arrow?',
+          o: [['The story you add about what happened', true, 'Yes! The event hurts once, and the story you tell about it hurts again.'],
+              ['A second thing going wrong the same day', false, 'Close! Here’s the twist: the second arrow is the meaning you add, not another event.'],
+              ['The other person’s reply', false, 'Close! Here’s the twist: the second arrow comes from inside. Their reply is theirs to look after.']] },
+        { at: 'both be right about different parts', k: 'wyr', q: 'You and a sibling remember a holiday very differently. Would you rather…',
+          o: [['Explain what they must have meant', 'That fills in their side for them, like describing the whole elephant from one leg.'],
+              ['Ask what they noticed, and listen', 'That’s the lesson: you’re each touching a different part. Ask, and listen.']] },
+        { at: 'Closeness is a distance', k: 'flip', q: 'Tap each card to flip it.',
+          cards: [['“Needing warmth is clingy.”', 'Needing warmth isn’t clingy.', 'Say what closeness looks like for you this week.'],
+                  ['“Needing room is cold.”', 'Needing room isn’t cold.', 'Try: “I need an hour to myself, then I’d love to catch up.”'],
+                  ['The porcupines', 'They huddle for warmth, pull apart when the quills prick, and find a middle distance.', 'Talk about the distance that suits you both.']] },
+        { at: 'The ledger serves the person', k: 'sort', q: 'Which line belongs in the ledger?', bins: ['What happened', 'What I’m telling myself it means'],
+          items: [['“The dishes were in the sink at 7.”', 0], ['“They don’t respect me.”', 1, 'That’s the story you add. Only the first line belongs in the ledger.'],
+                  ['“I did the school run three days this week.”', 0], ['“Nobody here cares how tired I am.”', 1]] }
+      ]
+    },
+
+    '/library/fairness.html': {
+      t: 'Fairness and the load', g: 'p1', n: '/library/communication.html',
+      m: [
+        { at: 'Cognitive labour', k: 'sort', q: 'Which stage of the thinking work is this?', bins: ['Anticipate', 'Identify', 'Decide', 'Monitor'],
+          items: [['Noticing the kids will need new shoes soon', 0], ['Looking up three shoe stores and their prices', 1], ['Choosing the pair', 2], ['Checking later that they still fit', 3]] },
+        { at: 'Why we each think we do more', k: 'quiz', q: 'When two people each estimate their share of the housework, the totals usually…',
+          o: [['Add up to more than 100 percent', true, 'Yes! We remember our own efforts more easily, so we overestimate our share without meaning to.'],
+              ['Add up to exactly 100 percent', false, 'Close! Here’s the twist: memory tilts toward our own work, so the totals go over.'],
+              ['Add up to less than 100 percent', false, 'Close! Here’s the twist: it runs the other way. A shared log gently corrects it.']] },
+        { at: 'Gatekeeping', k: 'wyr', q: 'Your partner packs the lunches for the first time, and the sandwich isn’t how you’d make it. Would you rather…',
+          o: [['Redo it and explain the right way', 'Next time they may not bother, and you end up doing everything again.'],
+              ['Let them own the method, within “good enough”', 'That’s gate opening: handing over a job means handing over the method too.']] },
+        { at: 'The default person', k: 'quiz', q: 'How do you change who the “default person” is?',
+          o: [['Give the other person whole areas to own, update the contact lists, and let things wobble while they learn', true, 'Yes! Deliberate steps, and a little patience while the new owner settles in.'],
+              ['Wait for them to notice on their own', false, 'Close! Here’s the twist: default status feeds itself. The default knows more, so they get asked more.'],
+              ['Keep doing it, but complain about it', false, 'Close! Here’s the twist: that keeps the setup the same. Moving whole areas to a new owner changes it.']] }
+      ]
+    },
+
+    '/library/communication.html': {
+      t: 'Talking and listening', g: 'p4', n: '/library/conflict.html',
+      m: [
+        { at: 'I-statements', k: 'sort', q: 'A real I-statement, or a you-statement in disguise?', bins: ['A real I-statement', 'A you-statement in disguise'],
+          items: [['“I felt worried when you were late and didn’t text.”', 0], ['“I feel that you are selfish.”', 1, 'It starts with “I,” but it’s a judgment about the person.'],
+                  ['“Here’s how it landed for me.”', 0], ['“I feel like you never think about me.”', 1]] },
+        { at: 'Validation', k: 'quiz', q: '“It makes sense you’re frustrated; you were expecting help and it didn’t come.” Is that agreeing?',
+          o: [['No. It says the reaction is understandable, and you can still have your own view', true, 'Yes! Validation isn’t agreement. It lowers the temperature fast.'],
+              ['Yes, it means you admit you were wrong', false, 'Close! Here’s the twist: validation says their reaction makes sense, not that you agree with every conclusion.'],
+              ['It’s the same as saying “don’t be so sensitive”', false, 'Close! Here’s the twist: that one is invalidation, and it often makes the feeling stronger.']] },
+        { at: 'Why tone gets lost in text', k: 'wyr', q: 'A text from a friend reads a little cold. Would you rather…',
+          o: [['Assume they’re annoyed and reply coldly too', 'The reader fills the gaps with their own mood. That’s where misunderstandings begin.'],
+              ['Ask: “Did you mean that as a joke?”', 'That’s the page’s tip: hold interpretations lightly, and asking is kinder than assuming.']] },
+        { at: 'Complaints versus criticism', k: 'sort', q: 'Complaint or criticism?', bins: ['Complaint', 'Criticism'],
+          items: [['“I was frustrated the bins weren’t taken out last night.”', 0], ['“You never take responsibility for anything.”', 1, '“Never” turns one event into a verdict.'],
+                  ['“What kind of person forgets that?”', 1], ['“The sink was full this morning. Could we sort it by 9?”', 0]] },
+        { at: 'Advice or support', k: 'quiz', q: 'A friend tells you about a rough day. What’s the simple, powerful habit?',
+          o: [['Ask whether they want solutions or to be heard', true, 'Yes! Offering the wrong one can feel like not being listened to.'],
+              ['Give three solutions right away', false, 'Close! Here’s the twist: some people want to be heard first. Asking takes one line.'],
+              ['Change the subject to cheer them up', false, 'Close! Here’s the twist: that can feel dismissive. Ask what kind of support they want.']] }
+      ]
+    },
+
+    '/library/conflict.html': {
+      t: 'Conflict and how to resolve it', g: 'p4', n: '/library/connection.html',
+      m: [
+        { at: 'Interests versus positions', k: 'sort', q: 'Position or interest?', bins: ['Position (what I want)', 'Interest (why I want it)'],
+          items: [['“I want the window open.”', 0], ['Fresh air', 1], ['“The dishes need doing straight after dinner.”', 0], ['Not waking up to a messy kitchen', 1], ['Needing to rest after a long day', 1]] },
+        { at: 'One topic at a time', k: 'quiz', q: 'Mid-talk about the school run, “and last month you…” comes up. What helps?',
+          o: [['Park it on a list for its own time', true, 'Yes! Parking isn’t dismissing. It says that matters too, and deserves its own time.'],
+              ['Deal with everything now, while you’re at it', false, 'Close! Here’s the twist: that’s kitchen-sinking. Each extra item widens the argument until nothing can be settled.'],
+              ['Pretend it never came up', false, 'Close! Here’s the twist: park it with a plan to come back, so it doesn’t keep flooding in.']] },
+        { at: 'Intent and impact', k: 'wyr', q: 'Something you said came across as dismissive. Would you rather open with…',
+          o: [['“I didn’t mean it that way.”', 'Leading with intent tends to sound like a defense, and the hurt can feel denied.'],
+              ['“I can see that came across as dismissive, and I’m sorry it hurt.”', 'Impact first, then intent if needed. Both can be true.']] },
+        { at: 'What makes an apology work', k: 'sort', q: 'Does this help an apology, or undo it?', bins: ['Helps', 'Undoes it'],
+          items: [['Owning what you did', 0], ['Offering to put it right', 0], ['“I’m sorry if you were offended.”', 1, 'That focuses on their reaction, not on what you did.'], ['“I’m sorry, but…”', 1], ['Listening first, then apologizing', 0]] }
+      ]
+    },
+
+    '/library/connection.html': {
+      t: 'Kindness and connection', g: 'p5', n: '/turning-toward.html',
+      m: [
+        { at: 'Gratitude in relationships', k: 'quiz', q: 'Which thank-you does the most?',
+          o: [['“Thank you for sorting out the car insurance; I know that was tedious.”', true, 'Yes! Specific thanks is recognition and gratitude in one, and it helps both people.'],
+              ['“Thanks for everything.”', false, 'Close! Here’s the twist: warm, but a specific thank-you shows the effort was seen.'],
+              ['Saving thanks for birthdays', false, 'Close! Here’s the twist: everyday moments of gratitude are the ones linked with feeling closer.']] },
+        { at: 'Responding to good news', k: 'sort', q: 'Your friend got the job. Which kind of response is this?', bins: ['Active-constructive', 'Something else'],
+          items: [['“That’s brilliant! Tell me how it happened!”', 0], ['“That’s nice.”', 1, 'Quiet support is kind, but it leaves people feeling less understood.'],
+                  ['“That’ll mean more work.”', 1], ['“What’s for dinner?”', 1], ['Putting your phone down and asking questions', 0]] },
+        { at: 'Rituals of connection', k: 'quiz', q: 'Why do small rituals matter most in busy seasons?',
+          o: [['They don’t depend on having free time', true, 'Yes! A ninety-second check-in or a goodnight message keeps connection going when other things are crowded out.'],
+              ['They have to be big and planned', false, 'Close! Here’s the twist: rituals are small, repeated moments, like a goodbye or a Sunday walk.'],
+              ['They replace talking about problems', false, 'Close! Here’s the twist: they sit alongside everything else, and build a sense of shared life.']] }
+      ]
     }
   },
 

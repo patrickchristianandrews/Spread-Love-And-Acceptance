@@ -813,12 +813,24 @@
     return null;
   }
 
+  // "I feel like we're roommates" / "we're just roommates now", said about a partner, is about
+  // closeness, not about sharing a flat: send it to partners and connection (turning toward, bids,
+  // small rituals). Real roommate talk ("my roommate…", rent, three of us) is left alone.
+  var ROOMIES_FIG = /\b(feel|feels|feeling|felt|it s|its|living) like (we re |we are |were |we ve become |we have become |we re just |we are just )?(just |only |basically |more like )?roommates\b|\b(we re|we are|were|we ve become|we have become|become|turned into) (just |only |basically |more like |like )?roommates\b|\b(just|only|basically|more like) roommates\b/;
+  var ROOMIES_REAL = /\b(my|our|the|a|new|two|three|four|five|six|seven|eight|other) (roommates?|roomates?|housemates?|flatmates?)\b|\b(roommates?|housemates?|flatmates?) (and i|of mine|agreement)\b|\b(rent|lease|landlord|utilities|bills?|venmo|splitwise)\b/;
+  function roommatesFigure(f) {
+    if (!ROOMIES_FIG.test(f) || ROOMIES_REAL.test(f.replace(ROOMIES_FIG, ' '))) return f;
+    var who = /\b(my )?(partner|husband|wife|spouse|boyfriend|girlfriend|fianc[eé]e?|bf|gf)\b/.exec(f);
+    return (who ? 'my ' + who[2] : 'my partner') + ' and i feel distant and disconnected lately like we have drifted apart';
+  }
+
   // Decide what to say to one message. Returns {blocks:[...], chips:[...]} (all data, rendered later),
   // or {needBG:true} when the background notes should be fetched first (reply() then asks again).
   function respond(state, q, chipDoc) {
     var f = norm(q);
     if (chipDoc == null) {
       if (DANGER.test(f)) { state.last = null; return safetyReply(); }
+      f = roommatesFigure(f);
       var fu = followUp(state, f, q);
       if (fu && fu.needBG) return fu;
       if (fu && fu.more) return more(state);

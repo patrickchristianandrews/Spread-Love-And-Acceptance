@@ -4,7 +4,7 @@
 
 :root{
   --paper:#F5EFDE; --paper-deep:#ECE2C4; --ink:#2B2620; --ink-soft:#5A5346;
-  --line:#D9CBA3; --credit:#3E6B4C; --brass:#A8792F; --focus:#2B5B8C;
+  --line:#D9CBA3; --credit:#3E6B4C; --brass:#A8792F; --brass-ink:#7A5620; --focus:#2B5B8C;
   --debit:#96412B; --radius:3px;
 }
 
@@ -100,7 +100,7 @@ body.unlocked .locked-section::before{ content:none !important; display:none !im
 .tol-code{ font-family:"IBM Plex Mono", ui-monospace, monospace; font-size:.78rem; color:var(--ink-soft); }
 .tol-title{ font-size:1rem; line-height:1.35; }
 .tol-title small{ display:block; color:var(--ink-soft); font-size:.85rem; margin-top:.1rem; }
-.tol-access{ font-size:.8rem; color:var(--brass); white-space:nowrap; font-style:italic; }
+.tol-access{ font-size:.8rem; color:var(--brass-ink, #7A5620); white-space:nowrap; font-style:italic; }
 .tol-index.is-member .tol-access{ color:var(--credit); }
 
 /* Larger index on the home page */
@@ -202,7 +202,7 @@ div.tol-gate p{ max-width:60ch; }
 .tol-panel .tol-index-section > h3{ font-style:normal; font-weight:600; font-size:1.25rem; }
 .tol-panel .tol-index-section > p{ font-size:.93rem; line-height:1.5; margin-bottom:.4rem; }
 .tol-panel .tol-row{ padding:.7rem .4rem .7rem .55rem; grid-template-columns:4.6rem 1fr auto; }
-.tol-panel .tol-code{ color:var(--brass); }
+.tol-panel .tol-code{ color:var(--brass-ink, #7A5620); }
 .tol-panel .tol-title{ font-size:1.02rem; font-weight:600; }
 .tol-panel .tol-title small{ font-weight:400; font-size:.9rem; line-height:1.45; margin-top:.2rem; }
 .tol-panel .tol-row[aria-current="page"] .tol-title::after{ content:" (you are here)"; font-weight:400; font-size:.85rem; color:var(--ink-soft); }
@@ -239,7 +239,7 @@ div.tol-gate p{ max-width:60ch; }
 }
 .tol-drop a:hover{ background:var(--paper-deep); }
 .tol-drop a[aria-current="page"]{ background:var(--paper-deep); font-weight:600; }
-.tol-drop-code{ flex:none; min-width:3.6rem; font-family:"IBM Plex Mono", ui-monospace, monospace; font-size:.72rem; color:var(--brass); }
+.tol-drop-code{ flex:none; min-width:3.6rem; font-family:"IBM Plex Mono", ui-monospace, monospace; font-size:.72rem; color:var(--brass-ink, #7A5620); }
 .tol-bar .tol-drop .tol-drop-all{
   display:block; width:100%; margin:.45rem 0 0; padding:.6rem .5rem .2rem; text-align:left;
   border:0; border-top:1px solid var(--line); border-radius:0; background:none;
@@ -281,7 +281,7 @@ div.tol-gate p{ max-width:60ch; }
 .dig{
   display:inline-flex; align-items:center; gap:.4em;
   font-family:"IBM Plex Mono", ui-monospace, monospace; font-size:.8rem; letter-spacing:.02em;
-  color:var(--brass) !important; text-decoration:none !important;
+  color:var(--brass-ink, #7A5620) !important; text-decoration:none !important;
   align-items:flex-start; line-height:1.45; max-width:100%;
 }
 .dig::before{
@@ -322,7 +322,7 @@ div.tol-gate p{ max-width:60ch; }
 .read .ideas > li:hover, .read .ideas > li:focus-within{ background:var(--paper-deep); }
 .read .ideas > li::before{
   content:counter(idea, decimal-leading-zero); display:block; margin:0 0 .35rem;
-  font-family:"IBM Plex Mono", ui-monospace, monospace; font-size:.7rem; letter-spacing:.08em; color:var(--brass);
+  font-family:"IBM Plex Mono", ui-monospace, monospace; font-size:.7rem; letter-spacing:.08em; color:var(--brass-ink, #7A5620);
 }
 .ideas h2, .ideas h3, .read .ideas h2, .read .ideas h3{
   font-family:"Fraunces", Georgia, serif; font-weight:600; font-size:1.2rem !important; line-height:1.25; margin:0 0 .45rem !important;
@@ -368,7 +368,7 @@ details.deeper{
 }
 details.deeper > summary{
   cursor:pointer; list-style:none; padding:.7rem 0;
-  font-family:"IBM Plex Mono", ui-monospace, monospace; font-size:.76rem; letter-spacing:.04em; color:var(--brass);
+  font-family:"IBM Plex Mono", ui-monospace, monospace; font-size:.76rem; letter-spacing:.04em; color:var(--brass-ink, #7A5620);
   display:flex; justify-content:space-between; gap:1rem; align-items:center;
 }
 details.deeper > summary::-webkit-details-marker{ display:none; }
@@ -398,7 +398,7 @@ details.deeper .deeper-body > :first-child{ margin-top:0; }
 .sw-picks li{ margin:.55rem 0; padding-left:1.6rem; position:relative; counter-increment:sw; }
 .sw-picks li::before{
   content:counter(sw); position:absolute; left:0; top:.05rem;
-  font-family:"IBM Plex Mono", ui-monospace, monospace; font-size:.72rem; color:var(--brass);
+  font-family:"IBM Plex Mono", ui-monospace, monospace; font-size:.72rem; color:var(--brass-ink, #7A5620);
 }
 .sw-picks a{ font-weight:600; display:inline-block; }
 .sw-picks span{ display:block; font-size:.92rem; color:var(--ink-soft); line-height:1.5; }
@@ -414,7 +414,7 @@ details.deeper .deeper-body > :first-child{ margin-top:0; }
 }
 .scene-when{
   font-family:"IBM Plex Mono", ui-monospace, monospace; font-size:.7rem; letter-spacing:.06em;
-  color:var(--brass); margin:0 0 .4rem !important;
+  color:var(--brass-ink, #7A5620); margin:0 0 .4rem !important;
 }
 .scene p:not(.scene-when){
   margin:0 !important; font-family:"Fraunces", Georgia, serif; font-style:italic;
@@ -432,7 +432,7 @@ details.deeper .deeper-body > :first-child{ margin-top:0; }
   .tol-sections{ display:none; }
   .tol-contents-btn{ display:inline-block; border-color:var(--ink-soft) !important; font-weight:600; }
 }
-.tol-acc-here{ margin-left:.5rem; font-family:"IBM Plex Mono", ui-monospace, monospace; font-size:.68rem; font-weight:400; color:var(--brass); vertical-align:.15em; }
+.tol-acc-here{ margin-left:.5rem; font-family:"IBM Plex Mono", ui-monospace, monospace; font-size:.68rem; font-weight:400; color:var(--brass-ink, #7A5620); vertical-align:.15em; }
 
 /* A safety note after the cards gets its own callout so it can't be missed */
 .read .ideas + p#safety{
@@ -804,7 +804,7 @@ body:has(.wpf-bar) .tol-breathe-btn{ bottom:calc(4.8rem + env(safe-area-inset-bo
 .tol-tip-k{ font-family:"IBM Plex Mono", ui-monospace, monospace; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:#8A6D8F; }
 .tol-tip-h{ font-family:"Fraunces", Georgia, serif; font-weight:600; font-size:1.15rem; margin:.25rem 0 .2rem !important; color:var(--ink); }
 .tol-tip-b{ color:var(--ink-soft); line-height:1.55; }
-.tol-tip-next{ margin-top:.7rem; font:inherit; font-size:.85rem; padding:.35rem .9rem; border-radius:999px; border:1px solid #D9C8F0; background:#fff; color:#4E3F6B; cursor:pointer; }
+.tol-tip-next{ margin-top:.7rem; font:inherit; font-size:.85rem; padding:.35rem .9rem; min-height:44px; border-radius:999px; border:1px solid #D9C8F0; background:#fff; color:#4E3F6B; cursor:pointer; }
 .tol-tip-next:hover{ background:#F3EEF9; }
 @media (max-width:560px){ .tol-tip{ padding:1rem; gap:.75rem; } .tol-tip img{ width:2.6rem; height:2.6rem; } }
 @media (prefers-reduced-motion: reduce){ .tol-tip img{ animation:none; } }
@@ -1189,6 +1189,9 @@ button.tol-dive{ display:inline !important; width:auto !important; min-height:0 
 @media (prefers-reduced-motion: reduce){ .growing-note .growing-ic{ animation:none; } }
 /* mini dives sit above a card's stretched "Dig deeper" link, so both can be tapped */
 .tol-dive{ position:relative; z-index:2; }
+/* a bigger, invisible tap area (at least 44px) around each mini dive; the words themselves look and wrap the same */
+.tol-dive::after{ content:""; position:absolute; left:50%; top:50%; width:calc(100% + 8px); min-width:44px; height:100%; min-height:44px; transform:translate(-50%, -50%); background:none; border-radius:8px; pointer-events:auto; }
+@media print{ .tol-dive::after{ content:none; } }
 /* the dive card: the title and depth meter stay put, and the layers scroll inside */
 .tol-dive-box{ display:flex; flex-direction:column; overflow:hidden; max-height:min(80vh, 40rem); }
 .tol-dive-body{ flex:1 1 auto; min-height:4rem; overflow-y:auto; overscroll-behavior:contain; -webkit-overflow-scrolling:touch; margin:0 -.5rem; padding:0 .5rem; scrollbar-width:thin;
@@ -1203,7 +1206,7 @@ button.tol-dive{ display:inline !important; width:auto !important; min-height:0 
 .tol-cheer-line{ display:block; font-family:"Fraunces", Georgia, serif; font-style:italic; }
 .tol-cheer.is-fact .tol-cheer-line{ font-style:normal; font-family:"Lora", Georgia, serif; font-size:.92rem; }
 .tol-cheer.is-fact .tol-cheer-say{ background:rgba(240,248,255,.9); border-color:rgba(143,188,227,.45); }
-.tol-cheer-more{ display:inline-flex; align-items:center; gap:.25rem; margin:.35rem 0 0; padding:.3rem .75rem; min-height:36px; border-radius:999px; border:1px solid rgba(143,188,227,.6);
+.tol-cheer-more{ display:inline-flex; align-items:center; gap:.25rem; margin:.35rem 0 0; padding:.3rem .75rem; min-height:44px; border-radius:999px; border:1px solid rgba(143,188,227,.6);
   background:#F2F9FE; color:#2F5F8A; font:600 .85rem/1.2 "Lora", Georgia, serif; font-style:normal; cursor:pointer; }
 .tol-cheer-more:hover{ background:#E1F0FB; }
 .tol-cheer.is-chat .tol-cheer-more{ border-color:rgba(217,200,240,.9); background:#F7F2FD; color:#5B4A86; }
@@ -1763,3 +1766,6 @@ body .jl-pal .jl-tagline{ color:#6E5373; }
 @media (prefers-reduced-motion: reduce){ .pc-launch .pc-dot{ animation:none; } }
 
 html.tol-still .pc-launch .pc-dot{ animation:none; }
+
+/* ---------- Screen-reader-only text: read aloud, not shown ---------- */
+.sr-only{ position:absolute !important; width:1px !important; height:1px !important; padding:0 !important; margin:-1px !important; overflow:hidden !important; clip:rect(0 0 0 0) !important; clip-path:inset(50%) !important; white-space:nowrap !important; border:0 !important; }

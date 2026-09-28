@@ -61,7 +61,7 @@
 .tol-header-logo p {
   font-family: "IBM Plex Mono", monospace;
   font-size: 0.7rem;
-  color: var(--brass);
+  color: var(--brass-ink, #7A5620);
   text-transform: uppercase;
   letter-spacing: 0.1em;
   margin: 0.25rem 0 0 0;
@@ -135,7 +135,7 @@
 }
 
 .breadcrumb a {
-  color: var(--brass);
+  color: var(--brass-ink, #7A5620);
   text-decoration: none;
   transition: all 0.2s;
 }
@@ -169,7 +169,7 @@
 
 .context-box h3 {
   margin-top: 0;
-  color: var(--brass);
+  color: var(--brass-ink, #7A5620);
   font-size: 1.1rem;
 }
 
@@ -208,7 +208,7 @@
 
 .use-with-block h4 {
   margin-top: 0;
-  color: var(--brass);
+  color: var(--brass-ink, #7A5620);
   font-size: 1rem;
   border-bottom: 1px solid var(--line);
   padding-bottom: 0.75rem;
@@ -246,7 +246,7 @@
 }
 
 .use-item a {
-  color: var(--brass);
+  color: var(--brass-ink, #7A5620);
   text-decoration: none;
   font-weight: 600;
   display: inline;
@@ -294,7 +294,7 @@
 .domain-indicator h4 {
   margin-top: 0;
   font-size: 0.95rem;
-  color: var(--brass);
+  color: var(--brass-ink, #7A5620);
   border-bottom: 1px solid var(--line);
   padding-bottom: 0.75rem;
 }
@@ -361,7 +361,7 @@
 
 .next-steps h3 {
   margin-top: 0;
-  color: var(--brass);
+  color: var(--brass-ink, #7A5620);
 }
 
 .next-steps p {
@@ -409,7 +409,7 @@
 .tol-integration h4 {
   margin-top: 0;
   font-size: 1rem;
-  color: var(--brass);
+  color: var(--brass-ink, #7A5620);
   border-bottom: 1px solid var(--line);
   padding-bottom: 0.75rem;
 }
@@ -431,7 +431,7 @@
 .tool-category h5 {
   margin: 0 0 0.75rem 0;
   font-size: 0.9rem;
-  color: var(--brass);
+  color: var(--brass-ink, #7A5620);
   font-weight: 600;
 }
 
@@ -449,7 +449,7 @@
 }
 
 .tool-category a {
-  color: var(--brass);
+  color: var(--brass-ink, #7A5620);
   text-decoration: none;
   transition: all 0.2s;
 }
@@ -475,7 +475,7 @@
 .footer-nav a {
   display: inline-block;
   margin: 0 1rem;
-  color: var(--brass);
+  color: var(--brass-ink, #7A5620);
   text-decoration: none;
   font-size: 0.9rem;
   transition: all 0.2s;
@@ -515,7 +515,7 @@
 .integrate-with-wp13 h4,
 .scenario-reference h4 {
   margin-top: 0;
-  color: var(--brass);
+  color: var(--brass-ink, #7A5620);
 }
 
 .deployment-flow p,
@@ -531,7 +531,7 @@
 .wp13-integration strong,
 .integrate-with-wp13 strong,
 .scenario-reference strong {
-  color: var(--brass);
+  color: var(--brass-ink, #7A5620);
 }
 
 /* ===================================================================

@@ -245,14 +245,14 @@
 .ws-stops > .ws-stop:last-child::before{ display: none; }
 .ws-dot{
   flex: none; width: 44px; height: 44px; border-radius: 50%; display: grid; place-items: center;
-  background: #fff; border: 2px solid #D6BE8E; color: #A8792F; font-family: "IBM Plex Mono", ui-monospace, monospace; font-size: .9rem;
+  background: #fff; border: 2px solid #D6BE8E; color: var(--brass-ink, #7A5620); font-family: "IBM Plex Mono", ui-monospace, monospace; font-size: .9rem;
   transition: background-color .5s, border-color .5s;
 }
 .ws-stop.is-done .ws-dot{ background: var(--c); border-color: #E8A5B8; color: #C95B7A; font-size: 1.2rem; box-shadow: inset -4px -5px 0 rgba(255,255,255,.35); }
 .ws-stop.is-stamp .ws-dot{ animation: ws-stamp .8s var(--ease-out, ease); }
 .ws-stop-body{ flex: 1; min-width: 0; padding: 10px 14px 12px; border-radius: 18px; background: #FFFDF7; border: 1px solid rgba(60,51,80,.1); }
 .ws-stop.is-done .ws-stop-body{ border-color: #F0C9D5; }
-.ws-stop-code{ margin: 0; font-family: "IBM Plex Mono", ui-monospace, monospace; font-size: .72rem; color: #A8792F; }
+.ws-stop-code{ margin: 0; font-family: "IBM Plex Mono", ui-monospace, monospace; font-size: .72rem; color: var(--brass-ink, #7A5620); }
 .ws .ws-stop-name{ margin: .1em 0 .15em; font-size: 1.12rem; line-height: 1.25; }
 .ws-stop-why{ margin: 0 0 .6em; font-size: .92em; color: var(--ink-soft, #524B3E); }
 .ws-sheets{ display: flex; flex-wrap: wrap; gap: 8px; }
@@ -319,7 +319,7 @@ html.ws-locked .tol-breathe-btn, html.ws-locked .tol-wx{ visibility: hidden; }
 }
 .ws-sheet.is-in .ws-sheet-panel{ transform: none; }
 .ws-sheet-top{ display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; padding: 16px 20px 10px; border-bottom: 1px solid var(--line, #D9CBA3); }
-.ws-sheet-code{ margin: 0; font-family: "IBM Plex Mono", ui-monospace, monospace; font-size: .72rem; color: #A8792F; }
+.ws-sheet-code{ margin: 0; font-family: "IBM Plex Mono", ui-monospace, monospace; font-size: .72rem; color: var(--brass-ink, #7A5620); }
 .ws-sheet-title{ margin: .1em 0 0; font-size: 1.35rem; }
 .ws-sheet-title:focus{ outline: none; }
 .ws-sheet-x{ flex: none; width: 44px; height: 44px; border-radius: 50%; border: 1px solid var(--line, #D9CBA3); background: #fff; font-size: 1.5rem; line-height: 1; cursor: pointer; color: var(--ink, #211D17); }
@@ -380,7 +380,7 @@ html.ws-locked .tol-breathe-btn, html.ws-locked .tol-wx{ visibility: hidden; }
 .ws-view button[aria-pressed="true"]{ background:#fff; box-shadow:0 2px 8px rgba(120,90,140,.15); font-weight:600; }
 .ws-weeks{ list-style:none; padding:0; margin:0; display:grid; gap:12px; }
 .ws-week{ margin:0; padding:14px 16px; border-radius:20px; background:#FFFDF7; border:1px solid rgba(60,51,80,.1); }
-.ws-week-k{ margin:0; font-family:"IBM Plex Mono", ui-monospace, monospace; font-size:.72rem; letter-spacing:.1em; text-transform:uppercase; color:#A8792F; }
+.ws-week-k{ margin:0; font-family:"IBM Plex Mono", ui-monospace, monospace; font-size:.72rem; letter-spacing:.1em; text-transform:uppercase; color: var(--brass-ink, #7A5620); }
 .ws .ws-week-h{ margin:.1em 0 .3em; font-size:1.15rem; }
 .ws-week-do{ margin:0 0 .7em; color:var(--ink, #211D17); }
 .ws-week .ws-sheets{ margin-bottom:.6em; }

@@ -83,7 +83,12 @@
     save();
     var res = { level: level(), streak: S.streak, unlocked: fresh, next: nextUnlock() };
     if (!opts.quiet && !fresh.length) toast(res, why);
-    if (fresh.length && !opts.noCard) setTimeout(function () { unlockCard(fresh[0]); }, opts.cardDelay || 1400);
+    if (fresh.length && !opts.noCard) {
+      // From a "Check yourself" card (learn-play): a small note that doesn't block the page, and
+      // it waits until the reader has finished with the card. The games keep the full card.
+      if (source === 'learn-play' || opts.soft) whenCalm(function () { unlockToast(fresh[0]); });
+      else setTimeout(function () { unlockCard(fresh[0]); }, opts.cardDelay || 1400);
+    }
     renderChips();
     return res;
   }
@@ -135,6 +140,33 @@
     requestAnimationFrame(function () { toastEl.classList.add('is-in'); });
     clearTimeout(toastTimer);
     toastTimer = setTimeout(function () { toastEl.classList.remove('is-in'); }, 3200);
+  }
+  // A quiet unlock note for reading pages: the same soft toast, no dialog, nothing to close.
+  function unlockToast(u) {
+    if (typeof document === 'undefined') return;
+    style();
+    if (!toastEl) { toastEl = document.createElement('div'); toastEl.className = 'tr-toast'; toastEl.setAttribute('role', 'status'); document.body.appendChild(toastEl); }
+    toastEl.innerHTML = '<b aria-hidden="true">' + esc(u.icon || '🌸') + '</b><span>Something new in the garden: ' + esc(u.name) +
+      '<small>Look behind the page to find it.</small></span>';
+    requestAnimationFrame(function () { toastEl.classList.add('is-in'); });
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function () { toastEl.classList.remove('is-in'); }, 5200);
+  }
+  // Wait while someone is working through a learn-play card (focus moving, taps or typing inside
+  // .lp-*), then run fn once that has been quiet for a few seconds (or after 20 seconds at most).
+  var lpLast = 0;
+  function inLp(n) { return !!(n && n.closest && n.closest('.lp-card, .lp-trail, .lp-eli-panel, [class^="lp-"], [class*=" lp-"]')); }
+  if (typeof document !== 'undefined') ['pointerdown', 'keydown', 'focusin', 'input'].forEach(function (t) {
+    document.addEventListener(t, function (e) { if (inLp(e.target)) lpLast = Date.now(); }, true);
+  });
+  function whenCalm(fn) {
+    if (typeof document === 'undefined') return;
+    var start = Date.now();
+    (function check() {
+      var busy = Date.now() - lpLast < 3000;
+      if (busy && Date.now() - start < 20000) { setTimeout(check, 800); return; }
+      fn();
+    })();
   }
   function esc(t) { return String(t).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
 
