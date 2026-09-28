@@ -167,8 +167,8 @@
   var DEFAULT_RX = 'CC1AD845', VIDEO = location.origin + '/assets/video/pal-cam-loop.webm', POSTER = location.origin + '/assets/video/pal-cam-poster.jpg';
   function ssGet(k) { try { return sessionStorage.getItem(k); } catch (e) { return null; } }
   function ssSet(k, v) { try { sessionStorage.setItem(k, v); } catch (e) {} }
-  var videoMode = /[?&]cast=video\b/.test(location.search) || (!castTest && ssGet('tv-cast-video') === '1') || (castTest && CAST_APP_ID === DEFAULT_RX);
-  if (/[?&]cast=live\b/.test(location.search)) { videoMode = false; ssSet('tv-cast-video', '0'); }
+  // The video version is the default: it works on every Chromecast. ?cast=live tries the live app instead.
+  var videoMode = !/[?&]cast=live\b/.test(location.search) && !(castTest && CAST_APP_ID !== DEFAULT_RX);
   if (videoMode) CAST_APP_ID = DEFAULT_RX;
   function addScript(src) { var sc = document.createElement('script'); sc.src = src; document.head.appendChild(sc); return sc; }
   if (receiver) {
