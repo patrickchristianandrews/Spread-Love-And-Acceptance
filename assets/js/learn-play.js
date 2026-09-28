@@ -67,11 +67,11 @@
   var hasCSP = !!doc.querySelector('meta[http-equiv="Content-Security-Policy"]');
 
   var PILLARS = [null,
-    { roman: 'I', name: 'See the whole load', hint: 'this one is about seeing work that’s easy to miss.' },
-    { roman: 'II', name: 'Fix the setup', hint: 'this one changes how things are set up, not who gets blamed.' },
-    { roman: 'III', name: 'Read your state first', hint: 'this one checks how much charge you have before you talk.' },
-    { roman: 'IV', name: 'Tune how you send and receive', hint: 'this one is about how words are sent and heard.' },
-    { roman: 'V', name: 'Notice the quiet incentives', hint: 'this one is about quiet defaults and drift.' }];
+    { roman: 'I', name: 'See the whole load', plain: 'Notice all the work, even the unseen kind', hint: 'Is this about making hidden work visible?' },
+    { roman: 'II', name: 'Fix the setup', plain: 'Change who does what, not who’s to blame', hint: 'Is this about changing how a job is arranged or who owns it?' },
+    { roman: 'III', name: 'Read your state first', plain: 'Check how tired or stressed you are first', hint: 'Is this about checking your own energy or stress before reacting?' },
+    { roman: 'IV', name: 'Tune how you send and receive', plain: 'Pick words that land the way you mean', hint: 'Is this about choosing words, or how a message is heard?' },
+    { roman: 'V', name: 'Notice the quiet incentives', plain: 'Spot jobs that drift to one person unasked', hint: 'Is this about a job that slid to someone without anyone deciding?' }];
   var KIND = { quiz: 'Quick question', sort: 'Sort it', pillar: 'Which pillar is this?', match: 'Match it up', flip: 'Tap to flip', wyr: 'Would you rather', gap: 'Fill the gap', slider: 'Slide and see' };
   var YAY = ['Yes!', 'Spot on!', 'Nailed it.', 'Exactly right.', 'Lovely!', 'You got it.'];
   function yay() { return YAY[Math.floor(Math.random() * YAY.length)]; }
@@ -134,6 +134,8 @@
       '.lp-bins .lp-btn{justify-content:center;text-align:center}' +
       '.lp-bins .lp-pil{display:inline-grid;place-items:center;min-width:1.9rem;height:1.9rem;padding:0 .3rem;border-radius:999px;background:#F3EAFB;color:#4E3F6B;font:600 .75rem/1 "IBM Plex Mono",monospace}' +
       '.lp-btn[aria-disabled="true"] .lp-pil{background:rgba(255,255,255,.6)}' +
+      '.lp-k-pillar .lp-bins{grid-template-columns:repeat(auto-fit,minmax(15rem,1fr))}.lp-k-pillar .lp-bins .lp-btn{justify-content:flex-start;text-align:left;gap:.65rem}' +
+      '.lp-pn{display:grid;gap:.1rem}.lp-pn small{font:400 .86rem/1.3 Lora,Georgia,serif;opacity:.85}' +
       /* match */
       '.lp-match{display:grid;grid-template-columns:1fr 1fr;gap:.6rem .8rem}.lp-match h4{margin:0 0 .15rem !important;font:600 .76rem/1.2 "IBM Plex Mono",monospace;letter-spacing:.05em;text-transform:uppercase;color:var(--lp-plum)}' +
       '.lp-col{display:grid;gap:.45rem;align-content:start}.lp-col .lp-btn{font-size:.95rem}' +
@@ -254,11 +256,11 @@
     ui.body.appendChild(list);
     return { solve: function () { for (var i = 0; i < m.o.length; i++) if (m.o[i][1]) { win(btns[i], m.o[i][2]); break; } } };
   };
-  function good(t) { t = t || yay(); var m = /^(Yes!|Yes\.|Exactly\.|Exactly right\.|Spot on!|Nailed it\.)\s*/.exec(t); return m ? '<b>' + esc(m[1]) + '</b> ' + esc(t.slice(m[0].length)) : '<b>' + yay() + '</b> ' + esc(t); }
+  function good(t) { t = t || yay(); var m = /^(Yes!|Yes\.|Yes,|Exactly\.|Exactly right\.|Spot on!|Nailed it\.)\s*/.exec(t); return m ? '<b>' + esc(m[1]) + '</b> ' + esc(t.slice(m[0].length)) : '<b>' + yay() + '</b> ' + esc(t); }
   function twist(t) {
-    t = t || 'Close! Here’s the twist: try another one.';
-    var m = /^(Ha, close!|Ha! Close\.|Close!)\s*/.exec(t);
-    return m ? '<b>' + esc(m[1]) + '</b> ' + esc(t.slice(m[0].length)) : '<b>Close!</b> ' + esc(t);
+    t = t || 'Not quite. Try another one.';
+    var m = /^(Not quite\.)\s*/.exec(t);
+    return m ? '<b>' + esc(m[1]) + '</b> ' + esc(t.slice(m[0].length)) : '<b>Not quite.</b> ' + esc(t);
   }
 
   function sorter(m, ui, bins, hintFor, noteFor) {
@@ -266,7 +268,7 @@
     var wrap = el('div', { class: 'lp-sort' });
     var count = el('span', { class: 'lp-count' }), item = el('p', { class: 'lp-sortitem' });
     var grid = el('div', { class: 'lp-opts is-row lp-bins', role: 'group', 'aria-label': 'Choose where it goes' });
-    var nextRow = el('div', { class: 'lp-row' }), next = btn('Next card →', { class: 'lp-btn lp-next' });
+    var nextRow = el('div', { class: 'lp-row' }), next = btn('Next example →', { class: 'lp-btn lp-next' });
     next.hidden = true; nextRow.appendChild(next);
     var bBtns = bins.map(function (label, bi) {
       var b = btn(label, { 'data-lp-bin': bi });
@@ -278,7 +280,7 @@
           ui.say(good(noteFor(it, bi)));
           if (at === order.length - 1) { at++; count.textContent = 'All ' + order.length + ' sorted'; ui.finish(); }
           else { next.hidden = false; next.focus(); }
-        } else { b.classList.add('is-tried'); off(b); ui.say(twist('Close! Here’s the twist: ' + hintFor(it)), true); }
+        } else { b.classList.add('is-tried'); off(b); ui.say(twist('Not quite. ' + hintFor(it)), true); }
       });
       return b;
     });
@@ -287,10 +289,11 @@
     function show() {
       next.hidden = true;
       bBtns.forEach(function (b) { b.classList.remove('is-right', 'is-tried'); b.removeAttribute('aria-disabled'); });
-      count.textContent = 'Card ' + (at + 1) + ' of ' + order.length;
+      count.textContent = 'Example ' + (at + 1) + ' of ' + order.length;
       item.innerHTML = esc(m.items[order[at]][0]);
       item.classList.remove('lp-pop-in'); void item.offsetWidth; if (!still()) item.classList.add('lp-pop-in');
     }
+    wrap.appendChild(el('p', { class: 'lp-help' }, 'Read the example, then tap the answer that fits. A new example follows until all ' + order.length + ' are done.'));
     wrap.appendChild(count); wrap.appendChild(item); wrap.appendChild(grid); wrap.appendChild(nextRow);
     ui.body.appendChild(wrap); show();
     return { solve: function () {
@@ -304,10 +307,10 @@
       function (it, bi) { return it[2] || (yay() + ' That one is “' + m.bins[bi] + '.”'); });
   };
   R.pillar = function (m, ui) {
-    var only = m.only || [1, 2, 3, 4, 5], bins = only.map(function (p) { return '<span class="lp-pil" aria-hidden="true">' + PILLARS[p].roman + '</span> ' + esc(PILLARS[p].name); });
+    var only = m.only || [1, 2, 3, 4, 5], bins = only.map(function (p) { return '<span class="lp-pil" aria-hidden="true">' + PILLARS[p].roman + '</span> <span class="lp-pn"><b>' + esc(PILLARS[p].name) + '</b><small>' + esc(PILLARS[p].plain) + '</small></span>'; });
     var mm = { items: m.items.map(function (it) { return [it[0], only.indexOf(it[1]), it[2]]; }) };
-    return sorter(mm, ui, bins, function (it) { return PILLARS[only[it[1]]].hint; },
-      function (it) { var p = PILLARS[only[it[1]]]; return it[2] || (yay() + ' That’s Pillar ' + p.roman + ', ' + p.name + '.'); });
+    return sorter(mm, ui, bins, function (it) { var h = PILLARS[only[it[1]]].hint; return 'Ask yourself: ' + h.charAt(0).toLowerCase() + h.slice(1); },
+      function (it) { var p = PILLARS[only[it[1]]]; return it[2] || (yay() + ' That’s Pillar ' + p.roman + ', ' + p.name + ': ' + p.plain.toLowerCase() + '.'); });
   };
 
   R.match = function (m, ui) {
@@ -323,7 +326,7 @@
       var li = side === 'L' ? i : sel.i, ri = side === 'R' ? i : sel.i;
       sel.b.setAttribute('aria-pressed', 'false');
       if (li === ri) { pair(li); ui.say(good(yay() + ' “' + m.pairs[li][0] + '” means ' + lower(m.pairs[li][1]) + '.')); if (matched === m.pairs.length) ui.finish(); }
-      else { var b2 = sel.b; ui.say(twist('Close! Here’s the twist: those two aren’t a pair. Try another.'), true); [b, b2].forEach(function (x) { x.classList.add('is-tried'); setTimeout(function () { x.classList.remove('is-tried'); }, 900); }); }
+      else { var b2 = sel.b; ui.say(twist('Not quite. Those two aren’t a pair. Try another.'), true); [b, b2].forEach(function (x) { x.classList.add('is-tried'); setTimeout(function () { x.classList.remove('is-tried'); }, 900); }); }
       sel = null;
     }
     function lower(t) { return /^[“"]/.test(t) ? t : t.charAt(0).toLowerCase() + t.slice(1); }
@@ -390,7 +393,7 @@
       b.addEventListener('click', function () {
         if (isOff(b)) return;
         if (i === m.a) { fill(); ui.say(good(m.say)); ui.finish(); }
-        else { b.classList.add('is-tried'); off(b); ui.say(twist('Close! Here’s the twist: “' + m.o[i] + '” isn’t quite the page’s word. Try another.'), true); }
+        else { b.classList.add('is-tried'); off(b); ui.say(twist('Not quite. “' + m.o[i] + '” isn’t the page’s word. Try another.'), true); }
       });
       bs[i] = b; chips.appendChild(b);
     });
@@ -512,7 +515,7 @@
       var id = 'lp-m' + (i + 1), hid = id + '-h', tint = (i % 4) + 1;
       var c = el('aside', { class: 'lp-card no-dive lp-t' + tint + ' lp-k-' + m.k, id: id, 'aria-labelledby': hid, 'data-lp-i': i });
       c.innerHTML = '<div class="lp-top"><span class="lp-badge" aria-hidden="true">' + ({ quiz: '💭', sort: '🗂️', pillar: '🏛️', match: '🧩', flip: '🃏', wyr: '🔀', gap: '✏️', slider: '🎚️' }[m.k] || '🌸') + '</span>' +
-        '<p class="lp-kicker">Check yourself · ' + esc(KIND[m.k] || 'Moment') + ' · ' + (i + 1) + ' of ' + total + '</p><span class="lp-found" hidden>🌸 Found</span></div>' +
+        '<p class="lp-kicker">Check yourself · ' + (i + 1) + ' of ' + total + ' on this page</p><span class="lp-found" hidden>🌸 Found</span></div>' +
         '<h3 class="lp-q" id="' + hid + '">' + esc(m.q || '') + '</h3><div class="lp-body"></div><p class="lp-say" aria-live="polite"></p>' +
         '<div class="lp-done-row" hidden><span class="lp-done-t"></span><button type="button" class="lp-btn lp-ghost lp-again">Play it again</button></div>';
       var body = c.querySelector('.lp-body'), sayEl = c.querySelector('.lp-say'), doneRow = c.querySelector('.lp-done-row'), found = c.querySelector('.lp-found');
