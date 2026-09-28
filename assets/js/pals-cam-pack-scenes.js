@@ -5,7 +5,7 @@
    ambient(g, env, t, layer) (cheap per-frame motion, layer 'back' or 'front'), sky(g, env, sky) (optional:
    paint your own sky, e.g. underwater or in space), indoor, water, snow, leaves, fireflies }.
    env: { x0, x1, y0, y1 (the visible stage), dark (0 day .. 1 night) }. The ground line is at y = 248.
-   Tidbit is T (index 0, the big smile); Sugarfoot is S (index 1, the gentle wag and tan eyebrow dots). */
+   Tidbit is T (index 0, the big smile); Sugarfoot is S (index 1, the gentle wag and white feet). */
 (function () {
   'use strict';
   var PI = Math.PI, TAU = PI * 2, G = 248;

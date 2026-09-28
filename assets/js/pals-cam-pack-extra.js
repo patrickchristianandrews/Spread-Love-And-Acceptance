@@ -5,7 +5,7 @@
    - story arcs that continue across visits (story: id, part: n); the engine plays the next part now and then
    - rare moments (rare: true), about one check-in in fifty
    - more everyday activities for anywhere
-   Tidbit is T (the big smile); Sugarfoot is S (the gentle wag, tan eyebrow dots). Both have a big heart of gold. */
+   Tidbit is T (the big smile); Sugarfoot is S (the gentle wag, white feet). Both have a big heart of gold. */
 (function () {
   'use strict';
   var PI = Math.PI, TAU = PI * 2;

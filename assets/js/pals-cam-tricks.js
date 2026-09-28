@@ -6,7 +6,7 @@
    - interludes: short personality moments that sometimes play between activities (not counted in the tally).
    - quips: little things they say on the way to the next activity, and how each reacts to the other's tricks.
    - facts: the "Pal facts" drawer shows three of these per pal each time the cam opens.
-   Tidbit is index 0 (looks.drop: the big smile); Sugarfoot is index 1 (looks.collar: the gentle wag, tan eyebrow dots).
+   Tidbit is index 0 (looks.drop: the big smile); Sugarfoot is index 1 (looks.collar: the gentle wag, white feet).
    Both have a big heart of gold. */
 (function () {
   'use strict';

@@ -23,7 +23,7 @@
   function motionMode() { RM = RM0 || stillNow(); SPEED = RM ? 0.72 : 1; PMAX = RM ? 50 : 140; if (typeof A !== 'undefined' && A) { A.R = RM; AO.R = RM; AP.R = RM; AT.R = RM; } }
   motionMode();
   document.addEventListener('tol-still', function () { motionMode(); });
-  var NAMES = ['Tidbit', 'Sugarfoot'], LOOKS = ['drop', 'collar']; // Tidbit: the big smile; Sugarfoot: the collar
+  var NAMES = ['Tidbit', 'Sugarfoot'], LOOKS = ['collar', 'drop']; // Tidbit: the tan mask (looks.collar); Sugarfoot: the white feet (looks.drop)
   function leanOf(i) { var P = window.TOLPups; return !!(P && P.looks[LOOKS[i]] && P.looks[LOOKS[i]].build === 'lean'); }
   var LEAN = [false, true];
   // who they are, in how they fidget: Tidbit quick and busy, Sugarfoot slow, steady and leaning on her pal
@@ -114,6 +114,7 @@
     // a pal drawn anywhere at any size (for tiny dogs, portraits and photos)
     pup: function (g, key, x, y, s, face, pose, t, wag) {
       var P = window.TOLPups; if (!P) return;
+      key = key === 'drop' ? LOOKS[0] : key === 'collar' ? LOOKS[1] : key; // in the acts, 'drop' means Tidbit's look and 'collar' Sugarfoot's
       g.save(); g.translate(x, y); g.scale(s * (face || 1), s); P.draw(g, P.looks[key], pose || 'sit', t / 90, wag == null ? Math.sin(t / 110) * 0.5 : wag, false, t, 0); g.restore();
     }
   };

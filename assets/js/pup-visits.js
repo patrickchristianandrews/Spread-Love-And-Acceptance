@@ -251,8 +251,8 @@
 
   // ---------- who they are ----------
   var PER = {
-    tidbit: { name: 'Tidbit', look: 'drop', speed: 0.46, wagRate: 0.0135, amp: 0.55, blink: [2200, 4200], blinkDur: 110, breathe: 380, tiltEvery: [1800, 3400], tiltAmp: 0.22, tiltDur: 600 },
-    sugarfoot: { name: 'Sugarfoot', look: 'collar', speed: 0.32, wagRate: 0.0078, amp: 0.4, blink: [3600, 6200], blinkDur: 230, breathe: 560, tiltEvery: [4200, 6800], tiltAmp: 0.13, tiltDur: 1400 }
+    tidbit: { name: 'Tidbit', look: 'collar', speed: 0.46, wagRate: 0.0135, amp: 0.55, blink: [2200, 4200], blinkDur: 110, breathe: 380, tiltEvery: [1800, 3400], tiltAmp: 0.22, tiltDur: 600 },
+    sugarfoot: { name: 'Sugarfoot', look: 'drop', speed: 0.32, wagRate: 0.0078, amp: 0.4, blink: [3600, 6200], blinkDur: 230, breathe: 560, tiltEvery: [4200, 6800], tiltAmp: 0.13, tiltDur: 1400 }
   };
   var SOLO = {
     tidbit: [['spin', 3], ['zoomies', 3], ['sniff', 2], ['sneeze', 2], ['wave', 2], ['wag', 1.5], ['heart', 1]],

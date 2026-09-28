@@ -16,8 +16,7 @@
    spin(d, t0, dur, turns), say(d, text, a, b), once(t), tick(period, from, to), burst(x, y, n, kind, opts), shake(px),
    head(i), mouth(i), pos(i), headL(i), pup(g, 'drop'|'collar', x, y, scale, face, pose), U (drawing helpers),
    dark (it's dusk or night), water, snow, setting, R (reduced motion).
-   Tidbit is T (index 0, looks.drop: the big smile, floppy ears, white toes); Sugarfoot is S (index 1, looks.collar: the gentle wag,
-   tan eyebrow dots and a gentle, slow wag). Both have a big heart of gold. */
+   Tidbit is T (index 0, the tan mask, drawn with looks.collar); Sugarfoot is S (index 1, the white feet, drawn with looks.drop). In pup(g, key…), 'drop' means Tidbit's look and 'collar' Sugarfoot's; pals-cam.js maps them. Both have a big heart of gold. */
 (function () {
   'use strict';
   var PI = Math.PI, TAU = PI * 2;
