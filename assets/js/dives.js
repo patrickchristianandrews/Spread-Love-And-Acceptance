@@ -62,6 +62,31 @@
   }
 
   var ICON = '<span class="tol-dive-i" aria-hidden="true"></span>';
+
+  // "Here on this page": an optional line that ties a term to the page it was tapped on.
+  // ctx keys: a page path (a simple page and its -in-depth twin share one), a folder
+  // prefix ending in "/", or sec: { <body data-sec>: '…' } for a whole section.
+  function hereLine(d) {
+    var c = d.ctx; if (!c) return '';
+    var p = location.pathname || '/'; if (p.slice(-1) === '/') p += 'index.html';
+    var twin = p.replace(/-in-depth\.html$/, '.html');
+    if (c[p]) return c[p];
+    if (c[twin]) return c[twin];
+    var best = '';
+    Object.keys(c).forEach(function (k) { if (k.slice(-1) === '/' && k.charAt(0) === '/' && p.indexOf(k) === 0 && k.length > best.length) best = k; });
+    if (best) return c[best];
+    var sec = document.body.getAttribute('data-sec');
+    return (c.sec && sec && c.sec[sec]) || '';
+  }
+  var CSS = '.tol-dive-here{ margin:.15rem 0 .65rem !important; padding:.5rem .75rem; border-left:3px solid #7FB3DA; border-radius:8px; background:rgba(150,194,232,.16); font-size:.94rem; }' +
+    '.tol-dive-here b{ font-weight:600; color:#2F5F8A; }' +
+    '.tol-dive-tease{ margin:0 !important; font-size:.9rem; line-height:1.45; color:#4F7597; }' +
+    '.tol-dive-card .tol-dive-more a{ min-height:44px; display:inline-flex; align-items:center; }' +
+    '.tol-dive-card .tol-dive-x{ width:44px; height:44px; top:8px; right:8px; }';
+  function addCss() {
+    if (document.getElementById('tol-dive-css')) return;
+    var st = document.createElement('style'); st.id = 'tol-dive-css'; st.textContent = CSS; document.head.appendChild(st);
+  }
   function makeBtn(key, word) {
     var b = document.createElement('button');
     b.type = 'button'; b.className = 'tol-dive'; b.setAttribute('data-dive', key);
@@ -77,6 +102,7 @@
     var d = G[key]; if (!d) return;
     lastBtn = from;
     if (!box) {
+      addCss();
       box = document.createElement('div');
       box.className = 'tol-dive-card'; box.setAttribute('role', 'dialog'); box.setAttribute('aria-modal', 'true'); box.setAttribute('aria-labelledby', 'tol-dive-h');
       box.innerHTML = '<div class="tol-dive-box"><button type="button" class="tol-dive-x" aria-label="Close">&times;</button>' +
@@ -95,20 +121,21 @@
     // the layers, from the shore to the deep: a line to start, then a little more, then the shallows
     var paras = (d.d || '').split('\n').filter(Boolean);
     layers = [d.s || paras[0], d.f || (d.s ? '' : paras[1]), d.w || (d.s ? '' : paras.slice(2).join('\n')), d.x || ''].filter(Boolean);
-    depth = 0; cur = d;
+    depth = 0; cur = d; hereText = hereLine(d);
     box.querySelector('.tol-dive-body').innerHTML = '';
     paint();
     box.classList.add('is-open');
     requestAnimationFrame(function () { box.classList.add('is-in'); });
     box.querySelector('.tol-dive-x').focus();
   }
-  var layers = [], depth = 0, cur = null;
+  var layers = [], depth = 0, cur = null, hereText = '';
   var STEPS = [['\uD83C\uDFD6', 'On the shore'], ['\uD83D\uDC63', 'Toes in the water'], ['\uD83C\uDF0A', 'The shallows'], ['\uD83C\uDFCA', 'Waist deep']], DEEP = ['\uD83E\uDD3F', 'The deep'];
   function paint() {
     var body = box.querySelector('.tol-dive-body'), d = cur;
     var t = layers[depth] || '';
     body.insertAdjacentHTML('beforeend', '<div class="tol-dive-layer' + (depth ? ' is-new' : '') + '"><p class="tol-dive-step">' + STEPS[depth][0] + ' ' + STEPS[depth][1] + '</p>' +
-      t.split('\n').map(function (p) { return '<p>' + esc(p) + '</p>'; }).join('') + '</div>');
+      t.split('\n').map(function (p) { return '<p>' + esc(p) + '</p>'; }).join('') +
+      (depth === 0 && hereText ? '<p class="tol-dive-here"><b>Here on this page:</b> ' + esc(hereText) + '</p>' : '') + '</div>');
     var here = d.u && (location.pathname + location.hash) === d.u, deep = d.u && !here;
     var total = layers.length + (deep ? 1 : 0);
     box.querySelector('.tol-dive-meter').innerHTML = STEPS.slice(0, layers.length).concat(deep ? [DEEP] : []).map(function (st, i) {
@@ -117,7 +144,9 @@
     box.querySelector('.tol-dive-meter').style.display = total > 1 ? '' : 'none';
     var more = depth < layers.length - 1;
     box.querySelector('.tol-dive-wade').innerHTML = more ? '<button type="button" class="tol-dive-go">' + (depth === 0 ? 'Wade in a little' : depth === 1 ? 'A little deeper' : 'Wade in to your waist') + ' ' + STEPS[depth + 1][0] + '</button>' : '';
-    box.querySelector('.tol-dive-more').innerHTML = (deep ? '<a href="' + esc(d.u) + '">' + DEEP[0] + ' ' + esc(d.l || 'Dive deeper') + ' &rarr;</a>' : '') +
+    var last = depth === layers.length - 1;
+    box.querySelector('.tol-dive-more').innerHTML = (deep && last && d.lt ? '<p class="tol-dive-tease">' + DEEP[0] + ' <b>The deep end:</b> ' + esc(d.lt) + '</p>' : '') +
+      (deep ? '<a href="' + esc(d.u) + '" aria-label="' + esc('Dive deeper: ' + (d.l || d.t) + ', in the full version') + '">' + DEEP[0] + ' ' + esc(d.l || 'Dive deeper') + ' &rarr;</a>' : '') +
       '<a class="tol-dive-chat" href="/ask.html?about=' + encodeURIComponent(d.t) + '"><span aria-hidden="true">&#128172;</span> Chat it out with Professor Puddles</a>';
     if (depth) { var nl = body.lastElementChild; if (nl) body.scrollTo ? body.scrollTo({ top: nl.offsetTop - body.offsetTop - 8, behavior: 'smooth' }) : (body.scrollTop = nl.offsetTop); }
     else body.scrollTop = 0;

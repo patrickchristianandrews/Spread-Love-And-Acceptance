@@ -181,11 +181,15 @@
       whoWrap.appendChild(l);
     });
 
+    // the "Dig deeper" link says which section of the full guide it opens
+    var DIG = { thanks: 'why specific thanks works', bids: 'bids, and three ways to answer them', 'good-news': 'celebrating good news',
+      'their-world': 'knowing their world', fondness: 'remembering what you like about them', 'stress-talk': 'the stress-reducing conversation', rituals: 'small rituals of connection' };
     function show() {
       var s = SPARKS[idx], msg = s.msg ? (s.msg[who] || s.msg.default) : '';
       $('tt-title').textContent = s.title;
       $('tt-todo').textContent = s.todo;
       $('tt-more').setAttribute('href', '/turning-toward-in-depth.html#' + s.key);
+      $('tt-more').textContent = 'Dig deeper: ' + (DIG[s.key] || 'why this works');
       var box = $('tt-msg');
       if (msg) { box.hidden = false; $('tt-msg-text').textContent = msg; }
       else box.hidden = true;
