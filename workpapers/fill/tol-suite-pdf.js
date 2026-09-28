@@ -33,11 +33,14 @@
   };
 
   // The road someone is on can change a worksheet's wording and rows (see TOL_WORKPAPER_VARIANT).
+  // On the "Just me" road (self) every sheet is worded for one person (TOL_WORKPAPER_SOLO).
   var currentRoad = null;
   function setRoad(road) { currentRoad = road || null; }
+  function solo(road) { return (road === undefined ? currentRoad : road) === 'self'; }
   function schemaFor(code, road) {
     var key = String(code || '').toLowerCase(), r = road === undefined ? currentRoad : road;
-    var v = r && global.TOL_WORKPAPER_VARIANT ? global.TOL_WORKPAPER_VARIANT(key, r) : null;
+    var v = r === 'self' && global.TOL_WORKPAPER_SOLO ? global.TOL_WORKPAPER_SOLO(key)
+      : r && global.TOL_WORKPAPER_VARIANT ? global.TOL_WORKPAPER_VARIANT(key, r) : null;
     return v || (global.TOL_WORKPAPERS || {})[key];
   }
   // What to call person i when no name is given: the road's word for them.
@@ -45,11 +48,16 @@
     people = people || [];
     if (people[i]) return people[i];
     var last = people[people.length - 1];
-    if (!last) return 'Person ' + WPK.CODES[i];
+    if (!last || last === 'You') return 'Person ' + WPK.CODES[i];
     if (/^(?:Partner|Parent|Person) [A-H]$/.test(last)) return last.replace(/[A-H]$/, WPK.CODES[i]);
     return last + ' ' + i;
   }
-  function nameOf(code) { var n = global.TOL_SUITE_PATHS && global.TOL_SUITE_PATHS.names[code]; return n || (schemaFor(code) || {}).title || code; }
+  // A road can call a workpaper something else (on "Just me", WP-01 is "Kind ways to say no").
+  function nameOf(code) {
+    var SPS = global.TOL_SUITE_PATHS, road = SPS && currentRoad ? SPS.paths.filter(function (p) { return p.id === currentRoad; })[0] : null;
+    var n = (road && road.names && road.names[code]) || (SPS && SPS.names[code]);
+    return n || (schemaFor(code) || {}).title || code;
+  }
   function enc(t) { return PDF.encode(t); }
   function wrap(t, f, s, w) { return PDF.wrap(t, f, s, w); }
   function tw(t, f, s) { return PDF.textWidth(enc(t), f, s); }
@@ -118,7 +126,7 @@
       doc.text(L, 761, enc(opts.fillable
         ? 'Tap any box to type, in any PDF app. Or print it and write by hand. Made on your device ' + made + '; nothing was sent anywhere.'
         : 'Made on your device ' + made + '. Nothing entered was sent to or stored by the website. Keep this file somewhere private.'), 'Helvetica', 6.8, C.soft);
-      doc.text(L, 770, enc('A self-reflection worksheet, not a clinical tool. It describes the arrangement, never either person.'), 'Helvetica', 6.8, C.soft);
+      doc.text(L, 770, enc(solo() ? 'A self-reflection worksheet, not a clinical tool. It describes your conditions, never your worth.' : 'A self-reflection worksheet, not a clinical tool. It describes the arrangement, never either person.'), 'Helvetica', 6.8, C.soft);
       var pg = enc('Page ' + (i + 1) + ' of ' + n);
       doc.text(R - PDF.textWidth(pg, 'Helvetica', 6.8), 770, pg, 'Helvetica', 6.8, C.soft);
     }
@@ -201,7 +209,8 @@
   function sheetMeta(pen, entry, e, schema, ctx, opts) {
     var defs = [];
     if (schema.people) ctx.people().forEach(function (c, i) {
-      defs.push({ id: 'partner' + c, label: (opts.people ? roleOf(opts.people, i) : WPK.labelFor(i)) + ' (name)', type: 'text' });
+      var role = opts.people ? roleOf(opts.people, i) : WPK.labelFor(i);
+      defs.push({ id: 'partner' + c, label: solo() && role === 'You' ? 'Your name' : role + ' (name)', type: 'text' });
     });
     defs = defs.concat(schema.meta || []);
     var colW = (W - 16) / 2;
@@ -282,11 +291,12 @@
     items.forEach(function (it) {
       var lines = wrap(it.label, 'Helvetica', 9.5, labW - 10);
       var opts = kind === 'scale' ? (function () { var o = []; for (var v = sec.min; v <= sec.max; v++) o.push(String(v)); return o; })() : it.options;
+      var shown = opts.map(function (o) { return WPK.optionLabel(it, o); });
       var h = Math.max(lines.length * 12.5 + 14, 30);
       pen.room(h);
       lines.forEach(function (ln, k) { pen.doc.text(L, pen.y + 11 + k * 12.5, ln, 'Helvetica', 9.5, C.ink); });
-      pen.doc.text(L, pen.y + 11 + lines.length * 12.5, enc(opts.join('  ·  ')), 'Helvetica', 7, C.soft);
-      box(pen, R - 100, pen.y + 2, 100, 20, { name: fname(e, schema.code, 'v', key(sec.id + '.' + it.id)), kind: 'choice', value: entry.state.values[sec.id + '.' + it.id] == null ? '' : String(entry.state.values[sec.id + '.' + it.id]), options: [['', '']].concat(opts.map(function (o) { return [o, o]; })) });
+      pen.doc.text(L, pen.y + 11 + lines.length * 12.5, enc(shown.join('  ·  ')), 'Helvetica', 7, C.soft);
+      box(pen, R - 100, pen.y + 2, 100, 20, { name: fname(e, schema.code, 'v', key(sec.id + '.' + it.id)), kind: 'choice', value: entry.state.values[sec.id + '.' + it.id] == null ? '' : String(entry.state.values[sec.id + '.' + it.id]), options: [['', '']].concat(opts.map(function (o, k) { return [o, shown[k]]; })) });
       pen.doc.line(L, pen.y + h - 3, R, pen.y + h - 3, C.line, 0.4);
       pen.y += h;
     });
@@ -481,7 +491,7 @@
     var trends = Object.keys(byWp).filter(function (k) { return byWp[k].length > 1; });
     if (trends.length) {
       pen.heading('Over time', 80, C.sky);
-      pen.para('The same sheet, filled in more than once. A change is worth a conversation; it isn\'t a grade.', { size: 8.5, color: C.soft, after: 6 });
+      pen.para(solo() ? 'The same sheet, filled in more than once. A change is worth noticing; it isn\'t a grade.' : 'The same sheet, filled in more than once. A change is worth a conversation; it isn\'t a grade.', { size: 8.5, color: C.soft, after: 6 });
       trends.forEach(function (k) {
         var m = METRICS[k], list = byWp[k].slice(-8), max = m.max || Math.max.apply(null, list.map(function (x) { return x.v; })) || 1;
         pen.room(86);
@@ -498,7 +508,7 @@
         });
         var first = list[0].v, last = list[list.length - 1].v, diff = last - first;
         var better = m.good === 'up' ? diff > 0 : diff < 0;
-        var say = Math.abs(diff) < 0.005 ? 'Holding steady.' : (better ? 'Moving in a kinder direction.' : 'Worth a gentle look together.');
+        var say = Math.abs(diff) < 0.005 ? 'Holding steady.' : (better ? 'Moving in a kinder direction.' : solo() ? 'Worth a gentle look.' : 'Worth a gentle look together.');
         pen.doc.text(L + 20 + list.length * (bw + 8) + 6, base - 14, enc(say), 'Times-Italic', 9, better ? C.credit : C.soft);
         pen.y = base + 20;
       });
@@ -573,10 +583,10 @@
     });
     var groups = [
       ['Kind words you said', 'From your daily check-ins. Worth reading again on a hard day.', items.thanks, C.pink],
-      ['Your pause lines', 'Said before a break, so it is never mistaken for walking out.', items.lines, C.lav],
+      ['Your pause lines', solo() ? 'Ready ahead of time, so a break feels planned instead of like giving up.' : 'Said before a break, so it is never mistaken for walking out.', items.lines, C.lav],
       ['What settles you', 'Your two defaults, decided on a calm day.', items.defaults, C.mint],
       ['Gentle ways to say no', 'Say why the request is fair, say what you have left, and offer something instead.', items.refusals, C.butter],
-      ['Said so it lands', 'Fact, feeling and a clear ask.', items.messages, C.sky]
+      [solo() ? 'What stung, sorted out' : 'Said so it lands', 'Fact, feeling and a clear ask.', items.messages, C.sky]
     ].filter(function (g) {
       var seen = {};
       g[2] = g[2].filter(function (it) { var k = it[0].trim().toLowerCase(); if (seen[k]) return false; seen[k] = true; return true; });

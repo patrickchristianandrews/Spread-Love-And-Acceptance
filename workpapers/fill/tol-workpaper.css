@@ -416,6 +416,7 @@ html.ws-locked .tol-breathe-btn, html.ws-locked .tol-wx{ visibility: hidden; }
 .ws-name-cell label{ flex: 1 1 auto; min-width: 0; }
 .ws-names-more{ display: flex; flex-wrap: wrap; align-items: center; gap: 6px 12px; margin: .8em 0 0; }
 .ws-names-count{ font-size: .88em; color: var(--ink-soft, #524B3E); }
+.ws-names-more[hidden]{ display: none; }
 .ws-names-note{ margin: .5em 0 0; font-size: .88em; color: var(--ink-soft, #524B3E); }
 @media print{
   .wpf-keep, .wpf-person-x, .wpf-people-actions, .ws-name-x, .ws-names-more{ display: none !important; }

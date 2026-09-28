@@ -7,6 +7,9 @@
 
   Each stop: { wp, why, again } — "again" marks a sheet worth filling in more
   than once (a new week, a new day), so the suite offers another copy.
+  A road can also rename a workpaper (names), and say which workpapers can be
+  added to it (addable; every one when it's left out). "Just me" (self) is for
+  one person only: its sheets are worded that way (TOL_WORKPAPER_SOLO).
 */
 (function (global) {
   'use strict';
@@ -110,11 +113,11 @@
       what: 'A kind record of your own load, what settles you, and how words reach you. It is for you first; share any page only if you want to.',
       lens: 'Each read describes your conditions and your setup, never your worth. Notice patterns the way you’d notice the weather.',
       together: ['How to read it', 'Read it on a calm day, with something warm to drink. Look for patterns across days, not verdicts about any one day. If a page stings, put it down and come back.'],
-      look: ['Days when your battery was already low before anything happened.', 'The settling defaults you actually reached for, and whether they helped.', 'Words that landed harder than they were meant to, and what that tells you about your wiring.', 'Where a kind “no” would have protected your energy.'],
-      talk: ['What drains me that nobody else can see?', 'Which of my two settling defaults works best, and when?', 'What would I like the people close to me to know about how I’m wired?', 'What is one thing I can say no to this week, kindly?'],
+      look: ['Days when your battery was already low before anything happened.', 'The settling defaults you actually reached for, and whether they helped.', 'Moments that stung more than you expected, and what that tells you about your wiring.', 'Where a kind “no” would have protected your energy.'],
+      talk: ['What drains me that I tend to overlook?', 'Which of my two settling defaults works best, and when?', 'What have I learned about how I’m wired?', 'What is one thing I can say no to this week, kindly?'],
       ask: { 'WP-02': 'What was already in the tank before today began?', 'WP-11': 'Did your defaults help? Would you change one?', 'WP-09': 'Which part was hardest to write: the fact, the feeling or the ask?', 'WP-01': 'Which refusal felt kindest to say out loud?' },
       keep: 'Kind words to keep close',
-      close: 'You are allowed to be as gentle with yourself as you are with the people you love.'
+      close: 'You are allowed to be gentle with yourself, today and every day.'
     },
     partners: {
       what: 'A shared picture of how the two of you run your life together: who does what, who owns what, how full each battery is, and how you talk about it.',
@@ -202,9 +205,11 @@
     {
       id: 'self', label: 'Just me', icon: '☀', color: '#F8E7AE',
       blurb: 'Know your own load, rhythms and reactions, kindly.',
-      people: ['You', 'Someone close'],
+      people: ['You'],
+      names: { 'WP-01': 'Kind ways to say no', 'WP-09': 'Sort out what stung' },
+      addable: [],
       groups: [
-        { along: A('weather','ch3','garden'), title: 'Start here', note: 'Every relationship runs through your own nervous system first.', stops: [
+        { along: A('weather','ch3','garden'), title: 'Start here', note: 'Everything starts with how you’re doing inside.', stops: [
           { wp: 'WP-02', why: "Separate what you're already carrying from what just happened.", again: 'Another day' },
           { wp: 'WP-11', why: 'Decide in advance what settles you, so it is ready when you need it.' }
         ] },
@@ -212,7 +217,7 @@
           { wp: 'WP-09', why: 'Turn a raw reaction into fact, feeling and a clear ask.', again: 'Another message' }
         ] },
         { along: A('freq','decoder'), title: 'Also helpful', note: 'Kind, ready-made ways to say no.', stops: [
-          { wp: 'WP-01', why: 'Part B has kind ways to say no: say why the request is fair, say what you have left, and offer something instead.' }
+          { wp: 'WP-01', why: 'Draft a kind “not right now”: say why the request is fair, say what you have left, and offer something instead.' }
         ] }
       ],
       next: 'Take one minute each morning with WP-02. Patterns show up within a week, and naming them is half the work.',

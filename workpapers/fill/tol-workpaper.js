@@ -13,7 +13,8 @@
   - The other copies are the files the person chooses to download: the PDF,
     and an optional draft file (.json) they can reopen later to keep working.
 
-  People: a worksheet with people:true holds 2 to 8 people, coded A to H.
+  People: a worksheet with people:true holds 2 to 8 people, coded A to H
+  (1 to 8 on the Workpaper Suite's "Just me" road, see setMinPeople).
   Their names live in values.partnerA … values.partnerH (so drafts saved when
   there were only "Partner A" and "Partner B" still open), and
   values.peopleCount says how many there are. Tables whose fixed rows are
@@ -30,6 +31,9 @@
   var DRAFT_VERSION = 1;
   var CODES = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'];
   var MIN_PEOPLE = 2, MAX_PEOPLE = CODES.length;
+  // The fewest people a sheet holds. The Workpaper Suite lowers it to 1 on the "Just me" road.
+  var minPeople = MIN_PEOPLE;
+  function setMinPeople(n) { minPeople = n === 1 ? 1 : MIN_PEOPLE; }
   var KEEP_PREFIX = 'tol-wpf-keep:';
 
   /* ------------------------------------------------------------ people */
@@ -40,7 +44,7 @@
 
   function peopleCount(values) {
     values = values || {};
-    var n = Math.max(MIN_PEOPLE, Math.min(MAX_PEOPLE, parseInt(values.peopleCount, 10) || 0));
+    var n = Math.max(minPeople, Math.min(MAX_PEOPLE, parseInt(values.peopleCount, 10) || 0));
     CODES.forEach(function (c, i) { if (String(values['partner' + c] || '').trim()) n = Math.max(n, i + 1); });
     return n;
   }
@@ -70,7 +74,7 @@
   // Take person i out, and move everyone after them up one place, everywhere in the sheet.
   function removePerson(schema, state, idx) {
     var n = peopleCount(state.values);
-    if (n <= MIN_PEOPLE || idx < 0 || idx >= n) return false;
+    if (n <= minPeople || idx < 0 || idx >= n) return false;
     for (var k = idx; k < n - 1; k++) state.values['partner' + CODES[k]] = state.values['partner' + CODES[k + 1]] || '';
     delete state.values['partner' + CODES[n - 1]];
     state.values.peopleCount = n - 1;
@@ -89,11 +93,12 @@
     syncPeople(schema, state);
     return true;
   }
-  // Everyone who can be picked in a person drop-down, in alphabetical order, then "Both"/"Everyone".
+  // Everyone who can be picked in a person drop-down, in alphabetical order, then "Both"/"Everyone"
+  // (left off when there is only one person).
   function personOptions(ctx, def) {
     var list = ctx.people().map(function (c) { return { v: c, l: ctx.name(c), person: c }; });
     list.sort(function (a, b) { return a.l.localeCompare(b.l, undefined, { sensitivity: 'base', numeric: true }); });
-    if (def && def.both) list.push({ v: 'Both', l: ctx.name('Both'), person: 'Both' });
+    if (def && def.both && list.length > 1) list.push({ v: 'Both', l: ctx.name('Both'), person: 'Both' });
     return list;
   }
 
@@ -144,6 +149,9 @@
     return n;
   }
 
+  // A choice can show different words from the value it stores (item.labels), so saved answers still open.
+  function optionLabel(item, v) { return item && item.labels && item.labels[v] ? item.labels[v] : v; }
+
   function isBlank(v) { return v === undefined || v === null || v === '' || v === false; }
 
   function rowIsEmpty(section, row) {
@@ -161,10 +169,10 @@
         var s = byId[tableId];
         return (state.tables[tableId] || []).filter(function (r) { return !rowIsEmpty(s, r); });
       },
-      name: function (p) {
+      name: function name(p) {
         var i = CODES.indexOf(p);
         if (i >= 0) return String(state.values['partner' + p] || '').trim() || labelFor(i);
-        if (p === 'Both') return peopleCount(state.values) > 2 ? 'Everyone' : 'Both';
+        if (p === 'Both') { var pc = peopleCount(state.values); return pc > 2 ? 'Everyone' : pc === 1 ? name('A') : 'Both'; }
         return '';
       },
       count: function () { return peopleCount(state.values); },
@@ -418,7 +426,7 @@
       if (s.type === 'checks') {
         R.heading(s.title, 60);
         R.table([{ label: 'Check', w: 4 }, { label: 'Answer', w: 1.2 }],
-          s.items.map(function (it) { return [it.label, state.values[s.id + '.' + it.id] || '—']; }));
+          s.items.map(function (it) { return [it.label, optionLabel(it, state.values[s.id + '.' + it.id]) || '—']; }));
         return;
       }
 
@@ -521,7 +529,7 @@
       metaDefs.forEach(function (f) {
         var c = self.control(f, st.values[f.id], { key: f.id });
         var kids = [h('label', { for: c.id, text: f.label, 'data-person-label': f.person != null ? String(f.person) : null }), c.el];
-        if (canEdit && f.person != null && peopleCount(st.values) > MIN_PEOPLE) {
+        if (canEdit && f.person != null && peopleCount(st.values) > minPeople) {
           kids = [kids[0], h('div', { className: 'wpf-person-row' }, [c.el,
             h('button', { type: 'button', className: 'wpf-person-x', 'data-action': 'remove-person', 'data-person': String(f.person), 'aria-label': 'Remove ' + (String(st.values[f.id] || '').trim() || f.label), text: '×' })])];
         }
@@ -588,7 +596,7 @@
           var id = 'f' + (++self.uid);
           var r = h('input', { type: 'radio', id: id, name: key, value: o, 'data-key': key, autocomplete: 'off' });
           if (st.values[key] === o) r.checked = true;
-          opts.appendChild(h('label', { for: id }, [r, h('span', { text: o })]));
+          opts.appendChild(h('label', { for: id }, [r, h('span', { text: optionLabel(it, o) })]));
         });
         fs.appendChild(opts);
         wrap.appendChild(fs);
@@ -970,6 +978,7 @@
     displayCell: displayCell, rowIsEmpty: rowIsEmpty, rowLabel: rowLabel, isBlank: isBlank, COLORS: COLORS, DRAFT_FORMAT: DRAFT_FORMAT,
     CODES: CODES, MAX_PEOPLE: MAX_PEOPLE, peopleCount: peopleCount, fixedRowsFor: fixedRowsFor, syncPeople: syncPeople,
     addPerson: addPerson, removePerson: removePerson, personOptions: personOptions, setDefaultLabels: setDefaultLabels,
+    setMinPeople: setMinPeople, optionLabel: optionLabel,
     labelFor: function (i) { return labelFor(i); }
   };
   if (typeof document !== 'undefined') {

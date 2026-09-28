@@ -126,6 +126,26 @@
     });
     return answered === WP02_FACTORS.length ? sum / 20 : null;
   }
+  // solo: worded for one person on their own, with no shared average
+  function wp02Reading(solo) {
+    return function (ctx) {
+      var s = wp02Score(ctx);
+      if (s === null) return [{ label: 'Score', value: 'Answer all five rows to see your score.' }];
+      var sb = r2(s);
+      var band = sb < 0.3 ? 'Low load. Whatever is coming up is probably about the thing itself.'
+        : sb < 0.6 ? (solo ? 'Medium. You\'re carrying more than usual today. Go gently, and leave big decisions for when you have more room.' : 'Medium. Before a hard conversation, it\'s worth saying out loud: "Heads up, I\'m carrying more than usual today."')
+          : 'High. Put off anything that doesn\'t need deciding in the next hour. If you need to settle first, the Calm-Down Kit (WP-11) is made for this.';
+      var out = [{ label: 'Battery score', value: fmt(s, 2) + ' (the five scores added up, then divided by 20)' }, { label: 'Reading', value: band }];
+      if (solo) return out;
+      // everyone else's shared scores ("0.4, 0.55, 0.3"); the average covers everyone
+      var others = String(ctx.value('partnerScore') || '').split(/[,;\s]+/).filter(Boolean).map(parseFloat);
+      if (others.length && others.every(function (p) { return p >= 0 && p <= 1; })) {
+        var all = [s].concat(others), avg = all.reduce(function (a, b) { return a + b; }, 0) / all.length;
+        out.push({ label: 'Average for CALC-01', value: fmt(avg, 2) + ' (' + all.length + ' people)', note: 'The average of everyone\'s scores is the stress number in CALC-01 (how stretched you all are). Make sure every person on the road is included: it is never worked out while anyone\'s is missing, or from one person alone.' });
+      }
+      return out;
+    };
+  }
   W['wp-02'] = {
     code: 'WP-02',
     title: 'The Battery & Stress Meter',
@@ -149,22 +169,7 @@
       },
       {
         id: 'reading', type: 'computed', title: 'Your battery score',
-        compute: function (ctx) {
-          var s = wp02Score(ctx);
-          if (s === null) return [{ label: 'Score', value: 'Answer all five rows to see your score.' }];
-          var sb = r2(s);
-          var band = sb < 0.3 ? 'Low load. Whatever is coming up is probably about the thing itself.'
-            : sb < 0.6 ? 'Medium. Before a hard conversation, it\'s worth saying out loud: "Heads up, I\'m carrying more than usual today."'
-              : 'High. Put off anything that doesn\'t need deciding in the next hour. If you need to settle first, the Calm-Down Kit (WP-11) is made for this.';
-          var out = [{ label: 'Battery score', value: fmt(s, 2) + ' (the five scores added up, then divided by 20)' }, { label: 'Reading', value: band }];
-          // everyone else's shared scores ("0.4, 0.55, 0.3"); the average covers everyone
-          var others = String(ctx.value('partnerScore') || '').split(/[,;\s]+/).filter(Boolean).map(parseFloat);
-          if (others.length && others.every(function (p) { return p >= 0 && p <= 1; })) {
-            var all = [s].concat(others), avg = all.reduce(function (a, b) { return a + b; }, 0) / all.length;
-            out.push({ label: 'Average for CALC-01', value: fmt(avg, 2) + ' (' + all.length + ' people)', note: 'The average of everyone\'s scores is the stress number in CALC-01 (how stretched you all are). Make sure every person on the road is included: it is never worked out while anyone\'s is missing, or from one person alone.' });
-          }
-          return out;
-        }
+        compute: wp02Reading(false)
       },
       {
         id: 'extra', type: 'fields', title: 'Optional',
@@ -358,31 +363,47 @@
       },
       {
         id: 'result', type: 'computed', title: 'What to do next',
-        compute: function (ctx) {
-          var out = [];
-          var fact = ctx.value('fact'), feeling = ctx.value('feeling'), ask = ctx.value('ask');
-          if (fact || feeling || ask) {
-            out.push({ label: 'Your message, in order', value: [fact && ('Fact: ' + fact), feeling && ('Feeling: ' + feeling), ask && ('Ask: ' + ask)].filter(Boolean).join('\n') });
-          }
-          var sat = ctx.value('filter.saturation'), neu = ctx.value('filter.neutral'), pat = ctx.value('filter.pattern'), spec = ctx.value('filter.specific');
-          var pause = sat === 'No' || sat === 'Not sure' || neu === 'Yes' || pat === 'A past pattern';
-          if (!(sat || neu || pat || spec)) {
-            out.push({ label: 'Filter', value: 'Answer the four checks to see a suggestion.' });
-          } else if (pause) {
-            out.push({ label: 'Suggestion', value: 'Pause before you go on. Use a neutral refusal or a "not right now" script (WP-01). Come back when your battery score is lower, or once you\'ve ruled out the neutral reading.' });
-          } else if (spec === 'No') {
-            out.push({ label: 'Suggestion', value: 'Name the specific task or event first. A message about a pattern is much harder to hear than one about a single thing.' });
-          } else {
-            out.push({ label: 'Suggestion', value: 'You\'re clear to respond. Build your reply from the fact, the feeling and the ask.' });
-          }
-          return out;
-        }
+        compute: wp09Result(false)
       }
     ]
   };
+  // solo: worded for one person sorting out their own reaction
+  function wp09Result(solo) {
+    return function (ctx) {
+      var out = [];
+      var fact = ctx.value('fact'), feeling = ctx.value('feeling'), ask = ctx.value('ask');
+      if (fact || feeling || ask) {
+        out.push({ label: solo ? 'Fact, feeling and ask' : 'Your message, in order', value: [fact && ('Fact: ' + fact), feeling && ('Feeling: ' + feeling), ask && ('Ask: ' + ask)].filter(Boolean).join('\n') });
+      }
+      var sat = ctx.value('filter.saturation'), neu = ctx.value('filter.neutral'), pat = ctx.value('filter.pattern'), spec = ctx.value('filter.specific');
+      var pause = sat === 'No' || sat === 'Not sure' || neu === 'Yes' || pat === 'A past pattern';
+      if (!(sat || neu || pat || spec)) {
+        out.push({ label: 'Filter', value: 'Answer the four checks to see a suggestion.' });
+      } else if (pause) {
+        out.push({ label: 'Suggestion', value: solo ? 'Pause before you go on. Come back to it when your battery score is lower, or once you\'ve ruled out the neutral reading. If a request is behind it, a kind "not right now" (WP-01) can buy you time.' : 'Pause before you go on. Use a neutral refusal or a "not right now" script (WP-01). Come back when your battery score is lower, or once you\'ve ruled out the neutral reading.' });
+      } else if (spec === 'No') {
+        out.push({ label: 'Suggestion', value: solo ? 'Name the specific task or event first. One thing is much easier to work with than a whole pattern.' : 'Name the specific task or event first. A message about a pattern is much harder to hear than one about a single thing.' });
+      } else {
+        out.push({ label: 'Suggestion', value: solo ? 'You\'re clear to go ahead. Let the fact, the feeling and the ask guide what you do next.' : 'You\'re clear to respond. Build your reply from the fact, the feeling and the ask.' });
+      }
+      return out;
+    };
+  }
 
   /* ------------------------------------------------------------------ WP-11 */
   var WP11_TACTICS = ['Asymmetric breathing (4 in, 6 out)', 'Naming the room (5-4-3)', 'Weight and pressure', 'Gating (lower the lights, step out)', 'Walking it out', 'Low, steady sound'];
+  // solo: "pick things back up" rather than "go back in" to a conversation
+  function wp11Next(solo) {
+    return function (ctx) {
+      var rows = ctx.rows('reentry').filter(function (r) { return parseFloat(r.after) >= 0; });
+      if (!rows.length) return [{ label: 'Coming back', value: 'Add a before-and-after reading to see where you are.' }];
+      var a = parseFloat(rows[rows.length - 1].after);
+      var band = a < 0.5 ? (solo ? 'Under 0.50: pick things back up, at the time you named.' : 'Under 0.50: go back in, at the time you named.')
+        : a < 0.6 ? '0.50 to 0.60: do a second round, with the same calming step or the other one.'
+          : (rows.length >= 2 ? '0.60 or above after two rounds: put it off to a specific time. "Tomorrow after dinner" is a real plan; "later" is not.' : '0.60 or above: do a second round first.');
+      return [{ label: 'Latest reading', value: fmt(a, 2) }, { label: 'Next', value: band, note: 'When you come back, start with one small, simple task, like putting the dishes away.' }];
+    };
+  }
   W['wp-11'] = {
     code: 'WP-11',
     title: 'The Calm-Down Kit',
@@ -445,15 +466,7 @@
       },
       {
         id: 'next', type: 'computed', title: 'Where that leaves you',
-        compute: function (ctx) {
-          var rows = ctx.rows('reentry').filter(function (r) { return parseFloat(r.after) >= 0; });
-          if (!rows.length) return [{ label: 'Coming back', value: 'Add a before-and-after reading to see where you are.' }];
-          var a = parseFloat(rows[rows.length - 1].after);
-          var band = a < 0.5 ? 'Under 0.50: go back in, at the time you named.'
-            : a < 0.6 ? '0.50 to 0.60: do a second round, with the same calming step or the other one.'
-              : (rows.length >= 2 ? '0.60 or above after two rounds: put it off to a specific time. "Tomorrow after dinner" is a real plan; "later" is not.' : '0.60 or above: do a second round first.');
-          return [{ label: 'Latest reading', value: fmt(a, 2) }, { label: 'Next', value: band, note: 'When you come back, start with one small, simple task, like putting the dishes away.' }];
-        }
+        compute: wp11Next(false)
       },
       {
         id: 'after', type: 'fields', title: 'Coming back',
@@ -617,6 +630,102 @@
     return out;
   }
 
+  /* ------------------------------------------------------------------ just me */
+  // The Workpaper Suite's "Just me" road: each sheet worded for one person on their own, with no one
+  // else on it. Field ids and stored answers stay the same, so a draft or PDF opens on any road; only
+  // the words you see change (a choice can show a different label from the value it stores).
+  function copyOf(o) { var c = {}; Object.keys(o).forEach(function (k) { c[k] = o[k]; }); return c; }
+  var SOLO = {
+    'wp-01': {
+      title: 'Neutral Refusals',
+      purpose: 'Kind ways to say no, drafted ahead of time. For a real request you can\'t take on right now, write a "not right now" in three steps: say why the request is fair, say honestly what you have left, and offer something instead. Having a few ready means you don\'t have to find the words on the spot.',
+      people: false,
+      meta: [
+        { id: 'name', label: 'Your name', type: 'text' },
+        { id: 'date', label: 'Date', type: 'date' }
+      ],
+      keep: ['refusals'],
+      sections: {
+        refusals: {
+          title: 'Kind ways to say no',
+          intro: 'Pick a real situation. Say why the request is fair, say honestly what you have left, and offer something instead. Add as many as you like.'
+        }
+      }
+    },
+    'wp-02': {
+      purpose: 'A short checklist about how you\'re doing right now. It separates "How much stress am I already carrying?" from "How upset am I about this one thing?" It is not a clinical test, just a structured gut-check.',
+      sections: {
+        note: { text: 'Answer about yourself, based on the last 24 to 48 hours.' },
+        reading: { compute: wp02Reading(true) },
+        extra: { fields: [{ id: 'note', label: 'Anything else on your mind right now', type: 'textarea' }] },
+        notePdf: { text: 'A high score is a way to press pause, not a way out. It means "I\'ll come back to this tomorrow," not "this doesn\'t need to happen."' }
+      }
+    },
+    'wp-09': {
+      purpose: 'A self-check for the moments when something stings. It helps you turn a raw reaction into a clear fact, feeling and ask, and slow down before you react. Nothing here records or analyzes anyone\'s voice.',
+      sections: {
+        transducer: { title: 'The transducer: untangle the reaction' },
+        filter: {
+          title: 'The filter: before you react',
+          items: [
+            { id: 'specific', label: 'Is this about a specific, nameable task or event?', options: ['Yes', 'No'] },
+            { id: 'saturation', label: "Would I read this the same way if my battery weren't already running high (WP-02)?", options: ['Yes', 'No', 'Not sure'] },
+            { id: 'neutral', label: 'Is there a neutral reading that also fits what happened?', options: ['Yes', 'No'] },
+            { id: 'pattern', label: 'Am I reacting to what happened just now, or to an old pattern?', options: ['Their words', 'A past pattern'], labels: { 'Their words': 'What happened just now', 'A past pattern': 'An old pattern' } }
+          ]
+        },
+        result: { compute: wp09Result(true) }
+      }
+    },
+    'wp-11': {
+      purpose: 'A short plan, made ahead of time, for settling yourself when a moment gets hard, so you can pick things back up when you\'re ready. Fill in Part A on an ordinary day, not a hard one.',
+      sections: {
+        note: { text: 'This kit is all about you.' },
+        lines: {
+          title: 'Part A: My pause line',
+          intro: 'One sentence, ready ahead of time, for when you need a break from a hard moment, so stepping away feels planned instead of like giving up. Say how you are, how long you need, and when you\'ll pick it back up: "I\'m at capacity. I need ten minutes. I\'ll come back to this at quarter past."',
+          columns: [{ id: 'line', label: 'Pause line', type: 'textarea', w: 4 }]
+        },
+        reentry: { intro: 'Take WP-02 before and after. "Feeling better" is not the test; the number is. Under 0.50, pick things back up. Between 0.50 and 0.60, do a second round. Still 0.60 or above after two rounds? Put it off to a named time.' },
+        next: { compute: wp11Next(true) },
+        after: {
+          fields: [
+            { id: 'nextAction', label: 'Next small action', type: 'text' },
+            { id: 'resume', label: 'If you put it off: when you\'ll pick it back up', type: 'text' }
+          ]
+        },
+        signoff: {
+          columns: [
+            { id: 'chosen', label: 'Defaults chosen', type: 'check', w: 1.3 },
+            { id: 'agreed', label: 'Pause line written', type: 'check', w: 1.3 },
+            { id: 'date', label: 'Date', type: 'date', w: 1.4 }
+          ]
+        }
+      }
+    }
+  };
+  var solos = {};
+  function solo(key) {
+    key = String(key || '').toLowerCase();
+    var o = SOLO[key], base = W[key];
+    if (!o || !base) return null;
+    if (solos[key]) return solos[key];
+    var out = copyOf(base);
+    Object.keys(o).forEach(function (k) { if (k !== 'sections' && k !== 'keep') out[k] = o[k]; });
+    out.solo = true;
+    // notes have no id: "note" is the one shown on the page, "notePdf" the one printed too
+    out.sections = base.sections.filter(function (s) { return !o.keep || (s.id && o.keep.indexOf(s.id) >= 0); }).map(function (s) {
+      var ch = o.sections && o.sections[s.id || (s.type === 'note' ? (s.pdf ? 'notePdf' : 'note') : '')];
+      if (!ch) return s;
+      var c = copyOf(s);
+      Object.keys(ch).forEach(function (k) { c[k] = ch[k]; });
+      return c;
+    });
+    solos[key] = out;
+    return out;
+  }
+
   global.TOL_WORKPAPERS = W;
   global.TOL_WORKPAPER_VARIANT = variant;
+  global.TOL_WORKPAPER_SOLO = solo;
 })(typeof window !== 'undefined' ? window : globalThis);

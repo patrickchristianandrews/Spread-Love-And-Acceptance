@@ -12,7 +12,8 @@
     only, until you press "Erase". Otherwise it lives on this page until you
     close it, and in the files you choose to download.
   - "Who's on this road?" holds 2 to 8 people. Every worksheet's person
-    drop-downs list all of them.
+    drop-downs list all of them. The "Just me" road (self) holds one: your own
+    name, with every sheet worded for you alone.
 */
 (function (global) {
   'use strict';
@@ -46,6 +47,23 @@
   var S = { path: null, names: ['', ''], stops: [], dirty: false, view: 'steps' };
   var uid = 0, keep = false, keepTimer = null;
 
+  // "Just me" is one person, on their own. Every other road has at least two.
+  function isSolo() { return !!S.path && S.path.id === 'self'; }
+  function minPeople() { return isSolo() ? 1 : MIN_PEOPLE; }
+  // Fit the names to the road: "Just me" keeps only the first, and the others it set aside come back
+  // when you switch to a road with more people on it.
+  function fitNames() {
+    if (isSolo()) {
+      if (S.names.length > 1) S.away = S.names.slice(1);
+      S.names = S.names.slice(0, 1);
+      if (!S.names.length) S.names = [''];
+    } else {
+      if (S.names.length < MIN_PEOPLE && S.away) S.names = S.names.concat(S.away).slice(0, MAX_PEOPLE);
+      S.away = null;
+      while (S.names.length < MIN_PEOPLE) S.names.push('');
+    }
+  }
+
   // What to call person i on this road when they have no name yet ("You", "Teammate", "Teammate 2" …)
   function roleLabel(i) { return SP.roleOf(S.path ? S.path.people : null, i); }
   function roleHeading(i) { var r = roleLabel(i); return r === 'You' ? 'Your name' : r; }
@@ -55,6 +73,12 @@
   function applyNames(sc, st) {
     if (sc.people) {
       var n = WPK.peopleCount(st.values);
+      // A sheet brought over to "Just me" with someone else's answers on it keeps them.
+      if (isSolo() && n > 1 && WPK.answered(sc, st) > 0) {
+        st.values.partnerA = S.names[0];
+        WPK.syncPeople(sc, st);
+        return;
+      }
       S.names.forEach(function (nm, i) { st.values['partner' + WPK.CODES[i]] = nm; });
       for (var k = S.names.length; k < n; k++) delete st.values['partner' + WPK.CODES[k]];
       st.values.peopleCount = S.names.length;
@@ -62,6 +86,22 @@
       while (WPK.peopleCount(st.values) > S.names.length) WPK.removePerson(sc, st, WPK.peopleCount(st.values) - 1);
       WPK.syncPeople(sc, st);
     }
+  }
+  // A sheet started on one road can be opened on another, where its version may have more parts
+  // (WP-01 on "Just me" is only the kind ways to say no): give it the parts it hasn't got yet.
+  function fitState(sc, st) {
+    var blank = WPK.blankState(sc);
+    Object.keys(blank.tables).forEach(function (k) { if (!Array.isArray(st.tables[k])) st.tables[k] = blank.tables[k]; });
+    return st;
+  }
+  // A clean copy of a saved sheet that keeps every part of it, even ones this road's version doesn't show.
+  function clean(sc, raw) {
+    var st = WPK.sanitize(sc, raw), base = SP.schemaFor(sc.code, null);
+    if (base && base !== sc) {
+      var all = WPK.sanitize(base, raw);
+      Object.keys(all.tables).forEach(function (k) { if (!st.tables[k]) st.tables[k] = all.tables[k]; });
+    }
+    return st;
   }
   function newEntry(code, label) {
     var sc = schema(code), st = WPK.blankState(sc);
@@ -75,10 +115,13 @@
   function setPath(id) {
     var p = pathById(id);
     if (!p) return;
-    SP.setRoad(p.id);
+    // (what counts as filled in is read on the road the sheet was filled in on)
     var pool = {};
     S.stops.forEach(function (st) { st.entries.forEach(function (en) { if (filled(en) || en.label) (pool[en.workpaper] = pool[en.workpaper] || []).push(en); }); });
+    SP.setRoad(p.id);
     S.path = p;
+    WPK.setMinPeople(minPeople());
+    fitNames();
     S.stops = [];
     p.groups.forEach(function (g, gi) {
       g.stops.forEach(function (s, si) {
@@ -139,10 +182,25 @@
     });
   }
 
+  var namesQ = null, namesNote = null, reportAbout = null; // the page's own words, for the roads with more people
   function renderNames() {
     var p = S.path, wrap = $('ws-names');
     if (!p) { wrap.hidden = true; return; }
     wrap.hidden = false;
+    var solo = isSolo(), q = $('ws-names-q'), note = $('ws-names-note'), about = $('ws-report-about');
+    if (q) {
+      if (namesQ == null) namesQ = q.innerHTML;
+      if (solo) { q.textContent = 'Who\u2019s this for? '; q.appendChild(h('span', { text: '(optional, a first name or initial)' })); } else q.innerHTML = namesQ;
+    }
+    if (note) {
+      if (namesNote == null) namesNote = note.textContent;
+      note.textContent = solo ? 'This road is just for you.' : namesNote;
+    }
+    if (about) {
+      if (reportAbout == null) reportAbout = about.textContent;
+      about.textContent = solo ? 'Just what you\u2019ve written, told for your road: where things stand, a question to ask yourself for each sheet, how to read it, what to look for, questions to sit with, your weeks on this road, and the kind words worth keeping close.' : reportAbout;
+    }
+    $('ws-name-add').parentNode.hidden = solo;
     var row = $('ws-names-row');
     row.innerHTML = '';
     S.names.forEach(function (nm, i) {
@@ -150,7 +208,7 @@
       inp.value = nm;
       var lab = h('label', { className: 'ws-name', for: 'ws-name-' + i }, [h('span', { text: roleHeading(i) }), inp]);
       var cell = h('div', { className: 'ws-name-cell' }, [lab]);
-      if (S.names.length > MIN_PEOPLE) {
+      if (S.names.length > minPeople()) {
         cell.appendChild(h('button', { type: 'button', className: 'ws-name-x', 'data-remove-name': String(i), 'aria-label': 'Take ' + (nm.trim() || roleLabel(i)) + ' off this road', text: '×' }));
       }
       row.appendChild(cell);
@@ -181,7 +239,7 @@
   }
 
   function addName() {
-    if (S.names.length >= MAX_PEOPLE) return;
+    if (isSolo() || S.names.length >= MAX_PEOPLE) return;
     S.names.push('');
     eachPeopleSheet(function (sc, st) {
       while (WPK.peopleCount(st.values) < S.names.length && WPK.addPerson(sc, st)) { /* keep in step with the road */ }
@@ -194,7 +252,7 @@
   }
 
   function removeName(i) {
-    if (S.names.length <= MIN_PEOPLE) return;
+    if (S.names.length <= minPeople()) return;
     var who = S.names[i].trim() || roleLabel(i);
     if (!global.confirm('Take ' + who + ' off this road? On every sheet, the jobs they own go back to "—".')) return;
     S.names.splice(i, 1);
@@ -310,7 +368,7 @@
     // Add a workpaper that isn't on this road
     var have = {};
     S.stops.forEach(function (st) { have[st.wp] = true; });
-    var missing = ORDER.filter(function (c) { return !have[c] && schema(c); });
+    var missing = (S.path.addable || ORDER).filter(function (c) { return !have[c] && schema(c); });
     var add = $('ws-add');
     add.innerHTML = '';
     if (missing.length) {
@@ -372,6 +430,7 @@
     var en = st.entries.filter(function (x) { return x.id === entryId; })[0];
     if (!en) { en = newEntry(st.wp); st.entries.push(en); }
     var sc = schema(st.wp);
+    fitState(sc, en.state);
     if (sc.people) applyNames(sc, en.state);
     editing = { stop: st, entry: en, before: SP.answers(en) };
     lastFocus = document.activeElement;
@@ -487,18 +546,18 @@
           if (d.path && pathById(d.path) && !S.path) setPath(d.path);
           if (Array.isArray(d.names) && !S.names.some(function (x) { return String(x || '').trim(); })) {
             S.names = d.names.slice(0, MAX_PEOPLE).map(function (x) { return String(x || ''); });
-            while (S.names.length < MIN_PEOPLE) S.names.push('');
+            fitNames();
           }
           d.entries.forEach(function (x) {
             var sc = x && schema(x.workpaper);
             if (!sc) return;
-            var en = { workpaper: sc.code, label: typeof x.label === 'string' ? x.label.slice(0, 80) : '', state: WPK.sanitize(sc, x.state) };
+            var en = { workpaper: sc.code, label: typeof x.label === 'string' ? x.label.slice(0, 80) : '', state: clean(sc, x.state) };
             place(en); loaded.push(en);
           });
           return;
         }
         if (d && d.format === WPK.DRAFT_FORMAT && d.state && schema(d.workpaper)) {
-          var sc2 = schema(d.workpaper), en2 = { workpaper: sc2.code, label: '', state: WPK.sanitize(sc2, d.state) };
+          var sc2 = schema(d.workpaper), en2 = { workpaper: sc2.code, label: '', state: clean(sc2, d.state) };
           place(en2); loaded.push(en2);
           return;
         }
@@ -532,10 +591,10 @@
       var list = st.entries.length ? st.entries : [newEntry(st.wp)];
       list.forEach(function (en) { g.entries.push({ workpaper: en.workpaper, label: en.label, state: en.state, why: st.why }); });
     });
-    return { path: S.path, names: S.names.slice(), people: S.path.people, groups: groups, tip: tip };
+    return { path: S.path, names: S.names.slice(), people: S.path.people, groups: groups, tip: isSolo() ? soloTip : tip };
   }
 
-  var tip = null; // a little tip for the end of the report, from the site's tips library
+  var tip = null, soloTip = null; // a little tip for the end of the report, from the site's tips library ("Just me" gets one about you)
 
   function base() { return 'TOL-Workpaper-Suite-' + (S.path ? S.path.label.replace(/[^A-Za-z0-9]+/g, '-') + '-' : '') + WPK.today(); }
 
@@ -561,7 +620,7 @@
   function syncAllNames() {
     var most = S.names.length;
     eachPeopleSheet(function (sc, st) { most = Math.max(most, WPK.peopleCount(st.values)); });
-    most = Math.min(MAX_PEOPLE, most);
+    most = Math.min(isSolo() ? 1 : MAX_PEOPLE, most);
     eachPeopleSheet(function (sc, st) {
       for (var i = 0; i < most; i++) {
         var v = String(st.values['partner' + WPK.CODES[i]] || '');
@@ -569,6 +628,7 @@
         else if (!S.names[i].trim() && v.trim()) S.names[i] = v;
       }
     });
+    fitNames();
     eachPeopleSheet(function (sc, st) { applyNames(sc, st); });
   }
 
@@ -594,6 +654,7 @@
     if (global.TOLTips) {
       var d = new Date();
       global.TOLTips.get(['connection', 'talking', 'kindness', 'home', 'calm'], function (t) { tip = ['', t[0], t[1]]; }, d.getFullYear() * 400 + d.getMonth() * 32 + d.getDate());
+      global.TOLTips.get(['calm', 'body', 'mind', 'selftalk', 'rest', 'sleep'], function (t) { soloTip = ['', t[0], t[1]]; }, d.getFullYear() * 400 + d.getMonth() * 32 + d.getDate());
     }
     renderPaths();
     var q = (global.location.search.match(/[?&]road=([a-z]+)/) || [])[1];
@@ -603,11 +664,11 @@
       keep = true;
       if ($('ws-keep')) $('ws-keep').checked = true;
       if (kept.path && pathById(kept.path)) setPath(kept.path);
-      if (Array.isArray(kept.names)) { S.names = kept.names.slice(0, MAX_PEOPLE).map(function (x) { return String(x || ''); }); while (S.names.length < MIN_PEOPLE) S.names.push(''); }
+      if (Array.isArray(kept.names)) { S.names = kept.names.slice(0, MAX_PEOPLE).map(function (x) { return String(x || ''); }); fitNames(); }
       kept.entries.forEach(function (x) {
         var sc = x && schema(x.workpaper);
         if (!sc) return;
-        place({ workpaper: sc.code, label: typeof x.label === 'string' ? x.label.slice(0, 80) : '', state: WPK.sanitize(sc, x.state) });
+        place({ workpaper: sc.code, label: typeof x.label === 'string' ? x.label.slice(0, 80) : '', state: clean(sc, x.state) });
       });
       syncAllNames();
       renderNames(); renderRoad();
