@@ -74,6 +74,20 @@
 (function () {
   'use strict';
   var SCENE_MS = 12 * 60 * 1000;
+  var receiver = /[?&]receiver=1\b/.test(location.search);
+  // on the TV, say what went wrong on screen, so it can be read off the TV
+  function showErr(e) {
+    if (!receiver) return;
+    var b = document.getElementById('tv-err') || document.body.appendChild(Object.assign(document.createElement('p'), { id: 'tv-err' }));
+    b.style.cssText = 'position:fixed;left:2vw;bottom:2vh;z-index:10002;margin:0;padding:.5rem .9rem;border-radius:12px;background:rgba(0,0,0,.7);color:#fff;font:16px/1.4 sans-serif;max-width:90vw';
+    b.textContent = 'Pal Cam TV hiccup: ' + (e && e.message ? e.message : String(e));
+  }
+  if (receiver) {
+    window.addEventListener('error', function (ev) { showErr(ev.error || ev.message); });
+    var st0 = document.getElementById('tv-start');
+    Array.prototype.forEach.call(st0.querySelectorAll('button, ul, p'), function (n) { n.hidden = true; n.style.display = 'none'; });
+    st0.appendChild(Object.assign(document.createElement('p'), { textContent: 'Tuning in to Tidbit and Sugarfoot…' }));
+  }
   var start = document.getElementById('tv-start'), go = document.getElementById('tv-go'), hint = document.getElementById('tv-hint');
   var on = false, timer = 0, lock = null, capsOff = false, quietT = 0, hintT = 0;
   var cam = function () { return window.TOLPalsCam; };
@@ -87,7 +101,7 @@
   }
   function keepAwake() {
     if (!on || !('wakeLock' in navigator) || lock) return;
-    navigator.wakeLock.request('screen').then(function (l) { lock = l; l.addEventListener('release', function () { lock = null; }); }).catch(function () {});
+    try { navigator.wakeLock.request('screen').then(function (l) { lock = l; l.addEventListener('release', function () { lock = null; }); }).catch(function () {}); } catch (e) {}
   }
   function freshScene() {
     if (!on || !cam()) return;
@@ -98,8 +112,9 @@
     if (!cam()) { say('The pal cam is still loading. Try again in a moment.'); return; }
     on = true; start.hidden = true;
     var el = document.documentElement;
-    if (el.requestFullscreen && !document.fullscreenElement) el.requestFullscreen().catch(function () {});
-    cam().open({}); styleCam();
+    if (!receiver && el.requestFullscreen && !document.fullscreenElement) { try { var fs = el.requestFullscreen(); if (fs && fs.catch) fs.catch(function () {}); } catch (e) {} }
+    try { cam().open({}); } catch (e) { showErr(e); }
+    styleCam();
     // the cam builds its overlay as it opens; style it again once it's there
     setTimeout(styleCam, 50); setTimeout(styleCam, 3000);
     keepAwake();
@@ -135,7 +150,6 @@
   document.addEventListener('visibilitychange', function () { if (!document.hidden) keepAwake(); });
   document.addEventListener('fullscreenchange', function () { if (on && !document.fullscreenElement) say('Press F11 (or Ctrl+Cmd+F on a Mac) for full screen'); });
   window.addEventListener('pointermove', quiet, { passive: true });
-  var receiver = /[?&]receiver=1\b/.test(location.search);
   if (!receiver && /[?&]autostart=1\b/.test(location.search)) window.addEventListener('load', function () { setTimeout(begin, 300); });
 
   /* ---------- Cast ----------
