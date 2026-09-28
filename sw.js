@@ -7,10 +7,10 @@
    below: they're saved the first time a game loads them (cache on use, via isStatic), so a puzzle
    you've opened once keeps working offline.
    Bump VERSION when the list below changes. */
-var VERSION = 'tol-v19';
+var VERSION = 'tol-v20';
 var CORE = [
   '/', '/index.html', '/offline.html',
-  '/night-garden.html', '/quiet-words.html', '/word-bloom.html', '/quiet-crossword.html', '/pause-and-play.html', '/ask.html', '/whats-new.html', '/frequency-journey.html', '/frequency-journey-play.html', '/daily-ledger-crossword.html', '/garden-backdrop.html', '/turning-toward.html', '/quick-checks.html', '/lemonade-stand.html',
+  '/night-garden.html', '/quiet-words.html', '/word-bloom.html', '/quiet-crossword.html', '/pause-and-play.html', '/ask.html', '/whats-new.html', '/frequency-journey.html', '/frequency-journey-play.html', '/pal-cam-tv.html', '/daily-ledger-crossword.html', '/garden-backdrop.html', '/turning-toward.html', '/quick-checks.html', '/lemonade-stand.html',
   '/assets/css/site.css', '/assets/css/reading.css', '/assets/css/games.css',
   '/assets/js/site.js', '/assets/js/night-garden.js', '/assets/js/quiet-words.js', '/assets/js/calm-music.js', '/assets/js/tips.js', '/assets/js/breathe.js', '/assets/js/turning-toward.js',
   '/assets/js/rewards.js', '/assets/js/pause-and-play.js', '/assets/js/site-chat.js', '/assets/js/frequency-journey.js', '/assets/js/journey-levels.js', '/assets/js/pups.js', '/assets/js/journey-pals.js', '/assets/js/chat-kb.js', '/assets/js/word-bloom.js', '/assets/js/quiet-crossword.js', '/assets/js/game-levels.js',

@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="en">
+<head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-NKC6CQ9S66"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-NKC6CQ9S66');
+</script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Pal Cam TV · The Objective Ledger</title>
+<meta name="description" content="Tidbit and Sugarfoot on the big screen, all day. Full screen, the screen stays awake, and the scene changes with the time of day.">
+<meta name="theme-color" content="#4A3F63">
+<link rel="icon" href="/favicon.ico">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Lora:wght@400;600&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+  html, body { margin: 0; height: 100%; background: #4A3F63; color: #FFF8EE; font-family: Lora, Georgia, serif; }
+  .tv-start { box-sizing: border-box; min-height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1rem; padding: 2rem 16px; text-align: center; }
+  .tv-start h1 { margin: 0; font: 600 clamp(1.6rem, 1.2rem + 2vw, 2.6rem)/1.2 Fraunces, Georgia, serif; }
+  .tv-start p { margin: 0; max-width: 34rem; font-size: 1.05rem; line-height: 1.55; color: #E9E2FB; }
+  .tv-go { min-height: 56px; padding: .8rem 2rem; border: 0; border-radius: 999px; background: #FFF8EE; color: #3C3350; font: 600 1.2rem Lora, Georgia, serif; cursor: pointer; }
+  .tv-go:hover { background: #fff; }
+  .tv-go:focus-visible, .tv-start a:focus-visible { outline: 3px solid #F2CAD5; outline-offset: 3px; }
+  .tv-start ul { margin: .4rem 0 0; padding: 0; list-style: none; font-size: .95rem; line-height: 1.6; color: #D8CFF0; }
+  .tv-start a { color: #FFF8EE; }
+  .tv-start[hidden] { display: none; }
+  /* TV mode: the cam fills the whole screen, nothing else */
+  .pc-ov.is-tv { padding: 0 !important; align-items: stretch !important; background: #000; }
+  .pc-ov.is-tv .pc-box { max-width: none !important; height: 100% !important; border-radius: 0 !important; box-shadow: none !important; padding: 0 !important; gap: 0 !important; background: #000; }
+  .pc-ov.is-tv .pc-top, .pc-ov.is-tv .pc-btns, .pc-ov.is-tv .pc-trs, .pc-ov.is-tv .pc-tally { display: none !important; }
+  .pc-ov.is-tv .pc-stage { max-height: none !important; min-height: 0; border-radius: 0 !important; }
+  .pc-ov.is-tv .pc-cap { position: absolute; left: 50%; bottom: 3vh; transform: translateX(-50%); max-width: 80vw; min-height: 0; padding: .45rem 1.1rem; border-radius: 999px; background: rgba(255,251,244,.82); font-size: clamp(1rem, .7rem + 1vw, 1.6rem); }
+  .pc-ov.is-tv .pc-cap:empty, .pc-ov.is-tv .pc-cap.tv-off { display: none; }
+  html.tv-quiet, html.tv-quiet * { cursor: none !important; }
+  .tv-hint { position: fixed; right: 12px; top: 12px; z-index: 10001; padding: .4rem .8rem; border-radius: 999px; background: rgba(20,14,34,.7); color: #fff; font: 500 .85rem Lora, Georgia, serif; opacity: 0; transition: opacity .4s; pointer-events: none; }
+  .tv-hint.is-on { opacity: 1; }
+</style>
+</head>
+<body>
+<main class="tv-start" id="tv-start">
+  <h1>Pal Cam TV</h1>
+  <p>Tidbit and Sugarfoot on the big screen, all day. Press start and leave it running. The scene changes every so often, and the light follows the real time of day, so evenings get cozy and nights get dark.</p>
+  <button type="button" class="tv-go" id="tv-go" autofocus>Start Pal Cam TV</button>
+  <ul>
+    <li>Press <b>Esc</b> (or <b>Back</b> on a TV remote) to come back to this screen.</li>
+    <li>Press <b>C</b> to show or hide the captions.</li>
+    <li>For all-day use, plug the device in and turn off its sleep and screen saver too.</li>
+  </ul>
+  <p><a href="/">Back to the site</a></p>
+</main>
+<div class="tv-hint" id="tv-hint" aria-live="polite"></div>
+<script src="/assets/js/pups.js"></script>
+<script src="/assets/js/pals-cam-acts.js"></script>
+<script src="/assets/js/pals-cam-more.js"></script>
+<script src="/assets/js/pals-cam-tricks.js"></script>
+<script src="/assets/js/pals-cam.js"></script>
+<script>
+/* Pal Cam TV: the pal cam, full screen, for a monitor that runs all day.
+   - asks the browser to keep the screen awake while it shows (Screen Wake Lock, where supported)
+   - starts a fresh scene every 12 minutes, which also picks up the current time of day
+   - hides the mouse pointer when it isn't moving
+   Nothing is sent anywhere, and nothing you do here is stored. */
+(function () {
+  'use strict';
+  var SCENE_MS = 12 * 60 * 1000;
+  var start = document.getElementById('tv-start'), go = document.getElementById('tv-go'), hint = document.getElementById('tv-hint');
+  var on = false, timer = 0, lock = null, capsOff = false, quietT = 0, hintT = 0;
+  var cam = function () { return window.TOLPalsCam; };
+
+  function say(t) { hint.textContent = t; hint.classList.add('is-on'); clearTimeout(hintT); hintT = setTimeout(function () { hint.classList.remove('is-on'); }, 3500); }
+  function ov() { return document.querySelector('.pc-ov'); }
+  function styleCam() {
+    var o = ov(); if (!o) return;
+    o.classList.add('is-tv');
+    var cap = o.querySelector('.pc-cap'); if (cap) cap.classList.toggle('tv-off', capsOff);
+  }
+  function keepAwake() {
+    if (!on || !('wakeLock' in navigator) || lock) return;
+    navigator.wakeLock.request('screen').then(function (l) { lock = l; l.addEventListener('release', function () { lock = null; }); }).catch(function () {});
+  }
+  function freshScene() {
+    if (!on || !cam()) return;
+    cam().close(); cam().open({});
+    styleCam();
+  }
+  function begin() {
+    if (!cam()) { say('The pal cam is still loading. Try again in a moment.'); return; }
+    on = true; start.hidden = true;
+    var el = document.documentElement;
+    if (el.requestFullscreen && !document.fullscreenElement) el.requestFullscreen().catch(function () {});
+    cam().open({}); styleCam();
+    // the cam builds its overlay as it opens; style it again once it's there
+    setTimeout(styleCam, 50); setTimeout(styleCam, 3000);
+    keepAwake();
+    clearInterval(timer); timer = setInterval(function () { freshScene(); keepAwake(); }, SCENE_MS);
+    say(lock || !('wakeLock' in navigator) ? 'Press Esc to stop' : 'Press Esc to stop');
+    quiet();
+  }
+  function end() {
+    if (!on) return;
+    on = false; clearInterval(timer);
+    if (cam() && cam().isOpen()) cam().close();
+    if (lock) { lock.release().catch(function () {}); lock = null; }
+    if (document.fullscreenElement && document.exitFullscreen) document.exitFullscreen().catch(function () {});
+    document.documentElement.classList.remove('tv-quiet');
+    start.hidden = false; go.focus();
+  }
+  function quiet() {
+    document.documentElement.classList.remove('tv-quiet');
+    clearTimeout(quietT);
+    if (on) quietT = setTimeout(function () { document.documentElement.classList.add('tv-quiet'); }, 3000);
+  }
+
+  go.addEventListener('click', begin);
+  try { go.focus(); } catch (e) {}
+  // Esc belongs to us in TV mode (the cam would otherwise just close itself)
+  window.addEventListener('keydown', function (e) {
+    if (!on) return;
+    if (e.key === 'Escape' || e.key === 'GoBack' || e.key === 'BrowserBack') { e.preventDefault(); e.stopImmediatePropagation(); end(); }
+    else if (e.key === 'c' || e.key === 'C') { capsOff = !capsOff; styleCam(); say(capsOff ? 'Captions hidden' : 'Captions showing'); e.stopImmediatePropagation(); }
+  }, true);
+  // if the cam gets closed some other way (a click outside the stage), bring it straight back
+  setInterval(function () { if (on && cam() && !cam().isOpen()) { cam().open({}); styleCam(); } }, 2000);
+  document.addEventListener('visibilitychange', function () { if (!document.hidden) keepAwake(); });
+  document.addEventListener('fullscreenchange', function () { if (on && !document.fullscreenElement) say('Press F11 (or Ctrl+Cmd+F on a Mac) for full screen'); });
+  window.addEventListener('pointermove', quiet, { passive: true });
+  if (/[?&]autostart=1\b/.test(location.search)) window.addEventListener('load', function () { setTimeout(begin, 300); });
+})();
+</script>
+</body>
+</html>

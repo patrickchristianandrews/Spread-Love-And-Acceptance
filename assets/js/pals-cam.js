@@ -839,6 +839,7 @@
     '@keyframes pcDot{50%{opacity:.35}}' +
     '.pc-ov{position:fixed;inset:0;z-index:10000;display:flex;align-items:stretch;justify-content:center;background:#4A3F63;padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);box-sizing:border-box;overscroll-behavior:contain}' +
     '.pc-ov[hidden]{display:none}' +
+    '.pc-tvl{flex:none;margin:0;text-align:center;font-size:.88rem}.pc-tvl a{color:#5B4A86}.pc-ov.is-tv .pc-tvl{display:none}' +
     '.pc-box{display:flex;flex-direction:column;width:100%;max-width:1000px;height:100%;background:#FFFBF4;color:#3C3350;box-sizing:border-box;padding:.6rem .7rem .7rem;gap:.5rem;overflow:hidden;font-family:Lora,Georgia,serif}' +
     '@media (max-width:759px){.pc-box{justify-content:center}}' +
     '@media (min-width:760px){.pc-ov{align-items:center;padding:1.2rem}.pc-box{height:min(100%,860px);border-radius:26px;box-shadow:0 24px 70px rgba(30,20,50,.4);padding:.9rem 1.1rem 1rem}}' +
@@ -920,6 +921,7 @@
         '<div class="pc-btns"><button type="button" class="pc-b is-main pc-next">Next!</button><button type="button" class="pc-b is-sur pc-sur">Surprise me</button><button type="button" class="pc-b pc-pause" aria-pressed="false">Pause</button></div>' +
         '<div class="pc-trs"><button type="button" class="pc-tr" data-trick="0">Tidbit, do a trick!</button><button type="button" class="pc-tr" data-trick="1">Sugarfoot, do a trick!</button></div>' +
         '<details class="pc-tally pc-facts"><summary>Pal facts <span class="pc-fnote">three new ones each visit</span></summary><div class="pc-fgrid"><div><h3>Tidbit</h3><ul class="pc-fl"></ul></div><div><h3>Sugarfoot</h3><ul class="pc-fl"></ul></div></div></details>' +
+        '<p class="pc-tvl"><a href="/pal-cam-tv.html">Pal Cam TV: full screen, all day, for a TV or spare monitor →</a></p>' +
         '<p class="pc-sr pc-live" aria-live="polite"></p>' +
       '</div>';
     document.body.appendChild(ov);
