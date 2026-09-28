@@ -921,7 +921,7 @@
         '<div class="pc-btns"><button type="button" class="pc-b is-main pc-next">Next!</button><button type="button" class="pc-b is-sur pc-sur">Surprise me</button><button type="button" class="pc-b pc-pause" aria-pressed="false">Pause</button></div>' +
         '<div class="pc-trs"><button type="button" class="pc-tr" data-trick="0">Tidbit, do a trick!</button><button type="button" class="pc-tr" data-trick="1">Sugarfoot, do a trick!</button></div>' +
         '<details class="pc-tally pc-facts"><summary>Pal facts <span class="pc-fnote">three new ones each visit</span></summary><div class="pc-fgrid"><div><h3>Tidbit</h3><ul class="pc-fl"></ul></div><div><h3>Sugarfoot</h3><ul class="pc-fl"></ul></div></div></details>' +
-        '<p class="pc-tvl"><a href="/pal-cam-tv.html">Pal Cam TV: full screen, all day, for a TV or spare monitor →</a></p>' +
+        '<p class="pc-tvl"><a href="/pal-cam-tv.html">📺 Watch on your TV: Cast to a Chromecast, or full screen all day →</a></p>' +
         '<p class="pc-sr pc-live" aria-live="polite"></p>' +
       '</div>';
     document.body.appendChild(ov);
