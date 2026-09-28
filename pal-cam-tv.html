@@ -30,6 +30,10 @@
   .tv-start ul { margin: .4rem 0 0; padding: 0; list-style: none; font-size: .95rem; line-height: 1.6; color: #D8CFF0; }
   .tv-start a { color: #FFF8EE; }
   .tv-start[hidden] { display: none; }
+  .tv-cast { display: flex; align-items: center; gap: .6rem; padding: .5rem 1.1rem .5rem .7rem; border-radius: 999px; background: rgba(255,248,238,.14); cursor: pointer; font: 600 1.05rem Lora, Georgia, serif; color: #FFF8EE; border: 1.5px solid rgba(255,248,238,.5); min-height: 48px; box-sizing: border-box; }
+  .tv-cast[hidden] { display: none; }
+  .tv-cast google-cast-launcher { display: block; width: 30px; height: 30px; --connected-color: #F2CAD5; --disconnected-color: #FFF8EE; }
+  .tv-cast-state { font-size: .92rem; color: #D8CFF0; min-height: 1.2em; }
   /* TV mode: the cam fills the whole screen, nothing else */
   .pc-ov.is-tv { padding: 0 !important; align-items: stretch !important; background: #000; }
   .pc-ov.is-tv .pc-box { max-width: none !important; height: 100% !important; border-radius: 0 !important; box-shadow: none !important; padding: 0 !important; gap: 0 !important; background: #000; }
@@ -47,6 +51,8 @@
   <h1>Pal Cam TV</h1>
   <p>Tidbit and Sugarfoot on the big screen, all day. Press start and leave it running. The scene changes every so often, and the light follows the real time of day, so evenings get cozy and nights get dark.</p>
   <button type="button" class="tv-go" id="tv-go" autofocus>Start Pal Cam TV</button>
+  <button type="button" class="tv-cast" id="tv-cast" hidden><google-cast-launcher></google-cast-launcher><span>Cast to your TV</span></button>
+  <p class="tv-cast-state" id="tv-cast-state" aria-live="polite"></p>
   <ul>
     <li>Press <b>Esc</b> (or <b>Back</b> on a TV remote) to come back to this screen.</li>
     <li>Press <b>C</b> to show or hide the captions.</li>
@@ -130,7 +136,42 @@
   document.addEventListener('visibilitychange', function () { if (!document.hidden) keepAwake(); });
   document.addEventListener('fullscreenchange', function () { if (on && !document.fullscreenElement) say('Press F11 (or Ctrl+Cmd+F on a Mac) for full screen'); });
   window.addEventListener('pointermove', quiet, { passive: true });
-  if (/[?&]autostart=1\b/.test(location.search)) window.addEventListener('load', function () { setTimeout(begin, 300); });
+  var receiver = /[?&]receiver=1\b/.test(location.search);
+  if (!receiver && /[?&]autostart=1\b/.test(location.search)) window.addEventListener('load', function () { setTimeout(begin, 300); });
+
+  /* ---------- Cast ----------
+     The TV side (the "receiver") is this same page with ?receiver=1: it runs the cam full screen on
+     the Chromecast or Google TV. The Cast button only appears once CAST_APP_ID is filled in (it comes
+     from registering this page in the Google Cast SDK Developer Console) and a Cast device is nearby.
+     Casting works from Chrome on a computer or an Android phone. */
+  var CAST_APP_ID = '';
+  function addScript(src) { var sc = document.createElement('script'); sc.src = src; document.head.appendChild(sc); return sc; }
+  if (receiver) {
+    addScript('https://www.gstatic.com/cast/sdk/libs/caf_receiver/v3/cast_receiver_framework.js').onload = function () {
+      try {
+        var o = new cast.framework.CastReceiverOptions();
+        o.disableIdleTimeout = true; o.skipPlayersLoad = true;
+        cast.framework.CastReceiverContext.getInstance().start(o);
+      } catch (e) {}
+    };
+    window.addEventListener('load', function () { setTimeout(begin, 300); });
+  } else if (CAST_APP_ID) {
+    var castBtn = document.getElementById('tv-cast'), castState = document.getElementById('tv-cast-state');
+    window.__onGCastApiAvailable = function (ok) {
+      if (!ok || !window.cast || !cast.framework) return;
+      var ctx = cast.framework.CastContext.getInstance();
+      ctx.setOptions({ receiverApplicationId: CAST_APP_ID, autoJoinPolicy: chrome.cast.AutoJoinPolicy.ORIGIN_SCOPED });
+      function sync() {
+        var st = ctx.getCastState();
+        castBtn.hidden = st === cast.framework.CastState.NO_DEVICES_AVAILABLE;
+        var ses = ctx.getCurrentSession();
+        castState.textContent = st === cast.framework.CastState.CONNECTED && ses ? 'Playing on ' + ses.getCastDevice().friendlyName + '. You can close this page; the TV keeps going.' : '';
+      }
+      ctx.addEventListener(cast.framework.CastContextEventType.CAST_STATE_CHANGED, sync); sync();
+      castBtn.addEventListener('click', function (e) { if (e.target === castBtn || e.target.tagName === 'SPAN') ctx.requestSession().catch(function () {}); });
+    };
+    addScript('https://www.gstatic.com/cv/js/sender/v1/cast_sender.js?loadCastFramework=1');
+  }
 })();
 </script>
 </body>
