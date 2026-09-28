@@ -9,7 +9,7 @@
 
   All three make the same data object (see tol-fullpath-model.js), which also
   downloads and uploads as a small JSON backup. The report is shown on the page
-  and downloads as a PDF.
+  and downloads as a PDF. On screen it has a contents list and folding sections.
 
   Privacy: nothing is sent anywhere, and the page's Content-Security-Policy
   blocks it. Nothing is stored unless "Keep a draft on this device" is on (the
@@ -340,6 +340,60 @@
 
   /* ------------------------------------------------------------ the report on screen */
 
+  function ulOf(items, cls) { var u = h('ul', { className: cls || '' }); items.forEach(function (t) { if (t) u.appendChild(h('li', { text: t })); }); return u; }
+  function dlOf(rows, cls) { var d = h('dl', { className: 'fp-kv' + (cls ? ' ' + cls : '') }); rows.forEach(function (r) { if (r[1] == null || r[1] === '') return; d.appendChild(h('dt', { text: r[0] })); d.appendChild(h('dd', { text: r[1] })); }); return d; }
+  function linkEl(l, pre) { return l ? h('p', { className: 'fp-links' }, [pre || 'On the site: ', h('a', { href: l[1], text: l[0] })]) : null; }
+  function tableEl(t) {
+    var wrapEl = h('div', { className: 'fp-tablewrap' });
+    if (t.title) wrapEl.appendChild(h('p', { className: 'fp-sub fp-sub-brass', text: t.title }));
+    var tb = h('table', { className: 'fp-table' }), cg = h('colgroup'), tot = (t.widths || t.head.map(function () { return 1; })).reduce(function (a, b) { return a + b; }, 0);
+    (t.widths || t.head.map(function () { return 1; })).forEach(function (w) { var col = h('col'); col.style.width = (w / tot * 100).toFixed(2) + '%'; cg.appendChild(col); });
+    tb.appendChild(cg);
+    var th = h('thead'), tr = h('tr'); t.head.forEach(function (x) { tr.appendChild(h('th', { scope: 'col', text: x })); }); th.appendChild(tr); tb.appendChild(th);
+    var body = h('tbody');
+    t.rows.forEach(function (r) { var row = h('tr'); r.forEach(function (cell, i) { row.appendChild(h(i === 0 ? 'th' : 'td', { scope: i === 0 ? 'row' : null, text: String(cell == null ? '' : cell) })); }); body.appendChild(row); });
+    tb.appendChild(body);
+    wrapEl.appendChild(tb);
+    if (t.note) wrapEl.appendChild(h('p', { className: 'fp-note fp-small', text: t.note }));
+    return wrapEl;
+  }
+  function barsEl(b) {
+    var box = h('div', { className: 'fp-bars' }, [h('p', { className: 'fp-sub fp-sub-brass', text: b.title })]);
+    b.items.forEach(function (it, i) {
+      var fill = h('span', { className: 'fp-bar-fill is-c' + (i % 6) });
+      fill.style.width = (it.max > 0 ? Math.max(0, Math.min(1, it.value / it.max)) * 100 : 0).toFixed(1) + '%';
+      box.appendChild(h('div', { className: 'fp-bar', role: 'img', 'aria-label': it.label + ': ' + it.text }, [
+        h('span', { className: 'fp-bar-l', text: it.label }), h('span', { className: 'fp-bar-v', text: it.text }),
+        h('span', { className: 'fp-bar-track', 'aria-hidden': 'true' }, [fill])
+      ]));
+    });
+    if (b.note) box.appendChild(h('p', { className: 'fp-note fp-small', text: b.note }));
+    return box;
+  }
+  function detailEl(s, m) {
+    var det = h('details', { className: 'fp-rep-wp' + (s.status === 'blank' ? ' is-blank' : ''), id: 'fp-r-' + s.code.toLowerCase(), open: s.status !== 'blank' ? 'open' : null }, [
+      h('summary', {}, [h('span', { className: 'fp-rep-code', text: s.code }), ' ' + s.name + (s.status === 'blank' ? ' · not filled in' : '')])
+    ]);
+    if (s.title && s.title !== s.name) det.appendChild(h('p', { className: 'fp-page-sub', text: s.title }));
+    det.appendChild(h('p', { className: 'fp-sub', text: 'What was entered' }));
+    if (s.entered.length) det.appendChild(dlOf(s.entered)); else det.appendChild(h('p', { className: 'fp-note', text: 'Not filled in. Nothing here is guessed.' }));
+    (s.bars || []).forEach(function (b) { det.appendChild(barsEl(b)); });
+    (s.tables || []).forEach(function (t) { det.appendChild(tableEl(t)); });
+    var shows = (s.shows || []).concat(s.more || []);
+    if (shows.length) { det.appendChild(h('p', { className: 'fp-sub', text: 'What it shows' })); det.appendChild(ulOf(shows)); }
+    if (s.suggests && s.suggests.length) { det.appendChild(h('p', { className: 'fp-sub', text: 'What it suggests' })); det.appendChild(ulOf(s.suggests)); }
+    det.appendChild(h('p', { className: 'fp-sub', text: 'What it can’t tell you' }));
+    det.appendChild(h('p', { className: 'fp-note', text: s.doesnt }));
+    if (s.card) det.appendChild(h('p', { className: 'fp-callout is-lav fp-quote' }, [h('strong', { text: 'A note you could share: ' }), s.card]));
+    det.appendChild(h('p', { className: 'fp-callout is-butter' }, [h('strong', { text: 'One next step: ' }), s.next]));
+    if (s.ask) det.appendChild(h('p', { className: 'fp-why', text: (m.road === 'self' ? 'Ask yourself: ' : 'Talk about: ') + s.ask }));
+    var le = linkEl(s.link); if (le) det.appendChild(le);
+    return det;
+  }
+  function itemEl(title, tag, rows, cls) {
+    return h('div', { className: 'fp-item ' + (cls || '') }, [h('p', { className: 'fp-item-t', text: title }), tag ? h('p', { className: 'fp-item-tag', text: tag }) : null, dlOf(rows, 'fp-kv-tight')]);
+  }
+
   function makeReport() {
     if (!S.data) return;
     var m = FP.report(S.data), box = $('fp-report');
@@ -349,7 +403,7 @@
       h('p', { className: 'fp-page-k', text: 'Full path report · ' + m.roadLabel }),
       h('h3', { className: 'fp-h3', id: 'fp-rep-title', tabindex: '-1', text: m.title }),
       h('p', { className: 'fp-rep-for', text: 'For ' + m.forWho + (m.n > 1 ? ' · ' + m.n + ' people' : '') }),
-      h('p', { className: 'fp-note', text: 'Not a verdict. ' + (m.lens || 'It describes the setup, never a person.') + ' Made on this device; nothing was sent anywhere.' })
+      h('p', { className: 'fp-note', text: 'Not a verdict. ' + (m.lens || 'It describes the setup, never a person.') + ' Everything stays on your device: this report was made here, and nothing was sent anywhere.' })
     ]));
     box.appendChild(h('div', { className: 'fp-actions' }, [
       h('button', { type: 'button', className: 'ws-go', id: 'fp-report-pdf', text: 'Download the report PDF' }),
@@ -357,70 +411,173 @@
       h('button', { type: 'button', className: 'fp-btn-quiet', id: 'fp-json2', text: 'Save a backup (JSON)' })
     ]));
     if (m.stateNote) box.appendChild(h('p', { className: 'fp-callout is-lav', text: m.stateNote }));
-    // summary
+
+    var secs = [];
+    function sec(id, title, open, kids) {
+      secs.push([id, title]);
+      var body = h('div', { className: 'fp-rsec-body' }, kids);
+      return h('details', { className: 'fp-rsec', id: 'fp-r-' + id, open: open ? 'open' : null }, [h('summary', {}, [h('span', { className: 'fp-rsec-n', text: String(secs.length) }), h('span', { className: 'fp-rsec-t', text: title })]), body]);
+    }
+    var all = [];
+
+    // 1. Executive summary
     var tiles = h('div', { className: 'fp-tiles' });
     m.tiles.forEach(function (t) { tiles.appendChild(h('div', { className: 'fp-tile is-' + t.tone }, [h('p', { className: 'fp-tile-k', text: t.k }), h('p', { className: 'fp-tile-v', text: t.v }), h('p', { className: 'fp-tile-b', text: t.band }), t.note ? h('p', { className: 'fp-tile-n', text: t.note }) : null])); });
-    box.appendChild(h('h4', { className: 'fp-h4', text: 'Summary: the headline numbers' }));
-    box.appendChild(tiles);
-    var fl = h('ol', { className: 'fp-findings' });
-    m.findings.forEach(function (t) { fl.appendChild(h('li', { text: t })); });
-    box.appendChild(h('h4', { className: 'fp-h4', text: 'Three things this shows' }));
-    box.appendChild(fl);
-    // workpapers
+    var fl = h('ol', { className: 'fp-findings' }); m.findings.forEach(function (t) { fl.appendChild(h('li', { text: t })); });
+    var top = h('ol', { className: 'fp-top' });
+    m.summary.top.forEach(function (t) { top.appendChild(h('li', {}, [h('strong', { text: t.title }), h('span', { text: t.text }), h('span', { className: 'fp-top-step', text: 'First step: ' + t.step })])); });
+    var ready = [];
+    if (m.ready && m.ready.going) ready.push('Going well: ' + m.ready.going);
+    if (m.ready && m.ready.focus) ready.push('What you most want help with: ' + m.ready.focus);
+    if (m.ready && m.ready.when) ready.push('When you’ll read it: ' + m.ready.when);
+    all.push(sec('summary', 'Executive summary', true, [
+      h('p', { className: 'fp-lead', text: m.summary.para }),
+      h('h4', { className: 'fp-h4', text: 'Summary: the headline numbers' }), tiles, ulOf(m.summary.bands, 'fp-bands'),
+      h('h4', { className: 'fp-h4', text: 'Key findings' }), fl,
+      h('h4', { className: 'fp-h4', text: 'Strengths to protect' }), ulOf(m.summary.strengths.map(function (s) { return s.title + '. ' + s.text; }), 'fp-strengths'),
+      h('h4', { className: 'fp-h4', text: 'Top 3 things to work on' }), top,
+      h('div', { className: 'fp-callout is-sand' }, [h('strong', { text: 'Confidence: ' + m.confidence.level + '. ' }), m.confidence.text + ' ' + m.confidence.weight]),
+      ready.length ? h('div', { className: 'fp-callout' }, [h('strong', { text: 'In your words' }), ulOf(ready)]) : null
+    ]));
+
+    // 2. Detailed findings
     var wps = h('div', { className: 'fp-rep-wps' });
-    m.sections.forEach(function (s) {
-      var det = h('details', { className: 'fp-rep-wp' + (s.status === 'blank' ? ' is-blank' : ''), open: s.status !== 'blank' ? 'open' : null }, [
-        h('summary', {}, [h('span', { className: 'fp-rep-code', text: s.code }), ' ' + s.name + (s.status === 'blank' ? ' · not filled in' : '')])
-      ]);
-      if (s.entered.length) { var dl = h('dl', { className: 'fp-kv' }); s.entered.forEach(function (e) { dl.appendChild(h('dt', { text: e[0] })); dl.appendChild(h('dd', { text: e[1] })); }); det.appendChild(h('p', { className: 'fp-sub', text: 'What was entered' })); det.appendChild(dl); }
-      else det.appendChild(h('p', { className: 'fp-note', text: 'Not filled in. Nothing here is guessed.' }));
-      if (s.shows.length) { det.appendChild(h('p', { className: 'fp-sub', text: 'What it shows' })); var ul = h('ul', {}); s.shows.forEach(function (t) { ul.appendChild(h('li', { text: t })); }); det.appendChild(ul); }
-      det.appendChild(h('p', { className: 'fp-sub', text: 'What it doesn’t show' }));
-      det.appendChild(h('p', { className: 'fp-note', text: s.doesnt }));
-      det.appendChild(h('p', { className: 'fp-callout is-butter' }, [h('strong', { text: 'One next step: ' }), s.next]));
-      wps.appendChild(det);
-    });
-    box.appendChild(h('h4', { className: 'fp-h4', text: 'Workpaper by workpaper' }));
-    box.appendChild(wps);
-    // CALC-01
-    var cs = m.calcSection, cdet = h('details', { className: 'fp-rep-wp', open: 'open' }, [h('summary', {}, [h('span', { className: 'fp-rep-code', text: 'CALC-01' }), cs.applies ? ' Can the load last?' : ' Your state and retuning count'])]);
-    var cdl = h('dl', { className: 'fp-kv' });
-    cs.rows.forEach(function (r) { cdl.appendChild(h('dt', { text: r[0] })); cdl.appendChild(h('dd', { text: r[1] + ' · ' + r[2] })); });
-    cdet.appendChild(cdl);
-    var cul = h('ul', {}); cs.lines.forEach(function (t) { cul.appendChild(h('li', { text: t })); }); cdet.appendChild(cul);
+    m.sections.forEach(function (s) { wps.appendChild(detailEl(s, m)); });
+    var cs = m.calcSection, cdet = h('details', { className: 'fp-rep-wp', id: 'fp-r-calc-01', open: 'open' }, [h('summary', {}, [h('span', { className: 'fp-rep-code', text: 'CALC-01' }), cs.applies ? ' Can the load last?' : ' Your state and retuning count'])]);
+    if (cs.state) cdet.appendChild(h('p', { className: 'fp-note', text: 'Step zero, your state: ' + cs.state + '.' }));
+    cdet.appendChild(dlOf(cs.rows.map(function (r) { return [r[0], r[1] + ' · ' + r[2]]; })));
+    cdet.appendChild(ulOf(cs.lines));
+    if (cs.moves && cs.moves.length) { cdet.appendChild(h('p', { className: 'fp-sub', text: 'What would move the score' })); cdet.appendChild(ulOf(cs.moves)); }
+    var cl = linkEl(cs.link); if (cl) cdet.appendChild(cl);
     wps.appendChild(cdet);
-    // road
-    var rp = m.roadPart, road = h('section', { className: 'fp-rep-road' }, [h('h4', { className: 'fp-h4', text: rp.heading })]);
-    rp.paras.forEach(function (t) { road.appendChild(h('p', { text: t })); });
-    (rp.blocks || []).forEach(function (b) { road.appendChild(h('p', { className: 'fp-sub', text: b[0] })); road.appendChild(h('p', { text: b[1] })); });
-    if (rp.suggestions.length) { road.appendChild(h('p', { className: 'fp-sub', text: 'Suggestions' })); var su = h('ul', {}); rp.suggestions.forEach(function (t) { su.appendChild(h('li', { text: t })); }); road.appendChild(su); }
-    if (rp.talk && rp.talk.length) { road.appendChild(h('p', { className: 'fp-sub', text: rp.talkTitle })); var tu = h('ul', { className: 'fp-quotes' }); rp.talk.forEach(function (t) { tu.appendChild(h('li', { text: '“' + t + '”' })); }); road.appendChild(tu); }
-    if (rp.links.length) { var lp = h('p', { className: 'fp-links' }, ['Read and try: ']); rp.links.forEach(function (l, i) { if (i) lp.appendChild(document.createTextNode(' · ')); lp.appendChild(h('a', { href: l[1], text: l[0] })); }); road.appendChild(lp); }
-    box.appendChild(road);
-    // pillars
-    var pv = m.pillars, pil = h('section', { className: 'fp-rep-pillars' }, [h('h4', { className: 'fp-h4' }, ['The ', h('a', { href: '/five-pillars.html', text: 'Five Pillars' }), ' view'])]);
-    if (pv.strongest) pil.appendChild(h('p', { className: 'fp-callout is-mint' }, [h('strong', { text: 'Looks strongest: Pillar ' + pv.strongest.n + ', ' + pv.strongest.name + '. ' }), 'In you: ' + pv.strongest.inYou + ' Between you and others: ' + pv.strongest.between]));
-    if (pv.care && pv.care !== pv.strongest && !pv.note) pil.appendChild(h('p', { className: 'fp-callout is-peach' }, [h('strong', { text: 'Needs the most care: Pillar ' + pv.care.n + ', ' + pv.care.name + '. ' }), 'In you: ' + pv.care.inYou + ' Between you and others: ' + pv.care.between]));
-    if (pv.note) pil.appendChild(h('p', { className: 'fp-note', text: pv.note }));
-    var pt = h('ul', { className: 'fp-pillar-list' });
-    pv.rows.forEach(function (r) { pt.appendChild(h('li', {}, [h('a', { href: '/five-pillars.html#' + r.anchor, text: 'Pillar ' + r.n + ': ' + r.name }), h('span', { className: 'fp-pillar-v', text: r.value != null ? ' · reads ' + FP.fmt(r.value) : ' · not filled in' }), h('span', { className: 'fp-pillar-lines', text: 'In you: ' + r.inYou + ' Between you and others: ' + r.between })])); });
-    pil.appendChild(pt);
-    box.appendChild(pil);
-    // plan
+    m.extra.forEach(function (s) { wps.appendChild(detailEl(s, m)); });
+    all.push(sec('findings', 'Detailed findings, section by section', true, [h('p', { className: 'fp-note', text: 'Each section says what was entered, what it shows, what it suggests and what it can’t tell you. Tap a heading to fold it away.' }), wps]));
+
+    // 3. Connections
+    var ins = h('div', { className: 'fp-items' }), work = m.insights.filter(function (r) { return !r.strength; }), good = m.insights.filter(function (r) { return r.strength; });
+    work.forEach(function (r) { ins.appendChild(itemEl(r.title, 'Pillar ' + r.pillar + ' · ' + r.src.join(', '), [['What we see', r.finding], ['Why it matters', r.why], ['What to try', r.rec ? r.rec.first : '']], 'is-work')); });
+    var goodBox = h('div', { className: 'fp-items' });
+    good.forEach(function (r) { goodBox.appendChild(itemEl(r.title, 'Pillar ' + r.pillar + ' · ' + r.src.join(', '), [['What we see', r.finding], ['Why it matters', r.why]], 'is-good')); });
+    all.push(sec('connections', 'Connections across workpapers', true, [
+      h('p', { className: 'fp-note', text: m.insights.length ? m.insights.length + ' of the report’s ' + m.counts.rules + ' insight rules fired for your answers. They describe the setup, not anyone’s character.' : 'None of the ' + m.counts.rules + ' insight rules fired yet. Most need two or more pages filled in.' }),
+      ins, good.length ? h('h4', { className: 'fp-h4', text: 'Strengths the pages show' }) : null, good.length ? goodBox : null
+    ]));
+
+    // 4. Worth a second look
+    var an = h('div', { className: 'fp-items' });
+    m.anomalies.forEach(function (a) { an.appendChild(itemEl(a.where, a.level === 'check' ? 'Worth fixing if it is a typo' : 'Worth knowing', [['What we noticed', a.text], ['What to do', a.fix]], a.level === 'check' ? 'is-check' : 'is-noted')); });
+    all.push(sec('checks', 'Worth a second look', true, [
+      h('p', { className: 'fp-note', text: 'We ran ' + m.counts.checks + ' gentle checks: numbers that don’t add up, answers that seem to disagree, and gaps. It may be a typo, or it may be real. ' + (m.anomalies.length ? m.anomalies.length + (m.anomalies.length === 1 ? ' thing' : ' things') + ' came up.' : 'Nothing stood out: the numbers hang together.') }),
+      an
+    ]));
+
+    // 5. Recommendations and plan
+    var recBox = h('div', {});
+    [['now', 'Now'], ['week', 'This week'], ['month', 'This month']].forEach(function (hz) {
+      recBox.appendChild(h('h4', { className: 'fp-h4', text: hz[1] }));
+      if (!m.recs[hz[0]].length) { recBox.appendChild(h('p', { className: 'fp-note', text: 'Nothing extra for ' + hz[1].toLowerCase() + '.' })); return; }
+      var it = h('div', { className: 'fp-items' });
+      m.recs[hz[0]].forEach(function (r) {
+        var el = itemEl(r.title, r.pillar ? 'Pillar ' + r.pillar : '', [['Why', r.why], ['First step', r.first], ['Try saying', r.script], ['It’s working when', r.working]], 'is-rec is-' + hz[0]);
+        var le2 = linkEl(r.link, 'Tool: '); if (le2) el.appendChild(le2);
+        it.appendChild(el);
+      });
+      recBox.appendChild(it);
+    });
     var pl = h('ol', { className: 'fp-plan' });
     m.plan.forEach(function (w) { pl.appendChild(h('li', {}, [h('strong', { text: 'Week ' + w.week + ': ' + w.title }), h('span', { className: 'fp-plan-wp', text: w.wp + (w.pillar ? ' · Pillar ' + w.pillar : '') }), h('span', { text: w.do })])); });
-    box.appendChild(h('h4', { className: 'fp-h4', text: 'Your ' + m.plan.length + '-week plan' }));
-    box.appendChild(pl);
-    // fair
+    recBox.appendChild(h('h4', { className: 'fp-h4', text: 'Your ' + m.plan.length + '-week plan' }));
+    recBox.appendChild(pl);
+    all.push(sec('recs', 'Recommendations and your plan', true, [recBox]));
+
+    // 6. People, or the Individual road's deeper look
+    if (m.persons) {
+      var pb = h('div', { className: 'fp-people' });
+      m.persons.forEach(function (p) {
+        pb.appendChild(h('details', { className: 'fp-person-card' }, [h('summary', { text: p.label }),
+          dlOf(p.rows), h('p', { className: 'fp-sub', text: 'What they bring' }), ulOf(p.strengths), h('p', { className: 'fp-sub', text: 'What might help' }), ulOf(p.help),
+          h('p', { className: 'fp-callout is-lav fp-quote' }, [h('strong', { text: 'A conversation starter: ' }), '“' + p.starter + '”'])]));
+      });
+      all.push(sec('people', 'A page for each person', false, [h('p', { className: 'fp-note', text: 'Not scorecards and not a ranking. Each one is written to that person about their own week. Read your own first; share it if you want to.' }), pb]));
+    }
+    if (m.self) {
+      var sd = m.self, sb = [h('p', { text: sd.intro })];
+      sd.layers.forEach(function (ly) { sb.push(h('p', { className: 'fp-sub', text: ly[0] })); sb.push(ulOf(ly[1])); });
+      sb.push(h('h4', { className: 'fp-h4', text: 'Which layer is it?' })); sb.push(ulOf(sd.sorting));
+      sb.push(h('h4', { className: 'fp-h4', text: 'Explaining yourself to others' }));
+      if (sd.explain.to) sb.push(h('p', { className: 'fp-note', text: 'You named: ' + sd.explain.to + '.' }));
+      sb.push(sd.explain.card ? h('p', { className: 'fp-callout is-lav fp-quote', text: sd.explain.card }) : h('p', { className: 'fp-note', text: 'Once your Wiring Card has a few lines, this becomes a short note you can share.' }));
+      sb.push(h('p', { className: 'fp-sub', text: 'Lines you could use' })); sb.push(ulOf(sd.explain.scripts, 'fp-quotes'));
+      var lp = h('p', { className: 'fp-links' }, ['Read more: ']);
+      sd.links.filter(Boolean).forEach(function (l, i) { if (i) lp.appendChild(document.createTextNode(' · ')); lp.appendChild(h('a', { href: l[1], text: l[0] })); });
+      sb.push(lp);
+      all.push(sec('self', 'Understanding yourself: wiring, patterns, conditions', true, sb));
+    }
+
+    // 7. For your road
+    var rp = m.roadPart, road = [];
+    rp.paras.forEach(function (t) { road.push(h('p', { text: t })); });
+    (rp.blocks || []).forEach(function (b) { road.push(h('p', { className: 'fp-sub', text: b[0] })); road.push(h('p', { text: b[1] })); });
+    if (rp.suggestions.length) { road.push(h('p', { className: 'fp-sub', text: 'Suggestions' })); road.push(ulOf(rp.suggestions)); }
+    if (rp.look && rp.look.length) { road.push(h('p', { className: 'fp-sub', text: 'What to look for' })); road.push(ulOf(rp.look)); }
+    if (rp.together) road.push(h('p', { className: 'fp-callout' }, [h('strong', { text: rp.together[0] + ': ' }), rp.together[1]]));
+    if (rp.links.length) { var rl2 = h('p', { className: 'fp-links' }, ['Read and try: ']); rp.links.forEach(function (l, i) { if (i) rl2.appendChild(document.createTextNode(' · ')); rl2.appendChild(h('a', { href: l[1], text: l[0] })); }); road.push(rl2); }
+    all.push(sec('road', rp.heading, false, road));
+
+    // 8. The Five Pillars
+    var pv = m.pillars, pil = [];
+    if (pv.strongest) pil.push(h('p', { className: 'fp-callout is-mint' }, [h('strong', { text: 'Looks strongest: Pillar ' + pv.strongest.n + ', ' + pv.strongest.name + '. ' }), 'In you: ' + pv.strongest.inYouI + ' Between you and others: ' + pv.strongest.betweenI]));
+    if (pv.care && pv.care !== pv.strongest && !pv.note) pil.push(h('p', { className: 'fp-callout is-peach' }, [h('strong', { text: 'Needs the most care: Pillar ' + pv.care.n + ', ' + pv.care.name + '. ' }), 'In you: ' + pv.care.inYouI + ' Between you and others: ' + pv.care.betweenI]));
+    if (pv.note) pil.push(h('p', { className: 'fp-note', text: pv.note }));
+    pil.push(barsEl({ title: 'Rough readings, 0 to 1 (higher is steadier)', items: pv.rows.map(function (r) { return { label: 'Pillar ' + r.n + ': ' + r.name, value: r.value || 0, max: 1, text: r.value != null ? FP.fmt(r.value) : 'not filled in' }; }) }));
+    var pt = h('ul', { className: 'fp-pillar-list' });
+    pv.rows.forEach(function (r) {
+      pt.appendChild(h('li', {}, [h('a', { href: '/five-pillars.html#' + r.anchor, text: 'Pillar ' + r.n + ': ' + r.name }), h('span', { className: 'fp-pillar-v', text: r.value != null ? ' · reads ' + FP.fmt(r.value) : ' · not filled in' }),
+        dlOf([['The data shows', r.shows], ['In you', r.inYouI], ['Between you', r.betweenI], ['A practice', r.practice]], 'fp-kv-tight')]));
+    });
+    pil.push(pt);
+    pil.push(h('p', { className: 'fp-note', text: 'Rough readings from what you entered, not scores on anyone.' }));
+    all.push(sec('pillars', 'The Five Pillars view', true, [h('p', {}, ['How the ', h('a', { href: '/five-pillars.html', text: 'Five Pillars' }), ' show up in your answers: each starts inside you, then shows up between you and others.'])].concat(pil)));
+
+    // 9. Discussion guide
+    var g = m.guide, qs = h('ol', { className: 'fp-questions' });
+    g.questions.forEach(function (t) { qs.appendChild(h('li', { text: t })); });
+    var gk = [h('h4', { className: 'fp-h4', text: 'Questions' }), qs, h('h4', { className: 'fp-h4', text: 'Ground rules' }), ulOf(g.rules), h('div', { className: 'fp-callout is-butter' }, [h('strong', { text: 'If it lands hard' }), ulOf(g.hard)])];
+    if (rp.talk && rp.talk.length) { gk.push(h('h4', { className: 'fp-h4', text: rp.talkTitle })); var tu = h('ul', { className: 'fp-quotes' }); rp.talk.forEach(function (t) { tu.appendChild(h('li', { text: '“' + t + '”' })); }); gk.push(tu); }
+    all.push(sec('guide', 'Discussion guide', true, gk));
+
+    // 10. Glossary and method
+    all.push(sec('method', 'Glossary and how this report works', false, [
+      h('h4', { className: 'fp-h4', text: 'How this report works' }), ulOf(m.method),
+      h('h4', { className: 'fp-h4', text: 'How complete the data is' }), h('p', { text: m.confidence.text + ' ' + m.confidence.weight }),
+      tableEl({ title: 'Page by page', head: ['Page', 'Status', 'Boxes filled in'], rows: m.completeness, widths: [2.4, 1, 1] }),
+      h('h4', { className: 'fp-h4', text: 'Glossary' }), dlOf(m.glossary)
+    ]));
+
+    // contents, then the sections
+    var toc = h('nav', { className: 'fp-toc', 'aria-label': 'In this report' }, [h('p', { className: 'fp-toc-k', text: 'In this report' })]), tol = h('ol', {});
+    secs.forEach(function (x) { tol.appendChild(h('li', {}, [h('a', { href: '#fp-r-' + x[0], 'data-open': 'fp-r-' + x[0], text: x[1] })])); });
+    toc.appendChild(tol);
+    toc.appendChild(h('p', { className: 'fp-toc-tools' }, [h('button', { type: 'button', className: 'ws-link', id: 'fp-open-all', text: 'Open every section' }), ' · ', h('button', { type: 'button', className: 'ws-link', id: 'fp-close-all', text: 'Fold them all' })]));
+    box.appendChild(toc);
+    all.forEach(function (x) { box.appendChild(x); });
     var fu = h('ul', { className: 'fp-fair' }); m.fair.forEach(function (t) { fu.appendChild(h('li', { text: t })); });
     box.appendChild(h('h4', { className: 'fp-h4', text: 'Keep it fair' }));
     box.appendChild(fu);
+    if (m.care) box.appendChild(h('p', { className: 'fp-why', text: m.care }));
     if (m.close) box.appendChild(h('p', { className: 'fp-callout is-butter fp-close', text: m.close }));
     show('fp-report');
     scrollTo(box);
     $('fp-rep-title').focus();
     say('Your report is ready below. Download the PDF to keep it.');
   }
+  function openSection(id) {
+    var el = $(id); if (!el) return;
+    if (el.tagName === 'DETAILS') el.open = true;
+    scrollTo(el);
+    var s = el.querySelector('summary'); if (s) s.focus();
+  }
+  function foldAll(open) { Array.prototype.forEach.call($('fp-report').querySelectorAll('details'), function (d) { d.open = open; }); }
 
   function reportPdf() {
     if (!S.data) return;
@@ -464,6 +621,8 @@
     });
 
     root.addEventListener('click', function (e) {
+      var a = e.target.closest('a[data-open]');
+      if (a && root.contains(a)) { e.preventDefault(); openSection(a.getAttribute('data-open')); return; }
       var t = e.target.closest('button');
       if (!t || !root.contains(t)) return;
       var id = t.id;
@@ -476,6 +635,7 @@
       else if (id === 'fp-json' || id === 'fp-json2') saveJson();
       else if (id === 'fp-filled-pdf') filledPdf();
       else if (id === 'fp-report-pdf') reportPdf();
+      else if (id === 'fp-open-all' || id === 'fp-close-all') foldAll(id === 'fp-open-all');
     });
     var form = $('fp-form');
     form.addEventListener('input', onFormInput);

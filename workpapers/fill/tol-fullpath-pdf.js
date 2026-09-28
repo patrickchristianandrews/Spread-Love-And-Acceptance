@@ -8,7 +8,9 @@
                       report". Plain AcroForm text boxes, check boxes and
                       radio groups, no JavaScript inside, page numbers on
                       every page, and a hidden version field.
-    reportPdf(model)  The comprehensive report (see TOLFullPath.report).
+    reportPdf(model)  The comprehensive report (see TOLFullPath.report): cover, contents,
+                      summary, findings with tables and bars, connections, data
+                      checks, recommendations and plan, people, pillars, guide.
     readPdf(bytes)    Reads the boxes of a filled-in package back out, from
                       any PDF app's save (Acrobat, Preview, Chrome, pdf-lib),
                       including compressed object streams.
@@ -483,6 +485,7 @@
   /* ------------------------------------------------------------ the report */
 
   var TONE = { good: C.mint, drift: C.butter, low: C.peach, none: C.head };
+  var BAR = ['#E88BA2', '#B49AD6', '#7FB98A', '#E9C95E', '#8EAEDB', '#EBA56B'];
 
   function tiles(lay, list) {
     var cols = 3, gap = 10, w = (W - gap * (cols - 1)) / cols;
@@ -490,7 +493,7 @@
       var row = list.slice(i, i + cols);
       var hs = row.map(function (t) {
         var band = wrap(t.band || '', 'Helvetica', 7.8, w - 16).slice(0, 4), note = t.note ? wrap(t.note, 'Times-Italic', 7.4, w - 16).slice(0, 3) : [];
-        var vs = t.v.length > 8 ? 13 : 19;
+        var vs = tw(t.v, 'Helvetica-Bold', 19) > w - 16 ? 13 : 19;
         return { band: band, note: note, vs: vs, h: 20 + vs + 6 + band.length * 10 + note.length * 9 + 8 };
       });
       var h = Math.max.apply(null, hs.map(function (x) { return x.h; }));
@@ -498,8 +501,8 @@
       row.forEach(function (t, k) {
         var x = L + k * (w + gap), m = hs[k];
         lay.doc.roundRect(x, lay.y, w, h, 10, TONE[t.tone] || C.head);
-        lay.doc.text(x + 8, lay.y + 13, enc(wrap(t.k.toUpperCase(), 'Helvetica-Bold', 6.8, w - 16)[0]), 'Helvetica-Bold', 6.8, C.soft);
-        lay.doc.text(x + 8, lay.y + 18 + m.vs, enc(t.v), 'Helvetica-Bold', m.vs, C.ink);
+        lay.doc.text(x + 8, lay.y + 13, wrap(t.k.toUpperCase(), 'Helvetica-Bold', 6.8, w - 16)[0], 'Helvetica-Bold', 6.8, C.soft);
+        lay.doc.text(x + 8, lay.y + 18 + m.vs, wrap(t.v, 'Helvetica-Bold', m.vs, w - 16)[0], 'Helvetica-Bold', m.vs, C.ink);
         var yy = lay.y + 24 + m.vs + 6;
         m.band.forEach(function (ln) { lay.doc.text(x + 8, yy, ln, 'Helvetica', 7.8, C.ink); yy += 10; });
         m.note.forEach(function (ln) { lay.doc.text(x + 8, yy, ln, 'Times-Italic', 7.4, C.soft); yy += 9; });
@@ -512,45 +515,182 @@
     var kw = o.kw || 150, cols3 = rows.some(function (r) { return r.length > 2; });
     rows.forEach(function (r) {
       var k = wrap(r[0], 'Helvetica-Bold', 8.6, kw - 8), v = wrap(r[1] || '', 'Helvetica', 8.8, cols3 ? (W - kw) * 0.45 : W - kw), n = cols3 ? wrap(r[2] || '', 'Times-Italic', 8.4, (W - kw) * 0.55 - 8) : [];
-      var h = Math.max(k.length, v.length, n.length) * 11.2 + 5;
-      if (h > 200) { v = v.slice(0, 16); h = Math.max(k.length, v.length, n.length) * 11.2 + 5; }
-      lay.room(h);
-      k.forEach(function (ln, i) { lay.doc.text(L, lay.y + 9 + i * 11.2, ln, 'Helvetica-Bold', 8.6, C.soft); });
-      v.forEach(function (ln, i) { lay.doc.text(L + kw, lay.y + 9 + i * 11.2, ln, 'Helvetica', 8.8, C.ink); });
-      n.forEach(function (ln, i) { lay.doc.text(L + kw + (W - kw) * 0.45 + 8, lay.y + 9 + i * 11.2, ln, 'Times-Italic', 8.4, C.soft); });
-      lay.y += h;
+      var lines = Math.max(k.length, v.length, n.length);
+      // a long answer breaks across pages line by line rather than running off the bottom
+      for (var i = 0; i < lines; i++) {
+        if (lay.room(11.2 + (i === lines - 1 ? 5 : 0)) && i === 0) { /* started on a new page */ }
+        if (k[i]) lay.doc.text(L, lay.y + 9, k[i], 'Helvetica-Bold', 8.6, C.soft);
+        if (v[i]) lay.doc.text(L + kw, lay.y + 9, v[i], 'Helvetica', 8.8, C.ink);
+        if (n[i]) lay.doc.text(L + kw + (W - kw) * 0.45 + 8, lay.y + 9, n[i], 'Times-Italic', 8.4, C.soft);
+        lay.y += 11.2;
+      }
+      lay.y += 5;
       lay.doc.line(L, lay.y - 2, R, lay.y - 2, C.line, 0.3);
     });
     lay.y += 6;
   }
   function sub(lay, t, color) {
-    lay.room(30);
-    lay.doc.text(L, lay.y + 9, enc(t.toUpperCase()), 'Helvetica-Bold', 7.4, color || C.credit);
+    lay.room(48);
+    lay.doc.text(L, lay.y + 9, wrap(t.toUpperCase(), 'Helvetica-Bold', 7.4, W)[0], 'Helvetica-Bold', 7.4, color || C.credit);
     lay.y += 14;
   }
+  function plural(n, one, many) { return n + ' ' + (n === 1 ? one : (many || one + 's')); }
+  function siteLink(l) { return l ? l[0] + ' (spreadloveandacceptance.com' + l[1] + ')' : ''; }
+
+  // A table with a header row, wrapped cells and a repeated header after a page break.
+  function table(lay, t) {
+    var size = 8.1, lh = size * 1.3, pad = 4;
+    var ws = t.widths || t.head.map(function () { return 1; }), tot = ws.reduce(function (a, b) { return a + b; }, 0);
+    var cw = ws.map(function (w) { return w / tot * W; });
+    var headL = t.head.map(function (h, i) { return wrap(h, 'Helvetica-Bold', 7.4, cw[i] - pad * 2); });
+    var headH = Math.max.apply(null, headL.map(function (l) { return l.length; })) * 9.4 + pad * 2;
+    var rowsL = t.rows.map(function (r) { return r.map(function (cell, i) { return wrap(String(cell == null ? '' : cell), 'Helvetica', size, cw[i] - pad * 2).slice(0, 30); }); });
+    var rowH = rowsL.map(function (r) { return Math.max.apply(null, [1].concat(r.map(function (l) { return l.length; }))) * lh + pad * 2 - 1; });
+    if (t.title) { lay.room(16 + headH + (rowH[0] || 0) + 4); sub(lay, t.title, C.brass); }
+    function head() {
+      lay.doc.rect(L, lay.y, W, headH, C.head);
+      var x = L;
+      headL.forEach(function (lines, i) { lines.forEach(function (ln, k) { lay.doc.text(x + pad, lay.y + pad + 7 + k * 9.4, ln, 'Helvetica-Bold', 7.4, C.soft); }); x += cw[i]; });
+      lay.y += headH;
+    }
+    lay.room(headH + (rowH[0] || 0));
+    head();
+    rowsL.forEach(function (r, ri) {
+      if (lay.room(rowH[ri])) head();
+      if (ri % 2) lay.doc.rect(L, lay.y, W, rowH[ri], '#FBF7EC');
+      var x = L;
+      r.forEach(function (lines, i) {
+        lines.forEach(function (ln, k) { lay.doc.text(x + pad, lay.y + pad + size + k * lh - 1, ln, i === 0 ? 'Helvetica-Bold' : 'Helvetica', size, C.ink); });
+        x += cw[i];
+      });
+      lay.y += rowH[ri];
+      lay.doc.line(L, lay.y, R, lay.y, C.line, 0.3);
+    });
+    lay.y += 4;
+    if (t.note) lay.para(t.note, { size: 7.8, color: C.soft, font: 'Times-Italic', after: 4 });
+    lay.y += 4;
+  }
+
+  // Small horizontal bars: a label, a track with a filled part, and the value in words.
+  function barChart(lay, b) {
+    var labW = 112, valW = 132, tx = L + labW + 8, tWidth = W - labW - valW - 16;
+    lay.room(16 + 18 * Math.min(b.items.length, 3));
+    sub(lay, b.title, C.brass);
+    b.items.forEach(function (it, i) {
+      var ll = wrap(it.label, 'Helvetica-Bold', 8.2, labW).slice(0, 2), vl = wrap(it.text, 'Helvetica', 8, valW).slice(0, 2);
+      var h = Math.max(ll.length, vl.length, 1) * 10 + 5;
+      lay.room(h);
+      ll.forEach(function (ln, k) { lay.doc.text(L, lay.y + 9 + k * 10, ln, 'Helvetica-Bold', 8.2, C.ink); });
+      lay.doc.roundRect(tx, lay.y + 2, tWidth, 9, 4, C.head);
+      var frac = it.max > 0 ? Math.max(0, Math.min(1, it.value / it.max)) : 0;
+      if (frac > 0) lay.doc.roundRect(tx, lay.y + 2, Math.max(6, tWidth * frac), 9, 4, BAR[i % BAR.length]);
+      vl.forEach(function (ln, k) { lay.doc.text(tx + tWidth + 8, lay.y + 9 + k * 10, ln, 'Helvetica', 8, C.ink); });
+      lay.y += h;
+    });
+    if (b.note) lay.para(b.note, { size: 7.8, color: C.soft, font: 'Times-Italic', after: 4 });
+    lay.y += 6;
+  }
+
+  // A small labelled block used for insights, recommendations and people.
+  function labelled(lay, rows, o) {
+    o = o || {};
+    var kw = o.kw || 104, size = o.size || 8.9, lh = size * 1.34;
+    rows.forEach(function (r) {
+      if (!r[1]) return;
+      var k = wrap(r[0], 'Helvetica-Bold', 7.8, kw - 8), v = wrap(r[1], r[2] || 'Helvetica', size, W - kw - (o.indent || 0));
+      var lines = Math.max(k.length, v.length);
+      for (var i = 0; i < lines; i++) {
+        lay.room(lh);
+        if (k[i]) lay.doc.text(L + (o.indent || 0), lay.y + size, k[i], 'Helvetica-Bold', 7.8, C.soft);
+        if (v[i]) lay.doc.text(L + (o.indent || 0) + kw, lay.y + size, v[i], r[2] || 'Helvetica', size, C.ink);
+        lay.y += lh;
+      }
+      lay.y += 3;
+    });
+  }
+  function itemHead(lay, title, tag, color, need) {
+    var lines = wrap(title, 'Helvetica-Bold', 10, W - 20);
+    lay.room(lines.length * 13 + 14 + (need || 40));
+    lay.doc.circle(L + 5, lay.y + 7, 4.2, color || C.pink);
+    lines.forEach(function (ln) { lay.doc.text(L + 14, lay.y + 10, ln, 'Helvetica-Bold', 10, C.ink); lay.y += 13; });
+    if (tag) { lay.doc.text(L + 14, lay.y + 7, wrap(tag, 'Helvetica', 7.6, W - 20)[0], 'Helvetica', 7.6, C.brass); lay.y += 12; }
+    lay.y += 2;
+  }
+
+  // One section of detailed findings, the same shape for every workpaper and page.
+  function detail(lay, s, m) {
+    lay.kicker(s.code + (s.status === 'blank' ? '  ·  not filled in' : ''));
+    lay.h1(s.name, s.title);
+    sub(lay, 'What was entered');
+    if (s.entered.length) kv(lay, s.entered, { kw: 160 });
+    else lay.para('Not filled in. Nothing here is guessed.', { color: C.soft, font: 'Times-Italic' });
+    (s.bars || []).forEach(function (b) { barChart(lay, b); });
+    (s.tables || []).forEach(function (t) { table(lay, t); });
+    var shows = (s.shows || []).concat(s.more || []);
+    if (shows.length) { sub(lay, 'What it shows'); lay.bullets(shows, { size: 9.1 }); }
+    if (s.suggests && s.suggests.length) { sub(lay, 'What it suggests'); lay.bullets(s.suggests, { size: 9.1, dot: C.credit }); }
+    sub(lay, 'What it can’t tell you', C.soft);
+    lay.para(s.doesnt, { size: 9, color: C.soft, font: 'Times-Italic' });
+    if (s.card) lay.callout('A note you could share', [s.card], C.lav, { font: 'Times-Italic', size: 10, titleColor: C.ink });
+    lay.callout('One next step', [s.next], C.butter, { size: 9.2, titleColor: C.ink });
+    if (s.ask) lay.para((m.road === 'self' ? 'Ask yourself: ' : 'Talk about: ') + s.ask, { font: 'Times-Italic', size: 9.5, color: C.credit });
+    if (s.link) lay.para('On the website: ' + siteLink(s.link), { size: 8.2, color: C.soft });
+  }
+
+  function fitLine(text, font, size, width) { return wrap(text, font, size, width)[0]; }
 
   function reportPdf(m) {
     var doc = new PDF.Doc({ title: m.title, producer: 'The Objective Ledger (TOL-OS) Full path report, made on this device', subject: 'tol-fullpath-report road=' + m.road });
     var lay = new Lay(doc), toc = [];
-    function section(title, bookmark) {
+    function section(title, bookmark, level) {
       lay.page('Full path report  ·  ' + m.roadLabel + '  ·  ' + title);
-      toc.push({ t: bookmark || title, page: doc.pages.length - 1 });
+      toc.push({ t: bookmark || title, page: doc.pages.length - 1, level: level || 0 });
     }
+    function mark(t, level) { toc.push({ t: t, page: doc.pages.length - 1, level: level || 1 }); }
 
-    // Summary
+    // 1. Cover
     lay.page('');
     sprinkle(doc, 9);
-    doc.roundRect(L, 44, W, 96, 16, ROAD_COLOR[m.road] || C.pink);
+    doc.roundRect(L, 44, W, 112, 16, ROAD_COLOR[m.road] || C.pink);
     doc.heart(R - 38, 74, 28, '#FFFFFF');
     doc.text(L + 18, 68, enc('THE OBJECTIVE LEDGER  ·  FULL PATH REPORT'), 'Helvetica-Bold', 7.8, C.ink);
-    doc.text(L + 18, 98, enc(m.title), 'Times-Bold', 21, C.ink);
-    doc.text(L + 18, 120, enc('For ' + m.forWho + '  ·  ' + m.roadLabel + (m.n > 1 ? '  ·  ' + m.n + ' people' : '') + '  ·  ' + niceDate(m.date)), 'Helvetica', 9.2, C.ink);
-    lay.y = 152;
-    lay.para('Not a verdict. ' + (m.lens || 'Each read describes the setup, never a person.') + ' Everything here was made on your device from what you entered; nothing was sent anywhere.', { font: 'Times-Italic', size: 9.8, color: C.soft, after: 8 });
-    if (m.stateNote) lay.callout('Before you read on', [m.stateNote], C.lav, { size: 9, titleColor: C.ink });
-    lay.kicker('The headline numbers');
+    var tl = wrap(m.title, 'Times-Bold', 21, W - 90);
+    tl.slice(0, 2).forEach(function (ln, k) { doc.text(L + 18, 96 + k * 23, ln, 'Times-Bold', 21, C.ink); });
+    var yy0 = 96 + Math.min(tl.length, 2) * 23 + 2;
+    wrap('For ' + m.forWho, 'Helvetica', 9.2, W - 40).slice(0, 2).forEach(function (ln) { doc.text(L + 18, yy0, ln, 'Helvetica', 9.2, C.ink); yy0 += 12; });
+    doc.text(L + 18, yy0, fitLine(m.roadLabel + (m.n > 1 ? '  ·  ' + m.n + ' people' : '') + '  ·  ' + niceDate(m.date), 'Helvetica', 9.2, W - 40), 'Helvetica', 9.2, C.ink);
+    lay.y = 170;
+    lay.para('Not a verdict. ' + (m.lens || 'Each read describes the setup, never a person.'), { font: 'Times-Italic', size: 10.5, color: C.soft, after: 8 });
+    lay.callout('Everything stays on your device', ['This report was made in your browser from what you entered. Nothing was sent anywhere or stored. Keep the file somewhere private, like any personal notes.'], C.creditSoft, { size: 9 });
+    lay.callout('A fair read, never a verdict', [m.road === 'self' ? 'It describes your conditions and your setup, never your worth. It is not a diagnosis and makes no health claims.' : 'It describes the setup between you, never any one person. It is not a diagnosis, makes no health claims, and is never evidence or a performance record.'], C.lav, { size: 9, titleColor: C.ink });
+    if (m.stateNote) lay.callout('Before you read on', [m.stateNote], C.butter, { size: 9, titleColor: C.ink });
+    lay.h2('How to read this report', 90, C.butter);
+    lay.bullets([
+      'Start with the summary: the headline numbers, what is working, and the top three things to work on.',
+      'Then read only the sections you need. Each one says what was entered, what it shows, what it suggests and what it can’t tell you.',
+      '"Connections" links the pages together; "Worth a second look" flags numbers that may be typos; "Recommendations" turns it all into steps for now, this week and this month.',
+      m.persons ? 'Each person has a short page of their own. They are not scorecards, and they are never a ranking.' : 'There is a section on your wiring, your patterns and your conditions, and on explaining yourself to others.',
+      'The discussion guide at the end has questions and ground rules for ' + (m.road === 'self' ? 'reading it on your own.' : 'reading it together.')
+    ], { size: 9 });
+    lay.callout('How much weight to give it: ' + m.confidence.level, [m.confidence.text, m.confidence.weight], C.head, { size: 8.8, titleColor: C.ink });
+
+    // 2. Contents (drawn at the end, once page numbers are known)
+    var persons = m.persons || [];
+    var entries = 12 + m.sections.length + m.extra.length + persons.length;
+    var tocPages = entries * 17 > 600 ? 2 : 1, contentsPage;
+    lay.page('Full path report  ·  ' + m.roadLabel + '  ·  Contents');
+    contentsPage = doc.pages.length - 1;
+    for (var tp = 1; tp < tocPages; tp++) lay.page('Full path report  ·  ' + m.roadLabel + '  ·  Contents');
+
+    // 3. Executive summary
+    section('Executive summary', '1  Executive summary');
+    lay.kicker('Executive summary');
+    lay.h1('The whole picture, in plain words');
+    lay.para(m.summary.para, { size: 10, after: 8 });
+    sub(lay, 'The headline numbers');
     tiles(lay, m.tiles);
-    lay.h2('Three things this shows', 60, C.pink);
+    lay.bullets(m.summary.bands, { size: 8.2, color: C.soft, dot: C.line });
+    lay.h2('Key findings', 60, C.pink);
     m.findings.forEach(function (t, i) {
       var lines = wrap(t, 'Helvetica', 9.6, W - 30), h = lines.length * 13 + 8;
       lay.room(h);
@@ -559,6 +699,14 @@
       lines.forEach(function (ln, k) { doc.text(L + 26, lay.y + 10 + k * 13, ln, 'Helvetica', 9.6, C.ink); });
       lay.y += h;
     });
+    lay.h2('Strengths to protect', 50, C.mint);
+    lay.bullets(m.summary.strengths.map(function (s) { return s.title + '. ' + s.text; }), { size: 9.2, dot: C.credit });
+    lay.h2('Top 3 things to work on', 120, C.peach);
+    m.summary.top.forEach(function (t, i) {
+      itemHead(lay, (i + 1) + '. ' + t.title, '', PASTELS[i % PASTELS.length], 30);
+      labelled(lay, [['What we see', t.text], ['First step', t.step]], { indent: 14, kw: 84 });
+    });
+    lay.callout('Confidence: ' + m.confidence.level, [m.confidence.text, m.confidence.weight], C.head, { size: 8.8, titleColor: C.ink });
     if (m.ready && (m.ready.going || m.ready.focus)) {
       var rl = [];
       if (m.ready.going) rl.push('Going well: ' + m.ready.going);
@@ -566,95 +714,177 @@
       if (m.ready.when) rl.push('When you’ll read it: ' + m.ready.when);
       lay.callout('In your words', rl, C.creditSoft, { size: 9 });
     }
-    var contentsPage = null;
-    lay.page('Full path report  ·  ' + m.roadLabel + '  ·  Contents');
-    contentsPage = doc.pages.length - 1;
 
-    // One section per workpaper
-    m.sections.forEach(function (s) {
-      section(s.code + '  ' + s.name, s.code + ' ' + s.name);
-      lay.kicker(s.code + (s.status === 'blank' ? '  ·  not filled in' : ''));
-      lay.h1(s.name, s.title);
-      sub(lay, 'What was entered');
-      if (s.entered.length) kv(lay, s.entered, { kw: 160 });
-      else lay.para('Not filled in. Nothing here is guessed.', { color: C.soft, font: 'Times-Italic' });
-      if (s.shows.length) { sub(lay, 'What it shows'); lay.bullets(s.shows, { size: 9.2 }); }
-      sub(lay, 'What it doesn’t show', C.soft);
-      lay.para(s.doesnt, { size: 9, color: C.soft, font: 'Times-Italic' });
-      lay.callout('One next step', [s.next], C.butter, { size: 9.2, titleColor: C.ink });
-      if (s.ask) lay.para((m.road === 'self' ? 'Ask yourself: ' : 'Talk about: ') + s.ask, { font: 'Times-Italic', size: 9.5, color: C.credit });
+    // 4. Detailed findings, section by section
+    m.sections.forEach(function (s, i) {
+      section(s.code + '  ' + s.name, (i === 0 ? '2  Detailed findings: ' : '') + s.code + ' ' + s.name, i === 0 ? 0 : 1);
+      detail(lay, s, m);
     });
-
-    // CALC-01
     var cs = m.calcSection;
-    section(cs.applies ? 'CALC-01  Can the load last?' : 'CALC-01  Your state and retuning count', 'CALC-01');
+    section(cs.applies ? 'CALC-01  Can the load last?' : 'CALC-01  Your state and retuning count', 'CALC-01 ' + (cs.applies ? 'Can the load last?' : 'State and retuning'), 1);
     lay.kicker('CALC-01');
     lay.h1(cs.applies ? 'Can the load last?' : 'Your state and your retuning count', 'The inputs, where each came from, and the read');
     if (cs.state) lay.para('Step zero, your state: ' + cs.state + '.', { size: 9.2, color: C.soft });
     kv(lay, [['Input', 'Value', 'Where it came from']].concat(cs.rows), { kw: 150 });
     lay.bullets(cs.lines, { size: 9.2 });
+    if (cs.moves && cs.moves.length) { sub(lay, 'What would move the score'); lay.bullets(cs.moves, { size: 9, dot: C.credit }); }
+    if (cs.link) lay.para('On the website: ' + siteLink(cs.link), { size: 8.2, color: C.soft });
+    m.extra.forEach(function (s) {
+      section(s.name, s.code === 'NOTES' ? 'Self-notes: wiring and weather' : 'Ready page: in your words', 1);
+      detail(lay, s, m);
+    });
 
-    // Self-notes
-    if (m.notes.filled || m.road === 'self') {
-      section('Self-notes', 'Self-notes: wiring and weather');
-      lay.kicker('Optional self-notes');
-      lay.h1('Your wiring and your weather');
-      sub(lay, 'Wiring Card');
-      if (m.notes.wiring.length) kv(lay, m.notes.wiring.map(function (l) { return [l.q, l.picked.join('; ')]; }), { kw: 180 });
-      else lay.para('Not filled in.', { color: C.soft, font: 'Times-Italic' });
-      if (m.notes.card) lay.callout('A note you could share', [m.notes.card], C.lav, { font: 'Times-Italic', size: 10, titleColor: C.ink });
-      sub(lay, 'Weather and battery log');
-      if (m.notes.weather.length) kv(lay, m.notes.weather.map(function (w) { return ['Week ' + w.w + (w.date ? ' (' + w.date + ')' : ''), [w.sky && 'Sky: ' + w.sky, w.pressure && 'pressure: ' + w.pressure.toLowerCase(), w.sleep && 'sleep: ' + w.sleep.toLowerCase(), w.battery != null && 'battery ' + FP.fmt(w.battery), w.note].filter(Boolean).join(', ')]; }), { kw: 140 });
-      else lay.para('Not filled in.', { color: C.soft, font: 'Times-Italic' });
+    // 5. Connections across workpapers
+    section('Connections across workpapers', '3  Connections across workpapers');
+    lay.kicker('Connections');
+    lay.h1('Connecting the dots', 'What the pages say when you read them together');
+    var work = m.insights.filter(function (r) { return !r.strength; }), good = m.insights.filter(function (r) { return r.strength; });
+    lay.para(m.insights.length ? m.insights.length + ' of the report’s ' + m.counts.rules + ' insight rules fired for your answers. Each one says what it found, why it matters, and one thing to try. They describe the setup, not anyone’s character.' : 'None of the ' + m.counts.rules + ' insight rules fired yet. Most of them need two or more pages filled in, so this section grows as you do.', { size: 9.3, color: C.soft });
+    work.forEach(function (r) {
+      itemHead(lay, r.title, 'Pillar ' + r.pillar + '  ·  ' + r.src.join(', '), C.peach, 40);
+      labelled(lay, [['What we see', r.finding], ['Why it matters', r.why], ['What to try', r.rec ? r.rec.first : '']], { indent: 14 });
+      lay.y += 4;
+    });
+    if (good.length) {
+      lay.h2('Strengths the pages show', 50, C.mint);
+      good.forEach(function (r) {
+        itemHead(lay, r.title, 'Pillar ' + r.pillar + '  ·  ' + r.src.join(', '), C.mint, 30);
+        labelled(lay, [['What we see', r.finding], ['Why it matters', r.why]], { indent: 14 });
+        lay.y += 4;
+      });
     }
 
-    // For your road
+    // 6. Worth a second look
+    section('Worth a second look', '4  Worth a second look (data checks)');
+    lay.kicker('Anomalies and data checks');
+    lay.h1('Worth a second look', 'It may be a typo, or it may be real');
+    lay.para('We ran ' + m.counts.checks + ' gentle checks on the numbers and answers: things that don’t add up, answers that seem to disagree, and gaps. ' + (m.anomalies.length ? plural(m.anomalies.length, 'thing') + ' came up.' : 'Nothing stood out: the numbers hang together.'), { size: 9.3, color: C.soft });
+    m.anomalies.forEach(function (a) {
+      itemHead(lay, a.where, a.level === 'check' ? 'Worth fixing if it is a typo' : 'Worth knowing', a.level === 'check' ? C.peach : C.sky, 30);
+      labelled(lay, [['What we noticed', a.text], ['What to do', a.fix]], { indent: 14 });
+      lay.y += 4;
+    });
+
+    // 7. Recommendations and the plan
+    section('Recommendations', '5  Recommendations and your plan');
+    lay.kicker('Recommendations');
+    lay.h1('What to do, in order', 'Now, this week and this month, each tied to a finding');
+    [['now', 'Now', C.peach], ['week', 'This week', C.butter], ['month', 'This month', C.mint]].forEach(function (h) {
+      var list2 = m.recs[h[0]];
+      lay.h2(h[1], 60, h[2]);
+      if (!list2.length) { lay.para('Nothing extra for ' + h[1].toLowerCase() + '.', { size: 9, color: C.soft, font: 'Times-Italic' }); return; }
+      list2.forEach(function (r, i) {
+        itemHead(lay, r.title, r.pillar ? 'Pillar ' + r.pillar : '', h[2], 50);
+        labelled(lay, [['Why', r.why], ['First step', r.first], ['Try saying', r.script, 'Times-Italic'], ['Tool', siteLink(r.link)], ['It’s working when', r.working]], { indent: 14 });
+        lay.y += 4;
+      });
+    });
+    lay.page();
+    mark('Your ' + m.plan.length + '-week plan');
+    lay.kicker('Your plan');
+    lay.h1('Your next ' + m.plan.length + ' weeks', 'Built from the recommendations above, one small step a week');
+    m.plan.forEach(function (w, i) {
+      var lines = wrap(w.do, 'Helvetica', 9.2, W - 40), h = 28 + lines.length * 12;
+      lay.room(h);
+      doc.circle(L + 12, lay.y + 11, 11, PASTELS[i % PASTELS.length], C.brass, 0.6);
+      doc.text(L + 12 - tw(String(w.week), 'Helvetica-Bold', 9) / 2, lay.y + 14, enc(String(w.week)), 'Helvetica-Bold', 9, C.ink);
+      doc.text(L + 32, lay.y + 10, fitLine('Week ' + w.week + ': ' + w.title, 'Helvetica-Bold', 10, W - 34), 'Helvetica-Bold', 10, C.ink);
+      doc.text(L + 32, lay.y + 21, fitLine(w.wp + (w.pillar ? '  ·  Pillar ' + w.pillar : ''), 'Helvetica', 7.8, W - 34), 'Helvetica', 7.8, C.brass);
+      lines.forEach(function (ln, k) { doc.text(L + 32, lay.y + 33 + k * 12, ln, 'Helvetica', 9.2, C.ink); });
+      lay.y += h + 8;
+    });
+
+    // 8. A page for each person, or the Individual road's deeper look
+    if (persons.length) {
+      section('A page for each person', '6  A page for each person');
+      lay.kicker('Each person');
+      lay.h1('A page for each person', 'Their load, their battery, what they bring and what might help');
+      lay.para('These are not scorecards and not a ranking. Each one is written to that person about their own week, and it only knows what was entered. Read your own first; share it if you want to.', { size: 9.3, color: C.soft, font: 'Times-Italic' });
+      persons.forEach(function (p, i) {
+        if (i) lay.room(260);
+        mark(p.label, 1);
+        lay.h2(p.label, 120, PASTELS[i % PASTELS.length]);
+        kv(lay, p.rows, { kw: 140 });
+        sub(lay, 'What they bring');
+        lay.bullets(p.strengths, { size: 9, dot: C.credit });
+        sub(lay, 'What might help');
+        lay.bullets(p.help, { size: 9 });
+        lay.callout('A conversation starter for ' + p.label, ['“' + p.starter + '”'], C.lav, { font: 'Times-Italic', size: 10, titleColor: C.ink });
+      });
+    }
+    if (m.self) {
+      var sd = m.self;
+      section('Understanding yourself', '6  Understanding yourself');
+      lay.kicker('Self-discovery');
+      lay.h1('Wiring, patterns and conditions', 'Three layers, and how to tell them apart');
+      lay.para(sd.intro, { size: 9.4 });
+      sd.layers.forEach(function (ly) { sub(lay, ly[0]); lay.bullets(ly[1], { size: 9 }); });
+      lay.h2('Which layer is it?', 50, C.sky);
+      lay.bullets(sd.sorting, { size: 9 });
+      lay.h2('Explaining yourself to others', 60, C.lav);
+      if (sd.explain.to) lay.para('You named: ' + sd.explain.to + '.', { size: 9, color: C.soft });
+      if (sd.explain.card) lay.callout('A note you could share, in your own words', [sd.explain.card], C.lav, { font: 'Times-Italic', size: 10, titleColor: C.ink });
+      else lay.para('Once your Wiring Card has a few lines, this becomes a short note you can share.', { size: 9, color: C.soft, font: 'Times-Italic' });
+      sub(lay, 'Lines you could use');
+      lay.bullets(sd.explain.scripts, { size: 9.4, font: 'Times-Italic' });
+      lay.para('Read more: ' + sd.links.filter(Boolean).map(siteLink).join('  ·  '), { size: 8.2, color: C.soft });
+    }
+
+    // 9. For your road
     var rp = m.roadPart;
-    section(rp.heading, 'For your road');
+    section(rp.heading, '7  For your road');
     lay.kicker('For your road  ·  ' + m.roadLabel);
     lay.h1(rp.heading);
     rp.paras.forEach(function (t) { lay.para(t, { size: 9.4 }); });
     if (rp.blocks) rp.blocks.forEach(function (b) { sub(lay, b[0]); lay.para(b[1], { size: 9.4 }); });
     if (rp.suggestions.length) { lay.h2('Suggestions', 50, C.mint); lay.bullets(rp.suggestions, { size: 9.3 }); }
     if (rp.look && rp.look.length) { lay.h2('What to look for', 50, C.sky); lay.bullets(rp.look, { size: 9 }); }
-    if (rp.talk && rp.talk.length) { lay.h2(rp.talkTitle, 50, C.lav); lay.bullets(rp.talk.map(function (t) { return '“' + t + '”'; }), { size: 9.6, font: 'Times-Italic' }); }
     if (rp.together) lay.callout(rp.together[0], [rp.together[1]], C.creditSoft, { size: 9 });
-    if (rp.links.length) lay.room(40);
     if (rp.links.length) lay.para('On the website: ' + rp.links.map(function (l) { return l[0] + ' (spreadloveandacceptance.com' + l[1] + ')'; }).join('  ·  '), { size: 8.4, color: C.soft });
 
-    // Five Pillars
-    section('The Five Pillars', 'The Five Pillars view');
+    // 10. The Five Pillars
+    section('The Five Pillars', '8  The Five Pillars view');
     lay.kicker('The Five Pillars');
     lay.h1('Where you’re strong, and what needs care', 'Each pillar starts inside you, then shows up between you and others');
     var pv = m.pillars;
-    if (pv.strongest) lay.callout('Looks strongest: Pillar ' + pv.strongest.n + ', ' + pv.strongest.name, ['In you: ' + pv.strongest.inYou, 'Between you and others: ' + pv.strongest.between], C.mint, { size: 9, titleColor: C.ink });
-    if (pv.care && pv.care !== pv.strongest && !pv.note) lay.callout('Needs the most care: Pillar ' + pv.care.n + ', ' + pv.care.name, ['In you: ' + pv.care.inYou, 'Between you and others: ' + pv.care.between], C.peach, { size: 9, titleColor: C.ink });
+    if (pv.strongest) lay.callout('Looks strongest: Pillar ' + pv.strongest.n + ', ' + pv.strongest.name, ['In you: ' + pv.strongest.inYouI, 'Between you and others: ' + pv.strongest.betweenI], C.mint, { size: 9, titleColor: C.ink });
+    if (pv.care && pv.care !== pv.strongest && !pv.note) lay.callout('Needs the most care: Pillar ' + pv.care.n + ', ' + pv.care.name, ['In you: ' + pv.care.inYouI, 'Between you and others: ' + pv.care.betweenI], C.peach, { size: 9, titleColor: C.ink });
     if (pv.note) lay.para(pv.note, { font: 'Times-Italic', size: 9.4, color: C.soft });
-    pv.rows.forEach(function (r) {
-      lay.room(70);
-      lay.doc.text(L, lay.y + 10, enc('Pillar ' + r.n + '  ' + r.name), 'Helvetica-Bold', 10, C.ink);
-      var val = r.value != null ? 'reads ' + FP.fmt(r.value) + ' from ' + r.from : 'not filled in (' + r.from + ')';
-      lay.y += 14;
-      lay.para(val, { size: 8.4, color: C.soft, after: 2 });
-      lay.para('In you: ' + r.inYou, { size: 9, after: 1 });
-      lay.para('Between you and others: ' + r.between, { size: 9, after: 8 });
+    barChart(lay, { title: 'Rough readings, 0 to 1 (higher is steadier)', items: pv.rows.map(function (r) { return { label: 'Pillar ' + r.n + ' ' + r.name, value: r.value || 0, max: 1, text: r.value != null ? FP.fmt(r.value) : 'not filled in' }; }) });
+    pv.rows.forEach(function (r, i) {
+      lay.h2('Pillar ' + r.n + '  ' + r.name, 90, PASTELS[i % PASTELS.length]);
+      lay.para((r.value != null ? 'Reads ' + FP.fmt(r.value) + ', from ' : 'Not filled in yet (') + r.from + (r.value != null ? '.' : ').'), { size: 8.2, color: C.soft, after: 3 });
+      labelled(lay, [['The data shows', r.shows], ['In you', r.inYouI], ['Between you', r.betweenI], ['A practice', r.practice]], { kw: 96 });
     });
-    lay.para('Rough readings from what you entered (0 to 1, higher is steadier), not scores on anyone. Read more at spreadloveandacceptance.com/five-pillars.html.', { size: 8.2, color: C.soft, font: 'Times-Italic' });
+    lay.para('Rough readings from what you entered, not scores on anyone. Read more at spreadloveandacceptance.com/five-pillars.html.', { size: 8.2, color: C.soft, font: 'Times-Italic' });
 
-    // Plan
-    section('Your ' + m.plan.length + '-week plan', 'Your plan');
-    lay.kicker('Your plan');
-    lay.h1('Your next ' + m.plan.length + ' weeks', 'Built from the gaps in what you entered, one small step a week');
-    m.plan.forEach(function (w, i) {
-      var lines = wrap(w.do, 'Helvetica', 9.2, W - 40), h = 28 + lines.length * 12;
-      lay.room(h);
-      doc.circle(L + 12, lay.y + 11, 11, PASTELS[i % PASTELS.length], C.brass, 0.6);
-      doc.text(L + 12 - tw(String(w.week), 'Helvetica-Bold', 9) / 2, lay.y + 14, enc(String(w.week)), 'Helvetica-Bold', 9, C.ink);
-      doc.text(L + 32, lay.y + 10, enc('Week ' + w.week + ': ' + w.title), 'Helvetica-Bold', 10, C.ink);
-      doc.text(L + 32, lay.y + 21, enc(w.wp + (w.pillar ? '  ·  Pillar ' + w.pillar : '')), 'Helvetica', 7.8, C.brass);
-      lines.forEach(function (ln, k) { doc.text(L + 32, lay.y + 33 + k * 12, ln, 'Helvetica', 9.2, C.ink); });
-      lay.y += h + 8;
+    // 11. Discussion guide
+    var g = m.guide;
+    section('Discussion guide', '9  Discussion guide');
+    lay.kicker('Discussion guide');
+    lay.h1(m.road === 'self' ? 'Questions to sit with' : 'Talking it through', m.road === 'self' ? 'For reading on your own, at your own pace' : 'For reading together, or alone first');
+    lay.h2('Questions', 60, C.lav);
+    g.questions.forEach(function (t, i) {
+      var lines = wrap((i + 1) + '.  ' + t, 'Times-Italic', 10, W - 16);
+      lay.room(lines.length * 13 + 4);
+      lines.forEach(function (ln) { doc.text(L + 8, lay.y + 10, ln, 'Times-Italic', 10, C.ink); lay.y += 13; });
+      lay.y += 4;
     });
+    lay.h2('Ground rules', 60, C.mint);
+    lay.bullets(g.rules, { size: 9.2 });
+    lay.callout('If it lands hard', g.hard, C.butter, { size: 9, titleColor: C.ink });
+    if (m.roadPart.talk && m.roadPart.talk.length) { lay.h2(m.roadPart.talkTitle, 50, C.lav); lay.bullets(m.roadPart.talk.map(function (t) { return '“' + t + '”'; }), { size: 9.6, font: 'Times-Italic' }); }
+
+    // 12. Glossary and method
+    section('Glossary and method', '10  Glossary and method');
+    lay.kicker('Appendix');
+    lay.h1('How this report works');
+    lay.bullets(m.method, { size: 8.9 });
+    lay.h2('How complete the data is', 70, C.sky);
+    lay.para(m.confidence.text + ' ' + m.confidence.weight, { size: 9 });
+    table(lay, { title: 'Page by page', head: ['Page', 'Status', 'Boxes filled in'], rows: m.completeness, widths: [2.6, 1, 1] });
+    lay.h2('Glossary', 60, C.butter);
+    kv(lay, m.glossary, { kw: 140 });
 
     // Keep it fair
     lay.h2('Keep it fair', 80, C.lav);
@@ -662,24 +892,29 @@
     if (m.care) lay.para(m.care, { font: 'Times-Italic', size: 9.4, color: C.credit });
     if (m.close) lay.callout('', [m.close], C.butter, { font: 'Times-Italic', size: 10.5 });
 
-    // Contents
+    // Contents, now that every section has a page
+    var all = [{ t: 'Cover and how to read this report', page: 0, level: 0 }].concat(toc), step = all.length > 34 ? 15 : 17;
     doc.setPage(contentsPage);
-    var y = TOP + 22;
+    var y = TOP + 22, pg = contentsPage;
     doc.text(L, y + 18, enc('In this report'), 'Times-Bold', 20, C.ink);
-    y += 40;
-    [{ t: 'Summary: headline numbers and three findings', page: 0 }].concat(toc).forEach(function (e, i) {
-      var num = String(e.page + 1), label = wrap(e.t, 'Helvetica-Bold', 10, W - 60)[0];
-      doc.circle(L + 6, y + 6, 4, PASTELS[i % PASTELS.length]);
-      doc.text(L + 16, y + 10, label, 'Helvetica-Bold', 10, C.ink);
-      var lx = L + 16 + PDF.textWidth(label, 'Helvetica-Bold', 10) + 6, rx = R - PDF.textWidth(enc(num), 'Helvetica-Bold', 10) - 6;
+    y += 36;
+    doc.text(L, y + 4, enc('Tap a line to jump to it. Page numbers are at the bottom right of every page.'), 'Helvetica', 8.5, C.soft);
+    y += 16;
+    all.forEach(function (e, i) {
+      if (y + step > BOTTOM && pg < contentsPage + tocPages - 1) { pg++; doc.setPage(pg); y = TOP + 26; }
+      var ind = e.level ? 16 : 0, size = e.level ? 9 : 10, font = e.level ? 'Helvetica' : 'Helvetica-Bold';
+      var num = String(e.page + 1), label = fitLine(e.t, font, size, W - 60 - ind);
+      doc.circle(L + 6 + ind, y + 6, e.level ? 2.6 : 4, PASTELS[i % PASTELS.length]);
+      doc.text(L + 16 + ind, y + 10, label, font, size, C.ink);
+      var lx = L + 16 + ind + PDF.textWidth(label, font, size) + 6, rx = R - PDF.textWidth(enc(num), font, size) - 6;
       if (rx > lx) doc.line(lx, y + 9, rx, y + 9, C.line, 0.5);
-      doc.text(R - PDF.textWidth(enc(num), 'Helvetica-Bold', 10), y + 10, enc(num), 'Helvetica-Bold', 10, C.ink);
-      doc.link(L, y - 2, W, 16, e.page, 0);
-      y += 22;
+      doc.text(R - PDF.textWidth(enc(num), font, size), y + 10, enc(num), font, size, C.ink);
+      doc.link(L, y - 2, W, step - 2, e.page, 0);
+      y += step;
     });
-    doc.marks = [{ title: 'Summary', level: 0, page: 0 }, { title: 'Contents', level: 0, page: contentsPage }].concat(toc.map(function (e) { return { title: e.t, level: 0, page: e.page }; }));
-    footers(doc, 'The Objective Ledger  ·  Full path report  ·  ' + m.roadLabel + '  ·  made on your device ' + niceDate(m.date),
-      'Not a verdict, not a diagnosis, no health claims. It describes the setup and what was entered, never a person. Keep this file somewhere private.');
+    doc.marks = [{ title: 'Cover', level: 0, page: 0 }, { title: 'Contents', level: 0, page: contentsPage }].concat(toc.map(function (e) { return { title: e.t, level: 0, page: e.page }; }));
+    footers(doc, fitLine('The Objective Ledger  ·  Full path report  ·  ' + m.roadLabel + '  ·  made on your device ' + niceDate(m.date), 'Helvetica', 6.8, W - 80),
+      fitLine('Everything stays on your device. Not a verdict, not a diagnosis, no health claims. It describes the setup, never a person.', 'Helvetica', 6.8, W - 80));
     return doc.output();
   }
 
