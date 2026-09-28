@@ -867,7 +867,7 @@
     var box = el('div', { class: 'depth-bar tol-depth', role: 'group', 'aria-label': 'Choose how deep to read' },
       '<p class="tol-depth-q">This page comes in two versions. Pick the one that suits you right now:' + (chip ? ' ' + chip.outerHTML : '') + '</p>' +
       '<div class="tol-depth-opts">' +
-        opt('simple', simpleHref, '🌱', 'Simple version', 'The main idea in a few short cards, one idea each, and one small thing to try.', 'Good if you’re new, short on time, or tired.', isFull ? 'a few minutes' : 'about ' + mins + ' min read') +
+        opt('simple', simpleHref, '🌱', 'Simple version', 'The main idea in a few short cards, one idea each, and one small thing to try. Want a little more on something? Tap any word with a water drop <span aria-hidden="true">💧</span> and dive deeper right here on the page, from a quick splash to the deep end, then carry on where you were.', 'Good if you’re new, short on time, or tired.', isFull ? 'a few minutes' : 'about ' + mins + ' min read') +
         opt('full', fullHref, '🌊', 'Full version', 'The whole idea: real-life examples, the reasoning and research behind it, worked numbers, common mix-ups and answers to questions.', 'Good if you want the why, or you’re using it for a real situation.', isFull ? 'about ' + mins + ' min read' : 'a longer read') +
       '</div>' +
       (pref && (pref === 'full') !== isFull ? '<p class="tol-depth-pref">Last time you chose the ' + (pref === 'full' ? 'full' : 'simple') + ' version. It’s one tap away above.</p>' : '') +
