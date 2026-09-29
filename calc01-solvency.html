@@ -358,9 +358,9 @@
 
   <!-- ================= AS ================= -->
   <section id="as" aria-labelledby="as-h">
-    <div class="section-head"><p class="part-label">Input 3 of 4 &middot; Pillar III</p><h2 id="as-h">Stress: how much each person is carrying <small>average battery load (AS)</small></h2></div>
+    <div class="section-head"><p class="part-label">Input 3 of 4 &middot; Pillar III</p><h2 id="as-h">Stress: how much each person is carrying <small>average load (AS)</small></h2></div>
     <div class="panel">
-      <div class="panel-head"><h3>Everyone's battery</h3><span class="src-tag">From <a href="/workpapers/fill/wp-02.html">WP-02, How much are you carrying?</a> (higher = heavier)</span></div>
+      <div class="panel-head"><h3>Everyone's load score</h3><span class="src-tag">From <a href="/workpapers/fill/wp-02.html">WP-02, How much are you carrying?</a> (higher = heavier)</span></div>
       <p class="panel-note">Each person fills in their own card, about themselves, for the last 24 to 48 hours. 0 = not at all, 4 = very true. Guessing for someone else turns a reflection tool into a way of watching them, so the read waits until every card is complete.</p>
       <div class="bat-grid" id="bat-grid"></div>
       <div class="derive" id="as-derive" aria-live="polite"></div>
@@ -505,7 +505,7 @@ apex     = (balance &times; 0.35) + (ownership &times; 0.30) + ((1 &minus; stres
 <pre>(0.60 &times; 0.40) + (0.75 &times; 0.35) + ((1 &minus; 0.40) &times; 0.25)
 =    0.24      +     0.2625     +        0.15
 =    0.6525  &rarr;  0.65, needs a look</pre>
-      <p><strong>A family of five</strong> logs 10, 8, 6, 4 and 2 hours (30 in all; an even share is 6 each). The gaps are +4, +2, 0, &minus;2 and &minus;4 hours, so 6 hours would have to move: <code>moved = 0.20</code>. <code>most = 1 &minus; 1/5 = 0.80</code>. Balance = <code>1 &minus; 0.20 &divide; 0.80 = 0.75</code>. With 9 of 12 jobs owned (0.75) and an average battery of 0.40, the read is 0.30 + 0.2625 + 0.15 = 0.7125 &rarr; <strong>0.71, holding</strong>.</p>
+      <p><strong>A family of five</strong> logs 10, 8, 6, 4 and 2 hours (30 in all; an even share is 6 each). The gaps are +4, +2, 0, &minus;2 and &minus;4 hours, so 6 hours would have to move: <code>moved = 0.20</code>. <code>most = 1 &minus; 1/5 = 0.80</code>. Balance = <code>1 &minus; 0.20 &divide; 0.80 = 0.75</code>. With 9 of 12 jobs owned (0.75) and an average load of 0.40, the read is 0.30 + 0.2625 + 0.15 = 0.7125 &rarr; <strong>0.71, holding</strong>.</p>
       <p><strong>An agreed split.</strong> If two people agree on 60/40 (say one works longer hours outside the home) and log 6 and 4 hours, nothing needs to move, so balance is 1.00. Against an even split the same week would score 0.80. Use the agreed split only if everyone really agreed to it, and say so when you share the read.</p>
     </div>
 
@@ -835,10 +835,10 @@ apex     = (balance &times; 0.35) + (ownership &times; 0.30) + ((1 &minus; stres
     var d = $("as-derive");
     if (s.value === null){
       var who = s.missing.map(nameOf);
-      d.innerHTML = '<div class="formula">Stress = the average of everyone’s battery</div><div>Waiting on ' + esc(who.join(", ")) + '. Each person fills in their own card.</div><div><span class="out na">—</span></div>';
+      d.innerHTML = '<div class="formula">Stress = the average of everyone’s load score</div><div>Waiting on ' + esc(who.join(", ")) + '. Each person fills in their own card.</div><div><span class="out na">—</span></div>';
       return s;
     }
-    d.innerHTML = '<div class="formula">Stress = the average of everyone’s battery</div><div>(' + scores.map(f2).join(" + ") + ') ÷ ' + scores.length + ' = ' + (C.sum(scores) / scores.length).toFixed(3) + '</div>' +
+    d.innerHTML = '<div class="formula">Stress = the average of everyone’s load score</div><div>(' + scores.map(f2).join(" + ") + ') ÷ ' + scores.length + ' = ' + (C.sum(scores) / scores.length).toFixed(3) + '</div>' +
       '<div><span class="out' + (s.value > 0.6 ? " warn" : "") + '">' + f2(s.value) + '</span> <span class="formula">stress (counted as 1 − ' + f2(s.value) + ' = ' + f2(1 - s.value) + ')</span></div>';
     return s;
   }
@@ -891,7 +891,7 @@ apex     = (balance &times; 0.35) + (ownership &times; 0.30) + ((1 &minus; stres
     var missing = [];
     if (wb === null) missing.push("hours for balance");
     if (oc === null) missing.push("a job list");
-    if (as === null) missing.push("everyone's battery");
+    if (as === null) missing.push("everyone's load score");
     var derived = [wb, oc, as, rf].filter(function(v){ return v !== null; }).length;
     $("completeness").innerHTML = "Inputs worked out: " + derived + " of 4" + (derived ? " (" + [wb !== null && "balance", oc !== null && "ownership", as !== null && "stress", rf !== null && "retuning"].filter(Boolean).join(", ") + ")." : ".") + (missing.length ? " Still needed: <b>" + esc(missing.join(", ")) + "</b>." : "") +
       (rf === null ? " Retuning has no value (no rough moments logged)." : "") + (b.mode === "agreed" && wb !== null ? " Balance is read against your agreed split." : "") + (custom ? " Custom weights in use." : "");
@@ -1010,7 +1010,7 @@ apex     = (balance &times; 0.35) + (ownership &times; 0.30) + ((1 &minus; stres
     L.push("");
     L.push("Balance: " + f2(b.value) + " (" + (b.mode === "agreed" ? "against our agreed split" : "against an even share") + "). Hours: " + b.hours.map(function(h, i){ return nameOf(i) + " " + f1(h); }).join(", ") + ". About " + f1(b.movedHours) + " hours would have to change hands.");
     L.push("Ownership: " + f2(o.value) + " (" + o.owned + " of " + o.total + " jobs have an owner).");
-    L.push("Stress: " + f2(s.value) + " (average battery of " + s.scores.length + " people). Counted as 1 - stress.");
+    L.push("Stress: " + f2(s.value) + " (average load of " + s.scores.length + " people). Counted as 1 - stress.");
     L.push("Retuning: " + (r.value === null ? "no value (no rough moments)" : f2(r.value) + " (" + r.retunes + " of " + r.friction + ")"));
     L.push("");
     L.push("Math: " + f2(b.value) + " x " + sol.weights.wb.toFixed(2) + " + " + f2(o.value) + " x " + sol.weights.oc.toFixed(2) + " + (1 - " + f2(s.value) + ") x " + sol.weights.as.toFixed(2) + " = " + sol.value.toFixed(4) + (useSig ? " (S-curve on)" : "") + (custom ? " (custom weights)" : ""));

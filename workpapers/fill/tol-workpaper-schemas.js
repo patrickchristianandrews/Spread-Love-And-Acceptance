@@ -441,7 +441,7 @@
         id: 'filter', type: 'checks', title: 'Before you react: four quick checks',
         items: [
           { id: 'specific', label: 'Is this about a specific, nameable task or event?', options: ['Yes', 'No'] },
-          { id: 'saturation', label: "Would I read this the same way if my battery weren't already running high (WP-02)?", options: ['Yes', 'No', 'Not sure'] },
+          { id: 'saturation', label: "Would I read this the same way if I weren't already carrying a lot (WP-02)?", options: ['Yes', 'No', 'Not sure'] },
           { id: 'neutral', label: 'Is there a neutral interpretation that also fits what was said?', options: ['Yes', 'No'] },
           { id: 'pattern', label: 'Am I responding to their words, or to a pattern from a past conversation?', options: ['Their words', 'A past pattern'] }
         ]
@@ -595,7 +595,7 @@
   W['wp-13'] = {
     code: 'WP-13',
     title: 'Phase-Locked Loop',
-    plain: 'The 90-second check-in',
+    plain: 'The 90-second daily check-in',
     slug: 'Phase-Locked-Loop',
     purpose: 'A 90-second daily check-in that keeps everyone in step with small, steady corrections instead of occasional big ones. Each person answers each prompt in one sentence, about their own day. No debating, no solving, no arguing back.',
     people: true,
@@ -767,7 +767,7 @@
           title: 'Before you react: four quick checks',
           items: [
             { id: 'specific', label: 'Is this about a specific, nameable task or event?', options: ['Yes', 'No'] },
-            { id: 'saturation', label: "Would I read this the same way if my battery weren't already running high (WP-02)?", options: ['Yes', 'No', 'Not sure'] },
+            { id: 'saturation', label: "Would I read this the same way if I weren't already carrying a lot (WP-02)?", options: ['Yes', 'No', 'Not sure'] },
             { id: 'neutral', label: 'Is there a neutral reading that also fits what happened?', options: ['Yes', 'No'] },
             { id: 'pattern', label: 'Am I reacting to what happened just now, or to an old pattern?', options: ['Their words', 'A past pattern'], labels: { 'Their words': 'What happened just now', 'A past pattern': 'An old pattern' } }
           ]

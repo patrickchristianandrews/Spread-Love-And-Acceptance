@@ -272,7 +272,7 @@
       var asBad = s.error && s.error.indexOf("runs from") >= 0;
       if (wb === null) (wbBad ? chk : miss).push("balance");
       if (oc === null) (ocBad ? chk : miss).push("ownership");
-      if (as === null) (asBad ? chk : miss).push("everyone's battery");
+      if (as === null) (asBad ? chk : miss).push("everyone's load score");
       setText("No read yet. " + (chk.length ? "Check this number: " + chk.join(", ") + " (see the note under it). " : "") + (miss.length ? "Still needed: " + miss.join(", ") + "." : ""));
       return;
     }
