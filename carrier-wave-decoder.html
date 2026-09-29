@@ -12,8 +12,8 @@
 </script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Carrier Wave Decoder — The Objective Ledger (TOL-OS)</title>
-<meta name="description" content="Decode the moment a conversation starts to squeal, check your state, practice getting back in tune, and close the books together. A free companion to Chapter I of The Objective Ledger.">
+<title>Carrier Wave Decoder — The Objective Ledger</title>
+<meta name="description" content="Decode the moment a conversation starts to squeal, check your state, practice getting back in tune, and look back on the week together. A free companion to Chapter I of The Objective Ledger.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,500&family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -206,7 +206,9 @@ textarea{width:100%;min-height:90px;margin-top:6px;border:1px solid var(--line);
 .tag{display:inline-block;font-family:var(--display);font-size:.78rem;border-radius:var(--radius);padding:1px 9px;margin-left:6px;border:1.5px solid var(--line)}
 .tag.ok{border-color:var(--v);color:var(--v)}
 .tag.open{border-color:var(--s);color:var(--s)}
-/* Close the books */
+.lookfor summary{cursor:pointer;font-family:var(--display);font-weight:600;min-height:44px;display:flex;align-items:center}
+.lookfor .lf-list{padding-left:1.1rem}.lookfor .lf-list li{margin:0 0 .6rem}.lookfor .lf-ex{color:var(--muted)}.lookfor .lf-why{font-size:.94rem}.lookfor .lf-h{font-size:1rem;margin:1rem 0 .4rem}.lookfor .lf-note{font-size:.9rem;color:var(--muted)}
+/* Weekly wrap-up */
 .pbtn{border:1.5px solid var(--line);background:none;border-radius:var(--radius);padding:6px 14px;font-family:var(--display);font-size:.9rem}
 .pbtn[aria-pressed="true"]{border-color:var(--ink);box-shadow:inset 0 0 0 1px var(--ink)}
 .status{font-family:var(--display);font-weight:700;font-size:clamp(1.6rem,4.5vw,2.3rem);line-height:1.08;margin:0 0 6px}
@@ -346,12 +348,13 @@ textarea{width:100%;min-height:90px;margin-top:6px;border:1px solid var(--line);
 @media (prefers-reduced-motion:reduce){.bar i,.script li,.orb{transition:none!important}}
 </style>
 <script src="/assets/js/site.js" defer></script>
+<script src="/assets/js/message-patterns.js"></script>
 </head>
 <body>
 <div class="wrap">
   <div class="sitebar">
-    <a class="mark" href="index.html">The Objective Ledger<small>TOL&#8209;OS &middot; TOOLS</small></a>
-    <a class="back" href="index.html">&larr; Back to TOL-OS</a>
+    <a class="mark" href="index.html">The Objective Ledger<small>TOOLS</small></a>
+    <a class="back" href="/check-ins.html">&larr; Read: Check-ins</a>
   </div>
   <header>
     <div class="kicker">Tool</div>
@@ -377,7 +380,7 @@ textarea{width:100%;min-height:90px;margin-top:6px;border:1px solid var(--line);
     <button class="tab" role="tab" data-tab="practice" aria-selected="false">Practice</button>
     <button class="tab" role="tab" data-tab="journal" aria-selected="false">Journal</button>
     <button class="tab" role="tab" data-tab="findings" aria-selected="false">Findings</button>
-    <button class="tab" role="tab" data-tab="close" aria-selected="false">Close the books</button>
+    <button class="tab" role="tab" data-tab="close" aria-selected="false">Weekly wrap-up</button>
     <button class="tab" role="tab" data-tab="learn" aria-selected="false">Learn</button>
   </div>
 
@@ -531,6 +534,7 @@ textarea{width:100%;min-height:90px;margin-top:6px;border:1px solid var(--line);
         <p class="hint" style="margin:8px 0 0">These buttons always work, whatever the check says.</p>
       </div>
       <div class="panel" id="t-out" aria-live="polite"></div>
+      <details class="panel lookfor"><summary>What it looks for</summary><div id="lookfor"></div></details>
     </div>
   </section>
 
@@ -538,7 +542,7 @@ textarea{width:100%;min-height:90px;margin-top:6px;border:1px solid var(--line);
   <section data-panel="findings" role="tabpanel" hidden>
     <div style="max-width:820px;display:grid;gap:20px">
       <div class="panel">
-        <h3>Findings and corrective action plans</h3>
+        <h3>Things that keep coming up, and a plan for each</h3>
         <p style="margin:0;max-width:64ch">When the same thing keeps coming back, log it as a finding. A finding describes the arrangement, never a person, and a plan doesn't start until you've both had a say.</p>
         <ul class="fsum" id="fsum"></ul>
         <p class="hint" id="fnote" style="margin:14px 0 0"></p>
@@ -550,13 +554,13 @@ textarea{width:100%;min-height:90px;margin-top:6px;border:1px solid var(--line);
       <details class="panel sevguide">
         <summary>How findings work</summary>
         <dl>
-          <dt>Observation</dt><dd>A one-off with a small effect, often already corrected. Noted, no plan needed.</dd>
-          <dt>Deficiency</dt><dd>A gap that could recur, with a limited effect. A quick fix with a named owner.</dd>
-          <dt>Significant deficiency</dt><dd>Recurring or clearly felt, or several small gaps in one area adding up. A full plan with a target date and a test, reviewed at the weekly close.</dd>
-          <dt>Material weakness</dt><dd>Your usual repairs aren't catching it: moments stay open, it's a repeat, an agreement was broken, or trust was breached. A priority plan, reviewed monthly with WP-04. Consider a counselor.</dd>
-          <dt>Four parts</dt><dd>From deficiency up, every finding is written as condition (what happened), criteria (what was expected), cause (what in the arrangement allowed it), and effect (what it cost). The fact and the cause are kept apart, and neither can be a character word.</dd>
+          <dt>Just noting it</dt><dd>A one-off with a small effect, often already corrected. Noted, no plan needed.</dd>
+          <dt>Small gap</dt><dd>A gap that could recur, with a limited effect. A quick fix with a named owner.</dd>
+          <dt>Recurring gap</dt><dd>Recurring or clearly felt, or several small gaps in one area adding up. A full plan with a target date and a test, reviewed at the weekly wrap-up.</dd>
+          <dt>Stubborn gap</dt><dd>Your usual repairs aren't catching it: moments stay open, it's a repeat, an agreement was broken, or trust was breached. A priority plan, reviewed monthly with WP-04. Consider a counselor.</dd>
+          <dt>Four parts</dt><dd>From a small gap up, every finding is written as condition (what happened), criteria (what was expected), cause (what in the arrangement allowed it), and effect (what it cost). The fact and the cause are kept apart, and neither can be a character word.</dd>
           <dt>Response</dt><dd>The receiving person logs Agree, Partly agree, or Disagree, in their own words and signed with their name, before a plan can move from Open to In progress. Revising a finding after that asks them to respond again.</dd>
-          <dt>Closing</dt><dd>A plan is marked remediated with evidence that its test was met, and it closes only after holding through one monthly review. Closed findings become strengths.</dd>
+          <dt>Closing</dt><dd>A plan is marked fixed with evidence that its test was met, and it closes only after holding through one monthly review. Closed findings become strengths.</dd>
         </dl>
       </details>
     </div>
@@ -578,7 +582,7 @@ textarea{width:100%;min-height:90px;margin-top:6px;border:1px solid var(--line);
           <label><input type="checkbox" id="inc-notes" checked> Include what I wrote about each moment</label>
           <label><input type="checkbox" id="inc-work"> Include my practice and retune activity</label>
           <label><input type="checkbox" id="inc-state"> Include the states I've been checking in from</label>
-          <label><input type="checkbox" id="inc-find"> Include our findings and corrective action plans</label>
+          <label><input type="checkbox" id="inc-find"> Include the things that keep coming up, and our plans for them</label>
         </div>
         <div><label for="pmsg">A personal note (optional)</label><textarea id="pmsg" placeholder="Anything you want to say in your own words."></textarea><div class="tc-compact" id="pmsg-tone"></div></div>
         <div class="row" style="margin-top:12px"><button class="play" id="printbtn">Print or save as PDF</button></div>
@@ -603,27 +607,9 @@ textarea{width:100%;min-height:90px;margin-top:6px;border:1px solid var(--line);
     </div>
   </section>
 
-  <p class="note">The Carrier Wave Decoder is a tool for reflection, built on the radio-frequency idea in Chapter I. Like the rest of TOL&#8209;OS, it's a rule of thumb, not a clinical tool or a substitute for therapy, and it measures nothing. Its readings describe the answers you enter, never either person. It's meant for everyday friction between people who feel safe with each other. Your notes, journal, and progress are saved only in this browser and are never sent to us.</p>
+  <p class="note">The Carrier Wave Decoder is a tool for reflection, built on the radio-frequency idea in Chapter I. Like the rest of the program, it's a rule of thumb, not a clinical tool or a substitute for therapy, and it measures nothing. Its readings describe the answers you enter, never either person. It's meant for everyday friction between people who feel safe with each other. Your notes, journal, and progress are saved only in this browser and are never sent to us.</p>
 </div>
 
-<footer class="sitefoot">
-  TOL&#8209;OS &middot; spreadloveandacceptance.com
-  <div class="links">
-    <a href="index.html">Home</a>
-    <a href="about.html">About</a>
-    <a href="roadmap.html">Roadmap</a>
-    <a href="podcast-index.html">Podcast</a>
-    <a href="suite-index.html">Suite Index</a>
-    <a href="program-overview.html">Program Overview</a>
-    <a href="telemetry.html">Rollout status</a>
-    <a href="snapshot/">Snapshot</a>
-    <a href="do/">Try It</a>
-    <a href="architecture/">Architecture</a>
-    <a href="legal/terms-of-service.html">Terms of Service</a>
-    <a href="legal/privacy-policy.html">Privacy Policy</a>
-    <a href="legal/refund-policy.html">Refund Policy</a>
-  </div>
-</footer>
 
 <script>
 const P="~";
@@ -678,9 +664,9 @@ const SCEN=[
   d:["Maybe you've stopped replying altogether, and it feels easier to let the thread go quiet.","That's okay for a little while.",P,"Put the phone face down. Notice three sounds around you.",P,"When you're ready, one short line keeps the channel open: got it. I'll reply properly tomorrow.","A short reply with a time attached reads very differently from silence."]},
  {id:"books",title:"Closing the books",channel:"Weekly check-in",
   setup:"It's the end of the week, time to look at the shared register together, and something about it already feels charged.",
-  v:["You're in a good state to close the books. That's worth noticing.",P,"Start with what went right. One thing each person handled that made the week easier.","Then look at the hours together. Not to find a winner, but to see whether the arrangement is carrying its own weight.",P,"If something is drifting, it's usually ownership. Ask: which items don't have a name next to them?","End by choosing one change for next week. Only one."],
+  v:["You're in a good state for the weekly wrap-up. That's worth noticing.",P,"Start with what went right. One thing each person handled that made the week easier.","Then look at the hours together. Not to find a winner, but to see whether the arrangement is carrying its own weight.",P,"If something is drifting, it's usually ownership. Ask: which items don't have a name next to them?","End by choosing one change for next week. Only one."],
   s:["You might be bracing for a fight about the numbers.","Before you open the register, breathe out long three times. Invite the other person to do the same.",P,"Agree on one rule before you start: the ledger describes the arrangement, not either person's worth.",P,"If things speed up, either of you can say: pause. That means a minute of quiet for everyone, no explaining.","Pick up again only when both voices have slowed."],
-  d:["If you're shut down, this may not be the right hour to close the books. That's a valid finding.",P,"Check what's here. Feel where your body touches the chair. Notice the temperature of the air.",P,"You can still do a small version. Each person names one thing they did this week. That's it.","Then set a time to do the rest, when you're both more resourced.","A postponed meeting with a date on it is a well-run ledger."]}
+  d:["If you're shut down, this may not be the right hour for the weekly wrap-up. That's worth knowing, and it's okay.",P,"Check what's here. Feel where your body touches the chair. Notice the temperature of the air.",P,"You can still do a small version. Each person names one thing they did this week. That's it.","Then set a time to do the rest, when you're both more resourced.","A postponed meeting with a date on it is a well-run ledger."]}
 ];
 
 const CHANNELS=[
@@ -708,7 +694,7 @@ const LESSONS=[
  {t:"The state you're listening from",p:["This tool borrows a simple ladder from polyvagal theory: a steady, social state; a revved-up, braced state; and a shut-down, far-away state. People move between rungs many times a day.","The same sentence lands differently depending on which rung you're on. Revved-up ears hear criticism. Shut-down ears barely hear anything at all.","Polyvagal theory is a popular model, and some of its physiology is debated by researchers. Here it's used as a practical vocabulary for noticing yourself, not as a measurement of anyone."]},
  {t:"Retuning in four moves",p:["First, name the mismatch out loud without blame: I think we're on different timelines here.","Second, check your own state. You can only change your own dial.","Third, slow the pace on purpose. Longer exhales, shorter sentences, real pauses.","Fourth, return to the actual content. Most of the time the original question was small and solvable once the static cleared."]},
  {t:"Before you send: the tone check",p:["The Tone check tab works like a spell-checker for tone. You say how you mean a message to come across, and it marks wording that tends to land harder than that: absolutes, labels, blame questions, orders, and vague timing.","It is private by design. It reads only your own draft, only in your browser. It never reads the other person's words, never saves what you typed, and never stops you from sending. You decide.","The shape that tends to work comes from WP-09, the tone filter: the fact, the feeling, and one specific ask with a real time, opened with appreciation or a shared goal if you have one."]},
- {t:"Findings: separating what's material",p:["Most friction is noise. A finding is for the thing that keeps coming back or clearly costs something. Severity runs from observation, through deficiency and significant deficiency, up to material weakness.","From deficiency up, a finding is written in four parts: the condition, what happened; the criteria, what was expected; the cause, what in the arrangement let it happen; and the effect, what it cost. Keeping the fact apart from the cause is what stops a finding from turning into an accusation.","Before a corrective action plan can start, the other person logs a response: agree, partly agree, or disagree, in their own words. A plan closes only after it holds through a monthly review, and closed findings become strengths."]},
+ {t:"What keeps coming up: telling the big from the small",p:["Most friction is noise. A finding is for the thing that keeps coming back or clearly costs something. It runs from “just noting it”, through a small gap and a recurring gap, up to a stubborn gap your usual fixes aren't catching.","From a small gap up, a finding is written in four parts: what happened; what was expected; what in the arrangement let it happen; and what it cost. Keeping the fact apart from the cause is what stops a finding from turning into an accusation.","Before a plan can start, the other person has their say: agree, partly agree, or disagree, in their own words. A plan closes only after it holds through a monthly review, and closed findings become strengths."]},
  {t:"Keeping shared books",p:["A lot of household work is invisible: remembering, tracking, noticing the milk is low. Invisible work can't be thanked, and it can't be shared.","Writing it down as a line item makes it visible to both people in the same units at the same time, so conversations start from shared facts instead of competing impressions.","Once a week, look at the books together. Start with what went right, check which tasks have no owner, and choose one change. The ledger describes the arrangement, never either person's worth."]}
 ];
 
@@ -895,13 +881,43 @@ function readFor(c){
     ? `You were at “${me}” and they were closer to “${th}.” Swap the feeling of hurry for a real time: could this happen by six?`
     : `They were at “${th}” and you were closer to “${me}.” Ask for their actual deadline, then offer yours.`;
 }
+// the no-blame sentence asks for the fix that fits the gap: pace, tone or timing
+const ASK_FOR={pace:"Can we slow down and take it one piece at a time?",reg:"Can we reset and try that again, a bit softer, both of us?",urg:"Can we agree on when this actually needs to happen?"};
 function decodeSentence(){
-  const off=CHANNELS.filter(c=>done(c)&&dec[c.id][0]!==dec[c.id][1]).map(c=>c.name.toLowerCase());
-  if(!off.length) return "It sounds like we were on the same wavelength here. Is there something else going on that we haven't named yet?";
+  const offC=CHANNELS.filter(c=>done(c)&&dec[c.id][0]!==dec[c.id][1]);
+  const off=offC.map(c=>c.name.toLowerCase());
+  const mine=CHANNELS.map(c=>dec[c.id][0]), theirs=CHANNELS.map(c=>dec[c.id][1]);
+  if(!off.length){
+    if(heatOf(mine)>=2&&heatOf(theirs)>=2) return "I think we were both running hot just now. Can we take ten minutes and come back to it?";
+    return "It sounds like we were on the same wavelength here. Is there something else going on that we haven't named yet?";
+  }
   const list=off.length===1?off[0]:off.slice(0,-1).join(", ")+" and "+off[off.length-1];
-  return `I think we got out of sync on ${list}, not on whether we're on the same side. Can we slow down and sort that part out first?`;
+  // the biggest gap decides the ask
+  offC.sort((x,y)=>Math.abs(dec[y.id][0]-dec[y.id][1])-Math.abs(dec[x.id][0]-dec[x.id][1]));
+  return `I think we got out of sync on ${list}, not on whether we're on the same side. ${ASK_FOR[offC[0].id]}`;
 }
-function verdictFor(n){return n===0?"In tune":n<=2?"A slight beat":n<=4?"An audible squeal":"Full squeal";}
+// n: total steps apart. a, b (optional): each person's three settings, [pace, tone, timing], 0 to 2.
+// Two people both at Fast, Sharp and Right now are matched, but matched hot: that isn't "in tune".
+function heatOf(x){return x?x.filter(v=>v===2).length:0;}
+function verdictFor(n,a,b){
+  const big=a&&b?[0,1,2].some(i=>a[i]!=null&&b[i]!=null&&Math.abs(a[i]-b[i])===2):false;
+  const ha=heatOf(a), hb=heatOf(b);
+  if(n===0){
+    if(ha>=2&&hb>=2) return "In sync, and both running hot";
+    if(ha>=1&&hb>=1) return "In sync, with some heat";
+    return "In tune";
+  }
+  let v=n<=2&&!big?"A slight beat":n<=4?"An audible squeal":"Full squeal";
+  if(v==="A slight beat"&&(ha>=2||hb>=2)) v="A slight beat, running hot";
+  return v;
+}
+function heatRead(a,b,na,nb){
+  const ha=heatOf(a), hb=heatOf(b);
+  if(ha>=2&&hb>=2) return `${na||"You"} and ${nb||"they"} were both running hot (fast, sharp or in a hurry). Matching isn't the same as calm: take a short break together before anything else.`;
+  if(ha>=2) return `${na?na+" was":"You were"} running hot on ${ha===3?"all three channels":"two channels"}. A slow exhale, or a short pause, helps before the next word.`;
+  if(hb>=2) return `${nb?nb+" was":"They were"} running hot on ${hb===3?"all three channels":"two channels"}. It may help to slow your own pace and let them settle before you answer.`;
+  return "";
+}
 let decT=null;
 function renderDecode(){
   const n=decTotal(), k=CHANNELS.filter(done).length, all=k===CHANNELS.length;
@@ -911,8 +927,10 @@ function renderDecode(){
     $("reads").innerHTML=`<li>Tap where you were and where they were on at least one channel, or load a worked example above.</li>`;
     $("say").textContent="Your sentence appears here.";
   }else{
-    $("verdict").textContent=verdictFor(n)+(all?"":" so far");
-    const rs=CHANNELS.map(c=>{const r=readFor(c);return r?`<li><b>${c.name}.</b> ${esc(r)}</li>`:""}).join("");
+    const dMe=CHANNELS.map(c=>dec[c.id][0]), dThem=CHANNELS.map(c=>dec[c.id][1]);
+    $("verdict").textContent=verdictFor(n,dMe,dThem)+(all?"":" so far");
+    const hr=all?heatRead(dMe,dThem):"";
+    const rs=CHANNELS.map(c=>{const r=readFor(c);return r?`<li><b>${c.name}.</b> ${esc(r)}</li>`:""}).join("")+(hr?`<li><b>Heat.</b> ${esc(hr)}</li>`:"");
     const pend=CHANNELS.filter(c=>!done(c)).map(c=>c.name.toLowerCase());
     $("reads").innerHTML=(rs||`<li>No gap on ${all?"these three channels":"the channels marked so far"}. If it still felt off, the static may be coming from somewhere else: tiredness, an older issue, or something neither of you has said yet.</li>`)+(pend.length?`<li>Still to mark: ${esc(joinList(pend))}.</li>`:"");
     $("say").textContent=decodeSentence();
@@ -933,7 +951,7 @@ document.querySelectorAll("[data-ex]").forEach(b=>b.onclick=()=>{
 $("decsave").onclick=()=>{
   if(!CHANNELS.every(done)) return;
   const summary=CHANNELS.map(c=>`${c.name}: you ${c.opts[dec[c.id][0]].toLowerCase()}, them ${c.opts[dec[c.id][1]].toLowerCase()}`).join(" · ");
-  store.log.unshift({t:Date.now(),kind:"decode",verdict:verdictFor(decTotal()),summary,say:decodeSentence(),note:$("decnote").value.trim(),
+  store.log.unshift({t:Date.now(),kind:"decode",verdict:verdictFor(decTotal(),CHANNELS.map(c=>dec[c.id][0]),CHANNELS.map(c=>dec[c.id][1])),summary,say:decodeSentence(),note:$("decnote").value.trim(),
     raw:{me:CHANNELS.map(c=>dec[c.id][0]),them:CHANNELS.map(c=>dec[c.id][1])},settled:false,agreed:""});
   save(); $("decsave").textContent=saving?"Saved ✓":"Added (saving is off)"; setTimeout(()=>$("decsave").textContent="Save to journal",2200);
 };
@@ -1222,7 +1240,7 @@ function renderTog(){
         <p class="hint" style="margin:6px 0 0">${lines.join(" ")}</p></div>`;
     }).join("");
     let insight;
-    if(gaps===0&&misreads===0) insight="You were in sync on all three channels, and you read each other accurately. If it still felt bad, the static may be coming from somewhere else, like tiredness or an older issue worth naming.";
+    if(gaps===0&&misreads===0) insight=heatOf(A.self)>=2&&heatOf(B.self)>=2?"You were on the same settings, and you read each other accurately, but you were both running hot. Matched isn't the same as calm.":"You were in sync on all three channels, and you read each other accurately. If it still felt bad, the static may be coming from somewhere else, like tiredness or an older issue worth naming.";
     else if(misreads>gaps) insight="More of the static came from misreading each other than from actually being far apart. That's good news: guesses are easier to correct than differences.";
     else if(gaps>0&&misreads===0) insight="You read each other accurately. You just really were on different settings. The work now is agreeing on a shared setting, not clearing up a misunderstanding.";
     else insight="Some of this was a real difference, and some was a misread. Start with the misreads, since they're quickest to clear, then talk through the real gap.";
@@ -1231,8 +1249,8 @@ function renderTog(){
     const say=off.length?`We got out of sync on ${list}. Neither of us was wrong; we were on different settings. What would a shared setting look like next time?`:"We were closer than it felt. What else might have been making the static?";
     tog.say=say; tog.summary=`${gaps} step${gaps===1?"":"s"} apart, ${misreads} of 6 guesses off`;
     el.innerHTML=`<h3>${esc(na)} and ${esc(nb)}${tog.note?`: ${esc(tog.note)}`:""}</h3>
-      <p class="verdict">${verdictFor(gaps)}</p>
-      <p class="insight">${insight}</p>
+      <p class="verdict">${verdictFor(gaps,A.self,B.self)}</p>
+      <p class="insight">${insight}${heatRead(A.self,B.self,esc(na),esc(nb))?" "+heatRead(A.self,B.self,esc(na),esc(nb)):""}</p>
       <p class="hint" style="margin:0">${gaps} step${gaps===1?"":"s"} apart in total. ${6-misreads} of 6 guesses were accurate.</p>
       <div class="legend"><span><i></i>Where each person says they were</span><span><i class="ring"></i>Where the other person thought they were</span></div>
       <div class="cmp">${blocks}</div>
@@ -1242,7 +1260,7 @@ function renderTog(){
     if(tog.mode==="join") $("rcopy").onclick=()=>copyText(encode(nb,B),$("rcopy"),$("rcode"));
     $("tsave").onclick=()=>{
       const mi=tog.mode==="join"?1:0;
-      store.log.unshift({t:Date.now(),kind:"together",names:[na,nb],note:tog.note,verdict:verdictFor(gaps),summary:tog.summary,say,
+      store.log.unshift({t:Date.now(),kind:"together",names:[na,nb],note:tog.note,verdict:verdictFor(gaps,A.self,B.self),summary:tog.summary,say,
         raw:{A:{self:[...A.self],guess:[...A.guess]},B:{self:[...B.self],guess:[...B.guess]}},makerIdx:mi,settled:false,agreed:""});
       if(!store.people.me) store.people.me=mi?nb:na; if(!store.people.them) store.people.them=mi?na:nb;
       save();$("tsave").textContent="Saved ✓";};
@@ -1268,7 +1286,7 @@ const STEPS=[
  {tab:"decode",t:"Decode the moment",h:"Mark where each of you was, then save it to the journal.",alt:"together"},
  {tab:"practice",t:"Practice",h:"The scenario that matches your biggest gap is already picked, in your current state."},
  {tab:"journal",t:"Record it",h:"Write what you agreed on the entry you just saved, and mark it settled once it really is. If it keeps coming back, log it as a finding."},
- {tab:"close",t:"Close the books",h:"See whether everything reconciles, and print a summary for the other person."}
+ {tab:"close",t:"Weekly wrap-up",h:"See whether everything reconciles, and print a summary for the other person."}
 ];
 let session=null;
 function renderStart(){
@@ -1368,9 +1386,9 @@ function reconcile(days){
   if(store.findings.some(f=>f.sev!=="obs")){
     const aw=FA.filter(f=>!f.response).length, pd=FA.filter(isPastDue).length;
     checks.push({t:"Every finding has a response",pass:aw===0,d:aw?`${aw} waiting on a response`:"All findings have one"});
-    checks.push({t:"No corrective action is past due",pass:pd===0,d:pd?`${pd} past the target date`:"All plans on schedule"});
-    if(aw||pd) focus.push({kind:"findings",title:[aw?`${aw} finding${aw===1?"":"s"} awaiting a response`:"",pd?`${pd} plan${pd===1?"":"s"} past due`:""].filter(Boolean).join(", "),
-      text:aw?"A corrective action plan can't start until the receiving person logs a response.":"Revisit the target date or the action at the weekly close."});
+    checks.push({t:"Every plan is on schedule",pass:pd===0,d:pd?`${pd} past the target date`:"All plans on schedule"});
+    if(aw||pd) focus.push({kind:"findings",title:[aw?`${aw} finding${aw===1?"":"s"} awaiting a response`:"",pd?`${pd} plan${pd===1?"":"s"} past the target date`:""].filter(Boolean).join(", "),
+      text:aw?"A plan can't start until the other person has had their say.":"Revisit the target date or the action at the weekly wrap-up."});
   }
   const practices=Object.keys(store.done).filter(k=>store.done[k]&&(!store.doneAt[k]||store.doneAt[k]>=since)).length;
   const retunes=store.retunes.filter(t=>t>=since).length;
@@ -1476,8 +1494,6 @@ const FEEL_RE=/\b(?:frustrated|tired|hurt|worried|anxious|overwhelmed|stressed|s
 const TONE_RULES=[
  {id:"label",hard:true,name:"Label",re:new RegExp("\\byou(?:['’]re| are) (?:so |such an? |being |acting )?(?:"+LABEL_WORDS+")\\b|\\b(?:"+LABEL_WORDS+")\\b","gi"),
   why:"Character words put the other person on trial, so they defend who they are instead of hearing what happened.",fix:"Describe the action instead: what was done or not done, and when."},
- {id:"absolute",hard:true,name:"Absolute",re:/\b(?:always|never|every single time|every time|constantly|nothing ever|not once)\b/gi,
-  why:"Absolutes turn one moment into a verdict on all of them, and the other person argues the exception instead.",fix:"Point to the specific time, like “on Tuesday” or “twice this week.”"},
  {id:"blame",hard:true,name:"Blame question",re:/\bwhy (?:didn['’]t|don['’]t|can['’]t|won['’]t|wouldn['’]t|haven['’]t|couldn['’]t|do|did|would|are|can) you\b/gi,
   why:"“Why did you…” asks for a defense, not a solution.",fix:"Turn it into a request: “Could you … by [time]?”"},
  {id:"directive",hard:true,name:"Order",re:/\byou (?:need to|have to|should|must|better)\b/gi,
@@ -1486,19 +1502,26 @@ const TONE_RULES=[
   why:"It hands your feeling to them to fix, which usually starts a debate about whether they caused it.",fix:"Own the feeling: “I feel … when …”.",swap:m=>/feel/i.test(m)?"I feel":null},
  {id:"stop",hard:true,name:"Stop-request",re:/\b(?:stop|quit) \w+ing\b/gi,
   why:"It says what you don't want, so the other person has to guess what you do.",fix:"Name what you'd like instead, like “Could the dishes go in the dishwasher tonight?”"},
- {id:"dismiss",hard:true,name:"Dismissive",re:/\b(?:whatever|forget it|never mind|as usual|typical|must be nice|thanks a lot|of course you did)\b/gi,
+ {id:"dismiss",hard:true,name:"Dismissive",re:/\b(?:as usual|typical|of course you did)\b/gi,
   why:"These often read as sarcasm or giving up, even when you mean them lightly.",fix:"Say the plain version of what you feel."},
  {id:"caps",hard:true,name:"Capitals",re:/\b[A-Z]{2,}(?:\s+[A-Z]{2,})+\b|\b[A-Z]{4,}\b/g,skip:m=>/^(?:ASAP|RACI|CALC|FYI)$/.test(m),
   why:"Capitals read as shouting.",fix:"Let the words carry the weight.",swap:m=>m.toLowerCase()},
  {id:"bang",hard:true,name:"Stacked punctuation",re:/[?!]*(?:!{2,}|\?{2,}|\?!|!\?)[?!]*/g,
   why:"Stacked marks read as raised voices.",fix:"One mark is enough.",swap:m=>m.includes("?")?"?":"."},
  {id:"stack",hard:false,name:"Stacking",re:/\b(?:and another thing|another thing|while we['’]re at it|while we are at it|not to mention|on top of that|and also)\b/gi,
-  why:"Adding more issues makes it harder to fix any one of them.",fix:"Pick the one that matters most, and save the rest for the weekly close."},
+  why:"Adding more issues makes it harder to fix any one of them.",fix:"Pick the one that matters most, and save the rest for the weekly wrap-up."},
  {id:"vague",hard:false,name:"Vague timing",re:/\b(?:when you get a chance|at some point|soon|later|whenever|eventually|asap|sometime)\b/gi,
   why:"Timing words mean different windows to different people. That's the urgency channel from Chapter I.",fix:"Name a real time.",swap:m=>/later/i.test(m)?"at [time]":"by [time]"}
 ];
+// The shared list (message-patterns.js): sarcasm, eye-rolls, passive jabs, pointed work phrases,
+// comparisons, always/never, dismissing a feeling, and shutting the door without a time to come back.
+// It's the same list the Signal Translator and the Conversation Reader use, so the verdicts agree.
+const SHARED_HARD={sarcasm:1,contempt:1,passive:1,compare:1,absolute:1,dismiss:1,stonewall:1,pointed:1};
+const SHARED_RULES=(window.TOLPatterns?window.TOLPatterns.LIST:[]).filter(p=>SHARED_HARD[p.id]).map(p=>({id:p.id,hard:true,name:p.name,shared:true,why:p.what,fix:p.fix}));
 function toneScan(text,ignored){
   const hits=[];
+  if(window.TOLPatterns) window.TOLPatterns.scan(text).forEach(m=>{const r=SHARED_RULES.find(x=>x.id===m.id); if(!r||m.whole&&m.id!=="stonewall") return;
+    hits.push({ri:-1,r,start:m.whole?0:m.start,end:m.whole?text.length:m.end,text:m.whole?text.trim():m.text});});
   TONE_RULES.forEach((r,ri)=>{r.re.lastIndex=0;let m;
     while((m=r.re.exec(text))){ if(!m[0].length){r.re.lastIndex++;continue;} if(r.skip&&r.skip(m[0])) continue;
       hits.push({ri,r,start:m.index,end:m.index+m[0].length,text:m[0]}); }});
@@ -1509,12 +1532,16 @@ function toneScan(text,ignored){
 }
 function toneGood(text,hits){
   const t=text.trim(), first=t.split(/[.!?\n]/)[0]||"";
+  const TP=window.TOLPatterns;
   const ask=/\b(?:could you|would you|can you|can we|could we|would it|i['’]d like|i would like|let['’]s|let us|please|would you be willing|are you open to|how about)\b/i.test(t);
+  const edgy=hits.some(h=>h.r.shared&&h.r.id!=="absolute");
+  const warmOpen=!edgy&&((TP&&TP.hasAppreciation(first))||/\b(?:i know|i love|i care|we both|i want us|i['’]d like us|i want to get this right|i['’]m glad)\b/i.test(first));
+  const hasTime=TP?TP.hasTime(t):TIME_RE.test(t);
   return [
-   {ok:/\b(?:thank|thanks|appreciate|grateful|i know|i love|i care|we both|i want us|i['’]d like us|i want to get this right|i['’]m glad)\b/i.test(first),t:"Opens with appreciation or a shared goal",opt:true},
+   {ok:warmOpen,t:"Opens with appreciation or a shared goal",opt:true},
    {ok:/\bi (?:feel|felt)\b/i.test(t)||(/\bi(?:['’]m| am| was| get)\b/i.test(t)&&FEEL_RE.test(t)),t:"Says how you feel, in an “I” sentence"},
    {ok:ask,t:"Makes one clear ask"},
-   {ok:ask&&TIME_RE.test(t),t:"Puts a real time on the ask",opt:true},
+   {ok:ask&&hasTime,t:"Puts a real time on the ask",opt:true},
    {ok:!hits.some(h=>h.r.id==="stack"),t:"Sticks to one issue"}
   ];
 }
@@ -1524,9 +1551,10 @@ function mountTone(mount,ta,st,compact){
   if(!mount||!ta) return;
   const text=ta.value, hits=toneScan(text,st.ignored);
   const hard=hits.filter(h=>h.r.hard).length, soft=hits.length-hard; st.hard=hard;
-  const iw={info:"just information",warm:"warm",firm:"firm"}[st.intent||"warm"];
+  const iw=st.intent?{info:"just information",warm:"warm",firm:"firm"}[st.intent]:"";
   let sum;
   if(!text.trim()) sum=compact?"Suggestions appear here as you type.":"Start typing. Suggestions appear here as you go, the way a spell-checker's do.";
+  else if(!st.intent) sum=hard?`${hard} phrase${hard===1?"":"s"} may land sharper than you mean. Pick how you mean it to come across above, and the check will compare against that.`:"Nothing here tends to land as sharp. Pick how you mean it to come across above, if you like.";
   else if(st.intent==="firm") sum=hard?`You've chosen to be firm, and that's allowed. ${hard} phrase${hard===1?"":"s"} may land as a verdict rather than a request.`:"Firm and clear. Nothing here tends to land as a verdict.";
   else sum=hard?`You mean this as ${iw}. ${hard} phrase${hard===1?"":"s"} often land${hard===1?"s":""} sharper than that.`:`Nothing here tends to land sharper than ${iw}.`;
   if(text.trim()&&soft) sum+=` ${soft} more suggestion${soft===1?"":"s"} could make it clearer.`;
@@ -1555,10 +1583,10 @@ function mountTone(mount,ta,st,compact){
 }
 
 const INTENTS=[["info","Just info"],["warm","Warm"],["firm","Firm"]];
-const toneState={intent:"warm",ignored:new Set(),hard:0};
+const toneState={intent:null,ignored:new Set(),hard:0};
 function renderTone(){
   $("intent").innerHTML=INTENTS.map(([k,l])=>`<button type="button" data-in="${k}" aria-pressed="${toneState.intent===k}">${l}</button>`).join("");
-  $("intent").querySelectorAll("[data-in]").forEach(b=>b.onclick=()=>{toneState.intent=b.dataset.in;renderTone();});
+  $("intent").querySelectorAll("[data-in]").forEach(b=>b.onclick=()=>{toneState.intent=toneState.intent===b.dataset.in?null:b.dataset.in;renderTone();});
   mountTone($("t-out"),$("draft"),toneState,false);
 }
 $("draft").addEventListener("input",()=>mountTone($("t-out"),$("draft"),toneState,false));
@@ -1588,7 +1616,7 @@ $("t-clear").onclick=()=>{
   clearTimeout(tcArm); tcArm=null; $("t-clear").textContent="Clear";
   $("draft").value=""; toneState.ignored.clear(); mountTone($("t-out"),$("draft"),toneState,false);
 };
-const pmsgTone={intent:"warm",ignored:new Set(),open:false};
+const pmsgTone={intent:null,ignored:new Set(),open:false};
 $("pmsg").addEventListener("input",()=>mountTone($("pmsg-tone"),$("pmsg"),pmsgTone,true));
 
 // ---------- findings & corrective action plans ----------
@@ -1597,10 +1625,10 @@ $("pmsg").addEventListener("input",()=>mountTone($("pmsg-tone"),$("pmsg"),pmsgTo
 // Management Response Workflow: a plan cannot move from Open to In progress until the
 // receiving person has logged Agree / Partly agree / Disagree plus their own view.
 const SEV=[
- {id:"obs",n:"Observation",h:"A one-off with a small effect, often already corrected. Noted, no plan needed."},
- {id:"def",n:"Deficiency",h:"A gap that could recur, with a limited effect. A quick fix with a named owner."},
- {id:"sig",n:"Significant deficiency",h:"Recurring or clearly felt, or several small gaps in one area adding up. A full plan, reviewed at the weekly close."},
- {id:"mat",n:"Material weakness",h:"Your usual repairs aren't catching it: moments stay open, it's a repeat, an agreement was broken, or trust was breached. A priority plan, reviewed monthly."}
+ {id:"obs",n:"Just noting it",h:"A one-off with a small effect, often already corrected. Noted, no plan needed."},
+ {id:"def",n:"Small gap",h:"A gap that could recur, with a limited effect. A quick fix with a named owner."},
+ {id:"sig",n:"Recurring gap",h:"Recurring or clearly felt, or several small gaps in one area adding up. A full plan, reviewed at the weekly wrap-up."},
+ {id:"mat",n:"Stubborn gap",h:"Your usual repairs aren't catching it: moments stay open, it's a repeat, an agreement was broken, or trust was breached. A priority plan, reviewed monthly."}
 ];
 const SEV_I=id=>SEV.findIndex(s=>s.id===id);
 const sevName=id=>(SEV[SEV_I(id)]||SEV[0]).n;
@@ -1614,7 +1642,7 @@ const CAUSES=[
  {id:"oneoff",n:"Temporary circumstance",h:"Illness, travel, or an unusually hard week (a WP-04 one-off)"}
 ];
 const causeName=id=>(CAUSES.find(c=>c.id===id)||{n:""}).n;
-const STATUS={noted:"Noted",open:"Open",progress:"In progress",remediated:"Remediated",closed:"Closed"};
+const STATUS={noted:"Noted",open:"Open",progress:"In progress",remediated:"Fixed, holding",closed:"Closed"};
 const STANCE={agree:"Agree",partly:"Partly agree",disagree:"Disagree"};
 const STANCE_H={agree:"This describes what happened, and the plan makes sense to me.",partly:"Some of it fits. I'll say which part doesn't.",disagree:"I see it differently. My view is recorded next to the finding, not overruled."};
 const HOLD_DAYS=28;
@@ -1671,9 +1699,9 @@ function validateFinding(fd){
   if(L(fd.effect)<10) e.push("Effect: describe what it cost the arrangement.");
   if(!L(fd.by)||!L(fd.to)) e.push("Add both names. The receiving person logs the response.");
   else if(fd.by.trim().toLowerCase()===fd.to.trim().toLowerCase()) e.push("The receiving person has to be someone other than the person logging the finding.");
-  if(L(fd.action)<8) e.push("Corrective action: name one specific change.");
-  if(strict&&!dueDate(fd.due)) e.push("Target date: required for a significant deficiency or material weakness.");
-  if(strict&&L(fd.test)<8) e.push("How we'll know it's fixed: required for a significant deficiency or material weakness.");
+  if(L(fd.action)<8) e.push("The plan: name one specific change.");
+  if(strict&&!dueDate(fd.due)) e.push("Target date: required for a recurring or stubborn gap.");
+  if(strict&&L(fd.test)<8) e.push("How we'll know it's fixed: required for a recurring or stubborn gap.");
   return e;
 }
 function saveFinding(){
@@ -1721,7 +1749,7 @@ function renderWork(){
       <div class="part"><label for="ff-causeType">Cause</label><small>What in the arrangement allowed this. Choose the systemic cause, then explain it. A person's character can't be a cause here.</small>
         <select id="ff-causeType" data-f="causeType">${opt("",fd.causeType,"Choose a cause…")}${CAUSES.map(c=>opt(c.id,fd.causeType,`${c.n}: ${c.h}`)).join("")}</select>
         <textarea id="ff-cause" data-f="cause" aria-label="Cause, explained" placeholder="What about the setup let this happen?">${esc(fd.cause)}</textarea>
-        <p class="warn" id="ff-oneoff"${fd.causeType==="oneoff"?"":" hidden"}>WP-04 treats a one-off with a temporary cause as no action. Consider noting it as an observation instead.</p>
+        <p class="warn" id="ff-oneoff"${fd.causeType==="oneoff"?"":" hidden"}>WP-04 treats a one-off with a temporary cause as no action. Consider just noting it instead.</p>
         <p class="warn" id="ff-repeat"${prior?"":" hidden"}>${prior?`Repeat of ${fid(prior)} (${STATUS[prior.status].toLowerCase()}). Repeat findings usually move up one level.`:""}</p></div>
       <div class="part"><label for="ff-effect">Effect</label><small>What it cost the arrangement: time, repeated requests, how it landed for each of you.</small><textarea id="ff-effect" data-f="effect">${esc(fd.effect)}</textarea></div>`:""}
     </div>
@@ -1729,16 +1757,16 @@ function renderWork(){
       <div class="field"><label for="ff-by">Logged by</label><input type="text" id="ff-by" data-f="by" maxlength="24" value="${esc(fd.by)}" autocomplete="off"></div>
       ${full?`<div class="field"><label for="ff-to">Receiving person</label><input type="text" id="ff-to" data-f="to" maxlength="24" value="${esc(fd.to)}" autocomplete="off"><small class="hint">They log the response.</small></div>`:""}
     </div>
-    ${full?`<h4 class="caph">Corrective action plan</h4>
+    ${full?`<h4 class="caph">The plan</h4>
     <div class="field wide"><label for="ff-action">Action</label><textarea id="ff-action" data-f="action" placeholder="One specific change.">${esc(fd.action)}</textarea></div>
     <div class="names">
       <div class="field"><label for="ff-owner">Owner</label><select id="ff-owner" data-f="owner">${opt("by",fd.owner,"The person logging it")}${opt("to",fd.owner,"The receiving person")}${opt("both",fd.owner,"Both of us")}</select></div>
       <div class="field"><label for="ff-due">Target date${strict?"":" (optional)"}</label><input type="date" id="ff-due" data-f="due" value="${esc(fd.due)}"></div>
     </div>
     <div class="field wide"><label for="ff-test">How we'll know it's fixed${strict?"":" (optional)"}</label><textarea id="ff-test" data-f="test" placeholder="A test you can check, like “the next five requests all name a time.”">${esc(fd.test)}</textarea></div>
-    ${fd.sev==="mat"?`<p class="warn">Material weakness: review it monthly alongside WP-04, and consider bringing in a counselor or mediator. This tool is a heuristic, not a substitute.</p>`:""}`:""}
+    ${fd.sev==="mat"?`<p class="warn">A stubborn gap: review it monthly alongside WP-04, and consider bringing in a counselor or mediator. This tool is a heuristic, not a substitute.</p>`:""}`:""}
     <ul class="errs" id="ff-errs" role="alert" tabindex="-1" hidden></ul>
-    <div class="row" style="margin-top:16px"><button class="play" id="ff-save">${full?(editing?"Save revision":"Log finding"):(editing?"Save observation":"Note observation")}</button><button class="ghost" id="ff-cancel">Cancel</button></div>`;
+    <div class="row" style="margin-top:16px"><button class="play" id="ff-save">${full?(editing?"Save revision":"Log finding"):(editing?"Save note":"Just note it")}</button><button class="ghost" id="ff-cancel">Cancel</button></div>`;
   w.oninput=w.onchange=ev=>{const t=ev.target;
     if(t.id==="ff-nostd"){fd.noStd=t.checked;const c=$("ff-criteria");if(c)c.disabled=t.checked;return;}
     if(t.dataset&&t.dataset.f){fd[t.dataset.f]=t.value;
@@ -1749,7 +1777,7 @@ function renderWork(){
 }
 
 function startResponse(id){fdraft=null;fresp={id,step:"handoff",stance:"",view:"",sign:""};renderWork();setTimeout(()=>$("fwork").scrollIntoView({behavior:reduceMotion?"auto":"smooth",block:"start"}),60);}
-const respTone={intent:"warm",ignored:new Set(),open:false};
+const respTone={intent:null,ignored:new Set(),open:false};
 function renderResp(){
   const w=$("fwork"), f=store.findings.find(x=>x.id===fresp.id); if(!f){fresp=null;renderWork();return;}
   w.hidden=false; w.oninput=w.onchange=null;
@@ -1792,8 +1820,8 @@ function partsHTML(f){
 }
 function capHTML(f){
   if(!f.cap) return ""; const past=isPastDue(f), d=dueDate(f.cap.due);
-  return `<h4 class="caph">Corrective action plan</h4><dl class="fparts"><dt>Action</dt><dd>${esc(f.cap.action)}</dd><dt>Owner</dt><dd>${esc(ownerName(f,f.cap.owner))}</dd>
-    <dt>Target</dt><dd>${d?esc(fmtDay(d)):"Not set"}${past?` <span class="tag sev-mat">Past due</span>`:""}</dd><dt>Test</dt><dd>${f.cap.test?esc(f.cap.test):"Not set"}</dd>
+  return `<h4 class="caph">The plan</h4><dl class="fparts"><dt>Action</dt><dd>${esc(f.cap.action)}</dd><dt>Owner</dt><dd>${esc(ownerName(f,f.cap.owner))}</dd>
+    <dt>Target</dt><dd>${d?esc(fmtDay(d)):"Not set"}${past?` <span class="tag sev-mat">Needs a new date</span>`:""}</dd><dt>Test</dt><dd>${f.cap.test?esc(f.cap.test):"Not set"}</dd>
     ${f.evidence?`<dt>Evidence</dt><dd>${esc(f.evidence)}</dd>`:""}</dl>`;
 }
 function stepperHTML(f){
@@ -1813,11 +1841,11 @@ function cardHTML(f){
         <p class="gate">${f.response?"Response logged. The plan can start.":`Locked until ${esc(f.to)} logs a response. This is how the plan gets signed off.`}</p>`;
     }else if(f.status==="progress"){
       act=`<div class="field wide"><label for="ev-${f.id}">Evidence the test was met</label><textarea id="ev-${f.id}" placeholder="${esc(f.cap.test||"What happened that shows it's fixed?")}"></textarea></div>
-        <div class="row" style="margin-top:8px"><button class="play" data-rem="${f.id}">Mark remediated</button></div><p class="gate" id="evx-${f.id}" role="alert"></p>`;
+        <div class="row" style="margin-top:8px"><button class="play" data-rem="${f.id}">Mark it fixed</button></div><p class="gate" id="evx-${f.id}" role="alert"></p>`;
     }else if(f.status==="remediated"){
       const ok=Date.now()-f.remediatedAt>=HOLD_DAYS*864e5, when=fmtDay(f.remediatedAt+HOLD_DAYS*864e5);
       act=`<div class="row"><button class="play" data-close="${f.id}"${ok?"":" disabled"}>Close finding</button><button class="ghost" data-reopen="${f.id}">It came back, reopen</button></div>
-        <p class="gate">${ok?"It has held through a monthly review. You can close it.":`A remediated finding closes only after it holds through one monthly review. You can close it on ${esc(when)}.`}</p>`;
+        <p class="gate">${ok?"It has held through a monthly review. You can close it.":`A fixed item closes only after it holds through one monthly review. You can close it on ${esc(when)}.`}</p>`;
     }else if(f.status==="closed"){
       act=`<div class="field wide"><label for="gr-${f.id}">What this makes possible</label><input type="text" id="gr-${f.id}" data-grow="${f.id}" maxlength="200" value="${esc(f.growth||"")}" placeholder="Now requests come with a time, and we don't have to chase each other."></div>`;
     }
@@ -1827,31 +1855,31 @@ function cardHTML(f){
     <h3>${esc(f.title)}</h3><p class="fmeta">Logged ${esc(fmtDay(f.t))} by ${esc(f.by)}${!obs&&f.to?`, response from ${esc(f.to)}`:""}</p>
     ${partsHTML(f)}${resp}${capHTML(f)}${obs?"":stepperHTML(f)}${act}
     <details class="hist"><summary>History (${f.hist.length})</summary><ol>${f.hist.map(h=>`<li>${esc(fmt(h.t))}: ${esc(h.ev)}${h.by?` (${esc(h.by)})`:""}</li>`).join("")}${(f.superseded||[]).map(s=>`<li>Superseded response from ${esc(s.by)}, ${esc(fmt(s.t))}: ${STANCE[s.stance]}. “${esc(s.view)}”</li>`).join("")}</ol></details>
-    <div class="row" style="margin-top:12px">${obs?`<button class="ghost" data-esc="${f.id}">Escalate to a deficiency</button>`:""}${canRevise&&!obs?`<button class="ghost" data-rev="${f.id}">Revise finding</button>`:""}<button class="ghost" data-fdel="${f.id}">Delete</button></div>
+    <div class="row" style="margin-top:12px">${obs?`<button class="ghost" data-esc="${f.id}">Treat it as a small gap</button>`:""}${canRevise&&!obs?`<button class="ghost" data-rev="${f.id}">Revise finding</button>`:""}<button class="ghost" data-fdel="${f.id}">Delete</button></div>
   </article>`;
 }
 
 function renderFindings(){
   const F=store.findings, act=F.filter(f=>f.sev!=="obs"&&f.status!=="closed");
   const n=s=>F.filter(f=>f.status===s).length, awaiting=act.filter(f=>!f.response).length, past=act.filter(isPastDue).length;
-  $("fsum").innerHTML=[["Open",n("open")],["In progress",n("progress")],["Remediated",n("remediated")],["Closed",n("closed")],["Awaiting response",awaiting],["Past due",past],["Observations",n("noted")]]
+  $("fsum").innerHTML=[["Open",n("open")],["In progress",n("progress")],["Fixed, holding",n("remediated")],["Closed",n("closed")],["Awaiting response",awaiting],["Needs a new date",past],["Just noted",n("noted")]]
     .map(([l,v])=>`<li><b>${v}</b>${l}</li>`).join("");
   const notes=[];
-  if(act.some(f=>f.sev==="mat")) notes.push("A material weakness is open. Review it monthly alongside WP-04.");
+  if(act.some(f=>f.sev==="mat")) notes.push("A stubborn gap is open. Review it monthly alongside WP-04.");
   if(awaiting) notes.push(`${awaiting} finding${awaiting===1?" is":"s are"} waiting on a response before ${awaiting===1?"its plan":"their plans"} can start.`);
-  if(past) notes.push(`${past} corrective action${past===1?" is":"s are"} past the target date. Revisit the date or the action at the weekly close.`);
+  if(past) notes.push(`${past} plan${past===1?" is":"s are"} past the target date. Revisit the date or the action at the weekly wrap-up.`);
   $("fnote").textContent=notes.join(" ")||(F.length?"Everything is on track.":"No findings yet. Most friction is noise; a finding is for what keeps coming back.");
-  const filters=[["active","Active"],["noted","Observations"],["closed","Strengths"],["all","All"]];
+  const filters=[["active","Active"],["noted","Just noted"],["closed","Strengths"],["all","All"]];
   $("ffilter").innerHTML=filters.map(([k,l])=>`<button class="pbtn" data-ff="${k}" aria-pressed="${ffilter===k}">${l}</button>`).join("");
   $("ffilter").querySelectorAll("[data-ff]").forEach(b=>b.onclick=()=>{ffilter=b.dataset.ff;renderFindings();});
   const shown=F.filter(f=>ffilter==="all"||(ffilter==="active"?(f.status!=="closed"&&f.status!=="noted"):f.status===ffilter));
-  $("flist").innerHTML=shown.map(cardHTML).join("")||`<p class="empty">${ffilter==="closed"?"Closed findings show up here as strengths.":ffilter==="noted"?"No observations noted.":"Nothing here. Log a finding when something keeps coming back."}</p>`;
+  $("flist").innerHTML=shown.map(cardHTML).join("")||`<p class="empty">${ffilter==="closed"?"Closed findings show up here as strengths.":ffilter==="noted"?"Nothing noted yet.":"Nothing here. Log a finding when something keeps coming back."}</p>`;
   const L=$("flist"), get=id=>F.find(f=>f.id===id);
   L.querySelectorAll("[data-resp]").forEach(b=>b.onclick=()=>startResponse(b.dataset.resp));
   L.querySelectorAll("[data-start]").forEach(b=>b.onclick=()=>{const f=get(b.dataset.start);if(!f||!f.response)return;const now=Date.now();f.status="progress";f.startedAt=now;f.hist.push({t:now,ev:"Status Open → In progress"});save();renderFindings();});
   L.querySelectorAll("[data-rem]").forEach(b=>b.onclick=()=>{const f=get(b.dataset.rem), ev=$("ev-"+f.id).value.trim();
     if(ev.length<10){$("evx-"+f.id).textContent="Describe what happened that shows the test was met.";return;}
-    const now=Date.now();f.status="remediated";f.remediatedAt=now;f.evidence=ev.slice(0,600);f.hist.push({t:now,ev:"Status In progress → Remediated, with evidence"});save();renderFindings();});
+    const now=Date.now();f.status="remediated";f.remediatedAt=now;f.evidence=ev.slice(0,600);f.hist.push({t:now,ev:"Status In progress → Fixed, with evidence"});save();renderFindings();});
   L.querySelectorAll("[data-reopen]").forEach(b=>b.onclick=()=>{const f=get(b.dataset.reopen),now=Date.now();f.status="progress";f.reopened=(f.reopened||0)+1;delete f.remediatedAt;f.hist.push({t:now,ev:"Reopened: it came back. Status Remediated → In progress"});save();renderFindings();});
   L.querySelectorAll("[data-close]").forEach(b=>b.onclick=()=>{const f=get(b.dataset.close);if(Date.now()-f.remediatedAt<HOLD_DAYS*864e5)return;const now=Date.now();f.status="closed";f.closedAt=now;f.hist.push({t:now,ev:"Status Remediated → Closed. Now a strength"});save();renderFindings();});
   L.querySelectorAll("[data-grow]").forEach(i=>i.onchange=()=>{const f=get(i.dataset.grow);f.growth=i.value.trim().slice(0,200);save();});
@@ -1897,6 +1925,9 @@ if(reduceMotion) setInterval(()=>requestAnimationFrame(draw),500);
 
 // ---------- init ----------
 save(); renderConsent(); renderList(); renderPanel(); renderStart(); renderChans(); renderDecode(); renderQs(); renderLessons(); setMode("breath"); setStateColor(st);
+// /carrier-wave-decoder.html#together opens the Together tab (the chat links there for "two phones")
+(function(){const h=(location.hash||"").slice(1); if(h&&TABS.some(b=>b.dataset.tab===h)) go(h);})();
+if(window.TOLPatterns&&$("lookfor")) window.TOLPatterns.lookFor($("lookfor"));
 </script>
 </body>
 </html>
