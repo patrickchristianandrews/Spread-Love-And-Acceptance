@@ -61,14 +61,28 @@
   .read .fc-titles h2:focus{ outline:none; }
   .read .fc-titles h2:focus-visible{ outline:2px solid var(--focus); outline-offset:3px; }
   .fc-sub{ font-family:"IBM Plex Mono", ui-monospace, monospace; font-size:.76rem; color:#7A5620; margin:0; }
-  .window{ display:inline-block; padding:.22rem .75rem; border-radius:3px; font-family:"IBM Plex Mono", ui-monospace, monospace; font-size:.76rem; color:#FFFDF7; white-space:normal; }
-  .w-open{ background:var(--credit); } .w-short{ background:#2F5A3C; }
-  .w-wait{ background:#7A5620; } .w-closed{ background:var(--debit); }
+  .window{ display:inline-block; padding:.3rem .8rem; border-radius:99px; font-size:.9rem; color:var(--ink); white-space:normal; border:1px solid transparent; }
+  /* Gentle colors on purpose: a talk window is timing advice, never a warning light */
+  .w-open{ background:#D6EBDA; border-color:#A9CDB1; } .w-short{ background:#E2EFD9; border-color:#B7D2A6; }
+  .w-wait{ background:#F6E8C4; border-color:#E0C98A; } .w-closed{ background:#E4DDF2; border-color:#C4B6E2; }
 
   .gauge{ margin:1.1rem 0 .2rem; }
   .gauge-track{ height:12px; background:var(--paper-deep); border:1px solid var(--line); border-radius:99px; overflow:hidden; }
-  .gauge-fill{ height:100%; width:0; background:var(--credit); transition:width .3s ease, background .3s ease; }
-  .gauge-line{ display:flex; justify-content:space-between; gap:.6rem; flex-wrap:wrap; font-family:"IBM Plex Mono", ui-monospace, monospace; font-size:.72rem; color:var(--ink-soft); margin-top:.3rem; }
+  .gauge-fill{ height:100%; width:0; background:#A9CDB1; transition:width .3s ease, background .3s ease; }
+  .gauge-fill.r-lots{ background:#A9CDB1; } .gauge-fill.r-some{ background:#E6CD8C; } .gauge-fill.r-little{ background:#C4B6E2; }
+  .gauge-line{ display:flex; justify-content:space-between; gap:.6rem; flex-wrap:wrap; font-size:.95rem; color:var(--ink); margin-top:.35rem; }
+  .gauge-line strong{ font-weight:600; }
+  .num-toggle{ display:inline-flex; align-items:center; gap:.4rem; font-size:.88rem; color:var(--ink-soft); min-height:44px; cursor:pointer; }
+  .num-toggle input{ width:1.1rem; height:1.1rem; }
+  .nums{ font-size:.86rem; color:var(--ink-soft); margin:.2rem 0 0; max-width:62ch; }
+  .pause{ margin:1.1rem 0 0; padding:.9rem 1rem 1rem; background:#EEF3F8; border-left:4px solid #9FBCD8; border-radius:var(--radius); }
+  .read .pause h3{ font-family:"Fraunces", Georgia, serif; font-weight:600; font-size:1.02rem; margin:0 0 .3rem; }
+  .pause p{ margin:0 0 .5rem; font-size:.95rem; max-width:62ch; }
+  .pause-clock{ font-family:"Fraunces", Georgia, serif; font-size:2rem; line-height:1.1; margin:.2rem 0 .4rem; font-variant-numeric:tabular-nums; }
+  .pause .chips{ margin:.2rem 0 .5rem; }
+  .pause-end{ background:var(--paper); border-radius:var(--radius); padding:.7rem .9rem; margin:.5rem 0 0; }
+  details.src{ margin:.55rem 0 0; font-size:.86rem; color:var(--ink-soft); max-width:62ch; }
+  details.src summary{ cursor:pointer; min-height:44px; display:flex; align-items:center; }
   .fc-body{ font-size:1.04rem; line-height:1.7; max-width:62ch; margin:1rem 0 0; }
   .fc-body p{ margin:0 0 .7rem; }
 
@@ -76,11 +90,11 @@
   .col{ padding:.9rem 1.05rem 1rem; background:var(--paper); }
   .col+.col{ border-left:1px solid var(--line); }
   .read .col h3{ font-family:"Fraunces", Georgia, serif; font-weight:600; font-size:1rem; margin:0 0 .4rem; }
-  .col.good h3{ color:var(--credit); } .col.later h3{ color:var(--debit); }
+  .col.good h3{ color:var(--credit); } .col.later h3{ color:#5B4A86; }
   .col ul{ list-style:none; margin:0; padding:0; }
   .col li{ font-size:.94rem; line-height:1.5; margin:.3rem 0; padding-left:1rem; position:relative; }
   .col.good li::before{ content:"\2713"; position:absolute; left:0; color:var(--credit); }
-  .col.later li::before{ content:"\00B7"; position:absolute; left:0; color:var(--debit); font-weight:700; }
+  .col.later li::before{ content:"\00B7"; position:absolute; left:0; color:#5B4A86; font-weight:700; }
   @media (max-width:600px){ .cols{ grid-template-columns:1fr; } .col+.col{ border-left:0; border-top:1px solid var(--line); } }
 
   .fc-sec{ margin:1.3rem 0 0; }
@@ -115,7 +129,7 @@
   .week .dn{ font-family:"IBM Plex Mono", ui-monospace, monospace; font-size:.68rem; color:var(--ink-soft); }
   .week .bar{ width:100%; max-width:34px; height:64px; background:var(--paper); border:1px solid var(--line); border-radius:3px; display:flex; align-items:flex-end; overflow:hidden; }
   .week .bar i{ display:block; width:100%; }
-  .week .bar i.s-clear{ background:var(--credit); } .week .bar i.s-gusty{ background:#7A5620; } .week .bar i.s-fog{ background:var(--debit); }
+  .week .bar i.s-clear{ background:#A9CDB1; } .week .bar i.s-gusty{ background:#E6CD8C; } .week .bar i.s-fog{ background:#C4B6E2; }
   .week .ic{ font-size:1rem; min-height:1.3em; line-height:1.3; }
   .week li.today .dn{ color:var(--ink); font-weight:600; }
   .strip-key{ font-family:"IBM Plex Mono", ui-monospace, monospace; font-size:.72rem; color:var(--ink-soft); display:flex; gap:1.1rem; flex-wrap:wrap; margin:0 0 .3rem; }
@@ -170,7 +184,7 @@
           <button class="rung" type="button" data-sky="gusty" aria-pressed="false"><span class="ico" aria-hidden="true">&#127788;</span><strong>Gusty<em>Revved up</em></strong><span class="d">You feel keyed up, thoughts move fast, and small things start to feel urgent or personal.</span></button>
           <button class="rung" type="button" data-sky="fog" aria-pressed="false"><span class="ico" aria-hidden="true">&#127787;</span><strong>Fogged in<em>Running on empty</em></strong><span class="d">Flat, far away or foggy, and words are harder to find than usual.</span></button>
         </div>
-        <p class="step-fine">Curious where these three come from? They&#39;re loosely borrowed from polyvagal theory, a popular idea about the nervous system that researchers still debate (it calls them the ventral vagal, sympathetic and dorsal vagal states). Here they&#39;re only everyday labels for how you feel, not a measurement of your body.</p>
+        <details class="src"><summary>Where do these three come from? (optional)</summary><p>They&#39;re loosely borrowed from polyvagal theory, a popular idea about the nervous system that researchers still debate, which has its own science names for them. Here they&#39;re only everyday words for how you feel, not a measurement of your body: <strong>Clear</strong> means calm and connected, <strong>Gusty</strong> means revved up, and <strong>Fogged in</strong> means running on empty.</p></details>
       </div>
 
       <div class="step">
@@ -287,11 +301,34 @@
       </div>
 
       <div class="gauge" id="gauge" hidden>
+        <div class="gauge-line"><span id="gauge-label">Room in the day</span></div>
         <div class="gauge-track" aria-hidden="true"><div class="gauge-fill" id="gauge-fill"></div></div>
-        <div class="gauge-line"><span id="gauge-label">Pressure reading</span><span id="gauge-num"></span></div>
+        <label class="num-toggle"><input type="checkbox" id="show-nums"> Show the numbers behind this</label>
+        <p class="nums" id="gauge-num" hidden></p>
       </div>
 
       <div class="fc-body" id="fc-body"><p>Answer step 1 and the forecast fills in. Every extra step sharpens it, and none of them are required.</p></div>
+
+        <div class="pause" id="pause" hidden>
+          <h3>A gentle pause before you talk</h3>
+          <p id="pause-intro">The forecast suggests waiting a little. If you like, start a pause here: a quiet countdown on this page only. Nothing pops up and nothing makes a sound.</p>
+          <div class="chips" role="group" aria-label="How long a pause">
+            <button class="chip" type="button" data-pause="10" aria-pressed="false">10 minutes</button>
+            <button class="chip" type="button" data-pause="20" aria-pressed="true">20 minutes</button>
+            <button class="chip" type="button" data-pause="30" aria-pressed="false">30 minutes</button>
+          </div>
+          <p class="pause-clock" id="pause-clock" hidden aria-hidden="true"></p>
+          <p class="sr-only" id="pause-status" role="status" aria-live="polite"></p>
+          <div class="pause-end" id="pause-end" hidden>
+            <p><strong>Your pause is over.</strong> Take a breath and see how the sky looks now. If you feel ready, here&#39;s the sentence from your forecast:</p>
+            <p><em id="pause-say"></em></p>
+            <p>If you&#39;re not ready yet, that&#39;s fine too. Waiting longer is allowed.</p>
+          </div>
+          <div class="actions" style="margin-top:.4rem">
+            <button class="btn" type="button" id="pause-go">Start the pause</button>
+            <button class="btn" type="button" id="pause-stop" hidden>Stop the pause</button>
+          </div>
+        </div>
 
       <div id="fc-extra" hidden>
         <div class="cols">
@@ -322,6 +359,7 @@
         <details class="how">
           <summary>How this reading works</summary>
           <p>It&#39;s a rough tally of what you told it, not a measurement. The sky sets the starting point. Heavy pressure, a short night, a lot of people time, body needs and open worries each add a little. A step you skip counts as a small, middle amount. The talk window mostly follows the sky: clear skies are good for talking, gusty skies say wait a little, and fog says leave it for another day.</p>
+          <p>The tally runs from 0 to 100, and <strong>higher means a heavier day</strong>. Under 45 reads as lots of room today, 45 to 64 as some room, and 65 or more as very little room. The numbers stay hidden unless you tick &ldquo;Show the numbers behind this&rdquo;.</p>
         </details>
 
         <div class="actions">
@@ -340,14 +378,14 @@
       <h2 id="al-h">Your 7-day log</h2>
       <p id="al-intro">Kept in this browser only. Nothing is uploaded, and no one else can see it.</p>
       <ol class="week" id="week"></ol>
-      <p class="strip-key" aria-hidden="true"><span>&#9728; Clear</span><span>&#127788; Gusty</span><span>&#127787; Fogged in</span><span>Taller bar = more pressure</span></p>
+      <p class="strip-key" aria-hidden="true"><span>&#9728; Clear (calm)</span><span>&#127788; Gusty (revved up)</span><span>&#127787; Fogged in (running on empty)</span><span>Taller bar = heavier day</span><span>Blank = no reading that day</span></p>
       <p class="trend" id="trend"></p>
       <div class="pattern" id="pattern"></div>
       <div class="actions"><button class="btn" type="button" id="erase">Erase my log</button></div>
       <p class="msg" id="al-msg" role="status" aria-live="polite"></p>
     </section>
 
-    <p class="why"><strong>What this is not.</strong> It isn&#39;t a diagnosis, a score or a judgment, and it can&#39;t tell you anything about your health. It describes a few hours of conditions, and conditions change. A heavy reading is information about a day, not a failing in a person.</p>
+    <p class="why"><strong>What this is not.</strong> It isn&#39;t a diagnosis, a grade or a judgment, and it can&#39;t tell you anything about your health. It describes a few hours of conditions, and conditions change. A heavy reading is information about a day, not a failing in a person.</p>
     <p class="why">See also: <a href="/know-yourself.html">Know your own wiring</a>, for telling today&#39;s conditions apart from lasting wiring and older patterns, and the <a href="/carrier-wave-decoder.html">Carrier Wave Decoder</a>, for a moment that has already gone sideways.</p>
   </section>
 
@@ -357,7 +395,7 @@
 
 <script>
 (function(){
-  var KEY='tol-weather-v1', MAX_DAYS=14;
+  var KEY='tol-weather-v1', MAX_DAYS=7, NUMKEY='tol-wx-shownums', PAUSEKEY='tol-wx-pause';
   var sky=null, load=null, sleep=null, people=null, rel=null;
   var body={}, front={}, need={};
   function $(id){ return document.getElementById(id); }
@@ -429,19 +467,17 @@
     return Math.max(0,Math.min(100,Math.round(s)));
   }
 
-  // The band describes how much room is left in the day, so it never contradicts the sky.
-  function band(i){
-    if(i<25) return 'Plenty of room';
-    if(i<45) return 'Some room';
-    if(i<65) return 'Less room than usual';
-    if(i<82) return 'Little room';
-    return 'Very little room';
-  }
+  // The band describes how much room is left in the day, in words, so it never reads as a score.
+  // Cut-offs (stated on the page too): under 45 = lots of room, 45 to 64 = some room, 65 and up = very little room.
+  function roomKey(i){ return i<45?'lots':i<65?'some':'little'; }
+  function band(i){ return {lots:'Lots of room today',some:'Some room today',little:'Very little room today'}[roomKey(i)]; }
+  function showNums(){ var el=$('show-nums'); return !!(el&&el.checked); }
 
+  // Timing advice, never a verdict: the same plain words are used everywhere on this page.
   function talkWindow(i){
-    if(sky==='fog') return ['Talk window: closed for today','w-closed'];
-    if(sky==='gusty') return i>=60?['Talk window: not today','w-closed']:['Talk window: wait 20 minutes','w-wait'];
-    return i>=50?['Talk window: open, keep it short','w-short']:['Talk window: open','w-open'];
+    if(sky==='fog') return ['Talk window: another day is kinder','w-closed','later'];
+    if(sky==='gusty') return i>=60?['Talk window: another day is kinder','w-closed','later']:['Talk window: wait about 20 minutes','w-wait','wait'];
+    return i>=50?['Talk window: good for a short talk','w-short','open']:['Talk window: good time to talk','w-open','open'];
   }
 
   function resetIdeas(){
@@ -484,8 +520,8 @@
       d.push('Log this week in <a href="/workpapers/wp-01.html">WP-01</a> while you can see it clearly.');
     } else if(sky==='gusty'){
       d.push('<a href="/wp-11.html">WP-11, the Calm-Down Kit</a> is the two-minute version of settling.');
-      d.push('<a href="/workpapers/wp-02-battery-stress-meter.html">WP-02</a> separates today’s load from this one thing.');
-      d.push('If something must be said now, run it through <a href="/workpapers/wp-09-tone-filter.html">WP-09</a>: fact, feeling, ask.');
+      d.push('<a href="/workpapers/wp-02-battery-stress-meter.html">WP-02, How much are you carrying?</a> separates today’s load from this one thing.');
+      d.push('If something must be said now, run it through <a href="/workpapers/wp-09-tone-filter.html">WP-09, Say it so it lands</a>: fact, feeling, ask.');
     } else {
       d.push('<a href="/wp-11.html">WP-11</a> holds the list you already decided on for exactly this.');
       d.push('Tell someone a time rather than a reason. <a href="/check-ins.html">Check-ins</a> has the words.');
@@ -540,7 +576,7 @@
     var n=on(need).map(function(k){ return NEEDTXT[k]; });
     if(n.length) p.push('You said what would help is '+list(n)+'. Arrange that before anything else. It’s a reasonable thing to ask for out loud, and asking is cheaper than the argument you get by not asking.');
 
-    p.push('Overall: '+band(i).toLowerCase()+' in the day, at '+i+' out of 100 on the pressure reading. '+(i<45?'There is room in the day.':i<65?'There is less room than usual today. Spend it carefully.':'There is very little room today. Protect what is left rather than spending it on a debate.'));
+    p.push('Overall: '+band(i).toLowerCase()+'. '+(i<45?'There is room in the day.':i<65?'There is less room than usual, so spend it carefully.':'Protect what is left rather than spending it on a debate.')+(showNums()?' (The tally behind this: '+i+' out of 100, where higher means a heavier day.)':''));
     return p;
   }
 
@@ -563,10 +599,13 @@
     $('fc-sub').textContent=s.sub+' · '+band(i);
     var win=$('fc-window'); win.hidden=false; win.className='window '+w[1]; win.textContent=w[0];
     $('gauge').hidden=false;
-    $('gauge-fill').style.width=i+'%';
-    $('gauge-fill').style.background=i<45?'var(--credit)':i<65?'#7A5620':'var(--debit)';
-    $('gauge-label').textContent='Pressure reading · '+band(i);
-    $('gauge-num').textContent=i+' / 100';
+    // The bar shows how much room is left, so a lighter day is a longer bar.
+    $('gauge-fill').style.width=Math.max(8,100-i)+'%';
+    $('gauge-fill').className='gauge-fill r-'+roomKey(i);
+    $('gauge-label').innerHTML='Room in the day: <strong></strong>';
+    $('gauge-label').querySelector('strong').textContent=band(i).toLowerCase();
+    $('gauge-num').hidden=!showNums();
+    $('gauge-num').textContent='The tally behind this: '+i+' out of 100. Higher means a heavier day. Under 45 reads as lots of room, 45 to 64 as some room, 65 or more as very little room. It is a rough tally, not a measurement.';
     var fb=$('fc-body'); fb.innerHTML='';
     paragraphs(i).forEach(function(t){ var el=document.createElement('p'); el.textContent=t; fb.appendChild(el); });
     function fill(id,arr,html){ var ul=$(id); ul.innerHTML=''; arr.forEach(function(t){ var li=document.createElement('li'); if(html){ li.innerHTML=t; } else { li.textContent=t; } ul.appendChild(li); }); }
@@ -578,6 +617,7 @@
     $('sec-reset').hidden=!r.length; if(r.length) fill('fc-reset',r,false);
     fill('fc-do',nextSteps(),true);
     $('fc-say').textContent=sentence();
+    showPause(w);
     $('fc-extra').hidden=false;
     $('msg').textContent='';
     var today=get().filter(function(e){ return e.d===localDay(); })[0];
@@ -587,7 +627,7 @@
 
   function plain(){
     var i=index();
-    var t='Today’s weather: '+SKY[sky].name+' · '+band(i)+' · pressure '+i+'/100\n'+talkWindow(i)[0]+'\n\n';
+    var t='Today’s weather: '+SKY[sky].name+' ('+SKY[sky].sub.toLowerCase()+') · '+band(i).toLowerCase()+(showNums()?' (tally '+i+' of 100, higher = heavier)':'')+'\n'+talkWindow(i)[0]+'\n\n';
     t+=paragraphs(i).join('\n\n');
     var gl=goodAndLater(i);
     t+='\n\nGood hours for:\n- '+gl[0].join('\n- ')+'\n\nLeave until the front passes:\n- '+gl[1].join('\n- ');
@@ -599,7 +639,7 @@
   function shareText(){
     var i=index(), n=on(need).map(function(k){ return NEEDME[k]; });
     var when = sky==='clear' ? 'now is a decent time to talk' : sky==='gusty' ? (i>=60 ? 'better to leave big talks until '+laterWord() : 'give me about 20 minutes before anything big') : 'let’s leave anything big until '+laterWord();
-    var t='A heads-up from me: my weather today is '+SKY[sky].name.toLowerCase()+' ('+band(i).toLowerCase()+' in the day). '+when.charAt(0).toUpperCase()+when.slice(1)+'.';
+    var t='A heads-up from me: my weather today is '+SKY[sky].name.toLowerCase()+' ('+SKY[sky].sub.toLowerCase()+', '+band(i).toLowerCase()+'). '+when.charAt(0).toUpperCase()+when.slice(1)+'.';
     if(n.length) t+=' What would help: '+list(n)+'.';
     if(sky!=='clear') t+=' It isn’t about you.';
     return t;
@@ -626,14 +666,15 @@
 
   function trend(a){
     var wk=lastSeven(a).filter(function(x){ return x.e; }).map(function(x){ return x.e; });
-    if(wk.length<3) return wk.length ? 'Log on at least three different days this week to see a trend.' : 'Nothing logged in the last seven days yet.';
+    if(wk.length<3) return wk.length ? 'Log on at least three different days this week to see a trend.' : 'No readings in the last seven days yet.';
     var h=Math.floor(wk.length/2), avg=function(x){ return Math.round(x.reduce(function(s,e){ return s+(e.i||0); },0)/x.length); };
     var first=avg(wk.slice(0,h)), second=avg(wk.slice(wk.length-h));
     var c={clear:0,gusty:0,fog:0}; wk.forEach(function(e){ c[e.sky]++; });
     var skies=[c.clear+' clear',c.gusty+' gusty',c.fog+' fogged in'].join(', ');
-    if(second-first>=8) return 'This week: pressure has been building, from about '+first+' to '+second+'. ('+skies+'.) Worth lightening one thing before the weekend.';
-    if(first-second>=8) return 'This week: pressure has been easing, from about '+first+' to '+second+'. ('+skies+'.) Whatever changed, it may be worth keeping.';
-    return 'This week: holding fairly steady, around '+avg(wk)+' out of 100. ('+skies+'.)';
+    var nums=function(a,b){ return showNums()?' (tally about '+a+' to '+b+' of 100, higher = heavier)':''; };
+    if(second-first>=8) return 'This week: the days have been getting heavier'+nums(first,second)+'. ('+skies+'.) Worth lightening one thing before the weekend.';
+    if(first-second>=8) return 'This week: the days have been getting lighter'+nums(first,second)+'. ('+skies+'.) Whatever changed, it may be worth keeping.';
+    return 'This week: fairly steady, mostly '+band(avg(wk)).toLowerCase().replace(' today','')+(showNums()?' (tally around '+avg(wk)+' of 100)':'')+'. ('+skies+'.)';
   }
 
   function patterns(a){
@@ -648,7 +689,7 @@
     if(heavy.length>=3){
       var b={}; heavy.forEach(function(e){ var k=bucket(e.t); b[k]=(b[k]||0)+1; });
       var bt=Object.keys(b).sort(function(x,y){ return b[y]-b[x]; })[0];
-      if(b[bt]>=2) out.push('Your high-pressure readings cluster in the '+bt+': '+b[bt]+' of '+heavy.length+'. Worth protecting that stretch, or at least not scheduling hard talks inside it.');
+      if(b[bt]>=2) out.push('Your heavier readings cluster in the '+bt+': '+b[bt]+' of '+heavy.length+'. Worth protecting that stretch, or at least not scheduling hard talks inside it.');
     }
     var fc={}; a.forEach(function(e){ (e.front||[]).forEach(function(k){ fc[k]=(fc[k]||0)+1; }); });
     var ft=Object.keys(fc).sort(function(x,y){ return fc[y]-fc[x]; })[0];
@@ -660,7 +701,7 @@
     var peoplishRough=peoplish.filter(function(e){ return e.sky!=='clear'; });
     if(peoplish.length>=3 && peoplishRough.length/peoplish.length>=0.6) out.push('Heavy people days and rough weather travel together for you: '+peoplishRough.length+' of '+peoplish.length+'. That’s a fact about your capacity, not an attitude problem.');
     var avg=Math.round(a.reduce(function(s,e){ return s+(e.i||0); },0)/a.length);
-    out.push('Your average pressure across '+a.length+' logged day'+(a.length===1?'':'s')+' is '+avg+' out of 100.'+(avg>=60?' That is a lot to be running at. <a href="/workpapers/wp-02-battery-stress-meter.html">WP-02</a> puts firmer numbers on it, and <a href="/relationships.html">the relationships page</a> shows where the weight usually hides.':''));
+    out.push('Across '+a.length+' logged day'+(a.length===1?'':'s')+', most days read as '+band(avg).toLowerCase().replace(' today','')+(showNums()?' (an average tally of '+avg+' of 100, higher = heavier)':'')+'.'+(avg>=60?' That is a lot to be carrying. <a href="/workpapers/wp-02-battery-stress-meter.html">WP-02, How much are you carrying?</a> looks at it more closely, and <a href="/relationships.html">the relationships page</a> shows where the weight usually hides.':''));
     return out;
   }
 
@@ -674,7 +715,7 @@
     lastSeven(a).forEach(function(x){
       var li=document.createElement('li'); if(x.key===todayKey) li.className='today';
       var e=x.e, dn=DAYN[x.date.getDay()];
-      var label=x.date.toLocaleDateString(undefined,{weekday:'long',month:'short',day:'numeric'})+': '+(e?SKY[e.sky].name+', pressure '+(e.i||0)+' out of 100':'nothing logged');
+      var label=x.date.toLocaleDateString(undefined,{weekday:'long',month:'short',day:'numeric'})+(e?': '+SKY[e.sky].name+' ('+SKY[e.sky].sub.toLowerCase()+'), '+band(e.i||0).toLowerCase().replace(' today',''):'');
       li.innerHTML='<span class="dn" aria-hidden="true"></span><span class="bar" aria-hidden="true"><i></i></span><span class="ic" aria-hidden="true"></span><span class="sr-only"></span>';
       li.querySelector('.dn').textContent=x.key===todayKey?'Today':dn;
       li.querySelector('.sr-only').textContent=label;
@@ -682,7 +723,7 @@
       if(e){ bar.className='s-'+e.sky; bar.style.height=Math.max(6,e.i||0)+'%'; li.querySelector('.ic').textContent=SKY[e.sky].ico; }
       week.appendChild(li);
     });
-    $('al-intro').textContent=a.length+' day'+(a.length===1?'':'s')+' logged, kept in this browser only. Nothing is uploaded, and no one else can see it. The log keeps your last '+MAX_DAYS+' days so this week can be compared with the one before.';
+    $('al-intro').textContent=a.length+' day'+(a.length===1?'':'s')+' logged, kept in this browser only. Nothing is uploaded, and no one else can see it. The log keeps only the last seven days; older readings drop off on their own.';
     $('trend').textContent=trend(a);
     var p=$('pattern'); p.innerHTML='';
     patterns(a).forEach(function(t){ var el=document.createElement('p'); el.innerHTML=t; p.appendChild(el); });
@@ -763,6 +804,7 @@
     $('fc-ico').textContent='⛅'; $('fc-head').textContent='Your forecast appears here';
     $('fc-sub').textContent='Pick the sky in step 1 to begin';
     $('fc-body').innerHTML='<p>Answer step 1 and the forecast fills in. Every extra step sharpens it, and none of them are required.</p>';
+    if(!pauseEnd()) $('pause').hidden=true;
     $('msg').textContent=''; $('fc-status').textContent='Cleared. Start again at step 1.';
     var first=document.querySelector('[data-sky]');
     if(first){ first.focus({preventScroll:true}); first.scrollIntoView({block:'center'}); }
@@ -774,11 +816,78 @@
     if(!eraseArm){ b.textContent='Tap again to erase your log'; eraseArm=setTimeout(function(){ eraseArm=null; b.textContent='Erase my log'; },4000); return; }
     clearTimeout(eraseArm); eraseArm=null; b.textContent='Erase my log';
     try{ localStorage.removeItem(KEY); }catch(e){}
+    // The flowers a weather save planted in the Night Garden go too, so nothing from the log is left behind.
+    try{
+      var g=JSON.parse(localStorage.getItem('tol-garden-gifts')||'null');
+      if(g&&g.from&&g.from.weather){
+        g.count=Math.max(0,(g.count||0)-g.from.weather); delete g.from.weather;
+        if(!g.count&&!Object.keys(g.from).length) localStorage.removeItem('tol-garden-gifts'); else localStorage.setItem('tol-garden-gifts',JSON.stringify(g));
+      }
+    }catch(e){}
     $('al-msg').textContent='';
     $('almanac').hidden=true;
-    $('fc-status').textContent='Your 7-day log was erased from this browser.';
+    $('fc-status').textContent='Your 7-day log, and the flowers it planted, were erased from this browser.';
     if(sky){ $('save').disabled=false; $('save').textContent='Save today to my 7-day log'; $('msg').textContent='Your 7-day log was erased from this browser.'; }
   });
+
+  // ---------- show the numbers (off by default; remembered for this tab only) ----------
+  try{ if(sessionStorage.getItem(NUMKEY)==='1') $('show-nums').checked=true; }catch(e){}
+  $('show-nums').addEventListener('change', function(){
+    try{ if(this.checked) sessionStorage.setItem(NUMKEY,'1'); else sessionStorage.removeItem(NUMKEY); }catch(e){}
+    render(); draw();
+  });
+
+  // ---------- a gentle talk-window pause: an on-page countdown, no sounds, no notifications ----------
+  var pauseMins=20, pauseT=null;
+  function pauseEnd(){ try{ return +sessionStorage.getItem(PAUSEKEY)||0; }catch(e){ return 0; } }
+  function showPause(w){
+    var box=$('pause'), wants=w[2]!=='open';
+    if(!wants && !pauseEnd()){ box.hidden=true; return; }
+    box.hidden=false;
+    $('pause-intro').textContent = w[2]==='wait'
+      ? 'The forecast suggests waiting about 20 minutes. If you like, start a pause here: a quiet countdown on this page only. Nothing pops up and nothing makes a sound.'
+      : w[2]==='later' ? 'The forecast suggests leaving the big talk for another day. If it truly can’t wait, a short pause first still helps. The countdown stays on this page only, with no pop-ups or sounds.'
+      : 'Your pause is still running. The countdown stays on this page only.';
+    $('pause-say').textContent=$('fc-say').textContent;
+  }
+  function fmtClock(ms){ var s=Math.max(0,Math.ceil(ms/1000)), m=Math.floor(s/60); return m+':'+(s%60<10?'0':'')+(s%60); }
+  function tick(){
+    var end=pauseEnd(), left=end-Date.now();
+    if(!end){ $('pause-clock').hidden=true; $('pause-go').hidden=false; $('pause-stop').hidden=true; return; }
+    $('pause-go').hidden=true; $('pause-stop').hidden=false;
+    if(left<=0){
+      clearInterval(pauseT); pauseT=null;
+      try{ sessionStorage.removeItem(PAUSEKEY); }catch(e){}
+      $('pause-clock').hidden=true; $('pause-end').hidden=false; $('pause-go').hidden=false; $('pause-go').textContent='Start another pause'; $('pause-stop').hidden=true;
+      if(sky) $('pause-say').textContent=$('fc-say').textContent;
+      $('pause-say').parentNode.hidden=!$('pause-say').textContent;
+      $('pause').hidden=false;
+      $('pause-status').textContent='Your pause is over. The sentence from your forecast is shown under the timer.';
+      return;
+    }
+    $('pause-clock').hidden=false; $('pause-end').hidden=true;
+    $('pause-clock').textContent=fmtClock(left)+' left';
+    var mins=Math.ceil(left/60000);
+    if(mins!==tick.lastMin){ tick.lastMin=mins; $('pause-status').textContent=mins+' minute'+(mins===1?'':'s')+' left in your pause.'; }
+  }
+  document.querySelectorAll('[data-pause]').forEach(function(c){
+    c.addEventListener('click', function(){
+      document.querySelectorAll('[data-pause]').forEach(function(x){ x.setAttribute('aria-pressed','false'); });
+      c.setAttribute('aria-pressed','true'); pauseMins=+c.getAttribute('data-pause');
+    });
+  });
+  $('pause-go').addEventListener('click', function(){
+    try{ sessionStorage.setItem(PAUSEKEY, String(Date.now()+pauseMins*60000)); }catch(e){}
+    $('pause-end').hidden=true; tick.lastMin=null;
+    $('pause-status').textContent='Pause started: '+pauseMins+' minutes. The countdown is on this page.';
+    clearInterval(pauseT); pauseT=setInterval(tick,1000); tick();
+  });
+  $('pause-stop').addEventListener('click', function(){
+    try{ sessionStorage.removeItem(PAUSEKEY); }catch(e){}
+    clearInterval(pauseT); pauseT=null; tick();
+    $('pause-go').textContent='Start the pause'; $('pause-status').textContent='Pause stopped.';
+  });
+  if(pauseEnd()){ $('pause').hidden=false; $('pause-intro').textContent='Your pause is still running. The countdown stays on this page only.'; pauseT=setInterval(tick,1000); tick(); }
 
   draw();
 
