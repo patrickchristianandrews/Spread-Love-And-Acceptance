@@ -149,6 +149,10 @@
       var t = r.turns[u.at];
       notes.push('<strong>A question that may not have been answered.</strong> ' + esc(t.who) + ' asked “' + esc(snip(u.q, 90)) + '”' + (u.open ? ' and it’s still open.' : u.flat ? ', and the reply was only “' + esc(snip(u.flat, 20)) + '”. A one-word reply can mean yes, or “I’m upset”, so it’s worth checking which.' : ', and the reply went somewhere else.'));
     });
+    (r.literal || []).forEach(function (x) {
+      var a = r.turns[x.at], b = r.turns[x.reply];
+      notes.push('<strong>A figure of speech taken at its word.</strong> ' + esc(a.mine ? 'You' : a.who) + ' said “' + esc(x.phrase) + '”, which usually means ' + esc(x.means) + '. The reply (“' + esc(snip(b.text, 50)) + '”) read it literally. That’s a fair reading of the words; saying the plain meaning avoids it.');
+    });
     r.drift.forEach(function (i) {
       notes.push('<strong>Another topic came in</strong> at message ' + (i + 1) + ' (“' + esc(snip(r.turns[i].text, 60)) + '”). Sticking to one topic at a time makes it easier to answer.');
     });
@@ -184,19 +188,20 @@
     var story = 'It starts ' + (startWarm ? 'already tense' : 'calm') + '. ';
     if (r.turned > 0) story += 'It turns at <strong>message ' + (r.turned + 1) + '</strong>, from ' + (t[r.turned].mine ? 'you' : esc(t[r.turned].who)) + ': “' + esc(snip(t[r.turned].text, 70)) + '”. ';
     else if (r.turned === 0) story += 'The first message already carries a lot of heat. ';
-    else if (r.peak < 3 && endsCalm) story += 'It never really heats up. ';
+    else if (r.peak < 1.5 && endsCalm) story += 'It never really heats up. ';
     else if (r.peak < 3) story += 'There’s no one big turn, but some tension creeps in. ';
     else story += 'The heat builds gradually rather than at one moment. ';
     // The closing line has to agree with the "Ends …" chip above it
     story += {
-      shutdown: 'By the end someone has shut down. That isn’t the same as calm: it usually means they’re overwhelmed.',
+      shutdown: 'By the end someone has pulled back. That isn’t the same as calm: it can mean they’re overwhelmed, or hurt.',
       rising: r.level === 'calm' ? 'It gets a touch warmer at the end, but it still ends calm.' : (r.peak < 3 ? 'It gets a little tenser toward the end.' : 'By the end it’s still heating up.'),
       cooling: endsCalm ? 'By the end it has cooled down.' : 'It cools a little from its hottest point, but it still ends ' + level + '.',
       steady: endsCalm ? (startWarm ? 'It settles down, and ends calm.' : 'It stays calm to the end.') : (startWarm ? 'It stays about as ' + level + ' to the end.' : 'It stays fairly ' + level + ' to the end.'),
       short: ''
     }[r.trend];
     parts.push('<p>' + story + '</p>');
-    if (r.turned > 0) parts.push('<p class="cr-note">A turn is rarely one person’s fault. It’s usually where two frequencies stopped matching. <a class="dig" href="/book/chapter-1-in-depth.html#squeal">Dig deeper: why two reasonable people end up in a fight</a></p>');
+    if (r.crossedThem) parts.push('<p class="cr-note">A put-down isn’t the same as a disagreement. You can take their real point seriously and still say the put-down wasn’t okay.</p>');
+    else if (r.turned > 0) parts.push('<p class="cr-note">A turn is rarely one person’s fault. It’s usually where two frequencies stopped matching. <a class="dig" href="/book/chapter-1-in-depth.html#squeal">Dig deeper: why two reasonable people end up in a fight</a></p>');
     return '<h2>What happened</h2>' + parts.join('');
   }
 
@@ -236,6 +241,7 @@
     if (notes.length) {
       why = '<details class="cr-why"><summary>What they may hear</summary><ul>' + notes.map(function (k) {
         var K = R.KINDS[k];
+        if (k === 'idiom') return t.marks.filter(function (m) { return m.kind === 'idiom'; }).map(function (m) { return '<li><strong>' + esc(K.label) + ':</strong> “' + esc(m.text) + '” usually means ' + esc(m.means) + '. Some people take it literally. <em>Instead:</em> say the plain meaning.</li>'; }).join('');
         return '<li><strong>' + esc(K.label) + ':</strong> ' + esc(K.hear) + (K.instead ? ' <em>Instead:</em> ' + esc(K.instead) : '') + '</li>';
       }).join('') + '</ul></details>';
     }
@@ -260,7 +266,10 @@
   function patterns(r, them) {
     var rows = ORDER.filter(function (k) { return r.tallyMe[k] || r.tallyThem[k]; });
     if (!rows.length) return '';
-    var h = '<p class="cr-hint">How often each pattern shows up. These count words, not people: both of you are doing your best with what you were carrying.</p>' +
+    var hint = r.crossedThem && !r.crossedMe ? 'How often each pattern shows up. Some lines from ' + esc(them) + ' were put-downs. Whatever else was going on, that isn’t okay, and it isn’t yours to fix.'
+      : r.crossedMe && !r.crossedThem ? 'How often each pattern shows up. Some of your lines were put-downs. Owning those, plainly, is the fastest way back.'
+      : 'How often each pattern shows up. These count words, not people: both of you are doing your best with what you were carrying.';
+    var h = '<p class="cr-hint">' + hint + '</p>' +
       '<div class="cr-table-wrap"><table class="cr-table"><thead><tr><th scope="col">Pattern</th><th scope="col" class="n">You</th><th scope="col" class="n">' + esc(them.length > 14 ? 'Them' : them) + '</th></tr></thead><tbody>';
     rows.forEach(function (k) {
       h += '<tr' + (GOOD[k] ? ' class="good"' : '') + '><td>' + (GOOD[k] ? '<span class="plus" aria-label="helpful">+</span>' : '') + esc(R.KINDS[k].label) + '</td><td class="n">' + (r.tallyMe[k] || '·') + '</td><td class="n">' + (r.tallyThem[k] || '·') + '</td></tr>';

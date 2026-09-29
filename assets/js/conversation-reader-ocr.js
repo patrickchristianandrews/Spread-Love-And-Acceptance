@@ -134,7 +134,37 @@
     return { name: name, meName: meName, bubbles: all };
   }
 
-  var api = { layout: layout, clean: clean, CHROME: CHROME };
+  // The two readings of one screenshot (plain gray, and light text in colored bubbles), merged: the same
+  // bubble read twice counts once. A short bubble like "No." can come back as "oO" from the other picture,
+  // in a box that only partly overlaps, so a line on the same row that overlaps at all is the same line,
+  // and the reading with more letters and better confidence wins.
+  function sameLine(a, b) {
+    var ix = Math.min(a.x1, b.x1) - Math.max(a.x0, b.x0), iy = Math.min(a.y1, b.y1) - Math.max(a.y0, b.y0);
+    if (ix <= 0 || iy <= 0) return false;
+    var hMin = Math.min(a.y1 - a.y0, b.y1 - b.y0), wMin = Math.min(a.x1 - a.x0, b.x1 - b.x0);
+    return iy >= hMin * 0.5 && ix >= wMin * 0.3;
+  }
+  function junk(t) { var x = String(t || '').replace(/[\s.,'"`-]/g, ''); return x.length <= 3 && /^[oO0Qcé°º]+$/.test(x); }
+  function mergeReads(a, b) {
+    var merged = (a || []).map(function (l) { return { text: l.text, conf: l.conf, bbox: l.bbox }; });
+    (b || []).forEach(function (l) {
+      var same = merged.filter(function (m) { return sameLine(m.bbox, l.bbox); });
+      if (!same.length) { merged.push({ text: l.text, conf: l.conf, bbox: l.bbox }); return; }
+      same.forEach(function (m) {
+        // junk ("oO") always loses; otherwise the more confident reading wins, as long as it kept most of the letters;
+        // between two equal readings, the one that kept the full stop wins
+        var better = junk(m.text) && !junk(l.text) ||
+          !junk(l.text) && (l.conf > m.conf + 5 && letters(l.text) >= letters(m.text) * 0.6 ||
+            Math.abs(l.conf - m.conf) <= 5 && letters(l.text) === letters(m.text) && /[.!?]\s*$/.test(l.text) && !/[.!?]\s*$/.test(m.text));
+        if (better) { m.text = l.text; m.conf = l.conf; m.bbox = l.bbox; }
+      });
+    });
+    // a stray "oO" left on the same row as a real line is noise
+    merged = merged.filter(function (m) { return !junk(m.text) || !merged.some(function (o) { return o !== m && !junk(o.text) && Math.min(o.bbox.y1, m.bbox.y1) - Math.max(o.bbox.y0, m.bbox.y0) > 0; }); });
+    return merged.filter(function (m) { return (m.conf >= 30 || letters(m.text) >= 3) && !(junk(m.text) && (m.conf || 0) < 80); });
+  }
+
+  var api = { layout: layout, clean: clean, CHROME: CHROME, mergeReads: mergeReads };
   if (typeof module !== 'undefined' && module.exports) { module.exports = api; return; }
   root.TOLShotReader = api;
 
@@ -220,11 +250,6 @@
     sat /= n;
     return sat > 0.3 ? 'me' : sat < 0.08 ? 'them' : '';
   }
-  function overlap(a, b) {
-    var x = Math.max(0, Math.min(a.x1, b.x1) - Math.max(a.x0, b.x0)), y = Math.max(0, Math.min(a.y1, b.y1) - Math.max(a.y0, b.y0));
-    var inter = x * y, ua = (a.x1 - a.x0) * (a.y1 - a.y0) + (b.x1 - b.x0) * (b.y1 - b.y0) - inter;
-    return ua ? inter / ua : 0;
-  }
   function linesOf(data) {
     var out = [];
     (data.blocks || []).forEach(function (bl) { (bl.paragraphs || []).forEach(function (pa) { (pa.lines || []).forEach(function (l) { out.push({ text: l.text, conf: l.confidence, bbox: l.bbox }); }); }); });
@@ -245,13 +270,7 @@
           return toCanvas(f).then(function (c) {
             return worker.recognize(gray(c), {}, { blocks: true }).then(function (r1) {
               return worker.recognize(lightText(c), {}, { blocks: true }).then(function (r2) {
-                var a = linesOf(r1.data), b = linesOf(r2.data), merged = a.slice();
-                b.forEach(function (l) {
-                  var same = merged.filter(function (m) { return overlap(m.bbox, l.bbox) > 0.3; });
-                  if (!same.length) merged.push(l);
-                  else same.forEach(function (m) { if (l.conf > m.conf + 5 && letters(l.text) >= letters(m.text) * 0.6) { m.text = l.text; m.conf = l.conf; m.bbox = l.bbox; } });
-                });
-                merged = merged.filter(function (m) { return m.conf >= 30 || letters(m.text) >= 3; });
+                var merged = mergeReads(linesOf(r1.data), linesOf(r2.data));
                 merged.forEach(function (m) { m.tint = tintAt(c, m.bbox); });
                 pages.push({ width: c.width, height: c.height, lines: merged });
               });

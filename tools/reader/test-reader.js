@@ -151,6 +151,28 @@ ok(hot.turns[1].marks.some(m => m.kind === 'hostile') && hot.turns[1].marks.some
 ok(hot.turns[2].marks.some(m => m.kind === 'verdict'), 'name-calling is a verdict');
 ok(hot.level === 'hot', 'a thread ending in name-calling reads hot (got ' + hot.level + ')');
 
+// ---------- Second round of testers ----------
+// the same lines read the same way, whatever the thread length
+const sam8 = readOf('Sam: are you coming to dinner or not\nMe: I said I would think about it.\nSam: its been 3 days\nMe: I am still thinking.\nSam: wow ok. just tell me yes or no\nMe: No.\nSam: fine. whatever\nMe: You asked for yes or no.', 'Me');
+const sam2 = readOf('Sam: fine. whatever\nMe: ok', 'Me');
+ok(sam8.level === sam2.level && sam8.level === 'warm', 'same words, same verdict: long thread ' + sam8.level + ', short thread ' + sam2.level);
+ok(sam2.trend !== 'shutdown' && sam8.trend !== 'shutdown', 'a plain “ok” is not shutting down');
+ok(JSON.stringify(sam8.turns[6].marks.map(m => m.kind)) === JSON.stringify(sam2.turns[0].marks.map(m => m.kind)), '“fine. whatever” gets the same marks in both threads');
+// a cruel line is flagged, the thread isn't "calm", and the hurt person's "ok" isn't coached
+const cruel = readOf('Jordan: you forgot AGAIN. unbelievable.\nMe: I\'m sorry, I had a really hard day and I just\nJordan: you always have a hard day. everyone has hard days\nMe: ok\nJordan: don\'t "ok" me. this is why nobody wants to deal with you\nMe: I\'m going to go', 'Me');
+ok(cruel.turns[4].marks.some(m => m.kind === 'contempt' && /nobody wants to deal with you/.test(m.text)), '“this is why nobody wants to deal with you” is flagged');
+ok(cruel.level !== 'calm' && cruel.crossedThem, 'a thread ending in a put-down does not end calm (got ' + cruel.level + ')');
+ok(!cruel.turns[3].marks.some(m => m.kind === 'short') && cruel.turns[3].heat === 0, 'the hurt person’s “ok” is not coached as the problem');
+ok(cruel.next[0].key === 'line', 'first advice: this crossed a line, you can step away (got ' + cruel.next[0].key + ')');
+ok(!cruel.next.concat(cruel.drafts).some(m => /not going anywhere/.test(m.script || m.text || '')), 'no “I’m not going anywhere” after “I’m going to go”');
+// literal replies and figures of speech
+const room = readOf('Jordan: hey are we still on for tonight\nMe: yes. 7pm. I will be there at 7pm.\nJordan: ok cool. maybe read the room a bit more this time lol\nMe: What room? We are meeting at the cafe.\nJordan: omg you know what i mean\nMe: I do not know what you mean. Please tell me directly.\nJordan: fine.\nMe: Is it fine or are you upset?\nJordan: whatever. forget it\nMe: Ok. I will forget it.', 'Me');
+ok(room.turns[2].marks.some(m => m.kind === 'idiom' && /notice/.test(m.means)), '“read the room” is marked, with its meaning');
+ok(room.literal.length && room.literal[0].reply === 3, '“What room?” is recognized as reading the figure of speech literally');
+ok(room.next.some(m => m.key === 'literal'), 'the advice names the literal mismatch');
+ok(!room.turns[9].marks.some(m => m.kind === 'withdraw') && room.turns[9].marks.some(m => m.kind === 'literal'), '“Ok. I will forget it.” is literal, not flooded');
+ok(!/usually means/.test(R.KINDS.withdraw.hear), 'shutting the door: no overclaiming “usually means”');
+
 // ---------- Screenshot import: OCR lines into bubbles (the browser test is tools/reader/ui-screens.js) ----------
 const O = require(path.join(__dirname, '../../assets/js/conversation-reader-ocr.js'));
 const L = (text, x0, y0, x1, y1, tint) => ({ text, conf: 92, bbox: { x0, y0, x1, y1 }, tint });
@@ -167,6 +189,16 @@ const pageB = { width: 1000, height: 2000, lines: [
   L('I literally just got home. You', 380, 400, 960, 440, 'me'), L('always do this.', 380, 450, 640, 490, 'me'),
   L('Fine.', 40, 560, 160, 600, 'them'), L('Sorry. Can we talk at 87', 560, 660, 960, 700, 'me') ] };
 const lay = O.layout([pageA, pageB]);
+// the two OCR readings of one screenshot merge: a short bubble "No." never becomes "oO" plus "No"
+{
+  const bb = (x0, y0, x1, y1) => ({ x0, y0, x1, y1 });
+  const m1 = O.mergeReads([{ text: 'oO', conf: 60, bbox: bb(640, 800, 700, 840) }, { text: 'wow ok. just tell me yes or no', conf: 88, bbox: bb(40, 700, 560, 740) }], [{ text: 'No.', conf: 90, bbox: bb(655, 798, 720, 842) }]);
+  ok(m1.length === 2 && m1.some(l => l.text === 'No.') && !m1.some(l => /oO/.test(l.text)), 'short bubble merged cleanly: ' + JSON.stringify(m1.map(l => l.text)));
+  const m2 = O.mergeReads([{ text: 'No', conf: 91, bbox: bb(655, 798, 715, 842) }], [{ text: 'No.', conf: 89, bbox: bb(655, 798, 720, 842) }]);
+  ok(m2.length === 1 && m2[0].text === 'No.', 'the reading that keeps the full stop wins: ' + JSON.stringify(m2.map(l => l.text)));
+  const m3 = O.mergeReads([{ text: 'hey are you home?', conf: 90, bbox: bb(40, 400, 500, 440) }], [{ text: 'No.', conf: 90, bbox: bb(655, 600, 720, 642) }]);
+  ok(m3.length === 2, 'separate bubbles stay separate');
+}
 ok(lay.name === 'Alex', 'contact name from the header (got ' + lay.name + ')');
 ok(lay.bubbles.map(b => b.side).join(',') === 'left,right,left,right,left,right', 'sides: ' + lay.bubbles.map(b => b.side + ':' + b.text).join(' | '));
 ok(lay.bubbles.length === 6, 'the overlapping bubble is kept once: ' + lay.bubbles.length);

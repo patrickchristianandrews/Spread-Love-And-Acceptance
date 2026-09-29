@@ -240,9 +240,70 @@ const chk = (c, m) => { if (c) pass++; else { fail++; errs.push(m); } };
   const nm = E.rewrite(E.analyze('You are a total nightmare. The kitchen is a mess.', { channel: 'text' }), { wirings: [] });
   chk(!/nightmare/.test(nm.main) && /kitchen/.test(nm.main), 'the insult goes, the point stays: ' + nm.main);
 }
+// ---------------- second round of testers (ADHD, autistic, dyslexic, highly sensitive)
+{
+  const rw = (t, w) => E.rewrite(E.analyze(t, { channel: 'text' }), { wirings: w || ['general'], channel: 'text' });
+  const band = t => E.score(E.analyze(t, { channel: 'text' }), ['general'], 'text').level[0];
+  const BOLT = /Could you \[one specific thing\] by \[a time\]\?/;
+  const BROKEN = /\.,|,\s*,|\.\.(?!\.)|, and [A-Z]|\b(?:and|but) Could\b|\w Could you/;
+  const all = r => [r.main].concat((r.variants || []).map(v => v.text));
+  // a rewrite is never worse than the original
+  [
+    ['Oh great, you forgot AGAIN. Wow. Amazing.', /Wow|Amazing|great/i],
+    ['Sure, whatever you say, genius.', /genius|whatever you say/i],
+    ['Sorry sorry sorry I’m so stupid, I forgot again', /stupid|sorry sorry/i],
+    ['I’m going to kill you if you’re late again.', /kill/i],
+    ['You’re pathetic. You never do anything right and I’m sick of you.', /pathetic|anything right|sick of/i],
+    ['Can you read the room?', /read the room|by \[a time\]/i],
+    ['Break a leg tonight!', /leg/i],
+    ['You are so autistic.', /autistic/i],
+    ['Nobody asked you.', /nobody asked/i],
+    ['don’t "ok" me. this is why nobody wants to deal with you', /nobody wants|ok me/i]
+  ].forEach(([t, bad]) => all(rw(t)).forEach(x => chk(!bad.test(x), 'rewrite keeps what it flagged (“' + t + '”): ' + x)));
+  // no demand bolted onto apologies, sarcasm, figures of speech, questions or lines with no request
+  ['Sorry sorry sorry I’m so stupid, I forgot again', 'I’m so sorry I missed your call.', 'Sure, whatever.', 'Sure, whatever you say, genius.', 'Can you read the room?', 'Break a leg tonight!', 'Why are you like this', 'Nobody asked you.', 'I’m going to kill you if you’re late again.', 'Great job, genius.', 'Yeah right.', 'fine.', 'i don’t care']
+    .forEach(t => chk(!BOLT.test(rw(t).main), 'no bolted-on “Could you [one thing] by [a time]?” for “' + t + '”: ' + rw(t).main));
+  // grammar joins
+  ['Hey, no rush, could we talk about the bills sometime this week? I love you.', 'I love you but I need you to stop interrupting me', 'No rush, but could you call the landlord sometime?', 'fine.', 'Oh great, you forgot AGAIN. Wow. Amazing.', 'Sorry sorry sorry I’m so stupid, I forgot again', 'We should get coffee sometime.']
+    .forEach(t => all(rw(t)).forEach(x => chk(!BROKEN.test(x) && !/No rush before then\.,/.test(x), 'broken join in “' + t + '”: ' + x)));
+  chk(rw('I love you but I need you to stop interrupting me').main === 'I love you. Could you stop interrupting me?', 'love + ask reads cleanly: ' + rw('I love you but I need you to stop interrupting me').main);
+  chk(!/by \[a time\]/.test(rw('We should get coffee sometime.').main), 'an invitation gets a day, not a deadline: ' + rw('We should get coffee sometime.').main);
+  // no feeling the page promises not to add
+  ['Sure, whatever.', 'Fine.', 'fine. whatever you want', 'whatever', 'Great job, genius.', 'You are so autistic.']
+    .forEach(t => chk(!/^(?:That's frustrating for me|I'm okay with that|I'm frustrated)/.test(rw(t).main), 'adds a feeling to “' + t + '”: ' + rw(t).main));
+  // typos: the rewrite uses the corrected word, and the verdict doesn't move
+  chk(!/tlak/.test(rw('we need to tlak later').main) && band('we need to tlak later') === band('we need to talk later'), 'typo “tlak” is read and rewritten as “talk”: ' + rw('we need to tlak later').main);
+  chk(/^It's hard for me when you do this/.test(rw('wy do you allways do this').main), 'typo’d “wy do you allways” reads as “why do you always”: ' + rw('wy do you allways do this').main);
+  chk(/phone/.test(rw('your always on your fone').main) && !/Your often|fone/.test(rw('your always on your fone').main), '“your always on your fone” reads as “you’re always on your phone”: ' + rw('your always on your fone').main);
+  [['whatevr', 'whatever'], ['fine whatevs', 'fine, whatever'], ['wy are you like this', 'why are you like this']].forEach(([a, b]) => chk(band(a) === band(b), 'spelling changes the verdict: ' + a));
+  // brush-offs and put-downs are static, the same as in the Conversation Reader
+  ['fine. whatever you want', 'i don’t care', 'whatevs', 'fine whatevs', 'Sure, whatever.', 'whatevr'].forEach(t => chk(band(t) !== 'clear', 'brush-off “' + t + '” reads as clear'));
+  ['Nobody asked you.', 'You are so autistic.', 'this is why nobody wants to deal with you', 'I’m going to kill you if you’re late again.'].forEach(t => chk(band(t) === 'heavy', '“' + t + '” should be heavy static, got ' + band(t)));
+  chk(E.analyze('You are so autistic.').found.dxlabel, 'a diagnosis used as an insult has its own reading');
+  chk(E.analyze('Can you stop stimming in public?').found.tic && /Stimming helps/.test(rw('Can you stop stimming in public?').main), 'asking someone to stop stimming gets a note');
+  chk(!E.analyze('Could you maybe possibly think about perhaps doing the dishes at some point if that is okay?').found.softno && /^Could you do the dishes/.test(rw('Could you maybe possibly think about perhaps doing the dishes at some point if that is okay?').main), 'stacked hedges are one problem, and they go');
+  // figures of speech: the meaning is given, and the sections agree
+  const leg = rw('Break a leg tonight!');
+  chk(/good luck/i.test(leg.main) && !leg.unchanged, '“Break a leg” is explained and rewritten: ' + leg.main);
+  chk(P.idioms('maybe read the room lol')[0].means.indexOf('notice') === 0, '“read the room” has a plain meaning');
+  chk(P.idioms('It’s not rocket science.').length === 1, '“not rocket science” has a plain meaning');
+  chk(E.analyze('Why are you like this').found.blameq && !E.analyze('Why are you like this').found.feelingq, '“Why are you like this” is a complaint, not an open feelings question');
+  // "I'm sick of you" is never a feeling worth keeping
+  chk(!E.analyze('You’re pathetic. You never do anything right and I’m sick of you.').goodIds.includes('feeling'), '“I’m sick of you” marked as a named feeling worth keeping');
+  // someone sent me this: kind, no mind-reading, a limit when a line was crossed
+  const got = E.receive(E.analyze('You’re pathetic. You never do anything right and I’m sick of you.', { channel: 'text' }));
+  const gotText = JSON.stringify(got);
+  chk(got.crossed && got.replies.some(r => /not okay being spoken to/.test(r.text)), 'received put-down: a calm limit is offered');
+  chk(!/think I'm|can't stand me|Nothing I do|bad person|pathetic|sick of you/i.test(gotText), 'received put-down: no insults read back, no mind-reading: ' + gotText);
+  const got2 = E.receive(E.analyze('fine. whatever', { channel: 'text' }));
+  chk(!got2.crossed && got2.meanings.some(m => /can't tell you which/.test(m)) && got2.replies.length, 'received brush-off: both readings, and a question to ask');
+  const got3 = E.receive(E.analyze('Can you read the room?', { channel: 'text' }));
+  chk(got3.literal.length && got3.replies.some(r => /did you mean notice/.test(r.text)) && !got3.replies.some(r => /By when/.test(r.text)), 'received figure of speech: meaning and a check, no deadline');
+  chk(E.receive(E.analyze('Thanks for dinner!')).meanings.length && !E.receive(E.analyze('Thanks for dinner!')).crossed, 'a kind message reads as kind');
+}
 // the shared list: the same line gets the same marks in the Conversation Reader
 const R = require(path.join(__dirname, '../../assets/js/conversation-reader-engine.js'));
-[['You are getting on my last fucking nerve', /swear|hostile/], ['You’re a total nightmare', /verdict/], ['It would be nice if someone helped around here.', /hint/], ['We need to talk.', /opener/], ['of course you did. I have to do everything around here', /sarcasm/]].forEach(([t, want]) => {
+[['fine. whatever you want', /dismiss/], ['i don’t care', /dismiss/], ['whatevs', /dismiss/], ['Nobody asked you.', /contempt/], ['You are so autistic.', /verdict/], ['this is why nobody wants to deal with you', /contempt/], ['You are getting on my last fucking nerve', /swear|hostile/], ['You’re a total nightmare', /verdict/], ['It would be nice if someone helped around here.', /hint/], ['We need to talk.', /opener/], ['of course you did. I have to do everything around here', /sarcasm/]].forEach(([t, want]) => {
   const kinds = R.read([{ who: 'A', text: t }], 'B').turns[0].marks.map(m => m.kind).join(' ');
   if (want.test(kinds)) pass++; else { fail++; errs.push('Reader disagrees on “' + t + '”: ' + kinds); }
 });
