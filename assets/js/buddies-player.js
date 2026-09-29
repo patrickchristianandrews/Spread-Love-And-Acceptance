@@ -106,8 +106,8 @@
   function actTargets(b, track) {
     // where each mover is going: { id: x } (used by the estimate and by the stage)
     var a = b.act, out = {};
-    if (a === 'hug' || a === 'nuzzle') return meetPoints(track, a === 'hug' ? 0.1 : 0.11);
-    if (a === 'highfive') return meetPoints(track, 0.13);
+    if (a === 'hug' || a === 'nuzzle') return meetPoints(track, a === 'hug' ? 0.15 : 0.15);
+    if (a === 'highfive') return meetPoints(track, 0.18);
     if (b.to == null || !(a === 'walk' || a === 'run' || a === 'carry' || a === 'hop')) return out;
     var to = clamp(num(b.to, 0.5), 0, 1), ids = whoList(b.who);
     if (b.who === 'both') return bothTo(to, ids, track);
@@ -345,6 +345,7 @@
       if (n === 'walk' || n === 'run' || n === 'carry' && a.toX !== a.fromX) setPose(c, 'stand');
       if (n === 'fly') { c.kite = true; c.tilt0 = -0.3; if (c.item === 'kite') c.item = null; setPose(c, 'stand'); }
       if (n === 'build' || n === 'dig') { a.prevPose = c.pose; setPose(c, 'bow'); }
+      if (n === 'build' && S.scene === 'treehouse' && p.item !== 'kite' && S.geo) c.fx = sgn(thX() + 30 - X(c.x)); // face the tree they're building in
       if (n === 'build') {
         var it = BUILDS.indexOf(p.item) >= 0 ? p.item : 'treehouse';
         if (it === 'kite') { var k = S.ground.filter(function (g2) { return g2.item === 'kitebuild'; })[0]; if (!k) { k = { item: 'kitebuild', x: clamp(c.x + c.fx * 0.1, 0.05, 0.95), prog: 0 }; S.ground.push(k); } a.kb = k; a.from = k.prog; a.to = p.to != null ? clamp(num(p.to, 1), 0, 1) : Math.min(1, k.prog + 0.5); }
@@ -1281,9 +1282,10 @@
     '.fb-season-h{display:flex;align-items:center;gap:.8rem;margin:0 0 .9rem;flex-wrap:wrap}' +
     '.fb-season-h .fb-badge{display:inline-grid;place-items:center;padding:.3rem .7rem;border-radius:999px;background:#FFE08A;color:#2B2140;font:700 .78rem/1 "IBM Plex Mono",monospace;letter-spacing:.06em;text-transform:uppercase}' +
     '.fb-season-h h3{margin:0;font:600 1.2rem/1.2 Fraunces,Georgia,serif;color:#FFF3D6}' +
-    '.fb-cards{list-style:none;margin:0;padding:0;display:grid;gap:.8rem;grid-template-columns:1fr}' +
-    '@media (min-width:640px){.fb-cards{grid-template-columns:1fr 1fr}.fb-cards li:first-child{grid-column:1 / -1}}' +
-    '.fb-card{position:relative;display:grid;grid-template-columns:auto 1fr;gap:.25rem .9rem;align-items:start;height:100%;box-sizing:border-box;padding:.8rem;border-radius:20px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.14);color:#FFF6E6 !important;text-decoration:none !important;transition:transform .2s,background .2s}' +
+    '.fb-season .fb-cards{list-style:none;margin:0;padding:0;max-width:none;display:grid;gap:.8rem;grid-template-columns:1fr}' +
+    '.fb-season .fb-cards > li{margin:0;padding:0;max-width:none}.fb-season .fb-cards > li::before{content:none}' +
+    '@media (min-width:640px){.fb-season .fb-cards{grid-template-columns:1fr 1fr}.fb-season .fb-cards > li:first-child{grid-column:1 / -1}}' +
+    '.fb-card{position:relative;width:100%;display:grid;grid-template-columns:auto 1fr;gap:.25rem .9rem;align-items:start;height:100%;box-sizing:border-box;padding:.8rem;border-radius:20px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.14);color:#FFF6E6 !important;text-decoration:none !important;transition:transform .2s,background .2s}' +
     'a.fb-card:hover{transform:translateY(-2px);background:rgba(255,255,255,.13)}a.fb-card:focus-visible{outline:3px solid #FFE08A;outline-offset:3px}' +
     '.fb-card canvas,.fb-card .fb-thumb{grid-row:span 5;width:132px;height:88px;border-radius:14px;background:linear-gradient(150deg,#6B5A9E,#F2A98C);display:grid;place-items:center;font-size:2.2rem}' +
     '@media (max-width:420px){.fb-card{grid-template-columns:1fr}.fb-card canvas,.fb-card .fb-thumb{grid-row:auto;width:100%;height:auto;aspect-ratio:16/9}}' +
@@ -1294,7 +1296,7 @@
     '.fb-card .fb-meta{font:500 .76rem/1.3 "IBM Plex Mono",monospace;color:#F7C98B}' +
     '.fb-card.is-soon{opacity:.72;border-style:dashed}.fb-card.is-soon .fb-meta{color:#D9C8F0}' +
     '.fb-card.is-now{border-color:#FFE08A;background:rgba(255,224,138,.12)}' +
-    '.fb-more{margin:.9rem 0 0;text-align:center;font-size:.86rem;color:#E6DDF6}';
+    '.fb-season .fb-more{margin:.9rem 0 0;max-width:none;text-align:center;font-size:.86rem;color:#E6DDF6}';
   function injectCss() { if (document.querySelector('style[data-buddies]')) return; var st = document.createElement('style'); st.setAttribute('data-buddies', ''); st.textContent = CSS; document.head.appendChild(st); }
 
   function mount(host, opts) {
@@ -1483,9 +1485,9 @@
     CATALOG.forEach(function (s) {
       html += '<div class="fb-season"><div class="fb-season-h"><span class="fb-badge">Season ' + s.season + '</span><h3>' + esc(s.name.replace(/^Season \d+: /, '')) + '</h3></div><ol class="fb-cards">';
       s.eps.forEach(function (e) { html += '<li data-ep="' + e.id + '"></li>'; });
-      html += '</ol></div>';
+      html += '</ol><p class="fb-more">More seasons are on the way. Each episode is about 15 minutes, with captions and gentle voices.</p></div>';
     });
-    host.innerHTML = html + '<p class="fb-more">More seasons are on the way. Each episode is about 15 minutes, with captions and gentle voices.</p>';
+    host.innerHTML = html;
     function card(e) {
       var li = host.querySelector('li[data-ep="' + e.id + '"]'), ep = B.episodes[e.id], now = opts.current === e.id;
       if (!li) return;

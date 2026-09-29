@@ -319,7 +319,12 @@
     if (TH.clip && TH.clip.ready() && !TH.busy) { // (busy: a movie inside the movie just shows the countdown)
       var m = g.getTransform ? g.getTransform() : { a: 2 }, px = Math.max(80, Math.round(w * m.a)), py = Math.max(45, Math.round(h * m.a));
       var img = null; TH.busy = true; try { img = TH.clip.frame(dt * (RM ? 0.8 : 1), px, py); } catch (e) { img = null; } TH.busy = false;
-      if (img) { g.drawImage(img, x, y, w, h); return; }
+      if (img) {
+        g.drawImage(img, x, y, w, h);
+        // the caption names the movie that's actually on the screen
+        var tt = TH.clip.title(); if (tt && tt !== TH.shown && cur && cur.act === MOVIE && capMain) { TH.shown = tt; capMain.textContent = 'Movie night: ' + tt; }
+        return;
+      }
     }
     // the countdown leader
     U.rr(g, x, y, w, h, 2, '#CFC4B4'); var n = 3 - Math.floor(t / 1000) % 3, a = (t % 1000) / 1000 * Math.PI * 2;
@@ -332,7 +337,7 @@
   var MOVIE = { id: 'movie-night', name: 'Movie night', kind: 'sweet', where: ['theater'], dur: 24000,
     get cap() { return 'Movie night: ' + theaterTitle(); },
     punch: [16000, 'Best seats in the house, and the best company too'],
-    seat: function (A, i) { return A.cx + (i ? 46 : -46); },
+    seat: function (A, i) { return A.cx + (i ? 56 : -56); },
     run: function (A, T, S) {
       var me = this;
       [T, S].forEach(function (d, i) {
@@ -973,28 +978,28 @@
   // ---------- sounds: soft, synthesized dog noises (pals-cam-sounds.js, fetched the first time the cam opens) ----------
   function SND() { return window.TOLPalsCamSounds || null; }
   function MUS() { return window.TOLPalsCamMusic || null; }
-  var musP = null;
+  var musP = null, quietHold = false;
   var sndP = null;
-  function soundOn() { try { return localStorage.getItem('tol-palcam-sound') !== 'off'; } catch (e) { return true; } }
+  function soundOn() { if (quietHold) return false; try { return localStorage.getItem('tol-palcam-sound') !== 'off'; } catch (e) { return true; } }
   function primeSound() {
     // made inside the tap that opens the cam, so the browser lets it play
     var AC = window.AudioContext || window.webkitAudioContext;
     if (AC && soundOn()) { try { if (!window.__pcAudio) window.__pcAudio = new AC(); if (window.__pcAudio.state === 'suspended') window.__pcAudio.resume(); } catch (e) {} }
     if (!musP && !MUS()) musP = new Promise(function (ok) { var sc = document.createElement('script'); sc.src = '/assets/js/pals-cam-music.js'; sc.onload = sc.onerror = function () { ok(); syncMusBtn(); if (isOpen && MUS() && setting) MUS().scene(setting.id); }; document.head.appendChild(sc); });
-    if (!sndP && !SND()) sndP = new Promise(function (ok) { var sc = document.createElement('script'); sc.src = '/assets/js/pals-cam-sounds.js'; sc.onload = sc.onerror = function () { ok(); syncSndBtn(); }; document.head.appendChild(sc); });
+    if (!sndP && !SND()) sndP = new Promise(function (ok) { var sc = document.createElement('script'); sc.src = '/assets/js/pals-cam-sounds.js'; sc.onload = sc.onerror = function () { if (SND() && SND().hold) SND().hold(quietHold); ok(); syncSndBtn(); }; document.head.appendChild(sc); });
     syncSndBtn();
   }
   function syncMusBtn() {
     var b = ov && ov.querySelector('.pc-mus'); if (!b) return;
     var on = MUS() ? MUS().on() : (function () { try { return localStorage.getItem('tol-palcam-music') === 'on'; } catch (e) { return false; } })();
-    b.setAttribute('aria-pressed', on ? 'true' : 'false'); b.innerHTML = '🎵<span> Music ' + (on ? 'on' : 'off') + '</span>';
+    b.setAttribute('aria-pressed', on ? 'true' : 'false'); b.innerHTML = '🎵<span class="pc-lbl"> Music</span> <span class="pc-st">' + (on ? 'On' : 'Off') + '</span>';
     b.setAttribute('aria-label', on ? 'Music is on. Turn the background music off' : 'Music is off. Turn on gentle background music');
     b.title = MUS() && !MUS().has(setting && setting.id) ? 'This scene is quiet for now; more music is on the way' : '';
   }
   function syncSndBtn() {
     var b = ov && ov.querySelector('.pc-snd'); if (!b) return;
     var on = SND() ? SND().on() : soundOn();
-    b.setAttribute('aria-pressed', on ? 'true' : 'false'); b.innerHTML = (on ? '🔊' : '🔈') + '<span> Sound ' + (on ? 'on' : 'off') + '</span>';
+    b.setAttribute('aria-pressed', on ? 'true' : 'false'); b.innerHTML = (on ? '🔊' : '🔇') + '<span class="pc-lbl"> Sound</span> <span class="pc-st">' + (on ? 'On' : 'Off') + '</span>';
     b.setAttribute('aria-label', on ? 'Sound is on. Turn the pups’ sounds off' : 'Sound is off. Turn the pups’ sounds on');
   }
 
@@ -1016,7 +1021,7 @@
     '@keyframes pcDot{50%{opacity:.35}}' +
     '.pc-ov{position:fixed;inset:0;z-index:10000;display:flex;align-items:stretch;justify-content:center;background:#4A3F63;padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);box-sizing:border-box;overscroll-behavior:contain}' +
     '.pc-ov[hidden]{display:none}' +
-    '.pc-tr8{display:flex;align-items:center;gap:.4rem;flex:none}.pc-snd,.pc-mus{min-height:44px;padding:.35rem .75rem;border-radius:999px;border:1px solid #E6D6EE;background:#fff;color:#3C3350;font:600 .9rem Lora,Georgia,serif;cursor:pointer;white-space:nowrap}.pc-snd:focus-visible,.pc-mus:focus-visible{outline:3px solid #7C6BB0;outline-offset:2px}@media (max-width:420px){.pc-snd span,.pc-mus span{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}}' +
+    '.pc-tr8{display:flex;align-items:center;gap:.4rem;flex:none}.pc-snd,.pc-mus{min-height:44px;padding:.35rem .75rem;border-radius:999px;border:1px solid #E6D6EE;background:#fff;color:#3C3350;font:600 .9rem Lora,Georgia,serif;cursor:pointer;white-space:nowrap}.pc-snd:focus-visible,.pc-mus:focus-visible{outline:3px solid #7C6BB0;outline-offset:2px}@media (max-width:420px){.pc-snd .pc-lbl,.pc-mus .pc-lbl{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}}' +
     '.pc-tvl{flex:none;margin:0;text-align:center;font-size:.88rem}.pc-tvl a{color:#5B4A86}.pc-ov.is-tv .pc-tvl{display:none}' +
     '.pc-box{display:flex;flex-direction:column;width:100%;max-width:1000px;height:100%;background:#FFFBF4;color:#3C3350;box-sizing:border-box;padding:.6rem .7rem .7rem;gap:.5rem;overflow:hidden;font-family:Lora,Georgia,serif}' +
     '@media (max-width:759px){.pc-box{justify-content:center}}' +
@@ -1070,6 +1075,13 @@
     '@media (prefers-reduced-motion: reduce){.pc-launch .pc-dot,.pc-rec i{animation:none}.pc-badge.is-pop,.pc-tally b.is-pop{animation:none}}' +
     'html.tol-still .pc-launch .pc-dot,html.tol-still .pc-rec i,html.tol-still .pc-badge.is-pop,html.tol-still .pc-tally b.is-pop{animation:none}' +
     'html.pc-lock,html.pc-lock body{overflow:hidden}' +
+    // the friendly "sound is on" notice (the first few visits), and a soft glow on the Sound button while it shows
+    '.pc-snote{flex:none;display:flex;align-items:center;justify-content:space-between;gap:.5rem .8rem;flex-wrap:wrap;margin:0;padding:.5rem .75rem;border-radius:16px;background:#FFF4D9;border:1px solid #F0D680;color:#3C3350;font-size:.9rem;line-height:1.35}' +
+    '.pc-snote[hidden]{display:none}.pc-snote p{margin:0;flex:1 1 16rem}.pc-snote-b{display:flex;gap:.4rem}' +
+    '.pc-snote button{min-height:44px;padding:.3rem .8rem;border-radius:999px;border:1px solid #E6D6EE;background:#fff;color:#3C3350;font:600 .88rem Lora,Georgia,serif;cursor:pointer}' +
+    '.pc-snote button.pc-snote-ok{background:#3C3350;border-color:#3C3350;color:#FFF8EE}.pc-snote button:focus-visible{outline:3px solid #7C6BB0;outline-offset:2px}' +
+    '.pc-snd.pc-glow{box-shadow:0 0 0 3px #F6CB4C;animation:pcGlow 1.6s ease-in-out 3}@keyframes pcGlow{50%{box-shadow:0 0 0 6px rgba(246,203,76,.45)}}' +
+    '@media (prefers-reduced-motion: reduce){.pc-snd.pc-glow{animation:none}}html.tol-still .pc-snd.pc-glow{animation:none}' +
     // the page underneath is fully covered, so it stops painting while the cam is open (smoother frames)
     'html.pc-lock body > :not(.pc-ov){visibility:hidden !important}';
 
@@ -1093,8 +1105,9 @@
     ov.innerHTML =
       '<div class="pc-box">' +
         '<div class="pc-top"><div><p class="pc-k" id="pc-where">Pal cam</p><h2 id="pc-h">Checking in on Tidbit &amp; Sugarfoot</h2></div>' +
-        '<div class="pc-tr8"><button type="button" class="pc-mus" aria-pressed="false">🎵<span> Music off</span></button><button type="button" class="pc-snd" aria-pressed="true">🔊<span> Sound on</span></button>' +
+        '<div class="pc-tr8"><button type="button" class="pc-mus" aria-pressed="false">🎵<span class="pc-lbl"> Music</span> <span class="pc-st">Off</span></button><button type="button" class="pc-snd" aria-pressed="true">🔊<span class="pc-lbl"> Sound</span> <span class="pc-st">On</span></button>' +
         '<button type="button" class="pc-x" aria-label="Close the pal cam"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>Close</button></div></div>' +
+        '<div class="pc-snote" role="status" hidden><p>🔊 <b>Sound is on:</b> soft barks and little sounds. Tap <b>Sound</b> to turn it off anytime.</p><div class="pc-snote-b"><button type="button" class="pc-snote-off">Turn sound off</button><button type="button" class="pc-snote-ok">Got it</button></div></div>' +
         '<div class="pc-stage"><canvas class="pc-cv" role="img" aria-label="Tidbit and Sugarfoot playing"></canvas><span class="pc-rec" aria-hidden="true"><i></i>PAL CAM</span><span class="pc-badge" hidden></span></div>' +
         '<p class="pc-cap" id="pc-cap"><span class="pc-main"></span><span class="pc-punch"></span></p>' +
         '<div class="pc-btns"><button type="button" class="pc-b is-main pc-next">Next!</button><button type="button" class="pc-b is-sur pc-sur">Surprise me</button><button type="button" class="pc-b pc-pause" aria-pressed="false">Pause</button></div>' +
@@ -1110,7 +1123,9 @@
     badge = ov.querySelector('.pc-badge'); tallyN = ov.querySelector('.pc-n'); tallyTot = ov.querySelector('.pc-tot'); chips = ov.querySelector('.pc-chips'); btnPause = ov.querySelector('.pc-pause');
     ov.querySelector('.pc-x').addEventListener('click', close);
     ov.querySelector('.pc-mus').addEventListener('click', function () { primeSound(); var go = function () { if (MUS()) { MUS().toggle(); if (setting) MUS().scene(setting.id); } syncMusBtn(); }; if (MUS()) go(); else if (musP) musP.then(go); });
-    ov.querySelector('.pc-snd').addEventListener('click', function () { primeSound(); if (SND()) SND().toggle(); else { try { localStorage.setItem('tol-palcam-sound', soundOn() ? 'off' : 'on'); } catch (e) {} } syncSndBtn(); });
+    ov.querySelector('.pc-snd').addEventListener('click', function () { quietHold = false; primeSound(); if (SND()) SND().toggle(); else { try { localStorage.setItem('tol-palcam-sound', soundOn() ? 'off' : 'on'); } catch (e) {} } syncSndBtn(); hideNote(false); });
+    ov.querySelector('.pc-snote-ok').addEventListener('click', function () { hideNote(true); });
+    ov.querySelector('.pc-snote-off').addEventListener('click', function () { primeSound(); if (SND()) SND().set(false); else { try { localStorage.setItem('tol-palcam-sound', 'off'); } catch (e) {} } syncSndBtn(); hideNote(true); });
     ov.querySelector('.pc-next').addEventListener('click', function () { next(false); });
     ov.querySelector('.pc-sur').addEventListener('click', function () { next(true); });
     btnPause.addEventListener('click', function () { setPaused(!paused); });
@@ -1127,7 +1142,7 @@
     // while the cam is open, keys belong to it (so the game underneath never moves), Esc closes, Tab stays inside
     window.addEventListener('keydown', function (e) {
       if (!isOpen) return;
-      if (e.key === 'Escape') { e.preventDefault(); e.stopPropagation(); close(); return; }
+      if (e.key === 'Escape') { e.preventDefault(); e.stopPropagation(); if (noteOpen()) hideNote(true); else close(); return; }
       if (e.key === 'Tab') {
         var f = Array.prototype.filter.call(ov.querySelectorAll('button, summary, [href], [tabindex]:not([tabindex="-1"])'), function (x) { return !x.disabled && x.offsetParent !== null; });
         if (f.length) { var i = f.indexOf(document.activeElement); if (e.shiftKey && (i <= 0)) { e.preventDefault(); f[f.length - 1].focus(); } else if (!e.shiftKey && (i === f.length - 1 || i < 0)) { e.preventDefault(); f[0].focus(); } }
@@ -1187,6 +1202,24 @@
     g.setTransform(1, 0, 0, 1, 0, 0); var gr = g.createLinearGradient(0, 0, 0, cv.height); gr.addColorStop(0, '#E9E2FB'); gr.addColorStop(1, '#FBE6F0'); g.fillStyle = gr; g.fillRect(0, 0, cv.width, cv.height);
     g.setTransform(DPR, 0, 0, DPR, 0, 0); var n = Math.floor(clock / 300) % 4; U.text(g, 'Tuning in' + '...'.slice(0, n), CW / 2, CH / 2, 16, '#5B4A86', '600');
   }
+  // ---------- "Sound is on" notice: the first 3 times the cam opens on this device, never when sound is off ----------
+  var NOTE_KEY = 'tol-palcam-soundnote';
+  function quietOn() { try { return !!(window.TOLQuiet && window.TOLQuiet.on && window.TOLQuiet.on()); } catch (e) { return false; } }
+  function noteOpen() { var n = ov && ov.querySelector('.pc-snote'); return !!(n && !n.hidden); }
+  function hideNote(focus) {
+    var n = ov && ov.querySelector('.pc-snote'); if (!n || n.hidden) return;
+    n.hidden = true; var sb = ov.querySelector('.pc-snd'); if (sb) { sb.classList.remove('pc-glow'); if (focus) sb.focus(); }
+  }
+  function maybeNote() {
+    var n = ov.querySelector('.pc-snote'), sb = ov.querySelector('.pc-snd'), count = 0;
+    n.hidden = true; if (sb) sb.classList.remove('pc-glow');
+    if (!soundNow()) return;
+    try { count = +(localStorage.getItem(NOTE_KEY) || 0) || 0; } catch (e) { count = 0; }
+    if (count >= 3) return;
+    try { localStorage.setItem(NOTE_KEY, String(count + 1)); } catch (e) {}
+    n.hidden = false; if (sb) sb.classList.add('pc-glow');
+  }
+  function soundNow() { return SND() ? SND().on() : soundOn() && !quietOn(); }
   function open(opts) {
     opts = opts || {};
     if (!window.TOLPups) return;
@@ -1195,6 +1228,8 @@
     build();
     if (isOpen) return;
     openerEl = opts.opener || document.activeElement;
+    quietHold = quietOn(); if (SND() && SND().hold) SND().hold(quietHold);
+    if (opts.noNote) { var nn = ov.querySelector('.pc-snote'); nn.hidden = true; } else maybeNote();
     primeSound();
     ov.hidden = false; isOpen = true; document.documentElement.classList.add('pc-lock'); resize();
     setPaused(false); ov.querySelector('.pc-x').focus();
@@ -1256,7 +1291,7 @@
     trickBusy: function () { return !!trick; }, trickLog: function () { return trickLog.slice(); }, caption: function () { return capMain ? capMain.textContent + ' | ' + capPunch.textContent : ''; },
     tricks: function () { if (!ACTS.length) loadActs(); return TRICKS.map(function (l) { return l.map(function (t) { return { id: t.id, name: t.name }; }); }); },
     facts: function () { return shownFacts.map(function (l) { return l.map(function (f) { return f.k; }); }); }, factCounts: function () { if (!ACTS.length) loadActs(); return [FACTS[0].length, FACTS[1].length]; },
-    isOpen: function () { return isOpen; },
+    isOpen: function () { return isOpen; }, soundNote: function () { return noteOpen(); }, hideSoundNote: function () { hideNote(false); },
     frames: function () { return frames.slice(); }, resetFrames: function () { frames.length = 0; },
     state: function () {
       var r = cv ? cv.getBoundingClientRect() : { left: 0, top: 0 };
