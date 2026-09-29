@@ -527,6 +527,7 @@
         try { geo = PC2.paintScene(b, S.scene, w, h, S.hour, { env: { bare: S.scene === 'treehouse' }, reduced: S.reduced }); } catch (e) { geo = null; }
       }
       if (!geo) { geo = geoFor(w, h); paintBlank(b, w, h, geo); geo.env = { x0: geo.x0 - 4, x1: geo.x1 + 4, y0: geo.y0 - 4, y1: geo.y1 + 4, dark: 0 }; }
+      S.sp = SP * clamp((geo.LW || 533) / 520, 0.8, 1); // a little smaller on narrow stages, so the pals have room
       S.geo = geo; S.info = PC2 && PC2.sceneInfo ? PC2.sceneInfo(S.scene) : null;
     }
     function paintBlank(b, w, h, geo) {
@@ -688,16 +689,16 @@
       var d = palFrame(c), L = P.looks[c.look];
       var px = X(d.x) + (d.jit || 0), base = G + groundDy(px) + d.dy, y = base - d.lift;
       // legs follow the ground covered
-      if (c.lastPx != null && d.moving) c.ph += Math.abs(px - c.lastPx) * 0.2 / SP; else if (!d.moving) { var tgt = Math.round(c.ph / Math.PI) * Math.PI; c.ph += (tgt - c.ph) * 0.15; }
+      if (c.lastPx != null && d.moving) c.ph += Math.abs(px - c.lastPx) * 0.2 / S.sp; else if (!d.moving) { var tgt = Math.round(c.ph / Math.PI) * Math.PI; c.ph += (tgt - c.ph) * 0.15; }
       c.lastPx = px;
       var f = c.face * (d.faceMul != null ? d.faceMul : 1), fa = Math.max(0.15, Math.abs(f)), fs = sgn(f);
       var pq = clamp((S.t - c.popT) / 0.35, 0, 1), pop = Math.sin(pq * Math.PI) * 0.06;
       var sh = clamp(1 - d.lift / 120, 0.4, 1);
-      ell(g, px, base + 1, 22 * SP * sh * 0.8, 3.6 * SP * sh * 0.8, 'rgba(40,30,60,' + (0.16 * sh).toFixed(3) + ')');
+      ell(g, px, base + 1, 22 * S.sp * sh * 0.8, 3.6 * S.sp * sh * 0.8, 'rgba(40,30,60,' + (0.16 * sh).toFixed(3) + ')');
       if (d.glow > 0) { var gr = g.createRadialGradient(px, y - 28, 4, px, y - 28, 70); gr.addColorStop(0, 'rgba(255,236,170,' + (0.45 * d.glow * (d.glowFade == null ? 1 : d.glowFade)).toFixed(3) + ')'); gr.addColorStop(1, 'rgba(255,236,170,0)'); g.fillStyle = gr; g.fillRect(px - 70, y - 98, 140, 140); }
       g.save(); g.translate(px, y); g.scale(fs, 1);
-      if (d.rot) { var pvx = d.pivot === 'hind' ? -12 * SP : 0, pvy = d.pivot === 'hind' ? 0 : -22 * SP; g.translate(pvx, pvy); g.rotate(d.rot); g.translate(-pvx, -pvy); }
-      g.scale(fa * SP * d.sx * (1 + pop * 0.6), SP * d.sy * (1 - pop));
+      if (d.rot) { var pvx = d.pivot === 'hind' ? -12 * S.sp : 0, pvy = d.pivot === 'hind' ? 0 : -22 * S.sp; g.translate(pvx, pvy); g.rotate(d.rot); g.translate(-pvx, -pvy); }
+      g.scale(fa * S.sp * d.sx * (1 + pop * 0.6), S.sp * d.sy * (1 - pop));
       var wag = d.tailBase + Math.sin(S.t * 11 * d.wagS + (c.id === 'tidbit' ? 0 : 2)) * d.wagA * (c.id === 'tidbit' ? 1 : 0.8) * (S.reduced ? 0.7 : 1);
       var pose = d.pose === 'stand' ? 'run' : d.pose;
       P.draw(g, L, pose, d.moving ? c.ph : (pose === 'run' ? Math.round(c.ph / Math.PI) * Math.PI : c.ph), wag, false, S.t * 1000, d.tilt, { ear: d.ear });
