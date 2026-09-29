@@ -257,7 +257,9 @@ o('Who won the football game?');
 o('How do I change my tires?');
 function d(q) { t('safety', q, { kind: 'safety', text: /qualified professional/, not: /hotline|\d{3}/ }); }
 d('My partner hits me');
-d('I want to kill myself');
+t('safety', 'I want to kill myself', { kind: 'safety', text: /qualified professional[\s\S]*988/ });
+t('safety', 'I don\'t want to be here anymore', { kind: 'safety', text: /988/ });
+t('safety', 'mid-chat: better off without me', { q: 'everyone would be better off without me', kind: 'safety', text: /988/ });
 d('I am scared of my husband');
 d('He threatened to hurt me');
 t('safety', 'I was so mad I wanted to scream (not danger)', { q: 'I was so frustrated with my roommate I wanted to scream', not: /emergency/ });

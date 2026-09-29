@@ -459,11 +459,14 @@
     '\\bwish (i|id) (was|were|had) (dead|never (been )?born|not here|not alive)\\b', '\\btired of (living|being alive|life)\\b', '\\b(nothing|no one|nobody) to live for\\b',
     '\\btake my (own )?life\\b', '\\bunalive\\w*', '\\bnot (be|being) here anymore\\b', '\\bgive up on (life|living|everything)\\b', '\\bhurt (him|her|them|someone|somebody)\\b'
   ].join('|'));
-  function safetyReply() {
-    return { blocks: [
+  // the words people use when they may not want to live: these also get the 988 line
+  var NOT_LIVE = /\bsuicid\w*|\bkill(ing)? my ?self\b|\b(want|wants|wanted|going) to die\b|\bend (it all|my life)\b|\bno reason to (live|go on)\b|\b(do ?n.?t|do not|dont) (really )?(want|wanna) to (be here|be alive|live|exist|wake up|be around)\b|\b(want|wanna|wish i could) (to )?(disappear|vanish|not exist|not wake up|fall asleep and not wake up)\b|\bi (just |really |honestly )?can.?t go on( anymore| living| like this)?$|\bcan.?t go on (anymore|living|like this)\b|\b(better off|be better) without me\b|\bno (point|reason) (in )?(living|being alive|going on|to keep going)\b|\bwish (i|id) (was|were|had) (dead|never (been )?born|not here|not alive)\b|\btired of (living|being alive|life)\b|\b(nothing|no one|nobody) to live for\b|\btake my (own )?life\b|\bunalive\w*|\bnot (be|being) here anymore\b|\bgive up on (life|living|everything)\b|\bself ?harm\w*|\b(hurt|hurting|harm|harming|cut|cutting) my ?self\b|\boverdos\w*/;
+  function safetyReply(f) {
+    var blocks = [
       { k: 'p', x: 'I’m really glad you said something. What you’re describing sounds serious, and it’s beyond what a small helper like me can help with. You deserve real support from a person.' },
-      { k: 'p', x: 'Please reach out to someone you trust, or to a qualified professional who can help with this properly.' }],
-      chips: [], kind: 'safety' };
+      { k: 'p', x: 'Please reach out to someone you trust, or to a qualified professional who can help with this properly.' }];
+    if (f && NOT_LIVE.test(f)) blocks.push({ k: 'p', x: 'If you might act on these feelings, you can call or text 988, the Suicide & Crisis Lifeline, any time.' });
+    return { blocks: blocks, chips: [], kind: 'safety' };
   }
 
   // ------------------------------------------------------------------ small calculators, worked out right here
@@ -1174,7 +1177,7 @@
   function respond1(state, q, chipDoc) {
     var f = norm(q), prevLast = state.last;
     if (chipDoc == null) {
-      if (DANGER.test(f)) { state.last = null; return safetyReply(); }
+      if (DANGER.test(f)) { state.last = null; return safetyReply(f); }
       f = roommatesFigure(f);
       var fu = followUp(state, f, q);
       if (fu && fu.needBG) return fu;
