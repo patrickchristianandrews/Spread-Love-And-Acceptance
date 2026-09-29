@@ -19,6 +19,24 @@
 <link rel="stylesheet" href="/assets/css/site.css">
 <link rel="stylesheet" href="/assets/css/reading.css">
 <script src="/assets/js/site.js" defer></script>
+<script src="/assets/js/rulebook.js" defer></script>
+<style>
+  .gu-gentle{ margin:1rem 0 1.2rem; padding:.85rem 1rem; border-left:4px solid var(--credit); background:rgba(62,107,76,.07); border-radius:0 10px 10px 0; font-size:1rem; }
+  .gu-gentle p{ margin:.25rem 0; }
+  .gu-stages{ list-style:none; padding:0; margin:.5rem 0 .8rem; }
+  .gu-stages li{ margin:0; padding:.45rem 0; border-bottom:1px dashed var(--line); max-width:none; }
+  .gu-stages li:last-child{ border-bottom:0; }
+  .gu-stages strong{ display:block; font-size:.98rem; }
+  .gu-old th{ font-size:.98rem; }
+  @media (max-width:640px){
+    .gu-old, .gu-old tbody, .gu-old tr, .gu-old td{ display:block; width:auto; }
+    .gu-old thead{ position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); }
+    .gu-old tr{ border:1px solid var(--line); border-radius:10px; padding:.6rem .8rem; margin:0 0 .9rem; background:rgba(255,253,247,.7); }
+    .gu-old td{ border:0 !important; padding:.2rem 0 !important; }
+    .gu-old td:first-child{ font-weight:600; font-size:1.05rem; }
+    .gu-old td::before{ content:attr(data-h); display:block; font-size:.85rem; font-weight:600; color:var(--ink-soft); margin:.25rem 0 .05rem; }
+  }
+</style>
 <!-- seo:start -->
 <link rel="canonical" href="https://spreadloveandacceptance.com/growing-up.html">
 <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1">
@@ -39,53 +57,68 @@
 <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"name":"Where Your Lens Came From: How Growing Up Shapes You · Spread Love & Acceptance","headline":"Where Your Lens Came From: How Growing Up Shapes You · Spread Love & Acceptance","description":"How growing up shapes the adult you: the big question at each stage of development, why timing makes some experiences go deeper, and how the world hands us a sometimes mistaken view of ourselves, other people and what we expect of them.","url":"https://spreadloveandacceptance.com/growing-up.html","inLanguage":"en-US","isAccessibleForFree":true,"keywords":"self-help, relationships, kindness, love, appreciation, acceptance, connection, communication, calm, peace, harmony, reconciliation, emotional wellbeing, self-discovery, fairness at home, mental load, invisible work, free self-help tools","publisher":{"@type":"Organization","@id":"https://spreadloveandacceptance.com/#org","name":"Spread Love & Acceptance"},"isPartOf":{"@type":"WebSite","@id":"https://spreadloveandacceptance.com/#website","name":"Spread Love & Acceptance","url":"https://spreadloveandacceptance.com/"},"dateModified":"2026-09-29","image":"https://spreadloveandacceptance.com/assets/img/og-image.png","@type":"WebPage"},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Spread Love & Acceptance","item":"https://spreadloveandacceptance.com/"},{"@type":"ListItem","position":2,"name":"Where Your Lens Came From: How Growing Up Shapes You · Spread Love & Acceptance","item":"https://spreadloveandacceptance.com/growing-up.html"}]}]}</script>
 <!-- seo:end -->
 </head>
-<body>
+<body data-no-cheer data-no-pupvisits>
 <main class="read">
 <header class="read-head"><p class="read-code">Self-discovery · Where your lens came from</p><h1>Where your lens came from: how growing up shapes the way you see yourself and others</h1></header>
-<p class="depth-bar"><span>Simple version</span><a class="dig" href="/growing-up-in-depth.html">Read the full guide</a></p>
+<p class="depth-bar" data-full-what="The whole idea: real-life examples, a table of the stages, the research behind it, and answers to common questions. Researchers’ names for things appear in bold."><span>Simple version</span><a class="dig" href="/growing-up-in-depth.html">Read the full guide</a></p>
 
-<p class="simple-lede">Every stage of growing up asks a big question: Is the world safe? Am I capable? Where do I belong? The answers we land on become understandings we carry forward and keep using as adults, usually without noticing. Most serve us well. Some were right for the child we were and are out of date for the adult we are now.</p>
+<div class="gu-gentle" id="gently">
+  <p><strong>Going gently.</strong> This page looks back at growing up. You can read one card and stop, and come back another day. Nothing here needs finishing.</p>
+  <p>Not every home felt calm or kind. If “they were doing their best” doesn’t fit your story, that’s okay. Take only what is useful to you and leave the rest.</p>
+</div>
+
+<p class="simple-lede">Every stage of growing up asks a big question: Is the world safe? Am I capable? Where do I belong? The answers we land on can become understandings many people keep using as adults, usually without noticing. Together they make up your lens. Most of these understandings serve us well. Some were right for the child we were and are out of date for the adult we are now. They can change.</p>
 <p class="pillar-note"><strong>Where this fits:</strong> This page mainly uses <a href="/five-pillars.html#read-your-state">Pillar III, Read your state first</a>, and <a href="/five-pillars.html#quiet-incentives">Pillar V, Notice the quiet incentives</a>, with help from <a href="/five-pillars.html#see-the-load">Pillar I</a>, <a href="/five-pillars.html#fix-the-setup">Pillar II</a> and <a href="/five-pillars.html#tune-signals">Pillar IV</a>. They are all part of the <a href="/five-pillars.html">Five Pillars</a>. <strong>In you:</strong> notice when an old understanding is doing the thinking. <strong>Between you and others:</strong> say out loud the rules you each brought from home, and choose your own together.</p>
 
 <div class="scene">
   <p class="scene-when">Sunday, 10:15am</p>
-  <p>Your partner is still in bed and the kitchen is a mess. Before you’ve had a single thought, you feel it: “Of course. It’s always me.” Nobody said that. But in the house you grew up in, whoever noticed the mess cleaned it, and anyone resting while there was work to do was lazy. That rule is thirty years old, and it just made a decision for you.</p>
+  <p>Your partner is still in bed and the kitchen is a mess. Before you’ve had a single thought, you feel it: “Of course. It’s always me.” Nobody said that. But in the house you grew up in, whoever noticed the mess cleaned it, and anyone resting while there was work to do was lazy. That rule comes from your childhood, and it just made a decision for you.</p>
 </div>
 
 <ol class="ideas">
   <li id="lens">
     <h2>You see the world through a lens you didn’t choose.</h2>
-    <p>Family, school, friends, culture, money at home, what you watched and what’s on your phone all taught you what to expect: of yourself, of other people, and of how a “good” partner, parent or friend behaves. By adulthood the lens doesn’t feel like a lens. It feels like simply seeing.</p>
+    <p>Family, school, friends, culture, money at home, what you watched and what’s on your phone all taught you what to expect: of yourself, of other people, and of how a “good” partner, parent or friend behaves. By adulthood your lens doesn’t feel like a lens. It feels like simply seeing.</p>
     <a class="dig" href="/growing-up-in-depth.html#lens">Dig deeper: the lens idea</a>
   </li>
   <li id="stages">
     <h2>Each stage of growing up asks a different question.</h2>
-    <p>Roughly: first years, “Is the world safe?” Toddler years, “Can I do it myself?” Early childhood, “Is it okay to take up space?” School years, “Am I capable?” Teen years, “Who am I, and where do I belong?” Young adulthood, “Can I be close without losing myself?” The answers become the understandings we use for the rest of life, and we revisit them at every big change.</p>
+    <p>Researchers call these developmental stages. The ages are rough, and people move at their own pace:</p>
+    <ul class="gu-stages">
+      <li><strong>First years (about 0 to 1)</strong> “Is the world safe? Will someone come?”</li>
+      <li><strong>Toddler years (about 2 to 3)</strong> “Can I do it myself?”</li>
+      <li><strong>Early childhood (about 4 to 5)</strong> “Is it okay to start things and take up space?”</li>
+      <li><strong>School years (about 6 to 11)</strong> “Am I capable?”</li>
+      <li><strong>Teen years (about 12 to 17)</strong> “Who am I, and where do I belong?”</li>
+      <li><strong>Young adulthood (about 18 to 39)</strong> “Can I be close without losing myself?”</li>
+    </ul>
+    <p>The answers can become understandings many people keep using as adults. We often come back to these questions at big changes, and each time we can answer a little differently.</p>
     <a class="dig" href="/growing-up-in-depth.html#stages">Dig deeper: the stages, with a table</a>
   </li>
   <li id="timing">
     <h2>When something happened matters.</h2>
-    <p>An experience that touches the question you were answering at the time tends to go deeper. A move at 4 is mostly about routines; a move at 14, in the middle of “Where do I belong?”, can leave a longer feeling of being the outsider. Repetition, what you decided it meant about you, and whether someone helped you make sense of it matter too. Deeper isn’t permanent: people keep learning all their lives.</p>
+    <p>An experience that touches the question you were answering at the time tends to go deeper. Researchers call the times when a growing brain is especially ready to learn certain things sensitive periods. A move at 4 is mostly about routines; a move at 14, in the middle of “Where do I belong?”, can leave a longer feeling of being the outsider. Repetition, what you decided it meant about you, and whether someone helped you make sense of it matter too. Deeper isn’t permanent: people keep learning all their lives.</p>
     <a class="dig" href="/growing-up-in-depth.html#timing">Dig deeper: why timing matters</a>
   </li>
   <li id="self">
-    <h2>Some of what you believe about yourself was decided by a child with half the facts.</h2>
-    <p>“I’m only okay when I’m useful.” “My needs are a burden.” “I’m too much.” “Mistakes mean I’m bad.” A child can’t know the grown-ups were tired or worried; they only know how it felt. As an adult, you’re allowed to look again with the full picture.</p>
+    <h2>Some of what you believe about yourself was learned when you were a child and didn’t have all the facts.</h2>
+    <p>For example: “I’m only okay when I’m useful.” “My needs are a burden.” “Mistakes mean I’m bad.” A child often can’t know what was going on for the grown-ups; they only know how it felt. As an adult, you’re allowed to look again with the full picture. Looking again doesn’t mean deciding it was all fine. Some things that hurt really were not okay.</p>
     <a class="dig" href="/growing-up-in-depth.html#self">Dig deeper: old stories and fairer readings</a>
   </li>
   <li id="others">
     <h2>The lens colors how you read the people you love.</h2>
-    <p>If silence at home meant anger, a partner’s quiet evening can feel like a storm coming. We also tend to blame other people’s slips on who they are (“lazy”) and our own on our day (“I was swamped”). Ask before you conclude: “When you went quiet, what was going on for you?”</p>
+    <p>If silence at home meant anger, a partner’s quiet evening can feel like trouble is on the way. We also tend to blame other people’s slips on who they are (“lazy”) and our own on our day (“I was swamped”). Ask before you conclude: “When you went quiet, what was going on for you?”</p>
     <a class="dig" href="/growing-up-in-depth.html#others">Dig deeper: misreading others</a>
   </li>
   <li id="expect">
-    <h2>Unspoken expectations can only be broken.</h2>
+    <h2>An expectation nobody said out loud can’t be agreed to, so the other person can only miss it.</h2>
     <p>“If you loved me, you’d just know.” “A good partner plans the birthdays.” “Rest is earned.” “Whoever notices, does it.” Each is somebody’s family rule, not a law of nature. When two people follow two different rulebooks, each sure theirs is normal, resentment grows without anyone doing wrong.</p>
     <a class="dig" href="/growing-up-in-depth.html#expect">Dig deeper: the expectations we place on others</a>
   </li>
   <li id="home">
     <h2>Write down the rulebook from home.</h2>
-    <p>Finish these the way your childhood home would have: “Love looked like…” “When someone was upset, we…” “The jobs were split like this…” “Resting was okay when…” “Asking for help meant…” Then ask of each line: do I still want this rule?</p>
+    <p>Everyone grew up with an unwritten rulebook from home. Finish these six lines the way your childhood home would have: “In my family, love looked like…” “When someone was upset, we…” “The jobs were split like this…” “Resting was okay when…” “Asking for help meant…” “The unforgivable thing was…” Then ask of each line: do I still want this rule? You can write right here:</p>
+    <div data-rulebook></div>
     <a class="dig" href="/growing-up-in-depth.html#home">Dig deeper: the six rulebook lines</a>
   </li>
   <li id="check">
@@ -102,13 +135,13 @@
 
 <h2 id="table">Old understanding, fairer reading</h2>
 <p>Common examples, not rules. Only you can sort your own.</p>
-<div class="table-wrap"><table>
-<thead><tr><th>The old understanding</th><th>Often learned when…</th><th>A fairer, adult reading</th></tr></thead>
+<div class="table-wrap"><table class="gu-old">
+<thead><tr><th>The old understanding</th><th>Often learned when</th><th>A fairer, adult reading</th></tr></thead>
 <tbody>
-<tr><td>“I’m only okay when I’m useful.”</td><td>Praise came mostly for helping</td><td>“Helping is something I do, not the price of being loved.”</td></tr>
-<tr><td>“It’s always me.”</td><td>Whoever noticed the mess had to fix it</td><td>“Let’s give each job one owner, by choice.”</td></tr>
-<tr><td>“If they loved me, they’d know.”</td><td>Stories and families where love meant mind-reading</td><td>“People who love me still need to be told.”</td></tr>
-<tr><td>“Quiet means angry.”</td><td>Silence at home came before trouble</td><td>“Quiet might mean tired. I can ask.”</td></tr>
+<tr><td data-h="The old understanding">“I’m only okay when I’m useful.”</td><td data-h="Often learned when">Praise came mostly for helping</td><td data-h="A fairer, adult reading">“Helping is something I do, not the price of being loved.”</td></tr>
+<tr><td data-h="The old understanding">“It’s always me.”</td><td data-h="Often learned when">Whoever noticed the mess had to fix it</td><td data-h="A fairer, adult reading">“Let’s give each job one owner, by choice.”</td></tr>
+<tr><td data-h="The old understanding">“If they loved me, they’d know.”</td><td data-h="Often learned when">Stories and families where love meant mind-reading</td><td data-h="A fairer, adult reading">“People who love me still need to be told.”</td></tr>
+<tr><td data-h="The old understanding">“Quiet means angry.”</td><td data-h="Often learned when">Silence at home came before trouble</td><td data-h="A fairer, adult reading">“Quiet might mean tired. I can ask.”</td></tr>
 </tbody>
 </table></div>
 
@@ -123,7 +156,7 @@
   <p><a href="/know-yourself.html">Know your own wiring &rarr;</a> <a href="/check-ins.html">Swap rulebooks in a check-in &rarr;</a></p>
 </div>
 
-<p><strong>What this page is not.</strong> It is general education, not a diagnosis or therapy, and it’s not about blaming anyone. The adults who raised us were working with their own lenses too. If looking back feels heavy, you can stop and come back another day, or explore it with a qualified professional, if and when you want that.</p>
+<p><strong>What this page is not.</strong> It is general education, not a diagnosis or therapy, and it’s not about blaming anyone. Many of the adults who raised us were working with their own lenses too, and if that doesn’t fit your story, you don’t have to make it fit. If looking back feels heavy, you can stop and come back another day, or explore it with a qualified professional, if and when you want that.</p>
 </main>
 </body>
 </html>

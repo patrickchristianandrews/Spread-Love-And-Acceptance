@@ -63,6 +63,14 @@
       { id: 's1e5', n: 5, title: 'The Longest Night', world: 'Forest, campsite, pond and the stars', theme: 'A night quest to the shooting stars', pillar: 'V', emoji: '🌠' }
     ] }
   ];
+  // a short, calm note shown before each episode plays: what happens that might feel big
+  var NOTES = {
+    s1e1: 'A gentle storm with thunder in chapters 4 and 5. Lightning shows as a soft glow. The treehouse falls down, and the pals snap at each other, then say sorry and rebuild it.',
+    s1e2: 'The wind blows the song pages away, and the pals misunderstand each other for a while before they make up.',
+    s1e3: 'One pal gets very tired from carrying too much, in soft falling snow. Everyone stops, rests and shares the load.',
+    s1e4: 'The pals’ kite snaps, and they blame each other for a while before they find out what really broke.',
+    s1e5: 'The pals get turned around in a dark, starry forest for a while, then find their way together.'
+  };
   function catalogIds() { var out = []; CATALOG.forEach(function (s) { s.eps.forEach(function (e) { out.push(e.id); }); }); return out; }
   function catalogEntry(id) { var f = null; CATALOG.forEach(function (s) { s.eps.forEach(function (e) { if (e.id === id) f = e; }); }); return f; }
 
@@ -259,7 +267,7 @@
   function makeStage(opts) {
     opts = opts || {};
     var S = {
-      t: 0, scene: 'blank', hour: 12, weather: 'clear', props: {}, ground: [], chars: {}, guests: {}, parts: [], wx: [], flash: 0, nextFlash: 6,
+      t: 0, scene: 'blank', hour: 12, weather: 'clear', props: {}, ground: [], chars: {}, guests: {}, parts: [], wx: [], flash: 0, nextFlash: 6, bright: !!opts.bright, glowT0: -99,
       bubble: null, card: null, trans: null, title: null, geo: null, bg: null, bgKey: '', reduced: !!opts.reduced || stillNow(), compact: !!opts.compact,
       noBubbleText: !!opts.noBubbleText, ep: null, shoot: null, lastEmit: {}
     };
@@ -510,7 +518,7 @@
       });
       stepParts(dt);
       if (S.flash > 0) S.flash = Math.max(0, S.flash - dt * 1.6);
-      if (S.weather === 'storm' && !R && S.scene !== 'blank') { S.nextFlash -= dt; if (S.nextFlash <= 0) { S.flash = 0.34; S.nextFlash = 7 + Math.random() * 6; if (S.onSound) S.onSound('rumble'); } }
+      if (S.weather === 'storm' && !R && S.scene !== 'blank') { S.nextFlash -= dt; if (S.nextFlash <= 0) { if (S.bright) S.flash = 0.34; else S.glowT0 = S.t; S.nextFlash = 7 + Math.random() * 6; if (S.onSound) S.onSound('rumble'); } }
       if (S.bubble && S.t > S.bubble.until + 0.4) S.bubble = null;
       if (S.card && S.t > S.card.t0 + S.card.dur + 0.6) S.card = null;
       for (var id in S.guests) { var gs = S.guests[id]; if (gs.out && S.t - gs.out.t0 > gs.out.dur) delete S.guests[id]; }
@@ -862,6 +870,9 @@
       if (w === 'storm') { g.fillStyle = 'rgba(24,28,60,.22)'; g.fillRect(gg.x0 - 4, gg.y0 - 4, gg.x1 - gg.x0 + 8, gg.y1 - gg.y0 + 8); }
       else if (w === 'rain') { g.fillStyle = 'rgba(60,70,100,.1)'; g.fillRect(gg.x0 - 4, gg.y0 - 4, gg.x1 - gg.x0 + 8, gg.y1 - gg.y0 + 8); }
       if (S.flash > 0) { g.fillStyle = 'rgba(235,240,255,' + S.flash.toFixed(3) + ')'; g.fillRect(gg.x0 - 4, gg.y0 - 4, gg.x1 - gg.x0 + 8, gg.y1 - gg.y0 + 8); }
+      // the default: lightning as a slow, dim lavender glow that fades in and out over about two seconds (no white flash)
+      var gq = (S.t - S.glowT0) / 2.2;
+      if (gq > 0 && gq < 1) { g.fillStyle = 'rgba(176,168,226,' + (0.09 * Math.sin(Math.PI * gq)).toFixed(3) + ')'; g.fillRect(gg.x0 - 4, gg.y0 - 4, gg.x1 - gg.x0 + 8, gg.y1 - gg.y0 + 8); }
     }
 
     // ---------- bubbles (drawn in pixels, so text stays crisp and readable) ----------
@@ -1323,15 +1334,22 @@
     '.fb-b[aria-pressed="true"]{background:rgba(142,221,166,.16);border-color:#8EDDA6;box-shadow:0 0 0 2px rgba(142,221,166,.22)}.fb-b[aria-pressed="true"] .fb-st{background:#8EDDA6;color:#16331F}' +
     '.fb-b[aria-pressed="false"]{border-style:dashed;border-color:rgba(255,255,255,.35);color:#CFC7DC}' +
     '.fb-sp{flex:1}' +
-    '@media (max-width:600px){.fb-ctrl .fb-lbl{display:none}.fb-b{padding:.35rem .65rem}.fb-sp{flex-basis:100%;height:0}}' +
+    '@media (max-width:600px){.fb-ctrl .fb-full .fb-lbl{display:none}.fb-b{padding:.35rem .65rem}.fb-sp{flex-basis:100%;height:0}}' +
+    '.fb-b.fb-flash[hidden]{display:none}' +
+    '.fb-ovc .fb-cn{margin:.1rem auto .75rem;padding:.55rem .75rem;border-radius:12px;background:rgba(255,255,255,.1);border-left:3px solid #BFE3D6;text-align:left;font-size:.92rem;line-height:1.45;color:#F2EAFB}' +
+    '.fb-ovc .fb-cn b{color:#CDEFE2}' +
+    '@media (max-width:600px){.fb-ovc .fb-cn{font-size:.86rem;padding:.45rem .6rem;margin-bottom:.5rem}}' +
+    '.fb-season .fb-cards > li{display:flex;flex-direction:column;align-items:flex-start}.fb-season .fb-cards > li > .fb-card{flex:1 1 auto;height:auto}' +
+    '@media (max-width:600px){.fb-ov{padding:.6rem}.fb-ovc h3{margin-bottom:.2rem}}' +
+    '.fb-one{display:inline-block;margin:.45rem .2rem 0;font-size:.88rem;color:#FFE08A !important;text-decoration:underline;text-underline-offset:3px}' +
     '.fb-chaps{margin:0;padding:0 .2rem}.fb-chaps ol{list-style:none;margin:.3rem 0 0;padding:0;display:flex;flex-wrap:wrap;gap:.35rem}' +
     '.fb-chaps h3{margin:.2rem 0 0;font:600 .8rem/1.3 "IBM Plex Mono",monospace;letter-spacing:.06em;text-transform:uppercase;color:#D9C8F0}' +
     '.fb-chaps button{min-height:40px;padding:.3rem .75rem;border-radius:999px;border:1px solid rgba(255,255,255,.18);background:transparent;color:#F2EAFB;font:500 .86rem/1.2 Lora,Georgia,serif;cursor:pointer}' +
     '.fb-chaps button[aria-current="true"]{background:rgba(247,201,139,.2);border-color:#F7C98B;color:#FFF3D6}' +
     '.fb-chaps button:focus-visible{outline:3px solid #C9B6F2;outline-offset:2px}' +
-    '.fb-ov{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;padding:1rem;background:linear-gradient(180deg,rgba(24,18,40,.35),rgba(24,18,40,.78));text-align:center;overflow:auto}' +
+    '.fb-ov{position:absolute;inset:0;display:flex;align-items:flex-start;justify-content:flex-start;padding:1rem;background:linear-gradient(180deg,rgba(24,18,40,.35),rgba(24,18,40,.78));text-align:center;overflow:auto}' +
     '.fb-ov[hidden]{display:none}' +
-    '.fb-ovc{max-width:34rem}.fb-ovc h3{margin:0 0 .3rem;font:600 clamp(1.2rem,4vw,1.8rem)/1.15 Fraunces,Georgia,serif;color:#FFF3D6}' +
+    '.fb-ovc{max-width:34rem;margin:auto}.fb-ovc h3{margin:0 0 .3rem;font:600 clamp(1.2rem,4vw,1.8rem)/1.15 Fraunces,Georgia,serif;color:#FFF3D6}' +
     '.fb-ovc p{margin:.2rem auto .7rem;color:#F2EAFB;font-size:.98rem;line-height:1.45}' +
     '.fb-ovc .fb-k{font:500 .75rem/1.3 "IBM Plex Mono",monospace;letter-spacing:.08em;text-transform:uppercase;color:#F7C98B;margin:0 0 .3rem}' +
     '.fb-ovc .fb-row{display:flex;gap:.5rem;justify-content:center;flex-wrap:wrap}' +
@@ -1372,7 +1390,7 @@
     var q = {}; try { location.search.replace(/^\?/, '').split('&').forEach(function (kv) { var p = kv.split('='); if (p[0]) q[decodeURIComponent(p[0])] = decodeURIComponent(p[1] || ''); }); } catch (e) {}
     var rate = clamp(parseFloat(q.rate) || 1, 0.25, 32), mem = memGet();
     var id = /^s\d+e\d+$/.test(q.ep || '') ? q.ep : (opts.ep || mem.last || 's1e1');
-    var P = { host: host, id: id, ep: null, stage: null, dir: null, raf: 0, last: 0, errors: 0, playing: false, started: false, voices: mem.voices !== false, music: mem.music !== false, rate: rate, ch: 0 };
+    var P = { host: host, id: id, ep: null, stage: null, dir: null, raf: 0, last: 0, errors: 0, playing: false, started: false, voices: mem.voices !== false, music: mem.music !== false, bright: mem.bright === true, one: false, oneCh: 0, oneFirst: q.one === '1', rate: rate, ch: 0 };
     host.classList.add('fb-player');
     host.innerHTML =
       '<div class="fb-head"><h2 class="fb-title">Frequency Buddies</h2><p class="fb-chap" aria-live="off"></p></div>' +
@@ -1387,6 +1405,7 @@
         '<span class="fb-sp"></span>' +
         '<button type="button" class="fb-b fb-voice" aria-pressed="true">🗣️<span class="fb-lbl"> Voices</span> <span class="fb-st">on</span></button>' +
         '<button type="button" class="fb-b fb-mus" aria-pressed="true">🎵<span class="fb-lbl"> Music</span> <span class="fb-st">on</span></button>' +
+        '<button type="button" class="fb-b fb-flash" aria-pressed="false" hidden>⚡<span class="fb-lbl"> Flashes</span> <span class="fb-st">soft</span></button>' +
         '<button type="button" class="fb-b fb-full" aria-label="Full screen" title="Full screen (F)">⛶<span class="fb-lbl"> Full screen</span></button>' +
       '</div>' +
       '<div class="fb-chaps"><h3>Chapters</h3><ol></ol></div>' +
@@ -1394,7 +1413,7 @@
       '<p class="fb-sr fb-live" aria-live="polite"></p>';
     var $ = function (s) { return host.querySelector(s); };
     var cv = $('.fb-cv'), g = cv.getContext('2d'), stageEl = $('.fb-stage'), capEl = $('.fb-cap'), whoEl = $('.fb-who'), lineEl = $('.fb-line'), fill = $('.fb-fill'), trackEl = $('.fb-track'), timeEl = $('.fb-time');
-    var playBtn = $('.fb-play'), vBtn = $('.fb-voice'), mBtn = $('.fb-mus'), startOv = $('.fb-start'), endOv = $('.fb-end'), chapEl = $('.fb-chap'), live = $('.fb-live');
+    var playBtn = $('.fb-play'), vBtn = $('.fb-voice'), mBtn = $('.fb-mus'), fBtn = $('.fb-flash'), startOv = $('.fb-start'), endOv = $('.fb-end'), chapEl = $('.fb-chap'), live = $('.fb-live');
     var W = 0, H = 0, DPR = 1;
     function resize() {
       var r = stageEl.getBoundingClientRect(); DPR = Math.min(2, window.devicePixelRatio || 1);
@@ -1406,10 +1425,18 @@
       vBtn.setAttribute('aria-pressed', String(P.voices)); vBtn.querySelector('.fb-st').textContent = P.voices ? 'on' : 'off'; vBtn.setAttribute('aria-label', P.voices ? 'Voices are on. Turn the voices off' : 'Voices are off. Turn the voices on');
       mBtn.setAttribute('aria-pressed', String(P.music)); mBtn.querySelector('.fb-st').textContent = P.music ? 'on' : 'off'; mBtn.setAttribute('aria-label', P.music ? 'Music and sounds are on. Turn them off' : 'Music and sounds are off. Turn them on');
       playBtn.textContent = P.playing ? '❚❚ Pause' : '▶ Play'; playBtn.setAttribute('aria-label', P.playing ? 'Pause' : 'Play');
+      fBtn.setAttribute('aria-pressed', String(P.bright)); fBtn.querySelector('.fb-st').textContent = P.bright ? 'bright' : 'soft';
+      fBtn.setAttribute('aria-label', P.bright ? 'Lightning shows as bright flashes. Switch to a soft glow' : 'Lightning shows as a soft glow. Switch to bright flashes');
       if (!voiceOk()) { vBtn.title = P.rate !== 1 ? 'Voices are off while the story plays fast' : 'This device has no voices to read with, so the captions tell the story'; }
+      // say it on the button itself, not only in a hover tip: no recordings and no device voices means captions only
+      var canVoice = !!CL.ready[P.id] || (VO.ok && vlist().length > 0);
+      if (P.voices && P.rate === 1 && CL.ready[P.id] === false && !canVoice) {
+        vBtn.querySelector('.fb-st').textContent = 'captions only';
+        vBtn.setAttribute('aria-label', 'Voices are not available on this device, so the captions tell the story');
+      }
     }
     function voiceOk() { return (VO.ok || CL.ready[P.id]) && P.rate === 1; }
-    function save() { var m = memGet(); m.last = P.id; m.pos = m.pos || {}; m.pos[P.id] = { ch: P.ch }; m.voices = P.voices; m.music = P.music; memSet(m); }
+    function save() { var m = memGet(); m.last = P.id; m.pos = m.pos || {}; m.pos[P.id] = { ch: P.ch }; m.voices = P.voices; m.music = P.music; m.bright = P.bright; memSet(m); }
     function setCaption(who, text, b) {
       capEl.setAttribute('data-who', who || '');
       var nm = who === 'scene' ? '' : who === 'narrator' ? 'Narrator' : PALS[who] ? PALS[who].name : GUESTS[who] ? (P.stage && P.stage.guests[who] ? P.stage.guests[who].name : GUESTS[who].name) : '';
@@ -1429,7 +1456,7 @@
       onMusic: function (m) { auMood(m); },
       onWeather: function (w) { auWeather(w); },
       onChapter: function (ch) { P.ch = ch; renderChapter(); if (P.started) save(); },
-      onEnd: function () { P.playing = false; stopLoop(); syncBtns(); showEnd(); var m = memGet(); if (m.pos) delete m.pos[P.id]; m.watched = m.watched || {}; m.watched[P.id] = 1; memSet(m); auMood('none'); }
+      onEnd: function () { P.one = false; P.playing = false; stopLoop(); syncBtns(); showEnd(); var m = memGet(); if (m.pos) delete m.pos[P.id]; m.watched = m.watched || {}; m.watched[P.id] = 1; memSet(m); auMood('none'); }
     };
     function renderChapter() {
       var ep = P.ep; if (!ep) return;
@@ -1446,7 +1473,25 @@
       P.raf = requestAnimationFrame(loop);
       var dt = P.last ? (now - P.last) / 1000 : 0.016; P.last = now; dt = clamp(dt, 0, 0.06);
       try { P.dir.tick(dt * P.rate); } catch (e) { P.errors++; if (window.console) console.error('buddies tick', e); }
+      if (P.one && !P.dir.ended && P.dir.chapterAt() !== P.oneCh) { chapterBreak(P.dir.chapterAt()); return; }
       paint(dt * P.rate); progress();
+    }
+    function chMins(i) { var e = estimate(P.ep).chapters[i]; return e ? Math.max(1, Math.round(e.dur / 60)) : 2; }
+    function oneLabel(i) { var n = chMins(i); return 'Watch one chapter (about ' + n + ' minute' + (n === 1 ? '' : 's') + ')'; }
+    function playOne(ch) { P.one = true; P.oneCh = ch; goChapter(ch); }
+    // one chapter is done: pause at the start of the next one, and offer it (or the rest)
+    function chapterBreak(next) {
+      var done = P.oneCh; P.one = false; pause();
+      P.dir.seekChapter(next); P.ch = next; renderChapter(); save(); paint(0); progress();
+      var ep = P.ep;
+      endOv.innerHTML = '<div class="fb-ovc"><p class="fb-k">End of chapter ' + (done + 1) + ' · ' + esc(ep.chapters[done].title) + '</p><h3>A good place to stop</h3>' +
+        '<p>Your place is saved in this browser, so you can come back to chapter ' + (next + 1) + ' anytime.</p><div class="fb-row">' +
+        '<button type="button" class="fb-b is-main fb-one-next">▶ Next chapter (about ' + chMins(next) + ' min)</button>' +
+        '<button type="button" class="fb-b fb-rest">Keep watching</button></div></div>';
+      endOv.querySelector('.fb-one-next').addEventListener('click', function () { playOne(next); });
+      endOv.querySelector('.fb-rest').addEventListener('click', function () { endOv.hidden = true; play(); });
+      endOv.hidden = false; live.textContent = 'End of chapter ' + (done + 1) + '. Paused.';
+      var f = endOv.querySelector('.fb-one-next'); if (f) try { f.focus({ preventScroll: true }); } catch (e) {}
     }
     function startLoop() { if (!P.raf) { P.last = 0; P.raf = requestAnimationFrame(loop); } }
     function stopLoop() { if (P.raf) cancelAnimationFrame(P.raf); P.raf = 0; }
@@ -1481,6 +1526,7 @@
     $('.fb-prev').addEventListener('click', prevChapter);
     $('.fb-nextc').addEventListener('click', nextChapter);
     vBtn.addEventListener('click', function () { P.voices = !P.voices; if (!P.voices) vstop(); else if (P.playing) P.dir.restartLine(); syncBtns(); save(); });
+    fBtn.addEventListener('click', function () { P.bright = !P.bright; if (P.stage) P.stage.bright = P.bright; syncBtns(); save(); });
     mBtn.addEventListener('click', function () { P.music = !P.music; if (P.music) { auEnsure(); auOn(true); if (P.dir) { auMood(P.dir.music); auWeather(P.stage.weather); } } else auOn(false); syncBtns(); save(); });
     $('.fb-full').addEventListener('click', function () {
       var fs = document.fullscreenElement || document.webkitFullscreenElement;
@@ -1513,15 +1559,27 @@
 
     function showStart() {
       var ep = P.ep, est = estimate(ep), m = memGet(), pos = m.pos && m.pos[P.id], ch = pos && pos.ch > 0 && pos.ch < ep.chapters.length ? pos.ch : 0;
-      startOv.innerHTML = '<div class="fb-ovc"><p class="fb-k">Season ' + (ep.season || 1) + ' · Episode ' + (ep.number || 1) + ' · about ' + mins(est.total) + '</p>' +
-        '<h3>' + esc(ep.title) + '</h3><p class="fb-hide-s">' + esc(ep.blurb) + '</p><div class="fb-row">' +
-        (ch ? '<button type="button" class="fb-b is-main fb-resume">▶ Resume: chapter ' + (ch + 1) + '</button><button type="button" class="fb-b fb-begin">From the beginning</button>'
-            : '<button type="button" class="fb-b is-main fb-begin">▶ Play the episode</button>') + '</div></div>';
+      var note = NOTES[P.id] || (hasStorm() ? 'A gentle storm with thunder. Lightning shows as a soft glow.' : '');
+      var oneBtn = '<button type="button" class="fb-b' + (P.oneFirst ? ' is-main' : '') + ' fb-onech">' + (P.oneFirst ? '▶ ' : '') + oneLabel(ch) + '</button>';
+      startOv.innerHTML = '<div class="fb-ovc"><p class="fb-k">Season ' + (ep.season || 1) + ' · Episode ' + (ep.number || 1) + ' · about ' + mins(est.total) + ' · ' + ep.chapters.length + ' chapters</p>' +
+        '<h3>' + esc(ep.title) + '</h3><p class="fb-hide-s">' + esc(ep.blurb) + '</p>' +
+        (note ? '<p class="fb-cn"><b>Before you watch:</b> ' + esc(note) + (hasStorm() ? ' <span class="fb-hide-s">You can turn on bright flashes with the ⚡ Flashes button.</span>' : '') + soundLine() + '</p>' : '') +
+        '<div class="fb-row">' +
+        (P.oneFirst ? oneBtn : '') +
+        (ch ? '<button type="button" class="fb-b' + (P.oneFirst ? '' : ' is-main') + ' fb-resume">▶ Resume: chapter ' + (ch + 1) + '</button><button type="button" class="fb-b fb-begin">From the beginning</button>'
+            : '<button type="button" class="fb-b' + (P.oneFirst ? '' : ' is-main') + ' fb-begin">▶ Play the episode</button>') +
+        (P.oneFirst ? '' : oneBtn) + '</div></div>';
       var rb = startOv.querySelector('.fb-resume'), bb = startOv.querySelector('.fb-begin');
+      startOv.querySelector('.fb-onech').addEventListener('click', function () { playOne(ch); });
       if (rb) rb.addEventListener('click', function () { goChapter(ch); });
       bb.addEventListener('click', function () { P.dir.seek(0); P.ch = 0; renderChapter(); play(); });
       startOv.hidden = false;
     }
+    function soundLine() {
+      var what = P.voices && P.music ? 'Voices, music and sounds' : P.voices ? 'Voices' : P.music ? 'Music and sounds' : '';
+      return what ? ' <span class="fb-hide-s">' + what + ' will play; the buttons below turn them off anytime.</span>' : ' <span class="fb-hide-s">Voices and music are off; captions tell the story.</span>';
+    }
+    function hasStorm() { return !!(P.ep && P.ep.chapters.some(function (c) { return c.beats.some(function (b) { return b.weather === 'storm'; }); })); }
     function showEnd() {
       var ep = P.ep, nid = nextIdOf(P.id), nep = nid ? B.episodes[nid] : null, ce = nid ? catalogEntry(nid) : null;
       var teaser = ep.next || (nep && nep.blurb) || '', ntitle = nep ? nep.title : ce ? ce.title : '';
@@ -1537,7 +1595,8 @@
       if (!ep) { startOv.innerHTML = '<div class="fb-ovc"><p class="fb-k">Coming soon</p><h3>This episode isn’t here yet</h3><p>The pals are still rehearsing it. Try another one below.</p><a class="fb-b is-main" href="/frequency-buddies.html?ep=s1e1">▶ Watch episode 1</a></div>'; return; }
       P.says = []; ep.chapters.forEach(function (c) { c.beats.forEach(function (b) { if (b.say) P.says.push(b); }); });
       clipMap(P.id).then(function (m) { if (m) fxLoad(); clipPrefetch(P.id, P.says, 0, 3); syncBtns(); });
-      P.ep = ep; P.stage = makeStage({ reduced: stillNow() }); P.stage.onSound = function (k, who) { if (P.music) auSound(k, who); };
+      P.ep = ep; P.stage = makeStage({ reduced: stillNow(), bright: P.bright });
+      fBtn.hidden = !hasStorm(); P.stage.onSound = function (k, who) { if (P.music) auSound(k, who); };
       P.dir = makeDirector(P.stage, ep, hooks);
       $('.fb-title').textContent = ep.title;
       cv.setAttribute('aria-label', 'Animated story: ' + ep.title + '. ' + ep.blurb);
@@ -1566,15 +1625,17 @@
     CATALOG.forEach(function (s) {
       html += '<div class="fb-season"><div class="fb-season-h"><span class="fb-badge">Season ' + s.season + '</span><h3>' + esc(s.name.replace(/^Season \d+: /, '')) + '</h3></div><ol class="fb-cards">';
       s.eps.forEach(function (e) { html += '<li data-ep="' + e.id + '"></li>'; });
-      html += '</ol><p class="fb-more">More seasons are on the way. Each episode is about 15 minutes, with captions and gentle voices.</p></div>';
+      html += '</ol><p class="fb-more">More seasons are on the way. Each episode runs about 16 to 17 minutes, in short chapters of about 2 to 4 minutes, with captions and gentle voices. You can watch one chapter at a time.</p></div>';
     });
     host.innerHTML = html;
     function card(e) {
       var li = host.querySelector('li[data-ep="' + e.id + '"]'), ep = B.episodes[e.id], now = opts.current === e.id;
       if (!li) return;
-      var inner = '<span class="fb-thumb" aria-hidden="true">' + e.emoji + '</span><span class="fb-num">Episode ' + e.n + (ep ? ' · ' + mins(estimate(ep).total) : '') + '</span><h4>' + esc(ep ? ep.title : e.title) + '</h4>' +
+      var est = ep ? estimate(ep) : null, one = est ? Math.max(1, Math.round(est.chapters[0].dur / 60)) : 2;
+      var inner = '<span class="fb-thumb" aria-hidden="true">' + e.emoji + '</span><span class="fb-num">Episode ' + e.n + (ep ? ' · ' + mins(est.total) + ' · ' + ep.chapters.length + ' chapters' : '') + '</span><h4>' + esc(ep ? ep.title : e.title) + '</h4>' +
         '<span class="fb-world">🗺️ ' + esc(e.world) + '</span><p>' + esc(ep ? ep.blurb : e.theme + '.') + '</p><span class="fb-meta">' + (ep ? (now ? 'Now playing' : '▶ Watch now') : 'Coming soon') + '</span>';
-      li.innerHTML = ep && !now ? '<a class="fb-card" href="/frequency-buddies.html?ep=' + e.id + '">' + inner + '</a>' : '<div class="fb-card' + (ep ? ' is-now' : ' is-soon') + '">' + inner + '</div>';
+      li.innerHTML = (ep && !now ? '<a class="fb-card" href="/frequency-buddies.html?ep=' + e.id + '">' + inner + '</a>' : '<div class="fb-card' + (ep ? ' is-now' : ' is-soon') + '">' + inner + '</div>') +
+        (ep ? '<a class="fb-one" href="/frequency-buddies.html?ep=' + e.id + '&amp;one=1">Watch one chapter (about ' + one + ' minute' + (one === 1 ? '' : 's') + ')</a>' : '');
       if (ep) thumb(li, ep);
     }
     CATALOG.forEach(function (s) { s.eps.forEach(card); });

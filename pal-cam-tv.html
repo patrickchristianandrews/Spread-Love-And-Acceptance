@@ -48,6 +48,16 @@
   html.tv-quiet, html.tv-quiet * { cursor: none !important; }
   .tv-hint { position: fixed; right: 12px; top: 12px; z-index: 10001; padding: .4rem .8rem; border-radius: 999px; background: rgba(20,14,34,.7); color: #fff; font: 500 .85rem Lora, Georgia, serif; opacity: 0; transition: opacity .4s; pointer-events: none; }
   .tv-hint.is-on { opacity: 1; }
+  /* touch controls: always there on phones and tablets; on a computer they show when the mouse moves */
+  .tv-ctl { position: absolute; left: 50%; top: max(10px, env(safe-area-inset-top)); transform: translateX(-50%); z-index: 3; display: flex; gap: .45rem; flex-wrap: wrap; justify-content: center; max-width: calc(100% - 20px); transition: opacity .4s; }
+  .tv-ctl[hidden] { display: none; }
+  .tv-ctl button { min-height: 48px; min-width: 48px; padding: .45rem .95rem; border-radius: 999px; border: 1.5px solid rgba(255,248,238,.7); background: rgba(28,20,44,.78); color: #FFF8EE; font: 600 1rem/1.1 Lora, Georgia, serif; cursor: pointer; touch-action: manipulation; }
+  .tv-ctl button[aria-pressed="false"] { border-style: dashed; color: #E2D9F2; }
+  .tv-ctl button:focus-visible { outline: 3px solid #F2CAD5; outline-offset: 2px; }
+  .tv-ctl .tv-exit { background: #FFF8EE; color: #3C3350; border-color: #FFF8EE; }
+  html.tv-quiet.tv-fine .tv-ctl { opacity: 0; pointer-events: none; }
+  .pc-ov.is-tv .tv-hint { position: absolute; top: auto; bottom: 12vh; right: auto; left: 50%; transform: translateX(-50%); max-width: 90vw; text-align: center; font-size: 1rem; z-index: 3; }
+  @media (max-width: 420px) { .tv-ctl button { padding: .45rem .75rem; font-size: .95rem; } }
 </style>
 <!-- seo:start -->
 <link rel="canonical" href="https://spreadloveandacceptance.com/pal-cam-tv.html">
@@ -88,7 +98,9 @@
     </ul>
   </details>
   <ul>
-    <li>Press <b>Esc</b> (or <b>Back</b> on a TV remote) to come back to this screen.</li>
+    <li><b>Sound starts on:</b> soft barks, little chimes and casino-style sounds (coins, cards, dice and a small bell), and quiet sounds of the place, like birds or waves. Music is off unless you turn it on.</li>
+    <li>On a phone or tablet, buttons for <b>Sound</b>, <b>Captions</b>, <b>Music</b> and <b>Exit</b> stay at the top of the screen.</li>
+    <li>With a keyboard, press <b>Esc</b> (or <b>Back</b> on a TV remote) to come back to this screen.</li>
     <li>Press <b>C</b> to show or hide the captions, <b>S</b> to turn the pups’ soft sounds on or off, and <b>M</b> for gentle background music.</li>
     <li>For all-day use, plug the device in and turn off its sleep and screen saver too.</li>
   </ul>
@@ -130,9 +142,32 @@
 
   function say(t) { hint.textContent = t; hint.classList.add('is-on'); clearTimeout(hintT); hintT = setTimeout(function () { hint.classList.remove('is-on'); }, 3500); }
   function ov() { return document.querySelector('.pc-ov'); }
+  var fine = window.matchMedia && window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+  if (fine) document.documentElement.classList.add('tv-fine');
+  // on-screen controls (a phone has no keyboard): they live inside the cam's overlay, the only thing showing while it runs
+  var ctl = document.createElement('div'); ctl.className = 'tv-ctl'; ctl.setAttribute('role', 'toolbar'); ctl.setAttribute('aria-label', 'Pal Cam TV controls'); ctl.hidden = receiver;
+  ctl.innerHTML = '<button type="button" class="tv-snd" aria-pressed="true"></button><button type="button" class="tv-caps" aria-pressed="true"></button><button type="button" class="tv-mus" aria-pressed="false"></button><button type="button" class="tv-exit">✕ Exit</button>';
+  function sndIsOn() { return window.TOLPalsCamSounds ? window.TOLPalsCamSounds.on() : (function () { try { return localStorage.getItem('tol-palcam-sound') !== 'off' && !(window.TOLQuiet && window.TOLQuiet.on && window.TOLQuiet.on()); } catch (e) { return true; } })(); }
+  function musIsOn() { return window.TOLPalsCamMusic ? window.TOLPalsCamMusic.on() : false; }
+  function syncCtl() {
+    var so = sndIsOn(), mo = musIsOn(), b = ctl.querySelector('.tv-snd'), c = ctl.querySelector('.tv-caps'), m = ctl.querySelector('.tv-mus');
+    b.textContent = (so ? '🔊' : '🔇') + ' Sound ' + (so ? 'on' : 'off'); b.setAttribute('aria-pressed', String(so));
+    c.textContent = '💬 Captions ' + (capsOff ? 'off' : 'on'); c.setAttribute('aria-pressed', String(!capsOff));
+    m.textContent = '🎵 Music ' + (mo ? 'on' : 'off'); m.setAttribute('aria-pressed', String(mo)); m.hidden = !window.TOLPalsCamMusic;
+  }
+  function toggleSound() { if (!window.TOLPalsCamSounds) return; var so = window.TOLPalsCamSounds.toggle(); say(so ? 'Sounds on' : 'Sounds off'); syncCtl(); }
+  function toggleMusic() { if (!window.TOLPalsCamMusic) return; var mo = window.TOLPalsCamMusic.toggle(); say(mo ? 'Music on' : 'Music off'); syncCtl(); }
+  function toggleCaps() { capsOff = !capsOff; styleCam(); say(capsOff ? 'Captions hidden' : 'Captions showing'); syncCtl(); }
+  ctl.querySelector('.tv-snd').addEventListener('click', toggleSound);
+  ctl.querySelector('.tv-caps').addEventListener('click', toggleCaps);
+  ctl.querySelector('.tv-mus').addEventListener('click', toggleMusic);
+  ctl.querySelector('.tv-exit').addEventListener('click', function () { end(); });
   function styleCam() {
     var o = ov(); if (!o) return;
     o.classList.add('is-tv');
+    if (ctl.parentNode !== o) o.appendChild(ctl);
+    if (hint.parentNode !== o) o.appendChild(hint);
+    syncCtl();
     var cap = o.querySelector('.pc-cap'); if (cap) cap.classList.toggle('tv-off', capsOff);
   }
   function keepAwake() {
@@ -157,8 +192,8 @@
     clearInterval(timer); timer = setInterval(function () { freshScene(); keepAwake(); }, SCENE_MS);
     // sound stays on by default; say so once at the start, and how to turn it off
     var sndOn = window.TOLPalsCamSounds ? window.TOLPalsCamSounds.on() : (function () { try { return localStorage.getItem('tol-palcam-sound') !== 'off' && !(window.TOLQuiet && window.TOLQuiet.on && window.TOLQuiet.on()); } catch (e) { return true; } })();
-    if (sndOn && !soundSaid) { soundSaid = true; say('Sound is on. Press S to turn it off. Press Esc to stop.'); clearTimeout(hintT); hintT = setTimeout(function () { hint.classList.remove('is-on'); }, 7000); }
-    else say('Press Esc to stop');
+    if (sndOn && !soundSaid) { soundSaid = true; say(fine ? 'Sound is on: soft barks, chimes and place sounds. Press S or use 🔊 Sound at the top to turn it off. Press Esc to stop.' : 'Sound is on: soft barks, chimes and place sounds. Tap 🔊 Sound on at the top to turn it off, or ✕ Exit to stop.'); clearTimeout(hintT); hintT = setTimeout(function () { hint.classList.remove('is-on'); }, 7000); }
+    else say(fine ? 'Press Esc to stop' : 'Tap ✕ Exit at the top to stop');
     quiet();
   }
   function end() {
@@ -168,6 +203,7 @@
     if (lock) { lock.release().catch(function () {}); lock = null; }
     if (document.fullscreenElement && document.exitFullscreen) document.exitFullscreen().catch(function () {});
     document.documentElement.classList.remove('tv-quiet');
+    if (hint.parentNode !== document.body) document.body.appendChild(hint);
     start.hidden = false; go.focus();
   }
   function quiet() {
@@ -182,15 +218,16 @@
   window.addEventListener('keydown', function (e) {
     if (!on) return;
     if (e.key === 'Escape' || e.key === 'GoBack' || e.key === 'BrowserBack') { e.preventDefault(); e.stopImmediatePropagation(); end(); }
-    else if ((e.key === 'm' || e.key === 'M') && window.TOLPalsCamMusic) { var mo = window.TOLPalsCamMusic.toggle(); say(mo ? 'Music on' : 'Music off'); e.stopImmediatePropagation(); }
-    else if ((e.key === 's' || e.key === 'S') && window.TOLPalsCamSounds) { var so = window.TOLPalsCamSounds.toggle(); say(so ? 'Sounds on' : 'Sounds off'); e.stopImmediatePropagation(); }
-    else if (e.key === 'c' || e.key === 'C') { capsOff = !capsOff; styleCam(); say(capsOff ? 'Captions hidden' : 'Captions showing'); e.stopImmediatePropagation(); }
+    else if ((e.key === 'm' || e.key === 'M') && window.TOLPalsCamMusic) { toggleMusic(); e.stopImmediatePropagation(); }
+    else if ((e.key === 's' || e.key === 'S') && window.TOLPalsCamSounds) { toggleSound(); e.stopImmediatePropagation(); }
+    else if (e.key === 'c' || e.key === 'C') { toggleCaps(); e.stopImmediatePropagation(); }
   }, true);
   // if the cam gets closed some other way (a click outside the stage), bring it straight back
   setInterval(function () { if (on && cam() && !cam().isOpen()) { cam().open({ noNote: true }); styleCam(); } }, 2000);
   document.addEventListener('visibilitychange', function () { if (!document.hidden) keepAwake(); });
   document.addEventListener('fullscreenchange', function () { if (on && !document.fullscreenElement) say('Press F11 (or Ctrl+Cmd+F on a Mac) for full screen'); });
   window.addEventListener('pointermove', quiet, { passive: true });
+  window.addEventListener('pointerdown', quiet, { passive: true });
   if (!receiver && /[?&]autostart=1\b/.test(location.search)) window.addEventListener('load', function () { setTimeout(begin, 300); });
 
   /* ---------- Cast ----------
