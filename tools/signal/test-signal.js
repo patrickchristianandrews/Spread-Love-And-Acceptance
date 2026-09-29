@@ -268,5 +268,51 @@ WORK.forEach(t=>{ const an=E.analyze(t,{channel:"chat"}); W_ALL.forEach(W=>{ con
   r.changes.forEach(c=>ok(c.why && c.why.length>20, `"${t}": change ${c.id} has no reason`)); });
   an.staticIds.forEach(id=>ok(E.FBY[id].what && E.FBY[id].fix, `feature ${id} missing what/fix`)); });
 
+// ---------- a first-time tester's sentences ----------
+const TESTER = [
+  // sarcasm, put-downs, passive jabs and shutting the door (the shared list, same as the other two tools)
+  {t:"Wow, nice of you to finally show up.", has:["sarcasm"], gone:["nice of you","finally"]},
+  {t:"Wow, thanks for nothing.", has:["sarcasm"], gone:["thanks for nothing"], notFound:["appreciation"]},
+  {t:"SOME of us like having clean dishes 🙂", has:["passiveag"], gone:["some of us","🙂"], keep:["clean dishes"]},
+  {t:"must be nice", has:["sarcasm"], gone:["must be nice"]},
+  {t:"no need to be rude", has:["passiveag"], gone:["no need"]},
+  {t:"lol ok whatever you say 🙄", has:["contempt"], gone:["whatever","🙄"]},
+  {t:"I guess I'll plan the trip again since nobody else will", has:["passiveag"], gone:["nobody else","i guess"]},
+  {t:"Your sister always remembers my birthday.", has:["compare"], gone:["sister","always"], keep:["my birthday"]},
+  {t:"…", has:["stonewall"], nonEmpty:true},
+  {t:"not now", has:["stonewall"], keep:["[a time]"]},
+  {t:"I just can't do this right now", has:["stonewall"], keep:["[a time]"]},
+  {t:"I can't do this right now. Can we talk at 8?", has:["pause"], notFound:["stonewall"]},
+  {t:"Per my last email, I need this ASAP.", has:["pointed"], gone:["per my last","asap"]},
+  // rewrites that used to break
+  {t:"I love you, but I need you to hear me: I can't keep doing all the school pickups", keep:["I love you","school pickups"], gone:["but.","Could you hear me"]},
+  {t:"You need to pick up the kids at 5 rather than be late", keep:["pick up the kids at 5"], gone:["rather than be late"]},
+  {t:"It's gross.", gone:["gross"]},
+  {t:"Did you even read what I wrote", changed:true, gone:["even"]},
+  {t:"You always leave the lights on.", gone:["always"]},
+  {t:"hey", exact:"hey"},
+  {t:"Thanks for dinner 😊", exact:"Thanks for dinner 😊"},
+  {t:"Can you grab milk on your way home", exact:"Can you grab milk on your way home"},
+  {t:"asdkjh qwe zzkx", gibberish:true}
+];
+TESTER.forEach(c=>{
+  const an=E.analyze(c.t,{channel:"text"});
+  (c.has||[]).forEach(id=>ok(an.found[id], `tester "${c.t}": expected ${id}, found ${Object.keys(an.found).join(",")}`));
+  (c.notFound||[]).forEach(id=>ok(!an.found[id], `tester "${c.t}": did not expect ${id}`));
+  W_ALL.forEach(W=>{ const r=E.rewrite(an,{wirings:W, channel:"text"});
+    if(c.exact) ok(r.main===c.exact, `tester "${c.t}" [${W}]: expected your exact words back, got "${r.main}"`);
+    if(c.gibberish) ok(r.gibberish && /doesn't look like a sentence/.test(r.main), `tester "${c.t}": gibberish should be named, got "${r.main}"`);
+    if(c.nonEmpty) ok(r.main && r.main.trim(), `tester "${c.t}" [${W}]: empty rewrite`);
+    if(c.changed) ok(!r.unchanged, `tester "${c.t}" [${W}]: flagged, so it must not say nothing needed changing`);
+    (c.keep||[]).forEach(k=>ok(lowIncl(r.main,k), `tester "${c.t}" [${W}]: "${k}" dropped in "${r.main}"`));
+    (c.gone||[]).forEach(g=>ok(!lowIncl(r.main,g), `tester "${c.t}" [${W}]: "${g}" kept in "${r.main}"`));
+    ok(!/\b(?:could|can|would|will) you\b[^.?!]*\.$/i.test(r.main.split(/(?<=[.?!])\s+/).filter(x=>/^(?:could|can|would|will) you\b/i.test(x)).join(" ")) , `tester "${c.t}" [${W}]: a question ends with "." in "${r.main}"`);
+    ok(!/\p{Extended_Pictographic}\.$/u.test(r.main), `tester "${c.t}" [${W}]: period after an emoji in "${r.main}"`);
+  });
+});
+// a listener's reading never quotes a word that isn't in the sentence
+{ const an=E.analyze("Could you clean up a bit?",{channel:"text"}); const rd=E.readings(an,["alex"],"text").alex||[];
+  rd.forEach(e=>ok(!/supportive/i.test(e.h) || /supportive/i.test("Could you clean up a bit?"), `alexithymia reading quotes "supportive": ${e.h}`)); }
+
 console.log(`${FIX.length} phrase fixtures + ${WORK.length} workplace review cases, ${pass} checks passed, ${fail} failed`);
 if(fail){ console.log(errs.slice(0,40).join("\n")); process.exit(1); }

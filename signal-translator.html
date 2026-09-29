@@ -316,6 +316,8 @@ q.w{quotes:"\201C" "\201D";font-family:var(--mono);font-size:.8rem;background:co
   .box{break-inside:avoid;border-color:#bbb}
 }
 @media (prefers-reduced-motion:reduce){.meter .fill{transition:none}}
+.lookfor{margin-top:18px}.lookfor summary{cursor:pointer;font-family:var(--display);font-weight:600;min-height:44px;display:flex;align-items:center}
+.lookfor .lf-list{padding-left:1.1rem}.lookfor .lf-list li{margin:0 0 .6rem}.lookfor .lf-ex{color:var(--muted)}.lookfor .lf-why{font-size:.94rem}.lookfor .lf-h{font-size:1rem;margin:1rem 0 .4rem}.lookfor .lf-note{font-size:.9rem;color:var(--muted)}
 </style>
 <script src="/assets/js/site.js" defer></script>
 </head>
@@ -532,33 +534,21 @@ q.w{quotes:"\201C" "\201D";font-family:var(--mono);font-size:.8rem;background:co
       </div>
     </div>
   </details>
+  <details class="panel lookfor" id="lookforBox">
+    <summary>What it looks for</summary>
+    <div id="lookfor"><p>The list of patterns appears here.</p></div>
+  </details>
   <div class="note">
     <b>What this tool is, and isn't.</b> It uses rules built from published research and lived-experience guidance, collected in <a href="wired-differently.html">Wired Differently</a>. It looks for patterns in the words, like hints, sarcasm, vague timing and labels, that commonly cause static for particular wirings. It can't hear tone, see faces or know your history, and it can't diagnose anyone. Every reading starts with "may" for a reason: people vary widely within every group. The best use is to find the question worth asking each other. It scores the wording, never the person.
   </div>
   </main>
 </div>
 
-<footer class="sitefoot">
-  The Objective Ledger &middot; spreadloveandacceptance.com
-  <div class="links">
-    <a href="index.html">Home</a>
-    <a href="about.html">About</a>
-    <a href="roadmap.html">Roadmap</a>
-    <a href="podcast-index.html">Podcast</a>
-    <a href="suite-index.html">Suite Index</a>
-    <a href="program-overview.html">Program Overview</a>
-    <a href="telemetry.html">Telemetry</a>
-    <a href="snapshot/">Snapshot</a>
-    <a href="do/">Try It</a>
-    <a href="architecture/">Architecture</a>
-    <a href="legal/terms-of-service.html">Terms of Service</a>
-    <a href="legal/privacy-policy.html">Privacy Policy</a>
-    <a href="legal/refund-policy.html">Refund Policy</a>
-  </div>
-</footer>
 
+<script src="/assets/js/message-patterns.js"></script>
 <script src="/assets/js/signal-engine.js"></script>
 <script>
+if(window.TOLPatterns) window.TOLPatterns.lookFor(document.getElementById("lookfor"), {intro:"This tool, the Carrier Wave Decoder’s tone check and the Conversation Reader all read wording with this same list, so the same words get the same reading in each. On top of it, the Translator checks the shape of a sentence: orders, hints, labels, vague timing, a missing ask. It reads words only, never tone of voice or history, so every mark is a “may land as,” not a verdict."});
 (function(){
 "use strict";
 
@@ -614,39 +604,170 @@ const ND_DIVERGENT = ["autistic","adhd","dyslexic","dyspraxic","apd","dld","tour
 const byLabel = (a,b)=>a.label.localeCompare(b.label, undefined, {sensitivity:"base"});
 const WIRING_IDS = Object.keys(NT).filter(id=>id!=="general").map(id=>({id, label:NT[id].name})).sort(byLabel).map(x=>x.id);
 
-const PRESETS = [
-  // home
-  "You need to clean your room.",
-  "Why didn't you tell me?",
-  "We need to talk.",
-  "Can you clean up a bit when you get a chance?",
-  "You never listen to me.",
-  "Fine.",
-  "Can you not leave dishes in the sink?",
-  "It's simple, just call them.",
-  "You're late again.",
-  "It would be nice if someone took the trash out.",
-  "Can you grab milk, drop off the package, and call your mom back?",
-  "If you don't clean up, I'm leaving.",
-  "Great job on dinner, but the kitchen is a mess.",
-  "Oh great, that's just perfect.",
-  "I felt hurt when you missed dinner. Could you text me by 6 if you'll be late?",
-  "Lately it's felt like you don't do the dishes and I'm sick of it. Can you actually clean for once?",
-  // work
-  "Any update?",
-  "As previously stated, the budget is final.",
-  "Can we hop on a quick call?",
-  "Can you come to my office?",
-  "Circling back on this.",
-  "Going forward, please send drafts to me first.",
-  "Hey, can you take a look at this when you get a sec? No rush.",
-  "Just checking in.",
-  "ok",
-  "Per my last message, the deck is due EOD.",
-  "Please do this ASAP.",
-  "Reminder: timesheets are due Friday. Please also update the tracker, reply to the funder, and book the room for Tuesday.",
-  "Why is this still not done??"
-].map(t=>({value:t, label:t})).sort(byLabel);
+/* Built-in examples, grouped by relationship (110 of them). Picking one also sets the relationship,
+   unless you already chose one. */
+const PRESET_GROUPS = [
+[
+"partner",
+"Partners",
+[
+"You never listen to me.",
+"Why didn't you tell me?",
+"We need to talk.",
+"You're late again.",
+"Can you clean up a bit when you get a chance?",
+"Fine.",
+"Can you not leave dishes in the sink?",
+"It would be nice if someone took the trash out.",
+"Great job on dinner, but the kitchen is a mess.",
+"Oh great, that's just perfect.",
+"I felt hurt when you missed dinner. Could you text me by 6 if you'll be late?",
+"Lately it's felt like you don't do the dishes and I'm sick of it. Can you actually clean for once?",
+"I love you, but I need you to hear me: I can't keep doing all the school pickups",
+"Wow, nice of you to finally show up.",
+"Must be nice to sleep in.",
+"You always leave the lights on.",
+"Did you even read what I wrote",
+"I just can't do this right now",
+"not now",
+"…",
+"k",
+"Supportive would be nice for once.",
+"Can you grab milk on your way home",
+"Thanks for dinner 😊",
+"If you don't clean up, I'm leaving.",
+"Why do you always do this?",
+"You made me feel stupid.",
+"Could we have ten minutes after dinner, phones down, just us?"
+]
+],
+[
+"family",
+"Family and kids",
+[
+"You need to clean your room.",
+"Why is your room still a mess??",
+"Your sister always remembers my birthday.",
+"How many times do I have to tell you to lock the door?",
+"Don't be mad, but I dented the car.",
+"After everything I do for you, you can't even do this.",
+"Can you grab milk, drop off the package, and call your mom back?",
+"It's gross.",
+"You should apologize to her.",
+"We'll see.",
+"Why can't you be more like your brother?",
+"Mom, I can't make Sunday this time. How about Saturday lunch?",
+"Who's hosting Thanksgiving this year?",
+"I guess I'll host again since nobody else will.",
+"Could you take the bins out by 8 on Tuesdays?"
+]
+],
+[
+"coparent",
+"Co-parents",
+[
+"You need to pick up the kids at 5 rather than be late",
+"Pickup is at 5.",
+"You always forget their homework.",
+"Can you let me know by Thursday if you're taking them this weekend?",
+"Per my last text, the dentist is Friday at 3.",
+"Whatever works for you.",
+"Last time you did this too.",
+"Could you pack their soccer bags before handoff?",
+"The kids said you let them stay up till midnight.",
+"Thanks for switching weekends with me. It really helped."
+]
+],
+[
+"friend",
+"Friends",
+[
+"lol ok whatever you say 🙄",
+"I guess I'll plan the trip again since nobody else will",
+"Must be nice.",
+"You never text me first.",
+"Any update on the cabin?",
+"Can everyone grab one job for the trip by Friday?",
+"No worries if not!",
+"I'm always the one who reaches out.",
+"Can I tell you about my week too?",
+"Hey, did I say something wrong last night?",
+"It's simple, just call them.",
+"You're so dramatic.",
+"Wow, thanks for nothing.",
+"Could you send me your share of the Airbnb by Sunday?"
+]
+],
+[
+"roommate",
+"Roommates",
+[
+"SOME of us like having clean dishes 🙂",
+"no need to be rude",
+"Can you not leave your stuff in the hall?",
+"Your boyfriend is basically living here.",
+"Who ate my leftovers?",
+"The trash is full again.",
+"Could we agree on quiet hours after 11 on weeknights?",
+"You still haven't paid the electric bill.",
+"Just saying, the bathroom could use a clean.",
+"Can you Venmo me for the internet by Friday?",
+"Could you give me a heads-up when people are staying over?",
+"hey"
+]
+],
+[
+"coworker",
+"Coworkers",
+[
+"Any update?",
+"Circling back on this.",
+"Just checking in.",
+"ok",
+"Can we hop on a quick call?",
+"Hey, can you take a look at this when you get a sec? No rush.",
+"Per my last message, the deck is due EOD.",
+"Per my last email, I need this ASAP.",
+"As previously stated, the budget is final.",
+"Why is this still not done??",
+"Did you even look at the spreadsheet?",
+"Friendly reminder: timesheets are due today.",
+"Could you send the notes by 3 so I can prep for the call?",
+"Thanks for jumping in on the client call.",
+"Mistakes were made with the budget.",
+"I need this done now."
+]
+],
+[
+"manager",
+"Managers",
+[
+"Can you come to my office?",
+"Going forward, please send drafts to me first.",
+"Please do this ASAP.",
+"Reminder: timesheets are due Friday. Please also update the tracker, reply to the funder, and book the room for Tuesday.",
+"You should have known better.",
+"We need to discuss your performance.",
+"Great presentation, but the numbers were off.",
+"Could you own the vendor follow-ups from now on?",
+"I noticed you stayed late all week. What can come off your plate?"
+]
+],
+[
+"caregiver",
+"Caring for someone",
+[
+"You never call Mom.",
+"Could you take over the pharmacy refills, starting this week?",
+"I'm doing everything for Dad and I'm exhausted.",
+"Can you not tell me how to do it?",
+"It's fine, I'll do it myself.",
+"Could you sit with her on Thursday afternoons so I can rest?"
+]
+]
+];
+PRESET_GROUPS.forEach(g=>g[2].sort((x,y)=>x.localeCompare(y, undefined, {sensitivity:"base"})));  // alphabetical inside each relationship
+const PRESETS = [].concat(...PRESET_GROUPS.map(g=>g[2].map(t=>({value:t, label:t, rel:g[0]}))));
 
 const USES = [
   {value:"after", label:"After a miss, before you answer"},
@@ -721,6 +842,16 @@ function paintWiring(who){
   $("#add"+who).hidden = ![...host.querySelectorAll(".extra")].some(x=>x.hidden);
 }
 function nm(who){ const v=$("#name"+who).value.trim(); return v||(who==="A"?"You":"Person B"); }
+// With no name typed, the speaker is "You": fix the grammar the name templates were written for ("You's wiring")
+function youFix(h){
+  if(nm("A")!=="You") return h;
+  return String(h)
+    .replace(/\bThis assumes You is settled\. It may land harder if they are not\./g,"This assumes you're settled. It may land harder if you're not.")
+    .replace(/\bYou's\b/g,"your").replace(/\bOnly You knows\b/g,"Only you know").replace(/\bWhat You (may|might)\b/g,"What you $1")
+    .replace(/\bType what You might\b/g,"Type what you might").replace(/\bYou needs\b/g,"You need").replace(/\bFor You:/g,"For you:")
+    .replace(/\bIf You is\b/g,"If you're").replace(/\bpick You\b/g,"pick you")
+    .replace(/(^|[.!?]\s+|>\s*)your\b/g,(m,p)=>p+"Your");
+}
 function listNames(set){
   const arr=[...set].map(id=>NT[id].name);
   if(!arr.length) return "";
@@ -1543,7 +1674,7 @@ function run(){
   h += '<p class="small pillars">This tool is <a href="five-pillars.html#tune-signals">Pillar IV, Tune how you send and receive</a>: know how you send, and translate across wiring so the message you meant is the one that arrives. Stuck on the wording? <a href="ask.html">Ask Professor Puddles</a>.</p>';
   h += '<div class="rfoot"><button class="go" type="button" id="addTopic">'+(useId==="now"?"Save the pause card, not this read":"Add the sentence I chose, then write the next")+'</button><button class="ghost" type="button" id="again">Try the reverse</button><button class="ghost" type="button" id="copy">Copy the full read</button><button class="ghost" type="button" id="print">Print</button><a class="ghost" href="check-ins.html" style="text-decoration:none">Check-in order</a></div>';
 
-  const R=$("#results"); R.innerHTML=h; R.hidden=false;
+  const R=$("#results"); R.innerHTML=youFix(h); R.hidden=false;
   requestAnimationFrame(()=>{ const f=R.querySelector(".fill"); if(f) f.style.width=f.dataset.w+"%"; });
   R.querySelectorAll('input[name="saypick"]').forEach(inp=>inp.addEventListener("change",()=>{
     const o=opts.find(x=>x.id===inp.value); if(!o||!lastTopic) return;
@@ -1560,7 +1691,7 @@ function run(){
     addCurrent();
     writeNext();
   });
-  $("#again").addEventListener("click",()=>{ swap(); $("#phrase").focus(); $("#msg").textContent = $("#phrase").value.trim() ? "Swapped. The reply is now the sentence. Translate again to read it the other way." : "Swapped. Type what "+nm("A")+" might say back, then translate."; });
+  $("#again").addEventListener("click",()=>{ swap(); $("#phrase").focus(); $("#msg").textContent = $("#phrase").value.trim() ? "Swapped. The reply is now the sentence. Translate again to read it the other way." : youFix("Swapped. Type what "+nm("A")+" might say back, then translate."); });
   $("#copy").addEventListener("click",()=>{
     R.querySelectorAll("details").forEach(d=>d.open=true);
     const t=R.innerText.replace(/\n{3,}/g,"\n\n");
@@ -1585,7 +1716,7 @@ function swap(){
    INIT
    ============================================================ */
 buildWiring("A"); buildWiring("B");
-fillSelect("#presetSel", PRESETS, "Choose an example…");
+$("#presetSel").innerHTML = '<option value="">Choose an example…</option>' + PRESET_GROUPS.map((g,gi)=>'<optgroup label="'+esc(g[1])+'">'+g[2].map((t,ti)=>'<option value="'+gi+':'+ti+'">'+esc(t)+'</option>').join("")+'</optgroup>').join("");
 fillSelect("#useSel", USES);
 fillSelect("#relSel", Object.keys(REL).map(k=>({value:k, label:REL[k].label})).sort(byLabel), "Not sure / skip");
 fillSelect("#chSel", CHANNELS);
@@ -1602,7 +1733,9 @@ function applyDefaults(){
   ["#sitSel","#envSel","#needASel","#needBSel","#presetSel"].forEach(id=>$(id).value="");
 }
 applyDefaults();
-$("#presetSel").addEventListener("change",e=>{ if(!e.target.value) return; $("#phrase").value=e.target.value; $("#phrase").removeAttribute("aria-invalid"); $("#msg").textContent=""; });
+$("#presetSel").addEventListener("change",e=>{ if(!e.target.value) return; const [gi,ti]=e.target.value.split(":").map(Number); const g=PRESET_GROUPS[gi]; if(!g) return;
+  $("#phrase").value=g[2][ti]; $("#phrase").removeAttribute("aria-invalid"); $("#msg").textContent="";
+  if(!relTouched && REL[g[0]]){ relId=g[0]; $("#relSel").value=relId; } });
 $("#useSel").addEventListener("change",e=>{
   useId=e.target.value;
   // the use case sets a sensible relationship and channel, unless you already chose them
