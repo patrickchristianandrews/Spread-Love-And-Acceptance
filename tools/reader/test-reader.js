@@ -83,5 +83,47 @@ convs.forEach(c => {
   ok(['shutdown', 'rising', 'cooling', 'steady', 'short'].includes(r.trend), 'trend set');
 });
 
+// ---------- A first-time tester's threads (shared pattern list) ----------
+[
+  { t: 'Wow, nice of you to finally show up.', has: ['sarcasm'] },
+  { t: 'Wow, thanks for nothing.', has: ['sarcasm'], not: ['warmth', 'repair'] },
+  { t: 'SOME of us like having clean dishes 🙂', has: ['passive'], not: ['warmth'] },
+  { t: 'must be nice', has: ['sarcasm'] },
+  { t: 'no need to be rude', has: ['passive'] },
+  { t: 'lol ok whatever you say 🙄', has: ['contempt'] },
+  { t: 'I guess I’ll plan the trip again since nobody else will', has: ['passive'], not: ['absolute'] },
+  { t: 'your sister always remembers', has: ['compare'] },
+  { t: '…', has: ['withdraw'] },
+  { t: 'I just can’t do this right now', has: ['withdraw'] },
+  { t: 'I just can’t do this right now. Can we talk at 8?', has: ['pause'], not: ['withdraw'] },
+  { t: 'hey everyone, dinner at 7?', not: ['absolute'] },
+  { t: 'nobody ever listens to me', has: ['absolute'] },
+  { t: 'you’re so good at it though!!', not: ['shouting'] },
+  { t: 'love you too ❤️', has: ['warmth'], not: ['repair'] },
+  { t: 'fine.', has: ['short'], not: ['dismiss'] },
+  { t: 'k', has: ['short'], not: ['dismiss'] },
+  { t: 'Per my last email, I need this ASAP.', has: ['pointed', 'demand'] }
+].forEach(c => {
+  const k = kinds(c.t);
+  (c.has || []).forEach(x => ok(k.includes(x), `"${c.t}": expected ${x}; got ${k.join(',')}`));
+  (c.not || []).forEach(x => ok(!k.includes(x), `"${c.t}": did not expect ${x}; got ${k.join(',')}`));
+});
+function readOf(text, me) { const p = R.parse(text); return R.read(p.turns, me || p.speakers[0], p.format === 'email' ? 'email' : 'text'); }
+const roomies = readOf('Jess: did you see the kitchen?\nMe: yeah I’ll get to it\nJess: SOME of us like having clean dishes 🙂\nMe: ok\nJess: must be nice to just leave everything\nMe: no need to be rude\nJess: lol ok whatever you say 🙄', 'Me');
+ok(roomies.level !== 'calm', 'contemptuous roommate thread must not end calm (got ' + roomies.level + ')');
+const walls = readOf('Me: can we talk about the rent?\nSam: not now\nMe: it’s due Friday though\nSam: I said not now\nMe: ok when?\nSam: …', 'Me');
+ok(walls.trend === 'shutdown', 'stonewalling thread reads as shut down (got ' + walls.trend + ')');
+const workQ = readOf('Priya: Did you finish the report?\nMe: no', 'Me');
+ok(!workQ.bids.length, 'a work question answered "no" is not good news met with a flat reply');
+ok(!/thought|best/.test(readOf('A: I had the best idea\nB: what are your thoughts on it\nA: the thoughts are good').topic), 'no nonsense topics like "the thoughts" or "the best"');
+const mail = readOf('Hi Sam,\nPer my last email, I need the deck ASAP.\nThanks,\nPat\n\nOn Mon, Mar 4, 2024 at 9:14 AM Sam Lee <sam@x.com> wrote:\n> Hi Pat, I’ll send the deck on Friday.\n>\n> On Fri, Mar 1, 2024 at 3:00 PM Pat Smith <pat@x.com> wrote:\n>> Could you send me the deck by Wednesday?', 'Sam Lee');
+ok(/Wednesday/.test(mail.turns[0].text) && /Per my last/.test(mail.turns[mail.turns.length - 1].text), 'email thread reads oldest first');
+ok(mail.turns[mail.turns.length - 1].who === 'Pat Smith', 'the unheadered newest email is from Pat (signed "Pat")');
+ok(mail.level !== 'calm' || mail.peak >= 2, '"Per my last email … ASAP" is not praised as calm');
+const pick = readOf('Dana: Could you do the school pickups on Tuesday and Thursday this week?\nMe: I always do them\nDana: I’m exhausted, I just need help this week\nMe: fine.', 'Me');
+ok(pick.drafts.length >= 2 && pick.drafts.some(d => /school pickups/.test(d.text)), 'reply drafts use the thread’s own words');
+ok(new Set([roomies, walls, pick, mail].map(r => r.drafts.map(d => d.text).join('|'))).size === 4, 'different threads get different reply drafts');
+ok(!readOf('A: hi\nB: hi').next.some(m => /^Then:/.test(m.title)), 'no "Then:" without a first step');
+
 console.log(`${pass} passed, ${fail} failed`);
 if (fail) { errs.forEach(e => console.log('  - ' + e)); process.exit(1); }

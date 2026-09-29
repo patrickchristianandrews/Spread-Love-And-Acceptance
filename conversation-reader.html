@@ -55,7 +55,7 @@
   .cr-summary h2{ margin:0 0 .5rem !important; }
   .cr-summary p{ margin:0 0 .6rem !important; }
   .cr-temp{ display:inline-block; padding:.1rem .55rem; border-radius:999px; font-family:"IBM Plex Mono", ui-monospace, monospace; font-size:.78rem; vertical-align:.1em; }
-  .cr-temp.calm{ background:#DCE8DF; color:#2F5A3C; } .cr-temp.warm{ background:#F1E2C2; color:#7A5520; } .cr-temp.hot{ background:#F2D6CC; color:#7E3421; }
+  .cr-temp.calm{ background:#DCE8DF; color:#2F5A3C; } .cr-temp.warm, .cr-temp.tense{ background:#F1E2C2; color:#7A5520; } .cr-temp.hot{ background:#F2D6CC; color:#7E3421; }
   .cr-chart{ margin:1rem 0 .3rem; }
   .cr-chart svg{ display:block; width:100%; height:auto; }
   .cr-legend{ display:flex; flex-wrap:wrap; gap:.3rem 1.2rem; font-family:"IBM Plex Mono", ui-monospace, monospace; font-size:.74rem; color:var(--ink-soft); }
@@ -86,7 +86,7 @@
   .cr-heat b{ display:block; height:100%; background:var(--debit); }
   .cr-bubble mark{ background:none; color:inherit; padding:0 .05em; border-radius:2px; }
   .cr-bubble mark.t-hot{ background:rgba(150,65,43,.16); box-shadow:inset 0 -2px 0 var(--debit); }
-  .cr-bubble mark.t-warm{ background:rgba(168,121,47,.16); box-shadow:inset 0 -2px 0 var(--brass); }
+  .cr-bubble mark.t-warm, .cr-bubble mark.t-tense{ background:rgba(168,121,47,.16); box-shadow:inset 0 -2px 0 var(--brass); }
   .cr-bubble mark.t-note{ box-shadow:inset 0 -2px 0 rgba(82,75,62,.45); }
   .cr-bubble mark.t-good{ background:rgba(62,107,76,.15); box-shadow:inset 0 -2px 0 var(--credit); }
   .cr-bubble mark.t-alarm{ background:rgba(150,65,43,.3); box-shadow:inset 0 -2px 0 var(--debit); }
@@ -118,6 +118,11 @@
   .cr-limits{ margin:2.5rem 0 0; }
   [hidden]{ display:none !important; }
   @media (max-width:560px){ .cr-msg{ max-width:94% !important; } .cr-script{ flex-direction:column; } }
+  .cr-drafts{ list-style:none; padding:0; margin:.4rem 0 0; }
+  .cr-drafts li{ margin:0 0 .8rem; }
+  .cr-drafts .cr-dl{ display:block; font-family:"IBM Plex Mono", ui-monospace, monospace; font-size:.78rem; color:var(--ink-soft); margin:0 0 .25rem; }
+  .cr-table td .plus{ color:var(--credit); font-weight:600; margin-right:.25rem; }
+  .lf-list{ padding-left:1.1rem; } .lf-list li{ margin:0 0 .6rem; } .lf-ex{ color:var(--ink-soft); } .lf-why{ font-size:.94rem; } .lf-h{ font-size:1.02rem; margin:1rem 0 .4rem; } .lf-note{ font-size:.92rem; color:var(--ink-soft); }
   @media print{ .cr-input-step, .cr-actions, .cr-draft-step, .cr-private{ display:none; } }
 
   /* ---------- Pastel watercolour splashes: decorative, behind everything ---------- */
@@ -178,6 +183,7 @@
   .cr-safety{ background:radial-gradient(120% 90% at 14% 8%, rgba(255,255,255,.9), rgba(255,255,255,0) 42%) padding-box, linear-gradient(rgba(255,241,236,.92), rgba(255,241,236,.92)) padding-box, linear-gradient(135deg, #F7C9D4, #F4A6B8 50%, #F8E7AE) border-box !important; }
 </style>
 <script src="/assets/js/site.js" defer></script>
+<script src="/assets/js/message-patterns.js" defer></script>
 <script src="/assets/js/conversation-reader-engine.js" defer></script>
 <script src="/assets/js/conversation-reader.js" defer></script>
 </head>
@@ -230,10 +236,17 @@
   </details>
 </section>
 
+<section class="cr-limits" aria-labelledby="cr-lf">
+  <details>
+    <summary><strong id="cr-lf">What it looks for</strong></summary>
+    <div id="cr-lookfor"><p>The list of patterns appears here.</p></div>
+  </details>
+</section>
+
 <section class="cr-limits" aria-labelledby="cr-lim">
   <details>
     <summary><strong id="cr-lim">What the Reader can and can’t do</strong></summary>
-    <p>The Reader looks for patterns in words: absolutes like “always” and “never”, sentences about who someone is, dismissals, sarcasm markers, capitals, apologies and other repair attempts, clear asks, questions that may not have been answered, the past being brought in, and long silences when times are included. It weighs them to show where the conversation got heated.</p>
+    <p>The Reader looks for patterns in words: absolutes like “always” and “never”, sentences about who someone is, dismissals, sarcasm, eye-rolls and passive-aggressive jabs, comparisons, shutting the door without a time to come back, capitals, apologies and other repair attempts, clear asks, questions that may not have been answered, the past being brought in, and long silences when times are included. It weighs them to show where the conversation got heated.</p>
     <p>It can’t hear tone of voice, and it doesn’t know your history, your in-jokes, or what either of you meant. The same words can be affectionate between two people and cutting between two others. Use it to slow down and prepare, never as proof of who was right. The program judges arrangements, never people.</p>
     <p>If someone’s wiring shapes how words land, the <a href="/signal-translator.html">Signal Translator</a> goes deeper on one sentence at a time, and <a href="/wired-differently.html">Wired Differently</a> explains why the same words reach people differently.</p>
   </details>

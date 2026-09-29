@@ -20,8 +20,9 @@
   ].join('\n');
 
   var FORMS = [['text', 'Text or chat'], ['email', 'Email'], ['person', 'In person, from memory'], ['phone', 'Phone call, from memory']];
-  var ORDER = ['verdict', 'absolute', 'dismiss', 'sarcasm', 'withdraw', 'demand', 'history', 'shouting', 'vague', 'short', 'turnaway', 'repair', 'feeling', 'ask'];
-  var GOOD = { repair: 1, feeling: 1, ask: 1 };
+  var ORDER = ['verdict', 'contempt', 'sarcasm', 'passive', 'compare', 'absolute', 'dismiss', 'withdraw', 'pointed', 'demand', 'history', 'shouting', 'vague', 'short', 'turnaway', 'repair', 'pause', 'warmth', 'feeling', 'ask'];
+  var GOOD = { repair: 1, pause: 1, warmth: 1, feeling: 1, ask: 1 };
+  if (window.TOLPatterns) window.TOLPatterns.lookFor(document.getElementById('cr-lookfor'));
 
   var $ = function (id) { return document.getElementById(id); };
   var input = $('cr-input'), out = $('cr-out'), draftStep = $('cr-draft-step'), draft = $('cr-draft'), draftOut = $('cr-draft-out');
@@ -114,7 +115,15 @@
           (m.script ? '<div class="cr-script"><q>' + esc(m.script) + '</q><button type="button" class="cr-btn is-quiet is-small" data-copy="' + esc(m.script) + '">Copy</button></div>' : '') +
           (m.dig ? '<a class="dig" href="' + m.dig[0] + '">Dig deeper: ' + esc(m.dig[1]) + '</a>' : '') + '</li>';
       });
-      mv += '</ol><p class="cr-note">Change anything in [square brackets] to fit. Short beats perfect.</p>';
+      mv += '</ol>';
+      if (r.drafts && r.drafts.length) {
+        mv += '<h3 style="margin-top:1.1rem;">Replies you could send, built from this conversation</h3><ul class="cr-drafts">';
+        r.drafts.forEach(function (d) {
+          mv += '<li><span class="cr-dl">' + esc(d.label) + '</span><div class="cr-script"><q>' + esc(d.text) + '</q><button type="button" class="cr-btn is-quiet is-small" data-copy="' + esc(d.text) + '">Copy</button></div></li>';
+        });
+        mv += '</ul>';
+      }
+      mv += '<p class="cr-note">Change anything in [square brackets] to fit. Short beats perfect.</p>';
       html += drop('How to respond', mv, true, '', 'is-key');
     }
 
@@ -165,6 +174,7 @@
   function summary(r, them) {
     var t = r.turns, parts = [];
     var level = { calm: 'calm', warm: 'tense', hot: 'heated' }[r.level];
+    // (the engine's "warm" level means "a bit tense" here: warmth, on this site, is a good thing)
     var chip = r.trend === 'shutdown' ? '<span class="cr-temp hot">Ends shut down</span> ' : '<span class="cr-temp ' + r.level + '">Ends ' + level + '</span> ';
     var endsCalm = r.level === 'calm' && r.trend !== 'shutdown';
     parts.push('<p>' + chip +
@@ -182,7 +192,7 @@
       shutdown: 'By the end someone has shut down. That isn’t the same as calm: it usually means they’re overwhelmed.',
       rising: r.level === 'calm' ? 'It gets a touch warmer at the end, but it still ends calm.' : (r.peak < 3 ? 'It gets a little tenser toward the end.' : 'By the end it’s still heating up.'),
       cooling: endsCalm ? 'By the end it has cooled down.' : 'It cools a little from its hottest point, but it still ends ' + level + '.',
-      steady: endsCalm ? 'It stays calm to the end.' : 'It stays about as ' + level + ' to the end.',
+      steady: endsCalm ? (startWarm ? 'It settles down, and ends calm.' : 'It stays calm to the end.') : (startWarm ? 'It stays about as ' + level + ' to the end.' : 'It stays fairly ' + level + ' to the end.'),
       short: ''
     }[r.trend];
     parts.push('<p>' + story + '</p>');
@@ -252,15 +262,16 @@
     var h = '<p class="cr-hint">How often each pattern shows up. These count words, not people: both of you are doing your best with what you were carrying.</p>' +
       '<div class="cr-table-wrap"><table class="cr-table"><thead><tr><th scope="col">Pattern</th><th scope="col" class="n">You</th><th scope="col" class="n">' + esc(them.length > 14 ? 'Them' : them) + '</th></tr></thead><tbody>';
     rows.forEach(function (k) {
-      h += '<tr' + (GOOD[k] ? ' class="good"' : '') + '><td>' + esc(R.KINDS[k].label) + '</td><td class="n">' + (r.tallyMe[k] || '·') + '</td><td class="n">' + (r.tallyThem[k] || '·') + '</td></tr>';
+      h += '<tr' + (GOOD[k] ? ' class="good"' : '') + '><td>' + (GOOD[k] ? '<span class="plus" aria-label="helpful">+</span>' : '') + esc(R.KINDS[k].label) + '</td><td class="n">' + (r.tallyMe[k] || '·') + '</td><td class="n">' + (r.tallyThem[k] || '·') + '</td></tr>';
     });
-    return h + '</tbody></table></div><p class="cr-note">Rows marked + are the helpful ones. This table is for you to notice your own side, not to show them: counts read aloud become ammunition.</p>';
+    var anyGood = rows.some(function (k) { return GOOD[k]; });
+    return h + '</tbody></table></div><p class="cr-note">' + (anyGood ? 'Rows marked + are the helpful ones. ' : '') + 'This table is for you to notice your own side, not to show them: counts read aloud become ammunition.</p>';
   }
 
   function formAdvice(form, r) {
     var hot = r.level !== 'calm' || r.peak >= 3;
     if (form === 'text') return 'Text strips out tone of voice, so a neutral message can read as sharp and a joke can read as a jab. ' +
-      (hot ? 'Once it’s this warm, more texting rarely helps. Suggest a call or talking in person, and name a time.' : 'Keep hard topics short, and move them to a call if they start to heat up.');
+      (hot ? 'Once it’s this tense, more texting rarely helps. Suggest a call or talking in person, and name a time.' : 'Keep hard topics short, and move them to a call if they start to heat up.');
     if (form === 'email') return 'In email, put the one thing that matters in the first two lines, answer their question before adding your own, and leave anything written while upset in drafts overnight.';
     if (form === 'phone') return 'This is written from memory, so it’s your recollection; the other person may remember it differently. Use it to prepare, not to prove. On the phone, pace carries a lot: slow down and leave pauses.';
     return 'This is written from memory, so it’s your recollection; the other person may remember it differently. Use it to prepare for the next conversation, not to prove what happened in the last one.';
