@@ -14,6 +14,7 @@
    TOLPatterns.hasAppreciation(text) -> thanks, "love you", "I appreciate", not the sarcastic kind
    TOLPatterns.isFlat(text)    -> a very short reply ("ok", "k", "fine.")
    TOLPatterns.spell(text)     -> {text, fixes:[{from, to}]}: common misspellings read as the word meant
+   TOLPatterns.idioms(text)    -> [{text, means, words}]: figures of speech, with what they usually mean
    TOLPatterns.lookFor(el, opts) fills el with the plain-language "What it looks for" list */
 (function (root) {
   'use strict';
@@ -33,7 +34,7 @@
       fix: 'Say the real thing plainly, once: “I was hurt that you were late.”',
       ex: ['Wow, thanks for nothing.', 'Nice of you to finally show up.', 'Must be nice.', 'lol ok whatever you say 🙄'] },
     { id: 'contempt', name: 'Eye-roll or put-down', group: 'edge', heat: 3,
-      re: /🙄|😒|\b(?:grow up|get a life|are you (?:serious|kidding me)|you can't be serious|unbelievable|pathetic|what is wrong with you|what's wrong with you|who does that|you're a joke|give me a break|oh please|spare me|as if|you wish|cry me a river|boo hoo|here we go again|not this again)\b/g,
+      re: /🙄|😒|\b(?:grow up|get a life|are you (?:serious|kidding me)|you can't be serious|unbelievable|pathetic|what is wrong with you|what's wrong with you|who does that|you're a joke|give me a break|oh please|spare me|as if|you wish|cry me a river|boo hoo|here we go again|not this again|don't "?(?:ok|okay|k|whatever|sorry)"? me|(?:nobody|no one|no-one) asked(?: you| for your (?:opinion|input))?|who asked(?: you)?(?= *(?:[?.!…🙄😒]|$))|(?:nobody|no one|no-one) (?:wants to (?:deal with|be around|talk to|be with|hear from)|likes|can stand|cares about) you|this is why (?:nobody|no one|no-one|people|everyone|you have no)\b[^.!?\n]{0,40}|no wonder (?:nobody|no one|you're alone|you have no|people)\b[^.!?\n]{0,40}|, ?(?:genius|einstein|sherlock|smart guy|smarty ?pants)(?= *(?:[?.!…🙄😒🙃]|$)))\b/g,
       what: 'An eye-roll, mocking or a put-down says “I look down on you,” which hurts more than a complaint and is very hard to answer calmly.',
       fix: 'Drop the jab and say the complaint underneath it, about the thing, not the person.',
       ex: ['Grow up.', 'Are you serious right now 🙄', 'Here we go again.'] },
@@ -58,7 +59,7 @@
       fix: 'Name the specific time instead: “twice this week” or “on Tuesday.”',
       ex: ['You never help.', 'Nobody ever listens to me.'] },
     { id: 'dismiss', name: 'Dismissing a feeling', group: 'blame', heat: 2.5,
-      re: /\b(?:calm down|just relax|chill out|you're overreacting|you are overreacting|you're (?:too|so) sensitive|you're being dramatic|not a big deal|no big deal|get over it|if you say so|ok whatever|whatever(?= *(?:[.!…🙄😒]|$))|i don't care|stop being so \w+|you're imagining (?:it|things)|it was (?:just )?a joke|can't you take a joke)\b/g,
+      re: /\b(?:calm down|just relax|chill out|you're overreacting|you are overreacting|you're (?:too|so) sensitive|you're being dramatic|not a big deal|no big deal|get over it|if you say so|ok whatever|whatever(?= *(?:[.!…🙄😒]|$))|whatev(?:s|er)?(?= *(?:[.!…🙄😒]|$))|(?:fine|ok(?:ay)?|sure),? whatev(?:s|er)?|whatever you (?:want|like|think|say)(?= *(?:[.!…🙄😒]|$))|i (?:really )?(?:don't|do not) care|i could(?:n't| not) care less|stop being so \w+|you're imagining (?:it|things)|it was (?:just )?a joke|can't you take a joke)\b/g,
       what: '“Calm down,” “whatever” or “you’re overreacting” tell the reader their feeling doesn’t count. They usually raise the heat.',
       fix: 'Say what you can see, even if you see it differently: “I can tell this matters to you.”',
       ex: ['Calm down.', 'You’re overreacting.', 'Whatever.'] },
@@ -78,12 +79,12 @@
       fix: 'Leave the swear words out and name the feeling instead: “I’m really frustrated right now.”',
       ex: ['You are getting on my last f*cking nerve.', 'wtf is wrong with you'] },
     { id: 'hostile', name: 'Hostile or fed-up line', group: 'edge', heat: 3,
-      re: /\b(?:(?:getting|get|got|gets|getting right) on my (?:last |every |one )?(?:[a-z*]+ )?nerves?|on my last (?:[a-z*]+ )?nerve|(?:i'm|i am|im) (?:so |sooo+ |really |just |totally |[a-z]*ing )?(?:done|finished|through) with (?:you|this|it|your \w+|us)|(?:you're|you are|youre|ur) (?:really |seriously |[a-z]*ing )?driving me (?:crazy|nuts|insane|mad|up the wall|bananas)|shut (?:up|the [a-z*]+ up|your (?:mouth|face))|(?:i )?can't stand (?:you|this|it|your|being around you)|i (?:really )?hate (?:you|this|it|your|when you|how you|living with you|everything about)|(?:i'm|i am|im) (?:so |really )?sick (?:and tired )?of (?:you|this|your|it)|get (?:out of my (?:face|sight|way)|lost|a grip)|go away|leave me the [a-z*]+ alone|piss off|go to hell|bite me|drop dead|you disgust me|you make me sick|(?:what|wtf) (?:the [a-z*]+ )?is (?:wrong|the matter) with you|are you (?:stupid|an idiot|deaf|blind|out of your mind|kidding me)|i don't give a [a-z*]+|who (?:the [a-z*]+ )?cares|do whatever you (?:want|like)|(?:i'm|i am|im) (?:so )?over (?:it|this|you)|enough is enough|i've had (?:it|enough)|you're impossible|you never shut up|zip it|back off|mind your own business)\b/g,
+      re: /\b(?:(?:getting|get|got|gets|getting right) on my (?:last |every |one )?(?:[a-z*]+ )?nerves?|on my last (?:[a-z*]+ )?nerve|(?:i'm|i am|im) (?:so |sooo+ |really |just |totally |[a-z]*ing )?(?:done|finished|through) with (?:you|this|it|your \w+|us)|(?:you're|you are|youre|ur) (?:really |seriously |[a-z]*ing )?driving me (?:crazy|nuts|insane|mad|up the wall|bananas)|shut (?:up|the [a-z*]+ up|your (?:mouth|face))|(?:i )?can't stand (?:you|this|it|your|being around you)|i (?:really )?hate (?:you|this|it|your|when you|how you|living with you|everything about)|(?:i'm|i am|im) (?:so |really )?sick (?:and tired )?of (?:you|this|your|it)|get (?:out of my (?:face|sight|way)|lost|a grip)|go away|leave me the [a-z*]+ alone|piss off|go to hell|bite me|drop dead|you disgust me|you make me sick|(?:what|wtf) (?:the [a-z*]+ )?is (?:wrong|the matter) with you|are you (?:stupid|an idiot|deaf|blind|out of your mind|kidding me)|i don't give a [a-z*]+|who (?:the [a-z*]+ )?cares|do whatever you (?:want|like)(?! (?:for|to|with|on|tonight|today|this|at|in)\b)|(?:i'm|i am|im) (?:so )?over (?:it|this|you)|enough is enough|i've had (?:it|enough)|you're impossible|you never shut up|zip it|back off|mind your own business)\b/g,
       what: 'A fed-up or hostile line (“you’re getting on my last nerve”, “shut up”, “I’m done with you”) says how angry you are, but not what you need. The reader can only defend themselves or pull away.',
       fix: 'Say the feeling and the need, and take a break if you need one: “I’m really frustrated. I need a few minutes, then can we talk about the dishes?”',
       ex: ['You are getting on my last nerve.', 'Shut up.', 'I’m so done with you.'] },
     { id: 'label', name: 'Name-calling or a label', group: 'blame', heat: 3,
-      re: /\b(?:you(?:'re| are| were|re|r)?|ur|youre) (?:(?:such|so|just|really|being|acting like|literally|always|the|a|an|total|complete|absolute|utter|real|huge|massive|[a-z]*ing|[a-z]*in') )*(?:idiot|moron|jerk|loser|slob|pig|brat|baby|child|joke|nightmare|disaster|failure|disappointment|liar|psycho|lunatic|narcissist|selfish|lazy|useless|pathetic|stupid|dumb|worthless|hopeless|clueless|incompetent|ridiculous|childish|immature|insane|crazy|toxic|ungrateful|spoiled|entitled|heartless|cruel|a mess|a waste of (?:space|time)|(?:terrible|awful|horrible|lousy|worst|sorry excuse for an?) (?:parent|mother|father|mom|mum|dad|partner|husband|wife|boyfriend|girlfriend|friend|person|roommate|boss|coworker|brother|sister|son|daughter|human being))\b|\b(?:i'm|i am|im) the only (?:adult|grown[- ]?up|responsible (?:one|person)|one (?:who|that) (?:does|cares|tries|cleans|works|helps|pays)\w*)\b|\byou (?:idiot|moron|jerk|slob|loser|pig)\b/g,
+      re: /\b(?:you(?:'re| are| were|re|r)?|ur|youre) (?:(?:such|so|just|really|being|acting like|literally|always|the|a|an|total|complete|absolute|utter|real|huge|massive|[a-z]*ing|[a-z]*in') )*(?:idiot|moron|jerk|loser|slob|pig|brat|baby|child|joke|nightmare|disaster|failure|disappointment|liar|psycho|lunatic|narcissist|selfish|lazy|useless|pathetic|stupid|dumb|worthless|hopeless|clueless|incompetent|ridiculous|childish|immature|insane|crazy|toxic|ungrateful|spoiled|entitled|heartless|cruel|a mess|a waste of (?:space|time)|(?:terrible|awful|horrible|lousy|worst|sorry excuse for an?) (?:parent|mother|father|mom|mum|dad|partner|husband|wife|boyfriend|girlfriend|friend|person|roommate|boss|coworker|brother|sister|son|daughter|human being))\b|\b(?:i'm|i am|im) the only (?:adult|grown[- ]?up|responsible (?:one|person)|one (?:who|that) (?:does|cares|tries|cleans|works|helps|pays)\w*)\b|\byou (?:idiot|moron|jerk|slob|loser|pig)\b|\b(?:you(?:'re| are|re|r)?|ur|youre) (?:(?:so|such an?|being|acting|really|totally|literally|too|acting like an?|like an?)\s+)+(?:autistic|retarded|a retard|retard|adhd|add|ocd|bipolar|schizo|schizophrenic|psychotic|mental|spastic|a spaz|spaz|an autist|autist|special needs|brain ?damaged|deranged)\b/g,
       what: 'A word about who someone is (“lazy”, “a nightmare”, “the only adult here”) turns one moment into a verdict on the person. People defend against a verdict instead of hearing what happened.',
       fix: 'Name what happened and how it affected you, not what kind of person they are.',
       ex: ['You are a total nightmare.', 'I’m the only adult here.'] },
@@ -146,7 +147,16 @@
     "unbiled": "unbilled", "unbilld": "unbilled", "unbiliied": "unbilled", "ledgar": "ledger", "lemonaid": "lemonade",
     "wating": "waiting", "waitting": "waiting", "finsh": "finish", "finnish": "finish", "finshed": "finished",
     "lisen": "listen", "lissen": "listen", "listn": "listen", "tlk": "talk", "tawk": "talk", "agian": "again", "agin": "again", "evrytime": "every time", "mesage": "message", "messege": "message", "gona": "gonna", "wanna": "wanna", "kichen": "kitchen", "kitchin": "kitchen", "bathrom": "bathroom", "togeather": "together", "togather": "together", "remeber": "remember", "rember": "remember", "forgor": "forgot", "forgoten": "forgotten",
-    "responsibel": "responsible", "helpfull": "helpful", "greatful": "grateful", "apreciate": "appreciate", "appriciate": "appreciate"
+    "responsibel": "responsible", "helpfull": "helpful", "greatful": "grateful", "apreciate": "appreciate", "appriciate": "appreciate",
+    "tlak": "talk", "talkk": "talk", "wy": "why", "whyy": "why", "fone": "phone", "phon": "phone", "fones": "phones",
+    "wahtever": "whatever", "whatevr": "whatever", "watever": "whatever", "whatver": "whatever", "wateva": "whatever", "whateva": "whatever",
+    "lowd": "loud", "devorce": "divorce", "divorse": "divorce", "tomoro": "tomorrow", "tomorro": "tomorrow", "becuz": "because", "becuse": "because",
+    "somtimes": "sometimes", "sumtimes": "sometimes", "alredy": "already", "allready": "already", "probly": "probably", "prolly": "probably",
+    "enuf": "enough", "enogh": "enough", "interupting": "interrupting", "intrupting": "interrupting", "interupt": "interrupt", "interrupt1ng": "interrupting",
+    "lisening": "listening", "lissening": "listening", "fogot": "forgot", "forgt": "forgot", "pleez": "please", "gunna": "gonna", "shure": "sure",
+    "reely": "really", "anymor": "anymore", "evryone": "everyone", "everone": "everyone", "happend": "happened", "hapened": "happened",
+    "angery": "angry", "frustated": "frustrated", "frusterated": "frustrated", "embarased": "embarrassed", "dissapointed": "disappointed", "disapointed": "disappointed",
+    "wont": "won't", "stupud": "stupid", "carless": "careless", "rediculous": "ridiculous", "ridiculus": "ridiculous", "definetly": "definitely"
   };
   var SPELL_PHRASES = [
     ["\\bwere (do|does|did|should|can|could|shall|would) (i|we|you|they|he|she)\\b", "where $1 $2"],
@@ -156,7 +166,8 @@
     ["\\b(don't|dont|do not|didn't|didnt) no\\b", "$1 know"],
     ["\\bunbill?ed (det|dept|dett|dbt|debit|dets|depts)\\b", "unbilled debt"],
     ["\\bcalm down kit\\b", "calm-down kit"],
-    ["\\bclam (down|me)\\b", "calm $1"]
+    ["\\bclam (down|me)\\b", "calm $1"],
+    ["\\byour (always|never|so|such|being|late|not|going|doing|the only|the worst|the best|a|an|too|really|just|welcome|kidding|joking|lying|making|acting|driving|getting|overreacting|still|literally|constantly|obviously)\\b", "you're $1"]
   ];
   /* SPELL-END */
   // "allways" → "always", keeping the writer's capitals. Returns {text, fixes:[{from, to}]}.
@@ -183,6 +194,102 @@
       });
     });
     return { text: out, fixes: fixes };
+  }
+
+  // ---------------------------------------------------------------- figures of speech, in plain words
+  // [pattern, what it usually means]. A literal listener sees the plain meaning; the Conversation Reader
+  // uses it to spot when a figure of speech was taken at its word ("read the room" / "What room?").
+  // Each entry: the phrase, what it usually means, and the words in it a literal reader may ask about.
+  var IDIOMS = [
+    ["break a leg", "good luck", ["leg"]],
+    ["read(?:ing)? the room", "notice how the people around you are feeling, and adjust", ["room"]],
+    ["(?:it's |this is |that's )?not rocket science", "it isn't very hard to do", ["rocket"]],
+    ["(?:a )?piece of cake", "easy", ["cake"]],
+    ["(?:the )?ball's in your court", "it's your turn to decide or act", ["ball", "court"]],
+    ["play it by ear", "decide later, as things happen", ["ear"]],
+    ["under the weather", "a little sick", ["weather"]],
+    ["beat(?:ing)? around the bush", "avoiding saying something directly", ["bush"]],
+    ["on the same page", "agreeing about the plan", ["page"]],
+    ["hit the (?:hay|sack)", "go to bed", ["hay", "sack"]],
+    ["cut (?:me |you |us |him |her )?some slack", "be less hard on me", ["slack"]],
+    ["get your act together", "get organized and do what's needed", ["act"]],
+    ["pull(?:ing)? (?:your|his|her|their|my) (?:own )?weight", "doing a fair share of the work", ["weight"]],
+    ["walk(?:ing)? on eggshells", "being very careful not to upset someone", ["eggshells"]],
+    ["(?:the )?last straw", "the last of many problems, and one too many", ["straw"]],
+    ["(?:the )?straw that broke", "the last of many problems, and one too many", ["straw"]],
+    ["(?:the )?elephant in the room", "a big problem nobody is talking about", ["elephant"]],
+    ["cross that bridge", "deal with it later, if it happens", ["bridge"]],
+    ["bite the bullet", "do the hard thing now", ["bullet"]],
+    ["spill(?:ed)? the beans", "told the secret", ["beans"]],
+    ["hold your horses", "wait, slow down", ["horses"]],
+    ["in hot water", "in trouble", ["water"]],
+    ["on thin ice", "close to being in serious trouble", ["ice"]],
+    ["drop(?:ped)? the ball", "forgot or missed something they were responsible for", ["ball"]],
+    ["at the end of the day", "in the end, what matters most is", []],
+    ["when pigs fly", "never", ["pigs"]],
+    ["blow(?:ing)? off steam", "letting out stress or anger", ["steam"]],
+    ["(?:take a )?rain ?check", "can we do this another time", ["rain"]],
+    ["touch base", "check in briefly", ["base"]],
+    ["get off my back", "stop criticizing or pressuring me", ["back"]],
+    ["cool it", "calm down, or stop", []],
+    ["jump(?:ed|ing)? the gun", "acted too soon", ["gun"]],
+    ["go the extra mile", "do more than expected", ["mile"]],
+    ["give me a hand", "help me", ["hand"]],
+    ["hang in there", "keep going, it will get better", []],
+    ["hit the roof", "got very angry", ["roof"]],
+    ["the whole nine yards", "everything", ["yards"]],
+    ["a lot on my plate", "a lot to deal with", ["plate"]],
+    ["keep me in the loop", "keep me updated", ["loop"]],
+    ["out of the loop", "not updated", ["loop"]],
+    ["sleep on it", "think about it overnight before deciding", []],
+    ["hit a wall", "got stuck and couldn't go on", ["wall"]],
+    ["on the fence", "undecided", ["fence"]],
+    ["up in the air", "not decided yet", ["air"]],
+    ["cold feet", "nervous, and thinking of backing out", ["feet"]],
+    ["cost(?:s)? an arm and a leg", "very expensive", ["arm", "leg"]],
+    ["kill two birds", "do two things at once", ["birds"]],
+    ["(?:get it|pull yourself) together", "calm down and get organized (often said sharply)", []],
+    ["get a grip", "calm down (often said sharply)", ["grip"]],
+    ["knock it off", "stop doing that", []],
+    ["cut it out", "stop doing that", []],
+    ["over the moon", "very happy", ["moon"]],
+    ["see eye to eye", "agree", ["eye"]],
+    ["water under the bridge", "in the past, and forgiven", ["bridge"]],
+    ["thr(?:ow|ew|own) (?:me |you |him |her |them |us )?under the bus", "blamed someone to protect yourself", ["bus"]],
+    ["get the ball rolling", "start", ["ball"]],
+    ["on the back burner", "set aside for later", ["burner"]],
+    ["call it a day", "stop for today", []],
+    ["take it easy", "relax, or calm down", []],
+    ["break the ice", "start talking in an awkward moment", ["ice"]],
+    ["sit tight", "wait where you are", []],
+    ["bent out of shape", "upset", ["shape"]],
+    ["push(?:ing)? my buttons", "deliberately upsetting me", ["buttons"]],
+    ["between a rock and a hard place", "stuck between two bad choices", ["rock"]],
+    ["(?:i have |i've got |there's )?nothing left in the tank", "no energy left", ["tank"]],
+    ["running on empty", "very tired, with no energy left", []],
+    ["at (?:the end of my rope|my wit's end|the end of my tether)", "out of patience, and can't cope much longer", ["rope"]],
+    ["over my head", "too hard for me to understand", ["head"]],
+    ["out of my depth", "in a situation that's too hard for me", ["depth"]],
+    ["hanging by a thread", "barely coping", ["thread"]],
+    ["my brain is (?:mush|fried|full)", "too tired to think clearly", ["brain"]],
+    ["beat(?:ing)? a dead horse", "going on about something that's already settled", ["horse"]],
+    ["read between the lines", "notice the meaning that isn't said directly", ["lines"]],
+    ["(?:it's )?not the end of the world", "it's not as bad as it feels", []],
+    ["(?:a real |such a )?piece of work", "a difficult person (said as an insult)", []],
+    ["rub(?:bing)? it in", "keep reminding someone of their mistake", []],
+    ["put a sock in it", "be quiet (said rudely)", ["sock"]],
+    ["(?:i'm |i am )?(?:going to|gonna|about to) (?:kill|murder|strangle) (?:you|him|her|them)|i(?:'ll| will| could) (?:kill|murder|strangle) (?:you|him|her|them)", "I'll be very angry (an exaggeration, not a real threat, though in writing it can read like one)", []],
+    ["(?:it's|this is) killing me", "this is really hard for me", []]
+  ];
+  var IDIOM_RX = IDIOMS.map(function (x) { return new RegExp('\\b(?:' + x[0] + ')\\b', 'i'); });
+  // -> [{text, means, words, start}] for every figure of speech in the text
+  function idioms(text) {
+    var t = prep(text), out = [];
+    IDIOMS.forEach(function (x, i) {
+      var m = t.match(IDIOM_RX[i]);
+      if (m && !out.some(function (o) { return m.index < o.start + o.text.length && o.start < m.index + m[0].length; })) out.push({ text: String(text).slice(m.index, m.index + m[0].length), means: x[1], words: x[2], start: m.index });
+    });
+    return out.sort(function (a, b) { return a.start - b.start; });
   }
 
   function prep(text) { return String(text == null ? '' : text).replace(/[’‘`´]/g, "'").replace(/[“”]/g, '"').toLowerCase(); }
@@ -255,6 +362,6 @@
   }
   function lookFor(el, opts) { if (el) el.innerHTML = lookForHTML(opts); }
 
-  var api = { LIST: LIST, BY: BY, SPELL: SPELL, SPELL_PHRASES: SPELL_PHRASES, spell: spell, scan: scan, has: has, hasTime: hasTime, hasAppreciation: hasAppreciation, isFlat: isFlat, TIME_RE: TIME_RE, lookFor: lookFor, lookForHTML: lookForHTML, prep: prep };
+  var api = { IDIOMS: IDIOMS, idioms: idioms, LIST: LIST, BY: BY, SPELL: SPELL, SPELL_PHRASES: SPELL_PHRASES, spell: spell, scan: scan, has: has, hasTime: hasTime, hasAppreciation: hasAppreciation, isFlat: isFlat, TIME_RE: TIME_RE, lookFor: lookFor, lookForHTML: lookForHTML, prep: prep };
   if (typeof module !== 'undefined' && module.exports) module.exports = api; else root.TOLPatterns = api;
 })(this);

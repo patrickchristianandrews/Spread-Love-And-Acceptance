@@ -64,7 +64,27 @@ const PLAIN_WORDS = [
   [/\bover my head\b/i, "too hard for me to follow"],
   [/\bwiped out\b/i, "exhausted"],
   [/\bhanging by a thread\b/i, "barely coping"],
-  [/\bmy brain is (?:mush|fried|full)\b/i, "I'm too tired to think clearly"]
+  [/\bmy brain is (?:mush|fried|full)\b/i, "I'm too tired to think clearly"],
+  [/\bbreak a leg\b/i, "good luck"],
+  [/\bread the room\b/i, "notice how people are feeling"],
+  [/\bnot rocket science\b/i, "not very hard"],
+  [/\bhit the (?:hay|sack)\b/i, "go to bed"],
+  [/\bhold your horses\b/i, "wait a moment"],
+  [/\bon thin ice\b/i, "close to serious trouble"],
+  [/\bin hot water\b/i, "in trouble"],
+  [/\bwhen pigs fly\b/i, "never"],
+  [/\bget off my back\b/i, "stop pressuring me"],
+  [/\b(?:cut it out|knock it off)\b/i, "please stop"],
+  [/\bover the moon\b/i, "really happy"],
+  [/\bsee eye to eye\b/i, "agree"],
+  [/\bhang in there\b/i, "keep going"],
+  [/\bgive me a hand\b/i, "help me"],
+  [/\bspill the beans\b/i, "tell"],
+  [/\bbite the bullet\b/i, "do the hard part now"],
+  [/\bjump(?:ed)? the gun\b/i, "acted too soon"],
+  [/\bcold feet\b/i, "second thoughts"],
+  [/\belephant in the room\b/i, "big thing we're not talking about"],
+  [/\bbeat(?:ing)? around the bush\b/i, "avoiding saying it directly"]
 ];
 const FEELINGS="hurt|sad|worried|anxious|scared|afraid|nervous|lonely|alone|tired|exhausted|overwhelmed|stressed|frustrated|angry|upset|disappointed|embarrassed|ashamed|confused|unseen|unheard|left out|stuck|drained|stretched thin|on edge|uneasy|hopeless|helpless|jealous|guilty|happy|grateful|glad|relieved|excited|proud|loved|calm|thankful|touched|hopeful|content|safe|close to you|annoyed|irritated|rushed|pressured|sore|sick|down|low|flat|raw|hurt and|worn out|burnt out|burned out";
 const ACRONYMS="ASAP|ADHD|OCD|PTSD|APD|DLD|DCD|HSP|USA|OK|TV|LOL|LMAO|JK|FYI|ETA|ID|AM|PM|UK|US|NHS|RSD|AuDHD|CEO|HR|IT|PDF|GP|ER|DM|BBQ|NASA|FBI|CIA|NFL|NBA|PTA|IEP|EOD|EOW|EOM|EOY|COB|OOO|TBD|TBC|KPI|KPIS|OKR|OKRS|ROI|PR|PRS|URL|URLS|API|SOP|FAQ|QA|UX|UI|MVP|SLA|NDA|CRM|PTO|WFH|RSVP|CC|BCC|AFK|BRB|IMO|IMHO|TLDR|YTD|QTD|FY|CFO|CTO|COO|CMO|VP|SVP|EVP|CSV|XLS|PPT|SQL|AWS|SEO|RFP|SOW|AI|ML|UAT|QBR|PO|POS|SMS|DMS|ASL|CPA|IRS|DMV|ICU|GPS|PIN|VPN|SSO|MFA|HTML|CSS|JSON";
@@ -120,7 +140,7 @@ function ingForm(clause){
 }
 
 /* Things that count as a when */
-const WHEN_RE = /\[a time\]|\[by when\]|\b(?:on (?:your|my|the|our) way (?:home|back|in|over|out)|when (?:you|we) get (?:home|here|back|in)|before (?:you|we) (?:leave|go|head out)|first thing)\b|\b(?:by|before|after|at|on|until|around|from)\s+(?:\d{1,2}(?::\d{2})?\s*(?:a\.?m\.?|p\.?m\.?|o'clock)?|noon|midnight|tonight|tomorrow|today|(?:mon|tues|wednes|thurs|fri|satur|sun)day|the weekend|the end of (?:the )?(?:day|week|month)|end of (?:the )?(?:day|week|month)|dinner|lunch|breakfast|work|school|bedtime|pickup|pick-up|the meeting|the game|this (?:morning|afternoon|evening|week|weekend)|next (?:week|month|\w+day))\b|\b(?:tonight|today|tomorrow|this (?:morning|afternoon|evening|week|weekend)|(?:on )?(?:mon|tues|wednes|thurs|fri|satur|sun)day|next week|in (?:\d+|an?|ten|five|fifteen|twenty|thirty|a few|two|three) (?:minutes?|mins?|hours?|days?)|right after \w+|after (?:dinner|lunch|breakfast|work|school)|after (?:the )?(?:kids|baby|children|they|we) (?:are|is|go|get|goes) (?:\w+ ){0,2}(?:bed|asleep|down|home|out)|before (?:bed|dinner|work|school|you leave|we leave)|this time|every (?:mon|tues|wednes|thurs|fri|satur|sun)day|(?:for |in )?(?:an?|one|two|three|\d+|a few|ten|twenty|thirty|fifteen) (?:hours?|minutes?|mins?)|(?:an?|one|\d+) hour)\b|\b\d{1,2}(?::\d{2})?\s*(?:a\.?m\.?|p\.?m\.?)\b|\b(?:eod|eow|eom|eoy|cob|close of business|end of (?:the )?(?:day|week|month|year)|first thing (?:tomorrow|in the morning|monday)|(?:by|before|in|for) q[1-4])\b/i;
+const WHEN_RE = /\[a time\]|\[a day\]|\[by when\]|\b(?:on (?:your|my|the|our) way (?:home|back|in|over|out)|when (?:you|we) get (?:home|here|back|in)|before (?:you|we) (?:leave|go|head out)|first thing)\b|\b(?:by|before|after|at|on|until|around|from)\s+(?:\d{1,2}(?::\d{2})?\s*(?:a\.?m\.?|p\.?m\.?|o'clock)?|noon|midnight|tonight|tomorrow|today|(?:mon|tues|wednes|thurs|fri|satur|sun)day|the weekend|the end of (?:the )?(?:day|week|month)|end of (?:the )?(?:day|week|month)|dinner|lunch|breakfast|work|school|bedtime|pickup|pick-up|the meeting|the game|this (?:morning|afternoon|evening|week|weekend)|next (?:week|month|\w+day))\b|\b(?:tonight|today|tomorrow|this (?:morning|afternoon|evening|week|weekend)|(?:on )?(?:mon|tues|wednes|thurs|fri|satur|sun)day|next week|in (?:\d+|an?|ten|five|fifteen|twenty|thirty|a few|two|three) (?:minutes?|mins?|hours?|days?)|right after \w+|after (?:dinner|lunch|breakfast|work|school)|after (?:the )?(?:kids|baby|children|they|we) (?:are|is|go|get|goes) (?:\w+ ){0,2}(?:bed|asleep|down|home|out)|before (?:bed|dinner|work|school|you leave|we leave)|this time|every (?:mon|tues|wednes|thurs|fri|satur|sun)day|(?:for |in )?(?:an?|one|two|three|\d+|a few|ten|twenty|thirty|fifteen) (?:hours?|minutes?|mins?)|(?:an?|one|\d+) hour)\b|\b\d{1,2}(?::\d{2})?\s*(?:a\.?m\.?|p\.?m\.?)\b|\b(?:eod|eow|eom|eoy|cob|close of business|end of (?:the )?(?:day|week|month|year)|first thing (?:tomorrow|in the morning|monday)|(?:by|before|in|for) q[1-4])\b/i;
 const WHY_RE = /\b(?:because|since (?:i|we|you|it|the|my|our)|so (?:that|we|i|you|it)|the reason|as (?:i|we)'m|as (?:i|we) (?:have|need|want)|which (?:means|helps)|that way|it (?:helps|would help) (?:me|us)|it matters (?:to me )?because|it means a lot)\b/i;
 
 /* ============================================================
@@ -151,7 +171,7 @@ const F = [
    what:"\"Can you not…\" is a question on the surface and irritation underneath. It says what not to do, but not what to do instead.",
    fix:"Say what you would like instead: \"Could you put the dishes in the dishwasher?\""},
   {id:"blameq", name:"Blame dressed as a question", kind:"static",
-   re:/\b(?:why (?:didn't|don't|can't|won't|wouldn't|haven't|aren't|isn't|do you always|do you keep|would you|did you|are you (?:being|so|always)|on earth)|what's wrong with you|what is wrong with you|what's your problem|what is your problem|how (?:hard|difficult) (?:is|can) it|how many times|what were you thinking|what did you expect|who does that|how could you|do i have to do everything|is it (?:really )?(?:too much|so hard) to ask|do you (?:even|ever) (?:care|listen|think|try|notice|help|clean|want)|did you (?:even )?(?:think|try|listen|bother)|are you (?:serious|kidding(?: me)?|even listening|even trying)|why (?:is|are|was|were) (?:this|that|it|these|those|the [\w-]+|my [\w-]+|our [\w-]+|your [\w-]+) (?:still )?not|why (?:isn't|aren't|hasn't|haven't) (?:this|that|it|these|those|the [\w-]+|my [\w-]+|our [\w-]+|your [\w-]+))\b|\b(?:seriously|really)\?/gi,
+   re:/\b(?:why (?:didn't|don't|can't|won't|wouldn't|haven't|aren't|isn't|do you always|do you keep|would you|did you|are you (?:being|so|always)|on earth)|what's wrong with you|what is wrong with you|what's your problem|why are you (?:like this|like that|the way you are|always like this)|what is your problem|how (?:hard|difficult) (?:is|can) it|how many times|what were you thinking|what did you expect|who does that|how could you|do i have to do everything|is it (?:really )?(?:too much|so hard) to ask|do you (?:even|ever) (?:care|listen|think|try|notice|help|clean|want)|did you (?:even )?(?:think|try|listen|bother)|are you (?:serious|kidding(?: me)?|even listening|even trying)|why (?:is|are|was|were) (?:this|that|it|these|those|the [\w-]+|my [\w-]+|our [\w-]+|your [\w-]+) (?:still )?not|why (?:isn't|aren't|hasn't|haven't) (?:this|that|it|these|those|the [\w-]+|my [\w-]+|our [\w-]+|your [\w-]+))\b|\b(?:seriously|really)\?/gi,
    what:"A \"why didn't you\" question usually isn't asking for a reason. It carries a complaint, and the listener has to pick between answering the question and answering the complaint.",
    fix:"Say the request underneath the question: \"Next time, could you…?\""},
   /* ---------- blame and verdicts ---------- */
@@ -215,7 +235,7 @@ const F = [
    what:"\"Now,\" \"right now\" and \"ASAP\" with no reason can read as an emergency, or as a power move. The listener reacts to the pressure before the task.",
    fix:"Give a real time and the reason: \"by 5, because the office closes then.\""},
   {id:"vtime", name:"Vague timing", kind:"static",
-   re:/\b(?:when you get a (?:chance|sec|second|minute|moment)|when you have (?:a (?:sec|second|minute|moment|chance)|time)|when you're free|when you can|whenever|at some point|sometime|eventually|(?<!see you |talk to you |talk |catch you )later(?! on today)|soon|in a bit|in a minute|one of these days|shortly)\b/gi,
+   re:/\b(?:when you get a (?:chance|sec|second|minute|moment)|when you have (?:a (?:sec|second|minute|moment|chance)|time)|when you're free|when you can|whenever|at some point|sometime(?! (?:this|next|today|tonight|tomorrow|on|before|after|between)\b)|eventually|(?<!see you |talk to you |talk |catch you )later(?! (?:on )?(?:today|tonight|this))|soon|in a bit|in a minute|one of these days|shortly)\b/gi,
    what:"\"Later\" and \"when you get a chance\" are kind, but they leave the time open. One person hears \"tonight,\" the other hears \"this month.\"",
    fix:"Replace vague timing with a real time or cue: \"by 6\" or \"right after dinner.\""},
   {id:"vstd", name:"Undefined standard", kind:"static",
@@ -247,9 +267,9 @@ const F = [
    re:/\b(?:oh,? (?:great|wonderful|perfect|nice|fantastic|lovely|good|sure)|yeah,? right|thanks a lot|thanks for nothing|(?:nice|great|good) (?:job|work|one)(?=[.!,]*$)|just (?:perfect|great|wonderful|what i needed)|real(?:ly)? (?:mature|helpful|nice)|wow,? (?:thanks|great|ok|just wow)|sure you (?:did|are|will|do)|what a surprise|big surprise|shocker|how (?:nice|lovely|thoughtful) of you|i'm so (?:thrilled|glad|happy) for you|love that for (?:me|us)|must be nice|good for you(?=[.!]*$)|well,? (?:that's|isn't that) (?:just )?(?:great|perfect|lovely))\b/gi,
    what:"Sarcasm carries the real message in the tone, the opposite of the words. That is the easiest signal to lose, and the easiest to over-hear.",
    fix:"Say the real message plainly. Sarcasm carries its meaning in tone, which is the easiest signal to lose or to over-amplify."},
-  {id:"idiom", name:"Figure of speech", kind:"static", re:new RegExp("\\b(?:"+IDIOMS.join("|")+")\\b","gi"),
+  {id:"idiom", name:"Figure of speech", kind:"static", re:new RegExp("\\b(?:"+IDIOMS.concat(SHARED && SHARED.IDIOMS ? SHARED.IDIOMS.filter(x=>!/kill|murder|strangle/.test(x[0])).map(x=>x[0]) : []).join("|")+")\\b","gi"),
    what:"A figure of speech says one thing and means another. Most listeners translate it without effort, but some take it literally, especially under stress.",
-   fix:"Swap the figure of speech for the literal meaning."},
+   fix:"Swap the figure of speech for what you mean in plain words (the plain meaning is shown above)."},
   {id:"contempt", name:"Eye-roll or put-down", kind:"static", re:null,
    what:"An eye-roll, mocking or a put-down says \"I look down on you,\" which hurts more than a complaint and is very hard to answer calmly.",
    fix:"Drop the jab and say the complaint underneath it, about the thing, not the person."},
@@ -301,7 +321,7 @@ const F = [
   {id:"feellike", name:"\"I feel like you…\" (a thought, not a feeling)", kind:"static", re:/\bi feel (?:like|that) you\b/gi,
    what:"\"I feel like you…\" usually introduces a judgment about the other person, not a feeling. The listener hears the judgment.",
    fix:"Name the actual feeling and the event: \"I felt lonely when…\""},
-  {id:"feelingq", name:"Open feelings question", kind:"static", re:/\b(?:how (?:does|did) (?:that|it|this) make you feel|how do you feel(?: about)?|what are you feeling|tell me how you feel|why are you (?:upset|sad|angry|mad|quiet|like this)|what's wrong\?)/gi,
+  {id:"feelingq", name:"Open feelings question", kind:"static", re:/\b(?:how (?:does|did) (?:that|it|this) make you feel|how do you feel(?: about)?|what are you feeling|tell me how you feel|why are you (?:upset|sad|angry|mad|quiet)|what's wrong\?)/gi,
    what:"An open \"how do you feel?\" can feel like a test with no right answer, especially for someone who finds feelings hard to name.",
    fix:"Offer options (\"More tired, or more annoyed?\") or ask about the body and what would help."},
   {id:"hyper", name:"Exaggeration", kind:"static", re:/\b(?:literally dying|i'm dying|kill (?:you|me|him|her)|going to die|a million times|takes forever|the worst(?: ever)?|i could (?:kill|murder)|dead to me|i'm done|i (?:can't|cannot) even|losing my mind)\b/gi,
@@ -331,12 +351,28 @@ const F = [
   {id:"stopask", name:"\"Stop asking\"", kind:"static", re:/\b(?:stop asking(?: me)?|you already asked(?: me)?|i already answered|not this again)\b/gi,
    what:"It ends the question without settling it, so the worry behind it stays.",
    fix:"Use a kind, agreed-on script for repeat questions instead of shutting them down."},
-  {id:"tic", name:"Commenting on a movement or sound", kind:"static", re:/\b(?:stop (?:doing|making) that|quit (?:it|doing that)|can't you (?:just )?stop|stop (?:twitching|blinking|sniffing|clearing your throat|making (?:that |those )?noises?|fidgeting|rocking|tapping|humming|flapping)|do you have to do that|what are you doing with your (?:hands|face))\b/gi,
+  {id:"tic", name:"Commenting on a movement or sound", kind:"static", re:/\b(?:stop (?:doing|making) that|quit (?:it|doing that)|can't you (?:just )?stop|stop (?:twitching|blinking|sniffing|clearing your throat|making (?:that |those )?noises?|fidgeting|rocking|tapping|humming|flapping|stimming)|do you have to do that|what are you doing with your (?:hands|face))\b/gi,
    what:"A movement or sound may be a tic or a stim, not a message. Commenting on it can add shame and make it more likely.",
    fix:"Leave the movement or sound alone. A tic or stim isn't a message."},
   {id:"nowhen", name:"Ask with no when", kind:"static", re:null,
    what:"The ask is there, but not the time. \"Could you call the dentist?\" can mean today or next month.",
    fix:"Add a time or a cue: \"before Friday\" or \"after dinner.\""},
+  {id:"brushoff", name:"Brush-off (\"whatever,\" \"I don't care\")", kind:"static", re:null,
+   what:"\"Whatever,\" \"fine, whatever\" and \"I don't care\" can mean \"really, either is fine\" or \"I'm upset and done talking.\" In writing, most people hear the second one.",
+   fix:"Say which one you mean: \"Either is fine with me\" or \"I'm upset. Can we talk about it at 8?\""},
+  {id:"dxlabel", name:"A diagnosis used as an insult", kind:"static", re:null,
+   what:"Using a diagnosis (\"so autistic,\" \"so OCD\") as a put-down turns a real part of some people's lives into an insult. It hurts the listener, and anyone who shares that diagnosis.",
+   fix:"Leave the label out. Say the specific thing that bothered you: \"You've been talking about trains for a while, and I'd like a turn.\""},
+  {id:"violent", name:"Violent figure of speech (\"I'll kill you\")", kind:"static", re:null,
+   what:"\"I'll kill you if…\" is almost always an exaggeration, but in writing there's no smile or tone to show that. Some listeners take it literally, and it can read as a real threat.",
+   fix:"Say the true size of it: \"I'll be really upset if you're late. It matters to me.\""},
+  {id:"selfput", name:"Putting yourself down", kind:"static",
+   re:/\bi(?:'m| am) (?:so |such an? |a |an |really |just |the |an absolute |a total |a complete |literally )*(?:stupid|an idiot|idiot|dumb|useless|hopeless|pathetic|worthless|a failure|failure|the worst|a terrible person|an awful person|a bad person|a mess|garbage|trash)\b/gi,
+   what:"Calling yourself stupid or useless can pull the listener into reassuring you, and the apology or the point gets lost. It's also hard on you.",
+   fix:"Say what happened and what you'll do: \"I forgot. I'm sorry. I'll set a reminder.\""},
+  {id:"overhedge", name:"Too many softeners", kind:"static", re:null,
+   what:"A few softeners are kind. A stack of them (\"maybe possibly perhaps, if that's okay\") hides the ask, and the listener can't tell whether you're asking at all.",
+   fix:"Keep one softener and say the ask plainly: \"Could you do the dishes tonight, if that works?\""},
 
   /* ---------- worth keeping ---------- */
   {id:"istate", name:"I-statement", kind:"good",
@@ -1086,17 +1122,27 @@ function analyze(textIn, opts){
 
   shoutSpans(text).forEach(x=>push("shout", x.s, x.e));
   if(SHARED){
-    const MAP = {sarcasm:"sarcasm", contempt:"contempt", passive:"passiveag", pointed:"pointed", compare:"compare", absolute:"absolute", stonewall:"stonewall", flat:"minimal", pause:"pause", appreciation:"appreciation", swear:"swear", hostile:"hostile", label:"label", hint:"hint", opener:"ominous"};
+    const MAP = {dismiss:"brushoff", sarcasm:"sarcasm", contempt:"contempt", passive:"passiveag", pointed:"pointed", compare:"compare", absolute:"absolute", stonewall:"stonewall", flat:"minimal", pause:"pause", appreciation:"appreciation", swear:"swear", hostile:"hostile", label:"label", hint:"hint", opener:"ominous"};
     SHARED.scan(raw).forEach(m=>{
       const id = MAP[m.id]; if(!id) return;
       const s0 = m.whole ? 0 : m.start, e0 = m.whole ? raw.length : m.end;
       if(hits.some(h=>h.id===id && h.s < e0 && s0 < h.e)) return;
+      // "calm down" and "you're overreacting" already have their own, more specific readings
+      if(id==="brushoff" && hits.some(h=>["calm","invalid","sarcasm"].includes(h.id) && h.s < e0 && s0 < h.e)) return;
+      // "You are so autistic": a diagnosis used as an insult gets its own reading
+      if(id==="label" && /\b(?:autis\w*|retard\w*|adhd|add|ocd|bipolar|schizo\w*|psychotic|mental|spastic|spaz|special needs|brain ?damaged|deranged)\b/i.test(raw.slice(s0,e0))) { push("dxlabel", s0, e0); return; }
       if(id==="contempt" && /^[🙄😒]/.test(raw.slice(s0,e0)) && hits.some(h=>h.id==="joke" && h.s===s0)) hits.splice(hits.findIndex(h=>h.id==="joke" && h.s===s0),1);
       push(id, s0, e0);
     });
     // "It's gross." / "That's disgusting.": a verdict on something they did, with nothing to act on
     const JR = /(?:^|[.!?]\s+)((?:it's|it is|that's|this is|that is|it was|that was)\s+(?:so |really |just |kind of |pretty |honestly )?(?:gross|disgusting|nasty|revolting|filthy|vile|ridiculous|unacceptable|a disgrace|embarrassing))\b/gi;
     let jm; while((jm=JR.exec(text))!==null){ const st=jm.index+jm[0].indexOf(jm[1]); if(!hits.some(h=>h.id==="critic"&&h.s<=st&&h.e>st)) push("critic", st, st+jm[1].length); }
+    // "I'm going to kill you if…": an exaggeration that reads as a threat in writing
+    (SHARED.idioms ? SHARED.idioms(raw) : []).forEach(x=>{ if(/kill|murder|strangle/i.test(x.text)){ for(let i=hits.length-1;i>=0;i--) if(hits[i].id==="hyper" && hits[i].s < x.start+x.text.length && x.start < hits[i].e) hits.splice(i,1); push("violent", x.start, x.start+x.text.length); } });
+    // a short brush-off ("whatever.") is one reading, not two
+    if(hits.some(h=>h.id==="minimal" && /^\s*whatever/i.test(h.match))) for(let i=hits.length-1;i>=0;i--) if(hits[i].id==="brushoff") hits.splice(i,1);
+    // "I'm sick of you" is a fed-up line, not a feeling worth keeping
+    for(let i=hits.length-1;i>=0;i--) if(hits[i].id==="feeling" && /\b(?:sick|tired|done|fed up)$/i.test(hits[i].match) && /^\s+(?:of|with)\s+(?:you|this|it|that|your|him|her|them|everything|everyone|us|all)\b/i.test(low.slice(hits[i].e, hits[i].e+20))) hits.splice(i,1);
     // a pause with a time to come back is not a door shut: drop the "minimal" and "stonewall" reads
     if(hits.some(h=>h.id==="pause")) for(let i=hits.length-1;i>=0;i--) if(hits[i].id==="stonewall"||hits[i].id==="minimal") hits.splice(i,1);
   }
@@ -1128,7 +1174,7 @@ function analyze(textIn, opts){
   const drop=(id, pred)=>{ for(let i=hits.length-1;i>=0;i--) if(hits[i].id===id && (!pred||pred(hits[i]))) hits.splice(i,1); };
   const has=id=>hits.some(h=>h.id===id);
   // conflicts: keep the more specific reading
-  drop("impera", h=>["calm","tone","demand","tic","hint","ominous","minimal","sarcasm","stopask"].some(id=>inside(h,id)));
+  drop("impera", h=>["calm","tone","demand","tic","hint","ominous","minimal","sarcasm","stopask","contempt"].some(id=>inside(h,id)));
   drop("clearask", h=>inside(h,"blameq")||inside(h,"cannot")||inside(h,"ominous")||inside(h,"feelingq"));
   if(has("tic")) drop("cannot", h=>inside(h,"tic"));
   drop("cannot", h=>/why\s*$/i.test(low.slice(Math.max(0,h.s-5), h.s)));
@@ -1149,6 +1195,15 @@ function analyze(textIn, opts){
   drop("critic", h=>/^you're late$/i.test(h.match) && /\b(?:when|if)\s*$/i.test(low.slice(Math.max(0,h.s-6),h.s)));
   drop("absolute", h=>/^never$/i.test(h.match) && /never\s*mind/i.test(low.slice(h.s,h.s+12)));
 
+  // a stack of softeners in one request ("could you maybe possibly think about perhaps…")
+  sentences.forEach(se=>{
+    const st = low.slice(se.s, se.e).toLowerCase();
+    const n = (st.match(/\b(?:maybe|possibly|perhaps|kind of|sort of|think about|at some point|if (?:that is|that's|it's|it is) (?:ok|okay|alright|not too much)|if you (?:don't|do not) mind|if it's not too much trouble|i was wondering if)\b/g)||[]).length;
+    if(n>=3 && /\b(?:could|would|can|will) you\b/.test(st)){
+      push("overhedge", se.s, se.e);
+      drop("softno", h=>h.s>=se.s && h.e<=se.e); drop("hedge", h=>h.s>=se.s && h.e<=se.e);
+    }
+  });
   // "now" at the end of an ask is time pressure too
   const hasWhy = WHY_RE.test(low);
   const askSent = new Set();
@@ -1207,7 +1262,7 @@ function analyze(textIn, opts){
   if(chBase(ch)==="text" && wc>0 && wc<=5 && /[^.]\.\s*$/.test(text)){ const i=text.lastIndexOf("."); push("period", i, i+1); }
   // an ask with no when
   const standingSent = i=>i!=null && sentences[i] && /\b(?:going forward|moving forward|from now on|in (?:the )?future|next time|from here on|each time|every time|whenever)\b/i.test(sentences[i].text);
-  const taskAsks = asks.filter(a=>["oblig","command","request","hint","still","critq","threat","nudge"].includes(a.kind) && !standingSent(a.sentence) && !/^(?:not |stop |be |calm|relax|listen|understand|know|look|keep|remember|tell me|let me|say|repeat|explain|pass|hand|hold|wait|give me|show me|come here|help me with this)\b/i.test(a.text) && !/\b(?:when|if|whenever|every time|next time)\b/i.test(a.text));
+  const taskAsks = asks.filter(a=>["oblig","command","request","hint","still","critq","threat","nudge"].includes(a.kind) && !standingSent(a.sentence) && !/^(?:not |stop |be |calm|relax|listen|understand|know|look|keep|remember|tell me|let me|say|repeat|explain|pass|hand|hold|wait|give me|show me|come here|help me with this)\b/i.test(a.text) && !/\b(?:when|if|whenever|every time|next time)\b/i.test(a.text) && !(SHARED && SHARED.idioms && SHARED.idioms(a.text).length) && !/\bstimming\b/i.test(a.text));
   const hasWhen = hits.some(h=>h.id==="when") || has("urgent");
   if(taskAsks.length && !hasWhen) hits.push({id:"nowhen", s:-1, e:-1, match:taskAsks[0].text});
   // "no rush" on an ask with no time is kind, and still vague for a literal listener
@@ -1278,7 +1333,7 @@ function readings(an, ids, ch){
   return out;
 }
 
-const HOT_IDS = ["swear","hostile","label","contempt","threat"];
+const HOT_IDS = ["swear","hostile","label","contempt","threat","dxlabel","violent"];
 /* a static score: sum of the loudest reading per feature, minus a little for what's worth keeping */
 function score(an, ids, ch, state){
   let sc=0; const top=[];
@@ -1351,6 +1406,12 @@ const CHANGE_WHY = {
   butc:{g:"Keeping the thanks and the request apart lets the thanks count.", adhd:"After \"but,\" the compliment tends to disappear."},
   multi:{g:"Several asks at once compete for the same working memory. A short numbered list, or one at a time, lets each one land.", adhd:"Many ADHD listeners keep the first or last item and lose the middle. A written list helps.", apd:"Spoken multi-step requests are easy to lose. Write them down too."},
   addwhen:{g:"The ask had no time. Adding one (fill in the blank) closes the loop so neither of you has to guess.", adhd:"A time or a cue helps it actually happen.", autistic:"A concrete time is easier to plan around than an open one."},
+  brushoff:{g:"\"Whatever\" or \"I don't care\" can mean \"either is fine\" or \"I'm upset.\" Saying which one you mean stops the listener guessing, usually wrong.", anxiety:"A brush-off is often heard as anger or pulling away.", autistic:"A brush-off may be taken at its word."},
+  dxlabel:{g:"A diagnosis used as a put-down is an insult, and it lands on everyone who has that diagnosis. The rewrite leaves it out and keeps what you actually want to say."},
+  violent:{g:"\"I'll kill you\" is an exaggeration, but in writing it can read as a real threat. The rewrite says the true size of it and keeps what you want.", autistic:"An exaggerated threat may be taken literally.", trauma:"Violent words can set off alarm even when they're clearly not meant."},
+  selfput:{g:"Calling yourself stupid pulls the listener into reassuring you. The rewrite keeps the apology and what happened, and leaves the put-down out."},
+  overhedge:{g:"A stack of softeners hides the ask. One softener is enough to keep it kind, and the ask stays clear."},
+  apology:{g:"An apology lands best when it's short and names what you'll do about it. The note in brackets is a place for that, if there's something you can do."},
   addask:{g:"The sentence had a complaint but no ask. Adding one specific ask gives the listener something they can say yes to."},
   noticed:{g:"\"I noticed…\" makes it an observation from your side rather than a charge."},
   softno:{g:"A clear no or a date for a real maybe stops the question from looping."},
@@ -1372,7 +1433,7 @@ const CHANGE_WHY = {
 };
 
 const MINIMAL_FIX = {
-  "fine":"I'm okay with that. [Or, if you're not: \"I'm not okay yet. Can we talk at [a time]?\"]",
+  "fine":"[If it's really fine:] That works for me. [If it isn't:] I'm not okay with this yet. Can we talk about it at [a time]?",
   "i'm fine":"I'm okay. [Or say what's actually going on, even in a few words.]",
   "it's fine":"It's really okay, I mean it.",
   "k":"Okay, got it.", "kk":"Okay, got it.", "ok":"Okay, got it.", "okay":"Okay, got it.",
@@ -1380,7 +1441,7 @@ const MINIMAL_FIX = {
   "k thx":"Okay, got it. Thanks.", "k thanks":"Okay, got it. Thanks.", "kk thx":"Okay, got it. Thanks.", "ok thx":"Okay, got it. Thanks.", "ok thanks":"Okay, got it. Thanks.", "ok, thanks":"Okay, got it. Thanks.", "okay thanks":"Okay, got it. Thanks.", "okay, thanks":"Okay, got it. Thanks.", "ok ty":"Okay, got it. Thanks.", "ok thank you":"Okay, got it. Thank you.", "okay, thank you":"Okay, got it. Thank you.", "okay thank you":"Okay, got it. Thank you.", "ok, thank you":"Okay, got it. Thank you.",
   "sure":"Sure, I can do that.", "noted":"Noted, thanks.", "cool":"Cool, got it.", "great":"Great, got it.",
   "good":"Good, got it.", "yep":"Yes, got it.", "yeah":"Yes, got it.", "mhm":"Yes, got it.", "right":"Right, I understand.",
-  "whatever":"I'm too frustrated to talk about this well right now. Can we come back to it at [a time]?",
+  "whatever":"[If it's really okay:] Okay, that works for me. [If it isn't:] I'm not ready to talk about this well right now. Can we come back to it at [a time]?",
   "nothing":"I'm not ready to talk yet. Can we talk at [a time]?",
   "nvm":"It's okay, it can wait until [a time].", "never mind":"It's okay, it can wait until [a time].", "nevermind":"It's okay, it can wait until [a time].",
   "if you say so":"I see it differently, but I'm okay going with that.",
@@ -1402,9 +1463,10 @@ function endP(s){ s = s.replace(/[\s,;:]+$/,""); return EMOJI_END.test(s) ? s : 
 function vagueObj(ask){ return ask.replace(/^(do|fix|handle|sort|finish|clean) (this|that|it)$/i, "$1 [the specific thing]").replace(/^help(?: out| more)?$/i, "help with [one specific task]"); }
 function tidy(t){
   t = t.replace(/[ \t]+/g," ").replace(/ +([,.!?:;])/g,"$1").replace(/([,.!?:;])(?=[A-Za-z])/g,"$1 ").replace(/,\s*([.!?])/g,"$1")
-       .replace(/([.?!])\s*\./g,"$1").replace(/\?\?+/g,"?").replace(/!!+/g,"!").replace(/^\s*[,.;:]\s*/,"").replace(/\s+\n/g,"\n").trim();
+       .replace(/,\s*,/g,",").replace(/([.?!])\s*\./g,"$1").replace(/\?\?+/g,"?").replace(/!!+/g,"!").replace(/^\s*[,.;:]\s*/,"").replace(/\s+\n/g,"\n").trim();
   t = t.replace(/(^|[.!?]\s+|[.!?]\]\s+|\n)([a-z])/g,(m,p,c)=>p+c.toUpperCase());
   t = t.replace(/\bi\b(?=[' ])/g,"I");
+  t = t.replace(/,\s+(and|but|so)?\s*(Could|Would|Can|Will)\b(?! [A-Z])/g, (m,c,w)=>", "+(c?c+" ":"")+w.toLowerCase());
   // "I love you, but. Could you…" → "I love you, and could you…"
   t = t.replace(/,?\s*\b(but|and|so)\.\s+(Could|Would|Can|Will|I)\b/g, (m,c,w)=>", and "+(w==="I"?w:w.toLowerCase()));
   // a question gets a question mark: "Can you grab milk on your way home." → "…home?"
@@ -1453,6 +1515,14 @@ function rewrite(an, opts){
     log.push({id:"minimal", from:[text], to:[out], extra:""}); log.push({id:"contempt", from:[(text.match(/[🙄😒]/)||[""])[0]], to:[], extra:""});
     return finish(out, out, log, an, W, opts);
   }
+  // a brush-off on its own ("fine. whatever", "i don't care", "sure, whatever"): say which one you mean
+  if(/^\s*(?:(?:fine|ok(?:ay)?|sure|k|yeah)[.,!]*\s*)?(?:whatever|whatevs|whatev|whatever you (?:want|like|say|think)|i (?:really )?(?:don't|do not) care|i could(?:n't| not) care less)(?:[\s.,!]*(?:whatever|fine))?[\s.!…🙄😒]*$/i.test(text)){
+    const out = /care/i.test(text)
+      ? "[If you don't mind either way:] Either is fine with me. [If you're upset:] I'm too upset to decide this well right now. Can we come back to it at [a time]?"
+      : "[If it's really okay:] Okay, that works for me. [If it isn't:] I'm not ready to talk about this well right now. Can we come back to it at [a time]?";
+    log.push({id:"brushoff", from:[text], to:["say which one you mean"], extra:""});
+    return finish(out, out, log, an, W, opts);
+  }
   if(has("minimal") && MINIMAL_FIX[low]){
     const out = MINIMAL_FIX[low];
     log.push({id:"minimal", from:[text], to:[out], extra:""});
@@ -1475,10 +1545,15 @@ function rewrite(an, opts){
   }
   if(/\.{3,}|…/.test(text)){ text = text.replace(/\s*(?:\.{3,}|…)\s*/g,". "); note("dots","…","."); }
 
+  const isApology = /^\W*(?:(?:i'm|i am|so|really|very)\s+)*sorry\b|^\W*(?:i apologi[sz]e|my bad|my fault|my mistake|i messed up)\b/i.test(text);
+  if(isApology) text = text.replace(/^\W*(?:(?:i'm |i am )?(?:so |really )?sorry[\s,!.]*){2,}/i, mm=>{ note("apology", mm.trim().replace(/[,.!\s]+$/,""), "I'm sorry"); return "I'm sorry, "; });
   const out = [];
-  const ctx = {converted:false, critical:false, hostile:false, insult:false};
+  const ctx = {converted:false, critical:false, hostile:false, insult:false, noAsk:false, apology:isApology};
   // swearing, fed-up lines and name-calling come out first; what's left (a fact, an ask) is rewritten as usual
-  const sents = splitSentences(text).map(x=>calmSentence(x.text, ctx, note)).filter(Boolean);
+  let sents = splitSentences(text).map(x=>calmSentence(x.text, ctx, note)).filter(Boolean);
+  // "Wow. Amazing." after a sarcastic line is more sarcasm: it goes, the point stays
+  if(has("sarcasm")||has("contempt")) sents = sents.filter(x=>{ if(sents.length>1 && /^(?:oh,?\s*)?(?:wow|amazing|great|perfect|wonderful|fantastic|brilliant|awesome|lovely|nice|super|terrific|marvelous|splendid|classic|typical|figures|shocker|bravo|just great|just perfect)(?:\s+(?:job|work|one))?[\s.!…🙄😒🙃]*$/i.test(x.trim())){ note("sarcasm", x.trim().replace(/[.!…\s]+$/,""), ""); return false; } return true; });
+  ctx.nSents = sents.length;
   const pairs = [];
   sents.forEach(s0=>{ const r = rewriteSentence(s0, ctx, note, an, W); pairs.push([s0, r]); if(r) out.push(r); });
   let main = out.join(" ");
@@ -1487,9 +1562,9 @@ function rewrite(an, opts){
   if(ctx.swore && !ctx.hostile && !ctx.insult && main.trim() && !/\b(?:could you|would you|can you|can we|could we|will you)\b/i.test(main)) main = "I'm frustrated. "+main;
   if(ctx.hostile || ctx.insult){
     const hasAsk = /\b(?:could you|would you|can you|can we|could we|will you)\b/i.test(main);
-    const lead = ctx.hostile ? "I'm really frustrated right now." : "I'm frustrated about [what happened].";
-    if(!main.trim()) main = ctx.hostile ? lead+" I need a few minutes, and then can we talk about [the thing]?" : lead+" Could you [one specific thing] by [a time]?";
-    else if(hasAsk || !ctx.hostile) main = lead+" "+main;
+    const lead = ctx.hostile ? "I'm really frustrated right now." : (ctx.swore || has("swear")) ? "I'm frustrated about [what happened]." : "";
+    if(!main.trim()) main = ctx.hostile ? lead+" I need a few minutes, and then can we talk about [the thing]?" : (lead || "[Say what happened, plainly.]")+" Could you [one specific thing] by [a time]?";
+    else if(lead && hasAsk) main = lead+" "+main;
     else main = lead+" "+main.replace(/\s*$/,"")+" Can we talk about it at [a time], once I've had a few minutes?";
   }
 
@@ -1524,10 +1599,19 @@ function rewrite(an, opts){
     const re = /\b(Could you|Can you|Would you|Will you|Can we|Could we) (?!stop|not|be |talk|listen|say|repeat|explain|[^?]*\b(?:when|if|whenever|next time)\b|understand|know|remember|look|keep|calm|relax|tell me|let me|[^?]*\b(?:rather than|instead)\b)([^?]+)\?/i;
     if(re.test(main)){ main = main.replace(re, (m,a,b)=>a+" "+b.replace(/\s+$/,"")+" by [a time]?"); note("addwhen","(no time)","by [a time]"); }
   }
-  // "no rush" stays kind once there is a real time to be in no rush about
-  if(an.found.vtime && /\[a time\]/.test(main)) main = main.replace(/\bno rush\b[.!]*/i, "No rush before then.");
-  // add an ask when there was only a complaint
-  if(!/\b(?:could you|would you|can you|can we|could we|could someone|would that work|will you|would you be|did you get a chance|did you mean|do you have)\b/i.test(main) && (ctx.critical || an.missing.ask)){
+  // "no rush" stays kind once there is a real time to be in no rush about: it moves after the time
+  if(an.found.vtime && /\[a time\]/.test(main) && /\bno rush\b/i.test(main)){
+    main = main.replace(/\s*\bno rush\b\s*(?:before then)?[,.!]*\s*(?:but\s+|and\s+)?/i, " ").replace(/^\s+/,"");
+    main = main.replace(/(\[a time\][^.!?\]]*[.!?])/, "$1 No rush before then.");
+  }
+  // an apology after a miss: a place to say what you'll do about it, never a demand
+  if(ctx.apology && log.some(c=>c.id!=="apology") && /\b(?:forgot|forget|missed|late|broke|lost|didn't|messed up|dropped)\b/i.test(main) && !/\[What you'll do/.test(main)){
+    main = endP(main.replace(/\s+$/,""))+" [What you'll do to put it right, if there's something, like \"I'll set a reminder.\"]";
+    note("apology","","[what you'll do to put it right]");
+  }
+  // add an ask when there was only a complaint (never to an apology, a question, or a line that already says what it needs)
+  const typedQ = /\?\s*$/.test(an.norm.trim());
+  if(!ctx.noAsk && !ctx.apology && !typedQ && !/\b(?:could you|would you|can you|can we|could we|could someone|would that work|will you|would you be|did you get a chance|did you mean|do you have|want to)\b/i.test(main) && (ctx.critical || an.missing.ask)){
     main = main.replace(/\s*$/," Could you [one specific thing] by [a time]?");
     note("addask","(no ask)","Could you [one specific thing] by [a time]?");
   }
@@ -1591,14 +1675,54 @@ function calmSentence(s0, ctx, note){
   return capFirst(kept.join(", ")) + (end || ".");
 }
 
+function ingBase(w){ const l=w.toLowerCase().replace(/ing$/,""); if(/([^aeiouls])\1$/.test(l)) return l.slice(0,-1); if(VERBSET.has(l)) return l; if(VERBSET.has(l+"e")) return l+"e"; return l; }
 function rewriteSentence(s, ctx, note, an, W){
   let t = s.trim(), m;
+  // "Can you read the room?": say what you noticed and what you'd like, not a figure of speech with a deadline
+  if(/^(?:(?:hey|so|ok(?:ay)?),?\s+)?(?:can|could) you (?:please |just |maybe )?(?:try to )?read the room\b[^.!?]*[?.!]*$/i.test(t)){
+    const rep = "[Say what you noticed, like \"Sam seems tired.\"] Could we [what you'd like instead, like \"wrap this up\"]?";
+    note("idiom", "read the room", "what you noticed, and what you'd like"); ctx.noAsk = true; return rep;
+  }
+  // "I'm going to kill you if you're late": the true size of it
+  m = t.match(/^(.*?)\b(?:i'm (?:going to|gonna|about to)|i am (?:going to|gonna)|i'll|i will|i could) (?:kill|murder|strangle) (?:you|him|her|them)\b\s*(.*?)([.!?]*)$/i);
+  if(m){
+    const lead = (m[1]||"").replace(/[,\s]+$/,""), rest = m[2].replace(/\s*\b(?:yet again|again|one more time)\b/gi,"").replace(/[,\s]+$/,"").trim();
+    let rep;
+    if(/^if (?:you're|you are|you (?:show up|come|get here|turn up)) late\b/i.test(rest)) rep = "It really matters to me that you're on time. Could you text me if you're running late?";
+    else if(/^if\b/i.test(rest)) rep = "I'll be really upset "+rest+". It matters to me.";
+    else rep = "I'm really upset with you right now.";
+    note("violent", (t.match(/\b(?:i'm (?:going to|gonna|about to)|i am (?:going to|gonna)|i'll|i will|i could) (?:kill|murder|strangle) (?:you|him|her|them)\b/i)||[""])[0], rep);
+    ctx.noAsk = true;
+    return (lead && !FILLER_ONLY.test(lead) ? endP(capFirst(lead))+" " : "")+rep;
+  }
+  // "Can you stop stimming?": a stim isn't a message
+  if(/\bstop (?:stimming|flapping|rocking|humming)\b/i.test(t)){
+    const rep = "[Stimming helps many people stay steady, so asking them to stop can take that away. If the place is the problem, you could ask:] Would it help to move somewhere quieter, or take a break?";
+    note("tic", (t.match(/\bstop \w+/i)||[""])[0], "an offer instead"); ctx.noAsk = true; return rep;
+  }
+  // "Sure, whatever you say, genius.": the mocking name goes
+  if(an.found.sarcasm || an.found.contempt) t = t.replace(/,\s*(?:genius|einstein|sherlock|smart guy|smarty ?pants)\b/gi, mm=>{ note("contempt", mm.replace(/^,\s*/,""), ""); return ""; });
+  // "I'm so stupid": the self put-down goes, what happened stays
+  t = t.replace(/(^|[,;]\s*|\s(?:and|but|so)\s+)i(?:'m| am) (?:so |such an? |a |an |really |just |the |an absolute |a total |a complete |literally )*(?:stupid|an idiot|idiot|dumb|useless|hopeless|pathetic|worthless|a failure|failure|the worst|a terrible person|an awful person|a bad person|a mess|garbage|trash)\b[,.!]?\s*/gi, (mm,p)=>{ note("selfput", mm.trim().replace(/^[,;]\s*|[,.!]$/g,"").replace(/^(?:and|but|so)\s+/i,""), ""); return /[,;]/.test(p) ? ", " : p ? " " : ""; }).trim();
+  if(!t.replace(/[.!?,\s]/g,"")) return "";
+  // "Could you maybe possibly think about perhaps doing the dishes": one ask, one softener
+  if(an.found.overhedge && /^(?:(?:hey|so|um),?\s+)?(?:could|would|can|will) you\b/i.test(t)){
+    const before = t;
+    t = t.replace(/\bi was wondering if\s*/i,"").replace(/\b(?:maybe|possibly|perhaps|kind of|sort of)\b,?\s*/gi,"").replace(/\bthink about (\w+ing)\b/i,(mm,v)=>ingBase(v)).replace(/\s{2,}/g," ");
+    if(t!==before) note("overhedge", "maybe, possibly, perhaps", "one softener");
+  }
+  // "We should get coffee sometime": an invitation with a day to fill in
+  m = t.match(/^(?:we should|we could|we gotta|let's|let us) (get|grab|have|go|do|see|catch|meet|hang out|play|try|watch)\b(.*?)\s*\b(?:sometime|some time|at some point|soon|one of these days)\b(.*?)([.!?]*)$/i);
+  if(m){ const rep="Want to "+m[1].toLowerCase()+m[2].replace(/\s+$/,"")+" on [a day]"+m[3].replace(/\s+$/,"")+"?"; note("vtime", (t.match(/\b(?:sometime|some time|at some point|soon|one of these days)\b/i)||[""])[0], "on [a day]"); ctx.noAsk = true; return rep; }
   PLAIN_WORDS.forEach(([rx, plain])=>{ t = t.replace(rx, mm=>{ note("idiom", mm, plain); return /^[A-Z]/.test(mm) && !/^I\b/.test(plain) ? plain.charAt(0).toUpperCase()+plain.slice(1) : plain; }); });
   const orig = t;
   m = t.match(/^(?:and |honestly,? )?i (?:have to|always|end up|got to|gotta|'m left to) (?:do(?:ing)?|clean(?:ing)?|handle|handling) everything(?: around here| at home| in this house| myself| alone)?[.!]*$/i);
   if(m){ const rep = "I'm feeling stretched thin. Could you take on [one specific thing] by [a time]?"; note("guilt", t.replace(/[.!?]+$/,""), rep); ctx.converted = true; return rep; }
-  if(/^(?:of course (?:you|he|she|they) (?:did|didn't|do|don't|would|wouldn't|forgot|are|were|can't|won't)|classic you|typical(?: you)?|yeah,? sure|sure,? whatever|(?:great|nice|good) (?:job|work),? (?:genius|einstein|really))[.!…🙄😒🙃\s]*$/i.test(t)){
-    note("sarcasm", t.replace(/[.!?]+$/,""), "That's frustrating for me."); ctx.critical = true; ctx.sarcasmOnly = true; return "That's frustrating for me.";
+  if(/^(?:of course (?:you|he|she|they) (?:did|didn't|do|don't|would|wouldn't|forgot|are|were|can't|won't)|classic you|typical(?: you)?|yeah,? sure|(?:great|nice|good) (?:job|work),?(?: (?:genius|einstein|really))?)[.!…🙄😒🙃\s]*$/i.test(t)){
+    ctx.critical = true; ctx.sarcasmOnly = true;
+    if(ctx.nSents>1){ note("sarcasm", t.replace(/[.!?]+$/,""), ""); return ""; }
+    const rep = "[Say plainly what happened, in your own words.] Can we talk about it?";
+    note("sarcasm", t.replace(/[.!?]+$/,""), rep); return rep;
   }
   if(/^thanks? (?:you )?for (?:finally )?(?:noticing|telling me now|letting me know now|the heads up)[.!]*$/i.test(t) && /finally|now/i.test(t)){
     const rep = "Thanks for noticing. [If something's bothering you, say it plainly: \"I was hoping you'd notice sooner.\"]"; note("passiveag", t.replace(/[.!?]+$/,""), rep); return rep;
@@ -1677,7 +1801,7 @@ function rewriteSentence(s, ctx, note, an, W){
     [/^(?:wow,?\s*|gee,?\s*)?thanks? (?:a lot )?for nothing[.!]*$/i, "sarcasm", "I was counting on your help with this, and I'm disappointed. Could you [one specific thing] by [a time]?"],
     [/^(?:wow,?\s*)?(?:thanks a lot|gee,? thanks)[.!]*$/i, "sarcasm", "That didn't help me. Could you [one specific thing] by [a time]?"],
     [/^(?:it )?must be nice(?: to (.+?))?[.!]*$/i, "sarcasm", m=>"I'm feeling stretched thin"+(m[1]?" while you "+m[1].replace(/\bjust\b\s*/,""):"")+". Could we find a way for me to get a break too?"],
-    [/^(?:lol,?\s*)?(?:ok(?:ay)?,?\s*)?(?:whatever you say|sure,? whatever|if you say so)[.!]*$/i, "sarcasm", "I see it differently, and I'd like to talk about it when we're both calm. Could we try tonight at [a time]?"],
+    [/^(?:lol,?\s*)?(?:(?:ok(?:ay)?|sure|fine|yeah),?\s*)?(?:whatever you say|sure,? whatever|if you say so)[.!]*$/i, "sarcasm", "I see it differently, and I'd like to talk about it when we're both calm. Could we try tonight at [a time]?"],
     [/^(?:lol,?\s*)?ok(?:ay)?,? whatever[.!]*$/i, "sarcasm", "I'm not sure how to answer that. Can we come back to it at [a time]?"],
     [/^some of us (?:actually |still |do |would )?(?:like|want|need|prefer|enjoy) (?:having |to have )?(.+?)[.!]*$/i, "passiveag", m=>"I'd really like "+m[1].replace(/^a /,"a ")+". Could you help with that by [a time]?"],
     [/^some of us (?:actually |still )?(have|had|need|work|clean|cook|pay|do) (.+?)[.!]*$/i, "passiveag", m=>"I've been the one who "+(m[1]==="have"||m[1]==="had"||m[1]==="need"?"has to":m[1]+"s")+" "+m[2]+", and I'd like some help. Could you take [one part] by [a time]?"],
@@ -1687,6 +1811,10 @@ function rewriteSentence(s, ctx, note, an, W){
     [/^not that (?:you|anyone|anybody) (?:would )?(?:care|cares|noticed?|asked)[.!]*$/i, "passiveag", "It would mean a lot to me if you noticed [the specific thing]."],
     [/^(?:grow up|get a life|give me a break|spare me|oh please|cry me a river|boo hoo)[.!]*$/i, "contempt", "I'm frustrated, and I don't want to say something I'll regret. Can we talk about this at [a time]?"],
     [/^(?:are you (?:serious|kidding me)|you can't be serious|unbelievable)(?: right now)?[.!?]*$/i, "contempt", "[Say what upset you, plainly.] Can we talk about it?"],
+    [/^don't "?(?:ok|okay|k|whatever|sorry)"? me[.!]*$/i, "contempt", ()=>ctx.nSents>1 ? "" : "[Say what upset you, plainly.] Can we talk about it?"],
+    [/^(?:(?:nobody|no one|no-one) asked(?: you| for your (?:opinion|input))?|who asked(?: you)?)[.!?]*$/i, "contempt", "I'd rather work this one out myself, thanks."],
+    [/^(?:(?:this is|that's) why |no wonder )?(?:nobody|no one|no-one) (?:wants to (?:deal with|be around|talk to|be with|hear from)|likes|can stand|cares about) you\b[^.!?]*[.!?]*$/i, "contempt", "[What happened] was really hard for me. I need a break, and then can we talk about it at [a time]?"],
+    [/^(?:this is why|no wonder) (?:nobody|no one|no-one|people|everyone|you have no)\b[^.!?]*[.!?]*$/i, "contempt", "[What happened] was really hard for me. I need a break, and then can we talk about it at [a time]?"],
     [/^(?:\.{3,}|…)$/, "stonewall", "[Say one short line, even \"I need a minute. I'll reply tonight.\"]"],
     [/^(?:i said )?not now[.!]*$/i, "stonewall", "I can't talk right now. Can we talk at [a time]?"],
     [/^i (?:just |really |honestly )?can't (?:do|talk about) this(?: right now| anymore| today| tonight)?[.!]*$/i, "stonewall", "I can't do this right now. I need a break. Can we come back to it at [a time]?"],
@@ -1695,14 +1823,20 @@ function rewriteSentence(s, ctx, note, an, W){
   for(const [re,id,rep] of PLAIN){
     if(id==="stonewall" && (an.found.pause || WHEN_RE.test(an.norm) || /\bi need (?:an? |some |one )?(?:hour|minute|break|moment|time|space|breather)\b/i.test(an.norm))) continue;
     const mm = t.replace(/\s*(?:\b(?:lol|lmao)\b|🙄|😒|🙂|🙃|😊)\s*/gi," ").trim().match(re);
-    if(mm){ const r = typeof rep==="function" ? rep(mm) : rep; note(id, t.replace(/[.!?]+$/,""), r.replace(/\s*\[Say.*$/,"")); ctx.critical = id!=="stonewall"; if(/Could you/.test(r)) ctx.converted=true; return r; }
+    if(mm){ const r = typeof rep==="function" ? rep(mm) : rep; note(id, t.replace(/[.!?]+$/,""), r.replace(/\s*\[Say.*$/,"")); ctx.critical = id!=="stonewall"; if(/Could you/.test(r)) ctx.converted=true; if(!/\?/.test(r)) ctx.noAsk=true; return r; }
   }
 
   // --- sarcasm (short lines)
   if(FBY.sarcasm.re && new RegExp(FBY.sarcasm.re.source,"i").test(t) && words(t)<=10 && !/\bbut\b/i.test(t)){
-    note("sarcasm", t, "That's frustrating for me. [What happened, in plain words.]");
+    const sm = t.match(new RegExp(FBY.sarcasm.re.source,"i"));
+    const rest = (t.slice(0, sm.index)+" "+t.slice(sm.index+sm[0].length)).replace(/^[\s,.!…:;-]+/,"").replace(/\s{2,}/g," ").trim();
     ctx.critical=true;
-    return "That's frustrating for me. [What happened, in plain words.]";
+    if((rest.match(/[A-Za-z']+/g)||[]).length >= 2){ note("sarcasm", sm[0], ""); t = capFirst(rest); }
+    else {
+      if(ctx.nSents>1){ note("sarcasm", t, ""); return ""; }
+      const rep = "[Say plainly what happened, in your own words.] Can we talk about it?";
+      note("sarcasm", t, rep); return rep;
+    }
   }
 
   // --- guilt
@@ -1841,6 +1975,7 @@ function rewriteSentence(s, ctx, note, an, W){
     [/^(.*?)\bwhy won't you (.+?)\?*$/i, (m)=>pre(m[1])+"Could you "+m[2]+"? If not, could you tell me what's in the way?"],
     [/^(.*?)\bwhy do you (?:always |keep |constantly )?(.+?)\?*$/i, (m)=>"It's hard for me when you "+m[2]+". Can we talk about it?"],
     [/^(.*?)\bwhy would you (.+?)\?*$/i, ()=>"Help me understand what happened."],
+    [/^(.*?)\bwhy are you (?:always )?(?:like this|like that|the way you are)[?!.]*$/i, ()=>"[What happened] is bothering me. Can we talk about it?"],
     [/^(.*?)\bwhy are you (?:being |so |always )(.+?)\?*$/i, ()=>"Something feels off between us. What's going on for you?"],
     [/^how many times do i have to (?:tell|ask|remind) you(?: to (.+?))?\?*$/i, (m)=> m[1] ? "This keeps coming up. Could you "+m[1]+"? Maybe we can find a way to make it easier to remember." : "This keeps coming up. Can we find a system for it together?"],
     [/^how (?:hard|difficult) (?:is|can) it (?:be )?to (.+?)\?*$/i, (m)=>"Could you "+m[1]+"?"],
@@ -1859,7 +1994,7 @@ function rewriteSentence(s, ctx, note, an, W){
     [/^(.*?)\b(?:can|could) you not (.+?)\?*$/i, (m)=>pre(m[1])+"Could you [what you'd like instead] rather than "+m[2].replace(/[.!?]+$/,"")+"?"],
     [/^(.*?)\bcan't you (?:just )?(.+?)\?*$/i, (m)=>pre(m[1])+"Could you "+m[2]+"?"]
   ];
-  function pre(p){ p=(p||"").replace(/[,\s]+$/,""); if(!p || FILLER_ONLY.test(p)) return ""; if(/\b(?:but|and|so)$/i.test(p)) return p.replace(/,?\s*\b(?:but|and|so)$/i,"")+", and "; return /^(?:tomorrow|tonight|today|later|next time|this weekend|on \w+day|in the morning|after dinner)$/i.test(p) ? p+", " : p+". "; }
+  function pre(p){ p=(p||"").replace(/[,\s]+$/,""); if(!p || FILLER_ONLY.test(p)) return ""; if(/\b(?:but|and|so)$/i.test(p)) return p.replace(/,?\s*\b(?:but|and|so)$/i,"")+". "; return /^(?:tomorrow|tonight|today|later|next time|this weekend|on \w+day|in the morning|after dinner)$/i.test(p) ? p+", " : p+". "; }
   for(const [re,fn] of CQ){
     const mm = t.match(re);
     if(mm){
@@ -1971,6 +2106,8 @@ function rewriteSentence(s, ctx, note, an, W){
   }
 
   // --- absolutes
+  m = t.match(/^(.*?)\byou (?:never|can't|cannot|don't|do not) (?:do|get) (?:anything|a single thing) right\b(.*?)([.!?]*)$/i);
+  if(m){ const rest=m[2].replace(/^[\s,]*(?:and|but)?\s*/i,"").trim(); t = pre(m[1])+"[The specific thing that went wrong] was hard for me."+(rest?" "+endP(capFirst(rest)):""); note("absolute", "never do anything right", "[the specific thing that went wrong]"); ctx.critical=true; }
   m = t.match(/^(.*?)\byou(?:'re| are) always (.+?)([.!?]*)$/i);
   if(m){ t = pre(m[1])+"Lately it's felt like you're "+m[2]+" a lot."; note("absolute","always","lately it's felt like"); ctx.critical=true; }
   m = t.match(/^(.*?)\byou(?:'re| are) never (.+?)([.!?]*)$/i);
@@ -2008,7 +2145,7 @@ function rewriteSentence(s, ctx, note, an, W){
   if(urgentHit && !hadReason) t = endQ(t).replace(/\?$/,"? It's urgent because [the reason].").replace(/^([^?]*[^?.])\.\s*It's urgent/,"$1. It's urgent");
 
   // --- vague timing and standards
-  t = t.replace(/\b(?:when you get a (?:chance|sec|second|minute|moment)|when you have (?:a (?:sec|second|minute|moment|chance)|time)|when you're free|when you can|whenever|at some point|sometime|eventually|in a bit|one of these days|soon|(?<!see you |talk to you |talk |catch you )later(?! on today))\b/gi, mm=>{ note("vtime", mm, "by [a time]"); return "by [a time]"; });
+  t = t.replace(/\b(?:when you get a (?:chance|sec|second|minute|moment)|when you have (?:a (?:sec|second|minute|moment|chance)|time)|when you're free|when you can|whenever|at some point|sometime(?! (?:this|next|today|tonight|tomorrow|on|before|after|between)\b)|eventually|in a bit|one of these days|soon|(?<!see you |talk to you |talk |catch you )later(?! (?:on )?(?:today|tonight|this)))\b/gi, mm=>{ note("vtime", mm, "by [a time]"); return "by [a time]"; });
   t = t.replace(/\bby \[a time\] by \[a time\]/g,"by [a time]");
   t = t.replace(/\b(?:clean(?:ed)? up|tidy(?: up)?)(?: a bit| a little)?\b/gi, mm=>{ note("vstd", mm, "clean [which rooms, and what done looks like]"); return "clean [which rooms, and what done looks like]"; });
   t = t.replace(/\b(?:properly|the right way|like a normal person|like an adult)\b/gi, mm=>{ note("vstd", mm, "[how exactly]"); return "[how exactly]"; });
@@ -2066,7 +2203,7 @@ function finish(main, list, log, an, W, opts){
   const base0 = main;
   const listMain = !!list && (W.has("adhd")||W.has("apd")||W.has("dyslexic")||W.has("dld")||an.segs.length>=3);
   const base = listMain ? list : main;
-  const isMinimal = log.some(c=>c.id==="minimal");
+  const isMinimal = log.some(c=>c.id==="minimal"||c.id==="brushoff");
   const flagged = an.staticIds && an.staticIds.length;
   variants.push({id:"main", label: unchanged ? "Your words" : "Clearest version",
     why: unchanged ? (flagged ? "There's no safe automatic rewrite for this one, so here are your words. The notes above show what may land hard: try the plain version of what you mean, in your own words." : "Nothing in the structure needed changing.") : "Keeps your ask. Changes the structure around it (see the list of changes).", text:base});
@@ -2139,6 +2276,43 @@ const SHARED_READ = {
  ocd:{passiveag:[2,"Did I do something wrong? I need to check.","An unclear complaint can start a loop of checking and reassurance-seeking."],
      stonewall:[2,"Is it okay? I need to know it's okay.","An open-ended pause is hard to sit with. A return time closes the loop."]}
 };
+/* Readings for brush-offs, a diagnosis used as an insult, violent figures of speech, self put-downs and stacked softeners */
+const MORE_READ = {
+ nt:{brushoff:[2,"They're done with me, and they don't care.","\"Whatever\" and \"I don't care\" are usually heard as a door closing, even when they mean \"either is fine.\""],
+     dxlabel:[3,"They're mocking something real about people.","Using a real condition as a put-down is heard as contempt, and it hurts anyone who lives with it."],
+     violent:[2,"That's a strange thing to say, even as a joke.","Most listeners know it's an exaggeration, but in writing it can still land as a threat."],
+     selfput:[1,"Now I have to reassure them.","Self put-downs pull the listener into comforting, and the point gets lost."],
+     overhedge:[1,"Are they asking or not?","A stack of softeners makes it hard to tell whether there's a real request."]},
+ autistic:{brushoff:[1,"They said they don't care, so it doesn't matter.","A brush-off may be taken at its word, which only causes trouble if it wasn't meant literally."],
+     dxlabel:[3,"My neurology is being used as an insult.","Using \"autistic\" as a put-down treats a real identity as something shameful."],
+     violent:[3,"Did they literally mean they'd hurt me?","An exaggerated threat may be taken at face value, and it's frightening either way."],
+     selfput:[1,"Is that true? Do they want me to agree?","Taken literally, a self put-down is a confusing statement of fact."],
+     overhedge:[2,"Is this a request? Do I have to do it?","Hedges stacked on hedges hide whether an answer is expected."]},
+ adhd:{brushoff:[2,"I've annoyed them, and now they've checked out.","Rejection sensitivity can turn \"whatever\" into proof of rejection."],
+     dxlabel:[3,"My brain is the joke again.","A condition used as a put-down echoes years of being called lazy or careless."],
+     violent:[2,"They're really angry with me.","The intensity lands first, and fast."],
+     selfput:[1,"Should I say it's okay? What happened?","The apology gets lost in the reassurance."],
+     overhedge:[2,"I'm not sure what they're asking, so I'll let it slide.","A buried ask is easy to miss."]},
+ anxiety:{brushoff:[3,"They're angry with me and pulling away.","A brush-off is ambiguous, and ambiguity resolves to threat."],
+     dxlabel:[3,"They look down on me.","A condition used as a put-down is heard as contempt."],
+     violent:[2,"Is something really wrong?","A violent phrase can set off alarm, even when it's clearly a joke."],
+     selfput:[1,"Is this my fault? Should I fix it?","Worry fills in the gap."],
+     overhedge:[1,"Is this a big deal they're scared to ask?","All that softening can sound like something is wrong."]},
+ hsp:{brushoff:[2,"That felt cold, and I'll keep thinking about it.","A curt brush-off registers strongly."],
+     dxlabel:[3,"That was cruel.","Put-downs land hard."],
+     violent:[2,"That was jarring.","Violent words register strongly, even as a figure of speech."]},
+ trauma:{brushoff:[2,"I've been shut out.","Withdrawal can echo old abandonment."],
+     dxlabel:[3,"I'm being attacked.","A put-down can register as threat."],
+     violent:[3,"Danger.","Even as an exaggeration, violent words can go straight to the alarm."]}
+};
+Object.keys(MORE_READ).forEach(w=>{ if(NT[w]) Object.keys(MORE_READ[w]).forEach(f=>{ if(!NT[w].receive[f]) NT[w].receive[f]=MORE_READ[w][f]; }); });
+Object.assign(CHECK, {
+  brushoff:"\"Do you mean either is fine, or are you upset? It's okay if it's the second one.\"",
+  dxlabel:"\"That hurt. What's the specific thing that bothered you?\"",
+  violent:"\"I know that's not literal. How upset are you, really?\"",
+  selfput:"\"It's okay. What would help fix it?\"",
+  overhedge:"\"Are you asking me to do it? I'm happy to. When would you like it by?\""
+});
 Object.keys(SHARED_READ).forEach(w=>{ if(NT[w]) Object.keys(SHARED_READ[w]).forEach(f=>{ if(!NT[w].receive[f]) NT[w].receive[f]=SHARED_READ[w][f]; }); });
 
 /* ============================================================
@@ -2196,6 +2370,70 @@ Object.assign(CHECK, CHECK_ADD);
     });
   });
 })();
-const api = {PLAIN: PLAIN_WORDS, F, FBY, NT, CHECK, CHANGE_WHY, analyze, detect, readings, rewrite, score, entry, splitSentences, commandOf, baseVerb, norm, chBase, shoutSpans, WRITTEN, ACRONYMS};
+/* ============================================================
+   SOMEONE SENT ME THIS
+   Reads a message someone received, kindly, for the person who got it: what it
+   might mean, what isn't okay whatever was meant, and calm ways to answer.
+   It never reads the words back as the receiver's fears ("they think I'm a bad
+   person"), and it never guesses what the sender thinks of them.
+   receive(analysis) -> {crossed, meanings:[..], literal:[{text, means}], replies:[{label, text}], found:[names]}
+   ============================================================ */
+const RECEIVE_MEANS = [
+  [["threat"], "It's worded as an ultimatum. It shows how much this matters to them right now. You don't have to answer it on the spot."],
+  [["violent"], "\"Kill you\" is almost always an exaggeration. It usually means they'd be very annoyed. If it doesn't feel like a joke to you, it's okay to say so."],
+  [["hostile","swear"], "They're very angry or fed up right now. The heat in the words says more about how they feel in this moment than about you."],
+  [["label","dxlabel","contempt"], "A put-down or a name is a verdict, not a fact. It usually means they're upset about something specific that they haven't said plainly."],
+  [["absolute"], "\"Always\" and \"never\" usually mean \"this has happened more than once, and it's getting to me.\" They're rarely meant as an exact count."],
+  [["brushoff","minimal"], "A short \"fine\" or \"whatever\" can mean \"really, it's okay\" or \"I'm upset and don't want to talk right now.\" The words alone can't tell you which."],
+  [["sarcasm"], "Sarcasm usually means the opposite of the words. They're probably annoyed or let down about something."],
+  [["blameq","cannot","shouldhave"], "A \"why didn't you\" question is usually a complaint more than a question. Underneath, there's often a request for next time."],
+  [["oblig","impera","should","urgent"], "It's worded as an order, but underneath it's usually a request."],
+  [["hint","passiveag"], "There may be a request under the politeness. They might be hoping you'll offer to help."],
+  [["ominous"], "An opener like this doesn't say the topic. It doesn't have to mean bad news, and it's fine to ask what it's about."],
+  [["stonewall"], "They may need a break. A pause doesn't have to mean it's over."],
+  [["guilt"], "They're probably feeling stretched thin, or that their effort isn't being seen."],
+  [["madefeel","critic","again","past","compare","passive"], "They're unhappy about something that happened. It's about that, not all of who you are."],
+  [["vemo"], "They expect you to know what's wrong. It's okay to say you don't, and to ask."],
+  [["demand"], "They'd like a reply soon, and may be anxious. You're allowed to take a moment."],
+  [["softno"], "\"We'll see\" or \"maybe\" can be a real maybe or a polite no. It's okay to ask which."],
+  [["selfput"], "They're being hard on themselves. A kind word may help more than agreeing or arguing."],
+  [["vtime","nowhen"], "The timing is open. If you need to know when, it's okay to ask."],
+  [["tic"], "They're asking you to stop something. If it's a stim or a tic, you can say so: it isn't a message to them."]
+];
+const RECEIVE_GOOD = {repair:"They're owning their part. That's a reach toward you.", appreciation:"There's warmth in it: thanks, or care.", istate:"They're telling you how it is for them, not a verdict on you.", clearask:"There's a clear request you can say yes, no or not yet to.", pause:"They want a pause, and they've said when they'll come back."};
+const CROSSED = ["label","dxlabel","contempt","hostile","swear","violent","threat"];
+/* their words, turned to face the person answering: "send me your notes" → "send you my notes" */
+function turnAround(t){ const SW={me:"you",my:"your",mine:"yours",your:"my",yours:"mine",you:"me",myself:"yourself",yourself:"myself"}; return String(t).replace(/\b(me|my|mine|your|yours|you|myself|yourself)\b/gi, w=>SW[w.toLowerCase()]); }
+function unq(s){ return String(s||"").replace(/^"|"$/g,""); }
+function receive(an){
+  const has = id=>!!an.found[id];
+  const crossed = CROSSED.some(has);
+  const meanings = [];
+  RECEIVE_MEANS.forEach(([ids, line])=>{ if(ids.some(has) && !meanings.includes(line)) meanings.push(line); });
+  const ask = an.asks && an.asks[0] && !crossed && !(SHARED && SHARED.idioms && SHARED.idioms(an.asks[0].text).length) ? an.asks[0].text : "";
+  if(ask && ["oblig","impera","should","hint","passiveag","blameq","cannot"].some(has)) meanings.push("The request underneath looks like: \u201c"+turnAround(ask).replace(/[.?!]+$/,"")+"\u201d.");
+  if(!crossed) Object.keys(RECEIVE_GOOD).forEach(id=>{ if(has(id) && !(id==="clearask" && !ask) && meanings.length<5) meanings.push(RECEIVE_GOOD[id]); });
+  if(!meanings.length) meanings.push("This reads as a plain message. It's probably fine to take it at face value, and it's always okay to ask if you're not sure.");
+  const literal = SHARED && SHARED.idioms ? SHARED.idioms(an.text).map(x=>({text:x.text, means:x.means})) : [];
+  const replies = [];
+  const push = (label, text)=>{ if(text && !replies.some(r=>r.text===text)) replies.push({label, text}); };
+  if(crossed){
+    push("Set a limit, calmly", "I want to sort this out, and I'm not okay being spoken to like that. Let's talk when we can both be calmer.");
+    push("Take time before you answer", "I've read this. I'm going to take some time before I reply.");
+  }
+  literal.filter(x=>!/kill|murder|strangle/i.test(x.text)).slice(0,1).forEach(x=>push("Check the figure of speech", "When you said \u201c"+x.text.replace(/^./, c=>c.toLowerCase())+"\u201d, did you mean "+x.means.replace(/\s*\(.*\)$/,"")+"?"));
+  if(ask){
+    const hasWhen = an.found.when || /\b(?:by|at|on|before|after)\s+\S/i.test(ask);
+    push("Check the ask", "Just to check: you'd like me to "+turnAround(ask).replace(/[.?!]+$/,"")+(hasWhen ? "?" : ". By when?"));
+  }
+  if(has("brushoff")||has("minimal")) push("Ask which one they mean", "Do you mean it's really okay, or are you upset? Either is okay to say.");
+  const order = ["absolute","sarcasm","blameq","ominous","hint","passiveag","vemo","vtime","softno","stonewall","demand","guilt","critic","again","past","compare","madefeel","selfput"];
+  if(!crossed) order.filter(has).forEach(id=>{ if(CHECK[id] && replies.length<4) push("Check what they meant", unq(CHECK[id])); });
+  if(crossed && replies.length<4 && (has("label")||has("dxlabel")||has("contempt"))) push("Ask for the real thing", "What's the specific thing that's bothering you?");
+  return {crossed, meanings: meanings.slice(0,5), literal, replies: replies.slice(0,4),
+    found: an.staticIds.filter(id=>FBY[id] && !["period","long","nowhen"].includes(id)).map(id=>FBY[id].name)};
+}
+
+const api = {receive, PLAIN: PLAIN_WORDS, F, FBY, NT, CHECK, CHANGE_WHY, analyze, detect, readings, rewrite, score, entry, splitSentences, commandOf, baseVerb, norm, chBase, shoutSpans, WRITTEN, ACRONYMS};
 if(typeof module!=="undefined" && module.exports) module.exports = api; else root.SignalEngine = api;
 })(typeof window!=="undefined" ? window : this);

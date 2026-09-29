@@ -192,7 +192,7 @@
     threat:   { label: 'Safety: a threat', heat: 6, tone: 'alarm', safety: true },
     control:  { label: 'Safety: controlling', heat: 4, tone: 'alarm', safety: true },
     withdraw: { label: 'Shutting the door', heat: 2, tone: 'hot',
-                hear: '“Not now,” “forget it” or a silent “…” usually means someone is flooded: too overwhelmed to keep going. Without a time to come back, the other person hears “this is over.” It isn’t calm, even when the messages stop.',
+                hear: '“Not now,” “forget it” or a silent “…” can mean someone is flooded: too overwhelmed to keep going. It can also mean they’re hurt and want the other person to keep trying. Without a time to come back, the other person may hear “this is over.”',
                 instead: 'Name the pause and a time to come back: “I need an hour. I’ll call you at 8.”' },
     contempt: { label: 'Eye-roll or put-down', heat: 3, tone: 'hot' },
     swear:    { label: 'Swearing', heat: 2.5, tone: 'hot' },
@@ -239,6 +239,15 @@
     warmth:   { label: 'Warmth or thanks', heat: -1, tone: 'good' },
     feeling:  { label: '“I feel” statement', heat: -1, tone: 'good',
                 hear: 'Saying what’s happening for you, without blame, is easier to hear than a statement about the other person.' },
+    idiom:    { label: 'Figure of speech', heat: 0, tone: 'note',
+                hear: 'A figure of speech says one thing and means another. Most people translate it without thinking; some take it at its word, especially in writing.',
+                instead: 'Say the plain meaning instead.' },
+    literal:  { label: 'Taking the words at their word', heat: 0, tone: 'note',
+                hear: 'This takes the last message exactly at its word. Some people mean “forget it” literally; others say it when they’re hurt and hope the other person keeps trying. The words alone don’t carry which.',
+                instead: 'If you’re not sure which was meant, ask once: “Do you want me to drop it, or keep talking?”' },
+    brief:    { label: 'A short reply after a hard message', heat: 0, tone: 'note',
+                hear: 'After a sharp message, a short reply is often someone protecting themselves or needing a moment. That’s okay. It isn’t the problem in the thread.',
+                instead: 'If you want to say more later: “I need a minute. I’ll come back to this.”' },
     ask:      { label: 'A clear ask', heat: -0.5, tone: 'good',
                 hear: 'A specific request gives the other person something they can actually do.' }
   };
@@ -292,6 +301,7 @@
       }
       marks.push(m.whole ? { kind: kind, start: 0, end: text.length, text: text.trim(), whole: true } : { kind: kind, start: m.start, end: m.end, text: m.text });
     });
+    if (P && P.idioms) P.idioms(text).forEach(function (x) { if (!/kill|murder|strangle/i.test(x.text)) marks.push({ kind: 'idiom', start: x.start, end: x.start + x.text.length, text: x.text, means: x.means, words: x.words }); });
     var edgy = marks.some(function (m) { return KINDS[m.kind].heat > 0; });
     // Shouting: words in capitals (3+ letters, not common acronyms) and stacked punctuation
     var caps = text.match(/\b[A-Z]{3,}\b/g) || [];
@@ -351,6 +361,18 @@
       if (prev && prev.who !== t.who && wc <= 2 && prevLen >= 20 && !marks.some(function (m) { return m.kind === 'repair'; })) {
         marks.push({ kind: 'short', start: 0, end: t.text.length, text: t.text, whole: true });
       }
+      // a short "ok" straight after a sharp message is someone protecting themselves, not the problem
+      var prevHard = prev && prev.who !== t.who && out.turns[i - 1] && (out.turns[i - 1].heat >= 2.5 || out.turns[i - 1].marks.some(function (m) { return ['verdict', 'contempt', 'hostile', 'swear'].indexOf(m.kind) !== -1; }));
+      // or after an edge from someone who has already been cutting, or right after this person apologized
+      if (!prevHard && prev && prev.who !== t.who && out.turns[i - 1] && out.turns[i - 1].marks.some(function (m) { return ['absolute', 'dismiss', 'sarcasm'].indexOf(m.kind) !== -1; }) &&
+          out.turns.some(function (o, k) { return k < i - 1 && ((o.who === prev.who && o.marks.some(function (m) { return ['verdict', 'contempt', 'hostile', 'swear'].indexOf(m.kind) !== -1; })) || (o.who === t.who && o.marks.some(function (m) { return m.kind === 'repair'; }))); })) prevHard = true;
+      if (prevHard && wc <= 3) marks = marks.map(function (m) { return m.kind === 'short' ? { kind: 'brief', start: m.start, end: m.end, text: m.text, whole: true } : m; });
+      // "Ok. I will forget it." after "forget it": doing what the words said, not shutting the door
+      var lit = t.text.match(/^\s*(?:ok(?:ay)?[.,!]?\s*)?i(?:[’']ll| will) (forget (?:it|about it)|leave it|drop it|stop|leave you alone|let it go)\b/i);
+      if (lit && prev && prev.who !== t.who && prev.text.toLowerCase().replace(/[’]/g, "'").indexOf(lit[1].toLowerCase().replace(/ about/, '')) !== -1) {
+        marks = marks.filter(function (m) { return m.kind !== 'withdraw' && m.kind !== 'short'; });
+        marks.push({ kind: 'literal', start: 0, end: t.text.length, text: t.text, whole: true });
+      }
       if (prev && prev.who !== t.who && isBid(prev.text) && isFlat(t.text, marks)) {
         marks.push({ kind: 'turnaway', start: 0, end: t.text.length, text: t.text, whole: true });
       }
@@ -390,6 +412,8 @@
     // an edge at the very end (sarcasm, a put-down, a passive jab) is never "calm", however short the message
     var lastT = n ? out.turns[n - 1] : null;
     if (lastT && out.level === 'calm' && lastT.marks.some(function (m) { return ['contempt', 'sarcasm', 'passive', 'dismiss', 'verdict', 'withdraw', 'compare', 'swear', 'hostile', 'opener', 'hint', 'short'].indexOf(m.kind) !== -1; })) out.level = 'warm';
+    // the same lines read the same way however long the thread is: an edge near the end is never "calm"
+    if (out.level === 'calm' && out.turns.slice(-3).some(function (t) { return t.marks.some(function (m) { return ['contempt', 'sarcasm', 'passive', 'dismiss', 'verdict', 'withdraw', 'compare', 'swear', 'hostile'].indexOf(m.kind) !== -1; }); })) out.level = 'warm';
     // swearing, a fed-up line or name-calling anywhere near the end: hot
     if (out.turns.slice(-2).some(function (t) { return t.marks.some(function (m) { return ['swear', 'hostile', 'verdict', 'contempt'].indexOf(m.kind) !== -1; }); }) && out.level !== 'hot' && peak >= 3) out.level = 'hot';
     var lastKinds = n ? out.turns[n - 1].marks.map(function (m) { return m.kind; }) : [];
@@ -397,7 +421,7 @@
     var lastTwo = out.turns.slice(-2).some(function (t) { return t.marks.some(function (m) { return m.kind === 'withdraw'; }); });
     var endsPause = lastKinds.indexOf('pause') !== -1;
     out.doors = doors;
-    out.trend = !endsPause && (lastKinds.indexOf('withdraw') !== -1 || (doors >= 2 && lastTwo) || lastKinds.indexOf('short') !== -1 && heats.slice(0, -1).some(function (h) { return h >= 2.5; })) ? 'shutdown'
+    out.trend = !endsPause && (lastKinds.indexOf('withdraw') !== -1 || (doors >= 2 && lastTwo)) ? 'shutdown'
       : n < 3 ? 'short'
       : peak >= 3 && peakAt < n - 1 && heats[n - 1] < peak * 0.4 ? 'cooling'
       : endHeat > headAvg + 1 || (peakAt === n - 1 && peak >= 3) ? 'rising' : 'steady';
@@ -459,6 +483,23 @@
       if (mins >= 120 && Math.max(p.heat, t.heat, i > 1 ? out.turns[i - 2].heat : 0) >= 2) out.gaps.push({ at: i, mins: mins });
     });
 
+    // put-downs, name-calling and fed-up lines: a line was crossed, whatever else was going on
+    var CROSS = ['verdict', 'contempt', 'hostile', 'swear'];
+    out.crossed = [];
+    out.turns.forEach(function (t, i) { var m = t.marks.filter(function (x) { return CROSS.indexOf(x.kind) !== -1; }).sort(function (a, b) { return b.text.length - a.text.length; })[0]; if (m) out.crossed.push({ at: i, mine: t.mine, text: m.text }); });
+    out.crossedThem = out.crossed.some(function (c) { return !c.mine; });
+    out.crossedMe = out.crossed.some(function (c) { return c.mine; });
+    // a figure of speech answered as if it were literal ("read the room" / "What room?")
+    out.literal = [];
+    out.turns.forEach(function (t, i) {
+      t.marks.filter(function (m) { return m.kind === 'idiom'; }).forEach(function (m) {
+        var j = nextFrom(i, !t.mine); if (j === -1 || j > i + 2) return;
+        var r = out.turns[j].text.toLowerCase().replace(/[’]/g, "'");
+        var asked = (m.words || []).some(function (w) { return new RegExp('\\bwhat ' + w + 's?\\b|\\bwhich ' + w + 's?\\b|\\bwhat (?:do you mean|does that mean) (?:by )?(?:a |the )?' + w).test(r); }) ||
+          /\b(?:what do you mean|what does that mean|i (?:do not|don't) (?:know|understand) what you mean|what are you talking about)\b/.test(r);
+        if (asked) { out.literal.push({ at: i, reply: j, phrase: m.text, means: m.means }); out.turns[j].marks.push({ kind: 'literal', start: 0, end: out.turns[j].text.length, text: out.turns[j].text, whole: true, idiom: true }); }
+      });
+    });
     function any(kind) { return out.turns.some(function (t) { return t.marks.some(function (m) { return m.kind === kind; }); }); }
     out.selfHarm = false; out.threat = any('threat'); out.control = any('control');
     out.safety = out.selfHarm || out.threat || out.control;
@@ -542,15 +583,31 @@
         script: '' });
       return moves;
     }
+    var myLast = null;
+    for (var mi = n - 1; mi >= 0; mi--) if (r.turns[mi].mine) { myLast = r.turns[mi]; break; }
+    var iLeft = myLast && /\b(?:i[’']?m (?:going to|gonna) go|i[’']?m (?:leaving|going|off|done)\b|i(?:[’']ll| will) (?:go|leave)|bye\b|goodnight|good night|going to bed)/i.test(myLast.text);
+    var stay = iLeft ? ' I’m stepping away for now, and I’ll come back to it then.' : ' I’m not going anywhere.';
+    if (r.crossedThem) {
+      var cx = r.crossed.filter(function (c) { return !c.mine; }).pop();
+      moves.push({ key: 'line', title: 'This crossed a line. You’re allowed to step away',
+        say: '“' + snippet(cx.text) + '” is a put-down. Whatever else was going on, that isn’t okay, and you don’t have to keep answering it. Check in with yourself first: how are you doing right now?',
+        script: 'I want to talk about this, but not like this. I’m stepping away for now, and I’ll come back to it when we can both be kind.' });
+    }
+    if (r.literal && r.literal.length) {
+      var lx = r.literal[r.literal.length - 1], idiomMine = r.turns[lx.at].mine;
+      moves.push({ key: 'literal', title: 'A figure of speech was taken at its word',
+        say: '“' + lx.phrase + '” usually means ' + lx.means + '. The reply read it literally. Neither person did anything wrong: the words just meant two things.',
+        script: idiomMine ? 'When I said “' + lx.phrase + '”, I meant ' + lx.means + '. I should have just said that plainly.' : 'I took “' + lx.phrase + '” literally. Did you mean ' + lx.means + '? Could you tell me directly what you’d like?' });
+    }
     if (r.trend === 'shutdown') {
-      moves.push({ key: 'pause', title: 'Someone has shut down. Give it time, then come back',
-        say: 'The conversation ended with someone pulling away. That usually means they’re flooded, not that it’s settled. More messages now tend to push harder. Name a return time instead.',
-        script: 'I can tell this is a lot right now. Let’s stop here. Can we talk about ' + topic + ' at [time]? I’m not going anywhere.',
+      moves.push({ key: 'pause', title: 'Someone has pulled back. Give it time, then come back',
+        say: 'The conversation ended with someone pulling away. That can mean they’re flooded, or hurt, rather than that it’s settled. More messages now tend to push harder. Name a return time instead.',
+        script: 'I can tell this is a lot right now. Let’s stop here. Can we talk about ' + topic + ' at [time]?' + stay,
         dig: ['/check-ins-in-depth.html#regroup', 'How to pause and come back'] });
     } else if (r.level === 'hot' || (r.trend === 'rising' && r.level !== 'calm' && r.peak >= 3)) {
       moves.push({ key: 'pause', title: 'Pause, and name when you’ll come back',
         say: 'It’s too hot to settle anything right now. A pause isn’t giving up if you say when you’ll return.' + (r.form === 'text' ? ' Text strips out tone, so a call or talking in person later will go better.' : ''),
-        script: 'I want to get this right, and I don’t think we can right now. Can we talk about ' + topic + ' at [time]? I’m not going anywhere.',
+        script: 'I want to get this right, and I don’t think we can right now. Can we talk about ' + topic + ' at [time]?' + stay,
         dig: ['/check-ins-in-depth.html#regroup', 'How to pause and come back'] });
     }
     if (lastTheirs && has(lastTheirs, 'repair') && lastTheirs === last && r.peak >= 2.5) {
@@ -589,7 +646,7 @@
         script: 'It sounds like you’re feeling ' + feelingWord.toLowerCase() + ' about ' + topic + '. Did I get that right?',
         dig: ['/check-ins-in-depth.html#order', 'Hear it back before you answer'] });
     }
-    if (!moves.length && r.peak < 1.5) {
+    if (!moves.length && r.peak < 1.5 && !(r.literal && r.literal.length)) {
       moves.push({ key: 'fine', title: 'This one looks okay',
         say: 'Nothing in the words suggests hurt or heat. Everyday moments like this, answered warmly, are what connection is built from.',
         script: '' });
@@ -625,6 +682,9 @@
     // their words, from my side: "send me your notes" → "send you my notes"
     function mine(t) { var SW = { me: 'you', my: 'your', mine: 'yours', your: 'my', yours: 'mine', you: 'you', myself: 'yourself', yourself: 'myself' }; return t.replace(/\b(me|my|mine|your|yours|you|myself|yourself)\b/gi, function (w) { return SW[w.toLowerCase()]; }); }
     var hot = r.level === 'hot' || r.peak >= 3 || r.trend === 'shutdown';
+    if (r.crossedThem) out.push({ label: 'Set a limit, calmly', text: 'I want to sort this out, and I’m not okay being spoken to like that. Let’s talk when we can both be calmer.' });
+    var myLastT = mineT[mineT.length - 1];
+    var left = myLastT && /\b(?:i[’']?m (?:going to|gonna) go|i[’']?m (?:leaving|going|off|done)\b|i(?:[’']ll| will) (?:go|leave)|bye\b|goodnight|good night|going to bed)/i.test(myLastT.text);
     // their good news met with a flat reply from me: go back to it, first
     var myBid = r.bids.filter(function (x) { return r.turns[x.reply].mine; }).pop();
     if (myBid) {
@@ -642,7 +702,7 @@
     if (sharp) out.push({ label: 'Own your part', text: 'I’m sorry I said “' + sharp.text.trim() + '”. That came out sharper than I meant. What I meant was: [the plain version, one sentence].' });
     // 3. slow it down, or say back how they feel
     if (feel) out.push({ label: 'Say back what you heard', text: 'It sounds like you’re feeling ' + feel.toLowerCase() + ' about ' + topic + '. Did I get that right?' });
-    if (hot && out.length < 3) out.push({ label: 'Pause, with a time to come back', text: 'I don’t want to keep going back and forth by text. Can we talk about ' + topic + ' ' + (whenTxt ? whenTxt : 'tonight at [time]') + '? I’m not going anywhere.' });
+    if (hot && out.length < 3) out.push({ label: 'Pause, with a time to come back', text: 'I don’t want to keep going back and forth by text. Can we talk about ' + topic + ' ' + (whenTxt ? whenTxt : 'tonight at [time]') + '?' + (left ? ' I’m stepping away until then.' : ' I’m not going anywhere.') });
     if (out.length < 2) out.push({ label: 'One fact, one feeling, one ask', text: (topic !== 'this' ? 'About ' + topic + ': ' : '') + '[what happened, one specific time]. I felt [one feeling]. Could you [one specific thing] ' + (whenTxt ? (/^(?:on|at|by|tonight|tomorrow|this)\b/i.test(whenTxt) ? whenTxt.replace(/^on /, 'by ') : whenTxt) : 'by [time]') + '?' });
     return out.slice(0, 3);
   }

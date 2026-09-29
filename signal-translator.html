@@ -317,7 +317,18 @@ q.w{quotes:"\201C" "\201D";font-family:var(--mono);font-size:.8rem;background:co
 }
 @media (prefers-reduced-motion:reduce){.meter .fill{transition:none}}
 .verdict{border:1.5px solid var(--line);border-radius:var(--radius);background:var(--sheet);padding:14px 16px;margin:0 0 14px}
-.verdict .vk{font-family:var(--mono);font-size:.7rem;letter-spacing:.06em;color:var(--muted);margin:0 0 4px}
+.verdict .vk{font-family:var(--display);font-size:.95rem;font-weight:600;color:var(--muted);margin:0 0 4px}
+.modes{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 14px}
+.mode{display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:8px 14px;border:1.5px solid var(--line);border-radius:999px;background:var(--sheet);cursor:pointer;font-weight:600;font-size:1rem}
+.mode:has(input:checked){border-color:var(--b);box-shadow:inset 0 0 0 1px var(--b)}
+.mode input{accent-color:var(--b);width:1.1rem;height:1.1rem;margin:0}
+.mode:has(input:focus-visible){outline:3px solid var(--b);outline-offset:2px}
+.recv .rmean{margin:4px 0 0;padding-left:1.2rem}
+.recv .rmean li{margin:.4rem 0;line-height:1.5}
+.verdict.line-card{border-left:5px solid var(--a)}
+.verdict .replies{list-style:none;margin:6px 0 8px;padding:0}
+.verdict .replies li{margin:0 0 12px}
+.verdict .replies .vbest{margin:4px 0 6px}
 .verdict .vlvl{font-family:var(--display);font-size:1.35rem;font-weight:600;margin:0 0 6px}
 .verdict .vlvl.lvl-heavy{color:#9A3B2E}.verdict .vlvl.lvl-some{color:#8A6116}.verdict .vlvl.lvl-clear{color:#3E6B48}
 .verdict .vfound{margin:0 0 10px;font-size:.95rem}
@@ -359,12 +370,16 @@ q.w{quotes:"\201C" "\201D";font-family:var(--mono);font-size:.8rem;background:co
   <header class="top">
     <div class="kicker">Tool &middot; Pairs with <a href="wired-differently.html">Wired Differently</a> and <a href="book/chapter-1.html">Chapter I</a></div>
     <h1>The Signal Translator</h1>
-    <p class="lede">Type what you plan to say or send. See how it may land, and get a clearer version that keeps your ask. Everything else is optional.</p>
+    <p class="lede">Type what you plan to say or send. See how it may land, and get a clearer version that keeps your ask. Got a message that stung or confused you? Choose <b>Someone sent me this</b> to read it kindly. Everything else is optional.</p>
     <p class="pillar-note">This is <a href="five-pillars.html#tune-signals">Pillar IV, Tune how you send and receive</a>, one of the <a href="five-pillars.html">Five Pillars</a>.</p>
   </header>
 
   <!-- THE SENTENCE (first) -->
   <section class="panel s4panel" aria-labelledby="s3">
+    <div class="modes" role="radiogroup" aria-label="Whose message is this?">
+      <label class="mode"><input type="radio" name="stmode" value="send" checked><span>I&rsquo;m about to send this</span></label>
+      <label class="mode"><input type="radio" name="stmode" value="got"><span>Someone sent me this</span></label>
+    </div>
     <h2 id="s3"><label for="phrase" id="phraseLab">Type your sentence</label></h2>
     <p class="hint" id="phraseHint">Type it the way it would actually come out. A text, a Slack message, or something you plan to say out loud.</p>
     <textarea id="phrase" placeholder="The exact words, as they would be said or sent." maxlength="1500" aria-describedby="phraseHint msg"></textarea>
@@ -1536,7 +1551,7 @@ function drop(title, count, body, open, key){
 }
 function quoteWords(list){
   const seen=new Set();
-  return (list||[]).filter(w=>w && !seen.has(w.toLowerCase()) && seen.add(w.toLowerCase())).slice(0,4).map(w=>'<q class="w">'+esc(w)+'</q>').join(" ");
+  return (list||[]).filter(w=>w && !seen.has(w.toLowerCase()) && seen.add(w.toLowerCase())).slice(0,4).map(w=>'<q class="w">'+esc(String(w).replace(/[.,;:]+$/,""))+'</q>').join(" ");
 }
 const WIRING_SHORT = id=>NT[id] ? NT[id].short : id;
 
@@ -1546,6 +1561,7 @@ function run(){
   // the only thing needed is a sentence; "Not sure" wiring gives a general reading
   if(!text){ msg.textContent="Type a sentence, or pick one of the examples."; $("#phrase").setAttribute("aria-invalid","true"); $("#phrase").focus(); return; }
   $("#phrase").removeAttribute("aria-invalid");
+  if(stMode==="got"){ runReceived(text); return; }
 
   const A=nm("A"), B=nm("B");
   const an = E.analyze(text, {channel});
@@ -1634,9 +1650,9 @@ function run(){
       c.forWiring.forEach(n=>{ h+='<p class="small"><b>If '+esc(B)+' is '+esc(WIRING_SHORT(n.wiring))+':</b> '+esc(n.text)+'</p>'; });
       return h+'</li>';
     }).join("")+'</ol>';
-    p3 += '<p class="small">Words in <span class="ph">dashed boxes</span> are blanks. Fill them in your own words before you say it. The rewrite keeps your ask. It never adds a promise or a feeling you don\'t have. Change anything that isn\'t true for you.</p>';
+    p3 += '<p class="small">Words in <span class="ph">dashed boxes</span> are blanks. Fill them in your own words before you say it. The rewrite keeps your ask and never adds a promise. Where your words could mean two things, it gives both in brackets so you can keep the true one. If it names a feeling, like "frustrated," swap in your real one. Change anything that isn\'t true for you.</p>';
   } else {
-    p3 += '<p>No changes. By these rules the structure already works: '+(goodIds.length?esc(goodIds.map(id=>FBY[id].name.toLowerCase()).join(", "))+'.':'nothing here is a known trouble spot.')+'</p>';
+    p3 += staticIds.length ? '<p>No automatic changes. Some parts may still land hard (they\'re listed above), so try the plain version of what you mean, in your own words.</p>' : '<p>No changes. By these rules the structure already works: '+(goodIds.length?esc(goodIds.map(id=>FBY[id].name.toLowerCase()).join(", "))+'.':'nothing here is a known trouble spot.')+'</p>';
   }
 
   /* ---------- 4. what A may have meant ---------- */
@@ -1718,18 +1734,19 @@ function run(){
   const foundList = staticIds.filter(id=>!["nowhen","long","period"].includes(id)).sort((a,b)=>(HOTF.includes(b)-HOTF.includes(a))).slice(0,4).map(id=>{
     const ws=(found[id]||[]).filter(Boolean); return '<b>'+esc(FBY[id].name)+'</b>'+(ws.length&&!["multi","questions"].includes(id)?' '+quoteWords(ws.slice(0,2)):'');
   });
-  let vtop='<div class="verdict" id="verdict"><p class="vk">HOW IT MAY LAND'+(general?' FOR MOST LISTENERS':' FOR '+esc(B.toUpperCase()))+'</p>';
+  let vtop='<div class="verdict" id="verdict"><p class="vk">How it may land'+(general?' for most listeners':' for '+esc(B))+'</p>';
   vtop+='<p class="vlvl lvl-'+lvl[0]+'">'+esc(lvl[1])+'</p>';
   vtop+='<p class="vfound">'+(foundList.length ? 'What stands out: '+foundList.join(' &middot; ')+'.' : staticIds.length ? 'A small gap: '+esc(FBY[staticIds[0]].name.toLowerCase())+'.' : 'Nothing in the words is a known trouble spot. Tone, timing and history can still add static the words don\'t show.')+'</p>';
   if(!rw.unchanged){
-    vtop+='<p class="vk">A CLEARER WAY TO SAY IT</p><p class="vbest" id="vbest">'+phHTML(opts[0].say)+'</p>';
+    vtop+='<p class="vk">A clearer way to say it</p><p class="vbest" id="vbest">'+phHTML(opts[0].say)+'</p>';
     vtop+='<div class="actions" style="margin:0"><button class="go" type="button" id="copyBest">Copy this</button></div>';
   } else if(staticIds.length){
     vtop+='<p class="small">There\'s no safe automatic rewrite for this one. The notes below show what may land hard.</p>';
   }
   if(an.readAs && an.readAs.length) vtop+='<p class="readas small">Read as: '+an.readAs.slice(0,4).map(f=>'&ldquo;'+esc(f.to)+'&rdquo; (you typed &ldquo;'+esc(f.from)+'&rdquo;)').join(', ')+'. Spelling never changes the reading.</p>';
-  const lit = (E.PLAIN||[]).map(([rx,plain])=>{ const m=an.text.match(rx); return m ? [m[0],plain] : null; }).filter(Boolean);
-  if(lit.length) vtop+='<div class="literal"><p class="small" style="margin:6px 0 2px"><b>For a listener who takes words literally:</b></p><ul class="ul">'+lit.slice(0,4).map(x=>'<li>&ldquo;'+esc(x[0])+'&rdquo; &rarr; &ldquo;'+esc(x[1])+'&rdquo;</li>').join('')+'</ul></div>';
+  const lit = (window.TOLPatterns && TOLPatterns.idioms ? TOLPatterns.idioms(an.text).map(x=>[x.text, x.means]) : []);
+  (E.PLAIN||[]).forEach(([rx,plain])=>{ const m=an.text.match(rx); if(m && !lit.some(x=>x[0].toLowerCase().indexOf(m[0].toLowerCase())!==-1 || m[0].toLowerCase().indexOf(x[0].toLowerCase())!==-1)) lit.push([m[0],plain]); });
+  if(lit.length) vtop+='<div class="literal"><p class="small" style="margin:6px 0 2px"><b>What the figure of speech means, for a listener who takes words literally:</b></p><ul class="ul">'+lit.slice(0,4).map(x=>'<li>&ldquo;'+esc(x[0])+'&rdquo; means &ldquo;'+esc(x[1])+'&rdquo;</li>').join('')+'</ul></div>';
   vtop+='</div>';
   let sum='<details class="cr-drop"><summary><span class="cr-drop-t">How it may be heard, and other ways to say it</span></summary><div class="cr-drop-b"><div class="takeaway" id="takeaway">';
   sum+='<div class="rhead"><h2 id="rTitle">The takeaway</h2>'+pairLine+'</div>';
@@ -1803,6 +1820,46 @@ function run(){
   R.focus({preventScroll:true});
   R.scrollIntoView({behavior: matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth", block:"start"});
 }
+
+/* ============================================================
+   SOMEONE SENT ME THIS: read it kindly, for the person who got it
+   ============================================================ */
+let stMode = "send";
+const MODE_TEXT = {
+  send:{lab:"Type your sentence", hint:"Type it the way it would actually come out. A text, a Slack message, or something you plan to say out loud.", ph:"The exact words, as they would be said or sent.", go:"Translate"},
+  got:{lab:"Paste the message you got", hint:"Paste it exactly as it came. You'll see what it might mean and calm ways to answer. It reads the words only, and it won't guess what they think of you.", ph:"The message someone sent you.", go:"Read it kindly"}
+};
+function setMode(m){
+  stMode = m; const t = MODE_TEXT[m];
+  $("#phraseLab").textContent = t.lab; $("#phraseHint").textContent = t.hint; $("#phrase").placeholder = t.ph; $("#go").textContent = t.go;
+  $("#fine").hidden = m==="got"; const pr=document.querySelector(".presetrow"); if(pr) pr.hidden = m==="got";
+  document.querySelectorAll('input[name="stmode"]').forEach(r=>{ r.checked = r.value===m; });
+  const nt=$("#notes"); if(nt) nt.hidden = m==="got";
+  const R=$("#results"); R.hidden=true; R.innerHTML=""; $("#msg").textContent="";
+}
+function runReceived(text){
+  const an = E.analyze(text, {channel});
+  const rv = E.receive(an);
+  let h = '<h2 id="rTitle" class="sr-only" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)">Reading it kindly</h2>';
+  h += '<div class="verdict recv" id="verdict"><p class="vk">What it might mean</p><ul class="rmean">'+rv.meanings.map(m=>'<li>'+esc(m)+'</li>').join('')+'</ul>';
+  if(rv.literal.length) h += '<div class="literal"><p class="small" style="margin:8px 0 2px"><b>Figures of speech, in plain words:</b></p><ul class="ul">'+rv.literal.map(x=>'<li>&ldquo;'+esc(x.text)+'&rdquo; usually means '+esc(x.means)+'.</li>').join('')+'</ul></div>';
+  h += '</div>';
+  if(rv.crossed) h += '<div class="verdict line-card" role="note"><p class="vk">Some of this crossed a line</p><p>Name-calling, put-downs and threats aren&rsquo;t okay, whatever was going on for them. You don&rsquo;t have to answer tonight, and you&rsquo;re allowed to step away.</p><p style="margin-bottom:0">How are you doing right now? If it hurt to read, that makes sense. Look after yourself first. The reply can wait.</p></div>';
+  h += '<div class="verdict"><p class="vk">Ways to answer calmly</p>';
+  h += rv.replies.length ? '<ul class="replies">'+rv.replies.map((r,i)=>'<li><b>'+esc(r.label)+'</b><p class="vbest">'+esc(r.text)+'</p><button class="ghost" type="button" data-copyr="'+i+'">Copy</button></li>').join('')+'</ul>' : '<p>Answer the way you normally would. Nothing here needs decoding.</p>';
+  h += '<p class="small">You don&rsquo;t have to reply right away. Waiting until you&rsquo;re calm is a fine answer too.</p>';
+  h += '<div class="actions" style="margin:0"><button class="go" type="button" id="checkReply">Check my reply before I send it</button></div></div>';
+  h += '<p class="small">'+(rv.found.length ? 'What the words contain: '+esc(rv.found.join("; "))+'. ' : '')+'This reads the words only. It can&rsquo;t know their tone, their day or your history, so these are possibilities, not verdicts.</p>';
+  const R=$("#results"); R.innerHTML=h; R.hidden=false;
+  R.querySelectorAll("[data-copyr]").forEach(b=>b.addEventListener("click",()=>{
+    const t = rv.replies[+b.dataset.copyr].text;
+    (navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(()=>{b.textContent="Copied";},()=>{b.textContent="Select and copy manually";});
+  }));
+  $("#checkReply").addEventListener("click",()=>{ setMode("send"); $("#phrase").value=""; $("#phrase").focus(); $("#msg").textContent="Type your reply, then Translate to see how it may land."; });
+  R.focus({preventScroll:true});
+  R.scrollIntoView({behavior: matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth", block:"start"});
+}
+document.querySelectorAll('input[name="stmode"]').forEach(r=>r.addEventListener("change",()=>{ if(r.checked) setMode(r.value); }));
 
 function swap(){
   const t=sel.A; sel.A=sel.B; sel.B=t;
