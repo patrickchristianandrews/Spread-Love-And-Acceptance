@@ -1209,7 +1209,7 @@
   // /assets/audio/buddies/<episode>/<key>.mp3, listed in index.json. A line plays its recording through
   // Web Audio (reliable on phones once Play has been pressed); a line with no recording falls back to
   // the device's own speech, and then to captions only.
-  var CL = { base: '/assets/audio/buddies/', maps: {}, ready: {}, bufs: {}, src: null, gain: null, token: 0 };
+  var CL = { base: '/assets/audio/buddies/', maps: {}, ready: {}, bufs: {}, got: {}, src: null, gain: null, token: 0, lastFx: -99 };
   function ckey(who, text) { var h = 0x811c9dc5, s = who + '|' + text; for (var i = 0; i < s.length; i++) { h ^= s.charCodeAt(i); h = Math.imul(h, 0x01000193) >>> 0; } return ('0000000' + h.toString(16)).slice(-8); }
   function clipMap(ep) {
     if (!CL.maps[ep]) CL.maps[ep] = fetch(CL.base + ep + '/index.json').then(function (r) { return r.ok ? r.json() : null; }).catch(function () { return null; }).then(function (m) { CL.ready[ep] = m || false; return m; });
@@ -1221,8 +1221,20 @@
     CL.bufs[id] = fetch(CL.base + id + '.mp3').then(function (r) { return r.ok ? r.arrayBuffer() : null; }).then(function (ab) {
       if (!ab) return null;
       return new Promise(function (ok) { try { c.decodeAudioData(ab, ok, function () { ok(null); }); } catch (e) { ok(null); } });
-    }).catch(function () { return null; });
+    }).catch(function () { return null; }).then(function (buf) { CL.got[id] = buf; return buf; });
     return CL.bufs[id];
+  }
+  // little cartoon dog noises in each pup's own voice ("Arf!", "Hee hee!", "Aww…"), now and then before a line
+  var FX = { up: ['arf', 'arfarf', 'ruff', 'yip', 'woof', 'hehe'], wow: ['ooh', 'arf', 'yip'], down: ['aww', 'mmm', 'hmm'], soft: ['mmm', 'sigh', 'yawn'] };
+  var FX_MOOD = { happy: 'up', excited: 'up', silly: 'up', proud: 'up', surprised: 'wow', sad: 'down', worried: 'down', sleepy: 'soft', calm: 'soft' };
+  function fxLoad() { ['tidbit', 'sugarfoot'].forEach(function (w) { Object.keys(FX).forEach(function (g) { FX[g].forEach(function (k) { clipBuf('fx', w + '-' + k); }); }); }); }
+  function fxPick(b) {
+    if (b.say !== 'tidbit' && b.say !== 'sugarfoot') return null;
+    var g = FX_MOOD[b.mood]; if (!g) return null;
+    var c = AU.ctx; if (!c || c.currentTime - CL.lastFx < 14) return null;
+    if (Math.random() > (g === 'up' ? 0.3 : g === 'wow' ? 0.35 : 0.22)) return null;
+    var list = FX[g], k = list[Math.floor(Math.random() * list.length)], buf = CL.got['fx/' + b.say + '-' + k];
+    if (!buf) return null; CL.lastFx = c.currentTime; return buf;
   }
   function clipHas(ep, b) { var m = CL.ready[ep]; return !!(m && m[ckey(b.say, b.text)]); }
   function clipPrefetch(ep, list, from, n) { for (var i = from, got = 0; i < list.length && got < n; i++) if (clipHas(ep, list[i])) { clipBuf(ep, ckey(list[i].say, list[i].text)); got++; } }
@@ -1236,9 +1248,11 @@
     clipBuf(ep, ckey(b.say, b.text)).then(function (buf) {
       if (tok !== CL.token) return;
       if (!buf) { cb(false); return; }
+      var fx = fxPick(b), at = c.currentTime + 0.03;
+      if (fx) { var f = c.createBufferSource(); f.buffer = fx; f.connect(CL.gain); try { f.start(at); } catch (e) {} at += fx.duration + 0.12; }
       var s = c.createBufferSource(); s.buffer = buf; s.connect(CL.gain);
       s.onended = function () { if (tok !== CL.token) return; CL.src = null; cb(true); };
-      CL.src = s; try { s.start(c.currentTime + 0.03); } catch (e) { cb(false); }
+      CL.src = s; try { s.start(at); } catch (e) { cb(false); }
     });
     return true;
   }
@@ -1509,7 +1523,7 @@
     function ready(ep) {
       if (!ep) { startOv.innerHTML = '<div class="fb-ovc"><p class="fb-k">Coming soon</p><h3>This episode isn’t here yet</h3><p>The pals are still rehearsing it. Try another one below.</p><a class="fb-b is-main" href="/frequency-buddies.html?ep=s1e1">▶ Watch episode 1</a></div>'; return; }
       P.says = []; ep.chapters.forEach(function (c) { c.beats.forEach(function (b) { if (b.say) P.says.push(b); }); });
-      clipMap(P.id).then(function () { clipPrefetch(P.id, P.says, 0, 3); syncBtns(); });
+      clipMap(P.id).then(function (m) { if (m) fxLoad(); clipPrefetch(P.id, P.says, 0, 3); syncBtns(); });
       P.ep = ep; P.stage = makeStage({ reduced: stillNow() }); P.stage.onSound = function (k, who) { if (P.music) auSound(k, who); };
       P.dir = makeDirector(P.stage, ep, hooks);
       $('.fb-title').textContent = ep.title;
