@@ -35,6 +35,9 @@
   .tv-cast-state { font-size: .92rem; color: #D8CFF0; min-height: 1.2em; }
   .tv-resend { min-height: 44px; padding: .45rem 1.2rem; border: 1px solid rgba(255,248,238,.5); border-radius: 999px; background: transparent; color: #FFF8EE; font: 600 1rem Lora, Georgia, serif; cursor: pointer; }
   .tv-resend[hidden] { display: none; }
+  .tv-live-help { max-width: 34rem; text-align: left; color: #E9E2FB; }
+  .tv-live-help summary { cursor: pointer; font-weight: 600; min-height: 44px; display: flex; align-items: center; justify-content: center; }
+  .tv-live-help li { margin: .45rem 0; }
   /* TV mode: the cam fills the whole screen, nothing else */
   .pc-ov.is-tv { padding: 0 !important; align-items: stretch !important; background: #000; }
   .pc-ov.is-tv .pc-box { max-width: none !important; height: 100% !important; border-radius: 0 !important; box-shadow: none !important; padding: 0 !important; gap: 0 !important; background: #000; }
@@ -73,6 +76,17 @@
   <button type="button" class="tv-go" id="tv-go" autofocus>Start Pal Cam TV</button>
   <button type="button" class="tv-cast" id="tv-cast" hidden><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" aria-hidden="true"><path d="M3 8V6a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2h-6"/><path d="M3 12a8 8 0 0 1 8 8M3 16a4 4 0 0 1 4 4"/><circle cx="3.5" cy="19.5" r=".6" fill="currentColor"/></svg><span>Cast to your TV</span></button>
   <p class="tv-cast-state" id="tv-cast-state" aria-live="polite"></p>
+  <details class="tv-live-help" id="tv-live-help">
+    <summary>Can’t find your TV? Other live ways to watch</summary>
+    <p>Every way below shows the real, live Pal Cam, not a recording.</p>
+    <ul>
+      <li><b>Chrome on a computer:</b> open this page, then the <b>⋮</b> menu → <b>Cast, save and share</b> → <b>Cast…</b>, choose <b>Sources → Cast tab</b>, pick your TV, and press <b>Start Pal Cam TV</b>.</li>
+      <li><b>Android phone:</b> swipe down twice, tap <b>Screen Cast</b> (or <b>Smart View</b>), pick your TV, then press <b>Start Pal Cam TV</b> here.</li>
+      <li><b>iPhone or iPad with an Apple TV or AirPlay TV:</b> open Control Center, tap <b>Screen Mirroring</b>, pick your TV, then press <b>Start Pal Cam TV</b>.</li>
+      <li><b>A TV with a web browser, or a computer plugged into the TV:</b> open this page on it and press <b>Start Pal Cam TV</b>.</li>
+      <li><b>The Cast button above</b> needs the TV and your phone or computer on the same Wi-Fi. If the TV still doesn’t show up, restart the Chromecast and try again in a few minutes.</li>
+    </ul>
+  </details>
   <ul>
     <li>Press <b>Esc</b> (or <b>Back</b> on a TV remote) to come back to this screen.</li>
     <li>Press <b>C</b> to show or hide the captions, <b>S</b> to turn the pups’ soft sounds on or off, and <b>M</b> for gentle background music.</li>
@@ -104,9 +118,10 @@
     b.textContent = 'Pal Cam TV hiccup: ' + (e && e.message ? e.message : String(e));
   }
   if (receiver) {
+    window.__pcLite = true; // a TV stick has a small processor: lighter drawing, same live cam
     window.addEventListener('error', function (ev) { showErr(ev.error || ev.message); });
     var st0 = document.getElementById('tv-start');
-    Array.prototype.forEach.call(st0.querySelectorAll('button, ul, p'), function (n) { n.hidden = true; n.style.display = 'none'; });
+    Array.prototype.forEach.call(st0.querySelectorAll('button, ul, p, details'), function (n) { n.hidden = true; n.style.display = 'none'; });
     st0.appendChild(Object.assign(document.createElement('p'), { textContent: 'Tuning in to Tidbit and Sugarfoot…' }));
   }
   var start = document.getElementById('tv-start'), go = document.getElementById('tv-go'), hint = document.getElementById('tv-hint');
@@ -192,8 +207,9 @@
   var DEFAULT_RX = 'CC1AD845', VIDEO = location.origin + '/assets/video/pal-cam-tv.mp4', POSTER = location.origin + '/assets/video/pal-cam-poster.jpg';
   function ssGet(k) { try { return sessionStorage.getItem(k); } catch (e) { return null; } }
   function ssSet(k, v) { try { sessionStorage.setItem(k, v); } catch (e) {} }
-  // The video version is the default: it works on every Chromecast. ?cast=live tries the live app instead.
-  var videoMode = !/[?&]cast=live\b/.test(location.search) && !(castTest && CAST_APP_ID !== DEFAULT_RX);
+  // Live is the default: the TV runs the real pal cam (this page with ?receiver=1), not a recording.
+  // ?cast=video is kept only for troubleshooting.
+  var videoMode = /[?&]cast=video\b/.test(location.search) || !!(castTest && CAST_APP_ID === DEFAULT_RX);
   if (videoMode) CAST_APP_ID = DEFAULT_RX;
   function addScript(src) { var sc = document.createElement('script'); sc.src = src; document.head.appendChild(sc); return sc; }
   if (receiver) {
@@ -235,11 +251,10 @@
         if (castTest) castState.textContent += ' [test: app ' + CAST_APP_ID + ', state ' + st + ']';
       }
       ctx.addEventListener(cast.framework.CastContextEventType.CAST_STATE_CHANGED, sync); sync();
-      // the live app isn't visible to any Chromecast yet: switch this page to the video version
+      // if no TV shows up for the live app, explain the other live ways (no recordings)
       if (!videoMode && !castTest) setTimeout(function () {
         if (ctx.getCastState() !== cast.framework.CastState.NO_DEVICES_AVAILABLE) return;
-        ssSet('tv-cast-video', '1'); castState.textContent = 'Switching to the video version, which works on every Chromecast…';
-        setTimeout(function () { location.reload(); }, 900);
+        var help = document.getElementById('tv-live-help'); if (help) help.open = true;
       }, 7000);
       // send the looping MP4 (H.264, which every Chromecast and Google TV plays) to the TV
       function sendVideo(session) {

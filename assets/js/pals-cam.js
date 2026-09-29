@@ -645,7 +645,14 @@
   }
 
   // ---------- one frame ----------
+  var stepDepth = 0;
   function step(dt) {
+    // never recurse more than a few times in one frame: if something keeps going wrong, try again next frame
+    if (stepDepth > 4) return;
+    stepDepth++;
+    try { return stepInner(dt); } finally { stepDepth--; }
+  }
+  function stepInner(dt) {
     var sdt = dt * SPEED;
     clock += dt;
     if (trick) { trick.prevT = trick.t; trick.t += sdt; if (trick.t >= trick.dur) endTrick(); }
@@ -837,7 +844,8 @@
   function resize() {
     if (!cv) return;
     var r = cv.parentNode.getBoundingClientRect();
-    DPR = Math.min(2, window.devicePixelRatio || 1); CW = Math.max(200, Math.round(r.width)); CH = Math.max(180, Math.round(r.height));
+    // TV sticks (Chromecast) draw at plain resolution
+    DPR = window.__pcLite ? 1 : Math.min(2, window.devicePixelRatio || 1); CW = Math.max(200, Math.round(r.width)); CH = Math.max(180, Math.round(r.height));
     cv.width = Math.round(CW * DPR); cv.height = Math.round(CH * DPR); cv.style.width = CW + 'px'; cv.style.height = CH + 'px';
     LW = clamp(CW / CH * LH, LW_MIN, LW_MAX); K = Math.min(CW / LW, CH / LH); OX = (CW - LW * K) / 2; OY = (CH - LH * K) * 0.62;
     bgKey = ''; // the backdrop is redrawn to fit
@@ -963,6 +971,7 @@
     raf = 0;
     if (!isOpen || paused || document.hidden) return;
     raf = requestAnimationFrame(loop);
+    if (window.__pcLite && last && now - last < 30) return; // light mode: a steady 30 frames a second
     var dt = last ? now - last : 16; last = now;
     if (frames.length < 20000) frames.push(dt);
     dt = clamp(dt, 0, 50); // after a hiccup or a tab switch nothing jumps
