@@ -51,6 +51,15 @@ for (const file of files) {
     if (b.say == null) errs.push(at + ': energy is only for say beats');
     else if (typeof b.energy !== 'number' || !isFinite(b.energy) || b.energy < 0.5 || b.energy > 1.5) errs.push(at + ': energy should be a number from 0.5 to 1.5 (got ' + JSON.stringify(b.energy) + ')');
   }));
+  // guests: no entering while already on stage, no exiting or speaking while off stage (guests stay on across scenes)
+  const onStage = new Set();
+  (ep.chapters || []).forEach((c, ci) => (c.beats || []).forEach((b, bi) => {
+    const at = 'chapter ' + (ci + 1) + ' beat ' + (bi + 1);
+    if (b.guest != null) {
+      if (b.exit) { if (!onStage.has(b.guest)) errs.push(at + ': ' + b.guest + ' exits but is not on stage'); onStage.delete(b.guest); }
+      else { if (onStage.has(b.guest)) errs.push(at + ': ' + b.guest + ' enters but is already on stage'); onStage.add(b.guest); }
+    } else if (b.say != null && !['tidbit', 'sugarfoot', 'narrator'].includes(b.say) && !onStage.has(b.say)) errs.push(at + ': ' + b.say + ' speaks but is not on stage');
+  }));
   const words = [];
   (ep.chapters || []).forEach((c, ci) => {
     [c.title].concat((c.beats || []).map(b => b.text || b.caption || '')).forEach(t => { const m = String(t || '').match(BANNED); if (m) words.push('chapter ' + (ci + 1) + ': "' + m[0] + '" in "' + String(t).slice(0, 70) + '"'); });
