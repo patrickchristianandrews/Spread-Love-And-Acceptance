@@ -14,7 +14,7 @@ In workplaces, RACI charts help clarify roles on complex projects, where confusi
 
 At home, the same problem appears: “I thought you were doing it.” Jobs that belong to “both of us” or “whoever notices” are the ones most likely to slip, or to fall to the person with the lowest mess threshold. A single owner removes ambiguity.
 
-The program’s version keeps it simple: for each regular job, write down who owns it (noticing, planning and doing) and who helps. Ownership can be changed on purpose, but not by drift. Signing means the arrangement is clear, not that it is perfect.
+The program’s version keeps it simple: for each regular job, write down who owns it (noticing, planning and doing) and who helps. Ownership can be changed on purpose, but not by drift. Agreeing on it means the arrangement is clear, not that it is perfect.
 research:
 Responsibility assignment matrices have been used in project management since at least the mid-twentieth century; their exact origin is not well documented. RACI and variants (RASCI, DACI) appear in project-management guides. There is little direct research on RACI itself, but research on role ambiguity and diffusion of responsibility supports the underlying principle that clear individual ownership reduces dropped tasks and stress.
 links:

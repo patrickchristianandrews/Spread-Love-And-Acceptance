@@ -463,7 +463,10 @@
         });
         if (!shown.length) return;
         R.heading(s.title, 40);
-        shown.forEach(function (f) { R.longField(f.label, String(state.values[f.id])); });
+        shown.forEach(function (f) {
+          var v = state.values[f.id];
+          R.longField(f.label, f.type === 'check' ? 'Yes' : f.type === 'date' ? formatDate(v) : String(v));
+        });
         return;
       }
 
@@ -634,7 +637,9 @@
     if (sec.type === 'fields') {
       sec.fields.forEach(function (f) {
         var c = self.control(f, st.values[f.id], { key: f.id });
-        var field = h('div', { className: 'wpf-field wpf-wide' }, [h('label', { for: c.id, text: f.label }), c.el]);
+        var field = f.type === 'check'
+          ? h('div', { className: 'wpf-field wpf-wide' }, [h('label', { className: 'wpf-optin wpf-tick', for: c.id }, [c.el, ' ' + f.label])])
+          : h('div', { className: 'wpf-field wpf-wide' }, [h('label', { for: c.id, text: f.label }), c.el]);
         if (f.chips) {
           var chips = h('div', { className: 'wpf-chips', role: 'group', 'aria-label': (f.chipsLabel || 'Words to add') + ': ' + f.label });
           if (f.chipsLabel) chips.appendChild(h('span', { className: 'wpf-chips-k', text: f.chipsLabel }));

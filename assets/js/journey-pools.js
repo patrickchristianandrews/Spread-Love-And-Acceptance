@@ -926,7 +926,7 @@
        ['Ask to revisit it at your end-of-week review.', 'Then ask for a good time.'],
        ['Talk it through together.', 'Talk comes before any change.'],
        ['Write the change into the table.', 'Then write it down so nobody has to remember.'],
-       ['Both initial it.', 'Last, you both agree to it as written.']],
+       ['Agree on it together.', 'Last, you both agree to it as written.']],
       'Notice, ask for a time, talk it through, write it down, and both agree.',
       'Change it on purpose, not by drift.',
       'Agreements are allowed to change as life does. Writing the change down means nobody quietly does more.',

@@ -320,14 +320,14 @@
   ul.plain{ padding-left: 20px; font-size: 0.95rem; max-width: 72ch; }
   ul.plain li{ margin-bottom: 9px; }
 
-  .signoff-table{
+  .tally-table{
     width: 100%;
     border-collapse: collapse;
     font-size: 0.85rem;
     margin-top: 8px;
   }
 
-  .signoff-table th{
+  .tally-table th{
     text-align: left;
     font-family: "IBM Plex Mono", monospace;
     font-size: 0.7rem;
@@ -338,12 +338,12 @@
     padding: 6px 10px 10px 0;
   }
 
-  .signoff-table td{
+  .tally-table td{
     border-bottom: 1px solid var(--line);
     padding: 14px 10px 8px 0;
   }
 
-  .signoff-table td.label-cell{
+  .tally-table td.label-cell{
     font-family: "Fraunces", serif;
     font-weight: 600;
     color: var(--ink);
@@ -606,7 +606,7 @@
           <p><strong>A week with no friction events doesn't score zero.</strong> Having nothing to repair is not the same as failing to repair. RF simply has no value that week, rather than 0.00. CALC-01 leaves it out, rebalances the other measures, and tells you it did.</p>
         </div>
 
-        <table class="signoff-table" style="margin-top:20px;">
+        <table class="tally-table" style="margin-top:20px;">
           <thead>
             <tr><th>Week of</th><th>Friction events</th><th>Retunes used</th></tr>
           </thead>
@@ -631,23 +631,6 @@
           <p><strong>Dressing a demand as an ask.</strong> "Can we agree you'll stop doing that?" is not an ask. It's a verdict with a question mark on the end. A real ask names what you want to happen next, and leaves room for a different answer.</p>
         </div>
       </div>
-    </section>
-
-    <section id="signoff" aria-labelledby="signoff-h">
-      <div class="part-divider">
-        <div class="part-label">Sign-Off</div>
-        <h2 id="signoff-h">Reviewed</h2>
-      </div>
-
-      <table class="signoff-table">
-        <thead>
-          <tr><th></th><th>Reviewed</th><th>Date</th></tr>
-        </thead>
-        <tbody>
-          <tr><td class="label-cell">Partner A</td><td></td><td></td></tr>
-          <tr><td class="label-cell">Partner B</td><td></td><td></td></tr>
-        </tbody>
-      </table>
     </section>
 
     <footer class="sheet-footer">

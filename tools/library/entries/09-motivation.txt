@@ -200,7 +200,7 @@ At home, perfectionism often shows up as difficulty handing over tasks, redoing 
 research:
 Hewitt and Flett published their multidimensional model in 1991; Randy Frost and colleagues published another in 1990. Joachim Stoeber and Kathleen Otto (2006) reviewed the strivings–concerns distinction. Thomas Curran and Andrew Hill (2019) found that perfectionism scores among college students rose between 1989 and 2016. Research on perfectionism is extensive, with some debate about whether strivings are ever fully healthy.
 links:
-/workpapers/wp-03-raci-treaty.html | One owner per job: signing means clear, not perfect (WP-03)
+/workpapers/wp-03-raci-treaty.html | One owner per job: agreeing means clear, not perfect (WP-03)
 /book/chapter-4.html | Once a job has an owner, look to the owner (Chapter IV)
 talk:
 - Where does each of us hold perfectionist standards?

@@ -1918,7 +1918,7 @@
       l(2, '2w', 'It can be the same ', ['person'], '.', ['person', 'reason', 'week'], 'One individual.', 'Both roles can be one person.'),
       l(2, '2w', 'Go down the list ', ['together'], '.', ['together', 'alone', 'quickly'], 'With each other.', 'Agree the list side by side.'),
       l(2, '2w', 'Change it on purpose, not by ', ['drift'], '.', ['drift', 'chance', 'letter'], 'Slow sliding.', 'Update agreements deliberately.'),
-      l(2, '2w', 'Signing means clear, not ', ['perfect'], '.', ['perfect', 'finished', 'signed'], 'Flawless.', 'Clarity is the goal.'),
+      l(2, '2w', 'Agreeing means clear, not ', ['perfect'], '.', ['perfect', 'finished', 'final'], 'Flawless.', 'Clarity is the goal.'),
       l(2, '2w', 'Count how many jobs are fully ', ['owned'], '.', ['owned', 'paid', 'done'], 'Given an owner.', 'Owned jobs slip less.'),
       l(1, '2w', 'Leave the harder ones for next ', ['time'], '.', ['time', 'door', 'week’s'], 'Later.', 'Start with the easy jobs.'),
       l(2, '2s', 'In you: you look for what in the setup lets things slip, instead of blaming ', ['yourself'], '.', ['yourself', 'others', 'luck'], 'You.', 'Look at the setup, not at yourself.'),
