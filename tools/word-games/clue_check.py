@@ -11,7 +11,8 @@ answer_problem(answer) returns a reason when an answer shouldn't be in a calm Am
 British spellings and words, abbreviations and odd forms, and political, legal or
 stereotype-prone words.
 puzzle_problems(words) checks a whole puzzle ([[ANSWER, r, c, d, clue], ...]): every clue, every
-answer, and no clue used twice.
+answer, no clue used twice, and no clue that another everyday word fits just as well where the
+crossing answers can't tell them apart (unsettled(): "Deer in a meadow (3)" is DOE, but ROE fits).
 americanize(text) turns British spellings in a clue into American ones.
 """
 import re
@@ -335,6 +336,131 @@ def puzzle_problems(words, known=None, hand_of=None):
         if k in seen:
             out.append((ans, 'duplicate clue: ' + clue))
         seen[k] = ans
+    for ans, clue, other in unsettled(words, known):
+        out.append((ans, 'unsettled: ' + clue + ' (could be ' + other + ')'))
+    return out
+
+
+# ---------------------------------------------------------------- clues more than one word could answer
+# A clue can be fair on its own and still fit two answers of the same length ("Deer in a meadow (3)":
+# DOE, but ROE fits as well). The squares an answer shares with other answers settle most of these;
+# the ones left are where the only letters that differ sit in squares nothing crosses.
+# clue_alternatives() lists the other answers a clue could mean; unsettled() keeps those that also
+# agree with the answer in every crossed square, so the solver has no way to tell which is meant.
+
+# a group word, and the answers a clue naming only the group can't tell apart
+FAMILIES = {
+    'deer': 'doe roe elk stag buck hart hind fawn moose',
+    'bird': 'wren lark dove crow robin finch owl jay swan duck hawk rook kite tern gull teal',
+    'flower': 'rose lily iris tulip daisy pansy aster poppy peony lilac',
+    'tree': 'oak elm ash fir pine yew maple birch cedar palm beech larch aspen alder',
+    'fish': 'cod eel carp bass trout perch pike sole hake',
+    'color': 'red tan blue pink gold teal gray rose plum jade lime navy',
+    'shade': 'red tan blue pink gold teal gray rose plum jade lime navy',
+    'meal': 'lunch brunch dinner supper',
+    'insect': 'ant bee gnat moth wasp flea',
+    'bug': 'ant bee gnat moth wasp flea',
+    'herb': 'sage dill mint basil thyme chive',
+    'spice': 'mace clove cumin anise',
+    'nut': 'pecan acorn almond cashew',
+    'month': 'may june july',
+    'season': 'fall spring summer winter autumn',
+}
+# words that set a scene but don't pick out one member of the group
+SCENE = set('''a an the in on of at by for to from with and or its it's this that one some little small big tiny pretty
+sweet gentle wild common kind sort type meadow garden forest woods wood field park pond lake sky night day spring
+summer autumn fall winter backyard yard bright soft quiet lovely nice favorite seen spotted often'''.split())
+# hand-found clues that fit more than one everyday word, and the words they fit
+CLUE_ALTS = {
+    'conditions': {'terms', 'state', 'rules', 'shape'},
+    'deer in a meadow': {'doe', 'roe', 'elk', 'stag', 'buck', 'hart', 'fawn'},
+}
+
+
+def _content(clue):
+    return [t for t in re.findall(r"[a-z']+", clue.lower()) if t not in SCENE]
+
+
+def _plural_of(w):
+    if re.search(r'(s|x|z|ch|sh)$', w):
+        return w + 'es'
+    if re.search(r'[^aeiou]y$', w):
+        return w[:-1] + 'ies'
+    return w + 's'
+
+
+_WN = {}
+
+
+def _synonyms(word):
+    """Everyday single-word synonyms of a word, from WordNet's first few senses (none without it)."""
+    if word in _WN:
+        return _WN[word]
+    out = set()
+    try:
+        from nltk.corpus import wordnet as wn
+        for s in wn.synsets(word)[:4]:
+            for n in s.lemma_names():
+                if n.isalpha() and n.islower():
+                    out.add(n)
+    except Exception:  # no WordNet here: the hand-made lists above still work
+        pass
+    _WN[word] = out
+    return out
+
+
+def clue_alternatives(answer, clue, known=None):
+    """Other everyday answers of the same length that this clue could just as well mean."""
+    a = answer.lower()
+    low = (clue or '').lower().strip().rstrip('.')
+    toks = _content(low)
+    out = set()
+    if low in CLUE_ALTS and a in CLUE_ALTS[low]:
+        out |= CLUE_ALTS[low]
+    for fam, members in FAMILIES.items():
+        ms = set(members.split())
+        if a in ms and toks and all(t in (fam, fam + 's') for t in toks):
+            out |= ms
+    # a one-word clue ("Glad", "Conditions"): the clue word's other synonyms of the same length, when
+    # the answer is one of them too, and only everyday words the games already know
+    if isinstance(known, dict) and len(toks) == 1 and '___' not in low:
+        t = toks[0]
+        base, plural = t, False
+        if t.endswith('s') and len(t) > 3 and t[:-1] in known:
+            base, plural = t[:-1], True
+        syn = _synonyms(base)
+        if plural:  # a plural clue: the plurals of the nouns among its synonyms
+            syn = {_plural_of(s) for s in syn if (known.get(s) or {}).get('p') == 'n' or s == a[:-1]} | ({a} if a[:-1] in syn or a[:-2] in syn else set())
+        if a in syn:
+            for s in syn:
+                info = known.get(s[:-1] if plural and s[:-1] in known else s) or {}
+                if s != a and len(s) == len(a) and info.get('z', 0) >= 3.8 and not contains_answer(s, clue) and not answer_problem(s):
+                    out.add(s)
+    out.discard(a)
+    return {s for s in out if len(s) == len(a)}
+
+
+def unsettled(words, known=None):
+    """[(ANSWER, clue, OTHER), ...]: each answer whose clue fits another word that also agrees with it
+    in every square another answer crosses. words: [[ANSWER, r, c, d, clue], ...]."""
+    cover = {}
+
+    def at(w, i):
+        return (w[1] + (i if w[3] == 'd' else 0), w[2] + (i if w[3] == 'a' else 0))
+    for w in words:
+        for i in range(len(w[0])):
+            cover[at(w, i)] = cover.get(at(w, i), 0) + 1
+    out = []
+    for w in words:
+        a = w[0].lower()
+        alts = clue_alternatives(a, w[4], known)
+        if not alts:
+            continue
+        crossed = [i for i in range(len(a)) if cover[at(w, i)] > 1]
+        for b in sorted(alts):
+            if all(b[i] == a[i] for i in crossed):
+                out.append((w[0], w[4], b.upper()))
+                break
     return out
 
 

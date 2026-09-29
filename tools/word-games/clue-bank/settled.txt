@@ -1,0 +1,12 @@
+advisors: People who give advice | Trusted guides at work
+advisers: People who give advice | Trusted guides at work
+themes: Big ideas in stories | Party ideas, like "luau" or "pirate"
+disclose: Tell, as a secret | Make public
+smells: What noses notice | Aromas from the kitchen
+elements: Earth, air, fire and water, in old lore | Basic building blocks
+comments: Notes in the margin | Words after a blog post
+moments: "Just a few ___" | Short stretches of time
+talents: Natural gifts, like singing | Things you're good at
+heights: "Scaling new ___" | Tall places
+fortunes: Messages in cookies | Great sums of money
+cupboards: Kitchen storage spots | Where the mugs live

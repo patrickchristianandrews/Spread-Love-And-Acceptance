@@ -2,7 +2,7 @@
 met: Got together | Was introduced to | Came across
 ran: Jogged | Dashed | Hurried
 sat: Took a seat | Rested in a chair | Perched
-doe: Female deer | Fawn's mother | Deer in a meadow
+doe: Female deer | Fawn's mother | Mother deer
 wig: Hairpiece | Costume curls | Stage hair
 fax: Old-school document sender | Send by phone line | Office machine of yore
 aft: Toward the back of a boat | Astern | Stern-ward

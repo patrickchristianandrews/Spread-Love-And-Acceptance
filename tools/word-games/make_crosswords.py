@@ -307,6 +307,26 @@ def gentle(count=1400):
     print('xw gentle', len(made), flush=True)
 
 
+def reclue_some(words):
+    """The puzzle with another clue for each answer that has a problem, or None if one can't be found."""
+    ws = [list(w) for w in words]
+    for _ in range(3):
+        probs = problems(ws)
+        if not probs:
+            return ws
+        for ans, _reason in probs:
+            i = next(k for k, w in enumerate(ws) if w[0] == ans)
+            for c, _kind in G().get(ans.lower(), []):
+                if c == ws[i][4]:
+                    continue
+                trial = [list(w) for w in ws]
+                trial[i][4] = c
+                if not any(a == ans for a, _ in problems(trial)):
+                    ws = trial
+                    break
+    return None if problems(ws) else ws
+
+
 def fix():
     """Re-clue any served puzzle that no longer passes (after the clue lists changed), and leave out
     one that still can't pass. Quicker than making a bank again."""
@@ -317,12 +337,19 @@ def fix():
         for p in items:
             if problems(p['w']):
                 changed += 1
-                clued = rotor.fill([w[:4] for w in p['w']])
-                if not clued:
+                # first, a different clue for just the answers with a problem (the puzzle keeps its place)
+                q = reclue_some(p['w'])
+                if q:
+                    out.append(dict(p, w=q))
+                    continue
+                # a few tries: each one hands out the next clues in turn
+                for _ in range(8):
+                    clued = rotor.fill([w[:4] for w in p['w']])
+                    if clued and not problems(clued):
+                        break
+                else:
                     continue
                 p = dict(p, w=clued)
-                if problems(p['w']):
-                    continue
             out.append(p)
         if changed:
             write_bank(b, out, note)

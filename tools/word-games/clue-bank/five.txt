@@ -21,7 +21,7 @@ girls: Young ladies | Daughters | Lasses
 hands: Helpers | Clock pointers | Palms and fingers
 value: Worth | Price | Treasure
 chief: Leader | Main | Head
-terms: Words | Conditions | Semesters
+terms: Words | Conditions of a deal | Semesters
 enjoy: Relish | Like | Savor
 staff: Team | Crew | Walking stick
 began: Started | Kicked off | Opened
