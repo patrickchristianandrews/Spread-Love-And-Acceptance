@@ -63,7 +63,8 @@
       load(L[0]).then(function (buf) {
         if (!buf || my !== gen || sceneId !== want || !on || paused) return;
         var s = c.createBufferSource(), g = c.createGain();
-        s.buffer = buf; s.loop = true; s.loopStart = Math.min(0.06, buf.duration / 4); s.loopEnd = Math.max(s.loopStart + 1, buf.duration - 0.06); // skip the mp3's tiny padding g.gain.value = 0.0001; s.connect(g); g.connect(b);
+        s.buffer = buf; s.loop = true; s.loopStart = Math.min(0.06, buf.duration / 4); s.loopEnd = Math.max(s.loopStart + 1, buf.duration - 0.06); // skip the mp3's tiny padding
+        g.gain.value = 0.0001; s.connect(g); g.connect(b);
         var t = c.currentTime; s.start(t, Math.random() * buf.duration); g.gain.linearRampToValueAtTime(L[1], t + FADE_IN);
         cur.push({ s: s, g: g });
       });

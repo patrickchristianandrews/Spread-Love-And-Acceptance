@@ -1912,6 +1912,9 @@ html[data-theme="dark"]:not(.tol-nodark) :is(img, video, iframe, canvas, picture
 html[data-theme="dark"]:not(.tol-nodark) .read-head::after{ filter:invert(1) hue-rotate(180deg); }
 html[data-theme="dark"]:not(.tol-nodark) .tol-wash{ opacity:.5; }
 @media print{ html, html[data-theme="dark"]{ filter:none !important; } }
+/* full screen leaves the page's dark filter behind, so the player shows its own colors there */
+.fb-player:fullscreen{ filter:none !important; }
+.fb-player:-webkit-full-screen{ filter:none !important; }
 .read-head .tol-chbar{ margin:.9rem 0 0; background:rgba(255,255,255,.55); }
 @media (max-width:560px){ .tol-depth-who{ display:none; } .depth-bar.tol-depth{ padding:.85rem .9rem; } }
 
