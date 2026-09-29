@@ -2,7 +2,7 @@
 /* tools/buddies/check.js — checks every Frequency Buddies episode file (assets/js/buddies/s*e*.js).
 
    For each episode it checks the data format against the engine's own vocabulary (scenes, actions, speakers,
-   guests, moods, weather, music, items, props), flags lines over 140 characters and a few words that don't
+   guests, moods, weather, music, items, props, and the optional 0.5–1.5 `energy` on say beats), flags lines over 140 characters and a few words that don't
    belong in these stories, and estimates the runtime with the player's own calm pacing (the same function the
    player uses: about 13 characters a second, at least 2 seconds a line, a 0.8 second pause after each line and
    a little more after the feeling ones, slow walks, slow scene changes). The runtime must be 13 to 17 minutes.
@@ -44,6 +44,13 @@ for (const file of files) {
   const epc = vm.runInContext('(' + JSON.stringify(ep) + ')', sandbox);
   const r = P.lint(epc), est = P.estimate(epc), errs = r.errors.slice();
   if (ep.id !== want) errs.push('id is "' + ep.id + '" but the file is ' + want);
+  // optional `energy` on a say beat: how big the delivery is (0.6 very soft … 1.0 normal … 1.4 very big)
+  (ep.chapters || []).forEach((c, ci) => (c.beats || []).forEach((b, bi) => {
+    if (!('energy' in b)) return;
+    const at = 'chapter ' + (ci + 1) + ' beat ' + (bi + 1);
+    if (b.say == null) errs.push(at + ': energy is only for say beats');
+    else if (typeof b.energy !== 'number' || !isFinite(b.energy) || b.energy < 0.5 || b.energy > 1.5) errs.push(at + ': energy should be a number from 0.5 to 1.5 (got ' + JSON.stringify(b.energy) + ')');
+  }));
   const words = [];
   (ep.chapters || []).forEach((c, ci) => {
     [c.title].concat((c.beats || []).map(b => b.text || b.caption || '')).forEach(t => { const m = String(t || '').match(BANNED); if (m) words.push('chapter ' + (ci + 1) + ': "' + m[0] + '" in "' + String(t).slice(0, 70) + '"'); });
