@@ -343,7 +343,7 @@
       if (c.sleep && n !== 'sleep' && n !== 'heart' && n !== 'sparkle') c.sleep = false;
       if (c.kite && ['walk', 'run', 'carry', 'drop', 'hug', 'highfive', 'nuzzle', 'sit', 'lie', 'sleep', 'dig', 'build'].indexOf(n) >= 0) c.kite = false;
       if (n === 'hug' || n === 'highfive' || n === 'nuzzle') { if (Math.abs(a.toX - a.fromX) < 0.005) c.fx = sgn(o.x - c.x); }
-      if (n === 'carry') { c.item = ITEMS.indexOf(p.item) >= 0 ? p.item : 'bone'; S.ground = S.ground.filter(function (g2) { return !(g2.item === c.item && Math.abs(g2.x - c.x) < 0.25); }); }
+      if (n === 'carry') { c.shared = p.who === 'both'; c.item = ITEMS.indexOf(p.item) >= 0 ? p.item : 'bone'; S.ground = S.ground.filter(function (g2) { return !(g2.item === c.item && Math.abs(g2.x - c.x) < 0.25); }); }
       if (n === 'tailtuck' || n === 'cry') c.mood = 'sad';
       if (n === 'shiver') c.mood = c.mood === 'happy' ? 'worried' : c.mood;
       if (n === 'lookat' || n === 'point') { var tgt = p.target || 'other'; if (tgt === 'other') { c.fx = sgn(o.x - c.x); c.tilt0 = 0; } else if (tgt === 'left') { c.fx = -1; c.tilt0 = 0; } else if (tgt === 'right') { c.fx = 1; c.tilt0 = 0; } else if (tgt === 'up') c.tilt0 = -0.42; }
@@ -361,7 +361,7 @@
           if (a.key === 'b' && th.w) { th.w = 0; th.b = 0; }
           a.from = th[a.key]; a.to = p.to != null ? clamp(num(p.to, 1), 0, 1) : Math.min(1, th[a.key] + (a.key === 'r' ? 1 : 0.34)); }
       }
-      if (n === 'drop') { var itm = c.item || (ITEMS.indexOf(p.item) >= 0 ? p.item : null); if (itm) { S.ground.push({ item: itm, x: clamp(c.x + c.fx * 0.06, 0.03, 0.97), t0: S.t }); c.item = null; } }
+      if (n === 'drop') { c.shared = false; var itm = c.item || (ITEMS.indexOf(p.item) >= 0 ? p.item : null); if (itm) { S.ground.push({ item: itm, x: clamp(c.x + c.fx * 0.06, 0.03, 0.97), t0: S.t }); c.item = null; } }
       if (n === 'pause-breath') c.mood = 'calm';
       if (n === 'highfive') { a.sound = true; }
     }
@@ -716,7 +716,14 @@
       var ph = d.moving ? c.ph : Math.round(c.ph / Math.PI) * Math.PI;
       g.translate(hx, hy); g.rotate((pose === 'run' ? Math.sin(ph) * 0.05 : pose === 'bow' ? -0.15 : pose === 'lie' ? 0.05 : 0) + (d.tilt || 0));
       drawFace(g, c, d);
-      if (c.item && !(c.act && c.act.name === 'build')) drawItem(g, c.item);
+      if (c.item && !(c.act && c.act.name === 'build')) {
+        var o2 = S.chars[c.id === 'tidbit' ? 'sugarfoot' : 'tidbit'];
+        if (c.shared && o2 && o2.shared && o2.item === c.item) {
+          // carried together: one item, held between the two of them (drawn once, when the second pup is drawn)
+          var mm = g.getTransform(); c.itemM = { m: mm, t: S.t };
+          if (o2.itemM && o2.itemM.t === S.t) { g.save(); g.setTransform(mm.a, mm.b, mm.c, mm.d, (mm.e + o2.itemM.m.e) / 2, (mm.f + o2.itemM.m.f) / 2 + 6 * Math.hypot(mm.a, mm.b)); drawItem(g, c.item); g.restore(); }
+        } else drawItem(g, c.item);
+      }
       if (d.hammer != null) { g.save(); g.translate(0, d.hammer * -2); drawItem(g, 'hammer'); g.restore(); }
       var m = g.getTransform(); c.headPx = { x: m.e, y: m.f, r: 14 * Math.hypot(m.a, m.b) };
       var inv = S.geo; c.headStage = { x: (m.e - inv.ox - S.shift) / inv.k, y: (m.f - inv.oy) / inv.k };
