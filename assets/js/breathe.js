@@ -272,7 +272,7 @@
   }
 
   var $ = function (q) { return ov.querySelector(q); };
-  var method = 'box', minutes = 1, scape = 'deep', engine = null, muted = false, timers = [], raf = 0, last = null;
+  var method = 'box', minutes = 1, scape = 'off', engine = null, muted = false, timers = [], raf = 0, last = null;
   var run = { start: 0, total: 0, cycle: 0, rounds: 0 };
   function later(fn, ms) { timers.push(setTimeout(fn, ms)); }
   function stopAll() { timers.forEach(clearTimeout); timers = []; cancelAnimationFrame(raf); raf = 0; }
@@ -397,7 +397,8 @@
     last = document.activeElement; ov.hidden = false; document.documentElement.style.overflow = 'hidden';
     ov.classList.remove('is-open', 'is-in', 'is-out'); void ov.offsetWidth; ov.classList.add('is-open');
     method = get('tol-br-method', 'box'); if (!PATTERNS[method]) method = 'box';
-    minutes = +get('tol-br-min', '1') || 1; scape = get('tol-br-scape', 'deep'); if (!SCAPES[scape]) scape = 'deep';
+    // silent unless a sound was picked before (sound is always one tap away, and says so first)
+    minutes = +get('tol-br-min', '1') || 1; scape = get('tol-br-scape', 'off'); if (scape !== 'off' && !SCAPES[scape]) scape = 'off';
     // quiet mode, or site sounds switched off in Settings: start in silence (a sound is one tap away)
     if (window.TOLQuiet && !window.TOLQuiet.sound()) scape = 'off';
     muted = false; show('pick'); pickUI();
@@ -415,7 +416,7 @@
       var b = e.target.closest('button'); if (!b) return;
       if (b.hasAttribute('data-method')) { method = b.getAttribute('data-method'); set('tol-br-method', method); pickUI(); }
       if (b.hasAttribute('data-min')) { minutes = +b.getAttribute('data-min'); set('tol-br-min', String(minutes)); pickUI(); }
-      if (b.hasAttribute('data-scape')) { scape = b.getAttribute('data-scape'); if (scape !== 'off') set('tol-br-scape', scape); pickUI(); }
+      if (b.hasAttribute('data-scape')) { scape = b.getAttribute('data-scape'); set('tol-br-scape', scape); pickUI(); }
       var act = b.getAttribute('data-act');
       if (act === 'begin' || act === 'again') begin();
       if (act === 'change') { if (engine) { engine.end(); engine = null; } show('pick'); pickUI(); $('.br-begin').focus(); }

@@ -1409,7 +1409,13 @@
     }
     refreshStill();
     after();
-    if (name === 'quiet') { try { document.dispatchEvent(new CustomEvent('tol-quiet', { detail: { on: quietOn(), sound: soundAllowed() } })); } catch (e) {} }
+    if (name === 'quiet') quietEvent();
+  }
+  // tell the games, the pal cam and the sound pages at once (they listen on window, and some on document)
+  function quietEvent() {
+    var d = { on: quietOn(), sound: soundAllowed() };
+    try { window.dispatchEvent(new CustomEvent('tol-quiet', { detail: d })); } catch (e) {}
+    try { document.dispatchEvent(new CustomEvent('tol-quiet', { detail: d })); } catch (e) {}
   }
   window.TOLQuiet = { on: quietOn, sound: soundAllowed, set: function (on) { setPreset('quiet', !!on); } };
   window.TOLEasyReading = { on: easyOn, set: function (on) { setPreset('easy', !!on); } };
@@ -1497,7 +1503,7 @@
       var s = i.getAttribute('data-switch');
       if (s === 'still') { setStill(i.checked); }
       if (s === 'helpers') { if (i.checked) lsSet(HELP_KEY, '1'); else lsDel(HELP_KEY); }
-      if (s === 'sound') { setSounds(i.checked); try { document.dispatchEvent(new CustomEvent('tol-quiet', { detail: { on: quietOn(), sound: soundAllowed() } })); } catch (er) {} }
+      if (s === 'sound') { setSounds(i.checked); quietEvent(); }
       if (s === 'ruler') { if (i.checked) lsSet(RULER_KEY, '1'); else lsDel(RULER_KEY); }
       after();
     });
@@ -1507,7 +1513,7 @@
       if (e.target.closest('.tol-set-close') || e.target === box) closeSettings();
       if (e.target.closest('.tol-set-reset')) {
         [QUIET_KEY, EASY_KEY, PREV_KEY + '-quiet', PREV_KEY + '-easy', SIZE_KEY, THEME_KEY, HELP_KEY, FONT_KEY, SPACE_KEY, TINT_KEY, RULER_KEY, STILL_KEY].forEach(lsDel);
-        setSounds(false); refreshStill(); after(); announce('Everything is back to the usual.');
+        setSounds(false); refreshStill(); after(); quietEvent(); announce('Everything is back to the usual.');
       }
     });
     box.addEventListener('keydown', function (e) {
