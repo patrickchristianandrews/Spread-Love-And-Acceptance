@@ -978,6 +978,9 @@
   // ---------- sounds: soft, synthesized dog noises (pals-cam-sounds.js, fetched the first time the cam opens) ----------
   function SND() { return window.TOLPalsCamSounds || null; }
   function MUS() { return window.TOLPalsCamMusic || null; }
+  function AMB() { return window.TOLPalsCamAmbience || null; }
+  var ambP = null;
+  function ambSync() { if (!AMB()) return; AMB().set(soundOn() && !quietHold && (!SND() || SND().on())); if (isOpen && setting) AMB().scene(setting.id, hour); }
   var musP = null, quietHold = false;
   var sndP = null;
   function soundOn() { if (quietHold) return false; try { return localStorage.getItem('tol-palcam-sound') !== 'off'; } catch (e) { return true; } }
@@ -986,6 +989,7 @@
     var AC = window.AudioContext || window.webkitAudioContext;
     if (AC && soundOn()) { try { if (!window.__pcAudio) window.__pcAudio = new AC(); if (window.__pcAudio.state === 'suspended') window.__pcAudio.resume(); } catch (e) {} }
     if (!musP && !MUS()) musP = new Promise(function (ok) { var sc = document.createElement('script'); sc.src = '/assets/js/pals-cam-music.js'; sc.onload = sc.onerror = function () { ok(); syncMusBtn(); if (isOpen && MUS() && setting) MUS().scene(setting.id); }; document.head.appendChild(sc); });
+    if (!ambP && !AMB()) ambP = new Promise(function (ok) { var sc = document.createElement('script'); sc.src = '/assets/js/pals-cam-ambience.js'; sc.onload = sc.onerror = function () { ok(); ambSync(); }; document.head.appendChild(sc); });
     if (!sndP && !SND()) sndP = new Promise(function (ok) { var sc = document.createElement('script'); sc.src = '/assets/js/pals-cam-sounds.js'; sc.onload = sc.onerror = function () { if (SND() && SND().hold) SND().hold(quietHold); ok(); syncSndBtn(); }; document.head.appendChild(sc); });
     syncSndBtn();
   }
@@ -1123,7 +1127,7 @@
     badge = ov.querySelector('.pc-badge'); tallyN = ov.querySelector('.pc-n'); tallyTot = ov.querySelector('.pc-tot'); chips = ov.querySelector('.pc-chips'); btnPause = ov.querySelector('.pc-pause');
     ov.querySelector('.pc-x').addEventListener('click', close);
     ov.querySelector('.pc-mus').addEventListener('click', function () { primeSound(); var go = function () { if (MUS()) { MUS().toggle(); if (setting) MUS().scene(setting.id); } syncMusBtn(); }; if (MUS()) go(); else if (musP) musP.then(go); });
-    ov.querySelector('.pc-snd').addEventListener('click', function () { quietHold = false; primeSound(); if (SND()) SND().toggle(); else { try { localStorage.setItem('tol-palcam-sound', soundOn() ? 'off' : 'on'); } catch (e) {} } syncSndBtn(); hideNote(false); });
+    ov.querySelector('.pc-snd').addEventListener('click', function () { quietHold = false; primeSound(); if (SND()) SND().toggle(); else { try { localStorage.setItem('tol-palcam-sound', soundOn() ? 'off' : 'on'); } catch (e) {} } ambSync(); syncSndBtn(); hideNote(false); });
     ov.querySelector('.pc-snote-ok').addEventListener('click', function () { hideNote(true); });
     ov.querySelector('.pc-snote-off').addEventListener('click', function () { primeSound(); if (SND()) SND().set(false); else { try { localStorage.setItem('tol-palcam-sound', 'off'); } catch (e) {} } syncSndBtn(); hideNote(true); });
     ov.querySelector('.pc-next').addEventListener('click', function () { next(false); });
@@ -1245,7 +1249,7 @@
     motionMode();
     var now = new Date(); hour = opts.hour != null ? +opts.hour : now.getHours() + now.getMinutes() / 60;
     setting = pickSetting(opts.setting);
-    if (MUS()) MUS().scene(setting.id); syncMusBtn();
+    if (MUS()) MUS().scene(setting.id); syncMusBtn(); ambSync();
     ambient = []; parts = []; bubbles = []; outgoing = null; trick = null; comboLeft = 0; bgKey = ''; clock = 0; stats.maxOut = 0;
     EVENT = opts.event !== undefined ? (opts.event ? eventFor(new Date(opts.event)) : null) : eventFor(new Date()); storyPlayed = false; forceRare = !!opts.rare;
     var ph = phaseOf(hour); whereEl.textContent = 'Pal cam · ' + (EVENT && EVENT.special ? EVENT.name + ' · ' : '') + ph.charAt(0).toUpperCase() + ph.slice(1) + ' at ' + setting.name;
@@ -1266,7 +1270,7 @@
   }
   function close() {
     if (!isOpen) return;
-    isOpen = false; halt(); if (MUS()) MUS().stop(); ov.hidden = true; document.documentElement.classList.remove('pc-lock');
+    isOpen = false; halt(); if (MUS()) MUS().stop(); if (AMB()) AMB().stop(); ov.hidden = true; document.documentElement.classList.remove('pc-lock');
     var o = openerEl; openerEl = null;
     if (o && o.focus && document.contains(o)) { try { o.focus({ preventScroll: true }); } catch (e) { o.focus(); } }
   }

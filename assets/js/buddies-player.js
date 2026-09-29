@@ -1039,7 +1039,7 @@
           var st = sayTime(b); stage.say(b, st); call('onCaption', b.say, b.text, b);
           if (call('speak', b, function (ok) { if (D.i === i && D.voice) { D.voiceEnd = ok === false ? null : D.u; if (ok === false) D.voice = false; stage.stopTalk(); } })) { D.voice = true; var c = stage.get(b.say); if (c) c.talkUntil = stage.t + 60; }
           break;
-        case 'act': D.dur = stage.beginAct(b); break;
+        case 'act': D.dur = stage.beginAct(b); call('onAct', b); break;
         case 'scene':
           var same = b.scene === stage.scene, cv = call('canvas');
           if (cv && i > 1) stage.transition(cv, same || stage.reduced || b.scene === 'blank' || stage.scene === 'blank' ? 'fade' : 'pan');
@@ -1225,9 +1225,21 @@
     return CL.bufs[id];
   }
   // little cartoon dog noises in each pup's own voice ("Arf!", "Hee hee!", "Aww…"), now and then before a line
-  var FX = { up: ['arf', 'arfarf', 'ruff', 'yip', 'woof', 'hehe'], wow: ['ooh', 'arf', 'yip'], down: ['aww', 'mmm', 'hmm'], soft: ['mmm', 'sigh', 'yawn'] };
+  var FX = { up: ['arf', 'arfarf', 'ruff', 'yip', 'woof', 'laugh-1', 'laugh-2'], wow: ['ooh', 'arf', 'yip'], down: ['aww', 'mmm', 'hmm'], soft: ['mmm', 'sigh', 'yawn'] };
   var FX_MOOD = { happy: 'up', excited: 'up', silly: 'up', proud: 'up', surprised: 'wow', sad: 'down', worried: 'down', sleepy: 'soft', calm: 'soft' };
-  function fxLoad() { ['tidbit', 'sugarfoot'].forEach(function (w) { Object.keys(FX).forEach(function (g) { FX[g].forEach(function (k) { clipBuf('fx', w + '-' + k); }); }); }); }
+  function fxLoad() { ['tidbit', 'sugarfoot'].forEach(function (w) { Object.keys(FX).forEach(function (g) { FX[g].forEach(function (k) { clipBuf('fx', w + '-' + k); }); }); [1, 2, 3, 4].forEach(function (n) { clipBuf('fx', w + '-laugh-' + n); }); }); }
+  // a real, recorded laugh when the story says a pup laughs (both of them: one, then the other joins in)
+  function laughFor(who) {
+    var c = AU.ctx; if (!c || c.state !== 'running') return;
+    if (!CL.gain) { CL.gain = c.createGain(); CL.gain.gain.value = 1; CL.gain.connect(c.destination); }
+    var list = who === 'both' ? ['tidbit', 'sugarfoot'] : [who];
+    list.forEach(function (w, i) {
+      var n = 1 + Math.floor(Math.random() * 4), buf = CL.got['fx/' + w + '-laugh-' + n] || CL.got['fx/' + w + '-laugh-1'];
+      if (!buf) return;
+      var s = c.createBufferSource(), g = c.createGain(); g.gain.value = i ? 0.8 : 0.9; s.buffer = buf; s.connect(g); g.connect(CL.gain);
+      try { s.start(c.currentTime + 0.05 + i * 0.35); } catch (e) {}
+    });
+  }
   function fxPick(b) {
     if (b.say !== 'tidbit' && b.say !== 'sugarfoot') return null;
     var g = FX_MOOD[b.mood]; if (!g) return null;
@@ -1413,6 +1425,7 @@
         return voiceOk() ? vspeak(b, cb) : false;
       },
       stopSpeech: vstop,
+      onAct: function (b) { if (b.act === 'laugh' && P.voices && P.rate === 1 && (b.who === 'tidbit' || b.who === 'sugarfoot' || b.who === 'both')) laughFor(b.who); },
       onMusic: function (m) { auMood(m); },
       onWeather: function (w) { auWeather(w); },
       onChapter: function (ch) { P.ch = ch; renderChapter(); if (P.started) save(); },
