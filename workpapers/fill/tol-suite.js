@@ -501,7 +501,7 @@
     if (missing.length === S.names.length) return 'The shared average (the stress number in CALC-01) appears here once everyone has filled in their own.';
     if (missing.length) return 'Shared average: waiting on ' + missing.map(whoLabel).join(', ') + '. It is never worked out while anyone\u2019s is missing.';
     var avg = latest.reduce(function (a, b) { return a + b; }, 0) / latest.length;
-    return 'Shared average of everyone\u2019s latest: ' + (Math.round(avg * 100 + 1e-7) / 100).toFixed(2) + ' (all ' + latest.length + ' in). That is the stress number for CALC-01.';
+    return 'Shared average of everyone\u2019s latest: ' + (Math.round(avg * 100 + 1e-7) / 100).toFixed(2) + (latest.length === 2 ? ' (both in)' : ' (all ' + latest.length + ' in)') + '. That is the stress number for CALC-01.';
   }
 
   // Week by week: this road's own plan, with its workpapers, reading and a small practice
@@ -689,7 +689,10 @@
         return SP.readFilled(f).then(function (entries) {
           if (!entries.length) { problems.push(f.name + " has no fill-in boxes from this site"); return; }
           if (entries.path && !S.path) setPath(entries.path);
-          entries.forEach(function (en) { if (SP.answers(en) > 0 || en.label) put(en, entries.path); });
+          if (Array.isArray(entries.names) && !differentRoad(entries.path) && !S.names.some(function (x) { return String(x || '').trim(); })) {
+            S.names = entries.names.slice(0, MAX_PEOPLE); fitNames();
+          }
+          entries.forEach(function (en) { if (SP.answers(en) > 0 || en.label) put(en, entries.path, entries.names); });
           if (!entries.some(function (en) { return SP.answers(en) > 0; })) problems.push(f.name + ' is still blank');
         }, function () { problems.push(f.name + " couldn't be read"); });
       }

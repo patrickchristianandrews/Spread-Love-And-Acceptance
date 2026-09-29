@@ -763,6 +763,8 @@
     if (opts.fillable && plan.path) {
       out.setPage(0);
       out.field({ name: FIELD_PREFIX + 'path', kind: 'text', value: plan.path.id, x: 0, y: 0, w: 1, h: 1, hidden: true });
+      // who is on the road, so sheets each person fills in about themselves find their person again
+      out.field({ name: FIELD_PREFIX + 'names', kind: 'text', value: JSON.stringify((plan.names || []).map(function (x) { return String(x || ''); })), x: 0, y: 0, w: 1, h: 1, hidden: true });
     }
     footers(out, opts);
     return out.output();
@@ -894,10 +896,11 @@
   }
 
   function rebuild(found) {
-    var byE = {}, path = null;
+    var byE = {}, path = null, roadNames = null;
     Object.keys(found).forEach(function (name) {
       var parts = name.slice(FIELD_PREFIX.length).split('~');
       if (parts[0] === 'path') { path = found[name]; return; }
+      if (parts[0] === 'names') { try { var nm = JSON.parse(found[name]); if (Array.isArray(nm)) roadNames = nm.map(function (x) { return String(x || '').slice(0, 40); }).slice(0, 8); } catch (e) {} return; }
       var e = parts[0], code = parts[1];
       if (!schemaFor(code, path)) return;
       var en = byE[e] || (byE[e] = { workpaper: code, raw: { values: {}, tables: {} }, label: '', order: +e });
@@ -951,6 +954,7 @@
       return { workpaper: en.workpaper, label: en.label, state: state };
     });
     entries.path = typeof path === 'string' ? path : null;
+    entries.names = roadNames;
     return entries;
   }
 
