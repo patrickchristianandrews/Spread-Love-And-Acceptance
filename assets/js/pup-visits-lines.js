@@ -159,7 +159,7 @@ window.TOL_PUP_LINES = {
       'Low-battery days are allowed. Plan a gentle one.',
       'Knowing what drains you helps you plan kinder days.',
       ['Make a little card about how you’re built, to share with your people.', '/wiring-card.html', 'Wiring Card'],
-      ['How full is your battery? Check before a hard talk.', '/workpapers/wp-02-battery-stress-meter.html', 'Battery check'],
+      ['How much are you carrying? Check before a hard talk.', '/workpapers/wp-02-battery-stress-meter.html', 'Battery check'],
       ['Build your own calm-down kit for rough moments.', '/wp-11.html', 'The Calm-Down Kit'],
       ['Every brain is wired a bit differently. That’s okay!', '/wired-differently.html', 'Wired Differently']
     ],

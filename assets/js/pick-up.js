@@ -21,7 +21,7 @@
   function keys() { var out = []; try { for (var i = 0; i < localStorage.length; i++) out.push(localStorage.key(i)); } catch (e) {} return out; }
 
   // what a tool remembers, in plain words, so the card can say where you were
-  var WP_NAMES = { 'WP-01': 'Who did what (WP-01)', 'WP-02': 'How full is your battery? (WP-02)', 'WP-03': 'One owner per job (WP-03)', 'WP-04': 'What keeps coming back? (WP-04)',
+  var WP_NAMES = { 'WP-01': 'Who did what (WP-01)', 'WP-02': 'How much are you carrying? (WP-02)', 'WP-03': 'One owner per job (WP-03)', 'WP-04': 'What keeps coming back? (WP-04)',
     'WP-09': 'Say it so it lands (WP-09)', 'WP-11': 'The Calm-Down Kit (WP-11)', 'WP-13': 'The 90-second check-in (WP-13)' };
   function drafts() {
     var out = [];
@@ -35,7 +35,7 @@
     if (lsGet('tol-wiring-card')) out.push({ t: 'Your Wiring Card', u: '/wiring-card.html' });
     var lem = json('tol-lemonade-stand-v2'); if (lem && lem.jobs && lem.jobs.some(function (j) { return j && j.name; }) && !lem.example) out.push({ t: 'The Lemonade Stand', u: '/lemonade-stand.html' });
     var cw = json('cwd-v1'); if (cw && ((cw.log && cw.log.length) || Object.keys(cw.done || {}).length)) out.push({ t: 'The Carrier Wave Decoder', u: '/carrier-wave-decoder.html', note: Object.keys(cw.done || {}).length ? Object.keys(cw.done).length + ' practice' + (Object.keys(cw.done).length === 1 ? '' : 's') + ' done' : '' });
-    if (lsGet('tol-calc01-full-v2')) out.push({ t: 'Can the load last? (the long form)', u: '/calc01-solvency.html' });
+    if (lsGet('tol-calc01-full-v2')) out.push({ t: 'Is the setup working for both of you? (the long form)', u: '/calc01-solvency.html' });
     return out;
   }
   function sixWeeks() {
