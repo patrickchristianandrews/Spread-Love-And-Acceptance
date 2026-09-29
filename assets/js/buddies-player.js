@@ -361,14 +361,19 @@
           if (a.key === 'b' && th.w) { th.w = 0; th.b = 0; }
           a.from = th[a.key]; a.to = p.to != null ? clamp(num(p.to, 1), 0, 1) : Math.min(1, th[a.key] + (a.key === 'r' ? 1 : 0.34)); }
       }
-      if (n === 'drop') { c.shared = false; var itm = c.item || (ITEMS.indexOf(p.item) >= 0 ? p.item : null); if (itm) { S.ground.push({ item: itm, x: clamp(c.x + c.fx * 0.06, 0.03, 0.97), t0: S.t }); c.item = null; } }
+      if (n === 'drop') {
+        var itm = c.item || (ITEMS.indexOf(p.item) >= 0 ? p.item : null), oc = other(c);
+        if (c.shared && oc && oc.shared && oc.item === itm) { // a shared basket goes down once, between them
+          S.ground.push({ item: itm, x: clamp((c.x + oc.x) / 2, 0.03, 0.97), t0: S.t }); c.item = null; oc.item = null; c.shared = oc.shared = false;
+        } else if (itm) { S.ground.push({ item: itm, x: clamp(c.x + c.fx * 0.06, 0.03, 0.97), t0: S.t }); c.item = null; c.shared = false; }
+      }
       if (n === 'pause-breath') c.mood = 'calm';
       if (n === 'highfive') { a.sound = true; }
     }
     function setPose(c, p) { if (c.pose !== p) { c.prevPose = c.pose; c.pose = p; c.popT = S.t; } }
     function commit(c) {
       var a = c.act; if (!a) return; c.act = null;
-      if (a.name === '_place') { c.x = mix(a.fromX, a.toX, sio((S.t - a.t0) / a.dur)); return; }
+      if (a.name === '_place') { c.x = a.toX; return; } // cut short by the next action: she still ends up where she was going
       if (MOVE[a.name] || a.name === 'hug' || a.name === 'highfive' || a.name === 'nuzzle') c.x = a.toX;
       if (a.name === 'build') { if (a.th) a.th[a.key] = a.to; if (a.kb) a.kb.prog = a.to; if (a.prevPose) setPose(c, a.prevPose === 'bow' ? 'stand' : a.prevPose); }
       if (a.name === 'dig') setPose(c, a.prevPose || 'stand');
@@ -1067,7 +1072,10 @@
           break;
         case 'guest': if (b.exit) stage.removeGuest(b.guest); else stage.addGuest(b.guest, b.enter, b.name); break;
         case 'music': D.music = b.music; call('onMusic', b.music); break;
-        case 'place': if (b.place) stage.place(b.place); stage.applyProps(b.props); break;
+        case 'place':
+          // right after a scene change (nothing said or done yet), the pals are simply there when the scene fades in
+          var fresh = false; for (var q = i - 1; q >= 0; q--) { var kq = kindOf(F.beats[q].b); if (kq === 'scene') { fresh = true; break; } if (kq === 'say' || kq === 'act' || kq === 'guest') break; }
+          if (b.place) stage.place(b.place, fresh); stage.applyProps(b.props); break;
       }
       call('onBeat', i, fb);
     }
