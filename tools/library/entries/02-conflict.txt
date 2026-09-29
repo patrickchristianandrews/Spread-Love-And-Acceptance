@@ -406,7 +406,7 @@ At home, this suggests that how chores or money decisions are made matters as mu
 research:
 John Thibaut and Laurens Walker introduced procedural justice research in 1975. Allan Lind and Tom Tyler developed it further, and Lind’s fairness heuristic theory (2001) suggests people use fair treatment as a shortcut for deciding whether to trust an authority or group. The effect of perceived procedural fairness on acceptance of outcomes is one of the more robust findings in social and organisational psychology.
 links:
-/workpapers/wp-03-raci-treaty.html | One owner per job: signing means clear (WP-03)
+/workpapers/wp-03-raci-treaty.html | One owner per job: agreeing means clear (WP-03)
 /book/chapter-4.html | Two kinds of fair (Chapter IV)
 /book/chapter-2-in-depth.html#limits | Chapter II in depth: what the number is not
 talk:

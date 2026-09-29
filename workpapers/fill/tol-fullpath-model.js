@@ -298,19 +298,23 @@
     var amend = [];
     for (i = 0; i < Math.max(2, ctx.sizes.amend || 0); i++) {
       var q = 'wp03.amend.r' + (i + 1) + '.';
-      amend.push({ label: 'Change ' + (i + 1), fields: [f(q + 'date', 'Date', 'date', { half: true }), f(q + 'initials', 'Initials', 'text', { half: true }), f(q + 'change', 'What changed', 'textarea', { small: true })] });
+      amend.push({ label: 'Change ' + (i + 1), fields: [f(q + 'date', 'Date', 'date', { half: true }), f(q + 'who', 'Who', 'text', { half: true }), f(q + 'change', 'What changed', 'textarea', { small: true })] });
     }
     blocks.push({ kind: 'cards', title: 'Changes to the agreement (optional)', intro: section(sc, 'amendments').intro, rows: amend });
-    blocks.push(personSignoff(ctx, 'wp03.ratify', 'Signing off', [['initials', 'Initials', 'text'], ['date', 'Date', 'date']]));
+    blocks.push(closing(ctx, 'wp03', section(sc, 'closing').intro));
     return { id: 'wp03', code: 'WP-03', title: sc.title, blocks: blocks };
   }
 
-  function personSignoff(ctx, base, title, cols) {
-    var rows = [];
-    for (var i = 0; i < ctx.n; i++) {
-      rows.push({ label: ctx.labels[i], fields: cols.map(function (c) { return f(base + '.p' + (i + 1) + '.' + c[0], c[1], c[2], { w: c[3] || 1.3 }); }) });
-    }
-    return { kind: 'grid', title: title, rows: rows, rowLabels: true, optional: true };
+  // The last lines of a page people settle on together: one box to tick, and an optional date to
+  // come back to it. Nothing to sign.
+  function closing(ctx, base, intro) {
+    var solo = ctx.road.solo;
+    var out = { kind: 'fields', title: solo ? 'Where I’ve landed' : 'Where we’ve landed', fields: [
+      f(base + '.closing.agreed', solo ? 'I’m going with this' : 'We’re agreed on this', 'check', { optional: true }),
+      f(base + '.closing.lookAgain', 'Look at this again on', 'date', { half: true, optional: true })
+    ] };
+    if (intro) out.intro = intro;
+    return out;
   }
 
   function pageWp04(ctx) {
@@ -330,7 +334,7 @@
     }
     blocks.push({ kind: 'grid', title: section(sc, 'classify').title, intro: section(sc, 'classify').intro, rows: cl });
     blocks.push({ kind: 'derived', title: 'Worked out for you', lines: ['Times each task was flagged (3 or 4 weeks is a real pattern, not a fluke), and the count of structural gaps, capacity issues and one-offs.'] });
-    blocks.push(personSignoff(ctx, 'wp04.signoff', 'Sign-off', [['initials', 'Initials', 'text'], ['date', 'Date', 'date']]));
+    blocks.push(closing(ctx, 'wp04'));
     return { id: 'wp04', code: 'WP-04', title: sc.title, blocks: blocks };
   }
 
@@ -372,7 +376,7 @@
     }
     blocks.push({ kind: 'grid', title: 'Part C: Coming back', intro: (ctx.road.solo ? 'Take WP-02 before and after. Under 0.50, go back to what you were doing.' : 'Take WP-02 before and after. Under 0.50, go back in.') + ' Between 0.50 and 0.60, do a second round. Still 0.60 or above after two rounds? Put it off to a named time. The list: 1 breathing, 2 naming the room, 3 weight and pressure, 4 gating, 5 walking it out, 6 low, steady sound.', rows: re });
     blocks.push({ kind: 'fields', fields: [f('wp11.nextAction', 'Next small action', 'text'), f('wp11.resume', ctx.road.solo ? 'If you put it off: when you’ll pick it back up' : 'If you put the conversation off: when you’ll pick it back up', 'text')] });
-    blocks.push(personSignoff(ctx, 'wp11.signoff', 'Defaults set', [['chosen', 'Defaults chosen', 'check'], ['agreed', ctx.road.solo ? 'Pause line written' : 'Pause line agreed', 'check'], ['date', 'Date', 'date']]));
+    blocks.push(closing(ctx, 'wp11'));
     return { id: 'wp11', code: 'WP-11', title: sc.title, blocks: blocks };
   }
 
@@ -403,7 +407,7 @@
       rs.push({ fields: [f(q + 'item', 'Sore spot that keeps coming up', 'text', { w: 3 }), f(q + 'times', 'Times', 'number', { min: 0, w: 0.7 }), f(q + 'to', 'Move to', 'radio', { options: to, w: 2.2 })] });
     }
     blocks.push({ kind: 'grid', title: section(sc, 'resync').title + ' (optional)', intro: section(sc, 'resync').intro, rows: rs });
-    blocks.push(personSignoff(ctx, 'wp13.signoff', 'Sign-off', [['committed', 'Committed to the daily loop', 'check'], ['date', 'Date', 'date']]));
+    blocks.push(closing(ctx, 'wp13'));
     return { id: 'wp13', code: 'WP-13', title: sc.title, blocks: blocks };
   }
 
@@ -555,9 +559,12 @@
   function regOf(data) { return build(data.road, data.people, namesOf(data), data.sizes); }
 
   // Fields from any scheme version, mapped onto today's names. v1 is today's.
+  // v1 packages made before the closing lines came in had "Initials" on WP-03 changes (now "Who")
+  // and sign-off grids at the end of four pages; those are quietly left behind.
   var MIGRATE = {
-    1: function (name) { return name; }
+    1: function (name) { return name.replace(/^(tol\.v1\.wp03\.amend\.r\d+\.)initials$/, '$1who'); }
   };
+  var RETIRED = /^tol\.v1\.wp(03\.ratify|04\.signoff|11\.signoff|13\.signoff)\./;
   function canonical(name) {
     var m = /^tol\.v(\d+)\.(.+)$/.exec(String(name || ''));
     if (!m) return null;
@@ -593,11 +600,11 @@
     var version = trim(canon[NS + 'meta.version']) || '';
     var n = parseInt(canon[NS + 'meta.people'], 10);
     if (!ROADS[roadId]) roadId = guessRoad(canon);
-    if (!(n >= 1)) { n = 0; Object.keys(canon).forEach(function (k) { var m = /\.p(\d)\./.exec(k) || /\.who\.p(\d)$/.exec(k); if (m) n = Math.max(n, +m[1]); }); }
+    if (!(n >= 1)) { n = 0; Object.keys(canon).forEach(function (k) { if (RETIRED.test(k)) return; var m = /\.p(\d)\./.exec(k) || /\.who\.p(\d)$/.exec(k); if (m) n = Math.max(n, +m[1]); }); }
     n = clampPeople(roadId, n);
     var sizes = sizesFromNames(Object.keys(canon)), reg = build(roadId, n, null, sizes), values = {}, unknown = [];
     Object.keys(canon).forEach(function (name) {
-      if (name.indexOf(NS + 'meta.') === 0) return;
+      if (name.indexOf(NS + 'meta.') === 0 || RETIRED.test(name)) return;
       var fl = reg.byName[name], v = canon[name];
       if (!fl) { if (!blank(v)) unknown.push(name); return; }
       if (fl.type === 'check') { values[name] = v === true || (typeof v === 'string' && v !== 'Off' && v !== '' && v !== 'false'); if (!values[name]) delete values[name]; return; }
@@ -649,6 +656,8 @@
       for (var i = 0; i < n; i++) if (nm && (fold(names[i]) === nm || fold(roleOf(roadId, i)) === nm)) return i;
       return null;
     }
+    // A sheet's closing lines (old drafts may still carry a sign-off table instead; that is left behind)
+    function closingFrom(en, base) { var v = en.state.values; if (v.agreed === true) V[base + '.closing.agreed'] = true; set(base + '.closing.lookAgain', v.lookAgain); }
     var by = {};
     snap.entries.forEach(function (e) { if (e && e.state && e.workpaper) (by[e.workpaper] = by[e.workpaper] || []).push(e); });
     var got = [];
@@ -682,9 +691,9 @@
       t3.forEach(function (r, i) { var p = 'wp03.treaty.r' + (i + 1) + '.'; set(p + 'task', r.task); set(p + 'freq', r.freq); set(p + 'r', whoName(r.r)); set(p + 'a', whoName(r.a)); set(p + 'c', r.c); set(p + 'i', r.i); set(p + 'notes', r.notes); });
       sizes.treaty = t3.length;
       var am = rowsOfT(e3.state, 'amendments');
-      am.forEach(function (r, i) { var p = 'wp03.amend.r' + (i + 1) + '.'; set(p + 'date', r.date); set(p + 'initials', [r.initA, r.initB].filter(Boolean).join(' ')); set(p + 'change', r.change); });
+      am.forEach(function (r, i) { var p = 'wp03.amend.r' + (i + 1) + '.'; set(p + 'date', r.date); set(p + 'who', [r.initA, r.initB].filter(Boolean).join(' ')); set(p + 'change', r.change); });
       if (am.length > 2) sizes.amend = am.length;
-      (e3.state.tables.ratify || []).forEach(function (r, i) { if (i < n && r) { set('wp03.ratify.p' + (i + 1) + '.initials', r.initials); set('wp03.ratify.p' + (i + 1) + '.date', r.date); } });
+      closingFrom(e3, 'wp03');
     }
     var e4 = latest(by['WP-04'] || []);
     if (e4) {
@@ -696,7 +705,7 @@
       var c4 = rowsOfT(e4.state, 'classify').filter(function (r) { return trim(r.task); });
       c4.forEach(function (r, i) { var p = 'wp04.classify.r' + (i + 1) + '.'; set(p + 'task', r.task); set(p + 'owner', r.owner); set(p + 'kind', r.kind); set(p + 'action', r.action); });
       if (c4.length > 6) sizes.classify = c4.length;
-      (e4.state.tables.signoff || []).forEach(function (r, i) { if (i < n && r) { set('wp04.signoff.p' + (i + 1) + '.initials', r.initials); set('wp04.signoff.p' + (i + 1) + '.date', r.date); } });
+      closingFrom(e4, 'wp04');
     }
     var e9 = latest(by['WP-09'] || []);
     if (e9) {
@@ -716,13 +725,12 @@
         if (!k) return;
         var line = (k.state.tables.lines || [])[0];
         if (line) set('wp11.lines.p' + (j + 1) + '.line', line.line);
-        var so = (k.state.tables.signoff || [])[0];
-        if (so) { if (so.chosen) V['wp11.signoff.p' + (j + 1) + '.chosen'] = true; if (so.agreed) V['wp11.signoff.p' + (j + 1) + '.agreed'] = true; set('wp11.signoff.p' + (j + 1) + '.date', so.date); }
       });
       // the package has one set of defaults, triggers and readings: the first kit that has them
       var main = kits.filter(function (k) { return k && (k.state.values.first || k.state.values.second); })[0] || kits.filter(Boolean)[0];
       set('wp11.date', main.state.values.date); set('wp11.first', main.state.values.first); set('wp11.second', main.state.values.second);
       set('wp11.nextAction', main.state.values.nextAction); set('wp11.resume', main.state.values.resume);
+      closingFrom(main, 'wp11');
       var tr = rowsOfT(main.state, 'triggers');
       tr.forEach(function (r, i) { set('wp11.triggers.r' + (i + 1) + '.trigger', r.trigger); set('wp11.triggers.r' + (i + 1) + '.body', r.body); });
       if (tr.length > 3) sizes.triggers = tr.length;
@@ -746,7 +754,7 @@
       var rs = rowsOfT(e13.state, 'resync').filter(function (r) { return trim(r.item); });
       rs.forEach(function (r, i) { var p = 'wp13.resync.r' + (i + 1) + '.'; set(p + 'item', r.item); set(p + 'times', r.times); set(p + 'to', r.to); });
       if (rs.length > 3) sizes.resync = rs.length;
-      (e13.state.tables.signoff || []).forEach(function (r, i) { if (i < n && r) { if (r.committed) V['wp13.signoff.p' + (i + 1) + '.committed'] = true; set('wp13.signoff.p' + (i + 1) + '.date', r.date); } });
+      closingFrom(e13, 'wp13');
     }
     var data = blankData(roadId, n, names, sizes);
     if (e3) Object.keys(data.values).forEach(function (k) { if (k.indexOf(NS + 'wp03.treaty.') === 0) delete data.values[k]; });
@@ -1774,8 +1782,7 @@
         none: rows3.filter(function (r) { return !r.rRaw && !r.aRaw; }), multi: rows3.filter(function (r) { return r.ro.multi || r.ao.multi; }),
         sameRA: single.filter(function (r) { return r.ro.list[0] === r.ao.list[0]; }),
         recurring: rows3.filter(function (r) { return r.fk === 'frequent' || r.fk === 'weekly'; }), occasional: rows3.filter(function (r) { return r.fk === 'occasional' || r.fk === 'asneeded'; }),
-        ci: rows3.filter(function (r) { return r.cRaw || r.iRaw; }).length,
-        signed: P.list.filter(function (p) { return has(data, 'wp03.ratify.p' + (p.i + 1) + '.initials'); }).length };
+        ci: rows3.filter(function (r) { return r.cRaw || r.iRaw; }).length };
       F.w3.gaps = rows3.filter(function (r) { return !(r.rRaw && r.aRaw) || r.ro.multi || r.ao.multi; });
     }
 
@@ -1829,7 +1836,8 @@
         return { day: d, n: rs.length, high: rs.filter(function (r) { return r.load === 'High'; }).length, friction: rs.filter(function (r) { return r.friction; }).length, thanks: rs.filter(function (r) { return r.thanks; }).length };
       });
       var fr = d13.filter(function (r) { return r.any && r.friction; });
-      pp.forEach(function (p) { p.committed = V(data, 'wp13.signoff.p' + (p.i + 1) + '.committed') === true; });
+      var agreed13 = V(data, 'wp13.closing.agreed') === true;
+      pp.forEach(function (p) { p.committed = agreed13; });
       F.w13 = { rows: d13, byDay: byDay, entries: c.wp13.entries, possible: 7 * n, rate: c.wp13.entries / (7 * n),
         empty: d13.filter(function (r) { return r.any && r.load && !r.thanks && !r.friction && !r.ask; }),
         daysWith: byDay.filter(function (d) { return d.n; }).length,
@@ -2479,7 +2487,7 @@
       fix: 'Even one word in "One thing I appreciated" is enough.' },
     { id: 'wp13-committed-skipped', where: 'WP-13', level: 'note',
       when: function (F) { if (!F.w13) return null; var s = F.pp.filter(function (p) { return p.committed && p.checkins < 3; }); return s.length ? s : null; },
-      text: function (s) { return list(lbl(s)) + ' signed up for the daily loop but ' + (s.length === 1 ? 'has' : 'have') + ' fewer than 3 check-ins recorded. It may be that they were done out loud and not written down.'; },
+      text: function (s) { return list(lbl(s)) + ' agreed to the daily check-in but ' + (s.length === 1 ? 'has' : 'have') + ' fewer than 3 check-ins recorded. It may be that they were done out loud and not written down.'; },
       fix: 'If they happened out loud, a tick for the load is enough to record them.' },
     { id: 'wp13-gap-day', where: 'WP-13', level: 'note',
       when: function (F) {
@@ -2621,7 +2629,6 @@
       if (t3.rOnly.length) s.more.push('Responsible but not Accountable: ' + list(t3.rOnly.slice(0, 4).map(function (r) { return r.task; })) + '.');
       s.more.push('How often: ' + t3.recurring.length + ' daily or weekly, ' + t3.occasional.length + ' monthly or as needed' + (t3.rows.length - t3.recurring.length - t3.occasional.length ? ', ' + (t3.rows.length - t3.recurring.length - t3.occasional.length) + ' not marked' : '') + '.');
       if (F.road === 'coworkers') s.more.push(t3.ci ? plural(t3.ci, 'row') + (t3.ci === 1 ? ' uses' : ' use') + ' Consulted or Informed, which is where a group belongs.' : 'No rows use Consulted or Informed yet. They are the right place for "the whole team".');
-      if (n >= 2) s.more.push('Signed off by ' + t3.signed + ' of ' + n + '.');
       s.suggests.push(c.wp03.oc != null && c.wp03.oc >= 0.8 ? 'Ownership is mostly clear, so repeat slips are more likely about capacity or timing than clarity.' : 'The unowned ' + v.tasks + ' are the quickest win in the whole report: one sitting, one name each.');
     }
     if (code === 'WP-04' && F.w4) {

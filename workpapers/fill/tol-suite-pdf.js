@@ -338,6 +338,14 @@
     pen.heading(sec.title, 60);
     if (sec.intro) pen.para(sec.intro, { size: 8.5, color: C.soft, after: 6 });
     sec.fields.forEach(function (f) {
+      if (f.type === 'check') {
+        // a single tick box with its words beside it, like "We're agreed on this"
+        pen.room(26);
+        box(pen, L, pen.y, 14, 14, fieldFor(f, fname(e, schema.code, 'v', key(f.id)), entry.state.values[f.id], ctx));
+        pen.doc.text(L + 22, pen.y + 10.5, enc(f.label), 'Times-Bold', 11, C.ink);
+        pen.y += 24;
+        return;
+      }
       var h = f.type === 'textarea' ? 62 : 22, label = wrap(f.label, 'Helvetica-Bold', 8, W);
       var need = label.length * 10 + h + (f.help ? 12 : 0) + 12;
       pen.room(need);
@@ -345,7 +353,7 @@
       pen.y += label.length * 10 + 3;
       var val = entry.state.values[f.id];
       if (f.privateOptIn && !entry.state.values[f.id + '__include']) val = '';
-      box(pen, L, pen.y, f.privateOptIn ? W - 150 : W, h, fieldFor(f, fname(e, schema.code, 'v', key(f.id)), val, ctx));
+      box(pen, L, pen.y, f.privateOptIn ? W - 150 : f.type === 'date' ? Math.min(W, 170) : W, h, fieldFor(f, fname(e, schema.code, 'v', key(f.id)), val, ctx));
       if (f.privateOptIn) {
         box(pen, R - 140, pen.y + 2, 14, 14, { name: fname(e, schema.code, 'v', key(f.id + '__include')), kind: 'check', value: !!entry.state.values[f.id + '__include'] });
         wrap('Include it in the report (it stays just for you otherwise)', 'Helvetica', 7.5, 118).forEach(function (ln, k) { pen.doc.text(R - 120, pen.y + 9 + k * 9.5, ln, 'Helvetica', 7.5, C.soft); });

@@ -320,36 +320,43 @@
   ul.plain{ padding-left: 20px; font-size: 0.95rem; max-width: 72ch; }
   ul.plain li{ margin-bottom: 9px; }
 
-  .signoff-table{
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 0.85rem;
-    margin-top: 8px;
-  }
-
-  .signoff-table th{
-    text-align: left;
-    font-family: "IBM Plex Mono", monospace;
-    font-size: 0.7rem;
-    letter-spacing: 0.04em;
-    text-transform: uppercase;
-    color: var(--brass-ink, #7A5620);
-    border-bottom: 2px solid var(--line);
-    padding: 6px 10px 10px 0;
-  }
-
-  .signoff-table td{
-    border-bottom: 1px solid var(--line);
-    padding: 14px 10px 8px 0;
-  }
-
-  .signoff-table td.label-cell{
+  /* Closing line: one box to tick, and a date to come back to it */
+  .closing-line{
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px 22px;
+    margin: 28px 0 0;
+    max-width: none;
+    padding: 14px 16px;
+    border: 1px solid var(--line);
+    border-radius: var(--radius, 3px);
     font-family: "Fraunces", serif;
-    font-weight: 600;
+    font-size: 1.02rem;
     color: var(--ink);
-    white-space: nowrap;
-    width: 1%;
-    padding-right: 24px;
+  }
+  .closing-line .tick{ display: inline-flex; align-items: center; gap: 10px; font-weight: 600; }
+  .closing-line .tick::before{
+    content: "";
+    width: 16px;
+    height: 16px;
+    border: 1.5px solid var(--ink);
+    border-radius: 2px;
+    flex: none;
+  }
+  .closing-line .again{
+    display: inline-flex;
+    align-items: flex-end;
+    gap: 8px;
+    font-family: "Lora", Georgia, serif;
+    font-size: 0.92rem;
+    color: var(--ink-soft, #524B3E);
+  }
+  .closing-line .again::after{
+    content: "";
+    width: 9em;
+    border-bottom: 1px solid var(--ink-soft, #524B3E);
+    margin-bottom: 3px;
   }
 
   .sheet-footer{
@@ -405,14 +412,14 @@
     <header class="sheet-header">
       <p class="wp-num">WP-03</p>
       <h1 class="sheet-mark">The RACI Treaty
-        <small>Ownership &middot; Changes &middot; Signing Off</small>
+        <small>Ownership &middot; Changes &middot; Agreeing on It</small>
       </h1>
       <p class="sheet-tagline">A living agreement that gives every regular household job exactly one Responsible name and one Accountable name.</p>
       <p class="sheet-tagline pillar-note">This worksheet puts <a href="/five-pillars.html#fix-the-setup">Pillar II, Fix the setup, not the person</a> to work, with a nod to <a href="/five-pillars.html#quiet-incentives">Pillar V, Notice the quiet incentives</a>. In you: a job that keeps slipping is a setup problem, not a character flaw. Between you and others: every job gets one clear owner, so unclaimed work stops drifting to one person.</p>
       <div class="toc">
         <a href="#treaty">The Treaty</a>
         <a href="#amend">Changing the Treaty</a>
-        <a href="#ratify">Signing Off</a>
+        <a href="#agree">Agreeing on It</a>
         <a href="#score">Clarity Score</a>
       </div>
     </header>
@@ -491,7 +498,7 @@
         <ol class="steps">
           <li>Either of you can ask to revisit it at the weekly closing, your short end-of-week review (Chapter V).</li>
           <li>Write each change into the table above. Don't just agree out loud.</li>
-          <li>You both initial the change and log it below.</li>
+          <li>Log it below, with the date and who agreed to it.</li>
         </ol>
 
         <p>A treaty with no history of changes is almost always a treaty nobody is using. The log also answers the question WP-04 asks each month: did last month's fix actually hold? You need a date to answer that.</p>
@@ -502,7 +509,7 @@
               <th style="width:90px;">Date</th>
               <th>Task</th>
               <th style="width:150px;">Change</th>
-              <th style="width:80px;">Initials</th>
+              <th style="width:90px;">Who</th>
             </tr>
           </thead>
           <tbody>
@@ -522,24 +529,15 @@
       </div>
     </section>
 
-    <section id="ratify" aria-labelledby="ratify-h">
+    <section id="agree" aria-labelledby="agree-h">
       <div class="part-divider">
         <div class="part-label">Part C</div>
-        <h2 id="ratify-h">Signing Off</h2>
+        <h2 id="agree-h">Agreeing on It</h2>
       </div>
 
       <div class="part-section">
-        <p>By initialing below, you both confirm that you've read the current version of this table and agree to who owns what, as written. It doesn't mean every task feels perfectly fair. It only means ownership is clear.</p>
-
-        <table class="signoff-table">
-          <thead>
-            <tr><th></th><th>Initials</th><th>Date</th></tr>
-          </thead>
-          <tbody>
-            <tr><td class="label-cell">Partner A</td><td></td><td></td></tr>
-            <tr><td class="label-cell">Partner B</td><td></td><td></td></tr>
-          </tbody>
-        </table>
+        <p>Agreeing means you&rsquo;ve both read this version and know who owns what. It doesn&rsquo;t mean every job feels perfectly fair, only that ownership is clear.</p>
+        <p class="closing-line"><span class="tick">We&rsquo;re agreed on this.</span><span class="again">Look at this again on</span></p>
       </div>
     </section>
 

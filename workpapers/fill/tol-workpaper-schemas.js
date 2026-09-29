@@ -66,6 +66,20 @@
 
   var W = {};
 
+  // The last few lines of a sheet people settle on together: one box to tick, and an optional
+  // date to come back to it. Nothing to sign.
+  function closing(intro, solo) {
+    var out = {
+      id: 'closing', type: 'fields', title: solo ? 'Where I\'ve landed' : 'Where we\'ve landed',
+      fields: [
+        { id: 'agreed', label: solo ? 'I\'m going with this' : 'We\'re agreed on this', type: 'check' },
+        { id: 'lookAgain', label: 'Look at this again on (optional)', type: 'date' }
+      ]
+    };
+    if (intro) out.intro = intro;
+    return out;
+  }
+
   /* ------------------------------------------------------------------ WP-01 */
   W['wp-01'] = {
     code: 'WP-01',
@@ -141,14 +155,6 @@
           { id: 'alt', label: 'Offer an alternative', type: 'textarea', w: 2 }
         ],
         defaultRows: [{}]
-      },
-      {
-        id: 'signoff', type: 'table', title: 'Sign-off',
-        fixedRows: ['Filled in by', 'Looked over by'],
-        columns: [
-          { id: 'name', label: 'Name', type: 'text', w: 2 },
-          { id: 'date', label: 'Date', type: 'date', w: 1.3 }
-        ]
       }
     ]
   };
@@ -304,23 +310,11 @@
         columns: [
           { id: 'date', label: 'Date', type: 'date', w: 1.1 },
           { id: 'change', label: 'What changed', type: 'textarea', w: 3.5 },
-          { id: 'initA', label: 'Initials', type: 'text', w: 0.9 },
-          { id: 'initB', label: 'More initials', type: 'text', w: 0.9 }
+          { id: 'initA', label: 'Who', type: 'text', w: 1.4 }
         ],
         defaultRows: [{}]
       },
-      {
-        type: 'note', pdf: true,
-        text: 'Initialing confirms that everyone on it has read the current version and agrees to who owns what, as written. It doesn\'t mean every task feels perfectly fair. It only means ownership is clear.'
-      },
-      {
-        id: 'ratify', type: 'table', title: 'Signing off',
-        fixedRows: ['@A', '@B'],
-        columns: [
-          { id: 'initials', label: 'Initials', type: 'text', w: 1.5 },
-          { id: 'date', label: 'Date', type: 'date', w: 1.5 }
-        ]
-      }
+      closing('Agreeing means everyone has read this version and knows who owns what. It doesn\'t mean every job feels perfectly fair, only that ownership is clear.')
     ]
   };
 
@@ -399,14 +393,7 @@
         type: 'note', pdf: true,
         text: 'Not a bill for the past, and not a performance review. A task with no owner is a gap in the setup, not a verdict on the person who kept covering it.'
       },
-      {
-        id: 'signoff', type: 'table', title: 'Sign-off',
-        fixedRows: ['@A', '@B'],
-        columns: [
-          { id: 'initials', label: 'Initials', type: 'text', w: 1.5 },
-          { id: 'date', label: 'Date', type: 'date', w: 1.5 }
-        ]
-      }
+      closing()
     ]
   };
 
@@ -576,15 +563,7 @@
           { id: 'resume', label: 'If you put the conversation off: when you\'ll pick it back up', type: 'text' }
         ]
       },
-      {
-        id: 'signoff', type: 'table', title: 'Defaults set',
-        fixedRows: ['This kit'],
-        columns: [
-          { id: 'chosen', label: 'Defaults chosen', type: 'check', w: 1.3 },
-          { id: 'agreed', label: 'Pause line shared', type: 'check', w: 1.3 },
-          { id: 'date', label: 'Date', type: 'date', w: 1.4 }
-        ]
-      }
+      closing()
     ]
   };
 
@@ -641,14 +620,7 @@
         ],
         defaultRows: [{}]
       },
-      {
-        id: 'signoff', type: 'table', title: 'Sign-off',
-        fixedRows: ['@A', '@B'],
-        columns: [
-          { id: 'committed', label: 'Committed to the daily loop', type: 'check', w: 1.6 },
-          { id: 'date', label: 'Date', type: 'date', w: 1.4 }
-        ]
-      }
+      closing()
     ]
   };
 
@@ -666,7 +638,7 @@
       freq: ['Daily', 'Each meeting', 'Weekly', 'Monthly', 'As needed', 'Ongoing'],
       ci: true,
       amend: 'When the work changes, rework the agreement in writing, instead of letting tasks drift to whoever started picking them up. Anyone on the team can ask for a review at a regular check-in, or at the monthly look-back (WP-04).',
-      sign: "Initialing confirms that everyone has read the current version and agrees to who owns what, as written. It isn't a performance record, and it isn't for HR. It only means ownership is clear."
+      sign: "Agreeing means everyone has read this version and knows who owns what. It isn't a performance record, and it isn't for HR. It only means ownership is clear."
     },
     roommates: {
       purpose: 'A living agreement that gives every regular shared-home job exactly one Responsible name and one Accountable name, so nobody has to re-decide who owns what every week. Responsible does the task. Accountable notices if it didn\'t get done and follows up. They can be the same person.',
@@ -678,7 +650,7 @@
         { task: 'Guests and quiet hours', freq: 'Ongoing' }
       ],
       amend: 'When things change (someone moves in or out, a schedule shifts), rework the agreement in writing, instead of letting jobs drift to whoever started doing more. Anyone can ask for a review at a house meeting, or at the monthly look-back (WP-04).',
-      sign: "Initialing confirms that everyone has read the current version and agrees to who owns what, as written. It doesn't mean every job feels perfectly even. It only means ownership is clear."
+      sign: "Agreeing means everyone has read this version and knows who owns what. It doesn't mean every job feels perfectly even, only that ownership is clear."
     },
     caregivers: {
       purpose: 'A living agreement that gives every regular part of the care exactly one Responsible name and one Accountable name, so "whenever someone can" becomes a plan. Responsible does the task. Accountable notices if it didn\'t get done and follows up. They can be the same person.',
@@ -691,7 +663,7 @@
         { task: 'Groceries and meals', freq: 'Weekly' }
       ],
       amend: 'When the care changes, rework the agreement in writing, instead of letting tasks drift to whoever lives closest or started doing more. Anyone sharing the care can ask for a review at a regular check-in, or at the monthly look-back (WP-04).',
-      sign: "Initialing confirms that everyone sharing the care has read the current version and agrees to who owns what, as written. It doesn't mean the load feels even. It only means ownership is clear."
+      sign: "Agreeing means everyone sharing the care has read this version and knows who owns what. It doesn't mean the load feels even, only that ownership is clear."
     }
   };
   var variants = {};
@@ -708,7 +680,7 @@
       var c = {};
       Object.keys(s).forEach(function (k) { c[k] = s[k]; });
       if (s.type === 'note' && s.pdf === false) c.text = v.note;
-      if (s.type === 'note' && s.pdf === true) c.text = v.sign;
+      if (s.id === 'closing') c.intro = v.sign;
       if (s.id === 'amendments') c.intro = v.amend;
       if (s.id === 'treaty') {
         c.defaultRows = v.rows;
@@ -802,13 +774,7 @@
             { id: 'resume', label: 'If you put it off: when you\'ll pick it back up', type: 'text' }
           ]
         },
-        signoff: {
-          columns: [
-            { id: 'chosen', label: 'Defaults chosen', type: 'check', w: 1.3 },
-            { id: 'agreed', label: 'Pause line written', type: 'check', w: 1.3 },
-            { id: 'date', label: 'Date', type: 'date', w: 1.4 }
-          ]
-        }
+        closing: closing(null, true)
       }
     }
   };
