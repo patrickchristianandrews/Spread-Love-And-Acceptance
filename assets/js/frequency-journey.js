@@ -8,7 +8,11 @@
   var J = window.TOLJourney, root = document.getElementById('fj');
   if (!J || !root) return;
   var WORLDS = J.WORLDS, KEY = 'tol-journey-v1';
-  var REDUCED = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+  // less motion: the device setting, or the site's "Keep the page still"
+  function stillNow() { return !!((window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches) || (window.TOLStill && window.TOLStill.on()) || document.documentElement.classList.contains('tol-still')); }
+  var REDUCED = stillNow();
+  document.addEventListener('tol-still', function () { REDUCED = stillNow(); });
+  function quietNow() { try { return !!(window.TOLQuiet && window.TOLQuiet.on()); } catch (e) { return false; } }
   var DPR = Math.min(2, window.devicePixelRatio || 1);
   // the two pals, in the order of PAL: Sugarfoot, the stocky one with long drop ears and white feet (the gentle wag),
   // and Tidbit, the leaner one with the black mask (the big smile). Both have a big heart of gold.
@@ -27,7 +31,8 @@
     try { s = JSON.parse(localStorage.getItem(KEY) || 'null'); } catch (e) { s = null; }
     if (!s || typeof s !== 'object') s = {};
     if (!s.done || typeof s.done !== 'object') s.done = {};
-    s.sound = s.sound !== false; s.drone = s.drone !== false; s.intro = !!s.intro;
+    // sound is off until the player turns it on (soundOn), and stays off in the site's Quiet mode
+    s.sound = s.soundOn === true && !quietNow(); s.drone = s.drone !== false; s.intro = !!s.intro;
     if (!s.worldIntro || typeof s.worldIntro !== 'object') s.worldIntro = {};
     // version 2: every level became a different kind of challenge. Anything already finished stays finished.
     if (s.v !== 2) { Object.keys(s.done).forEach(function (k) { if (!/^[1-6]-[1-3]$/.test(k)) delete s.done[k]; else s.done[k] = 1; }); s.v = 2; }
@@ -2368,7 +2373,9 @@
       showCard({ k: 'The Frequency Journey', h: 'Two pals set out together',
         lesson: 'Somewhere above the clouds is the Perfect Frequency.',
         p: 'Sugarfoot and Tidbit are going to find it: through a stormy forest, over melting glaciers, across a golden meadow, a canyon, a singing valley and a starry summit. Every level is a different small challenge, from riddles to breathing to sorting out a tricky moment, and with each one they grow a little wiser. They’ll get there as themselves, and as pals, side by side.',
-        btns: [['Begin', function () { hideCard(); startLevel(1, 1); }, true], ['Look at the map first', hideCard]] });
+        // the first world's own card is folded in here, so Begin goes straight to level 1 (one step, not two)
+        steps: 'First stop: World 1, ' + WORLDS[0].name + '. ' + WORLDS[0].intro,
+        btns: [['Begin', function () { save.worldIntro[1] = 1; persist(); hideCard(); startLevel(1, 1); }, true], ['Look at the map first', hideCard]] });
     }
   }
 
@@ -2429,12 +2436,17 @@
   $('.fj-clear').addEventListener('click', function () { if (SKY) SKY.stars = []; say('A clear sky again.'); });
   $('.fj-tomap').addEventListener('click', function () { showMap(7); });
   $('.fj-stars3').addEventListener('click', function () { wake(); startHarmony(); });
-  function setToggle(b, on) { b.setAttribute('aria-pressed', on ? 'true' : 'false'); }
+  function setToggle(b, on) {
+    b.setAttribute('aria-pressed', on ? 'true' : 'false');
+    if (b === btnSnd) { b.innerHTML = '<span aria-hidden="true">' + (on ? '&#127925;' : '&#128263;') + '</span> Sound: ' + (on ? 'on' : 'off'); b.removeAttribute('aria-label'); btnDrone.hidden = !on; }
+  }
   setToggle(btnSnd, save.sound); setToggle(btnDrone, save.drone);
   btnSnd.addEventListener('click', function () {
-    save.sound = !save.sound; persist(); setToggle(btnSnd, save.sound);
+    save.sound = !save.sound && !quietNow(); save.soundOn = save.sound; persist(); setToggle(btnSnd, save.sound);
     if (save.sound) { wake(); drone(); } else stopDrone();
   });
+  // Quiet mode switched on elsewhere: fall silent
+  document.addEventListener('tol-quiet', function () { if (quietNow() && save.sound) { save.sound = false; setToggle(btnSnd, false); stopDrone(); } });
   btnDrone.addEventListener('click', function () {
     save.drone = !save.drone; persist(); setToggle(btnDrone, save.drone);
     if (save.drone) { wake(); drone(); } else stopDrone();

@@ -49,6 +49,8 @@
   .fj-ic{ width:44px; height:44px; border-radius:50%; border:1px solid var(--fj-edge); background:var(--fj-tile); display:grid; place-items:center; cursor:pointer; padding:0; }
   .fj-ic svg{ width:22px; height:22px; }
   .fj-ic[aria-pressed="false"]{ opacity:.55; }
+  .fj-ic.fj-snd{ width:auto; border-radius:999px; padding:0 .8rem; font:inherit; font-size:.85rem; font-weight:600; white-space:nowrap; display:inline-flex; align-items:center; gap:.3rem; opacity:1; }
+  .fj-ic[hidden]{ display:none; }
   .fj-ic[aria-pressed="false"] .fj-on{ display:none; }
   .fj-ic[aria-pressed="true"] .fj-off{ display:none; }
 
@@ -75,7 +77,8 @@
   .fj-moves{ margin:0; text-align:center; font:500 .74rem/1 "IBM Plex Mono", monospace; letter-spacing:.06em; color:var(--fj-soft); }
 
   /* cards: level done, world intro, world done */
-  .fj-card{ position:fixed; inset:0; z-index:95; display:grid; place-items:center; padding:.8rem; background:rgba(255,250,244,.62); backdrop-filter:blur(5px); -webkit-backdrop-filter:blur(5px); }
+  /* above the pal cam button row (z-index 97), so it sits dimmed behind the card's backdrop */
+  .fj-card{ position:fixed; inset:0; z-index:98; display:grid; place-items:center; padding:.8rem; background:rgba(255,250,244,.62); backdrop-filter:blur(5px); -webkit-backdrop-filter:blur(5px); }
   .fj-card > div{ width:min(100%, 23rem); max-height:100%; overflow:auto; text-align:center; padding:1.3rem 1.15rem 1.15rem; border-radius:24px; background:#FFFDF9; box-shadow:0 18px 50px rgba(60,40,90,.24); animation:fj-pop .55s cubic-bezier(.2,1.4,.4,1) both; }
   @keyframes fj-pop{ from{ transform:scale(.85); opacity:0; } to{ transform:scale(1); opacity:1; } }
   .fj-orb{ width:4.2rem; height:4.2rem; margin:0 auto .5rem; border-radius:50%; background:radial-gradient(circle at 40% 38%, #fff 0 12%, var(--fj-accent) 45%, rgba(255,255,255,0) 72%); box-shadow:0 0 36px 8px var(--fj-accent); animation:fj-breathe 5s ease-in-out infinite; }
