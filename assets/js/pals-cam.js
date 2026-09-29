@@ -334,9 +334,9 @@
     U.text(g, String(n), x + w / 2, y + h / 2 + 1, h * 0.34, '#3C3350', '700');
   }
   // the pals' own movie night: into their seats with a bucket of popcorn, heads up to the screen
-  var MOVIE = { id: 'movie-night', name: 'Movie night', kind: 'sweet', where: ['theater'], dur: 24000,
+  var MOVIE = { id: 'movie-night', name: 'Movie night', kind: 'sweet', where: ['theater'], dur: 60000,
     get cap() { return 'Movie night: ' + theaterTitle(); },
-    punch: [16000, 'Best seats in the house, and the best company too'],
+    punch: [30000, 'Best seats in the house, and the best company too'],
     seat: function (A, i) { return A.cx + (i ? 56 : -56); },
     run: function (A, T, S) {
       var me = this;
@@ -345,15 +345,18 @@
         A.walk(d, i ? A.x1 : A.x0, sx, 200 + i * 160, 1500 + i * 160);
         if (A.t > 1500 + i * 160) { d.x = sx; d.face = f; d.pose = 'sit'; d.dy = -15; d.tilt = -0.26 + A.osc(5200, 0.03, i * 2); }
       });
+      // lights down: they hush everyone so the movie can start
+      A.say(T, 'Shh! The movie\u2019s starting!', 2000, 4300); A.say(S, 'Shh\u2026 quiet, everyone!', 3600, 5800);
+      if (A.in(2000, 3200)) T.lift += 2 * Math.abs(Math.sin((A.t - 2000) / 150));
       // Tidbit dips into the popcorn, and later tosses one up and catches it
-      if (A.in(4200, 5600)) T.tilt = 0.45 * A.bump(4200, 5600) - 0.26 * (1 - A.bump(4200, 5600));
-      if (A.in(19000, 21000)) T.tilt = -0.26 - 0.4 * A.bump(19000, 21000);
-      A.say(T, 'Popcorn!', 5600, 6800);
-      if (A.in(12400, 14000)) { T.lift += 3 * Math.abs(Math.sin((A.t - 12400) / 160)); S.lift += 2 * Math.abs(Math.sin((A.t - 12500) / 190)); T.wag = S.wag = 3; }
-      A.say(T, 'Ha!', 12400, 13400); A.say(S, 'Hee hee!', 12700, 13900);
-      A.say(S, '<3', 16200, 17600); if (A.once(16400)) A.burst(A.cx, A.G - 100, 6, 'heart');
-      if (A.in(9000, 11800)) S.tilt = -0.26 + 0.1 * A.bump(9000, 11800);
-      A.say(T, 'One more episode?', 22200, 23800); A.say(S, 'Okay, one more.', 23000, 24000);
+      if (A.in(9000, 10400)) T.tilt = 0.45 * A.bump(9000, 10400) - 0.26 * (1 - A.bump(9000, 10400));
+      A.say(T, 'Popcorn!', 10400, 11600);
+      if (A.in(16000, 18800)) S.tilt = -0.26 + 0.1 * A.bump(16000, 18800);
+      if (A.in(24000, 25600)) { T.lift += 3 * Math.abs(Math.sin((A.t - 24000) / 160)); S.lift += 2 * Math.abs(Math.sin((A.t - 24100) / 190)); T.wag = S.wag = 3; }
+      A.say(T, 'Ha!', 24000, 25000); A.say(S, 'Hee hee!', 24300, 25500);
+      A.say(S, '<3', 38000, 39400); if (A.once(38200)) A.burst(A.cx, A.G - 100, 6, 'heart');
+      if (A.in(47000, 49000)) T.tilt = -0.26 - 0.4 * A.bump(47000, 49000);
+      A.say(T, 'One more episode?', 56000, 57800); A.say(S, 'Okay, one more.', 57000, 59000);
     },
     back: function (g, A) {
       var U2 = A.U;
@@ -582,8 +585,27 @@
     mode = 'act'; if (!act.interlude) lastActId = act.id; stats.acts++;
     if (SND()) SND().act(act);
   }
+  // ---------- movie breaks: now and then the pals head to the little theater for a random mini movie ----------
+  var MB = { prev: null, last: 0 };
+  function whereText() { var ph = phaseOf(hour); return 'Pal cam · ' + (EVENT && EVENT.special ? EVENT.name + ' · ' : '') + ph.charAt(0).toUpperCase() + ph.slice(1) + ' at ' + setting.name; }
+  function toSetting(st) {
+    setting = st; bgKey = ''; ambient = []; if (whereEl) whereEl.textContent = whereText();
+    if (MUS()) MUS().scene(setting.id); syncMusBtn(); ambSync();
+  }
+  function movieBreakDue(a) {
+    if (!BYID[MOVIE.id] || !a || a.interlude || MB.prev || setting.id === 'theater') return false;
+    var th = SETTINGS.filter(function (x) { return x.id === 'theater'; })[0]; if (!th) return false;
+    if (stats.acts < 5 || clock - MB.last < 5 * 60000) return false;
+    return Math.random() < 0.16;
+  }
   function finishAct() {
     var a = cur && cur.act, next = null, combo = false;
+    if (a === MOVIE && MB.prev) { var back = MB.prev; MB.prev = null; MB.last = clock; toSetting(back); } // the movie's over: back outside
+    else if (movieBreakDue(a)) {
+      MB.prev = setting; MB.last = clock; TH.clip = null; // a fresh, random movie each time
+      toSetting(SETTINGS.filter(function (x) { return x.id === 'theater'; })[0]);
+      startTravel(BYID[MOVIE.id], {}); return;
+    }
     if (a && a.interlude && pendingNext) { var pn = pendingNext; pendingNext = null; startTravel(pn, {}); return; }
     if (a && COMBOS[a.id] && Math.random() < 0.6) { var b = BYID[COMBOS[a.id]]; if (fits(b) && b.id !== a.id) { next = b; removeFromBag(b.id); combo = true; } }
     // a story carries on: once one has begun, its next part comes along after a few other moments
@@ -996,7 +1018,7 @@
   function primeSound() {
     // made inside the tap that opens the cam, so the browser lets it play
     var AC = window.AudioContext || window.webkitAudioContext;
-    if (AC && soundOn()) { try { if (!window.__pcAudio) window.__pcAudio = new AC(); if (window.__pcAudio.state === 'suspended') window.__pcAudio.resume(); } catch (e) {} }
+    if (AC) { try { if (!window.__pcAudio) window.__pcAudio = new AC(); if (window.__pcAudio.state === 'suspended') window.__pcAudio.resume(); } catch (e) {} }
     if (!musP && !MUS()) musP = new Promise(function (ok) { var sc = document.createElement('script'); sc.src = '/assets/js/pals-cam-music.js'; sc.onload = sc.onerror = function () { ok(); syncMusBtn(); if (isOpen && MUS() && setting) MUS().scene(setting.id); }; document.head.appendChild(sc); });
     if (!ambP && !AMB()) ambP = new Promise(function (ok) { var sc = document.createElement('script'); sc.src = '/assets/js/pals-cam-ambience.js'; sc.onload = sc.onerror = function () { ok(); ambSync(); }; document.head.appendChild(sc); });
     if (!sndP && !SND()) sndP = new Promise(function (ok) { var sc = document.createElement('script'); sc.src = '/assets/js/pals-cam-sounds.js'; sc.onload = sc.onerror = function () { if (SND() && SND().hold) SND().hold(quietHold); ok(); syncSndBtn(); }; document.head.appendChild(sc); });
@@ -1315,7 +1337,9 @@
     trickBusy: function () { return !!trick; }, trickLog: function () { return trickLog.slice(); }, caption: function () { return capMain ? capMain.textContent + ' | ' + capPunch.textContent : ''; },
     tricks: function () { if (!ACTS.length) loadActs(); return TRICKS.map(function (l) { return l.map(function (t) { return { id: t.id, name: t.name }; }); }); },
     facts: function () { return shownFacts.map(function (l) { return l.map(function (f) { return f.k; }); }); }, factCounts: function () { if (!ACTS.length) loadActs(); return [FACTS[0].length, FACTS[1].length]; },
-    isOpen: function () { return isOpen; }, soundNote: function () { return noteOpen(); }, hideSoundNote: function () { hideNote(false); },
+    isOpen: function () { return isOpen; },
+    movieBreak: function () { if (!isOpen || MB.prev || setting.id === 'theater' || !BYID[MOVIE.id]) return false; MB.prev = setting; MB.last = clock; TH.clip = null; toSetting(SETTINGS.filter(function (x) { return x.id === 'theater'; })[0]); startTravel(BYID[MOVIE.id], {}); return true; },
+    settingId: function () { return setting && setting.id; }, soundNote: function () { return noteOpen(); }, hideSoundNote: function () { hideNote(false); },
     frames: function () { return frames.slice(); }, resetFrames: function () { frames.length = 0; },
     state: function () {
       var r = cv ? cv.getBoundingClientRect() : { left: 0, top: 0 };

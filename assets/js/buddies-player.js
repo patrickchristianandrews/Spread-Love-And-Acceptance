@@ -1427,6 +1427,7 @@
       playBtn.textContent = P.playing ? '❚❚ Pause' : '▶ Play'; playBtn.setAttribute('aria-label', P.playing ? 'Pause' : 'Play');
       fBtn.setAttribute('aria-pressed', String(P.bright)); fBtn.querySelector('.fb-st').textContent = P.bright ? 'bright' : 'soft';
       fBtn.setAttribute('aria-label', P.bright ? 'Lightning shows as bright flashes. Switch to a soft glow' : 'Lightning shows as a soft glow. Switch to bright flashes');
+      host.classList.toggle('is-playing', !!P.playing); // site.js keeps pop-ups and helpers away while this is on
       if (!voiceOk()) { vBtn.title = P.rate !== 1 ? 'Voices are off while the story plays fast' : 'This device has no voices to read with, so the captions tell the story'; }
       // say it on the button itself, not only in a hover tip: no recordings and no device voices means captions only
       var canVoice = !!CL.ready[P.id] || (VO.ok && vlist().length > 0);

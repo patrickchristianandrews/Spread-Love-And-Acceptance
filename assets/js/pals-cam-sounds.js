@@ -128,8 +128,9 @@
     var r = Math.random(), w = Math.random() < 0.5 ? 0 : 1;
     if (r < 0.55) bark(w, 0.72); else if (r < 0.8) chat(w); else play(pick(['stack', 'clink', 'flip', 'bling']), 0.5);
   }
-  function hush() { if (ctx && ctx.state === 'running' && ctx.suspend) { try { var pr = ctx.suspend(); if (pr && pr.catch) pr.catch(function () {}); } catch (e) {} } }
-  function wake() { if (enabled && !held && ctx && ctx.state === 'suspended') ensure(); }
+  function musicOn() { var M = window.TOLPalsCamMusic; return !!(M && M.on()); }
+  function hush() { if (musicOn()) return; /* the music shares this audio: never silence it */ if (ctx && ctx.state === 'running' && ctx.suspend) { try { var pr = ctx.suspend(); if (pr && pr.catch) pr.catch(function () {}); } catch (e) {} } }
+  function wake() { if (ctx && ctx.state === 'suspended' && (musicOn() || (enabled && !held))) { if (enabled && !held) ensure(); else { try { var pr = ctx.resume(); if (pr && pr.catch) pr.catch(function () {}); } catch (e) {} } } }
   function setOn(v) {
     held = false; enabled = !!v; lsSet('tol-palcam-sound', enabled ? 'on' : 'off');
     if (enabled) { ensure(); if (loading) loading.then(function () { bark(Math.random() < 0.5 ? 0 : 1, 0.8, true); }); } else hush();

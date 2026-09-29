@@ -36,6 +36,8 @@
   var SECTIONS = [
     { id: 'new', title: 'What’s new', blurb: 'Newly added and newly expanded, newest first.', items: [
       { href: '/whats-new.html', code: 'All', title: 'What’s new', note: 'Everything newly added and everything that’s grown, in one place, with dates' },
+      { href: '/growing-up.html', code: 'New', title: 'Where your lens came from', note: 'How growing up shapes the way you see yourself and others, and how to choose which old rules to keep' },
+      { href: '/frequency-buddies.html', code: 'New', title: 'Frequency Buddies', note: 'Animated episodes with Tidbit and Sugarfoot, with captions on' },
       { href: '/start-in-10-minutes.html', code: 'New', title: 'Start in 10 minutes', note: 'One short path: today’s weather, the Preface, one practice card and one thing logged' },
       { href: '/sent-this.html', code: 'New', title: 'Sent this by someone?', note: 'What the other person sees, what stays yours, and how to say yes, not yet or no kindly' },
       { href: '/quest.html', code: 'New', title: 'Your quest map', note: 'Little “Check yourself” moments on reading pages, and a map that lights up as you learn' },
@@ -176,6 +178,13 @@
   var inDepth = /-in-depth\.html$/.test(current);
   if (inDepth) current = current.replace(/-in-depth\.html$/, '.html');
   function deepHref(it) { return it.href.replace(/\.html(?=#|$)/, '-in-depth.html'); }
+  // Tender reading pages (growing up, knowing yourself, and any page marked data-sensitive): no pop-ups,
+  // no cheering buddies or pup visits, no Professor Puddles cards and no learning-trail score on them.
+  var SENSITIVE = /^\/(growing-up|know-yourself)\.html$/;
+  function sensitivePage() { return SENSITIVE.test(current) || !!(document.body && document.body.hasAttribute('data-sensitive')); }
+  if (SENSITIVE.test(current)) document.documentElement.classList.add('tol-sensitive');
+  // when this visit began (this tab only), so no invitation shows in someone's first minute here
+  try { if (!sessionStorage.getItem('tol-visit-t0')) sessionStorage.setItem('tol-visit-t0', String(Date.now())); } catch (e) {}
 
   var here = null, hereSection = null;
   SECTIONS.forEach(function (s) {
@@ -492,7 +501,7 @@
     }
 
     // little buddies who cheer you on between the sections of a reading page (cheer.js)
-    if (!body.hasAttribute('data-no-cheer') && !helpersHidden() && !busyPage() && current !== '/index.html' && current !== '/' &&
+    if (!body.hasAttribute('data-no-cheer') && !helpersHidden() && !busyPage() && !sensitivePage() && current !== '/index.html' && current !== '/' &&
         (document.querySelector('main.read') || body.classList.contains('tol-deep')) && !document.querySelector('meta[http-equiv="Content-Security-Policy"]')) {
       var cw = document.createElement('script'); cw.src = '/assets/js/cheer-words.js';
       cw.onload = cw.onerror = function () { var ch = document.createElement('script'); ch.src = '/assets/js/cheer.js'; document.head.appendChild(ch); };
@@ -525,8 +534,9 @@
     }
 
     // Tidbit & Sugarfoot pop by now and then with a tip or a little love (pup-visits.js; the pups and their words load only when a visit is about to happen)
-    if (document.querySelector('main.read') && !helpersHidden() && !busyPage() && !body.hasAttribute('data-no-pupvisits') && !body.classList.contains('is-game') && !document.querySelector('meta[http-equiv="Content-Security-Policy"]') &&
-        !/^\/(frequency-journey(-play)?|calm-visualizer|ask|404|offline|privacy-policy|refund-policy|terms-of-service)\.html$|^\/(legal|workpapers\/fill)\//.test(current)) {
+    // (not on the tender pages, and not on Frequency Buddies, where they'd sit over the episode)
+    if (document.querySelector('main.read') && !helpersHidden() && !busyPage() && !sensitivePage() && !body.hasAttribute('data-no-pupvisits') && !body.classList.contains('is-game') && !document.querySelector('meta[http-equiv="Content-Security-Policy"]') &&
+        !/^\/(frequency-journey(-play)?|frequency-buddies|calm-visualizer|ask|404|offline|privacy-policy|refund-policy|terms-of-service)\.html$|^\/(legal|workpapers\/fill)\//.test(current)) {
       var pv = document.createElement('script'); pv.src = '/assets/js/pup-visits.js'; document.head.appendChild(pv);
     }
 
@@ -595,15 +605,27 @@
     // buttons fold into Menu, then Join moves into the menu panel, then the name wraps onto two lines.
     function fitBar() {
       var html = document.documentElement;
-      html.classList.toggle('tol-bigtext', parseFloat(getComputedStyle(html).fontSize) >= 20);
-      bar.classList.remove('is-narrow', 'is-tight', 'is-tighter');
-      var name = bar.querySelector('.tol-brand span');
+      // the size words really show at: the root size, times the page zoom the Text size setting adds
+      var zoomed = parseFloat(getComputedStyle(document.body).zoom) || 1;
+      html.classList.toggle('tol-bigtext', parseFloat(getComputedStyle(html).fontSize) * zoomed >= 20);
+      bar.classList.remove('is-narrow', 'is-tight', 'is-snug', 'is-tighter', 'is-tightest');
+      var name = bar.querySelector('.tol-brand span'), brand = bar.querySelector('.tol-brand'), logo = bar.querySelector('.tol-logo');
       function crowded() {
-        if (bar.scrollWidth > bar.clientWidth + 1 || (name && name.scrollWidth > name.clientWidth + 1)) return true;
+        var named = name && !bar.classList.contains('is-tighter'); // once the name is tucked away it can't be squeezed
+        if (bar.scrollWidth > bar.clientWidth + 1 || (named && name.scrollWidth > name.clientWidth + 1)) return true;
+        // the logo squeezed under the next button (big text on a phone) counts too
+        if (logo) {
+          var lr = logo.getBoundingClientRect().right, nx = brand && brand.nextElementSibling;
+          while (nx && !nx.getClientRects().length) nx = nx.nextElementSibling;
+          if (nx && lr > nx.getBoundingClientRect().left + 1) return true;
+        }
         // the name squeezed into more than two lines (big text on a phone) also counts as crowded
-        return !!(name && name.offsetHeight > (parseFloat(getComputedStyle(name).fontSize) || 16) * 2.8);
+        return !!(named && name.offsetHeight > (parseFloat(getComputedStyle(name).fontSize) || 16) * 2.8);
       }
-      ['is-narrow', 'is-tight', 'is-tighter'].forEach(function (c) { if (crowded()) bar.classList.add(c); });
+      // is-snug: Search folds into Menu (the menu panel opens with its own search box), so Settings keeps its word
+      // is-tightest (only on the very smallest screens at the biggest text): Settings shows just its picture
+      ['is-narrow', 'is-tight', 'is-snug', 'is-tighter', 'is-tightest'].forEach(function (c) { if (crowded()) bar.classList.add(c); });
+      if (bar.classList.contains('is-snug')) mob.setAttribute('aria-label', 'Menu and search'); else mob.removeAttribute('aria-label');
     }
     function barHeight() { fitBar(); document.documentElement.style.setProperty('--tol-bar-h', bar.offsetHeight + 'px'); }
     barHeightHook = barHeight;
@@ -690,7 +712,9 @@
   function reEsc(t) { return t.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); }
   var STOP = { the: 1, and: 1, for: 1, with: 1, how: 1, what: 1, can: 1, you: 1, your: 1, are: 1, was: 1, when: 1, why: 1, who: 1, does: 1, just: 1, had: 1, have: 1, into: 1, from: 1, this: 1, that: 1, about: 1, get: 1, its: 1, too: 1, very: 1, some: 1, any: 1, all: 1, our: 1, out: 1, but: 1, not: 1, him: 1, her: 1, she: 1, they: 1, them: 1, his: 1, one: 1, did: 1, i: 1, me: 1, my: 1, to: 1, of: 1, in: 1, on: 1, at: 1, is: 1, it: 1, an: 1, a: 1, do: 1, be: 1, or: 1, so: 1, we: 1, us: 1, am: 1, im: 1 };
   function searchTerms(q) {
-    var all = fold(q).replace(/\s+·\s+spread love.*$/, '').split(/[^a-z0-9'-]+/).filter(function (t) { return t.length > 1 || /\d/.test(t); });
+    var f = fold(q).replace(/\s+·\s+spread love.*$/, '');
+    Object.keys(JOIN).forEach(function (k) { f = f.replace(new RegExp('\\b' + k.replace(/ /g, '\\s+') + '\\b', 'g'), JOIN[k]); });
+    var all = f.split(/[^a-z0-9'-]+/).filter(function (t) { return t.length > 1 || /\d/.test(t); });
     var kept = all.filter(function (t) { return !STOP[t.replace(/'/g, '')]; });
     return kept.length ? kept : all;
   }
@@ -701,7 +725,15 @@
     burnot: 'burnout', burnout: 'burnout', brethe: 'breathe', breath: 'breathe', breth: 'breathe', relashionship: 'relationship', relationshp: 'relationship',
     arguement: 'argument', argueing: 'arguing', freqency: 'frequency', frequncy: 'frequency', glosary: 'glossary', dyslexic: 'dyslexia', dislexia: 'dyslexia', dyslexsia: 'dyslexia',
     austism: 'autism', autisim: 'autism', adhd: 'adhd', lemonaid: 'lemonade', parnter: 'partner', patner: 'partner', stresed: 'stressed', overwelmed: 'overwhelmed', overwhelmd: 'overwhelmed',
-    batery: 'battery', batterie: 'battery', puddels: 'puddles', translater: 'translator', decodor: 'decoder', wieght: 'weight', seperate: 'separate', definately: 'definitely' };
+    batery: 'battery', batterie: 'battery', puddels: 'puddles', translater: 'translator', decodor: 'decoder', wieght: 'weight', seperate: 'separate', definately: 'definitely',
+    // slips people told us about: the nearest word on the site isn't the one they meant
+    devorce: 'divorce', divorse: 'divorce', devorse: 'divorce', divoce: 'divorce', diverce: 'divorce', divorced: 'divorce', seperated: 'separated', seperation: 'separation',
+    sory: 'sorry', sorrie: 'sorry', sorry: 'sorry', appology: 'apology', apolgy: 'apology', apologise: 'apologize', appologize: 'apologize', apologyze: 'apologize',
+    pupppy: 'puppy', puppey: 'puppy', puppie: 'puppy', puppies: 'puppy', pupy: 'puppy', doggy: 'dog', doggie: 'dog', dogs: 'dog', tidbitt: 'tidbit', sugerfoot: 'sugarfoot', sugarfut: 'sugarfoot',
+    screenshots: 'screenshot', screensot: 'screenshot', screnshot: 'screenshot', sreenshot: 'screenshot', childhod: 'childhood', chilhood: 'childhood', childood: 'childhood',
+    forgetfull: 'forgetful', forgot: 'forgot', rember: 'remember', remeber: 'remember', focuss: 'focus', foccus: 'focus', concentrait: 'concentrate', meltdowns: 'meltdown', meltown: 'meltdown' };
+  // two words people often split that the site writes as one ("screen shot" → screenshot)
+  var JOIN = { 'screen shot': 'screenshot', 'screen shots': 'screenshot', 'melt down': 'meltdown', 'shut down': 'shutdown', 'grown up': 'grown-up', 'grew up': 'growing up', 'brought up': 'growing up' };
   // words that mean the same here: each term also matches these
   var SAME = { autism: ['autistic', 'neurodivergent', 'wired differently', 'wiring', 'neurotype'], autistic: ['autism', 'neurodivergent', 'wired differently', 'wiring'],
     adhd: ['neurodivergent', 'wired differently', 'wiring', 'attention'], dyslexia: ['easy reading', 'read aloud', 'listen', 'text size'], neurodivergent: ['wired differently', 'wiring'],
@@ -710,7 +742,15 @@
     sleep: ['rest', 'tired', 'night'], burnout: ['battery', 'drained', 'overload', 'load'], stress: ['battery', 'pressure', 'load'], stressed: ['stress', 'battery', 'pressure'],
     overwhelmed: ['battery', 'calm', 'overload'], weather: ['forecast', 'today'], breathe: ['breathing', 'breath', 'calm'], listen: ['read aloud', 'audio', 'speech'],
     bigger: ['text size', 'larger'], aloud: ['listen', 'read aloud'], font: ['text size', 'easy reading'], erase: ['delete', 'stored', 'device'], delete: ['erase', 'stored'], privacy: ['private', 'device', 'stored'],
-    unbilled: ['invisible work', 'unseen work', 'work nobody sees'], invisible: ['unseen', 'unbilled'], partner: ['partners', 'couple'], text: ['message'], message: ['text', 'words'] };
+    unbilled: ['invisible work', 'unseen work', 'work nobody sees'], invisible: ['unseen', 'unbilled'], partner: ['partners', 'couple'], text: ['message'], message: ['text', 'words'],
+    divorce: ['separation', 'separated', 'co-parent', 'co-parents', 'ex'], separated: ['divorce', 'co-parent'], separation: ['divorce', 'co-parent'],
+    sorry: ['apology', 'apologize', 'repair', 'make up'], apology: ['sorry', 'apologize', 'repair'], apologize: ['apology', 'sorry', 'repair'], repair: ['apology', 'sorry'],
+    puppy: ['pups', 'pup', 'tidbit', 'sugarfoot', 'pal cam'], pup: ['pups', 'tidbit', 'sugarfoot', 'pal cam'], dog: ['pups', 'pup', 'tidbit', 'sugarfoot'], pups: ['pup', 'tidbit', 'sugarfoot', 'pal cam'],
+    screenshot: ['screenshots', 'screen shot', 'picture of the chat'], childhood: ['growing up', 'grew up', 'lens', 'rulebook', 'parents'], raised: ['growing up', 'childhood', 'rulebook from home', 'lens'],
+    upbringing: ['growing up', 'childhood', 'rulebook'], parents: ['growing up', 'family'],
+    forgot: ['forget', 'remember', 'reminder', 'owner', 'slipped'], forget: ['forgot', 'remember', 'reminder'], remember: ['reminder', 'forgot'], bill: ['bills', 'money', 'owner'], bills: ['bill', 'money', 'owner'],
+    focus: ['attention', 'concentrate', 'distracted', 'easy reading', 'reading ruler', 'steps'], attention: ['focus', 'adhd'], distracted: ['focus', 'attention'], concentrate: ['focus', 'attention'],
+    meltdown: ['shutdown', 'overload', 'calm-down', 'sensory'], shutdown: ['meltdown', 'overload', 'shut down'], blunt: ['direct', 'literal', 'wired differently'] };
   // doing and feeling words: the tools that help come first
   var ACT = {
     fight: ['/conversation-reader.html', '/carrier-wave-decoder.html', '/signal-translator.html', '/workpapers/wp-09-tone-filter.html'],
@@ -726,13 +766,24 @@
     dyslexia: ['#settings', '/wired-differently.html'], listen: ['#settings'], aloud: ['#settings'], read: null, larger: ['#settings'], size: ['#settings'], bigger: ['#settings'], font: ['#settings'], quiet: ['#settings'], dark: ['#settings'], settings: ['#settings'],
     erase: ['/on-this-device.html'], delete: ['/on-this-device.html'], stored: ['/on-this-device.html'], privacy: ['/on-this-device.html', '/legal/privacy-policy.html'],
     minutes: ['/start-in-10-minutes.html', '/quick-checks.html'], start: ['/start-here.html', '/start-in-10-minutes.html'],
-    chat: ['/ask.html'], ask: ['/ask.html'], question: ['/ask.html'], professor: ['/ask.html']
+    chat: ['/ask.html'], ask: ['/ask.html'], question: ['/ask.html'], professor: ['/ask.html'],
+    divorce: ['/relationships.html', '/library/life.html', '/check-ins.html', '/signal-translator.html'], separated: 'divorce', separation: 'divorce', ex: 'divorce', coparent: 'divorce',
+    sorry: ['/library/conflict.html', '/signal-translator.html', '/conversation-reader.html', '/workpapers/wp-09-tone-filter.html'], apology: 'sorry', apologize: 'sorry', repair: 'sorry', forgive: 'sorry',
+    puppy: ['#palcam', '/frequency-buddies.html', '/frequency-journey.html', '/pal-cam-tv.html'], pup: 'puppy', pups: 'puppy', dog: 'puppy', tidbit: 'puppy', sugarfoot: 'puppy',
+    screenshot: ['/conversation-reader.html'],
+    childhood: ['/growing-up.html', '/growing-up-in-depth.html', '/know-yourself.html'], raised: 'childhood', upbringing: 'childhood', parents: 'childhood', grew: 'childhood', growing: 'childhood', family: ['/growing-up.html', '/relationships.html'],
+    forgot: ['/workpapers/wp-03-raci-treaty.html', '/signal-translator.html', '/lemonade-stand.html', '/ask.html'], forget: 'forgot', remember: 'forgot', reminder: 'forgot', bill: ['/workpapers/wp-03-raci-treaty.html', '/lemonade-stand.html', '/signal-translator.html'], bills: 'bill',
+    focus: ['#settings', '/start-in-10-minutes.html', '#breathe', '/quick-checks.html'], attention: 'focus', distracted: 'focus', concentrate: 'focus',
+    meltdown: ['/wp-11.html', '#breathe', '/wiring-card.html', '/wired-differently.html'], shutdown: 'meltdown', overload: 'meltdown',
+    blunt: ['/wired-differently.html', '/signal-translator.html', '/wiring-card.html'],
+    mad: 'fight', angry: 'fight', annoyed: 'fight', frustrated: 'fight'
   };
   function actFor(t) { var v = ACT[t]; if (typeof v === 'string') v = ACT[v]; return v || null; }
   // results that aren't pages
   var EXTRA = {
     '#breathe': { u: '#breathe', t: 'Breathe: a breathing break', d: 'Opens right here, on top of this page: box breathing, calm breathing or 4-7-8, for one, three or five minutes, with or without sound.', k: 'Tool' },
-    '#settings': { u: '#settings', t: 'Settings: text size, Easy reading, Quiet mode', d: 'Bigger text, an easy-to-read font, roomy spacing, a page tint, a reading ruler, dark mode, Quiet mode and site sounds. Reading pages also have a Listen button that reads them aloud.', k: 'Settings' }
+    '#settings': { u: '#settings', t: 'Settings: text size, Easy reading, Quiet mode', d: 'Bigger text, an easy-to-read font, roomy spacing, a page tint, a reading ruler, dark mode, Quiet mode and site sounds. Long pages also have “In short” and “Show me only the steps”.', k: 'Settings' },
+    '#palcam': { u: '#palcam', t: 'Check in on Tidbit & Sugarfoot (the pal cam)', d: 'Opens right here: a peek at the two pups, Tidbit and Sugarfoot, with little captions. You can turn the sound off.', k: 'Pups' }
   };
   var TOOL_URL = /^\/(conversation-reader|carrier-wave-decoder|signal-translator|lemonade-stand|wiring-card|quick-checks|ask|night-garden|calm-visualizer|soundscapes|pause-and-play|word-bloom|quiet-words|quiet-crossword|daily-ledger-crossword|frequency-journey|start-in-10-minutes|on-this-device)\.html$|^\/workpapers\/(wp-|calculators|fill)|^\/wp-11\.html$|^\/tools\//;
 
@@ -886,10 +937,11 @@
         }).join('');
         var said = '“' + (auto ? fixed.join(' ') : q) + '”';
         var head = hits.length ? (hits.length === 25 ? 'The 25 best matches for ' + said + '.' : hits.length + (hits.length === 1 ? ' result for ' : ' results for ') + said + '.')
-          : 'Nothing matches “' + q + '” yet. Try a shorter or different word, or browse the sections below.';
+          : 'Nothing matches “' + q + '” yet. Try a shorter or different word, browse the sections below, or ask Professor Puddles in your own words.';
         note.innerHTML = '';
         if (auto) note.appendChild(document.createTextNode('Showing results for “' + fixed.join(' ') + '” (you typed “' + q + '”). '));
         note.appendChild(document.createTextNode(auto ? (hits.length === 25 ? 'The 25 best matches.' : hits.length + (hits.length === 1 ? ' result.' : ' results.')) : head));
+        if (!hits.length || hits.length < 3) { note.appendChild(document.createTextNode(' ')); note.appendChild(el('a', { href: '/ask.html', class: 'tol-find-ask' }, 'Ask Professor Puddles')); }
         if (changed && !auto) {
           var dym = el('button', { type: 'button', class: 'tol-find-dym' }, 'Did you mean “' + esc(fixed.join(' ')) + '”?');
           dym.addEventListener('click', function () { input.value = fixed.join(' '); runSearch(input.value); input.focus(); });
@@ -904,6 +956,7 @@
       closePanel();
       if (what === 'breathe') { var b = document.querySelector('.tol-breathe-btn'); if (b) b.click(); }
       if (what === 'settings') openSettings();
+      if (what === 'palcam' && window.TOLPalCam) window.TOLPalCam.open({});
     });
     input.addEventListener('input', function () { clearTimeout(timer); timer = setTimeout(function () { runSearch(input.value); }, 140); });
     input.addEventListener('keydown', function (e) {
@@ -1171,7 +1224,7 @@
   ];
   function buildPuddlesCards(body) {
     var main = document.querySelector('main.read');
-    if (!main || body.classList.contains('is-game') || /^\/(index|ask|whats-new|pause-and-play)\.html$/.test(current) ||
+    if (!main || body.classList.contains('is-game') || sensitivePage() || /^\/(index|ask|whats-new|pause-and-play)\.html$/.test(current) ||
         document.querySelector('meta[http-equiv="Content-Security-Policy"]')) return;
     var sec = body.getAttribute('data-sec') || '', course = /^\/(book|workpapers|learn)\//.test(current) || /^(book|workpapers|program|self|relationships|start|tools)$/.test(sec);
     if (!course) return;
@@ -1327,7 +1380,8 @@
       TINT_KEY = 'tol-tint', RULER_KEY = 'tol-ruler', SOUND_KEY = 'tol-sound-off', PREV_KEY = 'tol-comfort-prev';
   // the sound switches the pal cam and the games keep for themselves
   var SOUND_KEYS = ['tol-palcam-sound', 'tol-palcam-music', 'tol-qw-sound', 'tol-xw-sound', 'tol-bloom-sound'];
-  var SIZE_NAMES = { md: 'Standard', lg: 'Larger', xl: 'Largest', xxl: 'Extra large' };
+  // four steps, each bigger than the one before (every word on the page is scaled by 1, 1.12, 1.25 or 1.4)
+  var SIZE_NAMES = { md: 'Standard', lg: 'Large', xl: 'Larger', xxl: 'Largest' }, SIZE_SCALE = { md: 1, lg: 1.12, xl: 1.25, xxl: 1.4 };
   var TINTS = { cream: 'Cream', blue: 'Soft blue', mint: 'Mint' };
   function quietOn() { return lsGet(QUIET_KEY) === '1'; }
   function easyOn() { return lsGet(EASY_KEY) === '1'; }
@@ -1467,6 +1521,17 @@
     box.querySelectorAll('input[data-switch]').forEach(function (i) { i.checked = !!map[i.getAttribute('data-switch')]; i.disabled = quietOn() && i.getAttribute('data-switch') !== 'ruler'; });
     box.querySelectorAll('[data-preset]').forEach(function (b) { b.setAttribute('aria-pressed', String(lsGet(PRESETS[b.getAttribute('data-preset')].key) === '1')); });
     var qn = box.querySelector('.tol-set-qnote'); if (qn) qn.hidden = !quietOn();
+    // Listen: only promised when this device has a voice to read with (listen.js hides itself otherwise)
+    var ln = box.querySelector('[data-listen-note]');
+    if (ln) {
+      var synthOk = 'speechSynthesis' in window && 'SpeechSynthesisUtterance' in window, voices = 0;
+      try { voices = synthOk ? window.speechSynthesis.getVoices().length : 0; } catch (e) {}
+      var hasVoice = synthOk && (voices > 0 || /iPhone|iPad|iPod|Macintosh|Android/.test(navigator.userAgent));
+      ln.innerHTML = hasVoice
+        ? '<span aria-hidden="true">&#128266;</span> Reading pages have a <strong>Listen</strong> button near the top that reads the page aloud.'
+        : '<span aria-hidden="true">&#128266;</span> This device has no reading voice turned on right now, so pages don’t show a Listen button. Your device’s own read-aloud can still read any page (look for “Spoken content”, “Select to speak” or “Read aloud” in its settings).';
+      ln.hidden = false;
+    }
   }
   function buildSettings() {
     var id = 'tol-set-' + Math.random().toString(36).slice(2, 7);
@@ -1487,16 +1552,16 @@
       '<h3 class="tol-set-k">Calm</h3>' +
       '<p class="tol-set-qnote" hidden>Quiet mode is looking after these. Turn it off above to change them one by one.</p>' +
       sw('still', 'Keep the page still', 'No moving garden, bubbles, hearts or sliding in, here and in the Breathe break') +
-      sw('helpers', 'Hide the helpers', 'Professor Puddles’ cards, the cheering buddies, the pups, tips, the learning trail, petals and pop-up invitations') +
-      sw('sound', 'Site sounds off', 'The pal cam, the games and the Breathe break start silent') +
+      sw('helpers', 'Hide the helpers', 'Professor Puddles’ cards, the cheering buddies, the pups popping in while you read, tips, the learning trail, petals and pop-up invitations. The “Check in on Tidbit & Sugarfoot” button stays, for when you want them.') +
+      sw('sound', 'Keep site sounds off', 'When this is on, the pal cam, the games and the Breathe break start silent') +
       '<h3 class="tol-set-k">Reading</h3>' +
-      '<fieldset><legend>Text size</legend>' + ['md', 'lg', 'xl', 'xxl'].map(function (k) { return radio('size', 'data-size-opt', k, SIZE_NAMES[k]); }).join('') + '</fieldset>' +
+      '<fieldset class="tol-set-sizes"><legend>Text size <small>(smallest to biggest)</small></legend>' + ['md', 'lg', 'xl', 'xxl'].map(function (k) { return radio('size', 'data-size-opt', k, '<span class="tol-set-size" style="font-size:' + SIZE_SCALE[k] + 'em">' + SIZE_NAMES[k] + '</span>'); }).join('') + '</fieldset>' +
       '<fieldset><legend>Font</legend>' + radio('font', 'data-font-opt', 'usual', 'The usual') + radio('font', 'data-font-opt', 'easy', '<span class="tol-set-easyfont">Easy to read</span>') + '</fieldset>' +
       '<fieldset><legend>Spacing</legend>' + radio('space', 'data-space-opt', 'usual', 'The usual') + radio('space', 'data-space-opt', 'wide', 'Roomy') + '</fieldset>' +
       '<fieldset><legend>Page tint</legend>' + radio('tint', 'data-tint-opt', 'none', 'None') + Object.keys(TINTS).map(function (k) { return radio('tint', 'data-tint-opt', k, '<span class="tol-set-swatch is-' + k + '" aria-hidden="true"></span>' + TINTS[k]); }).join('') + '</fieldset>' +
-      '<fieldset><legend>Colors</legend>' + radio('theme', 'data-theme-opt', 'auto', 'Follow my device') + radio('theme', 'data-theme-opt', 'light', 'Light') + radio('theme', 'data-theme-opt', 'dark', 'Dark') + '</fieldset>' +
+      '<fieldset><legend>Colors (dark mode)</legend>' + radio('theme', 'data-theme-opt', 'auto', 'Follow my device') + radio('theme', 'data-theme-opt', 'light', 'Light') + radio('theme', 'data-theme-opt', 'dark', 'Dark') + '</fieldset>' +
       sw('ruler', 'Reading ruler', 'A soft band that follows your pointer or finger, so you keep your place on the line') +
-      ('speechSynthesis' in window ? '<p class="tol-set-note"><span aria-hidden="true">&#128266;</span> Reading pages have a <strong>Listen</strong> button near the top that reads the page aloud.</p>' : '') +
+      '<p class="tol-set-note" data-listen-note hidden></p>' +
       '<p class="tol-set-foot">These choices stay in this browser only. <button type="button" class="tol-set-reset">Back to the usual</button> <a href="/on-this-device.html">What’s stored on this device</a></p>' +
       '</div>');
     box.addEventListener('change', function (e) {
@@ -1666,9 +1731,17 @@
     var a = document.activeElement;
     if (a && /^(INPUT|TEXTAREA|SELECT)$/.test(a.tagName) && a.type !== 'search') return true;     // typing right now
     if (document.querySelector('.tol-breathe:not([hidden]), .pc-ov:not([hidden]), [role="dialog"][aria-modal="true"]:not([hidden]):not(.tol-set):not(#tol-panel)')) return true;
+    if (mediaPlaying()) return true;                                                              // a video or episode is playing
     return heavyToday();
   }
-  window.TOLSite = { busy: busyPage, heavyToday: heavyToday, readingPage: function () { return !busyPage() && !!document.querySelector('main.read'); } };
+  // someone whose device asks for less motion rarely wants things sliding in either: no pop-up invitations then
+  function calmDevice() { try { return !!(window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches); } catch (e) { return false; } }
+  // a Frequency Buddies episode, or any video on the page, playing right now
+  function mediaPlaying() {
+    if (document.querySelector('.fb-player.is-playing')) return true;
+    return Array.prototype.some.call(document.querySelectorAll('video'), function (v) { return !v.paused && !v.ended && v.readyState > 2; });
+  }
+  window.TOLSite = { busy: busyPage, heavyToday: heavyToday, sensitive: sensitivePage, playing: mediaPlaying, calmDevice: calmDevice, readingPage: function () { return !busyPage() && !!document.querySelector('main.read'); } };
 
   // ---------- Today's Weather, as a small floating invitation ----------
   // Bottom-left, and never while someone has only just started reading: at most once a visit, after
@@ -1677,7 +1750,7 @@
   // weather is logged.
   var SKIP_WEATHER = ['/quick-checks.html', '/night-garden.html', '/dashboard.html', '/offline.html', '/404.html'];
   function buildWeatherNudge(body) {
-    if (SKIP_WEATHER.indexOf(current) !== -1 || helpersHidden() || busyPage() || body.hasAttribute('data-no-weather') || document.querySelector('.wpf-bar')) return;
+    if (SKIP_WEATHER.indexOf(current) !== -1 || helpersHidden() || busyPage() || sensitivePage() || calmDevice() || body.hasAttribute('data-no-weather') || document.querySelector('.wpf-bar')) return;
     var today = new Date().toISOString().slice(0, 10);
     if (lsGet('tol-weather-nudge') === 'never') return;
     // at most once a week: after it's been shown (or hidden with ×), it stays away for seven days
@@ -1771,6 +1844,7 @@
     var p = location.pathname, force = /[?&]palcam-pop=1\b/.test(location.search);
     var skip = /^\/(frequency-journey(-play)?\.html|calm-visualizer\.html|ask\.html|privacy-policy\.html|refund-policy\.html|terms-of-service\.html|offline\.html|404\.html)$/.test(p) ||
       /^\/(workpapers\/fill|legal)\//.test(p) || body.classList.contains('is-game') || !!document.querySelector('meta[http-equiv="Content-Security-Policy"]');
+    if (!force && (sensitivePage() || calmDevice())) return; // not on the tender reading pages, nor for a device that asks for less motion
     if (skip || helpersHidden() || (busyPage() && !/[?&]palcam-pop=1\b/.test(location.search))) return;
     var prev = lsGet('tol-palcam-pop-prev'); lsSet('tol-palcam-pop-prev', '0');
     if (!force && (ssGet('tol-palcam-pop') || prev === '1' || Math.random() >= 0.25)) return;
@@ -1794,6 +1868,7 @@
     var btn = el('button', { type: 'button', class: 'tol-breathe-btn', 'aria-haspopup': 'dialog' }, moon + '<span>Breathe</span>');
     btn.setAttribute('aria-label', 'Breathe: take a breathing break');
     body.appendChild(btn);
+    keepBreatheClear(btn);
     var loading = false;
     btn.addEventListener('click', function () {
       if (window.TOLBreathe) { window.TOLBreathe.open(); return; }
@@ -1803,6 +1878,77 @@
       sc.onerror = function () { loading = false; };
       document.head.appendChild(sc);
     });
+  }
+
+  // The floating Breathe button never sits on a form field or a button: on pages with forms it's a small
+  // round picture, it rises above a sticky bottom bar (a workpaper's Save / PDF bar), it steps aside while
+  // someone is typing, and if something you can tap is under it, it moves to a free corner.
+  function keepBreatheClear(btn) {
+    var FIELDS = 'input:not([type=hidden]):not([type=checkbox]):not([type=radio]), textarea, select';
+    var TAPPABLE = 'input, textarea, select, button, label, summary, [role="button"], [contenteditable="true"], .tol-btn';
+    var main = document.querySelector('main') || document.body;
+    function formPage() { // a page that's mostly a form (a sign-up box doesn't count)
+      var n = Array.prototype.filter.call(main.querySelectorAll(FIELDS), function (f) { return !f.closest('.tol-join, .tol-gate, .tol-find, [role="search"]'); }).length;
+      return n >= 3 || !!document.querySelector('.wpf-bar');
+    }
+    function bottomBar() { // the tallest sticky bar along the bottom edge, if any
+      var lift = 0;
+      Array.prototype.forEach.call(document.querySelectorAll('.wpf-bar, [data-bottom-bar]'), function (b) {
+        var r = b.getBoundingClientRect(), pos = getComputedStyle(b).position; if (!r.height || (pos !== 'fixed' && pos !== 'sticky')) return;
+        if (r.bottom >= window.innerHeight - 2) lift = Math.max(lift, window.innerHeight - r.top);
+      });
+      return lift;
+    }
+    function under() { // is something you can tap (or type in) under the button?
+      var r = btn.getBoundingClientRect(); if (!r.width) return false;
+      var pts = [], g = [.06, .5, .94];
+      g.forEach(function (x) { g.forEach(function (y) { pts.push([x, y]); }); });
+      for (var i = 0; i < pts.length; i++) {
+        var list = document.elementsFromPoint(r.left + r.width * pts[i][0], r.top + r.height * pts[i][1]) || [];
+        for (var j = 0; j < list.length; j++) {
+          var n = list[j];
+          if (n === btn || btn.contains(n) || n.closest('.tol-breathe, .tol-wx, .pci, .tpv, .tol-join-pop, .tol-invite')) continue;
+          if (n.closest(TAPPABLE) && !n.closest('.tol-bar, .tol-panel, .tol-set')) return true;
+        }
+      }
+      return false;
+    }
+    var spots = ['', 'is-left', 'is-high', 'is-high is-left'], ALL = ['is-left', 'is-high', 'is-hiding'], queued = false;
+    function place() {
+      queued = false;
+      if (btn.classList.contains('is-away')) return;
+      btn.classList.remove('is-hiding');
+      btn.classList.toggle('is-compact', formPage());
+      var lift = bottomBar();
+      btn.style.setProperty('--tol-br-lift', lift ? Math.round(lift + 10) + 'px' : '');
+      if (!lift) btn.style.removeProperty('--tol-br-lift');
+      // try the usual corner first, then the left corner, then up under the top bar
+      for (var i = 0; i < spots.length; i++) {
+        ALL.forEach(function (c) { btn.classList.remove(c); });
+        if (spots[i]) spots[i].split(' ').forEach(function (c) { btn.classList.add(c); });
+        if (!under()) return;
+      }
+      // every corner is busy (a packed form on a small screen): it waits out of the way, and comes back
+      // as soon as a scroll frees a corner (unless it has focus, so a keyboard user never loses it)
+      ALL.forEach(function (c) { btn.classList.remove(c); });
+      if (document.activeElement !== btn) btn.classList.add('is-hiding');
+    }
+    function queue() { if (!queued) { queued = true; requestAnimationFrame(place); } }
+    window.addEventListener('scroll', queue, { passive: true });
+    window.addEventListener('resize', queue);
+    // typing: step aside until the field is left
+    document.addEventListener('focusin', function (e) {
+      var t = e.target;
+      if (t && t.matches && t.matches(FIELDS) && !t.closest('.tol-breathe, .tol-bar, .tol-panel, .tol-set')) btn.classList.add('is-away');
+    });
+    document.addEventListener('focusout', function () {
+      setTimeout(function () {
+        var a = document.activeElement;
+        if (!(a && a.matches && a.matches(FIELDS))) { btn.classList.remove('is-away'); queue(); }
+      }, 250);
+    });
+    setTimeout(queue, 400); setTimeout(queue, 2500);
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(queue);
   }
 
   // ---------- Membership ----------

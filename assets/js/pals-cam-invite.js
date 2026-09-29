@@ -27,6 +27,7 @@
   var el = null, tries = 0, auto = 0;
   // anything else in the way? then wait a little and try again
   function busy() {
+    if (window.TOLSite && (window.TOLSite.busy() || (window.TOLSite.sensitive && window.TOLSite.sensitive())) && !/[?&]palcam-pop=1\b/.test(location.search)) return true; // typing, a video playing, a tender page
     return document.hidden || !!document.querySelector('.tol-wx, [role="dialog"]:not([hidden]):not(.pc-ov[hidden]), dialog[open], [aria-modal="true"]:not([hidden]), .tol-breathe:not([hidden]), .tol-install, .tol-invite, .tol-bar [aria-expanded="true"]');
   }
   // sit above the Weather (bottom left) and Breathe (bottom right) pills when they share the space

@@ -1600,6 +1600,15 @@ main .wpf-computed dl{ border-left:0 !important; border-radius:16px; }
 .tol-bar.is-tight .tol-brand{ min-width:0; flex:1 1 auto; white-space:normal; }
 .tol-bar.is-tight .tol-brand span{ white-space:normal; overflow:visible; text-overflow:clip; line-height:1.1; overflow-wrap:anywhere; }
 .tol-bar.is-tighter .tol-brand span{ position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; }
+/* still crowded: Search folds into Menu (the menu panel has the same search box at its top) */
+.tol-bar.is-snug button.tol-search-btn{ display:none !important; }
+.tol-bar.is-snug .tol-contents-btn{ display:inline-flex !important; align-items:center; gap:.3rem; }
+.tol-bar.is-snug .tol-contents-btn::before{ content:""; flex:none; width:1em; height:1em; background:currentColor;
+  -webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Ccircle cx='10.5' cy='10.5' r='6.5' fill='none' stroke='black' stroke-width='2.4'/%3E%3Cpath d='M15.5 15.5 21 21' stroke='black' stroke-width='2.6' stroke-linecap='round'/%3E%3C/svg%3E") center / contain no-repeat;
+          mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Ccircle cx='10.5' cy='10.5' r='6.5' fill='none' stroke='black' stroke-width='2.4'/%3E%3Cpath d='M15.5 15.5 21 21' stroke='black' stroke-width='2.6' stroke-linecap='round'/%3E%3C/svg%3E") center / contain no-repeat; }
+.tol-bar.is-tightest .tol-set-name{ position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; }
+/* the logo never slides under the Quiet button */
+.tol-bar .tol-logo{ flex:none; }
 .tol-bar .tol-contents-btn{ flex:none; white-space:nowrap; }
 /* a short screen (a phone on its side, a small laptop at 150%): a slimmer bar that tucks away while you scroll down */
 @media (max-height:600px){
@@ -1822,9 +1831,7 @@ html.tol-still .pc-launch .pc-dot{ animation:none; }
 .tol-readopts-foot{ margin:.2rem 0 .8rem; font-size:.88rem; color:var(--ink-soft); }
 .tol-readopts-reset{ font:inherit; background:none; border:0; padding:0; color:var(--focus); text-decoration:underline; cursor:pointer; min-height:32px; }
 
-/* text size */
-html.tol-text-lg{ font-size:112.5%; }
-html.tol-text-xl{ font-size:125%; }
+/* text size: see "text size" further down (one zoom on the page, or a bigger root size on the games), never both */
 
 /* hide the helpers */
 html.tol-no-helpers :is(.tol-pud-card, .tol-cheer, .tpv, .tpv-bub, .tol-tip, .tol-wx, .pci, .tol-join-pop, .tol-invite, .tol-puddles-hi){ display:none !important; }
@@ -1959,8 +1966,10 @@ h1.tol-page-h{ font-family:"Fraunces", Georgia, serif; font-weight:600; font-siz
 .tol-bar.is-narrow button.tol-bar-quiet{ margin-left:auto; }
 .tol-bar.is-narrow .tol-contents-btn{ margin-left:0 !important; }
 @media (max-width:560px){
-  .tol-bar .tol-set-name, .tol-bar button.tol-search-btn span{ position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; }
+  /* a phone: Search shows its picture; Settings keeps its word, so nobody has to guess what the sliders mean */
+  .tol-bar button.tol-search-btn span{ position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; }
   .tol-bar button.tol-bar-set, .tol-bar button.tol-search-btn{ padding:.45rem .5rem !important; }
+  .tol-bar button.tol-bar-set{ gap:.25rem; }
   .tol-bar button.tol-bar-quiet{ padding:.42rem .6rem !important; }
   .tol-bar{ gap:.3rem !important; }
 }
@@ -2042,6 +2051,12 @@ html.tol-nozoom.tol-text-lg{ font-size:112.5%; }
 html.tol-nozoom.tol-text-xl{ font-size:125%; }
 html.tol-nozoom.tol-text-xxl{ font-size:140%; }
 html:is(.tol-text-lg, .tol-text-xl, .tol-text-xxl) .tol-panel{ width:min(34rem, 100%); }
+/* the top bar grows a little less than the page on a phone (about 1.12x at the two biggest sizes), so
+   Quiet, Settings and Menu keep their words and the logo never runs under them */
+@media (max-width:700px){
+  html.tol-text-xl:not(.tol-nozoom) .tol-bar{ zoom:.9; }
+  html.tol-text-xxl:not(.tol-nozoom) .tol-bar{ zoom:.8; }
+}
 
 /* the easy-to-read font, roomy spacing, and Easy reading's shorter, left-aligned lines */
 html.tol-font-easy body, html.tol-font-easy body :not(svg):not(svg *):not(.tol-keep-font):not(code):not(pre):not(kbd){ font-family:var(--tol-sans) !important; }
@@ -2227,3 +2242,40 @@ html.tol-home .tol-pickup-host{ margin-top:.2rem; }
 .tol-steps-note{ font-size:.92rem; color:var(--ink-soft); }
 html.tol-only-steps main :is(p, ul, blockquote, figure, .tol-table-scroll, table, dl, details, aside, .scene, .tol-pud-card, .tol-cheer, .lp-card, pre):not(ol *, .try-this, .try-this *, .read-head, .read-head *, .tol-steps-toggle, .tol-inshort, .tol-inshort *, .tol-listen, .tol-listen *, .tol-depth, .tol-depth *){ display:none !important; }
 @media print{ .tol-steps-toggle{ display:none !important; } }
+
+/* ---------- Big text on a phone: the title uses the card's full width ---------- */
+@media (max-width:700px){
+  html:is(.tol-text-lg, .tol-text-xl, .tol-text-xxl) .read-head h1{ padding-right:0 !important; overflow-wrap:break-word; }
+  html:is(.tol-text-lg, .tol-text-xl, .tol-text-xxl) .read-head::after{ content:none !important; display:none !important; }
+}
+
+/* ---------- Easy reading: no italics and no small typewriter labels, anywhere ---------- */
+/* (Text size zooms the whole page, so these grow with it too.) */
+html.tol-easy body *:not(svg):not(svg *), html.tol-easy body *::before, html.tol-easy body *::after{ font-style:normal !important; }
+html.tol-easy :is(em, i, cite, dfn, var){ font-weight:600; }
+html.tol-font-easy main :is(td, th, li, dd, dt, p, span, a)::before{ font-family:var(--tol-sans) !important; }
+html.tol-easy main :is(td, th)[data-h]::before{ font-size:.92rem !important; font-weight:700 !important; letter-spacing:0 !important; text-transform:none !important; color:var(--ink) !important; }
+html.tol-easy :is(.read-code, .dig, .depth-bar, .depth-bar > span, .scene-when, figcaption, caption, main small, main th, .tol-cheer-name, .lp-kicker, .tol-tip-k, .tol-read-k, .tol-read-src,
+  .tol-depth p, .tol-depth small, .tol-depth-name small, .tol-pager-dir, .tol-chbar-k, .tol-foot, .tol-foot a, .tol-foot button, .tol-promise, .fb-line, .fb-who, .tpv-bub, .tol-cheer p){
+  font-size:max(.92rem, 1em) !important; letter-spacing:0 !important; text-transform:none !important; }
+html.tol-easy .dig{ font-size:.95rem !important; }
+html.tol-easy :is(.read-code, .scene-when, .depth-bar){ font-size:.95rem !important; }
+/* the tint no longer makes cards look greyed out, and the reading ruler stands out on it */
+html.tol-easy.tol-tint-cream body::after{ background:rgba(250,226,178,.22); }
+html:is(.tol-tint-cream, .tol-tint-blue, .tol-tint-mint) .tol-ruler{ border-top:3px solid rgba(47,95,138,.8); border-bottom:3px solid rgba(47,95,138,.8); background:rgba(255,255,255,.25); box-shadow:0 0 0 100vmax rgba(40,34,26,.2); }
+
+/* ---------- Tender reading pages (growing up, knowing yourself): nothing pops up, nothing keeps score ---------- */
+html.tol-sensitive :is(.lp-trail, .lp-petals, .tol-join-pop, .tol-wx, .pci, .tpv, .tol-cheer, .tol-pud-card, .tr-chip, [data-rewards-chip]){ display:none !important; }
+
+/* ---------- The Breathe button keeps clear of forms (site.js: keepBreatheClear) ---------- */
+.tol-breathe-btn{ transition:opacity .2s ease; }
+.tol-breathe-btn[style*="--tol-br-lift"], body .tol-breathe-btn[style*="--tol-br-lift"]{ bottom:calc(var(--tol-br-lift) + env(safe-area-inset-bottom, 0px)) !important; }
+html body .tol-breathe-btn.is-compact{ padding:.55rem !important; gap:0 !important; }
+html body .tol-breathe-btn.is-compact > span{ position:absolute !important; width:1px !important; height:1px !important; overflow:hidden !important; clip:rect(0 0 0 0) !important; white-space:nowrap !important; }
+.tol-breathe-btn.is-compact svg{ width:1.35rem !important; height:1.35rem !important; }
+.tol-breathe-btn.is-left{ right:auto !important; left:max(1rem, env(safe-area-inset-left)) !important; }
+body .tol-breathe-btn.is-high.is-high{ bottom:auto !important; top:calc(var(--tol-bar-h, 58px) + .6rem) !important; }
+.tol-breathe-btn.is-away{ opacity:0 !important; pointer-events:none !important; visibility:hidden; }
+html.tol-still .tol-breathe-btn{ transition:none; }
+.tol-breathe-btn.is-hiding{ opacity:0 !important; pointer-events:none !important; }
+.tol-breathe-btn.is-hiding:focus-visible{ opacity:1 !important; pointer-events:auto !important; }

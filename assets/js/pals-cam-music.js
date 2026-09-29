@@ -18,6 +18,11 @@
     dock: 'dock.m4a',         // 8 The Lakeside Dock
     citypark: 'citypark.m4a'  // 9 The City Park
   };
+  // scenes without their own track yet borrow the closest one (the theater stays quiet for the movie)
+  var BORROW = { pumpkins: 'forest', cabin: 'snow', rainy: 'pond', carnival: 'citypark', library: 'rooftop', bakery: 'backyard',
+    gardenparty: 'meadow', campsite: 'forest', lighthouse: 'beach', underwater: 'dock', space: 'rooftop', farm: 'meadow',
+    orchard: 'forest', festival: 'citypark', aquarium: 'dock', studio: 'rooftop', bonfire: 'beach', treehouse: 'backyard' };
+  function trackFor(id) { return TRACKS[id] || TRACKS[BORROW[id]] || null; }
   var LEVEL = 0.2;          // soft: well under the pups
   var FADE_IN = 2.5, FADE_OUT = 1.6;
   function lsGet(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
@@ -58,7 +63,7 @@
     fade(p, 0, FADE_OUT, function () { try { p.el.pause(); } catch (e) {} });
   }
   function startScene() {
-    var file = scene && TRACKS[scene];
+    var file = scene && trackFor(scene);
     if (!enabled || !file || document.hidden) { if (cur) { stopPlayer(cur); cur = null; } playing = false; return; }
     if (cur && cur.file === file) { resume(); return; }
     if (cur) stopPlayer(cur);
@@ -70,6 +75,7 @@
   }
   function resume() {
     if (!cur || !enabled) return;
+    var ac = actx(); if (ac && ac.state === 'suspended' && ac.resume) { try { var rp = ac.resume(); if (rp && rp.catch) rp.catch(function () {}); } catch (e) {} }
     var pr; try { pr = cur.el.play(); } catch (e) {} if (pr && pr.catch) pr.catch(function () {});
     fade(cur, LEVEL, 1.2); playing = true;
   }
@@ -81,7 +87,7 @@
     stop: function () { scene = null; if (cur) { stopPlayer(cur); cur = null; } playing = false; }, // the cam closed
     pause: pause, resume: function () { if (scene && enabled) { if (cur) resume(); else startScene(); } },
     on: function () { return enabled; },
-    has: function (id) { return !!TRACKS[id || scene]; },
+    has: function (id) { return !!trackFor(id || scene); },
     set: function (v) { enabled = !!v; lsSet('tol-palcam-music', enabled ? 'on' : 'off'); if (enabled) startScene(); else if (cur) { stopPlayer(cur); cur = null; playing = false; } return enabled; },
     toggle: function () { return this.set(!enabled); },
     tracks: function () { return Object.keys(TRACKS); }
