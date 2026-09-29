@@ -46,6 +46,11 @@
   .live-play span{ font-size:.8rem; color:#6B4F8A; }
   .live-play[aria-pressed="true"]{ background:#EDE3F8; border-color:#B9A0E0; }
   .live-play:focus-visible{ outline:2px solid var(--focus); outline-offset:2px; }
+  .live-timer{ display:flex; flex-wrap:wrap; align-items:center; gap:.4rem; margin:.4rem 0 .6rem; }
+  .live-timer > span:first-child{ font-family:"IBM Plex Mono", monospace; font-size:.8rem; text-transform:uppercase; letter-spacing:.08em; color:var(--ink-soft); margin-right:.2rem; }
+  .live-timer button{ font:inherit; font-size:.9rem; min-height:40px; padding:.3rem .8rem; border-radius:999px; border:1px solid #E6D6EE; background:#fff; color:#4E3F6B; cursor:pointer; }
+  .live-timer button[aria-pressed="true"]{ background:#EDE3F8; border-color:#B9A0E0; font-weight:600; }
+  .live-left{ font-size:.88rem; color:var(--ink-soft); }
   .track-card{
     border: 1px solid var(--line);
     border-radius: var(--radius);
@@ -113,10 +118,10 @@
 
   <aside class="sidebar">
     <div class="mark">The Objective Ledger
-      <small>TOL&#8209;OS &middot; SOUNDSCAPES</small>
+      <small>SOUNDSCAPES</small>
     </div>
     <p class="tagline">Calming background audio made for the framework, added one real track at a time. Nothing listed here is a placeholder.</p>
-    <a class="back-link" href="index.html">&larr; Back to TOL-OS</a>
+    <a class="back-link" href="index.html">&larr; Back to the home page</a>
   </aside>
 
   <div class="rule" aria-hidden="true"></div>
@@ -175,7 +180,7 @@
             Your browser can't play this inline. <a href="assets/audio/soundscapes/Nothing-Needs-to-Change.mp3">Download the track directly</a>.
           </audio>
           <p class="track-description"><strong>The design.</strong> The slowest and deepest piece so far, at 65&nbsp;BPM, made with dark, woody tones that sound more like strings than anything digital.</p>
-          <p class="track-description"><strong>How it feels.</strong> The pace sits a little below a typical resting heartbeat. Many people find their breathing slows along with the long, slow swells.</p>
+          <p class="track-description"><strong>How it feels.</strong> The pace sits a little below a typical resting heartbeat, and the long, slow swells are easy to breathe along with.</p>
           <p class="track-description"><strong>Good for.</strong> The moment frustration or stress is spiking and you want something steady to hold on to. It pairs well with the <a href="/wp-11.html">Calm-Down Kit (WP-11)</a>, if you like to listen while you use it.</p>
         </div>
 
@@ -201,19 +206,34 @@
 
     <section id="live" aria-labelledby="live-h">
       <h2 id="live-h" class="live-h">Live soundscapes</h2>
-      <p class="live-lede">These are made in your browser as you listen, so they never repeat and never end. <em>Deep</em> is written in the style of The Breath Beneath: the same five-note scale, warm low drones and a slow heartbeat pulse. Play one while you work, read or rest. They fade in and out gently. The same sounds play in the Breathe break on every page.</p>
+      <p class="live-lede">These are made in your browser as you listen, so they never repeat and never end (unless you set the sleep timer). <em>Deep</em> is written in the style of The Breath Beneath: the same five-note scale, warm low drones and a slow heartbeat pulse. Play one while you work, read or rest. They fade in and out gently. The same sounds play in the Breathe break on every page.</p>
       <div class="live-list">
         <div class="live-card"><button type="button" class="live-play" data-live="deep" aria-pressed="false"><span aria-hidden="true">&#9654;</span> Deep</button><p>Warm low drones with a heartbeat pulse, and notes that bloom now and then.</p></div>
         <div class="live-card"><button type="button" class="live-play" data-live="ocean" aria-pressed="false"><span aria-hidden="true">&#9654;</span> Ocean</button><p>Slow waves over a soft hum. In the Breathe break, they follow your breath.</p></div>
         <div class="live-card"><button type="button" class="live-play" data-live="rain" aria-pressed="false"><span aria-hidden="true">&#9654;</span> Soft rain</button><p>Gentle rain on a quiet evening, with a warm hum underneath.</p></div>
         <div class="live-card"><button type="button" class="live-play" data-live="bowls" aria-pressed="false"><span aria-hidden="true">&#9654;</span> Singing bowls</button><p>Slow, ringing bowls over a soft drone.</p></div>
+        <div class="live-card"><button type="button" class="live-play" data-live="fireplace" aria-pressed="false"><span aria-hidden="true">&#9654;</span> Fireplace</button><p>The warm roar of a fire, with crackles and little pops now and then.</p></div>
+        <div class="live-card"><button type="button" class="live-play" data-live="forest" aria-pressed="false"><span aria-hidden="true">&#9654;</span> Forest</button><p>Wind moving through the leaves, and a faraway bird every so often.</p></div>
+        <div class="live-card"><button type="button" class="live-play" data-live="nightrain" aria-pressed="false"><span aria-hidden="true">&#9654;</span> Night rain</button><p>Steady rain after dark, drips from the eaves and crickets in the grass.</p></div>
       </div>
-      <p class="live-note">Nothing is downloaded or sent: the sound is made on your device.</p>
+      <div class="live-timer" role="group" aria-labelledby="live-timer-l">
+        <span id="live-timer-l">Sleep timer</span>
+        <button type="button" data-timer="0" aria-pressed="true">Off</button>
+        <button type="button" data-timer="15" aria-pressed="false">15 min</button>
+        <button type="button" data-timer="30" aria-pressed="false">30 min</button>
+        <button type="button" data-timer="45" aria-pressed="false">45 min</button>
+        <button type="button" data-timer="60" aria-pressed="false">1 hour</button>
+        <span class="live-left" aria-live="polite"></span>
+      </div>
+      <p class="live-note">Nothing is downloaded or sent: the sound is made on your device. With the sleep timer on, whatever is playing, a live soundscape or a track, fades out slowly and stops when the time is up.</p>
     </section>
     <script src="/assets/js/breathe.js" defer></script>
+    <script src="/assets/js/soundscapes-live.js" defer></script>
     <script>
       document.addEventListener('DOMContentLoaded', function () {
+        // the first four are the Breathe break's own beds; the others come from soundscapes-live.js
         var eng = null, playing = '', players = Array.prototype.slice.call(document.querySelectorAll('.track-player'));
+        var LIVE = window.TOLLiveSounds, own = function (n) { return LIVE && LIVE.names.indexOf(n) >= 0; };
         function label() {
           document.querySelectorAll('[data-live]').forEach(function (b) {
             var on = b.getAttribute('data-live') === playing;
@@ -221,21 +241,55 @@
             b.querySelector('span').innerHTML = on ? '&#10074;&#10074;' : '&#9654;';
           });
         }
+        function stopLive(fade) {
+          if (eng) { eng.end(); eng = null; }
+          if (LIVE) LIVE.stop(fade);
+          playing = ''; label();
+        }
         document.querySelectorAll('[data-live]').forEach(function (b) {
           b.addEventListener('click', function () {
             var name = b.getAttribute('data-live');
-            if (!window.TOLBreathe) return;
-            if (playing === name) { if (eng) { eng.end(); eng = null; } playing = ''; label(); return; }
+            if (playing === name) { stopLive(); return; }
             players.forEach(function (a) { if (!a.paused) a.pause(); });
-            if (!eng) { eng = window.TOLBreathe.Engine(); if (!eng) return; eng.start(name); } else eng.bed(name);
+            if (own(name)) {
+              if (eng) { eng.end(); eng = null; }
+              if (!LIVE.start(name)) return;
+            } else {
+              if (!window.TOLBreathe) return;
+              if (LIVE) LIVE.stop(0.6);
+              if (!eng) { eng = window.TOLBreathe.Engine(); if (!eng) return; eng.start(name); } else eng.bed(name);
+            }
             playing = name; label();
           });
         });
         // one thing at a time: starting a track pauses the others and any live soundscape
         players.forEach(function (a) { a.addEventListener('play', function () {
           players.forEach(function (o) { if (o !== a && !o.paused) o.pause(); });
-          if (eng) { eng.end(); eng = null; playing = ''; label(); }
+          if (playing) stopLive(0.5);
         }); });
+
+        // the sleep timer: fade whatever is playing over the last minute, then stop
+        var endAt = 0, tick = null, left = document.querySelector('.live-left');
+        function setTimer(min) {
+          document.querySelectorAll('[data-timer]').forEach(function (b) { b.setAttribute('aria-pressed', String(+b.getAttribute('data-timer') === min)); });
+          clearInterval(tick); endAt = min ? Date.now() + min * 60000 : 0;
+          players.forEach(function (a) { a.volume = 1; });
+          if (!min) { left.textContent = ''; return; }
+          tick = setInterval(update, 1000); update();
+        }
+        function update() {
+          var ms = endAt - Date.now();
+          if (ms <= 0) {
+            clearInterval(tick); endAt = 0; left.textContent = 'Sleep well.';
+            stopLive(4); players.forEach(function (a) { if (!a.paused) a.pause(); a.volume = 1; });
+            document.querySelectorAll('[data-timer]').forEach(function (b) { b.setAttribute('aria-pressed', String(b.getAttribute('data-timer') === '0')); });
+            return;
+          }
+          var m = Math.ceil(ms / 60000);
+          left.textContent = m + (m === 1 ? ' minute left' : ' minutes left');
+          if (ms < 60000) players.forEach(function (a) { a.volume = Math.max(0, ms / 60000); });
+        }
+        document.querySelectorAll('[data-timer]').forEach(function (b) { b.addEventListener('click', function () { setTimer(+b.getAttribute('data-timer')); }); });
       });
     </script>
 
@@ -243,11 +297,11 @@
 </div>
 
 <footer>
-  TOL&#8209;OS &middot; spreadloveandacceptance.com
+  The Objective Ledger &middot; spreadloveandacceptance.com
   <div class="footer-links">
     <a href="index.html">Home</a>
     <a href="roadmap.html">Roadmap</a>
-    <a href="telemetry.html">Rollout Status</a>
+    <a href="telemetry.html">What’s ready</a>
     <a href="suite-index.html">Suite Index</a>
   </div>
 </footer>
