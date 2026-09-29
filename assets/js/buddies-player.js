@@ -1067,7 +1067,7 @@
     function done() {
       var fb = F.beats[D.i]; if (!fb) return true; var b = fb.b;
       if (kindOf(b) === 'say' && D.voice) {
-        if (D.voiceEnd != null) return D.u >= D.voiceEnd + holdOf(b);
+        if (D.voiceEnd != null) return D.u >= D.voiceEnd + Math.max(0.3, holdOf(b) * 0.55); // spoken lines flow like real talk
         return D.u > sayTime(b) * 2.4 + holdOf(b) + 4; // the voice never said it had finished: move on anyway
       }
       return D.u >= D.dur;
@@ -1292,7 +1292,7 @@
     if (b.say !== 'tidbit' && b.say !== 'sugarfoot') return null;
     var g = FX_MOOD[b.mood]; if (!g) return null;
     var c = AU.ctx; if (!c || c.currentTime - CL.lastFx < 14) return null;
-    if (Math.random() > (g === 'up' ? 0.3 : g === 'wow' ? 0.35 : 0.22)) return null;
+    if (Math.random() > (g === 'up' ? 0.18 : g === 'wow' ? 0.2 : 0.12)) return null; // now and then, so the talk keeps flowing
     var list = FX[g], k = list[Math.floor(Math.random() * list.length)], buf = CL.got['fx/' + b.say + '-' + k];
     if (!buf) return null; CL.lastFx = c.currentTime; return buf;
   }
