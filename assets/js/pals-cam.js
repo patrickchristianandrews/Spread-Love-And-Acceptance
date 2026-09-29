@@ -731,7 +731,11 @@
       U.circle(b, sx2, sy2, 15, sunP < 0.12 || sunP > 0.86 ? '#FFC98A' : '#FFE68A'); }
     var mh = h < 12 ? h + 24 : h, moonP = (mh - 19.5) / (30.5 - 19.5);
     if (moonP > 0 && moonP < 1) { var mx = mix(env.x0 + 40, env.x1 - 40, moonP), my = G - 60 - Math.sin(moonP * Math.PI) * 160;
-      U.circle(b, mx, my, 20, 'rgba(255,250,220,.12)'); U.circle(b, mx, my, 12, '#FBF3D5'); U.circle(b, mx + 5, my - 3, 10, sky.top); }
+      U.circle(b, mx, my, 20, 'rgba(255,250,220,.12)');
+      // tonight's real phase, worked out the same way as the Night Garden's moon (0 new, 0.5 full)
+      var syn = 29.530588853, age = ((Date.now() - Date.UTC(2000, 0, 6, 18, 14)) / 864e5 % syn + syn) % syn / syn, lit = age <= 0.5 ? age * 2 : (1 - age) * 2;
+      b.save(); b.beginPath(); b.arc(mx, my, 12, 0, Math.PI * 2); b.clip(); b.fillStyle = '#FBF3D5'; b.fillRect(mx - 12, my - 12, 24, 24);
+      b.fillStyle = sky.top; b.globalAlpha = 0.92; b.beginPath(); b.arc(mx + (age < 0.5 ? -1 : 1) * 12 * lit * 2, my, 12.3, 0, Math.PI * 2); b.fill(); b.restore(); }
     }
     // the setting, then dimmed for the hour, then anything that glows
     var lay = document.createElement('canvas'); lay.width = bg.width; lay.height = bg.height; var l = lay.getContext('2d');

@@ -326,10 +326,25 @@
       tracePath(shape.pts.map(function (p) { return [cx + (p[0] - 0.5) * sz, cy + (p[1] - 0.5) * sz]; }), shape.parts); ctx.stroke();
       shape.pts.forEach(function (p) { ctx.fillStyle = 'rgba(255,240,210,0.5)'; ctx.beginPath(); ctx.arc(cx + (p[0] - 0.5) * sz, cy + (p[1] - 0.5) * sz, 1.3, 0, Math.PI * 2); ctx.fill(); });
       var who = save.dedic && save.dedic[id];
-      if (who) { ctx.fillStyle = 'rgba(255,240,210,0.45)'; ctx.textAlign = 'center'; ctx.textBaseline = 'top'; ctx.font = 'italic 10px Lora, Georgia, serif'; ctx.fillText(who, cx, cy + sz * 0.6); }
+      if (who) {
+        // a dedicated constellation: its lines a little brighter, and the name clear and warm beneath it
+        ctx.strokeStyle = 'rgba(255,226,170,0.45)'; ctx.lineWidth = 1.2;
+        tracePath(shape.pts.map(function (p) { return [cx + (p[0] - 0.5) * sz, cy + (p[1] - 0.5) * sz]; }), shape.parts); ctx.stroke();
+        var fs = W < 560 ? 13 : 14, label = '\u2665 ' + who, maxW = Math.min(W * 0.34, 190);
+        ctx.save(); ctx.font = '600 ' + fs + 'px Lora, Georgia, serif'; ctx.textAlign = 'center'; ctx.textBaseline = 'top';
+        var tw = Math.min(maxW, ctx.measureText(label).width), ty = cy + sz * 0.62;
+        cx = Math.max(tw / 2 + 10, Math.min(W - tw / 2 - 10, cx)); // keep the whole name on screen
+        ctx.fillStyle = 'rgba(28,31,58,0.62)'; ctx.beginPath();
+        if (ctx.roundRect) ctx.roundRect(cx - tw / 2 - 6, ty - 3, tw + 12, fs + 7, 9); else ctx.rect(cx - tw / 2 - 6, ty - 3, tw + 12, fs + 7);
+        ctx.fill();
+        ctx.shadowColor = 'rgba(255,214,150,0.7)'; ctx.shadowBlur = 6; ctx.fillStyle = '#FFE9C2';
+        ctx.fillText(label, cx, ty, maxW); ctx.restore();
+      }
     });
     // moon with its real phase
     var mx = W * 0.84, my = H * 0.15, mr = Math.min(W, H) * 0.045;
+    // on a narrow screen the pond's "Next" box and row count sit top right: the moon rises a little lower there
+    if (mode === 'pond' && W < 700 && !AMBIENT) { mx = W * 0.86; my = H * 0.36; }
     if (TOD !== 'night') { ctx.save(); ctx.globalAlpha = TOD === 'dusk' ? 0.55 : 0.3; mx = W * 0.2; my = H * 0.12; }
     var halo = ctx.createRadialGradient(mx, my, mr, mx, my, mr * 4);
     halo.addColorStop(0, 'rgba(255,240,210,0.22)'); halo.addColorStop(1, 'rgba(255,240,210,0)');
@@ -688,13 +703,13 @@
     document.getElementById('ng-help-steps').innerHTML = h.steps.map(function (x) { return '<li>' + x.replace('{N}', SHAPE_IDS.length) + '</li>'; }).join('') +
       (h.keys && window.matchMedia && window.matchMedia('(hover: hover)').matches ? '<li>' + h.keys + '</li>' : '');
     helpCard.hidden = false; say('', '', 0);
-    document.getElementById('ng-help-ok').focus();
+    try { document.getElementById('ng-help-ok').focus({ preventScroll: true }); } catch (e) {}
   }
   function hideHelp() {
     helpCard.hidden = true;
     if (mode === 'breathe') { breath.start = performance.now() + 600; breath.count = 0; breath.phase = ''; }
     if (mode === 'pond') dropAt = performance.now() + 1500;
-    document.getElementById('ng-help-btn').focus();
+    try { document.getElementById('ng-help-btn').focus({ preventScroll: true }); } catch (e) {}
   }
   if (helpCard) {
     document.getElementById('ng-help-ok').addEventListener('click', hideHelp);
@@ -1689,7 +1704,19 @@
     lantern: { name: 'a lantern', groups: [{ closed: true, pts: [[0.34, 0.32], [0.66, 0.32], [0.72, 0.78], [0.28, 0.78]] }, { pts: [[0.4, 0.32], [0.5, 0.14], [0.6, 0.32]] }] },
     cat: { name: 'a sleepy cat', closed: true, pts: [[0.2, 0.3], [0.3, 0.1], [0.42, 0.28], [0.58, 0.28], [0.7, 0.1], [0.8, 0.3], [0.8, 0.64], [0.5, 0.84], [0.2, 0.64]] },
     acorn: { name: 'an acorn', groups: [{ closed: true, pts: [[0.24, 0.38], [0.34, 0.22], [0.66, 0.22], [0.76, 0.38]] }, { pts: [[0.3, 0.38], [0.32, 0.62], [0.5, 0.86], [0.68, 0.62], [0.7, 0.38]] }, { pts: [[0.5, 0.1]] }] },
-    crown: { name: 'a daisy crown', closed: true, pts: [[0.14, 0.76], [0.14, 0.3], [0.32, 0.52], [0.5, 0.2], [0.68, 0.52], [0.86, 0.3], [0.86, 0.76]] }
+    crown: { name: 'a daisy crown', closed: true, pts: [[0.14, 0.76], [0.14, 0.3], [0.32, 0.52], [0.5, 0.2], [0.68, 0.52], [0.86, 0.3], [0.86, 0.76]] },
+    bone: { name: 'a dog bone', closed: true, pts: [[0.16, 0.36], [0.26, 0.26], [0.36, 0.4], [0.64, 0.4], [0.74, 0.26], [0.84, 0.36], [0.78, 0.5], [0.84, 0.64], [0.74, 0.74], [0.64, 0.6], [0.36, 0.6], [0.26, 0.74], [0.16, 0.64], [0.22, 0.5]] },
+    sprout: { name: 'a sprout', groups: [{ pts: [[0.5, 0.9], [0.5, 0.5]] }, { closed: true, pts: [[0.5, 0.56], [0.34, 0.44], [0.18, 0.28], [0.38, 0.3], [0.5, 0.44]] }, { closed: true, pts: [[0.5, 0.5], [0.64, 0.34], [0.84, 0.22], [0.76, 0.42], [0.56, 0.54]] }] },
+    apple: { name: 'an apple', groups: [{ closed: true, pts: [[0.5, 0.3], [0.66, 0.24], [0.8, 0.36], [0.8, 0.58], [0.66, 0.82], [0.5, 0.76], [0.34, 0.82], [0.2, 0.58], [0.2, 0.36], [0.34, 0.24]] }, { pts: [[0.5, 0.3], [0.54, 0.12]] }, { pts: [[0.62, 0.14]] }] },
+    balloon: { name: 'a balloon', groups: [{ closed: true, pts: arcPts(0.5, 0.36, 0.26, -Math.PI / 2, Math.PI * 1.5 - 0.5, 9, 0.28) }, { pts: [[0.5, 0.64], [0.46, 0.76], [0.54, 0.86], [0.5, 0.96]] }] },
+    key: { name: 'a little key', groups: [{ closed: true, pts: arcPts(0.28, 0.5, 0.16, 0, Math.PI * 2 * 5 / 6, 6) }, { pts: [[0.44, 0.5], [0.9, 0.5]] }, { pts: [[0.78, 0.5], [0.78, 0.64]] }, { pts: [[0.88, 0.5], [0.88, 0.62]] }] },
+    letter: { name: 'a letter', groups: [{ closed: true, pts: [[0.14, 0.28], [0.86, 0.28], [0.86, 0.76], [0.14, 0.76]] }, { pts: [[0.14, 0.28], [0.5, 0.56], [0.86, 0.28]] }] },
+    snowflake: { name: 'a snowflake', groups: [{ pts: [[0.5, 0.1], [0.5, 0.5], [0.5, 0.9]] }, { pts: [[0.15, 0.3], [0.5, 0.5], [0.85, 0.7]] }, { pts: [[0.15, 0.7], [0.5, 0.5], [0.85, 0.3]] }] },
+    owl: { name: 'a little owl', groups: [{ closed: true, pts: [[0.3, 0.2], [0.4, 0.3], [0.6, 0.3], [0.7, 0.2], [0.76, 0.5], [0.66, 0.84], [0.34, 0.84], [0.24, 0.5]] }, { pts: [[0.4, 0.44]] }, { pts: [[0.6, 0.44]] }] },
+    mitten: { name: 'a mitten', closed: true, pts: [[0.34, 0.9], [0.3, 0.5], [0.34, 0.24], [0.5, 0.14], [0.66, 0.24], [0.68, 0.46], [0.8, 0.4], [0.84, 0.52], [0.7, 0.66], [0.66, 0.9]] },
+    note: { name: 'a music note', groups: [{ closed: true, pts: [[0.24, 0.74], [0.34, 0.66], [0.44, 0.72], [0.36, 0.82]] }, { pts: [[0.44, 0.72], [0.44, 0.18], [0.76, 0.3], [0.76, 0.42]] }] },
+    pup: { name: 'a pup’s face', groups: [{ closed: true, pts: [[0.3, 0.3], [0.5, 0.24], [0.7, 0.3], [0.76, 0.56], [0.62, 0.8], [0.38, 0.8], [0.24, 0.56]] }, { pts: [[0.3, 0.3], [0.14, 0.52], [0.24, 0.6]] }, { pts: [[0.7, 0.3], [0.86, 0.52], [0.76, 0.6]] }, { pts: [[0.5, 0.64]] }] },
+    hotair: { name: 'a hot-air balloon', groups: [{ closed: true, pts: [[0.5, 0.08], [0.72, 0.18], [0.8, 0.38], [0.66, 0.6], [0.34, 0.6], [0.2, 0.38], [0.28, 0.18]] }, { closed: true, pts: [[0.42, 0.78], [0.58, 0.78], [0.58, 0.9], [0.42, 0.9]] }, { pts: [[0.36, 0.6], [0.42, 0.78]] }, { pts: [[0.64, 0.6], [0.58, 0.78]] }] }
   };
   Object.keys(MORE_SHAPES).forEach(function (id) { SHAPES[id] = MORE_SHAPES[id]; });
   // shapes are one line unless they have separate parts; either way, work from parts
@@ -1746,7 +1773,19 @@
     lantern: ['The Lantern', 'Light the next few steps. That’s enough.'],
     cat: ['The Sleepy Cat', 'Rest is not a prize. It’s a need.'],
     acorn: ['The Acorn', 'Big things start very small.'],
-    crown: ['The Daisy Crown', 'Everyone deserves to be celebrated for something.']
+    crown: ['The Daisy Crown', 'Everyone deserves to be celebrated for something.'],
+    bone: ['The Bone', 'Tidbit and Sugarfoot would share this one. Probably.'],
+    sprout: ['The Sprout', 'New things start small and green. Give them time.'],
+    apple: ['The Apple', 'Something simple and good, shared, is plenty.'],
+    balloon: ['The Balloon', 'Hold on lightly. Some things are lovelier when they float.'],
+    key: ['The Key', 'A kind question can open a lot of doors.'],
+    letter: ['The Letter', 'Write someone a few warm words this week.'],
+    snowflake: ['The Snowflake', 'No two alike, and each one lovely.'],
+    owl: ['The Little Owl', 'Listen twice as much as you speak tonight.'],
+    mitten: ['The Mitten', 'Warm hands, warm heart. Hold one tonight if you can.'],
+    note: ['The Note', 'One small note can start a whole song.'],
+    pup: ['The Pup', 'Be as glad to see someone as a dog is.'],
+    hotair: ['The Hot-Air Balloon', 'Rise slowly. The view is worth it.']
   };
   // wild constellations: new every time, drawn from the night itself, with a name and a kind thought
   var WILD_ADJ = ['Quiet', 'Gentle', 'Wandering', 'Sleepy', 'Patient', 'Brave', 'Little', 'Silver', 'Faithful', 'Hopeful', 'Humming', 'Dancing', 'Kindly', 'Steady', 'Dreaming', 'Curious', 'Lantern-lit', 'Midnight', 'Morning', 'Laughing', 'Listening', 'Golden'];
@@ -1765,6 +1804,12 @@
     'A winding line is still a line that arrives.',
     'You noticed something nobody else saw tonight.'
   ];
+  // the names of constellations found before names were kept, for My garden (/keepsakes.html)
+  if (!AMBIENT && save.consts.length && (!save.cnames || save.consts.some(function (id) { return !save.cnames[id]; }))) {
+    save.cnames = save.cnames || {};
+    save.consts.forEach(function (id) { if (MEANING[id]) save.cnames[id] = MEANING[id][0]; });
+    persist();
+  }
   var SHAPE_IDS = Object.keys(SHAPES), shape = null, targets = [], shapeDone = 0, dwell = null, sparks = [], shooting = null, nextShoot = 0;
   // One picture, one of endless variations: mirrored or not, a slight turn and stretch, a different
   // first star and direction, parts in a different order, and a little natural wobble. Each variation
@@ -1970,7 +2015,7 @@
         targets.forEach(function (p, k) { setTimeout(function () { chime(k, 0.06); burst(p.x, p.y, 6); }, 250 + k * 120); });
         if (audio && audio.music && save.sound) setTimeout(function () { audio.music.reward(true); }, 350 + targets.length * 120);
         var first = !shape.wild && save.consts.indexOf(shape.id) === -1, m = shape.wild ? [shape.name, shape.meaning] : MEANING[shape.id] || ['A new constellation', ''];
-        if (first) { save.consts.push(shape.id); persist(); }
+        if (first) { save.consts.push(shape.id); save.cnames = save.cnames || {}; save.cnames[shape.id] = m[0]; persist(); }
         if (shape.wild) { save.wild = (save.wild || 0) + 1; persist(); }
         if (window.TOLRewards) window.TOLRewards.earn(first ? 15 : shape.wild ? 8 : 6, 'fireflies', first ? 'A new constellation' : shape.wild ? 'A wild constellation' : 'A constellation sang', { cardDelay: 5200 });
         say(m[0] + (first ? ' \u2728 New!' : shape.wild ? ' \u2728' : ''), m[1] + (first ? '  ' + save.consts.length + ' of ' + SHAPE_IDS.length + ' found.' : shape.wild ? '  Wild constellations found: ' + save.wild + '.' : ''), 5200);
@@ -2328,7 +2373,9 @@
   });
   document.addEventListener('keydown', function (e) {
     if (/^(INPUT|TEXTAREA|SELECT)$/.test(e.target.tagName)) return;
-    if (e.key === ' ' && e.target.closest && e.target.closest('button, a, summary')) return;
+    // Space on a link or button does its usual job, except in the pond, where the garden's own
+    // buttons (the modes, the pad) shouldn't swallow it: there Space drops the pad
+    if (e.key === ' ' && e.target.closest && e.target.closest('button, a, summary') && !(mode === 'pond' && stage.contains(e.target) && !e.target.closest('.ng-card, #ng-more-menu'))) return;
     if (!closeCard.hidden || !welcome.hidden || (helpCard && !helpCard.hidden) || (dedCard && !dedCard.hidden) || stage.getBoundingClientRect().bottom < window.innerHeight * 0.5) return;
     if (mode === 'pond' && ['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', ' '].indexOf(e.key) !== -1 && !/^(INPUT|TEXTAREA|SELECT)$/.test(e.target.tagName)) { e.preventDefault(); pondKey(e.key); }
     if (mode === 'fireflies' && ['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown'].indexOf(e.key) !== -1 && !/INPUT|TEXTAREA/.test(e.target.tagName)) {
@@ -2433,7 +2480,7 @@
     if (!dedCard || mode !== 'fireflies') return;
     document.getElementById('ng-ded-title').textContent = title + ' is in your sky now.';
     var inp = document.getElementById('ng-ded-name'); inp.value = '';
-    dedCard.hidden = false; dedCard.setAttribute('data-id', id); inp.focus();
+    dedCard.hidden = false; dedCard.setAttribute('data-id', id); try { inp.focus({ preventScroll: true }); } catch (e) {}
   }
   if (dedCard) {
     var dedDone = function (keep) {
@@ -2452,7 +2499,7 @@
     document.getElementById('ng-quote').textContent = QUOTES[qi];
     var tipEl = document.getElementById('ng-tip');
     if (tipEl && window.TOLTips) window.TOLTips.get(['sleep', 'rest', 'calm', 'kindness'], function (t) { tipEl.innerHTML = '<strong>A little tip:</strong> ' + t[0] + ' ' + t[1]; tipEl.hidden = false; });
-    closeCard.hidden = false; stopAudio(); document.getElementById('ng-stay').focus();
+    closeCard.hidden = false; stopAudio(); try { document.getElementById('ng-stay').focus({ preventScroll: true }); } catch (e) {}
   });
   function stay() { closeCard.hidden = true; if (save.sound) startAudio(); document.getElementById('ng-leave').focus(); }
   document.getElementById('ng-stay').addEventListener('click', stay);

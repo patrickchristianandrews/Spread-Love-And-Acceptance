@@ -13,7 +13,9 @@
     kite: 'The Kite', butterfly: 'The Butterfly', paw: 'The Paw Prints', tree: 'The Evergreen', cloud: 'The Cloud', bird: 'The Swallow', fish: 'The Fish',
     cup: 'The Warm Cup', bell: 'The Bell', umbrella: 'The Umbrella', boat: 'The Sailboat', mountain: 'The Mountain', candle: 'The Candle', feather: 'The Feather',
     snail: 'The Snail', sun: 'The Sun', rainbow: 'The Rainbow', raindrop: 'The Raindrop', mushroom: 'The Mushroom', twohearts: 'The Two Hearts', infinity: 'The Loop',
-    gem: 'The Gem', teapot: 'The Teapot', bridge: 'The Bridge', lantern: 'The Lantern', cat: 'The Sleepy Cat', acorn: 'The Acorn', crown: 'The Daisy Crown' };
+    gem: 'The Gem', teapot: 'The Teapot', bridge: 'The Bridge', lantern: 'The Lantern', cat: 'The Sleepy Cat', acorn: 'The Acorn', crown: 'The Daisy Crown',
+    bone: 'The Bone', sprout: 'The Sprout', apple: 'The Apple', balloon: 'The Balloon', key: 'The Key', letter: 'The Letter', snowflake: 'The Snowflake',
+    owl: 'The Little Owl', mitten: 'The Mitten', note: 'The Note', pup: 'The Pup', hotair: 'The Hot-Air Balloon' };
   function nameOf(id, g) { return (g.cnames && g.cnames[id]) || NAMES[id] || ('The ' + id.charAt(0).toUpperCase() + id.slice(1)); }
 
   function render() {
