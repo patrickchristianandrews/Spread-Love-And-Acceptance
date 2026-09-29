@@ -279,22 +279,22 @@
     var freqs = treaty.columns.filter(function (c) { return c.id === 'freq'; })[0].options;
     var note = sc.sections.filter(function (s) { return s.type === 'note' && s.pdf === false; })[0];
     if (note) blocks.push({ kind: 'note', text: note.text });
-    blocks.push({ kind: 'fields', fields: [f('wp03.reviewDate', ctx.roadId === 'coworkers' ? 'Agreement date' : 'Treaty date', 'date', { half: true })] });
+    blocks.push({ kind: 'fields', fields: [f('wp03.reviewDate', 'Date of this list', 'date', { half: true })] });
     var defs = treaty.defaultRows || [], rows = [];
     for (var i = 0; i < Math.max(defs.length + 4, ctx.sizes.treaty || 0); i++) {
       var d = defs[i] || {}, p = 'wp03.treaty.r' + (i + 1) + '.';
       var fl = [
-        f(p + 'task', 'Task', 'text', { def: d.task || '', w: 2.2 }),
+        f(p + 'task', 'Job', 'text', { def: d.task || '', w: 2.2 }),
         f(p + 'freq', 'How often', 'text', { def: d.freq || '', w: 1, hint: freqs.join(', ') }),
-        f(p + 'r', 'Responsible (does it)', 'person', { w: 1.1 }),
-        f(p + 'a', 'Accountable (follows up)', 'person', { w: 1.1 })
+        f(p + 'r', 'Owner (does it)', 'person', { w: 1.1 }),
+        f(p + 'a', 'Helper (optional)', 'person', { w: 1.1 })
       ];
       if (ci) { fl.push(f(p + 'c', 'Consulted', 'text', { w: 1 })); fl.push(f(p + 'i', 'Informed', 'text', { w: 1 })); }
       fl.push(f(p + 'notes', 'Notes', 'text', { def: d.notes || '', w: ci ? 1.1 : 1.8 }));
       rows.push({ fields: fl });
     }
-    blocks.push({ kind: 'grid', title: treaty.title, intro: (treaty.intro ? treaty.intro + ' ' : '') + 'Clear the task box on any row that doesn’t apply. How often: ' + freqs.join(', ') + '. For owners, write a name or an initial.', rows: rows });
-    blocks.push({ kind: 'derived', title: 'Worked out for you', lines: ['Ownership clarity = the share of tasks that have both a Responsible and an Accountable name. This becomes the ownership input to CALC-01. Tasks still missing an owner are listed in your report.'] });
+    blocks.push({ kind: 'grid', title: treaty.title, intro: (treaty.intro ? treaty.intro + ' ' : '') + 'Clear the task box on any row that doesn’t apply. How often: ' + freqs.join(', ') + '. Each job needs one owner: write a name or an initial. A helper is optional.', rows: rows });
+    blocks.push({ kind: 'derived', title: 'Worked out for you', lines: ['Ownership clarity = the share of jobs that have an owner. This becomes the ownership input to CALC-01. Jobs still missing an owner are listed in your report.'] });
     var amend = [];
     for (i = 0; i < Math.max(2, ctx.sizes.amend || 0); i++) {
       var q = 'wp03.amend.r' + (i + 1) + '.';
@@ -307,8 +307,8 @@
 
   // The last lines of a page people settle on together: one box to tick, and an optional date to
   // come back to it. Nothing to sign.
-  function closing(ctx, base, intro) {
-    var solo = ctx.road.solo;
+  function closing(ctx, base, intro, personal) {
+    var solo = ctx.road.solo || personal; // WP-11 is a personal kit on every road
     var out = { kind: 'fields', title: solo ? 'Where I’ve landed' : 'Where we’ve landed', fields: [
       f(base + '.closing.agreed', solo ? 'I’m going with this' : 'We’re agreed on this', 'check', { optional: true }),
       f(base + '.closing.lookAgain', 'Look at this again on', 'date', { half: true, optional: true })
@@ -374,9 +374,9 @@
       var p = 'wp11.reentry.r' + (i + 1) + '.';
       re.push({ fields: [f(p + 'time', 'Time', 'text', { w: 1 }), f(p + 'tactic', 'What I did (1 to 6 from the list, or its name)', 'text', { w: 2.6 }), f(p + 'before', 'Battery before (0 to 1)', 'number', { min: 0, max: 1, w: 1.1 }), f(p + 'after', 'Battery after (0 to 1)', 'number', { min: 0, max: 1, w: 1.1 })] });
     }
-    blocks.push({ kind: 'grid', title: 'Part C: Coming back', intro: (ctx.road.solo ? 'Take WP-02 before and after. Under 0.50, go back to what you were doing.' : 'Take WP-02 before and after. Under 0.50, go back in.') + ' Between 0.50 and 0.60, do a second round. Still 0.60 or above after two rounds? Put it off to a named time. The list: 1 breathing, 2 naming the room, 3 weight and pressure, 4 gating, 5 walking it out, 6 low, steady sound.', rows: re });
+    blocks.push({ kind: 'grid', title: 'Part C: Coming back', intro: (ctx.road.solo ? 'Take WP-02 before and after. Under 0.50, go back to what you were doing.' : 'Take WP-02 before and after. Under 0.50, return to the conversation at the time you named.') + ' 0.50 to 0.59, do a second round. Still 0.60 or above after two rounds? Put it off to a named time. The list: 1 breathing, 2 naming the room, 3 weight and pressure, 4 gating, 5 walking it out, 6 low, steady sound.', rows: re });
     blocks.push({ kind: 'fields', fields: [f('wp11.nextAction', 'Next small action', 'text'), f('wp11.resume', ctx.road.solo ? 'If you put it off: when you’ll pick it back up' : 'If you put the conversation off: when you’ll pick it back up', 'text')] });
-    blocks.push(closing(ctx, 'wp11'));
+    blocks.push(closing(ctx, 'wp11', null, true));
     return { id: 'wp11', code: 'WP-11', title: sc.title, blocks: blocks };
   }
 
@@ -420,7 +420,7 @@
     if (R.calc) {
       blocks.push({ kind: 'derived', title: 'Worked out for you when you bring this back', lines: [
         'Workload balance (WB), from WP-01: how close the logged minutes come to an even split. 1 = even. With two people it is 1 minus the gap between the two shares; with more, 1 minus the share of time that would have to change hands, out of the most it could be.',
-        'Ownership clarity (OC), from WP-03: tasks with both a Responsible and an Accountable name, divided by all tasks.',
+        'Ownership clarity (OC), from WP-03: jobs with an owner, divided by all jobs (starter examples nobody filled in are left out).',
         'Stress (AS), from WP-02: the average battery score across everyone. It waits until every person\u2019s battery is in.',
         'Solvency = WB × 0.40 + OC × 0.35 + (1 − AS) × 0.25. 0.70 and up: working well. 0.40 to 0.69: needs a look. Under 0.40: needs a rethink, together. Higher means the setup is working better.',
         'Apex = WB × 0.35 + OC × 0.30 + (1 − AS) × 0.20 + RF × 0.15, where RF = retunes ÷ friction moments (below).'
@@ -435,7 +435,7 @@
       f('calc.friction', 'Friction moments this week', 'number', { min: 0, half: true, optional: true }),
       f('calc.retunes', 'Of those, retuned before answering', 'number', { min: 0, half: true, optional: true })
     ] });
-    return { id: 'calc', code: 'CALC-01', title: R.calc ? 'Is the setup working for both of you?' : 'Your state and your retuning count', blocks: blocks };
+    return { id: 'calc', code: 'CALC-01', title: R.calc ? 'Is the setup working for everyone?' : 'Your state and your retuning count', blocks: blocks };
   }
 
   function pageNotes(ctx) {
@@ -950,17 +950,29 @@
         });
       });
       touched = touched || has(data, 'wp03.reviewDate');
-      var tasks3 = rows3.filter(function (r) { return trim(r.task); });
+      // a printed starter job nobody filled in (same task and how-often, no names) is an example:
+      // it never counts for or against the clarity number. If the same job shows up in your own
+      // log (WP-01) or look-back (WP-04), it is clearly yours, so it counts.
+      var starterIdx = {}, starters = [], seen = {};
+      [['wp01.audit', 'audit'], ['wp04.raw', 'raw'], ['wp04.classify', 'classify']].forEach(function (t) {
+        rowsOf(data, t[0], ['task'], sizeOf(data, t[1])).forEach(function (r) { if (trim(r.task)) seen[trim(r.task).toLowerCase()] = true; });
+      });
+      rows3.forEach(function (r) {
+        var p = NS + 'wp03.treaty.r' + r._i + '.';
+        if (trim(r.task) && defs[p + 'task'] === trim(r.task) && !seen[trim(r.task).toLowerCase()] && !trim(r.r) && !trim(r.a) && !trim(r.c) && !trim(r.i) && (blank(r.freq) || r.freq === defs[p + 'freq']) && (blank(r.notes) || r.notes === defs[p + 'notes'])) { starterIdx[r._i] = true; starters.push(trim(r.task)); }
+      });
+      var tasks3 = rows3.filter(function (r) { return trim(r.task) && !starterIdx[r._i]; });
       var owned = [], unowned = [], half = [], byOwner = P.list.map(function () { return 0; }), unmatched3 = [];
       tasks3.forEach(function (r) {
         var ro = ownersOf(P, r.r), ao = ownersOf(P, r.a);
         if (trim(r.r) && ro.unknown.length) unmatched3.push(trim(r.r));
         if (trim(r.a) && ao.unknown.length) unmatched3.push(trim(r.a));
-        if (trim(r.r) && trim(r.a)) owned.push(r); else if (trim(r.r) || trim(r.a)) half.push(r); else unowned.push(r);
+        // one owner per job; the helper is optional (half = a helper but no owner)
+        if (trim(r.r)) owned.push(r); else if (trim(r.a)) half.push(r); else unowned.push(r);
         if (ro.list.length === 1) byOwner[ro.list[0]]++;
       });
       out.wp03 = { filled: touched, tasks: tasks3.length, owned: owned.length, oc: touched && tasks3.length ? owned.length / tasks3.length : null, conc: n >= 2 ? C1().concentration(byOwner, 3) : null,
-        unowned: unowned.map(function (r) { return trim(r.task); }), half: half.map(function (r) { return trim(r.task); }), byOwner: byOwner, unmatched: unmatched3,
+        unowned: unowned.map(function (r) { return trim(r.task); }), half: half.map(function (r) { return trim(r.task); }), byOwner: byOwner, unmatched: unmatched3, starters: starters, starterIdx: starterIdx,
         amend: rowsOf(data, 'wp03.amend', ['change'], sizeOf(data, 'amend')).filter(function (r) { return trim(r.change); }).length };
     }
 
@@ -1022,14 +1034,14 @@
     }
 
     // Who carries the most, beside the scores: the busiest person's share of the jobs with one named
-    // Responsible, of the logged minutes and of the unasked-for minutes. Clarity can read 1.00 with one
+    // owner, of the logged minutes and of the unasked-for minutes. Clarity can read 1.00 with one
     // person holding every job, so this is what keeps a high score honest.
     out.conc = { owned: out.wp03 && out.wp03.filled ? out.wp03.conc : null,
       minutes: out.wp01 && out.wp01.minutes && n >= 2 ? C1().concentration(out.wp01.minutes, 60) : null,
       noticed: out.wp01 && out.wp01.noticed && n >= 2 ? C1().concentration(out.wp01.noticed, 60) : null };
     out.conc.flag = !!((out.conc.owned && out.conc.owned.flag) || (out.conc.minutes && out.conc.minutes.flag));
     out.conc.lines = [];
-    if (out.conc.owned && out.conc.owned.flag) out.conc.lines.push(P.label(out.conc.owned.top) + ' is Responsible for ' + out.conc.owned.count + ' of the ' + out.conc.owned.total + ' ' + R.tasks + ' with one named owner (' + pct(out.conc.owned.share) + ')');
+    if (out.conc.owned && out.conc.owned.flag) out.conc.lines.push(P.label(out.conc.owned.top) + ' owns ' + out.conc.owned.count + ' of the ' + out.conc.owned.total + ' ' + R.tasks + ' with one named owner (' + pct(out.conc.owned.share) + ')');
     if (out.conc.minutes && out.conc.minutes.flag) out.conc.lines.push(P.label(out.conc.minutes.top) + ' logged ' + pct(out.conc.minutes.share) + ' of the minutes');
     if (out.conc.noticed && out.conc.noticed.flag && !(out.conc.minutes && out.conc.minutes.flag && out.conc.minutes.top === out.conc.noticed.top)) out.conc.lines.push(P.label(out.conc.noticed.top) + ' did ' + pct(out.conc.noticed.share) + ' of the work nobody asked for');
 
@@ -1140,7 +1152,7 @@
         : { k: 'Is the setup working?', v: 'Not worked out yet', band: 'Still needed: ' + c.calc.missing.join('; '), tone: 'none' });
       if (c.calc.sol != null) tiles.push({ k: 'With repairs counted', v: c.calc.apexBand.label, band: c.calc.apexRebalanced ? 'No friction moments were counted, so there was nothing to repair.' : 'Adds how often friction was repaired.', tone: c.calc.apexBand.key, note: 'Apex ' + fmt(c.calc.apex) + ' of 1' + (c.calc.apexRebalanced ? ', from three inputs.' : ', with retuning ' + fmt(c.calc.rf) + '.') });
       tiles.push({ k: 'How the time is shared', v: c.calc.wb != null ? cap(C1().shareWords(c.calc.wb)) : 'Not filled in', band: c.calc.wb == null ? 'WP-01 needs minutes and names' : c.calc.wbSrc === 'yours' ? 'Your own number' : 'From WP-01', tone: tone3(c.calc.wb), note: c.calc.wb != null ? 'Balance ' + fmt(c.calc.wb) + ' of 1, where 1 = an even split (0.70+ fairly even, 0.40 to 0.69 leaning, under 0.40 mostly on one person).' : '' });
-      tiles.push({ k: 'Does each job have a name?', v: c.calc.oc == null ? 'Not filled in' : c.calc.oc >= 0.7 ? 'Most jobs have one' : c.calc.oc >= 0.4 ? 'Some jobs have one' : 'Few jobs have one', band: c.calc.oc == null ? 'WP-03 needs owners' : c.calc.ocSrc === 'yours' ? 'Your own number' : c.wp03.owned + ' of ' + c.wp03.tasks + ' tasks fully owned', tone: tone3(c.calc.oc), note: c.calc.oc != null ? 'Ownership clarity ' + fmt(c.calc.oc) + ' of 1.' : '' });
+      tiles.push({ k: 'Does each job have a name?', v: c.calc.oc == null ? 'Not filled in' : c.calc.oc >= 0.7 ? 'Most jobs have one' : c.calc.oc >= 0.4 ? 'Some jobs have one' : 'Few jobs have one', band: c.calc.oc == null ? 'WP-03 needs owners' : c.calc.ocSrc === 'yours' ? 'Your own number' : c.wp03.owned + ' of ' + c.wp03.tasks + ' jobs with an owner', tone: tone3(c.calc.oc), note: c.calc.oc != null ? 'Ownership clarity ' + fmt(c.calc.oc) + ' of 1.' : '' });
       var co = c.conc && (c.conc.owned && c.conc.owned.flag ? c.conc.owned : c.conc.minutes && c.conc.minutes.flag ? c.conc.minutes : null);
       if (co) tiles.push({ k: 'Who’s carrying more right now', v: P.label(co.top), band: c.conc.lines[0], tone: 'drift', note: 'About ' + pct(co.share) + '; an even share would be ' + pct(1 / c.n) + '. Noted at half or more, and 20 points over even.' });
     }
@@ -1238,7 +1250,7 @@
       var gaps = c.wp03.unowned.concat(c.wp03.half);
       add(8, plural(gaps.length, v.task, v.tasks) + ' still need' + (gaps.length === 1 ? 's' : '') + ' a clear owner: ' + list(gaps.slice(0, 4)) + (gaps.length > 4 ? ' and more' : '') + '. Work with no owner drifts to whoever notices it first.');
     } else if (c.wp03 && c.wp03.filled && c.wp03.tasks) {
-      add(5, 'Every one of the ' + c.wp03.tasks + ' ' + v.tasks + ' on your list has both a Responsible and an Accountable name. That clarity is doing real work.');
+      add(5, 'Every one of the ' + c.wp03.tasks + ' ' + v.tasks + ' on your list has an owner. That clarity is doing real work.');
     }
     if (c.wp01 && c.wp01.shares && c.n >= 2) {
       var sh = c.wp01.shares, mx = Math.max.apply(null, sh), iMax = sh.indexOf(mx);
@@ -1335,15 +1347,16 @@
     }
     if (code === 'WP-03') {
       var t = c.wp03;
-      if (!t.filled) { s.next = 'Sit down once, with the week’s log if you have it, and give every recurring ' + v.task + ' exactly one Responsible and one Accountable name.'; return s; }
+      if (!t.filled) { s.next = 'Sit down once, with the week’s log if you have it, and give every recurring ' + v.task + ' exactly one owner.'; return s; }
       s.status = 'filled';
       s.entered.push([c.road === 'coworkers' ? 'Team tasks listed' : 'Tasks listed', String(t.tasks)]);
-      s.entered.push(['Both names filled in', t.owned + ' of ' + t.tasks]);
-      P.list.forEach(function (p) { if (t.byOwner[p.i]) s.entered.push([p.label + ' (Responsible)', plural(t.byOwner[p.i], 'task')]); });
-      s.shows.push(t.oc != null ? 'Ownership clarity ' + fmt(t.oc) + '. ' + (t.oc >= 0.9 ? 'Almost everything has a clear owner.' : t.oc >= 0.7 ? 'Most things are owned; a few are still floating.' : t.oc >= 0.4 ? 'Some things are owned; many are still floating.' : 'More than half of the list is still unowned or half-owned.') : 'No tasks listed, so there is no clarity number (not a zero).');
-      if (t.conc && t.conc.flag) s.shows.push(P.label(t.conc.top) + ' is Responsible for ' + t.conc.count + ' of the ' + t.conc.total + ' ' + v.tasks + ' with one named owner (' + pct(t.conc.share) + '; an even share would be ' + pct(1 / c.n) + '). Clarity reads whether each job has a name, not how the jobs are spread, so read the two together.');
+      s.entered.push(['Jobs with an owner', t.owned + ' of ' + t.tasks]);
+      P.list.forEach(function (p) { if (t.byOwner[p.i]) s.entered.push([p.label + ' (owner)', plural(t.byOwner[p.i], 'job')]); });
+      s.shows.push(t.oc != null ? 'Ownership clarity ' + fmt(t.oc) + '. ' + (t.oc >= 0.9 ? 'Almost everything has a clear owner.' : t.oc >= 0.7 ? 'Most things are owned; a few are still floating.' : t.oc >= 0.4 ? 'Some things are owned; many are still floating.' : 'More than half of the list still has no owner.') : 'No tasks listed, so there is no clarity number (not a zero).');
+      if (t.conc && t.conc.flag) s.shows.push(P.label(t.conc.top) + ' owns ' + t.conc.count + ' of the ' + t.conc.total + ' ' + v.tasks + ' with one named owner (' + pct(t.conc.share) + '; an even share would be ' + pct(1 / c.n) + '). Clarity reads whether each job has a name, not how the jobs are spread, so read the two together.');
       if (t.unowned.length) s.shows.push('No owner yet: ' + list(t.unowned) + '.');
-      if (t.half.length) s.shows.push('Only one of the two names: ' + list(t.half) + '.');
+      if (t.half.length) s.shows.push('A helper, but no owner yet: ' + list(t.half) + '.');
+      if (t.starters && t.starters.length) s.shows.push('Left out as examples (starter jobs nobody filled in): ' + list(t.starters.slice(0, 6)) + (t.starters.length > 6 ? ' and more' : '') + '.');
       if (t.unmatched.length) s.shows.push('Names that didn’t match anyone on the road: ' + list(t.unmatched.map(function (x) { return '“' + x + '”'; })) + '. They still count as owned.');
       if (c.road === 'coworkers') s.shows.push('Owners are team roles for recurring tasks. They describe the setup, not how well anyone is doing.');
       s.next = t.unowned.length || t.half.length ? 'At ' + v.meeting + ', take the unowned list first and ask for one volunteer per ' + v.task + '. Write it down the same day.' : 'Review it once a month (WP-04), and rework it in writing when life changes.';
@@ -1490,7 +1503,7 @@
     var t = c.wp03, k = c.calc;
     if (c.road === 'coworkers') {
       if (t && t.filled && (t.unowned.length || t.half.length)) sug('Bring the unowned team tasks (' + list(t.unowned.concat(t.half).slice(0, 4)) + ') to the next retrospective and ask for one volunteer owner each. An owner is a team role, not a rating.');
-      if (t && t.filled && c.road === 'coworkers') sug('Consulted and Informed can be a group, like "the whole team". Only Responsible and Accountable need one name each.');
+      if (t && t.filled && c.road === 'coworkers') sug('The helper, Consulted and Informed can be a group, like "the whole team". Only the owner needs to be one name.');
       if (c.wp13 && c.wp13.filled) sug('Keep the 90-second stand-up: load, one thanks, one ask. Anything bigger goes to the weekly catch-up, not the stand-up.');
       sug('Battery pages are private on this road. Share a number only if you want to, and never use one to rate a teammate.');
       if (c.wp09 && c.wp09.filled) sug('Before a charged chat or email goes out, run it through fact, feeling and ask. Would it read calmly to someone having a hard day?');
@@ -1586,7 +1599,7 @@
     function add(pri, title, wp, doIt, pillar) { weeks.push({ p: pri, title: title, wp: wp, do: doIt, pillar: pillar }); }
     var hi = c.battery.filter(function (b) { return b.band && b.band.key === 'high'; });
     if (hi.length || (k.as != null && k.as >= 0.45)) add(9, R.solo ? 'Protect your battery' : 'Protect the batteries', 'WP-02, WP-11', R.solo ? 'One minute with the battery meter each morning. On any day at 0.60 or above, use a settling default before anything hard, and put off what can wait.' : 'Everyone does the battery meter daily and says their number before any hard talk. At 0.60 or above, name a time instead.', 'III');
-    if (!R.solo && c.wp03 && ((c.wp03.filled && (c.wp03.unowned.length || c.wp03.half.length)) || (!c.wp03.filled && R.calc))) add(8, 'One owner for every ' + v.task, 'WP-03', c.wp03.filled ? 'Give each of these exactly one Responsible and one Accountable name: ' + list(c.wp03.unowned.concat(c.wp03.half).slice(0, 5)) + '.' : 'Sit down once and give every recurring ' + v.task + ' exactly one owner.', 'II');
+    if (!R.solo && c.wp03 && ((c.wp03.filled && (c.wp03.unowned.length || c.wp03.half.length)) || (!c.wp03.filled && R.calc))) add(8, 'One owner for every ' + v.task, 'WP-03', c.wp03.filled ? 'Give each of these exactly one owner: ' + list(c.wp03.unowned.concat(c.wp03.half).slice(0, 5)) + '.' : 'Sit down once and give every recurring ' + v.task + ' exactly one owner.', 'II');
     if (!R.solo && R.calc && (k.wb == null || k.wb < 0.7)) add(7, 'See the whole load', 'WP-01', k.wb == null ? 'Log one ordinary week of who did what, with rough minutes. No discussing it until the week is done.' : 'Log another week and compare. Then hand over one ' + v.task + ' from the busiest person.', 'I');
     if (c.wp04 && c.wp04.patterns.length) add(7, 'Fix what keeps slipping', 'WP-04, WP-03', 'Give ' + list(c.wp04.patterns.map(function (p) { return p.task; }).slice(0, 3)) + ' a new or clearer owner, then watch it for a month.', 'V');
     if (c.wp09 && (!c.wp09.filled || c.wp09.advice === 'pause' || (k.rf != null && k.rf < 0.5))) add(6, 'Say it so it lands', 'WP-09', 'Put one charged message a week through fact, feeling and ask before it goes out. Count the friction moments and how many you retuned.', 'IV');
@@ -1631,7 +1644,7 @@
     'WP-09': ['WP-09 Say it so it lands', '/workpapers/fill/wp-09.html'],
     'WP-11': ['WP-11 The Calm-Down Kit', '/workpapers/fill/wp-11.html'],
     'WP-13': ['WP-13 The 90-second check-in', '/workpapers/fill/wp-13.html'],
-    'CALC-01': ['CALC-01, Is the setup working for both of you?', '/calc01-solvency.html'],
+    'CALC-01': ['CALC-01, Is the setup working for everyone?', '/calc01-solvency.html'],
     NOTES: ['Make a Wiring Card', '/wiring-card.html'],
     wiring: ['Make a Wiring Card', '/wiring-card.html'],
     weather: ['Today’s Weather', '/quick-checks.html#today'],
@@ -1768,7 +1781,7 @@
     if (c.wp03 && c.wp03.filled) {
       var rows3 = [];
       rowsOf(data, 'wp03.treaty', ['task', 'freq', 'r', 'a', 'c', 'i', 'notes'], sizeOf(data, 'treaty')).forEach(function (r) {
-        if (!trim(r.task)) return;
+        if (!trim(r.task) || (c.wp03.starterIdx && c.wp03.starterIdx[r._i])) return;
         rows3.push({ task: trim(r.task), freq: trim(r.freq), fk: freqKind(r.freq), rRaw: trim(r.r), aRaw: trim(r.a), ro: ownersOf(P, r.r), ao: ownersOf(P, r.a), cRaw: trim(r.c), iRaw: trim(r.i), notes: trim(r.notes) });
       });
       rows3.forEach(function (r) {
@@ -1783,7 +1796,7 @@
         sameRA: single.filter(function (r) { return r.ro.list[0] === r.ao.list[0]; }),
         recurring: rows3.filter(function (r) { return r.fk === 'frequent' || r.fk === 'weekly'; }), occasional: rows3.filter(function (r) { return r.fk === 'occasional' || r.fk === 'asneeded'; }),
         ci: rows3.filter(function (r) { return r.cRaw || r.iRaw; }).length };
-      F.w3.gaps = rows3.filter(function (r) { return !(r.rRaw && r.aRaw) || r.ro.multi || r.ao.multi; });
+      F.w3.gaps = rows3.filter(function (r) { return !r.rRaw || r.ro.multi || r.ao.multi; });
     }
 
     // WP-04: what slipped, week by week
@@ -1910,7 +1923,7 @@
       when: function (F) { var k = F.c.calc, r = leanReasons(F.c); return k.sol != null && k.solBand.key === 'good' && r.length ? { k: k, r: r, who: F.c.conc && F.c.conc.flag ? (F.c.conc.owned && F.c.conc.owned.flag ? F.c.conc.owned : F.c.conc.minutes) : null } : null; },
       find: function (d) { return 'CALC-01 reads ' + fmt(d.k.sol) + ', and yet ' + list(d.r) + '.'; },
       why: 'CALC-01 reads whether jobs have names and whether the logged time is even. It can read high while one reliable person quietly holds most of it, or while the same thing slips most weeks. That is how a setup that looks fine wears someone down.',
-      rec: function (d, F, v) { var nm = d.who ? F.P.label(d.who.top) : null; return { h: 'week', title: nm ? 'Share out some of what ' + nm + ' holds' : 'Fix what keeps slipping', first: nm ? 'Ask ' + nm + ' which ' + v.task + ' they would hand over first, and move it to someone else on WP-03, with a date to check how it went.' : 'Give what keeps slipping a new or clearer owner on WP-03, and check it at the next look-back.', script: nm ? '“You hold most of these. Which one would you hand over if you could?”' : '“This one keeps slipping. What would make it fit, and who would like to own it?”', link: linkOf('WP-03'), working: nm ? 'Nobody is Responsible for more than half the list, and the score still holds.' : 'It isn’t ticked on next month’s look-back.' }; },
+      rec: function (d, F, v) { var nm = d.who ? F.P.label(d.who.top) : null; return { h: 'week', title: nm ? 'Share out some of what ' + nm + ' holds' : 'Fix what keeps slipping', first: nm ? 'Ask ' + nm + ' which ' + v.task + ' they would hand over first, and move it to someone else on WP-03, with a date to check how it went.' : 'Give what keeps slipping a new or clearer owner on WP-03, and check it at the next look-back.', script: nm ? '“You hold most of these. Which one would you hand over if you could?”' : '“This one keeps slipping. What would make it fit, and who would like to own it?”', link: linkOf('WP-03'), working: nm ? 'Nobody owns more than half the list, and the score still holds.' : 'It isn’t ticked on next month’s look-back.' }; },
       q: function (d) { return d.who ? 'Is the work spread the way everyone would choose, or has it settled on one person?' : 'Why does the same thing keep slipping when the rest is working?'; } },
     { id: 'sol-drifting', pillar: 'II', src: ['CALC-01'], pri: 9, title: 'The setup needs a look',
       when: function (F) { var k = F.c.calc; return k.sol != null && k.solBand.key === 'drift' ? k : null; },
@@ -1950,7 +1963,7 @@
       },
       find: function (d) { return (d.even ? 'Balance looks even in hours but uneven in mental-load items: ' : '') + d.top.label + ' logged ' + d.top.mental + ' of the ' + d.total + ' planning, remembering and keeping-track items (' + pc(d.share) + ').'; },
       why: 'Planning and remembering are short in minutes and long in the head. They are the part of the load that is easiest to miss and most tiring to carry alone.',
-      rec: function (d, F, v) { return { h: 'week', title: 'Share the remembering, not only the doing', first: 'Pick one planning job ' + d.top.label + ' carries, and move the whole of it (noticing, deciding and doing) to someone else.', script: '“Could you own the whole of this one, including remembering it’s due? I’ll stay out of it.”', link: linkOf('WP-03'), working: 'The next WP-01 log shows planning items under more than one name.', plan: { title: 'Share the remembering', wp: 'WP-01, WP-03', do: 'Move one whole planning job (noticing, deciding and doing) away from ' + d.top.label + ', with an Accountable name on WP-03.', pillar: 'I' } }; },
+      rec: function (d, F, v) { return { h: 'week', title: 'Share the remembering, not only the doing', first: 'Pick one planning job ' + d.top.label + ' carries, and move the whole of it (noticing, deciding and doing) to someone else.', script: '“Could you own the whole of this one, including remembering it’s due? I’ll stay out of it.”', link: linkOf('WP-03'), working: 'The next WP-01 log shows planning items under more than one name.', plan: { title: 'Share the remembering', wp: 'WP-01, WP-03', do: 'Move one whole planning job (noticing, deciding and doing) away from ' + d.top.label + ', with its new owner written on WP-03.', pillar: 'I' } }; },
       q: function (d) { return 'Which things do you keep track of in your head that nobody else sees?'; } },
     { id: 'invisible-one', pillar: 'I', src: ['WP-01'], pri: 7, title: 'Most of the unasked-for work falls to one person',
       when: function (F) {
@@ -1996,30 +2009,26 @@
 
     /* --- Pillar II: fix the setup (WP-03, WP-04) --- */
     { id: 'own-gaps', pillar: 'II', src: ['WP-03'], pri: 8, title: 'Some jobs still need a clear owner',
-      when: function (F) { return F.w3 && (F.w3.none.length + F.w3.rOnly.length + F.w3.aOnly.length) ? { list: F.w3.none.concat(F.w3.rOnly, F.w3.aOnly) } : null; },
-      find: function (d, F, v) { return plural(d.list.length, v.task, v.tasks) + ' still ' + (d.list.length === 1 ? 'needs' : 'need') + ' both names: ' + list(d.list.slice(0, 5).map(function (r) { return r.task; })) + (d.list.length > 5 ? ' and more' : '') + '.'; },
+      when: function (F) { return F.w3 && (F.w3.none.length + F.w3.aOnly.length) ? { list: F.w3.none.concat(F.w3.aOnly) } : null; },
+      find: function (d, F, v) { return plural(d.list.length, v.task, v.tasks) + ' still ' + (d.list.length === 1 ? 'needs' : 'need') + ' an owner: ' + list(d.list.slice(0, 5).map(function (r) { return r.task; })) + (d.list.length > 5 ? ' and more' : '') + '.'; },
       why: 'Work with no owner drifts to whoever notices it first, and that is rarely the same as whoever has room for it.',
-      rec: function (d, F, v) { return { h: 'week', title: 'One owner for every ' + v.task, first: 'At ' + v.meeting + ', go down the unowned list and ask for one volunteer per ' + v.task + '. Write it on WP-03 the same day.', script: '“Nobody owns ' + d.list[0].task + ' yet. Who would like it, and who will notice if it doesn’t happen?”', link: linkOf('WP-03'), working: 'Ownership clarity reads 0.90 or above.', plan: { title: 'One ' + ownWord(F) + ' per ' + v.task, wp: 'WP-03', do: 'Give each of these exactly one Responsible and one Accountable name: ' + list(d.list.slice(0, 5).map(function (r) { return r.task; })) + '.', pillar: 'II' } }; },
+      rec: function (d, F, v) { return { h: 'week', title: 'One owner for every ' + v.task, first: 'At ' + v.meeting + ', go down the unowned list and ask for one volunteer per ' + v.task + '. Write it on WP-03 the same day.', script: '“Nobody owns ' + d.list[0].task + ' yet. Who would like it, and who will notice if it doesn’t happen?”', link: linkOf('WP-03'), working: 'Ownership clarity reads 0.90 or above.', plan: { title: 'One ' + ownWord(F) + ' per ' + v.task, wp: 'WP-03', do: 'Give each of these exactly one owner: ' + list(d.list.slice(0, 5).map(function (r) { return r.task; })) + '.', pillar: 'II' } }; },
       q: function (d, F, v) { return 'Which of the unowned ' + v.tasks + ' do we each quietly assume someone else is doing?'; } },
     { id: 'own-clear', pillar: 'II', src: ['WP-03'], pri: 3, strength: true, title: 'Ownership is clear',
       when: function (F) { return F.w3 && F.c.wp03.oc != null && F.c.wp03.oc >= 0.9 && F.c.wp03.tasks >= 3 ? F.c.wp03 : null; },
-      find: function (t, F, v) { return t.owned + ' of ' + t.tasks + ' ' + v.tasks + ' have both a Responsible and an Accountable name (' + fmt(t.oc) + ').'; },
+      find: function (t, F, v) { return t.owned + ' of ' + t.tasks + ' ' + v.tasks + ' have an owner (' + fmt(t.oc) + ').'; },
       why: 'Clear owners take the arguing out of who should have done it. That clarity is doing real work.' },
     { id: 'own-too-many', pillar: 'II', src: ['WP-03'], pri: 6, title: 'Some jobs have too many owners',
       when: function (F) { return F.w3 && F.w3.multi.length ? { list: F.w3.multi } : null; },
-      find: function (d) { return list(d.list.slice(0, 4).map(function (r) { return r.task; })) + (d.list.length === 1 ? ' has' : ' have') + ' more than one name, or "Everyone", as Responsible or Accountable.'; },
+      find: function (d) { return list(d.list.slice(0, 4).map(function (r) { return r.task; })) + (d.list.length === 1 ? ' has' : ' have') + ' more than one name, or "Everyone", as the owner or the helper.'; },
       why: 'When everyone owns a job, nobody quite does. Shared jobs work best with one name who starts it and one who notices if it didn’t happen.',
-      rec: function (d, F, v) { return { h: 'week', title: 'Swap "everyone" for one name', first: 'For ' + d.list[0].task + ', put one name in Responsible, and ' + (hasCI(F) ? 'keep the group in Consulted or Informed.' : 'write who helps in the Notes box.'), script: '“We all help with this. Who is the one who makes sure it happens?”', link: linkOf('WP-03'), working: 'No row has "Everyone" as Responsible or Accountable.' }; } },
-    { id: 'ra-mismatch', pillar: 'II', src: ['WP-03'], pri: 6, title: 'Responsible, but nobody follows up',
-      when: function (F) { return F.w3 && F.w3.rOnly.length ? { list: F.w3.rOnly } : null; },
-      find: function (d, F, v) { return plural(d.list.length, v.task, v.tasks) + ' have someone Responsible but no one Accountable: ' + list(d.list.slice(0, 4).map(function (r) { return r.task + ' (' + r.rRaw + ')'; })) + '.'; },
-      why: 'Without someone who notices when a job slips, the person doing it carries both the work and the remembering, and a slip is found late.',
-      rec: function (d, F, v) { return { h: 'week', title: 'Add a follow-up name', first: 'Ask who would notice first if ' + d.list[0].task + ' didn’t happen, and write that name in Accountable.', script: '“If this slipped one week, who would notice first?”', link: linkOf('WP-03'), working: 'Every row with a Responsible name also has an Accountable one.' }; } },
-    { id: 'a-no-r', pillar: 'II', src: ['WP-03'], pri: 6, title: 'Followed up, but nobody does it',
+      rec: function (d, F, v) { return { h: 'week', title: 'Swap "everyone" for one name', first: 'For ' + d.list[0].task + ', put one name as the owner, and ' + (hasCI(F) ? 'keep the group in Consulted or Informed.' : 'write who helps in the Notes box.'), script: '“We all help with this. Who is the one who makes sure it happens?”', link: linkOf('WP-03'), working: 'No row has "Everyone" as the owner or the helper.' }; } },
+    // (no rule for an owner without a helper: the helper is optional)
+    { id: 'a-no-r', pillar: 'II', src: ['WP-03'], pri: 6, title: 'A helper, but no owner',
       when: function (F) { return F.w3 && F.w3.aOnly.length ? { list: F.w3.aOnly } : null; },
-      find: function (d, F, v) { return list(d.list.slice(0, 4).map(function (r) { return r.task; })) + (d.list.length === 1 ? ' has' : ' have') + ' someone Accountable but no one Responsible for doing it.'; },
+      find: function (d, F, v) { return list(d.list.slice(0, 4).map(function (r) { return r.task; })) + (d.list.length === 1 ? ' has' : ' have') + ' a helper but no owner.'; },
       why: 'Someone watching a job that nobody is named to do is how reminders turn into nagging.',
-      rec: function (d, F, v) { return { h: 'week', title: 'Name who does it', first: 'Ask the Accountable person whether they would rather do ' + d.list[0].task + ' themselves or hand it to a named person.', script: '“You’re keeping an eye on this one. Would you rather do it, or hand it to someone?”', link: linkOf('WP-03'), working: 'No row has an Accountable name without a Responsible one.' }; } },
+      rec: function (d, F, v) { return { h: 'week', title: 'Name who does it', first: 'Ask the helper whether they would rather own ' + d.list[0].task + ' themselves or hand it to a named person.', script: '“You’re keeping an eye on this one. Would you rather do it, or hand it to someone?”', link: linkOf('WP-03'), working: 'Every row with a helper also has an owner.' }; } },
     { id: 'own-concentrated', pillar: 'V', src: ['WP-03'], pri: 7, title: 'One person holds most of the named jobs',
       when: function (F) {
         if (!(F.n >= 2 && F.w3)) return null;
@@ -2027,9 +2036,9 @@
         var top = F.pp.slice().sort(function (a, b) { return b.r - a.r; })[0], share = top.r / tot;
         return share >= Math.max(0.5, 1 / F.n + 0.2) ? { top: top, share: share, tot: tot } : null;
       },
-      find: function (d, F, v) { return d.top.label + ' is Responsible for ' + d.top.r + ' of the ' + d.tot + ' ' + v.tasks + ' with a single named ' + ownWord(F) + ' (' + pc(d.share) + ').'; },
+      find: function (d, F, v) { return d.top.label + ' owns ' + d.top.r + ' of the ' + d.tot + ' ' + v.tasks + ' with a single named ' + ownWord(F) + ' (' + pc(d.share) + ').'; },
       why: 'Jobs drift to whoever is reliable, then settle there. The setup ends up leaning on one person without anyone deciding it should.',
-      rec: function (d, F, v) { return { h: 'month', title: 'Rebalance the named jobs', first: 'Ask ' + d.top.label + ' which ' + v.task + ' they would give away first, and who would like to try it.', script: '“You hold most of these. Which one would you hand over if you could?”', link: linkOf('WP-03'), working: 'Nobody is Responsible for more than half the list.' }; } },
+      rec: function (d, F, v) { return { h: 'month', title: 'Rebalance the named jobs', first: 'Ask ' + d.top.label + ' which ' + v.task + ' they would give away first, and who would like to try it.', script: '“You hold most of these. Which one would you hand over if you could?”', link: linkOf('WP-03'), working: 'Nobody owns more than half the list.' }; } },
     { id: 'recurring-one', pillar: 'V', src: ['WP-03'], pri: 5, title: 'The daily and weekly jobs sit with one person',
       when: function (F) {
         if (!(F.n >= 2 && F.w3)) return null;
@@ -2047,7 +2056,7 @@
         var mostR = F.pp.slice().sort(function (a, c) { return c.r - a.r; });
         return mostR[0].i === b.i && mostR[0].r > mostR[1].r ? { p: b } : null;
       },
-      find: function (d, F, v) { return d.p.label + ' has the highest load (' + fmt(d.p.battery.score) + ') and is also Responsible for the most ' + v.tasks + ' (' + d.p.r + ').'; },
+      find: function (d, F, v) { return d.p.label + ' has the highest load (' + fmt(d.p.battery.score) + ') and also owns the most ' + v.tasks + ' (' + d.p.r + ').'; },
       why: 'The person with the highest load is also holding the most. That is usually the setup drifting, not a choice anyone made.',
       rec: function (d, F, v) { return { h: 'week', title: 'Lighten ' + d.p.label + '’s list first', first: 'Move one of ' + d.p.label + '’s ' + v.tasks + ' to the person with the most room this week.', script: '“You’re carrying a lot right now. Which one could I take for the next two weeks?”', link: linkOf('WP-03'), working: d.p.label + ' holds fewer jobs and reads lower next time.' }; } },
     { id: 'drift-to-one', pillar: 'V', src: ['WP-01', 'WP-03'], pri: 7, title: 'Unowned jobs drift to one person',
@@ -2075,7 +2084,7 @@
       },
       find: function (d) { return list(d.list.map(function (p) { return p.task + ' (' + p.times + ' of 4 weeks)'; })) + (d.list.length === 1 ? ' keeps' : ' keep') + ' slipping, and ' + (d.list.length === 1 ? 'it has' : 'they have') + ' no single clear owner on WP-03.'; },
       why: 'A repeat slip on an unowned job is the clearest sign of a gap in the setup rather than a person. It is also the easiest to fix.',
-      rec: function (d, F, v) { return { h: 'now', title: 'Give ' + d.list[0].task + ' one owner', first: 'Before anything else, put one Responsible and one Accountable name next to ' + d.list[0].task + '.', script: '“This one keeps slipping because nobody owns it. Who would like it?”', link: linkOf('WP-04'), working: 'It isn’t ticked on next month’s look-back.' }; } },
+      rec: function (d, F, v) { return { h: 'now', title: 'Give ' + d.list[0].task + ' one owner', first: 'Before anything else, put one owner’s name next to ' + d.list[0].task + '.', script: '“This one keeps slipping because nobody owns it. Who would like it?”', link: linkOf('WP-04'), working: 'It isn’t ticked on next month’s look-back.' }; } },
     { id: 'structural-most', pillar: 'II', src: ['WP-04'], pri: 5, title: 'Most slips are about the setup',
       when: function (F) { var d = F.c.wp04; return d && d.structural >= 2 && d.structural >= d.capacity + d.oneoff ? d : null; },
       find: function (d) { return d.structural + ' of the ' + d.classified.length + ' sorted slips are structural gaps (no owner, unclear handoff), against ' + d.capacity + ' capacity ' + (d.capacity === 1 ? 'issue' : 'issues') + '.'; },
@@ -2098,9 +2107,9 @@
       rec: function (d, F, v) { return { h: 'week', title: 'Make the check-in smaller', first: 'Cut the check-in to one line each (load and one thanks), at a time you already share.', script: '“Could we do the 90-second version, just load and one thanks, right after ' + (F.road === 'coworkers' ? 'the morning sync' : 'dinner') + '?”', link: linkOf('WP-13'), working: 'Five or more check-ins next week.' }; } },
     { id: 'self-accountable', pillar: 'II', src: ['WP-03'], pri: 4, title: 'Everyone follows up on their own jobs',
       when: function (F) { return F.n >= 2 && F.w3 && F.w3.single.length >= 3 && F.w3.sameRA.length === F.w3.single.length ? { n: F.w3.single.length } : null; },
-      find: function (d) { return 'On all ' + d.n + ' fully owned rows, the same person is Responsible and Accountable.'; },
-      why: 'That can work well, but nobody else notices when a job slips. For a few important jobs, a second name as Accountable is a safety net.',
-      rec: function (d, F, v) { return { h: 'month', title: 'Add a second pair of eyes to the key jobs', first: 'Choose the two ' + v.tasks + ' that matter most and put someone else in Accountable.', script: '', link: linkOf('WP-03'), working: 'Slips on those jobs are caught within a day or two.' }; } },
+      find: function (d) { return 'On all ' + d.n + ' rows with a helper, the helper is the same person as the owner.'; },
+      why: 'That can work well, but nobody else notices when a job slips. For a few important jobs, a different person as the helper is a safety net.',
+      rec: function (d, F, v) { return { h: 'month', title: 'Add a second pair of eyes to the key jobs', first: 'Choose the two ' + v.tasks + ' that matter most and ask someone else to be the helper.', script: '', link: linkOf('WP-03'), working: 'Slips on those jobs are caught within a day or two.' }; } },
 
     /* --- Pillar III: read your state (WP-02, WP-11, weather) --- */
     { id: 'bat-high', pillar: 'III', src: ['WP-02'], pri: 9, title: function (d, F) { return F.solo ? 'Your battery is running high' : 'A battery is running high'; },
@@ -2293,7 +2302,7 @@
       when: function (F) { var r = F.c.wp13 && F.c.wp13.resync.filter(function (x) { return /RACI|Owners/i.test(x.to || ''); }); return r && r.length && F.w3 && F.w3.gaps.length ? { r: r } : null; },
       find: function (d) { return q(d.r[0].item) + ' was moved to the owners list, and WP-03 still has jobs without a clear owner.'; },
       why: 'Moving a sore spot is only half the fix. It lands when the job has a name next to it.',
-      rec: function (d, F, v) { return { h: 'week', title: 'Finish the move', first: 'Find ' + q(d.r[0].item) + ' on WP-03 (or add it) and give it both names.', script: '', link: linkOf('WP-03'), working: 'It stops coming up in the check-ins.' }; } },
+      rec: function (d, F, v) { return { h: 'week', title: 'Finish the move', first: 'Find ' + q(d.r[0].item) + ' on WP-03 (or add it) and give it an owner.', script: '', link: linkOf('WP-03'), working: 'It stops coming up in the check-ins.' }; } },
     { id: 'nokindno-highbat', pillar: 'V', src: ['WP-01', 'WP-02'], pri: 5, title: 'A full battery and no kind no ready',
       when: function (F) { return F.refusals && !F.refusals.length && F.c.on['WP-01'] && F.bat.high.length ? { who: F.bat.high } : null; },
       find: function (d, F) { return (F.solo ? 'Your battery is high' : list(lbl(d.who)) + (d.who.length === 1 ? ' is' : ' are') + ' running high') + ', and no kind no is drafted on WP-01.'; },
@@ -2451,15 +2460,15 @@
     { id: 'wp03-everyone', where: 'WP-03', level: 'note',
       when: function (F) { return F.w3 && F.w3.multi.length ? F.w3.multi : null; },
       text: function (r) { return listSome(r.map(function (x) { return q(x.task); }), 3) + (r.length === 1 ? ' lists' : ' list') + ' "Everyone" or several names as the owner. It counts as owned in the clarity number, which may make ownership look clearer than it is.'; },
-      fix: function (d, F) { return hasCI(F) ? 'Put one name in Responsible and move the group to Consulted or Informed.' : 'Put one name in Responsible, and write who helps in the Notes box.'; } },
+      fix: function (d, F) { return hasCI(F) ? 'Put one name as the owner and move the group to Consulted or Informed.' : 'Put one name as the owner, and a helper or the Notes box for the others.'; } },
     { id: 'wp03-default-untouched', where: 'WP-03', level: 'note',
+      // starter jobs nobody filled in are left out of the clarity number as examples; say so once
       when: function (F) {
         if (!F.w3) return null;
-        var reg3 = F.c.reg.pages.filter(function (p) { return p.id === 'wp03'; })[0], defs = reg3.fields.filter(function (f) { return /\.task$/.test(f.id) && f.def; }).map(function (f) { return f.def; });
-        var kept = F.w3.none.filter(function (r) { return defs.indexOf(r.task) >= 0; });
-        return kept.length >= 3 && kept.length === F.w3.none.length ? kept : null;
+        var kept = (F.c.wp03 && F.c.wp03.starters) || [];
+        return kept.length >= 3 ? kept.map(function (t) { return { task: t }; }) : null;
       },
-      text: function (k, F) { return plural(k.length, 'starter task') + ' from the printed list were kept but not given owners. If they don’t apply to you, clearing them will make the clarity number fairer.'; },
+      text: function (k, F) { return plural(k.length, 'starter job') + ' from the printed list ' + (k.length === 1 ? 'was' : 'were') + ' kept but not given an owner. They are examples, so they are left out of the clarity number, not counted against it.'; },
       fix: 'Clear the task box on any row that doesn’t apply.' },
     { id: 'wp04-oneoff-repeats', where: 'WP-04', level: 'check',
       when: function (F) { return F.w4 && F.w4.oneoffRepeat.length ? F.w4.oneoffRepeat : null; },
@@ -2619,14 +2628,13 @@
     if (code === 'WP-03' && F.w3) {
       var t3 = F.w3, word = F.road === 'coworkers' ? ' (team roles, not ratings)' : '';
       if (n >= 2) {
-        s.tables.push(tbl('Who holds which ' + v.tasks + word, ['Person', 'Responsible', 'Accountable', 'Does and follows up', 'Daily or weekly'], F.pp.map(function (p) { return [p.label, String(p.r), String(p.a), String(p.ra), String(p.recurR)]; }), [1.4, 1.1, 1.1, 1.2, 1.1]));
+        s.tables.push(tbl('Who holds which ' + v.tasks + word, ['Person', 'Owns', 'Helps with', 'Daily or weekly (owned)'], F.pp.map(function (p) { return [p.label, String(p.r), String(p.a), String(p.recurR)]; }), [1.4, 1.1, 1.1, 1.3]));
         var rmax = Math.max.apply(null, F.pp.map(function (p) { return p.r; }).concat([1]));
-        s.bars.push(bars('Responsible, by person', F.pp.map(function (p) { return { label: p.label, value: p.r, max: rmax, text: plural(p.r, v.task, v.tasks) }; })));
+        s.bars.push(bars('Jobs owned, by person', F.pp.map(function (p) { return { label: p.label, value: p.r, max: rmax, text: plural(p.r, v.task, v.tasks) }; })));
       }
-      if (t3.gaps.length) s.tables.push(tbl(cap(v.tasks) + ' that need a look', ['Job', 'How often', 'What’s missing'], t3.gaps.slice(0, 12).map(function (r) { return [r.task, r.freq || '—', !r.rRaw && !r.aRaw ? 'No names yet' : !r.aRaw ? 'No one Accountable' : !r.rRaw ? 'No one Responsible' : 'Several names or "Everyone"']; }), [2.4, 1.1, 1.6]));
-      s.more.push('Ownership rate: ' + c.wp03.owned + ' of ' + c.wp03.tasks + ' ' + v.tasks + ' have both names (' + (c.wp03.tasks ? pc(c.wp03.owned / c.wp03.tasks) : '0%') + ').');
+      if (t3.gaps.length) s.tables.push(tbl(cap(v.tasks) + ' that need a look', ['Job', 'How often', 'What’s missing'], t3.gaps.slice(0, 12).map(function (r) { return [r.task, r.freq || '—', !r.rRaw && !r.aRaw ? 'No owner yet' : !r.rRaw ? 'A helper, but no owner' : 'Several names or "Everyone"']; }), [2.4, 1.1, 1.6]));
+      s.more.push('Ownership rate: ' + c.wp03.owned + ' of ' + c.wp03.tasks + ' ' + v.tasks + ' have an owner (' + (c.wp03.tasks ? pc(c.wp03.owned / c.wp03.tasks) : '0%') + ').');
       if (t3.multi.length) s.more.push('Too many owners: ' + list(t3.multi.slice(0, 4).map(function (r) { return r.task; })) + '.');
-      if (t3.rOnly.length) s.more.push('Responsible but not Accountable: ' + list(t3.rOnly.slice(0, 4).map(function (r) { return r.task; })) + '.');
       s.more.push('How often: ' + t3.recurring.length + ' daily or weekly, ' + t3.occasional.length + ' monthly or as needed' + (t3.rows.length - t3.recurring.length - t3.occasional.length ? ', ' + (t3.rows.length - t3.recurring.length - t3.occasional.length) + ' not marked' : '') + '.');
       if (F.road === 'coworkers') s.more.push(t3.ci ? plural(t3.ci, 'row') + (t3.ci === 1 ? ' uses' : ' use') + ' Consulted or Informed, which is where a group belongs.' : 'No rows use Consulted or Informed yet. They are the right place for "the whole team".');
       s.suggests.push(c.wp03.oc != null && c.wp03.oc >= 0.8 ? 'Ownership is mostly clear, so repeat slips are more likely about capacity or timing than clarity.' : 'The unowned ' + v.tasks + ' are the quickest win in the whole report: one sitting, one name each.');
@@ -2779,7 +2787,7 @@
       var rows = [], strengths = [], help = [], b = p.battery, starter = '';
       if (c.on['WP-01'] && !R.refusalsOnly) rows.push(['Logged time (WP-01)', F.w1 && F.w1.total ? (p.minutes ? minText(p.minutes) + ', ' + pc(p.share) + ' of the logged week' + (p.noticed ? '; ' + minText(p.noticed) + ' noticed and handled without being asked' : '') + (p.mental ? '; ' + plural(p.mental, 'planning item') : '') : 'No rows under this name') : 'WP-01 not filled in']);
       rows.push(['Battery (WP-02)', b.score != null ? fmt(b.score) + ', ' + b.band.label.toLowerCase() + (p.top.length ? '. Scored highest: ' + list(p.top.slice(0, 2).map(function (x) { return lc(x.l); })) : '') : b.answered ? b.answered + ' of 5 answered' : 'Not filled in']);
-      if (c.on['WP-03']) rows.push([F.road === 'coworkers' ? 'Team roles (WP-03)' : 'Owns (WP-03)', F.w3 ? 'Responsible for ' + p.r + ', Accountable for ' + p.a + (p.recurR ? ' (' + p.recurR + ' daily or weekly)' : '') : 'WP-03 not filled in']);
+      if (c.on['WP-03']) rows.push([F.road === 'coworkers' ? 'Team roles (WP-03)' : 'Owns (WP-03)', F.w3 ? 'Owns ' + p.r + ', helps with ' + p.a + (p.recurR ? ' (' + p.recurR + ' daily or weekly)' : '') : 'WP-03 not filled in']);
       if (c.on['WP-13']) rows.push(['Check-ins (WP-13)', F.w13 ? p.checkins + ' of 7 days' + (p.checkins ? '; ' + p.loads.High + ' high, ' + p.loads.Medium + ' medium, ' + p.loads.Low + ' low; ' + plural(p.thanks, 'thanks', 'thanks') + ' written' : '') : 'WP-13 not filled in']);
       if (c.on['WP-11']) rows.push(['Pause line (WP-11)', c.wp11 && c.wp11.lines[p.i] ? q(c.wp11.lines[p.i]) : 'Not written yet']);
       // strengths: what this person brings
@@ -2863,9 +2871,9 @@
         inYou: F.w1 && F.w1.mentalRows.length ? 'Notice the planning and remembering you carry. It counts, even when it only takes two minutes to do.' : F.solo ? 'Write down everything you carried this week, including the parts nobody sees. It is usually more than you think.' : null,
         between: heavy && c.wp01 && c.wp01.wb != null && c.wp01.wb < 0.7 ? 'Read the log together, without discussing it until the week is done. ' + heavy.label + '’s ' + pc(heavy.share) + ' is a fact about the week, not about anyone.' : null,
         practice: F.solo ? 'Once a week, list what you carried, and circle one thing you could put down.' : 'Log one ordinary week on WP-01 every month, and read it together.' },
-      II: { shows: F.w3 ? 'Ownership ' + (c.wp03.oc != null ? fmt(c.wp03.oc) : 'not worked out') + ' (' + c.wp03.owned + ' of ' + c.wp03.tasks + ' fully owned); ' + plural(F.w3.gaps.length, 'job') + ' need a look' + (c.wp04 && c.wp04.classified.length ? '; ' + c.wp04.structural + ' structural gaps this month.' : '.') : F.solo ? (c.wp11 && (c.wp11.first || c.wp11.second) ? 'Settling defaults chosen: ' + list([c.wp11.first, c.wp11.second].filter(Boolean).map(lc)) + '.' : 'No settling defaults chosen yet.') : 'WP-03 isn’t filled in, so owners aren’t on the page yet.',
+      II: { shows: F.w3 ? 'Ownership ' + (c.wp03.oc != null ? fmt(c.wp03.oc) : 'not worked out') + ' (' + c.wp03.owned + ' of ' + c.wp03.tasks + ' with an owner); ' + plural(F.w3.gaps.length, 'job') + ' need a look' + (c.wp04 && c.wp04.classified.length ? '; ' + c.wp04.structural + ' structural gaps this month.' : '.') : F.solo ? (c.wp11 && (c.wp11.first || c.wp11.second) ? 'Settling defaults chosen: ' + list([c.wp11.first, c.wp11.second].filter(Boolean).map(lc)) + '.' : 'No settling defaults chosen yet.') : 'WP-03 isn’t filled in, so owners aren’t on the page yet.',
         inYou: F.solo ? 'When something slips, ask "what would make this easier next time?" before "what is wrong with me?"' : 'When a job slips, treat it as a setup question first: who owns it, and when is the handoff?',
-        between: F.w3 && F.w3.gaps.length ? 'Give ' + q(F.w3.gaps[0].task) + ' one Responsible and one Accountable name. One owner per job does more than any reminder.' : null,
+        between: F.w3 && F.w3.gaps.length ? 'Give ' + q(F.w3.gaps[0].task) + ' one owner. One owner per job does more than any reminder.' : null,
         practice: F.solo ? 'Redesign one routine this month instead of trying harder at it.' : 'One owner per job, written down, and checked once a month on WP-04.' },
       III: { shows: F.bat.scored.length ? (F.solo ? 'Battery ' + fmt(F.bat.scored[0].score) : 'Batteries: ' + F.bat.scored.map(function (b) { return b.label + ' ' + fmt(b.score); }).join(', ')) + (F.w11 && F.w11.avgDrop != null ? '; settling moved it by ' + fmt(F.w11.avgDrop) + ' on average' : '') + (F.wx.trend != null ? '; weather trend ' + (F.wx.trend > 0 ? '+' : '') + fmt(F.wx.trend) : '') + '.' : 'No battery readings yet.',
         inYou: F.pp[0] && F.solo && F.pp[0].top.length ? 'Your battery is filled most by ' + lc(F.pp[0].top[0].l) + '. Check it before you judge a moment.' : 'Check your number before you judge a moment, yours or anyone else’s.',
@@ -2933,7 +2941,7 @@
 
   /* ---------- the Individual road: words for one person, never a second one */
 
-  var SOLO_SKIP_TERMS = { 'Workload balance (WB)': 1, 'Ownership clarity (OC)': 1, 'Average battery (AS)': 1, 'Solvency': 1, 'Apex': 1, 'Responsible': 1, 'Accountable': 1,
+  var SOLO_SKIP_TERMS = { 'Workload balance (WB)': 1, 'Ownership clarity (OC)': 1, 'Average battery (AS)': 1, 'Solvency': 1, 'Apex': 1, 'Owner': 1, 'Helper': 1,
     'Consulted and Informed': 1, 'Noticed and handled': 1, 'Structural gap': 1, 'Capacity issue': 1, 'Pattern': 1 };
   var SOLO_WORDS = [
     [/“([^”]*?)\s*Can we pick this up ([^”?]*)\?”/g, '“$1 I’ll pick this up $2.”'],
@@ -2977,14 +2985,14 @@
     ['Battery', 'A quick self-check (WP-02) of how full you are right now: five answers from 0 to 4, added up and divided by 20. Higher means more load.'],
     ['Band', 'A rough range a number falls in, such as low, medium or high load. Round numbers chosen to be easy to read, not hard lines.'],
     ['Workload balance (WB)', 'How close the logged minutes come to an even split. 1.00 is even.'],
-    ['Ownership clarity (OC)', 'The share of jobs with both a Responsible and an Accountable name.'],
+    ['Ownership clarity (OC)', 'The share of jobs with an owner.'],
     ['Average battery (AS)', 'Everyone’s battery averaged. Only worked out when every battery is in.'],
     ['Solvency', 'The CALC-01 read of whether the way the load is shared can keep going.'],
     ['Apex', 'Solvency with repair after friction (retuning) added in.'],
     ['Retuning (RF)', 'Friction moments you ran through fact, feeling and ask before answering, divided by all friction moments.'],
     ['Friction moment', 'A time something landed badly enough to notice.'],
-    ['Responsible', 'The person who does the job.'],
-    ['Accountable', 'The person who notices if it didn’t happen and follows up.'],
+    ['Owner', 'The one person who does the job and sees it through.'],
+    ['Helper', 'Optional: someone who pitches in, covers, or notices if the job slips.'],
     ['Consulted and Informed', 'People asked before, or told after. A group like "the whole team" fits here.'],
     ['Mental load', 'Planning, remembering and keeping track: work that is short in minutes and long in the head.'],
     ['Noticed and handled', 'Work done without anyone asking. Often invisible, and the first to go unthanked.'],
@@ -3005,7 +3013,7 @@
     var out = [
       'Battery (WP-02): the five answers added up and divided by 20. Under 0.30 is a low load, 0.30 to 0.59 medium, 0.60 and up high.',
       'Workload balance (WP-01): each person’s share of the logged minutes is compared with an even split. Balance is 1 minus the part of the time that would have to change hands, out of the most it could be. With two people this is 1 minus the gap between the two shares.',
-      'Ownership clarity (WP-03): jobs with both a Responsible and an Accountable name, divided by all jobs listed.',
+      'Ownership clarity (WP-03): jobs with an owner, divided by all jobs listed.',
       'Solvency (CALC-01): balance × 0.40 + ownership × 0.35 + (1 − average battery) × 0.25. Apex adds retuning: × 0.35, × 0.30, × 0.20 and retuning × 0.15. With no friction counted, apex uses the first three, rebalanced.',
       'Bands for solvency and apex: 0.70 and up, working well; 0.40 to 0.69, needs a look; under 0.40, needs a rethink, together. Higher means working better. Bands are read from the number rounded to two decimals, so the number and the band always agree.',
       'Patterns (WP-04): 3 or 4 weeks out of 4. Consistency (WP-13): check-ins filled in, divided by 7 days × the number of people.',
@@ -3071,9 +3079,9 @@
     recs.now.concat(recs.week, recs.month).forEach(function (r) { if (top.length < 3 && !top.some(function (t) { return t.title === r.title; })) top.push({ title: r.title, text: r.why, step: r.first }); });
     var guideBands = [];
     if (k.applies) guideBands.push('Solvency and apex: 0.70 and up, working well; 0.40 to 0.69, needs a look; under 0.40, needs a rethink, together. Here higher means working better.');
-    if (k.applies) guideBands.push('Workload balance and ownership clarity: 1.00 is an even split or every job fully owned; 0.70 and up reads well.');
+    if (k.applies) guideBands.push('Workload balance and ownership clarity: 1.00 is an even split or every job has an owner; 0.70 and up reads well.');
     guideBands.push('How much you’re carrying (the WP-02 battery): under 0.30 low load, 0.30 to 0.59 medium, 0.60 and up high. Higher means heavier, not a worse person.');
-    if (c.wp11 && c.wp11.readings) guideBands.push('Coming back after settling (WP-11) uses the same battery number with one line of its own: under 0.50, go back in. It sits inside the medium range on purpose: you don’t need a light load to come back, just less than half.');
+    if (c.wp11 && c.wp11.readings) guideBands.push('Coming back after settling (WP-11) uses the same WP-02 load score with one line of its own: under 0.50, return to the conversation. It sits inside the medium range on purpose: you don’t need a light load to come back, just less than half.');
     if (c.conc && c.conc.lines.length) guideBands.push('Who’s carrying more right now: noted when one person holds half or more of the jobs or minutes, and at least 20 points over an even share. It sits beside the scores; it isn’t part of them.');
     if (k.rf != null) guideBands.push('Retuning (RF): the share of friction moments repaired before answering. 0.50 and up is a working habit.');
     return { para: bits.join(' '), strengths: strengths, top: top, bands: guideBands };

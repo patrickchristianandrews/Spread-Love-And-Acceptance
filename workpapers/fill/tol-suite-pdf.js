@@ -27,7 +27,7 @@
   var METRICS = {
     'WP-01': { label: 'Workload balance score', say: 'Balance', max: 1, good: 'up' },
     'WP-02': { label: 'Load score', say: 'Load', max: 1, good: 'down', perPerson: true, days: 7 },
-    'WP-03': { label: 'Ownership clarity score', say: 'Clarity', max: 1, good: 'up' },
+    'WP-03': { label: 'Jobs with an owner', say: 'Clarity', max: 1, good: 'up' },
     'WP-04': { label: 'Structural gaps found', say: 'Gaps', max: 0, good: 'down', count: true },
     'WP-11': { label: 'Latest reading', say: 'Load after settling', max: 1, good: 'down', perPerson: true }
   };
@@ -173,7 +173,7 @@
     var m = METRICS[entry.workpaper];
     if (!m) return null;
     var hit = results(entry).filter(function (it) { return it.label === m.label; })[0];
-    var v = hit ? parseFloat(hit.value) : NaN;
+    var v = hit ? (typeof hit.num === 'number' ? hit.num : parseFloat(hit.value)) : NaN;
     return isNaN(v) ? null : v;
   }
   function labelOf(entry, i) {

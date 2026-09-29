@@ -6,7 +6,7 @@
 
   Column / field types: text, textarea, number, date, select, person, check, computed.
   "person" columns offer every person named at the top of the page (2 to 8,
-  coded A to H), in alphabetical order, and optionally "Both" (shown as
+  coded A to H), in the order they were typed, and optionally "Both" (shown as
   "Everyone" when there are more than two). Tables with fixedRows ['@A', '@B']
   get one row per person.
 
@@ -66,17 +66,17 @@
 
   var W = {};
 
-  // The last few lines of a sheet people settle on together: one box to tick, and an optional
-  // date to come back to it. Nothing to sign.
-  function closing(intro, solo) {
-    var out = {
-      id: 'closing', type: 'fields', title: solo ? 'Where I\'ve landed' : 'Where we\'ve landed',
-      fields: [
-        { id: 'agreed', label: solo ? 'I\'m going with this' : 'We\'re agreed on this', type: 'check' },
-        { id: 'lookAgain', label: 'Look at this again on (optional)', type: 'date' }
-      ]
-    };
+  // The last few lines of a sheet people settle on together: one box to tick, who agreed (optional,
+  // shared sheets only), and an optional date to come back to it. Nothing to sign. Ticking it shows a
+  // calm "Agreed on <date>" line; the date is kept in agreedOn. notYet(ctx), when given, lists what
+  // still needs doing first (WP-03: jobs with no owner), and the box waits, with a gentle note.
+  function closing(intro, solo, notYet) {
+    var fields = [{ id: 'agreed', label: solo ? 'I\'m going with this' : 'We\'re agreed on this', type: 'check', closing: true }];
+    if (!solo) fields.push({ id: 'agreedBy', label: 'Who agreed (optional)', type: 'text', placeholder: 'e.g. Sam and Jordan', help: 'Everyone who agreed can add their name, or leave it blank.' });
+    fields.push({ id: 'lookAgain', label: 'Look at this again on (optional)', type: 'date' });
+    var out = { id: 'closing', type: 'fields', title: solo ? 'Where I\'ve landed' : 'Where we\'ve landed', solo: !!solo, fields: fields };
     if (intro) out.intro = intro;
+    if (notYet) out.notYet = notYet;
     return out;
   }
 
@@ -177,23 +177,26 @@
   }
   // Six readings inside the three bands (light under 0.30, medium 0.30 to 0.59, high 0.60 and up),
   // so the words move with the number. Higher always means more load.
+  // [the band in plain words, one line of what to do]
   function wp02Words(sb, solo) {
-    if (sb < 0.15) return 'Very light load. Not much is left over from before today, so whatever comes up is probably about the thing itself.';
-    if (sb < 0.30) return 'Light load. Whatever is coming up is probably about the thing itself.';
-    if (sb < 0.45) return 'Medium load, on the lighter side. You\'re carrying a bit more than usual. Fine for most things; go gently with anything big.';
-    if (sb < 0.60) return solo ? 'Medium load, on the heavier side. Go gently, and leave big decisions for when you have more room.' : 'Medium load, on the heavier side. Before a hard conversation, it\'s worth saying out loud: "Heads up, I\'m carrying more than usual today."';
-    if (sb < 0.80) return 'High load. Put off anything that doesn\'t need deciding in the next hour. If you need to settle first, the Calm-Down Kit (WP-11) is made for this.';
-    return solo ? 'Very high load. Today is for looking after yourself and the basics. Let anything that can wait, wait, and pick a time to come back to it.' : 'Very high load. Today is for looking after yourself and the basics. Say "not today" to anything that can wait, and name a time instead.';
+    if (sb < 0.15) return ['Very light load', 'Not much is left over from before today, so whatever comes up is probably about the thing itself.'];
+    if (sb < 0.30) return ['Light load', 'Whatever is coming up is probably about the thing itself.'];
+    if (sb < 0.45) return ['Medium load, on the lighter side', 'You\'re carrying a bit more than usual. Fine for most things; go gently with anything big.'];
+    if (sb < 0.60) return ['Medium load, on the heavier side', solo ? 'Go gently, and leave big decisions for when you have more room.' : 'Before a hard conversation, it\'s worth saying out loud: "Heads up, I\'m carrying more than usual today."'];
+    if (sb < 0.80) return ['High load', 'Put off anything that doesn\'t need deciding in the next hour. If you need to settle first, the Calm-Down Kit (WP-11) is made for this.'];
+    return ['Very high load', solo ? 'Today is for looking after yourself and the basics. Let anything that can wait, wait, and pick a time to come back to it.' : 'Today is for looking after yourself and the basics. Say "not today" to anything that can wait, and name a time instead.'];
   }
   // solo: worded for one person on their own, with no shared average
   function wp02Reading(solo) {
     return function (ctx) {
       var s = wp02Score(ctx);
-      if (s === null) return [{ label: 'Score', value: 'Answer all five rows to see your score.' }];
-      var sb = r2(s);
-      var out = [{ label: 'Load score', value: fmt(s, 2) + ' (the five scores added up, then divided by 20; higher means more load)' }, { label: 'Reading', value: wp02Words(sb, solo), note: 'Higher means heavier. The words follow these cut-offs: under 0.15 very light; 0.15 to 0.29 light; 0.30 to 0.44 medium, lighter side; 0.45 to 0.59 medium, heavier side; 0.60 to 0.79 high; 0.80 and up very high. (CALC-01 and the reports group them as under 0.30 low, 0.30 to 0.59 medium, 0.60 and up high.)' }];
+      if (s === null) return [{ label: 'Your load today', value: 'Answer all five rows to see it.' }];
+      var sb = r2(s), w = wp02Words(sb, solo), points = Math.round(s * 20);
+      // plain words first; the number and how it is worked out come after, folded away on screen
+      var out = [{ label: 'Your load today', value: w[0] + ' (' + points + ' out of 20 points)', num: s }, { label: 'What to do', value: w[1] }];
       var top = WP02_FACTORS.filter(function (f) { return Number(ctx.value('factors.' + f.id)) >= 3; }).map(function (f) { return f.label.replace(/\s*\(.*\)$/, '').replace(/ specifically$/, '').toLowerCase(); });
       if (top.length) out.push({ label: 'Filled most by', value: top.join(', ') + '.', note: 'Conditions, not character. Some of them are in your control this week; some are just weather.' });
+      out.push({ label: 'Load score', value: fmt(s, 2) + ' out of 1.00', more: 'How is this scored?', num: s, note: 'The five answers added up, then divided by 20. Higher means a heavier load (and a lower battery). The words follow these cut-offs: under 0.15 very light; 0.15 to 0.29 light; 0.30 to 0.44 medium, lighter side; 0.45 to 0.59 medium, heavier side; 0.60 to 0.79 high; 0.80 and up very high. (CALC-01 and the reports group them as under 0.30 low, 0.30 to 0.59 medium, 0.60 and up high.)' });
       if (solo) return out;
       // everyone else's shared scores ("0.4, 0.55, 0.3"); the average covers everyone on the road, or waits
       var raw = String(ctx.value('partnerScore') || '').split(/[,;\s]+/).filter(Boolean), others = raw.map(parseFloat);
@@ -252,30 +255,57 @@
   };
 
   /* ------------------------------------------------------------------ WP-03 */
+  // One owner per job: every job gets one owner, the person who does it and sees it through. A helper
+  // (someone who pitches in, covers, or notices if it slips) is optional. The field ids stay r (owner)
+  // and a (helper), so drafts and PDFs saved before the rename still open.
+  function wp03Clarity(ctx) {
+    var all = ctx.rows('treaty').filter(function (r) { return r.task; });
+    // starter jobs nobody has touched are examples: they never count for or against the score
+    var rows = all.filter(function (r) { return !ctx.isExample('treaty', r); }), examples = all.length - rows.length;
+    var exNote = examples ? ' ' + (examples === 1 ? '1 example job from the starter list isn’t counted until you give it an owner or change it.' : examples + ' example jobs from the starter list aren’t counted until you give them an owner or change them.') : '';
+    if (!rows.length) return [{ label: 'Jobs with an owner', value: examples ? 'Add an owner to a job, or add your own jobs, to see the score. Nothing is counted yet.' : 'Add jobs to see the score.', note: exNote ? exNote.trim() : '' }];
+    var clear = rows.filter(function (r) { return r.r; });
+    var missing = rows.filter(function (r) { return !r.r; }).map(function (r) { return r.task; });
+    // how the owners are spread: clarity can read 1.00 with one person holding everything
+    var people = ctx.people(), byR = people.map(function (p) { return rows.filter(function (r) { return r.r === p; }).length; });
+    var c = concentrationOf(byR, 3), named = byR.reduce(function (a, b) { return a + b; }, 0);
+    var share = clear.length / rows.length;
+    var words = share === 1 ? 'Every job has an owner.' : !clear.length ? 'No job has an owner yet.' : share >= 0.7 ? 'Most jobs have an owner.' : 'Some jobs have an owner.';
+    var out = [{ label: 'Jobs with an owner', num: share, value: clear.length + ' of ' + rows.length + '. ' + words, note: 'As a number: ' + fmt(share, 2) + ' out of 1.00 (the ownership clarity score). Enter it as the ownership number in CALC-01.' + (c.flag ? ' It only asks whether every job has a name, so read it next to “Who’s carrying more right now” below.' : '') + exNote }];
+    if (missing.length) out.push({ label: 'Still needs an owner', value: missing.join(', ') });
+    if (c.flag) out.push({ label: 'Who’s carrying more right now', value: ctx.name(people[c.top]) + ' owns ' + c.count + ' of the ' + named + ' jobs with an owner (' + fmt(c.share * 100, 0) + '%). An even share would be ' + fmt(100 / people.length, 0) + '%.', note: 'Clear, but leaning on one person. Jobs drift to whoever is reliable and settle there. Ask which one they would hand over first.' });
+    else if (people.length >= 2 && named >= 3) out.push({ label: 'How the jobs are spread', value: people.map(function (p, i) { return ctx.name(p) + ' ' + byR[i]; }).join(', ') + ' (jobs owned).' });
+    return out;
+  }
+  // The jobs that still have no owner (untouched examples left out), for the closing's gentle note.
+  function wp03Unowned(ctx) {
+    return ctx.rows('treaty').filter(function (r) { return r.task && !r.r && !ctx.isExample('treaty', r); }).map(function (r) { return r.task; });
+  }
   W['wp-03'] = {
     code: 'WP-03',
     title: 'RACI Treaty',
     plain: 'One owner per job',
     slug: 'RACI-Treaty',
-    purpose: 'A living agreement that gives every regular household job exactly one Responsible name and one Accountable name, so nobody has to re-decide who owns what every week. Responsible does the task. Accountable notices if it didn\'t get done and follows up. They can be the same person.',
+    purpose: 'A living agreement that gives every regular household job one owner: the person who does it and sees it through. That way nobody has to re-decide who owns what every week. If you like, add a helper who pitches in or notices if it slips. The helper is optional.',
     people: true,
     meta: [
-      { id: 'reviewDate', label: 'Treaty date', type: 'date' }
+      { id: 'reviewDate', label: 'Date of this list', type: 'date' }
     ],
     sections: [
       {
         type: 'note', pdf: false,
-        text: "Use this after your first full week of Who did what (WP-01), and fill it in from what that week's log actually showed. Remove any rows that don't apply to your household, and add the ones that do, including the invisible ones: forms, gifts, renewals, planning."
+        text: "Use this after your first full week of Who did what (WP-01), and fill it in from what that week's log actually showed. The starter jobs below are examples. They don't count until you give one an owner or change it. Remove any that don't apply to your household, and add the ones that do, including the invisible ones: forms, gifts, renewals, planning."
       },
       {
         id: 'treaty', type: 'table', title: 'Who owns each job',
-        addLabel: 'Add a task',
+        addLabel: 'Add a job',
         library: 'owner',
+        examples: true,
         columns: [
-          { id: 'task', label: 'Task', type: 'text', w: 2.3 },
-          { id: 'freq', label: 'Frequency', type: 'select', options: ['Daily', 'Weekly', 'Monthly', 'As needed', 'Ongoing'], w: 1.1 },
-          { id: 'r', label: 'Responsible', type: 'person', w: 1.1 },
-          { id: 'a', label: 'Accountable', type: 'person', w: 1.1 },
+          { id: 'task', label: 'Job', type: 'text', w: 2.3 },
+          { id: 'freq', label: 'How often', type: 'select', options: ['Daily', 'Weekly', 'Monthly', 'As needed', 'Ongoing'], w: 1.1 },
+          { id: 'r', label: 'Owner', type: 'person', w: 1.1 },
+          { id: 'a', label: 'Helper (optional)', type: 'person', w: 1.1 },
           { id: 'notes', label: 'Notes', type: 'text', w: 2 }
         ],
         defaultRows: [
@@ -287,24 +317,11 @@
         ]
       },
       {
-        id: 'clarity', type: 'computed', title: 'Ownership clarity',
-        compute: function (ctx) {
-          var rows = ctx.rows('treaty').filter(function (r) { return r.task; });
-          if (!rows.length) return [{ label: 'Ownership clarity score', value: 'Add tasks to see the score.' }];
-          var clear = rows.filter(function (r) { return r.r && r.a; });
-          var missing = rows.filter(function (r) { return !(r.r && r.a); }).map(function (r) { return r.task; });
-          // how the Responsible names are spread: clarity can read 1.00 with one person holding everything
-          var people = ctx.people(), byR = people.map(function (p) { return rows.filter(function (r) { return r.r === p; }).length; });
-          var c = concentrationOf(byR, 3), named = byR.reduce(function (a, b) { return a + b; }, 0);
-          var out = [{ label: 'Ownership clarity score', value: fmt(clear.length / rows.length, 2) + ' (' + clear.length + ' of ' + rows.length + ' tasks have both names)', note: 'Enter this as the ownership clarity number in CALC-01.' + (c.flag ? ' Clarity only asks whether every job has a name, so read it next to "Busiest person" below.' : '') }];
-          if (missing.length) out.push({ label: 'Still needs an owner', value: missing.join(', ') });
-          if (c.flag) out.push({ label: 'Who’s carrying more right now', value: ctx.name(people[c.top]) + ' is Responsible for ' + c.count + ' of the ' + named + ' jobs with a Responsible name (' + fmt(c.share * 100, 0) + '%). An even share would be ' + fmt(100 / people.length, 0) + '%.', note: 'Clear, but leaning on one person. Jobs drift to whoever is reliable and settle there. Ask which one they would hand over first.' });
-          else if (people.length >= 2 && named >= 3) out.push({ label: 'How the jobs are spread', value: people.map(function (p, i) { return ctx.name(p) + ' ' + byR[i]; }).join(', ') + ' (Responsible).' });
-          return out;
-        }
+        id: 'clarity', type: 'computed', title: 'Does every job have an owner?',
+        compute: wp03Clarity
       },
       {
-        id: 'amendments', type: 'table', title: 'Changes to the treaty', optional: true,
+        id: 'amendments', type: 'table', title: 'Changes to the list', optional: true,
         intro: 'When life changes, rework the agreement in writing, instead of letting jobs drift to whoever started doing more. Anyone on it can ask for a review at a weekly check-in, or at the monthly look-back (WP-04).',
         addLabel: 'Add a change',
         columns: [
@@ -314,7 +331,7 @@
         ],
         defaultRows: [{}]
       },
-      closing('Agreeing means everyone has read this version and knows who owns what. It doesn\'t mean every job feels perfectly fair, only that ownership is clear.')
+      closing('Agreeing means everyone has read this version and knows who owns what. It doesn\'t mean every job feels perfectly fair, only that ownership is clear.', false, wp03Unowned)
     ]
   };
 
@@ -480,11 +497,15 @@
       var rows = all.filter(function (r) { return inRange(r.after, 0, 1) !== null && !outOfRange(r.before, 0, 1); });
       var left = bad.length ? [{ label: 'Left out', value: plural(bad.length, 'reading') + ' with a number outside 0 to 1.', note: 'These are WP-02 load scores: the five answers added up and divided by 20, so they run from 0 to 1 (for example 0.45).' }] : [];
       if (!rows.length) return [{ label: 'Coming back', value: 'Add a before-and-after reading to see where you are.' }].concat(left);
-      var a = inRange(rows[rows.length - 1].after, 0, 1);
-      var band = a < 0.5 ? (solo ? 'Under 0.50: pick things back up, at the time you named.' : 'Under 0.50: go back in, at the time you named.')
-        : a < 0.6 ? '0.50 to 0.60: do a second round, with the same calming step or the other one.'
+      var last = rows[rows.length - 1], a = inRange(last.after, 0, 1), b = inRange(last.before, 0, 1);
+      var band = a < 0.5 ? (solo ? 'Under 0.50: pick things back up, at the time you named.' : 'Under 0.50: return to the conversation, at the time you named.')
+        : a < 0.6 ? '0.50 to 0.59: do a second round, with the same calming step or the other one.'
           : (rows.length >= 2 ? '0.60 or above after two rounds: put it off to a specific time. "Tomorrow after dinner" is a real plan; "later" is not.' : '0.60 or above: do a second round first.');
-      return [{ label: 'Latest reading', value: fmt(a, 2) }, { label: 'Next', value: band, note: 'When you come back, start with one small, simple task, like putting the dishes away. (0.50 is the come-back line for settling. It sits inside WP-02\'s medium range on purpose: you don\'t need a light load to come back, just less than half.)' }].concat(left);
+      var out = [{ label: 'Latest reading', value: fmt(a, 2) }];
+      // a reading that went up is worth saying out loud, kindly
+      if (b !== null && r2(a) > r2(b)) out.push({ label: 'It went up', value: 'Your load went from ' + fmt(b, 2) + ' to ' + fmt(a, 2) + '. That happens, and it is useful to know. Try your other calming step, or put it off to a named time.' });
+      out.push({ label: 'Next', value: band, note: 'When you come back, start with one small, simple task, like putting the dishes away. (0.50 is the come-back line for settling. It sits inside WP-02\'s medium range on purpose: you don\'t need a light load to come back, just less than half.)' });
+      return out.concat(left);
     };
   }
   W['wp-11'] = {
@@ -536,7 +557,7 @@
       },
       {
         id: 'reentry', type: 'table', title: 'Part C: Coming back',
-        intro: 'Take WP-02 before and after. "Feeling better" is not the test; the number is. Under 0.50, go back in. Between 0.50 and 0.60, do a second round. Still 0.60 or above after two rounds? Put it off to a named time.',
+        intro: 'Take WP-02 before and after. Write down how you feel too; the number is a second opinion that is easy to check. Under 0.50: return to the conversation at the time you named. 0.50 to 0.59: do a second round. Still 0.60 or above after two rounds? Put it off to a named time.',
         addLabel: 'Add a reading',
         rangeCols: true,
         columns: [
@@ -563,7 +584,8 @@
           { id: 'resume', label: 'If you put the conversation off: when you\'ll pick it back up', type: 'text' }
         ]
       },
-      closing()
+      // the kit is personal on every road, so its closing is in the first person
+      closing(null, true)
     ]
   };
 
@@ -628,7 +650,7 @@
   // WP-03 worded and prefilled for the road someone is on. Everything else about the sheet stays the same.
   var RACI_ROADS = {
     coworkers: {
-      purpose: 'A living agreement that gives every recurring team task exactly one Responsible name and one Accountable name, so nobody has to guess who is following up. Responsible does the task. Accountable makes sure it happened and follows up. They can be the same person. Consulted (who gives input before it is done) and Informed (who hears when it is) are optional.',
+      purpose: 'A living agreement that gives every recurring team task one owner (Responsible, in RACI terms): the person who does it and sees it through, so nobody has to guess who is following up. A helper who follows up (Accountable) is optional, and so are Consulted (who gives input before it is done) and Informed (who hears when it is).',
       note: "Fill it in together, from what a normal week actually looks like (WP-01 helps). Remove any rows that don't fit your team, and add the ones that do. It describes how the work is set up, never how well anyone is doing it.",
       rows: [
         { task: 'Meeting notes', freq: 'Each meeting' }, { task: 'Follow-ups after meetings', freq: 'Each meeting' },
@@ -641,7 +663,7 @@
       sign: "Agreeing means everyone has read this version and knows who owns what. It isn't a performance record, and it isn't for HR. It only means ownership is clear."
     },
     roommates: {
-      purpose: 'A living agreement that gives every regular shared-home job exactly one Responsible name and one Accountable name, so nobody has to re-decide who owns what every week. Responsible does the task. Accountable notices if it didn\'t get done and follows up. They can be the same person.',
+      purpose: 'A living agreement that gives every regular shared-home job one owner: the person who does it and sees it through, so nobody has to re-decide who owns what every week. If you like, add a helper who pitches in or notices if it slips. The helper is optional.',
       note: "Fill it in together at a house meeting. Remove any rows that don't apply to your place, and add the ones that do. Splitting a cleaning area by week or by room is fine; just write it down.",
       rows: [
         { task: 'Rent: collecting and paying', freq: 'Monthly' }, { task: 'Bills (power, water, internet)', freq: 'Monthly' },
@@ -653,7 +675,7 @@
       sign: "Agreeing means everyone has read this version and knows who owns what. It doesn't mean every job feels perfectly even, only that ownership is clear."
     },
     caregivers: {
-      purpose: 'A living agreement that gives every regular part of the care exactly one Responsible name and one Accountable name, so "whenever someone can" becomes a plan. Responsible does the task. Accountable notices if it didn\'t get done and follows up. They can be the same person.',
+      purpose: 'A living agreement that gives every regular part of the care one owner: the person who does it and sees it through, so "whenever someone can" becomes a plan. If you like, add a helper who covers or notices if it slips. The helper is optional.',
       note: "Fill it in together with whoever shares the care. This is about who owns each task, not medical advice: for anything about health or medicines, follow the care team's instructions. Remove rows that don't apply and add the ones that do.",
       rows: [
         { task: 'Appointments: booking, getting there, notes', freq: 'As needed' },
@@ -679,7 +701,7 @@
     out.sections = base.sections.map(function (s) {
       var c = {};
       Object.keys(s).forEach(function (k) { c[k] = s[k]; });
-      if (s.type === 'note' && s.pdf === false) c.text = v.note;
+      if (s.type === 'note' && s.pdf === false) c.text = v.note + ' The starter rows are examples. They don\'t count until you give one an owner or change it.';
       if (s.id === 'closing') c.intro = v.sign;
       if (s.id === 'amendments') c.intro = v.amend;
       if (s.id === 'treaty') {
@@ -690,7 +712,7 @@
         });
         if (v.ci) {
           c.title = 'The agreement';
-          c.intro = 'R and A are one name each. Consulted and Informed are optional, and can be more than one name or a group, like "the whole team".';
+          c.intro = 'The owner is one name. The helper, Consulted and Informed are optional, and can be more than one name or a group, like "the whole team".';
           c.columns = [
             c.columns[0], c.columns[1], c.columns[2], c.columns[3],
             { id: 'c', label: 'Consulted (optional)', type: 'text', w: 1.2, placeholder: 'Who gives input' },
@@ -766,15 +788,14 @@
           intro: 'One sentence, ready ahead of time, for when you need a break from a hard moment, so stepping away feels planned instead of like giving up. Say how you are, how long you need, and when you\'ll pick it back up: "I\'m at capacity. I need ten minutes. I\'ll come back to this at quarter past."',
           columns: [{ id: 'line', label: 'Pause line', type: 'textarea', w: 4 }]
         },
-        reentry: { intro: 'Take WP-02 before and after. "Feeling better" is not the test; the number is. Under 0.50, pick things back up. Between 0.50 and 0.60, do a second round. Still 0.60 or above after two rounds? Put it off to a named time.' },
+        reentry: { intro: 'Take WP-02 before and after. Write down how you feel too; the number is a second opinion that is easy to check. Under 0.50: pick things back up. 0.50 to 0.59: do a second round. Still 0.60 or above after two rounds? Put it off to a named time.' },
         next: { compute: wp11Next(true) },
         after: {
           fields: [
             { id: 'nextAction', label: 'Next small action', type: 'text' },
             { id: 'resume', label: 'If you put it off: when you\'ll pick it back up', type: 'text' }
           ]
-        },
-        closing: closing(null, true)
+        }
       }
     }
   };

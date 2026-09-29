@@ -547,7 +547,7 @@
       else if (n3.length === 1 && !hasNamed) {
         var b1 = calcBand(n3[0]);
         return { blocks: [{ k: 'p', x: 'A Solvency Read of ' + r2(n3[0]) + ' falls in this band. ' + b1[0] + ' First move: ' + b1[1] }, { k: 'note', x: 'It reads the setup, never a person. ' + NOT_VERDICT },
-          { k: 'links', x: [['CALC-01: Can the load last?', '/workpapers/calculators/calc01-solvency.html']] }],
+          { k: 'links', x: [['CALC-01: Is the setup working for everyone?', '/workpapers/calculators/calc01-solvency.html']] }],
           chips: [{ label: 'Show me the math', q: 'Show me the math for CALC-01' }], kind: 'calc', topic: 'solvency read' };
       }
     }
@@ -571,7 +571,7 @@
           (sol - apex > 0.1 ? ' Solvency is higher than apex, which usually means friction is being swallowed rather than repaired: WP-09 is the place to work on.' : '') });
       }
       out.push({ k: 'note', x: 'Pillars I and II: it reads the setup, never a person. The weights are an openly stated judgment call, not a fitted model, and ' + NOT_VERDICT.charAt(0).toLowerCase() + NOT_VERDICT.slice(1) });
-      out.push({ k: 'links', x: safeLinks([['CALC-01: Can the load last?', '/workpapers/calculators/calc01-solvency.html'], [gaps[0][2], gaps[0][3]]]) });
+      out.push({ k: 'links', x: safeLinks([['CALC-01: Is the setup working for everyone?', '/workpapers/calculators/calc01-solvency.html'], [gaps[0][2], gaps[0][3]]]) });
       return { blocks: out, chips: [{ label: 'Where do these numbers come from?', q: 'How does CALC-01 work?' }, { label: 'What does apex mean?', q: 'What is the apex score in CALC-01?' }], kind: 'calc', topic: 'solvency read' };
     }
     // two people's hours → workload balance
@@ -584,7 +584,7 @@
           { k: 'p', x: 'Out of ' + (a + b) + ' hours, that’s ' + Math.round(pa) + '% and ' + Math.round(pb) + '%. Workload balance is 1 − |' + Math.round(pa) + ' − ' + Math.round(pb) + '| ÷ 100 = ' + r2(wbv) + ' (1.00 means perfectly even, 0.00 means completely one-sided).' },
           { k: 'p', x: 'The math doesn’t care who carries more, only that the load isn’t shared. For three or more people, the Lemonade Stand and CALC-01 work it out from everyone’s hours for you.' },
           { k: 'note', x: 'Pillar I, See the whole load. ' + NOT_VERDICT },
-          { k: 'links', x: [['The Lemonade Stand', '/lemonade-stand.html'], ['CALC-01: Can the load last?', '/workpapers/calculators/calc01-solvency.html']] }],
+          { k: 'links', x: [['The Lemonade Stand', '/lemonade-stand.html'], ['CALC-01: Is the setup working for everyone?', '/workpapers/calculators/calc01-solvency.html']] }],
           chips: [{ label: 'What do I do with this?', q: 'How does CALC-01 work?' }], kind: 'calc', topic: 'workload balance' };
       }
     }

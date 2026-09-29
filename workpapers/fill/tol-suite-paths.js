@@ -34,7 +34,7 @@
     weather: ['Today\u2019s Weather', '/quick-checks.html#today'], preface: ['Preface: The work nobody sees', '/book/preface.html'],
     ch1: ['Ch. I: Why we get out of tune', '/book/chapter-1.html'], ch2: ['Ch. II: Is the split working?', '/book/chapter-2.html'], ch3: ['Ch. III: Full tanks and different angles', '/book/chapter-3.html'],
     ch4: ['Ch. IV: Two kinds of fair', '/book/chapter-4.html'], ch5: ['Ch. V: The monthly look-back', '/book/chapter-5.html'],
-    lemonade: ['The Lemonade Stand', '/lemonade-stand.html'], calc: ['CALC-01: Is the setup working for both of you?', '/workpapers/calculators/calc01-solvency.html'],
+    lemonade: ['The Lemonade Stand', '/lemonade-stand.html'], calc: ['CALC-01: Is the setup working for everyone?', '/workpapers/calculators/calc01-solvency.html'],
     decoder: ['Carrier Wave Decoder', '/carrier-wave-decoder.html'], freq: ['Frequency Calibration', '/tools/frequency-calibration.html'],
     mood: ['Mood Arbitrage', '/tools/mood-arbitrage-free.html'], wired: ['Wired Differently', '/wired-differently.html'], wiring: ['Wiring Card', '/wiring-card.html'],
     signal: ['The Signal Translator', '/signal-translator.html'], checkins: ['Check-ins', '/check-ins.html'], ground: ['Check-in ground rules', '/check-ins.html#ground'],

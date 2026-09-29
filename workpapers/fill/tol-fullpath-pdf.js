@@ -722,7 +722,7 @@
       detail(lay, s, m);
     });
     var cs = m.calcSection;
-    section(cs.applies ? 'CALC-01  Is the setup working for both of you?' : 'CALC-01  Your state and retuning count', 'CALC-01 ' + (cs.applies ? 'Is the setup working?' : 'State and retuning'), 1);
+    section(cs.applies ? 'CALC-01  Is the setup working for everyone?' : 'CALC-01  Your state and retuning count', 'CALC-01 ' + (cs.applies ? 'Is the setup working?' : 'State and retuning'), 1);
     lay.kicker('CALC-01');
     lay.h1(cs.applies ? 'Is the setup working?' : 'Your state and your retuning count', 'The inputs, where each came from, and the read');
     if (cs.state) lay.para('Step zero, your state: ' + cs.state + '.', { size: 9.2, color: C.soft });

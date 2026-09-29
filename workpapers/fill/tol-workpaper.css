@@ -122,6 +122,33 @@
 }
 .wpf-scale-opts input:focus-visible + span, .wpf-choice input:focus-visible + span{ outline: 2px solid var(--focus, #2B5B8C); outline-offset: 2px; }
 
+.wpf-scale-ends{ display: flex; justify-content: space-between; max-width: 252px; margin: 0.35em 0 0; font-size: 0.8rem; color: var(--ink-soft, #524B3E); }
+.wpf-more summary{ cursor: pointer; }
+.wpf-more summary::marker{ color: var(--credit, #3E6B4C); }
+.wpf-more .wpf-help{ margin-top: 0.4em; }
+
+/* ---------- starter rows shown as examples (WP-03) ---------- */
+.wpf-ex-tag{ display: none; }
+.wpf-row-example .wpf-ex-tag{
+  display: inline-block; margin-top: 4px; padding: 1px 8px; border-radius: 999px;
+  font-size: 0.78rem; font-style: normal; line-height: 1.5; white-space: nowrap;
+  background: var(--paper-deep, #ECE2C4); color: var(--ink-soft, #524B3E);
+}
+.wpf-row-example td input, .wpf-row-example td select{ border-style: dashed; }
+.wpf-row-example td input[data-col="task"]{ color: var(--ink-soft, #524B3E); }
+.wpf-ex-clear[hidden]{ display: none; }
+
+/* ---------- the closing tick ---------- */
+.wpf-agreed-note{ margin: 0.5em 0 0; font-size: 0.95em; }
+.wpf-agreed-note:empty{ display: none; }
+.wpf-agreed-note.is-agreed{
+  display: inline-block; padding: 6px 12px; border-radius: 3px;
+  background: var(--credit-soft, #E4EDE3); color: var(--credit, #3E6B4C); font-weight: 600;
+}
+.wpf-agreed-note.is-waiting{ color: var(--ink-soft, #524B3E); }
+.wpf-form input[type="checkbox"]:disabled{ opacity: 0.55; cursor: not-allowed; }
+.wpf-form input[type="checkbox"]:disabled + *{ cursor: not-allowed; }
+
 /* ---------- calculated results ---------- */
 .wpf-computed dl{
   margin: 0; padding: 1em 1.2em;

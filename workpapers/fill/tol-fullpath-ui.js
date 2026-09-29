@@ -244,7 +244,7 @@
     var c = FP.compute(S.data), out = [], f2 = FP.fmt;
     if (page.id === 'wp01' && c.wp01 && !c.R.refusalsOnly) out.push(c.wp01.wb != null ? 'Workload balance so far: ' + f2(c.wp01.wb) + ' (' + c.P.list.map(function (p) { return p.label + ' ' + Math.round(c.wp01.shares[p.i]) + '%'; }).join(', ') + ')' : 'Workload balance: add rows with a name and minutes.');
     if (page.id === 'wp02') c.battery.forEach(function (b) { out.push(b.label + ': ' + (b.score != null ? f2(b.score) + ' (' + b.band.label.toLowerCase() + ')' : b.answered + ' of 5 answered')); });
-    if (page.id === 'wp03' && c.wp03) out.push(c.wp03.oc != null ? 'Ownership clarity so far: ' + f2(c.wp03.oc) + ' (' + c.wp03.owned + ' of ' + c.wp03.tasks + ' tasks have both names)' : 'Ownership clarity: give tasks a Responsible and an Accountable name.');
+    if (page.id === 'wp03' && c.wp03) out.push(c.wp03.oc != null ? 'Ownership clarity so far: ' + f2(c.wp03.oc) + ' (' + c.wp03.owned + ' of ' + c.wp03.tasks + ' jobs have an owner)' : 'Ownership clarity: give each job one owner.');
     if (page.id === 'wp04' && c.wp04) out.push(c.wp04.patterns.length ? 'A real pattern (3 or 4 weeks): ' + c.wp04.patterns.map(function (p) { return p.task; }).join(', ') : 'Nothing flagged 3 or 4 weeks so far.');
     if (page.id === 'calc' && c.calc.applies) out.push(c.calc.sol != null ? 'Solvency ' + f2(c.calc.sol) + ' (' + c.calc.solBand.label.toLowerCase() + '), apex ' + f2(c.calc.apex) : 'Not worked out yet. Still needed: ' + c.calc.missing.join('; ') + '.');
     if (page.id === 'calc' && c.calc.rf != null) out.push('Retuning (RF): ' + f2(c.calc.rf));
@@ -467,7 +467,7 @@
     // 2. Detailed findings
     var wps = h('div', { className: 'fp-rep-wps' });
     m.sections.forEach(function (s) { wps.appendChild(detailEl(s, m)); });
-    var cs = m.calcSection, cdet = h('details', { className: 'fp-rep-wp', id: 'fp-r-calc-01', open: 'open' }, [h('summary', {}, [h('span', { className: 'fp-rep-code', text: 'CALC-01' }), cs.applies ? ' Is the setup working for both of you?' : ' Your state and retuning count'])]);
+    var cs = m.calcSection, cdet = h('details', { className: 'fp-rep-wp', id: 'fp-r-calc-01', open: 'open' }, [h('summary', {}, [h('span', { className: 'fp-rep-code', text: 'CALC-01' }), cs.applies ? ' Is the setup working for everyone?' : ' Your state and retuning count'])]);
     if (cs.state) cdet.appendChild(h('p', { className: 'fp-note', text: 'Step zero, your state: ' + cs.state + '.' }));
     cdet.appendChild(dlOf(cs.rows.map(function (r) { return [r[0], r[1] + ' · ' + r[2]]; })));
     cdet.appendChild(ulOf(cs.lines));
