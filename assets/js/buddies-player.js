@@ -1305,6 +1305,7 @@
   }
   function fxPick(b) {
     if (b.say !== 'tidbit' && b.say !== 'sugarfoot') return null;
+    if (b.mood === 'worried' || b.mood === 'grumpy' || (b.energy || 1) >= 1.2 || /!\s*$/.test(b.text || '') && b.mood !== 'happy' && b.mood !== 'excited') return null;
     var g = FX_MOOD[b.mood]; if (!g) return null;
     var c = AU.ctx; if (!c || c.currentTime - CL.lastFx < 14) return null;
     if (Math.random() > (g === 'up' ? 0.18 : g === 'wow' ? 0.2 : 0.12)) return null; // now and then, so the talk keeps flowing
@@ -1328,6 +1329,8 @@
       var s = c.createBufferSource(); s.buffer = buf; s.connect(CL.gain);
       s.onended = function () { if (tok !== CL.token) return; CL.src = null; cb(true); };
       CL.src = s; try { s.start(at); } catch (e) { cb(false); }
+      if (AU.mus) { try { AU.mus.gain.setTargetAtTime(0.36, c.currentTime, 0.15); } catch (e) {} } // the music steps back while she talks
+      var dur = buf.duration + (at - c.currentTime); clearTimeout(CL.duckT); CL.duckT = setTimeout(function () { if (AU.mus && AU.ctx) try { AU.mus.gain.setTargetAtTime(0.55, AU.ctx.currentTime, 0.6); } catch (e) {} }, dur * 1000 + 250);
     });
     return true;
   }
@@ -1537,7 +1540,8 @@
       var done = P.oneCh; P.one = false; pause();
       P.dir.seekChapter(next); P.ch = next; renderChapter(); save(); paint(0); progress();
       var ep = P.ep;
-      endOv.innerHTML = '<div class="fb-ovc"><p class="fb-k">End of chapter ' + (done + 1) + ' · ' + esc(ep.chapters[done].title) + '</p><h3>A good place to stop</h3>' +
+      endOv.innerHTML = '<div class="fb-ovc"><p class="fb-k">End of chapter ' + (done + 1) + ' · ' + esc(ep.chapters[done].title) + '</p><h3>Taking a little break</h3>' +
+        '<p>Don’t worry: Tidbit and Sugarfoot are okay. Whatever happens next, they work it out together, and the story ends happy.</p>' +
         '<p>Your place is saved in this browser, so you can come back to chapter ' + (next + 1) + ' anytime.</p><div class="fb-row">' +
         '<button type="button" class="fb-b is-main fb-one-next">▶ Next chapter (about ' + chMins(next) + ' min)</button>' +
         '<button type="button" class="fb-b fb-rest">Keep watching</button></div></div>';
