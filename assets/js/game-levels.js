@@ -129,7 +129,7 @@
     function current() {
       var t = tierOf(S.tier);
       return info(t).then(function (inf) {
-        var id = t.id, i = S.pos[id] || 0, seen = seenBits(id);
+        var id = t.id, i = startOf(t, inf), seen = seenBits(id);
         // the puzzle you finished last time: move on to one you haven't seen
         if (S.fin[id] === i) { i = nextUnseen(id, inf, i, true); S.pos[id] = i; delete S.fin[id]; }
         if (i < inf.n) seen.add(i); else S.gen[id] = Math.max(S.gen[id] || 0, i - inf.n + 1);
@@ -163,10 +163,18 @@
       }
       return look(j);
     }
+    // where a level begins: the first puzzle, or (for a game whose levels share one bank of themes)
+    // a different place in the bank for each level, so every level opens on its own theme
+    function startOf(t, inf) {
+      if (S.pos[t.id] != null) return S.pos[t.id];
+      var at = opts.startAt ? opts.startAt(tiers.indexOf(t), inf.n) : 0;
+      S.pos[t.id] = at;
+      return at;
+    }
     function next() {
       var t = tierOf(S.tier);
       return info(t).then(function (inf) {
-        var id = t.id, i = S.pos[id] || 0, j = nextUnseen(id, inf, i, false);
+        var id = t.id, i = startOf(t, inf), j = nextUnseen(id, inf, i, false);
         if (j >= inf.n && i < inf.n) {
           // the end of this level: move up, or (at the top) go back for any skipped, then new ones
           var at = tiers.indexOf(t);
@@ -174,7 +182,7 @@
             var up = tiers[at + 1];
             S.tier = up.id; save();
             return info(up).then(function (inf2) {
-              var k = S.pos[up.id] || 0;
+              var k = startOf(up, inf2);
               if (S.fin[up.id] === k) { k = nextUnseen(up.id, inf2, k, true); delete S.fin[up.id]; }
               return avoidRecent(up, inf2, k);
             }).then(function (k) { S.pos[up.id] = k; save(); return current(); }).then(function (c) { c.movedUp = true; return c; });
@@ -235,7 +243,10 @@
       Array.prototype.forEach.call(el.querySelectorAll('[data-tier]'), function (b) { b.setAttribute('aria-pressed', String(b.getAttribute('data-tier') === c.tier.id)); });
       var w = el.querySelector('.gl-where');
       if (w) {
-        w.textContent = c.tier.name + ' · ' + (c.fresh ? 'fresh puzzle ' + c.fresh : c.number + ' of ' + c.of.toLocaleString('en-US'));
+        // a game that starts each level at its own place in a shared bank counts the puzzles you've
+        // played at that level (1, 2, 3 ...) rather than showing where it is in the bank
+        var n = opts.countSeen ? seenBits(c.tier.id).count(c.of) : c.number;
+        w.textContent = c.tier.name + ' · ' + (c.fresh ? 'fresh puzzle ' + c.fresh : n + ' of ' + c.of.toLocaleString('en-US'));
         w.title = c.fresh ? 'You’ve seen every puzzle at this level, so this one was made just for you.' : 'You won’t see the same puzzle twice at this level.';
       }
     }
@@ -342,15 +353,27 @@
 
   // A short tip from the program, from the mini-dive glossary, with a link to read more
   var tipAt = Math.floor(Math.random() * 1000);
+  // After a puzzle, a game tip speaks in everyday words: entries named for a diagnosis get a plain
+  // description as their heading, and a few clinical ones aren't used in the games at all.
+  var TIP_TITLES = {
+    neurotypical: 'Reading between the lines', neurodivergent: 'When everyday customs don’t fit', autistic: 'When clear, literal words help',
+    adhd: 'When a list slips away on the way to the car', rsd: 'When silence feels like rejection', audhd: 'When plans stay vague',
+    dyslexic: 'When a long message feels like a wall', dyspraxic: 'When “just” and “easy” sting', apd: 'When words get lost in the noise',
+    dld: 'When a saying doesn’t land', alexithymia: 'When a feeling has no name yet', hsp: 'When a small tone feels big',
+    overload: 'When a busy room turns up the heat', anxiety: 'When “we need to talk” sounds scary'
+  };
+  var TIP_SKIP = { neurodev: 1, tourette: 1, hypervigilance: 1, ocd: 1, masking: 1 };
+  // the glossary is written for every reader; a few British words become American ones here
+  function plainTip(t) { return String(t).replace(/\bmum\b/g, 'mom').replace(/\bMum\b/g, 'Mom').replace(/\bcar park\b/g, 'parking lot').replace(/\bcolour/g, 'color').replace(/\bfavourite/g, 'favorite'); }
   function programTip() {
     var G = window.TOL_DIVES;
     if (!G) {
       if (!document.querySelector('script[src="/assets/js/dives-glossary.js"]')) { var sc = document.createElement('script'); sc.src = '/assets/js/dives-glossary.js'; document.head.appendChild(sc); }
       return '';
     }
-    var keys = Object.keys(G).filter(function (k) { return G[k].u; });
-    var k = keys[(tipAt++) % keys.length], d = G[k], first = d.s || (d.d || '').split('\n')[0];
-    return '<div class="gl-tip"><p class="gl-tip-k">&#127793; From the program</p><p><b>' + esc(d.t) + ':</b> ' + esc(first) + '</p>' +
+    var keys = Object.keys(G).filter(function (k) { return G[k].u && !TIP_SKIP[k]; });
+    var k = keys[(tipAt++) % keys.length], d = G[k], first = plainTip(d.s || (d.d || '').split('\n')[0]);
+    return '<div class="gl-tip"><p class="gl-tip-k">&#127793; From the program</p><p><b>' + esc(TIP_TITLES[k] || d.t) + ':</b> ' + esc(first) + '</p>' +
       '<p><a href="' + esc(d.u) + '">' + esc(d.l || 'Read more') + ' &rarr;</a></p></div>';
   }
   function esc(t) { return String(t).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }

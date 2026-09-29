@@ -5,7 +5,7 @@ THEMES = {
         'tree': 'It grows leaves and gives shade',
         'leaf': 'A green part of a tree that turns gold in autumn',
         'oak': 'A tree that grows from an acorn',
-        'acorn': 'A squirrel\'s favourite snack',
+        'acorn': 'A squirrel\'s favorite snack',
         'fern': 'A feathery green plant of shady woods',
         'moss': 'Soft green carpet on a shady stone',
         'river': 'Water flowing toward the sea',
@@ -25,7 +25,7 @@ THEMES = {
         'soil': 'Earth that plants grow in',
         'breeze': 'A soft, cool wind',
         'cloud': 'A fluffy shape in the sky',
-        'rain': 'Drops falling from grey skies',
+        'rain': 'Drops falling from gray skies',
         'mist': 'A thin, soft fog',
         'dew': 'Tiny drops on grass in the morning',
         'lake': 'A large pool of still water',
@@ -51,7 +51,7 @@ THEMES = {
         'garden': 'A place to grow flowers and vegetables',
         'lilac': 'A purple shrub with a lovely scent',
         'poppy': 'A bright red flower of the fields',
-        'violet': 'A small purple flower, or its colour',
+        'violet': 'A small purple flower, or its color',
         'orchid': 'An elegant flower often given as a gift',
         'lotus': 'A water flower that rises from the mud',
         'clover': 'A small plant; find one with four leaves for luck',
@@ -110,7 +110,7 @@ THEMES = {
         'gift': 'A present',
         'share': 'Give some to someone else',
         'gentle': 'Soft and careful',
-        'warm': 'Not cold; cosy',
+        'warm': 'Not cold; cozy',
         'love': 'A deep, caring feeling',
         'heart': 'A symbol of love',
         'friend': 'Someone you like and trust',
@@ -132,7 +132,7 @@ THEMES = {
         'lend': 'Give for a little while',
         'give': 'Hand over freely',
     },
-    'Home and cosy': {
+    'Home and cozy': {
         'home': 'Where the heart is, they say',
         'house': 'A building where a family lives',
         'room': 'A space with four walls',
@@ -145,7 +145,7 @@ THEMES = {
         'teapot': 'A pot for brewing tea',
         'mug': 'A big cup for cocoa',
         'cocoa': 'A warm chocolate drink',
-        'blanket': 'A cosy cover for cold nights',
+        'blanket': 'A cozy cover for cold nights',
         'quilt': 'A blanket made from patchwork',
         'sofa': 'A long, soft seat for the living room',
         'couch': 'Another word for a sofa',
@@ -201,7 +201,7 @@ THEMES = {
         'purr': 'The happy sound of a cat',
         'wag': 'What a happy dog\'s tail does',
         'hen': 'A mother chicken',
-        'chick': 'A baby chicken',
+        'chick': 'A fluffy baby hen',
         'goose': 'A big bird that honks',
         'seal': 'A sea animal that claps its flippers',
         'mole': 'It digs tunnels underground',
@@ -225,10 +225,10 @@ THEMES = {
         'grape': 'It grows in bunches on a vine',
         'mango': 'A sweet tropical fruit',
         'banana': 'A yellow fruit you peel',
-        'cookie': 'A sweet biscuit',
+        'cookie': 'A sweet, round treat from the jar',
         'muffin': 'A little cake for breakfast',
         'waffle': 'A breakfast treat with little squares',
-        'candy': 'Sweets',
+        'candy': 'Lollipops and gumdrops',
         'sugar': 'It makes things sweet',
         'cream': 'Whipped, it goes on top',
         'milk': 'A white drink from cows',
@@ -260,7 +260,7 @@ THEMES = {
         'ship': 'A big boat',
         'crab': 'It walks sideways',
         'pearl': 'A gem found in an oyster',
-        'coral': 'A colourful reef',
+        'coral': 'A colorful reef',
         'whale': 'A giant of the ocean',
         'seal': 'It barks on the rocks',
         'gull': 'A seaside bird',
@@ -323,7 +323,7 @@ THEMES = {
         'leaves': 'They fall from trees in autumn',
         'harvest': 'Gathering the crops',
         'pumpkin': 'A big orange autumn squash',
-        'mitten': 'A cosy glove',
+        'mitten': 'A cozy glove',
         'scarf': 'Wrap it round your neck in winter',
         'sled': 'Ride it down a snowy hill',
         'bloom': 'Flowers do it in spring',
@@ -340,7 +340,7 @@ THEMES = {
     },
     'Make and play': {
         'art': 'Painting or drawing, for example',
-        'paint': 'Colours for a brush',
+        'paint': 'Colors for a brush',
         'draw': 'Make a picture with a pencil',
         'sketch': 'A quick drawing',
         'craft': 'Something made by hand',
@@ -364,7 +364,7 @@ THEMES = {
         'play': 'Have fun',
         'toy': 'Something to play with',
         'bubble': 'A floating ball of soap',
-        'crayon': 'A waxy colouring stick',
+        'crayon': 'A waxy coloring stick',
         'clay': 'Shape it with your hands',
         'photo': 'A picture from a camera',
         'movie': 'A film',
@@ -372,9 +372,14 @@ THEMES = {
         'chess': 'A board game with kings and queens',
         'cards': 'A deck for playing games',
         'quilt': 'Patchwork you can sleep under',
-        'checkers': 'A board game of hopping pieces',
+        'checkers': 'Board game where pieces hop and get crowned',
     },
 }
+
+# more hand-written themes live in clues_more.py
+from clues_more import MORE_THEMES  # noqa: E402
+for _name, _words in MORE_THEMES.items():
+    THEMES.setdefault(_name, _words)
 
 
 def all_clues():

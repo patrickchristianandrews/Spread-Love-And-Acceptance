@@ -75,7 +75,7 @@
     R('r07', 1, 1, 'I have five fingers, but I’m not a glove. Offer me in the dark and the fear gets smaller. What am I?',
       'Friends hold one out to each other.',
       [['A hand to hold', 'Yes. A hand to hold makes a dark path feel much less lonely.'],
-       ['A glove', 'The riddle says it isn’t a glove, though a glove can be cosy.'],
+       ['A glove', 'The riddle says it isn’t a glove, though a glove can be cozy.'],
        ['A map', 'A map is useful in the dark, but it has no fingers.']]),
     R('r08', 2, 1, 'I get louder when you ignore me and quieter when you name me out loud. What am I?',
       'Saying “I’m a bit scared” to someone you trust is one way to shrink it.',
@@ -478,8 +478,8 @@
        ['“Sorry you were upset.”', 'That makes it about his reaction, not what you did.'],
        ['“Sorry, but you were being annoying.”', 'The “but” cancels the sorry.'],
        ['Act extra nice and hope he forgets.', 'Kindness helps, but saying it plainly clears the air faster.']]),
-    C('c24', 3, 'Your mum phones while you’re in the middle of cooking dinner. You love her calls, and you really can’t talk right now.',
-      [['“Mum! I’m mid-dinner and want to hear properly. Can I call you back at eight?”', 'Yes. You turn toward her, and say when you can really listen.'],
+    C('c24', 3, 'Your mom phones while you’re in the middle of cooking dinner. You love her calls, and you really can’t talk right now.',
+      [['“Mom! I’m mid-dinner and want to hear properly. Can I call you back at eight?”', 'Yes. You turn toward her, and say when you can really listen.'],
        ['Answer and half-listen while you cook.', 'She might hear the distraction. A real call later can be better than a half one now.'],
        ['Let it ring and forget to call back.', 'A missed call with no call-back can feel like being turned away.'],
        ['“I can’t talk, bye.”', 'Honest, but abrupt. A few warm words and a time make all the difference.']]),
@@ -731,7 +731,7 @@
     W('GRATEFUL', 'Noticing, and saying, what someone did for you.', '5w'),
     W('GENEROUS', 'Giving your time, attention or help freely.', '5w'),
     W('RELIABLE', 'Doing what you said you’d do, when you said.', '2w'),
-    W('CHEERFUL', 'Bright and friendly, even on a grey morning.', '5s'),
+    W('CHEERFUL', 'Bright and friendly, even on a gray morning.', '5s'),
     W('FLEXIBLE', 'Able to bend and change the plan when life does.', '2s'),
     W('FAIRNESS', 'Every job with one clear owner, and a load that fits.', '1w'),
     W('PATIENCE', 'Waiting kindly while someone finds their words.', '4w'),
@@ -1134,7 +1134,7 @@
       ['They think my time doesn’t count.', 'A guess about what’s inside them.', 1],
       ['We have no written list of who does what.', 'You can check that. It’s about the setup.']], '1w'),
     SP('s15', 2, 'The doorbell', [
-      ['The neighbour knocked at eight in the morning.', 'A time and a knock. Seen.'],
+      ['The neighbor knocked at eight in the morning.', 'A time and a knock. Seen.'],
       ['She asked if we’d seen her cat.', 'Those were her words.'],
       ['She thinks we took her cat.', 'Nobody said that. It’s a story.', 1],
       ['She looked worried.', 'You saw her face. That counts as seen.'],
@@ -1146,7 +1146,7 @@
       ['She smiled after she said it.', 'You saw the smile. Seen.'],
       ['She was just being polite to hide what she really thinks.', 'A guess about what’s hidden. You could just ask.', 1],
       ['She asked where I got it done.', 'Those were her words. Seen.']], '4s'),
-    SP('s17', 2, 'The rota', [
+    SP('s17', 2, 'The chore chart', [
       ['The bathroom was on my housemate’s list this week.', 'You can check the list. Seen.'],
       ['It hasn’t been cleaned yet.', 'You can see it. Seen.'],
       ['It’s Thursday.', 'The calendar says so.'],
@@ -1247,7 +1247,7 @@
        ['Pretend to be on your phone.', 'That’s turning away.']], '5w'),
     B('b05', 3, 'A long drive', 'Sam', 'A long drive to visit family, with your partner Sam.', [
       ['Sam turns the radio down a little.', 'Turning the radio down can be a quiet bid: “shall we talk?”', 1],
-      ['A lorry overtakes on the left.', 'Just the road.'],
+      ['A truck overtakes on the left.', 'Just the road.'],
       ['Sam says, “Remember when we got lost here?”', 'A shared memory is a warm bid.', 1],
       ['The sat-nav says, “In two miles, turn right.”', 'Just the sat-nav.'],
       ['Sam checks the mirror and changes lanes.', 'Sam is driving here, not reaching.'],
@@ -1293,7 +1293,7 @@
        ['“Don’t worry, it’ll be fine.”', 'Kindly meant, but it skips past the worry instead of hearing it.'],
        ['“Can we not do this now? I’m tired.”', 'You may be tired, but this closes the door. Try “Tell me in the morning?”'],
        ['Pretend to already be asleep.', 'That’s turning away.']], '3w'),
-    B('b09', 3, 'The garden', 'Dev', 'An afternoon in the shared garden with your neighbour Dev.', [
+    B('b09', 3, 'The garden', 'Dev', 'An afternoon in the shared garden with your neighbor Dev.', [
       ['Dev waves over the fence.', 'A wave is a small bid: “hello, I see you.”', 1],
       ['A bird lands on the feeder.', 'Just the bird.'],
       ['Dev says, “Your roses are doing well this year.”', 'A compliment is a friendly reach.', 1],
@@ -1309,10 +1309,10 @@
       ['Ellie points: “Look, a rainbow!”', '“Look!” is a clear bid to share something.', 1],
       ['A bus goes past.', 'Just a bus.'],
       ['Ellie ties her shoelace.', 'Just a shoelace.'],
-      ['She says, “I got a bad mark in maths today.”', 'Sharing something hard is a real reach.', 1],
+      ['She says, “I got a bad mark in math today.”', 'Sharing something hard is a real reach.', 1],
       ['She offers you half her apple.', 'An offer is a warm bid.', 1],
       ['A dog barks in a garden.', 'Just a dog.']],
-      'Ellie says, “I got a bad mark in maths today.” Which answer turns toward her?',
+      'Ellie says, “I got a bad mark in math today.” Which answer turns toward her?',
       [['“Oh no. That’s rubbish. Do you want to talk about it?”', 'Yes. You notice the feeling and open the door.'],
        ['“I got a good mark.”', 'That turns the moment toward you, and away from her.'],
        ['“You should have studied more.”', 'That can land as a verdict when she needs a friend.'],
@@ -1371,8 +1371,8 @@
       ['The oven timer ticks.', 'Just the timer.'],
       ['Ash hums along to the radio, then glances at you and grins.', 'A grin across the kitchen is a quiet bid.', 1],
       ['A pan lid rattles.', 'Just the pan.'],
-      ['Ash says, “My mum used to make this.”', 'Sharing a memory is a real reach.', 1]],
-      'Ash says, “My mum used to make this.” Which answer turns toward it?',
+      ['Ash says, “My mom used to make this.”', 'Sharing a memory is a real reach.', 1]],
+      'Ash says, “My mom used to make this.” Which answer turns toward it?',
       [['“Oh, really? What was she like in the kitchen?”', 'Yes. One gentle question invites the memory in.'],
        ['“Cool. Where’s the pepper?”', 'Not unkind, but the reach gets missed.'],
        ['“Mine never cooked.”', 'That turns the moment toward you.'],
@@ -1385,7 +1385,7 @@
       ['The cat jumps on the counter.', 'Just the cat.'],
       ['Nia leans against your arm.', 'Leaning in is a quiet bid for comfort.', 1]],
       'Nia says, “I’m nervous about the spelling test.” Which answer turns toward her?',
-      [['“That’s okay. Want to practise two words together before we go?”', 'Yes. You take the feeling seriously and offer a small, doable help.'],
+      [['“That’s okay. Want to practice two words together before we go?”', 'Yes. You take the feeling seriously and offer a small, doable help.'],
        ['“Don’t be silly, you’ll be fine.”', 'Kindly meant, but it tells her the feeling is silly.'],
        ['“Eat your breakfast.”', 'Breakfast matters, but the worry gets missed.'],
        ['“I was always bad at spelling too.”', 'It may comfort her, but it’s about you. Start with her.']], '3w'),
@@ -1393,7 +1393,7 @@
       ['Omar types quickly.', 'Busy working.'],
       ['Omar leans back and stretches: “Long day.”', 'A sigh-like remark is a small bid.', 1],
       ['The printer whirrs.', 'Just the printer.'],
-      ['Omar puts a biscuit on your desk.', 'A small gift is a bid.', 1],
+      ['Omar puts a cookie on your desk.', 'A small gift is a bid.', 1],
       ['Omar answers the phone.', 'Busy on a call.'],
       ['Omar asks, “Any plans for the weekend?”', 'A friendly question is a bid.', 1]],
       'Omar leans back: “Long day.” Which answer turns toward it?',
@@ -1401,7 +1401,7 @@
        ['Keep typing.', 'That’s turning away. Understandable when busy, but the reach is missed.'],
        ['“Some of us are actually working.”', 'That turns against the reach.'],
        ['“You think yours is long?”', 'That makes it a contest.']], '5w'),
-    B('b18', 2, 'The allotment', 'Pat', 'Saturday at the allotment with your dad, Pat.', [
+    B('b18', 2, 'The community garden', 'Pat', 'Saturday at the community garden with your dad, Pat.', [
       ['Pat pulls on his wellies.', 'Just getting ready.'],
       ['Pat says, “Come and see what came up!”', '“Come and see” is a clear bid.', 1],
       ['A robin hops on the fence.', 'Just the robin.'],
@@ -1425,19 +1425,19 @@
        ['“Nice. Is that our bus?”', 'Warm but brief. The moment slips away.'],
        ['“You should sell it. Have you thought about pricing?”', 'A practical idea, but it’s for another day. Tonight, enjoy it with her.'],
        ['“I could never paint.”', 'That turns the moment toward you.']], '5w'),
-    B('b20', 2, 'Caring for Mum', 'Mum', 'An afternoon with your mum, who you help look after.', [
-      ['Mum says, “Thank you for coming, love.”', 'Thanks is a warm bid.', 1],
+    B('b20', 2, 'Caring for Mom', 'Mom', 'An afternoon with your mom, who you help look after.', [
+      ['Mom says, “Thank you for coming, love.”', 'Thanks is a warm bid.', 1],
       ['The clock on the wall ticks.', 'Just the clock.'],
-      ['Mum folds the tea towels.', 'Just her routine.'],
+      ['Mom folds the tea towels.', 'Just her routine.'],
       ['She says, “Tell me about the children.”', 'Asking about your life is a real bid.', 1],
       ['The post drops through the door.', 'Just the post.'],
       ['She holds out her hand for yours.', 'Reaching for your hand is a quiet bid.', 1]],
-      'Mum says, “Tell me about the children.” Which answer turns toward her?',
+      'Mom says, “Tell me about the children.” Which answer turns toward her?',
       [['Sit down with her: “Oh, Mia lost her first tooth! Let me show you a photo.”', 'Yes. You turn toward her and share something real.'],
        ['“They’re fine. Have you eaten?”', 'Caring, but it closes her reach quickly.'],
-       ['“Not now, Mum, I need to do the washing up.”', 'The washing up can wait five minutes. This moment is the reach.'],
+       ['“Not now, Mom, I need to do the dishes.”', 'The washing up can wait five minutes. This moment is the reach.'],
        ['Answer while checking your phone.', 'Half-listening. She’ll notice.']], '1w'),
-    B('b21', 3, 'Holiday planning', 'Lou', 'Planning a holiday with your partner Lou.', [
+    B('b21', 3, 'Vacation planning', 'Lou', 'Planning a vacation with your partner Lou.', [
       ['Lou opens the laptop.', 'Getting started.'],
       ['Lou says, “I found a cottage by the sea. Look!”', '“Look!” is a clear bid.', 1],
       ['The laptop fan whirs.', 'Just the laptop.'],
@@ -1453,7 +1453,7 @@
       ['Ivy blows up the air mattress.', 'Just getting ready.'],
       ['Ivy says, “Want to hear a secret about my new school?”', 'An invitation to share is a bid.', 1],
       ['The heating pipes gurgle.', 'Just the pipes.'],
-      ['Ivy lends you her softest pyjamas.', 'Lending something special is a bid.', 1],
+      ['Ivy lends you her softest pajamas.', 'Lending something special is a bid.', 1],
       ['Ivy switches off the big light.', 'Just the light.'],
       ['Ivy whispers, “I’m glad you’re here.”', 'Saying she’s glad is a warm bid.', 1]],
       'Ivy whispers, “I’m glad you’re here.” Which answer turns toward it?',
@@ -1609,7 +1609,7 @@
       [['Mowing the lawn', 4], ['Weeding the beds', 3], ['Planting the seedlings', 3], ['Watering every evening', 3],
        ['Remembering when to feed the tomatoes', 1, 1], ['Fixing the fence', 4], ['Sweeping the path', 1], ['Planning what to grow next', 2, 1],
        ['Taking the green waste to the tip', 1]], '1s'),
-    FS('j13', 2, 'A holiday week away', [8, 10], ['a long week at work before', 'a lighter week'],
+    FS('j13', 2, 'A vacation week away', [8, 10], ['a long week at work before', 'a lighter week'],
       [['Booking the tickets', 2], ['Packing the cases', 3], ['Finding someone to feed the fish', 1, 1], ['Planning the days out', 2, 1],
        ['Checking the passports', 1, 1], ['Unpacking and the washing after', 4], ['Printing the maps', 1], ['Sorting the money', 2, 1],
        ['Carrying the bags', 2]], '1w')
@@ -1689,7 +1689,7 @@
     P.chunks.forEach(function (f) { require('./' + f); });
   } else {
     root.TOLJourneyPools = P;
-    // a chunk that arrived before this file (it shouldn't, but just in case) waits in a queue
+    // a chunk that arrived before this file (it shouldn't, but just in case) waits in a line
     (root.TOLJourneyPoolsQueue || []).forEach(function (q) { P.extend(q[0], q[1]); });
   }
 })(this);

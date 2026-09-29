@@ -71,3 +71,22 @@ html.has-garden body.is-game .gm-switch{ padding:.35rem; border-radius:999px; ba
 .gm-switch::-webkit-scrollbar{ display:none; }
 .gm-switch a.gm-tab{ flex:none; }
 @media (max-width:420px){ .gm-switch a.gm-tab{ padding:.3rem .6rem; font-size:.82rem; } }
+
+/* today's puzzles (the crosswords), above the difficulty bar */
+.xw-today{ display:flex; flex-wrap:wrap; align-items:center; gap:.4rem; margin:0 0 .6rem; padding:0 0 .6rem; border-bottom:1px dashed var(--g-edge); }
+.xw-today-k{ font:500 .7rem/1 "IBM Plex Mono", monospace; text-transform:uppercase; letter-spacing:.1em; color:var(--g-soft); margin-right:.1rem; }
+.xw-today button{ font:inherit; font-size:.9rem; font-weight:600; min-height:40px; padding:.3rem .95rem; border-radius:999px; border:1px solid var(--g-edge); background:var(--g-tile); color:var(--g-ink); cursor:pointer; }
+.xw-today button[aria-pressed="true"]{ background:#3C3350; border-color:#3C3350; color:#FFF8EE; }
+.xw-today-more{ margin-left:auto; font-size:.74rem; color:var(--g-soft); }
+@media (max-width:420px){ .xw-today-more{ display:none; } }
+/* bigger squares: the grid keeps a comfortable square size and scrolls sideways */
+.xw-scroll{ position:relative; }
+.xw.is-zoom .xw-scroll{ overflow-x:auto; -webkit-overflow-scrolling:touch; padding:2px; margin:0 -.2rem; overscroll-behavior-x:contain; }
+.xw.is-zoom .xw-grid{ margin:0; }
+.xw.is-zoom .xw-cell{ font-size:1.2rem !important; }
+.xw.is-zoom .gm-n{ font-size:.55rem !important; }
+.xw-zoom[hidden]{ display:none; }
+/* Quiet Words: a soft nudge when a line isn't one of the hidden words */
+.qw-grid.is-miss{ animation:qw-nope .45s ease-in-out; }
+@keyframes qw-nope{ 25%{ transform:translateX(-4px); } 75%{ transform:translateX(4px); } }
+@media (prefers-reduced-motion: reduce){ .qw-grid.is-miss{ animation:none; } }

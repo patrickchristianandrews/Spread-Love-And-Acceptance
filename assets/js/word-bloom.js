@@ -1,6 +1,8 @@
 /* word-bloom.js — Word Bloom (/word-bloom.html): a calm, moreish letter-wheel game.
-   Swipe across the petals (or tap them one by one) to spell a word. Words that belong
-   in the little crossword fill it in; other real words go in the bonus jar. Every level
+   Swipe across the petals (or tap them one by one) to spell a word. A word that fits a slot in
+   the little crossword fills it in (any everyday word with the right letters where it crosses
+   another word, not just the one we had in mind); any other real word goes in the bonus jar
+   (bloom-dict.js, a family-friendly dictionary). Every level
    blooms into the next, and every level counts toward something new in the background (see rewards.js).
    No timer and no way to lose. Progress stays in this browser. */
 (function () {
@@ -24,7 +26,7 @@
   var KIND = ['Lovely. Take a slow breath.', 'Beautifully done.', 'Your garden grows.', 'That felt good, didn’t it?', 'One more little bloom.', 'Gently does it.',
     'You found them all.', 'A small win is still a win.', 'Your mind has had a lovely stretch.', 'Well played. Rest your eyes a moment.'];
 
-  var S = { level: 0, found: [], bonus: [], jar: 0, hints: 0, revealed: [], cleared: 0, perfect: 0 };
+  var S = { level: 0, found: [], alt: {}, bonus: [], jar: 0, hints: 0, revealed: [], cleared: 0, perfect: 0 };
   try { var raw = localStorage.getItem(KEY); if (raw) { var o = JSON.parse(raw); for (var k in o) S[k] = o[k]; } } catch (e) {}
   function save() { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) {} }
 
@@ -48,20 +50,25 @@
   function start(c) {
     cur = c; lv = c.puzzle;
     var key = c.tier.id + ':' + c.index;
-    S.level = (c.base || 0) + c.index;
-    if (S.at !== key) { S.at = key; S.found = []; S.bonus = []; S.hints = 0; S.revealed = []; }
+    S.level = (c.base || 0) + c.index; S.tier = c.tier.name; S.num = c.fresh ? 0 : c.index + 1;
+    if (S.at !== key) { S.at = key; S.found = []; S.alt = {}; S.bonus = []; S.hints = 0; S.revealed = []; }
+    S.alt = S.alt || {};
     levels.paintBar(barEl, c);
     save();
     order = lv.l.split('');
     var ch = Math.floor(c.index / 10);
-    $('.wb-level').textContent = 'Level ' + (S.level + 1);
-    $('.wb-chapter').textContent = c.tier.name + ' · ' + CHAPTERS[Math.floor(ch + (c.base || 0) / 10) % CHAPTERS.length];
+    // levels are numbered within each difficulty (Gentle 1, 2, 3 ... Easy 1, 2, 3 ...)
+    $('.wb-level').textContent = c.fresh ? 'Fresh wheel ' + c.fresh : 'Level ' + (c.index + 1);
+    $('.wb-chapter').textContent = c.tier.name + ' · ' + CHAPTERS[(ch + levels.tiers.indexOf(c.tier) * 4) % CHAPTERS.length];
     if (c.movedUp) setTimeout(function () { noteEl.innerHTML = '<b>You moved up to ' + c.tier.name + '.</b> Bigger wheels, new words.'; }, 50);
     root.setAttribute('data-chapter', String(ch % 5));
     root.classList.remove('is-done');
     buildGrid(); buildWheel(); jar();
     noteEl.innerHTML = S.level === 0 && !S.cleared ? '<b>Swipe across the petals</b> to spell a word. Tap them one at a time if you prefer.' : 'Find every word to bloom this level.';
     wordEl.textContent = '';
+    // a new level from a button: move focus to the wheel, so Enter can't press the button again
+    var ae = document.activeElement;
+    if (ae && ae !== document.body && (barEl.contains(ae) || ae.closest('.wb-done'))) { try { wheel.focus({ preventScroll: true }); } catch (e) {} }
   }
 
   function buildGrid() {
@@ -72,14 +79,15 @@
       var d = document.createElement('div'); d.className = 'gm-cell'; gridEl.appendChild(d); cells[r + ',' + c] = d;
     }
     lv.w.forEach(function (w) { eachCell(w, function (el) { el.classList.add('is-on'); }); });
-    lv.w.forEach(function (w) { if (S.found.indexOf(w[0]) !== -1) fill(w, false); });
+    lv.w.forEach(function (w) { if (S.found.indexOf(w[0]) !== -1) fill(w, false, S.alt[w[0]]); });
     S.revealed.forEach(function (k) { var el = cells[k]; if (el && !el.textContent) { el.textContent = letterAt(k); el.classList.add('is-hinted'); } });
   }
   function eachCell(w, fn) { for (var i = 0; i < w[0].length; i++) { var r = w[1] + (w[3] === 'd' ? i : 0), c = w[2] + (w[3] === 'a' ? i : 0); fn(cells[r + ',' + c], i, r + ',' + c); } }
   function letterAt(key) { var out = ''; lv.w.forEach(function (w) { eachCell(w, function (el, i, k) { if (k === key) out = w[0][i]; }); }); return out; }
-  function fill(w, animate) {
+  function fill(w, animate, text) {
+    text = text || w[0];
     eachCell(w, function (el, i) {
-      var go = function () { el.textContent = w[0][i]; el.classList.remove('is-hinted'); el.classList.add('is-found'); };
+      var go = function () { el.textContent = text[i]; el.classList.remove('is-hinted'); el.classList.add('is-found'); };
       if (animate) setTimeout(go, i * 90); else go();
     });
   }
@@ -151,26 +159,66 @@
     if (/^[A-Z]$/.test(k)) { var i = -1; order.forEach(function (ch, j) { if (i < 0 && ch === k && chosen.indexOf(j) === -1) i = j; }); if (i >= 0) { wake(); tapMode = true; add(i); } }
   });
 
+  // ---------- is it a word, and does it fit? ----------
+  var DICT = null;
+  function loadDict() {
+    if (DICT) return;
+    window.TOLLevels.script('bloom-dict').then(function () {
+      var d = window.TOL_BLOOM_DICT || {}, set = {};
+      Object.keys(d).forEach(function (L) { d[L].split(' ').forEach(function (w) { set[w.toUpperCase()] = 1; }); });
+      DICT = set;
+    }, function () {});
+  }
+  function isWord(w) { return (DICT && DICT[w]) || lv.b.indexOf(w) !== -1; }
+  // the positions in a slot that cross another word
+  function crossings(slot) {
+    var out = [];
+    eachCell(slot, function (el, i, key) {
+      var n = 0; lv.w.forEach(function (o) { if (o !== slot) eachCell(o, function (e2, j, k2) { if (k2 === key) n++; }); });
+      if (n) out.push(i);
+    });
+    return out;
+  }
+  // a slot still open that this word fits: same length, and the same letter wherever it crosses
+  function fitsSlot(w) {
+    var open = lv.w.filter(function (x) { return S.found.indexOf(x[0]) === -1 && x[0].length === w.length; });
+    for (var k = 0; k < open.length; k++) {
+      var slot = open[k], ok = crossings(slot).every(function (i) { return slot[0][i] === w[i]; });
+      if (ok) return slot;
+    }
+    return null;
+  }
+  function foundAlready(w) {
+    return S.found.indexOf(w) !== -1 || S.bonus.indexOf(w) !== -1 || Object.keys(S.alt).some(function (k) { return S.alt[k] === w; });
+  }
+
   function submit() {
     var w = word(); tapMode = false;
     if (w.length < 3) { chosen = []; drawLines(); return; }
     var hit = lv.w.filter(function (x) { return x[0] === w; })[0];
-    if (hit && S.found.indexOf(w) === -1) {
-      S.found.push(w); save(); fill(hit, true); feedback('is-good');
+    if (hit && foundAlready(w)) hit = null;
+    // another everyday word that fits an open slot counts too
+    if (!hit && !foundAlready(w) && isWord(w)) { hit = fitsSlot(w); if (hit) S.alt[hit[0]] = w; }
+    if (hit) {
+      S.found.push(hit[0]); save(); fill(hit, true, w); feedback('is-good');
       var m = wake(); if (m) m.reward(false);
       var left = lv.w.length - S.found.length;
       noteEl.innerHTML = '<b>' + cap(w) + '</b> ' + (left ? '· ' + left + (left === 1 ? ' word to go' : ' words to go') : '');
-      say('Found ' + w.toLowerCase() + '.');
+      say('Found ' + w.toLowerCase() + '.' + (left ? ' ' + left + ' to go.' : ''));
       if (!left) setTimeout(finish, 700);
-    } else if (hit || S.bonus.indexOf(w) !== -1) {
+    } else if (foundAlready(w)) {
       feedback('is-again'); noteEl.innerHTML = 'You already found <b>' + cap(w) + '</b>.';
-    } else if (lv.b.indexOf(w) !== -1) {
+      say('Already found ' + w.toLowerCase() + '.');
+    } else if (isWord(w)) {
       S.bonus.push(w); S.jar++; save(); feedback('is-bonus'); jar(true);
       var mm = wake(); if (mm) mm.pluck(mm.note(6), 0.05);
-      noteEl.innerHTML = '<b>' + cap(w) + '</b> is a bonus word ✨ ' + (10 - S.jar % 10 === 10 ? '' : (10 - S.jar % 10) + (10 - S.jar % 10 === 1 ? ' more fills the jar.' : ' more fill the jar.'));
-      if (S.jar % 10 === 0 && R) R.earn(10, 'bloom', 'Bonus jar full');
+      var more = 10 - S.jar % 10;
+      noteEl.innerHTML = '<b>' + cap(w) + '</b> goes in the bonus jar ✨' + (more === 10 ? ' The jar is full. Lovely.' : ' ' + more + (more === 1 ? ' more fills it.' : ' more fill it.'));
+      say(w.toLowerCase() + ' is a bonus word.');
     } else {
-      feedback('is-miss'); noteEl.textContent = 'Not this time. Try another.';
+      // gentle: it may well be a word, just not one this little puzzle knows
+      feedback('is-miss'); noteEl.innerHTML = '<b>' + cap(w) + '</b> isn’t in this puzzle. Try another.';
+      say(w.toLowerCase() + ' is not in this puzzle.');
     }
     setTimeout(function () { chosen = []; drawLines(); }, 450);
   }
@@ -187,11 +235,12 @@
     var m = wake(); if (m) { m.home(); setTimeout(function () { m.reward(true); }, 500); }
     if (window.TOLGarden && S.cleared % 5 === 0) window.TOLGarden.gift('words');
     var res = null;
-    if (R) { res = R.earn(petalsWon, 'bloom', perfect ? 'Perfect bloom, no hints' : 'Level ' + (S.level + 1) + ' bloomed'); R.record('bloom', 'levels'); R.record('bloom', 'best', S.level + 1, 'max'); }
+    // the finish card is the only card: anything new in the garden is shown on it, not in a second pop-up
+    if (R) { res = R.earn(petalsWon, 'bloom', perfect ? 'Perfect bloom, no hints' : 'Level bloomed', { noCard: true, quiet: true }); R.record('bloom', 'levels'); }
     var card = $('.wb-done');
-    card.querySelector('.wb-done-h').textContent = perfect ? 'A perfect bloom!' : 'Level ' + (S.level + 1) + ' bloomed';
+    card.querySelector('.wb-done-h').textContent = perfect ? 'A perfect bloom!' : (cur.fresh ? 'Wheel bloomed' : 'Level ' + (cur.index + 1) + ' bloomed');
     card.querySelector('.wb-done-p').textContent = KIND[S.level % KIND.length] + (S.bonus.length ? ' You found ' + S.bonus.length + ' bonus ' + (S.bonus.length === 1 ? 'word' : 'words') + ' too.' : '');
-    card.querySelector('.wb-done-petals').textContent = (res && res.unlocked && res.unlocked.length ? '\u2728 New in the background: ' + res.unlocked[0].name : res ? '\u2728 Level ' + res.level : '');
+    card.querySelector('.wb-done-petals').textContent = (res && res.unlocked && res.unlocked.length ? res.unlocked[0].icon + ' New in your garden: ' + res.unlocked[0].name : '');
     levels.finished(cur);
     var tip = card.querySelector('.wb-done-tip'); if (tip) tip.innerHTML = window.TOLLevels.programTip();
     card.hidden = false;
@@ -266,7 +315,9 @@
   document.addEventListener('visibilitychange', function () { if (!music) return; if (document.hidden) music.stop(); else if (soundOn) music.start(); });
   window.addEventListener('resize', drawLines);
 
+  wheel.setAttribute('tabindex', '-1');
   go(levels.current());
+  loadDict();
   root.hidden = false;
   window.__wordBloom = { state: S, levels: levels, grow: grow, get level() { return lv; }, submitWord: function (w) { chosen = []; w.split('').forEach(function (ch) { var i = -1; order.forEach(function (o, j) { if (i < 0 && o === ch && chosen.indexOf(j) === -1) i = j; }); chosen.push(i); }); submit(); }, start: start };
 })();

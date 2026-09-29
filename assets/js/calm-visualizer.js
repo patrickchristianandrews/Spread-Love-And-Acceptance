@@ -1,6 +1,6 @@
 /* calm-visualizer.js — "Drift", a calm visualizer with binaural beats.
    You say how you feel; Drift picks a pair of soft tones (one per ear), a slow breathing pace,
-   a colour palette and a visual style, then glides the beat from "where you are" toward calmer.
+   a color palette and a visual style, then glides the beat from "where you are" toward slower.
    Sound: WebAudio, two sine oscillators panned hard left/right, an optional soft noise or pad bed.
    Pictures: a WebGL fragment shader (five styles), with a 2D-canvas fallback.
    Safety: every visual change is slow (well under 3 changes a second at any point on screen),
@@ -24,49 +24,49 @@
     { id: 'mandala', name: 'Mandala', ico: '🪷', say: 'glowing geometry turning slowly in space' }
   ];
   var BANDS = {
-    delta: 'the delta range, the pace of deep sleep',
-    theta: 'the theta range, often linked with drowsy, dreamy calm',
-    alpha: 'the alpha range, often linked with relaxed, awake calm',
-    smr: 'the low-beta (SMR) range, often linked with calm focus'
+    delta: 'a very slow beat, about one to four a second',
+    theta: 'a slow beat, about four to eight a second',
+    alpha: 'a gentle beat, about eight to twelve a second',
+    smr: 'a livelier beat, about twelve to fifteen a second'
   };
   var BEDS = { pink: 'Soft rain-like noise', brown: 'Deep, low hush', pad: 'Warm hum', none: 'Tones only' };
   var FEEL = [
     { id: 'wired', e: '⚡', name: 'Wired', full: 'Wired / on edge', hint: 'Buzzy, jumpy, can’t settle',
       carrier: 200, from: 14, to: 10, band: 'alpha', glide: 3, bed: 'pink', breath: [4, 0, 6, 0], style: 'tunnel', len: 10,
       pal: ['#0B1E2E', '#3FA7C9', '#7B6FD6', '#BDF2E6'], cols: 'cool teal and violet',
-      desc: 'A slow glide down a cool, glowing tunnel. The beat starts close to that buzzy, switched-on pace and eases down into alpha while your out-breath grows long.' },
+      desc: 'A slow glide down a cool, glowing tunnel. The beat starts close to that buzzy, switched-on pace and slows gently while your out-breath grows long.' },
     { id: 'anxious', e: '🌀', name: 'Anxious', full: 'Anxious / racing thoughts', hint: 'Worry loops, tight chest',
       carrier: 180, from: 12, to: 8, band: 'alpha', glide: 4, bed: 'brown', breath: [4, 0, 7, 0], style: 'mandala', len: 10,
       pal: ['#0E1236', '#5B7BE0', '#9A7BE8', '#BFD8FF'], cols: 'cool blues and violets',
-      desc: 'Soft geometry turning slowly in cool blues, around a light that breathes with you. The out-breath is long, which many people find settles racing thoughts.' },
+      desc: 'Soft geometry turning slowly in cool blues, around a light that breathes with you. The out-breath is long and unhurried.' },
     { id: 'overwhelmed', e: '🌊', name: 'Overwhelmed', full: 'Overwhelmed', hint: 'Too much at once',
       carrier: 170, from: 10, to: 7, band: 'theta', glide: 4, bed: 'pad', breath: [4, 1, 6, 1], style: 'liquid', len: 10,
       pal: ['#0C2426', '#3FB7A0', '#6FA8DC', '#D6C8F5'], cols: 'sea greens and soft lavender',
-      desc: 'Slow liquid colour with nothing to follow or keep up with. The beat drifts down toward the edge of theta, and a warm hum swells gently with each breath.' },
-    { id: 'low', e: '🌧️', name: 'Low', full: 'Low / flat', hint: 'Heavy, grey, no spark',
+      desc: 'Slow liquid color with nothing to follow or keep up with. The beat slows little by little, and a warm hum swells gently with each breath.' },
+    { id: 'low', e: '🌧️', name: 'Low', full: 'Low / flat', hint: 'Heavy, gray, no spark',
       carrier: 210, from: 6, to: 10, band: 'alpha', glide: 3, bed: 'pad', breath: [4, 1, 5, 0], style: 'kaleido', len: 10,
       pal: ['#2A1030', '#E89A6B', '#D77FB0', '#F5D38A'], cols: 'warm dusk: apricot, orchid and gold',
-      desc: 'A warm dusk kaleidoscope that slowly opens toward you. The beat meets a low, heavy pace and lifts gently toward alpha, like the light coming up.' },
+      desc: 'A warm dusk kaleidoscope that slowly opens toward you. The beat meets a low, heavy pace and lifts a little, like the light coming up.' },
     { id: 'tired', e: '🦉', name: 'Tired but wired', full: 'Tired but can’t switch off', hint: 'Exhausted, mind still on',
       carrier: 160, from: 10, to: 6, band: 'theta', glide: 5, bed: 'brown', breath: [4, 0, 7, 1], style: 'nebula', len: 15,
       pal: ['#151030', '#8B6FD0', '#5A7BC8', '#F0B8D0'], cols: 'dusky violet and rose',
-      desc: 'Drifting through soft violet clouds and far-off stars. The beat eases from alpha down into theta, the dreamy, drowsy range, while a deep hush sits underneath.' },
+      desc: 'Drifting through soft violet clouds and far-off stars. The beat slows gently while a deep hush sits underneath.' },
     { id: 'angry', e: '😤', name: 'Angry', full: 'Angry / frustrated', hint: 'Hot, tense, fed up',
       carrier: 190, from: 14, to: 9, band: 'alpha', glide: 3, bed: 'brown', breath: [4, 0, 8, 0], style: 'liquid', len: 10,
       pal: ['#082421', '#2FA58A', '#4F9FC8', '#BFEFD8'], cols: 'cooling jade and sea blue',
-      desc: 'Cool, flowing jade and blue, the opposite of hot. The out-breath is twice as long as the in-breath, and the beat cools from a fast pace down into alpha.' },
+      desc: 'Cool, flowing jade and blue, the opposite of hot. The out-breath is twice as long as the in-breath, and the beat eases from a fast pace to a gentle one.' },
     { id: 'scattered', e: '🧭', name: 'Scattered', full: 'Scattered / can’t focus', hint: 'Thoughts everywhere',
       carrier: 220, from: 10, to: 14, band: 'smr', glide: 2, bed: 'pink', breath: [4, 4, 4, 4], style: 'tunnel', len: 10,
       pal: ['#0C1A30', '#45C4B0', '#8BC8F5', '#FFE7A0'], cols: 'clear mint, sky and soft gold',
-      desc: 'One steady point to rest your eyes on, at the end of a slow tunnel. Box breathing (in, hold, out, hold) and a beat that rises gently toward calm focus.' },
+      desc: 'One steady point to rest your eyes on, at the end of a slow tunnel. Box breathing (in, hold, out, hold) and a beat that lifts a little.' },
     { id: 'unwind', e: '🍃', name: 'Unwind', full: 'Just want to unwind', hint: 'Nothing wrong, just winding down',
       carrier: 200, from: 12, to: 9, band: 'alpha', glide: 3, bed: 'pad', breath: [4, 0, 6, 0], style: 'kaleido', len: 15,
       pal: ['#1E1640', '#F2A98A', '#B08BE6', '#8FD3E8'], cols: 'pastel sunset',
-      desc: 'A pastel sunset kaleidoscope, a warm hum and an easy breath. The beat settles into the middle of alpha and stays there.' },
+      desc: 'A pastel sunset kaleidoscope, a warm hum and an easy breath. The beat settles into a gentle pace and stays there.' },
     { id: 'sleep', e: '🌙', name: 'Sleep', full: 'Getting ready for sleep', hint: 'Winding down for bed',
       carrier: 150, from: 7, to: 2.5, band: 'delta', glide: 8, bed: 'brown', breath: [4, 1, 7, 1], style: 'nebula', len: 20,
       pal: ['#04061A', '#3E4AA8', '#6B5BB8', '#E8D9A8'], cols: 'deep indigo and moonlight',
-      desc: 'Deep indigo sky and slow stars that dim as the session goes on. The beat drifts slowly down through theta into delta, the pace of deep sleep. Fine to fall asleep; it fades out by itself.' }
+      desc: 'Deep indigo sky and slow stars that dim as the session goes on. The beat slows right down. Fine to fall asleep; it fades out by itself.' }
   ];
   var IDLE = { id: 'idle', pal: ['#14163A', '#7A6FD8', '#4FA3C8', '#F2C6DC'], style: 'liquid', breath: [4, 0, 6, 0], carrier: 200, from: 10, to: 10 };
   var AFTER = [
@@ -281,7 +281,7 @@
     'float noise(vec2 p){ vec2 i=floor(p), f=fract(p); f=f*f*(3.0-2.0*f); return mix(mix(hash(i),hash(i+vec2(1.0,0.0)),f.x), mix(hash(i+vec2(0.0,1.0)),hash(i+vec2(1.0,1.0)),f.x), f.y); }',
     'float fbm(vec2 p){ float v=0.0, a=0.5; for(int i=0;i<5;i++){ v+=a*noise(p); p=rot(0.5)*p*2.03+3.1; a*=0.5; } return v; }',
 
-    // 0. Tunnel: flying slowly down a tiled, twisting tube of colour toward a soft light
+    // 0. Tunnel: flying slowly down a tiled, twisting tube of color toward a soft light
     'vec3 tunnel(vec2 p){',
     '  p *= 1.0 + 0.10*uB; p = rot(uT*0.025)*p;',
     '  float r = length(p), a = atan(p.y,p.x);',
@@ -641,7 +641,7 @@
       '<li><span aria-hidden="true">🎧</span><span>Tones: ' + hz(p.carrier - p.to / 2) + ' Hz left, ' + hz(p.carrier + p.to / 2) + ' Hz right</span></li>' +
       '<li><span aria-hidden="true">〰️</span><span>Beat: starts near ' + hz(p.from) + ' a second and drifts to ' + hz(p.to) + ' over about ' + mins + ' min, in ' + BANDS[f.band] + '</span></li>' +
       '<li><span aria-hidden="true">🫁</span><span>Breath: ' + breath + '</span></li>' +
-      '<li><span aria-hidden="true">🎨</span><span>Colours: ' + f.cols + '</span></li>';
+      '<li><span aria-hidden="true">🎨</span><span>Colors: ' + f.cols + '</span></li>';
     var labels = ['', 'A little. A short, easy glide.', 'Some.', 'Medium.', 'Quite strong. A longer glide and a slower out-breath.', 'A lot. The longest glide and the slowest out-breath. Go easy on yourself.'];
     $('cv-int-out').textContent = labels[S.intensity];
     $('cv-int').setAttribute('aria-valuetext', ['', 'A little', 'Some', 'Medium', 'Quite strong', 'A lot'][S.intensity] || '');

@@ -76,7 +76,10 @@
   var N = 9, DIRS = TIERS.easy.dirs, cur = null;
   var levels = window.TOLLevels ? window.TOLLevels.create({ game: 'words', tiers: ['gentle', 'easy', 'medium', 'hard', 'expert'].map(function (id) {
     return { id: id, name: id.charAt(0).toUpperCase() + id.slice(1), bank: 'qw-themes' };
-  }), shareSeen: true, keyOf: function (t) { return t.name; }, generate: mix }) : null;
+  }), keyOf: function (t) { return t.name; }, generate: mix,
+    // each level opens at its own place in the theme bank (so they don't all begin with "Calm"), and
+    // counts the puzzles you've played there: 1, 2, 3 ...
+    startAt: function (k, n) { return Math.floor(n * k / 5) + k * 7; }, countSeen: true }) : null;
   function mix(ctx) {
     var a = Math.floor(ctx.rand() * ctx.chunks), b = Math.floor(ctx.rand() * ctx.chunks);
     return Promise.all([ctx.chunk(a), ctx.chunk(b)]).then(function (l) {
@@ -268,8 +271,16 @@
 
   function check(line) {
     var text = line.map(function (p) { return grid[p[0]][p[1]]; }).join(''), back = text.split('').reverse().join('');
-    var hit = words.filter(function (w) { return !found[w.word] && (w.word === text || w.word === back) && sameCells(w, line); })[0];
-    if (!hit) return;
+    // the word, wherever you found it: SLED can turn up inside another word as well as in its own spot
+    var hit = words.filter(function (w) { return !found[w.word] && (w.word === text || w.word === back) && sameCells(w, line); })[0] ||
+      words.filter(function (w) { return !found[w.word] && (w.word === text || w.word === back); })[0];
+    if (!hit) { miss(text, back, line); return; }
+    if (!sameCells(hit, line)) {
+      // found it somewhere else: mark it where you found it
+      var a = line[0], b = line[line.length - 1], fwd = hit.word === text;
+      hit.r = fwd ? a[0] : b[0]; hit.c = fwd ? a[1] : b[1];
+      hit.dr = Math.sign((fwd ? b[0] : a[0]) - hit.r); hit.dc = Math.sign((fwd ? b[1] : a[1]) - hit.c);
+    }
     var n = Object.keys(found).length;
     found[hit.word] = COLORS[n % COLORS.length];
     bell(n);
@@ -280,6 +291,16 @@
     drawMarks();
     if (Object.keys(found).length === words.length) finish();
   }
+  // a gentle word when a line isn't one of the hidden words
+  function miss(text, back, line) {
+    if (line.length < 3) return;
+    var done = words.filter(function (w) { return found[w.word] && (w.word === text || w.word === back); })[0];
+    noteEl.innerHTML = done ? '<span class="qw-note-h">Already found.</span> ' + cap(done.word) + ' is glowing on the board.'
+      : '<span class="qw-note-h">Not one of the hidden words.</span> Keep looking, there’s no rush.';
+    say(done ? 'Already found ' + done.word.toLowerCase() + '.' : 'Not one of the hidden words.');
+    gridEl.classList.remove('is-miss'); void gridEl.offsetWidth; gridEl.classList.add('is-miss');
+  }
+  function cap(w) { return w.charAt(0) + w.slice(1).toLowerCase(); }
   function sameCells(w, line) {
     var cells = []; for (var i = 0; i < w.word.length; i++) cells.push((w.r + w.dr * i) + ',' + (w.c + w.dc * i));
     var got = line.map(function (p) { return p[0] + ',' + p[1]; });
@@ -307,6 +328,15 @@
   var barEl = $('.gl-host');
   if (levels) levels.bar(barEl, function (p) { go(p); });
   $('.qw-next').addEventListener('click', function () { if (levels) go(levels.next()); else start(puzzleNo + 1); });
+  // today's theme: picked from the bank by the date alone, so it's the same for everyone today
+  $('.qw-today').addEventListener('click', function () {
+    var d = new Date(), day = Math.round(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()) / 864e5);
+    if (!levels) { start(day % THEMES.length); return; }
+    levels.load(levels.state().tier).then(function (inf) {
+      var i = (window.TOLLevels.hash('daily:words') + (day % inf.n) * 7919) % inf.n;
+      go(levels.pick(i));
+    });
+  });
   // choose any theme (the list of names loads the first time it's opened)
   var picker = $('.qw-picker'), pickBtn = $('.qw-pick');
   function fillPicker(names) { picker.innerHTML = names.map(function (n, i) { return '<button type="button" data-theme="' + i + '">' + esc(n) + '</button>'; }).join(''); }
