@@ -89,7 +89,7 @@ OVERRIDE = {
         'calm puzzles, riddles and small lessons about harmony, patience and being in tune with each other.'),
     'frequency-buddies.html': (None,
         'Frequency Buddies: gentle animated adventures starring two pups, Tidbit and Sugarfoot, who hit real tough times, '
-        'work through them together and come out stronger. About 15 minutes each, with captions and soft voices.'),
+        'work through them together and come out stronger. About 16 to 17 minutes each, with captions and real, recorded voices.'),
     'ask.html': (None,
         'Chat with Professor Puddles: describe what’s going on in a relationship or ask about any tool, and get kind, '
         'practical next steps and words you could use. Free, private and on your device.'),
