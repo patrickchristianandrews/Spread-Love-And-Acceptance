@@ -284,6 +284,17 @@
       b.addEventListener('click', function () {
         if (isOff(b) || !next.hidden || at >= order.length) return;
         var it = m.items[order[at]];
+        // a card only the person can sort (m.personal): every answer is theirs to give, so there is no
+        // "not quite", only where many people would put it
+        if (m.personal) {
+          b.classList.add('is-right'); b.setAttribute('aria-pressed', 'true'); bBtns.forEach(off);
+          var common = bins[it[1]].replace(/<[^>]+>/g, '');
+          ui.say(it[1] === bi ? '<b>Many people would put this in ' + esc(common) + ' too.</b>' + (it[2] ? ' ' + esc(cap(it[2])) : '')
+            : '<b>Your call.</b> ' + esc('Many people would put this in ' + common + '. If it sits somewhere else for you, that’s yours to decide.'));
+          if (at === order.length - 1) { at++; count.textContent = 'All ' + order.length + ' sorted'; ui.finish(); }
+          else { next.hidden = false; next.focus(); }
+          return;
+        }
         if (it[1] === bi) {
           b.classList.add('is-right'); bBtns.forEach(off);
           ui.say(good(noteFor(it, bi)));
@@ -297,7 +308,7 @@
     next.addEventListener('click', function () { at++; show(); var f = bBtns[0]; if (f) f.focus(); });
     function show() {
       next.hidden = true;
-      bBtns.forEach(function (b) { b.classList.remove('is-right', 'is-tried'); b.removeAttribute('aria-disabled'); });
+      bBtns.forEach(function (b) { b.classList.remove('is-right', 'is-tried'); b.removeAttribute('aria-disabled'); b.removeAttribute('aria-pressed'); });
       count.textContent = 'Example ' + (at + 1) + ' of ' + order.length + ' in this card';
       item.innerHTML = esc(m.items[order[at]][0]);
       item.classList.remove('lp-pop-in'); void item.offsetWidth; if (!still()) item.classList.add('lp-pop-in');
