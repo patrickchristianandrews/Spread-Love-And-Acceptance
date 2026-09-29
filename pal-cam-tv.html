@@ -33,6 +33,8 @@
   .tv-cast { display: flex; align-items: center; gap: .6rem; padding: .5rem 1.1rem .5rem .7rem; border-radius: 999px; background: rgba(255,248,238,.14); cursor: pointer; font: 600 1.05rem Lora, Georgia, serif; color: #FFF8EE; border: 1.5px solid rgba(255,248,238,.5); min-height: 48px; box-sizing: border-box; }
   .tv-cast[hidden] { display: none; }
   .tv-cast-state { font-size: .92rem; color: #D8CFF0; min-height: 1.2em; }
+  .tv-resend { min-height: 44px; padding: .45rem 1.2rem; border: 1px solid rgba(255,248,238,.5); border-radius: 999px; background: transparent; color: #FFF8EE; font: 600 1rem Lora, Georgia, serif; cursor: pointer; }
+  .tv-resend[hidden] { display: none; }
   /* TV mode: the cam fills the whole screen, nothing else */
   .pc-ov.is-tv { padding: 0 !important; align-items: stretch !important; background: #000; }
   .pc-ov.is-tv .pc-box { max-width: none !important; height: 100% !important; border-radius: 0 !important; box-shadow: none !important; padding: 0 !important; gap: 0 !important; background: #000; }
@@ -187,7 +189,7 @@
   if (castTest) CAST_APP_ID = castTest[1].toUpperCase();
   // The backup: if a Chromecast can't see the live Pal Cam TV app yet, cast a looping video of the
   // pups with Google's built-in receiver instead (every Chromecast has it).
-  var DEFAULT_RX = 'CC1AD845', VIDEO = location.origin + '/assets/video/pal-cam-loop.webm', POSTER = location.origin + '/assets/video/pal-cam-poster.jpg';
+  var DEFAULT_RX = 'CC1AD845', VIDEO = location.origin + '/assets/video/pal-cam-tv.mp4', POSTER = location.origin + '/assets/video/pal-cam-poster.jpg';
   function ssGet(k) { try { return sessionStorage.getItem(k); } catch (e) { return null; } }
   function ssSet(k, v) { try { sessionStorage.setItem(k, v); } catch (e) {} }
   // The video version is the default: it works on every Chromecast. ?cast=live tries the live app instead.
@@ -239,19 +241,34 @@
         ssSet('tv-cast-video', '1'); castState.textContent = 'Switching to the video version, which works on every Chromecast…';
         setTimeout(function () { location.reload(); }, 900);
       }, 7000);
-      if (videoMode) ctx.addEventListener(cast.framework.CastContextEventType.SESSION_STATE_CHANGED, function (ev) {
-        if (ev.sessionState !== cast.framework.SessionState.SESSION_STARTED) return;
+      // send the looping MP4 (H.264, which every Chromecast and Google TV plays) to the TV
+      function sendVideo(session) {
+        if (!session) return;
         try {
-          var mi = new chrome.cast.media.MediaInfo(VIDEO, 'video/webm');
-          mi.streamType = chrome.cast.media.StreamType.BUFFERED;
+          var mi = new chrome.cast.media.MediaInfo(VIDEO, 'video/mp4');
+          mi.contentUrl = VIDEO; mi.streamType = chrome.cast.media.StreamType.BUFFERED;
           mi.metadata = new chrome.cast.media.GenericMediaMetadata();
           mi.metadata.title = 'Pal Cam TV'; mi.metadata.subtitle = 'Tidbit & Sugarfoot, all day';
           mi.metadata.images = [new chrome.cast.Image(POSTER)];
           var item = new chrome.cast.media.QueueItem(mi); item.autoplay = true;
           var q = new chrome.cast.media.QueueLoadRequest([item]); q.repeatMode = chrome.cast.media.RepeatMode.SINGLE;
-          ev.session.getSessionObj().queueLoad(q, function () {}, function (err) { castState.textContent = 'The TV couldn’t start the video (' + (err && (err.description || err.code) || 'unknown') + '). Try again.'; });
-        } catch (e) { castState.textContent = 'The TV couldn’t start the video (' + e.message + ').'; }
-      });
+          castState.textContent = 'Sending the video to the TV…';
+          session.getSessionObj().queueLoad(q, function () { castState.textContent = 'Playing on ' + session.getCastDevice().friendlyName + ' (the video version, on repeat). You can close this page; the TV keeps playing.'; resend.hidden = false; }, function () {
+            // some receivers refuse a queue: fall back to a plain load
+            var lr = new chrome.cast.media.LoadRequest(mi); lr.autoplay = true;
+            session.loadMedia(lr).then(function () { castState.textContent = 'Playing on ' + session.getCastDevice().friendlyName + '.'; resend.hidden = false; }, function (err) { castState.textContent = 'The TV couldn’t start the video (' + (err && (err.description || err.code || err) || 'unknown') + '). Tap “Send to the TV again”, or try again in a minute.'; resend.hidden = false; });
+          });
+        } catch (e) { castState.textContent = 'The TV couldn’t start the video (' + e.message + ').'; resend.hidden = false; }
+      }
+      var resend = document.createElement('button'); resend.type = 'button'; resend.className = 'tv-resend'; resend.hidden = true; resend.textContent = 'Send to the TV again';
+      resend.addEventListener('click', function () { sendVideo(ctx.getCurrentSession()); });
+      castState.parentNode.insertBefore(resend, castState.nextSibling);
+      if (videoMode) {
+        ctx.addEventListener(cast.framework.CastContextEventType.SESSION_STATE_CHANGED, function (ev) {
+          if (ev.sessionState === cast.framework.SessionState.SESSION_STARTED || ev.sessionState === cast.framework.SessionState.SESSION_RESUMED) sendVideo(ev.session || ctx.getCurrentSession());
+        });
+        if (ctx.getCurrentSession()) sendVideo(ctx.getCurrentSession());
+      }
     };
     addScript('https://www.gstatic.com/cv/js/sender/v1/cast_sender.js?loadCastFramework=1');
   }
