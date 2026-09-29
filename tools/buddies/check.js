@@ -25,7 +25,10 @@ if (!P || !P.lint || !P.estimate) { console.error('Could not load the engine (as
 // words that don't belong in a Frequency Buddies story (the site's content rules)
 const BANNED = /\b(abuse[ds]?|abusive|violen\w*|suicid\w*|self[- ]harm|crisis|hotline|kill\w*|dead|death|dying|die[sd]?|blood\w*|hurt(s|ing)? (?:yourself|herself|himself)|hospital|illness|sick(ness)?|disease|diagnos\w*|therap\w*|cure[sd]?|heal(s|ing|ed)?|streaks?|casino|jackpot|gambl\w*|bet(s|ting)?|collar)\b/i;
 
-const files = process.argv.slice(2).length ? process.argv.slice(2).map(f => path.resolve(f))
+const ARGS = process.argv.slice(2), NOCLIPS = ARGS.includes('--no-clips'), FILES = ARGS.filter(a => a !== '--no-clips');
+// the same key the player uses to find a line's recording
+function ckey(who, text) { let h = 0x811c9dc5; const s = who + '|' + text; for (let i = 0; i < s.length; i++) { h ^= s.charCodeAt(i); h = Math.imul(h, 0x01000193) >>> 0; } return ('0000000' + h.toString(16)).slice(-8); }
+const files = FILES.length ? FILES.map(f => path.resolve(f))
   : (fs.existsSync(DIR) ? fs.readdirSync(DIR).filter(f => /^s\d+e\d+\.js$/.test(f)).sort((a, b) => a.localeCompare(b, 'en', { numeric: true })).map(f => path.join(DIR, f)) : []);
 if (!files.length) { console.error('No episode files found in ' + path.relative(ROOT, DIR)); process.exit(1); }
 
@@ -74,6 +77,20 @@ for (const file of files) {
   });
   [ep.title, ep.blurb, ep.lesson, ep.next].forEach(t => { const m = String(t || '').match(BANNED); if (m) words.push('"' + m[0] + '" in "' + String(t).slice(0, 70) + '"'); });
   words.forEach(w => errs.push('content: ' + w));
+  // every spoken line has its recording (assets/audio/buddies/<ep>/<key>.mp3, listed in index.json);
+  // skip with --no-clips while a new recording is still being made
+  if (!NOCLIPS) {
+    const idxF = path.join(ROOT, 'assets/audio/buddies', want, 'index.json');
+    let idx = null; try { idx = JSON.parse(fs.readFileSync(idxF, 'utf8')); } catch (e) { errs.push('no recordings index at ' + path.relative(ROOT, idxF)); }
+    if (idx) {
+      const miss = [];
+      (ep.chapters || []).forEach((c, ci) => (c.beats || []).forEach(b => {
+        if (!b.say) return; const k = ckey(b.say, b.text);
+        if (!idx[k] || !fs.existsSync(path.join(path.dirname(idxF), k + '.mp3'))) miss.push('chapter ' + (ci + 1) + ' ' + b.say + ': "' + String(b.text).slice(0, 50) + '"');
+      }));
+      if (miss.length) errs.push(miss.length + ' line' + (miss.length === 1 ? ' has' : 's have') + ' no recording: ' + miss.slice(0, 4).join('; ') + (miss.length > 4 ? '; …' : ''));
+    }
+  }
   const min = est.total / 60, okTime = min >= 13 && min <= 17;
   if (!okTime) errs.push('runtime ' + min.toFixed(1) + ' min is outside 13–17 minutes');
   total += est.total;
