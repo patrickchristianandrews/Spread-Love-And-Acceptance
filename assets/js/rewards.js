@@ -201,7 +201,7 @@
     var go = c.querySelector('.tr-go'); if (go) go.focus();
   }
 
-  // Tile colours for the word games
+  // Tile colors for the word games
   function setTiles(id) {
     if (id !== 'tiles-petal' && S.unlocked.indexOf(id) === -1) return false;
     S.tiles = id; save();
