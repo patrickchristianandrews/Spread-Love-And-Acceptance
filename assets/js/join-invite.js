@@ -78,8 +78,11 @@
 
   // ---------- the occasional invitation on other pages ----------
   var SKIP = /^\/(ask|offline|404|brand)\.html$|^\/legal\/|^\/workpapers\/fill\/|^\/frequency-journey|^\/calm-visualizer/;
+  // never while a tool, the chat or a game is in use, while someone is typing, or after a heavy weather check
+  // today (site.js decides: window.TOLSite.busy); reading pages only
   function busy() {
-    return document.querySelector('[role=dialog]:not([hidden]), dialog[open], .tol-wx, .tol-install, .pci, .tol-join-pop, #tol-panel:not([hidden])');
+    return (window.TOLSite && window.TOLSite.busy()) || (window.TOLQuiet && window.TOLQuiet.on()) ||
+      document.querySelector('[role=dialog]:not([hidden]), dialog[open], .tol-wx, .tol-install, .pci, .tol-join-pop, #tol-panel:not([hidden]), .tol-set:not([hidden])');
   }
   function popup() {
     if (document.querySelector('.tol-join-pop')) return;
@@ -102,7 +105,8 @@
     requestAnimationFrame(function () { p.classList.add('is-in'); });
   }
   function maybePopup() {
-    if (isHome || SKIP.test(path) || document.body.classList.contains('is-game') || document.querySelector('meta[http-equiv="Content-Security-Policy"]')) return;
+    if (isHome || SKIP.test(path) || document.body.classList.contains('is-game') || !document.querySelector('main.read') || document.querySelector('meta[http-equiv="Content-Security-Policy"]')) return;
+    if (window.TOLSite && window.TOLSite.busy() && !/[?&]join-pop=1\b/.test(location.search)) return; // a tool page: not here at all
     var force = /[?&]join-pop=1\b/.test(location.search);
     var prev = ls('tol-join-pop-prev'); ls('tol-join-pop-prev', '0');
     if (!force && (ss('tol-join-pop') || prev === '1' || Math.random() >= 0.34)) return;

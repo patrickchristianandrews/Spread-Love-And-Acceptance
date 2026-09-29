@@ -237,7 +237,7 @@
         '<p class="br-how"></p>' +
         '<p class="br-label">How long</p>' + chips('min', [['1', '1 min'], ['3', '3 min'], ['5', '5 min']], get('tol-br-min', '1')) +
         '<p class="br-label">Sound</p>' + chips('scape', [['beneath', 'The Breath Beneath'], ['deep', 'Deep'], ['ocean', 'Ocean'], ['rain', 'Soft rain'], ['bowls', 'Singing bowls'], ['off', 'Silence']], get('tol-br-scape', 'deep')) +
-        '<p class="br-scape-note"></p>' +
+        '<p class="br-scape-note" aria-live="polite"></p>' +
         '<p class="br-phones"><span aria-hidden="true">&#127911;</span> Soundscapes sound best with headphones, so the deep, low tones and the gentle left-to-right movement come through fully.</p>' +
         '<div class="tol-breathe-row"><button type="button" class="br-begin" data-act="begin">Begin</button><button type="button" data-act="close">Not now</button></div>' +
       '</section>' +
@@ -288,7 +288,7 @@
     ov.querySelectorAll('[data-min]').forEach(function (b) { b.setAttribute('aria-pressed', String(+b.getAttribute('data-min') === minutes)); });
     ov.querySelectorAll('[data-scape]').forEach(function (b) { b.setAttribute('aria-pressed', String(b.getAttribute('data-scape') === scape)); });
     $('.br-how').textContent = PATTERNS[method].how;
-    $('.br-scape-note').textContent = scape === 'off' ? 'Just the guide on screen, in silence.' : SCAPES[scape].note;
+    $('.br-scape-note').textContent = scape === 'off' ? 'Just the guide on screen, in silence.' : 'This will play sound. ' + SCAPES[scape].note;
   }
 
   // the path the dot follows: a square for box breathing, a circle otherwise
@@ -397,7 +397,9 @@
     last = document.activeElement; ov.hidden = false; document.documentElement.style.overflow = 'hidden';
     ov.classList.remove('is-open', 'is-in', 'is-out'); void ov.offsetWidth; ov.classList.add('is-open');
     method = get('tol-br-method', 'box'); if (!PATTERNS[method]) method = 'box';
-    minutes = +get('tol-br-min', '1') || 1; scape = get('tol-br-scape', 'deep'); if (!SCAPES[scape]) scape = 'deep'; // always starts with sound
+    minutes = +get('tol-br-min', '1') || 1; scape = get('tol-br-scape', 'deep'); if (!SCAPES[scape]) scape = 'deep';
+    // quiet mode, or site sounds switched off in Settings: start in silence (a sound is one tap away)
+    if (window.TOLQuiet && !window.TOLQuiet.sound()) scape = 'off';
     muted = false; show('pick'); pickUI();
     $('.br-begin').focus();
   }
