@@ -15,11 +15,11 @@ Riverbank: river bank reed willow otter heron kingfisher pebble current ripple b
 Mountain air: mountain summit peak ridge valley glacier snow slope pine eagle goat trail cairn meadow rock boulder view
 Desert glow: desert dune sand cactus oasis camel lizard sunset mirage canyon mesa breeze palm star heat caravan
 Island life: island lagoon coral palm coconut shell reef tide shore hammock sand turtle breeze boat harbor wave sunset
-Rolling hills: hill slope valley sheep lamb hedge stile gate lane farm barn pasture fence cottage orchard windmill
+Rolling hills: hill slope valley sheep lamb hedge fence gate lane farm barn pasture meadow cottage orchard windmill
 The lake: lake shore pier canoe paddle loon ripple reflection dock cabin pine mist fish swim island calm
 Waterfalls: waterfall cascade spray mist rainbow pool rock fern moss stream roar splash cliff gorge ledge boulder
 Cliffs and coves: cliff cove gull puffin cave arch rock tide pool crab shell spray wave headland lighthouse path
-Caves: cave cavern stalactite crystal echo tunnel lantern rock chamber passage drip bat torch explorer shadow underground
+Caves: cave cavern stalactite crystal echo tunnel lantern rock chamber passage drip bat flashlight explorer shadow underground
 Wetlands: marsh swamp reed heron frog dragonfly lily bog rush cattail duck egret otter mud pond crane
 Prairie: prairie grass bison sky horizon wind wildflower hawk sunflower fence ranch horse wagon plain meadowlark
 Rainforest: rainforest canopy vine orchid parrot toucan sloth frog fern waterfall mist leaf monkey jaguar moss butterfly
@@ -27,17 +27,17 @@ Tundra: tundra snow ice caribou reindeer fox owl moss lichen hare aurora wind fr
 Seashore finds: shell pebble driftwood seaweed starfish crab feather sand glass rope bottle cockle mussel whelk limpet
 Rock pools: rock pool crab shrimp anemone starfish limpet mussel seaweed barnacle periwinkle tide net bucket splash
 Under the canopy: canopy branch leaf vine nest bird squirrel sunlight shade twig trunk bark bough moss lichen
-Countryside lanes: lane hedge stile gate cottage farm barn tractor sheep cow orchard village church pub green meadow
-Village green: village green pond duck bench cricket fete bunting cottage shop bakery post church school oak
-Seaside town: pier promenade arcade donkey deckchair beach hut ice_cream harbor gull fish_chips shell bucket spade
+Country roads: road barn farm fence gate cottage tractor sheep cow orchard field meadow creek bridge mailbox silo
+Town square: town square fountain bench pigeon bakery cafe library park market flag shop school oak gazebo clock
+Boardwalk: pier boardwalk arcade beach ice_cream harbor gull shell bucket shovel taffy carousel kite sand wave
 
 # ---- weather and sky
 Sunny day: sunshine sunhat sunglasses shade breeze picnic lemonade swim blue sky warm golden bright light daisy
-Clouds: cloud cumulus nimbus fluffy sky drift puff shade grey white shape wisp mist fog rain weather
-Rain showers: rain shower drizzle puddle umbrella raincoat boots splash drop gutter window cloud grey rainbow worm
+Clouds: cloud cumulus nimbus fluffy sky drift puff shade gray white shape wisp mist fog rain weather
+Rain showers: rain shower drizzle puddle umbrella raincoat boots splash drop gutter window cloud gray rainbow worm
 Snowfall: snow flake sled snowman scarf mittens hat frost ice cocoa fire blanket boots drift crisp white
 Windy weather: wind breeze gust kite blow flutter sail windmill leaves hat scarf cloud storm whistle sway flag
-Fog and mist: fog mist haze dew damp grey drift morning valley lamp harbor horn soft blur cool
+Fog and mist: fog mist haze dew damp gray drift morning valley lamp harbor horn soft blur cool
 Rainbow: rainbow red orange yellow green blue indigo violet arc prism light rain sun color bright band
 The night sky: moon star planet comet meteor galaxy telescope orbit constellation twinkle dark night sky space cosmos
 Sunrise: sunrise dawn morning light golden horizon lark bird glow pink orange sky wake day fresh early
@@ -49,12 +49,12 @@ Storm watching: storm thunder lightning rain wind cloud flash rumble window cozy
 
 # ---- seasons and times
 First signs of spring: spring bud blossom lamb daffodil crocus snowdrop nest robin rain shoot green fresh bloom tulip
-Summer holidays: summer holiday beach sandcastle swim sun ice_cream picnic camp hike lemonade shorts sandals hat fan
-Autumn walk: autumn leaves acorn conker chestnut squirrel mushroom crunch gold red orange harvest pumpkin apple mist scarf
+Summer vacation: summer vacation beach sandcastle swim sun ice_cream picnic camp hike lemonade shorts sandals hat fan
+Fall walk: autumn leaves acorn chestnut squirrel mushroom crunch gold red orange harvest pumpkin apple mist scarf
 Winter warmth: winter fire blanket cocoa scarf mittens hat boots snow frost candle soup quilt slippers wool
 Harvest time: harvest wheat barley corn apple pumpkin squash basket farmer tractor barn hay field festival bread orchard
 Early morning: morning dawn coffee toast alarm yawn stretch sunrise birdsong dew shower breakfast newspaper kettle fresh
-Lazy afternoon: afternoon nap hammock tea book shade garden breeze biscuit cushion sofa quiet daydream sun rest
+Lazy afternoon: afternoon nap hammock tea book shade garden breeze cookie cushion sofa quiet daydream sun rest
 Evening calm: evening dusk candle lamp supper bath book pajamas slippers tea quiet moon star rest calm
 Bedtime: bedtime pillow blanket teddy story lullaby dream moon star nightlight yawn pajamas quilt cuddle sleep
 Weekend: weekend lie brunch walk market friends picnic garden film park sleep relax bake visit cycle
@@ -73,7 +73,7 @@ Roses: rose petal thorn bud bloom stem scent climber rambler hip garden bouquet 
 Trees of the forest: oak ash beech birch elm maple pine spruce fir cedar willow yew holly hazel alder larch
 Fruit trees: apple pear plum cherry peach apricot fig orchard blossom branch harvest ladder basket fruit prune tree
 Houseplants: fern cactus succulent ivy palm orchid pot saucer water soil leaf window light mist repot bloom
-The vegetable patch: carrot potato onion lettuce bean pea tomato cabbage leek beet radish marrow spinach kale courgette
+The vegetable patch: carrot potato onion lettuce bean pea tomato cabbage leek beet radish squash spinach kale zucchini
 Herb garden: basil mint parsley thyme sage rosemary chives dill oregano fennel coriander lavender tarragon lemon_balm
 Garden tools: spade fork rake hoe trowel shears hose watering_can wheelbarrow gloves pot twine bucket sieve seed
 In the greenhouse: greenhouse seedling tray pot compost glass tomato pepper cucumber vine water warm light cutting sprout
@@ -95,8 +95,8 @@ Birds in flight: eagle hawk swallow swift gull goose crane heron kite falcon pig
 Garden birds: robin sparrow blackbird thrush wren finch tit starling pigeon dove magpie jay feeder nest egg
 Water birds: duck swan goose heron coot moorhen grebe kingfisher pelican flamingo stork puffin gull tern cormorant
 Busy bees: bee hive honey comb pollen nectar flower queen worker drone buzz wax garden meadow swarm keeper
-Butterflies and moths: butterfly moth caterpillar cocoon wing flutter meadow flower nectar peacock admiral monarch chrysalis pattern colour
-Minibeasts: ladybird beetle ant spider snail slug worm woodlouse centipede grasshopper cricket bee wasp caterpillar dragonfly
+Butterflies and moths: butterfly moth caterpillar cocoon wing flutter meadow flower nectar monarch swallowtail chrysalis pattern color
+Little bugs: ladybug beetle ant spider snail slug worm pill_bug centipede grasshopper cricket bee firefly caterpillar dragonfly
 Pond life: frog toad tadpole newt snail dragonfly damselfly duck fish reed lily minnow beetle heron ripple
 On safari: lion tiger elephant giraffe zebra hippo rhino cheetah leopard antelope buffalo ostrich monkey jeep savanna
 Polar animals: polar_bear penguin seal walrus whale fox hare owl reindeer caribou puffin orca narwhal husky ice
@@ -115,9 +115,9 @@ Berries: strawberry raspberry blueberry blackberry gooseberry cranberry currant 
 Vegetable soup: soup carrot potato onion leek celery lentil barley pea bean stock pepper herbs bread bowl spoon
 Breakfast table: toast butter jam honey egg bacon cereal porridge milk juice coffee tea muffin pancake yogurt
 Pancake day: pancake batter flour egg milk pan flip lemon sugar syrup butter berry cream stack griddle
-At the bakery: bread loaf roll bun croissant bagel scone muffin cake pie tart baguette pastry baker oven
+At the bakery: bread loaf roll bun croissant bagel biscuit muffin cake pie tart baguette pastry baker oven
 Baking a cake: cake flour sugar butter egg milk bowl whisk oven tin icing sponge cream candle slice
-Cookies and biscuits: cookie biscuit crumb chocolate ginger oat butter shortbread jar dunk tea sugar oven tray recipe
+The cookie jar: cookie crumb chocolate ginger oat butter shortbread jar dunk milk sugar oven tray recipe sprinkles
 Pizza night: pizza dough cheese tomato basil olive mushroom pepper crust oven slice onion ham pineapple oregano
 Pasta: pasta spaghetti noodle penne ravioli lasagne macaroni sauce tomato cheese basil garlic pesto fork bowl
 Rice dishes: rice risotto paella pilaf sushi curry biryani congee pudding grain bowl chopsticks steam saffron pea
@@ -125,7 +125,7 @@ Soup kitchen: soup broth stew chowder bisque stock ladle pot bowl spoon bread no
 Salad bowl: salad lettuce cucumber tomato radish pepper celery spinach rocket olive feta dressing crouton carrot bowl
 Sandwich shop: sandwich bread roll wrap cheese ham tomato lettuce pickle mustard butter tuna egg club toast
 Picnic basket: picnic basket blanket sandwich apple lemonade flask cake napkin cup plate grass sun ants park
-Afternoon tea: tea scone jam cream cake sandwich teapot cup saucer milk sugar lemon biscuit tray doily
+Tea party for two: tea muffin jam cream cake sandwich teapot cup saucer milk sugar lemon cookie tray doily
 Coffee shop: coffee latte mocha espresso cappuccino mug milk foam bean barista cookie muffin cake sofa chat
 Warm drinks: tea coffee cocoa chocolate cider milk honey lemon ginger mug steam cozy spoon saucer cinnamon
 Cold drinks: lemonade juice smoothie milkshake water soda ice straw glass jug orange apple lime mint cool
@@ -135,25 +135,24 @@ Cheese board: cheese cracker grape apple fig chutney brie cheddar board knife wa
 Nuts and seeds: almond walnut hazelnut peanut cashew pecan pistachio chestnut acorn seed sunflower pumpkin sesame flax pine
 Herbs and spices: pepper salt cinnamon nutmeg ginger clove cumin paprika turmeric saffron vanilla mint basil thyme sage
 Market stall: market stall fruit vegetable bread cheese flowers basket bag coin price fresh farmer honey egg jam
-Sunday roast: roast potato carrot gravy peas stuffing chicken beef parsnip pudding oven dish table family plate
+Sunday dinner: roast potato carrot gravy peas stuffing chicken corn biscuit oven dish table family plate
 Barbecue: barbecue grill sausage burger corn kebab salad bun sauce charcoal tongs apron garden summer friends
-Tea party: teapot cup saucer cake sandwich scone jam cream sugar spoon doily table friends chat party
+Tea party: teapot cup saucer cake sandwich muffin jam cream sugar spoon doily table friends chat party
 Chocolate: chocolate cocoa bar truffle fudge brownie cake milk dark white bean melt treat box square
-Kitchen garden: tomato lettuce bean pea carrot onion potato herb strawberry rhubarb marrow courgette kale chard leek
+Kitchen garden: tomato lettuce bean pea carrot onion potato herb strawberry rhubarb squash zucchini kale chard leek
 Around the world food: pizza sushi taco curry noodle pasta paella dumpling bagel croissant falafel kebab pretzel waffle crepe
 Dumplings: dumpling wonton gyoza bun steam bamboo basket dough filling soy sauce ginger pork chopsticks noodle
 Bread and butter: bread butter toast loaf crust crumb slice knife board yeast flour oven wholemeal sourdough rye
 Porridge: porridge oats milk honey banana berry cinnamon sugar bowl spoon warm breakfast raisin apple cream
 Jam making: jam jar sugar fruit strawberry raspberry plum apricot pan boil spoon label lid shelf toast
-Lunchbox: lunchbox sandwich apple crisps yogurt juice carrot cheese cracker grapes napkin flask cookie banana wrap
-Fish and chips: fish_chips batter vinegar salt pea lemon paper wrap seaside fork tartar cod haddock shop
-Snack time: snack crackers apple banana popcorn pretzel nuts raisin yogurt cheese carrot hummus muffin biscuit fruit
+Lunchbox: lunchbox sandwich apple chips yogurt juice carrot cheese cracker grapes napkin thermos cookie banana wrap
+Snack time: snack crackers apple banana popcorn pretzel nuts raisin yogurt cheese carrot hummus muffin cookie fruit
 Smoothies: smoothie banana berry mango yogurt milk honey spinach blender straw glass ice oat juice kiwi
 Tacos: taco tortilla bean cheese salsa lettuce tomato onion lime avocado pepper corn rice spice sauce
 Noodle bar: noodle broth ramen udon chopsticks bowl egg scallion ginger soy sesame mushroom tofu pork steam
 
 # ---- home life
-Cosy living room: sofa armchair cushion blanket lamp rug fireplace bookcase shelf clock plant curtain window table television
+Cozy living room: sofa armchair cushion blanket lamp rug fireplace bookcase shelf clock plant curtain window table television
 The kitchen: kitchen oven stove sink kettle toaster fridge cupboard drawer pan pot spoon ladle whisk tray
 Bedroom: bed pillow duvet quilt wardrobe drawer lamp mirror rug curtain slipper alarm_clock shelf dresser
 Bath time: bath bubbles soap towel sponge duck tap water shampoo robe mat mirror steam warm relax
@@ -163,7 +162,7 @@ Around the house: door window roof chimney wall floor stairs porch hall garden g
 The toolbox: hammer nail screw screwdriver wrench spanner pliers drill saw level tape ruler bolt nut glue
 Moving house: box tape label van key door address room unpack shelf curtain paint neighbor welcome home
 Decorating: paint brush roller ladder wallpaper color tape sheet shelf picture frame cushion lamp rug plant
-Cosy corners: blanket cushion candle lamp book tea slippers socks quilt window rain chair nook purr rest
+Cozy corners: blanket cushion candle lamp book tea slippers socks quilt window rain chair nook purr rest
 Doorstep: door step mat bell knock letter parcel porch plant lamp key lock boots bench welcome
 Windowsill: window sill plant pot cactus herb sun light glass curtain blind cat view frame breeze
 Garden shed: shed spade fork rake hose pot seed tray twine gloves bike ladder shelf bench jar
@@ -213,7 +212,7 @@ Board games: chess checkers draughts dice board counter card domino token pawn k
 Puzzles: puzzle jigsaw piece edge corner crossword riddle maze sudoku clue answer grid solve logic pattern
 Cycling: bike bicycle pedal wheel chain helmet saddle bell lane path hill ride gear brake pump
 Hiking: hike trail map compass boots backpack summit path stream view picnic walk hill forest bridge
-Camping: tent camp fire marshmallow lantern sleeping_bag stars torch map compass stove kettle hike lake canoe
+Camping: tent camp fire marshmallow lantern sleeping_bag stars flashlight map compass stove kettle hike lake canoe
 Swimming: swim pool lane dive float splash goggles towel stroke kick lap wave cap lake sea
 Fishing trip: fish rod reel line net boat lake river bait float cast catch pier dawn patience
 Bird watching: binoculars bird notebook hide robin wren finch owl heron feather nest song flight wing call
@@ -227,7 +226,7 @@ Model making: model kit glue paint brush plane ship train car piece box ruler kn
 Crafts: craft glue paper card scissors ribbon glitter paint bead felt button string tape clay yarn
 Origami: origami paper fold crease crane boat flower frog square corner edge shape pattern gift star
 Magic tricks: magic trick card coin hat wand rabbit scarf cape smile applause audience stage show wonder
-Theatre: theatre stage curtain actor play script role scene audience ticket applause costume lights usher interval
+Theater: theater stage curtain actor play script role scene audience ticket applause costume lights usher intermission
 At the cinema: cinema film movie screen seat ticket popcorn trailer star actor scene sequel comedy credits usher
 Museum visit: museum gallery exhibit painting statue fossil dinosaur mummy ticket guide map history art sculpture display
 Library: library book shelf card loan return librarian quiet reading desk story author page catalog fiction
@@ -235,8 +234,8 @@ Circus: circus tent clown juggler acrobat ring trapeze tumble ticket popcorn rin
 Fairground: fair carousel ride wheel ticket candy_floss prize balloon music lights hoopla stall swing laughter
 Sports day: race sack egg spoon relay medal ribbon cheer team run jump hop finish line trophy
 Tennis: tennis racket ball net court serve volley rally match set game point umpire lawn score
-Football fun: football goal ball pitch team kick pass score keeper boots whistle match fans cheer net
-Cricket: cricket bat ball wicket stump bowler batsman umpire over run pitch field catch team tea
+Soccer fun: soccer goal ball field team kick pass score goalie cleats whistle match fans cheer net
+Baseball: baseball bat ball glove base pitcher catcher inning umpire field team fans cheer peanuts dugout
 Golf: golf club ball tee green hole flag course putt swing caddy bunker score fairway par
 Ice skating: skate ice rink glide spin twirl blade scarf mittens cold winter music partner jump balance
 Skiing: ski slope snow lift pole boots goggles helmet chalet powder mountain lodge cocoa jacket glove
@@ -248,14 +247,14 @@ Road trip: car road map snack music window view motel fuel journey signpost high
 Packing a suitcase: suitcase pack shirt socks toothbrush book passport ticket charger hat sunscreen map camera pajamas shoes
 By the harbor: harbor boat yacht sail anchor rope pier gull lighthouse fisherman net crab tide dock mast
 Sailing: sail boat mast rope anchor deck wind tide compass harbor wave crew knot sea voyage
-Seaside holiday: beach sand sea wave shell bucket spade sun towel ice_cream pier gull swim hat
+Beach day: beach sand sea wave shell bucket shovel sun towel ice_cream pier gull swim hat
 City break: city museum gallery cafe square bridge tower park map ticket hotel market street tram shop
 Maps and compasses: map compass north south east west scale route path legend grid key trail distance guide
-Postcards: postcard stamp address message view beach mountain city greetings wish sunshine friend mail postbox travel
-Hotel stay: hotel room key bed pillow towel lobby lift breakfast view desk porter suitcase balcony pool
-Bus ride: bus stop ticket driver seat window bell route timetable passenger conductor stop town journey queue
+Postcards: postcard stamp address message view beach mountain city greetings wish sunshine friend mail mailbox travel
+Hotel stay: hotel room key bed pillow towel lobby elevator breakfast view desk bellhop suitcase balcony pool
+Bus ride: bus stop ticket driver seat window bell route schedule passenger fare town journey line
 Boats and ships: boat ship ferry yacht canoe kayak raft barge tug liner dinghy steamer sail oar anchor
-Around town: town street shop cafe bank post library park square market school station bakery bridge church
+Around town: town street shop cafe bank mail library park square market school station bakery bridge diner
 The open road: road lane mile signpost bend hill valley view horizon journey map car bike drive
 Adventure: adventure explore journey quest map path discover travel wander trail compass island summit trek voyage
 
@@ -274,7 +273,7 @@ Oceans: ocean sea wave tide current reef coral whale fish salt deep shore island
 Human kindness science: kindness smile laughter hug friendship trust empathy calm sleep exercise nature music gratitude breath rest
 Numbers: one two three four five six seven eight nine ten hundred thousand dozen half zero
 Shapes: circle square triangle rectangle oval star heart diamond cube sphere cone cylinder pyramid hexagon spiral
-Maths: add subtract multiply divide number sum total equal fraction half quarter shape angle graph count
+Math: add subtract multiply divide number sum total equal fraction half quarter shape angle graph count
 Time: time second minute hour day week month year clock watch calendar morning noon evening century
 School days: school class teacher pupil desk book pencil lesson bell lunch playground friend homework test reading
 Inventions: wheel printing_press telephone light_bulb radio camera computer engine clock compass telescope bicycle rocket
@@ -288,7 +287,7 @@ Clocks and watches: clock watch hand face tick tock alarm hour minute second chi
 Helpers in town: doctor nurse teacher baker firefighter postman farmer librarian vet chef driver builder cleaner gardener pilot
 Hospital kindness: nurse doctor care help ward bed chart smile visit flowers card rest heal kind hope
 At the vet: vet dog cat rabbit bird check scale collar treat nurse table calm kind patient pet
-Post office: post letter parcel stamp envelope address mail box queue counter card label courier sort deliver
+Post office: mail letter package stamp envelope address mailbox box line counter card label carrier sort deliver
 Farmers market: market farmer honey cheese bread egg apple jam flowers plant stall basket fresh local bag
 Cafe corner: cafe coffee tea cake croissant table chair window menu waiter cup saucer friend chat sofa
 Bakery shop: baker bread roll bun cake pie scone oven flour tray loaf crust sugar icing counter
@@ -296,30 +295,30 @@ Toy shop: toy doll teddy puzzle kite ball train robot yoyo blocks puppet game ma
 Bookshop: book shelf novel poem story author cover page shop bookmark gift reading chair cafe quiet
 The park: park bench tree path pond duck swing slide grass picnic dog kite fountain gate flower
 Playground: swing slide seesaw roundabout climbing_frame sandpit rope ladder bench chalk ball skip hop tag laugh
-The garden centre: plant pot seed compost bulb tree shrub rose bench tool hose cafe fountain gnome trellis
+The garden center: plant pot seed compost bulb tree shrub rose bench tool hose cafe fountain trellis mulch
 Music shop: guitar piano violin drum flute string pick sheet music record speaker amp keyboard tuner case
 Art gallery: gallery painting portrait landscape sculpture frame artist canvas brush exhibit visitor color light quiet
 At the beach: beach sand sea wave shell towel umbrella bucket spade sun swim kite gull boat ice_cream
 
 # ---- clothes and things
-In the wardrobe: shirt blouse skirt dress trousers jeans jumper cardigan jacket coat scarf hat sock belt tie
-Winter clothes: coat scarf hat gloves mittens boots jumper sweater cardigan socks wool fleece hood earmuffs thermal
+In the closet: shirt blouse skirt dress pants jeans sweater cardigan jacket coat scarf hat sock belt tie
+Winter clothes: coat scarf hat gloves mittens boots sweater cardigan socks wool fleece hood earmuffs parka
 Summer clothes: shorts sandals sunhat dress skirt shirt vest swimsuit sunglasses cap flip_flops linen cotton
 Shoes: shoe boot sandal slipper trainer sneaker clog loafer heel lace sole buckle pair size polish
 Hats: hat cap beret bonnet beanie sunhat bowler helmet hood crown visor boater straw feather brim
 Accessories: scarf belt glove watch ring necklace bracelet brooch earring bag purse wallet umbrella hat sunglasses
 Fabrics: cotton wool silk linen velvet denim satin lace tweed fleece flannel felt corduroy knit cashmere
-Colours of the world: red orange yellow green blue purple pink brown black white grey gold silver violet teal
+Colors of the world: red orange yellow green blue purple pink brown black white gray gold silver violet teal
 Soft things: pillow blanket feather cushion kitten fleece cloud velvet moss marshmallow bunny teddy scarf slippers wool
 Shiny things: gold silver glitter crystal mirror star sequin pearl diamond jewel coin glass tinsel moon polish
 Round things: ball wheel coin plate button orange moon sun clock ring bubble marble cookie pizza globe
 Things that fly: bird kite plane balloon butterfly bee bat rocket helicopter glider feather leaf seed cloud dragonfly
-Things with wheels: bike car bus train cart wagon pram scooter skateboard tractor truck van trolley wheelbarrow barrow
+Things with wheels: bike car bus train cart wagon stroller scooter skateboard tractor truck van wheelbarrow tricycle
 Things that grow: tree flower seed child puppy kitten plant grass hair moss mushroom vine bean friendship garden
 Yellow things: sun lemon banana daffodil buttercup canary butter cheese corn honey sunflower duckling star gold straw
 Green things: grass leaf frog lime pea moss fern apple cucumber lettuce clover emerald jade parrot mint
 Blue things: sky sea ocean sapphire blueberry denim bluebell whale forget wave river jay ice ink lagoon
-Red things: apple cherry strawberry rose tomato poppy ruby robin postbox fire_engine ladybird heart berry lobster
+Red things: apple cherry strawberry rose tomato poppy ruby robin cardinal fire_engine ladybug heart berry lobster
 White things: snow cloud milk swan sugar salt pearl daisy paper rice egg chalk cotton lily dove
 In pairs: shoes socks gloves mittens earrings twins boots chopsticks scissors glasses skates wings eyes ears hands
 Things in the sky: sun moon star cloud bird kite plane rainbow balloon comet planet lightning rain snow satellite
@@ -335,7 +334,7 @@ Laughing out loud: laugh giggle chuckle smile grin joke pun tickle silly funny c
 Love and care: love care hug kiss cuddle heart hold warmth kind tender cherish adore friend family home
 
 # ---- fun word collections
-Words that sparkle: sparkle glitter shimmer twinkle gleam glow shine dazzle glint flash sheen luster radiant bright gleam
+Words that sparkle: sparkle glitter shimmer twinkle gleam glow shine dazzle glint flash sheen luster radiant bright
 Words for walking: walk stroll wander amble hike march stride tiptoe skip hop trot ramble saunter step pace
 Words for small: small tiny little wee mini petite compact pocket slight baby teeny short dainty miniature bit
 Words for big: big large huge giant vast grand massive great enormous tall wide mighty jumbo broad hefty
@@ -343,7 +342,7 @@ Words for happy: happy glad merry jolly cheerful joyful content pleased delighte
 Words for quiet: quiet hush calm still silent soft peaceful gentle low mute muffled whisper tranquil serene restful
 Words for talking: talk chat say speak tell whisper murmur mutter chatter natter gossip call answer ask reply
 Double letters: apple balloon coffee kitten puppy yellow butter pepper summer teddy bubble letter little happy cookie
-Compound words: sunflower rainbow butterfly football snowman bedroom cupcake toothbrush daylight moonlight starfish seashell doorbell pancake teapot
+Compound words: sunflower rainbow butterfly snowman bedroom cupcake toothbrush daylight moonlight starfish seashell doorbell pancake teapot
 Alphabet animals: ant bear cat dog eel fox goat hare ibis jay koala lion mole newt owl
 Five letter fun: apple bread chair daisy eagle flute grape house igloo jelly koala lemon mango night ocean
 Words from the sea: sea salt sail seal shell shore surf tide wave spray foam reef kelp cove bay
@@ -355,7 +354,7 @@ Leaves and bark: leaf bark branch twig trunk root sap bud stem vein needle cone 
 Mushrooms: mushroom fungus cap stem gill spore toadstool puffball chanterelle forest moss log damp autumn ring
 Lichen and moss: moss lichen fern stone wall log damp shade green soft carpet forest bark rock spore
 Pebbles and stones: pebble stone rock boulder flint granite marble slate shingle cobble gravel sand beach river smooth
-Clouds and sky watching: sky cloud shape drift float puff wisp blue grey white lie grass dream imagine watch
+Clouds and sky watching: sky cloud shape drift float puff wisp blue gray white lie grass dream imagine watch
 Nests: nest twig straw feather egg chick robin wren swallow eave tree hedge moss mud weave
 Spider webs: spider web silk thread dew morning pattern spin weave corner garden hedge sparkle gossamer strand
 Frost patterns: frost fern crystal window cold morning ice sparkle white lace pattern glass winter breath delicate
@@ -368,7 +367,7 @@ Oranges and lemons: orange lemon lime grapefruit tangerine satsuma clementine ze
 Tropical fruit: mango pineapple papaya banana coconut passion_fruit guava lychee kiwi melon lime starfruit plantain date fig
 Soups and stews: soup stew casserole broth chowder hotpot goulash chili ladle pot bowl bread dumpling spoon simmer
 Pies and tarts: pie tart crust pastry filling apple cherry lemon pumpkin custard meringue crumble dish slice oven
-Puddings: pudding custard jelly trifle crumble sponge rice bread sticky toffee sauce cream spoon bowl dessert
+Cozy desserts: pudding custard jelly cobbler crumble cake rice bread sticky toffee sauce cream spoon bowl dessert
 Eggs: egg yolk white shell boil poach scramble fry omelette nest chick hen basket cup soldiers
 Cheese: cheese cheddar brie stilton feta mozzarella parmesan gouda cracker grater slice board wedge rind melt
 Grains: wheat oats barley rice corn rye millet quinoa flour bread porridge cereal grain field harvest
@@ -377,18 +376,18 @@ Root vegetables: carrot potato parsnip turnip beetroot radish swede yam ginger o
 Sauces: sauce gravy ketchup mustard mayonnaise pesto salsa dressing custard syrup chutney relish dip vinaigrette curry
 Spice rack: cinnamon nutmeg ginger clove cumin paprika turmeric saffron pepper chili cardamom vanilla anise coriander mustard
 Kitchen scales: scales weigh flour sugar butter gram ounce cup spoon measure recipe bowl jug bake cake
-Midnight feast: snack torch blanket cookie crisps chocolate milk cake fruit whisper giggle secret pillow fort friends
+Sleepover snacks: snack flashlight blanket cookie popcorn chocolate milk cake fruit whisper giggle secret pillow fort friends
 Summer fruits: strawberry raspberry cherry peach apricot plum melon watermelon nectarine berry currant gooseberry blueberry grape fig
-Autumn harvest: pumpkin squash apple pear plum blackberry nut chestnut corn marrow potato onion carrot mushroom cider
+Autumn harvest: pumpkin squash apple pear plum blackberry nut chestnut corn potato onion carrot mushroom cider
 
 # ---- home and family
 Family gathering: family grandma grandpa aunt uncle cousin sister brother baby table meal photo hug story laughter
-Grandparents: grandma grandpa story knit garden tea biscuit photo album visit hug cuddle wisdom advice warmth
+Grandparents: grandma grandpa story knit garden tea cookie photo album visit hug cuddle wisdom advice warmth
 Brothers and sisters: brother sister sibling share play laugh game secret tease help twin fort den adventure hug
-Babies: baby cot rattle bottle blanket cuddle smile giggle nappy pram teddy lullaby bath rock sleep
-Letters and notes: letter note card envelope stamp pen paper postbox message address love friend write read reply
-Photographs: photo album frame camera memory smile family holiday picture snap portrait wedding birthday print wall
-Memories: memory photo album story holiday childhood song smell place friend laughter letter keepsake remember treasure
+Babies: baby crib rattle bottle blanket cuddle smile giggle diaper stroller teddy lullaby bath rock sleep
+Letters and notes: letter note card envelope stamp pen paper mailbox message address love friend write read reply
+Photographs: photo album frame camera memory smile family vacation picture snap portrait wedding birthday print wall
+Memories: memory photo album story vacation childhood song smell place friend laughter letter keepsake remember treasure
 Weddings: wedding bride groom ring cake flowers veil dress suit dance vow music toast guest celebration
 Housewarming: home key door gift plant candle neighbor welcome party friends room box paint garden kettle
 
@@ -404,14 +403,14 @@ Mail day: mail post letter parcel stamp envelope postman van address box deliver
 
 # ---- celebrations and gentle traditions
 Fireworks night: firework sparkler rocket bonfire toffee apple scarf hat night sky bang whizz glow crowd cocoa
-Summer fete: fete stall cake raffle prize bunting tombola games music band dog show lemonade tea sunshine
+County fair: fair booth cake prize ribbon ferris_wheel games music band pie lemonade popcorn sunshine hayride pumpkin
 Picnic in the park: picnic park blanket basket sandwich strawberry lemonade frisbee ball grass tree sun shade friends
 Garden party: garden party lantern bunting table cake lemonade music guest flowers laughter hat sunshine chair lawn
 Tea and cake: tea cake scone cream jam cup saucer pot slice sponge icing chat friend plate fork
 Lantern festival: lantern light paper candle float river glow night wish sky festival crowd music color dragon
 Harvest festival: harvest basket bread apple corn pumpkin wheat thanks share food table song festival loaf sheaf
 Winter festival: lights snow candle star gift cocoa carol bell wreath tree ribbon card sleigh fire feast
-Kite festival: kite sky wind string tail color festival hill park family string spool soar breeze ribbon
+Kite festival: kite sky wind string tail color festival hill park family spool soar breeze ribbon
 
 # ---- gentle adventures
 Treasure hunt: treasure map clue chest gold coin key compass island path spade dig find hunt riddle
@@ -429,13 +428,13 @@ Magic garden: fairy toadstool moss wand wish petal dew glow firefly lantern secr
 Morning routine: wake stretch shower brush teeth dress breakfast coffee tea toast pack coat keys door hello
 Grocery list: milk bread eggs butter cheese apples bananas rice pasta tea coffee sugar flour jam soap
 Rainy day indoors: rain puzzle book blanket tea cocoa game film window drawing baking cushion fort nap music
-Sleepover: sleepover pajamas sleeping_bag pillow torch story snack film giggle friend midnight feast game quilt breakfast
+Sleepover: sleepover pajamas sleeping_bag pillow flashlight story snack film giggle friend midnight feast game quilt breakfast
 A good book: book story chapter page hero adventure author ending plot character cover reading bookmark tea chair
 Letters home: letter home family love news write read post stamp envelope miss hug soon friend care
-The corner shop: shop milk bread paper sweets stamps card counter till change bag shelf fridge open smile
+The corner store: store milk bread paper candy stamps card counter register change bag shelf fridge open smile
 Bike ride: bike ride path park helmet bell wheel pedal breeze hill lane friend picnic map pump
-Walk in the rain: rain puddle boots umbrella coat hood splash drip worm grey fresh smell cloud walk dog
-Sunday morning: sunday lie pancake coffee newspaper walk park church brunch garden quiet slow family roast rest
+Walk in the rain: rain puddle boots umbrella coat hood splash drip worm gray fresh smell cloud walk dog
+Sunday morning: sunday lie pancake coffee newspaper walk park brunch garden quiet slow family roast rest
 Afternoon nap: nap sofa blanket cushion quiet dream snooze doze rest cat sun window yawn stretch calm
 Winter evening: fire candle blanket soup tea book snow window slippers quilt lamp cozy cat stew warm
 # ---- more science and nature study
@@ -472,7 +471,7 @@ Mexican kitchen: taco tortilla bean rice salsa avocado lime chili corn cheese pe
 Greek kitchen: olive feta yogurt honey lemon oregano bread salad tomato cucumber pita hummus grape fig oil
 Bakes from the oven: loaf bun roll pie tart cake muffin scone cookie biscuit crumble pastry bread quiche flan
 Kitchen spices: salt pepper chili cumin ginger garlic onion paprika cinnamon clove nutmeg mustard fennel anise saffron
-Picnic treats: sandwich crisps apple grapes cheese cake cookie lemonade juice berry pie sausage roll egg quiche
+Picnic treats: sandwich chips apple grapes cheese cake cookie lemonade juice berry pie sausage roll egg quiche
 Farm shop: eggs milk cheese butter honey jam bread apples potatoes carrots meat flowers plants cream yogurt
 Frozen treats: ice_lolly sorbet sundae cone scoop freezer cold popsicle gelato frost chill cube slush sprinkles
 Hot dinners: stew soup pie roast curry chili casserole pasta risotto gravy potato dumpling rice noodle broth
@@ -486,7 +485,7 @@ Utility room: washer dryer iron board basket peg line mop bucket broom brush spo
 Front garden: gate path hedge lawn flower bed pot bench tree fence bird_bath gnome step porch door
 Balcony garden: balcony pot plant herb tomato flower chair table rail view sky breeze sun trough bird
 The attic: attic box trunk photo album suitcase lamp chair rocking_toy blanket dust beam window ladder
-Rainy window: window rain drop glass cloud grey tea blanket book cat cushion lamp quiet cozy view
+Rainy window: window rain drop glass cloud gray tea blanket book cat cushion lamp quiet cozy view
 Kitchen table: table chair plate cup bowl spoon fork napkin vase candle bread salt pepper cloth jug
 Fridge door: fridge magnet note drawing photo list calendar postcard milk juice cheese butter egg yogurt apple
 Bookshelf: book shelf novel poem atlas dictionary diary album cookbook story spine cover page dust bookend
@@ -528,18 +527,17 @@ Rock climbing: climb rock wall rope harness chalk hold grip ledge summit helmet 
 Sailing club: sail dinghy mast boom rope knot tide wind life_jacket harbor race crew rudder tiller buoy
 Dog show: dog show ribbon rosette groom brush collar lead trick agility jump tunnel judge handler parade
 Pony club: pony horse saddle bridle stable hay groom brush hoof ride trot canter jump rosette paddock
-Allotment: allotment plot shed spade fork seed compost bean pea potato onion carrot hose water barrow
 Bird feeder: feeder seed nut robin finch sparrow tit wren dove perch peck flutter garden winter window
 Stamp collecting: stamp album collect envelope postmark tweezers magnifier hinge perforation page country rare series swap post
 Lego building: brick block build tower house car base plate set piece color stack click model figure
 
 # ---- more travel and places
 Canal boat: canal boat barge lock towpath rope bridge duck swan heron tiller cabin kettle stove water slow
-Ferry crossing: ferry deck wave gull harbor ramp cabin ticket car lorry horizon wind salt spray port
+Ferry crossing: ferry deck wave gull harbor ramp cabin ticket car truck horizon wind salt spray port
 Mountain railway: train track tunnel bridge viaduct station mountain valley snow view window carriage whistle steam summit
 Cable car: cable car cabin mountain view summit valley glide slope snow lake peak ride wire station
 Lighthouse: lighthouse lamp beam light tower keeper rock sea wave ship night fog horn spiral stair
-Old town: cobble street square fountain church clock bell tower market cafe shop lane bridge gate wall
+Old town: cobble street square fountain clock bell tower market cafe shop lane bridge gate wall
 Countryside inn: inn fire tea soup pie table room key lamp garden sign village walk dog map
 The harbor wall: harbor wall boat rope net lobster pot crab gull tide steps bench chip ice_cream flag
 Airport lounge: lounge gate flight window plane coffee snack book seat board pass bag passport clock announcement
@@ -561,7 +559,50 @@ Words with ee: tree bee sheep feet seed green queen sleep week wheel cheese swee
 Things that open: door window book box gift eye flower bud gate lid jar tin curtain umbrella shell
 Things with keys: piano keyboard lock door car map computer typewriter chest diary clock organ accordion flute padlock
 Things that bounce: ball trampoline spring kangaroo rabbit frog balloon jelly bubble castle bean yoyo rubber pogo tennis
-Things that ring: bell phone chime alarm doorbell clock bicycle sleigh church tambourine triangle glass gong jingle timer
+Things that ring: bell phone chime alarm doorbell clock bicycle sleigh tambourine triangle glass gong jingle timer
+# ---- American seasons and gatherings
+Thanksgiving table: turkey stuffing gravy pie pumpkin cranberry corn rolls family thanks table potato yam feast napkin candle
+Road trip: car map snacks music window highway motel diner sunglasses mile sign scenery friend playlist cooler
+National parks: canyon geyser ranger trail bison elk forest waterfall campsite lake mountain vista map hike lodge
+Farmers market: market stall tomato peach honey jam flowers basket bread corn berry apple cheese herbs pie
+Backyard: yard lawn fence swing grill hammock garden birdhouse feeder sprinkler patio porch tree shade flowers
+Lemonade stand: lemon sugar water ice pitcher cup table sign price coins sunny neighbor smile sip straw
+Ice cream shop: cone scoop sprinkles vanilla chocolate strawberry sundae cherry waffle cup spoon swirl topping mint fudge
+Diner breakfast: pancake waffle syrup bacon egg toast coffee booth menu juice butter biscuit grits jam omelet
+Snow day: snow sled snowman mittens cocoa fort boots scarf hat flakes shovel blanket window cozy nap
+Fall leaves: maple oak red orange gold rake pile crunch sweater cider pumpkin apple hayride acorn breeze
+Spring cleaning: broom mop dust window fresh open sunshine tidy sort donate box shelf polish sponge bucket
+Garden birds: robin cardinal sparrow finch bluebird chickadee wren jay hummingbird dove feeder nest seed song branch
+Ocean friends: whale dolphin turtle seal otter octopus starfish crab jellyfish coral fish reef wave shell kelp
+Tide pools: tide pool rock crab anemone starfish mussel barnacle snail urchin shell kelp wave splash bucket
+Train ride: train track station ticket whistle window seat conductor platform tunnel bridge view journey caboose engine
+Art class: paint brush canvas easel crayon marker clay glue paper color sketch palette glitter scissors frame
+Science fair: magnet volcano poster plant experiment microscope ribbon project question idea model light battery robot
+Board games: dice board card token spinner turn player checkers chess puzzle team laugh friend score
+Movie night: movie popcorn couch blanket screen snacks friends family remote story laugh cozy candy pillow
+A day with the pups: walk sniff nap ball fetch treat bowl water bed leash park wag belly snooze puppy
+Good neighbors: wave smile share borrow help mail porch garden cookie hello friend street block party
+Starry night: star moon comet planet galaxy telescope orbit sky night glow twinkle wish meteor nebula constellation
+Morning routine: wake stretch shower brush teeth coffee breakfast dress shoes bag keys door sunshine smile walk
+Bedtime: pajamas teeth story book lamp pillow blanket hug kiss dream moon star lullaby yawn sleep
+Deep breaths: breathe slow inhale exhale pause calm steady soft gentle ease rest settle quiet still peace
+Words of thanks: thanks grateful kind help share gift smile note card hug friend neighbor teacher family warm
+Mountain cabin: cabin fire log porch rocking chair blanket view pine trail creek lantern cocoa quiet stars deer
+Sewing basket: needle thread button pin fabric pattern stitch hem scissors thimble spool quilt patch sew yarn
+Houseplants: fern ivy cactus succulent pot soil water sunlight leaf orchid mister window shelf grow sprout
+Summer garden: tomato zucchini sunflower bean pepper cucumber basil hose bee butterfly shade hat watering_can harvest
+Porch swing: porch swing rocker lemonade breeze evening fireflies neighbor wave chat creak cushion sunset crickets glow
+Pancake morning: pancake batter flip griddle spatula syrup butter blueberry stack plate fork fluffy golden warm breakfast
+Rainy afternoon: rain window puddle umbrella boots cocoa book blanket nap drizzle cloud drops tea quilt candle
+Picnic in the park: picnic blanket basket sandwich apple grapes lemonade cookie shade tree grass kite frisbee ants sunshine
+Beach cleanup: beach bag glove shell sand wave gull bottle recycle friends help tide shore clean sunshine
+Knitting circle: knit yarn needle scarf mitten sweater stitch purl wool loop row pattern friends tea chat
+Library visit: library book shelf card story author chapter page quiet desk lamp reader atlas poem fable
+Community garden: garden plot seed soil water trowel sprout tomato bean neighbor share harvest compost fence sunflower
+Kite day: kite string wind tail sky soar dive loop spool breeze hill field color ribbon run
+Hot cocoa: cocoa mug marshmallow whipped cream chocolate milk warm steam spoon blanket fire winter cozy sip
+Gentle walk: walk path step breathe look listen breeze bird tree flower shade bench rest slow smile
+Little wins: step progress try begin finish smile rest learn grow notice enough small proud steady kind
 '''
 
 

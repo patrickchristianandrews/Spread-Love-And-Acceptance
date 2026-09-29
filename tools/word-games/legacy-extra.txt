@@ -93,7 +93,7 @@ Baking|CAKE|A cake shared is joy doubled.
 Garden|SPADE|Turn the soil, and let your thoughts turn over too.
 Garden|WORM|Worms quietly make the soil rich.
 Garden|WATER|Water the plants, and drink some water too.
-Garden|BUD|A bud is a promise of colour.
+Garden|BUD|A bud is a promise of color.
 Garden|BENCH|Sit on the bench and simply look.
 Birds|BLACKBIRD|The blackbird sings from the rooftop at dusk.
 Birds|THRUSH|The thrush sings each phrase twice, to be sure.
@@ -101,8 +101,8 @@ Birds|FINCH|Finches chatter together in the hedge.
 Birds|NEST|Every nest is built one twig at a time.
 Birds|WING|Stretch your wings a little today.
 Butterflies|CATERPILLAR|Every butterfly was once a caterpillar.
-Butterflies|MEADOW|A meadow is a butterfly's favourite place.
-Butterflies|COLOUR|Wings full of colour, and you are too.
+Butterflies|MEADOW|A meadow is a butterfly's favorite place.
+Butterflies|COLOUR|Wings full of color, and you are too.
 Butterflies|BLOSSOM|Blossom and butterflies arrive together.
 Butterflies|SUMMER|Summer days are made for fluttering.
 Ocean Life|OCTOPUS|The clever octopus hugs with eight arms.
@@ -120,21 +120,21 @@ Music|DRUM|Tap a gentle beat on the table.
 Music|FLUTE|A flute sounds like a breeze with a tune.
 Music|VIOLIN|A violin can sing without words.
 Music|CHOIR|Voices together sound bigger than alone.
-Colours|BLUE|Blue skies are always there above the clouds.
-Colours|GREEN|Green is the colour of growing things.
-Colours|YELLOW|Yellow is sunshine you can hold.
-Colours|CORAL|Coral is warm like a summer evening.
-Colours|CREAM|Soft cream, like a cosy blanket.
+Colors|BLUE|Blue skies are always there above the clouds.
+Colors|GREEN|Green is the color of growing things.
+Colors|YELLOW|Yellow is sunshine you can hold.
+Colors|CORAL|Coral is warm like a summer evening.
+Colors|CREAM|Soft cream, like a cozy blanket.
 Home|DOOR|The door is always open to those you love.
 Home|KETTLE|Home is the sound of the kettle going on.
 Home|GARDEN|A little garden makes a house a home.
 Home|WINDOW|Look out of the window and let your eyes rest.
 Home|HEARTH|The hearth is the warm heart of a home.
-Cosy|BLANKET|Wrap yourself up. You deserve comfort.
-Cosy|CANDLE|A candle's glow makes any room cosy.
-Cosy|COCOA|Warm cocoa for cold hands.
-Cosy|SLIPPERS|Slippers on. You're home now.
-Cosy|QUILT|A patchwork quilt holds many stories.
+Cozy|BLANKET|Wrap yourself up. You deserve comfort.
+Cozy|CANDLE|A candle's glow makes any room cozy.
+Cozy|COCOA|Warm cocoa for cold hands.
+Cozy|SLIPPERS|Slippers on. You're home now.
+Cozy|QUILT|A patchwork quilt holds many stories.
 Friendship|FRIEND|A friend makes the good times brighter and the hard times lighter.
 Friendship|LAUGH|Laughing together is a kind of glue.
 Friendship|SHARE|Share a snack, share a story.
@@ -238,7 +238,7 @@ Crafts|BEAD|Thread the beads one at a time.
 Reading|BOOK|A good book is a friend who never tires.
 Reading|READ|Read a page just for yourself.
 Reading|CHAIR|A comfy chair and a good story.
-Reading|LAMP|A reading lamp makes a cosy circle of light.
+Reading|LAMP|A reading lamp makes a cozy circle of light.
 Reading|SHELF|A shelf of books is a shelf of friends.
 Dreams|DREAM|Dream big, dream small, just keep dreaming.
 Dreams|STAR|Reach for a star, or simply admire it.
@@ -257,7 +257,7 @@ Sweet things|MERINGUE|Meringue is light as a cloud.
 Sweet things|CUSTARD|Warm custard, poured over pudding.
 The bakery|LOAF|A fresh loaf fills the whole shop with warmth.
 The bakery|SCONE|A scone with jam and cream.
-Around the house|SHELF|A shelf for favourite things.
+Around the house|SHELF|A shelf for favorite things.
 Shapes|CIRCLE|A circle has no corners at all.
 Shapes|SQUARE|Four equal sides, as steady as can be.
 Stories and poems|STORY|Everyone has a story worth hearing.

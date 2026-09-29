@@ -153,9 +153,16 @@ def build(write=True, report=True):
     from clue_variants import build as build_variants
     from clues import all_clues
     from themes_bank import TEXT, parse
+    from clue_check import americanize, answer_problem, set_american_words
+    from english_words import get_english_words_set
+    set_american_words(get_english_words_set(['web2'], lower=True, alpha=True))
     L, V, hand = lex(), build_variants(), all_clues()
     lines = hand_lines()
     old = legacy('qw-themes')
+    # American English throughout: the older themes' names and lines too, and no British-only words
+    for t in old:
+        t['name'] = americanize(t['name'])
+        t['words'] = [[w, americanize(line)] for w, line in t['words'] if answer_problem(w.lower()) != 'british']
     # the older themes with fewer than 12 words get a few more (legacy-extra.txt), kept at the end
     extra = {}
     for raw in open(os.path.join(HERE, 'legacy-extra.txt'), encoding='utf-8'):
@@ -169,8 +176,8 @@ def build(write=True, report=True):
         have = {w[0] for w in t['words']}
         for w, line in extra.get(t['name'], []):
             lw = w.lower()
-            if w not in have and lw not in NEVER and (lw in L0 or theme_safe(lw, L0, g0)[0]):
-                t['words'].append([w, line])
+            if w not in have and lw not in NEVER and answer_problem(lw) != 'british' and (lw in L0 or theme_safe(lw, L0, g0)[0]):
+                t['words'].append([w, americanize(line)])
                 have.add(w)
         if len(t['words']) < MIN_WORDS:
             print('  older theme still short:', t['name'], len(t['words']))
@@ -188,7 +195,7 @@ def build(write=True, report=True):
         for w in ws:
             flat = w.replace('_', '')
             ln = None
-            if 3 <= len(flat) <= 12 and w not in NEVER:
+            if 3 <= len(flat) <= 12 and w not in NEVER and answer_problem(flat) != 'british':
                 if flat in L:
                     ln = line_for(flat, L, V, hand, lines)
                 else:
@@ -201,7 +208,7 @@ def build(write=True, report=True):
             if not ln:
                 dropped[w] = dropped.get(w, 0) + 1
                 continue
-            keep.append([flat.upper(), ln])
+            keep.append([flat.upper(), americanize(ln)])
         keep = keep[:MAX_WORDS]
         if len(keep) < MIN_WORDS:
             thin.append((name, len(keep)))
@@ -213,7 +220,7 @@ def build(write=True, report=True):
             continue
         accepted.append((name, s))
         names.add(name.lower())
-        new.append({'name': name, 'words': keep, '_c': cat.get(name, 'misc')})
+        new.append({'name': americanize(name), 'words': keep, '_c': cat.get(name, 'misc')})
     # deal the new themes out one category at a time, so neighbours differ
     rng = random.Random(7)
     by = {}
