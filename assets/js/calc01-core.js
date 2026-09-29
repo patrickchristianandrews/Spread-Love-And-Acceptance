@@ -1,5 +1,6 @@
 /*
-  calc01-core.js — The Objective Ledger, CALC-01 "Can the load last?"
+  calc01-core.js — The Objective Ledger, CALC-01 "Is the setup working for both of you?"
+  (also called "Can the load last?" and the solvency read)
   The one place the CALC-01 arithmetic lives. Loaded by:
     /calc01-solvency.html                       (the full calculator)
     /workpapers/calculators/calc01-solvency.html (the quick read)
@@ -11,7 +12,7 @@
     apex     = balance × 0.35 + ownership × 0.30 + (1 − stress) × 0.20 + retuning × 0.15
                (no friction logged → retuning has no value, and apex uses the
                 first three weights divided by 0.85 so they still add up to 1)
-    bands    : 0.70 or more = holding · 0.40 up to 0.70 = drifting · below 0.40 = rethink
+    bands    : 0.70 or more = working well · 0.40 up to 0.70 = needs a look · below 0.40 = needs a rethink, together
                Bands are read from the score rounded to two decimals, so the number
                you see and the band you see always agree.
 
@@ -200,10 +201,14 @@
   }
   function band(v) {
     var x = r2(v);
-    if (x >= BANDS.high) return { key: 'high', cls: '', label: 'Holding: the setup is carrying its own weight.', short: 'holding' };
-    if (x >= BANDS.low) return { key: 'mid', cls: 'mid', label: 'Drifting: something in the setup is slipping.', short: 'drifting' };
-    return { key: 'low', cls: 'low', label: 'Rethink: this setup can’t last as it is. That is about the setup, not anyone in it.', short: 'time for a kind rethink' };
+    if (x >= BANDS.high) return { key: 'high', cls: '', word: 'Working well', label: 'Working well: the setup is carrying its own weight.', short: 'working well' };
+    if (x >= BANDS.low) return { key: 'mid', cls: 'mid', word: 'Needs a look', label: 'Needs a look: something in the setup is slipping.', short: 'needs a look' };
+    return { key: 'low', cls: 'low', word: 'Needs a rethink, together', label: 'Needs a rethink, together: the setup is asking too much as it is. That is about the setup, not anyone in it.', short: 'needs a rethink, together' };
   }
+  // The same cut-offs, said once in words, for every page that shows the bands.
+  var BAND_NOTE = '0.70 or more: working well. 0.40 up to 0.70: needs a look. Below 0.40: needs a rethink, together. Here higher means the setup is working better (on the WP-02 battery, higher means heavier).';
+  // How evenly the time is shared, in words (the same 0.70 / 0.40 cut-offs as the bands).
+  function shareWords(v) { var x = r2(v); return x >= BANDS.high ? 'fairly even' : x >= BANDS.low ? 'leaning to one side' : 'mostly on one person'; }
 
   /* ---------- "what would move the score" ---------- */
   // Returns a list of concrete changes, biggest gain first. names: array of display names.
@@ -216,7 +221,7 @@
         out.push({ key: 'wb', gain: (h.after - o.wb) * w.wb,
           text: 'Hand about ' + f1(h.hours) + ' hour' + (h.hours === 1 ? '' : 's') + ' a week from ' + nm(h.from) + ' to ' + nm(h.to) +
             '. Balance would go from ' + f2(o.wb) + ' to ' + f2(h.after) + '.',
-          link: ['WP-01, Who did what', '/workpapers/fill/wp-01.html'] });
+          link: ['WP-01, Who did what, and kind ways to say no', '/workpapers/fill/wp-01.html'] });
       }
       out.push({ key: 'wb-all', gain: (1 - o.wb) * w.wb, full: true,
         text: 'A split that fully matches your ' + (o.balance && o.balance.mode === 'agreed' ? 'agreed shares' : 'even shares') + ' would add up to ' + fg((1 - o.wb) * w.wb) + '.' +
@@ -234,7 +239,7 @@
       var drop = Math.min(0.10, o.as);
       out.push({ key: 'as', gain: drop * w.as,
         text: 'If the average battery came down by ' + f2(drop) + ' (about ' + f1(drop * 20) + ' points on each person’s 20-point check), the score would rise by ' + fg(drop * w.as) + '. That usually comes from outside the chore list: a lighter week elsewhere, more sleep, less rushing.',
-        link: ['WP-02, the battery check', '/workpapers/fill/wp-02.html'] });
+        link: ['WP-02, How much are you carrying?', '/workpapers/fill/wp-02.html'] });
     }
     out.sort(function (a, b) { return (a.full ? 1 : 0) - (b.full ? 1 : 0) || b.gain - a.gain; });
     return out;
@@ -322,6 +327,6 @@
     r2: r2, f2: f2, f1: f1, fg: fg, pct: pct, num: num, sum: sum,
     balance: balance, balanceHandoff: balanceHandoff, ownership: ownership, concentration: concentration,
     battery: battery, wp02Band: wp02Band, stress: stress, retuning: retuning,
-    solvency: solvency, apex: apex, band: band, suggestions: suggestions, shortfalls: shortfalls, suiteDraft: suiteDraft, hoursProblem: hoursProblem
+    solvency: solvency, apex: apex, band: band, BAND_NOTE: BAND_NOTE, shareWords: shareWords, suggestions: suggestions, shortfalls: shortfalls, suiteDraft: suiteDraft, hoursProblem: hoursProblem
   };
 })(window);

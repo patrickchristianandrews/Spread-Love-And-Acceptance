@@ -684,7 +684,7 @@
       return out;
     }
     var high = started.filter(function (en) { return en.workpaper === 'WP-02' && metric(en) != null && Math.round(metric(en) * 100) / 100 >= 0.6; });
-    var owner = res('WP-03', 'Still needs an owner'), busy = res('WP-03', 'Busiest person') || res('WP-01', 'Busiest person');
+    var owner = res('WP-03', 'Still needs an owner'), busy = res('WP-03', 'Who’s carrying more right now') || res('WP-01', 'Who’s carrying more right now');
     if (high.length) {
       var nm = String(high[high.length - 1].state.values.name || '').trim();
       hit = solo() ? 'Your latest load reads 0.60 or above. This week, put off what can wait, and reach for your first settling default before anything hard.'

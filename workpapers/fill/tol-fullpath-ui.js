@@ -467,7 +467,7 @@
     // 2. Detailed findings
     var wps = h('div', { className: 'fp-rep-wps' });
     m.sections.forEach(function (s) { wps.appendChild(detailEl(s, m)); });
-    var cs = m.calcSection, cdet = h('details', { className: 'fp-rep-wp', id: 'fp-r-calc-01', open: 'open' }, [h('summary', {}, [h('span', { className: 'fp-rep-code', text: 'CALC-01' }), cs.applies ? ' Can the load last?' : ' Your state and retuning count'])]);
+    var cs = m.calcSection, cdet = h('details', { className: 'fp-rep-wp', id: 'fp-r-calc-01', open: 'open' }, [h('summary', {}, [h('span', { className: 'fp-rep-code', text: 'CALC-01' }), cs.applies ? ' Is the setup working for both of you?' : ' Your state and retuning count'])]);
     if (cs.state) cdet.appendChild(h('p', { className: 'fp-note', text: 'Step zero, your state: ' + cs.state + '.' }));
     cdet.appendChild(dlOf(cs.rows.map(function (r) { return [r[0], r[1] + ' · ' + r[2]]; })));
     cdet.appendChild(ulOf(cs.lines));

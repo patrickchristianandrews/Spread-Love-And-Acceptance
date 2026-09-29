@@ -124,7 +124,7 @@
           // Who is carrying the most, next to the balance: the logged minutes, and the unasked-for ones
           var cm = concentrationOf(people.map(function (p) { return t[p]; }), 60);
           var cn = concentrationOf(people.map(function (p) { return noticed[p]; }), 60);
-          if (cm.flag) out.push({ label: 'Busiest person', value: ctx.name(people[cm.top]) + ' logged ' + fmt(cm.share * 100, 0) + '% of the minutes. An even share would be ' + fmt(100 / people.length, 0) + '% each.', note: 'A fact about how this week fell, not about effort or care. One question is enough: which job would they most like to hand over?' });
+          if (cm.flag) out.push({ label: 'Who’s carrying more right now', value: ctx.name(people[cm.top]) + ' logged ' + fmt(cm.share * 100, 0) + '% of the minutes. An even share would be ' + fmt(100 / people.length, 0) + '% each.', note: 'A fact about how this week fell, not about effort or care. One question is enough: which job would they most like to hand over?' });
           if (cn.flag) out.push({ label: 'Unasked-for work', value: ctx.name(people[cn.top]) + ' did ' + fmt(cn.share * 100, 0) + '% of the work that was noticed and handled without anyone asking.', note: 'This is the work that is easiest to miss. Say it out loud, and give the jobs that repeat a named owner on WP-03.' });
           if (left) out.push(left);
           return out;
@@ -292,7 +292,7 @@
           var c = concentrationOf(byR, 3), named = byR.reduce(function (a, b) { return a + b; }, 0);
           var out = [{ label: 'Ownership clarity score', value: fmt(clear.length / rows.length, 2) + ' (' + clear.length + ' of ' + rows.length + ' tasks have both names)', note: 'Enter this as the ownership clarity number in CALC-01.' + (c.flag ? ' Clarity only asks whether every job has a name, so read it next to "Busiest person" below.' : '') }];
           if (missing.length) out.push({ label: 'Still needs an owner', value: missing.join(', ') });
-          if (c.flag) out.push({ label: 'Busiest person', value: ctx.name(people[c.top]) + ' is Responsible for ' + c.count + ' of the ' + named + ' jobs with a Responsible name (' + fmt(c.share * 100, 0) + '%). An even share would be ' + fmt(100 / people.length, 0) + '%.', note: 'Clear, but leaning on one person. Jobs drift to whoever is reliable and settle there. Ask which one they would hand over first.' });
+          if (c.flag) out.push({ label: 'Who’s carrying more right now', value: ctx.name(people[c.top]) + ' is Responsible for ' + c.count + ' of the ' + named + ' jobs with a Responsible name (' + fmt(c.share * 100, 0) + '%). An even share would be ' + fmt(100 / people.length, 0) + '%.', note: 'Clear, but leaning on one person. Jobs drift to whoever is reliable and settle there. Ask which one they would hand over first.' });
           else if (people.length >= 2 && named >= 3) out.push({ label: 'How the jobs are spread', value: people.map(function (p, i) { return ctx.name(p) + ' ' + byR[i]; }).join(', ') + ' (Responsible).' });
           return out;
         }

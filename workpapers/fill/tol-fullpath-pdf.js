@@ -484,7 +484,7 @@
 
   /* ------------------------------------------------------------ the report */
 
-  var TONE = { good: C.mint, drift: C.butter, low: C.peach, none: C.head };
+  var TONE = { good: C.mint, drift: C.butter, low: C.lav, none: C.head };
   var BAR = ['#E88BA2', '#B49AD6', '#7FB98A', '#E9C95E', '#8EAEDB', '#EBA56B'];
 
   function tiles(lay, list) {
@@ -493,8 +493,9 @@
       var row = list.slice(i, i + cols);
       var hs = row.map(function (t) {
         var band = wrap(t.band || '', 'Helvetica', 7.8, w - 16).slice(0, 4), note = t.note ? wrap(t.note, 'Times-Italic', 7.4, w - 16).slice(0, 3) : [];
-        var vs = tw(t.v, 'Helvetica-Bold', 19) > w - 16 ? 13 : 19;
-        return { band: band, note: note, vs: vs, h: 20 + vs + 6 + band.length * 10 + note.length * 9 + 8 };
+        // Tile values are words now, so they may take two lines at the smaller size.
+        var vs = tw(t.v, 'Helvetica-Bold', 16) > w - 16 ? 12 : 16, vl = wrap(t.v, 'Helvetica-Bold', vs, w - 16).slice(0, 2);
+        return { band: band, note: note, vs: vs, vl: vl, h: 20 + vs + (vl.length - 1) * (vs + 3) + 6 + band.length * 10 + note.length * 9 + 8 };
       });
       var h = Math.max.apply(null, hs.map(function (x) { return x.h; }));
       lay.room(h + 8);
@@ -502,8 +503,8 @@
         var x = L + k * (w + gap), m = hs[k];
         lay.doc.roundRect(x, lay.y, w, h, 10, TONE[t.tone] || C.head);
         lay.doc.text(x + 8, lay.y + 13, wrap(t.k.toUpperCase(), 'Helvetica-Bold', 6.8, w - 16)[0], 'Helvetica-Bold', 6.8, C.soft);
-        lay.doc.text(x + 8, lay.y + 18 + m.vs, wrap(t.v, 'Helvetica-Bold', m.vs, w - 16)[0], 'Helvetica-Bold', m.vs, C.ink);
-        var yy = lay.y + 24 + m.vs + 6;
+        m.vl.forEach(function (ln, j) { lay.doc.text(x + 8, lay.y + 18 + m.vs + j * (m.vs + 3), ln, 'Helvetica-Bold', m.vs, C.ink); });
+        var yy = lay.y + 24 + m.vs + (m.vl.length - 1) * (m.vs + 3) + 6;
         m.band.forEach(function (ln) { lay.doc.text(x + 8, yy, ln, 'Helvetica', 7.8, C.ink); yy += 10; });
         m.note.forEach(function (ln) { lay.doc.text(x + 8, yy, ln, 'Times-Italic', 7.4, C.soft); yy += 9; });
       });
@@ -721,9 +722,9 @@
       detail(lay, s, m);
     });
     var cs = m.calcSection;
-    section(cs.applies ? 'CALC-01  Can the load last?' : 'CALC-01  Your state and retuning count', 'CALC-01 ' + (cs.applies ? 'Can the load last?' : 'State and retuning'), 1);
+    section(cs.applies ? 'CALC-01  Is the setup working for both of you?' : 'CALC-01  Your state and retuning count', 'CALC-01 ' + (cs.applies ? 'Is the setup working?' : 'State and retuning'), 1);
     lay.kicker('CALC-01');
-    lay.h1(cs.applies ? 'Can the load last?' : 'Your state and your retuning count', 'The inputs, where each came from, and the read');
+    lay.h1(cs.applies ? 'Is the setup working?' : 'Your state and your retuning count', 'The inputs, where each came from, and the read');
     if (cs.state) lay.para('Step zero, your state: ' + cs.state + '.', { size: 9.2, color: C.soft });
     kv(lay, [['Input', 'Value', 'Where it came from']].concat(cs.rows), { kw: 150 });
     lay.bullets(cs.lines, { size: 9.2 });

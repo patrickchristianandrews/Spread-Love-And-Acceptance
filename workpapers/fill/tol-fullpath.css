@@ -107,10 +107,10 @@
 .fp-rep-for{ margin: 0; }
 .fp-tiles{ display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 10px; }
 .fp-tile{ padding: .7em .8em; border-radius: 16px; background: #F3ECD9; min-width: 0; }
-.fp-tile.is-good{ background: #CFE6D2; } .fp-tile.is-drift{ background: #F8E7AE; } .fp-tile.is-low{ background: #F9D9B8; }
+.fp-tile.is-good{ background: #CFE6D2; } .fp-tile.is-drift{ background: #F8E7AE; } .fp-tile.is-low{ background: #E4DDF2; }
 .fp-tile p{ margin: 0; overflow-wrap: anywhere; }
 .fp-tile-k{ font-family: "IBM Plex Mono", ui-monospace, monospace; font-size: .68rem; letter-spacing: .06em; text-transform: uppercase; color: #5A5346; }
-.fp-tile-v{ font-family: "IBM Plex Mono", ui-monospace, monospace; font-size: 1.6rem; line-height: 1.2; font-weight: 500; }
+.fp-tile-v{ font-family: "Fraunces", Georgia, serif; font-size: 1.25rem; line-height: 1.25; font-weight: 600; }
 .fp-tile-b{ font-size: .86em; }
 .fp-tile-n{ font-size: .8em; font-style: italic; color: #5A5346; }
 .fp-findings{ padding-left: 1.4em; }

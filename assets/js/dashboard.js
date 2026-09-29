@@ -75,9 +75,10 @@
   ];
 
   var STATES = {
-    ventral: { name: 'Calm & connected', sub: 'Ventral vagal' },
-    sympathetic: { name: 'Revved up', sub: 'Sympathetic' },
-    dorsal: { name: 'Shut down', sub: 'Dorsal vagal' }
+    // The same plain words and weather everywhere on the site (the keys stay as stored data).
+    ventral: { name: 'Calm and connected', sub: 'Clear skies' },
+    sympathetic: { name: 'Revved up', sub: 'Gusty' },
+    dorsal: { name: 'Running on empty', sub: 'Fogged in' }
   };
 
   var STARTER_LEDGER = ['Groceries & meal planning', 'Dishes', 'Laundry', 'Bills & scheduling', 'Emotional check-ins'];
@@ -96,15 +97,15 @@
   }
 
   function asiReading(score) {
-    if (score < 0.3) return 'Low load. Whatever comes up is probably about the thing itself.';
-    if (score < 0.6) return 'Medium. Before a hard conversation, it\u2019s worth saying out loud: \u201cHeads up, I\u2019m carrying more than usual today.\u201d';
-    return 'High. Put off anything that doesn\u2019t need deciding in the next hour. It\u2019s a pause, not a way out.';
+    if (score < 0.3) return 'Low load (under 0.30; higher means heavier). Whatever comes up is probably about the thing itself.';
+    if (score < 0.6) return 'Medium load (0.30 to 0.59; higher means heavier). Before a hard conversation, it\u2019s worth saying out loud: \u201cHeads up, I\u2019m carrying more than usual today.\u201d';
+    return 'High load (0.60 or more; higher means heavier). Put off anything that doesn\u2019t need deciding in the next hour. It\u2019s a pause, not a way out.';
   }
 
   function solvencyBand(s) {
-    if (s >= 0.7) return { cls: 'high', text: 'The current setup is carrying its own weight. Keep the same rhythm of check-ins.' };
-    if (s >= 0.4) return { cls: 'mid', text: 'Something in the setup is drifting, usually ownership clarity first. Revisit the ownership treaty below.' };
-    return { cls: 'low', text: 'The workload, as it\u2019s set up now, doesn\u2019t look like it can last. That\u2019s a statement about the setup, not about either person.' };
+    if (s >= 0.7) return { cls: 'high', word: 'Working well', text: 'Working well: the current setup is carrying its own weight. Keep the same rhythm of check-ins.' };
+    if (s >= 0.4) return { cls: 'mid', word: 'Needs a look', text: 'Needs a look: something in the setup is slipping, usually who owns what. Look at the job list below together.' };
+    return { cls: 'low', word: 'Needs a rethink, together', text: 'Needs a rethink, together: the workload, as it\u2019s set up now, asks too much. That\u2019s a statement about the setup, not about either person.' };
   }
 
   /* ------------------------------------------------------------------ */
@@ -776,11 +777,11 @@
   /* ------------------------------------------------------------------ */
 
   var SECTIONS = [
-    ['solvency', 'Can the load last?'],
+    ['solvency', 'Is the setup working for both of you?'],
     ['register', 'The Lemonade Stand'],
     ['battery', 'How much are you carrying?'],
     ['treaty', 'One owner per job'],
-    ['state', 'Check Your State'],
+    ['state', 'How you feel right now'],
     ['close', 'Close the Books'],
     ['household', 'Household & Account']
   ];
@@ -822,9 +823,9 @@
     if (weekClosed()) badgeHtml = badge('planned', 'Closed');
 
     el.innerHTML =
-      sectionHead('This Week', 'Can the load last?',
-        'The three inputs below, pulled into one number for ' + esc(fmtWeek(S.weekStart).replace('Week of ', 'the week of ')) +
-        '. It scores how the workload is set up, never either person.') +
+      sectionHead('This Week', 'Is the setup working for both of you?',
+        'The three inputs below, read together for ' + esc(fmtWeek(S.weekStart).replace('Week of ', 'the week of ')) +
+        '. It reads how the workload is set up, never either person. 0.70 or more reads as working well, 0.40 to 0.69 as needs a look, under 0.40 as needs a rethink, together.') +
       phase('This week\u2019s read', badgeHtml,
         '<div class="db-scroll"><table class="db-read-ledger">' +
           '<thead><tr><th scope="col">Input</th><th scope="col">Score</th><th scope="col">Weight</th><th scope="col">Amount</th></tr></thead>' +
@@ -833,8 +834,8 @@
             line('Ownership clarity', r.oc, 0.35, ocNote) +
             line('1 \u2212 how much you\u2019re both carrying', r.as !== null ? 1 - r.as : null, 0.25, asNote) +
           '</tbody>' +
-          '<tfoot><tr><th scope="row" colspan="3">The read (0 to 1)</th>' +
-            '<td class="db-read-total ' + (band ? 'is-' + band.cls : 'is-pending') + '">' + (r.solvency !== null ? fix2(r.solvency) : '\u2014') + '</td>' +
+          '<tfoot><tr><th scope="row" colspan="3">This week, in words (0 to 1, higher = working better)</th>' +
+            '<td class="db-read-total ' + (band ? 'is-' + band.cls : 'is-pending') + '">' + (r.solvency !== null ? esc(band.word) + ' (' + fix2(r.solvency) + ')' : '\u2014') + '</td>' +
           '</tr></tfoot>' +
         '</table></div>' +
         (band
@@ -1001,7 +1002,7 @@
       partnerBody = '<p class="db-muted">Your partner hasn\u2019t joined the household yet.</p>';
       partnerBadge = badge('planned', 'Not joined');
     } else if (theirs) {
-      partnerBody = '<p><span class="db-asi-score">' + fix2(asiScore(theirs)) + '</span> ' + esc(p.display_name) + '\u2019s battery score this week.</p>';
+      partnerBody = '<p><span class="db-asi-score">' + fix2(asiScore(theirs)) + '</span> ' + esc(p.display_name) + '\u2019s check-in this week (0 to 1, higher means carrying more).</p>';
       partnerBadge = badge('live', 'Checked in');
     } else {
       partnerBody = '<p class="db-muted">' + esc(p.display_name) + ' hasn\u2019t checked in this week yet.</p>';
@@ -1064,8 +1065,8 @@
       return '<tr data-id="' + esc(t.id) + '" class="' + (full ? 'is-owned' : 'is-open') + '">' +
         '<td><input type="text" class="db-raci-task" maxlength="120" value="' + esc(t.task) + '" aria-label="Task" placeholder="Task"></td>' +
         '<td><input type="text" class="db-raci-freq" maxlength="40" value="' + esc(t.frequency) + '" aria-label="Frequency" placeholder="How often"></td>' +
-        '<td>' + seatSelect('db-raci-r', t.responsible_seat, 'Responsible for ' + esc(t.task || 'this task')) + '</td>' +
-        '<td>' + seatSelect('db-raci-acc', t.accountable_seat, 'Accountable for ' + esc(t.task || 'this task')) + '</td>' +
+        '<td>' + seatSelect('db-raci-r', t.responsible_seat, 'Who does ' + esc(t.task || 'this task')) + '</td>' +
+        '<td>' + seatSelect('db-raci-acc', t.accountable_seat, 'Who notices ' + esc(t.task || 'this task')) + '</td>' +
         '<td><button type="button" class="db-remove" aria-label="Remove task">&times;</button></td>' +
       '</tr>';
     }).join('');
@@ -1077,12 +1078,12 @@
 
     el.innerHTML =
       sectionHead('WP-03', 'One owner per job',
-        'One Responsible (does it) and one Accountable (notices if it didn\u2019t get done) for every regular task. The treaty carries over from week to week. Change it together at the weekly close, never quietly.') +
+        'One person who does it and one who notices if it didn\u2019t get done, for every regular task. The treaty carries over from week to week. Change it together at the weekly close, never quietly.') +
       phase('The treaty', '<span id="raci-badge">' + badgeHtml + '</span>',
         (S.raci.length
           ? '<p class="db-raci-score" id="raci-score">' + raciScoreText(r) + '</p>' +
             '<div class="db-scroll"><table class="db-raci">' +
-              '<thead><tr><th scope="col">Task</th><th scope="col">Frequency</th><th scope="col">Responsible</th><th scope="col">Accountable</th><th scope="col"><span class="db-sr">Remove</span></th></tr></thead>' +
+              '<thead><tr><th scope="col">Task</th><th scope="col">Frequency</th><th scope="col">Does it</th><th scope="col">Notices</th><th scope="col"><span class="db-sr">Remove</span></th></tr></thead>' +
               '<tbody>' + rows + '</tbody></table></div>'
           : '<p class="db-muted">The treaty is empty.</p><div class="db-actions"><button type="button" class="db-btn db-btn--quiet" id="raci-starter">Start from the WP-03 task list</button></div>') +
         '<button type="button" class="db-link db-add" id="raci-add">+ Add a task</button>');
@@ -1126,7 +1127,7 @@
   }
 
   function raciScoreText(r) {
-    return r.withBoth + ' of ' + S.raci.length + ' tasks have both an R and an A \u00b7 ownership clarity ' + fix2(r.oc);
+    return r.withBoth + ' of ' + S.raci.length + ' tasks have both a doer and a noticer \u00b7 ownership clarity ' + fix2(r.oc);
   }
 
   function addRaci(pairs, focusLast) {
@@ -1159,7 +1160,7 @@
     }).join('');
 
     el.innerHTML =
-      sectionHead('Tool', 'Check Your State',
+      sectionHead('Tool', 'How you feel right now',
         'Before you look at this week\u2019s numbers, check what state you\u2019re in. Pick the step that feels closest to how you are right now.') +
       phase('Right now', badge('planned', 'Private'),
         '<div class="db-rungs" role="group" aria-label="Your current state">' +

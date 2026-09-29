@@ -33,7 +33,7 @@ input[type="number"]{ font-family:"IBM Plex Mono", monospace; text-align:right; 
 td.min{ width:100px; } td.who{ min-width:120px; }
 .out{ margin-top:1rem; padding:0.9rem 1.1rem; background:#FFFDF6; border:1px solid var(--line); border-radius:var(--radius); font-size:0.92rem; }
 .out .big{ font:500 1.6rem "IBM Plex Mono", monospace; color:var(--credit); }
-.out .big.mid{ color:#7A5720; } .out .big.low{ color:#96412B; }
+.out .big.mid{ color:#6B5320; } .out .big.low{ color:#5B4A86; } .out .big.word{ font:600 1.25rem "Fraunces", Georgia, serif; }
 .out .mono{ font-family:"IBM Plex Mono", monospace; font-size:0.82rem; color:var(--ink-soft); overflow-wrap:anywhere; }
 .bat{ display:grid; grid-template-columns:1fr 90px; gap:8px; align-items:center; max-width:520px; margin:6px 0; font-size:0.92rem; }
 .people{ display:grid; grid-template-columns:repeat(auto-fill,minmax(140px,1fr)); gap:10px; }
@@ -71,7 +71,7 @@ td.min{ width:100px; } td.who{ min-width:120px; }
 <div class="mark">Workpaper Playground<small>THE OBJECTIVE LEDGER &middot; PRACTICE</small></div>
 <p class="tagline">Try the tools on an example before you use your own week.</p>
 <a class="back-link" href="index.html">&larr; Back to Try the Workpapers</a>
-<nav aria-label="On this page"><ol><li><a href="#wp01">WP-01: Who did what</a></li><li><a href="#wp02">WP-02: The battery check</a></li><li><a href="#wp03">WP-03: One owner per job</a></li><li><a href="#calc01">CALC-01: Can the load last?</a></li><li><a href="#next">Your real worksheets</a></li></ol></nav>
+<nav aria-label="On this page"><ol><li><a href="#wp01">WP-01: Who did what</a></li><li><a href="#wp02">WP-02: How much are you carrying?</a></li><li><a href="#wp03">WP-03: One owner per job</a></li><li><a href="#calc01">CALC-01: Is the setup working for both of you?</a></li><li><a href="#next">Your real worksheets</a></li></ol></nav>
 <div class="sidebar-foot">spreadloveandacceptance.com</div>
 </aside>
 <div class="rule" aria-hidden="true"></div>
@@ -99,7 +99,7 @@ td.min{ width:100px; } td.who{ min-width:120px; }
 
 <section class="playground-section" id="wp02" aria-labelledby="wp02-h">
 <span class="tag">WP-02 &middot; Pillar III</span>
-<h2 id="wp02-h">The battery check: read your state first</h2>
+<h2 id="wp02-h">How much are you carrying? Read your state first</h2>
 <p class="playground-intro">Score five things about yourself for the last day or two, from 0 (not at all) to 4 (very true). Add them up and divide by 20. It's a self-check, not a health measure, and only ever filled in about yourself.</p>
 <div id="bat"></div>
 <div class="out" id="wp02-out" aria-live="polite"></div>
@@ -119,7 +119,7 @@ td.min{ width:100px; } td.who{ min-width:120px; }
 
 <section class="playground-section" id="calc01" aria-labelledby="calc01-h">
 <span class="tag">CALC-01 &middot; Pillars I and II together</span>
-<h2 id="calc01-h">Can the load last?</h2>
+<h2 id="calc01-h">Is the setup working for both of you?</h2>
 <p class="playground-intro">CALC-01 puts the three together: balance from WP-01, ownership from WP-03, and the average of everyone's battery from WP-02. Each person fills in their own battery, so here the example roommates' scores are typed in for them.</p>
 <div class="people" id="bats3"></div>
 <div class="out" id="calc-out" aria-live="polite"></div>
@@ -130,7 +130,7 @@ td.min{ width:100px; } td.who{ min-width:120px; }
 <section id="next" aria-labelledby="next-h">
 <h2 id="next-h" style="font-size:1.3rem;">From practice to your real week</h2>
 <ol class="path">
-<li>Each person does the two-minute <a href="/workpapers/fill/wp-02.html">battery check (WP-02)</a> before you start, so you pick a calm moment.</li>
+<li>Each person does the two-minute <a href="/workpapers/fill/wp-02.html">WP-02, How much are you carrying?</a> before you start, so you pick a calm moment.</li>
 <li>Log one ordinary week in <a href="/workpapers/fill/wp-01.html">WP-01</a> (or the <a href="/lemonade-stand.html">Lemonade Stand</a>).</li>
 <li>Sit down once and fill in <a href="/workpapers/fill/wp-03.html">WP-03</a> together.</li>
 <li>Put the numbers into <a href="/workpapers/calculators/calc01-solvency.html">CALC-01</a> and start with the biggest shortfall.</li>
@@ -196,7 +196,7 @@ function calc(){
     '<div class="mono">' + S.bat.join(" + ") + " = " + bt.points + " points ÷ 20</div>" +
     '<div>Your battery: <span class="big' + (bt.value >= 0.6 ? " low" : bt.value >= 0.3 ? " mid" : "") + '">' + f2(bt.value) + '</span> ' + C.wp02Band(bt.value).label + '</div>' +
     "<div>" + ({ low: "Whatever comes up is probably about the thing itself. A fine time to talk.", mid: "Before a hard conversation, say it out loud: “Heads up, I’m carrying more than usual today.”", high: "Put off anything that doesn’t need deciding in the next hour. Pick a time to come back. The <a href=\"/wp-11.html\">Calm-Down Kit (WP-11)</a> helps." })[C.wp02Band(bt.value).key] + "</div>" +
-    '<div class="mono">Bands: under 0.30 low, 0.30 up to 0.60 medium, 0.60 or more high.</div>';
+    '<div class="mono">Higher means heavier. Bands: under 0.30 low, 0.30 up to 0.60 medium, 0.60 or more high.</div>';
   // WP-03
   var owned = S.raci.filter(function(r){ return r[1] !== "" && r[2] !== ""; }).length;
   var sharedA = S.raci.filter(function(r){ return r[2] === "shared"; }).length;
@@ -213,12 +213,12 @@ function calc(){
   if (b.value === null || o.value === null || s.value === null){ out.innerHTML = "Fill in the pieces above: " + [b.value === null ? "the week log" : "", o.value === null ? "the job list" : "", s.value === null ? (s.error || "the batteries") : ""].filter(Boolean).map(esc).join(", ") + "."; return; }
   var sol = C.solvency(b.value, o.value, s.value), bd = C.band(sol.value);
   var sf = C.shortfalls(b.value, o.value, s.value).sort(function(x, y){ return y.short - x.short; })[0];
-  var mv = C.suggestions({ wb: b.value, oc: o.value, as: s.value, balance: b, ownership: o, names: S.names.map(function(_, i){ return nm(i); }) })[0];
+  var mv = C.suggestions({ wb: b.value, oc: o.value, as: s.value, balance: C.balance(mins.map(function(m){ return m / 60; }), null), ownership: o, names: S.names.map(function(_, i){ return nm(i); }) })[0];
   out.innerHTML = '<div class="mono">(' + f2(b.value) + " × 0.40) + (" + f2(o.value) + " × 0.35) + ((1 − " + f2(s.value) + ") × 0.25) = " + fg(sol.parts.wb) + " + " + fg(sol.parts.oc) + " + " + fg(sol.parts.as) + " = " + sol.value.toFixed(4) + "</div>" +
-    '<div>Solvency read: <span class="big ' + bd.cls + '">' + f2(sol.value) + "</span> " + esc(bd.short) + "</div>" +
+    '<div>How the setup is working: <span class="big word ' + bd.cls + '">' + esc(bd.word) + "</span> <span class=\"mono\">(" + f2(sol.value) + " of 1)</span></div>" +
     "<div>" + esc(bd.label) + (bd.key !== "high" ? " The biggest shortfall is <strong>" + esc(sf.name.toLowerCase()) + "</strong>." : "") + "</div>" +
     (mv ? "<div><strong>What would move it:</strong> " + esc(mv.text) + "</div>" : "") +
-    '<div class="mono">Bands: 0.70 or more holding · 0.40 up to 0.70 drifting · below 0.40 time for a kind rethink. It reads the setup, never a person.</div>';
+    '<div class="mono">Words: 0.70 or more working well · 0.40 up to 0.70 needs a look · below 0.40 needs a rethink, together. Higher means working better. It reads the setup, never a person.</div>';
 }
 document.addEventListener("input", function(e){
   var t = e.target, d = t.dataset;

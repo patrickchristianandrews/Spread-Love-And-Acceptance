@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Can the load last? The full CALC-01 · Spread Love &amp; Acceptance</title>
+<title>Is the setup working for both of you? The full CALC-01 · Spread Love &amp; Acceptance</title>
 <meta name="description" content="The full CALC-01 works out every input from your worksheet entries, for 2 to 8 people, shows the math step by step, and suggests what would move the score. It reads the setup, never a person.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -134,10 +134,15 @@
   .read-card:focus{ outline:3px solid var(--focus); outline-offset:3px; }
   .scores{ display:grid; grid-template-columns:1fr 1fr; gap:20px; margin-bottom:16px; }
   .score-box{ border:1px solid var(--line); border-radius:var(--radius); padding:16px 18px; background:var(--paper-deep); }
-  .score-box .val{ font-family:"IBM Plex Mono", monospace; font-size:2.4rem; line-height:1.1; color:var(--credit); }
-  .score-box .val.mid{ color:#7A5720; }
-  .score-box .val.low{ color:var(--debit); }
-  .score-box .val.na{ color:var(--ink-soft); font-size:1.4rem; }
+  /* Words first, in soft colors: the read is a conversation starter, never a warning light */
+  .score-box .val{ font-family:"Fraunces", serif; font-weight:600; font-size:1.45rem; line-height:1.2; color:var(--ink); display:inline-block; padding:4px 14px; border-radius:99px; background:#D6EBDA; margin-top:4px; }
+  .score-box .val.mid{ background:#F6E8C4; }
+  .score-box .val.low{ background:#E4DDF2; }
+  .score-box .val.na{ background:transparent; padding:0; color:var(--ink-soft); font-size:1.3rem; }
+  .score-box .num{ display:block; font-family:"IBM Plex Mono", monospace; font-size:0.85rem; color:var(--ink-soft); margin-top:4px; }
+  .num-toggle{ display:inline-flex; align-items:center; gap:8px; min-height:44px; font-size:0.9rem; cursor:pointer; margin:0 0 8px; }
+  .num-toggle input{ width:20px; height:20px; }
+  body:not(.show-nums) .nums-only{ display:none !important; }
   .score-box .band{ font-size:0.88rem; color:var(--ink); margin-top:4px; }
   .live-summary{ font-size:0.95rem; margin:0 0 14px 0; }
 
@@ -147,7 +152,7 @@
   .contrib-track{ height:14px; background:var(--paper-deep); border:1px solid var(--line); border-radius:var(--radius); overflow:hidden; }
   .contrib-fill{ height:100%; background:var(--credit); }
   .contrib-fill.short{ background:var(--brass); }
-  .contrib-fill.bad{ background:var(--debit); }
+  .contrib-fill.bad{ background:#B7A6DA; }
   .contrib-row .pts{ font-family:"IBM Plex Mono", monospace; font-size:0.76rem; text-align:right; color:var(--ink-soft); }
   .moves{ margin:8px 0 0 0; padding-left:20px; font-size:0.92rem; }
   .moves li{ margin-bottom:8px; }
@@ -155,7 +160,7 @@
 
   .next-box{ border-left:4px solid var(--credit); background:var(--credit-soft); border-radius:var(--radius); padding:16px 20px; margin-top:18px; }
   .next-box.hold{ border-left-color:var(--brass); background:var(--paper-deep); }
-  .next-box.stop{ border-left-color:var(--debit); background:var(--debit-soft); }
+  .next-box.stop{ border-left-color:#9C8BC9; background:#EEEAF6; }
   .next-box p{ margin:0 0 8px 0; font-size:0.93rem; } .next-box p:last-child{ margin-bottom:0; }
   .completeness{ font-family:"IBM Plex Mono", monospace; font-size:0.76rem; color:var(--ink-soft); border-top:1px solid var(--line); padding-top:12px; margin-top:16px; }
   .completeness b{ color:var(--debit); font-weight:500; }
@@ -204,7 +209,7 @@
 <meta name="keywords" content="self-help, relationships, kindness, love, appreciation, acceptance, connection, communication, calm, peace, harmony, reconciliation, emotional wellbeing, self-discovery, fairness at home, mental load, invisible work, free self-help tools, chore chart, fair division of labor, household workload, mental load worksheet, stress check, calm-down plan, daily check-in, free worksheets">
 <meta name="author" content="Spread Love &amp; Acceptance">
 <meta property="og:site_name" content="Spread Love &amp; Acceptance">
-<meta property="og:title" content="Can the load last? The full CALC-01 · Spread Love &amp; Acceptance">
+<meta property="og:title" content="Is the setup working for both of you? The full CALC-01 · Spread Love &amp; Acceptance">
 <meta property="og:description" content="The full CALC-01 works out every input from your worksheet entries, for 2 to 8 people, shows the math step by step, and suggests what would move the score. It reads the setup, never a person.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://spreadloveandacceptance.com/calc01-solvency.html">
@@ -212,10 +217,10 @@
 <meta property="og:image:alt" content="Two friends sharing one heart, with two happy pups: Spread Love &amp; Acceptance">
 <meta property="og:locale" content="en_US">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Can the load last? The full CALC-01 · Spread Love &amp; Acceptance">
+<meta name="twitter:title" content="Is the setup working for both of you? The full CALC-01 · Spread Love &amp; Acceptance">
 <meta name="twitter:description" content="The full CALC-01 works out every input from your worksheet entries, for 2 to 8 people, shows the math step by step, and suggests what would move the score. It reads the setup, never a person.">
 <meta name="twitter:image" content="https://spreadloveandacceptance.com/assets/img/og-image.png">
-<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"name":"Can the load last? The full CALC-01 · Spread Love & Acceptance","headline":"Can the load last? The full CALC-01 · Spread Love & Acceptance","description":"The full CALC-01 works out every input from your worksheet entries, for 2 to 8 people, shows the math step by step, and suggests what would move the score. It reads the setup, never a person.","url":"https://spreadloveandacceptance.com/calc01-solvency.html","inLanguage":"en-US","isAccessibleForFree":true,"keywords":"self-help, relationships, kindness, love, appreciation, acceptance, connection, communication, calm, peace, harmony, reconciliation, emotional wellbeing, self-discovery, fairness at home, mental load, invisible work, free self-help tools, chore chart, fair division of labor, household workload, mental load worksheet, stress check, calm-down plan, daily check-in, free worksheets","publisher":{"@type":"Organization","@id":"https://spreadloveandacceptance.com/#org","name":"Spread Love & Acceptance"},"isPartOf":{"@type":"WebSite","@id":"https://spreadloveandacceptance.com/#website","name":"Spread Love & Acceptance","url":"https://spreadloveandacceptance.com/"},"dateModified":"2026-09-29","image":"https://spreadloveandacceptance.com/assets/img/og-image.png","@type":"WebApplication","applicationCategory":"LifestyleApplication","operatingSystem":"Any (web browser)","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Spread Love & Acceptance","item":"https://spreadloveandacceptance.com/"},{"@type":"ListItem","position":2,"name":"Can the load last? The full CALC-01 · Spread Love & Acceptance","item":"https://spreadloveandacceptance.com/calc01-solvency.html"}]}]}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"name":"Is the setup working for both of you? The full CALC-01 · Spread Love & Acceptance","headline":"Is the setup working for both of you? The full CALC-01 · Spread Love & Acceptance","description":"The full CALC-01 works out every input from your worksheet entries, for 2 to 8 people, shows the math step by step, and suggests what would move the score. It reads the setup, never a person.","url":"https://spreadloveandacceptance.com/calc01-solvency.html","inLanguage":"en-US","isAccessibleForFree":true,"keywords":"self-help, relationships, kindness, love, appreciation, acceptance, connection, communication, calm, peace, harmony, reconciliation, emotional wellbeing, self-discovery, fairness at home, mental load, invisible work, free self-help tools, chore chart, fair division of labor, household workload, mental load worksheet, stress check, calm-down plan, daily check-in, free worksheets","publisher":{"@type":"Organization","@id":"https://spreadloveandacceptance.com/#org","name":"Spread Love & Acceptance"},"isPartOf":{"@type":"WebSite","@id":"https://spreadloveandacceptance.com/#website","name":"Spread Love & Acceptance","url":"https://spreadloveandacceptance.com/"},"dateModified":"2026-09-29","image":"https://spreadloveandacceptance.com/assets/img/og-image.png","@type":"WebApplication","applicationCategory":"LifestyleApplication","operatingSystem":"Any (web browser)","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Spread Love & Acceptance","item":"https://spreadloveandacceptance.com/"},{"@type":"ListItem","position":2,"name":"Is the setup working for both of you? The full CALC-01 · Spread Love & Acceptance","item":"https://spreadloveandacceptance.com/calc01-solvency.html"}]}]}</script>
 <!-- seo:end -->
 </head>
 <body>
@@ -229,11 +234,11 @@
 
   <header class="sheet-header">
     <p class="wp-num">CALC-01 &middot; THE FULL CALCULATOR</p>
-    <h1 class="sheet-mark">Can the load last?
-      <small>The Solvency Read &middot; for 2 to 8 people</small>
+    <h1 class="sheet-mark">Is the setup working for both of you?
+      <small>Also called &ldquo;Can the load last?&rdquo; or the solvency read &middot; for 2 to 8 people</small>
     </h1>
     <p class="sheet-tagline">This scores one narrow thing: whether the way you share the work right now, as you logged it, can keep going. It never scores a person or the relationship. It works for any group that shares a load: partners, families, roommates, co-carers, a small team at work. ("Solvency" is an accounting word. Here it just means the setup can carry its own weight.)</p>
-    <p class="sheet-tagline" style="color:var(--debit);"><strong>A place to start a conversation, not a verdict.</strong> A low score doesn't blame anyone, and a high score doesn't mean anyone should stop speaking up.</p>
+    <p class="sheet-tagline"><strong>A place to start a conversation, not a verdict.</strong> A low score doesn't blame anyone, and a high score doesn't mean anyone should stop speaking up.</p>
     <p class="sheet-tagline pillar-note"><small>CALC-01 puts <a href="/five-pillars.html#see-the-load">Pillar I, See the whole load</a> and <a href="/five-pillars.html#fix-the-setup">Pillar II, Fix the setup, not the person</a> to work. Step Zero uses <a href="/five-pillars.html#read-your-state">Pillar III, Read your state first</a>, and the retuning count uses <a href="/five-pillars.html#tune-signals">Pillar IV, Tune how you send and receive</a>. In you: you see the whole load you carry, and check your state before you read the number. Between you and others: you get one fair read of the setup, never a score on anyone.</small></p>
     <p class="sheet-tagline">The math comes from <a href="/book/chapter-2-in-depth.html">Chapter II</a>. Only have totals? Try the <a href="/workpapers/calculators/calc01-solvency.html">quick read</a>. To follow it week by week, use <a href="/workpapers/report-01.html">REPORT-01</a>.</p>
     <nav class="toc no-print" aria-label="On this page">
@@ -254,9 +259,9 @@
     <div class="section-head"><p class="part-label">Step zero</p><h2 id="state-h">Check your state</h2></div>
     <p>Before you read a number about how you share the load, notice how you feel right now. The same number lands differently when you're calm than when you're tired or wound up. This is a check on yourself only. It never changes the score; it changes whether today is the day to act on it.</p>
     <div class="ladder" role="group" aria-label="How do you feel right now?">
-      <button type="button" class="rung" data-state="calm" aria-pressed="false"><b>Calm and open</b><span>I can hear feedback without bracing.</span></button>
-      <button type="button" class="rung" data-state="revved" aria-pressed="false"><b>Revved up</b><span>Tense, quick to argue, on edge.</span></button>
-      <button type="button" class="rung" data-state="shut" aria-pressed="false"><b>Shut down</b><span>Flat, far away, past caring.</span></button>
+      <button type="button" class="rung" data-state="calm" aria-pressed="false"><b>Calm and connected</b><span>Clear skies. I can hear feedback without bracing.</span></button>
+      <button type="button" class="rung" data-state="revved" aria-pressed="false"><b>Revved up</b><span>Gusty. Tense, quick to argue, on edge.</span></button>
+      <button type="button" class="rung" data-state="shut" aria-pressed="false"><b>Running on empty</b><span>Fogged in. Flat, far away, words are hard to find.</span></button>
     </div>
     <div class="state-readout" aria-live="polite">
       <span class="lbl">Right now</span>
@@ -267,7 +272,7 @@
   <!-- ================= PEOPLE ================= -->
   <section id="people" aria-labelledby="people-h">
     <div class="section-head"><p class="part-label">Set up</p><h2 id="people-h">Who's sharing the load?</h2></div>
-    <p>List the people who share this set of jobs and can each fill in their own battery check. Two to eight people. Names stay on this page.</p>
+    <p>List the people who share this set of jobs and can each fill in their own WP-02 (How much are you carrying?). Two to eight people. Names stay on this page.</p>
     <div class="panel">
       <label for="people-count" style="font-weight:600;">How many people?</label>
       <select id="people-count" style="max-width:120px;display:block;margin-top:6px;"></select>
@@ -355,7 +360,7 @@
   <section id="as" aria-labelledby="as-h">
     <div class="section-head"><p class="part-label">Input 3 of 4 &middot; Pillar III</p><h2 id="as-h">Stress: how much each person is carrying <small>average battery load (AS)</small></h2></div>
     <div class="panel">
-      <div class="panel-head"><h3>Everyone's battery</h3><span class="src-tag">From <a href="/workpapers/fill/wp-02.html">WP-02, the battery check</a></span></div>
+      <div class="panel-head"><h3>Everyone's battery</h3><span class="src-tag">From <a href="/workpapers/fill/wp-02.html">WP-02, How much are you carrying?</a> (higher = heavier)</span></div>
       <p class="panel-note">Each person fills in their own card, about themselves, for the last 24 to 48 hours. 0 = not at all, 4 = very true. Guessing for someone else turns a reflection tool into a way of watching them, so the read waits until every card is complete.</p>
       <div class="bat-grid" id="bat-grid"></div>
       <div class="derive" id="as-derive" aria-live="polite"></div>
@@ -367,7 +372,7 @@
   <section id="rf" aria-labelledby="rf-h">
     <div class="section-head"><p class="part-label">Input 4 of 4 &middot; Pillar IV &middot; apex only</p><h2 id="rf-h">Retuning: repair after rough moments <small>retuning (RF)</small></h2></div>
     <div class="panel">
-      <div class="panel-head"><h3>Counting repairs</h3><span class="src-tag">From <a href="/workpapers/fill/wp-09.html">WP-09, the tone filter</a></span></div>
+      <div class="panel-head"><h3>Counting repairs</h3><span class="src-tag">From <a href="/workpapers/fill/wp-09.html">WP-09, Say it so it lands</a></span></div>
       <p class="panel-note">Count the week's rough moments (when something landed badly enough to notice). Then count how many you ran through the WP-09 steps (fact, feeling, ask) before you answered. This measures what you did about friction, not how much there was.</p>
       <div style="display:grid;grid-template-columns:1fr 110px;gap:10px;align-items:center;max-width:520px;">
         <label for="friction">Rough moments this week</label><input type="number" id="friction" min="0" step="1" inputmode="numeric">
@@ -382,20 +387,23 @@
     <div class="section-head"><p class="part-label">Output</p><h2 id="read-h">The read</h2></div>
     <div class="read-card" id="read-card" tabindex="-1">
       <p class="live-summary" id="live-summary">Fill in the inputs above to see a read.</p>
+      <label class="num-toggle no-print"><input type="checkbox" id="show-nums"> Show the numbers</label>
       <p class="sr-only" id="announce" role="status" aria-live="polite"></p>
       <div class="scores">
-        <div class="score-box"><span class="lbl">Solvency read &middot; balance + ownership + stress</span><div class="val na" id="solvency-val">&mdash;</div><div class="band" id="solvency-band">Waiting on inputs.</div></div>
-        <div class="score-box"><span class="lbl">Apex score &middot; adds retuning</span><div class="val na" id="apex-val">&mdash;</div><div class="band" id="apex-band">Waiting on inputs.</div></div>
+        <div class="score-box"><span class="lbl">How the setup is working &middot; balance + ownership + stress</span><div class="val na" id="solvency-val">&mdash;</div><span class="num nums-only" id="solvency-num"></span><div class="band" id="solvency-band">Waiting on inputs.</div></div>
+        <div class="score-box"><span class="lbl">With repairs counted &middot; adds retuning (the apex score)</span><div class="val na" id="apex-val">&mdash;</div><span class="num nums-only" id="apex-num"></span><div class="band" id="apex-band">Waiting on inputs.</div></div>
       </div>
 
+      <div class="nums-only">
       <h3 style="font-size:1rem;">The math, step by step</h3>
       <div class="math" id="math" tabindex="0" role="region" aria-label="The math, step by step">No read yet.</div>
+      </div>
 
-      <h3 style="font-size:1rem;margin-top:18px;">Where the points came from</h3>
+      <h3 style="font-size:1rem;margin-top:18px;">Where it is strong, and where it is short</h3>
       <div id="contrib-rows"></div>
-      <p style="font-size:0.84rem;color:var(--ink-soft);max-width:none;">Each bar shows the points earned out of the points available. The biggest shortfall, not the total, is the place to start.</p>
+      <p style="font-size:0.84rem;color:var(--ink-soft);max-width:none;">Each bar shows how much of that part is working. The biggest gap, not the total, is the place to start.</p>
 
-      <h3 style="font-size:1rem;margin-top:18px;">What would move the score</h3>
+      <h3 style="font-size:1rem;margin-top:18px;">What would help most</h3>
       <ul class="moves" id="moves"><li>Available once there's a read.</li></ul>
 
       <div id="divergence" hidden></div>
@@ -496,7 +504,7 @@ apex     = (balance &times; 0.35) + (ownership &times; 0.30) + ((1 &minus; stres
       <p>With 6 of 8 jobs owned (0.75) and batteries of 8, 12 and 4 points (0.40, 0.60 and 0.20, average 0.40):</p>
 <pre>(0.60 &times; 0.40) + (0.75 &times; 0.35) + ((1 &minus; 0.40) &times; 0.25)
 =    0.24      +     0.2625     +        0.15
-=    0.6525  &rarr;  0.65, drifting</pre>
+=    0.6525  &rarr;  0.65, needs a look</pre>
       <p><strong>A family of five</strong> logs 10, 8, 6, 4 and 2 hours (30 in all; an even share is 6 each). The gaps are +4, +2, 0, &minus;2 and &minus;4 hours, so 6 hours would have to move: <code>moved = 0.20</code>. <code>most = 1 &minus; 1/5 = 0.80</code>. Balance = <code>1 &minus; 0.20 &divide; 0.80 = 0.75</code>. With 9 of 12 jobs owned (0.75) and an average battery of 0.40, the read is 0.30 + 0.2625 + 0.15 = 0.7125 &rarr; <strong>0.71, holding</strong>.</p>
       <p><strong>An agreed split.</strong> If two people agree on 60/40 (say one works longer hours outside the home) and log 6 and 4 hours, nothing needs to move, so balance is 1.00. Against an even split the same week would score 0.80. Use the agreed split only if everyone really agreed to it, and say so when you share the read.</p>
     </div>
@@ -522,9 +530,9 @@ apex     = (balance &times; 0.35) + (ownership &times; 0.30) + ((1 &minus; stres
       <table>
         <thead><tr><th>Score</th><th>Reading</th><th>First move</th></tr></thead>
         <tbody>
-          <tr><td class="mono">0.70 or more</td><td>Holding: the setup is carrying its own weight.</td><td>Don't change the setup. Keep the same rhythm of <a href="/check-ins.html">check-ins</a>.</td></tr>
-          <tr><td class="mono">0.40 up to 0.70</td><td>Drifting.</td><td>Start with the biggest shortfall. It's often ownership, but check rather than assume.</td></tr>
-          <tr><td class="mono">below 0.40</td><td>Time for a kind rethink.</td><td>Rework the whole <a href="/workpapers/fill/wp-03.html">job list</a> together, not another one-off patch. This is about the setup, not about anyone.</td></tr>
+          <tr><td class="mono">0.70 or more</td><td>Working well: the setup is carrying its own weight.</td><td>Don't change the setup. Keep the same rhythm of <a href="/check-ins.html">check-ins</a>.</td></tr>
+          <tr><td class="mono">0.40 up to 0.70</td><td>Needs a look.</td><td>Start with the biggest shortfall. It's often ownership, but check rather than assume.</td></tr>
+          <tr><td class="mono">below 0.40</td><td>Needs a rethink, together.</td><td>Rework the whole <a href="/workpapers/fill/wp-03.html">job list</a> together, not another one-off patch. This is about the setup, not about anyone.</td></tr>
         </tbody>
       </table>
       </div>
@@ -740,7 +748,7 @@ apex     = (balance &times; 0.35) + (ownership &times; 0.30) + ((1 &minus; stres
   var STATE_COPY = {
     calm: { mode: "go", text: "Good conditions for reading a number. Go ahead, and bring what you find to the others kindly." },
     revved: { mode: "hold", text: "A number read while wound up tends to get argued with instead of used. Write it down and hold the conversation until you've settled. The Calm-Down Kit (WP-11) can help." },
-    shut: { mode: "stop", text: "In this state a low score can feel like a verdict on you. It isn't. Write the number down if you like, and stop there for today. Nothing here needs deciding now." }
+    shut: { mode: "stop", text: "Running on empty, a low read can feel like a verdict on you. It isn't. Write the number down if you like, and stop there for today. Nothing here needs deciding now." }
   };
 
   function computeWB(){
@@ -864,7 +872,7 @@ apex     = (balance &times; 0.35) + (ownership &times; 0.30) + ((1 &minus; stres
       var cls = pc >= 70 ? "" : (pc >= 40 ? "short" : "bad");
       var bar = t.value === null ? '<div class="contrib-track"></div>' : '<div class="contrib-track"><div class="contrib-fill ' + cls + '" style="width:' + pc.toFixed(0) + '%"></div></div>';
       var pts = t.value === null ? "n/a" : fg(t.earned) + " of " + fg(t.could);
-      return '<div class="contrib-row"><div class="name">' + t.name + '</div>' + bar + '<div class="pts">' + pts + '</div></div>';
+      return '<div class="contrib-row"><div class="name">' + t.name + '</div>' + bar + '<div class="pts nums-only">' + pts + '</div></div>';
     }).join("");
   }
 
@@ -890,7 +898,7 @@ apex     = (balance &times; 0.35) + (ownership &times; 0.30) + ((1 &minus; stres
 
     var solEl = $("solvency-val"), apexEl = $("apex-val");
     if (missing.length || warn.length){
-      solEl.textContent = "—"; solEl.className = "val na"; apexEl.textContent = "—"; apexEl.className = "val na";
+      solEl.textContent = "—"; solEl.className = "val na"; apexEl.textContent = "—"; apexEl.className = "val na"; $("solvency-num").textContent = ""; $("apex-num").textContent = "";
       $("solvency-band").textContent = warn.length ? "The weights don't add up to 1.00." : "Waiting on inputs.";
       $("apex-band").textContent = $("solvency-band").textContent;
       renderContrib([{ name: "Balance", value: wb, earned: wb === null ? 0 : wb * w.sol.wb, could: w.sol.wb }, { name: "Ownership", value: oc, earned: oc === null ? 0 : oc * w.sol.oc, could: w.sol.oc }, { name: "1 − stress", value: as, earned: as === null ? 0 : (1 - as) * w.sol.as, could: w.sol.as }, { name: "Retuning (apex)", value: rf, earned: rf === null ? 0 : rf * w.apex.rf, could: w.apex.rf }]);
@@ -908,8 +916,8 @@ apex     = (balance &times; 0.35) + (ownership &times; 0.30) + ((1 &minus; stres
     var sol = C.solvency(wb, oc, as, w.sol), ap = C.apex(wb, oc, as, rf, w.apex);
     var solV = useSig ? sigmoid(sol.value) : sol.value, apV = useSig ? sigmoid(ap.value) : ap.value;
     var sb = C.band(solV), ab = C.band(apV);
-    solEl.textContent = f2(solV); solEl.className = "val " + sb.cls;
-    apexEl.textContent = f2(apV); apexEl.className = "val " + ab.cls;
+    solEl.textContent = sb.word; solEl.className = "val " + sb.cls; $("solvency-num").textContent = f2(solV) + " of 1 (higher = working better)";
+    apexEl.textContent = ab.word; apexEl.className = "val " + ab.cls; $("apex-num").textContent = f2(apV) + " of 1";
     $("solvency-band").textContent = sb.label;
     $("apex-band").textContent = ab.label + (ap.rebalanced ? " Worked out from three inputs, because there were no rough moments to repair." : "");
 
@@ -942,7 +950,7 @@ apex     = (balance &times; 0.35) + (ownership &times; 0.30) + ((1 &minus; stres
     var worst = sf.slice().sort(function(x, y){ return y.short - x.short; })[0];
 
     var moves = C.suggestions({ wb: wb, oc: oc, as: as, balance: b, ownership: o, names: S.people.map(function(_, i){ return nameOf(i); }), weights: w.sol });
-    if (rf !== null && rf < 1) moves.push({ key: "rf", gain: 0, apexOnly: true, text: "Retune one more rough moment next week (fact, feeling, ask). Apex would rise by about " + fg(w.apex.rf / r.friction) + ".", link: ["WP-09, the tone filter", "/workpapers/fill/wp-09.html"] });
+    if (rf !== null && rf < 1) moves.push({ key: "rf", gain: 0, apexOnly: true, text: "Retune one more rough moment next week (fact, feeling, ask). Apex would rise by about " + fg(w.apex.rf / r.friction) + ".", link: ["WP-09, Say it so it lands", "/workpapers/fill/wp-09.html"] });
     $("moves").innerHTML = moves.length ? moves.map(function(mv){
       return "<li>" + esc(mv.text) + (mv.gain > 0 && !mv.full ? ' <span class="gain">+' + fg(mv.gain) + ' solvency</span>' : "") +
         (mv.link ? ' <a href="' + mv.link[1] + '">' + esc(mv.link[0]) + '</a>' : "") + "</li>";
@@ -962,8 +970,8 @@ apex     = (balance &times; 0.35) + (ownership &times; 0.30) + ((1 &minus; stres
     var lean = (o.conc && o.conc.flag) ? esc(nameOf(o.conc.top)) + " holds " + o.conc.count + " of the " + o.conc.total + " named jobs" : (b.conc && b.conc.flag) ? esc(nameOf(b.conc.top)) + " has " + C.pct(b.conc.share) + " of the hours" : "";
     if (sb.key === "high" && lean) base = "The numbers hold, but " + lean + ". A high score can hide a setup that leans on one reliable person. Ask which job they would hand over first, before calling it settled.";
     else if (sb.key === "high") base = "The setup is carrying its own weight. Nothing needs changing this week. Keep the same rhythm of <a href=\"/check-ins.html\">check-ins</a> and log the read.";
-    else if (sb.key === "mid") base = "Something is drifting. The biggest shortfall is <strong>" + esc(worst.name.toLowerCase()) + "</strong>, costing " + fg(worst.short) + " of the points. Start there, not with whatever happened most recently. The first item under “What would move the score” is a good first step to bring to the others.";
-    else base = "This setup can't last as it is. That's about the setup, not anyone's effort or worth. The biggest shortfall is <strong>" + esc(worst.name.toLowerCase()) + "</strong>. Plan a calm session to rework the <a href=\"/workpapers/fill/wp-03.html\">job list</a> together, rather than another one-off patch.";
+    else if (sb.key === "mid") base = "It needs a look: something in the setup is slipping. The biggest shortfall is <strong>" + esc(worst.name.toLowerCase()) + "</strong>, costing " + fg(worst.short) + " of the points. Start there, not with whatever happened most recently. The first item under “What would move the score” is a good first step to bring to the others.";
+    else base = "It needs a rethink, together: the setup is asking too much as it is. That's about the setup, not anyone's effort or worth. The biggest shortfall is <strong>" + esc(worst.name.toLowerCase()) + "</strong>. Plan a calm session to rework the <a href=\"/workpapers/fill/wp-03.html\">job list</a> together, rather than another one-off patch.";
     var extra = "";
     if (o.everyoneA && o.everyoneA.length) extra += "<p>Jobs where everyone is accountable often drift to whoever notices first. Consider naming one person to notice each of them.</p>";
     if (sb.key === "low" && ab.key === "low") extra += "<p>Both scores are low at once. Another worksheet may not be what helps most; it may be worth asking someone neutral that everyone trusts to help you rework the setup together.</p>";
@@ -973,10 +981,11 @@ apex     = (balance &times; 0.35) + (ownership &times; 0.30) + ((1 &minus; stres
     var nb = $("next-box"), nt = $("next-text");
     if (mode === "go"){ nb.className = "next-box"; nt.innerHTML = "<p>" + base + "</p>" + extra; }
     else if (mode === "hold"){ nb.className = "next-box hold"; nt.innerHTML = "<p><strong>Read it, but don't act on it yet.</strong> You said you're revved up. Write the number down and bring it to your next calm check-in.</p><p>" + base + "</p>" + extra; }
-    else { nb.className = "next-box stop"; nt.innerHTML = "<p><strong>Stop here for today.</strong> You said you're shut down, and in that state a score can sound like a verdict on you. It isn't. It will still be true tomorrow.</p>" + extra; }
+    else { nb.className = "next-box stop"; nt.innerHTML = "<p><strong>Stop here for today.</strong> You said you're running on empty, and on a day like that a read can sound like a verdict on you. It isn't. It will still be true tomorrow.</p>" + extra; }
 
     lastRead = { wb: wb, oc: oc, as: as, rf: rf, sol: solV, apex: apV };
-    setSummary("Solvency read " + f2(solV) + ", " + sb.short + ". Apex " + f2(apV) + ", " + ab.short + ". Biggest shortfall: " + worst.name.toLowerCase() + "." + (lean ? " Note: " + lean.replace(/<[^>]+>/g, "").replace(/&amp;/g, "&") + "." : ""));
+    var sn = document.body.classList.contains("show-nums");
+    setSummary("The setup: " + sb.short + (sn ? " (" + f2(solV) + ")" : "") + ". With repairs counted: " + ab.short + (sn ? " (" + f2(apV) + ")" : "") + ". Biggest shortfall: " + worst.name.toLowerCase() + "." + (lean ? " Note: " + lean.replace(/<[^>]+>/g, "").replace(/&amp;/g, "&") + "." : ""));
     buildCopyText(b, o, s, r, sol, ap, solV, apV, sb, ab, moves, useSig, custom);
     save();
   }
@@ -993,10 +1002,10 @@ apex     = (balance &times; 0.35) + (ownership &times; 0.30) + ((1 &minus; stres
   var copyText = "";
   function buildCopyText(b, o, s, r, sol, ap, solV, apV, sb, ab, moves, useSig, custom){
     var L = [];
-    L.push("CALC-01, Can the load last? (The Objective Ledger)");
+    L.push("CALC-01, Is the setup working for both of you? (The Objective Ledger)");
     L.push("People: " + S.people.map(function(_, i){ return nameOf(i); }).join(", "));
     L.push("");
-    L.push("Solvency read: " + f2(solV) + " (" + sb.short + ")");
+    L.push("How the setup is working: " + sb.short + " (" + f2(solV) + " of 1; 0.70+ working well, 0.40 to 0.69 needs a look, under 0.40 needs a rethink, together)");
     L.push("Apex score: " + f2(apV) + " (" + ab.short + ")" + (ap.rebalanced ? ", from three inputs (no rough moments logged)" : ""));
     L.push("");
     L.push("Balance: " + f2(b.value) + " (" + (b.mode === "agreed" ? "against our agreed split" : "against an even share") + "). Hours: " + b.hours.map(function(h, i){ return nameOf(i) + " " + f1(h); }).join(", ") + ". About " + f1(b.movedHours) + " hours would have to change hands.");
@@ -1074,6 +1083,7 @@ apex     = (balance &times; 0.35) + (ownership &times; 0.30) + ((1 &minus; stres
     if (t.tagName === "SELECT" && (t.dataset.rR !== undefined || t.dataset.rA !== undefined || t.dataset.bP !== undefined)) return; // handled by input
     if (t.id === "people-count"){ resize(+t.value); renderAll(); recalc(); $("people-names").querySelector("input").focus(); }
     else if (t.id === "sigmoid") recalc();
+    else if (t.id === "show-nums"){ document.body.classList.toggle("show-nums", t.checked); try { if (t.checked) sessionStorage.setItem("tol-calc-nums", "1"); else sessionStorage.removeItem("tol-calc-nums"); } catch (err) {} recalc(); }
     else if (t.id === "keep"){
       keepOn = t.checked;
       if (keepOn){ save(); $("keep-status").textContent = "Kept on this device. Untick or press Erase to delete it."; }
@@ -1159,6 +1169,7 @@ apex     = (balance &times; 0.35) + (ownership &times; 0.30) + ((1 &minus; stres
   } catch (e) {}
   each(document.querySelectorAll(".rung"), function(bn){ bn.setAttribute("aria-pressed", String(bn.dataset.state === currentState)); });
   if (currentState) $("state-text").textContent = STATE_COPY[currentState].text;
+  try { if (sessionStorage.getItem("tol-calc-nums") === "1"){ $("show-nums").checked = true; document.body.classList.add("show-nums"); } } catch (e) {}
   renderAll(); renderTrend(); recalc();
   var sdFound = C.suiteDraft && C.suiteDraft();
   if (sdFound){ $("suite-load").hidden = false; $("suite-found").textContent = "(" + sdFound.found.join(", ") + ")"; }
