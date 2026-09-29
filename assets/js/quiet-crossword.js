@@ -48,6 +48,16 @@
       return free(ctx, Object.keys(clues), clue, SIZE[ctx.tier.id] || SIZE.easy, ctx.tier.name);
     });
   }
+  // a clue for each answer, never the same clue twice in one puzzle
+  function clueAll(list, clue) {
+    var used = {};
+    return list.map(function (x) {
+      var c = clue(x[0]);
+      for (var k = 0; k < 6 && used[c.toLowerCase()]; k++) c = clue(x[0]);
+      used[c.toLowerCase()] = 1;
+      return c;
+    });
+  }
   function free(ctx, words, clue, size, title) {
     var rand = ctx.rand, n = size[0], lo = size[1], hi = size[2];
     words = words.filter(function (w) { return w.length >= 3 && w.length <= n; });
@@ -56,7 +66,9 @@
       var lay = window.TOLLevels.place(words.slice(0, lo >= 10 ? 90 : 40), n, n, rand, 8);
       if (lay.w.length < lo) continue;
       var w = lay.w.slice(0, hi), minr = Math.min.apply(null, w.map(function (x) { return x[1]; })), minc = Math.min.apply(null, w.map(function (x) { return x[2]; }));
-      w = w.map(function (x) { return [x[0], x[1] - minr, x[2] - minc, x[3], clue(x[0])]; });
+      var cl = clueAll(w, clue);
+      if (new Set(cl.map(function (c) { return c.toLowerCase(); })).size < cl.length) continue;
+      w = w.map(function (x, k) { return [x[0], x[1] - minr, x[2] - minc, x[3], cl[k]]; });
       var W = Math.max.apply(null, w.map(function (x) { return x[2] + (x[3] === 'a' ? x[0].length : 1); })), H = Math.max.apply(null, w.map(function (x) { return x[1] + (x[3] === 'd' ? x[0].length : 1); }));
       return { t: title, W: W, H: H, w: w, fresh: true };
     }
@@ -67,7 +79,10 @@
     for (var tries = 0; tries < 4; tries++) {
       var pat = all[Math.floor(ctx.rand() * all.length)];
       var got = window.TOLLevels.fill(pat.g, words, ctx.rand, pat.n <= 7 ? 1200 : 2000);
-      if (got) return { n: pat.n, g: pat.g, w: got.map(function (x) { return x.concat([clue(x[0])]); }), fresh: true };
+      if (!got) continue;
+      var cl = clueAll(got, clue);
+      if (new Set(cl.map(function (c) { return c.toLowerCase(); })).size < cl.length) continue;
+      return { n: pat.n, g: pat.g, w: got.map(function (x, k) { return x.concat([cl[k]]); }), fresh: true };
     }
     return null;
   }
@@ -94,10 +109,18 @@
   function start(c) {
     cur = c;
     var key = c.tier.id + ':' + c.index;
-    if (S.at !== key) { S.at = key; S.fill = {}; S.reveals = 0; save(); }
+    if (S.at !== key) {
+      // keep the letters of a few puzzles you've left half done (today's and the one you were on)
+      S.kept = S.kept || {};
+      if (S.at !== -1 && Object.keys(S.fill).length && S.done.indexOf(S.at) === -1) S.kept[S.at] = { f: S.fill, r: S.reveals };
+      var back = S.kept[key]; delete S.kept[key];
+      var ks = Object.keys(S.kept); while (ks.length > 6) delete S.kept[ks.shift()];
+      S.at = key; S.fill = back ? back.f : {}; S.reveals = back ? back.r : 0; save();
+    }
     pz = c.puzzle.g ? { W: c.puzzle.n, H: c.puzzle.n, w: c.puzzle.w, t: c.tier.name + ' crossword' } : c.puzzle;
     words = []; cells = {}; sol = {};
     levels.paintBar(barEl, c);
+    paintToday();
     // number the squares the usual way: left to right, top to bottom
     var starts = {};
     pz.w.forEach(function (w) { starts[w[1] + ',' + w[2]] = true; });
@@ -109,19 +132,27 @@
     });
     words.sort(function (a, b) { return a.d === b.d ? a.n - b.n : (a.d === 'a' ? -1 : 1); });
     $('.xw-theme').textContent = pz.t;
-    $('.xw-no').textContent = cur.movedUp ? 'You moved up to ' + cur.tier.name + '!' : (PAPER ? '' : cur.tier.name);
+    if (cur.daily) $('.xw-theme').textContent = (PAPER ? 'Today’s ' + cur.tier.name : 'Today’s crossword') + (PAPER ? '' : ': ' + pz.t);
+    $('.xw-no').textContent = cur.daily ? (PAPER ? '' : longDate()) : cur.movedUp ? 'You moved up to ' + cur.tier.name + '!' : (PAPER ? '' : cur.tier.name);
     root.classList.toggle('is-big', pz.W >= 11);
+    zoomBtn.hidden = pz.W < 9;
+    root.classList.toggle('is-zoom', zoom && pz.W >= 9);
     root.classList.remove('is-done'); $('.xw-done').hidden = true;
     build(numAt);
     sel = words[0].cells[0]; dir = words[0].d;
     paint();
+    // a new puzzle from a button: move focus to the grid, so Enter or a letter goes to the puzzle
+    // (and not to the button again, which would skip ahead)
+    var ae = document.activeElement;
+    if (ae && ae !== document.body && (barEl.contains(ae) || todayEl.contains(ae) || ae.closest('.xw-done, .gm-btns')) && cells[sel]) { try { cells[sel].focus({ preventScroll: true }); } catch (e) {} }
     noteEl.textContent = S.solved ? 'Tap a square to begin. Tap it again to switch direction.' : 'Tap a square, then type. Tap the same square again to switch between across and down.';
   }
 
   function build(numAt) {
     gridEl.innerHTML = '';
     gridEl.style.gridTemplateColumns = 'repeat(' + pz.W + ', 1fr)';
-    gridEl.style.maxWidth = 'min(' + Math.min(pz.W * 54, 440) + 'px, ' + (40 * pz.W / pz.H).toFixed(1) + 'vh)';
+    if (root.classList.contains('is-zoom')) { gridEl.style.maxWidth = 'none'; gridEl.style.width = (pz.W * 42) + 'px'; }
+    else { gridEl.style.width = ''; gridEl.style.maxWidth = 'min(' + Math.min(pz.W * 54, 440) + 'px, ' + (40 * pz.W / pz.H).toFixed(1) + 'vh)'; }
     for (var r = 0; r < pz.H; r++) for (var c = 0; c < pz.W; c++) {
       var key = r + ',' + c, d;
       if (sol[key]) {
@@ -160,6 +191,14 @@
     // squares that are no longer part of any solved word lose their glow
     Object.keys(cells).forEach(function (k) { if (sol[k] && !words.some(function (x) { return x.cells.indexOf(k) !== -1 && solved(x); })) cells[k].classList.remove('is-found'); });
     if (w) clueEl.innerHTML = '<b>' + w.n + ' ' + (w.d === 'a' ? 'Across' : 'Down') + '</b> ' + esc(w.clue) + ' <span class="xw-len">(' + w.text.length + ')</span>';
+    keepInView();
+  }
+  // with bigger squares the grid can be wider than the screen: keep the square you're on in view
+  function keepInView() {
+    if (!root.classList.contains('is-zoom') || !sel || !cells[sel]) return;
+    var el = cells[sel], l = el.offsetLeft, r = l + el.offsetWidth;
+    if (l < scrollEl.scrollLeft + 8) scrollEl.scrollLeft = l - 8;
+    else if (r > scrollEl.scrollLeft + scrollEl.clientWidth - 8) scrollEl.scrollLeft = r - scrollEl.clientWidth + 8;
   }
 
   function type(ch) {
@@ -204,7 +243,7 @@
     var perfect = S.reveals === 0, won = 6 + words.length + (perfect ? 6 : 0);
     if (S.done.indexOf(S.at) === -1) S.done.push(S.at);
     S.solved++; save();
-    levels.finished(cur);
+    if (cur.daily) markToday(cur.daily); else levels.finished(cur);
     var m = wake(); if (m) { m.home(); setTimeout(function () { m.reward(true); }, 500); }
     var res = null;
     if (R) { res = R.earn(won, 'crossword', perfect ? 'Solved with no reveals' : 'Crossword solved'); R.record('crossword', 'done'); }
@@ -214,7 +253,12 @@
     card.querySelector('.xw-done-p').textContent = 'You’ve finished ' + S.solved + (S.solved === 1 ? ' crossword.' : ' crosswords.') + ' Take a slow breath.';
     card.querySelector('.xw-done-petals').textContent = (res && res.unlocked && res.unlocked.length ? '\u2728 New in the background: ' + res.unlocked[0].name : res ? '\u2728 Level ' + res.level : '');
     var tip = card.querySelector('.xw-done-tip'); if (tip) tip.innerHTML = window.TOLLevels.programTip();
-    card.hidden = false; card.querySelector('.xw-again').focus();
+    // after today's puzzle: today's other one if it's still waiting, or on to the collection
+    var again = card.querySelector('.xw-again'), other = cur.daily && PAPER && !doneToday(cur.daily === 'mini' ? 'main' : 'mini') ? (cur.daily === 'mini' ? 'main' : 'mini') : null;
+    again.setAttribute('data-go', other || (cur.daily ? 'more' : 'next'));
+    again.innerHTML = other ? 'Today’s ' + esc(todayTier(other).name) + ' &rarr;' : cur.daily ? 'More puzzles &rarr;' : 'Next puzzle &rarr;';
+    if (cur.daily) card.querySelector('.xw-done-p').textContent = 'That’s today’s ' + (PAPER ? cur.tier.name : 'crossword') + '. A new one arrives tomorrow. Take a slow breath.';
+    card.hidden = false; again.focus();
   }
 
   // ---------- input ----------
@@ -265,9 +309,84 @@
   });
   function go(p) { p.then(start, function () { noteEl.textContent = 'That puzzle didn\u2019t load. Check your connection and try again.'; }); }
   $('.xw-another').addEventListener('click', function () { go(levels.random()); });
-  $('.xw-again').addEventListener('click', function () { go(levels.next()); });
+  $('.xw-again').addEventListener('click', function () {
+    var to = this.getAttribute('data-go');
+    if (to === 'mini' || to === 'main') go(today(to)); else if (to === 'more') go(levels.current()); else go(levels.next());
+  });
   var barEl = $('.gl-host');
   levels.bar(barEl, function (p) { go(p); });
+
+  // ---------- today's puzzles: the same for everyone on the same date ----------
+  // The Daily Ledger has a Mini every day and one bigger grid that grows through the week
+  // (Easy early in the week, Daily midweek, Weekend on Friday and Saturday, the Big Sunday on
+  // Sundays). Quiet Crossword has one themed Gentle crossword a day. Each is picked from its
+  // bank by the date alone, so everyone gets the same puzzle, and the rest of the bank stays
+  // there to play any time ("More puzzles").
+  var MAIN = ['sunday', 'small', 'small', 'daily', 'daily', 'weekend', 'weekend'];
+  function dayNo(d) { return Math.round(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()) / 864e5); }
+  function dayKey(d) { return d.getFullYear() + '-' + ('0' + (d.getMonth() + 1)).slice(-2) + '-' + ('0' + d.getDate()).slice(-2); }
+  function longDate() { return new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' }); }
+  function todayTier(kind) {
+    var id = PAPER ? (kind === 'mini' ? 'mini' : MAIN[new Date().getDay()]) : 'gentle';
+    return levels.tiers.filter(function (t) { return t.id === id; })[0];
+  }
+  function gcd(a, b) { return b ? gcd(b, a % b) : a; }
+  // a fixed walk through the bank that visits every puzzle before any comes round again
+  function dailyIndex(id, n, day) {
+    var step = 7919 % n || 1; while (gcd(step, n) !== 1) step++;
+    var start = window.TOLLevels.hash('daily:' + id) % n;
+    return (start + ((day % n) * step) % n) % n;
+  }
+  function today(kind) {
+    var t = todayTier(kind), d = new Date();
+    return levels.load(t.id).then(function (inf) {
+      var i = dailyIndex(t.id, inf.n, dayNo(d));
+      return window.TOLLevels.chunk(t.bank, Math.floor(i / inf.per)).then(function (list) {
+        return { tier: t, index: i, puzzle: list[i % inf.per], number: i + 1, of: inf.n, fresh: 0, base: 0, daily: kind };
+      });
+    });
+  }
+  var TKEY = PAPER ? 'tol-np-today' : 'tol-xw-today';
+  function todayRec() { var r = null; try { r = JSON.parse(localStorage.getItem(TKEY) || 'null'); } catch (e) {} return r && r.day === dayKey(new Date()) ? r : { day: dayKey(new Date()), done: {} }; }
+  function doneToday(kind) { return !!todayRec().done[kind]; }
+  function markToday(kind) { var r = todayRec(); r.done[kind] = true; try { localStorage.setItem(TKEY, JSON.stringify(r)); } catch (e) {} paintToday(); }
+  var todayEl = document.createElement('div');
+  todayEl.className = 'xw-today'; todayEl.setAttribute('role', 'group'); todayEl.setAttribute('aria-label', 'Today’s puzzles');
+  var kinds = PAPER ? ['mini', 'main'] : ['main'];
+  todayEl.innerHTML = '<span class="xw-today-k">Today</span>' + kinds.map(function (k) { return '<button type="button" data-today="' + k + '"></button>'; }).join('') +
+    '<span class="xw-today-more">More puzzles below</span>';
+  barEl.parentNode.insertBefore(todayEl, barEl);
+  function paintToday() {
+    Array.prototype.forEach.call(todayEl.querySelectorAll('[data-today]'), function (b) {
+      var k = b.getAttribute('data-today'), t = todayTier(k), on = !!(cur && cur.daily === k);
+      b.innerHTML = (doneToday(k) ? '&#10003; ' : '') + (PAPER ? esc(t.name) : 'Today’s crossword');
+      b.setAttribute('aria-pressed', String(on));
+      b.title = doneToday(k) ? 'Done today. A new one arrives tomorrow.' : 'The same puzzle for everyone today';
+    });
+    if (cur && cur.daily) {
+      Array.prototype.forEach.call(barEl.querySelectorAll('[data-tier]'), function (b) { b.setAttribute('aria-pressed', 'false'); });
+      var w = barEl.querySelector('.gl-where'); if (w) { w.textContent = 'Today · ' + new Date().toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' }); w.title = 'Pick a size to play any puzzle from the collection.'; }
+    }
+  }
+  todayEl.addEventListener('click', function (e) { var b = e.target.closest('[data-today]'); if (b) go(today(b.getAttribute('data-today'))); });
+
+  // ---------- bigger squares, for the large grids on a phone ----------
+  var scrollEl = document.createElement('div');
+  scrollEl.className = 'xw-scroll';
+  gridEl.parentNode.insertBefore(scrollEl, gridEl); scrollEl.appendChild(gridEl);
+  var zoom = get('tol-xw-zoom', 'off') === 'on';
+  var zoomBtn = document.createElement('button');
+  zoomBtn.type = 'button'; zoomBtn.className = 'xw-zoom';
+  $('.xw-tools').insertBefore(zoomBtn, $('.xw-sound'));
+  function zoomLabel() { zoomBtn.setAttribute('aria-pressed', String(zoom)); zoomBtn.innerHTML = zoom ? '&#8854;' : '&#8853;'; zoomBtn.setAttribute('aria-label', zoom ? 'Smaller squares' : 'Bigger squares'); zoomBtn.title = zoom ? 'Fit the grid on the screen' : 'Bigger squares (the grid scrolls sideways)'; }
+  zoomBtn.addEventListener('click', function () {
+    zoom = !zoom; set('tol-xw-zoom', zoom ? 'on' : 'off'); zoomLabel();
+    if (!pz) return;
+    root.classList.toggle('is-zoom', zoom && pz.W >= 9);
+    var s = sel, d = dir; build(numAtNow()); sel = s; dir = d; paint();
+  });
+  zoomLabel();
+  function numAtNow() { var m = {}; words.forEach(function (w) { m[w.cells[0]] = w.n; }); return m; }
   var sb = $('.xw-sound');
   function soundLabel() { sb.setAttribute('aria-pressed', String(soundOn)); sb.innerHTML = soundOn ? '&#127925;' : '&#128263;'; sb.setAttribute('aria-label', soundOn ? 'Music on' : 'Music off'); }
   sb.addEventListener('click', function () { soundOn = !soundOn; set('tol-xw-sound', soundOn ? 'on' : 'off'); soundLabel(); if (soundOn) wake(); else if (music) music.stop(); });
@@ -277,7 +396,9 @@
   var dateEl = document.getElementById('np-date');
   if (dateEl) dateEl.textContent = new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' });
   // carry on where you left off
-  go(levels.current());
+  // open on today's puzzle until it's done, then carry on where you left off
+  var first = PAPER ? (!doneToday('mini') ? 'mini' : !doneToday('main') ? 'main' : null) : (!doneToday('main') ? 'main' : null);
+  if (first && !/[?&]more\b/.test(location.search)) go(today(first)); else go(levels.current());
   root.hidden = false;
   window.__crossword = { levels: levels, make: make, get words() { return words; }, type: type, get sel() { return sel; }, set sel(v) { sel = v; }, start: start, get sol() { return sol; } };
 })();
