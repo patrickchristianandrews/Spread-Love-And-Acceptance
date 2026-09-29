@@ -1230,6 +1230,20 @@
     root.addEventListener('change', function (e) { app.onInput(e); });
     root.addEventListener('click', function (e) { app.onClick(e); });
 
+    // On a phone the save bar is one row: "Download PDF" and "More", which opens Open, Save draft
+    // and Fillable PDF. It keeps the bottom of the screen free for the form.
+    var actions = document.querySelector('.wpf-bar-actions');
+    if (actions && !document.getElementById('wpf-more')) {
+      var moreBtn = h('button', { type: 'button', id: 'wpf-more', className: 'wpf-btn-quiet wpf-bar-more', 'aria-expanded': 'false', text: 'More ▾' });
+      actions.insertBefore(moreBtn, actions.firstChild); actions.classList.add('has-more');
+      moreBtn.addEventListener('click', function () {
+        var open = !actions.classList.contains('is-open');
+        actions.classList.toggle('is-open', open);
+        moreBtn.setAttribute('aria-expanded', String(open));
+        moreBtn.textContent = open ? 'Less ▴' : 'More ▾';
+      });
+    }
+
     var fileInput = document.getElementById('wpf-file');
     document.getElementById('wpf-pdf').addEventListener('click', function () { app.savePdf(); });
     document.getElementById('wpf-save').addEventListener('click', function () { app.saveDraft(); });
