@@ -590,7 +590,7 @@
   function whereText() { var ph = phaseOf(hour); return 'Pal cam · ' + (EVENT && EVENT.special ? EVENT.name + ' · ' : '') + ph.charAt(0).toUpperCase() + ph.slice(1) + ' at ' + setting.name; }
   function toSetting(st) {
     setting = st; bgKey = ''; ambient = []; if (whereEl) whereEl.textContent = whereText();
-    if (MUS()) MUS().scene(setting.id); syncMusBtn(); ambSync();
+    if (MUS()) MUS().scene(setting.id, hour); syncMusBtn(); ambSync();
   }
   function movieBreakDue(a) {
     if (!BYID[MOVIE.id] || !a || a.interlude || MB.prev || setting.id === 'theater') return false;
@@ -1019,12 +1019,12 @@
     // made inside the tap that opens the cam, so the browser lets it play
     var AC = window.AudioContext || window.webkitAudioContext;
     if (AC) { try { if (!window.__pcAudio) window.__pcAudio = new AC(); if (window.__pcAudio.state === 'suspended') window.__pcAudio.resume(); } catch (e) {} }
-    if (!musP && !MUS()) musP = new Promise(function (ok) { var sc = document.createElement('script'); sc.src = '/assets/js/pals-cam-music.js'; sc.onload = sc.onerror = function () { ok(); syncMusBtn(); if (isOpen && MUS() && setting) MUS().scene(setting.id); }; document.head.appendChild(sc); });
+    if (!musP && !MUS()) musP = new Promise(function (ok) { var sc = document.createElement('script'); sc.src = '/assets/js/pals-cam-music.js'; sc.onload = sc.onerror = function () { ok(); syncMusBtn(); if (isOpen && MUS() && setting) MUS().scene(setting.id, hour); }; document.head.appendChild(sc); });
     if (!ambP && !AMB()) ambP = new Promise(function (ok) { var sc = document.createElement('script'); sc.src = '/assets/js/pals-cam-ambience.js'; sc.onload = sc.onerror = function () { ok(); ambSync(); }; document.head.appendChild(sc); });
     if (!sndP && !SND()) sndP = new Promise(function (ok) { var sc = document.createElement('script'); sc.src = '/assets/js/pals-cam-sounds.js'; sc.onload = sc.onerror = function () { if (SND() && SND().hold) SND().hold(quietHold); ok(); syncSndBtn(); }; document.head.appendChild(sc); });
     syncSndBtn();
   }
-  function musOn() { return MUS() ? MUS().on() : (function () { try { return localStorage.getItem('tol-palcam-music') === 'on'; } catch (e) { return false; } })(); }
+  function musOn() { return MUS() ? MUS().on() : (function () { try { return localStorage.getItem('tol-palcam-music') !== 'off'; } catch (e) { return false; } })(); }
   function syncMusBtn() {
     var b = ov && ov.querySelector('.pc-mus'); if (!b) return;
     var on = musOn();
@@ -1160,7 +1160,7 @@
     liveEl = ov.querySelector('.pc-live'); factLists = ov.querySelectorAll('.pc-fl');
     badge = ov.querySelector('.pc-badge'); tallyN = ov.querySelector('.pc-n'); tallyTot = ov.querySelector('.pc-tot'); chips = ov.querySelector('.pc-chips'); btnPause = ov.querySelector('.pc-pause');
     ov.querySelector('.pc-x').addEventListener('click', close);
-    ov.querySelector('.pc-mus').addEventListener('click', function () { primeSound(); var go = function () { if (MUS()) { MUS().toggle(); if (setting) MUS().scene(setting.id); } syncMusBtn(); ambSync(); }; if (MUS()) go(); else if (musP) musP.then(go); });
+    ov.querySelector('.pc-mus').addEventListener('click', function () { primeSound(); var go = function () { if (MUS()) { MUS().toggle(); if (setting) MUS().scene(setting.id, hour); } syncMusBtn(); ambSync(); }; if (MUS()) go(); else if (musP) musP.then(go); });
     ov.querySelector('.pc-snd').addEventListener('click', function () { quietHold = false; primeSound(); if (SND()) SND().toggle(); else { try { localStorage.setItem('tol-palcam-sound', soundOn() ? 'off' : 'on'); } catch (e) {} } ambSync(); syncSndBtn(); hideNote(false); });
     ov.querySelector('.pc-snote-ok').addEventListener('click', function () { hideNote(true); });
     ov.querySelector('.pc-snote-off').addEventListener('click', function () { primeSound(); if (SND()) SND().set(false); else { try { localStorage.setItem('tol-palcam-sound', 'off'); } catch (e) {} } syncSndBtn(); hideNote(true); });
@@ -1291,7 +1291,7 @@
     motionMode();
     var now = new Date(); hour = opts.hour != null ? +opts.hour : now.getHours() + now.getMinutes() / 60;
     setting = pickSetting(opts.setting);
-    if (MUS()) MUS().scene(setting.id); syncMusBtn(); ambSync();
+    if (MUS()) MUS().scene(setting.id, hour); syncMusBtn(); ambSync();
     ambient = []; parts = []; bubbles = []; outgoing = null; trick = null; comboLeft = 0; bgKey = ''; clock = 0; stats.maxOut = 0;
     EVENT = opts.event !== undefined ? (opts.event ? eventFor(new Date(opts.event)) : null) : eventFor(new Date()); storyPlayed = false; forceRare = !!opts.rare;
     var ph = phaseOf(hour); whereEl.textContent = 'Pal cam · ' + (EVENT && EVENT.special ? EVENT.name + ' · ' : '') + ph.charAt(0).toUpperCase() + ph.slice(1) + ' at ' + setting.name;

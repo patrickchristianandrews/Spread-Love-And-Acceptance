@@ -1156,6 +1156,43 @@
     AU.step = 0; AU.next = AU.ctx.currentTime + 0.1;
     if (!AU.timer) AU.timer = setInterval(function () { if (AU.ctx && AU.ctx.state === 'running') auSchedule(); }, 250);
   }
+  // the real sounds of each place, under the music (the same recordings as the pal cam)
+  var AMB_MAP = {
+    backyard: [['birds', .5]], forest: [['birds', .5], ['wind', .18]], meadow: [['birds', .45], ['wind', .2]], gardenparty: [['birds', .5]], farm: [['birds', .5]],
+    orchard: [['birds', .4], ['wind', .22]], treehouse: [['birds', .45], ['wind', .2]], pumpkins: [['wind', .28], ['birds', .28]],
+    beach: [['waves', .55]], lighthouse: [['waves', .45], ['wind', .28]], bonfire: [['waves', .4], ['fire', .45]], snow: [['wind', .42]], cabin: [['fire', .5], ['wind', .18]],
+    pond: [['stream', .38], ['birds', .3]], dock: [['boat', .5], ['birds', .18]], citypark: [['city', .28], ['birds', .3]], rooftop: [['city', .28], ['wind', .22]],
+    festival: [['city', .28]], carnival: [['cafe', .28]], campsite: [['fire', .45], ['birds', .25]], rainy: [['rain', .5]], bakery: [['cafe', .32]], library: [['cafe', .1]],
+    underwater: [['underwater', .45]], aquarium: [['underwater', .38]], studio: [['cafe', .12]], theater: [['cafe', .08]], space: [['underwater', .12]]
+  };
+  var AMBP = { bufs: {}, cur: [], gen: 0, key: '' };
+  function ambLoad(n) {
+    if (AMBP.bufs[n]) return AMBP.bufs[n];
+    var c = AU.ctx; if (!c) return Promise.resolve(null);
+    AMBP.bufs[n] = fetch('/assets/audio/ambience/' + n + '.mp3').then(function (r) { return r.ok ? r.arrayBuffer() : null; }).then(function (ab) {
+      if (!ab) return null; return new Promise(function (ok) { try { var pr = c.decodeAudioData(ab, ok, function () { ok(null); }); if (pr && pr.catch) pr.catch(function () { ok(null); }); } catch (e) { ok(null); } });
+    }).catch(function () { return null; });
+    return AMBP.bufs[n];
+  }
+  function auAmbience(scene, weather, hour) {
+    var c = AU.ctx; if (!c) return;
+    var layers = (AMB_MAP[scene] || []).slice(), night = hour != null && (hour < 6 || hour >= 20.5);
+    if (night) layers = layers.map(function (l) { return l[0] === 'birds' ? ['crickets', l[1]] : l; });
+    if (weather === 'rain' || weather === 'storm') layers = layers.filter(function (l) { return l[0] !== 'birds'; }).concat([['rain', weather === 'storm' ? .55 : .45]]);
+    if (weather === 'wind') layers.push(['wind', .35]);
+    if (weather === 'stars' && !layers.some(function (l) { return l[0] === 'crickets'; })) layers.push(['crickets', .3]);
+    var key = JSON.stringify(layers); if (key === AMBP.key) return; AMBP.key = key;
+    var my = ++AMBP.gen, old = AMBP.cur; AMBP.cur = [];
+    old.forEach(function (n) { try { n.g.gain.setTargetAtTime(0.0001, c.currentTime, 0.7); n.s.stop(c.currentTime + 3); } catch (e) {} });
+    layers.forEach(function (L) {
+      ambLoad(L[0]).then(function (buf) {
+        if (!buf || my !== AMBP.gen) return;
+        var s = c.createBufferSource(), g = c.createGain(); s.buffer = buf; s.loop = true; s.loopStart = Math.min(0.06, buf.duration / 4); s.loopEnd = Math.max(s.loopStart + 1, buf.duration - 0.06);
+        g.gain.value = 0.0001; s.connect(g); g.connect(AU.sfx); s.start(c.currentTime, Math.random() * buf.duration); g.gain.setTargetAtTime(L[1] * 0.9, c.currentTime, 1);
+        AMBP.cur.push({ s: s, g: g });
+      });
+    });
+  }
   function auWeather(w) {
     var c = AU.ctx; if (!c) return;
     var want = w === 'storm' ? 0.03 : w === 'rain' ? 0.018 : w === 'wind' ? 0.012 : 0;
@@ -1454,8 +1491,8 @@
       },
       stopSpeech: vstop,
       onAct: function (b) { if (b.act === 'laugh' && P.voices && P.rate === 1 && (b.who === 'tidbit' || b.who === 'sugarfoot' || b.who === 'both')) laughFor(b.who); },
-      onMusic: function (m) { auMood(m); },
-      onWeather: function (w) { auWeather(w); },
+      onWeather: function (w) { auWeather(w); if (P.music && P.stage) auAmbience(P.stage.scene, w, P.stage.hour); },
+      onMusic: function (m) { auMood(m === 'none' ? 'gentle' : m); },
       onChapter: function (ch) { P.ch = ch; renderChapter(); if (P.started) save(); },
       onEnd: function () { P.one = false; P.playing = false; stopLoop(); syncBtns(); showEnd(); var m = memGet(); if (m.pos) delete m.pos[P.id]; m.watched = m.watched || {}; m.watched[P.id] = 1; memSet(m); auMood('none'); }
     };
@@ -1500,7 +1537,7 @@
       if (!P.dir) return;
       if (P.dir.ended) { endOv.hidden = true; P.dir.seek(0); }
       startOv.hidden = true; endOv.hidden = true; P.started = true;
-      if (P.music) { auEnsure(); auOn(true); auPause(false); auMood(P.dir.music === 'none' && P.dir.i === 0 ? 'title' : P.dir.music); auWeather(P.stage.weather); } else { auOn(false); }
+      if (P.music) { auEnsure(); auOn(true); auPause(false); auMood(P.dir.music === 'none' && P.dir.i === 0 ? 'title' : (P.dir.music === 'none' ? 'gentle' : P.dir.music)); auWeather(P.stage.weather); AMBP.key = ''; auAmbience(P.stage.scene, P.stage.weather, P.stage.hour); } else { auOn(false); }
       P.playing = true; P.dir.playing = true; P.stage.reduced = stillNow();
       P.dir.restartLine(); syncBtns(); startLoop(); inView();
     }
