@@ -23,15 +23,16 @@
     { id: 'liquid', name: 'Liquid', ico: '🫧', say: 'swirling liquid colour' },
     { id: 'mandala', name: 'Mandala', ico: '🪷', say: 'glowing geometry turning slowly in space' }
   ];
+  // what the beat ends at: a plain word for the pace, and the range it sits in
   var BANDS = {
-    delta: 'a very slow beat, about one to four a second',
-    theta: 'a slow beat, about four to eight a second',
-    alpha: 'a gentle beat, about eight to twelve a second',
-    smr: 'a livelier beat, about twelve to fifteen a second'
+    delta: 'a very slow pace (the range called delta, about one to four a second)',
+    theta: 'a slow pace (the range called theta, about four to eight a second)',
+    alpha: 'a gentle pace (the range called alpha, about eight to twelve a second)',
+    smr: 'a livelier pace (the range called SMR, about twelve to fifteen a second)'
   };
   var BEDS = { pink: 'Soft rain-like noise', brown: 'Deep, low hush', pad: 'Warm hum', none: 'Tones only' };
   var FEEL = [
-    { id: 'wired', e: '⚡', name: 'Wired', full: 'Wired / on edge', hint: 'Buzzy, jumpy, can’t settle',
+    { id: 'wired', e: '⚡', name: 'Buzzing', full: 'Buzzing / on edge', hint: 'Buzzy, jumpy, can’t settle',
       carrier: 200, from: 14, to: 10, band: 'alpha', glide: 3, bed: 'pink', breath: [4, 0, 6, 0], style: 'tunnel', len: 10,
       pal: ['#0B1E2E', '#3FA7C9', '#7B6FD6', '#BDF2E6'], cols: 'cool teal and violet',
       desc: 'A slow glide down a cool, glowing tunnel. The beat starts close to that buzzy, switched-on pace and slows gently while your out-breath grows long.' },
@@ -47,7 +48,7 @@
       carrier: 210, from: 6, to: 10, band: 'alpha', glide: 3, bed: 'pad', breath: [4, 1, 5, 0], style: 'kaleido', len: 10,
       pal: ['#2A1030', '#E89A6B', '#D77FB0', '#F5D38A'], cols: 'warm dusk: apricot, orchid and gold',
       desc: 'A warm dusk kaleidoscope that slowly opens toward you. The beat meets a low, heavy pace and lifts a little, like the light coming up.' },
-    { id: 'tired', e: '🦉', name: 'Tired but wired', full: 'Tired but can’t switch off', hint: 'Exhausted, mind still on',
+    { id: 'tired', e: '🦉', name: 'Tired but buzzing', full: 'Tired but can’t switch off', hint: 'Exhausted, mind still on',
       carrier: 160, from: 10, to: 6, band: 'theta', glide: 5, bed: 'brown', breath: [4, 0, 7, 1], style: 'nebula', len: 15,
       pal: ['#151030', '#8B6FD0', '#5A7BC8', '#F0B8D0'], cols: 'dusky violet and rose',
       desc: 'Drifting through soft violet clouds and far-off stars. The beat slows gently while a deep hush sits underneath.' },
@@ -89,11 +90,14 @@
   try { saved = JSON.parse(localStorage.getItem(KEY) || '{}') || {}; } catch (e) { saved = {}; }
   function save() { try { localStorage.setItem(KEY, JSON.stringify(saved)); } catch (e) {} }
 
+  // "Keep the page still" (site.js), and the site's Quiet mode
+  function stillNow() { return !!((window.TOLStill && window.TOLStill.on()) || document.documentElement.classList.contains('tol-still')); }
+  function quietNow() { try { return !!(window.TOLQuiet && window.TOLQuiet.on()); } catch (e) { return false; } }
   var S = {
     feel: null, intensity: 3, len: 10, bed: 'pink', style: 'tunnel',
     vol: typeof saved.vol === 'number' ? Math.max(0, Math.min(100, saved.vol)) : 30,
     words: saved.words !== false,
-    gentle: prefersReduced ? true : !!saved.gentle
+    gentle: prefersReduced || stillNow() || quietNow() ? true : !!saved.gentle
   };
 
   // ---------- session maths ----------
@@ -505,6 +509,12 @@
     if (!document.hidden && run && !run.paused) wake(true);
   });
   if (reduceMQ && reduceMQ.addEventListener) reduceMQ.addEventListener('change', function (e) { if (e.matches) { S.gentle = true; syncToggles(); } });
+  document.addEventListener('tol-still', function () { if (stillNow()) { S.gentle = true; syncToggles(); } });
+  document.addEventListener('tol-quiet', function () {
+    if (!quietNow()) return;
+    S.gentle = true; if (!S.muted) { S.muted = true; if (A && ctx) ramp(A.mute.gain, 0, 0.6); }
+    syncToggles();
+  });
 
   // ---------- the session ----------
   var tick = null, wl = null;
@@ -527,8 +537,12 @@
     run = { f: f, p: p, t: 0, paused: false, fading: false, done: false, lastTick: performance.now() };
     V.breath = p.breath; V.bt = 0; V.beat = p.from; V.dim = 1; V.cap = f.id === 'sleep' ? 0.68 : 0.82; V.iri = iriFor(f);
     setLook(f.pal, S.style);
+    // with the site's Quiet mode on, the session begins silent; Sound: off can be tapped to hear it
+    var hushed = quietNow() && !S.muted;
+    if (hushed) S.muted = true;
     audioStart(p, f, S.bed, S.vol);
     if (A && S.muted) A.mute.gain.value = 0;
+    syncToggles();
     show(null);
     $('cv-ctrl').hidden = false; $('cv-clock').hidden = false; $('cv-paused').hidden = true;
     $('cv-sub').textContent = f.full;
@@ -536,7 +550,7 @@
     // keyboard and screen-reader users land on the session controls, not on the page top
     try { $('cv-pause').focus({ preventScroll: true }); } catch (e) { $('cv-pause').focus(); }
     saved.feel = f.id; saved.len = S.len; saved.bed = S.bed; saved.style = S.style; saved.intensity = S.intensity; save();
-    say('Session started: ' + f.full + ', ' + S.len + ' minutes. ' + (A ? 'The sound fades in slowly.' : 'Sound isn’t available in this browser, but the pictures and breathing still work.'));
+    say('Session started: ' + f.full + ', ' + S.len + ' minutes. ' + (hushed ? 'Quiet mode is on, so the sound starts off. Tap Sound to hear it.' : A ? 'The sound fades in slowly.' : 'Sound isn’t available in this browser, but the pictures and breathing still work.'));
     clearInterval(tick); tick = setInterval(onTick, 250);
   }
   // the session clock runs on wall time here (not in the picture loop), so it keeps going while the screen is off
@@ -636,10 +650,13 @@
     var f = feel(S.feel); if (!f) return;
     var p = plan(f, S.intensity, S.len), br = p.breath;
     var breath = 'In ' + br[0] + (br[1] ? ' · hold ' + br[1] : '') + ' · out ' + br[2] + (br[3] ? ' · rest ' + br[3] : '') + ' seconds';
-    var mins = Math.round(p.glide / 60 * 2) / 2;
+    var mins = Math.round(p.glide / 60 * 2) / 2, way = p.to < p.from ? 'slows' : p.to > p.from ? 'lifts' : 'stays';
+    // one set of numbers, start and end, so nothing reads as two different answers
     $('cv-s-facts').innerHTML =
-      '<li><span aria-hidden="true">🎧</span><span>Tones: ' + hz(p.carrier - p.to / 2) + ' Hz left, ' + hz(p.carrier + p.to / 2) + ' Hz right</span></li>' +
-      '<li><span aria-hidden="true">〰️</span><span>Beat: starts near ' + hz(p.from) + ' a second and drifts to ' + hz(p.to) + ' over about ' + mins + ' min, in ' + BANDS[f.band] + '</span></li>' +
+      '<li><span aria-hidden="true">〰️</span><span>Beat: begins at about ' + hz(p.from) + ' a second and ' + way + (way === 'stays' ? ' there' : ' to ' + hz(p.to) + ' a second over about ' + mins + ' min') + '. It ends at ' + BANDS[f.band] + '.</span></li>' +
+      '<li><span aria-hidden="true">🎧</span><span>Tones: a soft hum near ' + p.carrier + ' Hz, a little higher in the right ear than the left. ' +
+        '<details class="cv-exact"><summary>The exact tones</summary>At the start: ' + hz(p.carrier - p.from / 2) + ' Hz left and ' + hz(p.carrier + p.from / 2) + ' Hz right, ' + hz(p.from) + ' apart, which is the beat. ' +
+        'By the end: ' + hz(p.carrier - p.to / 2) + ' Hz left and ' + hz(p.carrier + p.to / 2) + ' Hz right, ' + hz(p.to) + ' apart.</details></span></li>' +
       '<li><span aria-hidden="true">🫁</span><span>Breath: ' + breath + '</span></li>' +
       '<li><span aria-hidden="true">🎨</span><span>Colors: ' + f.cols + '</span></li>';
     var labels = ['', 'A little. A short, easy glide.', 'Some.', 'Medium.', 'Quite strong. A longer glide and a slower out-breath.', 'A lot. The longest glide and the slowest out-breath. Go easy on yourself.'];
@@ -664,8 +681,8 @@
     $('cv-vol').value = S.vol; $('cv-vol2').value = S.vol; $('cv-vol-out').textContent = S.vol + '%';
     $('cv-look-name').textContent = STYLES[styleIdx(S.style)].name;
     $('cv-look').setAttribute('aria-label', 'Change the pictures. Now: ' + STYLES[styleIdx(S.style)].name);
-    var m = $('cv-mute'); m.setAttribute('aria-pressed', String(!!S.muted));
-    m.innerHTML = S.muted ? '<span aria-hidden="true">&#128263;</span> Unmute' : '<span aria-hidden="true">&#128264;</span> Mute';
+    var m = $('cv-mute'); m.removeAttribute('aria-pressed'); // the words say the state
+    m.innerHTML = S.muted ? '<span aria-hidden="true">&#128263;</span> Sound: off' : '<span aria-hidden="true">&#128264;</span> Sound: on';
   }
   function setVol(v) {
     S.vol = Math.max(0, Math.min(100, +v || 0)); saved.vol = S.vol; save();
