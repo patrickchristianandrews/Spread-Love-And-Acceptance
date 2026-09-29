@@ -330,6 +330,7 @@
     S.beginAct = function (b) {
       var name = ACTIONS[b.act] ? b.act : 'wiggle', ids = b.who === 'both' ? ['tidbit', 'sugarfoot'] : [b.who || 'tidbit'];
       var tr = track(), tg = actTargets(b, tr), dur = actTime(b, tr);
+      spaceOut(name, ids, tg);
       ids.forEach(function (id) {
         var c = get(id); if (!c) return;
         commit(c);
@@ -339,6 +340,25 @@
       });
       return dur;
     };
+    // the pals never end a move on top of each other (hugs, nuzzles and high-fives are meant to be close)
+    var GAP = 0.14, CLOSE = { hug: 1, nuzzle: 1, highfive: 1 };
+    function spaceOut(name, ids, tg) {
+      if (CLOSE[name]) return;
+      if (ids.length === 2) {
+        var T = S.chars.tidbit, Sg = S.chars.sugarfoot, together = name === 'carry' || (T.shared && Sg.shared && T.item && T.item === Sg.item);
+        if (together && tg.tidbit == null) { tg.tidbit = T.x; tg.sugarfoot = Sg.x; } // picking it up together: they step apart to hold each side
+        if (tg.tidbit == null || tg.sugarfoot == null) return;
+        var need = together ? 0.27 : GAP, d = tg.sugarfoot - tg.tidbit; if (Math.abs(d) >= need) return;
+        var mid = clamp((tg.tidbit + tg.sugarfoot) / 2, 0.03 + need / 2, 0.97 - need / 2), side = d !== 0 ? sgn(d) : sgn(Sg.x - T.x) || 1;
+        tg.tidbit = mid - side * need / 2; tg.sugarfoot = mid + side * need / 2; return;
+      }
+      var id = ids[0], c = get(id); if (!c || c.guest || tg[id] == null) return;
+      var o = other(c), ox = o.act && o.act.toX != null ? o.act.toX : o.x;
+      if (Math.abs(tg[id] - ox) >= GAP) return;
+      var from = c.x <= ox ? -1 : 1, want = ox + from * GAP;
+      if (want < 0.03 || want > 0.97) want = ox - from * GAP;
+      tg[id] = clamp(want, 0.03, 0.97);
+    }
     function start(c, a) {
       var n = a.name, p = a.p, o = other(c);
       if (n !== 'lookat' && n !== 'point' && n !== 'heart' && n !== 'sparkle' && n !== 'think') c.tilt0 = 0;
