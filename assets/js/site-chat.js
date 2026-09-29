@@ -611,7 +611,7 @@
       }
       return cards[ck.c];
     }
-    for (var j = 0; j < cards.length; j++) if (cards[j].re && cards[j].re.test(f)) return cards[j];
+    for (var j = 0; j < cards.length; j++) if (cards[j].re && cards[j].re.test(f) && !(cards[j].notRe && cards[j].notRe.test(f))) return cards[j];
     return fuzzyCard(f);
   }
   // Typos in a tool's name ("conversaton reader", "signal translater", "lemonaid stand"): a name of
