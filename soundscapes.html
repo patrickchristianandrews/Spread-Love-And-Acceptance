@@ -235,6 +235,8 @@
         <div class="live-card"><button type="button" class="live-play" data-live="fireplace" aria-pressed="false"><span aria-hidden="true">&#9654;</span> Fireplace</button><p>The warm roar of a fire, with crackles and little pops now and then.</p></div>
         <div class="live-card"><button type="button" class="live-play" data-live="forest" aria-pressed="false"><span aria-hidden="true">&#9654;</span> Forest</button><p>Wind moving through the leaves, and a faraway bird every so often.</p></div>
         <div class="live-card"><button type="button" class="live-play" data-live="nightrain" aria-pressed="false"><span aria-hidden="true">&#9654;</span> Night rain</button><p>Steady rain after dark, drips from the eaves and crickets in the grass.</p></div>
+        <div class="live-card"><button type="button" class="live-play" data-live="stream" aria-pressed="false"><span aria-hidden="true">&#9654;</span> Little stream</button><p>A small brook running over stones, with a soft bubble now and then.</p></div>
+        <div class="live-card"><button type="button" class="live-play" data-live="hush" aria-pressed="false"><span aria-hidden="true">&#9654;</span> Steady hush</button><p>A deep, even hush with nothing happening in it at all. Good for focus, or for covering other noise.</p></div>
       </div>
       <div class="live-timer" role="group" aria-labelledby="live-timer-l">
         <span id="live-timer-l">Sleep timer</span>
@@ -310,6 +312,11 @@
           if (ms < 60000) players.forEach(function (a) { a.volume = Math.max(0, ms / 60000); });
         }
         document.querySelectorAll('[data-timer]').forEach(function (b) { b.addEventListener('click', function () { setTimer(+b.getAttribute('data-timer')); }); });
+        // the site's Quiet mode: whatever is playing fades out
+        document.addEventListener('tol-quiet', function () {
+          if (!(window.TOLQuiet && window.TOLQuiet.on())) return;
+          stopLive(1.5); players.forEach(function (a) { if (!a.paused) a.pause(); });
+        });
       });
     </script>
 

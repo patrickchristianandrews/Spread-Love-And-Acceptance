@@ -1,6 +1,6 @@
 /* soundscapes-live.js — more live soundscapes for /soundscapes.html, made in the browser as you listen
    (Web Audio, nothing downloaded or sent): a crackling fireplace, a forest with wind in the leaves and the
-   odd faraway bird, and night rain with crickets. Also a gentle sleep timer that fades whatever is
+   odd faraway bird, night rain with crickets, a little stream, and a steady hush with nothing in it. Also a gentle sleep timer that fades whatever is
    playing (a live soundscape or a track) and stops it.
    window.TOLLiveSounds.start(name) / .stop(fade seconds) / .playing() */
 (function () {
@@ -97,6 +97,24 @@
           o.start(t0); o.stop(t0 + 0.06);
         }
       }, 1500, 4200);
+    },
+    stream: function () {
+      // a small brook over stones: running water that shifts a little all the time, and a soft bubble now and then
+      var water = keep(noise('pink', 6)), bp = filter('bandpass', 1100, 0.7), g = gain(0.34);
+      chain(water, bp, g, out); drift(g, 0.32, 0.08, 5); water.start();
+      var wob = keep(AC.createOscillator()), wa = gain(380); wob.frequency.value = 0.37; chain(wob, wa, bp.frequency); wob.start();
+      var low = keep(noise('brown', 5)), gl = gain(0.16); chain(low, filter('lowpass', 240), gl, out); low.start();
+      every(function () {
+        var t = AC.currentTime, o = AC.createOscillator(), e = gain(0), f0 = 300 + Math.random() * 300;
+        o.type = 'sine'; o.frequency.setValueAtTime(f0, t); o.frequency.exponentialRampToValueAtTime(f0 * 2.4, t + 0.06);
+        chain(o, e, out); e.gain.setValueAtTime(0, t); e.gain.linearRampToValueAtTime(0.025, t + 0.01); e.gain.exponentialRampToValueAtTime(0.0005, t + 0.09);
+        o.start(t); o.stop(t + 0.1);
+      }, 300, 1800);
+    },
+    hush: function () {
+      // a steady, deep hush (brown noise) with no events at all: nothing to notice, nothing to wait for
+      var n = keep(noise('brown', 8)), g = gain(0.55);
+      chain(n, filter('lowpass', 520), g, out); n.start();
     }
   };
 
@@ -119,5 +137,7 @@
     BEDS[name]();
     return true;
   }
+  // the site's Quiet mode, switched on while something plays: fade it out
+  document.addEventListener('tol-quiet', function () { try { if (window.TOLQuiet && window.TOLQuiet.on()) stop(1.5); } catch (e) {} });
   window.TOLLiveSounds = { start: start, stop: stop, playing: function () { return cur; }, names: Object.keys(BEDS) };
 })();
