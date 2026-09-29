@@ -7,7 +7,7 @@
    below: they're saved the first time a game loads them (cache on use, via isStatic), so a puzzle
    you've opened once keeps working offline.
    Bump VERSION when the list below changes. */
-var VERSION = 'tol-v29';
+var VERSION = 'tol-v31';
 var CORE = [
   '/', '/index.html', '/offline.html',
   '/night-garden.html', '/quiet-words.html', '/word-bloom.html', '/quiet-crossword.html', '/pause-and-play.html', '/ask.html', '/whats-new.html', '/frequency-journey.html', '/frequency-journey-play.html', '/pal-cam-tv.html', '/daily-ledger-crossword.html', '/garden-backdrop.html', '/turning-toward.html', '/quick-checks.html', '/lemonade-stand.html',
@@ -43,7 +43,7 @@ self.addEventListener('fetch', function (e) {
   var req = e.request;
   if (req.method !== 'GET') return;
   var url = new URL(req.url);
-  if (url.pathname.indexOf('/assets/video/') === 0) return; // big cast videos stream straight from the network, never cached
+  if (url.pathname.indexOf('/assets/video/') === 0 || url.pathname.indexOf('/assets/audio/music/') === 0) return; // big cast videos stream straight from the network, never cached
 
   if (req.mode === 'navigate' && url.origin === self.location.origin) {
     e.respondWith(fetch(req).then(function (res) {

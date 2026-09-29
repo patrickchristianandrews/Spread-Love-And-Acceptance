@@ -1,6 +1,6 @@
 /* pals-cam-sounds.js — soft, real sounds for the pal cam.
    Recorded sounds (all CC0, free to use), cleaned up and level-matched, in /assets/audio/palcam/:
-   - Tidbit's barks: a small, yappy pup ("Dog bark2.wav" by MisterTood, freesound 9032)
+   - Tidbit's barks: the poodle and dachshund recordings below, a touch brighter
    - Sugarfoot's barks: a mini dachshund and a poodle (plus softer "boof" versions of the same recordings) ("Miniature Dachshund Bark - Indoors" by Ligidium,
      freesound 192236; "one bark of a poodle dog" by fabiopx, freesound 170015)
    - chimes, plucks and little tunes from Kenney's Interface Sounds and Music Jingles (kenney.nl)
@@ -81,10 +81,10 @@
       return true;
     }
     // Tidbit: quick and bouncy
-    if (r < 0.2) { if (!play('yipT', v, force, d)) return false; play('yipT', v * 0.9, true, d + 0.22 + Math.random() * 0.06); return true; }
+    if (r < 0.2) { if (!play('yipT', v, force, d)) return false; play('yipT', v * 0.9, true, d + 0.42 + Math.random() * 0.08); return true; }
     if (!play('barkT', v, force, d)) return false;
-    if (r < 0.5) play('barkT', v * 0.92, true, d + 0.24 + Math.random() * 0.08);
-    else if (r < 0.62) { play('barkT', v * 0.9, true, d + 0.23); play('yipT', v * 0.8, true, d + 0.47); }
+    if (r < 0.5) play('barkT', v * 0.92, true, d + 0.5 + Math.random() * 0.12);
+    else if (r < 0.62) { play('barkT', v * 0.9, true, d + 0.48); play('yipT', v * 0.8, true, d + 0.95); }
     return true;
   }
   // the two of them "talking": one barks, the other answers

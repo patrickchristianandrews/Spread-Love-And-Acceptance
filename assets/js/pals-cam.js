@@ -822,19 +822,29 @@
     draw();
     if (SND()) SND().tick(dt, true);
   }
-  function run() { if (!raf && isOpen && !paused && !document.hidden) { last = 0; raf = requestAnimationFrame(loop); if (SND()) SND().wake(); } }
-  function halt() { if (raf) cancelAnimationFrame(raf); raf = 0; last = 0; if (SND()) SND().hush(); }
+  function run() { if (!raf && isOpen && !paused && !document.hidden) { last = 0; raf = requestAnimationFrame(loop); if (SND()) SND().wake(); if (MUS()) MUS().resume(); } }
+  function halt() { if (raf) cancelAnimationFrame(raf); raf = 0; last = 0; if (SND()) SND().hush(); if (MUS()) MUS().pause(); }
 
   // ---------- sounds: soft, synthesized dog noises (pals-cam-sounds.js, fetched the first time the cam opens) ----------
   function SND() { return window.TOLPalsCamSounds || null; }
+  function MUS() { return window.TOLPalsCamMusic || null; }
+  var musP = null;
   var sndP = null;
   function soundOn() { try { return localStorage.getItem('tol-palcam-sound') !== 'off'; } catch (e) { return true; } }
   function primeSound() {
     // made inside the tap that opens the cam, so the browser lets it play
     var AC = window.AudioContext || window.webkitAudioContext;
     if (AC && soundOn()) { try { if (!window.__pcAudio) window.__pcAudio = new AC(); if (window.__pcAudio.state === 'suspended') window.__pcAudio.resume(); } catch (e) {} }
+    if (!musP && !MUS()) musP = new Promise(function (ok) { var sc = document.createElement('script'); sc.src = '/assets/js/pals-cam-music.js'; sc.onload = sc.onerror = function () { ok(); syncMusBtn(); if (isOpen && MUS() && setting) MUS().scene(setting.id); }; document.head.appendChild(sc); });
     if (!sndP && !SND()) sndP = new Promise(function (ok) { var sc = document.createElement('script'); sc.src = '/assets/js/pals-cam-sounds.js'; sc.onload = sc.onerror = function () { ok(); syncSndBtn(); }; document.head.appendChild(sc); });
     syncSndBtn();
+  }
+  function syncMusBtn() {
+    var b = ov && ov.querySelector('.pc-mus'); if (!b) return;
+    var on = MUS() ? MUS().on() : (function () { try { return localStorage.getItem('tol-palcam-music') === 'on'; } catch (e) { return false; } })();
+    b.setAttribute('aria-pressed', on ? 'true' : 'false'); b.innerHTML = '🎵<span> Music ' + (on ? 'on' : 'off') + '</span>';
+    b.setAttribute('aria-label', on ? 'Music is on. Turn the background music off' : 'Music is off. Turn on gentle background music');
+    b.title = MUS() && !MUS().has(setting && setting.id) ? 'This scene is quiet for now; more music is on the way' : '';
   }
   function syncSndBtn() {
     var b = ov && ov.querySelector('.pc-snd'); if (!b) return;
@@ -861,7 +871,7 @@
     '@keyframes pcDot{50%{opacity:.35}}' +
     '.pc-ov{position:fixed;inset:0;z-index:10000;display:flex;align-items:stretch;justify-content:center;background:#4A3F63;padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);box-sizing:border-box;overscroll-behavior:contain}' +
     '.pc-ov[hidden]{display:none}' +
-    '.pc-tr8{display:flex;align-items:center;gap:.4rem;flex:none}.pc-snd{min-height:44px;padding:.35rem .75rem;border-radius:999px;border:1px solid #E6D6EE;background:#fff;color:#3C3350;font:600 .9rem Lora,Georgia,serif;cursor:pointer;white-space:nowrap}.pc-snd:focus-visible{outline:3px solid #7C6BB0;outline-offset:2px}@media (max-width:420px){.pc-snd span{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}}' +
+    '.pc-tr8{display:flex;align-items:center;gap:.4rem;flex:none}.pc-snd,.pc-mus{min-height:44px;padding:.35rem .75rem;border-radius:999px;border:1px solid #E6D6EE;background:#fff;color:#3C3350;font:600 .9rem Lora,Georgia,serif;cursor:pointer;white-space:nowrap}.pc-snd:focus-visible,.pc-mus:focus-visible{outline:3px solid #7C6BB0;outline-offset:2px}@media (max-width:420px){.pc-snd span,.pc-mus span{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}}' +
     '.pc-tvl{flex:none;margin:0;text-align:center;font-size:.88rem}.pc-tvl a{color:#5B4A86}.pc-ov.is-tv .pc-tvl{display:none}' +
     '.pc-box{display:flex;flex-direction:column;width:100%;max-width:1000px;height:100%;background:#FFFBF4;color:#3C3350;box-sizing:border-box;padding:.6rem .7rem .7rem;gap:.5rem;overflow:hidden;font-family:Lora,Georgia,serif}' +
     '@media (max-width:759px){.pc-box{justify-content:center}}' +
@@ -938,7 +948,7 @@
     ov.innerHTML =
       '<div class="pc-box">' +
         '<div class="pc-top"><div><p class="pc-k" id="pc-where">Pal cam</p><h2 id="pc-h">Checking in on Tidbit &amp; Sugarfoot</h2></div>' +
-        '<div class="pc-tr8"><button type="button" class="pc-snd" aria-pressed="true">🔊<span> Sound on</span></button>' +
+        '<div class="pc-tr8"><button type="button" class="pc-mus" aria-pressed="false">🎵<span> Music off</span></button><button type="button" class="pc-snd" aria-pressed="true">🔊<span> Sound on</span></button>' +
         '<button type="button" class="pc-x" aria-label="Close the pal cam"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>Close</button></div></div>' +
         '<div class="pc-stage"><canvas class="pc-cv" role="img" aria-label="Tidbit and Sugarfoot playing"></canvas><span class="pc-rec" aria-hidden="true"><i></i>PAL CAM</span><span class="pc-badge" hidden></span></div>' +
         '<p class="pc-cap" id="pc-cap"><span class="pc-main"></span><span class="pc-punch"></span></p>' +
@@ -954,6 +964,7 @@
     liveEl = ov.querySelector('.pc-live'); factLists = ov.querySelectorAll('.pc-fl');
     badge = ov.querySelector('.pc-badge'); tallyN = ov.querySelector('.pc-n'); tallyTot = ov.querySelector('.pc-tot'); chips = ov.querySelector('.pc-chips'); btnPause = ov.querySelector('.pc-pause');
     ov.querySelector('.pc-x').addEventListener('click', close);
+    ov.querySelector('.pc-mus').addEventListener('click', function () { primeSound(); var go = function () { if (MUS()) { MUS().toggle(); if (setting) MUS().scene(setting.id); } syncMusBtn(); }; if (MUS()) go(); else if (musP) musP.then(go); });
     ov.querySelector('.pc-snd').addEventListener('click', function () { primeSound(); if (SND()) SND().toggle(); else { try { localStorage.setItem('tol-palcam-sound', soundOn() ? 'off' : 'on'); } catch (e) {} } syncSndBtn(); });
     ov.querySelector('.pc-next').addEventListener('click', function () { next(false); });
     ov.querySelector('.pc-sur').addEventListener('click', function () { next(true); });
@@ -1053,6 +1064,7 @@
     motionMode();
     var now = new Date(); hour = opts.hour != null ? +opts.hour : now.getHours() + now.getMinutes() / 60;
     setting = pickSetting(opts.setting);
+    if (MUS()) MUS().scene(setting.id); syncMusBtn();
     ambient = []; parts = []; bubbles = []; outgoing = null; trick = null; comboLeft = 0; bgKey = ''; clock = 0; stats.maxOut = 0;
     EVENT = opts.event !== undefined ? (opts.event ? eventFor(new Date(opts.event)) : null) : eventFor(new Date()); storyPlayed = false; forceRare = !!opts.rare;
     var ph = phaseOf(hour); whereEl.textContent = 'Pal cam · ' + (EVENT && EVENT.special ? EVENT.name + ' · ' : '') + ph.charAt(0).toUpperCase() + ph.slice(1) + ' at ' + setting.name;
@@ -1072,7 +1084,7 @@
   }
   function close() {
     if (!isOpen) return;
-    isOpen = false; halt(); ov.hidden = true; document.documentElement.classList.remove('pc-lock');
+    isOpen = false; halt(); if (MUS()) MUS().stop(); ov.hidden = true; document.documentElement.classList.remove('pc-lock');
     var o = openerEl; openerEl = null;
     if (o && o.focus && document.contains(o)) { try { o.focus({ preventScroll: true }); } catch (e) { o.focus(); } }
   }

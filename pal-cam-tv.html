@@ -54,7 +54,7 @@
   <p class="tv-cast-state" id="tv-cast-state" aria-live="polite"></p>
   <ul>
     <li>Press <b>Esc</b> (or <b>Back</b> on a TV remote) to come back to this screen.</li>
-    <li>Press <b>C</b> to show or hide the captions, and <b>S</b> to turn the pups’ soft sounds on or off.</li>
+    <li>Press <b>C</b> to show or hide the captions, <b>S</b> to turn the pups’ soft sounds on or off, and <b>M</b> for gentle background music.</li>
     <li>For all-day use, plug the device in and turn off its sleep and screen saver too.</li>
   </ul>
   <p><a href="/">Back to the site</a></p>
@@ -143,6 +143,7 @@
   window.addEventListener('keydown', function (e) {
     if (!on) return;
     if (e.key === 'Escape' || e.key === 'GoBack' || e.key === 'BrowserBack') { e.preventDefault(); e.stopImmediatePropagation(); end(); }
+    else if ((e.key === 'm' || e.key === 'M') && window.TOLPalsCamMusic) { var mo = window.TOLPalsCamMusic.toggle(); say(mo ? 'Music on' : 'Music off'); e.stopImmediatePropagation(); }
     else if ((e.key === 's' || e.key === 'S') && window.TOLPalsCamSounds) { var so = window.TOLPalsCamSounds.toggle(); say(so ? 'Sounds on' : 'Sounds off'); e.stopImmediatePropagation(); }
     else if (e.key === 'c' || e.key === 'C') { capsOff = !capsOff; styleCam(); say(capsOff ? 'Captions hidden' : 'Captions showing'); e.stopImmediatePropagation(); }
   }, true);
