@@ -13,7 +13,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Carrier Wave Decoder · Spread Love &amp; Acceptance</title>
-<meta name="description" content="Decode the moment a conversation starts to squeal, check your state, practice getting back in tune, and look back on the week together. A free companion to Chapter I of The Objective Ledger.">
+<meta name="description" content="Decode the moment a conversation starts to go wrong, check your state, practice getting back in tune, and look back on the week together. A free companion to Chapter I of The Objective Ledger.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,500&family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -59,10 +59,14 @@ h1{font-family:var(--display);font-weight:700;font-size:clamp(2rem,5.5vw,3.4rem)
 .readout{display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;font-family:var(--mono);font-size:.78rem;color:var(--muted);margin-bottom:18px}
 .readout b{color:var(--ink);font-weight:600}
 
-.tabs{display:flex;gap:4px;overflow-x:auto;border-bottom:1px solid var(--line);margin-bottom:24px;scrollbar-width:none}
-.tabs::-webkit-scrollbar{display:none}
-.tab{background:none;border:none;border-bottom:3px solid transparent;padding:10px 14px 9px;font-family:var(--display);font-weight:600;font-size:.98rem;color:var(--muted);white-space:nowrap}
-.tab[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--state)}
+/* the eleven sections, in three labelled groups, each with a small picture */
+.tabs{display:flex;flex-wrap:wrap;align-items:center;gap:2px 4px;border-bottom:1px solid var(--line);margin-bottom:24px}
+.tab-group{flex-basis:100%;font-size:.84rem;font-weight:600;color:var(--muted);margin:10px 0 0}
+.tab-group:first-child{margin-top:0}
+.tab{background:none;border:none;border-bottom:3px solid transparent;padding:8px 12px 7px;font-family:var(--display);font-weight:600;font-size:.98rem;color:var(--muted);white-space:nowrap}
+.tab .ti{font-size:.95em;margin-right:2px}
+.tab[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--state);background:var(--panel);border-radius:8px 8px 0 0}
+[data-panel]{scroll-margin-top:84px}
 
 .grid{display:grid;grid-template-columns:300px 1fr;gap:28px;align-items:start}
 @media (max-width:820px){.grid{grid-template-columns:1fr}}
@@ -329,6 +333,10 @@ textarea{width:100%;min-height:90px;margin-top:6px;border:1px solid var(--line);
 .sr-only{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
 .consent{border:1.5px solid var(--line);background:var(--sheet);border-radius:var(--radius);padding:12px 16px;margin:0 0 18px;display:grid;gap:8px;font-size:.93rem}
 .consent p{margin:0;max-width:75ch}
+.linkbtn{background:none;border:0;padding:0;font:inherit;color:var(--ink);text-decoration:underline;cursor:pointer;min-height:0}
+.consent:has(.consent-short){padding:8px 14px}
+.cw-kept{margin:-8px 0 16px;font-size:.92rem;color:var(--ink)}
+.cw-kept:empty{display:none}
 .examples{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0 0}
 .ex-note{font-size:.92rem;margin:10px 0 0;padding:10px 14px;border-left:3px solid var(--b);background:var(--sheet);border-radius:0 var(--radius) var(--radius) 0;max-width:68ch}
 .ex-note:empty{display:none}
@@ -356,7 +364,7 @@ textarea{width:100%;min-height:90px;margin-top:6px;border:1px solid var(--line);
 <meta name="author" content="Spread Love &amp; Acceptance">
 <meta property="og:site_name" content="Spread Love &amp; Acceptance">
 <meta property="og:title" content="Carrier Wave Decoder · Spread Love &amp; Acceptance">
-<meta property="og:description" content="Decode the moment a conversation starts to squeal, check your state, practice getting back in tune, and look back on the week together. A free companion to Chapter I of The Objective Ledger.">
+<meta property="og:description" content="Decode the moment a conversation starts to go wrong, check your state, practice getting back in tune, and look back on the week together. A free companion to Chapter I of The Objective Ledger.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://spreadloveandacceptance.com/carrier-wave-decoder.html">
 <meta property="og:image" content="https://spreadloveandacceptance.com/assets/img/og-image.png">
@@ -364,9 +372,9 @@ textarea{width:100%;min-height:90px;margin-top:6px;border:1px solid var(--line);
 <meta property="og:locale" content="en_US">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Carrier Wave Decoder · Spread Love &amp; Acceptance">
-<meta name="twitter:description" content="Decode the moment a conversation starts to squeal, check your state, practice getting back in tune, and look back on the week together. A free companion to Chapter I of The Objective Ledger.">
+<meta name="twitter:description" content="Decode the moment a conversation starts to go wrong, check your state, practice getting back in tune, and look back on the week together. A free companion to Chapter I of The Objective Ledger.">
 <meta name="twitter:image" content="https://spreadloveandacceptance.com/assets/img/og-image.png">
-<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"name":"Carrier Wave Decoder · Spread Love & Acceptance","headline":"Carrier Wave Decoder · Spread Love & Acceptance","description":"Decode the moment a conversation starts to squeal, check your state, practice getting back in tune, and look back on the week together. A free companion to Chapter I of The Objective Ledger.","url":"https://spreadloveandacceptance.com/carrier-wave-decoder.html","inLanguage":"en-US","isAccessibleForFree":true,"keywords":"self-help, relationships, kindness, love, appreciation, acceptance, connection, communication, calm, peace, harmony, reconciliation, emotional wellbeing, self-discovery, fairness at home, mental load, invisible work, free self-help tools, communication tool, tone checker, how a message lands, repair after an argument, neurodiversity, listening","publisher":{"@type":"Organization","@id":"https://spreadloveandacceptance.com/#org","name":"Spread Love & Acceptance"},"isPartOf":{"@type":"WebSite","@id":"https://spreadloveandacceptance.com/#website","name":"Spread Love & Acceptance","url":"https://spreadloveandacceptance.com/"},"dateModified":"2026-09-29","image":"https://spreadloveandacceptance.com/assets/img/og-image.png","@type":"WebApplication","applicationCategory":"LifestyleApplication","operatingSystem":"Any (web browser)","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Spread Love & Acceptance","item":"https://spreadloveandacceptance.com/"},{"@type":"ListItem","position":2,"name":"Carrier Wave Decoder · Spread Love & Acceptance","item":"https://spreadloveandacceptance.com/carrier-wave-decoder.html"}]}]}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"name":"Carrier Wave Decoder · Spread Love & Acceptance","headline":"Carrier Wave Decoder · Spread Love & Acceptance","description":"Decode the moment a conversation starts to go wrong, check your state, practice getting back in tune, and look back on the week together. A free companion to Chapter I of The Objective Ledger.","url":"https://spreadloveandacceptance.com/carrier-wave-decoder.html","inLanguage":"en-US","isAccessibleForFree":true,"keywords":"self-help, relationships, kindness, love, appreciation, acceptance, connection, communication, calm, peace, harmony, reconciliation, emotional wellbeing, self-discovery, fairness at home, mental load, invisible work, free self-help tools, communication tool, tone checker, how a message lands, repair after an argument, neurodiversity, listening","publisher":{"@type":"Organization","@id":"https://spreadloveandacceptance.com/#org","name":"Spread Love & Acceptance"},"isPartOf":{"@type":"WebSite","@id":"https://spreadloveandacceptance.com/#website","name":"Spread Love & Acceptance","url":"https://spreadloveandacceptance.com/"},"dateModified":"2026-09-29","image":"https://spreadloveandacceptance.com/assets/img/og-image.png","@type":"WebApplication","applicationCategory":"LifestyleApplication","operatingSystem":"Any (web browser)","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Spread Love & Acceptance","item":"https://spreadloveandacceptance.com/"},{"@type":"ListItem","position":2,"name":"Carrier Wave Decoder · Spread Love & Acceptance","item":"https://spreadloveandacceptance.com/carrier-wave-decoder.html"}]}]}</script>
 <!-- seo:end -->
 </head>
 <body>
@@ -390,17 +398,20 @@ textarea{width:100%;min-height:90px;margin-top:6px;border:1px solid var(--line);
   </div>
 
   <div class="tabs" role="tablist" aria-label="Sections">
-    <button class="tab" role="tab" data-tab="start" aria-selected="true">Start</button>
-    <button class="tab" role="tab" data-tab="check" aria-selected="false">Check your state</button>
-    <button class="tab" role="tab" data-tab="retune" aria-selected="false">Retune</button>
-    <button class="tab" role="tab" data-tab="decode" aria-selected="false">Decode a moment</button>
-    <button class="tab" role="tab" data-tab="together" aria-selected="false">Together</button>
-    <button class="tab" role="tab" data-tab="tone" aria-selected="false">Tone check</button>
-    <button class="tab" role="tab" data-tab="practice" aria-selected="false">Practice</button>
-    <button class="tab" role="tab" data-tab="journal" aria-selected="false">Journal</button>
-    <button class="tab" role="tab" data-tab="findings" aria-selected="false">Findings</button>
-    <button class="tab" role="tab" data-tab="close" aria-selected="false">Weekly wrap-up</button>
-    <button class="tab" role="tab" data-tab="learn" aria-selected="false">Learn</button>
+    <span class="tab-group" aria-hidden="true">Start here</span>
+    <button class="tab" role="tab" data-tab="start" aria-selected="true"><span class="ti" aria-hidden="true">▶️</span> Start</button>
+    <span class="tab-group" aria-hidden="true">Right after a hard moment</span>
+    <button class="tab" role="tab" data-tab="check" aria-selected="false"><span class="ti" aria-hidden="true">🧭</span> Check your state</button>
+    <button class="tab" role="tab" data-tab="retune" aria-selected="false"><span class="ti" aria-hidden="true">🌬️</span> Retune</button>
+    <button class="tab" role="tab" data-tab="decode" aria-selected="false"><span class="ti" aria-hidden="true">🔍</span> Decode a moment</button>
+    <button class="tab" role="tab" data-tab="together" aria-selected="false"><span class="ti" aria-hidden="true">🤝</span> Together</button>
+    <button class="tab" role="tab" data-tab="tone" aria-selected="false"><span class="ti" aria-hidden="true">🎚️</span> Tone check</button>
+    <span class="tab-group" aria-hidden="true">Over the week</span>
+    <button class="tab" role="tab" data-tab="practice" aria-selected="false"><span class="ti" aria-hidden="true">🎧</span> Practice</button>
+    <button class="tab" role="tab" data-tab="journal" aria-selected="false"><span class="ti" aria-hidden="true">📓</span> Journal</button>
+    <button class="tab" role="tab" data-tab="findings" aria-selected="false"><span class="ti" aria-hidden="true">📌</span> Findings</button>
+    <button class="tab" role="tab" data-tab="close" aria-selected="false"><span class="ti" aria-hidden="true">🗓️</span> Weekly wrap-up</button>
+    <button class="tab" role="tab" data-tab="learn" aria-selected="false"><span class="ti" aria-hidden="true">📘</span> Learn</button>
   </div>
 
   <div class="consent" id="consent" role="region" aria-label="Saving on this device"></div>
@@ -410,7 +421,7 @@ textarea{width:100%;min-height:90px;margin-top:6px;border:1px solid var(--line);
   <section data-panel="start" role="tabpanel">
     <div class="panel" style="max-width:780px">
       <h3>One session, start to finish</h3>
-      <p style="max-width:60ch;margin:0 0 16px">When a moment has squealed, work through it in this order. Each step takes a few minutes, and you can skip any of them.</p>
+      <p style="max-width:60ch;margin:0 0 16px">When a conversation went wrong, work through it in this order. Each step takes a few minutes, and you can skip any of them.</p>
       <ol class="flow" id="flow"></ol>
       <div class="row" style="margin-top:18px"><button class="play" id="sessgo">Start a session</button></div>
       <p class="hint" id="bookstatus" style="margin:16px 0 0"></p>
@@ -455,7 +466,7 @@ textarea{width:100%;min-height:90px;margin-top:6px;border:1px solid var(--line);
     <div class="dec">
       <div>
         <h3>What was out of sync?</h3>
-        <p class="hint" style="margin:0">Think of one recent moment that started to squeal, with anyone: a partner, family, a co-parent, a roommate, a coworker, a friend. For each of the three channels, tap where <b>you</b> were, then your best guess at where <b>they</b> were. <b>Pace</b> is how fast you were talking and expecting replies. <b>Tone</b> is what sat underneath the words. <b>Timing</b> is how soon it needed to happen.</p>
+        <p class="hint" style="margin:0">Think of one recent moment that started to go wrong, with anyone: a partner, family, a co-parent, a roommate, a coworker, a friend. For each of the three channels, tap where <b>you</b> were, then your best guess at where <b>they</b> were. <b>Pace</b> is how fast you were talking and expecting replies. <b>Tone</b> is what sat underneath the words. <b>Timing</b> is how soon it needed to happen.</p>
         <p class="lab" style="margin:14px 0 0">Not sure how it works? Load a worked example:</p>
         <div class="examples" role="group" aria-label="Worked examples">
           <button class="ghost" type="button" data-ex="0">Roommates: &ldquo;when you get a chance&rdquo;</button>
@@ -497,7 +508,7 @@ textarea{width:100%;min-height:90px;margin-top:6px;border:1px solid var(--line);
   <section data-panel="check" role="tabpanel" hidden>
     <div class="panel" style="max-width:760px">
       <h3>Where are you listening from?</h3>
-      <p class="hint">Five quick questions. Answer for right now, not for how you usually are.</p>
+      <p class="hint">Five quick questions. Answer for right now, not for how you usually are. <p class="hint">Five quick questions. Answer for right now, not for how you usually are.</p>ldquo;I can<p class="hint">Five quick questions. Answer for right now, not for how you usually are.</p>rsquo;t tell<p class="hint">Five quick questions. Answer for right now, not for how you usually are.</p>rdquo; is a fine answer.</p>
       <div id="qs"></div>
       <div class="result" id="result" hidden>
         <p class="verdict" id="rstate"></p>
@@ -638,7 +649,7 @@ const RATE={v:.95,s:.86,d:.88}, PAUSE={v:2200,s:3000,d:3400};
 
 const SCEN=[
  {id:"chance",title:"“When you get a chance”",channel:"Timing",
-  setup:"You asked for something “when you get a chance.” Three hours later it hasn't happened, and you can feel the squeal starting.",
+  setup:"You asked for something “when you get a chance.” Three hours later it hasn't happened, and you can feel it starting to go wrong.",
   v:["You're steady right now. That makes this a good time to tune, not to argue.",P,"Notice the phrase you used: when you get a chance. To you, it may have meant today, before dinner.","To the person you said it to, it may have meant sometime this week.","Neither window is wrong. They just weren't on the same frequency.",P,"Try saying the window out loud. Something like: I realize I didn't say when. Could this happen before six?",P,"Then listen for their window. If the two don't match, you've found the real conversation. It's a scheduling question, not a character question."],
   s:["You're revved up. You might feel heat, speed, a readiness to make a point.","Before anything else, slow your exhale. Longer out than in. Do that three times.",P,"The story forming right now may sound like: they never listen. Set that story down for a moment. You can pick it back up later if it still fits.","What's true is smaller: a window wasn't named.",P,"When your voice feels a little slower, try one sentence. I didn't say when I needed it. Can we pick a time?","Keep it short. Revved-up sentences get long."],
   d:["You may feel flat, far away, or like it isn't worth bringing up.","That's okay. We're not going to fix anything yet.",P,"Feel your feet. Press them gently into the floor. Look around and find three things that are blue.",P,"When a little more of you is here, notice one thing you'd like. Maybe just that the task happens today.","You don't have to say it now. You could write it down, or say: can we talk about this later tonight?","Naming that you'll come back to it counts. It keeps the item on the shared books."]},
@@ -705,7 +716,7 @@ const QUESTIONS=[
 const RESULT_TEXT={
  v:"You're reading from a steady place. This is the best state for naming a mismatch and sorting it out together. Practice will feel like planning more than coping.",
  s:"You're revved up. That's useful energy, but it tends to speed you up and make tone sound sharper than it is. Slowing your exhale first may help everything else land.",
- d:"You may be running low or feeling far away. That's a common state, not a failure. Small steps count here: orient to the room, and let yourself set a time to come back."
+ d:"You may be running low or feeling far away. That's a common state, not a failure. Small steps count here: look slowly around the room to notice where you are, and let yourself set a time to come back."
 };
 
 const LESSONS=[
@@ -786,6 +797,9 @@ function runLines(lines,o){
 
 // ---------- tabs ----------
 function go(t){
+  // leaving a decoded moment never loses it: a finished decode goes into the journal (this tab's copy)
+  if(tab==="decode"&&t!=="decode") autoKeepDecode();
+  if(t!==tab) compactConsent();
   stopAll(); stopPacer(); tab=t;
   document.querySelectorAll(".tab").forEach(b=>{b.setAttribute("aria-selected",b.dataset.tab===t?"true":"false");b.tabIndex=b.dataset.tab===t?0:-1;});
   document.querySelectorAll("[data-panel]").forEach(p=>p.hidden=p.dataset.panel!==t);
@@ -804,11 +818,17 @@ function go(t){
   if(t==="retune") setStateColor(mode==="breath"?"s":"d");
   if(t==="decode"||t==="check"||t==="learn") setStateColor(st);
 }
+function revealPanel(t){
+  const pn=document.querySelector(`[data-panel="${t}"]`); if(!pn) return;
+  const top=pn.getBoundingClientRect().top;
+  if(top<70||top>innerHeight*0.45) pn.scrollIntoView({block:"start",behavior:matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth"});
+}
 const TABS=[...document.querySelectorAll(".tab")];
 TABS.forEach(b=>{const t=b.dataset.tab,pn=document.querySelector(`[data-panel="${t}"]`);
   b.id="tab-"+t; b.setAttribute("aria-controls","panel-"+t); b.tabIndex=b.getAttribute("aria-selected")==="true"?0:-1;
   if(pn){pn.id="panel-"+t; pn.setAttribute("aria-labelledby","tab-"+t);}
-  b.onclick=()=>go(t);
+  // tapping a section opens it and moves you to it, so something visibly happens
+  b.onclick=()=>{go(t); revealPanel(t);};
   b.onkeydown=e=>{const i=TABS.indexOf(b);let j=null;
     if(e.key==="ArrowRight")j=(i+1)%TABS.length; else if(e.key==="ArrowLeft")j=(i-1+TABS.length)%TABS.length; else if(e.key==="Home")j=0; else if(e.key==="End")j=TABS.length-1;
     if(j!==null){e.preventDefault();TABS[j].focus();go(TABS[j].dataset.tab);}};
@@ -971,14 +991,37 @@ function decodeText(){
 document.querySelectorAll("[data-ex]").forEach(b=>b.onclick=()=>{
   const ex=EX[+b.dataset.ex]; dec={pace:[...ex.set.pace],reg:[...ex.set.reg],urg:[...ex.set.urg]};
   $("exnote").textContent="Worked example. "+ex.note+" Read the result below, then press Start over to decode your own moment.";
-  renderChans(); renderDecode();
+  renderChans(); renderDecode(); decExampleSig=decSig();
 });
+// What the decode looks like now, so the same moment is never added twice, and a worked example
+// is never added on its own.
+let decKeptSig=null, decExampleSig=null;
+function decSig(){return JSON.stringify([dec,$("decnote").value.trim()]);}
+function keepDecode(){
+  if(!CHANNELS.every(done)) return false;
+  const sig=decSig(); if(sig===decKeptSig) return false;
+  const summary=CHANNELS.map(c=>`${c.name}: you ${c.opts[dec[c.id][0]].toLowerCase()}, them ${c.opts[dec[c.id][1]].toLowerCase()}`).join(" · ");
+  const entry={t:Date.now(),kind:"decode",verdict:verdictFor(decTotal(),CHANNELS.map(c=>dec[c.id][0]),CHANNELS.map(c=>dec[c.id][1])),summary,say:decodeSentence(),note:$("decnote").value.trim(),
+    raw:{me:CHANNELS.map(c=>dec[c.id][0]),them:CHANNELS.map(c=>dec[c.id][1])},settled:false,agreed:""};
+  // saved again after a change: the newer reading replaces the one kept a moment ago
+  if(decKeptSig&&store.log[0]&&store.log[0].kind==="decode"&&store.log[0].t===decKeptT) store.log[0]=entry; else store.log.unshift(entry);
+  decKeptSig=sig; decKeptT=entry.t; save(); return true;
+}
+let decKeptT=0;
+function autoKeepDecode(){
+  const k=CHANNELS.filter(done).length;
+  if(k&&k<CHANNELS.length&&decSig()!==decExampleSig){flashNote(`Your decode is ${k} of ${CHANNELS.length} channels in. It stays in “Decode a moment” for you to finish.`);return;}
+  if(!CHANNELS.every(done)||decSig()===decExampleSig) return;
+  if(keepDecode()) flashNote(`Your decoded moment is in the journal (${saving?"kept on this device":"kept in this tab"}), so nothing is lost.`);
+}
+function flashNote(msg){
+  let n=$("cw-kept"); if(!n){n=document.createElement("p");n.id="cw-kept";n.className="cw-kept";n.setAttribute("role","status");$("consent").insertAdjacentElement("afterend",n);}
+  n.textContent=""; setTimeout(()=>{n.textContent=msg;},30); clearTimeout(flashNote.t); flashNote.t=setTimeout(()=>{n.textContent="";},7000);
+}
 $("decsave").onclick=()=>{
   if(!CHANNELS.every(done)) return;
-  const summary=CHANNELS.map(c=>`${c.name}: you ${c.opts[dec[c.id][0]].toLowerCase()}, them ${c.opts[dec[c.id][1]].toLowerCase()}`).join(" · ");
-  store.log.unshift({t:Date.now(),kind:"decode",verdict:verdictFor(decTotal(),CHANNELS.map(c=>dec[c.id][0]),CHANNELS.map(c=>dec[c.id][1])),summary,say:decodeSentence(),note:$("decnote").value.trim(),
-    raw:{me:CHANNELS.map(c=>dec[c.id][0]),them:CHANNELS.map(c=>dec[c.id][1])},settled:false,agreed:""});
-  save(); $("decsave").textContent=saving?"Saved ✓":"Added (kept in this tab)"; setTimeout(()=>$("decsave").textContent="Save to journal",2200);
+  const added=keepDecode();
+  $("decsave").textContent=added?(saving?"Saved ✓":"Added (kept in this tab)"):"Already in the journal ✓"; setTimeout(()=>$("decsave").textContent="Save to journal",2200);
 };
 $("deccopy").onclick=async()=>{
   const txt=decodeSentence(); let ok=false;
@@ -987,18 +1030,25 @@ $("deccopy").onclick=async()=>{
   $("deccopy").textContent=ok?"Copied ✓":"Selected, press copy";
   setTimeout(()=>$("deccopy").textContent="Copy the sentence",1800);
 };
-$("decreset").onclick=()=>{dec=blankDec();$("decnote").value="";$("exnote").textContent="";renderChans();renderDecode();};
+$("decreset").onclick=()=>{dec=blankDec();$("decnote").value="";$("exnote").textContent="";decKeptSig=null;decExampleSig=null;renderChans();renderDecode();};
 $("decall").onclick=()=>{if(!CHANNELS.some(done)) return; copyText(decodeText(),$("decall"),$("reads"));};
 
 // ---------- check ----------
 let answers=Array(QUESTIONS.length).fill(null), suggested="v", checkRecorded=false;
 function renderQs(){
-  $("qs").innerHTML=QUESTIONS.map((q,i)=>`<div class="q"><p id="q${i}">${q.q}</p><div class="opts" role="group" aria-labelledby="q${i}">${q.o.map(([t,s])=>`<button data-q="${i}" data-s="${s}" aria-pressed="${answers[i]===s}">${t}</button>`).join("")}</div></div>`).join("");
+  // every question can be answered "I can't tell": noticing your body isn't easy for everyone
+  $("qs").innerHTML=QUESTIONS.map((q,i)=>`<div class="q"><p id="q${i}">${q.q}</p><div class="opts" role="group" aria-labelledby="q${i}">${q.o.concat([["I can’t tell","u"]]).map(([t,s])=>`<button data-q="${i}" data-s="${s}" aria-pressed="${answers[i]===s}">${t}</button>`).join("")}</div></div>`).join("");
   $("qs").querySelectorAll("button").forEach(b=>b.onclick=()=>{answers[+b.dataset.q]=b.dataset.s;renderQs();renderResult();});
 }
 function renderResult(){
   if(answers.some(a=>a===null)){$("result").hidden=true;return;}
-  const c={v:0,s:0,d:0}; answers.forEach(a=>c[a]++);
+  const c={v:0,s:0,d:0}; answers.forEach(a=>{if(c.hasOwnProperty(a))c[a]++;});
+  if(!c.v&&!c.s&&!c.d){
+    // all "I can't tell": say so kindly, and don't record a state
+    $("result").hidden=false; $("rstate").textContent="Hard to tell right now";
+    $("rtext").textContent="That's common, and it's useful to know. A minute of slow breathing in Retune often makes it clearer, or pick the state on the Practice tab that feels closest.";
+    suggested="s"; return;
+  }
   const max=Math.max(c.v,c.s,c.d), top=["s","d","v"].filter(k=>c[k]===max);
   suggested=top[0];
   $("result").hidden=false;
@@ -1117,8 +1167,22 @@ function armButton(btn,armedText,restText,fn){
   };
 }
 armButton($("wipe"),"Tap again to erase everything","Clear all my data",wipeAll);
+// The full note about where your work is kept shows once; after that it folds to one line,
+// so it doesn't sit between every section and its content.
+let consentShort=false;
+try{consentShort=sessionStorage.getItem("cwd-consent-seen")==="1";}catch(e){}
+function compactConsent(){
+  if(consentShort) return; consentShort=true;
+  try{sessionStorage.setItem("cwd-consent-seen","1");}catch(e){}
+  renderConsent();
+}
 function renderConsent(){
   const el=$("consent");
+  if(consentShort){
+    el.innerHTML=`<p class="consent-short"><b>${saving?"Kept on this device.":"Kept in this tab until you close it."}</b> <button class="linkbtn" type="button" id="c-more">Saving options</button></p>`;
+    $("c-more").onclick=()=>{consentShort=false;renderConsent();const b=$("consent").querySelector(".row button");if(b)b.focus();};
+    return;
+  }
   el.innerHTML=saving
     ?`<p><b>Keeping on this device is on.</b> Your journal, practice progress, findings and names are kept in this browser only (its local storage) until you erase them. They are never sent to us or anyone else. Anyone who uses this browser could see them.</p>
       <div class="row"><button class="ghost" type="button" id="c-off">Stop saving and remove my saved copy</button><button class="ghost" type="button" id="c-erase">Erase everything</button></div>`
@@ -1154,7 +1218,7 @@ function renderTog(){
   if(S==="start"){
     const pend=store.pending;
     el.innerHTML=`<h3>Decode it together</h3>
-      <p>Each of you marks where you were during a moment that squealed, and where you think the other person was. Then you reveal both at once and see where you actually differed, and where you simply misread each other.</p>
+      <p>Each of you marks where you were during a moment that went wrong, and where you think the other person was. Then you reveal both at once and see where you actually differed, and where you simply misread each other.</p>
       <div class="choices">
         <button class="choice" data-m="same"><b>One device</b><span>Pass it back and forth. Answers stay hidden until the reveal.</span></button>
         <button class="choice" data-m="send"><b>Two devices: start it</b><span>Answer here, then send your code to the other person.</span></button>
@@ -1311,7 +1375,7 @@ async function copyText(txt,btn,node){
 const STEPS=[
  {tab:"check",t:"Check your state",h:"Answer five quick questions so the rest of the session fits where you are right now."},
  {tab:"retune",t:"Retune",h:"Recommended if you checked in revved up or running on empty. If you're calm, skip ahead."},
- {tab:"decode",t:"Decode the moment",h:"Mark where each of you was, then save it to the journal.",alt:"together"},
+ {tab:"decode",t:"Decode the moment",h:"Mark where each of you was. When you move on, it goes into the journal for you.",alt:"together"},
  {tab:"practice",t:"Practice",h:"The scenario that matches your biggest gap is already picked, in your current state."},
  {tab:"journal",t:"Record it",h:"Write what you agreed on the entry you just saved, and mark it settled once it really is. If it keeps coming back, log it as a finding."},
  {tab:"close",t:"Weekly wrap-up",h:"See whether everything reconciles, and print a summary for the other person."}
@@ -1320,7 +1384,7 @@ let session=null;
 function renderStart(){
   $("flow").innerHTML=STEPS.map(x=>`<li><b>${x.t}</b><span>${x.h}</span></li>`).join("");
   const r=reconcile(30);
-  $("bookstatus").innerHTML=r.items.length?`Last 30 days: ${r.reconciled?"your books reconcile.":`not yet reconciled, ${r.focus.length} area${r.focus.length===1?"":"s"} to focus on.`} <button class="linkbtn" data-go2="close">See details</button>`:"Nothing logged yet. Your first session will start the books.";
+  $("bookstatus").innerHTML=r.items.length?`Last 30 days: ${r.reconciled?"your books reconcile.":`not yet reconciled, ${r.focus.length} area${r.focus.length===1?"":"s"} to focus on.`} <button class="linkbtn" data-go2="close">See details</button>`:"Nothing logged yet. Your first session starts the record.";
   const g=$("bookstatus").querySelector("[data-go2]"); if(g) g.onclick=()=>go("close");
 }
 $("sessgo").onclick=()=>{session={i:0,state:null};go(STEPS[0].tab);};
