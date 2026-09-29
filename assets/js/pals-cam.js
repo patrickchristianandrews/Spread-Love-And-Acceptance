@@ -414,7 +414,7 @@
     if (rares.length && (Math.random() < 1 / 50 || forceRare)) { forceRare = false; var r = rares[Math.floor(Math.random() * rares.length)]; mem.lastRare = r.id; persist(); return r; }
     return takeFromBag(prefer);
   }
-  var forceRare = false, storyPlayed = false;
+  var forceRare = false, storyPlayed = false, recentInter = [];
   function nextStoryPart() {
     var st = mem.story || {}, arcs = STORIES.filter(function (a) { return (st[a.id] || 0) < a.parts.length; });
     if (!arcs.length) return null;
@@ -459,13 +459,16 @@
     var a = cur && cur.act, next = null, combo = false;
     if (a && a.interlude && pendingNext) { var pn = pendingNext; pendingNext = null; startTravel(pn, {}); return; }
     if (a && COMBOS[a.id] && Math.random() < 0.6) { var b = BYID[COMBOS[a.id]]; if (fits(b) && b.id !== a.id) { next = b; removeFromBag(b.id); combo = true; } }
-    if (!next && !storyPlayed && stats.acts > 3 && Math.random() < 0.12) { var sp2 = nextStoryPart(); if (sp2) { next = sp2; storyPlayed = true; } }
+    // a story carries on: once one has begun, its next part comes along after a few other moments
+    if (!next && stats.acts > 3 && (storyPlayed === false || stats.acts - storyPlayed >= 5) && Math.random() < (mem.storyArc ? 0.4 : 0.12)) { var sp2 = nextStoryPart(); if (sp2) { next = sp2; storyPlayed = stats.acts; } }
     if (!next) { combo = comboLeft > 0 || Math.random() < 0.2; next = pickNext(); }
     comboLeft = combo && comboLeft <= 0 ? 1 : 0;
     // sometimes a little personality moment in between (never inside a combo, never twice running)
     if (!combo && a && !a.interlude && INTER.length && Math.random() < 0.3) {
-      var pool = INTER.filter(function (x) { return x.id !== lastInter && fits(x); });
-      if (pool.length) { var it = pool[Math.floor(Math.random() * pool.length)]; lastInter = it.id; pendingNext = next; startTravel(it, {}); return; }
+      // the little in-between moments are spread out: none of the last few comes back yet
+      var pool = INTER.filter(function (x) { return x.id !== lastInter && recentInter.indexOf(x.id) < 0 && fits(x); });
+      if (!pool.length) pool = INTER.filter(function (x) { return x.id !== lastInter && fits(x); });
+      if (pool.length) { var it = pool[Math.floor(Math.random() * pool.length)]; lastInter = it.id; recentInter.push(it.id); if (recentInter.length > Math.min(6, INTER.length - 1)) recentInter.shift(); pendingNext = next; startTravel(it, {}); return; }
     }
     pendingNext = null;
     startTravel(next, { combo: combo });
@@ -484,12 +487,12 @@
     if (!capEl) return;
     var txt = act.cap;
     var arc = act.story ? STORIES.filter(function (a) { return a.id === act.story; })[0] : null, lbl = arc ? arc.name + ', part ' + act.part + ' of ' + arc.parts.length : '';
-    capMain.textContent = (act.rare ? 'Rare! ' : opt.combo ? 'Combo! ' : opt.intro ? 'Surprise! ' : '') + (lbl ? lbl + ': ' : '') + txt;
+    capMain.textContent = (act.rare ? 'A special moment: ' : opt.combo ? 'Together: ' : opt.intro ? 'A little surprise: ' : '') + (lbl ? lbl + ': ' : '') + txt;
     capPunch.textContent = '';
     cv.setAttribute('aria-label', 'Tidbit and Sugarfoot in ' + setting.name + ': ' + txt);
     // narration stays quiet while it plays on its own; it speaks up only when the viewer asks for something
     if (opt.user && liveEl) liveEl.textContent = capMain.textContent;
-    badge.hidden = !opt.combo && !opt.intro && !act.rare && !arc && !act.event; badge.textContent = act.rare ? '\u2605 Rare!' : arc ? 'Story ' + act.part + '/' + arc.parts.length : act.event && EVENT ? EVENT.name : opt.combo ? 'Combo!' : 'Surprise!';
+    badge.hidden = !opt.combo && !opt.intro && !act.rare && !arc && !act.event; badge.textContent = act.rare ? 'A special moment' : arc ? 'Story ' + act.part + '/' + arc.parts.length : act.event && EVENT ? EVENT.name : opt.combo ? 'Together' : 'A little surprise';
     if (act.rare) burst(cx(), 80, 14, 'star', { spread: TAU0, speed: 0.1 });
     if (!badge.hidden) { badge.classList.remove('is-pop'); void badge.offsetWidth; badge.classList.add('is-pop'); }
   }
@@ -1067,7 +1070,7 @@
     var first = opts.act && BYID[opts.act] ? BYID[opts.act] : null;
     if (first) removeFromBag(opts.act);
     // sometimes the story continues where it left off, or the season says hello first
-    if (!first && !opts.noStory && Math.random() < 0.35) { first = nextStoryPart(); if (first) storyPlayed = true; }
+    if (!first && !opts.noStory && Math.random() < 0.35) { first = nextStoryPart(); if (first) storyPlayed = stats.acts; }
     if (!first && EVENT && Math.random() < 0.35) { var evs = ACTS.filter(function (a) { return a.event && fits(a); }); if (evs.length) first = evs[Math.floor(Math.random() * evs.length)]; }
     if (!first) first = pickNext();
     cur = null; mode = 'travel'; startTravel(first, { user: true });

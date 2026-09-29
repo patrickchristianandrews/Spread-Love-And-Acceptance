@@ -1654,7 +1654,7 @@
   function ease(x) { return x < 0.5 ? 2 * x * x : 1 - Math.pow(-2 * x + 2, 2) / 2; }
   function bloom() {
     var f = addFlower(false); addLantern(f.x * W); save.breaths++; persist(); chime(Math.floor(Math.random() * 5), 0.1); updateCount();
-    if (window.TOLRewards && save.breaths % 4 === 0) window.TOLRewards.earn(5, 'breathe', 'Four calm breaths');
+    if (window.TOLRewards && save.breaths % 4 === 0) window.TOLRewards.earn(5, 'breathe', 'Four calm breaths', { quiet: true, soft: true }); // nothing pops up while you breathe
   }
 
   // Fireflies: constellations
@@ -1992,7 +1992,7 @@
     if (wand.active && Math.hypot(wand.x - x, wand.y - y) < 44) {
       burst(x, y, 40, 50); [0, 2, 4, 5, 6].forEach(function (n, k) { setTimeout(function () { chime(n, 0.09); }, k * 110); });
       save.wishes = (save.wishes || 0) + 1; addFlower(false); addLantern(); persist(); updateCount();
-      if (window.TOLRewards) window.TOLRewards.earn(4, 'fireflies', 'You caught a shooting star');
+      if (window.TOLRewards) window.TOLRewards.earn(4, 'fireflies', 'You caught a shooting star', { soft: true });
       say('You caught a shooting star!', 'Make a wish for someone you love. A new flower opened in your garden.', 4000);
       shooting = null; nextShoot = t + 30000 + Math.random() * 25000;
     }
@@ -2017,7 +2017,7 @@
         var first = !shape.wild && save.consts.indexOf(shape.id) === -1, m = shape.wild ? [shape.name, shape.meaning] : MEANING[shape.id] || ['A new constellation', ''];
         if (first) { save.consts.push(shape.id); save.cnames = save.cnames || {}; save.cnames[shape.id] = m[0]; persist(); }
         if (shape.wild) { save.wild = (save.wild || 0) + 1; persist(); }
-        if (window.TOLRewards) window.TOLRewards.earn(first ? 15 : shape.wild ? 8 : 6, 'fireflies', first ? 'A new constellation' : shape.wild ? 'A wild constellation' : 'A constellation sang', { cardDelay: 5200 });
+        if (window.TOLRewards) window.TOLRewards.earn(first ? 15 : shape.wild ? 8 : 6, 'fireflies', first ? 'A new constellation' : shape.wild ? 'A wild constellation' : 'A constellation sang', { soft: true });
         say(m[0] + (first ? ' \u2728 New!' : shape.wild ? ' \u2728' : ''), m[1] + (first ? '  ' + save.consts.length + ' of ' + SHAPE_IDS.length + ' found.' : shape.wild ? '  Wild constellations found: ' + save.wild + '.' : ''), 5200);
         updateCount();
         if (first) setTimeout(function () { askDedication(shape.id, m[0]); }, 2600);
@@ -2185,13 +2185,13 @@
       var names = ['', 'A row bloomed.', 'Double bloom!', 'Triple bloom!', 'A whole garden bloomed!'];
       say(names[Math.min(4, n)] + (clearing.gold ? ' ✨' : ''), clearing.gold ? 'The golden lotus opened. How lovely.' : 'New flowers opened in your garden.', 2400);
       if (n > 1 && audio && audio.music && save.sound) setTimeout(function () { audio.music.reward(n > 2); }, 300);
-      if (window.TOLRewards) window.TOLRewards.earn([0, 2, 5, 9, 14][Math.min(4, n)] + (clearing.gold ? 4 : 0), 'pond', names[Math.min(4, n)].replace(/[.!]$/, ''));
+      if (window.TOLRewards) window.TOLRewards.earn([0, 2, 5, 9, 14][Math.min(4, n)] + (clearing.gold ? 4 : 0), 'pond', names[Math.min(4, n)].replace(/[.!]$/, ''), { quiet: true, soft: true });
       clearing = null;
       if (layout && !layout.cleared && !board.some(function (row) { return row.some(function (v) { return Math.abs(v) === OLD; }); })) {
         layout.cleared = true; addFlower(false); addLantern();
         save.variety.ponds = (save.variety.ponds || 0) + 1; persist();
         setTimeout(function () { say('The old lilies all bloomed.', 'Every gap is filled. The pond is yours now.', 3200); }, 2500);
-        if (window.TOLRewards) window.TOLRewards.earn(6, 'pond', 'The old lilies bloomed');
+        if (window.TOLRewards) window.TOLRewards.earn(6, 'pond', 'The old lilies bloomed', { quiet: true, soft: true });
       }
       spawn(); hud();
     }
