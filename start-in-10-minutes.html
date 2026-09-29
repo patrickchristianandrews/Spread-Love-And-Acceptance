@@ -27,6 +27,7 @@
   .ten-steps > li::before{ content:counter(ten); position:absolute; left:1rem; top:1rem; display:grid; place-items:center; width:1.9rem; height:1.9rem; border-radius:50%;
     background:#2F5F8A; color:#fff; font:600 .95rem/1 "IBM Plex Mono", monospace; }
   .ten-steps h2{ margin:0 0 .2rem !important; font-size:1.2rem; }
+  @media (max-width:560px){ .ten-steps > li{ padding:1rem 1rem 1.05rem; } .ten-steps > li::before{ position:static; margin:0 0 .45rem; } .ten-card{ padding:.75rem .8rem; } }
   .ten-time{ margin:0 0 .5rem !important; font-size:.9rem; color:var(--ink-soft); }
   .ten-steps p{ margin:0 0 .6rem !important; }
   .read .ten-go{ display:inline-flex; align-items:center; min-height:44px; padding:.4rem 1.1rem; border-radius:999px; background:#2F5F8A; color:#fff !important; text-decoration:none !important; font-weight:600; }
@@ -58,7 +59,7 @@
 
 <p class="simple-lede">One short, straight path through the whole idea. Four small steps, in order. There’s nothing to sign up for, and nothing you type here leaves your device.</p>
 
-<ol class="ten-steps">
+<ol class="ten-steps no-bubble">
   <li id="step-1">
     <h2>Check your own weather</h2>
     <p class="ten-time">About 1 minute · Pillar III, read your state first</p>
