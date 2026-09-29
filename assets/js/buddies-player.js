@@ -994,8 +994,7 @@
       if (dots) { var n = Math.floor(S.t * 3) % 3; g.fillText(['•  ·  ·', '·  •  ·', '·  ·  •'][S.reduced ? 0 : n], best.x + bw / 2, best.y + bh / 2); }
       else {
         // words light up as they're spoken, so the text keeps pace with the voice
-        var all2 = lines.join(' ').split(' '), nl = S.lit && S.lit.text === b.text ? S.lit.n : all2.length, lit = [];
-        for (var wi = 0; wi < all2.length; wi++) lit.push(wi < nl);
+        var all2 = lines.join(' ').split(' '), lit = all2.map(function () { return true; });
         var ink = self ? '#5A4F70' : '#3C3350', wn = 0, top = best.y + padY + chipH;
         lines.forEach(function (l, k) {
           var ws = l.split(' '), sp = g.measureText(' ').width, lw = g.measureText(l).width, x = best.x + bw / 2 - lw / 2, y = top + lh * (k + 0.5);
@@ -1144,7 +1143,13 @@
           };
           D.shown = false;
           cb.nearLaugh = [F.beats[i - 1], F.beats[i + 1], F.beats[i + 2]].some(function (x) { return x && x.b.act === 'laugh'; });
-          cb.start = function (delay, vdur) { if (D.i !== i || D.shown) return; D.shown = true; D.vAt = D.u + Math.max(0, delay || 0); D.vdur = vdur || 0; stage.voiceStart(delay, vdur); call('onCaption', b.say, b.text, b, delay, vdur); };
+          cb.start = function (delay, vdur) {
+            if (D.i !== i || D.shown) return; D.shown = true;
+            var lag = Math.max(0, delay || 0) + (call('latency') || 0);
+            D.vAt = D.u + lag; D.vdur = vdur || 0; stage.voiceStart(lag, vdur);
+            var show = function () { if (D.i === i) call('onCaption', b.say, b.text, b); };
+            if (lag > 0.02) setTimeout(show, lag * 1000); else show();
+          };
           if (call('speak', b, cb)) D.voice = true;
           else { D.shown = true; stage.showNow(); call('onCaption', b.say, b.text, b); }
           break;
@@ -1373,16 +1378,17 @@
   // /assets/audio/buddies/<episode>/<key>.mp3, listed in index.json. A line plays its recording through
   // Web Audio (reliable on phones once Play has been pressed); a line with no recording falls back to
   // the device's own speech, and then to captions only.
+  var REC = '2609c'; // bump whenever the recordings are redone, so no browser plays an old copy
   var CL = { base: '/assets/audio/buddies/', maps: {}, ready: {}, bufs: {}, got: {}, src: null, gain: null, token: 0, lastFx: -99 };
   function ckey(who, text) { var h = 0x811c9dc5, s = who + '|' + text; for (var i = 0; i < s.length; i++) { h ^= s.charCodeAt(i); h = Math.imul(h, 0x01000193) >>> 0; } return ('0000000' + h.toString(16)).slice(-8); }
   function clipMap(ep) {
-    if (!CL.maps[ep]) CL.maps[ep] = fetch(CL.base + ep + '/index.json').then(function (r) { return r.ok ? r.json() : null; }).catch(function () { return null; }).then(function (m) { CL.ready[ep] = m || false; return m; });
+    if (!CL.maps[ep]) CL.maps[ep] = fetch(CL.base + ep + '/index.json?v=' + REC, { cache: 'no-cache' }).then(function (r) { return r.ok ? r.json() : null; }).catch(function () { return null; }).then(function (m) { CL.ready[ep] = m || false; return m; });
     return CL.maps[ep];
   }
   function clipBuf(ep, k) {
     var id = ep + '/' + k; if (CL.bufs[id]) return CL.bufs[id];
     var c = auEnsure(); if (!c) return Promise.resolve(null);
-    CL.bufs[id] = fetch(CL.base + id + '.mp3').then(function (r) { return r.ok ? r.arrayBuffer() : null; }).then(function (ab) {
+    CL.bufs[id] = fetch(CL.base + id + '.mp3?v=' + REC).then(function (r) { return r.ok ? r.arrayBuffer() : null; }).then(function (ab) {
       if (!ab) return null;
       return new Promise(function (ok) { try { c.decodeAudioData(ab, ok, function () { ok(null); }); } catch (e) { ok(null); } });
     }).catch(function () { return null; }).then(function (buf) { CL.got[id] = buf; return buf; });
@@ -1418,25 +1424,6 @@
   }
   function clipHas(ep, b) { var m = CL.ready[ep]; return !!(m && m[ckey(b.say, b.text)]); }
   function clipPrefetch(ep, list, from, n) { for (var i = from, got = 0; i < list.length && got < n; i++) if (clipHas(ep, list[i])) { clipBuf(ep, ckey(list[i].say, list[i].text)); got++; } }
-  // how many words of this line have been spoken so far, from the audio itself (not the animation clock)
-  function wordsSpoken(b, n) {
-    var k = ckey(b.say, b.text), c = AU.ctx, cur = CL.cur;
-    if (cur && cur.key === k && c) {
-      if (cur.done) return n;
-      var t = c.currentTime - cur.at - (c.outputLatency || c.baseLatency || 0) + 0.04; // light a word just as it begins
-      if (t <= 0) return 0;
-      if (cur.words && cur.words.length === n) { var m = 0; while (m < n && cur.words[m] <= t) m++; return m; }
-      return Math.min(n, Math.floor(n * t / cur.dur) + 1);
-    }
-    var v = VO.line;
-    if (v && v.key === k) {
-      if (v.done) return n; if (!v.t0) return 0;
-      if (v.ch >= 0) { var before = v.text.slice(0, v.ch + 1).split(/\s+/).filter(Boolean).length; return Math.min(n, Math.max(1, before)); }
-      return Math.min(n, Math.floor(n * (performance.now() - v.t0) / 1000 / v.dur) + 1);
-    }
-    return -1; // not being spoken
-  }
-  B.wordsSpoken = wordsSpoken;
   function cstop() { CL.token++; if (CL.src) { try { CL.src.onended = null; CL.src.stop(); } catch (e) {} CL.src = null; } }
   function cspeak(ep, b, cb) {
     if (!clipHas(ep, b)) return false;
@@ -1648,14 +1635,13 @@
     function capLight() {
       var ws = P.capWords || []; if (!ws.length) return;
       var n = ws.length, lit = n;
-      if (P.capTimed && P.capB) { lit = wordsSpoken(P.capB, n); if (lit < 0) lit = P.dir && P.dir.voiceFrac() < 1 ? 0 : n; }
-      if (P.stage) P.stage.lit = { text: P.capB ? String(P.capB.text || '') : '', n: lit };
       if (lit === P.capLit) return; P.capLit = lit;
       ws.forEach(function (sp, i) { sp.className = i < lit ? '' : 'fb-soon'; });
     }
     var hooks = {
       canvas: function () { return cv; },
       onCaption: setCaption,
+      latency: function () { var c = AU.ctx; return c ? (c.outputLatency || c.baseLatency || 0) : 0; },
       speak: function (b, cb) {
         if (!P.voices || P.rate !== 1) return false;
         if (cspeak(P.id, b, cb)) { var at = P.says.indexOf(b); if (at >= 0) clipPrefetch(P.id, P.says, at + 1, 4); return true; }
