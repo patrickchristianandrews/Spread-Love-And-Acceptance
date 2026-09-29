@@ -125,5 +125,31 @@ ok(pick.drafts.length >= 2 && pick.drafts.some(d => /school pickups/.test(d.text
 ok(new Set([roomies, walls, pick, mail].map(r => r.drafts.map(d => d.text).join('|'))).size === 4, 'different threads get different reply drafts');
 ok(!readOf('A: hi\nB: hi').next.some(m => /^Then:/.test(m.title)), 'no "Then:" without a first step');
 
+// ---------- First-time testers, round two ----------
+// the bins thread: hints, "always", "Fine." and "We need to talk" raise the heat; "k" is not an answer
+const bins = readOf('A: Can you take the bins out tonight?\nB: k\nA: It would be nice if someone helped around here.\nB: I literally just got home. You always do this.\nA: Fine.\nB: We need to talk.', 'A');
+ok(bins.level !== 'calm', 'bins thread must not read as calm (got ' + bins.level + ')');
+ok(bins.turns[2].marks.some(m => m.kind === 'hint'), 'the hint is flagged');
+ok(bins.turns[3].marks.some(m => m.kind === 'absolute'), '"you always do this" is flagged');
+ok(bins.turns[5].marks.some(m => m.kind === 'opener'), '"We need to talk" is flagged');
+ok(bins.turns[4].heat > 0, '"Fine." adds heat');
+ok(bins.unanswered.some(u => u.at === 0 && u.flat === 'k'), '"k" is not counted as an answer to the bins question');
+// sarcasm and a sweeping "everything"
+const sarc = kinds('of course you did. I have to do everything around here');
+ok(sarc.includes('sarcasm') && sarc.includes('absolute'), 'sarcasm + "I have to do everything" flagged; got ' + sarc.join(','));
+// typos don't move the turn or lose the repair
+const typo = readOf('Me: can you clen the kichen tonite?\nSam: sory, i forgot. i will do it now\nMe: you allways forget', 'Me');
+const clean = readOf('Me: can you clean the kitchen tonight?\nSam: sorry, i forgot. i will do it now\nMe: you always forget', 'Me');
+ok(typo.turns[1].marks.some(m => m.kind === 'repair'), 'a typo’d “sory” is still a repair');
+ok(typo.turns[2].marks.some(m => m.kind === 'absolute'), 'a typo’d “allways” is still an absolute');
+ok(JSON.stringify(typo.turns.map(t => t.heat)) === JSON.stringify(clean.turns.map(t => t.heat)), 'typos read the same as clean spelling: ' + typo.turns.map(t => t.heat) + ' vs ' + clean.turns.map(t => t.heat));
+ok(typo.turned === clean.turned && typo.missedRepairs.length === clean.missedRepairs.length, 'typos don’t move where it turned or the repair advice');
+ok(typo.turns[2].readAs.some(f => f.to === 'always'), 'the turn says what it read the typo as');
+// swearing, fed-up lines and name-calling: the same reading as the Signal Translator
+const hot = readOf('A: did you do the dishes\nB: You are getting on my last fucking nerve\nA: you’re a total nightmare', 'A');
+ok(hot.turns[1].marks.some(m => m.kind === 'hostile') && hot.turns[1].marks.some(m => m.kind === 'swear'), 'hostile + swearing flagged');
+ok(hot.turns[2].marks.some(m => m.kind === 'verdict'), 'name-calling is a verdict');
+ok(hot.level === 'hot', 'a thread ending in name-calling reads hot (got ' + hot.level + ')');
+
 console.log(`${pass} passed, ${fail} failed`);
 if (fail) { errs.forEach(e => console.log('  - ' + e)); process.exit(1); }

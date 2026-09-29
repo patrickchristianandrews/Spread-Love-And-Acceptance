@@ -1,0 +1,251 @@
+/* test-messages.js — a broad quality pass for the Signal Translator: realistic messages across
+   partners, family, friends, roommates, coworkers and co-parents (kind, neutral, passive-aggressive,
+   sarcastic, hostile, profane, typo'd, emoji, very short, long), each with the verdict band it should get.
+
+     node tools/signal/test-messages.js        # summary and failures
+     node tools/signal/test-messages.js -v     # every message, its verdict and the best rewrite
+
+   Bands (general reading, by text): C clear, S some static, H heavy static. "CS" means either.
+   Every hostile, profane or name-calling line must be heavy, and its rewrite must drop the swearing,
+   the fed-up line and the insult, and say the feeling plus an ask. Nothing flagged may read "Clear". */
+'use strict';
+const path = require('path');
+const E = require(path.join(__dirname, '../../assets/js/signal-engine.js'));
+const P = require(path.join(__dirname, '../../assets/js/message-patterns.js'));
+
+const M = [
+  // ---------------- kind and clear
+  ['partner', 'Thank you for making dinner tonight, it was lovely.', 'C'],
+  ['partner', 'I love you. Drive safe!', 'C'],
+  ['partner', 'Could you pick up milk on your way home? Thanks!', 'C'],
+  ['partner', 'I felt a bit lonely tonight. Could we have a phone-free half hour after dinner?', 'C'],
+  ['partner', 'I had a rough day. Can I tell you about it after the kids are in bed?', 'C'],
+  ['family', 'Happy birthday, Mom! Can’t wait to see you Sunday.', 'C'],
+  ['family', 'Thanks for having us this weekend. The kids loved it.', 'C'],
+  ['friend', 'Want to grab coffee on Saturday morning?', 'C'],
+  ['friend', 'I’m so proud of you for finishing the race!', 'C'],
+  ['friend', 'No worries at all, we can reschedule. Does Thursday work?', 'C'],
+  ['roommate', 'Hey, could you take the recycling out by Tuesday night? Thanks!', 'C'],
+  ['roommate', 'I’m having a friend over Friday evening, is that okay with you?', 'C'],
+  ['coworker', 'Thanks for the quick turnaround on the deck.', 'C'],
+  ['coworker', 'Could you send me the Q3 numbers by 3 today? I need them for the 4pm review.', 'C'],
+  ['coworker', 'Great work on the launch, team. I really appreciate the late nights.', 'C'],
+  ['coparent', 'Pickup is at 5 on Friday. Sam has soccer at 10 on Saturday.', 'CS'],
+  ['coparent', 'Thanks for switching weekends. It really helped.', 'C'],
+  ['partner', 'I’m sorry I snapped earlier. That wasn’t fair to you.', 'C'],
+  ['partner', 'I can’t talk about this right now. Can we talk at 8?', 'C'],
+  ['friend', 'Congrats on the new job!! 🎉', 'C'],
+  // ---------------- neutral, with a small gap (no time, vague, a hedge)
+  ['partner', 'Can you do the dishes?', 'CS'],
+  ['roommate', 'Could you clean the bathroom sometime?', 'S'],
+  ['roommate', 'can you clean up a bit when you get a chance', 'S'],
+  ['coworker', 'Any update?', 'S'],
+  ['coworker', 'Just checking in on this.', 'S'],
+  ['coworker', 'Per my last email, the deadline is Friday.', 'S'],
+  ['coworker', 'Friendly reminder to submit your timesheets.', 'S'],
+  ['family', 'Call me when you can.', 'CS'],
+  ['partner', 'We need to talk.', 'S'],
+  ['partner', 'Can we talk?', 'S'],
+  ['friend', 'I guess.', 'CS'],
+  ['partner', 'k', 'S'],
+  ['partner', 'Fine.', 'SH'],
+  ['partner', 'ok.', 'S'],
+  ['partner', 'Whatever.', 'SH'],
+  ['partner', 'Sure.', 'S'],
+  ['coworker', 'Noted.', 'S'],
+  ['partner', '…', 'SH'],
+  ['partner', 'We’ll see.', 'CS'],
+  ['friend', 'Maybe.', 'CS'],
+  // ---------------- orders, shoulds, blame questions
+  ['partner', 'You need to clean your room.', 'S'],
+  ['partner', 'You should apologize to her.', 'S'],
+  ['partner', 'You should have told me.', 'S'],
+  ['partner', 'Take out the trash.', 'CS'],
+  ['partner', 'Why don’t you ever help?', 'SH'],
+  ['partner', 'Why didn’t you tell me?', 'S'],
+  ['partner', 'How many times do I have to tell you to lock the door?', 'SH'],
+  ['partner', 'Can you not leave dishes in the sink?', 'S'],
+  ['roommate', 'Why is the kitchen still a mess?', 'SH'],
+  ['coworker', 'I need this done now.', 'S'],
+  ['coworker', 'Send it ASAP!!!', 'SH'],
+  ['family', 'If you don’t come for Thanksgiving, don’t bother coming at Christmas.', 'H'],
+  ['partner', 'If you don’t clean up, I’m leaving.', 'H'],
+  // ---------------- always / never, the past, again
+  ['partner', 'You always forget.', 'S'],
+  ['partner', 'You never listen to me.', 'SH'],
+  ['partner', 'You’re late again.', 'S'],
+  ['partner', 'Last time you did this too.', 'S'],
+  ['roommate', 'You never do the dishes.', 'SH'],
+  ['partner', 'You still haven’t fixed the door.', 'S'],
+  ['family', 'Your sister always calls on Sundays.', 'SH'],
+  ['partner', 'Why can’t you be more like your brother?', 'SH'],
+  ['partner', 'After everything I do for you, you can’t even do this.', 'SH'],
+  ['partner', 'I have to do everything around here.', 'SH'],
+  // ---------------- passive-aggressive and hints
+  ['roommate', 'SOME of us like having clean dishes 🙂', 'SH'],
+  ['roommate', 'It would be nice if someone helped around here.', 'SH'],
+  ['roommate', 'I guess I’ll take the trash out again since nobody else will.', 'SH'],
+  ['family', 'Don’t worry about me.', 'SH'],
+  ['coworker', 'No need to be rude.', 'SH'],
+  ['friend', 'Not that anyone asked.', 'SH'],
+  ['partner', 'Thanks for finally noticing.', 'SH'],
+  ['partner', 'Must be nice to sit around all day.', 'SH'],
+  ['roommate', 'Someone should really clean the fridge.', 'SH'],
+  ['coworker', 'Going forward, please cc me.', 'CS'],
+  // ---------------- sarcasm
+  ['partner', 'Wow, thanks for nothing.', 'SH'],
+  ['partner', 'Oh great, another late night.', 'SH'],
+  ['partner', 'Nice of you to finally show up.', 'SH'],
+  ['partner', 'Of course you did. I have to do everything around here.', 'SH'],
+  ['friend', 'Yeah right.', 'SH'],
+  ['partner', 'lol ok whatever you say 🙄', 'H'],
+  ['coworker', 'Great job, genius.', 'SH'],
+  ['family', 'Must be nice.', 'SH'],
+  // ---------------- dismissing and invalidating
+  ['partner', 'Calm down.', 'SH'],
+  ['partner', 'You’re overreacting.', 'SH'],
+  ['partner', 'It was just a joke, can’t you take a joke?', 'SH'],
+  ['partner', 'You’re too sensitive.', 'SH'],
+  ['partner', 'Not a big deal.', 'S'],
+  ['family', 'Get over it.', 'SH'],
+  // ---------------- contempt and name-calling (always heavy)
+  ['partner', 'You are a total nightmare.', 'H'],
+  ['partner', 'You’re so lazy.', 'H'],
+  ['partner', 'You’re being selfish.', 'H'],
+  ['roommate', 'I’m the only adult here, clean the kitchen.', 'H'],
+  ['partner', 'You idiot.', 'H'],
+  ['partner', 'Grow up.', 'H'],
+  ['partner', 'Are you serious right now 🙄', 'H'],
+  ['coparent', 'You’re a terrible parent.', 'H'],
+  ['coworker', 'You’re completely useless.', 'H'],
+  ['family', 'You’re such a disappointment.', 'H'],
+  ['partner', 'You’re pathetic.', 'H'],
+  ['roommate', 'You’re a slob.', 'H'],
+  // ---------------- hostile and fed up (always heavy)
+  ['partner', 'You are getting on my last nerve', 'H'],
+  ['partner', 'Shut up.', 'H'],
+  ['partner', 'I’m so done with you.', 'H'],
+  ['partner', 'You’re driving me crazy.', 'H'],
+  ['partner', 'I can’t stand you.', 'H'],
+  ['partner', 'I hate you.', 'H'],
+  ['family', 'Leave me alone.', 'SH'],
+  ['partner', 'Go away.', 'H'],
+  ['partner', 'I’m sick and tired of this.', 'H'],
+  ['partner', 'What is wrong with you?', 'H'],
+  ['friend', 'Who cares.', 'H'],
+  ['partner', 'Do whatever you want.', 'H'],
+  ['roommate', 'Get out of my face.', 'H'],
+  ['partner', 'I’ve had it with you.', 'H'],
+  ['coworker', 'Mind your own business.', 'H'],
+  // ---------------- swearing, any intensity or disguise (always heavy)
+  ['partner', 'You are getting on my last fucking nerve', 'H'],
+  ['partner', 'You are getting on my last f*cking nerve', 'H'],
+  ['partner', 'wtf is wrong with you', 'H'],
+  ['partner', 'Can you fucking clean the kitchen tonight?', 'H'],
+  ['roommate', 'clean your shit up', 'H'],
+  ['partner', 'Fuck this. I’m done.', 'H'],
+  ['partner', 'shut the fuck up', 'H'],
+  ['friend', 'fkn hell, again??', 'H'],
+  ['partner', 'fuckin unbelievable', 'H'],
+  ['coworker', 'This is bullshit.', 'H'],
+  ['partner', 'Damn it, you forgot again.', 'H'],
+  ['partner', 'Are you f***ing kidding me?', 'H'],
+  ['roommate', 'What the hell happened to the kitchen?', 'H'],
+  ['partner', 'You’re a fucking idiot.', 'H'],
+  ['partner', 'screw you', 'H'],
+  ['partner', 'Piss off.', 'H'],
+  ['coworker', 'ffs, just send it', 'H'],
+  ['partner', 'This is crap and you know it.', 'H'],
+  // ---------------- all caps and stacked punctuation
+  ['partner', 'WHY IS THE KITCHEN STILL A MESS', 'H'],
+  ['partner', 'ANSWER YOUR PHONE', 'SH'],
+  ['partner', 'Where are you??', 'S'],
+  ['roommate', 'WHO ATE MY LEFTOVERS?!', 'SH'],
+  // ---------------- typos read as the word meant
+  ['partner', 'you’re allways late', 'S'],
+  ['roommate', 'can you clen up a bit wen you get a chance', 'S'],
+  ['partner', 'you nevr lisen to me', 'SH'],
+  ['partner', 'im sory i was late, can we tlk tonite?', 'CS'],
+  ['partner', 'u r so lazy', 'H'],
+  // ---------------- emoji
+  ['partner', 'Love you ❤️', 'C'],
+  ['partner', 'ok 🙄', 'H'],
+  ['friend', 'haha sure 😂', 'CS'],
+  ['partner', 'Thanks for the flowers 🥰', 'C'],
+  // ---------------- blame with no ask
+  ['partner', 'This is all your fault.', 'SH'],
+  ['partner', 'You ruined everything.', 'SH'],
+  ['partner', 'You made me feel stupid.', 'SH'],
+  ['partner', 'You know what you did.', 'SH'],
+  // ---------------- long
+  ['partner', 'I know you’ve been working a lot and I really appreciate it, but I’ve been doing every school run and every dinner for three weeks and I’m exhausted, and I feel like I’m running the house by myself, and I don’t know how much longer I can keep this up without some help.', 'SH'],
+  ['coworker', 'Hi all, a quick recap from today: the launch moves to Thursday, Priya owns the QA checklist, Marco is updating the release notes, and I will send the customer email by Wednesday at noon. Shout if I missed anything.', 'CS'],
+  ['coparent', 'The kids need to be picked up at 3 not 4 and you need to bring the soccer bag and the permission slip and remember that Mia has the dentist on Monday.', 'SH'],
+  // ---------------- work, for slow readers and clear asks
+  ['coworker', 'Could you review the draft by Thursday at 2? One ask: check the numbers on page 3.', 'C'],
+  ['coworker', 'Quick one: can you join the 10am call tomorrow?', 'C'],
+  ['coworker', 'Circling back on this.', 'S'],
+  ['coworker', 'As previously stated, the budget is final.', 'S'],
+  ['coworker', 'Please advise.', 'S'],
+];
+
+const SWEAR = /\b(?:f+u+c+k\w*|f\*+\w*|fk\w*|fuk\w*|sh[i*]t\w*|bullsh\w*|damn\w*|hell|crap\w*|piss\w*|wtf|ffs|screw you|idiot|nightmare|lazy|selfish|useless|pathetic|slob|disappointment|terrible parent|last nerve|shut up|driving me crazy|can't stand|hate you|done with you)\b/i;
+const HOT = ['swear', 'hostile', 'label', 'contempt', 'threat'];
+
+let pass = 0, fail = 0; const errs = [];
+const verbose = process.argv.includes('-v');
+M.forEach(([rel, t, want]) => {
+  const ch = rel === 'coworker' ? 'chat' : 'text';
+  const an = E.analyze(t, { channel: ch });
+  const sc = E.score(an, ['general'], ch);
+  const band = { clear: 'C', some: 'S', heavy: 'H' }[sc.level[0]];
+  const rw = E.rewrite(an, { wirings: ['general'], channel: ch, rel });
+  const why = [];
+  if (want.indexOf(band) === -1) why.push('verdict ' + sc.level[1] + ' (want ' + want + ')');
+  const hot = an.staticIds.some(id => HOT.includes(id));
+  if (hot && band !== 'H') why.push('a hot pattern but not heavy');
+  if (want === 'H' && !hot && band === 'H' && !/[A-Z]{4}/.test(t)) {/* heavy for another reason: fine */}
+  if (an.staticIds.length && sc.level[1] === 'Clear signal') why.push('flagged but "Clear signal"');
+  // every rewrite drops the swearing, the fed-up line and the name-calling
+  const texts = [rw.main].concat((rw.variants || []).map(v => v.text));
+  if (hot) texts.forEach(x => { const m = x.replace(/[’]/g, "'").match(SWEAR); if (m) why.push('rewrite keeps “' + m[0] + '”: ' + x); });
+  // a hostile line becomes feeling + ask
+  if (an.found.hostile || an.found.swear && !an.asks.length) {
+    if (!/frustrated|upset|hurt|a break|a few minutes/i.test(rw.main)) why.push('hostile rewrite names no feeling: ' + rw.main);
+    if (!/\?/.test(rw.main)) why.push('hostile rewrite has no ask: ' + rw.main);
+  }
+  if (rw.unchanged && hot) why.push('no rewrite for a hot line');
+  // contradictions: a rewrite that repeats the flagged absolute, or "Your words" for a heavy line
+  if (band === 'H' && rw.primary && rw.primary.label === 'Your words') why.push('heavy line, but "Your words" offered');
+  if (/\?\?|\.\?|\?\./.test(rw.main)) why.push('broken punctuation: ' + rw.main);
+  if (/\b(?:A|The|Could) [A-Z]{2,}/.test(rw.main)) why.push('stray capitals: ' + rw.main);
+  if (why.length) { fail++; errs.push('[' + rel + '] ' + t + '\n    ' + why.join('\n    ') + '\n    → ' + rw.main); } else pass++;
+  if (verbose) console.log((why.length ? 'FAIL ' : 'ok   ') + band + ' ' + t + '\n       → ' + rw.main);
+});
+// first-time testers: explanations match the matched word; typos read as the word meant; literal listeners
+const chk = (c, m) => { if (c) pass++; else { fail++; errs.push(m); } };
+{
+  const an = E.analyze('I literally just got home.', { channel: 'text' });
+  const r = E.readings(an, ['adhd', 'autistic'], 'text');
+  chk(!an.found.minim && an.found.intens, '"literally" is an intensifier, not a "just" minimizer');
+  chk(!JSON.stringify(r).includes('Just'), '"literally" never gets the "just" explanation');
+  const fine = E.readings(E.analyze('Fine.', { channel: 'text' }), ['autistic'], 'text').autistic;
+  chk(!fine.some(e => /curt|face value, so say/.test(e.h + e.y)), 'autistic "Fine." has no neurotypical "curt" reading with a mismatched reason');
+  const a1 = E.analyze('you’re allways late', { channel: 'text' });
+  chk(a1.found.absolute && a1.readAs.some(f => f.to === 'always'), '"allways" reads as "always", and says so');
+  const a2 = E.rewrite(E.analyze('can you clen up a bit wen you get a chance', { channel: 'text' }), { wirings: [] });
+  chk(!a2.unchanged && /clean/.test(a2.main) && /\[a time\]/.test(a2.main), 'typo’d ask still gets a rewrite: ' + a2.main);
+  const lit = E.rewrite(E.analyze('I have nothing left in the tank and I cannot even deal with this tonight.', { channel: 'text' }), { wirings: ['autistic'] });
+  chk(/no energy left/.test(lit.main) && !/tank|even/.test(lit.main), 'idioms and hyperbole get plain words: ' + lit.main);
+  const nm = E.rewrite(E.analyze('You are a total nightmare. The kitchen is a mess.', { channel: 'text' }), { wirings: [] });
+  chk(!/nightmare/.test(nm.main) && /kitchen/.test(nm.main), 'the insult goes, the point stays: ' + nm.main);
+}
+// the shared list: the same line gets the same marks in the Conversation Reader
+const R = require(path.join(__dirname, '../../assets/js/conversation-reader-engine.js'));
+[['You are getting on my last fucking nerve', /swear|hostile/], ['You’re a total nightmare', /verdict/], ['It would be nice if someone helped around here.', /hint/], ['We need to talk.', /opener/], ['of course you did. I have to do everything around here', /sarcasm/]].forEach(([t, want]) => {
+  const kinds = R.read([{ who: 'A', text: t }], 'B').turns[0].marks.map(m => m.kind).join(' ');
+  if (want.test(kinds)) pass++; else { fail++; errs.push('Reader disagrees on “' + t + '”: ' + kinds); }
+});
+errs.forEach(e => console.log('FAIL ' + e));
+console.log(M.length + ' messages; ' + pass + ' passed, ' + fail + ' failed');
+process.exitCode = fail ? 1 : 0;
