@@ -104,6 +104,8 @@
   .raci td.who{ min-width:120px; }
   tfoot td{ font-family:"IBM Plex Mono", monospace; font-size:0.8rem; border-bottom:none; padding-top:10px; }
 
+  .err-note{ color:var(--debit); font-family:"Lora", Georgia, serif; font-size:0.86rem; line-height:1.45; margin:4px 0 8px; }
+  input[aria-invalid="true"]{ border-color:var(--debit) !important; background:#FFF4F1 !important; }
   .derive{ margin-top:16px; padding:12px 16px; background:#FFFDF6; border:1px solid var(--line); border-radius:var(--radius); font-family:"IBM Plex Mono", monospace; font-size:0.78rem; line-height:1.7; overflow-wrap:anywhere; }
   .derive ol{ margin:6px 0 6px 18px; padding:0; }
   .derive .formula{ color:var(--ink-soft); }
@@ -258,6 +260,11 @@
         <button type="button" class="btn" data-example="family">A family of five</button>
         <button type="button" class="btn" data-example="blank">Start blank</button>
       </div>
+      <div id="suite-load" class="no-print" hidden>
+        <p class="panel-note" style="margin-top:14px;margin-bottom:4px;">You keep a Workpaper Suite draft on this device:</p>
+        <button type="button" class="btn btn-solid" id="load-suite">Load from my suite</button>
+        <span class="panel-note" id="suite-found" style="margin-left:6px;"></span>
+      </div>
       <p class="status" id="example-status" role="status"></p>
     </div>
 
@@ -327,7 +334,7 @@
 
   <!-- ================= AS ================= -->
   <section id="as" aria-labelledby="as-h">
-    <div class="section-head"><p class="part-label">Input 3 of 4 &middot; Pillar III</p><h2 id="as-h">Stress: how full each battery is <small>autonomic saturation</small></h2></div>
+    <div class="section-head"><p class="part-label">Input 3 of 4 &middot; Pillar III</p><h2 id="as-h">Stress: how much each person is carrying <small>average battery load (AS)</small></h2></div>
     <div class="panel">
       <div class="panel-head"><h3>Everyone's battery</h3><span class="src-tag">From <a href="/workpapers/fill/wp-02.html">WP-02, the battery check</a></span></div>
       <p class="panel-note">Each person fills in their own card, about themselves, for the last 24 to 48 hours. 0 = not at all, 4 = very true. Guessing for someone else turns a reflection tool into a way of watching them, so the read waits until every card is complete.</p>
@@ -339,7 +346,7 @@
 
   <!-- ================= RF ================= -->
   <section id="rf" aria-labelledby="rf-h">
-    <div class="section-head"><p class="part-label">Input 4 of 4 &middot; Pillar IV &middot; apex only</p><h2 id="rf-h">Retuning: repair after rough moments <small>retuning frequency</small></h2></div>
+    <div class="section-head"><p class="part-label">Input 4 of 4 &middot; Pillar IV &middot; apex only</p><h2 id="rf-h">Retuning: repair after rough moments <small>retuning (RF)</small></h2></div>
     <div class="panel">
       <div class="panel-head"><h3>Counting repairs</h3><span class="src-tag">From <a href="/workpapers/fill/wp-09.html">WP-09, the tone filter</a></span></div>
       <p class="panel-note">Count the week's rough moments (when something landed badly enough to notice). Then count how many you ran through the WP-09 steps (fact, feeling, ask) before you answered. This measures what you did about friction, not how much there was.</p>
@@ -718,9 +725,14 @@ apex     = (balance &times; 0.35) + (ownership &times; 0.30) + ((1 &minus; stres
   };
 
   function computeWB(){
-    var n = nPeople();
-    var hours = S.ledger.reduce(function(acc, row){ row.hours.forEach(function(h, i){ var v = parseFloat(h); acc[i] += isFinite(v) && v > 0 ? v : 0; }); return acc; }, S.people.map(function(){ return 0; }));
+    var n = nPeople(), bad = [];
+    var hours = S.ledger.reduce(function(acc, row, r){ row.hours.forEach(function(h, i){
+      var msg = C.hoursProblem(h), cell = document.querySelector('[data-l-row="' + r + '"][data-l-p="' + i + '"]');
+      if (cell){ if (msg) cell.setAttribute("aria-invalid", "true"); else cell.removeAttribute("aria-invalid"); }
+      if (msg){ bad.push((row.name || "Job " + (r + 1)) + ", " + nameOf(i) + ": " + msg); return; }
+      var v = parseFloat(h); acc[i] += isFinite(v) && v > 0 ? v : 0; }); return acc; }, S.people.map(function(){ return 0; }));
     var b = C.balance(hours, S.targetMode === "agreed" ? S.targets : null);
+    var badHtml = bad.length ? '<div class="err-note">' + bad.slice(0, 4).map(esc).join("<br>") + (bad.length > 4 ? "<br>and " + (bad.length - 4) + " more." : "") + '</div>' : "";
     // column totals
     var foot = '<tr><td>Total hours</td>' + hours.map(function(h){ return '<td class="num">' + f1(h) + '</td>'; }).join("") + '<td></td></tr>';
     $("ledger-foot").innerHTML = foot;
@@ -735,10 +747,10 @@ apex     = (balance &times; 0.35) + (ownership &times; 0.30) + ((1 &minus; stres
 
     var d = $("wb-derive");
     if (b.value === null){
-      d.innerHTML = '<div class="formula">Balance = 1 − moved ÷ most</div><div>' + esc(b.error) + '</div><div><span class="out na">—</span></div>';
+      d.innerHTML = '<div class="formula">Balance = 1 − moved ÷ most</div>' + badHtml + '<div>' + esc(b.error) + '</div><div><span class="out na">—</span></div>';
       return b;
     }
-    var steps = "<ol>";
+    var steps = badHtml + "<ol>";
     steps += "<li>Everyone's hours: " + hours.map(function(h, i){ return esc(nameOf(i)) + " " + f1(h); }).join(", ") + " = " + f1(b.total) + " hours.</li>";
     steps += "<li>Shares: " + b.shares.map(function(s, i){ return esc(nameOf(i)) + " " + C.pct(s); }).join(", ") + ".</li>";
     steps += "<li>Target (" + (b.mode === "agreed" ? "agreed split" : "even share") + "): " + b.target.map(function(t, i){ return esc(nameOf(i)) + " " + C.pct(t); }).join(", ") + ".</li>";
@@ -746,12 +758,18 @@ apex     = (balance &times; 0.35) + (ownership &times; 0.30) + ((1 &minus; stres
     steps += "<li>Most that could ever need to move (one person doing it all): most = 1 − " + C.pct(Math.min.apply(null, b.target)) + " = " + b.most.toFixed(3) + ".</li>";
     steps += "<li>Balance = 1 − " + b.moved.toFixed(3) + " ÷ " + b.most.toFixed(3) + " = <b>" + f2(b.value) + "</b>" + (n === 2 && b.mode === "even" ? " (same as 1 − |" + C.pct(b.shares[0]) + " − " + C.pct(b.shares[1]) + "| ÷ 100)" : "") + ".</li>";
     steps += "</ol>";
-    d.innerHTML = '<div class="formula">Balance = 1 − moved ÷ most</div>' + steps + '<div><span class="out' + (b.value < 0.5 ? " warn" : "") + '">' + f2(b.value) + '</span> <span class="formula">balance</span></div>';
+    var cw = C.concentration(hours, 1);
+    var cwHtml = cw.flag ? '<div class="err-note" style="color:var(--ink);">Busiest person: ' + esc(nameOf(cw.top)) + ' has ' + C.pct(cw.share) + ' of the hours (an even share is ' + C.pct(1 / n) + '). A fact about this week, not about effort.</div>' : "";
+    d.innerHTML = '<div class="formula">Balance = 1 − moved ÷ most</div>' + steps + cwHtml + '<div><span class="out' + (b.value < 0.5 ? " warn" : "") + '">' + f2(b.value) + '</span> <span class="formula">balance</span></div>';
+    b.conc = cw;
     return b;
   }
 
   function computeOC(){
     var owned = 0, total = S.raci.length, everyoneA = [];
+    var anyOwner = S.raci.some(function(row){ return row.r !== "" || row.a !== ""; });
+    var byR = S.people.map(function(){ return 0; });
+    S.raci.forEach(function(row){ if (row.r !== "" && row.r !== "all" && +row.r < byR.length) byR[+row.r]++; });
     S.raci.forEach(function(row, r){
       var ok = row.r !== "" && row.a !== "";
       if (ok) owned++;
@@ -759,8 +777,9 @@ apex     = (balance &times; 0.35) + (ownership &times; 0.30) + ((1 &minus; stres
       var flag = document.querySelector('[data-r-flag="' + r + '"]');
       if (flag){ flag.textContent = ok ? "yes" : "no"; flag.style.color = ok ? "var(--credit)" : "var(--debit)"; }
     });
-    var o = C.ownership(owned, total);
+    var o = anyOwner ? C.ownership(owned, total) : { value: null, error: "No owners picked yet, so ownership isn’t worked out (a list with no names at all is not started, not 0.00)." };
     o.everyoneA = everyoneA;
+    o.conc = C.concentration(byR, 3);
     var d = $("oc-derive");
     if (o.value === null){
       d.innerHTML = '<div class="formula">Ownership = jobs with both names ÷ all jobs</div><div>' + esc(o.error) + '</div><div><span class="out na">—</span></div>';
@@ -768,6 +787,7 @@ apex     = (balance &times; 0.35) + (ownership &times; 0.30) + ((1 &minus; stres
     }
     d.innerHTML = '<div class="formula">Ownership = jobs with both names ÷ all jobs</div><div>' + owned + ' ÷ ' + total + ' jobs' + (total - owned ? ' (' + (total - owned) + ' still without both names)' : '') + '</div>' +
       (everyoneA.length ? '<div>Accountable is "everyone together" for: ' + esc(everyoneA.join(", ")) + '. Worth naming one person to notice.</div>' : '') +
+      (o.conc.flag ? '<div class="err-note" style="color:var(--ink);">Busiest person: ' + esc(nameOf(o.conc.top)) + ' is Responsible for ' + o.conc.count + ' of the ' + o.conc.total + ' jobs with a named person (' + C.pct(o.conc.share) + '). Ownership reads whether jobs have names, not how they are spread, so read the two together.</div>' : '') +
       '<div><span class="out' + (o.value < 0.5 ? " warn" : "") + '">' + f2(o.value) + '</span> <span class="formula">ownership</span></div>';
     return o;
   }
@@ -796,14 +816,26 @@ apex     = (balance &times; 0.35) + (ownership &times; 0.30) + ((1 &minus; stres
     return s;
   }
 
+  function countProblem(v, label){
+    if (v === "" || v == null) return "";
+    var x = C.num(v);
+    if (x === null) return label + ": “" + v + "” isn’t a number, so it is left out.";
+    if (x < 0) return label + " can’t be negative, so " + v + " is left out.";
+    if (Math.floor(x) !== x) return label + " is a count, so use a whole number.";
+    return "";
+  }
   function computeRF(){
-    var r = C.retuning(S.retunes, S.friction);
-    var d = $("rf-derive");
+    var pf = countProblem(S.friction, "Rough moments"), pr = countProblem(S.retunes, "Retunes");
+    [["friction", pf], ["retunes", pr]].forEach(function(x){ if (x[1]) $(x[0]).setAttribute("aria-invalid", "true"); else $(x[0]).removeAttribute("aria-invalid"); });
+    var r = C.retuning(pr ? "" : S.retunes, pf ? "" : S.friction);
+    var d = $("rf-derive"), notes = [pf, pr].filter(Boolean);
+    if (r.value !== null && r.capped) notes.push("You counted " + r.retunes + " retunes but only " + r.friction + " rough moments. You can’t retune more moments than there were, so retuning is capped at 1.00. Worth checking the two numbers.");
+    var nh = notes.length ? '<div class="err-note">' + notes.map(esc).join("<br>") + '</div>' : "";
     if (r.value === null){
-      d.innerHTML = '<div class="formula">Retuning = moments retuned ÷ rough moments</div><div>' + esc(r.note) + '</div><div><span class="out na">n/a</span></div>';
+      d.innerHTML = '<div class="formula">Retuning = moments retuned ÷ rough moments</div>' + nh + '<div>' + esc(r.note) + '</div><div><span class="out na">n/a</span></div>';
       return r;
     }
-    d.innerHTML = '<div class="formula">Retuning = moments retuned ÷ rough moments</div><div>' + r.retunes + ' ÷ ' + r.friction + (r.capped ? " (capped at 1.00)" : "") + '</div><div><span class="out' + (r.value < 0.5 ? " warn" : "") + '">' + f2(r.value) + '</span> <span class="formula">retuning</span></div>';
+    d.innerHTML = '<div class="formula">Retuning = moments retuned ÷ rough moments</div>' + nh + '<div>' + r.retunes + ' ÷ ' + r.friction + (r.capped ? " (capped at 1.00)" : "") + '</div><div><span class="out' + (r.value < 0.5 ? " warn" : "") + '">' + f2(r.value) + '</span> <span class="formula">retuning</span></div>';
     return r;
   }
 
@@ -834,7 +866,7 @@ apex     = (balance &times; 0.35) + (ownership &times; 0.30) + ((1 &minus; stres
     if (oc === null) missing.push("a job list");
     if (as === null) missing.push("everyone's battery");
     var derived = [wb, oc, as, rf].filter(function(v){ return v !== null; }).length;
-    $("completeness").innerHTML = "Inputs worked out: " + derived + " of 4." + (missing.length ? " Still needed: <b>" + esc(missing.join(", ")) + "</b>." : "") +
+    $("completeness").innerHTML = "Inputs worked out: " + derived + " of 4" + (derived ? " (" + [wb !== null && "balance", oc !== null && "ownership", as !== null && "stress", rf !== null && "retuning"].filter(Boolean).join(", ") + ")." : ".") + (missing.length ? " Still needed: <b>" + esc(missing.join(", ")) + "</b>." : "") +
       (rf === null ? " Retuning has no value (no rough moments logged)." : "") + (b.mode === "agreed" && wb !== null ? " Balance is read against your agreed split." : "") + (custom ? " Custom weights in use." : "");
 
     var solEl = $("solvency-val"), apexEl = $("apex-val");
@@ -842,7 +874,7 @@ apex     = (balance &times; 0.35) + (ownership &times; 0.30) + ((1 &minus; stres
       solEl.textContent = "—"; solEl.className = "val na"; apexEl.textContent = "—"; apexEl.className = "val na";
       $("solvency-band").textContent = warn.length ? "The weights don't add up to 1.00." : "Waiting on inputs.";
       $("apex-band").textContent = $("solvency-band").textContent;
-      renderContrib([{ name: "Balance", value: wb, could: w.sol.wb }, { name: "Ownership", value: oc, could: w.sol.oc }, { name: "1 − stress", value: as, could: w.sol.as }, { name: "Retuning (apex)", value: rf, could: w.apex.rf }]);
+      renderContrib([{ name: "Balance", value: wb, earned: wb === null ? 0 : wb * w.sol.wb, could: w.sol.wb }, { name: "Ownership", value: oc, earned: oc === null ? 0 : oc * w.sol.oc, could: w.sol.oc }, { name: "1 − stress", value: as, earned: as === null ? 0 : (1 - as) * w.sol.as, could: w.sol.as }, { name: "Retuning (apex)", value: rf, earned: rf === null ? 0 : rf * w.apex.rf, could: w.apex.rf }]);
       $("math").textContent = "No read yet. Still needed: " + (missing.length ? missing.join(", ") : "weights that add up to 1.00") + ".";
       $("moves").innerHTML = "<li>Available once there's a read.</li>";
       $("divergence").hidden = true;
@@ -864,17 +896,17 @@ apex     = (balance &times; 0.35) + (ownership &times; 0.30) + ((1 &minus; stres
 
     // step-by-step math
     var m = "SOLVENCY\n";
-    m += "  balance    " + f2(wb) + " × " + w.sol.wb.toFixed(2) + " = " + fg(sol.parts.wb) + "\n";
-    m += "  ownership  " + f2(oc) + " × " + w.sol.oc.toFixed(2) + " = " + fg(sol.parts.oc) + "\n";
-    m += "  1 − stress (1 − " + f2(as) + ") × " + w.sol.as.toFixed(2) + " = " + fg(sol.parts.as) + "\n";
+    m += "  balance    " + fg(wb) + " × " + w.sol.wb.toFixed(2) + " = " + fg(sol.parts.wb) + "\n";
+    m += "  ownership  " + fg(oc) + " × " + w.sol.oc.toFixed(2) + " = " + fg(sol.parts.oc) + "\n";
+    m += "  1 − stress (1 − " + fg(as) + ") × " + w.sol.as.toFixed(2) + " = " + fg(sol.parts.as) + "\n";
     m += "  total      " + fg(sol.parts.wb) + " + " + fg(sol.parts.oc) + " + " + fg(sol.parts.as) + " = " + sol.value.toFixed(4) + "\n";
     if (useSig) m += "  S-curve    1 / (1 + e^(−6 × (" + sol.value.toFixed(4) + " − 0.5))) = " + solV.toFixed(4) + "\n";
-    m += "  shown as   " + f2(solV) + "  → " + sb.short + "\n\nAPEX\n";
+    m += "  shown as   " + f2(solV) + "  → " + sb.short + "\n  (inputs are shown to three decimals, so each line adds up; the cards above round to two)\n\nAPEX\n";
     if (ap.rebalanced){
       m += "  no rough moments, so retuning is left out and the rest is divided by " + ap.divisor.toFixed(2) + "\n";
       m += "  (" + fg(ap.parts.wb) + " + " + fg(ap.parts.oc) + " + " + fg(ap.parts.as) + ") ÷ " + ap.divisor.toFixed(2) + " = " + ap.value.toFixed(4) + "\n";
     } else {
-      m += "  " + f2(wb) + "×" + w.apex.wb.toFixed(2) + " + " + f2(oc) + "×" + w.apex.oc.toFixed(2) + " + (1−" + f2(as) + ")×" + w.apex.as.toFixed(2) + " + " + f2(rf) + "×" + w.apex.rf.toFixed(2) + "\n";
+      m += "  " + fg(wb) + "×" + w.apex.wb.toFixed(2) + " + " + fg(oc) + "×" + w.apex.oc.toFixed(2) + " + (1−" + fg(as) + ")×" + w.apex.as.toFixed(2) + " + " + fg(rf) + "×" + w.apex.rf.toFixed(2) + "\n";
       m += "  = " + fg(ap.parts.wb) + " + " + fg(ap.parts.oc) + " + " + fg(ap.parts.as) + " + " + fg(ap.parts.rf) + " = " + ap.value.toFixed(4) + "\n";
     }
     if (useSig) m += "  S-curve    " + apV.toFixed(4) + "\n";
@@ -908,12 +940,14 @@ apex     = (balance &times; 0.35) + (ownership &times; 0.30) + ((1 &minus; stres
 
     // what to do next, gated by state (never scored by it)
     var base;
-    if (sb.key === "high") base = "The setup is carrying its own weight. Nothing needs changing this week. Keep the same rhythm of <a href=\"/check-ins.html\">check-ins</a> and log the read.";
+    var lean = (o.conc && o.conc.flag) ? esc(nameOf(o.conc.top)) + " holds " + o.conc.count + " of the " + o.conc.total + " named jobs" : (b.conc && b.conc.flag) ? esc(nameOf(b.conc.top)) + " has " + C.pct(b.conc.share) + " of the hours" : "";
+    if (sb.key === "high" && lean) base = "The numbers hold, but " + lean + ". A high score can hide a setup that leans on one reliable person. Ask which job they would hand over first, before calling it settled.";
+    else if (sb.key === "high") base = "The setup is carrying its own weight. Nothing needs changing this week. Keep the same rhythm of <a href=\"/check-ins.html\">check-ins</a> and log the read.";
     else if (sb.key === "mid") base = "Something is drifting. The biggest shortfall is <strong>" + esc(worst.name.toLowerCase()) + "</strong>, costing " + fg(worst.short) + " of the points. Start there, not with whatever happened most recently. The first item under “What would move the score” is a good first step to bring to the others.";
     else base = "This setup can't last as it is. That's about the setup, not anyone's effort or worth. The biggest shortfall is <strong>" + esc(worst.name.toLowerCase()) + "</strong>. Plan a calm session to rework the <a href=\"/workpapers/fill/wp-03.html\">job list</a> together, rather than another one-off patch.";
     var extra = "";
     if (o.everyoneA && o.everyoneA.length) extra += "<p>Jobs where everyone is accountable often drift to whoever notices first. Consider naming one person to notice each of them.</p>";
-    if (sb.key === "low" && ab.key === "low") extra += "<p>Both scores are low at once. Another worksheet may not be what helps most; outside support, like a counselor or a trusted mediator, is worth considering.</p>";
+    if (sb.key === "low" && ab.key === "low") extra += "<p>Both scores are low at once. Another worksheet may not be what helps most; it may be worth asking someone neutral that everyone trusts to help you rework the setup together.</p>";
     extra += "<p>Keep going: <a href=\"/workpapers/fill/suite.html\">build your Workpaper Suite</a> or track the weeks in <a href=\"/workpapers/report-01.html\">REPORT-01</a>.</p>";
 
     var mode = currentState ? STATE_COPY[currentState].mode : "go";
@@ -923,7 +957,7 @@ apex     = (balance &times; 0.35) + (ownership &times; 0.30) + ((1 &minus; stres
     else { nb.className = "next-box stop"; nt.innerHTML = "<p><strong>Stop here for today.</strong> You said you're shut down, and in that state a score can sound like a verdict on you. It isn't. It will still be true tomorrow.</p>" + extra; }
 
     lastRead = { wb: wb, oc: oc, as: as, rf: rf, sol: solV, apex: apV };
-    setSummary("Solvency read " + f2(solV) + ", " + sb.short + ". Apex " + f2(apV) + ", " + ab.short + ". Biggest shortfall: " + worst.name.toLowerCase() + ".");
+    setSummary("Solvency read " + f2(solV) + ", " + sb.short + ". Apex " + f2(apV) + ", " + ab.short + ". Biggest shortfall: " + worst.name.toLowerCase() + "." + (lean ? " Note: " + lean.replace(/<[^>]+>/g, "").replace(/&amp;/g, "&") + "." : ""));
     buildCopyText(b, o, s, r, sol, ap, solV, apV, sb, ab, moves, useSig, custom);
     save();
   }
@@ -932,10 +966,9 @@ apex     = (balance &times; 0.35) + (ownership &times; 0.30) + ((1 &minus; stres
   var sumTimer = null;
   function setSummary(t){
     $("live-summary").textContent = t;
-    if (t === announced) return;
-    announced = t;
     clearTimeout(sumTimer);
-    sumTimer = setTimeout(function(){ $("announce").textContent = t; }, 600);
+    // read the line again when the timer fires, so a fast change is never announced one step behind
+    sumTimer = setTimeout(function(){ var now = $("live-summary").textContent; if (now === announced) return; announced = now; $("announce").textContent = now; }, 600);
   }
 
   var copyText = "";
@@ -964,13 +997,17 @@ apex     = (balance &times; 0.35) + (ownership &times; 0.30) + ((1 &minus; stres
   }
 
   /* ---------- trend ---------- */
+  function niceDate(iso){
+    var m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(iso || "");
+    return m ? new Date(Date.UTC(+m[1], +m[2] - 1, +m[3])).toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric", timeZone: "UTC" }) : String(iso || "");
+  }
   function renderTrend(){
     var tb = $("trend-rows");
     if (!trend.length){ tb.innerHTML = '<tr><td colspan="9" style="color:var(--ink-soft);">No reads logged yet.</td></tr>'; $("drift-alert").hidden = true; return; }
     tb.innerHTML = trend.map(function(row, i){
       var prev = i ? trend[i - 1] : null, d = prev ? row.sol - prev.sol : null;
       var dt = d === null ? "—" : (d >= 0 ? "+" : "−") + f2(Math.abs(d));
-      return '<tr><td class="mono">' + esc(row.date) + '</td><td class="num mono">' + f2(row.wb) + '</td><td class="num mono">' + f2(row.oc) + '</td><td class="num mono">' + f2(row.as) + '</td><td class="num mono">' + (row.rf === null ? "n/a" : f2(row.rf)) + '</td><td class="num mono"><b>' + f2(row.sol) + '</b></td><td class="num mono" style="color:' + (d === null ? "var(--ink-soft)" : d >= 0 ? "var(--credit)" : "var(--debit)") + '">' + dt + '</td><td class="num mono">' + f2(row.apex) + '</td><td><button type="button" class="remove no-print" data-t-del="' + i + '" aria-label="Remove the read for ' + esc(row.date) + '">&times;</button></td></tr>';
+      return '<tr><td class="mono">' + esc(niceDate(row.date)) + '</td><td class="num mono">' + f2(row.wb) + '</td><td class="num mono">' + f2(row.oc) + '</td><td class="num mono">' + f2(row.as) + '</td><td class="num mono">' + (row.rf === null ? "n/a" : f2(row.rf)) + '</td><td class="num mono"><b>' + f2(row.sol) + '</b></td><td class="num mono" style="color:' + (d === null ? "var(--ink-soft)" : d >= 0 ? "var(--credit)" : "var(--debit)") + '">' + dt + '</td><td class="num mono">' + f2(row.apex) + '</td><td><button type="button" class="remove no-print" data-t-del="' + i + '" aria-label="Remove the read for ' + esc(niceDate(row.date)) + '">&times;</button></td></tr>';
     }).join("");
     var drops = 0;
     for (var i = trend.length - 1; i > 0 && drops < 3; i--){ if (trend[i - 1].apex - trend[i].apex > 0.10) drops++; else break; }
@@ -1043,6 +1080,15 @@ apex     = (balance &times; 0.35) + (ownership &times; 0.30) + ((1 &minus; stres
       $("state-text").textContent = currentState ? STATE_COPY[currentState].text : "Pick the one closest to how you feel. It's optional, and you can change it any time.";
       recalc();
     }
+    else if (t.id === "load-suite"){
+      var sd = C.suiteDraft();
+      if (!sd){ $("example-status").textContent = "There’s no Workpaper Suite draft kept on this device to load."; return; }
+      S = { people: sd.names.slice(), ledger: sd.ledger.length ? sd.ledger.map(function(r){ return { name: r.name, hours: r.hours.map(String) }; }) : [{ name: "", hours: sd.names.map(function(){ return 0; }) }],
+        targetMode: "even", targets: sd.names.map(function(){ return ""; }), raci: sd.raci.length ? sd.raci : [{ name: "", r: "", a: "" }], bat: sd.bat, friction: S.friction, retunes: S.retunes };
+      renderAll(); recalc();
+      $("example-status").textContent = "Loaded from your suite: " + sd.found.join(", ") + ". Hours come from the WP-01 minutes. Retuning isn’t in the suite, so it stays as it was.";
+      $("read-card").focus();
+    }
     else if (t.id === "add-ledger-row"){ S.ledger.push({ name: "", hours: S.people.map(function(){ return 0; }) }); renderLedger(); recalc(); document.querySelector('[data-l-name="' + (S.ledger.length - 1) + '"]').focus(); }
     else if (t.id === "add-raci-row"){ S.raci.push({ name: "", r: "", a: "" }); renderRaci(); recalc(); document.querySelector('[data-r-name="' + (S.raci.length - 1) + '"]').focus(); }
     else if (t.id === "reset-weights"){ setWeights(C.W); recalc(); }
@@ -1059,11 +1105,13 @@ apex     = (balance &times; 0.35) + (ownership &times; 0.30) + ((1 &minus; stres
     }
     else if (t.id === "add-trend"){
       if (!lastRead){ $("trend-status").textContent = "There's no complete read to log yet. Fill in the missing inputs first."; return; }
-      var dte = $("trend-date").value || new Date().toISOString().slice(0, 10);
+      var today = new Date(), dte = $("trend-date").value || (today.getFullYear() + "-" + ("0" + (today.getMonth() + 1)).slice(-2) + "-" + ("0" + today.getDate()).slice(-2));
+      var had = trend.filter(function(x){ return x.date === dte; }).length;
+      trend = trend.filter(function(x){ return x.date !== dte; });
       trend.push({ date: dte, wb: lastRead.wb, oc: lastRead.oc, as: lastRead.as, rf: lastRead.rf, sol: lastRead.sol, apex: lastRead.apex });
       trend.sort(function(x, y){ return x.date < y.date ? -1 : x.date > y.date ? 1 : 0; });
       renderTrend(); save();
-      $("trend-status").textContent = "Logged the read for the week of " + dte + ".";
+      $("trend-status").textContent = (had ? "Replaced the read for the week of " : "Logged the read for the week of ") + niceDate(dte) + (had ? ". One read per week keeps the trend honest." : ".");
     }
     else if (t.id === "erase"){
       erase(); keepOn = false; $("keep").checked = false;
@@ -1093,6 +1141,8 @@ apex     = (balance &times; 0.35) + (ownership &times; 0.30) + ((1 &minus; stres
   each(document.querySelectorAll(".rung"), function(bn){ bn.setAttribute("aria-pressed", String(bn.dataset.state === currentState)); });
   if (currentState) $("state-text").textContent = STATE_COPY[currentState].text;
   renderAll(); renderTrend(); recalc();
+  var sdFound = C.suiteDraft && C.suiteDraft();
+  if (sdFound){ $("suite-load").hidden = false; $("suite-found").textContent = "(" + sdFound.found.join(", ") + ")"; }
 })();
 </script>
 </body>
