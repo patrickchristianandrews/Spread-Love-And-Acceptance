@@ -705,7 +705,7 @@
       "label": "half-finished chores",
       "match": [
         [
-          "half (done|finished|way done)|halfway (done|through|finished)|(never|doesnt|doesn t|dont|don t|cant|can t) (ever )?finish(es)? (the|his|her|their|my|anything|things|chores|jobs|tasks)|leaves? (it|things|jobs|chores|the [a-z]+) half|(starts?|started) .. (but|and) (never|doesnt|doesn t|dont|don t) finish|unfinished (chores|jobs|tasks|projects)|(laundry|washing|clothes) (left )?in the (machine|dryer|washer)|wet laundry|not (put|putting) (it|things|stuff|them) away",
+          "half (done|finished|way done)|halfway (done|through|finished)|(never|doesnt|doesn t|dont|don t|cant|can t) (ever )?finish(es)? (the|his|her|their|my|anything|things|chores|jobs|tasks)|leaves? (it|things|jobs|chores|the [a-z]+) half|(starts?|started|starting) .. (but|and) (never|doesnt|doesn t|dont|don t) (ever )?finish*|unfinished (chores|jobs|tasks|projects)|(laundry|washing|clothes) (left )?in the (machine|dryer|washer)|wet laundry|not (put|putting) (it|things|stuff|them) away",
           5
         ],
         [

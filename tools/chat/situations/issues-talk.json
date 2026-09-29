@@ -203,7 +203,7 @@
       "steps_self": ["Fill in a Wiring Card about yourself, on a calm day.", "Sort a recent reaction: was it your lasting wiring, a learned pattern, or just today’s conditions?", "Share one thing from your card with someone close: “If I go quiet, I’m processing, not upset.”"],
       "scripts": {
         "default": ["I think we take in words really differently. Could we both fill in a Wiring Card and swap them? I’d love to know how to say things so they land for you.", "When I go quiet, I’m processing, not upset. If you can give me a few minutes, I’ll come back with a real answer."],
-        "self": ["I’m wired to take things literally, so a direct ask works best for me. It’s not about you.", "I need a bit of quiet to process. Give me ten minutes and I’ll be back."],
+        "self": ["I’m wired a bit differently, so here’s what helps me: a clear, direct ask, and a little time to answer. It’s not about you.", "I need a bit of quiet to process. Give me ten minutes and I’ll be back.", "I’m wired to take things literally, so a direct ask works best for me. It’s not about you."],
         "coworker": ["I work best with requests in writing, with a deadline. Could you drop the details in a message after we talk?"]
       },
       "path": [["The Wiring Card", "/wiring-card.html"], ["Wired Differently", "/wired-differently.html"], ["Know your own wiring", "/know-yourself.html"]],
@@ -227,6 +227,141 @@
       "deeper": ["is it my fault?", "Is it my fault?"],
       "ex": "After her partner snapped at her about the dishes, Dana took ten quiet minutes in the Night Garden and went to bed. The next evening she said: “Last night stung. Can we find a better way to say hard stuff?” Her partner apologized, and they agreed on a pause line they could both use.",
       "tonight": "Do one calming thing, and let everything else wait until tomorrow."
+    },
+    "madatme": {
+      "label": "someone being upset with you",
+      "match": [
+        [
+          "(is|are|s|seems?|got|gets|getting|was|been|so) (so |really |very |pretty |kind of |a bit |a little )?(mad|angry|upset|annoyed|pissed|cross|furious|frustrated|irritated|disappointed) (at|with) me|(mad|angry|upset|annoyed|cross) at me",
+          6
+        ]
+      ],
+      "reflect": "It’s hard when someone you care about is upset with you, especially if you’re not sure what happened or how to fix it.",
+      "going": "This is Pillar III (read your state first) and Pillar IV (tune how you send and receive). When someone is upset with us, it’s tempting to guess, over-explain or defend right away. Asking plainly, listening, and saying back what you heard usually cools things faster than the perfect explanation. Things between two people are rarely one person’s fault, and you can own your part without carrying all of it.",
+      "steps": [
+        "Settle first: a slow breath out, so you can listen instead of defend.",
+        "Ask, don’t guess: “I can tell you’re upset with me. Can you tell me what happened for you?”",
+        "Say back what you heard before you explain your side. If you got something wrong, say sorry for that one specific thing."
+      ],
+      "scripts": {
+        "default": [
+          "I can tell you’re upset with me, and I want to understand. Can you tell me what happened for you? I’ll listen first.",
+          "I think I got something wrong earlier, and I’m sorry for that part. Can we talk about it when you’re ready?"
+        ],
+        "coworker": [
+          "I get the sense something I did bothered you. I’d rather hear it than guess. Do you have a few minutes later?"
+        ],
+        "kid": [
+          "You seem upset with me. I want to hear about it. Do you want to tell me now, or after dinner?"
+        ]
+      },
+      "path": [
+        [
+          "Check-ins: hear it back before you answer",
+          "/check-ins.html"
+        ],
+        [
+          "WP-11: The Calm-Down Kit",
+          "/wp-11.html"
+        ],
+        [
+          "What makes an apology work (Library)",
+          "/library/conflict.html#apology-research"
+        ]
+      ],
+      "deeper": [
+        "what makes an apology work",
+        "What makes a good apology?"
+      ],
+      "ex": "Sam could tell his partner was upset with him but didn’t know why. Instead of guessing, he said: “You seem upset with me. What happened for you?” He had forgotten to text when he was running late. He said back what he heard, apologized for that one thing, and they agreed on a quick “running late” text.",
+      "tonight": "Ask once, gently, what happened for them, and listen before you explain."
+    },
+    "selfinterrupt": {
+      "label": "interrupting, or not listening well",
+      "match": [
+        [
+          "(i|im|i m) (keep |always |often |tend to |sometimes |constantly )?(interrupt*|talk over|cut (people|him|her|them|others|everyone|my [a-z]+) off)|(i|how do i|how can i|how to|help me|want to|need to|trying to|try to) stop (myself )?(from )?interrupt*|(says?|said|thinks?|tells? me|told me|complains?) (that )?(i|im|i m) (never|dont|don t|do not|am not|m not|not|cant|can t) (really |ever )?(listen*|let (him|her|them|people) finish)|i (dont|don t|never|cant|can t) (really |ever )?listen|how (do|can|could) i (be a better listener|listen better)|(be|become) a better listener",
+          8
+        ]
+      ],
+      "reflect": "It’s good that you want to work on this. Jumping in or drifting off happens to lots of people, especially when your mind is quick or busy, and a few small habits can really change it.",
+      "going": "This is Pillar IV, Tune how you send and receive. People have different conversation rhythms: some think out loud and jump in fast, others need a pause to finish a thought. Jumping in often comes from enthusiasm, or from worry that you’ll lose your thought, not from not caring. To the other person, though, it can feel like they weren’t heard. Small habits help more than trying to be perfect.",
+      "steps": [
+        "Keep a way to hold your thought, so you don’t have to say it right away: a word jotted on your phone, or one finger pressed on the table.",
+        "Before you answer, say back one thing you heard: “So the main thing is…”",
+        "If you do cut in, catch it and hand the turn back: “Sorry, I jumped in. Go on.”"
+      ],
+      "scripts": {
+        "default": [
+          "I know I jump in sometimes. It’s not that I don’t care what you’re saying. If I do it, just say “hang on”, and I’ll let you finish.",
+          "Sorry, I cut you off. Go on, I want to hear the rest."
+        ],
+        "coworker": [
+          "I know I can jump in quickly in meetings. If I cut you off, please say so, and I’ll hold my point until you’ve finished."
+        ]
+      },
+      "path": [
+        [
+          "Check-ins: hear it back before you answer",
+          "/check-ins.html"
+        ],
+        [
+          "The Wiring Card",
+          "/wiring-card.html"
+        ],
+        [
+          "Active listening (Library)",
+          "/library/communication.html#active-listening"
+        ]
+      ],
+      "deeper": [
+        "active listening",
+        "What is active listening?"
+      ],
+      "ex": "Jordan kept finishing his partner’s sentences. They agreed on a small signal: she’d touch his arm, and he’d say “Sorry, go on.” He also started jotting a word on his phone when an idea popped up, so he didn’t have to say it right away. Within a couple of weeks, their talks felt calmer.",
+      "tonight": "In one conversation tonight, say back one thing you heard before you answer."
+    },
+    "blunt": {
+      "label": "coming across as blunt",
+      "match": [
+        [
+          "(says?|said|thinks?|tells? me|told me|calls? me|called me|complains?) (that )?(i m|im|i am|i was|i can be|i sound|me) (too |so |really |a bit |kind of |always )?(blunt|harsh|abrupt|cold|too direct|rude|mean|intense|aggressive)|i (come|came|can come) (across|off) (as )?(too |so |really |a bit )?(blunt|harsh|abrupt|cold|direct|rude|mean|intense|aggressive)|(i m|im|i am) (too |so |really )?(blunt|abrupt)",
+          8
+        ]
+      ],
+      "reflect": "It can sting to hear that you come across as blunt, especially when you meant it plainly and kindly.",
+      "going": "This is Pillar IV, Tune how you send and receive. Some people say things directly because that’s the clearest, most honest way for them, and there’s nothing wrong with that. Others hear directness as cold or cross. Neither of you is broken: it’s a mismatch between how the words are sent and how they’re received. A few small softeners, and explaining how you mean things, usually close the gap.",
+      "steps": [
+        "Explain how you mean things, on a calm day: “When I’m direct, I’m being clear, not cross.”",
+        "Add one softener to important asks: a “thanks”, a “when you get a chance”, or the reason behind it.",
+        "Before you send something important, try it in the Signal Translator to see how it may land."
+      ],
+      "scripts": {
+        "default": [
+          "I know I can come across as blunt. I’m being clear, never cold. If something I say lands hard, tell me, and I’ll say it again more gently.",
+          "Let me try that again, more kindly."
+        ]
+      },
+      "path": [
+        [
+          "The Signal Translator",
+          "/signal-translator.html"
+        ],
+        [
+          "The Wiring Card",
+          "/wiring-card.html"
+        ],
+        [
+          "Wired Differently",
+          "/wired-differently.html"
+        ]
+      ],
+      "deeper": [
+        "the double empathy problem",
+        "What is the double empathy problem?"
+      ],
+      "ex": "Alex kept hearing that his texts sounded cold. He added a line to his Wiring Card, “Short means busy, not upset,” and started adding a “thanks!” to requests. His partner said the texts felt warmer, and Alex didn’t have to change how he thinks.",
+      "tonight": "Tell one person how you mean things when you’re direct, in one kind sentence."
     }
   }
 }
