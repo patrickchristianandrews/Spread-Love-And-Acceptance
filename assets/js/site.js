@@ -72,6 +72,7 @@
       { href: '/workpapers/fill/suite.html?road=self', code: 'Workpapers', title: 'Workpapers for you', note: 'The “Just me” road: the worksheets for the self path, in order, fillable and printable' },
       { href: '/quick-checks.html#today', code: 'Daily', title: 'Today’s Weather', note: 'One minute on your own conditions: a forecast, a talk window, what today is good for, and an optional 7-day log of your patterns' },
       { href: '/know-yourself.html', deep: true, code: 'New', title: 'Know your own wiring', note: 'What’s you, what life taught you, and what’s just today, and how to explain each one to others' },
+      { href: '/growing-up.html', deep: true, code: 'New', title: 'Where your lens came from', note: 'How each stage of growing up shapes what you expect of yourself and others, and how to choose which rules to keep' },
       { href: '/wired-differently.html', deep: true, code: 'New', title: 'Wired Differently', note: 'How differently wired people hear the same words, and how to talk across the difference' },
       { href: '/wiring-card.html', code: 'Tool', title: 'Wiring Card', note: 'A one-page card on how you receive words, what silence means, and what to avoid' },
       { href: '/workpapers/wp-02-battery-stress-meter.html', deep: true, code: 'WP-02', title: 'How much are you carrying?', note: 'What you’re already carrying, separate from what just happened', paid: true },

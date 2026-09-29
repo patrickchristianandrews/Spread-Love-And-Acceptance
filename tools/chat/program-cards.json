@@ -3379,6 +3379,60 @@
           "/wp-11.html"
         ]
       ]
+    },
+    {
+      "id": "growing-up",
+      "kind": "tool",
+      "name": "Where your lens came from",
+      "keys": [
+        "where your lens came from",
+        "your lens",
+        "my lens",
+        "developmental stages",
+        "development stages",
+        "stages of development",
+        "stages of growing up",
+        "growing up",
+        "family rulebook",
+        "rulebook from home",
+        "unspoken expectations",
+        "unwritten rules",
+        "lens check"
+      ],
+      "what": "Where your lens came from is a guide to how growing up shapes the adult you. Each stage of development asks a big question (Is the world safe? Am I capable? Where do I belong? Can I be close without losing myself?), and the answers become understandings we carry forward and keep using. Something that happened while you were answering a particular question tends to go deeper. The guide also covers how family, culture, gender scripts, school and screens can hand us a mistaken view of ourselves, of other people, and of what we expect from them.",
+      "how": [
+        "Read the simple version first: nine short ideas and a table of old understandings with fairer readings.",
+        "Write the rulebook from the home you grew up in: how love looked, what happened when someone was upset, how the jobs were split, when rest was okay, what asking for help meant.",
+        "For each rule, ask: do I still want this one?",
+        "When a reaction feels bigger than the moment, try the one-minute lens check: Where did I learn this? How old does this feel? Is it true here, with this person, now? What would the adult me choose?",
+        "With a partner or housemates, swap rulebooks on a calm day, then choose your own rules on purpose, like one owner per job."
+      ],
+      "results": "There’s no score. The point is to notice which understandings you chose and which were handed to you, so you can decide what to keep. It isn’t about blaming anyone: the adults who raised us were working with their own lenses too.",
+      "ex": "Maya felt “It’s always me” every time the kitchen was messy. Writing her rulebook, she saw the rule “whoever notices the mess cleans it” came from her childhood home. She and her partner gave the kitchen one owner each night, and the Sunday fights stopped.",
+      "links": [
+        [
+          "Where your lens came from",
+          "/growing-up.html"
+        ],
+        [
+          "The full guide",
+          "/growing-up-in-depth.html"
+        ],
+        [
+          "The lens check",
+          "/growing-up-in-depth.html#check"
+        ]
+      ],
+      "chips": [
+        [
+          "Why does timing matter?",
+          "Why do experiences at certain ages matter more?"
+        ],
+        [
+          "Know your own wiring",
+          "What is Know your own wiring?"
+        ]
+      ]
     }
   ],
   "clarify": [

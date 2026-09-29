@@ -39,7 +39,7 @@ In many families, people fall into roles: the responsible one, the peacemaker, t
 
 Noticing your old role (and whether you still play it at work or at home) can explain why certain situations feel so heavy.
 
-Program: The Library’s family scripts entry covers habits we carry from our families. Know your own wiring separates learned patterns from wiring.
+Program: The Library’s family scripts entry covers habits we carry from our families. Where your lens came from shows how each stage of growing up shapes roles and expectations, with the rulebook from home to fill in. Know your own wiring separates learned patterns from wiring.
 
 ## Family scripts in daily life
 aka: how we did it growing up; family habits; the way my family did it
