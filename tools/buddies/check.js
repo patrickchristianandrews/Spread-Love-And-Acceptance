@@ -2,7 +2,7 @@
 /* tools/buddies/check.js — checks every Frequency Buddies episode file (assets/js/buddies/s*e*.js).
 
    For each episode it checks the data format against the engine's own vocabulary (scenes, actions, speakers,
-   guests, moods, weather, music, items, props, and the optional 0.5–1.5 `energy` on say beats), flags lines over 140 characters and a few words that don't
+   guests, moods, weather, music, items, props, the optional 0.5–1.5 `energy` on say beats, and each line's `to`: self, both, all, a pal or a guest on stage), flags lines over 140 characters and a few words that don't
    belong in these stories, and estimates the runtime with the player's own calm pacing (the same function the
    player uses: about 13 characters a second, at least 2 seconds a line, a 0.8 second pause after each line and
    a little more after the feeling ones, slow walks, slow scene changes). The runtime must be 13 to 17 minutes.
@@ -58,7 +58,15 @@ for (const file of files) {
     if (b.guest != null) {
       if (b.exit) { if (!onStage.has(b.guest)) errs.push(at + ': ' + b.guest + ' exits but is not on stage'); onStage.delete(b.guest); }
       else { if (onStage.has(b.guest)) errs.push(at + ': ' + b.guest + ' enters but is already on stage'); onStage.add(b.guest); }
-    } else if (b.say != null && !['tidbit', 'sugarfoot', 'narrator'].includes(b.say) && !onStage.has(b.say)) errs.push(at + ': ' + b.say + ' speaks but is not on stage');
+    } else if (b.say != null) {
+      if (!['tidbit', 'sugarfoot', 'narrator'].includes(b.say) && !onStage.has(b.say)) errs.push(at + ': ' + b.say + ' speaks but is not on stage');
+      // `to`: who the line is spoken to. Every pal and guest line has one; the narrator has none.
+      // 'self' (thinking out loud), 'both' (the two pals), 'all' (the whole group), 'tidbit', 'sugarfoot', or a guest on stage now
+      if (b.say === 'narrator') { if ('to' in b) errs.push(at + ': narrator lines take no `to`'); }
+      else if (!('to' in b)) errs.push(at + ': ' + b.say + ' line has no `to` (self, both, all, tidbit, sugarfoot or a guest on stage)');
+      else if (typeof b.to !== 'string' || !(['self', 'both', 'all', 'tidbit', 'sugarfoot'].includes(b.to) || onStage.has(b.to))) errs.push(at + ': to "' + b.to + '" should be self, both, all, tidbit, sugarfoot or a guest on stage now');
+      else if (b.to === b.say) errs.push(at + ': ' + b.say + ' is speaking to herself; use to: \'self\'');
+    }
   }));
   const words = [];
   (ep.chapters || []).forEach((c, ci) => {
