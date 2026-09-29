@@ -99,6 +99,8 @@
     return null;
   }
   function holdOf(b) { return b.hold != null ? Math.max(0, num(b.hold, HOLD)) : HOLD + (EMO_HOLD[b.mood] || 0); }
+  // small gestures don't hold up the conversation: the next line starts while they play
+  var GESTURE = { lookat: 1, wag: 1, laugh: 1, point: 1, wiggle: 1, heart: 1, sparkle: 1, think: 1, shiver: 1, tailtuck: 1, bow: 1, spin: 1, sniff: 1, turnaway: 1, 'rain-drip': 1, cry: 1 };
   function sayTime(b) { var len = String(b.text || '').replace(/[\u{1F000}-\u{1FAFF}☀-➿️]/gu, '').length; return Math.max(MIN_SAY, len / CPS); }
   function whoList(who) { return who === 'both' ? ['tidbit', 'sugarfoot'] : [who || 'tidbit']; }
   // the stage x each character ends up at, so walks can take as long as a calm walk needs
@@ -381,17 +383,42 @@
       if (a.name === 'hug' || a.name === 'nuzzle' || a.name === 'highfive') c.fx = sgn(other(c).x - c.x);
       if (c.guest && a.toX != null) c.x = a.toX;
     }
-    S.endActs = function (force) { all().forEach(function (c) { if (c.act && c.act.name === '_place' && !force) return; commit(c); }); };
+    S.endActs = function (force, keepGestures) { all().forEach(function (c) { if (c.act && c.act.name === '_place' && !force) return; if (keepGestures && c.act && GESTURE[c.act.name]) return; commit(c); }); };
     S.instantAct = function (b) { S.beginAct(b); S.endActs(true); };
 
     // ---------- speaking ----------
-    S.say = function (b, dur) {
+    // who a line is spoken to: 'self' (thinking out loud), the other pal, a guest, or 'both' / 'all'
+    function addressee(b) { var to = b.to; if (!to) { var c0 = get(b.say); return c0 && !c0.guest ? 'pal' : null; } return to; }
+    function walking(c) { var a = c.act; return !!(a && a.toX != null && a.toX !== a.fromX); }
+    function turnTo(c, x) { if (c && !walking(c) && Math.abs(x - c.x) > 0.01) c.fx = sgn(x - c.x); }
+    function faceFor(b) {
+      var c = get(b.say); if (!c) return; var to = addressee(b), o;
+      c.tilt0 = 0;
+      if (to === 'self') { c.tilt0 = 0.14; return; } // head a little down: she's talking to herself
+      if (to === 'pal') o = c.guest ? null : other(c); else if (to === 'both' || to === 'all') o = null; else o = get(to);
+      if (o && o !== c) { turnTo(c, o.x); turnTo(o, c.x); return; }
+      // several listeners: face the middle of the others, and they all look at her
+      var xs = all().filter(function (x) { return x !== c && (to !== 'both' || !x.guest); });
+      if (!xs.length) xs = all().filter(function (x) { return x !== c; });
+      if (xs.length) { var mx = 0; xs.forEach(function (x) { mx += x.x; turnTo(x, c.x); }); turnTo(c, mx / xs.length); }
+    }
+    S.say = function (b, dur, wait) {
       var c = get(b.say);
-      all().forEach(function (x) { x.talk = 0; });
-      if (c) { if (b.mood && MOODS.indexOf(b.mood) >= 0) c.mood = b.mood; c.talkUntil = S.t + dur; c.talk = 1; if (c.sleep) c.sleep = false; }
-      S.bubble = c ? { who: b.say, text: String(b.text || ''), t0: S.t, until: S.t + dur + 999, mood: b.mood || (c && c.mood) } : null;
+      all().forEach(function (x) { x.talk = 0; x.talkFrom = 0; });
+      if (c) { if (b.mood && MOODS.indexOf(b.mood) >= 0) c.mood = b.mood; if (c.sleep) c.sleep = false; if (!wait) { c.talkUntil = S.t + dur; c.talk = 1; } }
+      faceFor(b);
+      S.bubble = c ? { who: b.say, text: String(b.text || ''), to: addressee(b), t0: S.t, until: S.t + dur + 999, mood: b.mood || (c && c.mood), wait: !!wait, vdur: 0 } : null;
     };
-    S.stopTalk = function () { all().forEach(function (x) { x.talk = 0; x.talkUntil = 0; }); };
+    // the recorded voice really starts `delay` seconds from now and lasts `vdur`: words, mouth and bubble follow it
+    S.voiceStart = function (delay, vdur) {
+      var bb = S.bubble, c = bb && get(bb.who), at = S.t + Math.max(0, delay || 0);
+      if (bb) { bb.wait = false; bb.t0 = at; bb.vdur = vdur || 0; }
+      if (c) { c.talk = 0; c.talkFrom = at; c.talkUntil = at + (vdur || 60); }
+    };
+    S.showNow = function () { var bb = S.bubble; if (bb && bb.wait) { bb.wait = false; bb.t0 = S.t; var c = get(bb.who); if (c) { c.talk = 1; c.talkUntil = S.t + 60; } } };
+    S.voiceDone = function (keep) { var bb = S.bubble; if (bb) { bb.vdur = bb.vdur && Math.min(bb.vdur, S.t - bb.t0); if (!keep) bb.until = Math.min(bb.until, S.t + 0.55); } S.stopTalk(); };
+    S.spokenFrac = function () { var bb = S.bubble; if (!bb || bb.wait) return 0; if (!bb.vdur) return 1; return clamp((S.t - bb.t0) / bb.vdur, 0, 1); };
+    S.stopTalk = function () { all().forEach(function (x) { x.talk = 0; x.talkUntil = 0; x.talkFrom = 0; }); };
     S.endSay = function () { if (S.bubble) S.bubble.until = Math.min(S.bubble.until, S.t + 0.25); S.stopTalk(); };
     S.moodOf = function (id, m) { var c = get(id); if (c && MOODS.indexOf(m) >= 0) c.mood = m; };
 
@@ -518,8 +545,9 @@
       var R = S.reduced;
       all().forEach(function (c) {
         var tau = 0.16; c.face += (c.fx - c.face) * (1 - Math.exp(-dt / tau));
+        if (c.talkFrom && S.t >= c.talkFrom) { c.talk = 1; c.talkFrom = 0; } // the mouth moves when the voice does
         if (c.talk && c.talkUntil && S.t > c.talkUntil) c.talk = 0;
-        if (c.act && c.act.name === '_place' && S.t - c.act.t0 >= c.act.dur) commit(c);
+        if (c.act && (c.act.name === '_place' || GESTURE[c.act.name]) && S.t - c.act.t0 >= c.act.dur) commit(c); // little gestures finish on their own
       });
       stepParts(dt);
       if (S.flash > 0) S.flash = Math.max(0, S.flash - dt * 1.6);
@@ -896,15 +924,18 @@
     function faces() { var out = []; all().forEach(function (c) { if (c.headPx) out.push(c.headPx); }); return out; }
     function hits(bx, by, bw, bh, fs2, pad) { for (var i = 0; i < fs2.length; i++) { var f = fs2[i], cx = clamp(f.x, bx, bx + bw), cy = clamp(f.y, by, by + bh); if (Math.hypot(f.x - cx, f.y - cy) < f.r + pad) return true; } return false; }
     function drawBubble(g, W, H, dpr) {
-      var b = S.bubble; if (!b) return;
+      var b = S.bubble; if (!b || b.wait) return;
       var c = get(b.who); if (!c || !c.headPx) return;
+      var self = b.to === 'self', chip = self ? 'to herself' : b.to === 'all' ? 'to everyone' : b.to === 'both' ? (c.guest ? 'to Tidbit and Sugarfoot' : 'to both') : b.to && b.to !== 'pal' && get(b.to) && get(b.to).guest ? 'to ' + (get(b.to).name || b.to) : '';
       var age = S.t - b.t0, fade = clamp((b.until + 0.4 - S.t) / 0.4, 0, 1), pin = S.reduced ? clamp(age / 0.25, 0, 1) : eout(clamp(age / 0.35, 0, 1));
       var cssW = W / dpr, compact = S.compact || cssW < 600, fsz = (compact ? 13 : cssW > 900 ? 17 : 15) * dpr;
       var text = b.text, dots = false;
       if (S.noBubbleText || (compact && text.length > 44)) { dots = true; }
-      g.font = '600 ' + fsz + 'px ' + FONT;
+      g.font = (self ? 'italic 500 ' : '600 ') + fsz + 'px ' + FONT;
       var maxW = Math.min(W * 0.44, 330 * dpr), lines = dots ? ['• • •'] : wrap(g, text, maxW), lh = fsz * 1.28, padX = 12 * dpr, padY = 8 * dpr;
-      var bw = Math.min(maxW, Math.max.apply(null, lines.map(function (l) { return g.measureText(l).width; }))) + padX * 2, bh = lines.length * lh + padY * 2;
+      var chipF = Math.round(fsz * 0.62), chipH = chip ? chipF * 1.5 : 0;
+      var bw = Math.min(maxW, Math.max.apply(null, lines.map(function (l) { return g.measureText(l).width; }))) + padX * 2, bh = lines.length * lh + padY * 2 + chipH;
+      if (chip) { g.save(); g.font = '600 ' + chipF + 'px "IBM Plex Mono", monospace'; bw = Math.max(bw, g.measureText(chip.toUpperCase()).width + padX * 2); g.restore(); }
       var hp = c.headPx, fs2 = faces(), gap = 12 * dpr, best = null;
       var tries = [0, -0.35, 0.35, -0.7, 0.7, -1, 1];
       for (var lift = 0; lift < 4 && !best; lift++) {
@@ -918,14 +949,28 @@
       var sc = 0.85 + 0.15 * pin, cx = best.x + bw / 2, cy = best.y + bh / 2; g.translate(cx, cy); g.scale(sc, sc); g.translate(-cx, -cy);
       var isG = !!c.guest, fill = isG ? '#FFF8E6' : c.id === 'tidbit' ? '#FFFDF8' : '#FDF7FF', stroke = c.id === 'tidbit' ? 'rgba(200,120,60,.7)' : c.id === 'sugarfoot' ? 'rgba(120,96,170,.7)' : 'rgba(120,110,90,.6)';
       g.shadowColor = 'rgba(40,20,60,.18)'; g.shadowBlur = 8 * dpr; g.shadowOffsetY = 2 * dpr;
-      g.fillStyle = fill; g.beginPath(); if (g.roundRect) g.roundRect(best.x, best.y, bw, bh, 14 * dpr); else g.rect(best.x, best.y, bw, bh); g.fill();
-      g.shadowColor = 'transparent'; g.strokeStyle = stroke; g.lineWidth = 1.5 * dpr; g.stroke();
+      if (self) { fill = 'rgba(255,253,248,.82)'; g.shadowBlur = 4 * dpr; }
+      g.fillStyle = fill; g.beginPath(); if (g.roundRect) g.roundRect(best.x, best.y, bw, bh, (self ? bh / 2.4 : 14 * dpr)); else g.rect(best.x, best.y, bw, bh); g.fill();
+      g.shadowColor = 'transparent'; g.strokeStyle = stroke; g.lineWidth = 1.5 * dpr; if (self && g.setLineDash) g.setLineDash([3 * dpr, 4 * dpr]); g.stroke(); if (g.setLineDash) g.setLineDash([]);
+      if (chip) { g.save(); g.font = '600 ' + chipF + 'px "IBM Plex Mono", monospace'; g.fillStyle = stroke; g.textAlign = 'center'; g.textBaseline = 'middle'; g.fillText(chip.toUpperCase(), best.x + bw / 2, best.y + padY * 0.7 + chipH / 2); g.restore(); }
       // the tail points at the speaker's head
       var tx0 = clamp(hp.x, best.x + 16 * dpr, best.x + bw - 16 * dpr), ty0 = best.y + bh - 1, below = hp.y > best.y + bh;
-      if (below) { var tipX = mix(tx0, hp.x, 0.5), tipY = Math.min(hp.y - hp.r * 0.9, ty0 + 14 * dpr); g.fillStyle = fill; g.beginPath(); g.moveTo(tx0 - 7 * dpr, ty0); g.lineTo(tipX, tipY); g.lineTo(tx0 + 7 * dpr, ty0); g.closePath(); g.fill(); g.strokeStyle = stroke; g.beginPath(); g.moveTo(tx0 - 7 * dpr, ty0 + 0.5); g.lineTo(tipX, tipY); g.lineTo(tx0 + 7 * dpr, ty0 + 0.5); g.stroke(); }
+      if (below && self) { // murmur: two little dots instead of a pointing tail
+        [[0.35, 3.2], [0.7, 2.2]].forEach(function (k) { g.beginPath(); g.arc(mix(tx0, hp.x, k[0]), mix(ty0, hp.y - hp.r * 0.9, k[0]), k[1] * dpr, 0, TAU); g.fillStyle = fill; g.fill(); g.strokeStyle = stroke; g.stroke(); });
+      } else if (below) { var tipX = mix(tx0, hp.x, 0.5), tipY = Math.min(hp.y - hp.r * 0.9, ty0 + 14 * dpr); g.fillStyle = fill; g.beginPath(); g.moveTo(tx0 - 7 * dpr, ty0); g.lineTo(tipX, tipY); g.lineTo(tx0 + 7 * dpr, ty0); g.closePath(); g.fill(); g.strokeStyle = stroke; g.beginPath(); g.moveTo(tx0 - 7 * dpr, ty0 + 0.5); g.lineTo(tipX, tipY); g.lineTo(tx0 + 7 * dpr, ty0 + 0.5); g.stroke(); }
       g.fillStyle = '#3C3350'; g.textAlign = 'center'; g.textBaseline = 'middle';
       if (dots) { var n = Math.floor(S.t * 3) % 3; g.fillText(['•  ·  ·', '·  •  ·', '·  ·  •'][S.reduced ? 0 : n], best.x + bw / 2, best.y + bh / 2); }
-      else lines.forEach(function (l, k) { g.fillText(l, best.x + bw / 2, best.y + padY + lh * (k + 0.5)); });
+      else {
+        // words light up as they're spoken, so the text keeps pace with the voice
+        var fr = S.spokenFrac(), all2 = lines.join(' ').split(' '), wts = all2.map(function (w) { return w.length + 1.5 + (/[,.;:!?…—]$/.test(w) ? 3 : 0); }), tot = wts.reduce(function (a, x) { return a + x; }, 0), acc = 0, lit = [];
+        for (var wi = 0; wi < all2.length; wi++) { lit.push(fr >= 1 || (acc + wts[wi] * 0.35) / tot <= fr); acc += wts[wi]; }
+        var ink = self ? '#5A4F70' : '#3C3350', wn = 0, top = best.y + padY + chipH;
+        lines.forEach(function (l, k) {
+          var ws = l.split(' '), sp = g.measureText(' ').width, lw = g.measureText(l).width, x = best.x + bw / 2 - lw / 2, y = top + lh * (k + 0.5);
+          g.textAlign = 'left';
+          ws.forEach(function (w) { g.globalAlpha = fade * clamp(pin * 1.3, 0, 1) * (lit[wn] ? 1 : 0.38); g.fillStyle = ink; g.fillText(w, x, y); x += g.measureText(w).width + sp; wn++; });
+        });
+      }
       g.restore();
     }
     function drawThink(g, W, H, dpr) {
@@ -1050,19 +1095,29 @@
       }
     }
     function begin(i) {
-      D.i = i; D.u = 0; D.voice = false; D.voiceEnd = null;
+      D.i = i; D.u = 0; D.voice = false; D.voiceEnd = null; D.vdur = 0; D.vAt = 0; D.shown = true;
       var fb = F.beats[i]; if (!fb) { D.ended = true; D.playing = false; stage.endActs(); stage.endSay(); call('onEnd'); return; }
       var b = fb.b, k = kindOf(b);
       if (fb.ch !== D.ch) { D.ch = fb.ch; call('onChapter', fb.ch); }
-      stage.endActs();
+      stage.endActs(false, k === 'say');
       D.dur = fb.dur;
       switch (k) {
         case 'title': stage.showTitle(true); call('onCaption', '', ''); call('onMusic', 'title'); break;
         case 'say':
-          var st = sayTime(b); stage.say(b, st); call('onCaption', b.say, b.text, b);
-          if (call('speak', b, function (ok) { if (D.i === i && D.voice) { D.voiceEnd = ok === false ? null : D.u; if (ok === false) D.voice = false; stage.stopTalk(); } })) { D.voice = true; var c = stage.get(b.say); if (c) c.talkUntil = stage.t + 60; }
+          var st = sayTime(b); stage.say(b, st, true);
+          var cb = function (ok) {
+            if (D.i !== i || !D.voice) return;
+            D.voiceEnd = ok === false ? null : D.u; if (ok === false) D.voice = false;
+            var nx = F.beats[i + 1]; stage.voiceDone(nx && kindOf(nx.b) === 'say');
+          };
+          D.shown = false;
+          cb.start = function (delay, vdur) { if (D.i !== i || D.shown) return; D.shown = true; D.vAt = D.u + Math.max(0, delay || 0); D.vdur = vdur || 0; stage.voiceStart(delay, vdur); call('onCaption', b.say, b.text, b, delay, vdur); };
+          if (call('speak', b, cb)) D.voice = true;
+          else { D.shown = true; stage.showNow(); call('onCaption', b.say, b.text, b); }
           break;
-        case 'act': D.dur = stage.beginAct(b); call('onAct', b); break;
+        case 'act': D.dur = stage.beginAct(b); call('onAct', b);
+          var nb = F.beats[i + 1]; if (GESTURE[b.act] && nb && kindOf(nb.b) === 'say') D.dur = Math.min(D.dur, b.act === 'laugh' ? 0.9 : 0.45);
+          break;
         case 'scene':
           var same = b.scene === stage.scene, cv = call('canvas');
           if (cv && i > 1) stage.transition(cv, same || stage.reduced || b.scene === 'blank' || stage.scene === 'blank' ? 'fade' : 'pan');
@@ -1081,8 +1136,17 @@
     }
     function done() {
       var fb = F.beats[D.i]; if (!fb) return true; var b = fb.b;
+      if (kindOf(b) === 'say' && !D.shown && D.u > 1.2) { D.shown = true; stage.showNow(); call('onCaption', b.say, b.text, b); } // the voice is slow to start: show the words anyway
       if (kindOf(b) === 'say' && D.voice) {
-        if (D.voiceEnd != null) return D.u >= D.voiceEnd + Math.max(0.3, holdOf(b) * 0.55); // spoken lines flow like real talk
+        if (D.voiceEnd != null) {
+          var nx = F.beats[D.i + 1], nxb = nx && nx.b, gap = Math.max(0.3, holdOf(b) * 0.55);
+          if (nxb && nxb.say && nxb.say !== b.say) { // the other one answers
+            gap = /excited|silly|surprised|happy/.test(b.mood + ' ' + nxb.mood) ? 0.16 : b.mood === 'sad' || nxb.mood === 'sad' || b.mood === 'sleepy' ? 0.45 : 0.24;
+            if (b.say === 'narrator' || nxb.say === 'narrator') gap = Math.max(gap, 0.4);
+          } else if (nxb && nxb.say === b.say) gap = Math.min(gap, 0.35); // she keeps talking
+          if (b.hold != null && b.hold >= 1.2) gap = Math.max(gap, 0.6); // a written pause stays a pause
+          return D.u >= D.voiceEnd + gap;
+        }
         return D.u > sayTime(b) * 2.4 + holdOf(b) + 4; // the voice never said it had finished: move on anyway
       }
       return D.u >= D.dur;
@@ -1110,6 +1174,7 @@
     D.seekChapter = function (ch) { ch = clamp(ch, 0, F.chapterStart.length - 1); D.seek(ch === 0 ? 0 : F.chapterStart[ch]); };
     D.seekTime = function (t) { var k = 0; for (var i = 0; i < F.beats.length; i++) if (F.beats[i].start <= t) k = i; D.seek(k); };
     D.time = function () { var fb = F.beats[D.i]; return fb ? fb.start + Math.min(D.u, fb.dur) : F.total; };
+    D.voiceFrac = function () { if (D.voiceEnd != null || !D.voice) return 1; if (!D.vdur) return D.shown ? 1 : 0; return clamp((D.u - D.vAt) / D.vdur, 0, 1); };
     D.chapterAt = function () { var fb = F.beats[D.i]; return fb ? fb.ch : F.chapterStart.length - 1; };
     D.chapterTime = function (ch) { var s = F.chapterStart[ch]; return ch === 0 ? 0 : F.beats[s] ? F.beats[s].start : F.total; };
     D.restartLine = function () { var fb = F.beats[D.i]; if (fb && kindOf(fb.b) === 'say') begin(D.i); };
@@ -1261,6 +1326,7 @@
     u.pitch = clamp(P.pitch || 1, 0.1, 2); u.rate = clamp(P.rate || 1, 0.5, 1.6); u.volume = 1;
     if (who === 'narrator' && b.mood === 'excited') u.rate = 1.0;
     var fired = false; function end(ok) { if (fired || tok !== VO.token) return; fired = true; cb(ok); }
+    u.onstart = function () { if (tok === VO.token && cb.start) cb.start(0, sayTime(b) * 1.15); };
     u.onend = function () { end(true); }; u.onerror = function (e) { end(e && (e.error === 'interrupted' || e.error === 'canceled') ? true : false); };
     VO.cur = u; // held, so the browser doesn't lose it before it ends
     try { if (window.speechSynthesis.speaking || window.speechSynthesis.pending) window.speechSynthesis.cancel(); window.speechSynthesis.speak(u); } catch (e) { return false; }
@@ -1327,6 +1393,7 @@
       var fx = fxPick(b), at = c.currentTime + 0.03;
       if (fx) { var f = c.createBufferSource(); f.buffer = fx; f.connect(CL.gain); try { f.start(at); } catch (e) {} at += fx.duration + 0.12; }
       var s = c.createBufferSource(); s.buffer = buf; s.connect(CL.gain);
+      if (cb.start) cb.start(at - c.currentTime, buf.duration);
       s.onended = function () { if (tok !== CL.token) return; CL.src = null; cb(true); };
       CL.src = s; try { s.start(at); } catch (e) { cb(false); }
       if (AU.mus) { try { AU.mus.gain.setTargetAtTime(0.36, c.currentTime, 0.15); } catch (e) {} } // the music steps back while she talks
@@ -1373,7 +1440,8 @@
     '.fb-player .fb-cap{margin:0;max-width:none;width:100%;box-sizing:border-box;min-height:4.1em;display:flex;align-items:center;justify-content:center;flex-direction:column;padding:.55rem .9rem;border-radius:14px;background:rgba(0,0,0,.34);text-align:center;font:500 1.14rem/1.4 Fraunces,Georgia,serif;color:#FFFDF6;text-wrap:balance}' +
     '.fb-cap .fb-who{display:block;font:600 .78rem/1.3 "IBM Plex Mono",monospace;letter-spacing:.06em;text-transform:uppercase;margin-bottom:.1rem}' +
     '.fb-cap[data-who="tidbit"] .fb-who{color:#FFC48A}.fb-cap[data-who="sugarfoot"] .fb-who{color:#D7C4FF}.fb-cap[data-who="narrator"] .fb-who{color:#BFE3D6}.fb-cap .fb-who.is-guest{color:#FFE08A}' +
-    '.fb-cap[data-who="narrator"] .fb-line,.fb-cap[data-who="scene"] .fb-line{font-style:italic}' +
+    '.fb-cap[data-who="narrator"] .fb-line,.fb-cap[data-who="scene"] .fb-line,.fb-cap.is-self .fb-line{font-style:italic}.fb-cap.is-self .fb-line{opacity:.88}' +
+    '.fb-line span{transition:opacity .12s linear}.fb-line .fb-soon{opacity:.42}@media (prefers-reduced-motion:reduce){.fb-line span{transition:none}}' +
     '@media (max-width:600px){.fb-cap{font-size:1.02rem;min-height:4.6em;padding:.45rem .6rem}}' +
     '.fb-prog{display:flex;align-items:center;gap:.7rem;padding:0 .2rem}' +
     '.fb-track{position:relative;flex:1;height:10px;border-radius:99px;background:rgba(255,255,255,.16);cursor:pointer;touch-action:none}' +
@@ -1496,8 +1564,32 @@
     function setCaption(who, text, b) {
       capEl.setAttribute('data-who', who || '');
       var nm = who === 'scene' ? '' : who === 'narrator' ? 'Narrator' : PALS[who] ? PALS[who].name : GUESTS[who] ? (P.stage && P.stage.guests[who] ? P.stage.guests[who].name : GUESTS[who].name) : '';
-      whoEl.textContent = nm; whoEl.className = 'fb-who' + (GUESTS[who] ? ' is-guest' : ''); lineEl.textContent = text || '';
-      if (!P.voices && text) live.textContent = (nm ? nm + ': ' : '') + text;
+      // who she's talking to: herself, her pal, a guest, or everyone
+      var to = b && b.to, toNm = '';
+      if (to === 'self') toNm = 'to herself';
+      else if (to === 'all') toNm = 'to everyone';
+      else if (to === 'both') toNm = PALS[who] ? 'to both' : 'to Tidbit and Sugarfoot';
+      else if (to && who !== 'narrator') toNm = 'to ' + (PALS[to] ? PALS[to].name : P.stage && P.stage.guests[to] ? P.stage.guests[to].name : GUESTS[to] ? GUESTS[to].name : to);
+      whoEl.textContent = nm + (nm && toNm ? ' · ' + toNm : ''); whoEl.className = 'fb-who' + (GUESTS[who] ? ' is-guest' : '');
+      capEl.classList.toggle('is-self', to === 'self');
+      lineEl.textContent = '';
+      P.capWords = []; P.capLit = -1;
+      String(text || '').split(/(\s+)/).forEach(function (w) {
+        if (!w) return; if (/^\s+$/.test(w)) { lineEl.appendChild(document.createTextNode(w)); return; }
+        var sp = document.createElement('span'); sp.textContent = w; lineEl.appendChild(sp); P.capWords.push(sp);
+      });
+      P.capTimed = !!(b && who !== 'scene' && P.voices && P.rate === 1);
+      capLight();
+      if (!P.voices && text) live.textContent = (nm ? nm + (toNm ? ', ' + toNm : '') + ': ' : '') + text;
+    }
+    // the caption keeps pace with the voice: spoken words are bright, the rest wait a little dimmer
+    function capLight() {
+      var ws = P.capWords || []; if (!ws.length) return;
+      var fr = P.capTimed && P.dir ? P.dir.voiceFrac() : 1, n = ws.length;
+      var wts = ws.map(function (sp) { var w = sp.textContent; return w.length + 1.5 + (/[,.;:!?…—]$/.test(w) ? 3 : 0); }), tot = wts.reduce(function (a, x) { return a + x; }, 0), acc = 0, lit = 0;
+      for (var i = 0; i < n; i++) { if (fr >= 1 || (acc + wts[i] * 0.35) / tot <= fr) lit = i + 1; acc += wts[i]; }
+      if (lit === P.capLit) return; P.capLit = lit;
+      ws.forEach(function (sp, i) { sp.className = i < lit ? '' : 'fb-soon'; });
     }
     var hooks = {
       canvas: function () { return cv; },
@@ -1530,7 +1622,7 @@
       var dt = P.last ? (now - P.last) / 1000 : 0.016; P.last = now; dt = clamp(dt, 0, 0.06);
       try { P.dir.tick(dt * P.rate); } catch (e) { P.errors++; if (window.console) console.error('buddies tick', e); }
       if (P.one && !P.dir.ended && P.dir.chapterAt() !== P.oneCh) { chapterBreak(P.dir.chapterAt()); return; }
-      paint(dt * P.rate); progress();
+      paint(dt * P.rate); progress(); capLight();
     }
     function chMins(i) { var e = estimate(P.ep).chapters[i]; return e ? Math.max(1, Math.round(e.dur / 60)) : 2; }
     function oneLabel(i) { var n = chMins(i); return 'Watch one chapter (about ' + n + ' minute' + (n === 1 ? '' : 's') + ')'; }
