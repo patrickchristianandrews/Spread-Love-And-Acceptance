@@ -113,7 +113,7 @@
   function act(a) {
     if (!a || a.interlude) return;
     if (Math.random() < 0.22) { var w = Math.random() < 0.5 ? 0 : 1; if (Math.random() < 0.35) chat(w); else bark(w, 0.8, false, 0.4); return; } // a happy bark to start
-    if (Math.random() < 0.5) return; // plenty of activities stay quiet
+    if (Math.random() < 0.3) return; // some activities stay quiet
     var key = (a.id + ' ' + (a.name || '')).toLowerCase(), g = null;
     for (var i = 0; i < ACT_SOUNDS.length && !g; i++) if (ACT_SOUNDS[i][0].test(key)) g = ACT_SOUNDS[i][1];
     play(g || BY_KIND[a.kind] || 'stack', 0.6, false, 0.5);
@@ -122,9 +122,9 @@
   function tick(dt, running) {
     if (!running || !enabled || held) return;
     clockMs += dt;
-    if (!nextAmb) nextAmb = clockMs + 8000 + Math.random() * 6000;
+    if (!nextAmb) nextAmb = clockMs + 5000 + Math.random() * 4000;
     if (clockMs < nextAmb) return;
-    nextAmb = clockMs + 15000 + Math.random() * 14000;
+    nextAmb = clockMs + 8000 + Math.random() * 8000; // a gentle, steady rhythm even at the calmer pace
     var r = Math.random(), w = Math.random() < 0.5 ? 0 : 1;
     if (r < 0.55) bark(w, 0.72); else if (r < 0.8) chat(w); else play(pick(['stack', 'clink', 'flip', 'bling']), 0.5);
   }

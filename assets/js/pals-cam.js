@@ -22,7 +22,7 @@
   // calmer. It scales activity and travel timing (walks, runs, hops, spins), tail wags, particle drift and the
   // clouds. DWELL is a short rest (ms) after each activity before the pals move on to the next one.
   // Next, Surprise and the tricks still start straight away.
-  var PACE = 0.78, DWELL = 700;
+  var PACE = 0.62, DWELL = 1500; // calm and easy to follow, still playful
   var RM0 = !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches), RM = RM0, SPEED = PACE, PMAX = 140;
   function stillNow() { return !!((window.TOLStill && window.TOLStill.on()) || document.documentElement.classList.contains('tol-still')); }
   function motionMode() { RM = RM0 || stillNow(); SPEED = (RM ? 0.72 : 1) * PACE; PMAX = RM ? 50 : 140; if (typeof A !== 'undefined' && A) { A.R = RM; AO.R = RM; AP.R = RM; AT.R = RM; } }
@@ -1138,7 +1138,7 @@
     liveEl = ov.querySelector('.pc-live'); factLists = ov.querySelectorAll('.pc-fl');
     badge = ov.querySelector('.pc-badge'); tallyN = ov.querySelector('.pc-n'); tallyTot = ov.querySelector('.pc-tot'); chips = ov.querySelector('.pc-chips'); btnPause = ov.querySelector('.pc-pause');
     ov.querySelector('.pc-x').addEventListener('click', close);
-    ov.querySelector('.pc-mus').addEventListener('click', function () { primeSound(); var go = function () { if (MUS()) { MUS().toggle(); if (setting) MUS().scene(setting.id); } syncMusBtn(); }; if (MUS()) go(); else if (musP) musP.then(go); });
+    ov.querySelector('.pc-mus').addEventListener('click', function () { primeSound(); var go = function () { if (MUS()) { MUS().toggle(); if (setting) MUS().scene(setting.id); } syncMusBtn(); ambSync(); }; if (MUS()) go(); else if (musP) musP.then(go); });
     ov.querySelector('.pc-snd').addEventListener('click', function () { quietHold = false; primeSound(); if (SND()) SND().toggle(); else { try { localStorage.setItem('tol-palcam-sound', soundOn() ? 'off' : 'on'); } catch (e) {} } ambSync(); syncSndBtn(); hideNote(false); });
     ov.querySelector('.pc-snote-ok').addEventListener('click', function () { hideNote(true); });
     ov.querySelector('.pc-snote-off').addEventListener('click', function () { primeSound(); if (SND()) SND().set(false); else { try { localStorage.setItem('tol-palcam-sound', 'off'); } catch (e) {} } syncSndBtn(); hideNote(true); });

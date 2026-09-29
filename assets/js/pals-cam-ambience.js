@@ -27,7 +27,7 @@
     rainy: DAY_NIGHT([['rain', 0.55]]), bakery: DAY_NIGHT([['cafe', 0.35]]), library: DAY_NIGHT([['cafe', 0.12]]),
     underwater: DAY_NIGHT([['underwater', 0.5]]), aquarium: DAY_NIGHT([['underwater', 0.4]])
   };
-  var FADE_IN = 3, FADE_OUT = 2, MASTER = 0.55;
+  var FADE_IN = 3, FADE_OUT = 2, FULL = 0.9, UNDER_MUSIC = 0.55; // fuller on their own, a little under the music when it plays
   var bufs = {}, cur = [], gen = 0, sceneId = null, hour = 12, on = true, paused = false, out = null;
   function ctx() { return window.__pcAudio || null; }
   function isNight(h) { return h < 6 || h >= 20.5; }
@@ -42,7 +42,9 @@
   }
   function bus() {
     var c = ctx(); if (!c) return null;
-    if (!out) { out = c.createGain(); out.gain.value = MASTER; out.connect(c.destination); }
+    if (!out) { out = c.createGain(); out.gain.value = FULL; out.connect(c.destination); }
+    var M = window.TOLPalsCamMusic, lv = M && M.on() && M.has(sceneId) ? UNDER_MUSIC : FULL;
+    try { out.gain.setTargetAtTime(lv, c.currentTime, 0.6); } catch (e) { out.gain.value = lv; }
     return out;
   }
   function stopAll(secs) {
