@@ -133,7 +133,14 @@
       var inp = document.createElement('input');
       inp.type = 'number'; inp.min = '0'; inp.step = kind === 'job' ? '0.5' : '0.01'; inp.inputMode = 'decimal';
       inp.value = item.v[i] || 0;
-      inp.addEventListener('input', function () { item.v[i] = num(inp.value); markEdited(); recalc(); });
+      inp.addEventListener('input', function () {
+        // a negative number, or more hours than a week has, is left out and said so (never quietly zeroed)
+        var raw = inp.value, n = parseFloat(raw), bad = raw !== '' && (!isFinite(n) || n < 0 || (kind === 'job' && n > 168));
+        if (bad) inp.setAttribute('aria-invalid', 'true'); else inp.removeAttribute('aria-invalid');
+        item.v[i] = bad ? 0 : num(raw);
+        if (bad) status(n < 0 ? (kind === 'job' ? 'Hours' : 'Amounts') + ' can’t be negative, so ' + raw + ' is left out.' : raw + ' hours is more than a week has (168), so it is left out. Were they minutes?');
+        markEdited(); recalc();
+      });
       lab.appendChild(sp); lab.appendChild(inp);
       amts.appendChild(lab);
     });
@@ -177,7 +184,8 @@
   }
   function pcts(t) {
     var sum = t.reduce(function (a, b) { return a + b; }, 0);
-    return t.map(function (x) { return sum > 0 ? x / sum * 100 : 100 / t.length; });
+    // no hours yet means empty glasses, not an even split
+    return t.map(function (x) { return sum > 0 ? x / sum * 100 : 0; });
   }
 
   function hoursSentence() {
@@ -209,11 +217,11 @@
   }
 
   function recalc() {
-    var t = totals(state.jobs), p = pcts(t);
+    var t = totals(state.jobs), p = pcts(t), any = t.some(function (x) { return x > 0; });
     var wraps = document.querySelectorAll('#glasses .ls-gwrap');
     wraps.forEach(function (w, i) {
-      w.querySelector('.ls-juice').style.height = Math.max(4, p[i] * 0.92) + '%';
-      w.querySelector('.ls-pct').textContent = Math.round(p[i]) + '%';
+      w.querySelector('.ls-juice').style.height = (any ? Math.max(4, p[i] * 0.92) : 0) + '%';
+      w.querySelector('.ls-pct').textContent = any ? Math.round(p[i]) + '%' : '—';
       w.querySelector('.ls-gname').textContent = nameOf(i) + ' · ' + r1(t[i]) + 'h';
     });
     $('balance-line').textContent = hoursSentence();

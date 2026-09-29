@@ -165,7 +165,7 @@
     if (!p) missing.push('Invite the other person. The read always needs both of you.');
     else {
       if (!mine) missing.push('Fill in your battery check (WP-02).');
-      if (!theirs) missing.push('Waiting on ' + p.display_name + '\u2019s saturation check.');
+      if (!theirs) missing.push('Waiting on ' + p.display_name + '\u2019s load check.');
     }
 
     var solvency = missing.length === 0 ? wb * 0.4 + oc * 0.35 + (1 - as) * 0.25 : null;
@@ -776,10 +776,10 @@
   /* ------------------------------------------------------------------ */
 
   var SECTIONS = [
-    ['solvency', 'Solvency Read'],
+    ['solvency', 'Can the load last?'],
     ['register', 'The Lemonade Stand'],
-    ['battery', 'Battery & Stress Meter'],
-    ['treaty', 'RACI Treaty'],
+    ['battery', 'How much are you carrying?'],
+    ['treaty', 'One owner per job'],
     ['state', 'Check Your State'],
     ['close', 'Close the Books'],
     ['household', 'Household & Account']
@@ -822,18 +822,18 @@
     if (weekClosed()) badgeHtml = badge('planned', 'Closed');
 
     el.innerHTML =
-      sectionHead('This Week', 'Solvency Read',
+      sectionHead('This Week', 'Can the load last?',
         'The three inputs below, pulled into one number for ' + esc(fmtWeek(S.weekStart).replace('Week of ', 'the week of ')) +
         '. It scores how the workload is set up, never either person.') +
-      phase('P(Solvency)', badgeHtml,
+      phase('This week\u2019s read', badgeHtml,
         '<div class="db-scroll"><table class="db-read-ledger">' +
           '<thead><tr><th scope="col">Input</th><th scope="col">Score</th><th scope="col">Weight</th><th scope="col">Amount</th></tr></thead>' +
           '<tbody>' +
             line('Workload balance', r.wb, 0.40, r.total > 0 ? round1(r.total) + ' hours logged' : 'No hours yet') +
             line('Ownership clarity', r.oc, 0.35, ocNote) +
-            line('1 \u2212 autonomic saturation', r.as !== null ? 1 - r.as : null, 0.25, asNote) +
+            line('1 \u2212 how much you\u2019re both carrying', r.as !== null ? 1 - r.as : null, 0.25, asNote) +
           '</tbody>' +
-          '<tfoot><tr><th scope="row" colspan="3">P(Solvency)</th>' +
+          '<tfoot><tr><th scope="row" colspan="3">The read (0 to 1)</th>' +
             '<td class="db-read-total ' + (band ? 'is-' + band.cls : 'is-pending') + '">' + (r.solvency !== null ? fix2(r.solvency) : '\u2014') + '</td>' +
           '</tr></tfoot>' +
         '</table></div>' +
@@ -1009,14 +1009,14 @@
     }
 
     el.innerHTML =
-      sectionHead('WP-02', 'The Battery &amp; Stress Meter',
+      sectionHead('WP-02', 'How much are you carrying?',
         'Score how the last 24\u201348 hours have actually gone for you, from 0 (not at all) to 4 (very true). Fill it in about yourself only, never about the other person.') +
       phase('Your check-in', mine ? badge('live', 'Complete') : badge('progress', 'Not yet'),
         '<div class="db-asi">' + rows + '</div>' +
         (myScore !== null
           ? '<p class="db-asi-result"><span class="db-asi-score">' + fix2(myScore) + '</span> ' + esc(asiReading(myScore)) + '</p>'
           : '<p class="db-muted db-asi-result">Answer all five to get your battery score.</p>') +
-        '<p class="db-fine">The other person can see your check-in. It goes into the battery (saturation) line of the Solvency Read.</p>') +
+        '<p class="db-fine">The other person can see your check-in. It goes into the \u201chow much you\u2019re carrying\u201d line of this week\u2019s read.</p>') +
       phase(p ? esc(p.display_name) + '\u2019s check-in' : 'Partner\u2019s check-in', partnerBadge, partnerBody);
 
     if (closed) return;
@@ -1076,7 +1076,7 @@
       : badge('progress', (S.raci.length - r.withBoth) + ' unowned');
 
     el.innerHTML =
-      sectionHead('WP-03', 'RACI Treaty',
+      sectionHead('WP-03', 'One owner per job',
         'One Responsible (does it) and one Accountable (notices if it didn\u2019t get done) for every regular task. The treaty carries over from week to week. Change it together at the weekly close, never quietly.') +
       phase('The treaty', '<span id="raci-badge">' + badgeHtml + '</span>',
         (S.raci.length

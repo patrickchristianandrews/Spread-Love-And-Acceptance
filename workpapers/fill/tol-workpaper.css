@@ -422,6 +422,8 @@ html.ws-locked .tol-breathe-btn, html.ws-locked .tol-wx{ visibility: hidden; }
   .wpf-keep, .wpf-person-x, .wpf-people-actions, .ws-name-x, .ws-names-more{ display: none !important; }
 }
 
+.wpf-tech{ display: block; margin-top: .25em; font-size: .42em; font-weight: 400; font-style: italic; letter-spacing: 0; color: var(--ink-soft, #524B3E); }
+
 /* ---------- numbers outside their range, word chips, the task library, examples ---------- */
 .wpf-form input[aria-invalid="true"]{ border-color: var(--debit, #96412B); background: #FFF4F1; }
 .wpf-range{ display: block; margin-top: 4px; font-size: .82em; line-height: 1.35; color: var(--debit, #96412B); }
