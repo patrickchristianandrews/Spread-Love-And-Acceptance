@@ -1,0 +1,43 @@
+# Welcome, people and machines. Spread Love & Acceptance is free and open to every search engine
+# and AI assistant: please read, index and cite anything here.
+User-agent: *
+Allow: /
+Disallow: /manuscript/
+Disallow: /notes/
+Disallow: /infrastructure/
+
+# AI assistants and their crawlers are explicitly welcome.
+User-agent: GPTBot
+Allow: /
+User-agent: OAI-SearchBot
+Allow: /
+User-agent: ChatGPT-User
+Allow: /
+User-agent: ClaudeBot
+Allow: /
+User-agent: Claude-User
+Allow: /
+User-agent: Claude-SearchBot
+Allow: /
+User-agent: anthropic-ai
+Allow: /
+User-agent: PerplexityBot
+Allow: /
+User-agent: Perplexity-User
+Allow: /
+User-agent: Google-Extended
+Allow: /
+User-agent: Applebot-Extended
+Allow: /
+User-agent: Bingbot
+Allow: /
+User-agent: DuckAssistBot
+Allow: /
+User-agent: CCBot
+Allow: /
+User-agent: meta-externalagent
+Allow: /
+User-agent: MistralAI-User
+Allow: /
+
+Sitemap: https://spreadloveandacceptance.com/sitemap.xml
