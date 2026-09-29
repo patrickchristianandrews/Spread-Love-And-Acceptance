@@ -54,7 +54,7 @@
     clearTimeout(sayTimer);
     sayTimer = setTimeout(function () { el.textContent = msg; }, 30);
   }
-  function reg() { return FP.build(S.data.road, S.data.people, FP.namesOf(S.data)); }
+  function reg() { return FP.regOf(S.data); }
   function show(id) { ['fp-preview', 'fp-form', 'fp-report'].forEach(function (x) { $(x).hidden = x !== id; }); }
   function scrollTo(el) { if (el && el.scrollIntoView) el.scrollIntoView({ behavior: reduced() ? 'auto' : 'smooth', block: 'start' }); }
   function reduced() { return global.matchMedia && global.matchMedia('(prefers-reduced-motion: reduce)').matches; }
@@ -276,7 +276,14 @@
     if (page.intro) sec.appendChild(h('p', { className: 'fp-intro', text: page.intro }));
     page.blocks.forEach(function (b) {
       if (b.kind === 'note') { sec.appendChild(h('p', { className: 'fp-note', text: b.text })); return; }
-      if (b.kind === 'steps') { var ol = h('ol', { className: 'fp-howto' }); b.lines.forEach(function (t) { ol.appendChild(h('li', { text: t.replace(' (spreadloveandacceptance.com/workpapers/fill/suite.html)', ' (this page)') })); }); sec.appendChild(h('h4', { className: 'fp-h4', text: 'How to bring the PDF back' })); sec.appendChild(ol); return; }
+      if (b.kind === 'steps') {
+        // on the website there is no PDF to bring back: say what the buttons below do instead
+        var ol = h('ol', { className: 'fp-howto' });
+        ['Press \u201cMake my report\u201d below. It is made right here, in your browser, and nothing is sent anywhere.',
+          'To stop and come back later, press \u201cSave my progress\u201d. It downloads a small file; open it here next time with \u201cUpload your filled package\u201d.',
+          'Prefer to finish in a PDF app? \u201cDownload my answers as a PDF\u201d gives you the package with everything you typed already in the boxes.'].forEach(function (t) { ol.appendChild(h('li', { text: t })); });
+        sec.appendChild(h('h4', { className: 'fp-h4', text: 'When you\u2019re ready' })); sec.appendChild(ol); return;
+      }
       if (b.kind === 'derived') {
         var d = h('div', { className: 'fp-derived' }, [h('p', { className: 'fp-derived-k', text: 'Worked out for you' })]);
         var live = liveLines(page);
@@ -299,10 +306,14 @@
           blk.appendChild(fs2);
         });
       } else if (b.kind === 'grid' || b.kind === 'cards') {
-        var rows = b.rows, days = b.kind === 'grid' && rows.length > 12;
-        if (days) {
+        var rows = b.rows, long = b.kind === 'grid' && rows.length > 12, byDay = long && /\.day$/.test(rows[0].fields[0].id);
+        if (long) {
+          // day-by-day tables fold by day; other long tables fold in tens ("Rows 11 to 14")
           var groups = [], cur = null;
-          rows.forEach(function (r, i) { var k = val(r.fields[0].name) || ('Rows ' + (i + 1)); if (!cur || cur.k !== k) { cur = { k: k, rows: [] }; groups.push(cur); } cur.rows.push([r, i]); });
+          rows.forEach(function (r, i) {
+            var k = byDay ? (val(r.fields[0].name) || 'Other rows') : 'Rows ' + (Math.floor(i / 10) * 10 + 1) + ' to ' + Math.min(rows.length, Math.floor(i / 10) * 10 + 10);
+            if (!cur || cur.k !== k) { cur = { k: k, rows: [] }; groups.push(cur); } cur.rows.push([r, i]);
+          });
           groups.forEach(function (gr, gi) {
             var det = h('details', { className: 'fp-day', open: gi === 0 ? 'open' : null }, [h('summary', { text: gr.k })]);
             gr.rows.forEach(function (x) { det.appendChild(rowBox(x[0], x[1], b)); });
@@ -321,8 +332,8 @@
     ]));
     box.appendChild(h('p', { className: 'fp-form-more' }, [
       h('button', { type: 'button', className: 'ws-link', id: 'fp-make-any', text: 'Make my report now' }), ' · ',
-      h('button', { type: 'button', className: 'ws-link', id: 'fp-json', text: 'Save a backup (JSON)' }), ' · ',
-      h('button', { type: 'button', className: 'ws-link', id: 'fp-filled-pdf', text: 'Download my answers as a filled PDF' })
+      h('button', { type: 'button', className: 'ws-link', id: 'fp-json', text: 'Save my progress (a small file)' }), ' · ',
+      h('button', { type: 'button', className: 'ws-link', id: 'fp-filled-pdf', text: 'Download my answers as a PDF' })
     ]));
   }
   function shortName(p) { return p ? (p.code && /^WP|CALC/.test(p.code) ? p.code + ' ' : '') + (p.name || p.short || p.title) : ''; }
@@ -394,6 +405,18 @@
     return h('div', { className: 'fp-item ' + (cls || '') }, [h('p', { className: 'fp-item-t', text: title }), tag ? h('p', { className: 'fp-item-tag', text: tag }) : null, dlOf(rows, 'fp-kv-tight')]);
   }
 
+  // The Workpaper Suite's sheets, read into this package and made into the full report in one step.
+  function fromSuite() {
+    var suite = global.__workpaperSuite, snap = suite && suite.snapshot && suite.snapshot();
+    if (!snap || !snap.path) { say('Choose your road at the top first, then fill in a sheet or two.'); return; }
+    if (!snap.entries.length) { say('The full report reads the sheets you\u2019ve filled in. Fill in a sheet on your road, or bring in a file, first.'); return; }
+    var r = FP.fromSuite(snap, S.data);
+    if (!r) { say('The report could not be made from this suite.'); return; }
+    S.data = r.data; S.read = r.read; S.from = r.fromSuite;
+    changed();
+    makeReport();
+  }
+
   function makeReport() {
     if (!S.data) return;
     var m = FP.report(S.data), box = $('fp-report');
@@ -408,8 +431,9 @@
     box.appendChild(h('div', { className: 'fp-actions' }, [
       h('button', { type: 'button', className: 'ws-go', id: 'fp-report-pdf', text: 'Download the report PDF' }),
       h('button', { type: 'button', className: 'fp-btn-quiet', id: 'fp-edit', text: 'Change my answers' }),
-      h('button', { type: 'button', className: 'fp-btn-quiet', id: 'fp-json2', text: 'Save a backup (JSON)' })
+      h('button', { type: 'button', className: 'fp-btn-quiet', id: 'fp-json2', text: 'Save my progress (a small file)' })
     ]));
+    if (S.from) box.appendChild(h('p', { className: 'fp-callout', text: 'Made from your Workpaper Suite: ' + (S.from.length ? S.from.join(', ') : 'your sheets') + '. The CALC-01 page, your Wiring Card and the Ready page aren\u2019t in the Suite; add them with \u201cChange my answers\u201d if you like, and the report updates.' }));
     if (m.stateNote) box.appendChild(h('p', { className: 'fp-callout is-lav', text: m.stateNote }));
 
     var secs = [];
@@ -526,7 +550,7 @@
 
     // 8. The Five Pillars
     var pv = m.pillars, pil = [], soloP = m.road === 'self', withLbl = soloP ? ' With others, if you like: ' : ' Between you and others: ';
-    if (pv.strongest) pil.push(h('p', { className: 'fp-callout is-mint' }, [h('strong', { text: 'Looks strongest: Pillar ' + pv.strongest.n + ', ' + pv.strongest.name + '. ' }), 'In you: ' + pv.strongest.inYouI + withLbl + pv.strongest.betweenI]));
+    if (pv.strongest && !pv.note) pil.push(h('p', { className: 'fp-callout is-mint' }, [h('strong', { text: 'Looks strongest: Pillar ' + pv.strongest.n + ', ' + pv.strongest.name + '. ' }), 'In you: ' + pv.strongest.inYouI + withLbl + pv.strongest.betweenI]));
     if (pv.care && pv.care !== pv.strongest && !pv.note) pil.push(h('p', { className: 'fp-callout is-peach' }, [h('strong', { text: 'Needs the most care: Pillar ' + pv.care.n + ', ' + pv.care.name + '. ' }), 'In you: ' + pv.care.inYouI + withLbl + pv.care.betweenI]));
     if (pv.note) pil.push(h('p', { className: 'fp-note', text: pv.note }));
     pil.push(barsEl({ title: 'Rough readings, 0 to 1 (higher is steadier)', items: pv.rows.map(function (r) { return { label: 'Pillar ' + r.n + ': ' + r.name, value: r.value || 0, max: 1, text: r.value != null ? FP.fmt(r.value) : 'not filled in' }; }) }));
@@ -587,9 +611,10 @@
   function saveJson() {
     if (!S.data) return;
     var out = { format: S.data.format, version: S.data.version, road: S.data.road, people: S.data.people, saved: new Date().toISOString(), values: S.data.values };
-    download(JSON.stringify(out, null, 2), fileBase(S.data) + '-backup.json', 'application/json');
+    if (S.data.sizes) out.sizes = S.data.sizes;
+    download(JSON.stringify(out, null, 2), fileBase(S.data) + '-progress.json', 'application/json');
     S.dirty = false;
-    say('Backup saved to your Downloads. Upload it here any time to pick up where you left off.');
+    say('Your progress file is in your Downloads. Upload it here any time to pick up where you left off.');
   }
   function filledPdf() {
     if (!S.data) return;
@@ -614,9 +639,12 @@
     ['dragenter', 'dragover'].forEach(function (t) { drop.addEventListener(t, function (e) { e.preventDefault(); drop.classList.add('is-over'); }); });
     ['dragleave', 'drop'].forEach(function (t) { drop.addEventListener(t, function (e) { e.preventDefault(); drop.classList.remove('is-over'); }); });
     drop.addEventListener('drop', function (e) { takeFile(e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files[0]); });
+    var fromBtn = $('ws-fullreport');
+    if (fromBtn) fromBtn.addEventListener('click', fromSuite);
     $('fp-start').addEventListener('click', function () {
       if (S.data && (S.data.road !== $('fp-road').value) && Object.keys(S.data.values).length && !global.confirm('Start a new ' + FP.ROADS[$('fp-road').value].label + ' package? What you typed for ' + FP.ROADS[S.data.road].label + ' stays until you close the page, but this starts fresh.')) { startForm(S.step); return; }
       if (!S.data || S.data.road !== $('fp-road').value) S.data = FP.blankData($('fp-road').value, $('fp-count').value);
+      S.from = null;
       startForm(0);
     });
 
@@ -676,7 +704,7 @@
       e.returnValue = 'You have unsaved answers in your Full path package.';
       return e.returnValue;
     });
-    global.__fullPath = { state: function () { return S; }, take: takeFile, report: makeReport };
+    global.__fullPath = { state: function () { return S; }, take: takeFile, report: makeReport, fromSuite: fromSuite };
   }
 
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);

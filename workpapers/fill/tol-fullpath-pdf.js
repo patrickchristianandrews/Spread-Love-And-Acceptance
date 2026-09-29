@@ -391,7 +391,7 @@
   /* ------------------------------------------------------------ the package */
 
   function packagePdf(data) {
-    var reg = FP.build(data.road, data.people, FP.namesOf(data)), road = FP.ROADS[data.road];
+    var reg = FP.regOf(data), road = FP.ROADS[data.road];
     var doc = new PDF.Doc({ title: 'Full path package: ' + road.label, producer: 'The Objective Ledger (TOL-OS) Full path package ' + FP.VERSION + ', made on this device', subject: 'tol-fullpath road=' + data.road + ' people=' + data.people });
     var lay = new Lay(doc), toc = [];
     var roadName = road.label;
@@ -848,7 +848,7 @@
     var solo = m.road === 'self', withLbl = solo ? 'With others, if you like: ' : 'Between you and others: ';
     lay.h1('Where you’re strong, and what needs care', solo ? 'Each pillar starts inside you, and can show up with the people around you' : 'Each pillar starts inside you, then shows up between you and others');
     var pv = m.pillars;
-    if (pv.strongest) lay.callout('Looks strongest: Pillar ' + pv.strongest.n + ', ' + pv.strongest.name, ['In you: ' + pv.strongest.inYouI, withLbl + pv.strongest.betweenI], C.mint, { size: 9, titleColor: C.ink });
+    if (pv.strongest && !pv.note) lay.callout('Looks strongest: Pillar ' + pv.strongest.n + ', ' + pv.strongest.name, ['In you: ' + pv.strongest.inYouI, withLbl + pv.strongest.betweenI], C.mint, { size: 9, titleColor: C.ink });
     if (pv.care && pv.care !== pv.strongest && !pv.note) lay.callout('Needs the most care: Pillar ' + pv.care.n + ', ' + pv.care.name, ['In you: ' + pv.care.inYouI, withLbl + pv.care.betweenI], C.peach, { size: 9, titleColor: C.ink });
     if (pv.note) lay.para(pv.note, { font: 'Times-Italic', size: 9.4, color: C.soft });
     barChart(lay, { title: 'Rough readings, 0 to 1 (higher is steadier)', items: pv.rows.map(function (r) { return { label: 'Pillar ' + r.n + ' ' + r.name, value: r.value || 0, max: 1, text: r.value != null ? FP.fmt(r.value) : 'not filled in' }; }) });
