@@ -965,7 +965,7 @@ laboratory: A room for experiments.
 lace: Delicate, patterned fabric.
 ladder: Steps for climbing up.
 ladle: A big spoon for soup.
-ladybird: A little red beetle with spots.
+ladybug: A little red beetle with spots.
 lagoon: A calm pool of sea behind a reef.
 landscape: A wide view of land.
 lane: A narrow country road.

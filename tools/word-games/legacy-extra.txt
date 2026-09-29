@@ -245,7 +245,7 @@ Dreams|STAR|Reach for a star, or simply admire it.
 Dreams|CLOUD|Float away on a daydream cloud.
 Dreams|MOON|The moon is a nightlight for dreamers.
 Dreams|HOPE|Every dream begins with a little hope.
-Little creatures|LADYBIRD|Ladybirds are tiny garden helpers.
+Little creatures|LADYBUG|Ladybugs are tiny garden helpers.
 Little creatures|BEE|Bees keep the flowers blooming.
 Little creatures|BEETLE|Beetles wear shiny little coats.
 Gems and stones|RUBY|A ruby glows a warm, deep red.

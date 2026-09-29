@@ -110,9 +110,11 @@
   // ---------- sound: soft music that answers you (calm-music.js) ----------
   // Background chords and a gentle melody; each letter you pick plays the next rising note in
   // tune with the chord, and every found word settles with a small arpeggio.
-  var music = null, soundOn = get('tol-qw-sound', 'on') !== 'off';
+  // Off until you turn it on (remembered on this device); the site's Quiet mode keeps it off.
+  var music = null, soundSw = null;
+  function soundOn() { return !!(soundSw && soundSw.on()); }
   function wake() {
-    if (!soundOn || !window.TOLMusic) return null;
+    if (!soundOn() || !window.TOLMusic) return null;
     try { if (navigator.audioSession) navigator.audioSession.type = 'playback'; } catch (e) {}
     if (!music) { music = window.TOLMusic.create(); music.level(0.5); }
     music.start(); return music;
@@ -121,6 +123,13 @@
   function bell(i) { var m = wake(); if (m) m.reward(false); }
 
   // ---------- making a puzzle ----------
+  // Every choice comes from a random number seeded by the level, the puzzle's number and its theme,
+  // so "Gentle · 1" is the same grid every time you open it.
+  var rnd = Math.random;
+  function seeded(key) {
+    if (!window.TOLLevels || !window.TOLLevels.rng) return Math.random;
+    return window.TOLLevels.rng(window.TOLLevels.hash('words:' + key));
+  }
   function build(th) {
     for (var tries = 0; tries < 80; tries++) {
       var g = []; for (var r = 0; r < N; r++) g.push(new Array(N).fill(''));
@@ -129,7 +138,7 @@
       for (var w = 0; w < list.length && ok; w++) {
         var word = list[w][0], done = false;
         for (var k = 0; k < 300 && !done; k++) {
-          var d = DIRS[Math.floor(Math.random() * DIRS.length)], r0 = Math.floor(Math.random() * N), c0 = Math.floor(Math.random() * N);
+          var d = DIRS[Math.floor(rnd() * DIRS.length)], r0 = Math.floor(rnd() * N), c0 = Math.floor(rnd() * N);
           var re = r0 + d[0] * (word.length - 1), ce = c0 + d[1] * (word.length - 1);
           if (re < 0 || re >= N || ce < 0 || ce >= N) continue;
           var fits = true;
@@ -142,7 +151,7 @@
       }
       if (!ok) continue;
       var own = g.map(function (row) { return row.map(function (ch) { return !!ch; }); });
-      for (r = 0; r < N; r++) for (var c = 0; c < N; c++) if (!g[r][c]) g[r][c] = FILL[Math.floor(Math.random() * FILL.length)];
+      for (r = 0; r < N; r++) for (var c = 0; c < N; c++) if (!g[r][c]) g[r][c] = FILL[Math.floor(rnd() * FILL.length)];
       if (clean(g, own)) return { grid: g, words: placed };
     }
     return null;
@@ -174,19 +183,46 @@
     // the level decides the grid size, the directions and how many of the theme's words to hide
     var T = TIERS[c ? c.tier.id : 'easy'] || TIERS.easy, was = [N, DIRS];
     N = T.N; DIRS = T.dirs;
+    var key = (c ? c.tier.id + ':' + c.index : 'x:' + index) + ':' + th.name;
+    rnd = seeded(key);
     var pool = th.words.filter(function (w) { return w[0].length <= N; });
-    for (var i = pool.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)), tmp = pool[i]; pool[i] = pool[j]; pool[j] = tmp; }
-    var made = null;
+    for (var i = pool.length - 1; i > 0; i--) { var j = Math.floor(rnd() * (i + 1)), tmp = pool[i]; pool[i] = pool[j]; pool[j] = tmp; }
+    var made = null, kept = loadPlace(key, N);
+    if (kept) made = { grid: kept.grid, words: kept.words };
     for (var want = T.words; !made && want >= 3; want--) made = build({ name: th.name, words: pool.slice(0, want) });
     if (!made) { N = was[0]; DIRS = was[1]; return; } // keep the puzzle on screen as it was
     puzzleNo = index; theme = th; cur = c || null;
     gridEl.style.gridTemplateColumns = 'repeat(' + N + ', 1fr)';
     if (levels && c) levels.paintBar(barEl, c);
-    grid = made.grid; words = made.words; found = {}; hinted = false;
+    grid = made.grid; words = made.words; found = kept ? kept.found : {}; hinted = kept ? !!kept.hinted : false; placeKey = key;
     themeEl.textContent = theme.name;
-    noteEl.innerHTML = '<span class="qw-note-h">Find the words, at your own pace.</span> Drag across the letters, or tap the first letter and then the last.';
+    var nFound = Object.keys(found).length;
+    noteEl.innerHTML = nFound ? '<span class="qw-note-h">Welcome back.</span> Your ' + (nFound === 1 ? 'word is' : nFound + ' words are') + ' still glowing, right where you left ' + (nFound === 1 ? 'it' : 'them') + '.'
+      : '<span class="qw-note-h">Find the words, at your own pace.</span> Drag across the letters, or tap the first letter and then the last.';
     root.classList.remove('is-done');
     render();
+    words.forEach(function (w) { if (found[w.word]) { var li = listEl.querySelector('[data-w="' + w.word + '"]'); if (li) { li.classList.add('is-found'); li.style.setProperty('--c', found[w.word]); } } });
+    drawMarks();
+    if (nFound && nFound === words.length) { root.classList.add('is-done'); noteEl.innerHTML = '<span class="qw-note-h">All found.</span> This one is finished. A new theme is waiting under Next whenever you’re ready.'; }
+    savePlace();
+  }
+
+  // ---------- your place, kept on this device ----------
+  // The puzzle you're on and the words you've found stay in this browser (nothing is sent anywhere),
+  // so leaving the page and coming back picks up where you were.
+  var PLACE = 'tol-qw-place', placeKey = null;
+  function loadPlace(key, n) {
+    try {
+      var o = JSON.parse(localStorage.getItem(PLACE) || 'null');
+      if (o && o.key === key && o.n === n && o.grid && o.grid.length === n && o.words && o.words.length) {
+        return { grid: o.grid.map(function (row) { return row.split(''); }), words: o.words, found: o.found || {}, hinted: o.hinted };
+      }
+    } catch (e) {}
+    return null;
+  }
+  function savePlace() {
+    if (!placeKey) return;
+    set(PLACE, JSON.stringify({ key: placeKey, n: N, grid: grid.map(function (row) { return row.join(''); }), words: words, found: found, hinted: hinted }));
   }
 
 
@@ -288,7 +324,7 @@
     var li = listEl.querySelector('[data-w="' + hit.word + '"]'); if (li) { li.classList.add('is-found'); li.style.setProperty('--c', found[hit.word]); }
     noteEl.innerHTML = '<span class="qw-note-h">' + hit.word.charAt(0) + hit.word.slice(1).toLowerCase() + '</span> ' + hit.line;
     say('Found ' + hit.word.toLowerCase() + '. ' + hit.line);
-    drawMarks();
+    drawMarks(); savePlace();
     if (Object.keys(found).length === words.length) finish();
   }
   // a gentle word when a line isn't one of the hidden words
@@ -359,16 +395,14 @@
   $('.qw-hint').addEventListener('click', function () {
     var left = words.filter(function (w) { return !found[w.word]; }); if (!left.length) return;
     var w = left[Math.floor(Math.random() * left.length)], t = tile(w.r, w.c); hinted = true;
-    t.classList.add('is-hint'); setTimeout(function () { t.classList.remove('is-hint'); }, 3200);
+    t.classList.add('is-hint'); setTimeout(function () { t.classList.remove('is-hint'); }, 3200); savePlace();
     say('Look near the glowing letter for a word.');
   });
   var sb = $('.qw-sound');
-  function soundLabel() { sb.setAttribute('aria-pressed', String(soundOn)); sb.innerHTML = soundOn ? '&#127925; Music on' : '&#127925; Music off'; }
-  sb.addEventListener('click', function () { soundOn = !soundOn; set('tol-qw-sound', soundOn ? 'on' : 'off'); soundLabel(); if (soundOn) { var m = wake(); if (m) m.reward(false); } else if (music) music.stop(); });
-  // the music starts with the first tap anywhere in the game (browsers need a tap first)
-  root.addEventListener('pointerdown', function () { wake(); }, { once: true });
-  document.addEventListener('visibilitychange', function () { if (!music) return; if (document.hidden) music.stop(); else if (soundOn) music.start(); });
-  soundLabel();
+  // music plays only after you turn it on here (it is off to begin with)
+  if (window.TOLMusic && window.TOLMusic.toggle) soundSw = window.TOLMusic.toggle(sb, { key: 'tol-qw-sound', label: 'Music', onChange: function (on) { if (on) { var m = wake(); if (m) m.reward(false); } else if (music) music.stop(); } });
+  else sb.hidden = true;
+  document.addEventListener('visibilitychange', function () { if (!music) return; if (document.hidden) music.stop(); else if (soundOn()) music.start(); });
   window.addEventListener('resize', function () { drawMarks(); });
 
   // carry on through the levels (each one a new theme, at the difficulty you choose)
