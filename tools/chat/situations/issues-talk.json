@@ -49,7 +49,7 @@
     },
     "repair": {
       "label": "repairing after a rough moment",
-      "match": [["i (snapped|yelled|shouted|screamed|lost it|lost my temper|blew up|exploded|was (rude|mean|harsh)|said something (mean|hurtful|awful|terrible))|snapped at|yelled at|shouted at|lost my temper|blew up at|was mean to|hurt (his|her|their) feelings|i messed up|i screwed up|my fault|how (do|can|should) i apologi[sz]e|want to apologi[sz]e|say sorry|make (it|things) right|make up (with|after)", 5], ["apolog*|sorry|repair|regret", 2]],
+      "match": [["i (snapped|yelled|shouted|screamed|lost it|lost my temper|blew up|exploded|was (rude|mean|harsh)|said something (mean|hurtful|awful|terrible))|snapped at(?! me)|yelled at(?! me)|shouted at(?! me)|lost my temper|blew up at(?! me)|was mean to(?! me)|hurt (his|her|their) feelings|i messed up|i screwed up|my fault|how (do|can|should) i apologi[sz]e|want to apologi[sz]e|say sorry|make (it|things) right|make up (with|after)", 5], ["apolog*|sorry|repair|regret", 2]],
       "reflect": "Snapping at someone you care about, and then feeling it afterward, is so human. Everyone has moments like that.",
       "going": "This is Pillar III (read your state first) and Pillar IV (tune how you send and receive). A snap is usually leftover load leaking out: tiredness, stress, or a full battery from something else entirely. That explains it without excusing it. What matters most for the relationship isn’t never slipping. It’s repairing well afterward, and {they} will likely remember the repair more than the snap.",
       "steps": ["Take a breath and check your battery first, so the repair comes from a calm place, not a guilty rush.", "Apologize for the specific thing, without a “but”: name what you did and how it may have landed.", "Say what you’ll do differently, and if there’s a real issue underneath, offer a better time to talk about it."],
@@ -209,6 +209,24 @@
       "path": [["The Wiring Card", "/wiring-card.html"], ["Wired Differently", "/wired-differently.html"], ["Know your own wiring", "/know-yourself.html"]],
       "deeper": ["the double empathy problem", "What is the double empathy problem?"],
       "ex": "Kim, who is autistic, heard “we should clean the garage sometime” as a passing thought. Her partner meant it as a request. They swapped Wiring Cards, and now he says, “Could you help me clean the garage Saturday at 10?” It got done, and nobody felt ignored."
+    },
+    "hurtbythem": {
+      "label": "being snapped at",
+      "match": [["(snapped|snaps|snapping|yelled|yells|yelling|shouted|shouts|shouting|screamed|screams|screaming|swore|swears|cussed|barked|lashed out|went off|blew up|exploded|lost (his|her|their) temper) at me|(was|is|got|been|being) (so |really )?(rude|mean|harsh|short|cold|nasty|sharp|cruel|horrible|awful) (to|with) me|said something (mean|hurtful|harsh|awful|cruel|horrible|nasty) to me|(bit|biting|bites) my head off|(tore|ripped) into me|(made|makes) me cry|talked down to me|belittled me|called me (names|stupid|an idiot|useless|lazy|dramatic|pathetic)", 7], ["(feel|felt|feeling) (so )?(stupid|silly|dumb|pathetic|weak) for (crying|being upset|getting upset)|(cried|was crying|started crying|cant stop crying)", 3]],
+      "ownSteps": true,
+      "reflect": "I’m sorry. Being snapped at by someone you care about really hurts, and it makes sense that you’re shaken.",
+      "going": "This is Pillar III (read your state first), and it starts with looking after you. A snap usually comes from the other person’s full battery: tiredness, stress, or something else entirely. That may explain it, but it doesn’t make the tone yours to carry. Things between two people are rarely one person’s fault, and you don’t have to work out who was right tonight.",
+      "steps": ["You don’t have to fix anything tonight. Your only job right now is to settle.", "Do one calming thing: a slow breath out, a glass of water, or a few quiet minutes. The Calm-Down Kit and the Night Garden are there if you want them.", "If it helps, write one line about what happened, so it’s out of your head. You can decide later whether to bring it up.", "When you’re both calm, and only if you want to, say how it landed, in one sentence."],
+      "scriptLabel": "Words for later, if you want them",
+      "scripts": {
+        "default": ["That came out sharp, and it stung. Can we try again when we’re both calmer?", "I want to talk about earlier, but not tonight. Could we find a calm time tomorrow?", "When you snapped at me, I felt hurt. I’d like us to find a kinder way to say hard things."],
+        "coworker": ["That came across more sharply than I think you meant. Can we pick this up after lunch?"],
+        "kid": ["That was loud, and it hurt my feelings. Let’s both take a minute, then talk."]
+      },
+      "path": [["WP-11: The Calm-Down Kit", "/wp-11.html"], ["The Night Garden", "/night-garden.html"], ["Decode the moment, without blame", "/carrier-wave-decoder.html#decode"]],
+      "deeper": ["is it my fault?", "Is it my fault?"],
+      "ex": "After her partner snapped at her about the dishes, Dana took ten quiet minutes in the Night Garden and went to bed. The next evening she said: “Last night stung. Can we find a better way to say hard stuff?” Her partner apologized, and they agreed on a pause line they could both use.",
+      "tonight": "Do one calming thing, and let everything else wait until tomorrow."
     }
   }
 }

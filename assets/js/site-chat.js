@@ -159,6 +159,24 @@
       if (c.pat) { try { c.re = new RegExp(c.pat); } catch (e) { c.re = null; } }
     });
     cardKeys.sort(function (a, b) { return b.n - a.n; });
+    // cards that answer before anything else (who can see this chat, something calming, "is it my fault?")
+    var first = (KB.cards || []).filter(function (c) {
+      if (c.notPat) { try { c.notRe = new RegExp(c.notPat); } catch (e) { c.notRe = null; } }
+      return c.first && c.re;
+    });
+    // forgiving spelling: every word the site uses (how often), and the site's own topic words to correct toward
+    var vocab = {}, fixTo = {};
+    function countWords(t) { (String(t).toLowerCase().match(/[a-z]+/g) || []).forEach(function (w) { vocab[w] = (vocab[w] || 0) + 1; }); }
+    docs.forEach(function (d) { countWords(d.h + ' ' + d.t + ' ' + d.x); });
+    (KB.cards || []).forEach(function (c) { countWords([c.name || ''].concat(c.keys || [], c.what || [], c.how || []).join(' ')); });
+    // words the chat's own patterns and notes know (fought, sunk cost, stocks…) count as spelled right too
+    countWords(JSON.stringify([KB.syn || {}, KB.bgi || [], KB.clar || [], Object.keys((KB.sit || {}).issues || {}).map(function (k) { return KB.sit.issues[k].match; }), OFF_TOPIC.source, DANGER.source]).replace(/\\[bsw]/g, ' '));
+    Object.keys(vocab).forEach(function (w) {
+      if (w.length < 4 || vocab[w] < 2) return;
+      var st = stem(w);
+      if (!domain[st] && !(st.length >= 7 && domain['~' + st.slice(0, 7)])) return;
+      (fixTo[w.charAt(0)] = fixTo[w.charAt(0)] || []).push([w, vocab[w], phon(w)]);
+    });
     var sit = KB.sit || { who: {}, issues: {}, combos: {} };
     Object.keys(sit.who).forEach(function (k) { try { sit.who[k].re = new RegExp(sit.who[k].match); } catch (e) { sit.who[k].re = /$^/; } });
     Object.keys(sit.issues).forEach(function (k) {
@@ -166,7 +184,7 @@
     });
     (KB.clar || []).forEach(function (c) { try { c.re = new RegExp(c.pat); } catch (e) { c.re = /$^/; } });
     IDX = { N: N, df: df, tf: tf, len: len, head: head, avg: total / N, syn: syn, gloss: gloss, domain: domain,
-      bgNames: bgNames, cardKeys: cardKeys, sit: sit, bg: null };
+      bgNames: bgNames, cardKeys: cardKeys, sit: sit, bg: null, first: first, vocab: vocab, fixTo: fixTo };
   }
 
   // ------------------------------------------------------------------ background notes (lazy)
@@ -613,6 +631,54 @@
     }
     return prev[b.length];
   }
+  // A rough sound-alike key: the first letter, then the consonants ("unbiled" and "unbilled" are both "unbld")
+  function phon(w) {
+    var s0 = String(w).toLowerCase().replace(/ph/g, 'f').replace(/ck/g, 'k').replace(/[cq]/g, 'k').replace(/z/g, 's');
+    return s0.charAt(0) + s0.slice(1).replace(/[aeiouhwy]/g, '').replace(/(.)\1+/g, '$1');
+  }
+  function knownWord(w) {
+    return !!(STOP[w] || IDX.vocab[w] || w.length <= 2 || /\d/.test(w) || IDX.vocab[stem(w)] || ROLE[stem(w)]);
+  }
+  // the site word a misspelled word most likely means: within one or two letters, or the same sound
+  function closestWord(w) {
+    if (w.length < 4) return null;
+    var single = w.replace(/([a-z])\1+/g, '$1');  // "snapps" → "snaps", "allso" → "also"
+    if (single !== w && single.length >= 3 && knownWord(single)) return single;
+    var list = IDX.fixTo[w.charAt(0)] || [], pw = phon(w), best = null, bs = 9;
+    for (var i = 0; i < list.length; i++) {
+      var cw = list[i][0];
+      if (Math.abs(cw.length - w.length) > 2) continue;
+      var same = list[i][2] === pw, max = same ? 3 : (w.length >= 7 ? 2 : 1);
+      var d = lev(w, cw, max);
+      if (d > max) continue;
+      var sc = d - (same ? 0.6 : 0) - Math.min(0.3, list[i][1] / 5000);
+      if (sc < bs) { bs = sc; best = cw; }
+    }
+    return best;
+  }
+  // "whats unbiled debt", "were do i start", "i dont no were to begin": read as the words meant.
+  // Returns {q, fixes: [[typed, meant]], known, unknown}; q is unchanged when nothing needed fixing.
+  function spellFix(q) {
+    var low = String(q).replace(/[’‘`´]/g, "'").toLowerCase(), fixes = [], known = 0, unknown = 0;
+    (KB.spellp || []).forEach(function (p) {
+      var rx; try { rx = new RegExp(p[0], 'g'); } catch (e) { return; }
+      low = low.replace(rx, function (m) {
+        var to = m.replace(new RegExp(p[0]), p[1]);
+        if (fold(to) !== fold(m)) fixes.push([m, to]);
+        return to;
+      });
+    });
+    low = low.replace(/[a-z][a-z']*/g, function (w) {
+      var key = w.replace(/'/g, ''), to = (KB.spell || {})[w] || (KB.spell || {})[key];
+      if (to) { to = to.toLowerCase(); if (fold(to) !== fold(w)) fixes.push([w, to]); known++; return to; }
+      if (knownWord(key)) { known++; return w; }
+      var c = closestWord(key);
+      if (c) { fixes.push([w, c]); known++; return c; }
+      unknown++;
+      return w;
+    });
+    return { q: fixes.length ? low : q, fixes: fixes, known: known, unknown: unknown };
+  }
   function fuzzyCard(f) {
     var ws = f.split(' ').filter(Boolean);
     if (!ws.length || ws.length > 14) return null;
@@ -664,6 +730,7 @@
   var WHO_ORDER = ['coparent', 'kid', 'caregiving', 'coworker', 'roommate', 'partner', 'family', 'friend'];
   var SELF_ISSUES = null;
   var FEELS = [
+    [/\b(stupid|silly|dumb|pathetic|weak) for (crying|being upset|getting upset)\b|\b(cried|crying)\b/, 'Crying when something hurts isn’t stupid. It’s a very human response.'],
     [/\b(awful|terrible|horrible|guilty|so bad|really bad|ashamed|like a jerk|like a monster)\b/, 'Feeling awful afterward usually means you care how it landed. That’s something to build on, not a verdict on you.'],
     [/\b(furious|angry|mad|livid|irritated|annoyed|frustrated|fed up|sick of it)\b/, 'That frustration makes sense. It usually points at something that matters to you.'],
     [/\b(hurt|sad|upset|heartbroken|crushed|gutted)\b/, 'Feeling hurt by that is completely understandable.'],
@@ -746,7 +813,9 @@
       who = S.issues[best].only.indexOf('other') !== -1 ? 'other' : S.issues[best].only[0];
     }
     var feel = '';
-    for (var j = 0; j < FEELS.length; j++) if (FEELS[j][0].test(f)) { feel = FEELS[j][1]; break; }
+    // a feeling that belongs to someone else ("my partner is upset") isn't mine to reflect back
+    var fMine = f.replace(/\b(my \w+|your \w+|his \w+|her \w+|their \w+|he|she|they|hes|shes|theyre)( is| are| was| were| gets| got| seems| feels| felt| looks)?( so| really| very| pretty| kind of| a bit)? (upset|mad|angry|annoyed|irritated|frustrated|hurt|sad|furious|fed up|tired|exhausted|worried|anxious|stressed)\b/g, ' ');
+    for (var j = 0; j < FEELS.length; j++) if (FEELS[j][0].test(fMine)) { feel = FEELS[j][1]; break; }
     return { issue: best, score: bs, who: who, noun: noun, personal: personal || pronoun, pronoun: pronoun, actor: actor, feel: feel };
   }
   function whoCtx(who, noun) {
@@ -768,8 +837,8 @@
       if (other && I[field + '_other'] != null) return I[field + '_other'];
       return I[field];
     }
-    var steps = (pickF('steps') || []).slice(0, 3);
-    var wstep = (W.steps && W.steps[issueKey]) || W.step;
+    var steps = (pickF('steps') || []).slice(0, I.ownSteps ? 4 : 3);
+    var wstep = I.ownSteps ? null : (W.steps && W.steps[issueKey]) || W.step;  // ownSteps: the issue's own steps say it all
     if (wstep && !C.steps && steps.length < 4 && (!self || I.selfFirst) && !(self && steps.some(function (x) { return /battery/.test(x); }))) steps.push(wstep);
     var scripts = theirSide && I.scripts_other ? I.scripts_other.slice() : (C.scripts || []);
     if (!scripts.length) {
@@ -789,13 +858,19 @@
     var P = sitParts(issueKey, who, noun, actor), ctx = P.ctx, I = P.I;
     var reflect = fill(Array.isArray(P.reflect) ? P.reflect[0] : P.reflect, ctx);
     if (feel && /resent/i.test(reflect) && /resent/i.test(feel)) feel = '';
+    if (feel) {  // no feeling line that repeats the first line in other words
+      var rt = tokens(reflect), ft = tokens(feel).filter(function (t, i, a) { return a.indexOf(t) === i; });
+      if (ft.filter(function (t) { return rt.indexOf(t) !== -1; }).length >= Math.max(2, Math.ceil(ft.length * 0.5))) feel = '';
+    }
+    // one line first, then the steps; the why comes after
     var b = [{ k: 'p', x: reflect + (feel ? ' ' + feel : '') }];
-    b.push({ k: 'h', x: 'What might be going on' });
-    b.push({ k: 'p', x: fill(P.going, ctx) });
     b.push({ k: 'h', x: who === 'self' ? 'Small steps for today' : 'Try this today' });
     b.push({ k: 'list', x: P.steps.map(function (s) { return fill(s, ctx); }) });
+    var going = { k: 'p', x: fill(P.going, ctx) };
     if (P.scripts.length) b.push({ k: 'script', l: (I.scriptLabel && (who === 'self' || !I.selfFirst)) ? I.scriptLabel : (P.also ? fill('Words you could use with {them}', ctx) : 'Words you could use'), x: fill(P.scripts[(variant || 0) % P.scripts.length], ctx) });
     if (P.also) b.push({ k: 'script', l: fill(P.also[0], ctx), x: fill(P.also[1][(variant || 0) % P.also[1].length], ctx) });
+    b.push({ k: 'h', x: 'What might be going on' });
+    b.push(going);
     if (P.path.length) { b.push({ k: 'h', x: 'A short path on the site' }); b.push({ k: 'links', x: P.path }); }
     b.push({ k: 'note', x: 'You know your situation best. This is general guidance from the program, not counseling or a professional opinion.' });
     state.last = { kind: 'sit', issue: issueKey, who: who, noun: noun, actor: actor || '', v: variant || 0, q: I.label, topic: I.label, u: P.path[0] && P.path[0][1] };
@@ -871,7 +946,7 @@
   var FU_EX = /^(can you |could you )?(please )?(give me |show me |got |have you got |share )?(an |one |another |a )?(example|examples|sample|instance|script|line)( please| of (that|this|it))?$|^(for example|like what|such as|what would that look like|what does that look like|what would i say|what do i say|what could i say|how would i say (it|that)|how do i say (it|that)|(give me )?another way to (say|put|word) (it|that)|say it another way|different words|other words|another script|another line)\??$/;
   var FU_START = /^(so |ok |okay |and )?(how (do|should|would|can) (i|we) (start|begin|get started|use (it|this|that|them|these|those)|do (it|this|that))|where (do|should) (i|we) (start|begin)|what (do|should) (i|we) do first|first step|whats the first step|what is the first step|how do i begin|where to start)( with (it|this|that))?$/;
   var FU_WHO = /^(and |but |ok |okay |so )?((what|how) about|and|and for|and with|for|with|what if its|what if it s|same (thing )?(for|with)|does (this|that|it) (work|help|apply) (for|with)|would (this|that|it) (work|help) (for|with)|can i use (this|that|it) (for|with))\s+(.{2,40})$/;
-  var FU_TONIGHT = /^(ok |okay |so |but |and |ok but |okay but |right but |fine but )*(what (do|can|should|could) (i|we) (actually |really |even |possibly )?do( about it| about that)? ?(tonight|now|right now|today|this evening|first)?|what can i do tonight|whats (one|a) (tiny|small|little) (thing|step)( for tonight)?|(one|a) (tiny|small|little) (thing|step)( for tonight| i can do)?|now what|what now|what next|whats the first step tonight)$/;
+  var FU_TONIGHT = /^(ok |okay |so |but |and |ok but |okay but |right but |fine but )*(what (do|can|should|could) (i|we) (actually |really |even |possibly )?do( about it| about that)? ?(tonight|now|right now|today|this evening|first)?|what can i do tonight|whats (one|a) (tiny|small|little) (thing|step)( for tonight)?|(one|a) (tiny|small|little) (thing|step)( for tonight| i can do)?|now what|what now|what next|whats next|whats the first step tonight|what (do|should|can) (i|we) do next|give me (one|a|just one|a single) (thing|step)( to do| i can do| for now| right now)?|(tell me )?(one|just one) thing (to do|i can do)|(whats|what is) the next step|next step)( please)?$/;
   function followUp(state, f, q) {
     var L = state.last;
     if (!L) return null;
@@ -964,6 +1039,9 @@
   // we were on, with a different angle, instead of searching the pages for it.
   function contextReply(state, L, f) {
     if (!L || L.kind !== 'sit' || !IDX.sit.issues[L.issue]) return null;
+    // only for a follow-up that sounds like more of the story, not a new, unrelated question
+    if (/^(what|whats|how|hows|where|which|who|when|can you|could you|do you|is there|are there|tell me about|show me)\b/.test(f) ||
+        !/\b(he|she|they|him|her|them|his|hers|their|theirs|we|us|our|my|me|i|im|ive|said|says|say|did|does|didnt|doesnt|dont|then|again|still|keeps?|just|always|never|today|tonight|yesterday)\b/.test(f)) return null;
     var n = f.split(' ').length;
     if (n > 24) return null;
     var v = (L.v || 0) + 1, P = sitParts(L.issue, L.who, L.noun, L.actor);
@@ -993,16 +1071,98 @@
         { label: 'I’m worn out', q: 'I feel exhausted and overwhelmed' }, { label: 'What can I do tonight?', q: 'What can I do tonight?' }], kind: 'clarify' };
   }
 
+  // ------------------------------------------------------------------ care first: tender moments and literal questions
+  // Asked plainly, answered plainly: who can see this chat, "is it my fault?", "tell me something calming",
+  // "I just had a fight and I have 5 minutes", bigger text, reading out loud. These answer before anything else,
+  // and they don't change the topic we were on.
+  var SHORTER = /^(ok |so |can you |could you |please |pls )*(tl ?dr|tldr|too long( didnt read)?|make (it|that|this) (shorter|simpler|short)|shorter|shorten (it|that|this)|summari[sz]e( (it|that|this))?|(give me )?(the )?(short|shorter|quick|simple|simpler) version|sum (it|that) up|(say|put) (it|that) (shorter|simpler|more simply|in fewer words|in plain words)|simpler|simplify( (it|that|this))?|too many words|too much text|in short|less words|fewer words)( please| pls)?$/;
+  var LEFT_OFF = /^(so |ok |okay |um |hey )*(where (did|was|were) (i|we) (leave|left|leaving) off|where (was|were) (i|we)|what were we (talking about|saying|doing|on)|(pick up|carry on|continue|keep going) (from )?where (i|we) left off|where did we get to|what was i (asking|doing|saying)|remind me what we were (talking about|doing))( please)?$/;
+  function shorter(state) {
+    var R = state.lastReply, paras = [], bullets = [], link = null;
+    (R && R.blocks || []).forEach(function (b) {
+      if (b.k === 'p' && !b.mean && !/^(Here’s|The site|This part|Sure|Here you go|Related|It also|Another page|This may be|In short)/.test(b.x)) paras.push(b.x);
+      if (b.k === 'list' && !bullets.length) bullets = b.x.slice(0, 3);
+      if (b.k === 'passage') { paras.push((b.x || []).join(' ').replace(/^…\s*/, '').replace(/\s*…$/, '')); if (!link && b.u) link = [b.h, b.u]; }
+      if (b.k === 'bg') paras.push((b.x || []).join(' '));
+      if (b.k === 'links' && !link && b.x && b.x[0]) link = b.x[0];
+    });
+    var first = paras.length ? sentences(paras[0])[0] : '';
+    if (!bullets.length && paras.length) bullets = sentences(paras.join(' ')).slice(1, 3);
+    bullets = bullets.map(function (t) { return sentences(t)[0] || t; });
+    if (!first && !bullets.length) return { blocks: [{ k: 'p', x: 'There’s nothing above to shorten yet. Ask me anything, and I’ll keep it short.' }], chips: STARTERS.slice(0, 3), kind: 'short' };
+    var out = [];
+    if (first) out.push({ k: 'p', x: 'In short: ' + first });
+    if (bullets.length) out.push({ k: 'list', x: bullets });
+    if (link) out.push({ k: 'links', x: [link] });
+    return { blocks: out, chips: [{ label: 'Tell me more', q: 'Tell me more' }], kind: 'short' };
+  }
+  function leftOff(state) {
+    var L = state.last;
+    var tail = { k: 'p', x: 'Tools that keep your place do it on this device: Today’s Weather keeps a 7-day log, the Carrier Wave Decoder keeps a journal, and fill-in workpapers can keep a draft if you turn that on.' };
+    if (L && (L.topic || L.q)) {
+      var what = L.topic || '“' + String(L.q).slice(0, 60) + '”';
+      return { blocks: [{ k: 'p', x: 'We were last talking about ' + what + '. Want to carry on with that, or start something new?' }, tail],
+        chips: [{ label: 'Carry on', q: L.kind === 'sit' ? 'What can I do tonight?' : 'Tell me more' }, { label: 'Something new', q: 'What can I ask?' }], kind: 'care' };
+    }
+    return { blocks: [{ k: 'p', x: 'This chat is starting fresh, so there’s nothing earlier here to pick up. It only keeps a conversation in this tab, until you close it.' }, tail], chips: STARTERS.slice(0, 3), kind: 'care' };
+  }
+  function careFirst(state, q) {
+    var f = norm(q);
+    if (!f || DANGER.test(f)) return null;
+    if (SHORTER.test(f)) return shorter(state);
+    if (LEFT_OFF.test(f)) return leftOff(state);
+    var L = state.last, n = f.split(' ').length;
+    for (var i = 0; i < (IDX.first || []).length; i++) {
+      var c = IDX.first[i];
+      if (!c.re.test(f) || (c.notRe && c.notRe.test(f))) continue;
+      if (c.id === 'nextstep' && L && L.kind === 'sit') continue;   // "what next?" after a playbook: its own next step
+      if (c.id === 'fault' && n > 18) continue;
+      var r = cardReply(state, c, 'about');
+      if (c.id === 'fault') {
+        var H = IDX.sit.issues.hurtbythem;
+        var hurt = (L && L.kind === 'sit' && L.issue === 'hurtbythem') || (H && H.res.some(function (x) { return x[1] >= 5 && x[0].test(f); }));
+        if (hurt && c.what_hurt) {
+          r.blocks = [{ k: 'p', x: c.what_hurt[0] }, { k: 'list', x: c.how_hurt }].concat(r.blocks.filter(function (b) { return b.k === 'note' || b.k === 'links'; }));
+        }
+      }
+      r.kind = 'care';
+      state.last = L || state.last;  // a question about the chat or a feeling keeps the topic we were on
+      return r;
+    }
+    return null;
+  }
+  function unclearReply() {
+    return { blocks: [{ k: 'p', x: 'I didn’t catch that. Could you say it another way? A few words is plenty, like “chores” or “my partner snapped at me”.' }], chips: STARTERS, kind: 'unclear' };
+  }
+  // "I think you mean…": said once, above the answer, when a typo was read as another word
+  function meant(r, sp) {
+    if (!r || !r.blocks || !sp || !sp.fixes.length || r.kind === 'unclear') return r;
+    var fixed = String(sp.q).replace(/[?!.,\s]+$/, '').trim().replace(/'/g, '’').replace(/\bi\b/g, 'I'), shown = fixed.split(/\s+/).length <= 10 ? fixed : sp.fixes.map(function (x) { return x[1]; }).join(', ');
+    r.blocks.unshift({ k: 'p', x: 'I think you mean “' + shown + '”.', mean: 1 });
+    return r;
+  }
+
   // Decide what to say to one message. Returns {blocks:[...], chips:[...]} (all data, rendered later),
   // or {needBG:true} when the background notes should be fetched first (reply() then asks again).
   function respond(state, q, chipDoc) {
+    var sp = null;
+    if (chipDoc == null) {
+      sp = spellFix(q);
+      if (sp.fixes.length) q = sp.q;
+      var cf = careFirst(state, q);
+      if (cf) return meant(cf, sp);
+    }
     var f = norm(q), prevLast = state.last;
     var r = respond1(state, q, chipDoc);
+    if (r && r.needBG) return r;
+    // nothing here is a word I know ("asdfgh"): say so kindly, rather than "outside my little pond"
+    if (sp && r && (r.kind === 'offtopic' || r.kind === 'none') && sp.unknown && !sp.known) return unclearReply();
+    r = meant(r, sp);
     // an in-scope message that found nothing (a short, feeling-led one, or a follow-up in its own words):
     // stay with the last topic, or ask a warm clarifying question, rather than "outside my little pond"
     if (chipDoc == null && r && (r.kind === 'offtopic' || r.kind === 'none') && !OFF_TOPIC.test(f)) {
       var alt = contextReply(state, prevLast, f) || softClarify(state, f);
-      if (alt) return alt;
+      if (alt) return meant(alt, sp);
     }
     return r;
   }
@@ -1014,7 +1174,7 @@
       var fu = followUp(state, f, q);
       if (fu && fu.needBG) return fu;
       if (fu && fu.more) return more(state);
-      if (fu && fu.redirect) { var keep = state.last; var r0 = respondSite(state, fu.redirect, null, fu.prefer); if (r0.needBG) state.last = keep; return r0; }
+      if (fu && fu.redirect) { var cf2 = careFirst(state, fu.redirect); if (cf2) return cf2; var keep = state.last; var r0 = respondSite(state, fu.redirect, null, fu.prefer); if (r0.needBG) state.last = keep; return r0; }
       if (fu) return fu;
       var calc = calculators(q, f);
       if (calc) { state.last = { kind: 'calc', q: calc.topic || 'calculator', topic: calc.topic }; return calc; }
@@ -1268,6 +1428,7 @@
       }
       return true;
     });
+    if (r.kind !== 'short') state.lastReply = { blocks: r.blocks };
     var recent = state.recent || (state.recent = []);
     var asked = norm(q);
     recent.push(asked);
@@ -1290,7 +1451,7 @@
     function cb(x) { cb0(tidy(state, q, x)); }
     function safe(fn) {
       try { return fn(); }
-      catch (e) { return { blocks: [{ k: 'p', x: 'Sorry, something went wrong on my side. Could you try asking another way?' }], chips: STARTERS }; }
+      catch (e) { if (window.console && console.error) console.error(e); return { blocks: [{ k: 'p', x: 'Sorry, something went wrong on my side. Could you try asking another way?' }], chips: STARTERS }; }
     }
     r = safe(function () { return respond(state, q, doc); });
     if (r && r.needBG) {
@@ -1645,7 +1806,7 @@
   };
 
   Chat.prototype.reset = function () {
-    this.msgs = []; save(this.msgs); this.state.last = null;
+    this.msgs = []; save(this.msgs); this.state.last = null; this.state.lastReply = null; this.state.recent = [];
     this.log.textContent = ''; this.setChips([]);
     this.greet(this.char.greeting);
     this.input.focus();
