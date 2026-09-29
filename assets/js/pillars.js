@@ -19,7 +19,7 @@
     { id: 'read-your-state', roman: 'III', name: 'Read your state first', short: 'Read your state', field: 'Nervous-system science',
       you: 'Know how full your battery is before you judge a moment.',
       us: 'Pick the timing, pause and come back: your state shapes how their words land.' },
-    { id: 'tune-signals', roman: 'IV', name: 'Tune how you send and receive', short: 'Tune signals', field: 'Signal theory',
+    { id: 'tune-signals', roman: 'IV', name: 'Tune how you send and receive', short: 'Tune the signal', field: 'Signal theory',
       you: 'Know your own wiring, pace and how you hear things.',
       us: 'Translate across different wiring and tone. A mismatch is tuning, not a failing.' },
     { id: 'quiet-incentives', roman: 'V', name: 'Notice the quiet incentives', short: 'Quiet incentives', field: 'Behavioral economics',
@@ -45,6 +45,14 @@
       2: ['See strain as a setup you can change.', 'Agree owners that suit this kind of relationship.'] } },
     '/program-overview.html': OVERVIEW,
     '/start-here.html': OVERVIEW,
+    '/start-in-10-minutes.html': { p: [3, 1], n: {
+      3: ['Check your own weather first.', 'Know whether today is a good day to talk.'],
+      1: ['Log one thing you did today.', 'Start a record you can share when you are ready.'] } },
+    '/sent-this.html': { p: [1, 4], n: {
+      1: ['Look at your own side first, privately.', 'Share only what you choose, when you choose.'],
+      4: ['Answer in your own words and time.', 'Say yes, not yet or no kindly.'] } },
+    '/program.html': OVERVIEW,
+    '/glossary.html': OVERVIEW,
     '/frequency-framework.html': { p: [4], n: {
       4: ['Learn your own rhythm for money, rest, decisions, talking and values.', 'See a clash as two rhythms out of step, and agree when you will meet.'] } },
     '/quick-checks.html': { p: [3], n: {
@@ -105,7 +113,6 @@
       1: ['See your progress week by week.', 'Share one record instead of two memories.'],
       2: ['See which changes to the setup held.', 'Build on what worked together.'] } },
     '/prog-01.html': OVERVIEW,
-    '/curriculum.html': OVERVIEW,
     '/do/index.html': OVERVIEW,
     '/do/workpaper-playground.html': OVERVIEW,
 

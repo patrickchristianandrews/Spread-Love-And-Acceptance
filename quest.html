@@ -61,6 +61,8 @@
   .qm-name{ font:600 21px Fraunces, Georgia, serif; fill:#2B2620; }
   .qm-num{ font:600 15px "IBM Plex Mono", monospace; fill:#5E3F7A; letter-spacing:.06em; }
   .lp-isle-count{ font:600 15px Lora, Georgia, serif; fill:#3F3552; }
+  /* on a phone the map is drawn at about half size, so its labels grow to stay readable */
+  @media (max-width:560px){ .qm-name{ font-size:25px; } .qm-num{ font-size:19px; letter-spacing:.02em; } .lp-isle-count{ font-size:19px; } }
   .lp-lamp.is-lit circle:first-child{ animation:qm-glow 3.2s ease-in-out infinite; transform-box:fill-box; transform-origin:center; }
   @keyframes qm-glow{ 50%{ opacity:.45; } }
   .qm-boat{ animation:qm-bob 5s ease-in-out infinite; transform-box:fill-box; transform-origin:center; }
@@ -181,7 +183,7 @@
     <g class="qm-land"><path class="qm-ring" d="M378 370c0-40 44-62 92-62s88 22 88 60-40 60-88 60-92-18-92-58z" fill="#F8E7AE" stroke="#E6C766" stroke-width="2.5"/><path d="M378 370c0-40 44-62 92-62s88 22 88 60-40 60-88 60-92-18-92-58z" fill="url(#qm-shine)"/>
       <g aria-hidden="true"><path d="M406 330l8-14 8 14z" fill="#E79AAE"/><circle cx="414" cy="334" r="5" fill="#F7C9D4" stroke="#E79AAE" stroke-width="1.4"/></g></g>
     <text class="qm-num" x="476" y="350" text-anchor="middle">PILLAR V</text>
-    <text class="qm-name" x="476" y="374" text-anchor="middle">Quiet pulls</text>
+    <text class="qm-name" x="476" y="374" text-anchor="middle">Quiet incentives</text>
     <text class="lp-isle-count" x="476" y="396" text-anchor="middle">&#8203;</text>
     <g class="lp-lamps" data-x="476" data-y="298"></g>
   </a>
