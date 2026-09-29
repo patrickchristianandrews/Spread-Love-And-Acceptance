@@ -452,7 +452,12 @@
     '\\bthreat(en|ens|ened|ening)\\w* (to )?(hurt|kill|harm)\\b', '\\b(threatens|threatened) me\\b',
     '\\b(afraid|scared|frightened|terrified) (of|for) (him|her|my (life|safety)|my (partner|husband|wife|boyfriend|girlfriend|spouse|ex|dad|father|mom|mum|mother|stepdad|stepmom))\\b',
     '\\bnot safe (at home|with (him|her|them|my))\\b', '\\bfeel unsafe\\b', '\\b(rape|raped|sexual(ly)? assault\\w*|assault(ed|s)? me)\\b',
-    '\\bstalk(s|ed|ing|er)?\\b', '\\b(gun|knife|weapon)\\b', '\\boverdos\\w*'
+    '\\bstalk(s|ed|ing|er)?\\b', '\\b(gun|knife|weapon)\\b', '\\boverdos\\w*',
+    // quieter ways people say they may not want to live
+    '\\b(do ?n.?t|do not|dont) (really )?(want|wanna) to (be here|be alive|live|exist|wake up|be around)\\b', '\\b(want|wanna|wish i could) (to )?(disappear|vanish|not exist|not wake up|fall asleep and not wake up)\\b',
+    '\\bi (just |really |honestly )?can.?t go on( anymore| living| like this)?$', '\\bcan.?t go on (anymore|living|like this)\\b', '\\b(better off|be better) without me\\b', '\\bno (point|reason) (in )?(living|being alive|going on|to keep going)\\b',
+    '\\bwish (i|id) (was|were|had) (dead|never (been )?born|not here|not alive)\\b', '\\btired of (living|being alive|life)\\b', '\\b(nothing|no one|nobody) to live for\\b',
+    '\\btake my (own )?life\\b', '\\bunalive\\w*', '\\bnot (be|being) here anymore\\b', '\\bgive up on (life|living|everything)\\b', '\\bhurt (him|her|them|someone|somebody)\\b'
   ].join('|'));
   function safetyReply() {
     return { blocks: [
