@@ -125,5 +125,58 @@ ok(pick.drafts.length >= 2 && pick.drafts.some(d => /school pickups/.test(d.text
 ok(new Set([roomies, walls, pick, mail].map(r => r.drafts.map(d => d.text).join('|'))).size === 4, 'different threads get different reply drafts');
 ok(!readOf('A: hi\nB: hi').next.some(m => /^Then:/.test(m.title)), 'no "Then:" without a first step');
 
+// ---------- First-time testers, round two ----------
+// the bins thread: hints, "always", "Fine." and "We need to talk" raise the heat; "k" is not an answer
+const bins = readOf('A: Can you take the bins out tonight?\nB: k\nA: It would be nice if someone helped around here.\nB: I literally just got home. You always do this.\nA: Fine.\nB: We need to talk.', 'A');
+ok(bins.level !== 'calm', 'bins thread must not read as calm (got ' + bins.level + ')');
+ok(bins.turns[2].marks.some(m => m.kind === 'hint'), 'the hint is flagged');
+ok(bins.turns[3].marks.some(m => m.kind === 'absolute'), '"you always do this" is flagged');
+ok(bins.turns[5].marks.some(m => m.kind === 'opener'), '"We need to talk" is flagged');
+ok(bins.turns[4].heat > 0, '"Fine." adds heat');
+ok(bins.unanswered.some(u => u.at === 0 && u.flat === 'k'), '"k" is not counted as an answer to the bins question');
+// sarcasm and a sweeping "everything"
+const sarc = kinds('of course you did. I have to do everything around here');
+ok(sarc.includes('sarcasm') && sarc.includes('absolute'), 'sarcasm + "I have to do everything" flagged; got ' + sarc.join(','));
+// typos don't move the turn or lose the repair
+const typo = readOf('Me: can you clen the kichen tonite?\nSam: sory, i forgot. i will do it now\nMe: you allways forget', 'Me');
+const clean = readOf('Me: can you clean the kitchen tonight?\nSam: sorry, i forgot. i will do it now\nMe: you always forget', 'Me');
+ok(typo.turns[1].marks.some(m => m.kind === 'repair'), 'a typo’d “sory” is still a repair');
+ok(typo.turns[2].marks.some(m => m.kind === 'absolute'), 'a typo’d “allways” is still an absolute');
+ok(JSON.stringify(typo.turns.map(t => t.heat)) === JSON.stringify(clean.turns.map(t => t.heat)), 'typos read the same as clean spelling: ' + typo.turns.map(t => t.heat) + ' vs ' + clean.turns.map(t => t.heat));
+ok(typo.turned === clean.turned && typo.missedRepairs.length === clean.missedRepairs.length, 'typos don’t move where it turned or the repair advice');
+ok(typo.turns[2].readAs.some(f => f.to === 'always'), 'the turn says what it read the typo as');
+// swearing, fed-up lines and name-calling: the same reading as the Signal Translator
+const hot = readOf('A: did you do the dishes\nB: You are getting on my last fucking nerve\nA: you’re a total nightmare', 'A');
+ok(hot.turns[1].marks.some(m => m.kind === 'hostile') && hot.turns[1].marks.some(m => m.kind === 'swear'), 'hostile + swearing flagged');
+ok(hot.turns[2].marks.some(m => m.kind === 'verdict'), 'name-calling is a verdict');
+ok(hot.level === 'hot', 'a thread ending in name-calling reads hot (got ' + hot.level + ')');
+
+// ---------- Screenshot import: OCR lines into bubbles (the browser test is tools/reader/ui-screens.js) ----------
+const O = require(path.join(__dirname, '../../assets/js/conversation-reader-ocr.js'));
+const L = (text, x0, y0, x1, y1, tint) => ({ text, conf: 92, bbox: { x0, y0, x1, y1 }, tint });
+const pageA = { width: 1000, height: 2000, lines: [
+  L('9:41', 60, 20, 140, 60), L('82%', 860, 20, 940, 60), L('Alex >', 450, 200, 560, 240),
+  L('Today 9:30 PM', 400, 300, 600, 330),
+  L('Can you take the bins out tonight?', 40, 400, 700, 440, 'them'),
+  L('Sure, after dinner 9:31 PM vv', 600, 500, 960, 540, 'me'),
+  L('It would be nice if someone helped', 40, 600, 720, 640, 'them'), L('around here.', 40, 650, 300, 690, 'them'),
+  L('| literally just got home. You', 380, 760, 960, 800, 'me'), L('always do this.', 380, 810, 640, 850, 'me'),
+  L('Delivered', 850, 870, 960, 895), L('iMessage', 60, 1900, 220, 1940) ] };
+const pageB = { width: 1000, height: 2000, lines: [
+  L('9:42', 60, 20, 140, 60), L('Alex >', 450, 200, 560, 240),
+  L('I literally just got home. You', 380, 400, 960, 440, 'me'), L('always do this.', 380, 450, 640, 490, 'me'),
+  L('Fine.', 40, 560, 160, 600, 'them'), L('Sorry. Can we talk at 87', 560, 660, 960, 700, 'me') ] };
+const lay = O.layout([pageA, pageB]);
+ok(lay.name === 'Alex', 'contact name from the header (got ' + lay.name + ')');
+ok(lay.bubbles.map(b => b.side).join(',') === 'left,right,left,right,left,right', 'sides: ' + lay.bubbles.map(b => b.side + ':' + b.text).join(' | '));
+ok(lay.bubbles.length === 6, 'the overlapping bubble is kept once: ' + lay.bubbles.length);
+ok(lay.bubbles[1].text === 'Sure, after dinner', 'timestamps and ticks come off: ' + lay.bubbles[1].text);
+ok(lay.bubbles[2].text === 'It would be nice if someone helped around here.', 'a wrapped bubble is one message');
+ok(lay.bubbles[3].text === 'I literally just got home. You always do this.', '"|" is read as "I"');
+ok(lay.bubbles[5].text === 'Sorry. Can we talk at 8?', 'a question mark read as 7 is fixed');
+ok(!lay.bubbles.some(b => /Delivered|iMessage|9:4|Today|82%/.test(b.text)), 'no chat furniture');
+const noHead = O.layout([{ width: 1000, height: 2000, lines: [L('hey are you home?', 40, 400, 500, 440), L('Thanks Jamie, on my way', 500, 500, 960, 540)] }]);
+ok(noHead.name === 'Jamie', 'with no header, a greeting in my message names them (got ' + noHead.name + ')');
+
 console.log(`${pass} passed, ${fail} failed`);
 if (fail) { errs.forEach(e => console.log('  - ' + e)); process.exit(1); }

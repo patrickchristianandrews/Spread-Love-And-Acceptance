@@ -12,7 +12,8 @@ const ok=(c,m)=>{ if(c) pass++; else { fail++; errsOut.push(m); } };
 const NEUTRAL = /^(Not sure \/ skip|Choose an example…)$/;
 async function overflow(p){ return p.evaluate(()=>document.documentElement.scrollWidth - document.documentElement.clientWidth); }
 async function fullText(p){ return p.evaluate(()=>{ document.querySelectorAll('#results details').forEach(d=>d.open=true); return document.querySelector('#results').innerText; }); }
-async function translate(p){ await p.click('#go'); await p.waitForSelector('#takeaway'); await p.waitForTimeout(120); }
+async function translate(p){ await p.click('#go'); await p.waitForSelector('#verdict'); await p.evaluate(()=>document.querySelectorAll('#results details').forEach(d=>d.open=true)); await p.waitForTimeout(120); }
+async function openFine(p){ await p.evaluate(()=>{ document.querySelector('#fine').open=true; }); }
 
 (async()=>{
   const b=await chromium.launch();
@@ -78,7 +79,8 @@ async function translate(p){ await p.click('#go'); await p.waitForSelector('#tak
     ok(/The ask:/.test(t), `${tag}: no ask line for a call request`);
     ok(!/voice rises|a body (?:leaves|has left)|spike|ladder|resync/i.test(t), `${tag}: in-person or jargon wording on a text channel`);
 
-    // change drop-downs: work message, listener autistic + ADHD, group channel
+    // change drop-downs (under Fine-tune): work message, listener autistic + ADHD, group channel
+    await openFine(p);
     await p.selectOption('#useSel','work'); await p.waitForTimeout(60);
     ok(await p.$eval('#relSel', s=>s.value)==='coworker' && await p.$eval('#chSel', s=>s.value)==='chat', `${tag}: work use case should set coworker + chat`);
     await p.selectOption('#wB0','autistic');
@@ -99,7 +101,7 @@ async function translate(p){ await p.click('#go'); await p.waitForSelector('#tak
     await p.screenshot({path:S+`st2-${tag}-2-work.png`, fullPage:false});
 
     // fine-tune: state, situation, place, needs, speaker wiring, swap
-    await p.click('#fine > summary');
+    await openFine(p);
     await p.selectOption('#stateSel','s'); await p.selectOption('#sitSel','decision'); await p.selectOption('#envSel','work');
     await p.selectOption('#needASel','plan'); await p.selectOption('#needBSel','space');
     await p.selectOption('#wA0','nt');
@@ -129,6 +131,30 @@ async function translate(p){ await p.click('#go'); await p.waitForSelector('#tak
     const all = await p.evaluate(()=>{ document.querySelectorAll('details').forEach(d=>d.open=true); return document.title+' '+document.body.innerText; });
     ok(!/\bspike\b|TOL-OS|TOL‑OS|\bladder\b|resync|a body leaves/i.test(all), `${tag}: jargon on the page: ${(all.match(/.{30}(?:spike|TOL.OS|ladder|resync|a body leaves).{30}/i)||[''])[0]}`);
     ok(await overflow(p)<=0, `${tag}: overflow with everything open`);
+
+    // the owner's example: hostile and profane is heavy, never "clear", and the rewrite drops the heat
+    await p.goto(URL); await p.waitForLoadState('load');
+    const startUi = await p.evaluate(()=>({fineOpen:document.querySelector('#fine').open, useVisible:document.querySelector('#useSel').checkVisibility()}));
+    ok(!startUi.fineOpen && !startUi.useVisible, `${tag}: the page should start with just the box and Translate (settings under Fine-tune)`);
+    await p.fill('#phrase','You are getting on my last fucking nerve'); await p.click('#go'); await p.waitForSelector('#verdict');
+    const v = await p.evaluate(()=>({lvl:document.querySelector('.verdict .vlvl').innerText, found:document.querySelector('.verdict .vfound').innerText, best:(document.querySelector('#vbest')||{}).innerText||''}));
+    ok(/Heavy static/.test(v.lvl), `${tag}: hostile line verdict is "${v.lvl}"`);
+    ok(/Swearing/.test(v.found) && /Hostile/.test(v.found), `${tag}: verdict should name what it found: ${v.found}`);
+    ok(/frustrated/i.test(v.best) && !/fuck|nerve/i.test(v.best), `${tag}: best rewrite "${v.best}"`);
+    const full = await fullText(p);
+    ok(!/No known trouble spots|0 to look at|Clear signal/.test(full), `${tag}: contradiction in the full read`);
+    await p.screenshot({path:S+`st2-${tag}-4-hostile.png`, fullPage:false});
+    // typos read as the word meant, and say so
+    await p.fill('#phrase','you’re allways late'); await p.click('#go'); await p.waitForSelector('#verdict');
+    ok(/Read as: “always”/.test(await p.$eval('.verdict', e=>e.innerText)), `${tag}: "read as" line missing`);
+    // Try the reverse keeps the typed words and can be undone
+    await p.fill('#phrase','Could you take the bins out tonight?'); await p.click('#go'); await p.waitForSelector('#verdict');
+    await p.click('#again'); await p.waitForTimeout(80);
+    ok(await p.$eval('#reply', e=>e.value)==='Could you take the bins out tonight?', `${tag}: reverse lost the sentence`);
+    await p.click('#msg .undo'); await p.waitForTimeout(60);
+    ok(await p.$eval('#phrase', e=>e.value)==='Could you take the bins out tonight?', `${tag}: undo did not bring the sentence back`);
+    ok(!/You's|you's/.test(await p.evaluate(()=>document.body.innerText)), `${tag}: "You's" on the page`);
+    ok(await overflow(p)<=0, `${tag}: overflow on the hostile read`);
 
     ok(errs.length===0, `${tag}: console errors: ${errs.join(' | ')}`);
     await p.close();

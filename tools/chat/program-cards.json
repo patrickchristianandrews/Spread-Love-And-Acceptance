@@ -2,6 +2,484 @@
   "_about": "Curated answers for the program's own pieces (kind: tool) and the most common questions (kind: intent). keys are names people type (matched as whole words, longest first); pat is an optional pattern for intent cards (same small language as the situations). A tool card can answer 'what is it' (what + how), 'how do I use it' (how), 'what does it mean' (results) and 'show me the math' (math). See tools/chat/README.md.",
   "cards": [
     {
+      "id": "listen",
+      "kind": "intent",
+      "first": true,
+      "name": "listening instead of reading",
+      "pat": "\\b(read|say|speak)\\b.{0,30}\\b(out loud|aloud|to me)\\b|\\b(text to speech|listen to (this|the page|it|pages|the site)|audio version|hear (this|the page|it) (read|out loud)|read aloud|can i listen|can i hear it|voice reading)\\b",
+      "keys": [],
+      "what": [
+        "Yes, there are two easy ways to listen."
+      ],
+      "how": [
+        "Many pages have a Listen button near the top that reads the page out loud.",
+        "Your device can read any page too: Speak Screen on an iPhone or iPad, Select to Speak on Android, or Read aloud in Microsoft Edge.",
+        "I’ll keep my answers short, too. Say “make it shorter” any time."
+      ],
+      "links": [],
+      "chips": [
+        [
+          "Make the text bigger",
+          "How do I make the text bigger?"
+        ],
+        [
+          "The words are too hard",
+          "The words are too hard"
+        ]
+      ]
+    },
+    {
+      "id": "textsize",
+      "kind": "intent",
+      "first": true,
+      "name": "bigger text",
+      "pat": "\\b(make|get|turn|change) (the |this )?(text|words|font|letters|writing|print|type|page)( size)? (bigger|larger|smaller|easier to read|more readable)\\b|\\b(text|font|letters|words|writing|print) (is |are )?(too |so |really )?(small|tiny)\\b|\\b(bigger|larger|smaller) (text|font|letters|words|writing)\\b|\\b(text|font) size\\b|\\bzoom in\\b|\\bcant (read|see) (the )?(text|words|small print)\\b",
+      "keys": [],
+      "what": [
+        "You can make the text bigger in Settings, at the top of the page."
+      ],
+      "how": [
+        "Open Settings and choose a Text size: Larger or Largest.",
+        "Easy reading, in the same place, switches to a clearer font with more space between lines.",
+        "Your browser’s zoom works too: Ctrl and + (⌘ and + on a Mac), or pinch to zoom on a phone.",
+        "Your choices stay in this browser only."
+      ],
+      "links": [],
+      "chips": [
+        [
+          "Can you read it out loud?",
+          "Can you read this out loud?"
+        ],
+        [
+          "The words are too hard",
+          "The words are too hard"
+        ]
+      ]
+    },
+    {
+      "id": "hardwords",
+      "kind": "intent",
+      "first": true,
+      "name": "easier words",
+      "pat": "\\b(the |these |your |those )?(words|text|reading|language|page|pages|answers?|sentences) (are|is|feel|feels) (too |so |really |a bit )?(hard|difficult|complicated|confusing|long|much|dense)\\b|\\b(too many|big|long|hard|fancy|difficult) words\\b|\\b(i )?(cant|dont) understand (this|it|the words|you|that|what you mean)\\b|\\bplain(er)? (english|language|words)\\b|\\bsimpler (words|version|please)\\b|\\beasy (read|reading|words|version)\\b|\\b(its|it s|this is|that s|thats) (too )?(hard|difficult) to read\\b",
+      "keys": [],
+      "what": [
+        "Let’s make it easier."
+      ],
+      "how": [
+        "Most pages have a Simple version. Look for 🌱 Simple version near the top: the main idea in a few short cards.",
+        "Easy reading, in Settings at the top of the page, uses a clearer font, more space and shorter lines.",
+        "Many pages have a Listen button that reads the page out loud.",
+        "Ask me anything, and say “make it shorter” whenever an answer is too long."
+      ],
+      "links": [
+        [
+          "Start where you are",
+          "/start-here.html"
+        ]
+      ],
+      "chips": [
+        [
+          "Make the text bigger",
+          "How do I make the text bigger?"
+        ],
+        [
+          "Where do I start?",
+          "Where should I start?"
+        ]
+      ]
+    },
+    {
+      "id": "chatprivacy",
+      "kind": "intent",
+      "first": true,
+      "name": "who can see this chat",
+      "pat": "\\b(see|read|find|look at|check|know) (what i|what ive|what i ve|my) (typed|type|wrote|write|said|say|asked|ask|put|messages|chat|conversation|questions)\\b|\\b(see|read|find) (this|the|my|our) (chat|conversation|messages|chat history)\\b|\\b(delete|erase|clear|wipe|remove|get rid of) (this|the|my|our|that|these) (chat|conversation|messages|history|chat history|questions)\\b|\\b(delete|erase|clear|wipe) (this|it|everything)( chat)?$|\\b(is|are) (this|the|my|our) (chat|conversation|messages) (private|saved|stored|recorded|kept|logged|sent|safe|secret)\\b|\\b(do|does|will|can|could) (you|this chat|the chat|anyone|someone|anybody|people) (save|store|keep|remember|record|log|read|see) (this|what i|my|our|it|the chat)\\b|\\bhide (this|the|my) (chat|conversation)\\b|\\b(chat|conversation) history\\b|\\bwhat happens to (what i type|my messages|this chat)\\b",
+      "keys": [],
+      "what": [
+        "What you type here stays on this device, in this browser tab only. It isn’t sent anywhere."
+      ],
+      "how": [
+        "“Start over” at the top of this chat erases the conversation right away.",
+        "Closing this tab clears it too. Nothing from this chat is kept after that.",
+        "Your browser’s history can still show which pages you opened, but not what you typed. You can clear that in your browser’s settings, or use a private window next time."
+      ],
+      "links": [
+        [
+          "Privacy policy",
+          "/privacy-policy.html"
+        ]
+      ],
+      "chips": [
+        [
+          "Tell me something calming",
+          "Can you tell me something calming?"
+        ],
+        [
+          "Where do I start?",
+          "Where should I start?"
+        ]
+      ]
+    },
+    {
+      "id": "diagnose",
+      "kind": "intent",
+      "first": true,
+      "name": "whether I can tell you about your wiring",
+      "pat": "\\b(am i|are you saying (i m|im)|i think (i m|im|i am|i might be|i may be|i could be)|i might be|i may be|could i be|might i be|maybe (i m|im|i am)|do i have|do you think (i m|im|i am|i have)|tell me (if|whether) (i m|im|i am|i have)|can you tell (me )?(if|whether) (i m|im|i am|i have)|can you tell me)\\b.*\\b(autis[a-z]*|adhd|add|audhd|dyslexi[a-z]*|dyspraxi[a-z]*|neurodivergent|on the spectrum|aspergers?|ocd|bipolar|depress[a-z]*|an anxiety disorder|a disorder|hsp|highly sensitive)\\b|\\bdiagnose (me|my|him|her|them|us)\\b|\\bgive me a diagnosis\\b|\\b(is|could) (my|our) [a-z]+ (be )?(autistic|adhd|on the spectrum|dyslexic|neurodivergent)\\b",
+      "keys": [],
+      "what": [
+        "I can’t tell you that, and I won’t guess. I’m a small helper on a website, and nobody can tell that from a chat."
+      ],
+      "how": [
+        "If you’d like to find out, a qualified professional can talk it through with you properly.",
+        "Whatever the answer, the Wiring Card helps anyone put how they’re wired, and what helps, into words.",
+        "Wired Differently explains how different wiring can change the way words land, without labels."
+      ],
+      "links": [
+        [
+          "The Wiring Card",
+          "/wiring-card.html"
+        ],
+        [
+          "Wired Differently",
+          "/wired-differently.html"
+        ],
+        [
+          "Know your own wiring",
+          "/know-yourself.html"
+        ]
+      ],
+      "chips": [
+        [
+          "How do I make a Wiring Card?",
+          "How do I make a wiring card?"
+        ],
+        [
+          "Is this therapy?",
+          "Is this therapy?"
+        ]
+      ]
+    },
+    {
+      "id": "calmnow",
+      "kind": "intent",
+      "first": true,
+      "name": "something calming",
+      "pat": "\\b(tell me|say|give me|share|send me|i need|i want|i could use|i d like|id like) (something|anything|some words|a few words|a thought|words|a little something)? ?(calming|calm|comforting|soothing|gentle|reassuring|peaceful|nice|kind)\\b|\\bcalm me( down)?\\b|\\bhelp me (calm|settle|relax|breathe|slow down)\\b|\\bi (need|want|have) to (calm down|settle down|relax|breathe)\\b|\\bi need (some )?(calm|peace|a moment|a breather)\\b|\\bsoothe me\\b|\\bcomfort me\\b|\\bi cant (calm down|relax|settle)\\b|\\bsomething to (calm|settle|soothe) me\\b|\\bcalm (places?|spaces?|spots?|corners?)\\b|\\bi feel (so )?(panicky|shaky|wound up|keyed up)\\b",
+      "keys": [],
+      "what": [
+        "Of course. Let’s slow down together for a moment."
+      ],
+      "how": [
+        "Let your shoulders drop, and unclench your jaw.",
+        "Breathe in gently for a count of four, then out slowly for a count of six. Do that three times.",
+        "Nothing needs deciding in the next few minutes. You’re allowed to just be here.",
+        "The Breathe button, on any page, gives you a one-minute breathing break."
+      ],
+      "links": [
+        [
+          "The Night Garden",
+          "/night-garden.html"
+        ],
+        [
+          "Drift, the calm visualizer",
+          "/calm-visualizer.html"
+        ],
+        [
+          "Soundscapes",
+          "/soundscapes.html"
+        ]
+      ],
+      "chips": [
+        [
+          "Make a calm-down plan",
+          "What is WP-11?"
+        ],
+        [
+          "A calm game",
+          "What games are there?"
+        ]
+      ]
+    },
+    {
+      "id": "judged",
+      "kind": "intent",
+      "first": true,
+      "name": "feeling judged here",
+      "pat": "\\b(feel|feeling|felt|am|im|getting|get)( so| a bit| kind of| really| a little)? (judged|blamed|lectured|preached at|talked down to|shamed|criticized|criticised|told off|attacked|scolded|like (a failure|the bad guy|i m failing|im failing|i m doing it wrong|im doing it wrong))\\b.*\\b(by (this|the|your) (site|page|pages|program|chat|website|app|tool|tools)|by you|here|this (site|page|program|chat|website)|reading (this|these|the|your))\\b|\\b(this|the|your) (site|page|program|chat|website) (is|feels|seems|sounds) (so |really |kind of |a bit |a little )?(judgy|judgmental|judging|preachy|condescending|harsh|blaming|critical)\\b|\\b(are|r) you judging me\\b|\\bstop judging( me)?\\b|\\byou re judging me\\b|\\bdont judge me\\b",
+      "keys": [],
+      "what": [
+        "I’m sorry it felt that way. That’s the opposite of what this place is for, and I’m glad you told me."
+      ],
+      "how": [
+        "Nothing here grades you or decides who’s right. Every tool looks at a setup or a moment, never at a person.",
+        "Nobody sees what you type or choose. It stays on your device.",
+        "Skip anything that doesn’t fit. You don’t have to do any of it, in any order.",
+        "You’re welcome here exactly as you are."
+      ],
+      "pillar": "Pillar II, Fix the setup, not the person.",
+      "links": [
+        [
+          "Start where you are",
+          "/start-here.html"
+        ]
+      ],
+      "chips": [
+        [
+          "Tell me something calming",
+          "Can you tell me something calming?"
+        ],
+        [
+          "Is this therapy?",
+          "Is this therapy?"
+        ]
+      ]
+    },
+    {
+      "id": "fault",
+      "kind": "intent",
+      "first": true,
+      "name": "whether it’s my fault",
+      "pat": "\\b(is|was|isnt|wasnt) (it|this|that|all this|all of this|everything|the fight|the argument) (all )?(my|me) fault\\b|\\b(is|was) it (me|all me)$|\\bam i (the problem|to blame|the bad guy|the one at fault|in the wrong|the reason|a bad (person|partner|parent|friend|wife|husband|mom|mum|dad|roommate))\\b|\\bdid i (cause|start|ruin) (this|it|that|everything)\\b|\\b(its|it s|it is|this is|that is|everything is|thats) (all )?my fault\\b|\\bi (think|feel like|guess) (its|it s|it is|this is|everything is) (all )?my fault\\b|\\b(i )?blame myself\\b|\\bis (this|it) on me\\b",
+      "notPat": "\\b(apologi[sz]e|say sorry|make (it|things) right|how (do|can|should) i)\\b",
+      "keys": [],
+      "what": [
+        "It’s rarely one person’s fault. When things go wrong between people, it’s usually a mix: tired batteries, bad timing, a setup that isn’t working, and two different ways of hearing the same words."
+      ],
+      "how": [
+        "Asking this shows you care about getting it right.",
+        "You can own your part, if there is one, without carrying all of it.",
+        "Look at the setup before the person, and that includes you.",
+        "You don’t have to settle who was right tonight."
+      ],
+      "what_hurt": [
+        "No, not the way it was said to you. How someone speaks to you is theirs to own, and things between two people are rarely one person’s fault."
+      ],
+      "how_hurt": [
+        "You can care about what was underneath it without taking the blame for the tone.",
+        "Crying or feeling shaken afterward is a very human response, not a weakness.",
+        "You don’t have to work out who was right tonight.",
+        "When you’re both calm, you can say how it landed, in one sentence."
+      ],
+      "pillar": "Pillar II, Fix the setup, not the person.",
+      "links": [
+        [
+          "Decode the moment, without blame",
+          "/carrier-wave-decoder.html#decode"
+        ],
+        [
+          "WP-11: The Calm-Down Kit",
+          "/wp-11.html"
+        ]
+      ],
+      "chips": [
+        [
+          "Tell me something calming",
+          "Can you tell me something calming?"
+        ],
+        [
+          "What can I do tonight?",
+          "What can I do tonight?"
+        ]
+      ]
+    },
+    {
+      "id": "fightnow",
+      "kind": "intent",
+      "first": true,
+      "name": "right after a fight",
+      "pat": "\\b(i|we) (just|only just) (had|got into|finished|got out of) (a|an|another|this|our|that)( big| huge| bad| stupid| small| little| awful| horrible)? (fight|argument|row|blowup|blow up|disagreement|spat|falling out)\\b|\\bjust had (a|an|another)( big| huge| bad| stupid| small| little)? (fight|argument|row|blowup|disagreement|spat)\\b|\\bwe (just|only just) (fought|argued|had words)\\b|\\b(in the middle of|mid) (a |an )?(fight|argument|row)\\b|\\b(fight|argument|argued|fought|row)\\b.{0,50}\\b(\\d+|a few|two|three|five|ten|fifteen) (minutes?|mins?)\\b|\\b(\\d+|a few|two|three|five|ten|fifteen) (minutes?|mins?)\\b.{0,50}\\b(fight|argument|argued|fought)\\b",
+      "keys": [],
+      "what": [
+        "Here’s a plan for the next five minutes. You don’t have to fix anything right now."
+      ],
+      "how": [
+        "Minute 1: pause, with a time to come back. Something like: “I want to get this right. Can we pick it up at 8?”",
+        "Minutes 2 and 3: settle your body. Breathe out longer than you breathe in, get a glass of water, or step outside for a moment.",
+        "Minutes 4 and 5: write one line about what the fight was really about, so you don’t have to hold it in your head.",
+        "Later, when you’re both calm: decode what happened with the Carrier Wave Decoder, or paste the texts into the Conversation Reader."
+      ],
+      "links": [
+        [
+          "WP-11: The Calm-Down Kit",
+          "/wp-11.html"
+        ],
+        [
+          "Decode the moment (Carrier Wave Decoder)",
+          "/carrier-wave-decoder.html#decode"
+        ],
+        [
+          "The Conversation Reader",
+          "/conversation-reader.html"
+        ]
+      ],
+      "chips": [
+        [
+          "Is it my fault?",
+          "Is it my fault?"
+        ],
+        [
+          "Tell me something calming",
+          "Can you tell me something calming?"
+        ],
+        [
+          "What do I say later?",
+          "How do we make up after a fight?"
+        ]
+      ]
+    },
+    {
+      "id": "minutes",
+      "kind": "intent",
+      "first": true,
+      "name": "what fits in a few minutes",
+      "pat": "\\b(only |just )?(have|got|with|in) (only |just )?(\\d+|a few|two|three|four|five|ten|fifteen|twenty|a couple of|a couple) (minutes?|mins?)\\b|\\b(\\d+|two|three|five|ten|fifteen) (minutes?|mins?) (left|to spare|free|max|tops)\\b|\\bi m in a hurry\\b|\\bim in a hurry\\b|\\bno time\\b",
+      "keys": [
+        "start in 10 minutes",
+        "start in ten minutes"
+      ],
+      "what": [
+        "Here’s what fits in a few minutes. Pick one, or follow Start in 10 minutes for a guided first visit."
+      ],
+      "how": [
+        "1 minute: Today’s Weather, a quick read on how you are today.",
+        "2 minutes: the Battery Meter (WP-02), or a breathing break with the Breathe button.",
+        "5 minutes: a round of Word Bloom or Quiet Words, or one card of a Simple chapter.",
+        "10 minutes: fill in the Calm-Down Kit (WP-11), so it’s ready when you need it."
+      ],
+      "links": [
+        [
+          "Start in 10 minutes",
+          "/start-in-10-minutes.html"
+        ],
+        [
+          "Today’s Weather",
+          "/quick-checks.html#today"
+        ],
+        [
+          "WP-02: How full is your battery?",
+          "/workpapers/wp-02-battery-stress-meter.html"
+        ]
+      ],
+      "chips": [
+        [
+          "I just had a fight",
+          "I just had a fight and I only have a few minutes"
+        ],
+        [
+          "Tell me something calming",
+          "Can you tell me something calming?"
+        ]
+      ],
+      "notPat": "\\b(workpaper|chapter)\\b"
+    },
+    {
+      "id": "nextstep",
+      "kind": "intent",
+      "first": true,
+      "name": "one thing to do now",
+      "pat": "^(ok |okay |so |and |but |right |alright )*(what (should|do|can|could) (i|we) do (next|now)|what next|whats next|now what|what now|give me (one|a|just one|a single) (thing|step)( to do| i can do| for now| right now)?|(tell me )?(one|just one) thing (to do|i can do)|whats the next step|what is the next step|next step|what do i do next)( please)?$",
+      "keys": [],
+      "what": [
+        "Here’s one thing you can do now: take a short pause, and pick a time to come back to whatever is going on."
+      ],
+      "how": [
+        "Say it out loud or in a text: “I need a few minutes. Can we come back to this at 8?”",
+        "While you wait, settle your body with the Calm-Down Kit (WP-11), or the Breathe button on any page.",
+        "When you come back, the Carrier Wave Decoder can help you decode what happened, and the Conversation Reader can read a text thread."
+      ],
+      "links": [
+        [
+          "WP-11: The Calm-Down Kit",
+          "/wp-11.html"
+        ],
+        [
+          "Decode the moment (Carrier Wave Decoder)",
+          "/carrier-wave-decoder.html#decode"
+        ],
+        [
+          "The Conversation Reader",
+          "/conversation-reader.html"
+        ]
+      ],
+      "chips": [
+        [
+          "I just had a fight",
+          "I just had a fight and I only have a few minutes"
+        ],
+        [
+          "I’m worn out",
+          "I feel exhausted and overwhelmed"
+        ],
+        [
+          "Where do I start?",
+          "Where should I start?"
+        ]
+      ]
+    },
+    {
+      "id": "remind",
+      "kind": "intent",
+      "first": true,
+      "name": "reminders",
+      "pat": "\\bremind me\\b|\\b(set|make) (a|me a) reminder\\b|\\bcan you remember (this|that|it)\\b|\\bsave (this|that) for later\\b|\\bcome back to (this|it) later\\b",
+      "keys": [],
+      "what": [
+        "I can’t send reminders. Nothing you type here leaves this tab, so I have no way to reach you later."
+      ],
+      "how": [
+        "Set a reminder on your phone for the time you’ll come back to it.",
+        "Or write that time into the pause line in your Calm-Down Kit (WP-11), so it’s ready next time.",
+        "When you come back, the Carrier Wave Decoder can walk you through what happened."
+      ],
+      "links": [
+        [
+          "WP-11: The Calm-Down Kit",
+          "/wp-11.html"
+        ],
+        [
+          "The Carrier Wave Decoder",
+          "/carrier-wave-decoder.html#decode"
+        ]
+      ],
+      "chips": [
+        [
+          "Give me one thing to do",
+          "Give me one thing to do"
+        ]
+      ]
+    },
+    {
+      "id": "weatherlog",
+      "kind": "intent",
+      "first": true,
+      "name": "the 7-day log and the almanac",
+      "pat": "\\b(7|seven) ?day log\\b.*\\balmanac\\b|\\balmanac\\b.*\\b(7|seven) ?day log\\b|\\bdifference between\\b.*\\b(weather )?(log|almanac)\\b|\\bwhat is the (weather )?almanac\\b|\\bwhats the (weather )?almanac\\b",
+      "keys": [],
+      "what": [
+        "They’re the same thing. “Your 7-day log” on Today’s Weather is what some pages call the almanac."
+      ],
+      "how": [
+        "It’s optional: it only keeps a reading when you press Save.",
+        "It stays in this browser only, never on a server.",
+        "It shows your last seven days as a simple strip, with a trend once you’ve logged three days.",
+        "“Erase my log” removes it any time."
+      ],
+      "links": [
+        [
+          "Today’s Weather",
+          "/quick-checks.html#today"
+        ]
+      ],
+      "chips": [
+        [
+          "How do I use Today’s Weather?",
+          "How do I use Today's Weather?"
+        ]
+      ]
+    },
+    {
       "id": "lemonade",
       "kind": "tool",
       "name": "the Lemonade Stand",
@@ -1971,7 +2449,13 @@
         "where do we start",
         "where should we start",
         "how do i begin",
-        "how do we begin"
+        "how do we begin",
+        "where to begin",
+        "dont know where to start",
+        "dont know where to begin",
+        "not sure where to start",
+        "not sure where to begin",
+        "no idea where to start"
       ],
       "what": [
         "Welcome! A gentle way in: start with yourself, then add the other person when you’re ready.",

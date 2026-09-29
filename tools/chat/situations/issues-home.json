@@ -578,6 +578,186 @@
         "Tell me about caregiving logistics"
       ],
       "ex": "After her husband’s surgery, Ana was doing everything. She listed the care jobs, then texted her brother: “Could you own Tuesday and Thursday dinners for the next three weeks?” and asked a friend to handle pharmacy pickups. Having named owners meant she stopped carrying the whole list in her head."
+    },
+    "forgetting": {
+      "label": "forgotten tasks",
+      "match": [
+        [
+          "i (keep |always |often |sometimes |constantly )?(forget|forgot)( to| about| the| my)?|(forgets|forgot|forgetting|keeps forgetting|always forgets|kept forgetting) (to|the|about|chores|things|stuff|what i asked|jobs|tasks)|slips? (my|his|her|their) mind|slipped (my|his|her|their) mind|out of sight out of mind|(lose|loses|lost|losing) track of (chores|tasks|things|jobs)",
+          5
+        ],
+        [
+          "forget*|forgot|reminder*",
+          1
+        ]
+      ],
+      "selfFirst": true,
+      "reflect": "Forgetting things you meant to do is really common, and it doesn’t mean you don’t care. It usually means the reminder lives in your head, where it’s easy to lose.",
+      "going": "This is Pillar II (fix the setup, not the person). Memory is a poor place to keep chores, especially on busy or tiring days. The fix usually lives outside your head: a cue at the right moment, one clear owner, and a finish line you can see. It also helps to tell {them} what’s going on, so a slip doesn’t get read as not caring.",
+      "going_self": "This is Pillar II (fix the setup, not the person). Memory is a poor place to keep chores, especially on busy or tiring days. The fix usually lives outside your head: a cue at the right moment, one clear owner, and a finish line you can see.",
+      "steps": [
+        "Pick the one task that slips most, and tie it to something that already happens: the bins go out when the dishwasher goes on.",
+        "Put the reminder where the task is, not in your head: a note on the door, a phone alarm named after the task, or a shared list.",
+        "Tell {them} it’s a memory slip, not a priority slip, and ask which kind of reminder would feel okay."
+      ],
+      "steps_self": [
+        "Pick the one task that slips most, and tie it to something that already happens: the bins go out when the dishwasher goes on.",
+        "Put the reminder where the task is, not in your head: a note on the door, a phone alarm named after the task, or a shared list.",
+        "Go easy on yourself about the slips. Shame makes starting harder, not easier."
+      ],
+      "scripts": {
+        "default": [
+          "I’m sorry I forgot the bins again. It’s not that I don’t care. Could we set up a reminder that works for both of us?",
+          "Would it be okay to send me a quick text on Tuesday nights about the bins? It really helps me."
+        ]
+      },
+      "reflect_other": "It’s tiring when things you’re counting on keep getting forgotten, especially when you end up doing them yourself.",
+      "going_other": "This is Pillar II (fix the setup, not the person). Forgetting is very often about how someone’s memory and attention work, not about how much they care. A reminder that lives in one person’s head tends to slip. A cue in the right place, one clear owner and a visible finish line usually work better than asking them to try harder.",
+      "steps_other": [
+        "Pick the one task that slips most, rather than the whole list.",
+        "Agree on a cue together: a phone alarm named after the task, a note where the task happens, or a shared list.",
+        "Give that task one clear owner, including the remembering part, and look at it again in two weeks."
+      ],
+      "scripts_other": [
+        "The bins got missed again, and I ended up doing them. Could we find a reminder that works for you, like an alarm on Tuesday nights?",
+        "I know it’s not that you don’t care. What would help you remember the laundry, without me having to nag?"
+      ],
+      "path": [
+        [
+          "WP-03: One owner per job",
+          "/workpapers/wp-03-raci-treaty.html"
+        ],
+        [
+          "The Wiring Card",
+          "/wiring-card.html"
+        ],
+        [
+          "Know your own wiring",
+          "/know-yourself.html"
+        ]
+      ],
+      "deeper": [
+        "one owner per job",
+        "What is WP-03?"
+      ],
+      "ex": "Sam kept forgetting the recycling. Instead of more reminders from Jo, they put a sticky note on the back door and a Tuesday 8 p.m. alarm called “recycling out.” Within a week it stopped being a nightly argument.",
+      "tonight": "Set one alarm, named after the task, for the next time it’s due."
+    },
+    "lateness": {
+      "label": "running late",
+      "match": [
+        [
+          "(always|often|keeps? being|keep being|constantly|chronically|habitually) late|(im|i am|i m|hes|he is|shes|she is|theyre|they are) (always |often )?(late|running late)|never on time|lose track of time|loses track of time|time blind*|late (for|to) everything|late again",
+          5
+        ],
+        [
+          "late|on time|punctual*",
+          1
+        ]
+      ],
+      "selfFirst": true,
+      "reflect": "Running late a lot is stressful, and it’s very common. It usually isn’t about not caring. Time can be genuinely hard to feel, especially when you’re busy or absorbed in something.",
+      "going": "This is Pillar II (fix the setup, not the person). Most lateness comes from the gap between how long things feel like they take and how long they really take, plus the scramble at the end. Building the buffer into the plan works better than promising to try harder.",
+      "steps": [
+        "Time one regular trip or task this week, so you know the real number, not the hoped-for one.",
+        "Set a leave-by alarm, not an arrive-by one, with ten minutes of buffer.",
+        "If you’re going to be late, text early with a real time: “Running 15 minutes behind, there by 7:15.”"
+      ],
+      "scripts": {
+        "default": [
+          "I’m sorry I was late again. I know it leaves you waiting. I’m setting a leave-by alarm so it doesn’t keep happening.",
+          "Running about 15 minutes behind. I’ll be there by 7:15. Sorry for the wait."
+        ]
+      },
+      "reflect_other": "Waiting on someone who’s often late is frustrating, and it can start to feel like your time doesn’t count.",
+      "going_other": "This is Pillar II (fix the setup, not the person). Lateness is very often about how someone senses time and plans the last few minutes, not about how much they value you. A shared plan with buffer, and an early heads-up when they’re behind, usually helps more than pointing out every late arrival.",
+      "steps_other": [
+        "Pick the one kind of lateness that matters most, like dinner plans, school pickup or meetings.",
+        "Ask for an early heads-up with a real time, rather than a promise never to be late.",
+        "For the important things, agree on a leave-by time together, with ten minutes of buffer."
+      ],
+      "scripts_other": [
+        "When I’m left waiting, I feel like my time doesn’t count. Could you text me as soon as you know you’ll be late, with a real time?",
+        "For Friday’s dinner, could we agree you’ll leave by 6:30? That gives us some buffer."
+      ],
+      "path": [
+        [
+          "Today’s Weather",
+          "/quick-checks.html#today"
+        ],
+        [
+          "The planning fallacy (Library)",
+          "/library/thinking.html#planning-fallacy"
+        ],
+        [
+          "Know your own wiring",
+          "/know-yourself.html"
+        ]
+      ],
+      "deeper": [
+        "why plans slip",
+        "What is the planning fallacy?"
+      ],
+      "ex": "Alex was late to almost every dinner. Timing the drive showed it took 25 minutes, not the 15 he always pictured. He set a leave-by alarm for 30 minutes before, and texted a real time when he slipped. The dinners got a lot calmer.",
+      "tonight": "Set tomorrow’s first leave-by alarm, ten minutes earlier than feels necessary."
+    },
+    "halfdone": {
+      "label": "half-finished chores",
+      "match": [
+        [
+          "half (done|finished|way done)|halfway (done|through|finished)|(never|doesnt|doesn t|dont|don t|cant|can t) (ever )?finish(es)? (the|his|her|their|my|anything|things|chores|jobs|tasks)|leaves? (it|things|jobs|chores|the [a-z]+) half|(starts?|started) .. (but|and) (never|doesnt|doesn t|dont|don t) finish|unfinished (chores|jobs|tasks|projects)|(laundry|washing|clothes) (left )?in the (machine|dryer|washer)|wet laundry|not (put|putting) (it|things|stuff|them) away",
+          5
+        ],
+        [
+          "finish*|put away|half",
+          1
+        ]
+      ],
+      "selfFirst": true,
+      "reflect": "Starting something and not quite finishing it is really common, and it’s easy to feel bad about the half-done pile.",
+      "going": "This is Pillar II (fix the setup, not the person). Finishing is often the hardest part of a task: the last step is dull, and the next thing grabs your attention. Saying what “done” looks like, and making the last step easy, helps more than trying harder.",
+      "steps": [
+        "Write what “done” looks like for the job that slips most: “laundry is done when it’s folded and in the drawer.”",
+        "Make the last step easy: a basket by the dryer, a timer for when the cycle ends, or music that lasts as long as the job.",
+        "Finish one thing before starting the next, and let yourself stop there."
+      ],
+      "scripts": {
+        "default": [
+          "I know I left the laundry in the machine again. I’m setting a timer for when it finishes, so it gets moved.",
+          "Could we agree what “done” means for the kitchen? Then I’ll know when I’ve actually finished."
+        ]
+      },
+      "reflect_other": "It can be frustrating to find jobs left half-done, especially when you end up finishing them.",
+      "going_other": "This is Pillar II (fix the setup, not the person). The last step is often the hardest part of a job, and attention can slip away before it’s done. That usually isn’t about not caring. Agreeing on what “done” looks like, and making the last step easy, helps more than pointing out every half-finished job.",
+      "steps_other": [
+        "Pick the one job that’s most often left half-done.",
+        "Agree together on what “done” looks like for it, in one sentence.",
+        "Make the last step easier: a timer, a basket, or a short checklist where the job happens."
+      ],
+      "scripts_other": [
+        "The laundry got left in the washer again. Could we agree it’s done when it’s in the drawers, and maybe set a timer for when the cycle ends?",
+        "Thanks for starting the dishes. Could we agree they’re done when the counter’s wiped too?"
+      ],
+      "path": [
+        [
+          "WP-03: One owner per job",
+          "/workpapers/wp-03-raci-treaty.html"
+        ],
+        [
+          "The Signal Translator",
+          "/signal-translator.html"
+        ],
+        [
+          "Know your own wiring",
+          "/know-yourself.html"
+        ]
+      ],
+      "deeper": [
+        "one owner per job",
+        "What is WP-03?"
+      ],
+      "ex": "Riley’s roommate always left the dishwasher half-unloaded. They agreed “done” meant empty with the racks pushed back in, and put a small sticky note on the door. The half-done dishwasher stopped being a thing.",
+      "tonight": "Finish one small half-done job, and let that be enough for today."
     }
   }
 }

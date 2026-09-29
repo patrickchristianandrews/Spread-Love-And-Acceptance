@@ -7,17 +7,28 @@ It answers in this order:
 
 1. **Safety.** A message that suggests danger or harm gets a short, kind "this is beyond me, please
    reach out to someone you trust or a qualified professional" and nothing else.
-2. **Follow-ups** ("tell me more", "give me an example", "another way to say it", "how do I start?",
+2. **Care first.** Program cards marked `"first": true` answer before anything else, plainly: who can see this
+   chat (this tab only; “Start over” erases it; closing the tab clears it), “is it my fault?” (never a yes; after
+   being snapped at, `what_hurt`/`how_hurt`), “tell me something calming”, “I feel judged”, “can you tell me if I’m
+   autistic?” (plainly no), “I just had a fight and I have 5 minutes”, “what should I do next?”, “remind me later”,
+   bigger text, reading out loud and easier words. `notPat` keeps a card out of the way (“how do I apologize”).
+   They keep the topic we were on. “tl;dr” / “make it shorter” shortens the last answer (a one-line summary and up
+   to three bullets); “where did I leave off?” names the last topic.
+   Before any of this, typos are read as the word meant (“unbiled det”, “were do i start”): the shared list in
+   `assets/js/message-patterns.js` (copied into the knowledge base by the build), then doubled letters, then the
+   nearest site word by spelling or sound. The answer starts “I think you mean …”. A message with no word the chat
+   knows (“asdfgh”) gets a kind “I didn’t catch that”.
+3. **Follow-ups** ("tell me more", "give me an example", "another way to say it", "how do I start?",
    "what about for coworkers?") use the last topic: a card, a playbook, a background note or a search.
-3. **Calculators.** Five Battery Meter answers (WP-02: sum ÷ 20, bands 0.3 / 0.6), a CALC-01 read from
+4. **Calculators.** Five Battery Meter answers (WP-02: sum ÷ 20, bands 0.3 / 0.6), a CALC-01 read from
    balance, ownership and battery (0.40 / 0.35 / 0.25, bands 0.70 / 0.40, apex with retuning), a single
    score to explain, or two people's hours to workload balance. Always "not a verdict".
-4. **Clarifying chips** for vague messages ("help", "check in", "my partner", "idk"). A short, personal message
+5. **Clarifying chips** for vague messages ("help", "check in", "my partner", "idk"). A short, personal message
    that nothing else answers ("ugh, my sister") gets a warm clarifying question, never the off-topic reply, and a
    follow-up in someone's own words ("he just writes ok") stays with the last playbook.
-5. **Program cards** (`program-cards.json`) for every tool, workpaper, chapter, game and the common
+6. **Program cards** (`program-cards.json`) for every tool, workpaper, chapter, game and the common
    questions, and **situation playbooks** (`situations/*.json`) when someone describes what's going on.
-6. **The site's pages** (BM25 search over passages, the glossary and the Library), and only when they
+7. **The site's pages** (BM25 search over passages, the glossary and the Library), and only when they
    don't answer well, the **background notes** (`chat-kb-bg.js`, fetched on first need and always labelled
    "From the Professor's background notes (not a page on this site)"). Off-topic questions (cars, resumes,
    recipes…) get a polite no and never load the notes.
@@ -92,7 +103,7 @@ The chat works out who is doing the thing an issue is about ("my partner goes qu
 say no to my mom"): the person named inside the strongest match, or the nearest one before it. When it's the
 other person, an issue's `*_other` fields are used (for any issue, not only `selfFirst` ones), and a named
 person becomes {them} ("my mom needs care and my brother does nothing" is about your brother). More fields:
-`defaultWho` (the relationship to assume when nobody is named, e.g. `family` for holidays), `themPat` (which
+`ownSteps` (the issue's own four steps, with no general step for the relationship added), `defaultWho` (the relationship to assume when nobody is named, e.g. `family` for holidays), `themPat` (which
 named person is {them}, e.g. the roommate rather than their boyfriend), `scripts_also` ([label, [scripts]]:
 words for a second person involved, like the parent being cared for) and `tonight` (one tiny step for this
 evening, used by the "What can I do tonight?" chip every playbook offers).
@@ -130,7 +141,7 @@ Keep the background file under about 2 MB.
 
 ## Tests
 
-    node tools/chat/test-chat.js        # 266 questions with expected cards, playbooks, notes and pages
+    node tools/chat/test-chat.js        # 319 questions with expected cards, playbooks, notes and pages
     node tools/chat/coverage.js         # asks about every indexed page and checks the answer lands there
 
 Both run site-chat.js in Node through `chat-sandbox.js`, loading the knowledge files the way the page

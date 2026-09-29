@@ -13,6 +13,7 @@
    TOLPatterns.hasTime(text)   -> a real time or day ("by 8", "Friday", "tonight", "in 20 minutes")
    TOLPatterns.hasAppreciation(text) -> thanks, "love you", "I appreciate", not the sarcastic kind
    TOLPatterns.isFlat(text)    -> a very short reply ("ok", "k", "fine.")
+   TOLPatterns.spell(text)     -> {text, fixes:[{from, to}]}: common misspellings read as the word meant
    TOLPatterns.lookFor(el, opts) fills el with the plain-language "What it looks for" list */
 (function (root) {
   'use strict';
@@ -27,7 +28,7 @@
   // Each pattern's regular expression is written for lower-cased text with curly quotes made straight.
   var LIST = [
     { id: 'sarcasm', name: 'Sarcasm', group: 'edge', heat: 2,
-      re: /\b(?:wow,? (?:thanks|thank you|great|nice|ok(?:ay)?|real(?:ly)? (?:nice|helpful|great)|just wow)|thanks for nothing|thanks a lot(?= *(?:[.!…🙄😒🙃]|$))|gee,? thanks|nice of you to (?:finally )?\w+|(?:how|so) (?:nice|good|kind|thoughtful|sweet) of you to (?:finally )?\w+|must be nice|sure you (?:did|are|will|do)|yeah,? right|oh,? (?:great|wonderful|perfect|lovely|fantastic|joy)(?= *(?:[.!,…🙄😒🙃]|$))|what a surprise|big surprise|real mature|(?:great|nice|good) job,? (?:really|genius)|lol,? ok(?:ay)?,? (?:whatever|sure|then)|whatever you say|love that for (?:me|us)|good for you(?= *(?:[.!…🙄😒🙃]|$))|glad you could (?:finally )?(?:make it|join us|show up))/g,
+      re: /\b(?:wow,? (?:thanks|thank you|great|nice|ok(?:ay)?|real(?:ly)? (?:nice|helpful|great)|just wow)|thanks for nothing|thanks a lot(?= *(?:[.!…🙄😒🙃]|$))|gee,? thanks|nice of you to (?:finally )?\w+|(?:how|so) (?:nice|good|kind|thoughtful|sweet) of you to (?:finally )?\w+|must be nice|sure you (?:did|are|will|do)|yeah,? right|oh,? (?:great|wonderful|perfect|lovely|fantastic|joy)(?= *(?:[.!,…🙄😒🙃]|$))|what a surprise|big surprise|real mature|(?:great|nice|good) job,? (?:really|genius)|lol,? ok(?:ay)?,? (?:whatever|sure|then)|whatever you say|love that for (?:me|us)|good for you(?= *(?:[.!…🙄😒🙃]|$))|glad you could (?:finally )?(?:make it|join us|show up)|of course (?:you|he|she|they) (?:did|didn't|do|don't|would|wouldn't|forgot|are|were|can't|won't)|classic you|typical(?: you)?(?= *(?:[.!…🙄😒🙃]|$))|yeah,? sure(?= *(?:[.!…🙄😒🙃]|$))|sure,? whatever)/g,
       what: 'Sarcasm says the opposite of the words, and the real meaning rides on tone. In writing the tone is missing, so the reader fills it in with the worst version.',
       fix: 'Say the real thing plainly, once: “I was hurt that you were late.”',
       ex: ['Wow, thanks for nothing.', 'Nice of you to finally show up.', 'Must be nice.', 'lol ok whatever you say 🙄'] },
@@ -52,7 +53,7 @@
       fix: 'Leave the other person out. Say what you’d like from this person, about this thing.',
       ex: ['Your sister always calls on Sundays.', 'Why can’t you be more like your brother?'] },
     { id: 'absolute', name: 'Always / never', group: 'blame', heat: 1.5,
-      re: /\b(?:always(?! (?:love|be (?:here|there|on your side)|have your back|grateful|thankful|appreciate|welcome|remember (?:how|the|when)|proud|happy to|glad to|there for))|never(?! (?:mind|forget (?:this|that|how|what you)|stop (?:loving|caring)|been happier|felt so (?:loved|happy|seen)))|every (?:single )?time|constantly|all the time|not once|not even once|nothing ever|no one ever|nobody ever|every single day|nobody (?:else )?(?:cares|helps|listens|does anything|bothers|ever)|no one (?:else )?(?:cares|helps|listens|does anything|bothers)|everyone else (?:does|can|manages|knows|gets|has)|you (?:do|did) nothing|you don't do anything)\b/g,
+      re: /\b(?:always(?! (?:love|be (?:here|there|on your side)|have your back|grateful|thankful|appreciate|welcome|remember (?:how|the|when)|proud|happy to|glad to|there for))|never(?! (?:mind|forget (?:this|that|how|what you)|stop (?:loving|caring)|been happier|felt so (?:loved|happy|seen)))|every (?:single )?time|constantly|all the time|not once|not even once|nothing ever|no one ever|nobody ever|every single day|nobody (?:else )?(?:cares|helps|listens|does anything|bothers|ever)|no one (?:else )?(?:cares|helps|listens|does anything|bothers)|everyone else (?:does|can|manages|knows|gets|has)|you (?:do|did) nothing|you don't do anything|i (?:have to|always|got to|gotta|end up|'m left to) (?:do(?:ing)?|clean(?:ing)?|handle|handling) everything|everything around here|every single thing)\b/g,
       what: '“Always” and “never” turn one moment into a verdict on everything. The reader remembers the exception and argues with that, and the point gets lost.',
       fix: 'Name the specific time instead: “twice this week” or “on Tuesday.”',
       ex: ['You never help.', 'Nobody ever listens to me.'] },
@@ -71,6 +72,31 @@
       what: 'A one-word reply can mean “got it, busy” or “I’m upset.” The word is the same, so the reader has to guess, usually from their own mood.',
       fix: 'Add the missing half: “Ok, sounds good!” or “Ok. I need a minute, I’ll reply properly tonight.”',
       ex: ['k', 'fine.', 'ok.'] },
+    { id: 'swear', name: 'Swearing', group: 'edge', heat: 2.5,
+      re: /(?:\bf+[*\-_.@#]*u+[*\-_.@#]*c+[*\-_.@#]*k+\w*|\bf\*+\w*|\bf[*\-_.]?ck\w*|\bfu?k+(?:in[g']?|ing|n|ed|er|ers|s)?\b|\bfkn\b|\bf[*]?kin[g']?\b|\bfreakin[g']?\b|\bfrickin[g']?\b|\beff(?:ing|in)\b|\bsh[i1!*]+t+\w*|\bbull ?sh[i1!*]t\w*|\bb[i1*]+tch\w*|\ba[s$*]{2}(?:hole|holes|hat)?\b|\barse(?:hole)?\b|\bgod ?damn\w*|\bdamn(?:ed|it)?\b|\bdammit\b|\bcrap(?:py)?\b|\bpiss(?:ed|ing)?(?: off)?\b|\bdick(?:head)?s?\b|\bbastards?\b|\bc[u*]nts?\b|\bprick\b|\bdouche\w*|\bmother ?f\w*|\bwtf\b|\bstfu\b|\bffs\b|\bomfg\b|\bjfc\b|\bthe hell\b|\bhell no\b|\bhell(?=\s*(?:[,.!?]|$))|\bgo to hell\b|\bscrew (?:you|this|that|off|it|him|her|them)\b|[@#$%&*]{3,})/g,
+      what: 'Swearing, even the starred-out kind, turns up the volume. The reader hears the anger first, and often stops reading for the point.',
+      fix: 'Leave the swear words out and name the feeling instead: “I’m really frustrated right now.”',
+      ex: ['You are getting on my last f*cking nerve.', 'wtf is wrong with you'] },
+    { id: 'hostile', name: 'Hostile or fed-up line', group: 'edge', heat: 3,
+      re: /\b(?:(?:getting|get|got|gets|getting right) on my (?:last |every |one )?(?:[a-z*]+ )?nerves?|on my last (?:[a-z*]+ )?nerve|(?:i'm|i am|im) (?:so |sooo+ |really |just |totally |[a-z]*ing )?(?:done|finished|through) with (?:you|this|it|your \w+|us)|(?:you're|you are|youre|ur) (?:really |seriously |[a-z]*ing )?driving me (?:crazy|nuts|insane|mad|up the wall|bananas)|shut (?:up|the [a-z*]+ up|your (?:mouth|face))|(?:i )?can't stand (?:you|this|it|your|being around you)|i (?:really )?hate (?:you|this|it|your|when you|how you|living with you|everything about)|(?:i'm|i am|im) (?:so |really )?sick (?:and tired )?of (?:you|this|your|it)|get (?:out of my (?:face|sight|way)|lost|a grip)|go away|leave me the [a-z*]+ alone|piss off|go to hell|bite me|drop dead|you disgust me|you make me sick|(?:what|wtf) (?:the [a-z*]+ )?is (?:wrong|the matter) with you|are you (?:stupid|an idiot|deaf|blind|out of your mind|kidding me)|i don't give a [a-z*]+|who (?:the [a-z*]+ )?cares|do whatever you (?:want|like)|(?:i'm|i am|im) (?:so )?over (?:it|this|you)|enough is enough|i've had (?:it|enough)|you're impossible|you never shut up|zip it|back off|mind your own business)\b/g,
+      what: 'A fed-up or hostile line (“you’re getting on my last nerve”, “shut up”, “I’m done with you”) says how angry you are, but not what you need. The reader can only defend themselves or pull away.',
+      fix: 'Say the feeling and the need, and take a break if you need one: “I’m really frustrated. I need a few minutes, then can we talk about the dishes?”',
+      ex: ['You are getting on my last nerve.', 'Shut up.', 'I’m so done with you.'] },
+    { id: 'label', name: 'Name-calling or a label', group: 'blame', heat: 3,
+      re: /\b(?:you(?:'re| are| were|re|r)?|ur|youre) (?:(?:such|so|just|really|being|acting like|literally|always|the|a|an|total|complete|absolute|utter|real|huge|massive|[a-z]*ing|[a-z]*in') )*(?:idiot|moron|jerk|loser|slob|pig|brat|baby|child|joke|nightmare|disaster|failure|disappointment|liar|psycho|lunatic|narcissist|selfish|lazy|useless|pathetic|stupid|dumb|worthless|hopeless|clueless|incompetent|ridiculous|childish|immature|insane|crazy|toxic|ungrateful|spoiled|entitled|heartless|cruel|a mess|a waste of (?:space|time)|(?:terrible|awful|horrible|lousy|worst|sorry excuse for an?) (?:parent|mother|father|mom|mum|dad|partner|husband|wife|boyfriend|girlfriend|friend|person|roommate|boss|coworker|brother|sister|son|daughter|human being))\b|\b(?:i'm|i am|im) the only (?:adult|grown[- ]?up|responsible (?:one|person)|one (?:who|that) (?:does|cares|tries|cleans|works|helps|pays)\w*)\b|\byou (?:idiot|moron|jerk|slob|loser|pig)\b/g,
+      what: 'A word about who someone is (“lazy”, “a nightmare”, “the only adult here”) turns one moment into a verdict on the person. People defend against a verdict instead of hearing what happened.',
+      fix: 'Name what happened and how it affected you, not what kind of person they are.',
+      ex: ['You are a total nightmare.', 'I’m the only adult here.'] },
+    { id: 'hint', name: 'Hint instead of an ask', group: 'edge', heat: 1.5,
+      re: /\bit(?:'d| would) be (?:nice|great|good|lovely|helpful|amazing) if (?:someone|somebody|anyone|you|people|the)\b|\b(?:someone|somebody) (?:should|needs to|could|has to|might want to) [a-z]+|\bi wish (?:someone|somebody|anyone) would\b|\bmust be nice to [a-z]+/g,
+      what: 'A hint (“it would be nice if someone helped”) puts the request in the subtext. Some readers decode it; others hear a complaint with nothing they can say yes to.',
+      fix: 'Ask directly, with a when: “Could you take the bins out tonight?”',
+      ex: ['It would be nice if someone helped around here.'] },
+    { id: 'opener', name: 'Opener with no topic', group: 'door', heat: 1.5,
+      re: /\b(?:we|i) (?:need|have) to (?:talk|chat)(?! about| at| tonight| tomorrow| later| after| when| once)\b|\bcan we talk(?= *[?.!]|$)|\bwe need to have a (?:talk|chat|conversation)(?! about)\b/g,
+      what: '“We need to talk” signals weight but not the topic. The reader fills the gap, often with the worst case, until the talk happens.',
+      fix: 'Say what it’s about and how big it is: “Can we talk tonight about the budget? Nothing bad, I just want to plan.”',
+      ex: ['We need to talk.'] },
     // what's working
     { id: 'pause', name: 'A pause with a time to come back', group: 'good', good: true, heat: -2,
       what: 'Asking for a break and saying when you’ll return lets both people settle without either one feeling dropped.',
@@ -85,6 +111,79 @@
   ];
   var BY = {};
   LIST.forEach(function (p) { BY[p.id] = p; });
+
+  // ---------------------------------------------------------------- forgiving spelling
+  // Common misspellings, read as the word most people mean, so a typo never changes a reading
+  // ("you're allways late" reads the same as "you're always late"). Lowercase, whole words only.
+  // Professor Puddles uses the same list: tools/chat/build_kb.py copies the JSON between the
+  // SPELL markers into the chat's knowledge base, so keep that part plain JSON.
+  /* SPELL-START */
+  var SPELL = {
+    "allways": "always", "alwyas": "always", "alwasy": "always", "allway": "always", "alway": "always", "alwys": "always", "allwais": "always",
+    "nevr": "never", "nevar": "never", "neva": "never", "evry": "every", "everytime": "every time", "evrything": "everything", "everthing": "everything",
+    "anyting": "anything", "anythin": "anything", "nothin": "nothing", "nuthing": "nothing", "somthing": "something", "sumthing": "something", "somethin": "something",
+    "sory": "sorry", "soory": "sorry", "sorrry": "sorry", "sorri": "sorry",
+    "wen": "when", "wat": "what", "wut": "what", "wht": "what", "wich": "which", "wher": "where", "whare": "where",
+    "becuase": "because", "becasue": "because", "becos": "because", "becouse": "because", "cuz": "because", "coz": "because", "bc": "because",
+    "clen": "clean", "cleen": "clean", "claen": "clean", "clena": "clean",
+    "bizy": "busy", "buisy": "busy", "busey": "busy", "bussy": "busy",
+    "realy": "really", "rly": "really", "relly": "really",
+    "tommorow": "tomorrow", "tomorow": "tomorrow", "tommorrow": "tomorrow", "tmrw": "tomorrow", "tmr": "tomorrow",
+    "tonite": "tonight", "tonigth": "tonight", "2nite": "tonight", "tonihgt": "tonight",
+    "thier": "their", "freind": "friend", "frend": "friend", "wierd": "weird", "alot": "a lot", "untill": "until",
+    "definately": "definitely", "defintely": "definitely", "beleive": "believe", "recieve": "receive",
+    "pls": "please", "plz": "please", "pleese": "please", "u": "you", "r": "are",
+    "shud": "should", "shoud": "should", "cud": "could", "coud": "could", "wud": "would", "woud": "would",
+    "dont": "don't", "cant": "can't", "didnt": "didn't", "doesnt": "doesn't", "dosent": "doesn't", "dosnt": "doesn't", "isnt": "isn't", "arent": "aren't",
+    "wasnt": "wasn't", "werent": "weren't", "havent": "haven't", "hasnt": "hasn't", "couldnt": "couldn't", "wouldnt": "wouldn't", "shouldnt": "shouldn't",
+    "youre": "you're", "theyre": "they're", "thats": "that's", "whats": "what's", "im": "I'm", "ive": "I've", "youve": "you've", "youll": "you'll",
+    "laundery": "laundry", "londry": "laundry", "dishs": "dishes", "chors": "chores", "chorse": "chores", "cheres": "chores",
+    "garbege": "garbage", "garbadge": "garbage", "rubish": "rubbish", "anoying": "annoying", "anoyed": "annoyed",
+    "tierd": "tired", "tird": "tired", "exausted": "exhausted", "exhasted": "exhausted", "stresed": "stressed", "overwelmed": "overwhelmed", "overwhelmd": "overwhelmed",
+    "slep": "sleep", "sleap": "sleep", "fihgt": "fight", "figth": "fight", "fite": "fight", "arguement": "argument", "arguemnt": "argument",
+    "anxity": "anxiety", "anxeity": "anxiety", "anxous": "anxious", "burnot": "burnout", "burnnout": "burnout",
+    "gardn": "garden", "profesor": "professor", "proffesor": "professor", "crosword": "crossword", "calender": "calendar",
+    "unbiled": "unbilled", "unbilld": "unbilled", "unbiliied": "unbilled", "ledgar": "ledger", "lemonaid": "lemonade",
+    "wating": "waiting", "waitting": "waiting", "finsh": "finish", "finnish": "finish", "finshed": "finished",
+    "lisen": "listen", "lissen": "listen", "listn": "listen", "tlk": "talk", "tawk": "talk", "agian": "again", "agin": "again", "evrytime": "every time", "mesage": "message", "messege": "message", "gona": "gonna", "wanna": "wanna", "kichen": "kitchen", "kitchin": "kitchen", "bathrom": "bathroom", "togeather": "together", "togather": "together", "remeber": "remember", "rember": "remember", "forgor": "forgot", "forgoten": "forgotten",
+    "responsibel": "responsible", "helpfull": "helpful", "greatful": "grateful", "apreciate": "appreciate", "appriciate": "appreciate"
+  };
+  var SPELL_PHRASES = [
+    ["\\bwere (do|does|did|should|can|could|shall|would) (i|we|you|they|he|she)\\b", "where $1 $2"],
+    ["\\bwere (is|are|was) (the|my|your|our|it|you|they|he|she|this|that)\\b", "where $1 $2"],
+    ["\\bwere to (start|begin|go|look)\\b", "where to $1"],
+    ["\\b(don't|dont|do not|didn't|didnt|i) no (what|how|where|why|when|who|if|that|were|where)\\b", "$1 know $2"],
+    ["\\b(don't|dont|do not|didn't|didnt) no\\b", "$1 know"],
+    ["\\bunbill?ed (det|dept|dett|dbt|debit|dets|depts)\\b", "unbilled debt"],
+    ["\\bcalm down kit\\b", "calm-down kit"],
+    ["\\bclam (down|me)\\b", "calm $1"]
+  ];
+  /* SPELL-END */
+  // "allways" → "always", keeping the writer's capitals. Returns {text, fixes:[{from, to}]}.
+  function spell(text) {
+    var src = String(text == null ? '' : text), fixes = [];
+    var out = src.replace(/[A-Za-z][A-Za-z']*/g, function (w) {
+      var key = w.toLowerCase();
+      var to = SPELL[key];
+      if (!to || to === key) return w;
+      if (/^I'/.test(to)) { /* "im" → "I'm" */ }
+      else if (w === w.toUpperCase() && w.length > 1) to = to.toUpperCase();
+      else if (w.charAt(0) !== w.charAt(0).toLowerCase()) to = to.charAt(0).toUpperCase() + to.slice(1);
+      fixes.push({ from: w, to: to });
+      return to;
+    });
+    out = out.replace(/(^|[\s(])i(?=[\s'’,.!?]|$)/g, '$1I');
+    SPELL_PHRASES.forEach(function (p) {
+      var rx = new RegExp(p[0], 'gi');
+      out = out.replace(rx, function (m) {
+        var to = m.replace(new RegExp(p[0], 'i'), p[1]);
+        if (/^[A-Z]/.test(m)) to = to.charAt(0).toUpperCase() + to.slice(1);
+        if (to.toLowerCase() !== m.toLowerCase()) fixes.push({ from: m, to: to });
+        return to;
+      });
+    });
+    return { text: out, fixes: fixes };
+  }
 
   function prep(text) { return String(text == null ? '' : text).replace(/[’‘`´]/g, "'").replace(/[“”]/g, '"').toLowerCase(); }
   // "Friday" is a time; "hey everyone" is not always/never; "you're so good at it though!!" isn't shouting (that's each tool's job)
@@ -115,6 +214,10 @@
     marks.forEach(function (x) {
       var clash = out.filter(function (y) { return x.start < y.end && y.start < x.end; });
       if (!clash.length) { out.push(x); return; }
+      // a swear word inside another mark ("on my last f*cking nerve") counts as well: both are there
+      if ((x.id === 'swear') !== clash.some(function (y) { return y.id === 'swear'; }) && !clash.some(function (y) { return y.id === x.id; })) {
+        if (x.id === 'swear' || clash.every(function (y) { return y.id === 'swear'; })) { out.push(x); return; }
+      }
       if (x.whole || clash.some(function (y) { return y.whole; })) {
         // a whole-message mark ("ok.", "…") sits alongside word marks, except its own twin
         if (!clash.some(function (y) { return y.id === x.id || (x.whole && y.whole); })) out.push(x);
@@ -152,6 +255,6 @@
   }
   function lookFor(el, opts) { if (el) el.innerHTML = lookForHTML(opts); }
 
-  var api = { LIST: LIST, BY: BY, scan: scan, has: has, hasTime: hasTime, hasAppreciation: hasAppreciation, isFlat: isFlat, TIME_RE: TIME_RE, lookFor: lookFor, lookForHTML: lookForHTML, prep: prep };
+  var api = { LIST: LIST, BY: BY, SPELL: SPELL, SPELL_PHRASES: SPELL_PHRASES, spell: spell, scan: scan, has: has, hasTime: hasTime, hasAppreciation: hasAppreciation, isFlat: isFlat, TIME_RE: TIME_RE, lookFor: lookFor, lookForHTML: lookForHTML, prep: prep };
   if (typeof module !== 'undefined' && module.exports) module.exports = api; else root.TOLPatterns = api;
 })(this);

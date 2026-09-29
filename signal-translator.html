@@ -316,6 +316,17 @@ q.w{quotes:"\201C" "\201D";font-family:var(--mono);font-size:.8rem;background:co
   .box{break-inside:avoid;border-color:#bbb}
 }
 @media (prefers-reduced-motion:reduce){.meter .fill{transition:none}}
+.verdict{border:1.5px solid var(--line);border-radius:var(--radius);background:var(--sheet);padding:14px 16px;margin:0 0 14px}
+.verdict .vk{font-family:var(--mono);font-size:.7rem;letter-spacing:.06em;color:var(--muted);margin:0 0 4px}
+.verdict .vlvl{font-family:var(--display);font-size:1.35rem;font-weight:600;margin:0 0 6px}
+.verdict .vlvl.lvl-heavy{color:#9A3B2E}.verdict .vlvl.lvl-some{color:#8A6116}.verdict .vlvl.lvl-clear{color:#3E6B48}
+.verdict .vfound{margin:0 0 10px;font-size:.95rem}
+.verdict .vbest{font-family:var(--display);font-size:1.12rem;line-height:1.5;margin:4px 0 10px;padding:10px 12px;border-left:4px solid var(--b);background:#fff;border-radius:0 8px 8px 0;overflow-wrap:anywhere}
+.verdict .readas,.verdict .literal{font-size:.9rem;margin:6px 0 0}
+.verdict .literal li{margin:.2rem 0}
+.undo{margin-left:6px;min-height:36px;border:1.5px solid var(--line);border-radius:10px;background:#fff;font:inherit;cursor:pointer;padding:2px 10px}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .verdict .vbest{background:transparent}}
+:root[data-theme="dark"] .verdict .vbest{background:transparent}
 .lookfor{margin-top:18px}.lookfor summary{cursor:pointer;font-family:var(--display);font-weight:600;min-height:44px;display:flex;align-items:center}
 .lookfor .lf-list{padding-left:1.1rem}.lookfor .lf-list li{margin:0 0 .6rem}.lookfor .lf-ex{color:var(--muted)}.lookfor .lf-why{font-size:.94rem}.lookfor .lf-h{font-size:1rem;margin:1rem 0 .4rem}.lookfor .lf-note{font-size:.9rem;color:var(--muted)}
 </style>
@@ -367,7 +378,11 @@ q.w{quotes:"\201C" "\201D";font-family:var(--mono);font-size:.8rem;background:co
       <span class="msg" id="msg" role="alert"></span>
     </div>
 
-    <div class="quick">
+
+    <details class="fine" id="fine">
+      <summary>Fine-tune (optional): who it's for, the channel, the listener's wiring</summary>
+      <div class="fine-b">
+    <div class="quick" style="margin-top:6px;padding-top:0;border-top:0">
       <div class="field">
         <label for="useSel">What is this for?</label>
         <select id="useSel"></select>
@@ -383,10 +398,6 @@ q.w{quotes:"\201C" "\201D";font-family:var(--mono);font-size:.8rem;background:co
       </div>
     </div>
     <p class="hint" id="useNote" style="margin:10px 0 0"></p>
-
-    <details class="fine" id="fine">
-      <summary>Fine-tune (optional)</summary>
-      <div class="fine-b">
         <p class="hint">Leave any of these on "Not sure / skip". Each one only sharpens the reading. <a href="wired-differently.html#dynamics">What the relationships mean</a> &middot; <a href="wired-differently.html#situation">Situation and room</a>.</p>
         <h3>The people</h3>
         <div class="people">
@@ -779,6 +790,50 @@ const PRESET_GROUPS = [
 "It's fine, I'll do it myself.",
 "Could you sit with her on Thursday afternoons so I can rest?"
 ]
+],
+[
+"partner",
+"Heated moments",
+[
+"You are getting on my last nerve.",
+"I'm so done with you.",
+"You're driving me crazy.",
+"Shut up.",
+"Whatever. Do what you want.",
+"I'm the only adult here, clean the kitchen.",
+"You are a total nightmare.",
+"Of course you did. I have to do everything around here.",
+"I have nothing left in the tank and I cannot even deal with this tonight.",
+"WHY IS THE KITCHEN STILL A MESS"
+]
+],
+[
+"coworker",
+"Work: clear asks for busy readers",
+[
+"Per my last email, the deadline is Friday.",
+"Any update on this?",
+"Please advise.",
+"Can you take a look at the deck, fix the numbers, update the timeline and send it to the client?",
+"Could you review the draft by Thursday at 2? One ask: check the numbers on page 3.",
+"Quick one: can you join the 10am call tomorrow?",
+"We need to discuss your performance.",
+"Let's touch base and circle back offline.",
+"FYI the launch moved.",
+"Great work on the launch. Could you send the recap by Friday?"
+]
+],
+[
+"friend",
+"Short and clear, for slow readers",
+[
+"Can you call me when you get a chance? It's about the thing we talked about the other day, and also I wanted to ask you about the weekend and whether you still want to go.",
+"Dinner Friday at 7? Reply yes or no.",
+"One ask: could you bring the chairs Saturday by noon?",
+"I sent you a voice note instead of a long text. Listen when you have five minutes.",
+"Hey so I was thinking and I don't know, maybe we could possibly try to plan something at some point if you're free?",
+"The plan: meet at the park at 2. Bring water. I'll bring snacks."
+]
 ]
 ];
 PRESET_GROUPS.forEach(g=>g[2].sort((x,y)=>x.localeCompare(y, undefined, {sensitivity:"base"})));  // alphabetical inside each relationship
@@ -857,6 +912,8 @@ function paintWiring(who){
   $("#add"+who).hidden = ![...host.querySelectorAll(".extra")].some(x=>x.hidden);
 }
 function nm(who){ const v=$("#name"+who).value.trim(); return v||(who==="A"?"You":"Person B"); }
+// "your wiring" for the unnamed speaker, "Sam's wiring" for a name
+function poss(name){ return name==="You" ? "your" : name+"'s"; }
 // With no name typed, the speaker is "You": fix the grammar the name templates were written for ("You's wiring")
 function youFix(h){
   if(nm("A")!=="You") return h;
@@ -1418,7 +1475,7 @@ function replyHTML(reply, A, B, phraseFound, phrase){
   h += '<p class="marked">'+markup(reply, spans)+'</p>';
   if(fids.length) h += '<ul class="flist">'+fids.map(id=>'<li>'+esc(FBY[id].name)+'</li>').join("")+'</ul>';
   if(lvl) h += '<p style="margin-top:10px"><b>'+lvl[1]+'</b> for '+esc(A)+'\'s wiring. This assumes '+esc(A)+' is settled. It may land harder if they are not.</p>';
-  else h += '<p class="small" style="margin-top:10px">Pick '+esc(A)+'\'s wiring under Fine-tune to see how this reply may land for them.</p>';
+  else h += '<p class="small" style="margin-top:10px">Pick '+esc(poss(A))+' wiring under Fine-tune to see how this reply may land for them.</p>';
   const strongest = top.sort((x,y)=>y.w-x.w).filter((e,i,arr)=>arr.findIndex(z=>z.h===e.h)===i).slice(0,3);
   if(strongest.length){
     h += '<ul class="land">'+strongest.map(e=>'<li class="w'+e.w+'"><span class="fx">AS '+esc(NT[e.a].short.toUpperCase())+' · '+esc(FBY[e.fid].name.toUpperCase())+'</span><span class="heard">&ldquo;'+esc(e.h)+'&rdquo;</span><span class="y">'+esc(e.y)+'</span></li>').join("")+'</ul>';
@@ -1510,7 +1567,7 @@ function run(){
 
   /* ---------- 1. the sentence, taken apart ---------- */
   const staticIds = an.staticIds, goodIds = an.goodIds;
-  let p1 = '<p class="marked">'+markup(text, spans)+'</p>';
+  let p1 = '<p class="marked">'+markup(an.text, spans)+'</p>';
   p1 += '<p class="legend"><mark class="warn">amber</mark> may add static &middot; <mark class="good">green</mark> is worth keeping</p>';
   p1 += '<h3>How the sentence is built</h3><div class="srows">';
   an.sentences.slice(0,6).forEach(se=>{
@@ -1585,7 +1642,7 @@ function run(){
   /* ---------- 4. what A may have meant ---------- */
   let p4='';
   if(!Aids.length){
-    p4+='<p class="small">Pick '+esc(A)+'\'s wiring under Fine-tune to see how their wiring might shape what they meant.</p>';
+    p4+='<p class="small">Pick '+esc(poss(A))+' wiring under Fine-tune to see how it might shape what '+(A==="You"?"you":"they")+' meant.</p>';
   } else {
     Aids.forEach(a=>{
       const notes=[]; fids.forEach(fid=>{ const m=NT[a].meant&&NT[a].meant[fid]; if(m && !notes.includes(m)) notes.push(m); });
@@ -1617,7 +1674,7 @@ function run(){
       srcKeys.push("nasDE","crompton","nature25");
     }
   } else {
-    p6+='<p class="small">Pick '+esc(A)+'\'s wiring under Fine-tune too, and this shows how the static runs both ways.</p>';
+    p6+='<p class="small">Pick '+esc(poss(A))+' wiring under Fine-tune too, and this shows how the static runs both ways.</p>';
   }
   Bids.concat(Aids).forEach(id=>srcKeys=srcKeys.concat((NT[id]&&NT[id].src)||[]));
   if(sel.B.has("autistic")&&sel.B.has("adhd")) srcKeys.push("autistica");
@@ -1656,7 +1713,25 @@ function run(){
     cueWhen: cue.when,
     cueHow: cue.how
   };
-  let sum='<div class="takeaway" id="takeaway">';
+  // the verdict first: how it may land, what was found (with the words), and the clearest way to say it
+  const HOTF = ["swear","hostile","label","contempt","threat"];
+  const foundList = staticIds.filter(id=>!["nowhen","long","period"].includes(id)).sort((a,b)=>(HOTF.includes(b)-HOTF.includes(a))).slice(0,4).map(id=>{
+    const ws=(found[id]||[]).filter(Boolean); return '<b>'+esc(FBY[id].name)+'</b>'+(ws.length&&!["multi","questions"].includes(id)?' '+quoteWords(ws.slice(0,2)):'');
+  });
+  let vtop='<div class="verdict" id="verdict"><p class="vk">HOW IT MAY LAND'+(general?' FOR MOST LISTENERS':' FOR '+esc(B.toUpperCase()))+'</p>';
+  vtop+='<p class="vlvl lvl-'+lvl[0]+'">'+esc(lvl[1])+'</p>';
+  vtop+='<p class="vfound">'+(foundList.length ? 'What stands out: '+foundList.join(' &middot; ')+'.' : staticIds.length ? 'A small gap: '+esc(FBY[staticIds[0]].name.toLowerCase())+'.' : 'Nothing in the words is a known trouble spot. Tone, timing and history can still add static the words don\'t show.')+'</p>';
+  if(!rw.unchanged){
+    vtop+='<p class="vk">A CLEARER WAY TO SAY IT</p><p class="vbest" id="vbest">'+phHTML(opts[0].say)+'</p>';
+    vtop+='<div class="actions" style="margin:0"><button class="go" type="button" id="copyBest">Copy this</button></div>';
+  } else if(staticIds.length){
+    vtop+='<p class="small">There\'s no safe automatic rewrite for this one. The notes below show what may land hard.</p>';
+  }
+  if(an.readAs && an.readAs.length) vtop+='<p class="readas small">Read as: '+an.readAs.slice(0,4).map(f=>'&ldquo;'+esc(f.to)+'&rdquo; (you typed &ldquo;'+esc(f.from)+'&rdquo;)').join(', ')+'. Spelling never changes the reading.</p>';
+  const lit = (E.PLAIN||[]).map(([rx,plain])=>{ const m=an.text.match(rx); return m ? [m[0],plain] : null; }).filter(Boolean);
+  if(lit.length) vtop+='<div class="literal"><p class="small" style="margin:6px 0 2px"><b>For a listener who takes words literally:</b></p><ul class="ul">'+lit.slice(0,4).map(x=>'<li>&ldquo;'+esc(x[0])+'&rdquo; &rarr; &ldquo;'+esc(x[1])+'&rdquo;</li>').join('')+'</ul></div>';
+  vtop+='</div>';
+  let sum='<details class="cr-drop"><summary><span class="cr-drop-t">How it may be heard, and other ways to say it</span></summary><div class="cr-drop-b"><div class="takeaway" id="takeaway">';
   sum+='<div class="rhead"><h2 id="rTitle">The takeaway</h2>'+pairLine+'</div>';
   sum+='<div class="tk-heard"><span class="tk-k">HOW IT MAY BE HEARD'+(top?(top.b==="general"?' &middot; BY MOST LISTENERS':' &middot; IF '+esc(B.toUpperCase())+' IS '+esc(WIRING_SHORT(top.b).toUpperCase())):'')+'</span><p class="quote">&ldquo;'+esc(perceived)+'&rdquo;</p><p class="small"><b>Why:</b> '+esc(heardWhy)+'</p>';
   if(heard.length>1) sum+='<p class="small"><b>Also possible:</b> '+heard.slice(1).map(e=>'&ldquo;'+esc(e.h)+'&rdquo; ('+esc(FBY[e.fid].name.toLowerCase())+')').join(" &middot; ")+'</p>';
@@ -1672,16 +1747,16 @@ function run(){
   sum+='<div class="cue'+(cue.id==="stop"?' stop':'')+'"><b>'+esc(cue.label)+'.</b> '+esc(cue.when)+' '+esc(cue.how)+'</div>';
   if(bstate==="d") sum+='<p class="small"><b>Timing:</b> '+esc(B)+' is shut down. Even the clearest version is best saved for later.</p>';
   else if(bstate==="s" && lvl[0]!=="clear") sum+='<p class="small"><b>Timing:</b> '+esc(B)+' is mobilized. Consider waiting, or say only the first sentence now.</p>';
-  sum+='<div class="actions"><button class="ghost" type="button" id="copyTake">Copy the takeaway</button></div></div>';
+  sum+='<div class="actions"><button class="ghost" type="button" id="copyTake">Copy the takeaway</button></div></div></div></details>';
 
-  let h = sum;
+  let h = '<h2 id="rTitle" class="sr-only" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)">The read</h2>' + vtop + sum.replace('<h2 id="rTitle">The takeaway</h2>','<h3>The takeaway</h3>');
   h += '<p class="drops-h">The full read. Open any part.</p>';
-  h += drop("Your sentence, taken apart", staticIds.length+" to look at"+(goodIds.length?" · "+goodIds.length+" worth keeping":""), p1, true, false);
-  h += drop("How it may land for "+esc(B), lvl[1], p2, true, false);
+  h += drop("Your sentence, taken apart", staticIds.length+" to look at"+(goodIds.length?" · "+goodIds.length+" worth keeping":""), p1, false, false);
+  h += drop("How it may land for "+esc(B), lvl[1], p2, false, false);
   h += '<div id="chg"></div>'+drop("What changed in the rewrite, and why", rw.changes.length ? rw.changes.length+" change"+(rw.changes.length>1?"s":"") : "no changes", p3, true, true);
   if($("#facts").value.trim()) h += drop("The facts, kept separate", "", factsHTML($("#facts").value.trim(), found, A, B), false, false);
   if($("#reply").value.trim()) h += drop("What "+esc(B)+" said back", "", replyHTML($("#reply").value.trim(), A, B, found, text), true, false);
-  h += drop("What "+esc(A)+" may have meant", Aids.length?"":"pick "+A+"'s wiring", p4, false, false);
+  h += drop("What "+esc(A)+" may have meant", Aids.length?"":"pick "+poss(A)+" wiring", p4, false, false);
   h += drop("In this relationship", relName||"optional", dynHTML(relId, found, A, B), false, false);
   h += drop("The room, and what each of you needs", "Pillar III", settleHTML(A, B), false, false);
   h += drop(general ? "Writing for most listeners, and checking back" : "Speaking to "+esc(B)+"'s wiring, and checking back", "", p5, false, false);
@@ -1697,6 +1772,9 @@ function run(){
   }));
   $("#pickPri").addEventListener("change",e=>{ if(lastTopic) lastTopic.pri=e.target.value; });
   $("#pickCare").addEventListener("change",e=>{ if(lastTopic) lastTopic.care=e.target.value; });
+  const cb=$("#copyBest"); if(cb) cb.addEventListener("click",()=>{
+    (navigator.clipboard?navigator.clipboard.writeText(opts[0].say):Promise.reject()).then(()=>{cb.textContent="Copied";},()=>{cb.textContent="Select and copy manually";});
+  });
   $("#copyTake").addEventListener("click",()=>{
     const t=["How it may be heard: "+(lastTopic.heard[0]||"close to what you meant")+" ("+lastTopic.heardWhy+")", "Say this: "+lastTopic.say, lastTopic.cueLabel+": "+lastTopic.cueHow].join("\n");
     (navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(()=>{$("#copyTake").textContent="Copied";},()=>{$("#copyTake").textContent="Select and copy manually";});
@@ -1706,7 +1784,16 @@ function run(){
     addCurrent();
     writeNext();
   });
-  $("#again").addEventListener("click",()=>{ swap(); $("#phrase").focus(); $("#msg").textContent = $("#phrase").value.trim() ? "Swapped. The reply is now the sentence. Translate again to read it the other way." : youFix("Swapped. Type what "+nm("A")+" might say back, then translate."); });
+  $("#again").addEventListener("click",()=>{
+    swap(); $("#phrase").focus();
+    const moved = !$("#phrase").value.trim() && $("#reply").value.trim();
+    if(moved) $("#fine").open = true;
+    const msg = $("#msg");
+    msg.textContent = $("#phrase").value.trim() ? "Swapped. The reply is now the sentence. Translate again to read it the other way. " : youFix("Swapped. Your sentence moved to “What they already said” under Fine-tune. Type what "+nm("A")+" might say back, then translate. ");
+    const u = document.createElement("button"); u.type="button"; u.className="undo"; u.textContent="Undo";
+    u.addEventListener("click",()=>{ swap(); msg.textContent="Back the way it was."; $("#phrase").focus(); });
+    msg.appendChild(u);
+  });
   $("#copy").addEventListener("click",()=>{
     R.querySelectorAll("details").forEach(d=>d.open=true);
     const t=R.innerText.replace(/\n{3,}/g,"\n\n");

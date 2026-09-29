@@ -20,7 +20,7 @@
   ].join('\n');
 
   var FORMS = [['text', 'Text or chat'], ['email', 'Email'], ['person', 'In person, from memory'], ['phone', 'Phone call, from memory']];
-  var ORDER = ['verdict', 'contempt', 'sarcasm', 'passive', 'compare', 'absolute', 'dismiss', 'withdraw', 'pointed', 'demand', 'history', 'shouting', 'vague', 'short', 'turnaway', 'repair', 'pause', 'warmth', 'feeling', 'ask'];
+  var ORDER = ['hostile', 'swear', 'verdict', 'contempt', 'sarcasm', 'passive', 'compare', 'absolute', 'dismiss', 'withdraw', 'pointed', 'hint', 'opener', 'demand', 'history', 'shouting', 'vague', 'short', 'turnaway', 'repair', 'pause', 'warmth', 'feeling', 'ask'];
   var GOOD = { repair: 1, pause: 1, warmth: 1, feeling: 1, ask: 1 };
   if (window.TOLPatterns) window.TOLPatterns.lookFor(document.getElementById('cr-lookfor'));
 
@@ -147,7 +147,7 @@
     });
     r.unanswered.forEach(function (u) {
       var t = r.turns[u.at];
-      notes.push('<strong>A question that may not have been answered.</strong> ' + esc(t.who) + ' asked “' + esc(snip(u.q, 90)) + '”' + (u.open ? ' and it’s still open.' : ', and the reply went somewhere else.'));
+      notes.push('<strong>A question that may not have been answered.</strong> ' + esc(t.who) + ' asked “' + esc(snip(u.q, 90)) + '”' + (u.open ? ' and it’s still open.' : u.flat ? ', and the reply was only “' + esc(snip(u.flat, 20)) + '”. A one-word reply can mean yes, or “I’m upset”, so it’s worth checking which.' : ', and the reply went somewhere else.'));
     });
     r.drift.forEach(function (i) {
       notes.push('<strong>Another topic came in</strong> at message ' + (i + 1) + ' (“' + esc(snip(r.turns[i].text, 60)) + '”). Sticking to one topic at a time makes it easier to answer.');
@@ -239,7 +239,8 @@
         return '<li><strong>' + esc(K.label) + ':</strong> ' + esc(K.hear) + (K.instead ? ' <em>Instead:</em> ' + esc(K.instead) : '') + '</li>';
       }).join('') + '</ul></details>';
     }
-    return '<li class="cr-msg' + (t.mine ? ' is-me' : '') + '">' + meta + '<div class="cr-bubble">' + highlight(t) + '</div>' + why + '</li>';
+    var readAs = t.readAs && t.readAs.length ? '<p class="cr-hint" style="margin:.2rem 0 0">Read as: ' + t.readAs.slice(0, 3).map(function (f) { return '“' + esc(f.to) + '” (typed “' + esc(f.from) + '”)'; }).join(', ') + '</p>' : '';
+    return '<li class="cr-msg' + (t.mine ? ' is-me' : '') + '">' + meta + '<div class="cr-bubble">' + highlight(t) + '</div>' + readAs + why + '</li>';
   }
 
   function highlight(t) {
@@ -334,6 +335,14 @@
   draft.addEventListener('input', function () { clearTimeout(timer); timer = setTimeout(checkDraft, 250); });
 
   $('cr-go').addEventListener('click', function () { start(input.value); });
+  // the screenshot reader hands over the checked text, and who "you" are, so there's nothing to ask twice
+  window.TOLReaderPage = {
+    read: function (text, me) {
+      input.value = text;
+      start(text);
+      if (state && me && state.speakers.indexOf(me) !== -1 && state.me !== me) { state.me = me; render(true); }
+    }
+  };
   $('cr-example').addEventListener('click', function () {
     input.value = EXAMPLE; start(EXAMPLE);
     // In the example, read it from Alex's side: the one whose reach-outs came back cold

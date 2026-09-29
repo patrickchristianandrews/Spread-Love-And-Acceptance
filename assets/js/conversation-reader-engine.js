@@ -195,6 +195,10 @@
                 hear: '“Not now,” “forget it” or a silent “…” usually means someone is flooded: too overwhelmed to keep going. Without a time to come back, the other person hears “this is over.” It isn’t calm, even when the messages stop.',
                 instead: 'Name the pause and a time to come back: “I need an hour. I’ll call you at 8.”' },
     contempt: { label: 'Eye-roll or put-down', heat: 3, tone: 'hot' },
+    swear:    { label: 'Swearing', heat: 2.5, tone: 'hot' },
+    hostile:  { label: 'Hostile or fed-up line', heat: 3, tone: 'hot' },
+    hint:     { label: 'Hint instead of an ask', heat: 1.5, tone: 'tense' },
+    opener:   { label: 'Opener with no topic', heat: 1.5, tone: 'tense' },
     passive:  { label: 'Passive-aggressive edge', heat: 2, tone: 'hot' },
     pointed:  { label: 'Pointed work phrase', heat: 1.5, tone: 'tense' },
     compare:  { label: 'Comparison to someone else', heat: 2, tone: 'hot' },
@@ -240,11 +244,12 @@
   };
 
   // the shared list's own words for what the reader may hear, and what to try instead
-  var FROM_SHARED = { sarcasm: 'sarcasm', contempt: 'contempt', passive: 'passive', pointed: 'pointed', compare: 'compare', absolute: 'absolute', dismiss: 'dismiss', stonewall: 'withdraw', flat: 'short', pause: 'pause', appreciation: 'warmth' };
+  var FROM_SHARED = { sarcasm: 'sarcasm', contempt: 'contempt', passive: 'passive', pointed: 'pointed', compare: 'compare', absolute: 'absolute', dismiss: 'dismiss', stonewall: 'withdraw', flat: 'short', pause: 'pause', appreciation: 'warmth',
+    swear: 'swear', hostile: 'hostile', label: 'verdict', hint: 'hint', opener: 'opener' };
   if (P) Object.keys(FROM_SHARED).forEach(function (id) {
     var K = KINDS[FROM_SHARED[id]], S = P.BY[id];
     if (!K || !S) return;
-    if (!K.hear || ['contempt', 'passive', 'pointed', 'compare', 'sarcasm', 'absolute', 'pause', 'warmth'].indexOf(FROM_SHARED[id]) !== -1) { K.hear = S.what; if (S.fix) K.instead = S.fix; }
+    if (!K.hear || ['contempt', 'passive', 'pointed', 'compare', 'sarcasm', 'absolute', 'pause', 'warmth', 'swear', 'hostile', 'hint', 'opener'].indexOf(FROM_SHARED[id]) !== -1) { K.hear = S.what; if (S.fix) K.instead = S.fix; }
   });
 
   function words(list) { return new RegExp('(?:^|[^\\w’\'])(' + list.join('|') + ')(?=$|[^\\w’\'])', 'gi'); }
@@ -299,6 +304,7 @@
 
     // "never mind" is a dismissal, not an absolute; "thank you" inside sarcasm stays sarcasm
     marks = marks.filter(function (a) {
+      if (a.kind === 'swear') return true;  // a swear word inside a fed-up line counts too
       return !marks.some(function (b) { return b !== a && !b.whole && b.start <= a.start && b.end >= a.end && (b.end - b.start) > (a.end - a.start); });
     });
     // "I'm sorry you feel that way" is not a repair
@@ -334,6 +340,9 @@
     var out = { turns: [], form: form, me: me, mine: 0, theirs: 0 };
     var prevLen = 0;
     turns.forEach(function (t, i) {
+      // "you allways do this" reads as "you always do this": the shared list of common misspellings
+      var sp = P && P.spell ? P.spell(t.text) : { text: t.text, fixes: [] };
+      if (sp.fixes.length) { t = { who: t.who, text: sp.text, time: t.time, date: t.date, typed: t.text, readAs: sp.fixes }; turns[i] = t; }
       var marks = findMarks(t.text);
       var mine = t.who === me;
       var wc = (t.text.match(/\S+/g) || []).length;
@@ -351,7 +360,7 @@
         if (counted[m.kind] <= (m.kind === 'shouting' ? 3 : 2)) heat += KINDS[m.kind].heat;
       });
       heat = Math.max(0, Math.round(heat * 10) / 10);
-      out.turns.push({ who: t.who, text: t.text, time: t.time, date: t.date, mine: mine, marks: marks, heat: heat, words: wc });
+      out.turns.push({ who: t.who, text: t.text, typed: t.typed || '', readAs: t.readAs || [], time: t.time, date: t.date, mine: mine, marks: marks, heat: heat, words: wc });
       if (mine) out.mine++; else out.theirs++;
       prevLen = wc;
     });
@@ -380,7 +389,9 @@
     out.level = endHeat >= 3 ? 'hot' : endHeat >= 1.2 ? 'warm' : 'calm';
     // an edge at the very end (sarcasm, a put-down, a passive jab) is never "calm", however short the message
     var lastT = n ? out.turns[n - 1] : null;
-    if (lastT && out.level === 'calm' && lastT.marks.some(function (m) { return ['contempt', 'sarcasm', 'passive', 'dismiss', 'verdict', 'withdraw', 'compare'].indexOf(m.kind) !== -1; })) out.level = 'warm';
+    if (lastT && out.level === 'calm' && lastT.marks.some(function (m) { return ['contempt', 'sarcasm', 'passive', 'dismiss', 'verdict', 'withdraw', 'compare', 'swear', 'hostile', 'opener', 'hint', 'short'].indexOf(m.kind) !== -1; })) out.level = 'warm';
+    // swearing, a fed-up line or name-calling anywhere near the end: hot
+    if (out.turns.slice(-2).some(function (t) { return t.marks.some(function (m) { return ['swear', 'hostile', 'verdict', 'contempt'].indexOf(m.kind) !== -1; }); }) && out.level !== 'hot' && peak >= 3) out.level = 'hot';
     var lastKinds = n ? out.turns[n - 1].marks.map(function (m) { return m.kind; }) : [];
     var doors = out.turns.filter(function (t) { return t.marks.some(function (m) { return m.kind === 'withdraw'; }); }).length;
     var lastTwo = out.turns.slice(-2).some(function (t) { return t.marks.some(function (m) { return m.kind === 'withdraw'; }); });
@@ -421,6 +432,7 @@
       var reply = nextFrom(i, !t.mine);
       if (reply === -1) { if (i >= n - 2 && !t.mine) out.unanswered.push({ at: i, q: trim(qs[qs.length - 1]), open: true }); return; }
       var r = out.turns[reply].text;
+      if (P && P.isFlat(r)) { out.unanswered.push({ at: i, q: trim(qs[qs.length - 1]), reply: reply, flat: trim(r) }); return; }
       var yesNo = /^(?:yes|yeah|yep|no|nope|sure|ok|okay|maybe|not really|i think|i will|i can|i did|i didn|because|since|it was|it[’']s|that[’']s)/i.test(trim(r));
       var qWords = contentWords(qs.join(' ')), rWords = contentWords(r);
       var overlap = qWords.some(function (w) { return rWords.indexOf(w) !== -1; });

@@ -337,6 +337,70 @@ t('tester', 'my coworker keeps interrupting me (tonight chip)', { q: 'my coworke
 // no link twice, no bullet twice, no statement chips
 t('tester', 'my partner does nothing around the house (no repeats)', { q: 'my partner does nothing around the house', kind: 'sit' });
 
+// ---------------------------------------------------------------- first-time testers, round two
+// who did what: being snapped at is not the apology script
+const APOLOGY = /I’m sorry I snapped|Apologize for the specific thing/;
+t('care', 'my partner snapped at me tonight and I feel stupid for crying', { kind: 'sit', id: 'partner+hurtbythem', text: /don’t have to fix anything tonight/, not: APOLOGY });
+t('care', 'my partner snapped at me tonight (crying is not stupid)', { q: 'my partner snapped at me tonight and I feel stupid for crying', text: /Crying when something hurts isn’t stupid/ });
+t('care', 'my partner yelled at me', { kind: 'sit', id: 'partner+hurtbythem', not: APOLOGY });
+t('care', 'my boss was really rude to me in the meeting', { kind: 'sit', id: /hurtbythem/, not: APOLOGY });
+t('care', 'i snapped at my partner this morning (still the apology)', { q: 'i snapped at my partner this morning', kind: 'sit', id: 'partner+repair' });
+t('care', 'is it my fault?', { kind: 'care', id: 'fault', text: /rarely one person’s fault/, not: /\bYes\b|your fault/ });
+c('care', ['my partner snapped at me', 'is it my fault?'], { kind: 'care', id: 'fault', text: /theirs to own/, not: /\bYes\b/ });
+c('care', ['my partner snapped at me', 'Tell me more'], { kind: 'care', id: 'fault' });
+c('care', ['my partner snapped at me', 'is it my fault?', 'What can I do tonight?'], { kind: 'sit-more', text: /calming thing/ });
+t('care', 'my partner yelled at me, is it my fault?', { kind: 'care', id: 'fault', text: /theirs to own/ });
+// privacy, plainly
+t('care', 'I’m scared my partner will see what I typed here', { kind: 'care', id: 'chatprivacy', text: /Start over.*erases[\s\S]*Closing this tab/ });
+t('care', 'how do I delete this chat', { kind: 'care', id: 'chatprivacy', text: /Start over/ });
+t('care', 'is this chat saved anywhere', { kind: 'care', id: 'chatprivacy' });
+t('care', 'is my data private (the site-wide answer)', { q: 'is my data private', kind: 'card', id: 'privacy' });
+// calm, judged, diagnosis, literal answers
+t('care', 'can you just tell me something calming', { kind: 'care', id: 'calmnow', link: ['/night-garden.html', '/calm-visualizer.html'] });
+t('care', 'I feel judged by this site', { kind: 'care', id: 'judged', text: /welcome here exactly as you are/, not: /[Ss]hame and guilt/ });
+t('care', 'I think I am autistic, can you tell me?', { kind: 'care', id: 'diagnose', text: /can’t tell you that/ });
+t('care', 'is my husband on the spectrum', { kind: 'care', id: 'diagnose', text: /can’t tell you that/ });
+t('care', 'is this a diagnosis? (the therapy card)', { q: 'is this a diagnosis', kind: 'card', id: 'therapy' });
+t('care', 'asdfgh', { kind: 'unclear', text: /didn’t catch that/, not: /pond/ });
+t('care', 'what’s the difference between the 7-day log and the almanac', { kind: 'care', id: 'weatherlog', text: /same thing/ });
+// action, not research
+t('care', 'I just had a fight with my partner and I only have 5 minutes', { kind: 'care', id: 'fightnow', link: ['/wp-11.html'], not: /5:1|five positive/ });
+t('care', 'we just had a huge argument', { kind: 'care', id: 'fightnow', link: '/carrier-wave-decoder.html#decode' });
+t('care', 'what should I do next', { kind: 'care', id: 'nextstep', link: '/conversation-reader.html', not: /ego depletion/ });
+t('care', 'give me one thing to do', { kind: 'care', id: 'nextstep', not: /Spending on others/ });
+t('care', 'remind me later', { kind: 'care', id: 'remind', text: /can’t send reminders/ });
+t('care', 'I only have 10 minutes', { kind: 'care', id: 'minutes', link: '/quick-checks.html#today' });
+c('care', ['my roommates never do their chores', 'what should I do next'], { kind: 'sit-more', text: /tiny step for tonight/ });
+// the topic doesn't stick to unrelated follow-ups; "tl;dr" shortens the last answer
+c('care', ['my partner snapped at me', 'where did I leave off'], { kind: 'care', text: /last talking about being snapped at/ });
+t('care', 'where did I leave off (fresh)', { q: 'where did I leave off', kind: 'care', text: /starting fresh/ });
+c('care', ['i feel overwhelmed', 'tl;dr please'], { kind: 'short', text: /^In short: /, not: /Thanks for telling me more/ });
+c('care', ['what is the lemonade stand', 'make it shorter'], { kind: 'short', text: /^In short: / });
+c('care', ['my partner snapped at me', 'how do i make the text bigger'], { kind: 'care', id: 'textsize' });
+// household frictions, kindly
+t('care', 'i forget chores and my partner is upset', { kind: 'sit', id: 'partner+forgetting', text: /doesn’t mean you don’t care/, not: /log one week|Feeling hurt by that/ });
+t('care', 'my partner always forgets to take out the bins', { kind: 'sit', id: 'partner+forgetting', text: /memory and attention/ });
+t('care', 'i am always late and my friend is annoyed', { kind: 'sit', id: 'friend+lateness', text: /leave-by alarm/, not: /That frustration makes sense/ });
+t('care', 'my roommate leaves the laundry in the washer', { kind: 'sit', id: 'roommate+halfdone', text: /what “done” looks like/ });
+t('care', 'i never finish the chores i start', { kind: 'sit', id: /halfdone/ });
+// no sentence twice
+t('care', 'i feel overwhelmed (no doubled line)', { q: 'i feel overwhelmed', kind: 'sit', not: /not a sign that you’re failing\. Feeling overwhelmed is a signal/ });
+t('care', 'i feel overwhelmed (steps first)', { q: 'i feel overwhelmed', kind: 'sit', text: /^[^\n]*\n## Small steps for today/ });
+// site settings
+t('care', 'how do i make the text bigger', { kind: 'care', id: 'textsize', text: /Text size/, not: /Our Logo|Spread Love & Acceptance/ });
+t('care', 'can you read this out loud', { kind: 'care', id: 'listen', text: /Listen button/, not: /[Ss]ensory/ });
+t('care', 'the words are too hard', { kind: 'care', id: 'hardwords', text: /Simple version[\s\S]*Easy reading/ });
+// forgiving spelling, with "I think you mean"
+t('spelling', 'what is unbiled det', { text: /I think you mean “what is unbilled debt”[\s\S]*[Uu]nbilled [Dd]ebt/, link: '/' });
+t('spelling', 'what is unbiled dept', { text: /I think you mean[\s\S]*[Uu]nbilled [Dd]ebt/ });
+t('spelling', 'whats unbiled debt', { text: /I think you mean[\s\S]*[Uu]nbilled [Dd]ebt/, not: /pond|guessing/ });
+t('spelling', 'were do i start', { kind: 'card', id: 'start', text: /I think you mean “where do I start”/ });
+t('spelling', 'i dont no were to begin', { kind: 'card', id: 'start' });
+t('spelling', 'how do i stop fihgting about chors', { text: /I think you mean/, not: /pond/ });
+t('spelling', 'my partner allways snapps at me', { kind: 'sit', id: /hurtbythem/ });
+t('spelling', 'we fought again (a real word stays)', { q: 'we fought again', kind: 'sit', not: /I think you mean/ });
+t('spelling', 'What stocks should I buy? (a real word stays)', { q: 'What stocks should I buy?', kind: 'offtopic', not: /I think you mean/ });
+
 // ---------------------------------------------------------------- run
 (async () => {
   const args = process.argv.slice(2), verbose = args.includes('-v'), only = args.filter(a => a[0] !== '-')[0];
@@ -366,6 +430,15 @@ t('tester', 'my partner does nothing around the house (no repeats)', { q: 'my pa
     groups[x.g] = groups[x.g] || [0, 0]; groups[x.g][1]++; if (ok) { pass++; groups[x.g][0]++; }
     if (!ok) fails.push({ x, why, text });
     if (verbose) console.log((ok ? 'PASS ' : 'FAIL ') + '[' + x.g + '] ' + qs.join(' → ') + '  (' + r.kind + ' ' + idOf + ')\n' + text.replace(/^/gm, '     ') + '\n');
+  }
+  // the knowledge base itself: page titles never carry the site name added for search engines,
+  // and no SVG <title> text is glued onto a page title ("Our Logo · Spread Love & AcceptanceSpread Love…")
+  if (!only || 'kb'.includes(only)) {
+    const kbSrc = require('fs').readFileSync(require('path').join(__dirname, '..', '..', 'assets/js/chat-kb.js'), 'utf8');
+    const bad = (kbSrc.match(/"t":"[^"]*(· Spread Love|Acceptance[A-Z])[^"]*"/g) || []);
+    groups.kb = [bad.length ? 0 : 1, 1];
+    if (!bad.length) pass++; else fails.push({ x: { g: 'kb', q: 'page titles' }, why: ['titles with the site name: ' + bad.slice(0, 3).join(', ')], text: '' });
+    tests.push({ g: 'kb' });
   }
   fails.forEach(f => console.log('FAIL [' + f.x.g + '] ' + (f.x.convo || [f.x.q]).join(' → ') + '\n   ' + f.why.join('; ') + '\n   ' + f.text.slice(0, 300).replace(/\n/g, ' | ')));
   console.log('\n' + Object.keys(groups).map(g => g + ' ' + groups[g][0] + '/' + groups[g][1]).join('  ·  '));

@@ -181,11 +181,36 @@
     box-shadow:0 8px 22px rgba(110,90,160,.09); }
   .cr-moves > li.is-first{ background:radial-gradient(120% 90% at 14% 8%, rgba(255,255,255,.9), rgba(255,255,255,0) 42%) padding-box, linear-gradient(rgba(236,247,240,.92), rgba(236,247,240,.92)) padding-box, linear-gradient(135deg, #F7C9D4, #D9C8F0 30%, #C6DFF4 55%, #C7EBD6 78%, #F8E7AE) border-box !important; }
   .cr-safety{ background:radial-gradient(120% 90% at 14% 8%, rgba(255,255,255,.9), rgba(255,255,255,0) 42%) padding-box, linear-gradient(rgba(255,241,236,.92), rgba(255,241,236,.92)) padding-box, linear-gradient(135deg, #F7C9D4, #F4A6B8 50%, #F8E7AE) border-box !important; }
+  /* screenshots: pick, check, read */
+  .cr-shots{ margin-top:1rem; padding-top:.9rem; border-top:1px dashed rgba(120,100,70,.35); }
+  .cr-shots-h{ margin:0 0 .4rem; }
+  .cr-shots .cr-actions{ margin:.3rem 0; }
+  .cr-shots label.cr-btn{ display:inline-flex; align-items:center; cursor:pointer; }
+  .cr-input-step.is-drop{ outline:3px dashed var(--brass); outline-offset:6px; }
+  .cr-review{ margin-top:1.2rem; }
+  .cr-rv-names{ display:flex; flex-wrap:wrap; gap:.6rem 1.2rem; margin:.6rem 0; }
+  .cr-rv-names label{ display:flex; flex-direction:column; gap:.2rem; font-weight:600; font-size:.95rem; }
+  .cr-rv-names input{ min-height:44px; padding:.4rem .7rem; border:1.5px solid rgba(120,100,70,.35); border-radius:12px; font:inherit; max-width:100%; }
+  .cr-rv-side{ border:0; padding:0; margin:.4rem 0 .8rem; display:flex; flex-wrap:wrap; gap:.3rem 1.2rem; }
+  .cr-rv-side legend{ font-weight:600; margin-bottom:.2rem; }
+  .cr-rv-side label{ display:inline-flex; align-items:center; gap:.4rem; min-height:44px; }
+  .cr-rv-list{ list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:.6rem; }
+  .cr-rv-row{ border:1.5px solid rgba(120,100,70,.25); border-radius:16px; padding:.55rem .7rem; background:rgba(255,253,249,.9); max-width:92%; }
+  .cr-rv-row.is-me{ align-self:flex-end; background:rgba(230,241,234,.95); }
+  .cr-rv-top{ display:flex; flex-wrap:wrap; align-items:center; gap:.35rem .6rem; margin-bottom:.35rem; }
+  .cr-rv-who{ display:inline-flex; align-items:center; gap:.35rem; font-size:.9rem; font-weight:600; }
+  .cr-rv-who select{ min-height:40px; border-radius:10px; font:inherit; max-width:12rem; }
+  .cr-rv-text textarea{ width:100%; min-height:3rem; font:inherit; border:1px solid rgba(120,100,70,.3); border-radius:10px; padding:.4rem .6rem; box-sizing:border-box; }
+  @media (max-width:560px){ .cr-rv-row{ max-width:100%; } }
+  @media (prefers-color-scheme:dark){ :root:not([data-theme="light"]) .cr-rv-row{ background:rgba(40,36,50,.9); } :root:not([data-theme="light"]) .cr-rv-row.is-me{ background:rgba(36,56,46,.9); } }
+  :root[data-theme="dark"] .cr-rv-row{ background:rgba(40,36,50,.9); }
+  :root[data-theme="dark"] .cr-rv-row.is-me{ background:rgba(36,56,46,.9); }
 </style>
 <script src="/assets/js/site.js" defer></script>
 <script src="/assets/js/message-patterns.js" defer></script>
 <script src="/assets/js/conversation-reader-engine.js" defer></script>
 <script src="/assets/js/conversation-reader.js" defer></script>
+<script src="/assets/js/conversation-reader-ocr.js" defer></script>
 <!-- seo:start -->
 <link rel="canonical" href="https://spreadloveandacceptance.com/conversation-reader.html">
 <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1">
@@ -236,6 +261,7 @@
       <li><strong>A WhatsApp or iMessage export</strong> (“[date, time] Sam: …”, without media).</li>
       <li><strong>A copied text thread</strong> with no names: put a blank line between messages, and the Reader will alternate speakers. You can switch who said what afterward.</li>
       <li><strong>An email thread,</strong> with the “On … wrote:” lines left in.</li>
+      <li><strong>Screenshots</strong> of a chat (iMessage, WhatsApp, Messenger, texts, Slack): use “Choose screenshots”, or paste or drop them. They’re read on this device and never uploaded, and you check the words and sides before the Reader looks at them.</li>
       <li><strong>A conversation from memory</strong> (in person or on the phone): write it as “Me:” and “Them:” lines.</li>
     </ul>
   </details>
