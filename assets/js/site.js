@@ -158,6 +158,7 @@
       { href: '/roadmap.html', code: '', title: 'Content Roadmap', note: 'What’s live, what’s being written, and what’s planned' },
       { href: '/telemetry.html', code: '', title: 'Rollout Status', note: 'How much of the planned program is finished, counted plainly' },
       { href: '/membership.html', code: '', title: 'Membership', note: 'Free while in development: sign up, or sign out of this browser' },
+      { href: '/on-this-device.html', code: '', title: 'What’s stored on this device', note: 'Everything this site keeps in your browser, in plain words, with a button to erase each one' },
       { href: '/legal/privacy-policy.html', code: '', title: 'Privacy policy', note: 'What’s collected, who holds it, and your rights' },
       { href: '/legal/terms-of-service.html', code: '', title: 'Terms of service', note: 'The rules for using the site' },
       { href: '/legal/refund-policy.html', code: '', title: 'Refund policy', note: 'How cancellations and refunds will work once paid membership launches' }
@@ -302,8 +303,34 @@
     if (e.key === 'Escape' && openDrop) closeDrop(true);
   });
 
+  // "Pick up where you left off" and the time launcher (pick-up.js), loaded when first needed
+  var pickUpWait = null;
+  function loadPickUp(cb) {
+    if (window.TOLPickUp) return cb();
+    if (pickUpWait) { pickUpWait.push(cb); return; }
+    pickUpWait = [cb];
+    var sc = document.createElement('script'); sc.src = '/assets/js/pick-up.js';
+    sc.onload = function () { var w = pickUpWait; pickUpWait = null; if (window.TOLPickUp) w.forEach(function (f) { f(); }); };
+    document.head.appendChild(sc);
+  }
+  // the last few pages opened here, for "Pick up where you left off" (this browser only; it can be switched off or erased)
+  function rememberPage(body) {
+    if (lsGet('tol-recent-off') || /^\/(index|404|offline|garden-backdrop|pal-cam-tv|on-this-device|membership)\.html$|^\/legal\//.test(current) || location.search.indexOf('palcam-pop') !== -1) return;
+    var h1 = document.querySelector('main h1');
+    var t = (here && here.title) || (h1 && h1.textContent.replace(/\s+/g, ' ').trim()) || document.title.replace(/\s*[·|–—-]\s*(Spread Love|The Objective Ledger).*$/, '');
+    if (!t) return;
+    if (inDepth) t += ' (full version)';
+    var u = location.pathname, list = [];
+    try { list = JSON.parse(lsGet('tol-recent') || '[]') || []; } catch (e) { list = []; }
+    list = list.filter(function (r) { return r && r.u !== u; });
+    list.unshift({ u: u, t: t.slice(0, 90), at: Date.now() });
+    lsSet('tol-recent', JSON.stringify(list.slice(0, 6)));
+  }
+
   function openPanel(sectionId, toSearch) {
     lastFocus = document.activeElement;
+    var pu = panel.querySelector('[data-pickup="menu"]');
+    if (pu && !toSearch) loadPickUp(function () { window.TOLPickUp.mount(pu, 'menu'); });
     closeDrop();
     panel.querySelector('.tol-index').replaceWith(buildIndex({ accordion: true, open: sectionId }));
     if (!toSearch) { var q0 = panel.querySelector('.tol-find input'); if (q0 && q0.value) { q0.value = ''; runSearch(''); } }
@@ -471,6 +498,15 @@
       document.head.appendChild(cw);
     }
 
+    // "Listen": the page read aloud by the device's own voice (listen.js), on reading pages
+    var lmain = document.querySelector('main');
+    if (lmain && 'speechSynthesis' in window && !busyPage() && current !== '/index.html' && !body.hasAttribute('data-no-listen') &&
+        !document.querySelector('meta[http-equiv="Content-Security-Policy"]') && (lmain.textContent || '').split(/\s+/).length > 120) {
+      var ls = document.createElement('script'); ls.src = '/assets/js/listen.js';
+      ls.onload = function () { if (window.TOLListen) window.TOLListen.mount({ host: lmain, after: lmain.querySelector(':scope > .read-head') }); };
+      document.head.appendChild(ls);
+    }
+
     // playful learning layer: "Check yourself" moments, a learning trail and the quest map (learn-play.js)
     if (!body.hasAttribute('data-no-learnplay') && !document.querySelector('meta[http-equiv="Content-Security-Policy"]')) {
       var lp = document.createElement('script'); lp.src = '/assets/js/learn-play.js'; document.head.appendChild(lp);
@@ -526,6 +562,11 @@
     buildPuddlesCards(body);
     buildWeatherNudge(body);
     comfortOffer(body);
+    rememberPage(body);
+    if (current === '/index.html') {
+      var hi = document.querySelector('main [data-home-intro]');
+      if (hi) loadPickUp(function () { var h = el('div', { class: 'tol-pickup-host', 'data-pickup': 'home' }); hi.appendChild(h); window.TOLPickUp.mount(h, 'home'); });
+    }
     palCamHooks(body); // pal cam: "Check in on Tidbit & Sugarfoot" from anywhere (see below)
 
     // Pastel watercolour splashes behind the page (decorative; see site.css)
@@ -601,6 +642,7 @@
         '<a href="/membership.html">Membership</a>' +
         '<a href="/roadmap.html">Roadmap</a>' +
         '<a href="/legal/privacy-policy.html">Privacy</a>' +
+        '<a href="/on-this-device.html">Stored on this device</a>' +
         '<a href="/legal/terms-of-service.html">Terms</a>' +
         '<a href="/legal/refund-policy.html">Refunds</a>' +
         '<a href="mailto:' + CONFIG.supportEmail + '">Contact</a>' +

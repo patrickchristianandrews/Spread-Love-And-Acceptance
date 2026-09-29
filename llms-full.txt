@@ -157,6 +157,7 @@ Key facts:
 - [Privacy Policy](https://spreadloveandacceptance.com/legal/privacy-policy.html): How Spread Love & Acceptance handles your information: what you type in the tools stays on your device.
 - [Cancellation & Refund Policy](https://spreadloveandacceptance.com/legal/refund-policy.html): Cancellation and refund terms for Spread Love & Acceptance.
 - [Terms of Service](https://spreadloveandacceptance.com/legal/terms-of-service.html): The terms for using Spread Love & Acceptance and The Objective Ledger.
+- [What’s stored on this device](https://spreadloveandacceptance.com/on-this-device.html): Everything this site keeps in your browser, in plain words, with a button to erase each one or everything at once. Nothing on this list is ever sent to us.
 - [Content Roadmap](https://spreadloveandacceptance.com/roadmap.html): What's live today, what's next, and what's planned for The Objective Ledger (TOL-OS).
 - [Rollout Status](https://spreadloveandacceptance.com/telemetry.html): Component-by-component build status for The Objective Ledger, stated as real fractions of the promised whole.
 - [Frequency Calibration: Are Your Rhythms in Step?](https://spreadloveandacceptance.com/tools/frequency-calibration.html): A worksheet for two people (partners, family, co-parents, roommates, coworkers, friends) to map their rhythms for money, recovery, decisions, check-ins and the big picture, see what each rhythm means, and pick one agreement to close each gap.

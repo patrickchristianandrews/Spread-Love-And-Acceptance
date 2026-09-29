@@ -2153,3 +2153,55 @@ html.tol-bigtext .tol-wx-go > span{ display:flex !important; position:static !im
 .tol-find-dym{ font:inherit; font-weight:600; background:none; border:0; padding:0; min-height:32px; color:var(--focus); text-decoration:underline; cursor:pointer; }
 .tol-find-dym:focus-visible{ outline:2px solid var(--focus); outline-offset:2px; }
 .tol-chbar ol a{ font-family:var(--tol-sans) !important; font-size:.92rem !important; }
+
+/* ---------- Listen: the page read aloud (listen.js) ---------- */
+.tol-listen{ display:flex; flex-wrap:wrap; align-items:center; gap:.5rem; margin:.2rem 0 1.1rem !important; padding:0 !important; background:none !important; box-shadow:none !important; border:0 !important; position:relative; z-index:2; }
+.tol-listen button, .tol-listen-bar button, .tol-listen-mini{ display:inline-flex; align-items:center; gap:.4rem; min-height:44px; padding:.4rem 1rem; border-radius:999px; cursor:pointer;
+  font:600 .95rem/1.2 var(--tol-sans); color:#2B2620; background:#FFFDF7; border:1.5px solid #B9A8D6; }
+.tol-listen .tol-listen-go{ background:#2F5F8A; border-color:#2F5F8A; color:#fff; }
+.tol-listen .tol-listen-go:hover{ background:#264E73; }
+.tol-listen button:hover, .tol-listen-bar button:hover, .tol-listen-mini:hover{ border-color:#7A5FA8; }
+.tol-listen button:focus-visible, .tol-listen-bar :focus-visible, .tol-listen-mini:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
+.tol-listen-mini{ min-height:36px; padding:.25rem .75rem; font-size:.88rem; }
+.tol-listen-mini[aria-pressed="true"]{ background:#EAF6EF; border-color:#3E6B4C; }
+.tol-listen-bar{ position:fixed; z-index:930; left:50%; top:calc(var(--tol-bar-h, 58px) + 8px); transform:translateX(-50%); width:max-content; max-width:calc(100vw - 20px); box-sizing:border-box;
+  display:flex; flex-wrap:wrap; justify-content:center; align-items:center; gap:.4rem; padding:.45rem .55rem; border-radius:22px; background:rgba(255,251,242,.97); border:1px solid #D9C8F0; box-shadow:0 10px 28px rgba(60,40,90,.18); }
+.tol-listen-bar[hidden]{ display:none; }
+.tol-listen-bar button{ min-height:40px; padding:.3rem .85rem; }
+.tol-listen-bar button[aria-pressed="true"]{ background:#EAF6EF; border-color:#3E6B4C; }
+.tol-listen-bar button:disabled{ opacity:.5; cursor:default; }
+.tol-listen-speed select{ min-height:40px; padding:.25rem .6rem; border-radius:999px; border:1.5px solid #B9A8D6; background:#fff; font:600 .95rem/1.2 var(--tol-sans); color:#2B2620; }
+.tol-listen-status{ flex-basis:100%; margin:0; text-align:center; font:500 .9rem/1.35 var(--tol-sans); color:#4A4439; }
+.tol-listen-status:empty{ display:none; }
+::highlight(tol-listen){ background-color:#FCE38A; color:#1F1A14; }
+.tol-listen-now{ outline:2px dashed rgba(47,95,138,.45); outline-offset:4px; border-radius:6px; }
+html.tol-listen-picking main :is(p, li, h2, h3, blockquote, dd, td){ cursor:pointer; }
+html.tol-listen-picking main :is(p, li, h2, h3, blockquote, dd, td):hover{ outline:2px solid rgba(47,95,138,.35); outline-offset:3px; border-radius:6px; }
+@media (max-width:560px){ .tol-listen-bar{ top:calc(var(--tol-bar-h, 58px) + 4px); gap:.3rem; padding:.35rem .4rem; } .tol-listen-bar button{ padding:.25rem .65rem; font-size:.9rem; } }
+@media print{ .tol-listen, .tol-listen-bar, .tol-listen-mini{ display:none !important; } }
+
+/* ---------- "Pick up where you left off" and "How much time do you have?" (pick-up.js) ---------- */
+.tol-pickup-host{ max-width:40rem; margin:0 auto; text-align:left; }
+.tol-pickup, .tol-time{ position:relative; z-index:2; box-sizing:border-box; margin:.5rem 0 .8rem; padding:.8rem 1rem; border-radius:18px; background:rgba(255,253,247,.95); border:1.5px solid #E2D6BE;
+  box-shadow:0 6px 18px rgba(90,70,120,.08); color:var(--ink); font-size:.97rem; line-height:1.5; text-align:left; }
+.read .tol-pickup h2.tol-pu-h, .tol-pu-h{ margin:0 0 .4rem !important; padding:0 !important; background:none !important; box-shadow:none !important; font:600 1.05rem/1.3 "Fraunces", Georgia, serif !important; max-width:none !important; }
+.tol-pickup ul, .tol-time ul{ list-style:none; margin:0 !important; padding:0 !important; }
+.tol-pickup li, .tol-time li{ display:flex; gap:.5rem; align-items:baseline; margin:.25rem 0 !important; max-width:none !important; padding:0 !important; }
+.tol-pickup small{ color:var(--ink-soft); font-size:.9rem; }
+.tol-pu-ico{ flex:none; width:1.3rem; text-align:center; }
+.read .tol-pickup p.tol-pu-foot, .tol-pu-foot{ margin:.5rem 0 0 !important; padding:0 !important; background:none !important; box-shadow:none !important; font-size:.9rem !important; color:var(--ink-soft); max-width:none !important; }
+.tol-pu-foot button{ font:inherit; background:none; border:0; padding:0 .15rem; min-height:32px; color:var(--focus); text-decoration:underline; cursor:pointer; }
+.tol-pu-foot button:disabled{ color:var(--ink-soft); text-decoration:none; }
+.tol-pu-foot a{ margin-left:.2rem; }
+.read .tol-time p.tol-time-q, .tol-time-q{ margin:0 0 .45rem !important; padding:0 !important; background:none !important; box-shadow:none !important; font:600 1rem/1.3 "Fraunces", Georgia, serif !important; max-width:none !important; }
+.tol-time-opts{ display:flex; flex-wrap:wrap; gap:.4rem; }
+.tol-time-opts button{ min-height:44px; padding:.35rem 1rem; border-radius:999px; cursor:pointer; font:600 .95rem/1.2 "Lora", Georgia, serif; color:#2B2620; background:#FFFBF2; border:1.5px solid #D9C8F0; }
+.tol-time-opts button[aria-pressed="true"]{ background:#2F5F8A; border-color:#2F5F8A; color:#fff; }
+.tol-time-opts button:focus-visible, .tol-pickup :focus-visible, .tol-time :focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
+.tol-time-list{ margin-top:.55rem !important; }
+.tol-time-list li{ display:block !important; }
+.tol-time-list li span{ color:var(--ink-soft); }
+.tol-time-list a{ font-weight:600; }
+.tol-panel .tol-pickup, .tol-panel .tol-time{ margin:.9rem 0 0; background:var(--paper); box-shadow:none; }
+html.tol-home .tol-pickup-host{ margin-top:.2rem; }
+@media print{ .tol-pickup, .tol-time{ display:none !important; } }
