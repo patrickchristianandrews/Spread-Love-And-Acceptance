@@ -58,10 +58,25 @@
   // Give every per-person table a row for each person.
   function syncPeople(schema, state) {
     schema.sections.forEach(function (s) {
+      if (s.type === 'table' && s.personDays) { fitDays(s, state); return; }
       if (s.type !== 'table' || !s.fixedRows) return;
       var fr = fixedRowsFor(s, state), rows = state.tables[s.id] || (state.tables[s.id] = []);
       while (rows.length < fr.length) rows.push({});
     });
+  }
+  // A day-by-day table (WP-13) gets one row for each person on each day, in order, however many
+  // people there are. Anything already written stays; empty rows for someone taken off go.
+  function fitDays(s, state) {
+    var codes = CODES.slice(0, peopleCount(state.values)), rows = state.tables[s.id] || [], used = rows.map(function () { return false; }), out = [];
+    s.personDays.forEach(function (d) {
+      codes.forEach(function (c) {
+        var hit = -1;
+        rows.forEach(function (r, i) { if (hit < 0 && !used[i] && r && r.day === d && r.who === c) hit = i; });
+        if (hit >= 0) { used[hit] = true; out.push(rows[hit]); } else out.push({ day: d, who: c });
+      });
+    });
+    rows.forEach(function (r, i) { if (!used[i] && r && !rowIsEmpty(s, r)) out.push(r); });
+    state.tables[s.id] = out;
   }
   function addPerson(schema, state) {
     var n = peopleCount(state.values);
@@ -135,18 +150,28 @@
     return fresh;
   }
 
-  // How much of a sheet has been filled in: the number of answers given.
+  // How much of a sheet has been filled in: the number of answers given. Boxes the page fills in
+  // for you (a day, a person's row, how many people are on the road) don't count as answers.
   function answered(schema, state) {
     var n = 0, blank = blankState(schema);
     schema.sections.forEach(function (s) {
       if (s.type === 'table') (state.tables[s.id] || []).forEach(function (r, i) {
         var d = (blank.tables[s.id] || [])[i] || {};
-        if (s.columns.some(function (c) { return c.type !== 'computed' && !isBlank(r[c.id]) && r[c.id] !== d[c.id]; })) n++;
+        if (s.columns.some(function (c) { return c.type !== 'computed' && !c.prefill && !isBlank(r[c.id]) && r[c.id] !== d[c.id]; })) n++;
       });
       else if (s.type === 'scale' || s.type === 'checks') s.items.forEach(function (it) { if (!isBlank(state.values[s.id + '.' + it.id])) n++; });
-      else if (s.type === 'fields') s.fields.forEach(function (f) { if (!isBlank(state.values[f.id])) n++; });
+      else if (s.type === 'fields') s.fields.forEach(function (f) { if (!f.prefill && !isBlank(state.values[f.id])) n++; });
     });
     return n;
+  }
+  // A number outside the range its box allows (a 7 in a 0 to 1 box, a negative minute) is left out
+  // of every sum and flagged on the page. Returns a short message, or '' when the value is fine or blank.
+  function rangeProblem(def, v) {
+    if (!def || def.type !== 'number' || isBlank(v)) return '';
+    var n = parseFloat(v), lo = def.min, hi = def.max;
+    if (!isFinite(n)) return '“' + v + '” isn’t a number, so it is left out.';
+    if ((lo != null && n < lo) || (hi != null && n > hi)) return v + ' is outside ' + (lo != null ? lo : '') + ' to ' + (hi != null ? String(hi).replace(/\B(?=(\d{3})+(?!\d))/g, ',') : '') + ', so it is left out. ' + (def.rangeNote || '');
+    return '';
   }
 
   // A choice can show different words from the value it stores (item.labels), so saved answers still open.
@@ -195,6 +220,7 @@
     var v = row[col.id];
     if (col.type === 'computed') return col.compute(row);
     if (col.type === 'person') return ctx.name(v);
+    if (col.type === 'select' && col.labels && col.labels[v]) return col.labels[v];
     if (col.type === 'check') return v ? (col.pdfTrue || 'Yes') : '';
     if (col.type === 'date') return formatDate(v);
     return v == null ? '' : String(v);
@@ -249,9 +275,9 @@
 
   P.titleBlock = function () {
     var d = this.doc, s = this.schema;
-    d.text(this.L, this.y + 8, this.enc('The Objective Ledger  ·  ' + s.code), 'Helvetica', 8, COLORS.brass);
+    d.text(this.L, this.y + 8, this.enc('The Objective Ledger  ·  ' + s.code + (s.plain && s.plain !== s.title ? '  ·  ' + s.title : '')), 'Helvetica', 8, COLORS.brass);
     this.y += 16;
-    d.text(this.L, this.y + 20, this.enc(s.title), 'Times-Bold', 21, COLORS.ink);
+    d.text(this.L, this.y + 20, this.enc(s.plain || s.title), 'Times-Bold', 21, COLORS.ink);
     this.y += 30;
     d.line(this.L, this.y, this.R, this.y, COLORS.brass, 1.2);
     this.y += 12;
@@ -487,7 +513,7 @@
       el.appendChild(h('option', { value: '', text: '—' }));
       var opts = def.type === 'person'
         ? personOptions(self.ctx(), def)
-        : def.options.map(function (o) { return { v: o, l: o }; });
+        : def.options.map(function (o) { return { v: o, l: def.labels && def.labels[o] ? def.labels[o] : o }; });
       opts.forEach(function (o) {
         var op = h('option', { value: o.v, text: o.l, 'data-person': o.person });
         if (String(value) === o.v) op.selected = true;
@@ -504,14 +530,63 @@
         placeholder: def.placeholder
       }));
       el.value = value == null ? '' : value;
+      if (def.type === 'number' && rangeProblem(def, value)) el.setAttribute('aria-invalid', 'true');
     }
     return { el: el, id: id };
   };
+  // Where a box's definition lives, so a typed number can be checked against its range.
+  A.defFor = function (t) {
+    var tbl = t.getAttribute('data-table'), col = t.getAttribute('data-col'), key = t.getAttribute('data-key');
+    var found = null;
+    this.schema.sections.forEach(function (s) {
+      if (tbl && s.id === tbl && s.columns) s.columns.forEach(function (c) { if (c.id === col) found = c; });
+      if (!tbl && key && s.fields) s.fields.forEach(function (f) { if (f.id === key) found = f; });
+    });
+    if (!found && key) (this.schema.meta || []).forEach(function (f) { if (f.id === key) found = f; });
+    return found;
+  };
+  // Mark a number that is out of range, with a short note right under it (and nothing when it is fine).
+  A.flagRange = function (t) {
+    var def = this.defFor(t), msg = rangeProblem(def, t.value), holder = t.parentNode, note = holder && holder.querySelector('.wpf-range');
+    if (msg) {
+      t.setAttribute('aria-invalid', 'true');
+      if (!note) { note = h('span', { className: 'wpf-range', role: 'note' }); holder.appendChild(note); }
+      note.textContent = msg;
+      if (!t.id) return msg;
+      note.id = t.id + '-range'; t.setAttribute('aria-describedby', note.id);
+    } else {
+      t.removeAttribute('aria-invalid');
+      if (note) note.remove();
+      if (t.getAttribute('aria-describedby') === t.id + '-range') t.removeAttribute('aria-describedby');
+    }
+    return msg;
+  };
+
+  A.road = function () { return this.opts.road || this.schema.road || (this.schema.solo ? 'self' : ''); };
 
   A.render = function () {
     var self = this, s = this.schema, st = this.state;
     this.root.innerHTML = '';
     this.uid = 0;
+
+    // A filled-in example for this sheet and road, folded away until someone wants it
+    var ex = global.TOL_WORKPAPER_EXAMPLE ? global.TOL_WORKPAPER_EXAMPLE(s.code, this.road()) : null;
+    if (ex) {
+      var det = h('details', { className: 'wpf-example' }, [h('summary', { text: 'See a filled-in example' })]);
+      if (ex.intro) det.appendChild(h('p', { className: 'wpf-help', text: ex.intro }));
+      (ex.parts || []).forEach(function (part) {
+        if (part.title) det.appendChild(h('p', { className: 'wpf-example-h', text: part.title }));
+        if (part.rows) {
+          var tb = h('table', { className: 'wpf-example-table' });
+          if (part.head) tb.appendChild(h('thead', null, [h('tr', null, part.head.map(function (x) { return h('th', { scope: 'col', text: x }); }))]));
+          tb.appendChild(h('tbody', null, part.rows.map(function (r) { return h('tr', null, r.map(function (x) { return h('td', { text: x }); })); })));
+          det.appendChild(h('div', { className: 'wpf-table-box' }, [tb]));
+        }
+        if (part.lines) det.appendChild(h('ul', { className: 'wpf-example-lines' }, part.lines.map(function (x) { return h('li', { text: x }); })));
+      });
+      if (ex.note) det.appendChild(h('p', { className: 'wpf-help', text: ex.note }));
+      this.root.appendChild(det);
+    }
 
     // Names and meta fields
     var metaDefs = [];
@@ -560,6 +635,12 @@
       sec.fields.forEach(function (f) {
         var c = self.control(f, st.values[f.id], { key: f.id });
         var field = h('div', { className: 'wpf-field wpf-wide' }, [h('label', { for: c.id, text: f.label }), c.el]);
+        if (f.chips) {
+          var chips = h('div', { className: 'wpf-chips', role: 'group', 'aria-label': (f.chipsLabel || 'Words to add') + ': ' + f.label });
+          if (f.chipsLabel) chips.appendChild(h('span', { className: 'wpf-chips-k', text: f.chipsLabel }));
+          f.chips.forEach(function (w) { chips.appendChild(h('button', { type: 'button', className: 'wpf-chip', 'data-action': 'chip', 'data-key': f.id, 'data-word': w, text: w })); });
+          field.appendChild(chips);
+        }
         if (f.help) field.appendChild(h('p', { className: 'wpf-help', text: f.help }));
         if (f.privateOptIn) {
           var t = self.control({ type: 'check' }, st.values[f.id + '__include'], { key: f.id + '__include' });
@@ -659,6 +740,25 @@
       if (sec.pull) actions.appendChild(h('button', { type: 'button', className: 'wpf-add', 'data-action': 'pull', 'data-table': sec.id, text: sec.pull.label }));
       box.appendChild(actions);
     }
+    // The task library: common jobs for this road, including the invisible ones, one tap to add
+    var lib = sec.library && global.TOL_TASK_LIBRARY ? global.TOL_TASK_LIBRARY(this.road(), sec.library) : null;
+    if (lib && lib.groups && lib.groups.length) {
+      var have = {};
+      rows.forEach(function (r) { if (r && r.task) have[String(r.task).trim().toLowerCase()] = true; });
+      this.libOpen = this.libOpen || {};
+      var det = h('details', { className: 'wpf-lib', 'data-lib': sec.id, open: this.libOpen[sec.id] ? 'open' : null }, [
+        h('summary', { text: 'Add from the task library (' + lib.count + ' common jobs, including the ones nobody sees)' })]);
+      if (lib.intro) det.appendChild(h('p', { className: 'wpf-help', text: lib.intro }));
+      lib.groups.forEach(function (g) {
+        var grp = h('div', { className: 'wpf-lib-group', role: 'group', 'aria-label': g.name }, [h('p', { className: 'wpf-lib-h', text: g.name + (g.hidden ? ' · often unseen' : '') })]);
+        g.items.forEach(function (it) {
+          var on = !!have[it[0].toLowerCase()];
+          grp.appendChild(h('button', { type: 'button', className: 'wpf-chip' + (on ? ' is-on' : ''), 'data-action': 'lib', 'data-table': sec.id, 'data-task': it[0], 'data-freq': it[1] || '', 'aria-pressed': on ? 'true' : 'false', text: (on ? '✓ ' : '+ ') + it[0] }));
+        });
+        det.appendChild(grp);
+      });
+      box.appendChild(det);
+    }
     return box;
   };
 
@@ -701,6 +801,7 @@
       b.setAttribute('aria-label', 'Remove ' + ctx.name(CODES[i]));
     });
     Array.prototype.forEach.call(this.root.querySelectorAll('[data-fixed]'), function (t) { t.textContent = rowLabel(t.getAttribute('data-fixed'), ctx); });
+    Array.prototype.forEach.call(this.root.querySelectorAll('input[type="number"]'), function (t) { self.flagRange(t); });
   };
 
   A.onInput = function (e) {
@@ -715,6 +816,7 @@
     } else return;
     this.changed();
     this.refresh();
+    if (t.type === 'number' && e.type === 'change') { var msg = rangeProblem(this.defFor(t), t.value); if (msg) this.status(msg); }
   };
 
   A.changed = function () {
@@ -765,12 +867,42 @@
     this.keep = false;
     this.dirty = answered(this.schema, this.state) > 0;
     this.status('Erased. Nothing from this worksheet is stored on this device. What is on the page stays until you close it.');
+    var n = document.getElementById('wpf-erase-note');
+    if (n) { n.textContent = ''; setTimeout(function () { n.textContent = 'Erased from this device.'; }, 30); }
   };
 
   A.onClick = function (e) {
     var b = e.target.closest('button[data-action]');
     if (!b) return;
     var act = b.getAttribute('data-action');
+    if (act === 'chip') {
+      var key = b.getAttribute('data-key'), word = b.getAttribute('data-word'), cur = String(this.state.values[key] || '').replace(/\s+$/, '');
+      if (new RegExp('\\b' + word.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '\\b', 'i').test(cur)) { this.status('“' + word + '” is already there.'); return; }
+      this.state.values[key] = cur ? cur.replace(/[.]$/, '') + (/(^|\s)(and|or|,)$/.test(cur) ? ' ' : ', ') + word : 'I feel ' + word;
+      var ta = this.root.querySelector('[data-key="' + key + '"]');
+      if (ta) ta.value = this.state.values[key];
+      this.changed(); this.refresh();
+      this.status('Added “' + word + '”. Change the words any way you like.');
+      return;
+    }
+    if (act === 'lib') {
+      var tid = b.getAttribute('data-table'), task = b.getAttribute('data-task'), freq = b.getAttribute('data-freq'), trows = this.state.tables[tid];
+      var lsec = this.schema.sections.filter(function (s) { return s.id === tid; })[0];
+      if (trows.some(function (r) { return r.task && String(r.task).trim().toLowerCase() === task.toLowerCase(); })) { this.status('“' + task + '” is already on the list.'); return; }
+      var hasFreq = lsec.columns.some(function (c) { return c.id === 'freq'; }), freqOk = hasFreq && freq && lsec.columns.filter(function (c) { return c.id === 'freq'; })[0].options.indexOf(freq) >= 0;
+      var slot = -1;
+      trows.forEach(function (r, i) { if (slot < 0 && !r.task && lsec.columns.every(function (c) { return c.prefill || c.type === 'computed' || isBlank(r[c.id]) || c.id === 'day'; })) slot = i; });
+      var row = slot >= 0 ? trows[slot] : {};
+      row.task = task;
+      if (freqOk && !row.freq) row.freq = freq;
+      if (slot < 0) trows.push(row);
+      this.libOpen = this.libOpen || {}; this.libOpen[tid] = true;
+      this.changed(); this.render();
+      var again = this.root.querySelector('[data-lib="' + tid + '"] [data-task="' + task.replace(/"/g, '\\"') + '"]');
+      if (again) again.focus();
+      this.status('Added “' + task + '” to the list. Fill in ' + (hasFreq ? 'who owns it' : 'who did it and rough minutes') + ' next to it.');
+      return;
+    }
     if (act === 'add-person') {
       if (!addPerson(this.schema, this.state)) return;
       this.changed();
@@ -935,10 +1067,12 @@
     // ?road=coworkers (or roommates, caregivers) shows a worksheet worded for that road
     var road = (global.location && (global.location.search.match(/[?&]road=([a-z]+)/) || [])[1]) || '';
     if (road && global.TOL_WORKPAPER_VARIANT) schema = global.TOL_WORKPAPER_VARIANT(wp, road) || schema;
-    var app = new App(root, schema);
+    var app = new App(root, schema, { road: road });
 
     // "Keep a draft on this device": off unless the person turns it on
     var keepBox = document.getElementById('wpf-keep'), eraseBtn = document.getElementById('wpf-erase');
+    // a quiet word right next to "Erase", so pressing it always shows that something happened
+    if (eraseBtn && !document.getElementById('wpf-erase-note')) eraseBtn.parentNode.insertBefore(h('span', { className: 'wpf-erase-note', id: 'wpf-erase-note', role: 'status', 'aria-live': 'polite' }), eraseBtn.nextSibling);
     var kept = app.readKept();
     if (kept) {
       app.state = sanitize(schema, kept.state);
@@ -976,7 +1110,7 @@
     buildPdf: buildPdf, blankState: blankState, makeCtx: makeCtx, sanitize: sanitize, answered: answered,
     Report: Report, renderBody: renderBody, App: App, download: download, today: today, formatDate: formatDate,
     displayCell: displayCell, rowIsEmpty: rowIsEmpty, rowLabel: rowLabel, isBlank: isBlank, COLORS: COLORS, DRAFT_FORMAT: DRAFT_FORMAT,
-    CODES: CODES, MAX_PEOPLE: MAX_PEOPLE, peopleCount: peopleCount, fixedRowsFor: fixedRowsFor, syncPeople: syncPeople,
+    CODES: CODES, MAX_PEOPLE: MAX_PEOPLE, peopleCount: peopleCount, fixedRowsFor: fixedRowsFor, syncPeople: syncPeople, rangeProblem: rangeProblem,
     addPerson: addPerson, removePerson: removePerson, personOptions: personOptions, setDefaultLabels: setDefaultLabels,
     setMinPeople: setMinPeople, optionLabel: optionLabel,
     labelFor: function (i) { return labelFor(i); }

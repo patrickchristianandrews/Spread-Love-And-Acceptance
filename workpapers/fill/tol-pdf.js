@@ -20,9 +20,23 @@
   };
   var SUBS = { 0x2192: '->', 0x2190: '<-', 0x2212: '-', 0x2011: '-', 0x2010: '-', 0x00A0: ' ', 0x2009: ' ', 0x202F: ' ', 0x2264: '<=', 0x2265: '>=' };
 
+  // The standard PDF fonts can't draw emoji, so each one becomes a short word in brackets
+  // instead of quietly disappearing from what someone wrote.
+  var EMOJI = {};
+  [['heart', [0x2764, 0x2665, 0x1F495, 0x1F496, 0x1F497, 0x1F493, 0x1F49B, 0x1F49A, 0x1F499, 0x1F49C, 0x1F9E1, 0x1F90D, 0x1F90E, 0x1F5A4, 0x1F498, 0x1F49D, 0x1F49E]],
+    ['smile', [0x1F60A, 0x263A, 0x1F642, 0x1F600, 0x1F603, 0x1F604, 0x1F601, 0x1F607, 0x1F60C]], ['laughing', [0x1F602, 0x1F923, 0x1F606]], ['wink', [0x1F609]],
+    ['love', [0x1F60D, 0x1F970, 0x1F618]], ['hug', [0x1F917, 0x1FAC2]], ['tears', [0x1F622, 0x1F62D, 0x1F97A]], ['sad', [0x1F614, 0x1F61E, 0x1F641, 0x2639, 0x1F625]],
+    ['angry', [0x1F620, 0x1F621, 0x1F624]], ['tired', [0x1F634, 0x1F62A, 0x1F971, 0x1F62B, 0x1F629]], ['phew', [0x1F605, 0x1F62E]], ['awkward', [0x1F62C]], ['thinking', [0x1F914]],
+    ['thumbs up', [0x1F44D]], ['thanks', [0x1F64F]], ['clapping', [0x1F44F]], ['wave', [0x1F44B]], ['strong', [0x1F4AA]], ['celebrate', [0x1F389, 0x1F973, 0x1F38A]],
+    ['star', [0x2B50, 0x1F31F, 0x2728]], ['fire', [0x1F525]], ['done', [0x2705, 0x2714, 0x2611]], ['sun', [0x2600, 0x1F31E]], ['flower', [0x1F338, 0x1F337, 0x1F33B, 0x1F339, 0x1F33C]],
+    ['coffee', [0x2615]], ['dog', [0x1F436, 0x1F415]], ['cat', [0x1F431, 0x1F408]], ['home', [0x1F3E0, 0x1F3E1]], ['gift', [0x1F381]], ['cake', [0x1F382, 0x1F370]],
+    ['sleep', [0x1F4A4]], ['plant', [0x1F331, 0x1FAB4]], ['lemon', [0x1F34B]], ['laptop', [0x1F4BB]], ['calendar', [0x1F4C5, 0x1F4C6]]
+  ].forEach(function (g) { g[1].forEach(function (c) { EMOJI[c] = '(' + g[0] + ')'; }); });
+  function isEmoji(c) { return (c >= 0x1F000 && c <= 0x1FAFF) || (c >= 0x2600 && c <= 0x27BF) || (c >= 0x2B00 && c <= 0x2BFF); }
+
   // Encode any string as a Windows-1252 byte string (one char per byte).
   function encode(str) {
-    var out = '';
+    var out = '', afterJoin = false;
     str = String(str == null ? '' : str).replace(/\r\n?/g, '\n');
     for (var ch of str) {
       var c = ch.codePointAt(0);
@@ -31,7 +45,15 @@
       if (SUBS[c]) { out += SUBS[c]; continue; }
       if ((c >= 32 && c < 127) || (c >= 0xA1 && c <= 0xFF)) { out += String.fromCharCode(c); continue; }
       if (CP1252[c]) { out += String.fromCharCode(CP1252[c]); continue; }
-      if (c >= 0x2600 || (c >= 0xFE00 && c <= 0xFE0F) || c === 0x200D) continue; // emoji and symbols the standard fonts can't draw
+      if (c === 0x200D) { afterJoin = true; continue; } // a joined emoji (a family, a flag) reads as one word
+      if ((c >= 0xFE00 && c <= 0xFE0F) || (c >= 0x1F3FB && c <= 0x1F3FF) || (c >= 0xE0020 && c <= 0xE007F)) continue; // style and skin-tone marks
+      if (EMOJI[c] || isEmoji(c)) {
+        if (!afterJoin) out += (out && !/[\s(\n]$/.test(out) ? ' ' : '') + (EMOJI[c] || '(emoji)');
+        afterJoin = false;
+        continue;
+      }
+      afterJoin = false;
+      if (c >= 0x2600) continue; // other symbols the standard fonts can't draw
       var base = ch.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
       var b = base.codePointAt(0);
       out += (b >= 32 && b < 127) ? base.charAt(0) : '?';

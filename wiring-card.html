@@ -12,7 +12,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Wiring Card — The Objective Ledger (TOL-OS)</title>
-<meta name="description" content="Make a one-page wiring card: how you receive words, what silence means, what to avoid, and how a request should be phrased. Free. Nothing you type is saved or sent.">
+<meta name="description" content="Make a one-page wiring card: how you receive words, what silence means, what to avoid, and how a request should be phrased. Free. Nothing you type is sent anywhere.">
 <meta property="og:title" content="Wiring Card — The Objective Ledger">
 <meta property="og:description" content="Tell the people you live and work with how you receive words, before a hard conversation.">
 <meta property="og:image" content="https://spreadloveandacceptance.com/assets/img/og-image.png">
@@ -87,6 +87,7 @@ input[type=text]{width:100%;border:1px solid var(--line);background:var(--bg);bo
 }
 </style>
 <script src="/assets/js/site.js" defer></script>
+<script src="/workpapers/fill/tol-pdf.js" defer></script>
 </head>
 <body>
 <div class="wrap" role="main">
@@ -98,7 +99,7 @@ input[type=text]{width:100%;border:1px solid var(--line);background:var(--bg);bo
     <p class="kicker">Tool &middot; Pairs with <a href="wired-differently.html#card">the wiring card</a> in Wired Differently</p>
     <h1>Wiring Card</h1>
     <p class="lede">Fill in how you actually receive words. The card on the right updates as you go. Print it, or copy it, and give it to the people you live and work with before a hard conversation, not during one.</p>
-    <p class="privacy">Runs in your browser. Nothing you type is saved, stored, or sent. This is not a diagnosis, and it is not a contract. When you are running low, every line applies more strictly.</p>
+    <p class="privacy">Runs in your browser. Nothing you type is sent anywhere, and nothing is kept unless you tick &ldquo;Keep my card on this device&rdquo; (Erase removes it). This is not a diagnosis and not a label: it describes what helps words reach you. When you are running low, every line applies more strictly.</p>
     <p class="privacy pillar-note">The Wiring Card puts <a href="/five-pillars.html#tune-signals">Pillar IV, Tune how you send and receive</a> to work. In you: you name your own wiring, pace and how you hear things. Between you and others: people learn how to send a request so it lands, and a mismatch becomes tuning, not a moral failing.</p>
     <p class="privacy">See also: <a href="/know-yourself.html">Know your own wiring</a>, which helps you tell lasting wiring from learned patterns and today’s conditions.</p>
   </header>
@@ -114,13 +115,23 @@ input[type=text]{width:100%;border:1px solid var(--line);background:var(--bg);bo
 </div>
 <script>
 (function(){
+  // How words reach me, in everyday words. Descriptions of what helps, never labels or diagnoses.
   const WIRING = [
-    ["nt","Neurotypical"],["autistic","Autistic"],["adhd","ADHD"],["dyslexic","Dyslexic"],
-    ["dyspraxic","Dyspraxic"],["apd","Auditory processing"],["dld","Language processing"],
-    ["tourette","Tourette or tics"],["alex","Alexithymia"],["hsp","Highly sensitive"],
-    ["anxiety","Anxiety"],["trauma","Trauma-wired"],["ocd","OCD"]
+    ["easy","Words usually reach me easily"],["written","Written words stick better than spoken ones"],["spoken","Spoken words stick better than written ones"],
+    ["moment","I need a moment to turn words into meaning"],["noise","Background noise makes it hard to follow"],["fast","Fast talk, or many topics at once, loses me"],
+    ["longtext","Long blocks of text take me a while"],["short","Short, clear messages work best when my attention is split"],["tone","I feel tone strongly, sometimes before the words"],
+    ["feelings","Feelings can arrive before I have words for them"],["change","A sudden change of plan throws me off"],["repeat","Hearing it back in my own words helps me be sure"]
   ];
-  const DEV = new Set(["autistic","adhd","dyslexic","dyspraxic","apd","dld","tourette"]);
+  // Picks that point opposite ways: choosing one takes the other off, and says so.
+  const CONFLICTS = {
+    wire: [["written","spoken"],["easy","moment"],["easy","noise"],["easy","fast"],["easy","longtext"]],
+    words: [["literal","tone"],["literal","both"],["tone","both"]],
+    time: [["sec","min"],["sec","tomorrow"],["min","tomorrow"]],
+    quiet: [["fine","load"],["fine","upset"],["fine","space"]],
+    texts: [["brief","wrong"]],
+    upset: [["space","company"],["space","talk"]]
+  };
+  const KEEP_KEY = "tol-wiring-card";
   const LINES = [
     {id:"receive", q:"How I receive things best", opts:[["writing","In writing"],["face","Face to face"],["call","A short call"],["voice","A voice note I can replay"],["one","One thing at a time"],["list","A written list"]]},
     {id:"words", q:"I take words", opts:[["literal","Literally"],["tone","I read tone as part of the message"],["both","Literally when it matters, tone when it is light"]]},
@@ -135,6 +146,7 @@ input[type=text]{width:100%;border:1px solid var(--line);background:var(--bg);bo
 
   const people = ["A"];
   const state = {A: fresh(), B: fresh()};
+  let keep = false, lastSwap = "";
 
   function fresh(){ return {name:"", wiring:new Set(), picks:{}, custom:{}}; }
   function $(s,r){ return (r||document).querySelector(s); }
@@ -154,9 +166,7 @@ input[type=text]{width:100%;border:1px solid var(--line);background:var(--bg);bo
   function wiringLabel(who){
     const ids = [...state[who].wiring];
     if(!ids.length) return "";
-    const names = ids.map(id=>WIRING.find(w=>w[0]===id)[1]);
-    if(ids.includes("autistic") && ids.includes("adhd")) names.push("often called AuDHD");
-    return names.join(", ");
+    return ids.map(id=>(WIRING.find(w=>w[0]===id)||[,""])[1]).filter(Boolean).join(". ") + ".";
   }
 
   function buildForm(who){
@@ -167,8 +177,8 @@ input[type=text]{width:100%;border:1px solid var(--line);background:var(--bg);bo
     h += '<p class="hint">Pick what is usually true for you. Add a few words where the buttons are not enough. Leave a line blank if it does not apply.</p>';
     h += '<label class="lab" for="name'+who+'">Name on the card, optional</label>';
     h += '<input id="name'+who+'" data-name="'+who+'" type="text" maxlength="60" placeholder="Alex" value="'+esc(st.name)+'">';
-    h += '<span class="lab">How I describe my wiring, optional</span>';
-    h += '<div class="chips" role="group" aria-label="Wiring">';
+    h += '<span class="lab">How words reach me, optional</span>';
+    h += '<div class="chips" role="group" aria-label="How words reach me">';
     WIRING.forEach(w=>{
       const on = st.wiring.has(w[0]);
       h += '<button type="button" data-wire="'+w[0]+'" data-who="'+who+'" aria-pressed="'+(on?"true":"false")+'">'+w[1]+'</button>';
@@ -192,10 +202,13 @@ input[type=text]{width:100%;border:1px solid var(--line);background:var(--bg);bo
   }
 
   function paintForms(){
-    let h = people.map(buildForm).join("");
+    let h = '<p class="privacy" id="pickmsg" role="status" aria-live="polite">' + esc(lastSwap) + '</p>';
+    h += people.map(buildForm).join("");
     if(!people.includes("B")){
       h += '<div class="actions"><button class="go" type="button" id="addB">Add the other person\'s card</button></div>';
     }
+    h += '<div class="panel keepbox"><label class="keep"><input type="checkbox" id="keepcard"' + (keep ? " checked" : "") + '> Keep my card on this device</label> <button class="ghost" type="button" id="erasecard">Erase</button>' +
+      '<p class="hint" style="margin:6px 0 0">Off unless you tick it. Kept in this browser only, never sent anywhere. Best on your own device, not a shared one.</p><p class="privacy" id="keepmsg" role="status" aria-live="polite"></p></div>';
     $("#forms").innerHTML = h;
   }
 
@@ -209,11 +222,60 @@ input[type=text]{width:100%;border:1px solid var(--line);background:var(--bg);bo
         const empty = !t;
         return '<dt>'+esc(line.q)+'</dt><dd class="'+(empty?"empty":"")+'">'+(empty?"Not filled in yet":esc(t))+'</dd>';
       }).join("");
-      return '<article class="sheet"><p class="ck">WIRING CARD &middot; NOT A DIAGNOSIS</p><h2>'+esc(name)+'</h2>'+(wire?'<p class="wire">'+esc(wire)+'</p>':'<p class="wire">Wiring not listed. That is fine.</p>')+'<dl>'+rows+'</dl><p class="fine">Applies more strictly when I am running low. Not a contract, and not a label. Change it when it stops being true. Objective Ledger &middot; spreadloveandacceptance.com/wiring-card.html</p></article>';
-    }).join("") + '<div class="actions"><button class="go" type="button" id="copy">Copy the card</button><button class="ghost" type="button" id="copymd">Copy as a team snippet (Markdown)</button><button class="ghost" type="button" id="print">Print</button></div><p class="privacy" id="copymsg" role="status" aria-live="polite"></p>';
+      return '<article class="sheet"><p class="ck">WIRING CARD &middot; NOT A DIAGNOSIS</p><h2>'+esc(name)+'</h2>'+(wire?'<p class="wire">'+esc(wire)+'</p>':'')+'<dl>'+rows+'</dl><p class="fine">Applies more strictly when I am running low. Not a contract, and not a label. Change it when it stops being true. Objective Ledger &middot; spreadloveandacceptance.com/wiring-card.html</p></article>';
+    }).join("") + '<div class="actions"><button class="go" type="button" id="copy">Copy the card</button><button class="ghost" type="button" id="copymd">Copy as a team snippet (Markdown)</button><button class="ghost" type="button" id="pdf">Save as PDF</button><button class="ghost" type="button" id="print">Print</button></div><p class="privacy" id="copymsg" role="status" aria-live="polite"></p>';
     $("#copy").addEventListener("click", copyCard);
     $("#copymd").addEventListener("click", copyMarkdown);
     $("#print").addEventListener("click", ()=>window.print());
+    $("#pdf").addEventListener("click", savePdf);
+  }
+
+  // A one-page PDF of the card(s), made in this browser (nothing is sent anywhere).
+  function savePdf(){
+    const P = window.TOLPDF, msg = t=>{ const m=$("#copymsg"); if(m) m.textContent = t; };
+    if(!P){ msg("The PDF maker didn't load. Use Print, then choose Save as PDF."); return; }
+    try{
+      const doc = new P.Doc({ title: "Wiring Card", producer: "The Objective Ledger, made on this device" });
+      const L = 54, W = 504, enc = t=>P.encode(t);
+      let y = 60;
+      function room(hh){ if(y + hh > 740){ doc.addPage(); y = 60; } }
+      function para(t, font, size, color){ P.wrap(t, font, size, W).forEach(ln=>{ room(size * 1.4); doc.text(L, y + size, ln, font, size, color || "#211D17"); y += size * 1.4; }); }
+      doc.addPage();
+      people.forEach((who, k)=>{
+        const st = state[who], name = st.name.trim() || (who==="A" ? "My wiring card" : "Their wiring card");
+        if(k) y += 18;
+        room(80);
+        doc.text(L, y + 8, enc("WIRING CARD  ·  NOT A DIAGNOSIS"), "Helvetica-Bold", 7.5, "#8A5E1E"); y += 16;
+        doc.text(L, y + 20, enc(name), "Times-Bold", 22, "#211D17"); y += 32;
+        const wire = wiringLabel(who);
+        if(wire){ para("How words reach me: " + wire, "Helvetica", 9.5, "#524B3E"); y += 4; }
+        LINES.forEach(line=>{
+          const t = lineText(who, line);
+          if(!t) return;
+          room(28);
+          doc.text(L, y + 8, enc(line.q.toUpperCase()), "Helvetica-Bold", 7.5, "#8A5E1E"); y += 12;
+          para(t, "Helvetica", 11); y += 4;
+        });
+        para("Applies more strictly when I am running low. Not a contract, and not a label. Change it when it stops being true.", "Times-Italic", 9, "#524B3E");
+      });
+      const bytes = doc.output(), blob = new Blob([bytes], { type: "application/pdf" }), url = URL.createObjectURL(blob), a = document.createElement("a");
+      a.href = url; a.download = "Wiring-Card.pdf"; document.body.appendChild(a); a.click(); a.remove();
+      setTimeout(()=>URL.revokeObjectURL(url), 4000);
+      msg("Your card is in your Downloads as a PDF. Nothing was sent anywhere.");
+    }catch(e){ msg("The PDF could not be made here. Use Print, then choose Save as PDF."); }
+  }
+
+  // "Keep my card on this device": off by default, in this browser only, removed by Erase.
+  function snapshot(){ const o = {people: people.slice()}; ["A","B"].forEach(w=>{ const s = state[w]; o[w] = {name: s.name, wiring: [...s.wiring], picks: s.picks, custom: s.custom}; }); return o; }
+  function keepNow(){ if(!keep) return; try{ localStorage.setItem(KEEP_KEY, JSON.stringify(snapshot())); }catch(e){} }
+  function readKept(){
+    try{
+      const d = JSON.parse(localStorage.getItem(KEEP_KEY) || "null");
+      if(!d || !Array.isArray(d.people)) return false;
+      people.length = 0; d.people.filter(w=>w==="A"||w==="B").forEach(w=>people.push(w)); if(!people.length) people.push("A");
+      ["A","B"].forEach(w=>{ const s = d[w] || {}; state[w] = {name: String(s.name||""), wiring: new Set((s.wiring||[]).filter(id=>WIRING.some(x=>x[0]===id))), picks: s.picks||{}, custom: s.custom||{}}; });
+      return true;
+    }catch(e){ return false; }
   }
 
   function plain(who){
@@ -221,7 +283,7 @@ input[type=text]{width:100%;border:1px solid var(--line);background:var(--bg);bo
     const nm = st.name.trim();
     const lines = [nm ? "Wiring card: "+nm : (who==="A"?"Wiring card":"Second wiring card")];
     const wire = wiringLabel(who);
-    if(wire) lines.push("Wiring, as I describe it: "+wire);
+    if(wire) lines.push("How words reach me: "+wire);
     LINES.forEach(line=>{
       const t = lineText(who, line);
       if(t) lines.push(line.q+": "+t);
@@ -237,7 +299,7 @@ input[type=text]{width:100%;border:1px solid var(--line);background:var(--bg);bo
     const nm = st.name.trim();
     const out = ["### "+(nm ? "Wiring card: "+mdEsc(nm) : (who==="A"?"Wiring card":"Second wiring card"))];
     const wire = wiringLabel(who);
-    if(wire) out.push("*Wiring, as I describe it:* "+mdEsc(wire));
+    if(wire) out.push("*How words reach me:* "+mdEsc(wire));
     out.push("");
     let any = false;
     LINES.forEach(line=>{
@@ -271,20 +333,30 @@ input[type=text]{width:100%;border:1px solid var(--line);background:var(--bg);bo
     copyText(people.map(markdown).join("\n\n---\n\n"), $("#copymd"), "Copied as Markdown. Paste it into a Slack canvas, Notion page or team wiki.");
   }
 
-  function paint(){ paintSheets(); }
+  function paint(){ paintSheets(); keepNow(); }
 
+  function textOf(line, id){ if(line==="wire") return (WIRING.find(w=>w[0]===id)||[,id])[1]; const L0 = LINES.find(l=>l.id===line); const o = L0 && L0.opts.find(x=>x[0]===id); return o ? o[1] : id; }
+  // Take off anything that points the other way from a new pick, and say what changed.
+  function clearConflicts(line, id, has, drop){
+    const gone = [];
+    (CONFLICTS[line]||[]).forEach(pair=>{ const i = pair.indexOf(id); if(i<0) return; const other = pair[1-i]; if(has(other)){ drop(other); gone.push(textOf(line, other)); } });
+    lastSwap = gone.length ? "Took off “" + gone.join("” and “") + "”, since it points the other way from “" + textOf(line, id) + "”." : "";
+  }
   function toggleWire(who, id){
     const set = state[who].wiring;
+    lastSwap = "";
     if(set.has(id)){ set.delete(id); return; }
-    if(id==="nt") DEV.forEach(d=>set.delete(d));
-    if(DEV.has(id)) set.delete("nt");
+    clearConflicts("wire", id, x=>set.has(x), x=>set.delete(x));
     set.add(id);
   }
 
   function toggleOpt(who, line, opt){
     const arr = state[who].picks[line] || (state[who].picks[line]=[]);
     const i = arr.indexOf(opt);
-    if(i>=0) arr.splice(i,1); else arr.push(opt);
+    lastSwap = "";
+    if(i>=0){ arr.splice(i,1); return; }
+    clearConflicts(line, opt, x=>arr.indexOf(x)>=0, x=>arr.splice(arr.indexOf(x),1));
+    arr.push(opt);
   }
 
   function example(who){
@@ -298,6 +370,7 @@ input[type=text]{width:100%;border:1px solid var(--line);background:var(--bg);bo
   $("#forms").addEventListener("click", e=>{
     const t = e.target.closest("button");
     if(!t) return;
+    if(t.id==="erasecard"){ keep = false; try{ localStorage.removeItem(KEY_OR()); }catch(err){} paintForms(); paint(); const m = $("#keepmsg"); if(m) m.textContent = "Erased. Nothing from your card is kept on this device."; return; }
     if(t.id==="addB"){ people.push("B"); state.B=fresh(); paintForms(); paint(); return; }
     if(t.id==="removeB"){ people.pop(); paintForms(); paint(); return; }
     const who = t.dataset.who;
@@ -305,6 +378,14 @@ input[type=text]{width:100%;border:1px solid var(--line);background:var(--bg);bo
     if(t.dataset.opt){ toggleOpt(who, t.dataset.line, t.dataset.opt); paintForms(); paint(); return; }
     if(t.dataset.clear){ state[t.dataset.clear]=fresh(); paintForms(); paint(); return; }
     if(t.dataset.example){ example(t.dataset.example); paintForms(); paint(); }
+  });
+  function KEY_OR(){ return KEEP_KEY; }
+  $("#forms").addEventListener("change", e=>{
+    if(e.target.id !== "keepcard") return;
+    keep = e.target.checked;
+    const m = $("#keepmsg");
+    if(keep){ keepNow(); if(m) m.textContent = "Kept on this device only. Press Erase any time to remove it."; }
+    else { try{ localStorage.removeItem(KEEP_KEY); }catch(err){} if(m) m.textContent = "Not kept any more. Nothing from your card is on this device."; }
   });
   $("#forms").addEventListener("input", e=>{
     const t = e.target;
@@ -316,8 +397,10 @@ input[type=text]{width:100%;border:1px solid var(--line);background:var(--bg);bo
     paint();
   });
 
+  if(readKept()) keep = true;
   paintForms();
   paint();
+  if(keep){ const m = $("#keepmsg"); if(m) m.textContent = "Picked up the card kept on this device. Press Erase to remove it."; }
 })();
 </script>
 </body>

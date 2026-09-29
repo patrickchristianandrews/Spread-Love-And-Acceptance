@@ -57,13 +57,34 @@
     return arr.slice(0, -1).join(', ') + ' and ' + arr[arr.length - 1];
   }
   function cap(s) { return s ? s.charAt(0).toUpperCase() + s.slice(1) : s; }
+  // For matching names: no accents, no case ("José" = "Jose").
+  function fold(s) { return trim(s).normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase(); }
+  // "Tom and Aoife", "Tom & Aoife", "Tom, Aoife", "Tom/Aoife", "Tom + Aoife": more than one name.
+  var SEVERAL_RE = /\s*(?:,|&|\+|\/|\band\b)\s*/i;
+  // "a, b, c and 2 more": never a count that doesn't match what is listed.
+  function listSome(arr, k) { arr = arr.filter(Boolean); return arr.length > k ? arr.slice(0, k).join(', ') + ' and ' + (arr.length - k) + ' more' : list(arr); }
+  // End someone's words with a full stop, so fact, feeling and ask read as sentences when joined.
+  function sentence(t, ask) {
+    t = trim(t);
+    if (!t) return '';
+    t = t.charAt(0).toUpperCase() + t.slice(1);
+    if (/[.!?\u2026\u201D"')]$/.test(t)) return t;
+    return t + (ask && /^(could|can|would|will|shall|may|do|does|is|are)\b/i.test(t) ? '?' : '.');
+  }
+  function feelingSentence(t) {
+    t = trim(t);
+    if (!t) return '';
+    if (!/^(i|i'm|i\u2019m|im|i've|i\u2019ve|my|we|we're|we\u2019re|it|this|that|feeling|felt)\b/i.test(t) && t.split(/\s+/).length <= 5) t = 'I feel ' + t.charAt(0).toLowerCase() + t.slice(1);
+    return sentence(t);
+  }
+  function said(parts) { return parts.filter(Boolean).join(' '); }
   function numWord(n) { return ['no', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten'][n] || String(n); }
   function plural(n, one, many) { return n + ' ' + (n === 1 ? one : (many || one + 's')); }
 
   /* ------------------------------------------------------------ roads */
 
   var NAMES = {
-    'WP-01': 'Who did what', 'WP-02': 'How full is your battery?', 'WP-03': 'One owner per job',
+    'WP-01': 'Who did what', 'WP-02': 'How much are you carrying?', 'WP-03': 'One owner per job',
     'WP-04': 'The monthly look-back', 'WP-09': 'Say it so it lands', 'WP-11': 'The Calm-Down Kit', 'WP-13': 'The 90-second check-in'
   };
 
@@ -92,7 +113,7 @@
       label: 'Co-parents', roles: ['Parent A', 'Parent B'], more: 'Parent', letters: true,
       one: 'co-parent', many: 'co-parents', group2: 'both homes', groupN: 'everyone sharing the parenting', setting: 'between homes',
       meeting: 'the weekly handoff', work: 'the kid tasks', task: 'kid task', tasks: 'kid tasks',
-      wps: ['WP-03', 'WP-09', 'WP-04', 'WP-01', 'WP-13', 'WP-02', 'WP-11'], calc: true
+      wps: ['WP-03', 'WP-09', 'WP-13', 'WP-01', 'WP-02', 'WP-11', 'WP-04'], calc: true
     },
     friends: {
       label: 'Friends', roles: ['You', 'Your friend'], more: 'Friend',
@@ -104,19 +125,19 @@
       label: 'Roommates', roles: ['You', 'Roommate'], more: 'Roommate',
       one: 'roommate', many: 'roommates', group2: 'the two of you', groupN: 'the whole house', setting: 'in the shared home',
       meeting: 'the house meeting', work: 'the chores and bills', task: 'chore', tasks: 'chores',
-      wps: ['WP-03', 'WP-13', 'WP-01', 'WP-04', 'WP-09', 'WP-02', 'WP-11'], calc: true
+      wps: ['WP-03', 'WP-13', 'WP-01', 'WP-09', 'WP-04', 'WP-02', 'WP-11'], calc: true
     },
     coworkers: {
       label: 'Coworkers', roles: ['You', 'Teammate'], more: 'Teammate',
       one: 'teammate', many: 'teammates', group2: 'the two of you', groupN: 'the team', setting: 'on the team',
       meeting: 'the team retrospective', work: 'the recurring team tasks', task: 'team task', tasks: 'team tasks',
-      wps: ['WP-03', 'WP-09', 'WP-13', 'WP-04', 'WP-01', 'WP-02', 'WP-11'], calc: true
+      wps: ['WP-03', 'WP-09', 'WP-13', 'WP-01', 'WP-04', 'WP-02', 'WP-11'], calc: true
     },
     caregivers: {
       label: 'Caregivers', roles: ['You', 'Sibling or co-carer'], more: 'Co-carer',
       one: 'co-carer', many: 'co-carers', group2: 'the two of you', groupN: 'everyone sharing the care', setting: 'in the care',
       meeting: 'the handoff check-in', work: 'the parts of the care', task: 'part of the care', tasks: 'parts of the care',
-      wps: ['WP-02', 'WP-03', 'WP-11', 'WP-13', 'WP-01', 'WP-09', 'WP-04'], calc: true
+      wps: ['WP-02', 'WP-03', 'WP-11', 'WP-13', 'WP-09', 'WP-01', 'WP-04'], calc: true
     }
   };
   var ROAD_ORDER = ['self', 'partners', 'family', 'coparents', 'friends', 'roommates', 'coworkers', 'caregivers'];
@@ -205,7 +226,7 @@
       blocks.push({ kind: 'fields', fields: [f('wp01.weekOf', 'Week beginning', 'date', { half: true })] });
       var audit = section(sc, 'audit'), rows = [];
       var how = opts(['Asked for', 'Noticed and handled'], ['Asked', 'Noticed']);
-      for (i = 0; i < 10; i++) {
+      for (i = 0; i < Math.max(10, ctx.sizes.audit || 0); i++) {
         var p = 'wp01.audit.r' + (i + 1) + '.';
         rows.push({ fields: [
           f(p + 'day', 'Day', 'text', { def: DAYS[i] || '', prefill: true, w: 0.7 }),
@@ -220,7 +241,7 @@
     }
     var kinds = opts(['Capacity check', 'Delegation pivot', 'Time commitment'], ['Capacity', 'Delegation', 'Time']);
     var cards = [];
-    for (i = 0; i < (ctx.road.refusalsOnly ? 3 : 2); i++) {
+    for (i = 0; i < Math.max(ctx.road.refusalsOnly ? 3 : 2, ctx.sizes.refusals || 0); i++) {
       var q = 'wp01.refusals.r' + (i + 1) + '.';
       cards.push({ label: 'Kind no ' + (i + 1), fields: [
         f(q + 'kind', 'Type', 'radio', { options: kinds }),
@@ -260,7 +281,7 @@
     if (note) blocks.push({ kind: 'note', text: note.text });
     blocks.push({ kind: 'fields', fields: [f('wp03.reviewDate', ctx.roadId === 'coworkers' ? 'Agreement date' : 'Treaty date', 'date', { half: true })] });
     var defs = treaty.defaultRows || [], rows = [];
-    for (var i = 0; i < defs.length + 4; i++) {
+    for (var i = 0; i < Math.max(defs.length + 4, ctx.sizes.treaty || 0); i++) {
       var d = defs[i] || {}, p = 'wp03.treaty.r' + (i + 1) + '.';
       var fl = [
         f(p + 'task', 'Task', 'text', { def: d.task || '', w: 2.2 }),
@@ -275,7 +296,7 @@
     blocks.push({ kind: 'grid', title: treaty.title, intro: (treaty.intro ? treaty.intro + ' ' : '') + 'Clear the task box on any row that doesn’t apply. How often: ' + freqs.join(', ') + '. For owners, write a name or an initial.', rows: rows });
     blocks.push({ kind: 'derived', title: 'Worked out for you', lines: ['Ownership clarity = the share of tasks that have both a Responsible and an Accountable name. This becomes the ownership input to CALC-01. Tasks still missing an owner are listed in your report.'] });
     var amend = [];
-    for (i = 0; i < 2; i++) {
+    for (i = 0; i < Math.max(2, ctx.sizes.amend || 0); i++) {
       var q = 'wp03.amend.r' + (i + 1) + '.';
       amend.push({ label: 'Change ' + (i + 1), fields: [f(q + 'date', 'Date', 'date', { half: true }), f(q + 'initials', 'Initials', 'text', { half: true }), f(q + 'change', 'What changed', 'textarea', { small: true })] });
     }
@@ -296,14 +317,14 @@
     var sc = schemaFor('WP-04'), blocks = [], i;
     blocks.push({ kind: 'fields', fields: [f('wp04.month', 'Month', 'text', { half: true, placeholder: 'e.g. September 2026' })] });
     var raw = [];
-    for (i = 0; i < 8; i++) {
+    for (i = 0; i < Math.max(8, ctx.sizes.raw || 0); i++) {
       var p = 'wp04.raw.r' + (i + 1) + '.';
       raw.push({ fields: [f(p + 'task', 'Task that slipped', 'text', { w: 3.4 }), f(p + 'w1', 'Week 1', 'check', { w: 0.7 }), f(p + 'w2', 'Week 2', 'check', { w: 0.7 }), f(p + 'w3', 'Week 3', 'check', { w: 0.7 }), f(p + 'w4', 'Week 4', 'check', { w: 0.7 })] });
     }
     blocks.push({ kind: 'grid', title: section(sc, 'raw').title, intro: section(sc, 'raw').intro, rows: raw });
     var owner = opts(['Yes', 'No']), kind = opts(['Structural gap', 'Capacity issue', 'One-off, no action'], ['Structural', 'Capacity', 'One-off']);
     var cl = [];
-    for (i = 0; i < 6; i++) {
+    for (i = 0; i < Math.max(6, ctx.sizes.classify || 0); i++) {
       var q = 'wp04.classify.r' + (i + 1) + '.';
       cl.push({ fields: [f(q + 'task', 'Task', 'text', { w: 1.8 }), f(q + 'owner', 'Named owner?', 'radio', { options: owner, w: 1.1 }), f(q + 'kind', 'What kind of gap', 'radio', { options: kind, w: 2.4 }), f(q + 'action', 'Action', 'text', { w: 1.7 })] });
     }
@@ -337,7 +358,7 @@
     blocks.push({ kind: 'note', text: (ctx.road.solo ? 'This kit is all about you.' : 'Each person’s kit is about themselves.') + ' Fill in Part A on an ordinary day, not a hard one. Nothing here works by cold, pain or shock, and none of it is treatment.' });
     blocks.push({ kind: 'fields', fields: [f('wp11.date', 'Date', 'date', { half: true })] });
     var tr = [];
-    for (i = 0; i < 3; i++) tr.push({ fields: [f('wp11.triggers.r' + (i + 1) + '.trigger', 'What tends to start it', 'text', { w: 2.5 }), f('wp11.triggers.r' + (i + 1) + '.body', 'Where my body feels it first', 'text', { w: 2.5 })] });
+    for (i = 0; i < Math.max(3, ctx.sizes.triggers || 0); i++) tr.push({ fields: [f('wp11.triggers.r' + (i + 1) + '.trigger', 'What tends to start it', 'text', { w: 2.5 }), f('wp11.triggers.r' + (i + 1) + '.body', 'Where my body feels it first', 'text', { w: 2.5 })] });
     blocks.push({ kind: 'grid', title: section(sc, 'triggers').title, intro: section(sc, 'triggers').intro, rows: tr });
     var tac = opts(TACTICS, ['Breathing 4 in, 6 out', 'Naming the room', 'Weight and pressure', 'Gating', 'Walking it out', 'Low, steady sound']);
     blocks.push({ kind: 'fields', title: 'Part A: My two defaults', intro: 'Pick two now, so you don’t have to choose in the moment.', fields: [f('wp11.first', 'First default', 'radio', { options: tac, stack: true }), f('wp11.second', 'Second, if the first isn’t available', 'radio', { options: tac, stack: true })] });
@@ -345,7 +366,7 @@
     for (i = 0; i < ctx.n; i++) lines.push({ label: ctx.labels[i], fields: [f('wp11.lines.p' + (i + 1) + '.line', 'Pause line', 'textarea', { small: true })] });
     blocks.push({ kind: 'cards', title: 'Part A: ' + (ctx.n > 1 ? 'Pause lines' : 'My pause line'), intro: ctx.road.solo ? 'One sentence, ready ahead of time, for when you need a break from a hard moment, so stepping away feels planned instead of like giving up. Say how you are, how long you need, and what you’ll do next: "I’m at capacity. I’m taking ten minutes, then I’ll come back to this."' : section(sc, 'lines').intro, rows: lines });
     var re = [];
-    for (i = 0; i < 3; i++) {
+    for (i = 0; i < Math.max(3, ctx.sizes.reentry || 0); i++) {
       var p = 'wp11.reentry.r' + (i + 1) + '.';
       re.push({ fields: [f(p + 'time', 'Time', 'text', { w: 1 }), f(p + 'tactic', 'What I did (1 to 6 from the list, or its name)', 'text', { w: 2.6 }), f(p + 'before', 'Battery before (0 to 1)', 'number', { min: 0, max: 1, w: 1.1 }), f(p + 'after', 'Battery after (0 to 1)', 'number', { min: 0, max: 1, w: 1.1 })] });
     }
@@ -377,7 +398,7 @@
     if (ctx.roadId === 'coworkers') intro = 'Run it like a short stand-up. ' + intro.replace('about the other person', 'about a teammate');
     blocks.push({ kind: 'grid', title: ctx.roadId === 'coworkers' ? 'The daily stand-up' : section(sc, 'daily').title, intro: intro, rows: rows, small: true });
     var to = opts(['RACI Treaty (WP-03)', 'Tone Filter (WP-09)', 'Keep watching'], ['Owners', 'Tone', 'Watch']), rs = [];
-    for (var j = 0; j < 3; j++) {
+    for (var j = 0; j < Math.max(3, ctx.sizes.resync || 0); j++) {
       var q = 'wp13.resync.r' + (j + 1) + '.';
       rs.push({ fields: [f(q + 'item', 'Sore spot that keeps coming up', 'text', { w: 3 }), f(q + 'times', 'Times', 'number', { min: 0, w: 0.7 }), f(q + 'to', 'Move to', 'radio', { options: to, w: 2.2 })] });
     }
@@ -463,13 +484,37 @@
 
   // The whole package for a road and a number of people, in order.
   var cache = {};
-  function build(roadId, n, names) {
+  // sizes (optional): more rows than the printed package has, e.g. { audit: 14 } when a Workpaper
+  // Suite log is longer. The field names stay the same pattern (…audit.r14.task).
+  var SIZE_KEYS = { audit: 'wp01.audit', refusals: 'wp01.refusals', treaty: 'wp03.treaty', amend: 'wp03.amend', raw: 'wp04.raw', classify: 'wp04.classify', triggers: 'wp11.triggers', reentry: 'wp11.reentry', resync: 'wp13.resync' };
+  var SIZE_MAX = 40;
+  function cleanSizes(s) {
+    var out = {};
+    Object.keys(SIZE_KEYS).forEach(function (k) { var v = s && parseInt(s[k], 10); if (v > 0) out[k] = Math.min(SIZE_MAX, v); });
+    return out;
+  }
+  // The rows to read for a table: at least the old fixed count, more when the data has more.
+  var SIZE_READ = { audit: 10, refusals: 3, treaty: 20, amend: 2, raw: 8, classify: 6, triggers: 3, reentry: 3, resync: 3 };
+  function sizeOf(data, k) { return Math.max(SIZE_READ[k] || 3, (data && data.sizes && data.sizes[k]) || 0); }
+  // Which sizes a set of field names needs (from a PDF or a backup that had more rows).
+  function sizesFromNames(names) {
+    var out = {};
+    names.forEach(function (nm) {
+      Object.keys(SIZE_KEYS).forEach(function (k) {
+        var m = new RegExp('^' + (NS + SIZE_KEYS[k]).replace(/\./g, '\\.') + '\\.r(\\d+)\\.').exec(nm);
+        if (m) out[k] = Math.max(out[k] || 0, +m[1]);
+      });
+    });
+    return cleanSizes(out);
+  }
+  function build(roadId, n, names, sizes) {
     if (!ROADS[roadId]) roadId = 'partners';
     n = clampPeople(roadId, n);
     names = (names || []).slice(0, n);
-    var key = roadId + ':' + n + ':' + names.join('\u0001');
+    sizes = cleanSizes(sizes);
+    var key = roadId + ':' + n + ':' + names.join('\u0001') + ':' + JSON.stringify(sizes);
     if (cache[key]) return cache[key];
-    var R = ROADS[roadId], ctx = { roadId: roadId, road: R, n: n, names: names, labels: labelsFor(roadId, n, names) };
+    var R = ROADS[roadId], ctx = { roadId: roadId, road: R, n: n, names: names, labels: labelsFor(roadId, n, names), sizes: sizes };
     var pages = [pageWho(ctx)];
     R.wps.forEach(function (code) {
       var p = BUILDERS[code](ctx);
@@ -499,11 +544,15 @@
 
   /* ------------------------------------------------------------ the data object */
 
-  function blankData(roadId, n, names) {
-    var reg = build(roadId, n, names), values = {};
+  function blankData(roadId, n, names, sizes) {
+    var reg = build(roadId, n, names, sizes), values = {};
     reg.fields.forEach(function (fl) { if (fl.def) values[fl.name] = fl.def; });
-    return { format: FORMAT, version: PKG_VERSION, road: reg.road, people: reg.n, values: values };
+    var out = { format: FORMAT, version: PKG_VERSION, road: reg.road, people: reg.n, values: values };
+    sizes = cleanSizes(sizes);
+    if (Object.keys(sizes).length) out.sizes = sizes;
+    return out;
   }
+  function regOf(data) { return build(data.road, data.people, namesOf(data), data.sizes); }
 
   // Fields from any scheme version, mapped onto today's names. v1 is today's.
   var MIGRATE = {
@@ -546,7 +595,7 @@
     if (!ROADS[roadId]) roadId = guessRoad(canon);
     if (!(n >= 1)) { n = 0; Object.keys(canon).forEach(function (k) { var m = /\.p(\d)\./.exec(k) || /\.who\.p(\d)$/.exec(k); if (m) n = Math.max(n, +m[1]); }); }
     n = clampPeople(roadId, n);
-    var reg = build(roadId, n), values = {}, unknown = [];
+    var sizes = sizesFromNames(Object.keys(canon)), reg = build(roadId, n, null, sizes), values = {}, unknown = [];
     Object.keys(canon).forEach(function (name) {
       if (name.indexOf(NS + 'meta.') === 0) return;
       var fl = reg.byName[name], v = canon[name];
@@ -560,12 +609,154 @@
       if (trim(v) !== '') values[name] = fl.type === 'textarea' ? v.replace(/\s+$/, '') : trim(v);
     });
     var data = { format: FORMAT, version: PKG_VERSION, road: roadId, people: n, values: values };
+    if (Object.keys(sizes).length) data.sizes = sizes;
     return { data: data, read: readReport(data, { version: version, unknown: unknown, hadMeta: !!canon[NS + 'meta.road'] }) };
   }
   function guessRoad(canon) {
     var keys = Object.keys(canon).join(' ');
     if (/wp03\.treaty\.r\d+\.c\b/.test(keys)) return 'coworkers';
     return /wp01\.audit/.test(keys) ? 'partners' : 'self';
+  }
+
+  /* ------------------------------------------------------------ from the Workpaper Suite */
+
+  // The sheets someone filled in on the Suite page (its snapshot: road, names, entries), turned into
+  // this package's data object, so the full report can be made from them without typing anything twice.
+  // Only what was written is carried over; everything else stays blank ("not filled in").
+  var FACTOR_IDS = ['sleep', 'work', 'conflict', 'physical', 'time'];
+  function fromSuite(snap, keep) {
+    if (!snap || !Array.isArray(snap.entries)) return null;
+    var roadId = snap.path === 'program' ? 'partners' : snap.path;
+    if (!ROADS[roadId]) roadId = 'partners';
+    var R = ROADS[roadId], names = (snap.names || []).map(function (x) { return trim(x); });
+    var n = clampPeople(roadId, R.solo ? 1 : Math.max(MIN_PEOPLE, names.length)), V = {}, sizes = {};
+    names = names.slice(0, n);
+    function label(i) { return names[i] || roleOf(roadId, i); }
+    function whoName(code) { if (code === 'Both') return 'Everyone'; var i = CODES.indexOf(code); return i >= 0 && i < n ? label(i) : trim(code); }
+    function set(k, v) { if (v === true) V[k] = true; else if (v != null && v !== false && trim(v) !== '') V[k] = String(v); }
+    function rowsOfT(st, id) { return ((st && st.tables && st.tables[id]) || []).filter(function (r) { return r && Object.keys(r).some(function (k) { return k !== 'day' && k !== 'who' && r[k] !== '' && r[k] != null && r[k] !== false; }); }); }
+    function written(en) {
+      var v = en.state && en.state.values || {}, t = en.state && en.state.tables || {};
+      return Object.keys(v).some(function (k) { return !/^(partner[A-H]|peopleCount|roadPeople|name)$/.test(k) && v[k] !== '' && v[k] != null && v[k] !== false; }) ||
+        Object.keys(t).some(function (id) { return rowsOfT(en.state, id).length; });
+    }
+    function dateOf(en) { var v = en.state.values; return v.date || v.weekOf || v.reviewDate || ''; }
+    function latest(list) { list = list.filter(written); if (!list.length) return null; var dated = list.filter(function (e) { return /^\d{4}-\d{2}-\d{2}$/.test(dateOf(e)); }); if (dated.length === list.length) list = list.slice().sort(function (a, b) { return dateOf(a) < dateOf(b) ? -1 : dateOf(a) > dateOf(b) ? 1 : 0; }); return list[list.length - 1]; }
+    function personOf(en) {
+      if (R.solo) return 0;
+      if (typeof en.person === 'number' && en.person < n) return en.person;
+      var nm = fold(en.state.values.name);
+      for (var i = 0; i < n; i++) if (nm && (fold(names[i]) === nm || fold(roleOf(roadId, i)) === nm)) return i;
+      return null;
+    }
+    var by = {};
+    snap.entries.forEach(function (e) { if (e && e.state && e.workpaper) (by[e.workpaper] = by[e.workpaper] || []).push(e); });
+    var got = [];
+
+    var e1 = latest(by['WP-01'] || []);
+    if (e1) {
+      got.push('WP-01');
+      set('wp01.weekOf', e1.state.values.weekOf);
+      if (!R.refusalsOnly) {
+        var a1 = rowsOfT(e1.state, 'audit');
+        a1.forEach(function (r, i) { var p = 'wp01.audit.r' + (i + 1) + '.'; set(p + 'day', r.day); set(p + 'task', r.task); set(p + 'who', whoName(r.who)); set(p + 'minutes', r.minutes); set(p + 'how', r.how); });
+        if (a1.length > 10) sizes.audit = a1.length;
+      }
+      var rf = rowsOfT(e1.state, 'refusals');
+      rf.forEach(function (r, i) { var p = 'wp01.refusals.r' + (i + 1) + '.'; set(p + 'kind', r.kind); set(p + 'ack', r.ack); set(p + 'cap', r.cap); set(p + 'alt', r.alt); });
+      if (rf.length > 2) sizes.refusals = rf.length;
+    }
+    for (var i = 0; i < n; i++) {
+      var e2 = latest((by['WP-02'] || []).filter(function (e) { return personOf(e) === i; }));
+      if (!e2) continue;
+      got.push('WP-02');
+      var p2 = 'wp02.p' + (i + 1) + '.';
+      FACTOR_IDS.forEach(function (id, k) { set(p2 + 'q' + (k + 1), e2.state.values['factors.' + id]); });
+      set(p2 + 'date', e2.state.values.date); set(p2 + 'note', e2.state.values.note);
+    }
+    var e3 = latest(by['WP-03'] || []);
+    if (e3) {
+      got.push('WP-03');
+      set('wp03.reviewDate', e3.state.values.reviewDate);
+      var t3 = rowsOfT(e3.state, 'treaty').filter(function (r) { return trim(r.task); });
+      t3.forEach(function (r, i) { var p = 'wp03.treaty.r' + (i + 1) + '.'; set(p + 'task', r.task); set(p + 'freq', r.freq); set(p + 'r', whoName(r.r)); set(p + 'a', whoName(r.a)); set(p + 'c', r.c); set(p + 'i', r.i); set(p + 'notes', r.notes); });
+      sizes.treaty = t3.length;
+      var am = rowsOfT(e3.state, 'amendments');
+      am.forEach(function (r, i) { var p = 'wp03.amend.r' + (i + 1) + '.'; set(p + 'date', r.date); set(p + 'initials', [r.initA, r.initB].filter(Boolean).join(' ')); set(p + 'change', r.change); });
+      if (am.length > 2) sizes.amend = am.length;
+      (e3.state.tables.ratify || []).forEach(function (r, i) { if (i < n && r) { set('wp03.ratify.p' + (i + 1) + '.initials', r.initials); set('wp03.ratify.p' + (i + 1) + '.date', r.date); } });
+    }
+    var e4 = latest(by['WP-04'] || []);
+    if (e4) {
+      got.push('WP-04');
+      set('wp04.month', e4.state.values.month);
+      var r4 = rowsOfT(e4.state, 'raw').filter(function (r) { return trim(r.task); });
+      r4.forEach(function (r, i) { var p = 'wp04.raw.r' + (i + 1) + '.'; set(p + 'task', r.task); ['w1', 'w2', 'w3', 'w4'].forEach(function (w) { if (r[w]) V[p + w] = true; }); });
+      if (r4.length > 8) sizes.raw = r4.length;
+      var c4 = rowsOfT(e4.state, 'classify').filter(function (r) { return trim(r.task); });
+      c4.forEach(function (r, i) { var p = 'wp04.classify.r' + (i + 1) + '.'; set(p + 'task', r.task); set(p + 'owner', r.owner); set(p + 'kind', r.kind); set(p + 'action', r.action); });
+      if (c4.length > 6) sizes.classify = c4.length;
+      (e4.state.tables.signoff || []).forEach(function (r, i) { if (i < n && r) { set('wp04.signoff.p' + (i + 1) + '.initials', r.initials); set('wp04.signoff.p' + (i + 1) + '.date', r.date); } });
+    }
+    var e9 = latest(by['WP-09'] || []);
+    if (e9) {
+      got.push('WP-09');
+      var v9 = e9.state.values;
+      set('wp09.date', v9.date); if (!R.solo) set('wp09.who', v9.name);
+      set('wp09.raw', v9.raw); if (v9.raw__include) V['wp09.rawInclude'] = true;
+      set('wp09.fact', v9.fact); set('wp09.feeling', v9.feeling); set('wp09.ask', v9.ask);
+      ['specific', 'saturation', 'neutral', 'pattern'].forEach(function (id) { set('wp09.filter.' + id, v9['filter.' + id]); });
+    }
+    var kits = [];
+    for (var j = 0; j < n; j++) kits[j] = latest((by['WP-11'] || []).filter(function (e) { return personOf(e) === j; }));
+    if (!kits.some(Boolean)) { var any11 = latest(by['WP-11'] || []); if (any11) kits[0] = any11; }
+    if (kits.some(Boolean)) {
+      got.push('WP-11');
+      kits.forEach(function (k, j) {
+        if (!k) return;
+        var line = (k.state.tables.lines || [])[0];
+        if (line) set('wp11.lines.p' + (j + 1) + '.line', line.line);
+        var so = (k.state.tables.signoff || [])[0];
+        if (so) { if (so.chosen) V['wp11.signoff.p' + (j + 1) + '.chosen'] = true; if (so.agreed) V['wp11.signoff.p' + (j + 1) + '.agreed'] = true; set('wp11.signoff.p' + (j + 1) + '.date', so.date); }
+      });
+      // the package has one set of defaults, triggers and readings: the first kit that has them
+      var main = kits.filter(function (k) { return k && (k.state.values.first || k.state.values.second); })[0] || kits.filter(Boolean)[0];
+      set('wp11.date', main.state.values.date); set('wp11.first', main.state.values.first); set('wp11.second', main.state.values.second);
+      set('wp11.nextAction', main.state.values.nextAction); set('wp11.resume', main.state.values.resume);
+      var tr = rowsOfT(main.state, 'triggers');
+      tr.forEach(function (r, i) { set('wp11.triggers.r' + (i + 1) + '.trigger', r.trigger); set('wp11.triggers.r' + (i + 1) + '.body', r.body); });
+      if (tr.length > 3) sizes.triggers = tr.length;
+      var withReadings = kits.filter(function (k) { return k && rowsOfT(k.state, 'reentry').length; }), rk = withReadings[withReadings.length - 1];
+      if (rk) {
+        var re = rowsOfT(rk.state, 'reentry');
+        re.forEach(function (r, i) { var p = 'wp11.reentry.r' + (i + 1) + '.'; set(p + 'time', r.time); set(p + 'tactic', r.tactic); set(p + 'before', r.before); set(p + 'after', r.after); });
+        if (re.length > 3) sizes.reentry = re.length;
+      }
+    }
+    var e13 = latest(by['WP-13'] || []);
+    if (e13) {
+      got.push('WP-13');
+      set('wp13.weekOf', e13.state.values.weekOf);
+      (e13.state.tables.daily || []).forEach(function (r) {
+        var d = DAYS.indexOf(r.day), pi = CODES.indexOf(r.who);
+        if (d < 0 || pi < 0 || pi >= n) return;
+        var p = 'wp13.daily.r' + (d * n + pi + 1) + '.';
+        set(p + 'load', r.load); set(p + 'thanks', r.thanks); set(p + 'friction', r.friction); set(p + 'ask', r.ask);
+      });
+      var rs = rowsOfT(e13.state, 'resync').filter(function (r) { return trim(r.item); });
+      rs.forEach(function (r, i) { var p = 'wp13.resync.r' + (i + 1) + '.'; set(p + 'item', r.item); set(p + 'times', r.times); set(p + 'to', r.to); });
+      if (rs.length > 3) sizes.resync = rs.length;
+      (e13.state.tables.signoff || []).forEach(function (r, i) { if (i < n && r) { if (r.committed) V['wp13.signoff.p' + (i + 1) + '.committed'] = true; set('wp13.signoff.p' + (i + 1) + '.date', r.date); } });
+    }
+    var data = blankData(roadId, n, names, sizes);
+    if (e3) Object.keys(data.values).forEach(function (k) { if (k.indexOf(NS + 'wp03.treaty.') === 0) delete data.values[k]; });
+    names.forEach(function (nm, i) { if (nm) data.values[NS + 'who.p' + (i + 1)] = nm; });
+    // what the Suite has no page for (CALC-01 inputs, self-notes, the Ready page) comes from an earlier package, if there is one
+    if (keep && keep.road === roadId && keep.values) Object.keys(keep.values).forEach(function (k) { if (/^tol\.v1\.(calc|self|ready)\.|^tol\.v1\.who\.(started|context|others)$/.test(k)) data.values[k] = keep.values[k]; });
+    Object.keys(V).forEach(function (k) { data.values[NS + k] = V[k]; });
+    var r = fromJSON(data);
+    if (r) r.fromSuite = got.filter(function (x, k, a) { return a.indexOf(x) === k; });
+    return r;
   }
 
   // A JSON backup (or a draft) back into the data object, cleaned.
@@ -579,7 +770,7 @@
 
   // What was read, page by page, and what is missing or couldn't be matched.
   function readReport(data, extra) {
-    var reg = build(data.road, data.people, namesOf(data)), P = people(data), pages = [], issues = [], total = 0;
+    var reg = regOf(data), P = people(data), pages = [], issues = [], total = 0;
     reg.pages.forEach(function (p) {
       var filled = 0, need = 0, missing = [];
       p.fields.forEach(function (fl) {
@@ -595,7 +786,7 @@
         if (has && fl.type === 'number') {
           var nv = num(v);
           if (nv == null) issues.push({ page: p.id, field: fl, msg: '“' + trim(v) + '” in ' + fieldPlace(p, fl) + ' isn’t a number, so it is left out.' });
-          else if ((fl.max != null && nv > fl.max) || (fl.min != null && nv < fl.min)) issues.push({ page: p.id, field: fl, msg: trim(v) + ' in ' + fieldPlace(p, fl) + ' is outside ' + fl.min + ' to ' + fl.max + ', so it is left out.' });
+          else if ((fl.max != null && nv > fl.max) || (fl.min != null && nv < fl.min)) issues.push({ page: p.id, field: fl, msg: trim(v) + ' in ' + fieldPlace(p, fl) + (fl.min != null && fl.max != null ? ' is outside ' + fl.min + ' to ' + fl.max : fl.min != null ? ' is below ' + fl.min : ' is above ' + fl.max) + ', so it is left out.' });
         }
       });
       total += filled;
@@ -636,15 +827,17 @@
       // "You" reads oddly in a report about several people ("You is…"), so an unnamed first person is "Person 1 (you)".
       list.push({ i: i, name: names[i], label: names[i] || (role === 'You' && n > 1 ? 'Person 1 (you)' : role), role: role });
     }
+    // "José", "Jose" and "jose" are the same person; "Tom and Aoife" is two people (see ownersOf), never Tom.
     function resolve(v) {
       var s = trim(v);
       if (!s) return null;
-      var low = s.toLowerCase().replace(/[.!]+$/, '');
+      var low = fold(s).replace(/[.!]+$/, '');
       if (/^(both|everyone|everybody|all|all of us|us|we|together|the team|team|whole team|the house|whole house|the family)$/.test(low)) return 'all';
-      var hit = list.filter(function (p) { return p.label.toLowerCase() === low || (p.name && p.name.toLowerCase() === low) || p.role.toLowerCase() === low; });
+      var hit = list.filter(function (p) { return fold(p.label) === low || (p.name && fold(p.name) === low) || fold(p.role) === low; });
       if (hit.length === 1) return hit[0].i;
+      if (SEVERAL_RE.test(low)) return undefined;
       if (low.length === 1) {
-        var ini = list.filter(function (p) { return p.name && p.name.charAt(0).toLowerCase() === low; });
+        var ini = list.filter(function (p) { return p.name && fold(p.name).charAt(0) === low; });
         if (ini.length === 1) return ini[0].i;
         var li = CODES.indexOf(low.toUpperCase());
         if (li >= 0 && li < n) return li;
@@ -652,11 +845,11 @@
       var d = /^(?:p|person\s*)?([1-8])$/.exec(low);
       if (d && +d[1] <= n) return +d[1] - 1;
       if (low.length >= 2) {
-        var pre = list.filter(function (p) { return p.name && p.name.toLowerCase().indexOf(low) === 0; });
+        var pre = list.filter(function (p) { return p.name && fold(p.name).indexOf(low) === 0; });
         if (pre.length === 1) return pre[0].i;
-        var inits = list.filter(function (p) { return p.name && p.name.split(/\s+/).map(function (w) { return w.charAt(0); }).join('').toLowerCase() === low; });
+        var inits = list.filter(function (p) { return p.name && fold(p.name).split(/\s+/).map(function (w) { return w.charAt(0); }).join('') === low; });
         if (inits.length === 1) return inits[0].i;
-        var first = list.filter(function (p) { return p.name && p.name.split(/\s+/)[0].toLowerCase() === low.split(/\s+/)[0]; });
+        var first = list.filter(function (p) { return p.name && fold(p.name).split(/\s+/)[0] === low.split(/\s+/)[0]; });
         if (first.length === 1) return first[0].i;
       }
       return undefined;
@@ -690,7 +883,7 @@
 
   // Every number the report uses, with where it came from. Blank means null, never a guess.
   function compute(data) {
-    var reg = build(data.road, data.people, namesOf(data)), R = ROADS[data.road], P = people(data), n = data.people;
+    var reg = regOf(data), R = ROADS[data.road], P = people(data), n = data.people;
     var on = {}; R.wps.forEach(function (c) { on[c] = true; });
     var out = { road: data.road, R: R, n: n, P: P, reg: reg, on: on };
 
@@ -713,25 +906,25 @@
 
     // WP-01: minutes by person, and the balance score
     if (on['WP-01'] && !R.refusalsOnly) {
-      var mins = P.list.map(function () { return 0; }), noticed = mins.slice(), rowsUsed = 0, unmatched = [], logged = 0, tasks = [];
-      rowsOf(data, 'wp01.audit', ['day', 'task', 'who', 'minutes', 'how'], 10).forEach(function (r) {
+      var mins = P.list.map(function () { return 0; }), noticed = mins.slice(), rowsUsed = 0, unmatched = [], logged = 0, tasks = [], sharedRows = [];
+      rowsOf(data, 'wp01.audit', ['day', 'task', 'who', 'minutes', 'how'], sizeOf(data, 'audit')).forEach(function (r) {
         if (!(trim(r.task) || trim(r.who) || trim(r.minutes) || trim(r.how))) return;
         logged++;
         if (trim(r.task)) tasks.push(trim(r.task));
-        var m = num(r.minutes), who = P.resolve(r.who);
-        if (!(m > 0) || who == null) { if (who === undefined && trim(r.who)) unmatched.push(trim(r.who)); return; }
+        var m = num(r.minutes), ow = ownersOf(P, r.who);
+        if (!(m > 0) || !ow.list.length) { if (ow.unknown.length && trim(r.who)) unmatched.push(trim(r.who)); return; }
         rowsUsed++;
-        var share = {};
-        if (who === 'all') P.list.forEach(function (p) { share[p.i] = m / n; }); else share[who] = m;
-        Object.keys(share).forEach(function (k) { mins[k] += share[k]; if (r.how === 'Noticed and handled') noticed[k] += share[k]; });
+        // a row shared by several named people is split evenly between them, and said so in the report
+        if (ow.multi && !ow.all) sharedRows.push({ task: trim(r.task) || 'a row', who: ow.list.map(P.label) });
+        Object.keys(ow.list).forEach(function (j) { var k = ow.list[j], s = m / ow.list.length; mins[k] += s; if (r.how === 'Noticed and handled') noticed[k] += s; });
       });
       // balance for 2 to 8 people against an even split: 1 − (½Σ|share − 1/n|) ÷ (1 − 1/n)
       var bal = C1().balance(mins), total = bal.total, wb = bal.value, shares = bal.shares ? bal.shares.map(function (x) { return x * 100; }) : null;
-      out.wp01 = { filled: logged > 0 || has(data, 'wp01.weekOf'), logged: logged, rowsUsed: rowsUsed, minutes: mins, noticed: noticed, total: total, shares: shares, wb: wb, unmatched: unmatched, tasks: tasks };
+      out.wp01 = { filled: logged > 0 || has(data, 'wp01.weekOf'), logged: logged, rowsUsed: rowsUsed, minutes: mins, noticed: noticed, total: total, shares: shares, wb: wb, unmatched: unmatched, tasks: tasks, sharedRows: sharedRows };
     }
     // WP-01 Part B: kind no's (every road that has WP-01)
     if (on['WP-01']) {
-      out.refusals = rowsOf(data, 'wp01.refusals', ['kind', 'ack', 'cap', 'alt'], 3).filter(function (r) { return trim(r.ack) || trim(r.cap) || trim(r.alt); });
+      out.refusals = rowsOf(data, 'wp01.refusals', ['kind', 'ack', 'cap', 'alt'], sizeOf(data, 'refusals')).filter(function (r) { return trim(r.ack) || trim(r.cap) || trim(r.alt); });
       if (!out.wp01) out.wp01 = { filled: out.refusals.length > 0 };
       else out.wp01.filled = out.wp01.filled || out.refusals.length > 0;
     }
@@ -740,7 +933,7 @@
     if (on['WP-03']) {
       var reg3 = reg.pages.filter(function (p) { return p.id === 'wp03'; })[0], defs = {};
       reg3.fields.forEach(function (fl) { if (fl.def) defs[fl.name] = fl.def; });
-      var cols = ['task', 'freq', 'r', 'a', 'c', 'i', 'notes'], rows3 = rowsOf(data, 'wp03.treaty', cols, 20), touched = false;
+      var cols = ['task', 'freq', 'r', 'a', 'c', 'i', 'notes'], rows3 = rowsOf(data, 'wp03.treaty', cols, sizeOf(data, 'treaty')), touched = false;
       rows3.forEach(function (r) {
         cols.forEach(function (c) {
           var k = NS + 'wp03.treaty.r' + r._i + '.' + c, v = data.values[k];
@@ -752,23 +945,23 @@
       var tasks3 = rows3.filter(function (r) { return trim(r.task); });
       var owned = [], unowned = [], half = [], byOwner = P.list.map(function () { return 0; }), unmatched3 = [];
       tasks3.forEach(function (r) {
-        var rr = P.resolve(r.r), aa = P.resolve(r.a);
-        if (trim(r.r) && rr === undefined) unmatched3.push(trim(r.r));
-        if (trim(r.a) && aa === undefined) unmatched3.push(trim(r.a));
+        var ro = ownersOf(P, r.r), ao = ownersOf(P, r.a);
+        if (trim(r.r) && ro.unknown.length) unmatched3.push(trim(r.r));
+        if (trim(r.a) && ao.unknown.length) unmatched3.push(trim(r.a));
         if (trim(r.r) && trim(r.a)) owned.push(r); else if (trim(r.r) || trim(r.a)) half.push(r); else unowned.push(r);
-        if (typeof rr === 'number') byOwner[rr]++;
+        if (ro.list.length === 1) byOwner[ro.list[0]]++;
       });
-      out.wp03 = { filled: touched, tasks: tasks3.length, owned: owned.length, oc: touched && tasks3.length ? owned.length / tasks3.length : null,
+      out.wp03 = { filled: touched, tasks: tasks3.length, owned: owned.length, oc: touched && tasks3.length ? owned.length / tasks3.length : null, conc: n >= 2 ? C1().concentration(byOwner, 3) : null,
         unowned: unowned.map(function (r) { return trim(r.task); }), half: half.map(function (r) { return trim(r.task); }), byOwner: byOwner, unmatched: unmatched3,
-        amend: [1, 2].filter(function (i) { return has(data, 'wp03.amend.r' + i + '.change'); }).length };
+        amend: rowsOf(data, 'wp03.amend', ['change'], sizeOf(data, 'amend')).filter(function (r) { return trim(r.change); }).length };
     }
 
     // WP-04: what keeps slipping
     if (on['WP-04']) {
-      var raw = rowsOf(data, 'wp04.raw', ['task', 'w1', 'w2', 'w3', 'w4'], 8).filter(function (r) { return trim(r.task); }).map(function (r) {
+      var raw = rowsOf(data, 'wp04.raw', ['task', 'w1', 'w2', 'w3', 'w4'], sizeOf(data, 'raw')).filter(function (r) { return trim(r.task); }).map(function (r) {
         return { task: trim(r.task), times: ['w1', 'w2', 'w3', 'w4'].filter(function (w) { return r[w] === true; }).length };
       });
-      var cl = rowsOf(data, 'wp04.classify', ['task', 'owner', 'kind', 'action'], 6).filter(function (r) { return trim(r.task); });
+      var cl = rowsOf(data, 'wp04.classify', ['task', 'owner', 'kind', 'action'], sizeOf(data, 'classify')).filter(function (r) { return trim(r.task); });
       var count = { 'Structural gap': 0, 'Capacity issue': 0, 'One-off, no action': 0 };
       cl.forEach(function (r) { if (count.hasOwnProperty(r.kind)) count[r.kind]++; });
       out.wp04 = { filled: raw.length > 0 || cl.length > 0 || has(data, 'wp04.month'), raw: raw, patterns: raw.filter(function (r) { return r.times >= 3; }), twice: raw.filter(function (r) { return r.times === 2; }),
@@ -793,8 +986,8 @@
     // WP-11: the calm-down kit
     if (on['WP-11']) {
       var lines = P.list.map(function (p) { return trim(V(data, 'wp11.lines.p' + (p.i + 1) + '.line')); });
-      var trig = rowsOf(data, 'wp11.triggers', ['trigger', 'body'], 3).filter(function (r) { return trim(r.trigger) || trim(r.body); });
-      var re = rowsOf(data, 'wp11.reentry', ['time', 'tactic', 'before', 'after'], 3).filter(function (r) { return inRange(r.after, 0, 1) != null; });
+      var trig = rowsOf(data, 'wp11.triggers', ['trigger', 'body'], sizeOf(data, 'triggers')).filter(function (r) { return trim(r.trigger) || trim(r.body); });
+      var re = rowsOf(data, 'wp11.reentry', ['time', 'tactic', 'before', 'after'], sizeOf(data, 'reentry')).filter(function (r) { return inRange(r.after, 0, 1) != null; });
       var latest = re.length ? inRange(re[re.length - 1].after, 0, 1) : null, before = re.length ? inRange(re[re.length - 1].before, 0, 1) : null;
       var ret = latest == null ? null : latest < 0.5 ? 'back' : latest < 0.6 ? 'again' : (re.length >= 2 ? 'later' : 'again');
       out.wp11 = { filled: !!(V(data, 'wp11.first') || V(data, 'wp11.second') || lines.some(Boolean) || trig.length || re.length),
@@ -815,10 +1008,22 @@
         if (trim(r.friction)) frictions.push(trim(r.friction));
         if (trim(r.ask)) asks.push(trim(r.ask));
       });
-      var resync = rowsOf(data, 'wp13.resync', ['item', 'times', 'to'], 3).filter(function (r) { return trim(r.item); });
+      var resync = rowsOf(data, 'wp13.resync', ['item', 'times', 'to'], sizeOf(data, 'resync')).filter(function (r) { return trim(r.item); });
       out.wp13 = { filled: entries > 0 || resync.length > 0, entries: entries, possible: 7 * n, loads: loads, thanks: thanks, frictions: frictions, asks: asks, resync: resync,
         highDays: loads.map(function (l) { return l.High; }) };
     }
+
+    // Who carries the most, beside the scores: the busiest person's share of the jobs with one named
+    // Responsible, of the logged minutes and of the unasked-for minutes. Clarity can read 1.00 with one
+    // person holding every job, so this is what keeps a high score honest.
+    out.conc = { owned: out.wp03 && out.wp03.filled ? out.wp03.conc : null,
+      minutes: out.wp01 && out.wp01.minutes && n >= 2 ? C1().concentration(out.wp01.minutes, 60) : null,
+      noticed: out.wp01 && out.wp01.noticed && n >= 2 ? C1().concentration(out.wp01.noticed, 60) : null };
+    out.conc.flag = !!((out.conc.owned && out.conc.owned.flag) || (out.conc.minutes && out.conc.minutes.flag));
+    out.conc.lines = [];
+    if (out.conc.owned && out.conc.owned.flag) out.conc.lines.push(P.label(out.conc.owned.top) + ' is Responsible for ' + out.conc.owned.count + ' of the ' + out.conc.owned.total + ' ' + R.tasks + ' with one named owner (' + pct(out.conc.owned.share) + ')');
+    if (out.conc.minutes && out.conc.minutes.flag) out.conc.lines.push(P.label(out.conc.minutes.top) + ' logged ' + pct(out.conc.minutes.share) + ' of the minutes');
+    if (out.conc.noticed && out.conc.noticed.flag && !(out.conc.minutes && out.conc.minutes.flag && out.conc.minutes.top === out.conc.noticed.top)) out.conc.lines.push(P.label(out.conc.noticed.top) + ' did ' + pct(out.conc.noticed.share) + ' of the work nobody asked for');
 
     // CALC-01
     var wbSrc = null, ocSrc = null, asSrc = null, wb = null, oc = null, as = null;
@@ -924,6 +1129,8 @@
       if (c.calc.sol != null) tiles.push({ k: 'Apex score', v: fmt(c.calc.apex), band: c.calc.apexBand.label, tone: c.calc.apexBand.key, note: c.calc.apexRebalanced ? 'From three inputs, rebalanced: no friction moments were counted, so there was nothing to repair.' : 'Adds your retuning count (RF ' + fmt(c.calc.rf) + ').' });
       tiles.push({ k: 'Workload balance', v: c.calc.wb != null ? fmt(c.calc.wb) : 'Not filled in', band: c.calc.wb == null ? 'WP-01 needs minutes and names' : c.calc.wbSrc === 'yours' ? 'Your own number' : 'From WP-01 (1 = even split)', tone: c.calc.wb == null ? 'none' : c.calc.wb >= 0.7 ? 'good' : c.calc.wb >= 0.4 ? 'drift' : 'low' });
       tiles.push({ k: 'Ownership clarity', v: c.calc.oc != null ? fmt(c.calc.oc) : 'Not filled in', band: c.calc.oc == null ? 'WP-03 needs owners' : c.calc.ocSrc === 'yours' ? 'Your own number' : c.wp03.owned + ' of ' + c.wp03.tasks + ' tasks fully owned', tone: c.calc.oc == null ? 'none' : c.calc.oc >= 0.7 ? 'good' : c.calc.oc >= 0.4 ? 'drift' : 'low' });
+      var co = c.conc && (c.conc.owned && c.conc.owned.flag ? c.conc.owned : c.conc.minutes && c.conc.minutes.flag ? c.conc.minutes : null);
+      if (co) tiles.push({ k: 'Busiest person', v: pct(co.share), band: c.conc.lines[0], tone: 'drift', note: 'An even share would be ' + pct(1 / c.n) + '. Clarity reads the names; this reads how the work is spread.' });
     }
     c.battery.forEach(function (b) {
       tiles.push({ k: R.solo ? 'Your battery' : 'Battery: ' + b.label, v: b.score != null ? fmt(b.score) : 'Not filled in', band: b.score != null ? b.band.label + (b.source === 'shared' ? ' (score shared)' : '') : (b.answered ? b.answered + ' of 5 answered' : 'WP-02 blank'), tone: b.score == null ? 'none' : b.band.key === 'low' ? 'good' : b.band.key === 'medium' ? 'drift' : 'low', person: true });
@@ -967,7 +1174,7 @@
     model.self = selfDiscovery(F, v);
     model.pillars = pillars2(model.pillars, F, fired, v);
     model.guide = guide(fired, F, v, RP);
-    model.glossary = R.solo ? GLOSSARY.filter(function (g) { return !SOLO_SKIP_TERMS[g[0]]; }) : GLOSSARY;
+    model.glossary = R.solo ? GLOSSARY.filter(function (g) { return !SOLO_SKIP_TERMS[g[0]]; }) : GLOSSARY.filter(function (g) { return data.road === 'coworkers' || g[0] !== 'Consulted and Informed'; });
     model.method = method(F);
     model.confidence = confidence(F, checks);
     model.completeness = completeness(data);
@@ -994,8 +1201,9 @@
         'Everything stays on this device. Nothing is sent anywhere.'];
     }
     if (calc.sol != null) {
-      var s = fmt(calc.sol);
-      if (calc.sol >= 0.7) add(10, 'The setup reads ' + s + ' on CALC-01: it is carrying its own weight. Keep the same rhythm; nothing needs fixing this week.');
+      var s = fmt(calc.sol), leans = leanReasons(c);
+      if (calc.sol >= 0.7 && leans.length) add(10, 'The setup reads ' + s + ' on CALC-01, so the numbers hold, but ' + list(leans) + '. A high score can hide a setup that leans on one person or keeps slipping, so that is the place to look before calling it settled.');
+      else if (calc.sol >= 0.7) add(10, 'The setup reads ' + s + ' on CALC-01: it is carrying its own weight. Keep the same rhythm; nothing needs fixing this week.');
       else if (calc.sol >= 0.4) add(10, 'The setup reads ' + s + ' on CALC-01: something is drifting. The biggest single gap is ' + calc.worst.fix + ', so start there, not with whatever happened most recently.');
       else add(10, 'The setup reads ' + s + ' on CALC-01: as it is set up now, it can’t last. That is a statement about the setup, not about anyone. The biggest gap is ' + calc.worst.fix + '.');
       if (calc.rf != null && Math.abs(calc.gap) >= 0.08) add(7, calc.gap > 0 ? 'Solvency runs ' + fmt(calc.gap) + ' above apex: the setup holds, but repair after friction isn’t keeping up. WP-09 is the place to work, not the owners list.' : 'Apex runs ' + fmt(-calc.gap) + ' above solvency: you repair well, but the setup keeps making friction to repair. The owners list is the place to work.');
@@ -1026,7 +1234,8 @@
       else add(3, 'The logged minutes were fairly even this week (' + c.P.list.map(function (p) { return p.label + ' ' + Math.round(sh[p.i]) + '%'; }).join(', ') + ').');
       void iMax;
     }
-    if (c.wp04 && c.wp04.patterns.length) add(7, plural(c.wp04.patterns.length, 'task') + ' came up 3 or 4 weeks out of 4: ' + list(c.wp04.patterns.map(function (p) { return p.task; }).slice(0, 3)) + '. That is a pattern, not a fluke, and usually a gap in the setup.');
+    if (c.wp04 && c.wp04.patterns.length) add(7, plural(c.wp04.patterns.length, 'task') + ' came up 3 or 4 weeks out of 4: ' + listSome(c.wp04.patterns.map(function (p) { return p.task; }), 3) + '. That is a pattern, not a fluke, and usually a gap in the setup.');
+    if (c.conc && c.conc.flag && !(calc.sol != null && calc.sol >= 0.7)) add(7, cap(c.conc.lines.join('; ')) + '. That is a fact about how the setup has settled, not about effort or care, and it is worth one question: which job would they hand over first?');
     if (c.wp09 && c.wp09.advice === 'pause') add(5, 'Your Tone Filter checks suggest pausing before you answer that message' + (c.wp09.pattern ? ': it may be touching an older pattern, not just these words.' : '.'));
     if (c.wp13 && c.wp13.thanks.length) add(4, plural(c.wp13.thanks.length, 'appreciation') + ' written down in the daily check-ins. Those are worth reading again on a harder day.');
     if (c.wp11 && c.wp11.filled && !(c.wp11.first || c.wp11.second)) add(3, 'The Calm-Down Kit is started, but no settling defaults are chosen yet. Picking two on a calm day is what makes it work in the moment.');
@@ -1043,6 +1252,14 @@
     var k = 0;
     while (texts.length < 3) texts.push(pads[k++]);
     return texts;
+  }
+
+  // What a high CALC-01 read can hide: one person holding most of the jobs or minutes, or a task
+  // that slips most weeks.
+  function leanReasons(c) {
+    var out = (c.conc && c.conc.lines || []).slice();
+    if (c.wp04 && c.wp04.patterns.length) out.push(listSome(c.wp04.patterns.map(function (p) { return p.task; }), 2) + (c.wp04.patterns.length === 1 ? ' slipped' : ' slipped') + ' 3 or 4 weeks out of 4');
+    return out;
   }
 
   function topFactors(c) {
@@ -1078,12 +1295,13 @@
           var nt = w.noticed.reduce(function (a, b) { return a + b; }, 0);
           if (nt > 0) s.shows.push(Math.round(nt / w.total * 100) + '% of the logged minutes were noticed and handled without anyone asking: the quiet work that usually goes unseen.');
         }
+        if (w.sharedRows && w.sharedRows.length) s.shows.push(plural(w.sharedRows.length, 'row') + ' named more than one person (' + listSome(w.sharedRows.map(function (x) { return x.task + ': ' + list(x.who); }), 3) + '). Those minutes were split evenly between the names written. If one person led it, write just their name.');
         if (w.unmatched && w.unmatched.length) s.shows.push('Left out because the name didn’t match anyone: ' + list(w.unmatched.map(function (x) { return '“' + x + '”'; })) + '.');
         s.next = w.wb != null && w.wb < 0.7 ? 'Bring the log to ' + v.meeting + ' and ask one question: which ' + v.task + ' would the busiest person most like to hand over?' : 'Run the same log again in a month and compare. The change matters more than the number.';
       }
       if (c.refusals && c.refusals.length) {
         s.entered.push(['Kind no’s drafted', String(c.refusals.length)]);
-        s.shows.push('You have ' + plural(c.refusals.length, 'kind no') + ' ready: ' + c.refusals.map(function (r) { return '“' + [r.ack, r.cap, r.alt].filter(Boolean).join(' ') + '”'; }).slice(0, 2).join('  ') + (R.solo ? ' Saying no to one thing is how you say yes to your own battery.' : ''));
+        s.shows.push('You have ' + plural(c.refusals.length, 'kind no') + ' ready: ' + c.refusals.map(function (r) { return '“' + said([sentence(r.ack), sentence(r.cap), sentence(r.alt)]) + '”'; }).slice(0, 2).join('  ') + (R.solo ? ' Saying no to one thing is how you say yes to your own battery.' : ''));
         if (R.refusalsOnly) s.next = 'Say one of them out loud this week, lightly, to a small request first.';
       } else if (R.refusalsOnly) { s.status = 'blank'; s.next = 'Draft one kind no for a real request coming up.'; }
       return s;
@@ -1110,7 +1328,8 @@
       s.entered.push([c.road === 'coworkers' ? 'Team tasks listed' : 'Tasks listed', String(t.tasks)]);
       s.entered.push(['Both names filled in', t.owned + ' of ' + t.tasks]);
       P.list.forEach(function (p) { if (t.byOwner[p.i]) s.entered.push([p.label + ' (Responsible)', plural(t.byOwner[p.i], 'task')]); });
-      s.shows.push(t.oc != null ? 'Ownership clarity ' + fmt(t.oc) + '. ' + (t.oc >= 0.8 ? 'Almost everything has a clear owner.' : t.oc >= 0.5 ? 'Most things are owned; a few are still floating.' : 'More than half of the list is still unowned or half-owned.') : 'No tasks listed, so there is no clarity number (not a zero).');
+      s.shows.push(t.oc != null ? 'Ownership clarity ' + fmt(t.oc) + '. ' + (t.oc >= 0.9 ? 'Almost everything has a clear owner.' : t.oc >= 0.7 ? 'Most things are owned; a few are still floating.' : t.oc >= 0.4 ? 'Some things are owned; many are still floating.' : 'More than half of the list is still unowned or half-owned.') : 'No tasks listed, so there is no clarity number (not a zero).');
+      if (t.conc && t.conc.flag) s.shows.push(P.label(t.conc.top) + ' is Responsible for ' + t.conc.count + ' of the ' + t.conc.total + ' ' + v.tasks + ' with one named owner (' + pct(t.conc.share) + '; an even share would be ' + pct(1 / c.n) + '). Clarity reads whether each job has a name, not how the jobs are spread, so read the two together.');
       if (t.unowned.length) s.shows.push('No owner yet: ' + list(t.unowned) + '.');
       if (t.half.length) s.shows.push('Only one of the two names: ' + list(t.half) + '.');
       if (t.unmatched.length) s.shows.push('Names that didn’t match anyone on the road: ' + list(t.unmatched.map(function (x) { return '“' + x + '”'; })) + '. They still count as owned.');
@@ -1143,10 +1362,11 @@
       s.entered.push(['Ask', m.ask || 'Not filled in']);
       if (m.raw) s.entered.push(['Raw reaction (you chose to include it)', m.raw]);
       s.entered.push(['The four checks', m.checks + ' of 4 answered']);
-      if (m.parts === 3) s.shows.push('Your message, in order: “' + m.fact + ' ' + m.feeling + ' ' + m.ask + '”');
+      if (m.parts === 3) s.shows.push('Your message, in order: “' + said([sentence(m.fact), feelingSentence(m.feeling), sentence(m.ask, true)]) + '”');
       else s.shows.push(m.parts + ' of the three parts written. The one that is hardest to write is usually the one that matters most.');
       if (m.advice === 'pause') s.shows.push('The checks suggest pausing first' + (m.satNo ? ': you might read it differently with a lighter battery' : '') + (m.pattern ? (m.satNo ? ', and' : ':') + ' it may be answering an older pattern, not these words' : '') + '. Use a kind “not right now” and come back.');
       else if (m.advice === 'name') s.shows.push('Name the specific task or event first. A message about a pattern is much harder to hear than one about a single thing.');
+      else if (m.advice === 'clear' && m.checks < 4) s.shows.push('The checks answered so far look fine; ' + plural(4 - m.checks, 'check') + ' still ' + (4 - m.checks === 1 ? 'needs' : 'need') + ' an answer before you respond.');
       else if (m.advice === 'clear') s.shows.push('The checks say you’re clear to respond. Build the reply from the fact, the feeling and the ask.');
       s.next = m.advice === 'pause' ? 'Wait until your battery reads lower, then send the version built from fact, feeling and ask.' : 'Use fact, feeling and ask on one more message this week, and notice how it lands.';
       return s;
@@ -1197,6 +1417,7 @@
         out.lines.push('Solvency = ' + fmt(k.wb) + ' × 0.40 + ' + fmt(k.oc) + ' × 0.35 + (1 − ' + fmt(k.as) + ') × 0.25 = ' + fmt(k.sol) + ': ' + k.solBand.label.toLowerCase() + '.');
         out.lines.push('Apex = ' + (k.apexRebalanced ? '(' + fmt(k.wb) + ' × 0.35 + ' + fmt(k.oc) + ' × 0.30 + (1 − ' + fmt(k.as) + ') × 0.20) ÷ 0.85' : fmt(k.wb) + ' × 0.35 + ' + fmt(k.oc) + ' × 0.30 + (1 − ' + fmt(k.as) + ') × 0.20 + ' + fmt(k.rf) + ' × 0.15') + ' = ' + fmt(k.apex) + ': ' + k.apexBand.label.toLowerCase() + '.');
         out.lines.push('Where the points went: ' + k.terms.map(function (t) { return t.key + ' gives up ' + fmt(t.short, 3); }).join(', ') + '. The biggest gap is ' + k.worst.fix + '.');
+        if (c.conc && c.conc.lines.length) out.lines.push('Beside the score: ' + c.conc.lines.join('; ') + '. The score reads whether jobs are named and time is logged, not how they are spread, so this is worth reading next to it' + (k.sol >= 0.7 ? ', even at ' + fmt(k.sol) + '.' : '.'));
         if (k.sol < 0.4 && k.apex < 0.4) out.lines.push('Both scores are low at the same time. In that pattern, one more worksheet probably isn’t what helps most. It may be worth asking someone neutral that everyone trusts to help you rework the setup together.');
       } else {
         out.lines.push('No read yet. Still needed: ' + k.missing.join('; ') + '. The calculator never fills a gap with a guess.');
@@ -1319,7 +1540,7 @@
       I: R.solo ? avg([c.wp02.filled ? 1 : 0, c.notes.weather.length ? c.notes.weather.length / WEATHER_WEEKS : null]) : k.wb,
       II: R.solo ? avg([c.wp11 && c.wp11.filled ? ((c.wp11.first ? 0.5 : 0) + (c.wp11.second ? 0.5 : 0)) : null, c.refusals ? (c.refusals.length ? 1 : (c.wp01 && c.wp01.filled ? 0 : null)) : null])
         : avg([k.oc, c.wp04 && c.wp04.classified.length ? 1 - c.wp04.structural / c.wp04.classified.length : null]),
-      III: avg([b0.length ? 1 - avg(b0.map(function (b) { return b.score; })) : null, c.wp11 && c.wp11.latest != null ? (c.wp11.latest < 0.5 ? 1 : c.wp11.latest < 0.6 ? 0.5 : 0) : null]),
+      III: b0.length ? avg([1 - avg(b0.map(function (b) { return b.score; })), c.wp11 && c.wp11.latest != null ? (c.wp11.latest < 0.5 ? 1 : c.wp11.latest < 0.6 ? 0.5 : 0) : null]) : null,
       IV: avg([k.rf, c.wp09 && c.wp09.filled ? c.wp09.parts / 3 : null, c.notes.wiringLines ? c.notes.wiringLines / 9 : null]),
       V: avg([c.wp13 && c.wp13.entries ? c.wp13.thanks.length / c.wp13.entries : null, c.wp04 && c.wp04.raw.length ? 1 - c.wp04.patterns.length / c.wp04.raw.length : null, !R.solo && c.wp03 && c.wp03.filled && c.wp03.tasks ? 1 - (c.wp03.unowned.length / c.wp03.tasks) : null])
     };
@@ -1392,7 +1613,7 @@
 
   var LINKS = {
     'WP-01': ['WP-01 Who did what', '/workpapers/fill/wp-01.html'],
-    'WP-02': ['WP-02 How full is your battery?', '/workpapers/fill/wp-02.html'],
+    'WP-02': ['WP-02 How much are you carrying?', '/workpapers/fill/wp-02.html'],
     'WP-03': ['WP-03 One owner per job', '/workpapers/fill/wp-03.html'],
     'WP-04': ['WP-04 The monthly look-back', '/workpapers/fill/wp-04.html'],
     'WP-09': ['WP-09 Say it so it lands', '/workpapers/fill/wp-09.html'],
@@ -1481,7 +1702,7 @@
     // WP-01: rows, owners, time sinks, invisible and mental load
     if (c.wp01 && c.wp01.minutes) {
       var rows = [];
-      rowsOf(data, 'wp01.audit', ['day', 'task', 'who', 'minutes', 'how'], 10).forEach(function (r) {
+      rowsOf(data, 'wp01.audit', ['day', 'task', 'who', 'minutes', 'how'], sizeOf(data, 'audit')).forEach(function (r) {
         if (!(trim(r.task) || trim(r.who) || trim(r.minutes) || trim(r.how))) return;
         var m = num(r.minutes), who = P.resolve(r.who);
         rows.push({ day: trim(r.day), task: trim(r.task), whoRaw: trim(r.who), who: who, min: m, minRaw: trim(r.minutes), how: r.how || '', mental: MENTAL_RE.test(r.task || ''), noticed: r.how === 'Noticed and handled' });
@@ -1534,7 +1755,7 @@
     // WP-03: owners, gaps, too many owners, recurring load
     if (c.wp03 && c.wp03.filled) {
       var rows3 = [];
-      rowsOf(data, 'wp03.treaty', ['task', 'freq', 'r', 'a', 'c', 'i', 'notes'], 20).forEach(function (r) {
+      rowsOf(data, 'wp03.treaty', ['task', 'freq', 'r', 'a', 'c', 'i', 'notes'], sizeOf(data, 'treaty')).forEach(function (r) {
         if (!trim(r.task)) return;
         rows3.push({ task: trim(r.task), freq: trim(r.freq), fk: freqKind(r.freq), rRaw: trim(r.r), aRaw: trim(r.a), ro: ownersOf(P, r.r), ao: ownersOf(P, r.a), cRaw: trim(r.c), iRaw: trim(r.i), notes: trim(r.notes) });
       });
@@ -1556,7 +1777,7 @@
 
     // WP-04: what slipped, week by week
     if (c.wp04 && c.wp04.filled) {
-      var raw4 = rowsOf(data, 'wp04.raw', ['task', 'w1', 'w2', 'w3', 'w4'], 8).filter(function (r) { return trim(r.task); }).map(function (r) {
+      var raw4 = rowsOf(data, 'wp04.raw', ['task', 'w1', 'w2', 'w3', 'w4'], sizeOf(data, 'raw')).filter(function (r) { return trim(r.task); }).map(function (r) {
         var wk = ['w1', 'w2', 'w3', 'w4'].map(function (w) { return r[w] === true; });
         return { task: trim(r.task), weeks: wk, times: wk.filter(Boolean).length };
       });
@@ -1579,7 +1800,7 @@
 
     // WP-11: settling readings
     if (c.wp11 && c.wp11.filled) {
-      var re = rowsOf(data, 'wp11.reentry', ['time', 'tactic', 'before', 'after'], 3).map(function (r) { return { time: trim(r.time), tactic: trim(r.tactic), before: inRange(r.before, 0, 1), after: inRange(r.after, 0, 1) }; })
+      var re = rowsOf(data, 'wp11.reentry', ['time', 'tactic', 'before', 'after'], sizeOf(data, 'reentry')).map(function (r) { return { time: trim(r.time), tactic: trim(r.tactic), before: inRange(r.before, 0, 1), after: inRange(r.after, 0, 1) }; })
         .filter(function (r) { return r.before != null || r.after != null || r.tactic; });
       var pairs = re.filter(function (r) { return r.before != null && r.after != null; });
       F.w11 = { re: re, pairs: pairs, avgDrop: avgOf(pairs.map(function (r) { return r.before - r.after; })), rose: pairs.filter(function (r) { return r.after > r.before + 0.001; }),
@@ -1657,6 +1878,8 @@
   // strength: true marks something to protect rather than fix.
 
   function lbl(list) { return list.map(function (p) { return p.label; }); }
+  // Only the coworkers' version of WP-03 has Consulted and Informed columns.
+  function hasCI(F) { return F.road === 'coworkers'; }
   function heaviest(F) { var pp = F.pp.filter(function (p) { return p.minutes != null; }); return pp.length ? pp.slice().sort(function (a, b) { return b.minutes - a.minutes; })[0] : null; }
   function lightest(F) { var pp = F.pp.filter(function (p) { return p.minutes != null; }); return pp.length ? pp.slice().sort(function (a, b) { return a.minutes - b.minutes; })[0] : null; }
   function highestBat(F) { return F.bat.max ? F.pp[F.bat.max.i] : null; }
@@ -1666,11 +1889,17 @@
   var RULES = [
     /* --- the overall read (CALC-01) --- */
     { id: 'sol-holding', pillar: 'II', src: ['CALC-01'], pri: 5, strength: true, title: 'The setup is carrying its own weight',
-      when: function (F) { return F.c.calc.sol != null && F.c.calc.solBand.key === 'good' ? F.c.calc : null; },
+      when: function (F) { return F.c.calc.sol != null && F.c.calc.solBand.key === 'good' && !leanReasons(F.c).length ? F.c.calc : null; },
       find: function (k) { return 'CALC-01 reads ' + fmt(k.sol) + ': the way the load is shared is carrying its own weight.'; },
       why: 'A setup that holds leaves room for the harder, more interesting conversations, and it is easier to keep than to rebuild.',
       rec: function (k, F, v) { return { h: 'month', title: 'Keep the rhythm that is working', first: 'Put a date in the calendar a month from now to fill the pages again and compare.', script: '“This is working. Can we keep it exactly as it is for another month?”', link: linkOf('CALC-01'), working: 'The next report reads 0.70 or above again.' }; },
       q: function () { return 'What are we doing right now that we would miss if it stopped?'; } },
+    { id: 'sol-leans', pillar: 'V', src: ['CALC-01', 'WP-03', 'WP-01', 'WP-04'], pri: 9, title: 'The numbers hold, but the setup leans',
+      when: function (F) { var k = F.c.calc, r = leanReasons(F.c); return k.sol != null && k.solBand.key === 'good' && r.length ? { k: k, r: r, who: F.c.conc && F.c.conc.flag ? (F.c.conc.owned && F.c.conc.owned.flag ? F.c.conc.owned : F.c.conc.minutes) : null } : null; },
+      find: function (d) { return 'CALC-01 reads ' + fmt(d.k.sol) + ', and yet ' + list(d.r) + '.'; },
+      why: 'CALC-01 reads whether jobs have names and whether the logged time is even. It can read high while one reliable person quietly holds most of it, or while the same thing slips most weeks. That is how a setup that looks fine wears someone down.',
+      rec: function (d, F, v) { var nm = d.who ? F.P.label(d.who.top) : null; return { h: 'week', title: nm ? 'Share out some of what ' + nm + ' holds' : 'Fix what keeps slipping', first: nm ? 'Ask ' + nm + ' which ' + v.task + ' they would hand over first, and move it to someone else on WP-03, with a date to check how it went.' : 'Give what keeps slipping a new or clearer owner on WP-03, and check it at the next look-back.', script: nm ? '“You hold most of these. Which one would you hand over if you could?”' : '“This one keeps slipping. What would make it fit, and who would like to own it?”', link: linkOf('WP-03'), working: nm ? 'Nobody is Responsible for more than half the list, and the score still holds.' : 'It isn’t ticked on next month’s look-back.' }; },
+      q: function (d) { return d.who ? 'Is the work spread the way everyone would choose, or has it settled on one person?' : 'Why does the same thing keep slipping when the rest is working?'; } },
     { id: 'sol-drifting', pillar: 'II', src: ['CALC-01'], pri: 9, title: 'The setup is drifting',
       when: function (F) { var k = F.c.calc; return k.sol != null && k.solBand.key === 'drift' ? k : null; },
       find: function (k) { return 'CALC-01 reads ' + fmt(k.sol) + ': something in the setup is drifting. The part losing the most points is ' + k.worst.fix + '.'; },
@@ -1735,13 +1964,13 @@
       find: function (d) { return pc(d.share) + ' of the logged minutes were marked "Everyone", which splits them evenly on paper.'; },
       why: 'Shared jobs are real, but "everyone" can hide who actually started, planned or finished them, so the balance may look more even than it felt.',
       rec: function (d, F, v) { return { h: 'month', title: 'Log shared jobs by who led them', first: 'Next week, write the name of whoever started or planned each shared job.', script: '', link: linkOf('WP-01'), working: 'Fewer than a third of minutes marked "Everyone".' }; } },
-    { id: 'load-battery-align', pillar: 'III', src: ['WP-01', 'WP-02'], pri: 7, title: 'Most minutes and the fullest battery belong to the same person',
+    { id: 'load-battery-align', pillar: 'III', src: ['WP-01', 'WP-02'], pri: 7, title: 'Most minutes and the highest load belong to the same person',
       when: function (F) {
         var h = heaviest(F), b = highestBat(F);
         return F.n >= 2 && h && b && h.i === b.i && b.battery.score >= 0.5 && F.c.wp01.wb != null && F.c.wp01.wb < 0.85 && F.bat.scored.length >= 2 ? { p: h } : null;
       },
-      find: function (d) { return d.p.label + ' logged the most minutes (' + pc(d.p.share) + ') and has the fullest battery (' + fmt(d.p.battery.score) + '). The load and the battery line up.'; },
-      why: 'When the same person carries the most and is also running fullest, a small handoff helps twice: less work, and more room to recover.',
+      find: function (d) { return d.p.label + ' logged the most minutes (' + pc(d.p.share) + ') and has the highest load (' + fmt(d.p.battery.score) + '). The load and the battery line up.'; },
+      why: 'When the same person logs the most and also carries the highest load, a small handoff helps twice: less work, and more room to recover.',
       rec: function (d, F, v) { return { h: 'now', title: 'Take something off ' + d.p.label + '’s plate this week', first: 'Ask ' + d.p.label + ' for one ' + v.task + ' they would happily hand over for two weeks.', script: '“What’s one thing I could take off your plate this week, no strings?”', link: linkOf('WP-02'), working: d.p.label + '’s battery reads lower next week.' }; },
       q: function (d) { return 'What would make next week lighter for ' + d.p.label + ', even a little?'; } },
     { id: 'battery-beyond-list', pillar: 'III', src: ['WP-01', 'WP-02'], pri: 5, title: 'A full battery that the list doesn’t explain',
@@ -1749,7 +1978,7 @@
         var l = lightest(F), b = highestBat(F);
         return F.n >= 2 && l && b && l.i === b.i && b.battery.score >= 0.6 && F.bat.scored.length >= 2 ? { p: l } : null;
       },
-      find: function (d) { return d.p.label + ' logged the fewest minutes here but has the fullest battery (' + fmt(d.p.battery.score) + '). Something outside this list is filling it.'; },
+      find: function (d) { return d.p.label + ' logged the fewest minutes here but has the highest load (' + fmt(d.p.battery.score) + '). Something outside this list is filling it.'; },
       why: 'A battery reads the whole of life, not only these ' + 'jobs. Knowing that stops anyone from reading a light log as a light week.',
       rec: function (d, F, v) { return { h: 'now', title: 'Ask what else ' + d.p.label + ' is carrying', first: 'Ask, once and gently, what is filling ' + d.p.label + '’s battery this week, and accept any answer, including "not now".', script: '“Your battery’s high this week. Is there anything I can’t see that I could help with?”', link: linkOf('WP-02'), working: d.p.label + ' feels asked about, not assessed.' }; } },
 
@@ -1768,7 +1997,7 @@
       when: function (F) { return F.w3 && F.w3.multi.length ? { list: F.w3.multi } : null; },
       find: function (d) { return list(d.list.slice(0, 4).map(function (r) { return r.task; })) + (d.list.length === 1 ? ' has' : ' have') + ' more than one name, or "Everyone", as Responsible or Accountable.'; },
       why: 'When everyone owns a job, nobody quite does. Shared jobs work best with one name who starts it and one who notices if it didn’t happen.',
-      rec: function (d, F, v) { return { h: 'week', title: 'Swap "everyone" for one name', first: 'For ' + d.list[0].task + ', keep the group in Consulted or Informed, and put one name in Responsible.', script: '“We all help with this. Who is the one who makes sure it happens?”', link: linkOf('WP-03'), working: 'No row has "Everyone" as Responsible or Accountable.' }; } },
+      rec: function (d, F, v) { return { h: 'week', title: 'Swap "everyone" for one name', first: 'For ' + d.list[0].task + ', put one name in Responsible, and ' + (hasCI(F) ? 'keep the group in Consulted or Informed.' : 'write who helps in the Notes box.'), script: '“We all help with this. Who is the one who makes sure it happens?”', link: linkOf('WP-03'), working: 'No row has "Everyone" as Responsible or Accountable.' }; } },
     { id: 'ra-mismatch', pillar: 'II', src: ['WP-03'], pri: 6, title: 'Responsible, but nobody follows up',
       when: function (F) { return F.w3 && F.w3.rOnly.length ? { list: F.w3.rOnly } : null; },
       find: function (d, F, v) { return plural(d.list.length, v.task, v.tasks) + ' have someone Responsible but no one Accountable: ' + list(d.list.slice(0, 4).map(function (r) { return r.task + ' (' + r.rRaw + ')'; })) + '.'; },
@@ -1799,15 +2028,15 @@
       find: function (d, F, v) { return d.top.label + ' owns ' + d.top.recurR + ' of the ' + d.tot + ' daily or weekly ' + v.tasks + '. Recurring work is the kind that never lets up.'; },
       why: 'One-off jobs end; recurring ones come back every day or week. A fair split of recurring jobs matters more than a fair count of jobs.',
       rec: function (d, F, v) { return { h: 'month', title: 'Share the recurring jobs', first: 'Trade one daily or weekly ' + v.task + ' from ' + d.top.label + ' for one occasional job.', script: '“Could we swap one of the every-week ones for one of the now-and-then ones?”', link: linkOf('WP-03'), working: 'Recurring jobs are split closer to evenly on WP-03.' }; } },
-    { id: 'battery-owns-most', pillar: 'V', src: ['WP-02', 'WP-03'], pri: 8, title: 'The fullest battery also owns the most',
+    { id: 'battery-owns-most', pillar: 'V', src: ['WP-02', 'WP-03'], pri: 8, title: 'The highest load also owns the most',
       when: function (F) {
         if (!(F.n >= 2 && F.w3 && F.bat.scored.length >= 2)) return null;
         var b = highestBat(F); if (!b || b.battery.score < 0.5) return null;
         var mostR = F.pp.slice().sort(function (a, c) { return c.r - a.r; });
         return mostR[0].i === b.i && mostR[0].r > mostR[1].r ? { p: b } : null;
       },
-      find: function (d, F, v) { return d.p.label + ' has the fullest battery (' + fmt(d.p.battery.score) + ') and is also Responsible for the most ' + v.tasks + ' (' + d.p.r + ').'; },
-      why: 'The person running fullest is also holding the most. That is usually the setup drifting, not a choice anyone made.',
+      find: function (d, F, v) { return d.p.label + ' has the highest load (' + fmt(d.p.battery.score) + ') and is also Responsible for the most ' + v.tasks + ' (' + d.p.r + ').'; },
+      why: 'The person with the highest load is also holding the most. That is usually the setup drifting, not a choice anyone made.',
       rec: function (d, F, v) { return { h: 'week', title: 'Lighten ' + d.p.label + '’s list first', first: 'Move one of ' + d.p.label + '’s ' + v.tasks + ' to the person with the most room this week.', script: '“You’re carrying a lot right now. Which one could I take for the next two weeks?”', link: linkOf('WP-03'), working: d.p.label + ' holds fewer jobs and reads lower next time.' }; } },
     { id: 'drift-to-one', pillar: 'V', src: ['WP-01', 'WP-03'], pri: 7, title: 'Unowned jobs drift to one person',
       when: function (F) {
@@ -1866,7 +2095,7 @@
       when: function (F) { return F.bat.high.length ? { who: F.bat.high } : null; },
       find: function (d, F) { return F.solo ? 'Your battery reads ' + fmt(d.who[0].score) + ': a high load right now.' : list(d.who.map(function (b) { return b.label + ' (' + fmt(b.score) + ')'; })) + (d.who.length === 1 ? ' is' : ' are') + ' at 0.60 or above: a high load right now.'; },
       why: 'At a high load, words land harder and decisions come out worse. It is a reason to pick the timing, not a reason to avoid the talk.',
-      rec: function (d, F, v) { return { h: 'now', title: F.solo ? 'Protect your battery this week' : 'Protect the fullest batteries this week', first: F.solo ? 'Put off what doesn’t need deciding this week, and use your first settling default before anything hard.' : 'Agree that anyone at 0.60 or above can say “not today” and name a time instead, with no explanation needed.', script: sayNumber(F) + fmt(d.who[0].score) + ' today. Can we pick this up tomorrow at a set time?”', link: linkOf('WP-02'), working: 'Nothing big gets decided on a high-battery day, and the number drops within the week.', plan: { title: F.solo ? 'Protect your battery' : 'Protect the batteries', wp: 'WP-02, WP-11', do: F.solo ? 'One minute with the battery meter each morning. On any day at 0.60 or above, use a settling default before anything hard, and put off what can wait.' : 'Everyone does the battery meter daily and says their number before any hard talk. At 0.60 or above, name a time instead.', pillar: 'III' } }; },
+      rec: function (d, F, v) { return { h: 'now', title: F.solo ? 'Protect your battery this week' : 'Protect the highest loads this week', first: F.solo ? 'Put off what doesn’t need deciding this week, and use your first settling default before anything hard.' : 'Agree that anyone at 0.60 or above can say “not today” and name a time instead, with no explanation needed.', script: sayNumber(F) + fmt(d.who[0].score) + ' today. Can we pick this up tomorrow at a set time?”', link: linkOf('WP-02'), working: 'Nothing big gets decided on a high-battery day, and the number drops within the week.', plan: { title: F.solo ? 'Protect your battery' : 'Protect the batteries', wp: 'WP-02, WP-11', do: F.solo ? 'One minute with the battery meter each morning. On any day at 0.60 or above, use a settling default before anything hard, and put off what can wait.' : 'Everyone does the battery meter daily and says their number before any hard talk. At 0.60 or above, name a time instead.', pillar: 'III' } }; },
       q: function (d, F) { return F.solo ? 'What would a slightly lighter week look like for you, and what is one thing you could put down?' : 'When someone is running high, what is the kindest way for them to say "not today"?'; } },
     { id: 'bat-low-all', pillar: 'III', src: ['WP-02'], pri: 3, strength: true, title: 'Batteries are in a good place',
       when: function (F) { return F.bat.scored.length && F.bat.scored.every(function (b) { return b.score < 0.3; }) && (F.solo || F.bat.scored.length >= 2) ? F.bat : null; },
@@ -1876,7 +2105,7 @@
       when: function (F) { return F.bat.spread != null && F.bat.spread >= 0.35 ? { hi: F.bat.max, lo: F.bat.min, d: F.bat.spread } : null; },
       find: function (d) { return 'Batteries are ' + fmt(d.d) + ' apart: ' + d.hi.label + ' at ' + fmt(d.hi.score) + ', ' + d.lo.label + ' at ' + fmt(d.lo.score) + '.'; },
       why: 'People having very different weeks can hear the same sentence very differently. It is nobody’s fault; it is worth knowing before a conversation.',
-      rec: function (d, F, v) { return { h: 'now', title: 'Say your numbers before you start', first: 'Open the next conversation with everyone’s battery number, and let the fullest battery choose the timing.', script: '“I’m at ' + fmt(d.lo.score) + ', you’re at ' + fmt(d.hi.score) + '. You pick when we talk.”', link: linkOf('WP-02'), working: 'Hard talks happen on days when everyone reads under 0.60.' }; } },
+      rec: function (d, F, v) { return { h: 'now', title: 'Say your numbers before you start', first: 'Open the next conversation with everyone’s battery number, and let whoever is carrying the most choose the timing.', script: '“I’m at ' + fmt(d.lo.score) + ', you’re at ' + fmt(d.hi.score) + '. You pick when we talk.”', link: linkOf('WP-02'), working: 'Hard talks happen on days when everyone reads under 0.60.' }; } },
     { id: 'stressor-shared', pillar: 'III', src: ['WP-02'], pri: 6, title: 'The same thing is filling several batteries',
       when: function (F) {
         if (!(F.n >= 2 && F.bat.full.length >= 2)) return null;
@@ -1948,7 +2177,7 @@
       why: 'Friction in a low-weather week says as much about the weather as about anyone. It is worth reading the two side by side.',
       rec: null },
     { id: 'settle-works', pillar: 'III', src: ['WP-11'], pri: 3, strength: true, title: 'Settling works',
-      when: function (F) { return F.w11 && F.w11.avgDrop != null && F.w11.avgDrop >= 0.1 ? F.w11 : null; },
+      when: function (F) { return F.w11 && F.w11.pairs.length >= 2 && F.w11.avgDrop != null && F.w11.avgDrop >= 0.1 ? F.w11 : null; },
       find: function (w) { return 'After settling, the battery dropped by ' + fmt(w.avgDrop) + ' on average (' + plural(w.pairs.length, 'reading') + ').'; },
       why: 'That is your own evidence that a pause is a real tool, not a way out. Worth remembering on the day it feels pointless.' },
     { id: 'nokit-highbat', pillar: 'III', src: ['WP-11', 'WP-02'], pri: 6, title: 'A full battery and no calm-down plan yet',
@@ -1965,12 +2194,12 @@
     /* --- Pillar IV: tune how you send and receive (WP-09, RF, Wiring Card) --- */
     { id: 'rf-low', pillar: 'IV', src: ['CALC-01', 'WP-09'], pri: 6, title: 'Few frictions got retuned',
       when: function (F) { var k = F.c.calc; return k.rf != null && k.rf < 0.5 ? k : null; },
-      find: function (k) { return k.retunes + ' of ' + k.friction + ' friction moments were retuned before answering (RF ' + fmt(k.rf) + ').'; },
+      find: function (k) { return k.retunes + ' of ' + k.friction + ' friction moments ' + (k.retunes === 1 ? 'was' : 'were') + ' retuned before answering (RF ' + fmt(k.rf) + ').'; },
       why: 'Retuning is the habit that stops one bad moment from becoming a bad week. It gets easier each time.',
       rec: function (k, F, v) { return { h: 'week', title: 'Retune one message a week', first: 'Pick the next message that stings and write the fact, the feeling and the ask before you answer.', script: '“Give me a minute to say that better.”', link: linkOf('WP-09'), working: 'Half or more of next week’s friction moments are retuned.', plan: { title: 'Say it so it lands', wp: 'WP-09', do: 'Put one charged message a week through fact, feeling and ask before it goes out. Count the friction moments and how many you retuned.', pillar: 'IV' } }; } },
     { id: 'rf-high', pillar: 'IV', src: ['CALC-01', 'WP-09'], pri: 3, strength: true, title: 'Most frictions got retuned',
       when: function (F) { var k = F.c.calc; return k.rf != null && k.rf >= 0.75 ? k : null; },
-      find: function (k) { return k.retunes + ' of ' + k.friction + ' friction moments were retuned before answering (RF ' + fmt(k.rf) + ').'; },
+      find: function (k) { return k.retunes + ' of ' + k.friction + ' friction moments ' + (k.retunes === 1 ? 'was' : 'were') + ' retuned before answering (RF ' + fmt(k.rf) + ').'; },
       why: 'That is the repair habit working. It is worth saying out loud, because it is invisible when it works.' },
     { id: 'wp09-pause', pillar: 'III', src: ['WP-09'], pri: 6, title: 'The Tone Filter says pause first',
       when: function (F) { return F.c.wp09 && F.c.wp09.advice === 'pause' ? F.c.wp09 : null; },
@@ -2041,12 +2270,12 @@
       rec: function (r, F, v) { return { h: 'week', title: 'Turn the repeated ask into a job', first: 'Give the thing behind the ask a named owner on WP-03.', script: '“You’ve asked for this a few times. Let’s make it someone’s job.”', link: linkOf('WP-03'), working: 'The ask stops appearing in the check-ins.' }; } },
     { id: 'checkins-skip', pillar: 'V', src: ['WP-13'], pri: 5, title: 'Check-ins are patchy',
       when: function (F) { var w = F.w13; if (!w) return null; return w.rate < 0.5 || (F.n >= 2 && w.skipped.length && w.skipped.length < F.n) ? w : null; },
-      find: function (w, F) { return w.entries + ' of ' + w.possible + ' possible check-ins were filled in (' + pc(w.rate) + ')' + (F.n >= 2 && w.skipped.length ? '; none yet from ' + list(lbl(w.skipped)) : '') + '.'; },
+      find: function (w, F) { return w.entries + ' of ' + w.possible + ' possible check-ins ' + (w.entries === 1 ? 'was' : 'were') + ' filled in (' + pc(w.rate) + ')' + (F.n >= 2 && w.skipped.length ? '; none yet from ' + list(lbl(w.skipped)) : '') + '.'; },
       why: 'A check-in only works when it is short enough to keep. A patchy week usually means the check-in is too long or at the wrong time, not that anyone doesn’t care.',
       rec: function (w, F, v) { return { h: 'week', title: 'A check-in short enough to keep', first: 'Attach the check-in to something that already happens every day, and cut it to 90 seconds.', script: '', link: linkOf('checkins'), working: 'Five or more days of check-ins next week, from everyone.' }; } },
     { id: 'checkins-steady', pillar: 'V', src: ['WP-13'], pri: 3, strength: true, title: 'Check-ins are steady',
       when: function (F) { return F.w13 && F.w13.rate >= 0.8 ? F.w13 : null; },
-      find: function (w) { return w.entries + ' of ' + w.possible + ' possible check-ins were filled in (' + pc(w.rate) + ').'; },
+      find: function (w) { return w.entries + ' of ' + w.possible + ' possible check-ins ' + (w.entries === 1 ? 'was' : 'were') + ' filled in (' + pc(w.rate) + ').'; },
       why: 'Short and steady beats long and rare. This habit is what keeps small things small.' },
     { id: 'resync-open', pillar: 'II', src: ['WP-13', 'WP-03'], pri: 4, title: 'A sore spot was moved to owners, but the owners list still has gaps',
       when: function (F) { var r = F.c.wp13 && F.c.wp13.resync.filter(function (x) { return /RACI|Owners/i.test(x.to || ''); }); return r && r.length && F.w3 && F.w3.gaps.length ? { r: r } : null; },
@@ -2060,7 +2289,7 @@
       rec: function (d, F, v) { return { h: 'week', title: 'Draft one kind no', first: 'Write why the next request is fair, what you honestly have left, and what you can offer instead.', script: '“That’s a fair ask. I’m at capacity this week. I could do it on Saturday.”', link: linkOf('WP-01'), working: 'You say it once, to a small request, and it goes fine.', plan: { title: 'Kind ways to say no', wp: 'WP-01 Part B', do: 'Draft one kind no, then try it on a small request.', pillar: 'V' } }; } },
     { id: 'kindno-ready', pillar: 'V', src: ['WP-01'], pri: 2, strength: true, title: 'Kind no’s are ready',
       when: function (F) { return F.refusals && F.refusals.length ? F.refusals : null; },
-      find: function (r) { return plural(r.length, 'kind no') + ' drafted and ready, for example ' + q(short([r[0].ack, r[0].cap, r[0].alt].filter(Boolean).join(' '), 90)); },
+      find: function (r) { return plural(r.length, 'kind no') + ' drafted and ready, for example ' + q(short(said([sentence(r[0].ack), sentence(r[0].cap), sentence(r[0].alt)]), 90)); },
       why: 'Saying no to one thing is how you say yes to your battery, and a drafted one is much easier to say.' },
     { id: 'ready-going', pillar: 'V', src: ['READY'], pri: 4, strength: true, title: 'In your words: what is going well',
       when: function (F) { return F.c.ready.going ? F.c.ready : null; },
@@ -2133,11 +2362,11 @@
       fix: 'If it was hours, write it as "2h" and the report will turn it into minutes.' },
     { id: 'wp01-no-owner', where: 'WP-01', level: 'check',
       when: function (F) { return F.w1 && F.w1.noOwner.length ? F.w1.noOwner : null; },
-      text: function (r) { return plural(r.length, 'row') + ' on WP-01 name a job but not who did it (' + list(r.slice(0, 3).map(function (x) { return q(x.task); })) + '), so those minutes aren’t in the balance.'; },
+      text: function (r) { return plural(r.length, 'row') + ' on WP-01 ' + (r.length === 1 ? 'names' : 'name') + ' a job but not who did it (' + listSome(r.map(function (x) { return q(x.task); }), 3) + '), so ' + (r.length === 1 ? 'its minutes aren’t' : 'those minutes aren’t') + ' in the balance.'; },
       fix: 'Add a name, an initial, or "Everyone".' },
     { id: 'wp01-no-minutes', where: 'WP-01', level: 'note',
       when: function (F) { return F.w1 && F.w1.noMin.length ? F.w1.noMin : null; },
-      text: function (r) { return plural(r.length, 'row') + ' on WP-01 have no minutes (' + list(r.slice(0, 3).map(function (x) { return q(x.task || x.whoRaw); })) + '), so they count as jobs but not as time.'; },
+      text: function (r) { return plural(r.length, 'row') + ' on WP-01 ' + (r.length === 1 ? 'has' : 'have') + ' no minutes (' + listSome(r.map(function (x) { return q(x.task || x.whoRaw); }), 3) + '), so ' + (r.length === 1 ? 'it counts as a job' : 'they count as jobs') + ' but not as time.'; },
       fix: 'A rough guess is fine: 5, 15, 30 or 60 minutes.' },
     { id: 'wp01-duplicate', where: 'WP-01', level: 'note',
       when: function (F) {
@@ -2207,8 +2436,8 @@
       fix: 'Check your state again before reading on.' },
     { id: 'wp03-everyone', where: 'WP-03', level: 'note',
       when: function (F) { return F.w3 && F.w3.multi.length ? F.w3.multi : null; },
-      text: function (r) { return list(r.slice(0, 3).map(function (x) { return q(x.task); })) + ' list "Everyone" or several names as the owner. It counts as owned in the clarity number, which may make ownership look clearer than it is.'; },
-      fix: 'Put one name in Responsible and move the group to Consulted or Informed.' },
+      text: function (r) { return listSome(r.map(function (x) { return q(x.task); }), 3) + (r.length === 1 ? ' lists' : ' list') + ' "Everyone" or several names as the owner. It counts as owned in the clarity number, which may make ownership look clearer than it is.'; },
+      fix: function (d, F) { return hasCI(F) ? 'Put one name in Responsible and move the group to Consulted or Informed.' : 'Put one name in Responsible, and write who helps in the Notes box.'; } },
     { id: 'wp03-default-untouched', where: 'WP-03', level: 'note',
       when: function (F) {
         if (!F.w3) return null;
@@ -2275,7 +2504,7 @@
       text: function (d) { return 'The CALC-01 page counts ' + d.k.friction + ' friction ' + (d.k.friction === 1 ? 'moment' : 'moments') + ', while the check-ins note ' + d.n13 + '. They may cover different weeks, or some small ones weren’t counted.'; },
       fix: 'Count friction for the same week as the check-ins.' },
     { id: 'numbers-out-of-range', where: 'Several pages', level: 'check',
-      when: function (F) { var iss = readReport(F.data).issues.filter(function (i) { return /isn’t a number|is outside/.test(i.msg); }); return iss.length ? iss : null; },
+      when: function (F) { var iss = readReport(F.data).issues.filter(function (i) { return /isn’t a number|is outside|is below|is above/.test(i.msg); }); return iss.length ? iss : null; },
       text: function (i) { return plural(i.length, 'number') + ' couldn’t be used: ' + i.slice(0, 3).map(function (x) { return x.msg.replace(/, so it is left out\.$/, ''); }).join('; ') + '.'; },
       fix: 'Battery and CALC numbers run from 0 to 1 (for example 0.45).' },
     { id: 'dates-odd', where: 'Dates', level: 'note',
@@ -2322,7 +2551,7 @@
       var d;
       try { d = ck.when(F); } catch (e) { d = null; }
       if (!d) return;
-      out.push({ id: ck.id, where: ck.where, level: ck.level, text: ck.text(d, F), fix: ck.fix });
+      out.push({ id: ck.id, where: ck.where, level: ck.level, text: ck.text(d, F), fix: typeof ck.fix === 'function' ? ck.fix(d, F) : ck.fix });
     });
     out.sort(function (a, b) { return (a.level === 'check' ? 0 : 1) - (b.level === 'check' ? 0 : 1); });
     return out;
@@ -2356,7 +2585,7 @@
       var kinds = {}; F.refusals.forEach(function (r) { var k = r.kind || 'Not sorted'; kinds[k] = (kinds[k] || 0) + 1; });
       s.tables.push(tbl('Kind no’s drafted', ['Kind', 'Fair reason', 'What’s left', 'Offer instead'], F.refusals.map(function (r) { return [r.kind || 'Not sorted', r.ack ? 'Yes' : 'Not yet', r.cap ? 'Yes' : 'Not yet', r.alt ? 'Yes' : 'Not yet']; }), [1.4, 1, 1, 1]));
       var whole = F.refusals.filter(function (r) { return r.ack && r.cap && r.alt; }).length;
-      s.more.push(whole + ' of ' + F.refusals.length + ' kind no’s have all three parts (why it is fair, what you have left, what you can offer). Kinds: ' + Object.keys(kinds).map(function (k) { return lc(k) + ' ' + kinds[k]; }).join(', ') + '.');
+      s.more.push(whole + ' of ' + F.refusals.length + ' kind no’s ' + (whole === 1 ? 'has' : 'have') + ' all three parts (why it is fair, what you have left, what you can offer). Kinds: ' + Object.keys(kinds).map(function (k) { return lc(k) + ' ' + kinds[k]; }).join(', ') + '.');
       s.suggests.push(whole === F.refusals.length ? 'You have words ready. The next step is saying one out loud to a small request.' : 'The missing part is usually the offer. A no with an offer lands as care, not rejection.');
     }
     if (code === 'WP-02') {
@@ -2367,7 +2596,7 @@
       var best = -1; F.factorAvg.forEach(function (a, i) { if (a != null && (best < 0 || a > F.factorAvg[best])) best = i; });
       if (best >= 0) s.more.push('Highest-scoring stressor: ' + lc(F.factors[best]) + ' (' + C1().f1(F.factorAvg[best]) + ' of 4' + (F.solo ? '' : ' on average') + ').');
       if (!F.solo && sc.length) s.more.push(F.bat.all ? 'The ' + (n === 2 ? 'pair' : F.road === 'coworkers' ? 'team' : 'group') + ' average is ' + fmt(F.bat.avg) + '.' : 'Of the ' + sc.length + ' batteries filled in, the average is ' + fmt(F.bat.avg) + '. The full average waits for everyone.');
-      if (F.bat.spread != null) s.more.push('The spread between the fullest and the lightest battery is ' + fmt(F.bat.spread) + (F.bat.spread >= 0.35 ? ': very different weeks.' : '.'));
+      if (F.bat.spread != null) s.more.push('The spread between the highest and the lowest load is ' + fmt(F.bat.spread) + (F.bat.spread >= 0.35 ? ': very different weeks.' : '.'));
       var shared = sc.filter(function (b) { return b.source === 'shared'; });
       if (shared.length) s.more.push(list(lbl(shared)) + ' shared a score rather than the five answers. That is fine; it just means the stressor table can’t include them.');
       if (sc.length) s.suggests.push(F.bat.high.length ? 'Timing matters more than content this week. Hard conversations go better on a day under 0.60.' : 'Conditions are workable. What comes up is probably about the thing itself.');
@@ -2409,7 +2638,7 @@
         if (F.w9.absolutes) s.more.push('It uses "always" or "never". Swapping in the one time it happened makes it easier to hear.');
         if (c.wp09.ask && !F.w9.askQ) s.more.push('The ask reads as a statement. “Could you ___ by ___?” is easier to say yes to.');
       }
-      s.suggests.push(c.wp09.advice === 'pause' ? 'This one wants a pause before it is sent.' : c.wp09.parts === 3 ? 'This message is ready to send, at a calm time.' : 'Finishing the missing part will do more than polishing the rest.');
+      s.suggests.push(c.wp09.advice === 'pause' ? 'This one wants a pause before it is sent.' : c.wp09.checks < 4 ? 'Answer the ' + plural(4 - c.wp09.checks, 'check') + ' still open before you send it. ' + (c.wp09.parts === 3 ? 'The message itself is written.' : 'Finishing the missing part matters too.') : c.wp09.parts === 3 ? 'This message is ready to send, at a calm time.' : 'Finishing the missing part will do more than polishing the rest.');
     }
     if (code === 'WP-11' && c.wp11 && c.wp11.filled) {
       if (F.w11 && F.w11.re.length) s.tables.push(tbl('Coming back', ['Time', 'What I did', 'Before', 'After', 'Change'], F.w11.re.map(function (r) { return [r.time || '—', r.tactic || '—', r.before != null ? fmt(r.before) : '—', r.after != null ? fmt(r.after) : '—', r.before != null && r.after != null ? (r.after <= r.before ? '−' : '+') + fmt(Math.abs(r.after - r.before)) : '—']; }), [0.8, 2.2, 0.8, 0.8, 0.8]));
@@ -2624,7 +2853,7 @@
         practice: F.solo ? 'Redesign one routine this month instead of trying harder at it.' : 'One owner per job, written down, and checked once a month on WP-04.' },
       III: { shows: F.bat.scored.length ? (F.solo ? 'Battery ' + fmt(F.bat.scored[0].score) : 'Batteries: ' + F.bat.scored.map(function (b) { return b.label + ' ' + fmt(b.score); }).join(', ')) + (F.w11 && F.w11.avgDrop != null ? '; settling moved it by ' + fmt(F.w11.avgDrop) + ' on average' : '') + (F.wx.trend != null ? '; weather trend ' + (F.wx.trend > 0 ? '+' : '') + fmt(F.wx.trend) : '') + '.' : 'No battery readings yet.',
         inYou: F.pp[0] && F.solo && F.pp[0].top.length ? 'Your battery is filled most by ' + lc(F.pp[0].top[0].l) + '. Check it before you judge a moment.' : 'Check your number before you judge a moment, yours or anyone else’s.',
-        between: hb && !F.solo && hb.battery.score >= 0.5 ? 'Let the fullest battery (' + hb.label + ', ' + fmt(hb.battery.score) + ') choose the timing of the next hard talk.' : null,
+        between: hb && !F.solo && hb.battery.score >= 0.5 ? 'Let the person with the highest load (' + hb.label + ', ' + fmt(hb.battery.score) + ') choose the timing of the next hard talk.' : null,
         practice: 'Say your number before any hard talk. At 0.60 or above, name a time instead.' },
       IV: { shows: [k.rf != null ? 'Retuning ' + fmt(k.rf) + ' (' + k.retunes + ' of ' + k.friction + ')' : '', c.wp09 && c.wp09.filled ? 'WP-09: ' + c.wp09.parts + ' of 3 parts written' : '', c.notes.wiringLines ? 'Wiring Card: ' + c.notes.wiringLines + ' of 9 lines' : ''].filter(Boolean).join('; ') + '.',
         inYou: F.wiring.receive && F.wiring.receive.length ? 'You take things in best ' + lc(F.wiring.receive[0]) + '. Knowing that is half of being understood.' : null,
@@ -2651,7 +2880,9 @@
   function guide(fired, F, v, RP) {
     var qs = [];
     fired.forEach(function (r) { if (r.q && qs.indexOf(r.q) < 0 && qs.length < 6) qs.push(r.q); });
-    (RP && RP.talk || []).forEach(function (t) { if (qs.length < 9 && qs.indexOf(t) < 0) qs.push(t); });
+    // two questions about the quiet incentives (Pillar V): which jobs get thanked, and which drift
+    if (!F.solo) (global.TOL_PILLAR_V || []).slice(0, 2).forEach(function (t) { if (qs.length < 8 && qs.indexOf(t) < 0) qs.push(t); });
+    (RP && RP.talk || []).forEach(function (t) { if (qs.length < 10 && qs.indexOf(t) < 0) qs.push(t); });
     var gen = F.solo ? ['Which part of this feels like wiring, which like a pattern, and which like this week’s weather?', 'What surprised you most, and what didn’t surprise you at all?', 'What would "a little better" look like by the end of next week?', 'Who would you like to share one page of this with, and which page?', 'Where does the report miss something that matters to you?', 'What is one thing you would like to be kinder to yourself about?']
       : ['What surprised you most in this report, and what didn’t surprise you at all?', 'Where does the report not match your experience? What does it miss?', 'What is one thing in here you would like to thank someone for?', 'Which one number would you most like to see change by next month?', 'What would "a little better" look like by the end of next week?', 'Is there anything here that should wait for a calmer day?'];
     gen.forEach(function (t) { if (qs.length < 10 && qs.indexOf(t) < 0) qs.push(t); });
@@ -2811,8 +3042,11 @@
     else if (!F.solo && F.bat.scored.length) bits.push(F.bat.high.length ? list(lbl(F.bat.high)) + (F.bat.high.length === 1 ? ' is' : ' are') + ' running at a high load, so timing matters this week.' : 'No one’s battery is in the high band, so conditions are workable.');
     var work = fired.filter(function (r) { return !r.strength && r.rec && r.id !== 'state-not-now'; });
     var good = fired.filter(function (r) { return r.strength; });
+    if (k.sol != null && k.sol >= 0.7 && leanReasons(c).length) bits.push('The score holds, but ' + list(leanReasons(c)) + ', so read it together with that.');
     if (work.length) bits.push('The clearest thing to work on: ' + lc(work[0].title) + '.');
-    if (good.length) bits.push('What’s working: ' + lc(good[0].title) + '.');
+    var named = good.filter(function (r) { return r.id !== 'ready-going'; });
+    if (named.length) bits.push('What’s working: ' + lc(named[0].title) + '.');
+    else if (c.ready.going) bits.push('What’s working, in your own words: ' + q(short(c.ready.going, 100).replace(/[.!]$/, '')) + '.');
     if (!work.length && !good.length) bits.push('There isn’t enough filled in yet to draw firm conclusions, and that is fine: the report grows with each page.');
     bits.push('It is a picture of the setup, not a verdict on anyone.');
     var strengths = good.slice(0, 5).map(function (r) { return { title: r.title, text: r.finding }; });
@@ -2823,13 +3057,15 @@
     if (k.applies) guideBands.push('Solvency and apex: 0.70 and up, carrying its own weight; 0.40 to 0.69, something is drifting; under 0.40, can’t last as it is set up now.');
     if (k.applies) guideBands.push('Workload balance and ownership clarity: 1.00 is an even split or every job fully owned; 0.70 and up reads well.');
     guideBands.push('Battery: under 0.30 low load, 0.30 to 0.59 medium, 0.60 and up high. Higher means more load, not a worse person.');
+    if (c.wp11 && c.wp11.readings) guideBands.push('Coming back after settling (WP-11) uses the same battery number with one line of its own: under 0.50, go back in. It sits inside the medium range on purpose: you don’t need a light load to come back, just less than half.');
+    if (c.conc && c.conc.lines.length) guideBands.push('Busiest person: flagged when one person holds half or more of the jobs or minutes, and at least 20 points over an even share. It sits beside the scores; it isn’t part of them.');
     if (k.rf != null) guideBands.push('Retuning (RF): the share of friction moments repaired before answering. 0.50 and up is a working habit.');
     return { para: bits.join(' '), strengths: strengths, top: top, bands: guideBands };
   }
 
   global.TOLFullPath = {
     NS: NS, FORMAT: FORMAT, VERSION: PKG_VERSION, ROADS: ROADS, ROAD_ORDER: ROAD_ORDER, NAMES: NAMES, PILLARS: PILLARS, MAX_PEOPLE: MAX_PEOPLE, MIN_PEOPLE: MIN_PEOPLE,
-    build: build, blankData: blankData, fromFields: fromFields, fromJSON: fromJSON, readReport: readReport, canonical: canonical,
+    build: build, regOf: regOf, blankData: blankData, fold: fold, sentence: sentence, fromSuite: fromSuite, fromFields: fromFields, fromJSON: fromJSON, readReport: readReport, canonical: canonical,
     compute: compute, report: report, RULES: RULES, CHECKS: CHECKS, facts: facts, people: people, roleOf: roleOf, clampPeople: clampPeople, isoDate: isoDate, num: num, fmt: fmt, namesOf: namesOf
   };
 })(typeof window !== 'undefined' ? window : globalThis);

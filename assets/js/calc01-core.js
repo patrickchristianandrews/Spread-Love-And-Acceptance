@@ -28,6 +28,9 @@
     1 − |pctA − pctB| ÷ 100.
 
   Ownership = jobs with both a Responsible and an Accountable name ÷ all jobs.
+  Concentration (a check, not a fourth input): the busiest person's share of the owned jobs
+              or the logged minutes. Clarity can read 1.00 with one person holding every job,
+              so this sits next to it: flagged at half or more, and 20 points over an even share.
   Stress    = the average of everyone's WP-02 battery (each = five 0–4 scores ÷ 20).
               Never worked out while anyone's battery is missing.
 */
@@ -115,10 +118,29 @@
     var res = { owned: o, total: t, value: null, error: null };
     if (t === null || t <= 0) { res.error = 'No jobs listed yet, so there’s nothing to read (not 0.00).'; return res; }
     if (o === null) o = 0;
-    if (o < 0 || Math.floor(o) !== o || Math.floor(t) !== t) { res.error = 'Use whole numbers of jobs.'; return res; }
+    if (o < 0 || t < 0) { res.error = 'Job counts can’t be negative.'; return res; }
+    if (Math.floor(o) !== o || Math.floor(t) !== t) { res.error = 'Use whole numbers of jobs.'; return res; }
     if (o > t) { res.error = 'More jobs with both names (' + o + ') than jobs on the list (' + t + ').'; return res; }
     res.owned = o; res.total = t;
     res.value = o / t;
+    return res;
+  }
+
+  /* ---------- concentration: how much sits with the busiest person ---------- */
+  // Ownership clarity only asks "does every job have a name?". It reads 1.00 even when every name
+  // is the same person. This is the check that sits beside it (and beside balance): the busiest
+  // person's share of the owned jobs, the logged minutes or the unasked-for minutes.
+  // values: one number per person. min: the smallest total worth reading (e.g. 3 jobs, 60 minutes).
+  // It is flagged when that share is at least half, and at least 20 points over an even share.
+  function concentration(values, min) {
+    var v = (values || []).map(function (x) { var y = num(x); return y !== null && y > 0 ? y : 0; });
+    var n = v.length, total = sum(v);
+    var res = { n: n, total: total, top: null, count: null, share: null, even: n ? 1 / n : null, line: n ? Math.max(0.5, 1 / n + 0.2) : null, flag: false };
+    if (n < 2 || !(total > 0)) return res;
+    var top = 0;
+    v.forEach(function (x, i) { if (x > v[top]) top = i; });
+    res.top = top; res.count = v[top]; res.share = v[top] / total;
+    res.flag = total >= (min || 0) && r2(res.share) >= r2(res.line);
     return res;
   }
 
@@ -228,11 +250,78 @@
     ];
   }
 
+  // A week has 168 hours: an hours box above that (or below zero) is almost always a typo,
+  // for example minutes typed as hours. Returns a message, or '' when the value is fine or blank.
+  function hoursProblem(v) {
+    if (v === '' || v === null || v === undefined) return '';
+    var x = num(v);
+    if (x === null) return '“' + v + '” isn’t a number, so it is left out.';
+    if (x < 0) return 'Hours can’t be negative, so ' + v + ' is left out.';
+    if (x > 168) return v + ' hours is more than a week has (168), so it is left out. Were they minutes?';
+    return '';
+  }
+
+  /* ---------- "Load from my suite" ---------- */
+  // Reads the Workpaper Suite draft that the person chose to keep on this device ("Keep a draft on this
+  // device" on the Suite page), and turns it into CALC-01 entries: hours from WP-01, the job list from
+  // WP-03, and each person's own battery from WP-02. Nothing is read unless that draft exists, and
+  // nothing is sent anywhere. Returns null when there is nothing to load.
+  var SUITE_KEY = 'tol-wpf-keep:suite', FACTOR_IDS = ['sleep', 'work', 'conflict', 'physical', 'time'], CODES = 'ABCDEFGH';
+  function fold(s) { return String(s || '').normalize('NFD').replace(/[̀-ͯ]/g, '').trim().toLowerCase(); }
+  function suiteDraft() {
+    var d = null;
+    try { var raw = global.localStorage && global.localStorage.getItem(SUITE_KEY); d = raw ? JSON.parse(raw) : null; } catch (e) { return null; }
+    if (!d || d.format !== 'tol-workpaper-suite' || !Array.isArray(d.entries) || d.path === 'self') return null;
+    var names = (d.names || []).map(function (x) { return String(x || '').trim(); }).slice(0, MAX_PEOPLE);
+    while (names.length < MIN_PEOPLE) names.push('');
+    var n = names.length;
+    function dateOf(e) { var v = e.state && e.state.values || {}; return v.date || v.weekOf || v.reviewDate || ''; }
+    function latest(code, pick) {
+      var list = d.entries.filter(function (e) { return e && e.workpaper === code && e.state && (!pick || pick(e)); });
+      if (list.every(function (e) { return /^\d{4}-\d{2}-\d{2}$/.test(dateOf(e)); })) list.sort(function (a, b) { return dateOf(a) < dateOf(b) ? -1 : dateOf(a) > dateOf(b) ? 1 : 0; });
+      return list[list.length - 1] || null;
+    }
+    var out = { names: names, ledger: [], raci: [], bat: names.map(function () { return ['', '', '', '', '']; }), found: [], road: d.path };
+    var w1 = latest('WP-01');
+    if (w1) {
+      var byTask = {};
+      (w1.state.tables.audit || []).forEach(function (r) {
+        var m = num(r.minutes), task = String(r.task || '').trim();
+        if (!task || m === null || m <= 0 || m > 1440) return;
+        var row = byTask[task.toLowerCase()];
+        if (!row) { row = byTask[task.toLowerCase()] = { name: task, hours: names.map(function () { return 0; }) }; out.ledger.push(row); }
+        var i = CODES.indexOf(r.who);
+        if (r.who === 'Both') names.forEach(function (_, k) { row.hours[k] += m / 60 / n; });
+        else if (i >= 0 && i < n) row.hours[i] += m / 60;
+      });
+      out.ledger.forEach(function (row) { row.hours = row.hours.map(function (h) { return Math.round(h * 100) / 100; }); });
+      if (out.ledger.length) out.found.push('WP-01 (' + out.ledger.length + ' job' + (out.ledger.length === 1 ? '' : 's') + ')');
+    }
+    var w3 = latest('WP-03');
+    if (w3) {
+      (w3.state.tables.treaty || []).forEach(function (r) {
+        if (!String(r.task || '').trim()) return;
+        var ri = CODES.indexOf(r.r), ai = CODES.indexOf(r.a);
+        out.raci.push({ name: String(r.task).trim(), r: ri >= 0 && ri < n ? String(ri) : '', a: ai >= 0 && ai < n ? String(ai) : '' });
+      });
+      if (out.raci.length) out.found.push('WP-03 (' + out.raci.length + ' job' + (out.raci.length === 1 ? '' : 's') + ')');
+    }
+    var got = 0;
+    names.forEach(function (nm, i) {
+      var e = latest('WP-02', function (x) { return x.person === i || (nm && fold(x.state.values.name) === fold(nm)); });
+      if (!e) return;
+      var pts = FACTOR_IDS.map(function (id) { var v = e.state.values['factors.' + id]; return v === undefined || v === null ? '' : String(v); });
+      if (pts.some(function (x) { return x !== ''; })) { out.bat[i] = pts; got++; }
+    });
+    if (got) out.found.push(got + ' of ' + n + ' batteries');
+    return out.found.length ? out : null;
+  }
+
   global.TOLCalc01 = {
     W: W, BANDS: BANDS, WP02: WP02, MIN_PEOPLE: MIN_PEOPLE, MAX_PEOPLE: MAX_PEOPLE,
     r2: r2, f2: f2, f1: f1, fg: fg, pct: pct, num: num, sum: sum,
-    balance: balance, balanceHandoff: balanceHandoff, ownership: ownership,
+    balance: balance, balanceHandoff: balanceHandoff, ownership: ownership, concentration: concentration,
     battery: battery, wp02Band: wp02Band, stress: stress, retuning: retuning,
-    solvency: solvency, apex: apex, band: band, suggestions: suggestions, shortfalls: shortfalls
+    solvency: solvency, apex: apex, band: band, suggestions: suggestions, shortfalls: shortfalls, suiteDraft: suiteDraft, hoursProblem: hoursProblem
   };
 })(window);

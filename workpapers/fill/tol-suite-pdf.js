@@ -26,11 +26,33 @@
   var FIELD_PREFIX = 'TOL~';
   var METRICS = {
     'WP-01': { label: 'Workload balance score', say: 'Balance', max: 1, good: 'up' },
-    'WP-02': { label: 'Battery score', say: 'Battery load', max: 1, good: 'down' },
+    'WP-02': { label: 'Load score', say: 'Load', max: 1, good: 'down', perPerson: true, days: 7 },
     'WP-03': { label: 'Ownership clarity score', say: 'Clarity', max: 1, good: 'up' },
-    'WP-04': { label: 'Structural gaps found', say: 'Gaps', max: 0, good: 'down' },
-    'WP-11': { label: 'Latest reading', say: 'After settling', max: 1, good: 'down' }
+    'WP-04': { label: 'Structural gaps found', say: 'Gaps', max: 0, good: 'down', count: true },
+    'WP-11': { label: 'Latest reading', say: 'Load after settling', max: 1, good: 'down', perPerson: true }
   };
+  // Everyone's own sheets (WP-02, WP-11) are compared only with the same person's earlier ones.
+  function fold(s) { return String(s || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim().toLowerCase(); }
+  function personKey(entry, i) {
+    var nm = fold(entry.state && entry.state.values && entry.state.values.name);
+    return nm || (solo() ? 'you' : '#' + i);
+  }
+  function metricText(m, v) { return m.count ? String(Math.round(v)) : (Math.round(v * 100 + 1e-7) / 100).toFixed(2); }
+  // End someone's words with a full stop, so fact, feeling and ask read as sentences when joined.
+  function sentence(t, ask) {
+    t = String(t || '').trim();
+    if (!t) return '';
+    t = t.charAt(0).toUpperCase() + t.slice(1);
+    if (/[.!?\u2026\u201D"')]$/.test(t)) return t;
+    return t + (ask && /^(could|can|would|will|shall|may|do|does|is|are)\b/i.test(t) ? '?' : '.');
+  }
+  function feelingSentence(t) {
+    t = String(t || '').trim();
+    if (!t) return '';
+    if (!/^(i|i'm|i\u2019m|im|i've|i\u2019ve|my|we|we're|we\u2019re|it|this|that|feeling|felt)\b/i.test(t) && t.split(/\s+/).length <= 5) t = 'I feel ' + t.charAt(0).toLowerCase() + t.slice(1);
+    return sentence(t);
+  }
+  function joinSentences(parts) { return parts.map(function (p) { return p; }).filter(Boolean).join(' '); }
 
   // The road someone is on can change a worksheet's wording and rows (see TOL_WORKPAPER_VARIANT).
   // On the "Just me" road (self) every sheet is worded for one person (TOL_WORKPAPER_SOLO).
@@ -119,6 +141,7 @@
   }
 
   function footers(doc, opts) {
+    var lens = solo() ? 'It describes your conditions, never your worth.' : 'It describes the arrangement, never any one person.';
     var n = doc.pages.length, made = niceDate();
     for (var i = 0; i < n; i++) {
       doc.setPage(i);
@@ -126,7 +149,7 @@
       doc.text(L, 761, enc(opts.fillable
         ? 'Tap any box to type, in any PDF app. Or print it and write by hand. Made on your device ' + made + '; nothing was sent anywhere.'
         : 'Made on your device ' + made + '. Nothing entered was sent to or stored by the website. Keep this file somewhere private.'), 'Helvetica', 6.8, C.soft);
-      doc.text(L, 770, enc(solo() ? 'A self-reflection worksheet, not a clinical tool. It describes your conditions, never your worth.' : 'A self-reflection worksheet, not a clinical tool. It describes the arrangement, never either person.'), 'Helvetica', 6.8, C.soft);
+      doc.text(L, 770, enc('A self-reflection worksheet, not a clinical tool. ' + lens), 'Helvetica', 6.8, C.soft);
       var pg = enc('Page ' + (i + 1) + ' of ' + n);
       doc.text(R - PDF.textWidth(pg, 'Helvetica', 6.8), 770, pg, 'Helvetica', 6.8, C.soft);
     }
@@ -171,9 +194,16 @@
   function fname() { return FIELD_PREFIX + Array.prototype.join.call(arguments, '~'); }
   function key(k) { return String(k).replace(/\./g, '!'); }
 
+  // A drop-down's saved value is the words you see (a name, not a code letter), so any PDF app shows
+  // and exports "Sam", never "A". Reading it back turns the name into the person again.
   function choiceOptions(def, ctx) {
-    if (def.type === 'person') return [['', '']].concat(WPK.personOptions(ctx, def).map(function (o) { return [o.v, o.l]; }));
-    return [['', '']].concat(def.options.map(function (o) { return [o, o]; }));
+    if (def.type === 'person') return [['', '']].concat(WPK.personOptions(ctx, def).map(function (o) { return [o.l, o.l]; }));
+    return [['', '']].concat(def.options.map(function (o) { var l = def.labels && def.labels[o] ? def.labels[o] : o; return [l, l]; }));
+  }
+  function choiceValue(def, value, ctx) {
+    if (value == null || value === '') return '';
+    if (def.type === 'person') return ctx.name(value);
+    return def.labels && def.labels[value] ? def.labels[value] : value;
   }
 
   // Draw a box on the page (so paper copies show it) and a field over it.
@@ -184,17 +214,18 @@
   }
 
   function fieldFor(def, name, value, ctx) {
-    if (def.type === 'select' || def.type === 'person') return { name: name, kind: 'choice', value: value || '', options: choiceOptions(def, ctx) };
+    if (def.type === 'select' || def.type === 'person') return { name: name, kind: 'choice', value: choiceValue(def, value, ctx), options: choiceOptions(def, ctx) };
     if (def.type === 'check') return { name: name, kind: 'check', value: !!value };
     return { name: name, kind: 'text', value: value == null ? '' : String(value), multiline: def.type === 'textarea' };
   }
 
   function sheetTitle(pen, entry, e, schema, opts) {
     pen.kicker(('The Objective Ledger  ·  ' + schema.code + (entry.group ? '  ·  ' + entry.group : '')).toUpperCase());
-    var title = schema.title, name = nameOf(schema.code);
-    pen.doc.text(L, pen.y + 20, enc(title), 'Times-Bold', 21, C.ink);
+    // the plain name is the title; the technical name is a small subtitle
+    var name = nameOf(schema.code), tech = schema.title;
+    pen.doc.text(L, pen.y + 20, enc(name), 'Times-Bold', 21, C.ink);
     pen.y += 28;
-    if (name && name !== title) { pen.doc.text(L, pen.y + 9, enc(name), 'Times-Italic', 11, C.soft); pen.y += 16; }
+    if (tech && tech !== name) { pen.doc.text(L, pen.y + 9, enc('Also called ' + tech), 'Times-Italic', 10, C.soft); pen.y += 16; }
     pen.doc.line(L, pen.y, R, pen.y, C.brass, 1.2);
     pen.y += 10;
     if (entry.why) pen.para(entry.why, { font: 'Times-Italic', size: 10.5, color: C.credit, after: 4 });
@@ -376,8 +407,9 @@
     entry.page = doc.pages.length - 1;
     if (entry.group) { doc.text(rep.L, rep.y + 8, enc('The Objective Ledger  ·  ' + schema.code + '  ·  ' + entry.group), 'Helvetica', 8, C.brass); rep.y += 16; }
     else { doc.text(rep.L, rep.y + 8, enc('The Objective Ledger  ·  ' + schema.code), 'Helvetica', 8, C.brass); rep.y += 16; }
-    doc.text(rep.L, rep.y + 20, enc(schema.title), 'Times-Bold', 21, C.ink);
+    doc.text(rep.L, rep.y + 20, enc(nameOf(schema.code)), 'Times-Bold', 21, C.ink);
     rep.y += 30;
+    if (schema.title !== nameOf(schema.code)) { doc.text(rep.L, rep.y + 6, enc('Also called ' + schema.title), 'Times-Italic', 9.5, C.soft); rep.y += 14; }
     if (entry.label) { doc.text(rep.L, rep.y + 8, enc(entry.label), 'Times-Italic', 11, C.soft); rep.y += 16; }
     doc.line(rep.L, rep.y, rep.R, rep.y, C.brass, 1.2);
     rep.y += 12;
@@ -466,9 +498,10 @@
       if (g.note) pen.para(g.note, { size: 8.5, color: C.soft, after: 4 });
       if (g.along && g.along.length) pen.para('Read and try alongside: ' + g.along.map(function (a) { return a[0]; }).join('  \u00B7  '), { size: 8.5, color: C.credit, after: 4 });
       g.entries.forEach(function (en) {
-        var n = answers(en), res = n ? results(en).slice(0, 4) : [];
+        // every result, so a road with five or six people still shows each person and the balance
+        var n = answers(en), res = n ? results(en).slice(0, 12) : [];
         var title = en.workpaper + '  ' + nameOf(en.workpaper) + (en.label ? '  ·  ' + en.label : '');
-        pen.room(30 + res.length * 14);
+        pen.room(30 + Math.min(res.length, 4) * 14);
         pen.doc.text(L + 14, pen.y + 10, enc(title), 'Helvetica-Bold', 9.5, C.ink);
         var st = n ? n + (n === 1 ? ' answer' : ' answers') : 'Not started';
         pen.doc.roundRect(R - tw(st, 'Helvetica', 7.5) - 14, pen.y + 1, tw(st, 'Helvetica', 7.5) + 12, 13, 6.5, n ? C.mint : C.head);
@@ -485,23 +518,32 @@
       });
     });
 
-    // Over time: the same sheet filled in more than once.
-    var byWp = {};
-    entries.forEach(function (en) { var v = metric(en); if (v != null) (byWp[en.workpaper] = byWp[en.workpaper] || []).push({ en: en, v: v }); });
-    var trends = Object.keys(byWp).filter(function (k) { return byWp[k].length > 1; });
+    // Over time: the same sheet filled in more than once, by the same person for their own sheets.
+    // Two different people's batteries are never read as one person's trend.
+    var byWp = {}, order = [];
+    entries.forEach(function (en, i) {
+      var v = metric(en); if (v == null) return;
+      var m = METRICS[en.workpaper], key = en.workpaper + (m.perPerson ? '|' + personKey(en, i) : '');
+      if (!byWp[key]) { byWp[key] = []; order.push(key); }
+      byWp[key].push({ en: en, v: v, d: en.state.values.date || en.state.values.weekOf || en.state.values.reviewDate || '' });
+    });
+    var trends = order.filter(function (k) { return byWp[k].length > 1; });
     if (trends.length) {
       pen.heading('Over time', 80, C.sky);
-      pen.para(solo() ? 'The same sheet, filled in more than once. A change is worth noticing; it isn\'t a grade.' : 'The same sheet, filled in more than once. A change is worth a conversation; it isn\'t a grade.', { size: 8.5, color: C.soft, after: 6 });
-      trends.forEach(function (k) {
-        var m = METRICS[k], list = byWp[k].slice(-8), max = m.max || Math.max.apply(null, list.map(function (x) { return x.v; })) || 1;
+      pen.para((solo() ? 'The same sheet, filled in more than once. A change is worth noticing; it isn\'t a grade.' : 'The same sheet, filled in more than once. A change is worth a conversation; it isn\'t a grade.') + ' Each person\'s own sheets are only compared with their own.', { size: 8.5, color: C.soft, after: 6 });
+      trends.forEach(function (key) {
+        var k = key.split('|')[0], m = METRICS[k], all = byWp[key].slice();
+        if (all.every(function (x) { return /^\d{4}-\d{2}-\d{2}$/.test(x.d); })) all.sort(function (a, b) { return a.d < b.d ? -1 : a.d > b.d ? 1 : 0; });
+        var list = all.slice(-(m.days || 8)), max = m.max || Math.max.apply(null, list.map(function (x) { return x.v; })) || 1;
+        var who = m.perPerson && !solo() ? String(list[0].en.state.values.name || '').trim() : '';
         pen.room(86);
-        pen.doc.text(L + 14, pen.y + 10, enc(k + '  ' + nameOf(k) + '  ·  ' + m.say), 'Helvetica-Bold', 9.5, C.ink);
+        pen.doc.text(L + 14, pen.y + 10, enc(k + '  ' + nameOf(k) + '  ·  ' + m.say + (who ? '  ·  ' + who : '') + (m.days && all.length > 2 ? '  ·  the last ' + list.length + ' days' : '')), 'Helvetica-Bold', 9.5, C.ink);
         pen.y += 18;
         var bw = Math.min(54, (W - 40) / list.length - 8), base = pen.y + 42;
         list.forEach(function (x, i) {
           var h = Math.max(2, 38 * x.v / max), bx = L + 20 + i * (bw + 8);
           pen.doc.roundRect(bx, base - h, bw, h, Math.min(4, h / 2), PASTELS[i % PASTELS.length], C.brass, 0.4);
-          var val = String(Math.round(x.v * 100) / 100);
+          var val = metricText(m, x.v);
           pen.doc.text(bx + bw / 2 - tw(val, 'Helvetica-Bold', 7.5) / 2, base - h - 3, enc(val), 'Helvetica-Bold', 7.5, C.ink);
           var lab = wrap(shortLabel(x.en, i), 'Helvetica', 6.5, bw + 6)[0] || '';
           pen.doc.text(bx, base + 9, lab, 'Helvetica', 6.5, C.soft);
@@ -546,6 +588,20 @@
       pen.y += h;
     });
 
+    // Pillar V: the quiet incentives, as a few questions
+    var PV = global.TOL_PILLAR_V;
+    if (PV && PV.length && path.id !== 'self') {
+      pen.heading('The quiet incentives (Pillar V)', 50, C.peach);
+      pen.para('Some jobs get thanked; some are only noticed on the day they don’t happen. A few questions to notice which is which.', { size: 8.5, color: C.soft, after: 4 });
+      PV.slice(0, 4).forEach(function (t) {
+        var lines = wrap(t, 'Helvetica', 9.5, W - 34);
+        pen.room(lines.length * 13 + 4);
+        pen.doc.circle(L + 20, pen.y + 6, 2.4, C.brass);
+        lines.forEach(function (ln) { pen.doc.text(L + 30, pen.y + 9, ln, 'Helvetica', 9.5, C.ink); pen.y += 13; });
+        pen.y += 3;
+      });
+    }
+
     // the week plan for this road, with a tick where a week's sheets have been started
     if (path.weeks && path.weeks.length) {
       pen.heading('Your weeks on this road', 60, C.mint);
@@ -569,24 +625,28 @@
 
   // The kind words worth keeping close: appreciations, pause lines, gentle no's, messages.
   function keepClose(pen, plan, entries) {
-    var items = { thanks: [], lines: [], refusals: [], messages: [], defaults: [] };
+    var items = { thanks: [], lines: [], refusals: [], messages: [], defaults: [], unseen: [] };
     entries.forEach(function (en) {
       var s = en.state, ctx = ctxOf(en);
       if (!ctx) return;
       if (en.workpaper === 'WP-13') ctx.rows('daily').forEach(function (r) { if (r.thanks) items.thanks.push([r.thanks, [r.day, ctx.name(r.who)].filter(Boolean).join(', ')]); });
       if (en.workpaper === 'WP-11') {
-        (s.tables.lines || []).forEach(function (r, i) { if (r.line && WPK.CODES[i]) items.lines.push([r.line, ctx.name(WPK.CODES[i])]); });
-        [s.values.first, s.values.second].forEach(function (d) { if (d) items.defaults.push([d, '']); });
+        // one kit per person: the name on the kit (older shared kits had a line for each person)
+        var kitName = String(s.values.name || '').trim();
+        (s.tables.lines || []).forEach(function (r, i) { if (r.line) items.lines.push([sentence(r.line), kitName || (s.values['partner' + WPK.CODES[i]] || '')]); });
+        [s.values.first, s.values.second].forEach(function (d) { if (d) items.defaults.push([d, kitName]); });
       }
-      if (en.workpaper === 'WP-01') ctx.rows('refusals').forEach(function (r) { var t = [r.ack, r.cap, r.alt].filter(Boolean).join(' '); if (t) items.refusals.push([t, r.kind || '']); });
-      if (en.workpaper === 'WP-09') { var t = [s.values.fact, s.values.feeling, s.values.ask].filter(Boolean).join(' '); if (t) items.messages.push([t, en.label || '']); }
+      if (en.workpaper === 'WP-01') ctx.rows('refusals').forEach(function (r) { var t = joinSentences([sentence(r.ack), sentence(r.cap), sentence(r.alt)]); if (t) items.refusals.push([t, r.kind || '']); });
+      if (en.workpaper === 'WP-09') { var t = joinSentences([sentence(s.values.fact), feelingSentence(s.values.feeling), sentence(s.values.ask, true)]); if (t) items.messages.push([t, [String(s.values.name || '').trim(), en.label || ''].filter(Boolean).join(', ')]); }
+      if (en.workpaper === 'WP-04') ctx.rows('thanks').forEach(function (r) { if (r.job && (r.missed === 'Yes' || r.thanked === 'Rarely' || r.thanked === 'Never')) items.unseen.push([r.job + (r.notice ? ': ' + sentence(r.notice) : ''), r.thanked ? 'Thanked ' + r.thanked.toLowerCase() : '']); });
     });
     var groups = [
       ['Kind words you said', 'From your daily check-ins. Worth reading again on a hard day.', items.thanks, C.pink],
       ['Your pause lines', solo() ? 'Ready ahead of time, so a break feels planned instead of like giving up.' : 'Said before a break, so it is never mistaken for walking out.', items.lines, C.lav],
       ['What settles you', 'Your two defaults, decided on a calm day.', items.defaults, C.mint],
       ['Gentle ways to say no', 'Say why the request is fair, say what you have left, and offer something instead.', items.refusals, C.butter],
-      [solo() ? 'What stung, sorted out' : 'Said so it lands', 'Fact, feeling and a clear ask.', items.messages, C.sky]
+      [solo() ? 'What stung, sorted out' : 'Said so it lands', 'Fact, feeling and a clear ask.', items.messages, C.sky],
+      ['Only noticed when it\'s missed', 'Pillar V: jobs that keep things running quietly. Worth a thank-you while they\'re still being done.', items.unseen, C.peach]
     ].filter(function (g) {
       var seen = {};
       g[2] = g[2].filter(function (it) { var k = it[0].trim().toLowerCase(); if (seen[k]) return false; seen[k] = true; return true; });
@@ -614,16 +674,41 @@
     });
   }
 
-  function closing(pen, plan) {
+  // The next small step, from what is actually on the sheets: an owner still missing, a load that is
+  // high, a job leaning on one person, or the next stop not started yet. The road's own step comes last.
+  function nextStep(plan, entries) {
+    var started = entries.filter(function (en) { return answers(en) > 0; }), hit = null;
+    function res(code, label) {
+      var out = null;
+      started.filter(function (en) { return en.workpaper === code; }).forEach(function (en) { results(en).forEach(function (it) { if (it.label === label) out = it; }); });
+      return out;
+    }
+    var high = started.filter(function (en) { return en.workpaper === 'WP-02' && metric(en) != null && Math.round(metric(en) * 100) / 100 >= 0.6; });
+    var owner = res('WP-03', 'Still needs an owner'), busy = res('WP-03', 'Busiest person') || res('WP-01', 'Busiest person');
+    if (high.length) {
+      var nm = String(high[high.length - 1].state.values.name || '').trim();
+      hit = solo() ? 'Your latest load reads 0.60 or above. This week, put off what can wait, and reach for your first settling default before anything hard.'
+        : (nm ? nm + '\u2019s' : 'A') + ' load reads 0.60 or above. Agree that anyone that high can say \u201cnot today\u201d and name a time instead, with no explanation needed.';
+    } else if (owner) hit = 'Give an owner to what is still unowned: ' + owner.value.split(', ').slice(0, 4).join(', ') + (owner.value.split(', ').length > 4 ? ' and the rest' : '') + '. One name each, written down the same day.';
+    else if (busy) hit = busy.value.replace(/\.$/, '') + '. Ask which one job they would most like to hand over, and write the new owner on WP-03.';
+    if (hit) return hit;
+    var firstOpen = null;
+    plan.groups.some(function (g) { return g.entries.some(function (en) { if (!answers(en)) { firstOpen = en; return true; } return false; }); });
+    if (started.length && firstOpen) return 'Next on your road: ' + firstOpen.workpaper + ', ' + nameOf(firstOpen.workpaper) + '. ' + (firstOpen.why || '');
+    return plan.path.next;
+  }
+
+  function closing(pen, plan, entries) {
     if (!plan.path) return;
     pen.room(130);
     pen.y += 10;
-    var tip = plan.tip, closeLn = plan.path.report && plan.path.report.close ? wrap(plan.path.report.close, 'Times-Italic', 10, W - 50) : [], h = 64 + (tip ? 50 : 0) + closeLn.length * 13 + (closeLn.length ? 8 : 0);
+    var step = nextStep(plan, entries || []), stepLn = wrap(step, 'Helvetica', 9.5, W - 50);
+    var tip = plan.tip, closeLn = plan.path.report && plan.path.report.close ? wrap(plan.path.report.close, 'Times-Italic', 10, W - 50) : [], h = 52 + stepLn.length * 12.5 + (tip ? 50 : 0) + closeLn.length * 13 + (closeLn.length ? 8 : 0);
     pen.doc.roundRect(L, pen.y, W, h, 14, C.butter);
     pen.doc.heart(L + 22, pen.y + 22, 16, C.rose);
     pen.doc.text(L + 38, pen.y + 26, enc('Your next small step'), 'Times-Bold', 13, C.ink);
     var y = pen.y + 42;
-    wrap(plan.path.next, 'Helvetica', 9.5, W - 50).forEach(function (ln) { pen.doc.text(L + 38, y, ln, 'Helvetica', 9.5, C.ink); y += 12.5; });
+    stepLn.forEach(function (ln) { pen.doc.text(L + 38, y, ln, 'Helvetica', 9.5, C.ink); y += 12.5; });
     if (tip) {
       y += 6;
       pen.doc.text(L + 38, y, enc('A little tip: ' + tip[1]), 'Helvetica-Bold', 8.5, C.ink); y += 12;
@@ -663,7 +748,7 @@
         glance(fp, plan, entries, opts);
         if (!opts.fillable) roadPage(fp, plan, entries);
         keepClose(fp, plan, entries);
-        closing(fp, plan);
+        closing(fp, plan, entries);
         offset = front.pages.length;
       }
     }
@@ -678,6 +763,8 @@
     if (opts.fillable && plan.path) {
       out.setPage(0);
       out.field({ name: FIELD_PREFIX + 'path', kind: 'text', value: plan.path.id, x: 0, y: 0, w: 1, h: 1, hidden: true });
+      // who is on the road, so sheets each person fills in about themselves find their person again
+      out.field({ name: FIELD_PREFIX + 'names', kind: 'text', value: JSON.stringify((plan.names || []).map(function (x) { return String(x || ''); })), x: 0, y: 0, w: 1, h: 1, hidden: true });
     }
     footers(out, opts);
     return out.output();
@@ -809,10 +896,11 @@
   }
 
   function rebuild(found) {
-    var byE = {}, path = null;
+    var byE = {}, path = null, roadNames = null;
     Object.keys(found).forEach(function (name) {
       var parts = name.slice(FIELD_PREFIX.length).split('~');
       if (parts[0] === 'path') { path = found[name]; return; }
+      if (parts[0] === 'names') { try { var nm = JSON.parse(found[name]); if (Array.isArray(nm)) roadNames = nm.map(function (x) { return String(x || '').slice(0, 40); }).slice(0, 8); } catch (e) {} return; }
       var e = parts[0], code = parts[1];
       if (!schemaFor(code, path)) return;
       var en = byE[e] || (byE[e] = { workpaper: code, raw: { values: {}, tables: {} }, label: '', order: +e });
@@ -835,12 +923,14 @@
         if (v == null) return '';
         v = String(v);
         if (def.type === 'person' && v) {
-          var hit = WPK.CODES.filter(function (c) { return names[c] === v; })[0];
+          if (WPK.CODES.indexOf(v) >= 0) return v; // a PDF made before names were the saved value
+          var hit = WPK.CODES.filter(function (c) { return fold(names[c]) === fold(v); })[0];
           if (hit) return hit;
-          var dflt = WPK.CODES.filter(function (c, i) { return WPK.labelFor(i) === v || 'Partner ' + c === v; })[0];
+          var dflt = WPK.CODES.filter(function (c, i) { return fold(WPK.labelFor(i)) === fold(v) || fold('Partner ' + c) === fold(v) || fold('Person ' + c) === fold(v); })[0];
           if (dflt) return dflt;
-          if (v === 'Everyone') return 'Both';
+          if (v === 'Everyone' || v === 'Both') return 'Both';
         }
+        if (def.type === 'select' && def.labels) { var back = Object.keys(def.labels).filter(function (k) { return def.labels[k] === v; })[0]; if (back) return back; }
         if (def.type === 'date') return isoDate(v);
         return v;
       }
@@ -864,6 +954,7 @@
       return { workpaper: en.workpaper, label: en.label, state: state };
     });
     entries.path = typeof path === 'string' ? path : null;
+    entries.names = roadNames;
     return entries;
   }
 
@@ -896,5 +987,5 @@
     });
   }
 
-  global.TOLSuitePDF = { fillable: fillable, report: report, readFilled: readFilled, answers: answers, results: results, metric: metric, labelOf: labelOf, nameOf: nameOf, schemaFor: schemaFor, setRoad: setRoad, roleOf: roleOf, METRICS: METRICS };
+    global.TOLSuitePDF = { fillable: fillable, report: report, readFilled: readFilled, answers: answers, results: results, metric: metric, labelOf: labelOf, nameOf: nameOf, schemaFor: schemaFor, setRoad: setRoad, roleOf: roleOf, METRICS: METRICS, nextStep: nextStep, fold: fold, sentence: sentence, feelingSentence: feelingSentence };
 })(typeof window !== 'undefined' ? window : globalThis);

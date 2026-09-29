@@ -85,7 +85,9 @@
         <button type="button" class="btn" data-example="book">Try the book's example</button>
         <button type="button" class="btn" data-example="three">Try three roommates</button>
         <button type="button" class="btn" data-example="clear">Clear</button>
+        <button type="button" class="btn btn-solid" id="load-suite" hidden>Load from my suite</button>
       </div>
+      <p class="hint" id="suite-status" role="status" style="margin-top:6px;"></p>
     </div>
 
     <div class="step" id="s-wb">
@@ -115,7 +117,7 @@
     </div>
 
     <div class="step" id="s-as">
-      <h2>3. Stress: how full each battery is <small>autonomic saturation &middot; weight 0.25</small></h2>
+      <h2>3. Stress: how much each person is carrying <small>average battery load &middot; weight 0.25</small></h2>
       <p class="hint">From <a href="/workpapers/fill/wp-02.html">WP-02, the battery check</a>: each person's own score, their five 0&ndash;4 answers added up and divided by 20. Everyone fills in their own; nobody guesses for someone else.</p>
       <div class="grid" id="batteries"></div>
       <div class="work" id="as-work" aria-live="polite"></div>
@@ -195,7 +197,8 @@
     // 1. balance
     var b = null, wb = null, w = $("wb-work");
     if (mode === "hours"){
-      b = C.balance(hours, agreed ? targets : null);
+      var hp = hours.map(function(x, i){ var m = C.hoursProblem(x), el = $("h-" + i); if (el){ if (m) el.setAttribute("aria-invalid", "true"); else el.removeAttribute("aria-invalid"); } return m ? nameOf(i) + ": " + m : ""; }).filter(Boolean);
+      b = hp.length ? { value: null, error: hp.join(" ") } : C.balance(hours, agreed ? targets : null);
       wb = b.value;
       if (wb === null) w.innerHTML = '<span class="err">' + esc(b.error) + '</span>';
       else w.innerHTML = "Shares: " + b.shares.map(function(s, i){ return esc(nameOf(i)) + " " + C.pct(s); }).join(", ") +
@@ -238,9 +241,9 @@
     setText(f2(sol.value) + ". " + bd.label);
     $("details").hidden = false;
     $("math").textContent =
-      "balance     " + f2(wb) + " × 0.40 = " + fg(sol.parts.wb) + "\n" +
-      "ownership   " + f2(oc) + " × 0.35 = " + fg(sol.parts.oc) + "\n" +
-      "1 − stress  (1 − " + f2(as) + ") × 0.25 = " + fg(sol.parts.as) + "\n" +
+      "balance     " + fg(wb) + " × 0.40 = " + fg(sol.parts.wb) + "\n" +
+      "ownership   " + fg(oc) + " × 0.35 = " + fg(sol.parts.oc) + "\n" +
+      "1 − stress  (1 − " + fg(as) + ") × 0.25 = " + fg(sol.parts.as) + "\n" +
       "total       " + fg(sol.parts.wb) + " + " + fg(sol.parts.oc) + " + " + fg(sol.parts.as) + " = " + sol.value.toFixed(4) + "\n" +
       "shown as    " + f2(sol.value) + " → " + bd.short;
     var sf = C.shortfalls(wb, oc, as);
@@ -283,6 +286,18 @@
       document.querySelector('input[name="wb-mode"][value="hours"]').checked = true; $("agreed").checked = false;
       render(); recalc();
       if (t.dataset.example !== "clear") $("readout").focus();
+    } else if (t.id === "load-suite"){
+      var sd = C.suiteDraft();
+      if (!sd){ $("suite-status").textContent = "There’s no Workpaper Suite draft kept on this device to load."; return; }
+      n = sd.names.length; names = sd.names.slice();
+      hours = names.map(function(_, i){ var s = sd.ledger.reduce(function(a, r){ return a + (r.hours[i] || 0); }, 0); return sd.ledger.length ? String(Math.round(s * 100) / 100) : ""; });
+      bats = sd.bat.map(function(p){ var b = C.battery(p); return b ? String(b.value) : ""; });
+      targets = names.map(function(){ return ""; });
+      $("jobs-total").value = sd.raci.length ? sd.raci.length : "";
+      $("jobs-owned").value = sd.raci.length ? sd.raci.filter(function(r){ return r.r !== "" && r.a !== ""; }).length : "";
+      document.querySelector('input[name="wb-mode"][value="hours"]').checked = true; $("agreed").checked = false;
+      render(); recalc();
+      $("suite-status").textContent = "Loaded from your suite: " + sd.found.join(", ") + ".";
     } else if (t.id === "print") window.print();
     else if (t.id === "copy"){
       var ta = $("copy-out"), st = $("copy-status");
@@ -293,6 +308,7 @@
   });
 
   render(); recalc();
+  if (C.suiteDraft && C.suiteDraft()) $("load-suite").hidden = false;
 })();
 </script>
 </body>
