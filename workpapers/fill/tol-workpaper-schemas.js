@@ -69,8 +69,8 @@
   /* ------------------------------------------------------------------ WP-01 */
   W['wp-01'] = {
     code: 'WP-01',
-    title: 'Field Audit & Neutral Refusals',
-    plain: 'Who did what',
+    title: 'Who did what, and kind ways to say no',
+    plain: 'Who did what, and kind ways to say no',
     slug: 'Field-Audit',
     purpose: "Write down what actually happened this week, before anyone starts remembering it as a story. Fill it in together, or each keep your own copy and compare at the end of the week. Either way, write down only what you did or saw yourself; never fill in someone else's side for them.",
     people: true,
@@ -185,7 +185,7 @@
       var s = wp02Score(ctx);
       if (s === null) return [{ label: 'Score', value: 'Answer all five rows to see your score.' }];
       var sb = r2(s);
-      var out = [{ label: 'Load score', value: fmt(s, 2) + ' (the five scores added up, then divided by 20; higher means more load)' }, { label: 'Reading', value: wp02Words(sb, solo), note: 'Under 0.30 is a light load, 0.30 to 0.59 medium, 0.60 and up high.' }];
+      var out = [{ label: 'Load score', value: fmt(s, 2) + ' (the five scores added up, then divided by 20; higher means more load)' }, { label: 'Reading', value: wp02Words(sb, solo), note: 'Higher means heavier. The words follow these cut-offs: under 0.15 very light; 0.15 to 0.29 light; 0.30 to 0.44 medium, lighter side; 0.45 to 0.59 medium, heavier side; 0.60 to 0.79 high; 0.80 and up very high. (CALC-01 and the reports group them as under 0.30 low, 0.30 to 0.59 medium, 0.60 and up high.)' }];
       var top = WP02_FACTORS.filter(function (f) { return Number(ctx.value('factors.' + f.id)) >= 3; }).map(function (f) { return f.label.replace(/\s*\(.*\)$/, '').replace(/ specifically$/, '').toLowerCase(); });
       if (top.length) out.push({ label: 'Filled most by', value: top.join(', ') + '.', note: 'Conditions, not character. Some of them are in your control this week; some are just weather.' });
       if (solo) return out;
@@ -205,7 +205,7 @@
   }
   W['wp-02'] = {
     code: 'WP-02',
-    title: 'The Battery & Stress Meter',
+    title: 'How much are you carrying?',
     plain: 'How much are you carrying?',
     slug: 'Battery-Stress-Meter',
     purpose: 'A one-minute check that each person fills in about themselves. It separates "How much am I already carrying?" from "How upset am I about this one thing?" Higher numbers mean more load. It is not a clinical test, just a structured gut-check.',
@@ -413,7 +413,7 @@
   /* ------------------------------------------------------------------ WP-09 */
   W['wp-09'] = {
     code: 'WP-09',
-    title: 'Tone Filter',
+    title: 'Say it so it lands',
     plain: 'Say it so it lands',
     slug: 'Tone-Filter',
     purpose: 'A self-check each of you uses on your own side of a conversation. It helps you turn a raw reaction into something the other person can actually take in, and weigh a message you received before you react to it. Nothing here records or analyzes anyone\'s voice.',
