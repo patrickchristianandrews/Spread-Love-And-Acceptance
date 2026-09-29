@@ -273,6 +273,70 @@ t('pages', 'What is the mental load?', { link: ['/library/fairness.html', '/book
 t('pages', 'Why do I react this way?', { link: ['/know-yourself'] });
 t('pages', 'Surprise me', { not: /couldn’t find/ });
 
+// ---------------------------------------------------------------- a first-time tester's questions
+// in-scope, short or feeling-led messages never get "outside my little pond"
+const NOT_POND = /outside my little pond|only be guessing|not something I know about/;
+t('tester', 'we fought again', { kind: 'sit', id: /afterfight/, not: NOT_POND, script: true });
+t('tester', "why does he always say i'm overreacting", { kind: 'sit', id: /dismissed/, not: NOT_POND });
+t('tester', 'idk', { kind: 'clarify', not: NOT_POND });
+t('tester', 'is it normal to feel resentful', { kind: 'sit', id: /resentment/, text: /normal/ });
+t('tester', 'holidays are stressful for us', { kind: 'sit', id: 'family+holidays' });
+t('tester', 'can i use this if im single', { kind: 'card', id: 'single', text: /Yes/ });
+t('tester', 'my friend always talks about herself', { kind: 'sit', id: 'friend+onesided' });
+t('tester', 'my brother and i fight about who hosts thanksgiving', { kind: 'sit', id: 'family+holidays', text: /brother|host/ });
+t('tester', 'how do i get my friends to help plan the trip', { kind: 'sit', id: 'friend+trip', script: true });
+t('tester', 'ugh my sister', { not: NOT_POND });
+t('tester', 'the group chat is so dead nobody replies', { kind: 'sit', id: /groupchat/ });
+// typos in tool names and workpaper codes
+t('tester', 'conversaton reader', { kind: 'card', id: 'reader' });
+t('tester', 'signal translater', { kind: 'card', id: 'signal' });
+t('tester', 'lemonaid stand', { kind: 'card', id: 'lemonade' });
+t('tester', 'work paper three', { kind: 'card', id: 'wp03' });
+t('tester', 'what is wp-o1', { kind: 'card', id: 'wp01' });
+t('tester', 'where do i stand with my partner', { not: /^Here’s how to use/ });
+// perspective: who is doing it
+t('tester', 'my partner goes quiet whenever we argue', { kind: 'sit', id: 'partner+shutdown', text: /your partner goes quiet|when .*go quiet/, not: /Shutting down when your partner raises/ });
+t('tester', 'i shut down when my partner yells', { kind: 'sit', id: 'partner+shutdown', text: /Shutting down when/ });
+t('tester', 'when my partner raises his voice i freeze', { kind: 'sit', id: 'partner+shutdown', text: /Shutting down when/ });
+t('tester', 'how do i say no to my mom', { kind: 'sit', id: 'family+peoplepleasing', not: /Make it easy for your mom to say no/ });
+t('tester', 'my mom needs more care and my brother does nothing', { kind: 'sit', id: 'family+siblingcare', text: /your brother/, not: /between you and your mom/ });
+t('tester', 'my mom needs more care and my brother does nothing (both sides)', { q: 'my mom needs more care and my brother does nothing', text: /I love helping you|sorting out a plan/ });
+t('tester', "my roommate's boyfriend is always over", { kind: 'sit', id: 'roommate+guests' });
+// follow-ups keep the topic and the person
+c('tester', ['my partner texts me one word answers', "he just writes 'ok.' or 'fine'"], { kind: 'sit', id: 'partner+shorttexts' });
+c('tester', ['my partner texts me one word answers', "he just writes 'ok.' or 'fine'", 'give me an example'], { kind: 'sit-more', text: /ok/ });
+c('tester', ['my partner texts me one word answers', 'another way to say it'], { kind: 'sit-more', script: true });
+c('tester', ['my roommates never do their chores', 'ok but what do I actually DO tonight'], { kind: 'sit-more', text: /tiny step for tonight/, not: /[A-Z]{6,} [A-Z]{4,}/ });
+t('tester', 'ok but what do I actually DO tonight', { kind: 'card', id: 'tonight', not: /[A-Z]{6,} [A-Z]{4,}/ });
+c('tester', ['what are the five pillars', 'how do i use them'], { kind: 'card', id: 'pillars', text: /\(V\)/ });
+t('tester', 'what are the five pillars', { kind: 'card', id: 'pillars', text: /\(V\)/ });
+// other misses
+t('tester', 'my roommates never do their chores', { kind: 'sit', id: 'roommate+fairness', not: /^Yes\./ });
+t('tester', "what if my partner won't do the program", { kind: 'sit', id: 'partner+wontjoin', not: /worry/ });
+t('tester', 'my wife and i never have time for each other', { kind: 'sit', id: 'partner+notime', not: /caregiv|surgery/i });
+t('tester', 'is there an app', { kind: 'card', id: 'app', text: /home screen/i });
+t('tester', 'can we use this together on two phones', { kind: 'card', id: 'twophones', link: '/carrier-wave-decoder.html#together' });
+t('tester', 'my battery score of 3', { kind: 'calc', text: /3 ÷ 20 = 0\.15/ });
+t('tester', 'My partner sent me this link. Is this going to be used against me?', { kind: 'card', id: 'usedagainst', text: /setup, never a person/ });
+t('tester', 'my boss keeps dumping work on me', { kind: 'sit', id: 'coworker+manager' });
+t('tester', 'my manager micromanages everything', { kind: 'sit', id: 'coworker+manager' });
+t('tester', "i'm always the one who organizes everything for our friend group", { kind: 'sit', id: 'friend+friendgroup' });
+t('tester', 'my friends never help plan anything', { kind: 'sit', id: 'friend+friendgroup' });
+t('tester', 'we just had a baby and I am exhausted', { kind: 'sit', id: /newbaby/ });
+t('tester', 'my partner and i are moving in together', { kind: 'sit', id: 'partner+movingin' });
+t('tester', 'my stepkids ignore me', { kind: 'sit', id: /blended/ });
+t('tester', 'we are long distance', { kind: 'sit', id: /longdistance/ });
+t('tester', 'my partner and i have different standards of clean', { kind: 'sit', id: 'partner+tidiness' });
+t('tester', 'i need time to decompress after work', { kind: 'sit', id: /decompress/ });
+t('tester', 'my sister in law keeps giving parenting advice', { kind: 'sit', id: 'family+inlaws' });
+t('tester', 'my mom keeps comparing me to my sister', { kind: 'sit', id: 'family+comparison' });
+t('tester', 'he rolls his eyes whenever i talk', { kind: 'sit', id: /contempt/ });
+t('tester', 'i feel taken for granted at work', { kind: 'sit', id: 'coworker+appreciation' });
+// every playbook offers one tiny step for tonight
+t('tester', 'my coworker keeps interrupting me (tonight chip)', { q: 'my coworker keeps interrupting me', kind: 'sit' });
+// no link twice, no bullet twice, no statement chips
+t('tester', 'my partner does nothing around the house (no repeats)', { q: 'my partner does nothing around the house', kind: 'sit' });
+
 // ---------------------------------------------------------------- run
 (async () => {
   const args = process.argv.slice(2), verbose = args.includes('-v'), only = args.filter(a => a[0] !== '-')[0];
@@ -293,6 +357,10 @@ t('pages', 'Surprise me', { not: /couldn’t find/ });
     if (x.script && !(r.blocks || []).some(bl => bl.k === 'script')) why.push('no script');
     if (x.steps && !(r.blocks || []).some(bl => bl.k === 'list')) why.push('no steps');
     if (x.kind === 'sit' && !links.length) why.push('no site link');
+    if (x.kind === 'sit' && !(r.chips || []).some(ch => /tonight/i.test(ch.label))) why.push('no “What can I do tonight?” chip');
+    if (links.length !== new Set(links).size) why.push('a link appears twice');
+    (r.blocks || []).forEach(bl => { if (bl.k === 'list' && bl.x.length !== new Set(bl.x).size) why.push('a bullet appears twice'); });
+    (r.chips || []).forEach(ch => { if (ch.doc != null && /[.!]$/.test(ch.label)) why.push('statement chip: ' + ch.label); });
     if (x.bgLoaded === false && chat.loaded().some(u => /chat-kb-bg/.test(u))) why.push('background notes were loaded');
     const ok = !why.length;
     groups[x.g] = groups[x.g] || [0, 0]; groups[x.g][1]++; if (ok) { pass++; groups[x.g][0]++; }

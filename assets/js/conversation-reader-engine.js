@@ -11,6 +11,9 @@
    checkDraft(text)       -> marks and swaps for a reply someone is about to send */
 (function (root) {
   'use strict';
+  // The shared pattern list (message-patterns.js), so this reads words the same way as the
+  // Signal Translator and the Carrier Wave Decoder's tone check
+  var P = (typeof module !== 'undefined' && module.exports) ? require('./message-patterns.js') : root.TOLPatterns;
 
   // ---------- Parsing ----------
   var RX = {
@@ -75,13 +78,21 @@
       lines.forEach(function (l) {
         l = l.replace(/^(?:\s*>)+\s?/, '');   // quoted replies: strip every level of ">"
         var on = l.match(RX.emailOn), from = l.match(RX.emailFrom);
-        if (on || from) { cur = { who: on ? senderOf(on[1]) : clean(from[1]), text: '' }; turns.push(cur); return; }
+        if (on || from) { cur = { who: on ? senderOf(on[1]) : clean(from[1]), text: '', when: on ? Date.parse(on[1].replace(/\s+at\s+/i, ' ').replace(/[^\w\s:,\/-].*$/, '')) : NaN }; turns.push(cur); return; }
+        var hd = l.match(/^\s*(?:Sent|Date):\s*(.+)$/i);
+        if (hd && cur) { cur.when = Date.parse(hd[1].replace(/\s+at\s+/i, ' ')); return; }
         if (RX.header.test(l)) return;
-        if (!cur) { cur = { who: '', text: '' }; turns.push(cur); }
+        if (!cur) { cur = { who: '', text: '', top: true }; turns.push(cur); }
         cur.text += (cur.text ? '\n' : '') + l;
       });
-      // An email thread is newest-first; read it oldest-first
-      turns = turns.map(function (t) { t.text = t.text.trim(); return t; }).filter(function (t) { return t.text; }).reverse();
+      turns = turns.map(function (t) { t.text = t.text.trim(); return t; }).filter(function (t) { return t.text; });
+      // Oldest first. With dates on every message, sort by them. A reply chain (a new message on top,
+      // then "On … wrote:" or "From:" blocks under it) is newest-first, so turn it round. Emails pasted
+      // one after another, each starting with its own "From:", are already in order.
+      var dated = turns.length > 1 && turns.every(function (t) { return !isNaN(t.when); });
+      if (dated) turns.sort(function (x, y) { return x.when - y.when; });
+      else if (turns.length && (turns[0].top || turns.some(function (t, i) { return i > 0 && /^On .{3,140}wrote:/im.test(text); }))) turns.reverse();
+      turns.forEach(function (t) { delete t.when; delete t.top; });
 
     } else if (labelled >= 2 && labelled >= nonEmpty * 0.4) {
       lines.forEach(function (l) {
@@ -147,6 +158,19 @@
       var prev = turns[i - 1], next = turns[i + 1];
       t.who = 'Unnamed';
     });
+    // an email thread's newest message usually has no header: in a two-person thread it's from whoever wrote
+    // the message before it's "other" side, and often signs off with a name
+    if (format === 'email') {
+      var named = []; turns.forEach(function (t) { if (t.who !== 'Unnamed' && named.indexOf(t.who) === -1) named.push(t.who); });
+      turns.forEach(function (t, i) {
+        if (t.who !== 'Unnamed') return;
+        var sig = (t.text.match(/\n\s*([A-Z][a-z]+)\s*$/) || [])[1];
+        var bySig = sig && named.filter(function (nm) { return nm.split(/\s+/)[0] === sig; })[0];
+        var prevW = turns[i - 1] && turns[i - 1].who;
+        if (bySig) t.who = bySig;
+        else if (named.length === 2 && prevW && prevW !== 'Unnamed') t.who = named[0] === prevW ? named[1] : named[0];
+      });
+    }
 
     var speakers = [];
     turns.forEach(function (t) { if (speakers.indexOf(t.who) === -1) speakers.push(t.who); });
@@ -167,10 +191,14 @@
   var KINDS = {
     threat:   { label: 'Safety: a threat', heat: 6, tone: 'alarm', safety: true },
     control:  { label: 'Safety: controlling', heat: 4, tone: 'alarm', safety: true },
-    withdraw: { label: 'Shutting down', heat: 2, tone: 'hot',
-                hear: '“I’m done,” “leave me alone” or “forget it” usually means someone is flooded: too overwhelmed to keep going. It isn’t calm, even when the messages stop.',
+    withdraw: { label: 'Shutting the door', heat: 2, tone: 'hot',
+                hear: '“Not now,” “forget it” or a silent “…” usually means someone is flooded: too overwhelmed to keep going. Without a time to come back, the other person hears “this is over.” It isn’t calm, even when the messages stop.',
                 instead: 'Name the pause and a time to come back: “I need an hour. I’ll call you at 8.”' },
-    turnaway: { label: 'Good news met with a flat reply', heat: 1, tone: 'warm',
+    contempt: { label: 'Eye-roll or put-down', heat: 3, tone: 'hot' },
+    passive:  { label: 'Passive-aggressive edge', heat: 2, tone: 'hot' },
+    pointed:  { label: 'Pointed work phrase', heat: 1.5, tone: 'tense' },
+    compare:  { label: 'Comparison to someone else', heat: 2, tone: 'hot' },
+    turnaway: { label: 'Good news met with a flat reply', heat: 1, tone: 'tense',
                 hear: 'When someone shares good news or reaches out for attention and gets a flat reply, it lands as rejection, even when it wasn’t meant that way. Meeting good news with real interest is one of the strongest everyday ways to build connection.',
                 instead: 'Ask one question about it, or say what you’re glad about.' },
     verdict:  { label: 'A verdict on the person', heat: 3, tone: 'hot',
@@ -185,44 +213,49 @@
     sarcasm:  { label: 'Sarcasm', heat: 2, tone: 'hot',
                 hear: 'Sarcasm reads worse in writing than out loud. With no tone of voice, the other person fills the gap with the worst version.',
                 instead: 'Say the real thing plainly, once.' },
-    demand:   { label: 'Orders or blaming questions', heat: 1.5, tone: 'warm',
+    demand:   { label: 'Orders or blaming questions', heat: 1.5, tone: 'tense',
                 hear: '“You should,” “you need to” and “why can’t you” land as orders or blame, so they invite pushback.',
                 instead: 'Turn it into a request: “Could you…?”' },
-    history:  { label: 'Bringing in the past', heat: 1.5, tone: 'warm',
+    history:  { label: 'Bringing in the past', heat: 1.5, tone: 'tense',
                 hear: 'Bringing in other times (“last time”, “remember when”) widens one topic into many. Nobody can answer all of them at once.',
                 instead: 'Keep to one topic. Write the others down for another day.' },
-    shouting: { label: 'Shouting in text', heat: 1, tone: 'warm',
+    shouting: { label: 'Shouting in text', heat: 1, tone: 'tense',
                 hear: 'Capitals and stacked punctuation (!!, ?!) read as shouting.',
                 instead: 'Use normal capitals and one punctuation mark.' },
     vague:    { label: 'Vague timing', heat: 0.5, tone: 'note',
                 hear: '“Later”, “soon” or “when you get a chance” can mean tonight to one person and next week to the other. That gap is where a lot of friction starts.',
                 instead: 'Name a time: “by Thursday evening.”' },
     short:    { label: 'Very short reply', heat: 1, tone: 'note',
-                hear: 'A one- or two-word reply after a long message can land as “I don’t care,” even when it means “I’m overwhelmed” or “I’m busy.”',
-                instead: 'If you need time, say so: “I want to answer this properly. Can I reply tonight?”' },
+                hear: 'A one-word reply (“ok”, “k”, “fine.”) can mean “got it, I’m busy” or “I’m upset.” The word is the same, so the reader guesses, usually from their own mood. After a long message it can land as “I don’t care,” even when it means “I’m overwhelmed.”',
+                instead: 'Add the missing half: “Ok, sounds good!” or “Ok. I need a minute, I’ll reply properly tonight.”' },
     repair:   { label: 'Repair attempt', heat: -2, tone: 'good',
                 hear: 'This is an offer to cool things down: an apology, agreeing with part of it, or asking to pause. Repair attempts are one of the most important parts of a hard conversation.',
                 instead: 'Take it when it’s offered, even if the rest isn’t settled.' },
+    pause:    { label: 'A pause with a time to come back', heat: -2, tone: 'good' },
+    warmth:   { label: 'Warmth or thanks', heat: -1, tone: 'good' },
     feeling:  { label: '“I feel” statement', heat: -1, tone: 'good',
                 hear: 'Saying what’s happening for you, without blame, is easier to hear than a statement about the other person.' },
     ask:      { label: 'A clear ask', heat: -0.5, tone: 'good',
                 hear: 'A specific request gives the other person something they can actually do.' }
   };
 
+  // the shared list's own words for what the reader may hear, and what to try instead
+  var FROM_SHARED = { sarcasm: 'sarcasm', contempt: 'contempt', passive: 'passive', pointed: 'pointed', compare: 'compare', absolute: 'absolute', dismiss: 'dismiss', stonewall: 'withdraw', flat: 'short', pause: 'pause', appreciation: 'warmth' };
+  if (P) Object.keys(FROM_SHARED).forEach(function (id) {
+    var K = KINDS[FROM_SHARED[id]], S = P.BY[id];
+    if (!K || !S) return;
+    if (!K.hear || ['contempt', 'passive', 'pointed', 'compare', 'sarcasm', 'absolute', 'pause', 'warmth'].indexOf(FROM_SHARED[id]) !== -1) { K.hear = S.what; if (S.fix) K.instead = S.fix; }
+  });
+
   function words(list) { return new RegExp('(?:^|[^\\w’\'])(' + list.join('|') + ')(?=$|[^\\w’\'])', 'gi'); }
   var PATTERNS = {
     threat: [words(["i(?:[’']?ll| will|[’']?m (?:going to|gonna)| am (?:going to|gonna)) (?:hurt|kill|hit|ruin|destroy|end) you", "you(?:[’']?ll| will) regret (?:this|it)", "you(?:[’']?ll| will) be sorry", "i(?:[’']?ll| will|[’']?m (?:going to|gonna)| am (?:going to|gonna)) make you (?:pay|sorry|regret)", "i know where you (?:are|live|work)", "watch your back", "or else", "i(?:[’']?ll| will|[’']?m (?:going to|gonna)| am (?:going to|gonna)) find you", "i(?:[’']?ll| will|[’']?m (?:going to|gonna)| am (?:going to|gonna)) take (?:the kids|the children|your kids|them)(?: away| from you)?", "you(?:[’']?ll| will) never see (?:the kids|the children|them|your kids) again", "if you (?:leave|go|tell anyone)[^.!?]{0,40}(?:i(?:[’']?ll| will|[’']?m (?:going to|gonna)| am (?:going to|gonna))|you(?:[’']?ll| will) never)", "i(?:[’']?ll| will|[’']?m (?:going to|gonna)| am (?:going to|gonna)) (?:post|send|share|show everyone) (?:your|the|those) (?:photos|pictures|messages|videos)", "i(?:[’']?ll| will|[’']?m (?:going to|gonna)| am (?:going to|gonna)) tell everyone"])],
     control: [words(["i(?:[’']?m| am) (?:checking|going through|going to check) your phone", "give me your (?:phone|password|passcode)", "what(?:[’']?s| is) your password", "(?:send|share) (?:me )?your location", "i(?:[’']?m| am) tracking you", "who were you (?:with|talking to|texting)", "answer me", "you(?:[’']?re| are) not allowed", "you (?:can[’']?t|cannot) (?:go|see|talk to|leave|have)", "you need my permission", "i forbid", "you(?:[’']?re| are) not going (?:out|anywhere)", "stop (?:seeing|talking to) your (?:friends|family|sister|brother|mom|mum|dad)", "(?:block|delete) (?:him|her|them|your friends)", "you don[’']?t get (?:any )?money", "i control the money", "you(?:[’']?ll| will) do as i say", "because i said so"])],
     verdict: [words(["you(?:[’']?re| are) (?:so |such an? |just |being |really |always |)?(?:selfish|lazy|useless|pathetic|ridiculous|crazy|insane|childish|impossible|stupid|an idiot|a joke|a liar|a mess|toxic|unbelievable|hopeless|the worst|a narcissist|dramatic|immature|clueless|heartless|cold)", "you don[’']?t care(?: about)?", "you only care about", "you(?:[’']?re| are) the problem", "what(?:[’']?s| is) wrong with you", "your problem is", "typical you", "that(?:[’']?s| is) so you", "you(?:[’']?re| are) just like your", "you make me (?:sick|crazy|miserable|feel (?:worthless|stupid|small|like (?:crap|garbage|nothing|an idiot)|bad|guilty|terrible))", "you(?:[’']?ve| have) ruined"])],
-    absolute: [words(["always", "never", "every (?:single )?time", "constantly", "all the time", "not once", "not even once", "nobody", "no one", "everyone", "nothing (?:ever)?", "every day"])],
-    dismiss: [words(["calm down", "just relax", "relax,", "whatever(?=\\s*(?:$|[.,!?…;:)\\-—–]|🙄))", "ok whatever", "you(?:[’']?re| are) overreacting", "you(?:[’']?re| are) (?:too|so) sensitive", "not a big deal", "no big deal", "get over it", "chill out", "you(?:[’']?re| are) being dramatic", "i don[’']?t care", "if you say so", "here we go again", "not this again"]),
-              /^(?:k|ok\.|okay\.|fine\.?|sure\.|cool\.|noted\.?)$/i],
-    sarcasm: [words(["wow,? thanks", "thanks a lot", "great job,? really", "must be nice", "sure you did", "sure you are", "oh really", "as usual", "big surprise", "thanks for nothing", "real mature", "whatever you say"]), /🙄|😒|🙃/g],
-    demand: [words(["you should(?:n[’']?t)?(?: have)?", "you need to", "you have to", "you better", "why can[’']?t you", "why didn[’']?t you", "why don[’']?t you ever", "why do you always", "how hard is it", "is it too much to ask", "just do it", "do it now", "(?:can|could|would|will) you (?:please )?just", "just (?:get|do) it (?:done|already)"])],
-    withdraw: [words(["i[’']?m done(?: talking)?(?: about (?:this|it))?", "i am done", "leave me alone", "forget it", "never ?mind", "i don[’']?t want to talk(?: about (?:it|this))?", "stop (?:texting|messaging|calling) me", "don[’']?t (?:text|talk to|call) me", "i give up", "doesn[’']?t matter", "it doesn[’']?t matter"])],
+    demand: [words(["you should(?:n[’']?t)?(?: have)?", "you need to", "you have to", "you better", "why can[’']?t you", "why didn[’']?t you", "why don[’']?t you ever", "why do you always", "how hard is it", "is it too much to ask", "just do it", "do it now", "(?:can|could|would|will) you (?:please )?just", "just (?:get|do) it (?:done|already)", "asap", "immediately", "urgently", "right away"])],
     history: [words(["last time", "remember when", "like (?:the )?(?:last|other) time", "just like when", "you did the same", "same thing (?:as|with)", "and another thing", "while we[’']?re at it", "not to mention", "this is (?:just )?like", "again\\?", "for the (?:hundredth|millionth|thousandth) time", "back when"])],
     vague: [words(["later", "soon", "at some point", "when you get a chance", "when you can", "whenever", "in a bit", "in a minute", "sometime", "one of these days", "eventually"])],
-    repair: [words(["sorry", "i apologi[sz]e", "my bad", "my fault", "you[’']?re right", "that[’']?s fair", "fair point", "i hear you", "i get it", "i understand", "i didn[’']?t mean", "i shouldn[’']?t have", "can we (?:start over|talk|pause|take a break|try again)", "let[’']?s (?:pause|take a break|talk later|start over|try again)", "i need a (?:minute|moment|break)", "i love you", "thank you", "thanks for (?:telling|saying|listening|understanding)", "i want to (?:fix|sort|work on) this", "we[’']?re on the same (?:side|team)", "i[’']?m not against you", "good point", "i[’']?m not trying to (?:start|fight|argue|blame)", "i[’']?m not (?:mad|angry) at you"]), /❤️|💕|🙏|🫶|🤍|💛/g],
+    repair: [words(["sorry", "i apologi[sz]e", "my bad", "my fault", "you[’']?re right", "that[’']?s fair", "fair point", "i hear you", "i get it", "i understand", "i didn[’']?t mean", "i shouldn[’']?t have", "can we (?:start over|talk|pause|take a break|try again)", "let[’']?s (?:pause|take a break|talk later|start over|try again)", "i need a (?:minute|moment|break)", "thanks for (?:telling|saying|listening|understanding)", "i want to (?:fix|sort|work on) this", "we[’']?re on the same (?:side|team)", "i[’']?m not against you", "good point", "i[’']?m not trying to (?:start|fight|argue|blame)", "i[’']?m not (?:mad|angry) at you"]), /🙏/g],
     feeling: [words(["i feel", "i[’']?m feeling", "i felt", "i[’']?m (?:so |really |just |very |a bit |a little |kind of |pretty )?(?:hurt|sad|worried|tired|exhausted|frustrated|scared|overwhelmed|anxious|upset|lonely|stressed|disappointed|embarrassed)", "it hurt(?:s)? (?:me|when)", "that hurt", "makes me feel"])],
     ask: [words(["can you", "could you", "would you", "will you", "i need you to", "i[’']?d like", "i would like", "please", "would it help if", "can we", "how about", "what if we"])]
   };
@@ -242,16 +275,31 @@
         }
       });
     });
+    // The shared list: sarcasm, put-downs, passive edges, comparisons, always/never, dismissing,
+    // shutting the door (or a pause with a time to come back), very short replies and warmth
+    if (P) P.scan(text).forEach(function (m) {
+      var kind = FROM_SHARED[m.id];
+      if (!kind || !KINDS[kind]) return;
+      // "Thanks," alone on a line near the end is an email sign-off, not warmth
+      if (kind === 'warmth' && !m.whole) {
+        var ls = text.lastIndexOf('\n', m.start) + 1, le = text.indexOf('\n', m.end); if (le < 0) le = text.length;
+        if (/^\s*(?:many )?(?:thanks|thank you|thx|ty)[,.!]?\s*$/i.test(text.slice(ls, le)) && text.split('\n').length > 2) return;
+      }
+      marks.push(m.whole ? { kind: kind, start: 0, end: text.length, text: text.trim(), whole: true } : { kind: kind, start: m.start, end: m.end, text: m.text });
+    });
+    var edgy = marks.some(function (m) { return KINDS[m.kind].heat > 0; });
     // Shouting: words in capitals (3+ letters, not common acronyms) and stacked punctuation
     var caps = text.match(/\b[A-Z]{3,}\b/g) || [];
-    caps = caps.filter(function (w) { return !/^(OK|USA|UK|ADHD|OCD|PTSD|ASAP|LOL|OMG|FYI|BTW|TV|PM|AM|ETA|DIY|RSVP|PDF|WP|CALC|ID|NHS|IRS|GPS)$/.test(w); });
+    caps = caps.filter(function (w) { return !/^(OK|USA|UK|ADHD|OCD|PTSD|ASAP|LOL|OMG|FYI|BTW|TV|PM|AM|ETA|DIY|RSVP|PDF|WP|CALC|ID|NHS|IRS|GPS|EOD|COB|HR|IT|CEO|PTO|WFH|FAQ|URL|API|QA|UX|UI|RACI|TOL)$/.test(w); });
     if (caps.length >= 1 && caps.join('').length >= 4) caps.forEach(function (w) { var i = text.indexOf(w); marks.push({ kind: 'shouting', start: i, end: i + w.length, text: w }); });
+    // "you're so good at it though!!" is excitement, not shouting: stacked marks count only with an edge
+    // somewhere in the message, or with a question mark in the stack ("?!", "??")
     var punct = /[!?]{2,}/g, pm;
-    while ((pm = punct.exec(text))) marks.push({ kind: 'shouting', start: pm.index, end: pm.index + pm[0].length, text: pm[0] });
+    while ((pm = punct.exec(text))) if (edgy || /\?/.test(pm[0]) && pm[0].length > 1 && !/^\?+$/.test(pm[0]) || /\?{2,}/.test(pm[0]) || caps.length) marks.push({ kind: 'shouting', start: pm.index, end: pm.index + pm[0].length, text: pm[0] });
 
     // "never mind" is a dismissal, not an absolute; "thank you" inside sarcasm stays sarcasm
     marks = marks.filter(function (a) {
-      return !marks.some(function (b) { return b !== a && b.start <= a.start && b.end >= a.end && (b.end - b.start) > (a.end - a.start); });
+      return !marks.some(function (b) { return b !== a && !b.whole && b.start <= a.start && b.end >= a.end && (b.end - b.start) > (a.end - a.start); });
     });
     // "I'm sorry you feel that way" is not a repair
     if (/sorry (?:you feel|that you feel|if you)/i.test(text)) marks = marks.filter(function (m) { return m.kind !== 'repair' || !/sorry/i.test(m.text); }).concat([{ kind: 'dismiss', start: text.search(/sorry/i), end: text.search(/sorry/i) + 5, text: 'sorry you feel', non: true }]);
@@ -261,7 +309,12 @@
 
   // Good news, excitement or a reach for attention ("I got the job!!", "guess what", "look at this")
   var BID = /(?:\bi got (?:the|a|an|my)\b|\bguess what\b|\bgood news\b|\bgreat news\b|\bwe did it\b|\bi did it\b|\bi passed\b|\bi(?:[’']m| am) (?:so )?(?:excited|happy|proud)\b|\blook at this\b|\bcheck this out\b|\bi miss you\b|\bthinking (?:of|about) you\b|\bi love you\b|🎉|🥳|😍)/i;
-  function isBid(t) { return BID.test(t) || (/!{1,}/.test(t) && /\b(?:got|won|finished|finally|yes|yay|amazing|love)\b/i.test(t)); }
+  // a question ("did you finish the report?") is asking, not sharing news, and "no" is an answer to it
+  function isBid(t) {
+    if (/\?/.test(t) && !/\bguess what\b|\blook at this\b|\bcheck this out\b/i.test(t)) return false;
+    if (P && P.scan(t).some(function (m) { var k = FROM_SHARED[m.id]; return k && KINDS[k].heat > 0; })) return false;
+    return BID.test(t) || (/!{1,}/.test(t) && /\b(?:got|won|finished|finally|yay|amazing|passed)\b/i.test(t));
+  }
   // A reply with no interest in it: very short, or busy/ok/cool with nothing warm
   function isFlat(t, marks) {
     if (marks.some(function (m) { return m.kind === 'repair' || m.kind === 'ask'; })) return false;
@@ -325,8 +378,15 @@
     out.peak = peak;
     out.endHeat = Math.round(endHeat * 10) / 10;
     out.level = endHeat >= 3 ? 'hot' : endHeat >= 1.2 ? 'warm' : 'calm';
+    // an edge at the very end (sarcasm, a put-down, a passive jab) is never "calm", however short the message
+    var lastT = n ? out.turns[n - 1] : null;
+    if (lastT && out.level === 'calm' && lastT.marks.some(function (m) { return ['contempt', 'sarcasm', 'passive', 'dismiss', 'verdict', 'withdraw', 'compare'].indexOf(m.kind) !== -1; })) out.level = 'warm';
     var lastKinds = n ? out.turns[n - 1].marks.map(function (m) { return m.kind; }) : [];
-    out.trend = lastKinds.indexOf('withdraw') !== -1 || lastKinds.indexOf('short') !== -1 && heats.slice(0, -1).some(function (h) { return h >= 2.5; }) ? 'shutdown'
+    var doors = out.turns.filter(function (t) { return t.marks.some(function (m) { return m.kind === 'withdraw'; }); }).length;
+    var lastTwo = out.turns.slice(-2).some(function (t) { return t.marks.some(function (m) { return m.kind === 'withdraw'; }); });
+    var endsPause = lastKinds.indexOf('pause') !== -1;
+    out.doors = doors;
+    out.trend = !endsPause && (lastKinds.indexOf('withdraw') !== -1 || (doors >= 2 && lastTwo) || lastKinds.indexOf('short') !== -1 && heats.slice(0, -1).some(function (h) { return h >= 2.5; })) ? 'shutdown'
       : n < 3 ? 'short'
       : peak >= 3 && peakAt < n - 1 && heats[n - 1] < peak * 0.4 ? 'cooling'
       : endHeat > headAvg + 1 || (peakAt === n - 1 && peak >= 3) ? 'rising' : 'steady';
@@ -393,18 +453,36 @@
     out.bids = [];
     out.turns.forEach(function (t, i) { if (t.marks.some(function (m) { return m.kind === 'turnaway'; })) out.bids.push({ at: i - 1, reply: i }); });
     out.next = nextMove(out);
+    out.drafts = out.safety ? [] : drafts(out);
     return out;
   }
 
   // What the conversation is about: the most-mentioned "the ___" / "your ___" phrase early on
   var VAGUE = /^(?:way|point|problem|thing|fact|end|same|whole|rest|last|first|second|third|fourth|fifth|next|other|time|times|weekend|plan|plans|moment|idea|deal|reason|issue|mood|situation|conversation|matter)$/;
+  // Everyday things people talk about. A topic from this list wins; otherwise a thing mentioned at
+  // least twice; otherwise no topic at all, rather than a guess like "the thoughts" or "the best".
+  var TOPICS = ('dishes|sink|kitchen|laundry|trash|garbage|bins|recycling|bathroom|chores|cleaning|groceries|shopping|dinner|lunch|breakfast|cooking|rent|bills?|electric bill|water bill|internet bill|budget|money|venmo|car|school pickups?|pickups?|pick-ups?|school run|drop-off|school|homework|kids|baby|dog|cat|vet|trip|vacation|holiday|holidays|thanksgiving|christmas|party|wedding|birthday|weekend|plans|schedule|calendar|meeting|report|deck|deadline|project|presentation|email|invoice|shift|rota|handoff|custody|visit|guests?|boyfriend|girlfriend|noise|music|thermostat|heating|car park|parking|lease|landlord|deposit|mortgage|phone|bedtime|screen time|game|games|gym|appointment|doctor|dentist|mom|dad|parents|in-laws|family|job|work|promotion|raise|sofa|garage|garden|yard|lawn|snow|fridge|milk|leftovers|toilet|shower|towels|bed|keys').split('|');
+  var NOT_TOPIC = /^(?:best|worst|most|least|last|first|next|other|same|whole|thoughts?|feelings?|idea|ideas|point|problem|thing|things|stuff|way|end|fact|time|times|moment|reason|issue|mood|situation|conversation|matter|deal|kind|sort|type|part|bit|lot|one|ones|rest|side|sense|world|life|day|week|night|morning|evening|minute|hour|second|message|messages|text|texts|point|question|answer|help|chance|plan|truth|problem|mistake|fault|attitude|tone|face|heads|head|hand|hands|mind|word|words|talk|call)$/;
   function findTopic(turns) {
+    var lex = {}, lexOrder = [];
+    turns.forEach(function (t) {
+      var low = t.text.toLowerCase().replace(/[’']/g, '');
+      TOPICS.forEach(function (w) {
+        var m = low.match(new RegExp('\\b' + w + '\\b', 'g'));
+        if (m) { var k = m[0]; if (!lex[k]) { lex[k] = 0; lexOrder.push(k); } lex[k] += m.length; }
+      });
+    });
+    if (lexOrder.length) {
+      lexOrder.sort(function (a, b) { return lex[b] - lex[a] || b.length - a.length; });
+      var tw = lexOrder[0];
+      return (/^(?:work|money|dinner|lunch|breakfast|school|homework|rent|laundry|trash|garbage|recycling|cooking|cleaning|groceries|shopping|custody|parking|noise|music|heating|bedtime|screen time|family|parents|kids|christmas|thanksgiving)$/.test(tw) ? '' : 'the ') + tw;
+    }
     var freq = {}, order = [];
     turns.forEach(function (t) {
       var rx = /\b(?:the|my|your|our|his|her|their|this|that)\s+([a-z][a-z'’]+)(?:\s+([a-z][a-z'’]+))?/gi, m;
       while ((m = rx.exec(t.text))) {
         var a = m[1].toLowerCase().replace(/['’]s$/, ''), b = (m[2] || '').toLowerCase().replace(/['’]s$/, '');
-        if (STOP.indexOf(a) !== -1 || VAGUE.test(a)) continue;
+        if (STOP.indexOf(a) !== -1 || VAGUE.test(a) || NOT_TOPIC.test(a) || /(?:est|ly|ful|ous|ive|able|ible)$/.test(a) || a.length < 3) continue;
         // "the electric bill": keep a second word when the first reads as a describing word
         var phrase = b && STOP.indexOf(b) === -1 && !VAGUE.test(b) && /(?:ic|al|ous|ful|ive|y|en|er|ing)$/.test(a) && !/(?:ing)$/.test(b) ? a + ' ' + b : a;
         var det = /^(?:my|your|our|his|her|their)$/i.test(m[0].split(/\s+/)[0]) ? m[0].split(/\s+/)[0].toLowerCase() : 'the';
@@ -416,6 +494,7 @@
     if (!order.length) return '';
     order.sort(function (x, y) { return freq[y].n - freq[x].n; });
     var top = order[0];
+    if (freq[top].n < 2) return "";
     return (freq[top].det === 'your' || freq[top].det === 'my' ? 'the' : freq[top].det) + ' ' + top;
   }
 
@@ -440,7 +519,7 @@
     var last = r.turns[n - 1];
     var lastTheirs = null;
     for (var i = n - 1; i >= 0; i--) if (!r.turns[i].mine) { lastTheirs = r.turns[i]; break; }
-    var topic = r.topic || '[the one topic]';
+    var topic = r.topic || 'this';
     var has = function (t, k) { return t && t.marks.some(function (m) { return m.kind === k; }); };
     var feelingWord = lastTheirs && (lastTheirs.text.match(/i(?:[’']m| am| feel| felt)(?: so| really| just)? (hurt|sad|worried|tired|exhausted|frustrated|scared|overwhelmed|anxious|upset|lonely|stressed|disappointed|embarrassed|ignored|alone|angry)/i) || [])[1];
     var moves = [];
@@ -454,12 +533,12 @@
     if (r.trend === 'shutdown') {
       moves.push({ key: 'pause', title: 'Someone has shut down. Give it time, then come back',
         say: 'The conversation ended with someone pulling away. That usually means they’re flooded, not that it’s settled. More messages now tend to push harder. Name a return time instead.',
-        script: 'I can tell this is a lot right now. Let’s stop here. Can we come back to ' + topic + ' at [time]? I’m not going anywhere.',
+        script: 'I can tell this is a lot right now. Let’s stop here. Can we talk about ' + topic + ' at [time]? I’m not going anywhere.',
         dig: ['/check-ins-in-depth.html#regroup', 'How to pause and come back'] });
     } else if (r.level === 'hot' || (r.trend === 'rising' && r.level !== 'calm' && r.peak >= 3)) {
       moves.push({ key: 'pause', title: 'Pause, and name when you’ll come back',
         say: 'It’s too hot to settle anything right now. A pause isn’t giving up if you say when you’ll return.' + (r.form === 'text' ? ' Text strips out tone, so a call or talking in person later will go better.' : ''),
-        script: 'I want to get this right, and I don’t think we can right now. Can we come back to ' + topic + ' at [time]? I’m not going anywhere.',
+        script: 'I want to get this right, and I don’t think we can right now. Can we talk about ' + topic + ' at [time]? I’m not going anywhere.',
         dig: ['/check-ins-in-depth.html#regroup', 'How to pause and come back'] });
     }
     if (lastTheirs && has(lastTheirs, 'repair') && lastTheirs === last && r.peak >= 2.5) {
@@ -504,11 +583,56 @@
         script: '' });
       return moves;
     }
-    moves.push({ key: 'ffa', title: 'Then: one fact, one feeling, one ask',
+    moves.push({ key: 'ffa', title: moves.length ? 'Then: one fact, one feeling, one ask' : 'Make your point in three short parts: one fact, one feeling, one ask',
       say: 'When you’re ready to make your point, keep it to one topic and three short parts.',
       script: 'When [what happened, one specific time], I felt [one feeling]. Could you [one specific thing, by when]?',
       dig: ['/workpapers/wp-09-tone-filter-in-depth.html', 'WP-09: turning a reaction into fact, feeling and ask'] });
     return moves;
+  }
+
+  // Two or three replies someone could actually send, built from this conversation's own words:
+  // the topic, their question or ask, a time already mentioned, and the sharpest thing said on your side.
+  function drafts(r) {
+    var n = r.turns.length, out = [];
+    if (!n) return out;
+    var theirs = r.turns.filter(function (t) { return !t.mine; }), mineT = r.turns.filter(function (t) { return t.mine; });
+    var last = theirs[theirs.length - 1];
+    var topic = r.topic || 'this';
+    var allText = r.turns.map(function (t) { return t.text; }).join(' \n');
+    var when = (allText.match(/\b(?:tonight|tomorrow(?: (?:morning|night|evening))?|this (?:weekend|evening|afternoon)|(?:on )?(?:mon|tues|wednes|thurs|fri|satur|sun)day|after (?:dinner|work|school)|at \d{1,2}(?::\d{2})?\s*(?:am|pm)?|by \d{1,2}(?::\d{2})?\s*(?:am|pm)?)\b/i) || [])[0];
+    // "Friday" → "on Friday", "tonight" stays "tonight", "at 7" stays "at 7"
+    var whenTxt = when ? when.replace(/^on /i, '').toLowerCase().replace(/\b(mon|tues|wednes|thurs|fri|satur|sun)day\b/, function (d) { return d.charAt(0).toUpperCase() + d.slice(1); }) : '';
+    if (/^[A-Z]/.test(whenTxt)) whenTxt = 'on ' + whenTxt;
+    if (r.peak < 1.5 && r.next && r.next.length && r.next[0].key === 'fine') return out;
+    // their ask: "could you …", "can you …", "please …", in their most recent message that has one
+    var ask = null;
+    for (var ti = theirs.length - 1; ti >= 0 && !ask; ti--) ask = (theirs[ti].text.match(/\b(?:can|could|would|will) you (?:please )?([^.?!\n]{3,70})/i) || theirs[ti].text.match(/\bplease ([^.?!\n]{3,60})/i) || [])[1] || null;
+    // their question, if it's a real one
+    var q = r.unanswered.filter(function (u) { return !r.turns[u.at].mine; }).map(function (u) { return u.q; }).pop();
+    var feel = last && (last.text.match(/i(?:[’']m| am| feel| felt)(?: so| really| just)? (hurt|sad|worried|tired|exhausted|frustrated|scared|overwhelmed|anxious|upset|lonely|stressed|disappointed|embarrassed|ignored|alone|angry|unseen|stretched)/i) || [])[1];
+    // their words, from my side: "send me your notes" → "send you my notes"
+    function mine(t) { var SW = { me: 'you', my: 'your', mine: 'yours', your: 'my', yours: 'mine', you: 'you', myself: 'yourself', yourself: 'myself' }; return t.replace(/\b(me|my|mine|your|yours|you|myself|yourself)\b/gi, function (w) { return SW[w.toLowerCase()]; }); }
+    var hot = r.level === 'hot' || r.peak >= 3 || r.trend === 'shutdown';
+    // their good news met with a flat reply from me: go back to it, first
+    var myBid = r.bids.filter(function (x) { return r.turns[x.reply].mine; }).pop();
+    if (myBid) {
+      var news = r.turns[myBid.at].text, nw = (news.match(/\bi got (the|a|an|my) ([a-z]+(?: [a-z]+)?)/i) || []);
+      out.push({ label: 'Go back to their good news', text: 'Sorry I was short when you told me' + (nw[2] ? ' about ' + (nw[1].toLowerCase() === 'my' ? 'your' : 'the') + ' ' + nw[2] : '') + '. I’m really glad for you! Tell me everything?' });
+    }
+    // 1. answer what they asked, in their words
+    var askHasTime = ask && (/\b(?:tonight|today|tomorrow|this (?:week|weekend|evening)|(?:mon|tues|wednes|thurs|fri|satur|sun)days?|at \d|by \d|\d\s*(?:am|pm))\b/i.test(ask));
+    if (ask) out.push({ label: 'Say yes to the ask' + (askHasTime ? '' : ', with a time'), text: 'Yes, I can ' + mine(ask.trim()).replace(/[,;]+$/, '') + (askHasTime ? '' : whenTxt ? ' ' + whenTxt : ' by [time]') + '. Thanks for asking me straight.' });
+    if (q && !(ask && q.indexOf(ask.trim().slice(0, 20)) !== -1)) out.push({ label: 'Answer their question first', text: 'You asked, “' + q.replace(/\s+/g, ' ').trim() + '” The honest answer is [your answer].' });
+    // 2. own the sharpest thing you said
+    var edges = ['contempt', 'sarcasm', 'passive', 'verdict', 'dismiss', 'compare', 'absolute', 'shouting', 'demand'];
+    var sharp = null;
+    mineT.forEach(function (t) { t.marks.forEach(function (m) { if (!m.whole && edges.indexOf(m.kind) !== -1 && (!sharp || edges.indexOf(m.kind) < edges.indexOf(sharp.kind))) sharp = m; }); });
+    if (sharp) out.push({ label: 'Own your part', text: 'I’m sorry I said “' + sharp.text.trim() + '”. That came out sharper than I meant. What I meant was: [the plain version, one sentence].' });
+    // 3. slow it down, or say back how they feel
+    if (feel) out.push({ label: 'Say back what you heard', text: 'It sounds like you’re feeling ' + feel.toLowerCase() + ' about ' + topic + '. Did I get that right?' });
+    if (hot && out.length < 3) out.push({ label: 'Pause, with a time to come back', text: 'I don’t want to keep going back and forth by text. Can we talk about ' + topic + ' ' + (whenTxt ? whenTxt : 'tonight at [time]') + '? I’m not going anywhere.' });
+    if (out.length < 2) out.push({ label: 'One fact, one feeling, one ask', text: (topic !== 'this' ? 'About ' + topic + ': ' : '') + '[what happened, one specific time]. I felt [one feeling]. Could you [one specific thing] ' + (whenTxt ? (/^(?:on|at|by|tonight|tomorrow|this)\b/i.test(whenTxt) ? whenTxt.replace(/^on /, 'by ') : whenTxt) : 'by [time]') + '?' });
+    return out.slice(0, 3);
   }
 
   function snippet(t) { t = trim(t).replace(/\s+/g, ' '); return t.length > 70 ? t.slice(0, 67).replace(/\s\S*$/, '') + '…' : t; }
@@ -537,7 +661,7 @@
       checks: unsafe ? [] : [
         { ok: has('feeling') || has('ask') || /\bi need\b|\bi(?:[’']d| would) like\b|\bit landed\b|\bit made\b/i.test(text), label: 'Says what you need or how it landed (a feeling word is optional)' },
         { ok: has('ask'), label: 'Makes one clear ask (“Could you…?”)' },
-        { ok: !has('verdict') && !has('absolute') && !has('dismiss') && !has('sarcasm') && !has('withdraw'), label: 'No verdicts, always/never, dismissals, sarcasm or shutting the door' },
+        { ok: !has('verdict') && !has('absolute') && !has('dismiss') && !has('sarcasm') && !has('contempt') && !has('passive') && !has('compare') && !has('pointed') && !has('withdraw'), label: 'No verdicts, always/never, dismissals, sarcasm, jabs, comparisons or shutting the door' },
         { ok: !has('history'), label: 'Stays on one topic' }
       ]
     };

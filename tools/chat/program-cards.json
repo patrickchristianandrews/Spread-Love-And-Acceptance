@@ -1156,10 +1156,10 @@
         "~episodes",
         "~episode"
       ],
-      "what": "The Kane and Christian Experience explores the program through stories, real-life examples and conversation. Each episode dives into one workpaper, chapter or theme; listen in any order or follow the path matched to the PROG-01 weeks. Episodes marked Live are out now; the rest are in production or planned.",
+      "what": "The Kane and Christian Experience explores the program through stories, real-life examples and conversation. Each episode dives into one workpaper, chapter or theme; listen in any order or follow the path matched to the PROG-01 weeks. No episodes are published yet: the first three are recorded and coming soon, and the rest are in production or planned.",
       "how": [
         "Open the podcast page and filter by theme (foundation, diagnostics, communication, resonance).",
-        "Start with Episode 1 on Unbilled Debt, or pick the one matching your current week."
+        "When episodes are out, start with Episode 1 on Unbilled Debt, or pick the one matching your current week."
       ],
       "pillar": "Each episode names its chapter or workpaper, and so its pillar.",
       "links": [
@@ -2737,6 +2737,164 @@
           "/library.html"
         ]
       ]
+    },
+    {
+      "id": "single",
+      "kind": "intent",
+      "name": "using the program on your own or while single",
+      "pat": "\\b(im|i am) single\\b|\\b(dont|do not) have a (partner|boyfriend|girlfriend|husband|wife|spouse)\\b|\\bnot in a relationship\\b|\\bi live (alone|on my own|by myself)\\b|\\b(single|solo) (people|person|folks)\\b|\\bif (im|i am|youre|you are) single\\b|\\bwithout a (partner|relationship)\\b",
+      "keys": [
+        "if im single",
+        "im single",
+        "i am single",
+        "no partner",
+        "live alone",
+        "living alone"
+      ],
+      "what": [
+        "Yes, absolutely. The program isn’t only for couples. Every one of the Five Pillars starts with you: seeing your own load, reading your own state before you react, knowing your own wiring, and noticing the quiet pulls on your time.",
+        "It also works with anyone you share life or work with: roommates, family, friends, coworkers. And if you live alone, the self-check tools, the calm-down kit and the games are all yours."
+      ],
+      "how": [
+        "Start with Today’s Weather, a one-minute check on yourself.",
+        "Try WP-02, the Battery Meter, before a conversation that matters, with anyone.",
+        "Learn your own wiring on Know your own wiring, so you can explain what helps you."
+      ],
+      "links": [
+        [
+          "Know your own wiring",
+          "/know-yourself.html"
+        ],
+        [
+          "Today’s Weather",
+          "/quick-checks.html#today"
+        ],
+        [
+          "WP-02: How full is your battery?",
+          "/workpapers/wp-02-battery-stress-meter.html"
+        ]
+      ]
+    },
+    {
+      "id": "app",
+      "kind": "intent",
+      "name": "using the site like an app",
+      "pat": "\\b(is there|do you have|have you got|got|any) an? (app|mobile app|phone app|iphone app|android app)\\b|\\b(download|install|get) (the |an |this as an )?(app|it on my phone)\\b|\\bapp store\\b|\\bplay store\\b|\\bhome ?screen\\b|\\b(is|does) (it|this|the site) (an app|work (on|as) (a phone|an app|my phone|mobile))\\b",
+      "keys": [
+        "is there an app",
+        "an app",
+        "home screen",
+        "add to home screen",
+        "the app"
+      ],
+      "what": [
+        "There’s nothing to download, and you don’t need an app store. The site works like an app on your phone: add it to your home screen and it opens full-screen, with its own icon, like any other app.",
+        "Pages you’ve opened before keep working without a connection, and everything you type in the tools stays on your device."
+      ],
+      "how": [
+        "On an iPhone or iPad, open the site in Safari, tap the Share button, then “Add to Home Screen”.",
+        "On Android, open the site in Chrome, tap the ⋮ menu, then “Add to Home screen” or “Install app”.",
+        "On a computer, most browsers show an install icon in the address bar."
+      ],
+      "links": [
+        [
+          "Start here",
+          "/start-here.html"
+        ],
+        [
+          "What’s new",
+          "/whats-new.html"
+        ]
+      ]
+    },
+    {
+      "id": "twophones",
+      "kind": "intent",
+      "name": "doing it together on two phones",
+      "pat": "\\b(two|2|both|both our|separate|different|our own) (phones|devices|screens)\\b|\\b(together|each) on (our|two|separate|different|both) (phones|devices)\\b|\\b(use|do|try) (it|this|the tools?) together\\b|\\bboth (of us )?(use|do|fill in) (it|this)\\b",
+      "keys": [
+        "two phones",
+        "two devices",
+        "use this together",
+        "do this together",
+        "use it together"
+      ],
+      "what": [
+        "Yes. The Carrier Wave Decoder has a Together tab made for this. Each of you marks where you were during a moment that went sideways (pace, tone and timing), and your guess about the other person. Then you reveal both at once and see where you really differed, and where you just misread each other.",
+        "You can pass one phone back and forth, or use two phones: one of you starts and gets a short code, and sends it to the other however you like (a text works). The site never sends anything itself, and your answers stay on your own devices."
+      ],
+      "how": [
+        "Open the Carrier Wave Decoder and choose the Together tab.",
+        "Pick “One device” to pass the phone back and forth, or “Two devices: start it” to get a code.",
+        "The other person picks “Two devices: I got a code” and enters it, then you reveal together.",
+        "For a daily habit together, try WP-13, the 90-second check-in."
+      ],
+      "links": [
+        [
+          "The Carrier Wave Decoder: Together",
+          "/carrier-wave-decoder.html#together"
+        ],
+        [
+          "WP-13: The 90-second daily check-in",
+          "/workpapers/wp-13-pll-protocol.html"
+        ]
+      ]
+    },
+    {
+      "id": "usedagainst",
+      "kind": "intent",
+      "name": "when someone sent you this link",
+      "pat": "\\b(sent|shared|gave|forwarded|texted|showed) me (this|the|a) (link|site|page|website|program|tool)\\b|\\bused against me\\b|\\b(use|using|hold) (this|it|that) against me\\b|\\bammunition\\b|\\b(trying|going) to (prove|show) (im|i am|that i) (wrong|the problem)\\b|\\b(will|can|could) (they|he|she|my \\w+) see (what i|my)\\b|\\b(is|are) (this|the program) (to|going to) (blame|judge|score|grade) (me|people)\\b",
+      "keys": [
+        "used against me",
+        "sent me this link",
+        "sent me this"
+      ],
+      "what": [
+        "That’s a fair thing to wonder, and it’s kind of you to look before deciding. Here’s the honest answer.",
+        "Nothing about you goes anywhere without you. What each person types into the tools stays on their own device, and the site doesn’t send it to anyone, including the person who shared the link. The shared pages, like the weekly log, only work when you both choose to fill them in and look at them together.",
+        "The tools describe the setup, never a person: who does which job, how a message might land, how tired everyone is. None of them score anyone’s worth or decide who’s right. The whole program is built on “fix the setup, not the person.”",
+        "Most people who share this are hoping things can feel easier between you. A good first step is simply to ask what they’d like to look at together, and to say what you’d like too. You’re always free to try it on your own first, or to say no."
+      ],
+      "links": [
+        [
+          "The Five Pillars",
+          "/five-pillars.html"
+        ],
+        [
+          "Privacy, in plain words",
+          "/legal/privacy-policy.html"
+        ],
+        [
+          "Is this for you?",
+          "/is-this-for-you.html"
+        ]
+      ]
+    },
+    {
+      "id": "tonight",
+      "kind": "intent",
+      "name": "one tiny step for tonight",
+      "pat": "\\bwhat (do|can|should|could) (i|we) (actually |really |even )?do (tonight|now|right now|today|this evening|first thing)\\b|\\bwhat can i do tonight\\b|\\b(one|a|the) (tiny|small|little|single) (thing|step)\\b|\\b(tiny|smallest|small|first) step (tonight|today|now)\\b|\\bwhat (do|should) i do (about it )?(tonight|now)\\b",
+      "keys": [
+        "what can i do tonight",
+        "one tiny step",
+        "something small for tonight"
+      ],
+      "what": [
+        "Here’s one tiny step for tonight: before any conversation that matters, take one minute to check your own battery. How did you sleep, how full was your day, how does your body feel? If you’re running low, it’s okay to say, “Can we talk about this tomorrow at 7? I want to give it my best.”",
+        "That’s all. One small, kind step is plenty for one evening. If you tell me a little about what’s going on, I can suggest a step that fits it better."
+      ],
+      "links": [
+        [
+          "Today’s Weather: a one-minute check",
+          "/quick-checks.html#today"
+        ],
+        [
+          "WP-11: The Calm-Down Kit",
+          "/wp-11.html"
+        ]
+      ]
     }
   ],
   "clarify": [
@@ -2875,6 +3033,28 @@
         [
           "A friend",
           "My friend took my text the wrong way"
+        ]
+      ]
+    },
+    {
+      "pat": "^(idk|i dk|i dont know|i do not know|dunno|dont know|not sure|no idea|im not sure|i m not sure|hmm+|um+|uh+|meh|ugh+|sigh|eh|whatever|nothing|nevermind|never mind)$",
+      "x": "That’s okay. Not knowing where to start is a completely normal place to be. You could pick one of these, or just give me a word or two about what’s on your mind.",
+      "chips": [
+        [
+          "Something happened today",
+          "Something happened today and I want to handle it better"
+        ],
+        [
+          "I’m worn out",
+          "I feel exhausted and overwhelmed"
+        ],
+        [
+          "It’s about someone else",
+          "Which tool fits my situation?"
+        ],
+        [
+          "What can I do tonight?",
+          "What can I do tonight?"
         ]
       ]
     }

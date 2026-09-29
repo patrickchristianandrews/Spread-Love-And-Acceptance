@@ -29,7 +29,9 @@ async function translate(p){ await p.click('#go'); await p.waitForSelector('#tak
     ok(!/TOL-OS/.test(meta.title), `${tag}: title still says TOL-OS`);
 
     // every select has a visible label and alphabetical options
-    const sels = await p.evaluate(()=>[...document.querySelectorAll('select')].map(s=>({id:s.id, label:(s.labels&&s.labels[0]?s.labels[0].textContent.trim():''), opts:[...s.options].map(o=>o.text)})));
+    // a select with groups (the examples, by relationship) is alphabetical inside each group
+    const sels = await p.evaluate(()=>[].concat(...[...document.querySelectorAll('select')].map(s=>{ const label=(s.labels&&s.labels[0]?s.labels[0].textContent.trim():''); const gs=[...s.querySelectorAll('optgroup')];
+      return gs.length ? gs.map((g,i)=>({id:s.id, label, first:i===0, opts:(i===0?[s.options[0].text]:[]).concat([...g.querySelectorAll('option')].map(o=>o.text))})) : [{id:s.id, label, first:true, opts:[...s.options].map(o=>o.text)}]; })));
     for(const s of sels){
       if(/^pick(Pri|Care)$|^$/.test(s.id)) continue;
       ok(s.label.length>0, `${tag}: select #${s.id} has no visible label`);
@@ -38,7 +40,7 @@ async function translate(p){ await p.click('#go'); await p.waitForSelector('#tak
       ok(JSON.stringify(body)===JSON.stringify(sorted), `${tag}: #${s.id} not alphabetical: ${body.join(' | ')}`);
       if(/^w[AB]\d$/.test(s.id)) ok(s.opts[0]==='Not sure / skip', `${tag}: #${s.id} should start with "Not sure / skip"`);
       if(/^(relSel|stateSel|sitSel|envSel|needASel|needBSel)$/.test(s.id)) ok(s.opts[0]==='Not sure / skip', `${tag}: #${s.id} should start with "Not sure / skip"`);
-      if(s.id==='presetSel') ok(s.opts[0]==='Choose an example…', `${tag}: presets should start with "Choose an example…"`);
+      if(s.id==='presetSel' && s.first) ok(s.opts[0]==='Choose an example…', `${tag}: presets should start with "Choose an example…"`);
     }
     ok(sels.find(s=>s.id==='chSel').opts.includes('Chat (Slack / Teams)') && sels.find(s=>s.id==='chSel').opts.includes('Group channel (many listeners)'), `${tag}: channel options missing chat/group`);
     ok(await p.$eval('#chSel', s=>s.options[s.selectedIndex].text)==='Text / chat', `${tag}: default channel should be Text / chat`);

@@ -40,8 +40,13 @@
   function fold(s) {
     return String(s || '').toLowerCase()
       .replace(/[’‘`´]/g, "'").replace(/[“”]/g, '"')
-      .replace(/\b(wp|calc|prog|report)\s*-?\s*0*(\d{1,2})\b/g, function (m, a, n) { return a + (n.length < 2 ? '0' : '') + n; })
-      .replace(/\bworkpaper\s+0*(\d{1,2})\b/g, function (m, n) { return 'wp' + (n.length < 2 ? '0' : '') + n; })
+      // "work paper two", "wp-o2", "workpaper #3": the same workpaper codes, typed loosely
+      .replace(/\bwork\s+papers?\b/g, 'workpaper').replace(/\b(wp|workpaper|calc)\s*-?\s*#?\s*o(\d)\b/g, '$1 0$2')
+      .replace(/\b(wp|workpaper|calc|prog|report)\s*-?\s*#?\s*(one|two|three|four|nine|eleven|thirteen)\b/g, function (m, a, n) {
+        return a + ' ' + { one: 1, two: 2, three: 3, four: 4, nine: 9, eleven: 11, thirteen: 13 }[n];
+      })
+      .replace(/\b(wp|calc|prog|report)\s*-?\s*#?\s*0*(\d{1,2})\b/g, function (m, a, n) { return a + (n.length < 2 ? '0' : '') + n; })
+      .replace(/\bworkpaper\s*-?\s*#?\s*0*(\d{1,2})\b/g, function (m, n) { return 'wp' + (n.length < 2 ? '0' : '') + n; })
       .replace(/([a-z0-9])-(?=[a-z0-9])/g, '$1')
       .replace(/'s\b/g, '').replace(/'/g, '');
   }
@@ -321,9 +326,18 @@
   var LEAD_MORE = ['Related, and worth knowing:', 'It also connects to this:', 'Another page adds:'];
   var LEAD_NEXT = ['Here’s a bit more on that:', 'Another part of the site on this:', 'There’s more here too:'];
 
+  // Poster-style ALL-CAPS lines (from the infographic and the like) read as shouting in a chat: sentence case them.
+  function unshout(s) {
+    return String(s).replace(/[^.!?…]*[A-Z][^.!?…]*[.!?…]*/g, function (part) {
+      var letters = part.replace(/[^A-Za-z]/g, '');
+      if (letters.length < 12 || letters.replace(/[^A-Z]/g, '').length < letters.length * 0.8) return part;
+      var low = part.toLowerCase().replace(/\b(i)\b/g, 'I').replace(/\b(wp|calc|prog|report|tol)(-?\d*)\b/g, function (m) { return m.toUpperCase(); });
+      return low.replace(/^(\s*["“(]?)([a-z])/, function (m, a, c) { return a + c.toUpperCase(); });
+    });
+  }
   function passageBlock(i, qterms) {
     var d = KB.docs[i];
-    return { k: 'passage', i: i, h: d.tip ? 'A little tip' : d.h, src: d.tip ? '' : d.t, x: excerpt(d, qterms), u: safePath(d.u) ? d.u : '', l: d.l || '' };
+    return { k: 'passage', i: i, h: d.tip ? 'A little tip' : unshout(d.h), src: d.tip ? '' : d.t, x: excerpt(d, qterms).map(unshout), u: safePath(d.u) ? d.u : '', l: d.l || '' };
   }
 
   // Follow-up chips: glossary terms mentioned in what was shown, then headings of other good hits.
@@ -474,6 +488,19 @@
           { k: 'links', x: [['WP-02: How full is your battery?', '/workpapers/wp-02-battery-stress-meter.html']] }],
           chips: [{ label: 'How is it worked out?', q: 'Show me the math for WP-02' }], kind: 'calc', topic: 'battery score' };
       }
+      // "a battery score of 3": a whole number is most likely the five answers added up (0 to 20)
+      if (n.length === 1 && n[0] === Math.floor(n[0]) && n[0] >= 1 && n[0] <= 20) {
+        var v1 = n[0] / 20;
+        var bl1 = [{ k: 'p', x: 'If ' + n[0] + ' is your total (the five answers added up, out of 20), then ' + n[0] + ' ÷ 20 = ' + r2(v1) + '. ' + wp02Band(v1) }];
+        if (n[0] <= 4) bl1.push({ k: 'p', x: 'If you meant a single answer of ' + n[0] + ' (each one runs from 0 to 4), send me all five, like “my battery answers are ' + n[0] + ', 1, 2, 0, 2”, and I’ll add them up with you.' });
+        bl1.push({ k: 'note', x: 'This is Pillar III, Read your state first. ' + NOT_VERDICT + ' It isn’t a medical test.' });
+        bl1.push({ k: 'links', x: [['WP-02: How full is your battery?', '/workpapers/wp-02-battery-stress-meter.html']] });
+        return { blocks: bl1, chips: [{ label: 'What helps when my battery is low?', q: 'What helps when my battery is low?' }, { label: 'How is it worked out?', q: 'Show me the math for WP-02' }], kind: 'calc', topic: 'battery score' };
+      }
+      if (n.length === 1 && n[0] > 20) {
+        return { blocks: [{ k: 'p', x: 'The Battery Meter score runs from 0 to 1: five answers from 0 to 4, added up (so 0 to 20), then divided by 20. Could you send me your five answers, like “my battery answers are 2, 1, 3, 0, 2”?' }],
+          chips: [{ label: 'How does the Battery Meter work?', q: 'How do I use WP-02?' }], kind: 'calc' };
+      }
       if (/\banswers?\b|\bscored?\b/.test(low) && n.length >= 2 && n.length < 5) {
         return { blocks: [{ k: 'p', x: 'I can work that out for you, but I need all five answers, each from 0 to 4: ' + WP02_ITEMS.join(', ') + '. Try “my battery answers are 3, 2, 4, 1, 2”.' }], chips: [], kind: 'calc' };
       }
@@ -562,7 +589,44 @@
       return cards[ck.c];
     }
     for (var j = 0; j < cards.length; j++) if (cards[j].re && cards[j].re.test(f)) return cards[j];
-    return null;
+    return fuzzyCard(f);
+  }
+  // Typos in a tool's name ("conversaton reader", "signal translater", "lemonaid stand"): a name of
+  // eight letters or more, typed within one edit (two for long names), with the first letter right.
+  function lev(a, b, max) {
+    if (Math.abs(a.length - b.length) > max) return max + 1;
+    var prev = [], cur, i, j;
+    for (j = 0; j <= b.length; j++) prev[j] = j;
+    for (i = 1; i <= a.length; i++) {
+      cur = [i]; var lo = i;
+      for (j = 1; j <= b.length; j++) {
+        cur[j] = Math.min(prev[j] + 1, cur[j - 1] + 1, prev[j - 1] + (a.charAt(i - 1) === b.charAt(j - 1) ? 0 : 1));
+        if (cur[j] < lo) lo = cur[j];
+      }
+      if (lo > max) return max + 1;
+      prev = cur;
+    }
+    return prev[b.length];
+  }
+  function fuzzyCard(f) {
+    var ws = f.split(' ').filter(Boolean);
+    if (!ws.length || ws.length > 14) return null;
+    var best = null, bestD = 9;
+    IDX.cardKeys.forEach(function (ck) {
+      if (ck.broad || (KB.cards[ck.c] || {}).kind !== 'tool') return;
+      var key = ck.k.trim(), kw = key.split(' '), n = kw.length;
+      if (key.replace(/ /g, '').length < 8) return;
+      var max = key.length >= 13 ? 2 : 1;
+      for (var s = 0; s + n <= ws.length; s++) {
+        var win = ws.slice(s, s + n).join(' ');
+        if (win.charAt(0) !== key.charAt(0) || win === key) continue;
+        // only a misspelled long word counts: "where do i stand" is not "where do i start"
+        if (ws.slice(s, s + n).some(function (w, x) { return w !== kw[x] && (w.length < 5 || kw[x].length < 5); })) continue;
+        var dd = lev(win, key, max);
+        if (dd <= max && dd < bestD) { bestD = dd; best = ck; }
+      }
+    });
+    return best ? (KB.cards || [])[best.c] : null;
   }
   function cardReply(state, c, aspect) {
     var b = [], chips = [];
@@ -575,7 +639,7 @@
     else if (aspect === 'how') { b.push({ k: 'p', x: 'Here’s how to use ' + c.name + ', step by step:' }); b.push({ k: 'list', x: c.how }); }
     else {
       (Array.isArray(c.what) ? c.what : [c.what]).forEach(function (x) { if (x) b.push({ k: 'p', x: x }); });
-      if (c.how && c.how.length && c.kind !== 'intent') { b.push({ k: 'h', x: 'How to use it' }); b.push({ k: 'list', x: c.how.slice(0, 4) }); }
+      if (c.how && c.how.length && c.kind !== 'intent') { b.push({ k: 'h', x: 'How to use it' }); b.push({ k: 'list', x: c.how.slice(0, c.how.length <= 5 ? 5 : 4) }); }
       else if (c.how && c.how.length) b.push({ k: 'list', x: c.how });
     }
     if (c.pillar && aspect !== 'math') b.push({ k: 'note', x: c.pillar });
@@ -608,6 +672,41 @@
     [/\b(jealous|envious)\b/, 'Jealousy is a normal feeling, and it usually points at a need worth naming.']
   ];
   function firstGroup(m) { for (var i = 1; i < m.length; i++) if (m[i]) return m[i].trim(); return ''; }
+  // which kind of relationship a single word names ("brother" → family), and the word itself
+  function whoOfWord(w) {
+    var S = IDX.sit;
+    for (var i = 0; i < WHO_ORDER.length; i++) { var x = S.who[WHO_ORDER[i]]; var m = x && x.re.exec('my ' + w); if (m && firstGroup(m)) return { who: WHO_ORDER[i], noun: firstGroup(m) }; }
+    return null;
+  }
+  var SUBJ_SELF = { i: 1, im: 1, ive: 1, id: 1, ill: 1, me: 1, myself: 1 };
+  var SUBJ_OTHER = { he: 1, she: 1, they: 1, him: 1, her: 1, them: 1, hes: 1, shes: 1, theyre: 1, themselves: 1, himself: 1, herself: 1 };
+  // Who is doing the thing the issue is about? "my partner goes quiet" (them) is not "I go quiet" (me),
+  // and "how do I say no to my mom" is me saying no, not mom. Looks at the words of the strongest match,
+  // then back from it to the nearest person. Returns {actor: 'self'|'other'|'', word}.
+  function actorOf(f, I) {
+    var at = -1, len = 0, top = 0, found = { self: null, other: null };
+    function kind(w) { if (SUBJ_SELF[w]) return 'self'; if (SUBJ_OTHER[w]) return 'other'; if (w !== 'we' && w !== 'us' && w !== 'people' && ROLE[stem(w)]) return 'other'; return ''; }
+    I.res.forEach(function (r) {
+      if (r[1] < 3 || r[1] < top) return;
+      var g = new RegExp(r[0].source, 'g'), m, n = 0;
+      while ((m = g.exec(f)) && n++ < 6) {
+        if (at < 0 || r[1] > top) { top = r[1]; at = m.index; len = m[0].length; }
+        var ws = m[0].trim().split(' ');
+        for (var i = 0; i < ws.length; i++) { var k = kind(ws[i]); if (k) { if (!found[k]) found[k] = ws[i]; break; } }
+        if (!m[0].length) g.lastIndex++;
+      }
+    });
+    if (at < 0) return { actor: '' };
+    // the person named inside a match ("I freeze", "how do I say no") is the one doing it
+    if (found.self) return { actor: 'self', word: found.self };
+    if (found.other) return { actor: 'other', word: found.other };
+    var before = f.slice(0, at).trim().split(' ').slice(-7);
+    for (var j = before.length - 1; j >= 0; j--) {
+      if (before[j] === 'we' || before[j] === 'and') { if (before[j] === 'we') return { actor: '' }; continue; }
+      var k2 = kind(before[j]); if (k2) return { actor: k2, word: before[j] };
+    }
+    return { actor: '' };
+  }
   function detectSituation(f) {
     var S = IDX.sit, best = null, bs = 0, second = 0;
     var who = null, noun = '';
@@ -623,28 +722,42 @@
       if (sc > bs) { second = bs; bs = sc; best = k; } else if (sc > second) second = sc;
     });
     var personal = /\b(i|im|ive|id|me|my|we|us|our|myself|mine)\b/.test(f);
-    if (best && !who) {
-      var iss = S.issues[best];
-      var hasSelf = iss.selfFirst || iss.reflect_self || iss.going_self || iss.steps_self;
-      if (iss.selfFirst || (hasSelf && !/\b(we|us|our|home|house|household)\b/.test(f) && !iss.needsOther)) who = 'self';
-      else who = 'other';
+    var pronoun = /\b(he|she|him|her|his|hes|shes|they|them|their|theyre)\b/.test(f);
+    var actor = '';
+    if (best) {
+      var iss = S.issues[best], ac = actorOf(f, iss);
+      actor = ac.actor;
+      // the person doing it, when they're named: "my mom needs care and my brother does nothing" is about the brother
+      if (actor === 'other' && ac.word && !SUBJ_OTHER[ac.word]) { var ww = whoOfWord(ac.word); if (ww) { who = ww.who; noun = ww.noun; } }
+      if (iss.themPat) { var tm = new RegExp('\\b(' + iss.themPat + ')\\b').exec(f); if (tm) { var tw = whoOfWord(tm[1]); if (tw) { who = tw.who; noun = tw.noun; } } }
+      if (!who) {
+        var hasSelf = iss.selfFirst || iss.reflect_self || iss.going_self || iss.steps_self;
+        if (pronoun && actor !== 'self') who = iss.defaultWho && iss.defaultWho !== 'self' && !/\b(he|she|him|his|hes|shes)\b/.test(f) ? iss.defaultWho : 'other';
+        else if (iss.selfFirst || (hasSelf && !/\b(we|us|our|home|house|household)\b/.test(f) && !iss.needsOther)) who = 'self';
+        else who = iss.defaultWho || 'other';
+      }
     }
     if (best && S.issues[best].only && S.issues[best].only.indexOf(who) === -1) {
       who = S.issues[best].only.indexOf('other') !== -1 ? 'other' : S.issues[best].only[0];
     }
     var feel = '';
     for (var j = 0; j < FEELS.length; j++) if (FEELS[j][0].test(f)) { feel = FEELS[j][1]; break; }
-    return { issue: best, score: bs, who: who, noun: noun, personal: personal, feel: feel };
+    return { issue: best, score: bs, who: who, noun: noun, personal: personal || pronoun, pronoun: pronoun, actor: actor, feel: feel };
   }
   function whoCtx(who, noun) {
     var W = IDX.sit.who[who] || IDX.sit.who.other;
     var them = noun ? 'your ' + noun.replace(/^(my|our|the|a|an)\s+/, '') : W.them;
     return { them: them, they: 'they', their: 'their', who: who, W: W };
   }
-  function sitParts(issueKey, who, noun) {
+  // actor: who does the thing the issue is about ('self', 'other', or '' when it isn't clear)
+  function sitParts(issueKey, who, noun, actor) {
     var S = IDX.sit, I = S.issues[issueKey], C = S.combos[who + '+' + issueKey] || {}, ctx = whoCtx(who, noun), W = ctx.W;
-    var self = who === 'self', other = !self && I.selfFirst;
+    var self = who === 'self';
+    // someone else is doing it: for a selfFirst issue unless it's clearly me, for any other issue only when it's clearly them
+    var other = !self && (I.selfFirst ? actor !== 'self' : actor === 'other');
+    var theirSide = other && !I.selfFirst;  // written from my side, about them this time: its _other text wins over a combo
     function pickF(field) {
+      if (theirSide && I[field + '_other'] != null) return I[field + '_other'];
       if (C[field] != null) return C[field];
       if (self && I[field + '_self'] != null) return I[field + '_self'];
       if (other && I[field + '_other'] != null) return I[field + '_other'];
@@ -653,32 +766,39 @@
     var steps = (pickF('steps') || []).slice(0, 3);
     var wstep = (W.steps && W.steps[issueKey]) || W.step;
     if (wstep && !C.steps && steps.length < 4 && (!self || I.selfFirst) && !(self && steps.some(function (x) { return /battery/.test(x); }))) steps.push(wstep);
-    var scripts = C.scripts || [];
+    var scripts = theirSide && I.scripts_other ? I.scripts_other.slice() : (C.scripts || []);
     if (!scripts.length) {
       var sx = I.scripts || {};
-      scripts = (sx[who] || []).concat(other ? (I.scripts_other || []) : self ? (sx.self || sx['default'] || []) : (sx['default'] || []));
+      scripts = (sx[who] || []).concat(other ? (I.scripts_other || (I.selfFirst ? [] : sx['default']) || []) : self ? (I.scripts_self || sx.self || sx['default'] || []) : (sx['default'] || []));
     }
+    scripts = scripts.filter(function (x, i) { return scripts.indexOf(x) === i; });
+    // words for a second person involved (a parent, a partner), when the issue has them
+    var also = !self && I.scripts_also && I.scripts_also[1] && I.scripts_also[1].length ? I.scripts_also : null;
     var path = (C.path || (self && I.path_self) || I.path || []).slice(0, 2);
     var read = C.read || (W.read && !self ? W.read : null) || (I.path_self && self ? null : (I.path || [])[2]) || (self ? ['Know your own wiring', '/know-yourself.html'] : null);
     if (read && path.every(function (p) { return p[1] !== read[1]; })) path.push(read);
-    return { I: I, C: C, ctx: ctx, reflect: pickF('reflect'), going: pickF('going'), steps: steps, scripts: scripts, path: safeLinks(path).slice(0, 3), ex: pickF('ex'), more: pickF('more') };
+    return { I: I, C: C, ctx: ctx, reflect: pickF('reflect'), going: pickF('going'), steps: steps, scripts: scripts, also: also,
+      path: safeLinks(path).slice(0, 3), ex: pickF('ex'), more: pickF('more'), tonight: pickF('tonight') };
   }
-  function sitReply(state, issueKey, who, noun, feel, variant) {
-    var P = sitParts(issueKey, who, noun), ctx = P.ctx, I = P.I;
+  function sitReply(state, issueKey, who, noun, feel, variant, actor) {
+    var P = sitParts(issueKey, who, noun, actor), ctx = P.ctx, I = P.I;
     var reflect = fill(Array.isArray(P.reflect) ? P.reflect[0] : P.reflect, ctx);
+    if (feel && /resent/i.test(reflect) && /resent/i.test(feel)) feel = '';
     var b = [{ k: 'p', x: reflect + (feel ? ' ' + feel : '') }];
     b.push({ k: 'h', x: 'What might be going on' });
     b.push({ k: 'p', x: fill(P.going, ctx) });
     b.push({ k: 'h', x: who === 'self' ? 'Small steps for today' : 'Try this today' });
     b.push({ k: 'list', x: P.steps.map(function (s) { return fill(s, ctx); }) });
-    if (P.scripts.length) b.push({ k: 'script', l: (I.scriptLabel && (who === 'self' || !I.selfFirst)) ? I.scriptLabel : 'Words you could use', x: fill(P.scripts[(variant || 0) % P.scripts.length], ctx) });
+    if (P.scripts.length) b.push({ k: 'script', l: (I.scriptLabel && (who === 'self' || !I.selfFirst)) ? I.scriptLabel : (P.also ? fill('Words you could use with {them}', ctx) : 'Words you could use'), x: fill(P.scripts[(variant || 0) % P.scripts.length], ctx) });
+    if (P.also) b.push({ k: 'script', l: fill(P.also[0], ctx), x: fill(P.also[1][(variant || 0) % P.also[1].length], ctx) });
     if (P.path.length) { b.push({ k: 'h', x: 'A short path on the site' }); b.push({ k: 'links', x: P.path }); }
     b.push({ k: 'note', x: 'You know your situation best. This is general guidance from the program, not counseling or a professional opinion.' });
-    state.last = { kind: 'sit', issue: issueKey, who: who, noun: noun, v: variant || 0, q: I.label, topic: I.label, u: P.path[0] && P.path[0][1] };
+    state.last = { kind: 'sit', issue: issueKey, who: who, noun: noun, actor: actor || '', v: variant || 0, q: I.label, topic: I.label, u: P.path[0] && P.path[0][1] };
     var chips = [];
     if (I.deeper) chips.push({ label: 'Go deeper: ' + I.deeper[0], q: I.deeper[1] });
+    chips.push({ label: 'What can I do tonight?', q: 'What can I do tonight?' });
     if (P.scripts.length > 1) chips.push({ label: 'Another way to say it', q: 'Another way to say it' });
-    if (P.ex) chips.push({ label: 'Give me an example', q: 'Give me an example' });
+    else if (P.ex) chips.push({ label: 'Give me an example', q: 'Give me an example' });
     else chips.push({ label: 'How do I start?', q: 'How do I start?' });
     return { blocks: b, chips: chips.slice(0, 3), kind: 'sit', id: who + '+' + issueKey };
   }
@@ -744,15 +864,25 @@
   // ------------------------------------------------------------------ follow-ups: "tell me more", "an example", "what about coworkers?"
   var FU_MORE = /^(ok |okay |and |so |hmm |yes |yes please )?(tell me more|more|some more|more please|go on|continue|keep going|say more|go deeper|deeper|more on that|more about (that|this|it)|tell me more about (that|this|it)|what else|anything else|and then|then what|next|another|why|how so|why does (that|it|this) (work|help)|whats the (science|evidence|research)( on (that|this|it))?)( please)?$/;
   var FU_EX = /^(can you |could you )?(please )?(give me |show me |got |have you got |share )?(an |one |another |a )?(example|examples|sample|instance|script|line)( please| of (that|this|it))?$|^(for example|like what|such as|what would that look like|what does that look like|what would i say|what do i say|what could i say|how would i say (it|that)|how do i say (it|that)|(give me )?another way to (say|put|word) (it|that)|say it another way|different words|other words|another script|another line)\??$/;
-  var FU_START = /^(so |ok |okay |and )?(how (do|should|would|can) (i|we) (start|begin|get started|use (it|this|that)|do (it|this|that))|where (do|should) (i|we) (start|begin)|what (do|should) (i|we) do first|first step|whats the first step|what is the first step|how do i begin|where to start)( with (it|this|that))?$/;
+  var FU_START = /^(so |ok |okay |and )?(how (do|should|would|can) (i|we) (start|begin|get started|use (it|this|that|them|these|those)|do (it|this|that))|where (do|should) (i|we) (start|begin)|what (do|should) (i|we) do first|first step|whats the first step|what is the first step|how do i begin|where to start)( with (it|this|that))?$/;
   var FU_WHO = /^(and |but |ok |okay |so )?((what|how) about|and|and for|and with|for|with|what if its|what if it s|same (thing )?(for|with)|does (this|that|it) (work|help|apply) (for|with)|would (this|that|it) (work|help) (for|with)|can i use (this|that|it) (for|with))\s+(.{2,40})$/;
+  var FU_TONIGHT = /^(ok |okay |so |but |and |ok but |okay but |right but |fine but )*(what (do|can|should|could) (i|we) (actually |really |even |possibly )?do( about it| about that)? ?(tonight|now|right now|today|this evening|first)?|what can i do tonight|whats (one|a) (tiny|small|little) (thing|step)( for tonight)?|(one|a) (tiny|small|little) (thing|step)( for tonight| i can do)?|now what|what now|what next|whats the first step tonight)$/;
   function followUp(state, f, q) {
     var L = state.last;
     if (!L) return null;
+    if (L.kind === 'sit' && FU_TONIGHT.test(f)) {
+      var PT = sitParts(L.issue, L.who, L.noun, L.actor);
+      var step = PT.tonight || PT.steps[0] || '';
+      step = fill(step, PT.ctx).replace(/^./, function (ch) { return ch.toLowerCase(); }).replace(/[.!]?$/, '.');
+      var tb = [{ k: 'p', x: 'Just one tiny step for tonight: ' + step },
+        { k: 'p', x: 'That’s plenty for one evening. Small and done beats big and planned.' }];
+      if (PT.scripts.length) tb.push({ k: 'script', l: 'If you want words for it', x: fill(PT.scripts[((L.v || 0) + 1) % PT.scripts.length], PT.ctx) });
+      return { blocks: tb, chips: [{ label: 'Another way to say it', q: 'Another way to say it' }, { label: 'Give me an example', q: 'Give me an example' }], kind: 'sit-more' };
+    }
     if (FU_EX.test(f)) {
       var anotherWay = /another|different|other/.test(f);
       if (L.kind === 'sit') {
-        var P = sitParts(L.issue, L.who, L.noun);
+        var P = sitParts(L.issue, L.who, L.noun, L.actor);
         if (anotherWay || !P.ex) {
           if (P.scripts.length > 1) { var v = (L.v || 0) + 1; state.last.v = v; return { blocks: [{ k: 'p', x: 'Sure, here’s another way to put it:' }, { k: 'script', l: 'Words you could use', x: fill(P.scripts[v % P.scripts.length], P.ctx) }, { k: 'note', x: 'Change any word so it sounds like you. Your own words beat a perfect script.' }], chips: [{ label: 'Another one', q: 'Another way to say it' }, { label: 'How do I start?', q: 'How do I start?' }], kind: 'sit-more' }; }
         }
@@ -783,10 +913,11 @@
     if (FU_START.test(f)) {
       if (L.kind === 'card') {
         var c3 = cardById(L.card);
+        if (c3 && c3.how && c3.how.length && /\buse\b/.test(f)) return cardReply(state, c3, 'how');
         if (c3 && (c3.start || c3.how)) return { blocks: [{ k: 'p', x: 'Here’s a simple way to start with ' + c3.name + ':' }, { k: 'list', x: (c3.start || c3.how).slice(0, 4) }, { k: 'links', x: safeLinks(c3.links).slice(0, 1) }], chips: [], kind: 'card-more' };
       }
       if (L.kind === 'sit') {
-        var P2 = sitParts(L.issue, L.who, L.noun);
+        var P2 = sitParts(L.issue, L.who, L.noun, L.actor);
         var first = P2.path[0];
         return { blocks: [{ k: 'p', x: 'Start small. Today, just do this one thing: ' + fill(P2.steps[0], P2.ctx).replace(/^./, function (ch) { return ch.toLowerCase(); }) },
           first ? { k: 'p', x: 'Then, when you have ten calm minutes, open ' + first[0] + '. It’s the first stop on your short path.' } : { k: 'p', x: 'Then come back and tell me how it went.' },
@@ -804,7 +935,7 @@
       if (!nw) return null;
       if (L.kind === 'sit') {
         var ok = !S.issues[L.issue].only || S.issues[L.issue].only.indexOf(nw) !== -1;
-        if (ok) return sitReply(state, L.issue, nw, noun, '', 0);
+        if (ok) return sitReply(state, L.issue, nw, noun, '', 0, L.actor);
       }
       var rr2 = roadReply(state, nw, noun);
       if (L.topic && L.kind !== 'road') rr2.blocks.unshift({ k: 'p', x: 'Good question. Everything here works in any relationship, and ' + L.topic + ' is no exception.' });
@@ -824,10 +955,54 @@
     return (who ? 'my ' + who[2] : 'my partner') + ' and i feel distant and disconnected lately like we have drifted apart';
   }
 
+  // A follow-up in someone's own words ("he just ignores it", "and then she laughed"): stay with the playbook
+  // we were on, with a different angle, instead of searching the pages for it.
+  function contextReply(state, L, f) {
+    if (!L || L.kind !== 'sit' || !IDX.sit.issues[L.issue]) return null;
+    var n = f.split(' ').length;
+    if (n > 24) return null;
+    var v = (L.v || 0) + 1, P = sitParts(L.issue, L.who, L.noun, L.actor);
+    var b = [{ k: 'p', x: fill('Thanks for telling me more. Let’s stay with ' + P.I.label + (L.who && L.who !== 'self' && L.who !== 'other' ? ', with {them}.' : '.'), P.ctx) }];
+    var step = P.steps[v % Math.max(1, P.steps.length)];
+    if (step) b.push({ k: 'p', x: 'One thing that often helps here: ' + fill(step, P.ctx).replace(/^./, function (ch) { return ch.toLowerCase(); }) });
+    if (P.scripts.length) b.push({ k: 'script', l: 'Words you could use', x: fill(P.scripts[v % P.scripts.length], P.ctx) });
+    if (P.path[0]) b.push({ k: 'links', x: [P.path[0]] });
+    b.push({ k: 'note', x: 'If that’s not quite it, tell me a bit more about what happened, or who it was with.' });
+    state.last = Object.assign({}, L, { v: v });
+    return { blocks: b, chips: [{ label: 'What can I do tonight?', q: 'What can I do tonight?' }, { label: 'Give me an example', q: 'Give me an example' }, { label: 'Something else', q: 'Something happened today and I want to handle it better' }], kind: 'sit-more', id: L.who + '+' + L.issue };
+  }
+  // A short, personal message the pages can't answer ("we fought again", "ugh, my sister"): a warm question back.
+  var SOFT = /\b(i|im|ive|me|my|we|us|our|he|she|they|him|her|them|feel|feeling|felt|fight|fought|fighting|argu\w*|upset|stress\w*|sad|hurt|lonely|tired|angry|mad|annoyed|frustrat\w*|worried|scared|nervous|jealous|awkward|tense|help)\b/;
+  function softClarify(state, f) {
+    var n = f.split(' ').length;
+    if (n > 16 || !(SOFT.test(f) || FEELS.some(function (x) { return x[0].test(f); }))) return null;
+    var sit = detectSituation(f);
+    state.last = null;
+    if (sit.who && sit.who !== 'self' && sit.who !== 'other') {
+      var c = clarifyWho(state, sit.who, sit.noun);
+      c.blocks[0].x = fill('Thanks for telling me. I’d like to help with the right thing with {them}. Is it closest to one of these? Or say a bit more in your own words.', whoCtx(sit.who, sit.noun));
+      return c;
+    }
+    return { blocks: [{ k: 'p', x: 'Thanks for telling me. I want to make sure I help with the right thing. Is it closest to one of these? Or tell me a little more in your own words, like who it’s with and what happened.' }],
+      chips: [{ label: 'We keep having the same fight', q: 'We keep having the same fight again' }, { label: 'Making up after a fight', q: 'How do we make up after a fight?' },
+        { label: 'I’m worn out', q: 'I feel exhausted and overwhelmed' }, { label: 'What can I do tonight?', q: 'What can I do tonight?' }], kind: 'clarify' };
+  }
+
   // Decide what to say to one message. Returns {blocks:[...], chips:[...]} (all data, rendered later),
   // or {needBG:true} when the background notes should be fetched first (reply() then asks again).
   function respond(state, q, chipDoc) {
-    var f = norm(q);
+    var f = norm(q), prevLast = state.last;
+    var r = respond1(state, q, chipDoc);
+    // an in-scope message that found nothing (a short, feeling-led one, or a follow-up in its own words):
+    // stay with the last topic, or ask a warm clarifying question, rather than "outside my little pond"
+    if (chipDoc == null && r && (r.kind === 'offtopic' || r.kind === 'none') && !OFF_TOPIC.test(f)) {
+      var alt = contextReply(state, prevLast, f) || softClarify(state, f);
+      if (alt) return alt;
+    }
+    return r;
+  }
+  function respond1(state, q, chipDoc) {
+    var f = norm(q), prevLast = state.last;
     if (chipDoc == null) {
       if (DANGER.test(f)) { state.last = null; return safetyReply(); }
       f = roommatesFigure(f);
@@ -854,19 +1029,27 @@
         if (bj != null) return bgReply(state, bj);
       }
       var wo = whoOnly(f);
-      if (wo) return clarifyWho(state, wo.who, wo.noun);
+      if (wo && !(detectSituation(f).score >= 5)) return clarifyWho(state, wo.who, wo.noun);
       for (var ci = 0; ci < (KB.clar || []).length; ci++) {
         var cl = KB.clar[ci];
         if (cl.re.test(f)) { state.last = null; return { blocks: [{ k: 'p', x: cl.x }], chips: cl.chips.map(function (c) { return { label: c[0], q: c[1] }; }), kind: 'clarify' }; }
       }
       var sit = detectSituation(f);
+      // "he", "she", "they" after a playbook about someone: the same person, unless someone new is named
+      if (prevLast && prevLast.kind === 'sit' && sit.pronoun && (!sit.who || sit.who === 'other') && prevLast.who && prevLast.who !== 'self' && prevLast.who !== 'other') {
+        sit.who = prevLast.who; sit.noun = prevLast.noun;
+        if (sit.issue && IDX.sit.issues[sit.issue].only && IDX.sit.issues[sit.issue].only.indexOf(sit.who) === -1) sit.who = 'other';
+      }
+      if (!sit.personal && /^(is it|its|it is|is that|isnt it) (normal|ok|okay|common|natural|wrong|bad|weird|fine|unusual) to\b|\b(feel|feeling|felt)\b/.test(f)) sit.personal = true;
+      // "the group chat is dead", "how should roommates split chores": a clear situation, even without "I" or "my"
+      if (!sit.personal && sit.issue && !defn && (sit.score >= 5 || (sit.score >= 2 && sit.who && sit.who !== 'self' && sit.who !== 'other' && /^(how|what|why|should|do|does|can)\b/.test(f)))) sit.personal = true;
       var card = matchCard(f);
       var asksAbout = /^(what|whats|how|hows|where|which|when|why|is|are|does|do|can|could|should|tell me|explain|show me|define|who)\b/.test(f) && !/\b(when|if) (my|our|i|we|he|she|they)\b|\b(my|our) (partner|husband|wife|boyfriend|girlfriend|spouse|roommates?|housemates?|coworkers?|colleagues?|boss|manager|team|sister|brother|mom|mum|dad|mother|father|parents?|kids?|son|daughter|teen|teenager|friends?|ex)\b.*\b(keeps?|always|never|wont|doesnt|wont|wants?|says?|makes?|leaves?|forgets?)\b/.test(f);
       var road = /\b(path|road|which (tools?|workpapers?|pages?)|what (tools?|workpapers?|pages?)|where (do|should|can) (we|i) (start|begin)|start with|best tool|good tool|tool for|tools for)\b/.test(f);
       if (road && sit.who && sit.who !== 'self' && sit.who !== 'other' && !card && (!sit.issue || sit.score < 3 || /^(which|what|where)\b/.test(f))) return roadReply(state, sit.who, sit.noun);
       var sitOk = sit.issue && sit.score >= 2 && sit.personal && !(defn && !/\b(my|our|i|we|me)\b/.test(norm(defn)));
       if (card && (!sitOk || asksAbout || sit.score < 3)) return cardReply(state, card, cardAspect(f));
-      if (sitOk) return sitReply(state, sit.issue, sit.who, sit.noun, sit.feel, 0);
+      if (sitOk) return sitReply(state, sit.issue, sit.who, sit.noun, sit.feel, 0, sit.actor);
     }
     return respondSite(state, q, chipDoc);
   }
@@ -1061,9 +1244,45 @@
     return { blocks: [{ k: 'p', x: 'Here’s a little tip from the site’s collection:' }, passageBlock(i, [])], chips: [{ label: 'Another tip', q: 'Give me a tip' }, { label: 'Surprise me', q: 'Surprise me' }] };
   }
 
+  // Last tidy-up of any reply: each link once, each bullet once, no chip that repeats what was just asked
+  // (or bounces back to a recent answer), and chips read as questions or choices, not statements.
+  function tidy(state, q, r) {
+    if (!r || !r.blocks) return r;
+    var seenU = {}, seenL = {};
+    r.blocks.forEach(function (b) {
+      if (b.u) seenU[b.u.split('#')[0] + '#' + (b.u.split('#')[1] || '')] = 1;
+    });
+    r.blocks = r.blocks.filter(function (b) {
+      if (b.k === 'links') {
+        b.x = (b.x || []).filter(function (l) { var key = l && l[1]; if (!key || seenU[key]) return false; seenU[key] = 1; return true; });
+        return b.x.length > 0;
+      }
+      if (b.k === 'list') {
+        b.x = (b.x || []).filter(function (t) { var key = norm(t); if (seenL[key]) return false; seenL[key] = 1; return true; });
+        return b.x.length > 0;
+      }
+      return true;
+    });
+    var recent = state.recent || (state.recent = []);
+    var asked = norm(q);
+    recent.push(asked);
+    if (recent.length > 4) recent.shift();
+    var chipSeen = {};
+    r.chips = (r.chips || []).filter(function (c) {
+      var cq = norm(c.q || c.label);
+      if (chipSeen[cq]) return false; chipSeen[cq] = 1;
+      // "Another way to say it" and "Tell me more" are meant to be pressed again; anything else just asked is a loop
+      if (!/^(another|tell me more|more|surprise me|give me a tip|another tip)/.test(cq) && recent.indexOf(cq) !== -1) return false;
+      if (c.doc != null && /[.!]$/.test(c.label) && !/\?$/.test(c.label)) return false;
+      return true;
+    });
+    return r;
+  }
+
   // One message in, one reply out; fetches the background notes first when an answer needs them.
-  function reply(state, q, doc, cb) {
+  function reply(state, q, doc, cb0) {
     var r;
+    function cb(x) { cb0(tidy(state, q, x)); }
     function safe(fn) {
       try { return fn(); }
       catch (e) { return { blocks: [{ k: 'p', x: 'Sorry, something went wrong on my side. Could you try asking another way?' }], chips: STARTERS }; }
@@ -1401,8 +1620,13 @@
 
   Chat.prototype.start = function (opts) {
     opts = opts || {};
-    var changed = !this.char || (opts.name && opts.name !== this.char.name);
+    // a greeting only for a new conversation, or when a different character takes over: coming back to
+    // the page (or opening /ask.html?about=… again) never stacks up another hello
+    var lastBot = null, lastUser = null;
+    this.msgs.forEach(function (m) { if (m.r === 'b') lastBot = m; else lastUser = m; });
+    var prevName = this.char ? this.char.name : (lastBot && lastBot.n) || DEFAULT_CHAR.name;
     this.setChar(opts);
+    var changed = this.char.name !== prevName;
     if (!this.started) {
       this.started = true;
       var me = this;
@@ -1410,7 +1634,8 @@
       if (this.msgs.length) { this.setChips(STARTERS.slice(0, 3)); this.scrollTo(); }
     }
     if (!this.msgs.length || (changed && opts.greeting)) this.greet(this.char.greeting);
-    if (typeof opts.topic === 'string' && opts.topic.trim()) this.ask(opts.topic.trim().slice(0, 300));
+    var topic = typeof opts.topic === 'string' ? opts.topic.trim().slice(0, 300) : '';
+    if (topic && !(lastUser && lastUser.x === topic)) this.ask(topic);
     loadKB(function () {});
   };
 
