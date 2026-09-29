@@ -345,7 +345,7 @@
   var hinted = false;
   function finish() {
     if (window.TOLGarden) window.TOLGarden.gift('words');
-    if (window.TOLRewards) { window.TOLRewards.earn(6 + words.length + (hinted ? 0 : 4), 'words', hinted ? 'Puzzle finished' : 'Every word, no hints'); window.TOLRewards.record('words', 'done'); }
+    if (window.TOLRewards) { window.TOLRewards.earn(10 + words.length, 'words', 'Puzzle finished'); window.TOLRewards.record('words', 'done'); }
     root.classList.add('is-done');
     var n = +get('tol-qw-done', '0') + 1; set('tol-qw-done', String(n));
     setTimeout(function () { var m = wake(); if (m) { m.home(); setTimeout(function () { m.reward(true); }, 600); } }, 300);

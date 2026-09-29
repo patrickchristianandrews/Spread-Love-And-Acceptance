@@ -35,11 +35,13 @@
   var lv = null, cells = {}, petals = [], order = [];
 
   // ---------- sound (calm-music.js): each petal rises a note; each word settles with a chord ----------
-  var music = null, soundOn = get('tol-bloom-sound', 'on') !== 'off';
+  // Off until you turn it on (remembered on this device); the site's Quiet mode keeps it off.
+  var music = null, soundSw = null;
+  function soundOn() { return !!(soundSw && soundSw.on()); }
   function get(k, d) { try { var v = localStorage.getItem(k); return v === null ? d : v; } catch (e) { return d; } }
   function set(k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
   function wake() {
-    if (!soundOn || !window.TOLMusic) return null;
+    if (!soundOn() || !window.TOLMusic) return null;
     try { if (navigator.audioSession) navigator.audioSession.type = 'playback'; } catch (e) {}
     if (!music) { music = window.TOLMusic.create(null, null, { calm: true }); music.level(0.45); }
     music.start(); return music;
@@ -81,13 +83,27 @@
     lv.w.forEach(function (w) { eachCell(w, function (el) { el.classList.add('is-on'); }); });
     lv.w.forEach(function (w) { if (S.found.indexOf(w[0]) !== -1) fill(w, false, S.alt[w[0]]); });
     S.revealed.forEach(function (k) { var el = cells[k]; if (el && !el.textContent) { el.textContent = letterAt(k); el.classList.add('is-hinted'); } });
+    anchors();
+  }
+  // "First letters": each word's first square shows its letter, a place to start without spelling
+  // the whole word from scratch
+  var firstOn = get('tol-bloom-first', 'off') === 'on';
+  function anchors() {
+    lv.w.forEach(function (w) {
+      var done = S.found.indexOf(w[0]) !== -1;
+      eachCell(w, function (el, i, key) {
+        if (i !== 0 || done || el.classList.contains('is-found') || S.revealed.indexOf(key) !== -1) return;
+        if (firstOn) { el.textContent = w[0][0]; el.classList.add('is-hinted', 'is-anchor'); }
+        else if (el.classList.contains('is-anchor')) { el.textContent = ''; el.classList.remove('is-hinted', 'is-anchor'); }
+      });
+    });
   }
   function eachCell(w, fn) { for (var i = 0; i < w[0].length; i++) { var r = w[1] + (w[3] === 'd' ? i : 0), c = w[2] + (w[3] === 'a' ? i : 0); fn(cells[r + ',' + c], i, r + ',' + c); } }
   function letterAt(key) { var out = ''; lv.w.forEach(function (w) { eachCell(w, function (el, i, k) { if (k === key) out = w[0][i]; }); }); return out; }
   function fill(w, animate, text) {
     text = text || w[0];
     eachCell(w, function (el, i) {
-      var go = function () { el.textContent = text[i]; el.classList.remove('is-hinted'); el.classList.add('is-found'); };
+      var go = function () { el.textContent = text[i]; el.classList.remove('is-hinted', 'is-anchor'); el.classList.add('is-found'); };
       if (animate) setTimeout(go, i * 90); else go();
     });
   }
@@ -217,8 +233,8 @@
       say(w.toLowerCase() + ' is a bonus word.');
     } else {
       // gentle: it may well be a word, just not one this little puzzle knows
-      feedback('is-miss'); noteEl.innerHTML = '<b>' + cap(w) + '</b> isn’t in this puzzle. Try another.';
-      say(w.toLowerCase() + ' is not in this puzzle.');
+      feedback('is-miss'); noteEl.innerHTML = '<b>' + cap(w) + '</b> isn’t one of the words this little puzzle knows, and that’s okay. Try another mix of petals.';
+      say(w.toLowerCase() + ' isn’t one of this puzzle’s words. Try another mix.');
     }
     setTimeout(function () { chosen = []; drawLines(); }, 450);
   }
@@ -229,16 +245,17 @@
 
   function finish() {
     root.classList.add('is-done');
-    var perfect = S.hints === 0, petalsWon = 4 + lv.w.length + (perfect ? 5 : 0) + S.bonus.length;
+    // hints cost nothing: every bloom earns the same
+    var perfect = S.hints === 0, petalsWon = 9 + lv.w.length + S.bonus.length;
     S.cleared++; if (perfect) S.perfect++;
     save();
     var m = wake(); if (m) { m.home(); setTimeout(function () { m.reward(true); }, 500); }
     if (window.TOLGarden && S.cleared % 5 === 0) window.TOLGarden.gift('words');
     var res = null;
     // the finish card is the only card: anything new in the garden is shown on it, not in a second pop-up
-    if (R) { res = R.earn(petalsWon, 'bloom', perfect ? 'Perfect bloom, no hints' : 'Level bloomed', { noCard: true, quiet: true }); R.record('bloom', 'levels'); }
+    if (R) { res = R.earn(petalsWon, 'bloom', 'Level bloomed', { noCard: true, quiet: true }); R.record('bloom', 'levels'); }
     var card = $('.wb-done');
-    card.querySelector('.wb-done-h').textContent = perfect ? 'A perfect bloom!' : (cur.fresh ? 'Wheel bloomed' : 'Level ' + (cur.index + 1) + ' bloomed');
+    card.querySelector('.wb-done-h').textContent = cur.fresh ? 'Wheel bloomed' : 'Level ' + (cur.index + 1) + ' bloomed';
     card.querySelector('.wb-done-p').textContent = KIND[S.level % KIND.length] + (S.bonus.length ? ' You found ' + S.bonus.length + ' bonus ' + (S.bonus.length === 1 ? 'word' : 'words') + ' too.' : '');
     card.querySelector('.wb-done-petals').textContent = (res && res.unlocked && res.unlocked.length ? res.unlocked[0].icon + ' New in your garden: ' + res.unlocked[0].name : '');
     levels.finished(cur);
@@ -305,14 +322,35 @@
     for (var k = 0; k < left.length; k++) {
       var done = false;
       eachCell(left[k], function (el, i, key) { if (!done && !el.textContent) { el.textContent = left[k][0][i]; el.classList.add('is-hinted'); S.revealed.push(key); done = true; } });
-      if (done) { S.hints++; save(); noteEl.textContent = 'A letter is showing. Finish without hints for a perfect bloom next time.'; return; }
+      if (done) { S.hints++; save(); noteEl.textContent = 'A letter is showing. Use as many as you like.'; return; }
     }
   });
   var sb = $('.wb-sound');
-  function soundLabel() { sb.setAttribute('aria-pressed', String(soundOn)); sb.innerHTML = soundOn ? '&#127925;' : '&#128263;'; sb.setAttribute('aria-label', soundOn ? 'Music on' : 'Music off'); }
-  sb.addEventListener('click', function () { soundOn = !soundOn; set('tol-bloom-sound', soundOn ? 'on' : 'off'); soundLabel(); if (soundOn) wake(); else if (music) music.stop(); });
-  soundLabel();
-  document.addEventListener('visibilitychange', function () { if (!music) return; if (document.hidden) music.stop(); else if (soundOn) music.start(); });
+  if (window.TOLMusic && window.TOLMusic.toggle) soundSw = window.TOLMusic.toggle(sb, { key: 'tol-bloom-sound', label: 'Music', onChange: function (on) { if (on) wake(); else if (music) music.stop(); } });
+  else sb.hidden = true;
+  document.addEventListener('visibilitychange', function () { if (!music) return; if (document.hidden) music.stop(); else if (soundOn()) music.start(); });
+
+  // ---------- less spelling: first letters, and hearing a word ----------
+  var fb = $('.wb-first');
+  function firstLabel() { fb.setAttribute('aria-pressed', String(firstOn)); fb.innerHTML = '<span aria-hidden="true">&#128292;</span> First letters: ' + (firstOn ? 'on' : 'off'); }
+  fb.addEventListener('click', function () { firstOn = !firstOn; set('tol-bloom-first', firstOn ? 'on' : 'off'); firstLabel(); if (lv) anchors(); });
+  firstLabel();
+  // "Hear a word" says one word you haven't found yet, out loud (only when you tap it)
+  var hb = $('.wb-hear');
+  if (!('speechSynthesis' in window) || typeof window.SpeechSynthesisUtterance !== 'function') hb.hidden = true;
+  hb.addEventListener('click', function () {
+    var left = lv ? lv.w.filter(function (w) { return S.found.indexOf(w[0]) === -1; }) : [];
+    if (!left.length) return;
+    var w = left[hearAt++ % left.length][0];
+    try {
+      window.speechSynthesis.cancel();
+      var u = new SpeechSynthesisUtterance(w.toLowerCase()); u.lang = 'en-US'; u.rate = 0.8;
+      window.speechSynthesis.speak(u);
+    } catch (e) {}
+    noteEl.innerHTML = 'Listen for a word with ' + w.length + ' letters. It starts with <b>' + w[0] + '</b>.';
+    say('A word with ' + w.length + ' letters, starting with ' + w[0] + '.');
+  });
+  var hearAt = 0;
   window.addEventListener('resize', drawLines);
 
   wheel.setAttribute('tabindex', '-1');

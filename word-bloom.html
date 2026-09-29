@@ -29,6 +29,8 @@
   .wb-tools{ display:flex; gap:.4rem; align-items:center; }
   .wb-chip{ display:none; }
   @media (max-width:520px){ .wb-chip{ display:inline-block; } }
+  .wb-tools .wb-sound{ width:auto; padding:0 .85rem; border-radius:999px; font-size:.86rem; font-weight:600; white-space:nowrap; display:inline-flex; gap:.3rem; }
+  .wb-help{ margin-top:.4rem; }
   .wb-tools button, .wb-side button{ width:44px; height:44px; border-radius:50%; border:1px solid var(--g-edge); background:var(--g-tile); color:var(--g-ink); font-size:1.15rem; cursor:pointer; display:grid; place-items:center; }
   .wb-grid{ margin-bottom:.8rem; }
   .wb-grid .gm-cell.is-hinted{ color:var(--g-soft); background:var(--g-empty); }
@@ -119,7 +121,7 @@
 <section class="gm-board wb" id="wb" aria-label="Word Bloom" hidden>
   <div class="wb-head">
     <div><p class="wb-level">Level 1</p><p class="wb-chapter"></p></div>
-    <div class="wb-tools"><span class="wb-chip" data-rewards-chip></span><button type="button" class="wb-sound" aria-pressed="true">&#127925;</button></div>
+    <div class="wb-tools"><span class="wb-chip" data-rewards-chip></span><button type="button" class="wb-sound" aria-pressed="false">&#128263; Music: off</button></div>
   </div>
   <div class="gl-host"></div>
   <div class="gm-grid wb-grid" aria-label="The words to find"></div>
@@ -139,6 +141,10 @@
     </div>
   </div>
   <p class="gm-note wb-note"></p>
+  <div class="gm-btns wb-help" role="group" aria-label="Less spelling">
+    <button type="button" class="wb-first" aria-pressed="false">&#128292; First letters: off</button>
+    <button type="button" class="wb-hear">&#128266; Hear a word</button>
+  </div>
   <p class="gm-live" aria-live="polite"></p>
   <div class="wb-done" hidden role="dialog" aria-modal="true" aria-labelledby="wb-done-h">
     <div>
@@ -153,7 +159,7 @@
 </section>
 
 <div class="try-this wb-how">
-  <p><strong>How to play:</strong> drag your finger from petal to petal to spell a word, then let go. Slide back to undo a letter. You can also tap petals one at a time and tap the middle, or type on a keyboard. &#128256; mixes up the letters, and &#128161; shows one letter. Finish a level without hints for a <em>perfect bloom</em>.</p>
+  <p><strong>How to play:</strong> drag your finger from petal to petal to spell a word, then let go. Slide back to undo a letter. You can also tap petals one at a time and tap the middle, or type on a keyboard. &#128256; mixes up the letters, and &#128161; shows one letter, as often as you like. If spelling is tiring, turn on “First letters” to see where each word starts, or tap “Hear a word” to hear one of the words out loud.</p>
 </div>
 </main>
 </body>

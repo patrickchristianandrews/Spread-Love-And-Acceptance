@@ -2,7 +2,7 @@
    Tap a square (tap it again to switch between across and down) and type with the
    on-screen keys or a keyboard. Each word glows softly when it's right. "Next" goes on
    in order, "Random" (or "A random one") picks one you haven't played, and you can change the difficulty
-   any time (game-levels.js). Every puzzle counts as a level, with a kinder note for no reveals (rewards.js). No timer, no way to lose. Progress stays in this browser. */
+   any time (game-levels.js). Every puzzle counts as a level (rewards.js), the same whether or not you show a letter. No timer, no way to lose. Progress stays in this browser. */
 (function () {
   'use strict';
   var root = document.getElementById('xw'); if (!root) return;
@@ -251,16 +251,16 @@
 
   function finish() {
     root.classList.add('is-done');
-    var perfect = S.reveals === 0, won = 6 + words.length + (perfect ? 6 : 0);
+    var perfect = S.reveals === 0, won = 12 + words.length; // help costs nothing: every solve earns the same
     if (S.done.indexOf(S.at) === -1) S.done.push(S.at);
     S.solved++; save();
     if (cur.daily) markToday(cur.daily); else levels.finished(cur);
     var m = wake(); if (m) { m.home(); setTimeout(function () { m.reward(true); }, 500); }
     var res = null;
-    if (R) { res = R.earn(won, 'crossword', perfect ? 'Solved with no reveals' : 'Crossword solved'); R.record('crossword', 'done'); }
+    if (R) { res = R.earn(won, 'crossword', 'Crossword solved'); R.record('crossword', 'done'); }
     if (window.TOLGarden) window.TOLGarden.gift('words');
     var card = $('.xw-done');
-    card.querySelector('.xw-done-h').textContent = perfect ? 'Solved, all by yourself!' : 'Solved. Lovely.';
+    card.querySelector('.xw-done-h').textContent = 'Solved. Lovely.';
     card.querySelector('.xw-done-p').textContent = 'You’ve finished ' + S.solved + (S.solved === 1 ? ' crossword.' : ' crosswords.') + ' Take a slow breath.';
     card.querySelector('.xw-done-petals').textContent = (res && res.unlocked && res.unlocked.length ? '\u2728 New in the background: ' + res.unlocked[0].name : res ? '\u2728 Level ' + res.level : '');
     var tip = card.querySelector('.xw-done-tip'); if (tip) tip.innerHTML = window.TOLLevels.programTip();
@@ -327,7 +327,7 @@
     var w = current(); if (!w) return;
     var k = w.cells.filter(function (x) { return S.fill[x] !== sol[x]; })[0]; if (!k) return;
     sel = k; S.reveals++; type(sol[k]);
-    noteEl.textContent = 'One letter is in. Try the next one with no reveals, just for fun.';
+    noteEl.textContent = 'One letter is in. Show a letter whenever you like.';
   });
   $('.xw-check').addEventListener('click', function () {
     var wrong = Object.keys(S.fill).filter(function (k) { return S.fill[k] && S.fill[k] !== sol[k]; });
