@@ -40,6 +40,9 @@
   .ng-pad[hidden]{ display:none; }
   .ng-pad button{ padding:0; height:3rem; font-size:1.2rem; border-radius:50%; touch-action:none; user-select:none; -webkit-user-select:none; }
   .ng-more{ display:contents; }
+  .ng-break{ display:none; }
+  /* "Keep the page still": nothing in the page chrome moves either */
+  html.tol-still .ng-stage *{ animation:none !important; transition:none !important; }
   .ng-more-btn, .ng-short{ display:none; }
   .ng-hud{ position:absolute; right:1rem; top:3.4rem; margin:0; font:600 .85rem/1 "IBM Plex Mono", monospace; color:#F9D9B8; text-shadow:0 1px 6px rgba(0,0,0,.5); pointer-events:none; }
   .ng-hud:empty{ display:none; }
@@ -84,9 +87,10 @@
   .ng-sources{ font-size:.9rem; color:var(--ink-soft); }
   @media (max-width:560px){
     .ng-say{ font-size:1.15rem; top:46%; }
-    .ng-pad{ left:50%; right:auto; transform:translateX(-50%); bottom:calc(6.9rem + env(safe-area-inset-bottom, 0px)); grid-template-columns:repeat(4, 4rem); gap:.55rem; }
+    .ng-pad{ left:50%; right:auto; transform:translateX(-50%); bottom:calc(9.9rem + env(safe-area-inset-bottom, 0px)); grid-template-columns:repeat(4, 4rem); gap:.55rem; }
     .ng-pad button{ height:4rem; font-size:1.45rem; }
-    .ng-bar{ gap:.35rem; flex-wrap:nowrap; }
+    .ng-bar{ gap:.35rem; flex-wrap:wrap; }
+    .ng-break{ display:block; flex-basis:100%; height:0; }
     .ng-bar button{ padding:.55rem .75rem; font-size:.86rem; min-height:44px; white-space:nowrap; }
     .ng-long{ display:none; } .ng-short{ display:inline; }
     .ng-more-btn{ display:inline-block; min-width:44px; font-size:1.2rem !important; line-height:1; }
@@ -148,12 +152,10 @@
       <button type="button" data-mode="breathe" aria-pressed="false">&#127800; Breathe</button>
       <button type="button" data-mode="fireflies" aria-pressed="false">&#10024; Fireflies</button>
       <button type="button" data-mode="pond" aria-pressed="false">&#128167; <span class="ng-long">Lily pond</span><span class="ng-short">Pond</span></button>
-      <button type="button" class="ng-more-btn" id="ng-more" aria-expanded="false" aria-controls="ng-more-menu" aria-label="More: sound, full screen, leave">&#8943;</button>
-      <div class="ng-more" id="ng-more-menu">
-        <button type="button" id="ng-sound" aria-pressed="false">&#127925; Sound off</button>
-        <button type="button" id="ng-full" aria-pressed="false">&#10530; Full screen</button>
-        <button type="button" id="ng-leave">Leave gently</button>
-      </div>
+      <span class="ng-break" aria-hidden="true"></span>
+      <button type="button" id="ng-sound" aria-pressed="false">&#128263; Sound: off</button>
+      <button type="button" id="ng-full" aria-pressed="false">&#10530; Full screen</button>
+      <button type="button" id="ng-leave">&#127769; Leave gently</button>
     </div>
 
     <div class="ng-card" id="ng-welcome">
@@ -167,8 +169,8 @@
           <button type="button" class="ng-choice" data-enter="fireflies"><span class="ng-ico">&#10024;</span><strong>Fireflies</strong><small>Connect the stars into pictures that sing. No puzzle comes back the same: collect the pictures, find wild constellations, catch shooting stars, and dedicate each new one to someone you love.</small></button>
           <button type="button" class="ng-choice" data-enter="pond"><span class="ng-ico">&#128167;</span><strong>Lily pond</strong><small>A slow, gentle puzzle. Fit lily pads into rows and they bloom. Most nights, old lilies are waiting with gaps to fill. You can’t lose.</small></button>
         </div>
-        <p class="ng-row" style="margin:0 0 .8rem;"><button type="button" id="ng-sound-welcome" aria-pressed="false">&#127925; Soft sound: off</button></p>
-        <p class="ng-small">Headphones are lovely here. You can switch between the three activities anytime with the buttons at the bottom. Tap <strong>How to play</strong> whenever you need a reminder.</p>
+        <p class="ng-row" style="margin:0 0 .8rem;"><button type="button" id="ng-sound-welcome" aria-pressed="false">&#128263; Soft sound: off</button></p>
+        <p class="ng-small">The garden is silent unless you turn sound on, and you can turn it off again anytime with the Sound button at the bottom. If you like sound, headphones are lovely here. You can switch between the three activities anytime with the buttons at the bottom. Tap <strong>How to play</strong> whenever you need a reminder.</p>
       </div>
     </div>
 

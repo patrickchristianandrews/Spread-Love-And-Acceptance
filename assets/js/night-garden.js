@@ -8,8 +8,9 @@
                  pond fills, it simply settles and starts fresh.
    The garden remembers flowers, lilies and constellations in this browser only
    (localStorage). The moon follows the real moon; the season follows the calendar.
-   Nothing is sent anywhere. Sound is on by default (it starts when the visitor enters),
-   and box breathing always starts with sound unless it was switched off during the visit. */
+   Nothing is sent anywhere. Sound is off until the visitor turns it on (the choice is kept on
+   this device), it never starts while a card covers the garden, and the site's Quiet mode keeps it
+   off. "Keep the page still" (or the device asking for less motion) stills the garden. */
 (function () {
   'use strict';
 
@@ -18,7 +19,13 @@
   var ctx = canvas.getContext('2d');
   var sayEl = document.getElementById('ng-say'), countEl = document.getElementById('ng-count');
   var padEl = document.getElementById('ng-pad');
-  var REDUCED = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function stillNow() {
+    return !!((window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) ||
+      (window.TOLStill && window.TOLStill.on()) || document.documentElement.classList.contains('tol-still'));
+  }
+  var REDUCED = stillNow();
+  document.addEventListener('tol-still', function () { REDUCED = stillNow(); });
+  function quietNow() { try { return !!(window.TOLQuiet && window.TOLQuiet.on()); } catch (e) { return false; } }
   // Backdrop mode (garden-backdrop.html, behind Pause & Play): silent, no buttons, and it
   // never changes the visitor's saved garden.
   var AMBIENT = document.documentElement.hasAttribute('data-ambient');
@@ -40,6 +47,8 @@
   var KEY = 'tol-night-garden-v1';
   var save = { flowers: [], lilies: 0, consts: [], days: [], breaths: 0, sound: true }, mutedThisVisit = false;
   try { var raw = localStorage.getItem(KEY); if (raw) { var o = JSON.parse(raw); for (var k in o) save[k] = o[k]; } } catch (e) {}
+  // sound is on only if the visitor turned it on (save.snd), never by default, and never in Quiet mode
+  save.sound = save.snd === 'on' && !quietNow();
   function persist() { if (AMBIENT) return; try { localStorage.setItem(KEY, JSON.stringify(save)); } catch (e) {} }
   // ---------- Variety: what this browser has already seen ----------
   // Every picture, pond layout, breathing pattern, sky word, parting thought and kind of night is chosen
@@ -703,12 +712,14 @@
     document.getElementById('ng-help-steps').innerHTML = h.steps.map(function (x) { return '<li>' + x.replace('{N}', SHAPE_IDS.length) + '</li>'; }).join('') +
       (h.keys && window.matchMedia && window.matchMedia('(hover: hover)').matches ? '<li>' + h.keys + '</li>' : '');
     helpCard.hidden = false; say('', '', 0);
+    if (audio) stopAudio(); // the garden goes quiet while a card is up
     try { document.getElementById('ng-help-ok').focus({ preventScroll: true }); } catch (e) {}
   }
   function hideHelp() {
     helpCard.hidden = true;
     if (mode === 'breathe') { breath.start = performance.now() + 600; breath.count = 0; breath.phase = ''; }
     if (mode === 'pond') dropAt = performance.now() + 1500;
+    soundIfClear();
     try { document.getElementById('ng-help-btn').focus({ preventScroll: true }); } catch (e) {}
   }
   if (helpCard) {
@@ -723,7 +734,6 @@
     padEl.hidden = m !== 'pond';
     stage.classList.toggle('is-play', m === 'pond' || m === 'fireflies'); // the page doesn't scroll while you play
     flies.forEach(function (f) { f.home = null; });
-    if (m === 'breathe' && !save.sound && !mutedThisVisit && typeof startAudio === 'function') { save.sound = true; persist(); soundLabel(); startAudio(); } // box breathing starts with sound
     if (m === 'breathe') { var bp = chooseBreath(); breath.start = performance.now() + 1500; breath.count = 0; breath.phase = ''; skyWords = []; wordAt = 0; say(bp.name, breathDesc(bp).replace(/^./, function (c) { return c.toUpperCase(); }) + '. Follow the star around ' + bp.shape + '.', 0); }
     if (m === 'fireflies') { newShape(); say('Connect the stars', 'Start at 1 and follow the numbers. Each star sings a note.', 6000); }
     if (m === 'pond') { pondReset(); say('Float the lily pads', layout ? 'Old lilies are waiting at the bottom tonight, with gaps to fill. The first pads to drift in fit them.' : 'Drag a pad with your finger, tap to turn it, flick down to drop it. Fill a row and it blooms.', 6000); }
@@ -2408,18 +2418,24 @@
   var soundBtn = document.getElementById('ng-sound');
   var soundWelcome = document.getElementById('ng-sound-welcome');
   function soundLabel() {
-    soundBtn.setAttribute('aria-pressed', String(!!save.sound)); soundBtn.innerHTML = save.sound ? '&#127925; Sound on' : '&#127925; Sound off';
-    if (soundWelcome) { soundWelcome.setAttribute('aria-pressed', String(!!save.sound)); soundWelcome.innerHTML = save.sound ? '&#127925; Soft sound: on' : '&#127925; Soft sound: off'; }
+    soundBtn.setAttribute('aria-pressed', String(!!save.sound)); soundBtn.innerHTML = save.sound ? '&#127925; Sound: on' : '&#128263; Sound: off';
+    if (soundWelcome) { soundWelcome.setAttribute('aria-pressed', String(!!save.sound)); soundWelcome.innerHTML = save.sound ? '&#127925; Soft sound: on' : '&#128263; Soft sound: off'; }
   }
-  if (soundWelcome) soundWelcome.addEventListener('click', function () {
-    save.sound = !save.sound; persist(); soundLabel(); if (!save.sound) mutedThisVisit = true;
-    if (save.sound) { startAudio(); setTimeout(function () { chime(2, 0.12); }, 150); } else stopAudio();
-  });
+  function setSound(on) {
+    save.sound = !!on && !quietNow(); save.snd = save.sound ? 'on' : 'off'; persist(); soundLabel();
+    if (!save.sound) { mutedThisVisit = true; stopAudio(); }
+  }
+  // any card covering the garden (the welcome, how to play, a dedication, leaving)
+  function cardUp() { return Array.prototype.some.call(stage.querySelectorAll('.ng-card'), function (c) { return !c.hidden; }); }
+  function soundIfClear() { if (save.sound && !quietNow() && !cardUp()) startAudio(); }
+  // on the welcome card, the switch only records the choice: sound starts once you're in the garden
+  if (soundWelcome) soundWelcome.addEventListener('click', function () { setSound(!save.sound); });
   soundBtn.addEventListener('click', function () {
-    save.sound = !save.sound; persist(); soundLabel(); if (!save.sound) mutedThisVisit = true;
-    if (save.sound) { startAudio(); setTimeout(function () { chime(2, 0.12); }, 150); say('Sound on', 'If you can’t hear anything, turn your volume up' + (/iphone|ipad/i.test(navigator.userAgent) ? ' and check the silent switch.' : '.'), 3500); }
-    else stopAudio();
+    setSound(!save.sound);
+    if (save.sound && !cardUp()) { startAudio(); setTimeout(function () { chime(2, 0.12); }, 150); say('Sound on', 'If you can’t hear anything, turn your volume up' + (/iphone|ipad/i.test(navigator.userAgent) ? ' and check the silent switch.' : '.'), 3500); }
   });
+  // Quiet mode switched on elsewhere: the garden falls silent at once
+  document.addEventListener('tol-quiet', function () { if (quietNow() && save.sound) { save.sound = false; soundLabel(); stopAudio(); } });
 
   var QUOTES = [
     'You don’t have to fix everything tonight.',
@@ -2501,7 +2517,7 @@
     if (tipEl && window.TOLTips) window.TOLTips.get(['sleep', 'rest', 'calm', 'kindness'], function (t) { tipEl.innerHTML = '<strong>A little tip:</strong> ' + t[0] + ' ' + t[1]; tipEl.hidden = false; });
     closeCard.hidden = false; stopAudio(); try { document.getElementById('ng-stay').focus({ preventScroll: true }); } catch (e) {}
   });
-  function stay() { closeCard.hidden = true; if (save.sound) startAudio(); document.getElementById('ng-leave').focus(); }
+  function stay() { closeCard.hidden = true; soundIfClear(); document.getElementById('ng-leave').focus(); }
   document.getElementById('ng-stay').addEventListener('click', stay);
   closeCard.addEventListener('keydown', function (e) { if (e.key === 'Escape') stay(); });
 
@@ -2516,9 +2532,10 @@
   if (wp && !AMBIENT) wp.textContent += ' ' + TONIGHT.line;
   document.querySelectorAll('[data-enter]').forEach(function (b) {
     b.addEventListener('click', function () {
-      welcome.hidden = true; if (save.sound) startAudio();
+      welcome.hidden = true;
       if (window.innerWidth <= 560 && fullBtn && !document.documentElement.classList.contains('ng-full')) setFull(true); // more room on a phone
       setMode(b.getAttribute('data-enter'));
+      soundIfClear(); // only if sound is on, and not while the how-to card is showing
     });
   });
 
