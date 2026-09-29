@@ -104,7 +104,7 @@ window.TOLLearnPlayData = {
               ['Sort out who owns what, one owner per job', false, 'Not quite. The Calm-Down Kit comes before agreeing owners and choosing words.'],
               ['Check whether the load can last', false, 'Not quite. Measuring comes once there are numbers. When someone is running hot, calming down comes first.']] },
         { at: 'How it works, in order', k: 'match', q: 'Match each worksheet to the question it answers.',
-          pairs: [['Who did what (WP-01)', 'What is actually happening?'], ['How full is your battery? (WP-02)', 'What is each of us bringing?'],
+          pairs: [['Who did what (WP-01)', 'What is actually happening?'], ['How much are you carrying? (WP-02)', 'What is each of us bringing?'],
                   ['One owner per job (WP-03)', 'Who is actually responsible for what?'], ['Say it so it lands (WP-09)', 'How do I say what I actually mean?']] },
         { at: 'What this is', k: 'sort', q: 'Is it, or isn’t it?', bins: ['It is', 'It isn’t'],
           items: [['A shared record of the work of a home', 0], ['A compatibility test or relationship score', 1], ['A daily habit for catching small problems early', 0],
@@ -638,7 +638,7 @@ window.TOLLearnPlayData = {
     },
 
     '/workpapers/wp-02-battery-stress-meter.html': {
-      t: 'WP-02: How full is your battery?', g: 'p3', n: '/wp-11.html',
+      t: 'WP-02: How much are you carrying?', g: 'p3', n: '/wp-11.html',
       m: [
         { at: 'before a hard conversation', k: 'quiz', q: 'This check is…',
           o: [['A simple gut-check', true, 'Yes! Kind and quick, and not a medical test.'],

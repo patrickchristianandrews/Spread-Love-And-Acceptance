@@ -68,8 +68,10 @@
     }
     save();
     var res = { level: level(), unlocked: fresh, next: nextUnlock() };
-    if (!opts.quiet && !fresh.length) toast(res, why);
-    if (fresh.length && !opts.noCard) {
+    // Quiet mode: progress is still kept, but nothing pops up about it
+    var hush = !!(window.TOLQuiet && window.TOLQuiet.on());
+    if (!opts.quiet && !fresh.length && !hush) toast(res, why);
+    if (fresh.length && !opts.noCard && !hush) {
       // From a "Check yourself" card (learn-play): a small note that doesn't block the page, and
       // it waits until the reader has finished with the card. The games keep the full card.
       if (source === 'learn-play' || opts.soft) whenCalm(function () { unlockToast(fresh[0]); });

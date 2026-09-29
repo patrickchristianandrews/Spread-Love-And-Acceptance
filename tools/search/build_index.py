@@ -131,7 +131,8 @@ def main():
         if p.noindex or p.refresh:
             continue
         body = clean(' '.join(p.text if p._saw_main else p._body_text))
-        title = re.sub(r'\s+[—–|-]\s+The Objective Ledger.*$', '', p.title).strip() or p.h1 or f
+        title = re.sub(r'\s+[—–|-]\s+The Objective Ledger.*$', '', p.title)
+        title = re.sub(r'\s*[·|–—-]\s*Spread Love (&|and) Acceptance\s*$', '', title).strip() or p.h1 or f
         url = '/' + f
         rows.append({
             'u': url,

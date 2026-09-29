@@ -88,8 +88,10 @@
     var st = document.createElement('style'); st.id = 'tol-dive-css'; st.textContent = CSS; document.head.appendChild(st);
   }
   function makeBtn(key, word) {
-    var b = document.createElement('button');
-    b.type = 'button'; b.className = 'tol-dive'; b.setAttribute('data-dive', key);
+    // a span that acts as a button, so a long term wraps across lines like the words around it
+    // (a real <button> becomes one box and can spill over the line below in narrow places)
+    var b = document.createElement('span');
+    b.setAttribute('role', 'button'); b.tabIndex = 0; b.className = 'tol-dive'; b.setAttribute('data-dive', key);
     b.setAttribute('aria-haspopup', 'dialog');
     b.innerHTML = esc(word) + ICON;
     b.setAttribute('aria-label', word + ': a mini dive, tap for a short explanation');
@@ -97,20 +99,29 @@
   }
 
   // ---------- the little dialog ----------
-  var box = null, lastBtn = null;
+  var box = null, lastBtn = null, curKey = '';
+  // mini dives that also have a one-line entry in the glossary (glossary.html#id)
+  var GLOSS = {static: 'static', framework: 'frequency', retune: 'retune', drift: 'drift', carrier: 'carrier-wave', wired: 'wiring', card: 'wiring-card', weather: 'weather', talkwindow: 'talk-window', almanac: 'almanac', battery: 'battery', invisible: 'load', unbilled: 'unbilled-debt', raci: 'owner', pll: 'check-in', kit: 'calm-down-kit', flooded: 'flooded', bids: 'bid', turning: 'turning-toward', repair: 'repair', refusal: 'neutral-refusal', workpapers: 'workpaper', lemonade: 'lemonade-stand', solvency: 'can-the-load-last', translator: 'signal-translator', reader: 'conversation-reader', masking: 'masking', petals: 'levels'};
   function open(key, from) {
     var d = G[key]; if (!d) return;
-    lastBtn = from;
+    lastBtn = from; curKey = key;
     if (!box) {
       addCss();
       box = document.createElement('div');
       box.className = 'tol-dive-card'; box.setAttribute('role', 'dialog'); box.setAttribute('aria-modal', 'true'); box.setAttribute('aria-labelledby', 'tol-dive-h');
       box.innerHTML = '<div class="tol-dive-box"><button type="button" class="tol-dive-x" aria-label="Close">&times;</button>' +
-        '<p class="tol-dive-k"><span class="tol-dive-i" aria-hidden="true"></span> Mini dive</p><ol class="tol-dive-meter" aria-hidden="true"></ol><h2 id="tol-dive-h"></h2><div class="tol-dive-body" aria-live="polite"></div><p class="tol-dive-wade"></p><p class="tol-dive-more"></p></div>';
+        '<p class="tol-dive-k"><span class="tol-dive-i" aria-hidden="true"></span> Mini dive' + ('speechSynthesis' in window ? ' <button type="button" class="tol-listen-mini tol-dive-listen" aria-pressed="false"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" focusable="false"><path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z" fill="currentColor"/><path d="M15.5 8.5a5 5 0 0 1 0 7" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/></svg> Listen</button>' : '') + '</p><ol class="tol-dive-meter" aria-hidden="true"></ol><h2 id="tol-dive-h"></h2><div class="tol-dive-body" aria-live="polite"></div><p class="tol-dive-wade"></p><p class="tol-dive-more"></p></div>';
       document.body.appendChild(box);
       box.addEventListener('click', function (e) {
         if (e.target === box || e.target.closest('.tol-dive-x')) return close();
         if (e.target.closest('.tol-dive-go')) wade();
+        var lb = e.target.closest('.tol-dive-listen');
+        if (lb) {
+          // read the title and the newest step out loud (listen.js, the device's own voice)
+          var go = function () { var body = box.querySelector('.tol-dive-body'), layer = body.lastElementChild; if (window.TOLListen && layer) window.TOLListen.read(layer, lb); };
+          if (window.TOLListen) go();
+          else { var sc = document.createElement('script'); sc.src = '/assets/js/listen.js'; sc.onload = go; document.head.appendChild(sc); }
+        }
       });
       box.addEventListener('keydown', function (e) {
         if (e.key === 'Escape') close();
@@ -147,6 +158,7 @@
     var last = depth === layers.length - 1;
     box.querySelector('.tol-dive-more').innerHTML = (deep && last && d.lt ? '<p class="tol-dive-tease">' + DEEP[0] + ' <b>The deep end:</b> ' + esc(d.lt) + '</p>' : '') +
       (deep ? '<a href="' + esc(d.u) + '" aria-label="' + esc('Dive deeper: ' + (d.l || d.t) + ', in the full version') + '">' + DEEP[0] + ' ' + esc(d.l || 'Dive deeper') + ' &rarr;</a>' : '') +
+      (GLOSS[curKey] && location.pathname !== '/glossary.html' ? '<a class="tol-dive-gloss" href="/glossary.html#' + GLOSS[curKey] + '"><span aria-hidden="true">&#128214;</span> In the glossary</a>' : '') +
       '<a class="tol-dive-chat" href="/ask.html?about=' + encodeURIComponent(d.t) + '"><span aria-hidden="true">&#128172;</span> Chat it out with Professor Puddles</a>';
     if (depth) { var nl = body.lastElementChild; if (nl) body.scrollTo ? body.scrollTo({ top: nl.offsetTop - body.offsetTop - 8, behavior: 'smooth' }) : (body.scrollTop = nl.offsetTop); }
     else body.scrollTop = 0;
@@ -158,6 +170,7 @@
   }
   function close() {
     if (!box) return;
+    if (window.TOLListen) window.TOLListen.stop();
     box.classList.remove('is-in');
     setTimeout(function () { box.classList.remove('is-open'); }, 260);
     if (lastBtn && lastBtn.focus) lastBtn.focus();

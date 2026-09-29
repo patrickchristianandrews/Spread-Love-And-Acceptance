@@ -237,7 +237,7 @@
         '<p class="br-how"></p>' +
         '<p class="br-label">How long</p>' + chips('min', [['1', '1 min'], ['3', '3 min'], ['5', '5 min']], get('tol-br-min', '1')) +
         '<p class="br-label">Sound</p>' + chips('scape', [['beneath', 'The Breath Beneath'], ['deep', 'Deep'], ['ocean', 'Ocean'], ['rain', 'Soft rain'], ['bowls', 'Singing bowls'], ['off', 'Silence']], get('tol-br-scape', 'deep')) +
-        '<p class="br-scape-note"></p>' +
+        '<p class="br-scape-note" aria-live="polite"></p>' +
         '<p class="br-phones"><span aria-hidden="true">&#127911;</span> Soundscapes sound best with headphones, so the deep, low tones and the gentle left-to-right movement come through fully.</p>' +
         '<div class="tol-breathe-row"><button type="button" class="br-begin" data-act="begin">Begin</button><button type="button" data-act="close">Not now</button></div>' +
       '</section>' +
@@ -272,7 +272,7 @@
   }
 
   var $ = function (q) { return ov.querySelector(q); };
-  var method = 'box', minutes = 1, scape = 'deep', engine = null, muted = false, timers = [], raf = 0, last = null;
+  var method = 'box', minutes = 1, scape = 'off', engine = null, muted = false, timers = [], raf = 0, last = null;
   var run = { start: 0, total: 0, cycle: 0, rounds: 0 };
   function later(fn, ms) { timers.push(setTimeout(fn, ms)); }
   function stopAll() { timers.forEach(clearTimeout); timers = []; cancelAnimationFrame(raf); raf = 0; }
@@ -288,7 +288,7 @@
     ov.querySelectorAll('[data-min]').forEach(function (b) { b.setAttribute('aria-pressed', String(+b.getAttribute('data-min') === minutes)); });
     ov.querySelectorAll('[data-scape]').forEach(function (b) { b.setAttribute('aria-pressed', String(b.getAttribute('data-scape') === scape)); });
     $('.br-how').textContent = PATTERNS[method].how;
-    $('.br-scape-note').textContent = scape === 'off' ? 'Just the guide on screen, in silence.' : SCAPES[scape].note;
+    $('.br-scape-note').textContent = scape === 'off' ? 'Just the guide on screen, in silence.' : 'This will play sound. ' + SCAPES[scape].note;
   }
 
   // the path the dot follows: a square for box breathing, a circle otherwise
@@ -397,7 +397,10 @@
     last = document.activeElement; ov.hidden = false; document.documentElement.style.overflow = 'hidden';
     ov.classList.remove('is-open', 'is-in', 'is-out'); void ov.offsetWidth; ov.classList.add('is-open');
     method = get('tol-br-method', 'box'); if (!PATTERNS[method]) method = 'box';
-    minutes = +get('tol-br-min', '1') || 1; scape = get('tol-br-scape', 'deep'); if (!SCAPES[scape]) scape = 'deep'; // always starts with sound
+    // silent unless a sound was picked before (sound is always one tap away, and says so first)
+    minutes = +get('tol-br-min', '1') || 1; scape = get('tol-br-scape', 'off'); if (scape !== 'off' && !SCAPES[scape]) scape = 'off';
+    // quiet mode, or site sounds switched off in Settings: start in silence (a sound is one tap away)
+    if (window.TOLQuiet && !window.TOLQuiet.sound()) scape = 'off';
     muted = false; show('pick'); pickUI();
     $('.br-begin').focus();
   }
@@ -413,7 +416,7 @@
       var b = e.target.closest('button'); if (!b) return;
       if (b.hasAttribute('data-method')) { method = b.getAttribute('data-method'); set('tol-br-method', method); pickUI(); }
       if (b.hasAttribute('data-min')) { minutes = +b.getAttribute('data-min'); set('tol-br-min', String(minutes)); pickUI(); }
-      if (b.hasAttribute('data-scape')) { scape = b.getAttribute('data-scape'); if (scape !== 'off') set('tol-br-scape', scape); pickUI(); }
+      if (b.hasAttribute('data-scape')) { scape = b.getAttribute('data-scape'); set('tol-br-scape', scape); pickUI(); }
       var act = b.getAttribute('data-act');
       if (act === 'begin' || act === 'again') begin();
       if (act === 'change') { if (engine) { engine.end(); engine = null; } show('pick'); pickUI(); $('.br-begin').focus(); }

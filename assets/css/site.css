@@ -1099,7 +1099,7 @@ body:has(.wpf-bar) .tol-breathe-btn{ bottom:calc(4.8rem + env(safe-area-inset-bo
 
 /* eight sections (with About) on one line at every desktop width */
 .tol-bar .tol-member{ white-space:nowrap; }
-@media (max-width:1360px) and (min-width:981px){
+@media (max-width:1680px) and (min-width:981px){
   .tol-brand{ font-size:1rem; }
   .tol-bar{ gap:.5rem; }
   .tol-sections .tol-nav-item > button{ padding:.5rem .38rem; font-size:.9rem; }
@@ -1929,3 +1929,301 @@ html[data-theme="dark"]:not(.tol-nodark) .tol-wash{ opacity:.5; }
 .tol-find-s{ display:block; font-size:.9rem; color:var(--ink-soft); line-height:1.45; margin-top:.15rem; }
 .tol-find mark{ background:rgba(168,121,47,.22); color:inherit; border-radius:2px; }
 h1.tol-page-h{ font-family:"Fraunces", Georgia, serif; font-weight:600; font-size:2rem; line-height:1.15; max-width:22ch; margin:0 0 1rem; }
+
+/* =====================================================================
+   Comfort: Quiet mode, Settings, Easy reading, text size, the reading ruler
+   (site.js: the Settings section). Everything here is a choice kept on this device.
+   ===================================================================== */
+:root{ --tol-sans:"Atkinson Hyperlegible", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; }
+
+/* the header: Quiet and Settings on every width, next to Search */
+.tol-bar button.tol-bar-quiet, .tol-bar button.tol-bar-set{ display:inline-flex; align-items:center; gap:.35rem; flex:none; white-space:nowrap; }
+.tol-bar button.tol-bar-quiet svg, .tol-bar button.tol-bar-set svg{ flex:none; }
+.tol-bar button.tol-bar-quiet{ margin-left:.4rem; border-color:var(--line); border-radius:999px; }
+.tol-bar button.tol-bar-quiet[aria-pressed="true"]{ background:#3E6B4C; border-color:#3E6B4C; color:#fff; }
+.tol-bar button.tol-bar-quiet[aria-pressed="true"]:hover{ background:#335A40; color:#fff; }
+.tol-bar button.tol-bar-set{ border-radius:999px; }
+.tol-bar button.tol-search-btn{ margin-left:0; }
+/* desktop: the section names need the room, so Settings and Search show their pictures (names stay for screen readers) */
+@media (min-width:981px) and (max-width:1599px){
+  .tol-bar .tol-set-name, .tol-bar button.tol-search-btn span{ position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; }
+  .tol-bar button.tol-bar-set, .tol-bar button.tol-search-btn{ padding-left:.5rem !important; padding-right:.5rem !important; }
+  .tol-bar{ gap:.45rem !important; }
+  .tol-bar button.tol-bar-quiet{ padding-left:.6rem !important; padding-right:.7rem !important; }
+  .tol-bar a.tol-member{ margin-left:.1rem; padding-left:.7rem !important; padding-right:.7rem !important; }
+}
+@media (max-width:980px){
+  .tol-bar button.tol-bar-quiet{ margin-left:auto; }
+  .tol-bar button.tol-search-btn, .tol-bar .tol-contents-btn{ margin-left:0 !important; }
+}
+.tol-bar.is-narrow button.tol-bar-quiet{ margin-left:auto; }
+.tol-bar.is-narrow .tol-contents-btn{ margin-left:0 !important; }
+@media (max-width:560px){
+  .tol-bar .tol-set-name, .tol-bar button.tol-search-btn span{ position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; }
+  .tol-bar button.tol-bar-set, .tol-bar button.tol-search-btn{ padding:.45rem .5rem !important; }
+  .tol-bar button.tol-bar-quiet{ padding:.42rem .6rem !important; }
+  .tol-bar{ gap:.3rem !important; }
+}
+@media (max-width:374px){ .tol-bar .tol-quiet-name{ position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; } }
+.tol-bar a.tol-member[hidden]{ display:none !important; }
+
+/* the menu panel and footer: Quiet mode, Settings */
+.tol-panel .tol-set-btn, .tol-foot .tol-set-btn{ display:inline-flex; align-items:center; gap:.4rem; min-height:40px; padding:.35rem .9rem; cursor:pointer;
+  font:inherit; font-size:.95rem; color:var(--ink); background:rgba(255,253,248,.9); border:1px solid #8C826E; border-radius:999px; }
+.tol-foot .tol-set-btn{ font-size:.9rem; min-height:36px; }
+.tol-panel .tol-set-btn:hover, .tol-foot .tol-set-btn:hover{ background:var(--paper-deep); }
+.tol-still-state{ font-family:var(--tol-sans) !important; }
+
+/* the Settings panel */
+.tol-set{ position:fixed; inset:0; z-index:985; display:flex; justify-content:flex-end; background:rgba(33,29,23,.35); font-family:"Lora", Georgia, serif; color:var(--ink); }
+.tol-set[hidden]{ display:none; }
+.tol-set-card{ box-sizing:border-box; width:min(32rem, 100%); max-width:100%; height:100%; overflow-y:auto; overscroll-behavior:contain; background:var(--paper); border-left:3px double var(--ink);
+  padding:0 clamp(1rem,4vw,1.8rem) 2.5rem; }
+.tol-set-head{ position:sticky; top:0; z-index:1; display:flex; align-items:center; justify-content:space-between; gap:1rem; background:var(--paper); padding:1rem 0 .7rem; border-bottom:1px solid var(--line); }
+.tol-set-head h2{ margin:0; font:600 1.5rem/1.2 "Fraunces", Georgia, serif; }
+.tol-set-close{ font:inherit; font-size:.95rem; min-height:44px; padding:.35rem .9rem; background:none; color:var(--ink); border:1px solid #8C826E; border-radius:999px; cursor:pointer; }
+.tol-set-close:hover{ background:var(--paper-deep); }
+.tol-set-intro{ margin:.9rem 0 .8rem; color:var(--ink-soft); line-height:1.5; }
+.tol-set-presets{ display:grid; grid-template-columns:1fr 1fr; gap:.6rem; }
+@media (max-width:460px){ .tol-set-presets{ grid-template-columns:1fr; } }
+.tol-preset{ position:relative; display:flex; flex-direction:column; align-items:flex-start; gap:.25rem; text-align:left; font:inherit; color:var(--ink); cursor:pointer;
+  padding:.85rem .9rem 2.3rem; border-radius:18px; border:1.5px solid #CFC3A5; background:#FFFDF7; }
+.tol-preset:hover{ border-color:#8C826E; }
+.tol-preset strong{ font:600 1.08rem/1.25 "Fraunces", Georgia, serif; }
+.tol-preset small{ font-size:.9rem; line-height:1.45; color:var(--ink-soft); }
+.tol-preset-ico{ font-size:1.4rem; line-height:1; }
+.tol-preset-state{ position:absolute; left:.9rem; bottom:.7rem; font:600 .9rem/1 var(--tol-sans); color:#4A4439; }
+.tol-preset-state::before{ content:"Off"; }
+.tol-preset[aria-pressed="true"]{ border-color:#3E6B4C; background:#EAF6EF; box-shadow:0 0 0 2px #3E6B4C inset; }
+.tol-preset[aria-pressed="true"] .tol-preset-state{ color:#2F5A3C; }
+.tol-preset[aria-pressed="true"] .tol-preset-state::before{ content:"On \2713"; }
+.tol-set-k{ margin:1.4rem 0 .5rem; font:600 1.15rem/1.3 "Fraunces", Georgia, serif; }
+.tol-set-qnote{ margin:0 0 .5rem; font-size:.92rem; color:#2F5A3C; }
+.tol-set fieldset{ border:0; margin:0 0 .7rem; padding:0; display:flex; flex-wrap:wrap; gap:.2rem .9rem; }
+.tol-set legend{ font-weight:600; margin-bottom:.2rem; padding:0; font-size:.98rem; }
+.tol-set fieldset label{ display:inline-flex; align-items:center; gap:.4rem; min-height:44px; cursor:pointer; }
+.tol-set input[type=radio]{ width:1.15rem; height:1.15rem; accent-color:#3E6B4C; margin:0; }
+.tol-set-easyfont{ font-family:var(--tol-sans); }
+.tol-set-swatch{ display:inline-block; width:1rem; height:1rem; border-radius:50%; border:1px solid #8C826E; }
+.tol-set-swatch.is-cream{ background:#FBEBC9; } .tol-set-swatch.is-blue{ background:#D6E6F5; } .tol-set-swatch.is-mint{ background:#D5EEDF; }
+.tol-set-sw{ position:relative; display:flex; align-items:flex-start; gap:.7rem; padding:.55rem 0; min-height:44px; cursor:pointer; border-bottom:1px dotted var(--line); }
+.tol-set-sw input{ position:absolute; opacity:0; width:1px; height:1px; }
+.tol-set-sw > span:last-child{ flex:1; line-height:1.35; }
+.tol-set-sw small{ display:block; margin-top:.15rem; font-size:.9rem; color:var(--ink-soft); line-height:1.45; }
+.tol-set-track{ position:relative; flex:none; width:2.5rem; height:1.4rem; margin-top:.05rem; border-radius:999px; background:#E9E2D2; border:1px solid #6B6353; box-sizing:border-box; }
+.tol-set-track > span{ position:absolute; top:50%; left:.15rem; width:1rem; height:1rem; margin-top:-.5rem; border-radius:50%; background:#6B6353; transition:transform .2s ease; }
+.tol-set-sw input:checked + .tol-set-track{ background:#3E6B4C; border-color:#3E6B4C; }
+.tol-set-sw input:checked + .tol-set-track > span{ background:#fff; transform:translateX(1.05rem); }
+.tol-set-sw input:focus-visible + .tol-set-track{ outline:3px solid var(--focus); outline-offset:2px; }
+.tol-set-sw input:disabled + .tol-set-track{ opacity:.55; }
+.tol-set-sw:has(input:disabled){ cursor:default; }
+.tol-set-note{ margin:1rem 0 0; padding:.6rem .8rem; border-radius:14px; background:#F3EEF9; font-size:.95rem; line-height:1.45; }
+.tol-set-foot{ margin:1.2rem 0 0; font-size:.92rem; color:var(--ink-soft); line-height:1.6; }
+.tol-set-foot a{ display:inline-block; margin-left:.3rem; color:var(--focus); }
+.tol-set-reset{ font:inherit; background:none; border:0; padding:0; min-height:36px; color:var(--focus); text-decoration:underline; cursor:pointer; }
+.tol-set :focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
+@media (prefers-reduced-motion: reduce){ .tol-set-track > span{ transition:none; } }
+@media print{ .tol-set, .tol-offer, .tol-ruler, .tol-bar-quiet, .tol-bar-set{ display:none !important; } }
+
+/* the first-visit offer */
+.tol-offer{ margin:.4rem auto 1rem; max-width:40rem; padding:.85rem 1rem; border-radius:18px; background:#FFFDF7; border:1.5px solid #D9C8F0; box-shadow:0 6px 18px rgba(90,70,120,.1);
+  text-align:left; font-size:.97rem; line-height:1.5; color:var(--ink); position:relative; z-index:2; }
+.read .tol-offer p, .tol-offer p{ margin:0; max-width:none; padding:0; background:none; box-shadow:none; border:0; font-size:inherit; color:inherit; }
+.tol-offer .tol-offer-row{ display:flex; flex-wrap:wrap; gap:.45rem; margin-top:.6rem; }
+.tol-offer button{ font:600 .95rem/1.2 "Lora", Georgia, serif; min-height:44px; padding:.45rem 1rem; border-radius:999px; cursor:pointer; background:#2F5F8A; color:#fff; border:1px solid #2F5F8A; }
+.tol-offer button.is-quiet{ background:transparent; color:var(--ink); border-color:#8C826E; }
+.tol-offer button:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
+
+/* text size: every word on the page grows, whatever size the page set it in */
+html.tol-text-lg:not(.tol-nozoom) body{ zoom:1.12; }
+html.tol-text-xl:not(.tol-nozoom) body{ zoom:1.25; }
+html.tol-text-xxl:not(.tol-nozoom) body{ zoom:1.4; }
+html.tol-nozoom.tol-text-lg{ font-size:112.5%; }
+html.tol-nozoom.tol-text-xl{ font-size:125%; }
+html.tol-nozoom.tol-text-xxl{ font-size:140%; }
+html:is(.tol-text-lg, .tol-text-xl, .tol-text-xxl) .tol-panel{ width:min(34rem, 100%); }
+
+/* the easy-to-read font, roomy spacing, and Easy reading's shorter, left-aligned lines */
+html.tol-font-easy body, html.tol-font-easy body :not(svg):not(svg *):not(.tol-keep-font):not(code):not(pre):not(kbd){ font-family:var(--tol-sans) !important; }
+html.tol-space-wide main :is(p, li, dd, dt, td, th, blockquote, figcaption, label, summary, small){ letter-spacing:.04em !important; word-spacing:.16em !important; line-height:2 !important; }
+html.tol-space-wide main :is(h1, h2, h3, h4){ letter-spacing:.02em !important; word-spacing:.1em !important; line-height:1.4 !important; }
+html.tol-easy main :is(p, li, dd, blockquote, h1, h2, h3, figcaption){ text-align:left !important; }
+html.tol-easy main :is(p, li, dd, blockquote){ max-width:60ch !important; hyphens:none !important; }
+html.tol-easy .home-intro{ text-align:left !important; }
+
+/* a soft tint over the whole page */
+html:is(.tol-tint-cream, .tol-tint-blue, .tol-tint-mint) body::after{ content:""; position:fixed; inset:0; z-index:2147483000; pointer-events:none; mix-blend-mode:multiply; }
+html.tol-tint-cream body::after{ background:rgba(250,226,178,.32); }
+html.tol-tint-blue body::after{ background:rgba(190,215,240,.34); }
+html.tol-tint-mint body::after{ background:rgba(190,230,205,.34); }
+html[data-theme="dark"] body::after{ display:none; }
+@media (prefers-color-scheme: dark){ html:not([data-theme="light"]) body::after{ display:none; } }
+
+/* the reading ruler */
+.tol-ruler{ position:fixed; left:0; right:0; top:0; height:2.6em; z-index:2147482000; pointer-events:none; border-top:2px solid rgba(47,95,138,.45); border-bottom:2px solid rgba(47,95,138,.45);
+  background:rgba(255,236,160,.16); box-shadow:0 0 0 100vmax rgba(40,34,26,.14); }
+
+/* "Hide the helpers" also puts away the learning trail and the petals; Quiet mode adds no levels,
+   toasts, bursts or pop-ups */
+html:is(.tol-no-helpers, .tol-quiet) :is(.lp-trail, .lp-petals, .tr-chip, [data-rewards-chip], .lp-spark, .lp-quest-state){ display:none !important; }
+html.tol-quiet :is(.tr-toast, .tr-confetti, .tol-planted, .tol-poplet, .tol-join-pop, .tol-invite, .pci, .tol-wx, .tol-offer){ display:none !important; }
+html.tol-quiet .pc-launch .pc-dot{ display:none; }
+
+/* Keep the page still, everywhere: the Breathe break's drifting light, bubbles and hearts, the toasts and pop-ups */
+html.tol-still .tol-breathe-aurora, html.tol-still .tol-breathe-bg, html.tol-still .tol-breathe-ripples{ display:none !important; }
+html.tol-still .tol-breathe.is-open{ animation:none !important; }
+html.tol-still :is(.tr-toast, .tr-card, .tr-card-box, .tol-join-pop, .tol-planted, .tol-wx, .tol-invite, .pci, .tol-offer, .tol-dive-box, .tol-dive-card){ transition:none !important; animation:none !important; }
+html.tol-still :is(.tr-card-art, .tr-confetti span, .lp-spark, .pc-dot){ animation:none !important; }
+html.tol-still .tr-confetti{ display:none !important; }
+html.tol-still, html.tol-still *{ scroll-behavior:auto !important; }
+
+/* =====================================================================
+   Reader fixes from first-time testers
+   ===================================================================== */
+
+/* chapters: the little open-book buddy sits up by the title, so it never covers "Next" */
+.read-head:has(.tol-chbar)::after{ bottom:auto !important; top:1rem; }
+.read-head .tol-chbar{ position:relative; z-index:1; }
+@media (max-width:560px){ .read-head:has(.tol-chbar)::after{ top:.8rem; } }
+
+/* the book's own chapter counter (book-layout.css numbers every "nav a") never reaches the site's own strips */
+:is(.tol-pillars, .tol-chbar, .tol-pager, .tol-find, .tol-bar, .tol-panel) a::before{ content:none !important; display:none !important; }
+
+/* wayfinding labels: plain sentence case in a clear sans, at least 14.4px (decorative numbers and codes keep their look) */
+:is(.lp-kicker, .lp-count, .lp-ex-k, .qm-k, .qm-type, .lp-val, .tol-tip-k, .tol-tip-topic, .tol-read-k, .tol-read-src, .scene-when, .announce-tag, .start-sub, .next-kicker,
+  .fp-num, .fp-field, .tol-inst small, .tol-depth-name small, .lp-quest-state, .nt-tag, .nt-plain b, .tr-card-k, .br-label, .br-top, .tol-breathe-sub,
+  .tol-code, .tol-drop-code, .tol-bar .tol-drop .tol-drop-all, .tol-acc-count, .tol-access, .tol-pager-dir, .tol-chbar-k, .depth-bar > span, .lib-pillar-list small, .lib-pillar small){
+  font-family:var(--tol-sans) !important; text-transform:none !important; letter-spacing:0 !important; }
+:is(.lp-kicker, .lp-count, .lp-ex-k, .qm-k, .qm-type, .tol-tip-k, .tol-tip-topic, .tol-read-k, .tol-read-src, .scene-when, .tol-inst small, .tol-depth-name small,
+  .lp-quest-state, .nt-tag, .nt-plain b, .tr-card-k, .br-label, .br-top, .lib-pillar-list small, .lib-pillar small, .tol-code, .tol-drop-code, .tol-acc-count){ font-size:.9rem !important; }
+.tol-inst{ font-family:var(--tol-sans) !important; font-size:1rem !important; }
+.tol-pillars, .tol-pillars *{ font-family:var(--tol-sans) !important; letter-spacing:0 !important; text-transform:none !important; }
+.tol-pillars .tp-chip{ font-size:.95rem !important; }
+.tol-pillars .tp-chip b{ font-weight:700 !important; }
+.tol-pillars-label, .tol-pillars summary, .tol-pillars dd span{ font-size:.92rem !important; }
+.tol-pillars dd span{ font-weight:700; }
+
+/* the Professor's Library and quest map: small words dark enough to read */
+.lib-pillar-list small, .lib-pillar small{ color:#4A4439 !important; }
+.lp-quest-state{ color:#3F3A2E; }
+
+/* the home page's opening line: bigger and easy to read over the moving sky */
+html.tol-home .home-intro{ font-size:1rem !important; line-height:1.5; color:#2B2620 !important; }
+html.tol-home .home-intro-wrap > .home-intro{ display:table; margin-left:auto; margin-right:auto; padding:.3rem .9rem !important; border-radius:14px; background:rgba(255,251,242,.88) !important; }
+@media (max-width:560px){ html.tol-home .home-intro{ font-size:.95rem !important; } }
+
+/* the cheering buddies' names: a quiet little label inside their bubble, never a heading */
+.tol-cheer-name{ display:inline !important; font:italic 400 .9rem/1.3 "Lora", Georgia, serif !important; letter-spacing:0 !important; color:#6E5373 !important; margin:0 .35em 0 0 !important; }
+.tol-cheer-name::after{ content:":"; }
+.tol-cheer-name em{ display:none; }
+
+/* the Breathe break: never sideways on a phone, and its buttons never over the words */
+.tol-breathe{ overflow-x:hidden !important; }
+.tol-breathe-aurora{ inset:0 !important; overflow:hidden; }
+.br section{ max-width:100%; box-sizing:border-box; }
+.br .tol-breathe-row{ position:relative; z-index:2; flex-wrap:wrap; justify-content:center; margin-top:.4rem; }
+.br-run{ padding-bottom:.5rem; }
+@media (max-height:760px){ .br section{ margin:0 0 auto; } }
+
+/* wide formulas and code: they scroll inside their own box, never past the card */
+main pre{ max-width:100%; overflow-x:auto; box-sizing:border-box; white-space:pre-wrap; overflow-wrap:anywhere; }
+main pre code{ white-space:inherit; }
+main pre.formula, main .formula pre{ white-space:pre-wrap; overflow-wrap:anywhere; }
+
+/* dark mode: the header's and panels' own line icons follow the text color instead of being turned back */
+html[data-theme="dark"]:not(.tol-nodark) :is(.tol-bar, .tol-panel, .tol-set, .tol-foot, .tol-listen) :is(button, a) svg{ filter:none !important; }
+@media (prefers-color-scheme: dark){
+  html:not([data-theme="light"]):not(.tol-nodark) :is(.tol-bar, .tol-panel, .tol-set, .tol-foot, .tol-listen) :is(button, a) svg{ filter:none !important; }
+}
+.tol-bar button.tol-search-btn svg circle, .tol-bar button.tol-search-btn svg path{ stroke:currentColor; }
+
+/* Today's Weather on a phone: the little cloud keeps its words, just above Breathe */
+@media (max-width:560px), (max-height:600px){
+  .tol-wx{ left:.6rem !important; right:.6rem; bottom:calc(3.9rem + env(safe-area-inset-bottom, 0px)) !important; max-width:none !important; flex-wrap:nowrap; }
+  .tol-wx-go{ flex:1 1 auto; padding:.35rem .8rem .35rem .4rem !important; }
+  .tol-wx-go > span{ display:flex !important; position:static !important; width:auto !important; height:auto !important; clip:auto !important; }
+  .tol-wx-go small{ display:none !important; }
+  .tol-wx-go strong{ font-size:.92rem !important; }
+  .tol-wx-go svg{ width:2.2rem; height:1.8rem; }
+  .tol-wx-never{ font-size:.85rem !important; padding:.25rem .6rem !important; white-space:normal !important; max-width:6.5rem; line-height:1.15 !important; }
+}
+html.tol-bigtext .tol-wx-go > span{ display:flex !important; position:static !important; width:auto !important; height:auto !important; clip:auto !important; }
+
+/* search: a small "Tool" tag, and "Did you mean" */
+.tol-find-kind{ display:inline-block; margin-left:.35rem; padding:.05rem .5rem; border-radius:999px; background:#EAF6EF; color:#2F5A3C !important; font:600 .8rem/1.5 var(--tol-sans) !important; vertical-align:.1em; }
+.tol-find-dym{ font:inherit; font-weight:600; background:none; border:0; padding:0; min-height:32px; color:var(--focus); text-decoration:underline; cursor:pointer; }
+.tol-find-dym:focus-visible{ outline:2px solid var(--focus); outline-offset:2px; }
+.tol-chbar ol a{ font-family:var(--tol-sans) !important; font-size:.92rem !important; }
+
+/* ---------- Listen: the page read aloud (listen.js) ---------- */
+.tol-listen{ display:flex; flex-wrap:wrap; align-items:center; gap:.5rem; margin:.2rem 0 1.1rem !important; padding:0 !important; background:none !important; box-shadow:none !important; border:0 !important; position:relative; z-index:2; }
+.tol-listen button, .tol-listen-bar button, .tol-listen-mini{ display:inline-flex; align-items:center; gap:.4rem; min-height:44px; padding:.4rem 1rem; border-radius:999px; cursor:pointer;
+  font:600 .95rem/1.2 var(--tol-sans); color:#2B2620; background:#FFFDF7; border:1.5px solid #B9A8D6; }
+.tol-listen .tol-listen-go{ background:#2F5F8A; border-color:#2F5F8A; color:#fff; }
+.tol-listen .tol-listen-go:hover{ background:#264E73; }
+.tol-listen button:hover, .tol-listen-bar button:hover, .tol-listen-mini:hover{ border-color:#7A5FA8; }
+.tol-listen button:focus-visible, .tol-listen-bar :focus-visible, .tol-listen-mini:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
+.tol-listen-mini{ min-height:36px; padding:.25rem .75rem; font-size:.88rem; }
+.tol-listen-mini[aria-pressed="true"]{ background:#EAF6EF; border-color:#3E6B4C; }
+.tol-listen-bar{ position:fixed; z-index:930; left:50%; top:calc(var(--tol-bar-h, 58px) + 8px); transform:translateX(-50%); width:max-content; max-width:calc(100vw - 20px); box-sizing:border-box;
+  display:flex; flex-wrap:wrap; justify-content:center; align-items:center; gap:.4rem; padding:.45rem .55rem; border-radius:22px; background:rgba(255,251,242,.97); border:1px solid #D9C8F0; box-shadow:0 10px 28px rgba(60,40,90,.18); }
+.tol-listen-bar[hidden]{ display:none; }
+.tol-listen-bar button{ min-height:40px; padding:.3rem .85rem; }
+.tol-listen-bar button[aria-pressed="true"]{ background:#EAF6EF; border-color:#3E6B4C; }
+.tol-listen-bar button:disabled{ opacity:.5; cursor:default; }
+.tol-listen-speed select{ min-height:40px; padding:.25rem .6rem; border-radius:999px; border:1.5px solid #B9A8D6; background:#fff; font:600 .95rem/1.2 var(--tol-sans); color:#2B2620; }
+.tol-listen-status{ flex-basis:100%; margin:0; text-align:center; font:500 .9rem/1.35 var(--tol-sans); color:#4A4439; }
+.tol-listen-status:empty{ display:none; }
+::highlight(tol-listen){ background-color:#FCE38A; color:#1F1A14; }
+.tol-listen-now{ outline:2px dashed rgba(47,95,138,.45); outline-offset:4px; border-radius:6px; }
+html.tol-listen-picking main :is(p, li, h2, h3, blockquote, dd, td){ cursor:pointer; }
+html.tol-listen-picking main :is(p, li, h2, h3, blockquote, dd, td):hover{ outline:2px solid rgba(47,95,138,.35); outline-offset:3px; border-radius:6px; }
+@media (max-width:560px){ .tol-listen-bar{ top:calc(var(--tol-bar-h, 58px) + 4px); gap:.3rem; padding:.35rem .4rem; } .tol-listen-bar button{ padding:.25rem .65rem; font-size:.9rem; } }
+@media print{ .tol-listen, .tol-listen-bar, .tol-listen-mini{ display:none !important; } }
+
+/* ---------- "Pick up where you left off" and "How much time do you have?" (pick-up.js) ---------- */
+.tol-pickup-host{ max-width:40rem; margin:0 auto; text-align:left; }
+.tol-pickup, .tol-time{ position:relative; z-index:2; box-sizing:border-box; margin:.5rem 0 .8rem; padding:.8rem 1rem; border-radius:18px; background:rgba(255,253,247,.95); border:1.5px solid #E2D6BE;
+  box-shadow:0 6px 18px rgba(90,70,120,.08); color:var(--ink); font-size:.97rem; line-height:1.5; text-align:left; }
+.read .tol-pickup h2.tol-pu-h, .tol-pu-h{ margin:0 0 .4rem !important; padding:0 !important; background:none !important; box-shadow:none !important; font:600 1.05rem/1.3 "Fraunces", Georgia, serif !important; max-width:none !important; }
+.tol-pickup ul, .tol-time ul{ list-style:none; margin:0 !important; padding:0 !important; }
+.tol-pickup li, .tol-time li{ display:flex; gap:.5rem; align-items:baseline; margin:.25rem 0 !important; max-width:none !important; padding:0 !important; }
+.tol-pickup small{ color:var(--ink-soft); font-size:.9rem; }
+.tol-pu-ico{ flex:none; width:1.3rem; text-align:center; }
+.read .tol-pickup p.tol-pu-foot, .tol-pu-foot{ margin:.5rem 0 0 !important; padding:0 !important; background:none !important; box-shadow:none !important; font-size:.9rem !important; color:var(--ink-soft); max-width:none !important; }
+.tol-pu-foot button{ font:inherit; background:none; border:0; padding:0 .15rem; min-height:32px; color:var(--focus); text-decoration:underline; cursor:pointer; }
+.tol-pu-foot button:disabled{ color:var(--ink-soft); text-decoration:none; }
+.tol-pu-foot a{ margin-left:.2rem; }
+.read .tol-time p.tol-time-q, .tol-time-q{ margin:0 0 .45rem !important; padding:0 !important; background:none !important; box-shadow:none !important; font:600 1rem/1.3 "Fraunces", Georgia, serif !important; max-width:none !important; }
+.tol-time-opts{ display:flex; flex-wrap:wrap; gap:.4rem; }
+.tol-time-opts button{ min-height:44px; padding:.35rem 1rem; border-radius:999px; cursor:pointer; font:600 .95rem/1.2 "Lora", Georgia, serif; color:#2B2620; background:#FFFBF2; border:1.5px solid #D9C8F0; }
+.tol-time-opts button[aria-pressed="true"]{ background:#2F5F8A; border-color:#2F5F8A; color:#fff; }
+.tol-time-opts button:focus-visible, .tol-pickup :focus-visible, .tol-time :focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
+.tol-time-list{ margin-top:.55rem !important; }
+.tol-time-list li{ display:block !important; }
+.tol-time-list li span{ color:var(--ink-soft); }
+.tol-time-list a{ font-weight:600; }
+.tol-panel .tol-pickup, .tol-panel .tol-time{ margin:.9rem 0 0; background:var(--paper); box-shadow:none; }
+html.tol-home .tol-pickup-host{ margin-top:.2rem; }
+@media print{ .tol-pickup, .tol-time{ display:none !important; } }
+/* mini dives: a plain label, and Listen beside it */
+.tol-dive-k, .tol-dive-step{ font-family:var(--tol-sans) !important; text-transform:none !important; letter-spacing:0 !important; font-size:.9rem !important; }
+.tol-dive-k{ display:flex; align-items:center; gap:.6rem; flex-wrap:wrap; padding-right:3rem; }
+.tol-dive-listen{ text-transform:none; letter-spacing:0; }
+.tol-heart::after{ content:none !important; } .tol-heart::before{ animation:none !important; clip-path:none !important; }
+/* table cells never have a fixed height (stacked on a phone, a two-line cell would spill over the next row) */
+.read :is(td, th){ height:auto !important; }
+.tol-dive-gloss{ display:inline-flex; align-items:center; gap:.35rem; min-height:40px; padding:.35rem .95rem; border-radius:999px; background:#FFF8E8; border:1px solid #E6CD92; color:#5A4214 !important; font:600 .88rem "Lora", Georgia, serif; text-decoration:none !important; }
+
+/* ---------- "In short" and "Show me only the steps" (in-short.js) ---------- */
+.tol-inshort{ position:relative; z-index:2; margin:0 0 1.2rem !important; padding:.85rem 1.1rem !important; border-radius:18px; background:#FFF8E8 !important; border:1.5px solid #E6CD92; box-shadow:none !important; }
+.read .tol-inshort p.tol-inshort-h, .tol-inshort-h{ margin:0 0 .35rem !important; padding:0 !important; background:none !important; box-shadow:none !important; font:600 1.05rem/1.3 "Fraunces", Georgia, serif !important; max-width:none !important; }
+.tol-inshort ul{ margin:0 !important; padding-left:1.25rem !important; background:none !important; box-shadow:none !important; }
+.tol-inshort li{ margin:.25rem 0 !important; max-width:62ch; line-height:1.5; }
+.tol-steps-toggle{ margin:0 0 1.2rem !important; padding:0 !important; background:none !important; box-shadow:none !important; border:0 !important; }
+.tol-steps-toggle button{ min-height:44px; padding:.4rem 1.1rem; border-radius:999px; cursor:pointer; font:600 .95rem/1.2 var(--tol-sans); color:#2B2620; background:#FFFDF7; border:1.5px solid #B9A8D6; }
+.tol-steps-toggle button[aria-pressed="true"]{ background:#EAF6EF; border-color:#3E6B4C; }
+.tol-steps-toggle button:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
+.tol-steps-note{ font-size:.92rem; color:var(--ink-soft); }
+html.tol-only-steps main :is(p, ul, blockquote, figure, .tol-table-scroll, table, dl, details, aside, .scene, .tol-pud-card, .tol-cheer, .lp-card, pre):not(ol *, .try-this, .try-this *, .read-head, .read-head *, .tol-steps-toggle, .tol-inshort, .tol-inshort *, .tol-listen, .tol-listen *, .tol-depth, .tol-depth *){ display:none !important; }
+@media print{ .tol-steps-toggle{ display:none !important; } }
