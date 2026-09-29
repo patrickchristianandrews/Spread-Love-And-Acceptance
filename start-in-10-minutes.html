@@ -33,6 +33,12 @@
   .read .ten-go{ display:inline-flex; align-items:center; min-height:44px; padding:.4rem 1.1rem; border-radius:999px; background:#2F5F8A; color:#fff !important; text-decoration:none !important; font-weight:600; }
   .read .ten-go:hover{ background:#264E73; }
   .read .ten-go:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
+  .read button.ten-go{ border:0; font:600 1rem/1.2 "Lora", Georgia, serif; cursor:pointer; }
+  .ten-panel{ margin:.6rem 0 .4rem; padding:.9rem 1rem; border-radius:16px; background:var(--paper, #F5EFDE); border:1px solid var(--line, #D9CBA3); }
+  .ten-panel:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
+  .ten-ideas{ margin:.4rem 0 .6rem !important; padding-left:1.3rem !important; }
+  .ten-ideas li{ margin:0 0 .5rem !important; }
+  .ten-steps > li.is-done::after{ content:"Done"; position:absolute; top:1rem; right:1rem; font-size:.8rem; font-weight:600; color:var(--credit, #3E6B4C); }
   .ten-card{ margin:.4rem 0 .6rem; padding:.85rem 1rem; border-radius:16px; background:#EEF4FB; border:1px solid #C6DFF4; }
   .ten-card p{ margin:0 0 .45rem !important; }
   .ten-card .ten-before{ text-decoration:line-through; text-decoration-color:rgba(0,0,0,.35); color:var(--ink-soft); }
@@ -83,15 +89,16 @@
     <h2>Check your own weather</h2>
     <p class="ten-time">About 1 minute · Pillar III, read your state first</p>
     <p>Before anything else, see how you’re doing today. One required tap, and up to seven optional ones, give you a forecast and whether now is a good time for a hard talk.</p>
-    <p><a class="ten-go" href="/quick-checks.html#today">Check today’s weather</a></p>
-    <p class="ten-time">It opens in this tab. Come back here with your browser’s Back button when you’re done.</p>
+    <p><a class="ten-go" href="/quick-checks.html#today" data-ten-step="1">Check today’s weather</a></p>
+    <p class="ten-time">It opens in this tab, with a bar at the top that brings you straight back to step 2 when you’re done.</p>
   </li>
 
   <li id="step-2">
     <h2>Read the Preface, the simple version</h2>
     <p class="ten-time">About 4 minutes · Pillar I, see the whole load</p>
     <p>The work nobody sees: the quiet, unseen jobs that keep a shared life running, and why they deserve to be noticed. A few short cards, one idea each.</p>
-    <p><a class="ten-go" href="/book/preface.html">Read the Preface</a></p>
+    <p><button type="button" class="ten-go ten-open" id="ten-read" aria-expanded="false" aria-controls="ten-preface">Read it here</button> <a href="/book/preface.html" data-ten-step="2">or open the Preface page</a></p>
+    <div class="ten-panel" id="ten-preface" hidden tabindex="-1" aria-label="The Preface, simple version"></div>
   </li>
 
   <li id="step-3">
@@ -161,6 +168,49 @@
     items = []; keep.checked = false; store(); draw(); say.textContent = 'Erased from this device.'; input.focus();
   });
   draw();
+})();
+// Steps that lead to another page leave a small trail for this tab, so that page can show a
+// "back to the next step" bar; the Preface opens right here, in a panel.
+(function () {
+  'use strict';
+  var TRAIL = 'tol-ten-trail';
+  document.addEventListener('click', function (e) {
+    var a = e.target.closest && e.target.closest('[data-ten-step]');
+    if (a) try { sessionStorage.setItem(TRAIL, JSON.stringify({ step: +a.getAttribute('data-ten-step'), at: Date.now() })); } catch (e2) {}
+  });
+  // coming back from a step: mark the steps before it as done, and bring the next one into view
+  var m = /^#step-([1-4])$/.exec(location.hash);
+  if (m) {
+    var n = +m[1];
+    for (var k = 1; k < n; k++) { var li = document.getElementById('step-' + k); if (li) li.classList.add('is-done'); }
+    try { sessionStorage.removeItem(TRAIL); } catch (e) {}
+  }
+  var btn = document.getElementById('ten-read'), panel = document.getElementById('ten-preface'), loaded = false;
+  function plain(el) { var d = document.createElement('div'); d.textContent = (el && el.textContent || '').replace(/\s+/g, ' ').trim(); return d.innerHTML; }
+  function fill(doc) {
+    var main = doc.querySelector('main'); if (!main) throw new Error('no main');
+    var h = '', lede = main.querySelector('.simple-lede');
+    if (lede) h += '<p>' + plain(lede) + '</p>';
+    var ideas = main.querySelectorAll('ol.ideas > li');
+    if (!ideas.length) throw new Error('no ideas');
+    h += '<ol class="ten-ideas">';
+    Array.prototype.forEach.call(ideas, function (li) { var t = li.querySelector('h2'), p = li.querySelector('p'); h += '<li><strong>' + plain(t) + '</strong> ' + plain(p) + '</li>'; });
+    h += '</ol><p class="ten-row"><a class="ten-go" href="#step-3" id="ten-read-done">Done reading: on to step 3</a> <a href="/book/preface.html" data-ten-step="2">Read it on its own page</a></p>';
+    panel.innerHTML = h;
+    var done = document.getElementById('ten-read-done');
+    done.addEventListener('click', function () { document.getElementById('step-2').classList.add('is-done'); });
+  }
+  if (btn && panel) btn.addEventListener('click', function () {
+    var open = panel.hidden;
+    panel.hidden = !open; btn.setAttribute('aria-expanded', String(open)); btn.textContent = open ? 'Close the Preface' : 'Read it here';
+    if (!open || loaded) { if (open) panel.focus(); return; }
+    panel.innerHTML = '<p>Opening the Preface…</p>';
+    fetch('/book/preface.html', { credentials: 'same-origin' }).then(function (r) { if (!r.ok) throw new Error(r.status); return r.text(); }).then(function (t) {
+      fill(new DOMParser().parseFromString(t, 'text/html')); loaded = true; panel.focus();
+    }).catch(function () {
+      panel.innerHTML = '<p>The Preface couldn’t open here. <a href="/book/preface.html" data-ten-step="2">Open it on its own page</a>; a bar there brings you back to step 3.</p>';
+    });
+  });
 })();
 </script>
 </body>

@@ -18,7 +18,9 @@
     0x2013: 0x96, 0x2014: 0x97, 0x02DC: 0x98, 0x2122: 0x99, 0x0161: 0x9A, 0x203A: 0x9B,
     0x0153: 0x9C, 0x017E: 0x9E, 0x0178: 0x9F
   };
-  var SUBS = { 0x2192: '->', 0x2190: '<-', 0x2212: '-', 0x2011: '-', 0x2010: '-', 0x00A0: ' ', 0x2009: ' ', 0x202F: ' ', 0x2264: '<=', 0x2265: '>=' };
+  // Curly apostrophes become plain ones, so "Who’s" reads as "Who's" in every PDF app, screen reader
+  // and copy-and-paste (some drop the Windows-1252 byte for ’ and show "Whos").
+  var SUBS = { 0x2019: "'", 0x2018: "'", 0x02BC: "'", 0x2192: '->',0x2190: '<-', 0x2212: '-', 0x2011: '-', 0x2010: '-', 0x00A0: ' ', 0x2009: ' ', 0x202F: ' ', 0x2264: '<=', 0x2265: '>=' };
 
   // The standard PDF fonts can't draw emoji, so each one becomes a short word in brackets
   // instead of quietly disappearing from what someone wrote.

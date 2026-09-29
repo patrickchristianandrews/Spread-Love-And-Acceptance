@@ -20,6 +20,7 @@
 <link rel="stylesheet" href="/assets/css/reading.css">
 <script>/* The Lemonade Stand moved to its own page: send old links there */ (function () { function go() { if (location.hash === "#lemonade") location.replace("/lemonade-stand.html"); } go(); window.addEventListener("hashchange", go); })();</script>
 <script src="/assets/js/site.js" defer></script>
+<script src="/assets/js/ten-return.js" defer></script>
 <style>
   .sr-only{ position:absolute !important; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; border:0; }
   .steps{ counter-reset:step; }
@@ -178,7 +179,7 @@
       <div class="step">
         <p class="step-n">Step 1 of 8 &middot; required</p>
         <h2 id="ladder">The sky</h2>
-        <p class="step-hint" id="ladder-hint">Pick the one closest to true right now. This is a reading of you, never of anyone else.</p>
+        <p class="step-hint" id="ladder-hint">Pick the one closest to true right now. This is a reading of you, never of anyone else. Hard to tell? That&#39;s common. Pick the nearest one; you can change it any time.</p>
         <div class="rungs" role="group" aria-labelledby="ladder" aria-describedby="ladder-hint">
           <button class="rung" type="button" data-sky="clear" aria-pressed="false"><span class="ico" aria-hidden="true">&#9728;</span><strong>Clear<em>Calm and connected</em></strong><span class="d">Breath is easy, shoulders aren&#39;t braced, and you can hear something hard without defending yourself.</span></button>
           <button class="rung" type="button" data-sky="gusty" aria-pressed="false"><span class="ico" aria-hidden="true">&#127788;</span><strong>Gusty<em>Revved up</em></strong><span class="d">You feel keyed up, thoughts move fast, and small things start to feel urgent or personal.</span></button>
@@ -454,7 +455,8 @@
       gusty:'Burn off the gusts with something physical before you reply to anyone.',
       fog:'Keep today small: food, water, rest, and one finishable thing.'}}
   };
-  function laterWord(){ return rel&&REL[rel] ? REL[rel].later : 'tomorrow'; }
+  // when the talk window says another day is kinder, "later" always means tomorrow or after, never tonight
+  function laterWord(){ var w = talkWindow(index())[2]; if (w==='later') return 'tomorrow'; return rel&&REL[rel] ? REL[rel].later : 'tomorrow'; }
 
   function index(){
     var s=0;
@@ -542,14 +544,14 @@
     if(sky==='clear') return 'I’m in a decent place to talk. Is now good for you?';
     if(sky==='gusty') return 'I’m running hot, and it isn’t about you. Give me twenty minutes and I’ll come back to this.';
     return cw ? 'I’m running low today, so I’ll keep to the essentials. Can we pick this up '+later+'?'
-              : 'I’ve got nothing left in the tank today. I’m not shutting you out. Can we pick this up '+later+'?';
+              : 'I’m running very low today. I’m not shutting you out. Can we pick this up '+later+'?';
   }
 
   function paragraphs(i){
     var p=[];
     var lead={clear:'The sky is clear. Your body isn’t braced, which means you can hear something hard without treating it as a threat. This is the weather the rest of the site is designed for.',
       gusty:'It’s gusty. You’re revved up. That energy is useful for doing something physical, but it is poor weather for deciding anything about another person.',
-      fog:'You’re fogged in. Flat, far away or foggy, and words are harder to reach than usual. Nothing decided in this weather gets decided well.'}[sky];
+      fog:'You’re fogged in. Flat, far away or foggy, and words are harder to reach than usual. Big decisions usually go better on a clearer day.'}[sky];
     p.push(lead);
     if(sky==='clear' && i>=50) p.push('The sky is clear, but the ground is heavy. You’re calm right now, and there’s less in reserve than usual, so keep anything important short.');
 

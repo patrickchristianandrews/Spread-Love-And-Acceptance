@@ -777,7 +777,7 @@
   /* ------------------------------------------------------------------ */
 
   var SECTIONS = [
-    ['solvency', 'Is the setup working for both of you?'],
+    ['solvency', 'Is the setup working for everyone?'],
     ['register', 'The Lemonade Stand'],
     ['battery', 'How much are you carrying?'],
     ['treaty', 'One owner per job'],
@@ -823,7 +823,7 @@
     if (weekClosed()) badgeHtml = badge('planned', 'Closed');
 
     el.innerHTML =
-      sectionHead('This Week', 'Is the setup working for both of you?',
+      sectionHead('This Week', 'Is the setup working for everyone?',
         'The three inputs below, read together for ' + esc(fmtWeek(S.weekStart).replace('Week of ', 'the week of ')) +
         '. It reads how the workload is set up, never either person. 0.70 or more reads as working well, 0.40 to 0.69 as needs a look, under 0.40 as needs a rethink, together.') +
       phase('This week\u2019s read', badgeHtml,

@@ -139,7 +139,7 @@ window.TOLLearnPlayData = {
     '/know-yourself.html': {
       t: 'Know your own wiring', g: 'p3', n: '/wired-differently.html',
       m: [
-        { at: 'Layer three', k: 'sort', q: 'Which layer is it most likely? (Only you can sort your own, so these are common guesses.)',
+        { at: 'Layer three', k: 'sort', personal: true, q: 'Where would you put it? Only you can sort your own, so there are no wrong answers here, just where many people would put it.',
           bins: ['Wiring (stays)', 'Learned pattern (can soften)', 'Today’s conditions (pass)'],
           items: [['Needs things in writing', 0], ['Snaps when hungry', 2], ['An alarm that goes off early, left over from years ago', 1],
                   ['Short on sleep after a late night', 2], ['A habit of pleasing people', 1]] },
@@ -876,7 +876,7 @@ window.TOLLearnPlayData = {
     '/know-yourself-in-depth.html': {
       t: 'Know your own wiring (full)', g: 'p3', n: '/wired-differently-in-depth.html',
       m: [
-        { at: 'Three layers', k: 'sort', q: 'Which layer is carrying most of the weight?', bins: ['Wiring', 'Shaped pattern', 'Today’s conditions'],
+        { at: 'Three layers', k: 'sort', personal: true, q: 'Which layer is carrying most of the weight for you? There are no wrong answers, just where many people would put it.', bins: ['Wiring', 'Shaped pattern', 'Today’s conditions'],
           items: [['You take words literally, and always have', 0], ['You say yes before you’ve checked if you can', 1, 'A learned setting: pleasing once kept things calm.'],
                   ['You slept badly and skipped lunch', 2], ['Good news makes you wait for the catch', 1], ['You like a heads-up before plans change, on every kind of day', 0]] },
         { at: 'Work on it, work with it', k: 'match', q: 'Match each layer to its move.',

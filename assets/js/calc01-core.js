@@ -1,6 +1,6 @@
 /*
-  calc01-core.js — The Objective Ledger, CALC-01 "Is the setup working for both of you?"
-  (also called "Can the load last?" and the solvency read)
+  calc01-core.js — The Objective Ledger, CALC-01 "Is the setup working for everyone?"
+  (also called the solvency read)
   The one place the CALC-01 arithmetic lives. Loaded by:
     /calc01-solvency.html                       (the full calculator)
     /workpapers/calculators/calc01-solvency.html (the quick read)
@@ -28,7 +28,7 @@
     With two people and an even target this is exactly the book's
     1 − |pctA − pctB| ÷ 100.
 
-  Ownership = jobs with both a Responsible and an Accountable name ÷ all jobs.
+  Ownership = jobs with an owner ÷ all jobs (one owner per job; a helper is optional).
   Concentration (a check, not a fourth input): the busiest person's share of the owned jobs
               or the logged minutes. Clarity can read 1.00 with one person holding every job,
               so this sits next to it: flagged at half or more, and 20 points over an even share.
@@ -121,7 +121,7 @@
     if (o === null) o = 0;
     if (o < 0 || t < 0) { res.error = 'Job counts can’t be negative.'; return res; }
     if (Math.floor(o) !== o || Math.floor(t) !== t) { res.error = 'Use whole numbers of jobs.'; return res; }
-    if (o > t) { res.error = 'More jobs with both names (' + o + ') than jobs on the list (' + t + ').'; return res; }
+    if (o > t) { res.error = 'More jobs with an owner (' + o + ') than jobs on the list (' + t + ').'; return res; }
     res.owned = o; res.total = t;
     res.value = o / t;
     return res;
@@ -159,16 +159,16 @@
     if (x < WP02.high) return { key: 'mid', label: 'medium load' };
     return { key: 'high', label: 'high load' };
   }
-  // scores: array of each person's battery score (0–1) or null
+  // scores: array of each person's load score (0–1) or null
   function stress(scores) {
     var res = { value: null, error: null, scores: scores, missing: [] };
     scores.forEach(function (s, i) {
       var v = num(s);
       if (v === null) res.missing.push(i);
-      else if (v < 0 || v > 1) res.error = 'A battery score runs from 0 to 1 (the five answers added up, then divided by 20).';
+      else if (v < 0 || v > 1) res.error = 'A load score runs from 0 to 1 (the five answers added up, then divided by 20).';
     });
     if (res.error) return res;
-    if (res.missing.length) { res.error = 'Waiting on ' + res.missing.length + ' battery score' + (res.missing.length === 1 ? '' : 's') + '. Each person fills in their own; it is never worked out for someone else.'; return res; }
+    if (res.missing.length) { res.error = 'Waiting on ' + res.missing.length + ' load score' + (res.missing.length === 1 ? '' : 's') + '. Each person fills in their own; it is never worked out for someone else.'; return res; }
     var v = scores.map(num);
     res.value = sum(v) / v.length;
     return res;
@@ -230,7 +230,7 @@
     if (o.oc !== null && o.ownership && o.ownership.total && o.ownership.owned < o.ownership.total) {
       var t = o.ownership.total, own = o.ownership.owned;
       out.push({ key: 'oc', gain: w.oc / t,
-        text: 'Give one more job both names (who does it, who notices if it didn’t happen). Ownership would go from ' + f2(o.oc) + ' to ' + f2((own + 1) / t) + '.',
+        text: 'Give one more job an owner (the person who does it and sees it through). Ownership would go from ' + f2(o.oc) + ' to ' + f2((own + 1) / t) + '.',
         link: ['WP-03, One owner per job', '/workpapers/fill/wp-03.html'] });
       if (t - own > 1) out.push({ key: 'oc-all', gain: (1 - o.oc) * w.oc, full: true,
         text: 'Naming owners for all ' + (t - own) + ' unowned jobs would add ' + fg((1 - o.oc) * w.oc) + '. Keep them on the list until they have names; deleting them only hides them.' });
@@ -238,7 +238,7 @@
     if (o.as !== null && o.as > 0) {
       var drop = Math.min(0.10, o.as);
       out.push({ key: 'as', gain: drop * w.as,
-        text: 'If the average battery came down by ' + f2(drop) + ' (about ' + f1(drop * 20) + ' points on each person’s 20-point check), the score would rise by ' + fg(drop * w.as) + '. That usually comes from outside the chore list: a lighter week elsewhere, more sleep, less rushing.',
+        text: 'If the average load came down by ' + f2(drop) + ' (about ' + f1(drop * 20) + ' points on each person’s 20-point check), the score would rise by ' + fg(drop * w.as) + '. That usually comes from outside the chore list: a lighter week elsewhere, more sleep, less rushing.',
         link: ['WP-02, How much are you carrying?', '/workpapers/fill/wp-02.html'] });
     }
     out.sort(function (a, b) { return (a.full ? 1 : 0) - (b.full ? 1 : 0) || b.gain - a.gain; });
@@ -272,6 +272,11 @@
   // WP-03, and each person's own battery from WP-02. Nothing is read unless that draft exists, and
   // nothing is sent anywhere. Returns null when there is nothing to load.
   var SUITE_KEY = 'tol-wpf-keep:suite', FACTOR_IDS = ['sleep', 'work', 'conflict', 'physical', 'time'], CODES = 'ABCDEFGH';
+  // The starter jobs WP-03 shows as examples on each road (see tol-workpaper-schemas.js).
+  var WP03_STARTERS = ['Groceries', 'Cooking', 'Dishes', 'Laundry', 'Bills & scheduling', 'Cleaning (bathroom/kitchen)', 'Pet care', 'Car maintenance', 'Social/family calendar', 'Emotional check-ins',
+    'Meeting notes', 'Follow-ups after meetings', 'Deadlines and status reporting', 'On-call or cover when someone is out', 'Team chat and shared inbox triage', 'Onboarding a new teammate',
+    'Rent: collecting and paying', 'Bills (power, water, internet)', 'Cleaning: kitchen', 'Cleaning: bathroom', 'Cleaning: shared living space', 'Shared supplies (soap, paper, basics)', 'Trash and recycling', 'Guests and quiet hours',
+    'Appointments: booking, getting there, notes', 'Medications: keeping the list and schedule up to date', 'Pharmacy pickups', 'Bills and insurance paperwork', 'Visits', 'Overnight calls', 'Groceries and meals'];
   function fold(s) { return String(s || '').normalize('NFD').replace(/[̀-ͯ]/g, '').trim().toLowerCase(); }
   function suiteDraft() {
     var d = null;
@@ -306,6 +311,8 @@
     if (w3) {
       (w3.state.tables.treaty || []).forEach(function (r) {
         if (!String(r.task || '').trim()) return;
+        // a WP-03 starter job nobody touched is an example: it never counts for or against ownership
+        if (!r.r && !r.a && !r.c && !r.i && WP03_STARTERS.indexOf(String(r.task).trim()) >= 0) return;
         var ri = CODES.indexOf(r.r), ai = CODES.indexOf(r.a);
         out.raci.push({ name: String(r.task).trim(), r: ri >= 0 && ri < n ? String(ri) : '', a: ai >= 0 && ai < n ? String(ai) : '' });
       });

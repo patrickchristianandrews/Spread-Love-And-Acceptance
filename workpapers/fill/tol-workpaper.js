@@ -108,11 +108,10 @@
     syncPeople(schema, state);
     return true;
   }
-  // Everyone who can be picked in a person drop-down, in alphabetical order, then "Both"/"Everyone"
-  // (left off when there is only one person).
+  // Everyone who can be picked in a person drop-down, in the order their names were typed at the
+  // top of the sheet, then "Both"/"Everyone" (left off when there is only one person).
   function personOptions(ctx, def) {
     var list = ctx.people().map(function (c) { return { v: c, l: ctx.name(c), person: c }; });
-    list.sort(function (a, b) { return a.l.localeCompare(b.l, undefined, { sensitivity: 'base', numeric: true }); });
     if (def && def.both && list.length > 1) list.push({ v: 'Both', l: ctx.name('Both'), person: 'Both' });
     return list;
   }
@@ -185,6 +184,18 @@
     });
   }
 
+  // A starter row on a table marked examples:true (WP-03's list of common jobs) that nobody has
+  // touched yet: the same job and how-often as the starter, and nothing else filled in. It is shown
+  // as an example and never counted, for or against anyone, until someone edits it.
+  function isExampleRow(section, row) {
+    if (!section || !section.examples || !row || !row.task) return false;
+    var keys = { task: 1, freq: 1 };
+    return (section.defaultRows || []).some(function (d) {
+      if (!d.task || d.task !== row.task || (row.freq || '') !== (d.freq || '')) return false;
+      return section.columns.every(function (c) { return keys[c.id] || c.prefill || c.type === 'computed' || isBlank(row[c.id]) || row[c.id] === d[c.id]; });
+    });
+  }
+
   function makeCtx(schema, state) {
     var byId = {};
     schema.sections.forEach(function (s) { if (s.id) byId[s.id] = s; });
@@ -194,6 +205,7 @@
         var s = byId[tableId];
         return (state.tables[tableId] || []).filter(function (r) { return !rowIsEmpty(s, r); });
       },
+      isExample: function (tableId, row) { return isExampleRow(byId[tableId], row); },
       name: function name(p) {
         var i = CODES.indexOf(p);
         if (i >= 0) return String(state.values['partner' + p] || '').trim() || labelFor(i);
@@ -214,6 +226,21 @@
     var p = v.split('-');
     var d = new Date(Date.UTC(+p[0], +p[1] - 1, +p[2]));
     return d.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC' });
+  }
+
+  // "Agreed by Sam and Jordan on September 29, 2026." (or "Chosen on …" on a personal sheet)
+  function agreedLine(sec, values) {
+    var d = values.agreedOn ? formatDate(values.agreedOn) : '', who = String(values.agreedBy || '').trim();
+    if (sec.solo) return 'Chosen' + (d ? ' on ' + d : '') + '.';
+    return 'Agreed' + (who ? ' by ' + who : '') + (d ? ' on ' + d : '') + '.';
+  }
+  // The closing's lines for a PDF: what was ticked, when, by whom, and the look-again date.
+  function closingLines(sec, values) {
+    var out = [], box = sec.fields.filter(function (f) { return f.id === 'agreed'; })[0];
+    if (values.agreed && box) out.push(box.label + ': Yes. ' + agreedLine(sec, values));
+    else if (!sec.solo && String(values.agreedBy || '').trim()) out.push('Who agreed: ' + String(values.agreedBy).trim());
+    if (values.lookAgain) out.push('Look at this again on ' + formatDate(values.lookAgain) + '.');
+    return out;
   }
 
   function displayCell(col, row, ctx) {
@@ -382,6 +409,21 @@
     void startY; void startPage;
   };
 
+  // The closing: a small heading and a line or two. It may use the last few points above the
+  // footer rule rather than start a page of its own.
+  P.closing = function (title, lines) {
+    var self = this, size = 10, lh = 13.5;
+    var wrapped = [];
+    lines.forEach(function (t) { wrapped = wrapped.concat(self.wrap(t, 'Helvetica', size, self.W)); });
+    var need = 24 + wrapped.length * lh;
+    if (this.y + need > this.bottom + 10) this.newPage();
+    this.y += 6;
+    this.doc.text(this.L, this.y + 11, this.enc(title), 'Times-Bold', 12, COLORS.ink);
+    this.y += 18;
+    wrapped.forEach(function (ln) { self.doc.text(self.L, self.y + size, ln, 'Helvetica', size, COLORS.ink); self.y += lh; });
+    this.y += 4;
+  };
+
   P.footers = function () {
     var d = this.doc, n = d.pages.length, self = this;
     var created = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
@@ -430,7 +472,8 @@
           R.table(cols, cells);
           return;
         }
-        var filled = rows.filter(function (r) { return !rowIsEmpty(s, r); });
+        // untouched starter rows are examples, not part of anyone's list
+        var filled = rows.filter(function (r) { return !rowIsEmpty(s, r) && !isExampleRow(s, r); });
         if (!filled.length && s.optional) return;
         var introH = s.intro ? R.wrap(s.intro, 'Helvetica', 8.5, R.W).length * 11.9 + 6 : 0;
         R.heading(s.title, introH + 70);
@@ -453,6 +496,13 @@
         R.heading(s.title, 60);
         R.table([{ label: 'Check', w: 4 }, { label: 'Answer', w: 1.2 }],
           s.items.map(function (it) { return [it.label, optionLabel(it, state.values[s.id + '.' + it.id]) || '—']; }));
+        return;
+      }
+
+      if (s.type === 'fields' && s.id === 'closing') {
+        // a few short lines, never a page of their own
+        var cl = closingLines(s, state.values);
+        if (cl.length) R.closing(s.title, cl);
         return;
       }
 
@@ -647,6 +697,8 @@
           field.appendChild(chips);
         }
         if (f.help) field.appendChild(h('p', { className: 'wpf-help', text: f.help }));
+        // a calm line under the closing tick: "Agreed on …", or what is still to do first
+        if (f.closing) field.appendChild(h('p', { className: 'wpf-agreed-note', id: 'wpf-agreed-note', role: 'status', 'aria-live': 'polite' }));
         if (f.privateOptIn) {
           var t = self.control({ type: 'check' }, st.values[f.id + '__include'], { key: f.id + '__include' });
           field.appendChild(h('label', { className: 'wpf-optin', for: t.id }, [t.el, ' ' + f.privateOptIn]));
@@ -669,6 +721,8 @@
           opts.appendChild(h('label', { for: id }, [r, h('span', { text: String(v) })]));
         }
         fs.appendChild(opts);
+        // the two ends in words on every row, so nobody has to scroll back up to remember them
+        fs.appendChild(h('p', { className: 'wpf-scale-ends', 'aria-hidden': 'true' }, [h('span', { text: sec.min + ' = ' + sec.anchors[0] }), h('span', { text: sec.max + ' = ' + sec.anchors[1] })]));
         wrap.appendChild(fs);
       });
     }
@@ -716,9 +770,9 @@
 
     var body = h('tbody');
     rows.forEach(function (r, i) {
-      var tr = h('tr');
+      var tr = h('tr', sec.examples ? { 'data-ex-table': sec.id, 'data-ex-row': String(i) } : null);
       if (sec.fixedRows) tr.appendChild(h('th', { scope: 'row', className: 'wpf-rowlabel', 'data-fixed': fixed[i], text: rowLabel(fixed[i], ctx) }));
-      sec.columns.forEach(function (c) {
+      sec.columns.forEach(function (c, ci) {
         var td = h('td', { 'data-label': c.label });
         if (c.type === 'computed') {
           td.appendChild(h('output', { 'data-computed': sec.id + ':' + i + ':' + c.id, text: c.compute(r) }));
@@ -727,6 +781,8 @@
           ctl.el.setAttribute('aria-label', c.label + ', row ' + (i + 1));
           td.appendChild(ctl.el);
         }
+        // starter rows are marked as examples until someone changes them
+        if (sec.examples && ci === 0) td.appendChild(h('span', { className: 'wpf-ex-tag', text: 'Example', title: 'An example job. It isn’t counted until you give it an owner or change it.' }));
         tr.appendChild(td);
       });
       if (!sec.fixedRows) {
@@ -743,6 +799,7 @@
       var actions = h('div', { className: 'wpf-table-actions' });
       actions.appendChild(h('button', { type: 'button', className: 'wpf-add', 'data-action': 'add', 'data-table': sec.id, text: sec.addLabel || 'Add a row' }));
       if (sec.pull) actions.appendChild(h('button', { type: 'button', className: 'wpf-add', 'data-action': 'pull', 'data-table': sec.id, text: sec.pull.label }));
+      if (sec.examples) actions.appendChild(h('button', { type: 'button', className: 'wpf-add wpf-ex-clear', 'data-action': 'clear-examples', 'data-table': sec.id, text: 'Remove the example jobs' }));
       box.appendChild(actions);
     }
     // The task library: common jobs for this road, including the invisible ones, one tap to add
@@ -774,11 +831,21 @@
       if (sec.type !== 'computed') return;
       var dl = document.getElementById('cmp-' + sec.id);
       if (!dl) return;
+      var open = {};
+      Array.prototype.forEach.call(dl.querySelectorAll('details[data-more]'), function (d) { if (d.open) open[d.getAttribute('data-more')] = true; });
       dl.innerHTML = '';
       sec.compute(ctx).forEach(function (it) {
         dl.appendChild(h('dt', { text: it.label }));
-        var dd = h('dd', { text: it.value });
-        if (it.note) dd.appendChild(h('span', { className: 'wpf-help', text: it.note }));
+        var dd;
+        if (it.more) {
+          // the number and how it is worked out, folded away under the plain words
+          var det = h('details', { className: 'wpf-more', 'data-more': it.label, open: open[it.label] ? 'open' : null }, [h('summary', { text: it.value + ' · ' + it.more })]);
+          if (it.note) det.appendChild(h('span', { className: 'wpf-help', text: it.note }));
+          dd = h('dd', null, [det]);
+        } else {
+          dd = h('dd', { text: it.value });
+          if (it.note) dd.appendChild(h('span', { className: 'wpf-help', text: it.note }));
+        }
         dl.appendChild(dd);
       });
     });
@@ -788,25 +855,47 @@
       var col = sec.columns.filter(function (c) { return c.id === p[2]; })[0];
       o.textContent = col.compute(self.state.tables[p[0]][+p[1]] || {});
     });
-    // Person drop-downs: fresh names, still in alphabetical order
+    // Person drop-downs: fresh names, in the order they were typed at the top
     Array.prototype.forEach.call(this.root.querySelectorAll('select[data-person-select]'), function (sel) {
-      var val = sel.value;
       var opts = Array.prototype.slice.call(sel.querySelectorAll('option[data-person]'));
       opts.forEach(function (o) { o.textContent = ctx.name(o.getAttribute('data-person')); });
-      opts.sort(function (a, b) {
-        var ab = a.getAttribute('data-person') === 'Both', bb = b.getAttribute('data-person') === 'Both';
-        if (ab !== bb) return ab ? 1 : -1;
-        return a.textContent.localeCompare(b.textContent, undefined, { sensitivity: 'base', numeric: true });
-      });
-      opts.forEach(function (o) { sel.appendChild(o); });
-      sel.value = val;
     });
+    this.refreshExamples();
+    this.refreshClosing();
     Array.prototype.forEach.call(this.root.querySelectorAll('.wpf-person-x'), function (b) {
       var i = +b.getAttribute('data-person');
       b.setAttribute('aria-label', 'Remove ' + ctx.name(CODES[i]));
     });
     Array.prototype.forEach.call(this.root.querySelectorAll('[data-fixed]'), function (t) { t.textContent = rowLabel(t.getAttribute('data-fixed'), ctx); });
     Array.prototype.forEach.call(this.root.querySelectorAll('input[type="number"]'), function (t) { self.flagRange(t); });
+  };
+
+  // Starter rows that nobody has changed carry an "Example" tag; it goes as soon as the row is edited.
+  A.refreshExamples = function () {
+    var self = this, any = {};
+    Array.prototype.forEach.call(this.root.querySelectorAll('tr[data-ex-table]'), function (tr) {
+      var tid = tr.getAttribute('data-ex-table'), sec = self.schema.sections.filter(function (s) { return s.id === tid; })[0];
+      var ex = isExampleRow(sec, (self.state.tables[tid] || [])[+tr.getAttribute('data-ex-row')]);
+      tr.classList.toggle('wpf-row-example', ex);
+      if (ex) any[tid] = true;
+    });
+    Array.prototype.forEach.call(this.root.querySelectorAll('[data-action="clear-examples"]'), function (b) { b.hidden = !any[b.getAttribute('data-table')]; });
+  };
+
+  // The closing tick: a calm "Agreed on …" line once ticked, and, while something still needs doing
+  // first (WP-03: a job with no owner), a gentle note and a box that waits.
+  A.refreshClosing = function () {
+    var sec = this.schema.sections.filter(function (s) { return s.id === 'closing'; })[0];
+    var box = this.root.querySelector('input[data-key="agreed"]'), note = this.root.querySelector('#wpf-agreed-note');
+    if (!sec || !box || !note) return;
+    var v = this.state.values, on = !!v.agreed, waiting = sec.notYet ? sec.notYet(this.ctx()) : [];
+    var list = waiting.slice(0, 5).join(', ') + (waiting.length > 5 ? ' and ' + (waiting.length - 5) + ' more' : '');
+    box.disabled = !on && waiting.length > 0;
+    note.className = 'wpf-agreed-note' + (on ? ' is-agreed' : waiting.length ? ' is-waiting' : '');
+    var text = '';
+    if (on) text = agreedLine(sec, v) + (waiting.length ? ' Since then, ' + (waiting.length === 1 ? 'one job has' : waiting.length + ' jobs have') + ' been added without an owner: ' + list + '.' : '');
+    else if (waiting.length) text = (waiting.length === 1 ? 'One job doesn’t' : 'A few jobs don’t') + ' have an owner yet: ' + list + '. Give ' + (waiting.length === 1 ? 'it an owner (or remove it)' : 'each one an owner (or remove the ones that don’t apply)') + ', and this box will be ready to tick.';
+    if (note.textContent !== text) note.textContent = text;
   };
 
   A.onInput = function (e) {
@@ -818,6 +907,8 @@
     } else if (t.getAttribute('data-key')) {
       if (t.type === 'radio' && !t.checked) return;
       this.state.values[t.getAttribute('data-key')] = val;
+      // the day the closing box was ticked, for the "Agreed on …" line
+      if (t.getAttribute('data-key') === 'agreed') { if (val) { if (!this.state.values.agreedOn) this.state.values.agreedOn = today(); } else delete this.state.values.agreedOn; }
     } else return;
     this.changed();
     this.refresh();
@@ -951,6 +1042,16 @@
     var tbl = b.getAttribute('data-table'), rows = this.state.tables[tbl];
     var sec = this.schema.sections.filter(function (s) { return s.id === tbl; })[0];
     var action = b.getAttribute('data-action');
+    if (action === 'clear-examples') {
+      var left = rows.filter(function (r) { return !isExampleRow(sec, r); }), gone = rows.length - left.length;
+      this.state.tables[tbl] = left.length ? left : [{}];
+      this.changed();
+      this.render();
+      this.status(gone ? 'Removed ' + gone + ' example ' + (gone === 1 ? 'job' : 'jobs') + '. Your own rows are still here.' : 'There are no untouched example jobs left.');
+      var first = this.root.querySelector('[data-table="' + tbl + '"][data-col="task"]');
+      if (first) first.focus();
+      return;
+    }
     if (action === 'add') {
       rows.push({});
       this.changed();
@@ -1129,6 +1230,20 @@
     root.addEventListener('change', function (e) { app.onInput(e); });
     root.addEventListener('click', function (e) { app.onClick(e); });
 
+    // On a phone the save bar is one row: "Download PDF" and "More", which opens Open, Save draft
+    // and Fillable PDF. It keeps the bottom of the screen free for the form.
+    var actions = document.querySelector('.wpf-bar-actions');
+    if (actions && !document.getElementById('wpf-more')) {
+      var moreBtn = h('button', { type: 'button', id: 'wpf-more', className: 'wpf-btn-quiet wpf-bar-more', 'aria-expanded': 'false', text: 'More ▾' });
+      actions.insertBefore(moreBtn, actions.firstChild); actions.classList.add('has-more');
+      moreBtn.addEventListener('click', function () {
+        var open = !actions.classList.contains('is-open');
+        actions.classList.toggle('is-open', open);
+        moreBtn.setAttribute('aria-expanded', String(open));
+        moreBtn.textContent = open ? 'Less ▴' : 'More ▾';
+      });
+    }
+
     var fileInput = document.getElementById('wpf-file');
     document.getElementById('wpf-pdf').addEventListener('click', function () { app.savePdf(); });
     document.getElementById('wpf-save').addEventListener('click', function () { app.saveDraft(); });
@@ -1153,7 +1268,7 @@
     displayCell: displayCell, rowIsEmpty: rowIsEmpty, rowLabel: rowLabel, isBlank: isBlank, COLORS: COLORS, DRAFT_FORMAT: DRAFT_FORMAT,
     CODES: CODES, MAX_PEOPLE: MAX_PEOPLE, peopleCount: peopleCount, fixedRowsFor: fixedRowsFor, syncPeople: syncPeople, rangeProblem: rangeProblem,
     addPerson: addPerson, removePerson: removePerson, personOptions: personOptions, setDefaultLabels: setDefaultLabels,
-    setMinPeople: setMinPeople, optionLabel: optionLabel,
+    setMinPeople: setMinPeople, optionLabel: optionLabel, isExampleRow: isExampleRow, agreedLine: agreedLine, closingLines: closingLines,
     labelFor: function (i) { return labelFor(i); }
   };
   if (typeof document !== 'undefined') {

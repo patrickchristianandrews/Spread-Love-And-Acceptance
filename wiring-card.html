@@ -72,6 +72,10 @@ input[type=text]{width:100%;border:1px solid var(--line);background:var(--bg);bo
 .sheet dt{font-family:var(--mono);font-size:.68rem;letter-spacing:.03em;color:var(--brass-ink, #7A5620);margin-top:8px}
 .sheet dd{margin:0;font-size:1.02rem}
 .sheet dd.empty{color:var(--muted);font-style:italic}
+.sheet .emptycard{color:var(--muted);font-size:.95rem;margin:4px 0 0}
+details.more{margin:18px 0 0;border-top:1px solid var(--line);padding-top:12px}
+details.more > summary{cursor:pointer;font-weight:600;min-height:44px;display:flex;align-items:center;gap:.3rem}
+.swapnote{margin:6px 0 0;font-size:.88rem;color:var(--ink);background:#FFF8E6;border-left:3px solid var(--brass);padding:4px 8px;border-radius:4px}
 .sheet .fine{font-size:.78rem;color:var(--muted);margin:12px 0 0;border-top:1px solid var(--line);padding-top:8px}
 .note{margin-top:18px;padding:14px 16px;border:1px dashed var(--muted);border-radius:var(--radius);font-size:.9rem;color:var(--muted);max-width:70ch}
 .note b{color:var(--ink)}
@@ -132,7 +136,7 @@ input[type=text]{width:100%;border:1px solid var(--line);background:var(--bg);bo
 <!-- seo:end -->
 </head>
 <body>
-<div class="wrap" role="main">
+<main class="wrap">
   <div class="sitebar">
     <a class="mark" href="index.html">The Objective Ledger<small>Tools</small></a>
     <a class="back" href="wired-differently.html">&larr; Read: Wired Differently</a>
@@ -161,7 +165,7 @@ input[type=text]{width:100%;border:1px solid var(--line);background:var(--bg);bo
   <div class="note">
     <b>What this is for.</b> A card is a simple note about how you take in words. It is not a label, not permission to criticize, and not proof of bad intent. It tells someone how to send a request so it gets through. It doesn't make them responsible for managing you, and it doesn't mean you have to be available no matter how you feel. Stick to one topic at a time. The <a href="check-ins.html#ground">ground rules</a> explain how to use what you wrote here in a conversation. Pair the card with the <a href="signal-translator.html">Signal Translator</a> when you want to test one sentence, and with <a href="check-ins.html">Check-ins</a> when the topic needs a calm, safe space. <a href="wired-differently.html">Wired Differently</a> explains the ideas behind it.
   </div>
-</div>
+</main>
 <script>
 (function(){
   // How words reach me, in everyday words. Descriptions of what helps, never labels or diagnoses.
@@ -183,13 +187,13 @@ input[type=text]{width:100%;border:1px solid var(--line);background:var(--bg);bo
   const KEEP_KEY = "tol-wiring-card", DRAFT_KEY = "tol-wiring-draft";
   let pending = null, undoSnap = null, undoMsg = "", showCmp = false;
   const LINES = [
-    {id:"receive", q:"How I receive things best", opts:[["writing","In writing"],["face","Face to face"],["call","A short call"],["voice","A voice note I can replay"],["one","One thing at a time"],["list","A written list"]]},
+    {id:"receive", q:"How I receive things best", opts:[["writing","In writing"],["face","Face to face"],["call","A short call"],["voice","A voice note I can replay"],["one","One thing at a time"],["list","A written list"],["aloud","Read the important parts to me"]]},
     {id:"words", q:"I take words", opts:[["literal","Literally"],["tone","I read tone as part of the message"],["both","Literally when it matters, tone when it is light"]]},
     {id:"time", q:"Give me time to answer", opts:[["sec","A few seconds"],["min","A few minutes"],["tomorrow","Until tomorrow"],["write","Write it down so I can answer later"]]},
     {id:"quiet", q:"If I go quiet, it means", opts:[["think","I'm thinking"],["load","I'm overloaded"],["space","I need space"],["upset","I'm upset and don't have words yet"],["fine","Nothing is wrong"]]},
     {id:"texts", q:"Short texts from me mean", opts:[["brief","Nothing. I'm just brief"],["wrong","Something is wrong"],["minute","I need a minute"],["done","I'm done for now, not done with you"]]},
     {id:"upset", q:"When I'm upset, I need", opts:[["space","Space first, then a return time"],["company","Quiet company"],["talk","To talk it through"],["plan","A written plan"],["hug","A gesture, only if I ask"],["signal","A signal that we are still okay"]]},
-    {id:"avoid", q:"Please avoid", opts:[["sarcasm","Sarcasm when it matters"],["calm","\"Calm down\""],["loud","Loud voices"],["long","Long texts or many topics at once"],["hints","Hints instead of the ask"],["always","Always, never, and labels"],["public","Correcting me in public"],["surprise","A hard topic with no warning"]]},
+    {id:"avoid", q:"Please avoid", opts:[["sarcasm","Sarcasm when it matters"],["calm","\"Calm down\""],["loud","Loud voices"],["long","Long texts or many topics at once"],["hints","Hints instead of the ask"],["always","Always, never, and labels"],["public","Correcting me in public"],["spelling","Correcting my spelling in the moment"],["surprise","A hard topic with no warning"]]},
     {id:"ask", q:"A request lands best as", opts:[["could","\"Could you ___ by ___?\""],["list","One written list, not a stack of hints"],["headline","The ask in the first sentence"],["choice","Two clear options, not an open guess"]]},
     {id:"depleted", q:"When I'm running low, what helps", opts:[["shorter","Shorter messages"],["writing","Writing only"],["volume","Lower volume and fewer people"],["notopic","Don't add a second topic"],["return","Name a return time, then give space"]]},
     {id:"sensory", q:"Sensory needs", opts:[["noise","Quiet, or a lower volume"],["light","Softer light, no glare"],["room","Room to move, not boxed in"],["touch","Ask before touching"],["scent","Strong smells are hard for me"],["breaks","Short breaks in long talks"]]},
@@ -208,7 +212,10 @@ input[type=text]{width:100%;border:1px solid var(--line);background:var(--bg);bo
 
   const people = ["A"];
   const state = {A: fresh(), B: fresh()};
-  let keep = false, lastSwap = "";
+  let keep = false, lastSwap = "", lastSwapAt = "";
+  // the lines shown up front; the rest sit behind "More lines" until wanted
+  const CORE = ["receive","words","time","quiet","ask"];
+  const moreOpen = {A:false, B:false};
 
   function fresh(){ return {name:"", wiring:new Set(), picks:{}, custom:{}}; }
   function $(s,r){ return (r||document).querySelector(s); }
@@ -222,7 +229,8 @@ input[type=text]{width:100%;border:1px solid var(--line);background:var(--bg);bo
     }).filter(Boolean);
     const custom = (st.custom[line.id]||"").trim();
     if(custom) chosen.push(custom);
-    return chosen.join(". ").replace(/\.\./g,".");
+    // each part is its own sentence: a capital letter to start, a full stop to end
+    return chosen.map(t=>{ t = t.trim(); if(!t) return ""; t = t.charAt(0).toUpperCase() + t.slice(1); return /[.!?…"”')]$/.test(t) ? t : t + "."; }).filter(Boolean).join(" ");
   }
 
   function wiringLabel(who){
@@ -239,28 +247,37 @@ input[type=text]{width:100%;border:1px solid var(--line);background:var(--bg);bo
     h += '<p class="hint">Pick what is usually true for you. Add a few words where the buttons are not enough. Leave a line blank if it does not apply.</p>';
     h += '<label class="lab" for="name'+who+'">Name on the card, optional</label>';
     h += '<input id="name'+who+'" data-name="'+who+'" type="text" maxlength="60" placeholder="Alex" value="'+esc(st.name)+'">';
-    h += '<span class="lab">How words reach me, optional <span class="how">(pick any that fit; opposite picks swap)</span></span>';
+    // a quick start first, then the five lines most cards need; the rest wait behind "More lines"
+    if(who==="A"){
+      h += '<div class="presets"><span class="lab">A quick start, optional <span class="how">(adds picks; you can undo)</span></span><div class="chips" role="group" aria-label="Quick-start picks">';
+      PRESETS.forEach(p=>{ h += '<button type="button" data-preset="'+p.id+'" data-who="'+who+'" aria-pressed="false">'+esc(p.label)+'</button>'; });
+      h += '</div></div>';
+    }
+    const swapNote = at=>lastSwap && lastSwapAt===who+":"+at ? '<p class="swapnote" role="status">'+esc(lastSwap)+'</p>' : "";
+    const lineHtml = line=>{
+      const how = line.one ? "pick one" : (CONFLICTS[line.id] ? "pick any that fit; opposites replace each other" : "pick any that fit");
+      let s = '<span class="lab">'+esc(line.q)+' <span class="how">('+how+')</span></span><div class="chips" role="group" aria-label="'+esc(line.q+" ("+how+")")+'">';
+      const picked = st.picks[line.id]||[];
+      line.opts.forEach(o=>{
+        s += '<button type="button" data-line="'+line.id+'" data-opt="'+o[0]+'" data-who="'+who+'" aria-pressed="'+(picked.includes(o[0])?"true":"false")+'">'+esc(o[1])+'</button>';
+      });
+      s += '</div>' + swapNote(line.id);
+      s += '<input data-custom="'+line.id+'" data-who="'+who+'" type="text" maxlength="160" aria-label="Your own words: '+esc(line.q)+'" placeholder="Or add your own words" value="'+esc(st.custom[line.id]||"")+'">';
+      return s;
+    };
+    LINES.filter(l=>CORE.includes(l.id)).forEach(line=>{ h += lineHtml(line); });
+    const extra = LINES.filter(l=>!CORE.includes(l.id)), filledExtra = extra.filter(l=>lineText(who, l)).length + (st.wiring.size ? 1 : 0);
+    const open = moreOpen[who] || filledExtra > 0;
+    h += '<details class="more" data-more="'+who+'"'+(open?" open":"")+'><summary>More lines, optional <span class="how">('+(extra.length+1)+' more'+(filledExtra?', '+filledExtra+' filled in':'')+')</span></summary>';
+    h += '<span class="lab">How words reach me <span class="how">(pick any that fit; opposites replace each other)</span></span>';
     h += '<div class="chips" role="group" aria-label="How words reach me">';
     WIRING.forEach(w=>{
       const on = st.wiring.has(w[0]);
       h += '<button type="button" data-wire="'+w[0]+'" data-who="'+who+'" aria-pressed="'+(on?"true":"false")+'">'+w[1]+'</button>';
     });
-    h += '</div>';
-    if(who==="A"){
-      h += '<div class="presets"><span class="lab">A quick start for how you read and listen, optional <span class="how">(adds picks; you can undo)</span></span><div class="chips" role="group" aria-label="Reading-style starting points">';
-      PRESETS.forEach(p=>{ h += '<button type="button" data-preset="'+p.id+'" data-who="'+who+'" aria-pressed="false">'+esc(p.label)+'</button>'; });
-      h += '</div></div>';
-    }
-    LINES.forEach(line=>{
-      const how = line.one ? "pick one" : (CONFLICTS[line.id] ? "pick any that fit; opposite picks swap" : "pick any that fit");
-      h += '<span class="lab">'+esc(line.q)+' <span class="how">('+how+')</span></span><div class="chips" role="group" aria-label="'+esc(line.q+" ("+how+")")+'">';
-      const picked = st.picks[line.id]||[];
-      line.opts.forEach(o=>{
-        h += '<button type="button" data-line="'+line.id+'" data-opt="'+o[0]+'" data-who="'+who+'" aria-pressed="'+(picked.includes(o[0])?"true":"false")+'">'+esc(o[1])+'</button>';
-      });
-      h += '</div>';
-      h += '<input data-custom="'+line.id+'" data-who="'+who+'" type="text" maxlength="160" aria-label="Your own words: '+esc(line.q)+'" placeholder="Or add your own words" value="'+esc(st.custom[line.id]||"")+'">';
-    });
+    h += '</div>' + swapNote("wire");
+    extra.forEach(line=>{ h += lineHtml(line); });
+    h += '</details>';
     h += '<div class="actions">';
     h += '<button class="ghost" type="button" data-example="'+who+'">Use the guide\'s example</button>';
     h += '<button class="ghost" type="button" data-clear="'+who+'">Clear this card</button>';
@@ -295,12 +312,13 @@ input[type=text]{width:100%;border:1px solid var(--line);background:var(--bg);bo
       const st = state[who];
       const name = st.name.trim() || (who==="A"?"Your wiring card":"Their wiring card");
       const wire = wiringLabel(who);
+      // only the lines you filled in; blank ones are left off the card, on screen and on paper
       let rows = LINES.map(line=>{
         const t = lineText(who, line);
-        const empty = !t;
-        return '<dt>'+esc(line.q)+'</dt><dd class="'+(empty?"empty":"")+'">'+(empty?"Not filled in yet":esc(t))+'</dd>';
+        return t ? '<dt>'+esc(line.q)+'</dt><dd>'+esc(t)+'</dd>' : '';
       }).join("");
-      return '<article class="sheet"><p class="ck">WIRING CARD &middot; NOT A DIAGNOSIS</p><h2>'+esc(name)+'</h2>'+(wire?'<p class="wire">'+esc(wire)+'</p>':'')+'<dl>'+rows+'</dl><p class="fine">Applies more strictly when I am running low. Not a contract, and not a label. Change it when it stops being true. Objective Ledger &middot; spreadloveandacceptance.com/wiring-card.html</p></article>';
+      const body = rows ? '<dl>'+rows+'</dl>' : (wire ? '' : '<p class="emptycard">Nothing on the card yet. Tap an answer in the form and it shows up here.</p>');
+      return '<article class="sheet"><p class="ck">WIRING CARD &middot; NOT A DIAGNOSIS</p><h2>'+esc(name)+'</h2>'+(wire?'<p class="wire">'+esc(wire)+'</p>':'')+body+'<p class="fine">Applies more strictly when I am running low. Not a contract, and not a label. Change it when it stops being true. Objective Ledger &middot; spreadloveandacceptance.com/wiring-card.html</p></article>';
     }).join("") + '<div class="actions"><button class="go" type="button" id="copy">Copy the card</button><button class="ghost" type="button" id="copymd">Copy as a team snippet (Markdown)</button><button class="ghost" type="button" id="pdf">Save as PDF</button><button class="ghost" type="button" id="print">Print</button><button class="ghost" type="button" id="printwallet">Print a wallet-size card</button></div><p class="privacy" id="copymsg" role="status" aria-live="polite"></p>';
     $("#printwallet").addEventListener("click", printWallet);
     $("#copy").addEventListener("click", copyCard);
@@ -385,7 +403,7 @@ input[type=text]{width:100%;border:1px solid var(--line);background:var(--bg);bo
       const t = lineText(who, line);
       if(t){ out.push("- **"+mdEsc(line.q)+":** "+mdEsc(t)); any = true; }
     });
-    if(!any) out.push("- _Not filled in yet_");
+    if(!any && !wire) out.push("- _Nothing on this card yet_");
     out.push("");
     out.push("> Not a diagnosis, not a contract, and not a label. Applies more strictly when I am running low. Change it when it stops being true.");
     return out.join("\n");
@@ -483,7 +501,7 @@ input[type=text]{width:100%;border:1px solid var(--line);background:var(--bg);bo
     const set = state[who].wiring;
     lastSwap = "";
     if(set.has(id)){ set.delete(id); return; }
-    clearConflicts("wire", id, x=>set.has(x), x=>set.delete(x));
+    clearConflicts("wire", id, x=>set.has(x), x=>set.delete(x)); lastSwapAt = who+":wire";
     set.add(id);
   }
 
@@ -493,8 +511,8 @@ input[type=text]{width:100%;border:1px solid var(--line);background:var(--bg);bo
     lastSwap = "";
     if(i>=0){ arr.splice(i,1); return; }
     const L1 = LINES.find(l=>l.id===line);
-    if(L1 && L1.one && arr.length){ const was = arr.map(x=>textOf(line, x)); arr.length = 0; lastSwap = "This line takes one answer, so “" + was.join("” and “") + "” was swapped for “" + textOf(line, opt) + "”."; arr.push(opt); return; }
-    clearConflicts(line, opt, x=>arr.indexOf(x)>=0, x=>arr.splice(arr.indexOf(x),1));
+    if(L1 && L1.one && arr.length){ const was = arr.map(x=>textOf(line, x)); arr.length = 0; lastSwapAt = who+":"+line; lastSwap = "This line takes one answer, so “" + was.join("” and “") + "” was swapped for “" + textOf(line, opt) + "”."; arr.push(opt); return; }
+    clearConflicts(line, opt, x=>arr.indexOf(x)>=0, x=>arr.splice(arr.indexOf(x),1)); lastSwapAt = who+":"+line;
     arr.push(opt);
   }
 
@@ -513,6 +531,8 @@ input[type=text]{width:100%;border:1px solid var(--line);background:var(--bg);bo
     Object.keys(p.picks).forEach(line=>p.picks[line].forEach(o=>{ if((state[who].picks[line]||[]).indexOf(o)<0) toggleOpt(who, line, o); }));
     lastSwap = "";
   }
+  // remember whether "More lines" is open, since the form is redrawn after every tap
+  $("#forms").addEventListener("toggle", e=>{ const d = e.target; if(d.matches && d.matches("details[data-more]")) moreOpen[d.dataset.more] = d.open; }, true);
   $("#forms").addEventListener("click", e=>{
     const t = e.target.closest("button");
     if(!t) return;

@@ -788,7 +788,7 @@ body[data-sec="program"] .read-head::after, body[data-sec="tools"] .read-head::a
 @media print{ .tol-private{ display:none; } }
 /* Fill-in worksheets have a save bar at the bottom: keep Breathe above it */
 body:has(.wpf-bar) .tol-breathe-btn{ bottom:calc(4.8rem + env(safe-area-inset-bottom, 0px)); }
-@media (max-width:560px){ body:has(.wpf-bar) .tol-breathe-btn{ bottom:calc(8.2rem + env(safe-area-inset-bottom, 0px)); } }
+@media (max-width:560px){ body:has(.wpf-bar) .tol-breathe-btn{ bottom:calc(8.2rem + env(safe-area-inset-bottom, 0px)); } body:has(.wpf-bar-actions.has-more:not(.is-open)) .tol-breathe-btn{ bottom:calc(4.8rem + env(safe-area-inset-bottom, 0px)); } }
 @media (max-width:380px){
   .tol-bar button, .tol-bar a.tol-member{ padding:.42rem .6rem !important; font-size:.9rem !important; }
   .tol-bar a.tol-member{ margin-left:.25rem; }

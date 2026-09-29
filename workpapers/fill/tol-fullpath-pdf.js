@@ -404,7 +404,7 @@
     doc.heart(R - 42, 86, 32, '#FFFFFF');
     doc.text(L + 20, 78, enc('THE OBJECTIVE LEDGER  ·  FULL PATH PACKAGE  ·  VERSION ' + FP.VERSION), 'Helvetica-Bold', 7.8, C.ink);
     doc.text(L + 20, 112, enc('My full path: ' + roadName), 'Times-Bold', 24, C.ink);
-    wrap(road.solo ? 'Every page for understanding yourself, in one place: your battery, your calm-down kit, how words reach you, and kind ways to say no.'
+    wrap(road.solo ? 'Every page for understanding yourself, in one place: your load score, your calm-down kit, how words reach you, and kind ways to say no.'
       : 'Every workpaper for this road, in one place, plus the CALC-01 inputs and a page to get ready for your report.', 'Times-Italic', 11, W - 110).slice(0, 3).forEach(function (ln, k) { doc.text(L + 20, 134 + k * 13.5, ln, 'Times-Italic', 11, C.ink); });
     var names = FP.namesOf(data).filter(Boolean);
     doc.text(L, 190, enc((names.length ? 'For ' + (names.length > 1 ? names.slice(0, -1).join(', ') + ' & ' + names[names.length - 1] : names[0]) + '  ·  ' : '') + (road.solo ? 'Just me' : data.people + ' people') + '  ·  made ' + niceDate()), 'Helvetica', 9.5, C.soft);
@@ -413,7 +413,7 @@
     lay.bullets([
       'Tap any box to type, in Adobe Acrobat Reader, Apple Preview or Files, Chrome, Edge or another PDF app. Round buttons pick one answer; square boxes are ticks. Or print it and write by hand.',
       'Go in order, or start anywhere. Each page says what it is for. Blank pages are fine: the report says "not filled in" rather than guessing.',
-      road.solo ? 'Everything is about you, written by you.' : 'Wherever a page asks "who", write a name from page 3, an initial, or "Everyone". Pages about one person (the battery, the pause line) are filled in by that person, about themselves.',
+      road.solo ? 'Everything is about you, written by you.' : 'Wherever a page asks "who", write a name from page 3, an initial, or "Everyone". Pages about one person (the load score, the pause line) are filled in by that person, about themselves.',
       'When you’re done, save the PDF and bring it back to the Workpaper Suite on the website. It reads your answers on your own device, shows you what it found, lets you fix anything, and makes your report.'
     ], { size: 9.2 });
     lay.callout('Private by design', ['Nothing you type in this PDF is sent anywhere. The website reads it in your browser, on your device, and never uploads it. Keep the file somewhere private, like any personal notes.'], C.creditSoft, { size: 9 });
@@ -722,7 +722,7 @@
       detail(lay, s, m);
     });
     var cs = m.calcSection;
-    section(cs.applies ? 'CALC-01  Is the setup working for both of you?' : 'CALC-01  Your state and retuning count', 'CALC-01 ' + (cs.applies ? 'Is the setup working?' : 'State and retuning'), 1);
+    section(cs.applies ? 'CALC-01  Is the setup working for everyone?' : 'CALC-01  Your state and retuning count', 'CALC-01 ' + (cs.applies ? 'Is the setup working?' : 'State and retuning'), 1);
     lay.kicker('CALC-01');
     lay.h1(cs.applies ? 'Is the setup working?' : 'Your state and your retuning count', 'The inputs, where each came from, and the read');
     if (cs.state) lay.para('Step zero, your state: ' + cs.state + '.', { size: 9.2, color: C.soft });
@@ -799,7 +799,7 @@
     if (persons.length) {
       section('A page for each person', '6  A page for each person');
       lay.kicker('Each person');
-      lay.h1('A page for each person', 'Their load, their battery, what they bring and what might help');
+      lay.h1('A page for each person', 'Their load, their load score, what they bring and what might help');
       lay.para('These are not scorecards and not a ranking. Each one is written to that person about their own week, and it only knows what was entered. Read your own first; share it if you want to.', { size: 9.3, color: C.soft, font: 'Times-Italic' });
       persons.forEach(function (p, i) {
         if (i) lay.room(260);

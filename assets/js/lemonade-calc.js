@@ -28,20 +28,25 @@
   var KEY = 'tol-lemonade-stand-v2', DRAFT = 'tol-lemonade-draft', MAX_OWN = 5;
   var COLORS = ['#BFE3CF', '#F8DC6E', '#F2B8C6', '#B9D3F0', '#D9C4F0', '#F6C99B', '#C8E6A0', '#A8DDE0'];
 
+  // The example is shown as grey placeholder text (item.ex), never as values: it is never counted in
+  // a total, and the first edit to a row turns that row into yours.
+  function exampleRow(name, v) { return { name: '', v: v.map(function () { return 0; }), ex: { name: name, v: v } }; }
   var EXAMPLE = {
     people: ['Me', 'Them'],
     jobs: [
-      { name: 'Groceries & meal planning', v: [3, 1] },
-      { name: 'Dishes', v: [1, 4] },
-      { name: 'Laundry', v: [0, 3] },
-      { name: 'Bills & scheduling', v: [2, 0] },
-      { name: 'Emotional check-ins', v: [2, 2] }
+      exampleRow('Groceries & meal planning', [3, 1]),
+      exampleRow('Dishes', [1, 4]),
+      exampleRow('Laundry', [0, 3]),
+      exampleRow('Bills & scheduling', [2, 0]),
+      exampleRow('Emotional check-ins', [2, 2])
     ],
     bills: [
-      { name: 'Rent', v: [600, 600] },
-      { name: 'Power & internet', v: [140, 0] }
+      exampleRow('Rent', [600, 600]),
+      exampleRow('Power & internet', [140, 0])
     ]
   };
+  function anyExample() { return state.jobs.concat(state.bills).some(function (r) { return !!r.ex; }); }
+  function anyBad(list) { return list.some(function (r) { return r.raw && Object.keys(r.raw).length; }); }
 
   var state;       // { people:[], jobs:[{name,v[]}], bills:[{name,v[]}], example:bool }
   var keep = false;
@@ -127,9 +132,17 @@
     var top = document.createElement('div'); top.className = 'row-top';
     var ta = document.createElement('textarea');
     ta.rows = 1; ta.className = 'task-name'; ta.value = item.name; ta.setAttribute('autocomplete', 'off');
-    ta.placeholder = kind === 'job' ? 'What was the job?' : 'What was the cost?';
+    ta.placeholder = item.ex ? 'Example: ' + item.ex.name : kind === 'job' ? 'What was the job?' : 'What was the cost?';
     ta.setAttribute('aria-label', kind === 'job' ? 'Job name' : 'Bill name');
-    ta.addEventListener('input', function () { item.name = ta.value.replace(/\n/g, ' '); autoGrow(ta); markEdited(); recalc(); if (kind === 'job') renderPicks(); });
+    if (item.ex) row.classList.add('is-example');
+    // the first edit to an example row makes it yours: its grey example numbers go
+    function own() {
+      if (!item.ex) return;
+      delete item.ex; row.classList.remove('is-example');
+      ta.placeholder = kind === 'job' ? 'What was the job?' : 'What was the cost?';
+      amts.querySelectorAll('input').forEach(function (x) { x.placeholder = '0'; });
+    }
+    ta.addEventListener('input', function () { own(); item.name = ta.value.replace(/\n/g, ' '); autoGrow(ta); markEdited(); recalc(); if (kind === 'job') renderPicks(); });
     ta.addEventListener('keydown', function (e) { if (e.key === 'Enter') e.preventDefault(); });
     var rm = document.createElement('button');
     rm.type = 'button'; rm.className = 'remove'; rm.innerHTML = '&times;';
@@ -153,9 +166,13 @@
       sp.textContent = nameOf(i) + (kind === 'job' ? ' (hours)' : ' paid');
       var inp = document.createElement('input');
       inp.type = 'number'; inp.min = '0'; inp.step = kind === 'job' ? '0.5' : '0.01'; inp.inputMode = 'decimal'; inp.autocomplete = 'off';
-      inp.value = item.raw && item.raw[i] != null ? item.raw[i] : (item.v[i] || 0);
+      inp.setAttribute('aria-label', nameOf(i) + (kind === 'job' ? ', hours' : ', amount paid') + (item.ex ? ' (example: ' + (item.ex.v[i] || 0) + ')' : ''));
+      // an example row shows its numbers as grey placeholders, which are never counted
+      if (item.ex) { inp.value = ''; inp.placeholder = String(item.ex.v[i] || 0); }
+      else { inp.placeholder = '0'; inp.value = item.raw && item.raw[i] != null ? item.raw[i] : (item.v[i] || 0); }
       if (item.raw && item.raw[i] != null) inp.setAttribute('aria-invalid', 'true');
       inp.addEventListener('input', function () {
+        own();
         // a negative number, or more hours than a week has, is left out and said so under the row (never quietly zeroed)
         var raw = inp.value, n = parseFloat(raw), bad = raw !== '' && (!isFinite(n) || n < 0 || (kind === 'job' && n > 168));
         if (bad) inp.setAttribute('aria-invalid', 'true'); else inp.removeAttribute('aria-invalid');
@@ -186,7 +203,8 @@
     });
   }
   function markEdited() {
-    if (state.example) { state.example = false; $('example-note').hidden = true; }
+    state.example = false;
+    $('example-note').hidden = !anyExample();
   }
 
   /* ---------- glasses ---------- */
@@ -218,7 +236,10 @@
   // of 1.5 times an even share or more "leans one way"; anything less is "fairly even".
   function hoursSentence() {
     var t = totals(state.jobs), sum = t.reduce(function (a, b) { return a + b; }, 0);
-    if (sum === 0) return 'Add some hours above to see how the work is split.';
+    // a number that can't be counted (negative, not a number, more than a week) holds the read back,
+    // so a typo never turns into "100% done by them"
+    if (anyBad(state.jobs)) return 'One of the numbers above isn’t counted yet (it’s marked under its row). Fix it to see how the work is split. Nothing is guessed in the meantime.';
+    if (sum === 0) return anyExample() ? 'The grey numbers are only an example, so nothing is counted yet. Type your own hours to see how the work is split.' : 'Add some hours above to see how the work is split.';
     var p = pcts(t), n = t.length, even = 100 / n;
     var top = 0; p.forEach(function (x, i) { if (x > p[top]) top = i; });
     var topPct = Math.round(p[top]);
@@ -237,6 +258,7 @@
   }
   function moneySentence() {
     var t = totals(state.bills), sum = t.reduce(function (a, b) { return a + b; }, 0);
+    if (anyBad(state.bills)) return 'One of the amounts above isn’t counted yet (it’s marked under its row). Fix it to see the money side.';
     if (sum === 0) return '';
     var fair = sum / t.length;
     var parts = t.map(function (x, i) {
@@ -248,12 +270,12 @@
   }
 
   function recalc() {
-    var t = totals(state.jobs), p = pcts(t), any = t.some(function (x) { return x > 0; });
+    var t = totals(state.jobs), p = pcts(t), any = t.some(function (x) { return x > 0; }) && !anyBad(state.jobs);
     var wraps = document.querySelectorAll('#glasses .ls-gwrap');
     wraps.forEach(function (w, i) {
       w.querySelector('.ls-juice').style.height = (any ? Math.max(4, p[i] * 0.92) : 0) + '%';
       w.querySelector('.ls-pct').textContent = any ? Math.round(p[i]) + '%' : '—';
-      w.querySelector('.ls-gname').textContent = nameOf(i) + ' · ' + r1(t[i]) + 'h';
+      w.querySelector('.ls-gname').textContent = nameOf(i) + (any ? ' · ' + r1(t[i]) + 'h' : '');
     });
     $('balance-line').textContent = hoursSentence();
     $('money-line').textContent = moneySentence();
@@ -323,7 +345,7 @@
 
   function renderAll() {
     renderPeople(); renderRows(); renderGlasses();
-    $('example-note').hidden = !state.example;
+    $('example-note').hidden = !anyExample();
     renderOwners();
     recalc();
   }
@@ -373,6 +395,9 @@
     state = clone(EXAMPLE); state.example = true;
   }
   state.jobs = state.jobs || []; state.bills = state.bills || []; state.owners = state.owners || [];
+  // a stand saved before examples became grey placeholders: its example numbers were real values,
+  // so start from the placeholder example instead of counting them
+  if (state.example && !anyExample()) { var ppl = state.people; state = clone(EXAMPLE); state.example = true; state.owners = []; if (ppl && ppl.length >= MIN) { state.people = ppl.slice(0, MAX); state.jobs.concat(state.bills).forEach(function (r) { while (r.v.length < state.people.length) r.v.push(0); r.v.length = state.people.length; }); } }
   $('keep-device').checked = keep;
   renderAll();
 

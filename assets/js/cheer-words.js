@@ -231,7 +231,7 @@ window.TOL_CHEER = {
       'Worksheets are just questions in nice outfits.', 'One box at a time. You’ve got this.', 'Honest and kind can live in the same box.',
       'Paper is patient. Take your time.', 'Surprised by an answer? That’s the good stuff.', 'Numbers can start kind talks, not end them.',
       ['Fill it in on your phone, or print it.', '/workpapers/fill/suite.html', 'The Workpaper Suite'],
-      ['Can the load last? The calculator can help.', '/workpapers/calculators/calc01-solvency.html', 'CALC-01'],
+      ['Is the setup working for everyone? The calculator can help.', '/workpapers/calculators/calc01-solvency.html', 'CALC-01'],
       ['Short on time? Try the 90-second check-in.', '/workpapers/wp-13-pll-protocol.html', 'WP-13'],
       ['Start by listing the quiet jobs.', '/workpapers/wp-01.html', 'WP-01'],
       ['Check your battery before you fill it in.', '/workpapers/wp-02-battery-stress-meter.html', 'WP-02'],
