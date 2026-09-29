@@ -21,6 +21,39 @@
 <link rel="stylesheet" href="/assets/css/games.css">
 <style>
   .read a.pp-card, .read a.pp-stem, .read a.pp-stat{ text-decoration:none; }
+  /* only have a moment? */
+  .pp-quick{ margin:0 0 1.4rem; padding:1rem 1.1rem; border-radius:22px; background:#FFFDF9; border:1px solid #E6D6EE; }
+  .pp-quick h2{ margin:0 0 .6rem; font-size:1.2rem; }
+  .pp-quick-row{ display:flex; flex-wrap:wrap; gap:.5rem; }
+  .pp-quick-btn{ font:inherit; font-weight:600; font-size:.95rem; min-height:48px; padding:.5rem 1.1rem; border-radius:999px; border:1px solid #D9C8F0; background:#F3EEF9; color:#3C3350; cursor:pointer; text-align:left; }
+  .pp-quick-btn:hover{ background:#EDE3F8; }
+  .pp-quick-out{ margin:.7rem 0 0; min-height:1.2em; }
+  .pp-quick-out:empty{ display:none; }
+  .pp-quick-note{ margin:.6rem 0 0; font-size:.9rem; color:#5A5346; }
+  /* the wind-down: a quiet full-screen card with no sound */
+  .pp-wd{ position:fixed; inset:0; z-index:10050; display:grid; place-items:center; padding:16px; background:linear-gradient(180deg, #1B1E3F 0%, #2B2B57 60%, #3A3563 100%); color:#F4F1FA; }
+  .pp-wd[hidden]{ display:none; }
+  .pp-wd-box{ width:min(100%, 30rem); text-align:center; }
+  .pp-wd-k{ margin:0 0 .3rem; font-family:"IBM Plex Mono", monospace; font-size:.8rem; letter-spacing:.06em; color:#D9D2F0; }
+  .pp-wd h2{ margin:0 0 1rem; color:#FFF8EE; font-size:1.5rem; }
+  .pp-wd-scene{ position:relative; height:220px; margin:0 auto 1rem; max-width:320px; border-radius:24px; overflow:hidden; }
+  .pp-wd-orb{ position:absolute; left:50%; top:50%; width:120px; height:120px; margin:-60px 0 0 -60px; border-radius:50%; background:radial-gradient(circle, #FFE9C7 0%, #F4C9A8 45%, rgba(244,201,168,0) 72%); transform:scale(.7); }
+  .pp-wd.is-breathe .pp-wd-orb{ animation:pp-breathe 10s ease-in-out infinite; }
+  @keyframes pp-breathe{ 0%{ transform:scale(.7); } 40%{ transform:scale(1.15); } 100%{ transform:scale(.7); } }
+  .pp-wd-moon, .pp-wd-water{ display:none; }
+  .pp-wd.is-scene .pp-wd-orb{ display:none; }
+  .pp-wd.is-scene .pp-wd-scene{ background:linear-gradient(180deg, #232552 0%, #3B3A72 62%, #2A3E66 62%, #1F2E52 100%); }
+  .pp-wd.is-scene .pp-wd-moon{ display:block; position:absolute; left:62%; top:18%; width:46px; height:46px; border-radius:50%; background:#FFF3D6; box-shadow:0 0 30px rgba(255,243,214,.6); }
+  .pp-wd.is-scene .pp-wd-water{ display:block; position:absolute; left:0; right:0; top:62%; bottom:0; background:repeating-linear-gradient(180deg, rgba(255,243,214,.0) 0 10px, rgba(255,243,214,.10) 10px 12px); animation:pp-drift 12s ease-in-out infinite alternate; }
+  @keyframes pp-drift{ from{ transform:translateY(0); } to{ transform:translateY(6px); } }
+  .pp-wd.is-words .pp-wd-scene{ display:none; }
+  .pp-wd-p{ font-family:"Fraunces", Georgia, serif; font-size:1.25rem; line-height:1.45; margin:0 0 .6rem; color:#FFF8EE; min-height:1.5em; }
+  .pp-wd-left{ margin:0 0 1rem; font-size:.9rem; color:#D9D2F0; min-height:1.2em; }
+  .pp-wd-btns{ display:flex; justify-content:center; gap:.6rem; flex-wrap:wrap; }
+  .pp-wd-btns button{ font:inherit; font-weight:600; min-height:48px; padding:.5rem 1.3rem; border-radius:999px; border:1px solid rgba(255,248,238,.5); background:rgba(255,248,238,.12); color:#FFF8EE; cursor:pointer; }
+  .pp-wd-btns #pp-wd-next{ background:#FFF8EE; color:#2B2B57; }
+  html.tol-still .pp-wd-orb, html.tol-still .pp-wd-water{ animation:none !important; }
+  @media (prefers-reduced-motion: reduce){ .pp-wd-orb, .pp-wd-water{ animation:none !important; } }
   .sr-only{ position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; }
   .pp-hero, .pp-bouquet, .pp-card, .pp-why{ backdrop-filter:blur(6px) saturate(1.05); -webkit-backdrop-filter:blur(6px) saturate(1.05); }
   .pp-hero{ position:relative; margin:0 0 1.4rem; padding:1.3rem 1.3rem 1.2rem; border-radius:28px; overflow:hidden;
@@ -102,6 +135,30 @@
 <body class="pp-page is-game">
 <main class="read">
 <header class="read-head pp-head"><h1>Pause &amp; Play</h1><p class="pp-sub">Calm games for a busy mind</p></header>
+
+<section class="pp-quick" aria-labelledby="pp-quick-h">
+  <h2 id="pp-quick-h">Only have a moment?</h2>
+  <div class="pp-quick-row">
+    <button type="button" class="pp-quick-btn" id="pp-pick"><span aria-hidden="true">&#127922;</span> Pick one for me (2 minutes)</button>
+    <button type="button" class="pp-quick-btn" id="pp-tonight"><span aria-hidden="true">&#127769;</span> Tonight only: a 3-minute wind-down</button>
+  </div>
+  <p class="pp-quick-out" id="pp-pick-out" aria-live="polite"></p>
+  <p class="pp-quick-note">The wind-down is silent: one minute of slow breathing, one minute with a quiet picture, and one kind sentence. You can stop at any time.</p>
+</section>
+
+<div class="pp-wd" id="pp-wd" hidden role="dialog" aria-modal="true" aria-labelledby="pp-wd-h">
+  <div class="pp-wd-box">
+    <p class="pp-wd-k" id="pp-wd-k">1 of 3 · Breathe</p>
+    <h2 id="pp-wd-h" tabindex="-1">Breathe with the circle</h2>
+    <div class="pp-wd-scene" id="pp-wd-scene" aria-hidden="true"><div class="pp-wd-orb"></div><div class="pp-wd-moon"></div><div class="pp-wd-water"></div></div>
+    <p class="pp-wd-p" id="pp-wd-p" aria-live="polite"></p>
+    <p class="pp-wd-left" id="pp-wd-left"></p>
+    <div class="pp-wd-btns">
+      <button type="button" id="pp-wd-next">Next &rarr;</button>
+      <button type="button" id="pp-wd-stop">Stop here</button>
+    </div>
+  </div>
+</div>
 
 <div class="try-this pp-why pp-what">
   <p><strong>What is Pause &amp; Play?</strong> It’s the calm corner of the site: a handful of gentle games for when your mind needs a rest. Breathe in the Night Garden, take the Frequency Journey, spell words in Word Bloom, solve a crossword, or find words in a quiet word search. There are no timers and no way to lose.</p>
