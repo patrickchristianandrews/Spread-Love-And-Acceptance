@@ -1,12 +1,12 @@
-/* pals-cam-sounds.js — soft, real sounds for the pal cam.
-   Recorded sounds (all CC0, free to use), cleaned up and level-matched, in /assets/audio/palcam/:
-   - Tidbit's barks: the poodle and dachshund recordings below, a touch brighter
-   - Sugarfoot's barks: a mini dachshund and a poodle (plus softer "boof" versions of the same recordings) ("Miniature Dachshund Bark - Indoors" by Ligidium,
-     freesound 192236; "one bark of a poodle dog" by fabiopx, freesound 170015)
-   - chimes, plucks and little tunes from Kenney's Interface Sounds and Music Jingles (kenney.nl)
-   - a real slide whistle, boings and soft swishes (Bluezone/"bb" sample packs and 100 CC0 SFX, via
-     github.com/lavenderdotpet/CC0-Public-Domain-Sounds)
-   Kept gentle: a soft master level, plenty of quiet between sounds, and never two at once.
+/* pals-cam-sounds.js — the pal cam's sounds.
+   - The pups' barks are real, unaltered recordings (all CC0): Tidbit uses a poodle and a mini
+     dachshund; Sugarfoot a mini dachshund and a softer, deeper bark. Kept quieter than the music.
+     Sources: "one bark of a poodle dog" by fabiopx (freesound 170015), "Miniature Dachshund Bark -
+     Indoors" by Ligidium (freesound 192236), "Dog Barks.wav" by UnderlinedDesigns (freesound 191687).
+   - Every other sound is a casino sound: chips stacking and clinking, cards shuffling and flipping,
+     dice rolling, coins, and a little win bell (Kenney's Casino, RPG and Interface audio, kenney.nl,
+     and 50 CC0 retro synth SFX; all CC0).
+   All cleaned up (mono, gentle low-pass, fades) and level-matched in /assets/audio/palcam/.
    The pal cam calls TOLPalsCamSounds.bubble / trick / act / tick. The on/off choice is remembered on
    this device only (localStorage), and nothing is sent anywhere. */
 (function () {
@@ -14,14 +14,13 @@
   var AC = window.AudioContext || window.webkitAudioContext;
   var BASE = '/assets/audio/palcam/';
   var FILES = {
-    barkT: ['tidbit-bark-1', 'tidbit-bark-2', 'tidbit-bark-3', 'tidbit-bark-4'],
-    barkS: ['sugarfoot-bark-1', 'sugarfoot-bark-2', 'sugarfoot-bark-3', 'sugarfoot-bark-4', 'sugarfoot-bark-5'],
-    yipT: ['tidbit-yip-1', 'tidbit-yip-2', 'tidbit-yip-3'], boofS: ['sugarfoot-boof-1', 'sugarfoot-boof-2', 'sugarfoot-boof-3'],
-    chime: ['chime-1', 'chime-2'], pluck: ['pluck-1', 'pluck-2'], ding: ['ding'], curious: ['curious'], plip: ['plip'], sparkle: ['sparkle'],
-    tune: ['tune-1', 'tune-2', 'tune-3', 'tune-4', 'tune-5'], sweet: ['sweet-1', 'sweet-2', 'sweet-3'],
-    slide: ['slide-up-1', 'slide-up-2'], wobble: ['slide-wobble', 'slide-fall-rise'], boing: ['boing-1', 'boing-2'],
-    swish: ['swish-1', 'swish-2', 'swish-3'], space: ['space-1', 'space-2']
+    barkT: ['tidbit-bark-1', 'tidbit-bark-2', 'tidbit-bark-3'],
+    barkS: ['sugarfoot-bark-1', 'sugarfoot-bark-2', 'sugarfoot-bark-3', 'sugarfoot-bark-4'],
+    stack: ['chips-stack-1', 'chips-stack-2', 'chips-stack-3'], clink: ['chips-clink-1', 'chips-clink-2', 'chips-clink-3'],
+    shuffle: ['cards-shuffle-1', 'cards-shuffle-2', 'cards-shuffle-3'], flip: ['cards-flip-1', 'cards-flip-2', 'cards-flip-3', 'cards-flip-4'],
+    dice: ['dice-1', 'dice-2', 'dice-3'], coins: ['coins-1', 'coins-2'], bling: ['coin-bling-1', 'coin-bling-2'], bell: ['bell-1', 'bell-2']
   };
+  var BARK_VOL = 0.42; // the pups sit under the music
   var ctx = null, out = null, bufs = {}, loading = null, lastAt = -10, lastKey = '', lastKeyAt = 0, nextAmb = 0, clockMs = 0, lastName = '';
   function lsGet(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
   function lsSet(k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
@@ -59,32 +58,22 @@
     if (!enabled || document.hidden || !FILES[group]) return false;
     if (!ensure()) return false;
     var now = ctx.currentTime;
-    if (!force && now - lastAt < (/^bark|^yip|^boof/.test(group) ? 1.3 : 2.2)) return false; // plenty of quiet between sounds
+    if (!force && now - lastAt < (/^bark/.test(group) ? 1.3 : 2.2)) return false; // plenty of quiet between sounds
     var list = FILES[group].filter(function (n) { return bufs[n] && (FILES[group].length < 2 || n !== lastName); });
     if (!list.length) return false;
     var name = pick(list), s = ctx.createBufferSource(), g = ctx.createGain();
     s.buffer = bufs[name];
-    s.playbackRate.value = 0.97 + Math.random() * 0.06; // a touch of variety, never chipmunky
+    s.playbackRate.value = /^bark/.test(group) ? 1 : 0.98 + Math.random() * 0.04; // barks exactly as recorded
     g.gain.value = vol == null ? 1 : vol;
     s.connect(g); g.connect(out); s.start(now + 0.02 + (delay || 0));
     lastAt = now + (delay || 0); lastName = name; nextAmb = Math.max(nextAmb, clockMs + 6000);
     return true;
   }
-  // one "bark moment", in her own style: a single bark, a quick double, a little burst, or a soft yip/boof
+  // one "bark moment": a single real bark, or now and then a second one a beat later
   function bark(who, vol, force, delay) {
-    var d = delay || 0, v = vol == null ? 1 : vol, r = Math.random();
-    if (who === 1) { // Sugarfoot: steady and soft
-      if (r < 0.2) return play('boofS', v, force, d);
-      if (!play('barkS', v, force, d)) return false;
-      if (r < 0.45) play('barkS', v * 0.9, true, d + 0.5 + Math.random() * 0.15);
-      else if (r < 0.55) play('boofS', v * 0.85, true, d + 0.55);
-      return true;
-    }
-    // Tidbit: quick and bouncy
-    if (r < 0.2) { if (!play('yipT', v, force, d)) return false; play('yipT', v * 0.9, true, d + 0.42 + Math.random() * 0.08); return true; }
-    if (!play('barkT', v, force, d)) return false;
-    if (r < 0.5) play('barkT', v * 0.92, true, d + 0.5 + Math.random() * 0.12);
-    else if (r < 0.62) { play('barkT', v * 0.9, true, d + 0.48); play('yipT', v * 0.8, true, d + 0.95); }
+    var d = delay || 0, v = (vol == null ? 1 : vol) * BARK_VOL, g = who === 1 ? 'barkS' : 'barkT';
+    if (!play(g, v, force, d)) return false;
+    if (Math.random() < (who === 1 ? 0.3 : 0.4)) play(g, v * 0.9, true, d + 0.7 + Math.random() * 0.3);
     return true;
   }
   // the two of them "talking": one barks, the other answers
@@ -102,34 +91,32 @@
     var s = String(text || '').toLowerCase();
     if (/^!+$/.test(s) || /woof|arf|bark|ruff|yay|wow|hooray|yes|ooh|whee/.test(s)) { if (Math.random() < 0.72) bark(who, 0.85); }
     else if (s.length > 3 && Math.random() < 0.2) bark(who, 0.7); // now and then she barks along with what she says
-    else if (/^\?+!?$/.test(s)) play('curious', 0.7);
-    else if (s === '<3' || s.indexOf('♥') !== -1 || s.indexOf('❤') !== -1) play('chime', 0.7);
+    else if (/^\?+!?$/.test(s)) play('flip', 0.6);
+    else if (s === '<3' || s.indexOf('♥') !== -1 || s.indexOf('❤') !== -1) play('stack', 0.6);
   }
   // a trick on request: a happy bark, then now and then a little flourish
   function trick(who) {
     bark(who, 0.9, true);
-    if (Math.random() < 0.5) play(pick(['pluck', 'boing', 'sparkle', 'tune']), 0.75, true, 0.35);
+    if (Math.random() < 0.5) play(pick(['coins', 'bling', 'bell', 'clink', 'dice']), 0.6, true, 0.6);
   }
   // a new activity is starting: sometimes a sound that fits it
   var ACT_SOUNDS = [
-    [/ufo|alien|teleport|space|rocket|jetpack|comet|constellation|stardogs|earthrise|zero|robot/, 'space'],
-    [/trampoline|pogo|bounce|leapfrog|seesaw|bigball|ballrain|jumprope|hopscotch|cloudbounce|boomerang/, 'boing'],
-    [/slide|surf|toboggan|skate|zoomies|swing|carousel|highdive|speedrun|relay|race|kite|capes|flight|carpet/, 'slide'],
-    [/magic|wish|sparkle|glow|crystal|firefl|lantern|snowglobe|rainbow|northern|pearl|jelly|gold|dragon|star/, 'sparkle'],
-    [/bubble|popcorn|balloon|pop|sprinkler|puddle|spout|rain|drops/, 'plip'],
-    [/drum|band|piano|dj|disco|dance|sing|chorus|concert|waltz|conga|hula|talent|show|party|marchband|fest|cheer/, 'tune'],
-    [/silly|sockshow|copycat|pillow|pancake|sandwich|pizza|juggle|unicycle|wobble|scheme/, 'wobble'],
-    [/hug|share|boop|flower|letter|gift|heart|bear|note|friend|toast|sunset|nap|hammock|picnic|tea/, 'sweet'],
-    [/planes|leaf|twirl|feather|seeds|dandelion|blossom|breeze/, 'swish']
+    [/ufo|alien|teleport|space|rocket|jetpack|comet|constellation|stardogs|earthrise|zero|robot|magic|wish|sparkle|glow|crystal|firefl|lantern|snowglobe|rainbow|northern|pearl|jelly|gold|dragon|star/, 'bell'],
+    [/trampoline|pogo|bounce|leapfrog|seesaw|bigball|ballrain|jumprope|hopscotch|cloudbounce|boomerang|bowling|beanbag|hoops|minigolf|juggle/, 'dice'],
+    [/slide|surf|toboggan|skate|zoomies|swing|carousel|highdive|speedrun|relay|race|kite|capes|flight|carpet|planes|leaf|feather|seeds|dandelion|breeze|letter|note|book|map|scrapbook|stickers/, 'flip'],
+    [/drum|band|piano|dj|disco|dance|sing|chorus|concert|waltz|conga|hula|talent|show|party|marchband|fest|cheer|fireworks|confetti|treasure|goldball|rainbowpot|gift|present|cake|toast/, 'coins'],
+    [/bubble|popcorn|balloon|pop|sprinkler|puddle|spout|rain|drops|pancake|sandwich|pizza|cookie|muffin|bread|pie|apple|smores|treat|tea|picnic/, 'clink'],
+    [/silly|sockshow|copycat|pillow|unicycle|wobble|scheme|detective|cookiecode|checkers|jigsaw|dominoes|puzzle/, 'shuffle'],
+    [/hug|share|boop|flower|heart|bear|friend|sunset|nap|hammock|critternap|blanket|cozy|snuggle/, 'stack']
   ];
-  var BY_KIND = { silly: 'wobble', cool: 'tune', sweet: 'sweet', surprising: 'sparkle' };
+  var BY_KIND = { silly: 'dice', cool: 'shuffle', sweet: 'stack', surprising: 'bling' };
   function act(a) {
     if (!a || a.interlude) return;
     if (Math.random() < 0.22) { var w = Math.random() < 0.5 ? 0 : 1; if (Math.random() < 0.35) chat(w); else bark(w, 0.8, false, 0.4); return; } // a happy bark to start
     if (Math.random() < 0.5) return; // plenty of activities stay quiet
     var key = (a.id + ' ' + (a.name || '')).toLowerCase(), g = null;
     for (var i = 0; i < ACT_SOUNDS.length && !g; i++) if (ACT_SOUNDS[i][0].test(key)) g = ACT_SOUNDS[i][1];
-    play(g || BY_KIND[a.kind] || 'chime', 0.75, false, 0.5);
+    play(g || BY_KIND[a.kind] || 'stack', 0.6, false, 0.5);
   }
   // the cam is running: once in a while, one of them barks softly or a little chime rings
   function tick(dt, running) {
@@ -139,7 +126,7 @@
     if (clockMs < nextAmb) return;
     nextAmb = clockMs + 15000 + Math.random() * 14000;
     var r = Math.random(), w = Math.random() < 0.5 ? 0 : 1;
-    if (r < 0.55) bark(w, 0.72); else if (r < 0.8) chat(w); else play(pick(['pluck', 'chime', 'sweet']), 0.6);
+    if (r < 0.55) bark(w, 0.72); else if (r < 0.8) chat(w); else play(pick(['stack', 'clink', 'flip', 'bling']), 0.5);
   }
   function hush() { if (ctx && ctx.state === 'running' && ctx.suspend) { try { var pr = ctx.suspend(); if (pr && pr.catch) pr.catch(function () {}); } catch (e) {} } }
   function wake() { if (enabled && ctx && ctx.state === 'suspended') ensure(); }
