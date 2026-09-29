@@ -24,7 +24,7 @@
   var ctx = null, out = null, bufs = {}, loading = null, lastAt = -10, lastKey = '', lastKeyAt = 0, nextAmb = 0, clockMs = 0, lastName = '';
   function lsGet(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
   function lsSet(k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
-  var enabled = lsGet('tol-palcam-sound') !== 'off', held = false; // held: kept quiet for this visit (the site's quiet mode), without changing the saved choice
+  var enabled = lsGet('tol-pc-sound') !== 'off', held = false; // held: kept quiet for this visit (the site's quiet mode), without changing the saved choice
 
   function ensure() {
     if (!AC || !enabled || held) return false;
@@ -132,7 +132,7 @@
   function hush() { if (musicOn()) return; /* the music shares this audio: never silence it */ if (ctx && ctx.state === 'running' && ctx.suspend) { try { var pr = ctx.suspend(); if (pr && pr.catch) pr.catch(function () {}); } catch (e) {} } }
   function wake() { if (ctx && ctx.state === 'suspended' && (musicOn() || (enabled && !held))) { if (enabled && !held) ensure(); else { try { var pr = ctx.resume(); if (pr && pr.catch) pr.catch(function () {}); } catch (e) {} } } }
   function setOn(v) {
-    held = false; enabled = !!v; lsSet('tol-palcam-sound', enabled ? 'on' : 'off');
+    held = false; enabled = !!v; lsSet('tol-pc-sound', enabled ? 'on' : 'off');
     if (enabled) { ensure(); if (loading) loading.then(function () { bark(Math.random() < 0.5 ? 0 : 1, 0.8, true); }); } else hush();
     return enabled;
   }

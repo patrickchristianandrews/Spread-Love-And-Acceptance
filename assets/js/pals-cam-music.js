@@ -47,7 +47,7 @@
   function lsGet(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
   function lsSet(k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
   function quietNow() { try { return !!(window.TOLQuiet && window.TOLQuiet.on && window.TOLQuiet.on()); } catch (e) { return false; } }
-  var enabled = lsGet('tol-palcam-music') !== 'off' && !quietNow();
+  var enabled = lsGet('tol-pc-music') !== 'off' && !quietNow();
   var scene = null, hour = 12, running = false, timer = 0;
   var A = null; // the audio graph, built once on the shared pal cam audio context
   var M = { next: 0, beat: 0, deg: 0, bars: 0, phrase: [], pi: 0, style: DEFAULT_STYLE };
@@ -180,7 +180,7 @@
     resume: function () { if (scene && enabled) start(); },
     on: function () { return enabled && !quietNow(); },
     has: function (id) { return true; },                                          // every scene has music now
-    set: function (v) { enabled = !!v; lsSet('tol-palcam-music', enabled ? 'on' : 'off'); if (enabled) start(); else stopNow(); return enabled; },
+    set: function (v) { enabled = !!v; lsSet('tol-pc-music', enabled ? 'on' : 'off'); if (enabled) start(); else stopNow(); return enabled; },
     toggle: function () { return this.set(!enabled); },
     tracks: function () { return Object.keys(STYLES); },
     playing: function () { return running; },

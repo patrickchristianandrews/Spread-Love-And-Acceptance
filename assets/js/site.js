@@ -1379,7 +1379,7 @@
       QUIET_KEY = 'tol-quiet', EASY_KEY = 'tol-easy', FONT_KEY = 'tol-font', SPACE_KEY = 'tol-spacing',
       TINT_KEY = 'tol-tint', RULER_KEY = 'tol-ruler', SOUND_KEY = 'tol-sound-off', PREV_KEY = 'tol-comfort-prev';
   // the sound switches the pal cam and the games keep for themselves
-  var SOUND_KEYS = ['tol-palcam-sound', 'tol-palcam-music', 'tol-qw-sound', 'tol-xw-sound', 'tol-bloom-sound'];
+  var SOUND_KEYS = ['tol-pc-sound', 'tol-pc-music', 'tol-qw-sound', 'tol-xw-sound', 'tol-bloom-sound'];
   // four steps, each bigger than the one before (every word on the page is scaled by 1, 1.12, 1.25 or 1.4)
   var SIZE_NAMES = { md: 'Standard', lg: 'Large', xl: 'Larger', xxl: 'Largest' }, SIZE_SCALE = { md: 1, lg: 1.12, xl: 1.25, xxl: 1.4 };
   var TINTS = { cream: 'Cream', blue: 'Soft blue', mint: 'Mint' };

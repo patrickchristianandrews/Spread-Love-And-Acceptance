@@ -109,6 +109,10 @@
   .cv-words{ position:absolute; left:50%; top:68%; transform:translate(-50%, -50%); z-index:2; margin:0; width:min(30rem, 90%); text-align:center; pointer-events:none;
     font-family:"Fraunces", Georgia, serif; font-style:italic; font-size:clamp(1.4rem, 4.6vw, 2rem); color:#FFF6E8; text-shadow:0 2px 18px rgba(10,10,30,.85); opacity:0; transition:opacity 1.2s ease; }
   .cv-words.is-on{ opacity:.92; }
+  .cv-fly{ position:absolute; inset:0; z-index:1; pointer-events:none; overflow:hidden; }
+  .cv-fly span{ position:absolute; left:0; top:0; white-space:nowrap; font-family:"Fraunces", Georgia, serif; font-weight:500; color:#FFF6E8; letter-spacing:.02em;
+    text-shadow:0 0 18px rgba(255,236,214,.55), 0 2px 14px rgba(10,10,30,.7); will-change:transform, opacity; }
+
   .cv-words small{ display:block; font-family:"Lora", Georgia, serif; font-style:normal; font-size:.9rem; color:var(--cv-soft); margin-top:.3rem; }
   .cv-ctrl{ position:absolute; left:50%; bottom:max(.9rem, env(safe-area-inset-bottom)); transform:translateX(-50%); z-index:3; width:min(44rem, calc(100% - 1.5rem));
     display:grid; gap:.3rem; padding:.6rem .8rem .4rem; border-radius:26px; background:rgba(20,18,46,.5); border:1px solid rgba(246,242,252,.18);
@@ -206,6 +210,7 @@
 
     <div class="cv-clock" id="cv-clock" hidden><b id="cv-left">10:00 left</b><i aria-hidden="true"><u id="cv-prog"></u></i></div>
     <p class="cv-words" id="cv-words" aria-hidden="true"></p>
+    <div class="cv-fly" id="cv-fly" aria-hidden="true"></div>
     <p class="cv-paused" id="cv-paused" hidden>Paused</p>
 
     <!-- 1. How are you feeling? -->
@@ -252,7 +257,6 @@
           </div>
           <div class="cv-checks">
             <label class="cv-check"><input type="checkbox" id="cv-words-on" checked> Breathing words</label>
-            <label class="cv-check"><input type="checkbox" id="cv-gentle"> Gentle visuals (nearly still)</label>
           </div>
         </div>
         <button type="button" class="cv-btn cv-go" id="cv-begin">Begin</button>
@@ -268,7 +272,6 @@
         <button type="button" class="cv-btn" id="cv-mute"><span aria-hidden="true">&#128264;</span> Sound: on</button>
         <button type="button" class="cv-btn" id="cv-look"><span aria-hidden="true">&#127752;</span> <span id="cv-look-name">Tunnel</span></button>
         <button type="button" class="cv-btn" id="cv-words-btn" aria-pressed="true">Words</button>
-        <button type="button" class="cv-btn" id="cv-gentle-btn" aria-pressed="false"><span>Gentle<span class="cv-long"> visuals</span></span></button>
       </div>
       <div class="cv-vol"><label for="cv-vol2">Volume</label><input type="range" id="cv-vol2" min="0" max="100" step="1" value="30"><output id="cv-vol-out" for="cv-vol2">30%</output></div>
     </div>
@@ -320,7 +323,7 @@
         <li>Don’t use it while driving, cycling or operating machinery, or anywhere you need to stay alert.</li>
         <li>Keep the volume low. The tones should sit quietly in the background.</li>
         <li>Stop anytime if you feel dizzy, uneasy or uncomfortable in any way.</li>
-        <li>The pictures move slowly and never flash, and brightness is kept soft. If you have epilepsy or are sensitive to light or motion, you may prefer <strong>Gentle visuals</strong>, which keep the picture nearly still. Drift switches it on for you if your device asks for reduced motion. You can also just close your eyes and listen.</li>
+        <li>The pictures move slowly and never flash, and brightness is kept soft. If your device asks for reduced motion, or you turn on Keep the page still, Drift keeps the picture nearly still. You can also just close your eyes and listen.</li>
       </ul>
       <p><strong>Private by design.</strong> The sound and pictures are made right here in your browser. Drift remembers your last choices on this device only, so it’s ready next time.</p>
     </details>

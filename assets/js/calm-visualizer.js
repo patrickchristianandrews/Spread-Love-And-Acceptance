@@ -97,7 +97,7 @@
     feel: null, intensity: 3, len: 10, bed: 'pink', style: 'tunnel',
     vol: typeof saved.vol === 'number' ? Math.max(0, Math.min(100, saved.vol)) : 30,
     words: saved.words !== false,
-    gentle: prefersReduced || stillNow() || quietNow() ? true : !!saved.gentle
+    gentle: !!(prefersReduced || stillNow() || quietNow()) // nearly still only when the device or the site asks for it
   };
 
   // ---------- session maths ----------
@@ -472,6 +472,7 @@
     var br = breathAt(V.breath, V.bt);
     draw(now, br.b);
     showWords(br);
+    flyWords(dt);
     adapt(dt);
   }
   // advance the clocks: breath in real time, pictures at a speed set by the beat, slower when gentle
@@ -493,6 +494,44 @@
     if (V.gentleAmt > 0.5) return;
     if (avg > 1 / 40 && V.scale > 0.3) { V.scale = Math.max(0.3, V.scale * 0.85); V.good = 0; }
     else if (avg < 1 / 55 && V.scale < 0.85) { if (++V.good >= 3) { V.scale = Math.min(0.85, V.scale * 1.08); V.good = 0; } }
+  }
+  // kind words that float out of the distance, grow closer and drift past, into the screen
+  var FLY_WORDS = ['You are loved', 'Calm', 'Peace', 'Kindness', 'You belong', 'Breathe easy', 'You matter', 'Gentle', 'Hope', 'Warmth',
+    'Enough, just as you are', 'Grateful', 'Joy', 'Together', 'Patience', 'Light', 'Rest', 'Love', 'Acceptance', 'Harmony', 'Ease', 'Grace',
+    'You are doing well', 'Soft and steady', 'Home', 'Wonder', 'Trust', 'Tenderness', 'Connection', 'Let it be easy', 'Welcome', 'Serenity',
+    'You are not alone', 'Little by little', 'Kind to yourself', 'Bright', 'Hug', 'Friendship', 'Sunshine', 'Easy breath', 'Open heart', 'Thank you'];
+  var fly = $('cv-fly'), FL = { list: [], next: 1.5, bag: [] };
+  function flyPick() { if (!FL.bag.length) { FL.bag = FLY_WORDS.slice().sort(function () { return Math.random() - 0.5; }); } return FL.bag.pop(); }
+  function flyWords(dt) {
+    var on = fly && !!run && !run.paused && S.words;
+    if (!on) { if (FL.list.length) { FL.list.forEach(function (w) { w.el.remove(); }); FL.list = []; } return; }
+    var W = fly.clientWidth, H = fly.clientHeight, still = V.gentleAmt > 0.5;
+    FL.next -= dt;
+    if (FL.next <= 0 && FL.list.length < 4) {
+      FL.next = 3.2 + Math.random() * 2.6;
+      var el = document.createElement('span'); el.textContent = flyPick(); fly.appendChild(el);
+      var ang = Math.random() * Math.PI * 2, spread = 0.35 + Math.random() * 0.55;
+      FL.list.push({ el: el, z: 1, dx: Math.cos(ang) * spread, dy: Math.sin(ang) * spread * 0.7, life: 0, speed: 0.085 + Math.random() * 0.03 });
+    }
+    FL.list = FL.list.filter(function (w) {
+      w.life += dt;
+      if (still) { // nearly-still mode: the word simply glows in and out where it is
+        var a = Math.min(1, w.life / 2) * Math.max(0, 1 - Math.max(0, w.life - 5) / 2);
+        w.el.style.transform = 'translate(' + (W * (0.5 + w.dx * 0.5)) + 'px,' + (H * (0.42 + w.dy * 0.5)) + 'px) translate(-50%,-50%)'; w.el.style.opacity = (a * 0.85).toFixed(3);
+        if (w.life > 7) { w.el.remove(); return false; } return true;
+      }
+      w.z -= dt * w.speed;                            // closer and closer
+      var p = 1 / Math.max(0.08, w.z * 1.1);           // perspective: small and far, then big and near
+      var x = W / 2 + w.dx * W * 0.5 * (p - 0.9) * 0.35, y = H * 0.42 + w.dy * H * 0.5 * (p - 0.9) * 0.35;
+      var size = Math.min(110, 9 * p);
+      var fadeIn = Math.min(1, (1 - w.z) / 0.25), fadeOut = w.z < 0.28 ? Math.max(0, (w.z - 0.1) / 0.18) : 1;
+      w.el.style.fontSize = size.toFixed(1) + 'px';
+      w.el.style.transform = 'translate(' + x.toFixed(1) + 'px,' + y.toFixed(1) + 'px) translate(-50%,-50%)';
+      w.el.style.opacity = (0.9 * fadeIn * fadeOut).toFixed(3);
+      w.el.style.filter = w.z < 0.3 ? 'blur(' + ((0.3 - w.z) * 12).toFixed(1) + 'px)' : 'none';
+      if (w.z <= 0.1) { w.el.remove(); return false; }
+      return true;
+    });
   }
   function showWords(br) {
     var on = !!run && !run.paused && (S.words || S.gentle);
@@ -675,9 +714,9 @@
   table();
 
   function syncToggles() {
-    $('cv-words-on').checked = S.words; $('cv-gentle').checked = S.gentle;
+    $('cv-words-on').checked = S.words; if ($('cv-gentle')) $('cv-gentle').checked = S.gentle;
     $('cv-words-btn').setAttribute('aria-pressed', String(S.words));
-    $('cv-gentle-btn').setAttribute('aria-pressed', String(S.gentle));
+    if ($('cv-gentle-btn')) $('cv-gentle-btn').setAttribute('aria-pressed', String(S.gentle));
     $('cv-vol').value = S.vol; $('cv-vol2').value = S.vol; $('cv-vol-out').textContent = S.vol + '%';
     $('cv-look-name').textContent = STYLES[styleIdx(S.style)].name;
     $('cv-look').setAttribute('aria-label', 'Change the pictures. Now: ' + STYLES[styleIdx(S.style)].name);
@@ -700,9 +739,9 @@
   $('cv-vol').addEventListener('input', function () { setVol(this.value); });
   $('cv-vol2').addEventListener('input', function () { setVol(this.value); });
   $('cv-words-on').addEventListener('change', function () { S.words = this.checked; saved.words = S.words; save(); syncToggles(); });
-  $('cv-gentle').addEventListener('change', function () { S.gentle = this.checked; saved.gentle = S.gentle; save(); syncToggles(); });
+  if ($('cv-gentle')) $('cv-gentle').addEventListener('change', function () { S.gentle = this.checked; saved.gentle = S.gentle; save(); syncToggles(); });
   $('cv-words-btn').addEventListener('click', function () { S.words = !S.words; saved.words = S.words; save(); syncToggles(); say(S.words ? 'Breathing words on.' : 'Breathing words off.'); });
-  $('cv-gentle-btn').addEventListener('click', function () { S.gentle = !S.gentle; saved.gentle = S.gentle; save(); syncToggles(); say(S.gentle ? 'Gentle visuals on. The picture is nearly still.' : 'Gentle visuals off.'); });
+  if ($('cv-gentle-btn')) $('cv-gentle-btn').addEventListener('click', function () { S.gentle = !S.gentle; saved.gentle = S.gentle; save(); syncToggles(); say(S.gentle ? 'Gentle visuals on. The picture is nearly still.' : 'Gentle visuals off.'); });
   $('cv-look').addEventListener('click', function () {
     var i = (styleIdx(S.style) + 1) % STYLES.length; S.style = STYLES[i].id; saved.style = S.style; save();
     setLook(null, S.style); syncToggles(); say('Pictures: ' + STYLES[i].name + '.');
