@@ -141,7 +141,7 @@ Keep the background file under about 2 MB.
 
 ## Tests
 
-    node tools/chat/test-chat.js        # 320 questions with expected cards, playbooks, notes and pages
+    node tools/chat/test-chat.js        # 319 questions with expected cards, playbooks, notes and pages
     node tools/chat/coverage.js         # asks about every indexed page and checks the answer lands there
 
 Both run site-chat.js in Node through `chat-sandbox.js`, loading the knowledge files the way the page
