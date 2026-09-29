@@ -1406,6 +1406,7 @@
       vBtn.setAttribute('aria-pressed', String(P.voices)); vBtn.querySelector('.fb-st').textContent = P.voices ? 'on' : 'off'; vBtn.setAttribute('aria-label', P.voices ? 'Voices are on. Turn the voices off' : 'Voices are off. Turn the voices on');
       mBtn.setAttribute('aria-pressed', String(P.music)); mBtn.querySelector('.fb-st').textContent = P.music ? 'on' : 'off'; mBtn.setAttribute('aria-label', P.music ? 'Music and sounds are on. Turn them off' : 'Music and sounds are off. Turn them on');
       playBtn.textContent = P.playing ? '❚❚ Pause' : '▶ Play'; playBtn.setAttribute('aria-label', P.playing ? 'Pause' : 'Play');
+      host.classList.toggle('is-playing', !!P.playing); // site.js keeps pop-ups and helpers away while this is on
       if (!voiceOk()) { vBtn.title = P.rate !== 1 ? 'Voices are off while the story plays fast' : 'This device has no voices to read with, so the captions tell the story'; }
     }
     function voiceOk() { return (VO.ok || CL.ready[P.id]) && P.rate === 1; }

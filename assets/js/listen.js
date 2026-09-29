@@ -20,7 +20,9 @@
   // skipping the site's own furniture (menus, buddies, quizzes, tips, sign-up boxes)
   var SKIP = '.tol-listen, .tol-listen-bar, .tol-cheer, .lp-card, .lp-trail, .tol-pillars, nav, .tol-chbar, .tol-depth, .depth-bar, .tol-tip, .tol-read-host, .tol-pud-card, ' +
     '.tol-private, .tol-fp-note, .tol-gate, form, .tol-offer, .tol-pickup, .tol-dive-box, .no-listen, [aria-hidden="true"], .sr-only, ' +
-    'script, style, noscript, .tol-join, .tol-puddles-hi, .pc-launch-row, .tol-steps-toggle';
+    'script, style, noscript, .tol-join, .tol-puddles-hi, .pc-launch-row, .tol-steps-toggle, ' +
+    // the breadcrumb ("Self-discovery · Where your lens came from") isn't read: the title comes first
+    '.read-code, .breadcrumb, .crumbs, [aria-label="Breadcrumb"], [aria-label="breadcrumb"]';
   var BLOCK = 'h1, h2, h3, h4, h5, p, li, dt, dd, blockquote, figcaption, td, th, summary, .scene-line';
   function visible(n) { return !!(n.offsetParent || n.getClientRects().length); }
   function blocksIn(root) {

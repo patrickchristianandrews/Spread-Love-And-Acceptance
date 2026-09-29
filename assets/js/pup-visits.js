@@ -125,6 +125,8 @@
   function busy() {
     if (D.hidden) return true;
     if (D.querySelector('.tol-bar [aria-expanded="true"]')) return true;
+    // typing, a video or episode playing, the pal cam open, or a tender page (site.js decides)
+    if (window.TOLSite && (window.TOLSite.busy() || (window.TOLSite.sensitive && window.TOLSite.sensitive()))) return true;
     var list = D.querySelectorAll(BUSY);
     for (var i = 0; i < list.length; i++) if (!list[i].closest('.tpv') && shown(list[i])) return true;
     return false;

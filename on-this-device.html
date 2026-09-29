@@ -105,7 +105,7 @@
     ['tol-comfort-offer', 'The first-visit question', 'That you’ve already been asked about Quiet mode and Easy reading.'],
     ['tol-still', 'Keep the page still', 'Whether moving things are switched off.'],
     ['tol-hide-helpers', 'Hide the helpers', 'Whether the mascots, pups, tips and pop-ups are hidden.'],
-    ['tol-sound-off', 'Site sounds off', 'Whether site sounds start switched off.'],
+    ['tol-sound-off', 'Keep site sounds off', 'Whether site sounds start switched off.'],
     ['tol-listen-rate', 'Listen speed', 'How fast the Listen voice reads.'],
     ['tol-recent', 'Pages you visited', 'The last few pages you opened here, for “Pick up where you left off.”'],
     ['tol-recent-off', 'Don’t remember pages', 'That you asked the site not to keep a list of pages you visit.'],
@@ -140,7 +140,7 @@
     ['tol-br-', 'Breathe', 'Your breathing method, length and sound, and how many breaks you’ve taken.'],
     ['tol-palcam-', 'The pal cam', 'Pal cam sound and music switches, and what Tidbit and Sugarfoot remember.'],
     ['tol-install-asked', 'Home-screen tip', 'That you’ve seen the “add to your home screen” tip.'],
-    ['tol-join-pop-prev', 'Sign-up invitation', 'Keeps the sign-up invitation from showing on two pages in a row.'],
+    ['tol-join-pop-prev', 'Sign-up invitation', 'The date the newsletter invitation last showed (just the day), so it stays away for two weeks after.'],
     ['tol-chat-v1', 'Your chat with Professor Puddles', 'The conversation, until you close the tab or press Start over.']
   ];
   var SESSION = [
@@ -150,7 +150,8 @@
     ['tol-wx-seen', 'Weather cloud', 'That the weather cloud was shown this visit.'],
     ['tol-invite-seen', 'Home-screen tip', 'That the tip was shown this visit.'],
     ['tol-join-pop', 'Sign-up invitation', 'That the invitation was shown this visit.'],
-    ['tol-palcam-pop', 'Pal cam invitation', 'That the pal cam invitation was shown this visit.']
+    ['tol-palcam-pop', 'Pal cam invitation', 'That the pal cam invitation was shown this visit.'],
+    ['tol-visit-t0', 'When this visit began', 'The time you opened the site in this tab, so no invitation shows in your first minute.']
   ];
   function store(s) { try { return s === 'session' ? sessionStorage : localStorage; } catch (e) { return null; } }
   function allKeys(s) { var st = store(s), out = []; if (!st) return out; for (var i = 0; i < st.length; i++) out.push(st.key(i)); return out.sort(); }

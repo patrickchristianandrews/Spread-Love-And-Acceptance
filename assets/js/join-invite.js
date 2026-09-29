@@ -1,9 +1,12 @@
-/* join-invite.js — "Join our newsletter to unlock all areas for free".
+/* join-invite.js — "Join the newsletter": a free note when something new arrives, which also opens the few pages that ask for an email.
    site.js loads this only for visitors who haven't signed up. It adds:
    - a banner at the very top of the home page, and
-   - now and then, a small invitation while browsing other pages
-     (about 1 in 3 page views, at most once a visit, never two page views in a row,
-     never early in reading, and never on top of another invitation or dialog).
+   - rarely, a small invitation while browsing other pages
+     (about 1 in 5 page views, at most once every two weeks, never in the first minute of a visit
+     or of a page, never on the pages about growing up and knowing yourself, never when the device asks
+     for reduced motion, never while a video
+     or episode plays or while someone is typing, and never on top of another invitation or dialog).
+     Closing it puts focus back where it was.
    Both disappear the moment someone signs up (the site sends a "tol-member" event).
    Sign-up uses the site's own free sign-up (window.TOL.signUp). The email is sent to the
    newsletter service only when the person presses Join; nothing else is collected. */
@@ -66,8 +69,8 @@
     b.setAttribute('aria-labelledby', 'tol-join-h');
     b.innerHTML =
       '<span class="tol-join-k">Free</span>' +
-      '<h2 id="tol-join-h">Join our newsletter to unlock every area, free</h2>' +
-      '<p class="tol-join-long">Pop in your email and every chapter, workpaper and tool opens right away in this browser. You’ll get a short, friendly note when something new arrives. No payment, and you can unsubscribe any time.</p>' +
+      '<h2 id="tol-join-h">Almost everything here is open already. Join our newsletter, free</h2>' +
+      '<p class="tol-join-long">Most pages, tools and games need nothing from you. Join for a short, friendly note when something new arrives; it also opens the few chapters and workpapers that ask for an email, right away in this browser. No payment, and you can unsubscribe any time.</p>' +
       '<p class="tol-join-short">Free. No payment. Unsubscribe any time.</p>' +
       form('tol-join-b') +
       '<p class="tol-join-small">Already joined on another device? Enter the same email here to open everything.</p>';
@@ -91,13 +94,22 @@
     p.setAttribute('aria-labelledby', 'tol-join-ph');
     p.innerHTML =
       '<button type="button" class="tol-join-x" aria-label="Close this invitation">&times;</button>' +
-      '<h2 id="tol-join-ph">Unlock every area, free</h2>' +
-      '<p>Join our newsletter and everything on the site opens up in this browser: every chapter, workpaper and tool. No payment, unsubscribe any time.</p>' +
+      '<h2 id="tol-join-ph">Want a note when something new arrives?</h2>' +
+      '<p>Join the free newsletter. It also opens the few chapters and workpapers that ask for an email, right away in this browser. No payment, unsubscribe any time.</p>' +
       form('tol-join-p') +
       '<p class="tol-join-small"><button type="button" class="tol-join-later">Maybe later</button></p>';
+    var back = document.activeElement && document.activeElement !== document.body ? document.activeElement : null;
     document.body.appendChild(p);
     wire(p);
-    function close() { p.classList.remove('is-in'); setTimeout(function () { if (p.parentNode) p.parentNode.removeChild(p); }, 350); document.removeEventListener('keydown', onKey); }
+    function close() {
+      var had = p.contains(document.activeElement);
+      p.classList.remove('is-in'); setTimeout(function () { if (p.parentNode) p.parentNode.removeChild(p); }, 350); document.removeEventListener('keydown', onKey);
+      // focus goes back where it was (or to the top of the page), never lost on <body>
+      if (had || document.activeElement === document.body) {
+        var to = back && document.contains(back) ? back : document.getElementById('tol-main');
+        if (to && to.focus) try { to.focus({ preventScroll: true }); } catch (e) {}
+      }
+    }
     function onKey(e) { if (e.key === 'Escape' && !e.defaultPrevented) close(); }
     p.querySelector('.tol-join-x').addEventListener('click', close);
     p.querySelector('.tol-join-later').addEventListener('click', close);
@@ -106,21 +118,27 @@
   }
   function maybePopup() {
     if (isHome || SKIP.test(path) || document.body.classList.contains('is-game') || !document.querySelector('main.read') || document.querySelector('meta[http-equiv="Content-Security-Policy"]')) return;
-    if (window.TOLSite && window.TOLSite.busy() && !/[?&]join-pop=1\b/.test(location.search)) return; // a tool page: not here at all
     var force = /[?&]join-pop=1\b/.test(location.search);
-    var prev = ls('tol-join-pop-prev'); ls('tol-join-pop-prev', '0');
-    if (!force && (ss('tol-join-pop') || prev === '1' || Math.random() >= 0.34)) return;
+    if (window.TOLSite && window.TOLSite.busy() && !force) return; // a tool page: not here at all
+    if (window.TOLSite && window.TOLSite.sensitive && window.TOLSite.sensitive() && !force) return; // a tender page: never here
+    if (window.TOLSite && window.TOLSite.calmDevice && window.TOLSite.calmDevice() && !force) return; // the device asks for less motion: no pop-up at all
+    // rarely: about 1 in 5 page views, and at most once every two weeks ('tol-join-pop-prev' keeps the date it last showed)
+    var prev = ls('tol-join-pop-prev'), today = new Date().toISOString().slice(0, 10);
+    var recent = /^\d{4}-\d{2}-\d{2}$/.test(prev || '') && (Date.parse(today) - Date.parse(prev)) / 864e5 < 14;
+    if (!force && (ss('tol-join-pop') || prev === '1' || recent || Math.random() >= 0.2)) return;
+    // never in the first minute of a visit (the time this tab first opened the site, kept in this tab only)
+    var visitT0 = parseInt(ss('tol-visit-t0') || '0', 10) || Date.now();
     var started = Date.now(), scrolled = false, fired = false;
     function onScroll() { if (window.scrollY > window.innerHeight) scrolled = true; }
     window.addEventListener('scroll', onScroll, { passive: true });
     function tick() {
       if (fired) return;
       var t = Date.now() - started;
-      var ready = force ? t > 1200 : (t > 45000 || (scrolled && t > 15000));
+      var ready = force ? t > 1200 : (Date.now() - visitT0 > 60000 && (t > 45000 || (scrolled && t > 20000)));
       if (!ready || document.hidden || busy()) { setTimeout(tick, 2000); return; }
       fired = true;
       window.removeEventListener('scroll', onScroll);
-      ss('tol-join-pop', '1'); ls('tol-join-pop-prev', '1');
+      ss('tol-join-pop', '1'); ls('tol-join-pop-prev', today);
       popup();
     }
     setTimeout(tick, 2000);

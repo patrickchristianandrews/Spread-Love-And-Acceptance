@@ -29,6 +29,11 @@ SKIP = re.compile(r'^(tools|supabase|_|node_modules)/|(^|/)(garden-backdrop|offl
 
 class Page(HTMLParser):
     SKIP_TAGS = {'script', 'style', 'noscript', 'svg', 'template', 'nav', 'header-skip', 'button', 'select', 'textarea', 'form'}
+    # the breadcrumb and the "simple / full" line aren't prose: leave them out of the text, so a result's
+    # snippet reads as a sentence from the page, not a string of labels
+    SKIP_CLASSES = {'read-code', 'depth-bar', 'breadcrumb', 'crumbs', 'no-index'}
+    # headings are kept on their own (title, h1, section headings), not again inside the text
+    HEAD_TAGS = {'h1', 'h2', 'h3'}
 
     def __init__(self):
         super().__init__(convert_charrefs=True)
@@ -60,8 +65,10 @@ class Page(HTMLParser):
             return
         if tag in ('br', 'img', 'input', 'link', 'hr', 'meta', 'source', 'wbr'):
             return
-        self._stack.append(tag)
-        if tag in self.SKIP_TAGS or 'aria-hidden' in a and a.get('aria-hidden') == 'true':
+        classes = set((a.get('class') or '').split())
+        skip = tag in self.SKIP_TAGS or (a.get('aria-hidden') == 'true') or bool(classes & self.SKIP_CLASSES) or tag in self.HEAD_TAGS
+        self._stack.append((tag, skip))
+        if skip:
             self._skip += 1
         if tag == 'main':
             self._in_main += 1
@@ -71,11 +78,11 @@ class Page(HTMLParser):
             self._buf = []
 
     def handle_endtag(self, tag):
-        if tag not in self._stack:
+        if not any(t == tag for t, _ in self._stack):
             return
         while self._stack:
-            t = self._stack.pop()
-            if t in self.SKIP_TAGS:
+            t, skipped = self._stack.pop()
+            if skipped:
                 self._skip = max(0, self._skip - 1)
             if t == 'main':
                 self._in_main = max(0, self._in_main - 1)
