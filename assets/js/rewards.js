@@ -1,9 +1,10 @@
-/* rewards.js — levels, gentle streaks and a background that keeps growing, shared by every
-   calm game. Each level you finish counts, and every few levels (a random two to five)
-   something new appears in the living garden behind every page: a swing, koi, wind chimes,
-   a bridge, a blossom tree... and each one plays along with the animals there.
-   The streak is gentle: one missed day a week is a rest day and never breaks it.
-   Everything is kept in this browser only. Nothing is sent anywhere. */
+/* rewards.js — levels and a background that keeps growing, shared by every calm game.
+   Each level you finish counts, and now and then (at a steady, unhurried pace that slows as the
+   garden fills) something new appears in the living garden behind every page: a swing, koi, wind
+   chimes, a bridge, a blossom tree... and each one plays along with the animals there. There are
+   no streaks and nothing to keep up; "My garden" (/keepsakes.html) lists what has arrived.
+   A new arrival is shown on the game's own finish card, or as a soft note, never as a second
+   pop-up on top of another. Everything is kept in this browser only. Nothing is sent anywhere. */
 (function () {
   'use strict';
   if (window.TOLRewards) return; // already loaded on this page
@@ -16,19 +17,19 @@
     ['garden-koi', 'Koi in the pond', '🐟', 'Two glowing koi swim in slow circles and leap when anyone splashes.'],
     ['garden-chimes', 'Wind chimes', '🎐', 'Chimes hang from the tree and sparkle whenever someone runs past.'],
     ['garden-boats', 'Paper boats', '⛵', 'Candle-lit paper boats drift across the pond. The frog hops aboard now and then.'],
-    ['garden-bridge', 'A little bridge', '🌉', 'A wooden footbridge over the pond, the best spot for a hug.'],
+    ['garden-bridge', 'A little bridge', '🪵', 'A wooden footbridge over the pond, the best spot for a hug.', '/assets/img/keepsakes/bridge.svg'],
     ['garden-blossom', 'A blossom tree', '🌸', 'A cherry tree on the far bank. Its petals drift across every page and land on whoever is near.'],
     ['garden-aurora', 'Aurora', '🌌', 'Ribbons of light across the sky. Everyone stops to look up.'],
     ['garden-lights', 'Fairy lights', '✨', 'Warm little lights strung between the trees. They glow brighter as the animals pass underneath.'],
     ['garden-balloon', 'A hot-air balloon', '🎈', 'A striped balloon drifts across the sky, and the plane waves hello.'],
-    ['garden-hammock', 'A hammock', '🛏️', 'A hammock between the trees, for naps after all that playing.'],
+    ['garden-hammock', 'A hammock', '🌿', 'A hammock between the trees, for naps after all that playing.', '/assets/img/keepsakes/hammock.svg'],
     ['garden-rainbow', 'Rainbow lanterns', '🏮', 'The Night Garden’s lanterns rise in every pastel color.'],
     ['garden-owls', 'Sleepy owls', '🦉', 'Two owls in the branches, watching all the fun.'],
     ['garden-butterflies', 'Glowing butterflies', '🦋', 'Softly glowing butterflies. The dogs chase them, and the bunny follows.'],
     ['garden-meteors', 'A meteor shower', '🌠', 'Now and then a shower of shooting stars, and everyone makes a wish.'],
-    ['garden-gazebo', 'A lantern gazebo', '🏯', 'A little glowing gazebo on the hill, where the dogs go to dance.']
+    ['garden-gazebo', 'A lantern gazebo', '🏮', 'A little glowing gazebo on the hill, where the dogs go to dance.', '/assets/img/keepsakes/gazebo.svg']
   ];
-  var LADDER = WONDERS.map(function (w) { return { id: w[0], kind: 'garden', name: w[1], icon: w[2], desc: w[3] }; });
+  var LADDER = WONDERS.map(function (w) { return { id: w[0], kind: 'garden', name: w[1], icon: w[2], desc: w[3], img: w[4] }; });
   // after all that, more fireflies every few levels, for as long as you like to play
   for (var mi = 0; mi < 40; mi++) LADDER.push({ id: 'garden-flies-' + mi, kind: 'garden', name: 'More fireflies', icon: '✨', desc: 'Five more fireflies light up the background.' });
   var ALL = LADDER;
@@ -37,41 +38,26 @@
   function dayKey(d) { d = d || new Date(); return d.getFullYear() + '-' + ('0' + (d.getMonth() + 1)).slice(-2) + '-' + ('0' + d.getDate()).slice(-2); }
   function daysBetween(a, b) { var pa = a.split('-'), pb = b.split('-'); return Math.round((Date.UTC(+pb[0], pb[1] - 1, +pb[2]) - Date.UTC(+pa[0], pa[1] - 1, +pa[2])) / 864e5); }
 
-  var S = { lv: 0, nextAt: 0, lastAt: 0, days: [], streak: 0, best: 0, rest: '', last: '', unlocked: [], tiles: 'tiles-petal', garden: {}, from: {}, games: {}, today: { day: '', did: {}, bouquet: false } };
+  var S = { lv: 0, nextAt: 0, lastAt: 0, unlocked: [], tiles: 'tiles-petal', garden: {}, from: {}, games: {} };
   try { var raw = localStorage.getItem(KEY); if (raw) { var o = JSON.parse(raw); for (var k in o) S[k] = o[k]; } } catch (e) {}
   function save() { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) {} }
   delete S.petals; delete S.today;
+  // streaks are gone: nothing about which days you played is kept
+  if ('streak' in S || 'days' in S || 'best' in S) { delete S.streak; delete S.best; delete S.rest; delete S.last; delete S.days; save(); }
   S.unlocked = S.unlocked.filter(function (id) { return id.indexOf('st-') !== 0 && id.indexOf('tiles-') !== 0; }); // stickers and tiles retired
   S.tiles = 'tiles-petal';
-  function gap() { return 2 + Math.floor(Math.random() * 4); } // a surprise every two to five levels
+  // A steady pace, never a lucky draw: the next arrival comes after six levels at first, then a
+  // little more slowly as the garden fills (up to twelve).
+  function gap() { return Math.min(12, 6 + Math.floor(S.unlocked.length / 3)); }
   if (!S.nextAt) { S.lv = S.lv || S.unlocked.length * 3; S.lastAt = S.lv; S.nextAt = S.lv + gap(); }
+  if (S.nextAt - S.lastAt < gap()) S.nextAt = S.lastAt + gap(); // older records were set up closer together
   function nextUnlock() { for (var i = 0; i < ALL.length; i++) if (S.unlocked.indexOf(ALL[i].id) === -1) return ALL[i]; return null; }
   function level() { return S.lv + 1; }
-
-  // A new day: keep the streak (a missed day is forgiven once a week).
-  function touchDay() {
-    var today = dayKey();
-    if (S.last === today) return 0;
-    var bonus = 5;
-    if (!S.last) S.streak = 1;
-    else {
-      var gap = daysBetween(S.last, today);
-      if (gap === 1) S.streak++;
-      else if (gap === 2 && (!S.rest || daysBetween(S.rest, today) >= 7)) { S.streak++; S.rest = today; }
-      else S.streak = 1;
-    }
-    S.best = Math.max(S.best, S.streak);
-    S.last = today;
-    S.days.push(today); if (S.days.length > 60) S.days = S.days.slice(-60);
-    bonus += Math.min(S.streak, 7) - 1;
-    return bonus;
-  }
 
   // earn(n, source, why): a level done. Every few levels something new appears in the
   // background. Shows it softly; returns what happened.
   function earn(n, source, why, opts) {
     opts = opts || {};
-    touchDay();
     if (source) S.from[source] = (S.from[source] || 0) + 1;
     S.lv++;
     var fresh = [];
@@ -81,7 +67,7 @@
       S.lastAt = S.lv; S.nextAt = S.lv + gap();
     }
     save();
-    var res = { level: level(), streak: S.streak, unlocked: fresh, next: nextUnlock() };
+    var res = { level: level(), unlocked: fresh, next: nextUnlock() };
     if (!opts.quiet && !fresh.length) toast(res, why);
     if (fresh.length && !opts.noCard) {
       // From a "Check yourself" card (learn-play): a small note that doesn't block the page, and
@@ -172,23 +158,25 @@
 
   function artFor(u) { return u.img ? '<img src="' + u.img + '" alt="">' : '<span aria-hidden="true">' + (u.icon || '🌸') + '</span>'; }
   var cardOpen = false;
+  // another dialog on screen (a game's finish card, a help card): don't stack a second one on it
+  function otherDialog() {
+    return Array.prototype.some.call(document.querySelectorAll('[role="dialog"], [aria-modal="true"]'), function (el) {
+      if (el.classList.contains('tr-card') || el.hidden) return false;
+      var r = el.getBoundingClientRect(), cs = getComputedStyle(el);
+      return r.width > 0 && r.height > 0 && cs.display !== 'none' && cs.visibility !== 'hidden';
+    });
+  }
   function unlockCard(u) {
     if (cardOpen || typeof document === 'undefined') return;
+    if (otherDialog()) { unlockToast(u); return; }
     style(); cardOpen = true;
     var what = 'Level ' + level() + ' · something new in the background';
     var action = '';
     var c = document.createElement('div');
     c.className = 'tr-card'; c.setAttribute('role', 'dialog'); c.setAttribute('aria-modal', 'true'); c.setAttribute('aria-label', 'You unlocked ' + u.name);
-    c.innerHTML = '<div class="tr-card-box"><div class="tr-confetti" aria-hidden="true"></div><p class="tr-card-k">✨ ' + what + ' ✨</p><div class="tr-card-art">' + artFor(u) + '</div>' +
-      '<h2>' + esc(u.name) + '</h2><p>' + esc(u.desc) + '</p><p class="tr-card-hint">Look behind the page to find it.</p><div class="tr-card-row">' + action + '<button type="button" class="tr-go" data-close>Keep playing</button></div></div>';
+    c.innerHTML = '<div class="tr-card-box"><p class="tr-card-k">' + what + '</p><div class="tr-card-art">' + artFor(u) + '</div>' +
+      '<h2>' + esc(u.name) + '</h2><p>' + esc(u.desc) + '</p><p class="tr-card-hint">Look behind the page to find it.</p><div class="tr-card-row">' + action + '<a href="/keepsakes.html">My garden</a><button type="button" class="tr-go" data-close>Keep playing</button></div></div>';
     document.body.appendChild(c);
-    var conf = c.querySelector('.tr-confetti'), bits = ['🌸', '✨', '💗', '🫧', '🌟'];
-    for (var i = 0; i < 18; i++) {
-      var sp = document.createElement('span'), a = i / 18 * Math.PI * 2, d = 90 + (i % 3) * 40;
-      sp.textContent = bits[i % bits.length];
-      sp.style.setProperty('--dx', Math.round(Math.cos(a) * d) + 'px'); sp.style.setProperty('--dy', Math.round(Math.sin(a) * d) + 'px'); sp.style.setProperty('--r', (i * 37 % 180 - 90) + 'deg');
-      sp.style.animationDelay = (i % 5) * 60 + 'ms'; conf.appendChild(sp);
-    }
     requestAnimationFrame(function () { c.classList.add('is-in'); });
     function close() { c.classList.remove('is-in'); cardOpen = false; setTimeout(function () { c.remove(); }, 350); document.removeEventListener('keydown', onKey); }
     function onKey(e) { if (e.key === 'Escape') close(); }
@@ -209,13 +197,12 @@
     return true;
   }
 
-  // Little chips that show your level and streak
+  // Little chips that show your level; each one opens "My garden", where your keepsakes are
   function renderChips() {
     if (typeof document === 'undefined') return;
     Array.prototype.forEach.call(document.querySelectorAll('[data-rewards-chip]'), function (el) {
       style();
-      el.innerHTML = '<span class="tr-chip" role="img" aria-label="Level ' + level() + (S.streak > 1 ? ', ' + S.streak + '-day streak' : '') + '">✨ ' + level() +
-        (S.streak > 1 ? ' <span class="tr-s">🔥 ' + S.streak + '</span>' : '') + '</span>';
+      el.innerHTML = '<a class="tr-chip" href="/keepsakes.html" aria-label="Level ' + level() + '. Open My garden to see your keepsakes" title="My garden: everything that has arrived">✨ ' + level() + '</a>';
     });
   }
 
@@ -224,7 +211,14 @@
     if (e.key !== KEY || !e.newValue) return;
     try { var o = JSON.parse(e.newValue); for (var k in o) S[k] = o[k]; renderChips(); } catch (err) {}
   });
+  // the row of game tabs scrolls sideways on a phone: bring the one you're on into view
+  function showCurrentTab() {
+    var cur = document.querySelector('.gm-switch [aria-current="page"]'), bar = cur && cur.parentNode;
+    if (!bar || bar.scrollWidth <= bar.clientWidth + 2) return;
+    bar.scrollLeft = Math.max(0, cur.offsetLeft - bar.offsetLeft - (bar.clientWidth - cur.offsetWidth) / 2);
+  }
   if (typeof document !== 'undefined') {
+    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', showCurrentTab); else showCurrentTab();
     document.documentElement.setAttribute('data-tiles', S.tiles || 'tiles-petal');
     if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', renderChips); else renderChips();
   }
@@ -232,10 +226,11 @@
   window.TOLRewards = {
     earn: earn, record: record, stat: stat, setTiles: setTiles, renderChips: renderChips, unlockCard: unlockCard,
     has: function (id) { return id === 'tiles-petal' || S.unlocked.indexOf(id) !== -1; },
-    garden: function (id) { return S.unlocked.indexOf(id) !== -1; },
+    // in the background: arrived, and not switched off on "My garden"
+    garden: function (id) { return S.unlocked.indexOf(id) !== -1 && S.garden[id] !== false; },
     extraFlies: function () { return S.unlocked.filter(function (id) { return id.indexOf('garden-flies-') === 0; }).length * 5; },
     setGarden: function (id, on) { S.garden[id] = !!on; save(); },
-    state: function () { return { streak: S.streak, best: S.best, days: S.days.slice(), level: level(), next: nextUnlock(), toNext: Math.max(0, S.nextAt - S.lv), progress: (S.lv - S.lastAt) / Math.max(1, S.nextAt - S.lastAt), unlocked: S.unlocked.slice(), from: S.from, games: S.games }; },
+    state: function () { return { level: level(), next: nextUnlock(), toNext: Math.max(0, S.nextAt - S.lv), progress: (S.lv - S.lastAt) / Math.max(1, S.nextAt - S.lastAt), unlocked: S.unlocked.slice(), from: S.from, games: S.games }; },
     ladder: ALL, tileThemes: TILE_THEMES, dayKey: dayKey
   };
 })();
