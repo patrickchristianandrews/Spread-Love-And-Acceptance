@@ -1,0 +1,11 @@
+On-device text recognition for the Conversation Reader's screenshot import.
+Loaded only when someone picks a screenshot; screenshots are read in the browser and never uploaded.
+
+tesseract.min.js, worker.min.js   tesseract.js 6.0.1 (https://github.com/naptha/tesseract.js), Apache License 2.0
+core/*.wasm.js                    tesseract.js-core 6.0.0 (https://github.com/naptha/tesseract.js-core), Apache License 2.0
+                                  (Tesseract OCR, https://github.com/tesseract-ocr/tesseract, Apache License 2.0)
+lang/eng.traineddata.gz           @tesseract.js-data/eng 1.0.0, 4.0.0_best_int (MIT package of the Apache-2.0
+                                  tessdata_best model from https://github.com/tesseract-ocr/tessdata_best)
+tesseract.min.js also bundles regenerator-runtime (MIT, Facebook, Inc.).
+
+The Apache License 2.0 text is in LICENSE.txt.

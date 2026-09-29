@@ -335,6 +335,14 @@
   draft.addEventListener('input', function () { clearTimeout(timer); timer = setTimeout(checkDraft, 250); });
 
   $('cr-go').addEventListener('click', function () { start(input.value); });
+  // the screenshot reader hands over the checked text, and who "you" are, so there's nothing to ask twice
+  window.TOLReaderPage = {
+    read: function (text, me) {
+      input.value = text;
+      start(text);
+      if (state && me && state.speakers.indexOf(me) !== -1 && state.me !== me) { state.me = me; render(true); }
+    }
+  };
   $('cr-example').addEventListener('click', function () {
     input.value = EXAMPLE; start(EXAMPLE);
     // In the example, read it from Alex's side: the one whose reach-outs came back cold
