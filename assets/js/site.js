@@ -596,7 +596,11 @@
       html.classList.toggle('tol-bigtext', parseFloat(getComputedStyle(html).fontSize) >= 20);
       bar.classList.remove('is-narrow', 'is-tight', 'is-tighter');
       var name = bar.querySelector('.tol-brand span');
-      function crowded() { return bar.scrollWidth > bar.clientWidth + 1 || (name && name.scrollWidth > name.clientWidth + 1); }
+      function crowded() {
+        if (bar.scrollWidth > bar.clientWidth + 1 || (name && name.scrollWidth > name.clientWidth + 1)) return true;
+        // the name squeezed into more than two lines (big text on a phone) also counts as crowded
+        return !!(name && name.offsetHeight > (parseFloat(getComputedStyle(name).fontSize) || 16) * 2.8);
+      }
       ['is-narrow', 'is-tight', 'is-tighter'].forEach(function (c) { if (crowded()) bar.classList.add(c); });
     }
     function barHeight() { fitBar(); document.documentElement.style.setProperty('--tol-bar-h', bar.offsetHeight + 'px'); }
