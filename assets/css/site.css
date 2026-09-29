@@ -1769,3 +1769,163 @@ html.tol-still .pc-launch .pc-dot{ animation:none; }
 
 /* ---------- Screen-reader-only text: read aloud, not shown ---------- */
 .sr-only{ position:absolute !important; width:1px !important; height:1px !important; padding:0 !important; margin:-1px !important; overflow:hidden !important; clip:rect(0 0 0 0) !important; clip-path:inset(50%) !important; white-space:nowrap !important; border:0 !important; }
+
+/* =====================================================================
+   Reader care: honest sign-up notes, chapter bar, reading options,
+   dark mode, calmer floaters, and a tidier first screen on phones
+   ===================================================================== */
+
+/* the sign-up couldn't reach the newsletter: an honest note with a way to try again */
+.tol-msg.is-warn{ color:#5A4214; }
+.tol-msg-retry{ font:600 .92rem/1.2 "Lora", Georgia, serif; margin:.35rem 0 0; padding:.45rem .95rem; min-height:40px; border-radius:999px;
+  border:1px solid #B08A3E; background:#FFF6E0; color:#4A3510; cursor:pointer; }
+.tol-msg-retry:hover{ background:#FBEBC4; }
+.tol-msg-retry:focus-visible{ outline:2px solid var(--focus); outline-offset:2px; }
+.tol-join-note{ margin:1rem 0 !important; padding:.8rem 1rem !important; border-radius:14px; background:#FFF8E8; border:1px solid #E6CD92; font-size:.95rem; }
+
+/* "Chapter N of 6" under a chapter's title */
+.tol-chbar{ display:flex; flex-wrap:wrap; align-items:center; gap:.4rem 1rem; margin:-.6rem 0 1.4rem; padding:.55rem .8rem; border-radius:14px;
+  background:rgba(255,251,242,.92); border:1px solid var(--line); font-family:"Lora", Georgia, serif; }
+.read .tol-chbar p, .tol-chbar p{ margin:0; max-width:none; line-height:1.3; }
+.tol-chbar-k{ font-weight:600; font-size:.95rem; }
+.tol-chbar-k span{ font-weight:400; color:var(--ink-soft); }
+.tol-chbar ol{ display:flex; gap:.3rem; list-style:none; margin:0 !important; padding:0 !important; }
+.tol-chbar li{ margin:0 !important; max-width:none; }
+.tol-chbar ol a{ display:grid; place-items:center; min-width:2.2rem; height:2.2rem; padding:0 .3rem; border-radius:999px; border:1px solid var(--line);
+  font:600 .85rem/1 "IBM Plex Mono", ui-monospace, monospace; color:var(--ink); text-decoration:none; background:var(--paper); box-sizing:border-box; }
+.tol-chbar ol a:hover{ border-color:var(--brass); }
+.tol-chbar ol a[aria-current="page"]{ background:var(--ink); color:var(--paper); border-color:var(--ink); }
+.tol-chbar-nav{ display:flex; gap:1rem; margin-left:auto !important; font-size:.95rem; }
+.tol-chbar-nav a{ font-weight:600; min-height:2.2rem; display:inline-flex; align-items:center; }
+.tol-chbar :focus-visible{ outline:2px solid var(--focus); outline-offset:2px; }
+@media (max-width:560px){ .tol-chbar-nav{ margin-left:0 !important; width:100%; justify-content:space-between; } }
+@media print{ .tol-chbar{ display:none; } }
+
+/* the Simple / Full chooser: the link is the short name, and the whole card still opens it */
+.tol-depth-opt{ position:relative; }
+.tol-depth-opt a.tol-depth-name{ color:inherit; text-decoration:none; }
+.tol-depth-opt a.tol-depth-name::after{ content:""; position:absolute; inset:0; border-radius:18px; }
+.tol-depth-opt a.tol-depth-name:focus-visible{ outline:none; }
+.tol-depth-opt:focus-within{ outline:3px solid var(--focus, #2F5F8A); outline-offset:2px; }
+
+/* reading options in the menu panel */
+.tol-readopts{ margin:.9rem 0 0; border:1px solid var(--line); border-radius:14px; padding:0 .9rem; background:var(--paper); }
+.tol-readopts > summary{ cursor:pointer; min-height:44px; display:flex; align-items:center; font-weight:600; }
+.tol-readopts > summary:focus-visible{ outline:2px solid var(--focus); outline-offset:2px; }
+.tol-readopts fieldset{ border:0; margin:0 0 .6rem; padding:0; display:flex; flex-wrap:wrap; gap:.3rem .9rem; }
+.tol-readopts legend{ font-size:.9rem; color:var(--ink-soft); margin-bottom:.2rem; padding:0; }
+.tol-readopts label{ display:inline-flex; align-items:center; gap:.35rem; min-height:40px; cursor:pointer; }
+.tol-readopts input{ width:1.1rem; height:1.1rem; accent-color:#3E6B4C; }
+.tol-readopts-help{ align-items:flex-start !important; }
+.tol-readopts-help input{ margin-top:.2rem; flex:none; }
+.tol-readopts-help small{ display:block; color:var(--ink-soft); font-size:.85rem; }
+.tol-readopts-foot{ margin:.2rem 0 .8rem; font-size:.88rem; color:var(--ink-soft); }
+.tol-readopts-reset{ font:inherit; background:none; border:0; padding:0; color:var(--focus); text-decoration:underline; cursor:pointer; min-height:32px; }
+
+/* text size */
+html.tol-text-lg{ font-size:112.5%; }
+html.tol-text-xl{ font-size:125%; }
+
+/* hide the helpers */
+html.tol-no-helpers :is(.tol-pud-card, .tol-cheer, .tpv, .tpv-bub, .tol-tip, .tol-wx, .pci, .tol-join-pop, .tol-invite, .tol-puddles-hi){ display:none !important; }
+
+/* ---------- Floating hearts: whole hearts, never split in two ---------- */
+.tol-heart{ animation:tol-bob-soft 32s var(--ease-soft, ease-in-out) infinite; }
+.tol-heart::before{ clip-path:none !important; animation:none !important; transform:none !important; }
+.tol-heart::after{ display:none !important; }
+
+/* ---------- The Breathe break: its drifting bubbles stay clear of the words ---------- */
+@media (max-width:760px){ .tol-breathe-bg{ display:none !important; } }
+.tol-breathe-bg{ opacity:.55; }
+
+/* ---------- The Breathe button on phones: labeled, and never hiding the last lines ---------- */
+@media (max-width:560px){
+  .tol-breathe-btn > span{ position:static !important; width:auto !important; height:auto !important; overflow:visible !important; clip:auto !important; white-space:nowrap; }
+  .tol-breathe-btn{ padding:.45rem .85rem .45rem .55rem !important; gap:.35rem; font-size:.9rem; }
+  .tol-breathe-btn svg{ width:1.2rem !important; height:1.2rem !important; }
+  main{ padding-bottom:4.5rem; }
+}
+html.tol-bigtext .tol-breathe-btn > span{ position:static !important; width:auto !important; height:auto !important; clip:auto !important; }
+
+/* ---------- The little "well done" note: on phones it drops in from the top, clear of the card and the pills ---------- */
+@media (max-width:760px){
+  html .tr-toast{ top:calc(var(--tol-bar-h, 56px) + 8px); bottom:auto; transform:translate(-50%, -30px); max-width:calc(100vw - 32px); box-sizing:border-box; }
+  html .tr-toast.is-in{ transform:translate(-50%, 0); }
+}
+
+/* ---------- Mini dives: a comfortable tap area that stays on its own line ---------- */
+.tol-dive::after{ left:-6px; right:-6px; top:50%; width:auto; min-width:0; height:max(100%, 24px); min-height:0; transform:translateY(-50%); }
+.tol-dive{ padding:0 .15em; }
+
+/* ---------- Home on phones: the opening line and "Start here" on the first screen ---------- */
+.home-chips{ display:flex; flex-wrap:wrap; justify-content:center; gap:.45rem; margin:.1rem 0 1rem !important; padding:0 !important; list-style:none; }
+.home-chips li{ margin:0 !important; max-width:none !important; }
+.read .home-chips a{ display:inline-flex; align-items:center; min-height:40px; padding:.3rem .95rem; border-radius:999px; text-decoration:none;
+  font:600 .92rem/1.2 "Lora", Georgia, serif; color:#2B2620; background:#FFFBF2; border:1.5px solid #D9C8F0; }
+.read .home-chips a.is-main{ background:#2F5F8A; border-color:#2F5F8A; color:#fff; }
+.read .home-chips a:hover{ border-color:#9A80C8; }
+.read .home-chips a:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
+.tol-join-short{ display:none; }
+@media (max-width:560px){
+  html.tol-home main.read{ padding-top:14px !important; }
+  html.tol-home .home-intro{ margin-bottom:.35rem !important; font-size:.84rem; }
+  html.tol-home .home-chips{ margin-bottom:.7rem !important; }
+  html.tol-home .tol-join-banner .tol-msg:empty{ display:none; }
+  html.tol-home .tol-join-banner form{ margin-bottom:0; }
+  html.tol-home .tol-join-banner{ padding:.75rem .85rem .7rem; margin-bottom:.8rem; border-radius:18px; }
+  html.tol-home .tol-join-banner .tol-join-k, html.tol-home .tol-join-banner .tol-join-long, html.tol-home .tol-join-banner .tol-join-small{ display:none; }
+  html.tol-home .tol-join-banner h2{ font-size:1rem; margin-bottom:.15rem; }
+  html.tol-home .tol-join-banner .tol-join-short{ display:block; font-size:.88rem; margin:0 0 .45rem; }
+  html.tol-home .tol-join-banner input[type=email], html.tol-home .tol-join-banner button{ min-height:44px; }
+  html.tol-home .pc-launch-row{ margin:0 0 .6rem; }
+  html.tol-home .pc-launch{ min-height:44px; padding:.35rem .9rem .35rem .45rem; font-size:.92rem; }
+  html.tol-home .pc-launch small{ display:none; }
+  html.tol-home .pc-launch .pc-paw{ width:28px; height:28px; }
+  html.tol-home .tol-puddles-hi{ margin-bottom:.8rem; }
+  html.tol-home main .announce-stack{ gap:6px; margin-bottom:1.2rem; }
+  html.tol-home main .announce-bar{ padding:8px 12px; font-size:.9rem; }
+}
+
+/* =====================================================================
+   Dark mode. It follows the device by itself, and "Dark mode" in the menu
+   or the footer overrides it on this device. The page's own colors are
+   turned around softly, and pictures, video, the garden behind the page and
+   the things that are already dark (the Breathe break, the pal cam) are
+   turned back so they look the way they were made. Pages with their own
+   dark look (the games, the Night Garden, Drift) are left as they are.
+   ===================================================================== */
+@media (prefers-color-scheme: dark){
+  html:not([data-theme="light"]):not(.tol-nodark):not(:has(> body.is-game)){ filter:invert(.9) hue-rotate(180deg); background:#FFFDF7; }
+  html:not([data-theme="light"]):not(.tol-nodark):not(:has(> body.is-game)) :is(img, video, iframe, canvas, picture, svg, .tol-breathe, .pc-ov, .tr-card, .tol-wash):not(:is(svg, picture, .tol-breathe, .pc-ov, .tr-card, .tol-wash) *){ filter:invert(1) hue-rotate(180deg); }
+  html:not([data-theme="light"]):not(.tol-nodark):not(:has(> body.is-game)) .read-head::after{ filter:invert(1) hue-rotate(180deg); }
+  html:not([data-theme="light"]):not(.tol-nodark):not(:has(> body.is-game)) .tol-wash{ opacity:.5; }
+}
+html[data-theme="dark"]:not(.tol-nodark){ filter:invert(.9) hue-rotate(180deg); background:#FFFDF7; }
+html[data-theme="dark"]:not(.tol-nodark) :is(img, video, iframe, canvas, picture, svg, .tol-breathe, .pc-ov, .tr-card, .tol-wash):not(:is(svg, picture, .tol-breathe, .pc-ov, .tr-card, .tol-wash) *){ filter:invert(1) hue-rotate(180deg); }
+html[data-theme="dark"]:not(.tol-nodark) .read-head::after{ filter:invert(1) hue-rotate(180deg); }
+html[data-theme="dark"]:not(.tol-nodark) .tol-wash{ opacity:.5; }
+@media print{ html, html[data-theme="dark"]{ filter:none !important; } }
+.read-head .tol-chbar{ margin:.9rem 0 0; background:rgba(255,255,255,.55); }
+@media (max-width:560px){ .tol-depth-who{ display:none; } .depth-bar.tol-depth{ padding:.85rem .9rem; } }
+
+/* ---------- Search the site (in the menu panel; the bar's Search button opens it) ---------- */
+.tol-bar button.tol-search-btn{ display:inline-flex; align-items:center; gap:.35rem; margin-left:.25rem; }
+.tol-bar button.tol-search-btn svg{ flex:none; }
+@media (max-width:980px){ .tol-bar button.tol-search-btn{ margin-left:auto; } .tol-bar .tol-contents-btn{ margin-left:0; } }
+@media (max-width:420px){ .tol-bar button.tol-search-btn span{ position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; } .tol-bar button.tol-search-btn{ padding:.5rem .6rem; } }
+.tol-find{ margin:.9rem 0 0; }
+.tol-find label{ display:block; font-weight:600; margin:0 0 .3rem; }
+.tol-find input{ box-sizing:border-box; width:100%; min-height:46px; font:1rem "Lora", Georgia, serif; color:var(--ink); background:#FFFDF7;
+  border:1.5px solid var(--ink-soft); border-radius:999px; padding:.55rem 1rem; }
+.tol-find input:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
+.tol-find-note{ margin:.35rem 0 0; font-size:.88rem; color:var(--ink-soft); }
+.tol-find-results{ list-style:none; margin:.6rem 0 0; padding:0; }
+.tol-find-results li{ margin:0; border-bottom:1px dotted var(--line); }
+.tol-find-results a{ display:block; padding:.65rem .5rem; color:var(--ink); text-decoration:none; border-radius:8px; }
+.tol-find-results a:hover{ background:var(--paper-deep); }
+.tol-find-results a:focus-visible{ outline:2px solid var(--focus); outline-offset:1px; }
+.tol-find-t{ display:block; font-weight:600; font-size:1.02rem; }
+.tol-find-t small{ font-weight:400; font-size:.8rem; color:var(--ink-soft); margin-left:.3rem; }
+.tol-find-s{ display:block; font-size:.9rem; color:var(--ink-soft); line-height:1.45; margin-top:.15rem; }
+.tol-find mark{ background:rgba(168,121,47,.22); color:inherit; border-radius:2px; }
+h1.tol-page-h{ font-family:"Fraunces", Georgia, serif; font-weight:600; font-size:2rem; line-height:1.15; max-width:22ch; margin:0 0 1rem; }

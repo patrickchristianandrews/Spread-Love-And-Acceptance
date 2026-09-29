@@ -256,12 +256,21 @@
     ui.body.appendChild(list);
     return { solve: function () { for (var i = 0; i < m.o.length; i++) if (m.o[i][1]) { win(btns[i], m.o[i][2]); break; } } };
   };
-  function good(t) { t = t || yay(); var m = /^(Yes!|Yes\.|Yes,|Exactly\.|Exactly right\.|Spot on!|Nailed it\.)\s*/.exec(t); return m ? '<b>' + esc(m[1]) + '</b> ' + esc(t.slice(m[0].length)) : '<b>' + yay() + '</b> ' + esc(t); }
-  function twist(t) {
-    t = t || 'Not quite. Try another one.';
-    var m = /^(Not quite\.)\s*/.exec(t);
-    return m ? '<b>' + esc(m[1]) + '</b> ' + esc(t.slice(m[0].length)) : '<b>Not quite.</b> ' + esc(t);
+  // Praise and "not quite" lines: one cheer at the start (never two), and the rest starts with a capital
+  function cap(t) { t = String(t || '').trim(); return t.charAt(0).toUpperCase() + t.slice(1); }
+  var CHEER = /^(Yes!|Yes\.|Yes,|Exactly\.|Exactly right\.|Exactly!|Spot on!|Nailed it\.|Lovely!|You got it\.|Right!|Correct\.)\s*/;
+  function good(t) {
+    t = String(t || '').trim(); if (!t) return '<b>' + esc(yay()) + '</b>';
+    var m = CHEER.exec(t);
+    return m ? '<b>' + esc(m[1]) + '</b>' + (t.slice(m[0].length) ? ' ' + esc(cap(t.slice(m[0].length))) : '') : '<b>' + esc(yay()) + '</b> ' + esc(cap(t));
   }
+  function twist(t) {
+    t = String(t || '').trim() || 'Not quite. Try another one.';
+    var m = /^(Not quite\.)\s*/.exec(t), rest = m ? t.slice(m[0].length) : t;
+    return '<b>Not quite.</b> ' + esc(cap(rest || 'Try another one.'));
+  }
+  // “That one is ‘Who was responsible?’” without a stray period after a question mark
+  function quoted(label) { label = String(label).replace(/<[^>]+>/g, '').trim(); return '“' + label + (/[.?!]$/.test(label) ? '”' : '.”'); }
 
   function sorter(m, ui, bins, hintFor, noteFor) {
     var at = 0, order = shuffledIdx(m.items.length);
@@ -280,7 +289,7 @@
           ui.say(good(noteFor(it, bi)));
           if (at === order.length - 1) { at++; count.textContent = 'All ' + order.length + ' sorted'; ui.finish(); }
           else { next.hidden = false; next.focus(); }
-        } else { b.classList.add('is-tried'); off(b); ui.say(twist('Not quite. ' + hintFor(it)), true); }
+        } else { b.classList.add('is-tried'); off(b); ui.say(twist(hintFor(it)), true); }
       });
       return b;
     });
@@ -289,7 +298,7 @@
     function show() {
       next.hidden = true;
       bBtns.forEach(function (b) { b.classList.remove('is-right', 'is-tried'); b.removeAttribute('aria-disabled'); });
-      count.textContent = 'Example ' + (at + 1) + ' of ' + order.length;
+      count.textContent = 'Example ' + (at + 1) + ' of ' + order.length + ' in this card';
       item.innerHTML = esc(m.items[order[at]][0]);
       item.classList.remove('lp-pop-in'); void item.offsetWidth; if (!still()) item.classList.add('lp-pop-in');
     }
@@ -303,8 +312,8 @@
     } };
   }
   R.sort = function (m, ui) {
-    return sorter(m, ui, m.bins.map(esc), function (it) { return it[2] || 'read it once more and try another spot.'; },
-      function (it, bi) { return it[2] || (yay() + ' That one is “' + m.bins[bi] + '.”'); });
+    return sorter(m, ui, m.bins.map(esc), function () { return 'Read it once more and try another answer.'; },
+      function (it, bi) { return it[2] || ('That one goes with ' + quoted(m.bins[bi])); });
   };
   R.pillar = function (m, ui) {
     var only = m.only || [1, 2, 3, 4, 5], bins = only.map(function (p) { return '<span class="lp-pil" aria-hidden="true">' + PILLARS[p].roman + '</span> <span class="lp-pn"><b>' + esc(PILLARS[p].name) + '</b><small>' + esc(PILLARS[p].plain) + '</small></span>'; });
@@ -515,7 +524,7 @@
       var id = 'lp-m' + (i + 1), hid = id + '-h', tint = (i % 4) + 1;
       var c = el('aside', { class: 'lp-card no-dive lp-t' + tint + ' lp-k-' + m.k, id: id, 'aria-labelledby': hid, 'data-lp-i': i });
       c.innerHTML = '<div class="lp-top"><span class="lp-badge" aria-hidden="true">' + ({ quiz: '💭', sort: '🗂️', pillar: '🏛️', match: '🧩', flip: '🃏', wyr: '🔀', gap: '✏️', slider: '🎚️' }[m.k] || '🌸') + '</span>' +
-        '<p class="lp-kicker">Check yourself · ' + (i + 1) + ' of ' + total + ' on this page</p><span class="lp-found" hidden>🌸 Found</span></div>' +
+        '<p class="lp-kicker">Check yourself · moment ' + (i + 1) + ' of ' + total + ' on this page</p><span class="lp-found" hidden>🌸 Found</span></div>' +
         '<h3 class="lp-q" id="' + hid + '">' + esc(m.q || '') + '</h3><div class="lp-body"></div><p class="lp-say" aria-live="polite"></p>' +
         '<div class="lp-done-row" hidden><span class="lp-done-t"></span><button type="button" class="lp-btn lp-ghost lp-again">Play it again</button></div>';
       var body = c.querySelector('.lp-body'), sayEl = c.querySelector('.lp-say'), doneRow = c.querySelector('.lp-done-row'), found = c.querySelector('.lp-found');

@@ -35,11 +35,12 @@
   // ===== Every page on the site, in reading order =====
   var SECTIONS = [
     { id: 'new', title: 'What’s new', blurb: 'Newly added and newly expanded, newest first.', items: [
-      { href: '/whats-new.html', code: 'All', title: 'What’s new', note: 'Everything newly added and everything that’s grown, in one place' },
+      { href: '/whats-new.html', code: 'All', title: 'What’s new', note: 'Everything newly added and everything that’s grown, in one place, with dates' },
+      { href: '/start-in-10-minutes.html', code: 'New', title: 'Start in 10 minutes', note: 'One short path: today’s weather, the Preface, one practice card and one thing logged' },
+      { href: '/sent-this.html', code: 'New', title: 'Sent this by someone?', note: 'What the other person sees, what stays yours, and how to say yes, not yet or no kindly' },
       { href: '/quest.html', code: 'New', title: 'Your quest map', note: 'Little “Check yourself” moments on reading pages, and a map that lights up as you learn' },
       { href: '/calm-visualizer.html', code: 'New', title: 'Drift: calm visualizer', note: 'Deep, slow 3D colors and binaural tones matched to how you feel' },
       { href: '/five-pillars.html', code: 'New', title: 'The Five Pillars', note: 'How every part of the program fits together, inside you and between you and others' },
-      { href: '/quest.html', code: 'New', title: 'Your quest map', note: 'Find the little “Check yourself” moments on each page, light a lantern for every trail you finish, and watch your explorer level grow' },
       { href: '/library.html', code: 'New', title: 'The Professor’s Library', note: 'Deep, plain-language reading on psychology and conflict, and Professor Puddles can chat about all of it' },
       { href: '/reading.html', code: 'New', title: 'Something to read', note: 'Hand-picked articles from trusted sources, matched to what you’re reading' },
       { href: '/frequency-journey.html', code: 'New', title: 'The Frequency Journey', note: 'Tidbit and Sugarfoot’s calm puzzle journey: riddles, life lessons and puzzles in seven worlds' },
@@ -50,6 +51,10 @@
       { href: '/workpapers/fill/suite.html', code: 'New', title: 'The Workpaper Suite', note: 'Fillable, printable PDFs for your situation, with a plan for each week' }
     ]},
     { id: 'start', title: 'Start here', blurb: 'New to the site? These pages explain the idea and let you try it in a few minutes.', items: [
+      { href: '/start-here.html', code: 'Start', title: 'Start here', note: 'What this is in one minute, and the one best first step for you' },
+      { href: '/start-in-10-minutes.html', code: '10 min', title: 'Start in 10 minutes', note: 'A short, straight path: check your weather, read the Preface, try one card and log one thing' },
+      { href: '/sent-this.html', code: '', title: 'Sent this by someone?', note: 'What they see, what stays yours, doing your side privately, and saying no kindly' },
+      { href: '/program.html', code: '', title: 'Which part of the program to use', note: 'Six weeks, the Workpaper Suite, the package and report, and the indexes: which to use when' },
       { href: '/index.html', code: '', title: 'Home', note: 'What’s new, the ways in, and the full contents' },
       { href: '/five-pillars.html', deep: true, code: '', title: 'The Five Pillars', note: 'The five ideas under everything here, how each works inside you and between you and others, and where each one shows up' },
       { href: '/how-it-works.html', deep: true, code: '', title: 'How it works', note: 'A friendly tour of what the program looks at, and why you can skip the technical bits' },
@@ -59,7 +64,8 @@
       { href: '/relationships.html', deep: true, code: '', title: 'How it fits your relationships', note: 'How every part of the program connects to yourself, partners, family, friends, roommates, co-parents, coworkers and caregivers' },
       { href: '/quick-checks.html', code: '', title: 'Today’s Weather', note: 'A one-minute read on your own conditions today, and what today is good for' },
       { href: '/frequency-framework.html', deep: true, code: '', title: 'The Frequency Framework', note: 'Why two kind people can fall out of step, and how to find the same rhythm again' },
-      { href: '/infographic.html', code: '', title: 'The whole idea on one page', note: 'A printable one-page summary, easy to share' }
+      { href: '/infographic.html', code: '', title: 'The whole idea on one page', note: 'A printable one-page summary, easy to share' },
+      { href: '/glossary.html', code: '', title: 'Plain names and their technical names', note: 'Every tool’s everyday name beside the technical name you may see on the Full pages' }
     ]},
     { id: 'self', title: 'Self-discovery', blurb: 'Tools for understanding yourself: your load, your wiring, your patterns. Start here, with or without anyone else.', items: [
       { href: '/self-path.html', code: 'Start', title: 'Your self-discovery path', note: 'The self path, step by step: your battery, your wiring, what settles you and kind words, on your own' },
@@ -68,10 +74,10 @@
       { href: '/know-yourself.html', deep: true, code: 'New', title: 'Know your own wiring', note: 'What’s you, what life taught you, and what’s just today, and how to explain each one to others' },
       { href: '/wired-differently.html', deep: true, code: 'New', title: 'Wired Differently', note: 'How differently wired people hear the same words, and how to talk across the difference' },
       { href: '/wiring-card.html', code: 'Tool', title: 'Wiring Card', note: 'A one-page card on how you receive words, what silence means, and what to avoid' },
-      { href: '/workpapers/wp-02-battery-stress-meter.html', deep: true, code: 'WP-02', title: 'How full is your battery?', note: 'What you’re already carrying, separate from what just happened. Also called the Battery & Stress Meter', paid: true },
-      { href: '/tools/frequency-calibration.html', code: 'Tool', title: 'Frequency Calibration', note: 'Your natural rhythms for money, decisions, check-ins and recovery', paid: true },
+      { href: '/workpapers/wp-02-battery-stress-meter.html', deep: true, code: 'WP-02', title: 'How full is your battery?', note: 'What you’re already carrying, separate from what just happened', paid: true },
+      { href: '/tools/frequency-calibration.html', code: 'Tool', title: 'Find your natural rhythms', note: 'Your natural rhythms for money, decisions, check-ins and recovery', paid: true },
       { href: '/wp-11.html', deep: true, code: 'WP-11', title: 'The Calm-Down Kit', note: 'Decide in advance what settles your body', paid: true },
-      { href: '/book/chapter-3.html', deep: true, code: 'III', title: 'Full tanks and different angles', note: 'Why some reactions are bigger than their cause. Also called Autonomic Saturation & the 7 Ocular Vectors', paid: true },
+      { href: '/book/chapter-3.html', deep: true, code: 'III', title: 'Full tanks and different angles', note: 'Why some reactions are bigger than their cause', paid: true },
       { href: '/learn/index.html#part-self', deep: true, code: 'Stories', title: 'Stories from Philosophy: Knowing yourself', note: 'The Second Arrow, the Ship of Theseus, What Is Up to Us' },
     ]},
     { id: 'play', title: 'Play', blurb: 'Calm games for a busy mind: a gentle way to read your state and settle it (Pillar III) before you talk. No timers and no way to lose, and something new in the background every few levels.', items: [
@@ -98,30 +104,31 @@
       { href: '/relationships.html#map', deep: true, code: 'Map', title: 'The full map', note: 'Every chapter, worksheet and tool, for every kind of relationship' }
     ]},
     { id: 'book', title: 'The book', blurb: 'The manuscript, one idea per chapter. Each chapter pairs with a workpaper that puts it to use.', items: [
-      { href: '/book/preface.html', deep: true, code: 'Preface', title: 'The work nobody sees', note: 'The quiet, unseen work of running a shared life, and why it deserves to be noticed. Also called Unbilled Debt' },
-      { href: '/book/chapter-1.html', deep: true, code: 'I', title: 'Why we get out of tune', note: 'How pace, tone and urgency nudge two people out of sync, and how to get back in tune. Also called the Radio Frequency Paradigm' },
-      { href: '/book/chapter-2.html', deep: true, code: 'II', title: 'Is the split working?', note: 'A simple way to see whether the way you share the work can last. It looks at the arrangement, never at a person. Also called P(Solvency)' },
-      { href: '/book/chapter-3.html', deep: true, code: 'III', title: 'Full tanks and different angles', note: 'How much of a reaction is leftover stress, and the seven angles people see things from. Also called Autonomic Saturation & the 7 Ocular Vectors', paid: true },
-      { href: '/book/chapter-4.html', deep: true, code: 'IV', title: 'Two kinds of fair', note: 'Agreeing on what fair means to you both, and letting words land before you react. Also called Deontological Parity & Sensory Gating', paid: true },
-      { href: '/book/chapter-5.html', deep: true, code: 'V', title: 'The monthly look-back', note: 'A gentle monthly look back that catches what weekly check-ins miss. Also called the Deficit Audit', paid: true },
+      { href: '/book/preface.html', deep: true, code: 'Preface', title: 'The work nobody sees', note: 'The quiet, unseen work of running a shared life, and why it deserves to be noticed' },
+      { href: '/book/chapter-1.html', deep: true, code: 'I', title: 'Why we get out of tune', note: 'How pace, tone and urgency nudge two people out of sync, and how to get back in tune' },
+      { href: '/book/chapter-2.html', deep: true, code: 'II', title: 'Is the split working?', note: 'A simple way to see whether the way you share the work can last. It looks at the arrangement, never at a person' },
+      { href: '/book/chapter-3.html', deep: true, code: 'III', title: 'Full tanks and different angles', note: 'How much of a reaction is leftover stress, and the seven angles people see things from', paid: true },
+      { href: '/book/chapter-4.html', deep: true, code: 'IV', title: 'Two kinds of fair', note: 'Agreeing on what fair means to you both, and letting words land before you react', paid: true },
+      { href: '/book/chapter-5.html', deep: true, code: 'V', title: 'The monthly look-back', note: 'A gentle monthly look back that catches what weekly check-ins miss', paid: true },
       { href: '/library.html', code: 'Library', title: 'The Professor’s Library', note: 'Psychology, behavioral science and conflict resolution in plain words: 233 short entries, each tied to the Five Pillars and the program' },
     ]},
     { id: 'workpapers', title: 'Workpapers', blurb: 'Short worksheets. Each of you fills in your own, then you read them together. They work best in the order listed, with the monthly look-back once a month.', items: [
       { href: '/full-path.html', code: 'Package', title: 'The workpaper package and report', note: 'One fillable PDF for your relationship, and a detailed report from your answers: findings, recommendations and a plan' },
-      { href: '/workpapers/wp-01.html', deep: true, code: 'WP-01', title: 'Who did what, and kind ways to say no', note: 'Start here: a week’s log of who did what, plus kind ways to say no. Also called the Field Audit & Neutral Refusals', paid: true },
-      { href: '/workpapers/wp-02-battery-stress-meter.html', deep: true, code: 'WP-02', title: 'How full is your battery?', note: 'Five quick questions: how much are you already carrying today? Also called the Battery & Stress Meter', paid: true },
-      { href: '/workpapers/wp-03-raci-treaty.html', deep: true, code: 'WP-03', title: 'One owner per job', note: 'Give every regular job one owner, so nobody has to keep asking. Also called the RACI Treaty', paid: true },
-      { href: '/workpapers/wp-04-deficit-audit.html', deep: true, code: 'WP-04', title: 'What keeps coming back?', note: 'The monthly look-back: what keeps coming up, and what’s really behind it. Also called the Deficit Audit', paid: true },
-      { href: '/workpapers/wp-09-tone-filter.html', deep: true, code: 'WP-09', title: 'Say it so it lands', note: 'Turn a big feeling into a fact, a feeling and a kind ask before you send it. Also called the Tone Filter', paid: true },
+      { href: '/workpapers/wp-01.html', deep: true, code: 'WP-01', title: 'Who did what, and kind ways to say no', note: 'Start here: a week’s log of who did what, plus kind ways to say no', paid: true },
+      { href: '/workpapers/wp-02-battery-stress-meter.html', deep: true, code: 'WP-02', title: 'How full is your battery?', note: 'Five quick questions: how much are you already carrying today?', paid: true },
+      { href: '/workpapers/wp-03-raci-treaty.html', deep: true, code: 'WP-03', title: 'One owner per job', note: 'Give every regular job one owner, so nobody has to keep asking', paid: true },
+      { href: '/workpapers/wp-04-deficit-audit.html', deep: true, code: 'WP-04', title: 'What keeps coming back?', note: 'The monthly look-back: what keeps coming up, and what’s really behind it', paid: true },
+      { href: '/workpapers/wp-09-tone-filter.html', deep: true, code: 'WP-09', title: 'Say it so it lands', note: 'Turn a big feeling into a fact, a feeling and a kind ask before you send it', paid: true },
       { href: '/wp-11.html', deep: true, code: 'WP-11', title: 'The Calm-Down Kit', note: 'Ways to settle your body first, when either of you is too wound up to talk', paid: true },
-      { href: '/workpapers/wp-13-pll-protocol.html', deep: true, code: 'WP-13', title: 'The 90-second daily check-in', note: 'Ninety seconds a day, no debating, to keep small things small. Also called the Phase-Locked Loop', paid: true },
+      { href: '/workpapers/wp-13-pll-protocol.html', deep: true, code: 'WP-13', title: 'The 90-second daily check-in', note: 'Ninety seconds a day, no debating, to keep small things small', paid: true },
       { href: '/do/index.html', code: '', title: 'Try the Workpapers', note: 'A playground to try the worksheets before you commit' },
       { href: '/workpapers/fill/suite.html', code: 'Suite', title: 'The Workpaper Suite', note: 'New: the worksheets for your situation, in order, as one fillable PDF and a report' },
       { href: '/workpapers/fill/index.html', code: 'Fill-in', title: 'Fill-in workpapers', note: 'Type straight into the worksheets and save them as PDFs on your device' }
     ]},
     { id: 'program', title: 'Guided program', blurb: 'For anyone who’d like to be walked through it, one gentle step at a time.', items: [
-      { href: '/prog-01.html', deep: true, code: 'PROG-01', title: 'Six gentle weeks', note: 'One worksheet a week, in order, ending with a before-and-after look. Also called the 6-Week Program', paid: true },
-      { href: '/workpapers/report-01.html', deep: true, code: 'REPORT-01', title: 'Your progress, week by week', note: 'Your week-by-week record, so progress builds instead of starting over. Also called the Full Read', paid: true }
+      { href: '/program.html', code: 'Guide', title: 'Which part to use when', note: 'The six weeks, the Workpaper Suite, the package and report, and the indexes, side by side' },
+      { href: '/prog-01.html', deep: true, code: 'PROG-01', title: 'Six gentle weeks', note: 'One worksheet a week, in order, ending with a before-and-after look', paid: true },
+      { href: '/workpapers/report-01.html', deep: true, code: 'REPORT-01', title: 'Your progress, week by week', note: 'Your week-by-week record, so progress builds instead of starting over', paid: true }
     ]},
     { id: 'tools', title: 'Tools', blurb: 'Interactive pages. Everything you type stays in your own browser.', items: [
       { href: '/ask.html', code: 'New', title: 'Chat with Professor Puddles', note: 'Ask a question in your own words and get an answer made only from this site’s pages. Nothing you type leaves your device' },
@@ -130,11 +137,11 @@
       { href: '/wiring-card.html', code: 'New', title: 'Wiring Card', note: 'Make a one-page card for how you receive words, what silence means, and what to avoid' },
       { href: '/signal-translator.html', code: 'New', title: 'The Signal Translator', note: 'Test a sentence before a check-in. Pick the wiring, the room, and how it might land' },
       { href: '/carrier-wave-decoder.html', code: 'Tool', title: 'The Carrier Wave Decoder', note: 'A guided session for the moment a conversation starts going sideways' },
-      { href: '/workpapers/calculators/calc01-solvency.html', code: 'CALC-01', title: 'Can the load last?', note: 'Add your worksheet numbers and see whether the way you share the load can last. Also called the Solvency Read' },
-      { href: '/calc01-solvency.html', code: 'CALC-01', title: 'Solvency Read (full)', note: 'Enter hours and jobs for 2–8 people and see the math step by step' },
+      { href: '/workpapers/calculators/calc01-solvency.html', code: 'CALC-01', title: 'Can the load last?', note: 'Add your worksheet numbers and see whether the way you share the load can last' },
+      { href: '/calc01-solvency.html', code: 'CALC-01', title: 'Can the load last? The long form', note: 'Enter hours and jobs for 2–8 people and see the math step by step', menu: false },
       { href: '/tools/mood-arbitrage-free.html', code: 'Tool', title: 'Mood Arbitrage', note: 'Small, kind ways to shift a heavy mood: a printable plan builder, five scenarios and a four-week practice plan' },
       { href: '/tools/mood-arbitrage-full.html', code: 'Tool', title: 'Mood Arbitrage: the full toolkit', note: 'Five everyday scenarios and a four-week practice plan', paid: true, menu: false },
-      { href: '/tools/frequency-calibration.html', code: '', title: 'Find your natural rhythms', note: 'Compare your rhythms across five areas of daily life. Also called Frequency Calibration', paid: true },
+      { href: '/tools/frequency-calibration.html', code: '', title: 'Find your natural rhythms', note: 'Compare your rhythms across five areas of daily life', paid: true },
       { href: '/tools/frequency-sync-visualizer.html', code: '', title: 'Watch two rhythms sync', note: 'A moving picture of how the daily check-in keeps two people in step', paid: true },
       { href: '/snapshot/index.html', code: '', title: 'A quick snapshot', note: 'A two-minute look at how things are right now' }
     ]},
@@ -194,7 +201,8 @@
   function buildIndex(opts) {
     var wrap = el('div', { class: 'tol-index' + (opts.page ? ' is-page' : '') + (isMember ? ' is-member' : '') });
     SECTIONS.forEach(function (s) {
-      if (opts.page && s.id === 'about') return;
+      if (opts.page && s.id === 'about' && !opts.all) return;
+      if (opts.page && s.id === 'new' && opts.all) return; // the contents list names each page once, in its home section
       var sec;
       if (opts.accordion) {
         // The panel shows section names only; open one to see its pages
@@ -210,7 +218,7 @@
         });
       } else {
         sec = el('div', { class: 'tol-index-section', id: (opts.page ? 'contents-' : 'tol-sec-') + s.id });
-        sec.appendChild(el('h3', null, esc(s.title)));
+        sec.appendChild(el(opts.h || 'h3', null, esc(s.title)));
       }
       if (s.blurb) sec.appendChild(el('p', null, esc(s.blurb)));
       var ol = el('ol');
@@ -221,7 +229,7 @@
         a.innerHTML =
           '<span class="tol-code">' + esc(it.code || '') + '</span>' +
           '<span class="tol-title">' + esc(it.title) + (it.note ? '<small>' + esc(it.note) + '</small>' : '') + '</span>' +
-          '<span class="tol-access">' + (it.paid ? (isMember ? 'unlocked' : (CONFIG.freePreview ? 'free · email' : 'members')) : '') + '</span>';
+          '<span class="tol-access">' + (it.paid ? (isMember ? 'unlocked' : (CONFIG.freePreview ? 'Free with sign-up' : 'members')) : '') + '</span>';
         var li = el('li'); li.appendChild(a);
         if (it.deep) li.appendChild(el('a', { class: 'dig tol-dig', href: deepHref(it) }, 'Dig deeper'));
         ol.appendChild(li);
@@ -294,16 +302,31 @@
     if (e.key === 'Escape' && openDrop) closeDrop(true);
   });
 
-  function openPanel(sectionId) {
+  function openPanel(sectionId, toSearch) {
     lastFocus = document.activeElement;
     closeDrop();
     panel.querySelector('.tol-index').replaceWith(buildIndex({ accordion: true, open: sectionId }));
+    if (!toSearch) { var q0 = panel.querySelector('.tol-find input'); if (q0 && q0.value) { q0.value = ''; runSearch(''); } }
+    else { var q1 = panel.querySelector('.tol-find input'); if (q1 && q1.value) runSearch(q1.value); }
     scrim.hidden = false; panel.hidden = false;
+    setInert(true);
     document.querySelectorAll('[aria-controls="tol-panel"]').forEach(function (b) { b.setAttribute('aria-expanded', 'true'); });
     panel.scrollTop = 0;  // start at the top so every section name is in view
-    panel.querySelector('.tol-close').focus({ preventScroll: true });
+    if (toSearch) panel.querySelector('.tol-find input').focus({ preventScroll: true });
+    else panel.querySelector('.tol-close').focus({ preventScroll: true });
+  }
+  // While the menu panel is open, everything behind it is out of reach (keyboard, screen readers, taps)
+  var inerted = [];
+  function setInert(on) {
+    if (on) {
+      inerted = Array.prototype.filter.call(document.body.children, function (n) {
+        return n !== panel && n !== scrim && !n.hasAttribute('inert') && !/^(SCRIPT|STYLE|LINK)$/.test(n.tagName);
+      });
+      inerted.forEach(function (n) { n.setAttribute('inert', ''); });
+    } else { inerted.forEach(function (n) { n.removeAttribute('inert'); }); inerted = []; }
   }
   function closePanel() {
+    setInert(false);
     scrim.hidden = true; panel.hidden = true;
     document.querySelectorAll('[aria-controls="tol-panel"]').forEach(function (b) { b.setAttribute('aria-expanded', 'false'); });
     if (lastFocus) lastFocus.focus();
@@ -326,6 +349,10 @@
     RIBBON.forEach(function (p, n) { nav.appendChild(buildDrop(p[0], p[1], n >= RIBBON.length - 3)); });
     bar.appendChild(nav);
 
+    var find = el('button', { type: 'button', class: 'tol-search-btn', 'aria-controls': 'tol-panel', 'aria-expanded': 'false' },
+      '<svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false"><circle cx="10.5" cy="10.5" r="6.5" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M15.5 15.5 21 21" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg><span>Search</span>');
+    find.addEventListener('click', function () { openPanel(null, true); });
+    bar.appendChild(find);
     var mob = el('button', { type: 'button', class: 'tol-contents-btn', 'aria-controls': 'tol-panel', 'aria-expanded': 'false' }, 'Menu');
     mob.addEventListener('click', function () { openPanel(null); });
     bar.appendChild(mob);
@@ -341,19 +368,24 @@
     close.addEventListener('click', closePanel);
     head.appendChild(close);
     panel.appendChild(head);
+    panel.appendChild(buildSearch());
     panel.appendChild(el('p', { class: 'tol-panel-intro' }, 'Open a section to see its pages.' +
-      (CONFIG.freePreview ? ' Pages marked <em>free · email</em> open once you sign up with your email.' : '')));
+      (CONFIG.freePreview ? ' Pages marked <em>Free with sign-up</em> open once you sign up with your email. It’s free.' : '')));
     var tools = el('div', { class: 'tol-panel-tools' });
     tools.appendChild(stillButton());
+    tools.appendChild(darkButton());
     tools.appendChild(joinLink('tol-member tol-panel-join'));
     panel.appendChild(tools);
+    panel.appendChild(readingOptions());
     panel.appendChild(buildIndex({ accordion: true }));
 
     document.addEventListener('keydown', function (e) {
       if (panel.hidden) return;
       if (e.key === 'Escape') closePanel();
       if (e.key === 'Tab') {
-        var f = Array.prototype.filter.call(panel.querySelectorAll('a, button, summary'), function (n) { return n.offsetParent !== null; });
+        var f = Array.prototype.filter.call(panel.querySelectorAll('a[href], button:not([disabled]), summary, input:not([disabled]), select, textarea'), function (n) { return n.getClientRects().length > 0 && !n.closest('details:not([open]) > :not(summary)'); });
+        if (!f.length) return;
+        if (!panel.contains(document.activeElement)) { e.preventDefault(); (e.shiftKey ? f[f.length - 1] : f[0]).focus(); return; }
         var first = f[0], last = f[f.length - 1];
         if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
         else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
@@ -362,10 +394,21 @@
 
     // Simple pages get their cute dressing and a gentle reminder (see site.css)
     if (hereSection) body.setAttribute('data-sec', hereSection.id);
+    if (current === '/index.html') document.documentElement.classList.add('tol-home');
+    // pages with their own dark look (the games, the Night Garden, Drift) keep it as it is
+    if (body.classList.contains('is-game') || body.hasAttribute('data-no-dark') || /^\/(night-garden|calm-visualizer|pal-cam-tv|garden-backdrop)\.html$/.test(current)) document.documentElement.classList.add('tol-nodark');
     var ideas = document.querySelector('main .ideas');
     if (inDepth) body.classList.add('tol-deep');
     if (ideas) body.classList.add('tol-simple');
     buildDepthPicker(!!inDepth);
+    // Simple pages use plain names only: the technical name under the title is kept for the Full version
+    if (!inDepth && document.querySelector('main .tol-depth')) {
+      Array.prototype.forEach.call(document.querySelectorAll('main .read-code .formal'), function (f) {
+        var prev = f.previousSibling;
+        if (prev && prev.nodeType === 3) prev.textContent = prev.textContent.replace(/\s*(·|&middot;|\u00b7)\s*$/, '');
+        f.remove();
+      });
+    }
 
     // wide tables scroll inside their own box on small screens, instead of pushing the page sideways
     Array.prototype.forEach.call(document.querySelectorAll('main table'), function (tb) {
@@ -417,7 +460,7 @@
     }
 
     // little buddies who cheer you on between the sections of a reading page (cheer.js)
-    if (!body.hasAttribute('data-no-cheer') && !body.classList.contains('is-game') && current !== '/index.html' && current !== '/' &&
+    if (!body.hasAttribute('data-no-cheer') && !helpersHidden() && !body.classList.contains('is-game') && current !== '/index.html' && current !== '/' &&
         (document.querySelector('main.read') || body.classList.contains('tol-deep')) && !document.querySelector('meta[http-equiv="Content-Security-Policy"]')) {
       var cw = document.createElement('script'); cw.src = '/assets/js/cheer-words.js';
       cw.onload = cw.onerror = function () { var ch = document.createElement('script'); ch.src = '/assets/js/cheer.js'; document.head.appendChild(ch); };
@@ -435,7 +478,7 @@
     }
 
     // Tidbit & Sugarfoot pop by now and then with a tip or a little love (pup-visits.js; the pups and their words load only when a visit is about to happen)
-    if (document.querySelector('main.read') && !body.hasAttribute('data-no-pupvisits') && !body.classList.contains('is-game') && !document.querySelector('meta[http-equiv="Content-Security-Policy"]') &&
+    if (document.querySelector('main.read') && !helpersHidden() && !body.hasAttribute('data-no-pupvisits') && !body.classList.contains('is-game') && !document.querySelector('meta[http-equiv="Content-Security-Policy"]') &&
         !/^\/(frequency-journey(-play)?|calm-visualizer|ask|404|offline|privacy-policy|refund-policy|terms-of-service)\.html$|^\/(legal|workpapers\/fill)\//.test(current)) {
       var pv = document.createElement('script'); pv.src = '/assets/js/pup-visits.js'; document.head.appendChild(pv);
     }
@@ -464,7 +507,7 @@
           if (!window.TOLReading) return;
           var host = el('div', { class: 'tol-read-host' });
           readMain.appendChild(host);
-          try { if (!window.TOLReading.mount(host, { heading: 2 })) host.remove(); } catch (e) { host.remove(); }
+          try { if (!window.TOLReading.mount(host, { heading: 'none' })) host.remove(); } catch (e) { host.remove(); }
         };
         document.head.appendChild(rs);
       };
@@ -505,6 +548,7 @@
       ['is-narrow', 'is-tight', 'is-tighter'].forEach(function (c) { if (crowded()) bar.classList.add(c); });
     }
     function barHeight() { fitBar(); document.documentElement.style.setProperty('--tol-bar-h', bar.offsetHeight + 'px'); }
+    barHeightHook = barHeight;
     barHeight(); window.addEventListener('resize', barHeight);
     if (document.fonts && document.fonts.ready) document.fonts.ready.then(barHeight);
     // When the bar takes a big share of a short screen (a phone on its side, zoom, large text), it tucks
@@ -522,7 +566,7 @@
 
     // Pager: previous / next within the same section
     if (here && hereSection && ['book', 'workpapers', 'program'].indexOf(hereSection.id) !== -1) {
-      var list = hereSection.items.filter(function (i) { return i.href !== '/index.html'; });
+      var list = hereSection.items.filter(function (i) { return i.href !== '/index.html' && i.menu !== false && (hereSection.id !== 'book' || isChapter(i)); });
       var idx = list.indexOf(here);
       var prev = list[idx - 1], next = list[idx + 1];
       if (prev || next) {
@@ -537,6 +581,8 @@
         body.insertBefore(pager, scrim);
       }
     }
+
+    buildChapterBar();
 
     var foot = el('div', { class: 'tol-foot', role: 'contentinfo' });
     foot.style.margin = '2rem ' + (-pr) + 'px ' + (-pb) + 'px ' + (-pl) + 'px';
@@ -556,10 +602,114 @@
         (isApp() ? '' : '<button type="button" class="tol-install-link">Add to your home screen</button>') +
       '</span>';
     foot.querySelector('.tol-foot-links').appendChild(stillButton());
+    foot.querySelector('.tol-foot-links').appendChild(darkButton());
     body.insertBefore(foot, scrim);
     var il = foot.querySelector('.tol-install-link');
     if (il) il.addEventListener('click', showInstall);
     maybeInviteInstall();
+  }
+
+  // ---------- Search the site ----------
+  // Page titles, headings and text, searched right here in the browser from a small index
+  // (assets/js/search-index.js, built by tools/search/build_index.py). Nothing typed leaves the device.
+  var searchData = null, searchWait = null;
+  function loadSearch(cb) {
+    if (searchData) return cb(searchData);
+    if (searchWait) { searchWait.push(cb); return; }
+    searchWait = [cb];
+    var sc = document.createElement('script'); sc.src = '/assets/js/search-index.js';
+    sc.onload = function () { searchData = (window.TOL_SEARCH && window.TOL_SEARCH.pages) || []; var w = searchWait; searchWait = null; w.forEach(function (f) { f(searchData); }); };
+    sc.onerror = function () { var w = searchWait; searchWait = null; searchData = null; w.forEach(function (f) { f(null); }); };
+    document.head.appendChild(sc);
+  }
+  function fold(t) { return String(t || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[’‘]/g, "'"); }
+  function reEsc(t) { return t.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); }
+  function searchTerms(q) { return fold(q).split(/[^a-z0-9'-]+/).filter(function (t) { return t.length > 1 || /\d/.test(t); }); }
+  function searchPages(list, q) {
+    var terms = searchTerms(q);
+    if (!terms.length) return [];
+    var out = [];
+    list.forEach(function (p) {
+      var title = fold(p.t + ' ' + (p.h || '')), heads = fold((p.s || []).join(' · ')), desc = fold(p.d), text = fold(p.x), score = 0, all = true;
+      terms.forEach(function (t) {
+        var s = 0;
+        if (title.indexOf(t) !== -1) s += 12 + (new RegExp('(^|\\W)' + reEsc(t)).test(title) ? 6 : 0);
+        if (heads.indexOf(t) !== -1) s += 5;
+        if (desc.indexOf(t) !== -1) s += 3;
+        if (text.indexOf(t) !== -1) s += 1 + Math.min(3, text.split(t).length - 2);
+        if (!s) all = false;
+        score += s;
+      });
+      if (all && score) out.push({ p: p, score: score - (p.f ? 2 : 0) });
+    });
+    return out.sort(function (a, b) { return b.score - a.score; }).slice(0, 25);
+  }
+  function snippet(p, q) {
+    var terms = searchTerms(q), src = p.x || p.d || '', low = fold(src), at = -1;
+    terms.some(function (t) { at = low.indexOf(t); return at !== -1; });
+    if (at === -1) return p.d || src.slice(0, 140);
+    var from = Math.max(0, at - 60);
+    return (from ? '…' : '') + src.slice(from, at + 110) + '…';
+  }
+  function markTerms(text, q) {
+    var h = esc(text);
+    searchTerms(q).forEach(function (t) { h = h.replace(new RegExp('(' + reEsc(t) + ')', 'ig'), '<mark>$1</mark>'); });
+    return h;
+  }
+  var runSearch = function () {};
+  function buildSearch() {
+    var box = el('div', { class: 'tol-find', role: 'search' },
+      '<label for="tol-find-q">Search the site</label>' +
+      '<input id="tol-find-q" type="search" autocomplete="off" enterkeyhint="search" placeholder="A word or two, like “chores” or “calm down”" aria-describedby="tol-find-note">' +
+      '<p class="tol-find-note" id="tol-find-note" aria-live="polite">Searches every page’s title and words, right here on your device.</p>' +
+      '<ol class="tol-find-results" hidden></ol>');
+    var input = box.querySelector('input'), note = box.querySelector('.tol-find-note'), list = box.querySelector('.tol-find-results'), timer = null;
+    runSearch = function (q) {
+      q = String(q || '').trim();
+      var idx = panel && panel.querySelector('.tol-index');
+      if (!q) { list.hidden = true; list.innerHTML = ''; note.textContent = 'Searches every page’s title and words, right here on your device.'; if (idx) idx.hidden = false; return; }
+      loadSearch(function (data) {
+        if (input.value.trim() !== q) return;
+        if (!data) { note.textContent = 'Search isn’t available just now. The full list of pages is below.'; if (idx) idx.hidden = false; return; }
+        var hits = searchPages(data, q);
+        if (idx) idx.hidden = !!hits.length;
+        list.hidden = !hits.length;
+        list.innerHTML = hits.map(function (h) {
+          var p = h.p;
+          return '<li><a href="' + esc(p.u) + '"><span class="tol-find-t">' + markTerms(p.t, q) + (p.f ? ' <small>Full version</small>' : '') + '</span>' +
+            '<span class="tol-find-s">' + markTerms(snippet(p, q), q) + '</span></a></li>';
+        }).join('');
+        note.textContent = hits.length ? (hits.length === 25 ? 'The 25 best matches for “' + q + '”.' : hits.length + (hits.length === 1 ? ' page matches' : ' pages match') + ' “' + q + '”.')
+          : 'Nothing matches “' + q + '” yet. Try a shorter or different word, or browse the sections below.';
+      });
+    };
+    input.addEventListener('input', function () { clearTimeout(timer); timer = setTimeout(function () { runSearch(input.value); }, 140); });
+    input.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter') { e.preventDefault(); var first = list.querySelector('a'); if (first) first.focus(); }
+      if (e.key === 'Escape' && input.value) { e.stopPropagation(); input.value = ''; runSearch(''); }
+    });
+    return box;
+  }
+
+  // ---------- "Chapter N of 6": where you are in the book, with every chapter one tap away ----------
+  function isChapter(it) { return /^\/book\/(preface|chapter-\d)\.html$/.test(it.href); }
+  function buildChapterBar() {
+    if (!here || !isChapter(here)) return;
+    var main = document.querySelector('main'); if (!main) return;
+    var book = SECTIONS.filter(function (x) { return x.id === 'book'; })[0].items.filter(isChapter);
+    var at = book.indexOf(here); if (at < 0) return;
+    var nav = el('nav', { class: 'tol-chbar no-bubble', 'aria-label': 'Chapters of the book' });
+    var items = book.map(function (it, i) {
+      var name = it.code === 'Preface' ? 'Preface' : 'Chapter ' + it.code;
+      var href = inDepth && it.deep ? deepHref(it) : it.href;
+      return '<li><a href="' + href + '"' + (i === at ? ' aria-current="page"' : '') + ' title="' + esc(name + ': ' + it.title) + '">' +
+        '<span aria-hidden="true">' + (it.code === 'Preface' ? 'P' : esc(it.code)) + '</span><span class="sr-only">' + esc(name + ': ' + it.title) + '</span></a></li>';
+    }).join('');
+    nav.innerHTML = '<p class="tol-chbar-k">Chapter ' + (at + 1) + ' of ' + book.length + '<span> · ' + esc(here.code === 'Preface' ? 'the Preface' : 'Chapter ' + here.code) + '</span></p><ol>' + items + '</ol>' +
+      '<p class="tol-chbar-nav">' + (at > 0 ? '<a href="' + (inDepth && book[at - 1].deep ? deepHref(book[at - 1]) : book[at - 1].href) + '" rel="prev">&larr; Previous</a>' : '') +
+      (at < book.length - 1 ? '<a href="' + (inDepth && book[at + 1].deep ? deepHref(book[at + 1]) : book[at + 1].href) + '" rel="next">Next &rarr;</a>' : '<a href="/prog-01.html">Next: six gentle weeks &rarr;</a>') + '</p>';
+    var head = main.querySelector('.read-head');
+    if (head) head.appendChild(nav); else main.insertBefore(nav, main.firstChild);
   }
 
   // ---------- Breathe with me ----------
@@ -764,6 +914,8 @@
     if (current !== '/index.html' && current !== '/') return;
     var small = false;
     try { small = sessionStorage.getItem('tol-puddles-small') === '1'; } catch (e) {}
+    // on a phone the hello starts as its small chip, so the page's opening line and "Start here" fit on the first screen
+    if (window.innerWidth <= 560) small = true;
     var hi = el('div', { class: 'tol-puddles-hi' + (small ? ' is-small' : ''), role: 'complementary', 'aria-label': 'Meet Professor Puddles' },
       '<span class="tol-puddles-hi-art">' + PUDDLES_SVG + '</span>' +
       '<p><strong>Meet Professor Puddles!</strong> <span class="tol-puddles-hi-more">Small drop, big brain. Ask anything about the program in your own words, and he’ll answer straight from these pages.</span></p>' +
@@ -864,17 +1016,18 @@
     var pref = lsGet('tol-depth-pref');
     function opt(kind, href, icon, name, what, who, time) {
       var cur = (kind === 'full') === isFull;
-      return '<a class="tol-depth-opt is-' + kind + (cur ? ' is-here' : '') + '" href="' + href + '" data-depth="' + kind + '"' + (cur ? ' aria-current="page"' : '') + '>' +
-        '<span class="tol-depth-name"><span aria-hidden="true">' + icon + '</span> ' + name + (cur ? ' <small>you’re here</small>' : '') + '</span>' +
+      // the link holds only the short name; the description sits beside it (the whole card still opens it)
+      return '<div class="tol-depth-opt is-' + kind + (cur ? ' is-here' : '') + '">' +
+        '<a class="tol-depth-name" href="' + href + '" data-depth="' + kind + '"' + (cur ? ' aria-current="page"' : '') + '><span aria-hidden="true">' + icon + '</span> ' + name + (cur ? ' <small>you’re here</small>' : '') + '</a>' +
         '<span class="tol-depth-time">' + time + '</span>' +
         '<span class="tol-depth-what">' + what + '</span>' +
-        '<span class="tol-depth-who">' + who + '</span></a>';
+        '<span class="tol-depth-who">' + who + '</span></div>';
     }
     var box = el('div', { class: 'depth-bar tol-depth', role: 'group', 'aria-label': 'Choose how deep to read' },
       '<p class="tol-depth-q">This page comes in two versions. Pick the one that suits you right now:' + (chip ? ' ' + chip.outerHTML : '') + '</p>' +
       '<div class="tol-depth-opts">' +
-        opt('simple', simpleHref, '🌱', 'Simple version', 'The main idea in a few short cards, one idea each, and one small thing to try. Want a little more on something? Tap any word with a water drop <span aria-hidden="true">💧</span> and dive deeper right here on the page, from a quick splash to the deep end, then carry on where you were.', 'Good if you’re new, short on time, or tired.', isFull ? 'a few minutes' : 'about ' + mins + ' min read') +
-        opt('full', fullHref, '🌊', 'Full version', 'The whole idea: real-life examples, the reasoning and research behind it, worked numbers, common mix-ups and answers to questions.', 'Good if you want the why, or you’re using it for a real situation.', isFull ? 'about ' + mins + ' min read' : 'a longer read') +
+        opt('simple', simpleHref, '🌱', 'Simple version', 'The main idea in a few short cards and one small thing to try. Tap a word with a water drop <span aria-hidden="true">💧</span> to dive deeper right here.', 'Good if you’re new, short on time, or tired.', isFull ? 'a few minutes' : 'about ' + mins + ' min read') +
+        opt('full', fullHref, '🌊', 'Full version', 'The whole idea: real-life examples, the reasoning behind it, worked numbers and answers to questions. Technical names appear here, in small print.', 'Good if you want the why, or you’re using it for a real situation.', isFull ? 'about ' + mins + ' min read' : 'a longer read') +
       '</div>' +
       (pref && (pref === 'full') !== isFull ? '<p class="tol-depth-pref">Last time you chose the ' + (pref === 'full' ? 'full' : 'simple') + ' version. It’s one tap away above.</p>' : '') +
       '<details class="tol-depth-more"><summary>How the two versions, “Dig deeper” links and mini dives fit together</summary>' +
@@ -885,7 +1038,7 @@
       '</details>' +
       '<p class="tol-gentle' + (isFull ? ' is-deep' : '') + '"><span aria-hidden="true">' + (isFull ? '🌿' : '🌱') + '</span> Take what helps and leave the rest. Nothing here grades you.</p>');
     bar.parentNode.replaceChild(box, bar);
-    Array.prototype.forEach.call(box.querySelectorAll('.tol-depth-opt'), function (a) {
+    Array.prototype.forEach.call(box.querySelectorAll('a[data-depth]'), function (a) {
       a.addEventListener('click', function () { lsSet('tol-depth-pref', a.getAttribute('data-depth')); });
     });
     if (!isFull) lsSet('tol-depth-seen', '1');
@@ -926,6 +1079,73 @@
     return b;
   }
   window.TOLStill = { on: function () { return stillOn; }, set: setStill };
+
+  // ---------- Reading options: dark or light, text size, and "hide the helpers" ----------
+  // Dark follows the device by itself (site.css); a choice made here wins on this device. Text size
+  // scales the whole page. "Hide the helpers" puts away the extra friends: Professor Puddles' cards,
+  // the little cheering buddies, the pups, tips and the floating invitations. Each choice is one
+  // small setting kept in this browser, nothing more; "Back to the usual" clears them all.
+  var THEME_KEY = 'tol-theme', SIZE_KEY = 'tol-text-size', HELP_KEY = 'tol-hide-helpers';
+  function applyReading() {
+    var h = document.documentElement, t = lsGet(THEME_KEY), z = lsGet(SIZE_KEY);
+    if (t === 'dark' || t === 'light') h.setAttribute('data-theme', t); else h.removeAttribute('data-theme');
+    h.classList.toggle('tol-text-lg', z === 'lg'); h.classList.toggle('tol-text-xl', z === 'xl');
+    h.classList.toggle('tol-no-helpers', lsGet(HELP_KEY) === '1');
+    var meta = document.querySelector('meta[name="theme-color"]');
+    if (meta) meta.setAttribute('content', darkNow() ? '#1E1B24' : '#F5EFDE');
+    document.querySelectorAll('.tol-dark-btn').forEach(function (b) {
+      b.setAttribute('aria-pressed', String(darkNow()));
+      b.querySelector('.tol-still-state').textContent = darkNow() ? 'On' : 'Off';
+    });
+    document.querySelectorAll('.tol-readopts').forEach(syncReadOpts);
+  }
+  function darkNow() {
+    var t = lsGet(THEME_KEY);
+    if (t === 'dark' || t === 'light') return t === 'dark';
+    return !!(window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches);
+  }
+  function helpersHidden() { return document.documentElement.classList.contains('tol-no-helpers'); }
+  applyReading();
+  if (window.matchMedia) { try { window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', applyReading); } catch (e) {} }
+  function darkButton() {
+    var b = el('button', { type: 'button', class: 'tol-still-btn tol-dark-btn', 'aria-pressed': String(darkNow()) },
+      '<span class="tol-still-track" aria-hidden="true"><span></span></span>Dark mode' +
+      '<span class="tol-still-state" aria-hidden="true">' + (darkNow() ? 'On' : 'Off') + '</span>');
+    b.addEventListener('click', function () { lsSet(THEME_KEY, darkNow() ? 'light' : 'dark'); applyReading(); });
+    return b;
+  }
+  function syncReadOpts(box) {
+    var t = lsGet(THEME_KEY) || 'auto', z = lsGet(SIZE_KEY) || 'md';
+    box.querySelectorAll('input[data-theme-opt]').forEach(function (i) { i.checked = i.value === t; });
+    box.querySelectorAll('input[data-size-opt]').forEach(function (i) { i.checked = i.value === z; });
+    var hh = box.querySelector('input[data-helpers]'); if (hh) hh.checked = helpersHidden();
+  }
+  function readingOptions() {
+    var id = 'tol-ro-' + Math.random().toString(36).slice(2, 7);
+    function radio(group, attr, val, text) {
+      return '<label><input type="radio" name="' + id + '-' + group + '" value="' + val + '" ' + attr + '> ' + text + '</label>';
+    }
+    var box = el('details', { class: 'tol-readopts' },
+      '<summary>Reading options</summary>' +
+      '<fieldset><legend>Text size</legend>' + radio('size', 'data-size-opt', 'md', 'Standard') + radio('size', 'data-size-opt', 'lg', 'Larger') + radio('size', 'data-size-opt', 'xl', 'Largest') + '</fieldset>' +
+      '<fieldset><legend>Colors</legend>' + radio('theme', 'data-theme-opt', 'auto', 'Follow my device') + radio('theme', 'data-theme-opt', 'light', 'Light') + radio('theme', 'data-theme-opt', 'dark', 'Dark') + '</fieldset>' +
+      '<label class="tol-readopts-help"><input type="checkbox" data-helpers> Hide the helpers <small>(Professor Puddles’ cards, the cheering buddies, the pups, tips and pop-up invitations)</small></label>' +
+      '<p class="tol-readopts-foot">These choices stay in this browser only. <button type="button" class="tol-readopts-reset">Back to the usual</button></p>');
+    box.addEventListener('change', function (e) {
+      var i = e.target;
+      if (i.hasAttribute('data-size-opt')) { if (i.value === 'md') lsDel(SIZE_KEY); else lsSet(SIZE_KEY, i.value); }
+      if (i.hasAttribute('data-theme-opt')) { if (i.value === 'auto') lsDel(THEME_KEY); else lsSet(THEME_KEY, i.value); }
+      if (i.hasAttribute('data-helpers')) { if (i.checked) lsSet(HELP_KEY, '1'); else lsDel(HELP_KEY); }
+      applyReading();
+      if (typeof barHeightHook === 'function') barHeightHook();
+    });
+    box.querySelector('.tol-readopts-reset').addEventListener('click', function () { [SIZE_KEY, THEME_KEY, HELP_KEY].forEach(lsDel); applyReading(); });
+    syncReadOpts(box);
+    return box;
+  }
+  var barHeightHook = null;
+  function lsDel(k) { try { localStorage.removeItem(k); } catch (e) {} }
+  window.TOLReadingOptions = { dark: darkNow, helpersHidden: helpersHidden };
 
   // "Add to your home screen": the browser's own prompt where there is one, otherwise how-to steps
   function showInstall() {
@@ -978,7 +1198,7 @@
   // weather is logged.
   var SKIP_WEATHER = ['/quick-checks.html', '/night-garden.html', '/dashboard.html', '/offline.html', '/404.html'];
   function buildWeatherNudge(body) {
-    if (SKIP_WEATHER.indexOf(current) !== -1 || body.hasAttribute('data-no-weather') || document.querySelector('.wpf-bar')) return;
+    if (SKIP_WEATHER.indexOf(current) !== -1 || helpersHidden() || body.hasAttribute('data-no-weather') || document.querySelector('.wpf-bar')) return;
     var today = new Date().toISOString().slice(0, 10);
     if (lsGet('tol-weather-nudge') === 'never' || lsGet('tol-weather-nudge') === today) return;
     try { var log = JSON.parse(lsGet('tol-weather-v1') || '[]'); if (log.length && log[log.length - 1].d === today) return; } catch (e) {}
@@ -1053,7 +1273,7 @@
     var p = location.pathname, force = /[?&]palcam-pop=1\b/.test(location.search);
     var skip = /^\/(frequency-journey(-play)?\.html|calm-visualizer\.html|ask\.html|privacy-policy\.html|refund-policy\.html|terms-of-service\.html|offline\.html|404\.html)$/.test(p) ||
       /^\/(workpapers\/fill|legal)\//.test(p) || body.classList.contains('is-game') || !!document.querySelector('meta[http-equiv="Content-Security-Policy"]');
-    if (skip) return;
+    if (skip || helpersHidden()) return;
     var prev = lsGet('tol-palcam-pop-prev'); lsSet('tol-palcam-pop-prev', '0');
     if (!force && (ssGet('tol-palcam-pop') || prev === '1' || Math.random() >= 0.25)) return;
     function still() { return !!(window.TOLStill && window.TOLStill.on()); }
@@ -1129,13 +1349,43 @@
     if (!/^\S+@\S+\.\S+$/.test(norm(email))) { say('Enter an email address, like name@example.com.', 'error'); return; }
     say('Signing you up…');
     var body = new URLSearchParams({ email: norm(email), embed: '1' });
+    function unlock() { try { localStorage.setItem(STORE_KEY, norm(email)); } catch (e) {} }
     function done() {
-      try { localStorage.setItem(STORE_KEY, norm(email)); } catch (e) {}
-      say('You’re in. Every page on the site is now open in this browser. Buttondown may send a confirmation email; confirming keeps you on the update list.', 'ok');
+      unlock();
+      try { localStorage.removeItem('tol-join-pending'); } catch (e) {}
+      say('You’re signed up. Every page on the site is now open in this browser. The newsletter may send a confirmation email; confirming keeps you on the update list.', 'ok');
       applyState(true);
     }
-    // Buttondown doesn't let other sites read its reply, so a sent request counts as signed up
-    fetch(CONFIG.signupUrl, { method: 'POST', mode: 'no-cors', body: body }).then(done, done);
+    // The newsletter couldn't be reached (offline, blocked, or the service is down). Everything still
+    // opens on this device, as promised, but we say so plainly and offer another try.
+    function failed() {
+      unlock();
+      try { localStorage.setItem('tol-join-pending', '1'); } catch (e) {}
+      function warn(box) {
+        box.className = 'tol-msg is-warn';
+        box.innerHTML = 'We couldn’t reach the newsletter just now, so you’re not on the update list yet. Everything is open on this device anyway. Try joining again later. ';
+        var again = el('button', { type: 'button', class: 'tol-msg-retry' }, 'Try joining again');
+        again.addEventListener('click', function () { signUpFree(email, box); });
+        box.appendChild(again);
+      }
+      if (msgEl) warn(msgEl);
+      applyState(true);
+      // the form it came from may be tucked away now that everything is open: keep the note in view
+      if (!msgEl || !msgEl.getClientRects().length) {
+        var note = document.querySelector('.tol-join-note') || el('p', { class: 'tol-join-note', role: 'status' });
+        warn(note); note.classList.add('tol-join-note');
+        var from = msgEl && msgEl.closest('.tol-gate, form'), main = document.querySelector('main');
+        if (!note.parentNode) { if (from) from.after(note); else if (main) main.appendChild(note); else document.body.appendChild(note); }
+      }
+    }
+    if (navigator.onLine === false) { failed(); return; }
+    // The newsletter service doesn't let other sites read its reply, so a request that arrives counts as
+    // signed up; a request that can't be sent at all (a network error) is told truthfully
+    var timer = null, settled = false;
+    function once(f) { return function () { if (settled) return; settled = true; clearTimeout(timer); f(); }; }
+    var ok = once(done), bad = once(failed);
+    timer = setTimeout(bad, 12000);
+    fetch(CONFIG.signupUrl, { method: 'POST', mode: 'no-cors', body: body }).then(ok, bad);
   }
 
   function signIn(email, msgEl) {
@@ -1232,7 +1482,7 @@
   // ---------- Placeholders pages can use ----------
   function renderPlaceholders() {
     document.querySelectorAll('[data-tol="contents"]').forEach(function (n) {
-      n.innerHTML = ''; n.appendChild(buildIndex({ page: true }));
+      n.innerHTML = ''; n.appendChild(buildIndex({ page: true, all: n.hasAttribute('data-all'), h: n.hasAttribute('data-all') ? 'h2' : 'h3' }));
     });
     document.querySelectorAll('[data-tol="members-list"]').forEach(function (n) {
       var html = '';

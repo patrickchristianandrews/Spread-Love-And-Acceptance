@@ -21,7 +21,8 @@
    Placement: pinned in the page margin beside the section (at the height it was when they came),
    never over the text, on wide screens; on narrow screens they float just above the bottom edge,
    above the Breathe button. Pinned to the screen, so the bubble stays readable while you scroll on.
-   The pups are decorative (aria-hidden). The bubble text goes once to a polite live region; the
+   The pups are decorative (aria-hidden). The bubble is never announced (it sits at the end of the
+   reading order, and the pup's name is hidden from screen readers); the
    bubble never takes focus; its link is a real link and its × a real 44px button.
    pups.js and the words (pup-visits-lines.js) load only when a visit is about to happen.
    Test hooks: ?pupvisit=1 (a visit comes quickly), ?pupvisit=fast (all pacing x0.1),
@@ -294,8 +295,9 @@
   var DPR = Math.min(2, window.devicePixelRatio || 1);
   var live = null;
   function say(text) {
-    if (!live) { live = D.createElement('div'); live.className = 'tpv-sr'; live.setAttribute('aria-live', 'polite'); B.appendChild(live); }
-    live.textContent = text;
+    // decorative: nothing is announced, so a screen reader is never interrupted mid-page by a pup
+    // with a made-up name. The bubble sits at the very end of the page's reading order instead.
+    return text;
   }
 
   function run(plan) {
@@ -363,7 +365,7 @@
       if (!line) { bubIdx = i; bubAcc = 0; bubDur = 0; return; }
       bub = D.createElement('div'); bub.className = 'tpv-bub'; bub.setAttribute('data-who', who);
       var tx = D.createElement('p'); tx.style.margin = '0';
-      var nm = D.createElement('span'); nm.className = 'tpv-name'; nm.textContent = PER[who].name; tx.appendChild(nm);
+      var nm = D.createElement('span'); nm.className = 'tpv-name'; nm.setAttribute('aria-hidden', 'true'); nm.textContent = PER[who].name; tx.appendChild(nm);
       tx.appendChild(D.createTextNode(line.text));
       if (line.href) { tx.appendChild(D.createTextNode(' ')); var a = D.createElement('a'); a.href = line.href; a.textContent = line.label || 'Take a look'; tx.appendChild(a); }
       bub.appendChild(tx);

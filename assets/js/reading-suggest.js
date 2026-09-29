@@ -250,7 +250,8 @@
     var d = data(), n = ++uid;
     var state = { audience: '', item: null };  // no 'for me / with others' choice on the card: every article fits both
     if (opts.scan !== false) opts._scanned = scanPage();
-    var level = Math.min(6, Math.max(2, parseInt(opts.heading, 10) || 3));
+    // heading: 'none' (or 0) keeps the changing article title out of the page's outline: a plain line, not a heading
+    var level = opts.heading === 'none' || opts.heading === 0 ? 0 : Math.min(6, Math.max(2, parseInt(opts.heading, 10) || 3));
 
     var wrap = el('div', 'tol-read-wrap no-dive no-cheer');
     var box = el('section', 'tol-read');
@@ -268,7 +269,7 @@
     body.setAttribute('aria-live', 'polite');
     var src = el('span', 'tol-read-src');
     var pil = el('p', 'tol-read-p');
-    var title = el('h' + level, 'tol-read-t');
+    var title = el(level ? 'h' + level : 'p', 'tol-read-t');
     var by = el('p', 'tol-read-by');
     var sum = el('p', 'tol-read-s');
     body.appendChild(src); body.appendChild(pil); body.appendChild(title); body.appendChild(by); body.appendChild(sum);
