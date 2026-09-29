@@ -66,6 +66,11 @@
     border-radius: 6px;
     border: none;
   }
+  /* the players load only when asked */
+  .embed-gate{ display:flex; flex-direction:column; align-items:flex-start; gap:10px; padding:16px; border-radius:6px; border:1px dashed var(--line, #D8CFBD); }
+  .embed-gate p{ margin:0; font-size:.95rem; line-height:1.5; }
+  .embed-load{ font:inherit; font-weight:600; min-height:44px; padding:.5rem 1.1rem; border-radius:999px; border:1px solid var(--brass-ink, #7A5620); background:#fff; color:var(--brass-ink, #7A5620); cursor:pointer; }
+  .embed-load:hover{ background:#FBF3E4; }
 
   .phase{
     margin-bottom: 28px;
@@ -115,6 +120,16 @@
   }
 </style>
 <script src="/assets/js/site.js" defer></script>
+<script>
+  // click-to-load: a music player from Spotify or Apple loads only after you tap its button
+  document.addEventListener('click', function (e) {
+    var b = e.target.closest && e.target.closest('.embed-load'); if (!b) return;
+    var gate = b.closest('.embed-gate'), f = document.createElement('iframe');
+    f.src = gate.getAttribute('data-src'); f.height = gate.getAttribute('data-h'); f.title = gate.getAttribute('data-title');
+    f.setAttribute('allow', gate.getAttribute('data-allow')); f.setAttribute('allowfullscreen', ''); f.setAttribute('frameborder', '0');
+    gate.replaceWith(f);
+  });
+</script>
 <!-- seo:start -->
 <link rel="canonical" href="https://spreadloveandacceptance.com/echoes-of-gold.html">
 <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1">
@@ -167,11 +182,19 @@
       <div class="embed-row">
         <div class="embed-card">
           <div class="embed-label">Listen on Spotify</div>
-          <iframe src="https://open.spotify.com/embed/album/3kjsd5IGXMHtW7GCTU9CsX?utm_source=generator" height="352" frameborder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+          <div class="embed-gate" data-src="https://open.spotify.com/embed/album/3kjsd5IGXMHtW7GCTU9CsX?utm_source=generator" data-h="352" data-allow="clipboard-write; encrypted-media; fullscreen; picture-in-picture" data-title="Echoes of Gold on Spotify">
+            <p>This loads a player from Spotify. Nothing from Spotify loads, and nothing plays, until you choose to. Spotify may set its own cookies.</p>
+            <button type="button" class="embed-load">Load the Spotify player</button>
+            <a href="https://open.spotify.com/album/3kjsd5IGXMHtW7GCTU9CsX" rel="noopener" target="_blank">Or open it on Spotify &#8599;</a>
+          </div>
         </div>
         <div class="embed-card">
           <div class="embed-label">Listen on Apple Music</div>
-          <iframe src="https://embed.music.apple.com/us/album/echoes-of-gold-the-christian-project-the/1876871973" height="450" frameborder="0" allow="autoplay *; encrypted-media *;" loading="lazy"></iframe>
+          <div class="embed-gate" data-src="https://embed.music.apple.com/us/album/echoes-of-gold-the-christian-project-the/1876871973" data-h="450" data-allow="encrypted-media *;" data-title="Echoes of Gold on Apple Music">
+            <p>This loads a player from Apple Music. Nothing from Apple loads, and nothing plays, until you choose to. Apple may set its own cookies.</p>
+            <button type="button" class="embed-load">Load the Apple Music player</button>
+            <a href="https://music.apple.com/us/album/echoes-of-gold-the-christian-project-the/1876871973" rel="noopener" target="_blank">Or open it on Apple Music &#8599;</a>
+          </div>
         </div>
       </div>
 
