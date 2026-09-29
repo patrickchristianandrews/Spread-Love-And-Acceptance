@@ -24,10 +24,10 @@
   var ctx = null, out = null, bufs = {}, loading = null, lastAt = -10, lastKey = '', lastKeyAt = 0, nextAmb = 0, clockMs = 0, lastName = '';
   function lsGet(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
   function lsSet(k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
-  var enabled = lsGet('tol-palcam-sound') !== 'off';
+  var enabled = lsGet('tol-palcam-sound') !== 'off', held = false; // held: kept quiet for this visit (the site's quiet mode), without changing the saved choice
 
   function ensure() {
-    if (!AC || !enabled) return false;
+    if (!AC || !enabled || held) return false;
     if (!ctx) {
       try { ctx = window.__pcAudio || new AC(); } catch (e) { return false; }
       var comp = ctx.createDynamicsCompressor();
@@ -55,7 +55,7 @@
   function pick(a) { return a[Math.floor(Math.random() * a.length)]; }
   // play one sound from a group, softly; vol is 0..1 on top of the file's own (already gentle) level
   function play(group, vol, force, delay) {
-    if (!enabled || document.hidden || !FILES[group]) return false;
+    if (!enabled || held || document.hidden || !FILES[group]) return false;
     if (!ensure()) return false;
     var now = ctx.currentTime;
     if (!force && now - lastAt < (/^bark/.test(group) ? 1.3 : 2.2)) return false; // plenty of quiet between sounds
@@ -120,7 +120,7 @@
   }
   // the cam is running: once in a while, one of them barks softly or a little chime rings
   function tick(dt, running) {
-    if (!running || !enabled) return;
+    if (!running || !enabled || held) return;
     clockMs += dt;
     if (!nextAmb) nextAmb = clockMs + 8000 + Math.random() * 6000;
     if (clockMs < nextAmb) return;
@@ -129,9 +129,9 @@
     if (r < 0.55) bark(w, 0.72); else if (r < 0.8) chat(w); else play(pick(['stack', 'clink', 'flip', 'bling']), 0.5);
   }
   function hush() { if (ctx && ctx.state === 'running' && ctx.suspend) { try { var pr = ctx.suspend(); if (pr && pr.catch) pr.catch(function () {}); } catch (e) {} } }
-  function wake() { if (enabled && ctx && ctx.state === 'suspended') ensure(); }
+  function wake() { if (enabled && !held && ctx && ctx.state === 'suspended') ensure(); }
   function setOn(v) {
-    enabled = !!v; lsSet('tol-palcam-sound', enabled ? 'on' : 'off');
+    held = false; enabled = !!v; lsSet('tol-palcam-sound', enabled ? 'on' : 'off');
     if (enabled) { ensure(); if (loading) loading.then(function () { bark(Math.random() < 0.5 ? 0 : 1, 0.8, true); }); } else hush();
     return enabled;
   }
@@ -140,7 +140,8 @@
     bubble: bubble, trick: trick, act: act, tick: tick, hush: hush, wake: wake,
     play: function (group, vol) { return play(group, vol, true); }, bark: function (who) { return bark(who, 0.9, true); },
     ready: function () { ensure(); return loading || Promise.resolve(); },
-    on: function () { return enabled; }, set: setOn, toggle: function () { return setOn(!enabled); },
+    on: function () { return enabled && !held; }, set: setOn, toggle: function () { return setOn(!(enabled && !held)); },
+    hold: function (v) { held = !!v; if (held) hush(); },
     groups: function () { return Object.keys(FILES); }, loaded: function () { return Object.keys(bufs).length; }, supported: !!AC
   };
 })();

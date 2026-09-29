@@ -108,7 +108,7 @@
     st0.appendChild(Object.assign(document.createElement('p'), { textContent: 'Tuning in to Tidbit and Sugarfoot…' }));
   }
   var start = document.getElementById('tv-start'), go = document.getElementById('tv-go'), hint = document.getElementById('tv-hint');
-  var on = false, timer = 0, lock = null, capsOff = false, quietT = 0, hintT = 0;
+  var on = false, timer = 0, lock = null, capsOff = false, quietT = 0, hintT = 0, soundSaid = false;
   var cam = function () { return window.TOLPalsCam; };
 
   function say(t) { hint.textContent = t; hint.classList.add('is-on'); clearTimeout(hintT); hintT = setTimeout(function () { hint.classList.remove('is-on'); }, 3500); }
@@ -124,7 +124,7 @@
   }
   function freshScene() {
     if (!on || !cam()) return;
-    cam().close(); cam().open({});
+    cam().close(); cam().open({ noNote: true });
     styleCam();
   }
   function begin() {
@@ -132,13 +132,16 @@
     on = true; start.hidden = true;
     var el = document.documentElement;
     if (!receiver && el.requestFullscreen && !document.fullscreenElement) { try { var fs = el.requestFullscreen(); if (fs && fs.catch) fs.catch(function () {}); } catch (e) {} }
-    try { cam().open({}); } catch (e) { showErr(e); }
+    try { cam().open({ noNote: true }); } catch (e) { showErr(e); }
     styleCam();
     // the cam builds its overlay as it opens; style it again once it's there
     setTimeout(styleCam, 50); setTimeout(styleCam, 3000);
     keepAwake();
     clearInterval(timer); timer = setInterval(function () { freshScene(); keepAwake(); }, SCENE_MS);
-    say(lock || !('wakeLock' in navigator) ? 'Press Esc to stop' : 'Press Esc to stop');
+    // sound stays on by default; say so once at the start, and how to turn it off
+    var sndOn = window.TOLPalsCamSounds ? window.TOLPalsCamSounds.on() : (function () { try { return localStorage.getItem('tol-palcam-sound') !== 'off' && !(window.TOLQuiet && window.TOLQuiet.on && window.TOLQuiet.on()); } catch (e) { return true; } })();
+    if (sndOn && !soundSaid) { soundSaid = true; say('Sound is on. Press S to turn it off. Press Esc to stop.'); clearTimeout(hintT); hintT = setTimeout(function () { hint.classList.remove('is-on'); }, 7000); }
+    else say('Press Esc to stop');
     quiet();
   }
   function end() {
@@ -167,7 +170,7 @@
     else if (e.key === 'c' || e.key === 'C') { capsOff = !capsOff; styleCam(); say(capsOff ? 'Captions hidden' : 'Captions showing'); e.stopImmediatePropagation(); }
   }, true);
   // if the cam gets closed some other way (a click outside the stage), bring it straight back
-  setInterval(function () { if (on && cam() && !cam().isOpen()) { cam().open({}); styleCam(); } }, 2000);
+  setInterval(function () { if (on && cam() && !cam().isOpen()) { cam().open({ noNote: true }); styleCam(); } }, 2000);
   document.addEventListener('visibilitychange', function () { if (!document.hidden) keepAwake(); });
   document.addEventListener('fullscreenchange', function () { if (on && !document.fullscreenElement) say('Press F11 (or Ctrl+Cmd+F on a Mac) for full screen'); });
   window.addEventListener('pointermove', quiet, { passive: true });

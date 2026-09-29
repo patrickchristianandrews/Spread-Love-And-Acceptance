@@ -1890,18 +1890,18 @@ html.tol-bigtext .tol-breathe-btn > span{ position:static !important; width:auto
    Dark mode. It follows the device by itself, and "Dark mode" in the menu
    or the footer overrides it on this device. The page's own colors are
    turned around softly, and pictures, video, the garden behind the page and
-   the things that are already dark (the Breathe break, the pal cam) are
+   the things that are already dark (the Breathe break, the pal cam, the Frequency Buddies player and cards) are
    turned back so they look the way they were made. Pages with their own
    dark look (the games, the Night Garden, Drift) are left as they are.
    ===================================================================== */
 @media (prefers-color-scheme: dark){
   html:not([data-theme="light"]):not(.tol-nodark):not(:has(> body.is-game)){ filter:invert(.9) hue-rotate(180deg); background:#FFFDF7; }
-  html:not([data-theme="light"]):not(.tol-nodark):not(:has(> body.is-game)) :is(img, video, iframe, canvas, picture, svg, .tol-breathe, .pc-ov, .tr-card, .tol-wash):not(:is(svg, picture, .tol-breathe, .pc-ov, .tr-card, .tol-wash) *){ filter:invert(1) hue-rotate(180deg); }
+  html:not([data-theme="light"]):not(.tol-nodark):not(:has(> body.is-game)) :is(img, video, iframe, canvas, picture, svg, .tol-breathe, .pc-ov, .tr-card, .tol-wash, .fb-player, .fb-season):not(:is(svg, picture, .tol-breathe, .pc-ov, .tr-card, .tol-wash, .fb-player, .fb-season) *){ filter:invert(1) hue-rotate(180deg); }
   html:not([data-theme="light"]):not(.tol-nodark):not(:has(> body.is-game)) .read-head::after{ filter:invert(1) hue-rotate(180deg); }
   html:not([data-theme="light"]):not(.tol-nodark):not(:has(> body.is-game)) .tol-wash{ opacity:.5; }
 }
 html[data-theme="dark"]:not(.tol-nodark){ filter:invert(.9) hue-rotate(180deg); background:#FFFDF7; }
-html[data-theme="dark"]:not(.tol-nodark) :is(img, video, iframe, canvas, picture, svg, .tol-breathe, .pc-ov, .tr-card, .tol-wash):not(:is(svg, picture, .tol-breathe, .pc-ov, .tr-card, .tol-wash) *){ filter:invert(1) hue-rotate(180deg); }
+html[data-theme="dark"]:not(.tol-nodark) :is(img, video, iframe, canvas, picture, svg, .tol-breathe, .pc-ov, .tr-card, .tol-wash, .fb-player, .fb-season):not(:is(svg, picture, .tol-breathe, .pc-ov, .tr-card, .tol-wash, .fb-player, .fb-season) *){ filter:invert(1) hue-rotate(180deg); }
 html[data-theme="dark"]:not(.tol-nodark) .read-head::after{ filter:invert(1) hue-rotate(180deg); }
 html[data-theme="dark"]:not(.tol-nodark) .tol-wash{ opacity:.5; }
 @media print{ html, html[data-theme="dark"]{ filter:none !important; } }

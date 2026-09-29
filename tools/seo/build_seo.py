@@ -44,6 +44,7 @@ SECTION_KEYWORDS = [
     (r'^library', ['psychology', 'relationship research', 'conflict resolution', 'gratitude', 'self-compassion', 'emotions', 'stress', 'neurodiversity', 'mindfulness']),
     (r'^(night-garden|calm-visualizer|soundscapes|wp-11-sound|pause-and-play|echoes-of-gold)',
      ['calm', 'relaxation', 'breathing', 'meditation', 'mindfulness', 'peace', 'soundscapes', 'ambient music', 'sound frequencies', 'higher frequency']),
+    (r'^frequency-buddies', ['animated stories', 'cartoon for kids and families', 'Tidbit and Sugarfoot', 'kindness stories', 'working through tough times together', 'captions']),
     (r'^(frequency-journey|frequency-framework)', ['higher frequency', 'sound frequencies', 'Solfeggio tones', 'harmony', 'being in tune', 'calm puzzle game']),
     (r'^(quiet-words|word-bloom|quiet-crossword|daily-ledger-crossword|quest|keepsakes|garden-backdrop|pal-cam)',
      ['calm games', 'relaxing word games', 'crossword', 'word search', 'cozy games', 'no timers', 'Tidbit and Sugarfoot']),
@@ -86,6 +87,9 @@ OVERRIDE = {
     'frequency-journey.html': (None,
         'The Frequency Journey: help Tidbit and Sugarfoot find the Perfect Frequency through seven tone-themed worlds of '
         'calm puzzles, riddles and small lessons about harmony, patience and being in tune with each other.'),
+    'frequency-buddies.html': (None,
+        'Frequency Buddies: gentle animated adventures starring two pups, Tidbit and Sugarfoot, who hit real tough times, '
+        'work through them together and come out stronger. About 15 minutes each, with captions and soft voices.'),
     'ask.html': (None,
         'Chat with Professor Puddles: describe what’s going on in a relationship or ask about any tool, and get kind, '
         'practical next steps and words you could use. Free, private and on your device.'),
@@ -112,7 +116,7 @@ OVERRIDE = {
 }
 
 TOOLS = r'^(tools/|signal-translator|carrier-wave-decoder|conversation-reader|lemonade-stand|calc01-solvency|wiring-card|quick-checks|full-path|workpapers/calculators|do/|snapshot/|pal-cam-tv|ask)'
-GAMES = r'^(quiet-words|word-bloom|quiet-crossword|daily-ledger-crossword|frequency-journey|night-garden|calm-visualizer)'
+GAMES = r'^(frequency-buddies|quiet-words|word-bloom|quiet-crossword|daily-ledger-crossword|frequency-journey|night-garden|calm-visualizer)'
 ARTICLES = r'^(book/|library/|learn/|workpapers/wp-|workpapers/report|wp-|five-pillars|turning-toward|check-ins|know-yourself|wired-differently|frequency-framework|how-it-works|relationships|self-path|glossary)'
 
 

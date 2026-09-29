@@ -18,9 +18,14 @@
   'use strict';
   var LH = 300, G = 248, LW_MIN = 320, LW_MAX = 560, S = 1.15, KEY = 'tol-palcam-v1';
   // reduced motion: the system setting, or the site's own "Keep the page still" switch
-  var RM0 = !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches), RM = RM0, SPEED = 1, PMAX = 140;
+  // PACE: the cam's overall tempo, in one place so it can be tuned. 1 is the original lively speed; below 1 is
+  // calmer. It scales activity and travel timing (walks, runs, hops, spins), tail wags, particle drift and the
+  // clouds. DWELL is a short rest (ms) after each activity before the pals move on to the next one.
+  // Next, Surprise and the tricks still start straight away.
+  var PACE = 0.78, DWELL = 700;
+  var RM0 = !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches), RM = RM0, SPEED = PACE, PMAX = 140;
   function stillNow() { return !!((window.TOLStill && window.TOLStill.on()) || document.documentElement.classList.contains('tol-still')); }
-  function motionMode() { RM = RM0 || stillNow(); SPEED = RM ? 0.72 : 1; PMAX = RM ? 50 : 140; if (typeof A !== 'undefined' && A) { A.R = RM; AO.R = RM; AP.R = RM; AT.R = RM; } }
+  function motionMode() { RM = RM0 || stillNow(); SPEED = (RM ? 0.72 : 1) * PACE; PMAX = RM ? 50 : 140; if (typeof A !== 'undefined' && A) { A.R = RM; AO.R = RM; AP.R = RM; AT.R = RM; } }
   motionMode();
   document.addEventListener('tol-still', function () { motionMode(); });
   var NAMES = ['Tidbit', 'Sugarfoot'], LOOKS = ['collar', 'drop']; // Tidbit: the black mask (looks.collar); Sugarfoot: the white feet (looks.drop)
@@ -249,8 +254,128 @@
       [[env.x0 + 70, G - 40], [env.x1 - 100, G - 42]].forEach(function (h) { U.rr(g, h[0] - 20, h[1] - 14, 40, 18, 3, '#E9C96B'); U.line(g, h[0] - 20, h[1] - 6, h[0] + 20, h[1] - 6, 'rgba(150,110,40,.5)', 1); });
       for (var i = 0; i < 9; i++) pumpkin(g, env.x0 + 22 + i * ((env.x1 - env.x0 - 40) / 8), G - 26 + (i % 2) * 5, 0.8 + (i % 3) * 0.15);
       for (var j = 0; j < 4; j++) pumpkin(g, env.x0 + 30 + j * ((env.x1 - env.x0) / 4), G + 26 + (j % 2) * 8, 0.9);
+    } },
+    // the little movie theater: the pals watch Frequency Buddies on the big screen (the screen is painted live,
+    // every frame, by theaterScreen below, using the Frequency Buddies player at a small size, silently)
+    { id: 'theater', name: 'the little movie theater', indoor: true, draw: function (g, env) {
+      var gr = g.createLinearGradient(0, env.y0, 0, G); gr.addColorStop(0, '#2B1A33'); gr.addColorStop(1, '#43263F');
+      g.fillStyle = gr; g.fillRect(env.x0, env.y0, env.x1 - env.x0, G - env.y0);
+      var sc = theaterRect(env);
+      // soft wall panels and the stage under the screen
+      for (var x = env.x0 + 10; x < env.x1; x += 46) U.rr(g, x, sc.y + sc.h + 16, 30, G - sc.y - sc.h - 52, 6, 'rgba(255,255,255,.035)');
+      U.rr(g, sc.x - 16, sc.y - 10, sc.w + 32, sc.h + 20, 6, '#1B1220'); U.rr(g, sc.x - 3, sc.y - 3, sc.w + 6, sc.h + 6, 3, '#6B4C2E');
+      U.rr(g, sc.x, sc.y, sc.w, sc.h, 2, '#EDE6F2');
+      U.rr(g, sc.x - 30, sc.y + sc.h + 10, sc.w + 60, 8, 3, '#5A3448');
+      // velvet curtains, gathered at each side, and a scalloped valance
+      [[env.x0 - 6, 1], [env.x1 + 6, -1]].forEach(function (c) {
+        var w = Math.max(34, (env.x1 - env.x0) * 0.12);
+        g.fillStyle = '#8E2436'; g.beginPath(); g.moveTo(c[0], env.y0); g.lineTo(c[0] + c[1] * w, env.y0); g.quadraticCurveTo(c[0] + c[1] * w * 0.55, G - 120, c[0] + c[1] * w * 0.9, G - 34); g.lineTo(c[0], G - 34); g.closePath(); g.fill();
+        for (var f = 1; f < 4; f++) U.line(g, c[0] + c[1] * w * f / 4.2, env.y0, c[0] + c[1] * w * f / 5, G - 36, 'rgba(40,6,20,.35)', 2);
+        U.rr(g, c[0] + c[1] * w * 0.45 - 6, G - 128, 12, 5, 2, '#E8B04F');
+      });
+      g.fillStyle = '#A12E42'; g.beginPath(); g.moveTo(env.x0, env.y0); g.lineTo(env.x1, env.y0); g.lineTo(env.x1, sc.y - 22);
+      for (var v = env.x1; v > env.x0; v -= 24) g.quadraticCurveTo(v - 12, sc.y - 8, v - 24, sc.y - 22);
+      g.closePath(); g.fill(); U.rr(g, env.x0, sc.y - 26, env.x1 - env.x0, 3, 1, '#E8B04F');
+      // the carpet, and rows of seats further back
+      ground(g, env, G - 34, '#5E2233', '#4A1B2A');
+      for (var i = 0; i < 40; i++) U.circle(g, env.x0 + rnd(i) * (env.x1 - env.x0), G - 26 + rnd(i + 40) * (env.y1 - G + 20), 1, 'rgba(232,176,79,.18)');
+      for (var sx = env.x0 + 8; sx < env.x1; sx += 26) { U.rr(g, sx, G - 52, 20, 20, 5, '#6E2638'); U.rr(g, sx + 1, G - 36, 18, 6, 3, '#57202F'); }
+    }, lights: function (g, env) {
+      var sc = theaterRect(env);
+      [env.x0 + 40, env.x1 - 40].forEach(function (x) { U.rr(g, x - 4, G - 150, 8, 10, 3, '#E8B04F'); U.circle(g, x, G - 152, 12, 'rgba(255,214,150,.16)'); });
+      for (var i = 0; i < 14; i++) { var p = i / 13; U.circle(g, mix(sc.x - 24, sc.x + sc.w + 24, p), sc.y + sc.h + 14, 1.4, 'rgba(255,226,160,.8)'); }
+    }, ambient: function (g, env, t, layer) {
+      if (layer !== 'back') return;
+      var sc = theaterRect(env);
+      theaterScreen(g, sc.x, sc.y, sc.w, sc.h, t);
+      // the projector's soft beam from the back of the room
+      var bx = env.x1 - 10, by = env.y0 + 14, bm = g.createLinearGradient(bx, by, sc.x + sc.w / 2, sc.y + sc.h / 2);
+      bm.addColorStop(0, 'rgba(255,248,220,.16)'); bm.addColorStop(1, 'rgba(255,248,220,0)');
+      g.fillStyle = bm; g.beginPath(); g.moveTo(bx, by - 3); g.lineTo(sc.x + sc.w, sc.y); g.lineTo(sc.x + sc.w, sc.y + sc.h); g.lineTo(bx, by + 3); g.closePath(); g.fill();
     } }
   ];
+  function theaterRect(env) {
+    var w = Math.min(250, (env.x1 - env.x0) * 0.64), h = w * 9 / 16, c = (env.x0 + env.x1) / 2;
+    return { x: c - w / 2, y: Math.max(env.y0 + 34, G - 222), w: w, h: h };
+  }
+  // the screen: short, silent clips of the Frequency Buddies episodes (the player and the episode files are
+  // fetched the first time the theater opens, never before); until they're ready, an old film countdown
+  var TH = { st: 0, clip: null, last: 0, cv: null };
+  function theaterLoad() {
+    if (TH.st) return; TH.st = 1;
+    function add(src) { return new Promise(function (ok) { var sc = document.createElement('script'); sc.src = src; sc.onload = sc.onerror = function () { ok(); }; document.head.appendChild(sc); }); }
+    (window.TOLBuddiesPlayer ? Promise.resolve() : add('/assets/js/buddies-player.js')).then(function () {
+      var P = window.TOLBuddiesPlayer, ids = P && P.catalogIds ? P.catalogIds() : [];
+      var eps = window.TOLBuddies && window.TOLBuddies.episodes || {};
+      return Promise.all(ids.filter(function (id) { return !eps[id]; }).map(function (id) { return add('/assets/js/buddies/' + id + '.js'); }));
+    }).then(function () { TH.st = 2; });
+  }
+  function theaterTitle() { return TH.clip && TH.clip.title() ? TH.clip.title() : 'a Frequency Buddies adventure'; }
+  function theaterScreen(g, x, y, w, h, t) {
+    if (!TH.st) theaterLoad();
+    var P = window.TOLBuddiesPlayer;
+    if (TH.st === 2 && P && P.clip && !TH.clip) { try { TH.clip = P.clip({ reduced: RM }); } catch (e) { TH.clip = null; TH.st = 3; } }
+    var dt = TH.last ? clamp(t - TH.last, 0, 60) : 16; TH.last = t;
+    if (TH.clip && TH.clip.ready() && !TH.busy) { // (busy: a movie inside the movie just shows the countdown)
+      var m = g.getTransform ? g.getTransform() : { a: 2 }, px = Math.max(80, Math.round(w * m.a)), py = Math.max(45, Math.round(h * m.a));
+      var img = null; TH.busy = true; try { img = TH.clip.frame(dt * (RM ? 0.8 : 1), px, py); } catch (e) { img = null; } TH.busy = false;
+      if (img) {
+        g.drawImage(img, x, y, w, h);
+        // the caption names the movie that's actually on the screen
+        var tt = TH.clip.title(); if (tt && tt !== TH.shown && cur && cur.act === MOVIE && capMain) { TH.shown = tt; capMain.textContent = 'Movie night: ' + tt; }
+        return;
+      }
+    }
+    // the countdown leader
+    U.rr(g, x, y, w, h, 2, '#CFC4B4'); var n = 3 - Math.floor(t / 1000) % 3, a = (t % 1000) / 1000 * Math.PI * 2;
+    g.strokeStyle = 'rgba(60,50,40,.5)'; g.lineWidth = 1; g.beginPath(); g.moveTo(x + w / 2, y); g.lineTo(x + w / 2, y + h); g.moveTo(x, y + h / 2); g.lineTo(x + w, y + h / 2); g.stroke();
+    g.beginPath(); g.arc(x + w / 2, y + h / 2, h * 0.36, 0, Math.PI * 2); g.stroke();
+    g.fillStyle = 'rgba(60,50,40,.18)'; g.beginPath(); g.moveTo(x + w / 2, y + h / 2); g.arc(x + w / 2, y + h / 2, h * 0.36, -Math.PI / 2, -Math.PI / 2 + a); g.closePath(); g.fill();
+    U.text(g, String(n), x + w / 2, y + h / 2 + 1, h * 0.34, '#3C3350', '700');
+  }
+  // the pals' own movie night: into their seats with a bucket of popcorn, heads up to the screen
+  var MOVIE = { id: 'movie-night', name: 'Movie night', kind: 'sweet', where: ['theater'], dur: 24000,
+    get cap() { return 'Movie night: ' + theaterTitle(); },
+    punch: [16000, 'Best seats in the house, and the best company too'],
+    seat: function (A, i) { return A.cx + (i ? 56 : -56); },
+    run: function (A, T, S) {
+      var me = this;
+      [T, S].forEach(function (d, i) {
+        var sx = me.seat(A, i), f = i ? -1 : 1;
+        A.walk(d, i ? A.x1 : A.x0, sx, 200 + i * 160, 1500 + i * 160);
+        if (A.t > 1500 + i * 160) { d.x = sx; d.face = f; d.pose = 'sit'; d.dy = -15; d.tilt = -0.26 + A.osc(5200, 0.03, i * 2); }
+      });
+      // Tidbit dips into the popcorn, and later tosses one up and catches it
+      if (A.in(4200, 5600)) T.tilt = 0.45 * A.bump(4200, 5600) - 0.26 * (1 - A.bump(4200, 5600));
+      if (A.in(19000, 21000)) T.tilt = -0.26 - 0.4 * A.bump(19000, 21000);
+      A.say(T, 'Popcorn!', 5600, 6800);
+      if (A.in(12400, 14000)) { T.lift += 3 * Math.abs(Math.sin((A.t - 12400) / 160)); S.lift += 2 * Math.abs(Math.sin((A.t - 12500) / 190)); T.wag = S.wag = 3; }
+      A.say(T, 'Ha!', 12400, 13400); A.say(S, 'Hee hee!', 12700, 13900);
+      A.say(S, '<3', 16200, 17600); if (A.once(16400)) A.burst(A.cx, A.G - 100, 6, 'heart');
+      if (A.in(9000, 11800)) S.tilt = -0.26 + 0.1 * A.bump(9000, 11800);
+      A.say(T, 'One more episode?', 22200, 23800); A.say(S, 'Okay, one more.', 23000, 24000);
+    },
+    back: function (g, A) {
+      var U2 = A.U;
+      for (var i = 0; i < 2; i++) {
+        var sx = this.seat(A, i), f = i ? -1 : 1, c = A.G;
+        U2.rr(g, sx - f * 30 - 5, c - 64, 10, 52, 5, '#B0344A');           // the seat back, behind her
+        U2.rr(g, Math.min(sx - f * 28, sx + f * 18), c - 16, 46, 10, 5, '#C84458'); // the cushion
+        U2.rr(g, sx - 14, c - 8, 28, 8, 2, '#3A1E28');
+      }
+    },
+    front: function (g, A) {
+      var U2 = A.U, c = A.G, x = A.cx;
+      U2.rr(g, x - 7, c - 30, 14, 30, 3, '#5A2233'); // the armrest between them, with the popcorn on top
+      g.fillStyle = '#F4EEE6'; g.beginPath(); g.moveTo(x - 11, c - 52); g.lineTo(x + 11, c - 52); g.lineTo(x + 8, c - 30); g.lineTo(x - 8, c - 30); g.closePath(); g.fill();
+      g.fillStyle = '#D8434F'; [-7, 0, 7].forEach(function (k) { g.beginPath(); g.moveTo(x + k - 2, c - 52); g.lineTo(x + k + 2, c - 52); g.lineTo(x + k * 0.72 + 1.5, c - 30); g.lineTo(x + k * 0.72 - 1.5, c - 30); g.closePath(); g.fill(); });
+      [[-7, -54], [-2, -57], [4, -55], [8, -53], [1, -53], [-5, -51]].forEach(function (p) { U2.circle(g, x + p[0], c + p[1], 3.2, '#FFF6D8'); U2.circle(g, x + p[0] + 1, c + p[1] - 1, 1.2, '#F6DA8A'); });
+      // one kernel on its way into Tidbit's mouth, then one tossed up and caught
+      var m = A.mouth(0);
+      if (A.in(5000, 5700)) { var q = A.p(5000, 5700); U2.circle(g, A.mix(x, m.x, q), A.mix(c - 56, m.y, q) - 18 * Math.sin(q * Math.PI), 2.6, '#FFF6D8'); }
+      if (A.in(19200, 20600)) { var r = A.p(19200, 20600); U2.circle(g, m.x, m.y - 46 * Math.sin(r * Math.PI), 2.6, '#FFF6D8'); }
+    }
+  };
 
   // ---------- state ----------
   var STORIES = [], ACTS = [], BYID = {}, COMBOS = {}, INTER = [], QUIPS = { travel: [[], []], react: [[], []] }, FACTS = [[], []], lastInter = null;
@@ -410,6 +535,8 @@
   }
   // what comes next: now and then a rare moment (about 1 in 50), otherwise the shuffled bag
   function pickNext(prefer) {
+    // in the theater, most of the time it's back to the movie (with other moments in between)
+    if (setting && setting.id === 'theater' && !prefer && BYID[MOVIE.id] && lastActId !== MOVIE.id && Math.random() < 0.6) return BYID[MOVIE.id];
     var rares = ACTS.filter(function (a) { return a.rare && fits(a) && a.id !== lastActId && a.id !== mem.lastRare; });
     if (rares.length && (Math.random() < 1 / 50 || forceRare)) { forceRare = false; var r = rares[Math.floor(Math.random() * rares.length)]; mem.lastRare = r.id; persist(); return r; }
     return takeFromBag(prefer);
@@ -526,14 +653,14 @@
     if (outgoing) { outgoing.a -= dt / 450; if (outgoing.a <= 0) outgoing = null; }
 
     if (mode === 'act' && cur) {
-      if (!frozen) { cur.prevT = cur.t; cur.t += sdt; }
+      if (!frozen) { cur.prevT = cur.t; cur.t = Math.min(cur.t + sdt, cur.act.dur); if (cur.t >= cur.act.dur) cur.dwell = (cur.dwell || 0) + dt; }
       syncA(A); A.t = cur.t; A.prevT = frozen ? cur.t : cur.prevT; A.dur = cur.act.dur; A.k = clamp(cur.t / cur.act.dur, 0, 1); A.probe = false; A.fired = cur.fired;
       try { D = frameDogs(cur.act, A); } catch (e) { cur.act.broken = true; stats.errors++; if (window.console) console.warn('pal cam: ' + cur.act.id, e); recover('error'); return step(0); }
       cur.lastD = D;
       if (cur.act.punch && cur.t >= cur.act.punch[0] && !trick && capPunch.textContent !== cur.act.punch[1]) capPunch.textContent = cur.act.punch[1]; // a trick's name keeps the line while it plays
       if (!cur.counted && cur.t >= cur.act.dur * 0.55) { cur.counted = true; if (!cur.act.interlude) countSeen(cur.act); }
-      if (cur.t >= cur.act.dur) { finishAct(); return step(0); }
-      if (cur.t > cur.act.dur + 2500) { recover('overtime'); return step(0); } // watchdog (belt and braces)
+      if (cur.t >= cur.act.dur && (cur.dwell || 0) >= (cur.act.interlude ? DWELL * 0.5 : DWELL)) { finishAct(); return step(0); } // a little rest, then on to the next
+      if ((cur.dwell || 0) > DWELL + 2500) { recover('overtime'); return step(0); } // watchdog (belt and braces)
     } else if (trav) {
       if (!frozen) trav.t += sdt;
       D = travelDogs(trav);
@@ -556,7 +683,7 @@
 
     idle(D, dt);
     smooth(D, dt);
-    stepParts(dt);
+    stepParts(dt * PACE);
     shake = Math.max(0, shake - dt * 0.02);
   }
 
@@ -652,7 +779,7 @@
       r.rot += angDiff(r.rot, d.rot) * kx; if (Math.abs(r.rot) > Math.PI * 2) r.rot = r.rot % (Math.PI * 2);
       r.face += (d.face - r.face) * kf; r.sx += (d.sx - r.sx) * ks; r.sy += (d.sy - r.sy) * ks; r.scale += (d.scale - r.scale) * ka;
       r.alpha += (d.alpha - r.alpha) * ka; r.tilt += (d.tilt - r.tilt) * kx; r.dy += (d.dy - r.dy) * ka; r.ear = d.ear;
-      r.wagS += (d.wag - r.wagS) * ex(200); r.wph += dt * 0.0105 * r.wagS * (RM ? 0.6 : 1);
+      r.wagS += (d.wag - r.wagS) * ex(200); r.wph += dt * 0.0105 * r.wagS * (RM ? 0.6 : 1) * PACE;
       if (d.pose !== r.pose) { r.popT = clock; r.pose = d.pose; }
       // legs follow the ground covered, never a clock, and settle when she stops
       var moved = Math.abs(r.x - ox) + Math.abs(r.lift - ol) * 0.25;
@@ -720,20 +847,28 @@
     var key = CW + 'x' + CH + '@' + DPR + setting.id + Math.round(hour * 12);
     if (key === bgKey && bg) return; bgKey = key;
     bg = bg || document.createElement('canvas'); bg.width = cv.width; bg.height = cv.height;
-    var b = bg.getContext('2d'), env = envBox(), sky = skyAt(hour);
-    b.setTransform(DPR * K, 0, 0, DPR * K, DPR * OX, DPR * OY);
+    paintBg(bg.getContext('2d'), setting, hour, bg.width, bg.height, DPR * K, DPR * OX, DPR * OY, RM, null);
+  }
+  // paints a setting (sky, the place, the night tint, then anything that glows) into a 2D context of pw x ph
+  // pixels, where one stage unit is s pixels and the stage's origin sits at (ox, oy). Shared by the cam and by
+  // paintScene below (the Frequency Buddies player and the theater screen).
+  function paintBg(b, st, hr, pw, ph, s, ox, oy, reduced, opt) {
+    var sky = skyAt(hr);
+    var env = { x0: -ox / s - 4, x1: (pw - ox) / s + 4, y0: -oy / s - 4, y1: (ph - oy) / s + 4, dark: clamp(1 - sky.light * 1.6, 0, 1), phase: phaseOf(hr), reduced: reduced };
+    if (opt) { for (var ok in opt) if (Object.prototype.hasOwnProperty.call(opt, ok) && !(ok in env)) env[ok] = opt[ok]; }
+    b.setTransform(s, 0, 0, s, ox, oy);
     var gr = b.createLinearGradient(0, env.y0, 0, G); gr.addColorStop(0, sky.top); gr.addColorStop(1, sky.bot);
     b.fillStyle = gr; b.fillRect(env.x0, env.y0, env.x1 - env.x0, env.y1 - env.y0);
-    if (setting.sky) { try { setting.sky(b, env, sky); } catch (e) { stats.errors++; } }
+    if (st.sky) { try { st.sky(b, env, sky); } catch (e) { stats.errors++; } }
     else {
     // stars and the moon at night, the sun by day, where the clock says they'd be
     if (env.dark > 0.1) { for (var i = 0; i < 70; i++) { var sx = env.x0 + rnd(i) * (env.x1 - env.x0), sy = env.y0 + rnd(i + 500) * (G - 70 - env.y0); U.circle(b, sx, sy, (i % 5 === 0 ? 1.3 : 0.8), 'rgba(255,250,230,' + (env.dark * (0.45 + (i % 3) * 0.2)).toFixed(2) + ')'); } }
-    var h = hour, sunP = (h - 5.8) / (20.2 - 5.8);
-    if (sunP > 0 && sunP < 1) { var sx2 = mix(env.x0 + 30, env.x1 - 30, sunP), sy2 = G - 50 - Math.sin(sunP * Math.PI) * 170;
+    var h = hr, sunP = (h - 5.8) / (20.2 - 5.8);
+    if (sunP > 0 && sunP < 1 && !(opt && opt.noSun)) { var sx2 = mix(env.x0 + 30, env.x1 - 30, sunP), sy2 = G - 50 - Math.sin(sunP * Math.PI) * 170;
       var sg = b.createRadialGradient(sx2, sy2, 4, sx2, sy2, 44); sg.addColorStop(0, 'rgba(255,248,210,.9)'); sg.addColorStop(1, 'rgba(255,240,190,0)'); b.fillStyle = sg; b.fillRect(sx2 - 44, sy2 - 44, 88, 88);
       U.circle(b, sx2, sy2, 15, sunP < 0.12 || sunP > 0.86 ? '#FFC98A' : '#FFE68A'); }
     var mh = h < 12 ? h + 24 : h, moonP = (mh - 19.5) / (30.5 - 19.5);
-    if (moonP > 0 && moonP < 1) { var mx = mix(env.x0 + 40, env.x1 - 40, moonP), my = G - 60 - Math.sin(moonP * Math.PI) * 160;
+    if (moonP > 0 && moonP < 1 && !(opt && opt.noMoon)) { var mx = mix(env.x0 + 40, env.x1 - 40, moonP), my = G - 60 - Math.sin(moonP * Math.PI) * 160;
       U.circle(b, mx, my, 20, 'rgba(255,250,220,.12)');
       // tonight's real phase, worked out the same way as the Night Garden's moon (0 new, 0.5 full)
       var syn = 29.530588853, age = ((Date.now() - Date.UTC(2000, 0, 6, 18, 14)) / 864e5 % syn + syn) % syn / syn, lit = age <= 0.5 ? age * 2 : (1 - age) * 2;
@@ -741,18 +876,26 @@
       b.fillStyle = sky.top; b.globalAlpha = 0.92; b.beginPath(); b.arc(mx + (age < 0.5 ? -1 : 1) * 12 * lit * 2, my, 12.3, 0, Math.PI * 2); b.fill(); b.restore(); }
     }
     // the setting, then dimmed for the hour, then anything that glows
-    var lay = document.createElement('canvas'); lay.width = bg.width; lay.height = bg.height; var l = lay.getContext('2d');
-    l.setTransform(DPR * K, 0, 0, DPR * K, DPR * OX, DPR * OY); env.dark = clamp(1 - sky.light * 1.6, 0, 1);
-    try { setting.draw(l, env); } catch (e) { stats.errors++; }
-    var warm = phaseOf(hour) === 'golden hour' || phaseOf(hour) === 'dawn';
+    var lay = document.createElement('canvas'); lay.width = pw; lay.height = ph; var l = lay.getContext('2d');
+    l.setTransform(s, 0, 0, s, ox, oy);
+    try { st.draw(l, env); } catch (e) { stats.errors++; }
+    var warm = phaseOf(hr) === 'golden hour' || phaseOf(hr) === 'dawn';
     l.setTransform(1, 0, 0, 1, 0, 0); l.globalCompositeOperation = 'source-atop';
-    var dim = setting.indoor || setting.dream ? 0.25 : 0.55; // rooms have their lamps on; dreams keep their own light
+    var dim = st.indoor || st.dream ? 0.25 : 0.55; // rooms have their lamps on; dreams keep their own light
     if (env.dark > 0) { l.fillStyle = 'rgba(22,24,64,' + (env.dark * dim).toFixed(3) + ')'; l.fillRect(0, 0, lay.width, lay.height); }
     if (warm) { l.fillStyle = 'rgba(255,170,90,.12)'; l.fillRect(0, 0, lay.width, lay.height); }
     b.setTransform(1, 0, 0, 1, 0, 0); b.drawImage(lay, 0, 0);
-    b.setTransform(DPR * K, 0, 0, DPR * K, DPR * OX, DPR * OY);
-    if (setting.lights) try { setting.lights(b, env); } catch (e) { stats.errors++; }
+    b.setTransform(s, 0, 0, s, ox, oy);
+    if (st.lights) try { st.lights(b, env); } catch (e) { stats.errors++; }
+    return env;
   }
+  // the stage geometry for a canvas of w x h pixels, laid out exactly the way the cam lays itself out
+  function geoFor(w, h, o) {
+    o = o || {};
+    var lw = clamp(w / h * LH, o.lwMin || LW_MIN, o.lwMax || LW_MAX), k = Math.min(w / lw, h / LH), ox = (w - lw * k) / 2, oy = (h - LH * k) * (o.oyRatio == null ? 0.62 : o.oyRatio);
+    return { LW: lw, LH: LH, G: G, k: k, ox: ox, oy: oy, x0: -ox / k, x1: (w - ox) / k, y0: -oy / k, y1: (h - oy) / k };
+  }
+  function settingById(id) { for (var i = 0; i < SETTINGS.length; i++) if (SETTINGS[i].id === id) return SETTINGS[i]; return null; }
   function ambientStep(dt) {
     // drifting clouds by day, fireflies after dark, snow on the hill, leaves in autumn places
     var env = envBox(), dark = isDark(hour), want = [];
@@ -824,7 +967,7 @@
     if (frames.length < 20000) frames.push(dt);
     dt = clamp(dt, 0, 50); // after a hiccup or a tab switch nothing jumps
     if (tuning) { clock += dt; drawTuning(); return; }
-    ambientStep(dt);
+    ambientStep(dt * PACE);
     step(dt);
     draw();
     if (SND()) SND().tick(dt, true);
@@ -835,28 +978,28 @@
   // ---------- sounds: soft, synthesized dog noises (pals-cam-sounds.js, fetched the first time the cam opens) ----------
   function SND() { return window.TOLPalsCamSounds || null; }
   function MUS() { return window.TOLPalsCamMusic || null; }
-  var musP = null;
+  var musP = null, quietHold = false;
   var sndP = null;
-  function soundOn() { try { return localStorage.getItem('tol-palcam-sound') !== 'off'; } catch (e) { return true; } }
+  function soundOn() { if (quietHold) return false; try { return localStorage.getItem('tol-palcam-sound') !== 'off'; } catch (e) { return true; } }
   function primeSound() {
     // made inside the tap that opens the cam, so the browser lets it play
     var AC = window.AudioContext || window.webkitAudioContext;
     if (AC && soundOn()) { try { if (!window.__pcAudio) window.__pcAudio = new AC(); if (window.__pcAudio.state === 'suspended') window.__pcAudio.resume(); } catch (e) {} }
     if (!musP && !MUS()) musP = new Promise(function (ok) { var sc = document.createElement('script'); sc.src = '/assets/js/pals-cam-music.js'; sc.onload = sc.onerror = function () { ok(); syncMusBtn(); if (isOpen && MUS() && setting) MUS().scene(setting.id); }; document.head.appendChild(sc); });
-    if (!sndP && !SND()) sndP = new Promise(function (ok) { var sc = document.createElement('script'); sc.src = '/assets/js/pals-cam-sounds.js'; sc.onload = sc.onerror = function () { ok(); syncSndBtn(); }; document.head.appendChild(sc); });
+    if (!sndP && !SND()) sndP = new Promise(function (ok) { var sc = document.createElement('script'); sc.src = '/assets/js/pals-cam-sounds.js'; sc.onload = sc.onerror = function () { if (SND() && SND().hold) SND().hold(quietHold); ok(); syncSndBtn(); }; document.head.appendChild(sc); });
     syncSndBtn();
   }
   function syncMusBtn() {
     var b = ov && ov.querySelector('.pc-mus'); if (!b) return;
     var on = MUS() ? MUS().on() : (function () { try { return localStorage.getItem('tol-palcam-music') === 'on'; } catch (e) { return false; } })();
-    b.setAttribute('aria-pressed', on ? 'true' : 'false'); b.innerHTML = '🎵<span> Music ' + (on ? 'on' : 'off') + '</span>';
+    b.setAttribute('aria-pressed', on ? 'true' : 'false'); b.innerHTML = '🎵<span class="pc-lbl"> Music</span> <span class="pc-st">' + (on ? 'On' : 'Off') + '</span>';
     b.setAttribute('aria-label', on ? 'Music is on. Turn the background music off' : 'Music is off. Turn on gentle background music');
     b.title = MUS() && !MUS().has(setting && setting.id) ? 'This scene is quiet for now; more music is on the way' : '';
   }
   function syncSndBtn() {
     var b = ov && ov.querySelector('.pc-snd'); if (!b) return;
     var on = SND() ? SND().on() : soundOn();
-    b.setAttribute('aria-pressed', on ? 'true' : 'false'); b.innerHTML = (on ? '🔊' : '🔈') + '<span> Sound ' + (on ? 'on' : 'off') + '</span>';
+    b.setAttribute('aria-pressed', on ? 'true' : 'false'); b.innerHTML = (on ? '🔊' : '🔇') + '<span class="pc-lbl"> Sound</span> <span class="pc-st">' + (on ? 'On' : 'Off') + '</span>';
     b.setAttribute('aria-label', on ? 'Sound is on. Turn the pups’ sounds off' : 'Sound is off. Turn the pups’ sounds on');
   }
 
@@ -878,7 +1021,7 @@
     '@keyframes pcDot{50%{opacity:.35}}' +
     '.pc-ov{position:fixed;inset:0;z-index:10000;display:flex;align-items:stretch;justify-content:center;background:#4A3F63;padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);box-sizing:border-box;overscroll-behavior:contain}' +
     '.pc-ov[hidden]{display:none}' +
-    '.pc-tr8{display:flex;align-items:center;gap:.4rem;flex:none}.pc-snd,.pc-mus{min-height:44px;padding:.35rem .75rem;border-radius:999px;border:1px solid #E6D6EE;background:#fff;color:#3C3350;font:600 .9rem Lora,Georgia,serif;cursor:pointer;white-space:nowrap}.pc-snd:focus-visible,.pc-mus:focus-visible{outline:3px solid #7C6BB0;outline-offset:2px}@media (max-width:420px){.pc-snd span,.pc-mus span{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}}' +
+    '.pc-tr8{display:flex;align-items:center;gap:.4rem;flex:none}.pc-snd,.pc-mus{min-height:44px;padding:.35rem .75rem;border-radius:999px;border:1px solid #E6D6EE;background:#fff;color:#3C3350;font:600 .9rem Lora,Georgia,serif;cursor:pointer;white-space:nowrap}.pc-snd:focus-visible,.pc-mus:focus-visible{outline:3px solid #7C6BB0;outline-offset:2px}@media (max-width:420px){.pc-snd .pc-lbl,.pc-mus .pc-lbl{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}}' +
     '.pc-tvl{flex:none;margin:0;text-align:center;font-size:.88rem}.pc-tvl a{color:#5B4A86}.pc-ov.is-tv .pc-tvl{display:none}' +
     '.pc-box{display:flex;flex-direction:column;width:100%;max-width:1000px;height:100%;background:#FFFBF4;color:#3C3350;box-sizing:border-box;padding:.6rem .7rem .7rem;gap:.5rem;overflow:hidden;font-family:Lora,Georgia,serif}' +
     '@media (max-width:759px){.pc-box{justify-content:center}}' +
@@ -932,6 +1075,13 @@
     '@media (prefers-reduced-motion: reduce){.pc-launch .pc-dot,.pc-rec i{animation:none}.pc-badge.is-pop,.pc-tally b.is-pop{animation:none}}' +
     'html.tol-still .pc-launch .pc-dot,html.tol-still .pc-rec i,html.tol-still .pc-badge.is-pop,html.tol-still .pc-tally b.is-pop{animation:none}' +
     'html.pc-lock,html.pc-lock body{overflow:hidden}' +
+    // the friendly "sound is on" notice (the first few visits), and a soft glow on the Sound button while it shows
+    '.pc-snote{flex:none;display:flex;align-items:center;justify-content:space-between;gap:.5rem .8rem;flex-wrap:wrap;margin:0;padding:.5rem .75rem;border-radius:16px;background:#FFF4D9;border:1px solid #F0D680;color:#3C3350;font-size:.9rem;line-height:1.35}' +
+    '.pc-snote[hidden]{display:none}.pc-snote p{margin:0;flex:1 1 16rem}.pc-snote-b{display:flex;gap:.4rem}' +
+    '.pc-snote button{min-height:44px;padding:.3rem .8rem;border-radius:999px;border:1px solid #E6D6EE;background:#fff;color:#3C3350;font:600 .88rem Lora,Georgia,serif;cursor:pointer}' +
+    '.pc-snote button.pc-snote-ok{background:#3C3350;border-color:#3C3350;color:#FFF8EE}.pc-snote button:focus-visible{outline:3px solid #7C6BB0;outline-offset:2px}' +
+    '.pc-snd.pc-glow{box-shadow:0 0 0 3px #F6CB4C;animation:pcGlow 1.6s ease-in-out 3}@keyframes pcGlow{50%{box-shadow:0 0 0 6px rgba(246,203,76,.45)}}' +
+    '@media (prefers-reduced-motion: reduce){.pc-snd.pc-glow{animation:none}}html.tol-still .pc-snd.pc-glow{animation:none}' +
     // the page underneath is fully covered, so it stops painting while the cam is open (smoother frames)
     'html.pc-lock body > :not(.pc-ov){visibility:hidden !important}';
 
@@ -955,8 +1105,9 @@
     ov.innerHTML =
       '<div class="pc-box">' +
         '<div class="pc-top"><div><p class="pc-k" id="pc-where">Pal cam</p><h2 id="pc-h">Checking in on Tidbit &amp; Sugarfoot</h2></div>' +
-        '<div class="pc-tr8"><button type="button" class="pc-mus" aria-pressed="false">🎵<span> Music off</span></button><button type="button" class="pc-snd" aria-pressed="true">🔊<span> Sound on</span></button>' +
+        '<div class="pc-tr8"><button type="button" class="pc-mus" aria-pressed="false">🎵<span class="pc-lbl"> Music</span> <span class="pc-st">Off</span></button><button type="button" class="pc-snd" aria-pressed="true">🔊<span class="pc-lbl"> Sound</span> <span class="pc-st">On</span></button>' +
         '<button type="button" class="pc-x" aria-label="Close the pal cam"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>Close</button></div></div>' +
+        '<div class="pc-snote" role="status" hidden><p>🔊 <b>Sound is on:</b> soft barks and little sounds. Tap <b>Sound</b> to turn it off anytime.</p><div class="pc-snote-b"><button type="button" class="pc-snote-off">Turn sound off</button><button type="button" class="pc-snote-ok">Got it</button></div></div>' +
         '<div class="pc-stage"><canvas class="pc-cv" role="img" aria-label="Tidbit and Sugarfoot playing"></canvas><span class="pc-rec" aria-hidden="true"><i></i>PAL CAM</span><span class="pc-badge" hidden></span></div>' +
         '<p class="pc-cap" id="pc-cap"><span class="pc-main"></span><span class="pc-punch"></span></p>' +
         '<div class="pc-btns"><button type="button" class="pc-b is-main pc-next">Next!</button><button type="button" class="pc-b is-sur pc-sur">Surprise me</button><button type="button" class="pc-b pc-pause" aria-pressed="false">Pause</button></div>' +
@@ -972,7 +1123,9 @@
     badge = ov.querySelector('.pc-badge'); tallyN = ov.querySelector('.pc-n'); tallyTot = ov.querySelector('.pc-tot'); chips = ov.querySelector('.pc-chips'); btnPause = ov.querySelector('.pc-pause');
     ov.querySelector('.pc-x').addEventListener('click', close);
     ov.querySelector('.pc-mus').addEventListener('click', function () { primeSound(); var go = function () { if (MUS()) { MUS().toggle(); if (setting) MUS().scene(setting.id); } syncMusBtn(); }; if (MUS()) go(); else if (musP) musP.then(go); });
-    ov.querySelector('.pc-snd').addEventListener('click', function () { primeSound(); if (SND()) SND().toggle(); else { try { localStorage.setItem('tol-palcam-sound', soundOn() ? 'off' : 'on'); } catch (e) {} } syncSndBtn(); });
+    ov.querySelector('.pc-snd').addEventListener('click', function () { quietHold = false; primeSound(); if (SND()) SND().toggle(); else { try { localStorage.setItem('tol-palcam-sound', soundOn() ? 'off' : 'on'); } catch (e) {} } syncSndBtn(); hideNote(false); });
+    ov.querySelector('.pc-snote-ok').addEventListener('click', function () { hideNote(true); });
+    ov.querySelector('.pc-snote-off').addEventListener('click', function () { primeSound(); if (SND()) SND().set(false); else { try { localStorage.setItem('tol-palcam-sound', 'off'); } catch (e) {} } syncSndBtn(); hideNote(true); });
     ov.querySelector('.pc-next').addEventListener('click', function () { next(false); });
     ov.querySelector('.pc-sur').addEventListener('click', function () { next(true); });
     btnPause.addEventListener('click', function () { setPaused(!paused); });
@@ -989,7 +1142,7 @@
     // while the cam is open, keys belong to it (so the game underneath never moves), Esc closes, Tab stays inside
     window.addEventListener('keydown', function (e) {
       if (!isOpen) return;
-      if (e.key === 'Escape') { e.preventDefault(); e.stopPropagation(); close(); return; }
+      if (e.key === 'Escape') { e.preventDefault(); e.stopPropagation(); if (noteOpen()) hideNote(true); else close(); return; }
       if (e.key === 'Tab') {
         var f = Array.prototype.filter.call(ov.querySelectorAll('button, summary, [href], [tabindex]:not([tabindex="-1"])'), function (x) { return !x.disabled && x.offsetParent !== null; });
         if (f.length) { var i = f.indexOf(document.activeElement); if (e.shiftKey && (i <= 0)) { e.preventDefault(); f[f.length - 1].focus(); } else if (!e.shiftKey && (i === f.length - 1 || i < 0)) { e.preventDefault(); f[0].focus(); } }
@@ -1025,6 +1178,7 @@
   function loadActs() {
     var src = window.TOLPalsCamActs || { acts: [], combos: [] };
     ACTS = (src.acts || []).filter(function (a) { return a && a.id && typeof a.run === 'function'; });
+    if (!ACTS.some(function (a) { return a.id === MOVIE.id; })) ACTS.push(MOVIE);
     BYID = {}; ACTS.forEach(function (a) { a.dur = a.dur || 7000; BYID[a.id] = a; });
     COMBOS = {}; (src.combos || []).forEach(function (c) { if (BYID[c[0]] && BYID[c[1]]) COMBOS[c[0]] = c[1]; });
     INTER = (src.interludes || []).filter(function (a) { return a && a.id && typeof a.run === 'function'; });
@@ -1048,6 +1202,24 @@
     g.setTransform(1, 0, 0, 1, 0, 0); var gr = g.createLinearGradient(0, 0, 0, cv.height); gr.addColorStop(0, '#E9E2FB'); gr.addColorStop(1, '#FBE6F0'); g.fillStyle = gr; g.fillRect(0, 0, cv.width, cv.height);
     g.setTransform(DPR, 0, 0, DPR, 0, 0); var n = Math.floor(clock / 300) % 4; U.text(g, 'Tuning in' + '...'.slice(0, n), CW / 2, CH / 2, 16, '#5B4A86', '600');
   }
+  // ---------- "Sound is on" notice: the first 3 times the cam opens on this device, never when sound is off ----------
+  var NOTE_KEY = 'tol-palcam-soundnote';
+  function quietOn() { try { return !!(window.TOLQuiet && window.TOLQuiet.on && window.TOLQuiet.on()); } catch (e) { return false; } }
+  function noteOpen() { var n = ov && ov.querySelector('.pc-snote'); return !!(n && !n.hidden); }
+  function hideNote(focus) {
+    var n = ov && ov.querySelector('.pc-snote'); if (!n || n.hidden) return;
+    n.hidden = true; var sb = ov.querySelector('.pc-snd'); if (sb) { sb.classList.remove('pc-glow'); if (focus) sb.focus(); }
+  }
+  function maybeNote() {
+    var n = ov.querySelector('.pc-snote'), sb = ov.querySelector('.pc-snd'), count = 0;
+    n.hidden = true; if (sb) sb.classList.remove('pc-glow');
+    if (!soundNow()) return;
+    try { count = +(localStorage.getItem(NOTE_KEY) || 0) || 0; } catch (e) { count = 0; }
+    if (count >= 3) return;
+    try { localStorage.setItem(NOTE_KEY, String(count + 1)); } catch (e) {}
+    n.hidden = false; if (sb) sb.classList.add('pc-glow');
+  }
+  function soundNow() { return SND() ? SND().on() : soundOn() && !quietOn(); }
   function open(opts) {
     opts = opts || {};
     if (!window.TOLPups) return;
@@ -1056,6 +1228,8 @@
     build();
     if (isOpen) return;
     openerEl = opts.opener || document.activeElement;
+    quietHold = quietOn(); if (SND() && SND().hold) SND().hold(quietHold);
+    if (opts.noNote) { var nn = ov.querySelector('.pc-snote'); nn.hidden = true; } else maybeNote();
     primeSound();
     ov.hidden = false; isOpen = true; document.documentElement.classList.add('pc-lock'); resize();
     setPaused(false); ov.querySelector('.pc-x').focus();
@@ -1081,6 +1255,7 @@
     R[0].x = cx() - span() + 4; R[1].x = cx() + span() - 4;
     var first = opts.act && BYID[opts.act] ? BYID[opts.act] : null;
     if (first) removeFromBag(opts.act);
+    if (!first && setting.id === 'theater' && BYID[MOVIE.id]) first = BYID[MOVIE.id]; // the theater opens on the movie
     // sometimes the story continues where it left off, or the season says hello first
     if (!first && !opts.noStory && Math.random() < 0.35) { first = nextStoryPart(); if (first) storyPlayed = stats.acts; }
     if (!first && EVENT && Math.random() < 0.35) { var evs = ACTS.filter(function (a) { return a.event && fits(a); }); if (evs.length) first = evs[Math.floor(Math.random() * evs.length)]; }
@@ -1116,7 +1291,7 @@
     trickBusy: function () { return !!trick; }, trickLog: function () { return trickLog.slice(); }, caption: function () { return capMain ? capMain.textContent + ' | ' + capPunch.textContent : ''; },
     tricks: function () { if (!ACTS.length) loadActs(); return TRICKS.map(function (l) { return l.map(function (t) { return { id: t.id, name: t.name }; }); }); },
     facts: function () { return shownFacts.map(function (l) { return l.map(function (f) { return f.k; }); }); }, factCounts: function () { if (!ACTS.length) loadActs(); return [FACTS[0].length, FACTS[1].length]; },
-    isOpen: function () { return isOpen; },
+    isOpen: function () { return isOpen; }, soundNote: function () { return noteOpen(); }, hideSoundNote: function () { hideNote(false); },
     frames: function () { return frames.slice(); }, resetFrames: function () { frames.length = 0; },
     state: function () {
       var r = cv ? cv.getBoundingClientRect() : { left: 0, top: 0 };
@@ -1134,6 +1309,20 @@
     acts: function () { if (!ACTS.length) loadActs(); return ACTS.map(function (a) { return { id: a.id, name: a.name, kind: a.kind, time: a.time || 'any', where: a.where || null, event: a.event || null, story: a.story || null, rare: !!a.rare }; }); },
     interludes: function () { if (!ACTS.length) loadActs(); return INTER.map(function (a) { return a.id; }); },
     settings: function () { return SETTINGS.map(function (s) { return s.id; }); },
+    // Read-only painting API (used by the Frequency Buddies player, buddies-player.js):
+    // paintScene(ctx, id, w, h, hour, opts) paints setting `id` into ctx (w x h pixels) and returns the stage
+    // geometry { LW, LH, G, k, ox, oy, x0, x1, y0, y1, dark, env }: draw on the stage with
+    // ctx.setTransform(k, 0, 0, k, ox, oy). opts: lwMin, lwMax, oyRatio (layout), env: extra fields for the
+    // painter (e.g. { bare: true } leaves the treehouse off its tree), reduced. Returns null for an unknown id.
+    paintScene: function (ctx, id, w, h, hour, opts) {
+      var st = settingById(id); if (!st || !ctx) return null; opts = opts || {};
+      var geo = geoFor(w, h, opts), env = paintBg(ctx, st, hour == null ? 12 : +hour, w, h, geo.k, geo.ox, geo.oy, !!opts.reduced, opts.env || null);
+      geo.dark = env.dark; geo.env = env; return geo;
+    },
+    paintAmbient: function (ctx, id, env, t, layer) { var st = settingById(id); if (st && st.ambient) { try { st.ambient(ctx, env, t, layer); } catch (e) { /* a painter's hiccup never stops the show */ } } },
+    sceneInfo: function (id) { var st = settingById(id); return st ? { id: st.id, name: st.name, indoor: !!st.indoor, water: !!st.water, snow: !!st.snow, dream: !!st.dream, leaves: !!st.leaves, fireflies: !!st.fireflies, ambient: !!st.ambient } : null; },
+    skyAt: function (h) { return skyAt(h); },
+    packsReady: function () { return packsDone; },
     loadPacks: function () { return loadPacks().then(function () { return ACTS.length; }); },
     stories: function () { return STORIES.map(function (a) { return { id: a.id, parts: a.parts.slice(), done: (mem.story || {})[a.id] || 0 }; }); },
     event: function () { return EVENT; },
