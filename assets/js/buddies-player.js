@@ -994,8 +994,8 @@
       if (dots) { var n = Math.floor(S.t * 3) % 3; g.fillText(['•  ·  ·', '·  •  ·', '·  ·  •'][S.reduced ? 0 : n], best.x + bw / 2, best.y + bh / 2); }
       else {
         // words light up as they're spoken, so the text keeps pace with the voice
-        var fr = S.spokenFrac(), all2 = lines.join(' ').split(' '), wts = all2.map(function (w) { return w.length + 1.5 + (/[,.;:!?…—]$/.test(w) ? 3 : 0); }), tot = wts.reduce(function (a, x) { return a + x; }, 0), acc = 0, lit = [];
-        for (var wi = 0; wi < all2.length; wi++) { lit.push(fr >= 1 || (acc + wts[wi] * 0.35) / tot <= fr); acc += wts[wi]; }
+        var all2 = lines.join(' ').split(' '), nl = S.lit && S.lit.text === b.text ? S.lit.n : all2.length, lit = [];
+        for (var wi = 0; wi < all2.length; wi++) lit.push(wi < nl);
         var ink = self ? '#5A4F70' : '#3C3350', wn = 0, top = best.y + padY + chipH;
         lines.forEach(function (l, k) {
           var ws = l.split(' '), sp = g.measureText(' ').width, lw = g.measureText(l).width, x = best.x + bw / 2 - lw / 2, y = top + lh * (k + 0.5);
@@ -1169,7 +1169,7 @@
     }
     function done() {
       var fb = F.beats[D.i]; if (!fb) return true; var b = fb.b;
-      if (kindOf(b) === 'say' && !D.shown && D.u > 1.2) { D.shown = true; stage.showNow(); call('onCaption', b.say, b.text, b); } // the voice is slow to start: show the words anyway
+      if (kindOf(b) === 'say' && !D.shown && D.u > 3) { D.shown = true; stage.showNow(); call('onCaption', b.say, b.text, b); } // the voice is slow to start: show the words anyway
       if (kindOf(b) === 'say' && D.voice) {
         if (D.voiceEnd != null) {
           var nx = F.beats[D.i + 1], nxb = nx && nx.b, gap = Math.max(0.3, holdOf(b) * 0.55);
@@ -1359,8 +1359,10 @@
     u.pitch = clamp(P.pitch || 1, 0.1, 2); u.rate = clamp(P.rate || 1, 0.5, 1.6); u.volume = 1;
     if (who === 'narrator' && b.mood === 'excited') u.rate = 1.0;
     var fired = false; function end(ok) { if (fired || tok !== VO.token) return; fired = true; cb(ok); }
-    u.onstart = function () { if (tok === VO.token && cb.start) cb.start(0, sayTime(b) * 1.15); };
-    u.onend = function () { end(true); }; u.onerror = function (e) { end(e && (e.error === 'interrupted' || e.error === 'canceled') ? true : false); };
+    var vc = VO.line = { key: ckey(b.say, b.text), t0: 0, dur: sayTime(b) * 1.15, ch: -1, done: false, text: text };
+    u.onstart = function () { vc.t0 = performance.now(); if (tok === VO.token && cb.start) cb.start(0, vc.dur); };
+    u.onboundary = function (e) { if (e && e.name !== 'sentence' && e.charIndex != null) vc.ch = e.charIndex; };
+    u.onend = function () { vc.done = true; end(true); }; u.onerror = function (e) { end(e && (e.error === 'interrupted' || e.error === 'canceled') ? true : false); };
     VO.cur = u; // held, so the browser doesn't lose it before it ends
     try { if (window.speechSynthesis.speaking || window.speechSynthesis.pending) window.speechSynthesis.cancel(); window.speechSynthesis.speak(u); } catch (e) { return false; }
     return true;
@@ -1416,6 +1418,25 @@
   }
   function clipHas(ep, b) { var m = CL.ready[ep]; return !!(m && m[ckey(b.say, b.text)]); }
   function clipPrefetch(ep, list, from, n) { for (var i = from, got = 0; i < list.length && got < n; i++) if (clipHas(ep, list[i])) { clipBuf(ep, ckey(list[i].say, list[i].text)); got++; } }
+  // how many words of this line have been spoken so far, from the audio itself (not the animation clock)
+  function wordsSpoken(b, n) {
+    var k = ckey(b.say, b.text), c = AU.ctx, cur = CL.cur;
+    if (cur && cur.key === k && c) {
+      if (cur.done) return n;
+      var t = c.currentTime - cur.at - (c.outputLatency || c.baseLatency || 0) + 0.04; // light a word just as it begins
+      if (t <= 0) return 0;
+      if (cur.words && cur.words.length === n) { var m = 0; while (m < n && cur.words[m] <= t) m++; return m; }
+      return Math.min(n, Math.floor(n * t / cur.dur) + 1);
+    }
+    var v = VO.line;
+    if (v && v.key === k) {
+      if (v.done) return n; if (!v.t0) return 0;
+      if (v.ch >= 0) { var before = v.text.slice(0, v.ch + 1).split(/\s+/).filter(Boolean).length; return Math.min(n, Math.max(1, before)); }
+      return Math.min(n, Math.floor(n * (performance.now() - v.t0) / 1000 / v.dur) + 1);
+    }
+    return -1; // not being spoken
+  }
+  B.wordsSpoken = wordsSpoken;
   function cstop() { CL.token++; if (CL.src) { try { CL.src.onended = null; CL.src.stop(); } catch (e) {} CL.src = null; } }
   function cspeak(ep, b, cb) {
     if (!clipHas(ep, b)) return false;
@@ -1430,7 +1451,10 @@
       if (fx) { var f = c.createBufferSource(); f.buffer = fx; f.connect(CL.gain); try { f.start(at); } catch (e) {} at += fx.duration + 0.12; }
       var s = c.createBufferSource(); s.buffer = buf; s.connect(CL.gain);
       if (cb.start) cb.start(at - c.currentTime, buf.duration);
-      s.onended = function () { if (tok !== CL.token) return; CL.src = null; cb(true); };
+      var wm = CL.ready[ep] && CL.ready[ep][ckey(b.say, b.text)];
+      CL.cur = { key: ckey(b.say, b.text), at: at, dur: buf.duration, words: wm && wm[1] || null, done: false };
+      var cur = CL.cur;
+      s.onended = function () { cur.done = true; if (tok !== CL.token) return; CL.src = null; cb(true); };
       CL.src = s; try { s.start(at); } catch (e) { cb(false); }
       if (AU.mus) { try { AU.mus.gain.setTargetAtTime(0.36, c.currentTime, 0.15); } catch (e) {} } // the music steps back while she talks
       var dur = buf.duration + (at - c.currentTime); clearTimeout(CL.duckT); CL.duckT = setTimeout(function () { if (AU.mus && AU.ctx) try { AU.mus.gain.setTargetAtTime(0.55, AU.ctx.currentTime, 0.6); } catch (e) {} }, dur * 1000 + 250);
@@ -1611,7 +1635,7 @@
       whoEl.textContent = nm + (nm && toNm ? ' · ' + toNm : ''); whoEl.className = 'fb-who' + (GUESTS[who] ? ' is-guest' : '');
       capEl.classList.toggle('is-self', to === 'self');
       lineEl.textContent = '';
-      P.capWords = []; P.capLit = -1;
+      P.capWords = []; P.capLit = -1; P.capB = who !== 'scene' ? b : null;
       String(text || '').split(/(\s+)/).forEach(function (w) {
         if (!w) return; if (/^\s+$/.test(w)) { lineEl.appendChild(document.createTextNode(w)); return; }
         var sp = document.createElement('span'); sp.textContent = w; lineEl.appendChild(sp); P.capWords.push(sp);
@@ -1623,9 +1647,9 @@
     // the caption keeps pace with the voice: spoken words are bright, the rest wait a little dimmer
     function capLight() {
       var ws = P.capWords || []; if (!ws.length) return;
-      var fr = P.capTimed && P.dir ? P.dir.voiceFrac() : 1, n = ws.length;
-      var wts = ws.map(function (sp) { var w = sp.textContent; return w.length + 1.5 + (/[,.;:!?…—]$/.test(w) ? 3 : 0); }), tot = wts.reduce(function (a, x) { return a + x; }, 0), acc = 0, lit = 0;
-      for (var i = 0; i < n; i++) { if (fr >= 1 || (acc + wts[i] * 0.35) / tot <= fr) lit = i + 1; acc += wts[i]; }
+      var n = ws.length, lit = n;
+      if (P.capTimed && P.capB) { lit = wordsSpoken(P.capB, n); if (lit < 0) lit = P.dir && P.dir.voiceFrac() < 1 ? 0 : n; }
+      if (P.stage) P.stage.lit = { text: P.capB ? String(P.capB.text || '') : '', n: lit };
       if (lit === P.capLit) return; P.capLit = lit;
       ws.forEach(function (sp, i) { sp.className = i < lit ? '' : 'fb-soon'; });
     }
