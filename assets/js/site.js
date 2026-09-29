@@ -507,6 +507,12 @@
       document.head.appendChild(ls);
     }
 
+    // "In short" bullets on the long pages, and "Show me only the steps" (in-short.js)
+    if (lmain && !busyPage() && current !== '/index.html' && !document.querySelector('meta[http-equiv="Content-Security-Policy"]') &&
+        (inDepth || /^\/library/.test(current) || (lmain.textContent || '').split(/\s+/).length > 1200) && !/^\/workpapers\//.test(current)) {
+      var isc = document.createElement('script'); isc.src = '/assets/js/in-short.js'; document.head.appendChild(isc);
+    }
+
     // playful learning layer: "Check yourself" moments, a learning trail and the quest map (learn-play.js)
     if (!body.hasAttribute('data-no-learnplay') && !document.querySelector('meta[http-equiv="Content-Security-Policy"]')) {
       var lp = document.createElement('script'); lp.src = '/assets/js/learn-play.js'; document.head.appendChild(lp);
