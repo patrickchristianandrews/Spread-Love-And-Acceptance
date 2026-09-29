@@ -12,6 +12,8 @@ The puzzles from before the banks grew stay first in each bank (bank.legacy). Af
   - Quiet Crossword: no two puzzles in a level share more than a few answers, no answer is used
     too often, and the same answer is clued in different words from puzzle to puzzle (clue_variants.py).
     Gentle crosswords are themed, from the Quiet Words themes (themes_bank.py) and clues.py.
+Quiet Crossword (xw, gentle) is now made by make_crosswords.py, with every clue checked; asking for it
+here hands over to that. After making Word Bloom banks, run make_bloom_dict.py and clean_bloom.py.
 Run from the repo root:  python3 tools/word-games/make_levels.py [bloom] [xw] [gentle] [lex]
 """
 import json
@@ -337,7 +339,7 @@ if __name__ == '__main__':
         bloom(rng)
     if 'lex' in which:
         bloom_lexicon()
-    if 'xw' in which:
-        crosswords(rng)
-    if 'gentle' in which:
-        gentle_crosswords(rng)
+    # Quiet Crossword is made by make_crosswords.py now, from checked answers and clues only
+    if 'xw' in which or 'gentle' in which:
+        import subprocess
+        subprocess.call([sys.executable, os.path.join(HERE, 'make_crosswords.py')] + [w for w in which if w in ('xw', 'gentle')])

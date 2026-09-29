@@ -7,7 +7,9 @@ newspaper-style clues.
 The puzzles from before the banks grew stay first (bank.legacy). New ones must not share more than a
 few answers with any other puzzle in the level, no answer is used too often, and the same answer is
 clued in different words from puzzle to puzzle (clue_variants.py).
-Run from the repo root:  python3 tools/word-games/make_newspaper.py [level ...]
+The banks are now made by make_crosswords.py, which uses the pattern makers and the filler here with
+checked answers and clues only (clue_check.py, good_clues.py). Running this file hands over to it.
+Run from the repo root:  python3 tools/word-games/make_crosswords.py np [level ...]
 """
 import json
 import os
@@ -331,4 +333,6 @@ def main():
 
 
 if __name__ == '__main__':
-    main()
+    # the checked build: answers and clues from good_clues.py only
+    import subprocess
+    sys.exit(subprocess.call([sys.executable, os.path.join(HERE, 'make_crosswords.py'), 'np'] + sys.argv[1:]))

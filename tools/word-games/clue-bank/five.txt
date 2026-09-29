@@ -1,0 +1,457 @@
+# Five-letter answers
+being: Existence | Creature | Living thing
+while: During | Although | Short time
+might: Power | Strength | Could
+times: Occasions | Moments | Eras
+later: Afterward | Subsequently | See you ___
+maybe: Perhaps | Possibly | Could be
+least: Smallest amount | Fewest | Minimum
+hours: Clock periods | Business ___ | Sixty-minute spans
+cause: Reason | Source | Make happen
+third: After second | One of three parts | Bronze-medal place
+quite: Rather | Fairly | Completely
+works: Functions | Operates | Creations
+bring: Carry along | Fetch | Take with you
+heard: Listened to | Caught, as a rumor | Picked up by ear
+month: About four weeks | Calendar page | May or June
+wants: Wishes | Desires | Longs for
+shows: Programs | Exhibits | Displays
+weeks: Seven-day spans | Calendar rows | Fortnight halves
+girls: Young ladies | Daughters | Lasses
+hands: Helpers | Clock pointers | Palms and fingers
+value: Worth | Price | Treasure
+chief: Leader | Main | Head
+terms: Words | Conditions | Semesters
+enjoy: Relish | Like | Savor
+staff: Team | Crew | Walking stick
+began: Started | Kicked off | Opened
+built: Constructed | Assembled | Put together
+daily: Every day | Each day | Newspaper
+parts: Pieces | Sections | Roles
+voice: Speech | Singing sound | Say
+build: Construct | Make | Assemble
+speak: Talk | Say | Utter
+write: Pen | Compose | Jot down
+album: Photo book | Record | Collection
+spent: Used up | Paid | Worn out
+store: Shop | Keep | Save
+sales: Bargain events | Discounts | Markdowns
+moved: Relocated | Touched | Shifted
+plans: Schemes | Blueprints | Arrangements
+loved: Adored | Cherished | Dear
+miles: Long distances | Road signs measure them | Odometer figures
+quick: Fast | Speedy | Rapid
+spend: Pay out | Use | Pass, as time
+coach: Trainer | Bus | Mentor
+claim: Assert | State | Demand
+goals: Aims | Targets | Points
+floor: Ground | Story | Level
+stock: Supply | Inventory | Broth
+older: Senior | More aged | Elder
+grand: Great | Big | Majestic
+fully: Completely | Entirely | Wholly
+rates: Speeds | Prices | Ranks
+stars: Night-sky twinklers | Celebrities | Lead actors
+types: Kinds | Sorts | Keys in
+twice: Two times | Doubly | Again
+count: Tally | Number | Add up
+scale: Weigher | Size | Climb
+views: Scenes | Opinions | Outlooks
+agent: Representative | Broker | Rep
+adult: Grown-up | Mature | Grown
+grade: Mark | Level | Score
+apart: Separate | Aside | Away
+fifth: After fourth | One of five | Quintet member
+proud: Pleased | Honored | Pleased as punch
+items: Things | Objects | Articles
+birth: Beginning | Arrival | Delivery
+prove: Show | Demonstrate | Confirm
+units: Pieces | Measures | Apartments
+funds: Money | Savings | Capital
+helps: Aids | Assists | Supports
+sites: Places | Locations | Web pages
+exist: Be | Live | Survive
+forms: Shapes | Papers | Styles
+links: Chains | Connections | Golf course
+plane: Jet | Airliner | Flat surface
+facts: Truths | Details | Data
+crowd: Throng | Mob | Audience
+fixed: Repaired | Mended | Set
+honor: Respect | Glory | Integrity
+noted: Famous | Observed | Jotted down
+banks: Shores | Money places | Tilts
+keeps: Holds | Retains | Saves
+shoes: Sneakers | Boots | Footwear
+actor: Performer | Star | Player
+urban: City | Metropolitan | Downtown
+leads: Guides | Heads | Clues
+mixed: Blended | Stirred | Assorted
+phase: Stage | Step | Moon shape
+truck: Pickup | Van | Big rig
+films: Movies | Pictures | Cinema
+giant: Huge | Massive | Colossal
+walls: Barriers | Sides | Partitions
+spoke: Talked | Said | Wheel part
+finds: Discoveries | Locates | Treasures
+talks: Chats | Speeches | Discussions
+birds: Robins and wrens | Feathered friends | Songsters
+prize: Award | Trophy | Reward
+rural: Country | Pastoral | Farm
+faces: Visages | Features | Looks
+folks: People | Family | Kin
+admit: Confess | Let in | Grant
+favor: Kindness | Good turn | Prefer
+bunch: Group | Bundle | Cluster
+fruit: Apple or pear | Produce | Harvest
+shift: Move | Change | Workday
+crown: Royal headwear | Top | Tiara
+rooms: Chambers | Spaces | Quarters
+panel: Board | Committee | Pane
+plate: Dish | Platter | Serving piece
+roads: Streets | Highways | Routes
+ships: Boats | Vessels | Liners
+cable: Wire | Cord | Line
+dates: Calendar days | Palm fruits | Outings
+doors: Entrances | Gates | Portals
+broad: Wide | Spacious | Vast
+motor: Engine | Drive | Machine
+solar: Of the sun | Sun-powered | Panel type
+brief: Short | Concise | Quick
+debut: First appearance | Premiere | Launch
+bills: Invoices | Money | Beaks
+quote: Cite | Repeat | Estimate
+trend: Fad | Fashion | Craze
+clubs: Groups | Societies | Golf sticks
+reply: Answer | Respond | Response
+audio: Sound | Hearing | Stereo
+chart: Graph | Map | Diagram
+occur: Happen | Take place | Arise
+files: Folders | Documents | Records
+bonus: Extra | Reward | Perk
+flash: Instant | Spark | Blink
+refer: Mention | Direct | Point
+minds: Brains | Intellects | Thinkers
+roles: Parts | Characters | Functions
+clock: Timepiece | Watch | Alarm
+comic: Funny | Humorous | Cartoon
+newly: Freshly | Just | Recently
+skill: Ability | Talent | Knack
+boost: Raise | Lift | Encourage
+hired: Employed | Engaged | Taken on
+foods: Dishes | Meals | Snacks
+delay: Wait | Stall | Postpone
+sheet: Page | Bed cover | Layer
+cares: Worries | Looks after | Concerns
+stops: Halts | Ends | Pauses
+medal: Award | Prize | Honor
+towns: Villages | Burgs | Hamlets
+angle: Corner | Slant | Point of view
+forum: Meeting | Discussion | Assembly
+rapid: Fast | Quick | Speedy
+sixth: After fifth | One of six | Place after fifth
+valid: Sound | Legitimate | Genuine
+vital: Essential | Crucial | Key
+gifts: Presents | Talents | Surprises
+races: Dashes | Contests | Sprints
+creek: Brook | Stream | Rivulet
+honey: Bee's sweet | Syrup | Sweetie
+ratio: Proportion | Rate | Fraction
+spell: Charm | Magic words | Short period
+daddy: Pop | Father | Dada
+drove: Steered | Motored | Herd
+glory: Splendor | Fame | Honor
+cents: Pennies | Coins | Change
+dozen: Twelve | Egg carton count | A baker's is thirteen
+fancy: Elegant | Ornate | Desire
+input: Contribution | Opinion | Feedback
+holes: Openings | Gaps | Pits
+flood: Deluge | Torrent | Overflow
+rally: Gather | Assemble | Recover
+shops: Stores | Boutiques | Outlets
+texts: Messages | Readings | Writings
+fleet: Group of ships | Swift | Quick on your feet
+shake: Jiggle | Wobble | Tremble
+boots: Shoes | Footwear | Galoshes
+jokes: Jests | Gags | Laughs
+rings: Circles | Bands | Calls
+spots: Dots | Places | Notices
+walks: Strolls | Rambles | Hikes
+slide: Chute | Glide | Slip
+gates: Doors | Entrances | Portals
+candy: Sweets | Treats | Lollipops
+dated: Old | Stale | Aged
+fifty: Half a hundred | Number of states | Gold anniversary
+quest: Search | Hunt | Mission
+sized: Measured | Scaled | Fitted
+scope: Range | Reach | Extent
+stays: Remains | Lingers | Visits
+brick: Block | Building block | Adobe
+mercy: Kindness | Compassion | Grace
+outer: Outside | External | Exterior
+venue: Place | Site | Location
+wages: Pay | Salary | Earnings
+boats: Vessels | Ships | Canoes
+gains: Profits | Earnings | Increases
+habit: Custom | Routine | Practice
+robot: Automaton | Android | Machine
+usage: Use | Custom | Practice
+tasks: Chores | Duties | Jobs
+canal: Channel | Waterway | Duct
+fluid: Liquid | Flowing | Smooth
+loads: Burdens | Cargoes | Heaps
+unity: Oneness | Harmony | Accord
+winds: Breezes | Gusts | Coils
+chips: Snacks | Crumbs | Nicks
+sorts: Kinds | Types | Organizes
+dealt: Handed out | Traded | Distributed
+forty: Four tens | Middle age | Number
+laser: Beam | Light | Pointer
+patch: Mend | Fix | Plot
+radar: Detector | Sensor | Scanner
+adopt: Take in | Embrace | Choose
+humor: Wit | Comedy | Funniness
+nerve: Courage | Guts | Boldness
+sandy: Gritty | Beachy | Tan
+trace: Track | Hint | Outline
+meals: Dinners | Lunches | Feasts
+suite: Set of rooms | Hotel room | Music piece
+verse: Poetry | Stanza | Rhyme
+knees: Lap parts | Leg bends
+couch: Sofa | Settee | Futon
+genre: Style | Type | Category
+lease: Rent | Contract | Hire
+react: Respond | Answer | Reply
+rocky: Stony | Rough | Craggy
+shade: Tint | Shadow | Hue
+teens: Youths | Adolescents | Young people
+vocal: Loud | Outspoken | Singing
+salad: Greens | Lettuce dish | Side dish
+awake: Alert | Up | Conscious
+curve: Bend | Arc | Twist
+hurry: Rush | Hasten | Speed
+organ: Keyboard instrument | Pipe ___ | Body part
+pearl: Gem from an oyster | Bead | Jewel
+farms: Ranches | Homesteads | Plantations
+flows: Streams | Currents | Runs
+lakes: Ponds | Lagoons | Waters
+alike: Similar | Identical | Same
+cabin: Cottage | Hut | Lodge
+eaten: Consumed | Devoured | Dined on
+haven: Shelter | Refuge | Harbor
+poems: Verses | Rhymes | Odes
+array: Arrangement | Display | Series
+cliff: Bluff | Crag | Precipice
+derby: Hat | Race | Contest
+tales: Stories | Yarns | Fables
+diary: Journal | Log | Daybook
+jeans: Denims | Pants | Blue ___
+meter: Measure | Gauge | Rhythm
+edges: Borders | Rims | Brinks
+flags: Banners | Pennants | Standards
+basin: Sink | Bowl | Valley
+chick: Baby bird | Hatchling | Fledgling
+merit: Worth | Value | Deserve
+micro: Tiny | Small | Minute
+wears: Has on | Sports | Dons
+beard: Whiskers | Stubble | Facial hair
+drain: Empty | Pipe | Sink hole
+flame: Fire | Blaze | Spark
+ninth: After eighth | One of nine | Inning after the eighth
+penny: Cent | Coin | Copper
+saves: Keeps | Stores | Rescues
+pulse: Beat | Throb | Rhythm
+brass: Metal | Horns | Bronze
+graph: Chart | Diagram | Plot
+stack: Pile | Heap | Mound
+crops: Harvests | Yields | Produce
+aging: Getting older | Maturing | Ripening
+dried: Parched | Dehydrated | Arid
+joins: Links | Connects | Unites
+nails: Tacks | Fingertips | Brads
+cloth: Fabric | Material | Textile
+eager: Keen | Enthusiastic | Avid
+lobby: Foyer | Entrance hall | Vestibule
+ranch: Farm | Estate | Spread
+trunk: Chest | Tree stem | Elephant's nose
+carol: Christmas song | Hymn | Sing
+ferry: Boat | Shuttle | Transport
+gauge: Meter | Measure | Indicator
+rider: Horseman | Cyclist | Passenger
+width: Breadth | Span | Extent
+buses: Coaches | Shuttles | School rides
+paths: Trails | Lanes | Routes
+peers: Equals | Colleagues | Gazes
+sheer: Transparent | Steep | Utter
+thumb: Digit | Finger | Hitchhiker's tool
+wheat: Grain | Cereal | Bread source
+civic: Public | Community | Municipal
+clerk: Cashier | Secretary | Teller
+drone: Buzz | Hum | Flying camera
+flour: Baking powder | Meal | Bread base
+pause: Break | Wait | Rest
+puppy: Young dog | Pup | Whelp
+vinyl: Record | Plastic | LP
+exams: Tests | Quizzes | Finals
+steep: Sheer | Sharp | Soak, as tea
+weigh: Measure | Consider | Balance
+adapt: Adjust | Change | Tailor
+kitty: Cat | Kitten | Fund
+amber: Golden brown | Fossil resin | Traffic light color
+ankle: Foot part | Leg end | Sock top spot
+grasp: Grip | Understand | Clutch
+scout: Explore | Search | Seek
+steak: Beef | Meat | Fillet
+sweep: Broom | Brush | Clean
+lanes: Paths | Roads | Alleys
+polar: Arctic | Cold | Icy
+skirt: Dress | Border | Avoid
+modes: Ways | Styles | Methods
+blend: Mix | Combine | Merge
+brake: Stop | Slow | Halt
+feast: Banquet | Dinner | Spread
+purse: Handbag | Bag | Wallet
+chess: Board game with kings and queens | Game of checkmate | Strategy game
+float: Drift | Bob | Hover
+grind: Crush | Mill | Pulverize
+grove: Orchard | Woods | Thicket
+hobby: Pastime | Interest | Pursuit
+spice: Seasoning | Flavor | Zest
+swept: Brushed | Cleaned | Dusted
+packs: Bags | Bundles | Knapsacks
+arise: Get up | Occur | Stand
+guild: Club | Union | Society
+sixty: Six tens | Number | Minutes in an hour
+drums: Beats | Rhythms | Percussion
+baked: Roasted | Cooked | Toasted
+tenth: One of ten | After ninth | Tithe
+batch: Lot | Group | Bunch
+plaza: Square | Mall | Courtyard
+blunt: Dull | Frank | Direct
+champ: Winner | Champion | Victor
+slope: Hill | Incline | Ramp
+snack: Treat | Nibble | Bite
+unite: Join | Combine | Merge
+vault: Safe | Jump | Leap
+ducks: Quackers | Waddlers | Dodges
+midst: Middle | Center | Heart
+bikes: Bicycles | Cycles | Two-wheelers
+feeds: Nourishes | Supplies | Meals
+choir: Chorus | Singers | Ensemble
+shiny: Glossy | Bright | Gleaming
+masks: Covers | Disguises | Veils
+poles: Sticks | Rods | Posts
+alley: Lane | Passage | Bowling ___
+salon: Beauty shop | Parlor | Studio
+peaks: Summits | Tops | Crests
+pools: Ponds | Puddles | Swim spots
+dough: Bread base | Pastry | Cash
+irony: Sarcasm | Twist | Paradox
+relay: Pass on | Race | Transmit
+jumps: Leaps | Hops | Bounds
+ivory: Off-white | Cream | Piano key color
+niche: Nook | Corner | Specialty
+porch: Veranda | Stoop | Deck
+cakes: Desserts | Pastries | Treats
+hints: Clues | Tips | Suggestions
+seals: Stamps | Closes | Sea mammals
+wires: Cables | Cords | Lines
+elbow: Arm bend | Nudge | ___ grease
+about: Concerning | Around | Approximately
+above: Over | Higher | Aloft
+acorn: Oak seed | Squirrel snack | Nut
+alive: Living | Animated | Awake
+amaze: Astonish | Wow | Surprise
+angel: Cherub | Darling | Sweetheart
+apple: Fall fruit | Orchard fruit | Cider source
+apron: Kitchen cover | Bib | Smock
+aroma: Scent | Smell | Fragrance
+beach: Sandy shore | Seaside | Coast
+berry: Blueberry | Fruit | Currant
+bench: Seat | Park seat | Pew
+bloom: Flower | Blossom | Flourish
+blush: Pink cheeks | Flush | Rosy glow
+brave: Courageous | Bold | Heroic
+bread: Loaf | Baked goods | Sourdough
+breed: Kind | Type | Raise
+brook: Stream | Creek | Rivulet
+brush: Comb | Paintbrush | Sweep
+bunny: Rabbit | Hare | Hopper
+charm: Grace | Appeal | Amulet
+cheer: Hurrah | Applaud | Encourage
+chime: Ring | Bell | Tinkle
+cider: Apple juice | Fall drink | Pressed apple drink
+cloud: Fluffy sky shape | Puff | Mist
+clover: Three-leaf plant | Lucky plant | Shamrock
+cocoa: Hot chocolate | Chocolate powder | Warm winter drink
+comet: Icy visitor with a tail | Shooting star | Space traveler
+coral: Reef | Pinkish orange | Ocean rock
+cream: Coffee addition | Lotion | Top of the milk
+daisy: White flower | Oxeye | Flower with petals to pull
+dance: Waltz | Boogie | Move to the beat
+dream: Nighttime story in your mind | Hope | Fantasy
+drift: Float | Wander | Snowbank
+eagle: Bald bird | Golf score of two under | Soaring bird
+earth: Planet | Soil | Ground
+feast: Banquet | Dinner | Spread
+field: Meadow | Pasture | Area
+flora: Plant life | Plants | Vegetation
+frost: Ice | Rime | Chill
+grace: Elegance | Charm | Poise
+grape: Vine fruit | Raisin source | Jelly flavor
+grass: Lawn | Turf | Green blades
+green: Grassy color | Verdant | Emerald
+guest: Visitor | Company | Caller
+happy: Glad | Joyful | Cheerful
+heart: Love symbol | Center | Valentine shape
+horse: Stallion | Mare | Pony
+house: Home | Dwelling | Place to live
+jelly: Jam | Preserve | Gel
+lemon: Citrus fruit | Sour fruit | Lemonade source
+light: Lamp | Bright | Not heavy
+lilac: Purple shrub | Lavender | Spring flower
+lunch: Midday meal | Brunch | Snack
+maple: Syrup tree | Canada tree | Red-leaf tree
+melon: Juicy fruit | Cantaloupe | Honeydew
+merry: Jolly | Cheerful | Festive
+music: Tunes | Melody | Songs
+novel: Book | New | Original
+ocean: Atlantic or Pacific | Deep blue sea | Home of whales
+otter: River mammal | Playful swimmer | Sea animal
+paint: Color | Brush on | Coat
+peace: Calm | Harmony | Stillness
+peach: Georgia fruit | Pastel color | Fuzzy fruit
+petal: Flower part | Bloom piece | Leaf of a flower
+piano: Instrument with 88 keys | Grand ___ | Keyboard instrument
+plant: Flower or fern | Sow | Factory
+poppy: Red flower | Bloom | Field flower
+quiet: Silent | Hushed | Calm
+quilt: Patchwork bed cover | Comforter | Duvet
+radio: FM device | Broadcast receiver | Car music source
+raven: Black bird | Crow | Poe's bird
+relax: Unwind | Rest | Chill out
+river: Mississippi, for one | Flowing water | Stream
+robin: Red-breasted bird | Songbird | Spring bird
+round: Circular | Spherical | Lap
+scarf: Muffler | Wrap | Neck warmer
+shell: Seashell | Husk | Casing
+shore: Coast | Beach | Seaside
+sleep: Rest at night | Snooze | Slumber
+smile: Grin | Beam | Happy face
+snowy: Wintry | White | Frosty
+spark: Flicker | Glint | Flash
+stone: Rock | Pebble | Gem
+storm: Tempest | Squall | Gale
+sweet: Sugary | Kind | Dear
+table: Dining furniture | Chart | Where you eat dinner
+teddy: Stuffed bear | Plush toy | Bear
+thank: Show gratitude | Say "much obliged" | Credit
+tiger: Striped cat | Big cat | Jungle cat
+toast: Bread browned | Salute | Cheer to a friend
+trail: Path | Track | Hiking path
+tulip: Spring flower | Dutch bloom | Bulb flower
+tweed: Wool fabric | Plaid cloth | Jacket fabric
+waltz: Dance | Ballroom dance | Three-step dance
+water: Aqua | Drink | Liquid
+whale: Big sea mammal | Humpback | Orca
+wheel: Tire | Circle | Steering part
+world: Earth | Globe | Planet
