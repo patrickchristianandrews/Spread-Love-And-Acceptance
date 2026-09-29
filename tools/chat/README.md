@@ -12,14 +12,22 @@ It answers in this order:
    being snapped at, `what_hurt`/`how_hurt`), “tell me something calming”, “I feel judged”, “can you tell me if I’m
    autistic?” (plainly no), “I just had a fight and I have 5 minutes”, “what should I do next?”, “remind me later”,
    bigger text, reading out loud and easier words. `notPat` keeps a card out of the way (“how do I apologize”).
-   They keep the topic we were on. “tl;dr” / “make it shorter” shortens the last answer (a one-line summary and up
-   to three bullets); “where did I leave off?” names the last topic.
+   They keep the topic we were on, unless the card is marked `"newTopic": true` (a meltdown, “I have ADHD”, feeling
+   like a burden), which becomes the topic. A card's optional `script` is shown as “Words you could use”.
+   “tl;dr” / “make it shorter” shortens the last answer (a one-line summary and up to three bullets) and turns on
+   short mode, as do “keep your answers short” and “can you talk slower”: every later answer comes short, with
+   “Tell me more” for the full one, until they ask for more (never the safety reply). “where did I leave off?” names
+   the last topic.
    Before any of this, typos are read as the word meant (“unbiled det”, “were do i start”): the shared list in
    `assets/js/message-patterns.js` (copied into the knowledge base by the build), then doubled letters, then the
    nearest site word by spelling or sound. The answer starts “I think you mean …”. A message with no word the chat
    knows (“asdfgh”) gets a kind “I didn’t catch that”.
 3. **Follow-ups** ("tell me more", "give me an example", "another way to say it", "how do I start?",
    "what about for coworkers?") use the last topic: a card, a playbook, a background note or a search.
+   Then sayings and the site's own words: “what does ‘read the room’ mean?” / “why do people say ‘break a leg’?”
+   explain the idiom literally (`idioms` in `program-cards.json`), and “what does static mean?” gives the plain
+   definition from `/glossary.html` first (plus `terms` in `program-cards.json`, such as the two meanings of “lens”).
+   “Give a definition, not an example” leaves the example out.
 4. **Calculators.** Five Battery Meter answers (WP-02: sum ÷ 20, bands 0.3 / 0.6), a CALC-01 read from
    balance, ownership and battery (0.40 / 0.35 / 0.25, bands 0.70 / 0.40, apex with retuning), a single
    score to explain, or two people's hours to workload balance. Always "not a verdict".
@@ -141,7 +149,7 @@ Keep the background file under about 2 MB.
 
 ## Tests
 
-    node tools/chat/test-chat.js        # 319 questions with expected cards, playbooks, notes and pages
+    node tools/chat/test-chat.js        # 375 questions with expected cards, playbooks, notes and pages
     node tools/chat/coverage.js         # asks about every indexed page and checks the answer lands there
 
 Both run site-chat.js in Node through `chat-sandbox.js`, loading the knowledge files the way the page

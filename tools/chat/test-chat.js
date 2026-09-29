@@ -403,6 +403,73 @@ t('spelling', 'my partner allways snapps at me', { kind: 'sit', id: /hurtbythem/
 t('spelling', 'we fought again (a real word stays)', { q: 'we fought again', kind: 'sit', not: /I think you mean/ });
 t('spelling', 'What stocks should I buy? (a real word stays)', { q: 'What stocks should I buy?', kind: 'offtopic', not: /I think you mean/ });
 
+// ---------------------------------------------------------------- testers, round three (ADHD, autistic, dyslexic, highly sensitive)
+// ADHD: focus and long pages get the reading helps, never kids' screen rules; "where do I start" doesn't carry the last topic
+t('nt2', "I can't focus on long pages", { kind: 'care', id: 'focus', text: /Show me only the steps/, not: /[Ss]creen agreements|kids/, link: '/' });
+t('nt2', "I can't focus on long pages (all the helps)", { q: "I can't focus on long pages", text: /In short[\s\S]*Simple version[\s\S]*Listen[\s\S]*Easy reading[\s\S]*2, 5 or 10 minutes/ });
+c('nt2', ['What is a BIFF response?', "I can't focus on long pages"], { kind: 'care', id: 'focus', not: /[Ss]creen agreements|phones-and-presence/ });
+c('nt2', ["I can't focus on long pages", 'where do I start'], { kind: 'card', id: 'start', not: /phones-and-presence|Phones and presence/ });
+c('nt2', ['What is a BIFF response?', 'where do I start'], { kind: 'card', id: 'start', link: '/start-here.html' });
+c('nt2', ['What is the Lemonade Stand?', 'where do I start?'], { steps: true, link: '/lemonade-stand.html' });
+t('nt2', 'where do I start: a first step that takes minutes, not a week', { q: 'where do I start', kind: 'card', id: 'start', not: /Log one week/ });
+// ADHD: the person asking is the one doing it
+t('nt2', 'how do i stop interupting people', { kind: 'sit', id: /selfinterrupt/, text: /I jumped in|jump in/, not: /keep getting cut off|I sometimes get cut off/ });
+t('nt2', 'my partner says I never listen', { kind: 'sit', id: 'partner+selfinterrupt', text: /say back one thing you heard/, not: /keep getting cut off/ });
+t('nt2', 'my coworker keeps interrupting me (still being interrupted)', { q: 'my coworker keeps interrupting me', kind: 'sit', id: 'coworker+interrupt' });
+// ADHD: a plain yes, with ADHD help, never an autism script
+t('nt2', 'I have ADHD', { kind: 'care', id: 'adhd', text: /Yes, this site is for people with ADHD/, not: /take things literally/, script: true });
+t('nt2', 'is this site for people with adhd?', { kind: 'care', id: 'adhd', text: /Yes/, not: /take things literally/ });
+t('nt2', 'do I have ADHD? (still no diagnosis)', { q: 'do I have ADHD?', kind: 'care', id: 'diagnose' });
+t('nt2', "I'm neurodivergent (no literal-only script first)", { q: "I'm neurodivergent", not: /Words you could use[^\n]*\n[^\n]*take things literally|^I’m wired to take things literally/m });
+t('nt2', 'I keep starting things and never finishing them', { kind: 'sit', id: /halfdone/, not: /RACI/ });
+// ADHD: still excellent
+t('nt2', 'I forgot to pay the bill again and my partner is mad', { kind: 'sit', id: 'partner+forgetting', text: /memory slip, not a priority slip/ });
+// autistic: idioms explained literally, the site's own words defined, no stale topic
+t('nt2', "what does 'read the room' mean", { kind: 'idiom', text: /no real room[\s\S]*how the people around you seem to feel/, not: /phones face down|check-ins/ });
+c('nt2', ["what does 'fine.' mean when my partner texts it", "Why do people say 'break a leg'?"], { kind: 'idiom', text: /Good luck/, not: /Let’s stay with|short or slow replies/ });
+t('nt2', 'what does "we\'ll see" mean', { kind: 'idiom', text: /isn’t ready to decide/ });
+t('nt2', "what does 'fine.' mean when my partner texts it (still a playbook)", { q: "what does 'fine.' mean when my partner texts it", kind: 'sit', id: 'partner+shorttexts' });
+t('nt2', 'What exactly does "static" mean? Give a definition, not an example.', { kind: 'term', id: 'static', text: /^Static is the crackle/, not: /outside my little pond|For example/, link: '/glossary.html#static' });
+t('nt2', 'define static', { kind: 'term', id: 'static', text: /^Static is the crackle[\s\S]*For example/ });
+t('nt2', 'what does frequency mean on this site', { kind: 'term', id: 'frequency', not: /pond/ });
+t('nt2', 'what is the carrier wave', { kind: 'term', id: 'carrier-wave' });
+t('nt2', 'I had a meltdown at work', { kind: 'care', id: 'meltdown', text: /I’m sorry[\s\S]*recovery comes first/, not: /RACI|team of three/, link: '/wp-11.html' });
+t('nt2', 'my kid has meltdowns (not the self card)', { q: 'my kid has meltdowns every night', not: /at work it can feel/ });
+t('nt2', 'I stim when I am anxious. Is that bad?', { kind: 'care', id: 'stim', text: /^No, stimming isn’t bad/ });
+t('nt2', 'Is my mom to blame for how I am?', { kind: 'care', id: 'parentsblame', text: /^No/, link: '/growing-up' });
+t('nt2', "my partner says I'm blunt", { kind: 'sit', id: 'partner+blunt', text: /come across as blunt/, not: /landed as a bit sharp for me/ });
+c('nt2', ['what is the lemonade stand', 'I had a meltdown at work'], { kind: 'care', id: 'meltdown', not: /Lemonade/ });
+c('nt2', ['I had a meltdown at work', 'what is WP-02?'], { kind: 'card', id: 'wp02', not: /meltdown/ });
+// the two lenses are never mixed up
+t('nt2', 'What is a lens?', { kind: 'term', id: 'lens', text: /two different ways[\s\S]*Your lens[\s\S]*outside lens/, link: ['/glossary.html#lens', '/growing-up.html'] });
+t('nt2', 'what is the outside lens', { kind: 'term', id: 'outsidelens', text: /as if from the outside/, not: /growing up and still use/, link: '/how-it-works-in-depth.html#outside-lens' });
+t('nt2', 'what does your lens mean', { kind: 'term', id: 'yourlens', text: /picked up growing up/, not: /as if from the outside:/, link: '/growing-up.html#lens' });
+t('nt2', 'what is my lens', { link: '/growing-up', not: /late screens|as if from the outside/ });
+// dyslexic: repair help, reading help, the screenshot import, short answers that stay short
+t('nt2', 'my partnr is mad at me', { kind: 'sit', id: 'partner+madatme', text: /I think you mean[\s\S]*upset with you/, not: /“Are you mad at me\?” is a real question/, script: true });
+t('nt2', 'im dislexic is this site ok for me', { kind: 'care', id: 'dyslexia', text: /Easy reading[\s\S]*Extra large[\s\S]*Listen[\s\S]*Simple version/, not: /take things literally/ });
+t('nt2', 'can i use a screen shot', { kind: 'care', id: 'screenshot', text: /Choose screenshots/, link: '/conversation-reader.html', not: /phone-free|attention/ });
+t('nt2', 'how do i make the writing biger (Extra large)', { q: 'how do i make the writing biger', kind: 'care', id: 'textsize', text: /Extra large/ });
+c('nt2', ['what is the lemonade stand', 'make it shorter', 'what is the signal translator'], { kind: 'card', id: 'signal', text: /^In short: /, not: /## How to use it/ });
+c('nt2', ['what is the lemonade stand', 'make it shorter', 'what is the signal translator', 'I feel overwhelmed'], { kind: 'sit', text: /^In short: /, not: /What might be going on/ });
+c('nt2', ['what is the lemonade stand', 'make it shorter', 'what is the signal translator', 'tell me more'], { kind: 'card', id: 'signal', text: /## How to use it/ });
+c('nt2', ['what is the lemonade stand', 'make it shorter', 'what is the signal translator', 'tell me more', 'what is WP-02'], { kind: 'card', id: 'wp02', text: /## How to use it/ });
+c('nt2', ['make it shorter', 'what is WP-02'], { kind: 'card', id: 'wp02', text: /^In short: / });
+c('nt2', ['keep your answers short', 'my partner snapped at me'], { kind: 'sit', text: /^In short: I’m sorry\. Being snapped at/, script: true });
+t('nt2', 'too long didnt read (points to the short ways in)', { q: 'too long didnt read', kind: 'short', text: /Simple version[\s\S]*In short/ });
+// highly sensitive: warm and on topic, and no words they didn't use
+t('nt2', "I feel everyone's moods", { kind: 'care', id: 'sensitive', text: /a lot to carry[\s\S]*is this mine/, not: /Mood Arbitrage|Emotions are usually short/ });
+t('nt2', "I'm so overwhelmed by noise and people, I just want to hide", { kind: 'care', id: 'overload', text: /Quiet button[\s\S]*Night Garden/, not: /school run|everything on your plate/ });
+c('nt2', ['i feel overwhelmed', 'my mom always made me feel like a burden'], { kind: 'care', id: 'burden', text: /I’m sorry[\s\S]*Where your lens came from/, not: /Let’s stay with|stretched thin/, link: '/growing-up.html#lens' });
+t('nt2', 'my mom always made me feel like a burden', { kind: 'care', id: 'burden', not: /outside lens|late screens/ });
+t('nt2', "my partner snapped at me and I can't stop crying", { kind: 'sit', id: 'partner+hurtbythem', text: /Crying when something hurts is a very human response/, not: /stupid/ });
+t('nt2', 'my partner snapped at me and I feel silly for crying', { kind: 'sit', text: /isn’t silly/, not: /stupid/ });
+c('nt2', ['can you talk slower, this is a lot', 'what is WP-02'], { kind: 'card', id: 'wp02', text: /^In short: / });
+t('nt2', 'can you talk slower, this is a lot', { kind: 'care', id: 'brief', not: /pond/ });
+c('nt2', ['can you talk slower, this is a lot', 'I want to kill myself'], { kind: 'safety' });
+// a new question after a playbook starts fresh
+c('nt2', ['i feel overwhelmed', 'why do people say break a leg'], { kind: 'idiom', not: /Let’s stay with/ });
+
 // ---------------------------------------------------------------- run
 (async () => {
   const args = process.argv.slice(2), verbose = args.includes('-v'), only = args.filter(a => a[0] !== '-')[0];

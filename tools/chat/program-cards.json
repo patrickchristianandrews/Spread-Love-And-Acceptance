@@ -39,7 +39,7 @@
         "You can make the text bigger in Settings, at the top of the page."
       ],
       "how": [
-        "Open Settings and choose a Text size: Larger or Largest.",
+        "Open Settings and choose a Text size: Larger, Largest or Extra large.",
         "Easy reading, in the same place, switches to a clearer font with more space between lines.",
         "Your browser’s zoom works too: Ctrl and + (⌘ and + on a Mac), or pinch to zoom on a phone.",
         "Your choices stay in this browser only."
@@ -68,9 +68,10 @@
       ],
       "how": [
         "Most pages have a Simple version. Look for 🌱 Simple version near the top: the main idea in a few short cards.",
+        "Long pages have an 📌 In short box at the top, and a “Show me only the steps” button that hides everything but the steps.",
         "Easy reading, in Settings at the top of the page, uses a clearer font, more space and shorter lines.",
-        "Many pages have a Listen button that reads the page out loud.",
-        "Ask me anything, and say “make it shorter” whenever an answer is too long."
+        "Many pages have a Listen button that reads them out loud.",
+        "Say “make it shorter”, and I’ll keep my answers short for the rest of this chat."
       ],
       "links": [
         [
@@ -476,6 +477,407 @@
         [
           "How do I use Today’s Weather?",
           "How do I use Today's Weather?"
+        ]
+      ]
+    },
+    {
+      "id": "brief",
+      "kind": "intent",
+      "first": true,
+      "name": "shorter answers",
+      "pat": "\\b(talk|go|type|write|speak|answer|explain|reply) (it )?(slower|more slowly|slowly|less|shorter|in short bits)\\b|\\b(shorter|short|brief|simpler|smaller|fewer) (answers|replies|messages|bits)\\b|\\bkeep (it|them|your answers|answers|replies|things) (short|brief|simple)\\b|\\bone (thing|step|bit) at a time\\b|\\b(less|fewer) words please\\b|\\btoo (much|many) (text|words|reading)\\b",
+      "keys": [],
+      "what": [
+        "Of course. I’ll keep my answers short from now on, one small piece at a time."
+      ],
+      "how": [
+        "Say “tell me more” whenever you want the full answer.",
+        "If a page feels like a lot, look for 📌 In short at the top, or press Listen."
+      ],
+      "links": [],
+      "chips": [
+        [
+          "Where do I start?",
+          "Where do I start?"
+        ]
+      ]
+    },
+    {
+      "id": "focus",
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "name": "focusing on long pages",
+      "pat": "\\b(cant|can t|cannot|hard to|struggle to|trouble|hard time|unable to|never) (focus|concentrate|concentrating|focusing|pay attention|keep my attention|stay focused|stay on|get through|finish reading|read)\\b.{0,40}\\b(long|pages?|reading|read|text|articles?|walls? of text|paragraphs?|site|website|screen)\\b|\\b(i )?(lose|lost|losing) (focus|my place|track|concentration|interest)\\b.{0,30}\\b(reading|pages?|read|long)\\b|\\bmy (attention|focus|mind) (span )?(drifts|wanders|goes|jumps)\\b.{0,30}\\b(reading|pages?|read|long)\\b|\\b(long|big) (pages|walls of text|paragraphs)\\b.{0,30}\\b(lose|lost|cant|can t|hard|too much)\\b",
+      "keys": [],
+      "what": [
+        "That’s really common, and you don’t have to read a long page from top to bottom here. A few things make it easier:"
+      ],
+      "how": [
+        "📌 In short, at the top of long pages, gives the main idea in three lines.",
+        "“Show me only the steps”, near the top of long pages, hides everything except the headings and the numbered steps.",
+        "Most pages have a 🌱 Simple version: the same idea in a few short cards.",
+        "Press Listen near the top to hear a page instead of reading it.",
+        "In Settings, at the top of the page: Easy reading (a clearer font and more space) and a reading ruler that keeps your place.",
+        "Short on focus today? “How much time do you have?”, on the home page and in the menu, picks one thing for 2, 5 or 10 minutes."
+      ],
+      "links": [
+        [
+          "Home: How much time do you have?",
+          "/"
+        ],
+        [
+          "Start in 10 minutes",
+          "/start-in-10-minutes.html"
+        ]
+      ],
+      "chips": [
+        [
+          "Keep your answers short",
+          "Keep your answers short"
+        ],
+        [
+          "Something for 2 minutes",
+          "I only have 2 minutes"
+        ]
+      ]
+    },
+    {
+      "id": "adhd",
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "name": "using the site with ADHD",
+      "pat": "\\b(i have|i ve got|ive got|i got|i m|im|i am|diagnosed with|living with) (adhd|audhd)\\b|\\b(for|with) (people|folks|someone|adults|us|anyone|those) (with|who have) (adhd|audhd)\\b|\\badhd (friendly|people|folks|brains?|here)\\b|\\b(site|this|it|program|chat)\\b.{0,20}\\b(for|ok for|okay for|good for|work for|works for|suitable for)\\b.{0,20}\\badhd\\b",
+      "keys": [],
+      "what": [
+        "Thanks for telling me. Yes, this site is for people with ADHD too. ADHD is a way of being wired, not a flaw, and plenty here works well with busy, jumpy attention."
+      ],
+      "how": [
+        "Short on time or focus: “How much time do you have?”, on the home page and in the menu, picks one thing for 2, 5 or 10 minutes.",
+        "On long pages, read 📌 In short, or press “Show me only the steps”. Listen reads a page out loud.",
+        "“Pick up where you left off”, on the home page, takes you back to what you were doing.",
+        "Forgot something again? Tell me what happened. The fix usually lives outside your head: a cue, one owner, a finish line you can see.",
+        "The Wiring Card lets you explain what helps you, like reminders in writing or a heads-up before plans change."
+      ],
+      "script": "My attention wanders sometimes, so if I miss something, it’s not that I don’t care. A quick written reminder really helps me.",
+      "links": [
+        [
+          "ADHD, in Wired Differently",
+          "/wired-differently-in-depth.html#adhd"
+        ],
+        [
+          "The Wiring Card",
+          "/wiring-card.html"
+        ],
+        [
+          "Start in 10 minutes",
+          "/start-in-10-minutes.html"
+        ]
+      ],
+      "chips": [
+        [
+          "I forget things",
+          "I forget chores and my partner is upset"
+        ],
+        [
+          "I can’t focus on long pages",
+          "I can't focus on long pages"
+        ]
+      ],
+      "notPat": "\\b(forgot|forget|forgets|forgetting|mad at|upset|angry|fight|fought|argue|argument|snapped|yelled)\\b"
+    },
+    {
+      "id": "dyslexia",
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "name": "using the site with dyslexia",
+      "pat": "\\b(i have|i ve got|ive got|i m|im|i am|diagnosed with|living with) (dyslexi[a-z]*)\\b|\\b(for|with) (people|folks|someone|adults|us|anyone|those|readers) (with|who have|who are) (dyslexi[a-z]*)\\b|\\bdyslexi[a-z]* (friendly|people|folks|readers?)\\b|\\b(site|this|it|program|chat)\\b.{0,20}\\b(for|ok for|okay for|good for|work for|works for|suitable for)\\b.{0,20}\\bdyslexi[a-z]*\\b",
+      "keys": [],
+      "what": [
+        "Yes, this site is for you too. Here’s what makes reading easier:"
+      ],
+      "how": [
+        "Easy reading, in Settings at the top of the page: a clearer font, more space between lines, and shorter lines.",
+        "Text size, in the same place: Larger, Largest or Extra large.",
+        "Listen, near the top of reading pages, reads the page out loud. Your device can read any page too.",
+        "Most pages have a 🌱 Simple version: the main idea in a few short cards.",
+        "Spelling doesn’t matter here. I read typos as the word you meant.",
+        "Say “make it shorter”, and I’ll keep my answers short for the rest of this chat."
+      ],
+      "links": [
+        [
+          "Dyslexia, in Wired Differently",
+          "/wired-differently-in-depth.html#dyslexic"
+        ],
+        [
+          "Start in 10 minutes",
+          "/start-in-10-minutes.html"
+        ]
+      ],
+      "chips": [
+        [
+          "Keep your answers short",
+          "Keep your answers short"
+        ],
+        [
+          "Can you read it out loud?",
+          "Can you read this out loud?"
+        ]
+      ],
+      "notPat": "\\b(mad at|upset|angry|fight|fought|argue|argument|snapped|yelled)\\b"
+    },
+    {
+      "id": "sensitive",
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "name": "feeling everyone’s moods",
+      "pat": "\\b(feel|pick up on|pick up|absorb|soak up|take on|sense|carry|notice) (everyone else s|everyone elses|everyone else|everyone s|everyones|everyone|everybody s|everybodys|everybody|other people s|other peoples|other people|peoples|people s|people|others|all the|every) (moods?|feelings|emotions|energy|stress|vibes?|tension)\\b|\\b(i m|im|i am) (too|so|very|really|highly|extremely) sensitive\\b|\\b(i m|im|i am) (an )?(hsp|highly sensitive( person)?|empath)\\b|\\bi feel everything\\b|\\b(other people s|other peoples|other people|everyone s|everyones|everyone|everybody|peoples|people) (moods?|feelings|emotions) (rub off|get into me|wear me out|drain me|stick to me|affect me)\\b",
+      "keys": [],
+      "what": [
+        "That can be a lot to carry. Some people notice other people’s moods quickly and strongly. It’s a real sensitivity, not a flaw, and it can leave you tired at the end of a full day."
+      ],
+      "how": [
+        "When a feeling shows up, ask yourself quietly: is this mine, or am I holding someone else’s?",
+        "You can notice someone’s mood without fixing it. Being kind doesn’t mean carrying it for them.",
+        "Plan small breaks after busy, people-heavy times: a few quiet minutes, a walk, or the Night Garden.",
+        "Put it on your Wiring Card, so the people close to you know what helps."
+      ],
+      "script": "I pick up on moods easily, so after a busy day I need a little quiet time. It’s not about you.",
+      "links": [
+        [
+          "Highly sensitive, in Wired Differently",
+          "/wired-differently.html#sensitive"
+        ],
+        [
+          "The Wiring Card",
+          "/wiring-card.html"
+        ],
+        [
+          "The Night Garden",
+          "/night-garden.html"
+        ]
+      ],
+      "chips": [
+        [
+          "Tell me something calming",
+          "Tell me something calming"
+        ],
+        [
+          "Noise and people wear me out",
+          "I'm overwhelmed by noise and people"
+        ]
+      ]
+    },
+    {
+      "id": "overload",
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "name": "too much noise and too many people",
+      "pat": "\\b(noise|noisy|loud|sounds?|crowds?|crowded|people|lights?|bright|busy places?)\\b.{0,60}\\b(want to hide|wanna hide|need to hide|hide away|hide somewhere|hide from|get away from|escape|run away)\\b|\\b(noise|noisy|loud|crowds?|crowded|bright lights?|sounds?)\\b.{0,40}\\b(too much|cant cope|can t cope|cant think|can t think|overwhelm[a-z]*)\\b|\\b(overwhelmed|swamped|drained|worn out|exhausted) by (the )?(noise|sounds?|people|crowds?|lights?)\\b|\\b(overstimulat[a-z]*|sensory overload|over ?stimulated|overloaded)\\b",
+      "keys": [],
+      "what": [
+        "That sounds like a lot coming in at once. Wanting to get away from noise and people when it’s too much makes sense. It’s your system asking for less, not you being difficult."
+      ],
+      "how": [
+        "If you can, step somewhere quieter for a few minutes: another room, outside, or anywhere with a door. Headphones or earplugs help many people.",
+        "Turn down what you can: dim the screen, switch sounds off, close your eyes for a few slow breaths.",
+        "On this site, the Quiet button at the top makes pages still and silent, and the Night Garden is a calm place to rest your eyes.",
+        "Later, on a calm day, add what overloads you and what helps to your Calm-Down Kit and your Wiring Card."
+      ],
+      "script": "I’m getting overloaded. I need ten quiet minutes. I’m not upset with anyone, and I’ll come back.",
+      "links": [
+        [
+          "The Night Garden",
+          "/night-garden.html"
+        ],
+        [
+          "WP-11: The Calm-Down Kit",
+          "/wp-11.html"
+        ],
+        [
+          "The Wiring Card",
+          "/wiring-card.html"
+        ]
+      ],
+      "chips": [
+        [
+          "Tell me something calming",
+          "Tell me something calming"
+        ],
+        [
+          "I feel everyone’s moods",
+          "I feel everyone's moods"
+        ]
+      ]
+    },
+    {
+      "id": "meltdown",
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "name": "after a meltdown",
+      "pat": "\\b(meltdowns?|melt ?down|melted down|melting down)\\b",
+      "notPat": "\\b(my|our|his|her|their) (kid|kids|son|daughter|child|children|toddler|teen|teenager|partner|husband|wife|boyfriend|girlfriend|friend|sister|brother|mom|mum|dad|roommate|coworker|boss)s? (has|had|have|is having|was having|keeps having|melted|melts)\\b|\\bwhat (is|s) a meltdown\\b",
+      "keys": [],
+      "what": [
+        "I’m sorry. A meltdown can feel awful, before, during and after, and at work it can feel even more exposed. It isn’t a character flaw or a choice. It’s what can happen when too much has built up for too long."
+      ],
+      "how": [
+        "Right now, recovery comes first: somewhere quieter, some water, less light and noise, and no big decisions.",
+        "You don’t owe anyone a long explanation today. If you want to say something at work, one short line is enough.",
+        "Later, on a calm day, look back at what built up beforehand: noise, a change of plan, too many people, no break, a short night.",
+        "Make a Calm-Down Kit (WP-11) for next time: your early signs, what helps, and a line to ask for a break before it gets too much."
+      ],
+      "script": "Earlier I got overloaded, and I’m okay now. What helps me is a short break somewhere quiet when things get intense.",
+      "links": [
+        [
+          "WP-11: The Calm-Down Kit",
+          "/wp-11.html"
+        ],
+        [
+          "The Wiring Card",
+          "/wiring-card.html"
+        ],
+        [
+          "Autistic people, in Wired Differently",
+          "/wired-differently-in-depth.html#autistic"
+        ]
+      ],
+      "chips": [
+        [
+          "Too much noise and people",
+          "I'm overwhelmed by noise and people"
+        ],
+        [
+          "Tell me something calming",
+          "Tell me something calming"
+        ]
+      ]
+    },
+    {
+      "id": "stim",
+      "kind": "intent",
+      "first": true,
+      "name": "whether stimming is bad",
+      "pat": "\\bstim(s|ming|med|mies)?\\b.{0,40}\\b(bad|wrong|ok|okay|normal|weird|embarrass[a-z]*|a problem|stop|allowed)\\b|\\b(is|it s|its) (it )?(bad|wrong|ok|okay|normal|weird) (to|that i|if i) stim\\b",
+      "keys": [],
+      "what": [
+        "No, stimming isn’t bad. Rocking, tapping, fidgeting, humming and similar movements are a common way people settle, focus or show joy, and everyone does a little of it."
+      ],
+      "how": [
+        "If a stim helps you and doesn’t hurt you or anyone else, there’s no need to stop.",
+        "If one causes trouble, like sore skin or a quiet office, you can look for another that does the same job, such as a fidget toy or a quieter movement.",
+        "You can add what you do and why to your Wiring Card, so people close to you understand it."
+      ],
+      "links": [
+        [
+          "Stimming (Library)",
+          "/library/wiring.html#stimming"
+        ],
+        [
+          "The Wiring Card",
+          "/wiring-card.html"
+        ]
+      ],
+      "chips": []
+    },
+    {
+      "id": "parentsblame",
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "name": "whether my parents are to blame",
+      "pat": "\\b(is|are|was|were) (my|our) (mom|mum|mother|dad|father|parents?|family|upbringing|childhood) (to blame|the reason|at fault|responsible|the cause)\\b|\\bblam(e|ing) (it on )?my (mom|mum|mother|dad|father|parents?|family|upbringing|childhood)\\b|\\bjust blaming (my )?parents\\b|\\b(my )?parents fault\\b|\\b(my )?(mom|mum|dad|mother|father)s fault\\b",
+      "keys": [],
+      "what": [
+        "No, not in the way “blame” usually means. Understanding where a habit or rule came from isn’t the same as blaming the people who handed it to you. Most parents passed on what they were given, often while doing their best with less than they needed. You can understand, appreciate and still choose differently."
+      ],
+      "how": [
+        "Where your lens came from looks gently at the understandings people often pick up growing up, with no blame.",
+        "You don’t need clear memories, just footprints: the reactions that feel older than the moment.",
+        "If looking back feels heavy, you can stop and come back another day."
+      ],
+      "links": [
+        [
+          "Where your lens came from",
+          "/growing-up.html"
+        ],
+        [
+          "Isn’t this just blaming my parents?",
+          "/growing-up-in-depth.html#faq"
+        ]
+      ],
+      "chips": []
+    },
+    {
+      "id": "burden",
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "name": "being made to feel like a burden",
+      "pat": "\\b(mom|mum|mother|dad|father|parents?|family|stepmom|stepdad|stepmother|stepfather|grandma|grandmother|grandpa|grandfather|mama|papa)\\b.{0,40}\\b(made|makes|making|treated|treats|treating) me (feel )?(like )?(i was |i m |im |i am )?(a burden|a nuisance|in the way|too much|not good enough|unwanted|invisible|a problem)\\b|\\bgrowing up\\b.{0,40}\\b(felt|feel|was) like (a burden|a nuisance|in the way|too much)\\b",
+      "keys": [],
+      "what": [
+        "I’m sorry. Being made to feel that way, especially by a parent, hurts, and it can stay with you for a long time. It makes sense that it stings."
+      ],
+      "how": [
+        "You don’t have to sort any of this out today. Go gently with yourself.",
+        "A feeling like that is often something we learned early. It can feel like plain fact, even when it isn’t true about you.",
+        "When you’re ready, Where your lens came from looks gently at what we pick up growing up, with no blame and no pressure.",
+        "If looking back feels heavy, you can stop and come back another day, or talk it through with someone you trust."
+      ],
+      "links": [
+        [
+          "Where your lens came from",
+          "/growing-up.html#lens"
+        ],
+        [
+          "The Night Garden",
+          "/night-garden.html"
+        ]
+      ],
+      "chips": [
+        [
+          "Tell me something calming",
+          "Tell me something calming"
+        ],
+        [
+          "Is my mom to blame?",
+          "Is my mom to blame for how I am?"
+        ]
+      ]
+    },
+    {
+      "id": "screenshot",
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "name": "reading a screenshot of a chat",
+      "pat": "\\bscreen ?shots?\\b|\\bscreen ?caps?\\b|\\bscreen ?grabs?\\b|\\bscreenshotted\\b",
+      "notPat": "\\b(he|she|they|my [a-z]+) (took|takes|taking|sent|sends|sending|posted|posts|posting|shared|shares|sharing|screenshot[a-z]*)\\b",
+      "keys": [],
+      "what": [
+        "Yes. The Conversation Reader can read screenshots of a chat, like iMessage, WhatsApp, Messenger, texts or Slack."
+      ],
+      "how": [
+        "Open the Conversation Reader and press “Choose screenshots”, or paste or drop them in.",
+        "They’re read on this device and never uploaded.",
+        "Check the words and who said what, then let the Reader look at them."
+      ],
+      "links": [
+        [
+          "The Conversation Reader",
+          "/conversation-reader.html"
+        ]
+      ],
+      "chips": [
+        [
+          "How does the Reader work?",
+          "How do I use the conversation reader?"
         ]
       ]
     },
@@ -2459,13 +2861,13 @@
       ],
       "what": [
         "Welcome! A gentle way in: start with yourself, then add the other person when you’re ready.",
-        "If you’re sharing a home, the usual first step is one ordinary week of who did what (WP-01), before you discuss anything."
+        "If you’re sharing a home, a good first step takes a few minutes: jot down who did what today, before you discuss anything."
       ],
       "how": [
         "One minute on Today’s Weather to see how you’re doing today.",
         "Read the Preface, The work nobody sees (free).",
-        "Log one week in WP-01, or put the week on the Lemonade Stand if there are several of you.",
-        "Then follow the Workpaper Suite for your road, or the six gentle weeks (PROG-01)."
+        "Start a who-did-what list today, in WP-01 or on the Lemonade Stand. Just today’s jobs is plenty.",
+        "Later, follow the Workpaper Suite for your road, or the six gentle weeks (PROG-01)."
       ],
       "links": [
         [
@@ -2898,8 +3300,7 @@
       "kind": "tool",
       "name": "How it works",
       "keys": [
-        "how it works",
-        "~outside lens"
+        "how it works"
       ],
       "what": "How it works is a friendly tour of what the program looks at: your life situation (a new baby, a move or an illness can shrink what you can carry), your wiring (information, not a flaw), the patterns that show up when you write things down, and the static that lives between two people. It all rests on the Five Pillars.",
       "links": [
@@ -3595,6 +3996,414 @@
           "What can I do tonight?"
         ]
       ]
+    }
+  ],
+  "_about_terms": "terms: the site’s own words, defined plainly. The chat reads every term on /glossary.html (its plain definition, example and first link); entries here add terms or override one by id. idioms: sayings explained literally for “what does X mean?” questions. p lists the normalised phrases (lowercase, no apostrophes), lit what the words do not mean, m what people usually mean, tone how it usually sounds, plain a plain way to say it.",
+  "terms": [
+    {
+      "id": "lens",
+      "t": "Lens",
+      "d": "The site uses “lens” in two different ways, and they mean different things:",
+      "list": [
+        "Your lens (on Where your lens came from): the understandings about yourself, other people and what they owe you that you picked up growing up and still use without noticing. For example, “rest is earned” can feel like plain fact, until you notice it was your family’s rule.",
+        "The outside lens (on How it works): looking at your own situation calmly, as if from the outside, using what you wrote down over a few weeks instead of how it felt in the moment."
+      ],
+      "e": "",
+      "a": [
+        "lens",
+        "lenses",
+        "the lens",
+        "a lens"
+      ],
+      "links": [
+        [
+          "Where your lens came from",
+          "/growing-up.html#lens"
+        ],
+        [
+          "How it works: the outside lens",
+          "/how-it-works-in-depth.html#outside-lens"
+        ]
+      ]
+    },
+    {
+      "id": "yourlens",
+      "t": "Your lens",
+      "d": "Your lens is the set of understandings about yourself, other people and what they owe you that you picked up growing up and still use without noticing. It’s not the same as “the outside lens” on How it works.",
+      "e": "“Rest is earned” can feel like plain fact, until you notice it was your family’s rule.",
+      "a": [
+        "your lens",
+        "my lens",
+        "where your lens came from",
+        "where my lens came from",
+        "growing up lens",
+        "the growing up lens"
+      ],
+      "links": [
+        [
+          "Where your lens came from",
+          "/growing-up.html#lens"
+        ]
+      ]
+    },
+    {
+      "id": "outsidelens",
+      "t": "The outside lens",
+      "d": "The outside lens means looking at your own situation calmly, as if from the outside: what actually happened, written down over a few weeks, instead of how it felt in the moment. It’s not the same as “your lens” from growing up.",
+      "e": "You believe you’re “just bad at mornings.” Written down for two weeks, the picture changes: mornings go wrong after late screens and no breakfast.",
+      "a": [
+        "outside lens",
+        "an outside lens",
+        "the outside lens",
+        "objective lens"
+      ],
+      "links": [
+        [
+          "How it works: the outside lens",
+          "/how-it-works-in-depth.html#outside-lens"
+        ]
+      ]
+    }
+  ],
+  "idioms": [
+    {
+      "p": [
+        "read the room"
+      ],
+      "lit": "There’s no real room to read.",
+      "m": "Notice how the people around you seem to feel, and fit what you say or do to that. For example, not telling a joke when everyone looks upset.",
+      "plain": "Check how people are feeling before you speak.",
+      "tone": "Usually a gentle nudge. Sometimes a mild telling-off."
+    },
+    {
+      "p": [
+        "break a leg"
+      ],
+      "lit": "Nobody wants you to get hurt.",
+      "m": "Good luck! It’s said to performers before a show. Theater people have long avoided saying “good luck” directly, so this became the friendly version.",
+      "plain": "Good luck!",
+      "tone": "Friendly."
+    },
+    {
+      "p": [
+        "not rocket science",
+        "its not rocket science"
+      ],
+      "lit": "It has nothing to do with rockets.",
+      "m": "It isn’t very hard to do or understand.",
+      "plain": "This part is fairly simple.",
+      "tone": "Can sound a bit impatient."
+    },
+    {
+      "p": [
+        "circle back",
+        "circle back to"
+      ],
+      "lit": "Nobody is walking in a circle.",
+      "m": "Come back to this topic later.",
+      "plain": "Let’s talk about this again later.",
+      "tone": "Neutral. Common at work."
+    },
+    {
+      "p": [
+        "well see"
+      ],
+      "lit": "Nobody is going to look at anything.",
+      "m": "Maybe. It often means the person isn’t ready to decide, and sometimes it leans toward no.",
+      "plain": "I’m not sure yet. Ask me again on Friday.",
+      "tone": "Neutral. It’s fine to ask “When will you know?”"
+    },
+    {
+      "p": [
+        "no worries if not"
+      ],
+      "lit": "It isn’t about worrying.",
+      "m": "It’s okay to say no. I won’t be upset.",
+      "plain": "It’s fine if you can’t.",
+      "tone": "Friendly."
+    },
+    {
+      "p": [
+        "touch base"
+      ],
+      "lit": "There’s no base to touch.",
+      "m": "Have a short check-in.",
+      "plain": "Let’s have a quick talk.",
+      "tone": "Neutral. Common at work."
+    },
+    {
+      "p": [
+        "on the same page"
+      ],
+      "lit": "There’s no page.",
+      "m": "Agree, or understand something the same way.",
+      "plain": "Let’s make sure we agree.",
+      "tone": "Neutral."
+    },
+    {
+      "p": [
+        "walking on eggshells",
+        "walk on eggshells",
+        "walking on egg shells"
+      ],
+      "lit": "There are no eggshells.",
+      "m": "Being very careful about what you say or do, because you’re worried someone will get upset.",
+      "plain": "I’m worried about upsetting you, so I’m being very careful.",
+      "tone": "Describes a tense feeling."
+    },
+    {
+      "p": [
+        "bite your tongue",
+        "bit my tongue",
+        "bite my tongue"
+      ],
+      "lit": "Nobody actually bites anything.",
+      "m": "Stop yourself from saying something.",
+      "plain": "I stopped myself from saying it.",
+      "tone": "Neutral."
+    },
+    {
+      "p": [
+        "elephant in the room",
+        "the elephant in the room"
+      ],
+      "lit": "There is no elephant.",
+      "m": "A big, obvious problem that everyone knows about but nobody is mentioning.",
+      "plain": "There’s something important we haven’t talked about.",
+      "tone": "Neutral."
+    },
+    {
+      "p": [
+        "play it by ear"
+      ],
+      "lit": "No music is involved.",
+      "m": "Decide as we go, without a fixed plan.",
+      "plain": "Let’s decide when we get there.",
+      "tone": "Relaxed."
+    },
+    {
+      "p": [
+        "beat around the bush",
+        "beating around the bush"
+      ],
+      "lit": "There’s no bush.",
+      "m": "Avoid saying the main thing directly.",
+      "plain": "Please just tell me the main point.",
+      "tone": "Can sound impatient."
+    },
+    {
+      "p": [
+        "cut to the chase"
+      ],
+      "lit": "Nobody is chasing anyone.",
+      "m": "Get to the main point.",
+      "plain": "Please tell me the main point.",
+      "tone": "Can sound impatient."
+    },
+    {
+      "p": [
+        "grain of salt",
+        "take it with a grain of salt",
+        "pinch of salt"
+      ],
+      "lit": "It has nothing to do with salt.",
+      "m": "Don’t believe it completely.",
+      "plain": "This might not be fully true.",
+      "tone": "Neutral."
+    },
+    {
+      "p": [
+        "blow off steam",
+        "let off steam",
+        "blowing off steam"
+      ],
+      "lit": "There’s no steam.",
+      "m": "Do something to let out stress or anger, like a walk, exercise or a rant to a friend.",
+      "plain": "I need to let out some stress.",
+      "tone": "Neutral."
+    },
+    {
+      "p": [
+        "cold shoulder",
+        "the cold shoulder"
+      ],
+      "lit": "It has nothing to do with temperature.",
+      "m": "Deliberately ignoring someone, or being unfriendly to them.",
+      "plain": "You’re ignoring me.",
+      "tone": "Describes someone being unfriendly."
+    },
+    {
+      "p": [
+        "hang in there"
+      ],
+      "lit": "Nobody is hanging from anything.",
+      "m": "Keep going. Things may get easier.",
+      "plain": "Keep going. I’m rooting for you.",
+      "tone": "Friendly and supportive."
+    },
+    {
+      "p": [
+        "under the weather"
+      ],
+      "lit": "It isn’t about the weather.",
+      "m": "Feeling a bit unwell.",
+      "plain": "I’m not feeling well.",
+      "tone": "Neutral."
+    },
+    {
+      "p": [
+        "piece of cake"
+      ],
+      "lit": "There’s no cake.",
+      "m": "Very easy.",
+      "plain": "That’s easy.",
+      "tone": "Friendly."
+    },
+    {
+      "p": [
+        "rain check",
+        "raincheck",
+        "take a rain check"
+      ],
+      "lit": "It has nothing to do with rain.",
+      "m": "Not now, but I’d like to do it another time.",
+      "plain": "I can’t today. Can we do it another day?",
+      "tone": "Friendly."
+    },
+    {
+      "p": [
+        "get on my nerves",
+        "gets on my nerves",
+        "getting on my nerves"
+      ],
+      "lit": "Nobody is touching your nerves.",
+      "m": "Annoys me.",
+      "plain": "That annoys me.",
+      "tone": "Annoyed."
+    },
+    {
+      "p": [
+        "in a minute",
+        "give me a minute",
+        "just a minute"
+      ],
+      "lit": "It usually isn’t exactly sixty seconds.",
+      "m": "Soon, often “when I finish what I’m doing”.",
+      "plain": "I’ll do it when I finish this, in about ten minutes.",
+      "tone": "Neutral. It’s fine to ask “About how long?”"
+    },
+    {
+      "p": [
+        "we need to talk"
+      ],
+      "lit": "",
+      "m": "The person wants a serious conversation. It doesn’t always mean something bad, but many people hear it that way.",
+      "plain": "Can we talk about the bills tonight? Nothing is wrong.",
+      "tone": "Serious. Adding the topic makes it much easier to hear."
+    },
+    {
+      "p": [
+        "agree to disagree",
+        "lets agree to disagree"
+      ],
+      "lit": "",
+      "m": "Let’s stop arguing. We see it differently, and that’s okay.",
+      "plain": "We see this differently, and that’s okay.",
+      "tone": "Usually calm, sometimes a little tired of the topic."
+    },
+    {
+      "p": [
+        "water under the bridge"
+      ],
+      "lit": "There’s no bridge.",
+      "m": "It’s in the past, and it’s forgiven.",
+      "plain": "That’s in the past. I’m not upset about it now.",
+      "tone": "Friendly."
+    },
+    {
+      "p": [
+        "on thin ice",
+        "skating on thin ice"
+      ],
+      "lit": "There’s no ice.",
+      "m": "Close to getting into trouble.",
+      "plain": "One more slip and I’ll be upset.",
+      "tone": "A warning."
+    },
+    {
+      "p": [
+        "ball is in your court",
+        "the ball is in your court"
+      ],
+      "lit": "There’s no ball.",
+      "m": "It’s your turn to decide or act.",
+      "plain": "It’s your turn to decide.",
+      "tone": "Neutral."
+    },
+    {
+      "p": [
+        "drop the ball",
+        "dropped the ball"
+      ],
+      "lit": "Nobody dropped a ball.",
+      "m": "Forgot, or didn’t do something you were responsible for.",
+      "plain": "I forgot to do it.",
+      "tone": "Admits a mistake, or points one out."
+    },
+    {
+      "p": [
+        "sure whatever"
+      ],
+      "lit": "",
+      "m": "It often means the person is annoyed or has given up on the point, not that they truly agree.",
+      "plain": "I’m frustrated, and I don’t want to keep talking about this right now.",
+      "tone": "Often annoyed. It’s fine to ask kindly: “Is that a real yes?”"
+    },
+    {
+      "p": [
+        "just saying",
+        "im just saying",
+        "i m just saying"
+      ],
+      "lit": "",
+      "m": "It softens a comment, but it often signals a mild criticism.",
+      "plain": "I’m a bit bothered by this.",
+      "tone": "Often mildly critical."
+    },
+    {
+      "p": [
+        "it is what it is"
+      ],
+      "lit": "",
+      "m": "This can’t be changed, so let’s accept it.",
+      "plain": "We can’t change this.",
+      "tone": "Resigned, sometimes a little fed up."
+    },
+    {
+      "p": [
+        "throw under the bus",
+        "threw me under the bus",
+        "throw someone under the bus",
+        "thrown under the bus"
+      ],
+      "lit": "There’s no bus.",
+      "m": "Blamed someone else to protect themselves.",
+      "plain": "You blamed me so you wouldn’t get in trouble.",
+      "tone": "Describes unfair blame."
+    },
+    {
+      "p": [
+        "pull your weight",
+        "pull their weight",
+        "pulling my weight",
+        "pulling their weight",
+        "pull his weight",
+        "pull her weight"
+      ],
+      "lit": "It isn’t about body weight.",
+      "m": "Do your fair share of the work.",
+      "plain": "Could you take on more of the jobs?",
+      "tone": "Often a complaint."
     }
   ]
 }
