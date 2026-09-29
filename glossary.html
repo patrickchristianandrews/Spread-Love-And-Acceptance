@@ -12,8 +12,8 @@
 </script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Plain names and their technical names · Spread Love &amp; Acceptance</title>
-<meta name="description" content="Every part of the program has a plain, everyday name. Some also have a technical name you may see on the Full pages. Here they are side by side.">
+<title>Glossary: the words, in plain English · Spread Love &amp; Acceptance</title>
+<meta name="description" content="Every word this site uses, like static, frequency, battery, talk window and owner, in one plain sentence with an example, plus each tool’s plain name beside its technical name.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,500&family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -25,7 +25,29 @@
   .gl-table th, .gl-table td{ text-align:left; vertical-align:top; padding:.6rem .6rem; border-bottom:1px solid var(--line); }
   .gl-table thead th{ font-family:"Fraunces", Georgia, serif; font-size:1rem; border-bottom:2px solid var(--ink); }
   .gl-table td:first-child a{ font-weight:600; }
-  .gl-table .gl-tech{ font-family:"IBM Plex Mono", ui-monospace, monospace; font-size:.9rem; color:var(--ink-soft); }
+  .gl-table .gl-tech{ font-family:var(--tol-sans, system-ui, sans-serif); font-size:.95rem; color:var(--ink-soft); line-height:1.4; }
+  .gl-table td{ line-height:1.45; }
+  .gl-defs{ margin:0 0 2rem; }
+  .gl-find{ margin:.6rem 0 1rem; }
+  .gl-find label{ display:block; font-weight:600; margin-bottom:.3rem; }
+  .gl-find input{ box-sizing:border-box; width:100%; max-width:28rem; min-height:46px; padding:.5rem 1rem; border-radius:999px; border:1.5px solid var(--ink-soft); background:#FFFDF7; font:1rem "Lora", Georgia, serif; color:var(--ink); }
+  .gl-find input:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
+  .gl-q-note{ margin:.3rem 0 0 !important; font-size:.92rem; color:var(--ink-soft); }
+  .gl-q-note button{ font:inherit; font-weight:600; background:none; border:0; padding:0; color:var(--focus); text-decoration:underline; cursor:pointer; min-height:32px; }
+  .gl-az ul{ list-style:none; padding:0 !important; margin:0 0 1.2rem !important; display:flex; flex-wrap:wrap; gap:.35rem; }
+  .gl-az li{ margin:0 !important; max-width:none !important; }
+  .gl-az a{ display:inline-flex; align-items:center; min-height:36px; padding:.15rem .7rem; border-radius:999px; border:1px solid var(--line); background:#FFFDF7; font-size:.92rem; text-decoration:none; color:var(--ink); }
+  .gl-term{ margin:0 0 .8rem; padding:.9rem 1.1rem; border-radius:18px; background:rgba(255,251,242,.97); border:1px solid var(--line); scroll-margin-top:calc(var(--tol-bar-h, 60px) + 12px); }
+  .gl-term[hidden]{ display:none; }
+  .read .gl-term h3{ margin:0 0 .35rem !important; font-size:1.2rem !important; display:flex; align-items:center; gap:.5rem; }
+  .gl-ico{ font-size:1.35rem; }
+  .read .gl-term p{ margin:.25rem 0 !important; max-width:62ch; padding:0 !important; background:none !important; box-shadow:none !important; border:0 !important; }
+  .gl-def{ font-size:1.05rem; }
+  .gl-ex{ color:var(--ink-soft); }
+  .gl-links{ display:flex; flex-wrap:wrap; align-items:center; gap:.4rem .8rem; margin-top:.5rem !important; }
+  .gl-dive{ display:inline-flex; align-items:center; gap:.3rem; min-height:36px; padding:.2rem .8rem; border-radius:999px; border:1.5px solid #9CC3E6; background:#EEF6FD; color:#1F4E79; font:600 .9rem/1.2 var(--tol-sans, system-ui, sans-serif); cursor:pointer; }
+  .gl-dive:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
+  .gl-term:target{ box-shadow:0 0 0 3px #9CC3E6; }
   @media (max-width:600px){
     .gl-table thead{ position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); }
     .gl-table, .gl-table tbody, .gl-table tr, .gl-table td, .gl-table th{ display:block; }
@@ -41,26 +63,263 @@
 <meta name="keywords" content="self-help, relationships, kindness, love, appreciation, acceptance, connection, communication, calm, peace, harmony, reconciliation, emotional wellbeing, self-discovery, fairness at home, mental load, invisible work, free self-help tools, psychology-informed, personal growth, healthy relationships, understanding yourself, kind communication, couples, family, friends, roommates, coworkers, caregivers">
 <meta name="author" content="Spread Love &amp; Acceptance">
 <meta property="og:site_name" content="Spread Love &amp; Acceptance">
-<meta property="og:title" content="Plain names and their technical names · Spread Love &amp; Acceptance">
-<meta property="og:description" content="Every part of the program has a plain, everyday name. Some also have a technical name you may see on the Full pages. Here they are side by side.">
+<meta property="og:title" content="Glossary: the words, in plain English · Spread Love &amp; Acceptance">
+<meta property="og:description" content="Every word this site uses, like static, frequency, battery, talk window and owner, in one plain sentence with an example, plus each tool’s plain name beside its technical name.">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://spreadloveandacceptance.com/glossary.html">
 <meta property="og:image" content="https://spreadloveandacceptance.com/assets/img/og-image.png">
 <meta property="og:image:alt" content="Two friends sharing one heart, with two happy pups: Spread Love &amp; Acceptance">
 <meta property="og:locale" content="en_US">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Plain names and their technical names · Spread Love &amp; Acceptance">
-<meta name="twitter:description" content="Every part of the program has a plain, everyday name. Some also have a technical name you may see on the Full pages. Here they are side by side.">
+<meta name="twitter:title" content="Glossary: the words, in plain English · Spread Love &amp; Acceptance">
+<meta name="twitter:description" content="Every word this site uses, like static, frequency, battery, talk window and owner, in one plain sentence with an example, plus each tool’s plain name beside its technical name.">
 <meta name="twitter:image" content="https://spreadloveandacceptance.com/assets/img/og-image.png">
-<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"name":"Plain names and their technical names · Spread Love & Acceptance","headline":"Plain names and their technical names · Spread Love & Acceptance","description":"Every part of the program has a plain, everyday name. Some also have a technical name you may see on the Full pages. Here they are side by side.","url":"https://spreadloveandacceptance.com/glossary.html","inLanguage":"en-US","isAccessibleForFree":true,"keywords":"self-help, relationships, kindness, love, appreciation, acceptance, connection, communication, calm, peace, harmony, reconciliation, emotional wellbeing, self-discovery, fairness at home, mental load, invisible work, free self-help tools, psychology-informed, personal growth, healthy relationships, understanding yourself, kind communication, couples, family, friends, roommates, coworkers, caregivers","publisher":{"@type":"Organization","@id":"https://spreadloveandacceptance.com/#org","name":"Spread Love & Acceptance"},"isPartOf":{"@type":"WebSite","@id":"https://spreadloveandacceptance.com/#website","name":"Spread Love & Acceptance","url":"https://spreadloveandacceptance.com/"},"dateModified":"2026-09-29","image":"https://spreadloveandacceptance.com/assets/img/og-image.png","@type":"Article","author":{"@type":"Organization","@id":"https://spreadloveandacceptance.com/#org","name":"Spread Love & Acceptance"},"mainEntityOfPage":"https://spreadloveandacceptance.com/glossary.html"},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Spread Love & Acceptance","item":"https://spreadloveandacceptance.com/"},{"@type":"ListItem","position":2,"name":"Plain names and their technical names · Spread Love & Acceptance","item":"https://spreadloveandacceptance.com/glossary.html"}]}]}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"name":"Glossary: the words, in plain English · Spread Love & Acceptance","headline":"Glossary: the words, in plain English · Spread Love & Acceptance","description":"Every word this site uses, like static, frequency, battery, talk window and owner, in one plain sentence with an example, plus each tool’s plain name beside its technical name.","url":"https://spreadloveandacceptance.com/glossary.html","inLanguage":"en-US","isAccessibleForFree":true,"keywords":"self-help, relationships, kindness, love, appreciation, acceptance, connection, communication, calm, peace, harmony, reconciliation, emotional wellbeing, self-discovery, fairness at home, mental load, invisible work, free self-help tools, psychology-informed, personal growth, healthy relationships, understanding yourself, kind communication, couples, family, friends, roommates, coworkers, caregivers","publisher":{"@type":"Organization","@id":"https://spreadloveandacceptance.com/#org","name":"Spread Love & Acceptance"},"isPartOf":{"@type":"WebSite","@id":"https://spreadloveandacceptance.com/#website","name":"Spread Love & Acceptance","url":"https://spreadloveandacceptance.com/"},"dateModified":"2026-09-29","image":"https://spreadloveandacceptance.com/assets/img/og-image.png","@type":"Article","author":{"@type":"Organization","@id":"https://spreadloveandacceptance.com/#org","name":"Spread Love & Acceptance"},"mainEntityOfPage":"https://spreadloveandacceptance.com/glossary.html"},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Spread Love & Acceptance","item":"https://spreadloveandacceptance.com/"},{"@type":"ListItem","position":2,"name":"Glossary: the words, in plain English · Spread Love & Acceptance","item":"https://spreadloveandacceptance.com/glossary.html"}]}]}</script>
 <!-- seo:end -->
 </head>
-<body>
+<body data-no-private-note>
 <main class="read">
-<header class="read-head"><p class="read-code">Start here</p><h1>Plain names and their technical names</h1></header>
+<header class="read-head"><p class="read-code">Start here</p><h1>Glossary: the words, in plain English</h1></header>
 
-<p class="simple-lede">Everything in the program has a plain, everyday name, and that’s the name you’ll see in the menus and on the Simple pages. Some parts also have a technical name, used in small print on the Full pages and in the book’s longer chapters. They mean the same thing.</p>
+<p class="simple-lede">The words this site uses, each in one plain sentence with an example. Below them, every tool’s everyday name beside the technical name you may see on the Full pages.</p>
 
+<section class="gl-defs no-bubble" aria-labelledby="words">
+<h2 id="words">Words used on this site</h2>
+<p>One plain sentence for each, with an example. Tap <strong>Wade in</strong> for a step-by-step explanation, or <strong>Listen</strong> to hear it.</p>
+<div class="gl-find no-bubble" role="search"><label for="gl-q">Find a word</label><input id="gl-q" type="search" autocomplete="off" spellcheck="true" placeholder="Like “static” or “battery”" aria-describedby="gl-q-note"><p class="gl-q-note" id="gl-q-note" aria-live="polite">Spelling doesn’t need to be perfect.</p></div>
+<nav class="gl-az no-bubble" aria-label="Jump to a word"><ul><li><a href="#static">Static</a></li><li><a href="#frequency">Frequency</a></li><li><a href="#retune">Retune</a></li><li><a href="#drift">Drift</a></li><li><a href="#carrier-wave">Carrier wave</a></li><li><a href="#wiring">Wiring</a></li><li><a href="#wired-differently">Wired differently</a></li><li><a href="#wiring-card">Wiring Card</a></li><li><a href="#weather">Today’s Weather</a></li><li><a href="#talk-window">Talk window</a></li><li><a href="#pressure">Pressure</a></li><li><a href="#almanac">Your 7-day log</a></li><li><a href="#battery">Battery</a></li><li><a href="#load">The load</a></li><li><a href="#unbilled-debt">Unbilled debt</a></li><li><a href="#owner">Owner (one owner per job)</a></li><li><a href="#person-b">Person A and Person B</a></li><li><a href="#check-in">Check-in</a></li><li><a href="#calm-down-kit">Calm-Down Kit</a></li><li><a href="#flooded">Flooded</a></li><li><a href="#bid">A bid</a></li><li><a href="#turning-toward">Turning toward</a></li><li><a href="#repair">Repair</a></li><li><a href="#neutral-refusal">A kind no</a></li><li><a href="#five-pillars">The Five Pillars</a></li><li><a href="#workpaper">Workpaper</a></li><li><a href="#lemonade-stand">The Lemonade Stand</a></li><li><a href="#can-the-load-last">Can the load last?</a></li><li><a href="#signal-translator">The Signal Translator</a></li><li><a href="#conversation-reader">The Conversation Reader</a></li><li><a href="#masking">Masking</a></li><li><a href="#petals">Petals</a></li><li><a href="#levels">Levels</a></li><li><a href="#mini-dive">Mini dive</a></li><li><a href="#simple-full">Simple and Full versions</a></li><li><a href="#pal-cam">Pal cam</a></li><li><a href="#quiet-mode">Quiet mode</a></li><li><a href="#easy-reading">Easy reading</a></li></ul></nav>
+<article class="gl-term" id="static" data-also="crackle, noise, radio static, relational static">
+  <h3><span class="gl-ico" aria-hidden="true">📻</span> Static</h3>
+  <p class="gl-def">Static is the crackle between two people when the words are fine but the tone, pace or timing doesn’t match.</p>
+  <p class="gl-ex"><strong>For example:</strong> You ask “When will you do it?” calmly. They hear pressure. Nobody meant harm, but it crackles.</p>
+  <p class="gl-links"><a href="/book/chapter-1.html">Chapter I: why we get out of tune</a> <button type="button" class="gl-dive" data-gl-dive="static"><span aria-hidden="true">💧</span> Wade in</button></p>
+</article>
+<article class="gl-term" id="frequency" data-also="rhythm, pace, natural rhythm, frequencies">
+  <h3><span class="gl-ico" aria-hidden="true">🎚️</span> Frequency</h3>
+  <p class="gl-def">Your frequency is your natural pace: how fast you decide, talk, reply and recover.</p>
+  <p class="gl-ex"><strong>For example:</strong> One person answers a text in a minute; the other answers at the end of the day. Neither is wrong.</p>
+  <p class="gl-links"><a href="/frequency-framework.html">The Frequency Framework</a> <button type="button" class="gl-dive" data-gl-dive="framework"><span aria-hidden="true">💧</span> Wade in</button></p>
+</article>
+<article class="gl-term" id="retune" data-also="retuning, get back in tune, back in step">
+  <h3><span class="gl-ico" aria-hidden="true">🔧</span> Retune</h3>
+  <p class="gl-def">To retune is to notice you’ve fallen out of step with someone and adjust together: slower, softer, or at a better time.</p>
+  <p class="gl-ex"><strong>For example:</strong> “Can we start that again? I came in too fast.”</p>
+  <p class="gl-links"><a href="/book/chapter-1.html">Chapter I</a> <button type="button" class="gl-dive" data-gl-dive="retune"><span aria-hidden="true">💧</span> Wade in</button></p>
+</article>
+<article class="gl-term" id="drift" data-also="frequency drift, falling out of step">
+  <h3><span class="gl-ico" aria-hidden="true">〰️</span> Drift</h3>
+  <p class="gl-def">Drift is how two people slowly fall out of step when nobody checks in, even when nothing is wrong.</p>
+  <p class="gl-ex"><strong>For example:</strong> Three busy weeks, no real talk, and small things start to feel big.</p>
+  <p class="gl-links"><a href="/workpapers/wp-13-pll-protocol.html">The 90-second daily check-in</a> <button type="button" class="gl-dive" data-gl-dive="drift"><span aria-hidden="true">💧</span> Wade in</button></p>
+</article>
+<article class="gl-term" id="carrier-wave" data-also="carrier, tone underneath, subtext">
+  <h3><span class="gl-ico" aria-hidden="true">🌊</span> Carrier wave</h3>
+  <p class="gl-def">The carrier wave is the feeling that travels underneath the words: the tone that arrives before the meaning does.</p>
+  <p class="gl-ex"><strong>For example:</strong> “Fine.” can carry calm, hurt or tiredness. The carrier wave tells you which.</p>
+  <p class="gl-links"><a href="/carrier-wave-decoder.html">The Carrier Wave Decoder</a> <button type="button" class="gl-dive" data-gl-dive="carrier"><span aria-hidden="true">💧</span> Wade in</button></p>
+</article>
+<article class="gl-term" id="wiring" data-also="how you receive words, neurotype, wired">
+  <h3><span class="gl-ico" aria-hidden="true">🔌</span> Wiring</h3>
+  <p class="gl-def">Your wiring is the way your brain and senses take in words, sound, change and people. It stays the same from day to day.</p>
+  <p class="gl-ex"><strong>For example:</strong> Some people need a plan in writing. Others think best out loud.</p>
+  <p class="gl-links"><a href="/know-yourself.html">Know your own wiring</a> <button type="button" class="gl-dive" data-gl-dive="wired"><span aria-hidden="true">💧</span> Wade in</button></p>
+</article>
+<article class="gl-term" id="wired-differently" data-also="neurodivergent, autistic, autism, adhd, dyslexic, dyslexia, highly sensitive, neurotype">
+  <h3><span class="gl-ico" aria-hidden="true">🧩</span> Wired differently</h3>
+  <p class="gl-def">Being wired differently means your brain works in a less common way, such as being autistic, ADHD, dyslexic or highly sensitive, which changes how words land.</p>
+  <p class="gl-ex"><strong>For example:</strong> A hint like “the bins are full” may be heard as a plain fact, not a request.</p>
+  <p class="gl-links"><a href="/wired-differently.html">Wired Differently</a> <button type="button" class="gl-dive" data-gl-dive="wired"><span aria-hidden="true">💧</span> Wade in</button></p>
+</article>
+<article class="gl-term" id="wiring-card" data-also="card">
+  <h3><span class="gl-ico" aria-hidden="true">🪪</span> Wiring Card</h3>
+  <p class="gl-def">A Wiring Card is a one-page card you make that tells others how you receive words best, what silence means for you, and what to avoid.</p>
+  <p class="gl-ex"><strong>For example:</strong> “Please send big news in writing first. If I go quiet, I’m thinking, not upset.”</p>
+  <p class="gl-links"><a href="/wiring-card.html">Make your Wiring Card</a> <button type="button" class="gl-dive" data-gl-dive="card"><span aria-hidden="true">💧</span> Wade in</button></p>
+</article>
+<article class="gl-term" id="weather" data-also="weather, inner weather, forecast, quick check">
+  <h3><span class="gl-ico" aria-hidden="true">⛅</span> Today’s Weather</h3>
+  <p class="gl-def">Today’s Weather is a one-minute check on your own conditions today, like sleep, stress and energy, so you know what the day is good for.</p>
+  <p class="gl-ex"><strong>For example:</strong> Short night, busy day: the forecast says to keep big talks for tomorrow.</p>
+  <p class="gl-links"><a href="/quick-checks.html">Check your weather</a> <button type="button" class="gl-dive" data-gl-dive="weather"><span aria-hidden="true">💧</span> Wade in</button></p>
+</article>
+<article class="gl-term" id="talk-window" data-also="talk window open, wait, closed">
+  <h3><span class="gl-ico" aria-hidden="true">🪟</span> Talk window</h3>
+  <p class="gl-def">The talk window says whether now is a good time for a big conversation: open, wait a little, or closed for today.</p>
+  <p class="gl-ex"><strong>For example:</strong> Your window says “wait,” so you ask to talk after dinner instead of right now.</p>
+  <p class="gl-links"><a href="/quick-checks.html">Check your weather</a> <button type="button" class="gl-dive" data-gl-dive="talkwindow"><span aria-hidden="true">💧</span> Wade in</button></p>
+</article>
+<article class="gl-term" id="pressure" data-also="pressure reading, out of 100">
+  <h3><span class="gl-ico" aria-hidden="true">🌡️</span> Pressure</h3>
+  <p class="gl-def">Pressure is the number in Today’s Weather that shows how much is pressing on you today. It is a reading of what you told it, not a score or a grade.</p>
+  <p class="gl-ex"><strong>For example:</strong> A pressure of 40 leaves room in the day; 75 means go gently and leave big things for later.</p>
+  <p class="gl-links"><a href="/quick-checks.html">Today’s Weather</a> <button type="button" class="gl-dive" data-gl-dive="weather"><span aria-hidden="true">💧</span> Wade in</button></p>
+</article>
+<article class="gl-term" id="almanac" data-also="almanac, weather log, log">
+  <h3><span class="gl-ico" aria-hidden="true">📔</span> Your 7-day log</h3>
+  <p class="gl-def">Your 7-day log keeps your weather check-ins on this device, if you choose, so you can see which days tend to be heavy.</p>
+  <p class="gl-ex"><strong>For example:</strong> After a week you notice Mondays are always gusty, and plan around it.</p>
+  <p class="gl-links"><a href="/quick-checks.html">Today’s Weather</a> <button type="button" class="gl-dive" data-gl-dive="almanac"><span aria-hidden="true">💧</span> Wade in</button></p>
+</article>
+<article class="gl-term" id="battery" data-also="battery score, stress meter, how full is your battery">
+  <h3><span class="gl-ico" aria-hidden="true">🔋</span> Battery</h3>
+  <p class="gl-def">Your battery is how much you’re already carrying today, before anything new happens.</p>
+  <p class="gl-ex"><strong>For example:</strong> After a poor night and a long workday, a small request feels big because the battery was already low.</p>
+  <p class="gl-links"><a href="/workpapers/wp-02-battery-stress-meter.html">How full is your battery? (WP-02)</a> <button type="button" class="gl-dive" data-gl-dive="battery"><span aria-hidden="true">💧</span> Wade in</button></p>
+</article>
+<article class="gl-term" id="load" data-also="shared load, mental load, invisible work, workload">
+  <h3><span class="gl-ico" aria-hidden="true">⚖️</span> The load</h3>
+  <p class="gl-def">The load is all the work of a shared life, including the thinking, planning and remembering that nobody sees.</p>
+  <p class="gl-ex"><strong>For example:</strong> Buying the gift is one job. Remembering the birthday, picking the gift and wrapping it are three more.</p>
+  <p class="gl-links"><a href="/book/preface.html">The Preface</a> <button type="button" class="gl-dive" data-gl-dive="invisible"><span aria-hidden="true">💧</span> Wade in</button></p>
+</article>
+<article class="gl-term" id="unbilled-debt" data-also="unbilled, work nobody sees, invisible work">
+  <h3><span class="gl-ico" aria-hidden="true">🧾</span> Unbilled debt</h3>
+  <p class="gl-def">Unbilled debt is the work of a shared life that got done but was never noticed or thanked.</p>
+  <p class="gl-ex"><strong>For example:</strong> You remembered the dentist appointment, and nobody knew there was anything to remember.</p>
+  <p class="gl-links"><a href="/book/preface.html">The Preface: the work nobody sees</a> <button type="button" class="gl-dive" data-gl-dive="unbilled"><span aria-hidden="true">💧</span> Wade in</button></p>
+</article>
+<article class="gl-term" id="owner" data-also="owner, one owner per job, raci, responsible">
+  <h3><span class="gl-ico" aria-hidden="true">🙋</span> Owner (one owner per job)</h3>
+  <p class="gl-def">The owner of a job is the one person who makes sure it gets done from start to finish, so nobody has to keep asking.</p>
+  <p class="gl-ex"><strong>For example:</strong> Sam owns the recycling: noticing it’s full, taking it out and buying the bags.</p>
+  <p class="gl-links"><a href="/workpapers/wp-03-raci-treaty.html">One owner per job (WP-03)</a> <button type="button" class="gl-dive" data-gl-dive="raci"><span aria-hidden="true">💧</span> Wade in</button></p>
+</article>
+<article class="gl-term" id="person-b" data-also="person b, person a, the listener, the other person">
+  <h3><span class="gl-ico" aria-hidden="true">👥</span> Person A and Person B</h3>
+  <p class="gl-def">Person A and Person B are simply the two people on a two-person worksheet or tool. They are labels, not a ranking.</p>
+  <p class="gl-ex"><strong>For example:</strong> In the Signal Translator, Person A sends the message and Person B receives it.</p>
+  <p class="gl-links"><a href="/signal-translator.html">The Signal Translator</a> </p>
+</article>
+<article class="gl-term" id="check-in" data-also="daily check-in, 90-second check-in, weekly check-in">
+  <h3><span class="gl-ico" aria-hidden="true">🗓️</span> Check-in</h3>
+  <p class="gl-def">A check-in is a short, planned talk that keeps small things small. The daily one takes about ninety seconds, with no debating.</p>
+  <p class="gl-ex"><strong>For example:</strong> “Load today: heavy. Thank you for the dishes. One small thing: the car. My ask: could you fill it up?”</p>
+  <p class="gl-links"><a href="/check-ins.html">Check-ins</a> <button type="button" class="gl-dive" data-gl-dive="pll"><span aria-hidden="true">💧</span> Wade in</button></p>
+</article>
+<article class="gl-term" id="calm-down-kit" data-also="calm down, settle, wp-11, calm">
+  <h3><span class="gl-ico" aria-hidden="true">🫧</span> Calm-Down Kit</h3>
+  <p class="gl-def">The Calm-Down Kit is your own short list of what settles your body, chosen ahead of time so you don’t have to think when you’re wound up.</p>
+  <p class="gl-ex"><strong>For example:</strong> A glass of cold water, a walk to the corner, and three long breaths out.</p>
+  <p class="gl-links"><a href="/wp-11.html">The Calm-Down Kit (WP-11)</a> <button type="button" class="gl-dive" data-gl-dive="kit"><span aria-hidden="true">💧</span> Wade in</button></p>
+</article>
+<article class="gl-term" id="flooded" data-also="flooding, too wound up, overwhelmed">
+  <h3><span class="gl-ico" aria-hidden="true">💦</span> Flooded</h3>
+  <p class="gl-def">Flooded means being so wound up that listening stops working for a while. The kind thing is a short pause with a time to come back.</p>
+  <p class="gl-ex"><strong>For example:</strong> “I need twenty minutes. Can we talk again at eight?”</p>
+  <p class="gl-links"><a href="/wp-11.html">The Calm-Down Kit</a> <button type="button" class="gl-dive" data-gl-dive="flooded"><span aria-hidden="true">💧</span> Wade in</button></p>
+</article>
+<article class="gl-term" id="bid" data-also="bids, bids for connection, reaching out">
+  <h3><span class="gl-ico" aria-hidden="true">✋</span> A bid</h3>
+  <p class="gl-def">A bid is any small reach for attention or connection, like “look at this,” a sigh or a joke.</p>
+  <p class="gl-ex"><strong>For example:</strong> They show you a photo of a dog. Looking and smiling back is turning toward it.</p>
+  <p class="gl-links"><a href="/turning-toward.html">Turning toward</a> <button type="button" class="gl-dive" data-gl-dive="bids"><span aria-hidden="true">💧</span> Wade in</button></p>
+</article>
+<article class="gl-term" id="turning-toward" data-also="turn toward">
+  <h3><span class="gl-ico" aria-hidden="true">🤝</span> Turning toward</h3>
+  <p class="gl-def">Turning toward means answering someone’s small bids for attention, even briefly, instead of missing or brushing them off.</p>
+  <p class="gl-ex"><strong>For example:</strong> “Oh, that’s a funny one!” instead of scrolling on.</p>
+  <p class="gl-links"><a href="/turning-toward.html">Turning toward</a> <button type="button" class="gl-dive" data-gl-dive="turning"><span aria-hidden="true">💧</span> Wade in</button></p>
+</article>
+<article class="gl-term" id="repair" data-also="repair attempt, making up">
+  <h3><span class="gl-ico" aria-hidden="true">🩹</span> Repair</h3>
+  <p class="gl-def">A repair is anything that stops a tense moment from getting worse, like a joke, a softer tone or “Can we start over?”</p>
+  <p class="gl-ex"><strong>For example:</strong> “I said that badly. What I meant was…”</p>
+  <p class="gl-links"><a href="/check-ins.html">Check-ins</a> <button type="button" class="gl-dive" data-gl-dive="repair"><span aria-hidden="true">💧</span> Wade in</button></p>
+</article>
+<article class="gl-term" id="neutral-refusal" data-also="neutral refusal, saying no, boundary">
+  <h3><span class="gl-ico" aria-hidden="true">🙅</span> A kind no</h3>
+  <p class="gl-def">A kind no says what you can and can’t do right now, without blaming anyone.</p>
+  <p class="gl-ex"><strong>For example:</strong> “I can’t take that on this week. I could help on Saturday.”</p>
+  <p class="gl-links"><a href="/workpapers/wp-01.html">Who did what, and kind ways to say no (WP-01)</a> <button type="button" class="gl-dive" data-gl-dive="refusal"><span aria-hidden="true">💧</span> Wade in</button></p>
+</article>
+<article class="gl-term" id="five-pillars" data-also="pillars, pillar i, pillar ii, pillar iii, pillar iv, pillar v">
+  <h3><span class="gl-ico" aria-hidden="true">🏛️</span> The Five Pillars</h3>
+  <p class="gl-def">The Five Pillars are the five ideas under everything here: see the whole load, fix the setup, read your state first, tune how you send and receive, and notice the quiet incentives.</p>
+  <p class="gl-ex"><strong>For example:</strong> A chip near the top of each page shows which pillars that page uses.</p>
+  <p class="gl-links"><a href="/five-pillars.html">The Five Pillars</a> </p>
+</article>
+<article class="gl-term" id="workpaper" data-also="worksheet, wp">
+  <h3><span class="gl-ico" aria-hidden="true">📄</span> Workpaper</h3>
+  <p class="gl-def">A workpaper is a short worksheet. Each person fills in their own, then you read them together.</p>
+  <p class="gl-ex"><strong>For example:</strong> WP-01 is a week’s log of who did what.</p>
+  <p class="gl-links"><a href="/workpapers/fill/index.html">Fill-in workpapers</a> <button type="button" class="gl-dive" data-gl-dive="workpapers"><span aria-hidden="true">💧</span> Wade in</button></p>
+</article>
+<article class="gl-term" id="lemonade-stand" data-also="lemonade">
+  <h3><span class="gl-ico" aria-hidden="true">🍋</span> The Lemonade Stand</h3>
+  <p class="gl-def">The Lemonade Stand is a tool where you list who did what to keep the household running this week, and see the split as a plain fact.</p>
+  <p class="gl-ex"><strong>For example:</strong> You list the jobs and hours, and see one person is doing about two thirds.</p>
+  <p class="gl-links"><a href="/lemonade-stand.html">Open the Lemonade Stand</a> <button type="button" class="gl-dive" data-gl-dive="lemonade"><span aria-hidden="true">💧</span> Wade in</button></p>
+</article>
+<article class="gl-term" id="can-the-load-last" data-also="calc-01, solvency, calculator">
+  <h3><span class="gl-ico" aria-hidden="true">🧮</span> Can the load last?</h3>
+  <p class="gl-def">“Can the load last?” is a calculator that looks at the way you share the work, never at a person, and says whether it can keep going as it is.</p>
+  <p class="gl-ex"><strong>For example:</strong> Balanced hours but unclear owners still come out as “worth adjusting.”</p>
+  <p class="gl-links"><a href="/workpapers/calculators/calc01-solvency.html">Can the load last? (CALC-01)</a> <button type="button" class="gl-dive" data-gl-dive="solvency"><span aria-hidden="true">💧</span> Wade in</button></p>
+</article>
+<article class="gl-term" id="signal-translator" data-also="translator">
+  <h3><span class="gl-ico" aria-hidden="true">📡</span> The Signal Translator</h3>
+  <p class="gl-def">The Signal Translator lets you test a sentence before you send it, to see how it might land for someone wired differently from you.</p>
+  <p class="gl-ex"><strong>For example:</strong> “You never listen” comes back with a calmer way to say what you need.</p>
+  <p class="gl-links"><a href="/signal-translator.html">Open the Signal Translator</a> <button type="button" class="gl-dive" data-gl-dive="translator"><span aria-hidden="true">💧</span> Wade in</button></p>
+</article>
+<article class="gl-term" id="conversation-reader" data-also="reader">
+  <h3><span class="gl-ico" aria-hidden="true">🗨️</span> The Conversation Reader</h3>
+  <p class="gl-def">The Conversation Reader looks at a text thread you paste in and shows where it turned, what each of you may be hearing, and a calmer way to answer.</p>
+  <p class="gl-ex"><strong>For example:</strong> It spots the moment “ok” started meaning “I’m hurt.”</p>
+  <p class="gl-links"><a href="/conversation-reader.html">Open the Conversation Reader</a> <button type="button" class="gl-dive" data-gl-dive="reader"><span aria-hidden="true">💧</span> Wade in</button></p>
+</article>
+<article class="gl-term" id="masking" data-also="mask, camouflaging">
+  <h3><span class="gl-ico" aria-hidden="true">🎭</span> Masking</h3>
+  <p class="gl-def">Masking is hiding the way you’re wired to fit in, which can be very tiring over time.</p>
+  <p class="gl-ex"><strong>For example:</strong> Forcing eye contact and rehearsing small talk all day, then needing the evening to recover.</p>
+  <p class="gl-links"><a href="/wired-differently.html">Wired Differently</a> <button type="button" class="gl-dive" data-gl-dive="masking"><span aria-hidden="true">💧</span> Wade in</button></p>
+</article>
+<article class="gl-term" id="petals" data-also="petal, check yourself, learning trail">
+  <h3><span class="gl-ico" aria-hidden="true">🌸</span> Petals</h3>
+  <p class="gl-def">Petals are little markers you collect when you find a “Check yourself” moment on a reading page. They don’t count for anything, and you can hide them in Settings.</p>
+  <p class="gl-ex"><strong>For example:</strong> Answer a quick question on a chapter page, and a petal appears on your quest map.</p>
+  <p class="gl-links"><a href="/quest.html">Your quest map</a> </p>
+</article>
+<article class="gl-term" id="levels" data-also="level, garden, keepsakes, curious visitor">
+  <h3><span class="gl-ico" aria-hidden="true">✨</span> Levels</h3>
+  <p class="gl-def">Levels count the rounds you finish in the calm games. Every few levels something new appears in the background garden. There’s no way to lose, and no streaks.</p>
+  <p class="gl-ex"><strong>For example:</strong> Finish a crossword, and a little later koi appear in the pond behind every page.</p>
+  <p class="gl-links"><a href="/pause-and-play.html">Pause &amp; Play</a> <button type="button" class="gl-dive" data-gl-dive="petals"><span aria-hidden="true">💧</span> Wade in</button></p>
+</article>
+<article class="gl-term" id="mini-dive" data-also="water drop, dive, dives">
+  <h3><span class="gl-ico" aria-hidden="true">💧</span> Mini dive</h3>
+  <p class="gl-def">A word with a little water drop opens a short explanation right on the page, from simple to deeper, one step at a time.</p>
+  <p class="gl-ex"><strong>For example:</strong> Tap “static” with its drop, then “Wade in a little” for more.</p>
+  <p class="gl-links"><a href="/book/preface.html">Try one in the Preface</a> </p>
+</article>
+<article class="gl-term" id="simple-full" data-also="simple version, full version, in depth, dig deeper">
+  <h3><span class="gl-ico" aria-hidden="true">🌱</span> Simple and Full versions</h3>
+  <p class="gl-def">Many pages come in two versions: Simple gives the main idea in a few short cards, and Full adds examples, reasons and numbers.</p>
+  <p class="gl-ex"><strong>For example:</strong> Start with Simple. A “Dig deeper” link jumps to the matching part of Full.</p>
+  <p class="gl-links"><a href="/how-it-works.html">How it works</a> </p>
+</article>
+<article class="gl-term" id="pal-cam" data-also="pal cam, tidbit, sugarfoot, pups">
+  <h3><span class="gl-ico" aria-hidden="true">🐾</span> Pal cam</h3>
+  <p class="gl-def">The pal cam is a cartoon window where you can watch Tidbit and Sugarfoot, the site’s two pups. It is animation, not a real camera.</p>
+  <p class="gl-ex"><strong>For example:</strong> Open it from the home page to see what the pups are up to.</p>
+  <p class="gl-links"><a href="/index.html">The home page</a> </p>
+</article>
+<article class="gl-term" id="quiet-mode" data-also="quiet, still, calm page, settings">
+  <h3><span class="gl-ico" aria-hidden="true">🌙</span> Quiet mode</h3>
+  <p class="gl-def">Quiet mode makes the page still and silent, with no helpers, pop-ups, levels or petals. It’s the Quiet button at the top of every page.</p>
+  <p class="gl-ex"><strong>For example:</strong> Turn it on before reading in a busy place, and turn it off any time.</p>
+  <p class="gl-links"><a href="/on-this-device.html">What’s stored on this device</a> </p>
+</article>
+<article class="gl-term" id="easy-reading" data-also="easy reading, dyslexia, font, spacing, text size, listen, read aloud">
+  <h3><span class="gl-ico" aria-hidden="true">📖</span> Easy reading</h3>
+  <p class="gl-def">Easy reading uses a clear font, more space between letters and lines, shorter lines and a soft tint. It’s in Settings at the top of every page, next to text size.</p>
+  <p class="gl-ex"><strong>For example:</strong> Many readers find lines easier to track with more space between them. Reading pages also have a Listen button.</p>
+  <p class="gl-links"><a href="/on-this-device.html">What’s stored on this device</a> </p>
+</article>
+</section>
+
+<h2 id="names">Plain names and their technical names</h2>
+<p>Everything in the program has a plain, everyday name, and that’s the name you’ll see in the menus and on the Simple pages. Some parts also have a technical name, used in small print on the Full pages and in the book’s longer chapters. They mean the same thing.</p>
 <h2 id="book">The book</h2>
 <div class="tol-table-scroll">
 <table class="gl-table">
@@ -120,5 +379,67 @@
   <p><a href="/ask.html">Ask Professor Puddles &rarr;</a> <a href="/start-here.html">Back to Start here</a></p>
 </div>
 </main>
+<script>
+(function () {
+  'use strict';
+  var terms = Array.prototype.slice.call(document.querySelectorAll('.gl-term')), q = document.getElementById('gl-q'), note = document.getElementById('gl-q-note');
+  function fold(t) { return String(t || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[’‘]/g, "'"); }
+  function dist(a, b) {
+    if (Math.abs(a.length - b.length) > 2) return 3;
+    var d = [], i, j; for (i = 0; i <= a.length; i++) d[i] = [i]; for (j = 0; j <= b.length; j++) d[0][j] = j;
+    for (i = 1; i <= a.length; i++) for (j = 1; j <= b.length; j++) {
+      d[i][j] = Math.min(d[i - 1][j] + 1, d[i][j - 1] + 1, d[i - 1][j - 1] + (a[i - 1] === b[j - 1] ? 0 : 1));
+      if (i > 1 && j > 1 && a[i - 1] === b[j - 2] && a[i - 2] === b[j - 1]) d[i][j] = Math.min(d[i][j], d[i - 2][j - 2] + 1);
+    }
+    return d[a.length][b.length];
+  }
+  var info = terms.map(function (t) {
+    var name = fold(t.querySelector('h3').textContent), also = fold(t.getAttribute('data-also')), all = fold(t.textContent);
+    return { el: t, name: name, words: (name + ' ' + also).split(/[^a-z0-9'-]+/).filter(Boolean), all: all };
+  });
+  function match(i, w) {
+    if (i.name.indexOf(w) !== -1 || i.words.some(function (x) { return x.indexOf(w) === 0; })) return 3;
+    var lim = w.length > 6 ? 2 : 1;
+    if (w.length > 3 && i.words.some(function (x) { return x[0] === w[0] && (dist(w, x) <= lim || (x.length > w.length && dist(w, x.slice(0, w.length)) <= lim - (lim > 1 ? 1 : 0) && w.length > 4)); })) return 2;
+    if (w.length > 3 && i.all.indexOf(w) !== -1) return 1;
+    return 0;
+  }
+  function run() {
+    var words = fold(q.value).split(/[^a-z0-9'-]+/).filter(function (w) { return w.length > 1; }), shown = 0, fuzzy = false;
+    info.forEach(function (i) {
+      var ok = !words.length || words.every(function (w) { var m = match(i, w); if (m === 2) fuzzy = true; return m > 0; });
+      i.el.hidden = !ok; if (ok) shown++;
+    });
+    note.textContent = !words.length ? 'Spelling doesn’t need to be perfect.' : shown ? shown + (shown === 1 ? ' word matches' : ' words match') + (fuzzy ? ', including close spellings.' : '.') : 'No word matches “' + q.value + '”. ';
+    if (words.length && !shown) {
+      var b = document.createElement('button'); b.type = 'button'; b.textContent = 'Search the whole site instead';
+      b.addEventListener('click', function () { var s = document.querySelector('.tol-search-btn'); if (s) s.click(); setTimeout(function () { var i = document.getElementById('tol-find-q'); if (i) { i.value = q.value; i.dispatchEvent(new Event('input')); } }, 60); });
+      note.appendChild(b);
+    }
+  }
+  q.addEventListener('input', run);
+  // Wade in: the mini dive for this word, right here
+  document.addEventListener('click', function (e) {
+    var b = e.target.closest && e.target.closest('[data-gl-dive]'); if (!b) return;
+    if (window.TOLDives) window.TOLDives.open(b.getAttribute('data-gl-dive'), b);
+  });
+  // Listen: each word read aloud on its own (listen.js), where the device has a voice
+  function addListen() {
+    if (!window.TOLListen || !window.TOLListen.ok) return;
+    window.TOLListen.whenReady(function () {
+      terms.forEach(function (t) {
+        if (t.querySelector('.tol-listen-mini')) return;
+        var b = window.TOLListen.button('Listen'); b.setAttribute('aria-label', 'Listen: ' + t.querySelector('h3').textContent.trim());
+        b.addEventListener('click', function () { window.TOLListen.read(t, b); });
+        t.querySelector('.gl-links').appendChild(b);
+      });
+    });
+  }
+  if ('speechSynthesis' in window) {
+    if (window.TOLListen) addListen();
+    else document.addEventListener('tol-listen-ready', addListen);
+  }
+})();
+</script>
 </body>
 </html>

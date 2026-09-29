@@ -45,9 +45,10 @@
       2: ['See strain as a setup you can change.', 'Agree owners that suit this kind of relationship.'] } },
     '/program-overview.html': OVERVIEW,
     '/start-here.html': OVERVIEW,
-    '/start-in-10-minutes.html': { p: [3, 1], n: {
-      3: ['Check your own weather first.', 'Know whether today is a good day to talk.'],
-      1: ['Log one thing you did today.', 'Start a record you can share when you are ready.'] } },
+    '/start-in-10-minutes.html': { p: [3, 1, 4], n: {
+      3: ['Step 1: check your own weather first.', 'Know whether today is a good day to talk.'],
+      1: ['Steps 2 and 4: read the Preface, and log one thing you did today.', 'Start a record you can share when you are ready.'],
+      4: ['Step 3: try one practice card.', 'Turn a big feeling into a fact, a feeling and a kind ask.'] } },
     '/sent-this.html': { p: [1, 4], n: {
       1: ['Look at your own side first, privately.', 'Share only what you choose, when you choose.'],
       4: ['Answer in your own words and time.', 'Say yes, not yet or no kindly.'] } },

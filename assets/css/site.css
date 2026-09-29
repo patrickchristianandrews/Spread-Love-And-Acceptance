@@ -2126,7 +2126,8 @@ html.tol-home .home-intro-wrap > .home-intro{ display:table; margin-left:auto; m
 @media (max-height:760px){ .br section{ margin:0 0 auto; } }
 
 /* wide formulas and code: they scroll inside their own box, never past the card */
-main pre{ max-width:100%; overflow-x:auto; box-sizing:border-box; white-space:pre; }
+main pre{ max-width:100%; overflow-x:auto; box-sizing:border-box; white-space:pre-wrap; overflow-wrap:anywhere; }
+main pre code{ white-space:inherit; }
 main pre.formula, main .formula pre{ white-space:pre-wrap; overflow-wrap:anywhere; }
 
 /* dark mode: the header's and panels' own line icons follow the text color instead of being turned back */
@@ -2205,3 +2206,11 @@ html.tol-listen-picking main :is(p, li, h2, h3, blockquote, dd, td):hover{ outli
 .tol-panel .tol-pickup, .tol-panel .tol-time{ margin:.9rem 0 0; background:var(--paper); box-shadow:none; }
 html.tol-home .tol-pickup-host{ margin-top:.2rem; }
 @media print{ .tol-pickup, .tol-time{ display:none !important; } }
+/* mini dives: a plain label, and Listen beside it */
+.tol-dive-k, .tol-dive-step{ font-family:var(--tol-sans) !important; text-transform:none !important; letter-spacing:0 !important; font-size:.9rem !important; }
+.tol-dive-k{ display:flex; align-items:center; gap:.6rem; flex-wrap:wrap; padding-right:3rem; }
+.tol-dive-listen{ text-transform:none; letter-spacing:0; }
+.tol-heart::after{ content:none !important; } .tol-heart::before{ animation:none !important; clip-path:none !important; }
+/* table cells never have a fixed height (stacked on a phone, a two-line cell would spill over the next row) */
+.read :is(td, th){ height:auto !important; }
+.tol-dive-gloss{ display:inline-flex; align-items:center; gap:.35rem; min-height:40px; padding:.35rem .95rem; border-radius:999px; background:#FFF8E8; border:1px solid #E6CD92; color:#5A4214 !important; font:600 .88rem "Lora", Georgia, serif; text-decoration:none !important; }

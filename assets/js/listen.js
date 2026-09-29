@@ -25,7 +25,8 @@
   function visible(n) { return !!(n.offsetParent || n.getClientRects().length); }
   function blocksIn(root) {
     return Array.prototype.filter.call(root.querySelectorAll(BLOCK), function (n) {
-      if (n.closest(SKIP) || !visible(n)) return false;
+      var sk = n.closest(SKIP);
+      if ((sk && sk !== root && root.contains(sk)) || !visible(n)) return false;
       if (n.querySelector(BLOCK)) {                 // a list item holding paragraphs: read the paragraphs instead
         var own = Array.prototype.some.call(n.childNodes, function (c) { return c.nodeType === 3 && c.textContent.trim(); });
         if (!own) return false;
