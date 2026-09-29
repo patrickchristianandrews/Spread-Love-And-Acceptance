@@ -19,6 +19,14 @@
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,500&family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/assets/css/site.css">
 <link rel="stylesheet" href="/assets/css/reading.css">
+<link rel="stylesheet" href="/assets/css/tol-index.css">
+<style>
+  .read .contents-jump{ display:flex; flex-wrap:wrap; gap:.4rem; margin:0 0 1.2rem; }
+  .read .contents-jump a{ display:inline-flex; align-items:center; min-height:40px; padding:.2rem .85rem; border-radius:999px; border:1px solid var(--line); background:var(--paper); text-decoration:none; font-weight:600; font-size:.92rem; color:var(--ink); }
+  .read .contents-jump a:hover{ border-color:var(--brass); }
+  .contents-help{ font-size:.95rem; color:var(--ink-soft); }
+  .contents-list .tol-index-section > h2{ font-family:"Fraunces", Georgia, serif; font-size:1.4rem; margin:0 0 .35rem; padding-bottom:.3rem; border-bottom:1px solid var(--ink); }
+</style>
 <script src="/assets/js/site.js" defer></script>
 </head>
 <body>
@@ -26,40 +34,26 @@
 <header class="read-head"><p class="read-code">Contents</p><h1>Everything in the program</h1></header>
 <p class="depth-bar"><span>Simple version</span><a class="dig" href="/contents-in-depth.html">Read the full page</a></p>
 
-<p class="simple-lede">Everything in the program, in three parts: tools for understanding yourself, tools for any two people, and where to start in your kind of relationship.</p>
+<p class="simple-lede">Every page in the program, grouped by what it’s for. Tap any title to open it. Not sure where to begin? <a href="/start-here.html">Start here</a>, or take the short path in <a href="/start-in-10-minutes.html">Start in 10 minutes</a>.</p>
 
-<ol class="ideas">
-  <li>
-    <h2>Not sure where to start? Pick what feels true.</h2>
-    <p>Tap whatever is closest to how things are right now, and you get a shortcut into the lists. It is the same program, just a quicker way in.</p>
-    <a class="dig" href="/contents-in-depth.html#start-where">Dig deeper: find your starting point</a>
-  </li>
-  <li>
-    <h2>Part 1 is about you.</h2>
-    <p>Tools for understanding yourself: how full your plate is today, how you are wired, and what helps you settle. You can start here with or without anyone else.</p>
-    <a class="dig" href="/contents-in-depth.html#part-self">Dig deeper: every self-discovery tool</a>
-  </li>
-  <li>
-    <h2>Part 2 is for any two people.</h2>
-    <p>Shared tools for partners, family, friends, roommates, co-parents, coworkers and caregivers. Each of you fills in your own side, then you read them together.</p>
-    <a class="dig" href="/contents-in-depth.html#part-rel">Dig deeper: every relationship tool</a>
-  </li>
-  <li>
-    <h2>Part 3 shows where to start in your kind of relationship.</h2>
-    <p>Pick the kind of relationship you are in and see which tools to start with and which others fit. Each person also brings their own Part 1 tools.</p>
-    <a class="dig" href="/contents-in-depth.html#by-relationship">Dig deeper: where to start, relationship by relationship</a>
-  </li>
-  <li>
-    <h2>An email opens everything, free.</h2>
-    <p>Everything is free while the program is being built. Enter your email once and every chapter, workpaper and tool opens in this browser. No account or password.</p>
-    <a class="dig" href="/contents-in-depth.html#free-member">Dig deeper: signing up free</a>
-  </li>
-  <li>
-    <h2>Everything else is in the site directory.</h2>
-    <p>Guides, tools, stories, audio, who built this, what is finished, and the legal pages, grouped by what they are for.</p>
-    <a class="dig" href="/contents-in-depth.html#directory">Dig deeper: the full site directory</a>
-  </li>
-</ol>
+<nav class="contents-jump" aria-label="Jump to a part">
+  <a href="#contents-start">Start here</a>
+  <a href="#contents-self">Self-discovery</a>
+  <a href="#contents-relationships">Relationships</a>
+  <a href="#contents-book">The book</a>
+  <a href="#contents-workpapers">Workpapers</a>
+  <a href="#contents-program">Guided program</a>
+  <a href="#contents-tools">Tools</a>
+  <a href="#contents-play">Play</a>
+  <a href="#contents-media">Media</a>
+  <a href="#contents-about">About</a>
+</nav>
+
+<p class="contents-help">Pages marked <em>Free with sign-up</em> open once you enter your email; it’s free while the program is being built. Pages with a <strong>Dig deeper</strong> link also come in a full version. Looking for something specific? Use <strong>Search</strong> in the menu.</p>
+
+<div class="contents-list" data-tol="contents" data-all>
+  <p><a href="/contents-in-depth.html">Open the full contents page</a></p>
+</div>
 
 <div class="try-this">
   <p><strong>Try this:</strong> Start with one minute on yourself: a quick read on how today is going for you.</p>

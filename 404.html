@@ -22,7 +22,7 @@
       'ch04-ocular-vectors.html': '/book/chapter-4.html',
       'ch05-deficit-audit.html': '/book/chapter-5.html',
       'mood-arbitrage-generator.html': '/tools/mood-arbitrage-full.html',
-      'curriculum.html': '/contents.html',
+      'curriculum.html': '/program.html',
       'register.html': '/membership.html',
       'join.html': '/membership.html',
       'signin.html': '/membership.html',
@@ -50,7 +50,8 @@
 
   .suggest{ list-style:none; padding:0; margin:0 0 2.5rem; }
   .suggest li{ max-width:none; margin:0; }
-  .suggest a.tol-row{ grid-template-columns:4.2rem 1fr auto; }
+  .suggest a.tol-row{ grid-template-columns:5.4rem 1fr auto; }
+  @media (max-width:520px){ .suggest a.tol-row{ grid-template-columns:1fr auto; } .suggest .tol-code{ grid-column:1 / -1; } .suggest .tol-code:empty{ display:none; } }
 
   .finder label{ display:block; font-family:"Fraunces", Georgia, serif; font-size:1.25rem; font-weight:600; margin:0 0 .5rem; }
   .finder input{
@@ -60,6 +61,7 @@
   .finder input:focus-visible{ outline:2px solid var(--focus); outline-offset:2px; }
   .finder .count{ font-size:.9rem; color:var(--ink-soft); margin:.5rem 0 0; min-height:1.4em; }
   .results .tol-index-section{ margin-top:1.5rem; }
+  .results .find-h{ font-family:"Fraunces", Georgia, serif; font-style:italic; font-weight:500; font-size:1.2rem; margin:0 0 .35rem; padding-bottom:.3rem; border-bottom:1px solid var(--ink); max-width:none; }
   .read .results ol, .read ol.suggest{ padding-left:0; }
   .results mark{ background:none; color:inherit; box-shadow:inset 0 -.4em 0 rgba(168,121,47,.25); }
 
@@ -132,10 +134,13 @@ document.addEventListener('DOMContentLoaded', function () {
   document.getElementById('asked').textContent = path;
 
   // Flatten the site's page list
-  var pages = [];
-  TOL.sections.forEach(function (s) {
+  // each page once, even when it's listed in more than one section (the first listing wins, except "What's new")
+  var pages = [], seenHref = {};
+  TOL.sections.slice().sort(function (a, b) { return (a.id === 'new') - (b.id === 'new'); }).forEach(function (s) {
     s.items.forEach(function (it) {
-      if (it.href !== '/index.html') pages.push({ it: it, section: s });
+      var h = it.href;
+      if (it.href === '/index.html' || seenHref[h]) return;
+      seenHref[h] = 1; pages.push({ it: it, section: s });
     });
   });
 
@@ -174,7 +179,12 @@ document.addEventListener('DOMContentLoaded', function () {
   // If more than three pages tie for best, a guess would be arbitrary; leave it to the search box
   var best = scored.length ? scored[0].score : 0;
   if (scored.filter(function (x) { return x.score === best; }).length > 3) scored = [];
-  scored = scored.filter(function (x) { return x.score >= best - 1; }).slice(0, 3);
+  var seenPath = {};
+  scored = scored.filter(function (x) {
+    var path = x.p.it.href.split('#')[0];
+    if (x.score < best - 1 || seenPath[path]) return false;
+    seenPath[path] = 1; return true;
+  }).slice(0, 3);
 
   function row(p, q) {
     var it = p.it;
@@ -216,7 +226,7 @@ document.addEventListener('DOMContentLoaded', function () {
       });
       if (!items.length) return;
       shown += items.length;
-      html += '<div class="tol-index-section"><h3>' + esc(s.title) + '</h3><ol>' +
+      html += '<div class="tol-index-section"><h2 class="find-h">' + esc(s.title) + '</h2><ol>' +
         items.map(function (p) { return row(p, q); }).join('') + '</ol></div>';
     });
     results.innerHTML = html;

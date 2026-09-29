@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-NKC6CQ9S66"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-NKC6CQ9S66');
+</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Start in 10 minutes — The Objective Ledger</title>
+<meta name="description" content="One short, straight path through the whole idea: check your weather, read the Preface, try one practice card, and log one thing you did today.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,500&family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/css/site.css">
+<link rel="stylesheet" href="/assets/css/reading.css">
+<script src="/assets/js/site.js" defer></script>
+<style>
+  .ten-steps{ list-style:none; counter-reset:ten; padding:0 !important; margin:1.4rem 0 2rem !important; display:grid; gap:1rem; }
+  .ten-steps > li{ counter-increment:ten; position:relative; margin:0 !important; max-width:none !important; padding:1.05rem 1.15rem 1.1rem 3.6rem;
+    border-radius:20px; border:1px solid var(--line); background:rgba(255,251,242,.96); }
+  .ten-steps > li::before{ content:counter(ten); position:absolute; left:1rem; top:1rem; display:grid; place-items:center; width:1.9rem; height:1.9rem; border-radius:50%;
+    background:#2F5F8A; color:#fff; font:600 .95rem/1 "IBM Plex Mono", monospace; }
+  .ten-steps h2{ margin:0 0 .2rem !important; font-size:1.2rem; }
+  @media (max-width:560px){ .ten-steps > li{ padding:1rem 1rem 1.05rem; } .ten-steps > li::before{ position:static; margin:0 0 .45rem; } .ten-card{ padding:.75rem .8rem; } }
+  .ten-time{ margin:0 0 .5rem !important; font-size:.9rem; color:var(--ink-soft); }
+  .ten-steps p{ margin:0 0 .6rem !important; }
+  .read .ten-go{ display:inline-flex; align-items:center; min-height:44px; padding:.4rem 1.1rem; border-radius:999px; background:#2F5F8A; color:#fff !important; text-decoration:none !important; font-weight:600; }
+  .read .ten-go:hover{ background:#264E73; }
+  .read .ten-go:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
+  .ten-card{ margin:.4rem 0 .6rem; padding:.85rem 1rem; border-radius:16px; background:#EEF4FB; border:1px solid #C6DFF4; }
+  .ten-card p{ margin:0 0 .45rem !important; }
+  .ten-card .ten-before{ text-decoration:line-through; text-decoration-color:rgba(0,0,0,.35); color:var(--ink-soft); }
+  .ten-card label, .ten-log label{ display:block; font-weight:600; margin:.4rem 0 .25rem; }
+  .ten-card textarea, .ten-log input[type=text]{ box-sizing:border-box; width:100%; font:1rem/1.5 "Lora", Georgia, serif; color:var(--ink); background:#fff;
+    border:1px solid var(--ink-soft); border-radius:12px; padding:.55rem .75rem; }
+  .ten-card textarea:focus-visible, .ten-log input:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
+  .ten-log{ margin:.4rem 0 0; }
+  .ten-row{ display:flex; flex-wrap:wrap; gap:.5rem .8rem; align-items:center; margin:.5rem 0 0; }
+  .ten-btn{ font:600 .95rem/1.2 "Lora", Georgia, serif; min-height:44px; padding:.45rem 1.05rem; border-radius:999px; border:1px solid #2F5F8A; background:#2F5F8A; color:#fff; cursor:pointer; }
+  .ten-btn.is-quiet{ background:#FFFDF7; color:#2F5F8A; }
+  .ten-btn.is-erase{ background:#FFFDF7; color:#8A2F3C; border-color:#C98B94; }
+  .ten-btn:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
+  .ten-keep{ display:flex !important; gap:.5rem; align-items:flex-start; font-weight:400 !important; }
+  .ten-keep input{ width:1.2rem; height:1.2rem; margin-top:.2rem; flex:none; accent-color:#3E6B4C; }
+  .ten-list{ margin:.5rem 0 0 !important; padding-left:1.2rem !important; }
+  .ten-list li{ margin:.15rem 0 !important; }
+  .ten-say{ min-height:1.4em; font-size:.93rem; color:#2F5A3C; }
+</style>
+</head>
+<body data-private-note>
+<main class="read">
+<header class="read-head"><p class="read-code">Start here</p><h1>Start in 10 minutes</h1></header>
+
+<p class="simple-lede">One short, straight path through the whole idea. Four small steps, in order. There’s nothing to sign up for, and nothing you type here leaves your device.</p>
+
+<ol class="ten-steps no-bubble">
+  <li id="step-1">
+    <h2>Check your own weather</h2>
+    <p class="ten-time">About 1 minute · Pillar III, read your state first</p>
+    <p>Before anything else, see how you’re doing today. Seven quick taps give you a forecast, and whether now is a good time for a hard talk.</p>
+    <p><a class="ten-go" href="/quick-checks.html#today">Check today’s weather</a></p>
+    <p class="ten-time">It opens in this tab. Come back here with your browser’s Back button when you’re done.</p>
+  </li>
+
+  <li id="step-2">
+    <h2>Read the Preface, the simple version</h2>
+    <p class="ten-time">About 4 minutes · Pillar I, see the whole load</p>
+    <p>The work nobody sees: the quiet, unseen jobs that keep a shared life running, and why they deserve to be noticed. A few short cards, one idea each.</p>
+    <p><a class="ten-go" href="/book/preface.html">Read the Preface</a></p>
+  </li>
+
+  <li id="step-3">
+    <h2>Try one practice card</h2>
+    <p class="ten-time">About 3 minutes · Pillar IV, tune how you send and receive</p>
+    <p>Say it so it lands: turn a big feeling into a fact, a feeling and a kind ask.</p>
+    <div class="ten-card">
+      <p class="ten-before">“You never take the trash out.”</p>
+      <p><strong>Fact:</strong> The trash has gone out late three weeks running. <strong>Feeling:</strong> I feel worn out when I notice it every time. <strong>Ask:</strong> Could the trash be yours on Tuesdays?</p>
+      <label for="ten-try">Now try one of your own (it isn’t saved or sent)</label>
+      <textarea id="ten-try" rows="3" placeholder="Fact… Feeling… Ask…"></textarea>
+    </div>
+    <p>Want more? The full worksheet is <a href="/workpapers/wp-09-tone-filter.html">Say it so it lands</a>.</p>
+  </li>
+
+  <li id="step-4">
+    <h2>Log one thing you did today</h2>
+    <p class="ten-time">About 1 minute · Pillar I, see the whole load</p>
+    <p>Just one. Something you did that kept things running, however small: packed a lunch, paid a bill, remembered a birthday.</p>
+    <form class="ten-log" id="ten-log">
+      <label for="ten-thing">One thing I did today</label>
+      <input type="text" id="ten-thing" maxlength="140" autocomplete="off" placeholder="e.g. Booked the dentist for everyone">
+      <label class="ten-keep"><input type="checkbox" id="ten-keep"> Keep my list on this device, so it’s here next time (you can erase it any time)</label>
+      <div class="ten-row"><button type="submit" class="ten-btn">Log it</button></div>
+      <p class="ten-say" id="ten-say" role="status"></p>
+      <ol class="ten-list" id="ten-list" hidden></ol>
+      <div class="ten-row" id="ten-erase-row" hidden><button type="button" class="ten-btn is-erase" id="ten-erase">Erase my list</button></div>
+    </form>
+    <p>That’s the whole idea in small: see the work, notice your state, and say things so they land. When you’re ready for more, the <a href="/lemonade-stand.html">Lemonade Stand</a> logs a whole week.</p>
+  </li>
+</ol>
+
+<div class="try-this">
+  <p><strong>What next?</strong> If that felt useful, six gentle weeks walks you through the rest, one small step a week.</p>
+  <p><a href="/prog-01.html">See six gentle weeks &rarr;</a> <a href="/start-here.html">Back to Start here</a></p>
+</div>
+</main>
+<script>
+(function () {
+  'use strict';
+  var KEY = 'tol-ten-log-v1';
+  var form = document.getElementById('ten-log'), input = document.getElementById('ten-thing'), keep = document.getElementById('ten-keep'),
+      list = document.getElementById('ten-list'), say = document.getElementById('ten-say'), eraseRow = document.getElementById('ten-erase-row');
+  var items = [];
+  try { var saved = JSON.parse(localStorage.getItem(KEY) || 'null'); if (saved && saved.length) { items = saved; keep.checked = true; } } catch (e) {}
+  function esc(s) { var d = document.createElement('div'); d.textContent = s; return d.innerHTML; }
+  function draw() {
+    list.innerHTML = items.map(function (it) { return '<li>' + esc(it.t) + ' <small>(' + esc(it.d) + ')</small></li>'; }).join('');
+    list.hidden = !items.length;
+    eraseRow.hidden = !(keep.checked && items.length);
+  }
+  function store() {
+    try { if (keep.checked) localStorage.setItem(KEY, JSON.stringify(items.slice(-50))); else localStorage.removeItem(KEY); } catch (e) {}
+  }
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    var t = input.value.trim();
+    if (!t) { say.textContent = 'Type one small thing first. Anything counts.'; input.focus(); return; }
+    var d = new Date();
+    items.push({ t: t, d: d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) });
+    store(); draw(); input.value = '';
+    say.textContent = keep.checked ? 'Logged, and kept on this device. That counts.' : 'Logged for now. It will be gone when you leave this page, unless you tick “Keep my list.”';
+    if (window.TOLGarden) try { window.TOLGarden.gift('ten-minutes'); } catch (e2) {}
+  });
+  keep.addEventListener('change', function () { store(); draw(); say.textContent = keep.checked ? 'Your list will be kept on this device.' : 'Your list is no longer kept. It was erased from this device.'; });
+  document.getElementById('ten-erase').addEventListener('click', function () {
+    items = []; keep.checked = false; store(); draw(); say.textContent = 'Erased from this device.'; input.focus();
+  });
+  draw();
+})();
+</script>
+</body>
+</html>

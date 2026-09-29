@@ -29,7 +29,7 @@
     '.tol-join .tol-join-go{background:#2F5F8A;color:#fff}.tol-join .tol-join-go:hover{background:#264E73}' +
     '.tol-join button:focus-visible{outline:3px solid #2F5F8A;outline-offset:2px}' +
     '.tol-join .tol-join-small{margin:.55rem 0 0;font-size:.86rem;color:#4F4760}' +
-    '.tol-join .tol-msg{margin:.5rem 0 0;font-size:.92rem}.tol-join .tol-msg.is-error{color:#9B2C3C}.tol-join .tol-msg.is-ok{color:#2F5A3C}' +
+    '.tol-join .tol-msg{margin:.5rem 0 0;font-size:.92rem}.tol-join .tol-msg.is-error{color:#9B2C3C}.tol-join .tol-msg.is-ok{color:#2F5A3C}.tol-join .tol-msg.is-warn{color:#5A4214}' +
     '.tol-join-x{position:absolute;top:.35rem;right:.35rem;width:44px;height:44px;min-height:0!important;padding:0!important;background:none;color:#5E5470;font-size:1.4rem!important;line-height:1}' +
     '.tol-join-x:hover{background:rgba(0,0,0,.05)!important}' +
     '.tol-join-banner{position:relative;margin:0 0 1.4rem;padding:1.1rem 1.2rem}' +
@@ -67,7 +67,8 @@
     b.innerHTML =
       '<span class="tol-join-k">Free</span>' +
       '<h2 id="tol-join-h">Join our newsletter to unlock every area, free</h2>' +
-      '<p>Pop in your email and every chapter, workpaper and tool opens right away in this browser. You’ll get a short, friendly note when something new arrives. No payment, and you can unsubscribe any time.</p>' +
+      '<p class="tol-join-long">Pop in your email and every chapter, workpaper and tool opens right away in this browser. You’ll get a short, friendly note when something new arrives. No payment, and you can unsubscribe any time.</p>' +
+      '<p class="tol-join-short">Free. No payment. Unsubscribe any time.</p>' +
       form('tol-join-b') +
       '<p class="tol-join-small">Already joined on another device? Enter the same email here to open everything.</p>';
     var intro = main.querySelector('[data-home-intro]'); // right under the one-line "what this is"
@@ -124,6 +125,14 @@
   // ---------- gone the moment someone signs up ----------
   function removeAll() {
     Array.prototype.forEach.call(document.querySelectorAll('.tol-join'), function (n) {
+      var warn = n.querySelector('.tol-msg.is-warn');
+      if (warn) { // the newsletter couldn't be reached: keep the honest note and its "Try joining again" button in view
+        var x = n.querySelector('.tol-join-x');
+        Array.prototype.slice.call(n.childNodes).forEach(function (c) { if (c !== warn && c !== x) n.removeChild(c); });
+        if (warn.parentNode !== n) n.appendChild(warn);
+        warn.setAttribute('role', 'status');
+        return;
+      }
       var ok = n.querySelector('.tol-msg.is-ok');
       if (ok && n.classList.contains('tol-join-pop')) { setTimeout(function () { if (n.parentNode) n.parentNode.removeChild(n); }, 2600); return; } // let them read "You're in" first
       if (ok) { n.innerHTML = '<p class="tol-msg is-ok" role="status">' + ok.textContent + '</p>'; setTimeout(function () { if (n.parentNode) n.parentNode.removeChild(n); }, 6000); return; }
