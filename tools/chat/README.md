@@ -12,7 +12,9 @@ It answers in this order:
 3. **Calculators.** Five Battery Meter answers (WP-02: sum ÷ 20, bands 0.3 / 0.6), a CALC-01 read from
    balance, ownership and battery (0.40 / 0.35 / 0.25, bands 0.70 / 0.40, apex with retuning), a single
    score to explain, or two people's hours to workload balance. Always "not a verdict".
-4. **Clarifying chips** for vague messages ("help", "check in", "my partner").
+4. **Clarifying chips** for vague messages ("help", "check in", "my partner", "idk"). A short, personal message
+   that nothing else answers ("ugh, my sister") gets a warm clarifying question, never the off-topic reply, and a
+   follow-up in someone's own words ("he just writes ok") stays with the last playbook.
 5. **Program cards** (`program-cards.json`) for every tool, workpaper, chapter, game and the common
    questions, and **situation playbooks** (`situations/*.json`) when someone describes what's going on.
 6. **The site's pages** (BM25 search over passages, the glossary and the Library), and only when they
@@ -86,6 +88,19 @@ in it. `clarify` holds the clarifying prompts: a `pat`, a line `x`, and 2–4 `c
 `needsOther` means it needs another person. `situations/combos.json` hand-tunes a pair (`who+issue`):
 any field there replaces the composed one. Text may use {them}, {Them}, {they}, {their}.
 
+The chat works out who is doing the thing an issue is about ("my partner goes quiet" vs "I go quiet", "how do I
+say no to my mom"): the person named inside the strongest match, or the nearest one before it. When it's the
+other person, an issue's `*_other` fields are used (for any issue, not only `selfFirst` ones), and a named
+person becomes {them} ("my mom needs care and my brother does nothing" is about your brother). More fields:
+`defaultWho` (the relationship to assume when nobody is named, e.g. `family` for holidays), `themPat` (which
+named person is {them}, e.g. the roommate rather than their boyfriend), `scripts_also` ([label, [scripts]]:
+words for a second person involved, like the parent being cared for) and `tonight` (one tiny step for this
+evening, used by the "What can I do tonight?" chip every playbook offers).
+
+Tool names are matched with small typos allowed ("conversaton reader", "lemonaid stand"), and workpaper codes
+typed loosely ("work paper three", "wp-o1") are understood. Every reply is tidied before it's shown: each
+link and bullet once, and no chip that repeats a question just asked.
+
 Patterns use a small language (compiled by the build): `|` separates choices, a trailing `*` ends a word
 stem, ` .. ` allows up to four words between, `(a|b)` groups, `<a|b>` captures. They match lowercase
 text with apostrophes and in-word hyphens removed ("don't" → "dont", "co-parent" → "coparent").
@@ -115,7 +130,7 @@ Keep the background file under about 2 MB.
 
 ## Tests
 
-    node tools/chat/test-chat.js        # 210 questions with expected cards, playbooks, notes and pages
+    node tools/chat/test-chat.js        # 266 questions with expected cards, playbooks, notes and pages
     node tools/chat/coverage.js         # asks about every indexed page and checks the answer lands there
 
 Both run site-chat.js in Node through `chat-sandbox.js`, loading the knowledge files the way the page
