@@ -1,0 +1,385 @@
+{
+  "_about": "Everyday life situations: friends and groups, holidays and family, work, homes and big changes. Same format as the other issues files (see tools/chat/README.md). defaultWho is the kind of relationship to assume when the message names nobody; themPat picks which named person is {them}; scripts_also adds a second set of words for someone else involved; tonight is one tiny step for this evening.",
+  "issues": {
+    "friendgroup": {
+      "label": "always being the one who organizes",
+      "defaultWho": "friend",
+      "match": [["(im|i am) (always )?the (only )?one who (plans|organizes|organises|makes (the )?plans|reaches out|texts first|sets (things|it) up|books)|i (always|have to|end up) (plan|planning|organize|organizing|organise|make (the )?plans|do (all )?the planning|set (everything|it|things) up|book everything)|(nobody|no one) (else )?(ever )?(plans|organizes|organises|makes plans|reaches out|helps plan|steps up)|(friends?|group) (never|dont|doesnt|wont) (plan|help plan|make plans|organize|organise|reach out|step up)|(the )?(group|friend group) organi[sz]er|default (planner|organi[sz]er)", 5], ["organi[sz]*|plan*|group|hang out|get together", 1]],
+      "reflect": "Being the one who always gets everyone together is lovely work, and it’s tiring when it only ever runs through you.",
+      "reflect_self": "Being the one who always gets everyone together is lovely work, and it’s tiring when it only ever runs through you.",
+      "going": "This is Pillar V, Notice the quiet incentives, and Pillar I, See the whole load. In most groups, whoever organizes once becomes the organizer by default. It’s rarely that {them} don’t care. The job just never had a name, so it drifted to the person who noticed first. Planning is real work (dates, bookings, reminders, chasing replies), and naming it is what lets it be shared.",
+      "steps": ["Name the job out loud, kindly: “I love getting us together, and I’d love not to be the only one who does it.”", "Offer a simple rotation or split, like one person picks the date, one books, one sends reminders.", "Then let one plan wait for someone else to pick it up, without rescuing it. A small gap is often what lets others step in."],
+      "scripts": {
+        "default": ["I love it when we all get together, and I’ve noticed I’m usually the one who sets it up. Could someone else pick the next one? I’m happy to help.", "How about we take turns planning? I’ll do this month, and whoever’s next picks any date in June.", "I’m running low on planning energy lately. Could one of you grab the booking this time?"],
+        "family": ["I’ve organized the last few family get-togethers. Could someone else host or plan the next one? I’ll bring dessert."],
+        "coworker": ["I’ve been setting up the team lunches for a while. Could we rotate it, maybe a different person each month?"]
+      },
+      "path": [["Where friends start", "/relationships-in-depth.html#friends"], ["WP-03: One owner per job", "/workpapers/wp-03-raci-treaty.html"], ["Invisible work (Library)", "/library/fairness.html#invisible-work"]],
+      "deeper": ["why jobs drift to one person", "What is diffusion of responsibility?"],
+      "ex": "Priya organized every birthday dinner for her friends for three years. She finally said, “I love doing this, but I’d love a break. Who wants October?” Jess took it, picked a place Priya would never have chosen, and it was one of their best nights.",
+      "tonight": "send one light message naming the job: “I’d love someone else to pick our next get-together. Any takers?”"
+    },
+    "trip": {
+      "label": "planning a trip or event together",
+      "defaultWho": "friend",
+      "match": [["plan*? .. (trip|vacation|holiday|getaway|weekend away|road trip|camping|reunion|bachelorette|bachelor party|birthday party|wedding)|(trip|vacation|getaway|reunion|party) planning|help (me )?(plan|organize|organise|book) (the |our |a )?(trip|vacation|getaway|party|reunion|weekend)|who books|splitting (the )?(airbnb|hotel|rental|cabin|house)", 5], ["trip|vacation|travel*|airbnb|booking|itinerary", 1]],
+      "reflect": "Group trips are so much fun once you’re there, and the planning can quietly land on one person.",
+      "going": "This is Pillar I, See the whole load, and Pillar II, Fix the setup, not the person. A trip is a pile of small jobs (dates, budget, booking, travel, food, the group chat), and when nobody owns them, they drift to whoever cares most. It isn’t that {them} don’t want to help. They often can’t see which job is theirs.",
+      "steps": ["Write down the jobs, even the small ones: pick dates, set a budget, book the place, sort travel, plan food, collect money.", "Ask each person to pick one job by a date: “Can everyone claim one by Friday?”", "Agree a simple rule for money up front, like one person books and everyone pays back within a week."],
+      "scripts": {
+        "default": ["I’m excited for this trip! To keep it easy, I made a list of the jobs. Could everyone grab one by Friday?", "I can book the place if someone takes travel and someone takes food. Who wants which?", "Quick money note so nobody’s out of pocket: I’ll book, and could everyone send their share by Sunday?"],
+        "family": ["For the reunion, could each household take one piece? We’ll do the booking if someone can sort food and someone does the schedule."],
+        "partner": ["Could we split the trip planning? I’ll handle the booking if you take the packing list and the drive."]
+      },
+      "path": [["The Lemonade Stand (list the jobs, see the split)", "/lemonade-stand.html"], ["WP-03: One owner per job", "/workpapers/wp-03-raci-treaty.html"], ["Where friends start", "/relationships-in-depth.html#friends"]],
+      "deeper": ["one owner per job", "What is the RACI treaty?"],
+      "ex": "Six friends were planning a cabin weekend, and Marco was doing everything. He posted a list of seven jobs in the group chat and wrote, “Grab one by Friday!” By Thursday every job had a name next to it, and Marco only had the booking.",
+      "tonight": "post a short list of the trip jobs in the group chat and ask everyone to claim one by a set day."
+    },
+    "holidays": {
+      "label": "holidays, hosting and family get-togethers",
+      "defaultWho": "family",
+      "match": [["holidays?|thanksgiving|christmas|xmas|hanukkah|chanukah|passover|easter|eid|diwali|lunar new year|new years eve|the festive season|holiday season|family (gatherings?|get togethers?|dinners?|reunions?)", 4], ["(who|whose turn to|whether to|we) (host|hosts|hosting)|hosting|host (it|this year|the)|whose (house|place)|which (family|side)|(his|her|their|my|your) (family|side) (or|vs|versus)|split(ting)? (the )?(day|holidays)", 3], ["stress*|tense|dread*|busy|travel*|cook*|gifts?", 1]],
+      "reflect": "Holidays carry so many hopes, and so much work, that they can feel heavier than any ordinary week.",
+      "going": "This is Pillar I, See the whole load, and Pillar III, Read your state first. Holidays bundle lots of invisible jobs (hosting, cooking, gifts, travel, keeping everyone happy) into a few busy days, when everyone is tired and old family roles come back fast. When tension rises, it’s usually about the load and the expectations, not about anyone being difficult. Agreeing the plan early, and who owns each part, takes most of the heat out.",
+      "steps": ["Decide the big questions early and calmly, weeks ahead: who hosts, which days, and who brings what.", "Make a list of the holiday jobs, including the invisible ones like gifts and cards, and give each one owner.", "Plan a little recovery time for yourself in the middle of it: a walk, a quiet hour, an early night."],
+      "scripts": {
+        "default": ["Could we sort out the holiday plan this weekend, while it’s calm? I’d love to agree who’s hosting and who’s bringing what.", "I’d love to host less this year. Could we take turns, or could someone else take dinner and I’ll do dessert?", "I want the day to be fun for all of us, me included. Can we split the cooking?"],
+        "family": ["I know we both love hosting. How about you take this year and I take next year, and we write it down so we don’t have to decide again?", "Could each of us bring one dish this year, so nobody’s cooking all day?"],
+        "partner": ["Could we plan the holidays together this week? I’d love to agree which family we see when, before anyone asks us.", "Can we split the holiday jobs? I’ll do gifts if you take travel and cards."]
+      },
+      "path": [["Holidays (Library)", "/library/life.html#holidays"], ["WP-03: One owner per job", "/workpapers/wp-03-raci-treaty.html"], ["Where families start", "/relationships-in-depth.html#family"]],
+      "deeper": ["holidays and family expectations", "What does the Library say about holidays?"],
+      "ex": "Every year Ana and her brother argued about who would host Thanksgiving. In September they agreed a simple rotation (odd years her place, even years his) and wrote it in the family chat. The argument simply stopped, because there was nothing left to decide.",
+      "tonight": "write down the three holiday questions that cause the most tension (who hosts, which days, who brings what) so you can raise them early, on a calm day."
+    },
+    "siblings": {
+      "label": "friction with a brother or sister",
+      "defaultWho": "family",
+      "match": [["my (brother|sister|siblings?|bro|sis) and i (always |keep |still )?(fight|argue|clash|bicker|dont get along|butt heads)|(fight|argue|argument|arguing|fighting|clash) with my (brother|sister|siblings?)|(brother|sister|siblings?) (always|keeps?) (starts?|picks?) (fights?|arguments?)|sibling (rivalry|fights?|drama|tension)", 5], ["brother|sister|sibling*", 1]],
+      "reflect": "Sibling friction can sting in a special way, because you know each other so well and old roles come back so fast.",
+      "going": "This is Pillar II, Fix the setup, not the person, and Pillar III, Read your state first. Siblings often slip back into roles from childhood (the responsible one, the baby, the peacemaker), and the same argument replays because the setup never changed. Most sibling fights are about fairness, recognition or old patterns, not about the thing on the table. Treating it as a shared problem to solve, rather than a contest to win, helps.",
+      "steps": ["Pick one topic and one calm time, not the middle of a family event.", "Say what you’d like to happen next, rather than going over who was right last time.", "If it’s about a shared job (hosting, a parent, a gift), agree one owner or a simple rotation and write it down."],
+      "scripts": {
+        "default": ["I don’t want us to keep having the same argument. Could we find a plan we both like, and write it down?", "I think we slip into old roles when we’re together. Can we try doing this one differently?", "I care about us getting along more than about who’s right. What would feel fair to you?"]
+      },
+      "path": [["Where families start", "/relationships-in-depth.html#family"], ["Family systems and roles (Library)", "/library/life.html#family-systems"], ["WP-09: Say it so it lands", "/workpapers/wp-09-tone-filter.html"]],
+      "deeper": ["family roles that come back", "What are family scripts?"],
+      "ex": "Jordan and his sister argued every time they planned their dad’s birthday. They agreed that one of them would own the plan each year, and the other would just show up and help. The planning got easier, and so did the birthday.",
+      "tonight": "write one sentence about what you’d like to happen next with your sibling, not about the last argument."
+    },
+    "inlaws": {
+      "label": "in-laws and the extended family",
+      "defaultWho": "family",
+      "match": [["in laws?|inlaws?|mother in law|father in law|motherinlaw|fatherinlaw|sister in law|brother in law|sisterinlaw|brotherinlaw|(his|her|their|my partners|my husbands|my wifes) (mom|mum|mother|dad|father|parents|family)", 5], ["visit*|visiting|stay*|opinions?|advice|comments?", 1]],
+      "reflect": "In-law tension is so common, and it’s tricky because it involves someone you love and people they love.",
+      "going": "This is Pillar II, Fix the setup, not the person, and Pillar IV, Tune how you send and receive. Two families usually have two different sets of habits and expectations, and neither is wrong. Things go most smoothly when partners agree a plan together first, and each person talks to their own family. When one partner carries every hard message, it strains everyone.",
+      "steps": ["Talk with your partner first, at a calm time, and agree what you both want (visits, advice, holidays).", "Agree that each of you speaks to your own family about it, as “we”, not “my partner wants”.", "Pick one small change to try, like visits with a set end time, rather than everything at once."],
+      "scripts": {
+        "default": ["Could we agree a plan for your parents’ visits together first? Then it’s our plan, and you could share it with them.", "I really like your mom, and I’d love for visits to feel easy for all of us. Could we try a set end time this time?"],
+        "family": ["Thank you for all your help with the kids. We’re trying to do bedtime our way for a while, and it would mean a lot if you’d go along with it."]
+      },
+      "scripts_also": ["For your partner", ["I don’t want to come between you and your family. Could we decide what we want together, and you talk to them?"]],
+      "path": [["In-laws (Library)", "/library/life.html#in-laws"], ["Where partners start", "/relationships-in-depth.html#partners"], ["WP-09: Say it so it lands", "/workpapers/wp-09-tone-filter.html"]],
+      "deeper": ["in-laws and two family cultures", "What does the Library say about in-laws?"],
+      "ex": "Mia’s mother-in-law often gave parenting advice at dinner. Mia and her husband agreed together that he would mention it to his mom, kindly: “We love your help, and we’re figuring out bedtime our own way.” It landed far better coming from him.",
+      "tonight": "jot down the one thing about the in-laws you’d most like to agree on with your partner, so you can bring it up on a calm day."
+    },
+    "wontjoin": {
+      "label": "when the other person won’t do the program",
+      "defaultWho": "partner",
+      "match": [["(wont|will not|doesnt want to|does not want to|dont want to|refuses to|refused to|isnt interested in|is not interested in|not interested in|wont even) (do|join|try|use|read|look at|fill in|fill out|open) (the |this |these |any )?(program|tools?|workpapers?|worksheets?|exercises?|site|it|this|stuff|book)|what if (my )?\\w+ (wont|doesnt|refuses)( want to)? (do|join|try|use|read)|(partner|husband|wife|boyfriend|girlfriend|roommates?|family|kids?|coworkers?|boss|team) (thinks|says) (it|this|the program) is (dumb|silly|stupid|pointless|a waste)|(wont|doesnt) (do|join) (it|this) with me", 7]],
+      "reflect": "It’s disappointing when you’d like to work on things together and the other person isn’t keen, at least not yet.",
+      "going": "This is Pillar II, Fix the setup, not the person. The good news is that the program works from one side. Seeing your own load, reading your own state before you talk, and changing how you send things all change the pattern between you, even if {them} never opens a workpaper. Pushing tends to make people dig in. Small, visible changes on your side often do more than any invitation.",
+      "steps": ["Start on your own: log your week in WP-01 and check your battery before hard talks.", "Change one thing on your side, like the timing or wording of one request, and notice what happens.", "Invite lightly, once, without pressure: offer one small thing, like a two-minute check-in, not the whole program."],
+      "scripts": {
+        "default": ["I’ve been trying a little check-in thing that helps me. No pressure, but would you do two minutes of it with me on Sunday?", "You don’t have to read any of it. I’m just trying to say things more clearly, and I’d love to know if it helps.", "I’m not trying to fix you. I’m trying to make our week easier, for both of us."]
+      },
+      "path": [["Can I do this on my own?", "/is-this-for-you.html"], ["WP-01: Who did what", "/workpapers/wp-01.html"], ["Know your own wiring", "/know-yourself.html"]],
+      "deeper": ["doing it from one side", "Can I do this alone?"],
+      "ex": "Chris’s partner rolled their eyes at “workpapers.” So Chris just started checking their own battery before raising anything, and moved hard talks away from right after work. A month later their partner said, “Things feel calmer lately. What are you doing?” That was the moment to share it.",
+      "tonight": "do one thing just for you: a one-minute battery check before any conversation that matters."
+    },
+    "movingin": {
+      "label": "moving in together",
+      "defaultWho": "partner",
+      "match": [["mov(e|ed|ing) in (together|with (my |our )?\\w+)|(just|recently) moved in|first (home|apartment|place|flat) together|living together for the first time|new (home|place|apartment) together|combin(e|ing) (our )?(homes|households|stuff|finances)", 6], ["lease|living together|new place", 1]],
+      "reflect": "Moving in together is exciting, and it turns lots of unspoken habits into daily decisions all at once.",
+      "going": "This is Pillar II, Fix the setup, not the person, and Pillar V, Notice the quiet incentives. The first months set the defaults: whoever does a job once often ends up doing it forever. Each of you brings habits from your last home (how clean is clean, when bills get paid, how much time alone), and none of them are wrong. Talking about the setup early, before resentment has a chance to build, is much easier than untangling it later.",
+      "steps": ["Before (or soon after) the move, list the regular jobs of running a home and give each one owner.", "Talk about money in plain numbers: rent, bills, groceries, and how you’ll split them.", "Agree a short weekly check-in for the first couple of months, to tweak things while they’re small."],
+      "scripts": {
+        "default": ["Before we fall into habits, could we list the house jobs and each pick the ones we’d like to own?", "Can we talk about how we’ll split the bills? I’d love to agree on it before the first one arrives.", "Could we do a quick check-in each Sunday for the first month, just to see what’s working?"]
+      },
+      "path": [["WP-03: One owner per job", "/workpapers/wp-03-raci-treaty.html"], ["WP-13: The 90-second daily check-in", "/workpapers/wp-13-pll-protocol.html"], ["Moving and big changes (Library)", "/library/life.html#moving-and-transitions"]],
+      "deeper": ["one owner per job", "What is the RACI treaty?"],
+      "ex": "Before moving in, Dev and Sam spent one evening listing every house job they could think of. They each picked their favorites and split the rest. Six months later, the dishes had never once been an argument.",
+      "tonight": "start a shared list of house jobs together, even just five, and each put your name on one."
+    },
+    "newbaby": {
+      "label": "life with a new baby",
+      "defaultWho": "partner",
+      "match": [["new ?born|new baby|(just|recently) had (a|our|the) baby|since (the|our) baby|(the|our) baby (is|was) (born|here|arriving)|new (mom|mum|dad|parents?)|first (baby|child|kid)|parental leave|maternity leave|paternity leave|night feeds?|nappies|diapers|baby (wont|doesnt) sleep", 6], ["baby|infant|nursery|feeds?", 2]],
+      "reflect": "A new baby brings so much love and so little sleep, and it reshuffles who does what almost overnight.",
+      "going": "This is Pillar I, See the whole load, and Pillar III, Read your state first. With a baby, the load jumps, and much of it is invisible: noticing when the next feed is due, remembering appointments, knowing where the spare clothes are. The person at home often becomes the default for everything. And when everyone is short on sleep, small things feel huge. It’s the setup and the tiredness talking, not a sign that anything is wrong between you.",
+      "steps": ["Give some baby jobs a clear owner, like bath time, the night bottle or the diaper bag, so it isn’t all defaulting to one person.", "Before any hard talk, check both batteries. If either of you is running on empty, it can wait for a nap.", "Protect one small daily moment that’s just for the two of you, even five minutes."],
+      "scripts": {
+        "default": ["I’m so tired I can’t think straight. Could you own bath time every night, start to finish, so I get one hour off?", "Can we each take one night feed, so we both get a stretch of sleep?", "I love us, and I miss us. Could we have five minutes tonight, just to talk, no baby talk?"]
+      },
+      "path": [["Becoming parents (Library)", "/library/life.html#transition-to-parenthood"], ["WP-02: How full is your battery?", "/workpapers/wp-02-battery-stress-meter.html"], ["WP-03: One owner per job", "/workpapers/wp-03-raci-treaty.html"]],
+      "deeper": ["becoming parents", "What is the transition to parenthood?"],
+      "ex": "Three weeks in, Kim was doing every night feed and quietly resenting it. They agreed Alex would own the 11 p.m. bottle and bath time, fully, noticing included. Kim got one real stretch of sleep a night, and the snapping stopped.",
+      "tonight": "pick one baby job for the other person to own fully, starting tonight, like bath time or the late bottle."
+    },
+    "shorttexts": {
+      "label": "short or slow replies (“k”, “fine”, being left on read)",
+      "match": [["one word (answers?|replies|reply|texts?|responses?)|(just|only) (says?|writes?|texts?|replies|replied|sent|sends|answers?|answered) (back )?(k|kk|ok|okay|fine|sure|whatever|yep|yeah|thumbs up)|(replies|replied|answers?) (with )?(just )?(k|ok|fine|a thumbs up)|leaves? me on read|left (me )?on read|(takes?|took) (hours|days|forever|ages) to (reply|respond|text back|answer)|slow (to reply|to respond|texter|replies)|(doesnt|dont|never|wont) (text|message|reply|respond|write) back|(k|fine|ok) (with a period|full stop)|what does (k|ok|fine) mean|dry texter|dry texts", 6], ["texts?|texting|reply|replies|messages?|read receipts?", 1]],
+      "reflect": "A short reply can land like a door closing, especially when you’ve written something that mattered to you.",
+      "going": "This is Pillar IV, Tune how you send and receive. Text strips out tone, so a “k” or “fine” gets filled in by whatever mood you’re in. For some people, short replies just mean busy, driving, or “got it”. For others, they mean “not now”. People also have very different texting styles and speeds, and that’s wiring and habit more than feeling. The only way to know is to ask, kindly, at a calm moment, rather than guessing from the punctuation.",
+      "steps": ["Before reading anything into it, check your own state: are you tired or already worried? That colors every short reply.", "Ask once, lightly, what their short replies usually mean: “When you write ‘ok’, is that ‘got it’ or ‘I’m upset’?”", "If something matters, move it off text: “Can we talk about this tonight?” works better than a long message."],
+      "scripts": {
+        "default": ["Quick check, because text loses tone: when you replied “ok”, did that mean “got it”, or is something up?", "No rush on this. When you have a minute tonight, I’d love to talk about it properly rather than over text.", "I’ve noticed I read a lot into short replies. What does a quick “k” usually mean for you?"],
+        "partner": ["I know you text short when you’re busy. Could you add a “busy, call you later” when that’s what it is? It would really help me not worry."],
+        "coworker": ["Just to check I read your reply right: does “fine” mean the plan works for you, or would you like changes?"]
+      },
+      "path": [["The Signal Translator", "/signal-translator.html"], ["Texting and tone (Library)", "/library/communication.html#texting-and-tone"], ["The Conversation Reader", "/conversation-reader.html"]],
+      "deeper": ["texting and tone", "How does tone get lost in texts?"],
+      "ex": "Rae kept reading her partner’s “ok.” as annoyed. When she finally asked, he laughed: “It means I read it and I’m driving.” They agreed he’d send “driving, talk later” instead, and a whole category of worry disappeared.",
+      "tonight": "before you reply to the short message, wait ten minutes, then send one kind check-in question rather than a long message."
+    },
+    "manager": {
+      "label": "a manager who piles on work or micromanages",
+      "only": ["coworker"],
+      "match": [["micro ?manag*|(dumps?|dumping|dumped|piles?|piling|piled|offloads?|offloading) (all )?(the |their |his |her |more |extra )?(work|tasks?|projects?|everything|stuff|it|more) on me|keeps? (adding|giving me|piling|assigning) (more|extra|work|tasks?)|(gives|assigns|hands) me (all )?(the|their|his|her|extra|more) (work|tasks?|projects?)|last minute (work|tasks?|requests?|deadlines?)|(checks|checking) (up )?on (me|my work) (constantly|all the time|every)|hovers? over me|breathing down my neck|wants to approve everything|cc s? (my boss|everyone)|(boss|manager|supervisor|team lead) .. (unrealistic|too much|overload*)", 6], ["workload|deadlines?|too much work|overtime|priorities", 1]],
+      "reflect": "Feeling buried in work, or watched over every step, is draining, and it’s hard to push back on someone who decides your work.",
+      "going": "This is Pillar II, Fix the setup, not the person, and Pillar I, See the whole load. Managers often can’t see how much is already on your plate, because it isn’t written down anywhere they look. Close checking often comes from their own pressure or unclear ownership, not a judgment of you. Making the load visible, and agreeing who decides what, usually works better than silently absorbing it or pushing back in the moment.",
+      "steps": ["Write down what’s on your plate right now, with rough hours, so the load is visible in one place.", "When something new arrives, ask what should move: “Happy to take this. Which of these should slip?”", "For close checking, suggest a set rhythm: “Could I send you a short update every Thursday, so you don’t need to chase?”"],
+      "scripts": {
+        "default": ["I want to do this well. Right now I have the report, the launch and the onboarding. If I take this on, which one should move?", "Could we agree on priorities for this week? I’d rather tell you now than miss something later.", "Would a short update from me every Thursday help? That way you’d always know where things stand without needing to check."]
+      },
+      "path": [["The Lemonade Stand (make the load visible)", "/lemonade-stand.html"], ["WP-03: One owner per job", "/workpapers/wp-03-raci-treaty.html"], ["Work disagreements (Library)", "/library/conflict.html#work-disagreements"]],
+      "deeper": ["role clarity at work", "What is role ambiguity?"],
+      "ex": "Tasha’s manager kept adding “quick” tasks. She started replying, “Sure. Right now I have A, B and C. Which should move?” Her manager usually picked one to drop, and twice said, “Oh, I didn’t realize you had all that.”",
+      "tonight": "write a quick list of everything on your plate, with rough hours, so you have it ready for tomorrow."
+    },
+    "onesided": {
+      "label": "a friendship that feels one-sided",
+      "defaultWho": "friend",
+      "match": [["(always|only|just) talks? about (herself|himself|themselves|themself|her life|his life|their life|her problems|his problems|their problems)|never asks? (about me|how i am|how im doing|about my)|(one sided|onesided|one way) (friendship|relationship)|(im|i am) always the one (who|that) (reaches out|texts first|calls|makes plans|listens)|i always (have to )?(reach out|text first|call first|make the plans)|only (calls|texts|messages|reaches out) when (she|he|they) (needs?|wants?)|(doesnt|never) (make|return) (the )?effort|all about (her|him|them)", 6], ["listen*|effort|reach out|friendship", 1]],
+      "reflect": "It’s lonely to feel like you give a lot to a friendship and don’t get much back.",
+      "going": "This is Pillar I, See the whole load, and Pillar IV, Tune how you send and receive. Friendships drift out of balance quietly, often without either person noticing. Some people talk a lot when they’re stressed; some don’t ask questions because they’re waiting to be invited to; some just have a different rhythm. It isn’t necessarily that {them} don’t care. A light, honest word about what you’d like usually does more than quietly pulling away.",
+      "steps": ["Notice what you actually want more of: being asked about your life, them reaching out first, or more balanced plans.", "Say it lightly, as an invitation, not a complaint: “Can I tell you about my week too?”", "Then give it a little time and notice. A friend who cares will usually adjust once they know."],
+      "scripts": {
+        "default": ["I love hearing about your life. Can I tell you about something going on with me too?", "I’ve noticed I usually reach out first. I’d really love it if you texted me sometimes too.", "Could we swap for a bit? I’ve had a lot on my mind and I’d love to talk it through with you."]
+      },
+      "path": [["Where friends start", "/relationships-in-depth.html#friends"], ["Bids for connection (Library)", "/library/relationships.html#bids-for-connection"], ["WP-09: Say it so it lands", "/workpapers/wp-09-tone-filter.html"]],
+      "deeper": ["bids for connection", "What are bids for connection?"],
+      "ex": "Every coffee with Sam turned into an hour about Sam’s job. One day Leah said, “Can I tell you about my week too? It’s been a lot.” Sam looked surprised, then asked three questions in a row. “I didn’t realize I was doing that,” Sam said later.",
+      "tonight": "notice one thing you’d like to share with your friend, and plan to bring it up the next time you talk."
+    },
+    "resentment": {
+      "label": "resentment that’s building up",
+      "selfFirst": true,
+      "match": [["resent*|bitter(ness)?|(feel|feeling|getting) (so )?(bitter|resentful)|(its|it is|things are) building up|keep(ing)? score|keeping (a )?tally|holding (a )?grudge|(cant|can t) let (it|this) go", 5], ["fed up|sick of|tired of", 1]],
+      "reflect": "Yes, it’s very normal to feel resentful sometimes. Resentment usually builds when something has gone unnoticed or unspoken for a while. It’s information, not a character flaw.",
+      "going": "This is Pillar I, See the whole load, and Pillar V, Notice the quiet incentives. Resentment is often the feeling of an unbalanced ledger: effort that isn’t seen, a request you haven’t made, or a job that quietly drifted to you. It tends to grow in silence, and it shrinks fastest when the facts get put on the table in a calm, specific way. The goal isn’t to prove anyone wrong. It’s to find the unmet need underneath.",
+      "steps": ["Ask yourself what, specifically, the resentment is about: a job, a pattern, not being thanked, or not being asked.", "Write the facts down, without adjectives, so you can see them clearly (WP-01 is good for this).", "Turn it into one specific, kind request, and pick a calm time to make it."],
+      "scripts": {
+        "default": ["I’ve noticed I’ve been feeling a bit resentful about the evenings, and I don’t want it to build. Could we look at how we split things?", "I don’t want to keep score. I just want to tell you what’s been weighing on me, so we can fix it together.", "Something’s been building up for me, and I’d rather say it kindly now than snap about it later. Is tonight okay?"]
+      },
+      "reflect_other": "It’s hard to feel resentment coming from someone you care about, even when it isn’t said out loud.",
+      "going_other": "This is Pillar I, See the whole load. Resentment usually means someone feels a part of their load isn’t seen or shared. It’s rarely about one incident. Asking with real curiosity, and listening without defending, is usually the fastest way to find out what’s underneath.",
+      "steps_other": ["Ask, at a calm time, with real curiosity: “It feels like something’s been building. What’s been hardest?”", "Listen first, and reflect back what you hear before explaining your side.", "Look at the facts together, like one week of who does what, rather than debating impressions."],
+      "scripts_other": ["It feels like something’s been building for you. I’d really like to hear it, and I’ll try to just listen first.", "I don’t want you to carry this on your own. What would make things feel fairer?"],
+      "path": [["WP-01: Who did what", "/workpapers/wp-01.html"], ["WP-09: Say it so it lands", "/workpapers/wp-09-tone-filter.html"], ["Unbilled Debt: the work nobody sees", "/book/preface.html"]],
+      "deeper": ["why we each think we do more", "Why do we each think we do more?"],
+      "ex": "Nina felt a flash of resentment every time she unloaded the dishwasher. When she wrote down her week, she realized it wasn’t the dishes, it was that nobody ever asked if she needed a hand. She said exactly that, kindly, and it was a much shorter talk than she’d feared.",
+      "tonight": "write down, in one sentence, what the resentment is really about. Just for you, no sending."
+    },
+    "groupchat": {
+      "label": "group chats",
+      "defaultWho": "friend",
+      "match": [["group ?chat|group ?text|group ?thread|family chat|whatsapp group|(the|our) (chat|thread) (is|was|got|gets)|group message", 6], ["muted?|replies|left the (chat|group)|drama|pinged", 1]],
+      "reflect": "Group chats can be great, and they can also get noisy, tense or quiet in ways that are hard to read.",
+      "going": "This is Pillar IV, Tune how you send and receive, and Pillar V, Notice the quiet incentives. In a group chat, everyone reads the same words in their own mood, and nobody feels responsible for replying because someone else might. That’s why plans stall and small jokes can land wrong. It usually isn’t that people don’t care. Clear asks with a name and a date, and moving anything tense to a one-on-one, help a lot.",
+      "steps": ["When you need an answer, name people and a date: “Sam and Jo, can you confirm by Thursday?”", "Move anything tense out of the group and into a private message or a call.", "It’s okay to mute a busy chat and check it once a day. Tell people if they need you, to message you directly."],
+      "scripts": {
+        "default": ["Quick poll so we can lock this in: Friday or Saturday? Could everyone vote by Wednesday night?", "Hey, I think my message in the group came out wrong. Can I call you for a minute?", "I’m muting the chat for a bit so I can focus this week. Text me directly if you need me!"]
+      },
+      "path": [["The Conversation Reader", "/conversation-reader.html"], ["Texting and tone (Library)", "/library/communication.html#texting-and-tone"], ["Where friends start", "/relationships-in-depth.html#friends"]],
+      "deeper": ["why nobody replies in groups", "What is diffusion of responsibility?"],
+      "ex": "The family chat had discussed Mom’s birthday for two weeks with no decision. Kai wrote, “Two options, vote by Sunday: dinner at ours, or the Italian place.” Everyone voted within the day.",
+      "tonight": "if the group chat needs a decision, post one clear question with two options and a deadline."
+    },
+    "siblingcare": {
+      "label": "caring for a parent when siblings don’t share it",
+      "defaultWho": "family",
+      "themPat": "brother|sister|siblings|sibling|bro|sis|stepbrother|stepsister",
+      "match": [["(brother|sister|siblings?|bro|sis) .. (does|do|did|is doing|are doing) (nothing|very little|little|less|zero|none of it)|(brother|sister|siblings?) (never|doesnt|dont|wont|isnt|arent|refuses? to) (help|helping|visits?|calls?|step up|pitch in|do (anything|their share|any of it))|(i|im) (the only one|doing all the) (caring|looking after|care|helping) .. (mom|mum|dad|mother|father|parents?)", 6], ["(mom|mum|dad|mother|father|parents?|grandma|grandpa|grandmother|grandfather) .. (needs?|needing) .. (care|help|support|looking after|more help|someone)|(ageing|aging|elderly|older) (mom|mum|dad|mother|father|parents?)|(care|caring) for (my |our )?(mom|mum|dad|mother|father|parents?)", 3]],
+      "reflect": "It sounds like your parent needs more care, and much of it is landing on you while {them} does very little. That’s a heavy, lonely mix, and it makes sense that it hurts.",
+      "going": "This is Pillar I, See the whole load, and Pillar V, Notice the quiet incentives. Care for a parent usually drifts to whoever lives closest, noticed first, or has always been the responsible one. The other siblings often don’t see the daily work (appointments, calls, noticing what’s changed), so it looks smaller from where they stand. It may not be that {them} doesn’t care. The care has simply never been split out loud. Listing the jobs and asking for specific ones works better than asking for “more help”.",
+      "steps": ["List the care jobs, including the invisible ones: appointments, prescriptions, calls, bills, visits, and noticing changes.", "Ask {them} for one or two specific jobs they can own from afar, like the pharmacy calls or the bills, rather than general help.", "Check your own battery. Caring runs people down quietly, and it’s okay to ask for a break, or for outside help."],
+      "scripts": {
+        "default": ["Mom needs more help now, and I’m doing most of it. Could you take over the pharmacy and the Thursday call, fully, starting this week?", "I’m not trying to blame you. I just can’t keep doing it all. Can we list what Dad needs and split it?", "Even from far away, you could own the bills and the insurance calls. Would you take those?"]
+      },
+      "scripts_also": ["For your parent", ["I love helping you, and I want to keep doing it well. Would it be okay if my brother took over the bills?", "We’re sorting out a plan so you always have someone to call. Is there anything you’d like us to know?"]],
+      "path": [["Where caregivers start", "/relationships-in-depth.html#caregivers"], ["WP-03: One owner per job", "/workpapers/wp-03-raci-treaty.html"], ["Caring for ageing parents (Library)", "/library/life.html#ageing-parents"]],
+      "deeper": ["caregiver strain", "What is caregiver strain?"],
+      "ex": "Rosa did all of her mom’s appointments while her brother lived two states away. She listed every care job and asked him to own three he could do from home: the bills, the pharmacy refills and a Sunday video call. He said yes to all three. He had just never known what to offer.",
+      "tonight": "write down every care job you did this week, even the tiny ones, so you have the list ready when you talk to your sibling."
+    },
+    "blended": {
+      "label": "blended families and stepparenting",
+      "defaultWho": "partner",
+      "match": [["step ?(kids?|son|daughter|child|children|mom|mum|dad|parent|parenting|family)|stepkids?|stepson|stepdaughter|stepchild(ren)?|stepparent*|blended family|(his|her|their|my partners|my husbands|my wifes) (kids|children|son|daughter)|(my|our) (bonus (kids?|son|daughter))|(not|isnt) (my|their) (real )?(kid|parent|mom|dad)", 6], ["two families|rules|discipline", 1]],
+      "reflect": "Blending families takes real patience. You’re building something new while everyone brings their own history and loyalties.",
+      "going": "This is Pillar II, Fix the setup, not the person, and Pillar IV, Tune how you send and receive. In blended families, kids, parents and stepparents often have different expectations about roles, rules and closeness, and it usually takes years, not months, to settle. Tension is normal, not a sign it isn’t working. Things tend to go better when the parent leads on discipline for their own kids for a while, and the stepparent builds warmth first.",
+      "steps": ["Agree with your partner, privately and calmly, on a few house rules you both support.", "Let each parent lead on rules for their own kids for now, while the stepparent focuses on warmth and one-on-one time.", "Make small, regular moments, like a shared hobby or a weekly outing, that don’t depend on anyone calling anyone Mom or Dad."],
+      "scripts": {
+        "default": ["Could we agree on a few house rules together first, and then you share them with the kids? I think they’ll hear it better from you.", "I’d love to build my own relationship with them, slowly. Could I take them for pancakes on Saturdays?"],
+        "kid": ["I’m not trying to replace your mom. I’d just like us to get along. Want to help me pick dinner tonight?"]
+      },
+      "path": [["Stepfamilies (Library)", "/library/life.html#stepfamilies"], ["Where families start", "/relationships-in-depth.html#family"], ["Where co-parents start", "/relationships-in-depth.html#co-parents"]],
+      "deeper": ["how stepfamilies settle", "What does the Library say about stepfamilies?"],
+      "ex": "Jamie kept clashing with his stepdaughter over screen time. He and his partner agreed that she would set and enforce the rules for now, and Jamie would just be the fun one on Saturday mornings. Within a few months, his stepdaughter started asking him for help with homework.",
+      "tonight": "suggest one small, low-pressure thing to do with your stepkid, with no rules attached."
+    },
+    "longdistance": {
+      "label": "a long-distance relationship",
+      "defaultWho": "partner",
+      "match": [["long distance|ldr|different time ?zones?|time difference|(live|living|lives) (in )?(different|separate) (cities|states|countries|places)|(far|miles|hours) apart|(only )?see each other (once a|every) (month|few weeks|few months)", 6], ["video calls?|facetime|visits?|flights?", 1]],
+      "reflect": "Being far from someone you love takes a lot of heart, and the gaps between calls can feel long.",
+      "going": "This is Pillar IV, Tune how you send and receive. When you’re apart, most of your connection travels through text and calls, which strip out a lot of tone, so small misreadings happen more easily. Different time zones and schedules also make it easy for one person to feel like they’re always adjusting. Small, reliable rituals help more than long, occasional talks.",
+      "steps": ["Agree a simple, reliable rhythm, like a short call at the same time most days, that fits both schedules.", "Share small, everyday moments (a photo, a voice note), not just the big news.", "When something feels off over text, suggest a quick call instead of reading into it."],
+      "scripts": {
+        "default": ["Could we pick a regular time to call that works for both of us? Even ten minutes would help me feel close.", "I miss you. Want to watch the same show tonight and text through it?", "That text read a bit short to me. Can we hop on a quick call?"]
+      },
+      "path": [["Turning Toward: small rituals", "/turning-toward.html#rituals"], ["The Signal Translator", "/signal-translator.html"], ["Texting and tone (Library)", "/library/communication.html#texting-and-tone"]],
+      "deeper": ["small rituals", "What are rituals of connection?"],
+      "ex": "With a seven-hour time difference, Leo and Ama kept missing each other. They agreed on a voice note every morning and a short call every Sunday. The notes were silly and small, and they both said it made the distance feel shorter.",
+      "tonight": "send one small, everyday moment, like a photo or a thirty-second voice note, with no agenda."
+    },
+    "guests": {
+      "label": "guests and overnight visitors in a shared home",
+      "defaultWho": "roommate",
+      "themPat": "roommates|roommate|roomate|housemates|housemate|flatmates|flatmate|roomie",
+      "match": [["(boyfriend|girlfriend|bf|gf|partner|friends?|guests?|family) (is )?(always|basically|practically|constantly) (over|here|staying|living here)|(stays|sleeps|staying|sleeping) over (every|all the|too)|overnight guests?|has (people|friends|guests) over|too many guests|guest (policy|rules)|(unannounced|surprise) (guests?|visitors?)|basically lives here", 6], ["guests?|visitors?|overnight|over all the time", 1]],
+      "reflect": "When someone is over a lot, it can quietly change how home feels, and it’s awkward to bring up.",
+      "going": "This is Pillar II, Fix the setup, not the person. Most shared homes never agree on guests up front, so every visit becomes a judgment call, and the person who minds feels like the bad guy. It’s usually not that {them} are being rude. There’s simply no agreement. A simple, shared guest agreement (how many nights, a heads-up, sharing costs if someone’s basically living there) makes it about the house, not anyone’s partner or friend.",
+      "steps": ["Before you talk, work out what you’d actually like: a heads-up, a limit on nights, or help with bills when someone stays a lot.", "Raise it as a house agreement for everyone, not a complaint about one guest.", "Write down what you agree, and agree to look at it again in a month."],
+      "scripts": {
+        "default": ["Could we agree on a simple guest plan for the house? Like a heads-up text, and a chat if someone’s staying more than a few nights a week.", "I really like Sam. It’s just that with someone here most nights, the bills and the bathroom are getting stretched. Could we talk about it?", "I’d love a heads-up when people are staying over, so I know what to expect at home."]
+      },
+      "path": [["Where roommates start", "/relationships-in-depth.html#roommates"], ["Roommates and shared homes (Library)", "/library/life.html#roommates-and-shared-homes"], ["WP-09: Say it so it lands", "/workpapers/wp-09-tone-filter.html"]],
+      "deeper": ["shared homes", "How do roommates share a home fairly?"],
+      "ex": "Jo’s roommate’s boyfriend was over five nights a week. Instead of complaining about him, Jo suggested a house guest plan: a heads-up text, and anyone staying over more than three nights chips in for utilities. Her roommate agreed on the spot, a bit relieved.",
+      "tonight": "write down what you’d actually like (a heads-up, a limit, or help with bills), so you know your ask before you talk."
+    },
+    "afterfight": {
+      "label": "making up after a fight",
+      "match": [["we (had|have had) (a|another|the|this|our) (big |huge |bad |stupid )?(fight|argument|row|blowup|blow up)|we (fought|argued|had words)( again| last night| today| this morning| yesterday)?|(big|huge|bad) fight (with|last night|today|yesterday)|after (a|the|our|that|this) (fight|argument|row)|make up (after|with)|making up after|(how|what) (do|can|should) (we|i) (make up|move on|get past)|apologi[sz]e (after|for) (the|our|a|that) (fight|argument)|(fight|argument) (last night|this morning|yesterday)", 6], ["fight*|fought|argu*|sorry|apolog*", 1]],
+      "reflect": "After a fight, it can feel like the air is still heavy. Wanting to make it right is a really good sign.",
+      "going": "This is Pillar III, Read your state first, and Pillar IV, Tune how you send and receive. Right after a fight, both bodies are often still revved up, so talking about it too soon can restart it. A good repair usually has three parts: settle first, own your part (without “but”), and then talk about the thing itself later, calmly. Couples and friends who fight aren’t failing. What matters most is how you come back together.",
+      "steps": ["Settle first. Give it at least twenty minutes, or until you both feel calmer, before trying to talk.", "Own your part in one or two sentences, with no “but” after the apology.", "Later, at a calm time, talk about what the fight was really about, one topic only."],
+      "scripts": {
+        "default": ["I’m sorry for how I spoke to you earlier. That wasn’t fair to you. I’d like to talk about it properly when we’re both calm.", "I hate when we fight. Can we take a breather and try again after dinner?", "I think we were both tired. I’m sorry for my part. Can we start over?"],
+        "kid": ["I’m sorry I raised my voice. You didn’t deserve that. Can we talk about the homework after a snack?"],
+        "coworker": ["I didn’t handle our conversation well this morning, and I’m sorry. Could we try again this afternoon?"]
+      },
+      "path": [["WP-09: Say it so it lands", "/workpapers/wp-09-tone-filter.html"], ["The Carrier Wave Decoder", "/carrier-wave-decoder.html"], ["Repair attempts (Library)", "/library/relationships.html#repair-attempts"]],
+      "deeper": ["what makes an apology work", "What makes a good apology?"],
+      "ex": "After another fight about the car, Jess waited until they’d both eaten, then said, “I’m sorry I called you careless. That wasn’t fair.” No “but”. Her partner softened right away, and the actual problem (who books the service) took five minutes the next day.",
+      "tonight": "let things settle, then say one short, honest sorry for your part, with no “but” after it."
+    },
+    "decompress": {
+      "label": "needing time to unwind after work",
+      "match": [["decompress*|wind down|unwind|(need|want|needs|wants) (some |a little |a bit of )?(time|space|quiet|a minute|ten minutes|twenty minutes) .. (after work|when (i|he|she|they) get home|when (i|he|she|they) come home|before talking)|(the )?(minute|second|moment) (i|he|she|they) (walk|walks|get|gets|come|comes) (in|home|through the door)|(as soon as|when) (i|he|she|they) (get|gets|come|comes|walk|walks) (home|in) (from work|after work)|after work (i|he|she|they) (need|needs|just want|wants)|transition time", 6], ["after work|home from work|long day|tired", 1]],
+      "reflect": "Coming home and being met with questions or jobs straight away can feel like one more shift, even when everyone means well.",
+      "going": "This is Pillar III, Read your state first. After a long day, many people need a little buffer before they can really listen, while others want to connect right away. Neither is wrong. They’re just different ways of settling. When nobody says what they need, the first ten minutes at home can turn into friction nobody intended. Agreeing a short, predictable transition time helps everyone.",
+      "steps": ["Say what you need, on a calm day: “I need about twenty minutes when I get home before I can really talk.”", "Agree a simple signal or routine, like a change of clothes, a short walk, or a cup of tea, that means “back soon”.", "After the buffer, come back and check in properly, so the other person doesn’t feel shut out."],
+      "scripts": {
+        "default": ["When I get home, I need about twenty minutes to switch off before I can really listen. Could we say hi, and then catch up properly after I change?", "I want to hear about your day. Can I have ten minutes to land first?", "Could we save the logistics for after dinner? My brain is fried right when I walk in."]
+      },
+      "reflect_other": "It’s hard when someone you want to connect with seems to need space the moment they come through the door.",
+      "going_other": "This is Pillar III, Read your state first. Many people need a short buffer after work before they can really listen, and it’s about their energy, not about you. Agreeing a small, predictable transition time, and a proper catch-up after it, usually makes the evening feel warmer for both of you.",
+      "steps_other": ["Greet them warmly and save the questions and jobs for twenty minutes or so.", "Agree together, on a calm day, what the buffer looks like and when you’ll catch up.", "Ask for the catch-up you want too: “After your twenty minutes, can we have ten minutes, just us?”"],
+      "scripts_other": ["Take your twenty minutes. When you’re ready, I’d love to hear about your day, and tell you about mine.", "I’ve noticed you need a bit of quiet when you get in. Could we plan a proper catch-up after dinner?"],
+      "path": [["WP-02: How full is your battery?", "/workpapers/wp-02-battery-stress-meter.html"], ["Today’s Weather", "/quick-checks.html#today"], ["Turning Toward: small rituals", "/turning-toward.html#rituals"]],
+      "deeper": ["reading your state first", "What is Pillar III, Read your state first?"],
+      "ex": "Every evening, Ben walked in to a list of questions and snapped. They agreed on a routine: a hello and a hug, then twenty minutes for Ben to change and sit, then a real catch-up over dinner. The snapping mostly stopped within a week.",
+      "tonight": "when you get home, say “I just need ten minutes to land, then I’m all yours,” and then come back when you said."
+    },
+    "tidiness": {
+      "label": "different ideas of clean and tidy",
+      "match": [["different (standards|ideas|idea|definitions?|levels?) of (clean|tidy|mess|messy|neat)|(cleaner|tidier|messier|neater) than (me|him|her|them|us|i am)|(my|his|her|their|our) (standards?|idea) of (clean|tidy)|clean enough|never (clean|tidy) enough|neat freak|clean freak|(thinks?|says?) (it|its|the (house|kitchen|room|place)) (is )?(clean|fine|tidy)|(doesnt|dont|doesn t) (see|notice) (the )?mess|(what|how) clean (means|is)", 6], ["clean*|tidy*|mess*|standards?|neat", 1]],
+      "reflect": "It’s so frustrating when one of you sees mess and the other honestly doesn’t, and it can feel personal on both sides.",
+      "going": "This is Pillar II, Fix the setup, not the person. People genuinely notice different amounts of mess. It’s partly wiring, partly habit and what you grew up with. The person with the higher standard often ends up doing the job and resenting it, while the other feels criticized for not seeing it. Agreeing a shared, specific standard for each job (“counters wiped, dishes in the dishwasher by bedtime”) works better than arguing about what “clean” means.",
+      "steps": ["Pick the two or three spots that matter most to you, rather than the whole house.", "Agree a specific, shared standard for each, like “dishes in by 10 p.m.”, that both of you can see and check.", "Give each job one owner, and let the owner do it their way as long as it meets the standard."],
+      "scripts": {
+        "default": ["I think we just notice mess differently, and that’s okay. Could we agree what ‘done’ looks like for the kitchen, so neither of us has to guess?", "The living room matters most to me. If we keep that one tidy by bedtime, I can let the rest go.", "Can we pick a standard we can both live with, and each own a few jobs?"]
+      },
+      "path": [["WP-03: One owner per job", "/workpapers/wp-03-raci-treaty.html"], ["Chores disagreements (Library)", "/library/conflict.html#chores-disagreements"], ["The Lemonade Stand", "/lemonade-stand.html"]],
+      "deeper": ["one owner per job", "What is the RACI treaty?"],
+      "ex": "Alex saw crumbs everywhere; Jordan honestly didn’t. They agreed on just two rules, counters wiped and dishes in by 10, and Jordan owned the kitchen on weeknights. Alex stopped re-cleaning, Jordan stopped feeling nagged.",
+      "tonight": "name the one spot at home that matters most to you, and what ‘done’ looks like there."
+    },
+    "dismissed": {
+      "label": "being told you’re overreacting",
+      "match": [["(says?|said|tells? me|told me|calls? me|called me|thinks? (that )?|thought) (that )?(im|i am|i was|i m) (overreacting|over reacting|too sensitive|so sensitive|dramatic|being dramatic|too emotional|making (it|a) (big deal|thing))|(says?|said|tells? me|told me) (to )?(calm down|relax|chill|get over it)|(brushes|brushed|laughs|laughed) (it|me) off|dismiss(es|ed|ive)? (my feelings|me|how i feel)|(doesnt|dont|never) take (me|my feelings) seriously|my feelings (dont|arent|never) (matter|count|taken seriously)", 6], ["overreact*|sensitive|dramatic", 1]],
+      "reflect": "It really hurts to share how you feel and hear that you’re overreacting. Your feelings are real information, even if the two of you see the situation differently.",
+      "going": "This is Pillar IV, Tune how you send and receive, and Pillar III, Read your state first. Often “you’re overreacting” means the other person is reacting to your volume or intensity, not what you’re saying, or they’re uncomfortable and want the moment to end. Sometimes you’re both right: the feeling is real, and the moment you raised it was a tired one. Separating the fact, the feeling and the ask makes it much harder to wave away.",
+      "steps": ["Wait for a calm moment, then say the fact, the feeling and one specific ask, in that order.", "Name the pattern gently: “When I hear ‘you’re overreacting’, I stop feeling heard.”", "Ask for listening first, not agreement: “You don’t have to agree, I’d just like you to hear me out.”"],
+      "scripts": {
+        "default": ["You don’t have to agree with me. I’d just like you to hear how it felt for me, before we talk about whether I’m right.", "When I hear “you’re overreacting”, I stop feeling heard. Could you ask me what’s going on instead?", "I might be tired, and it still bothered me. Can I tell you why?"]
+      },
+      "path": [["WP-09: Say it so it lands", "/workpapers/wp-09-tone-filter.html"], ["Validation (Library)", "/library/communication.html#validation-in-conversation"], ["WP-02: How full is your battery?", "/workpapers/wp-02-battery-stress-meter.html"]],
+      "deeper": ["validation", "What is validation?"],
+      "ex": "Whenever Sara brought something up, her husband said she was overreacting. One calm evening she said, “You don’t have to agree. I just want you to hear me first.” He listened, then said, “Okay, I get why that bugged you.” That was all she’d wanted.",
+      "tonight": "write your feeling as fact, feeling and ask, in three short lines, ready for a calm moment."
+    },
+    "notime": {
+      "label": "never having time for each other",
+      "defaultWho": "partner",
+      "match": [["(never|dont|barely|hardly) (have|get|find|spend) (any )?(time|quality time|alone time) (for|with|together) (each other|us|one another)|(never|dont|barely|hardly) (have|get|find|spend) (any )?time together|no time (for|with) (each other|us|one another)|no (quality |alone )?time together|too busy for (each other|us)|(like )?ships (that )?pass(ing)?( in the night)?|barely see each other|we never (go out|have date nights?|do anything together)", 6], ["busy|schedule|date night|quality time", 1]],
+      "reflect": "When life gets full, time for each other is often the first thing to slip, and it’s lonely even when you both mean well.",
+      "going": "This is Pillar V, Notice the quiet incentives, and Pillar IV. Work, kids, chores and screens all have deadlines, and time together doesn’t, so it quietly loses out every day. It isn’t that either of you cares less. Closeness is mostly built in small, regular moments rather than big occasional dates, so a tiny ritual you protect often does more than waiting for a free weekend.",
+      "steps": ["Pick one small ritual you can protect, like ten minutes after dinner, phones down, or coffee together before work.", "Put it on the calendar like any other appointment.", "Notice and turn toward the tiny moments too: a joke, a “look at this”, a hand on the shoulder."],
+      "scripts": {
+        "default": ["I miss us. Could we protect ten minutes after dinner, phones down, just to catch up?", "Could we put one evening a week on the calendar for just us? Even a walk would be lovely.", "I know we’re both stretched. What’s one small thing we could do together this week?"]
+      },
+      "path": [["Turning Toward: small rituals", "/turning-toward.html#rituals"], ["WP-13: The 90-second daily check-in", "/workpapers/wp-13-pll-protocol.html"], ["Time disagreements (Library)", "/library/conflict.html#time-disagreements"]],
+      "deeper": ["bids for connection", "What are bids for connection?"],
+      "ex": "Nate and Jo kept saying they’d have a date night “when things calm down.” Instead they started a ten-minute tea on the back step after the kids were asleep. It became the best part of their day.",
+      "tonight": "suggest ten minutes together after dinner tonight, phones down, with no agenda."
+    },
+    "contempt": {
+      "label": "sarcasm, eye-rolling and put-downs",
+      "match": [["eye ?roll*|rolls? (his|her|their) eyes|rolled (his|her|their) eyes|contempt*|mock(s|ed|ing)? me|makes? fun of me|made fun of me|puts? me down|put me down|belittl*|talks? down to me|(so )?sarcastic|sarcasm|must be nice|thanks for nothing|whatever you say|nice of you to (finally )?(show up|join|help)|(snide|sneer*|scoff*)", 6], ["tone|attitude|comments?", 1]],
+      "reflect": "Sarcasm and eye-rolls can sting more than a direct complaint, because they say “I look down on this” without saying it.",
+      "going": "This is Pillar IV, Tune how you send and receive, and Pillar II, Fix the setup, not the person. Sarcasm and put-downs usually grow when someone has a complaint they haven’t said plainly, or feels unheard, so it leaks out sideways. Relationship research sees contempt as one of the most corrosive patterns, so it’s worth addressing, calmly. The fix is usually to swap the jab for the plain request underneath it, on both sides.",
+      "steps": ["Name it calmly, later, without matching it: “When you say ‘must be nice’, it stings. What’s the real ask?”", "Look for the complaint underneath. A jab often hides a fair request that was never made plainly.", "Agree to say the plain version instead, both ways. The Signal Translator can help turn a jab into a clear ask."],
+      "scripts": {
+        "default": ["When it comes out as sarcasm, I get defensive and miss the point. Could you tell me straight what you need?", "I think there’s a real ask under that comment. Can you say it plainly? I’d like to hear it.", "I don’t want us talking to each other like that, me included. Can we try again?"]
+      },
+      "scripts_self": ["I’ve caught myself being sarcastic lately. I’m sorry. What I actually mean is: I’d love more help on weeknights."],
+      "path": [["The Signal Translator", "/signal-translator.html"], ["The four patterns to watch (Library)", "/library/relationships.html#four-horsemen"], ["WP-09: Say it so it lands", "/workpapers/wp-09-tone-filter.html"]],
+      "deeper": ["the patterns that hurt most", "What are the four horsemen?"],
+      "ex": "Every time Kai came home late, his partner said, “Nice of you to show up.” One calm Sunday Kai said, “I know that’s about something real. What would help?” It turned out to be one thing: a text by six if he’d be late. That was easy.",
+      "tonight": "if a jab lands tonight, pause, and later ask gently: “What’s the real ask under that?”"
+    },
+    "comparison": {
+      "label": "being compared to someone else",
+      "match": [["compar(es|ed|ing) me (to|with)|(why cant|why can t|why dont|why don t) you be (more )?like|your (sister|brother|mom|mum|dad|ex|friend|cousin|coworker) (always|never|would have)|(at least|unlike) (your|my) (sister|brother|mom|mum|dad|ex)|(her|his|their) (ex|sister|brother|mom|mum) (always|never) (did|used to)", 6], ["compare*|comparison", 1]],
+      "reflect": "Being compared to someone else hurts, because it can sound like you’re being measured and coming up short.",
+      "going": "This is Pillar IV, Tune how you send and receive. A comparison is usually a request in disguise: “your sister always calls” often means “I’d love a call from you.” The comparison makes the other person defend themselves instead of hearing the ask. Naming how it lands, and asking for the plain request, usually helps both of you.",
+      "steps": ["Notice the ask hiding in the comparison, and say it back: “It sounds like you’d like me to call more. Is that it?”", "Tell them, calmly, how comparisons land for you.", "If you’re the one comparing, swap it for the direct ask: “I’d love a call on Sundays.”"],
+      "scripts": {
+        "default": ["When I hear “your sister always…”, I feel measured instead of asked. Could you just tell me what you’d like from me?", "It sounds like you’d love it if I called more. I can do Sundays. Would that work?"],
+        "self": ["I compared you to your brother earlier, and that wasn’t fair. What I meant was that I’d love a bit more help with the garden."]
+      },
+      "path": [["WP-09: Say it so it lands", "/workpapers/wp-09-tone-filter.html"], ["Complaints vs criticism (Library)", "/library/communication.html#complaints-vs-criticism"], ["The Signal Translator", "/signal-translator.html"]],
+      "deeper": ["complaints vs criticism", "What is the difference between a complaint and criticism?"],
+      "ex": "Mo’s mom often said, “Your cousin visits every week.” Mo finally said, “It sounds like you’d like to see me more. How about Sunday lunch every other week?” The comparisons mostly stopped, because the real ask had been answered.",
+      "tonight": "write the plain ask that’s hiding inside the comparison, so you can answer that instead."
+    }
+  }
+}
