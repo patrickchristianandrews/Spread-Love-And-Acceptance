@@ -588,6 +588,20 @@
       pen.y += h;
     });
 
+    // Pillar V: the quiet incentives, as a few questions
+    var PV = global.TOL_PILLAR_V;
+    if (PV && PV.length && path.id !== 'self') {
+      pen.heading('The quiet incentives (Pillar V)', 50, C.peach);
+      pen.para('Some jobs get thanked; some are only noticed on the day they don’t happen. A few questions to notice which is which.', { size: 8.5, color: C.soft, after: 4 });
+      PV.slice(0, 4).forEach(function (t) {
+        var lines = wrap(t, 'Helvetica', 9.5, W - 34);
+        pen.room(lines.length * 13 + 4);
+        pen.doc.circle(L + 20, pen.y + 6, 2.4, C.brass);
+        lines.forEach(function (ln) { pen.doc.text(L + 30, pen.y + 9, ln, 'Helvetica', 9.5, C.ink); pen.y += 13; });
+        pen.y += 3;
+      });
+    }
+
     // the week plan for this road, with a tick where a week's sheets have been started
     if (path.weeks && path.weeks.length) {
       pen.heading('Your weeks on this road', 60, C.mint);

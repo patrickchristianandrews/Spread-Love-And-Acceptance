@@ -900,7 +900,7 @@
       this.changed(); this.render();
       var again = this.root.querySelector('[data-lib="' + tid + '"] [data-task="' + task.replace(/"/g, '\\"') + '"]');
       if (again) again.focus();
-      this.status('Added “' + task + '” to the list. Fill in who and how often next to it.');
+      this.status('Added “' + task + '” to the list. Fill in ' + (hasFreq ? 'who owns it' : 'who did it and rough minutes') + ' next to it.');
       return;
     }
     if (act === 'add-person') {

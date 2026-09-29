@@ -2880,7 +2880,9 @@
   function guide(fired, F, v, RP) {
     var qs = [];
     fired.forEach(function (r) { if (r.q && qs.indexOf(r.q) < 0 && qs.length < 6) qs.push(r.q); });
-    (RP && RP.talk || []).forEach(function (t) { if (qs.length < 9 && qs.indexOf(t) < 0) qs.push(t); });
+    // two questions about the quiet incentives (Pillar V): which jobs get thanked, and which drift
+    if (!F.solo) (global.TOL_PILLAR_V || []).slice(0, 2).forEach(function (t) { if (qs.length < 8 && qs.indexOf(t) < 0) qs.push(t); });
+    (RP && RP.talk || []).forEach(function (t) { if (qs.length < 10 && qs.indexOf(t) < 0) qs.push(t); });
     var gen = F.solo ? ['Which part of this feels like wiring, which like a pattern, and which like this week’s weather?', 'What surprised you most, and what didn’t surprise you at all?', 'What would "a little better" look like by the end of next week?', 'Who would you like to share one page of this with, and which page?', 'Where does the report miss something that matters to you?', 'What is one thing you would like to be kinder to yourself about?']
       : ['What surprised you most in this report, and what didn’t surprise you at all?', 'Where does the report not match your experience? What does it miss?', 'What is one thing in here you would like to thank someone for?', 'Which one number would you most like to see change by next month?', 'What would "a little better" look like by the end of next week?', 'Is there anything here that should wait for a calmer day?'];
     gen.forEach(function (t) { if (qs.length < 10 && qs.indexOf(t) < 0) qs.push(t); });
