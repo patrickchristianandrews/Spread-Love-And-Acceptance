@@ -421,3 +421,35 @@ html.ws-locked .tol-breathe-btn, html.ws-locked .tol-wx{ visibility: hidden; }
 @media print{
   .wpf-keep, .wpf-person-x, .wpf-people-actions, .ws-name-x, .ws-names-more{ display: none !important; }
 }
+
+/* ---------- numbers outside their range, word chips, the task library, examples ---------- */
+.wpf-form input[aria-invalid="true"]{ border-color: var(--debit, #96412B); background: #FFF4F1; }
+.wpf-range{ display: block; margin-top: 4px; font-size: .82em; line-height: 1.35; color: var(--debit, #96412B); }
+.wpf-chips{ display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin-top: 8px; }
+.wpf-chips-k, .wpf-lib-h{ flex-basis: 100%; margin: 0; font-size: .8em; color: var(--brass-ink, #7A5620); font-family: "IBM Plex Mono", ui-monospace, monospace; }
+.wpf-chip{ font: inherit; font-size: .86rem; min-height: 36px; padding: 5px 12px; border-radius: 999px; border: 1px dashed #C9B6DA; background: #fff; color: #4E3F6B; cursor: pointer; }
+.wpf-chip:hover{ background: #F3EEF9; border-style: solid; }
+.wpf-chip.is-on{ border-style: solid; background: #EAF1E9; border-color: #CFE0CC; color: var(--credit, #3E6B4C); }
+.wpf-chip:focus-visible{ outline: 2px solid var(--focus, #2B5B8C); outline-offset: 2px; }
+.wpf-lib, .wpf-example{ margin: 12px 0 4px; padding: 8px 12px; border: 1px solid var(--line, #D9CBA3); border-radius: 12px; background: #FFFDF6; }
+.wpf-lib summary, .wpf-example summary{ cursor: pointer; font-weight: 600; min-height: 32px; display: flex; align-items: center; }
+.wpf-lib-group{ display: flex; flex-wrap: wrap; gap: 6px; margin: 10px 0 4px; }
+.wpf-example-h{ margin: .8em 0 .3em; font-weight: 600; font-size: .92em; }
+.wpf-example-table{ width: 100%; border-collapse: collapse; font-size: .86em; }
+.wpf-example-table th, .wpf-example-table td{ text-align: left; padding: 4px 6px; border-bottom: 1px solid var(--line, #D9CBA3); vertical-align: top; }
+.wpf-example-lines{ margin: .3em 0; padding-left: 1.2em; font-size: .9em; }
+.wpf-erase-note{ font-size: .88em; font-weight: 600; color: var(--credit, #3E6B4C); }
+.wpf-erase-note:empty{ display: none; }
+
+/* ---------- the suite: one row per person, road choices, saving ---------- */
+.ws-people-rows{ display: flex; flex-direction: column; gap: 10px; }
+.ws-person-row{ display: flex; flex-direction: column; gap: 6px; }
+.ws-person-name{ font-size: .82em; font-weight: 600; color: var(--brass-ink, #7A5620); }
+.ws-person-hint, .ws-shared{ margin: 0; font-size: .86em; color: var(--ink-soft, #524B3E); }
+.ws-shared{ padding: 6px 10px; border-radius: 10px; background: #F6F1E4; }
+.ws-hold-msg{ display: block; font-weight: 600; margin-bottom: 8px; }
+.ws-hold-actions{ display: flex; flex-wrap: wrap; gap: 8px; align-items: center; font-weight: 400; }
+.ws-out-card.is-lead{ margin: 0 0 14px; }
+.ws-save-row p{ margin: .4em 0; }
+.ws-save-how{ font-size: .92em; }
+.ws-sheet-saved{ font-size: .85em; color: var(--ink-soft, #524B3E); }

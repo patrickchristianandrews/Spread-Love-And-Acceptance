@@ -28,6 +28,9 @@
     1 − |pctA − pctB| ÷ 100.
 
   Ownership = jobs with both a Responsible and an Accountable name ÷ all jobs.
+  Concentration (a check, not a fourth input): the busiest person's share of the owned jobs
+              or the logged minutes. Clarity can read 1.00 with one person holding every job,
+              so this sits next to it: flagged at half or more, and 20 points over an even share.
   Stress    = the average of everyone's WP-02 battery (each = five 0–4 scores ÷ 20).
               Never worked out while anyone's battery is missing.
 */
@@ -119,6 +122,24 @@
     if (o > t) { res.error = 'More jobs with both names (' + o + ') than jobs on the list (' + t + ').'; return res; }
     res.owned = o; res.total = t;
     res.value = o / t;
+    return res;
+  }
+
+  /* ---------- concentration: how much sits with the busiest person ---------- */
+  // Ownership clarity only asks "does every job have a name?". It reads 1.00 even when every name
+  // is the same person. This is the check that sits beside it (and beside balance): the busiest
+  // person's share of the owned jobs, the logged minutes or the unasked-for minutes.
+  // values: one number per person. min: the smallest total worth reading (e.g. 3 jobs, 60 minutes).
+  // It is flagged when that share is at least half, and at least 20 points over an even share.
+  function concentration(values, min) {
+    var v = (values || []).map(function (x) { var y = num(x); return y !== null && y > 0 ? y : 0; });
+    var n = v.length, total = sum(v);
+    var res = { n: n, total: total, top: null, count: null, share: null, even: n ? 1 / n : null, line: n ? Math.max(0.5, 1 / n + 0.2) : null, flag: false };
+    if (n < 2 || !(total > 0)) return res;
+    var top = 0;
+    v.forEach(function (x, i) { if (x > v[top]) top = i; });
+    res.top = top; res.count = v[top]; res.share = v[top] / total;
+    res.flag = total >= (min || 0) && r2(res.share) >= r2(res.line);
     return res;
   }
 
@@ -231,7 +252,7 @@
   global.TOLCalc01 = {
     W: W, BANDS: BANDS, WP02: WP02, MIN_PEOPLE: MIN_PEOPLE, MAX_PEOPLE: MAX_PEOPLE,
     r2: r2, f2: f2, f1: f1, fg: fg, pct: pct, num: num, sum: sum,
-    balance: balance, balanceHandoff: balanceHandoff, ownership: ownership,
+    balance: balance, balanceHandoff: balanceHandoff, ownership: ownership, concentration: concentration,
     battery: battery, wp02Band: wp02Band, stress: stress, retuning: retuning,
     solvency: solvency, apex: apex, band: band, suggestions: suggestions, shortfalls: shortfalls
   };
