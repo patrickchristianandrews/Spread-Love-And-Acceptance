@@ -96,11 +96,13 @@
   var pz = null, words = [], cells = {}, sol = {}, sel = null, dir = 'a';
 
   // ---------- sound: soft plucks as you type, a chord for each word ----------
-  var music = null, soundOn = get('tol-xw-sound', 'on') !== 'off';
+  // Off until you turn it on (the switch is remembered on this device); Quiet mode keeps it off.
+  var music = null, soundSw = null;
+  function soundOn() { return !!(soundSw && soundSw.on()); }
   function get(k, d) { try { var v = localStorage.getItem(k); return v === null ? d : v; } catch (e) { return d; } }
   function set(k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
   function wake() {
-    if (!soundOn || !window.TOLMusic) return null;
+    if (!soundOn() || !window.TOLMusic) return null;
     try { if (navigator.audioSession) navigator.audioSession.type = 'playback'; } catch (e) {}
     if (!music) { music = window.TOLMusic.create(null, null, { calm: true }); music.level(0.4); }
     music.start(); return music;
@@ -138,6 +140,7 @@
     zoomBtn.hidden = pz.W < 9;
     root.classList.toggle('is-zoom', zoom && pz.W >= 9);
     root.classList.remove('is-done'); $('.xw-done').hidden = true;
+    var oldWhy = document.querySelector('.xw-why'); if (oldWhy) oldWhy.remove();
     build(numAt);
     sel = words[0].cells[0]; dir = words[0].d;
     paint();
@@ -158,7 +161,7 @@
       if (sol[key]) {
         d = document.createElement('button'); d.type = 'button'; d.className = 'gm-cell is-on xw-cell'; d.setAttribute('data-k', key);
         d.innerHTML = (numAt[key] ? '<span class="gm-n">' + numAt[key] + '</span>' : '') + '<span class="xw-l">' + (S.fill[key] || '') + '</span>';
-        d.setAttribute('aria-label', 'Square' + (numAt[key] ? ' ' + numAt[key] : '') + (S.fill[key] ? ', ' + S.fill[key] : ', empty'));
+        d.setAttribute('aria-label', cellLabel(key));
       } else { d = document.createElement('div'); d.className = 'gm-cell xw-block'; }
       gridEl.appendChild(d); cells[key] = d;
     }
@@ -167,6 +170,13 @@
       var li = document.createElement('li'); li.innerHTML = '<button type="button" data-w="' + i + '"><b>' + w.n + '</b> ' + esc(w.clue) + ' <span class="xw-len">(' + w.text.length + ')</span></button>';
       (w.d === 'a' ? listA : listD).appendChild(li);
     });
+  }
+  // what a screen reader hears on a square: where it is, which clues it belongs to, and what's in it
+  function cellLabel(k) {
+    var p = k.split(','), inWords = words.filter(function (w) { return w.cells.indexOf(k) !== -1; });
+    return 'Row ' + (+p[0] + 1) + ', column ' + (+p[1] + 1) + '. ' +
+      inWords.map(function (w) { return w.n + ' ' + (w.d === 'a' ? 'Across' : 'Down') + ', letter ' + (w.cells.indexOf(k) + 1) + ' of ' + w.cells.length; }).join('; ') +
+      '. ' + (S.fill[k] ? 'Letter ' + S.fill[k] : 'Empty') + (inWords.length && inWords.every(solved) ? ', solved' : '') + '.';
   }
   function esc(t) { return String(t).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
 
@@ -182,6 +192,7 @@
       el.classList.toggle('is-word', !!w && w.cells.indexOf(k) !== -1);
       el.classList.toggle('is-sel', k === sel);
       el.querySelector('.xw-l').textContent = S.fill[k] || '';
+      var lab = cellLabel(k); if (el.getAttribute('aria-label') !== lab) el.setAttribute('aria-label', lab);
     });
     words.forEach(function (x, i) {
       var ok = solved(x);
@@ -259,6 +270,22 @@
     again.innerHTML = other ? 'Today’s ' + esc(todayTier(other).name) + ' &rarr;' : cur.daily ? 'More puzzles &rarr;' : 'Next puzzle &rarr;';
     if (cur.daily) card.querySelector('.xw-done-p').textContent = 'That’s today’s ' + (PAPER ? cur.tier.name : 'crossword') + '. A new one arrives tomorrow. Take a slow breath.';
     card.hidden = false; again.focus();
+    showWhy();
+  }
+  // "Why this answer?": after solving, each answer with its clue and the words that cross it, since
+  // the crossing letters are what settle a clue that more than one word could fit
+  function showWhy() {
+    var host = document.querySelector('.xw-lists'); if (!host) return;
+    var old = host.querySelector('.xw-why'); if (old) old.remove();
+    var d = document.createElement('details'); d.className = 'xw-why';
+    d.innerHTML = '<summary>Why this answer?</summary><p>Some clues could fit more than one word. The letters that cross each answer are what settle it.</p><ul>' +
+      words.map(function (w) {
+        var cross = words.filter(function (x) { return x !== w && x.cells.some(function (k) { return w.cells.indexOf(k) !== -1; }); });
+        return '<li><b>' + esc(w.text) + '</b> (' + w.n + ' ' + (w.d === 'a' ? 'Across' : 'Down') + ', “' + esc(w.clue) + '”)' +
+          (cross.length ? ': it shares letters with ' + cross.map(function (x) { var k = x.cells.filter(function (c) { return w.cells.indexOf(c) !== -1; })[0]; return esc(x.text) + ' (the ' + sol[k] + ')'; }).join(', ') + '.' : '.') + '</li>';
+      }).join('') + '</ul>';
+    d.style.gridColumn = '1 / -1';
+    host.appendChild(d);
   }
 
   // ---------- input ----------
@@ -388,10 +415,9 @@
   zoomLabel();
   function numAtNow() { var m = {}; words.forEach(function (w) { m[w.cells[0]] = w.n; }); return m; }
   var sb = $('.xw-sound');
-  function soundLabel() { sb.setAttribute('aria-pressed', String(soundOn)); sb.innerHTML = soundOn ? '&#127925;' : '&#128263;'; sb.setAttribute('aria-label', soundOn ? 'Music on' : 'Music off'); }
-  sb.addEventListener('click', function () { soundOn = !soundOn; set('tol-xw-sound', soundOn ? 'on' : 'off'); soundLabel(); if (soundOn) wake(); else if (music) music.stop(); });
-  soundLabel();
-  document.addEventListener('visibilitychange', function () { if (!music) return; if (document.hidden) music.stop(); else if (soundOn) music.start(); });
+  if (window.TOLMusic && window.TOLMusic.toggle) soundSw = window.TOLMusic.toggle(sb, { key: 'tol-xw-sound', label: 'Music', onChange: function (on) { if (on) wake(); else if (music) music.stop(); } });
+  else sb.hidden = true;
+  document.addEventListener('visibilitychange', function () { if (!music) return; if (document.hidden) music.stop(); else if (soundOn()) music.start(); });
 
   var dateEl = document.getElementById('np-date');
   if (dateEl) dateEl.textContent = new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' });

@@ -101,5 +101,39 @@
       end: function () { this.stop(); setTimeout(function () { try { stops.forEach(function (o) { o.stop(); }); } catch (e) {} }, 2500); }
     };
   }
-  window.TOLMusic = { create: create };
+  // ---------- sound preferences, shared by every calm game ----------
+  // Sound is off until the player turns it on, and the choice is remembered on this device.
+  // The site-wide Quiet mode (window.TOLQuiet) always wins: nothing plays while it's on.
+  function quietOn() { try { return !!(window.TOLQuiet && typeof window.TOLQuiet.on === 'function' && window.TOLQuiet.on()); } catch (e) { return false; } }
+  // "Keep the page still" (site.js), or the device asking for less motion
+  function stillOn() {
+    try {
+      return !!((window.TOLStill && window.TOLStill.on()) || document.documentElement.classList.contains('tol-still') ||
+        (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches));
+    } catch (e) { return false; }
+  }
+  function lsGet(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
+  function lsSet(k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
+  // A text switch on a button: "🔇 Music: off" / "🎵 Music: on". opts: { key, label, onChange(on) }
+  function toggle(btn, opts) {
+    var label = opts.label || 'Music', on = lsGet(opts.key) === 'on' && !quietOn();
+    function paint() {
+      btn.setAttribute('aria-pressed', String(on));
+      btn.innerHTML = '<span aria-hidden="true">' + (on ? '&#127925;' : '&#128263;') + '</span> ' + label + ': ' + (on ? 'on' : 'off');
+      btn.removeAttribute('aria-label');
+      btn.title = on ? 'Tap to turn the ' + label.toLowerCase() + ' off' : quietOn() ? 'Quiet mode is on for this site' : 'Tap to play soft ' + label.toLowerCase();
+    }
+    function set(v, keep) {
+      on = !!v; if (!keep) lsSet(opts.key, on ? 'on' : 'off');
+      paint(); if (opts.onChange) opts.onChange(on);
+    }
+    btn.addEventListener('click', function () { set(!on); });
+    // Quiet mode switched on (here or in another tab): fall silent right away
+    function hush() { if (quietOn() && on) set(false, true); else paint(); }
+    document.addEventListener('tol-quiet', hush);
+    window.addEventListener('storage', hush);
+    paint();
+    return { on: function () { return on && !quietOn(); }, set: set };
+  }
+  window.TOLMusic = { create: create, toggle: toggle, quiet: quietOn, still: stillOn };
 })();
