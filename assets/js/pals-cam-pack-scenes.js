@@ -174,9 +174,10 @@
     { id: 'treehouse', name: 'the treehouse', draw: function (g, env) {
       hills(g, env, G - 60, 16, '#A6D494', 11); ground(g, env, G - 24, '#9AD17F', '#86C46B');
       var tx = env.x0 + 64; rr(g, tx - 14, G - 170, 28, 150, 6, '#8A6340'); circ(g, tx, G - 190, 50, '#6FAE6A'); circ(g, tx - 40, G - 160, 32, '#7FBE72'); circ(g, tx + 42, G - 166, 34, '#7FBE72');
+      if (env.bare) return; // env.bare (the Frequency Buddies player): just the tree, the pals build the house themselves
       rr(g, tx - 44, G - 130, 88, 6, 2, '#9B6B45'); rr(g, tx - 36, G - 170, 72, 40, 2, '#C9A77A'); g.fillStyle = '#C9674E'; g.beginPath(); g.moveTo(tx - 44, G - 170); g.lineTo(tx, G - 196); g.lineTo(tx + 44, G - 170); g.fill(); rr(g, tx - 8, G - 160, 16, 16, 2, '#6B4A3A');
       line(g, tx + 30, G - 124, tx + 32, G - 22, '#C9A77A', 1.6); line(g, tx + 44, G - 124, tx + 46, G - 22, '#C9A77A', 1.6); for (var k = 0; k < 7; k++) line(g, tx + 31, G - 116 + k * 14, tx + 45, G - 116 + k * 14, '#9B6B45', 2);
-    }, lights: function (g, env) { var tx = env.x0 + 64; if (env.dark > 0.15) { rr(g, tx - 6, G - 158, 12, 12, 2, 'rgba(255,214,140,' + (0.8 * env.dark).toFixed(2) + ')'); glow(g, tx, G - 152, 30, '255,214,140', (0.35 * env.dark).toFixed(2)); } } }
+    }, lights: function (g, env) { var tx = env.x0 + 64; if (env.dark > 0.15 && !env.bare) { rr(g, tx - 6, G - 158, 12, 12, 2, 'rgba(255,214,140,' + (0.8 * env.dark).toFixed(2) + ')'); glow(g, tx, G - 152, 30, '255,214,140', (0.35 * env.dark).toFixed(2)); } } }
   );
 
   // ---------------- a kit of routines, so every setting gets its own specials ----------------
