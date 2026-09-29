@@ -34,7 +34,7 @@
   // The fewest people a sheet holds. The Workpaper Suite lowers it to 1 on the "Just me" road.
   var minPeople = MIN_PEOPLE;
   function setMinPeople(n) { minPeople = n === 1 ? 1 : MIN_PEOPLE; }
-  var KEEP_PREFIX = 'tol-wpf-keep:';
+  var KEEP_PREFIX = 'tol-wpf-keep:', TAB_PREFIX = 'tol-wpf-tab:';
 
   /* ------------------------------------------------------------ people */
 
@@ -823,7 +823,27 @@
     this.dirty = true;
     if (this.opts.onChange) this.opts.onChange(this.state);
     if (this.keep) this.keepSoon();
+    this.tabSoon();
   };
+
+  /* ---------- a draft for this tab only (sessionStorage): on by default, gone when the tab closes ---------- */
+  // It protects someone who is interrupted, reloads or presses Back. Nothing is written to the device.
+  A.tabKey = function () { return TAB_PREFIX + this.schema.code + (this.schema.road ? ':' + this.schema.road : ''); };
+  A.tabSoon = function () {
+    var self = this;
+    clearTimeout(this.tabTimer);
+    this.tabTimer = setTimeout(function () { self.tabNow(); }, 300);
+  };
+  A.tabNow = function () {
+    try { global.sessionStorage.setItem(this.tabKey(), JSON.stringify({ format: DRAFT_FORMAT, version: DRAFT_VERSION, workpaper: this.schema.code, state: this.state })); } catch (e) {}
+  };
+  A.readTab = function () {
+    try {
+      var d = JSON.parse(global.sessionStorage.getItem(this.tabKey()) || 'null');
+      return d && d.format === DRAFT_FORMAT && d.workpaper === this.schema.code && d.state ? d : null;
+    } catch (e) { return null; }
+  };
+  A.clearTab = function () { clearTimeout(this.tabTimer); try { global.sessionStorage.removeItem(this.tabKey()); } catch (e) {} };
 
   /* ---------- "Keep a draft on this device": opt-in, one draft per worksheet ---------- */
   A.keepKey = function () { return KEEP_PREFIX + this.schema.code + (this.schema.road ? ':' + this.schema.road : ''); };
@@ -1054,6 +1074,7 @@
     if (!window.confirm('Clear everything on this page? Anything you haven\'t saved as a PDF or draft file will be gone.')) return;
     this.state = blankState(this.schema);
     this.dirty = false;
+    this.clearTab();
     this.render();
     if (this.keep) { this.eraseKept(); var k = document.getElementById('wpf-keep'); if (k) k.checked = false; }
     this.status('Cleared. Nothing from this worksheet remains on the page' + (this.keep ? '.' : ', and nothing is kept on this device.'));
@@ -1073,14 +1094,29 @@
     var keepBox = document.getElementById('wpf-keep'), eraseBtn = document.getElementById('wpf-erase');
     // a quiet word right next to "Erase", so pressing it always shows that something happened
     if (eraseBtn && !document.getElementById('wpf-erase-note')) eraseBtn.parentNode.insertBefore(h('span', { className: 'wpf-erase-note', id: 'wpf-erase-note', role: 'status', 'aria-live': 'polite' }), eraseBtn.nextSibling);
-    var kept = app.readKept();
+    var kept = app.readKept(), tabbed = app.readTab();
     if (kept) {
       app.state = sanitize(schema, kept.state);
       app.keep = true;
       if (keepBox) keepBox.checked = true;
     }
+    // this tab's own copy is the newest, kept or not
+    if (tabbed && JSON.stringify(sanitize(schema, tabbed.state)) !== JSON.stringify(blankState(schema))) { app.state = sanitize(schema, tabbed.state); app.dirty = true; }
+    if (keepBox) keepBox.checked = app.keep;
+    // say plainly what happens by default, with a way to clear it now
+    var keepP = keepBox && keepBox.closest('p');
+    if (keepP && !document.getElementById('wpf-tabnote')) {
+      var tn = h('p', { className: 'wpf-tabnote', id: 'wpf-tabnote' });
+      tn.appendChild(h('span', { text: 'Kept in this tab until you close it, so a reload or Back won’t lose your answers. ' }));
+      var cb = h('button', { type: 'button', className: 'wpf-erase', id: 'wpf-tabclear', text: 'Clear' });
+      tn.appendChild(cb);
+      keepP.parentNode.insertBefore(tn, keepP);
+      cb.addEventListener('click', function () { app.clear(); });
+    }
     app.render();
     if (kept) app.status('Picked up the draft kept on this device. Press “Erase” to remove it.');
+    else if (tabbed && app.dirty) app.status('Your answers from earlier in this tab are back.');
+    window.addEventListener('pageshow', function (e) { if (e.persisted) { if (keepBox) keepBox.checked = app.keep; app.render(); } });
     if (keepBox) keepBox.addEventListener('change', function () { app.setKeep(keepBox.checked); });
     if (eraseBtn) eraseBtn.addEventListener('click', function () { app.eraseKept(); if (keepBox) keepBox.checked = false; });
 

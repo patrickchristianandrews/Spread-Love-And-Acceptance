@@ -198,7 +198,7 @@ var AREAS = {
     desc: function(g){ return "The setup is fairly clear and it bends when it needs to. For " + g + ", that's worth protecting: no shared load is effortless, but this one looks like it can keep going."; },
     action: "Write down what's working: who owns what, and when you check in. It's easier to keep a rhythm you can see, especially in a busy month.",
     pillar: "This protects Pillar II, Fix the setup, not the person: the setup is the thing that's working.",
-    links: [["The 90-second daily check-in (WP-13)", "/workpapers/fill/wp-13.html"], ["Check-ins", "/check-ins.html"], ["CALC-01, Can the load last?", "/workpapers/calculators/calc01-solvency.html"]]
+    links: [["The 90-second daily check-in (WP-13)", "/workpapers/fill/wp-13.html"], ["Check-ins", "/check-ins.html"], ["CALC-01, Is the setup working for both of you?", "/workpapers/calculators/calc01-solvency.html"]]
   },
   readjust: {
     name: "Ready to readjust",
@@ -208,18 +208,18 @@ var AREAS = {
     links: [["WP-01, Who did what", "/workpapers/fill/wp-01.html"], ["WP-03, One owner per job", "/workpapers/fill/wp-03.html"], ["The Lemonade Stand", "/lemonade-stand.html"]]
   },
   stuck: {
-    name: "Stuck pattern",
+    name: "Could bend more",
     desc: function(g){ return "The setup is fairly clear, but it's hard to talk about or change. For " + g + ", the jobs may be settled while the conversation about them isn't. A pattern that's been the same for a long time can feel fixed. It isn't."; },
     action: "Swap one small job for just seven days, then talk for ten minutes about how it went. Use one sentence each: a fact, a feeling, an ask.",
     pillar: "This is Pillar IV, Tune how you send and receive, with Pillar III: pick a calm time, not a tired one.",
     links: [["WP-09, The tone filter (fact, feeling, ask)", "/workpapers/fill/wp-09.html"], ["The 90-second daily check-in (WP-13)", "/workpapers/fill/wp-13.html"], ["The Signal Translator", "/signal-translator.html"]]
   },
   stretched: {
-    name: "Stretched thin",
+    name: "Carrying a lot right now",
     desc: function(g){ return "The setup is unclear or uneven, and it's hard to adjust when things get heavy. For " + g + ", that's a lot to hold at once. It says nothing about anyone's effort or worth; it says the setup needs attention first."; },
-    action: "Start small. Each person does the two-minute battery check (WP-02) so you pick a calm moment. Then name the one job that would cause the biggest problem if it were missed, and agree who owns it this week.",
+    action: "Start small. Each person does the two-minute WP-02 (How much are you carrying?) so you pick a calm moment. Then name the one job that would cause the biggest problem if it were missed, and agree who owns it this week.",
     pillar: "This starts with Pillar III, Read your state first, then Pillar II, one owner per job.",
-    links: [["WP-02, The battery check", "/workpapers/fill/wp-02.html"], ["WP-03, One owner per job", "/workpapers/fill/wp-03.html"], ["The Calm-Down Kit (WP-11)", "/wp-11.html"]]
+    links: [["WP-02, How much are you carrying?", "/workpapers/fill/wp-02.html"], ["WP-03, One owner per job", "/workpapers/fill/wp-03.html"], ["The Calm-Down Kit (WP-11)", "/wp-11.html"]]
   }
 };
 
@@ -264,7 +264,7 @@ $("snapshot-form").addEventListener("submit", function(e){
   $("result-action").textContent = A.action;
   $("result-pillar").textContent = A.pillar;
   $("result-scores").innerHTML = "The setup (questions 1–3): <b>" + setup + " of 6</b><br>How it bends (questions 4–6): <b>" + flex + " of 6</b><br><span style=\"color:var(--ink-soft)\">4 or more counts as the steadier side. Each answer is worth 0, 1 or 2.</span>";
-  var cells = { stuck: ["Stuck pattern", "clear setup, hard to bend"], steady: ["Steady", "clear setup, bends well"], stretched: ["Stretched thin", "blurry setup, hard to bend"], readjust: ["Ready to readjust", "blurry setup, bends well"] };
+  var cells = { stuck: ["Could bend more", "clear setup, hard to bend"], steady: ["Steady", "clear setup, bends well"], stretched: ["Carrying a lot right now", "blurry setup, hard to bend"], readjust: ["Ready to readjust", "blurry setup, bends well"] };
   var order = ["stuck", "steady", "stretched", "readjust"];
   var m = $("map");
   m.setAttribute("aria-label", "Four areas: setup clear or blurry, and bends well or hard to bend. You are in " + A.name + ".");

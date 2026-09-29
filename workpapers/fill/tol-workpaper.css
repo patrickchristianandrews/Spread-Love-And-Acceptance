@@ -59,12 +59,11 @@
 .wpf-section{ margin-top: 2.2em; }
 .wpf-intro{ color: var(--ink-soft, #524B3E); font-size: 0.95em; margin: 0 0 0.9em; }
 
-/* ---------- tables: allowed wider than the reading column ---------- */
+/* ---------- tables: they stay inside their card (scrolling sideways only if a table truly can't fit) ---------- */
 .wpf-table-box{
-  width: min(960px, calc(100vw - 32px));
-  max-width: none;
-  margin-left: 50%;
-  transform: translateX(-50%);
+  width: 100%;
+  max-width: 100%;
+  overflow-x: auto;
 }
 .wpf-table{ width: 100%; border-collapse: collapse; margin: 0; }
 .wpf-table th{
@@ -77,7 +76,11 @@
   border-bottom: 1px solid var(--brass, #A8792F);
   vertical-align: bottom;
 }
-.wpf-table td{ padding: 5px 4px; border-bottom: 1px solid var(--line, #D9CBA3); vertical-align: top; }
+.wpf-table td{ padding: 5px 4px; border-bottom: 1px solid var(--line, #D9CBA3); vertical-align: top; height: auto; }
+/* the reading pages give every td a fixed height; a worksheet cell holds a label and a field, so it grows */
+.read .wpf-table td{ height: auto; }
+.wpf-table td + td, .wpf-table th + th{ border-left: 0; }
+.wpf-table input, .wpf-table select, .wpf-table textarea{ max-width: 100%; box-sizing: border-box; }
 .wpf-table select{ min-width: 4.6em; padding-right: 4px; }
 .wpf-table td output{ display: block; padding: 7px 4px; font-weight: 600; }
 .wpf-table th.wpf-rowlabel{
@@ -167,7 +170,7 @@
 @media (max-width: 720px){
   .wpf-table-box{ width: 100%; margin-left: 0; transform: none; }
   .wpf-table thead{ position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0,0,0,0); }
-  .wpf-table, .wpf-table tbody, .wpf-table tr, .wpf-table td, .wpf-table th.wpf-rowlabel{ display: block; width: 100%; }
+  .wpf-table, .wpf-table tbody, .wpf-table tr, .wpf-table td, .wpf-table th.wpf-rowlabel{ display: block; width: 100%; box-sizing: border-box; height: auto; }
   .wpf-table tr{ border: 1px solid var(--line, #D9CBA3); border-radius: 3px; padding: 8px 40px 8px 10px; margin-bottom: 10px; background: #FFFDF7; position: relative; }
   .wpf-table td{ border: 0; padding: 4px 0; }
   .wpf-table td[data-label]::before{

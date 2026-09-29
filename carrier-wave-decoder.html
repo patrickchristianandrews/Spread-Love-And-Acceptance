@@ -428,11 +428,11 @@ textarea{width:100%;min-height:90px;margin-top:6px;border:1px solid var(--line);
         <h3 id="title"></h3>
         <p class="setup" id="setup"></p>
         <div class="states" role="group" aria-label="Your state right now">
-          <button class="st" data-s="v" aria-pressed="true"><span class="n">Steady</span><span class="h">Calm and connected</span><span class="tech" aria-hidden="true">(&ldquo;ventral&rdquo;)</span></button>
-          <button class="st" data-s="s" aria-pressed="false"><span class="n">Revved up</span><span class="h">Keyed up, braced</span><span class="tech" aria-hidden="true">(&ldquo;sympathetic&rdquo;)</span></button>
-          <button class="st" data-s="d" aria-pressed="false"><span class="n">Shut down</span><span class="h">Flat, far away</span><span class="tech" aria-hidden="true">(&ldquo;dorsal&rdquo;)</span></button>
+          <button class="st" data-s="v" aria-pressed="true"><span class="n">Calm</span><span class="h">Clear skies: calm and connected</span></button>
+          <button class="st" data-s="s" aria-pressed="false"><span class="n">Revved up</span><span class="h">Gusty: keyed up, braced</span></button>
+          <button class="st" data-s="d" aria-pressed="false"><span class="n">Running on empty</span><span class="h">Fogged in: flat, far away</span></button>
         </div>
-        <p class="hint">Pick the state that feels closest to how you are right now. Not sure? <button data-go="check">Check your state</button>. The small labels in brackets come from polyvagal theory, a popular but debated model; here they&#39;re only names, not measurements.</p>
+        <p class="hint">Pick the state that feels closest to how you are right now. Not sure? <button data-go="check">Check your state</button>. These are the same three words used across the site (Clear, Gusty, Fogged in), and they&#39;re only everyday names for how you feel, not measurements.</p>
         <div class="controls">
           <button class="play" id="play">Play</button>
           <button class="ghost" id="voice" aria-pressed="true">Voice on</button>
@@ -620,19 +620,20 @@ textarea{width:100%;min-height:90px;margin-top:6px;border:1px solid var(--line);
   <section data-panel="journal" role="tabpanel" hidden>
     <div style="max-width:760px">
       <h3>Your journal</h3>
-      <p class="hint">Notes from your practices and moments you've decoded. When saving is on, everything stays in this browser on this device (never on a server), so anyone else who uses this browser can see it too. Turn saving on or off in the box near the top of the page.</p>
+      <p class="hint">Notes from your practices and moments you've decoded. When you keep your work on this device, everything stays in this browser (never on a server), so anyone else who uses this browser can see it too. Turn saving on or off in the box near the top of the page.</p>
       <ul class="entries" id="entries"></ul>
       <div class="row" style="margin-top:24px"><button class="ghost" id="wipe">Clear all my data</button></div>
     </div>
   </section>
 
-  <p class="note">The Carrier Wave Decoder is a tool for reflection, built on the radio-frequency idea in Chapter I. Like the rest of the program, it's a rule of thumb, not a clinical tool or a substitute for therapy, and it measures nothing. Its readings describe the answers you enter, never either person. It's meant for everyday friction between people who feel safe with each other. Your notes, journal, and progress are saved only in this browser and are never sent to us.</p>
+  <div class="sessbar" id="sessfoot" hidden></div>
+  <p class="note">The Carrier Wave Decoder is a tool for reflection, built on the radio-frequency idea in Chapter I. Like the rest of the program, it's a rule of thumb, not a clinical tool or a substitute for therapy, and it measures nothing. Its readings describe the answers you enter, never either person. It's meant for everyday friction between people who feel safe with each other. Nothing you enter is ever sent to us. Your notes, journal and progress are kept in this tab until you close it, or in this browser if you choose &ldquo;Keep my work on this device&rdquo; near the top; you can erase them at any time.</p>
 </div>
 
 
 <script>
 const P="~";
-const SN={v:"Steady",s:"Revved up",d:"Shut down"};
+const SN={v:"Calm",s:"Revved up",d:"Running on empty"};
 const RATE={v:.95,s:.86,d:.88}, PAUSE={v:2200,s:3000,d:3400};
 
 const SCEN=[
@@ -685,7 +686,7 @@ const SCEN=[
   setup:"It's the end of the week, time to look at the shared register together, and something about it already feels charged.",
   v:["You're in a good state for the weekly wrap-up. That's worth noticing.",P,"Start with what went right. One thing each person handled that made the week easier.","Then look at the hours together. Not to find a winner, but to see whether the arrangement is carrying its own weight.",P,"If something is drifting, it's usually ownership. Ask: which items don't have a name next to them?","End by choosing one change for next week. Only one."],
   s:["You might be bracing for a fight about the numbers.","Before you open the register, breathe out long three times. Invite the other person to do the same.",P,"Agree on one rule before you start: the ledger describes the arrangement, not either person's worth.",P,"If things speed up, either of you can say: pause. That means a minute of quiet for everyone, no explaining.","Pick up again only when both voices have slowed."],
-  d:["If you're shut down, this may not be the right hour for the weekly wrap-up. That's worth knowing, and it's okay.",P,"Check what's here. Feel where your body touches the chair. Notice the temperature of the air.",P,"You can still do a small version. Each person names one thing they did this week. That's it.","Then set a time to do the rest, when you're both more resourced.","A postponed meeting with a date on it is a well-run ledger."]}
+  d:["If you're running on empty, this may not be the right hour for the weekly wrap-up. That's worth knowing, and it's okay.",P,"Check what's here. Feel where your body touches the chair. Notice the temperature of the air.",P,"You can still do a small version. Each person names one thing they did this week. That's it.","Then set a time to do the rest, when you're both more resourced.","A postponed meeting with a date on it is a well-run ledger."]}
 ];
 
 const CHANNELS=[
@@ -720,7 +721,10 @@ const LESSONS=[
 // ---------- storage ----------
 const KEY="cwd-v1";
 let store={done:{},notes:{},voice:true,log:[],doneAt:{},checks:[],retunes:[],people:{me:"",them:""},letter:{notes:true,work:false,state:false,msg:"",find:false},findings:[],findSeq:0};
-try{const raw=localStorage.getItem(KEY); if(raw) store=Object.assign(store,JSON.parse(raw));}catch(e){}
+// Saving to this device is opt-in. Until then, the work is kept in this tab only (sessionStorage), so a
+// reload or an interruption doesn't lose it; it goes when the tab closes.
+const TKEY="cwd-tab-v1", NKEY="cwd-nav";
+try{const raw=localStorage.getItem(KEY)||sessionStorage.getItem(TKEY); if(raw) store=Object.assign(store,JSON.parse(raw));}catch(e){}
 if(!Array.isArray(store.log)) store.log=[];
 ["checks","retunes"].forEach(k=>{if(!Array.isArray(store[k])) store[k]=[];});
 store.doneAt=store.doneAt||{}; store.people=Object.assign({me:"",them:""},store.people||{});
@@ -739,7 +743,7 @@ if(store.v!==2){
 const CKEY="cwd-consent";
 let saving=false;
 try{const c=localStorage.getItem(CKEY); saving=c==="yes"||(c===null&&localStorage.getItem(KEY)!==null);}catch(e){}
-function save(){if(!saving)return;try{localStorage.setItem(KEY,JSON.stringify(store));}catch(e){}}
+function save(){try{if(saving){localStorage.setItem(KEY,JSON.stringify(store));sessionStorage.removeItem(TKEY);}else sessionStorage.setItem(TKEY,JSON.stringify(store));}catch(e){}}
 
 const $=id=>document.getElementById(id);
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
@@ -795,6 +799,8 @@ function go(t){
   if(t==="check"){answers=Array(QUESTIONS.length).fill(null);checkRecorded=false;renderQs();renderResult();}
   if(session){const j=STEPS.findIndex((x,k)=>x.tab===t||(x.alt===t&&k===session.i)); if(j>=0) session.i=j;}
   renderSess();
+  // remember where you are, for this tab only
+  try{sessionStorage.setItem(NKEY,JSON.stringify({tab:t,session:session}));}catch(e){}
   if(t==="retune") setStateColor(mode==="breath"?"s":"d");
   if(t==="decode"||t==="check"||t==="learn") setStateColor(st);
 }
@@ -972,7 +978,7 @@ $("decsave").onclick=()=>{
   const summary=CHANNELS.map(c=>`${c.name}: you ${c.opts[dec[c.id][0]].toLowerCase()}, them ${c.opts[dec[c.id][1]].toLowerCase()}`).join(" · ");
   store.log.unshift({t:Date.now(),kind:"decode",verdict:verdictFor(decTotal(),CHANNELS.map(c=>dec[c.id][0]),CHANNELS.map(c=>dec[c.id][1])),summary,say:decodeSentence(),note:$("decnote").value.trim(),
     raw:{me:CHANNELS.map(c=>dec[c.id][0]),them:CHANNELS.map(c=>dec[c.id][1])},settled:false,agreed:""});
-  save(); $("decsave").textContent=saving?"Saved ✓":"Added (saving is off)"; setTimeout(()=>$("decsave").textContent="Save to journal",2200);
+  save(); $("decsave").textContent=saving?"Saved ✓":"Added (kept in this tab)"; setTimeout(()=>$("decsave").textContent="Save to journal",2200);
 };
 $("deccopy").onclick=async()=>{
   const txt=decodeSentence(); let ok=false;
@@ -1051,7 +1057,9 @@ function startPacer(){
     pacer.on=false; pacer.prog=1; $("rstart").textContent="Start again";
     store.retunes.unshift(Date.now()); store.retunes=store.retunes.slice(0,300); save();
     $("cue").textContent="Nice. Check in with yourself: any different?";
-    $("csub").textContent="If you're ready, try a practice from where you are now.";
+    $("csub").textContent=session?"When you're ready, the next step is just below.":"If you're ready, try a practice from where you are now.";
+    {const old=$("rnext"); if(old) old.remove();}
+    if(session&&STEPS[session.i].tab==="retune"){const nx=STEPS[session.i+1]; if(nx){$("rstart").insertAdjacentHTML("afterend",`<button class="play" id="rnext" style="margin-left:8px">Next: ${nx.t}</button>`); $("rnext").onclick=()=>{$("rnext").remove();goStep(session.i+1);};}}
     orb.style.transitionDuration=reduceMotion?"0s":"2s"; orb.style.transform="scale(.7)";
   }
 }
@@ -1097,7 +1105,7 @@ function renderJournal(){
 }
 function wipeAll(){
   store={done:{},notes:{},voice:hasSpeech,log:[],doneAt:{},checks:[],retunes:[],people:{me:"",them:""},letter:{notes:true,work:false,state:false,msg:"",find:false},findings:[],findSeq:0,v:2};
-  try{localStorage.removeItem(KEY);}catch(e){}
+  try{localStorage.removeItem(KEY);sessionStorage.removeItem(TKEY);}catch(e){}
   save(); togReset(); fdraft=null; fresp=null;
   renderList(); renderJournal(); if(tab!=="journal") go(tab);
 }
@@ -1112,14 +1120,15 @@ armButton($("wipe"),"Tap again to erase everything","Clear all my data",wipeAll)
 function renderConsent(){
   const el=$("consent");
   el.innerHTML=saving
-    ?`<p><b>Saving is on.</b> Your journal, practice progress, findings and names are kept in this browser only (its local storage). They are never sent to us or anyone else. Anyone who uses this browser could see them.</p>
+    ?`<p><b>Keeping on this device is on.</b> Your journal, practice progress, findings and names are kept in this browser only (its local storage) until you erase them. They are never sent to us or anyone else. Anyone who uses this browser could see them.</p>
       <div class="row"><button class="ghost" type="button" id="c-off">Stop saving and remove my saved copy</button><button class="ghost" type="button" id="c-erase">Erase everything</button></div>`
-    :`<p><b>Saving is off.</b> Nothing you do on this page is kept after you close it. To keep a journal, practice progress and findings between visits, turn saving on. They would be kept in this browser only, never sent anywhere, and you can erase them at any time.</p>
-      <div class="row"><button class="ghost" type="button" id="c-on">Keep my work on this device</button></div>`;
+    :`<p><b>Kept in this tab until you close it.</b> Your work stays in this tab only, so a reload or an interruption won't lose it, and it's gone when you close the tab. To keep a journal, practice progress and findings between visits, keep it on this device instead: in this browser only, never sent anywhere, and you can erase it at any time.</p>
+      <div class="row"><button class="ghost" type="button" id="c-on">Keep my work on this device</button><button class="ghost" type="button" id="c-clear">Clear this tab's copy</button></div>`;
   if(saving){
     $("c-off").onclick=()=>{try{localStorage.removeItem(KEY);localStorage.setItem(CKEY,"no");}catch(e){} saving=false; renderConsent(); $("consent").querySelector("button").focus();};
     armButton($("c-erase"),"Tap again to erase everything","Erase everything",()=>{wipeAll();});
   }else{
+    armButton($("c-clear"),"Tap again to clear","Clear this tab's copy",()=>{wipeAll();try{sessionStorage.removeItem(TKEY);sessionStorage.removeItem(NKEY);}catch(e){}});
     $("c-on").onclick=()=>{saving=true; try{localStorage.setItem(CKEY,"yes");}catch(e){} save(); renderConsent(); $("consent").querySelector("button").focus();};
   }
 }
@@ -1224,7 +1233,7 @@ function renderTog(){
       <p>Text it or message it. They'll open this same page, choose “I got a code,” and answer for themselves. Your answers aren't shown to them until the reveal.</p>
       <div class="code" id="mycode">${esc(code)}</div>
       <div class="row"><button class="ghost" id="ccopy">Copy code</button></div>
-      <p>When they finish, they'll get a reply code. Come back to this tab and enter it to see the reveal on your side too. ${saving?"This page remembers your answers until then.":"Saving is off, so keep this tab open until then."}</p>
+      <p>When they finish, they'll get a reply code. Come back to this tab and enter it to see the reveal on your side too. ${saving?"This page remembers your answers until then.":"Your answers are kept in this tab, so keep it open until then."}</p>
       <div class="row"><button class="play" id="cnext">I have their reply</button><button class="ghost" id="tback">Done for now</button></div>`;
     $("ccopy").onclick=()=>copyText(code,$("ccopy"),$("mycode"));
     $("cnext").onclick=()=>{tog.step="replycode";renderTog();};
@@ -1301,7 +1310,7 @@ async function copyText(txt,btn,node){
 // ---------- session flow ----------
 const STEPS=[
  {tab:"check",t:"Check your state",h:"Answer five quick questions so the rest of the session fits where you are right now."},
- {tab:"retune",t:"Retune",h:"Recommended if you checked in keyed up or shut down. If you're steady, skip ahead."},
+ {tab:"retune",t:"Retune",h:"Recommended if you checked in revved up or running on empty. If you're calm, skip ahead."},
  {tab:"decode",t:"Decode the moment",h:"Mark where each of you was, then save it to the journal.",alt:"together"},
  {tab:"practice",t:"Practice",h:"The scenario that matches your biggest gap is already picked, in your current state."},
  {tab:"journal",t:"Record it",h:"Write what you agreed on the entry you just saved, and mark it settled once it really is. If it keeps coming back, log it as a finding."},
@@ -1329,13 +1338,19 @@ function goStep(j){
   go(stp.tab); window.scrollTo({top:0,behavior:reduceMotion?"auto":"smooth"});
 }
 function renderSess(){
-  const bar=$("sessbar"); if(!session){bar.hidden=true;return;}
+  const bar=$("sessbar"), foot=$("sessfoot"); if(!session){bar.hidden=true;foot.hidden=true;return;}
+  // the same Back / Next at the foot of every step, so the way on is never only at the top of the page
+  const fi=session.i;
+  foot.hidden=false;
+  foot.innerHTML=`<p class="sb-hint">Session, step ${fi+1} of ${STEPS.length}: ${STEPS[fi].t}</p><div class="row">${fi>0?`<button class="ghost" id="sfback">Back: ${STEPS[fi-1].t}</button>`:""}<button class="play" id="sfnext">${fi===STEPS.length-1?"Finish session":"Next: "+STEPS[fi+1].t}</button></div>`;
+  if($("sfback")) $("sfback").onclick=()=>goStep(fi-1);
+  $("sfnext").onclick=()=>{if(fi===STEPS.length-1){session=null;go("start");}else goStep(fi+1);};
   const i=session.i, stp=STEPS[i]; bar.hidden=false;
   bar.innerHTML=`<div class="sb-top"><span>Session, step ${i+1} of ${STEPS.length}</span><button id="sbend">End session</button></div>
     <ol class="sb-steps">${STEPS.map((x,j)=>`<li class="${j<i?"done":j===i?"now":""}"><button data-j="${j}" ${j===i?'aria-current="step"':""}>${x.t}</button></li>`).join("")}</ol>
     <p class="sb-hint">${stp.h}${stp.alt?(tab===stp.alt?` <button id="sbalt">Decode it on your own instead</button>`:` <button id="sbalt">Do it together instead</button>`):""}</p>
     <div class="row">${i>0?`<button class="ghost" id="sbback">Back</button>`:""}<button class="play" id="sbnext">${i===STEPS.length-1?"Finish session":"Next: "+STEPS[i+1].t}</button></div>`;
-  $("sbend").onclick=()=>{session=null;renderSess();};
+  $("sbend").onclick=()=>{session=null;renderSess();try{sessionStorage.setItem(NKEY,JSON.stringify({tab:tab,session:null}));}catch(e){}};
   bar.querySelectorAll("[data-j]").forEach(b=>b.onclick=()=>goStep(+b.dataset.j));
   if($("sbback")) $("sbback").onclick=()=>goStep(i-1);
   $("sbnext").onclick=()=>{if(i===STEPS.length-1){session=null;go("start");}else goStep(i+1);};
@@ -1945,7 +1960,10 @@ if(reduceMotion) setInterval(()=>requestAnimationFrame(draw),500);
 // ---------- init ----------
 save(); renderConsent(); renderList(); renderPanel(); renderStart(); renderChans(); renderDecode(); renderQs(); renderLessons(); setMode("breath"); setStateColor(st);
 // /carrier-wave-decoder.html#together opens the Together tab (the chat links there for "two phones")
-(function(){const h=(location.hash||"").slice(1); if(h&&TABS.some(b=>b.dataset.tab===h)) go(h);})();
+(function(){const h=(location.hash||"").slice(1); if(h&&TABS.some(b=>b.dataset.tab===h)){go(h);return;}
+  // back in the same tab (a reload, or Back from another page): open the section and session step you were on
+  try{const n=JSON.parse(sessionStorage.getItem(NKEY)||"null"); if(n&&n.tab&&TABS.some(b=>b.dataset.tab===n.tab)){ if(n.session&&typeof n.session.i==="number") session={i:Math.max(0,Math.min(STEPS.length-1,n.session.i)),state:n.session.state||null}; if(n.tab!=="start"||session) go(n.tab); }}catch(e){}
+})();
 if(window.TOLPatterns&&$("lookfor")) window.TOLPatterns.lookFor($("lookfor"));
 </script>
 </body>
