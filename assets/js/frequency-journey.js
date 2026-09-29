@@ -273,7 +273,12 @@
     if (!base) return;
     if (!(keepSet && G.lv && G.lv.id === w + '-' + l)) {
       var drawn = null;
-      try { drawn = J.drawLevel ? J.drawLevel(w, l, save.seen, { again: isDone(w, l) }) : null; } catch (e) { drawn = null; }
+      // a level left halfway (a reload, or a visit to the map) comes back with the very same set
+      if (save.cur && save.cur.id === w + '-' + l && save.cur.lv) drawn = save.cur.lv;
+      else {
+        try { drawn = J.drawLevel ? J.drawLevel(w, l, save.seen, { again: isDone(w, l) }) : null; } catch (e) { drawn = null; }
+        if (drawn) { try { save.cur = { id: w + '-' + l, lv: JSON.parse(JSON.stringify(drawn)) }; } catch (e) { save.cur = null; } }
+      }
       G.lv = drawn || base; if (!G.lv.id) G.lv = Object.assign({}, base, { id: w + '-' + l, set: [], pillars: [] });
     }
     var lv = G.lv;
@@ -281,7 +286,7 @@
     G.w = w; G.l = l;
     save.last = w + '-' + l; persist();
     root.setAttribute('data-world', w);
-    titleK.textContent = 'World ' + w + ' · ' + W.hz + ' Hz · ' + W.theme;
+    titleK.textContent = 'World ' + w + ' · ' + W.theme;
     titleH.textContent = W.name;
     titleSub.innerHTML = 'Level ' + l + ' of ' + W.levels.length + ' · ' + esc(lv.kind) + ' ' + leaves(lv.d) + (isDone(w, l) ? ' <span class="fj-again">· finished before</span>' : '');
     if (lv.type === 'walk' || lv.type === 'maze') startGrid(w, l, keepHist); else startChal(w, l);
@@ -519,14 +524,18 @@
   /* ------------------------------------------------------------------ the celebration */
   function winLevel() {
     var W = WORLDS[G.w - 1], lv = curLevel(), id = G.w + '-' + G.l, grid = lv.type === 'walk' || lv.type === 'maze';
-    save.done[id] = lv.type === 'walk' ? G.moves : 1; persist();
+    save.done[id] = lv.type === 'walk' ? G.moves : 1;
+    if (save.cur && save.cur.id === id) save.cur = null; // finished: the next play draws a new set
+    persist();
     if (grid) {
       var t = now(); G.pv.forEach(function (p) { p.happy = t; });
       var o = orbCenter(); burst(o[0], o[1], REDUCED ? 8 : 26, ['#FFE3AE', '#F7C9D4', '#D9C8F0', '#C7EBD6', '#FFFFFF'], 'spark');
     }
     pad(W.hz, 0.075);
+    // anything new for the garden is shown on this level's own card, never as a second pop-up
+    var gift = null;
     if (window.TOLRewards && typeof window.TOLRewards.earn === 'function') {
-      try { window.TOLRewards.earn(8, 'journey', 'World ' + G.w + ' · level ' + G.l); } catch (e) { }
+      try { var res = window.TOLRewards.earn(8, 'journey', 'World ' + G.w + ' · level ' + G.l, { noCard: true, quiet: true }); gift = res && res.unlocked && res.unlocked[0]; } catch (e) { }
     }
     var last = G.l === W.levels.length, min = lv.min, nc = G.calls ? G.calls.length : 0;
     var steps = lv.type === 'walk' ? G.moves + ' steps' + (min ? (G.moves <= min ? ' · a beautifully neat path' : ' · the neatest path is ' + min) : '')
@@ -534,12 +543,12 @@
     var wl = G.w, ll = G.l;
     setTimeout(function () {
       showCard({
-        k: 'World ' + wl + ' · ' + W.hz + ' Hz · Level ' + ll,
+        k: 'World ' + wl + ' · Level ' + ll,
         h: lv.done || 'You arrived together',
         meta: lv,
         lesson: lv.lesson,
         p: lv.why,
-        steps: steps,
+        steps: steps + (gift ? (steps ? ' · ' : '') + gift.icon + ' New in your garden: ' + gift.name : ''),
         more: lv.more,
         pillars: lv.pillars,
         btns: last ? [['World complete →', function () { worldCard(wl); }, true], ['Play again: a new set', function () { hideCard(); startLevel(wl, ll); }]]
@@ -551,10 +560,10 @@
     var W = WORLDS[w - 1], nx = WORLDS[w];
     pad(W.hz, 0.06);
     showCard({
-      k: 'World ' + w + ' complete · ' + W.hz + ' Hz',
+      k: 'World ' + w + ' complete',
       h: W.name,
       lesson: W.summary,
-      p: nx ? 'Next: ' + nx.name + ', at ' + nx.hz + ' Hz. ' + (nx.n === 7 ? 'The very top.' : '') : '',
+      p: nx ? 'Next: ' + nx.name + '. ' + (nx.n === 7 ? 'The very top.' : '') : '',
       btns: [[nx ? (nx.n === 7 ? 'Up into the sky →' : 'Onward to World ' + nx.n + ' →') : 'Journey map', function () { hideCard(); if (nx) { if (nx.n === 7) startSky(); else startLevel(nx.n, 1); } else showMap(); }, true],
         ['Journey map', function () { hideCard(); showMap(w + 1 <= 7 ? w + 1 : w); }]]
     });
@@ -562,7 +571,7 @@
   function showWorldIntro(w) {
     var W = WORLDS[w - 1];
     save.worldIntro[w] = 1; persist();
-    showCard({ k: 'World ' + w + ' · ' + W.hz + ' Hz', h: W.name, lesson: W.theme, p: W.intro,
+    showCard({ k: 'World ' + w, h: W.name, lesson: W.theme, p: W.intro,
       btns: [['Begin', function () { hideCard(); }, true]] });
   }
   var cardReturn = null;
@@ -1137,7 +1146,7 @@
 
   function startChal(w, l) {
     var lv = G.lv;
-    C = { type: lv.type, lv: lv, hearts: 3, useHearts: lv.d >= 4 && ['echo', 'sort', 'spot', 'choose'].indexOf(lv.type) >= 0, done: false, timers: [] };
+    C = { type: lv.type, lv: lv, hearts: 3, useHearts: false, done: false, timers: [] }; // no tries to count: a "not yet" is only ever a gentle why and another go
     G.react = null; G.parts = [];
     setMode('chal'); resize(); paintScene();
     chalEl.innerHTML = '';
@@ -1236,7 +1245,7 @@
   BUILD.riddle = function () { C.i = 0; riddleStep(); };
   function riddleStep() {
     var R = C.lv.riddles, r = R[C.i], last = C.i === R.length - 1;
-    choiceQ({ k: 'Riddle ' + (C.i + 1) + ' of ' + R.length + (r.w && WORLDS[r.w - 1] ? ' · from the ' + WORLDS[r.w - 1].short : ''), q: r.q, options: r.options, hintText: r.hint, idx: C.i,
+    choiceQ({ k: 'Riddle ' + (C.i + 1) + ' of ' + R.length, q: r.q, options: r.options, hintText: r.hint, idx: C.i,
       nextLabel: last ? 'Light the lantern →' : 'Next riddle →',
       onRight: function () { if (last) finish(); else { C.i++; riddleStep(); focusFirst(C.body, '.fj-opt'); } } });
     G.lanterns = C.i;
@@ -1292,7 +1301,12 @@
   function breathTap() {
     if (C.done) return;
     if (!C.t0) { C.t0 = now(); C.tapBtn.textContent = 'Tap with the lantern'; fb('Breathe in as the lantern grows, and out as it softens. Tap at the fullest and the smallest.'); return; }
-    var s = (now() - C.t0) / 1000, tg = breathTarget(s), win = C.lv.window;
+    // breathing along, not tapping fast: a tap straight after another doesn't count, the window around each
+    // turn of the breath is narrow, and a tap in the middle of a breath means that breath's turn isn't lit
+    var t = now(), s = (t - C.t0) / 1000, tg = breathTarget(s), win = Math.min(0.7, C.lv.window), quick = C.lastTap && t - C.lastTap < 1200;
+    C.lastTap = t;
+    if (quick) { C.voided = Math.abs(tg.d) > win ? (tg.d < 0 ? tg.id : null) : tg.id; fb('Slow and easy: one tap at each turn of the breath is plenty.', 'soft'); return; }
+    if (Math.abs(tg.d) <= win && C.voided === tg.id) { fb('Follow the lantern for a breath, then tap at the next turn.', 'soft'); C.voided = null; return; }
     if (Math.abs(tg.d) <= win) {
       if (C.last === tg.id) { fb('That turn is already counted. Wait for the next one.', 'soft'); return; }
       C.last = tg.id; C.hits++; breathDots(); chime(C.hits); react('yay');
@@ -1300,6 +1314,7 @@
       fb(tg.top ? 'Full. Lovely. Now breathe out, slowly.' : 'Empty. Lovely. Now breathe in.', 'good');
     } else {
       C.miss++; react('hmm');
+      if (tg.d < -1.5) C.voided = tg.id; // tapped mid-breath: wait for this breath to turn
       var b = breathAt(now());
       fb(tg.d < 0 && Math.abs(tg.d) < 2.2 ? 'A touch early. Let the breath finish; there’s no rush.' : tg.d > 0 && Math.abs(tg.d) < 2.2 ? 'A touch late. Catch the next turn.' : b.inh ? 'Still breathing in… tap when the lantern is fullest.' : 'Breathing out, slowly… tap when it’s smallest.', 'soft');
       if (C.miss >= 3) C.showNow = true;
@@ -1882,7 +1897,7 @@
     C = { type: 'harmony', picks: (save.harmony || []).filter(starById), timers: [], done: false };
     G.react = null; G.parts = [];
     setMode('chal'); resize(); paintScene();
-    titleK.textContent = 'World 7 · 963 Hz · Harmony';
+    titleK.textContent = 'World 7 · Harmony';
     titleH.textContent = 'Before you rest';
     titleSub.textContent = PAL[0] + ' and ' + PAL[1] + ' made it. One gentle last step.';
     chalEl.innerHTML = '';
@@ -1892,7 +1907,7 @@
     var list = el('div', 'fj-harm'); list.setAttribute('role', 'group'); list.setAttribute('aria-label', 'Eighteen lessons');
     var lastW = 0;
     allStars().forEach(function (s) {
-      if (s.w !== lastW) { lastW = s.w; list.appendChild(txt('p', 'fj-ck fj-harm-w', WORLDS[s.w - 1].short + ' · ' + WORLDS[s.w - 1].hz + ' Hz')); }
+      if (s.w !== lastW) { lastW = s.w; list.appendChild(txt('p', 'fj-ck fj-harm-w', WORLDS[s.w - 1].short)); }
       var b = btn('fj-harm-b', s.t, function () {
         var k = C.picks.indexOf(s.id);
         if (k >= 0) C.picks.splice(k, 1);
@@ -2117,7 +2132,7 @@
     G.w = 7; root.setAttribute('data-world', 7);
     setMode('sky');
     var W = WORLDS[6];
-    titleK.textContent = 'World 7 · ' + W.hz + ' Hz · ' + W.theme;
+    titleK.textContent = 'World 7 · ' + W.theme;
     titleH.textContent = W.name; titleSub.textContent = 'No goal here. Just be.';
     SKY = SKY || { stars: [], pals: [{ x: 0.36, y: 0.6, vx: 0, vy: 0, tx: 0.36, ty: 0.6, face: 1 }, { x: 0.62, y: 0.62, vx: 0, vy: 0, tx: 0.62, ty: 0.62, face: -1 }], turn: 0, rest: false, restT0: 0, hugAt: 0, calmSince: now(), clouds: [] , t0: now() };
     if (!SKY.clouds.length) for (var k = 0; k < 9; k++) SKY.clouds.push({ x: Math.random(), y: 0.12 + Math.random() * 0.8, s: 0.6 + Math.random() * 0.9, v: 0.000004 + Math.random() * 0.000008, a: 0.5 + Math.random() * 0.4 });
@@ -2125,7 +2140,7 @@
     myStars(); bringIntoView();
     say('Tap anywhere in the sky to place a star that chimes. The pals will float over to play.');
     cv.setAttribute('aria-label', 'The Infinite Sky: soft clouds, and Sugarfoot and Tidbit floating together. Tap to place chiming stars.');
-    if (!save.worldIntro[7]) { save.worldIntro[7] = 1; persist(); showCard({ k: 'World 7 · 963 Hz', h: 'The Infinite Sky', lesson: W.lessons[0], p: W.intro, btns: [['Float up', function () { hideCard(); }, true]] }); }
+    if (!save.worldIntro[7]) { save.worldIntro[7] = 1; persist(); showCard({ k: 'World 7', h: 'The Infinite Sky', lesson: W.lessons[0], p: W.intro, btns: [['Float up', function () { hideCard(); }, true]] }); }
   }
   var SPECIAL = [[0.2, 0.13], [0.8, 0.15], [0.5, 0.37]];
   function skyTap(fx, fy) {
@@ -2287,8 +2302,8 @@
       var b = el('button', 'fj-node' + (NODES[k][0] > 50 ? ' is-right' : '') + (worldDone(W.n) ? ' is-done' : '') + (!worldOpen(W.n) ? ' is-locked' : '') + (W.n === here ? ' is-here' : ''));
       b.type = 'button'; b.style.left = NODES[k][0] + '%'; b.style.top = (NODES[k][1] / 140 * 100) + '%';
       var dots = W.levels.length ? W.levels.map(function (_, l) { return isDone(W.n, l + 1) ? '●' : '○'; }).join('') : (save.skySeen ? '★' : '☆');
-      b.innerHTML = '<span class="fj-node-dot">' + ICONS[W.n] + '</span><span class="fj-node-l"><b>' + W.short + '</b><small>' + W.hz + ' Hz <i>' + dots + '</i></small></span>';
-      b.setAttribute('aria-label', 'World ' + W.n + ', ' + W.name + ', ' + W.hz + ' hertz. ' + (worldDone(W.n) ? 'Finished.' : worldOpen(W.n) ? 'Open.' : 'Not reached yet.'));
+      b.innerHTML = '<span class="fj-node-dot">' + ICONS[W.n] + '</span><span class="fj-node-l"><b>' + W.short + '</b><small>World ' + W.n + ' <i>' + dots + '</i></small></span>';
+      b.setAttribute('aria-label', 'World ' + W.n + ', ' + W.name + '. ' + (worldDone(W.n) ? 'Finished.' : worldOpen(W.n) ? 'Open.' : 'Not reached yet.'));
       b.addEventListener('click', function () { wake(); showPanel(W.n); });
       // keep the label inside the trail on narrow screens
       if (NODES[k][0] > 50) b.style.transform = 'translate(calc(-100% + 26px), -50%)'; else b.style.transform = 'translate(-26px, -50%)';
@@ -2314,7 +2329,7 @@
   function showPanel(w) {
     var W = WORLDS[w - 1];
     panel.innerHTML = '';
-    panel.appendChild(el('p', 'fj-k', 'World ' + w + ' · ' + W.hz + ' Hz · ' + W.theme));
+    panel.appendChild(el('p', 'fj-k', 'World ' + w + ' · ' + W.theme));
     panel.appendChild(el('h3', '', W.name));
     if (!worldOpen(w)) {
       panel.appendChild(el('p', '', 'The pals haven’t reached this world yet. Finish ' + WORLDS[w - 2].name + ' to walk on.'));
@@ -2327,7 +2342,7 @@
         if (save.harmony) { var hb = el('button', '', 'Choose your three stars again'); hb.type = 'button'; hb.addEventListener('click', function () { wake(); startHarmony(); }); box.appendChild(hb); }
       }
       W.levels.forEach(function (lv, l) {
-        var dn = isDone(w, l + 1), open = levelOpen(w, l + 1), b = el('button', 'fj-lvb' + (dn ? ' is-done' : ''));
+        var dn = isDone(w, l + 1), open = dn || levelOpen(w, l + 1), b = el('button', 'fj-lvb' + (dn ? ' is-done' : ''));
         b.type = 'button';
         b.innerHTML = '<span class="fj-lvn">' + (dn ? '✓ ' : '') + 'Level ' + (l + 1) + '</span><span class="fj-lvk">' + esc(lv.kind) + '</span>' + leaves(lv.d);
         b.disabled = !open;
@@ -2337,8 +2352,8 @@
       });
       panel.appendChild(box);
     }
-    if (worldOpen(w) && W.levels.length) panel.appendChild(el('p', 'fj-fresh', '<b>New set each time you play.</b> Fresh riddles, puzzles and boards on every visit, spread across the Five Pillars. Replay a level you’ve finished and it leans a little more thoughtful.'));
-    panel.appendChild(el('p', 'fj-note', 'The tones are used here as calm themes for each world, not as a treatment.'));
+    if (worldOpen(w) && W.levels.length) panel.appendChild(el('p', 'fj-fresh', '<b>A new set each time you play a level.</b> Fresh riddles, puzzles and boards, spread across the Five Pillars. Leave a level halfway and it waits for you just as it was. Any level you’ve finished can be played again from here, and it leans a little more thoughtful.'));
+    panel.appendChild(el('p', 'fj-note', 'Each world has its own soft tone, simply as a calm theme for the music.'));
     panel.hidden = false;
   }
   function showMap(focusWorld) {

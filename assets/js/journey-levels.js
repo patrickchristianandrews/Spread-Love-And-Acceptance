@@ -37,7 +37,7 @@
   'use strict';
 
   var WORLDS = [
-    { n: 1, hz: 396, name: 'The Whispering Shadows', theme: 'Letting go of fear', short: 'Shadows', mech: 'shadows',
+    { n: 1, hz: 396, name: 'The Whispering Shadows', theme: 'Braver together', short: 'Shadows', mech: 'shadows',
       intro: 'A stormy forest, lit by one small lantern. Here Sugarfoot and Tidbit learn to trust: a few kind riddles, a walk through the dark side by side, and one slow, steady breath.',
       summary: 'Learning to trust: fear gets smaller when you don’t have to carry it alone.',
       levels: [
