@@ -335,9 +335,14 @@
       return low.replace(/^(\s*["“(]?)([a-z])/, function (m, a, c) { return a + c.toUpperCase(); });
     });
   }
+  // a page's name without the site name search engines see ("Our Logo · Spread Love & Acceptance" → "Our Logo")
+  function pageName(t) {
+    var s = String(t || '').replace(/\s*[—|–·-]\s*(Spread Love (&|and) Acceptance|The Objective Ledger)\b.*$/, '').trim();
+    return s || String(t || '');
+  }
   function passageBlock(i, qterms) {
     var d = KB.docs[i];
-    return { k: 'passage', i: i, h: d.tip ? 'A little tip' : unshout(d.h), src: d.tip ? '' : d.t, x: excerpt(d, qterms).map(unshout), u: safePath(d.u) ? d.u : '', l: d.l || '' };
+    return { k: 'passage', i: i, h: d.tip ? 'A little tip' : pageName(unshout(d.h)), src: d.tip ? '' : pageName(d.t), x: excerpt(d, qterms).map(unshout), u: safePath(d.u) ? d.u : '', l: d.l || '' };
   }
 
   // Follow-up chips: glossary terms mentioned in what was shown, then headings of other good hits.

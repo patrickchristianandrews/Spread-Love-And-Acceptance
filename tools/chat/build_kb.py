@@ -109,8 +109,8 @@ class PageParser(HTMLParser):
         a = dict(attrs)
         if tag == 'meta' and (a.get('http-equiv') or '').lower() == 'refresh':
             self.redirect = True
-        if tag == 'title':
-            self.in_title = True
+        if tag == 'title' and not self.title and self.body_depth == 0:
+            self.in_title = True  # the page's own <title>, never an SVG <title> inside the body
         if tag in VOID:
             if tag in ('br', 'hr') and self.active():
                 self.flush()
@@ -206,6 +206,9 @@ class PageParser(HTMLParser):
 def clean_title(t):
     t = norm_space(unescape(t))
     t = re.sub(r'\s*[—|–·-]\s*The Objective Ledger.*$', '', t)
+    # the site name added for search engines ("Our Logo · Spread Love & Acceptance") is not part of a page's name
+    t = re.sub(r'\s*[—|–·-]\s*Spread Love (&|and) Acceptance\b.*$', '', t)
+    t = re.sub(r'^Spread Love (&|and) Acceptance\s*[—|–·:-]\s*', '', t) if not re.match(r'^Spread Love (&|and) Acceptance\s*$', t) else t
     t = re.sub(r'\s+—\s+.*$', '', t) if len(t) > 48 else t
     return t or 'The Objective Ledger'
 

@@ -367,6 +367,15 @@ t('tester', 'my partner does nothing around the house (no repeats)', { q: 'my pa
     if (!ok) fails.push({ x, why, text });
     if (verbose) console.log((ok ? 'PASS ' : 'FAIL ') + '[' + x.g + '] ' + qs.join(' → ') + '  (' + r.kind + ' ' + idOf + ')\n' + text.replace(/^/gm, '     ') + '\n');
   }
+  // the knowledge base itself: page titles never carry the site name added for search engines,
+  // and no SVG <title> text is glued onto a page title ("Our Logo · Spread Love & AcceptanceSpread Love…")
+  if (!only || 'kb'.includes(only)) {
+    const kbSrc = require('fs').readFileSync(require('path').join(__dirname, '..', '..', 'assets/js/chat-kb.js'), 'utf8');
+    const bad = (kbSrc.match(/"t":"[^"]*(· Spread Love|Acceptance[A-Z])[^"]*"/g) || []);
+    groups.kb = [bad.length ? 0 : 1, 1];
+    if (!bad.length) pass++; else fails.push({ x: { g: 'kb', q: 'page titles' }, why: ['titles with the site name: ' + bad.slice(0, 3).join(', ')], text: '' });
+    tests.push({ g: 'kb' });
+  }
   fails.forEach(f => console.log('FAIL [' + f.x.g + '] ' + (f.x.convo || [f.x.q]).join(' → ') + '\n   ' + f.why.join('; ') + '\n   ' + f.text.slice(0, 300).replace(/\n/g, ' | ')));
   console.log('\n' + Object.keys(groups).map(g => g + ' ' + groups[g][0] + '/' + groups[g][1]).join('  ·  '));
   console.log('PASSED ' + pass + ' of ' + tests.length + ' (' + (100 * pass / tests.length).toFixed(1) + '%)');
