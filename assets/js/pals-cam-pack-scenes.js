@@ -54,6 +54,33 @@
     }, lights: function (g, env) { var cx = env.x0 + (env.x1 - env.x0) * 0.62, a = 0.35 + env.dark * 0.6; rr(g, cx - 30, G - 60, 14, 12, 1, 'rgba(255,214,140,' + a.toFixed(2) + ')'); rr(g, cx + 10, G - 60, 14, 12, 1, 'rgba(255,214,140,' + a.toFixed(2) + ')'); if (env.dark > 0.2) { glow(g, cx - 23, G - 54, 26, '255,214,140', (0.3 * env.dark).toFixed(2)); glow(g, cx + 17, G - 54, 26, '255,214,140', (0.3 * env.dark).toFixed(2)); } },
       ambient: function (g, env, t, layer) { if (layer !== 'back') return; var cx = env.x0 + (env.x1 - env.x0) * 0.62 + 25; for (var i = 0; i < 4; i++) { var q = ((t / 2600) + i / 4) % 1; circ(g, cx + Math.sin(q * 6 + i) * 6 + q * 14, G - 116 - q * 60, 4 + q * 8, 'rgba(230,230,240,' + (0.5 * (1 - q)).toFixed(2) + ')'); } } },
 
+    // inside the snowy cabin: log walls, a wood stove with a little fire, a braided rug, snow past the window
+    { id: 'cabinin', name: 'inside the cozy cabin', indoor: true, draw: function (g, env) {
+      var w = { x: env.x0 + (env.x1 - env.x0) * 0.24 - 45, y: G - 158, w: 90, h: 76 };
+      room(g, env, '#B07A4E', '#8E6040', w);
+      for (var k = 0; k < 16; k++) { var ly = env.y0 + 6 + k * 13; if (ly > G - 24) break; rr(g, env.x0, ly, env.x1 - env.x0, 2, 0, 'rgba(70,40,20,.28)'); for (var e = 0; e < 3; e++) circ(g, env.x0 + rnd(k * 7 + e) * (env.x1 - env.x0), ly - 5, 1.6, 'rgba(70,40,20,.18)'); }
+      // (the window hole shows the snowy sky; its frame is drawn by room)
+      rr(g, w.x - 8, w.y - 8, w.w + 16, 6, 2, '#E9E1D2');
+      // the wood stove, its pipe, and a little stack of logs
+      var sx = env.x0 + (env.x1 - env.x0) * 0.72; rr(g, sx - 26, G - 70, 52, 48, 6, '#2F2A2E'); rr(g, sx - 30, G - 74, 60, 7, 3, '#3C3539'); rr(g, sx - 4, env.y0, 8, G - 74 - env.y0, 1, '#3C3539');
+      rr(g, sx - 15, G - 60, 30, 22, 4, '#1B1719'); rr(g, sx - 22, G - 24, 6, 5, 1, '#2F2A2E'); rr(g, sx + 16, G - 24, 6, 5, 1, '#2F2A2E');
+      for (var q = 0; q < 3; q++) { circ(g, sx + 42 + q * 9, G - 26, 4.5, '#8A5A36'); circ(g, sx + 42 + q * 9, G - 26, 2.5, '#C8955E'); } circ(g, sx + 46, G - 34, 4.5, '#8A5A36'); circ(g, sx + 46, G - 34, 2.5, '#C8955E');
+      // a braided rug and a shelf with mugs
+      ell(g, (env.x0 + env.x1) / 2, G - 8, 90, 13, '#C9674E'); ell(g, (env.x0 + env.x1) / 2, G - 8, 70, 9, '#E0A060'); ell(g, (env.x0 + env.x1) / 2, G - 8, 48, 6, '#F2D39A');
+      var hx = env.x1 - 40; rr(g, hx - 26, G - 140, 52, 5, 1, '#7A4E2E'); rr(g, hx - 20, G - 152, 10, 12, 2, '#F4EFE6'); rr(g, hx - 2, G - 150, 10, 10, 2, '#7FB8F0'); circ(g, hx + 18, G - 147, 5, '#8FD694');
+    }, lights: function (g, env) { var sx = env.x0 + (env.x1 - env.x0) * 0.72; glow(g, sx, G - 50, 70, '255,170,90', (0.22 + 0.3 * env.dark).toFixed(2)); },
+      ambient: function (g, env, t, layer) {
+        var sx = env.x0 + (env.x1 - env.x0) * 0.72;
+        if (layer === 'back') { // the fire, flickering behind the stove's window
+          for (var i = 0; i < 5; i++) { var f = 0.6 + 0.4 * Math.sin(t / (140 + i * 37) + i * 2); g.fillStyle = ['#FF9F43', '#FFC56E', '#FF7B3A', '#FFD98A', '#FF9F43'][i]; g.beginPath(); var bx = sx - 11 + i * 5.5; g.moveTo(bx - 4, G - 39); g.quadraticCurveTo(bx, G - 39 - 16 * f, bx + 4, G - 39); g.closePath(); g.fill(); }
+          return;
+        }
+        var w = { x: env.x0 + (env.x1 - env.x0) * 0.24 - 45, y: G - 158, w: 90, h: 76 }; // soft snow, only outside the window
+        g.save(); g.beginPath(); g.rect(w.x + 3, w.y + 3, w.w - 6, w.h - 6); g.clip();
+        for (var j = 0; j < 16; j++) { var x = w.x + ((rnd(j) * w.w + Math.sin(t / 900 + j) * 6) % w.w), y = w.y + ((t / 40 + rnd(j + 30) * 120) % (w.h + 10)) - 5; circ(g, x, y, 1.2 + rnd(j + 60), 'rgba(255,255,255,.9)'); }
+        g.restore();
+      } },
+
     { id: 'rainy', name: 'the rainy window seat', indoor: true, draw: function (g, env) {
       var w = { x: env.x0 + (env.x1 - env.x0) * 0.5 - 70, y: G - 170, w: 140, h: 104 };
       room(g, env, '#D9CCE8', '#C9A77A', w); rr(g, w.x - 14, G - 60, w.w + 28, 18, 6, '#B79CEB'); for (var k = 0; k < 4; k++) rr(g, w.x - 6 + k * 38, G - 70, 30, 14, 6, ['#F7C9D4', '#FFF3C9', '#C9E4F7', '#F7C9D4'][k]);

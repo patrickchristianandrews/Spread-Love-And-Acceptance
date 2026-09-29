@@ -19,7 +19,7 @@
   if (!B.episodes) B.episodes = {};
 
   // ---------- the vocabulary (shared with the validator) ----------
-  var SCENES = ['backyard', 'beach', 'snow', 'pond', 'forest', 'rooftop', 'meadow', 'dock', 'citypark', 'pumpkins', 'cabin', 'rainy', 'carnival',
+  var SCENES = ['backyard', 'beach', 'snow', 'pond', 'forest', 'rooftop', 'meadow', 'dock', 'citypark', 'pumpkins', 'cabin', 'cabinin', 'rainy', 'carnival',
     'library', 'bakery', 'gardenparty', 'campsite', 'lighthouse', 'underwater', 'space', 'farm', 'orchard', 'festival', 'aquarium', 'studio',
     'bonfire', 'treehouse', 'theater', 'blank'];
   var WEATHER = ['clear', 'rain', 'storm', 'snow', 'wind', 'stars'];
@@ -67,7 +67,7 @@
   var NOTES = {
     s1e1: 'A far-off rumble of thunder at the end of chapter 2, and a big storm in chapter 4 (lightning shows as a soft glow). A swaying rope bridge that the pals cross slowly and together. The storm knocks the treehouse down and Sugarfoot cries; the pals snap at each other, then say sorry and rebuild it better.',
     s1e2: 'The wind blows the song pages away, and the pals try to reach them from a windy rooftop. One pal snaps ("Why won\u2019t you just help?"), and they misunderstand each other for a while, then say sorry and make up.',
-    s1e3: 'One pal quietly carries far too much and gets very tired. A log crossing over a shallow creek, and soft falling snow. The pals argue and Sugarfoot cries a little, then they rest in a warm cabin and share the load.',
+    s1e3: 'One pal quietly carries far too much and gets very tired. Stepping stones across a shallow creek, and soft falling snow. The pals argue and Sugarfoot cries a little, then they rest in a warm cabin and share the load.',
     s1e4: 'The pals\u2019 kite falls into the waves; they don\u2019t go in after it, and Hopper the frog swims out to help. They blame each other for a while, have a cozy dream under the sea, then find out what really broke.',
     s1e5: 'At night in the forest, the pals take a wrong turn, their lantern grows dim, and they argue. They are never in the pitch dark; they say sorry, rest, and the moon helps them find the way.'
   };
@@ -345,7 +345,7 @@
       if (c.sleep && n !== 'sleep' && n !== 'heart' && n !== 'sparkle') c.sleep = false;
       if (c.kite && ['walk', 'run', 'carry', 'drop', 'hug', 'highfive', 'nuzzle', 'sit', 'lie', 'sleep', 'dig', 'build'].indexOf(n) >= 0) c.kite = false;
       if (n === 'hug' || n === 'highfive' || n === 'nuzzle') { if (Math.abs(a.toX - a.fromX) < 0.005) c.fx = sgn(o.x - c.x); }
-      if (n === 'carry') { c.shared = p.who === 'both'; c.item = ITEMS.indexOf(p.item) >= 0 ? p.item : 'bone'; S.ground = S.ground.filter(function (g2) { return !(g2.item === c.item && Math.abs(g2.x - c.x) < 0.25); }); }
+      if (n === 'carry') { if (c.pose === 'sit' || c.pose === 'lie') setPose(c, 'stand'); c.shared = p.who === 'both'; c.item = ITEMS.indexOf(p.item) >= 0 ? p.item : 'bone'; S.ground = S.ground.filter(function (g2) { return !(g2.item === c.item && Math.abs(g2.x - c.x) < 0.25); }); }
       if (n === 'tailtuck' || n === 'cry') c.mood = 'sad';
       if (n === 'shiver') c.mood = c.mood === 'happy' ? 'worried' : c.mood;
       if (n === 'lookat' || n === 'point') { var tgt = p.target || 'other'; if (tgt === 'other') { c.fx = sgn(o.x - c.x); c.tilt0 = 0; } else if (tgt === 'left') { c.fx = -1; c.tilt0 = 0; } else if (tgt === 'right') { c.fx = 1; c.tilt0 = 0; } else if (tgt === 'up') c.tilt0 = -0.42; }
@@ -365,6 +365,7 @@
       }
       if (n === 'drop') {
         var itm = c.item || (ITEMS.indexOf(p.item) >= 0 ? p.item : null), oc = other(c);
+        if (!c.item && p.who === 'both' && S.ground.some(function (g2) { return g2.item === itm && g2.t0 === S.t; })) itm = null; // her pal already set the shared one down
         if (c.shared && oc && oc.shared && oc.item === itm) { // a shared basket goes down once, between them
           S.ground.push({ item: itm, x: clamp((c.x + oc.x) / 2, 0.03, 0.97), t0: S.t }); c.item = null; oc.item = null; c.shared = oc.shared = false;
         } else if (itm) { S.ground.push({ item: itm, x: clamp(c.x + c.fx * 0.06, 0.03, 0.97), t0: S.t }); c.item = null; c.shared = false; }
@@ -389,6 +390,7 @@
     // ---------- speaking ----------
     // who a line is spoken to: 'self' (thinking out loud), the other pal, a guest, or 'both' / 'all'
     function addressee(b) { var to = b.to; if (!to) { var c0 = get(b.say); return c0 && !c0.guest ? 'pal' : null; } return to; }
+    function passing(c) { if (c.guest) return 0; var o = other(c); if (!o || !walking(c) || walking(o) && c.act.toX > c.act.fromX === o.act.toX > o.act.fromX) return 0; var q = clamp(1 - Math.abs(c.x - o.x) / 0.14, 0, 1); return q * q * (3 - 2 * q); }
     function walking(c) { var a = c.act; return !!(a && a.toX != null && a.toX !== a.fromX); }
     function turnTo(c, x) { if (c && !walking(c) && Math.abs(x - c.x) > 0.01) c.fx = sgn(x - c.x); }
     function faceFor(b) {
@@ -559,16 +561,16 @@
 
     // ---------- painting ----------
     function bgPaint(w, h) {
-      var key = S.scene + '|' + S.hour.toFixed(2) + '|' + w + 'x' + h;
+      var key = S.scene + '|' + S.hour.toFixed(2) + '|' + w + 'x' + h + (S.guests.moon ? '|moon' : '');
       if (key === S.bgKey && S.bg) return;
       S.bgKey = key; S.bg = S.bg || document.createElement('canvas'); S.bg.width = w; S.bg.height = h;
       var b = S.bg.getContext('2d'), PC2 = window.TOLPalsCam, geo = null;
       b.setTransform(1, 0, 0, 1, 0, 0); b.clearRect(0, 0, w, h);
       if (S.scene !== 'blank' && PC2 && PC2.paintScene) {
-        try { geo = PC2.paintScene(b, S.scene, w, h, S.hour, { env: { bare: S.scene === 'treehouse' }, reduced: S.reduced }); } catch (e) { geo = null; }
+        try { geo = PC2.paintScene(b, S.scene, w, h, S.hour, { env: { bare: S.scene === 'treehouse', noMoon: !!S.guests.moon }, reduced: S.reduced }); } catch (e) { geo = null; }
       }
       if (!geo) { geo = geoFor(w, h); paintBlank(b, w, h, geo); geo.env = { x0: geo.x0 - 4, x1: geo.x1 + 4, y0: geo.y0 - 4, y1: geo.y1 + 4, dark: 0 }; }
-      S.sp = SP * clamp((geo.LW || 533) / 520, 0.8, 1); // a little smaller on narrow stages, so the pals have room
+      S.sp = SP * clamp((geo.LW || 533) / 520, 0.66, 1); // a little smaller on narrow stages, so the pals have room
       S.geo = geo; S.info = PC2 && PC2.sceneInfo ? PC2.sceneInfo(S.scene) : null;
     }
     function paintBlank(b, w, h, geo) {
@@ -729,6 +731,7 @@
       var P = window.TOLPups; if (!P) return;
       var d = palFrame(c), L = P.looks[c.look];
       var px = X(d.x) + (d.jit || 0), base = G + groundDy(px) + d.dy, y = base - d.lift;
+      var pass = passing(c); if (pass) { base -= 7 * pass; y -= 7 * pass; } // walking past her pal: a step further back
       // legs follow the ground covered
       if (c.lastPx != null && d.moving) c.ph += Math.abs(px - c.lastPx) * 0.2 / S.sp; else if (!d.moving) { var tgt = Math.round(c.ph / Math.PI) * Math.PI; c.ph += (tgt - c.ph) * 0.15; }
       c.lastPx = px;
@@ -739,7 +742,7 @@
       if (d.glow > 0) { var gr = g.createRadialGradient(px, y - 28, 4, px, y - 28, 70); gr.addColorStop(0, 'rgba(255,236,170,' + (0.45 * d.glow * (d.glowFade == null ? 1 : d.glowFade)).toFixed(3) + ')'); gr.addColorStop(1, 'rgba(255,236,170,0)'); g.fillStyle = gr; g.fillRect(px - 70, y - 98, 140, 140); }
       g.save(); g.translate(px, y); g.scale(fs, 1);
       if (d.rot) { var pvx = d.pivot === 'hind' ? -12 * S.sp : 0, pvy = d.pivot === 'hind' ? 0 : -22 * S.sp; g.translate(pvx, pvy); g.rotate(d.rot); g.translate(-pvx, -pvy); }
-      g.scale(fa * S.sp * d.sx * (1 + pop * 0.6), S.sp * d.sy * (1 - pop));
+      g.scale(fa * S.sp * d.sx * (1 + pop * 0.6) * (1 - 0.06 * pass), S.sp * d.sy * (1 - pop) * (1 - 0.06 * pass));
       var wag = d.tailBase + Math.sin(S.t * 11 * d.wagS + (c.id === 'tidbit' ? 0 : 2)) * d.wagA * (c.id === 'tidbit' ? 1 : 0.8) * (S.reduced ? 0.7 : 1);
       var pose = d.pose === 'stand' ? 'run' : d.pose;
       P.draw(g, L, pose, d.moving ? c.ph : (pose === 'run' ? Math.round(c.ph / Math.PI) * Math.PI : c.ph), wag, false, S.t * 1000, d.tilt, { ear: d.ear });
@@ -754,7 +757,14 @@
         if (c.shared && o2 && o2.shared && o2.item === c.item) {
           // carried together: one item, held between the two of them (drawn once, when the second pup is drawn)
           var mm = g.getTransform(); c.itemM = { m: mm, t: S.t };
-          if (o2.itemM && o2.itemM.t === S.t) { g.save(); g.setTransform(mm.a, mm.b, mm.c, mm.d, (mm.e + o2.itemM.m.e) / 2, (mm.f + o2.itemM.m.f) / 2 + 6 * Math.hypot(mm.a, mm.b)); drawItem(g, c.item); g.restore(); }
+          if (o2.itemM && o2.itemM.t === S.t) {
+            // halfway between them at chest height, with a handle to each mouth, so it reads as carried together
+            var ks = Math.hypot(mm.a, mm.b), ix = (mm.e + o2.itemM.m.e) / 2, iy = (mm.f + o2.itemM.m.f) / 2 + 16 * ks;
+            g.save(); g.setTransform(1, 0, 0, 1, 0, 0); g.strokeStyle = 'rgba(110,80,50,.85)'; g.lineWidth = 1.6 * ks; g.lineCap = 'round';
+            [c.mouthPx, o2.mouthPx].forEach(function (mp) { if (!mp) return; g.beginPath(); g.moveTo(mp.x, mp.y); g.quadraticCurveTo((mp.x + ix) / 2, iy - 2 * ks, ix + sgn(mp.x - ix) * 8 * ks, iy - 4 * ks); g.stroke(); });
+            g.restore();
+            g.save(); g.setTransform(mm.a, mm.b, mm.c, mm.d, ix, iy); g.translate(-14, -4); drawItem(g, c.item); g.restore();
+          }
         } else drawItem(g, c.item);
       }
       if (d.hammer != null) { g.save(); g.translate(0, d.hammer * -2); drawItem(g, 'hammer'); g.restore(); }
@@ -903,7 +913,9 @@
     }
     function weatherFront(g) {
       var w = S.weather, gg = S.geo;
-      if (w === 'rain' || w === 'storm') { g.strokeStyle = w === 'storm' ? 'rgba(200,215,240,.55)' : 'rgba(190,210,240,.5)'; g.lineWidth = 1; g.beginPath();
+      var inside = S.info && S.info.indoor; // inside, the rain and snow stay out past the window
+      if (inside) { /* no drops or flakes in the room */ }
+      else if (w === 'rain' || w === 'storm') { g.strokeStyle = w === 'storm' ? 'rgba(200,215,240,.55)' : 'rgba(190,210,240,.5)'; g.lineWidth = 1; g.beginPath();
         for (var i = 0; i < S.wx.length; i++) { var p = S.wx[i], dx = w === 'storm' ? -3.5 : -1.2; g.moveTo(p.x, p.y); g.lineTo(p.x + dx, p.y + 9); } g.stroke(); }
       else if (w === 'snow') { for (var j = 0; j < S.wx.length; j++) circ(g, S.wx[j].x, S.wx[j].y, 1.3 + S.wx[j].s * 1.3, 'rgba(255,255,255,.9)'); }
       else if (w === 'wind') { for (var k = 0; k < S.wx.length; k++) { var q = S.wx[k]; if (k % 3 === 0) { g.save(); g.translate(q.x, q.y); g.rotate(S.t * 3 + q.s * 6); ell(g, 0, 0, 3.6, 1.8, ['#8FC46B', '#E8913F', '#F2C14E'][k % 3]); g.restore(); } else line(g, q.x, q.y, q.x + 18 + q.s * 16, q.y, 'rgba(255,255,255,.4)', 1); } }
@@ -957,7 +969,7 @@
       var tx0 = clamp(hp.x, best.x + 16 * dpr, best.x + bw - 16 * dpr), ty0 = best.y + bh - 1, below = hp.y > best.y + bh;
       if (below && self) { // murmur: two little dots instead of a pointing tail
         [[0.35, 3.2], [0.7, 2.2]].forEach(function (k) { g.beginPath(); g.arc(mix(tx0, hp.x, k[0]), mix(ty0, hp.y - hp.r * 0.9, k[0]), k[1] * dpr, 0, TAU); g.fillStyle = fill; g.fill(); g.strokeStyle = stroke; g.stroke(); });
-      } else if (below) { var tipX = mix(tx0, hp.x, 0.5), tipY = Math.min(hp.y - hp.r * 0.9, ty0 + 14 * dpr); g.fillStyle = fill; g.beginPath(); g.moveTo(tx0 - 7 * dpr, ty0); g.lineTo(tipX, tipY); g.lineTo(tx0 + 7 * dpr, ty0); g.closePath(); g.fill(); g.strokeStyle = stroke; g.beginPath(); g.moveTo(tx0 - 7 * dpr, ty0 + 0.5); g.lineTo(tipX, tipY); g.lineTo(tx0 + 7 * dpr, ty0 + 0.5); g.stroke(); }
+      } else if (below) { /* a long tail when the bubble had to move away, so it's clear who's talking */ var far = hp.y - hp.r * 0.9 - ty0 > 30 * dpr, tipX = mix(tx0, hp.x, far ? 0.8 : 0.5), tipY = far ? hp.y - hp.r * 0.95 : Math.min(hp.y - hp.r * 0.9, ty0 + 14 * dpr); g.fillStyle = fill; g.beginPath(); g.moveTo(tx0 - 7 * dpr, ty0); g.lineTo(tipX, tipY); g.lineTo(tx0 + 7 * dpr, ty0); g.closePath(); g.fill(); g.strokeStyle = stroke; g.beginPath(); g.moveTo(tx0 - 7 * dpr, ty0 + 0.5); g.lineTo(tipX, tipY); g.lineTo(tx0 + 7 * dpr, ty0 + 0.5); g.stroke(); }
       g.fillStyle = '#3C3350'; g.textAlign = 'center'; g.textBaseline = 'middle';
       if (dots) { var n = Math.floor(S.t * 3) % 3; g.fillText(['•  ·  ·', '·  •  ·', '·  ·  •'][S.reduced ? 0 : n], best.x + bw / 2, best.y + bh / 2); }
       else {
@@ -1037,7 +1049,7 @@
       list.forEach(function (c) { drawGuest(g, c); g.setTransform(gg.k, 0, 0, gg.k, gg.ox + S.shift, gg.oy); });
       var order = [S.chars.tidbit, S.chars.sugarfoot];
       for (var gid in S.guests) if (GUESTS[gid].where === 'ground' || GUESTS[gid].where === 'hover') order.push(S.guests[gid]);
-      order.sort(function (a, b) { return (a.guest ? 1 : 0) - (b.guest ? 1 : 0) || (a.id === 'tidbit' ? -1 : 1); });
+      order.sort(function (a, b) { return (a.guest ? 1 : 0) - (b.guest ? 1 : 0) || (passing(b) - passing(a)) || (a.id === 'tidbit' ? -1 : 1); });
       order.forEach(function (c) { if (c.guest) drawGuest(g, c); else drawPal(g, c); g.setTransform(gg.k, 0, 0, gg.k, gg.ox + S.shift, gg.oy); });
       drawBridgeFront(g);
       drawParts(g);
@@ -1111,6 +1123,7 @@
             var nx = F.beats[i + 1]; stage.voiceDone(nx && kindOf(nx.b) === 'say');
           };
           D.shown = false;
+          cb.nearLaugh = [F.beats[i - 1], F.beats[i + 1], F.beats[i + 2]].some(function (x) { return x && x.b.act === 'laugh'; });
           cb.start = function (delay, vdur) { if (D.i !== i || D.shown) return; D.shown = true; D.vAt = D.u + Math.max(0, delay || 0); D.vdur = vdur || 0; stage.voiceStart(delay, vdur); call('onCaption', b.say, b.text, b, delay, vdur); };
           if (call('speak', b, cb)) D.voice = true;
           else { D.shown = true; stage.showNow(); call('onCaption', b.say, b.text, b); }
@@ -1369,14 +1382,17 @@
       try { s.start(c.currentTime + 0.05 + i * 0.35); } catch (e) {}
     });
   }
-  function fxPick(b) {
+  function fxPick(b, cb) {
     if (b.say !== 'tidbit' && b.say !== 'sugarfoot') return null;
+    if (b.to === 'self' || (cb && cb.nearLaugh)) return null; // no noise on a murmur, or right next to a real laugh
     if (b.mood === 'worried' || b.mood === 'grumpy' || (b.energy || 1) >= 1.2 || /!\s*$/.test(b.text || '') && b.mood !== 'happy' && b.mood !== 'excited') return null;
     var g = FX_MOOD[b.mood]; if (!g) return null;
     var c = AU.ctx; if (!c || c.currentTime - CL.lastFx < 14) return null;
     if (Math.random() > (g === 'up' ? 0.18 : g === 'wow' ? 0.2 : 0.12)) return null; // now and then, so the talk keeps flowing
-    var list = FX[g], k = list[Math.floor(Math.random() * list.length)], buf = CL.got['fx/' + b.say + '-' + k];
-    if (!buf) return null; CL.lastFx = c.currentTime; return buf;
+    var list = FX[g].filter(function (x) { return !/^laugh/.test(x); }); if (!list.length) return null;
+    var k = list[Math.floor(Math.random() * list.length)], buf = CL.got['fx/' + b.say + '-' + k];
+    if (!buf || buf.duration > 0.9) return null; // only a quick little sound, so the line isn't kept waiting
+    CL.lastFx = c.currentTime; return buf;
   }
   function clipHas(ep, b) { var m = CL.ready[ep]; return !!(m && m[ckey(b.say, b.text)]); }
   function clipPrefetch(ep, list, from, n) { for (var i = from, got = 0; i < list.length && got < n; i++) if (clipHas(ep, list[i])) { clipBuf(ep, ckey(list[i].say, list[i].text)); got++; } }
@@ -1390,7 +1406,7 @@
     clipBuf(ep, ckey(b.say, b.text)).then(function (buf) {
       if (tok !== CL.token) return;
       if (!buf) { cb(false); return; }
-      var fx = fxPick(b), at = c.currentTime + 0.03;
+      var fx = fxPick(b, cb), at = c.currentTime + 0.03;
       if (fx) { var f = c.createBufferSource(); f.buffer = fx; f.connect(CL.gain); try { f.start(at); } catch (e) {} at += fx.duration + 0.12; }
       var s = c.createBufferSource(); s.buffer = buf; s.connect(CL.gain);
       if (cb.start) cb.start(at - c.currentTime, buf.duration);
@@ -1463,7 +1479,7 @@
     '.fb-ovc .fb-cn b{color:#CDEFE2}' +
     '@media (max-width:600px){.fb-ovc .fb-cn{font-size:.86rem;padding:.45rem .6rem;margin-bottom:.5rem}}' +
     '.fb-season .fb-cards > li{display:flex;flex-direction:column;align-items:flex-start}.fb-season .fb-cards > li > .fb-card{flex:1 1 auto;height:auto}' +
-    '@media (max-width:600px){.fb-ov{padding:.6rem}.fb-ovc h3{margin-bottom:.2rem}}' +
+    '@media (max-width:600px){.fb-ov{padding:.6rem}.fb-ovc h3{margin-bottom:.2rem}.fb-ovc{display:flex;flex-direction:column}.fb-ovc .fb-row{order:2;margin-bottom:.55rem}.fb-ovc .fb-cn{order:3}}' +
     '.fb-one{display:inline-block;margin:.45rem .2rem 0;font-size:.88rem;color:#FFE08A !important;text-decoration:underline;text-underline-offset:3px}' +
     '.fb-chaps{margin:0;padding:0 .2rem}.fb-chaps ol{list-style:none;margin:.3rem 0 0;padding:0;display:flex;flex-wrap:wrap;gap:.35rem}' +
     '.fb-chaps h3{margin:.2rem 0 0;font:600 .8rem/1.3 "IBM Plex Mono",monospace;letter-spacing:.06em;text-transform:uppercase;color:#D9C8F0}' +
@@ -1532,7 +1548,7 @@
         '<button type="button" class="fb-b fb-full" aria-label="Full screen" title="Full screen (F)">⛶<span class="fb-lbl"> Full screen</span></button>' +
       '</div>' +
       '<div class="fb-chaps"><h3>Chapters</h3><ol></ol></div>' +
-      '<p class="fb-note">Space plays and pauses, the arrow keys move between chapters. Voices use your device’s own speech, and captions are always on.</p>' +
+      '<p class="fb-note">Space plays and pauses, the arrow keys move between chapters. Voices are recorded, and captions are always on.</p>' +
       '<p class="fb-sr fb-live" aria-live="polite"></p>';
     var $ = function (s) { return host.querySelector(s); };
     var cv = $('.fb-cv'), g = cv.getContext('2d'), stageEl = $('.fb-stage'), capEl = $('.fb-cap'), whoEl = $('.fb-who'), lineEl = $('.fb-line'), fill = $('.fb-fill'), trackEl = $('.fb-track'), timeEl = $('.fb-time');
@@ -1548,8 +1564,10 @@
       vBtn.setAttribute('aria-pressed', String(P.voices)); vBtn.querySelector('.fb-st').textContent = P.voices ? 'on' : 'off'; vBtn.setAttribute('aria-label', P.voices ? 'Voices are on. Turn the voices off' : 'Voices are off. Turn the voices on');
       mBtn.setAttribute('aria-pressed', String(P.music)); mBtn.querySelector('.fb-st').textContent = P.music ? 'on' : 'off'; mBtn.setAttribute('aria-label', P.music ? 'Music and sounds are on. Turn them off' : 'Music and sounds are off. Turn them on');
       playBtn.textContent = P.playing ? '❚❚ Pause' : '▶ Play'; playBtn.setAttribute('aria-label', P.playing ? 'Pause' : 'Play');
-      fBtn.setAttribute('aria-pressed', String(P.bright)); fBtn.querySelector('.fb-st').textContent = P.bright ? 'bright' : 'soft';
-      fBtn.setAttribute('aria-label', P.bright ? 'Lightning shows as bright flashes. Switch to a soft glow' : 'Lightning shows as a soft glow. Switch to bright flashes');
+      var still = P.stage && P.stage.reduced; // with less motion on, lightning is only ever a soft glow
+      fBtn.setAttribute('aria-pressed', String(P.bright && !still)); fBtn.querySelector('.fb-st').textContent = still ? 'soft (less motion)' : P.bright ? 'bright' : 'soft';
+      fBtn.disabled = !!still;
+      fBtn.setAttribute('aria-label', still ? 'Lightning shows as a soft glow while less motion is on' : P.bright ? 'Lightning shows as bright flashes. Switch to a soft glow' : 'Lightning shows as a soft glow. Switch to bright flashes');
       host.classList.toggle('is-playing', !!P.playing); // site.js keeps pop-ups and helpers away while this is on
       if (!voiceOk()) { vBtn.title = P.rate !== 1 ? 'Voices are off while the story plays fast' : 'This device has no voices to read with, so the captions tell the story'; }
       // say it on the button itself, not only in a hover tip: no recordings and no device voices means captions only
@@ -1664,7 +1682,7 @@
     function goChapter(ch) {
       if (!P.dir) return; var n = P.ep.chapters.length; ch = clamp(ch, 0, n - 1);
       endOv.hidden = true; startOv.hidden = true; P.started = true;
-      P.dir.seekChapter(ch); P.ch = ch; renderChapter(); save(); paint(0); progress();
+      P.dir.seekChapter(ch); P.ch = ch; if (P.one) P.oneCh = ch; renderChapter(); save(); paint(0); progress();
       if (P.playing) { P.dir.playing = true; startLoop(); } else play();
       live.textContent = 'Chapter ' + (ch + 1) + ': ' + P.ep.chapters[ch].title;
     }
@@ -1687,7 +1705,7 @@
       setTimeout(resize, 80);
     });
     ['fullscreenchange', 'webkitfullscreenchange'].forEach(function (ev) { document.addEventListener(ev, function () { setTimeout(resize, 60); }); });
-    function seekFromPointer(e) { if (!P.dir) return; var r = trackEl.getBoundingClientRect(), p = clamp((e.clientX - r.left) / r.width, 0, 1); endOv.hidden = true; startOv.hidden = true; P.started = true; P.dir.seekTime(p * P.dir.total); P.ch = P.dir.chapterAt(); renderChapter(); paint(0); progress(); if (P.playing) P.dir.playing = true; else play(); }
+    function seekFromPointer(e) { if (!P.dir) return; var r = trackEl.getBoundingClientRect(), p = clamp((e.clientX - r.left) / r.width, 0, 1); endOv.hidden = true; startOv.hidden = true; P.started = true; P.dir.seekTime(p * P.dir.total); P.ch = P.dir.chapterAt(); if (P.one) P.oneCh = P.ch; renderChapter(); paint(0); progress(); if (P.playing) P.dir.playing = true; else play(); }
     trackEl.addEventListener('click', seekFromPointer);
     trackEl.addEventListener('keydown', function (e) { if (e.key === 'Home') { e.preventDefault(); goChapter(0); } else if (e.key === 'End') { e.preventDefault(); goChapter(P.ep.chapters.length - 1); } });
     document.addEventListener('keydown', function (e) {
@@ -1696,13 +1714,16 @@
       if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT' || (t && t.isContentEditable)) return;
       if ((tag === 'BUTTON' || tag === 'A' || tag === 'SUMMARY') && (e.key === ' ' || e.key === 'Enter')) return;
       if (document.querySelector('.pc-ov:not([hidden]), .tol-menu-panel.is-open')) return;
+      // only when the player has focus or is mostly on screen, so Space still scrolls the story below
+      var hr = host.getBoundingClientRect(), vh = window.innerHeight || 1, seen = Math.max(0, Math.min(hr.bottom, vh) - Math.max(hr.top, 0)) / Math.max(1, Math.min(hr.height, vh));
+      if (!host.contains(document.activeElement) && !document.fullscreenElement && seen < 0.6) return;
       if (e.key === ' ' || e.key === 'k' || e.key === 'K') { e.preventDefault(); toggle(); }
       else if (e.key === 'ArrowLeft') { e.preventDefault(); prevChapter(); }
       else if (e.key === 'ArrowRight') { e.preventDefault(); nextChapter(); }
       else if (e.key === 'f' || e.key === 'F') { $('.fb-full').click(); }
     });
     document.addEventListener('visibilitychange', function () { if (document.hidden && P.playing) pause(); });
-    document.addEventListener('tol-still', function () { if (P.stage) { P.stage.reduced = stillNow(); P.stage.bgKey = ''; paint(0); } });
+    document.addEventListener('tol-still', function () { if (P.stage) { P.stage.reduced = stillNow(); P.stage.bgKey = ''; paint(0); syncBtns(); } });
     window.addEventListener('resize', resize);
     if (window.ResizeObserver) new ResizeObserver(function () { resize(); }).observe(stageEl);
 

@@ -21,6 +21,7 @@
     citypark: { root: 62, mode: 'major', bpm: 84, lead: 'piano', accent: 'pluck', busy: 0.6, bright: 2800, wet: 0.26 },
     pumpkins: { root: 57, mode: 'dorian', bpm: 68, lead: 'marimba', accent: 'pluck', busy: 0.5, bright: 2100, wet: 0.32 },
     cabin: { root: 55, mode: 'major', bpm: 60, lead: 'piano', accent: 'bell', busy: 0.4, bright: 1900, wet: 0.35 },
+    cabinin: { root: 53, mode: 'major', bpm: 58, lead: 'piano', accent: 'bell', busy: 0.35, bright: 1700, wet: 0.3 },
     rainy: { root: 57, mode: 'minor', bpm: 58, lead: 'piano', accent: 'bell', busy: 0.35, bright: 1800, wet: 0.45 },
     carnival: { root: 60, mode: 'major', bpm: 92, lead: 'marimba', accent: 'bell', busy: 0.65, bright: 3000, wet: 0.25 },
     library: { root: 62, mode: 'major', bpm: 60, lead: 'piano', accent: 'pluck', busy: 0.32, bright: 1900, wet: 0.3 },

@@ -98,7 +98,7 @@
     </ul>
   </details>
   <ul>
-    <li><b>Sound starts on:</b> soft barks, little chimes and casino-style sounds (coins, cards, dice and a small bell), and quiet sounds of the place, like birds or waves. Gentle music plays too; press M or tap Music to turn it off.</li>
+    <li><b>Sound starts on:</b> soft barks, little chimes, playful game sounds (coins, cards, dice and a small bell), and quiet sounds of the place, like birds or waves. Gentle music plays too; press M or tap Music to turn it off.</li>
     <li>On a phone or tablet, buttons for <b>Sound</b>, <b>Captions</b>, <b>Music</b> and <b>Exit</b> stay at the top of the screen.</li>
     <li>With a keyboard, press <b>Esc</b> (or <b>Back</b> on a TV remote) to come back to this screen.</li>
     <li>Press <b>C</b> to show or hide the captions, <b>S</b> to turn the pups’ soft sounds on or off, and <b>M</b> for gentle background music.</li>
@@ -192,7 +192,8 @@
     clearInterval(timer); timer = setInterval(function () { freshScene(); keepAwake(); }, SCENE_MS);
     // sound stays on by default; say so once at the start, and how to turn it off
     var sndOn = window.TOLPalsCamSounds ? window.TOLPalsCamSounds.on() : (function () { try { return localStorage.getItem('tol-pc-sound') !== 'off' && !(window.TOLQuiet && window.TOLQuiet.on && window.TOLQuiet.on()); } catch (e) { return true; } })();
-    if (sndOn && !soundSaid) { soundSaid = true; say(fine ? 'Sound is on: soft barks, chimes and place sounds. Press S or use 🔊 Sound at the top to turn it off. Press Esc to stop.' : 'Sound is on: soft barks, chimes and place sounds. Tap 🔊 Sound on at the top to turn it off, or ✕ Exit to stop.'); clearTimeout(hintT); hintT = setTimeout(function () { hint.classList.remove('is-on'); }, 7000); }
+    if (receiver) { /* on the TV itself there are no keys to press: no hints */ }
+    else if (sndOn && !soundSaid) { soundSaid = true; say(fine ? 'Sound is on: soft barks, chimes and place sounds. Press S or use 🔊 Sound at the top to turn it off. Press Esc to stop.' : 'Sound is on: soft barks, chimes and place sounds. Tap 🔊 Sound on at the top to turn it off, or ✕ Exit to stop.'); clearTimeout(hintT); hintT = setTimeout(function () { hint.classList.remove('is-on'); }, 7000); }
     else say(fine ? 'Press Esc to stop' : 'Tap ✕ Exit at the top to stop');
     quiet();
   }

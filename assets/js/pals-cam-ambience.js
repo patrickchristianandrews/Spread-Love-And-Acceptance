@@ -18,7 +18,7 @@
     orchard: DAY_NIGHT([['birds', 0.45], ['wind', 0.25]], NIGHT), treehouse: DAY_NIGHT([['birds', 0.5], ['wind', 0.2]], NIGHT),
     pumpkins: DAY_NIGHT([['wind', 0.3], ['birds', 0.3]], [['crickets', 0.4], ['wind', 0.25]]),
     beach: DAY_NIGHT([['waves', 0.6]]), lighthouse: DAY_NIGHT([['waves', 0.5], ['wind', 0.3]]), bonfire: DAY_NIGHT([['waves', 0.45], ['fire', 0.5]]),
-    snow: DAY_NIGHT([['wind', 0.45]]), cabin: DAY_NIGHT([['fire', 0.55], ['wind', 0.2]]),
+    snow: DAY_NIGHT([['wind', 0.45]]), cabin: DAY_NIGHT([['fire', 0.55], ['wind', 0.2]]), cabinin: DAY_NIGHT([['fire', 0.6], ['wind', 0.08]]),
     pond: DAY_NIGHT([['stream', 0.4], ['birds', 0.35]], [['stream', 0.35], ['crickets', 0.4]]),
     dock: DAY_NIGHT([['boat', 0.55], ['birds', 0.2]], [['boat', 0.5], ['crickets', 0.3]]),
     citypark: DAY_NIGHT([['city', 0.3], ['birds', 0.35]], [['city', 0.3], ['crickets', 0.25]]), rooftop: DAY_NIGHT([['city', 0.3], ['wind', 0.25]]),
