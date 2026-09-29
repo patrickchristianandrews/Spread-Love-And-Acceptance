@@ -414,7 +414,7 @@
       else if (e.t === 'bump' && !moved && !msg) {
         msg = e.why === 'thorn' ? 'A thorny shadow. Stand beside it together, both at once, and it lifts.'
           : e.why === 'water' ? 'Cold water. Push an ice block in to make a crossing.'
-          : e.why === 'murk' ? 'Grey murk. Sing the melody on the crystals to clear it.'
+          : e.why === 'murk' ? 'Gray murk. Sing the melody on the crystals to clear it.'
           : e.why === 'bridge' ? 'The bridge piece rests low. A pal on the matching plate will raise it.'
           : e.why === 'block' ? 'The ice block won’t budge that way.'
           : e.why === 'gap' ? (G.w === 6 ? 'Nothing there but sky. Look closely for the real stars.' : 'Too far to jump. There’s another way.')

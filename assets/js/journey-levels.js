@@ -27,7 +27,7 @@
      p q r  pressure plates     P Q R  bridge pieces over the canyon, up while a pal stands on the plate
                                      (a bridge piece also stays up under a pal who is on it)
      1-5  singing crystals: step on them in the order of the level's melody to clear the murk
-     m  grey murk (clears when the melody is complete)
+     m  gray murk (clears when the melody is complete)
      x  illusion: looks like starry ground but isn't; a pal just bounces gently back
      h  hidden ground: looks like empty sky but is really there
    In a 'maze' level, A is the calling pal on the lookout (she stays put, beside the one O tile)
@@ -701,7 +701,7 @@
   // mix: the grade (1 easy · 2 medium · 3 hard) of each item drawn; again: the mix for a replay
   var DRAW = {
     '1-1': { pool: 'riddle', mix: [1, 1, 2], again: [1, 2, 3] },
-    '1-2': { p: [3] }, '2-2': { p: [2] }, '4-3': { p: [2] },      // grid boards: variants from the pools; p = the pillar they practise
+    '1-2': { p: [3] }, '2-2': { p: [2] }, '4-3': { p: [2] },      // grid boards: variants from the pools; p = the pillar they practice
     '1-3': { pool: 'breath', mix: [2], again: [2] },         // grade 2 reaches every pattern (1-3) before any repeats
     '2-1': { pool: 'word', mix: [1, 2, 2], again: [2, 2, 3] },
     '2-3': { pool: 'seq', mix: [2], again: [3] },
