@@ -1203,7 +1203,45 @@
     try { if (window.speechSynthesis.speaking || window.speechSynthesis.pending) window.speechSynthesis.cancel(); window.speechSynthesis.speak(u); } catch (e) { return false; }
     return true;
   }
-  function vstop() { VO.token++; if (VO.ok) { try { window.speechSynthesis.cancel(); } catch (e) {} } }
+  function vstop() { VO.token++; if (VO.ok) { try { window.speechSynthesis.cancel(); } catch (e) {} } cstop(); }
+
+  // RECORDED VOICES: every line is recorded ahead of time (natural voices, one per character) in
+  // /assets/audio/buddies/<episode>/<key>.mp3, listed in index.json. A line plays its recording through
+  // Web Audio (reliable on phones once Play has been pressed); a line with no recording falls back to
+  // the device's own speech, and then to captions only.
+  var CL = { base: '/assets/audio/buddies/', maps: {}, ready: {}, bufs: {}, src: null, gain: null, token: 0 };
+  function ckey(who, text) { var h = 0x811c9dc5, s = who + '|' + text; for (var i = 0; i < s.length; i++) { h ^= s.charCodeAt(i); h = Math.imul(h, 0x01000193) >>> 0; } return ('0000000' + h.toString(16)).slice(-8); }
+  function clipMap(ep) {
+    if (!CL.maps[ep]) CL.maps[ep] = fetch(CL.base + ep + '/index.json').then(function (r) { return r.ok ? r.json() : null; }).catch(function () { return null; }).then(function (m) { CL.ready[ep] = m || false; return m; });
+    return CL.maps[ep];
+  }
+  function clipBuf(ep, k) {
+    var id = ep + '/' + k; if (CL.bufs[id]) return CL.bufs[id];
+    var c = auEnsure(); if (!c) return Promise.resolve(null);
+    CL.bufs[id] = fetch(CL.base + id + '.mp3').then(function (r) { return r.ok ? r.arrayBuffer() : null; }).then(function (ab) {
+      if (!ab) return null;
+      return new Promise(function (ok) { try { c.decodeAudioData(ab, ok, function () { ok(null); }); } catch (e) { ok(null); } });
+    }).catch(function () { return null; });
+    return CL.bufs[id];
+  }
+  function clipHas(ep, b) { var m = CL.ready[ep]; return !!(m && m[ckey(b.say, b.text)]); }
+  function clipPrefetch(ep, list, from, n) { for (var i = from, got = 0; i < list.length && got < n; i++) if (clipHas(ep, list[i])) { clipBuf(ep, ckey(list[i].say, list[i].text)); got++; } }
+  function cstop() { CL.token++; if (CL.src) { try { CL.src.onended = null; CL.src.stop(); } catch (e) {} CL.src = null; } }
+  function cspeak(ep, b, cb) {
+    if (!clipHas(ep, b)) return false;
+    var c = auEnsure(); if (!c) return false;
+    if (!CL.gain) { CL.gain = c.createGain(); CL.gain.gain.value = 1; CL.gain.connect(c.destination); }
+    VO.token++; if (VO.ok) { try { window.speechSynthesis.cancel(); } catch (e) {} }
+    cstop(); var tok = CL.token;
+    clipBuf(ep, ckey(b.say, b.text)).then(function (buf) {
+      if (tok !== CL.token) return;
+      if (!buf) { cb(false); return; }
+      var s = c.createBufferSource(); s.buffer = buf; s.connect(CL.gain);
+      s.onended = function () { if (tok !== CL.token) return; CL.src = null; cb(true); };
+      CL.src = s; try { s.start(c.currentTime + 0.03); } catch (e) { cb(false); }
+    });
+    return true;
+  }
 
   // =====================================================================================================
   // LOADING episode files (each one is a small script that fills TOLBuddies.episodes)
@@ -1255,7 +1293,9 @@
     '.fb-b{min-height:44px;min-width:44px;padding:.35rem .8rem;border-radius:999px;border:1px solid rgba(255,255,255,.22);background:rgba(255,255,255,.08);color:#FFF6E6;font:600 .95rem/1.1 Lora,Georgia,serif;cursor:pointer;touch-action:manipulation}' +
     '.fb-b:hover{background:rgba(255,255,255,.16)}.fb-b:focus-visible{outline:3px solid #C9B6F2;outline-offset:2px}' +
     '.fb-b.is-main{background:#FFF3D6;color:#2B2140;border-color:#FFF3D6;min-width:7.2em}' +
-    '.fb-b[aria-pressed="false"]{opacity:.72}' +
+    '.fb-b .fb-st{display:inline-block;margin-left:.15rem;padding:.08rem .5rem;border-radius:999px;font:700 .72rem/1.3 "IBM Plex Mono",ui-monospace,monospace;letter-spacing:.06em;text-transform:uppercase;background:rgba(255,255,255,.14);color:#D9D2E6}' +
+    '.fb-b[aria-pressed="true"]{background:rgba(142,221,166,.16);border-color:#8EDDA6;box-shadow:0 0 0 2px rgba(142,221,166,.22)}.fb-b[aria-pressed="true"] .fb-st{background:#8EDDA6;color:#16331F}' +
+    '.fb-b[aria-pressed="false"]{border-style:dashed;border-color:rgba(255,255,255,.35);color:#CFC7DC}' +
     '.fb-sp{flex:1}' +
     '@media (max-width:600px){.fb-ctrl .fb-lbl{display:none}.fb-b{padding:.35rem .65rem}.fb-sp{flex-basis:100%;height:0}}' +
     '.fb-chaps{margin:0;padding:0 .2rem}.fb-chaps ol{list-style:none;margin:.3rem 0 0;padding:0;display:flex;flex-wrap:wrap;gap:.35rem}' +
@@ -1342,7 +1382,7 @@
       playBtn.textContent = P.playing ? '❚❚ Pause' : '▶ Play'; playBtn.setAttribute('aria-label', P.playing ? 'Pause' : 'Play');
       if (!voiceOk()) { vBtn.title = P.rate !== 1 ? 'Voices are off while the story plays fast' : 'This device has no voices to read with, so the captions tell the story'; }
     }
-    function voiceOk() { return VO.ok && P.rate === 1; }
+    function voiceOk() { return (VO.ok || CL.ready[P.id]) && P.rate === 1; }
     function save() { var m = memGet(); m.last = P.id; m.pos = m.pos || {}; m.pos[P.id] = { ch: P.ch }; m.voices = P.voices; m.music = P.music; memSet(m); }
     function setCaption(who, text, b) {
       capEl.setAttribute('data-who', who || '');
@@ -1353,7 +1393,11 @@
     var hooks = {
       canvas: function () { return cv; },
       onCaption: setCaption,
-      speak: function (b, cb) { if (!P.voices || !voiceOk()) return false; return vspeak(b, cb); },
+      speak: function (b, cb) {
+        if (!P.voices || P.rate !== 1) return false;
+        if (cspeak(P.id, b, cb)) { var at = P.says.indexOf(b); if (at >= 0) clipPrefetch(P.id, P.says, at + 1, 4); return true; }
+        return voiceOk() ? vspeak(b, cb) : false;
+      },
       stopSpeech: vstop,
       onMusic: function (m) { auMood(m); },
       onWeather: function (w) { auWeather(w); },
@@ -1464,6 +1508,8 @@
     }
     function ready(ep) {
       if (!ep) { startOv.innerHTML = '<div class="fb-ovc"><p class="fb-k">Coming soon</p><h3>This episode isn’t here yet</h3><p>The pals are still rehearsing it. Try another one below.</p><a class="fb-b is-main" href="/frequency-buddies.html?ep=s1e1">▶ Watch episode 1</a></div>'; return; }
+      P.says = []; ep.chapters.forEach(function (c) { c.beats.forEach(function (b) { if (b.say) P.says.push(b); }); });
+      clipMap(P.id).then(function () { clipPrefetch(P.id, P.says, 0, 3); syncBtns(); });
       P.ep = ep; P.stage = makeStage({ reduced: stillNow() }); P.stage.onSound = function (k, who) { if (P.music) auSound(k, who); };
       P.dir = makeDirector(P.stage, ep, hooks);
       $('.fb-title').textContent = ep.title;
