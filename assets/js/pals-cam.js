@@ -993,9 +993,10 @@
     if (!sndP && !SND()) sndP = new Promise(function (ok) { var sc = document.createElement('script'); sc.src = '/assets/js/pals-cam-sounds.js'; sc.onload = sc.onerror = function () { if (SND() && SND().hold) SND().hold(quietHold); ok(); syncSndBtn(); }; document.head.appendChild(sc); });
     syncSndBtn();
   }
+  function musOn() { return MUS() ? MUS().on() : (function () { try { return localStorage.getItem('tol-palcam-music') === 'on'; } catch (e) { return false; } })(); }
   function syncMusBtn() {
     var b = ov && ov.querySelector('.pc-mus'); if (!b) return;
-    var on = MUS() ? MUS().on() : (function () { try { return localStorage.getItem('tol-palcam-music') === 'on'; } catch (e) { return false; } })();
+    var on = musOn();
     b.setAttribute('aria-pressed', on ? 'true' : 'false'); b.innerHTML = '🎵<span class="pc-lbl"> Music</span> <span class="pc-st">' + (on ? 'On' : 'Off') + '</span>';
     b.setAttribute('aria-label', on ? 'Music is on. Turn the background music off' : 'Music is off. Turn on gentle background music');
     b.title = MUS() && !MUS().has(setting && setting.id) ? 'This scene is quiet for now; more music is on the way' : '';
@@ -1018,6 +1019,8 @@
     '.pc-launch-row{position:relative;z-index:97;display:flex;justify-content:center;margin:.2rem 0 .9rem}' +
     // the game shows full-screen cards (z-index 95); the launcher stays above their veil, and they make room below it
     '.fj-card{padding-top:max(.8rem,var(--pc-row-b,0px))}' +
+    // on phones and short screens there isn't room to keep the launcher clear, so the card just clears the site bar (the launcher sits under the veil)
+    '@media (max-width:700px),(max-height:820px){.fj-card{padding-top:max(.8rem,4.4rem)}}' +
     '.pc-launch-row[hidden]{display:none}' +
     '.pc-launch .pc-lt{display:block}' +
     '.pc-launch small .pc-dot{display:inline-block;margin-right:.35rem;vertical-align:1px}' +
@@ -1111,7 +1114,7 @@
         '<div class="pc-top"><div><p class="pc-k" id="pc-where">Pal cam</p><h2 id="pc-h">Checking in on Tidbit &amp; Sugarfoot</h2></div>' +
         '<div class="pc-tr8"><button type="button" class="pc-mus" aria-pressed="false">🎵<span class="pc-lbl"> Music</span> <span class="pc-st">Off</span></button><button type="button" class="pc-snd" aria-pressed="true">🔊<span class="pc-lbl"> Sound</span> <span class="pc-st">On</span></button>' +
         '<button type="button" class="pc-x" aria-label="Close the pal cam"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>Close</button></div></div>' +
-        '<div class="pc-snote" role="status" hidden><p>🔊 <b>Sound is on:</b> soft barks and little sounds. Tap <b>Sound</b> to turn it off anytime.</p><div class="pc-snote-b"><button type="button" class="pc-snote-off">Turn sound off</button><button type="button" class="pc-snote-ok">Got it</button></div></div>' +
+        '<div class="pc-snote" role="status" hidden><p class="pc-snote-t"></p><div class="pc-snote-b"><button type="button" class="pc-snote-off">Turn sound off</button><button type="button" class="pc-snote-ok">Got it</button></div></div>' +
         '<div class="pc-stage"><canvas class="pc-cv" role="img" aria-label="Tidbit and Sugarfoot playing"></canvas><span class="pc-rec" aria-hidden="true"><i></i>PAL CAM</span><span class="pc-badge" hidden></span></div>' +
         '<p class="pc-cap" id="pc-cap"><span class="pc-main"></span><span class="pc-punch"></span></p>' +
         '<div class="pc-btns"><button type="button" class="pc-b is-main pc-next">Next!</button><button type="button" class="pc-b is-sur pc-sur">Surprise me</button><button type="button" class="pc-b pc-pause" aria-pressed="false">Pause</button></div>' +
@@ -1221,7 +1224,15 @@
     try { count = +(localStorage.getItem(NOTE_KEY) || 0) || 0; } catch (e) { count = 0; }
     if (count >= 3) return;
     try { localStorage.setItem(NOTE_KEY, String(count + 1)); } catch (e) {}
-    n.hidden = false; if (sb) sb.classList.add('pc-glow');
+    noteText(); n.hidden = false; if (sb) sb.classList.add('pc-glow');
+  }
+  // the notice names the button exactly as it looks right now (on phones the word "Sound" is hidden, so it reads "🔊 On")
+  function noteText() {
+    var t = ov && ov.querySelector('.pc-snote-t'); if (!t) return;
+    var narrow = window.matchMedia && window.matchMedia('(max-width:420px)').matches;
+    var sndLbl = narrow ? '🔊 On' : '🔊 Sound On', musLbl = narrow ? '🎵' : '🎵 Music';
+    t.innerHTML = '<b>Sound is on.</b> You’ll hear soft barks, little chimes and casino-style sounds (coins, cards, dice and a small bell), and quiet sounds of the place, like birds or waves. ' +
+      (musOn() ? 'Music is on too; tap <b>' + musLbl + ' On</b> to turn it off. ' : 'Music stays off unless you turn it on with <b>' + musLbl + '</b>. ') + 'Tap <b>' + sndLbl + '</b> at the top, or “Turn sound off” here, to stop the sounds anytime.';
   }
   function soundNow() { return SND() ? SND().on() : soundOn() && !quietOn(); }
   function open(opts) {

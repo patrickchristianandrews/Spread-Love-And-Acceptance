@@ -1254,7 +1254,7 @@
       '<p class="tol-depth-q">This page comes in two versions. Pick the one that suits you right now:' + (chip ? ' ' + chip.outerHTML : '') + '</p>' +
       '<div class="tol-depth-opts">' +
         opt('simple', simpleHref, '🌱', 'Simple version', 'The main idea in a few short cards and one small thing to try. Tap a word with a water drop <span aria-hidden="true">💧</span> to dive deeper right here.', 'Good if you’re new, short on time, or tired.', isFull ? 'a few minutes' : 'about ' + mins + ' min read') +
-        opt('full', fullHref, '🌊', 'Full version', 'The whole idea: real-life examples, the reasoning behind it, worked numbers and answers to questions. Technical names appear here, in small print.', 'Good if you want the why, or you’re using it for a real situation.', isFull ? 'about ' + mins + ' min read' : 'a longer read') +
+        opt('full', fullHref, '🌊', 'Full version', bar.getAttribute('data-full-what') ? esc(bar.getAttribute('data-full-what')) : 'The whole idea: real-life examples, the reasoning behind it, worked numbers and answers to questions. Technical names appear here, in small print.', 'Good if you want the why, or you’re using it for a real situation.', isFull ? 'about ' + mins + ' min read' : 'a longer read') +
       '</div>' +
       (pref && (pref === 'full') !== isFull ? '<p class="tol-depth-pref">Last time you chose the ' + (pref === 'full' ? 'full' : 'simple') + ' version. It’s one tap away above.</p>' : '') +
       '<details class="tol-depth-more"><summary>How the two versions, “Dig deeper” links and mini dives fit together</summary>' +
@@ -1747,6 +1747,21 @@
     var intro = document.querySelector('main [data-home-intro]'); // the one-line "what this is" stays at the very top, then the pal cam link
     var anchorEl = intro ? intro.nextElementSibling : (top && top.parentNode.firstElementChild);
     if (top && anchorEl !== top) top.parentNode.insertBefore(top, anchorEl);
+    // tell the garden behind the page where the "Check in" button is, so the dogs step out of view there instead of running through it
+    var avoidQ = 0;
+    function avoidNow() {
+      avoidQ = 0;
+      var gf = document.querySelector('iframe.tol-garden-bg'), btn = document.querySelector('[data-palcam-row]:not([hidden]) .pc-launch');
+      if (!gf || !gf.contentWindow) return;
+      if (!gf.__tolAvoid) { gf.__tolAvoid = 1; gf.addEventListener('load', avoidNow); }
+      var r = btn ? btn.getBoundingClientRect() : null, on = !!(r && r.width && r.bottom > 0 && r.top < window.innerHeight);
+      try { gf.contentWindow.postMessage({ tolAvoid: on ? { l: r.left - 24, t: r.top - 20, r: r.right + 24, b: r.bottom + 20 } : null }, location.origin); } catch (e) {}
+    }
+    function avoidSoon() { if (!avoidQ) avoidQ = requestAnimationFrame(avoidNow); }
+    if (document.querySelector('[data-palcam-row] .pc-launch')) {
+      window.addEventListener('scroll', avoidSoon, { passive: true }); window.addEventListener('resize', avoidSoon);
+      [0, 600, 1500, 4000].forEach(function (ms) { setTimeout(avoidNow, ms); });
+    }
     document.addEventListener('click', function (e) {
       var b = e.target.closest && e.target.closest('[data-palcam-open]');
       if (!b || window.TOLPalsCam) return; // on the Journey pages the cam handles its own buttons

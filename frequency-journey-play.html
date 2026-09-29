@@ -78,8 +78,9 @@
 
   /* cards: level done, world intro, world done */
   /* above the pal cam button row (z-index 97), so it sits dimmed behind the card's backdrop */
-  .fj-card{ position:fixed; inset:0; z-index:98; display:grid; place-items:center; padding:.8rem; background:rgba(255,250,244,.62); backdrop-filter:blur(5px); -webkit-backdrop-filter:blur(5px); }
-  .fj-card > div{ width:min(100%, 23rem); max-height:100%; overflow:auto; text-align:center; padding:1.3rem 1.15rem 1.15rem; border-radius:24px; background:#FFFDF9; box-shadow:0 18px 50px rgba(60,40,90,.24); animation:fj-pop .55s cubic-bezier(.2,1.4,.4,1) both; }
+  .fj-card{ position:fixed; inset:0; z-index:98; display:grid; place-items:normal; padding:.8rem; overflow-y:auto; overscroll-behavior:contain; background:rgba(255,250,244,.62); backdrop-filter:blur(5px); -webkit-backdrop-filter:blur(5px); }
+  /* margin:auto centers the card when it fits, and lets it start at the top (and scroll) when it doesn't, so its buttons are never cut off */
+  .fj-card > div{ width:min(100%, 23rem); box-sizing:border-box; margin:auto; max-height:none; text-align:center; padding:1.3rem 1.15rem 1.15rem; border-radius:24px; background:#FFFDF9; box-shadow:0 18px 50px rgba(60,40,90,.24); animation:fj-pop .55s cubic-bezier(.2,1.4,.4,1) both; }
   @keyframes fj-pop{ from{ transform:scale(.85); opacity:0; } to{ transform:scale(1); opacity:1; } }
   .fj-orb{ width:4.2rem; height:4.2rem; margin:0 auto .5rem; border-radius:50%; background:radial-gradient(circle at 40% 38%, #fff 0 12%, var(--fj-accent) 45%, rgba(255,255,255,0) 72%); box-shadow:0 0 36px 8px var(--fj-accent); animation:fj-breathe 5s ease-in-out infinite; }
   @keyframes fj-breathe{ 50%{ transform:scale(1.12); } }

@@ -34,6 +34,12 @@
   // The Night Garden itself is always night.
   var QS = (function () { var o = {}; location.search.replace(/[?&]([a-z]+)=([a-z]+)/g, function (_, k, v) { o[k] = v; }); return o; })();
   var SCENE = AMBIENT && /^(garden|beach|lake|meadow|river|forest)$/.test(QS.scene || '') ? QS.scene : 'garden';
+  // behind a page, the page can name a spot the dogs shouldn't run through (the pal cam button): { l, t, r, b } in page pixels
+  var AVOID = null;
+  if (AMBIENT) window.addEventListener('message', function (e) {
+    if (e.origin !== location.origin || !e.data || !('tolAvoid' in e.data)) return;
+    var a = e.data.tolAvoid; AVOID = a && isFinite(a.l) && isFinite(a.t) && isFinite(a.r) && isFinite(a.b) ? a : null;
+  });
   function todNow() {
     if (!AMBIENT) return 'night';
     if (/^(dawn|day|golden|dusk|night)$/.test(QS.tod || '')) return QS.tod;
@@ -1093,7 +1099,13 @@
       var wag = REDUCED ? 0 : Math.sin(t / (pose === 'run' ? 70 : 90) + i) * (pose === 'lie' ? 0.08 : 0.5);
       var blink = Math.sin(t / 1000 + 2 + i * 3) > 0.985;
       pack.pos = pack.pos || []; pack.pos[i] = [x + dx, y - 20 * s, s];
-      ctx.save(); ctx.translate(x + dx, y);
+      // near the page's button, a dog fades softly out of view instead of running through it
+      pack.fade = pack.fade || [1, 1];
+      var hit = false;
+      if (AVOID) { var cr = canvas.getBoundingClientRect(), px = x + dx + cr.left, py = y + cr.top, hw = 34 * s; hit = px + hw > AVOID.l && px - hw < AVOID.r && py + 6 > AVOID.t && py - 64 * s < AVOID.b; }
+      pack.fade[i] += ((hit ? 0 : 1) - pack.fade[i]) * (REDUCED ? 1 : 0.12);
+      if (pack.fade[i] < 0.03) return;
+      ctx.save(); ctx.globalAlpha = pack.fade[i]; ctx.translate(x + dx, y);
       ctx.fillStyle = 'rgba(10,15,30,0.28)'; ctx.beginPath(); ctx.ellipse(0, 2, 22 * s * depth, 4.5 * s * depth, 0, 0, Math.PI * 2); ctx.fill();
       ctx.translate(0, -lift * s); ctx.scale(1.3 * s * depth * face, 1.3 * s * depth);
       if (rear) ctx.rotate(-rear); // rearing up for a hug or a high five

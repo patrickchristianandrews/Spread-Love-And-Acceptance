@@ -23,6 +23,7 @@
 <link rel="stylesheet" href="/assets/css/reading.css">
 <link rel="stylesheet" href="/assets/css/tol-pages.css">
 <script src="/assets/js/site.js" defer></script>
+<script src="/assets/js/rulebook.js" defer></script>
 <style>
   :root{ --paper:#F5EFDE; --paper-deep:#ECE2C4; --ink:#211D17; --ink-soft:#524B3E; --line:#D9CBA3; --credit:#3E6B4C; --brass:#8A5E1E; --focus:#2B5B8C; --debit:#96412B; --radius:3px; }
   .read.is-wide{ max-width:58rem; }
@@ -40,6 +41,7 @@
   .ky-tag{ display:inline-block; font-family:"IBM Plex Mono", ui-monospace, monospace; font-size:.72rem; color:var(--brass-ink, #7A5620); letter-spacing:.04em; margin:0 0 .9rem; }
   .ky-part h3{ font-family:"Fraunces", Georgia, serif; font-weight:600; font-size:1.08rem; margin:1.5rem 0 .4rem; }
   .ky-note{ font-size:.92rem; color:var(--ink-soft); }
+  .ky-erik{ display:block; font-weight:400; font-size:.88rem; color:var(--ink-soft); font-family:"Lora", Georgia, serif; }
 
   .ky-layers{ display:grid; grid-template-columns:repeat(auto-fit, minmax(230px, 1fr)); gap:1rem; margin:1rem 0 0; }
   .ky-layers > div{ padding:1rem 1.1rem; border:1px solid var(--line); border-radius:var(--radius); background:var(--paper); }
@@ -55,12 +57,20 @@
   .ky-ex td:first-child{ font-style:italic; width:22%; }
   .ky-ex td + td, .ky-ex th + th{ border-left:1px dotted var(--line); }
   @media (max-width:640px){
-    .ky-ex, .ky-ex tbody, .ky-ex tr, .ky-ex td{ display:block; width:auto !important; }
+    .ky-ex, .ky-ex tbody, .ky-ex tr, .ky-ex td, .ky-ex caption{ display:block; width:auto !important; }
     .ky-ex thead{ display:none; }
     .ky-ex tr{ border-bottom:1px solid var(--line); padding:.5rem 0; }
     .ky-ex td{ border:0 !important; padding:.15rem 0; }
-    .ky-ex td::before{ content:attr(data-h); display:block; font-family:"IBM Plex Mono", monospace; font-style:normal; font-size:.7rem; color:var(--brass-ink, #7A5620); }
+    .ky-ex tr{ border:1px solid var(--line); border-radius:10px; padding:.7rem .85rem; margin:0 0 1rem; background:rgba(255,253,247,.75); }
+    .ky-ex td{ padding:.25rem 0 !important; }
+    .ky-ex td:first-child{ font-style:normal; font-weight:600; font-family:"Fraunces", Georgia, serif; font-size:1.1rem; padding-bottom:.4rem !important; border-bottom:2px solid var(--brass) !important; margin-bottom:.3rem; }
+    .ky-ex td::before{ content:attr(data-h); display:block; font-family:inherit; font-style:normal; font-weight:600; font-size:.88rem; color:var(--ink-soft); margin:.35rem 0 .05rem; }
+    .ky-ex td:first-child::before{ font-family:"Lora", Georgia, serif; font-weight:500; font-size:.85rem; margin-top:0; }
   }
+  .ky-ex caption{ caption-side:top; text-align:left; font-size:.95rem; color:var(--ink-soft); padding:0 0 .5rem; }
+  .ky-stages td:first-child{ font-style:normal; font-weight:600; }
+  .gu-gentle{ margin:1rem 0 1.2rem; padding:.85rem 1rem; border-left:4px solid var(--credit); background:rgba(62,107,76,.07); border-radius:0 10px 10px 0; font-size:1rem; }
+  .gu-gentle p{ margin:.25rem 0; }
 
   .ky-steps{ counter-reset:r; list-style:none; padding:0; }
   .ky-steps > li{ counter-increment:r; position:relative; padding:.8rem 0 .8rem 2.6rem; border-bottom:1px dotted var(--line); margin:0; max-width:none; }
@@ -95,19 +105,24 @@
 <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"name":"Where Your Lens Came From in depth — Developmental Stages, Timing and Inherited Expectations · Spread Love & Acceptance","headline":"Where Your Lens Came From in depth — Developmental Stages, Timing and Inherited Expectations · Spread Love & A","description":"A plain-language guide to developmental stages and the lens they leave: Erikson’s big questions, sensitive periods, why timing matters, how family, culture, gender scripts, school and screens shape how we see ourselves and others, and the unspoken expectations we place on the people we love.","url":"https://spreadloveandacceptance.com/growing-up-in-depth.html","inLanguage":"en-US","isAccessibleForFree":true,"keywords":"self-help, relationships, kindness, love, appreciation, acceptance, connection, communication, calm, peace, harmony, reconciliation, emotional wellbeing, self-discovery, fairness at home, mental load, invisible work, free self-help tools","publisher":{"@type":"Organization","@id":"https://spreadloveandacceptance.com/#org","name":"Spread Love & Acceptance"},"isPartOf":{"@type":"WebSite","@id":"https://spreadloveandacceptance.com/#website","name":"Spread Love & Acceptance","url":"https://spreadloveandacceptance.com/"},"dateModified":"2026-09-29","image":"https://spreadloveandacceptance.com/assets/img/og-image.png","@type":"WebPage"},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Spread Love & Acceptance","item":"https://spreadloveandacceptance.com/"},{"@type":"ListItem","position":2,"name":"Where Your Lens Came From in depth — Developmental Stages, Timing and Inherited Expectations · Spread Love & Acceptance","item":"https://spreadloveandacceptance.com/growing-up-in-depth.html"}]}]}</script>
 <!-- seo:end -->
 </head>
-<body>
+<body data-no-cheer data-no-pupvisits>
 <main class="read is-wide" id="main">
 
   <header class="read-head">
     <p class="read-code">Self-discovery · Where your lens came from</p>
     <h1>Where your lens came from: how growing up shapes the way you see yourself, others and what you expect of them</h1>
-    <p class="ky-lede" style="margin:.6rem 0 0">Every stage of growing up asks a big question, and the answer we land on becomes an understanding we carry forward and keep using as adults. Most of those understandings serve us well. Some were right for the child we were and quietly out of date for the adult we are now.</p>
+    <p class="ky-lede" style="margin:.6rem 0 0">Every stage of growing up asks a big question, and the answer we land on can become an understanding many people carry forward and keep using as adults. Most of those understandings serve us well. Some were right for the child we were and quietly out of date for the adult we are now.</p>
   </header>
-  <p class="depth-bar"><span>Full version</span><a href="/growing-up.html">&larr; Back to the simple version</a></p>
+  <p class="depth-bar" data-full-what="The whole idea: real-life examples, a table of the stages, the research behind it, and answers to common questions. Researchers’ names for things appear in bold."><span>Full version</span><a href="/growing-up.html">&larr; Back to the simple version</a></p>
+
+<div class="gu-gentle" id="gently">
+  <p><strong>Going gently.</strong> This guide looks back at growing up. You can read one section and stop, and come back another day. The “Jump to a section” links below take you straight to the part you want.</p>
+  <p>Not every home felt calm or kind. If “they were doing their best” doesn’t fit your story, that’s okay. Take only what is useful to you and leave the rest.</p>
+</div>
 
 <div class="scene">
   <p class="scene-when">Sunday, 10:15am</p>
-  <p>Your partner is still in bed and the kitchen is a mess. Before you’ve had a single thought, you feel it: a hot, tight “Of course. It’s always me.” Nobody said that. Your partner may not even know the dishes are there. But in the house you grew up in, the person who noticed the mess was the person who cleaned it, and anyone who rested while there was work to do was lazy. That rule is thirty years old, and it just made a decision for you.</p>
+  <p>Your partner is still in bed and the kitchen is a mess. Before you’ve had a single thought, you feel it: a hot, tight “Of course. It’s always me.” Nobody said that. Your partner may not even know the dishes are there. But in the house you grew up in, the person who noticed the mess was the person who cleaned it, and anyone who rested while there was work to do was lazy. That rule comes from your childhood, and it just made a decision for you.</p>
 </div>
 
   <p>We like to think we see the world as it is. Mostly, we see it through a lens we started grinding very early, long before we could choose. Family, school, friends, culture, faith communities, the money situation at home, the shows we watched and, more and more, the screens in our hands all taught us what to expect: of ourselves, of other people, and of how a “good” partner, parent, friend or coworker behaves. By adulthood, that lens feels less like a lens and more like simple reality.</p>
@@ -117,7 +132,7 @@
 
   <aside class="tol-aside" aria-labelledby="honest">
     <h3 id="honest">An honest note before you read on</h3>
-    <p>This page is general education about how people grow, not a diagnosis, therapy or treatment, and it can’t explain any one person’s life. Stage models are maps, not measurements: real childhoods are messier, cultures differ, and people move through these questions at their own pace, often more than once. Nothing here is about blame. The adults who raised us were working with their own lenses too. If you’d like to explore your own story more deeply, a qualified professional can help, if and when you want that.</p>
+    <p>This page is general education about how people grow, not a diagnosis, therapy or treatment, and it can’t explain any one person’s life. Stage models are maps, not measurements: real childhoods are messier, cultures differ, and people move through these questions at their own pace, often more than once. Nothing here is about blame. Many of the adults who raised us were working with their own lenses too. Not every home felt calm or kind, though, and this page doesn’t ask you to decide that yours did. If you’d like to explore your own story more deeply, a qualified professional can help, if and when you want that.</p>
   </aside>
 
   <p><strong>Jump to a section:</strong></p>
@@ -154,17 +169,19 @@
   <section class="ky-part" id="stages">
     <h2>The stages: a big question at each age</h2>
     <p class="ky-tag">A MAP, NOT A MEASUREMENT</p>
-    <p>Psychologist Erik Erikson described human development as a series of stages across the whole life, each built around a central question. Later research has refined and argued with the details, and ages vary a lot from person to person, but his core insight has held up well: at different ages we are especially busy answering different questions, and the answer we reach tends to become a lasting part of how we see things.</p>
-    <table class="ky-ex">
+    <p>Psychologist Erik Erikson described human development as eight stages across the whole life, each built around a central question. His model has been widely influential, though debated: later research has refined and argued with the details, there is limited direct evidence for the stages themselves, and ages vary a lot from person to person. The part most researchers accept is that development continues across the whole life. The useful part for everyday life is simpler: at different ages we are often especially busy with different questions, and the answer we reach can become a lasting part of how we see things.</p>
+    <table class="ky-ex ky-stages">
+      <caption>Erikson’s eight stages, with his name for each in brackets. The questions and examples are this site’s plain-language paraphrase, not his wording. The ages are rough.</caption>
       <thead><tr><th>Roughly when</th><th>The big question</th><th>What tends to shape the answer</th><th>Understandings adults may carry forward</th></tr></thead>
       <tbody>
-        <tr><td data-h="Roughly when">The first years (about 0–2)</td><td data-h="The big question">Is the world safe? Will someone come?</td><td data-h="What tends to shape it">How reliably care, comfort and calm showed up; the everyday back-and-forth researchers call “serve and return”</td><td data-h="Carried forward">“People are there for me,” or “I’d better not need anyone,” or “I have to be loud to be noticed”</td></tr>
-        <tr><td data-h="Roughly when">Toddler years (about 2–3)</td><td data-h="The big question">Can I do things myself? Is it okay to have a will of my own?</td><td data-h="What tends to shape it">Room to try, patience with mess, how “no” and mistakes were handled</td><td data-h="Carried forward">“I can figure things out,” or “Wanting things is selfish,” or “If I try and fail, I’m bad”</td></tr>
-        <tr><td data-h="Roughly when">Early childhood (about 3–6)</td><td data-h="The big question">Is it okay to start things, to play, to ask, to take up space?</td><td data-h="What tends to shape it">Whether curiosity and big feelings were welcomed; the home’s mood; young children also tend to see themselves as the cause of what happens around them</td><td data-h="Carried forward">“My ideas matter,” or “When people are upset, it’s probably my fault,” or “I’m too much”</td></tr>
-        <tr><td data-h="Roughly when">School years (about 6–12)</td><td data-h="The big question">Am I capable? How do I measure up?</td><td data-h="What tends to shape it">Teachers, grades, sports, friendships, being compared to siblings, the role you played in the family</td><td data-h="Carried forward">“I’m good at things when I practice,” or “I’m only as good as my last result,” or “I’m the responsible one”</td></tr>
-        <tr><td data-h="Roughly when">Teen years (about 12–18)</td><td data-h="The big question">Who am I? Where do I belong?</td><td data-h="What tends to shape it">Friends and peer approval, first crushes, body changes, what’s “normal” online and in media, what’s expected of your gender and background</td><td data-h="Carried forward">“I can be myself and still belong,” or “I have to perform to be liked,” or “Everyone else has it together”</td></tr>
-        <tr><td data-h="Roughly when">Young adulthood (about 18–30)</td><td data-h="The big question">Can I be close to someone without losing myself?</td><td data-h="What tends to shape it">First serious relationships, first homes shared with others, early work, money pressures</td><td data-h="Carried forward">“Closeness is safe,” or “Love means giving up what I need,” or “If I stop giving, they’ll leave”</td></tr>
-        <tr><td data-h="Roughly when">Middle and later adulthood</td><td data-h="The big question">What am I building? Did it matter?</td><td data-h="What tends to shape it">Raising or mentoring others, caring for aging parents, work, community, looking back</td><td data-h="Carried forward">We keep revising earlier answers here. Development doesn’t stop at 18.</td></tr>
+        <tr><td data-h="Roughly when">The first years (about 0 to 1) <span class="ky-erik">(trust versus mistrust)</span></td><td data-h="The big question">Is the world safe? Will someone come?</td><td data-h="What tends to shape the answer">How reliably care, comfort and calm showed up; the everyday back-and-forth researchers call “serve and return”</td><td data-h="Understandings adults may carry forward">“People are there for me,” or “I’d better not need anyone,” or “I have to be loud to be noticed”</td></tr>
+        <tr><td data-h="Roughly when">Toddler years (about 2 to 3) <span class="ky-erik">(autonomy versus shame and doubt)</span></td><td data-h="The big question">Can I do things myself? Is it okay to have a will of my own?</td><td data-h="What tends to shape the answer">Room to try, patience with mess, how “no” and mistakes were handled</td><td data-h="Understandings adults may carry forward">“I can figure things out,” or “Wanting things is selfish,” or “If I try and fail, I’m bad”</td></tr>
+        <tr><td data-h="Roughly when">Early childhood (about 4 to 5) <span class="ky-erik">(initiative versus guilt)</span></td><td data-h="The big question">Is it okay to start things, to play, to ask, to take up space?</td><td data-h="What tends to shape the answer">Whether curiosity and big feelings were welcomed; the home’s mood; young children also tend to see themselves as the cause of what happens around them</td><td data-h="Understandings adults may carry forward">“My ideas matter,” or “When people are upset, it’s probably my fault,” or “I’m too much”</td></tr>
+        <tr><td data-h="Roughly when">School years (about 6 to 11) <span class="ky-erik">(industry versus inferiority)</span></td><td data-h="The big question">Am I capable? How do I measure up?</td><td data-h="What tends to shape the answer">Teachers, grades, sports, friendships, being compared to siblings, the role you played in the family</td><td data-h="Understandings adults may carry forward">“I’m good at things when I practice,” or “I’m only as good as my last result,” or “I’m the responsible one”</td></tr>
+        <tr><td data-h="Roughly when">Teen years (about 12 to 17) <span class="ky-erik">(identity versus role confusion)</span></td><td data-h="The big question">Who am I? Where do I belong?</td><td data-h="What tends to shape the answer">Friends and peer approval, first crushes, body changes, what’s “normal” online and in media, what’s expected of your gender and background</td><td data-h="Understandings adults may carry forward">“I can be myself and still belong,” or “I have to perform to be liked,” or “Everyone else has it together”</td></tr>
+        <tr><td data-h="Roughly when">Young adulthood (about 18 to 39) <span class="ky-erik">(intimacy versus isolation)</span></td><td data-h="The big question">Can I be close to someone without losing myself?</td><td data-h="What tends to shape the answer">Serious relationships, homes shared with others, early work, money pressures</td><td data-h="Understandings adults may carry forward">“Closeness is safe,” or “Love means giving up what I need,” or “If I stop giving, they’ll leave”</td></tr>
+        <tr><td data-h="Roughly when">Middle adulthood (about 40 to 64) <span class="ky-erik">(generativity versus stagnation)</span></td><td data-h="The big question">What am I building? Am I helping the next generation?</td><td data-h="What tends to shape the answer">Raising or mentoring others, caring for aging parents, work, community</td><td data-h="Understandings adults may carry forward">We keep revising earlier answers here: “I still have something to give,” or “I’ve missed my chance”</td></tr>
+        <tr><td data-h="Roughly when">Later life (about 65 and older) <span class="ky-erik">(integrity versus despair)</span></td><td data-h="The big question">Did my life matter? Can I make peace with it?</td><td data-h="What tends to shape the answer">Looking back, health, loss, the people still around you</td><td data-h="Understandings adults may carry forward">“My life had meaning, mistakes and all,” or “It’s too late to change anything.” Development doesn’t stop at 18, or at 65.</td></tr>
       </tbody>
     </table>
     <p class="ky-note">These questions don’t get answered once and filed away. We return to them, especially at big transitions: a new relationship, a move, becoming a parent, a new job, a loss of routine. Each return is a chance to answer a little differently.</p>
@@ -223,12 +240,12 @@
   <section class="ky-part" id="self">
     <h2>When the lens is wrong about you</h2>
     <p class="ky-tag">THE STORY YOU TELL ABOUT YOURSELF</p>
-    <p>Children draw conclusions with the information they have, and they have very little. A child can’t know that a parent was exhausted, worried about work or grieving; they only know the parent was short with them. So many of the harshest things adults believe about themselves were concluded by a small person with half the facts. Some common examples:</p>
+    <p>Children draw conclusions with the information they have, and they have very little. A child can’t know that a parent was exhausted, worried about work or grieving; they only know the parent was short with them. So many of the harshest things adults believe about themselves were concluded by a small person who didn’t have all the facts. And sometimes the child read things exactly right: not every hurt was a misunderstanding. Some common examples:</p>
     <table class="ky-ex">
       <thead><tr><th>The old understanding</th><th>Where it often comes from</th><th>A fairer, adult reading</th></tr></thead>
       <tbody>
         <tr><td data-h="The old understanding">“I’m only okay when I’m useful.”</td><td data-h="Where it often comes from">Praise mostly for helping, being the responsible child</td><td data-h="A fairer reading">“I’m allowed to rest and receive. Helping is something I do, not the price of being loved.”</td></tr>
-        <tr><td data-h="The old understanding">“My needs are a burden.”</td><td data-h="Where it often comes from">A busy, stretched or stressed household; being told to stop fussing</td><td data-h="A fairer reading">“The adults were stretched. That wasn’t a verdict on my needs. Asking clearly is fair.”</td></tr>
+        <tr><td data-h="The old understanding">“My needs are a burden.”</td><td data-h="Where it often comes from">A busy, stretched or stressed household; being told to stop fussing</td><td data-h="A fairer reading">“Whatever was going on for the adults, it wasn’t a verdict on my needs. Asking clearly is fair.”</td></tr>
         <tr><td data-h="The old understanding">“I’m too much.” / “I’m not enough.”</td><td data-h="Where it often comes from">Big feelings or energy that didn’t fit the room; being compared</td><td data-h="A fairer reading">“I was a different fit for that room. Some rooms, and people, suit me.”</td></tr>
         <tr><td data-h="The old understanding">“Mistakes mean I’m bad.”</td><td data-h="Where it often comes from">Mistakes met with shame or laughter</td><td data-h="A fairer reading">“Mistakes mean I’m learning. I can own one without being one.”</td></tr>
         <tr><td data-h="The old understanding">“I have to be the strong one.”</td><td data-h="Where it often comes from">Growing up fast, looking after others, gender scripts</td><td data-h="A fairer reading">“Strong people also lean. Letting someone help is part of a fair share.”</td></tr>
@@ -242,7 +259,7 @@
     <p class="ky-tag">THE STORY YOU TELL ABOUT THEM</p>
     <p>The same lens colors how we read the people closest to us, often in ways that make them strangers to us:</p>
     <ul>
-      <li><strong>Reading an old face onto a new person.</strong> If silence at home meant someone was angry, your partner’s quiet evening can feel like a storm coming, even when they’re just tired.</li>
+      <li><strong>Reading an old face onto a new person.</strong> If silence at home meant someone was angry, your partner’s quiet evening can feel like trouble is on the way, even when they’re just tired.</li>
       <li><strong>Character instead of circumstances.</strong> We tend to explain other people’s slips by who they are (“lazy,” “careless”) and our own by our situation (“I was swamped”). Psychologists call this the <strong>fundamental attribution error</strong>, a term from Lee Ross. It’s one of the biggest sources of unfair blame at home.</li>
       <li><strong>Assuming they learned your rules.</strong> Someone who grew up in a home where nobody talked about feelings isn’t cold for not asking how your day went. They may simply never have seen it done.</li>
       <li><strong>“Everyone else has it together.”</strong> Comparing your partner, family or home with the polished version others show can make ordinary, good-enough people look like they’re failing.</li>
@@ -261,7 +278,7 @@
       <li><strong>“Anger looks like this.”</strong> If anger in your home was loud, a quiet partner can seem calm when they’re actually upset; if it was silent, a loud partner can seem dangerous when they’re just venting.</li>
       <li><strong>“The person who notices does it.”</strong> In many homes the person who noticed the mess, the empty fridge or the permission slip was the person who handled it. Carried into adulthood, this rule quietly hands the whole mental load to whoever notices first, and then feels unfair to them. See the <a href="/book/preface.html">Preface on the work nobody sees</a>.</li>
     </ul>
-    <p>An expectation that’s never said out loud can’t be agreed to, and one that can’t be agreed to can only be broken. That’s how many resentments start: not with one person doing wrong, but with two people following two different rulebooks, each sure theirs is simply “normal.”</p>
+    <p>An expectation that’s never said out loud can’t be agreed to, so the other person can only miss it, often without knowing it was there. That’s how many resentments start: not with one person doing wrong, but with two people following two different rulebooks, each sure theirs is simply “normal.”</p>
   </section>
 
   <section class="ky-part" id="home">
@@ -277,6 +294,8 @@
       <li><strong>The unforgivable thing was…</strong></li>
     </ol>
     <p>Then, for each line, ask one question: <strong>“Do I still want this rule?”</strong> Some you’ll keep with pride. Some you’ll want to soften. Some you may realize you’ve been living by without ever agreeing to.</p>
+    <p>You can write your answers right here:</p>
+    <div data-rulebook></div>
   </section>
 
   <section class="ky-part" id="check">
@@ -303,7 +322,7 @@
     <p class="ky-tag">TWO RULEBOOKS, ONE HOME</p>
     <p>Every couple, family and shared house is a meeting of rulebooks. The goal isn’t to decide whose family did it right. It’s to write a new, shared one on purpose.</p>
     <ul>
-      <li><strong>Swap rulebooks on a calm day.</strong> Each person fills in the six lines above, then you read them to each other with curiosity, not correction. Many couples find this explains fights they’ve been having for years.</li>
+      <li><strong>Swap rulebooks on a calm day.</strong> Each person fills in the six lines above, then you read them to each other with curiosity, not correction. Some people find it makes sense of an argument that keeps coming back.</li>
       <li><strong>Name the jobs, then choose.</strong> Lay out the jobs you each assumed “someone” would do, and give each one a single owner by choice rather than by habit. The <a href="/lemonade-stand.html">Lemonade Stand</a> and <a href="/workpapers/wp-03-raci-treaty.html">WP-03</a> help here.</li>
       <li><strong>Agree on how upset looks.</strong> Tell each other how anger, hurt and tiredness show up in you, and what helps. The <a href="/wiring-card.html">Wiring Card</a> is a good place to write it down.</li>
       <li><strong>Talk in a check-in, not in the heat.</strong> Use a <a href="/check-ins.html">check-in</a> to bring up one expectation at a time.</li>
@@ -343,7 +362,7 @@
   <section class="ky-part" id="faq">
     <h2>Questions people often ask</h2>
     <h3>Isn’t this just blaming my parents?</h3>
-    <p>No. Understanding where a rule came from isn’t the same as blaming the people who handed it to you. Most parents passed on what they were given, often while doing their best with less than they needed. You can understand, appreciate and still choose differently.</p>
+    <p>No. Understanding where a rule came from isn’t the same as blaming the people who handed it to you. Many parents passed on what they were given, often while doing their best with less than they needed. If that doesn’t fit your story, you don’t have to make it fit: understanding where a rule came from never means saying it was okay. You can understand, appreciate what was good, and still choose differently.</p>
     <h3>I don’t remember much from when I was little. Can I still use this?</h3>
     <p>Yes. You don’t need memories, just footprints: the reactions that feel older than the moment, the rules you notice only when they’re broken, the roles you slide into. Those are enough to work with.</p>
     <h3>If it happened early, is it permanent?</h3>
