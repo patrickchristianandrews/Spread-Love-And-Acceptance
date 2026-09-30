@@ -9,7 +9,7 @@
    The Frequency Buddies episodes (/assets/js/buddies/) are small data files, saved up front so an episode
    plays offline; a future episode not in the list is saved the first time it's watched.
    Bump VERSION when the list below changes. */
-var VERSION = 'tol-v61';
+var VERSION = 'tol-v62';
 var CORE = [
   '/', '/index.html', '/offline.html',
   '/night-garden.html', '/quiet-words.html', '/word-bloom.html', '/quiet-crossword.html', '/pause-and-play.html', '/ask.html', '/whats-new.html', '/frequency-journey.html', '/frequency-journey-play.html', '/pal-cam-tv.html', '/frequency-buddies.html', '/daily-ledger-crossword.html', '/garden-backdrop.html', '/turning-toward.html', '/quick-checks.html', '/lemonade-stand.html',
@@ -49,7 +49,7 @@ self.addEventListener('fetch', function (e) {
   if (url.pathname.indexOf('/assets/video/') === 0 || url.pathname.indexOf('/assets/audio/music/') === 0 || url.pathname.indexOf('/assets/vendor/tesseract/') === 0 || url.pathname.indexOf('/assets/audio/buddies/') === 0) return; // big cast videos stream straight from the network, never cached
 
   if (req.mode === 'navigate' && url.origin === self.location.origin) {
-    e.respondWith(fetch(req).then(function (res) {
+    e.respondWith(fetch(req.url, { cache: 'no-cache', credentials: 'same-origin' }).then(function (res) {
       if (res.ok) { var copy = res.clone(); caches.open(VERSION).then(function (c) { c.put(req, copy); }); }
       return res;
     }).catch(function () {
@@ -59,7 +59,8 @@ self.addEventListener('fetch', function (e) {
   }
 
   if (isStatic(url)) {
-    e.respondWith(fetch(req).then(function (res) {
+    // always ask the server whether there's a newer copy (cheap when nothing changed), so an update reaches everyone right away
+    e.respondWith(fetch(req.url, { cache: 'no-cache', credentials: 'same-origin' }).then(function (res) {
       if (res.ok) { var copy = res.clone(); caches.open(VERSION).then(function (c) { c.put(req, copy); }); }
       return res;
     }).catch(function () { return caches.match(req); }));

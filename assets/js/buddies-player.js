@@ -1069,7 +1069,7 @@
       var order = [S.chars.tidbit, S.chars.sugarfoot];
       for (var gid in S.guests) if (GUESTS[gid].where === 'ground' || GUESTS[gid].where === 'hover') order.push(S.guests[gid]);
       order.sort(function (a, b) { return (a.guest ? 1 : 0) - (b.guest ? 1 : 0) || (passing(b) - passing(a)) || (a.id === 'tidbit' ? -1 : 1); });
-      order.forEach(function (c) { if (c.guest) drawGuest(g, c); else drawPal(g, c); g.setTransform(gg.k, 0, 0, gg.k, gg.ox + S.shift, gg.oy); });
+      order.forEach(function (c) { if (S.hidden && S.hidden[c.id]) return; if (c.guest) drawGuest(g, c); else drawPal(g, c); g.setTransform(gg.k, 0, 0, gg.k, gg.ox + S.shift, gg.oy); });
       drawBridgeFront(g);
       drawParts(g);
       if (S.info && S.info.ambient && PC2 && PC2.paintAmbient) PC2.paintAmbient(g, S.scene, env, S.t * 1000, 'front');
@@ -1379,6 +1379,7 @@
   // /assets/audio/buddies/<episode>/<key>.mp3, listed in index.json. A line plays its recording through
   // Web Audio (reliable on phones once Play has been pressed); a line with no recording falls back to
   // the device's own speech, and then to captions only.
+  var PLAYER_VER = '30 Sep · 3'; // shown under the player, so we can tell which version a browser has
   var REC = '2609c'; // bump whenever the recordings are redone, so no browser plays an old copy
   var CL = { base: '/assets/audio/buddies/', maps: {}, ready: {}, bufs: {}, got: {}, src: null, gain: null, token: 0, lastFx: -99 };
   function ckey(who, text) { var h = 0x811c9dc5, s = who + '|' + text; for (var i = 0; i < s.length; i++) { h ^= s.charCodeAt(i); h = Math.imul(h, 0x01000193) >>> 0; } return ('0000000' + h.toString(16)).slice(-8); }
@@ -1483,6 +1484,7 @@
     '.fb-head h2{margin:0;font:600 1.25rem/1.2 Fraunces,Georgia,serif;color:#FFF3D6}' +
     '.fb-chap{margin:0;font:500 .8rem/1.3 "IBM Plex Mono",monospace;letter-spacing:.05em;text-transform:uppercase;color:#D9C8F0}' +
     '.fb-stage{position:relative;width:100%;aspect-ratio:16/9;border-radius:18px;overflow:hidden;background:#2E2A5C}' +
+    '.fb-skip{position:absolute;right:.7rem;bottom:.7rem;z-index:3;padding:.45rem .85rem;border-radius:999px;border:1.5px solid rgba(255,255,255,.7);background:rgba(30,22,46,.72);color:#FFF6E6;font:600 .85rem/1 "IBM Plex Mono",monospace;cursor:pointer}.fb-skip[hidden]{display:none}.fb-skip:hover,.fb-skip:focus-visible{background:rgba(30,22,46,.92)}' +
     '@media (max-width:600px){.fb-stage{aspect-ratio:1/1;max-height:62vh}.fb-player{padding:.5rem;border-radius:20px}}' +
     '.fb-cv{position:absolute;left:0;top:0;width:100%;height:100%;display:block;cursor:pointer}' +
     '.fb-player .fb-cap{margin:0;max-width:none;width:100%;box-sizing:border-box;min-height:4.1em;display:flex;align-items:center;justify-content:center;flex-direction:column;padding:.55rem .9rem;border-radius:14px;background:rgba(0,0,0,.34);text-align:center;font:500 1.14rem/1.4 Fraunces,Georgia,serif;color:#FFFDF6;text-wrap:balance}' +
@@ -1565,7 +1567,7 @@
     host.classList.add('fb-player');
     host.innerHTML =
       '<div class="fb-head"><h2 class="fb-title">Frequency Buddies</h2><p class="fb-chap" aria-live="off"></p></div>' +
-      '<div class="fb-stage"><canvas class="fb-cv" role="img" aria-label="An animated story with Tidbit and Sugarfoot"></canvas>' +
+      '<div class="fb-stage"><canvas class="fb-cv" role="img" aria-label="An animated story with Tidbit and Sugarfoot"></canvas><button type="button" class="fb-skip" hidden>Skip intro ⏭</button>' +
       '<div class="fb-ov fb-start"><div class="fb-ovc"><p class="fb-k">Loading…</p></div></div><div class="fb-ov fb-end" hidden></div></div>' +
       '<p class="fb-cap" data-who=""><span class="fb-who"></span><span class="fb-line">Captions show here, always.</span></p>' +
       '<div class="fb-prog"><div class="fb-track" role="slider" tabindex="0" aria-label="Where you are in the episode" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div class="fb-fill"></div></div><span class="fb-time">0:00</span></div>' +
@@ -1580,11 +1582,11 @@
         '<button type="button" class="fb-b fb-full" aria-label="Full screen" title="Full screen (F)">⛶<span class="fb-lbl"> Full screen</span></button>' +
       '</div>' +
       '<div class="fb-chaps"><h3>Chapters</h3><ol></ol></div>' +
-      '<p class="fb-note">Space plays and pauses, the arrow keys move between chapters. Voices are recorded, and captions are always on.</p>' +
+      '<p class="fb-note">Space plays and pauses, the arrow keys move between chapters. Voices are recorded, and captions are always on. <span class="fb-ver">Player ' + PLAYER_VER + '</span></p>' +
       '<p class="fb-sr fb-live" aria-live="polite"></p>';
     var $ = function (s) { return host.querySelector(s); };
     var cv = $('.fb-cv'), g = cv.getContext('2d'), stageEl = $('.fb-stage'), capEl = $('.fb-cap'), whoEl = $('.fb-who'), lineEl = $('.fb-line'), fill = $('.fb-fill'), trackEl = $('.fb-track'), timeEl = $('.fb-time');
-    var playBtn = $('.fb-play'), vBtn = $('.fb-voice'), mBtn = $('.fb-mus'), fBtn = $('.fb-flash'), startOv = $('.fb-start'), endOv = $('.fb-end'), chapEl = $('.fb-chap'), live = $('.fb-live');
+    var skipBtn = $('.fb-skip'), playBtn = $('.fb-play'), vBtn = $('.fb-voice'), mBtn = $('.fb-mus'), fBtn = $('.fb-flash'), startOv = $('.fb-start'), endOv = $('.fb-end'), chapEl = $('.fb-chap'), live = $('.fb-live');
     var W = 0, H = 0, DPR = 1;
     function resize() {
       var r = stageEl.getBoundingClientRect(); DPR = Math.min(2, window.devicePixelRatio || 1);
@@ -1639,6 +1641,210 @@
       if (lit === P.capLit) return; P.capLit = lit;
       ws.forEach(function (sp, i) { sp.className = i < lit ? '' : 'fb-soon'; });
     }
+
+    // ---------- THE THEME SONG ----------
+    // Like a 90s sitcom: the opening plays before the episode (each pup gets her own verse, a name card and a
+    // freeze-frame, then a montage of places for the chorus and the logo), and the rest of the song plays over
+    // closing credits after it. Everything follows the song's own clock, so the pictures stay on the beat.
+    // Lyric times come from the song file. Skippable; only when Music is on.
+    var SONG = {
+      open: { file: 'theme-open', base: 0, dur: 51.4, lyrics: [
+        [4.07, 'both', 'Tune in, turn it up, here we go!'],
+        [8.94, 'tidbit', 'Yo, it’s Tidbit, black mask, eyebrows tan,'], [11.33, 'tidbit', 'first one out the door with a big ol’ plan!'],
+        [13.25, 'tidbit', 'Tail on spin, I’m a zoom-zoom pup,'], [14.92, 'tidbit', 'if the sky gets gray, I’m still lookin’ up!'],
+        [16.6, 'sugarfoot', 'And I’m Sugarfoot, white paws, slow and sweet,'], [18.67, 'sugarfoot', 'I take my time with my four little feet.'],
+        [20.43, 'sugarfoot', 'When it gets too loud, I take a breath,'], [22.42, 'sugarfoot', 'say what I feel, then I try my best!'],
+        [24.34, 'both', 'Different, different, that’s okay,'], [27.29, 'both', 'we find the way together every day!'],
+        [30.56, 'both', 'Frequency Buddies! (Ooh-ooh!)'], [34.07, 'both', 'Two pals, one big heart each!'], [39.1, 'both', 'Frequency Buddies! (Arf arf!)'],
+        [41.41, 'both', 'Every frequency an adventure, you’ll see!'], [45.96, 'both', 'Turn it up, tune in, come along with me,'], [49.63, 'both', 'we’re the Frequency Buddies!']
+      ] },
+      close: { file: 'theme-close', base: 51.5, dur: 92.4, lyrics: [
+        [52.66, 'tidbit', 'When I go fast…'], [54.45, 'sugarfoot', '…I go slow!'], [56.25, 'tidbit', 'When I say yes…'], [57.65, 'sugarfoot', '…I can say no!'],
+        [59.04, 'both', 'When we mess up…'], [61.6, 'both', '…we say sorry!'], [64.15, 'both', 'Then we laugh and keep on runnin’ free!'],
+        [70.29, 'both', 'Frequency Buddies! (Ooh-ooh!)'], [72.61, 'both', 'Two pals, one big heart each!'], [77.55, 'both', 'Frequency Buddies! (Arf arf!)'],
+        [79.71, 'both', 'Every frequency an adventure, you’ll see!'], [87.05, 'both', 'See you next time, pals! (Arf!)']
+      ] }
+    };
+    var TCOL = { tidbit: '#FF9F43', sugarfoot: '#B79CEB', both: '#F28AA8' };
+    function themeCues(kind) {
+      var S = P.stage, ep = P.ep || {};
+      function scene(id, hour, weather) { var c = cv; if (c && S.scene !== 'blank') { S.transition(c, 'fade'); if (S.trans) S.trans.dur = 0.4; } S.applyScene({ scene: id, hour: hour, weather: weather || 'clear' }); S.title = null; }
+      function at(t, u) { S.place({ tidbit: t, sugarfoot: u }, true); S.chars.tidbit.fx = S.chars.tidbit.face = t < u ? 1 : -1; S.chars.sugarfoot.fx = S.chars.sugarfoot.face = t < u ? -1 : 1; }
+      function hide(id) { S.hidden = {}; if (id) S.hidden[id] = 1; }
+      function act(who, name, o) { var b = { act: name, who: who }; for (var k in o || {}) b[k] = o[k]; S.beginAct(b); }
+      function card(name, tag, col) { P.th.card = { name: name, tag: tag, col: col, t0: P.th.t }; }
+      function freeze(d, name, col) { P.th.freeze = { until: P.th.t + d, name: name, col: col, t0: P.th.t }; }
+      function logo(big) { P.th.logo = { t0: P.th.t, big: !!big }; }
+      function credit(a, b) { P.th.credit = { a: a, b: b, t0: P.th.t }; }
+      if (kind === 'open') return [
+        [0, function () { hide(null); S.applyScene({ scene: 'blank', hour: 12, weather: 'clear' }); S.showTitle(true); }],
+        [4.07, function () { scene('backyard', 10); at(0.08, 0.2); act('both', 'run', { to: 0.5, dur: 2.4 }); }],
+        [6.8, function () { act('both', 'wiggle'); }],
+        [8.94, function () { scene('citypark', 11); hide('sugarfoot'); at(0.64, 0.98); S.chars.tidbit.fx = S.chars.tidbit.face = -1; act('tidbit', 'wiggle'); card('Tidbit', 'the one who goes first', TCOL.tidbit); }],
+        [11.33, function () { act('tidbit', 'run', { to: 0.84, dur: 1.2 }); }],
+        [12.6, function () { act('tidbit', 'run', { to: 0.62, dur: 1.0 }); }],
+        [13.25, function () { act('tidbit', 'spin'); }],
+        [14.92, function () { S.weather = 'rain'; act('tidbit', 'lookat', { target: 'up' }); }],
+        [15.75, function () { S.weather = 'clear'; S.wx = []; act('tidbit', 'sparkle'); }],
+        [15.95, function () { freeze(0.62, 'Tidbit', TCOL.tidbit); }],
+        [16.6, function () { scene('meadow', 16); hide('tidbit'); at(0.02, 0.58); act('sugarfoot', 'walk', { to: 0.72, dur: 2 }); card('Sugarfoot', 'the one who takes her time', TCOL.sugarfoot); }],
+        [18.67, function () { act('sugarfoot', 'wag'); }],
+        [20.43, function () { act('sugarfoot', 'pause-breath', { dur: 1.9 }); }],
+        [22.42, function () { act('sugarfoot', 'heart'); }],
+        [23.65, function () { freeze(0.66, 'Sugarfoot', TCOL.sugarfoot); }],
+        [24.34, function () { scene('beach', 17.5); hide(null); at(0.2, 0.8); act('tidbit', 'hop'); act('sugarfoot', 'sit'); }],
+        [25.8, function () { act('tidbit', 'spin'); act('sugarfoot', 'wag'); }],
+        [27.29, function () { act('both', 'walk', { to: 0.5, dur: 1.4 }); }],
+        [28.8, function () { act('both', 'hug', { dur: 1.7 }); }],
+        [30.56, function () { scene('carnival', 19); at(0.4, 0.6); act('both', 'wiggle'); logo(false); }],
+        [32.3, function () { act('both', 'spin'); }],
+        [34.07, function () { scene('snow', 12, 'snow'); at(0.4, 0.6); act('both', 'heart'); }],
+        [36.5, function () { act('both', 'nuzzle', { dur: 2.2 }); }],
+        [39.1, function () { scene('forest', 21, 'stars'); at(0.38, 0.62); act('both', 'jump'); logo(false); }],
+        [41.41, function () { scene('treehouse', 15); at(0.2, 0.36); act('both', 'run', { to: 0.62, dur: 1.8 }); }],
+        [43.6, function () { act('both', 'spin'); }],
+        [45.96, function () { scene('rooftop', 20.8, 'stars'); at(0.38, 0.62); act('both', 'hop'); }],
+        [47.8, function () { act('both', 'wiggle'); }],
+        [49.63, function () { scene('backyard', 17); at(0.4, 0.6); act('both', 'jump'); logo(true); }]
+      ];
+      var guests = [], seen = {};
+      (ep.chapters || []).forEach(function (c) { c.beats.forEach(function (b) { if (b.guest && !b.exit && !seen[b.guest]) { seen[b.guest] = 1; guests.push(b.name || (GUESTS[b.guest] && GUESTS[b.guest].name) || b.guest); } }); });
+      return [
+        [51.5, function () { hide(null); scene('backyard', 18.6); at(0.12, 0.88); credit('Frequency Buddies', 'Season ' + (ep.season || 1) + ' · Episode ' + (ep.number || 1) + ': ' + (ep.title || '')); }],
+        [52.66, function () { act('tidbit', 'run', { to: 0.36, dur: 1.2 }); }],
+        [54.45, function () { act('sugarfoot', 'walk', { to: 0.64, dur: 1.7 }); }],
+        [56.25, function () { act('tidbit', 'hop'); }],
+        [57.65, function () { act('sugarfoot', 'sit'); }],
+        [59.04, function () { act('both', 'bow'); }],
+        [61.6, function () { act('both', 'nuzzle', { dur: 2.2 }); }],
+        [64.15, function () { act('both', 'laugh'); }],
+        [66.4, function () { act('both', 'run', { to: 0.72, dur: 2.2 }); }],
+        [70.29, function () { scene('citypark', 19); at(0.38, 0.6); act('both', 'wiggle'); credit('Starring', 'Tidbit as herself'); }],
+        [72.61, function () { scene('beach', 18); at(0.38, 0.6); act('both', 'spin'); }],
+        [74.4, function () { credit('and', 'Sugarfoot as herself'); }],
+        [77.55, function () { scene('snow', 13, 'snow'); at(0.4, 0.6); act('both', 'heart'); credit(guests.length ? 'With special guests' : 'With', guests.length ? guests.slice(0, 5).join(', ') : 'all their friends'); }],
+        [79.71, function () { scene('forest', 21, 'stars'); at(0.38, 0.62); act('both', 'jump'); }],
+        [81.6, function () { credit('Theme song', '“Frequency Buddies”'); act('both', 'wiggle'); }],
+        [84.3, function () { credit('Thank you for watching!', 'Two pals. One big heart each.'); act('both', 'spin'); }],
+        [87.05, function () { scene('backyard', 20.2, 'stars'); at(0.42, 0.58); act('both', 'wag'); P.th.credit = null; card('See you next time, pals!', 'Arf!', TCOL.both); }],
+        [89.6, function () { P.th.iris = { t0: P.th.t, dur: 2.5 }; }]
+      ];
+    }
+    var themeBuf = {};
+    function themeLoad(kind) {
+      if (themeBuf[kind]) return themeBuf[kind];
+      var c = auEnsure(); if (!c) return Promise.resolve(null);
+      themeBuf[kind] = fetch(CL.base + SONG[kind].file + '.mp3?v=' + REC).then(function (r) { return r.ok ? r.arrayBuffer() : null; }).then(function (ab) {
+        if (!ab) return null;
+        return new Promise(function (ok) { try { var pr = c.decodeAudioData(ab, ok, function () { ok(null); }); if (pr && pr.catch) pr.catch(function () { ok(null); }); } catch (e) { ok(null); } });
+      }).catch(function () { return null; });
+      return themeBuf[kind];
+    }
+    function themeWanted() { return P.music && P.rate === 1 && !!(window.AudioContext || window.webkitAudioContext); }
+    function songCap(who, text) {
+      capEl.setAttribute('data-who', who === 'both' ? 'tidbit' : who); P.capB = null; P.capWords = [];
+      whoEl.textContent = '♪ ' + (who === 'tidbit' ? 'Tidbit' : who === 'sugarfoot' ? 'Sugarfoot' : 'Tidbit and Sugarfoot'); whoEl.className = 'fb-who';
+      lineEl.textContent = text;
+    }
+    function startTheme(kind, done) {
+      if (!themeWanted()) { done(); return; }
+      var c = auEnsure(); auOn(true); auPause(false);
+      themeLoad(kind).then(function (buf) {
+        if (!buf || !P.stage || P.th) { done(); return; }
+        vstop(); P.stage.stopTalk(); auMood('none'); auAmbience('blank', 'clear', 12);
+        var S0 = SONG[kind], g0 = c.createGain(); g0.gain.value = 1; g0.connect(AU.bus || c.destination);
+        var src = c.createBufferSource(); src.buffer = buf; src.connect(g0);
+        var t0 = c.currentTime + 0.06; src.start(t0);
+        P.th = { kind: kind, song: S0, at: t0, src: src, gain: g0, t: S0.base, cues: themeCues(kind), ci: 0, li: 0, done: done };
+        skipBtn.textContent = kind === 'open' ? 'Skip intro ⏭' : 'Skip credits ⏭'; skipBtn.hidden = false;
+        lineEl.textContent = ''; whoEl.textContent = '';
+        live.textContent = kind === 'open' ? 'The Frequency Buddies theme song.' : 'Closing credits and the theme song.';
+        P.playing = true; syncBtns(); startLoop();
+      });
+    }
+    function endTheme(run) {
+      var th = P.th; if (!th) return; P.th = null;
+      try { var c = AU.ctx, tt = c.currentTime; th.gain.gain.setValueAtTime(th.gain.gain.value, tt); th.gain.gain.linearRampToValueAtTime(0.0001, tt + 0.35); th.src.stop(tt + 0.4); } catch (e) {}
+      skipBtn.hidden = true; if (P.stage) P.stage.hidden = null; lineEl.textContent = ''; whoEl.textContent = '';
+      if (run) th.done();
+    }
+    function themeTick(dt) {
+      var th = P.th, c = AU.ctx; if (!th || !c) return;
+      th.t = th.manual != null ? th.manual : th.song.base + Math.max(0, c.currentTime - th.at);
+      while (th.ci < th.cues.length && th.cues[th.ci][0] <= th.t) { try { th.cues[th.ci][1](); } catch (e) { P.errors++; } th.ci++; }
+      var L = th.song.lyrics;
+      while (th.li < L.length && L[th.li][0] <= th.t) {
+        var ly = L[th.li], nx = L[th.li + 1], len = (nx ? nx[0] : th.song.dur) - ly[0];
+        songCap(ly[1], ly[2]);
+        (ly[1] === 'both' ? ['tidbit', 'sugarfoot'] : [ly[1]]).forEach(function (id) { var ch = P.stage.get(id); if (ch) { ch.talk = 1; ch.talkFrom = 0; ch.talkUntil = P.stage.t + Math.max(0.6, len - 0.25); } });
+        th.li++;
+      }
+      if (!(th.freeze && th.t < th.freeze.until)) P.stage.step(dt); // a freeze-frame holds the picture
+      paint(dt); drawTheme(g, W, H, DPR, th);
+      if (th.t >= th.song.dur) endTheme(true);
+    }
+    // the 90s touches, drawn over the picture
+    function outlined(g, text, x, y, size, fill, dpr, align) {
+      g.font = 'italic 800 ' + size + 'px ' + 'Fraunces, Georgia, serif'; g.textAlign = align || 'left'; g.textBaseline = 'middle';
+      g.lineJoin = 'round'; g.lineWidth = Math.max(3, size * 0.14); g.strokeStyle = '#2E2346'; g.strokeText(text, x, y);
+      g.fillStyle = fill; g.fillText(text, x, y);
+    }
+    function drawTheme(g, W, H, dpr, th) {
+      var t = th.t, k = Math.min(W, H * 16 / 9) / 820, still = P.stage && P.stage.reduced;
+      g.save(); g.setTransform(1, 0, 0, 1, 0, 0);
+      if (th.freeze && t < th.freeze.until + 0.15) { // freeze-frame: a colored wash, a snapshot border and her name, big
+        var fz = th.freeze, fa = Math.min(1, (t - fz.t0) / 0.12) * Math.min(1, (fz.until + 0.15 - t) / 0.15);
+        g.globalAlpha = 0.3 * fa; g.fillStyle = fz.col; g.fillRect(0, 0, W, H);
+        g.globalAlpha = fa; g.strokeStyle = '#FFFDF8'; g.lineWidth = 10 * k; g.strokeRect(12 * k, 12 * k, W - 24 * k, H - 24 * k);
+        g.save(); g.translate(W * 0.5, H * 0.3); g.rotate(-0.05); outlined(g, fz.name.toUpperCase(), 0, 0, 74 * k, '#FFF3D6', dpr, 'center'); g.restore();
+      }
+      if (th.card) { // the name card slides in, tilted, like a 90s opening
+        var cd = th.card, u = t - cd.t0, life = 3.0;
+        if (u > life + 0.4) th.card = null;
+        else {
+          var inn = Math.min(1, u / 0.35), out = Math.max(0, (u - life) / 0.4), e = 1 - Math.pow(1 - inn, 3), x = W * 0.05 - (1 - e) * W * 0.6 - out * W * 0.6, y = H * 0.74;
+          g.save(); g.translate(x, y); g.rotate(-0.06);
+          g.font = 'italic 800 ' + (46 * k) + 'px Fraunces, Georgia, serif'; var nw = g.measureText(cd.name).width;
+          g.fillStyle = '#2E2346'; g.fillRect(8 * k, -34 * k + 8 * k, nw + 44 * k, 68 * k);
+          g.fillStyle = cd.col; g.fillRect(0, -34 * k, nw + 44 * k, 68 * k);
+          outlined(g, cd.name, 22 * k, 0, 46 * k, '#FFFFFF', dpr);
+          g.font = '600 ' + (15 * k) + 'px "IBM Plex Mono", monospace'; var tw = g.measureText(cd.tag.toUpperCase()).width;
+          g.fillStyle = '#FFFDF8'; g.fillRect(22 * k, 40 * k, tw + 20 * k, 26 * k); g.fillStyle = '#2E2346'; g.textAlign = 'left'; g.fillText(cd.tag.toUpperCase(), 32 * k, 53 * k);
+          g.restore();
+        }
+      }
+      if (th.logo) { // the show's name pops in on the beat
+        var lg = th.logo, lu = t - lg.t0, life2 = lg.big ? 99 : 2.6;
+        if (lu > life2) th.logo = null;
+        else {
+          var pop = still ? 1 : 1 + 0.18 * Math.exp(-lu * 6) * Math.cos(lu * 18), la = Math.min(1, lu / 0.2) * Math.min(1, (life2 - lu) / 0.4);
+          g.globalAlpha = la; g.save(); g.translate(W / 2, lg.big ? H * 0.16 : H * 0.17); g.scale(pop, pop); g.rotate(-0.03);
+          var sz = (lg.big ? 62 : 50) * k, grd = g.createLinearGradient(0, -sz / 2, 0, sz / 2); grd.addColorStop(0, '#FFE08A'); grd.addColorStop(1, '#F28AA8');
+          outlined(g, 'Frequency Buddies', 0, 0, sz, grd, dpr, 'center');
+          if (lg.big && P.ep) {
+            g.font = '600 ' + (16 * k) + 'px "IBM Plex Mono", monospace'; g.textAlign = 'center'; g.fillStyle = '#FFFDF8'; g.strokeStyle = '#2E2346'; g.lineWidth = 4 * k;
+            var l1 = ('Season ' + (P.ep.season || 1) + ' · Episode ' + (P.ep.number || 1)).toUpperCase(); g.strokeText(l1, 0, sz * 0.8); g.fillText(l1, 0, sz * 0.8);
+            outlined(g, P.ep.title || '', 0, sz * 1.35, 26 * k, '#FFFFFF', dpr, 'center');
+          }
+          g.restore(); g.globalAlpha = 1;
+        }
+      }
+      if (th.credit) { // closing credits, one card at a time
+        var cr = th.credit, cu = t - cr.t0, ca = Math.min(1, cu / 0.4);
+        g.globalAlpha = ca; var bw = Math.min(W * 0.8, 520 * k), bh = 84 * k, bx = (W - bw) / 2, by = H * 0.06;
+        g.fillStyle = 'rgba(30,22,46,.72)'; if (g.roundRect) { g.beginPath(); g.roundRect(bx, by, bw, bh, 16 * k); g.fill(); } else g.fillRect(bx, by, bw, bh);
+        g.textAlign = 'center'; g.textBaseline = 'middle'; g.fillStyle = '#F7C98B'; g.font = '600 ' + (14 * k) + 'px "IBM Plex Mono", monospace'; g.fillText(cr.a.toUpperCase(), W / 2, by + 26 * k);
+        g.fillStyle = '#FFF6E6'; g.font = 'italic 600 ' + (26 * k) + 'px Fraunces, Georgia, serif'; g.fillText(cr.b, W / 2, by + 58 * k, bw - 24 * k);
+        g.globalAlpha = 1;
+      }
+      if (th.iris) { // the classic circle close, on the pals
+        var ir = th.iris, q = Math.min(1, (t - ir.t0) / ir.dur), T1 = P.stage.chars.tidbit.headPx, T2 = P.stage.chars.sugarfoot.headPx;
+        var cx = T1 && T2 ? (T1.x + T2.x) / 2 : W / 2, cy = T1 && T2 ? (T1.y + T2.y) / 2 + 20 * k : H / 2, r = Math.max(0, (1 - q * q) * Math.hypot(W, H));
+        g.fillStyle = '#120D1C'; g.beginPath(); g.rect(0, 0, W, H); g.arc(cx, cy, r, 0, Math.PI * 2, true); g.fill('evenodd');
+      }
+      g.restore();
+    }
+    function voiceSrc(t) { var v = host.querySelector('.fb-ver'); if (v && v.getAttribute('data-src') !== t) { v.setAttribute('data-src', t); v.textContent = 'Player ' + PLAYER_VER + ' · ' + t; } }
     var hooks = {
       canvas: function () { return cv; },
       onCaption: setCaption,
@@ -1646,15 +1852,19 @@
       latency: function () { var c = AU.ctx; return c ? (c.outputLatency || c.baseLatency || 0) : 0; },
       speak: function (b, cb) {
         if (!P.voices || P.rate !== 1) return false;
-        if (cspeak(P.id, b, cb)) { var at = P.says.indexOf(b); if (at >= 0) clipPrefetch(P.id, P.says, at + 1, 4); return true; }
-        return voiceOk() ? vspeak(b, cb) : false;
+        if (cspeak(P.id, b, cb)) { voiceSrc('recorded voices'); var at = P.says.indexOf(b); if (at >= 0) clipPrefetch(P.id, P.says, at + 1, 4); return true; }
+        if (voiceOk() && vspeak(b, cb)) { voiceSrc('this device’s speech (the recordings didn’t load)'); return true; } return false;
       },
       stopSpeech: vstop,
       onAct: function (b) { if (b.act === 'laugh' && P.voices && P.rate === 1 && (b.who === 'tidbit' || b.who === 'sugarfoot' || b.who === 'both')) laughFor(b.who); },
       onWeather: function (w) { auWeather(w); if (P.music && P.stage) auAmbience(P.stage.scene, w, P.stage.hour); },
       onMusic: function (m) { auMood(m === 'none' ? 'gentle' : m); },
       onChapter: function (ch) { P.ch = ch; renderChapter(); if (P.started) save(); },
-      onEnd: function () { P.one = false; P.playing = false; stopLoop(); syncBtns(); showEnd(); var m = memGet(); if (m.pos) delete m.pos[P.id]; m.watched = m.watched || {}; m.watched[P.id] = 1; memSet(m); auMood('none'); }
+      onEnd: function () {
+        P.one = false; var m = memGet(); if (m.pos) delete m.pos[P.id]; m.watched = m.watched || {}; m.watched[P.id] = 1; memSet(m);
+        var fin = function () { P.playing = false; stopLoop(); syncBtns(); showEnd(); auMood('none'); };
+        if (themeWanted()) startTheme('close', fin); else fin();
+      }
     };
     function renderChapter() {
       var ep = P.ep; if (!ep) return;
@@ -1670,6 +1880,7 @@
       P.raf = 0; if (!P.playing) return;
       P.raf = requestAnimationFrame(loop);
       var dt = P.last ? (now - P.last) / 1000 : 0.016; P.last = now; dt = clamp(dt, 0, 0.06);
+      if (P.th) { try { themeTick(dt); } catch (e) { P.errors++; if (window.console) console.error('buddies theme', e); endTheme(true); } return; }
       try { P.dir.tick(dt * P.rate); } catch (e) { P.errors++; if (window.console) console.error('buddies tick', e); }
       if (P.one && !P.dir.ended && P.dir.chapterAt() !== P.oneCh) { chapterBreak(P.dir.chapterAt()); return; }
       paint(dt * P.rate); progress(); capLight();
@@ -1696,8 +1907,14 @@
     function stopLoop() { if (P.raf) cancelAnimationFrame(P.raf); P.raf = 0; }
     function play() {
       if (!P.dir) return;
-      if (P.dir.ended) { endOv.hidden = true; P.dir.seek(0); }
+      if (P.th) { startOv.hidden = true; endOv.hidden = true; auPause(false); P.playing = true; syncBtns(); startLoop(); return; } // the theme song carries on
+      if (P.dir.ended && !P.th) { endOv.hidden = true; P.dir.seek(0); }
       startOv.hidden = true; endOv.hidden = true; P.started = true;
+      if (P.dir.i === 0 && !P.introDone && themeWanted()) { // from the very start: the theme song first
+        P.introDone = true; P.stage.reduced = stillNow();
+        startTheme('open', function () { P.dir.seek(1); P.playing = false; play(); });
+        return;
+      }
       if (P.music) { auEnsure(); auOn(true); auPause(false); auMood(P.dir.music === 'none' && P.dir.i === 0 ? 'title' : (P.dir.music === 'none' ? 'gentle' : P.dir.music)); auWeather(P.stage.weather); AMBP.key = ''; auAmbience(P.stage.scene, P.stage.weather, P.stage.hour); } else { auOn(false); }
       P.playing = true; P.dir.playing = true; P.stage.reduced = stillNow();
       P.dir.restartLine(); syncBtns(); startLoop(); inView();
@@ -1709,9 +1926,10 @@
       var r = host.getBoundingClientRect();
       if (r.top < top + 4 || r.top > innerHeight * 0.5) { try { scrollBy({ top: r.top - top - 10, behavior: stillNow() ? 'auto' : 'smooth' }); } catch (e) { scrollBy(0, r.top - top - 10); } }
     }
-    function pause() { if (!P.dir) return; P.playing = false; P.dir.playing = false; vstop(); P.stage.stopTalk(); auPause(true); stopLoop(); syncBtns(); paint(0); }
+    function pause() { if (!P.dir) return; if (P.th) { P.playing = false; auPause(true); stopLoop(); syncBtns(); return; } P.playing = false; P.dir.playing = false; vstop(); P.stage.stopTalk(); auPause(true); stopLoop(); syncBtns(); paint(0); }
     function toggle() { if (P.playing) pause(); else play(); }
     function goChapter(ch) {
+      if (P.th) endTheme(false);
       if (!P.dir) return; var n = P.ep.chapters.length; ch = clamp(ch, 0, n - 1);
       endOv.hidden = true; startOv.hidden = true; P.started = true;
       P.dir.seekChapter(ch); P.ch = ch; if (P.one) P.oneCh = ch; renderChapter(); save(); paint(0); progress();
@@ -1726,7 +1944,8 @@
     $('.fb-nextc').addEventListener('click', nextChapter);
     vBtn.addEventListener('click', function () { P.voices = !P.voices; if (!P.voices) vstop(); else if (P.playing) P.dir.restartLine(); syncBtns(); save(); });
     fBtn.addEventListener('click', function () { P.bright = !P.bright; if (P.stage) P.stage.bright = P.bright; syncBtns(); save(); });
-    mBtn.addEventListener('click', function () { P.music = !P.music; if (P.music) { auEnsure(); auOn(true); if (P.dir) { auMood(P.dir.music); auWeather(P.stage.weather); } } else auOn(false); syncBtns(); save(); });
+    skipBtn.addEventListener('click', function () { endTheme(true); });
+    mBtn.addEventListener('click', function () { P.music = !P.music; if (!P.music && P.th) endTheme(true); if (P.music) { auEnsure(); auOn(true); if (P.dir) { auMood(P.dir.music); auWeather(P.stage.weather); } } else auOn(false); syncBtns(); save(); });
     $('.fb-full').addEventListener('click', function () {
       var fs = document.fullscreenElement || document.webkitFullscreenElement;
       if (fs) { (document.exitFullscreen || document.webkitExitFullscreen).call(document); return; }
@@ -1737,7 +1956,7 @@
       setTimeout(resize, 80);
     });
     ['fullscreenchange', 'webkitfullscreenchange'].forEach(function (ev) { document.addEventListener(ev, function () { setTimeout(resize, 60); }); });
-    function seekFromPointer(e) { if (!P.dir) return; var r = trackEl.getBoundingClientRect(), p = clamp((e.clientX - r.left) / r.width, 0, 1); endOv.hidden = true; startOv.hidden = true; P.started = true; P.dir.seekTime(p * P.dir.total); P.ch = P.dir.chapterAt(); if (P.one) P.oneCh = P.ch; renderChapter(); paint(0); progress(); if (P.playing) P.dir.playing = true; else play(); }
+    function seekFromPointer(e) { if (P.th) endTheme(false); if (!P.dir) return; var r = trackEl.getBoundingClientRect(), p = clamp((e.clientX - r.left) / r.width, 0, 1); endOv.hidden = true; startOv.hidden = true; P.started = true; P.dir.seekTime(p * P.dir.total); P.ch = P.dir.chapterAt(); if (P.one) P.oneCh = P.ch; renderChapter(); paint(0); progress(); if (P.playing) P.dir.playing = true; else play(); }
     trackEl.addEventListener('click', seekFromPointer);
     trackEl.addEventListener('keydown', function (e) { if (e.key === 'Home') { e.preventDefault(); goChapter(0); } else if (e.key === 'End') { e.preventDefault(); goChapter(P.ep.chapters.length - 1); } });
     document.addEventListener('keydown', function (e) {
@@ -1774,7 +1993,7 @@
       var rb = startOv.querySelector('.fb-resume'), bb = startOv.querySelector('.fb-begin');
       startOv.querySelector('.fb-onech').addEventListener('click', function () { playOne(ch); });
       if (rb) rb.addEventListener('click', function () { goChapter(ch); });
-      bb.addEventListener('click', function () { P.dir.seek(0); P.ch = 0; renderChapter(); play(); });
+      bb.addEventListener('click', function () { P.introDone = false; P.dir.seek(0); P.ch = 0; renderChapter(); play(); });
       startOv.hidden = false;
     }
     function soundLine() {
@@ -1789,7 +2008,7 @@
         (teaser || ntitle ? '<div class="fb-next"><b>Next time on Frequency Buddies' + (ntitle ? ': ' + esc(ntitle) : '') + '</b>' + esc(teaser) + '</div>' : '') +
         '<div class="fb-row">' + (nep ? '<a class="fb-b is-main" href="/frequency-buddies.html?ep=' + nid + '">▶ Watch episode ' + nep.number + '</a>' : nid ? '<span class="fb-b" aria-disabled="true">Episode ' + (ce ? ce.n : '') + ' is coming soon</span>' : '') +
         '<button type="button" class="fb-b fb-again">↺ Watch again</button><a class="fb-b" href="/frequency-journey.html#buddies">All episodes</a></div></div>';
-      endOv.querySelector('.fb-again').addEventListener('click', function () { P.dir.seek(0); P.ch = 0; renderChapter(); play(); });
+      endOv.querySelector('.fb-again').addEventListener('click', function () { P.introDone = false; P.dir.seek(0); P.ch = 0; renderChapter(); play(); });
       endOv.hidden = false; live.textContent = 'The end. ' + ep.lesson;
       var f = endOv.querySelector('a.is-main, .fb-again'); if (f) try { f.focus({ preventScroll: true }); } catch (e) {}
     }
@@ -1816,7 +2035,7 @@
     resize(); syncBtns();
     var pk = window.TOLPalsCam && window.TOLPalsCam.loadPacks ? window.TOLPalsCam.loadPacks().catch(function () {}) : Promise.resolve();
     Promise.all([loadEpisode(P.id), pk]).then(function (r) { ready(r[0]); });
-    API._p = P;
+    API._p = P; API._themeTick = function (dt) { themeTick(dt); }; API._startTheme = startTheme; // (for tests and the preview video)
     return P;
   }
 
