@@ -1672,7 +1672,7 @@
       function at(t, u) { S.place({ tidbit: t, sugarfoot: u }, true); S.chars.tidbit.fx = S.chars.tidbit.face = t < u ? 1 : -1; S.chars.sugarfoot.fx = S.chars.sugarfoot.face = t < u ? -1 : 1; }
       function hide(id) { S.hidden = {}; if (id) S.hidden[id] = 1; }
       function act(who, name, o) { var b = { act: name, who: who }; for (var k in o || {}) b[k] = o[k]; S.beginAct(b); }
-      function card(name, tag, col) { P.th.card = { name: name, tag: tag, col: col, t0: P.th.t }; }
+      function card(name, tag, col, top) { P.th.card = { name: name, tag: tag, col: col, t0: P.th.t, top: !!top, life: top ? 4.6 : 3.0 }; }
       function freeze(d, name, col) { P.th.freeze = { until: P.th.t + d, name: name, col: col, t0: P.th.t }; }
       function logo(big) { P.th.logo = { t0: P.th.t, big: !!big }; }
       function credit(a, b) { P.th.credit = { a: a, b: b, t0: P.th.t }; }
@@ -1726,7 +1726,7 @@
         [79.71, function () { scene('forest', 21, 'stars'); at(0.38, 0.62); act('both', 'jump'); }],
         [81.6, function () { credit('Theme song', '“Frequency Buddies”'); act('both', 'wiggle'); }],
         [84.3, function () { credit('Thank you for watching!', 'Two pals. One big heart each.'); act('both', 'spin'); }],
-        [87.05, function () { scene('backyard', 20.2, 'stars'); at(0.42, 0.58); act('both', 'wag'); P.th.credit = null; card('See you next time, pals!', 'Arf!', TCOL.both); }],
+        [87.05, function () { scene('backyard', 20.2, 'stars'); at(0.42, 0.58); act('both', 'wag'); P.th.credit = null; card('See you next time, pals!', 'Arf!', TCOL.both, true); }],
         [89.6, function () { P.th.iris = { t0: P.th.t, dur: 2.5 }; }]
       ];
     }
@@ -1799,10 +1799,10 @@
         g.save(); g.translate(W * 0.5, H * 0.3); g.rotate(-0.05); outlined(g, fz.name.toUpperCase(), 0, 0, 74 * k, '#FFF3D6', dpr, 'center'); g.restore();
       }
       if (th.card) { // the name card slides in, tilted, like a 90s opening
-        var cd = th.card, u = t - cd.t0, life = 3.0;
+        var cd = th.card, u = t - cd.t0, life = cd.life || 3.0;
         if (u > life + 0.4) th.card = null;
         else {
-          var inn = Math.min(1, u / 0.35), out = Math.max(0, (u - life) / 0.4), e = 1 - Math.pow(1 - inn, 3), x = W * 0.05 - (1 - e) * W * 0.6 - out * W * 0.6, y = H * 0.74;
+          var inn = Math.min(1, u / 0.35), out = Math.max(0, (u - life) / 0.4), e = 1 - Math.pow(1 - inn, 3), x = W * 0.05 - (1 - e) * W * 0.6 - out * W * 0.6, y = cd.top ? H * 0.2 : H * 0.74;
           g.save(); g.translate(x, y); g.rotate(-0.06);
           g.font = 'italic 800 ' + (46 * k) + 'px Fraunces, Georgia, serif'; var nw = g.measureText(cd.name).width;
           g.fillStyle = '#2E2346'; g.fillRect(8 * k, -34 * k + 8 * k, nw + 44 * k, 68 * k);
