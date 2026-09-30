@@ -1234,13 +1234,24 @@
     title: { p: 3.2, c: [[48, 55, 64, 67], [43, 50, 62, 67]], arp: 1 }
   };
   function hz(m) { return 440 * Math.pow(2, (m - 69) / 12); }
+  var MIX = { music: 0.32, amb: 0.34, sfx: 0.5, duck: 0.5, fx: 0.7 }; // voices play at full level; the rest sits underneath
+  // everyone's voice pulls the bed down smoothly, and it comes back up gently once nobody has spoken for a moment
+  function duck(on, holdMs) {
+    var c = AU.ctx; if (!c || !AU.bed) return;
+    clearTimeout(AU.duckT);
+    if (on) { try { AU.bed.gain.setTargetAtTime(MIX.duck, c.currentTime, 0.12); } catch (e) {} }
+    AU.duckT = setTimeout(function () { if (AU.bed && AU.ctx) try { AU.bed.gain.setTargetAtTime(1, AU.ctx.currentTime, 0.9); } catch (e) {} }, holdMs == null ? 900 : holdMs);
+  }
   function auEnsure() {
     var AC = window.AudioContext || window.webkitAudioContext; if (!AC) return null;
     if (!AU.ctx) {
       try { AU.ctx = new AC(); } catch (e) { return null; }
       var c = AU.ctx; AU.bus = c.createGain(); AU.bus.gain.value = AU.on ? 0.9 : 0; AU.bus.connect(c.destination);
-      AU.mus = c.createGain(); AU.mus.gain.value = 0.55; var lp = c.createBiquadFilter(); lp.type = 'lowpass'; lp.frequency.value = 1500; AU.mus.connect(lp); lp.connect(AU.bus);
-      AU.sfx = c.createGain(); AU.sfx.gain.value = 0.8; AU.sfx.connect(AU.bus);
+      // the bed (music, place sounds, effects) sits well under the voices, and dips a little more while anyone talks
+      AU.bed = c.createGain(); AU.bed.gain.value = 1; AU.bed.connect(AU.bus);
+      AU.mus = c.createGain(); AU.mus.gain.value = MIX.music; var lp = c.createBiquadFilter(); lp.type = 'lowpass'; lp.frequency.value = 1500; AU.mus.connect(lp); lp.connect(AU.bed);
+      AU.sfx = c.createGain(); AU.sfx.gain.value = MIX.sfx; AU.sfx.connect(AU.bed);
+      AU.amb = c.createGain(); AU.amb.gain.value = MIX.amb; AU.amb.connect(AU.bed);
     }
     if (AU.ctx.state === 'suspended') { try { var pr = AU.ctx.resume(); if (pr && pr.catch) pr.catch(function () {}); } catch (e) {} }
     return AU.ctx;
@@ -1307,7 +1318,7 @@
       ambLoad(L[0]).then(function (buf) {
         if (!buf || my !== AMBP.gen) return;
         var s = c.createBufferSource(), g = c.createGain(); s.buffer = buf; s.loop = true; s.loopStart = Math.min(0.06, buf.duration / 4); s.loopEnd = Math.max(s.loopStart + 1, buf.duration - 0.06);
-        g.gain.value = 0.0001; s.connect(g); g.connect(AU.sfx); s.start(c.currentTime, Math.random() * buf.duration); g.gain.setTargetAtTime(L[1] * 0.9, c.currentTime, 1);
+        g.gain.value = 0.0001; s.connect(g); g.connect(AU.amb || AU.sfx); s.start(c.currentTime, Math.random() * buf.duration); g.gain.setTargetAtTime(L[1], c.currentTime, 1);
         AMBP.cur.push({ s: s, g: g });
       });
     });
@@ -1366,9 +1377,9 @@
     if (who === 'narrator' && b.mood === 'excited') u.rate = 1.0;
     var fired = false; function end(ok) { if (fired || tok !== VO.token) return; fired = true; cb(ok); }
     var vc = VO.line = { key: ckey(b.say, b.text), t0: 0, dur: sayTime(b) * 1.15, ch: -1, done: false, text: text };
-    u.onstart = function () { vc.t0 = performance.now(); if (tok === VO.token && cb.start) cb.start(0, vc.dur); };
+    u.onstart = function () { vc.t0 = performance.now(); duck(true, vc.dur * 1000 + 1500); if (tok === VO.token && cb.start) cb.start(0, vc.dur); };
     u.onboundary = function (e) { if (e && e.name !== 'sentence' && e.charIndex != null) vc.ch = e.charIndex; };
-    u.onend = function () { vc.done = true; end(true); }; u.onerror = function (e) { end(e && (e.error === 'interrupted' || e.error === 'canceled') ? true : false); };
+    u.onend = function () { vc.done = true; duck(false, 700); end(true); }; u.onerror = function (e) { end(e && (e.error === 'interrupted' || e.error === 'canceled') ? true : false); };
     VO.cur = u; // held, so the browser doesn't lose it before it ends
     try { if (window.speechSynthesis.speaking || window.speechSynthesis.pending) window.speechSynthesis.cancel(); window.speechSynthesis.speak(u); } catch (e) { return false; }
     return true;
@@ -1379,7 +1390,7 @@
   // /assets/audio/buddies/<episode>/<key>.mp3, listed in index.json. A line plays its recording through
   // Web Audio (reliable on phones once Play has been pressed); a line with no recording falls back to
   // the device's own speech, and then to captions only.
-  var PLAYER_VER = '30 Sep · 3'; // shown under the player, so we can tell which version a browser has
+  var PLAYER_VER = '30 Sep · 4'; // shown under the player, so we can tell which version a browser has
   var REC = '2609c'; // bump whenever the recordings are redone, so no browser plays an old copy
   var CL = { base: '/assets/audio/buddies/', maps: {}, ready: {}, bufs: {}, got: {}, src: null, gain: null, token: 0, lastFx: -99 };
   function ckey(who, text) { var h = 0x811c9dc5, s = who + '|' + text; for (var i = 0; i < s.length; i++) { h ^= s.charCodeAt(i); h = Math.imul(h, 0x01000193) >>> 0; } return ('0000000' + h.toString(16)).slice(-8); }
@@ -1410,6 +1421,7 @@
       if (!buf) return;
       var s = c.createBufferSource(), g = c.createGain(); g.gain.value = i ? 0.8 : 0.9; s.buffer = buf; s.connect(g); g.connect(CL.gain);
       try { s.start(c.currentTime + 0.05 + i * 0.35); } catch (e) {}
+      duck(true, (buf.duration + 0.4 + i * 0.35) * 1000 + 700);
     });
   }
   function fxPick(b, cb) {
@@ -1426,7 +1438,10 @@
   }
   function clipHas(ep, b) { var m = CL.ready[ep]; return !!(m && m[ckey(b.say, b.text)]); }
   function clipPrefetch(ep, list, from, n) { for (var i = from, got = 0; i < list.length && got < n; i++) if (clipHas(ep, list[i])) { clipBuf(ep, ckey(list[i].say, list[i].text)); got++; } }
-  function cstop() { CL.token++; if (CL.src) { try { CL.src.onended = null; CL.src.stop(); } catch (e) {} CL.src = null; } }
+  function cstop() {
+    CL.token++;
+    if (CL.src) { var c = AU.ctx, s0 = CL.src, g0 = CL.srcG; try { s0.onended = null; if (c && g0) { g0.gain.setTargetAtTime(0.0001, c.currentTime, 0.03); s0.stop(c.currentTime + 0.15); } else s0.stop(); } catch (e) {} CL.src = null; CL.srcG = null; }
+  }
   function cspeak(ep, b, cb) {
     if (!clipHas(ep, b)) return false;
     var c = auEnsure(); if (!c) return false;
@@ -1437,16 +1452,18 @@
       if (tok !== CL.token) return;
       if (!buf) { cb(false); return; }
       var fx = fxPick(b, cb), at = c.currentTime + 0.03;
-      if (fx) { var f = c.createBufferSource(); f.buffer = fx; f.connect(CL.gain); try { f.start(at); } catch (e) {} at += fx.duration + 0.12; }
-      var s = c.createBufferSource(); s.buffer = buf; s.connect(CL.gain);
+      if (fx) { var f = c.createBufferSource(), fg = c.createGain(); fg.gain.value = MIX.fx; f.buffer = fx; f.connect(fg); fg.connect(CL.gain); try { f.start(at); } catch (e) {} at += fx.duration + 0.12; }
+      var s = c.createBufferSource(), sg = c.createGain(); s.buffer = buf; s.connect(sg); sg.connect(CL.gain);
+      sg.gain.setValueAtTime(0.0001, at); sg.gain.linearRampToValueAtTime(1, at + 0.012); // a soft start
+      sg.gain.setValueAtTime(1, at + Math.max(0.02, buf.duration - 0.03)); sg.gain.linearRampToValueAtTime(0.0001, at + buf.duration); // and a soft end
+      CL.srcG = sg;
       if (cb.start) cb.start(at - c.currentTime, buf.duration);
       var wm = CL.ready[ep] && CL.ready[ep][ckey(b.say, b.text)];
       CL.cur = { key: ckey(b.say, b.text), at: at, dur: buf.duration, words: wm && wm[1] || null, done: false };
       var cur = CL.cur;
       s.onended = function () { cur.done = true; if (tok !== CL.token) return; CL.src = null; cb(true); };
       CL.src = s; try { s.start(at); } catch (e) { cb(false); }
-      if (AU.mus) { try { AU.mus.gain.setTargetAtTime(0.36, c.currentTime, 0.15); } catch (e) {} } // the music steps back while she talks
-      var dur = buf.duration + (at - c.currentTime); clearTimeout(CL.duckT); CL.duckT = setTimeout(function () { if (AU.mus && AU.ctx) try { AU.mus.gain.setTargetAtTime(0.55, AU.ctx.currentTime, 0.6); } catch (e) {} }, dur * 1000 + 250);
+      var dur = buf.duration + (at - c.currentTime); duck(true, dur * 1000 + 900); // everything else steps back while she talks
     });
     return true;
   }
