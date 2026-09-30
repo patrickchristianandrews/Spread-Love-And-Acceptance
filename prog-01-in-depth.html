@@ -478,6 +478,12 @@ main { flex: 1 1 0; min-width: 0; }
 @media screen and (min-width: 769px) {
   .sidebar { top: var(--tol-bar-h, 58px); height: calc(100vh - var(--tol-bar-h, 58px)); }
 }
+/* On phones everything stacks in one column: the header, the week list, then the page (no wrapping into a second column) */
+@media screen and (max-width: 768px) {
+  body { flex-wrap: nowrap; align-items: stretch; }
+  body > .tol-bar, body > .tol-foot, body > .tol-pager, body > footer, body > .sidebar, body > main { flex: none; width: auto; max-width: 100%; }
+  main { margin: 0; }
+}
 </style>
 <script src="/assets/js/site.js" defer></script>
 <script src="/assets/js/prog-tracker.js" defer></script>
