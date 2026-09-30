@@ -1139,7 +1139,8 @@
           var cb = function (ok) {
             if (D.i !== i || !D.voice) return;
             D.voiceEnd = ok === false ? null : D.u; if (ok === false) D.voice = false;
-            var nx = F.beats[i + 1]; stage.voiceDone(nx && kindOf(nx.b) === 'say');
+            var nx = F.beats[i + 1], more = nx && kindOf(nx.b) === 'say'; stage.voiceDone(more);
+            if (!more && ok !== false) call('onVoiceEnd', b); // nobody talking next: the words go when the voice does
           };
           D.shown = false;
           cb.nearLaugh = [F.beats[i - 1], F.beats[i + 1], F.beats[i + 2]].some(function (x) { return x && x.b.act === 'laugh'; });
@@ -1641,6 +1642,7 @@
     var hooks = {
       canvas: function () { return cv; },
       onCaption: setCaption,
+      onVoiceEnd: function (b) { clearTimeout(P.capClr); P.capClr = setTimeout(function () { if (P.capB === b) { lineEl.textContent = ''; whoEl.textContent = ''; P.capWords = []; P.capB = null; } }, 450); },
       latency: function () { var c = AU.ctx; return c ? (c.outputLatency || c.baseLatency || 0) : 0; },
       speak: function (b, cb) {
         if (!P.voices || P.rate !== 1) return false;
