@@ -390,7 +390,7 @@ t('care', 'i feel overwhelmed (no doubled line)', { q: 'i feel overwhelmed', kin
 t('care', 'i feel overwhelmed (steps first)', { q: 'i feel overwhelmed', kind: 'sit', text: /^[^\n]*\n## Small steps for today/ });
 // site settings
 t('care', 'how do i make the text bigger', { kind: 'care', id: 'textsize', text: /Text size/, not: /Our Logo|Spread Love & Acceptance/ });
-t('care', 'can you read this out loud', { kind: 'care', id: 'listen', text: /Listen button/, not: /[Ss]ensory/ });
+t('care', 'can you read this out loud', { kind: 'care', id: 'listen', text: /read-aloud|read any page/, not: /[Ss]ensory/ });
 t('care', 'the words are too hard', { kind: 'care', id: 'hardwords', text: /Simple version[\s\S]*Easy reading/ });
 // forgiving spelling, with "I think you mean"
 t('spelling', 'what is unbiled det', { text: /I think you mean “what is unbilled debt”[\s\S]*[Uu]nbilled [Dd]ebt/, link: '/' });

@@ -9,10 +9,10 @@
       "pat": "\\b(read|say|speak)\\b.{0,30}\\b(out loud|aloud|to me)\\b|\\b(text to speech|listen to (this|the page|it|pages|the site)|audio version|hear (this|the page|it) (read|out loud)|read aloud|can i listen|can i hear it|voice reading)\\b",
       "keys": [],
       "what": [
-        "Yes, there are two easy ways to listen."
+        "Yes, your device can read any page out loud."
       ],
       "how": [
-        "Many pages have a Listen button near the top that reads the page out loud.",
+        
         "Your device can read any page too: Speak Screen on an iPhone or iPad, Select to Speak on Android, or Read aloud in Microsoft Edge.",
         "I’ll keep my answers short, too. Say “make it shorter” any time."
       ],
@@ -70,7 +70,7 @@
         "Most pages have a Simple version. Look for 🌱 Simple version near the top: the main idea in a few short cards.",
         "Long pages have an 📌 In short box at the top, and a “Show me only the steps” button that hides everything but the steps.",
         "Easy reading, in Settings at the top of the page, uses a clearer font, more space and shorter lines.",
-        "Many pages have a Listen button that reads them out loud.",
+        
         "Say “make it shorter”, and I’ll keep my answers short for the rest of this chat."
       ],
       "links": [

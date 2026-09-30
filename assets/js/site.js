@@ -516,7 +516,7 @@
     if (lmain && 'speechSynthesis' in window && !busyPage() && current !== '/index.html' && !body.hasAttribute('data-no-listen') &&
         !document.querySelector('meta[http-equiv="Content-Security-Policy"]') && (lmain.textContent || '').split(/\s+/).length > 120) {
       var ls = document.createElement('script'); ls.src = '/assets/js/listen.js';
-      ls.onload = function () { if (window.TOLListen) window.TOLListen.mount({ host: lmain, after: lmain.querySelector(':scope > .read-head') }); };
+      // (no Listen buttons at the top of the page any more; the reader stays for the mini dives' little speaker buttons)
       document.head.appendChild(ls);
     }
 
@@ -1543,9 +1543,7 @@
       var synthOk = 'speechSynthesis' in window && 'SpeechSynthesisUtterance' in window, voices = 0;
       try { voices = synthOk ? window.speechSynthesis.getVoices().length : 0; } catch (e) {}
       var hasVoice = synthOk && (voices > 0 || /iPhone|iPad|iPod|Macintosh|Android/.test(navigator.userAgent));
-      ln.innerHTML = hasVoice
-        ? '<span aria-hidden="true">&#128266;</span> Reading pages have a <strong>Listen</strong> button near the top that reads the page aloud.'
-        : '<span aria-hidden="true">&#128266;</span> This device has no reading voice turned on right now, so pages don’t show a Listen button. Your device’s own read-aloud can still read any page (look for “Spoken content”, “Select to speak” or “Read aloud” in its settings).';
+      ln.innerHTML = '<span aria-hidden="true">&#128266;</span> To hear a page read aloud, use your device’s own read-aloud (look for “Spoken content”, “Select to speak” or “Read aloud” in its settings).';
       ln.hidden = false;
     }
   }

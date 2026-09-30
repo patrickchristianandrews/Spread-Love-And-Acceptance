@@ -1135,7 +1135,7 @@
     var R = state.lastReply, out = shortBlocks(R && R.blocks);
     state.brief = 1;  // and short from here on, until they ask for more
     if (!out) return { blocks: [{ k: 'p', x: 'There’s nothing above to shorten yet. I’ll keep my answers short from now on.' },
-      { k: 'p', x: 'Pages have short ways in too: a 🌱 Simple version, 📌 In short at the top of long pages, and a Listen button that reads the page out loud.' }], chips: STARTERS.slice(0, 3), kind: 'short' };
+      { k: 'p', x: 'Pages have short ways in too: a 🌱 Simple version, 📌 In short at the top of long pages, and your device’s own read-aloud can read any page out loud.' }], chips: STARTERS.slice(0, 3), kind: 'short' };
     state.fullReply = R;
     return { blocks: out, chips: [{ label: 'Tell me more', q: 'Tell me more' }], kind: 'short' };
   }
