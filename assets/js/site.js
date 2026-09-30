@@ -1757,6 +1757,45 @@
     if (document.querySelector('.fb-player.is-playing')) return true;
     return Array.prototype.some.call(document.querySelectorAll('video'), function (v) { return !v.paused && !v.ended && v.readyState > 2; });
   }
+  // ---------- keep the screen awake while something is playing ----------
+  // An episode, a video, the pal cam or any music or sounds: the phone or computer won't dim and lock
+  // while they play, and goes back to normal once they stop. Nothing is stored or sent.
+  (function () {
+    if (!('wakeLock' in navigator)) return;
+    var ctxs = [], lock = null, asking = false;
+    ['AudioContext', 'webkitAudioContext'].forEach(function (n) {
+      var A = window[n]; if (!A || A.__tolAwake) return;
+      var Wrap = function (o) { var c = o === undefined ? new A() : new A(o); ctxs.push(c); return c; };
+      Wrap.prototype = A.prototype; Wrap.__tolAwake = true;
+      try { window[n] = Wrap; } catch (e) {}
+    });
+    function soundOn() {
+      if (document.querySelector('.fb-player')) return false; // the movie player says for itself when it's playing
+      for (var i = 0; i < ctxs.length; i++) {
+        var c = ctxs[i]; if (c.state !== 'running') continue;
+        if (c === window.__pcAudio && !document.querySelector('.pc-ov:not([hidden])')) continue; // the pal cam, once closed
+        return true;
+      }
+      return false;
+    }
+    function playing() {
+      if (document.querySelector('.fb-player.is-playing, .pc-ov:not([hidden]), .tol-breathe:not([hidden])')) return true;
+      if (Array.prototype.some.call(document.querySelectorAll('video, audio'), function (v) { return !v.paused && !v.ended; })) return true;
+      return soundOn();
+    }
+    function check() {
+      var want = !document.hidden && playing();
+      if (want && !lock && !asking) {
+        asking = true;
+        try { navigator.wakeLock.request('screen').then(function (l) { asking = false; lock = l; l.addEventListener('release', function () { lock = null; }); }).catch(function () { asking = false; }); } catch (e) { asking = false; }
+      } else if (!want && lock) { try { lock.release(); } catch (e) {} lock = null; }
+    }
+    setInterval(check, 3000);
+    document.addEventListener('visibilitychange', function () { setTimeout(check, 300); }); // the lock ends when the page is hidden; ask again on return
+    document.addEventListener('click', function () { setTimeout(check, 600); }, true);
+    window.TOLAwake = { check: check, held: function () { return !!lock; } };
+  })();
+
   window.TOLSite = { busy: busyPage, heavyToday: heavyToday, sensitive: sensitivePage, playing: mediaPlaying, calmDevice: calmDevice, readingPage: function () { return !busyPage() && !!document.querySelector('main.read'); } };
 
   // ---------- Today's Weather, as a small floating invitation ----------

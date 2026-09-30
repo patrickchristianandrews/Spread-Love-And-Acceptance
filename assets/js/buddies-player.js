@@ -1143,7 +1143,7 @@
       switch (k) {
         case 'title': stage.showTitle(true); call('onCaption', '', ''); call('onMusic', 'title'); break;
         case 'say':
-          var st = sayTime(b); stage.say(b, st, true);
+          var st = sayTime(b); stage.say(b, st, true); call('onLine', b);
           var cb = function (ok) {
             if (D.i !== i || !D.voice) return;
             D.voiceEnd = ok === false ? null : D.u; if (ok === false) D.voice = false;
@@ -1231,7 +1231,7 @@
   // =====================================================================================================
   // SOUND: soft generated music moods, rain, and a rare happy bark (Web Audio, made on the first Play)
   // =====================================================================================================
-  var AU = { ctx: null, bus: null, mus: null, sfx: null, on: true, mood: 'none', timer: 0, next: 0, step: 0, rain: null, lastBark: -99, barks: {} };
+  var AU = { live: [], ctx: null, bus: null, mus: null, sfx: null, on: true, mood: 'none', timer: 0, next: 0, step: 0, rain: null, lastBark: -99, barks: {} };
   var CH = { // chords as MIDI notes; period in seconds per chord
     gentle: { p: 5.2, c: [[48, 55, 64, 71], [45, 52, 60, 67], [41, 48, 57, 64], [43, 50, 59, 62]], arp: 0.25 },
     happy: { p: 3.6, c: [[48, 55, 64, 67], [43, 50, 59, 67], [45, 52, 60, 64], [41, 48, 57, 65]], arp: 1 },
@@ -1269,12 +1269,14 @@
       var o = c.createOscillator(), gn = c.createGain(); o.type = k ? 'sine' : 'triangle'; o.frequency.value = freq; o.detune.value = det;
       gn.gain.setValueAtTime(0.0001, t); gn.gain.linearRampToValueAtTime(vol * (k ? 0.7 : 0.5), t + Math.min(1.8, len * 0.35)); gn.gain.setValueAtTime(vol * (k ? 0.7 : 0.5), t + len * 0.75); gn.gain.linearRampToValueAtTime(0.0001, t + len + 1.4);
       o.connect(gn); gn.connect(AU.mus); o.start(t); o.stop(t + len + 1.6);
+      AU.live.push({ g: gn, end: t + len + 1.6 });
     });
   }
   function pluck(freq, t, vol) {
     var c = AU.ctx, o = c.createOscillator(), gn = c.createGain(); o.type = 'sine'; o.frequency.value = freq;
     gn.gain.setValueAtTime(0.0001, t); gn.gain.linearRampToValueAtTime(vol, t + 0.02); gn.gain.exponentialRampToValueAtTime(0.0001, t + 0.9);
     o.connect(gn); gn.connect(AU.mus); o.start(t); o.stop(t + 1);
+    AU.live.push({ g: gn, end: t + 1 });
   }
   function auSchedule() {
     var c = AU.ctx; if (!c || AU.mood === 'none' || !CH[AU.mood]) return;
@@ -1288,10 +1290,17 @@
       if (AU.mood === 'title' && AU.step >= 2) { AU.mood = 'none'; break; }
     }
   }
-  function auMood(m) {
-    AU.mood = m && (CH[m] || m === 'none') ? m : 'none';
+  // a change of music lands on the next chord, so it flows; a big change ('now') lets the old notes fade quickly first
+  function auMood(m, now) {
+    var was = AU.mood; AU.mood = m && (CH[m] || m === 'none') ? m : 'none';
     if (!AU.ctx) return;
-    AU.step = 0; AU.next = AU.ctx.currentTime + 0.1;
+    var c = AU.ctx, t = c.currentTime;
+    AU.live = AU.live.filter(function (n) { return n.end > t; });
+    if (was === 'none' || AU.mood === 'none' || !(AU.next > t) || AU.next > t + 6) { AU.step = 0; AU.next = t + 0.1; }
+    else if (now && was !== AU.mood) {
+      AU.live.forEach(function (n) { try { n.g.gain.cancelScheduledValues(t); n.g.gain.setValueAtTime(n.g.gain.value, t); n.g.gain.linearRampToValueAtTime(0.0001, t + 0.9); } catch (e) {} });
+      AU.live = []; AU.step = 0; AU.next = t + 0.5;
+    } else if (was !== AU.mood) AU.step = 0; // the new chords begin where the current one ends
     if (!AU.timer) AU.timer = setInterval(function () { if (AU.ctx && AU.ctx.state === 'running') auSchedule(); }, 250);
   }
   // the real sounds of each place, under the music (the same recordings as the pal cam)
@@ -1398,7 +1407,7 @@
   // /assets/audio/buddies/<episode>/<key>.mp3, listed in index.json. A line plays its recording through
   // Web Audio (reliable on phones once Play has been pressed); a line with no recording falls back to
   // the device's own speech, and then to captions only.
-  var PLAYER_VER = '30 Sep · 6'; // shown under the player, so we can tell which version a browser has
+  var PLAYER_VER = '30 Sep · 7'; // shown under the player, so we can tell which version a browser has
   var REC = '2609c'; // bump whenever the recordings are redone, so no browser plays an old copy
   var CL = { base: '/assets/audio/buddies/', maps: {}, ready: {}, bufs: {}, got: {}, src: null, gain: null, token: 0, lastFx: -99 };
   function ckey(who, text) { var h = 0x811c9dc5, s = who + '|' + text; for (var i = 0; i < s.length; i++) { h ^= s.charCodeAt(i); h = Math.imul(h, 0x01000193) >>> 0; } return ('0000000' + h.toString(16)).slice(-8); }
@@ -1517,6 +1526,7 @@
     '.fb-player.is-stream .fb-cap.is-empty{display:none}' +
     'html.fb-streaming,html.fb-streaming body{overflow:hidden!important;background:#000!important;filter:none!important}' +
     'html.fb-streaming body > :not(main):not(script){display:none!important}' +
+    'html.fb-watching iframe.tol-garden-bg,html.fb-watching .tol-garden-veil{display:none!important}' +
     '.fb-skip{position:absolute;right:.7rem;bottom:.7rem;z-index:3;padding:.45rem .85rem;border-radius:999px;border:1.5px solid rgba(255,255,255,.7);background:rgba(30,22,46,.72);color:#FFF6E6;font:600 .85rem/1 "IBM Plex Mono",monospace;cursor:pointer}.fb-skip[hidden]{display:none}.fb-skip:hover,.fb-skip:focus-visible{background:rgba(30,22,46,.92)}' +
     '@media (max-width:600px){.fb-stage{aspect-ratio:1/1;max-height:62vh}.fb-player{padding:.5rem;border-radius:20px}}' +
     '.fb-cv{position:absolute;left:0;top:0;width:100%;height:100%;display:block;cursor:pointer}' +
@@ -1624,7 +1634,7 @@
     var skipBtn = $('.fb-skip'), playBtn = $('.fb-play'), vBtn = $('.fb-voice'), mBtn = $('.fb-mus'), fBtn = $('.fb-flash'), startOv = $('.fb-start'), endOv = $('.fb-end'), chapEl = $('.fb-chap'), live = $('.fb-live');
     var W = 0, H = 0, DPR = 1;
     function resize() {
-      var r = stageEl.getBoundingClientRect(); DPR = Math.min(2, window.devicePixelRatio || 1);
+      var r = stageEl.getBoundingClientRect(); DPR = Math.max(0.6, Math.min(2, window.devicePixelRatio || 1) * (P.q || 1)); // P.q: lowered on slow devices
       var w = Math.max(200, Math.round(r.width)), h = Math.max(120, Math.round(r.height));
       if (w * DPR !== W || h * DPR !== H) { W = Math.round(w * DPR); H = Math.round(h * DPR); cv.width = W; cv.height = H; if (P.stage) { P.stage.bgKey = ''; paint(0); } }
     }
@@ -1638,6 +1648,9 @@
       fBtn.disabled = !!still;
       fBtn.setAttribute('aria-label', still ? 'Lightning shows as a soft glow while less motion is on' : P.bright ? 'Lightning shows as bright flashes. Switch to a soft glow' : 'Lightning shows as a soft glow. Switch to bright flashes');
       host.classList.toggle('is-playing', !!P.playing); // site.js keeps pop-ups and helpers away while this is on
+      document.documentElement.classList.toggle('fb-watching', !!P.playing); // and the moving garden behind the page rests, so the show runs smoothly
+      var gf = document.querySelector('iframe.tol-garden-bg');
+      if (gf && P.playing && !gf.__rest) { gf.__rest = gf.src; gf.src = 'about:blank'; } else if (gf && !P.playing && gf.__rest) { gf.src = gf.__rest; gf.__rest = null; }
       if (!voiceOk()) { vBtn.title = P.rate !== 1 ? 'Voices are off while the story plays fast' : 'This device has no voices to read with, so the captions tell the story'; }
       // say it on the button itself, not only in a hover tip: no recordings and no device voices means captions only
       var canVoice = !!CL.ready[P.id] || (VO.ok && vlist().length > 0);
@@ -1945,6 +1958,28 @@
       tg.drawImage(cv, (1280 - cv.width * k) / 2, (720 - cv.height * k) / 2, cv.width * k, cv.height * k); paint(0);
       return tc;
     }
+    // ---------- the music follows the story ----------
+    // The script's own music cues lead. Between them, the feeling of the last few lines steers the music
+    // (worried lines get tense music, a sad stretch goes soft, a proud moment lifts), never flipping back
+    // and forth: a change only when two of the last three lines agree, and not more than once in a while.
+    var MF = { cue: 'none', cueAt: -99, cur: 'none', at: -99, recent: [] };
+    var LINE_MUSIC = { happy: 'happy', silly: 'happy', excited: 'happy', proud: 'triumph', worried: 'tense', grumpy: 'tense', sad: 'sad', calm: 'gentle', sleepy: 'gentle' };
+    function musicCue(m) {
+      var t = P.dir ? P.dir.time() : 0, want = m === 'none' ? 'gentle' : m, big = /^(tense|sad|triumph|brave)$/.test(want) && want !== MF.cur;
+      MF.cue = m; MF.cueAt = t; MF.recent = [];
+      if (want !== MF.cur || AU.mood === 'none') { MF.cur = want; MF.at = t; auMood(want, big); }
+    }
+    function musicFollow(b) {
+      if (!P.dir || b.say === 'narrator' && !b.mood) return;
+      var t = P.dir.time(), cat = LINE_MUSIC[b.mood] || null;
+      if (b.mood === 'excited' && (b.energy || 1) >= 1.25) cat = 'brave';
+      if (b.mood === 'surprised') cat = (b.energy || 1) >= 1.2 ? 'tense' : null;
+      MF.recent.push(cat); if (MF.recent.length > 3) MF.recent.shift();
+      if (t - MF.cueAt < 20 || t - MF.at < 14 || MF.cue === 'title') return; // the script just chose, or the music just changed
+      var n = {}; MF.recent.forEach(function (x) { if (x) n[x] = (n[x] || 0) + 1; });
+      var best = null; for (var k in n) if (n[k] >= 2 && (!best || n[k] > n[best])) best = k;
+      if (best && best !== MF.cur) { MF.cur = best; MF.at = t; auMood(best, best === 'tense' || best === 'sad'); }
+    }
     function voiceSrc(t) { var v = host.querySelector('.fb-ver'); if (v && v.getAttribute('data-src') !== t) { v.setAttribute('data-src', t); v.textContent = 'Player ' + PLAYER_VER + ' · ' + t; } }
     var hooks = {
       canvas: function () { return cv; },
@@ -1959,7 +1994,8 @@
       stopSpeech: vstop,
       onAct: function (b) { if (b.act === 'laugh' && P.voices && P.rate === 1 && (b.who === 'tidbit' || b.who === 'sugarfoot' || b.who === 'both')) laughFor(b.who); },
       onWeather: function (w) { auWeather(w); if (P.music && P.stage) auAmbience(P.stage.scene, w, P.stage.hour); },
-      onMusic: function (m) { auMood(m === 'none' ? 'gentle' : m); },
+      onMusic: function (m) { musicCue(m); },
+      onLine: function (b) { musicFollow(b); },
       onChapter: function (ch) { P.ch = ch; renderChapter(); if (P.started) save(); },
       onEnd: function () {
         P.one = false; var m = memGet(); if (m.pos) delete m.pos[P.id]; m.watched = m.watched || {}; m.watched[P.id] = 1; memSet(m);
@@ -1984,7 +2020,13 @@
     function loop(now) {
       P.raf = 0; if (!P.playing) return;
       P.raf = requestAnimationFrame(loop);
-      var dt = P.last ? (now - P.last) / 1000 : 0.016; P.last = now; dt = clamp(dt, 0, 0.06);
+      // the story follows the real clock, so on a slow device the pictures skip ahead instead of falling behind the voices and music
+      var raw = P.last ? (now - P.last) / 1000 : 0.016; P.last = now; var dt = clamp(raw, 0, 0.35);
+      // and if frames come slowly, draw a little less sharply so it stays smooth
+      P.ft = P.ft == null ? raw : P.ft * 0.95 + raw * 0.05; P.ftN = (P.ftN || 0) + 1;
+      if (P.ftN > 60) { P.ftN = 0;
+        if (P.ft > 0.045 && (P.q || 1) > 0.5) { P.q = Math.max(0.5, (P.q || 1) * 0.8); resize(); }
+        else if (P.ft < 0.022 && (P.q || 1) < 1) { P.q = Math.min(1, P.q * 1.12); resize(); } }
       if (P.th) { try { themeTick(dt); } catch (e) { P.errors++; if (window.console) console.error('buddies theme', e); endTheme(true); } if (P.rec) recFrame(); if (P.stream) capEl.classList.toggle('is-empty', !lineEl.textContent); return; }
       try { P.dir.tick(dt * P.rate); } catch (e) { P.errors++; if (window.console) console.error('buddies tick', e); }
       if (P.one && !P.dir.ended && P.dir.chapterAt() !== P.oneCh) { chapterBreak(P.dir.chapterAt()); return; }
@@ -2021,7 +2063,7 @@
         startTheme('open', function () { P.dir.seek(1); P.playing = false; play(); });
         return;
       }
-      if (P.music) { auEnsure(); auOn(true); auPause(false); auMood(P.dir.music === 'none' && P.dir.i === 0 ? 'title' : (P.dir.music === 'none' ? 'gentle' : P.dir.music)); auWeather(P.stage.weather); AMBP.key = ''; auAmbience(P.stage.scene, P.stage.weather, P.stage.hour); } else { auOn(false); }
+      if (P.music) { auEnsure(); auOn(true); auPause(false); auMood(P.dir.music === 'none' && P.dir.i === 0 ? 'title' : MF.cur !== 'none' ? MF.cur : (P.dir.music === 'none' ? 'gentle' : P.dir.music)); auWeather(P.stage.weather); AMBP.key = ''; auAmbience(P.stage.scene, P.stage.weather, P.stage.hour); } else { auOn(false); }
       P.playing = true; P.dir.playing = true; P.stage.reduced = stillNow();
       P.dir.restartLine(); syncBtns(); startLoop(); inView();
     }
@@ -2052,7 +2094,7 @@
     vBtn.addEventListener('click', function () { P.voices = !P.voices; if (!P.voices) vstop(); else if (P.playing) P.dir.restartLine(); syncBtns(); save(); });
     fBtn.addEventListener('click', function () { P.bright = !P.bright; if (P.stage) P.stage.bright = P.bright; syncBtns(); save(); });
     skipBtn.addEventListener('click', function () { endTheme(true); });
-    mBtn.addEventListener('click', function () { P.music = !P.music; if (!P.music && P.th) endTheme(true); if (P.music) { auEnsure(); auOn(true); if (P.dir) { auMood(P.dir.music); auWeather(P.stage.weather); } } else auOn(false); syncBtns(); save(); });
+    mBtn.addEventListener('click', function () { P.music = !P.music; if (!P.music && P.th) endTheme(true); if (P.music) { auEnsure(); auOn(true); if (P.dir) { auMood(MF.cur !== 'none' ? MF.cur : P.dir.music); auWeather(P.stage.weather); } } else auOn(false); syncBtns(); save(); });
     $('.fb-full').addEventListener('click', function () {
       var fs = document.fullscreenElement || document.webkitFullscreenElement;
       if (fs) { (document.exitFullscreen || document.webkitExitFullscreen).call(document); return; }
@@ -2151,6 +2193,7 @@
     var pk = window.TOLPalsCam && window.TOLPalsCam.loadPacks ? window.TOLPalsCam.loadPacks().catch(function () {}) : Promise.resolve();
     Promise.all([loadEpisode(P.id), pk]).then(function (r) { ready(r[0]); });
     API._p = P;
+    API._music = function () { return { mood: AU.mood, cur: MF.cur, cue: MF.cue }; };
     API.record = recStart; API.stopRecording = recStop; API.recording = function () { return !!P.rec; }; API.recordSupported = recSupported;
     API.thumbnail = thumbnail; API.switchTo = function (id) { switchTo(id, false); }; API.shuffleNext = function () { switchTo(shufflePick(P.id), true); }; API._themeTick = function (dt) { themeTick(dt); }; API._startTheme = startTheme; // (for tests and the preview video)
     return P;
