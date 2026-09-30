@@ -511,6 +511,7 @@
       document.head.appendChild(cw);
     }
 
+    var lmain = document.querySelector('main');
     // "In short" bullets on the long pages, and "Show me only the steps" (in-short.js)
     if (lmain && !busyPage() && current !== '/index.html' && !document.querySelector('meta[http-equiv="Content-Security-Policy"]') &&
         (inDepth || /^\/library/.test(current) || (lmain.textContent || '').split(/\s+/).length > 1200) && !/^\/workpapers\//.test(current)) {
