@@ -71,6 +71,14 @@
     s1e4: 'The pals\u2019 kite falls into the waves; they don\u2019t go in after it, and Hopper the frog swims out to help. They blame each other for a while, have a cozy dream under the sea, then find out what really broke.',
     s1e5: 'At night in the forest, the pals take a wrong turn, their lantern grows dim, and they argue. They are never in the pitch dark; they say sorry, rest, and the moon helps them find the way.'
   };
+  // shuffle: every episode once, in a random order, then a fresh order (never the same one twice in a row)
+  function shufflePick(cur) {
+    var ids = catalogIds(), bag = [];
+    try { bag = JSON.parse(sessionStorage.getItem('tol-fb-shuffle') || '[]').filter(function (x) { return ids.indexOf(x) >= 0; }); } catch (e) {}
+    if (!bag.length) { bag = ids.slice(); for (var i = bag.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)), t = bag[i]; bag[i] = bag[j]; bag[j] = t; } if (bag[0] === cur && bag.length > 1) bag.push(bag.shift()); }
+    var next = bag.shift(); try { sessionStorage.setItem('tol-fb-shuffle', JSON.stringify(bag)); } catch (e) {}
+    return next;
+  }
   function catalogIds() { var out = []; CATALOG.forEach(function (s) { s.eps.forEach(function (e) { out.push(e.id); }); }); return out; }
   function catalogEntry(id) { var f = null; CATALOG.forEach(function (s) { s.eps.forEach(function (e) { if (e.id === id) f = e; }); }); return f; }
 
@@ -1390,7 +1398,7 @@
   // /assets/audio/buddies/<episode>/<key>.mp3, listed in index.json. A line plays its recording through
   // Web Audio (reliable on phones once Play has been pressed); a line with no recording falls back to
   // the device's own speech, and then to captions only.
-  var PLAYER_VER = '30 Sep · 4'; // shown under the player, so we can tell which version a browser has
+  var PLAYER_VER = '30 Sep · 5'; // shown under the player, so we can tell which version a browser has
   var REC = '2609c'; // bump whenever the recordings are redone, so no browser plays an old copy
   var CL = { base: '/assets/audio/buddies/', maps: {}, ready: {}, bufs: {}, got: {}, src: null, gain: null, token: 0, lastFx: -99 };
   function ckey(who, text) { var h = 0x811c9dc5, s = who + '|' + text; for (var i = 0; i < s.length; i++) { h ^= s.charCodeAt(i); h = Math.imul(h, 0x01000193) >>> 0; } return ('0000000' + h.toString(16)).slice(-8); }
@@ -1579,9 +1587,10 @@
     injectCss();
     var q = {}; try { location.search.replace(/^\?/, '').split('&').forEach(function (kv) { var p = kv.split('='); if (p[0]) q[decodeURIComponent(p[0])] = decodeURIComponent(p[1] || ''); }); } catch (e) {}
     var rate = clamp(parseFloat(q.rate) || 1, 0.25, 32), mem = memGet();
-    var id = /^s\d+e\d+$/.test(q.ep || '') ? q.ep : (opts.ep || mem.last || 's1e1');
+    var shuffle = !!(opts.shuffle || q.shuffle === '1');
+    var id = /^s\d+e\d+$/.test(q.ep || '') ? q.ep : shuffle ? shufflePick(null) : (opts.ep || mem.last || 's1e1');
     var P = { host: host, id: id, ep: null, stage: null, dir: null, raf: 0, last: 0, errors: 0, playing: false, started: false, voices: mem.voices !== false, music: mem.music !== false, bright: mem.bright === true, one: false, oneCh: 0, oneFirst: q.one === '1', rate: rate, ch: 0 };
-    host.classList.add('fb-player');
+    host.classList.add('fb-player'); P.shuffle = shuffle;
     host.innerHTML =
       '<div class="fb-head"><h2 class="fb-title">Frequency Buddies</h2><p class="fb-chap" aria-live="off"></p></div>' +
       '<div class="fb-stage"><canvas class="fb-cv" role="img" aria-label="An animated story with Tidbit and Sugarfoot"></canvas><button type="button" class="fb-skip" hidden>Skip intro ⏭</button>' +
@@ -1640,7 +1649,7 @@
       else if (to === 'both') toNm = PALS[who] ? 'to both' : 'to Tidbit and Sugarfoot';
       else if (to && who !== 'narrator') toNm = 'to ' + (PALS[to] ? PALS[to].name : P.stage && P.stage.guests[to] ? P.stage.guests[to].name : GUESTS[to] ? GUESTS[to].name : to);
       whoEl.textContent = nm + (nm && toNm ? ' · ' + toNm : ''); whoEl.className = 'fb-who' + (GUESTS[who] ? ' is-guest' : '');
-      capEl.classList.toggle('is-self', to === 'self');
+      capEl.classList.toggle('is-self', to === 'self'); if (P.rec && who !== 'scene') recCue(nm, text);
       lineEl.textContent = '';
       P.capWords = []; P.capLit = -1; P.capB = who !== 'scene' ? b : null;
       String(text || '').split(/(\s+)/).forEach(function (w) {
@@ -1761,7 +1770,7 @@
     function songCap(who, text) {
       capEl.setAttribute('data-who', who === 'both' ? 'tidbit' : who); P.capB = null; P.capWords = [];
       whoEl.textContent = '♪ ' + (who === 'tidbit' ? 'Tidbit' : who === 'sugarfoot' ? 'Sugarfoot' : 'Tidbit and Sugarfoot'); whoEl.className = 'fb-who';
-      lineEl.textContent = text;
+      lineEl.textContent = text; if (P.rec) recCue(who === 'tidbit' ? 'Tidbit' : who === 'sugarfoot' ? 'Sugarfoot' : 'Tidbit and Sugarfoot', '♪ ' + text + ' ♪');
     }
     function startTheme(kind, done) {
       if (!themeWanted()) { done(); return; }
@@ -1861,11 +1870,77 @@
       }
       g.restore();
     }
+
+    // ---------- another episode, in place (shuffle), without reloading the page ----------
+    function switchTo(id, autoplay) {
+      if (!id) return;
+      P.id = id; P.introDone = false; live.textContent = 'Up next: ' + ((catalogEntry(id) || {}).title || 'another episode');
+      loadEpisode(id).then(function (ep) {
+        if (!ep) { var nx = shufflePick(id); if (nx && nx !== id) switchTo(nx, autoplay); return; }
+        ready(ep); if (opts.onSwitch) opts.onSwitch(ep);
+        if (autoplay) setTimeout(function () { P.introDone = false; P.dir.seek(0); play(); }, 1200);
+      });
+    }
+    // ---------- recording an episode as a video, in this browser (for YouTube) ----------
+    // The picture is the stage, drawn into a 1920×1080 frame; the sound is everything the player plays.
+    // Captions are written down as they appear, for an .srt file YouTube can use as closed captions.
+    function recSupported() { return !!(window.MediaRecorder && HTMLCanvasElement.prototype.captureStream && (window.AudioContext || window.webkitAudioContext)); }
+    function recMime() { var t = ['video/webm;codecs=vp9,opus', 'video/webm;codecs=vp8,opus', 'video/webm', 'video/mp4;codecs=avc1,mp4a', 'video/mp4']; for (var i = 0; i < t.length; i++) if (MediaRecorder.isTypeSupported && MediaRecorder.isTypeSupported(t[i])) return t[i]; return ''; }
+    function recStart(o) {
+      o = o || {};
+      if (!recSupported()) { if (o.onError) o.onError('This browser can’t record video. Try Chrome, Edge or Firefox on a computer.'); return false; }
+      if (P.rec) return false;
+      var c = auEnsure(); if (!c) return false;
+      if (!P.music) { P.music = true; auOn(true); } if (!P.voices) P.voices = true; P.rate = 1; syncBtns(); save();
+      if (!CL.gain) { CL.gain = c.createGain(); CL.gain.gain.value = 1; CL.gain.connect(c.destination); }
+      var dest = c.createMediaStreamDestination(); AU.bus.connect(dest); CL.gain.connect(dest);
+      var rc = document.createElement('canvas'); rc.width = 1920; rc.height = 1080; var rg = rc.getContext('2d');
+      rg.fillStyle = '#1B1629'; rg.fillRect(0, 0, 1920, 1080);
+      var stream = rc.captureStream(30); dest.stream.getAudioTracks().forEach(function (t) { stream.addTrack(t); });
+      var mime = recMime(), mr;
+      try { mr = new MediaRecorder(stream, mime ? { mimeType: mime, videoBitsPerSecond: 6e6, audioBitsPerSecond: 160000 } : {}); } catch (e) { if (o.onError) o.onError('Recording couldn’t start in this browser.'); return false; }
+      P.rec = { mr: mr, chunks: [], canvas: rc, g: rg, dest: dest, t0: 0, cues: [], mime: mr.mimeType || mime || 'video/webm', o: o, id: P.id, title: P.ep ? P.ep.title : '' };
+      mr.ondataavailable = function (e) { if (e.data && e.data.size) P.rec.chunks.push(e.data); };
+      mr.onstop = function () { recFinish(); };
+      if (P.th) endTheme(false); // start clean, from the very beginning
+      P.introDone = false; P.dir.seek(0); P.ch = 0; renderChapter();
+      recFrame(); mr.start(1000); P.rec.t0 = performance.now();
+      play();
+      return true;
+    }
+    function recFrame() { var r = P.rec; if (!r || !cv.width) return; var k = Math.min(1920 / cv.width, 1080 / cv.height), w = cv.width * k, h = cv.height * k; r.g.fillStyle = '#1B1629'; r.g.fillRect(0, 0, 1920, 1080); r.g.drawImage(cv, (1920 - w) / 2, (1080 - h) / 2, w, h); }
+    function recCue(who, text) { var r = P.rec; if (!r) return; r.cues.push({ t: (performance.now() - r.t0 - (r.paused || 0)) / 1000, who: who, text: text || '' }); }
+    function recStop() { var r = P.rec; if (!r) return; recCue('', ''); try { if (r.mr.state !== 'inactive') r.mr.stop(); } catch (e) { recFinish(); } }
+    function srtTime(t) { t = Math.max(0, t); var ms = Math.round(t * 1000), h = Math.floor(ms / 3600000), m = Math.floor(ms / 60000) % 60, s = Math.floor(ms / 1000) % 60; return (h < 10 ? '0' : '') + h + ':' + (m < 10 ? '0' : '') + m + ':' + (s < 10 ? '0' : '') + s + ',' + ('00' + (ms % 1000)).slice(-3); }
+    function recSrt(cues) {
+      var out = [], n = 0;
+      cues.forEach(function (c, i) {
+        if (!c.text) return; var nx = cues[i + 1], end = nx ? nx.t : c.t + 4; if (end - c.t < 0.3) return;
+        out.push(String(++n), srtTime(c.t) + ' --> ' + srtTime(Math.min(end, c.t + 12)), (c.who ? c.who + ': ' : '') + c.text, '');
+      });
+      return out.join('\n');
+    }
+    function recFinish() {
+      var r = P.rec; if (!r) return; P.rec = null;
+      try { AU.bus.disconnect(r.dest); CL.gain.disconnect(r.dest); } catch (e) {}
+      var ext = /mp4/.test(r.mime) ? 'mp4' : 'webm', base = 'frequency-buddies-' + r.id;
+      var video = new Blob(r.chunks, { type: r.mime.split(';')[0] }), srt = new Blob([recSrt(r.cues)], { type: 'text/plain' });
+      if (r.o.onDone) r.o.onDone({ video: video, srt: srt, videoName: base + '.' + ext, srtName: base + '.srt', id: r.id, title: r.title });
+    }
+    // a thumbnail: the episode's title card, 1280×720
+    function thumbnail() {
+      if (!P.stage) return null; var was = P.stage.title;
+      P.stage.title = { t0: -3.4, dur: 99 }; P.stage.poster = false; P.stage.t = P.stage.t || 0;
+      var sv = P.stage.t; P.stage.t = 4.2; paint(0); P.stage.t = sv; P.stage.title = was;
+      var tc = document.createElement('canvas'); tc.width = 1280; tc.height = 720; var tg = tc.getContext('2d'), k = Math.min(1280 / cv.width, 720 / cv.height);
+      tg.drawImage(cv, (1280 - cv.width * k) / 2, (720 - cv.height * k) / 2, cv.width * k, cv.height * k); paint(0);
+      return tc;
+    }
     function voiceSrc(t) { var v = host.querySelector('.fb-ver'); if (v && v.getAttribute('data-src') !== t) { v.setAttribute('data-src', t); v.textContent = 'Player ' + PLAYER_VER + ' · ' + t; } }
     var hooks = {
       canvas: function () { return cv; },
       onCaption: setCaption,
-      onVoiceEnd: function (b) { clearTimeout(P.capClr); P.capClr = setTimeout(function () { if (P.capB === b) { lineEl.textContent = ''; whoEl.textContent = ''; P.capWords = []; P.capB = null; } }, 450); },
+      onVoiceEnd: function (b) { clearTimeout(P.capClr); P.capClr = setTimeout(function () { if (P.capB === b) { lineEl.textContent = ''; whoEl.textContent = ''; P.capWords = []; P.capB = null; if (P.rec) recCue('', ''); } }, 450); },
       latency: function () { var c = AU.ctx; return c ? (c.outputLatency || c.baseLatency || 0) : 0; },
       speak: function (b, cb) {
         if (!P.voices || P.rate !== 1) return false;
@@ -1879,7 +1954,11 @@
       onChapter: function (ch) { P.ch = ch; renderChapter(); if (P.started) save(); },
       onEnd: function () {
         P.one = false; var m = memGet(); if (m.pos) delete m.pos[P.id]; m.watched = m.watched || {}; m.watched[P.id] = 1; memSet(m);
-        var fin = function () { P.playing = false; stopLoop(); syncBtns(); showEnd(); auMood('none'); };
+        var fin = function () {
+          if (P.rec) { recStop(); P.playing = false; stopLoop(); syncBtns(); showEnd(); auMood('none'); return; }
+          if (P.shuffle) { P.playing = false; stopLoop(); switchTo(shufflePick(P.id), true); return; }
+          P.playing = false; stopLoop(); syncBtns(); showEnd(); auMood('none');
+        };
         if (themeWanted()) startTheme('close', fin); else fin();
       }
     };
@@ -1897,10 +1976,10 @@
       P.raf = 0; if (!P.playing) return;
       P.raf = requestAnimationFrame(loop);
       var dt = P.last ? (now - P.last) / 1000 : 0.016; P.last = now; dt = clamp(dt, 0, 0.06);
-      if (P.th) { try { themeTick(dt); } catch (e) { P.errors++; if (window.console) console.error('buddies theme', e); endTheme(true); } return; }
+      if (P.th) { try { themeTick(dt); } catch (e) { P.errors++; if (window.console) console.error('buddies theme', e); endTheme(true); } if (P.rec) recFrame(); return; }
       try { P.dir.tick(dt * P.rate); } catch (e) { P.errors++; if (window.console) console.error('buddies tick', e); }
       if (P.one && !P.dir.ended && P.dir.chapterAt() !== P.oneCh) { chapterBreak(P.dir.chapterAt()); return; }
-      paint(dt * P.rate); progress(); capLight();
+      paint(dt * P.rate); progress(); capLight(); if (P.rec) recFrame();
     }
     function chMins(i) { var e = estimate(P.ep).chapters[i]; return e ? Math.max(1, Math.round(e.dur / 60)) : 2; }
     function oneLabel(i) { var n = chMins(i); return 'Watch one chapter (about ' + n + ' minute' + (n === 1 ? '' : 's') + ')'; }
@@ -1923,7 +2002,7 @@
     function startLoop() { if (!P.raf) { P.last = 0; P.raf = requestAnimationFrame(loop); } }
     function stopLoop() { if (P.raf) cancelAnimationFrame(P.raf); P.raf = 0; }
     function play() {
-      if (!P.dir) return;
+      if (!P.dir) return; recHold(false);
       if (P.th) { startOv.hidden = true; endOv.hidden = true; auPause(false); P.playing = true; syncBtns(); startLoop(); return; } // the theme song carries on
       if (P.dir.ended && !P.th) { endOv.hidden = true; P.dir.seek(0); }
       startOv.hidden = true; endOv.hidden = true; P.started = true;
@@ -1943,7 +2022,8 @@
       var r = host.getBoundingClientRect();
       if (r.top < top + 4 || r.top > innerHeight * 0.5) { try { scrollBy({ top: r.top - top - 10, behavior: stillNow() ? 'auto' : 'smooth' }); } catch (e) { scrollBy(0, r.top - top - 10); } }
     }
-    function pause() { if (!P.dir) return; if (P.th) { P.playing = false; auPause(true); stopLoop(); syncBtns(); return; } P.playing = false; P.dir.playing = false; vstop(); P.stage.stopTalk(); auPause(true); stopLoop(); syncBtns(); paint(0); }
+    function recHold(on) { var r = P.rec; if (!r) return; try { if (on && r.mr.state === 'recording') { r.mr.pause(); r.hid = performance.now(); } else if (!on && r.mr.state === 'paused' && !document.hidden) { r.mr.resume(); r.paused = (r.paused || 0) + performance.now() - (r.hid || performance.now()); } } catch (e) {} }
+    function pause() { recHold(true); if (!P.dir) return; if (P.th) { P.playing = false; auPause(true); stopLoop(); syncBtns(); return; } P.playing = false; P.dir.playing = false; vstop(); P.stage.stopTalk(); auPause(true); stopLoop(); syncBtns(); paint(0); }
     function toggle() { if (P.playing) pause(); else play(); }
     function goChapter(ch) {
       if (P.th) endTheme(false);
@@ -1990,7 +2070,10 @@
       else if (e.key === 'ArrowRight') { e.preventDefault(); nextChapter(); }
       else if (e.key === 'f' || e.key === 'F') { $('.fb-full').click(); }
     });
-    document.addEventListener('visibilitychange', function () { if (document.hidden && P.playing) pause(); });
+    document.addEventListener('visibilitychange', function () {
+      if (document.hidden && P.playing) pause();
+      if (P.rec) { try { if (document.hidden && P.rec.mr.state === 'recording') { P.rec.mr.pause(); P.rec.hid = performance.now(); } else if (!document.hidden && P.rec.mr.state === 'paused') { P.rec.mr.resume(); P.rec.paused = (P.rec.paused || 0) + performance.now() - (P.rec.hid || performance.now()); } } catch (e) {} }
+    });
     document.addEventListener('tol-still', function () { if (P.stage) { P.stage.reduced = stillNow(); P.stage.bgKey = ''; paint(0); syncBtns(); } });
     window.addEventListener('resize', resize);
     if (window.ResizeObserver) new ResizeObserver(function () { resize(); }).observe(stageEl);
@@ -2052,7 +2135,9 @@
     resize(); syncBtns();
     var pk = window.TOLPalsCam && window.TOLPalsCam.loadPacks ? window.TOLPalsCam.loadPacks().catch(function () {}) : Promise.resolve();
     Promise.all([loadEpisode(P.id), pk]).then(function (r) { ready(r[0]); });
-    API._p = P; API._themeTick = function (dt) { themeTick(dt); }; API._startTheme = startTheme; // (for tests and the preview video)
+    API._p = P;
+    API.record = recStart; API.stopRecording = recStop; API.recording = function () { return !!P.rec; }; API.recordSupported = recSupported;
+    API.thumbnail = thumbnail; API.switchTo = function (id) { switchTo(id, false); }; API.shuffleNext = function () { switchTo(shufflePick(P.id), true); }; API._themeTick = function (dt) { themeTick(dt); }; API._startTheme = startTheme; // (for tests and the preview video)
     return P;
   }
 
@@ -2130,7 +2215,7 @@
   API.play = function () { var P = API._p; if (P) P.host.querySelector('.fb-play').click(); };
   // start the player on any element marked [data-buddies-player], and the cards on [data-buddies-cards]
   function auto() {
-    var el = document.querySelector('[data-buddies-player]'); if (el && !el.__fb) { el.__fb = 1; mount(el, {}); }
+    var el = document.querySelector('[data-buddies-player]'); if (el && !el.__fb) { el.__fb = 1; mount(el, { shuffle: el.hasAttribute('data-shuffle') }); }
     Array.prototype.forEach.call(document.querySelectorAll('[data-buddies-cards]'), function (c) { if (!c.__fb) { c.__fb = 1; renderCards(c, { current: el && API._p ? API._p.id : null }); } });
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', auto); else auto();
