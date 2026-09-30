@@ -1398,7 +1398,7 @@
   // /assets/audio/buddies/<episode>/<key>.mp3, listed in index.json. A line plays its recording through
   // Web Audio (reliable on phones once Play has been pressed); a line with no recording falls back to
   // the device's own speech, and then to captions only.
-  var PLAYER_VER = '30 Sep · 5'; // shown under the player, so we can tell which version a browser has
+  var PLAYER_VER = '30 Sep · 6'; // shown under the player, so we can tell which version a browser has
   var REC = '2609c'; // bump whenever the recordings are redone, so no browser plays an old copy
   var CL = { base: '/assets/audio/buddies/', maps: {}, ready: {}, bufs: {}, got: {}, src: null, gain: null, token: 0, lastFx: -99 };
   function ckey(who, text) { var h = 0x811c9dc5, s = who + '|' + text; for (var i = 0; i < s.length; i++) { h ^= s.charCodeAt(i); h = Math.imul(h, 0x01000193) >>> 0; } return ('0000000' + h.toString(16)).slice(-8); }
@@ -1509,6 +1509,14 @@
     '.fb-head h2{margin:0;font:600 1.25rem/1.2 Fraunces,Georgia,serif;color:#FFF3D6}' +
     '.fb-chap{margin:0;font:500 .8rem/1.3 "IBM Plex Mono",monospace;letter-spacing:.05em;text-transform:uppercase;color:#D9C8F0}' +
     '.fb-stage{position:relative;width:100%;aspect-ratio:16/9;border-radius:18px;overflow:hidden;background:#2E2A5C}' +
+    '.fb-player.is-stream{position:fixed;inset:0;z-index:2147483000;padding:0;gap:0;border-radius:0;background:#000;box-shadow:none}' +
+    '.fb-player.is-stream .fb-head,.fb-player.is-stream .fb-ctrl,.fb-player.is-stream .fb-prog,.fb-player.is-stream .fb-chaps,.fb-player.is-stream .fb-note,.fb-player.is-stream .fb-skip,.fb-player.is-stream .fb-ov{display:none!important}' +
+    '.fb-player.is-stream .fb-stage{position:absolute;inset:0;width:100%;height:100%;aspect-ratio:auto;border-radius:0}' +
+    '.fb-player.is-stream .fb-cap{position:absolute;left:50%;bottom:2.6vh;transform:translateX(-50%);z-index:5;width:auto;max-width:74vw;min-height:0!important;height:auto!important;margin:0;padding:.35em .9em .45em;border-radius:14px;background:rgba(20,14,32,.72);font-size:clamp(14px,1.75vw,32px);line-height:1.3;text-align:center}' +
+    '.fb-player.is-stream .fb-cap .fb-who{font-size:.5em;margin-bottom:.15em}.fb-player.is-stream .fb-stage,.fb-player.is-stream .fb-cv{border-radius:0!important}' +
+    '.fb-player.is-stream .fb-cap.is-empty{display:none}' +
+    'html.fb-streaming,html.fb-streaming body{overflow:hidden!important;background:#000!important;filter:none!important}' +
+    'html.fb-streaming body > :not(main):not(script){display:none!important}' +
     '.fb-skip{position:absolute;right:.7rem;bottom:.7rem;z-index:3;padding:.45rem .85rem;border-radius:999px;border:1.5px solid rgba(255,255,255,.7);background:rgba(30,22,46,.72);color:#FFF6E6;font:600 .85rem/1 "IBM Plex Mono",monospace;cursor:pointer}.fb-skip[hidden]{display:none}.fb-skip:hover,.fb-skip:focus-visible{background:rgba(30,22,46,.92)}' +
     '@media (max-width:600px){.fb-stage{aspect-ratio:1/1;max-height:62vh}.fb-player{padding:.5rem;border-radius:20px}}' +
     '.fb-cv{position:absolute;left:0;top:0;width:100%;height:100%;display:block;cursor:pointer}' +
@@ -1590,7 +1598,8 @@
     var shuffle = !!(opts.shuffle || q.shuffle === '1');
     var id = /^s\d+e\d+$/.test(q.ep || '') ? q.ep : shuffle ? shufflePick(null) : (opts.ep || mem.last || 's1e1');
     var P = { host: host, id: id, ep: null, stage: null, dir: null, raf: 0, last: 0, errors: 0, playing: false, started: false, voices: mem.voices !== false, music: mem.music !== false, bright: mem.bright === true, one: false, oneCh: 0, oneFirst: q.one === '1', rate: rate, ch: 0 };
-    host.classList.add('fb-player'); P.shuffle = shuffle;
+    host.classList.add('fb-player'); P.shuffle = shuffle; P.stream = !!(opts.stream || q.stream === '1');
+    if (P.stream) { host.classList.add('is-stream'); document.documentElement.classList.add('fb-streaming'); P.voices = true; P.music = true; P.rate = 1; }
     host.innerHTML =
       '<div class="fb-head"><h2 class="fb-title">Frequency Buddies</h2><p class="fb-chap" aria-live="off"></p></div>' +
       '<div class="fb-stage"><canvas class="fb-cv" role="img" aria-label="An animated story with Tidbit and Sugarfoot"></canvas><button type="button" class="fb-skip" hidden>Skip intro ⏭</button>' +
@@ -1976,10 +1985,11 @@
       P.raf = 0; if (!P.playing) return;
       P.raf = requestAnimationFrame(loop);
       var dt = P.last ? (now - P.last) / 1000 : 0.016; P.last = now; dt = clamp(dt, 0, 0.06);
-      if (P.th) { try { themeTick(dt); } catch (e) { P.errors++; if (window.console) console.error('buddies theme', e); endTheme(true); } if (P.rec) recFrame(); return; }
+      if (P.th) { try { themeTick(dt); } catch (e) { P.errors++; if (window.console) console.error('buddies theme', e); endTheme(true); } if (P.rec) recFrame(); if (P.stream) capEl.classList.toggle('is-empty', !lineEl.textContent); return; }
       try { P.dir.tick(dt * P.rate); } catch (e) { P.errors++; if (window.console) console.error('buddies tick', e); }
       if (P.one && !P.dir.ended && P.dir.chapterAt() !== P.oneCh) { chapterBreak(P.dir.chapterAt()); return; }
       paint(dt * P.rate); progress(); capLight(); if (P.rec) recFrame();
+      if (P.stream) capEl.classList.toggle('is-empty', !lineEl.textContent);
     }
     function chMins(i) { var e = estimate(P.ep).chapters[i]; return e ? Math.max(1, Math.round(e.dur / 60)) : 2; }
     function oneLabel(i) { var n = chMins(i); return 'Watch one chapter (about ' + n + ' minute' + (n === 1 ? '' : 's') + ')'; }
@@ -2071,7 +2081,7 @@
       else if (e.key === 'f' || e.key === 'F') { $('.fb-full').click(); }
     });
     document.addEventListener('visibilitychange', function () {
-      if (document.hidden && P.playing) pause();
+      if (document.hidden && P.playing && !P.stream) pause(); // a stream keeps going
       if (P.rec) { try { if (document.hidden && P.rec.mr.state === 'recording') { P.rec.mr.pause(); P.rec.hid = performance.now(); } else if (!document.hidden && P.rec.mr.state === 'paused') { P.rec.mr.resume(); P.rec.paused = (P.rec.paused || 0) + performance.now() - (P.rec.hid || performance.now()); } } catch (e) {} }
     });
     document.addEventListener('tol-still', function () { if (P.stage) { P.stage.reduced = stillNow(); P.stage.bgKey = ''; paint(0); syncBtns(); } });
@@ -2129,6 +2139,11 @@
       // a still of the title card behind the start screen
       P.stage.title = { t0: -3.4, dur: 99 }; P.stage.poster = true; resize(); paint(0); P.stage.poster = false; P.stage.title = { t0: 0, dur: TITLE_T - 0.6 };
       progress(); syncBtns(); showStart();
+      if (P.stream && !P.streamStarted) {
+        P.streamStarted = true; startOv.hidden = true;
+        var wake = function () { auEnsure(); auPause(false); }; document.addEventListener('pointerdown', wake); document.addEventListener('keydown', wake);
+        setTimeout(function () { P.introDone = false; P.dir.seek(0); play(); }, 900);
+      }
       if (opts.onReady) opts.onReady(ep);
       loadEpisode(nextIdOf(P.id) || '');
     }
@@ -2215,7 +2230,7 @@
   API.play = function () { var P = API._p; if (P) P.host.querySelector('.fb-play').click(); };
   // start the player on any element marked [data-buddies-player], and the cards on [data-buddies-cards]
   function auto() {
-    var el = document.querySelector('[data-buddies-player]'); if (el && !el.__fb) { el.__fb = 1; mount(el, { shuffle: el.hasAttribute('data-shuffle') }); }
+    var el = document.querySelector('[data-buddies-player]'); if (el && !el.__fb) { el.__fb = 1; mount(el, { shuffle: el.hasAttribute('data-shuffle') || /[?&]stream=1\b/.test(location.search) }); }
     Array.prototype.forEach.call(document.querySelectorAll('[data-buddies-cards]'), function (c) { if (!c.__fb) { c.__fb = 1; renderCards(c, { current: el && API._p ? API._p.id : null }); } });
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', auto); else auto();

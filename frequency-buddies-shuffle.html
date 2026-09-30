@@ -107,6 +107,23 @@
   </ol>
 </section>
 
+<section class="fbs-yt" aria-labelledby="fbs-live-h">
+  <h2 id="fbs-live-h">Go live on YouTube, around the clock</h2>
+  <p>There’s a stream view of this page made for live streaming: the show fills the whole screen, starts by itself, goes from episode to episode forever, and shows the captions over the picture. There are no menus or buttons in the way.</p>
+  <div class="fbs-copy"><label for="fbs-live-url">Stream link</label><input id="fbs-live-url" readonly value="https://spreadloveandacceptance.com/frequency-buddies-shuffle.html?stream=1"><button type="button" class="btn" data-copy="fbs-live-url">Copy link</button> <a class="btn" href="/frequency-buddies-shuffle.html?stream=1" target="_blank" rel="noopener">Preview it</a></div>
+  <h3>Setting it up (free, with OBS Studio)</h3>
+  <ol class="fbs-small">
+    <li><strong>Turn on live streaming</strong> in YouTube Studio (Create → Go live). The first time, YouTube can take up to 24 hours to switch it on.</li>
+    <li><strong>Install OBS Studio</strong> (free, from obsproject.com) on a computer that can stay on while you stream.</li>
+    <li>In OBS, under <strong>Sources</strong>, press <strong>+ → Browser</strong>. Paste the stream link above as the URL, set the width to <strong>1920</strong> and the height to <strong>1080</strong>, and tick <strong>“Control audio via OBS”</strong>. Leave “Shutdown source when not visible” unticked.</li>
+    <li>In OBS <strong>Settings → Video</strong>, set both resolutions to <strong>1920×1080</strong> and 30 frames per second. The show starts by itself, with its theme song.</li>
+    <li>In YouTube Studio → <strong>Go live → Stream</strong>, copy your <strong>stream key</strong>. In OBS <strong>Settings → Stream</strong>, choose YouTube and paste the key (or use “Connect account”).</li>
+    <li>In YouTube’s stream settings, set the title and description (use the ones above), and under <strong>Audience</strong> choose <strong>“Yes, it’s made for kids”</strong>. Live chat is switched off for kids’ streams; that’s expected.</li>
+    <li>Press <strong>Start Streaming</strong> in OBS. YouTube shows a preview in a few seconds; press <strong>Go live</strong> if it asks.</li>
+  </ol>
+  <p class="fbs-small">Tips: keep the computer plugged in and set it never to sleep. If the sound ever stops, right-click the Browser source in OBS and choose <strong>Refresh</strong>. YouTube can also add its own automatic captions to a live stream (turn them on in the stream settings).</p>
+</section>
+
 <p class="fbp-note">Nothing you record here is sent anywhere: the video is made in your browser and saved to your own computer.</p>
 </main>
 <script>
