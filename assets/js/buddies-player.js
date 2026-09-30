@@ -1916,11 +1916,12 @@
       if (!P.music) { P.music = true; auOn(true); } if (!P.voices) P.voices = true; P.rate = 1; syncBtns(); save();
       if (!CL.gain) { CL.gain = c.createGain(); CL.gain.gain.value = 1; CL.gain.connect(c.destination); }
       var dest = c.createMediaStreamDestination(); AU.bus.connect(dest); CL.gain.connect(dest);
-      var rc = document.createElement('canvas'); rc.width = 1920; rc.height = 1080; var rg = rc.getContext('2d');
-      rg.fillStyle = '#1B1629'; rg.fillRect(0, 0, 1920, 1080);
+      var RW = o.width || 1920, RH = o.height || 1080;
+      var rc = document.createElement('canvas'); rc.width = RW; rc.height = RH; var rg = rc.getContext('2d');
+      rg.fillStyle = '#1B1629'; rg.fillRect(0, 0, RW, RH);
       var stream = rc.captureStream(30); dest.stream.getAudioTracks().forEach(function (t) { stream.addTrack(t); });
       var mime = recMime(), mr;
-      try { mr = new MediaRecorder(stream, mime ? { mimeType: mime, videoBitsPerSecond: 6e6, audioBitsPerSecond: 160000 } : {}); } catch (e) { if (o.onError) o.onError('Recording couldn’t start in this browser.'); return false; }
+      try { mr = new MediaRecorder(stream, mime ? { mimeType: mime, videoBitsPerSecond: o.bitrate || 6e6, audioBitsPerSecond: 160000 } : {}); } catch (e) { if (o.onError) o.onError('Recording couldn’t start in this browser.'); return false; }
       P.rec = { mr: mr, chunks: [], canvas: rc, g: rg, dest: dest, t0: 0, cues: [], mime: mr.mimeType || mime || 'video/webm', o: o, id: P.id, title: P.ep ? P.ep.title : '' };
       mr.ondataavailable = function (e) { if (e.data && e.data.size) P.rec.chunks.push(e.data); };
       mr.onstop = function () { recFinish(); };
@@ -1930,7 +1931,22 @@
       play();
       return true;
     }
-    function recFrame() { var r = P.rec; if (!r || !cv.width) return; var k = Math.min(1920 / cv.width, 1080 / cv.height), w = cv.width * k, h = cv.height * k; r.g.fillStyle = '#1B1629'; r.g.fillRect(0, 0, 1920, 1080); r.g.drawImage(cv, (1920 - w) / 2, (1080 - h) / 2, w, h); }
+    function recFrame() {
+      var r = P.rec; if (!r || !cv.width) return; var RW = r.canvas.width, RH = r.canvas.height, k = Math.min(RW / cv.width, RH / cv.height), w = cv.width * k, h = cv.height * k;
+      r.g.fillStyle = '#1B1629'; r.g.fillRect(0, 0, RW, RH); r.g.drawImage(cv, (RW - w) / 2, (RH - h) / 2, w, h);
+      var txt = lineEl.textContent, who = whoEl.textContent;
+      if (r.o.captions && txt) { // captions in the picture, like the stream view
+        var g2 = r.g, fs = Math.round(RH * 0.034), pad = fs * 0.55; g2.save(); g2.font = '500 ' + fs + 'px Lora, Georgia, serif';
+        var words = txt.split(' '), lines = [], cur2 = '', maxW = RW * 0.7;
+        words.forEach(function (wd) { var tt = cur2 ? cur2 + ' ' + wd : wd; if (g2.measureText(tt).width > maxW && cur2) { lines.push(cur2); cur2 = wd; } else cur2 = tt; }); if (cur2) lines.push(cur2);
+        var bw = Math.max.apply(null, lines.map(function (l) { return g2.measureText(l).width; })) + pad * 2, lh = fs * 1.3, bh = lines.length * lh + pad * 1.4 + (who ? fs * 0.8 : 0), bx = (RW - bw) / 2, by = RH - bh - RH * 0.03;
+        g2.fillStyle = 'rgba(20,14,32,.74)'; if (g2.roundRect) { g2.beginPath(); g2.roundRect(bx, by, bw, bh, fs * 0.5); g2.fill(); } else g2.fillRect(bx, by, bw, bh);
+        g2.textAlign = 'center'; g2.textBaseline = 'top'; var y = by + pad * 0.7;
+        if (who) { g2.font = '600 ' + Math.round(fs * 0.5) + 'px "IBM Plex Mono", monospace'; g2.fillStyle = '#F7C98B'; g2.fillText(who.toUpperCase(), RW / 2, y); y += fs * 0.8; }
+        g2.font = '500 ' + fs + 'px Lora, Georgia, serif'; g2.fillStyle = '#FFF6E6'; lines.forEach(function (l) { g2.fillText(l, RW / 2, y); y += lh; });
+        g2.restore();
+      }
+    }
     function recCue(who, text) { var r = P.rec; if (!r) return; r.cues.push({ t: (performance.now() - r.t0 - (r.paused || 0)) / 1000, who: who, text: text || '' }); }
     function recStop() { var r = P.rec; if (!r) return; recCue('', ''); try { if (r.mr.state !== 'inactive') r.mr.stop(); } catch (e) { recFinish(); } }
     function srtTime(t) { t = Math.max(0, t); var ms = Math.round(t * 1000), h = Math.floor(ms / 3600000), m = Math.floor(ms / 60000) % 60, s = Math.floor(ms / 1000) % 60; return (h < 10 ? '0' : '') + h + ':' + (m < 10 ? '0' : '') + m + ':' + (s < 10 ? '0' : '') + s + ',' + ('00' + (ms % 1000)).slice(-3); }
