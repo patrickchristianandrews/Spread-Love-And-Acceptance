@@ -2,33 +2,6 @@
   "_about": "Curated answers for the program's own pieces (kind: tool) and the most common questions (kind: intent). keys are names people type (matched as whole words, longest first); pat is an optional pattern for intent cards (same small language as the situations). A tool card can answer 'what is it' (what + how), 'how do I use it' (how), 'what does it mean' (results) and 'show me the math' (math). See tools/chat/README.md.",
   "cards": [
     {
-      "id": "listen",
-      "kind": "intent",
-      "first": true,
-      "name": "listening instead of reading",
-      "pat": "\\b(read|say|speak)\\b.{0,30}\\b(out loud|aloud|to me)\\b|\\b(text to speech|listen to (this|the page|it|pages|the site)|audio version|hear (this|the page|it) (read|out loud)|read aloud|can i listen|can i hear it|voice reading)\\b",
-      "keys": [],
-      "what": [
-        "Yes, your device can read any page out loud."
-      ],
-      "how": [
-        
-        "Your device can read any page too: Speak Screen on an iPhone or iPad, Select to Speak on Android, or Read aloud in Microsoft Edge.",
-        "I’ll keep my answers short, too. Say “make it shorter” any time."
-      ],
-      "links": [],
-      "chips": [
-        [
-          "Make the text bigger",
-          "How do I make the text bigger?"
-        ],
-        [
-          "The words are too hard",
-          "The words are too hard"
-        ]
-      ]
-    },
-    {
       "id": "textsize",
       "kind": "intent",
       "first": true,
@@ -46,10 +19,6 @@
       ],
       "links": [],
       "chips": [
-        [
-          "Can you read it out loud?",
-          "Can you read this out loud?"
-        ],
         [
           "The words are too hard",
           "The words are too hard"
@@ -70,7 +39,6 @@
         "Most pages have a Simple version. Look for 🌱 Simple version near the top: the main idea in a few short cards.",
         "Long pages have an 📌 In short box at the top, and a “Show me only the steps” button that hides everything but the steps.",
         "Easy reading, in Settings at the top of the page, uses a clearer font, more space and shorter lines.",
-        
         "Say “make it shorter”, and I’ll keep my answers short for the rest of this chat."
       ],
       "links": [
@@ -555,7 +523,7 @@
       ],
       "how": [
         "Short on time or focus: “How much time do you have?”, on the home page and in the menu, picks one thing for 2, 5 or 10 minutes.",
-        "On long pages, read 📌 In short, or press “Show me only the steps”. Listen reads a page out loud.",
+        "On long pages, read 📌 In short, or press “Show me only the steps”.",
         "“Pick up where you left off”, on the home page, takes you back to what you were doing.",
         "Forgot something again? Tell me what happened. The fix usually lives outside your head: a cue, one owner, a finish line you can see.",
         "The Wiring Card lets you explain what helps you, like reminders in writing or a heads-up before plans change."
@@ -601,7 +569,6 @@
       "how": [
         "Easy reading, in Settings at the top of the page: a clearer font, more space between lines, and shorter lines.",
         "Text size, in the same place: Larger, Largest or Extra large.",
-        "Listen, near the top of reading pages, reads the page out loud. Your device can read any page too.",
         "Most pages have a 🌱 Simple version: the main idea in a few short cards.",
         "Spelling doesn’t matter here. I read typos as the word you meant.",
         "Say “make it shorter”, and I’ll keep my answers short for the rest of this chat."
@@ -620,10 +587,6 @@
         [
           "Keep your answers short",
           "Keep your answers short"
-        ],
-        [
-          "Can you read it out loud?",
-          "Can you read this out loud?"
         ]
       ],
       "notPat": "\\b(mad at|upset|angry|fight|fought|argue|argument|snapped|yelled)\\b"

@@ -511,15 +511,6 @@
       document.head.appendChild(cw);
     }
 
-    // "Listen": the page read aloud by the device's own voice (listen.js), on reading pages
-    var lmain = document.querySelector('main');
-    if (lmain && 'speechSynthesis' in window && !busyPage() && current !== '/index.html' && !body.hasAttribute('data-no-listen') &&
-        !document.querySelector('meta[http-equiv="Content-Security-Policy"]') && (lmain.textContent || '').split(/\s+/).length > 120) {
-      var ls = document.createElement('script'); ls.src = '/assets/js/listen.js';
-      // (no Listen buttons at the top of the page any more; the reader stays for the mini dives' little speaker buttons)
-      document.head.appendChild(ls);
-    }
-
     // "In short" bullets on the long pages, and "Show me only the steps" (in-short.js)
     if (lmain && !busyPage() && current !== '/index.html' && !document.querySelector('meta[http-equiv="Content-Security-Policy"]') &&
         (inDepth || /^\/library/.test(current) || (lmain.textContent || '').split(/\s+/).length > 1200) && !/^\/workpapers\//.test(current)) {
@@ -752,12 +743,12 @@
   var JOIN = { 'screen shot': 'screenshot', 'screen shots': 'screenshot', 'melt down': 'meltdown', 'shut down': 'shutdown', 'grown up': 'grown-up', 'grew up': 'growing up', 'brought up': 'growing up' };
   // words that mean the same here: each term also matches these
   var SAME = { autism: ['autistic', 'neurodivergent', 'wired differently', 'wiring', 'neurotype'], autistic: ['autism', 'neurodivergent', 'wired differently', 'wiring'],
-    adhd: ['neurodivergent', 'wired differently', 'wiring', 'attention'], dyslexia: ['easy reading', 'read aloud', 'listen', 'text size'], neurodivergent: ['wired differently', 'wiring'],
+    adhd: ['neurodivergent', 'wired differently', 'wiring', 'attention'], dyslexia: ['easy reading', 'text size'], neurodivergent: ['wired differently', 'wiring'],
     chores: ['chore', 'housework', 'jobs', 'owner'], housework: ['chores', 'jobs'], fight: ['argument', 'conflict', 'sideways', 'row'], argument: ['fight', 'conflict'], arguing: ['fight', 'argument', 'conflict'],
     calm: ['settle', 'calm-down', 'breathe', 'soothe'], anxiety: ['worry', 'anxious', 'calm', 'stress'], anxious: ['worry', 'anxiety', 'calm'], tired: ['battery', 'rest', 'sleep', 'drained'],
     sleep: ['rest', 'tired', 'night'], burnout: ['battery', 'drained', 'overload', 'load'], stress: ['battery', 'pressure', 'load'], stressed: ['stress', 'battery', 'pressure'],
-    overwhelmed: ['battery', 'calm', 'overload'], weather: ['forecast', 'today'], breathe: ['breathing', 'breath', 'calm'], listen: ['read aloud', 'audio', 'speech'],
-    bigger: ['text size', 'larger'], aloud: ['listen', 'read aloud'], font: ['text size', 'easy reading'], erase: ['delete', 'stored', 'device'], delete: ['erase', 'stored'], privacy: ['private', 'device', 'stored'],
+    overwhelmed: ['battery', 'calm', 'overload'], weather: ['forecast', 'today'], breathe: ['breathing', 'breath', 'calm'],
+    bigger: ['text size', 'larger'], font: ['text size', 'easy reading'], erase: ['delete', 'stored', 'device'], delete: ['erase', 'stored'], privacy: ['private', 'device', 'stored'],
     unbilled: ['invisible work', 'unseen work', 'work nobody sees'], invisible: ['unseen', 'unbilled'], partner: ['partners', 'couple'], text: ['message'], message: ['text', 'words'],
     divorce: ['separation', 'separated', 'co-parent', 'co-parents', 'ex'], separated: ['divorce', 'co-parent'], separation: ['divorce', 'co-parent'],
     sorry: ['apology', 'apologize', 'repair', 'make up'], apology: ['sorry', 'apologize', 'repair'], apologize: ['apology', 'sorry', 'repair'], repair: ['apology', 'sorry'],
@@ -1537,15 +1528,7 @@
     box.querySelectorAll('input[data-switch]').forEach(function (i) { i.checked = !!map[i.getAttribute('data-switch')]; i.disabled = quietOn() && i.getAttribute('data-switch') !== 'ruler'; });
     box.querySelectorAll('[data-preset]').forEach(function (b) { b.setAttribute('aria-pressed', String(lsGet(PRESETS[b.getAttribute('data-preset')].key) === '1')); });
     var qn = box.querySelector('.tol-set-qnote'); if (qn) qn.hidden = !quietOn();
-    // Listen: only promised when this device has a voice to read with (listen.js hides itself otherwise)
-    var ln = box.querySelector('[data-listen-note]');
-    if (ln) {
-      var synthOk = 'speechSynthesis' in window && 'SpeechSynthesisUtterance' in window, voices = 0;
-      try { voices = synthOk ? window.speechSynthesis.getVoices().length : 0; } catch (e) {}
-      var hasVoice = synthOk && (voices > 0 || /iPhone|iPad|iPod|Macintosh|Android/.test(navigator.userAgent));
-      ln.innerHTML = '<span aria-hidden="true">&#128266;</span> To hear a page read aloud, use your device’s own read-aloud (look for “Spoken content”, “Select to speak” or “Read aloud” in its settings).';
-      ln.hidden = false;
-    }
+
   }
   function buildSettings() {
     var id = 'tol-set-' + Math.random().toString(36).slice(2, 7);
@@ -1575,7 +1558,6 @@
       '<fieldset><legend>Page tint</legend>' + radio('tint', 'data-tint-opt', 'none', 'None') + Object.keys(TINTS).map(function (k) { return radio('tint', 'data-tint-opt', k, '<span class="tol-set-swatch is-' + k + '" aria-hidden="true"></span>' + TINTS[k]); }).join('') + '</fieldset>' +
       '<fieldset><legend>Colors (dark mode)</legend>' + radio('theme', 'data-theme-opt', 'auto', 'Follow my device') + radio('theme', 'data-theme-opt', 'light', 'Light') + radio('theme', 'data-theme-opt', 'dark', 'Dark') + '</fieldset>' +
       sw('ruler', 'Reading ruler', 'A soft band that follows your pointer or finger, so you keep your place on the line') +
-      '<p class="tol-set-note" data-listen-note hidden></p>' +
       '<p class="tol-set-foot">These choices stay in this browser only. <button type="button" class="tol-set-reset">Back to the usual</button> <a href="/on-this-device.html">What’s stored on this device</a></p>' +
       '</div>');
     box.addEventListener('change', function (e) {

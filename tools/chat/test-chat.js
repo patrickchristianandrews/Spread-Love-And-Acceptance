@@ -390,7 +390,6 @@ t('care', 'i feel overwhelmed (no doubled line)', { q: 'i feel overwhelmed', kin
 t('care', 'i feel overwhelmed (steps first)', { q: 'i feel overwhelmed', kind: 'sit', text: /^[^\n]*\n## Small steps for today/ });
 // site settings
 t('care', 'how do i make the text bigger', { kind: 'care', id: 'textsize', text: /Text size/, not: /Our Logo|Spread Love & Acceptance/ });
-t('care', 'can you read this out loud', { kind: 'care', id: 'listen', text: /read-aloud|read any page/, not: /[Ss]ensory/ });
 t('care', 'the words are too hard', { kind: 'care', id: 'hardwords', text: /Simple version[\s\S]*Easy reading/ });
 // forgiving spelling, with "I think you mean"
 t('spelling', 'what is unbiled det', { text: /I think you mean “what is unbilled debt”[\s\S]*[Uu]nbilled [Dd]ebt/, link: '/' });
@@ -447,7 +446,7 @@ t('nt2', 'what does your lens mean', { kind: 'term', id: 'yourlens', text: /pick
 t('nt2', 'what is my lens', { link: '/growing-up', not: /late screens|as if from the outside/ });
 // dyslexic: repair help, reading help, the screenshot import, short answers that stay short
 t('nt2', 'my partnr is mad at me', { kind: 'sit', id: 'partner+madatme', text: /I think you mean[\s\S]*upset with you/, not: /“Are you mad at me\?” is a real question/, script: true });
-t('nt2', 'im dislexic is this site ok for me', { kind: 'care', id: 'dyslexia', text: /Easy reading[\s\S]*Extra large[\s\S]*Listen[\s\S]*Simple version/, not: /take things literally/ });
+t('nt2', 'im dislexic is this site ok for me', { kind: 'care', id: 'dyslexia', text: /Easy reading[\s\S]*Extra large[\s\S]*Simple version/, not2: /Listen/, not: /take things literally/ });
 t('nt2', 'can i use a screen shot', { kind: 'care', id: 'screenshot', text: /Choose screenshots/, link: '/conversation-reader.html', not: /phone-free|attention/ });
 t('nt2', 'how do i make the writing biger (Extra large)', { q: 'how do i make the writing biger', kind: 'care', id: 'textsize', text: /Extra large/ });
 c('nt2', ['what is the lemonade stand', 'make it shorter', 'what is the signal translator'], { kind: 'card', id: 'signal', text: /^In short: /, not: /## How to use it/ });

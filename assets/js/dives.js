@@ -110,7 +110,7 @@
       box = document.createElement('div');
       box.className = 'tol-dive-card'; box.setAttribute('role', 'dialog'); box.setAttribute('aria-modal', 'true'); box.setAttribute('aria-labelledby', 'tol-dive-h');
       box.innerHTML = '<div class="tol-dive-box"><button type="button" class="tol-dive-x" aria-label="Close">&times;</button>' +
-        '<p class="tol-dive-k"><span class="tol-dive-i" aria-hidden="true"></span> Mini dive' + ('speechSynthesis' in window ? ' <button type="button" class="tol-listen-mini tol-dive-listen" aria-pressed="false"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" focusable="false"><path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z" fill="currentColor"/><path d="M15.5 8.5a5 5 0 0 1 0 7" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/></svg> Listen</button>' : '') + '</p><ol class="tol-dive-meter" aria-hidden="true"></ol><h2 id="tol-dive-h"></h2><div class="tol-dive-body" aria-live="polite"></div><p class="tol-dive-wade"></p><p class="tol-dive-more"></p></div>';
+        '<p class="tol-dive-k"><span class="tol-dive-i" aria-hidden="true"></span> Mini dive' + '</p><ol class="tol-dive-meter" aria-hidden="true"></ol><h2 id="tol-dive-h"></h2><div class="tol-dive-body" aria-live="polite"></div><p class="tol-dive-wade"></p><p class="tol-dive-more"></p></div>';
       document.body.appendChild(box);
       box.addEventListener('click', function (e) {
         if (e.target === box || e.target.closest('.tol-dive-x')) return close();

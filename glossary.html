@@ -328,7 +328,7 @@
   <p class="gl-ex"><strong>For example:</strong> Turn it on before reading in a busy place, and turn it off any time.</p>
   <p class="gl-links"><a href="/on-this-device.html">What’s stored on this device</a> </p>
 </article>
-<article class="gl-term" id="easy-reading" data-also="easy reading, dyslexia, font, spacing, text size, listen, read aloud">
+<article class="gl-term" id="easy-reading" data-also="easy reading, dyslexia, font, spacing, text size">
   <h3><span class="gl-ico" aria-hidden="true">📖</span> Easy reading</h3>
   <p class="gl-def">Easy reading uses a clear font, more space between letters and lines, shorter lines and a soft tint. It’s in Settings at the top of every page, next to text size.</p>
   <p class="gl-ex"><strong>For example:</strong> Many readers find lines easier to track with more space between them.</p>
@@ -441,22 +441,6 @@
     var b = e.target.closest && e.target.closest('[data-gl-dive]'); if (!b) return;
     if (window.TOLDives) window.TOLDives.open(b.getAttribute('data-gl-dive'), b);
   });
-  // Listen: each word read aloud on its own (listen.js), where the device has a voice
-  function addListen() {
-    if (!window.TOLListen || !window.TOLListen.ok) return;
-    window.TOLListen.whenReady(function () {
-      terms.forEach(function (t) {
-        if (t.querySelector('.tol-listen-mini')) return;
-        var b = window.TOLListen.button('Listen'); b.setAttribute('aria-label', 'Listen: ' + t.querySelector('h3').textContent.trim());
-        b.addEventListener('click', function () { window.TOLListen.read(t, b); });
-        t.querySelector('.gl-links').appendChild(b);
-      });
-    });
-  }
-  if ('speechSynthesis' in window) {
-    if (window.TOLListen) addListen();
-    else document.addEventListener('tol-listen-ready', addListen);
-  }
 })();
 </script>
 </body>
