@@ -586,7 +586,7 @@
     if (SND()) SND().act(act);
   }
   // ---------- movie breaks: now and then the pals head to the little theater for a random mini movie ----------
-  var MB = { prev: null, last: 0 };
+  var MB = { prev: null, last: 0 }, wantPlace = false;
   function whereText() { var ph = phaseOf(hour); return 'Pal cam · ' + (EVENT && EVENT.special ? EVENT.name + ' · ' : '') + ph.charAt(0).toUpperCase() + ph.slice(1) + ' at ' + setting.name; }
   function toSetting(st) {
     setting = st; bgKey = ''; ambient = []; if (whereEl) whereEl.textContent = whereText();
@@ -601,6 +601,10 @@
   function finishAct() {
     var a = cur && cur.act, next = null, combo = false;
     if (a === MOVIE && MB.prev) { var back = MB.prev; MB.prev = null; MB.last = clock; toSetting(back); } // the movie's over: back outside
+    else if (wantPlace && !MB.prev) { // time for a new place: the pals just go there, and the music and sounds carry on
+      wantPlace = false; var ns = pickSetting();
+      if (ns && ns.id !== setting.id && ns.id !== 'theater') { var nw = new Date(); hour = nw.getHours() + nw.getMinutes() / 60; toSetting(ns); }
+    }
     else if (movieBreakDue(a)) {
       MB.prev = setting; MB.last = clock; TH.clip = null; // a fresh, random movie each time
       toSetting(SETTINGS.filter(function (x) { return x.id === 'theater'; })[0]);
@@ -1338,6 +1342,7 @@
     tricks: function () { if (!ACTS.length) loadActs(); return TRICKS.map(function (l) { return l.map(function (t) { return { id: t.id, name: t.name }; }); }); },
     facts: function () { return shownFacts.map(function (l) { return l.map(function (f) { return f.k; }); }); }, factCounts: function () { if (!ACTS.length) loadActs(); return [FACTS[0].length, FACTS[1].length]; },
     isOpen: function () { return isOpen; },
+    newPlace: function () { if (!isOpen) return false; wantPlace = true; return true; }, // after the current moment, on to a new place
     movieBreak: function () { if (!isOpen || MB.prev || setting.id === 'theater' || !BYID[MOVIE.id]) return false; MB.prev = setting; MB.last = clock; TH.clip = null; toSetting(SETTINGS.filter(function (x) { return x.id === 'theater'; })[0]); startTravel(BYID[MOVIE.id], {}); return true; },
     settingId: function () { return setting && setting.id; }, soundNote: function () { return noteOpen(); }, hideSoundNote: function () { hideNote(false); },
     frames: function () { return frames.slice(); }, resetFrames: function () { frames.length = 0; },

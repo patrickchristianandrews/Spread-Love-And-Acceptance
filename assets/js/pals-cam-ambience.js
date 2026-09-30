@@ -47,21 +47,23 @@
     try { out.gain.setTargetAtTime(lv, c.currentTime, 0.6); } catch (e) { out.gain.value = lv; }
     return out;
   }
-  function stopAll(secs) {
-    gen++;
-    var c = ctx(), list = cur; cur = [];
+  function fadeOut(list, secs) {
+    var c = ctx();
     list.forEach(function (n) {
       try { var t = c.currentTime; n.g.gain.cancelScheduledValues(t); n.g.gain.setValueAtTime(n.g.gain.value, t); n.g.gain.linearRampToValueAtTime(0.0001, t + secs); n.s.stop(t + secs + 0.1); } catch (e) {}
     });
   }
+  function stopAll(secs) { gen++; var list = cur; cur = []; fadeOut(list, secs); }
   function start() {
-    stopAll(FADE_OUT); var my = ++gen;
-    var c = ctx(), b = bus(), m = MAP[sceneId];
-    if (!on || paused || !c || !b || !m || document.hidden) return;
+    var my = ++gen, c = ctx(), b = bus(), m = MAP[sceneId];
+    if (!on || paused || !c || !b || !m || document.hidden) { stopAll(FADE_OUT); return; }
     var layers = m[isNight(hour) ? 1 : 0], want = sceneId;
-    layers.forEach(function (L) {
-      load(L[0]).then(function (buf) {
-        if (!buf || my !== gen || sceneId !== want || !on || paused) return;
+    // load the new place's sounds first, then crossfade: the old ones fade out as the new ones fade in, with no silent gap
+    Promise.all(layers.map(function (L) { return load(L[0]); })).then(function (bs) {
+      if (my !== gen || sceneId !== want || !on || paused) return;
+      var old = cur; cur = []; fadeOut(old, FADE_OUT);
+      bs.forEach(function (buf, i) {
+        if (!buf) return; var L = layers[i];
         var s = c.createBufferSource(), g = c.createGain();
         s.buffer = buf; s.loop = true; s.loopStart = Math.min(0.06, buf.duration / 4); s.loopEnd = Math.max(s.loopStart + 1, buf.duration - 0.06); // skip the mp3's tiny padding
         g.gain.value = 0.0001; s.connect(g); g.connect(b);

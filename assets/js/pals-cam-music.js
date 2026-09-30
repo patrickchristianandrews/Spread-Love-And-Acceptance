@@ -127,7 +127,7 @@
     var c = ctx(); if (!running || !A || !c || c.state !== 'running') return;
     var st = M.style, beat = 60 / (st.bpm * (night() ? 0.88 : 1)), soft = (st.soft || 1) * (night() ? 0.75 : 1);
     if (M.next < c.currentTime) M.next = c.currentTime + 0.1;
-    while (M.next < c.currentTime + 0.8) {
+    while (M.next < c.currentTime + (window.__pcLite ? 2.5 : 1.5)) { // planned well ahead, so a busy moment (or a small TV stick) never leaves a gap
       var t = M.next;
       if (M.beat % 4 === 0) { // a new bar: sometimes a new chord (a walk that never loops exactly)
         if (M.bars % 2 === 0) M.deg = rnd(NEXT[M.deg] || [0]);

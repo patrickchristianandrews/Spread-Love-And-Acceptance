@@ -176,6 +176,9 @@
   }
   function freshScene() {
     if (!on || !cam()) return;
+    // a new place now and then, without stopping: the pals head there after what they're doing,
+    // and the music and place sounds carry on (older pal cam scripts: reopen instead)
+    if (cam().newPlace) { cam().newPlace(); return; }
     cam().close(); cam().open({ noNote: true });
     styleCam();
   }
