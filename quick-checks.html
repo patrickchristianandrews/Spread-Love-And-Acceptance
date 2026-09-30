@@ -82,6 +82,11 @@
   .pause-clock{ font-family:"Fraunces", Georgia, serif; font-size:2rem; line-height:1.1; margin:.2rem 0 .4rem; font-variant-numeric:tabular-nums; }
   .pause .chips{ margin:.2rem 0 .5rem; }
   .pause-end{ background:var(--paper); border-radius:var(--radius); padding:.7rem .9rem; margin:.5rem 0 0; }
+  .pause-busy{ background:var(--paper); border-radius:var(--radius); padding:.75rem .9rem .8rem; margin:.7rem 0 0; border:1px dashed #9FBCD8; }
+  .read .pause-busy h4{ font-family:"Fraunces", Georgia, serif; font-weight:600; font-size:.98rem; margin:0 0 .2rem; }
+  .pause-busy .pb-t{ margin:0; font-weight:600; }
+  .pause-busy .pb-d{ margin:.1rem 0 .55rem; }
+  .pause-busy .pb-note{ margin:.45rem 0 0; font-size:.85rem; opacity:.8; }
   details.src{ margin:.55rem 0 0; font-size:.86rem; color:var(--ink-soft); max-width:62ch; }
   details.src summary{ cursor:pointer; min-height:44px; display:flex; align-items:center; }
   .fc-body{ font-size:1.04rem; line-height:1.7; max-width:62ch; margin:1rem 0 0; }
@@ -312,7 +317,7 @@
 
         <div class="pause" id="pause" hidden>
           <h3>A gentle pause before you talk</h3>
-          <p id="pause-intro">The forecast suggests waiting a little. If you like, start a pause here: a quiet countdown on this page only. Nothing pops up and nothing makes a sound.</p>
+          <p id="pause-intro">The forecast suggests waiting a little. If you like, start a pause here: a quiet countdown on this page, plus something calm to do while the time goes by, picked at random. Close it anytime.</p>
           <div class="chips" role="group" aria-label="How long a pause">
             <button class="chip" type="button" data-pause="10" aria-pressed="false">10 minutes</button>
             <button class="chip" type="button" data-pause="20" aria-pressed="true">20 minutes</button>
@@ -328,6 +333,13 @@
           <div class="actions" style="margin-top:.4rem">
             <button class="btn" type="button" id="pause-go">Start the pause</button>
             <button class="btn" type="button" id="pause-stop" hidden>Stop the pause</button>
+          </div>
+          <div class="pause-busy" id="pause-busy" hidden>
+            <h4>While you wait</h4>
+            <p class="pb-t" id="pb-t"></p>
+            <p class="pb-d" id="pb-d"></p>
+            <div class="actions"><a class="btn" id="pb-open" href="#" target="_blank" rel="noopener">Open it</a><button class="btn" type="button" id="pb-other">Something else</button></div>
+            <p class="pb-note" id="pb-note">Your countdown keeps going on this page.</p>
           </div>
         </div>
 
@@ -847,9 +859,9 @@
     if(!wants && !pauseEnd()){ box.hidden=true; return; }
     box.hidden=false;
     $('pause-intro').textContent = w[2]==='wait'
-      ? 'The forecast suggests waiting about 20 minutes. If you like, start a pause here: a quiet countdown on this page only. Nothing pops up and nothing makes a sound.'
-      : w[2]==='later' ? 'The forecast suggests leaving the big talk for another day. If it truly can’t wait, a short pause first still helps. The countdown stays on this page only, with no pop-ups or sounds.'
-      : 'Your pause is still running. The countdown stays on this page only.';
+      ? 'The forecast suggests waiting about 20 minutes. If you like, start a pause here: a quiet countdown on this page, plus something calm to do while the time goes by, picked at random. Close it anytime.'
+      : w[2]==='later' ? 'The forecast suggests leaving the big talk for another day. If it truly can’t wait, a short pause first still helps. When you start, a quiet countdown runs here and something calm opens to keep you busy while you wait.'
+      : 'Your pause is still running. The countdown stays on this page.';
     $('pause-say').textContent=$('fc-say').textContent;
   }
   function fmtClock(ms){ var s=Math.max(0,Math.ceil(ms/1000)), m=Math.floor(s/60); return m+':'+(s%60<10?'0':'')+(s%60); }
@@ -860,7 +872,7 @@
     if(left<=0){
       clearInterval(pauseT); pauseT=null;
       try{ sessionStorage.removeItem(PAUSEKEY); }catch(e){}
-      $('pause-clock').hidden=true; $('pause-end').hidden=false; $('pause-go').hidden=false; $('pause-go').textContent='Start another pause'; $('pause-stop').hidden=true;
+      $('pause-clock').hidden=true; $('pause-end').hidden=false; $('pause-go').hidden=false; $('pause-go').textContent='Start another pause'; $('pause-stop').hidden=true; $('pause-busy').hidden=true;
       if(sky) $('pause-say').textContent=$('fc-say').textContent;
       $('pause-say').parentNode.hidden=!$('pause-say').textContent;
       $('pause').hidden=false;
@@ -878,18 +890,58 @@
       c.setAttribute('aria-pressed','true'); pauseMins=+c.getAttribute('data-pause');
     });
   });
+  // ---------- while you wait: something calm, picked at random, to keep hands and mind busy ----------
+  var CALMKEY='tol-wx-calm', calmNow=null;
+  function openBreathe(){
+    if(window.TOLBreathe){ window.TOLBreathe.open(); return; }
+    var sc=document.createElement('script'); sc.src='/assets/js/breathe.js';
+    sc.onload=function(){ if(window.TOLBreathe) window.TOLBreathe.open(); }; document.head.appendChild(sc);
+  }
+  var CALM=[
+    { id:'palcam', t:'Watch Tidbit and Sugarfoot on the pal cam', d:'The two pups play, nap and wander around. Just watch them for a while.', run:function(){ if(window.TOLPalCam) window.TOLPalCam.open(); } },
+    { id:'breathe', t:'A slow breathing break', d:'Follow the light in and out, at your own pace.', run:openBreathe },
+    { id:'drift', t:'Drift', d:'Soft shapes and kind words float slowly by.', url:'/calm-visualizer.html' },
+    { id:'garden', t:'The Night Garden', d:'A quiet garden to wander around and play in.', url:'/night-garden.html' },
+    { id:'bloom', t:'Word Bloom', d:'Turn a wheel of letters and find the hidden words.', url:'/word-bloom.html' },
+    { id:'cross', t:'A quiet crossword', d:'A small crossword with gentle clues.', url:'/quiet-crossword.html' },
+    { id:'search', t:'Quiet Words', d:'A calm word search, one word at a time.', url:'/quiet-words.html' },
+    { id:'play', t:'Pause & Play', d:'A glowing light to breathe with, singing fireflies and a slow lily-pond puzzle.', url:'/pause-and-play.html' },
+    { id:'movie', t:'Frequency Buddies: The Storm Over the Treehouse', d:'Watch the pups take a pause of their own, then come back to it together.', url:'/frequency-buddies.html?ep=s1e1' }
+  ];
+  function calmPick(){
+    var last=''; try{ last=sessionStorage.getItem(CALMKEY)||''; }catch(e){}
+    var pool=CALM.filter(function(c){ return c.id!==last; }), c=pool[Math.floor(Math.random()*pool.length)];
+    try{ sessionStorage.setItem(CALMKEY, c.id); }catch(e){}
+    return c;
+  }
+  function calmShow(c){
+    calmNow=c; $('pause-busy').hidden=false; $('pb-t').textContent=c.t; $('pb-d').textContent=c.d;
+    var a=$('pb-open');
+    if(c.url){ a.href=c.url; a.target='_blank'; a.textContent='Open it (new tab)'; $('pb-note').textContent='It opens in a new tab, so your countdown keeps going here. Come back whenever you like.'; }
+    else { a.href='#'; a.removeAttribute('target'); a.textContent='Open it'; $('pb-note').textContent='Your countdown keeps going on this page.'; }
+  }
+  function calmOpen(c){
+    if(c.run){ c.run(); return; }
+    var w=null; try{ w=window.open(c.url,'_blank'); if(w) w.opener=null; }catch(e){}
+    if(!w) $('pb-note').textContent='Tap “Open it” to start it. Your countdown keeps going here.';
+  }
+  $('pb-open').addEventListener('click', function(e){ if(calmNow && calmNow.run){ e.preventDefault(); calmNow.run(); } });
+  $('pb-other').addEventListener('click', function(){ var c=calmPick(); calmShow(c); calmOpen(c); });
   $('pause-go').addEventListener('click', function(){
     try{ sessionStorage.setItem(PAUSEKEY, String(Date.now()+pauseMins*60000)); }catch(e){}
     $('pause-end').hidden=true; tick.lastMin=null;
     $('pause-status').textContent='Pause started: '+pauseMins+' minutes. The countdown is on this page.';
     clearInterval(pauseT); pauseT=setInterval(tick,1000); tick();
+    var c=calmPick(); calmShow(c); calmOpen(c); // something calm right away, so the waiting has somewhere to go
   });
   $('pause-stop').addEventListener('click', function(){
+    $('pause-busy').hidden=true;
     try{ sessionStorage.removeItem(PAUSEKEY); }catch(e){}
     clearInterval(pauseT); pauseT=null; tick();
     $('pause-go').textContent='Start the pause'; $('pause-status').textContent='Pause stopped.';
   });
-  if(pauseEnd()){ $('pause').hidden=false; $('pause-intro').textContent='Your pause is still running. The countdown stays on this page only.'; pauseT=setInterval(tick,1000); tick(); }
+  if(pauseEnd()){ $('pause').hidden=false; $('pause-intro').textContent='Your pause is still running. The countdown stays on this page.'; pauseT=setInterval(tick,1000); tick();
+    var lastId=''; try{ lastId=sessionStorage.getItem(CALMKEY)||''; }catch(e){} var lc=CALM.filter(function(c){ return c.id===lastId; })[0]; if(lc) calmShow(lc); }
 
   draw();
 
