@@ -530,10 +530,23 @@
       var lp = document.createElement('script'); lp.src = '/assets/js/learn-play.js'; document.head.appendChild(lp);
     }
 
+    // "Watch it with the pups": the one Frequency Buddies episode that fits this reading page (buddies-suggest.js).
+    // It reads the page's pillar, so it loads after pillars.js. Not on the games, the episodes page itself,
+    // the tools, the legal, account and sign-in pages, or the tender pages.
+    var buddiesOk = document.querySelector('main') && (document.querySelector('main.read') || inDepth) && !body.hasAttribute('data-no-buddies') &&
+      !helpersHidden() && !busyPage() && !sensitivePage() && !(hereSection && hereSection.id === 'play') &&
+      !document.querySelector('meta[http-equiv="Content-Security-Policy"]') &&
+      !/^\/(index|frequency-buddies|404|offline|ask|brand|contents|reading|library|whats-new|roadmap|telemetry|membership|on-this-device|privacy-policy|refund-policy|terms-of-service|sent-this|about|suite-index)\.html$|^\/(legal|workpapers\/fill|store|supabase)\//.test(current);
+    function loadBuddies() {
+      if (!buddiesOk || window.TOLBuddiesSuggest) return;
+      var bs = document.createElement('script'); bs.src = '/assets/js/buddies-suggest.js'; document.head.appendChild(bs);
+    }
     // which of the Five Pillars this page puts to work, as a small strip under the title (pillars.js)
     if (!body.hasAttribute('data-no-pillars') && current !== '/index.html' && !document.querySelector('meta[http-equiv="Content-Security-Policy"]')) {
-      var pj = document.createElement('script'); pj.src = '/assets/js/pillars.js'; document.head.appendChild(pj);
-    }
+      var pj = document.createElement('script'); pj.src = '/assets/js/pillars.js';
+      pj.onload = pj.onerror = loadBuddies;
+      document.head.appendChild(pj);
+    } else loadBuddies();
 
     // Tidbit & Sugarfoot pop by now and then with a tip or a little love (pup-visits.js; the pups and their words load only when a visit is about to happen)
     // (not on the tender pages, and not on Frequency Buddies, where they'd sit over the episode)
