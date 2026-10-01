@@ -153,6 +153,7 @@
     { id: 'media', title: 'Media', blurb: 'Tidbit and Sugarfoot’s movies and live pal cam, music and audio for settling first (Pillar III), and conversations about all five pillars.', items: [
       { href: '/frequency-buddies.html', code: 'Movies', title: 'Tidbit & Sugarfoot: Frequency Buddies', note: 'Five animated adventures with the two pals, with voices, music and captions, about 16 minutes each' },
       { href: '/frequency-buddies-shuffle.html', code: 'Shuffle', title: 'Frequency Buddies on shuffle', note: 'Episode after episode in a random order, and every episode to download' },
+      { href: '/frequency-buddies-live.html', code: 'On air', title: 'Frequency Buddies Live', note: 'An always-on station: drop in on the episode playing now, or cast it to your TV' },
       { href: '/pal-cam-tv.html', code: 'Live', title: 'Tidbit & Sugarfoot: Pal Cam TV', note: 'The pals live, all day, full screen or cast to your TV, with music and the sounds of each place' },
       { href: '/reading.html', code: 'Articles', title: 'Articles to read', note: 'Hand-picked articles from Psychology Today, Greater Good, the Gottman Institute and more, grouped by topic and fresh every visit' },
       { href: '/soundscapes.html', code: 'Audio', title: 'Soundscape Catalog', note: 'Background audio made for settling down and focusing' },

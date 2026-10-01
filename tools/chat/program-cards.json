@@ -3799,6 +3799,49 @@
       ]
     },
     {
+      "id": "buddieslive",
+      "kind": "tool",
+      "name": "Frequency Buddies Live",
+      "keys": [
+        "frequency buddies live",
+        "live station",
+        "live tv",
+        "always on",
+        "cast frequency buddies",
+        "frequency buddies on tv",
+        "watch on my tv",
+        "drop in on"
+      ],
+      "what": "Frequency Buddies Live is a station that is always on, like live TV. Whenever you tune in, you join the episode that's playing right now, and everyone watching sees the same moment. All five episodes play in order, around the clock.",
+      "how": [
+        "Open the live station and press Tune in.",
+        "Tap the picture to show the buttons: pause, sound, full screen and Back to live.",
+        "To watch on a TV, press Cast (Chrome with a Chromecast or Google TV) or Play on a TV (AirPlay on an iPhone, iPad or Mac).",
+        "The Coming up list shows what plays next, in your own time zone."
+      ],
+      "chips": [
+        [
+          "What's on right now?",
+          "What's on Frequency Buddies Live?"
+        ],
+        [
+          "Can I watch it on my TV?",
+          "How do I cast Frequency Buddies to my TV?"
+        ]
+      ],
+      "pillar": "Every episode shows one of the five pillars in a story kids can follow.",
+      "links": [
+        [
+          "Frequency Buddies Live",
+          "/frequency-buddies-live.html"
+        ],
+        [
+          "Pick an episode yourself",
+          "/frequency-buddies.html"
+        ]
+      ]
+    },
+    {
       "id": "buddies",
       "kind": "tool",
       "name": "Frequency Buddies",

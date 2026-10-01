@@ -5,7 +5,8 @@
    Recordings (from the open-source Blanket app's collection, edited into gentle loops):
    birds by kvgarlic (CC0), stream by gluckose (CC0), wind by felix.blume (CC0), boat by Falcet (CC0),
    crickets by Lisa Redfern (public domain), fireplace by ezwa (public domain), café by stephan (public
-   domain), waves by Luftrum (CC BY), rain by alex36917 (CC BY), city by gezortenplotz (CC BY). */
+   domain). The waves, rain and city sounds were made for this site from scratch (shaped noise, no recordings),
+   so they're free to use. */
 (function () {
   'use strict';
   var BASE = '/assets/audio/ambience/';

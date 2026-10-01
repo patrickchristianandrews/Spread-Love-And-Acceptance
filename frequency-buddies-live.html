@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-NKC6CQ9S66"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-NKC6CQ9S66');
+</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Frequency Buddies Live: Drop In Anytime</title>
+<meta name="description" content="A Frequency Buddies TV station that is always on: drop in anytime, watch the episode playing right now, and cast it to your TV.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,500&family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/css/site.css">
+<link rel="stylesheet" href="/assets/css/reading.css">
+<script src="/assets/js/site.js" defer></script>
+<style>
+  .fbl main.read{ max-width:60rem; }
+  .fbl .read > *{ max-width:none; }
+  .fbl-hero{ text-align:center; margin:.4rem 0 1rem; }
+  .fbl-k{ margin:0; font:500 .75rem/1 "IBM Plex Mono", monospace; letter-spacing:.14em; text-transform:uppercase; color:#8A6D8F; }
+  .fbl-hero h1{ margin:.35rem 0 .35rem; font-size:clamp(2rem, 7vw, 3rem); line-height:1.05; }
+  .fbl-hero p{ margin:0 auto; max-width:38rem; font-family:"Fraunces", Georgia, serif; font-style:italic; font-size:1.08rem; color:#4E3F6B; }
+  .fbl-tv{ position:relative; aspect-ratio:16/9; border-radius:22px; overflow:hidden; background:#1E1730 url(/assets/img/frequency-buddies-season-1.jpg) center/cover; box-shadow:0 10px 30px rgba(40,25,70,.25); }
+  @media (max-width:600px){ .fbl-tv{ margin:0 -.6rem; border-radius:14px; } }
+  .fbl-tv video{ position:absolute; inset:0; width:100%; height:100%; background:#000; display:block; }
+  .fbl-tv video[hidden]{ display:none; }
+  .fbl-tv:fullscreen{ border-radius:0; } .fbl-tv:-webkit-full-screen{ border-radius:0; }
+  .fbl-start{ position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:.7rem; padding:1rem; text-align:center; background:rgba(30,23,48,.62); color:#FFF8EE; }
+  .fbl-start[hidden]{ display:none; }
+  .fbl-start p{ margin:0; max-width:28rem; font-size:1rem; color:#F1EBFF; }
+  .fbl-go{ min-height:56px; padding:.75rem 1.8rem; border:0; border-radius:999px; background:#FFF8EE; color:#3C3350; font:600 1.15rem "Lora", Georgia, serif; cursor:pointer; }
+  .fbl-go:focus-visible, .fbl-ctl button:focus-visible{ outline:3px solid #F2CAD5; outline-offset:3px; }
+  .fbl-badge{ position:absolute; left:12px; top:12px; z-index:2; display:flex; align-items:center; gap:.4rem; padding:.3rem .7rem; border-radius:999px; background:rgba(20,14,34,.72); color:#fff; font:600 .78rem/1 "IBM Plex Mono", monospace; letter-spacing:.1em; text-transform:uppercase; pointer-events:none; }
+  .fbl-badge i{ width:.6rem; height:.6rem; border-radius:50%; background:#FF5A6E; box-shadow:0 0 0 0 rgba(255,90,110,.6); animation:fbl-pulse 2s infinite; }
+  .fbl-badge.is-behind i{ background:#BBB; animation:none; }
+  @keyframes fbl-pulse{ 70%{ box-shadow:0 0 0 8px rgba(255,90,110,0); } 100%{ box-shadow:0 0 0 0 rgba(255,90,110,0); } }
+  @media (prefers-reduced-motion:reduce){ .fbl-badge i{ animation:none; } }
+  .fbl-ctl{ position:absolute; left:0; right:0; bottom:0; z-index:2; display:flex; flex-wrap:wrap; gap:.4rem; justify-content:center; padding:.6rem; background:linear-gradient(transparent, rgba(20,14,34,.75)); transition:opacity .4s; }
+  .fbl-ctl[hidden]{ display:none; }
+  .fbl-tv.is-idle .fbl-ctl{ opacity:0; pointer-events:none; } .fbl-tv.is-idle{ cursor:none; }
+  .fbl-ctl button{ min-height:46px; min-width:46px; padding:.4rem .9rem; border-radius:999px; border:1.5px solid rgba(255,248,238,.7); background:rgba(28,20,44,.8); color:#FFF8EE; font:600 .95rem/1.1 "Lora", Georgia, serif; cursor:pointer; touch-action:manipulation; }
+  .fbl-ctl button[hidden]{ display:none; }
+  .fbl-now{ margin:1rem 0 .4rem; text-align:center; }
+  .fbl-now strong{ display:block; font-family:"Fraunces", Georgia, serif; font-size:1.25rem; }
+  .fbl-now span{ color:var(--ink-soft); font-size:.95rem; }
+  .fbl-bar{ height:6px; border-radius:6px; background:rgba(217,200,240,.6); overflow:hidden; max-width:28rem; margin:.5rem auto 0; }
+  .fbl-bar i{ display:block; height:100%; width:0; background:#8C6FC7; }
+  .fbl-sec{ margin:2rem 0 1rem; padding:1.1rem 1.2rem 1.2rem; border-radius:22px; background:rgba(255,253,248,.94); border:1px solid rgba(217,200,240,.8); }
+  .fbl-sec h2{ margin:0 0 .5rem; }
+  .fbl-sched{ list-style:none; margin:.4rem 0 0; padding:0; display:grid; gap:.45rem; }
+  .fbl-sched li{ display:flex; flex-wrap:wrap; gap:.2rem .8rem; justify-content:space-between; padding:.5rem .8rem; border:1px solid var(--line); border-radius:12px; background:#FFFDF7; }
+  .fbl-sched li.is-now{ border-color:#8C6FC7; background:#F6F0FF; }
+  .fbl-sched time{ font:500 .9rem "IBM Plex Mono", monospace; color:#5B4A86; }
+  .fbl-cast-state{ min-height:1.3em; font-size:.93rem; color:#5B4A86; }
+  .fbl-row{ display:flex; flex-wrap:wrap; gap:.5rem; margin:.6rem 0; }
+  .fbl-sec li{ margin:.3rem 0; }
+</style>
+<link rel="canonical" href="https://spreadloveandacceptance.com/frequency-buddies-live.html">
+<meta property="og:title" content="Frequency Buddies Live">
+<meta property="og:description" content="Drop in anytime: Tidbit and Sugarfoot, always on, and ready to cast to your TV.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://spreadloveandacceptance.com/frequency-buddies-live.html">
+<meta property="og:image" content="https://spreadloveandacceptance.com/assets/img/frequency-buddies-season-1.jpg">
+<!-- seo:start -->
+<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1">
+<meta name="keywords" content="self-help, relationships, kindness, love, appreciation, acceptance, connection, communication, calm, peace, harmony, reconciliation, emotional wellbeing, self-discovery, fairness at home, mental load, invisible work, free self-help tools, animated stories, cartoon for kids and families, Tidbit and Sugarfoot, kindness stories, working through tough times together, captions">
+<meta name="author" content="Spread Love &amp; Acceptance">
+<meta property="og:site_name" content="Spread Love &amp; Acceptance">
+<meta property="og:locale" content="en_US">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Frequency Buddies Live: Drop In Anytime">
+<meta name="twitter:description" content="A Frequency Buddies TV station that is always on: drop in anytime, watch the episode playing right now, and cast it to your TV.">
+<meta name="twitter:image" content="https://spreadloveandacceptance.com/assets/img/og-image.png">
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"name":"Frequency Buddies Live: Drop In Anytime","headline":"Frequency Buddies Live: Drop In Anytime","description":"A Frequency Buddies TV station that is always on: drop in anytime, watch the episode playing right now, and cast it to your TV.","url":"https://spreadloveandacceptance.com/frequency-buddies-live.html","inLanguage":"en-US","isAccessibleForFree":true,"keywords":"self-help, relationships, kindness, love, appreciation, acceptance, connection, communication, calm, peace, harmony, reconciliation, emotional wellbeing, self-discovery, fairness at home, mental load, invisible work, free self-help tools, animated stories, cartoon for kids and families, Tidbit and Sugarfoot, kindness stories, working through tough times together, captions","publisher":{"@type":"Organization","@id":"https://spreadloveandacceptance.com/#org","name":"Spread Love & Acceptance"},"isPartOf":{"@type":"WebSite","@id":"https://spreadloveandacceptance.com/#website","name":"Spread Love & Acceptance","url":"https://spreadloveandacceptance.com/"},"dateModified":"2026-10-01","image":"https://spreadloveandacceptance.com/assets/img/og-image.png","@type":"WebApplication","applicationCategory":"GameApplication","operatingSystem":"Any (web browser)","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Spread Love & Acceptance","item":"https://spreadloveandacceptance.com/"},{"@type":"ListItem","position":2,"name":"Frequency Buddies Live: Drop In Anytime","item":"https://spreadloveandacceptance.com/frequency-buddies-live.html"}]}]}</script>
+<!-- seo:end -->
+</head>
+<body class="fbl" data-no-cheer data-no-pupvisits data-garden-nopals data-no-buddies>
+<main class="read" id="main">
+
+<section class="fbl-hero" aria-labelledby="fbl-h">
+  <p class="fbl-k">Frequency Buddies · live station</p>
+  <h1 id="fbl-h">Drop in anytime</h1>
+  <p>The Frequency Buddies station is always on. Whenever you tune in, you join the episode that’s playing right now, just like live TV, and everyone watching sees the same moment.</p>
+</section>
+
+<div class="fbl-tv" id="fbl-tv">
+  <video id="fbl-v" playsinline preload="none" poster="/assets/img/frequency-buddies-season-1.jpg" hidden x-webkit-airplay="allow"></video>
+  <p class="fbl-badge" id="fbl-badge" hidden><i aria-hidden="true"></i><span>Live</span></p>
+  <div class="fbl-start" id="fbl-start">
+    <button type="button" class="fbl-go" id="fbl-go">▶ Tune in</button>
+    <p id="fbl-start-now">Now on: …</p>
+  </div>
+  <div class="fbl-ctl" id="fbl-ctl" hidden>
+    <button type="button" id="fbl-pause" aria-label="Pause">⏸ Pause</button>
+    <button type="button" id="fbl-live" hidden>⏩ Back to live</button>
+    <button type="button" id="fbl-mute" aria-pressed="true">🔊 Sound on</button>
+    <button type="button" id="fbl-full">⛶ Full screen</button>
+    <button type="button" id="fbl-remote" hidden>📺 Play on a TV</button>
+  </div>
+</div>
+
+<div class="fbl-now" aria-live="polite">
+  <strong id="fbl-title">Loading the schedule…</strong>
+  <span id="fbl-sub"></span>
+  <div class="fbl-bar" aria-hidden="true"><i id="fbl-bar"></i></div>
+</div>
+
+<section class="fbl-sec" aria-labelledby="fbl-cast-h">
+  <h2 id="fbl-cast-h">Watch it on your TV</h2>
+  <div class="fbl-row"><button type="button" class="btn" id="fbl-cast">📺 Cast to your TV</button></div>
+  <p class="fbl-cast-state" id="fbl-cast-state" aria-live="polite"></p>
+  <ul>
+    <li><b>Chromecast or Google TV:</b> use Chrome on a computer or an Android phone, on the same Wi-Fi as the TV, and press Cast. The TV joins the station at the moment that’s playing now and keeps going on its own, so you can close this page.</li>
+    <li><b>Apple TV or AirPlay:</b> on an iPhone, iPad or Mac, tune in, then press <b>Play on a TV</b> (or the AirPlay button in full screen) and pick your TV.</li>
+    <li><b>A smart TV with a web browser:</b> open this page on the TV itself and press Tune in, then Full screen.</li>
+  </ul>
+</section>
+
+<section class="fbl-sec" aria-labelledby="fbl-sched-h">
+  <h2 id="fbl-sched-h">Coming up</h2>
+  <p>The station plays all five episodes in order, around the clock. Times are shown in your time zone.</p>
+  <ol class="fbl-sched" id="fbl-sched"></ol>
+  <div class="fbl-row"><a class="btn" href="/frequency-buddies.html">Pick an episode yourself</a><a class="btn" href="/frequency-buddies-shuffle.html">Episodes on shuffle, and downloads</a></div>
+</section>
+
+</main>
+<script>
+(function () {
+  'use strict';
+  // The station's clock: the whole season loops forever, starting from a fixed moment, so the place in the
+  // loop comes from the time of day and everyone who drops in sees the same scene.
+  var SEASON = '/assets/video/frequency-buddies-season-1.mp4', POSTER = '/assets/img/frequency-buddies-season-1.jpg';
+  var EPS = [
+    { n: 1, title: 'The Storm Over the Treehouse', dur: 893.14, file: '/assets/video/frequency-buddies-s1e1.mp4' },
+    { n: 2, title: 'Out of Tune', dur: 852.87, file: '/assets/video/frequency-buddies-s1e2.mp4' },
+    { n: 3, title: 'The Heavy Basket', dur: 851.53, file: '/assets/video/frequency-buddies-s1e3.mp4' },
+    { n: 4, title: 'Who Broke the Kite?', dur: 853.05, file: '/assets/video/frequency-buddies-s1e4.mp4' },
+    { n: 5, title: 'The Longest Night', dur: 882.46, file: '/assets/video/frequency-buddies-s1e5.mp4' }
+  ];
+  var START = [], CYCLE = 0; EPS.forEach(function (e) { START.push(CYCLE); CYCLE += e.dur; });
+  var EPOCH = Date.UTC(2026, 0, 1);
+  function livePos(at) { var s = ((at || Date.now()) - EPOCH) / 1000; return ((s % CYCLE) + CYCLE) % CYCLE; }
+  function epAt(pos) { for (var i = EPS.length - 1; i >= 0; i--) if (pos >= START[i]) return i; return 0; }
+  function clock(ms) { return new Date(ms).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' }); }
+  function mins(s) { var m = Math.round(s / 60); return m <= 1 ? 'about a minute' : m + ' minutes'; }
+  var $ = function (id) { return document.getElementById(id); };
+  var tv = $('fbl-tv'), v = $('fbl-v'), ctl = $('fbl-ctl'), badge = $('fbl-badge'), tuned = false, paused = false;
+
+  // what's on, what's next and the schedule (works before anyone tunes in)
+  function info() {
+    var pos = tuned && !paused && v.readyState > 0 ? v.currentTime : livePos(), i = epAt(pos), into = pos - START[i], e = EPS[i], left = e.dur - into;
+    $('fbl-title').textContent = 'Now: Episode ' + e.n + ', ' + e.title;
+    var nx = EPS[(i + 1) % EPS.length];
+    $('fbl-sub').textContent = 'Up next, in ' + mins(left) + ': Episode ' + nx.n + ', ' + nx.title;
+    $('fbl-bar').style.width = (into / e.dur * 100).toFixed(1) + '%';
+    $('fbl-start-now').textContent = 'Now on: Episode ' + e.n + ', ' + e.title + ' (' + mins(left) + ' left)';
+  }
+  var lastSched = -1;
+  function schedule() {
+    var pos = livePos(), i = epAt(pos); if (i === lastSched) return; lastSched = i;
+    var ol = $('fbl-sched'); ol.innerHTML = '';
+    var t0 = Date.now() - (pos - START[i]) * 1000;
+    for (var k = 0; k < 8; k++) {
+      var e = EPS[(i + k) % EPS.length], li = document.createElement('li'), tm = document.createElement('time'), nm = document.createElement('span');
+      tm.dateTime = new Date(t0).toISOString(); tm.textContent = k === 0 ? 'On now' : clock(t0);
+      nm.textContent = 'Episode ' + e.n + ': ' + e.title; li.appendChild(nm); li.appendChild(tm);
+      if (k === 0) li.className = 'is-now'; ol.appendChild(li);
+      t0 += e.dur * 1000;
+    }
+  }
+  info(); schedule(); setInterval(function () { info(); schedule(); }, 1000);
+
+  // tuning in: jump to the live moment, and stay there
+  function toLive() {
+    var pos = livePos();
+    if (isFinite(v.duration) && v.duration > 0 && pos > v.duration - 0.5) pos = 0;
+    try { v.currentTime = pos; } catch (e) {}
+  }
+  function setBehind(b) { badge.classList.toggle('is-behind', b); badge.querySelector('span').textContent = b ? 'Behind live' : 'Live'; $('fbl-live').hidden = !b; }
+  function play() { var p = v.play(); if (p && p.catch) p.catch(function () { v.muted = true; muteLabel(); v.play().catch(function () {}); }); }
+  $('fbl-go').addEventListener('click', function () {
+    tuned = true; v.hidden = false; $('fbl-start').hidden = true; ctl.hidden = false; badge.hidden = false;
+    v.preload = 'auto'; v.loop = true; v.src = SEASON + '#t=' + livePos().toFixed(1);
+    v.addEventListener('loadedmetadata', function () { toLive(); }, { once: true });
+    play(); wake(); remoteSetup();
+  });
+  v.addEventListener('ended', function () { toLive(); play(); });
+  // keep in step: a slow connection or a sleeping tab can fall behind; catch up quietly
+  setInterval(function () {
+    if (!tuned || paused || v.paused || v.seeking || v.readyState < 2) return;
+    var d = v.currentTime - livePos();
+    d = ((d + CYCLE * 1.5) % CYCLE) - CYCLE / 2; // the gap the short way around the loop
+    if (Math.abs(d) > 6) toLive();
+  }, 5000);
+  document.addEventListener('visibilitychange', function () { if (!document.hidden && tuned && !paused) setTimeout(toLive, 300); });
+
+  $('fbl-pause').addEventListener('click', function () {
+    if (!paused) { paused = true; v.pause(); this.textContent = '▶ Play'; this.setAttribute('aria-label', 'Play'); setBehind(true); }
+    else { paused = false; play(); this.textContent = '⏸ Pause'; this.setAttribute('aria-label', 'Pause'); }
+  });
+  $('fbl-live').addEventListener('click', function () { paused = false; $('fbl-pause').textContent = '⏸ Pause'; toLive(); play(); setBehind(false); });
+  function muteLabel() { var b = $('fbl-mute'); b.textContent = v.muted ? '🔇 Sound off' : '🔊 Sound on'; b.setAttribute('aria-pressed', String(!v.muted)); }
+  $('fbl-mute').addEventListener('click', function () { v.muted = !v.muted; muteLabel(); });
+  $('fbl-full').addEventListener('click', function () {
+    var d = document;
+    if (d.fullscreenElement || d.webkitFullscreenElement) { (d.exitFullscreen || d.webkitExitFullscreen).call(d); return; }
+    if (tv.requestFullscreen) tv.requestFullscreen().catch(function () {});
+    else if (tv.webkitRequestFullscreen) tv.webkitRequestFullscreen();
+    else if (v.webkitEnterFullscreen) v.webkitEnterFullscreen(); // iPhone: the video's own full screen
+  });
+  // the controls fade when nobody touches the screen, and come back with a tap or a mouse move
+  var idleT = 0;
+  function wakeCtl() { tv.classList.remove('is-idle'); clearTimeout(idleT); idleT = setTimeout(function () { if (tuned && !paused) tv.classList.add('is-idle'); }, 3500); }
+  ['pointermove', 'pointerdown', 'keydown'].forEach(function (ev) { tv.addEventListener(ev, wakeCtl); });
+  v.addEventListener('click', wakeCtl);
+  function wake() { wakeCtl(); if (window.TOLAwake) window.TOLAwake.check(true); }
+
+  // AirPlay (Safari) and the browser's own remote playback (Chrome on Android)
+  function remoteSetup() {
+    var b = $('fbl-remote');
+    if (window.WebKitPlaybackTargetAvailabilityEvent) {
+      v.addEventListener('webkitplaybacktargetavailabilitychanged', function (ev) { b.hidden = ev.availability !== 'available'; });
+      b.onclick = function () { v.webkitShowPlaybackTargetPicker(); };
+    } else if (v.remote && v.remote.watchAvailability) {
+      v.remote.watchAvailability(function (ok) { b.hidden = !ok; }).catch(function () {});
+      b.onclick = function () { v.remote.prompt().catch(function () {}); };
+    }
+  }
+
+  // Chromecast: the TV gets the episodes in order, starting at the live moment, and plays on by itself
+  var castBtn = $('fbl-cast'), castState = $('fbl-cast-state'), castReady = false, ctx = null;
+  function noCast() {
+    castState.textContent = /iPhone|iPad|iPod/.test(navigator.userAgent)
+      ? 'Casting from this page needs Chrome on a computer or an Android phone. On an iPhone or iPad, tune in and use Play on a TV for AirPlay.'
+      : 'Casting from this page needs Google Chrome on a computer or an Android phone. Open this page in Chrome and the button will work.';
+  }
+  function sendToTv(session) {
+    if (!session) return;
+    try {
+      var pos = livePos(), i = epAt(pos), items = [];
+      for (var k = 0; k < 30; k++) { // about seven hours of the station, then it starts over
+        var e = EPS[(i + k) % EPS.length], url = location.origin + e.file;
+        var mi = new chrome.cast.media.MediaInfo(url, 'video/mp4');
+        mi.contentUrl = url; mi.streamType = chrome.cast.media.StreamType.BUFFERED;
+        mi.metadata = new chrome.cast.media.GenericMediaMetadata();
+        mi.metadata.title = 'Frequency Buddies Live'; mi.metadata.subtitle = 'Episode ' + e.n + ': ' + e.title;
+        mi.metadata.images = [new chrome.cast.Image(location.origin + POSTER)];
+        var it = new chrome.cast.media.QueueItem(mi); it.autoplay = true;
+        if (k === 0) it.startTime = Math.max(0, pos - START[i]);
+        items.push(it);
+      }
+      var q = new chrome.cast.media.QueueLoadRequest(items); q.repeatMode = chrome.cast.media.RepeatMode.ALL;
+      castState.textContent = 'Sending the station to the TV…';
+      session.getSessionObj().queueLoad(q, function () {
+        castState.textContent = 'Live on ' + session.getCastDevice().friendlyName + '. You can close this page; the TV keeps playing.';
+        if (tuned && !v.paused) { v.pause(); paused = true; $('fbl-pause').textContent = '▶ Play'; setBehind(true); }
+      }, function (err) { castState.textContent = 'The TV couldn’t start the station (' + (err && (err.description || err.code) || 'unknown') + '). Try Cast again in a minute.'; });
+    } catch (e) { castState.textContent = 'The TV couldn’t start the station (' + e.message + ').'; }
+  }
+  castBtn.addEventListener('click', function () {
+    if (!castReady) { noCast(); return; }
+    if (ctx.getCastState() === cast.framework.CastState.NO_DEVICES_AVAILABLE) castState.textContent = 'No Chromecast found yet. Check that this device is on the same Wi-Fi as the TV.';
+    var ses = ctx.getCurrentSession(); if (ses) { sendToTv(ses); return; }
+    ctx.requestSession().catch(function () {});
+  });
+  setTimeout(function () { if (!castReady && !castState.textContent) noCast(); }, 6000);
+  window.__onGCastApiAvailable = function (ok) {
+    if (!ok || !window.cast || !cast.framework) { noCast(); return; }
+    castReady = true; ctx = cast.framework.CastContext.getInstance();
+    ctx.setOptions({ receiverApplicationId: chrome.cast.media.DEFAULT_MEDIA_RECEIVER_APP_ID, autoJoinPolicy: chrome.cast.AutoJoinPolicy.ORIGIN_SCOPED });
+    ctx.addEventListener(cast.framework.CastContextEventType.SESSION_STATE_CHANGED, function (ev) {
+      if (ev.sessionState === cast.framework.SessionState.SESSION_STARTED) sendToTv(ev.session || ctx.getCurrentSession());
+    });
+    castState.textContent = 'Ready. Press Cast and pick your TV.';
+  };
+  var sc = document.createElement('script'); sc.src = 'https://www.gstatic.com/cv/js/sender/v1/cast_sender.js?loadCastFramework=1'; document.head.appendChild(sc);
+})();
+</script>
+</body>
+</html>
