@@ -2201,6 +2201,25 @@ function explainChange(c, W){
   return {id:c.id, from:c.from, to:c.to, why:why.g, forWiring:notes};
 }
 
+/* the safest version of a sentence: built on the clearest rewrite, or a fill-in template when there's no safe
+   automatic rewrite. Nothing here adds a promise the speaker didn't make. */
+function safestVersion(base, o){
+  if(!(o.criticism || o.flagged || o.isAsk)) return "";
+  // no safe rewrite of these words: the safest thing is the plain shape, in their own words
+  if(o.unchanged && !o.criticism) return ""; // the words already work: nothing safer to offer
+  if(o.unchanged){
+    return "I'd like to talk about [the topic] when it suits you. When [what happened], I felt [one feeling word]. Could you [one specific thing]? I'd like to hear how it looks to you, too.";
+  }
+  let t = String(base||"").replace(/!+/g, ".").replace(/\?{2,}/g, "?").replace(/\s+/g, " ").trim();
+  if(!t) return "";
+  // shouting in capitals reads as yelling: write it calmly (short codes like "WP-03" stay)
+  t = t.replace(/\b([A-Z]{4,})\b/g, (w)=>w.charAt(0)+w.slice(1).toLowerCase());
+  const lead = o.criticism ? (o.work ? "I'd like to sort something out, and I'm not blaming anyone. " : "I'm not upset with you as a person, and I'd like us to sort this out together. ") : "";
+  const close = /\b(?:how it looks to you|your side|what do you think|does that work|is that okay)\b/i.test(t) ? "" :
+    (o.isAsk ? " Is that okay, or would something else work better for you?" : " I'd like to hear how it looks to you, too.");
+  return tidy(lead + t + close);
+}
+
 function finish(main, list, log, an, W, opts){
   const changes = log.map(c=>explainChange(c, W));
   const ask = an.asks[0] || null;
@@ -2214,6 +2233,7 @@ function finish(main, list, log, an, W, opts){
   variants.push({id:"main", label: unchanged ? "Your words" : "Clearest version",
     why: unchanged ? (flagged ? "There's no safe automatic rewrite for this one, so here are your words. The notes above show what may land hard: try the plain version of what you mean, in your own words." : "Nothing in the structure needed changing.") : "Keeps your ask. Changes the structure around it (see the list of changes).", text:base});
   if(isMinimal) return {main:base, primary:variants[0], variants, changes, ask, list, unchanged};
+  // the safest version is built after the others (below), from the same words
 
   const firstAsk = (base0.match(/(?:^|[.!?\]]\s+)([^.!?\]]*\b(?:could you|would you|can you|can we|could we|would that work)\b[^?]*\?)/i)||["",""])[1].trim();
   const isAsk = !!firstAsk;
@@ -2254,6 +2274,12 @@ function finish(main, list, log, an, W, opts){
     const pref = W.has("autistic")||W.has("dld")||W.has("alex") ? "explicit" : (W.has("anxiety")||W.has("trauma")||W.has("hsp")) ? "warm" : (W.has("adhd")||W.has("dyslexic")||W.has("apd")) ? "brief" : "main";
     variants.sort((a,b)=>(b.id===pref)-(a.id===pref));
   }
+  // The safest way to say it: the version least likely to land as an attack, whoever is listening.
+  // No blame, the person kept separate from the problem, one plain ask, a choice, and room for their side.
+  // Offered whenever the words carry static, an ask or a criticism; it sits right after the first choice.
+  const safe = safestVersion(base0, {criticism, isAsk, flagged, unchanged, close: CLOSE_REL.includes(opts.rel) && opts.channel!=="group", work: WORK_REL.includes(opts.rel)});
+  if(safe && !variants.some(v=>v.text.toLowerCase()===safe.toLowerCase())) variants.splice(Math.min(1, variants.length), 0, {id:"safe", label:"Safest way to say it",
+    why:"The version least likely to start a fight, whoever is listening: no blame, the person kept separate from the problem, one clear ask, a real choice, and room for their side. Send it when you’re both calm, and say it once.", text:safe});
   return {main: base, primary: variants[0], variants, changes, ask, list, unchanged};
 }
 
