@@ -111,9 +111,120 @@ OVERRIDE = {
     'legal/privacy-policy.html': ('Privacy Policy', 'How Spread Love & Acceptance handles your information: what you type in the tools stays on your device.'),
     'legal/terms-of-service.html': ('Terms of Service', 'The terms for using Spread Love & Acceptance and The Objective Ledger.'),
     'legal/refund-policy.html': ('Cancellation & Refund Policy', 'Cancellation and refund terms for Spread Love & Acceptance.'),
-    'architecture/architecture.html': ('How the site is built', 'How The Objective Ledger is designed and built, and why.'),
+    'architecture/architecture.html': ('The site’s architecture, in detail', 'The full technical picture of how The Objective Ledger is put together: pages, tools, privacy and how it all connects.'),
     'architecture/index.html': ('How the site is built', 'How The Objective Ledger is designed and built, and why.'),
 }
+
+# search-led titles and descriptions: what people type, in plain words (title without the site name)
+SEARCH = {
+ 'index.html': ('Free Relationship Self-Help · Spread Love & Acceptance', 'Free tools for fair, kind relationships: share chores fairly, talk without fighting and calm down before hard talks, plus calm games and a kids’ cartoon.'),
+ 'start-here.html': ('Start Here: Fairer, Kinder Relationships, Step by Step', 'New here? The one idea behind it all, the best first tools and a gentle six-week path to fairer chores and kinder conversations at home.'),
+ 'five-pillars.html': ('The Five Pillars of Fair, Kind Relationships', 'Five simple ideas for fair, kind relationships: see the whole load, fix the setup not the person, read your state first, and tune how you talk.'),
+ 'relationships.html': ('Relationship Tools for Couples, Family and Roommates', 'Fair ways to share chores, kinder words and calmer check-ins for partners, families, co-parents, friends, roommates, coworkers and caregivers.'),
+ 'signal-translator.html': ('Tone Checker: See How Your Text Will Land', 'A free tone checker: type a text or message and see how it may land, what they may hear, and a kinder, clearer way to say it. Private, on your device.'),
+ 'conversation-reader.html': ('Text Thread Reader: Calm Replies After a Fight', 'Paste a text thread and see where it turned, what each of you may be hearing, and calmer replies in your own words. Free and private.'),
+ 'turning-toward.html': ('Turning Toward: 7 Small Habits for Closer Relationships', 'Connection grows in small moments. Seven simple practices: notice when someone reaches for you, give specific thanks, and repair gently after a hard moment.'),
+ 'check-ins.html': ('Relationship Check-Ins: A Simple, Kind Weekly Ritual', 'A short, kind check-in for couples, families and housemates: what went well, what felt heavy, and one small change to try next.'),
+ 'quick-checks.html': ('Daily Mood Check-In: How’s Your Weather Today?', 'A 60-second check-in on how you’re doing today, with a gentle forecast for hard talks and a calm pause with something soothing to do.'),
+ 'ask.html': ('Free Relationship Help Chat: Ask Professor Puddles', 'Describe what’s going on in a relationship and get kind, practical next steps and words you could use. Free and private: what you type stays on your device.'),
+ 'library.html': ('Relationship Psychology Library, in Plain English', 'Hundreds of plain-language entries on relationships, conflict, kindness, gratitude, emotions, stress, calm and wiring, with honest notes on the evidence.'),
+ 'pause-and-play.html': ('Calm Games for a Busy Mind: Free, No Timers', 'Free calm games with no timers and no way to lose: the Night Garden, the Frequency Journey, Word Bloom, crosswords and a word search, with two friendly pups.'),
+ 'night-garden.html': ('The Night Garden: A Calm Breathing Game', 'A peaceful garden at night: breathe slowly to make flowers bloom, guide fireflies into constellations and stack glowing stones. A free, calm game.'),
+ 'calm-visualizer.html': ('Drift: A Calm Visualizer With Soft Tones', 'Tell Drift how you feel, put on headphones and let slow, dreamy visuals, kind words and gentle tones keep you company for a few quiet minutes.'),
+ 'word-bloom.html': ('Word Bloom: A Relaxing Letter-Wheel Word Game', 'A free, calm word game: spin a wheel of letters and find the hidden words. Levels from easy to tricky, no timers and no ads.'),
+ 'quiet-crossword.html': ('Quiet Crossword: Easy, Gentle Mini Crosswords', 'Small, friendly crosswords with gentle clues, from easy to tricky. Free, calm and no timers: a peaceful puzzle for a few quiet minutes.'),
+ 'quiet-words.html': ('Quiet Words: A Calm, Free Word Search', 'A calming word search with soft themes, levels from easy to tricky and no timers. Free to play on your phone or computer.'),
+ 'daily-ledger-crossword.html': ('Daily Crossword Puzzle, Newspaper Style (Free)', 'A free newspaper-style crossword with fair, friendly clues. Play in your browser on any device, at your own pace.'),
+ 'frequency-journey.html': ('The Frequency Journey: A Calm Puzzle Adventure', 'Help Tidbit and Sugarfoot find the Perfect Frequency through seven worlds of calm puzzles, riddles and small lessons about patience and harmony.'),
+ 'frequency-buddies.html': ('Frequency Buddies: A Kids’ Cartoon About Feelings', 'Gentle animated episodes for kids and families: two pups, Tidbit and Sugarfoot, face tough times, talk it through and come out stronger. Free, with captions.'),
+ 'frequency-buddies-shuffle.html': ('Frequency Buddies: Watch Every Episode on Shuffle', 'Every Frequency Buddies episode back to back in a random order, with the theme song, plus the whole season as one video for YouTube.'),
+ 'soundscapes.html': ('Calm Soundscapes and Relaxing Music', 'Calm soundscapes and gentle music: breathing tracks, peaceful ambient pieces and songs about love, acceptance and finding your way back to each other.'),
+ 'pal-cam-tv.html': ('Pal Cam TV: A Cozy Puppy Cam for Your TV', 'Two cartoon pups play, nap and explore live on your TV, with calm music and soft place sounds. Free to cast or play full screen.'),
+ 'wp-01.html': ('Fair Chore Chart: Who Did What (WP-01)', 'A free chore chart worksheet: note who did what this week, see the split clearly, and find kind ways to say no. For couples, families and roommates.'),
+ 'wp-02.html': ('How Much Are You Carrying? A Stress Self-Check (WP-02)', 'A quick self-check of how full your plate feels today, to help you pace a hard talk. A reflection tool, not a test or diagnosis.'),
+ 'wp-03.html': ('Who Owns Which Chore? One Owner per Job (WP-03)', 'Give every recurring job one owner from start to finish, so nothing slips and nobody nags. A free household planning worksheet.'),
+ 'wp-04.html': ('Mental Load Audit: What Keeps Coming Back? (WP-04)', 'Find the jobs and arguments that keep coming back, see the invisible work behind them, and fix the setup instead of blaming a person.'),
+ 'wp-09.html': ('Say It So It Lands: Kinder Wording (WP-09)', 'Turn a hard sentence into one that lands: what you mean, what they may hear, and a calmer way to say it. A free communication worksheet.'),
+ 'wp-11.html': ('Calm-Down Kit: A Plan for Heated Moments (WP-11)', 'Make a simple plan for heated moments: your signs, a pause signal, what helps you settle, and how to come back to the talk kindly.'),
+ 'wp-13.html': ('90-Second Daily Check-In for Couples (WP-13)', 'A 90-second daily check-in for couples and housemates: how you’re doing, what’s coming up, and one small way to help.'),
+ 'lemonade-stand.html': ('Who Did What This Week? A Simple Chore Tracker', 'A friendly chore tracker for the week: note who did what, see the balance at a glance, and talk about it without blame.'),
+ 'calc01-solvency.html': ('Is the Chore Split Fair? A Free Calculator (CALC-01)', 'A free calculator for the household split: time, effort and the invisible jobs, so you can see whether the setup works for everyone.'),
+ 'prog-01.html': ('A Six-Week Guided Program for Fairer Chores', 'Six gentle weeks, one worksheet a week: see the load, give every job an owner, check your batteries and how you talk, then look at what changed.'),
+ 'wired-differently.html': ('Wired Differently: Neurodiversity in Relationships', 'How different minds can hear the same words differently, and simple ways to share plans, chores and feedback so they land for everyone.'),
+ 'know-yourself.html': ('Know Your Own Wiring: A Self-Discovery Guide', 'Understand how you take in plans, change and feedback, and how to explain what helps you to the people you live and work with.'),
+ 'about.html': ('About Spread Love & Acceptance', 'The story behind Spread Love & Acceptance and The Objective Ledger: a free, growing suite of tools for kinder, fairer relationships.'),
+ 'book/preface.html': ('The Work Nobody Sees: Invisible Labor at Home', 'The preface: the planning, remembering and noticing that keeps a home running, why it goes unseen, and how seeing it changes everything.'),
+ 'book/chapter-1.html': ('Why We Get Out of Tune (Chapter I)', 'Chapter I: why kind people still end up resentful at home, and how small mismatches in what we see and expect add up over time.'),
+ 'book/chapter-2.html': ('Is the Chore Split Working? (Chapter II)', 'Chapter II: a fair way to ask whether the household split is working for everyone, counting time, effort and the invisible jobs.'),
+ 'book/chapter-3.html': ('Stress, Full Tanks and Different Angles (Chapter III)', 'Chapter III: how a full stress tank changes what we hear and say, and why the same moment looks different from each side.'),
+ 'book/chapter-4.html': ('Two Kinds of Fair at Home (Chapter IV)', 'Chapter IV: equal and fair are not the same. How to find a split that fits your real lives, strengths and seasons.'),
+ 'book/chapter-5.html': ('The Monthly Relationship Look-Back (Chapter V)', 'Chapter V: a calm monthly look-back to see what changed, celebrate it, and adjust the setup before resentment builds.'),
+ 'library/fairness.html': ('Fairness and the Mental Load at Home', None),
+ 'library/conflict.html': ('Conflict Resolution in Relationships, Explained', None),
+ 'library/communication.html': ('Communication Skills: Talking and Listening', None),
+ 'library/stress.html': ('Stress and the Body, in Plain English', None),
+ 'library/emotions.html': ('Understanding Feelings and Emotions', None),
+ 'library/connection.html': ('Kindness, Gratitude and Connection', None),
+ 'library/wiring.html': ('Neurodiversity: Differences in Wiring', None),
+ 'library/thinking.html': ('Common Thinking Traps, Explained', None),
+ 'library/motivation.html': ('Motivation, Habits and Change', None),
+ 'library/relationships.html': ('How Relationships Work: What Research Says', None),
+ 'library/teams.html': ('Fair Systems for Teams and Households', None),
+ 'library/life.html': ('Family, Money and Big Life Changes', None),
+ 'library/calm.html': ('Calm and Attention, Explained', None),
+}
+
+# Titles past about 60 characters and descriptions past about 158 are cut off in search results
+TITLE_MAX, DESC_MAX = 60, 158
+
+
+def fit_title(t):
+    if len(t) <= TITLE_MAX: return t
+    bare = t.replace(' · ' + BRAND, '')
+    if len(bare) <= TITLE_MAX: return bare            # search engines show the site name on their own
+    for sep in (' — ', ': ', ' · '):
+        head = bare.split(sep)[0]
+        if 20 <= len(head) <= TITLE_MAX: return head
+    return bare[:TITLE_MAX - 1].rsplit(' ', 1)[0] + '…'
+
+
+def fit_desc(d):
+    d = re.sub(r'\s+', ' ', d).strip()
+    if len(d) <= DESC_MAX: return d
+    cut = d[:DESC_MAX + 1]
+    end = max(cut.rfind('. '), cut.rfind('! '), cut.rfind('? '))
+    if end >= 90: return cut[:end + 1]
+    return cut.rsplit(' ', 1)[0].rstrip(',;:—-') + '.'
+
+
+# The Frequency Buddies season as one video, for video search (with a chapter for each episode)
+SEASON_VIDEO = {
+    'url': SITE + '/assets/video/frequency-buddies-season-1.mp4', 'thumb': SITE + '/assets/img/frequency-buddies-season-1.jpg',
+    'name': 'Frequency Buddies · Season 1 · All five episodes', 'duration': 'PT1H12M13S', 'seconds': 4333, 'uploaded': '2026-09-30',
+    'desc': 'Five gentle animated episodes for kids and families: Tidbit and Sugarfoot set off on big little quests, hit real tough times and find their way through, together. With the theme song, captions in the picture and chapters.',
+    'chapters': [(0, 893, 'Episode 1: The Storm Over the Treehouse'), (893, 1746, 'Episode 2: Out of Tune'), (1746, 2598, 'Episode 3: The Heavy Basket'),
+                 (2598, 3451, 'Episode 4: Who Broke the Kite?'), (3451, 4333, 'Episode 5: The Longest Night')],
+}
+VIDEO_PAGES = ('frequency-buddies.html', 'frequency-buddies-shuffle.html')
+
+
+def video_ld(publisher):
+    v = SEASON_VIDEO
+    return {'@type': 'VideoObject', 'name': v['name'], 'description': v['desc'], 'thumbnailUrl': [v['thumb']], 'uploadDate': v['uploaded'],
+            'duration': v['duration'], 'contentUrl': v['url'], 'embedUrl': SITE + '/frequency-buddies-shuffle.html', 'isFamilyFriendly': True,
+            'inLanguage': 'en-US', 'publisher': publisher,
+            'hasPart': [{'@type': 'Clip', 'name': n, 'startOffset': a, 'endOffset': b, 'url': v['url'] + '#t=' + str(a)} for a, b, n in v['chapters']]}
+
+
+def series_ld(publisher):
+    eps = [('s1e1', 'The Storm Over the Treehouse'), ('s1e2', 'Out of Tune'), ('s1e3', 'The Heavy Basket'), ('s1e4', 'Who Broke the Kite?'), ('s1e5', 'The Longest Night')]
+    return {'@type': 'TVSeries', 'name': 'Frequency Buddies', 'description': 'A gentle animated series for kids and families starring two pups, Tidbit and Sugarfoot.',
+            'genre': ['Animation', 'Kids & Family'], 'inLanguage': 'en-US', 'isFamilyFriendly': True, 'url': SITE + '/frequency-buddies.html',
+            'image': SEASON_VIDEO['thumb'], 'publisher': publisher, 'numberOfSeasons': 1, 'numberOfEpisodes': len(eps),
+            'character': [{'@type': 'Person', 'name': 'Tidbit'}, {'@type': 'Person', 'name': 'Sugarfoot'}],
+            'containsSeason': {'@type': 'TVSeason', 'seasonNumber': 1, 'name': 'Season 1: The First Adventures', 'numberOfEpisodes': len(eps),
+                               'episode': [{'@type': 'TVEpisode', 'episodeNumber': i + 1, 'name': t, 'url': SITE + '/frequency-buddies.html?ep=' + e} for i, (e, t) in enumerate(eps)]}}
+
 
 TOOLS = r'^(tools/|signal-translator|carrier-wave-decoder|conversation-reader|lemonade-stand|calc01-solvency|wiring-card|quick-checks|full-path|workpapers/calculators|do/|snapshot/|pal-cam-tv|ask)'
 GAMES = r'^(frequency-buddies|quiet-words|word-bloom|quiet-crossword|daily-ledger-crossword|frequency-journey|night-garden|calm-visualizer)'
@@ -214,6 +325,8 @@ def ld_for(path, title, desc, url, kw, modified):
         graph.append(art)
     else:
         graph.append(dict(common, **{'@type': 'WebPage'}))
+    if path in VIDEO_PAGES:
+        graph.append(video_ld(publisher)); graph.append(series_ld(publisher))
     if path != 'index.html':
         graph.append({'@type': 'BreadcrumbList', 'itemListElement': [
             {'@type': 'ListItem', 'position': 1, 'name': BRAND, 'item': SITE + '/'},
@@ -236,9 +349,12 @@ def process(path, report):
         return None
     s = re.sub(r'\n?[ \t]*<!-- seo:start -->.*?<!-- seo:end -->[ \t]*', '', s, flags=re.S)
     ov_title, ov_desc = OVERRIDE.get(path, (None, None))
+    st, sd = SEARCH.get(path, (None, None))
+    if st: ov_title = st
+    if sd: ov_desc = sd
     m = re.search(r'<title>(.*?)</title>', s, re.S)
     old_title = m.group(1) if m else ''
-    title = ov_title if ov_title and path == 'index.html' else clean_title(ov_title or old_title, path)
+    title = ov_title if ov_title and path == 'index.html' else fit_title(clean_title(ov_title or old_title, path))
     if m:
         s = s[:m.start()] + '<title>' + html.escape(title, quote=False) + '</title>' + s[m.end():]
     else:
@@ -247,6 +363,7 @@ def process(path, report):
     desc = ov_desc or (html.unescape(dm.group(1)) if dm else '')
     if not desc:
         desc = title + '. ' + ABOUT_ORG.split('. ')[0] + '.'
+    desc = fit_desc(desc)
     if dm:
         s = s[:dm.start()] + '<meta name="description" content="' + attr(desc) + '">' + s[dm.end():]
     else:
@@ -332,15 +449,19 @@ Sitemap: https://spreadloveandacceptance.com/sitemap.xml
 
 def priority(path):
     if path == 'index.html': return '1.0'
-    if re.search(r'^(start-here|five-pillars|relationships|pause-and-play|ask|signal-translator|library\.html|turning-toward|night-garden|sent-this|start-in-10|about|contents|program)', path): return '0.9'
+    if re.search(r'^(start-here|five-pillars|relationships|pause-and-play|ask|signal-translator|library\.html|turning-toward|night-garden|sent-this|start-in-10|about|contents|program|frequency-buddies|wp-0[1-4]\.html|conversation-reader|check-ins)', path): return '0.9'
     if re.search(r'^(book/|library/|workpapers/fill/suite|frequency-journey|soundscapes|calm-visualizer|word-bloom|quiet-words|quiet-crossword|daily-ledger)', path): return '0.8'
     return '0.6'
 
 
 def write_sitemap(report):
-    rows = ['<?xml version="1.0" encoding="UTF-8"?>', '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">']
+    rows = ['<?xml version="1.0" encoding="UTF-8"?>', '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:video="http://www.google.com/schemas/sitemap-video/1.1">']
+    v = SEASON_VIDEO
+    vid = ('<video:video><video:thumbnail_loc>%s</video:thumbnail_loc><video:title>%s</video:title><video:description>%s</video:description>'
+           '<video:content_loc>%s</video:content_loc><video:duration>%d</video:duration><video:family_friendly>yes</video:family_friendly></video:video>') % (
+           html.escape(v['thumb']), html.escape(v['name']), html.escape(v['desc'][:2000]), html.escape(v['url']), v['seconds'])
     for path, title, desc, mod in sorted(report, key=lambda r: (-float(priority(r[0])), r[0])):
-        rows.append('  <url><loc>%s</loc><lastmod>%s</lastmod><changefreq>weekly</changefreq><priority>%s</priority></url>' % (html.escape(SITE + rel_url(path)), mod, priority(path)))
+        rows.append('  <url><loc>%s</loc><lastmod>%s</lastmod><changefreq>weekly</changefreq><priority>%s</priority>%s</url>' % (html.escape(SITE + rel_url(path)), mod, priority(path), vid if path in VIDEO_PAGES else ''))
     rows.append('</urlset>')
     open(os.path.join(ROOT, 'sitemap.xml'), 'w', encoding='utf-8').write('\n'.join(rows) + '\n')
 
