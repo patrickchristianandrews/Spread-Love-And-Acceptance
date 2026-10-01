@@ -2282,3 +2282,30 @@ body .tol-breathe-btn.is-high.is-high{ bottom:auto !important; top:calc(var(--to
 html.tol-still .tol-breathe-btn{ transition:none; }
 .tol-breathe-btn.is-hiding{ opacity:0 !important; pointer-events:none !important; }
 .tol-breathe-btn.is-hiding:focus-visible{ opacity:1 !important; pointer-events:auto !important; }
+
+/* ---------- Professor Puddles on every page: the round button, and the bubble for highlighted words ---------- */
+.tol-pud-fab{
+  position:fixed; left:max(1rem, env(safe-area-inset-left)); bottom:max(1rem, env(safe-area-inset-bottom)); z-index:879;
+  display:inline-flex; align-items:center; gap:.45rem; padding:.3rem .9rem .3rem .3rem; min-height:48px;
+  font:500 .92rem/1 "Lora", Georgia, serif; color:#24425E; background:rgba(226,240,252,.96);
+  border:1px solid #A9CBE8; border-radius:999px; box-shadow:0 6px 20px rgba(36,66,94,.16); cursor:pointer;
+}
+.tol-pud-fab:hover{ background:#D5E9FA; }
+.tol-pud-fab:focus-visible, .tol-pud-sel:focus-visible{ outline:2px solid var(--focus); outline-offset:3px; }
+.tol-pud-fab-art{ display:grid; place-items:center; width:40px; height:40px; border-radius:50%; background:#fff; flex:none; }
+.tol-pud-fab-art svg{ width:34px; height:34px; }
+@media (max-width:560px){
+  .tol-pud-fab{ padding:.3rem; gap:0; }
+  .tol-pud-fab-t{ position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; }
+}
+body.has-pud-fab .tol-wx{ bottom:calc(4.6rem + env(safe-area-inset-bottom, 0px)) !important; }
+.tol-pud-sel{
+  position:fixed; z-index:991; display:inline-flex; align-items:center; gap:.35rem; padding:.35rem .8rem .35rem .35rem; min-height:40px;
+  font:600 .88rem/1 "Lora", Georgia, serif; color:#fff; background:#24425E; border:0; border-radius:999px;
+  box-shadow:0 6px 18px rgba(20,30,50,.28); cursor:pointer; white-space:nowrap;
+}
+.tol-pud-sel[hidden]{ display:none; }
+.tol-pud-sel-art{ display:grid; place-items:center; width:28px; height:28px; border-radius:50%; background:#fff; }
+.tol-pud-sel-art svg{ width:24px; height:24px; }
+html.tol-no-helpers .tol-pud-fab, html.tol-no-helpers .tol-pud-sel{ display:none !important; }
+@media print{ .tol-pud-fab, .tol-pud-sel{ display:none !important; } }

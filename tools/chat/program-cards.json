@@ -3911,10 +3911,7 @@
         "polymath",
         "polymaths",
         "the polymath way",
-        "how every field connects",
-        "how the fields connect",
-        "everything is connected",
-        "universal roots"
+        "how every field connects"
       ],
       "what": "The polymath page explains how different fields (psychology, economics, nature, music and more) grow from the same few roots: balance, signal and noise, feedback loops, limited capacity, ownership and structure, quiet incentives, and state and setting. Christian, the creator, is a polymath who studied nine fields and found where they meet, and those meeting points became the Five Pillars.",
       "how": [
@@ -3940,6 +3937,139 @@
         [
           "Ask Tide about Christian",
           "/about.html#ask-tide"
+        ]
+      ]
+    },
+    {
+      "id": "connections",
+      "kind": "intent",
+      "first": true,
+      "name": "how the nine fields connect",
+      "pat": "\\b(how|what|which|where|in what way)\\b[^?]*\\b(fields|areas|subjects|inputs|disciplines|things (you|christian|they) studied|nine (fields|areas|inputs|subjects)|learnings|studies)\\b[^?]*\\b(connect\\w*|link\\w*|relate\\w*|tie\\w*|fit together|overlap\\w*|intersect\\w*)\\b|\\bconnections? (between|across|among|in) (the )?(nine|9|fields|areas|subjects|inputs|disciplines)\\b|\\b(nine|9) (fields|areas|inputs|subjects)\\b[^?]*\\b(connect\\w*|link\\w*|relate\\w*|tie\\w*)\\b|\\bhow (does|do) (it|they|everything|all of (it|this|them)) (all )?(connect|tie together|fit together)\\b|\\bshow me (the )?(obvious|main|first) connections\\b",
+      "keys": [],
+      "what": [
+        "Christian’s nine fields (psychology, philosophy, behavioral science, neurobiology, economics, business, finance, holistic therapies and aromatherapy) connect in 22 ways I can show you, in three layers: 8 obvious, 8 hidden and 6 abstract.",
+        "They run along seven kinds of connection, the seven roots: balance, signal and noise, feedback loops, limited capacity, ownership and structure, quiet incentives, and state and setting. Here are the 8 most obvious ones, where two fields share an idea in plain sight:"
+      ],
+      "how": [
+        "Finance + Economics (balance): both keep accounts of a limited supply. In the program: the ledger itself, unbilled debt and the Solvency Read.",
+        "Business + Finance (ownership and structure): internal controls give every job one owner and every entry a record. In the program: One owner per job (WP-03).",
+        "Psychology + Neurobiology (state and setting): how you feel and how your nervous system is running are the same moment seen two ways. In the program: Today’s Weather and the Battery & Stress Meter (WP-02).",
+        "Psychology + Behavioral science (feedback loops): habits beat willpower, especially when you’re tired. In the program: the 90-second daily check-in (WP-13).",
+        "Holistic therapies + Aromatherapy (state and setting): both start with the body and the senses, not the argument. In the program: the Soundscape Catalog and the setting of a talk (Sensory Gating, Chapter IV).",
+        "Economics + Behavioral science (quiet incentives): people follow what the setup quietly rewards. In the program: Pillar V, Notice the quiet incentives.",
+        "Neurobiology + Holistic therapies (limited capacity): a system past its limit can’t think its way back. In the program: “calm down first, talk second” (Pillar III) and Breathe.",
+        "Business + Economics (limited capacity): time and attention get allocated like any budget. In the program: the Lemonade Stand, which puts everyone’s hours on one page."
+      ],
+      "pillar": "Would you like to see the 8 hidden connections, or the 6 abstract ones?",
+      "chips": [
+        [
+          "Show me the hidden connections",
+          "Show me the hidden connections"
+        ],
+        [
+          "Show me the abstract connections",
+          "Show me the abstract connections"
+        ],
+        [
+          "What does each field add?",
+          "Which fields did Christian study, and what did each become?"
+        ]
+      ],
+      "links": [
+        [
+          "Connect any two fields yourself",
+          "/polymath.html#connect"
+        ],
+        [
+          "The nine fields, one by one",
+          "/about-in-depth.html#curriculum"
+        ]
+      ]
+    },
+    {
+      "id": "connections-hidden",
+      "kind": "intent",
+      "first": true,
+      "name": "the hidden connections",
+      "pat": "\\b(hidden|less obvious|deeper|surprising|unexpected|subtle|secret|more) connections?\\b|\\bshow me (the )?hidden( ones)?\\b",
+      "keys": [],
+      "what": [
+        "Here are the 8 hidden connections: fields that look far apart until you see the root they share."
+      ],
+      "how": [
+        "Finance + Neurobiology (balance): your battery works like a balance sheet. Stress left over from earlier is a debt, and rest is the reserve. That’s why the Battery & Stress Meter is weighted into the Solvency Read.",
+        "Business + Psychology (ownership and structure): work with no clear owner lands on whoever notices first, and that person gets called controlling. Unclear ownership turns into hurt feelings. In the program: WP-03 and the Signal Translator.",
+        "Philosophy + Finance (balance): double-entry bookkeeping is a fairness idea. Every entry has two sides, and a book that balances from one side only isn’t balanced. In the program: Chapter IV, where each person’s needs carry equal weight.",
+        "Philosophy + Psychology (signal and noise): in a conflict, most of what’s said is a guess wearing the costume of a fact, and intent isn’t the same as impact. In the program: the Tone Filter (WP-09) and the Signal Translator.",
+        "Aromatherapy + Psychology (state and setting): the same sentence lands differently in a calm, quiet room. Light, noise and scent change what a person can take in. In the program: choosing where and when to talk.",
+        "Behavioral science + Business (feedback loops): small, regular checks catch problems while they’re small, in a company or a home. In the program: the weekly wrap-up and the monthly Deficit Audit (WP-04).",
+        "Economics + Neurobiology (limited capacity): attention is a scarce resource. Noticing, remembering and planning spend it, even when nobody sees. In the program: the mental load, and the “noticed and handled” column in WP-01.",
+        "Holistic therapies + Business (feedback loops): maintenance before breakdown. Care for the person the way a good team cares for its systems, before the crisis. In the program: routines, check-ins and the safety margin."
+      ],
+      "pillar": "Want to go one layer deeper, to the 6 abstract connections?",
+      "chips": [
+        [
+          "Show me the abstract connections",
+          "Show me the abstract connections"
+        ],
+        [
+          "Back to the obvious ones",
+          "How do the nine fields connect?"
+        ]
+      ],
+      "links": [
+        [
+          "The polymath way",
+          "/polymath.html#roots"
+        ],
+        [
+          "The Five Pillars",
+          "/five-pillars.html"
+        ]
+      ]
+    },
+    {
+      "id": "connections-abstract",
+      "kind": "intent",
+      "first": true,
+      "name": "the abstract connections",
+      "pat": "\\b(abstract|philosophical|deepest|big picture|underlying|universal|most abstract) connections?\\b|\\bshow me (the )?abstract( ones)?\\b",
+      "keys": [],
+      "what": [
+        "Here are the 6 abstract connections: the deepest patterns, where the fields stop looking like separate subjects at all."
+      ],
+      "how": [
+        "Finance + Holistic therapies (balance): a Solvency Read tells you whether an arrangement is sustainable, never whether it’s worthwhile. Holistic practice asks the other question: what makes the whole person well. The program keeps both: numbers for the setup, care for the people.",
+        "Philosophy + Neurobiology (state and setting): if shutting down and getting revved up are a body doing its job, they aren’t character flaws. That changes what blame means. In the program: “fix the setup, not the person” (Pillar II).",
+        "Economics + Aromatherapy (quiet incentives): a room, like a market, carries costs nobody pays out loud. A noisy, rushed setting quietly taxes every conversation in it. In the program: the setting is part of the method, not the background.",
+        "Psychology + Neurobiology + Philosophy (signal and noise): all three describe communication as a signal travelling through static. That shared picture is the whole radio idea behind Frequency Buddies and the Frequency framework.",
+        "Behavioral science + Holistic therapies (feedback loops): the smallest repeated acts, a breath, a 90-second check-in, a weekly look back, are rhythms. Rhythm is how a body, a habit and a relationship all stay in tune.",
+        "All nine fields (the audit thread): every one of them asks, in its own words, “what does the evidence actually support?” That shared question, Christian’s fifteen years of audit, is what holds the nine together. It is The Objective Ledger itself."
+      ],
+      "pillar": "That’s all 22 connections I know so far. Try connecting any two fields yourself on the polymath page.",
+      "chips": [
+        [
+          "Back to the hidden ones",
+          "Show me the hidden connections"
+        ],
+        [
+          "Start from the obvious ones",
+          "How do the nine fields connect?"
+        ],
+        [
+          "What is a polymath?",
+          "What is a polymath?"
+        ]
+      ],
+      "links": [
+        [
+          "Connect two fields yourself",
+          "/polymath.html#connect"
+        ],
+        [
+          "A new dimension",
+          "/polymath.html#dimension"
         ]
       ]
     }

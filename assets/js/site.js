@@ -586,6 +586,7 @@
     if (!body.hasAttribute('data-no-breathe')) buildBreathe(body);
     buildPuddles(body);
     buildPuddlesCards(body);
+    buildPuddlesPop(body);
     buildWeatherNudge(body);
     comfortOffer(body);
     rememberPage(body);
@@ -1220,6 +1221,74 @@
     var after = main && (main.querySelector('[data-palcam-top]') || main.querySelector('[data-home-intro]')); // below the "what this is" line and the pal cam link
     if (main) main.insertBefore(hi, after ? after.nextSibling : main.firstChild); else body.appendChild(hi);
     setTimeout(function () { hi.classList.add('is-in'); }, small ? 0 : 600);
+  }
+
+  // ---------- Professor Puddles, on every page ----------
+  // A small round button (bottom left) opens him as a pop-over right on the page, and highlighting any words
+  // shows a little "Ask Professor Puddles" bubble that asks him what they mean. He answers from this site's own
+  // pages, on this device; nothing is sent anywhere. Away in Quiet mode, on the Ask page and in the games.
+  function openPud(o) {
+    if (window.TOLChat) return window.TOLChat.open(o);
+    var sc = document.createElement('script'); sc.src = '/assets/js/site-chat.js';
+    sc.onload = function () { if (window.TOLChat) window.TOLChat.open(o); };
+    document.head.appendChild(sc);
+  }
+  function buildPuddlesPop(body) {
+    if (/^\/(ask|offline|404)\.html$/.test(current) || body.classList.contains('is-game') || body.hasAttribute('data-no-puddles') ||
+        document.querySelector('meta[http-equiv="Content-Security-Policy"]') || document.querySelector('.pc-ov.is-tv')) return;
+    var main = document.querySelector('main'); if (!main) return;
+    var h1 = main.querySelector('h1'), title = h1 ? h1.textContent.replace(/\s+/g, ' ').trim() : document.title.split('·')[0].trim();
+    function opts(topic) {
+      return { name: PUDDLES.name, svg: PUDDLES.svg, color: PUDDLES.color, topic: topic || '',
+        greeting: 'Hello! I’m Professor Puddles. Curious about something on “' + title.slice(0, 80) + '”? Ask me in your own words, or highlight any words on the page and tap “Ask Professor Puddles”. I answer from this site’s pages, and what you type stays on this device.' };
+    }
+    var fab = el('button', { type: 'button', class: 'tol-pud-fab', 'aria-label': 'Ask Professor Puddles about this page', title: 'Ask Professor Puddles' },
+      '<span class="tol-pud-fab-art" aria-hidden="true">' + PUDDLES_SVG + '</span><span class="tol-pud-fab-t">Ask Professor Puddles</span>');
+    fab.addEventListener('click', function () { hideSel(); openPud(opts('')); });
+    body.appendChild(fab); body.classList.add('has-pud-fab');
+
+    // highlight words → a little bubble just under them
+    var bub = el('button', { type: 'button', class: 'tol-pud-sel', hidden: '' }, '<span class="tol-pud-sel-art" aria-hidden="true">' + PUDDLES_SVG + '</span> Ask Professor Puddles');
+    body.appendChild(bub);
+    var picked = '';
+    function hideSel() { bub.hidden = true; picked = ''; }
+    function question(t) {
+      var n = t.split(/\s+/).length;
+      return n <= 4 ? 'What does “' + t + '” mean?' : n <= 9 ? 'Tell me more about “' + t + '”' : 'Help me understand this: “' + t + '”';
+    }
+    function check() {
+      var sel = window.getSelection ? window.getSelection() : null;
+      if (!sel || sel.isCollapsed || !sel.rangeCount) { hideSel(); return; }
+      var t = String(sel);
+      // a drag that stops partway through a word takes the whole word
+      try {
+        var rg = sel.getRangeAt(0), a = rg.startContainer, b = rg.endContainer, so = rg.startOffset, eo = rg.endOffset, W = /[A-Za-z0-9’'-]/;
+        var pre = a.nodeType === 3 ? a.textContent.slice(0, so).match(/[A-Za-z0-9’'-]*$/)[0] : '', post = b.nodeType === 3 ? b.textContent.slice(eo).match(/^[A-Za-z0-9’'-]*/)[0] : '';
+        if (pre && W.test(t.charAt(0))) t = pre + t; if (post && W.test(t.charAt(t.length - 1))) t = t + post;
+      } catch (e) {}
+      t = t.replace(/\s+/g, ' ').trim().replace(/^[“"'(]+|[”"'),.;:!?]+$/g, '');
+      var node = sel.anchorNode && (sel.anchorNode.nodeType === 1 ? sel.anchorNode : sel.anchorNode.parentNode);
+      if (!t || t.length < 2 || t.length > 160 || t.split(' ').length > 18 || !node || !main.contains(node) ||
+          (node.closest && node.closest('input, textarea, select, button, [contenteditable], .tolc, .tol-chat, .wpf-form, .fb-player, .pc-ov'))) { hideSel(); return; }
+      var r = sel.getRangeAt(0).getBoundingClientRect(); if (!r.width && !r.height) { hideSel(); return; }
+      picked = t; bub.hidden = false;
+      var bw = bub.offsetWidth || 200, x = Math.max(8, Math.min(window.innerWidth - bw - 8, r.left + r.width / 2 - bw / 2));
+      // under the words (a phone's own copy menu sits above them), or above when there's no room below
+      var y = r.bottom + 10; if (y + 48 > window.innerHeight) y = Math.max(8, r.top - 54);
+      bub.style.left = Math.round(x) + 'px'; bub.style.top = Math.round(y) + 'px';
+    }
+    var tmr = 0; function soon() { clearTimeout(tmr); tmr = setTimeout(check, 220); }
+    document.addEventListener('selectionchange', soon);
+    document.addEventListener('mouseup', soon); document.addEventListener('touchend', soon, { passive: true });
+    window.addEventListener('scroll', function () { if (!bub.hidden) check(); }, { passive: true });
+    window.addEventListener('resize', hideSel);
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape') hideSel(); });
+    bub.addEventListener('mousedown', function (e) { e.preventDefault(); }); // keep the words selected while it's tapped
+    bub.addEventListener('click', function () {
+      var t = picked; hideSel(); if (!t) return;
+      try { window.getSelection().removeAllRanges(); } catch (e) {}
+      openPud(opts(question(t)));
+    });
   }
 
   // A little card from Professor Puddles partway through the course pages: "chat about this?"
