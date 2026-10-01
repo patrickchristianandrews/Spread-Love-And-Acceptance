@@ -150,7 +150,7 @@
     ]},
     { id: 'media', title: 'Media', blurb: 'Tidbit and Sugarfoot’s movies and live pal cam, music and audio for settling first (Pillar III), and conversations about all five pillars.', items: [
       { href: '/frequency-buddies.html', code: 'Movies', title: 'Tidbit & Sugarfoot: Frequency Buddies', note: 'Five animated adventures with the two pals, with voices, music and captions, about 16 minutes each' },
-      { href: '/frequency-buddies-shuffle.html', code: 'Shuffle', title: 'Frequency Buddies on shuffle', note: 'Episode after episode in a random order, with a way to record one for YouTube' },
+      { href: '/frequency-buddies-shuffle.html', code: 'Shuffle', title: 'Frequency Buddies on shuffle', note: 'Episode after episode in a random order, and every episode to download' },
       { href: '/pal-cam-tv.html', code: 'Live', title: 'Tidbit & Sugarfoot: Pal Cam TV', note: 'The pals live, all day, full screen or cast to your TV, with music and the sounds of each place' },
       { href: '/reading.html', code: 'Articles', title: 'Articles to read', note: 'Hand-picked articles from Psychology Today, Greater Good, the Gottman Institute and more, grouped by topic and fresh every visit' },
       { href: '/soundscapes.html', code: 'Audio', title: 'Soundscape Catalog', note: 'Background audio made for settling down and focusing' },
@@ -1755,14 +1755,14 @@
   // a Frequency Buddies episode, or any video on the page, playing right now
   function mediaPlaying() {
     if (document.querySelector('.fb-player.is-playing')) return true;
-    return Array.prototype.some.call(document.querySelectorAll('video'), function (v) { return !v.paused && !v.ended && v.readyState > 2; });
+    return Array.prototype.some.call(document.querySelectorAll('video:not(.tol-awake-v)'), function (v) { return !v.paused && !v.ended && v.readyState > 2; });
   }
   // ---------- keep the screen awake while something is playing ----------
   // An episode, a video, the pal cam or any music or sounds: the phone or computer won't dim and lock
   // while they play, and goes back to normal once they stop. Nothing is stored or sent.
   (function () {
-    if (!('wakeLock' in navigator)) return;
-    var ctxs = [], lock = null, asking = false;
+    var hasLock = 'wakeLock' in navigator;
+    var ctxs = [], lock = null, asking = false, vid = null, lockFailed = false;
     ['AudioContext', 'webkitAudioContext'].forEach(function (n) {
       var A = window[n]; if (!A || A.__tolAwake) return;
       var Wrap = function (o) { var c = o === undefined ? new A() : new A(o); ctxs.push(c); return c; };
@@ -1780,20 +1780,34 @@
     }
     function playing() {
       if (document.querySelector('.fb-player.is-playing, .pc-ov:not([hidden]), .tol-breathe:not([hidden])')) return true;
-      if (Array.prototype.some.call(document.querySelectorAll('video, audio'), function (v) { return !v.paused && !v.ended; })) return true;
+      if (Array.prototype.some.call(document.querySelectorAll('video:not(.tol-awake-v), audio'), function (v) { return !v.paused && !v.ended; })) return true;
       return soundOn();
     }
-    function check() {
-      var want = !document.hidden && playing();
-      if (want && !lock && !asking) {
-        asking = true;
-        try { navigator.wakeLock.request('screen').then(function (l) { asking = false; lock = l; l.addEventListener('release', function () { lock = null; }); }).catch(function () { asking = false; }); } catch (e) { asking = false; }
-      } else if (!want && lock) { try { lock.release(); } catch (e) {} lock = null; }
+    // where the browser has no screen lock (older iPhones) or refuses one, a tiny silent video playing out of
+    // sight does the same job; it can only start from a tap, so a tap on the page also tries it
+    function vidOn(fromTap) {
+      if (!vid) {
+        vid = document.createElement('video'); vid.src = '/assets/video/awake.mp4'; vid.loop = true; vid.muted = true; vid.setAttribute('muted', ''); vid.setAttribute('playsinline', ''); vid.setAttribute('aria-hidden', 'true'); vid.tabIndex = -1;
+        vid.className = 'tol-awake-v'; vid.style.cssText = 'position:fixed;left:0;bottom:0;width:1px;height:1px;opacity:.01;pointer-events:none;z-index:-1';
+        document.body.appendChild(vid);
+      }
+      if (vid.paused) { try { var p = vid.play(); if (p && p.catch) p.catch(function () {}); } catch (e) {} }
     }
-    setInterval(check, 3000);
-    document.addEventListener('visibilitychange', function () { setTimeout(check, 300); }); // the lock ends when the page is hidden; ask again on return
-    document.addEventListener('click', function () { setTimeout(check, 600); }, true);
-    window.TOLAwake = { check: check, held: function () { return !!lock; } };
+    function vidOff() { if (vid && !vid.paused) try { vid.pause(); } catch (e) {} }
+    function check(fromTap) {
+      var want = !document.hidden && playing();
+      if (want && hasLock && !lockFailed && !lock && !asking) {
+        asking = true;
+        try { navigator.wakeLock.request('screen').then(function (l) { asking = false; lock = l; vidOff(); l.addEventListener('release', function () { lock = null; }); }).catch(function () { asking = false; lockFailed = true; vidOn(fromTap); }); } catch (e) { asking = false; lockFailed = true; }
+      }
+      if (want && (!hasLock || lockFailed) && !lock) vidOn(fromTap);
+      if (!want) { if (lock) { try { lock.release(); } catch (e) {} lock = null; } vidOff(); lockFailed = false; }
+    }
+    setInterval(function () { check(false); }, 3000);
+    document.addEventListener('visibilitychange', function () { setTimeout(function () { check(false); }, 300); }); // the lock ends when the page is hidden; ask again on return
+    // a tap starts things playing: check right away (still inside the tap, so the fallback video may start) and again a moment later
+    ['click', 'touchend', 'keydown'].forEach(function (ev) { document.addEventListener(ev, function () { check(true); setTimeout(function () { check(true); }, 700); }, true); });
+    window.TOLAwake = { check: check, held: function () { return !!lock || !!(vid && !vid.paused); } };
   })();
 
   window.TOLSite = { busy: busyPage, heavyToday: heavyToday, sensitive: sensitivePage, playing: mediaPlaying, calmDevice: calmDevice, readingPage: function () { return !busyPage() && !!document.querySelector('main.read'); } };

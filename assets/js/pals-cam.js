@@ -509,7 +509,7 @@
     if (a.event && !(EVENT && (a.event === EVENT.season || a.event === EVENT.special))) return false;
     return true;
   }
-  function inBag(a) { return !a.story && !a.rare; }
+  function inBag(a) { return !a.story && !a.rare && !a.ad; }
   function refillBag() {
     var ids = shuffle(ACTS.filter(inBag).map(function (a) { return a.id; })); mem.played = [];
     if (ids.length > 1 && ids[0] === lastActId) { ids.push(ids.shift()); }
@@ -589,6 +589,91 @@
     if (SND()) SND().act(act);
   }
   // ---------- movie breaks: now and then the pals head to the little theater for a random mini movie ----------
+  // ---------- a commercial break: the Frequency Buddies theme song, as a music video ----------
+  // Now and then the pals put on a show: a "Commercial break" sign goes up, the theme song plays, and they
+  // dance and sing their parts, with the words in the captions, ending on a card for the episodes.
+  var AD = { id: 'ad-break', name: 'Commercial break', kind: 'sweet', ad: true, dur: 36000, // set to the song (51 s) and a short end card, in real seconds, as each break starts (the pal cam's clock runs a little slow) buf: null, loading: false, src: null, on: false, last: -1e9, songAt: 0,
+    lyrics: [[4.07, 'both', 'Tune in, turn it up, here we go!'],
+      [8.94, 'tidbit', 'Yo, it’s Tidbit, black mask, eyebrows tan,'], [11.33, 'tidbit', 'first one out the door with a big ol’ plan!'],
+      [13.25, 'tidbit', 'Tail on spin, I’m a zoom-zoom pup,'], [14.92, 'tidbit', 'if the sky gets gray, I’m still lookin’ up!'],
+      [16.6, 'sugarfoot', 'And I’m Sugarfoot, white paws, slow and sweet,'], [18.67, 'sugarfoot', 'I take my time with my four little feet.'],
+      [20.43, 'sugarfoot', 'When it gets too loud, I take a breath,'], [22.42, 'sugarfoot', 'say what I feel, then I try my best!'],
+      [24.34, 'both', 'Different, different, that’s okay,'], [27.29, 'both', 'we find the way together every day!'],
+      [30.56, 'both', 'Frequency Buddies! (Ooh-ooh!)'], [34.07, 'both', 'Two pals, one big heart each!'], [39.1, 'both', 'Frequency Buddies! (Arf arf!)'],
+      [41.41, 'both', 'Every frequency an adventure, you’ll see!'], [45.96, 'both', 'Turn it up, tune in, come along with me,'], [49.63, 'both', 'we’re the Frequency Buddies!']],
+    get cap() { return 'Commercial break! A song from Frequency Buddies'; },
+    // the song's own clock, so the dancing and the words keep time with the music
+    songT: function () { var c = window.__pcAudio; return AD.src && c ? c.currentTime - AD.songAt : (cur && cur.act === AD ? cur.t / 1000 / SPEED : 0); },
+    load: function () {
+      var c = window.__pcAudio; if (AD.buf || AD.loading || !c) return; AD.loading = true;
+      fetch('/assets/audio/buddies/theme-open.mp3').then(function (r) { return r.ok ? r.arrayBuffer() : null; }).then(function (ab) {
+        if (!ab) return; return new Promise(function (ok) { try { var pr = c.decodeAudioData(ab, function (b) { AD.buf = b; ok(); }, function () { ok(); }); if (pr && pr.catch) pr.catch(function () { ok(); }); } catch (e) { ok(); } });
+      }).catch(function () {}).then(function () { AD.loading = false; });
+    },
+    play: function (from) {
+      AD.stop(); var c = window.__pcAudio; if (!c || !AD.buf || !soundOn() || (MUS() && !MUS().on()) || from >= AD.buf.duration) return; // the Music button and Sound both have their say
+      try { if (c.state === 'suspended') c.resume(); } catch (e) {}
+      var g0 = c.createGain(); g0.gain.value = 0.9; g0.connect(c.destination);
+      var src = c.createBufferSource(); src.buffer = AD.buf; src.connect(g0); var t0 = c.currentTime + 0.05; src.start(t0, Math.max(0, from || 0));
+      AD.src = src; AD.gain = g0; AD.songAt = t0 - Math.max(0, from || 0);
+    },
+    stop: function () { if (AD.src) { try { AD.src.stop(); } catch (e) {} try { AD.gain.disconnect(); } catch (e) {} } AD.src = null; },
+    begin: function () { AD.on = true; if (MUS()) MUS().pause(); if (AMB() && AMB().duck) AMB().duck(true); AD.play(0); },
+    end: function () { AD.on = false; AD.stop(); if (AMB() && AMB().duck) AMB().duck(false); if (MUS() && isOpen) MUS().resume(); if (capPunch) capPunch.textContent = ''; },
+    run: function (A, T, S) {
+      var st = A.probe ? 0 : AD.songT(), beat = 0.47, k = SPEED; // about 128 beats a minute; k turns real time into the pal cam's clock
+      if (A.once(1)) AD.begin();
+      // into place, side by side, facing the viewer a little
+      A.walk(T, T.x, A.cx - 58, 0, 1100); A.walk(S, S.x, A.cx + 58, 0, 1300);
+      if (A.t > 1300) { T.x = A.cx - 58; S.x = A.cx + 58; T.face = 1; S.face = -1; T.pose = S.pose = 'wiggle'; T.wag = S.wag = 3; }
+      if (A.t > 1300 && st > 0 && st < 51.5) {
+        var bi = Math.floor(st / beat), inB = (st % beat) / beat, chorus = st > 30.3 && st < 51.5, verseT = st > 8.7 && st < 16.4, verseS = st > 16.4 && st < 24.2;
+        // each pal bounces on the beat; the one singing bounces higher, and in the chorus they both go for it
+        var hT = chorus ? 9 : verseT ? 11 : 4, hS = chorus ? 9 : verseS ? 11 : 4;
+        T.lift += hT * Math.max(0, Math.sin(Math.PI * inB)); S.lift += hS * Math.max(0, Math.sin(Math.PI * ((inB + 0.5) % 1)));
+        T.tilt = 0.12 * Math.sin(st * 6.7); S.tilt = -0.12 * Math.sin(st * 6.7 + 1);
+        // a spin at the end of every four bars of the chorus, and a big jump on "Frequency Buddies!"
+        if (chorus && bi % 16 === 15) { T.face = Math.cos(Math.PI * 2 * inB); S.face = -Math.cos(Math.PI * 2 * inB); }
+        if ((st > 30.5 && st < 31.4) || (st > 39.1 && st < 40) || (st > 49.6 && st < 50.6)) { T.lift += 10; S.lift += 10; }
+        if (A.tick(940 * k, 30500 * k, 51000 * k) && !A.probe) A.burst(A.cx, A.G - 120, 4, 'note');
+        if (!A.probe && capMain) { var line = ''; AD.lyrics.forEach(function (l) { if (st >= l[0] - 0.15) line = '♪ ' + l[2] + ' ♪'; }); if (line && capMain.textContent !== line) capMain.textContent = line; }
+        // a little note over whoever's singing
+        var cl = null; AD.lyrics.forEach(function (l) { if (st >= l[0] - 0.15) cl = l; });
+        if (cl && !A.probe) { if (cl[1] !== 'sugarfoot') A.say(T, '♪', A.t, A.t + 60); if (cl[1] !== 'tidbit') A.say(S, '♪', A.t, A.t + 60); }
+      }
+      // the end card
+      if (st >= 51.5 || A.t > 52500 * k) {
+        T.pose = S.pose = 'sit'; T.wag = S.wag = 2;
+        if (A.once(Math.round(52000 * k))) A.burst(A.cx, A.G - 130, 14, 'confetti', { speed: 0.14, spread: 3 });
+        if (!A.probe && capMain && capMain.textContent.indexOf('Frequency Buddies:') !== 0) { capMain.textContent = 'Frequency Buddies: five cartoon adventures with Tidbit and Sugarfoot'; capPunch.textContent = 'Watch them free at spreadloveandacceptance.com'; }
+        A.say(T, 'Watch with us!', 52600 * k, 55600 * k); A.say(S, 'See you there!', 54600 * k, 58400 * k);
+      }
+    },
+    back: function (g, A) {
+      var U2 = A.U, st = A.probe ? 0 : AD.songT(), w = Math.min(300, A.W * 0.8), x = A.cx - w / 2, y = Math.max(16, A.G - 250), h = 74;
+      // a stage glow, two spotlights swaying to the music, and the marquee sign with chasing bulbs
+      g.save();
+      var gl = g.createRadialGradient(A.cx, A.G, 10, A.cx, A.G, 260); gl.addColorStop(0, 'rgba(255,228,160,.35)'); gl.addColorStop(1, 'rgba(255,228,160,0)'); g.fillStyle = gl; g.fillRect(A.cx - 280, A.G - 260, 560, 300);
+      [-1, 1].forEach(function (sd) {
+        var ax = A.cx + sd * (w / 2 + 30), sw = Math.sin(st * 1.3 + (sd > 0 ? 1.4 : 0)) * 40, tx = A.cx + sd * 58 + sw;
+        var bm = g.createLinearGradient(ax, y, tx, A.G); bm.addColorStop(0, 'rgba(255,248,214,.32)'); bm.addColorStop(1, 'rgba(255,248,214,0)');
+        g.fillStyle = bm; g.beginPath(); g.moveTo(ax - 6, y - 6); g.lineTo(ax + 6, y - 6); g.lineTo(tx + 34, A.G + 4); g.lineTo(tx - 34, A.G + 4); g.closePath(); g.fill();
+      });
+      U2.rr(g, x - 4, y - 4, w + 8, h + 8, 14, '#3C2A5A'); U2.rr(g, x, y, w, h, 11, '#5B3F8C');
+      var n = 22, on = Math.floor(st / 0.24);
+      for (var i = 0; i < n; i++) { var bx = x + 8 + i * (w - 16) / (n - 1); U2.circle(g, bx, y + 7, 3, (i + on) % 3 ? '#FFE9A8' : '#F28AA8'); U2.circle(g, bx, y + h - 7, 3, (i + on) % 3 === 1 ? '#FFE9A8' : '#7FB8F0'); }
+      U2.text(g, st >= 51.5 ? 'WATCH THE EPISODES' : 'COMMERCIAL BREAK', A.cx, y + 25, 10, '#F7C98B', '700');
+      U2.text(g, 'Frequency Buddies', A.cx, y + 48, 21, '#FFF6E6', '700');
+      g.restore();
+    }
+  };
+  function adDue(a) {
+    if (!a || a.interlude || a === AD || MB.prev || setting.id === 'theater' || !soundOn()) return false;
+    if (stats.acts < 4) return false;
+    AD.load(); if (!AD.buf) return false; // the song is fetched the first time it might be needed, and the break waits until it's here
+    if (clock - AD.last < 6 * 60000) return false;
+    return Math.random() < 0.14;
+  }
   var MB = { prev: null, last: 0 }, wantPlace = false;
   function whereText() { var ph = phaseOf(hour); return 'Pal cam · ' + (EVENT && EVENT.special ? EVENT.name + ' · ' : '') + ph.charAt(0).toUpperCase() + ph.slice(1) + ' at ' + setting.name; }
   function toSetting(st) {
@@ -603,11 +688,13 @@
   }
   function finishAct() {
     var a = cur && cur.act, next = null, combo = false;
+    if (a === AD) { AD.end(); AD.last = clock; }
     if (a === MOVIE && MB.prev) { var back = MB.prev; MB.prev = null; MB.last = clock; toSetting(back); } // the movie's over: back outside
     else if (wantPlace && !MB.prev) { // time for a new place: the pals just go there, and the music and sounds carry on
       wantPlace = false; var ns = pickSetting();
       if (ns && ns.id !== setting.id && ns.id !== 'theater') { var nw = new Date(); hour = nw.getHours() + nw.getMinutes() / 60; toSetting(ns); }
     }
+    else if (adDue(a)) { AD.last = clock; AD.dur = 58500 * SPEED; startTravel(AD, {}); return; }
     else if (movieBreakDue(a)) {
       MB.prev = setting; MB.last = clock; TH.clip = null; // a fresh, random movie each time
       toSetting(SETTINGS.filter(function (x) { return x.id === 'theater'; })[0]);
@@ -1010,8 +1097,8 @@
     draw();
     if (SND()) SND().tick(dt, true);
   }
-  function run() { if (!raf && isOpen && !paused && !document.hidden) { last = 0; raf = requestAnimationFrame(loop); if (SND()) SND().wake(); if (MUS()) MUS().resume(); } }
-  function halt() { if (raf) cancelAnimationFrame(raf); raf = 0; last = 0; if (SND()) SND().hush(); if (MUS()) MUS().pause(); }
+  function run() { if (!raf && isOpen && !paused && !document.hidden) { last = 0; raf = requestAnimationFrame(loop); if (SND()) SND().wake(); if (cur && cur.act === AD && AD.on) AD.play(cur.t / 1000 / SPEED); else if (MUS()) MUS().resume(); } }
+  function halt() { if (raf) cancelAnimationFrame(raf); raf = 0; last = 0; if (SND()) SND().hush(); if (MUS()) MUS().pause(); if (AD.src) AD.stop(); }
 
   // ---------- sounds: soft, synthesized dog noises (pals-cam-sounds.js, fetched the first time the cam opens) ----------
   function SND() { return window.TOLPalsCamSounds || null; }
@@ -1240,6 +1327,7 @@
     var src = window.TOLPalsCamActs || { acts: [], combos: [] };
     ACTS = (src.acts || []).filter(function (a) { return a && a.id && typeof a.run === 'function'; });
     if (!ACTS.some(function (a) { return a.id === MOVIE.id; })) ACTS.push(MOVIE);
+    if (!ACTS.some(function (a) { return a.id === AD.id; })) ACTS.push(AD);
     BYID = {}; ACTS.forEach(function (a) { a.dur = a.dur || 7000; BYID[a.id] = a; });
     COMBOS = {}; (src.combos || []).forEach(function (c) { if (BYID[c[0]] && BYID[c[1]]) COMBOS[c[0]] = c[1]; });
     INTER = (src.interludes || []).filter(function (a) { return a && a.id && typeof a.run === 'function'; });
@@ -1335,6 +1423,7 @@
   }
   function close() {
     if (!isOpen) return;
+    if (AD.on) AD.end();
     isOpen = false; halt(); if (MUS()) MUS().stop(); if (AMB()) AMB().stop(); ov.hidden = true; document.documentElement.classList.remove('pc-lock');
     var o = openerEl; openerEl = null;
     if (o && o.focus && document.contains(o)) { try { o.focus({ preventScroll: true }); } catch (e) { o.focus(); } }
@@ -1362,6 +1451,7 @@
     facts: function () { return shownFacts.map(function (l) { return l.map(function (f) { return f.k; }); }); }, factCounts: function () { if (!ACTS.length) loadActs(); return [FACTS[0].length, FACTS[1].length]; },
     isOpen: function () { return isOpen; },
     newPlace: function () { if (!isOpen) return false; wantPlace = true; return true; }, // after the current moment, on to a new place
+    adBreak: function () { if (!isOpen || MB.prev || setting.id === 'theater') return false; AD.load(); var go = function () { AD.last = clock; AD.dur = 58500 * SPEED; startTravel(AD, {}); }; if (AD.buf) go(); else { var n = 0, w = setInterval(function () { if (AD.buf || ++n > 40) { clearInterval(w); go(); } }, 150); } return true; },
     movieBreak: function () { if (!isOpen || MB.prev || setting.id === 'theater' || !BYID[MOVIE.id]) return false; MB.prev = setting; MB.last = clock; TH.clip = null; toSetting(SETTINGS.filter(function (x) { return x.id === 'theater'; })[0]); startTravel(BYID[MOVIE.id], {}); return true; },
     settingId: function () { return setting && setting.id; }, soundNote: function () { return noteOpen(); }, hideSoundNote: function () { hideNote(false); },
     frames: function () { return frames.slice(); }, resetFrames: function () { frames.length = 0; },

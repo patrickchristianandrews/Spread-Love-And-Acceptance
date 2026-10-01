@@ -137,7 +137,7 @@ SEARCH = {
  'daily-ledger-crossword.html': ('Daily Crossword Puzzle, Newspaper Style (Free)', 'A free newspaper-style crossword with fair, friendly clues. Play in your browser on any device, at your own pace.'),
  'frequency-journey.html': ('The Frequency Journey: A Calm Puzzle Adventure', 'Help Tidbit and Sugarfoot find the Perfect Frequency through seven worlds of calm puzzles, riddles and small lessons about patience and harmony.'),
  'frequency-buddies.html': ('Frequency Buddies: A Kids’ Cartoon About Feelings', 'Gentle animated episodes for kids and families: two pups, Tidbit and Sugarfoot, face tough times, talk it through and come out stronger. Free, with captions.'),
- 'frequency-buddies-shuffle.html': ('Frequency Buddies: Watch Every Episode on Shuffle', 'Every Frequency Buddies episode back to back in a random order, with the theme song, plus the whole season as one video for YouTube.'),
+ 'frequency-buddies-shuffle.html': ('Frequency Buddies: Watch Every Episode on Shuffle', 'Every Frequency Buddies episode back to back in a random order, with the theme song, plus every episode to download and watch offline.'),
  'soundscapes.html': ('Calm Soundscapes and Relaxing Music', 'Calm soundscapes and gentle music: breathing tracks, peaceful ambient pieces and songs about love, acceptance and finding your way back to each other.'),
  'pal-cam-tv.html': ('Pal Cam TV: A Cozy Puppy Cam for Your TV', 'Two cartoon pups play, nap and explore live on your TV, with calm music and soft place sounds. Free to cast or play full screen.'),
  'wp-01.html': ('Fair Chore Chart: Who Did What (WP-01)', 'A free chore chart worksheet: note who did what this week, see the split clearly, and find kind ways to say no. For couples, families and roommates.'),

@@ -1423,7 +1423,7 @@
   // /assets/audio/buddies/<episode>/<key>.mp3, listed in index.json. A line plays its recording through
   // Web Audio (reliable on phones once Play has been pressed); a line with no recording falls back to
   // the device's own speech, and then to captions only.
-  var PLAYER_VER = '1 Oct · 3'; // shown under the player, so we can tell which version a browser has
+  var PLAYER_VER = '1 Oct · 4'; // shown under the player, so we can tell which version a browser has
   var REC = '2609c'; // bump whenever the recordings are redone, so no browser plays an old copy
   var CL = { base: '/assets/audio/buddies/', maps: {}, ready: {}, bufs: {}, got: {}, src: null, gain: null, token: 0, lastFx: -99 };
   function ckey(who, text) { var h = 0x811c9dc5, s = who + '|' + text; for (var i = 0; i < s.length; i++) { h ^= s.charCodeAt(i); h = Math.imul(h, 0x01000193) >>> 0; } return ('0000000' + h.toString(16)).slice(-8); }
@@ -1526,6 +1526,8 @@
   // THE PLAYER (the /frequency-buddies.html page)
   // =====================================================================================================
   var KEY = 'tol-buddies-v1';
+  // each episode as a video to download and watch offline (sizes in MB)
+  var DOWNLOADS = { s1e1: 19, s1e2: 19, s1e3: 18, s1e4: 18, s1e5: 17 };
   function memGet() { try { var o = JSON.parse(localStorage.getItem(KEY) || '{}'); return o && typeof o === 'object' ? o : {}; } catch (e) { return {}; } }
   function memSet(o) { try { localStorage.setItem(KEY, JSON.stringify(o)); } catch (e) { /* private mode: fine */ } }
   var CSS = '' +
@@ -1566,6 +1568,16 @@
     '.fb-b[aria-pressed="true"]{background:rgba(142,221,166,.16);border-color:#8EDDA6;box-shadow:0 0 0 2px rgba(142,221,166,.22)}.fb-b[aria-pressed="true"] .fb-st{background:#8EDDA6;color:#16331F}' +
     '.fb-b[aria-pressed="false"]{border-style:dashed;border-color:rgba(255,255,255,.35);color:#CFC7DC}' +
     '.fb-sp{flex:1}' +
+    '.fb-tap{position:absolute;inset:0;z-index:4;pointer-events:none;transition:opacity .35s}' +
+    '.fb-tap-b{position:absolute;pointer-events:auto;display:grid;place-items:center;border:2px solid rgba(255,255,255,.75);background:rgba(20,14,32,.62);color:#FFF6E6;cursor:pointer;border-radius:999px;font:600 1.2rem/1 system-ui,sans-serif;width:52px;height:52px;padding:0}' +
+    '.fb-tap-play{left:50%;top:50%;width:84px;height:84px;margin:-42px 0 0 -42px;font-size:2rem}' +
+    '.fb-tap-re{left:.7rem;top:.7rem}.fb-tap-full{right:.7rem;top:.7rem}' +
+    '.fb-tap-b:focus-visible{outline:3px solid #F7C98B;outline-offset:2px}' +
+    '.fb-player.is-idle .fb-tap{opacity:0}.fb-player.is-idle .fb-tap-b{pointer-events:none}.fb-player.is-idle .fb-stage{cursor:none}' +
+    '.fb-stage:has(.fb-ov:not([hidden])) .fb-tap{display:none}' +
+    '.fb-player:fullscreen .fb-prog,.fb-player:fullscreen .fb-ctrl,.fb-player.is-full .fb-prog,.fb-player.is-full .fb-ctrl{transition:opacity .35s}' +
+    '.fb-player.is-idle:fullscreen .fb-prog,.fb-player.is-idle:fullscreen .fb-ctrl,.fb-player.is-idle.is-full .fb-prog,.fb-player.is-idle.is-full .fb-ctrl{opacity:0;pointer-events:none}' +
+    '.fb-under{display:flex;flex-wrap:wrap;gap:.5rem;margin:.6rem 0 0}.fb-under .fb-b{text-decoration:none}.fb-player:fullscreen .fb-under,.fb-player.is-full .fb-under,.fb-player.is-stream .fb-under{display:none}' +
     '@media (max-width:600px){.fb-ctrl .fb-full .fb-lbl{display:none}.fb-b{padding:.35rem .65rem}.fb-sp{flex-basis:100%;height:0}}' +
     '.fb-b.fb-flash[hidden]{display:none}' +
     '.fb-ovc .fb-cn{margin:.1rem auto .75rem;padding:.55rem .75rem;border-radius:12px;background:rgba(255,255,255,.1);border-left:3px solid #BFE3D6;text-align:left;font-size:.92rem;line-height:1.45;color:#F2EAFB}' +
@@ -1629,6 +1641,7 @@
     host.innerHTML =
       '<div class="fb-head"><h2 class="fb-title">Frequency Buddies</h2><p class="fb-chap" aria-live="off"></p></div>' +
       '<div class="fb-stage"><canvas class="fb-cv" role="img" aria-label="An animated story with Tidbit and Sugarfoot"></canvas><button type="button" class="fb-skip" hidden>Skip intro ⏭</button>' +
+      '<div class="fb-tap"><button type="button" class="fb-tap-b fb-tap-re" aria-label="Restart the episode from the beginning" title="Restart">↺</button><button type="button" class="fb-tap-b fb-tap-play" aria-label="Play">▶</button><button type="button" class="fb-tap-b fb-tap-full" aria-label="Full screen" title="Full screen">⛶</button></div>' +
       '<div class="fb-ov fb-start"><div class="fb-ovc"><p class="fb-k">Loading…</p></div></div><div class="fb-ov fb-end" hidden></div></div>' +
       '<p class="fb-cap" data-who=""><span class="fb-who"></span><span class="fb-line">Captions show here, always.</span></p>' +
       '<div class="fb-prog"><div class="fb-track" role="slider" tabindex="0" aria-label="Where you are in the episode" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div class="fb-fill"></div></div><span class="fb-time">0:00</span></div>' +
@@ -1636,12 +1649,14 @@
         '<button type="button" class="fb-b fb-prev" aria-label="Previous chapter" title="Previous chapter (Left arrow)">⏮</button>' +
         '<button type="button" class="fb-b is-main fb-play" aria-label="Play" title="Play or pause (Space)">▶ Play</button>' +
         '<button type="button" class="fb-b fb-nextc" aria-label="Next chapter" title="Next chapter (Right arrow)">⏭</button>' +
+        '<button type="button" class="fb-b fb-restart" aria-label="Restart the episode from the beginning" title="Restart the episode (R)">↺ Restart</button>' +
         '<span class="fb-sp"></span>' +
         '<button type="button" class="fb-b fb-voice" aria-pressed="true">🗣️<span class="fb-lbl"> Voices</span> <span class="fb-st">on</span></button>' +
         '<button type="button" class="fb-b fb-mus" aria-pressed="true">🎵<span class="fb-lbl"> Music</span> <span class="fb-st">on</span></button>' +
         '<button type="button" class="fb-b fb-flash" aria-pressed="false" hidden>⚡<span class="fb-lbl"> Flashes</span> <span class="fb-st">soft</span></button>' +
         '<button type="button" class="fb-b fb-full" aria-label="Full screen" title="Full screen (F)">⛶<span class="fb-lbl"> Full screen</span></button>' +
       '</div>' +
+      '<div class="fb-under"><button type="button" class="fb-b fb-restart2">↺ Restart episode</button><a class="fb-b fb-dl" hidden>⬇ Download this episode</a></div>' +
       '<div class="fb-chaps"><h3>Chapters</h3><ol></ol></div>' +
       '<p class="fb-note">Space plays and pauses, the arrow keys move between chapters. Voices are recorded, and captions are always on. <span class="fb-ver">Player ' + PLAYER_VER + '</span></p>' +
       '<p class="fb-sr fb-live" aria-live="polite"></p>';
@@ -1659,6 +1674,8 @@
       vBtn.setAttribute('aria-pressed', String(P.voices)); vBtn.querySelector('.fb-st').textContent = P.voices ? 'on' : 'off'; vBtn.setAttribute('aria-label', P.voices ? 'Voices are on. Turn the voices off' : 'Voices are off. Turn the voices on');
       mBtn.setAttribute('aria-pressed', String(P.music)); mBtn.querySelector('.fb-st').textContent = P.music ? 'on' : 'off'; mBtn.setAttribute('aria-label', P.music ? 'Music and sounds are on. Turn them off' : 'Music and sounds are off. Turn them on');
       playBtn.textContent = P.playing ? '❚❚ Pause' : '▶ Play'; playBtn.setAttribute('aria-label', P.playing ? 'Pause' : 'Play');
+      var tp = host.querySelector('.fb-tap-play'); if (tp) { tp.textContent = P.playing ? '❚❚' : '▶'; tp.setAttribute('aria-label', P.playing ? 'Pause' : 'Play'); }
+      if (typeof wakeTap === 'function') wakeTap(!P.playing);
       var still = P.stage && P.stage.reduced; // with less motion on, lightning is only ever a soft glow
       fBtn.setAttribute('aria-pressed', String(P.bright && !still)); fBtn.querySelector('.fb-st').textContent = still ? 'soft (less motion)' : P.bright ? 'bright' : 'soft';
       fBtn.disabled = !!still;
@@ -1804,7 +1821,7 @@
       }).catch(function () { return null; });
       return themeBuf[kind];
     }
-    function themeWanted() { return P.music && P.rate === 1 && !!(window.AudioContext || window.webkitAudioContext); }
+    function themeWanted() { return (P.music || P.voices) && !!(window.AudioContext || window.webkitAudioContext); } // the theme is part of the show: it plays whenever any sound is on
     function songCap(who, text) {
       capEl.setAttribute('data-who', who === 'both' ? 'tidbit' : who); P.capB = null; P.capWords = [];
       whoEl.textContent = '♪ ' + (who === 'tidbit' ? 'Tidbit' : who === 'sugarfoot' ? 'Sugarfoot' : 'Tidbit and Sugarfoot'); whoEl.className = 'fb-who';
@@ -1912,6 +1929,7 @@
     // ---------- another episode, in place (shuffle), without reloading the page ----------
     function switchTo(id, autoplay) {
       if (!id) return;
+      if (P.th) endTheme(false); P.playing = false; if (P.dir) P.dir.playing = false; vstop(); if (P.stage) P.stage.stopTalk(); stopLoop(); syncBtns();
       P.id = id; P.introDone = false; live.textContent = 'Up next: ' + ((catalogEntry(id) || {}).title || 'another episode');
       loadEpisode(id).then(function (ep) {
         if (!ep) { var nx = shufflePick(id); if (nx && nx !== id) switchTo(nx, autoplay); return; }
@@ -2090,6 +2108,14 @@
     }
     function startLoop() { if (!P.raf) { P.last = 0; P.raf = requestAnimationFrame(loop); } }
     function stopLoop() { if (P.raf) cancelAnimationFrame(P.raf); P.raf = 0; }
+    function restart() {
+      if (!P.dir) return;
+      if (P.th) endTheme(false);
+      vstop(); if (P.stage) P.stage.stopTalk();
+      endOv.hidden = true; startOv.hidden = true;
+      P.playing = false; P.dir.playing = false; P.introDone = false; P.dir.seek(0); P.ch = 0; if (P.one) P.oneCh = 0; renderChapter(); progress();
+      play(); live.textContent = 'Starting the episode from the beginning.';
+    }
     function play() {
       if (!P.dir) return; recHold(false);
       if (P.th) { startOv.hidden = true; endOv.hidden = true; auPause(false); P.playing = true; syncBtns(); startLoop(); return; } // the theme song carries on
@@ -2115,6 +2141,7 @@
     function pause() { recHold(true); if (!P.dir) return; if (P.th) { P.playing = false; auPause(true); stopLoop(); syncBtns(); return; } P.playing = false; P.dir.playing = false; vstop(); P.stage.stopTalk(); auPause(true); stopLoop(); syncBtns(); paint(0); }
     function toggle() { if (P.playing) pause(); else play(); }
     function goChapter(ch) {
+      if (ch <= 0 && !P.one && P.dir) { restart(); return; }
       if (P.th) endTheme(false);
       if (!P.dir) return; var n = P.ep.chapters.length; ch = clamp(ch, 0, n - 1);
       endOv.hidden = true; startOv.hidden = true; P.started = true;
@@ -2125,7 +2152,30 @@
     function prevChapter() { if (!P.dir) return; var ch = P.dir.chapterAt(); if (P.dir.time() - P.dir.chapterTime(ch) < 4 && ch > 0) goChapter(ch - 1); else goChapter(ch); }
     function nextChapter() { if (!P.dir) return; var ch = P.dir.chapterAt(); if (ch + 1 < P.ep.chapters.length) goChapter(ch + 1); }
     playBtn.addEventListener('click', toggle);
-    cv.addEventListener('click', toggle);
+    // ---------- the controls on the picture: they fade while it plays, and come back with a tap or a move ----------
+    var idleT = 0;
+    function wakeTap(hold) {
+      host.classList.remove('is-idle'); clearTimeout(idleT);
+      if (!hold && P.playing) idleT = setTimeout(function () {
+        // not while someone is moving through the buttons with a keyboard
+        var a = document.activeElement, kb = false; try { kb = !!(a && host.contains(a) && a.matches(':focus-visible') && a.closest('.fb-tap, .fb-ctrl, .fb-prog')); } catch (e) {}
+        if (P.playing && !kb) host.classList.add('is-idle');
+      }, 2600);
+    }
+    var lastTouch = 0;
+    stageEl.addEventListener('touchstart', function () { lastTouch = Date.now(); }, { passive: true });
+    cv.addEventListener('click', function () {
+      // a tap on a touch screen first brings the controls back; a click with a mouse plays or pauses, like any video
+      if (Date.now() - lastTouch < 800 && host.classList.contains('is-idle')) { wakeTap(); return; }
+      toggle(); wakeTap();
+    });
+    stageEl.addEventListener('mousemove', function () { wakeTap(); });
+    host.querySelector('.fb-tap-play').addEventListener('click', function () { toggle(); wakeTap(); });
+    host.querySelector('.fb-tap-re').addEventListener('click', function () { restart(); wakeTap(); });
+    host.querySelector('.fb-tap-full').addEventListener('click', function () { $('.fb-full').click(); wakeTap(); });
+    $('.fb-restart').addEventListener('click', restart);
+    $('.fb-restart2').addEventListener('click', function () { restart(); inView(); });
+    ['fb-ctrl', 'fb-prog'].forEach(function (c) { var n = host.querySelector('.' + c); if (n) { n.addEventListener('pointerdown', function () { wakeTap(); }); n.addEventListener('focusin', function () { wakeTap(); }); } });
     $('.fb-prev').addEventListener('click', prevChapter);
     $('.fb-nextc').addEventListener('click', nextChapter);
     vBtn.addEventListener('click', function () { P.voices = !P.voices; if (!P.voices) vstop(); else if (P.playing) P.dir.restartLine(); syncBtns(); save(); });
@@ -2142,7 +2192,7 @@
       setTimeout(resize, 80);
     });
     ['fullscreenchange', 'webkitfullscreenchange'].forEach(function (ev) { document.addEventListener(ev, function () { setTimeout(resize, 60); }); });
-    function seekFromPointer(e) { if (P.th) endTheme(false); if (!P.dir) return; var r = trackEl.getBoundingClientRect(), p = clamp((e.clientX - r.left) / r.width, 0, 1); endOv.hidden = true; startOv.hidden = true; P.started = true; P.dir.seekTime(p * P.dir.total); P.ch = P.dir.chapterAt(); if (P.one) P.oneCh = P.ch; renderChapter(); paint(0); progress(); if (P.playing) P.dir.playing = true; else play(); }
+    function seekFromPointer(e) { if (!P.dir) return; var r = trackEl.getBoundingClientRect(), p = clamp((e.clientX - r.left) / r.width, 0, 1); if (p < 0.012 || p * P.dir.total < 3) { restart(); return; } if (P.th) endTheme(false); endOv.hidden = true; startOv.hidden = true; P.started = true; P.dir.seekTime(p * P.dir.total); P.ch = P.dir.chapterAt(); if (P.one) P.oneCh = P.ch; renderChapter(); paint(0); progress(); if (P.playing) P.dir.playing = true; else play(); }
     trackEl.addEventListener('click', seekFromPointer);
     trackEl.addEventListener('keydown', function (e) { if (e.key === 'Home') { e.preventDefault(); goChapter(0); } else if (e.key === 'End') { e.preventDefault(); goChapter(P.ep.chapters.length - 1); } });
     document.addEventListener('keydown', function (e) {
@@ -2158,6 +2208,7 @@
       else if (e.key === 'ArrowLeft') { e.preventDefault(); prevChapter(); }
       else if (e.key === 'ArrowRight') { e.preventDefault(); nextChapter(); }
       else if (e.key === 'f' || e.key === 'F') { $('.fb-full').click(); }
+      else if (e.key === 'r' || e.key === 'R') { restart(); }
     });
     document.addEventListener('visibilitychange', function () {
       if (document.hidden && P.playing && !P.stream) pause(); // a stream keeps going
@@ -2176,13 +2227,13 @@
         (note ? '<p class="fb-cn"><b>Before you watch:</b> ' + esc(note) + (hasStorm() ? ' <span class="fb-hide-s">You can turn on bright flashes with the ⚡ Flashes button.</span>' : '') + soundLine() + '</p>' : '') +
         '<div class="fb-row">' +
         (P.oneFirst ? oneBtn : '') +
-        (ch ? '<button type="button" class="fb-b' + (P.oneFirst ? '' : ' is-main') + ' fb-resume">▶ Resume: chapter ' + (ch + 1) + '</button><button type="button" class="fb-b fb-begin">From the beginning</button>'
-            : '<button type="button" class="fb-b' + (P.oneFirst ? '' : ' is-main') + ' fb-begin">▶ Play the episode</button>') +
+        '<button type="button" class="fb-b' + (P.oneFirst ? '' : ' is-main') + ' fb-begin">▶ Play the episode</button>' +
+        (ch ? '<button type="button" class="fb-b fb-resume">Pick up at chapter ' + (ch + 1) + '</button>' : '') +
         (P.oneFirst ? '' : oneBtn) + '</div></div>';
       var rb = startOv.querySelector('.fb-resume'), bb = startOv.querySelector('.fb-begin');
       startOv.querySelector('.fb-onech').addEventListener('click', function () { playOne(ch); });
       if (rb) rb.addEventListener('click', function () { goChapter(ch); });
-      bb.addEventListener('click', function () { P.introDone = false; P.dir.seek(0); P.ch = 0; renderChapter(); play(); });
+      bb.addEventListener('click', restart);
       startOv.hidden = false;
     }
     function soundLine() {
@@ -2197,7 +2248,7 @@
         (teaser || ntitle ? '<div class="fb-next"><b>Next time on Frequency Buddies' + (ntitle ? ': ' + esc(ntitle) : '') + '</b>' + esc(teaser) + '</div>' : '') +
         '<div class="fb-row">' + (nep ? '<a class="fb-b is-main" href="/frequency-buddies.html?ep=' + nid + '">▶ Watch episode ' + nep.number + '</a>' : nid ? '<span class="fb-b" aria-disabled="true">Episode ' + (ce ? ce.n : '') + ' is coming soon</span>' : '') +
         '<button type="button" class="fb-b fb-again">↺ Watch again</button><a class="fb-b" href="/frequency-journey.html#buddies">All episodes</a></div></div>';
-      endOv.querySelector('.fb-again').addEventListener('click', function () { P.introDone = false; P.dir.seek(0); P.ch = 0; renderChapter(); play(); });
+      endOv.querySelector('.fb-again').addEventListener('click', restart);
       endOv.hidden = false; live.textContent = 'The end. ' + ep.lesson;
       var f = endOv.querySelector('a.is-main, .fb-again'); if (f) try { f.focus({ preventScroll: true }); } catch (e) {}
     }
@@ -2209,6 +2260,8 @@
       fBtn.hidden = !hasStorm(); P.stage.onSound = function (k, who) { if (P.music) auSound(k, who); };
       P.dir = makeDirector(P.stage, ep, hooks);
       $('.fb-title').textContent = ep.title;
+      var dl = host.querySelector('.fb-dl');
+      if (dl) { var mb = DOWNLOADS[P.id]; dl.hidden = !mb; if (mb) { dl.href = '/assets/video/frequency-buddies-' + P.id + '.mp4'; dl.setAttribute('download', 'Frequency Buddies - Episode ' + (ep.number || '') + ' - ' + String(ep.title).replace(/[\\/:*?"<>|]/g, '') + '.mp4'); dl.textContent = '⬇ Download this episode (MP4, ' + mb + ' MB)'; } }
       cv.setAttribute('aria-label', 'Animated story: ' + ep.title + '. ' + ep.blurb);
       var ol = host.querySelector('.fb-chaps ol'), est = estimate(ep); ol.innerHTML = '';
       ep.chapters.forEach(function (c, i) { var li = document.createElement('li'), b = document.createElement('button'); b.type = 'button'; b.textContent = (i + 1) + '. ' + c.title; b.setAttribute('aria-label', 'Chapter ' + (i + 1) + ': ' + c.title + ', ' + fmt(est.chapters[i].start)); b.addEventListener('click', function () { goChapter(i); }); li.appendChild(b); ol.appendChild(li); });
