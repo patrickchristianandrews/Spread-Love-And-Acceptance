@@ -162,6 +162,7 @@ Key facts:
 - [Cancellation & Refund Policy](https://spreadloveandacceptance.com/legal/refund-policy.html): Cancellation and refund terms for Spread Love & Acceptance.
 - [Terms of Service](https://spreadloveandacceptance.com/legal/terms-of-service.html): The terms for using Spread Love & Acceptance and The Objective Ledger.
 - [What’s stored on this device](https://spreadloveandacceptance.com/on-this-device.html): Everything this site keeps in your browser, in plain words, with a button to erase each one or everything at once. Nothing on this list is ever sent to us.
+- [Your Pawprint: A Personal Statement, Made Easy](https://spreadloveandacceptance.com/pawprint.html): Build a warm personal statement in nine easy steps: how you’re wired, what fills and drains you, how you show care.
 - [The Polymath Way: How Every Field Connects](https://spreadloveandacceptance.com/polymath.html): How psychology, economics, nature, music and more grow from the same few roots, and how a polymath joined nine fields into one program you can learn.
 - [Content Roadmap](https://spreadloveandacceptance.com/roadmap.html): What's live today, what's next, and what's planned for The Objective Ledger.
 - [Rollout Status](https://spreadloveandacceptance.com/telemetry.html): Component-by-component build status for The Objective Ledger, stated as real fractions of the promised whole.

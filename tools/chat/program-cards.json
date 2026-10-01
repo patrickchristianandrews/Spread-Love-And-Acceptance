@@ -4072,6 +4072,49 @@
           "/polymath.html#dimension"
         ]
       ]
+    },
+    {
+      "id": "pawprint",
+      "kind": "tool",
+      "name": "Your Pawprint",
+      "keys": [
+        "pawprint",
+        "your pawprint",
+        "personal statement",
+        "about me statement",
+        "a statement about me",
+        "describe myself",
+        "user manual for me",
+        "how to explain myself"
+      ],
+      "what": "Your Pawprint is a guided personal statement: a short, warm note about you that you can share with the people in your life. In nine easy steps, mostly tapping, you choose what fits: what’s going on right now, how you’re wired, what fills and drains your battery, what people might notice when you’re stretched, what helps, how you show care, the work you do that may go unseen, and what matters most. It writes the statement for you as you go, and shows connections between your choices that are easy to miss.",
+      "how": [
+        "Open Your Pawprint and pick what fits in each step. Add a line in your own words if you like.",
+        "Read “Things you might not have noticed” as you go: each one says which field it comes from, which pillar it belongs to and a tool to try.",
+        "Add your name, then copy it, save it as a text file or print it.",
+        "Share it at a calm moment, as information rather than rules, and invite theirs."
+      ],
+      "pillar": "It starts inside you, with Pillar III, Read your state first, and Pillar IV, Tune how you send and receive.",
+      "chips": [
+        [
+          "What’s the Wiring Card?",
+          "What is the Wiring Card?"
+        ],
+        [
+          "How do I share it?",
+          "How do I share my Pawprint?"
+        ]
+      ],
+      "links": [
+        [
+          "Your Pawprint",
+          "/pawprint.html"
+        ],
+        [
+          "The Wiring Card",
+          "/wiring-card.html"
+        ]
+      ]
     }
   ],
   "clarify": [

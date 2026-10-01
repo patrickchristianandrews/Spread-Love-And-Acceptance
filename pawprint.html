@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-NKC6CQ9S66"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-NKC6CQ9S66');
+</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Your Pawprint: A Personal Statement, Made Easy</title>
+<meta name="description" content="Build a warm personal statement in nine easy steps: how you’re wired, what fills and drains you, how you show care.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,500&family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/css/site.css">
+<link rel="stylesheet" href="/assets/css/reading.css">
+<script src="/assets/js/site.js" defer></script>
+<script src="/assets/js/pawprint.js" defer></script>
+<style>
+  main.read.pp-page { max-width: 68rem; }
+  .pp-page > .read-head, .pp-page > .simple-lede, .pp-page > .try-this, .pp-page > h2, .pp-page > ul, .pp-page > p { max-width: 42rem; margin-left: auto; margin-right: auto; }
+  .pp-ins { position: sticky; top: 76px; max-height: calc(100vh - 96px); overflow: auto; }
+  @media (max-width: 900px) { .pp-ins { position: static; max-height: none; } }
+  .pp-grid { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: 1rem; align-items: start; margin: 1rem 0; }
+  @media (max-width: 900px) { .pp-grid { grid-template-columns: 1fr; } }
+  .pp-step, .pp-ins, .pp-out { background: #FFFDF7; border: 1px solid var(--line); border-radius: 18px; padding: 1rem; }
+  .pp-step h2, .pp-ins h2, .pp-out h2 { margin-top: .2rem; }
+  .pp-dots { list-style: none; display: flex; flex-wrap: wrap; gap: .35rem; padding: 0; margin: 0 0 .6rem; }
+  .pp-dots button { width: 34px; height: 34px; border-radius: 50%; border: 1px solid var(--line); background: #fff; font: 600 .85rem/1 Lora, Georgia, serif; color: var(--ink); cursor: pointer; }
+  .pp-dots .is-done button { background: #E4EDE3; border-color: #9DBB9F; }
+  .pp-dots .is-now button { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+  .pp-k { margin: 0; font: 500 .8rem/1.2 "IBM Plex Mono", monospace; letter-spacing: .06em; text-transform: uppercase; color: var(--ink-soft); }
+  .pp-q { margin: .2rem 0 .8rem; color: var(--ink-soft); }
+  .pp-chips { display: flex; flex-wrap: wrap; gap: .45rem; margin: 0 0 .9rem; }
+  .pp-chip { font: inherit; font-size: .95rem; min-height: 44px; padding: .45rem .9rem; border-radius: 999px; border: 1px solid var(--line); background: #fff; color: var(--ink); cursor: pointer; }
+  .pp-chip:hover { background: var(--paper-deep); }
+  .pp-chip.is-on { background: #2F5F8A; border-color: #2F5F8A; color: #fff; }
+  .pp-own, .pp-name { display: flex; flex-direction: column; gap: .3rem; font-size: .9rem; font-weight: 600; margin: 0 0 .8rem; }
+  .pp-own textarea, .pp-name input { font: inherit; font-weight: 400; padding: .55rem .7rem; border-radius: 10px; border: 1px solid var(--line); background: #fff; color: var(--ink); width: 100%; box-sizing: border-box; }
+  .pp-nav, .pp-acts { display: flex; flex-wrap: wrap; justify-content: space-between; gap: .5rem; }
+  .pp-acts { justify-content: flex-start; margin: .8rem 0 .4rem; }
+  .pp-b { font: inherit; font-weight: 600; min-height: 44px; padding: .5rem 1rem; border-radius: 999px; border: 1px solid var(--ink); background: #fff; color: var(--ink); cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; }
+  .pp-b.is-main { background: var(--ink); color: var(--paper); }
+  .pp-b[disabled] { opacity: .45; cursor: default; }
+  .pp-ins ul { list-style: none; padding: 0; margin: 0; display: grid; gap: .7rem; }
+  .pp-ins li { border-left: 3px solid #7FB3DA; padding: .2rem 0 .2rem .7rem; }
+  .pp-ins li p { margin: .2rem 0; font-size: .95rem; }
+  .pp-tag { font-size: .82rem !important; color: var(--ink-soft); }
+  .pp-n { display: inline-grid; place-items: center; min-width: 1.6em; height: 1.6em; border-radius: 999px; background: #2F5F8A; color: #fff; font-size: .8rem; vertical-align: middle; }
+  .pp-empty { color: var(--ink-soft); font-style: italic; }
+  .pp-card { border: 2px dashed #C9B8EC; border-radius: 16px; padding: 1rem 1.1rem; background: #fff; }
+  .pp-card-h { font: 600 1.25rem/1.2 Fraunces, Georgia, serif; margin: 0; }
+  .pp-card-s { margin: .1rem 0 .8rem; color: var(--ink-soft); font-style: italic; font-size: .92rem; }
+  .pp-card-end { color: var(--ink-soft); font-style: italic; }
+  .pp-keep { display: flex; gap: .5rem; align-items: center; font-size: .92rem; margin: .4rem 0; }
+  .pp-keep input { width: 20px; height: 20px; }
+  .pp-status { min-height: 1.2em; font-size: .9rem; color: var(--credit); }
+  @media print { html.pp-printing body * { visibility: hidden; } html.pp-printing .pp-card, html.pp-printing .pp-card * { visibility: visible; } html.pp-printing .pp-card { position: absolute; left: 0; top: 0; width: 100%; border: 0; } }
+</style>
+<!-- seo:start -->
+<link rel="canonical" href="https://spreadloveandacceptance.com/pawprint.html">
+<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1">
+<meta name="keywords" content="self-help, relationships, kindness, love, appreciation, acceptance, connection, communication, calm, peace, harmony, reconciliation, emotional wellbeing, self-discovery, fairness at home, mental load, invisible work, free self-help tools">
+<meta name="author" content="Spread Love &amp; Acceptance">
+<meta property="og:site_name" content="Spread Love &amp; Acceptance">
+<meta property="og:title" content="Your Pawprint: A Personal Statement, Made Easy">
+<meta property="og:description" content="Build a warm personal statement in nine easy steps: how you’re wired, what fills and drains you, how you show care.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://spreadloveandacceptance.com/pawprint.html">
+<meta property="og:image" content="https://spreadloveandacceptance.com/assets/img/og-image.png">
+<meta property="og:image:alt" content="Two friends sharing one heart, with two happy pups: Spread Love &amp; Acceptance">
+<meta property="og:locale" content="en_US">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Your Pawprint: A Personal Statement, Made Easy">
+<meta name="twitter:description" content="Build a warm personal statement in nine easy steps: how you’re wired, what fills and drains you, how you show care.">
+<meta name="twitter:image" content="https://spreadloveandacceptance.com/assets/img/og-image.png">
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"name":"Your Pawprint: A Personal Statement, Made Easy","headline":"Your Pawprint: A Personal Statement, Made Easy","description":"Build a warm personal statement in nine easy steps: how you’re wired, what fills and drains you, how you show care.","url":"https://spreadloveandacceptance.com/pawprint.html","inLanguage":"en-US","isAccessibleForFree":true,"keywords":"self-help, relationships, kindness, love, appreciation, acceptance, connection, communication, calm, peace, harmony, reconciliation, emotional wellbeing, self-discovery, fairness at home, mental load, invisible work, free self-help tools","publisher":{"@type":"Organization","@id":"https://spreadloveandacceptance.com/#org","name":"Spread Love & Acceptance"},"isPartOf":{"@type":"WebSite","@id":"https://spreadloveandacceptance.com/#website","name":"Spread Love & Acceptance","url":"https://spreadloveandacceptance.com/"},"dateModified":"2026-10-01","image":"https://spreadloveandacceptance.com/assets/img/og-image.png","@type":"WebPage"},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Spread Love & Acceptance","item":"https://spreadloveandacceptance.com/"},{"@type":"ListItem","position":2,"name":"Your Pawprint: A Personal Statement, Made Easy","item":"https://spreadloveandacceptance.com/pawprint.html"}]}]}</script>
+<!-- seo:end -->
+</head>
+<body>
+<main class="read pp-page">
+<header class="read-head"><p class="read-code">Know yourself</p><h1>Your Pawprint: a personal statement, made easy</h1></header>
+<p class="simple-lede">Everyone leaves their own pawprint. This one is a short, warm note about you: how you’re wired, what fills and drains your battery, how you show care, and what helps when you’re stretched. Nine easy steps, mostly tapping.</p>
+<div class="try-this" data-in-short>
+  <p><strong>How it works:</strong> Pick what fits in each step, and add a line in your own words if you like. Your Pawprint writes itself as you go, and <strong>Things you might not have noticed</strong> shows connections between your choices that are easy to miss, and why they matter to the people around you.</p>
+  <p>Everything happens on this device. Nothing is sent anywhere, and a draft is kept only if you choose.</p>
+</div>
+<div data-pawprint><noscript><p>Your Pawprint needs JavaScript to build your statement.</p></noscript></div>
+<h2 id="sharing">Sharing your Pawprint</h2>
+<ul>
+  <li><strong>Pick a calm moment.</strong> Share it as information, not a list of rules: “I wrote this so you don’t have to guess. Would you read it?”</li>
+  <li><strong>Invite theirs.</strong> Two Pawprints side by side show where you’re alike and where you differ, and nobody has to be wrong.</li>
+  <li><strong>Update it.</strong> Seasons change, and so does what you need. Come back when life shifts.</li>
+</ul>
+<p>Want more? The <a href="/wiring-card.html">Wiring Card</a> goes deeper into how you take in and send messages, and <a href="/quick-checks.html#today">Today’s Weather</a> checks how full your battery is right now.</p>
+</main>
+</body>
+</html>

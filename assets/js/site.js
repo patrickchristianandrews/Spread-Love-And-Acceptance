@@ -77,6 +77,7 @@
       { href: '/growing-up.html', deep: true, code: 'New', title: 'Where your lens came from', note: 'How each stage of growing up shapes what you expect of yourself and others, and how to choose which rules to keep' },
       { href: '/wired-differently.html', deep: true, code: 'New', title: 'Wired Differently', note: 'How differently wired people hear the same words, and how to talk across the difference' },
       { href: '/wiring-card.html', code: 'Tool', title: 'Wiring Card', note: 'A one-page card on how you receive words, what silence means, and what to avoid' },
+      { href: '/pawprint.html', code: 'New', title: 'Your Pawprint', note: 'Build a warm personal statement in nine easy steps, with connections you may never have noticed' },
       { href: '/workpapers/wp-02-battery-stress-meter.html', deep: true, code: 'WP-02', title: 'How much are you carrying?', note: 'What you’re already carrying, separate from what just happened', paid: true },
       { href: '/tools/frequency-calibration.html', code: 'Tool', title: 'Find your natural rhythms', note: 'Your natural rhythms for money, decisions, check-ins and recovery', paid: true },
       { href: '/wp-11.html', deep: true, code: 'WP-11', title: 'The Calm-Down Kit', note: 'Decide in advance what settles your body', paid: true },
@@ -587,7 +588,6 @@
     buildPuddles(body);
     buildPuddlesCards(body);
     buildPuddlesPop(body);
-    buildWeatherNudge(body);
     comfortOffer(body);
     rememberPage(body);
     if (current === '/index.html') {
@@ -680,7 +680,7 @@
     var promise = current === '/dashboard.html' ? '' :
       '<p class="tol-promise">What you type into the tools and worksheets stays on your device. It is never collected or sent to us. <a href="/legal/privacy-policy.html#your-entries">How we handle your information</a></p>';
     foot.innerHTML = promise +
-      '<span class="tol-foot-brand"><img src="/assets/img/logo-mark.svg" alt="" width="40" height="40">The Objective Ledger &middot; spreadloveandacceptance.com</span>' +
+      '<span class="tol-foot-brand"><img src="/assets/img/logo-mark.svg" alt="" width="40" height="40">Spread Love &amp; Acceptance &middot; spreadloveandacceptance.com</span>' +
       '<span class="tol-foot-links">' +
         '<a href="/contents.html">All pages</a>' +
         '<a href="/membership.html">Membership</a>' +

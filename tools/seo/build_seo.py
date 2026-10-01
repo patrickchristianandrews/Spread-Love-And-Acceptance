@@ -152,6 +152,7 @@ SEARCH = {
  'prog-01.html': ('A Six-Week Guided Program for Fairer Chores', 'Six gentle weeks, one worksheet a week: see the load, give every job an owner, check your batteries and how you talk, then look at what changed.'),
  'wired-differently.html': ('Wired Differently: Neurodiversity in Relationships', 'How different minds can hear the same words differently, and simple ways to share plans, chores and feedback so they land for everyone.'),
  'know-yourself.html': ('Know Your Own Wiring: A Self-Discovery Guide', 'Understand how you take in plans, change and feedback, and how to explain what helps you to the people you live and work with.'),
+ 'pawprint.html': ('Your Pawprint: A Personal Statement, Made Easy', 'Build a warm personal statement in nine easy steps: how you’re wired, what fills and drains you, how you show care. It points out connections you may never have noticed.'),
  'polymath.html': ('The Polymath Way: How Every Field Connects', 'How psychology, economics, nature, music and more grow from the same few roots, and how a polymath joined nine fields into one program you can learn.'),
  'about.html': ('About Spread Love & Acceptance', 'The story behind Spread Love & Acceptance and The Objective Ledger: a free, growing suite of tools for kinder, fairer relationships.'),
  'book/preface.html': ('The Work Nobody Sees: Invisible Labor at Home', 'The preface: the planning, remembering and noticing that keeps a home running, why it goes unseen, and how seeing it changes everything.'),
