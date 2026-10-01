@@ -2283,7 +2283,7 @@ html.tol-still .tol-breathe-btn{ transition:none; }
 .tol-breathe-btn.is-hiding{ opacity:0 !important; pointer-events:none !important; }
 .tol-breathe-btn.is-hiding:focus-visible{ opacity:1 !important; pointer-events:auto !important; }
 
-/* ---------- Professor Puddles on every page: the round button, and the bubble for highlighted words ---------- */
+/* ---------- Professor Puddles on every page: the round button ---------- */
 .tol-pud-fab{
   position:fixed; left:max(1rem, env(safe-area-inset-left)); bottom:max(1rem, env(safe-area-inset-bottom)); z-index:879;
   display:inline-flex; align-items:center; gap:.45rem; padding:.3rem .9rem .3rem .3rem; min-height:48px;
@@ -2291,7 +2291,7 @@ html.tol-still .tol-breathe-btn{ transition:none; }
   border:1px solid #A9CBE8; border-radius:999px; box-shadow:0 6px 20px rgba(36,66,94,.16); cursor:pointer;
 }
 .tol-pud-fab:hover{ background:#D5E9FA; }
-.tol-pud-fab:focus-visible, .tol-pud-sel:focus-visible{ outline:2px solid var(--focus); outline-offset:3px; }
+.tol-pud-fab:focus-visible{ outline:2px solid var(--focus); outline-offset:3px; }
 .tol-pud-fab-art{ display:grid; place-items:center; width:40px; height:40px; border-radius:50%; background:#fff; flex:none; }
 .tol-pud-fab-art svg{ width:34px; height:34px; }
 @media (max-width:560px){
@@ -2299,16 +2299,8 @@ html.tol-still .tol-breathe-btn{ transition:none; }
   .tol-pud-fab-t{ position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; }
 }
 body.has-pud-fab .tol-wx{ bottom:calc(4.6rem + env(safe-area-inset-bottom, 0px)) !important; }
-.tol-pud-sel{
-  position:fixed; z-index:991; display:inline-flex; align-items:center; gap:.35rem; padding:.35rem .8rem .35rem .35rem; min-height:40px;
-  font:600 .88rem/1 "Lora", Georgia, serif; color:#fff; background:#24425E; border:0; border-radius:999px;
-  box-shadow:0 6px 18px rgba(20,30,50,.28); cursor:pointer; white-space:nowrap;
-}
-.tol-pud-sel[hidden]{ display:none; }
-.tol-pud-sel-art{ display:grid; place-items:center; width:28px; height:28px; border-radius:50%; background:#fff; }
-.tol-pud-sel-art svg{ width:24px; height:24px; }
-html.tol-no-helpers .tol-pud-fab, html.tol-no-helpers .tol-pud-sel{ display:none !important; }
-@media print{ .tol-pud-fab, .tol-pud-sel{ display:none !important; } }
+html.tol-no-helpers .tol-pud-fab{ display:none !important; }
+@media print{ .tol-pud-fab{ display:none !important; } }
 /* on a phone, Professor Puddles and Breathe tuck against the screen edges as slim tabs, in the margin beside the
    text, so neither one covers what someone is reading */
 @media (max-width:560px){
@@ -2321,3 +2313,10 @@ html.tol-no-helpers .tol-pud-fab, html.tol-no-helpers .tol-pud-sel{ display:none
   html body .tol-breathe-btn.is-compact.is-left:not(.is-high){ left:0 !important; right:auto !important; border-radius:0 24px 24px 0; padding:0 4px 0 0 !important; justify-content:flex-end; }
   body.has-pud-fab .tol-wx{ bottom:calc(1rem + env(safe-area-inset-bottom, 0px)) !important; }
 }
+/* the two choices in every mini dive: wade in deeper, or chat it out with Professor Puddles */
+.tol-dive-wade{ display:flex; flex-wrap:wrap; align-items:center; gap:.5rem; }
+.tol-dive-ask{ flex-basis:100%; font-size:.86rem; color:#4E6377; }
+.tol-dive-chat{ display:inline-flex; align-items:center; gap:.35rem; min-height:44px; padding:.55rem 1rem; border-radius:999px; font-weight:600; font-size:.95rem;
+  text-decoration:none; color:#fff !important; background:#2F5F8A; border:1px solid #2F5F8A; }
+.tol-dive-chat:hover{ background:#24496B; }
+.tol-dive-chat:focus-visible{ outline:2px solid var(--focus); outline-offset:3px; }

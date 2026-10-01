@@ -115,6 +115,11 @@
       box.addEventListener('click', function (e) {
         if (e.target === box || e.target.closest('.tol-dive-x')) return close();
         if (e.target.closest('.tol-dive-go')) wade();
+        var ch = e.target.closest('.tol-dive-chat');
+        if (ch && cur && (window.TOLPuddles || window.TOLChat)) {
+          e.preventDefault(); var q = 'What does “' + cur.t + '” mean?'; close();
+          if (window.TOLPuddles) window.TOLPuddles.open(q); else window.TOLChat.open({ topic: q });
+        }
         var lb = e.target.closest('.tol-dive-listen');
         if (lb) {
           // read the title and the newest step out loud (listen.js, the device's own voice)
@@ -154,12 +159,13 @@
     }).join('');
     box.querySelector('.tol-dive-meter').style.display = total > 1 ? '' : 'none';
     var more = depth < layers.length - 1;
-    box.querySelector('.tol-dive-wade').innerHTML = more ? '<button type="button" class="tol-dive-go">' + (depth === 0 ? 'Wade in a little' : depth === 1 ? 'A little deeper' : 'Wade in to your waist') + ' ' + STEPS[depth + 1][0] + '</button>' : '';
+    box.querySelector('.tol-dive-wade').innerHTML = '<span class="tol-dive-ask">' + (depth === 0 ? 'Want to go further?' : 'Keep going, or talk it through:') + '</span>' +
+      (more ? '<button type="button" class="tol-dive-go">' + (depth === 0 ? 'Wade in a little' : depth === 1 ? 'A little deeper' : 'Wade in to your waist') + ' ' + STEPS[depth + 1][0] + '</button>' : '') +
+      '<a class="tol-dive-chat" href="/ask.html?about=' + encodeURIComponent(d.t) + '"><span aria-hidden="true">&#128172;</span> Chat it out with Professor Puddles</a>';
     var last = depth === layers.length - 1;
     box.querySelector('.tol-dive-more').innerHTML = (deep && last && d.lt ? '<p class="tol-dive-tease">' + DEEP[0] + ' <b>The deep end:</b> ' + esc(d.lt) + '</p>' : '') +
       (deep ? '<a href="' + esc(d.u) + '" aria-label="' + esc('Dive deeper: ' + (d.l || d.t) + ', in the full version') + '">' + DEEP[0] + ' ' + esc(d.l || 'Dive deeper') + ' &rarr;</a>' : '') +
-      (GLOSS[curKey] && location.pathname !== '/glossary.html' ? '<a class="tol-dive-gloss" href="/glossary.html#' + GLOSS[curKey] + '"><span aria-hidden="true">&#128214;</span> In the glossary</a>' : '') +
-      '<a class="tol-dive-chat" href="/ask.html?about=' + encodeURIComponent(d.t) + '"><span aria-hidden="true">&#128172;</span> Chat it out with Professor Puddles</a>';
+      (GLOSS[curKey] && location.pathname !== '/glossary.html' ? '<a class="tol-dive-gloss" href="/glossary.html#' + GLOSS[curKey] + '"><span aria-hidden="true">&#128214;</span> In the glossary</a>' : '');
     if (depth) { var nl = body.lastElementChild; if (nl) body.scrollTo ? body.scrollTo({ top: nl.offsetTop - body.offsetTop - 8, behavior: 'smooth' }) : (body.scrollTop = nl.offsetTop); }
     else body.scrollTop = 0;
   }
