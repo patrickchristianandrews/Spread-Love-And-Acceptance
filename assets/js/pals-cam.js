@@ -1019,7 +1019,23 @@
   var musP = null, quietHold = false;
   var sndP = null;
   function soundOn() { if (quietHold) return false; try { return localStorage.getItem('tol-pc-sound') !== 'off'; } catch (e) { return true; } }
+  // iPhones treat web sound as "ambient" and mute it with the silent switch. Asking for media playback
+  // (and briefly playing a moment of silence through a media element) lets the music be heard.
+  var unlocked = false;
+  function unlockMediaAudio() {
+    if (unlocked) return; unlocked = true;
+    try { if (navigator.audioSession) navigator.audioSession.type = 'playback'; } catch (e) {}
+    try {
+      var n = 800, buf = new Uint8Array(44 + n), dv = new DataView(buf.buffer), w = function (o, str) { for (var i = 0; i < str.length; i++) buf[o + i] = str.charCodeAt(i); };
+      w(0, 'RIFF'); dv.setUint32(4, 36 + n, true); w(8, 'WAVEfmt '); dv.setUint32(16, 16, true); dv.setUint16(20, 1, true); dv.setUint16(22, 1, true);
+      dv.setUint32(24, 8000, true); dv.setUint32(28, 8000, true); dv.setUint16(32, 1, true); dv.setUint16(34, 8, true); w(36, 'data'); dv.setUint32(40, n, true);
+      for (var i = 44; i < 44 + n; i++) buf[i] = 128;
+      var el = new Audio(URL.createObjectURL(new Blob([buf], { type: 'audio/wav' })));
+      el.setAttribute('playsinline', ''); var pr = el.play(); if (pr && pr.catch) pr.catch(function () { unlocked = false; });
+    } catch (e) {}
+  }
   function primeSound() {
+    unlockMediaAudio();
     // made inside the tap that opens the cam, so the browser lets it play
     var AC = window.AudioContext || window.webkitAudioContext;
     if (AC) { try { if (!window.__pcAudio) window.__pcAudio = new AC(); if (window.__pcAudio.state === 'suspended') window.__pcAudio.resume(); } catch (e) {} }

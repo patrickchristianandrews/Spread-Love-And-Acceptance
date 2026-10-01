@@ -1250,7 +1250,23 @@
     if (on) { try { AU.bed.gain.setTargetAtTime(MIX.duck, c.currentTime, 0.12); } catch (e) {} }
     AU.duckT = setTimeout(function () { if (AU.bed && AU.ctx) try { AU.bed.gain.setTargetAtTime(1, AU.ctx.currentTime, 0.9); } catch (e) {} }, holdMs == null ? 900 : holdMs);
   }
+  // iPhones treat web sound as "ambient" and mute it with the silent switch. Asking for media playback
+  // (and briefly playing a moment of silence through a media element) lets the music be heard.
+  var unlocked = false;
+  function unlockMediaAudio() {
+    if (unlocked) return; unlocked = true;
+    try { if (navigator.audioSession) navigator.audioSession.type = 'playback'; } catch (e) {}
+    try {
+      var n = 800, buf = new Uint8Array(44 + n), dv = new DataView(buf.buffer), w = function (o, str) { for (var i = 0; i < str.length; i++) buf[o + i] = str.charCodeAt(i); };
+      w(0, 'RIFF'); dv.setUint32(4, 36 + n, true); w(8, 'WAVEfmt '); dv.setUint32(16, 16, true); dv.setUint16(20, 1, true); dv.setUint16(22, 1, true);
+      dv.setUint32(24, 8000, true); dv.setUint32(28, 8000, true); dv.setUint16(32, 1, true); dv.setUint16(34, 8, true); w(36, 'data'); dv.setUint32(40, n, true);
+      for (var i = 44; i < 44 + n; i++) buf[i] = 128;
+      var el = new Audio(URL.createObjectURL(new Blob([buf], { type: 'audio/wav' })));
+      el.setAttribute('playsinline', ''); var pr = el.play(); if (pr && pr.catch) pr.catch(function () { unlocked = false; });
+    } catch (e) {}
+  }
   function auEnsure() {
+    unlockMediaAudio();
     var AC = window.AudioContext || window.webkitAudioContext; if (!AC) return null;
     if (!AU.ctx) {
       try { AU.ctx = new AC(); } catch (e) { return null; }
@@ -1407,7 +1423,7 @@
   // /assets/audio/buddies/<episode>/<key>.mp3, listed in index.json. A line plays its recording through
   // Web Audio (reliable on phones once Play has been pressed); a line with no recording falls back to
   // the device's own speech, and then to captions only.
-  var PLAYER_VER = '30 Sep · 7'; // shown under the player, so we can tell which version a browser has
+  var PLAYER_VER = '1 Oct · 1'; // shown under the player, so we can tell which version a browser has
   var REC = '2609c'; // bump whenever the recordings are redone, so no browser plays an old copy
   var CL = { base: '/assets/audio/buddies/', maps: {}, ready: {}, bufs: {}, got: {}, src: null, gain: null, token: 0, lastFx: -99 };
   function ckey(who, text) { var h = 0x811c9dc5, s = who + '|' + text; for (var i = 0; i < s.length; i++) { h ^= s.charCodeAt(i); h = Math.imul(h, 0x01000193) >>> 0; } return ('0000000' + h.toString(16)).slice(-8); }

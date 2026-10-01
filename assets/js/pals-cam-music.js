@@ -1,48 +1,45 @@
-/* pals-cam-music.js — gentle music for the pal cam, made fresh as it plays (the same soft, warm style as
-   the Frequency Buddies movies). Every scene has its own style: key, pace, instruments and brightness.
-   It keeps writing new chord changes and little melodies, so it never loops the same way twice, and it
-   plays through the pal cam's one audio channel, so it starts reliably on phones too. Softer at night.
-   On unless the viewer turns it off with the 🎵 Music button (remembered on this device only), or turns on
-   Quiet mode. Nothing is sent anywhere. */
+/* pals-cam-music.js — gentle music for the pal cam, made fresh as it plays, in the same style as the
+   Frequency Buddies movies: warm chords, little plucked sparkles and a soft tune that comes back like a
+   chorus. Every place has a mood to match it (sunny for the backyard, cozy by the fire, dreamy under the
+   sea or the stars, a bit of adventure in the woods, playful at the carnival), its own key and its own
+   instrument for the tune. Softer and calmer at night. It plays through the pal cam's one audio channel, so
+   it starts reliably on phones too. On unless the viewer turns it off with the 🎵 Music button (remembered
+   on this device only), or turns on Quiet mode. Nothing is sent anywhere. */
 (function () {
   'use strict';
-  // scale shapes (semitones from the root)
-  var MODES = { major: [0, 2, 4, 5, 7, 9, 11], lydian: [0, 2, 4, 6, 7, 9, 11], mixo: [0, 2, 4, 5, 7, 9, 10], dorian: [0, 2, 3, 5, 7, 9, 10], minor: [0, 2, 3, 5, 7, 8, 10], penta: [0, 2, 4, 7, 9, 12, 14] };
-  // each scene: root note, mode, beats per minute, lead and accent voices, how busy, filter brightness, echo
+  // The same kind of music as the Frequency Buddies movies: warm pads walking through a real chord
+  // progression, little plucked sparkles on top of each chord, and a soft tune that comes back like a chorus.
+  // Each mood is a song form: an A part (heard twice), a B part, then A again, so it feels written, not random.
+  var MOODS = {
+    sunny: { p: 3.4, scale: 'major', arp: 0.85, A: [[48, 55, 64, 67], [43, 50, 59, 67], [45, 52, 60, 64], [41, 48, 57, 65]], B: [[41, 48, 57, 64], [43, 50, 59, 62], [40, 47, 55, 64], [45, 52, 60, 64]] },
+    gentle: { p: 4.8, scale: 'major', arp: 0.35, A: [[48, 55, 64, 71], [45, 52, 60, 67], [41, 48, 57, 64], [43, 50, 59, 62]], B: [[41, 48, 57, 64], [40, 47, 55, 62], [45, 52, 60, 67], [43, 50, 59, 65]] },
+    cozy: { p: 5.2, scale: 'major', arp: 0.3, A: [[48, 55, 64, 71], [40, 47, 55, 64], [41, 48, 57, 64], [48, 55, 64, 67]], B: [[45, 52, 60, 64], [41, 48, 57, 60], [43, 50, 55, 62], [43, 50, 59, 65]] },
+    dreamy: { p: 5.6, scale: 'lydian', arp: 0.25, A: [[48, 55, 64, 71], [50, 57, 62, 66], [48, 55, 64, 71], [45, 52, 59, 64]], B: [[41, 48, 57, 64], [43, 50, 57, 62], [40, 47, 55, 59], [50, 57, 62, 66]] },
+    adventure: { p: 3.8, scale: 'dmajor', arp: 0.7, pulse: 0.6, A: [[50, 57, 62, 66], [45, 52, 61, 64], [47, 54, 62, 66], [43, 50, 59, 62]], B: [[43, 50, 59, 62], [45, 52, 61, 64], [47, 54, 62, 66], [50, 57, 62, 66]] },
+    playful: { p: 3.0, scale: 'major', arp: 1, pulse: 0.45, A: [[48, 55, 64, 67], [45, 52, 60, 64], [41, 48, 57, 65], [43, 50, 59, 67]], B: [[41, 48, 57, 65], [43, 50, 59, 67], [40, 47, 55, 64], [45, 52, 60, 64]] },
+    mellow: { p: 5.4, scale: 'major', arp: 0.2, A: [[45, 52, 60, 64], [41, 48, 57, 60], [48, 55, 60, 64], [43, 50, 55, 59]], B: [[41, 48, 57, 64], [43, 50, 59, 62], [45, 52, 60, 64], [45, 52, 60, 64]] }
+  };
+  var SCALES = { major: [0, 2, 4, 5, 7, 9, 11], lydian: [0, 2, 4, 6, 7, 9, 11], dmajor: [1, 2, 4, 6, 7, 9, 11] };
+  // each place: its mood, key (semitones from C), the instrument that sings the tune, tone brightness, echo
+  function S(mood, key, lead, bright, wet, soft) { return { mood: mood, key: key, lead: lead, bright: bright, wet: wet, soft: soft || 1 }; }
   var STYLES = {
-    backyard: { root: 60, mode: 'major', bpm: 76, lead: 'flute', accent: 'pluck', busy: 0.55, bright: 2600, wet: 0.28 },
-    beach: { root: 57, mode: 'major', bpm: 62, lead: 'marimba', accent: 'pluck', busy: 0.4, bright: 2200, wet: 0.4 },
-    snow: { root: 64, mode: 'lydian', bpm: 58, lead: 'bell', accent: 'bell', busy: 0.35, bright: 3200, wet: 0.45 },
-    pond: { root: 62, mode: 'major', bpm: 66, lead: 'marimba', accent: 'pluck', busy: 0.45, bright: 2400, wet: 0.35 },
-    forest: { root: 55, mode: 'dorian', bpm: 64, lead: 'flute', accent: 'pluck', busy: 0.45, bright: 2000, wet: 0.38 },
-    rooftop: { root: 58, mode: 'mixo', bpm: 80, lead: 'piano', accent: 'pluck', busy: 0.55, bright: 2600, wet: 0.3 },
-    meadow: { root: 60, mode: 'lydian', bpm: 70, lead: 'flute', accent: 'bell', busy: 0.5, bright: 2800, wet: 0.32 },
-    dock: { root: 57, mode: 'mixo', bpm: 60, lead: 'piano', accent: 'marimba', busy: 0.38, bright: 2000, wet: 0.4 },
-    citypark: { root: 62, mode: 'major', bpm: 84, lead: 'piano', accent: 'pluck', busy: 0.6, bright: 2800, wet: 0.26 },
-    pumpkins: { root: 57, mode: 'dorian', bpm: 68, lead: 'marimba', accent: 'pluck', busy: 0.5, bright: 2100, wet: 0.32 },
-    cabin: { root: 55, mode: 'major', bpm: 60, lead: 'piano', accent: 'bell', busy: 0.4, bright: 1900, wet: 0.35 },
-    cabinin: { root: 53, mode: 'major', bpm: 58, lead: 'piano', accent: 'bell', busy: 0.35, bright: 1700, wet: 0.3 },
-    rainy: { root: 57, mode: 'minor', bpm: 58, lead: 'piano', accent: 'bell', busy: 0.35, bright: 1800, wet: 0.45 },
-    carnival: { root: 60, mode: 'major', bpm: 92, lead: 'marimba', accent: 'bell', busy: 0.65, bright: 3000, wet: 0.25 },
-    library: { root: 62, mode: 'major', bpm: 60, lead: 'piano', accent: 'pluck', busy: 0.32, bright: 1900, wet: 0.3 },
-    bakery: { root: 60, mode: 'mixo', bpm: 78, lead: 'piano', accent: 'marimba', busy: 0.55, bright: 2500, wet: 0.28 },
-    gardenparty: { root: 65, mode: 'major', bpm: 80, lead: 'flute', accent: 'bell', busy: 0.6, bright: 3000, wet: 0.3 },
-    campsite: { root: 55, mode: 'mixo', bpm: 64, lead: 'pluck', accent: 'flute', busy: 0.45, bright: 2000, wet: 0.36 },
-    lighthouse: { root: 57, mode: 'dorian', bpm: 56, lead: 'bell', accent: 'marimba', busy: 0.35, bright: 2200, wet: 0.48 },
-    underwater: { root: 53, mode: 'lydian', bpm: 52, lead: 'bell', accent: 'marimba', busy: 0.3, bright: 1500, wet: 0.55 },
-    space: { root: 52, mode: 'lydian', bpm: 50, lead: 'bell', accent: 'bell', busy: 0.28, bright: 2600, wet: 0.6 },
-    farm: { root: 62, mode: 'major', bpm: 82, lead: 'flute', accent: 'pluck', busy: 0.55, bright: 2600, wet: 0.28 },
-    orchard: { root: 57, mode: 'major', bpm: 70, lead: 'marimba', accent: 'flute', busy: 0.5, bright: 2300, wet: 0.32 },
-    festival: { root: 60, mode: 'major', bpm: 88, lead: 'bell', accent: 'marimba', busy: 0.62, bright: 3000, wet: 0.35 },
-    aquarium: { root: 55, mode: 'lydian', bpm: 56, lead: 'marimba', accent: 'bell', busy: 0.35, bright: 1700, wet: 0.5 },
-    studio: { root: 62, mode: 'mixo', bpm: 84, lead: 'piano', accent: 'marimba', busy: 0.6, bright: 2700, wet: 0.24 },
-    bonfire: { root: 55, mode: 'mixo', bpm: 62, lead: 'pluck', accent: 'flute', busy: 0.4, bright: 1900, wet: 0.38 },
-    treehouse: { root: 62, mode: 'major', bpm: 74, lead: 'flute', accent: 'marimba', busy: 0.55, bright: 2600, wet: 0.3 },
-    theater: { root: 60, mode: 'major', bpm: 58, lead: 'piano', accent: 'bell', busy: 0.28, bright: 1700, wet: 0.35, soft: 0.6 }
+    backyard: S('sunny', 0, 'flute', 2600, 0.28), meadow: S('sunny', 0, 'flute', 2800, 0.32), gardenparty: S('sunny', 5, 'flute', 3000, 0.3),
+    farm: S('sunny', 2, 'flute', 2600, 0.28), orchard: S('sunny', -3, 'marimba', 2300, 0.32),
+    beach: S('gentle', -3, 'marimba', 2200, 0.4), pond: S('gentle', 2, 'marimba', 2400, 0.35), dock: S('gentle', -3, 'piano', 2000, 0.4),
+    library: S('gentle', 2, 'piano', 1900, 0.3, 0.8), theater: S('gentle', 0, 'piano', 1700, 0.35, 0.6),
+    cabin: S('cozy', -5, 'piano', 1900, 0.35), cabinin: S('cozy', -7, 'piano', 1700, 0.3), pumpkins: S('cozy', -3, 'marimba', 2100, 0.32),
+    bakery: S('cozy', 0, 'piano', 2400, 0.28), bonfire: S('cozy', -5, 'pluck', 1900, 0.38),
+    snow: S('dreamy', 4, 'bell', 3000, 0.45), lighthouse: S('dreamy', -3, 'bell', 2200, 0.48), underwater: S('dreamy', -7, 'bell', 1500, 0.55),
+    space: S('dreamy', -8, 'bell', 2600, 0.6), aquarium: S('dreamy', -5, 'marimba', 1700, 0.5),
+    forest: S('adventure', -2, 'flute', 2100, 0.38), campsite: S('adventure', -7, 'flute', 2000, 0.36), treehouse: S('adventure', 0, 'flute', 2500, 0.3),
+    rooftop: S('playful', -2, 'piano', 2600, 0.3), citypark: S('playful', 2, 'piano', 2800, 0.26), carnival: S('playful', 0, 'marimba', 3000, 0.25),
+    festival: S('playful', 0, 'bell', 3000, 0.35), studio: S('playful', 2, 'piano', 2700, 0.24),
+    rainy: S('mellow', -3, 'piano', 1800, 0.45)
   };
   var DEFAULT_STYLE = STYLES.backyard;
-  // which chord (scale degree) tends to follow which: a gentle, never-quite-the-same walk
-  var NEXT = { 0: [3, 4, 5, 1, 3], 1: [4, 4, 3, 6], 2: [5, 3, 0], 3: [0, 4, 1, 5, 0], 4: [0, 5, 3, 0, 2], 5: [3, 1, 4, 0], 6: [0, 4] };
+  var FORM = ['A', 'A', 'B', 'A'];
+  // after dark, bright moods turn gentle and the adventure ones turn dreamy, a little slower and softer
+  var NIGHT_MOOD = { sunny: 'gentle', playful: 'gentle', adventure: 'dreamy' };
   var LEVEL = 1.15, FADE = 2.2;
 
   function lsGet(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
@@ -51,7 +48,7 @@
   var enabled = lsGet('tol-pc-music') !== 'off' && !quietNow();
   var scene = null, hour = 12, running = false, timer = 0;
   var A = null; // the audio graph, built once on the shared pal cam audio context
-  var M = { next: 0, beat: 0, deg: 0, bars: 0, phrase: [], pi: 0, style: DEFAULT_STYLE };
+  var M = { next: 0, chord: 0, part: 0, motif: null, motifB: null, last: 76, style: DEFAULT_STYLE, mood: null };
 
   function ctx() { return window.__pcAudio || null; }
   function hz(m) { return 440 * Math.pow(2, (m - 69) / 12); }
@@ -88,6 +85,8 @@
   }
   function bass(f, t, len, vol) { var o = osc('sine', f, t, t + len + 1), g = A.c.createGain(); env(g, t, 0.08, vol, len * 0.5, len * 0.45); o.connect(g); g.connect(A.bus); }
   function pluck(f, t, vol) { var o = osc('triangle', f, t, t + 1.4), g = A.c.createGain(); env(g, t, 0.008, vol, 0.02, 1.1); o.connect(g); g.connect(A.bus); }
+  // the movies' sparkle: a soft, round plucked note
+  function spark(f, t, vol) { var o = osc('sine', f, t, t + 1), g = A.c.createGain(); env(g, t, 0.02, vol, 0.01, 0.85); o.connect(g); g.connect(A.bus); }
   function marimba(f, t, vol) {
     [[1, 1], [4, 0.18], [10, 0.05]].forEach(function (p) { var o = osc('sine', f * p[0], t, t + 1.2), g = A.c.createGain(); env(g, t, 0.004, vol * p[1], 0.01, p[0] > 1 ? 0.25 : 0.9); o.connect(g); g.connect(A.bus); });
   }
@@ -107,49 +106,69 @@
     else if (voice === 'piano') piano(f, t, vol * 0.9); else pluck(f, t, vol);
   }
   // ---------- the composer ----------
-  function scale(st) { return MODES[st.mode] || MODES.major; }
-  function note(st, deg, oct) { var sc = scale(st), n = sc.length, d = ((deg % n) + n) % n, o = Math.floor(deg / n); return st.root + sc[d] + 12 * (o + (oct || 0)); }
-  function chordOf(st, deg) { return [note(st, deg, -1), note(st, deg + 2, -1), note(st, deg + 4, -1), note(st, deg + 6, -1)]; }
-  function newPhrase(st) {
-    // a short tune: steps and small leaps on the scale, with rests; sometimes a variation of the last one
-    var len = 4 + Math.floor(Math.random() * 5), p = [], pos = Math.floor(Math.random() * 5);
-    if (M.phrase.length && Math.random() < 0.35) { // echo the last tune, moved a step, so it feels composed
-      var sh = rnd([-2, -1, 1, 2]); return M.phrase.map(function (x) { return x ? { d: x.d + sh, b: x.b } : null; });
+  function moodOf(st) { var m = st.mood; if (night() && NIGHT_MOOD[m]) m = NIGHT_MOOD[m]; return MOODS[m] ? m : 'gentle'; }
+  // a tune for one part of the song: for each of its four chords, a few notes on eighth-note slots;
+  // each note is a step up or down the scale from the chord tone nearest the last note, so it moves smoothly
+  function newMotif(busy) {
+    var out = [];
+    for (var c = 0; c < 4; c++) {
+      var notes = [], slot = rnd([0, 0, 1, 2]), n = c === 3 ? rnd([1, 2]) : rnd([2, 3, 3, 4]);
+      if (Math.random() > busy) n = Math.max(1, n - 2);
+      for (var i = 0; i < n && slot < 8; i++) {
+        var len = rnd(i === n - 1 ? [3, 4, 4] : [1, 2, 2, 3]);
+        notes.push({ s: slot, step: i === 0 ? 0 : rnd([-2, -1, 1, 1, 2]), len: len });
+        slot += len;
+      }
+      out.push(notes);
     }
-    for (var i = 0; i < len; i++) {
-      if (Math.random() < 0.22) { p.push(null); continue; }
-      pos += rnd([-2, -1, -1, 0, 1, 1, 2, 3, -3]); pos = Math.max(-2, Math.min(9, pos));
-      p.push({ d: pos, b: rnd([1, 1, 2, 2, 0.5, 1.5]) });
-    }
-    return p;
+    return out;
+  }
+  function inScale(scl, m) { var pc = ((m % 12) + 12) % 12; return scl.indexOf(pc) >= 0; }
+  function stepScale(scl, m, steps) { var d = steps > 0 ? 1 : -1; for (var k = Math.abs(steps); k > 0;) { m += d; if (inScale(scl, m)) k--; } return m; }
+  function nearestTone(chord, last) {
+    var best = 76, bd = 99;
+    chord.forEach(function (n) { for (var o = 12; o <= 48; o += 12) { var m = n + o; if (m < 67 || m > 86) continue; var d = Math.abs(m - last); if (d < bd) { bd = d; best = m; } } });
+    return best;
   }
   function schedule() {
     var c = ctx(); if (!running || !A || !c || c.state !== 'running') return;
-    var st = M.style, beat = 60 / (st.bpm * (night() ? 0.88 : 1)), soft = (st.soft || 1) * (night() ? 0.75 : 1);
+    var st = M.style, mid = moodOf(st), md = MOODS[mid], slow = night() ? 1.12 : 1, p = md.p * slow, soft = st.soft * (night() ? 0.75 : 1), key = st.key;
+    var scl = SCALES[md.scale].map(function (x) { return (x + key + 12) % 12; });
+    if (M.mood !== mid) { M.mood = mid; M.chord = 0; M.part = 0; M.motif = null; M.motifB = null; }
     if (M.next < c.currentTime) M.next = c.currentTime + 0.1;
     while (M.next < c.currentTime + (window.__pcLite ? 2.5 : 1.5)) { // planned well ahead, so a busy moment (or a small TV stick) never leaves a gap
-      var t = M.next;
-      if (M.beat % 4 === 0) { // a new bar: sometimes a new chord (a walk that never loops exactly)
-        if (M.bars % 2 === 0) M.deg = rnd(NEXT[M.deg] || [0]);
-        M.bars++;
-        var ch = chordOf(st, M.deg);
-        ch.forEach(function (n, i) { pad(hz(n), t, beat * 4 * (M.bars % 2 ? 1 : 2) * 0.95, (i ? 0.012 : 0.016) * soft); });
-        if (Math.random() < 0.85) bass(hz(ch[0] - 12), t, beat * 2, 0.03 * soft);
-        if (!M.phrase.length || M.pi >= M.phrase.length) { M.phrase = Math.random() < st.busy + 0.2 ? newPhrase(st) : []; M.pi = 0; }
+      var t = M.next, part = FORM[M.part % FORM.length], prog = md[part], ci = M.chord % 4;
+      var chord = prog[ci].map(function (n) { return n + key; });
+      // the pads: the whole chord, held and swelling gently into the next
+      chord.forEach(function (n, i) { pad(hz(n), t, p * 0.95, (i ? 0.014 : 0.019) * soft); });
+      if (Math.random() < 0.9) bass(hz(chord[0] - 12), t, p * 0.6, 0.026 * soft);
+      // the sparkles: eight little plucked chord notes across the chord, like the movies
+      var e = p / 8;
+      for (var k = 0; k < 8; k++) if (Math.random() < md.arp * (night() ? 0.6 : 1)) spark(hz(chord[(k * 3 + M.chord) % 4] + 12), t + k * e + (Math.random() - 0.5) * 0.012, 0.013 * soft);
+      if (md.pulse) for (var q = 0; q < 4; q++) if (Math.random() < md.pulse) spark(hz(chord[0] - 12), t + q * p / 4, 0.022 * soft);
+      // the tune: the A part's tune comes back each time (a little chorus); the B part has its own
+      if (part === 'A' && !M.motif) M.motif = newMotif(0.6);
+      if (part === 'B' && !M.motifB) M.motifB = newMotif(0.5);
+      var mot = part === 'A' ? M.motif : M.motifB;
+      // the last time round, the tune rests now and then, so it breathes
+      if (!(M.part % 4 === 3 && ci % 2 === 1 && Math.random() < 0.5)) {
+        var m = nearestTone(chord, M.last);
+        mot[ci].forEach(function (x) {
+          m = x.step ? stepScale(scl, m, x.step) : m; if (m > 88) m -= 12; if (m < 64) m += 12;
+          play(st.lead, hz(m), t + x.s * e + (Math.random() - 0.5) * 0.015, e * x.len, 0.026 * soft);
+        });
+        M.last = m;
       }
-      // the tune, one note at a time
-      if (M.phrase.length && M.pi < M.phrase.length && M.beat % (M.hold || 1) === 0) {
-        var x = M.phrase[M.pi++];
-        if (x) { play(st.lead, hz(note(st, x.d, 0)), t + (Math.random() - 0.5) * 0.02, beat * x.b, 0.03 * soft); M.hold = Math.max(1, Math.round(x.b)); }
-        else M.hold = 1;
+      M.chord++; M.next = t + p;
+      if (M.chord % 4 === 0) {
+        M.part++;
+        // after the whole song, a fresh tune now and then, so it never wears thin
+        if (M.part % FORM.length === 0) { if (Math.random() < 0.6) M.motif = null; M.motifB = null; }
       }
-      // little sparkles in between
-      if (Math.random() < st.busy * 0.35) play(st.accent, hz(note(st, M.deg + rnd([0, 2, 4, 7]), 1)), t + beat * rnd([0.5, 0.25, 0.75]), beat, 0.016 * soft);
-      M.beat++; M.next = t + beat;
     }
   }
   function applyStyle(id) {
-    var st = STYLES[id] || DEFAULT_STYLE; M.style = st;
+    var st = STYLES[id] || DEFAULT_STYLE; if (st !== M.style) { M.style = st; M.mood = null; }
     if (!A) return;
     var c = A.c, now = c.currentTime;
     A.tone.frequency.setTargetAtTime(st.bright * (night() ? 0.7 : 1), now, 1.5);
@@ -162,7 +181,7 @@
     if (c.state === 'suspended' && c.resume) { try { var pr = c.resume(); if (pr && pr.catch) pr.catch(function () {}); } catch (e) {} }
     build(); applyStyle(scene);
     A.out.gain.cancelScheduledValues(c.currentTime); A.out.gain.setTargetAtTime(LEVEL, c.currentTime, FADE / 3);
-    if (!running) { M.next = c.currentTime + 0.15; M.beat = 0; M.bars = 0; M.phrase = []; M.pi = 0; M.deg = 0; }
+    if (!running) { M.next = c.currentTime + 0.15; M.chord = 0; M.part = 0; M.motif = null; M.motifB = null; M.mood = null; }
     running = true;
     if (!timer) timer = setInterval(schedule, 200);
     schedule();

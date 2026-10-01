@@ -27,7 +27,7 @@
     rainy: DAY_NIGHT([['rain', 0.55]]), bakery: DAY_NIGHT([['cafe', 0.35]]), library: DAY_NIGHT([['cafe', 0.12]]),
     underwater: DAY_NIGHT([['underwater', 0.5]]), aquarium: DAY_NIGHT([['underwater', 0.4]])
   };
-  var FADE_IN = 3, FADE_OUT = 2, FULL = 0.9, UNDER_MUSIC = 0.55; // fuller on their own, a little under the music when it plays
+  var FADE_IN = 3, FADE_OUT = 2, FULL = 0.9, UNDER_MUSIC = 0.45; // fuller on their own, a little under the music when it plays
   var bufs = {}, cur = [], gen = 0, sceneId = null, hour = 12, on = true, paused = false, out = null;
   function ctx() { return window.__pcAudio || null; }
   function isNight(h) { return h < 6 || h >= 20.5; }
