@@ -618,7 +618,17 @@
       AD.src = src; AD.gain = g0; AD.songAt = t0 - Math.max(0, from || 0);
     },
     stop: function () { if (AD.src) { try { AD.src.stop(); } catch (e) {} try { AD.gain.disconnect(); } catch (e) {} } AD.src = null; },
-    begin: function () { AD.on = true; if (MUS()) MUS().pause(); if (AMB() && AMB().duck) AMB().duck(true); AD.play(0); },
+    // a different outfit pair for every break: [Tidbit's, Sugarfoot's], drawn in each pal's own frame (over), plus capes
+    fits: [
+      { name: 'top hats and bow ties', over: [function (g, A2, i) { var h = A2.headL(i); A2.U.hat(g, h.x - 1, h.y - 8, 0.6); ADfit.bow(g, h, '#E4566E'); }, function (g, A2, i) { var h = A2.headL(i); A2.U.hat(g, h.x - 1, h.y - 8, 0.6, '#5B3F8C'); ADfit.bow(g, h, '#7FB8F0'); }] },
+      { name: 'sunglasses and star headbands', over: [function (g, A2, i) { var h = A2.headL(i); ADfit.shades(g, h); ADfit.stars(g, h, A2.now, '#F8D76A'); }, function (g, A2, i) { var h = A2.headL(i); ADfit.shades(g, h); ADfit.stars(g, h, A2.now, '#F7A8C2'); }] },
+      { name: 'superstar capes', cape: ['#7C97E8', '#E4566E'], over: [function (g, A2, i) { ADfit.stars(g, A2.headL(i), A2.now, '#FFFFFF'); }, function (g, A2, i) { ADfit.stars(g, A2.headL(i), A2.now, '#FFFFFF'); }] },
+      { name: 'sparkly vests', over: [function (g, A2, i) { ADfit.vest(g, A2.headL(i), '#E4566E', A2.now); }, function (g, A2, i) { ADfit.vest(g, A2.headL(i), '#7FB8F0', A2.now); }] },
+      { name: 'band hats', over: [function (g, A2, i) { ADfit.shako(g, A2.headL(i), '#C93F57'); ADfit.bow(g, A2.headL(i), '#F6CB4C'); }, function (g, A2, i) { ADfit.shako(g, A2.headL(i), '#3E5BB0'); ADfit.bow(g, A2.headL(i), '#F6CB4C'); }] },
+      { name: 'crowns and capes', cape: ['#B79CEB', '#F6B26B'], over: [function (g, A2, i) { var h = A2.headL(i); A2.U.crown(g, h.x - 1, h.y - 9, 0.75); }, function (g, A2, i) { var h = A2.headL(i); A2.U.crown(g, h.x - 1, h.y - 9, 0.75); }] },
+      { name: 'bow ties and flower crowns', over: [function (g, A2, i) { var h = A2.headL(i); ADfit.flowers(g, h, ['#F7A8C2', '#F7DC6F', '#FFFFFF']); ADfit.bow(g, h, '#8FD694'); }, function (g, A2, i) { var h = A2.headL(i); ADfit.flowers(g, h, ['#B79CEB', '#7FB8F0', '#FFFFFF']); ADfit.bow(g, h, '#F7A8C2'); }] }
+    ], fit: -1,
+    begin: function () { var n = AD.fits.length; AD.fit = AD.forceFit != null ? AD.forceFit % n : AD.fit < 0 ? Math.floor(Math.random() * n) : (AD.fit + 1 + Math.floor(Math.random() * (n - 1))) % n; AD.on = true; if (MUS()) MUS().pause(); if (AMB() && AMB().duck) AMB().duck(true); AD.play(0); },
     end: function () { AD.on = false; AD.stop(); if (AMB() && AMB().duck) AMB().duck(false); if (MUS() && isOpen) MUS().resume(); if (capPunch) capPunch.textContent = ''; },
     run: function (A, T, S) {
       var st = A.probe ? 0 : AD.songT(), beat = 0.47, k = SPEED; // about 128 beats a minute; k turns real time into the pal cam's clock
@@ -626,6 +636,28 @@
       // into place, side by side, facing the viewer a little
       A.walk(T, T.x, A.cx - 58, 0, 1100); A.walk(S, S.x, A.cx + 58, 0, 1300);
       if (A.t > 1300) { T.x = A.cx - 58; S.x = A.cx + 58; T.face = 1; S.face = -1; T.pose = S.pose = 'wiggle'; T.wag = S.wag = 3; }
+      // dressed up for the show
+      var fit = AD.fits[AD.fit < 0 ? 0 : AD.fit];
+      if (A.t > 300) { T.over = fit.over[0]; S.over = fit.over[1]; if (fit.cape) { T.cape = fit.cape[0]; S.cape = fit.cape[1]; T.capeFly = S.capeFly = true; } }
+      // dancing all around the stage, in time with the song: places at moments in the song (offsets from the middle)
+      if (A.t > 1300) {
+        var fs = Math.min(1, (A.span - 12) / 96), kf = ADfit.keys, ki = 0;
+        while (ki < kf.length - 2 && st >= kf[ki + 1][0]) ki++;
+        var ka = kf[ki], kb = kf[ki + 1], kp = A.eio(A.clamp((st - ka[0]) / (kb[0] - ka[0]), 0, 1)), tx0 = A.mix(ka[1], kb[1], kp), sx0 = A.mix(ka[2], kb[2], kp);
+        var tmv = Math.abs(kb[1] - ka[1]) > 4 && kp > 0.02 && kp < 0.98, smv = Math.abs(kb[2] - ka[2]) > 4 && kp > 0.02 && kp < 0.98;
+        var env = function (a, b) { return A.clamp((st - a) / 0.5, 0, 1) * A.clamp((b - st) / 0.5, 0, 1); };
+        // Tidbit's zoom-zoom, side to side, in her verse
+        var zz = env(13.25, 16.2), zo = Math.sin((st - 13.25) * Math.PI * 2 / 1.88) * 34 * zz;
+        // in the chorus they sway across the stage together
+        var sw = (env(30.6, 41.3) + env(46, 49.5)) * Math.sin((st - 30.3) * Math.PI / (beat * 4)) * 30;
+        T.x = A.cx + (tx0 + zo + sw) * fs; S.x = A.cx + (sx0 + sw) * fs;
+        if (tmv) { T.pose = 'run'; T.face = kb[1] > ka[1] ? 1 : -1; }
+        if (smv) { S.pose = 'run'; S.face = kb[2] > ka[2] ? 1 : -1; }
+        if (zz > 0.3) { T.pose = 'run'; T.face = Math.cos((st - 13.25) * Math.PI * 2 / 1.88) >= 0 ? 1 : -1; }
+        // "every frequency an adventure": round and round each other
+        var ci = env(41.5, 45.9); if (ci > 0) { var ca = (st - 41.41) / 4.55 * Math.PI * 4, cr = (24 + 18 * ci) * fs; T.x = A.cx - cr * Math.cos(ca); S.x = A.cx + cr * Math.cos(ca); T.dy = -3 - 7 * Math.sin(ca) * ci; S.dy = 3 + 7 * Math.sin(ca) * ci; T.z = Math.sin(ca) < 0 ? 2 : 0; S.z = 1; T.face = Math.sin(ca) >= 0 ? 1 : -1; S.face = -T.face; T.pose = S.pose = 'run'; }
+        if (!tmv && !smv && zz < 0.3 && ci <= 0) { T.face = T.x <= S.x ? 1 : -1; S.face = -T.face; }
+      }
       if (A.t > 1300 && st > 0 && st < 51.5) {
         var bi = Math.floor(st / beat), inB = (st % beat) / beat, chorus = st > 30.3 && st < 51.5, verseT = st > 8.7 && st < 16.4, verseS = st > 16.4 && st < 24.2;
         // each pal bounces on the beat; the one singing bounces higher, and in the chorus they both go for it
@@ -643,7 +675,7 @@
       }
       // the end card
       if (st >= 51.5 || A.t > 52500 * k) {
-        T.pose = S.pose = 'sit'; T.wag = S.wag = 2;
+        T.pose = S.pose = 'sit'; T.wag = S.wag = 2; T.face = T.x <= S.x ? 1 : -1; S.face = -T.face;
         if (A.once(Math.round(52000 * k))) A.burst(A.cx, A.G - 130, 14, 'confetti', { speed: 0.14, spread: 3 });
         if (!A.probe && capMain && capMain.textContent.indexOf('Frequency Buddies:') !== 0) { capMain.textContent = 'Frequency Buddies: five cartoon adventures with Tidbit and Sugarfoot'; capPunch.textContent = 'Watch them free at spreadloveandacceptance.com'; }
         A.say(T, 'Watch with us!', 52600 * k, 55600 * k); A.say(S, 'See you there!', 54600 * k, 58400 * k);
@@ -653,6 +685,7 @@
       var U2 = A.U, st = A.probe ? 0 : AD.songT(), w = Math.min(300, A.W * 0.8), x = A.cx - w / 2, y = Math.max(16, A.G - 250), h = 74;
       // a stage glow, two spotlights swaying to the music, and the marquee sign with chasing bulbs
       g.save();
+      ADfit.stage(g, A, st);
       var gl = g.createRadialGradient(A.cx, A.G, 10, A.cx, A.G, 260); gl.addColorStop(0, 'rgba(255,228,160,.35)'); gl.addColorStop(1, 'rgba(255,228,160,0)'); g.fillStyle = gl; g.fillRect(A.cx - 280, A.G - 260, 560, 300);
       [-1, 1].forEach(function (sd) {
         var ax = A.cx + sd * (w / 2 + 30), sw = Math.sin(st * 1.3 + (sd > 0 ? 1.4 : 0)) * 40, tx = A.cx + sd * 58 + sw;
@@ -664,6 +697,51 @@
       for (var i = 0; i < n; i++) { var bx = x + 8 + i * (w - 16) / (n - 1); U2.circle(g, bx, y + 7, 3, (i + on) % 3 ? '#FFE9A8' : '#F28AA8'); U2.circle(g, bx, y + h - 7, 3, (i + on) % 3 === 1 ? '#FFE9A8' : '#7FB8F0'); }
       U2.text(g, st >= 51.5 ? 'WATCH THE EPISODES' : 'COMMERCIAL BREAK', A.cx, y + 25, 10, '#F7C98B', '700');
       U2.text(g, 'Frequency Buddies', A.cx, y + 48, 21, '#FFF6E6', '700');
+      g.restore();
+    },
+    front: function (g, A) { ADfit.crowd(g, A, A.probe ? 0 : AD.songT()); }
+  };
+  // the commercial break's show: the stage, the crowd, the outfits and the dance (pure drawing, no state)
+  var ADfit = {
+    // [song seconds, Tidbit's place, Sugarfoot's place] (offsets from the middle of the stage)
+    keys: [[0, -58, 58], [8.5, -58, 58], [9.4, -14, 84], [16.1, -14, 84], [17.1, -84, 14], [24.0, -84, 14], [25.6, 72, -72], [27.0, 72, -72], [28.6, -24, 24], [41.0, -24, 24], [46.2, -24, 24], [51.5, -24, 24], [52.8, -58, 58], [999, -58, 58]],
+    bow: function (g, h, col) { var x = h.x - 5, y = h.y + 13; g.fillStyle = col; g.beginPath(); g.moveTo(x, y); g.lineTo(x - 5, y - 3.4); g.lineTo(x - 5, y + 3.4); g.closePath(); g.fill(); g.beginPath(); g.moveTo(x, y); g.lineTo(x + 5, y - 3.4); g.lineTo(x + 5, y + 3.4); g.closePath(); g.fill(); U.circle(g, x, y, 1.6, col); },
+    shades: function (g, h) { U.rr(g, h.x + 1, h.y - 4, 7, 4, 2, '#2C2638'); U.rr(g, h.x + 9, h.y - 4, 5, 4, 2, '#2C2638'); U.line(g, h.x - 4, h.y - 3, h.x + 1, h.y - 3, '#2C2638', 1); U.circle(g, h.x + 3, h.y - 3.4, 0.8, 'rgba(255,255,255,.7)'); },
+    stars: function (g, h, t, col) { g.strokeStyle = '#2C2638'; g.lineWidth = 1; for (var k = -1; k <= 1; k += 2) { var bx = h.x - 2 + k * 5 + Math.sin(t / 180 + k) * 1.5, by = h.y - 22; g.beginPath(); g.moveTo(h.x - 2 + k * 3, h.y - 10); g.lineTo(bx, by); g.stroke(); U.star(g, bx, by, 3.4, col, t / 600); } },
+    vest: function (g, h, col, t) { var x = h.x - 12, y = h.y + 17; U.ell(g, x, y, 9, 7, col); U.ell(g, x + 4, y - 1, 3, 5, 'rgba(255,255,255,.25)'); for (var k = 0; k < 4; k++) { var a = t / 250 + k * 1.7; U.star(g, x - 5 + k * 3.4, y - 2 + (k % 2) * 4, 1.2 + 0.6 * Math.max(0, Math.sin(a)), '#FFF6C9', a); } },
+    shako: function (g, h, col) { var x = h.x - 1, y = h.y - 8; U.rr(g, x - 6, y - 14, 12, 14, 2, col); U.rr(g, x - 7, y - 2, 14, 3, 1, '#2C2638'); U.rr(g, x - 6, y - 9, 12, 2, 0, '#F6CB4C'); U.ell(g, x, y - 18, 2.4, 5, '#FFFFFF'); },
+    flowers: function (g, h, cols) { for (var k = 0; k < 5; k++) { var x = h.x - 9 + k * 4.4, y = h.y - 10 - Math.sin(k / 4 * Math.PI) * 3; U.circle(g, x, y, 2.4, cols[k % cols.length]); U.circle(g, x, y, 0.9, '#F8D76A'); } },
+    stage: function (g, A, st) {
+      var L = -200, R2 = A.W + 200, top = -60, fl = A.G - 10;
+      // the backdrop: a deep, starry curtain wall
+      var bd = g.createLinearGradient(0, 0, 0, fl); bd.addColorStop(0, '#20163A'); bd.addColorStop(1, '#3D2A63'); g.fillStyle = bd; g.fillRect(L, top, R2 - L, fl - top + 2);
+      for (var k = 0; k < 26; k++) { var sx = (k * 97.3) % (A.W + 40) - 20, sy = 20 + (k * 53.7) % (fl - 60), tw = 0.4 + 0.4 * Math.sin(st * 2.2 + k); U.star(g, sx, sy, 1.4 + tw, 'rgba(255,240,200,' + (0.25 + 0.3 * tw).toFixed(2) + ')'); }
+      // red curtains swagged at the sides, with a scalloped valance along the top
+      [-1, 1].forEach(function (sd) {
+        var ex = sd < 0 ? -210 : A.W + 210, inner = A.cx + sd * Math.max(A.span + 16, A.W * 0.5 - 34);
+        g.fillStyle = '#9E2F48'; g.beginPath(); g.moveTo(ex, top); g.lineTo(inner, top); g.quadraticCurveTo(inner - sd * 6, fl * 0.55, inner + sd * 18, fl * 0.62); g.quadraticCurveTo(inner + sd * 4, fl * 0.8, inner + sd * 14, fl + 2); g.lineTo(ex, fl + 2); g.closePath(); g.fill();
+        for (var f = 1; f < 4; f++) U.line(g, inner + sd * f * 9, 0, inner + sd * (f * 9 + 8), fl, 'rgba(60,10,30,.28)', 2);
+      });
+      for (var v = 0; v * 28 < A.W + 28; v++) { U.circle(g, v * 28, 2, 16, '#B23B57'); } g.fillStyle = '#B23B57'; g.fillRect(L, top, R2 - L, 2 - top);
+      // the raised stage: wooden floor, a front edge and footlights
+      U.rr(g, L, fl, R2 - L, 14, 0, '#9B6B45'); for (var p = 0; p < 14; p++) U.line(g, A.cx + (p - 7) * 40, fl, A.cx + (p - 7) * 52, fl + 14, 'rgba(60,35,20,.25)', 1);
+      U.rr(g, L, fl + 13, R2 - L, 3, 0, '#C9A77A'); U.rr(g, L, fl + 16, R2 - L, 90, 0, '#4A2E2A');
+      var nb = Math.max(6, Math.round(A.W / 34));
+      for (var b = 0; b < nb; b++) { var bx2 = (b + 0.5) * A.W / nb, on = 0.75 + 0.25 * Math.sin(st * 6 + b); var gl = g.createRadialGradient(bx2, fl + 18, 1, bx2, fl + 18, 14); gl.addColorStop(0, 'rgba(255,230,160,' + (0.55 * on).toFixed(2) + ')'); gl.addColorStop(1, 'rgba(255,230,160,0)'); g.fillStyle = gl; g.fillRect(bx2 - 14, fl + 4, 28, 28); U.circle(g, bx2, fl + 18, 2.4, '#FFF1C2'); }
+    },
+    crowd: function (g, A, st) {
+      var beat = 0.47, chorus = st > 30.3 && st < 51.5, end = st >= 51.5 || A.t > 52500 * SPEED, cols = ['#2B2140', '#35294F', '#3F3060', '#2F2547', '#46356A'], glowC = ['#7FE0F7', '#F7A8C2', '#F8D76A', '#8FD694'];
+      var n = Math.min(36, Math.max(18, Math.round(A.W / 15))), hit = Math.floor(st / beat);
+      g.save();
+      for (var i = 0; i < n; i++) {
+        var row = i % 2, x = (i + 0.5) * A.W / n * 1.0 + (row ? 6 : -6), y = A.G + (row ? 50 : 36), c = cols[(i * 7) % cols.length];
+        var ph = ((st / beat) + (i % 4) * 0.25) % 1, bob = (chorus || end ? 4 : 2) * Math.abs(Math.sin(Math.PI * ph)) * (st > 0.5 ? 1 : 0);
+        var wave = end || (chorus && (i * 5 + Math.floor(hit / 8)) % 3 === 0), hy = y - 14 - bob;
+        if (wave) { var sway = Math.sin(st * 4 + i) * 4, ax = x + 7 + sway, ay = hy - 16, stick = !end && i % 2 === 0;
+          U.line(g, x + 5, y - 6 - bob, ax, ay, c, 3.4);
+          if (stick) { var gc = glowC[i % glowC.length]; U.line(g, ax, ay, ax + sway * 0.6, ay - 10, gc, 2.4); U.circle(g, ax + sway * 0.6, ay - 10, 4, 'rgba(255,255,255,.25)'); } else U.circle(g, ax, ay, 2.6, c); }
+        U.ell(g, x, y - bob * 0.5, 11, 9, c); U.circle(g, x, hy, 7, c); U.circle(g, x - 2, hy - 2, 2.4, 'rgba(255,255,255,.06)');
+      }
       g.restore();
     }
   };
@@ -1339,7 +1417,7 @@
     LEAN = [leanOf(0), leanOf(1)];
     STORIES = (src.stories || []).filter(function (a) { return a && a.id && a.parts && a.parts.every(function (id) { return BYID[id]; }); });
   }
-  var PACKS = ['/assets/js/pals-cam-pack-scenes.js', '/assets/js/pals-cam-pack-extra.js'], packsP = null, packsDone = false, tuning = false;
+  var PACKS = ['/assets/js/pals-cam-pack-scenes.js', '/assets/js/pals-cam-pack-extra.js', '/assets/js/pals-cam-pack-more.js'], packsP = null, packsDone = false, tuning = false;
   function loadPacks() {
     if (packsP) return packsP;
     packsP = PACKS.reduce(function (pr, src) { return pr.then(function () { return new Promise(function (ok) { var sc = document.createElement('script'); sc.src = src; sc.onload = sc.onerror = function () { ok(); }; document.head.appendChild(sc); }); }); }, Promise.resolve())
@@ -1451,8 +1529,10 @@
     facts: function () { return shownFacts.map(function (l) { return l.map(function (f) { return f.k; }); }); }, factCounts: function () { if (!ACTS.length) loadActs(); return [FACTS[0].length, FACTS[1].length]; },
     isOpen: function () { return isOpen; },
     newPlace: function () { if (!isOpen) return false; wantPlace = true; return true; }, // after the current moment, on to a new place
-    adBreak: function () { if (!isOpen || MB.prev || setting.id === 'theater') return false; AD.load(); var go = function () { AD.last = clock; AD.dur = 58500 * SPEED; startTravel(AD, {}); }; if (AD.buf) go(); else { var n = 0, w = setInterval(function () { if (AD.buf || ++n > 40) { clearInterval(w); go(); } }, 150); } return true; },
+    adBreak: function (fit) { if (!isOpen || MB.prev || setting.id === 'theater') return false; AD.forceFit = fit == null ? null : Math.max(0, Math.floor(+fit) || 0); AD.load(); var go = function () { AD.last = clock; AD.dur = 58500 * SPEED; startTravel(AD, {}); }; if (AD.buf) go(); else { var n = 0, w = setInterval(function () { if (AD.buf || ++n > 40) { clearInterval(w); go(); } }, 150); } return true; },
     movieBreak: function () { if (!isOpen || MB.prev || setting.id === 'theater' || !BYID[MOVIE.id]) return false; MB.prev = setting; MB.last = clock; TH.clip = null; toSetting(SETTINGS.filter(function (x) { return x.id === 'theater'; })[0]); startTravel(BYID[MOVIE.id], {}); return true; },
+    // for testing: play one activity now (moving to a place it belongs, if it has one)
+    playAct: function (id) { var a = BYID[id]; if (!isOpen || !a || MB.prev || a.ad) return false; if (a.where && a.where.indexOf(setting.id) < 0) { var st = settingById(a.where[0]); if (st) toSetting(st); } startTravel(a, {}); return true; },
     settingId: function () { return setting && setting.id; }, soundNote: function () { return noteOpen(); }, hideSoundNote: function () { hideNote(false); },
     frames: function () { return frames.slice(); }, resetFrames: function () { frames.length = 0; },
     state: function () {
