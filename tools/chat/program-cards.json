@@ -3902,6 +3902,46 @@
           "/legal/privacy-policy.html"
         ]
       ]
+    },
+    {
+      "id": "polymath",
+      "kind": "tool",
+      "name": "the polymath way",
+      "keys": [
+        "polymath",
+        "polymaths",
+        "the polymath way",
+        "how every field connects",
+        "how the fields connect",
+        "everything is connected",
+        "universal roots"
+      ],
+      "what": "The polymath page explains how different fields (psychology, economics, nature, music and more) grow from the same few roots: balance, signal and noise, feedback loops, limited capacity, ownership and structure, quiet incentives, and state and setting. Christian, the creator, is a polymath who studied nine fields and found where they meet, and those meeting points became the Five Pillars.",
+      "how": [
+        "Read the seven roots and the fields each one shows up in.",
+        "See which fields meet in each of the Five Pillars.",
+        "Try “connect two fields”: pick any two and see the root they share and the tool it became."
+      ],
+      "chips": [
+        [
+          "Who is the creator?",
+          "Who made this site?"
+        ],
+        [
+          "What are the Five Pillars?",
+          "What are the five pillars?"
+        ]
+      ],
+      "links": [
+        [
+          "The polymath way",
+          "/polymath.html"
+        ],
+        [
+          "Ask Tide about Christian",
+          "/about.html#ask-tide"
+        ]
+      ]
     }
   ],
   "clarify": [
