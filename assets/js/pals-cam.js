@@ -24,7 +24,7 @@
   // Next, Surprise and the tricks still start straight away.
   var PACE = 0.62, DWELL = 1500; // calm and easy to follow, still playful
   var RM0 = !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches), RM = RM0, SPEED = PACE, PMAX = 140;
-  function stillNow() { return !!((window.TOLStill && window.TOLStill.on()) || document.documentElement.classList.contains('tol-still')); }
+  function stillNow() { return !!((window.TOLStill && (window.TOLStill.chosen ? window.TOLStill.chosen() : window.TOLStill.on()))); }
   function motionMode() { RM = RM0 || stillNow(); SPEED = (RM ? 0.72 : 1) * PACE; PMAX = RM ? 50 : 140; if (typeof A !== 'undefined' && A) { A.R = RM; AO.R = RM; AP.R = RM; AT.R = RM; } }
   motionMode();
   document.addEventListener('tol-still', function () { motionMode(); });

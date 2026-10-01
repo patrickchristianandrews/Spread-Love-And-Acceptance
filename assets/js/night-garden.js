@@ -21,7 +21,7 @@
   var padEl = document.getElementById('ng-pad');
   function stillNow() {
     return !!((window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) ||
-      (window.TOLStill && window.TOLStill.on()) || document.documentElement.classList.contains('tol-still'));
+      (window.TOLStill && (window.TOLStill.chosen ? window.TOLStill.chosen() : window.TOLStill.on())));
   }
   var REDUCED = stillNow();
   document.addEventListener('tol-still', function () { REDUCED = stillNow(); });

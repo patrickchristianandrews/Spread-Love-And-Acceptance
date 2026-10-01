@@ -108,7 +108,7 @@
   // "Keep the page still" (site.js), or the device asking for less motion
   function stillOn() {
     try {
-      return !!((window.TOLStill && window.TOLStill.on()) || document.documentElement.classList.contains('tol-still') ||
+      return !!((window.TOLStill && (window.TOLStill.chosen ? window.TOLStill.chosen() : window.TOLStill.on())) ||
         (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches));
     } catch (e) { return false; }
   }

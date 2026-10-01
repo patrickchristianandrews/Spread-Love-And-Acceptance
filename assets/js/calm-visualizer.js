@@ -91,7 +91,7 @@
   function save() { try { localStorage.setItem(KEY, JSON.stringify(saved)); } catch (e) {} }
 
   // "Keep the page still" (site.js), and the site's Quiet mode
-  function stillNow() { return !!((window.TOLStill && window.TOLStill.on()) || document.documentElement.classList.contains('tol-still')); }
+  function stillNow() { return !!((window.TOLStill && (window.TOLStill.chosen ? window.TOLStill.chosen() : window.TOLStill.on()))); }
   function quietNow() { try { return !!(window.TOLQuiet && window.TOLQuiet.on()); } catch (e) { return false; } }
   var S = {
     feel: null, intensity: 3, len: 10, bed: 'pink', style: 'tunnel',

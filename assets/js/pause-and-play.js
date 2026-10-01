@@ -92,7 +92,7 @@
       { cls: 'is-scene', k: '2 of 3 · Rest your eyes', h: 'A quiet night', secs: 60, p: 'Just look for a while. Nothing to do. Let your shoulders drop.' },
       { cls: 'is-words', k: '3 of 3 · Something kind', h: 'Before you go', secs: 0 }
     ];
-    function still() { return !!((window.TOLStill && window.TOLStill.on()) || document.documentElement.classList.contains('tol-still') || (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches)); }
+    function still() { return !!((window.TOLStill && (window.TOLStill.chosen ? window.TOLStill.chosen() : window.TOLStill.on())) || (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches)); }
     function show(n) {
       step = n; var st = STEPS[n];
       clearInterval(timer); clearInterval(breathT);

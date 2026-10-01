@@ -9,7 +9,7 @@
   if (!J || !root) return;
   var WORLDS = J.WORLDS, KEY = 'tol-journey-v1';
   // less motion: the device setting, or the site's "Keep the page still"
-  function stillNow() { return !!((window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches) || (window.TOLStill && window.TOLStill.on()) || document.documentElement.classList.contains('tol-still')); }
+  function stillNow() { return !!((window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches) || (window.TOLStill && (window.TOLStill.chosen ? window.TOLStill.chosen() : window.TOLStill.on()))); }
   var REDUCED = stillNow();
   document.addEventListener('tol-still', function () { REDUCED = stillNow(); });
   function quietNow() { try { return !!(window.TOLQuiet && window.TOLQuiet.on()); } catch (e) { return false; } }

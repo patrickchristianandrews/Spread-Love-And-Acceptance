@@ -62,7 +62,7 @@ Key facts:
 ## Worksheets (the Workpaper Suite)
 - [Try the workpapers](https://spreadloveandacceptance.com/do/): A practice space to try the core worksheets on a worked example before you use your own week. Nothing is saved.
 - [Workpaper Playground](https://spreadloveandacceptance.com/do/workpaper-playground.html): Practice the core worksheets on a worked example: log a week (WP-01), check a battery (WP-02), name owners (WP-03) and see if the load can last (CALC-01).
-- [PROG-01 in depth: The 6-Week Guided Implementation Roadmap](https://spreadloveandacceptance.com/prog-01-in-depth.html): PROG-01: Structured, week-by-week curriculum for The Objective Ledger (TOL-OS). Integrates chapters, workpapers, podcast episodes, and optional audio.
+- [PROG-01 in depth: The 6-Week Guided Implementation Roadmap](https://spreadloveandacceptance.com/prog-01-in-depth.html): PROG-01: Structured, week-by-week curriculum for The Objective Ledger. Integrates chapters, workpapers, podcast episodes, and optional audio.
 - [A Six-Week Guided Program for Fairer Chores](https://spreadloveandacceptance.com/prog-01.html): Six gentle weeks, one worksheet a week: see the load, give every job an owner, check your batteries and how you talk, then look at what changed.
 - [Program Overview in depth](https://spreadloveandacceptance.com/program-overview-in-depth.html): How the manuscript chapters map onto the workpapers: what each chapter argues, which tool it pairs with, and what is built today.
 - [Program Overview](https://spreadloveandacceptance.com/program-overview.html): How the program fits together: the chapters explain the ideas and the worksheets put them to use. It also says plainly what is built and what isn't yet.
@@ -163,7 +163,7 @@ Key facts:
 - [Terms of Service](https://spreadloveandacceptance.com/legal/terms-of-service.html): The terms for using Spread Love & Acceptance and The Objective Ledger.
 - [What’s stored on this device](https://spreadloveandacceptance.com/on-this-device.html): Everything this site keeps in your browser, in plain words, with a button to erase each one or everything at once. Nothing on this list is ever sent to us.
 - [The Polymath Way: How Every Field Connects](https://spreadloveandacceptance.com/polymath.html): How psychology, economics, nature, music and more grow from the same few roots, and how a polymath joined nine fields into one program you can learn.
-- [Content Roadmap](https://spreadloveandacceptance.com/roadmap.html): What's live today, what's next, and what's planned for The Objective Ledger (TOL-OS).
+- [Content Roadmap](https://spreadloveandacceptance.com/roadmap.html): What's live today, what's next, and what's planned for The Objective Ledger.
 - [Rollout Status](https://spreadloveandacceptance.com/telemetry.html): Component-by-component build status for The Objective Ledger, stated as real fractions of the promised whole.
 - [Frequency Calibration: Are Your Rhythms in Step?](https://spreadloveandacceptance.com/tools/frequency-calibration.html): A worksheet for two people (partners, family, co-parents, roommates, coworkers, friends) to map their rhythms for money, recovery, decisions, check-ins and.
 - [Frequency Sync Visualizer](https://spreadloveandacceptance.com/tools/frequency-sync-visualizer.html): A calm picture of two rhythms drifting into step: the idea behind the 90-second check-in (WP-13).

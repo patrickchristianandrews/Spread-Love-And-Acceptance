@@ -279,7 +279,7 @@
       if (b.kind === 'steps') {
         // on the website there is no PDF to bring back: say what the buttons below do instead
         var ol = h('ol', { className: 'fp-howto' });
-        ['Press \u201cMake my report\u201d below. It is made right here, in your browser, and nothing is sent anywhere.',
+        ['Press \u201cMake my report\u201d below. It is made right here, in your browser, and nothing you type or choose is sent anywhere.',
           'To stop and come back later, press \u201cSave my progress\u201d. It downloads a small file; open it here next time with \u201cUpload your filled package\u201d.',
           'Prefer to finish in a PDF app? \u201cDownload my answers as a PDF\u201d gives you the package with everything you typed already in the boxes.'].forEach(function (t) { ol.appendChild(h('li', { text: t })); });
         sec.appendChild(h('h4', { className: 'fp-h4', text: 'When you\u2019re ready' })); sec.appendChild(ol); return;

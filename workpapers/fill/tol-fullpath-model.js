@@ -478,7 +478,7 @@
           'Save this PDF with your answers in it. Most apps save as you go; in some, use Save or Share, then Save to Files.',
           'Open the Workpaper Suite on the website (spreadloveandacceptance.com/workpapers/fill/suite.html) and go to "Full path package".',
           'Choose "Upload your filled package". It reads your answers on your own device, shows you what it found, and lets you fix anything first.',
-          'Press "Make my report". Nothing is sent anywhere: the report is made in your browser.'
+          'Press "Make my report". Nothing you type or choose is sent anywhere: the report is made in your browser.'
         ] }
       ]
     };
@@ -1222,7 +1222,7 @@
     if (!c.anything) {
       return ['Nothing is filled in yet, so there is nothing to read. That is fine: start with one page, and the report grows with you.',
         R.solo ? 'A good first page is WP-02, your load score. One minute, about the last day or two.' : 'A good first page is ' + (R.wps[0]) + ', ' + NAMES[R.wps[0]] + '.',
-        'Everything stays on this device. Nothing is sent anywhere.'];
+        'Everything stays on this device. Nothing you type or choose is sent anywhere.'];
     }
     if (calc.sol != null) {
       var s = fmt(calc.sol), leans = leanReasons(c);
@@ -3021,7 +3021,7 @@
       'Data checks (' + CHECKS.length + ' of them) look for numbers that may be typos or answers that seem to disagree. They are worded gently because the answer may be real.',
       'Recommendations come from the rules that fired, ranked by how much they matter, and sorted into now, this week and this month. The plan takes one a week.',
       'Nothing is guessed. A blank page says "not filled in", and a score waits until everything it needs is there.',
-      'All of it is worked out on this device. Nothing is sent anywhere.'
+      'All of it is worked out on this device. Nothing you type or choose is sent anywhere.'
     ];
     if (F.solo) {
       out = out.filter(function (t) { return !/^(Workload balance|Ownership clarity|Solvency|Bands for solvency|Patterns \(WP-04\))/.test(t); });

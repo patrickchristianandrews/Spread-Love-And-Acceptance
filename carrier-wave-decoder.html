@@ -1574,7 +1574,7 @@ function renderLetter(r){
   }
   parts.push(`<h2>An invitation</h2><p>${r.reconciled?"Could we keep closing the books together once a week? Twenty minutes, starting with what went right.":"Could we find twenty minutes this week to look at this together? No verdicts, just a look at where our signals crossed and one small change to try."}</p>`);
   parts.push(`<p class="sig">${me?`With care,<br>${esc(me)}`:"With care"}</p>`);
-  parts.push(`<p class="fine">Made with the Carrier Wave Decoder from The Objective Ledger (TOL‑OS), spreadloveandacceptance.com. It isn't therapy or a clinical assessment, and it measures nothing about either person's worth.</p>`);
+  parts.push(`<p class="fine">Made with the Carrier Wave Decoder from The Objective Ledger, spreadloveandacceptance.com. It isn't therapy or a clinical assessment, and it measures nothing about either person's worth.</p>`);
   $("printout").innerHTML=parts.join("");
 }
 $("printbtn").onclick=()=>{try{window.print();}catch(e){}};

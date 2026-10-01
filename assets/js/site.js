@@ -384,7 +384,7 @@
     var bar = el('div', { class: 'tol-bar', role: 'banner' });
     bar.style.margin = (-pt) + 'px ' + (-pr) + 'px ' + pt + 'px ' + (-pl) + 'px';
     bar.appendChild(el('a', { class: 'tol-brand', href: '/index.html' },
-      '<img class="tol-logo" src="/assets/img/logo-mark.svg" alt="" width="36" height="36"><span>The Objective Ledger</span>'));
+      '<img class="tol-logo" src="/assets/img/logo-mark.svg" alt="" width="36" height="36"><span>Spread Love &amp; Acceptance</span>'));
 
     var nav = el('div', { class: 'tol-sections', role: 'navigation', 'aria-label': 'Site sections' });
     RIBBON.forEach(function (p, n) { nav.appendChild(buildDrop(p[0], p[1], n >= RIBBON.length - 3)); });
@@ -1353,16 +1353,22 @@
   // itself when the device asks for less motion, and this browser remembers the choice.
   // Other scripts can read window.TOLStill.on() or listen for the 'tol-still' event.
   var STILL_KEY = 'tol-still', stillHooks = [];
+  // on a phone the page starts still too (calmer to read, and kinder to the battery); turning it off in
+  // Settings is remembered, like any other choice made here
+  function stillDefault() {
+    var mm = window.matchMedia;
+    return !!(mm && (mm('(prefers-reduced-motion: reduce)').matches || mm('(max-width: 700px) and (pointer: coarse)').matches || mm('(max-width: 560px)').matches));
+  }
   var stillOn = (function () {
     var v = lsGet(STILL_KEY);
     if (v === '1' || v === '0') return v === '1';
-    return !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+    return stillDefault();
   })();
   document.documentElement.classList.toggle('tol-still', stillOn);
   // the device's own "reduce motion" choice, unless one was made here
   function refreshStill() {
     var v = lsGet(STILL_KEY);
-    setStill(v === '1' || v === '0' ? v === '1' : !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches), true);
+    setStill(v === '1' || v === '0' ? v === '1' : stillDefault(), true);
   }
   function setStill(on, keep) {
     stillOn = !!on; if (!keep) lsSet(STILL_KEY, stillOn ? '1' : '0');
@@ -1381,7 +1387,10 @@
     b.addEventListener('click', function () { setStill(!stillOn); });
     return b;
   }
-  window.TOLStill = { on: function () { return stillOn; }, set: setStill };
+  // chosen(): only a still page someone asked for (here, or with the device's reduce-motion setting). The movies,
+  // the pal cam and the games follow that, not the phone's calmer default, so what people come to watch stays lively.
+  function stillChosen() { var v = lsGet(STILL_KEY); if (v === '1' || v === '0') return v === '1'; return !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches); }
+  window.TOLStill = { on: function () { return stillOn; }, chosen: stillChosen, set: setStill };
 
   // ---------- Settings: calm and reading choices, in one panel for the whole site ----------
   // Dark follows the device by itself (site.css); a choice made here wins on this device. Text size

@@ -128,6 +128,8 @@
   if (spots.length < 4 || textLen < 900) return;
 
   var want = Math.max(2, Math.min(8, Math.round(textLen / 1400) + 1));
+  // on a phone, one friendly face per page is plenty (calmer to read): just the one who cheers at the end
+  if (window.matchMedia && (matchMedia('(max-width: 560px)').matches || matchMedia('(max-width: 700px) and (pointer: coarse)').matches)) want = 0;
   var chosen = [], step = spots.length / (want + 0.5);
   for (var n = 1; n <= want; n++) {
     var at = Math.max(0, Math.min(spots.length - 1, Math.round(step * n) - 1));
