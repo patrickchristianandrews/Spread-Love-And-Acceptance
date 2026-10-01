@@ -969,7 +969,8 @@
     input.addEventListener('input', function () { clearTimeout(timer); timer = setTimeout(function () { runSearch(input.value); }, 140); });
     input.addEventListener('keydown', function (e) {
       if (e.key === 'Enter') { e.preventDefault(); var first = list.querySelector('a'); if (first) first.focus(); }
-      if (e.key === 'Escape' && input.value) { e.stopPropagation(); input.value = ''; runSearch(''); }
+      // Escape clears the box and, in the menu or search panel, closes it too: one press is enough
+      if (e.key === 'Escape' && input.value) { input.value = ''; runSearch(''); }
     });
     return box;
   }
@@ -1300,7 +1301,7 @@
     var simpleHref = isFull ? other : here, fullHref = isFull ? here : other;
     var main = document.querySelector('main');
     var words = ((main && main.textContent) || '').split(/\s+/).length;
-    var mins = Math.max(1, Math.round(words / 220));
+    var mins = Math.max(1, Math.round(words / 200));
     var pref = lsGet('tol-depth-pref');
     function opt(kind, href, icon, name, what, who, time) {
       var cur = (kind === 'full') === isFull;
@@ -1326,6 +1327,14 @@
       '</details>' +
       '<p class="tol-gentle' + (isFull ? ' is-deep' : '') + '"><span aria-hidden="true">' + (isFull ? '🌿' : '🌱') + '</span> Take what helps and leave the rest. Nothing here grades you.</p>');
     bar.parentNode.replaceChild(box, bar);
+    // some pages fill in their cards after this runs, so count again once everything is on the page
+    window.addEventListener('load', function () {
+      setTimeout(function () {
+        var clone = main.cloneNode(true); Array.prototype.forEach.call(clone.querySelectorAll('.tol-depth, script, style, nav, .tol-trail, [aria-hidden="true"]'), function (n) { n.remove(); });
+        var n = Math.max(1, Math.round((clone.textContent || '').split(/\s+/).filter(Boolean).length / 200)), t = box.querySelector('.is-here .tol-depth-time');
+        if (t && n > mins && /min read/.test(t.textContent)) t.textContent = 'about ' + n + ' min read';
+      }, 1200);
+    });
     Array.prototype.forEach.call(box.querySelectorAll('a[data-depth]'), function (a) {
       a.addEventListener('click', function () { lsSet('tol-depth-pref', a.getAttribute('data-depth')); });
     });
@@ -1822,6 +1831,9 @@
       if (busyPage()) return; // something is being worked on now: not today
       ssSet('tol-wx-seen', '1'); lsSet('tol-weather-nudge-seen', today);
       body.appendChild(w); requestAnimationFrame(function () { w.classList.add('is-in'); });
+      // left alone, it slips away after twenty seconds, so it never sits over what someone is reading
+      var linger = function () { if (!w.isConnected) return; if (w.contains(document.activeElement) || w.matches(':hover')) { setTimeout(linger, 8000); return; } w.classList.add('is-bye'); setTimeout(function () { w.remove(); }, 300); };
+      setTimeout(linger, 20000);
     }
     // a real scroll: more than a screen's worth down the page, at least 15 seconds in
     function onScroll() { if (window.scrollY > window.innerHeight && Date.now() - t0 > 15000) show(); }
@@ -1954,12 +1966,15 @@
       queued = false;
       if (btn.classList.contains('is-away')) return;
       btn.classList.remove('is-hiding');
-      btn.classList.toggle('is-compact', formPage());
+      // on a phone it's a small round button (just the moon), so it covers as little of the page as possible
+      var phone = window.innerWidth <= 560;
+      btn.classList.toggle('is-compact', phone || formPage());
       var lift = bottomBar();
       btn.style.setProperty('--tol-br-lift', lift ? Math.round(lift + 10) + 'px' : '');
       if (!lift) btn.style.removeProperty('--tol-br-lift');
       // try the usual corner first, then the left corner, then up under the top bar
-      for (var i = 0; i < spots.length; i++) {
+      // (on a phone it stays in the bottom corners rather than jumping up over what you're reading)
+      for (var i = 0; i < (phone ? 2 : spots.length); i++) {
         ALL.forEach(function (c) { btn.classList.remove(c); });
         if (spots[i]) spots[i].split(' ').forEach(function (c) { btn.classList.add(c); });
         if (!under()) return;

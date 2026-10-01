@@ -1612,8 +1612,13 @@ function rewrite(an, opts){
   // add an ask when there was only a complaint (never to an apology, a question, or a line that already says what it needs)
   const typedQ = /\?\s*$/.test(an.norm.trim());
   if(!ctx.noAsk && !ctx.apology && !typedQ && !/\b(?:could you|would you|can you|can we|could we|could someone|would that work|will you|would you be|did you get a chance|did you mean|do you have|want to)\b/i.test(main) && (ctx.critical || an.missing.ask)){
-    main = main.replace(/\s*$/," Could you [one specific thing] by [a time]?");
+    main = main.replace(/([^.!?…\s])\s*$/,"$1.").replace(/\s*$/," Could you [one specific thing] by [a time]?");
     note("addask","(no ask)","Could you [one specific thing] by [a time]?");
+  }
+  // a leftover "even" ("did you even look", "could you even rinse") keeps the jab, so it goes
+  if(/\b(?:you|did you|could you|can you|didn't|don't|can't|couldn't|won't|not) even\b/i.test(main)){
+    main = main.replace(/\b(did|do) you even (\w+)/gi, (mm,d,v)=>{ note("again","even",""); return (/^D/.test(mm)?"D":"d")+(d.toLowerCase()==="did"?"id you get a chance to ":"o you get a chance to ")+v; })
+               .replace(/\b(you|could you|can you|didn't|don't|can't|couldn't|won't|not) even\b/gi, (mm,w)=>{ note("again","even",""); return w; });
   }
   // an absolute that slipped through a rewrite ("always", "never") becomes "often" / "rarely"
   if(has("absolute") && /\b(?:always|never)\b/i.test(main)){
@@ -2123,6 +2128,7 @@ function rewriteSentence(s, ctx, note, an, W){
   t = t.replace(/\b(?:constantly|all the time)\b/gi, mm=>{ note("absolute", mm.toLowerCase(), "a lot lately"); ctx.critical=true; return "a lot lately"; });
   t = t.replace(/\bevery (?:single )?time\b/gi, mm=>{ note("absolute", mm.toLowerCase(), "a few times lately"); ctx.critical=true; return "a few times lately"; });
   t = t.replace(/\b(you|you're|he|she|they|he's|she's|they're) always\b/gi, (mm,a)=>{ note("absolute","always","often"); ctx.critical=true; return a+" often"; });
+  t = t.replace(/\b(do|doing|does|did) everything\b(?! (?:i|we|you) can\b)/gi, (mm,v)=>{ note("absolute","everything","most of the work"); ctx.critical=true; return v+" most of the work"; });
 
   // --- past-bringing
   t = t.replace(/,?\s*\b(?:just )?like (?:the )?last time\b/gi, mm=>{ note("past", mm.replace(/^[,\s]+/,""), ""); return ""; });

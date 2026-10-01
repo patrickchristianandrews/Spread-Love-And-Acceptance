@@ -530,6 +530,10 @@
       spot.parent.insertBefore(card.el, spot.before);
       cards.push(card);
     });
+    // number the moments in the order they sit on the page (a moment placed by its heading can land before an earlier one)
+    cards.slice().sort(function (a, b) { return a.el.compareDocumentPosition(b.el) & 4 ? -1 : 1; }).forEach(function (c, k) {
+      var kk = c.el.querySelector('.lp-kicker'); if (kk) kk.textContent = 'Check yourself · moment ' + (k + 1) + ' of ' + total + ' on this page';
+    });
 
     function buildCard(m, i) {
       var id = 'lp-m' + (i + 1), hid = id + '-h', tint = (i % 4) + 1;

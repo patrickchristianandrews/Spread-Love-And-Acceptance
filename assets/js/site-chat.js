@@ -663,9 +663,19 @@
   function knownWord(w) {
     return !!(STOP[w] || IDX.vocab[w] || w.length <= 2 || /\d/.test(w) || IDX.vocab[stem(w)] || ROLE[stem(w)]);
   }
+  // real English words are never "fixed" into site words ("melts" isn't a typo for "meets", nor "spoil" for "spell")
+  var ENG = null;
+  function english(w) {
+    if (!ENG) { ENG = {}; String(KB.eng || '').split(' ').forEach(function (x) { if (x) ENG[x] = 1; }); }
+    if (ENG[w]) return true;
+    var forms = [w.replace(/s$/, ''), w.replace(/es$/, ''), w.replace(/ies$/, 'y'), w.replace(/ied$/, 'y'), w.replace(/ed$/, ''), w.replace(/d$/, ''), w.replace(/ing$/, ''), w.replace(/ing$/, 'e'),
+      w.replace(/([b-df-hj-np-tv-z])\1(ed|ing)$/, '$1'), w.replace(/er$/, ''), w.replace(/ly$/, ''), w.replace(/'s$/, '')];
+    for (var i = 0; i < forms.length; i++) if (forms[i] !== w && forms[i].length >= 3 && ENG[forms[i]]) return true;
+    return false;
+  }
   // the site word a misspelled word most likely means: within one or two letters, or the same sound
   function closestWord(w) {
-    if (w.length < 4) return null;
+    if (w.length < 4 || english(w)) return null;
     var single = w.replace(/([a-z])\1+/g, '$1');  // "snapps" → "snaps", "allso" → "also"
     if (single !== w && single.length >= 3 && knownWord(single)) return single;
     var list = IDX.fixTo[w.charAt(0)] || [], pw = phon(w), best = null, bs = 9;
@@ -814,6 +824,9 @@
       var m = w.re.exec(f);
       if (m) { who = WHO_ORDER[i]; noun = firstGroup(m); break; }
     }
+    // "two kids and my partner doesn't notice" is about the partner: the kids are only the setting
+    // (if the kids are the ones doing it, the actor check below hands it back to them)
+    if (who === 'kid' && S.who.partner) { var mp = S.who.partner.re.exec(f); if (mp && firstGroup(mp)) { who = 'partner'; noun = firstGroup(mp); } }
     var bonus = (who && S.who[who].bonus) || {};
     Object.keys(S.issues).forEach(function (k) {
       var sc = 0; S.issues[k].res.forEach(function (r) { if (r[0].test(f)) sc += r[1]; });
@@ -876,7 +889,7 @@
     // words for a second person involved (a parent, a partner), when the issue has them
     var also = !self && I.scripts_also && I.scripts_also[1] && I.scripts_also[1].length ? I.scripts_also : null;
     var path = (C.path || (self && I.path_self) || I.path || []).slice(0, 2);
-    var read = C.read || (W.read && !self ? W.read : null) || (I.path_self && self ? null : (I.path || [])[2]) || (self ? ['Know your own wiring', '/know-yourself.html'] : null);
+    var read = C.read || (W.read && !self && !I.ownRead ? W.read : null) || (I.path_self && self ? null : (I.path || [])[2]) || (self ? ['Know your own wiring', '/know-yourself.html'] : null);
     if (read && path.every(function (p) { return p[1] !== read[1]; })) path.push(read);
     return { I: I, C: C, ctx: ctx, reflect: pickF('reflect'), going: pickF('going'), steps: steps, scripts: scripts, also: also,
       path: safeLinks(path).slice(0, 3), ex: pickF('ex'), more: pickF('more'), tonight: pickF('tonight') };

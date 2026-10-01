@@ -548,8 +548,11 @@
   function nextStoryPart() {
     var st = mem.story || {}, arcs = STORIES.filter(function (a) { return (st[a.id] || 0) < a.parts.length; });
     if (!arcs.length) return null;
+    // only stories whose next part belongs in this place (no secret garden on the beach)
+    arcs = arcs.filter(function (a) { return fits(BYID[a.parts[st[a.id] || 0]]); });
+    if (!arcs.length) return null;
     var arc = arcs.filter(function (a) { return a.id === mem.storyArc; })[0] || arcs[Math.floor(Math.random() * arcs.length)];
-    var act = BYID[arc.parts[st[arc.id] || 0]]; return act && fits(act) ? act : null;
+    return BYID[arc.parts[st[arc.id] || 0]];
   }
   function removeFromBag(id) { if (Array.isArray(mem.bag)) { var i = mem.bag.indexOf(id); if (i >= 0) { mem.bag.splice(i, 1); persist(); } } }
 

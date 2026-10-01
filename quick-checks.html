@@ -499,11 +499,11 @@
     if(body.thirsty||need.food) r.push('Have a full glass of water. Small body needs can make everything else feel sharper.');
     if(body.hungry) r.push('Eat something, even something small. It’s hard to be patient on an empty tank.');
     if(body.pain) r.push('Go easy on yourself today. Lower the bar for what counts as a good day, and let people know you’re not at full strength.');
-    if(body.still||need.move) r.push('Two minutes on your feet: stairs, the yard, once around the block. Moving can shake off some of what the gusts leave behind.');
+    if(body.still||need.move) r.push('Two minutes on your feet: stairs, the yard, once around the block. '+(sky==='fog'?'Moving can help clear a little of the fog.':'Moving can shake off some of what the gusts leave behind.'));
     if(body.noise||need.quiet) r.push('Find the quietest room you can and close the door for five minutes.');
     if(body.screens) r.push('Look at something far away for a minute, out a window if you can.');
     if(sleep==='bad'||sleep==='short'||need.sleep) r.push('If you can lie down for ten minutes, do. If you can’t, decide now what time you’ll wind down tonight.');
-    if(body.caffeine) r.push('Maybe skip the next coffee. On a gusty day it can add to the wind.');
+    if(body.caffeine) r.push(sky==='gusty'?'Maybe skip the next coffee. On a gusty day it can add to the wind.':sky==='fog'?'If you’ve had a few already, water and a snack might carry you further than another coffee.':'If you’ve had a few already, make the next one a water, so the clear sky stays clear.');
     if(sky!=='clear' && !r.length) r.push('Breathe out slowly, a little longer than you breathe in, a few times. Many people find the slow exhale is the settling part.');
     return r.slice(0,4);
   }

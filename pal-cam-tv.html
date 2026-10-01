@@ -37,6 +37,11 @@
   .tv-resend[hidden] { display: none; }
   .tv-live-help { max-width: 34rem; text-align: left; color: #E9E2FB; }
   .tv-live-help summary { cursor: pointer; font-weight: 600; min-height: 44px; display: flex; align-items: center; justify-content: center; }
+  .tv-live-help summary { list-style: none; gap: .5rem; padding: .4rem 1rem; border: 1px solid currentColor; border-radius: 999px; width: max-content; max-width: 100%; margin: 0 auto; box-sizing: border-box; text-align: center; }
+  .tv-live-help summary::-webkit-details-marker { display: none; }
+  .tv-live-help summary::after { content: "▾"; font-size: .9em; transition: transform .2s; }
+  .tv-live-help[open] summary::after { transform: rotate(180deg); }
+  .tv-live-help summary:hover { background: rgba(127,127,127,.12); }
   .tv-live-help li { margin: .45rem 0; }
   /* TV mode: the cam fills the whole screen, nothing else */
   .pc-ov.is-tv { padding: 0 !important; align-items: stretch !important; background: #000; }
@@ -56,7 +61,7 @@
   .tv-ctl button:focus-visible { outline: 3px solid #F2CAD5; outline-offset: 2px; }
   .tv-ctl .tv-exit { background: #FFF8EE; color: #3C3350; border-color: #FFF8EE; }
   html.tv-quiet.tv-fine .tv-ctl { opacity: 0; pointer-events: none; }
-  .pc-ov.is-tv .tv-hint { position: absolute; top: auto; bottom: 12vh; right: auto; left: 50%; transform: translateX(-50%); max-width: 90vw; text-align: center; font-size: 1rem; z-index: 3; }
+  .pc-ov.is-tv .tv-hint { position: absolute; top: 26vh; bottom: auto; right: auto; left: 50%; transform: translateX(-50%); max-width: min(90vw, 34rem); text-align: center; font-size: 1rem; z-index: 3; }
   @media (max-width: 420px) { .tv-ctl button { padding: .45rem .75rem; font-size: .95rem; } }
 </style>
 <!-- seo:start -->

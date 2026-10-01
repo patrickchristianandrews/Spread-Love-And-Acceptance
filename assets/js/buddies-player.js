@@ -1423,7 +1423,7 @@
   // /assets/audio/buddies/<episode>/<key>.mp3, listed in index.json. A line plays its recording through
   // Web Audio (reliable on phones once Play has been pressed); a line with no recording falls back to
   // the device's own speech, and then to captions only.
-  var PLAYER_VER = '1 Oct · 1'; // shown under the player, so we can tell which version a browser has
+  var PLAYER_VER = '1 Oct · 2'; // shown under the player, so we can tell which version a browser has
   var REC = '2609c'; // bump whenever the recordings are redone, so no browser plays an old copy
   var CL = { base: '/assets/audio/buddies/', maps: {}, ready: {}, bufs: {}, got: {}, src: null, gain: null, token: 0, lastFx: -99 };
   function ckey(who, text) { var h = 0x811c9dc5, s = who + '|' + text; for (var i = 0; i < s.length; i++) { h ^= s.charCodeAt(i); h = Math.imul(h, 0x01000193) >>> 0; } return ('0000000' + h.toString(16)).slice(-8); }
@@ -2045,6 +2045,11 @@
       Array.prototype.forEach.call(host.querySelectorAll('.fb-chaps button'), function (b, i) { b.setAttribute('aria-current', i === P.ch ? 'true' : 'false'); });
     }
     function progress() {
+      if (P.th) { // the theme song has its own little clock, so the episode clock never looks stuck at 0:00
+        var th = P.th, d = th.song.dur || 0, e = Math.max(0, th.t - th.song.base);
+        timeEl.textContent = '♪ ' + (th.kind === 'open' ? 'Theme' : 'Credits') + (d ? ' ' + fmt(e) + ' / ' + fmt(d - th.song.base) : '');
+        return;
+      }
       if (!P.dir) return; var t = P.dir.time(), T = P.dir.total;
       fill.style.width = (100 * clamp(t / T, 0, 1)).toFixed(2) + '%'; timeEl.textContent = fmt(t) + ' / ' + fmt(T);
       trackEl.setAttribute('aria-valuenow', String(Math.round(100 * t / T))); trackEl.setAttribute('aria-valuetext', fmt(t) + ' of ' + fmt(T) + ', chapter ' + (P.ch + 1));
@@ -2059,7 +2064,7 @@
       if (P.ftN > 60) { P.ftN = 0;
         if (P.ft > 0.045 && (P.q || 1) > 0.5) { P.q = Math.max(0.5, (P.q || 1) * 0.8); resize(); }
         else if (P.ft < 0.022 && (P.q || 1) < 1) { P.q = Math.min(1, P.q * 1.12); resize(); } }
-      if (P.th) { try { themeTick(dt); } catch (e) { P.errors++; if (window.console) console.error('buddies theme', e); endTheme(true); } if (P.rec) recFrame(); if (P.stream) capEl.classList.toggle('is-empty', !lineEl.textContent); return; }
+      if (P.th) { try { themeTick(dt); } catch (e) { P.errors++; if (window.console) console.error('buddies theme', e); endTheme(true); } progress(); if (P.rec) recFrame(); if (P.stream) capEl.classList.toggle('is-empty', !lineEl.textContent); return; }
       try { P.dir.tick(dt * P.rate); } catch (e) { P.errors++; if (window.console) console.error('buddies tick', e); }
       if (P.one && !P.dir.ended && P.dir.chapterAt() !== P.oneCh) { chapterBreak(P.dir.chapterAt()); return; }
       paint(dt * P.rate); progress(); capLight(); if (P.rec) recFrame();

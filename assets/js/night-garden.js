@@ -29,6 +29,12 @@
   // Backdrop mode (garden-backdrop.html, behind Pause & Play): silent, no buttons, and it
   // never changes the visitor's saved garden.
   var AMBIENT = document.documentElement.hasAttribute('data-ambient');
+  var ambLastInput = Date.now();
+  if (AMBIENT) (function () {
+    var mark = function () { ambLastInput = Date.now(); };
+    var docs = [document]; try { if (window.parent && window.parent !== window && window.parent.document) docs.push(window.parent.document); } catch (e) {}
+    docs.forEach(function (d) { ['pointerdown', 'pointermove', 'keydown', 'wheel', 'touchstart', 'scroll'].forEach(function (ev) { try { d.addEventListener(ev, mark, { passive: true, capture: true }); } catch (e) {} }); });
+  })();
   // Behind the pages, each part of the site has its own scene (garden, beach, lake, meadow,
   // river, forest), lit by the visitor's own clock: dawn, day, golden hour, dusk or night.
   // The Night Garden itself is always night.
@@ -2277,9 +2283,11 @@
   var lastDraw = 0;
   function frame(t) {
     rafId = 0;
-    if (AMBIENT && t - lastDraw < 32) { kick(); return; } // a gentle 30 frames a second is plenty behind a page
+    // behind a page, a gentle 20 frames a second is plenty, and once the visitor has been still (reading)
+    // for a couple of minutes it slows to a soft 8, so a phone stays cool and the battery lasts
+    if (AMBIENT && t - lastDraw < (Date.now() - ambLastInput > 120000 ? 125 : 50)) { kick(); return; }
     lastDraw = t;
-    var dt = Math.min(60, t - lastT); lastT = t;
+    var dt = Math.min(AMBIENT ? 150 : 60, t - lastT); lastT = t;
     if (!running) return;
     ctx.clearRect(0, 0, W, H);
     if (bg) ctx.drawImage(bg, 0, 0, W, H);

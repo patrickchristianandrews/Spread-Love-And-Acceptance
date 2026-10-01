@@ -56,7 +56,13 @@
   add(K.watch({ id: 'ev-longnight', name: 'The longest night', kind: 'sweet', event: 'longnight', cap: 'The longest night of the year. Sugarfoot lights a lantern, bravely', punch: 'The night is long, and that’s fine: they have each other and a lantern.', says: [[1400, 'S', 'Brave paws.'], [3000, 'T', 'Together.']], gold: true, show: function (g, A) { var x = A.cx, y = A.G - 30; glow(g, x, y, 60, '255,230,150', 0.45); rr(g, x - 5, y - 7, 10, 13, 2, '#FCE38A'); } }));
 
   // ======================= story arcs (they continue across visits) =======================
-  function part(story, n, o) { return add(flag(o, { story: story, part: n })); }
+  // each story belongs somewhere: a garden needs soil, a kite needs open sky (the band can play anywhere)
+  var STORY_WHERE = {
+    garden: ['backyard', 'meadow', 'gardenparty', 'farm', 'orchard', 'forest', 'treehouse', 'pumpkins', 'citypark', 'pond', 'campsite', 'cabin'],
+    treehouse: ['backyard', 'forest', 'treehouse', 'meadow', 'orchard', 'farm', 'campsite', 'cabin'],
+    kite: ['beach', 'meadow', 'backyard', 'farm', 'citypark', 'rooftop', 'orchard', 'festival', 'pond', 'lighthouse', 'dock', 'snow']
+  };
+  function part(story, n, o) { var f = { story: story, part: n }; if (STORY_WHERE[story]) f.where = STORY_WHERE[story]; return add(flag(o, f)); }
   X.stories = [
     { id: 'treehouse', name: 'The treehouse', parts: ['st-tree1', 'st-tree2', 'st-tree3', 'st-tree4', 'st-tree5'] },
     { id: 'garden', name: 'The secret garden', parts: ['st-garden1', 'st-garden2', 'st-garden3', 'st-garden4'] },

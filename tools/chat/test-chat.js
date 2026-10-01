@@ -469,6 +469,20 @@ c('nt2', ['can you talk slower, this is a lot', 'I want to kill myself'], { kind
 // a new question after a playbook starts fresh
 c('nt2', ['i feel overwhelmed', 'why do people say break a leg'], { kind: 'idiom', not: /Let’s stay with/ });
 
+// ---------------------------------------------------------------- parents (from a parent's review of the chat)
+t('parents', "I feel like I do all the mental load with two kids and my partner doesn't notice.", { kind: 'sit', id: 'partner+load', not: /your kids to log/ });
+t('parents', 'my 4 year old melts down at bedtime every night', { kind: 'sit', id: 'kid+meltdowns', not: /I think you mean/ });
+t('parents', 'my son has a meltdown after school', { kind: 'sit', id: 'kid+meltdowns' });
+t('parents', 'my kids fight all the time', { kind: 'sit', id: 'kid+kidsfight' });
+t('parents', 'my teen won’t talk to me', { kind: 'sit', id: /^kid\+/ });
+
+t('parents', 'I help with my grandchildren and my daughter thinks I spoil them', { kind: 'sit', id: /\+grandkids$/, not: /I think you mean/ });
+t('parents', 'what can I watch with my grandkids', { id: 'kidswatch', link: '/frequency-buddies.html' });
+t('parents', 'is this safe for my grandkids to watch', { id: 'kidswatch', link: '/frequency-buddies.html' });
+t('parents', 'do I have to give my email', { id: 'emailwhy', text: /without giving anything/ });
+t('parents', 'what do you do with my email', { id: 'emailwhy', text: /Buttondown/ });
+t('parents', 'what is frequency buddies', { kind: 'card', id: 'buddies', link: '/frequency-buddies.html' });
+
 // ---------------------------------------------------------------- run
 (async () => {
   const args = process.argv.slice(2), verbose = args.includes('-v'), only = args.filter(a => a[0] !== '-')[0];

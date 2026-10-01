@@ -3797,6 +3797,111 @@
           "What is Know your own wiring?"
         ]
       ]
+    },
+    {
+      "id": "buddies",
+      "kind": "tool",
+      "name": "Frequency Buddies",
+      "keys": [
+        "frequency buddies",
+        "frequency buddy",
+        "the cartoon",
+        "the cartoons",
+        "mini movies",
+        "mini movie",
+        "the episodes",
+        "tidbit and sugarfoot show",
+        "the kids show",
+        "kids show"
+      ],
+      "what": "Frequency Buddies is a gentle cartoon for kids and grown-ups to watch together. Tidbit and Sugarfoot, two puppy pals, go on small adventures that teach the site’s ideas in kid-sized ways: noticing your battery, sharing the jobs, saying sorry and making up. There are five episodes, each in short chapters of about two minutes, with a theme song at the start and end.",
+      "how": [
+        "Open the Frequency Buddies page and pick an episode.",
+        "Read the short “Before you watch” note first: it says if anything is a little tense (like a thunderstorm) and how it ends.",
+        "Captions are always on. Settings can soften flashes and slow things down, and you can watch one chapter at a time.",
+        "It remembers where you stopped, in this browser, so you can pick up later."
+      ],
+      "chips": [
+        [
+          "What can kids watch here?",
+          "What can I watch with my kids?"
+        ],
+        [
+          "Is it okay for little ones?",
+          "Is Frequency Buddies okay for a 5 year old?"
+        ]
+      ],
+      "pillar": "Every episode shows one of the five pillars in a story kids can follow.",
+      "links": [
+        [
+          "Frequency Buddies",
+          "/frequency-buddies.html"
+        ],
+        [
+          "All episodes on shuffle",
+          "/frequency-buddies-shuffle.html"
+        ],
+        [
+          "Pal Cam TV: the pups live on your TV",
+          "/pal-cam-tv.html"
+        ]
+      ]
+    },
+    {
+      "id": "kidswatch",
+      "kind": "intent",
+      "first": true,
+      "name": "something to watch with kids",
+      "pat": "\\b(what|something|anything) (can|could|should|do) (i|we|they|you) (watch|show|put on|play)( here)? (with|for) (my|the|our|your)? ?(kids?|children|child|grandkids?|grandchildren|grandchild|grandson|granddaughter|little ones?|toddler|son|daughter)\\b|\\b(is|are) (this|it|the (cartoon|show|episodes?|movies?|videos?)|frequency buddies) (safe|ok|okay|alright|good|suitable|appropriate|fine) for (my |a |the |our )?(kids?|children|child|grandkids?|grandchildren|little ones?|toddler|[0-9] year old|[0-9] yo)\\b|\\b(safe|ok|okay|good|suitable) for (my )?(kids?|grandkids?|grandchildren|children) to (watch|see|play)\\b|\\b(kids|childrens|children s|family) (show|shows|cartoon|cartoons|videos?|movies?)\\b|\\bsomething for (the|my|our) (kids|grandkids|grandchildren|children)\\b",
+      "keys": [],
+      "what": [
+        "Frequency Buddies is made for watching together: a gentle cartoon with two puppy pals, Tidbit and Sugarfoot. Episodes come in two-minute chapters, captions are always on, and a short “Before you watch” note tells you about any tense moments (like a storm) and how it ends. Every episode ends kindly.",
+        "For a quieter time, the Pal Cam shows the pups playing and napping, live, with soft music. It works full screen on a TV too."
+      ],
+      "how": [
+        "Start with one chapter and watch it with them, so you can talk about it after: “How full was Tidbit’s battery?”",
+        "The calm games (Word Bloom, the Night Garden) have no timers and start with sound off, so they suit a wind-down too."
+      ],
+      "links": [
+        [
+          "Frequency Buddies",
+          "/frequency-buddies.html"
+        ],
+        [
+          "Pal Cam TV",
+          "/pal-cam-tv.html"
+        ],
+        [
+          "The Night Garden",
+          "/night-garden.html"
+        ]
+      ]
+    },
+    {
+      "id": "emailwhy",
+      "kind": "intent",
+      "first": true,
+      "name": "why an email",
+      "pat": "\\b(do|will|would|must|should) i (have to|need to|got to|be asked to)? ?(give|enter|share|hand over|type in|put in|sign up with|provide) (you )?(my|an|your|a) (email|e mail|email address)\\b|\\b(do|does) (it|this|the site|you) (need|want|require|ask for) (my|an) (email|e mail)\\b|\\bwhat (do|will|does) (you|the site|it|this) (do|use) with my (email|e mail|address)\\b|\\bwhy (do you|does it|does the site|is it) (need|want|ask(ing)? for|asking) (my|an) (email|e mail)\\b|\\b(is|will) my (email|e mail)( address)? (be )?(safe|shared|sold|private|given|passed)\\b|\\bwill you (sell|share|spam)\\b|\\bcan i use (it|this|the site) without (an |my )?(email|signing up)\\b",
+      "keys": [],
+      "what": [
+        "No. You can read, play and use the tools without giving anything. An email is only asked for to open the fill-in workpapers and Chapters III to V, and to send a short note when something new arrives.",
+        "If you do join, your address goes to Buttondown, the newsletter service, and is used only for those notes. It’s never sold, and every note has an unsubscribe link. What you type in the tools and this chat stays on your device either way."
+      ],
+      "links": [
+        [
+          "Ways in: what needs an email",
+          "/ways-in.html"
+        ],
+        [
+          "Membership",
+          "/membership.html"
+        ],
+        [
+          "Privacy policy",
+          "/legal/privacy-policy.html"
+        ]
+      ]
     }
   ],
   "clarify": [

@@ -69,8 +69,8 @@
     b.setAttribute('aria-labelledby', 'tol-join-h');
     b.innerHTML =
       '<span class="tol-join-k">Free</span>' +
-      '<h2 id="tol-join-h">Almost everything here is open already. Join our newsletter, free</h2>' +
-      '<p class="tol-join-long">Most pages, tools and games need nothing from you. Join for a short, friendly note when something new arrives; it also opens the few chapters and workpapers that ask for an email, right away in this browser. No payment, and you can unsubscribe any time.</p>' +
+      '<h2 id="tol-join-h">Reading, tools and games are free to everyone. Join free to open the workpapers too</h2>' +
+      '<p class="tol-join-long">You don’t need an email to read, play or use the tools. The fill-in workpapers and Chapters III to V ask for one: join for a short, friendly note when something new arrives, and they open right away in this browser. No payment, and you can unsubscribe any time.</p>' +
       '<p class="tol-join-short">Free. No payment. Unsubscribe any time.</p>' +
       form('tol-join-b') +
       '<p class="tol-join-small">Already joined on another device? Enter the same email here to open everything.</p>';

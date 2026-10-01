@@ -380,6 +380,133 @@
       "deeper": ["complaints vs criticism", "What is the difference between a complaint and criticism?"],
       "ex": "Mo’s mom often said, “Your cousin visits every week.” Mo finally said, “It sounds like you’d like to see me more. How about Sunday lunch every other week?” The comparisons mostly stopped, because the real ask had been answered.",
       "tonight": "write the plain ask that’s hiding inside the comparison, so you can answer that instead."
+    },
+    "meltdowns": {
+      "label": "big feelings at bedtime or after school",
+      "defaultWho": "kid",
+      "match": [["melt(s|ing|ed)? ?down|meltdowns?|tantrums?|throws? (a )?fits?|(screams?|screaming|cries|crying|sobbing|kicking off) (at|every|before|after|when)|falls? apart (at|after|every|when)|(bedtime|bed time|night time|after school|afterschool) (battles?|meltdowns?|tantrums?|fights?|is (a )?(nightmare|battle|war|hard))|(wont|doesnt|refuses to|will not) (go to bed|go to sleep|stay in bed|settle)|fights? (going to )?(bed|sleep)|after.?school (crash|meltdown|restraint collapse)|falls apart after school", 6], ["bedtime|bed time|after school|big feelings|melt*|upset every", 2]],
+      "reflect": "Evenings like that are hard on everyone, and it says a lot that you’re looking for a calmer way through.",
+      "going": "This is Pillar III, Read your state first, and Pillar II, Fix the setup, not the person. Many kids hold it together all day and let it out at home, where they feel safest, and the end of the day is when everyone’s battery is lowest, the grown-ups included. It isn’t a sign that anyone is doing it wrong. Small, steady setups (the same few steps in the same order, a warning before changes, a calm grown-up who isn’t also rushing) tend to help more than new rules in the moment.",
+      "ownSteps": true,
+      "steps": [
+        "Pick the hardest time of day and look at what comes just before it: hunger, a rushed handoff, screens off suddenly, a tired grown-up.",
+        "Make the run-up the same every day, with a few steps in the same order (snack, bath, two books, lights), and give a five-minute heads-up before each change.",
+        "In the moment, say less: stay close, keep your voice low and slow, and name the feeling (“You’re really tired and cross”). The talking can wait until everyone is calm.",
+        "Share the hard shift with the other grown-up, if there is one: one owner for bedtime on set nights, so nobody does it running on empty every night."
+      ],
+      "scripts": {
+        "default": [
+          "You’re having a big feeling. I’m right here. We can take a breath together.",
+          "First pajamas, then two books. Do you want the dinosaur book or the bus book?",
+          "Could we each own bedtime on set nights? I’ll do Monday, Wednesday and Friday if you take the rest."
+        ]
+      },
+      "path": [
+        [
+          "Frequency Buddies: feelings stories to watch together",
+          "/frequency-buddies.html"
+        ],
+        [
+          "Night Garden: a slow breathing game to share",
+          "/night-garden.html"
+        ],
+        [
+          "WP-03: One owner per job",
+          "/workpapers/wp-03-raci-treaty.html"
+        ]
+      ],
+      "deeper": [
+        "Why do kids save it for home?",
+        "What does read your state first mean?"
+      ],
+      "ex": "Every night at seven, Maya’s four-year-old fell apart over pajamas. Her partner noticed it always came right after the tablet went off. They moved the tablet to before dinner, added a five-minute warning and a picture list (bath, teeth, two books, song), and took turns on bedtime. It wasn’t perfect, but most nights got shorter and quieter.",
+      "tonight": "choose the same three bedtime steps for tonight, say them out loud ahead of time, and give one five-minute warning before the first one.",
+      "ownRead": true
+    },
+    "kidsfight": {
+      "label": "kids fighting with each other",
+      "defaultWho": "kid",
+      "match": [["(my |the |our )?(kids|children|boys|girls|twins|son and daughter|daughter and son|siblings) (always |keep |wont stop |constantly |wont quit )?(fight|fighting|argue|arguing|bicker|bickering|squabble|squabbling|hit each other|scream at each other|are at each other)|(fight|fights|fighting|bickering) between (my|the|our) (kids|children|boys|girls)|(brother|sister) (keeps |always )?(hits?|teases?|picks? on) (his|her|their) (brother|sister)|kids sibling rivalry", 7], ["each other|fight*|bicker*|squabbl*", 1]],
+      "reflect": "Living with kids who are at each other’s throats is exhausting, and wanting more peace at home is completely fair.",
+      "going": "This is Pillar II, Fix the setup, not the person. Most fights between kids are about the same few things: turns, space, fairness and the grown-ups’ attention. When the setup makes those clear (whose turn, whose space, what happens next), there is less to fight about, and the grown-up gets to be a coach instead of a judge.",
+      "ownSteps": true,
+      "steps": [
+        "Notice when the fights happen: the same toy, the same seat, the same time of day. Most of them repeat.",
+        "Fix the setup for the top one: a turn timer, a seat rota on the fridge, a box of things that are only theirs.",
+        "When it starts, describe and don’t judge: “I see two kids who both want the blue cup.” Ask what they could try, and let them pick.",
+        "Give each child a few minutes of one-on-one time most days. A lot of fights are really asking for you."
+      ],
+      "scripts": {
+        "default": [
+          "I see two kids who both want the same thing. What could we try so you both get a turn?",
+          "I’m not going to pick a winner. I’ll help you find a plan you can both live with.",
+          "The timer decides whose turn it is, not me. Ten minutes each, starting with whoever’s name comes first today."
+        ]
+      },
+      "path": [
+        [
+          "WP-03: One owner per job (age-sized jobs)",
+          "/workpapers/wp-03-raci-treaty.html"
+        ],
+        [
+          "Frequency Buddies: Tidbit and Sugarfoot learn to share",
+          "/frequency-buddies.html"
+        ],
+        [
+          "Parenting styles (Library)",
+          "/library/life.html#parenting-styles"
+        ]
+      ],
+      "deeper": [
+        "What does fix the setup, not the person mean?",
+        "How do I give kids age-sized jobs?"
+      ],
+      "ex": "Sam’s two kids fought over the front seat every single morning. Sam put a calendar on the fridge with their names on alternate days. The fights didn’t vanish, but that one did, and Sam stopped being the referee at 8 a.m.",
+      "tonight": "pick the one thing they fight over most and decide a simple rule for whose turn it is, then tell them both before it comes up.",
+      "ownRead": true
+    },
+    "grandkids": {
+      "label": "helping with the grandkids",
+      "defaultWho": "family",
+      "themPat": "daughter|son|daughter in law|son in law|kids parents|their parents|their mom|their mum|their dad",
+      "match": [["grandkids?|grandchild(ren)?|grandson|granddaughter|grandbab(y|ies)|grandparents?|grandma|grandpa|granny|grandad|nana|(as|being) (a |the )?(grandmother|grandfather|grandparent)", 4], ["spoil(s|ing|ed)? (them|him|her|the kids|the grandkids)|(different|their|our|my) rules|babysit*|childcare|watch the kids|look after the kids|pick(ing)? (them|the kids) up|too many days|every (day|week)", 2]],
+      "reflect": "Helping with grandchildren is a big gift, and it works best when everyone knows who decides what.",
+      "going": "This is Pillar II, Fix the setup, not the person, and Pillar IV, Tune how you send and receive. Most grandparent friction isn’t about love. It’s about rules nobody said out loud (screens, sweets, bedtime) and about how much help is being asked for. The parents usually set the rules; grandparents usually set how much they can give. Saying both out loud stops a lot of quiet hurt on both sides.",
+      "ownSteps": true,
+      "steps": [
+        "Ask the parents for their top three rules (screens, sweets, bedtime) and follow those. Everything else can be your own way at your house.",
+        "Agree when you help and for how long, and say it plainly, including what you can’t do. A clear yes is easier to keep than a vague always.",
+        "If “you spoil them” comes up, ask what they’d like instead, rather than defending. Usually there’s one specific thing behind it.",
+        "Write the regular jobs down (school run, lunches, who brings what) with one owner each, so nobody is guessing."
+      ],
+      "scripts": {
+        "default": [
+          "I love having them. Could you tell me the three rules that matter most to you, so I keep to those?",
+          "I can do Tuesdays and Thursdays until five. Fridays are too much for me right now.",
+          "When you say I spoil them, what’s the one thing you’d like me to do differently? I’m happy to change it."
+        ]
+      },
+      "path": [
+        [
+          "WP-03: One owner per job",
+          "/workpapers/wp-03-raci-treaty.html"
+        ],
+        [
+          "Frequency Buddies: a gentle cartoon to watch together",
+          "/frequency-buddies.html"
+        ],
+        [
+          "Where families start",
+          "/relationships-in-depth.html#family"
+        ]
+      ],
+      "deeper": [
+        "How do I say no kindly?",
+        "What can I watch with my grandkids?"
+      ],
+      "ex": "Ruth looked after her grandsons three days a week and felt hurt when her daughter said she spoiled them. They sat down with a cup of tea and her daughter named one thing: candy after school. Ruth swapped it for fruit and a story, and kept her own ways for everything else. The tension went out of the pickups.",
+      "tonight": "write down the three rules you think matter most to the parents, and check them next time you talk.",
+      "ownRead": true
     }
   }
 }
