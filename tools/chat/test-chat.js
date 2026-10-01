@@ -484,10 +484,11 @@ t('parents', 'what do you do with my email', { id: 'emailwhy', text: /Buttondown
 t('parents', 'what is frequency buddies', { kind: 'card', id: 'buddies', link: '/frequency-buddies.html' });
 
 // ---------------------------------------------------------------- the nine fields and how they connect
-t('connections', 'how do the nine fields connect', { id: 'connections', text: /22 ways.*8 obvious, 8 hidden and 6 abstract/s });
-t('connections', 'how are all the different areas Christian studied connected?', { id: 'connections', text: /seven kinds of connection/ });
-t('connections', 'Show me the hidden connections', { id: 'connections-hidden', text: /Finance \+ Neurobiology/ });
-t('connections', 'Show me the abstract connections', { id: 'connections-abstract', text: /audit thread/ });
+t('connections', 'how do the nine fields connect', { id: 'connections', text: /36 possible pairs.*12 obvious, 14 hidden and 10 abstract/s });
+t('connections', 'how are all the different areas Christian studied connected?', { id: 'connections', text: /seven kinds of root/ });
+t('connections', 'Show me the hidden connections', { id: 'connections-hidden', text: /Neurobiology \+ Finance/ });
+t('connections', 'Show me the abstract connections', { id: 'connections-abstract', text: /Aristotle/ });
+t('connections', 'Show me how one field leads into the next', { id: 'connections-chain', text: /Aromatherapy → Neurobiology/ });
 t('connections', 'what is a polymath', { kind: 'card', id: 'polymath', link: '/polymath.html' });
 
 // ---------------------------------------------------------------- run

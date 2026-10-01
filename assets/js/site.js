@@ -77,7 +77,7 @@
       { href: '/growing-up.html', deep: true, code: 'New', title: 'Where your lens came from', note: 'How each stage of growing up shapes what you expect of yourself and others, and how to choose which rules to keep' },
       { href: '/wired-differently.html', deep: true, code: 'New', title: 'Wired Differently', note: 'How differently wired people hear the same words, and how to talk across the difference' },
       { href: '/wiring-card.html', code: 'Tool', title: 'Wiring Card', note: 'A one-page card on how you receive words, what silence means, and what to avoid' },
-      { href: '/pawprint.html', code: 'New', title: 'Your Pawprint', note: 'Build a warm personal statement in nine easy steps, with connections you may never have noticed' },
+      { href: '/heartprint.html', code: 'New', title: 'Your Heartprint', note: 'Build a warm personal statement in nine easy steps, with connections you may never have noticed' },
       { href: '/workpapers/wp-02-battery-stress-meter.html', deep: true, code: 'WP-02', title: 'How much are you carrying?', note: 'What you’re already carrying, separate from what just happened', paid: true },
       { href: '/tools/frequency-calibration.html', code: 'Tool', title: 'Find your natural rhythms', note: 'Your natural rhythms for money, decisions, check-ins and recovery', paid: true },
       { href: '/wp-11.html', deep: true, code: 'WP-11', title: 'The Calm-Down Kit', note: 'Decide in advance what settles your body', paid: true },
@@ -140,6 +140,7 @@
       { href: '/lemonade-stand.html', code: 'Tool', title: 'The Lemonade Stand', note: 'List who did what to keep the household running this week, and see the split as a plain fact' },
       { href: '/wiring-card.html', code: 'New', title: 'Wiring Card', note: 'Make a one-page card for how you receive words, what silence means, and what to avoid' },
       { href: '/signal-translator.html', code: 'New', title: 'The Signal Translator', note: 'Test a sentence before a check-in. Pick the wiring, the room, and how it might land' },
+      { href: '/perspective-shifter.html', code: 'New', title: 'The Perspective Shifter', note: 'See a moment from their side: their state, wiring, surroundings, and what each of you could see' },
       { href: '/carrier-wave-decoder.html', code: 'Tool', title: 'The Carrier Wave Decoder', note: 'A guided session for the moment a conversation starts going sideways' },
       { href: '/workpapers/calculators/calc01-solvency.html', code: 'CALC-01', title: 'Is the setup working for everyone?', note: 'Also called the solvency read: add your worksheet numbers and see whether the way you share the load is working' },
       { href: '/calc01-solvency.html', code: 'CALC-01', title: 'Is the setup working for everyone? The long form', note: 'Enter hours and jobs for 2–8 people and see the math step by step', menu: false },
@@ -159,7 +160,7 @@
       { href: '/podcast-index.html', code: 'Podcast', title: 'The Podcast', note: 'Friendly conversations with Kane and Christian about the ideas behind it all' }
     ]},
     { id: 'about', title: 'About & status', blurb: 'Who made this and why, what’s finished so far, and the site’s policies.', items: [
-      { href: '/about.html', deep: true, code: '', title: 'About the creator', note: 'The person behind it, their story, and why this exists' },
+      { href: '/about.html', code: '', title: 'About the creator', note: 'The person behind it, their story, and why this exists' },
       { href: '/polymath.html', code: '', title: 'The polymath way', note: 'How every field grows from the same few roots, and how nine of them became one program' },
       { href: '/program-overview.html', deep: true, code: '', title: 'Program Overview', note: 'How the chapters, workpapers and calculators fit together' },
       { href: '/suite-index.html', deep: true, code: '', title: 'Suite Index', note: 'The official list of what’s built today. If it isn’t here, it isn’t live yet' },

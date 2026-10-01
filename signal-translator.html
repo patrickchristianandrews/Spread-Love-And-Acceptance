@@ -383,6 +383,7 @@ q.w{quotes:"\201C" "\201D";font-family:var(--mono);font-size:.8rem;background:co
     <h2 id="s3"><label for="phrase" id="phraseLab">Type your sentence</label></h2>
     <p class="hint" id="phraseHint">Type it the way it would actually come out. A text, a Slack message, or something you plan to say out loud.</p>
     <textarea id="phrase" placeholder="The exact words, as they would be said or sent." maxlength="1500" aria-describedby="phraseHint msg"></textarea>
+    <p class="st-shift"><a href="/perspective-shifter.html">Not sure how they saw it? Try the Perspective Shifter first →</a></p>
     <div class="field presetrow">
       <label for="presetSel">Or try an example</label>
       <select id="presetSel"></select>
@@ -2124,6 +2125,10 @@ $("#clearAgenda").addEventListener("click",()=>{ agenda=[]; lastTopic=null; pain
 paintAgenda();
 sync();
 })();
+</script>
+<script>
+  // a sentence passed in the address (?text=…), from the Perspective Shifter or a link, goes straight into the box
+  (function () { try { var q = new URLSearchParams(location.search).get('text'); var box = document.getElementById('phrase'); if (q && box && !box.value) { box.value = q.slice(0, 1500); box.dispatchEvent(new Event('input', { bubbles: true })); } } catch (e) {} })();
 </script>
 </body>
 </html>

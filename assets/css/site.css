@@ -2320,3 +2320,6 @@ html.tol-no-helpers .tol-pud-fab{ display:none !important; }
   text-decoration:none; color:#fff !important; background:#2F5F8A; border:1px solid #2F5F8A; }
 .tol-dive-chat:hover{ background:#24496B; }
 .tol-dive-chat:focus-visible{ outline:2px solid var(--focus); outline-offset:3px; }
+/* "easier on a laptop": only where it really matters, and only shown on the smaller screens it's written for */
+.tol-device-note{ display:none; gap:.5rem; align-items:flex-start; font-size:.9rem; line-height:1.45; color:#3C4A5A; background:#F1F5F9; border:1px solid #D5DEE8; border-radius:12px; padding:.55rem .8rem; margin:.6rem 0 1rem; }
+@media (max-width:900px){ .tol-device-note{ display:flex; } }

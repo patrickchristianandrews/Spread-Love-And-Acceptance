@@ -1,4 +1,4 @@
-/* pawprint.js — Your Pawprint: a guided personal statement. Nine short steps of tap-to-choose (and a line in your
+/* heartprint.js — Your Heartprint: a guided personal statement. Nine short steps of tap-to-choose (and a line in your
    own words, if you like) become a warm, first-person statement you can share with the people in your life. As you
    choose, "Things you might not have noticed" shows connections between your choices that are easy to miss, each
    with the field it comes from, the pillar it belongs to and a tool to try.
@@ -6,9 +6,10 @@
    that on, and "Start over" erases it. */
 (function () {
   'use strict';
-  var root = document.querySelector('[data-pawprint]');
+  var root = document.querySelector('[data-heartprint]');
   if (!root) return;
-  var KEY = 'tol-pawprint-v1';
+  var KEY = 'tol-heartprint-v1';
+  try { var old = localStorage.getItem('tol-pawprint-v1'); if (old && !localStorage.getItem(KEY)) localStorage.setItem(KEY, old); localStorage.removeItem('tol-pawprint-v1'); } catch (e) {}
 
   // ---------- the steps: each choice has a short label and the words it adds to the statement ----------
   var STEPS = [
@@ -57,7 +58,7 @@
   var PIL = { 1: ['Pillar I, See the whole load', 'see-the-load'], 2: ['Pillar II, Fix the setup, not the person', 'fix-the-setup'], 3: ['Pillar III, Read your state first', 'read-your-state'],
     4: ['Pillar IV, Tune how you send and receive', 'tune-signals'], 5: ['Pillar V, Notice the quiet incentives', 'quiet-incentives'] };
   var INSIGHTS = [
-    { when: [['wired', 'alone'], ['stretched', 'quiet']], f: 'ps', p: 4, t: 'Your quiet can be read as being upset with someone.', d: 'If you recharge alone and go quiet when stretched, the people around you may guess it’s about them. One line in your Pawprint, “When I go quiet, I’m recharging, not upset with you,” saves a lot of guessing.', l: ['Wired Differently', '/wired-differently.html'] },
+    { when: [['wired', 'alone'], ['stretched', 'quiet']], f: 'ps', p: 4, t: 'Your quiet can be read as being upset with someone.', d: 'If you recharge alone and go quiet when stretched, the people around you may guess it’s about them. One line in your Heartprint, “When I go quiet, I’m recharging, not upset with you,” saves a lot of guessing.', l: ['Wired Differently', '/wired-differently.html'] },
     { when: [['wired', 'direct']], f: 'ps', p: 4, t: 'Direct words can land harder than you mean them.', d: 'People who say things straight are often heard as sharper than they intend, especially by people who hint. Adding a softener or a reason (“because I want to get this right”) keeps your meaning and lowers the static.', l: ['The Signal Translator', '/signal-translator.html'] },
     { when: [['wired', 'hint']], f: 'ps', p: 4, t: 'Hints can go unheard, then turn into disappointment.', d: 'If you tend to hint, a literal listener may miss it completely, and you may feel let down by someone who never knew. Try saying one plain ask, out loud, once.', l: ['Say it so it lands (WP-09)', '/workpapers/wp-09-tone-filter.html'] },
     { when: [['wired', 'thinkfirst'], ['drains', 'openconflict']], f: 'bs', p: 3, t: 'You need time to answer, and you hate leaving things open.', d: 'Those two pull against each other. The answer is a named time: “Can I think about it and come back to you at eight?” It gives you room without leaving the disagreement hanging.', l: ['Chapter III: later, not never', '/book/chapter-3.html'] },
@@ -78,7 +79,7 @@
     { when: [['now', 'caring']], f: 'ht', p: 3, t: 'People who care for others often stop counting their own needs.', d: 'Pick one thing from “What fills my battery” and give it a real time this week, written down like any other appointment.', l: ['Caring for someone', '/relationships-in-depth.html'] },
     { when: [['now', 'kids'], ['unseen', '*']], f: 'bu', p: 2, t: 'Family logistics run like a small business.', d: 'School forms, lunches and birthday gifts are recurring jobs. Each one runs better with one named owner than with “whoever remembers.”', l: ['One owner per job (WP-03)', '/workpapers/wp-03-raci-treaty.html'] },
     { when: [['helps', 'spacetime']], f: 'bs', p: 3, t: 'Space works best with a time to come back.', d: '“I need a break” can sound like leaving. “I need twenty minutes, then let’s talk at eight” sounds like caring about the conversation. The time is what makes space feel safe for both of you.', l: ['The Calm-Down Kit (WP-11)', '/wp-11.html'] },
-    { when: [['helps', 'written']], f: 'ps', p: 4, t: 'Writing can say what a face-to-face talk can’t.', d: 'Some people find hard things easier to say and hear in writing: there’s time to think, and no tone of voice to misread. Saying so in your Pawprint lets people offer it.', l: ['The Signal Translator', '/signal-translator.html'] },
+    { when: [['helps', 'written']], f: 'ps', p: 4, t: 'Writing can say what a face-to-face talk can’t.', d: 'Some people find hard things easier to say and hear in writing: there’s time to think, and no tone of voice to misread. Saying so in your Heartprint lets people offer it.', l: ['The Signal Translator', '/signal-translator.html'] },
     { when: [['wired', 'fast'], ['wired', 'slow']], f: 'ph', p: 4, t: 'You move fast and slow.', d: 'Many people do: fast at some things, slow at others. Naming which is which helps others match your pace, instead of guessing.', l: ['Chapter I: what sets the frequency', '/book/chapter-1-in-depth.html'] },
     { when: [['fills', 'quiet'], ['now', 'kids']], f: 'ht', p: 3, t: 'Quiet may be the rarest thing in your week.', d: 'With kids at home, quiet doesn’t happen by accident. Agreeing on even fifteen protected minutes, and swapping turns, is a setup fix, not a luxury.', l: ['Fix the setup, not the person', '/five-pillars.html#fix-the-setup'] },
     { when: [['values', 'reliable'], ['stretched', 'hide']], f: 'ph', p: 2, t: 'Being reliable and hiding stress can wear each other out.', d: 'If being someone people can count on matters to you, saying “not this week” can feel like failing. But an honest “not right now, I’ll do it Thursday” is still being reliable.', l: ['Kind ways to say no (WP-01)', '/workpapers/wp-01.html'] },
@@ -117,7 +118,7 @@
   }
   function plain() {
     var n = S.name.trim(), lines = sentences();
-    var head = (n ? n + '’s Pawprint' : 'My Pawprint') + '\n' + '(a little note about me, so you don’t have to guess)\n';
+    var head = (n ? n + '’s Heartprint' : 'My Heartprint') + '\n' + '(a little note about me, so you don’t have to guess)\n';
     return head + '\n' + lines.map(function (x) { return x.line; }).join('\n\n') + (lines.length ? '\n\nThank you for reading this. It’s how I work best, not a list of rules.' : '');
   }
 
@@ -133,18 +134,18 @@
         '<div class="pp-chips" role="group" aria-label="' + esc(st.t) + '">' + chips + '</div>' +
         '<label class="pp-own">In your own words (optional)<textarea rows="2" maxlength="400" data-own placeholder="Anything to add, in your own words…">' + esc(S.words[st.id] || '') + '</textarea></label>' +
         '<div class="pp-nav">' + (S.at ? '<button type="button" class="pp-b" data-prev>← Back</button>' : '<span></span>') +
-          (S.at < total - 1 ? '<button type="button" class="pp-b is-main" data-next>Next: ' + esc(STEPS[S.at + 1].t) + ' →</button>' : '<a class="pp-b is-main" href="#pp-statement">See my Pawprint ↓</a>') + '</div>' +
+          (S.at < total - 1 ? '<button type="button" class="pp-b is-main" data-next>Next: ' + esc(STEPS[S.at + 1].t) + ' →</button>' : '<a class="pp-b is-main" href="#pp-statement">See my Heartprint ↓</a>') + '</div>' +
       '</section>' +
       '<aside class="pp-ins" aria-labelledby="pp-ins-h" aria-live="polite"><h2 id="pp-ins-h">🔎 Things you might not have noticed' + (ins.length ? ' <span class="pp-n">' + ins.length + '</span>' : '') + '</h2>' +
         (ins.length ? '<ul>' + ins.map(function (x) { var P = PIL[x.p]; return '<li><strong>' + esc(x.t) + '</strong><p>' + esc(x.d) + '</p><p class="pp-tag">' + esc(F[x.f]) + ' · <a href="/five-pillars.html#' + P[1] + '">' + esc(P[0]) + '</a> · <a href="' + x.l[1] + '">' + esc(x.l[0]) + ' →</a></p></li>'; }).join('') + '</ul>'
           : '<p class="pp-empty">As you choose, connections between your choices show up here: things that are easy to miss about yourself, and why they matter to the people around you.</p>') +
       '</aside></div>' +
-      '<section class="pp-out" id="pp-statement" aria-labelledby="pp-out-h"><h2 id="pp-out-h">🐾 Your Pawprint</h2>' +
-        '<label class="pp-name">Your name (optional)<input type="text" maxlength="40" data-name value="' + esc(S.name) + '" placeholder="So it reads “Jo’s Pawprint”"></label>' +
-        '<div class="pp-card"><p class="pp-card-h">' + esc(S.name.trim() ? S.name.trim() + '’s Pawprint' : 'My Pawprint') + '</p><p class="pp-card-s">A little note about me, so you don’t have to guess</p>' +
+      '<section class="pp-out" id="pp-statement" aria-labelledby="pp-out-h"><h2 id="pp-out-h">💗 Your Heartprint</h2>' +
+        '<label class="pp-name">Your name (optional)<input type="text" maxlength="40" data-name value="' + esc(S.name) + '" placeholder="So it reads “Jo’s Heartprint”"></label>' +
+        '<div class="pp-card"><p class="pp-card-h">' + esc(S.name.trim() ? S.name.trim() + '’s Heartprint' : 'My Heartprint') + '</p><p class="pp-card-s">A little note about me, so you don’t have to guess</p>' +
           (lines.length ? lines.map(function (x) { return '<p>' + esc(x.line) + '</p>'; }).join('') + '<p class="pp-card-end">Thank you for reading this. It’s how I work best, not a list of rules.</p>'
             : '<p class="pp-empty">Your statement builds itself here as you choose. Start with step 1.</p>') + '</div>' +
-        '<div class="pp-acts"><button type="button" class="pp-b is-main" data-copy' + (lines.length ? '' : ' disabled') + '>Copy my Pawprint</button><button type="button" class="pp-b" data-dl' + (lines.length ? '' : ' disabled') + '>Save as a text file</button><button type="button" class="pp-b" data-print' + (lines.length ? '' : ' disabled') + '>Print</button><button type="button" class="pp-b" data-reset>Start over</button></div>' +
+        '<div class="pp-acts"><button type="button" class="pp-b is-main" data-copy' + (lines.length ? '' : ' disabled') + '>Copy my Heartprint</button><button type="button" class="pp-b" data-dl' + (lines.length ? '' : ' disabled') + '>Save as a text file</button><button type="button" class="pp-b" data-print' + (lines.length ? '' : ' disabled') + '>Print</button><button type="button" class="pp-b" data-reset>Start over</button></div>' +
         '<label class="pp-keep"><input type="checkbox" data-keep' + (S.keep ? ' checked' : '') + '> Keep a draft on this device, so I can come back to it</label>' +
         '<p class="pp-status" aria-live="polite"></p>' +
       '</section>';
@@ -176,7 +177,7 @@
     }
     if (b.hasAttribute('data-dl')) {
       var blob = new Blob([plain()], { type: 'text/plain' }), u = URL.createObjectURL(blob), a = document.createElement('a');
-      a.href = u; a.download = (S.name.trim() ? S.name.trim().replace(/[^\w -]/g, '') + ' - ' : '') + 'My Pawprint.txt'; document.body.appendChild(a); a.click(); a.remove();
+      a.href = u; a.download = (S.name.trim() ? S.name.trim().replace(/[^\w -]/g, '') + ' - ' : '') + 'My Heartprint.txt'; document.body.appendChild(a); a.click(); a.remove();
       setTimeout(function () { URL.revokeObjectURL(u); }, 2000); status('Saved to your device.'); return;
     }
     if (b.hasAttribute('data-print')) { document.documentElement.classList.add('pp-printing'); window.print(); setTimeout(function () { document.documentElement.classList.remove('pp-printing'); }, 500); return; }
@@ -195,5 +196,5 @@
   });
   function focusStep() { var h = root.querySelector('#pp-st-h'); if (h) { h.setAttribute('tabindex', '-1'); h.focus({ preventScroll: true }); var r = root.querySelector('.pp-step'); if (r && r.getBoundingClientRect().top < 60) r.scrollIntoView({ block: 'start' }); } }
   render();
-  window.TOLPawprint = { insights: function () { return insights().map(function (x) { return x.t; }); }, text: plain, _set: function (step, ids) { S.pick[step] = ids.slice(); render(); } };
+  window.TOLHeartprint = { insights: function () { return insights().map(function (x) { return x.t; }); }, text: plain, _set: function (step, ids) { S.pick[step] = ids.slice(); render(); } };
 })();

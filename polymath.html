@@ -20,6 +20,7 @@
 <link rel="stylesheet" href="/assets/css/site.css">
 <link rel="stylesheet" href="/assets/css/reading.css">
 <script src="/assets/js/site.js" defer></script>
+<script src="/assets/js/nine-connections.js" defer></script>
 <script src="/assets/js/polymath.js" defer></script>
 <style>
   .pm-roots { display: grid; grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr)); gap: .8rem; margin: 1rem 0 1.4rem; padding: 0; list-style: none; }
@@ -50,6 +51,33 @@
   .pm-out p:last-child { margin: 0; }
   .pm-out .pm-tool a { font-weight: 600; }
   @media (max-width: 560px) { .pm-pick .pm-plus { display: none; } }
+  .nine-grid { margin: .8rem 0 1.4rem; }
+  .ng-wrap { overflow-x: auto; }
+  .ng-table { border-collapse: separate; border-spacing: 3px; margin: 0 auto; }
+  .ng-table th { font: 600 .74rem/1.15 Lora, Georgia, serif; padding: 2px 4px; color: var(--ink-soft); }
+  .ng-table thead th { height: 7.2rem; vertical-align: bottom; white-space: nowrap; }
+  .ng-table thead th span { display: inline-block; transform: rotate(-55deg); transform-origin: left bottom; width: 1.6rem; }
+  .ng-table tbody th { text-align: right; white-space: nowrap; }
+  .ng-cell { width: 2.1rem; height: 2.1rem; border-radius: 8px; border: 1px solid var(--line); cursor: pointer; font: 600 .72rem/1 system-ui, sans-serif; color: #fff; }
+  .ng-cell.t-o { background: #3E6B4C; } .ng-cell.t-h { background: #2F5F8A; } .ng-cell.t-a { background: #7C5BA6; }
+  .ng-cell.is-on { outline: 3px solid #F2B84B; outline-offset: 1px; }
+  .ng-self { width: 2.1rem; height: 2.1rem; border-radius: 8px; background: var(--paper-deep); }
+  .ng-key { display: flex; flex-wrap: wrap; gap: .4rem 1rem; justify-content: center; font-size: .85rem; margin: .5rem 0; }
+  .ng-key i { display: inline-block; width: .9rem; height: .9rem; border-radius: 3px; vertical-align: -2px; margin-right: .3rem; }
+  .ng-out { background: #fff; border: 1px solid #CFE0EC; border-radius: 14px; padding: .8rem 1rem; margin: .6rem 0; }
+  .ng-out h3 { margin: 0 0 .3rem; font-size: 1.02rem; }
+  .ng-out p { margin: .2rem 0; }
+  .ng-list details { border: 1px solid var(--line); border-radius: 12px; background: #FFFDF7; margin: .4rem 0; padding: .3rem .8rem; }
+  .ng-list summary { cursor: pointer; font-weight: 600; min-height: 40px; display: flex; align-items: center; }
+  .ng-list li { margin: .45rem 0; }
+  .ng-tag { font-size: .82rem; color: var(--ink-soft); }
+  .ng-grid-only { display: block; } .ng-list-only { display: none; }
+  @media (max-width: 760px) { .ng-grid-only { display: none; } .ng-list-only { display: block; } }
+  .nine-chain { padding-left: 0; list-style: none; counter-reset: c; }
+  .nine-chain li { position: relative; margin: 0 0 .7rem; padding: .7rem .9rem .7rem 3rem; background: #FFFDF7; border: 1px solid var(--line); border-radius: 14px; counter-increment: c; }
+  .nine-chain li::before { content: counter(c); position: absolute; left: .8rem; top: .75rem; width: 1.6rem; height: 1.6rem; border-radius: 50%; background: var(--ink); color: var(--paper); display: grid; place-items: center; font: 600 .8rem/1 Lora, serif; }
+  .nine-chain .nc-h { font-weight: 600; display: block; margin-bottom: .15rem; }
+
 </style>
 <!-- seo:start -->
 <link rel="canonical" href="https://spreadloveandacceptance.com/polymath.html">
@@ -110,7 +138,7 @@
 <p>Christian, who made this site, is a polymath. Christian spent fifteen years as a government auditor and audit manager, and studied psychology, philosophy, behavioral science, neurobiology, economics, business, finance, alternative holistic therapies and aromatherapy, almost obsessively, to understand how the mind, the body and the places we live work together.</p>
 <blockquote><p>“I didn’t study nine fields because I was collecting credentials. I studied them because each one held a piece of a problem I was living inside, and none of them held the whole thing. The framework is what happened when the pieces were finally laid on the same table.”</p></blockquote>
 <p>Christian’s thinking “runs on many tracks at once,” with fast pattern-spotting and firm logic, so the same root showing up in a ledger, a nervous system and a radio signal is something Christian tends to see all at once. Audit is the thread that holds it together: an audit doesn’t ask whether people are good. It asks whether the system produces reliable results, and what the evidence actually supports.</p>
-<p><a href="/about.html#ask-tide">Ask Tide about Christian →</a> &nbsp; <a href="/about-in-depth.html#curriculum">The nine fields, one by one →</a></p>
+<p><a href="/about.html#ask-tide">Ask Tide about Christian →</a> &nbsp; <a href="/about.html#curriculum">The nine fields, one by one →</a></p>
 
 <h2 id="pillars">Where the fields meet: the Five Pillars</h2>
 <p>Each pillar is a meeting point, a place where several fields describe the same thing. That’s what makes them useful: one idea you can learn once and use everywhere.</p>
@@ -142,6 +170,15 @@
 <div class="pm-lab" data-pm-lab>
   <noscript><p>This little tool needs JavaScript. The table above shows the same connections.</p></noscript>
 </div>
+
+<h2 id="all-pairs">Every field connects to every other: all 36 pairs</h2>
+<p>Nine fields make 36 possible pairs, and every one of them connects. Some connections are obvious (two fields using the same idea in plain sight), some are hidden (fields that look far apart until you see the root they share), and some are abstract (the deepest patterns, where the fields stop looking like separate subjects).</p>
+<p class="tol-device-note"><span aria-hidden="true">💻</span> <span>The full grid needs room for nine columns side by side, so it shows on a laptop or desktop. On a phone or tablet, the same 36 connections are listed field by field instead.</span></p>
+<div class="nine-grid" data-nine-grid><noscript><p>This needs JavaScript. Professor Puddles can walk you through the connections too.</p></noscript></div>
+
+<h2 id="chain">One field leads into the next</h2>
+<p>The fields also line up in a chain, where each one follows logically from the last, and the ninth leads back to the first. Read it as one argument, start to finish:</p>
+<ol class="nine-chain" data-nine-chain></ol>
 
 <h2 id="you">How to think like a polymath</h2>
 <ol class="ideas">

@@ -22,12 +22,12 @@ window.TOL_CREATOR_KB = {
 
     { id: 'who', k: ['who is christian', 'who made', 'who created', 'who built', 'who wrote', 'who is the creator', 'who is the founder', 'the creator', 'the founder', 'the author', 'about christian', 'tell me about christian', 'who is behind', 'who runs', 'who are they', 'creator', 'founder', 'christian'],
       a: ['Christian is the founder of Spread Love & Acceptance and the creator of The Objective Ledger. Christian spent fifteen years as a government auditor and audit manager, and a lifetime trying to understand how people work. The program grew out of both.', 'Christian is a polymath: someone who has studied many fields deeply (psychology, philosophy, behavioral science, neurobiology, economics, business, finance, holistic therapies and aromatherapy) and looks for the places where they meet. Christian is also autistic, with OCD, ADHD and anxiety, and has built the site around what that wiring taught them.'],
-      l: [['About Christian', '/about.html'], ['The full story', '/about-in-depth.html']],
+      l: [['About Christian', '/about.html'], ['The full story', '/about.html']],
       f: ['What did Christian do for work?', 'Is Christian a polymath?', 'Why did Christian make this site?'] },
 
     { id: 'career', k: ['job', 'work', 'for work', 'do for work', 'what did christian do', 'what does christian do', 'what did they do', 'what do they do', 'career', 'auditor', 'audit', 'audits', 'auditing', 'government', 'tax', 'internal controls', 'compliance', 'profession', 'what do they do', 'for a living', 'fifteen years', '15 years', 'audit manager', 'background', 'experience'],
       a: ['For fifteen years, Christian built a career as a government auditor and audit manager, specializing in tax enforcement, internal controls and compliance. In Christian’s words, the work “came down to one job: finding the objective truth inside complex systems that are hard to see into.”', 'That audit lens is the thread through the whole program. An audit doesn’t ask whether people are good. It asks whether the system produces reliable results, where the controls are missing, and what the evidence actually supports. Turning that lens on a household is the premise of The Objective Ledger.'],
-      l: [['Where it started', '/about-in-depth.html#the-mandate']],
+      l: [['Where it started', '/about.html#the-mandate']],
       f: ['How did audit shape the tools?', 'Which fields did Christian study?'] },
 
     { id: 'polymath', k: ['polymath', 'polymaths', 'renaissance', 'many fields', 'many subjects', 'lots of subjects', 'so many things', 'generalist', 'jack of all trades', 'many interests', 'study everything', 'why so many'],
@@ -47,7 +47,7 @@ window.TOL_CREATOR_KB = {
 
     { id: 'fields', k: ['fields', 'what did christian study', 'which fields', 'subjects', 'studied', 'study', 'education', 'learn', 'learned', 'nine inputs', 'nine fields', '9 fields', 'curriculum', 'degree', 'school'],
       a: ['Christian studied nine fields “almost obsessively”, each for a reason: psychology, philosophy, behavioral science, neurobiology, economics, business, finance, alternative holistic therapies and aromatherapy. Fifteen years of audit is the thread that holds them together.', 'Each field became part of the program. Psychology became the Tone Filter (WP-09), behavioral science the 90-second check-in (WP-13), neurobiology the Battery & Stress Meter (WP-02), economics the Deficit Audit (WP-04), business and audit “One owner per job” (WP-03), and finance the ledger itself.'],
-      l: [['The nine inputs', '/about-in-depth.html#curriculum']],
+      l: [['The nine inputs', '/about.html#curriculum']],
       f: ['How did psychology shape the program?', 'How did neurobiology shape the program?', 'How did audit shape the tools?'] },
 
     { id: 'psychology', k: ['psychology', 'psych', 'tone filter', 'wp-09', 'wp 09', 'intent and impact', 'neutral refusals'],
@@ -56,7 +56,7 @@ window.TOL_CREATOR_KB = {
 
     { id: 'philosophy', k: ['philosophy', 'epistemology', 'ethics', 'how we know', 'verdict engine', 'deontological', 'chapter iv'],
       a: ['Philosophy is the discipline Christian returns to most, especially epistemology, the study of how we know what we claim to know. In Christian’s words: “In a conflict, almost nothing being asserted is actually knowledge. It’s inference, memory, and pattern-matching, all wearing the costume of fact.” Ethics did the other half: it set what a ledger is not allowed to do.', 'That’s why the program scores an arrangement, never a person, and why each person’s needs carry equal weight as a starting principle (Chapter IV’s Deontological Parity).'],
-      l: [['The nine inputs', '/about-in-depth.html#curriculum']], f: ['How did behavioral science shape the program?'] },
+      l: [['The nine inputs', '/about.html#curriculum']], f: ['How did behavioral science shape the program?'] },
 
     { id: 'behavioral', k: ['behavioral science', 'behavioural science', 'behavior', 'willpower', 'habits', 'discipline', 'check-in', 'check in', 'wp-13', 'phase-locked loop', '90 second', 'ninety second'],
       a: ['Christian’s hardest lesson here: willpower collapses exactly when you need it most. Every resolution evaporated the moment Christian was depleted. What survived wasn’t discipline. It was structure that didn’t need discipline to run.', 'It became the 90-second daily check-in (WP-13): deliberately too small to skip, because small and frequent beats big and rare. In Christian’s words: “A system that only works when both people are at their best isn’t a system.”'],
@@ -76,7 +76,7 @@ window.TOL_CREATOR_KB = {
 
     { id: 'finance', k: ['finance', 'bookkeeping', 'double entry', 'double-entry', 'ledger', 'solvency', 'accounting', 'why a ledger', 'objective ledger name', 'why is it called'],
       a: ['Finance is Christian’s professional native language. Double-entry bookkeeping carries a quiet philosophical claim: every entry has two sides, and a book that only balances from one direction isn’t balanced at all.', 'It became the ledger framing of the whole program, and the Solvency Read in Chapter II. Both carry the caveat that took Christian longest to learn: the number describes the arrangement, never the people inside it.'],
-      l: [['The full story', '/about-in-depth.html#curriculum']], f: ['How did holistic practice shape the program?'] },
+      l: [['The full story', '/about.html#curriculum']], f: ['How did holistic practice shape the program?'] },
 
     { id: 'holistic', k: ['holistic', 'alternative', 'body first', 'soundscape', 'soundscapes', 'self-care', 'self care', 'routines', 'calm down first', 'grounded'],
       a: ['Christian turned to holistic practice when thinking-based approaches stopped being enough: they worked beautifully at the level of thought and did nothing when Christian’s system was already past its limit. Holistic practice starts with the body instead of the argument, and it’s how Christian keeps their balance now.', 'It became the Soundscape Catalog and a rule that runs through the whole program: calm down first, talk second. The audio is always optional, because, as Christian puts it, “a practice that becomes another obligation has already stopped working.”'],
@@ -84,11 +84,11 @@ window.TOL_CREATOR_KB = {
 
     { id: 'aroma', k: ['aromatherapy', 'smell', 'scent', 'scents', 'senses', 'sensory', 'sensory gating', 'setting', 'light and noise'],
       a: ['For Christian’s sensory profile, scent is one of the quickest ways they’ve found to shift their state without changing their circumstances: a practical tool in the personal routine that keeps them steady, not a pleasant extra.', 'It became the Sensory Gating half of Chapter IV: the setting of a conversation isn’t neutral background. Light, noise and scent all shift what each person can take in, so choosing where and when to talk is part of the method.'],
-      l: [['The nine inputs', '/about-in-depth.html#curriculum']], f: ['How does Christian think differently?'] },
+      l: [['The nine inputs', '/about.html#curriculum']], f: ['How does Christian think differently?'] },
 
     { id: 'wiring', k: ['autistic', 'autism', 'adhd', 'ocd', 'anxiety', 'neurodivergent', 'neurodiverse', 'neurodiversity', 'wiring', 'wired', 'diagnosis', 'spectrum', 'different language'],
       a: ['In Christian’s words: “My brain speaks a different language. I am autistic, and my wiring also includes OCD, ADHD and anxiety. My thinking runs on many tracks at once, full of creativity, and it works very differently from a neurotypical mind (and for the record, being neurotypical is awesome too!).”', 'That difference gave Christian real strengths: fast pattern-spotting, firm logic and a knack for working well with adaptive technology.'],
-      l: [['A different language', '/about-in-depth.html#different-language'], ['Wired Differently', '/wired-differently.html']],
+      l: [['A different language', '/about.html#different-language'], ['Wired Differently', '/wired-differently.html']],
       f: ['How does Christian think differently?', 'What was masking like for Christian?'] },
 
     { id: 'thinking', k: ['think differently', 'how does christian think', 'way of thinking', 'how they think', 'perspective', 'mind work', 'different from others', 'compared to others', 'compared to other people', 'unlike others', 'strengths', 'pattern', 'logic', 'many tracks', 'how is christian different', 'superpower'],
@@ -98,25 +98,25 @@ window.TOL_CREATOR_KB = {
 
     { id: 'masking', k: ['masking', 'mask', 'hiding', 'hide', 'pretend', 'pretending', 'exhaustion', 'exhausted', 'invisible cost', 'cost', 'fit in'],
       a: ['Since childhood, Christian absorbed the unspoken message that it wasn’t okay to just be themselves. Christian spent years masking (hiding) their neurodivergence to make everyone else comfortable, and gave up their own identity and peace to do it. Running a very fast mind while pretending to be wired like everyone else led to deep exhaustion.'],
-      l: [['The invisible cost', '/about-in-depth.html#invisible-cost']], f: ['How did Christian drop the mask?', 'How did it affect Christian’s relationships?'] },
+      l: [['The invisible cost', '/about.html#invisible-cost']], f: ['How did Christian drop the mask?', 'How did it affect Christian’s relationships?'] },
 
     { id: 'relationships', k: ['relationships', 'relationship', 'friends', 'lonely', 'loneliness', 'misread', 'misunderstood', 'directness', 'direct', 'static', 'unseen', 'people', 'social'],
       a: ['The exhaustion took its heaviest toll on Christian’s personal life. Making and keeping relationships became a source of constant static. Christian’s directness and quick leaps to the pattern were often misread: Christian meant to offer clarity, honest facts and practical support, and people often heard intensity, aggression or a lack of empathy instead.', 'In Christian’s words: “This constant mistranslation made for a very lonely, painful life. I felt completely unseen, even while standing right in front of people I cared about deeply.” That gap between what’s meant and what’s heard is exactly what tools like the Signal Translator and the Tone Filter were built to close.'],
-      l: [['Relational static', '/about-in-depth.html#relational-static'], ['The Signal Translator', '/signal-translator.html']],
+      l: [['Relational static', '/about.html#relational-static'], ['The Signal Translator', '/signal-translator.html']],
       f: ['How did Christian drop the mask?'] },
 
     { id: 'unmask', k: ['drop the mask', 'dropping the mask', 'dropped the mask', 'unmask', 'unmasking', 'changed', 'turning point', 'what changed', 'recover', 'clarity', 'stay steady', 'how does christian cope', 'cope'],
       a: ['Looking back, Christian sees that none of that pain was wasted. Through key life events, constant study and the hard lessons of their career, Christian found real clarity: to keep going, they had to drop the mask, stop living for everyone else and start honoring how they are actually built.', 'Today Christian stays steady with self-care routines built around their own sensory and physical needs, including holistic practices that help them feel calm and grounded.'],
-      l: [['Dropping the mask', '/about-in-depth.html#dropping-the-mask']], f: ['Why did Christian make this site?'] },
+      l: [['Dropping the mask', '/about.html#dropping-the-mask']], f: ['Why did Christian make this site?'] },
 
     { id: 'mission', k: ['why did christian make', 'why make', 'why build', 'why create', 'why this site', 'why does this exist', 'mission', 'purpose', 'goal', 'why', 'spread love and acceptance', 'what is the point'],
       a: ['Christian built Spread Love & Acceptance and The Objective Ledger to use their lived experience to help others map their own realities. In Christian’s words: “I stopped trying to force my brain to run like someone else’s. Instead, I built a life where my true wiring could thrive. My mission is to help you do the same.”'],
-      l: [['The mission', '/about-in-depth.html#the-mission'], ['Start here', '/start-here.html']],
+      l: [['The mission', '/about.html#the-mission'], ['Start here', '/start-here.html']],
       f: ['How did the program come from Christian’s life?', 'What are the Five Pillars?'] },
 
     { id: 'program', k: ['program', 'objective ledger', 'framework', 'how did the program', 'tie into', 'ties into', 'come from', 'came from', 'based on', 'how does the site relate', 'tools come from', 'where did the ideas'],
       a: ['The program is Christian’s own life, laid out as tools. Each of the nine fields Christian studied held a piece of a problem Christian was living inside, and each piece became a tool: the Tone Filter from psychology, the check-in from behavioral science, the Battery & Stress Meter from neurobiology, the Deficit Audit from economics, “One owner per job” from business and audit, the ledger itself from finance, and “calm down first” from holistic practice.', 'Fifteen years of audit holds it all together: look at the system, not the person, and go by what the evidence supports.'],
-      l: [['The nine inputs', '/about-in-depth.html#curriculum'], ['Program overview', '/program-overview.html']],
+      l: [['The nine inputs', '/about.html#curriculum'], ['Program overview', '/program-overview.html']],
       f: ['What are the Five Pillars?', 'How did audit shape the tools?'] },
 
     { id: 'pillars', k: ['five pillars', 'pillars', 'pillar', 'see the whole load', 'fix the setup', 'read your state', 'tune how you send', 'quiet incentives'],
@@ -126,11 +126,11 @@ window.TOL_CREATOR_KB = {
 
     { id: 'auditlens', k: ['how did audit shape', 'audit shape', 'audit lens', 'audit thread', 'holds them together', 'thread', 'objective truth', 'evidence'],
       a: ['In Christian’s words: “An audit doesn’t ask whether people are good. It asks whether the system produces reliable results, where the controls are missing, and what the evidence actually supports. Turning that lens on a household is the entire premise of The Objective Ledger. The nine fields are where the evidence came from. The audit is what holds them together.”'],
-      l: [['The full story', '/about-in-depth.html']], f: ['Is Christian a polymath?'] },
+      l: [['The full story', '/about.html']], f: ['Is Christian a polymath?'] },
 
     { id: 'faith', k: ['god', 'faith', 'religious', 'religion', 'spiritual', 'spirituality', 'angels', 'pray', 'prayer', 'believe', 'blessed'],
       a: ['Christian closes their story with gratitude: “God, thank you for the allowance of the presence of my angels who work so hard; I feel their love every day with every step. I feel blessed, sanctified.”'],
-      l: [['The full story', '/about-in-depth.html']] },
+      l: [['The full story', '/about.html']] },
 
     { id: 'neurotypical', k: ['neurotypical', 'normal people', 'is it only for autistic', 'only for neurodivergent', 'for everyone', 'am i welcome'],
       a: ['The program grew out of Christian’s own wiring, but it’s made for everyone. As Christian says, “being neurotypical is awesome too!” The tools help any two people whose wiring differs, which is nearly everyone, see the same picture and hear each other more clearly.'],
@@ -146,7 +146,7 @@ window.TOL_CREATOR_KB = {
 
     { id: 'therapist', k: ['therapist', 'counselor', 'counsellor', 'psychologist', 'licensed', 'qualified', 'credentials', 'certified', 'doctor', 'professional', 'expert'],
       a: ['Christian’s professional background is fifteen years as a government auditor and audit manager. Christian has studied psychology, neurobiology and the other fields deeply, out of a need to understand how people work rather than to collect credentials.', 'The program is self-help and general guidance. It isn’t counseling or therapy, and it doesn’t replace a qualified professional.'],
-      l: [['The full story', '/about-in-depth.html']] },
+      l: [['The full story', '/about.html']] },
 
     { id: 'contact', k: ['contact', 'email christian', 'reach christian', 'get in touch', 'message christian', 'talk to christian', 'write to'],
       a: ['The Membership page has the way to get in touch with Christian. Joining the free newsletter is also a good way to hear when something new arrives.'],

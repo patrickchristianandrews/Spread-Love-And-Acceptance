@@ -70,3 +70,47 @@
   });
   show();
 })();
+
+/* the 36 pairs (a grid on a wide screen, a list field by field on a phone) and the chain through all nine */
+(function () {
+  'use strict';
+  var N = window.TOL_NINE, grid = document.querySelector('[data-nine-grid]'), chainEl = document.querySelector('[data-nine-chain]');
+  if (!N) return;
+  function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
+  var NAME = {}; N.fields.forEach(function (f) { NAME[f[0]] = f[1]; });
+  function find(a, b) { for (var i = 0; i < N.pairs.length; i++) { var p = N.pairs[i]; if ((p[0] === a && p[1] === b) || (p[0] === b && p[1] === a)) return p; } return null; }
+  function detail(p) {
+    var P = N.pillars[p[6]];
+    return '<h3>' + esc(NAME[p[0]]) + ' + ' + esc(NAME[p[1]]) + '</h3><p class="ng-tag">' + esc(N.tiers[p[3]]) + ' connection · the shared root: ' + esc(N.roots[p[2]]) + '</p><p>' + esc(p[4]) + '</p>' +
+      '<p class="ng-tag"><a href="/five-pillars.html#' + P[1] + '">' + esc(P[0]) + '</a> · <a href="' + p[5][1] + '">' + esc(p[5][0]) + ' →</a></p>';
+  }
+  if (grid) {
+    var count = { o: 0, h: 0, a: 0 }; N.pairs.forEach(function (p) { count[p[3]]++; });
+    var head = '<tr><th></th>' + N.fields.map(function (f) { return '<th scope="col"><span>' + esc(f[1]) + '</span></th>'; }).join('') + '</tr>';
+    var rows = N.fields.map(function (r) {
+      return '<tr><th scope="row">' + esc(r[1]) + '</th>' + N.fields.map(function (c) {
+        if (r[0] === c[0]) return '<td><span class="ng-self" aria-hidden="true"></span></td>';
+        var p = find(r[0], c[0]);
+        return '<td><button type="button" class="ng-cell t-' + p[3] + '" data-a="' + r[0] + '" data-b="' + c[0] + '" aria-label="' + esc(r[1] + ' and ' + c[1] + ': ' + N.tiers[p[3]].toLowerCase() + ' connection, ' + N.roots[p[2]]) + '">' + p[3].toUpperCase() + '</button></td>';
+      }).join('') + '</tr>';
+    }).join('');
+    var list = N.fields.map(function (f) {
+      var mine = N.pairs.filter(function (p) { return p[0] === f[0] || p[1] === f[0]; });
+      return '<details><summary>' + esc(f[1]) + ' · ' + mine.length + ' connections</summary><ul>' + mine.map(function (p) { var other = p[0] === f[0] ? p[1] : p[0], P = N.pillars[p[6]]; return '<li><strong>+ ' + esc(NAME[other]) + '</strong> <span class="ng-tag">(' + esc(N.tiers[p[3]].toLowerCase()) + ', ' + esc(N.roots[p[2]]) + ')</span><br>' + esc(p[4]) + ' <span class="ng-tag"><a href="/five-pillars.html#' + P[1] + '">' + esc(P[0].split(',')[0]) + '</a> · <a href="' + p[5][1] + '">' + esc(p[5][0]) + '</a></span></li>'; }).join('') + '</ul></details>';
+    }).join('');
+    grid.innerHTML = '<p class="ng-key"><span><i style="background:#3E6B4C"></i>O: obvious (' + count.o + ')</span><span><i style="background:#2F5F8A"></i>H: hidden (' + count.h + ')</span><span><i style="background:#7C5BA6"></i>A: abstract (' + count.a + ')</span></p>' +
+      '<div class="ng-grid-only"><div class="ng-wrap"><table class="ng-table"><thead>' + head + '</thead><tbody>' + rows + '</tbody></table></div>' +
+      '<div class="ng-out" aria-live="polite"><p>Pick any square to see how those two fields connect.</p></div></div>' +
+      '<div class="ng-list ng-list-only">' + list + '</div>';
+    var out = grid.querySelector('.ng-out');
+    grid.addEventListener('click', function (e) {
+      var b = e.target.closest('.ng-cell'); if (!b) return;
+      Array.prototype.forEach.call(grid.querySelectorAll('.ng-cell.is-on'), function (x) { x.classList.remove('is-on'); });
+      Array.prototype.forEach.call(grid.querySelectorAll('.ng-cell[data-a="' + b.getAttribute('data-b') + '"][data-b="' + b.getAttribute('data-a') + '"], .ng-cell[data-a="' + b.getAttribute('data-a') + '"][data-b="' + b.getAttribute('data-b') + '"]'), function (x) { x.classList.add('is-on'); });
+      out.innerHTML = detail(find(b.getAttribute('data-a'), b.getAttribute('data-b')));
+    });
+  }
+  if (chainEl) {
+    chainEl.innerHTML = N.chain.map(function (c) { var P = N.pillars[c[3]]; return '<li><span class="nc-h">' + esc(NAME[c[0]]) + ' → ' + esc(NAME[c[1]]) + '</span>' + esc(c[2]) + ' <span class="ng-tag">(<a href="/five-pillars.html#' + P[1] + '">' + esc(P[0]) + '</a>)</span></li>'; }).join('');
+  }
+})();
