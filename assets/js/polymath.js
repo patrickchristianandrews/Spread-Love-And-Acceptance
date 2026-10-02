@@ -113,4 +113,64 @@
   if (chainEl) {
     chainEl.innerHTML = N.chain.map(function (c) { var P = N.pillars[c[3]]; return '<li><span class="nc-h">' + esc(NAME[c[0]]) + ' → ' + esc(NAME[c[1]]) + '</span>' + esc(c[2]) + ' <span class="ng-tag">(<a href="/five-pillars.html#' + P[1] + '">' + esc(P[0]) + '</a>)</span></li>'; }).join('');
   }
+
+  // each field chapter: its closest links, one per tier where it has one, climbing obvious → hidden → abstract
+  Array.prototype.forEach.call(document.querySelectorAll('[data-field-links]'), function (el) {
+    var f = el.getAttribute('data-field-links');
+    var mine = N.pairs.filter(function (p) { return p[0] === f || p[1] === f; });
+    var pick = [];
+    ['o', 'h', 'a'].forEach(function (t) { var p = mine.filter(function (x) { return x[3] === t; })[0]; if (p) pick.push(p); });
+    mine.forEach(function (p) { if (pick.length < 3 && pick.indexOf(p) < 0) pick.push(p); });
+    pick.sort(function (x, y) { return 'oha'.indexOf(x[3]) - 'oha'.indexOf(y[3]); });
+    el.innerHTML = '<h4>Closest links, from obvious to hidden</h4><ul>' + pick.map(function (p) {
+      var other = p[0] === f ? p[1] : p[0];
+      return '<li class="t-' + p[3] + '"><strong>+ <a href="#field-' + other + '">' + esc(NAME[other]) + '</a></strong> <span class="ng-tag">(' + esc(N.tiers[p[3]].toLowerCase()) + ', ' + esc(N.roots[p[2]]) + ')</span><br>' + esc(p[4]) + ' <a href="' + p[5][1] + '">' + esc(p[5][0]) + ' →</a></li>';
+    }).join('') + '</ul><p class="ng-tag">All ' + mine.length + ' of its links are in <a href="#all-pairs">the grid of 36 pairs</a>.</p>';
+  });
+  // a link to a field chapter opens it
+  function openField() {
+    var m = /^#field-(\w+)$/.exec(location.hash), d = m && document.getElementById('field-' + m[1]);
+    if (d && d.tagName === 'DETAILS') d.open = true;
+  }
+  window.addEventListener('hashchange', openField); openField();
+
+  // the climb: two examples from each tier, then the deepest tier, where three or more fields meet at once
+  var climbEl = document.querySelector('[data-nine-climb]');
+  if (climbEl) {
+    var EX = { o: [['ps', 'nb'], ['ec', 'fi']], h: [['ps', 'ph'], ['nb', 'fi']], a: [['ph', 'bs'], ['fi', 'ar']] };
+    var ABOUT = {
+      o: ['#3E6B4C', 'Two fields using the same idea in plain sight. You’d spot these on a first read.'],
+      h: ['#2F5F8A', 'Fields that look far apart, until you see the root they share.'],
+      a: ['#7C5BA6', 'The deepest patterns between two fields, where they stop looking like separate subjects.']
+    };
+    var cnt = { o: 0, h: 0, a: 0 }; N.pairs.forEach(function (p) { cnt[p[3]]++; });
+    var html = ['o', 'h', 'a'].map(function (t, i) {
+      return '<li style="--tc:' + ABOUT[t][0] + '"><span class="pc-lvl">Step ' + (i + 1) + ' of 4</span><h3>' + esc(N.tiers[t]) + '</h3><p>' + esc(ABOUT[t][1]) + ' There are ' + cnt[t] + ' of them.</p><ul>' +
+        EX[t].map(function (k) { var p = find(k[0], k[1]); return '<li><strong>' + esc(NAME[p[0]]) + ' + ' + esc(NAME[p[1]]) + '</strong> <span class="ng-tag">(' + esc(N.roots[p[2]]) + ')</span><br>' + esc(p[4]) + '</li>'; }).join('') +
+        '</ul><p class="ng-tag">See all ' + cnt[t] + ' in <a href="#all-pairs">the grid</a>.</p></li>';
+    }).join('');
+    if (N.deep) {
+      html += '<li style="--tc:#A8792F"><span class="pc-lvl">Step 4 of 4</span><h3>' + esc(N.tiers.d || 'Deepest') + ': where many fields meet at once</h3><p>Here the connections stop being pairs. One everyday moment runs through three, six, or all nine fields.</p><ul>' +
+        N.deep.map(function (d) {
+          return '<li><strong>' + esc(d.title) + '</strong><span class="pc-chips">' + d.fields.map(function (f) { return '<span>' + esc(NAME[f]) + '</span>'; }).join('') + '</span>' + esc(d.text) +
+            (d.steps ? ' <a href="#flow-moment">Follow it step by step ↓</a>' : '') + ' <a href="' + d.tool[1] + '">' + esc(d.tool[0]) + ' →</a></li>';
+        }).join('') + '</ul></li>';
+    }
+    climbEl.innerHTML = html;
+  }
+
+  // flowchart 1: one moment through all nine fields, snaking across three rows on a wide screen
+  var flowEl = document.querySelector('[data-flow-moment]');
+  var talk = N.deep && N.deep.filter(function (d) { return d.steps; })[0];
+  if (flowEl && talk) {
+    var STAGE = ['s-in', 's-in', 's-in', 's-btw', 's-btw', 's-btw', 's-out', 's-out', 's-out'];
+    // grid places: row 1 left to right, row 2 right to left, row 3 left to right; arrows follow the path
+    var COL = [1, 2, 3, 3, 2, 1, 1, 2, 3], ARROW = ['a-r', 'a-r', 'a-d', 'a-l', 'a-l', 'a-d', 'a-r', 'a-r', 'a-d'];
+    var STAGE_NAME = { 's-in': 'inside you', 's-btw': 'between you', 's-out': 'around you' };
+    flowEl.innerHTML = '<li class="fc-pill a-d" style="grid-column:1">Something happens</li>' +
+      talk.steps.map(function (s, i) {
+        return '<li class="' + STAGE[i] + ' ' + ARROW[i] + '" style="--c:' + COL[i] + '" data-row="' + (Math.floor(i / 3) + 2) + '"><b><small>' + (i + 1) + '</small>' + esc(NAME[s[0]]) + '</b><span class="fc-vh">(' + STAGE_NAME[STAGE[i]] + ') </span>' + esc(s[1]) + '</li>';
+      }).join('') +
+      '<li class="fc-pill fc-decided" style="--c:3">' + esc(talk.decide) + '</li>';
+  }
 })();
