@@ -494,3 +494,57 @@ html.ws-locked .tol-breathe-btn, html.ws-locked .tol-wx{ visibility: hidden; }
 .ws-save-row p{ margin: .4em 0; }
 .ws-save-how{ font-size: .92em; }
 .ws-sheet-saved{ font-size: .85em; color: var(--ink-soft, #524B3E); }
+
+/* ---------- the suite answers as you choose: steps that wait, a summary of your road, buttons that say what they make ---------- */
+.ws-step-body{ transition: opacity .45s ease, filter .45s ease; }
+.ws-step.is-locked .ws-step-body{ opacity: .4; filter: grayscale(.4); pointer-events: none; user-select: none; }
+.ws-step.is-locked > h2{ color: var(--ink-soft, #524B3E); }
+.ws-num{ transition: background-color .45s, color .45s; }
+.ws-step.is-locked .ws-num{ background: #E9E3EE; color: #6B6178; }
+.ws-step.is-locked .ws-road-empty, .ws-view[hidden]{ display: none; }
+.ws .ws-lock-note{
+  display: block; width: fit-content; max-width: 100%; box-sizing: border-box;
+  margin: .2em 0 .9em; padding: 8px 14px 8px 12px; border-radius: 18px; border: 1px dashed #C9B6DA; background: #FBF8FD;
+  color: #4E3F6B; font-size: .92em; line-height: 1.4; box-shadow: none;
+}
+.ws .ws-lock-note::before{ content: "\2191"; margin-right: 8px; vertical-align: 1px; display: inline-grid; place-items: center; width: 1.5em; height: 1.5em; border-radius: 50%; background: #EBDDF6; font-size: .85em; }
+.ws .ws-lock-note[hidden]{ display: none; }
+.ws .ws-lock-note:focus{ outline: 2px solid var(--focus, #2B5B8C); outline-offset: 2px; }
+.ws-lock-note .ws-link, .fp-mirror-note .ws-link{ position: relative; }
+.ws-lock-note .ws-link::after, .fp-mirror-note .ws-link::after{ content: ""; position: absolute; inset: -12px -6px; }
+
+.ws-summary{ margin-top: 1em; padding: .75em .9em .85em; border-radius: 18px; background: #FFFDF7; border: 1px solid rgba(60,51,80,.1); animation: ws-fade .4s ease both; }
+.ws-summary[hidden]{ display: none; }
+.ws .ws-summary-k{ margin: 0 0 .5em; padding: 0; background: none; box-shadow: none; font-family: "IBM Plex Mono", ui-monospace, monospace; font-size: .72rem; letter-spacing: .1em; text-transform: uppercase; color: #8A6D8F; }
+.ws .ws-chips{ list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 6px; background: none; box-shadow: none; }
+.ws .ws-chip-s{
+  display: inline-flex; align-items: center; gap: 6px; min-height: 32px; max-width: 100%; box-sizing: border-box; margin: 0; padding: 4px 12px;
+  border-radius: 999px; background: #F3EEF9; box-shadow: none; color: #3C3350; font-size: .9rem; line-height: 1.25; overflow-wrap: anywhere;
+}
+.ws .ws-chip-s.is-road{ background: var(--c, #F7CAD4); font-weight: 600; }
+.ws-chip-icon{ font-size: 1.05em; }
+.ws .ws-chip-s.is-done{ background: #EAF1E9; color: var(--credit, #3E6B4C); font-weight: 600; }
+.ws .ws-chip-s.is-quiet{ background: transparent; border: 1px dashed #C9B6DA; color: var(--ink-soft, #524B3E); }
+.ws-announce{ position: absolute !important; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+
+/* step 2: the fillable PDF, one card */
+.ws-pdf-text > :last-child{ margin-bottom: .9em; }
+.ws-go-wrap{ display: flex; flex-direction: column; align-items: flex-start; gap: 6px; margin-top: auto; }
+.ws-go-wrap .ws-go{ margin-top: 0; text-align: center; }
+.ws .ws-go-note{ margin: 0; padding: 0 4px; background: none; box-shadow: none; font-size: .84rem; line-height: 1.35; color: var(--ink-soft, #524B3E); }
+.ws .ws-go-note:empty{ display: none; }
+.ws-go:disabled{ cursor: not-allowed; opacity: .7; transform: none; }
+/* step 5: the two reports side by side */
+.ws-make .ws-out{ align-items: stretch; }
+.ws-make .ws-out-card.is-lead{ margin: 0; background: #F4EEFA; border-color: #E0D0EA; }
+.fp-mirror-note{ font-size: .86em; color: var(--ink-soft, #524B3E); }
+.fp-mirror-note[hidden]{ display: none; }
+@keyframes ws-fade{ from{ opacity: 0; } to{ opacity: 1; } }
+@media (prefers-reduced-motion: reduce){
+  .ws-step-body, .ws-num{ transition: none; }
+  .ws-summary{ animation: none; }
+}
+/* small text links in the suite's sentences get a full-size tap area without changing the line */
+.ws-drop .ws-link, .ws-save-row .ws-link{ position: relative; }
+.ws-drop .ws-link::after, .ws-save-row .ws-link::after{ content: ""; position: absolute; inset: -12px -6px; }
+.ws #ws-name-add{ min-height: 44px; }
