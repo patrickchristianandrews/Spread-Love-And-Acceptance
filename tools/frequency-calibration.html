@@ -619,6 +619,21 @@
   .agreements li small{ display:block; color:var(--ink-soft); }
   .fc-msg{ font-size:.9rem; color:var(--credit); min-height:1.3em; margin:8px 0 0; }
   .ab-tip{ font-size:.9rem; color:var(--ink-soft); }
+  body[data-fc-mode="solo"] .pair-only, body[data-fc-mode="pair"] .solo-only, body:not([data-fc-mode]) .solo-only{ display:none !important; }
+  #fc-body[hidden]{ display:none !important; }
+  .mode-grid{ display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,240px),1fr)); gap:14px; margin:6px 0 0; }
+  .mode-card{ display:flex; flex-direction:column; gap:6px; text-align:left; min-height:44px; padding:18px 20px; border:2px solid var(--line); border-radius:6px; background:var(--paper); color:var(--ink); font:inherit; cursor:pointer; }
+  .mode-card .mc-t{ font-family:"Fraunces","Lora",serif; font-weight:600; font-size:1.15rem; line-height:1.25; }
+  .mode-card .mc-d{ font-size:.9rem; color:var(--ink-soft); line-height:1.5; }
+  .mode-card:hover{ border-color:var(--focus); }
+  .mode-card:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
+  .mode-card[aria-pressed="true"]{ border-color:var(--credit); background:var(--credit-soft); box-shadow:inset 0 0 0 1px var(--credit); }
+  .mode-card[aria-pressed="true"] .mc-t::after{ content:" \2713"; color:var(--credit); }
+  .mode-switch{ margin:20px 0 0; padding:14px 16px; border:1px dashed var(--brass); border-radius:var(--radius); font-size:.92rem; }
+  .mode-switch p{ margin:0 0 10px; }
+  .gapmap.profile li{ grid-template-columns:minmax(0,11rem) 1fr; }
+  .gapmap.profile .gm-ans{ font-weight:500; }
+  @media (max-width:520px){ .gapmap.profile li{ grid-template-columns:1fr; gap:0; } }
   #results h2:focus{ outline:none; } #results h2:focus-visible{ outline:3px solid var(--focus); outline-offset:3px; }
   @media (max-width:520px){ .sheet{ padding:18px 14px; } .intro-note, .delta-readout, .action-block{ padding:14px; } .frequency-domain{ padding:14px; } }
   @media print{
@@ -666,13 +681,25 @@
 
   <div class="intro-note">
     <p><strong>What this looks at:</strong> Any two people who share part of their lives (partners, family, co-parents, roommates, coworkers, a carer and the person they help, close friends) each run on their own rhythms, a bit like two radios tuned to slightly different stations. When the rhythms match, things feel clear. When they drift apart, you get static. (In radio, the squeal between two nearby stations is called the beat frequency.) A lot of everyday friction turns out to be a mismatch in rhythm, not a clash of values.</p>
-    <p><strong>How to use it:</strong> Each person picks their own answers, ideally without looking at the other&#39;s first. Then read the comparison together. You can also do Person A alone to learn your own rhythms.</p>
-    <p><strong>What this is not:</strong> Not a diagnosis, a compatibility test, or a prediction. It&#39;s a look at how your shared routines run right now. <strong>Privacy:</strong> nothing you pick or type here is saved or sent anywhere. Print or copy your agreements before you leave the page.</p>
+    <p><strong>Two ways to use it:</strong> <em>Just me</em> maps your own rhythms, what they mean, and how to plan around them and explain them to others. <em>Me and someone close to me</em> is for any two people who share part of their lives: each person fills in only their own side, ideally without looking at the other&#39;s first, and then you read the comparison together.</p>
+    <p><strong>What this is not:</strong> Not a diagnosis, a compatibility test, or a prediction. It&#39;s a look at how your routines run right now. <strong>Privacy:</strong> nothing you pick or type here is sent anywhere, and your answers aren&#39;t saved. The only thing this page remembers, on this device, is which version you chose. Print or copy your notes before you leave the page.</p>
   </div>
 
   <div class="locked-section">
 
-  <section id="setup" aria-labelledby="setup-h">
+  <section id="mode" aria-labelledby="mode-h">
+    <h2 id="mode-h" tabindex="-1">Who is this for?</h2>
+    <p class="ab-tip">Pick one to start. You can switch any time, and your answers stay put.</p>
+    <div class="mode-grid" role="group" aria-labelledby="mode-h">
+      <button type="button" class="mode-card" data-mode="solo" aria-pressed="false"><span class="mc-t">Just me</span><span class="mc-d">Understand my own rhythms: how I like to handle money, settle after stress, make decisions and stay in touch.</span></button>
+      <button type="button" class="mode-card" data-mode="pair" aria-pressed="false"><span class="mc-t">Me and someone close to me</span><span class="mc-d">A partner, family member, roommate, friend, or anyone you share part of your life with. Each of you fills in only your own side.</span></button>
+    </div>
+    <p class="fc-msg" id="mode-msg" role="status" aria-live="polite"></p>
+  </section>
+
+  <div id="fc-body" hidden>
+
+  <section id="setup" class="pair-only" aria-labelledby="setup-h">
     <h2 id="setup-h">Before you start</h2>
     <div class="setup-grid">
       <div><label for="name-a">First person&#39;s name (optional)</label><input id="name-a" type="text" maxlength="24" autocomplete="off" placeholder="Person A"></div>
@@ -692,22 +719,24 @@
   </section>
 
   <section id="person-a" aria-labelledby="pa-h">
-    <h2 id="pa-h"><span data-name="a">Person A</span>: your rhythms</h2>
+    <h2 id="pa-h"><span class="pair-only"><span data-name="a">Person A</span>: your rhythms</span><span class="solo-only">Your rhythms</span></h2>
     <p class="ab-tip">Pick what feels natural to you, not what you think you should want. Under each answer you&#39;ll see what it tends to mean for you.</p>
     <div class="domain-grid" id="grid-a"></div>
   </section>
 
-  <section id="person-b" aria-labelledby="pb-h">
+  <section id="person-b" class="pair-only" aria-labelledby="pb-h">
     <h2 id="pb-h"><span data-name="b">Person B</span>: your rhythms</h2>
-    <p class="ab-tip">The same five areas, from the other person&#39;s side. Doing this alone? Skip this part for now and come back when you can both fill it in.</p>
+    <p class="ab-tip">The same five areas, from the other person&#39;s side. Only answer for yourself. Not here right now? Skip this part and come back when you can both fill it in.</p>
     <div class="domain-grid" id="grid-b"></div>
-    <div class="btn-row"><button class="fc-btn" type="button" id="compare">Compare our rhythms</button><button class="fc-btn ghost" type="button" id="clear">Clear all answers</button></div>
   </section>
 
-  <section id="results" aria-labelledby="res-h">
-    <h2 id="res-h" tabindex="-1">Where your rhythms differ</h2>
+  <div class="btn-row"><button class="fc-btn" type="button" id="compare">Compare our rhythms</button><button class="fc-btn ghost" type="button" id="clear">Clear all answers</button></div>
+
+  <section id="results" aria-labelledby="res-h" style="margin-top:34px;">
+    <h2 id="res-h" tabindex="-1"><span class="pair-only">Where your rhythms differ</span><span class="solo-only">What your rhythms say about you</span></h2>
     <p class="sr-only" id="res-status" role="status" aria-live="polite" aria-atomic="true"></p>
-    <p style="color: var(--ink-soft); font-size: 0.95rem;">Each gap is how many steps apart your two answers are on that area&#39;s scale. A big gap doesn&#39;t mean anyone is wrong. It means you&#39;re running at different speeds, and a shared agreement usually closes most of it.</p>
+    <p class="pair-only" style="color: var(--ink-soft); font-size: 0.95rem;">Each gap is how many steps apart your two answers are on that area&#39;s scale. A big gap doesn&#39;t mean anyone is wrong. It means you&#39;re running at different speeds, and a shared agreement usually closes most of it.</p>
+    <p class="solo-only" style="color: var(--ink-soft); font-size: 0.95rem;">There are no right or wrong rhythms here. Knowing your own pace helps you plan around it, and makes it easier to tell the people in your life what works for you.</p>
 
     <div class="delta-readout">
       <h3>At a glance</h3>
@@ -719,21 +748,45 @@
       <h3>Area by area</h3>
       <div id="deltas"></div>
     </div>
+
+    <div class="mode-switch no-print">
+      <p class="solo-only">Curious how your rhythms fit with someone close to you, like a partner, family member, roommate or friend? You can do the version for two any time. Your answers carry over, and they fill in their own side.</p>
+      <p class="pair-only">Want to look at just your own rhythms for now? The &ldquo;just me&rdquo; version keeps the first person&#39;s answers and explains them on their own.</p>
+      <button class="fc-btn ghost solo-only" type="button" data-switch="pair">Do the version for two</button>
+      <button class="fc-btn ghost pair-only" type="button" data-switch="solo">Switch to just me</button>
+    </div>
   </section>
 
   <section id="action-plan" aria-labelledby="plan-h">
-    <h2 id="plan-h">Your plan to get back in step</h2>
+    <h2 id="plan-h"><span class="pair-only">Your plan to get back in step</span><span class="solo-only">Putting your rhythms to work</span></h2>
 
     <div class="action-block">
-      <h4>This week: one agreement to try</h4>
+      <h4><span class="pair-only">This week: one agreement to try</span><span class="solo-only">This week: one thing to try</span></h4>
       <p id="first-step" style="margin:0 0 10px;">Fill in both sets of rhythms and your first agreement appears here.</p>
-      <h4 style="margin-top:14px;">All your agreements</h4>
+      <h4 style="margin-top:14px;"><span class="pair-only">All your agreements</span><span class="solo-only">Your rhythm notes: how to explain your pace</span></h4>
       <ol class="agreements" id="agreements"><li>None yet.</li></ol>
-      <div class="btn-row no-print"><button class="fc-btn" type="button" id="copy-agree">Copy our agreements</button><button class="fc-btn ghost" type="button" onclick="window.print()">Print this plan</button></div>
+      <div class="btn-row no-print"><button class="fc-btn" type="button" id="copy-agree"><span class="pair-only">Copy our agreements</span><span class="solo-only">Copy my rhythm notes</span></button><button class="fc-btn ghost" type="button" onclick="window.print()">Print this plan</button></div>
       <p class="fc-msg" id="copy-msg" role="status" aria-live="polite"></p>
     </div>
 
-    <div class="action-block" style="margin-top: 16px;">
+    <div class="action-block solo-only" style="margin-top: 16px;">
+      <h4>This month</h4>
+      <ul>
+        <li>Try one plan at a time and give it two weeks before you judge it.</li>
+        <li>Share one rhythm note with someone you live or work with. Hearing &ldquo;this is just my pace&rdquo; up front can save a lot of guessing on both sides.</li>
+        <li><strong>Recovery:</strong> fill in a <a href="/wp-11.html">Calm-Down Kit (WP-11)</a>, with a line that says when you&#39;ll be back, so taking a pause never feels like a door closing.</li>
+      </ul>
+    </div>
+
+    <div class="action-block solo-only" style="margin-top: 16px;">
+      <h4>Every few months</h4>
+      <ul>
+        <li>Run this again. Life changes (a new job, a move, the seasons, a new stage of life), and rhythms shift with it.</li>
+        <li>When you&#39;re ready, try the version for you and someone close to you. Switch at the top of the worksheet; your answers carry over.</li>
+      </ul>
+    </div>
+
+    <div class="action-block pair-only" style="margin-top: 16px;">
       <h4>This month</h4>
       <ul>
         <li>Try one agreement at a time, starting with the biggest gap. Give it two weeks before you judge it.</li>
@@ -743,7 +796,7 @@
       </ul>
     </div>
 
-    <div class="action-block" style="margin-top: 16px;">
+    <div class="action-block pair-only" style="margin-top: 16px;">
       <h4>Every few months</h4>
       <ul>
         <li>Run this check again. Life changes (a new job, a move, the seasons, a new stage of life), and rhythms shift with it. Notice whether your gaps are getting smaller or bigger.</li>
@@ -752,9 +805,10 @@
     </div>
   </section>
   </div>
+  </div>
 
   <p class="disclaimer">
-    <strong>Important:</strong> This is a rule-of-thumb worksheet based on what you each report, not a tested assessment. It describes the rhythms you notice, not anything wrong with either person, and not whether you&#39;re compatible. Big gaps in rhythm are normal in every kind of relationship. What matters is whether you both know about them and are willing to build a shared habit around them. It works best if you each answer on your own, then compare notes with real curiosity.
+    <strong>Important:</strong> This is a rule-of-thumb worksheet based on what you report, not a tested assessment. It describes the rhythms you notice, not anything wrong with anyone, and not whether two people are compatible. Every rhythm on these scales is a normal way to be, and big gaps between two people are normal in every kind of relationship. What matters is knowing about them and being willing to build a habit around them. If you&#39;re doing it with someone, it works best when you each answer on your own, then compare notes with real curiosity.
   </p>
 
 </main>
@@ -829,6 +883,75 @@
      agree:function(sh){ return 'We’ll put a big-picture talk in the calendar '+sh+', with three questions: what’s working, what’s changed, and what we each want next.'; },
      agreeSpecial:function(sh){ return 'We’ll put one big-picture talk in the calendar '+sh+', and either of us can ask for an extra one if something changes.'; }}
   ];
+  // "Just me" wording: questions about yourself, a plan for each answer, and a way to explain it to others.
+  var SOLO={
+    money:{plain:'How often you like to look at your money: bills, spending, saving',
+      q:'How often do you like to look at your money?',
+      plan:['Give it a set, short time, like five minutes with your morning coffee, so checking stays a calm habit instead of a worry loop.',
+        'Pick one day and time each week and keep it short. If you share costs with anyone, let them know that’s your day.',
+        'Line your look up with paydays and put it in your calendar, so it still happens in a busy stretch.',
+        'Set a monthly reminder and turn on alerts for big or unusual charges, so nothing slips between looks.',
+        'Automate the bills you can and set reminders for yearly costs, so the long gaps stay safe.',
+        'Put the regular things on autopilot (bills, savings) and keep a short list of what needs a decision, so “when something comes up” doesn’t turn into a scramble.'],
+      say:['I like to keep a close eye on money, every day or two. It helps me feel settled. It isn’t about not trusting anyone.',
+        'I like a quick look at money once a week. That’s how I keep surprises small.',
+        'I check in on money about every two weeks, usually around payday.',
+        'A monthly look at money is enough for me. If something needs me sooner, just tell me.',
+        'I look at money every few months. Frequent money talks feel like pressure to me, so flag anything urgent and I’ll jump in.',
+        'I deal with money best when there’s something to decide. If you need me to look at something, ask, and I will.']},
+    rest:{
+      plan:['You’ll often be ready before others are. When you settle first, jot your thought down so it’s there when they’re ready, instead of pushing to talk right away.',
+        'Have a go-to short break ready, like a walk, a cup of tea or a few minutes outside, and then come back.',
+        'Build a real pause in before hard talks. Saying when you’ll be back keeps it from feeling like you’ve left.',
+        'Plan to sleep on hard topics, and try not to settle big things late at night.',
+        'Give yourself the time you need, and give others a rough time you’ll come back. A day of space feels very different when people know it ends.'],
+      say:['I settle quickly after a tense moment. If I want to talk soon, that’s just my pace, and it’s fine to tell me you need longer.',
+        'After a tense moment I need about twenty to thirty minutes. I’ll take a short break and come back.',
+        'I need an hour or two after a tense moment before I can talk it through well. I’m not shutting you out. I’ll come back.',
+        'I do my best thinking after a night’s sleep. Can we pick this up tomorrow? I will come back to it.',
+        'I need a good stretch of time, often a day or more, before a hard topic feels okay to reopen. I’ll tell you when I’m ready, and I won’t leave it hanging.']},
+    dec:{plain:'How long before a decision feels final to you',
+      q:'How long do you like before a big decision feels final?',
+      plan:['For choices that are hard to undo, add a short pause anyway, even an hour. For everyday ones, trust your speed.',
+        'When someone asks for an answer, it’s fine to say “Let me sleep on it.” Build that night into your plans.',
+        'Ask for the few days up front and name a day you’ll answer, so the wait doesn’t feel open-ended to others.',
+        'Start big decisions early, so your week of thinking fits before the deadline.',
+        'Say clearly which decisions are settled and which are still open, and give the open ones a date to look at again.'],
+      say:['I like to decide and move on. If you need more time, tell me and I’ll wait.',
+        'I like to sleep on decisions. Give me a night and I’ll have a real answer.',
+        'I take a few days with decisions. I’ll tell you when I’ll have an answer.',
+        'I take my time with big decisions, often a week or more. Starting early helps me.',
+        'I like to keep decisions open as I learn more. I’ll be clear about what’s settled and what’s still open.']},
+    talk:{plain:'How often you like a quick catch-up with the people in your life: how are things, what’s coming up',
+      q:'How often do you like a quick check-in with the people close to you?',
+      plan:['Short, frequent touches suit you, like a quick text or a one-line update. Let people know a short reply is plenty.',
+        'A daily touchpoint keeps you steady. Pick a regular moment for it, like a call on the way home.',
+        'A few catch-ups a week is your sweet spot. Let busy people know that’s plenty for you.',
+        'Put a weekly catch-up in your calendar, so staying in touch doesn’t depend on remembering.',
+        'Set a gentle reminder to reach out every so often, since time may pass faster than it feels.',
+        'Let people know you’d rather talk when there’s something to share, and that quiet from you doesn’t mean distance.'],
+      say:['I like little check-ins through the day. A quick message is plenty, and it helps me feel connected.',
+        'A daily check-in helps me feel connected. Even two minutes works.',
+        'A few check-ins a week feels right for me.',
+        'A weekly catch-up is enough for me. If I’m quiet in between, nothing is wrong.',
+        'I’m happy with catch-ups every few weeks. If I’ve gone quiet, it isn’t about you.',
+        'I tend to reach out when there’s something to talk about. Quiet from me doesn’t mean distance.']},
+    big:{plain:'How often you like to check that your goals, plans and commitments still fit',
+      q:'How often do you like to step back and check your goals and plans?',
+      opts:{4:'Rarely: only if something changes'},
+      mean:{0:'You like to check direction often. Going months without it can leave you wondering whether you’re still on track.',
+        4:'You’d rather keep going unless something changes, and frequent “where am I headed” check-ins may feel heavy.'},
+      plan:['Pick one quiet moment a month, like the first Sunday, for a short look at what’s working and what’s next.',
+        'Put a check in your calendar each season. Fifteen minutes with three questions is enough: what’s working, what’s changed, what’s next.',
+        'Twice a year, maybe around a birthday or the new year, take an hour to look back and ahead.',
+        'Choose one yearly moment to look back and ahead, and write down what you want next.',
+        'Put one short look back in your calendar anyway, maybe once a year, so “rarely” becomes “once in a while, on purpose.”'],
+      say:['I like to check in on plans and goals about once a month. It keeps me feeling on track.',
+        'I like a big-picture check every few months.',
+        'Twice a year is plenty of big-picture talk for me.',
+        'A yearly look back and ahead suits me.',
+        'I don’t need many “where are we going” talks. If something changes for you, tell me and I’ll make time.']}
+  };
   var REL_NOTE={
     partner:'',
     family:'For family, read “money” as shared costs, gifts or help for a relative, and “big picture” as plans for holidays, care or where everyone is headed.',
@@ -852,7 +975,7 @@
       var sid=who+'-'+d.id;
       fs.innerHTML='<legend>'+esc(d.name)+'</legend>'+
         '<div class="definition" id="'+sid+'-def">'+esc(d.plain)+'.</div>'+
-        '<div class="field-group"><label for="'+sid+'">'+esc(d.q)+'</label>'+
+        '<div class="field-group"><label for="'+sid+'" id="'+sid+'-lab">'+esc(d.q)+'</label>'+
         '<select id="'+sid+'" aria-describedby="'+sid+'-def"><option value="">Choose one…</option>'+
         d.opts.map(function(o,i){ return '<option value="'+i+'">'+esc(o)+'</option>'; }).join('')+'</select></div>'+
         '<p class="mean" id="'+sid+'-mean" aria-live="polite"></p>';
@@ -900,6 +1023,69 @@
       '<div class="track-ends" aria-hidden="true"><span>'+esc(d.opts[0])+'</span><span>'+esc(d.opts[n-1])+'</span></div>';
   }
 
+  // ----- Who is this for: 'solo' (just me) or 'pair' (me and someone close to me) -----
+  var MODE_KEY='tol-freq-mode', mode=null;
+  function loadMode(){
+    try{
+      var m=localStorage.getItem(MODE_KEY);
+      if(m==='solo'||m==='pair') return m;
+      // anything older or unrecognized is treated as the version for two
+      if(m) return 'pair';
+    }catch(e){}
+    return null;
+  }
+  function saveMode(m){ try{ localStorage.setItem(MODE_KEY,m); }catch(e){} }
+  function setMode(m,announce){
+    mode=m;
+    document.body.setAttribute('data-fc-mode',m);
+    $('fc-body').hidden=false;
+    document.querySelectorAll('.mode-card').forEach(function(b){ b.setAttribute('aria-pressed',String(b.getAttribute('data-mode')===m)); });
+    DOMAINS.forEach(function(d){
+      var so=SOLO[d.id]||{}, sid='a-'+d.id, solo=m==='solo';
+      $(sid+'-lab').textContent=solo&&so.q?so.q:d.q;
+      $(sid+'-def').textContent=(solo&&so.plain?so.plain:d.plain)+'.';
+      if(so.opts) Object.keys(so.opts).forEach(function(i){ $(sid).options[+i+1].textContent=solo?so.opts[i]:d.opts[i]; });
+    });
+    $('compare').textContent=m==='solo'?'See my rhythms':'Compare our rhythms';
+    if(announce) $('mode-msg').textContent=m==='solo'?'Set up for just you. Your questions are below.':'Set up for you and someone close to you. Each of you fills in your own side below.';
+    update();
+  }
+  function meanText(d,i){ var so=SOLO[d.id]; return mode==='solo'&&so&&so.mean&&so.mean[i]?so.mean[i]:d.mean[i]; }
+  function optText(d,i){ var so=SOLO[d.id]; return mode==='solo'&&so&&so.opts&&so.opts[i]?so.opts[i]:d.opts[i]; }
+
+  // Results for "just me": your own rhythms, what they mean, how to plan around them and explain them.
+  function updateSolo(){
+    var items=[], profile=[], cards=[];
+    DOMAINS.forEach(function(d){
+      var a=val('a',d), so=SOLO[d.id];
+      profile.push('<li><span>'+esc(d.name)+'</span><span class="gm-ans">'+(a===null?'<span class="gm-lab">not filled in</span>':esc(optText(d,a)))+'</span></li>');
+      if(a===null){
+        cards.push('<div class="delta-item"><div class="delta-domain-name">'+esc(d.name)+'</div><div class="delta-help">Pick an answer above to see what this rhythm means for you.</div></div>');
+        return;
+      }
+      items.push({d:d,a:a,plan:so.plan[a],say:so.say[a],edge:a===0||a===d.opts.length-1});
+      cards.push('<div class="delta-item"><div class="delta-domain-name">'+esc(d.name)+'</div>'+
+        '<div class="delta-value"><span>You: '+esc(optText(d,a))+'</span></div>'+
+        '<div class="delta-help"><p><strong>What it means:</strong> '+esc(meanText(d,a))+'</p></div>'+
+        '<div class="coherence-recommendation" style="margin-top:10px;">'+
+        '<p><strong>How to plan around it:</strong> '+esc(so.plan[a])+'</p>'+
+        '<p><strong>A way to explain it to others:</strong> <span class="agree-line">“'+esc(so.say[a])+'”</span></p></div></div>');
+    });
+    var gm=$('gapmap'); gm.classList.add('profile'); gm.innerHTML=profile.join('');
+    $('deltas').innerHTML=cards.join('');
+    var n=items.length, summary;
+    if(!n) summary='Nothing here yet. Pick your answers above and your rhythms appear here.';
+    else summary=n+' of 5 areas filled in.'+(n<5?' Fill in the rest whenever you like.':' That’s your full rhythm picture for right now.')+' Each one is a normal way to be. It helps to know your pace, and to tell people about it.';
+    $('summary').innerHTML=esc(summary);
+    // Start with a rhythm at either end of its scale: those are the ones most likely to differ from the people around you.
+    var first=items.filter(function(x){ return x.edge; })[0]||items[0];
+    $('first-step').innerHTML=first?'Start with your <strong>'+esc(first.d.name.toLowerCase())+'</strong>. '+esc(first.plan):'Pick your answers above and one thing to try appears here.';
+    $('agreements').innerHTML=n?items.map(function(x){ return '<li><strong>'+esc(x.d.name)+'</strong><br>“'+esc(x.say)+'”</li>'; }).join(''):'<li>None yet.</li>';
+    var st=n?summary:'';
+    if(st!==lastStatus){ lastStatus=st; clearTimeout(update.t); update.t=setTimeout(function(){ $('res-status').textContent=st; },600); }
+    update.agrees=[]; update.notes=items;
+  }
+
   var lastStatus='';
   function update(){
     var A=nameA(), B=nameB();
@@ -910,8 +1096,9 @@
     var rows=[], cards=[], agrees=[], counts={same:0,close:0,gap:0,big:0,style:0}, filledBoth=0, filledA=0;
     DOMAINS.forEach(function(d){
       var a=val('a',d), b=val('b',d);
-      $('a-'+d.id+'-mean').textContent=a===null?'':'What this means for you: '+d.mean[a];
+      $('a-'+d.id+'-mean').textContent=a===null?'':'What this means for you: '+meanText(d,a);
       $('b-'+d.id+'-mean').textContent=b===null?'':'What this means for you: '+d.mean[b];
+      if(mode==='solo') return;
       if(a!==null) filledA++;
       var g=gap(d,a,b);
       var html='<div class="delta-item"><div class="delta-domain-name">'+esc(d.name)+'</div>'+
@@ -934,7 +1121,9 @@
       if(g.kind!=='same') agrees.push({d:d,g:g,ag:ag});
     });
 
+    if(mode==='solo'){ updateSolo(); return; }
     // Gap map
+    $('gapmap').classList.remove('profile');
     $('gapmap').innerHTML=rows.map(function(r){
       var w=r.g?Math.min(100,r.g.score*25):0, col=r.g?(r.g.cls==='high'?'#96412B':r.g.cls==='med'?'#7A5620':'#3E6B4C'):'transparent';
       return '<li><span>'+esc(r.d.name)+'</span><span class="gm-bar" aria-hidden="true"><i style="width:'+(r.g&&r.g.score===0?4:w)+'%;background:'+col+'"></i></span><span class="gm-lab">'+(r.g?esc(r.g.label):'not filled in')+'</span></li>';
@@ -955,15 +1144,22 @@
     update.agrees=agrees;
   }
 
-  function copyText(t){
-    function ok(){ $('copy-msg').textContent='Agreements copied.'; }
+  function copyText(t,done){
+    done=done||'Agreements copied.';
+    function ok(){ $('copy-msg').textContent=done; }
     function fb(){
-      try{ var ta=document.createElement('textarea'); ta.value=t; ta.setAttribute('readonly',''); ta.style.position='fixed'; ta.style.top='-1000px'; document.body.appendChild(ta); ta.select(); var r=document.execCommand('copy'); document.body.removeChild(ta); $('copy-msg').textContent=r?'Agreements copied.':'Copying isn’t available here. Use Print instead.'; }
+      try{ var ta=document.createElement('textarea'); ta.value=t; ta.setAttribute('readonly',''); ta.style.position='fixed'; ta.style.top='-1000px'; document.body.appendChild(ta); ta.select(); var r=document.execCommand('copy'); document.body.removeChild(ta); $('copy-msg').textContent=r?done:'Copying isn’t available here. Use Print instead.'; }
       catch(e){ $('copy-msg').textContent='Copying isn’t available here. Use Print instead.'; }
     }
     if(navigator.clipboard&&navigator.clipboard.writeText) navigator.clipboard.writeText(t).then(ok,fb); else fb();
   }
   $('copy-agree').addEventListener('click', function(){
+    if(mode==='solo'){
+      var nt=update.notes||[];
+      if(!nt.length){ $('copy-msg').textContent='Pick your answers first. Your rhythm notes appear here.'; return; }
+      copyText('My rhythms\n\n'+nt.map(function(x,i){ return (i+1)+'. '+x.d.name+': '+x.say; }).join('\n')+'\n\nFrom Frequency Calibration, The Objective Ledger.', 'Rhythm notes copied.');
+      return;
+    }
     var ag=update.agrees||[];
     if(!ag.length){ $('copy-msg').textContent='Fill in both sets of rhythms first. Agreements appear where your rhythms differ.'; return; }
     var t='Our rhythm agreements ('+nameA()+' and '+nameB()+')\n\n'+ag.map(function(x,i){ return (i+1)+'. '+x.d.name+': '+x.ag; }).join('\n')+'\n\nTry one at a time, for two weeks each. From Frequency Calibration, The Objective Ledger.';
@@ -985,7 +1181,18 @@
 
   document.querySelector('.locked-section').addEventListener('input', update);
   document.querySelector('.locked-section').addEventListener('change', update);
-  update();
+  document.querySelectorAll('.mode-card').forEach(function(b){
+    b.addEventListener('click', function(){ var m=b.getAttribute('data-mode'); saveMode(m); setMode(m,true); $('copy-msg').textContent=''; });
+  });
+  document.querySelectorAll('[data-switch]').forEach(function(b){
+    b.addEventListener('click', function(){
+      var m=b.getAttribute('data-switch'); saveMode(m); setMode(m,true); $('copy-msg').textContent='';
+      var h=$('mode-h'); h.focus({preventScroll:true});
+      h.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'start'});
+    });
+  });
+  var saved=loadMode();
+  if(saved) setMode(saved,false); else update();
 })();
 </script>
 
