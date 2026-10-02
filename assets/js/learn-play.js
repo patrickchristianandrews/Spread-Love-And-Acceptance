@@ -2,8 +2,8 @@
    - "Check yourself" moments after some sections: quick questions, pillar sort-its, tap-to-match,
      flip cards, "would you rather" picks, fill-the-gap and tiny sliders. Each one found earns a
      petal (through the shared rewards in rewards.js) and a small, calm sparkle.
-   - A "Learning trail" ribbon near the top of the page: "3 of 5 moments found", with a badge and a
-     suggested next page when the trail is done, and an easy way to start over.
+   - (The "Learning trail" ribbon that used to sit near the top of the page has been removed;
+     buildTrail() is kept but no longer called.)
    - "Explain it like I'm new" toggles on the fullest paragraphs of the full pages.
    - The quest map (/quest.html) reads the same progress and lights a lantern for each finished trail.
    The words live in learn-play-data.js, loaded on demand. Progress stays in this browser only
@@ -646,7 +646,7 @@
       }
     }
 
-    buildTrail();
+    // the learning-trail ribbon was taken off the pages; progress still lights the quest map
     // membership can open the full page after we've loaded: keep the count honest
     try { new MutationObserver(function () { refresh(); }).observe(doc.body, { attributes: true, attributeFilter: ['class'] }); } catch (e) {}
 
@@ -738,7 +738,7 @@
       var L = level(), lit = 0, trails = 0;
       Object.keys(D.pages).forEach(function (p) { trails++; if (doneCount(p, D.pages[p].m.length) === D.pages[p].m.length) lit++; });
       ex.innerHTML = '<span class="lp-ex-ico" aria-hidden="true">' + L.icon + '</span><div><p class="lp-ex-k">Your explorer level</p><p class="lp-ex-name">Level ' + L.n + ': ' + esc(L.name) + '</p>' +
-        '<p class="lp-ex-sub">🌸 ' + (S.petals || 0) + ' petal' + (S.petals === 1 ? '' : 's') + ' · 🏮 ' + lit + ' of ' + trails + ' trails lit</p>' +
+        '<p class="lp-ex-sub">🌸 ' + (S.petals || 0) + ' petal' + (S.petals === 1 ? '' : 's') + ' · 🏮 ' + lit + ' of ' + trails + ' pages lit</p>' +
         '<span class="lp-trail-bar" aria-hidden="true"><i style="width:' + Math.max(4, Math.round(L.progress * 100)) + '%"></i></span>' +
         '<p class="lp-ex-next">' + (L.next ? (L.next.at - (S.petals || 0)) + ' more petal' + (L.next.at - (S.petals || 0) === 1 ? '' : 's') + ' to ' + L.next.icon + ' ' + esc(L.next.name) : 'The very top. Thank you for exploring every corner.') + '</p></div>';
     }
@@ -749,7 +749,7 @@
       if (first) picks = ['/five-pillars.html', '/start-here.html', '/know-yourself.html'];
       else { picks = []; var nx = nextFor(D, ''); (D.order || []).forEach(function (p) { if (picks.length < 3 && D.pages[p] && doneCount(p, D.pages[p].m.length) < D.pages[p].m.length) picks.push(p); }); if (!picks.length && nx) picks.push(nx); }
       var why = { '/five-pillars.html': 'The five ideas under everything, in ten minutes.', '/start-here.html': 'How the pieces fit, in order.', '/know-yourself.html': 'Why you react the way you do.' };
-      var h = sh.querySelector('[data-lp-start-h]'); if (h) h.textContent = first ? 'Start here: three easy first steps' : (picks.length ? 'Next up on your trail' : 'Every trail is lit!');
+      var h = sh.querySelector('[data-lp-start-h]'); if (h) h.textContent = first ? 'Start here: three easy first steps' : (picks.length ? 'Next up for you' : 'Every lantern is lit!');
       var list = sh.querySelector('[data-lp-start-list]');
       if (list) list.innerHTML = picks.map(function (p) { var P = D.pages[p], t = P.m.length, n = doneCount(p, t); return '<li><a href="' + esc(p) + '"><strong>' + esc(P.t) + '</strong><small>' + esc(why[p] && first ? why[p] : (n ? n + ' of ' + t + ' moments found. Pick up where you left off.' : t + ' moments to find')) + '</small></a></li>'; }).join('');
     }
@@ -757,10 +757,10 @@
     if (resetAll && !resetAll.lpWired) {
       resetAll.lpWired = true; var armed = null, label = resetAll.textContent;
       resetAll.addEventListener('click', function () {
-        if (!armed) { resetAll.textContent = 'Tap again to clear every trail'; armed = setTimeout(function () { armed = null; resetAll.textContent = label; }, 4000); return; }
+        if (!armed) { resetAll.textContent = 'Tap again to clear every lantern'; armed = setTimeout(function () { armed = null; resetAll.textContent = label; }, 4000); return; }
         clearTimeout(armed); armed = null; resetAll.textContent = label;
         S.pages = {}; S.trails = {}; save(); mountQuest(D, qroot);
-        var say = qroot.querySelector('[data-lp-say]'); if (say) say.textContent = 'All trails cleared. Your petals and garden stay yours.';
+        var say = qroot.querySelector('[data-lp-say]'); if (say) say.textContent = 'All lanterns cleared. Your petals and garden stay yours.';
       });
     }
   }

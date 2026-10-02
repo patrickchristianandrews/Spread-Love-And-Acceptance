@@ -1630,7 +1630,7 @@
       '<h3 class="tol-set-k">Calm</h3>' +
       '<p class="tol-set-qnote" hidden>Quiet mode is looking after these. Turn it off above to change them one by one.</p>' +
       sw('still', 'Keep the page still', 'No moving garden, bubbles, hearts or sliding in, here and in the Breathe break') +
-      sw('helpers', 'Hide the helpers', 'Professor Puddles’ cards, the cheering buddies, the pups popping in while you read, tips, the learning trail, petals and pop-up invitations. The “Check in on Tidbit & Sugarfoot” button stays, for when you want them.') +
+      sw('helpers', 'Hide the helpers', 'Professor Puddles’ cards, the cheering buddies, the pups popping in while you read, tips, petals and pop-up invitations. The “Check in on Tidbit & Sugarfoot” button stays, for when you want them.') +
       sw('sound', 'Keep site sounds off', 'When this is on, the pal cam, the games and the Breathe break start silent') +
       '<h3 class="tol-set-k">Reading</h3>' +
       '<fieldset class="tol-set-sizes"><legend>Text size <small>(smallest to biggest)</small></legend>' + ['md', 'lg', 'xl', 'xxl'].map(function (k) { return radio('size', 'data-size-opt', k, '<span class="tol-set-size" style="font-size:' + SIZE_SCALE[k] + 'em">' + SIZE_NAMES[k] + '</span>'); }).join('') + '</fieldset>' +
