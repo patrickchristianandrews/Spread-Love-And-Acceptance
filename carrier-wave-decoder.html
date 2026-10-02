@@ -472,6 +472,7 @@ textarea{width:100%;min-height:90px;margin-top:6px;border:1px solid var(--line);
           <button class="ghost" type="button" data-ex="0">Roommates: &ldquo;when you get a chance&rdquo;</button>
           <button class="ghost" type="button" data-ex="1">Coworkers: the fast meeting</button>
           <button class="ghost" type="button" data-ex="2">Co-parents: the pickup text</button>
+          <button class="ghost" type="button" data-ex="3">Partners: &ldquo;the sink&rsquo;s full&rdquo;</button>
         </div>
         <p class="ex-note" id="exnote"></p>
       </div>
@@ -508,7 +509,7 @@ textarea{width:100%;min-height:90px;margin-top:6px;border:1px solid var(--line);
   <section data-panel="check" role="tabpanel" hidden>
     <div class="panel" style="max-width:760px">
       <h3>Where are you listening from?</h3>
-      <p class="hint">Five quick questions. Answer for right now, not for how you usually are. <p class="hint">Five quick questions. Answer for right now, not for how you usually are.</p>ldquo;I can<p class="hint">Five quick questions. Answer for right now, not for how you usually are.</p>rsquo;t tell<p class="hint">Five quick questions. Answer for right now, not for how you usually are.</p>rdquo; is a fine answer.</p>
+      <p class="hint">Five quick questions. Answer for right now, not for how you usually are. &ldquo;I can&rsquo;t tell&rdquo; is a fine answer.</p>
       <div id="qs"></div>
       <div class="result" id="result" hidden>
         <p class="verdict" id="rstate"></p>
@@ -896,7 +897,8 @@ const done=c=>dec[c.id][0]!==null&&dec[c.id][1]!==null;
 const EX=[
  {set:{pace:[1,1],reg:[1,1],urg:[1,0]},note:"Roommates. You asked your roommate to take the recycling out “when you get a chance.” You meant today; they heard this week. Pace and tone were fine. The gap is timing."},
  {set:{pace:[2,0],reg:[1,1],urg:[2,1]},note:"Coworkers. You fired questions through a quick planning chat while your coworker was still thinking. You needed answers right now; they assumed later today was fine. The gaps are pace and timing."},
- {set:{pace:[1,1],reg:[1,2],urg:[1,1]},note:"Co-parents. You texted “Pickup is at 5.” as plain information, and the reply that came back felt sharp. Pace and timing matched. The gap is tone, and it's worth checking before you react."}
+ {set:{pace:[1,1],reg:[1,2],urg:[1,1]},note:"Co-parents. You texted “Pickup is at 5.” as plain information, and the reply that came back felt sharp. Pace and timing matched. The gap is tone, and it's worth checking before you react."},
+ {set:{pace:[2,1],reg:[2,1],urg:[1,1]},note:"Partners. At the end of a long, loud day you said “The sink's full again.” You meant it as an update. It came out quick and clipped, and what landed was “You never do the dishes.” They answered the tone, not the dishes. Pace and tone were both off, and the day you'd had before you spoke was part of it."}
 ];
 function renderChans(){
   const box=$("chans"); box.innerHTML="";
