@@ -276,7 +276,7 @@
       { href: '/full-path.html', code: 'Package', title: 'The package and report', note: 'One PDF for your relationship, and a report from your answers' },
       { href: '/program.html', title: 'Which part to use when', note: 'The six weeks, the suite and the package, side by side' }
     ]},
-    { id: 'play', name: 'Calm & play', title: 'Calm & play', blurb: 'Calm games and sounds for a busy mind. No timers and no way to lose.', items: [
+    { id: 'play', name: 'Calm & play', title: 'Calm & play', blurb: 'Calm games and sounds for a busy mind, and Tidbit and Sugarfoot’s show and live pal cam. No timers and no way to lose.', items: [
       { href: '/pause-and-play.html', code: 'All', title: 'Pause & Play', note: 'All the calm games, your level and your garden' },
       { href: '/night-garden.html', code: 'Breathe', title: 'The Night Garden', note: 'Breathe slowly and watch the flowers bloom' },
       { href: '/calm-visualizer.html', code: 'Drift', title: 'Drift: calm visualizer', note: 'Slow colors and tones matched to how you feel' },
@@ -286,13 +286,14 @@
       { href: '/quiet-crossword.html', code: 'Game', title: 'Quiet Crossword', note: 'Small, friendly crosswords for your phone' },
       { href: '/daily-ledger-crossword.html', code: 'Game', title: 'The Daily Ledger Crossword', note: 'From a quick Mini to a Big Sunday' },
       { href: '/soundscapes.html', code: 'Audio', title: 'Soundscapes', note: 'Background audio for settling down' },
-      { href: '/echoes-of-gold.html', code: 'Album', title: 'Echoes of Gold', note: 'The companion album' }
-    ]},
-    { id: 'kids', name: 'Kids & families', title: 'For kids & families', blurb: 'Tidbit and Sugarfoot’s cartoon and live pal cam, and help for every generation at home.', items: [
-      { href: '/frequency-buddies.html', code: 'Cartoon', title: 'Frequency Buddies', note: 'A free kids’ cartoon about feelings, with captions' },
+      { href: '/echoes-of-gold.html', code: 'Album', title: 'Echoes of Gold', note: 'The companion album' },
+      { sub: 'Tidbit & Sugarfoot' },
+      { href: '/frequency-buddies.html', code: 'Cartoon', title: 'Frequency Buddies', note: 'An animated show about feelings, with captions' },
       { href: '/frequency-buddies-live.html', code: 'On air', title: 'Frequency Buddies Live', note: 'An always-on station: drop in on the episode playing now' },
       { href: '/frequency-buddies-shuffle.html', code: 'Shuffle', title: 'Frequency Buddies on shuffle', note: 'Episodes in a random order, and downloads' },
-      { href: '/pal-cam-tv.html', code: 'Live', title: 'Pal Cam TV', note: 'The pups live, all day, full screen or on your TV' },
+      { href: '/pal-cam-tv.html', code: 'Live', title: 'Pal Cam TV', note: 'The pups live, all day, full screen or on your TV' }
+    ]},
+    { id: 'family', name: 'Family', title: 'Family', blurb: 'Help for every generation at home.', items: [
       { href: '/grandparents.html', code: 'New', title: 'For grandparents', note: 'Help with the grandkids without taking over' },
       { href: '/relationships.html#family', title: 'Family: where to start', note: 'The first tools to try together at home' }
     ]},
@@ -851,7 +852,7 @@
         '<a href="/how-to-stop-fighting-with-your-partner.html">How to stop fighting</a>' +
         '<a href="/neurodivergent-relationships.html">Neurodivergent relationships</a>' +
         '<a href="/communication-style-quiz.html">Communication style quiz</a>' +
-        '<a href="/frequency-buddies.html">Kids’ cartoon</a>' +
+        '<a href="/frequency-buddies.html">Frequency Buddies</a>' +
       '</nav>' +
       '<span class="tol-foot-links">' +
         '<a href="/contents.html">All pages</a>' +
