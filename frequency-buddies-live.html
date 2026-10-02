@@ -93,7 +93,7 @@
 <meta name="twitter:description" content="An always-on Frequency Buddies channel: drop in anytime, watch the kids’ cartoon episode playing right now, and cast it to your TV. Free, with captions.">
 <meta name="twitter:image" content="https://spreadloveandacceptance.com/assets/img/frequency-buddies-season-1.jpg">
 <meta name="twitter:image:alt" content="Tidbit and Sugarfoot, the two pups of the Frequency Buddies kids’ cartoon">
-<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@id":"https://spreadloveandacceptance.com/frequency-buddies-live.html#page","name":"Frequency Buddies Live: A Kids’ Cartoon Channel","headline":"Frequency Buddies Live: A Kids’ Cartoon Channel","description":"An always-on Frequency Buddies channel: drop in anytime, watch the kids’ cartoon episode playing right now, and cast it to your TV. Free, with captions.","url":"https://spreadloveandacceptance.com/frequency-buddies-live.html","inLanguage":"en-US","isAccessibleForFree":true,"keywords":"self-help, relationships, kindness, love, appreciation, acceptance, connection, communication, calm, peace, harmony, reconciliation, emotional wellbeing, self-discovery, fairness at home, mental load, invisible work, free self-help tools, animated stories, cartoon for kids and families, Tidbit and Sugarfoot, kindness stories, working through tough times together, captions","publisher":{"@type":"Organization","@id":"https://spreadloveandacceptance.com/#org","name":"Spread Love & Acceptance","url":"https://spreadloveandacceptance.com/","logo":{"@type":"ImageObject","url":"https://spreadloveandacceptance.com/assets/img/logo-stacked.png"}},"isPartOf":{"@type":"WebSite","@id":"https://spreadloveandacceptance.com/#website","name":"Spread Love & Acceptance","url":"https://spreadloveandacceptance.com/"},"datePublished":"2026-10-01","dateModified":"2026-10-01","image":"https://spreadloveandacceptance.com/assets/img/frequency-buddies-season-1.jpg","primaryImageOfPage":{"@type":"ImageObject","url":"https://spreadloveandacceptance.com/assets/img/frequency-buddies-season-1.jpg"},"@type":"WebPage"},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Spread Love & Acceptance","item":"https://spreadloveandacceptance.com/"},{"@type":"ListItem","position":2,"name":"Frequency Buddies","item":"https://spreadloveandacceptance.com/frequency-buddies.html"},{"@type":"ListItem","position":3,"name":"Frequency Buddies Live: A Kids’ Cartoon Channel","item":"https://spreadloveandacceptance.com/frequency-buddies-live.html"}]}]}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@id":"https://spreadloveandacceptance.com/frequency-buddies-live.html#page","name":"Frequency Buddies Live: A Kids’ Cartoon Channel","headline":"Frequency Buddies Live: A Kids’ Cartoon Channel","description":"An always-on Frequency Buddies channel: drop in anytime, watch the kids’ cartoon episode playing right now, and cast it to your TV. Free, with captions.","url":"https://spreadloveandacceptance.com/frequency-buddies-live.html","inLanguage":"en-US","isAccessibleForFree":true,"keywords":"self-help, relationships, kindness, love, appreciation, acceptance, connection, communication, calm, peace, harmony, reconciliation, emotional wellbeing, self-discovery, fairness at home, mental load, invisible work, free self-help tools, animated stories, cartoon for kids and families, Tidbit and Sugarfoot, kindness stories, working through tough times together, captions","publisher":{"@type":"Organization","@id":"https://spreadloveandacceptance.com/#org","name":"Spread Love & Acceptance","url":"https://spreadloveandacceptance.com/","logo":{"@type":"ImageObject","url":"https://spreadloveandacceptance.com/assets/img/logo-stacked.png"}},"isPartOf":{"@type":"WebSite","@id":"https://spreadloveandacceptance.com/#website","name":"Spread Love & Acceptance","url":"https://spreadloveandacceptance.com/"},"datePublished":"2026-10-01","dateModified":"2026-10-02","image":"https://spreadloveandacceptance.com/assets/img/frequency-buddies-season-1.jpg","primaryImageOfPage":{"@type":"ImageObject","url":"https://spreadloveandacceptance.com/assets/img/frequency-buddies-season-1.jpg"},"@type":"WebPage"},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Spread Love & Acceptance","item":"https://spreadloveandacceptance.com/"},{"@type":"ListItem","position":2,"name":"Frequency Buddies","item":"https://spreadloveandacceptance.com/frequency-buddies.html"},{"@type":"ListItem","position":3,"name":"Frequency Buddies Live: A Kids’ Cartoon Channel","item":"https://spreadloveandacceptance.com/frequency-buddies-live.html"}]}]}</script>
 <!-- seo:end -->
 </head>
 <body class="fbl" data-no-cheer data-no-pupvisits data-garden-nopals data-no-buddies>
@@ -149,9 +149,10 @@
 <script>
 (function () {
   'use strict';
-  // The station's clock: the whole season loops forever, starting from a fixed moment, so the place in the
-  // loop comes from the time of day and everyone who drops in sees the same scene.
-  var SEASON = '/assets/video/frequency-buddies-season-1.mp4', POSTER = '/assets/img/frequency-buddies-season-1.jpg';
+  // The station's clock: the five episodes loop forever, starting from a fixed moment, so the place in the
+  // loop comes from the time of day and everyone who drops in sees the same scene. Each episode is its own
+  // small file (so every host can serve it); the player moves from one to the next on the clock.
+  var POSTER = '/assets/img/frequency-buddies-season-1.jpg';
   var EPS = [
     { n: 1, title: 'The Storm Over the Treehouse', dur: 893.14, file: '/assets/video/frequency-buddies-s1e1.mp4' },
     { n: 2, title: 'Out of Tune', dur: 852.87, file: '/assets/video/frequency-buddies-s1e2.mp4' },
@@ -166,11 +167,13 @@
   function clock(ms) { return new Date(ms).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' }); }
   function mins(s) { var m = Math.round(s / 60); return m <= 1 ? 'about a minute' : m + ' minutes'; }
   var $ = function (id) { return document.getElementById(id); };
-  var tv = $('fbl-tv'), v = $('fbl-v'), ctl = $('fbl-ctl'), badge = $('fbl-badge'), tuned = false, paused = false;
+  var tv = $('fbl-tv'), v = $('fbl-v'), ctl = $('fbl-ctl'), badge = $('fbl-badge'), tuned = false, paused = false, cur = -1;
+  // where the player is in the whole loop (the episode it has loaded, plus its own clock)
+  function playerPos() { return cur >= 0 && v.readyState > 0 ? START[cur] + v.currentTime : livePos(); }
 
   // what's on, what's next and the schedule (works before anyone tunes in)
   function info() {
-    var pos = tuned && !paused && v.readyState > 0 ? v.currentTime : livePos(), i = epAt(pos), into = pos - START[i], e = EPS[i], left = e.dur - into;
+    var pos = tuned && !paused ? playerPos() : livePos(), i = epAt(pos), into = pos - START[i], e = EPS[i], left = e.dur - into;
     $('fbl-title').textContent = 'Now: Episode ' + e.n + ', ' + e.title;
     var nx = EPS[(i + 1) % EPS.length];
     $('fbl-sub').textContent = 'Up next, in ' + mins(left) + ': Episode ' + nx.n + ', ' + nx.title;
@@ -194,23 +197,28 @@
 
   // tuning in: jump to the live moment, and stay there
   function toLive() {
-    var pos = livePos();
-    if (isFinite(v.duration) && v.duration > 0 && pos > v.duration - 0.5) pos = 0;
-    try { v.currentTime = pos; } catch (e) {}
+    var pos = livePos(), i = epAt(pos), off = pos - START[i];
+    if (i !== cur) { // a new episode: load its file, then seek to the live moment once it's ready
+      cur = i; v.src = EPS[i].file + '#t=' + off.toFixed(1);
+      v.addEventListener('loadedmetadata', function () { var o = livePos() - START[i]; if (o >= 0 && o < EPS[i].dur - 0.5) try { v.currentTime = o; } catch (e) {} }, { once: true });
+      if (!paused) play();
+      return;
+    }
+    if (isFinite(v.duration) && off > v.duration - 0.5) off = Math.max(0, v.duration - 0.5);
+    try { v.currentTime = off; } catch (e) {}
   }
   function setBehind(b) { badge.classList.toggle('is-behind', b); badge.querySelector('span').textContent = b ? 'Behind live' : 'Live'; $('fbl-live').hidden = !b; }
   function play() { var p = v.play(); if (p && p.catch) p.catch(function () { v.muted = true; muteLabel(); v.play().catch(function () {}); }); }
   $('fbl-go').addEventListener('click', function () {
     tuned = true; v.hidden = false; $('fbl-start').hidden = true; ctl.hidden = false; badge.hidden = false;
-    v.preload = 'auto'; v.loop = true; v.src = SEASON + '#t=' + livePos().toFixed(1);
-    v.addEventListener('loadedmetadata', function () { toLive(); }, { once: true });
+    v.preload = 'auto'; v.loop = false; cur = -1; toLive();
     play(); wake(); remoteSetup();
   });
   v.addEventListener('ended', function () { toLive(); play(); });
   // keep in step: a slow connection or a sleeping tab can fall behind; catch up quietly
   setInterval(function () {
     if (!tuned || paused || v.paused || v.seeking || v.readyState < 2) return;
-    var d = v.currentTime - livePos();
+    var d = playerPos() - livePos();
     d = ((d + CYCLE * 1.5) % CYCLE) - CYCLE / 2; // the gap the short way around the loop
     if (Math.abs(d) > 6) toLive();
   }, 5000);

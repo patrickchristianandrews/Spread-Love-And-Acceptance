@@ -1,5 +1,5 @@
 /* site.js — shared navigation and membership for every page.
-   To add a page: add one line to SECTIONS below and put these two lines in the page's <head>:
+   To add a page: add one line to SECTIONS below (and to MENU, if it should show in the menu) and put these two lines in the page's <head>:
      <link rel="stylesheet" href="/assets/css/site.css">
      <script src="/assets/js/site.js" defer></script>
    To make a page members-only: set  paid: true  on its line. That's the only switch.
@@ -113,7 +113,8 @@
       { href: '/relationships.html#coworkers', deep: true, code: '', title: 'Coworkers & teams', note: 'Start with one owner per job, getting back in tune, and saying it so it lands' },
       { href: '/relationships.html#caregivers', deep: true, code: '', title: 'Caregivers', note: 'Start with your battery, one owner per job, and the Calm-Down Kit' },
       { href: '/full-path.html', code: 'Package', title: 'The workpaper package and report', note: 'One fillable PDF for your relationship, and a detailed report from your answers: findings, recommendations and a plan' },
-      { href: '/relationships.html#map', deep: true, code: 'Map', title: 'The full map', note: 'Every chapter, worksheet and tool, for every kind of relationship' }
+      { href: '/relationships.html#map', deep: true, code: 'Map', title: 'The full map', note: 'Every chapter, worksheet and tool, for every kind of relationship' },
+      { href: '/grandparents.html', code: 'New', title: 'For grandparents', note: 'Help with the grandkids without taking over: fair childcare, house rules and saying no kindly' }
     ]},
     { id: 'book', title: 'The book', blurb: 'The manuscript, one idea per chapter. Each chapter pairs with a workpaper that puts it to use.', items: [
       { href: '/book/preface.html', deep: true, code: 'Preface', title: 'The work nobody sees', note: 'The quiet, unseen work of running a shared life, and why it deserves to be noticed' },
@@ -184,6 +185,120 @@
     ]}
   ];
 
+  // ===== The menu: what the top bar and the "Menu" panel show =====
+  // SECTIONS above stays the full list of pages (it sets each page's lock, previous/next links and look,
+  // and the Contents page lists all of it). MENU is the shorter, grouped view people browse:
+  // each page once, most-used first. Members locks come from SECTIONS automatically.
+  // { sub: 'Name' } starts a small heading inside a group. A page left out of MENU is still on
+  // the Contents page (/contents.html, linked in every footer as "All pages").
+  var MENU = [
+    { id: 'start', name: 'Start here', title: 'Start here', blurb: 'New here? What this is, and a gentle first step.', items: [
+      { href: '/start-here.html', code: 'Start', title: 'Start here', note: 'What this is in one minute, and your best first step' },
+      { href: '/start-in-10-minutes.html', code: '10 min', title: 'Start in 10 minutes', note: 'Today’s weather, the Preface, one card and one thing logged' },
+      { href: '/quick-checks.html#today', code: 'Daily', title: 'Today’s Weather', note: 'A one-minute read on how you’re doing today' },
+      { href: '/ask.html', code: 'Chat', title: 'Ask Professor Puddles', note: 'Ask in your own words. Answers come only from this site' },
+      { href: '/sent-this.html', title: 'Sent this by someone?', note: 'What they see, what stays yours, and how to say no kindly' },
+      { href: '/is-this-for-you.html', deep: true, title: 'Is this right for you?', note: 'What this is and isn’t, and who it helps' },
+      { href: '/how-it-works.html', deep: true, title: 'How it works', note: 'A friendly tour of the idea behind it all' },
+      { href: '/five-pillars.html', deep: true, title: 'The Five Pillars', note: 'The five ideas under everything here' },
+      { href: '/whats-new.html', code: 'New', title: 'What’s new', note: 'Everything newly added, with dates' },
+      { href: '/infographic.html', title: 'The whole idea on one page', note: 'A printable summary, easy to share' },
+      { href: '/contents.html', deep: true, code: 'All', title: 'Every page', note: 'The full contents and site directory' }
+    ]},
+    { id: 'book', name: 'Book', title: 'The book', blurb: 'A short book, one idea per chapter. More to read and hear is under Learn.', items: [
+      { href: '/book/preface.html', deep: true, code: 'Preface', title: 'The work nobody sees', note: 'The quiet, unseen work of running a shared life' },
+      { href: '/book/chapter-1.html', deep: true, code: 'I', title: 'Why we get out of tune', note: 'How pace, tone and urgency nudge two people out of sync' },
+      { href: '/book/chapter-2.html', deep: true, code: 'II', title: 'Is the split working?', note: 'Look at the arrangement, never at a person' },
+      { href: '/book/chapter-3.html', deep: true, code: 'III', title: 'Full tanks and different angles', note: 'Why some reactions are bigger than their cause' },
+      { href: '/book/chapter-4.html', deep: true, code: 'IV', title: 'Two kinds of fair', note: 'Agreeing on what fair means to you both' },
+      { href: '/book/chapter-5.html', deep: true, code: 'V', title: 'The monthly look-back', note: 'Catch what weekly check-ins miss' },
+      { href: '/quest.html', title: 'Your quest map', note: 'A map that lights up as you read' }
+    ]},
+    { id: 'learn', name: 'Learn', title: 'Learn', blurb: 'Read, listen and go deeper: the library, articles, stories, guides and the big ideas behind it all. New learning lands here first.', items: [
+      { sub: 'Read and listen' },
+      { href: '/frequency-framework.html', deep: true, title: 'The Frequency Framework', note: 'Why two kind people fall out of step, and how to find the rhythm again' },
+      { href: '/library.html', code: 'Library', title: 'The Professor’s Library', note: 'Psychology and conflict in plain words' },
+      { href: '/learn/index.html', deep: true, code: 'Stories', title: 'Stories from Philosophy', note: 'Old stories with useful ideas inside' },
+      { href: '/reading.html', code: 'Articles', title: 'Articles to read', note: 'Hand-picked articles from trusted sources' },
+      { href: '/podcast-index.html', code: 'Podcast', title: 'The Podcast', note: 'Kane and Christian talk through the ideas' },
+      { sub: 'Guides to common questions' },
+      { href: '/invisible-labor-mental-load.html', code: 'Guide', title: 'Invisible labor and the mental load', note: 'What it is, and five calm steps to share it' },
+      { href: '/chore-chart-for-couples.html', code: 'Print', title: 'A fair chore chart for couples', note: 'Free and printable, one owner per job' },
+      { href: '/how-to-stop-fighting-with-your-partner.html', code: 'Guide', title: 'How to stop fighting with your partner', note: 'Seven calm steps' },
+      { href: '/neurodivergent-relationships.html', code: 'Guide', title: 'Neurodivergent relationships', note: 'Tips for ADHD and autistic couples and families' },
+      { href: '/communication-style-quiz.html', code: 'Quiz', title: 'Communication style quiz', note: 'Find your Wave Code' },
+      { sub: 'Words and big ideas' },
+      { href: '/glossary.html', code: 'Words', title: 'Glossary', note: 'Every word the site uses, in plain English' },
+      { href: '/polymath.html', title: 'The polymath way', note: 'How nine fields of study became one program' }
+    ]},
+    { id: 'self', name: 'Know yourself', title: 'Know yourself', blurb: 'Understand your own wiring, load and patterns, on your own and at your pace.', items: [
+      { href: '/wavelength.html', code: 'New', title: 'Find your Wavelength', note: 'How you think, talk and listen: your Wave Code' },
+      { href: '/self-path.html', code: 'Start', title: 'Your self-discovery path', note: 'The self path, step by step, on your own' },
+      { href: '/know-yourself.html', deep: true, title: 'Know your own wiring', note: 'What’s you, what life taught you, and what’s just today' },
+      { href: '/growing-up.html', deep: true, title: 'Where your lens came from', note: 'How growing up shapes what you expect, and which rules to keep' },
+      { href: '/wired-differently.html', deep: true, title: 'Wired Differently', note: 'How differently wired people hear the same words' },
+      { href: '/wiring-card.html', code: 'Tool', title: 'Wiring Card', note: 'A one-page card on how you like to be spoken to' },
+      { href: '/workpapers/wp-02-battery-stress-meter.html', deep: true, code: 'WP-02', title: 'How much are you carrying?', note: 'Five quick questions about today’s load' },
+      { href: '/wp-11.html', deep: true, code: 'WP-11', title: 'The Calm-Down Kit', note: 'Decide ahead of time what settles you' },
+      { href: '/tools/frequency-calibration.html', code: 'Tool', title: 'Find your natural rhythms', note: 'Your rhythms for money, decisions, check-ins and rest' }
+    ]},
+    { id: 'two', name: 'Tools for two', title: 'Tools for two', blurb: 'Share the load and talk it through kindly. What you type stays on your device.', items: [
+      { href: '/relationships.html', deep: true, code: 'Start', title: 'Where to start in your relationship', note: 'Partners, family, co-parents, friends, roommates, coworkers and caregivers' },
+      { href: '/lemonade-stand.html', code: 'Tool', title: 'The Lemonade Stand', note: 'List who did what this week, and see the split plainly' },
+      { href: '/conversation-reader.html', code: 'Tool', title: 'The Conversation Reader', note: 'Paste a thread and see where it turned' },
+      { href: '/perspective-shifter.html', code: 'New', title: 'The Perspective Shifter', note: 'See a moment from their side' },
+      { href: '/signal-translator.html', code: 'Tool', title: 'The Signal Translator', note: 'How a sentence might land for someone wired differently' },
+      { href: '/turning-toward.html', deep: true, title: 'Turning toward', note: 'Seven small, everyday ways to connect' },
+      { href: '/check-ins.html', deep: true, title: 'Check-ins', note: 'How to have a tender conversation kindly' },
+      { href: '/carrier-wave-decoder.html', code: 'Tool', title: 'The Carrier Wave Decoder', note: 'For when a talk starts going sideways' },
+      { href: '/tools/mood-arbitrage-free.html', code: 'Tool', title: 'Mood Arbitrage', note: 'Small, kind ways to shift a heavy mood' },
+      { href: '/workpapers/calculators/calc01-solvency.html', code: 'CALC-01', title: 'Is the setup working for everyone?', note: 'Add your numbers and see if the split works' },
+      { sub: 'Worksheets and the six weeks' },
+      { href: '/workpapers/fill/suite.html', code: 'Suite', title: 'The Workpaper Suite', note: 'Every worksheet for your situation, fillable and printable' },
+      { href: '/workpapers/wp-01.html', deep: true, code: 'WP-01', title: 'Who did what', note: 'Start here: a week’s log, plus kind ways to say no' },
+      { href: '/workpapers/wp-03-raci-treaty.html', deep: true, code: 'WP-03', title: 'One owner per job', note: 'So nobody has to keep asking' },
+      { href: '/workpapers/wp-09-tone-filter.html', deep: true, code: 'WP-09', title: 'Say it so it lands', note: 'A fact, a feeling and a kind ask' },
+      { href: '/workpapers/wp-13-pll-protocol.html', deep: true, code: 'WP-13', title: 'The 90-second daily check-in', note: 'Keep small things small' },
+      { href: '/workpapers/wp-04-deficit-audit.html', deep: true, code: 'WP-04', title: 'What keeps coming back?', note: 'The monthly look-back' },
+      { href: '/prog-01.html', deep: true, code: '6 weeks', title: 'Six gentle weeks', note: 'One worksheet a week, in order' },
+      { href: '/full-path.html', code: 'Package', title: 'The package and report', note: 'One PDF for your relationship, and a report from your answers' },
+      { href: '/program.html', title: 'Which part to use when', note: 'The six weeks, the suite and the package, side by side' }
+    ]},
+    { id: 'play', name: 'Calm & play', title: 'Calm & play', blurb: 'Calm games and sounds for a busy mind. No timers and no way to lose.', items: [
+      { href: '/pause-and-play.html', code: 'All', title: 'Pause & Play', note: 'All the calm games, your level and your garden' },
+      { href: '/night-garden.html', code: 'Breathe', title: 'The Night Garden', note: 'Breathe slowly and watch the flowers bloom' },
+      { href: '/calm-visualizer.html', code: 'Drift', title: 'Drift: calm visualizer', note: 'Slow colors and tones matched to how you feel' },
+      { href: '/frequency-journey.html', code: 'Game', title: 'The Frequency Journey', note: 'A calm puzzle journey with Tidbit and Sugarfoot' },
+      { href: '/word-bloom.html', code: 'Game', title: 'Word Bloom', note: 'Swipe the petals to spell words' },
+      { href: '/quiet-words.html', code: 'Game', title: 'Quiet Words', note: 'A gentle word search' },
+      { href: '/quiet-crossword.html', code: 'Game', title: 'Quiet Crossword', note: 'Small, friendly crosswords for your phone' },
+      { href: '/daily-ledger-crossword.html', code: 'Game', title: 'The Daily Ledger Crossword', note: 'From a quick Mini to a Big Sunday' },
+      { href: '/soundscapes.html', code: 'Audio', title: 'Soundscapes', note: 'Background audio for settling down' },
+      { href: '/echoes-of-gold.html', code: 'Album', title: 'Echoes of Gold', note: 'The companion album' }
+    ]},
+    { id: 'kids', name: 'Kids & families', title: 'For kids & families', blurb: 'Tidbit and Sugarfoot’s cartoon and live pal cam, and help for every generation at home.', items: [
+      { href: '/frequency-buddies.html', code: 'Cartoon', title: 'Frequency Buddies', note: 'A free kids’ cartoon about feelings, with captions' },
+      { href: '/frequency-buddies-live.html', code: 'On air', title: 'Frequency Buddies Live', note: 'An always-on station: drop in on the episode playing now' },
+      { href: '/frequency-buddies-shuffle.html', code: 'Shuffle', title: 'Frequency Buddies on shuffle', note: 'Episodes in a random order, and downloads' },
+      { href: '/pal-cam-tv.html', code: 'Live', title: 'Pal Cam TV', note: 'The pups live, all day, full screen or on your TV' },
+      { href: '/grandparents.html', code: 'New', title: 'For grandparents', note: 'Help with the grandkids without taking over' },
+      { href: '/relationships.html#family', title: 'Family: where to start', note: 'The first tools to try together at home' }
+    ]},
+    { id: 'about', name: 'About', title: 'About', blurb: 'Who made this and why, what’s finished, and the site’s policies.', items: [
+      { href: '/about.html', title: 'About the creator', note: 'Christian’s story, and why this exists' },
+      { href: '/ways-in.html', deep: true, title: 'Ways in', note: 'Free while it’s being built: what each level opens' },
+      { href: '/membership.html', title: 'Membership', note: 'Sign up free, or sign out of this browser' },
+      { href: '/roadmap.html', title: 'Content Roadmap', note: 'What’s live, in progress and planned' },
+      { href: '/program-overview.html', deep: true, title: 'Program Overview', note: 'How the chapters, worksheets and tools fit together' },
+      { href: '/suite-index.html', deep: true, title: 'Suite Index', note: 'The official list of what’s built today' },
+      { href: '/telemetry.html', title: 'Rollout Status', note: 'How much of the plan is finished' },
+      { href: '/on-this-device.html', title: 'What’s stored on this device', note: 'See and erase what this site keeps in your browser' },
+      { href: '/legal/privacy-policy.html', title: 'Privacy policy' },
+      { href: '/legal/terms-of-service.html', title: 'Terms of service' },
+      { href: '/legal/refund-policy.html', title: 'Refund policy' }
+    ]}
+  ];
+
   // ===== Nothing below needs editing =====
   var STORE_KEY = 'tol-member-email';
   // Full path from the site root, e.g. /book/chapter-2.html ("/" means /index.html)
@@ -206,6 +321,17 @@
   SECTIONS.forEach(function (s) {
     s.items.forEach(function (it) { if (it.href === current) { here = it; hereSection = s; } });
   });
+  // Menu entries take their members lock from SECTIONS, so the lock is still set in one place
+  var PAID = {};
+  SECTIONS.forEach(function (s) { s.items.forEach(function (it) { if (it.paid) PAID[it.href.split('#')[0]] = true; }); });
+  var hereGroup = null;
+  MENU.forEach(function (g) {
+    g.items.forEach(function (it) {
+      if (!it.href) return;
+      if (PAID[it.href.split('#')[0]]) it.paid = true;
+      if (!hereGroup && it.href.split('#')[0] === current) hereGroup = g;
+    });
+  });
 
   function el(tag, attrs, html) {
     var n = document.createElement(tag);
@@ -227,16 +353,17 @@
   // ---------- Index (panel + home page) ----------
   function buildIndex(opts) {
     var wrap = el('div', { class: 'tol-index' + (opts.page ? ' is-page' : '') + (isMember ? ' is-member' : '') });
-    SECTIONS.forEach(function (s) {
+    // the menu panel shows the grouped MENU; the Contents page lists every page in SECTIONS
+    (opts.accordion ? MENU : SECTIONS).forEach(function (s) {
       if (opts.page && s.id === 'about' && !opts.all) return;
       if (opts.page && s.id === 'new' && opts.all) return; // the contents list names each page once, in its home section
       var sec;
       if (opts.accordion) {
         // The panel shows section names only; open one to see its pages
-        var count = s.items.filter(function (i) { return i.href !== '/index.html' && i.menu !== false; }).length;
+        var count = s.items.filter(function (i) { return i.href && i.href !== '/index.html' && i.menu !== false; }).length;
         sec = el('details', { class: 'tol-index-section tol-acc', id: 'tol-sec-' + s.id });
         if (s.id === opts.open) sec.open = true;
-        var hereMark = hereSection && hereSection.id === s.id ? ' <span class="tol-acc-here">you are here</span>' : '';
+        var hereMark = hereGroup && hereGroup.id === s.id ? ' <span class="tol-acc-here">you are here</span>' : '';
         sec.appendChild(el('summary', null, '<span class="tol-acc-title">' + esc(s.title) + hereMark + '</span><span class="tol-acc-count">' + count + (count === 1 ? ' page' : ' pages') + '</span>'));
         // One section open at a time keeps the list short
         sec.addEventListener('toggle', function () {
@@ -250,9 +377,10 @@
       if (s.blurb) sec.appendChild(el('p', null, esc(s.blurb)));
       var ol = el('ol');
       s.items.forEach(function (it) {
+        if (it.sub) { ol.appendChild(el('li', { class: 'tol-sub', role: 'presentation' }, esc(it.sub))); return; }
         if (it.href === '/index.html' || it.menu === false) return; // menu:false pages are reached from their parent page
         var a = el('a', { class: 'tol-row', href: it.href });
-        if (it.href === current) a.setAttribute('aria-current', 'page');
+        if (it.href.split('#')[0] === current) a.setAttribute('aria-current', 'page');
         a.innerHTML =
           '<span class="tol-code">' + esc(it.code || '') + '</span>' +
           '<span class="tol-title">' + esc(it.title) + (it.note ? '<small>' + esc(it.note) + '</small>' : '') + '</span>' +
@@ -279,8 +407,7 @@
   var panel, scrim, lastFocus, memberLink;
 
   // The sections shown in the top bar. Each opens a short list of its pages.
-  var RIBBON = [['new', 'New'], ['start', 'Start here'], ['self', 'Self-discovery'], ['relationships', 'Relationships'],
-                ['book', 'Book'], ['workpapers', 'Workpapers'], ['tools', 'Tools'], ['play', 'Play'], ['media', 'Media'], ['about', 'About']];
+  var RIBBON = MENU.map(function (g) { return [g.id, g.name || g.title]; });
   var openDrop = null;
 
   function closeDrop(refocus) {
@@ -292,17 +419,18 @@
   }
 
   function buildDrop(id, name, alignRight) {
-    var s = SECTIONS.filter(function (x) { return x.id === id; })[0];
+    var s = MENU.filter(function (x) { return x.id === id; })[0];
     var item = el('div', { class: 'tol-nav-item' });
     var btn = el('button', { type: 'button', 'data-sec': id, 'aria-expanded': 'false', 'aria-controls': 'tol-drop-' + id }, esc(name));
-    if (hereSection && hereSection.id === id) btn.setAttribute('aria-current', 'true');
+    if (hereGroup && hereGroup.id === id) btn.setAttribute('aria-current', 'true');
     var menu = el('div', { class: 'tol-drop' + (alignRight ? ' is-right' : ''), id: 'tol-drop-' + id, hidden: '' });
     if (s.blurb) menu.appendChild(el('p', { class: 'tol-drop-blurb' }, esc(s.blurb)));
     var ul = el('ul');
     s.items.forEach(function (it) {
+      if (it.sub) { ul.appendChild(el('li', { class: 'tol-sub', role: 'presentation' }, esc(it.sub))); return; }
       if (it.href === '/index.html' || it.menu === false) return;
       var a = el('a', { href: it.href }, (it.code ? '<span class="tol-drop-code">' + esc(it.code) + '</span>' : '') + '<span>' + esc(it.title) + '</span>');
-      if (it.href === current) a.setAttribute('aria-current', 'page');
+      if (it.href.split('#')[0] === current) a.setAttribute('aria-current', 'page');
       var li = el('li'); li.appendChild(a); ul.appendChild(li);
     });
     menu.appendChild(ul);
@@ -2320,7 +2448,7 @@
   }
 
   // Read-only access for pages that need the page list (e.g. 404.html)
-  window.TOL = { sections: SECTIONS, config: CONFIG, signUp: signUpFree, isMember: function () { return isMember; } };
+  window.TOL = { sections: SECTIONS, menu: MENU, config: CONFIG, signUp: signUpFree, isMember: function () { return isMember; } };
 
   // ---------- Start ----------
   function start() {

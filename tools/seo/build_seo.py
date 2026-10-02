@@ -284,6 +284,7 @@ SEARCH.update({
  'how-to-stop-fighting-with-your-partner.html': ('How to Stop Fighting With Your Partner: 7 Calm Steps', 'Practical, calm ways to stop fighting with your partner: notice the early signs, take a real pause, check your words, and fix the setup behind repeat fights.'),
  'neurodivergent-relationships.html': ('Neurodivergent Relationships: ADHD and Autistic Couples', 'Practical tips for ADHD, autistic and AuDHD couples and families: communication differences, sensory overload at home, plans, chores and kind feedback.'),
  'communication-style-quiz.html': ('Communication Style Quiz: Find Your Wave Code (Free)', 'A free communication style quiz: find your four-letter Wave Code and which of 16 archetypes fits, from pace and detail to how you send and receive words.'),
+ 'grandparents.html': ('For Grandparents: Help Without Taking Over', 'Free, gentle help for grandparents: share childcare fairly, agree on house rules with your adult children, say no kindly, and stay close to your grandkids.'),
 })
 
 # Titles past about 60 characters and descriptions past about 160 are cut off in search results
@@ -317,6 +318,11 @@ SEASON_VIDEO = {
     'chapters': [(0, 893, 'Episode 1: The Storm Over the Treehouse'), (893, 1746, 'Episode 2: Out of Tune'), (1746, 2598, 'Episode 3: The Heavy Basket'),
                  (2598, 3451, 'Episode 4: Who Broke the Kite?'), (3451, 4333, 'Episode 5: The Longest Night')],
 }
+# each episode is its own video file (every file stays under the 25 MB limit some hosts have)
+EPISODE_VIDEOS = [{'url': SITE + '/assets/video/frequency-buddies-s1e%d.mp4' % (i + 1), 'thumb': SEASON_VIDEO['thumb'], 'name': 'Frequency Buddies · ' + n,
+                   'seconds': b - a, 'duration': 'PT%dM%dS' % ((b - a) // 60, (b - a) % 60), 'uploaded': SEASON_VIDEO['uploaded'],
+                   'desc': 'A gentle animated episode for kids and families: Tidbit and Sugarfoot on a big little quest, with the theme song and captions in the picture.'}
+                  for i, (a, b, n) in enumerate(SEASON_VIDEO['chapters'])]
 VIDEO_PAGES = ('frequency-buddies.html', 'frequency-buddies-shuffle.html')
 
 # Older copies of a worksheet that compete with the page the menu links to. Each one points search
@@ -363,11 +369,9 @@ CRUMB_PARENTS = [
 
 
 def video_ld(publisher):
-    v = SEASON_VIDEO
-    return {'@type': 'VideoObject', 'name': v['name'], 'description': v['desc'], 'thumbnailUrl': [v['thumb']], 'uploadDate': v['uploaded'],
-            'duration': v['duration'], 'contentUrl': v['url'], 'embedUrl': SITE + '/frequency-buddies-shuffle.html', 'isFamilyFriendly': True,
-            'inLanguage': 'en-US', 'publisher': publisher,
-            'hasPart': [{'@type': 'Clip', 'name': n, 'startOffset': a, 'endOffset': b, 'url': v['url'] + '#t=' + str(a)} for a, b, n in v['chapters']]}
+    return [{'@type': 'VideoObject', 'name': v['name'], 'description': v['desc'], 'thumbnailUrl': [v['thumb']], 'uploadDate': v['uploaded'],
+             'duration': v['duration'], 'contentUrl': v['url'], 'embedUrl': SITE + '/frequency-buddies.html?ep=s1e%d' % (i + 1), 'isFamilyFriendly': True,
+             'inLanguage': 'en-US', 'publisher': publisher} for i, v in enumerate(EPISODE_VIDEOS)]
 
 
 def series_ld(publisher):
@@ -382,7 +386,7 @@ def series_ld(publisher):
 
 TOOLS = r'^(tools/|signal-translator|carrier-wave-decoder|conversation-reader|lemonade-stand|calc01-solvency|wiring-card|quick-checks|full-path|workpapers/calculators|do/|snapshot/|pal-cam-tv|ask)'
 GAMES = r'^(quiet-words|word-bloom|quiet-crossword|daily-ledger-crossword|frequency-journey|night-garden|calm-visualizer)'
-ARTICLES = r'^(invisible-labor-mental-load|chore-chart-for-couples|how-to-stop-fighting|neurodivergent-relationships|book/|library/|learn/|workpapers/wp-|workpapers/report|wp-|five-pillars|turning-toward|check-ins|know-yourself|wired-differently|frequency-framework|how-it-works|relationships|self-path|glossary)'
+ARTICLES = r'^(invisible-labor-mental-load|chore-chart-for-couples|grandparents|how-to-stop-fighting|neurodivergent-relationships|book/|library/|learn/|workpapers/wp-|workpapers/report|wp-|five-pillars|turning-toward|check-ins|know-yourself|wired-differently|frequency-framework|how-it-works|relationships|self-path|glossary)'
 
 
 def rel_url(path):
@@ -579,7 +583,7 @@ def ld_for(path, title, desc, url, kw, modified, published, body, image):
                                                   for i, (n, t) in enumerate(steps)]})
         graph[-1].pop('totalTime')
     if path in VIDEO_PAGES:
-        graph.append(video_ld(publisher)); graph.append(series_ld(publisher))
+        graph.extend(video_ld(publisher)); graph.append(series_ld(publisher))
     if path != 'index.html':
         graph.append(crumbs(path, title, url))
     return {'@context': 'https://schema.org', '@graph': graph}
@@ -757,10 +761,9 @@ def priority(path):
 
 def write_sitemap(report):
     rows = ['<?xml version="1.0" encoding="UTF-8"?>', '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1" xmlns:video="http://www.google.com/schemas/sitemap-video/1.1">']
-    v = SEASON_VIDEO
-    vid = ('<video:video><video:thumbnail_loc>%s</video:thumbnail_loc><video:title>%s</video:title><video:description>%s</video:description>'
+    vid = ''.join(('<video:video><video:thumbnail_loc>%s</video:thumbnail_loc><video:title>%s</video:title><video:description>%s</video:description>'
            '<video:content_loc>%s</video:content_loc><video:duration>%d</video:duration><video:family_friendly>yes</video:family_friendly></video:video>') % (
-           html.escape(v['thumb']), html.escape(v['name']), html.escape(v['desc'][:2000]), html.escape(v['url']), v['seconds'])
+           html.escape(v['thumb']), html.escape(v['name']), html.escape(v['desc'][:2000]), html.escape(v['url']), v['seconds']) for v in EPISODE_VIDEOS)
     for path, title, desc, mod in sorted(report, key=lambda r: (-float(priority(r[0])), r[0])):
         imgs = ''.join('<image:image><image:loc>%s</image:loc></image:image>' % html.escape(u) for u in PAGE_IMAGES.get(path, []))
         rows.append('  <url><loc>%s</loc><lastmod>%s</lastmod><changefreq>weekly</changefreq><priority>%s</priority>%s%s</url>' % (html.escape(SITE + rel_url(path)), mod, priority(path), imgs, vid if path in VIDEO_PAGES else ''))
@@ -770,7 +773,7 @@ def write_sitemap(report):
 
 GROUPS = [
     ('Start here', r'^(index|start-here|start-in-10|sent-this|about|how-it-works|is-this-for-you|ways-in|program\.html|contents|glossary|five-pillars|relationships|self-path|whats-new|membership)'),
-    ('Guides to common questions', r'^(invisible-labor-mental-load|chore-chart-for-couples|how-to-stop-fighting|neurodivergent-relationships|communication-style-quiz)'),
+    ('Guides to common questions', r'^(invisible-labor-mental-load|chore-chart-for-couples|grandparents|how-to-stop-fighting|neurodivergent-relationships|communication-style-quiz)'),
     ('Tools for kinder conversations and fair relationships', r'^(ask|signal-translator|carrier-wave|conversation-reader|wired-differently|wiring-card|turning-toward|check-ins|know-yourself|quick-checks|lemonade|calc01|full-path|snapshot)'),
     ('Worksheets (the Workpaper Suite)', r'^(workpapers|wp-|do/|prog-01|suite-index|program-overview)'),
     ('Calm, breathing and sound', r'^(night-garden|calm-visualizer|soundscapes|wp-11-sound|echoes-of-gold|pal-cam)'),

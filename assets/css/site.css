@@ -2425,3 +2425,11 @@ html.tol-bubbles:not(.tol-nobubbles) main table:where(:not(.no-bubble, .tol-plai
   html.tol-bubbles main :is(p, li, dt, dd, figcaption, caption, legend, address, blockquote, h1, h2, h3, h4, h5, h6, td, th, label){ background-color:transparent; box-shadow:none; }
 }
 /* ========================= end Text bubbles ========================= */
+
+/* ---------- Grouped menu: small headings inside a group, and long drop-downs that scroll ---------- */
+.tol-index li.tol-sub, .tol-drop li.tol-sub{
+  margin:.9rem 0 .2rem; padding:.55rem .55rem 0; border-top:1px solid var(--line);
+  font-family:"IBM Plex Mono", ui-monospace, monospace; font-size:.76rem; letter-spacing:.04em; color:var(--brass-ink, #7A5620);
+}
+.tol-drop li.tol-sub{ margin:.45rem 0 .1rem; padding:.45rem .5rem .1rem; }
+.tol-drop{ max-height:calc(100vh - var(--tol-bar-h, 58px) - 1.5rem); overflow-y:auto; overscroll-behavior:contain; }

@@ -489,6 +489,22 @@
     const code = scores.map((s, i) => { const v = s !== 0 ? s : first[i]; return v >= 0 ? AXES[i][0] : AXES[i][1]; }).join('');
     return { code, scores };
   }
+  // where the Wave Code and the statement point two ways: normal, and worth a second look
+  const TWO_WAYS = [
+    ['Q', 'wired', 'thinkfirst', 'Quick Spark', 'I think first, then talk', 'Many people think out loud about small things and quietly about big ones. Which is which for you?'],
+    ['S', 'wired', 'thinkloud', 'Slow Simmer', 'I think out loud', 'Many people talk to think in easy moments and go quiet when it matters. Which is which for you?'],
+    ['D', 'wired', 'hint', 'Direct', 'I hint more than I say', 'Plenty of people are direct at work and hint at home, or the other way around. Where does each one show up?'],
+    ['N', 'wired', 'direct', 'Nuanced', 'I say things directly', 'You may be plain-spoken about facts and gentler about feelings. Where does each one show up?'],
+    ['F', 'wired', 'details', 'Forest', 'I notice the details', 'Big-picture thinkers often notice details that matter to them. Which details catch your eye?'],
+    ['T', 'wired', 'bigpic', 'Trees', 'I see the big picture', 'Detail-minded people can still see the whole. When do you zoom out?']
+  ];
+  function twoWays(code, scores) {
+    const out = [];
+    TWO_WAYS.forEach(r => { if (code.indexOf(r[0]) >= 0 && hpPicked(r[1], r[2])) out.push('Your Wave Code says <strong>' + r[3] + '</strong>, and in your statement you picked “' + r[4] + '.” ' + r[5]); });
+    scores.forEach((v, i) => { if (Math.abs(v) <= 1) { const a = LETTERS[AXES[i][0]], b = LETTERS[AXES[i][1]]; out.push('On ' + a.axis.toLowerCase() + ' you landed right in the middle, between <strong>' + a.name + '</strong> and <strong>' + b.name + '</strong>. You may switch between them depending on the day or the person.'); } });
+    if (!out.length) return '';
+    return '<div class="wl-sect wl-twoways"><h3>Where your answers point two ways</h3><p class="wl-small">That’s normal. People aren’t one thing all the time, and a mix often means you adjust to the moment. These are worth a second look, and you can change any answer.</p><ul class="wl-words">' + out.map(x => '<li>' + x + '</li>').join('') + '</ul></div>';
+  }
   function chosenWords(secId) {
     const sec = SECTIONS.find(s => s.id === secId), out = [];
     Object.keys(sec.chips).forEach(bank => sec.chips[bank].forEach((c, i) => { if (S.chips.indexOf(secId + ':' + bank + ':' + i) >= 0) out.push(c[0]); }));
@@ -774,7 +790,7 @@
           '</div>' +
           '<div class="wl-wavebox">' + waveSVG(code, true) +
             '<p class="wl-wavecap">Your waveform: faster waves for Quick Spark, slower for Slow Simmer; sharp edges for Trees, smooth for Forest; taller for Direct, softer for Nuanced; echoes for Attuned, one clean line for Explicit.</p></div>' +
-          '<div class="wl-sect"><h3>What each letter means</h3><p class="wl-small">Tap a letter to open it. Each one is a preference on a line between two ends, and everyone uses both ends sometimes.</p>' + letters + '</div>'
+          '<div class="wl-sect"><h3>What each letter means</h3><p class="wl-small">Tap a letter to open it. Each one is a preference on a line between two ends, and everyone uses both ends sometimes.</p>' + letters + '</div>' + twoWays(code, scores)
           : '<div class="wl-result-top"><p class="wl-who">' + (S.name ? esc(S.name) + '’s Wavelength' : 'Your Wavelength') + '</p></div>' + unlock) +
         (groups ? '<div class="wl-sect"><h3>In my own words</h3>' + groups + '</div>' : '') +
         '<div class="wl-sect" id="wl-inputs-sect"><h3>How I take things in</h3>' +

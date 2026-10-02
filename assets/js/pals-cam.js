@@ -678,7 +678,7 @@
         T.pose = S.pose = 'sit'; T.wag = S.wag = 2; T.face = T.x <= S.x ? 1 : -1; S.face = -T.face;
         if (A.once(Math.round(52000 * k))) A.burst(A.cx, A.G - 130, 14, 'confetti', { speed: 0.14, spread: 3 });
         if (!A.probe && capMain && capMain.textContent.indexOf('Frequency Buddies:') !== 0) { capMain.textContent = 'Frequency Buddies: five cartoon adventures with Tidbit and Sugarfoot'; capPunch.textContent = 'Watch them free at spreadloveandacceptance.com'; }
-        A.say(T, 'Watch with us!', 52600 * k, 55600 * k); A.say(S, 'See you there!', 54600 * k, 58400 * k);
+        A.say(T, 'Watch with us!', 52600 * k, 55200 * k); A.say(S, 'See you there!', 55400 * k, 58400 * k); // one at a time, so they never overlap on a narrow screen
       }
     },
     back: function (g, A) {
