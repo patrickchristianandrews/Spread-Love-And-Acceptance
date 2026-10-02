@@ -4,9 +4,8 @@
    always under the pups. It follows the pal cam's Sound button (and Quiet mode), and nothing is sent anywhere.
    Recordings (from the open-source Blanket app's collection, edited into gentle loops):
    birds by kvgarlic (CC0), stream by gluckose (CC0), wind by felix.blume (CC0), boat by Falcet (CC0),
-   crickets by Lisa Redfern (public domain), fireplace by ezwa (public domain), café by stephan (public
-   domain). The waves, rain and city sounds were made for this site from scratch (shaped noise, no recordings),
-   so they're free to use. */
+   crickets by Lisa Redfern (public domain), café by stephan (public domain). The waves, rain, city,
+   fireplace and far-off carnival organ were made for this site from scratch (no recordings), so they're free to use. */
 (function () {
   'use strict';
   var BASE = '/assets/audio/ambience/';
@@ -23,7 +22,7 @@
     pond: DAY_NIGHT([['stream', 0.4], ['birds', 0.35]], [['stream', 0.35], ['crickets', 0.4]]),
     dock: DAY_NIGHT([['boat', 0.55], ['birds', 0.2]], [['boat', 0.5], ['crickets', 0.3]]),
     citypark: DAY_NIGHT([['city', 0.3], ['birds', 0.35]], [['city', 0.3], ['crickets', 0.25]]), rooftop: DAY_NIGHT([['city', 0.3], ['wind', 0.25]]),
-    festival: DAY_NIGHT([['city', 0.3]]), carnival: DAY_NIGHT([['cafe', 0.3]]),
+    festival: DAY_NIGHT([['city', 0.3]]), carnival: DAY_NIGHT([['carnival', 0.3]]),
     campsite: DAY_NIGHT([['fire', 0.5], ['birds', 0.3]], [['fire', 0.5], ['crickets', 0.45]]),
     rainy: DAY_NIGHT([['rain', 0.55]]), bakery: DAY_NIGHT([['cafe', 0.35]]), library: DAY_NIGHT([['cafe', 0.12]]),
     underwater: DAY_NIGHT([['underwater', 0.5]]), aquarium: DAY_NIGHT([['underwater', 0.4]])

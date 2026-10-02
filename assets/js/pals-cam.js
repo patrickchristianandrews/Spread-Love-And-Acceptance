@@ -678,7 +678,7 @@
         T.pose = S.pose = 'sit'; T.wag = S.wag = 2; T.face = T.x <= S.x ? 1 : -1; S.face = -T.face;
         if (A.once(Math.round(52000 * k))) A.burst(A.cx, A.G - 130, 14, 'confetti', { speed: 0.14, spread: 3 });
         if (!A.probe && capMain && capMain.textContent.indexOf('Frequency Buddies:') !== 0) { capMain.textContent = 'Frequency Buddies: five cartoon adventures with Tidbit and Sugarfoot'; capPunch.textContent = 'Watch them free at spreadloveandacceptance.com'; }
-        A.say(T, 'Watch with us!', 52600 * k, 55600 * k); A.say(S, 'See you there!', 54600 * k, 58400 * k);
+        A.say(T, 'Watch with us!', 52600 * k, 55200 * k); A.say(S, 'See you there!', 55400 * k, 58400 * k); // one at a time, so they never overlap on a narrow screen
       }
     },
     back: function (g, A) {
@@ -749,10 +749,16 @@
     if (!a || a.interlude || a === AD || MB.prev || setting.id === 'theater' || !soundOn()) return false;
     if (stats.acts < 4) return false;
     AD.load(); if (!AD.buf) return false; // the song is fetched the first time it might be needed, and the break waits until it's here
-    if (clock - AD.last < 6 * 60000) return false;
-    return Math.random() < 0.14;
+    if (clock - AD.last < 20 * 60000) return false; // a break now and then, not every few minutes
+    return Math.random() < 0.08;
   }
   var MB = { prev: null, last: 0 }, wantPlace = false;
+  // the local time in the top corner, like a real camera's timestamp
+  var timeEl = null;
+  function showTime() {
+    if (!timeEl || !isOpen) return;
+    try { timeEl.textContent = new Date().toLocaleTimeString([], { hour: 'numeric', minute: '2-digit', second: '2-digit' }); } catch (e) { timeEl.textContent = ''; }
+  }
   function whereText() { var ph = phaseOf(hour); return 'Pal cam · ' + (EVENT && EVENT.special ? EVENT.name + ' · ' : '') + ph.charAt(0).toUpperCase() + ph.slice(1) + ' at ' + setting.name; }
   function toSetting(st) {
     setting = st; bgKey = ''; ambient = []; if (whereEl) whereEl.textContent = whereText();
@@ -1261,7 +1267,9 @@
     '.pc-cv{position:absolute;left:0;top:0;display:block;touch-action:manipulation;cursor:pointer;-webkit-user-select:none;user-select:none}' +
     '.pc-rec{position:absolute;left:.6rem;top:.55rem;display:inline-flex;align-items:center;gap:.35rem;padding:.2rem .55rem;border-radius:999px;background:rgba(255,253,248,.85);font:600 .66rem/1.2 "IBM Plex Mono",monospace;letter-spacing:.08em;color:#8A3E52;pointer-events:none}' +
     '.pc-rec i{width:7px;height:7px;border-radius:50%;background:#E4566E;animation:pcDot 2s ease-in-out infinite}' +
-    '.pc-badge{position:absolute;right:.6rem;top:.55rem;padding:.25rem .7rem;border-radius:999px;background:#3C3350;color:#FFF3D6;font:700 .8rem/1.2 Fraunces,Georgia,serif;pointer-events:none}' +
+    '.pc-time{position:absolute;right:.6rem;top:.55rem;padding:.2rem .55rem;border-radius:999px;background:rgba(255,253,248,.85);font:600 .66rem/1.2 "IBM Plex Mono",monospace;letter-spacing:.06em;color:#3C3350;pointer-events:none;font-variant-numeric:tabular-nums}' +
+    '.pc-time:empty{display:none}' +
+    '.pc-badge{position:absolute;right:.6rem;top:2.1rem;padding:.25rem .7rem;border-radius:999px;background:#3C3350;color:#FFF3D6;font:700 .8rem/1.2 Fraunces,Georgia,serif;pointer-events:none}' +
     '.pc-badge.is-pop{animation:pcPop .5s cubic-bezier(.2,1.6,.4,1) both}' +
     '@keyframes pcPop{from{transform:scale(.4);opacity:0}to{transform:scale(1);opacity:1}}' +
     '.pc-cap{flex:none;margin:0;min-height:2.7em;text-align:center;font:500 1.05rem/1.35 Fraunces,Georgia,serif;color:#3C3350;text-wrap:balance}' +
@@ -1334,7 +1342,7 @@
         '<div class="pc-tr8"><button type="button" class="pc-mus" aria-pressed="false">🎵<span class="pc-lbl"> Music</span> <span class="pc-st">Off</span></button><button type="button" class="pc-snd" aria-pressed="true">🔊<span class="pc-lbl"> Sound</span> <span class="pc-st">On</span></button>' +
         '<button type="button" class="pc-x" aria-label="Close the pal cam"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>Close</button></div></div>' +
         '<div class="pc-snote" role="status" hidden><p class="pc-snote-t"></p><div class="pc-snote-b"><button type="button" class="pc-snote-off">Turn sound off</button><button type="button" class="pc-snote-ok">Got it</button></div></div>' +
-        '<div class="pc-stage"><canvas class="pc-cv" role="img" aria-label="Tidbit and Sugarfoot playing"></canvas><span class="pc-rec" aria-hidden="true"><i></i>PAL CAM</span><span class="pc-badge" hidden></span></div>' +
+        '<div class="pc-stage"><canvas class="pc-cv" role="img" aria-label="Tidbit and Sugarfoot playing"></canvas><span class="pc-rec" aria-hidden="true"><i></i>PAL CAM</span><span class="pc-time" aria-hidden="true"></span><span class="pc-badge" hidden></span></div>' +
         '<p class="pc-cap" id="pc-cap"><span class="pc-main"></span><span class="pc-punch"></span></p>' +
         '<div class="pc-btns"><button type="button" class="pc-b is-main pc-next">Next!</button><button type="button" class="pc-b is-sur pc-sur">Surprise me</button><button type="button" class="pc-b pc-pause" aria-pressed="false">Pause</button></div>' +
         '<div class="pc-trs"><button type="button" class="pc-tr" data-trick="0">Tidbit, do a trick!</button><button type="button" class="pc-tr" data-trick="1">Sugarfoot, do a trick!</button></div>' +
@@ -1346,6 +1354,7 @@
     box = ov.querySelector('.pc-box'); cv = ov.querySelector('.pc-cv'); g = cv.getContext('2d');
     capEl = ov.querySelector('.pc-cap'); capMain = ov.querySelector('.pc-main'); capPunch = ov.querySelector('.pc-punch'); whereEl = ov.querySelector('#pc-where');
     liveEl = ov.querySelector('.pc-live'); factLists = ov.querySelectorAll('.pc-fl');
+    timeEl = ov.querySelector('.pc-time'); showTime(); setInterval(showTime, 1000);
     badge = ov.querySelector('.pc-badge'); tallyN = ov.querySelector('.pc-n'); tallyTot = ov.querySelector('.pc-tot'); chips = ov.querySelector('.pc-chips'); btnPause = ov.querySelector('.pc-pause');
     ov.querySelector('.pc-x').addEventListener('click', close);
     ov.querySelector('.pc-mus').addEventListener('click', function () { primeSound(); var go = function () { if (MUS()) { MUS().toggle(); if (setting) MUS().scene(setting.id, hour); } syncMusBtn(); ambSync(); }; if (MUS()) go(); else if (musP) musP.then(go); });
@@ -1466,7 +1475,7 @@
     quietHold = quietOn(); if (SND() && SND().hold) SND().hold(quietHold);
     if (opts.noNote) { var nn = ov.querySelector('.pc-snote'); nn.hidden = true; } else maybeNote();
     primeSound();
-    ov.hidden = false; isOpen = true; document.documentElement.classList.add('pc-lock'); resize();
+    ov.hidden = false; isOpen = true; showTime(); document.documentElement.classList.add('pc-lock'); resize();
     setPaused(false); ov.querySelector('.pc-x').focus();
     if (!packsDone) {
       tuning = true; cur = null; trav = null; run();

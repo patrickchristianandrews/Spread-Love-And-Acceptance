@@ -2323,3 +2323,113 @@ html.tol-no-helpers .tol-pud-fab{ display:none !important; }
 /* "easier on a laptop": only where it really matters, and only shown on the smaller screens it's written for */
 .tol-device-note{ display:none; gap:.5rem; align-items:flex-start; font-size:.9rem; line-height:1.45; color:#3C4A5A; background:#F1F5F9; border:1px solid #D5DEE8; border-radius:12px; padding:.55rem .8rem; margin:.6rem 0 1rem; }
 @media (max-width:900px){ .tol-device-note{ display:flex; } }
+
+/* ==========================================================================
+   Text bubbles (html.tol-bubbles) — every piece of reading text sits in its own
+   small speech bubble: a soft tinted fill, round corners and one squared-off "tail"
+   corner. site.js adds html.tol-bubbles on ordinary pages (not the games, the Night
+   Garden, Drift, the pal cam TV, the garden backdrop, 404 or offline), and Settings →
+   "Text bubbles" adds html.tol-nobubbles to switch it all off on this device.
+   - Low specificity on purpose (:where): a page's own styling for a card, chip, option
+     or table always wins, and the older .bb bubbles (which use !important) stay as they are.
+   - No border and no drop shadow, so a bubble inside a card is just a soft patch of
+     tint, never a frame inside a frame.
+   - Chrome, controls, chat windows, games, players and overlays never get one.
+   Put class="no-bubble" on an element (or class="tol-plain" on a whole block) that should stay plain.
+   ========================================================================== */
+:root{
+  /* near-opaque, so words stay easy to read over the moving garden too */
+  --tb-fill:rgba(247,241,226,.94);                 /* --paper-deep softened toward white */
+  --tb-fill:color-mix(in srgb, color-mix(in srgb, var(--paper-deep) 48%, #FFFDF8) 94%, transparent);
+  --tb-ring:rgba(217,203,163,.55);
+  --tb-ring:color-mix(in srgb, var(--line) 55%, transparent);
+  --tb-head:rgba(246,238,222,.95);                 /* a whisper of --brass */
+  --tb-head:color-mix(in srgb, color-mix(in srgb, var(--brass) 11%, #FFFDF8) 95%, transparent);
+  --tb-head-ring:color-mix(in srgb, var(--brass) 22%, transparent);
+  --tb-cell:color-mix(in srgb, color-mix(in srgb, var(--paper-deep) 30%, #FFFDF8) 92%, transparent);
+  --tb-r:18px; --tb-tail:6px;
+}
+html.tol-tint-blue{ --tb-fill:color-mix(in srgb, #E3EDF7 94%, transparent); --tb-ring:color-mix(in srgb, #9FBCD8 45%, transparent); }
+html.tol-tint-mint{ --tb-fill:color-mix(in srgb, #E3F2E8 94%, transparent); --tb-ring:color-mix(in srgb, #98C8AA 40%, transparent); }
+
+/* the bubble itself */
+:where(html.tol-bubbles:not(.tol-nobubbles) main) :is(p, dt, dd, figcaption, caption, legend, address, blockquote, h1, h2, h3, h4, h5, h6, td, th,
+  li:not(:has(> :is(p, div, h2, h3, h4, h5, h6, blockquote, table, figure, details, dl, section, article, form, fieldset, label, input, select, textarea, button, canvas, svg, img)), :has(button, input, select, textarea, [role="button"], a[class]), :has(> a:only-child))):where(:not(:is(nav, header.tol-bar, footer, .tol-foot, .tol-plain, .pt-bar, .pt-card, .pt-resume, .ten-trail, .tol-chbar, .tol-fbs-wrap, .tol-listen, .tol-pickup, .tol-steps-toggle, .tol-time, .wl-app, figure.fc, .tolc, .tol-breathe, .tol-breathe-btn, .pc-ov, .pc-launch, .fb-player, .fb-season, [class*="player"], [class*="-stage"], .pc-cam, [data-no-bubble], .tr-card, .tr-toast,
+    .gm-board, .qw-board, .xw, .tol-cheer, .tol-pud-card, .tol-puddles-hi, .tol-tip, .tol-wx, .tpv, .pci, .tol-join-pop, .tol-invite, .tol-offer, .tol-depth,
+    .tol-pager, .tol-pillars, .tol-set, .tol-panel, .read-head, .depth-bar, button, a, summary, svg, canvas, video, [contenteditable], [role="toolbar"], [role="tablist"], [role="menu"],
+    blockquote, td, th, dt, dd, figcaption, caption, legend, label, p, h1, h2, h3, h4, h5, h6) *):not(.no-bubble, .sr-only, .visually-hidden, .tol-cheer, .read-head, .depth-bar, [hidden], :empty,
+    p:has(> :is(button, input, select, textarea, a.btn, a[class*="btn"], a[class*="button"], a[class*="cta"], a[class$="-go"], a[class*="-go "])))){
+  box-sizing:border-box; max-width:100%;
+  padding:.55em .85em;
+  background-color:var(--tb-fill);
+  border-radius:var(--tb-r) var(--tb-r) var(--tb-r) var(--tb-tail);
+  box-shadow:inset 0 0 0 1px var(--tb-ring);
+  overflow-wrap:break-word;
+}
+/* a short line makes a small bubble, a long one grows to the full width */
+:where(html.tol-bubbles:not(.tol-nobubbles) main) :is(p, dt, dd, figcaption, address, li){ width:fit-content; }
+/* text that is centred keeps its bubble centred (site.js marks it .tol-bub-mid) */
+html.tol-bubbles:not(.tol-nobubbles) body main .tol-bub-mid.tol-bub-mid{ margin-left:auto !important; margin-right:auto !important; }
+/* the page's own big bubbles ("Every word in a bubble" above) stop melting into one card:
+   each paragraph, list or heading straight on the page becomes its own speech bubble, with the tail corner */
+html.tol-bubbles:not(.tol-nobubbles) main :is(p, ul, ol, dl, details, figure, address, pre, h1, h2, h3, h4, h5){
+  --bb-tl:var(--bb-r) !important; --bb-tr:var(--bb-r) !important; --bb-br:var(--bb-r) !important; --bb-bl:var(--tb-tail) !important;
+  --bb-bt:1.5px !important; --bb-bbw:1.5px !important; --bb-w:fit-content !important;
+}
+html.tol-bubbles:not(.tol-nobubbles) main :is(p, ul, ol, dl, details, figure, address, pre){
+  --bb-mt:0px !important; --bb-mb:calc(var(--bb-gap) * .6) !important; --bb-pt:var(--bb-py) !important; --bb-pb:var(--bb-py) !important;
+}
+html.tol-bubbles:not(.tol-nobubbles) main :is(h1, h2, h3, h4, h5){
+  --bb-pt:.5rem !important; --bb-pb:.55rem !important; --bb-pl:1.15rem !important; --bb-pr:1.15rem !important; --bb-r:1.35rem !important; --bb-mb:calc(var(--bb-gap) * .55) !important;
+}
+/* headings: a lighter, warmer bubble, as wide as the words */
+:where(html.tol-bubbles:not(.tol-nobubbles) main) :is(h1, h2, h3, h4, h5, h6):where(:not(:is(nav, header.tol-bar, footer, .tol-foot, .tol-plain, .pt-bar, .pt-card, .pt-resume, .ten-trail, .tol-chbar, .tol-fbs-wrap, .tol-listen, .tol-pickup, .tol-steps-toggle, .tol-time, .wl-app, figure.fc, .tolc, .tol-breathe, .pc-ov, .fb-player, .fb-season, [class*="player"], [class*="-stage"], .pc-cam, [data-no-bubble], .tr-card,
+    .gm-board, .qw-board, .xw, .tol-cheer, .tol-pud-card, .tol-puddles-hi, .tol-tip, .tol-wx, .tpv, .pci, .tol-join-pop, .tol-invite, .tol-offer, .tol-depth,
+    .tol-pager, .tol-pillars, .tol-set, .tol-panel, .read-head, button, a, summary, svg, [contenteditable], blockquote, td, th, label, p) *):not(.no-bubble, .sr-only, .visually-hidden, [hidden], :empty)){
+  width:fit-content;
+  padding:.35em .8em .4em;
+  background-color:var(--tb-head);
+  box-shadow:inset 0 0 0 1px var(--tb-head-ring);
+}
+/* list items: a little air between the bubbles */
+:where(html.tol-bubbles:not(.tol-nobubbles) main) li:where(:not(nav *, .tol-plain *, .wl-app *, figure.fc *, .tolc *, .tol-cheer *, .tol-pillars *, .tol-pager *, .gm-board *, .qw-board *, .xw *, a *, button *)):where(:not(:has(> :is(p, div, h2, h3, h4, h5, h6, blockquote, table, figure, details, dl, section, article, form, fieldset, label, input, select, textarea, button, canvas, svg, img)))) + li{
+  margin-top:.3em;
+}
+/* a paragraph inside a list item already sits in the item's place, so it keeps its own small gap */
+:where(html.tol-bubbles:not(.tol-nobubbles) main) :is(blockquote, li, dd) > p:where(:not(:last-child)){ margin-bottom:.4em; }
+/* form labels and hint text: small, snug bubbles */
+:where(html.tol-bubbles:not(.tol-nobubbles) main) :is(label, legend):where(:not(:is(nav, .tol-plain, .pt-bar, .pt-card, .pt-resume, .ten-trail, .tol-chbar, .tol-fbs-wrap, .tol-listen, .tol-pickup, .tol-steps-toggle, .tol-time, .wl-app, figure.fc, [class*="player"], .tolc, .tol-set, .tol-panel, .gm-board, .qw-board, .xw, .tol-depth, .tol-cheer, button, a, td, th, [role="radiogroup"], [role="group"]) *):not(.no-bubble, .sr-only, .visually-hidden, :has(input[type="radio"], input[type="checkbox"]))){
+  max-width:100%; box-sizing:border-box;
+  padding:.25em .7em; border-radius:14px 14px 14px 5px;
+  background-color:var(--tb-fill); box-shadow:inset 0 0 0 1px var(--tb-ring);
+  -webkit-box-decoration-break:clone; box-decoration-break:clone;
+}
+:where(html.tol-bubbles:not(.tol-nobubbles) main) :is(label, legend):where(:not(:has(input, select, textarea, button))){ width:fit-content; }
+/* table cells become separate little bubbles; the table still scrolls sideways on a phone */
+html.tol-bubbles:not(.tol-nobubbles) main table:where(:not(.no-bubble, .tol-plain *, .wl-app *, [class*="player"] *, .gm-board *, .qw-board *, .xw *, .tolc *, [role="grid"])){
+  border-collapse:separate !important; border-spacing:3px !important;
+}
+:where(html.tol-bubbles:not(.tol-nobubbles) main) :is(td, th):where(:not(table.no-bubble *, .tol-plain *, .wl-app *, [class*="player"] *, .gm-board *, .qw-board *, .xw *, .tolc *, [role="grid"] *)){
+  background-color:var(--tb-cell); border-radius:12px 12px 12px 4px;
+}
+:where(html.tol-bubbles:not(.tol-nobubbles) main) th:where(:not(table.no-bubble *, .tol-plain *, .wl-app *, [class*="player"] *, .gm-board *, .qw-board *, .xw *, .tolc *, [role="grid"] *)){ background-color:var(--tb-head); }
+/* print: clean paper, no tints */
+@media print{
+  html.tol-bubbles main :is(p, li, dt, dd, figcaption, caption, legend, address, blockquote, h1, h2, h3, h4, h5, h6, td, th, label){
+    background-color:transparent !important; box-shadow:none !important;
+  }
+  html.tol-bubbles main table{ border-spacing:0 !important; }
+}
+/* forced colors (Windows high contrast): the system draws its own colors, so drop the tints */
+@media (forced-colors: active){
+  html.tol-bubbles main :is(p, li, dt, dd, figcaption, caption, legend, address, blockquote, h1, h2, h3, h4, h5, h6, td, th, label){ background-color:transparent; box-shadow:none; }
+}
+/* ========================= end Text bubbles ========================= */
+
+/* ---------- Grouped menu: small headings inside a group, and long drop-downs that scroll ---------- */
+.tol-index li.tol-sub, .tol-drop li.tol-sub{
+  margin:.9rem 0 .2rem; padding:.55rem .55rem 0; border-top:1px solid var(--line);
+  font-family:"IBM Plex Mono", ui-monospace, monospace; font-size:.76rem; letter-spacing:.04em; color:var(--brass-ink, #7A5620);
+}
+.tol-drop li.tol-sub{ margin:.45rem 0 .1rem; padding:.45rem .5rem .1rem; }
+.tol-drop{ max-height:calc(100vh - var(--tol-bar-h, 58px) - 1.5rem); overflow-y:auto; overscroll-behavior:contain; }

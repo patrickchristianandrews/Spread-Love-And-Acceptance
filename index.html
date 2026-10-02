@@ -12,17 +12,8 @@
 </script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Free Relationship Self-Help · Spread Love &amp; Acceptance</title>
-<meta name="description" content="Free tools for fair, kind relationships: share chores fairly, talk without fighting and calm down before hard talks, plus calm games and a kids’ cartoon.">
-<meta property="og:title" content="The Objective Ledger · Spread Love &amp; Acceptance">
-<meta property="og:description" content="See it fairly. Say it kindly. Calm, practical tools for understanding yourself and the people you love.">
-<meta property="og:type" content="website">
-<meta property="og:url" content="https://spreadloveandacceptance.com/">
-<meta property="og:image" content="https://spreadloveandacceptance.com/assets/img/og-image.png">
-<meta property="og:image:width" content="1200">
-<meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="Two round friends sharing a heart, with two happy pups snuggled in front, beside the words Spread Love &amp; Acceptance. See it fairly. Say it kindly. For yourself and others.">
-<meta name="twitter:card" content="summary_large_image">
+<title>Spread Love &amp; Acceptance: Free Relationship Self-Help Tools</title>
+<meta name="description" content="Free self-help for love and acceptance at home: share the mental load, a fair chore chart, calm ways to stop fighting, a communication quiz and a kids’ cartoon.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,500&family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -43,7 +34,6 @@
   main{ padding: revert; max-width: revert; }
   footer{ max-width: revert; margin: revert; padding: revert; font-family: revert; font-size: revert; color: revert; }
   h2{ font-size: revert; max-width: revert; }
-  .home-intro{ --bb-fill:transparent; --bb-edge:transparent; --bb-shadow:none; --bb-py:0; --bb-px:0; --bb-mb:.5rem; width:auto !important; font-size:.86rem; line-height:1.4; text-align:center; color:#5E5470; }
 </style>
 
 <link rel="stylesheet" href="/assets/css/site.css">
@@ -51,6 +41,46 @@
 <link rel="stylesheet" href="/assets/css/tol-index.css">
 <style>
   /* Homepage additions */
+  /* First screen: what this is, who it's for, and where to start */
+  .read .hh{ margin:0 0 1.6rem; padding:0; text-align:left; }
+  .read .hh p, .read .hh h1, .read .hh ul, .read .hh li{ max-width:none; }
+  .read .hh-brand{ margin:0 0 .35rem; font-family:"Fraunces", Georgia, serif; font-style:italic; font-size:1.05rem; color:var(--brass-ink, #7A5620); }
+  .read .hh-h1{ margin:0 0 .7rem; font-family:"Fraunces", Georgia, serif; font-weight:600; font-size:clamp(1.85rem, 1.2rem + 2.6vw, 2.75rem); line-height:1.12; letter-spacing:-.015em; color:var(--ink, #2B2620); }
+  .read .hh-kick{ display:block; margin:0 0 .4rem; font-family:"IBM Plex Mono", ui-monospace, monospace; font-size:.78rem; font-weight:500; letter-spacing:.06em; text-transform:uppercase; color:var(--credit, #3E6B4C); }
+  .read .hh-lede{ margin:0 0 .55rem; font-size:1.12rem; line-height:1.55; color:var(--ink, #2B2620); }
+  .read .hh-who{ margin:0 0 1.1rem; font-size:.98rem; color:var(--ink-soft, #5A5346); }
+  .read .hh-who-k{ font-weight:600; color:var(--ink, #2B2620); }
+  .read .hh-go{ display:grid; grid-template-columns:repeat(3, 1fr); gap:.7rem; margin:0 0 .9rem; padding:0; list-style:none; }
+  .read .hh .hh-go li{ margin:0; padding:0; width:auto; }
+  .read .hh-go li::before, .read .hh-more li::before{ content:none; }
+  .read a.hh-card{ display:flex; flex-direction:column; justify-content:center; gap:.2rem; height:100%; box-sizing:border-box; min-height:64px; padding:.8rem .85rem;
+    border-radius:18px 18px 18px 6px; border:1.5px solid #D9C8F0; background:#FFFBF2; color:var(--ink, #2B2620); text-decoration:none; }
+  .read a.hh-card.is-main{ background:var(--focus, #2B5B8C); border-color:var(--focus, #2B5B8C); color:#FFFDF7; }
+  .read .hh-card-t{ font-family:"Fraunces", Georgia, serif; font-weight:600; font-size:1.06rem; line-height:1.2; }
+  .read .hh-card-t::after{ content:"\a0\2192"; font-family:"Lora", Georgia, serif; font-weight:400; }
+  .read .hh-card-n{ font-size:.9rem; line-height:1.35; opacity:.88; }
+  .read a.hh-card:hover{ border-color:#9A80C8; background:#FFF7EA; }
+  .read a.hh-card.is-main:hover{ background:#244E78; border-color:#244E78; }
+  .read a.hh-card:focus-visible, .read .hh-more a:focus-visible{ outline:3px solid var(--focus, #2B5B8C); outline-offset:3px; }
+  .read .hh-more{ display:flex; flex-wrap:wrap; gap:.45rem; margin:0; padding:0; list-style:none; }
+  .read .hh .hh-more li{ margin:0; padding:0; width:auto; }
+  .read .hh-more a{ display:flex; flex-direction:column; justify-content:center; min-height:44px; height:100%; box-sizing:border-box; padding:.3rem .9rem; border-radius:16px; line-height:1.2;
+    border:1px solid var(--line, #D9CBA3); background:rgba(255,251,242,.7); color:var(--ink, #2B2620); text-decoration:none; font-size:.92rem; font-weight:600; }
+  .read .hh-more a:hover{ border-color:#9A80C8; }
+  .read .hh-more-k{ font-weight:400; font-size:.78rem; color:var(--ink-soft, #5A5346); }
+  @media (prefers-reduced-motion: no-preference){ .read a.hh-card, .read .hh-more a{ transition:background-color .15s ease, border-color .15s ease; } }
+  @media (max-width:640px){
+    .read .hh-go{ grid-template-columns:1fr; gap:.5rem; }
+    .read a.hh-card{ min-height:56px; padding:.6rem .95rem; }
+    .read .hh-card-t{ font-size:1.08rem; }
+    .read .hh-lede{ font-size:1.05rem; }
+    .read .hh-who{ margin-bottom:.85rem; }
+    .read .hh-more{ display:grid; grid-template-columns:1fr 1fr; gap:.4rem; }
+    .read .hh-more a{ padding:.3rem .75rem; font-size:.9rem; }
+  }
+  /* The idea behind it all (lower on the page) */
+  .read .home-method h2{ font-family:"Fraunces", Georgia, serif; font-weight:600; font-size:clamp(1.5rem, 4vw, 2rem); line-height:1.15; margin:0 0 1rem; }
+
   .home-tagline{ font-size: 1.12rem; color: var(--ink-soft, #524B3E); margin-top: -.4rem; }
   .home-print{ font-size: .95rem; }
   .home-print span{ color: var(--ink-soft, #524B3E); }
@@ -316,27 +346,58 @@
 <script src="/assets/js/start-where.js" defer></script>
 <!-- seo:start -->
 <link rel="canonical" href="https://spreadloveandacceptance.com/">
-<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1">
+<link rel="alternate" hreflang="en-us" href="https://spreadloveandacceptance.com/">
+<link rel="alternate" hreflang="x-default" href="https://spreadloveandacceptance.com/">
+<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
 <meta name="keywords" content="self-help, relationships, kindness, love, appreciation, acceptance, connection, communication, calm, peace, harmony, reconciliation, emotional wellbeing, self-discovery, fairness at home, mental load, invisible work, free self-help tools, psychology-informed, personal growth, healthy relationships, understanding yourself, kind communication, couples, family, friends, roommates, coworkers, caregivers">
-<meta name="author" content="Spread Love &amp; Acceptance">
+<meta name="author" content="Christian, Spread Love &amp; Acceptance">
+<meta name="application-name" content="Spread Love &amp; Acceptance">
+<meta name="theme-color" content="#F5EFDE">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" href="/assets/icons/icon.svg" type="image/svg+xml">
+<link rel="icon" href="/assets/icons/favicon-32.png" type="image/png" sizes="32x32">
+<link rel="icon" href="/assets/icons/favicon-16.png" type="image/png" sizes="16x16">
+<link rel="apple-touch-icon" href="/assets/icons/apple-touch-icon-180.png" sizes="180x180">
+<link rel="manifest" href="/manifest.webmanifest">
 <meta property="og:site_name" content="Spread Love &amp; Acceptance">
+<meta property="og:title" content="Spread Love &amp; Acceptance: Free Relationship Self-Help Tools">
+<meta property="og:description" content="Free self-help for love and acceptance at home: share the mental load, a fair chore chart, calm ways to stop fighting, a communication quiz and a kids’ cartoon.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://spreadloveandacceptance.com/">
+<meta property="og:image" content="https://spreadloveandacceptance.com/assets/img/og-image.png">
+<meta property="og:image:type" content="image/png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Two friends sharing one heart, with two happy pups: Spread Love &amp; Acceptance">
 <meta property="og:locale" content="en_US">
-<meta name="twitter:title" content="Free Relationship Self-Help · Spread Love &amp; Acceptance">
-<meta name="twitter:description" content="Free tools for fair, kind relationships: share chores fairly, talk without fighting and calm down before hard talks, plus calm games and a kids’ cartoon.">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Spread Love &amp; Acceptance: Free Relationship Self-Help Tools">
+<meta name="twitter:description" content="Free self-help for love and acceptance at home: share the mental load, a fair chore chart, calm ways to stop fighting, a communication quiz and a kids’ cartoon.">
 <meta name="twitter:image" content="https://spreadloveandacceptance.com/assets/img/og-image.png">
-<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://spreadloveandacceptance.com/#org","name":"Spread Love & Acceptance","alternateName":["The Objective Ledger","Spread Love and Acceptance"],"url":"https://spreadloveandacceptance.com/","logo":"https://spreadloveandacceptance.com/assets/img/logo-stacked.png","email":"patrick.christian.andrews@gmail.com","slogan":"See it fairly. Say it kindly.","description":"Spread Love & Acceptance is a young, independent start-up building The Objective Ledger: a free, growing suite of self-help tools for understanding yourself and sharing life kindly with the people around you. It brings together practical relationship tools, gentle games, calm breathing and sound spaces, and a plain-language library, with new tools and content added all the time. Everything you type stays on your device.","knowsAbout":["self-help","relationships","kindness","appreciation","reconciliation","communication","calm","breathing","meditation","mindfulness","harmony","connection","fairness at home","mental load","neurodiversity","emotional wellbeing"]},{"@type":"WebSite","@id":"https://spreadloveandacceptance.com/#website","name":"Spread Love & Acceptance","alternateName":"The Objective Ledger","url":"https://spreadloveandacceptance.com/","description":"Free tools for fair, kind relationships: share chores fairly, talk without fighting and calm down before hard talks, plus calm games and a kids’ cartoon.","inLanguage":"en-US","publisher":{"@type":"Organization","@id":"https://spreadloveandacceptance.com/#org","name":"Spread Love & Acceptance"},"keywords":"self-help, relationships, kindness, love, appreciation, acceptance, connection, communication, calm, peace, harmony, reconciliation, emotional wellbeing, self-discovery, fairness at home, mental load, invisible work, free self-help tools, psychology-informed, personal growth, healthy relationships, understanding yourself, kind communication, couples, family, friends, roommates, coworkers, caregivers"},{"name":"Free Relationship Self-Help · Spread Love & Acceptance","headline":"Free Relationship Self-Help · Spread Love & Acceptance","description":"Free tools for fair, kind relationships: share chores fairly, talk without fighting and calm down before hard talks, plus calm games and a kids’ cartoon.","url":"https://spreadloveandacceptance.com/","inLanguage":"en-US","isAccessibleForFree":true,"keywords":"self-help, relationships, kindness, love, appreciation, acceptance, connection, communication, calm, peace, harmony, reconciliation, emotional wellbeing, self-discovery, fairness at home, mental load, invisible work, free self-help tools, psychology-informed, personal growth, healthy relationships, understanding yourself, kind communication, couples, family, friends, roommates, coworkers, caregivers","publisher":{"@type":"Organization","@id":"https://spreadloveandacceptance.com/#org","name":"Spread Love & Acceptance"},"isPartOf":{"@type":"WebSite","@id":"https://spreadloveandacceptance.com/#website","name":"Spread Love & Acceptance","url":"https://spreadloveandacceptance.com/"},"dateModified":"2026-10-01","image":"https://spreadloveandacceptance.com/assets/img/og-image.png","@type":"WebPage"}]}</script>
+<meta name="twitter:image:alt" content="Two friends sharing one heart, with two happy pups: Spread Love &amp; Acceptance">
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://spreadloveandacceptance.com/#org","name":"Spread Love & Acceptance","alternateName":["The Objective Ledger","Spread Love and Acceptance","spreadloveandacceptance"],"url":"https://spreadloveandacceptance.com/","logo":{"@type":"ImageObject","@id":"https://spreadloveandacceptance.com/#logo","url":"https://spreadloveandacceptance.com/assets/img/logo-stacked.png","contentUrl":"https://spreadloveandacceptance.com/assets/img/logo-stacked.png","caption":"Spread Love & Acceptance"},"image":{"@id":"https://spreadloveandacceptance.com/#logo"},"email":"patrick.christian.andrews@gmail.com","slogan":"See it fairly. Say it kindly.","description":"Spread Love & Acceptance is a young, independent start-up building The Objective Ledger: a free, growing suite of self-help tools for understanding yourself and sharing life kindly with the people around you. It brings together practical relationship tools, gentle games, calm breathing and sound spaces, and a plain-language library, with new tools and content added all the time. Everything you type stays on your device.","founder":{"@type":"Person","@id":"https://spreadloveandacceptance.com/about.html#christian","name":"Christian","url":"https://spreadloveandacceptance.com/about.html"},"knowsAbout":["self-help","relationships","love and acceptance","kindness","appreciation","communication in relationships","mental load","invisible labor","division of labor at home","household chores for couples","calm","breathing exercises","mindfulness","neurodiversity","neurodivergent relationships","self-discovery"]},{"@type":"Person","@id":"https://spreadloveandacceptance.com/about.html#christian","name":"Christian","url":"https://spreadloveandacceptance.com/about.html","jobTitle":"Creator of Spread Love & Acceptance","worksFor":{"@id":"https://spreadloveandacceptance.com/#org"},"description":"Christian (they/them) created Spread Love & Acceptance and The Objective Ledger after fifteen years as a government auditor."},{"@type":"WebSite","@id":"https://spreadloveandacceptance.com/#website","name":"Spread Love & Acceptance","alternateName":["The Objective Ledger","Spread Love and Acceptance"],"url":"https://spreadloveandacceptance.com/","description":"Free self-help for love and acceptance at home: share the mental load, a fair chore chart, calm ways to stop fighting, a communication quiz and a kids’ cartoon.","inLanguage":"en-US","publisher":{"@id":"https://spreadloveandacceptance.com/#org"},"keywords":"self-help, relationships, kindness, love, appreciation, acceptance, connection, communication, calm, peace, harmony, reconciliation, emotional wellbeing, self-discovery, fairness at home, mental load, invisible work, free self-help tools, psychology-informed, personal growth, healthy relationships, understanding yourself, kind communication, couples, family, friends, roommates, coworkers, caregivers"},{"@id":"https://spreadloveandacceptance.com/#page","name":"Spread Love & Acceptance: Free Relationship Self-Help Tools","headline":"Spread Love & Acceptance: Free Relationship Self-Help Tools","description":"Free self-help for love and acceptance at home: share the mental load, a fair chore chart, calm ways to stop fighting, a communication quiz and a kids’ cartoon.","url":"https://spreadloveandacceptance.com/","inLanguage":"en-US","isAccessibleForFree":true,"keywords":"self-help, relationships, kindness, love, appreciation, acceptance, connection, communication, calm, peace, harmony, reconciliation, emotional wellbeing, self-discovery, fairness at home, mental load, invisible work, free self-help tools, psychology-informed, personal growth, healthy relationships, understanding yourself, kind communication, couples, family, friends, roommates, coworkers, caregivers","publisher":{"@type":"Organization","@id":"https://spreadloveandacceptance.com/#org","name":"Spread Love & Acceptance","url":"https://spreadloveandacceptance.com/","logo":{"@type":"ImageObject","url":"https://spreadloveandacceptance.com/assets/img/logo-stacked.png"}},"isPartOf":{"@type":"WebSite","@id":"https://spreadloveandacceptance.com/#website","name":"Spread Love & Acceptance","url":"https://spreadloveandacceptance.com/"},"datePublished":"2026-09-24","dateModified":"2026-10-02","image":"https://spreadloveandacceptance.com/assets/img/og-image.png","primaryImageOfPage":{"@type":"ImageObject","url":"https://spreadloveandacceptance.com/assets/img/og-image.png"},"@type":"WebPage","about":{"@id":"https://spreadloveandacceptance.com/#org"}}]}</script>
 <!-- seo:end -->
 </head>
 <body>
 <main class="read">
-<div class="home-intro-wrap no-bubble" data-home-intro>
-<p class="home-intro"><strong>Spread Love &amp; Acceptance</strong>: a free, friendly way to understand yourself and share the load kindly, built on the Objective Ledger method.</p>
-<ul class="home-chips" aria-label="Ways to begin">
-  <li><a class="is-main" href="/start-here.html">Start here</a></li>
-  <li><a href="/start-in-10-minutes.html">Start in 10 minutes</a></li>
-  <li><a href="/sent-this.html">Sent this by someone?</a></li>
-</ul>
-</div>
+<section class="hh tol-plain no-bubble" data-home-intro aria-labelledby="hero-h">
+  <p class="hh-brand">Spread Love &amp; Acceptance</p>
+  <h1 id="hero-h" class="hh-h1"><span class="hh-kick">Free relationship self-help tools</span> Understand yourself, then share the load kindly.</h1>
+  <p class="hh-lede">Free tools and a short book that help you understand yourself and share the load kindly at home.</p>
+  <p class="hh-who"><span class="hh-who-k">Made for</span> couples <span aria-hidden="true">&middot;</span> families <span aria-hidden="true">&middot;</span> roommates <span aria-hidden="true">&middot;</span> parents</p>
+  <h2 class="sr-only">Where to start</h2>
+  <ul class="hh-go">
+    <li><a class="hh-card is-main" href="/start-in-10-minutes.html"><span class="hh-card-t">Start in 10 minutes</span><span class="hh-card-n">One short, guided path. No sign-up.</span></a></li>
+    <li><a class="hh-card" href="/wavelength.html"><span class="hh-card-t">Find your Wavelength</span><span class="hh-card-n">How you think, talk and listen</span></a></li>
+    <li><a class="hh-card" href="/book/preface.html"><span class="hh-card-t">Read the book</span><span class="hh-card-n">Start with the Preface: the work nobody sees</span></a></li>
+  </ul>
+  <ul class="hh-more" aria-label="More ways in">
+    <li><a href="/frequency-buddies.html"><span class="hh-more-k">For kids</span> Frequency Buddies</a></li>
+    <li><a href="/night-garden.html"><span class="hh-more-k">Calm down now</span> Night Garden</a></li>
+    <li><a href="/start-here.html"><span class="hh-more-k">Not sure?</span> Start here</a></li>
+    <li><a href="/sent-this.html"><span class="hh-more-k">Sent a link?</span> What it means</a></li>
+  </ul>
+</section>
 <!-- pal cam hook (site.js loads the cam on demand): check in on Tidbit & Sugarfoot -->
 <div class="pc-launch-row" data-palcam-row data-palcam-top><button type="button" class="pc-launch" data-palcam-open><span class="pc-paw"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><ellipse cx="12" cy="16.2" rx="4.6" ry="3.8"/><circle cx="6" cy="10.8" r="2.1"/><circle cx="9.6" cy="6.8" r="2.1"/><circle cx="14.4" cy="6.8" r="2.1"/><circle cx="18" cy="10.8" r="2.1"/></svg></span><span><span class="pc-lt">Check in on Tidbit &amp; Sugarfoot</span><small><i class="pc-dot" aria-hidden="true"></i>See what they&rsquo;re up to</small></span></button></div>
 <!-- /pal cam hook -->
@@ -366,9 +427,26 @@
     </aside>
     </div>
 
-    <header class="hero" aria-labelledby="hero-h">
-      <p class="hero-brand">Spread Love &amp; Acceptance</p>
-      <h1 id="hero-h">Understand yourself first. Then share the load kindly.</h1>
+    <section id="start-where" aria-labelledby="sw-h">
+      <h2 id="sw-h">Start where you are</h2>
+      <p class="lede">You don&#39;t have to read anything in order. Tap whatever is closest to true right now, and we'll point you to the two or three pages that help most with that.</p>
+      <div data-tol-start></div>
+    </section>
+
+    <section id="guides" aria-labelledby="guides-h">
+      <h2 id="guides-h">Popular guides</h2>
+      <ul class="home-guides">
+        <li><a href="/invisible-labor-mental-load.html">Invisible labor and the mental load</a>: what it is and how to share it</li>
+        <li><a href="/chore-chart-for-couples.html">A fair chore chart for couples</a>: free and printable</li>
+        <li><a href="/how-to-stop-fighting-with-your-partner.html">How to stop fighting with your partner</a>: seven calm steps</li>
+        <li><a href="/neurodivergent-relationships.html">Neurodivergent relationships</a>: tips for ADHD and autistic couples and families</li>
+        <li><a href="/communication-style-quiz.html">Communication style quiz</a>: find your Wave Code</li>
+        <li><a href="/frequency-buddies.html">Frequency Buddies</a>: a free kids’ cartoon about feelings</li>
+      </ul>
+    </section>
+    <header class="hero home-method" id="method" aria-labelledby="method-h">
+      <p class="hero-brand">The idea behind it all</p>
+      <h2 id="method-h">See yourself from the outside, then share the load kindly</h2>
       <div class="announce-stack">
       <aside class="announce-bar" aria-label="What the Objective Ledger method is">
         <div class="announce-line">
@@ -385,19 +463,16 @@
       <p class="hero-habit">People have inner weather, and it changes without asking permission. One tap to start, and up to eight short steps if you like, give you a forecast, a talk window (open, wait, or closed), what today is good for, what to leave, and a sentence you can send. Save it, and a private almanac builds up on your device. Over time it shows which fronts keep coming back, and how much of it is really about sleep.</p>
     </header>
 
+
     <section id="right-for-you" class="fit-callout" aria-labelledby="fit-h">
       <h2 id="fit-h">New here? See if this is right for you</h2>
       <p>Once you can see yourself clearly, the program gives you and anyone you share time, space, work or care with a fair way to see what each of you carries. That way, hard conversations start from shared facts. It is not a scorecard for proving who's right. It is not therapy, and it is not a way to assign blame.</p>
       <p>The guide covers what the program is and isn't, who it helps, the ways in (all free while it's being built), and where everything lives. A second page shows how every chapter, workpaper and tool connects to each kind of relationship.</p>
       <p class="fit-actions"><a class="cta-button" href="is-this-for-you.html">Is this right for you?</a> <a class="fit-second" href="relationships.html">How it fits your relationships</a></p>
     </section>
-    <section id="start-where" aria-labelledby="sw-h">
-      <h2 id="sw-h">Start where you are</h2>
-      <p class="lede">You don&#39;t have to read anything in order. Tap whatever is closest to true right now, and we'll point you to the two or three pages that help most with that.</p>
-      <div data-tol-start></div>
-    </section>
 
     <p class="home-print"><a href="infographic.html" target="_blank" rel="noopener">Open the printable summary</a> <span>(opens in a new tab)</span></p>
+
 
 
     <section id="whats-inside" aria-labelledby="inside-h">

@@ -1325,7 +1325,7 @@
     orchard: [['birds', .4], ['wind', .22]], treehouse: [['birds', .45], ['wind', .2]], pumpkins: [['wind', .28], ['birds', .28]],
     beach: [['waves', .55]], lighthouse: [['waves', .45], ['wind', .28]], bonfire: [['waves', .4], ['fire', .45]], snow: [['wind', .42]], cabin: [['fire', .5], ['wind', .18]],
     pond: [['stream', .38], ['birds', .3]], dock: [['boat', .5], ['birds', .18]], citypark: [['city', .28], ['birds', .3]], rooftop: [['city', .28], ['wind', .22]],
-    festival: [['city', .28]], carnival: [['cafe', .28]], campsite: [['fire', .45], ['birds', .25]], rainy: [['rain', .5]], bakery: [['cafe', .32]], library: [['cafe', .1]],
+    festival: [['city', .28]], carnival: [['carnival', .28]], campsite: [['fire', .45], ['birds', .25]], rainy: [['rain', .5]], bakery: [['cafe', .32]], library: [['cafe', .1]],
     underwater: [['underwater', .45]], aquarium: [['underwater', .38]], studio: [['cafe', .12]], theater: [['cafe', .08]], space: [['underwater', .12]]
   };
   var AMBP = { bufs: {}, cur: [], gen: 0, key: '' };
@@ -1423,7 +1423,7 @@
   // /assets/audio/buddies/<episode>/<key>.mp3, listed in index.json. A line plays its recording through
   // Web Audio (reliable on phones once Play has been pressed); a line with no recording falls back to
   // the device's own speech, and then to captions only.
-  var PLAYER_VER = '1 Oct · 4'; // shown under the player, so we can tell which version a browser has
+  var PLAYER_VER = '2 Oct · 1'; // shown under the player, so we can tell which version a browser has
   var REC = '2609c'; // bump whenever the recordings are redone, so no browser plays an old copy
   var CL = { base: '/assets/audio/buddies/', maps: {}, ready: {}, bufs: {}, got: {}, src: null, gain: null, token: 0, lastFx: -99 };
   function ckey(who, text) { var h = 0x811c9dc5, s = who + '|' + text; for (var i = 0; i < s.length; i++) { h ^= s.charCodeAt(i); h = Math.imul(h, 0x01000193) >>> 0; } return ('0000000' + h.toString(16)).slice(-8); }

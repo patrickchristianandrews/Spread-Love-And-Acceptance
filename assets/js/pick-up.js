@@ -33,7 +33,7 @@
       else { var code = id.split(':')[0].toUpperCase(); out.push({ t: WP_NAMES[code] || code, u: '/workpapers/fill/' + code.toLowerCase() + '.html', when: d.saved }); }
     });
     if (lsGet('tol-wiring-card')) out.push({ t: 'Your Wiring Card', u: '/wiring-card.html' });
-    if (lsGet('tol-heartprint-v1')) out.push({ t: 'Your Heartprint', u: '/heartprint.html' });
+    if (lsGet('tol-wavelength-v1') || lsGet('tol-heartprint-v1')) out.push({ t: 'Wavelength', u: '/wavelength.html' });
     var lem = json('tol-lemonade-stand-v2'); if (lem && lem.jobs && lem.jobs.some(function (j) { return j && j.name; }) && !lem.example) out.push({ t: 'The Lemonade Stand', u: '/lemonade-stand.html' });
     var cw = json('cwd-v1'); if (cw && ((cw.log && cw.log.length) || Object.keys(cw.done || {}).length)) out.push({ t: 'The Carrier Wave Decoder', u: '/carrier-wave-decoder.html', note: Object.keys(cw.done || {}).length ? Object.keys(cw.done).length + ' practice' + (Object.keys(cw.done).length === 1 ? '' : 's') + ' done' : '' });
     if (lsGet('tol-calc01-full-v2')) out.push({ t: 'Is the setup working for everyone? (the long form)', u: '/calc01-solvency.html' });

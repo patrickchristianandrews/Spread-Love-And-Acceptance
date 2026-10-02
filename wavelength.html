@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-NKC6CQ9S66"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-NKC6CQ9S66');
+</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Wavelength: Free Communication Style Quiz and…</title>
+<meta name="description" content="A free quiz on how you think, talk and listen. Pick your wiring (ADHD, autistic, AuDHD and more) and get your four-letter Wave Code and archetype.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,800;1,9..144,500&family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/css/site.css">
+<link rel="stylesheet" href="/assets/css/reading.css">
+<script src="/assets/js/site.js" defer></script>
+<script src="/assets/js/wavelength.js" defer></script>
+<style>
+  /* Wavelength: everything here is scoped to this page (body.wl-page and the .wl-app tool), so nothing reaches the
+     site header or menu. Dark mode comes from the site (it inverts the whole page), so only light colors live here. */
+  main.read.wl-page { max-width: 46rem; }
+  .wl-app {
+    --wl-paper:#F5EFDE; --wl-deep:#ECE2C4; --wl-card:#FBF7EC; --wl-ink:#211D17; --wl-soft:#5A5244;
+    --wl-line:#D9CBA3; --wl-green:#3E6B4C; --wl-green-soft:#E4EDE3; --wl-rose:#96412B; --wl-rose-soft:#F2E2DB;
+    --wl-brass:#A8792F; --wl-wave:#2B5B8C; --wl-wave-soft:#DCE6F0;
+    color: var(--wl-ink); font-size: 1.02rem; line-height: 1.6; margin: 0 0 2rem; scroll-margin-top: calc(var(--tol-bar-h, 58px) + .5rem);
+    background: none !important; border: 0 !important; box-shadow: none !important; padding: 0 !important;
+  }
+  .wl-app *, .wl-app *::before, .wl-app *::after { box-sizing: border-box; }
+  .wl-app h2, .wl-app h3, .wl-app h4 { font-family: "Fraunces", Georgia, serif; line-height: 1.15; color: var(--wl-ink); }
+  .wl-app button { font: inherit; color: inherit; }
+  .wl-app :focus-visible { outline: 3px solid var(--wl-wave); outline-offset: 2px; border-radius: 6px; }
+  .wl-app .wl-small { font-size: .92rem; color: var(--wl-soft); }
+  .wl-app a { color: var(--wl-wave); }
+
+  /* text bubbles: every piece of text in the tool sits in its own soft bubble */
+  main .wl-app p, main .wl-app label.wl-field, .wl-app .wl-group h4, .wl-app .wl-prompt label, .wl-app .wl-lt, .wl-app .wl-wordgroup h4 {
+    display: block; max-width: none; background: var(--wl-card); border: 1.5px solid var(--wl-line); border-radius: 18px 18px 18px 6px;
+    padding: 10px 14px; margin: 10px 0; line-height: 1.5; }
+  main .wl-app h2, main .wl-app h3 { display: inline-block; max-width: 100%; background: var(--wl-wave-soft); border: 1.5px solid var(--wl-wave);
+    border-radius: 22px 22px 22px 8px; padding: .22em .6em; margin: 14px 0 6px; }
+  main .wl-app h2 { font-size: clamp(1.5rem, 5.5vw, 2.1rem); font-weight: 600; }
+  main .wl-app h3 { font-size: 1.3rem; font-weight: 600; }
+  main .wl-app ul.wl-words, main .wl-app ul.wl-blist, main .wl-app ul.wl-ins-list { background: var(--wl-card); border: 1.5px solid var(--wl-line);
+    border-radius: 18px 18px 18px 6px; padding: 10px 14px 10px 32px; margin: 10px 0; }
+  main .wl-app ul li { margin: 4px 0; max-width: none; }
+  main .wl-app p:empty { display: none; }
+  /* bubbles inside cards get a lighter fill */
+  main .wl-app :is(.wl-lbody, .wl-ntnote, .wl-trythis, .wl-cbub, .wl-gitem, .wl-picked, .wl-card, .wl-ins, .wl-hp) p { background: var(--wl-paper); }
+  main .wl-app p.wl-mine { background: var(--wl-green-soft); border-color: var(--wl-green); }
+  main .wl-app p.wl-evidence { background: var(--wl-deep); font-size: .9rem; }
+  main .wl-app p.wl-combo { background: var(--wl-wave-soft); border-color: var(--wl-wave); }
+  main .wl-app p.wl-needs { color: var(--wl-rose); background: var(--wl-rose-soft); border-color: var(--wl-rose); font-size: .92rem; }
+  main .wl-app p.wl-toast, main .wl-app p.wl-saved { color: var(--wl-green); font-size: .92rem; }
+  main .wl-app p.wl-note { font-size: .88rem; color: var(--wl-soft); margin-top: 28px; }
+  main .wl-app p.wl-steplabel, main .wl-app p.wl-kick { display: table; font-size: .88rem; color: var(--wl-soft); padding: 4px 12px; margin: 0 0 4px; }
+  main .wl-app p.wl-kick { color: #7A5620; font-weight: 600; margin-top: 14px; }
+  main .wl-app p.wl-chgroup { font-family: "Fraunces", Georgia, serif; font-weight: 600; background: var(--wl-deep); margin-top: 18px; }
+
+  /* buttons and fields */
+  .wl-app .wl-btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; border: 1.5px solid var(--wl-ink); border-radius: 999px; padding: 11px 22px;
+    background: var(--wl-ink); color: var(--wl-paper); font-weight: 600; cursor: pointer; min-height: 48px; text-align: center; }
+  .wl-app .wl-btn:disabled { opacity: .35; cursor: not-allowed; }
+  .wl-app .wl-btn.ghost { background: var(--wl-card); color: var(--wl-ink); border-color: var(--wl-line); }
+  .wl-app .wl-nav { display: flex; justify-content: space-between; gap: 12px; margin-top: 24px; flex-wrap: wrap; }
+  .wl-app .wl-nav-quiet { margin-top: 8px; justify-content: flex-end; }
+  .wl-app .wl-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 12px; }
+  .wl-app .wl-linkbtn { background: none; border: 0; padding: 8px 0; min-height: 44px; color: var(--wl-wave); text-decoration: underline; text-underline-offset: 3px; cursor: pointer; font-size: .97rem; text-align: left; }
+  .wl-app input[type=text], .wl-app textarea { width: 100%; font: inherit; padding: 12px 14px; border: 1.5px solid var(--wl-line); border-radius: 12px; background: var(--wl-card); color: var(--wl-ink); }
+  .wl-app textarea { min-height: 96px; font-size: 1rem; resize: vertical; }
+  .wl-app input[type=text]:focus, .wl-app textarea:focus { border-color: var(--wl-wave); outline: none; box-shadow: 0 0 0 3px var(--wl-wave-soft); }
+  .wl-app .wl-keep { display: flex; gap: .6rem; align-items: flex-start; font-size: .93rem; margin: 14px 0; padding: 10px 14px; background: var(--wl-card); border: 1.5px dashed var(--wl-line); border-radius: 18px 18px 18px 6px; cursor: pointer; }
+  .wl-app .wl-keep input { width: 22px; height: 22px; flex: none; margin: 1px 0 0; }
+  .wl-app .wl-sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+  .wl-app .wl-opt-tag { font: 500 .8rem/1 "IBM Plex Mono", monospace; letter-spacing: .04em; color: var(--wl-soft); vertical-align: middle; }
+
+  /* intro */
+  .wl-app .wl-hero svg { display: block; width: 100%; height: 70px; margin: 6px 0 10px; }
+
+  /* progress */
+  .wl-app .wl-progress { display: flex; gap: 6px; margin-bottom: 14px; }
+  .wl-app .wl-progress span { flex: 1; height: 6px; border-radius: 3px; background: var(--wl-line); }
+  .wl-app .wl-progress span.on { background: var(--wl-wave); }
+
+  /* wiring */
+  .wl-app .wl-nt-grid { display: grid; gap: 10px; margin: 12px 0; }
+  @media (min-width: 640px) { .wl-app .wl-nt-grid { grid-template-columns: 1fr 1fr; } }
+  .wl-app .wl-nt { display: block; width: 100%; text-align: left; padding: 14px 16px; border: 1.5px solid var(--wl-line); border-radius: 20px 20px 20px 8px; background: var(--wl-card); cursor: pointer; }
+  .wl-app .wl-nt strong { display: block; font-family: "Fraunces", Georgia, serif; font-size: 1.12rem; }
+  .wl-app .wl-nt span { color: var(--wl-soft); font-size: .92rem; }
+  .wl-app .wl-nt[aria-pressed="true"] { border-color: var(--wl-wave); background: var(--wl-wave-soft); box-shadow: inset 0 0 0 1px var(--wl-wave); }
+  .wl-app .wl-nt[aria-pressed="true"] strong::before { content: "✓ "; color: var(--wl-wave); }
+  .wl-app .wl-picked { margin: 8px 0; }
+  .wl-app .wl-guide { margin-top: 32px; border-top: 1px solid var(--wl-line); padding-top: 12px; }
+  .wl-app .wl-gitem { padding: 10px 0; border-bottom: 1px solid var(--wl-line); }
+  .wl-app .wl-ghead { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+  .wl-app .wl-ghead strong { font-family: "Fraunces", Georgia, serif; font-size: 1.12rem; }
+  .wl-app .wl-gpick { flex: none; border: 1.5px solid var(--wl-line); background: var(--wl-card); border-radius: 999px; padding: 6px 14px; font-size: .9rem; cursor: pointer; min-height: 44px; }
+  .wl-app .wl-gpick[aria-pressed="true"] { background: var(--wl-green-soft); border-color: var(--wl-green); }
+
+  /* either/or */
+  .wl-app .wl-q { margin: 0 0 18px; }
+  .wl-app .wl-q > p { font-weight: 600; }
+  .wl-app .wl-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  @media (max-width: 420px) { .wl-app .wl-pair { grid-template-columns: 1fr; } }
+  .wl-app .wl-opt { text-align: left; padding: 14px; border: 1.5px solid var(--wl-line); border-radius: 20px 20px 20px 8px; background: var(--wl-card); cursor: pointer; font-size: .98rem; line-height: 1.4; min-height: 64px; }
+  .wl-app .wl-opt[aria-pressed="true"] { border-color: var(--wl-ink); background: var(--wl-deep); box-shadow: inset 0 0 0 1px var(--wl-ink); }
+  .wl-app .wl-opt[aria-pressed="true"]::before { content: "✓ "; font-weight: 700; }
+
+  /* chips */
+  main .wl-app p.wl-chiphead { font-family: "Fraunces", Georgia, serif; font-size: 1.15rem; margin-top: 22px; }
+  main .wl-app p.wl-chiphint { font-size: .92rem; color: var(--wl-soft); }
+  .wl-app .wl-group { margin: 0 0 12px; }
+  main .wl-app .wl-group h4 { display: inline-block; margin: 6px 0 8px; font-size: .9rem; font-weight: 600; color: var(--wl-soft); padding: 4px 12px; }
+  .wl-app .wl-chips { display: flex; flex-wrap: wrap; gap: 8px; margin: 8px 0; }
+  .wl-app .wl-chip { border: 1.5px solid var(--wl-line); background: var(--wl-card); border-radius: 999px; padding: 9px 15px; font-size: .95rem; line-height: 1.35; cursor: pointer; text-align: left; min-height: 44px; }
+  .wl-app .wl-chip[aria-pressed="true"] { background: var(--wl-green-soft); border-color: var(--wl-green); color: var(--wl-ink); }
+  .wl-app .wl-chip[aria-pressed="true"]::before { content: "✓ "; color: var(--wl-green); font-weight: 700; }
+  .wl-app .wl-sw { display: inline-block; width: 12px; height: 12px; border-radius: 50%; margin-right: 6px; vertical-align: -1px; }
+
+  /* inputs */
+  .wl-app .wl-in-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 10px; margin: 14px 0; }
+  .wl-app .wl-incard { display: flex; flex-direction: column; gap: 3px; text-align: left; padding: 14px; border: 1.5px solid var(--wl-line); border-radius: 20px 20px 20px 8px; background: var(--wl-card); cursor: pointer; min-height: 120px; }
+  .wl-app .wl-incard strong { font-family: "Fraunces", Georgia, serif; font-size: 1.06rem; }
+  .wl-app .wl-incard span { font-size: .9rem; color: var(--wl-soft); line-height: 1.4; }
+  .wl-app .wl-incard .wl-inico { font-size: 1.6rem; color: inherit; }
+  .wl-app .wl-incard em { font-size: .8rem; color: var(--wl-green); font-style: normal; font-weight: 600; margin-top: auto; }
+  .wl-app .wl-incard[aria-pressed="true"] { border-color: var(--wl-green); background: var(--wl-green-soft); box-shadow: inset 0 0 0 1px var(--wl-green); }
+
+  /* statement */
+  .wl-app .wl-hp, .wl-app .wl-ins { background: var(--wl-card); border: 1.5px solid var(--wl-line); border-radius: 24px 24px 24px 10px; padding: 12px 14px; margin: 14px 0; }
+  .wl-app .wl-ins { border-color: #7FB3DA; }
+  .wl-app .wl-dots { list-style: none; display: flex; flex-wrap: wrap; gap: 6px; padding: 0; margin: 0 0 8px; }
+  .wl-app .wl-dots button { width: 40px; height: 40px; border-radius: 50%; border: 1.5px solid var(--wl-line); background: #fff; font-weight: 600; font-size: .9rem; cursor: pointer; }
+  .wl-app .wl-dots .is-done button { background: var(--wl-green-soft); border-color: #9DBB9F; }
+  .wl-app .wl-dots .is-now button { background: var(--wl-ink); color: var(--wl-paper); border-color: var(--wl-ink); }
+  main .wl-app ul.wl-ins-list { list-style: none; padding: 0; background: none; border: 0; }
+  main .wl-app ul.wl-ins-list li { border-left: 4px solid #7FB3DA; padding: 2px 0 2px 10px; margin: 10px 0; }
+  main .wl-app p.wl-tag { font-size: .85rem; color: var(--wl-soft); }
+  .wl-app .wl-n { display: inline-grid; place-items: center; min-width: 1.6em; height: 1.6em; border-radius: 999px; background: var(--wl-wave); color: #fff; font-size: .8rem; vertical-align: middle; }
+  .wl-app .wl-card { border: 2px dashed #C9B8EC; border-radius: 22px 22px 22px 8px; padding: 12px 14px; background: #fff; margin: 10px 0; }
+  main .wl-app p.wl-card-h { font: 600 1.25rem/1.2 Fraunces, Georgia, serif; }
+  main .wl-app p.wl-card-s, main .wl-app p.wl-card-end, main .wl-app p.wl-card-empty { color: var(--wl-soft); font-style: italic; font-size: .93rem; }
+  .wl-app details.wl-insd { margin: 12px 0; }
+  .wl-app details.wl-insd > summary { cursor: pointer; font-weight: 600; padding: 10px 0; min-height: 44px; }
+  @media print { html.wl-printing body * { visibility: hidden; } html.wl-printing .wl-card, html.wl-printing .wl-card * { visibility: visible; } html.wl-printing .wl-card { position: absolute; left: 0; top: 0; width: 100%; border: 0; } }
+
+  /* results */
+  .wl-app .wl-result-top { padding: 4px 0; }
+  main .wl-app h2.wl-code { display: inline-flex; gap: 6px; font-weight: 800; font-size: clamp(3.4rem, 16vw, 5.6rem); line-height: 1; letter-spacing: .02em; font-variation-settings: "opsz" 144; padding: .12em .4em; margin-top: 4px; }
+  .wl-app .wl-code span:nth-child(1) { color: #2B5B8C; } .wl-app .wl-code span:nth-child(2) { color: #3E6B4C; }
+  .wl-app .wl-code span:nth-child(3) { color: #96412B; } .wl-app .wl-code span:nth-child(4) { color: #8A6224; }
+  main .wl-app p.wl-arch { display: inline-block; font: 600 clamp(1.6rem, 6.5vw, 2.3rem)/1.15 Fraunces, Georgia, serif; background: var(--wl-wave-soft); border-color: var(--wl-wave); }
+  main .wl-app p.wl-tagline { font-size: 1.08rem; }
+  .wl-app .wl-wavebox { margin: 14px 0 6px; }
+  .wl-app .wl-wavebox svg { display: block; width: 100%; height: 120px; background: var(--wl-card); border: 1.5px solid var(--wl-line); border-radius: 22px 22px 22px 8px; }
+  main .wl-app p.wl-wavecap { font-size: .88rem; color: var(--wl-soft); }
+  .wl-app .wl-sect { margin-top: 26px; }
+  .wl-app details.wl-letter { border: 1.5px solid var(--wl-line); border-radius: 20px 20px 20px 8px; background: var(--wl-card); margin-bottom: 10px; overflow: hidden; }
+  .wl-app details.wl-letter summary { list-style: none; display: flex; align-items: center; gap: 12px; padding: 10px 14px; cursor: pointer; }
+  .wl-app details.wl-letter summary::-webkit-details-marker { display: none; }
+  .wl-app .wl-big { font-family: "Fraunces", Georgia, serif; font-weight: 800; font-size: 2.2rem; line-height: 1; width: 1.2em; text-align: center; flex: none; }
+  main .wl-app .wl-lt { margin: 0; padding: 6px 10px; background: var(--wl-paper); }
+  .wl-app .wl-lt strong { display: block; font-family: "Fraunces", Georgia, serif; font-size: 1.1rem; }
+  .wl-app .wl-lt span { display: block; font-size: .88rem; color: var(--wl-soft); }
+  .wl-app .wl-chev { margin-left: auto; transition: transform .2s; font-size: 1.4rem; }
+  .wl-app details[open] .wl-chev { transform: rotate(90deg); }
+  .wl-app .wl-lbody { padding: 0 14px 12px; }
+  .wl-app .wl-meter { display: flex; align-items: center; gap: 8px; font-size: .82rem; color: var(--wl-soft); margin: 4px 0 8px; }
+  .wl-app .wl-meter .wl-bar { position: relative; flex: 1; height: 6px; border-radius: 3px; background: var(--wl-deep); min-width: 50px; }
+  .wl-app .wl-meter .wl-dot { position: absolute; top: 50%; width: 14px; height: 14px; border-radius: 50%; transform: translate(-50%, -50%); background: var(--wl-ink); }
+  main .wl-app .wl-tune, main .wl-app .wl-lbody p.wl-tune { background: var(--wl-deep); }
+  main .wl-app .wl-wordgroup h4 { display: inline-block; margin: 12px 0 2px; font-size: 1rem; }
+  .wl-app .wl-pairbox { display: flex; gap: 10px; flex-wrap: wrap; }
+  .wl-app .wl-pairbox input { flex: 1; min-width: 140px; text-transform: uppercase; letter-spacing: .15em; font-family: "Fraunces", Georgia, serif; font-weight: 600; }
+  .wl-app .wl-pairrow { padding: 10px 14px; margin: 8px 0; background: var(--wl-card); border: 1.5px solid var(--wl-line); border-radius: 18px 18px 18px 6px; }
+  .wl-app .wl-pairrow strong { font-family: "Fraunces", Georgia, serif; }
+  .wl-app .wl-chlist { display: grid; gap: 10px; }
+  .wl-app .wl-chitem { display: flex; align-items: center; gap: 14px; width: 100%; text-align: left; padding: 12px 14px; border: 1.5px solid var(--wl-line); border-radius: 20px 20px 20px 8px; background: var(--wl-card); cursor: pointer; }
+  .wl-app .wl-chnum { font-family: "Fraunces", Georgia, serif; font-weight: 800; font-size: 1.5rem; color: #8A6224; width: 1.4em; text-align: center; flex: none; }
+  .wl-app .wl-chitem strong { display: block; font-family: "Fraunces", Georgia, serif; font-size: 1.06rem; }
+  .wl-app .wl-chitem .wl-s { font-size: .88rem; color: var(--wl-soft); }
+  .wl-app .wl-tick { margin-left: auto; flex: none; font-size: .85rem; color: var(--wl-green); font-weight: 600; }
+
+  /* chapters */
+  main .wl-app .wl-yours { background: var(--wl-card); border-left: 5px solid var(--wl-wave); }
+  .wl-app .wl-ntnote, .wl-app .wl-trythis, .wl-app .wl-cbub { border-radius: 20px 20px 20px 8px; }
+  .wl-app .wl-ntnote { background: var(--wl-deep); padding: 4px 12px; margin: 14px 0; }
+  .wl-app .wl-prompt { margin: 16px 0; }
+  main .wl-app .wl-prompt label { font-weight: 600; margin: 0 0 8px; }
+  .wl-app .wl-trythis { border: 1.5px dashed var(--wl-brass); padding: 4px 14px 10px; margin: 22px 0; background: var(--wl-card); }
+
+  /* how the nine inputs connect */
+  .wl-app .wl-mapbox { background: var(--wl-card); border: 1.5px solid var(--wl-line); border-radius: 24px 24px 24px 10px; padding: 10px; margin: 12px 0; }
+  .wl-app .wl-cmap { display: block; width: 100%; max-width: 420px; height: auto; margin: 0 auto; }
+  .wl-app .wl-mnode { cursor: pointer; }
+  .wl-app .wl-mnode:focus-visible circle { stroke: var(--wl-wave); stroke-width: 4; }
+  .wl-app .wl-cbub { background: var(--wl-card); border: 1.5px solid var(--wl-line); border-left: 5px solid var(--wl-wave); padding: 2px 12px; margin: 10px 0; }
+  main .wl-app .wl-cbub p { margin: 6px 0; }
+  main .wl-app p.wl-pairline { font-size: .88rem; font-weight: 600; color: var(--wl-soft); }
+  .wl-app .wl-cbub.deep { border-left-color: var(--wl-ink); }
+  main .wl-app p.wl-lvd { background: var(--wl-deep); }
+  main .wl-app p.wl-wl.hl { border-color: var(--wl-green); background: var(--wl-green-soft); }
+  .wl-app .wl-flow { display: flex; flex-direction: column; align-items: stretch; margin: 12px 0; }
+  .wl-app .wl-fnode { background: var(--wl-card); border: 1.5px solid var(--wl-wave); border-radius: 20px 20px 20px 8px; padding: 10px 14px; line-height: 1.45; }
+  .wl-app .wl-fnode.warn { border-color: var(--wl-rose); background: var(--wl-rose-soft); }
+  .wl-app .wl-fnode.good { border-color: var(--wl-green); background: var(--wl-green-soft); }
+  .wl-app .wl-farrow { text-align: center; color: var(--wl-soft); font-weight: 600; padding: 4px 0; font-size: .9rem; }
+  .wl-app .wl-fbranch { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .wl-app .wl-fbranch-in { grid-template-columns: 1fr; }
+  @media (min-width: 560px) { .wl-app .wl-fbranch-in { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 420px) { .wl-app .wl-fbranch { grid-template-columns: 1fr; } }
+  @media (prefers-reduced-motion: reduce) { .wl-app * { transition: none !important; animation: none !important; } }
+  main.read .wl-arch-list { columns: 2 14rem; }
+</style>
+<!-- seo:start -->
+<link rel="canonical" href="https://spreadloveandacceptance.com/wavelength.html">
+<link rel="alternate" hreflang="en-us" href="https://spreadloveandacceptance.com/wavelength.html">
+<link rel="alternate" hreflang="x-default" href="https://spreadloveandacceptance.com/wavelength.html">
+<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+<meta name="keywords" content="self-help, relationships, kindness, love, appreciation, acceptance, connection, communication, calm, peace, harmony, reconciliation, emotional wellbeing, self-discovery, fairness at home, mental load, invisible work, free self-help tools, communication style quiz, personality type quiz, neurodivergent, ADHD, autistic, AuDHD, how you think, talk and listen, self-discovery journal">
+<meta name="author" content="Christian, Spread Love &amp; Acceptance">
+<meta name="application-name" content="Spread Love &amp; Acceptance">
+<meta name="theme-color" content="#F5EFDE">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" href="/assets/icons/icon.svg" type="image/svg+xml">
+<link rel="icon" href="/assets/icons/favicon-32.png" type="image/png" sizes="32x32">
+<link rel="icon" href="/assets/icons/favicon-16.png" type="image/png" sizes="16x16">
+<link rel="apple-touch-icon" href="/assets/icons/apple-touch-icon-180.png" sizes="180x180">
+<link rel="manifest" href="/manifest.webmanifest">
+<meta property="og:site_name" content="Spread Love &amp; Acceptance">
+<meta property="og:title" content="Wavelength: Free Communication Style Quiz and…">
+<meta property="og:description" content="A free quiz on how you think, talk and listen. Pick your wiring (ADHD, autistic, AuDHD and more) and get your four-letter Wave Code and archetype.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://spreadloveandacceptance.com/wavelength.html">
+<meta property="og:image" content="https://spreadloveandacceptance.com/assets/img/og-image.png">
+<meta property="og:image:type" content="image/png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Two friends sharing one heart, with two happy pups: Spread Love &amp; Acceptance">
+<meta property="og:locale" content="en_US">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Wavelength: Free Communication Style Quiz and…">
+<meta name="twitter:description" content="A free quiz on how you think, talk and listen. Pick your wiring (ADHD, autistic, AuDHD and more) and get your four-letter Wave Code and archetype.">
+<meta name="twitter:image" content="https://spreadloveandacceptance.com/assets/img/og-image.png">
+<meta name="twitter:image:alt" content="Two friends sharing one heart, with two happy pups: Spread Love &amp; Acceptance">
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@id":"https://spreadloveandacceptance.com/wavelength.html#page","name":"Wavelength: Free Communication Style Quiz and…","headline":"Wavelength: Free Communication Style Quiz and…","description":"A free quiz on how you think, talk and listen. Pick your wiring (ADHD, autistic, AuDHD and more) and get your four-letter Wave Code and archetype.","url":"https://spreadloveandacceptance.com/wavelength.html","inLanguage":"en-US","isAccessibleForFree":true,"keywords":"self-help, relationships, kindness, love, appreciation, acceptance, connection, communication, calm, peace, harmony, reconciliation, emotional wellbeing, self-discovery, fairness at home, mental load, invisible work, free self-help tools, communication style quiz, personality type quiz, neurodivergent, ADHD, autistic, AuDHD, how you think, talk and listen, self-discovery journal","publisher":{"@type":"Organization","@id":"https://spreadloveandacceptance.com/#org","name":"Spread Love & Acceptance","url":"https://spreadloveandacceptance.com/","logo":{"@type":"ImageObject","url":"https://spreadloveandacceptance.com/assets/img/logo-stacked.png"}},"isPartOf":{"@type":"WebSite","@id":"https://spreadloveandacceptance.com/#website","name":"Spread Love & Acceptance","url":"https://spreadloveandacceptance.com/"},"datePublished":"2026-10-02","dateModified":"2026-10-02","image":"https://spreadloveandacceptance.com/assets/img/og-image.png","primaryImageOfPage":{"@type":"ImageObject","url":"https://spreadloveandacceptance.com/assets/img/og-image.png"},"@type":"WebPage"},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Spread Love & Acceptance","item":"https://spreadloveandacceptance.com/"},{"@type":"ListItem","position":2,"name":"Wavelength: Free Communication Style Quiz and…","item":"https://spreadloveandacceptance.com/wavelength.html"}]}]}</script>
+<!-- seo:end -->
+</head>
+<body class="wl-page">
+<main class="read wl-page" id="main">
+<header class="read-head"><p class="read-code">Know yourself</p><h1>Wavelength: how you think, talk and listen</h1></header>
+<p class="simple-lede">Wavelength helps you understand how you think and how you communicate, both giving and receiving. Pick your wiring if you like, tap through four short parts, and get your four-letter Wave Code and archetype. Then read sixteen self-discovery chapters written for your answers, explore how the nine inputs of learning connect, and build a warm personal statement to share.</p>
+<div class="try-this" data-in-short>
+  <p><strong>How it works:</strong> Mostly tapping, about ten minutes. Your wiring step is optional and you can select more than one. Every part shows options that are common for the wiring you picked, and you can open the rest anytime. Wavelength replaces Your Heartprint: the personal statement and its “Things you might not have noticed” are now Part 7.</p>
+  <p>Nothing you type or choose is sent anywhere. Your answers and journal stay on this device only if you tick the box, and “Erase everything” removes them.</p>
+</div>
+<div class="wl-app no-bubble" data-wavelength aria-live="polite"><noscript><p>Wavelength needs JavaScript to build your Wave Code. The guide below explains every letter and archetype.</p></noscript></div>
+
+<section aria-labelledby="wl-about">
+<h2 id="wl-about">What’s in Wavelength</h2>
+<ul>
+  <li><strong>Your wiring (optional).</strong> Neurotypical, ADHD, Autistic, Dyslexic, Highly sensitive, Not sure yet, or Something else, in any combination. ADHD and Autistic together is often called AuDHD. It only decides which options you see first. It’s self-identified, and it isn’t a diagnosis: a doctor or psychologist can do a formal assessment if you want one.</li>
+  <li><strong>Your Wave Code.</strong> Four parts, each with three either/or questions and tap-to-select statements: how your brain gets going (pace), how you think things through (lens), how you send what you mean, and how you take things in.</li>
+  <li><strong>The 9 inputs of learning.</strong> Words, logic and numbers, pictures and space, hands and movement, sound and rhythm, people, inner reflection, nature and patterns, and big questions and meaning. Pick the ones that help things click, then your strongest.</li>
+  <li><strong>What helps me feel understood,</strong> and <strong>your statement</strong> (optional): a short, warm note about how you work best, with connections between your choices you may not have noticed.</li>
+  <li><strong>Sixteen self-discovery chapters:</strong> seven for your Wave Code (your speed, your lens, your voice, how you listen, your energy and your senses, masks and scripts, asking for what helps) and nine, one for each input. Each has a reading written for you, journal prompts and one thing to try this week.</li>
+  <li><strong>How the 9 inputs connect:</strong> a map from the obvious links to the most hidden, three flowcharts, and a nine-point check before a hard conversation.</li>
+</ul>
+
+<h2 id="wl-letters">The four Wave Code letters</h2>
+<p>Your Wave Code is four letters, a bit like the four-letter personality types you may have seen. It’s a fun way to describe your preferences, not a test that measures you, and everyone uses both ends of each line sometimes.</p>
+<ul>
+  <li><strong>Pace: Q or S.</strong> Q is Quick Spark: you think fast and out loud, and talking is part of thinking. S is Slow Simmer: you process inside first, and your best thoughts often arrive later.</li>
+  <li><strong>Lens: F or T.</strong> F is Forest: the big picture, patterns and the why come first. T is Trees: the specifics, the steps and the exact details come first.</li>
+  <li><strong>Sending: D or N.</strong> D is Direct: you say it plainly, and honesty is how you show respect. N is Nuanced: you cushion what you say, read the moment, and may hint first.</li>
+  <li><strong>Receiving: E or A.</strong> E is Explicit: you take words at face value and want things spelled out. A is Attuned: you read tone, mood and what’s under the words.</li>
+</ul>
+
+<h2 id="wl-archetypes">The 16 Wavelength archetypes</h2>
+<ul class="wl-arch-list">
+  <li><strong>QFDE, the Comet:</strong> fast, visionary and straight-talking.</li>
+  <li><strong>QFDA, the Sunflare:</strong> big ideas, said bluntly, yet feels every shift in tone.</li>
+  <li><strong>QFNE, the Kite:</strong> quick, imaginative and gentle, needs things said plainly.</li>
+  <li><strong>QFNA, the Firefly:</strong> bright, warm, full of ideas, quick to sense how others feel.</li>
+  <li><strong>QTDE, the Hummingbird:</strong> fast, precise and to the point.</li>
+  <li><strong>QTDA, the Spark Plug:</strong> gets things moving, but tone lands deep.</li>
+  <li><strong>QTNE, the Bumblebee:</strong> busy, practical, kind, likes instructions spelled out.</li>
+  <li><strong>QTNA, the Otter:</strong> quick, hands-on, playful, always reading the room.</li>
+  <li><strong>SFDE, the Owl:</strong> thinks long and deep, speaks plainly.</li>
+  <li><strong>SFDA, the Lighthouse:</strong> steady, far-seeing and honest, senses the mood.</li>
+  <li><strong>SFNE, the Tide:</strong> slow and deep, gentle, grateful for clear words.</li>
+  <li><strong>SFNA, the Willow:</strong> reflective, soft-spoken, feels every undercurrent.</li>
+  <li><strong>STDE, the Compass:</strong> steady, exact and direct.</li>
+  <li><strong>STDA, the Oak:</strong> practical and honest, sensitive to how it’s said back.</li>
+  <li><strong>STNE, the Hearth:</strong> calm, careful and kind, likes expectations spelled out.</li>
+  <li><strong>STNA, the Quilt:</strong> patient, detail-minded and gentle, notices everything.</li>
+</ul>
+
+<h2 id="sharing">Sharing your Wavelength</h2>
+<ul>
+  <li><strong>Pick a calm moment.</strong> Share your Wave Code or your statement as information, not a list of rules: “I wrote this so you don’t have to guess. Would you read it?”</li>
+  <li><strong>Invite theirs.</strong> Two Wave Codes side by side show where you’re alike and where you’ll want to tune in on purpose, and nobody has to be wrong. Enter their code under “Compare with someone.”</li>
+  <li><strong>Update it.</strong> Seasons change, and so does what you need. Come back when life shifts.</li>
+</ul>
+<p>Want more? The <a href="/wiring-card.html">Wiring Card</a> turns how you receive words into one page, <a href="/wired-differently.html">Wired Differently</a> shows how differently wired people hear the same words, the <a href="/perspective-shifter.html">Perspective Shifter</a> helps you see a moment from their side, and <a href="/quick-checks.html#today">Today’s Weather</a> checks how full your stress tank is right now. You can also ask <a href="/ask.html">Professor Puddles</a> anything about Wavelength.</p>
+</section>
+</main>
+</body>
+</html>

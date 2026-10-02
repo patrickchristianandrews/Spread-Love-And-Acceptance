@@ -8,7 +8,7 @@ window.TOL_NINE = {
     ['fi', 'Finance'], ['bu', 'Business'], ['ht', 'Holistic therapies'], ['ar', 'Aromatherapy']
   ],
   roots: { balance: 'balance', signal: 'signal and noise', loops: 'feedback loops', capacity: 'limited capacity', owner: 'ownership and structure', incent: 'quiet incentives', state: 'state and setting' },
-  tiers: { o: 'Obvious', h: 'Hidden', a: 'Abstract' },
+  tiers: { o: 'Obvious', h: 'Hidden', a: 'Abstract', d: 'Deepest' },
   pillars: { 1: ['Pillar I, See the whole load', 'see-the-load'], 2: ['Pillar II, Fix the setup, not the person', 'fix-the-setup'], 3: ['Pillar III, Read your state first', 'read-your-state'], 4: ['Pillar IV, Tune how you send and receive', 'tune-signals'], 5: ['Pillar V, Notice the quiet incentives', 'quiet-incentives'] },
   // [field a, field b, root, tier, what connects them, [tool, link], pillar]
   pairs: [
@@ -45,7 +45,7 @@ window.TOL_NINE = {
     ['ph', 'ht', 'balance', 'a', 'A setup can be sustainable without being good for the people in it. Asking what makes the whole person well is a different question from “does it work?”', ['Chapter II: what the number is not', '/book/chapter-2-in-depth.html'], 2],
     ['ph', 'ar', 'state', 'a', 'What we take in through the senses shapes what we believe is true. Two people in one room may not be perceiving the same room.', ['The Perspective Shifter', '/perspective-shifter.html'], 4],
     ['bs', 'ht', 'loops', 'a', 'The smallest repeated acts, a breath, a daily check-in, a weekly look back, are rhythms, and rhythm is how a body and a relationship stay in tune.', ['Chapter V: the rhythms', '/book/chapter-5.html'], 3],
-    ['ec', 'ht', 'balance', 'a', 'Rest isn’t time lost. It keeps the capacity that everything else spends, so skipping it is borrowing against next week.', ['Your Heartprint: what fills your battery', '/heartprint.html'], 3],
+    ['ec', 'ht', 'balance', 'a', 'Rest isn’t time lost. It keeps the capacity that everything else spends, so skipping it is borrowing against next week.', ['Wavelength: what fills you up', '/wavelength.html'], 3],
     ['ec', 'ar', 'incent', 'a', 'A room, like a market, carries costs nobody pays out loud. A rushed, noisy setting quietly taxes every conversation in it.', ['Chapter IV: the setting', '/book/chapter-4-in-depth.html'], 5],
     ['bu', 'ar', 'state', 'a', 'Good workplaces are designed so the setting helps people do their best. A home can be too: a quiet corner for hard talks is a design choice.', ['Check-ins: a good moment', '/check-ins.html'], 2],
     ['fi', 'ht', 'balance', 'a', 'A solvency read says whether an arrangement can last, never whether it’s worthwhile. Holistic care asks the other question: what makes the whole person well.', ['Chapter II', '/book/chapter-2.html'], 2],
@@ -62,5 +62,46 @@ window.TOL_NINE = {
     ['bu', 'ht', 'Systems are run by people. A team, or a home, only works if the people in it are cared for, not just managed.', 2],
     ['ht', 'ar', 'Caring for the whole person starts with the body and the senses: rest, calm and the setting you’re in.', 3],
     ['ar', 'nb', 'And the senses feed straight back into the nervous system, setting the body’s state, which is where the chain began.', 3]
+  ],
+  // the deepest tier: connections that run through three or more fields at once. Each has a title, the fields it
+  // runs through (in order), the roots it rests on, what it means, what to do with it, and a tool. The first one,
+  // a single hard conversation, has a step for every field; the polymath page draws it as a flowchart.
+  deep: [
+    {
+      id: 'hard-talk', title: 'One hard conversation, all nine fields at once',
+      fields: ['nb', 'ps', 'ph', 'bs', 'ec', 'fi', 'bu', 'ht', 'ar'], roots: ['state', 'signal', 'capacity', 'balance', 'owner'],
+      text: 'A single tense talk about the dishes runs through every field in the program, one after another, in a few seconds.',
+      steps: [
+        ['nb', 'Your body reacts first. A tight chest or a racing heart sets the volume before anyone speaks.'],
+        ['ps', 'That state becomes a filter. A neutral sentence can sound like criticism when you’re already on edge.'],
+        ['ph', 'So ask what you actually know. “The dishes are still there” is a fact. “They don’t care” is a guess.'],
+        ['bs', 'Under stress, habits take over. A small, practiced pause works better than a promise to stay calm.'],
+        ['ec', 'Attention is limited. A talk squeezed in at 11 p.m. is paid for out of an almost empty account.'],
+        ['fi', 'Underneath sits a ledger: the unseen work each person has carried, and how much goodwill is left in reserve.'],
+        ['bu', 'Much of the heat is about a job with no clear owner. Naming one owner turns blame into a plan.'],
+        ['ht', 'Body first: a glass of water, a short walk or a few slow breaths, then the words.'],
+        ['ar', 'And the setting. For some people, a quieter room or a familiar scent is a quick cue to slow down.']
+      ],
+      decide: 'Then you decide: talk now, or name a better time. Either way, you’re choosing with the whole picture.',
+      tool: ['Check-ins: pick a good moment', '/check-ins.html']
+    },
+    {
+      id: 'unowned-job', title: 'The job nobody owns',
+      fields: ['ps', 'bs', 'ec', 'fi', 'bu', 'ph'], roots: ['owner', 'incent', 'balance'],
+      text: 'Each of us remembers our own effort best (psychology). A job with no owner drifts to whoever notices first (behavioral science). Noticing spends real attention (economics), so a debt builds up that nobody writes down (finance). Business calls it a missing owner. Philosophy calls it unfair. They’re all describing the same unwritten job.',
+      tool: ['One owner per job (WP-03)', '/workpapers/wp-03-raci-treaty.html']
+    },
+    {
+      id: 'tired-week', title: 'The tired week',
+      fields: ['nb', 'ht', 'bs', 'ec', 'fi', 'bu'], roots: ['capacity', 'balance', 'loops'],
+      text: 'A worn-out body has less to give (neurobiology), so rest has to match effort (holistic therapies). Habits have to be small enough to survive that week (behavioral science). A household running at full stretch has no safety margin (economics) and no reserve for a surprise (finance), and a team in the same state drops things (business). One tired week shows that capacity is a single root under six fields.',
+      tool: ['The Battery & Stress Meter (WP-02)', '/workpapers/wp-02-battery-stress-meter.html']
+    },
+    {
+      id: 'the-room', title: 'The room does some of the talking',
+      fields: ['ar', 'nb', 'ps', 'ph', 'ec', 'bu'], roots: ['state', 'incent'],
+      text: 'Noise, light and smell reach the senses first (aromatherapy and the senses) and set the body’s alert level (neurobiology). That changes what a person can take in (psychology), and even what they believe happened (philosophy). A rushed, noisy room quietly taxes every conversation in it (economics), and good workplaces are designed to avoid that (business). Choosing the place is part of the conversation.',
+      tool: ['The Soundscape Catalog', '/soundscapes.html']
+    }
   ]
 };

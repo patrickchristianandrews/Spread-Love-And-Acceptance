@@ -77,26 +77,131 @@
   .nine-chain li { position: relative; margin: 0 0 .7rem; padding: .7rem .9rem .7rem 3rem; background: #FFFDF7; border: 1px solid var(--line); border-radius: 14px; counter-increment: c; }
   .nine-chain li::before { content: counter(c); position: absolute; left: .8rem; top: .75rem; width: 1.6rem; height: 1.6rem; border-radius: 50%; background: var(--ink); color: var(--paper); display: grid; place-items: center; font: 600 .8rem/1 Lora, serif; }
   .nine-chain .nc-h { font-weight: 600; display: block; margin-bottom: .15rem; }
+  /* the nine field chapters */
+  .read .pf-toc ol { display: flex; flex-wrap: wrap; gap: .4rem; list-style: none; padding: 0; margin: .4rem 0 1rem; }
+  .pf-toc li { margin: 0; }
+  .pf-toc a { display: inline-flex; align-items: center; min-height: 40px; padding: .2rem .75rem; border: 1px solid var(--line); border-radius: 999px; background: #FFFDF7; text-decoration: none; color: var(--ink); font-size: .95rem; }
+  .pf-toc a:hover { background: var(--paper-deep); }
+  .pf-ch { border: 1px solid var(--line); border-radius: 14px; background: #FFFDF7; margin: .5rem 0; padding: 0 1rem; scroll-margin-top: 5rem; }
+  .pf-ch > summary { cursor: pointer; min-height: 48px; display: flex; flex-wrap: wrap; align-items: center; gap: .1rem .6rem; padding: .5rem 0; font: 600 1.08rem Fraunces, Georgia, serif; }
+  .pf-ch[open] > summary { border-bottom: 1px solid var(--line); margin-bottom: .7rem; }
+  .pf-n { display: inline-grid; place-items: center; width: 1.6rem; height: 1.6rem; border-radius: 50%; background: var(--ink); color: var(--paper); font: 600 .8rem/1 Lora, serif; }
+  .pf-sum { font: italic 400 .92rem Lora, Georgia, serif; color: var(--ink-soft); }
+  .pf-ch p { margin: 0 0 .6rem; font-size: .98rem; }
+  .pf-links { margin: 0 0 .9rem; }
+  .pf-links h4 { margin: .2rem 0 .3rem; font: 600 .95rem Lora, Georgia, serif; }
+  .read .pf-links ul { margin: 0; padding-left: 0; list-style: none; }
+  .pf-links li { margin: .35rem 0; padding-left: .7rem; border-left: 4px solid var(--line); font-size: .95rem; }
+  .read .pf-links li.t-o { border-left-color: #3E6B4C; } .read .pf-links li.t-h { border-left-color: #2F5F8A; } .read .pf-links li.t-a { border-left-color: #7C5BA6; }
+  /* the climb: obvious, hidden, abstract, deepest */
+  .read .pc-climb { list-style: none; padding: 0; margin: 1rem 0 1.4rem; }
+  .pc-climb > li { position: relative; margin: 0 0 1.1rem; padding: .85rem 1rem; border: 1px solid var(--line); border-left: 6px solid var(--tc, #3E6B4C); border-radius: 14px; background: #FFFDF7; max-width: none; }
+  .pc-climb > li + li::before { content: "↑ deeper"; position: absolute; top: -1.05rem; left: 1rem; font: 600 .78rem/1 Lora, serif; color: var(--ink-soft); }
+  @media (min-width: 760px) { .pc-climb > li:nth-child(2) { margin-left: 1.5rem; } .pc-climb > li:nth-child(3) { margin-left: 3rem; } .pc-climb > li:nth-child(4) { margin-left: 4.5rem; } }
+  .pc-climb h3 { margin: 0 0 .3rem; font-size: 1.12rem; }
+  .pc-climb .pc-lvl { font: 600 .8rem/1 Lora, serif; color: var(--tc); text-transform: uppercase; letter-spacing: .05em; display: block; margin-bottom: .3rem; }
+  .pc-climb p { margin: 0 0 .5rem; font-size: .97rem; }
+  .read .pc-climb ul { list-style: none; padding: 0; margin: .3rem 0 .2rem; }
+  .pc-climb ul li { margin: .45rem 0; font-size: .95rem; }
+  .pc-chips { display: flex; flex-wrap: wrap; gap: .25rem; margin: .3rem 0; padding: 0; list-style: none; }
+  .pc-chips span { font-size: .8rem; padding: .1rem .5rem; border-radius: 999px; background: #EFE7F6; border: 1px solid #D5C6E6; }
+  /* flowcharts: plain boxes and arrows, stacked on phones */
+  .fc { margin: 1.2rem 0 2rem; padding: 1rem; border: 1px solid var(--line); border-radius: 18px; background: #FBF8F0; }
+  .fc h3 { margin: 0 0 .4rem; font-size: 1.15rem; }
+  .fc > p { margin: 0 0 .8rem; font-size: .97rem; }
+  .fc figcaption { margin-top: 1rem; padding: .7rem .9rem; border-radius: 12px; background: #fff; border: 1px solid #CFE0EC; font-size: .96rem; }
+  .fc-key { display: flex; flex-wrap: wrap; gap: .3rem 1rem; font-size: .85rem; }
+  .fc-key i { display: inline-block; width: .9rem; height: .9rem; border-radius: 3px; vertical-align: -2px; margin-right: .3rem; border: 1px solid var(--line); }
+  .k-in { background: #E3EEF8; } .k-btw { background: #E4F1E6; } .k-out { background: #FBEFD5; }
+  .read .fc-moment { list-style: none; padding: 0; margin: .6rem 0 0; display: grid; gap: 1.7rem; }
+  .fc-moment li { position: relative; margin: 0; max-width: none; padding: .6rem .75rem; border: 1px solid #B9AE8E; border-radius: 12px; background: #fff; font-size: .93rem; line-height: 1.45; }
+  .fc-moment li.s-in { background: #E3EEF8; } .fc-moment li.s-btw { background: #E4F1E6; } .fc-moment li.s-out { background: #FBEFD5; }
+  .fc-moment li.fc-pill { background: var(--ink); color: var(--paper); border-color: var(--ink); font-weight: 600; text-align: center; border-radius: 999px; }
+  .fc-moment b { display: block; font: 600 .98rem Fraunces, Georgia, serif; margin-bottom: .1rem; }
+  .fc-moment b small { font: 600 .75rem Lora, serif; color: var(--ink-soft); margin-right: .3rem; }
+  .fc-moment li::after { position: absolute; font: 700 1.2rem/1 system-ui, sans-serif; color: var(--ink); left: 50%; bottom: -1.45rem; transform: translateX(-50%); content: "↓"; }
+  .fc-moment li:last-child::after { content: none; }
+  @media (min-width: 760px) {
+    .fc-moment { grid-template-columns: repeat(3, 1fr); gap: 1.7rem 1.9rem; }
+    .fc-moment li.a-r::after { content: "→"; left: auto; right: -1.55rem; bottom: auto; top: 50%; transform: translateY(-50%); }
+    .fc-moment li.a-l::after { content: "←"; left: -1.55rem; bottom: auto; top: 50%; transform: translateY(-50%); }
+    .fc-moment li[data-row] { grid-column: var(--c); }
+    .fc-moment li[data-row="2"] { grid-row: 2; } .fc-moment li[data-row="3"] { grid-row: 3; } .fc-moment li[data-row="4"] { grid-row: 4; }
+    .fc-moment li.fc-decided { grid-column: 2 / 4; grid-row: 5; }
+  }
+  .fc-vh { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+  .read .fc-decide { list-style: none; padding: 0; margin: .6rem 0 0; }
+  .fc-decide > li { position: relative; margin: 0 0 1.9rem; max-width: none; }
+  .fc-decide > li:last-child { margin-bottom: 0; }
+  .fc-decide > li::after { content: "No ↓"; position: absolute; left: 1rem; bottom: -1.5rem; font: 700 .85rem/1 Lora, serif; color: var(--ink-soft); }
+  .fc-decide > li.fc-start::after { content: "↓"; font-size: 1.15rem; }
+  .fc-decide > li:last-child::after { content: none; }
+  .fc-start, .fc-end { padding: .6rem .9rem; border-radius: 999px; background: var(--ink); color: var(--paper); font-weight: 600; text-align: center; }
+  .fc-end { border-radius: 14px; font-weight: 400; }
+  .fc-end a { color: var(--paper); font-weight: 600; }
+  .fc-row { display: grid; gap: 1.6rem; }
+  .fc-q, .fc-yes { position: relative; margin: 0; padding: .6rem .8rem; border-radius: 12px; font-size: .95rem; max-width: none; }
+  .fc-q { background: #fff; border: 2px solid var(--ink); font-weight: 600; }
+  .fc-yes { background: #E4F1E6; border: 1px solid #9FC3A6; margin-left: 1.2rem; }
+  .fc-yes::before { content: "Yes ↓"; position: absolute; left: .6rem; top: -1.35rem; font: 700 .85rem/1 Lora, serif; color: #2E5C3C; }
+  .fc-lab { font-weight: 600; display: block; }
+  .fc-yes a { font-weight: 600; white-space: nowrap; }
+  @media (min-width: 760px) {
+    .fc-row { grid-template-columns: 1fr 1.25fr; gap: 2.6rem; align-items: center; }
+    .fc-yes { margin-left: 0; }
+    .fc-yes::before { content: "Yes →"; left: -2.45rem; top: 50%; transform: translateY(-50%); }
+  }
+  .fc-ring { position: relative; }
+  .fc-hub { background: var(--ink); color: var(--paper); border-radius: 18px; padding: .8rem 1rem; text-align: center; }
+  .fc-hub strong { font: 600 1.05rem Fraunces, Georgia, serif; display: block; margin-bottom: .3rem; }
+  .read .fc-hub ul { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; justify-content: center; gap: .2rem .8rem; font-size: .92rem; }
+  .fc-hub li { margin: 0; }
+  .read .fc-nodes { list-style: none; padding: 0; margin: 1rem 0 0; display: grid; grid-template-columns: 1fr 1fr; gap: .5rem; }
+  .fc-nodes li { margin: 0; padding: .5rem .6rem; border: 1px solid var(--line); border-radius: 12px; background: #fff; font-size: .9rem; line-height: 1.3; text-align: center; }
+  .fc-nodes a { display: block; font-weight: 600; color: var(--ink); }
+  .fc-nodes span { color: var(--ink-soft); font-size: .82rem; }
+  @media (min-width: 720px) {
+    .fc-ring { height: 34rem; max-width: 34rem; margin: .4rem auto 0; }
+    .fc-ring::before { content: ""; position: absolute; inset: 3.4rem; border: 2px dashed #B9AE8E; border-radius: 50%; }
+    .fc-hub { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); width: 12.5rem; padding: .9rem; }
+    .read .fc-hub ul { display: block; } .fc-hub li { margin: .12rem 0; }
+    .read .fc-nodes { margin: 0; display: block; }
+    .fc-nodes li { position: absolute; left: 50%; top: 50%; width: 8.4rem; transform: translate(-50%, -50%) rotate(calc(var(--i) * 40deg)) translateY(-13.6rem) rotate(calc(var(--i) * -40deg)); }
+  }
 
 </style>
 <!-- seo:start -->
 <link rel="canonical" href="https://spreadloveandacceptance.com/polymath.html">
-<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1">
+<link rel="alternate" hreflang="en-us" href="https://spreadloveandacceptance.com/polymath.html">
+<link rel="alternate" hreflang="x-default" href="https://spreadloveandacceptance.com/polymath.html">
+<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
 <meta name="keywords" content="self-help, relationships, kindness, love, appreciation, acceptance, connection, communication, calm, peace, harmony, reconciliation, emotional wellbeing, self-discovery, fairness at home, mental load, invisible work, free self-help tools">
-<meta name="author" content="Spread Love &amp; Acceptance">
+<meta name="author" content="Christian, Spread Love &amp; Acceptance">
+<meta name="application-name" content="Spread Love &amp; Acceptance">
+<meta name="theme-color" content="#F5EFDE">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" href="/assets/icons/icon.svg" type="image/svg+xml">
+<link rel="icon" href="/assets/icons/favicon-32.png" type="image/png" sizes="32x32">
+<link rel="icon" href="/assets/icons/favicon-16.png" type="image/png" sizes="16x16">
+<link rel="apple-touch-icon" href="/assets/icons/apple-touch-icon-180.png" sizes="180x180">
+<link rel="manifest" href="/manifest.webmanifest">
 <meta property="og:site_name" content="Spread Love &amp; Acceptance">
 <meta property="og:title" content="The Polymath Way: How Every Field Connects">
 <meta property="og:description" content="How psychology, economics, nature, music and more grow from the same few roots, and how a polymath joined nine fields into one program you can learn.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://spreadloveandacceptance.com/polymath.html">
 <meta property="og:image" content="https://spreadloveandacceptance.com/assets/img/og-image.png">
+<meta property="og:image:type" content="image/png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
 <meta property="og:image:alt" content="Two friends sharing one heart, with two happy pups: Spread Love &amp; Acceptance">
 <meta property="og:locale" content="en_US">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="The Polymath Way: How Every Field Connects">
 <meta name="twitter:description" content="How psychology, economics, nature, music and more grow from the same few roots, and how a polymath joined nine fields into one program you can learn.">
 <meta name="twitter:image" content="https://spreadloveandacceptance.com/assets/img/og-image.png">
-<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"name":"The Polymath Way: How Every Field Connects","headline":"The Polymath Way: How Every Field Connects","description":"How psychology, economics, nature, music and more grow from the same few roots, and how a polymath joined nine fields into one program you can learn.","url":"https://spreadloveandacceptance.com/polymath.html","inLanguage":"en-US","isAccessibleForFree":true,"keywords":"self-help, relationships, kindness, love, appreciation, acceptance, connection, communication, calm, peace, harmony, reconciliation, emotional wellbeing, self-discovery, fairness at home, mental load, invisible work, free self-help tools","publisher":{"@type":"Organization","@id":"https://spreadloveandacceptance.com/#org","name":"Spread Love & Acceptance"},"isPartOf":{"@type":"WebSite","@id":"https://spreadloveandacceptance.com/#website","name":"Spread Love & Acceptance","url":"https://spreadloveandacceptance.com/"},"dateModified":"2026-10-01","image":"https://spreadloveandacceptance.com/assets/img/og-image.png","@type":"WebPage"},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Spread Love & Acceptance","item":"https://spreadloveandacceptance.com/"},{"@type":"ListItem","position":2,"name":"The Polymath Way: How Every Field Connects","item":"https://spreadloveandacceptance.com/polymath.html"}]}]}</script>
+<meta name="twitter:image:alt" content="Two friends sharing one heart, with two happy pups: Spread Love &amp; Acceptance">
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@id":"https://spreadloveandacceptance.com/polymath.html#page","name":"The Polymath Way: How Every Field Connects","headline":"The Polymath Way: How Every Field Connects","description":"How psychology, economics, nature, music and more grow from the same few roots, and how a polymath joined nine fields into one program you can learn.","url":"https://spreadloveandacceptance.com/polymath.html","inLanguage":"en-US","isAccessibleForFree":true,"keywords":"self-help, relationships, kindness, love, appreciation, acceptance, connection, communication, calm, peace, harmony, reconciliation, emotional wellbeing, self-discovery, fairness at home, mental load, invisible work, free self-help tools","publisher":{"@type":"Organization","@id":"https://spreadloveandacceptance.com/#org","name":"Spread Love & Acceptance","url":"https://spreadloveandacceptance.com/","logo":{"@type":"ImageObject","url":"https://spreadloveandacceptance.com/assets/img/logo-stacked.png"}},"isPartOf":{"@type":"WebSite","@id":"https://spreadloveandacceptance.com/#website","name":"Spread Love & Acceptance","url":"https://spreadloveandacceptance.com/"},"datePublished":"2026-10-01","dateModified":"2026-10-02","image":"https://spreadloveandacceptance.com/assets/img/og-image.png","primaryImageOfPage":{"@type":"ImageObject","url":"https://spreadloveandacceptance.com/assets/img/og-image.png"},"@type":"WebPage"},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Spread Love & Acceptance","item":"https://spreadloveandacceptance.com/"},{"@type":"ListItem","position":2,"name":"The Polymath Way: How Every Field Connects","item":"https://spreadloveandacceptance.com/polymath.html"}]}]}</script>
 <!-- seo:end -->
 </head>
 <body>
@@ -138,7 +243,82 @@
 <p>Christian, who made this site, is a polymath. Christian spent fifteen years as a government auditor and audit manager, and studied psychology, philosophy, behavioral science, neurobiology, economics, business, finance, alternative holistic therapies and aromatherapy, almost obsessively, to understand how the mind, the body and the places we live work together.</p>
 <blockquote><p>“I didn’t study nine fields because I was collecting credentials. I studied them because each one held a piece of a problem I was living inside, and none of them held the whole thing. The framework is what happened when the pieces were finally laid on the same table.”</p></blockquote>
 <p>Christian’s thinking “runs on many tracks at once,” with fast pattern-spotting and firm logic, so the same root showing up in a ledger, a nervous system and a radio signal is something Christian tends to see all at once. Audit is the thread that holds it together: an audit doesn’t ask whether people are good. It asks whether the system produces reliable results, and what the evidence actually supports.</p>
-<p><a href="/about.html#ask-tide">Ask Tide about Christian →</a> &nbsp; <a href="/about.html#curriculum">The nine fields, one by one →</a></p>
+<p><a href="/about.html#ask-tide">Ask Tide about Christian →</a> &nbsp; <a href="#fields">The nine fields, one chapter each ↓</a></p>
+
+<h2 id="fields">The nine fields, one chapter each</h2>
+<p>Each field gets a short chapter: what it studies, the one idea the program borrows from it, where that idea shows up, and its closest links to the other eight, from the most obvious to the most hidden.</p>
+<nav class="pf-toc" aria-label="The nine fields">
+  <ol>
+    <li><a href="#field-nb">Neurobiology</a></li><li><a href="#field-ps">Psychology</a></li><li><a href="#field-ph">Philosophy</a></li>
+    <li><a href="#field-bs">Behavioral science</a></li><li><a href="#field-ec">Economics</a></li><li><a href="#field-fi">Finance</a></li>
+    <li><a href="#field-bu">Business</a></li><li><a href="#field-ht">Holistic therapies</a></li><li><a href="#field-ar">Aromatherapy</a></li>
+  </ol>
+</nav>
+<div class="pf-chapters no-bubble">
+<details class="pf-ch" id="field-nb"><summary><span class="pf-n">1</span> Neurobiology <span class="pf-sum">the body’s state comes first</span></summary>
+  <p><strong>What it studies:</strong> how the brain and nerves work. Part of that is how the body shifts between calm, revved up and shut down, often before we notice.</p>
+  <p><strong>The idea we borrow:</strong> your state sets the volume. A body on high alert hears every comment louder, and stress left over from earlier still counts.</p>
+  <p><strong>Where it shows up:</strong> <a href="/book/chapter-3.html">Chapter III: stress and full tanks</a>, <a href="/workpapers/wp-02-battery-stress-meter.html">the Battery &amp; Stress Meter (WP-02)</a> and <a href="/quick-checks.html#today">Today’s Weather</a>.</p>
+  <p class="pf-roots"><strong>Roots:</strong> state and setting, limited capacity, balance.</p>
+  <div class="pf-links" data-field-links="nb"></div>
+</details>
+<details class="pf-ch" id="field-ps"><summary><span class="pf-n">2</span> Psychology <span class="pf-sum">what’s meant isn’t always what’s heard</span></summary>
+  <p><strong>What it studies:</strong> how people think, feel and make sense of each other, including the shortcuts the mind takes without asking.</p>
+  <p><strong>The idea we borrow:</strong> intent isn’t impact. Mood filters what we hear, and we each remember our own effort best.</p>
+  <p><strong>Where it shows up:</strong> <a href="/book/chapter-1.html">Chapter I: why we get out of tune</a>, <a href="/signal-translator.html">the Signal Translator</a> and <a href="/turning-toward.html">Turning Toward</a>.</p>
+  <p class="pf-roots"><strong>Roots:</strong> signal and noise, state and setting, limited capacity.</p>
+  <div class="pf-links" data-field-links="ps"></div>
+</details>
+<details class="pf-ch" id="field-ph"><summary><span class="pf-n">3</span> Philosophy <span class="pf-sum">what we know, and what’s fair</span></summary>
+  <p><strong>What it studies:</strong> big questions asked carefully. How do we know what we know? What do we owe each other? What makes a life go well?</p>
+  <p><strong>The idea we borrow:</strong> separate the fact from the guess, and agree on which kind of fair you’re using: fair by equal shares, or fair by promises kept.</p>
+  <p><strong>Where it shows up:</strong> <a href="/book/chapter-4.html">Chapter IV: two kinds of fair</a>, <a href="/book/chapter-2-in-depth.html">Chapter II in depth</a> and <a href="/perspective-shifter.html">the Perspective Shifter</a>.</p>
+  <p class="pf-roots"><strong>Roots:</strong> balance (as fairness), signal and noise, ownership and structure.</p>
+  <div class="pf-links" data-field-links="ph"></div>
+</details>
+<details class="pf-ch" id="field-bs"><summary><span class="pf-n">4</span> Behavioral science <span class="pf-sum">the setup beats willpower</span></summary>
+  <p><strong>What it studies:</strong> what people actually do, as opposed to what they plan to do, and how small changes to a setup change behavior.</p>
+  <p><strong>The idea we borrow:</strong> habits beat good intentions. A routine too small to skip keeps going on the worst day of the week.</p>
+  <p><strong>Where it shows up:</strong> <a href="/workpapers/wp-13-pll-protocol.html">the 90-second check-in (WP-13)</a>, <a href="/book/chapter-5.html">Chapter V: the monthly look-back</a> and <a href="/workpapers/wp-04-deficit-audit.html">the Deficit Audit (WP-04)</a>.</p>
+  <p class="pf-roots"><strong>Roots:</strong> feedback loops, quiet incentives, limited capacity.</p>
+  <div class="pf-links" data-field-links="bs"></div>
+</details>
+<details class="pf-ch" id="field-ec"><summary><span class="pf-n">5</span> Economics <span class="pf-sum">time and attention run out</span></summary>
+  <p><strong>What it studies:</strong> how people and groups share out things that are limited, and how choices follow whatever gets rewarded.</p>
+  <p><strong>The idea we borrow:</strong> attention is a budget. Noticing, remembering and planning spend it, even when nobody sees, and a home running at full stretch has no margin for a bad week.</p>
+  <p><strong>Where it shows up:</strong> <a href="/book/preface.html">the Preface: the work nobody sees</a>, <a href="/lemonade-stand.html">the Lemonade Stand</a> and <a href="/five-pillars.html#quiet-incentives">Pillar V</a>.</p>
+  <p class="pf-roots"><strong>Roots:</strong> limited capacity, balance, quiet incentives.</p>
+  <div class="pf-links" data-field-links="ec"></div>
+</details>
+<details class="pf-ch" id="field-fi"><summary><span class="pf-n">6</span> Finance <span class="pf-sum">a ledger with two sides</span></summary>
+  <p><strong>What it studies:</strong> money over time: what comes in, what goes out, what’s kept in reserve, and whether an arrangement can last.</p>
+  <p><strong>The idea we borrow:</strong> the ledger. Every entry has two sides, unseen work is a debt nobody billed, and a reserve is what gets you through a surprise.</p>
+  <p><strong>Where it shows up:</strong> <a href="/book/preface-in-depth.html">the Preface in depth: unbilled debt</a>, <a href="/book/chapter-2.html">Chapter II: is the split working?</a> and <a href="/calc01-solvency.html">the fairness calculator (CALC-01)</a>.</p>
+  <p class="pf-roots"><strong>Roots:</strong> balance, ownership and structure, quiet incentives.</p>
+  <div class="pf-links" data-field-links="fi"></div>
+</details>
+<details class="pf-ch" id="field-bu"><summary><span class="pf-n">7</span> Business <span class="pf-sum">one owner per job</span></summary>
+  <p><strong>What it studies:</strong> how groups of people organize to get work done: roles, routines, reviews and what happens when nobody is sure who’s in charge of what.</p>
+  <p><strong>The idea we borrow:</strong> work that belongs to everyone belongs to no one. Give each regular job one owner and a simple check.</p>
+  <p><strong>Where it shows up:</strong> <a href="/workpapers/wp-03-raci-treaty.html">One owner per job (WP-03)</a>, <a href="/book/chapter-2-in-depth.html">Chapter II in depth: ownership clarity</a> and <a href="/check-ins.html">Check-ins</a>.</p>
+  <p class="pf-roots"><strong>Roots:</strong> ownership and structure, feedback loops, limited capacity.</p>
+  <div class="pf-links" data-field-links="bu"></div>
+</details>
+<details class="pf-ch" id="field-ht"><summary><span class="pf-n">8</span> Holistic therapies <span class="pf-sum">the whole person, body first</span></summary>
+  <p><strong>What it studies:</strong> practices that look at the whole person, like rest, breathing, movement and gentle routines. Some are well studied and some are debated. The program uses only the plain, everyday parts.</p>
+  <p><strong>The idea we borrow:</strong> start with the body, then the argument. Settle first, and care for people before things break, not after.</p>
+  <p><strong>Where it shows up:</strong> <a href="/night-garden.html">the Night Garden</a>, <a href="/wp-11.html">the Calm-Down Kit (WP-11)</a> and <a href="/book/chapter-3.html">Chapter III</a>.</p>
+  <p class="pf-roots"><strong>Roots:</strong> balance, state and setting, feedback loops.</p>
+  <div class="pf-links" data-field-links="ht"></div>
+</details>
+<details class="pf-ch" id="field-ar"><summary><span class="pf-n">9</span> Aromatherapy <span class="pf-sum">the senses and the setting</span></summary>
+  <p><strong>What it studies:</strong> the use of scent, and more widely how what reaches our senses shapes how we feel. Claims about specific oils are debated, and the program doesn’t lean on them.</p>
+  <p><strong>The idea we borrow:</strong> the setting matters. For some people, a familiar scent, softer light or a quieter room is a quick cue to slow down.</p>
+  <p><strong>Where it shows up:</strong> <a href="/book/chapter-4-in-depth.html">Chapter IV in depth: where and when to talk</a>, <a href="/soundscapes.html">the Soundscape Catalog</a> and <a href="/wp-11.html">the Calm-Down Kit (WP-11)</a>.</p>
+  <p class="pf-roots"><strong>Roots:</strong> state and setting, quiet incentives, balance.</p>
+  <div class="pf-links" data-field-links="ar"></div>
+</details>
+</div>
 
 <h2 id="pillars">Where the fields meet: the Five Pillars</h2>
 <p>Each pillar is a meeting point, a place where several fields describe the same thing. That’s what makes them useful: one idea you can learn once and use everywhere.</p>
@@ -176,9 +356,62 @@
 <p class="tol-device-note"><span aria-hidden="true">💻</span> <span>The full grid needs room for nine columns side by side, so it shows on a laptop or desktop. On a phone or tablet, the same 36 connections are listed field by field instead.</span></p>
 <div class="nine-grid" data-nine-grid><noscript><p>This needs JavaScript. Professor Puddles can walk you through the connections too.</p></noscript></div>
 
+<h2 id="climb">From obvious to hidden: the climb</h2>
+<p>Read the connections in order and they get deeper. Each step up, the fields look less alike on the surface and more alike underneath.</p>
+<ol class="pc-climb" data-nine-climb><noscript><li>This needs JavaScript. The grid above lists the same connections.</li></noscript></ol>
+
 <h2 id="chain">One field leads into the next</h2>
 <p>The fields also line up in a chain, where each one follows logically from the last, and the ninth leads back to the first. Read it as one argument, start to finish:</p>
 <ol class="nine-chain" data-nine-chain></ol>
+
+<h2 id="intersection">The intersection of all nine</h2>
+<p>Three pictures of the same thing: all nine fields working at once. Read them top to bottom. Each ends with what it means for you.</p>
+
+<figure class="fc no-bubble" id="flow-moment" aria-labelledby="flow-moment-h">
+  <h3 id="flow-moment-h">1. How one moment travels through all nine fields</h3>
+  <p>A tense moment about the dishes, from what happens to what you decide. The path snakes from inside you, to between you, to around you.</p>
+  <p class="fc-key" aria-hidden="true"><span><i class="k-in"></i>Inside you</span><span><i class="k-btw"></i>Between you</span><span><i class="k-out"></i>Around you</span></p>
+  <ol class="fc-moment" data-flow-moment><noscript><li>This flowchart needs JavaScript. The chain above tells the same story.</li></noscript></ol>
+  <figcaption><strong>What this means for you:</strong> a hard moment is never just one thing. If you only fix the words, the body, the ledger and the room are still pushing. Start at the top: settle, then check the facts, then the setup.</figcaption>
+</figure>
+
+<figure class="fc no-bubble" id="flow-wrong" aria-labelledby="flow-wrong-h">
+  <h3 id="flow-wrong-h">2. When something goes wrong: where to look first</h3>
+  <p>Ask the questions in order. Stop at the first yes. The order matters: there’s no point checking the ledger while your body is on high alert.</p>
+  <ol class="fc-decide">
+    <li class="fc-start">Something feels off.</li>
+    <li class="fc-row"><p class="fc-q">Is your body revved up, shut down or worn out?</p><p class="fc-yes"><span class="fc-lab">Neurobiology and holistic therapies:</span> settle first, then talk. <a href="/wp-11.html">Calm-Down Kit (WP-11)</a> · <a href="/night-garden.html">Night Garden</a></p></li>
+    <li class="fc-row"><p class="fc-q">Is it about how something was said or heard?</p><p class="fc-yes"><span class="fc-lab">Psychology and philosophy:</span> separate what was meant from what arrived, and the fact from the guess. <a href="/signal-translator.html">Signal Translator</a></p></li>
+    <li class="fc-row"><p class="fc-q">Is it a job that keeps landing on the same person?</p><p class="fc-yes"><span class="fc-lab">Business:</span> give the job one owner. <a href="/workpapers/wp-03-raci-treaty.html">One owner per job (WP-03)</a></p></li>
+    <li class="fc-row"><p class="fc-q">Does one side seem to give more, week after week?</p><p class="fc-yes"><span class="fc-lab">Economics and finance:</span> put the whole load on one page, unseen work included. <a href="/lemonade-stand.html">Lemonade Stand</a></p></li>
+    <li class="fc-row"><p class="fc-q">Does the same problem keep coming back?</p><p class="fc-yes"><span class="fc-lab">Behavioral science:</span> change the setup, not the person, with one small habit. <a href="/workpapers/wp-04-deficit-audit.html">Deficit Audit (WP-04)</a></p></li>
+    <li class="fc-row"><p class="fc-q">Is the place or time making it harder: late, rushed, noisy?</p><p class="fc-yes"><span class="fc-lab">Aromatherapy and the senses:</span> move it to a calmer room or a better time. <a href="/check-ins.html">Check-ins</a></p></li>
+    <li class="fc-end">No to all of these? Start with <a href="/workpapers/wp-13-pll-protocol.html">the 90-second check-in (WP-13)</a> together. It often shows which question was the real one.</li>
+  </ol>
+  <figcaption><strong>What this means for you:</strong> you don’t need to know all nine fields. You need the order: body, then message, then setup. Often, one of the first three questions is enough.</figcaption>
+</figure>
+
+<figure class="fc no-bubble" id="flow-roots" aria-labelledby="flow-roots-h">
+  <h3 id="flow-roots-h">3. Seven roots in the middle, nine fields around them</h3>
+  <p>Every field draws on the same seven roots. Each field below lists the roots it uses most.</p>
+  <div class="fc-ring">
+    <div class="fc-hub"><strong>The seven roots</strong>
+      <ul><li>⚖️ Balance</li><li>📡 Signal and noise</li><li>🔁 Feedback loops</li><li>🔋 Limited capacity</li><li>🗂️ Ownership</li><li>🧲 Quiet incentives</li><li>🌤️ State and setting</li></ul>
+    </div>
+    <ul class="fc-nodes">
+      <li style="--i:0"><a href="#field-nb">Neurobiology</a><span>setting, capacity</span></li>
+      <li style="--i:1"><a href="#field-ps">Psychology</a><span>setting, signal</span></li>
+      <li style="--i:2"><a href="#field-ph">Philosophy</a><span>balance, setting</span></li>
+      <li style="--i:3"><a href="#field-bs">Behavioral science</a><span>loops, incentives</span></li>
+      <li style="--i:4"><a href="#field-ec">Economics</a><span>capacity, balance</span></li>
+      <li style="--i:5"><a href="#field-fi">Finance</a><span>balance, ownership</span></li>
+      <li style="--i:6"><a href="#field-bu">Business</a><span>ownership, loops</span></li>
+      <li style="--i:7"><a href="#field-ht">Holistic therapies</a><span>balance, loops</span></li>
+      <li style="--i:8"><a href="#field-ar">Aromatherapy</a><span>setting, incentives</span></li>
+    </ul>
+  </div>
+  <figcaption><strong>What this means for you:</strong> learn a root once and you can use it in all nine places. If a budget needs a safety margin, so does a tired person, and so does a busy week.</figcaption>
+</figure>
 
 <h2 id="you">How to think like a polymath</h2>
 <ol class="ideas">
@@ -192,6 +425,7 @@
   <p><strong>Try this:</strong> Start with the root of balance. The Lemonade Stand puts everyone’s share of the work on one page, so you can see the whole load together.</p>
   <p><a href="/lemonade-stand.html">Open the Lemonade Stand &rarr;</a> &nbsp; <a href="/five-pillars.html">Read the Five Pillars &rarr;</a></p>
 </div>
+<p>The same way of seeing works inside you, too. <a href="/wavelength.html">Wavelength</a> has its own nine: the nine inputs of learning, from words and logic to sound, nature and meaning, with a map of how they connect, from the obvious links to the most hidden.</p>
 </main>
 </body>
 </html>

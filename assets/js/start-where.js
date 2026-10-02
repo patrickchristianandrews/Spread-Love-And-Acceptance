@@ -56,12 +56,14 @@
       say:'Often neither of you is being difficult. Two brains can process the same sentence differently, and the mismatch runs both ways rather than one person being wrong.',
       picks:[
         ['/wired-differently.html','Wired Differently','How fourteen kinds of wiring receive the same words.'],
+        ['/wavelength.html','Wavelength','Find both of your Wave Codes and compare them, to see where to tune in on purpose.'],
         ['/wiring-card.html','Make a wiring card','Say how you receive things once, instead of every time.'],
         ['/book/chapter-1.html','Chapter I','Why reasonable people produce a squeal.']
       ]},
     { id:'know-myself', ico:'\uD83E\uDDED', label:'I want to understand myself better',
       say:'That is the half of the program you can do entirely alone, and it is the half everything else rests on. No partner, no permission, nothing to negotiate.',
       picks:[
+        ['/wavelength.html','Wavelength','How you think, talk and listen: your wiring, your Wave Code and sixteen self-discovery chapters.'],
         ['/quick-checks.html#today','Today\u2019s Weather','Start today. Within two weeks, the almanac shows your patterns.'],
         ['/tools/frequency-calibration.html','Frequency Calibration','Your natural pace for decisions, contact and recovery.'],
         ['/learn/index.html','Stories from Philosophy','Twelve old stories that work as honest mirrors.']

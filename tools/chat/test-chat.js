@@ -487,9 +487,27 @@ t('parents', 'what is frequency buddies', { kind: 'card', id: 'buddies', link: '
 t('connections', 'how do the nine fields connect', { id: 'connections', text: /36 possible pairs.*12 obvious, 14 hidden and 10 abstract/s });
 t('connections', 'how are all the different areas Christian studied connected?', { id: 'connections', text: /seven kinds of root/ });
 t('connections', 'Show me the hidden connections', { id: 'connections-hidden', text: /Neurobiology \+ Finance/ });
+t('connections', 'what are the deepest connections?', { id: 'connections-deepest', text: /One hard conversation/ });
+t('connections', 'where do all nine fields meet at once', { id: 'connections-deepest' });
 t('connections', 'Show me the abstract connections', { id: 'connections-abstract', text: /Aristotle/ });
 t('connections', 'Show me how one field leads into the next', { id: 'connections-chain', text: /Aromatherapy → Neurobiology/ });
 t('connections', 'what is a polymath', { kind: 'card', id: 'polymath', link: '/polymath.html' });
+
+// ---------------------------------------------------------------- Wavelength (replaced Your Heartprint)
+t('wavelength', 'what is wavelength', { kind: 'card', id: 'wavelength', link: '/wavelength.html', text: /Wave Code.*16 archetypes/s });
+t('wavelength', 'how do I use wavelength?', { kind: 'card', id: 'wavelength', steps: true });
+t('wavelength', 'where did heartprint go', { id: 'wavelength', link: '/wavelength.html', text: /replaces Your Heartprint/ });
+t('wavelength', 'what does the Q mean in my wave code', { id: 'wl-letters', text: /Quick Spark.*Slow Simmer/s });
+t('wavelength', 'what do the wave code letters mean?', { id: 'wl-letters', text: /Attuned/ });
+t('wavelength', 'what is the firefly', { id: 'wl-archetypes', text: /QFNA, the Firefly/ });
+t('wavelength', 'what are the 16 archetypes in wavelength', { id: 'wl-archetypes', text: /STNA, the Quilt/ });
+t('wavelength', 'can I pick ADHD and autistic', { id: 'wl-wiring', text: /AuDHD/ });
+t('wavelength', 'is wavelength a diagnosis', { id: 'wl-wiring', text: /not a diagnosis/ });
+t('wavelength', 'what are the 9 inputs of learning', { id: 'wl-inputs', text: /Hands and movement.*not fixed learning styles|not fixed learning styles.*Hands and movement/s });
+t('wavelength', 'how do the 9 inputs connect', { id: 'wl-inputs', link: '/wavelength.html' });
+t('wavelength', 'what chapters are in wavelength', { id: 'wl-chapters', text: /sixteen self-discovery chapters/ });
+t('wavelength', 'how do I compare wave codes with my partner', { id: 'wl-compare', text: /Compare with someone/ });
+t('wavelength', 'does wavelength save what I type', { id: /^wl-|^wavelength$/, text: /on this device|sent anywhere/ });
 
 // ---------------------------------------------------------------- run
 (async () => {
