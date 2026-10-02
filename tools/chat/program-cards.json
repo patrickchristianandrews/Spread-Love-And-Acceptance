@@ -2,6 +2,258 @@
   "_about": "Curated answers for the program's own pieces (kind: tool) and the most common questions (kind: intent). keys are names people type (matched as whole words, longest first); pat is an optional pattern for intent cards (same small language as the situations). A tool card can answer 'what is it' (what + how), 'how do I use it' (how), 'what does it mean' (results) and 'show me the math' (math). See tools/chat/README.md.",
   "cards": [
     {
+      "id": "wl-letters",
+      "kind": "intent",
+      "first": true,
+      "name": "the Wave Code letters",
+      "pat": "\\bwhat (does|do|is) (the |my )?(letter )?(q|s|f|t|d|n|e|a)( (mean|means|stand|stands|in|for|letter)\\b|$)|\\b(letters?|quick spark|slow simmer|nuanced|explicit|attuned)\\b[^?]*\\b(wave ?codes?|wavelength)\\b|\\b(wave ?codes?|wavelength)\\b[^?]*\\b(letters?|quick spark|slow simmer|nuanced|explicit|attuned)\\b|\\bwhat (is|are|does) (a |my |the )?wave ?codes?( mean)?\\b|\\b(quick spark|slow simmer)\\b",
+      "keys": [],
+      "what": [
+        "Your Wave Code is four letters from Wavelength, one for each part. It’s a bit like the four-letter personality types you may have seen, but it’s a fun way to describe your preferences, not a test that measures you. Everyone uses both ends of each line sometimes.",
+        "Here’s what each letter means:"
+      ],
+      "how": [
+        "Q, Quick Spark (pace): you think fast and out loud, and ideas show up mid-sentence. The gift is energy and momentum. To tune in to a Q: let them think aloud without treating every idea as a final answer.",
+        "S, Slow Simmer (pace): you process inside before speaking, and the good thoughts often arrive later. The gift is depth and steadiness. To tune in to an S: give a heads-up before big talks, and accept “I need time to think” as a real answer.",
+        "F, Forest (lens): you see the big picture first: patterns, purpose and how it all connects. The gift is vision. To tune in to an F: start with the why, then help with the steps.",
+        "T, Trees (lens): you start with the specifics: steps, facts and exact details. The gift is precision and follow-through. To tune in to a T: be concrete. “Saturday at 10” beats “sometime soon.”",
+        "D, Direct (sending): you say it plainly, and honesty is how you show respect. The gift is clarity. To tune in to a D: listen to the words, not an imagined tone. Bluntness usually isn’t anger.",
+        "N, Nuanced (sending): you cushion what you say and read the moment, and may hint first. The gift is tact and warmth. To tune in to an N: make it safe to be direct, and take soft hints seriously.",
+        "E, Explicit (receiving): you take words at face value and want things spelled out. The gift is clear agreements. To tune in to an E: say exactly what you mean, without counting on hints or sarcasm.",
+        "A, Attuned (receiving): you read tone, mood and what’s under the words. The gift is empathy. To tune in to an A: mind your tone, and say so when you’re stressed about something else."
+      ],
+      "pillar": "Together the four letters make one of 16 archetypes, like the Firefly (QFNA) or the Compass (STDE). Want the list?",
+      "chips": [
+        [
+          "What are the 16 archetypes?",
+          "What are the Wavelength archetypes?"
+        ],
+        [
+          "How do I compare codes?",
+          "How do I compare Wave Codes with someone?"
+        ]
+      ],
+      "links": [
+        [
+          "Wavelength",
+          "/wavelength.html"
+        ],
+        [
+          "The four letters on one page",
+          "/wavelength.html#wl-letters"
+        ]
+      ]
+    },
+    {
+      "id": "wl-archetypes",
+      "kind": "intent",
+      "first": true,
+      "name": "the 16 Wavelength archetypes",
+      "pat": "\\b(wavelength|wave ?codes?)\\b[^?]*\\barchetypes?\\b|\\barchetypes?\\b[^?]*\\b(wavelength|wave ?codes?|16|sixteen)\\b|\\b(what|which) (is |s )?(my |the )?archetypes?\\b|\\b(what|who)( is| s| are)? (a |an |the )(comet|sunflare|kite|firefly|hummingbird|spark plug|bumblebee|otter|owl|lighthouse|tide|willow|compass|oak|hearth|quilt)\\b|\\b(am i|i m) (a |an |the )(comet|sunflare|kite|firefly|hummingbird|spark plug|bumblebee|otter|owl|lighthouse|tide|willow|compass|oak|hearth|quilt)\\b|\\b(qfde|qfda|qfne|qfna|qtde|qtda|qtne|qtna|sfde|sfda|sfne|sfna|stde|stda|stne|stna)\\b|\\bthe (comet|sunflare|kite|firefly|hummingbird|spark plug|bumblebee|otter|owl|lighthouse|tide|willow|compass|oak|hearth|quilt) (in|on|from) (wavelength|my wave ?code)\\b",
+      "keys": [],
+      "what": [
+        "Your four Wave Code letters make one of 16 Wavelength archetypes. Each is a picture of how you tend to think, talk and listen, not a box. Here they are:"
+      ],
+      "how": [
+        "QFDE, the Comet: fast, visionary and straight-talking. Wants the same honesty back.",
+        "QFDA, the Sunflare: bursting with big ideas and blunt about them, yet feels every shift in tone.",
+        "QFNE, the Kite: quick, imaginative and gentle with words. Needs things said plainly in return.",
+        "QFNA, the Firefly: bright, warm, full of ideas, and quick to sense how others feel.",
+        "QTDE, the Hummingbird: fast, precise and to the point. Clear in, clear out.",
+        "QTDA, the Spark Plug: gets things moving and says what’s needed, but tone lands deep.",
+        "QTNE, the Bumblebee: busy, practical and kind in delivery. Likes instructions spelled out.",
+        "QTNA, the Otter: quick, hands-on, playful, and always reading the room.",
+        "SFDE, the Owl: thinks long and deep, speaks plainly, and takes words at face value.",
+        "SFDA, the Lighthouse: steady, far-seeing and honest, with a keen sense for the mood around them.",
+        "SFNE, the Tide: slow and deep, gentle in delivery, and grateful for clear, direct words.",
+        "SFNA, the Willow: reflective and soft-spoken. Feels the undercurrents of every room.",
+        "STDE, the Compass: steady, exact and direct. Wants clear words and clear plans.",
+        "STDA, the Oak: steady and practical, honest in what they say, sensitive to how it’s said back.",
+        "STNE, the Hearth: calm, careful and kind. Does best when expectations are spelled out.",
+        "STNA, the Quilt: patient, detail-minded and gentle. Stitches people together by noticing everything."
+      ],
+      "pillar": "On your results, Wavelength adds what you bring at your best, what to watch for, and how someone can tune in to each letter.",
+      "chips": [
+        [
+          "What do the letters mean?",
+          "What do the Wave Code letters mean?"
+        ],
+        [
+          "How do I compare codes?",
+          "How do I compare Wave Codes with someone?"
+        ]
+      ],
+      "links": [
+        [
+          "Wavelength",
+          "/wavelength.html"
+        ],
+        [
+          "All 16 on one page",
+          "/wavelength.html#wl-archetypes"
+        ]
+      ]
+    },
+    {
+      "id": "wl-wiring",
+      "kind": "intent",
+      "first": true,
+      "name": "wiring in Wavelength",
+      "pat": "\\bcan i (pick|choose|select|tick|say|be|put|mark)\\b[^?]*\\b(adhd|autistic|autism|dyslexic|dyslexia|audhd|neurotypes?|wiring( types?)?|highly sensitive)\\b[^?]*\\b(and|both|more than one|all that apply|combination|mix)\\b|\\b(neurotypes?|wiring|adhd|autistic|audhd|diagnos\\w*)\\b[^?]*\\bwavelength\\b|\\bwavelength\\b[^?]*\\b(neurotypes?|wiring|adhd|autistic|audhd|dyslexic|diagnos\\w*|a test)\\b|\\bperceived neurotype\\b|\\bnot sure (which|what) (my )?(wiring|neurotype)\\b",
+      "keys": [],
+      "what": [
+        "In Wavelength, the wiring step is optional, and you can select all that apply: Neurotypical, ADHD, Autistic, Dyslexic, Highly sensitive, Not sure yet, or Something else (with a box to name it). ADHD and Autistic together is often called AuDHD, and Wavelength says so. Your wiring only decides which options you see first in each part, and “Show options from other wiring types” opens the rest.",
+        "It’s self-identified, so no diagnosis is needed, and Wavelength is not a diagnosis or a test that measures you. If you’re not sure, the “Not sure which fits?” guide explains each type, with “you might relate if” examples and a “That’s me” button. If you’re curious about a formal assessment, a doctor or psychologist can help."
+      ],
+      "how": [
+        "Open Wavelength and tap Start. The wiring step comes first.",
+        "Tap every type that fits you, or skip it. Picking “Not sure yet” shows options from every type.",
+        "Read the short explanation under your picks, or the guide below them if you need help.",
+        "Change it anytime with “Change my wiring” on your results."
+      ],
+      "pillar": "Your wiring shapes how you send and receive, which is Pillar IV, Tune how you send and receive.",
+      "chips": [
+        [
+          "What is Wavelength?",
+          "What is Wavelength?"
+        ],
+        [
+          "What is Wired Differently?",
+          "What is Wired Differently?"
+        ]
+      ],
+      "links": [
+        [
+          "Wavelength",
+          "/wavelength.html"
+        ],
+        [
+          "Wired Differently",
+          "/wired-differently.html"
+        ],
+        [
+          "Know your own wiring",
+          "/know-yourself.html"
+        ]
+      ]
+    },
+    {
+      "id": "wl-inputs",
+      "kind": "intent",
+      "first": true,
+      "name": "the 9 inputs of learning",
+      "pat": "\\b(nine|9) inputs\\b|\\binputs? of learning\\b|\\blearning inputs?\\b|\\binputs?\\b[^?]*\\bwavelength\\b|\\bwavelength\\b[^?]*\\binputs?\\b|\\bstrongest input\\b",
+      "keys": [],
+      "what": [
+        "The 9 inputs of learning are the ways people take in the world and make things click. Wavelength asks you to tap every one that helps you, then pick your strongest. They’re adapted from Howard Gardner’s idea of multiple intelligences. Treat them as preferences, not fixed learning styles: research doesn’t support learning through only one style, and most people learn best when several work together.",
+        "Here are the nine:"
+      ],
+      "how": [
+        "💬 Words: talking, reading, writing and stories.",
+        "🔢 Logic and numbers: reasons, rules, numbers and how things work.",
+        "🖼️ Pictures and space: images, diagrams, color, maps and where things are.",
+        "🤲 Hands and movement: doing, touching, moving and making.",
+        "🎵 Sound and rhythm: tone, music, rhythm and how things sound.",
+        "🤝 People: learning with others and reading how they feel.",
+        "🌙 Inner reflection: quiet thinking, journaling and knowing yourself.",
+        "🌿 Nature and patterns: noticing, sorting and reading environments.",
+        "✨ Big questions and meaning: purpose, values and the why behind everything."
+      ],
+      "pillar": "Each input has its own self-discovery chapter, and “How the 9 inputs connect” maps their links in five levels, from obvious (words and people: conversation) to the deepest (hands and people: care sent through actions often goes unseen by a words-first partner), with three flowcharts and a nine-point check before a hard conversation.",
+      "chips": [
+        [
+          "What are the chapters?",
+          "What chapters are in Wavelength?"
+        ],
+        [
+          "How do the nine fields connect?",
+          "How do the nine fields connect?"
+        ]
+      ],
+      "links": [
+        [
+          "Wavelength",
+          "/wavelength.html"
+        ],
+        [
+          "The polymath way",
+          "/polymath.html"
+        ]
+      ]
+    },
+    {
+      "id": "wl-chapters",
+      "kind": "intent",
+      "first": true,
+      "name": "the Wavelength chapters",
+      "pat": "\\b(chapters?|journal\\w*|self discovery)\\b[^?]*\\bwavelength\\b|\\bwavelength\\b[^?]*\\b(chapters?|journal\\w*|self discovery)\\b",
+      "keys": [],
+      "what": [
+        "After your Wave Code, sixteen self-discovery chapters open up on your results. Each has a short reading written for your answers (and a note for the wiring you picked), three journal prompts and one thing to try this week. You can mark each one done and see how many you’ve explored."
+      ],
+      "how": [
+        "Seven for your Wave Code: Meeting your own speed; How you make sense of things; Finding your voice; How you listen and receive; Your energy and your senses (what fills you up and what drains you); The masks and the scripts; Asking for what helps.",
+        "Nine for the inputs of learning: one for each input, from learning through words to learning through big questions and meaning, each with how it connects to the others.",
+        "Your journal answers stay in your browser. They’re kept on this device only if you tick “Keep my answers and journal on this device,” and “Copy my journal” copies them all."
+      ],
+      "pillar": "It starts with Pillar III, Read your state first, then Pillar IV, Tune how you send and receive.",
+      "chips": [
+        [
+          "What are the 9 inputs?",
+          "What are the 9 inputs of learning?"
+        ],
+        [
+          "What is Wavelength?",
+          "What is Wavelength?"
+        ]
+      ],
+      "links": [
+        [
+          "Wavelength",
+          "/wavelength.html"
+        ]
+      ]
+    },
+    {
+      "id": "wl-compare",
+      "kind": "intent",
+      "first": true,
+      "name": "comparing Wave Codes",
+      "pat": "\\bcompar\\w*\\b[^?]*\\b(wave ?codes?|wavelength)\\b|\\b(both|two|our) wave ?codes?\\b",
+      "keys": [],
+      "what": [
+        "To compare in Wavelength, the other person takes it too (on their own device, so their answers stay theirs) and tells you their four-letter Wave Code. On your results, type it under “Compare with someone.” You’ll see both archetypes, how many letters you share, and a tip for each of the four lines: pace, lens, sending and receiving."
+      ],
+      "how": [
+        "Same letter: that part usually runs smoothly, with a tip for keeping it that way.",
+        "Q and S: the Quick Spark can say “I’m just brainstorming,” and the Slow Simmer can say “I’ll come back to this by tonight.”",
+        "F and T: start with the big picture, then agree on the first concrete step together.",
+        "D and N: agree that plain words aren’t anger, and soft words still count.",
+        "E and A: say what you mean, and say it kindly. Here, both matter."
+      ],
+      "pillar": "Pillar IV, Tune how you send and receive: a mismatch is something to tune, not a fault in either of you.",
+      "chips": [
+        [
+          "What do the letters mean?",
+          "What do the Wave Code letters mean?"
+        ],
+        [
+          "What is the Perspective Shifter?",
+          "What is the Perspective Shifter?"
+        ]
+      ],
+      "links": [
+        [
+          "Compare in Wavelength",
+          "/wavelength.html"
+        ],
+        [
+          "The Perspective Shifter",
+          "/perspective-shifter.html"
+        ]
+      ]
+    },
+    {
       "id": "textsize",
       "kind": "intent",
       "first": true,
@@ -1602,7 +1854,8 @@
       ],
       "what": "Frequency Calibration maps the natural rhythms two people run on across five areas (money, rest and recovery, decisions, talking, and big-picture values), shows where you’re out of step, and suggests simple shared habits to get back in line. It isn’t a diagnosis or a compatibility test.",
       "how": [
-        "Add both names (optional) and how you’re connected.",
+        "First choose who it’s for: “Just me” maps your own rhythms and how to plan around them and explain them; “Me and someone close to me” compares two people’s rhythms.",
+        "For two people, add both names (optional) and how you’re connected.",
         "Person A picks what feels natural in each area; then Person B does the same.",
         "Compare your rhythms to see the gap in each area.",
         "Try one agreement at a time, starting with the biggest gap, for two weeks before judging it.",
@@ -4091,7 +4344,7 @@
       "kind": "intent",
       "first": true,
       "name": "the abstract connections",
-      "pat": "\\b(abstract|philosophical|deepest|big picture|underlying|universal|most abstract) connections?\\b|\\bshow me (the )?abstract( ones)?\\b",
+      "pat": "\\b(abstract|philosophical|big picture|underlying|universal|most abstract) connections?\\b|\\bshow me (the )?abstract( ones)?\\b",
       "keys": [],
       "what": [
         "Here are the 10 abstract connections: the deepest patterns, where the fields stop looking like separate subjects at all."
@@ -4102,7 +4355,7 @@
         "Philosophy + Holistic therapies (balance): A setup can be sustainable without being good for the people in it. Asking what makes the whole person well is a different question from “does it work?” In the program: Chapter II: what the number is not.",
         "Philosophy + Aromatherapy (state and setting): What we take in through the senses shapes what we believe is true. Two people in one room may not be perceiving the same room. In the program: The Perspective Shifter.",
         "Behavioral science + Holistic therapies (feedback loops): The smallest repeated acts, a breath, a daily check-in, a weekly look back, are rhythms, and rhythm is how a body and a relationship stay in tune. In the program: Chapter V: the rhythms.",
-        "Economics + Holistic therapies (balance): Rest isn’t time lost. It keeps the capacity that everything else spends, so skipping it is borrowing against next week. In the program: Your Heartprint: what fills your battery.",
+        "Economics + Holistic therapies (balance): Rest isn’t time lost. It keeps the capacity that everything else spends, so skipping it is borrowing against next week. In the program: Wavelength: what fills you up.",
         "Economics + Aromatherapy (quiet incentives): A room, like a market, carries costs nobody pays out loud. A rushed, noisy setting quietly taxes every conversation in it. In the program: Chapter IV: the setting.",
         "Business + Aromatherapy (state and setting): Good workplaces are designed so the setting helps people do their best. A home can be too: a quiet corner for hard talks is a design choice. In the program: Check-ins: a good moment.",
         "Finance + Holistic therapies (balance): A solvency read says whether an arrangement can last, never whether it’s worthwhile. Holistic care asks the other question: what makes the whole person well. In the program: Chapter II.",
@@ -4135,45 +4388,106 @@
       ]
     },
     {
-      "id": "heartprint",
+      "id": "wavelength",
       "kind": "tool",
-      "name": "Your Heartprint",
+      "name": "Wavelength",
       "keys": [
+        "wavelength",
+        "wave length",
+        "wave code",
+        "my wave code",
         "heartprint",
         "your heartprint",
+        "heart print",
+        "pawprint",
         "personal statement",
         "about me statement",
         "a statement about me",
         "describe myself",
         "user manual for me",
-        "how to explain myself"
+        "how to explain myself",
+        "communication style quiz",
+        "personality quiz",
+        "personality type",
+        "communication style"
       ],
-      "what": "Your Heartprint is a guided personal statement: a short, warm note about you that you can share with the people in your life. In nine easy steps, mostly tapping, you choose what fits: what’s going on right now, how you’re wired, what fills and drains your battery, what people might notice when you’re stretched, what helps, how you show care, the work you do that may go unseen, and what matters most. It writes the statement for you as you go, and shows connections between your choices that are easy to miss.",
+      "what": "Wavelength is a free guide to how you think, how you communicate and how you take things in, both giving and receiving. It replaces Your Heartprint (the old Heartprint page now opens Wavelength, and saved Heartprint answers move over). You pick your wiring if you like (any mix, or none), tap through four short parts with either/or questions and statements common for your wiring, choose the 9 inputs of learning that help you, and pick what helps you feel understood. You get a four-letter Wave Code and one of 16 archetypes, like the Firefly, with what each letter means, its gift and how to tune in. Then there are sixteen self-discovery chapters, a page on how the 9 inputs connect, an optional personal statement, and a way to compare codes with someone. It’s a fun way to describe preferences, not a diagnosis or a test that measures you. Nothing you type or choose is sent anywhere.",
       "how": [
-        "Open Your Heartprint and pick what fits in each step. Add a line in your own words if you like.",
-        "Read “Things you might not have noticed” as you go: each one says which field it comes from, which pillar it belongs to and a tool to try.",
-        "Add your name, then copy it, save it as a text file or print it.",
-        "Share it at a calm moment, as information rather than rules, and invite theirs."
+        "Open Wavelength, add your first name if you like, and tap Start.",
+        "Pick your wiring (optional, select all that apply), or use the “Not sure which fits?” guide.",
+        "Answer the four parts: how your brain gets going (pace), how you think things through (lens), how you communicate out (sending) and how you take things in (receiving). Tap any statements that sound like you.",
+        "Choose your inputs of learning and your strongest, then what helps you feel understood.",
+        "Part 7, your statement, is optional: the old Heartprint steps, with “Things you might not have noticed.” Skip it if you like.",
+        "Read your Wave Code, open the chapters, explore how the 9 inputs connect, and compare with someone. Copy my profile and Copy my journal are on your results."
       ],
+      "results": "Your results show your four letters (Q or S for pace, F or T for lens, D or N for sending, E or A for receiving), your archetype, how strongly you lean on each line, and a waveform drawn from your code: faster waves for Quick Spark, sharp edges for Trees, taller for Direct, echoes for Attuned. Each letter opens to what it means, its gift, what to watch for and how someone can tune in to you. It’s a description of preferences, not a verdict or a diagnosis, and everyone uses both ends of each line sometimes.",
+      "more": "Privacy: everything happens in your browser. Your answers and journal are kept on this device only if you tick “Keep my answers and journal on this device,” and “Erase everything” on your results removes them. The statement part is the old Your Heartprint: nine quick steps (what’s going on now, how you’re wired, what fills you up, what drains you, what people notice when you’re stretched, what helps, how you show care, the unseen work you do and what matters most) that write a warm note you can copy, save or print.",
+      "ex": "Say Sam answers quickly and thinks out loud (Q), wants the big picture first (F), cushions hard things (N) and reads tone closely (A). Sam is QFNA, the Firefly: bright, warm, full of ideas and quick to sense how others feel. Sam’s partner is STDE, the Compass. Comparing shows four different letters, so they agree on a few things: Sam labels brainstorms, the partner says “I’ll come back to you by tonight,” they start with the why and then the first step, and they agree that plain words aren’t anger.",
       "pillar": "It starts inside you, with Pillar III, Read your state first, and Pillar IV, Tune how you send and receive.",
       "chips": [
         [
-          "What’s the Wiring Card?",
-          "What is the Wiring Card?"
+          "What do the letters mean?",
+          "What do the Wave Code letters mean?"
         ],
         [
-          "How do I share it?",
-          "How do I share my Heartprint?"
+          "Can I pick more than one wiring?",
+          "Can I pick ADHD and autistic in Wavelength?"
+        ],
+        [
+          "What are the 9 inputs?",
+          "What are the 9 inputs of learning?"
         ]
       ],
       "links": [
         [
-          "Your Heartprint",
-          "/heartprint.html"
+          "Wavelength",
+          "/wavelength.html"
         ],
         [
           "The Wiring Card",
           "/wiring-card.html"
+        ],
+        [
+          "Wired Differently",
+          "/wired-differently.html"
+        ]
+      ]
+    },
+    {
+      "id": "connections-deepest",
+      "kind": "intent",
+      "first": true,
+      "name": "the deepest connections, where many fields meet",
+      "pat": "\\b(deepest|most hidden|deeper still|even deeper)\\b[^?]*\\b(connection|connections|link|links|fields?|ones?)\\b|\\bwhere\\b[^?]*\\b(all|nine|9|the|many) (nine |9 )?(fields|subjects|areas)?\\s?(all )?meet\\b|\\bintersection of (all|the nine|the 9)\\b|\\b(all|nine|9) (fields )?(meet )?at once\\b",
+      "keys": [],
+      "what": [
+        "Past obvious, hidden and abstract, there's a deepest level: moments where many of the nine fields meet at once. Here are four:"
+      ],
+      "how": [
+        "One hard conversation, all nine fields at once (9 fields: Neurobiology, Psychology, Philosophy, Behavioral science, Economics, Finance, Business, Holistic therapies, Aromatherapy). A single tense talk about the dishes runs through every field in the program, one after another, in a few seconds. Then you decide: talk now, or name a better time. Either way, you’re choosing with the whole picture.",
+        "The job nobody owns (6 fields: Psychology, Behavioral science, Economics, Finance, Business, Philosophy). Each of us remembers our own effort best (psychology). A job with no owner drifts to whoever notices first (behavioral science). Noticing spends real attention (economics), so a debt builds up that nobody writes down (finance). Business calls it a missing owner. Philosophy calls it unfair. They’re all describing the same unwritten job.",
+        "The tired week (6 fields: Neurobiology, Holistic therapies, Behavioral science, Economics, Finance, Business). A worn-out body has less to give (neurobiology), so rest has to match effort (holistic therapies). Habits have to be small enough to survive that week (behavioral science). A household running at full stretch has no safety margin (economics) and no reserve for a surprise (finance), and a team in the same state drops things (business). One tired week shows that capacity is a single root under six fields.",
+        "The room does some of the talking (6 fields: Aromatherapy, Neurobiology, Psychology, Philosophy, Economics, Business). Noise, light and smell reach the senses first (aromatherapy and the senses) and set the body’s alert level (neurobiology). That changes what a person can take in (psychology), and even what they believe happened (philosophy). A rushed, noisy room quietly taxes every conversation in it (economics), and good workplaces are designed to avoid that (business). Choosing the place is part of the conversation."
+      ],
+      "pillar": "These are the whole program in one moment: read your state, check what you know, count the load, give the job an owner, and mind the setting.",
+      "chips": [
+        [
+          "Show me the chain",
+          "Show me the chain through the nine fields"
+        ],
+        [
+          "The abstract ones",
+          "Show me the abstract connections"
+        ]
+      ],
+      "links": [
+        [
+          "The climb and the deepest tier",
+          "/polymath.html#climb"
+        ],
+        [
+          "The intersection of all nine, with flowcharts",
+          "/polymath.html#intersection"
         ]
       ]
     },

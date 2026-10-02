@@ -36,6 +36,7 @@
   var SECTIONS = [
     { id: 'new', title: 'What’s new', blurb: 'Newly added and newly expanded, newest first.', items: [
       { href: '/whats-new.html', code: 'All', title: 'What’s new', note: 'Everything newly added and everything that’s grown, in one place, with dates' },
+      { href: '/wavelength.html', code: 'New', title: 'Wavelength', note: 'Replaces Your Heartprint: pick your wiring, find your Wave Code, read your self-discovery chapters' },
       { href: '/growing-up.html', code: 'New', title: 'Where your lens came from', note: 'How growing up shapes the way you see yourself and others, and how to choose which old rules to keep' },
       { href: '/frequency-buddies.html', code: 'New', title: 'Frequency Buddies', note: 'Animated episodes with Tidbit and Sugarfoot, with captions on' },
       { href: '/start-in-10-minutes.html', code: 'New', title: 'Start in 10 minutes', note: 'One short path: today’s weather, the Preface, one practice card and one thing logged' },
@@ -69,6 +70,13 @@
       { href: '/infographic.html', code: '', title: 'The whole idea on one page', note: 'A printable one-page summary, easy to share' },
       { href: '/glossary.html', code: '', title: 'Glossary: the words, in plain English', note: 'Every word the site uses in one plain sentence with an example, and each tool’s plain and technical names' }
     ]},
+    { id: 'guides', title: 'Guides', blurb: 'Plain, practical guides to the questions people ask most, each linked to the free tools that help.', items: [
+      { href: '/invisible-labor-mental-load.html', code: 'Guide', title: 'Invisible labor and the mental load', note: 'What the mental load is, everyday examples, and five calm steps to share it fairly' },
+      { href: '/chore-chart-for-couples.html', code: 'Print', title: 'A fair chore chart for couples', note: 'A free, printable chore chart with one owner per job, for couples, families and roommates' },
+      { href: '/how-to-stop-fighting-with-your-partner.html', code: 'Guide', title: 'How to stop fighting with your partner', note: 'Seven calm steps, from the first sign to fixing the setup behind repeat fights' },
+      { href: '/neurodivergent-relationships.html', code: 'Guide', title: 'Neurodivergent relationships', note: 'Practical tips for ADHD, autistic and AuDHD couples and families' },
+      { href: '/communication-style-quiz.html', code: 'Quiz', title: 'Communication style quiz', note: 'What the Wavelength quiz looks at, the four Wave Code letters, and how to use your result' }
+    ]},
     { id: 'self', title: 'Self-discovery', blurb: 'Tools for understanding yourself: your load, your wiring, your patterns. Start here, with or without anyone else.', items: [
       { href: '/self-path.html', code: 'Start', title: 'Your self-discovery path', note: 'The self path, step by step: your battery, your wiring, what settles you and kind words, on your own' },
       { href: '/workpapers/fill/suite.html?road=self', code: 'Workpapers', title: 'Workpapers for you', note: 'The “Just me” road: the worksheets for the self path, in order, fillable and printable' },
@@ -77,7 +85,7 @@
       { href: '/growing-up.html', deep: true, code: 'New', title: 'Where your lens came from', note: 'How each stage of growing up shapes what you expect of yourself and others, and how to choose which rules to keep' },
       { href: '/wired-differently.html', deep: true, code: 'New', title: 'Wired Differently', note: 'How differently wired people hear the same words, and how to talk across the difference' },
       { href: '/wiring-card.html', code: 'Tool', title: 'Wiring Card', note: 'A one-page card on how you receive words, what silence means, and what to avoid' },
-      { href: '/heartprint.html', code: 'New', title: 'Your Heartprint', note: 'Build a warm personal statement in nine easy steps, with connections you may never have noticed' },
+      { href: '/wavelength.html', code: 'New', title: 'Wavelength', note: 'How you think, talk and listen: pick your wiring, find your four-letter Wave Code and archetype, and read sixteen self-discovery chapters' },
       { href: '/workpapers/wp-02-battery-stress-meter.html', deep: true, code: 'WP-02', title: 'How much are you carrying?', note: 'What you’re already carrying, separate from what just happened', paid: true },
       { href: '/tools/frequency-calibration.html', code: 'Tool', title: 'Find your natural rhythms', note: 'Your natural rhythms for money, decisions, check-ins and recovery', paid: true },
       { href: '/wp-11.html', deep: true, code: 'WP-11', title: 'The Calm-Down Kit', note: 'Decide in advance what settles your body', paid: true },
@@ -139,6 +147,7 @@
       { href: '/conversation-reader.html', code: 'New', title: 'The Conversation Reader', note: 'Paste a text thread, chat or email exchange: see where it turned, what each of you may be hearing, and a calmer way to answer' },
       { href: '/lemonade-stand.html', code: 'Tool', title: 'The Lemonade Stand', note: 'List who did what to keep the household running this week, and see the split as a plain fact' },
       { href: '/wiring-card.html', code: 'New', title: 'Wiring Card', note: 'Make a one-page card for how you receive words, what silence means, and what to avoid' },
+      { href: '/wavelength.html', code: 'New', title: 'Wavelength', note: 'A communication style guide: your wiring, your Wave Code, the 9 inputs of learning, a personal statement and a way to compare with someone' },
       { href: '/signal-translator.html', code: 'New', title: 'The Signal Translator', note: 'Test a sentence before a check-in. Pick the wiring, the room, and how it might land' },
       { href: '/perspective-shifter.html', code: 'New', title: 'The Perspective Shifter', note: 'See a moment from their side: their state, wiring, surroundings, and what each of you could see' },
       { href: '/carrier-wave-decoder.html', code: 'Tool', title: 'The Carrier Wave Decoder', note: 'A guided session for the moment a conversation starts going sideways' },
@@ -445,6 +454,18 @@
     if (current === '/index.html') document.documentElement.classList.add('tol-home');
     // pages with their own dark look (the games, the Night Garden, Drift) keep it as it is
     if (body.classList.contains('is-game') || body.hasAttribute('data-no-dark') || /^\/(night-garden|calm-visualizer|pal-cam-tv|garden-backdrop)\.html$/.test(current)) document.documentElement.classList.add('tol-nodark');
+    // every piece of reading text in its own soft bubble (site.css "Text bubbles"), except on pages with their own full-screen look
+    if (!document.documentElement.classList.contains('tol-nodark') && !/^\/(404|offline)\.html$/.test(current)) {
+      document.documentElement.classList.add('tol-bubbles');
+      // a bubble that is only as wide as its words stays in the middle when its text is centred
+      var midBubbles = function () {
+        document.querySelectorAll('main :is(p, dt, dd, figcaption, address, li, h1, h2, h3, h4, h5, h6):not(.tol-bub-mid)').forEach(function (n) {
+          var ta = getComputedStyle(n).textAlign, pd = n.parentElement && getComputedStyle(n.parentElement).display;
+          if (/center/.test(ta) && /^(block|flow-root|list-item|table-cell)$/.test(pd)) n.classList.add('tol-bub-mid');
+        });
+      };
+      midBubbles(); setTimeout(midBubbles, 1500);
+    }
     var ideas = document.querySelector('main .ideas');
     if (inDepth) body.classList.add('tol-deep');
     if (ideas) body.classList.add('tol-simple');
@@ -683,6 +704,14 @@
       '<p class="tol-promise">What you type into the tools and worksheets stays on your device. It is never collected or sent to us. <a href="/legal/privacy-policy.html#your-entries">How we handle your information</a></p>';
     foot.innerHTML = promise +
       '<span class="tol-foot-brand"><img src="/assets/img/logo-mark.svg" alt="" width="40" height="40">Spread Love &amp; Acceptance &middot; spreadloveandacceptance.com</span>' +
+      '<nav class="tol-foot-guides" aria-label="Guides" style="display:flex;flex-wrap:wrap;gap:.3rem 1rem;justify-content:center;margin:0 0 .75rem;font-size:.9rem">' +
+        '<a href="/invisible-labor-mental-load.html">The mental load</a>' +
+        '<a href="/chore-chart-for-couples.html">Chore chart for couples</a>' +
+        '<a href="/how-to-stop-fighting-with-your-partner.html">How to stop fighting</a>' +
+        '<a href="/neurodivergent-relationships.html">Neurodivergent relationships</a>' +
+        '<a href="/communication-style-quiz.html">Communication style quiz</a>' +
+        '<a href="/frequency-buddies.html">Kids’ cartoon</a>' +
+      '</nav>' +
       '<span class="tol-foot-links">' +
         '<a href="/contents.html">All pages</a>' +
         '<a href="/membership.html">Membership</a>' +
@@ -774,7 +803,8 @@
     weather: ['/quick-checks.html'], mood: 'weather', feeling: 'weather', today: 'weather', forecast: 'weather',
     message: ['/signal-translator.html', '/workpapers/wp-09-tone-filter.html', '/conversation-reader.html'], text: 'message', say: 'message', words: 'message', email: 'message',
     game: ['/pause-and-play.html'], games: 'game', play: 'game', puzzle: 'game',
-    autism: ['/wired-differently.html', '/wiring-card.html', '/know-yourself.html'], autistic: 'autism', adhd: 'autism', neurodivergent: 'autism', wiring: 'autism', sensory: 'autism',
+    autism: ['/wired-differently.html', '/wavelength.html', '/wiring-card.html', '/know-yourself.html'], autistic: 'autism', adhd: 'autism', neurodivergent: 'autism', wiring: 'autism', sensory: 'autism',
+    personality: ['/wavelength.html', '/know-yourself.html'], quiz: 'personality', archetype: 'personality', wavelength: 'personality', heartprint: 'personality', neurotype: 'personality', audhd: 'autism',
     dyslexia: ['#settings', '/wired-differently.html'], listen: ['#settings'], aloud: ['#settings'], read: null, larger: ['#settings'], size: ['#settings'], bigger: ['#settings'], font: ['#settings'], quiet: ['#settings'], dark: ['#settings'], settings: ['#settings'],
     erase: ['/on-this-device.html'], delete: ['/on-this-device.html'], stored: ['/on-this-device.html'], privacy: ['/on-this-device.html', '/legal/privacy-policy.html'],
     minutes: ['/start-in-10-minutes.html', '/quick-checks.html'], start: ['/start-here.html', '/start-in-10-minutes.html'],
@@ -1434,7 +1464,7 @@
   //   and listen for the 'tol-quiet' event on document.
   var THEME_KEY = 'tol-theme', SIZE_KEY = 'tol-text-size', HELP_KEY = 'tol-hide-helpers',
       QUIET_KEY = 'tol-quiet', EASY_KEY = 'tol-easy', FONT_KEY = 'tol-font', SPACE_KEY = 'tol-spacing',
-      TINT_KEY = 'tol-tint', RULER_KEY = 'tol-ruler', SOUND_KEY = 'tol-sound-off', PREV_KEY = 'tol-comfort-prev';
+      TINT_KEY = 'tol-tint', RULER_KEY = 'tol-ruler', BUB_KEY = 'tol-nobubbles', SOUND_KEY = 'tol-sound-off', PREV_KEY = 'tol-comfort-prev';
   // the sound switches the pal cam and the games keep for themselves
   var SOUND_KEYS = ['tol-pc-sound', 'tol-pc-music', 'tol-qw-sound', 'tol-xw-sound', 'tol-bloom-sound'];
   // four steps, each bigger than the one before (every word on the page is scaled by 1, 1.12, 1.25 or 1.4)
@@ -1466,6 +1496,7 @@
     h.classList.toggle('tol-easy', easyOn());
     h.classList.toggle('tol-font-easy', lsGet(FONT_KEY) === 'easy');
     h.classList.toggle('tol-space-wide', lsGet(SPACE_KEY) === 'wide');
+    h.classList.toggle('tol-nobubbles', lsGet(BUB_KEY) === '1');
     var tint = lsGet(TINT_KEY);
     Object.keys(TINTS).forEach(function (k) { h.classList.toggle('tol-tint-' + k, tint === k); });
     if (lsGet(FONT_KEY) === 'easy') linkEasyFont();
@@ -1574,8 +1605,8 @@
     box.querySelectorAll('input[data-font-opt]').forEach(function (i) { i.checked = i.value === (lsGet(FONT_KEY) || 'usual'); });
     box.querySelectorAll('input[data-space-opt]').forEach(function (i) { i.checked = i.value === (lsGet(SPACE_KEY) || 'usual'); });
     box.querySelectorAll('input[data-tint-opt]').forEach(function (i) { i.checked = i.value === (lsGet(TINT_KEY) || 'none'); });
-    var map = { still: stillOn, helpers: helpersHidden(), sound: !soundAllowed(), ruler: lsGet(RULER_KEY) === '1' };
-    box.querySelectorAll('input[data-switch]').forEach(function (i) { i.checked = !!map[i.getAttribute('data-switch')]; i.disabled = quietOn() && i.getAttribute('data-switch') !== 'ruler'; });
+    var map = { still: stillOn, helpers: helpersHidden(), sound: !soundAllowed(), ruler: lsGet(RULER_KEY) === '1', bubbles: lsGet(BUB_KEY) !== '1' };
+    box.querySelectorAll('input[data-switch]').forEach(function (i) { i.checked = !!map[i.getAttribute('data-switch')]; i.disabled = quietOn() && !/^(ruler|bubbles)$/.test(i.getAttribute('data-switch')); });
     box.querySelectorAll('[data-preset]').forEach(function (b) { b.setAttribute('aria-pressed', String(lsGet(PRESETS[b.getAttribute('data-preset')].key) === '1')); });
     var qn = box.querySelector('.tol-set-qnote'); if (qn) qn.hidden = !quietOn();
 
@@ -1608,6 +1639,7 @@
       '<fieldset><legend>Page tint</legend>' + radio('tint', 'data-tint-opt', 'none', 'None') + Object.keys(TINTS).map(function (k) { return radio('tint', 'data-tint-opt', k, '<span class="tol-set-swatch is-' + k + '" aria-hidden="true"></span>' + TINTS[k]); }).join('') + '</fieldset>' +
       '<fieldset><legend>Colors (dark mode)</legend>' + radio('theme', 'data-theme-opt', 'auto', 'Follow my device') + radio('theme', 'data-theme-opt', 'light', 'Light') + radio('theme', 'data-theme-opt', 'dark', 'Dark') + '</fieldset>' +
       sw('ruler', 'Reading ruler', 'A soft band that follows your pointer or finger, so you keep your place on the line') +
+      sw('bubbles', 'Text bubbles', 'Each piece of text sits in its own soft, round bubble. Turn this off for plain text on the page') +
       '<p class="tol-set-foot">These choices stay in this browser only. <button type="button" class="tol-set-reset">Back to the usual</button> <a href="/on-this-device.html">What’s stored on this device</a></p>' +
       '</div>');
     box.addEventListener('change', function (e) {
@@ -1622,6 +1654,7 @@
       if (s === 'helpers') { if (i.checked) lsSet(HELP_KEY, '1'); else lsDel(HELP_KEY); }
       if (s === 'sound') { setSounds(i.checked); quietEvent(); }
       if (s === 'ruler') { if (i.checked) lsSet(RULER_KEY, '1'); else lsDel(RULER_KEY); }
+      if (s === 'bubbles') { if (i.checked) lsDel(BUB_KEY); else lsSet(BUB_KEY, '1'); }
       after();
     });
     box.addEventListener('click', function (e) {
@@ -1629,7 +1662,7 @@
       if (p) { var n = p.getAttribute('data-preset'); setPreset(n, lsGet(PRESETS[n].key) !== '1'); }
       if (e.target.closest('.tol-set-close') || e.target === box) closeSettings();
       if (e.target.closest('.tol-set-reset')) {
-        [QUIET_KEY, EASY_KEY, PREV_KEY + '-quiet', PREV_KEY + '-easy', SIZE_KEY, THEME_KEY, HELP_KEY, FONT_KEY, SPACE_KEY, TINT_KEY, RULER_KEY, STILL_KEY].forEach(lsDel);
+        [QUIET_KEY, EASY_KEY, PREV_KEY + '-quiet', PREV_KEY + '-easy', SIZE_KEY, THEME_KEY, HELP_KEY, FONT_KEY, SPACE_KEY, TINT_KEY, RULER_KEY, BUB_KEY, STILL_KEY].forEach(lsDel);
         setSounds(false); refreshStill(); after(); quietEvent(); announce('Everything is back to the usual.');
       }
     });
