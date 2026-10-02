@@ -241,6 +241,7 @@
     $('ws-name-add').hidden = S.names.length >= MAX_PEOPLE;
     $('ws-names-count').textContent = S.names.length + ' people · up to ' + MAX_PEOPLE;
     $('ws-care').textContent = p.care;
+    refreshDynamic();
   }
 
   // A person added and never named, with nothing on any sheet, is taken off before anything is made,
@@ -334,6 +335,7 @@
   }
   function changed() {
     S.dirty = true;
+    refreshDynamic();
     if (!keep) return;
     clearTimeout(keepTimer);
     keepTimer = setTimeout(keepNow, 400);
@@ -546,13 +548,119 @@
   function renderProgress() {
     var box = $('ws-progress');
     box.innerHTML = '';
-    if (!S.path) return;
+    if (!S.path) { refreshDynamic(); return; }
     var total = S.stops.length, done = S.stops.filter(function (st) { return st.entries.some(filled); }).length;
     var bubbles = h('span', { className: 'ws-bubbles', 'aria-hidden': 'true' });
     for (var i = 0; i < total; i++) bubbles.appendChild(h('span', { className: i < done ? 'is-on' : '' }));
     box.appendChild(bubbles);
     box.appendChild(h('span', { text: done === total ? 'Every stop has a sheet. Lovely work.' : done + ' of ' + total + ' stops started' }));
     $('ws-make').classList.toggle('is-ready', done > 0);
+    refreshDynamic();
+  }
+
+  /* ------------------------------------------------------------ the page answers as you choose */
+
+  // Before a road is picked, steps 2 to 4 wait for one; the report (step 5) waits for something written.
+  // Step 1 keeps a little summary of the road, and the buttons say what they will make.
+  var LOCK_BTNS = ['ws-fillable', 'ws-choose', 'ws-fullreport', 'ws-report', 'ws-save'];
+  var was = { road: null, work: null }, booted = false;
+  function trimmedNames() { return S.names.map(function (x) { return String(x || '').trim(); }).filter(Boolean); }
+  function andList(a) { return a.length < 2 ? a.join('') : a.slice(0, -1).join(', ') + ' & ' + a[a.length - 1]; }
+  function shortRoad(p) { return p.id === 'program' ? '6-week program' : p.label; }
+  function plural(n, one, many) { return n + ' ' + (n === 1 ? one : many); }
+  function sheetsFilled() { var n = 0; S.stops.forEach(function (st) { st.entries.forEach(function (en) { if (filled(en)) n++; }); }); return n; }
+  function stopsWritten() { return S.stops.filter(function (st) { return st.entries.some(filled); }).length; }
+  function workpaperCount() { var seen = {}; S.stops.forEach(function (st) { seen[st.wp] = true; }); return Object.keys(seen).length; }
+  function announce(msg) {
+    var el = $('ws-announce');
+    if (!el || !msg) return;
+    el.textContent = '';
+    setTimeout(function () { el.textContent = msg; }, 60);
+  }
+  function setLock(sec, locked, note) {
+    var body = sec.querySelector('.ws-step-body'), noteEl = sec.querySelector('[data-lock-note]');
+    if (!body) return;
+    var hadFocus = locked && body.contains(document.activeElement);
+    sec.classList.toggle('is-locked', locked);
+    if (noteEl) {
+      noteEl.hidden = !locked;
+      if (note && noteEl.getAttribute('data-lock-text') !== note && !noteEl.querySelector('button')) { noteEl.textContent = note; noteEl.setAttribute('data-lock-text', note); }
+    }
+    if (locked) { body.setAttribute('aria-disabled', 'true'); body.setAttribute('inert', ''); }
+    else { body.removeAttribute('aria-disabled'); body.removeAttribute('inert'); }
+    LOCK_BTNS.forEach(function (id) { var b = $(id); if (b && body.contains(b)) b.disabled = locked; });
+    if (hadFocus && noteEl) { noteEl.setAttribute('tabindex', '-1'); noteEl.focus(); }
+  }
+  function chip(text, cls) { return h('li', { className: 'ws-chip-s' + (cls ? ' ' + cls : ''), text: text }); }
+  function refreshDynamic() {
+    var p = S.path, names = trimmedNames(), sheets = sheetsFilled(), written = stopsWritten(), total = S.stops.length;
+    var road = !!p, work = road && written > 0;
+    // step 1: the road at a glance
+    var sum = $('ws-summary'), chips = $('ws-chips');
+    if (sum && chips) {
+      sum.hidden = !road;
+      chips.innerHTML = '';
+      if (road) {
+        var r = h('li', { className: 'ws-chip-s is-road' }, [h('span', { className: 'ws-chip-icon', 'aria-hidden': 'true', text: p.icon }), document.createTextNode(' ' + p.label)]);
+        r.style.setProperty('--c', p.color);
+        chips.appendChild(r);
+        chips.appendChild(names.length ? chip(andList(names)) : chip(isSolo() ? 'No name yet' : 'No names yet', 'is-quiet'));
+        chips.appendChild(chip(plural(total, 'stop', 'stops')));
+        if (p.weeks && p.weeks.length) chips.appendChild(chip(plural(p.weeks.length, 'week', 'weeks')));
+        chips.appendChild(sheets ? chip(plural(sheets, 'sheet', 'sheets') + ' filled in', 'is-done') : chip('No sheets filled in yet', 'is-quiet'));
+      }
+    }
+    // the locks
+    Array.prototype.forEach.call(document.querySelectorAll('.ws-lockable'), function (sec) {
+      var needsWork = sec.getAttribute('data-unlock') === 'work';
+      setLock(sec, needsWork ? !work : !road, !road ? 'Pick a road above to unlock this.' : 'Fill in or bring in at least one sheet to write your report.');
+    });
+    // the buttons say what they will make
+    var fb = $('ws-fillable'), fn = $('ws-fillable-note');
+    if (fb) fb.textContent = !road ? 'Download the fillable PDF' : isSolo() ? 'Download your Just me fillable PDF' : 'Download the ' + shortRoad(p) + ' fillable PDF';
+    if (fn) fn.textContent = !road ? 'Every workpaper on the road you pick' : [plural(workpaperCount(), 'workpaper', 'workpapers'), shortRoad(p) + ' road'].concat(names.length ? [names.join(', ')] : []).join(' \u00b7 ');
+    var rn = $('ws-report-note'), frn = $('ws-fullreport-note');
+    if (rn) rn.textContent = road ? written + ' of ' + plural(total, 'stop', 'stops') + ' ' + (written === 1 ? 'has' : 'have') + ' something written' : '';
+    if (frn) frn.textContent = !road ? '' : sheets ? 'Reads ' + (sheets === 1 ? 'the 1 sheet' : 'all ' + sheets + ' sheets') + ' you\u2019ve filled in' : 'Reads every sheet you fill in';
+    // tell people, gently, when something opens up
+    if (booted) {
+      if (road && was.road === false) announce('Steps 2 to 4 are open: your fillable PDF, your road, and bringing in files.');
+      if (work && was.work === false) announce('Step 5 is open: your report can be written from what you\u2019ve filled in.');
+    }
+    was.road = road; was.work = work;
+    mirrorFullPath();
+  }
+
+  // The Full path package below asks for a road and names too: it starts with yours, and keeps
+  // following step 1 until you change it there yourself.
+  var fpFollow = true, fpSyncing = false;
+  function hasOption(sel, v) { return Array.prototype.some.call(sel.options, function (o) { return o.value === v; }); }
+  function fire(el, type) { var e; try { e = new Event(type, { bubbles: true }); } catch (x) { e = document.createEvent('Event'); e.initEvent(type, true, true); } el.dispatchEvent(e); }
+  function mirrorFullPath() {
+    var road = $('fp-road'), cnt = $('fp-count'), nms = $('fp-names'), note = $('fp-mirror-note');
+    if (!road || !nms || !road.options.length) return;
+    if (note) note.hidden = !S.path;
+    if (!S.path) return;
+    if (!fpFollow) {
+      if (note && !note.querySelector('button')) {
+        note.textContent = 'Set here, apart from your road above. ';
+        note.appendChild(h('button', { type: 'button', className: 'ws-link', id: 'fp-follow', text: 'Use my road from step 1 again' }));
+      }
+      return;
+    }
+    var id = S.path.id;
+    if (!hasOption(road, id)) id = id === 'program' && hasOption(road, 'partners') ? 'partners' : null;
+    var list = S.names.map(function (x) { return String(x || '').trim(); });
+    while (list.length && !list[list.length - 1]) list.pop();
+    fpSyncing = true;
+    try {
+      if (id && road.value !== id) { road.value = id; fire(road, 'change'); }
+      var n = String(Math.max(MIN_PEOPLE, S.names.length));
+      if (cnt && !isSolo() && hasOption(cnt, n) && cnt.value !== n) { cnt.value = n; fire(cnt, 'change'); }
+      var v = list.join(', ');
+      if (nms.value !== v) nms.value = v;
+    } finally { fpSyncing = false; }
+    if (note) note.textContent = 'Filled in from step 1' + (id ? ': ' + road.options[road.selectedIndex].text : '') + (list.some(Boolean) ? ' \u00b7 ' + list.filter(Boolean).join(', ') : '') + '. Change anything here and it stays as you set it.';
   }
 
   /* ------------------------------------------------------------ the sheet editor */
@@ -924,7 +1032,8 @@
       var had = S.path;
       setPath(b.getAttribute('data-path'));
       changed();
-      if (!had) setTimeout(function () { var t = $('ws-step-road'); if (t.scrollIntoView) t.scrollIntoView({ behavior: reduced ? 'auto' : 'smooth', block: 'start' }); }, 60);
+      // keep the names and the summary in view; step 2 (your fillable PDF) sits right below them
+      if (!had) setTimeout(function () { var t = $('ws-summary'); if (t && t.scrollIntoView) t.scrollIntoView({ behavior: reduced ? 'auto' : 'smooth', block: 'nearest' }); }, 60);
       say(S.path.label + ': your road has ' + S.stops.length + ' stops.');
     });
     $('ws-paths').addEventListener('keydown', function (e) {
@@ -973,6 +1082,24 @@
 
     var fileInput = $('ws-file'), drop = $('ws-drop');
     $('ws-choose').addEventListener('click', function () { fileInput.click(); });
+    if ($('ws-open-early')) $('ws-open-early').addEventListener('click', function () { fileInput.click(); });
+    // A file dropped on step 4 before a road is picked still comes in, and picks its own road.
+    var bring = $('ws-bring');
+    if (bring) {
+      ['dragenter', 'dragover'].forEach(function (t) { bring.addEventListener(t, function (e) { if (bring.classList.contains('is-locked')) e.preventDefault(); }); });
+      bring.addEventListener('drop', function (e) { if (!bring.classList.contains('is-locked')) return; e.preventDefault(); takeFiles(e.dataTransfer && e.dataTransfer.files); });
+    }
+    // The Full path package follows step 1 until its road or names are changed there by hand.
+    ['fp-road', 'fp-count', 'fp-names'].forEach(function (id) {
+      var el = $(id);
+      if (el) el.addEventListener(id === 'fp-names' ? 'input' : 'change', function () { if (!fpSyncing && fpFollow) { fpFollow = false; mirrorFullPath(); } });
+    });
+    var fpCard = $('fp-mirror-note');
+    if (fpCard) fpCard.addEventListener('click', function (e) {
+      if (!e.target.closest('#fp-follow')) return;
+      fpFollow = true; mirrorFullPath();
+      var r = $('fp-road'); if (r) r.focus();
+    });
     $('wpf-open').addEventListener('click', function () { fileInput.click(); });
     fileInput.addEventListener('change', function () { takeFiles(fileInput.files); fileInput.value = ''; });
     ['dragenter', 'dragover'].forEach(function (t) { drop.addEventListener(t, function (e) { e.preventDefault(); drop.classList.add('is-over'); }); });
@@ -993,6 +1120,10 @@
       e.returnValue = 'You have unsaved entries.';
       return 'You have unsaved entries.';
     });
+    refreshDynamic();
+    booted = true;
+    // the Full path package fills its own road list once it has started: follow step 1 after that
+    setTimeout(mirrorFullPath, 0);
   }
 
   global.__workpaperSuite = { state: function () { return S; }, take: takeFiles, plan: function () { return plan(); }, snapshot: function () { return snapshot(); } };

@@ -33,9 +33,9 @@
     <p class="wpf-keep"><label><input type="checkbox" id="ws-keep"> Keep a draft on this device</label> <button type="button" class="wpf-erase" id="ws-erase">Erase</button><span class="wpf-keep-note">Kept in this browser only, never sent. Best on your own device, not a shared one.</span></p>
   </div>
 
-  <p class="ws-full-promo"><strong>Your full report.</strong> Fill in sheets on your road below, then press &ldquo;Make my full report&rdquo; in step 4: one report that reads all your sheets together. Rather do it all in one PDF? <a href="#full-path">The Full path package &darr;</a></p>
+  <p class="ws-full-promo"><strong>Your full report.</strong> Pick a road, fill in sheets on it below, then press &ldquo;Make my full report&rdquo; in step 5: one report that reads all your sheets together. Rather do it all in one PDF? <a href="#full-path">The Full path package &darr;</a></p>
 
-  <section class="ws-step" aria-labelledby="ws-h1">
+  <section class="ws-step" id="ws-step-choose" aria-labelledby="ws-h1">
     <h2 id="ws-h1"><span class="ws-num" aria-hidden="true">1</span> Choose your road</h2>
     <p class="ws-sub">Who is this for? You can switch any time; what you’ve filled in comes with you.</p>
     <div class="ws-paths" id="ws-paths" role="radiogroup" aria-label="Your road"></div>
@@ -46,56 +46,89 @@
       <p class="ws-names-note" id="ws-names-note">Every name here shows up in the owner and person drop-downs on every sheet.</p>
       <p class="ws-care" id="ws-care"></p>
     </div>
+    <div class="ws-summary" id="ws-summary" data-no-bubble hidden>
+      <p class="ws-summary-k no-bubble" id="ws-summary-k">Your road so far</p>
+      <ul class="ws-chips" id="ws-chips" aria-labelledby="ws-summary-k"></ul>
+    </div>
+    <p class="ws-announce sr-only" id="ws-announce" role="status" aria-live="polite"></p>
   </section>
 
-  <section class="ws-step" id="ws-step-road" aria-labelledby="ws-road-title">
-    <h2><span class="ws-num" aria-hidden="true">2</span> <span id="ws-road-title">Your road</span></h2>
-    <p class="ws-progress" id="ws-progress" aria-live="polite"></p>
-    <div class="ws-view" id="ws-view" role="group" aria-label="How to see your road" hidden>
-      <button type="button" data-view="steps" aria-pressed="true">By step</button>
-      <button type="button" data-view="weeks" aria-pressed="false">Week by week</button>
-    </div>
-    <ol class="ws-weeks" id="ws-weeks" hidden></ol>
-    <p class="ws-road-empty" id="ws-road-empty">Choose a road above and your workpapers appear here, in order.</p>
-    <ol class="ws-road" id="ws-road"></ol>
-    <div class="ws-add" id="ws-add"></div>
-  </section>
-
-  <section class="ws-step" aria-labelledby="ws-h3">
-    <h2 id="ws-h3"><span class="ws-num" aria-hidden="true">3</span> Bring in what you’ve filled in</h2>
-    <div class="ws-drop" id="ws-drop">
-      <p class="ws-drop-art" aria-hidden="true">&#129767;</p>
-      <p><strong>Drop files here</strong>, or <button type="button" class="ws-link" id="ws-choose">choose files</button>. Choose as many as you like at once.</p>
-      <p class="ws-drop-kinds">Draft files from any fill-in workpaper, a suite file, or a fillable PDF you filled in on your phone or computer. Each one finds its place on your road.</p>
-      <p class="ws-drop-note" id="ws-drop-note" aria-live="polite"></p>
-    </div>
-  </section>
-
-  <section class="ws-step ws-make" id="ws-make" aria-labelledby="ws-h4">
-    <h2 id="ws-h4"><span class="ws-num" aria-hidden="true">4</span> Make your report</h2>
-    <div class="ws-out-card is-report is-lead">
-      <p class="ws-out-k">Recommended</p>
-      <h3>Your full report</h3>
-      <p>One report that reads all the sheets on your road together: where things stand, what connects across them, what is working, a few things to try and a plan, week by week. It appears on this page, and you can download it as a PDF.</p>
-      <button type="button" class="ws-go" id="ws-fullreport">Make my full report from my suite</button>
-    </div>
-    <div class="ws-out">
-      <div class="ws-out-card">
-        <p class="ws-out-k">Fill in or print</p>
-        <h3>The fillable PDF</h3>
-        <p>Every workpaper on your road, with real boxes you can tap and type into in any PDF app, or print and fill in by hand. It opens with your road and an at-a-glance read.</p>
-        <button type="button" class="ws-go" id="ws-fillable">Download the fillable PDF</button>
-      </div>
-      <div class="ws-out-card is-report">
-        <p class="ws-out-k">Keep and share</p>
-        <h3>A short keepsake</h3>
-        <p id="ws-report-about">Just what you’ve written, told for your road: where things stand, a question to talk about for each sheet, how to read it together, what to look for, conversation starters, your weeks on this road, and the kind words worth keeping close.</p>
-        <button type="button" class="ws-go" id="ws-report">Download the keepsake PDF</button>
+  <section class="ws-step ws-lockable is-locked" id="ws-pdf" data-unlock="road" aria-labelledby="ws-h2">
+    <h2 id="ws-h2"><span class="ws-num" aria-hidden="true">2</span> Make your PDF</h2>
+    <p class="ws-lock-note no-bubble" data-lock-note>Pick a road above to unlock this.</p>
+    <div class="ws-step-body">
+      <div class="ws-out-card is-pdf">
+        <div class="ws-pdf-text">
+          <p class="ws-out-k">Fill in or print</p>
+          <h3>The fillable PDF</h3>
+          <p>Every workpaper on your road, with real boxes you can tap and type into in any PDF app, or print and fill in by hand. It opens with your road and an at-a-glance read.</p>
+        </div>
+        <div class="ws-go-wrap">
+          <button type="button" class="ws-go" id="ws-fillable" aria-describedby="ws-fillable-note">Download the fillable PDF</button>
+          <p class="ws-go-note no-bubble" id="ws-fillable-note">Every workpaper on the road you pick</p>
+        </div>
       </div>
     </div>
-    <div class="ws-save-row">
-      <p><button type="button" class="ws-link" id="ws-save">Save my progress</button> as a small file, to pick everything up next time, even on another device.</p>
-      <p class="ws-save-how"><strong>Three ways to keep your work, none of them sent anywhere:</strong> tick &ldquo;Keep a draft on this device&rdquo; at the top (this browser only; &ldquo;Erase&rdquo; removes it), save your progress as a small file you can open here on any device, or download a PDF to keep or print.</p>
+  </section>
+
+  <section class="ws-step ws-lockable is-locked" id="ws-step-road" data-unlock="road" aria-labelledby="ws-road-title">
+    <h2><span class="ws-num" aria-hidden="true">3</span> <span id="ws-road-title">Your road</span></h2>
+    <p class="ws-lock-note no-bubble" data-lock-note>Pick a road above to unlock this.</p>
+    <div class="ws-step-body">
+      <p class="ws-progress" id="ws-progress" aria-live="polite"></p>
+      <div class="ws-view" id="ws-view" role="group" aria-label="How to see your road" hidden>
+        <button type="button" data-view="steps" aria-pressed="true">By step</button>
+        <button type="button" data-view="weeks" aria-pressed="false">Week by week</button>
+      </div>
+      <ol class="ws-weeks" id="ws-weeks" hidden></ol>
+      <p class="ws-road-empty" id="ws-road-empty">Choose a road above and your workpapers appear here, in order.</p>
+      <ol class="ws-road" id="ws-road"></ol>
+      <div class="ws-add" id="ws-add"></div>
+    </div>
+  </section>
+
+  <section class="ws-step ws-lockable is-locked" id="ws-bring" data-unlock="road" aria-labelledby="ws-h3">
+    <h2 id="ws-h3"><span class="ws-num" aria-hidden="true">4</span> Bring in what you’ve filled in</h2>
+    <p class="ws-lock-note no-bubble" data-lock-note>Pick a road above to unlock this. Have a saved file already? <button type="button" class="ws-link" id="ws-open-early">Open it</button> and it picks its own road.</p>
+    <div class="ws-step-body">
+      <div class="ws-drop" id="ws-drop">
+        <p class="ws-drop-art" aria-hidden="true">&#129767;</p>
+        <p><strong>Drop files here</strong>, or <button type="button" class="ws-link" id="ws-choose">choose files</button>. Choose as many as you like at once.</p>
+        <p class="ws-drop-kinds">Draft files from any fill-in workpaper, a suite file, or a fillable PDF you filled in on your phone or computer. Each one finds its place on your road.</p>
+        <p class="ws-drop-note" id="ws-drop-note" aria-live="polite"></p>
+      </div>
+    </div>
+  </section>
+
+  <section class="ws-step ws-make ws-lockable is-locked" id="ws-make" data-unlock="work" aria-labelledby="ws-h4">
+    <h2 id="ws-h4"><span class="ws-num" aria-hidden="true">5</span> Keep and share your report</h2>
+    <p class="ws-lock-note no-bubble" data-lock-note>Pick a road above to unlock this.</p>
+    <div class="ws-step-body">
+      <p class="ws-sub">Your report is written from what you’ve filled in, so it comes last.</p>
+      <div class="ws-out">
+        <div class="ws-out-card is-report is-lead">
+          <p class="ws-out-k">Recommended</p>
+          <h3>Your full report</h3>
+          <p>One report that reads all the sheets on your road together: where things stand, what connects across them, what is working, a few things to try and a plan, week by week. It appears on this page, and you can download it as a PDF.</p>
+          <div class="ws-go-wrap">
+            <button type="button" class="ws-go" id="ws-fullreport" aria-describedby="ws-fullreport-note">Make my full report from my suite</button>
+            <p class="ws-go-note no-bubble" id="ws-fullreport-note"></p>
+          </div>
+        </div>
+        <div class="ws-out-card is-report">
+          <p class="ws-out-k">Keep and share</p>
+          <h3>A short keepsake</h3>
+          <p id="ws-report-about">Just what you’ve written, told for your road: where things stand, a question to talk about for each sheet, how to read it together, what to look for, conversation starters, your weeks on this road, and the kind words worth keeping close.</p>
+          <div class="ws-go-wrap">
+            <button type="button" class="ws-go" id="ws-report" aria-describedby="ws-report-note">Download the keepsake PDF</button>
+            <p class="ws-go-note no-bubble" id="ws-report-note"></p>
+          </div>
+        </div>
+      </div>
+      <div class="ws-save-row">
+        <p><button type="button" class="ws-link" id="ws-save">Save my progress</button> as a small file, to pick everything up next time, even on another device.</p>
+        <p class="ws-save-how"><strong>Three ways to keep your work, none of them sent anywhere:</strong> tick &ldquo;Keep a draft on this device&rdquo; at the top (this browser only; &ldquo;Erase&rdquo; removes it), save your progress as a small file you can open here on any device, or download a PDF to keep or print.</p>
+      </div>
     </div>
   </section>
 
@@ -111,6 +144,7 @@
         <label for="fp-road">Your road <select id="fp-road"></select></label>
         <label for="fp-count" id="fp-count-wrap">How many people <select id="fp-count"></select></label>
         <label for="fp-names" id="fp-names-label">Names (optional, separated by commas) <input type="text" id="fp-names" autocomplete="off" maxlength="330"></label>
+        <p class="fp-mirror-note" id="fp-mirror-note" hidden></p>
         <button type="button" class="ws-go" id="fp-download">Download the full path PDF</button>
       </div>
       <div class="fp-card fp-drop" id="fp-drop">
