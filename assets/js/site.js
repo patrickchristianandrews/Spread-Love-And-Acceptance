@@ -1391,8 +1391,10 @@
       hi.querySelector('.tol-puddles-hi-go').focus();
     });
     var main = document.querySelector('main');
-    var after = main && (main.querySelector('[data-palcam-top]') || main.querySelector('[data-home-intro]')); // below the "what this is" line and the pal cam link
-    if (main) main.insertBefore(hi, after ? after.nextSibling : main.firstChild); else body.appendChild(hi);
+    // Professor Puddles sits just above the "Check in on Tidbit & Sugarfoot" link (or below the "what this is" line)
+    var pal = main && main.querySelector('[data-palcam-top]'), intro = main && main.querySelector('[data-home-intro]');
+    if (main && pal) pal.parentNode.insertBefore(hi, pal);
+    else if (main) main.insertBefore(hi, intro ? intro.nextSibling : main.firstChild); else body.appendChild(hi);
     setTimeout(function () { hi.classList.add('is-in'); }, small ? 0 : 600);
   }
 
@@ -2095,7 +2097,9 @@
     var top = document.querySelector('main [data-palcam-top]'); // the home page's link stays first, above anything added to the top of main
     var intro = document.querySelector('main [data-home-intro]'); // the one-line "what this is" stays at the very top, then the pal cam link
     var anchorEl = intro ? intro.nextElementSibling : (top && top.parentNode.firstElementChild);
+    if (anchorEl && anchorEl.classList.contains('tol-puddles-hi')) anchorEl = anchorEl.nextElementSibling; // Professor Puddles stays just above it
     if (top && anchorEl !== top) top.parentNode.insertBefore(top, anchorEl);
+    var pudHi = document.querySelector('main .tol-puddles-hi'); if (top && pudHi && pudHi.nextElementSibling !== top) top.parentNode.insertBefore(pudHi, top);
     // tell the garden behind the page where the "Check in" button is, so the dogs step out of view there instead of running through it
     var avoidQ = 0;
     function avoidNow() {
