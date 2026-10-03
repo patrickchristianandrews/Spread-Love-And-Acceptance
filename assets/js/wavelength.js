@@ -786,6 +786,7 @@
             '<h2 class="wl-code" aria-label="' + code.split('').join(' ') + '">' + code.split('').map(c => '<span>' + c + '</span>').join('') + '</h2>' +
             '<p class="wl-arch">' + arch + '</p>' +
             '<p class="wl-tagline">' + tag + '</p>' +
+            (window.TOLShare ? '<div class="wl-actions"><button type="button" class="wl-btn ghost tol-share-btn" id="wl-sharecode">Share my Wave Code</button></div>' : '') +
             '<p class="wl-small"><strong>At your best:</strong> ' + code.split('').map(L => lower(LETTERS[L].gift.replace(/\.$/, ''))).join('; ') + '. <strong>Watch for:</strong> ' + code.split('').map(L => LETTERS[L].watch).join('; ') + '.</p>' +
           '</div>' +
           '<div class="wl-wavebox">' + waveSVG(code, true) +
@@ -799,7 +800,7 @@
         (helps.length ? '<div class="wl-sect"><h3>What helps me feel understood</h3><ul class="wl-words">' + helps.map(x => '<li>' + esc(x) + '</li>').join('') + '</ul></div>' : '') +
         '<div class="wl-sect" id="wl-stmt-sect"><h3>My statement</h3>' +
           (lines.length ? stmtCard(lines) +
-            '<div class="wl-actions"><button type="button" class="wl-btn" id="wl-scopy">Copy my statement</button><button type="button" class="wl-btn ghost" id="wl-sdl">Save as a text file</button><button type="button" class="wl-btn ghost" id="wl-sprint">Print</button><button type="button" class="wl-btn ghost" id="wl-sedit">Edit my statement</button></div>' +
+            '<div class="wl-actions"><button type="button" class="wl-btn" id="wl-scopy">Copy my statement</button>' + (window.TOLShare ? '<button type="button" class="wl-btn ghost tol-share-btn" id="wl-sshare">Share my statement</button>' : '') + '<button type="button" class="wl-btn ghost" id="wl-sdl">Save as a text file</button><button type="button" class="wl-btn ghost" id="wl-sprint">Print</button><button type="button" class="wl-btn ghost" id="wl-sedit">Edit my statement</button></div>' +
             (ins.length ? '<details class="wl-insd"><summary>🔎 Things you might not have noticed (' + ins.length + ')</summary>' + insightList(ins) + '</details>' : '')
             : '<p>You skipped the statement. It’s a short, warm note about how you work best, in nine quick steps, and it shows connections between your choices you may not have noticed.</p><div class="wl-actions"><button type="button" class="wl-btn ghost" id="wl-sedit">Write my statement</button></div>') +
           '<p class="wl-toast" id="wl-stoast" role="status"></p></div>' +
@@ -812,7 +813,7 @@
             '<p class="wl-chcount">' + S.done.filter(id => CHAPTERS.some(c => c.id === id)).length + ' of ' + CHAPTERS.length + ' explored. Each one has a short reading written for you, a few journal prompts, and one thing to try this week.</p>' + chList +
             '<div class="wl-actions"><button type="button" class="wl-btn ghost" id="wl-copyj">Copy my journal</button></div><p class="wl-toast" id="wl-jtoast" role="status"></p></div>' : '') +
         '<div class="wl-sect"><h3>Keep, share or start again</h3>' +
-          '<div class="wl-actions">' + (done ? '<button type="button" class="wl-btn" id="wl-copy">Copy my profile</button>' : '') + '<button type="button" class="wl-btn ghost" id="wl-edit">Change answers</button><button type="button" class="wl-btn ghost" id="wl-wiring">Change my wiring</button><button type="button" class="wl-btn ghost" id="wl-erase">Erase everything</button></div>' +
+          '<div class="wl-actions">' + (done ? '<button type="button" class="wl-btn" id="wl-copy">Copy my profile</button>' + (window.TOLShare ? '<button type="button" class="wl-btn ghost tol-share-btn" id="wl-share">Share my profile</button>' : '') : '') + '<button type="button" class="wl-btn ghost" id="wl-edit">Change answers</button><button type="button" class="wl-btn ghost" id="wl-wiring">Change my wiring</button><button type="button" class="wl-btn ghost" id="wl-erase">Erase everything</button></div>' +
           '<p class="wl-toast" id="wl-toast" role="status"></p>' + keepBox('wl-keep-res') + '</div>' +
         '<p class="wl-note">Wavelength is a reflection tool, not a diagnosis or a test that measures you. The options shown for each wiring type are common experiences, not rules, and every person is their own mix. Nothing you type or choose is sent anywhere.</p>' +
       '</section>';
@@ -833,7 +834,7 @@
         '<div class="wl-pairrow"><strong>' + AXIS_NAMES[i] + ': ' + code[i] + ' and ' + other[i] + '</strong><br>' + (code[i] === other[i] ? 'Same wavelength here, so this usually runs smoothly. ' + LETTERS[code[i]].tune : PAIR_TIPS[i]) + '</div>').join('');
     });
     const pc = $('#wl-pc'); if (pc) pc.onkeydown = e => { if (e.key === 'Enter') { e.preventDefault(); $('#wl-cmp').click(); } };
-    on('#wl-copy', () => {
+    const profileText = () => {
       const L2 = [(S.name ? S.name + '’s ' : 'My ') + 'Wave Code: ' + code + ', ' + arch, tag];
       if (nt) L2.push('Wiring (self-identified): ' + nt);
       L2.push('');
@@ -842,8 +843,15 @@
       if (S.inputs.length) { L2.push('', 'The inputs I learn through: ' + inputsLabel() + (S.topInput ? ' (strongest: ' + IN[S.topInput].name + ')' : '')); if (S.topInput) L2.push('To reach me: ' + IN[S.topInput].send); }
       if (lines.length) L2.push('', 'In my own words:', lines.map(x => x.line).join(' '));
       L2.push('', 'Made with Wavelength from Spread Love & Acceptance: spreadloveandacceptance.com/wavelength.html');
-      copyText(L2.join('\n'), '#wl-toast', 'Copied. Paste it into a text or a note to share.');
-    });
+      return L2.join('\n');
+    };
+    on('#wl-copy', () => copyText(profileText(), '#wl-toast', 'Copied. Paste it into a text or a note to share.'));
+    // Share: only what the person chose to share, through the site's share (their own app, or a small sheet)
+    const share = o => { if (window.TOLShare) window.TOLShare.share(o); };
+    on('#wl-share', () => share({ title: 'My Wavelength', text: profileText(), url: false, result: true }));
+    on('#wl-sshare', () => share({ title: 'My Wavelength statement', text: stmtPlain(), url: false, result: true }));
+    on('#wl-sharecode', () => share({ title: 'My Wave Code', text: 'I’m a ' + code + ', ' + arch.replace(/^The /, 'the ') + '. Find your Wave Code:', url: '/wavelength.html', result: true }));
+    if (window.TOLShareClip && window.TOLShareClip.mount) $$('#wl-share, #wl-sshare, #wl-sharecode').forEach(b => { try { window.TOLShareClip.mount(b); } catch (e) {} });
     on('#wl-scopy', () => copyText(stmtPlain(), '#wl-stoast', 'Copied. Paste it into a message, a note or a card.'));
     on('#wl-sdl', () => { download(stmtPlain(), (S.name.trim() ? S.name.trim().replace(/[^\w -]/g, '') + ' - ' : '') + 'My Wavelength statement.txt'); const t = $('#wl-stoast'); if (t) t.textContent = 'Saved to your device.'; });
     on('#wl-sprint', () => { document.documentElement.classList.add('wl-printing'); window.print(); setTimeout(() => document.documentElement.classList.remove('wl-printing'), 500); });
