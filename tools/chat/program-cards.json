@@ -1105,12 +1105,14 @@
         "lemonade",
         "lemonade stand heuristic"
       ],
-      "what": "The Lemonade Stand is a free tool for seeing how the work of keeping a place running is split. It works for two to eight people: partners, roommates, family or a small team. You list the week’s jobs and each person’s hours (and, if you like, shared bills), and the split shows up as a plain fact, not a verdict on anyone.",
+      "what": "The Lemonade Stand is a free tool for seeing the work of keeping life running. It starts by asking who it’s for. “Just me” shows your own week as a ledger: where your time and attention go, the thinking work nobody sees, your rest, whether the week looks sustainable or stretched, and what you could hand off, drop, simplify or schedule, with a summary to explain your load to others. “Me and others I share a home with” works for two to eight people: partners, roommates, family or a small team. You list the week’s jobs and each person’s time (and, if you like, shared bills), and the split shows up as a plain fact, not a verdict on anyone. A built-in task library, from dishes to remembering birthdays, makes the list quick.",
       "how": [
-        "Add everyone who shares the place (two to eight names).",
-        "Add one line per job, with the hours each person really spent on it this week, the quiet jobs included. The “who did what” log (WP-01) is the best source.",
+        "Pick who it’s for: “Just me” to see your own load, or “Me and others” for two to eight people who share a home. You can switch any time, and your entries stay.",
+        "If you share a home, add everyone’s names. Each person fills in only their own side.",
+        "Tap tasks in the task library (home, food, laundry, kids and caring, pets, money, admin, errands, planning and remembering, emotional work, work hours, rest and more). Typical minutes are filled in; change them to fit your week, or add your own jobs.",
+        "For each job, set how often it happens. Open “More” to add the thinking part (noticing, planning, remembering) and who notices first. The “who did what” log (WP-01) is the best source.",
         "Optionally, add shared costs on the money side: what each person actually paid.",
-        "Look at the split together, calmly. Copy or share the result if that helps.",
+        "Look at the result calmly: the split or your own ledger, by area, the work you can and can’t see, and week by week if you save each week. Copy, print or share a clean summary if that helps.",
         "Next step: give each job one owner with WP-03, and use the totals in CALC-01."
       ],
       "results": "The result shows each person’s share of the hours (and money, if you added it). An even split isn’t the goal in itself: what matters is whether everyone sees the same picture and agrees the split works. A lopsided split is a fact about the setup, often jobs that quietly drifted to whoever notices first, never a judgment of anyone.",
@@ -4052,6 +4054,70 @@
       ]
     },
     {
+      "id": "roots",
+      "kind": "tool",
+      "name": "Roots & Wings",
+      "keys": [
+        "roots and wings",
+        "roots wings",
+        "root finder",
+        "where does this trait come from",
+        "where do my traits come from",
+        "where did this trait come from",
+        "where does my trait come from",
+        "why do i always apologize",
+        "why do i always over apologize",
+        "why do i always people please",
+        "why do i always have to be the strong one",
+        "childhood patterns",
+        "patterns from childhood",
+        "patterns from my childhood",
+        "from my childhood",
+        "childhood habits",
+        "how i grew up",
+        "how does my past show up now",
+        "why do i always",
+        "childhood",
+        "how my childhood affects me",
+        "how my past shows up",
+        "my past"
+      ],
+      "what": "Roots & Wings is a gentle tap-through tool on the Where your lens came from page. You pick a trait or reaction you’d like to understand, like “I over-apologize”, “I can’t rest until everything’s done” or “I go quiet in conflict”, or just explore. Then it walks you through the stages of your life, from the early years up to now, with a few tap questions about the mood at home, the roles you took on, big changes and the unspoken rules. It’s self-reflection, not therapy or a diagnosis, and it never asks for details of anything painful.",
+      "how": [
+        "Open Roots & Wings on the Where your lens came from page.",
+        "Pick one or more traits, write your own, or choose “I’m not sure yet, just explore.”",
+        "Tap through each life stage. Every question can be skipped, and there’s a “Something hard happened that I’d rather not name” option that asks nothing more.",
+        "An optional part asks, in general, how a hard time felt, what helped you get through, and how it may show up now. Never what happened.",
+        "Read your results, write one new rule you choose, and copy, print or save them. Nothing you type or choose is sent anywhere."
+      ],
+      "results": "For each trait you get gentle guesses from your own answers: where it may have started, what it protected back then, what it may cost now, how to notice it in the moment, and one or two small things to try this week, with words to say. They’re possibilities, not facts about you. Most families were doing their best with what they had; noticing where a rule came from isn’t blaming anyone. If a memory feels heavy, it’s okay to stop, and talking it through with a trained counselor can help.",
+      "ex": "Sam picked “I can’t rest until everything’s done.” Their answers showed being the responsible one in the school years, with “work comes first” as a home rule. The tool suggested one 15-minute rest before the list was done, and a new rule: “Rest is part of the work, not the prize for finishing it.”",
+      "links": [
+        [
+          "Roots & Wings",
+          "/growing-up.html#roots"
+        ],
+        [
+          "Where your lens came from",
+          "/growing-up.html"
+        ],
+        [
+          "Know your own wiring",
+          "/know-yourself.html"
+        ]
+      ],
+      "chips": [
+        [
+          "The rulebook from home",
+          "What is the rulebook from home?"
+        ],
+        [
+          "Know your own wiring",
+          "What is Know your own wiring?"
+        ]
+      ]
+    },
+    {
       "id": "buddieslive",
       "kind": "tool",
       "name": "Frequency Buddies Live",
@@ -4090,6 +4156,83 @@
         ],
         [
           "Pick an episode yourself",
+          "/frequency-buddies.html"
+        ]
+      ]
+    },
+    {
+      "id": "buddiesmvmaker",
+      "kind": "tool",
+      "name": "Frequency Buddies music video maker",
+      "keys": [
+        "make my own music video",
+        "make your own music video",
+        "music video maker",
+        "music video creator",
+        "design the dance",
+        "make a music video",
+        "create a music video"
+      ],
+      "what": "The music video maker lets you direct your own version of the Frequency Buddies theme song video. For each part of the song you pick the backdrop, the stage, the lights, effects like confetti or bubbles, the dance moves and the costumes, and you choose who’s in the show and what they do: lead singer, backup dancer, the band, the chorus line or the crowd.",
+      "how": [
+        "Open the music video maker and start from a show like Rock concert, Beach party, Space show or Cozy campfire, or press Surprise me.",
+        "Pick a part of the song along the top, then change its stage, effects, moves and costumes. The picture shows your changes right away.",
+        "Press Play my video to watch it with the song.",
+        "Press Share to send a link that plays your video, Save to keep it on this device, or Save as a video to download it where your browser can."
+      ],
+      "chips": [
+        [
+          "Watch the original",
+          "Is there a Frequency Buddies music video?"
+        ]
+      ],
+      "pillar": "Making something together is a great way to connect: build a video with your kids and share it with someone you love.",
+      "links": [
+        [
+          "The music video maker",
+          "/frequency-buddies-music-video-maker.html"
+        ],
+        [
+          "The theme song music video",
+          "/frequency-buddies-music-video.html"
+        ]
+      ]
+    },
+    {
+      "id": "buddiesmusicvideo",
+      "kind": "tool",
+      "name": "Frequency Buddies music video",
+      "keys": [
+        "theme song",
+        "the theme song",
+        "music video",
+        "frequency buddies song",
+        "frequency buddies music video",
+        "frequency buddies theme",
+        "buddies song",
+        "tidbit and sugarfoot song"
+      ],
+      "what": "The Frequency Buddies theme song as a music video, about a minute and a half long. The stage rises out of the floor, and Tidbit and Sugarfoot sing and dance with every friend from the episodes: a band with Beep, Hopper, Ollie and Nutmeg, the ducklings, Dot the snail, the butterfly, the Moon and Professor Puddles conducting. There are eight costume changes, a conga line, a trip into space and a cheering crowd.",
+      "how": [
+        "Open the music video page and press Play. Turn your sound on for the song.",
+        "The words of the song show under the picture, and you can jump to any part with the buttons below it.",
+        "Tap the picture for the buttons: play or pause, start over and full screen.",
+        "Press Calm version for softer, slower lights and smaller moves. It starts on by itself when Keep the page still is on. The lights never flash."
+      ],
+      "chips": [
+        [
+          "Watch the episodes",
+          "What is Frequency Buddies?"
+        ]
+      ],
+      "pillar": "The song sings the show’s big ideas: different is okay, take a breath, say sorry, and find the way together.",
+      "links": [
+        [
+          "The theme song music video",
+          "/frequency-buddies-music-video.html"
+        ],
+        [
+          "Frequency Buddies episodes",
           "/frequency-buddies.html"
         ]
       ]
@@ -4140,6 +4283,63 @@
         [
           "Pal Cam TV: the pups live on your TV",
           "/pal-cam-tv.html"
+        ]
+      ]
+    },
+    {
+      "id": "buddiess2",
+      "kind": "tool",
+      "name": "Frequency Buddies Season 2",
+      "keys": [
+        "season 2",
+        "season two",
+        "second season",
+        "new season",
+        "next season",
+        "the next season",
+        "frequency buddies season 2",
+        "season 2 teaser",
+        "the teaser",
+        "teaser",
+        "trailer",
+        "frequency buddies trailer",
+        "when is the next season",
+        "when is season 2",
+        "when does season 2 come out",
+        "new episodes",
+        "more episodes",
+        "are there more episodes"
+      ],
+      "what": "Season 2 of Frequency Buddies is on its way, and there’s a one-minute teaser to watch now. Tidbit and Sugarfoot head farther than ever: a hot-air balloon above the clouds, a lighthouse in the fog, a snowy mountain top, a secret door in the library, a night market, a glowing sea and a rooftop full of shooting stars, plus a new friend nobody has met yet. There’s no release date yet; it’s coming, and the site will share more as it gets closer.",
+      "how": [
+        "Open the Season 2 page and press Play the teaser. It’s about a minute long.",
+        "Five little secrets are hidden in it, like a star sticker and a paw print. Tap one on the picture when you spot it, or pause and hunt. What you find is remembered on your device only.",
+        "After it ends, pick the new place you’re most excited for and see what the pals say.",
+        "To hear when it’s out, join free with your email: you’ll be on the site’s update list."
+      ],
+      "chips": [
+        [
+          "Catch up on Season 1",
+          "What is Frequency Buddies?"
+        ],
+        [
+          "Watch on the live station",
+          "What's on Frequency Buddies Live?"
+        ]
+      ],
+      "pillar": "Every episode shows one of the five pillars in a story kids can follow.",
+      "links": [
+        [
+          "Watch the Season 2 teaser",
+          "/frequency-buddies-season-2.html"
+        ],
+        [
+          "Season 1 episodes",
+          "/frequency-buddies.html"
+        ],
+        [
+          "Join free",
+          "/membership.html"
         ]
       ]
     },
@@ -4579,6 +4779,61 @@
         [
           "Chapter III: the seven angles",
           "/book/chapter-3.html"
+        ]
+      ]
+    },
+    {
+      "id": "grandparents",
+      "kind": "tool",
+      "name": "the page for grandparents",
+      "keys": [
+        "page for grandparents",
+        "grandparents page",
+        "grandparent page",
+        "for grandparents",
+        "tools for grandparents",
+        "help for grandparents",
+        "tips for grandparents",
+        "~grandparent",
+        "~grandparents",
+        "~grandma",
+        "~grandpa",
+        "~my grandkids",
+        "~grandkids",
+        "~my grandchildren"
+      ],
+      "what": "The page for grandparents is for anyone who helps with the grandkids: grandparents, great-aunts and great-uncles, and other older relatives who often care for children in the family. It shows how to check your own tank before a busy visit, share the load fairly so help doesn’t quietly turn into an unspoken full-time job, agree on house rules with your grown children (their house, their rules; your house, a few gentle ones you agree on), say no kindly, be a calm place for the grandkids and stay close from far away.",
+      "how": [
+        "Before a busy visit, take one minute with Today’s Weather to see how full your own tank is.",
+        "Write down every job you do for the grandkids in a normal week, and give each regular one an owner with WP-03, One owner per job.",
+        "Ask the parents for their top three rules (screens, sweets, bedtime) and keep to those. Everything else can be your own way at your house.",
+        "Say plainly when you can help and for how long: “I can do Tuesdays and Thursdays until five.” A clear yes is easier to keep than a vague always.",
+        "For calm time together, watch a chapter of Frequency Buddies or play the Night Garden, side by side or on a call."
+      ],
+      "ex": "Ruth looked after her grandsons three days a week and felt hurt when her daughter said she spoiled them. Over a cup of tea, her daughter named one thing: candy after school. Ruth swapped it for fruit and a story, and kept her own ways for everything else.",
+      "pillar": "Pillar II, Fix the setup, not the person, and Pillar IV, Tune how you send and receive.",
+      "chips": [
+        [
+          "How do I say no kindly?",
+          "How do I say no kindly?"
+        ],
+        [
+          "Something to watch together",
+          "What can I watch with my grandkids?"
+        ]
+      ],
+      "links": [
+        [
+          "For grandparents",
+          "/grandparents.html"
+        ],
+        [
+          "Words for common moments",
+          "/grandparents.html#scripts"
+        ],
+        [
+          "WP-03: One owner per job",
+          "/workpapers/wp-03-raci-treaty.html"
         ]
       ]
     }

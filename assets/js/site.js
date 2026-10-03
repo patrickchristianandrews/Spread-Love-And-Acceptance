@@ -292,6 +292,9 @@
       { href: '/frequency-buddies.html', code: 'Cartoon', title: 'Frequency Buddies', note: 'A free kids’ cartoon about feelings, with captions' },
       { href: '/frequency-buddies-live.html', code: 'On air', title: 'Frequency Buddies Live', note: 'An always-on station: drop in on the episode playing now' },
       { href: '/frequency-buddies-shuffle.html', code: 'Shuffle', title: 'Frequency Buddies on shuffle', note: 'Episodes in a random order, and downloads' },
+      { href: '/frequency-buddies-music-video.html', code: 'New', title: 'The theme song music video', note: 'Everyone on stage, singing and dancing' },
+      { href: '/frequency-buddies-music-video-maker.html', code: 'Make', title: 'Make your own music video', note: 'Pick the stage, costumes and moves, then share it' },
+      { href: '/frequency-buddies-season-2.html', code: 'Soon', title: 'Season 2 teaser', note: 'New places, new friends, and five hidden secrets' },
       { href: '/pal-cam-tv.html', code: 'Live', title: 'Pal Cam TV', note: 'The pups live, all day, full screen or on your TV' },
       { href: '/grandparents.html', code: 'New', title: 'For grandparents', note: 'Help with the grandkids without taking over' },
       { href: '/relationships.html#family', title: 'Family: where to start', note: 'The first tools to try together at home' }
