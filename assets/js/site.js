@@ -1846,6 +1846,7 @@
 
   // ---- the Settings panel ----
   var setBox = null, setLast = null, setInerted = [];
+  var wxPending = false;   // while the browser is asking for the location, the switch stays on
   function syncSettings(box) {
     var t = lsGet(THEME_KEY) || 'auto', z = lsGet(SIZE_KEY) || 'md';
     box.querySelectorAll('input[data-theme-opt]').forEach(function (i) { i.checked = i.value === t; });
@@ -1853,8 +1854,8 @@
     box.querySelectorAll('input[data-font-opt]').forEach(function (i) { i.checked = i.value === (lsGet(FONT_KEY) || 'usual'); });
     box.querySelectorAll('input[data-space-opt]').forEach(function (i) { i.checked = i.value === (lsGet(SPACE_KEY) || 'usual'); });
     box.querySelectorAll('input[data-tint-opt]').forEach(function (i) { i.checked = i.value === (lsGet(TINT_KEY) || 'none'); });
-    var map = { still: stillOn, helpers: helpersHidden(), sound: !soundAllowed(), ruler: lsGet(RULER_KEY) === '1', bubbles: lsGet(BUB_KEY) !== '1' };
-    box.querySelectorAll('input[data-switch]').forEach(function (i) { i.checked = !!map[i.getAttribute('data-switch')]; i.disabled = quietOn() && !/^(ruler|bubbles)$/.test(i.getAttribute('data-switch')); });
+    var map = { still: stillOn, helpers: helpersHidden(), sound: !soundAllowed(), ruler: lsGet(RULER_KEY) === '1', bubbles: lsGet(BUB_KEY) !== '1', wxnote: lsGet('tol-clockwx-off') !== '1', wxloc: !!lsGet('tol-pc-wx') || wxPending };
+    box.querySelectorAll('input[data-switch]').forEach(function (i) { i.checked = !!map[i.getAttribute('data-switch')]; i.disabled = quietOn() && !/^(ruler|bubbles|wxnote|wxloc)$/.test(i.getAttribute('data-switch')); });
     box.querySelectorAll('[data-preset]').forEach(function (b) { b.setAttribute('aria-pressed', String(lsGet(PRESETS[b.getAttribute('data-preset')].key) === '1')); });
     var qn = box.querySelector('.tol-set-qnote'); if (qn) qn.hidden = !quietOn();
 
@@ -1888,6 +1889,10 @@
       '<fieldset><legend>Colors (dark mode)</legend>' + radio('theme', 'data-theme-opt', 'auto', 'Follow my device') + radio('theme', 'data-theme-opt', 'light', 'Light') + radio('theme', 'data-theme-opt', 'dark', 'Dark') + '</fieldset>' +
       sw('ruler', 'Reading ruler', 'A soft band that follows your pointer or finger, so you keep your place on the line') +
       sw('bubbles', 'Text bubbles', 'Each piece of text sits in its own soft, round bubble. Turn this off for plain text on the page') +
+      '<h3 class="tol-set-k">Time and weather</h3>' +
+      sw('wxnote', 'Show the time and weather note', 'A very faint note in the corner of each page') +
+      sw('wxloc', 'Use my location for the weather', 'Your browser asks first. Only a rounded spot is kept, on this device, and nothing is sent to us. Turn this off to forget it') +
+      '<p class="tol-set-wxmsg" role="status" hidden></p>' +
       '<p class="tol-set-foot">These choices stay in this browser only. <button type="button" class="tol-set-reset">Back to the usual</button> <a href="/on-this-device.html">What’s stored on this device</a></p>' +
       '</div>');
     box.addEventListener('change', function (e) {
@@ -1903,6 +1908,21 @@
       if (s === 'sound') { setSounds(i.checked); quietEvent(); }
       if (s === 'ruler') { if (i.checked) lsSet(RULER_KEY, '1'); else lsDel(RULER_KEY); }
       if (s === 'bubbles') { if (i.checked) lsDel(BUB_KEY); else lsSet(BUB_KEY, '1'); }
+      if (s === 'wxnote') { var cw = window.TOLClockWx; if (cw && cw.show) cw.show(i.checked); else if (i.checked) lsDel('tol-clockwx-off'); else lsSet('tol-clockwx-off', '1'); }
+      if (s === 'wxloc') {
+        var msg = box.querySelector('.tol-set-wxmsg'), cw2 = window.TOLClockWx;
+        if (!i.checked) { if (cw2 && cw2.off) cw2.off(); else lsDel('tol-pc-wx'); if (msg) msg.hidden = true; }
+        else {
+          if (msg) { msg.hidden = false; msg.textContent = 'Asking your browser… choose Allow when it asks.'; }
+          var go = function () { return window.TOLClockWx && window.TOLClockWx.ask ? window.TOLClockWx.ask() : Promise.resolve('unavailable'); };
+          if (!window.TOLClockWx || !window.TOLClockWx.ask) { lsDel('tol-clockwx-off'); }
+          wxPending = true;
+          go().then(function (r) {
+            wxPending = false; var ok = r === 'ok'; i.checked = ok;
+            if (msg) { msg.hidden = ok; if (!ok) msg.textContent = r === 'denied' ? 'Your browser has location blocked for this site. Allow it in the browser’s site settings (the lock or tune icon next to the address), then switch this on again.' : 'The weather could not be found just now. Try again in a moment.'; }
+          });
+        }
+      }
       after();
     });
     box.addEventListener('click', function (e) {
