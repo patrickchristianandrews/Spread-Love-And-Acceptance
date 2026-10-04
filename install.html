@@ -29,7 +29,7 @@
   .in-btn{ font:600 1.05rem/1.2 "Lora", Georgia, serif; min-height:48px; padding:.6rem 1.4rem; border-radius:999px; border:1px solid #2F5F8A; background:#2F5F8A; color:#fff; cursor:pointer; justify-self:start; }
   .in-btn[hidden]{ display:none; }
   .in-btn:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
-  .in-pick{ display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:.6rem; margin:1rem 0 1.2rem; }
+  .in-pick{ display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:.6rem; margin:1rem 0 1.2rem; }
   .in-tab{ display:flex; flex-direction:column; align-items:center; gap:.15rem; min-height:92px; padding:.7rem .5rem; border-radius:18px; border:2px solid #C6DFF4; background:#F4F9FE; color:#243B52; font:inherit; cursor:pointer; text-align:center; }
   .in-tab:hover{ transform:translateY(-2px); }
   .in-tab[aria-selected="true"]{ background:#2F5F8A; border-color:#2F5F8A; color:#fff; box-shadow:0 8px 20px -10px rgba(47,95,138,.7); }
@@ -65,6 +65,7 @@
   .in-pin{ display:flex; flex-wrap:wrap; gap:.5rem; margin:.6rem 0 1.4rem; padding:0; list-style:none; }
   .in-pin li{ margin:0 !important; }
   .in-pin a{ display:inline-block; min-height:44px; padding:.55rem 1rem; border-radius:999px; border:1px solid #2F5F8A; text-decoration:none; background:#FFFDF7; box-sizing:border-box; }
+  @media (max-width:760px){ .in-pick{ grid-template-columns:repeat(2,minmax(0,1fr)); } }
   @media (max-width:560px){ .in-pick{ grid-template-columns:1fr; } .in-tab{ flex-direction:row; justify-content:flex-start; gap:.7rem; min-height:64px; padding:.6rem .9rem; text-align:left; flex-wrap:wrap; } .in-tab-t{ flex:1; } }
 </style>
 <!-- seo:start -->
@@ -105,12 +106,13 @@
 <main class="read">
 <header class="read-head"><p class="read-code">Start here</p><h1>Get the app</h1></header>
 
-<p class="simple-lede">Put the whole site on your phone as an app. It gets its own icon, opens full screen with no address bar, and keeps working when your signal drops. <strong>Pick your phone first:</strong></p>
+<p class="simple-lede">Put the whole site on your phone or computer as an app. It gets its own icon, opens full screen with no address bar, and keeps working when your signal drops. <strong>Pick your phone first:</strong></p>
 
 <div class="in-pick no-bubble" role="tablist" aria-label="Choose your device">
   <button type="button" role="tab" class="in-tab" id="tab-android" data-p="android" aria-controls="p-android" aria-selected="false"><span class="in-tab-i" aria-hidden="true">&#129302;</span><span class="in-tab-t">Android</span><span class="in-tab-s is-now">Install now</span></button>
   <button type="button" role="tab" class="in-tab" id="tab-apple" data-p="apple" aria-controls="p-apple" aria-selected="false"><span class="in-tab-i" aria-hidden="true">&#127822;</span><span class="in-tab-t">iPhone &amp; iPad</span><span class="in-tab-s is-soon">App Store: coming soon</span></button>
-  <button type="button" role="tab" class="in-tab" id="tab-computer" data-p="computer" aria-controls="p-computer" aria-selected="false"><span class="in-tab-i" aria-hidden="true">&#128187;</span><span class="in-tab-t">Computer</span><span class="in-tab-s is-now">Chrome or Edge</span></button>
+  <button type="button" role="tab" class="in-tab" id="tab-windows" data-p="windows" aria-controls="p-windows" aria-selected="false"><span class="in-tab-i" aria-hidden="true">&#129695;</span><span class="in-tab-t">Windows</span><span class="in-tab-s is-now">Install now</span></button>
+  <button type="button" role="tab" class="in-tab" id="tab-mac" data-p="mac" aria-controls="p-mac" aria-selected="false"><span class="in-tab-i" aria-hidden="true">&#128187;</span><span class="in-tab-t">Mac &amp; Linux</span><span class="in-tab-s is-now">Chrome or Edge</span></button>
 </div>
 
 <section class="in-panel no-bubble" id="p-android" role="tabpanel" aria-labelledby="tab-android" hidden>
@@ -119,7 +121,7 @@
     <button type="button" class="in-btn" id="in-btn" hidden>Install the app</button>
   </div>
 
-  <h2 id="chrome">Install it with Chrome on Android</h2>
+  <h2 id="chrome">Install it with Chrome on an Android phone or tablet</h2>
   <ol class="in-steps no-bubble">
     <li>Open <strong>spreadloveandacceptance.com</strong> in <strong>Chrome</strong>. Use a normal tab, not an Incognito one.</li>
     <li>Tap the <strong>three dots</strong> <span aria-hidden="true">(&#8942;)</span> at the top right of Chrome.</li>
@@ -164,14 +166,28 @@
   <p>One honest difference: iPhones don&rsquo;t let a web page make the phone vibrate, so the &ldquo;feel the sound&rdquo; buzz only works on Android. You can still see and hear everything.</p>
 </section>
 
-<section class="in-panel no-bubble" id="p-computer" role="tabpanel" aria-labelledby="tab-computer" hidden>
-  <h2 id="desktop">On a computer</h2>
+<section class="in-panel no-bubble" id="p-windows" role="tabpanel" aria-labelledby="tab-windows" hidden>
+  <h2 id="windows">Install it on Windows 10 or 11</h2>
+  <p>It installs as a web app: its own window and icon, no store and no download page. Use <strong>Edge</strong> or <strong>Chrome</strong>.</p>
+  <ol class="in-steps no-bubble">
+    <li>Open <strong>spreadloveandacceptance.com</strong> in <strong>Microsoft Edge</strong> or <strong>Google Chrome</strong>.</li>
+    <li>Look at the right end of the address bar for the small <strong>install icon</strong> (a screen with a down arrow, or a plus). Click it.</li>
+    <li>No icon? Open the menu (the three dots at the top right). In Edge choose <strong>Apps</strong>, then <strong>Install this site as an app</strong>. In Chrome choose <strong>Cast, save and share</strong>, then <strong>Install page as app</strong>.</li>
+    <li>Click <strong>Install</strong>. If it offers, tick <strong>Pin to taskbar</strong> and <strong>Pin to Start</strong>.</li>
+    <li>It opens in its own window. Find it any time in the Start menu under <strong>The Ledger</strong>.</li>
+  </ol>
+  <p>It keeps working without a connection once you have opened pages, and updates by itself. To remove it later, open the app, click the three dots in its title bar and choose <strong>Uninstall</strong>, or use Settings, then Apps.</p>
+  <p>Firefox on Windows doesn&rsquo;t install web apps, but the site works fine in a normal tab. A Microsoft Store version and Windows widgets are not built yet.</p>
+</section>
+
+<section class="in-panel no-bubble" id="p-mac" role="tabpanel" aria-labelledby="tab-mac" hidden>
+  <h2 id="desktop">On a Mac or Linux computer</h2>
   <ol class="in-steps no-bubble">
     <li>Open <strong>spreadloveandacceptance.com</strong> in <strong>Chrome</strong> or <strong>Edge</strong>.</li>
-    <li>Look for the small <strong>install icon</strong> at the right end of the address bar (a screen with a down arrow), and click it.</li>
+    <li>Click the small <strong>install icon</strong> at the right end of the address bar (a screen with a down arrow).</li>
     <li>Click <strong>Install</strong>. It opens in its own window and gets its own icon.</li>
   </ol>
-  <p>Safari on a Mac: choose <strong>File</strong>, then <strong>Add to Dock</strong>. Firefox on a computer doesn&rsquo;t install web apps, but the site works fine in a normal tab.</p>
+  <p>Safari on a Mac: choose <strong>File</strong>, then <strong>Add to Dock</strong>. Firefox doesn&rsquo;t install web apps, but the site works fine in a normal tab.</p>
 </section>
 
 <h2 id="what-you-get">What you get</h2>
@@ -211,7 +227,7 @@
   var state = document.getElementById('in-state'), sub = document.getElementById('in-sub'), btn = document.getElementById('in-btn'), ev = null;
   var installed = (window.matchMedia && matchMedia('(display-mode: standalone)').matches) || navigator.standalone === true;
   var ua = navigator.userAgent, android = /android/i.test(ua), ios = /iphone|ipad|ipod/i.test(ua) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
-  var tabs = Array.prototype.slice.call(document.querySelectorAll('.in-tab')), panels = { android: document.getElementById('p-android'), apple: document.getElementById('p-apple'), computer: document.getElementById('p-computer') };
+  var tabs = Array.prototype.slice.call(document.querySelectorAll('.in-tab')), panels = { android: document.getElementById('p-android'), apple: document.getElementById('p-apple'), windows: document.getElementById('p-windows'), mac: document.getElementById('p-mac') };
   function show(id, move) {
     if (!panels[id]) id = 'android';
     tabs.forEach(function (t) { var on = t.getAttribute('data-p') === id; t.setAttribute('aria-selected', String(on)); t.tabIndex = on ? 0 : -1; });
@@ -226,21 +242,24 @@
     });
   });
   // start on the hash if there is one, otherwise on the phone you are holding
-  var h = (location.hash || '').replace('#', ''), map = { chrome: 'android', others: 'android', stuck: 'android', iphone: 'apple', desktop: 'computer' };
-  show(panels[h] ? h : map[h] || (ios ? 'apple' : android ? 'android' : 'android'), false);
+  var h = (location.hash || '').replace('#', ''), map = { chrome: 'android', others: 'android', stuck: 'android', iphone: 'apple', computer: 'windows', desktop: 'mac' };
+  var win = /windows/i.test(ua), mac = /macintosh|mac os x|linux|cros/i.test(ua) && !android && !ios;
+  show(panels[h] ? h : map[h] || (ios ? 'apple' : android ? 'android' : win ? 'windows' : mac ? 'mac' : 'android'), false);
   if (map[h]) setTimeout(function () { var el = document.getElementById(h); if (el) el.scrollIntoView(); }, 50);
   function plain() {
     if (android) { state.textContent = 'Use Chrome’s menu to install.'; sub.textContent = 'Follow the five steps below. It takes about ten seconds.'; }
     else { state.textContent = 'This part is for an Android phone.'; sub.textContent = 'Open this page on your Android phone, or pick your device above.'; }
   }
+  var wasInstalled = false; try { wasInstalled = localStorage.getItem('tol-app-installed') === '1'; if (installed) localStorage.setItem('tol-app-installed', '1'); } catch (e) {}
   if (installed) { state.textContent = 'You are already using the app.'; sub.textContent = 'Nothing more to do. Enjoy it.'; }
+  else if (wasInstalled) { state.textContent = 'The app is already on this phone.'; sub.textContent = 'Look for the two little bubbles on your home screen or in your app drawer. Nothing more to do.'; }
   else {
     plain();
     window.addEventListener('beforeinstallprompt', function (e) {
       e.preventDefault(); ev = e; btn.hidden = false;
       state.textContent = 'Ready to install.'; sub.textContent = 'Tap the button. Chrome asks you to confirm, then the icon appears.';
     });
-    window.addEventListener('appinstalled', function () { btn.hidden = true; ev = null; state.textContent = 'Installed. Look for the two little bubbles on your home screen.'; sub.textContent = 'You can close this tab.'; });
+    window.addEventListener('appinstalled', function () { try { localStorage.setItem('tol-app-installed', '1'); } catch (e) {} btn.hidden = true; ev = null; state.textContent = 'Installed. Look for the two little bubbles on your home screen.'; sub.textContent = 'You can close this tab.'; });
     btn.addEventListener('click', function () {
       if (!ev) return; ev.prompt();
       ev.userChoice.then(function (c) { if (c && c.outcome === 'dismissed') { state.textContent = 'No problem. It will be here when you are ready.'; } ev = null; btn.hidden = true; }).catch(function () {});
