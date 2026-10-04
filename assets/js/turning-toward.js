@@ -197,10 +197,15 @@
     $('tt-next').addEventListener('click', function () { idx = (idx + 1) % SPARKS.length; show(); });
     $('tt-copy').addEventListener('click', function () { copy($('tt-msg-text').textContent, this); });
     var share = $('tt-share');
-    if (navigator.share) {
+    // the message, and only the message, through the site's own share (the device's share menu, or a small sheet)
+    if (window.TOLShare || navigator.share) {
       share.hidden = false;
+      share.classList.add('tol-share-btn');
+      try { if (window.TOLShareClip && window.TOLShareClip.mount) window.TOLShareClip.mount(share); } catch (e) {}
       share.addEventListener('click', function () {
-        navigator.share({ text: $('tt-msg-text').textContent }).catch(function () {});
+        var text = $('tt-msg-text').textContent;
+        if (window.TOLShare) window.TOLShare.share({ title: 'A little message', text: text, url: false, result: true });
+        else navigator.share({ text: text }).catch(function () {});
       });
     }
     show();

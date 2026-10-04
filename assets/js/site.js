@@ -291,6 +291,9 @@
       { href: '/frequency-buddies.html', code: 'Cartoon', title: 'Frequency Buddies', note: 'An animated show about feelings, with captions' },
       { href: '/frequency-buddies-live.html', code: 'On air', title: 'Frequency Buddies Live', note: 'An always-on station: drop in on the episode playing now' },
       { href: '/frequency-buddies-shuffle.html', code: 'Shuffle', title: 'Frequency Buddies on shuffle', note: 'Episodes in a random order, and downloads' },
+      { href: '/frequency-buddies-music-video.html', code: 'New', title: 'The theme song music video', note: 'Everyone on stage, singing and dancing' },
+      { href: '/frequency-buddies-music-video-maker.html', code: 'Make', title: 'Make your own music video', note: 'Pick the stage, costumes and moves, then share it' },
+      { href: '/frequency-buddies-season-2.html', code: 'Soon', title: 'Season 2 teaser', note: 'New places, new friends, and five hidden secrets' },
       { href: '/pal-cam-tv.html', code: 'Live', title: 'Pal Cam TV', note: 'The pups live, all day, full screen or on your TV' }
     ]},
     { id: 'family', name: 'Family', title: 'Family', blurb: 'Help for every generation at home.', items: [
@@ -628,6 +631,8 @@
     });
     addPrivateNote(body);
     addTip(body);
+    placeShare(body);
+    if (document.querySelector('.tol-share-btn, [data-share]') || current === '/frequency-buddies-season-2.html') loadScript('/assets/js/share-clip.js').catch(function () {}); // Kip the Paperclip, by the Share buttons
     revealOnScroll();
 
     // The Night Garden, softly alive behind every page, under a see-through veil.
@@ -755,6 +760,7 @@
     buildPuddlesPop(body);
     comfortOffer(body);
     rememberPage(body);
+    if (!document.querySelector('meta[http-equiv="Content-Security-Policy"]')) { var cbk = document.createElement('script'); cbk.src = '/assets/js/come-back.js'; document.head.appendChild(cbk); } // time picker, "What you got from this", "Your path so far" (come-back.js)
     if (current === '/index.html') {
       var hi = document.querySelector('main [data-home-intro]');
       // below the approved opening (intro, join, pal cam, hello, new notices): after the first notices stack
@@ -1392,8 +1398,10 @@
       hi.querySelector('.tol-puddles-hi-go').focus();
     });
     var main = document.querySelector('main');
-    var after = main && (main.querySelector('[data-palcam-top]') || main.querySelector('[data-home-intro]')); // below the "what this is" line and the pal cam link
-    if (main) main.insertBefore(hi, after ? after.nextSibling : main.firstChild); else body.appendChild(hi);
+    // Professor Puddles sits just above the "Check in on Tidbit & Sugarfoot" link (or below the "what this is" line)
+    var pal = main && main.querySelector('[data-palcam-top]'), intro = main && main.querySelector('[data-home-intro]');
+    if (main && pal) pal.parentNode.insertBefore(hi, pal);
+    else if (main) main.insertBefore(hi, intro ? intro.nextSibling : main.firstChild); else body.appendChild(hi);
     setTimeout(function () { hi.classList.add('is-in'); }, small ? 0 : 600);
   }
 
@@ -2096,7 +2104,9 @@
     var top = document.querySelector('main [data-palcam-top]'); // the home page's link stays first, above anything added to the top of main
     var intro = document.querySelector('main [data-home-intro]'); // the one-line "what this is" stays at the very top, then the pal cam link
     var anchorEl = intro ? intro.nextElementSibling : (top && top.parentNode.firstElementChild);
+    if (anchorEl && anchorEl.classList.contains('tol-puddles-hi')) anchorEl = anchorEl.nextElementSibling; // Professor Puddles stays just above it
     if (top && anchorEl !== top) top.parentNode.insertBefore(top, anchorEl);
+    var pudHi = document.querySelector('main .tol-puddles-hi'); if (top && pudHi && pudHi.nextElementSibling !== top) top.parentNode.insertBefore(pudHi, top);
     // tell the garden behind the page where the "Check in" button is, so the dogs step out of view there instead of running through it
     var avoidQ = 0;
     function avoidNow() {
@@ -2459,6 +2469,307 @@
     document.querySelectorAll('[data-tol-support]').forEach(function (a) {
       a.href = 'mailto:' + CONFIG.supportEmail; a.textContent = CONFIG.supportEmail;
     });
+  }
+
+  // ---------- Share ----------
+  // One share feature for the whole site. TOLShare.share({ title, text, url }) opens the device's own share
+  // menu where there is one (navigator.share); otherwise a small share sheet: Copy link, Text message, Email
+  // and plain share links (WhatsApp, Facebook, X, Pinterest) that open in a new tab. No third-party scripts,
+  // nothing added to the link, and nothing is sent from this site.
+  //   url: omitted → this page (without its query or #); false → share the text alone (no link)
+  //   result: true → the person's own words (a statement, a message): the sheet shows exactly what goes,
+  //           offers "Copy message", and leaves out Facebook and Pinterest (they only carry a link)
+  //   pin: true → offer Pinterest (pages with a picture worth pinning)
+  // Any element with data-share (and optional data-share-title / -text / -url, data-share-from="#id" to share
+  // that element's text, data-share-result) is a share button. <body data-no-share> keeps the automatic
+  // "Share this page" button off a page. A successful share or copy fires 'tol:shared' on document
+  // and 'tol-shared' (detail: { url, method, how }). Buttons made here carry class tol-share-btn and are offered to TOLShareClip.
+  var shareBox = null, shareLast = null, shareCur = null;
+  function shareUrl(u) {
+    if (u === false || u === '') return '';
+    if (u == null) return location.origin + location.pathname;
+    try { return new URL(u, location.href).href; } catch (e) { return String(u); }
+  }
+  function shareFire(url, method) {
+    // both spellings: 'tol:shared' and 'tol-shared' (the paperclip listens for the second, reading detail.how)
+    ['tol:shared', 'tol-shared'].forEach(function (name) {
+      try { document.dispatchEvent(new CustomEvent(name, { detail: { url: url, method: method, how: method } })); } catch (e) {}
+    });
+  }
+  function shareCopy(text) {
+    function fallback() {
+      var ta = document.createElement('textarea'), ok = false;
+      ta.value = text; ta.setAttribute('readonly', ''); ta.style.position = 'fixed'; ta.style.top = '0'; ta.style.opacity = '0';
+      document.body.appendChild(ta); ta.select();
+      try { ok = document.execCommand('copy'); } catch (e) {}
+      ta.remove(); return ok;
+    }
+    if (navigator.clipboard && navigator.clipboard.writeText) return navigator.clipboard.writeText(text).then(function () { return true; }, function () { return fallback(); });
+    return Promise.resolve(fallback());
+  }
+  function shareMessage(d) { return [d.text, d.url].filter(Boolean).join('\n'); }
+  function shareMount(btn) {
+    if (!btn.classList.contains('tol-share-btn')) btn.classList.add('tol-share-btn');
+    try { if (window.TOLShareClip && window.TOLShareClip.mount) window.TOLShareClip.mount(btn); } catch (e) {}
+    return btn;
+  }
+  function buildShareSheet() {
+    var box = el('div', { class: 'tol-sharesheet tol-plain no-bubble', 'data-share-sheet': '', role: 'dialog', 'aria-modal': 'true', 'aria-labelledby': 'tol-share-h', hidden: '' },
+      '<div class="tol-share-card">' +
+        '<div class="tol-share-head"><h2 id="tol-share-h">Share</h2><button type="button" class="tol-share-close">Close</button></div>' +
+        '<p class="tol-share-what"></p>' +
+        '<p class="tol-share-preview" hidden></p>' +
+        '<div class="tol-share-acts">' +
+          '<button type="button" class="tol-share-act" data-act="copy">Copy link</button>' +
+          '<button type="button" class="tol-share-act" data-act="copy-text">Copy message</button>' +
+          '<a class="tol-share-act" data-act="sms">Text message</a>' +
+          '<a class="tol-share-act" data-act="email">Email</a>' +
+          '<a class="tol-share-act" data-act="whatsapp" target="_blank" rel="noopener noreferrer">WhatsApp</a>' +
+          '<a class="tol-share-act" data-act="facebook" target="_blank" rel="noopener noreferrer">Facebook</a>' +
+          '<a class="tol-share-act" data-act="x" target="_blank" rel="noopener noreferrer">X</a>' +
+          '<a class="tol-share-act" data-act="pinterest" target="_blank" rel="noopener noreferrer">Pinterest</a>' +
+        '</div>' +
+        '<p class="tol-share-status" role="status" aria-live="polite"></p>' +
+        '<p class="tol-share-note">Sharing opens your own app. Nothing is sent from this site.</p>' +
+      '</div>');
+    box.addEventListener('click', function (e) {
+      if (e.target === box) { closeShareSheet(); return; }
+      var a = e.target.closest('[data-act]'); if (!a || !shareCur) return;
+      var act = a.getAttribute('data-act'), st = box.querySelector('.tol-share-status');
+      if (act === 'copy' || act === 'copy-text') {
+        var orig = a.getAttribute('data-label') || a.textContent; a.setAttribute('data-label', orig);
+        shareCopy(act === 'copy' ? shareCur.url : shareMessage(shareCur)).then(function (ok) {
+          a.textContent = ok ? 'Copied!' : orig;
+          st.textContent = ok ? (act === 'copy' ? 'Link copied. Paste it wherever you like.' : 'Message copied. Paste it wherever you like.') : 'Couldn’t copy here. Try selecting the link by hand.';
+          clearTimeout(a._t); a._t = setTimeout(function () { a.textContent = orig; }, 2000);
+          if (ok) shareFire(shareCur.url, act);
+        });
+        return;
+      }
+      shareFire(shareCur.url, act);   // the person's own app takes it from here
+      if (act === 'sms' || act === 'email') setTimeout(closeShareSheet, 400);
+    });
+    box.querySelector('.tol-share-close').addEventListener('click', closeShareSheet);
+    box.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape') { e.preventDefault(); e.stopPropagation(); closeShareSheet(); return; }
+      if (e.key !== 'Tab') return;
+      var f = Array.prototype.filter.call(box.querySelectorAll('button, a[href]'), function (n) { return n.getClientRects().length > 0; });
+      if (!f.length) return;
+      var first = f[0], last = f[f.length - 1];
+      if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+      else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+    });
+    document.body.appendChild(box);
+    return box;
+  }
+  function openShareSheet(d) {
+    if (!shareBox) shareBox = buildShareSheet();
+    shareCur = d; shareLast = document.activeElement;
+    var box = shareBox, enc = encodeURIComponent, msg = shareMessage(d);
+    box.querySelector('#tol-share-h').textContent = d.result ? 'Share what you made' : 'Share';
+    box.querySelector('.tol-share-what').textContent = d.title || '';
+    box.querySelector('.tol-share-what').hidden = !d.title;
+    var pv = box.querySelector('.tol-share-preview');
+    pv.hidden = !d.result || !d.text; pv.textContent = d.result ? (d.text.length > 600 ? d.text.slice(0, 600) + '…' : d.text) : '';
+    box.querySelector('.tol-share-status').textContent = '';
+    var img = '', og = document.querySelector('meta[property="og:image"]'); if (og) img = og.getAttribute('content') || '';
+    var links = {
+      sms: 'sms:?&body=' + enc(msg),
+      email: 'mailto:?subject=' + enc(d.title || 'Something to share') + '&body=' + enc(msg),
+      whatsapp: 'https://wa.me/?text=' + enc(msg),
+      facebook: d.url ? 'https://www.facebook.com/sharer/sharer.php?u=' + enc(d.url) : '',
+      x: msg.length <= 260 ? 'https://x.com/intent/post?text=' + enc(d.text || d.title || '') + (d.url ? '&url=' + enc(d.url) : '') : '',
+      pinterest: d.url && d.pin && img ? 'https://www.pinterest.com/pin/create/button/?url=' + enc(d.url) + '&media=' + enc(img) + '&description=' + enc(d.text || d.title || '') : ''
+    };
+    Array.prototype.forEach.call(box.querySelectorAll('[data-act]'), function (a) {
+      var act = a.getAttribute('data-act'), show;
+      if (act === 'copy') show = !!d.url;
+      else if (act === 'copy-text') show = !!(d.result && d.text);
+      else if (act === 'facebook' || act === 'pinterest') show = !d.result && !!links[act];
+      else show = !!links[act];
+      a.hidden = !show;
+      if (a.hasAttribute('data-label')) { a.textContent = a.getAttribute('data-label'); }
+      if (show && links[act]) a.setAttribute('href', links[act]);
+    });
+    box.hidden = false;
+    document.documentElement.classList.add('tol-share-open');
+    var firstAct = box.querySelector('[data-act]:not([hidden])') || box.querySelector('.tol-share-close');
+    firstAct.focus({ preventScroll: true });
+  }
+  function closeShareSheet() {
+    if (!shareBox || shareBox.hidden) return;
+    shareBox.hidden = true; shareCur = null;
+    document.documentElement.classList.remove('tol-share-open');
+    if (shareLast && shareLast.focus && document.contains(shareLast)) shareLast.focus({ preventScroll: true });
+  }
+  function shareNow(o) {
+    o = o || {};
+    var d = { title: o.title || '', text: o.text || '', url: shareUrl(o.url), result: !!o.result, pin: !!o.pin };
+    if (navigator.share) {
+      var data = {}; if (d.title) data.title = d.title; if (d.text) data.text = d.text; if (d.url) data.url = d.url;
+      var can = true; try { if (navigator.canShare) can = navigator.canShare(data); } catch (e) { can = true; }
+      if (can) {
+        try {
+          return Promise.resolve(navigator.share(data)).then(function () { shareFire(d.url, 'native'); return { method: 'native' }; }, function (err) {
+            if (err && err.name === 'AbortError') return null;    // they closed their share menu: nothing more to do
+            openShareSheet(d); return { method: 'sheet' };
+          });
+        } catch (e) { /* fall through to the sheet */ }
+      }
+    }
+    openShareSheet(d);
+    return Promise.resolve({ method: 'sheet' });
+  }
+  function shareFromEl(n) {
+    var from = n.getAttribute('data-share-from'), src = from ? document.querySelector(from) : null, text = n.getAttribute('data-share-text') || '';
+    if (src) text = ('value' in src && src.tagName !== 'BUTTON' ? src.value : src.textContent || '').trim();
+    var u = n.hasAttribute('data-share-url') ? n.getAttribute('data-share-url') : null;
+    if (u === 'none') u = false;
+    return { title: n.getAttribute('data-share-title') || '', text: text, url: u, result: n.hasAttribute('data-share-result'), pin: n.hasAttribute('data-share-pin') };
+  }
+  document.addEventListener('click', function (e) {
+    var n = e.target.closest && e.target.closest('[data-share]');
+    if (!n || n.closest('.tol-sharesheet')) return;
+    e.preventDefault();
+    var o = shareFromEl(n), dyn = n._tolShare;
+    if (typeof dyn === 'function') { var x = dyn(); if (x) Object.keys(x).forEach(function (k) { o[k] = x[k]; }); }
+    shareNow(o);
+  });
+  // a share button: label, and either fixed data or a function that makes it at tap time
+  function shareButton(label, o, cls) {
+    var b = el('button', { type: 'button', class: 'tol-share-btn' + (cls ? ' ' + cls : ''), 'data-share': '' },
+      '<span class="tol-share-ic" aria-hidden="true"></span><span class="tol-share-t"></span>');
+    b.querySelector('.tol-share-t').textContent = label;
+    if (typeof o === 'function') b._tolShare = o;
+    else if (o) {
+      if (o.title) b.setAttribute('data-share-title', o.title);
+      if (o.text) b.setAttribute('data-share-text', o.text);
+      if (o.url != null) b.setAttribute('data-share-url', o.url === false ? 'none' : o.url);
+      if (o.result) b.setAttribute('data-share-result', '');
+      if (o.pin) b.setAttribute('data-share-pin', '');
+    }
+    return b;
+  }
+  window.TOLShare = {
+    share: shareNow,
+    open: function (o) { o = o || {}; openShareSheet({ title: o.title || '', text: o.text || '', url: shareUrl(o.url), result: !!o.result, pin: !!o.pin }); },
+    close: closeShareSheet,
+    copy: shareCopy,
+    // TOLShare.button('Share', { title, text, url } or function () { return {...}; }) → a ready button
+    button: function (label, o, cls) { return shareMount(shareButton(label, o, cls)); }
+  };
+
+  // ---- where a "Share" button sits on its own: content pages, the tools (the link only), kids' pages and games ----
+  var SHARE_BLURB = 'Free, kind tools for sharing the load at home.';
+  var SHARE_PAGES = [
+    [/^\/book\/(preface|chapter-\d)\.html$/, 'Share this chapter', 'A chapter from a free, kind guide to sharing the mental load at home.'],
+    [/^\/grandparents\.html$/, 'Share this guide', 'A free, kind guide for grandparents who help with the grandkids.'],
+    [/^\/chore-chart-for-couples\.html$/, 'Share this guide', 'A free, printable chore chart with one owner per job.', { pin: true }],
+    [/^\/(invisible-labor-mental-load|how-to-stop-fighting-with-your-partner|neurodivergent-relationships|communication-style-quiz)\.html$/, 'Share this guide', 'A free, kind guide to sharing the mental load at home.'],
+    [/^\/library\.html$|^\/library\/[a-z-]+\.html$/, 'Share this page', 'Plain-language reading on how people think, feel and get along. Free.'],
+    [/^\/learn\/index\.html$/, 'Share these stories', 'Short stories from philosophy, in plain words. Free.'],
+    [/^\/whats-new\.html$/, 'Share this page', 'What’s new on Spread Love & Acceptance, a free site about sharing the load kindly.'],
+    [/^\/infographic\.html$/, 'Share this page', 'The whole idea on one page: a free, kind way to share the load at home.', { pin: true }],
+    [/^\/(five-pillars|how-it-works|polymath|start-here|start-in-10-minutes|frequency-framework|turning-toward|check-ins|wired-differently|relationships|is-this-for-you|glossary)\.html$/, 'Share this page', SHARE_BLURB],
+    // tools: the link to the tool, never anything typed into it
+    [/^\/signal-translator\.html$/, 'Share this tool', 'A free tool to test how a sentence might land before you say it.'],
+    [/^\/perspective-shifter\.html$/, 'Share this tool', 'A free tool for seeing a moment from the other person’s side.'],
+    [/^\/lemonade-stand\.html$/, 'Share this tool', 'A free, friendly way to see who does what at home.'],
+    [/^\/conversation-reader\.html$/, 'Share this tool', 'A free tool for reading a tricky conversation more calmly.'],
+    [/^\/wavelength\.html$/, 'Share this tool', 'Find your Wave Code: a free, friendly look at how you think, talk and listen.'],
+    [/^\/tools\/frequency-calibration\.html$/, 'Share this tool', 'A free tool for comparing your natural rhythms.'],
+    [/^\/quick-checks\.html$/, 'Share this tool', 'A one-minute check on how you’re doing today. Free.'],
+    [/^\/wiring-card\.html$/, 'Share this tool', 'Make a free one-page card about how you take in words.'],
+    [/^\/carrier-wave-decoder\.html$/, 'Share this tool', 'A free, step-by-step guide for when a conversation starts going sideways.'],
+    [/^\/workpapers\/fill\/suite\.html$/, 'Share this tool', 'Free, printable worksheets for sharing the load at home.', { url: '/workpapers/fill/suite.html' }],
+    // kids and families
+    [/^\/frequency-buddies\.html$/, 'Share this episode', 'Frequency Buddies: a gentle cartoon for kids and families, free, with captions.', { pin: true, episode: true }],
+    [/^\/frequency-buddies-live\.html$/, 'Share the station', 'Frequency Buddies Live: a gentle cartoon station for kids and families, always on.', { pin: true }],
+    [/^\/frequency-buddies-shuffle\.html$/, 'Share this page', 'Frequency Buddies on shuffle: gentle cartoon episodes for kids and families.', { pin: true }],
+    [/^\/frequency-buddies-season-2\.html$/, 'Share the teaser', 'Frequency Buddies Season 2 is coming! Watch the one-minute teaser and look for the five secrets.', { pin: true }],
+    [/^\/frequency-buddies-music-video[\w-]*\.html$/, 'Share the music video', 'A Frequency Buddies music video for kids and families.', { pin: true }],
+    // games (the game, never a score)
+    [/^\/pause-and-play\.html$/, 'Share the games', 'Calm games for a busy mind. Free, with no timers.'],
+    [/^\/(word-bloom|quiet-crossword|daily-ledger-crossword|quiet-words)\.html$/, 'Share this game', 'A calm word game I like.'],
+    [/^\/frequency-journey\.html$/, 'Share this game', 'A calm puzzle journey with two pups. Free.'],
+    [/^\/night-garden\.html$/, 'Share the garden', 'A calm place to breathe and play. Free, with no timers.']
+  ];
+  function shareTitle() {
+    var h = document.querySelector('main h1');
+    var t = h ? h.textContent.replace(/\s+/g, ' ').trim() : '';
+    return t || (document.title || '').replace(/\s*[|·–-]\s*Spread Love.*$/i, '').trim();
+  }
+  // the episode playing on the episodes page, by its ?ep= (or the one last watched), named from the page's own episode list
+  function episodeShare() {
+    var m = /[?&]ep=(s\d+e\d+)/.exec(location.search), id = m ? m[1] : null;
+    if (!id) { try { id = JSON.parse(lsGet('tol-buddies-v1') || '{}').last || null; } catch (e) { id = null; } }
+    if (!id) return null;
+    var name = '';
+    Array.prototype.some.call(document.querySelectorAll('script[type="application/ld+json"]'), function (s) {
+      var hit = new RegExp('"episodeNumber":(\\d+),"name":"([^"]+)","url":"[^"]*\\?ep=' + id + '"').exec(s.textContent || '');
+      if (hit) name = 'Episode ' + hit[1] + ': ' + hit[2];
+      return !!hit;
+    });
+    return { url: location.pathname + '?ep=' + id, title: 'Frequency Buddies' + (name ? ', ' + name : ''),
+      text: 'Frequency Buddies' + (name ? ', ' + name : '') + ': a gentle cartoon for kids and families, free, with captions.' };
+  }
+  function placeShare(body) {
+    var main = document.querySelector('main');
+    if (!main || body.hasAttribute('data-no-share')) return;
+    var rule = null;
+    SHARE_PAGES.some(function (r) { if (r[0].test(current)) { rule = r; return true; } return false; });
+    // About: right beside the "please pass it on" line
+    if (current === '/about.html') {
+      var line = document.querySelector('.share-line');
+      var ab = shareMount(shareButton('Pass it on', { title: 'Spread Love & Acceptance', text: 'A free site about sharing the load kindly, made by one person, for anyone.', url: '/index.html' }));
+      var wrap = el('p', { class: 'tol-share-row is-inline tol-plain no-bubble' }); wrap.appendChild(ab);
+      if (line) line.after(wrap); else main.appendChild(wrap);
+      return;
+    }
+    if (rule) {
+      var extra = rule[3] || {}, title = shareTitle();
+      var opts = extra.episode ? function () { return episodeShare() || { title: title, text: rule[2], url: location.pathname }; }
+        : { title: title, text: rule[2], url: extra.url, pin: !!extra.pin };
+      var row = el('div', { class: 'tol-share-row tol-plain no-bubble' });
+      row.appendChild(shareMount(shareButton(rule[1], opts)));
+      var tip = main.querySelector(':scope > .tol-tip');
+      if (tip) main.insertBefore(row, tip); else main.appendChild(row);
+    }
+    // the glossary: each word can be shared on its own, by its #id
+    if (current === '/glossary.html') {
+      Array.prototype.forEach.call(document.querySelectorAll('main article.gl-term[id]'), function (a) {
+        var h = a.querySelector('h3'), def = a.querySelector('.gl-def'), links = a.querySelector('.gl-links'), word = h ? h.textContent.replace(/\s+/g, ' ').trim() : '';
+        if (!links || !word) return;
+        var b = shareMount(shareButton('Share', { title: word + ', in plain English', text: def ? def.textContent.trim() : word, url: '/glossary.html#' + a.id }, 'is-small'));
+        b.setAttribute('aria-label', 'Share the word ' + word);
+        links.appendChild(document.createTextNode(' ')); links.appendChild(b);
+      });
+    }
+    // Roots & Wings on "Where your lens came from": the tool's link only
+    var roots = current === '/growing-up.html' && document.querySelector('main #roots [data-roots]');
+    if (roots) {
+      var rr = el('p', { class: 'tol-share-row is-inline tol-plain no-bubble' });
+      rr.appendChild(shareMount(shareButton('Share this tool', { title: 'Roots & Wings', text: 'A gentle, tap-through look back at where a trait may have started. Free.', url: '/growing-up.html#roots' })));
+      var rsec = roots.closest('section'); (rsec || main).appendChild(rr);
+    }
+    // the Season 2 teaser: the end card can share how many secrets were found (a count, nothing else)
+    if (current === '/frequency-buddies-season-2.html') {
+      var tries = 0;
+      var addTeaser = function () {
+        var row2 = document.querySelector('.tz-end .tz-row');
+        if (!row2) { if (++tries < 20) setTimeout(addTeaser, 500); return; }
+        if (row2.querySelector('.tol-share-btn')) return;
+        row2.appendChild(shareMount(shareButton('Share', function () {
+          var n = 0; try { n = (JSON.parse(lsGet('tol-fb-s2-teaser') || '{}').found || []).length; } catch (e) {}
+          n = Math.max(0, Math.min(5, n));
+          return { title: 'Frequency Buddies Season 2 teaser', url: '/frequency-buddies-season-2.html',
+            text: n >= 5 ? 'I found all 5 secrets in the Frequency Buddies Season 2 teaser! Can you?' : n > 0 ? 'I found ' + n + ' of 5 secrets in the Frequency Buddies Season 2 teaser! Can you find them all?' : 'Five secrets are hidden in the Frequency Buddies Season 2 teaser. Can you find them?' };
+        }, 'tz-b')));
+      };
+      addTeaser();
+    }
+    // buttons written into a page as plain data-share get the same look and the paperclip
+    Array.prototype.forEach.call(document.querySelectorAll('[data-share]:not(.tol-share-btn)'), shareMount);
   }
 
   // Read-only access for pages that need the page list (e.g. 404.html)
