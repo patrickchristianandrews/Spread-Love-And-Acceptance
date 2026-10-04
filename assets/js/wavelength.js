@@ -172,7 +172,7 @@
       send: 'Mind your tone. Say it calmly, out loud rather than in text when you can, and keep the pace steady.',
       intro: ['Sound-first people hear the music under the words: the tone, the pace, the pause. A song can change their whole state in a minute.', 'In relationships, this input is often the first to notice when something’s off, and the first to be overwhelmed by a loud or chaotic room.'],
       prompts: ['Which sounds calm you down, and which ones wear you out?', 'When has someone’s tone mattered more to you than their words?', 'Is there a song or sound that means “us” or “safe” to you?'],
-      tryThis: 'Choose one sound together, like a song or a soft background track, that means “let’s pause and come back to this.” Use it once this week.', link: ['The Soundscape Catalog', '/soundscapes.html'],
+      tryThis: 'Choose one sound together, like a song or a soft background track, that means “let’s pause and come back to this.” Use it once this week.', link: ['Brain Breakers', '/soundscapes.html'],
       fit: { sensitive: 'Highly sensitive people often hear everything: hums, clicks, sharp tones. Noticing which sounds cost you the most is a good first step.', autistic: 'Many Autistic people are sensitive to sound. A quiet space can be a need, not just a preference.', adhd: 'Music or background noise helps many ADHD folks focus and get started.' } },
     { id: 'people', icon: '🤝', name: 'People', g: 'Interpersonal', short: 'Learning with others and reading how they feel.',
       how: 'You learn through other people: discussing, working together and reading how others feel.',
@@ -416,7 +416,7 @@
     ['One owner per job (WP-03)', '/workpapers/wp-03-raci-treaty.html', 'logic,words,pictures', 'Ownership you can see.'],
     ['Say it so it lands (WP-09)', '/workpapers/wp-09-tone-filter.html', 'words,self,people', 'Turn a reaction into a fact, a feeling and an ask.'],
     ['The 90-second check-in (WP-13)', '/workpapers/wp-13-pll-protocol.html', 'people,sound,self', 'Small, frequent tuning.'],
-    ['The Soundscape Catalog', '/soundscapes.html', 'sound,body,meaning', 'One agreed sound can mean “let’s pause.”'],
+    ['Brain Breakers', '/soundscapes.html', 'sound,body,meaning', 'One agreed sound can mean “let’s pause.”'],
     ['Kind ways to say no (WP-01)', '/workpapers/wp-01.html', 'words,people', 'Saying no without a fight.'],
     ['The seven angles (Chapter III)', '/book/chapter-3.html', 'pictures,meaning,logic', 'Different vantage points on the same moment.']
   ];

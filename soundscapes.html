@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Calm Music and Relaxing Soundscapes</title>
-<meta name="description" content="Calm music and relaxing soundscapes: breathing tracks, peaceful ambient pieces and gentle songs about love, acceptance and finding your way back to each other.">
+<title>Brain Breakers: Instrumental Music to See and Feel</title>
+<meta name="description" content="Three instrumental pieces by Christian’s Lab, from soft and floating to big and cinematic, with a live picture and gentle vibration so you can see and feel the.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,500&family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -95,14 +95,6 @@
   .live-h{ font-family:"Fraunces", Georgia, serif; font-size:1.5rem; margin:0 0 .5rem; }
   .live-lede, .live-note{ color:var(--ink-soft); line-height:1.6; }
   .live-note{ font-size:.9rem; }
-  .live-list{ display:grid; gap:.8rem; grid-template-columns:repeat(auto-fit, minmax(14rem, 1fr)); margin:1rem 0; }
-  .live-card{ padding:1rem 1.1rem; border-radius:18px; border:1px solid #E6D6EE; background:linear-gradient(135deg, #FFF8EE, #F7EEF8); }
-  .live-card p{ margin:.5rem 0 0; font-size:.92rem; color:var(--ink-soft); line-height:1.5; }
-  .live-play{ font:inherit; font-family:"Fraunces", Georgia, serif; font-weight:600; font-size:1.05rem; display:inline-flex; align-items:center; gap:.5rem;
-    padding:.5rem 1.1rem; border-radius:999px; border:1px solid #D9C8F0; background:#fff; color:var(--ink); cursor:pointer; }
-  .live-play span{ font-size:.8rem; color:#6B4F8A; }
-  .live-play[aria-pressed="true"]{ background:#EDE3F8; border-color:#B9A0E0; }
-  .live-play:focus-visible{ outline:2px solid var(--focus); outline-offset:2px; }
   .live-timer{ display:flex; flex-wrap:wrap; align-items:center; gap:.4rem; margin:.4rem 0 .6rem; }
   .live-timer > span:first-child{ font-family:"IBM Plex Mono", monospace; font-size:.8rem; text-transform:uppercase; letter-spacing:.08em; color:var(--ink-soft); margin-right:.2rem; }
   .live-timer button{ font:inherit; font-size:.9rem; min-height:40px; padding:.3rem .8rem; border-radius:999px; border:1px solid #E6D6EE; background:#fff; color:#4E3F6B; cursor:pointer; }
@@ -167,6 +159,27 @@
     color: var(--ink-soft);
     font-size: 0.88rem;
   }
+  .sn-info{ margin:.8rem 0 .2rem; padding:.8rem 1rem; border-radius:16px; background:rgba(255,255,255,.09); border:1px solid rgba(255,255,255,.18); }
+  .sn-info[hidden]{ display:none; }
+  .sn-info-top{ display:flex; flex-wrap:wrap; align-items:center; gap:.6rem; }
+  .sn-info-top strong{ font:700 1.15rem "Fraunces", Georgia, serif; color:#fff; }
+  .sn-meter{ flex:1 1 7rem; min-width:6rem; max-width:14rem; height:8px; border-radius:99px; background:rgba(255,255,255,.18); overflow:hidden; }
+  .sn-meter i{ display:block; height:100%; width:0; border-radius:99px; background:linear-gradient(90deg,#7FE0D7,#F8D76A,#F7A896); }
+  .sn-meter-l{ font:500 .72rem "IBM Plex Mono", monospace; text-transform:uppercase; letter-spacing:.08em; color:#D4C9F0; }
+  #sn-info-fx{ margin:.6rem 0 0; display:grid; gap:.35rem; }
+  #sn-info-fx > div{ display:grid; grid-template-columns:5rem 1fr; gap:.5rem; background:none !important; border:0 !important; padding:0 !important; }
+  #sn-info-fx dt{ font:600 .72rem "IBM Plex Mono", monospace; text-transform:uppercase; letter-spacing:.08em; color:#F8D76A !important; }
+  #sn-info-fx dd{ margin:0; font-size:.9rem; line-height:1.45; color:#E6DDF8 !important; }
+  @media (max-width:520px){ #sn-info-fx > div{ grid-template-columns:1fr; gap:0; } }
+  .bb-fx{ margin:.8rem 0 0; display:grid; gap:.55rem; }
+  .bb-fx > div{ display:grid; grid-template-columns:5.5rem 1fr; gap:.6rem; align-items:baseline; padding:.55rem .8rem; border-radius:12px; background:rgba(255,255,255,.65); border:1px solid #E3D3F0; }
+  .bb-fx dt{ font-family:"IBM Plex Mono", monospace; font-size:.75rem; text-transform:uppercase; letter-spacing:.08em; color:#6B4F8A; font-weight:600; }
+  .bb-fx dd{ margin:0; font-size:.95rem; line-height:1.5; color:var(--ink-soft); }
+  .bb-table-wrap{ overflow-x:auto; margin:0 0 1rem; }
+  .bb-table{ border-collapse:collapse; width:100%; min-width:34rem; font-size:.95rem; }
+  .bb-table th, .bb-table td{ padding:.6rem .8rem; text-align:left; border-bottom:1px solid #E3D3F0; vertical-align:top; }
+  .bb-table thead th{ font-family:"IBM Plex Mono", monospace; font-size:.75rem; text-transform:uppercase; letter-spacing:.08em; color:#6B4F8A; }
+  @media (max-width:520px){ .bb-fx > div{ grid-template-columns:1fr; gap:.1rem; } }
 </style>
 <script src="/assets/js/site.js" defer></script>
 <!-- seo:start -->
@@ -185,8 +198,8 @@
 <link rel="apple-touch-icon" href="/assets/icons/apple-touch-icon-180.png" sizes="180x180">
 <link rel="manifest" href="/manifest.webmanifest">
 <meta property="og:site_name" content="Spread Love &amp; Acceptance">
-<meta property="og:title" content="Calm Music and Relaxing Soundscapes">
-<meta property="og:description" content="Calm music and relaxing soundscapes: breathing tracks, peaceful ambient pieces and gentle songs about love, acceptance and finding your way back to each other.">
+<meta property="og:title" content="Brain Breakers: Instrumental Music to See and Feel">
+<meta property="og:description" content="Three instrumental pieces by Christian’s Lab, from soft and floating to big and cinematic, with a live picture and gentle vibration so you can see and feel the.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://spreadloveandacceptance.com/soundscapes.html">
 <meta property="og:image" content="https://spreadloveandacceptance.com/assets/img/og-image.png">
@@ -196,11 +209,11 @@
 <meta property="og:image:alt" content="Two friends sharing one heart, with two happy pups: Spread Love &amp; Acceptance">
 <meta property="og:locale" content="en_US">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Calm Music and Relaxing Soundscapes">
-<meta name="twitter:description" content="Calm music and relaxing soundscapes: breathing tracks, peaceful ambient pieces and gentle songs about love, acceptance and finding your way back to each other.">
+<meta name="twitter:title" content="Brain Breakers: Instrumental Music to See and Feel">
+<meta name="twitter:description" content="Three instrumental pieces by Christian’s Lab, from soft and floating to big and cinematic, with a live picture and gentle vibration so you can see and feel the.">
 <meta name="twitter:image" content="https://spreadloveandacceptance.com/assets/img/og-image.png">
 <meta name="twitter:image:alt" content="Two friends sharing one heart, with two happy pups: Spread Love &amp; Acceptance">
-<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@id":"https://spreadloveandacceptance.com/soundscapes.html#page","name":"Calm Music and Relaxing Soundscapes","headline":"Calm Music and Relaxing Soundscapes","description":"Calm music and relaxing soundscapes: breathing tracks, peaceful ambient pieces and gentle songs about love, acceptance and finding your way back to each other.","url":"https://spreadloveandacceptance.com/soundscapes.html","inLanguage":"en-US","isAccessibleForFree":true,"keywords":"self-help, relationships, kindness, love, appreciation, acceptance, connection, communication, calm, peace, harmony, reconciliation, emotional wellbeing, self-discovery, fairness at home, mental load, invisible work, free self-help tools, relaxation, breathing, meditation, mindfulness, soundscapes, ambient music, sound frequencies, higher frequency","publisher":{"@type":"Organization","@id":"https://spreadloveandacceptance.com/#org","name":"Spread Love & Acceptance","url":"https://spreadloveandacceptance.com/","logo":{"@type":"ImageObject","url":"https://spreadloveandacceptance.com/assets/img/logo-stacked.png"}},"isPartOf":{"@type":"WebSite","@id":"https://spreadloveandacceptance.com/#website","name":"Spread Love & Acceptance","url":"https://spreadloveandacceptance.com/"},"datePublished":"2026-09-24","dateModified":"2026-10-04","image":"https://spreadloveandacceptance.com/assets/img/og-image.png","primaryImageOfPage":{"@type":"ImageObject","url":"https://spreadloveandacceptance.com/assets/img/og-image.png"},"@type":"WebPage"},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Spread Love & Acceptance","item":"https://spreadloveandacceptance.com/"},{"@type":"ListItem","position":2,"name":"Calm Music and Relaxing Soundscapes","item":"https://spreadloveandacceptance.com/soundscapes.html"}]}]}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@id":"https://spreadloveandacceptance.com/soundscapes.html#page","name":"Brain Breakers: Instrumental Music to See and Feel","headline":"Brain Breakers: Instrumental Music to See and Feel","description":"Three instrumental pieces by Christian’s Lab, from soft and floating to big and cinematic, with a live picture and gentle vibration so you can see and feel the.","url":"https://spreadloveandacceptance.com/soundscapes.html","inLanguage":"en-US","isAccessibleForFree":true,"keywords":"self-help, relationships, kindness, love, appreciation, acceptance, connection, communication, calm, peace, harmony, reconciliation, emotional wellbeing, self-discovery, fairness at home, mental load, invisible work, free self-help tools, relaxation, breathing, meditation, mindfulness, soundscapes, ambient music, sound frequencies, higher frequency","publisher":{"@type":"Organization","@id":"https://spreadloveandacceptance.com/#org","name":"Spread Love & Acceptance","url":"https://spreadloveandacceptance.com/","logo":{"@type":"ImageObject","url":"https://spreadloveandacceptance.com/assets/img/logo-stacked.png"}},"isPartOf":{"@type":"WebSite","@id":"https://spreadloveandacceptance.com/#website","name":"Spread Love & Acceptance","url":"https://spreadloveandacceptance.com/"},"datePublished":"2026-09-24","dateModified":"2026-10-04","image":"https://spreadloveandacceptance.com/assets/img/og-image.png","primaryImageOfPage":{"@type":"ImageObject","url":"https://spreadloveandacceptance.com/assets/img/og-image.png"},"@type":"WebPage"},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Spread Love & Acceptance","item":"https://spreadloveandacceptance.com/"},{"@type":"ListItem","position":2,"name":"Brain Breakers: Instrumental Music to See and Feel","item":"https://spreadloveandacceptance.com/soundscapes.html"}]}]}</script>
 <!-- seo:end -->
 </head>
 <body>
@@ -209,9 +222,9 @@
 
   <aside class="sidebar">
     <div class="mark">The Objective Ledger
-      <small>SOUNDSCAPES</small>
+      <small>BRAIN BREAKERS</small>
     </div>
-    <p class="tagline">Sounds you can see and feel. Calming audio, big instrumentals and live soundscapes, added one real piece at a time. Nothing listed here is a placeholder.</p>
+    <p class="tagline">Three instrumental pieces you can see and feel. Come get your brain wrecked, broken in a good way. Music by Christian&rsquo;s Lab.</p>
     <a class="back-link" href="index.html">&larr; Back to the home page</a>
   </aside>
 
@@ -223,203 +236,92 @@
 
     <section id="finder" aria-labelledby="finder-h"></section>
 
-    <section id="catalog">
-      <div class="kicker">Audio</div>
-      <h1 class="tol-page-h">Soundscape Catalog: calm music and relaxing soundscapes</h1>
-      <p class="lede">Every track below has actually been produced and is ready to hear. Not sure which to press? <a href="#finder">Find your sound</a>. You can also <a href="#senses">see the sound and feel it</a>: a picture that moves with whatever is playing, and gentle vibration on Android phones. Looking for something bigger? Head to the <a href="#brain-breakers">Brain Breakers</a>. This page grows one real track at a time, not from a planned track list.</p>
-
-      <div class="catalog-note">
-        <p><strong>A note on what these are:</strong> these are ambient, atmospheric audio pieces, not a validated therapeutic or clinical tool. Some people find ambient and low-frequency audio calming as part of a personal listening habit. That's a matter of personal taste, not an established treatment.</p>
-        <p><strong>What this page is, and isn't.</strong> This catalog holds functional and ambient audio, plus one grounding song. No workpaper requires audio, and none ever will. Any pairing below is only a suggestion for people who like to listen.</p>
-      </div>
-
-      <p class="phones-note"><span aria-hidden="true">&#127911;</span> <strong>Soundscapes sound best with headphones.</strong> The deep, low tones and the gentle left-to-right movement are much of what makes them calming, and small speakers can’t carry them.</p>
-
-
-
-      <div class="track-list">
-
-        <div class="track-card">
-          <div class="track-meta">
-            <h2 class="track-title">1. The Breath Beneath</h2>
-            <span class="track-tags">40&nbsp;Hz &middot; 80&nbsp;BPM &middot; Vibroacoustic ambient &middot; 2:55</span>
-          </div>
-          <audio class="track-player" controls preload="metadata">
-            <source src="assets/audio/soundscapes/The-Breath-Beneath.mp3" type="audio/mpeg">
-            Your browser can't play this inline. <a href="assets/audio/soundscapes/The-Breath-Beneath.mp3">Download the track directly</a>.
-          </audio>
-          <p class="track-description"><strong>The design.</strong> A pure 40&nbsp;Hz drone you can almost feel, under an 80&nbsp;BPM rhythm that matches the pace of a steady, resting breath.</p>
-          <p class="track-description"><strong>How it feels.</strong> The low tone sits deep and heavy, a little like a weighted blanket for the ears. It comes through best on good over-ear headphones.</p>
-          <p class="track-description"><strong>Good for.</strong> A bridge out of stressful or intensely analytical work: a few minutes to reset before you walk in the door, talk with family or settle into the evening.</p>
-        </div>
-
-        <div class="track-card">
-          <div class="track-meta">
-            <h2 class="track-title">2. One Breath to Anchor You</h2>
-            <span class="track-tags">40&nbsp;Hz &middot; 75&nbsp;BPM &middot; Minimal ambient with guided voice &middot; 2:55</span>
-          </div>
-          <audio class="track-player" controls preload="metadata">
-            <source src="assets/audio/soundscapes/One-Breath-to-Anchor-You.mp3" type="audio/mpeg">
-            Your browser can't play this inline. <a href="assets/audio/soundscapes/One-Breath-to-Anchor-You.mp3">Download the track directly</a>.
-          </audio>
-          <p class="track-description"><strong>The design.</strong> Very spare and spacious. The tempo drops to 75&nbsp;BPM, with long quiet spaces between the guided words.</p>
-          <p class="track-description"><strong>How it feels.</strong> Bright, busy sounds are stripped away, and a wide, soft reverb makes it feel like sitting alone in a large, calm room.</p>
-          <p class="track-description"><strong>Good for.</strong> Shutting the world out for three minutes, when the room is too loud or the lights too bright and you need to find your baseline again.</p>
-        </div>
-
-        <div class="track-card">
-          <div class="track-meta">
-            <h2 class="track-title">3. Nothing Needs to Change</h2>
-            <span class="track-tags">40&nbsp;Hz &middot; 65&nbsp;BPM &middot; Deep ambient &middot; 2:56</span>
-          </div>
-          <audio class="track-player" controls preload="metadata">
-            <source src="assets/audio/soundscapes/Nothing-Needs-to-Change.mp3" type="audio/mpeg">
-            Your browser can't play this inline. <a href="assets/audio/soundscapes/Nothing-Needs-to-Change.mp3">Download the track directly</a>.
-          </audio>
-          <p class="track-description"><strong>The design.</strong> The slowest and deepest piece so far, at 65&nbsp;BPM, made with dark, woody tones that sound more like strings than anything digital.</p>
-          <p class="track-description"><strong>How it feels.</strong> The pace sits a little below a typical resting heartbeat, and the long, slow swells are easy to breathe along with.</p>
-          <p class="track-description"><strong>Good for.</strong> The moment frustration or stress is spiking and you want something steady to hold on to. It pairs well with the <a href="/wp-11.html">Calm-Down Kit (WP-11)</a>, if you like to listen while you use it.</p>
-        </div>
-
-        <div class="track-card">
-          <div class="track-meta">
-            <h2 class="track-title">4. The Road We Made</h2>
-            <span class="track-tags">40&nbsp;Hz pulse &middot; Americana &middot; 2:49</span>
-          </div>
-          <audio class="track-player" controls preload="metadata">
-            <source src="assets/audio/soundscapes/The-Road-We-Made.mp3" type="audio/mpeg">
-            Your browser can't play this inline. <a href="assets/audio/soundscapes/The-Road-We-Made.mp3">Download the track directly</a>.
-          </audio>
-          <p class="track-description"><strong>The design.</strong> A song rather than an ambient piece: acoustic guitars and vocals in an outlaw-country style, with a quiet 40&nbsp;Hz pulse underneath.</p>
-          <p class="track-description"><strong>How it feels.</strong> Steady and grounded, a rhythm to walk with rather than a stillness to sink into.</p>
-          <p class="track-description"><strong>Good for.</strong> Feeling anchored by where you come from. It honors a much-loved legacy and the roots of a childhood, and it’s a reminder of resilience, of endurance, and of the history you carry with you.</p>
-          <p class="track-description"><strong>Walking companions.</strong> This is Tidbit and Sugarfoot’s song, a road for two best friends to walk side by side, the way they do in <a href="/frequency-journey.html">the Frequency Journey</a>.</p>
-        </div>
-
-        <div class="empty-slot">More tracks will appear here as they're actually finished and uploaded.</div>
-
-      </div>
-    </section>
-
     <section id="brain-breakers" aria-labelledby="bb-h">
       <div class="kicker">Music</div>
-      <h2 id="bb-h" class="live-h">Brain Breakers</h2>
-      <p class="live-lede bb-lede"><strong>Come get your brain wrecked. Broken in a good way.</strong> These are big, bold instrumental pieces, the opposite of a quiet hush. Press play, then try them with <a href="#senses">See and feel the sound</a>.</p>
-      <p class="live-note bb-credit">Music by Christian’s Lab. &copy; 2026 Christian’s Lab.</p>
-      <p class="phones-note bb-tip"><span aria-hidden="true">&#128266;</span> <strong>Start with the volume low,</strong> then turn it up. They are meant to be big, and they are not for falling asleep to. The sleep timer works here too.</p>
+      <h1 id="bb-h" class="tol-page-h">Brain Breakers</h1>
+      <p class="lede"><strong>Come get your brain wrecked. Broken in a good way.</strong> Three instrumental pieces for a short break, each with a different job: one to quiet a busy mind, one to give a flat afternoon a spark, one to get you moving again. Not sure which to press? <a href="#finder">find your Brain Breaker</a>. Then <a href="#senses">see and feel it</a>.</p>
+      <p class="live-note bb-credit">Music by Christian&rsquo;s Lab. &copy; 2026 Christian&rsquo;s Lab.</p>
+      <p class="phones-note bb-tip"><span aria-hidden="true">&#127911;</span> <strong>Headphones help, and start with the volume low.</strong> These are meant to be felt as well as heard. Shooting Star is the gentle one; the other two have bigger moments.</p>
       <div class="track-list">
 
-        <div class="track-card bb-card">
+        <div class="track-card bb-card" id="bb-star">
           <div class="track-meta">
             <h2 class="track-title">1. Shooting Star</h2>
-            <span class="track-tags">New &middot; Instrumental &middot; 3:27</span>
+            <span class="track-tags">math-music &middot; chill &middot; 3:27</span>
           </div>
           <audio class="track-player" controls preload="metadata">
             <source src="assets/audio/soundscapes/Shooting-Star.mp3" type="audio/mpeg">
             Your browser can't play this inline. <a href="assets/audio/soundscapes/Shooting-Star.mp3">Download the track directly</a>.
           </audio>
-          <p class="track-description">An instrumental piece with no voices. Press play and watch it in <a href="#senses">See and feel the sound</a>.</p>
+          <p class="track-description">The softest and most floating track in the set. The mathematical complexity is still there, but it glides rather than pushes. Very airy and low-energy.</p>
+          <dl class="bb-fx no-bubble">
+            <div class="no-bubble"><dt class="no-bubble">Mind</dt><dd class="no-bubble">Strongly quiets mental noise and looping thoughts. A gentle, floating daydream state with very little cognitive demand.</dd></div>
+            <div class="no-bubble"><dt class="no-bubble">Body</dt><dd class="no-bubble">Noticeably lowers arousal: a slower heart rate and deeper, easier breathing. One of the most physically calming of the three.</dd></div>
+            <div class="no-bubble"><dt class="no-bubble">Best for</dt><dd class="no-bubble">Mild anxiety, restlessness, or pre-sleep quieting when you want to wind down without fully shutting off.</dd></div>
+          </dl>
         </div>
 
-        <div class="track-card bb-card">
+        <div class="track-card bb-card" id="bb-shimmer">
           <div class="track-meta">
-            <h2 class="track-title">2. Watching a Shooting Star</h2>
-            <span class="track-tags">Instrumental &middot; 3:38</span>
-          </div>
-          <audio class="track-player" controls preload="metadata">
-            <source src="assets/audio/soundscapes/Watching-a-Shooting-Star.mp3" type="audio/mpeg">
-            Your browser can't play this inline. <a href="assets/audio/soundscapes/Watching-a-Shooting-Star.mp3">Download the track directly</a>.
-          </audio>
-          <p class="track-description">An instrumental piece with no voices. Press play and watch it in <a href="#senses">See and feel the sound</a>.</p>
-        </div>
-
-        <div class="track-card bb-card">
-          <div class="track-meta">
-            <h2 class="track-title">3. Thunderous Shimmer</h2>
-            <span class="track-tags">Instrumental &middot; 2:51</span>
+            <h2 class="track-title">2. Thunderous Shimmer</h2>
+            <span class="track-tags">math-music &middot; experimental &middot; acoustic &middot; 2:51</span>
           </div>
           <audio class="track-player" controls preload="metadata">
             <source src="assets/audio/soundscapes/Thunderous-Shimmer.mp3" type="audio/mpeg">
             Your browser can't play this inline. <a href="assets/audio/soundscapes/Thunderous-Shimmer.mp3">Download the track directly</a>.
           </audio>
-          <p class="track-description">An instrumental piece with no voices. Press play, then try the Rings look and the Beat vibration in <a href="#senses">See and feel the sound</a>.</p>
+          <p class="track-description">The most textural and restless track. Experimental acoustic elements, sudden shimmering moments and the occasional thunderous low end make it dynamic and unpredictable.</p>
+          <dl class="bb-fx no-bubble">
+            <div class="no-bubble"><dt class="no-bubble">Mind</dt><dd class="no-bubble">Stimulates curiosity and mild alertness. The shifting textures keep the mind from going completely flat or foggy.</dd></div>
+            <div class="no-bubble"><dt class="no-bubble">Body</dt><dd class="no-bubble">A subtle physical &ldquo;aliveness&rdquo;: a little more body awareness and breathing depth, without raising stress.</dd></div>
+            <div class="no-bubble"><dt class="no-bubble">Best for</dt><dd class="no-bubble">Recovery periods when pure calm feels too passive. Gentle activation while you still decompress.</dd></div>
+          </dl>
+        </div>
+
+        <div class="track-card bb-card" id="bb-watching">
+          <div class="track-meta">
+            <h2 class="track-title">3. Watching a Shooting Star</h2>
+            <span class="track-tags">avant-garde &middot; math-rock &middot; orchestral &middot; 3:38</span>
+          </div>
+          <audio class="track-player" controls preload="metadata">
+            <source src="assets/audio/soundscapes/Watching-a-Shooting-Star.mp3" type="audio/mpeg">
+            Your browser can't play this inline. <a href="assets/audio/soundscapes/Watching-a-Shooting-Star.mp3">Download the track directly</a>.
+          </audio>
+          <p class="track-description">The most expansive and cinematic piece. Math-rock rhythmic drive meets full orchestral writing, with an adventurous, journey-like arc.</p>
+          <dl class="bb-fx no-bubble">
+            <div class="no-bubble"><dt class="no-bubble">Mind</dt><dd class="no-bubble">A sense of expansion and forward motion. It can lift mood and bring mild exhilaration or imaginative openness.</dd></div>
+            <div class="no-bubble"><dt class="no-bubble">Body</dt><dd class="no-bubble">Keeps a relaxed baseline and adds a light energetic current. Feels purposeful rather than heavy or draining.</dd></div>
+            <div class="no-bubble"><dt class="no-bubble">Best for</dt><dd class="no-bubble">Decompression that still feels productive: walking, light planning, or shifting out of a stuck or low-energy mental state.</dd></div>
+          </dl>
         </div>
 
       </div>
-    </section>
 
-    <section id="live" aria-labelledby="live-h">
-      <h2 id="live-h" class="live-h">Live soundscapes</h2>
-      <p class="live-lede">These are made in your browser as you listen, so they never repeat and never end (unless you set the sleep timer). <em>Deep</em> is written in the style of The Breath Beneath: the same five-note scale, warm low drones and a slow heartbeat pulse. Play one while you work, read or rest. They fade in and out gently. The same sounds play in the Breathe break on every page.</p>
-      <div class="live-list">
-        <div class="live-card"><button type="button" class="live-play" data-live="deep" aria-pressed="false"><span aria-hidden="true">&#9654;</span> Deep</button><p>Warm low drones with a heartbeat pulse, and notes that bloom now and then.</p></div>
-        <div class="live-card"><button type="button" class="live-play" data-live="ocean" aria-pressed="false"><span aria-hidden="true">&#9654;</span> Ocean</button><p>Slow waves over a soft hum. In the Breathe break, they follow your breath.</p></div>
-        <div class="live-card"><button type="button" class="live-play" data-live="rain" aria-pressed="false"><span aria-hidden="true">&#9654;</span> Soft rain</button><p>Gentle rain on a quiet evening, with a warm hum underneath.</p></div>
-        <div class="live-card"><button type="button" class="live-play" data-live="bowls" aria-pressed="false"><span aria-hidden="true">&#9654;</span> Singing bowls</button><p>Slow, ringing bowls over a soft drone.</p></div>
-        <div class="live-card"><button type="button" class="live-play" data-live="fireplace" aria-pressed="false"><span aria-hidden="true">&#9654;</span> Fireplace</button><p>The warm roar of a fire, with crackles and little pops now and then.</p></div>
-        <div class="live-card"><button type="button" class="live-play" data-live="forest" aria-pressed="false"><span aria-hidden="true">&#9654;</span> Forest</button><p>Wind moving through the leaves, and a faraway bird every so often.</p></div>
-        <div class="live-card"><button type="button" class="live-play" data-live="nightrain" aria-pressed="false"><span aria-hidden="true">&#9654;</span> Night rain</button><p>Steady rain after dark, drips from the eaves and crickets in the grass.</p></div>
-        <div class="live-card"><button type="button" class="live-play" data-live="stream" aria-pressed="false"><span aria-hidden="true">&#9654;</span> Little stream</button><p>A small brook running over stones, with a soft bubble now and then.</p></div>
-        <div class="live-card"><button type="button" class="live-play" data-live="hush" aria-pressed="false"><span aria-hidden="true">&#9654;</span> Steady hush</button><p>A deep, even hush with nothing happening in it at all. Good for focus, or for covering other noise.</p></div>
-      </div>
+      <h2 class="live-h" id="bb-ref-h">Quick reference</h2>
+      <div class="bb-table-wrap"><table class="bb-table no-bubble" aria-labelledby="bb-ref-h">
+        <thead><tr class="no-bubble"><th scope="col" class="no-bubble">Track</th><th scope="col" class="no-bubble">Energy</th><th scope="col" class="no-bubble">Main effect</th><th scope="col" class="no-bubble">Best situation</th></tr></thead>
+        <tbody><tr class="no-bubble"><th scope="row" class="no-bubble">Shooting Star</th><td class="no-bubble">Lowest</td><td class="no-bubble">Deep quieting</td><td class="no-bubble">Anxiety, restlessness, pre-sleep wind-down</td></tr><tr class="no-bubble"><th scope="row" class="no-bubble">Thunderous Shimmer</th><td class="no-bubble">Medium, dynamic</td><td class="no-bubble">Curious alertness</td><td class="no-bubble">Passive recovery that needs a spark</td></tr><tr class="no-bubble"><th scope="row" class="no-bubble">Watching a Shooting Star</th><td class="no-bubble">Medium, expansive</td><td class="no-bubble">Uplifting expansion</td><td class="no-bubble">Stuck or low-energy mental states</td></tr></tbody>
+      </table></div>
+      <p class="live-note">The Mind, Body and Best for notes are Christian&rsquo;s own listening notes on how each piece tends to feel. They are not medical claims, and people react to music differently. If a track does not suit you today, try another or stop it.</p>
+
       <div class="live-timer" role="group" aria-labelledby="live-timer-l">
         <span id="live-timer-l">Sleep timer</span>
         <button type="button" data-timer="0" aria-pressed="true">Off</button>
         <button type="button" data-timer="15" aria-pressed="false">15 min</button>
         <button type="button" data-timer="30" aria-pressed="false">30 min</button>
-        <button type="button" data-timer="45" aria-pressed="false">45 min</button>
         <button type="button" data-timer="60" aria-pressed="false">1 hour</button>
         <span class="live-left" aria-live="polite"></span>
       </div>
-      <p class="live-note">Nothing is downloaded or sent: the sound is made on your device. With the sleep timer on, whatever is playing, a live soundscape or a track, fades out slowly and stops when the time is up.</p>
+      <p class="live-note">Nothing is downloaded or sent. With the sleep timer on, the track fades out over the last minute and stops.</p>
     </section>
-    <script src="/assets/js/breathe.js" defer></script>
-    <script src="/assets/js/soundscapes-live.js" defer></script>
     <script src="/assets/js/sound-senses.js" defer></script>
     <script src="/assets/js/sound-finder.js" defer></script>
     <script>
       document.addEventListener('DOMContentLoaded', function () {
-        // the first four are the Breathe break's own beds; the others come from soundscapes-live.js
-        var eng = null, playing = '', players = Array.prototype.slice.call(document.querySelectorAll('.track-player'));
-        var LIVE = window.TOLLiveSounds, own = function (n) { return LIVE && LIVE.names.indexOf(n) >= 0; };
-        function label() {
-          document.querySelectorAll('[data-live]').forEach(function (b) {
-            var on = b.getAttribute('data-live') === playing;
-            b.setAttribute('aria-pressed', String(on));
-            b.querySelector('span').innerHTML = on ? '&#10074;&#10074;' : '&#9654;';
-          });
-        }
-        function stopLive(fade) {
-          if (eng) { eng.end(); eng = null; }
-          if (window.TOLSenses) window.TOLSenses.engine(null);
-          if (LIVE) LIVE.stop(fade);
-          playing = ''; label();
-        }
-        document.querySelectorAll('[data-live]').forEach(function (b) {
-          b.addEventListener('click', function () {
-            var name = b.getAttribute('data-live');
-            if (playing === name) { stopLive(); return; }
-            players.forEach(function (a) { if (!a.paused) a.pause(); });
-            if (own(name)) {
-              if (eng) { eng.end(); eng = null; }
-              if (window.TOLSenses) window.TOLSenses.engine(null);
-              if (!LIVE.start(name)) return;
-            } else {
-              if (!window.TOLBreathe) return;
-              if (LIVE) LIVE.stop(0.6);
-              if (!eng) { eng = window.TOLBreathe.Engine(); if (!eng) return; eng.start(name); } else eng.bed(name);
-              if (window.TOLSenses) window.TOLSenses.engine(eng, name);
-            }
-            playing = name; label();
-          });
-        });
-        // one thing at a time: starting a track pauses the others and any live soundscape
-        players.forEach(function (a) { a.addEventListener('play', function () {
-          players.forEach(function (o) { if (o !== a && !o.paused) o.pause(); });
-          if (playing) stopLive(0.5);
-        }); });
-
-        // the sleep timer: fade whatever is playing over the last minute, then stop
+        var players = Array.prototype.slice.call(document.querySelectorAll('.track-player'));
+        // one thing at a time: starting a track pauses the others
+        players.forEach(function (a) { a.addEventListener('play', function () { players.forEach(function (o) { if (o !== a && !o.paused) o.pause(); }); }); });
+        // the sleep timer: fade over the last minute, then stop
         var endAt = 0, tick = null, left = document.querySelector('.live-left');
         function setTimer(min) {
           document.querySelectorAll('[data-timer]').forEach(function (b) { b.setAttribute('aria-pressed', String(+b.getAttribute('data-timer') === min)); });
@@ -432,7 +334,7 @@
           var ms = endAt - Date.now();
           if (ms <= 0) {
             clearInterval(tick); endAt = 0; left.textContent = 'Sleep well.';
-            stopLive(4); players.forEach(function (a) { if (!a.paused) a.pause(); a.volume = 1; });
+            players.forEach(function (a) { if (!a.paused) a.pause(); a.volume = 1; });
             document.querySelectorAll('[data-timer]').forEach(function (b) { b.setAttribute('aria-pressed', String(b.getAttribute('data-timer') === '0')); });
             return;
           }
@@ -444,7 +346,7 @@
         // the site's Quiet mode: whatever is playing fades out
         document.addEventListener('tol-quiet', function () {
           if (!(window.TOLQuiet && window.TOLQuiet.on())) return;
-          stopLive(1.5); players.forEach(function (a) { if (!a.paused) a.pause(); });
+          players.forEach(function (a) { if (!a.paused) a.pause(); });
         });
       });
     </script>

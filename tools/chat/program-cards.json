@@ -408,7 +408,7 @@
           "/calm-visualizer.html"
         ],
         [
-          "Soundscapes",
+          "Brain Breakers",
           "/soundscapes.html"
         ]
       ],
@@ -2194,32 +2194,30 @@
     {
       "id": "soundscapes",
       "kind": "tool",
-      "name": "the soundscapes",
+      "name": "Soundscapes: Brain Breakers",
       "keys": [
         "~soundscapes",
         "~soundscape",
-        "the breath beneath",
-        "one breath to anchor you",
-        "nothing needs to change",
-        "the road we made",
-        "~40 hz",
+        "shooting star",
+        "watching a shooting star",
+        "thunderous shimmer",
         "~audio"
       ],
-      "what": "The Soundscape Catalog has four produced tracks, in the order they’re best used: The Breath Beneath, One Breath to Anchor You, Nothing Needs to Change and The Road We Made. They’re ambient audio for settling down and focusing, not a clinical tool.",
+      "what": "The Soundscapes page is now all about Brain Breakers: three instrumental pieces by Christian’s Lab, each with a different job. Shooting Star is the softest and most floating, for quieting a busy mind, anxiety or pre-sleep wind-down. Thunderous Shimmer is textural and restless, for recovery that needs a spark and a little curious alertness. Watching a Shooting Star is the most expansive and cinematic, for shifting out of a stuck or low-energy state. The page also has See and feel the sound, and a short picker. These are listening notes, not a clinical tool.",
       "how": [
-        "Put on good headphones: the deep, low tones and gentle left-to-right movement carry the effect.",
-        "Pick the track that fits, like The Breath Beneath as a bridge out of intense work before you walk in the door.",
-        "No workpaper requires audio; any pairing is only a suggestion."
+        "Open Soundscapes and tap what you need in Find your Brain Breaker, or just press play on a track.",
+        "Press See and feel this to watch the track and, on an Android phone with Chrome, feel it as vibration.",
+        "Headphones help, and start with the volume low."
       ],
       "pillar": "Pillar III, Read your state first.",
       "links": [
         [
-          "Four soundscapes",
-          "/soundscapes.html"
+          "Brain Breakers",
+          "/soundscapes.html#brain-breakers"
         ],
         [
-          "Echoes of Gold",
-          "/echoes-of-gold.html"
+          "See and feel the sound",
+          "/soundscapes.html#senses"
         ]
       ]
     },
@@ -4466,7 +4464,7 @@
         "Economics + Business (limited capacity): Time and attention get spent like any budget, and they run out like one too. In the program: The Lemonade Stand.",
         "Economics + Finance (balance): Both keep accounts of a limited supply. Together they give the book its ledger and the idea of unbilled debt. In the program: The Preface: unbilled debt.",
         "Finance + Business (ownership and structure): Internal controls give every job an owner and every entry a record. In the program: One owner per job (WP-03).",
-        "Holistic therapies + Aromatherapy (state and setting): Both start with the body and the senses, not the argument. In the program: The Soundscape Catalog."
+        "Holistic therapies + Aromatherapy (state and setting): Both start with the body and the senses, not the argument. In the program: Brain Breakers."
       ],
       "pillar": "Would you like the 14 hidden connections, the 10 abstract ones, or the chain that runs through all nine?",
       "chips": [
@@ -5332,12 +5330,12 @@
         "~vibrate with the music",
         "~buzz"
       ],
-      "what": "See and feel the sound is the big stage at the top of the Soundscapes page. It draws whatever is playing as a large live picture (aurora, rings, tunnel, bars or wave, or Auto to mix them), can go full screen, and a slim bar follows you down the page while something plays. On an Android phone with Chrome it can also vibrate gently with the sound: a rumble that follows the low tones, a beat, or a steady heartbeat. Vibration is off until you choose a strength. iPhones can’t vibrate from a web page, so there you can see the sound and feel it through the speaker or headphones.",
+      "what": "See and feel the sound is the big stage at the top of the Soundscapes page. It draws the Brain Breaker that is playing as a large live picture (stars, aurora, rings, tunnel, bars or wave, or Auto, which picks looks that suit the track), with a live card showing the track’s own notes and an energy meter, can go full screen, and a slim bar follows you down the page while something plays. On an Android phone with Chrome it can also vibrate gently with the sound: a pattern that matches the track, a rumble that follows the low tones, a beat, or a steady heartbeat. Vibration is off until you choose a strength. iPhones can’t vibrate from a web page, so there you can see the sound and feel it through the speaker or headphones.",
       "how": [
         "Open Soundscapes. The big stage is at the top.",
-        "Press See and feel this on any track or live soundscape, or press play on one.",
-        "Pick a look: Auto, Aurora, Rings, Tunnel, Bars or Wave. Try Full screen. With reduced motion on, you get a still, slowly changing glow.",
-        "On an Android phone, choose Soft, Medium or Strong under Feel, then pick Rumble, Beat or Heartbeat. Try a pulse first.",
+        "Press See and feel this on a track, or press play on one.",
+        "Pick a look: Auto, Stars, Aurora, Rings, Tunnel, Bars or Wave. Try Full screen. With reduced motion on, you get a still, slowly changing glow.",
+        "On an Android phone, choose Soft, Medium or Strong under Feel, then pick Match the track, Rumble, Beat or Heartbeat. Try a pulse first.",
         "The Upset right now page can also buzz in time with its breathing pacer."
       ],
       "pillar": "Pillar III, Read your state first.",
@@ -5363,12 +5361,12 @@
         "brain breakers",
         "~take a brain break"
       ],
-      "what": "Brain Breakers are big, bold instrumental pieces on the Soundscapes page, made for a short break between program steps: come get your brain wrecked, broken in a good way. A Brain Break card sits at the top of the home page and at the end of each program page. Press a button, take about three minutes, and the card then offers the next step in the program. Nothing plays until you press a button, and the only thing kept is a count of breaks on your own device.",
+      "what": "Brain Breakers are three instrumental pieces by Christian’s Lab, from soft to cinematic, on the Soundscapes page, made for a short break between program steps: come get your brain wrecked, broken in a good way. A Brain Break card sits at the top of the home page and at the end of each program page. Press a button, take about three minutes, and the card then offers the next step in the program. Nothing plays until you press a button, and the only thing kept is a count of breaks on your own device.",
       "how": [
-        "Press one of the two tracks on the home page or at the end of a chapter or worksheet, or press Surprise me.",
+        "Press one of the three tracks on the home page or at the end of a chapter or worksheet, or press Surprise me.",
         "Keep your eyes off the screen if you like. It is about three minutes.",
         "When it ends, follow the link to the next step in the program.",
-        "Want more? The Brain Breakers section on Soundscapes has both tracks, and See and feel the sound draws and vibrates with them."
+        "Want more? The Brain Breakers section on Soundscapes has all three tracks, with notes on what each is best for, and See and feel the sound draws and vibrates with them."
       ],
       "pillar": "Pillar III, Read your state first.",
       "links": [
@@ -5389,7 +5387,7 @@
     {
       "id": "findsound",
       "kind": "tool",
-      "name": "Find your sound",
+      "name": "Find your Brain Breaker",
       "keys": [
         "find your sound",
         "which soundscape",
@@ -5399,19 +5397,20 @@
         "recommend music",
         "recommend a track",
         "~which one should i play",
-        "~what music should i"
+        "~what music should i",
+        "find your brain breaker"
       ],
-      "what": "Find your sound is a short picker at the top of the Soundscapes page. Tap what you need (wake up, reset, calm down, focus, wind down, feel something big), how your body is, and how you like sound, and it suggests one track or live soundscape with the reasons, plus two others to try. You can save a go-to for each need, and it shows what you play most. All of that stays on your device.",
+      "what": "Find your Brain Breaker is a short picker on the Soundscapes page. Tap what you need (quiet a busy mind, calm anxious energy, wind down before sleep, recover with a spark, get curious and alert, get unstuck, a walk or light planning, or feel something big), how your body is, and how you like sound, and it suggests one of the three tracks with the reasons, plus the other two. You can save a go-to for each need, and it shows what you play most. All of that stays on your device.",
       "how": [
-        "Open Soundscapes and find Find your sound at the top.",
+        "Open Soundscapes and find Find your Brain Breaker near the top.",
         "Tap what you need right now. Add how your body is, and how you like sound, if you want.",
-        "Press Play it, or try one of the two others.",
-        "Save a go-to if one works for you. Big sounds can feel like too much when you are overwhelmed, so the picker leans calm then."
+        "Press Play it, or try one of the others.",
+        "Save a go-to if one works for you. Bigger sounds can feel like too much when you are overwhelmed, so the picker leans toward Shooting Star then."
       ],
       "pillar": "Pillar III, Read your state first.",
       "links": [
         [
-          "Find your sound",
+          "Find your Brain Breaker",
           "/soundscapes.html#finder"
         ],
         [

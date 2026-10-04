@@ -86,8 +86,8 @@ OVERRIDE = {
         'Drift is a calm visualizer: tell it how you feel, put on headphones and let slow, dreamy visuals and gentle '
         'tones keep you company for a few quiet minutes of breathing and rest.'),
     'soundscapes.html': (None,
-        'Soundscapes you can see and feel: a big live picture of whatever plays, optional gentle vibration on phones, '
-        'calm breathing tracks, big instrumentals and live soundscapes made for The Objective Ledger.'),
+        'Brain Breakers: three instrumental pieces you can see and feel, with a big live picture, optional gentle vibration '
+        'on phones, and a short picker to find the one that fits how you feel. Music by Christian’s Lab.'),
     'frequency-journey.html': (None,
         'The Frequency Journey: pick Tidbit or Sugarfoot and play a maze chase or a road-and-river crossing, with easy '
         'controls and no game over, and watch the Frequency Buddies cartoon on the same page.'),
@@ -143,7 +143,7 @@ SEARCH = {
  'frequency-buddies.html': ('Frequency Buddies: A Kids’ Cartoon About Feelings', 'Gentle animated episodes for kids and families: two pups, Tidbit and Sugarfoot, face tough times, talk it through and come out stronger. Free, with captions.'),
  'frequency-buddies-live.html': ('Frequency Buddies Live: Drop In Anytime', 'A Frequency Buddies TV station that is always on: drop in anytime, watch the episode playing right now, and cast it to your TV.'),
  'frequency-buddies-shuffle.html': ('Frequency Buddies: Watch Every Episode on Shuffle', 'Every Frequency Buddies episode back to back in a random order, with the theme song, plus every episode to download and watch offline.'),
- 'soundscapes.html': ('Calm Soundscapes and Relaxing Music', 'Calm soundscapes and gentle music: breathing tracks, peaceful ambient pieces and songs about love, acceptance and finding your way back to each other.'),
+ 'soundscapes.html': ('Brain Breakers: Instrumental Music to See and Feel', 'Three instrumental pieces by Christian’s Lab, from soft and floating to big and cinematic, with a live picture and gentle vibration so you can see and feel the sound.'),
  'pal-cam-tv.html': ('Pal Cam TV: A Cozy Puppy Cam for Your TV', 'Two cartoon pups play, nap and explore live on your TV, with calm music and soft place sounds. Free to cast or play full screen.'),
  'wp-01.html': ('Fair Chore Chart: Who Did What (WP-01)', 'A free chore chart worksheet: note who did what this week, see the split clearly, and find kind ways to say no. For couples, families and roommates.'),
  'wp-02.html': ('How Much Are You Carrying? A Stress Self-Check (WP-02)', 'A quick self-check of how full your plate feels today, to help you pace a hard talk. A reflection tool, not a test or diagnosis.'),
@@ -231,7 +231,7 @@ SEARCH.update({
  'pause-and-play.html': ('Calm Games for a Busy Mind: Free, No Timers', 'Free calm games with no timers and no way to lose: the Night Garden breathing game, the Frequency Journey, Word Bloom, crosswords and a cozy word search.'),
  'night-garden.html': ('The Night Garden: A Calm Breathing Exercise Game', 'A breathing exercise you can play: breathe slowly to make flowers bloom, guide fireflies into constellations and stack glowing stones. Free, calm, no timers.'),
  'calm-visualizer.html': ('Drift: Calm Visuals and Soft Tones to Unwind', 'Tell Drift how you feel, put on headphones, and let slow, dreamy visuals, kind words and gentle tones keep you company for a few quiet minutes of calm.'),
- 'soundscapes.html': ('Calm Music and Relaxing Soundscapes', 'Calm music and relaxing soundscapes: breathing tracks, peaceful ambient pieces and gentle songs about love, acceptance and finding your way back to each other.'),
+ 'soundscapes.html': ('Brain Breakers: Instrumental Music to See and Feel', 'Three instrumental pieces by Christian’s Lab, from soft and floating to big and cinematic, with a live picture and gentle vibration so you can see and feel the sound.'),
  'word-bloom.html': ('Word Bloom: A Relaxing Letter-Wheel Word Game', 'A free, relaxing word game: swipe across a wheel of letters to find the hidden words. Hundreds of levels from easy to tricky, with no timers and no ads.'),
  'quiet-words.html': ('Calm Word Search, No Timer: Quiet Words (Free)', 'A calm, free word search with soft themes, levels from easy to tricky and no timer. Every word you find leaves a kind thought behind. Play on phone or computer.'),
  'quiet-crossword.html': ('Quiet Crossword: Easy, Gentle Mini Crosswords', 'Small, friendly mini crosswords with gentle clues in five levels from easy to tricky. Free and calm with no timer: a peaceful puzzle for a few quiet minutes.'),

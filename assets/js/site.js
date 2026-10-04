@@ -36,7 +36,7 @@
   var SECTIONS = [
     { id: 'new', title: 'What’s new', blurb: 'Newly added and newly expanded, newest first.', items: [
       { href: '/whats-new.html', code: 'All', title: 'What’s new', note: 'Everything newly added and everything that’s grown, in one place, with dates' },
-      { href: '/soundscapes.html#brain-breakers', code: 'New', title: 'Brain Breakers', note: 'A new music section on Soundscapes: big, bold instrumental pieces, with a way to see and feel the sound' },
+      { href: '/soundscapes.html#brain-breakers', code: 'New', title: 'Brain Breakers', note: 'The Soundscapes page is now all Brain Breakers: three instrumental pieces, with a way to see and feel the sound' },
       { href: '/love-languages.html', deep: true, code: 'New', title: 'Love languages: a menu, not a label', note: 'What is healthy and unhealthy about each of the five, how to practice and talk about them, and similar ideas like apology languages and bids' },
       { href: '/install.html', code: 'New', title: 'Put the app on your phone', note: 'Install the full app on Android in a few taps, with an honest answer about widgets' },
       { href: '/upset-right-now.html', code: 'New', title: 'Upset right now?', note: 'A five-minute page for two upset people: a pause line with a return time, a breathing pacer, and how to come back' },
@@ -56,7 +56,7 @@
       { href: '/library.html', code: 'New', title: 'The Professor’s Library', note: 'Deep, plain-language reading on psychology and conflict, and Professor Puddles can chat about all of it' },
       { href: '/reading.html', code: 'New', title: 'Something to read', note: 'Hand-picked articles from trusted sources, matched to what you’re reading' },
       { href: '/frequency-journey.html', code: 'New', title: 'The Frequency Journey', note: 'Pick Tidbit or Sugarfoot and play a maze chase or a road-and-river crossing: easy controls and no game over' },
-      { href: '/soundscapes.html', code: 'New', title: 'Four soundscapes', note: 'The Breath Beneath, One Breath to Anchor You, Nothing Needs to Change and The Road We Made' },
+      { href: '/soundscapes.html', code: 'New', title: 'Brain Breakers', note: 'Shooting Star, Thunderous Shimmer and Watching a Shooting Star, with See and feel the sound' },
       { href: '/ask.html', code: 'New', title: 'Chat with Professor Puddles', note: 'Small drop, big brain: answers made only from this site’s pages. What you type stays on your device' },
       { href: '/pause-and-play.html', code: 'New', title: 'Levels that grow the background', note: 'Every few levels, something new appears behind every page and joins in' },
       { href: '/book/preface.html', code: 'Deeper', title: 'Mini dives, shore to deep', note: 'Tap any word with the water drop and wade in one step at a time' },
@@ -187,7 +187,7 @@
       { href: '/frequency-buddies-live.html', code: 'On air', title: 'Frequency Buddies Live', note: 'An always-on station: drop in on the episode playing now, or cast it to your TV' },
       { href: '/pal-cam-tv.html', code: 'Live', title: 'Tidbit & Sugarfoot: Pal Cam TV', note: 'The pals live, all day, full screen or cast to your TV, with music and the sounds of each place' },
       { href: '/reading.html', code: 'Articles', title: 'Articles to read', note: 'Hand-picked articles from Psychology Today, Greater Good, the Gottman Institute and more, grouped by topic and fresh every visit' },
-      { href: '/soundscapes.html', code: 'Audio', title: 'Soundscape Catalog', note: 'Background audio made for settling down and focusing' },
+      { href: '/soundscapes.html', code: 'Audio', title: 'Brain Breakers', note: 'Three instrumental pieces to see and feel, by Christian’s Lab' },
       { href: '/echoes-of-gold.html', code: 'Album', title: 'Echoes of Gold', note: 'The companion album: the music that came before the framework, for settling first (Pillar III)' },
       { href: '/podcast-index.html', code: 'Podcast', title: 'The Podcast', note: 'Friendly conversations with Kane and Christian about the ideas behind it all' }
     ]},
@@ -300,8 +300,8 @@
       { href: '/pause-and-play.html', code: 'All', title: 'Pause & Play', note: 'All the calm games and word puzzles, your level and your garden' },
       { href: '/frequency-journey.html', code: 'Game', title: 'The Frequency Journey', note: 'Pick Tidbit or Sugarfoot: a maze chase or a road-and-river crossing, with easy controls' },
       { href: '/calm-visualizer.html', code: 'Drift', title: 'Drift: calm visualizer', note: 'Slow colors and tones matched to how you feel' },
-      { href: '/soundscapes.html', code: 'Audio', title: 'Soundscapes', note: 'Sounds you can see and feel: a big live picture, vibration, music and live soundscapes' },
-      { href: '/soundscapes.html#brain-breakers', code: 'New', title: 'Brain Breakers', note: 'Big, bold instrumental music: come get your brain wrecked, broken in a good way' },
+      { href: '/soundscapes.html', code: 'Audio', title: 'Soundscapes: Brain Breakers', note: 'Three instrumental pieces you can see and feel: a big live picture, vibration, and a picker' },
+      { href: '/soundscapes.html#brain-breakers', code: 'New', title: 'Brain Breakers', note: 'Come get your brain wrecked, broken in a good way: three instrumental pieces from soft to cinematic' },
       { href: '/frequency-buddies.html', code: 'Cartoon', title: 'Frequency Buddies', note: 'A free cartoon about feelings, with captions. Live and shuffle versions are inside' },
       { href: '/frequency-buddies-music-video.html', code: 'New', title: 'The theme song music video', note: 'Everyone on stage, singing and dancing' },
       { href: '/frequency-buddies-music-video-maker.html', code: 'Make', title: 'Make your own music video', note: 'Pick the stage, costumes and moves, then share it' },
