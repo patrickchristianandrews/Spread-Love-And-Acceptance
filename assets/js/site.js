@@ -1405,6 +1405,20 @@
   }
   var installPrompt = null;
   window.addEventListener('beforeinstallprompt', function (e) { e.preventDefault(); installPrompt = e; });
+  // one call anywhere on the site (the Get the app ad, the install page): ask the browser to install the app right now
+  window.TOLInstall = {
+    ready: function () { return !!installPrompt; },
+    ask: function () {
+      if (!installPrompt) return Promise.resolve('unavailable');
+      var ev = installPrompt; installPrompt = null;
+      try { ev.prompt(); } catch (e) { return Promise.resolve('error'); }
+      return ev.userChoice.then(function (c) {
+        var ok = c && c.outcome === 'accepted';
+        if (ok) { try { localStorage.setItem('tol-app-installed', '1'); } catch (e) {} document.dispatchEvent(new CustomEvent('tol-app-installed')); }
+        return ok ? 'accepted' : 'dismissed';
+      }).catch(function () { return 'error'; });
+    }
+  };
   // ---------- Professor Puddles: the site's chat host, floating by, with a hello bubble up top ----------
   var PUDDLES_SVG = '<svg viewBox="-4 -14 88 92" aria-hidden="true" focusable="false">' +
     '<path d="M40 8C33 22 14 36 14 50c0 14 12 22 26 22s26-8 26-22C66 36 47 22 40 8z" fill="#CFE6FA" stroke="#7FB2E0" stroke-width="2.6"/>' +

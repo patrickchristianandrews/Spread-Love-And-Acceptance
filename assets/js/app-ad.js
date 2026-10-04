@@ -108,6 +108,7 @@
     '.appad .aa-go{ display:inline-flex; align-items:center; gap:.45rem; min-height:48px; padding:.55rem 1.3rem; border-radius:999px; background:linear-gradient(180deg,#FF7C93,#E4566E); color:#fff !important; text-decoration:none !important; font:800 1.05rem/1.2 "Lora",Georgia,serif; box-shadow:0 6px 0 #B8384F; transform:translateY(-3px); transition:transform .1s, box-shadow .1s; }' +
     '.appad .aa-go::before{ content:"\\1F43E"; font-size:1.1rem; }' +
     '.appad .aa-go::after{ content:"\\2728"; font-size:.95rem; }' +
+    '.appad .aa-msg{ margin:.6rem 0 0 !important; padding:0 !important; background:none !important; box-shadow:none !important; border:0 !important; font:700 .95rem "Lora",Georgia,serif; color:#2F7A5A !important; }' +
     '.appad .aa-go:hover{ transform:translateY(0); box-shadow:0 3px 0 #B8384F; }' +
     '.appad .aa-x{ position:absolute; top:.45rem; right:.5rem; width:44px; height:44px; border-radius:50%; border:0; background:transparent; color:#6B4F8A; font-size:1.3rem; cursor:pointer; }' +
     '@media (max-width:620px){ .appad{ grid-template-columns:1fr; padding:1rem; } .appad .aa-stage{ max-width:260px; margin:0 auto; } }';
@@ -143,6 +144,19 @@
         '<button type="button" class="aa-x" aria-label="Hide this for now">&times;</button>' +
       '</aside>';
     var card = host.firstChild, cv = card.querySelector('canvas'), tilt = card.querySelector('.aa-tilt'), say = card.querySelector('.aa-say'), g = cv.getContext('2d');
+    // Android, Windows and the main button install right here when the browser allows it; otherwise they open the install page.
+    // iPhone and iPad cannot be installed with one tap (Apple only allows Add to Home Screen by hand), so that chip shows the steps.
+    function msg(t) { var m = card.querySelector('.aa-msg'); if (!m) { m = document.createElement('p'); m.className = 'aa-msg no-bubble'; m.setAttribute('role', 'status'); card.querySelector('.aa-go').parentNode.appendChild(m); } m.textContent = t; }
+    card.addEventListener('click', function (e) {
+      var a = e.target.closest('a.aa-chip:not(.is-soon), a.aa-go'); if (!a || !window.TOLInstall || !window.TOLInstall.ready()) return;
+      e.preventDefault(); msg('Asking your browser…');
+      window.TOLInstall.ask().then(function (r) {
+        if (r === 'accepted') { noteInstalled(); msg('Installed! Look for the two little bubbles.'); setTimeout(function () { stopLoop(); host.innerHTML = ''; }, 2200); }
+        else if (r === 'dismissed') msg('No problem. Press again any time.');
+        else location.href = a.getAttribute('href');
+      });
+    });
+    document.addEventListener('tol-app-installed', function () { stopLoop(); host.innerHTML = ''; });
     card.querySelector('.aa-x').addEventListener('click', function () { lsSet('tol-appad-off', '1'); stopLoop(); host.innerHTML = ''; });
     var raf = 0, vis = true, t0 = performance.now(), lastSay = '';
     function frame(now) {
