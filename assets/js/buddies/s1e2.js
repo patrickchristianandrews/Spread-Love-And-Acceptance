@@ -8,7 +8,16 @@ TOLBuddies.episodes['s1e2'] = {
   pillar: 'IV',
   blurb: 'The wind steals the park band\'s song, and the pals race across the city to find five humming pages before sunset.',
   lesson: 'The same words can sound different to a pal, so say what you mean, then check how it landed.',
-  next: 'A summit picnic on a snowy hill, a basket full of goodies, and one pup quietly carrying much too much.',
+  next: [
+    "Some hills are steep. Some picnics are big. And one basket is much, much heavier than it looks.",
+    "A snowy summit. A basket packed with sandwiches, snacks, a lamp, three umbrellas and what might be a bowling ball.",
+    "One pup says, “I’ve got it!” She does not have it.",
+    "Slide! Wobble! Splat! A snowball the size of a car rolls in, with a da-dum, da-dum that sounds suspiciously like a shark movie.",
+    "A sled with no brakes! A snowman who has seen things! And a mitten that has big plans of its own.",
+    "They told us to let it go. Nobody told the basket.",
+    "Because sometimes the bravest thing in the whole world is to say, “This is too heavy. Can you help?”",
+    "The Heavy Basket. Pack light. Ask for help. Bring snacks."
+  ],
   chapters: [
     { title: 'The wind steals a song', beats: [
       { scene: 'blank', hour: 12, weather: 'clear' },

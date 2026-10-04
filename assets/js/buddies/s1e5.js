@@ -8,7 +8,16 @@ TOLBuddies.episodes['s1e5'] = {
   pillar: 'V',
   blurb: 'In the season finale, the pals set off through the night forest to see the stars fall, and get turned around in the dark.',
   lesson: 'Some habits pull us so quietly we hardly notice, and once we notice them, we get to choose a new way, together.',
-  next: 'Season 2 is on its way: a map from Professor Puddles, and an adventure across the sea.',
+  next: [
+    "The first season is over. But a map has arrived, and so has Professor Puddles.",
+    "A treasure map. A boat that is, technically, a bathtub. A parrot who will not stop doing impressions.",
+    "Not all who wander are lost, but some of them are very, very seasick.",
+    "Waves! Whales! A very polite sea monster who only wants to borrow a cup of sugar!",
+    "A seagull steals the map. A crab steals the seagull. Nobody steals the snacks, because Sugarfoot is sitting on them.",
+    "Just keep swimming. (Tidbit tried. It was mostly splashing.)",
+    "Same pals. Bigger waves. Even bigger hearts.",
+    "Frequency Buddies, Season 2. Hold on to your ears."
+  ],
   chapters: [
     { title: 'Starfall night', beats: [
       { scene: 'blank', hour: 12, weather: 'clear' },

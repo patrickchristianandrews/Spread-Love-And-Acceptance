@@ -8,7 +8,15 @@ TOLBuddies.episodes['s1e3'] = {
   pillar: 'I',
   blurb: 'The pals trek from the farm, through the orchard, up to a snowy summit with a picnic for their friends, but one of them is carrying far too much.',
   lesson: 'When the jobs are all laid out where both pals can see them, even a heavy load gets light enough to share.',
-  next: 'A seaside race to the Great Kite Festival, a kite that snaps in two, and a mystery on the beach: who broke the kite?',
+  next: [
+    "It was the greatest kite festival of all time. The sky was blue. The sea was calm. And then… SNAP.",
+    "One kite. Two halves. Zero confessions.",
+    "Was it the seagull with the shifty eyes? The crab with the attitude? The pup holding half of the kite? (Everyone looks very guilty. Nobody is.)",
+    "Sandcastles crumble! A beach ball bounces off exactly the wrong head! A lifeguard tumbles into the world’s smallest wave!",
+    "Sherlock Bones is on the case. His assistant is a very tired crab.",
+    "There is a chase scene straight through a volleyball game, a snack stand and one extremely surprised sandcastle.",
+    "Who Broke the Kite? The truth is out there. (It’s a bit windy, so hold on to your hat.)"
+  ],
   chapters: [
     { title: 'The summit picnic', beats: [
       { scene: 'blank', hour: 12, weather: 'clear' },
