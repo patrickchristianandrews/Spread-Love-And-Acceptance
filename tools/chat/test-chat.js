@@ -24,6 +24,8 @@ function c(g, convo, e) { T.push(Object.assign({ g, convo }, e || {})); }
 t('tools', 'What is the Lemonade Stand?', { kind: 'card', id: 'lemonade', link: '/lemonade-stand.html' });
 t('tools', 'How do I use the lemonade stand?', { kind: 'card', id: 'lemonade', steps: true });
 t('tools', 'What do the Lemonade Stand results mean?', { kind: 'card', id: 'lemonade', text: /not a verdict|judgment/ });
+t('tools', 'Can I use the Lemonade Stand just for me?', { kind: 'card', id: 'lemonade', text: /Just me/, link: '/lemonade-stand.html' });
+t('tools', 'Does the lemonade stand have a task library?', { kind: 'card', id: 'lemonade', text: /task library/ });
 t('tools', 'How do I make a wiring card?', { kind: 'card', id: 'wiringcard', link: '/wiring-card.html' });
 t('tools', 'what is the signal translator for', { kind: 'card', id: 'signal', link: '/signal-translator.html' });
 t('tools', 'How does the Carrier Wave Decoder work?', { kind: 'card', id: 'decoder', link: '/carrier-wave-decoder.html' });
@@ -461,6 +463,13 @@ t('nt2', "I feel everyone's moods", { kind: 'care', id: 'sensitive', text: /a lo
 t('nt2', "I'm so overwhelmed by noise and people, I just want to hide", { kind: 'care', id: 'overload', text: /Quiet button[\s\S]*Night Garden/, not: /school run|everything on your plate/ });
 c('nt2', ['i feel overwhelmed', 'my mom always made me feel like a burden'], { kind: 'care', id: 'burden', text: /I’m sorry[\s\S]*Where your lens came from/, not: /Let’s stay with|stretched thin/, link: '/growing-up.html#lens' });
 t('nt2', 'my mom always made me feel like a burden', { kind: 'care', id: 'burden', not: /outside lens|late screens/ });
+// Roots & Wings: where a trait may have started
+t('nt2', 'What is Roots & Wings?', { kind: 'card', id: 'roots', link: '/growing-up.html#roots' });
+t('nt2', 'where does this trait come from', { kind: 'card', id: 'roots', link: '/growing-up.html#roots' });
+t('nt2', 'why do I always apologize so much', { kind: 'card', id: 'roots', link: '/growing-up.html' });
+t('nt2', 'how does my past show up now', { kind: 'card', id: 'roots', link: '/growing-up.html#roots' });
+t('nt2', 'how does my childhood affect me now', { kind: 'card', id: 'roots', link: '/growing-up.html#roots' });
+t('nt2', 'How do I use the root finder?', { kind: 'card', id: 'roots', steps: true });
 t('nt2', "my partner snapped at me and I can't stop crying", { kind: 'sit', id: 'partner+hurtbythem', text: /Crying when something hurts is a very human response/, not: /stupid/ });
 t('nt2', 'my partner snapped at me and I feel silly for crying', { kind: 'sit', text: /isn’t silly/, not: /stupid/ });
 c('nt2', ['can you talk slower, this is a lot', 'what is WP-02'], { kind: 'card', id: 'wp02', text: /^In short: / });
@@ -479,9 +488,18 @@ t('parents', 'my teen won’t talk to me', { kind: 'sit', id: /^kid\+/ });
 t('parents', 'I help with my grandchildren and my daughter thinks I spoil them', { kind: 'sit', id: /\+grandkids$/, not: /I think you mean/ });
 t('parents', 'what can I watch with my grandkids', { id: 'kidswatch', link: '/frequency-buddies.html' });
 t('parents', 'is this safe for my grandkids to watch', { id: 'kidswatch', link: '/frequency-buddies.html' });
+t('parents', 'is there a page for grandparents', { kind: 'card', id: 'grandparents', link: '/grandparents.html' });
+t('parents', 'tips for grandparents', { kind: 'card', id: 'grandparents', text: /their house, their rules/ });
+t('parents', 'how do I say no to babysitting my grandkids', { kind: 'sit', id: /\+grandkids$/, script: true });
 t('parents', 'do I have to give my email', { id: 'emailwhy', text: /without giving anything/ });
 t('parents', 'what do you do with my email', { id: 'emailwhy', text: /Buttondown/ });
 t('parents', 'what is frequency buddies', { kind: 'card', id: 'buddies', link: '/frequency-buddies.html' });
+t('parents', 'is there a frequency buddies music video', { kind: 'card', id: 'buddiesmusicvideo', link: '/frequency-buddies-music-video.html' });
+t('parents', 'where can I hear the frequency buddies theme song', { kind: 'card', id: 'buddiesmusicvideo', link: '/frequency-buddies-music-video.html' });
+t('parents', 'can I make my own music video', { kind: 'card', id: 'buddiesmvmaker', link: '/frequency-buddies-music-video-maker.html' });
+t('parents', 'is there a music video maker for frequency buddies', { kind: 'card', id: 'buddiesmvmaker', link: '/frequency-buddies-music-video-maker.html' });
+t('parents', 'when is the next season of frequency buddies', { kind: 'card', id: 'buddiess2', link: '/frequency-buddies-season-2.html', text: /no release date yet/ });
+t('parents', 'is there a season 2 teaser', { kind: 'card', id: 'buddiess2', link: '/frequency-buddies-season-2.html' });
 
 // ---------------------------------------------------------------- the nine fields and how they connect
 t('connections', 'how do the nine fields connect', { id: 'connections', text: /36 possible pairs.*12 obvious, 14 hidden and 10 abstract/s });

@@ -78,6 +78,35 @@
     .read .hh-more{ display:grid; grid-template-columns:1fr 1fr; gap:.4rem; }
     .read .hh-more a{ padding:.3rem .75rem; font-size:.9rem; }
   }
+  /* How much time do you have? (come-back.js turns a choice into a short plan) */
+  .read .hh-time{ margin:0 0 .9rem; }
+  .read .hh .hh-time-q{ margin:0 0 .4rem; font-family:"Fraunces", Georgia, serif; font-weight:600; font-size:1.02rem; color:var(--ink, #2B2620); }
+  .read .hh-time-opts{ display:flex; flex-wrap:wrap; gap:.4rem; }
+  .read .hh-time-opts button{ flex:0 0 auto; min-height:44px; padding:.3rem .95rem; border-radius:999px; cursor:pointer; font:600 .95rem/1.2 "Lora", Georgia, serif; color:#2B2620; background:#FFFBF2; border:1.5px solid #D9C8F0; }
+  .read .hh-time-opts button:hover{ border-color:#9A80C8; }
+  .read .hh-time-opts button[aria-pressed="true"]{ background:#4E3F6B; border-color:#4E3F6B; color:#FFFDF7; }
+  .read .hh-time-opts button:focus-visible, .read .hh-time-plan :focus-visible{ outline:3px solid var(--focus, #2B5B8C); outline-offset:2px; }
+  .read .hh-time-plan{ margin:.55rem 0 0; padding:.7rem .9rem .75rem; border-radius:16px 16px 16px 6px; background:rgba(246,240,251,.92); border:1px solid #E1D3F2; }
+  .read .hh .hh-time-plan p{ margin:0; }
+  .read .hh .cb-plan-h{ margin:0 0 .35rem; font-family:"IBM Plex Mono", ui-monospace, monospace; font-size:.74rem; letter-spacing:.06em; text-transform:uppercase; color:#6B4F8A; }
+  .read .hh ol.cb-steps{ margin:0 0 .45rem; padding:0; list-style:none; counter-reset:none; }
+  .read .hh .cb-steps li{ display:flex; gap:.6rem; align-items:baseline; margin:0 0 .35rem; padding:0; max-width:none; }
+  .read .hh .cb-steps li::before{ content:none; }
+  .read .hh .cb-m{ flex:0 0 4.2rem; font-family:"IBM Plex Mono", ui-monospace, monospace; font-size:.78rem; color:#6B4F8A; white-space:nowrap; }
+  .read .hh .cb-step{ display:flex; flex-direction:column; min-width:0; }
+  .read .hh .cb-step-t{ font-weight:600; font-size:1rem; line-height:1.3; }
+  .read .hh .cb-step small{ font-size:.86rem; line-height:1.35; color:var(--ink-soft, #5A5346); }
+  .read .hh .cb-plan-foot{ font-size:.88rem; color:var(--ink-soft, #5A5346); }
+  .read .hh .cb-plan-foot button{ font:inherit; font-weight:600; min-height:36px; padding:0 .2rem; background:none; border:0; color:var(--focus, #2B5B8C); text-decoration:underline; cursor:pointer; }
+  @media (max-width:640px){
+    .read .hh-t-x{ display:none; }
+    .read .hh-time{ margin-bottom:.75rem; }
+    .read .hh-time-opts{ display:grid; grid-template-columns:repeat(4, 1fr); gap:.35rem; }
+    .read .hh-time-opts button{ padding:.3rem .2rem; font-size:.92rem; }
+    .read .hh .cb-m{ flex-basis:3.6rem; }
+    .read .hh .hh-time-plan.is-welcome .cb-step small{ display:none; }
+  }
+
   /* The idea behind it all (lower on the page) */
   .read .home-method h2{ font-family:"Fraunces", Georgia, serif; font-weight:600; font-size:clamp(1.5rem, 4vw, 2rem); line-height:1.15; margin:0 0 1rem; }
 
@@ -386,6 +415,16 @@
   <p class="hh-lede">Free tools and a short book that help you understand yourself and share the load kindly at home.</p>
   <p class="hh-who"><span class="hh-who-k">Made for</span> couples <span aria-hidden="true">&middot;</span> families <span aria-hidden="true">&middot;</span> roommates <span aria-hidden="true">&middot;</span> parents</p>
   <h2 class="sr-only">Where to start</h2>
+  <div class="hh-time" data-cb-time>
+    <p class="hh-time-q" id="hh-time-q">How much time do you have?</p>
+    <div class="hh-time-opts" role="group" aria-labelledby="hh-time-q">
+      <button type="button" data-cb-min="1" aria-pressed="false" aria-controls="hh-time-plan">1 min<span class="hh-t-x">ute</span></button>
+      <button type="button" data-cb-min="5" aria-pressed="false" aria-controls="hh-time-plan">5 min<span class="hh-t-x">utes</span></button>
+      <button type="button" data-cb-min="15" aria-pressed="false" aria-controls="hh-time-plan">15 min<span class="hh-t-x">utes</span></button>
+      <button type="button" data-cb-min="30" aria-pressed="false" aria-controls="hh-time-plan">30+ min<span class="hh-t-x">utes</span></button>
+    </div>
+    <div class="hh-time-plan" id="hh-time-plan" data-cb-plan aria-live="polite" hidden></div>
+  </div>
   <ul class="hh-go">
     <li><a class="hh-card is-main" href="/start-in-10-minutes.html"><span class="hh-card-t">Start in 10 minutes</span><span class="hh-card-n">One short, guided path. No sign-up.</span></a></li>
     <li><a class="hh-card" href="/wavelength.html"><span class="hh-card-t">Find your Wavelength</span><span class="hh-card-n">How you think, talk and listen</span></a></li>

@@ -119,5 +119,6 @@
     var c = card(where); if (c) host.appendChild(c);
     host.appendChild(launcher(where));
   }
-  window.TOLPickUp = { mount: mount, card: card, launcher: launcher };
+  // TIME is shared with the home page's time picker (come-back.js), so both offer the same ideas
+  window.TOLPickUp = { mount: mount, card: card, launcher: launcher, time: TIME };
 })();
