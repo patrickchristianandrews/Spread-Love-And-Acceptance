@@ -2821,6 +2821,8 @@
     // Brain Breakers: the bold card on the home page, and a "Brain Break" card ending each program page
     var BB_PAGE = /^\/(index|start-in-10-minutes|invisible-labor-mental-load|chore-chart-for-couples|how-to-stop-fighting-with-your-partner|neurodivergent-relationships|communication-style-quiz|check-ins|turning-toward|complacency|wired-differently|love-languages|share-the-load|new-parent|co-parenting|prog-01)(-in-depth)?\.html$|^\/(book|workpapers)\/(?!fill\/)/;
     if ((current === '/index.html' || BB_PAGE.test(current)) && !document.querySelector('meta[http-equiv="Content-Security-Policy"]')) { var bbs = document.createElement('script'); bbs.src = '/assets/js/brain-breaks.js'; bbs.defer = true; document.head.appendChild(bbs); }
+    // tablets, laptops and desktops: an "On this page" outline, keyboard shortcuts, roomier touch targets (wide-screens.js)
+    { var wsc = document.createElement('script'); wsc.src = '/assets/js/wide-screens.js'; wsc.defer = true; document.head.appendChild(wsc); }
     // phones: a "turn sideways" hint under big pictures, and full screen asks for landscape
     if (/^\/(soundscapes|frequency-buddies[a-z0-9-]*|calm-visualizer|night-garden|pal-cam-tv)\.html$/.test(current)) { var tsw = document.createElement('script'); tsw.src = '/assets/js/turn-sideways.js'; tsw.defer = true; document.head.appendChild(tsw); }
     if (location.hash) { var t = document.getElementById(location.hash.slice(1)); if (t) t.scrollIntoView(); }

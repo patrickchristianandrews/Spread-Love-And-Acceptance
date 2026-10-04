@@ -132,5 +132,9 @@
       "platform": "webapp",
       "url": "https://spreadloveandacceptance.com/manifest.webmanifest"
     }
-  ]
+  ],
+  "launch_handler": {
+    "client_mode": "navigate-existing"
+  },
+  "handle_links": "preferred"
 }
