@@ -27,9 +27,9 @@
   var canVib = typeof navigator.vibrate === 'function';
   var LOOKS = RM ? ['glow'] : ['auto', 'stars', 'aurora', 'rings', 'tunnel', 'bars', 'wave'];
   // what Auto cycles through for each track, and how Match feels it
-  var ROTATE = { star: ['stars', 'aurora', 'wave', 'stars'], shimmer: ['rings', 'bars', 'tunnel', 'stars'], watching: ['tunnel', 'stars', 'aurora', 'bars'], other: ['stars', 'aurora', 'tunnel', 'rings', 'bars', 'wave'] };
-  var TRACKFEEL = { star: 'heart', shimmer: 'rumble', watching: 'beat', other: 'rumble' };
-  var TRACKID = { 'Shooting Star': 'star', 'Thunderous Shimmer': 'shimmer', 'Watching a Shooting Star': 'watching' };
+  var ROTATE = { star: ['stars', 'aurora', 'wave', 'stars'], shimmer: ['rings', 'bars', 'tunnel', 'stars'], bedroom: ['rings', 'bars', 'stars', 'wave'], watching: ['tunnel', 'stars', 'aurora', 'bars'], other: ['stars', 'aurora', 'tunnel', 'rings', 'bars', 'wave'] };
+  var TRACKFEEL = { star: 'heart', shimmer: 'rumble', bedroom: 'beat', watching: 'beat', other: 'rumble' };
+  var TRACKID = { 'Shooting Star': 'star', 'Thunderous Shimmer': 'shimmer', 'Bouncy Bedroom': 'bedroom', 'Watching a Shooting Star': 'watching' };
   var LEVELS = ['off', 'soft', 'medium', 'strong'];
   // phone motors barely register anything under about 30 ms, so a pulse is 30 to 200 ms, and the rumble is a pattern of on and off
   var HAPT = { soft: { min: 32, max: 55, duty: 0.4 }, medium: { min: 48, max: 95, duty: 0.65 }, strong: { min: 70, max: 170, duty: 0.92 } };
@@ -106,7 +106,7 @@
 
   // ---------- the Choose panel (full screen) ----------
   var ovl = document.getElementById('sn-ovl'), optBtn = document.getElementById('sn-opt'), trkEl = document.getElementById('sn-trk'), findEl = document.getElementById('sn-ovl-find'), ctlEl = document.getElementById('sn-ovl-ctl');
-  var BLURB = { 'Shooting Star': 'Soft and floating · quiets a busy mind', 'Thunderous Shimmer': 'Textured and curious · a little spark', 'Watching a Shooting Star': 'Big and cinematic · gets you moving' };
+  var BLURB = { 'Shooting Star': 'Soft and floating · quiets a busy mind', 'Thunderous Shimmer': 'Textured and curious · a little spark', 'Bouncy Bedroom': 'Cozy and playful · a light bounce', 'Watching a Shooting Star': 'Big and cinematic · gets you moving' };
   var finder = null, moved = [];
   function cards() { return Array.prototype.slice.call(document.querySelectorAll('.track-card')).filter(function (c) { return c.querySelector('.track-player'); }); }
   function cardName(c) { var h = c.querySelector('.track-title'); return h ? h.textContent.replace(/^\d+\.\s*/, '') : 'Track'; }

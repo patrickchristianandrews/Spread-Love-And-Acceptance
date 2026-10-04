@@ -1,5 +1,5 @@
 /* sound-finder.js — "Find your sound" for /soundscapes.html (the Brain Breakers page).
-   Three quick taps (what you need, how your body is, how you like sound) and it suggests one of the three
+   Three quick taps (what you need, how your body is, how you like sound) and it suggests one of the four
    Brain Breakers, with the reasons, and the other two to try. The matching uses Christian's own listening
    notes for each piece (Shooting Star: deep quieting; Thunderous Shimmer: curious alertness; Watching a
    Shooting Star: uplifting expansion). No quiz result is stored as a "type", and nothing is sent anywhere.
@@ -25,10 +25,13 @@
       why: { spark: 'Recovery that feels too passive with pure calm needs a little aliveness, and this gives it.', curious: 'Its shifting textures stimulate curiosity and mild alertness.' } },
     { id: 'watching', name: 'Watching a Shooting Star', m: 3.6, e: .6, n: .35, tags: ['stuck', 'walk', 'big'],
       note: 'The most expansive and cinematic one, with a journey-like arc.',
-      why: { stuck: 'It builds a sense of expansion and forward motion that can lift a stuck or low mood.', walk: 'It keeps a relaxed baseline with a light current of energy, so it feels purposeful.', big: 'Full orchestral writing with math-rock drive: the biggest of the three.' } }
+      why: { stuck: 'It builds a sense of expansion and forward motion that can lift a stuck or low mood.', walk: 'It keeps a relaxed baseline with a light current of energy, so it feels purposeful.', big: 'Full orchestral writing with math-rock drive: the biggest of the four.' } },
+    { id: 'bedroom', name: 'Bouncy Bedroom', m: 1.55, e: .4, n: .1, tags: ['lift', 'cozy'],
+      note: 'Short, warm and playful. A cozy little bounce.',
+      why: { lift: 'It gently lifts low energy or mild boredom without asking for deep focus.', cozy: 'Pure calm can feel flat. This is close-up and cozy, with a light bounce that stays relaxed.' } }
   ];
   var BYID = {}; S.forEach(function (x) { BYID[x.id] = x; });
-  var NEEDS = [['quiet', 'Quiet my busy mind'], ['anxious', 'Calm anxious or restless energy'], ['sleep', 'Wind down before sleep'], ['spark', 'Recover, but I need a spark'], ['curious', 'Get curious and alert'], ['stuck', 'I feel stuck or low on energy'], ['walk', 'A walk or light planning'], ['big', 'Feel something big']];
+  var NEEDS = [['quiet', 'Quiet my busy mind'], ['anxious', 'Calm anxious or restless energy'], ['sleep', 'Wind down before sleep'], ['spark', 'Recover, but I need a spark'], ['curious', 'Get curious and alert'], ['stuck', 'I feel stuck or low on energy'], ['walk', 'A walk or light planning'], ['big', 'Feel something big'], ['lift', 'Lift low energy or boredom'], ['cozy', 'Something cozy and playful']];
   var BODY = [['', 'No idea'], ['fine', 'Fine'], ['tired', 'Tired'], ['wired', 'Wired or restless'], ['over', 'Anxious or overwhelmed']];
   var PREFS = [['steady', 'Nothing sudden'], ['soft', 'Soft and floaty'], ['big', 'Big and cinematic'], ['feelit', 'I want to feel the low end'], ['textured', 'Something textured and surprising'], ['short', 'Under three minutes']];
   var NEEDNAME = {}; NEEDS.forEach(function (n) { NEEDNAME[n[0]] = n[1]; });
@@ -45,7 +48,7 @@
       if (x.tags.indexOf(need) >= 0) { sc += 6; if (x.why && x.why[need]) why.push(x.why[need]); }
       if (need === 'anxious' || need === 'sleep' || need === 'quiet') sc += (1 - x.e) * 2;
       if (need === 'stuck' || need === 'spark' || need === 'curious') sc += x.e * 1.5;
-      if (body === 'over') { sc -= x.e * 5 + x.n * 2; if (x.e < .3) why.push('The gentlest of the three, which suits an overwhelmed body.'); }
+      if (body === 'over') { sc -= x.e * 5 + x.n * 2; if (x.e < .3) why.push('The gentlest of the four, which suits an overwhelmed body.'); }
       if (body === 'wired') { sc -= x.e * 2; if (x.e < .3) why.push('Low-energy and floating, to take the edge off.'); }
       if (body === 'tired') { sc += x.e * 1.5; if (x.id === 'watching') why.push('A light energetic current for a tired body, without feeling heavy.'); }
       if (prefs.steady) { sc -= x.n * 3; if (x.n <= .2) why.push('Smooth and steady, with nothing sudden.'); }
@@ -97,7 +100,7 @@
     function plain() { host.querySelectorAll('p, h2, h3, ul, li').forEach(function (n) { n.classList.add('no-bubble'); }); }
     host.innerHTML =
       (compact ? '<p class="sf-k sf-ovl-k">Undecided? Find what is right for you</p>' : '<h2 id="finder-h' + uid + '" class="live-h">Find your Brain Breaker</h2>' +
-      '<p class="live-lede">Not sure which of the three to press? Three quick taps. It suggests one and tells you why. Nothing is saved unless you choose to save a go-to, and that stays on your device.</p>') +
+      '<p class="live-lede">Not sure which of the four to press? Three quick taps. It suggests one and tells you why. Nothing is saved unless you choose to save a go-to, and that stays on your device.</p>') +
       '<div class="sf-q" role="group" aria-labelledby="sf-q1' + uid + '"><p class="sf-ql" id="sf-q1' + uid + '">1. What do you need right now?</p><div class="sf-chips">' + chips('need', NEEDS, need) + '</div></div>' +
       '<div class="sf-q" role="group" aria-labelledby="sf-q2' + uid + '"><p class="sf-ql" id="sf-q2' + uid + '">2. How is your body? <span>(optional)</span></p><div class="sf-chips">' + chips('body', BODY, body) + '</div></div>' +
       '<div class="sf-q" role="group" aria-labelledby="sf-q3' + uid + '"><p class="sf-ql" id="sf-q3' + uid + '">3. How do you like sound? <span>(pick any)</span></p><div class="sf-chips">' + chips('pref', PREFS, null, true) + '</div></div>' +

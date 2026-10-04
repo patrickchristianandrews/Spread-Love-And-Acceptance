@@ -92,7 +92,35 @@
     if (autoBox && isFull(autoBox) && autoBtn) { try { autoBtn.click(); } catch (e) {} }
     autoBox = autoBtn = null; leftByUser = false;
   }
-  function onTurn() { if (port.matches) goUpright(); else setTimeout(function () { goSideways(false); }, 350); sync(); }
+  // ---- 2b. real <video> pictures: turning sideways makes the video full screen too (true full screen when the browser allows,
+  // otherwise a picture that fills the screen with its own Exit button), and turning upright lets go
+  var vidOn = null, vidBtn = null, leftVid = false;
+  function vids() { return Array.prototype.slice.call(document.querySelectorAll('video')); }
+  function vidPseudo(v) {
+    v.classList.add('tsw-vid');
+    if (!vidBtn) { vidBtn = document.createElement('button'); vidBtn.type = 'button'; vidBtn.className = 'tsw-vid-x'; vidBtn.textContent = '✕ Exit full screen'; vidBtn.addEventListener('click', function () { leftVid = true; vidUp(true); }); document.body.appendChild(vidBtn); }
+    vidBtn.hidden = false;
+  }
+  function vidGo() {
+    if (!small() || port.matches || vidOn || leftVid) return;
+    var v = vids().filter(function (x) { return (!x.paused && !x.ended) || visibleShare(x) >= 0.45; })[0]; if (!v) return;
+    vidOn = v;
+    try {
+      var rq = v.requestFullscreen || v.webkitRequestFullscreen;
+      if (rq) { var pr = rq.call(v); if (pr && pr.catch) pr.catch(function () { vidPseudo(v); }); return; }
+      if (v.webkitEnterFullscreen) { v.webkitEnterFullscreen(); return; }
+    } catch (e) {}
+    vidPseudo(v);
+  }
+  function vidUp(keepLeft) {
+    if (vidOn) { try { if (fsEl() === vidOn) (document.exitFullscreen || document.webkitExitFullscreen).call(document); } catch (e) {} vidOn.classList.remove('tsw-vid'); vidOn = null; }
+    if (vidBtn) vidBtn.hidden = true;
+    if (!keepLeft) leftVid = false;
+  }
+  document.addEventListener('play', function (e) { if (e.target && e.target.tagName === 'VIDEO' && !port.matches) setTimeout(vidGo, 200); }, true);
+  // if the person closes full screen themselves while sideways, leave it closed until the next turn
+  document.addEventListener('fullscreenchange', function () { if (vidOn && !fsEl() && !vidOn.classList.contains('tsw-vid')) { vidOn = null; leftVid = true; } });
+  function onTurn() { if (port.matches) { goUpright(); vidUp(); } else setTimeout(function () { goSideways(false); vidGo(); }, 350); sync(); }
   // if the person closes full screen themselves while sideways, leave it closed until the next turn
   var autoSeen = false;
   setInterval(function () {
@@ -112,7 +140,10 @@
 
   // ---- 1. the hint
   var TARGETS = ['#sn-stage', '.tz-stage', '.fb-stage', '.fbmv-stage', '#cv-gl', '#ng-canvas'];
-  var CSS = '.tsw-rot{ position:fixed !important; inset:auto !important; top:0 !important; left:0 !important; width:100vh !important; height:100vw !important; width:100dvh !important; height:100dvw !important; max-width:none !important; transform-origin:top left !important; transform:rotate(90deg) translateY(-100%) !important; z-index:10060 !important; border-radius:0 !important; margin:0 !important; }' +
+  var CSS = '.tsw-vid{ position:fixed !important; inset:0 !important; width:100vw !important; height:100vh !important; height:100dvh !important; max-width:none !important; max-height:none !important; z-index:2147483000 !important; background:#000 !important; object-fit:contain !important; margin:0 !important; border-radius:0 !important; }' +
+    '.tsw-vid-x{ position:fixed; top:max(10px,env(safe-area-inset-top)); right:max(10px,env(safe-area-inset-right)); z-index:2147483001; min-height:44px; padding:.4rem .9rem; border-radius:999px; border:1.5px solid rgba(255,255,255,.8); background:rgba(28,20,44,.82); color:#fff; font:600 1rem Lora,Georgia,serif; cursor:pointer; }' +
+    '.tsw-vid-x[hidden]{ display:none; }' +
+    '.tsw-rot{ position:fixed !important; inset:auto !important; top:0 !important; left:0 !important; width:100vh !important; height:100vw !important; width:100dvh !important; height:100dvw !important; max-width:none !important; transform-origin:top left !important; transform:rotate(90deg) translateY(-100%) !important; z-index:10060 !important; border-radius:0 !important; margin:0 !important; }' +
     '.tsw{ display:none; align-items:center; gap:.6rem; margin:.6rem auto; padding:.45rem .5rem .45rem .9rem; max-width:34rem; border-radius:999px; background:#FFF4D6; border:1px solid #E7C777; color:#5A430F; font:600 .92rem/1.25 "Lora",Georgia,serif; box-shadow:0 4px 12px -6px rgba(90,60,10,.4); }' +
     '.tsw.is-on{ display:flex; }' +
     '.tsw-ph{ flex:none; width:1.5rem; height:2.3rem; display:grid; place-items:center; }' +
