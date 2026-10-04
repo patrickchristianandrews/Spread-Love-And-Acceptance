@@ -5332,10 +5332,11 @@
         "~vibrate with the music",
         "~buzz"
       ],
-      "what": "The Soundscapes page can draw whatever is playing as a moving picture (aurora, rings or wave), and on an Android phone with Chrome it can also vibrate gently with the sound: a rumble that follows the low tones, a beat, or a steady heartbeat. Vibration is off until you choose a strength. iPhones can’t vibrate from a web page, so there you can see the sound and feel it through the speaker or headphones.",
+      "what": "See and feel the sound is the big stage at the top of the Soundscapes page. It draws whatever is playing as a large live picture (aurora, rings, tunnel, bars or wave, or Auto to mix them), can go full screen, and a slim bar follows you down the page while something plays. On an Android phone with Chrome it can also vibrate gently with the sound: a rumble that follows the low tones, a beat, or a steady heartbeat. Vibration is off until you choose a strength. iPhones can’t vibrate from a web page, so there you can see the sound and feel it through the speaker or headphones.",
       "how": [
-        "Open Soundscapes and press play on any track or live soundscape.",
-        "Pick how to see it: Aurora, Rings or Wave. With reduced motion on, you get a still, slowly changing glow.",
+        "Open Soundscapes. The big stage is at the top.",
+        "Press See and feel this on any track or live soundscape, or press play on one.",
+        "Pick a look: Auto, Aurora, Rings, Tunnel, Bars or Wave. Try Full screen. With reduced motion on, you get a still, slowly changing glow.",
         "On an Android phone, choose Soft, Medium or Strong under Feel, then pick Rumble, Beat or Heartbeat. Try a pulse first.",
         "The Upset right now page can also buzz in time with its breathing pacer."
       ],

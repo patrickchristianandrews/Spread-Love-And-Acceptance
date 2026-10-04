@@ -86,8 +86,8 @@ OVERRIDE = {
         'Drift is a calm visualizer: tell it how you feel, put on headphones and let slow, dreamy visuals and gentle '
         'tones keep you company for a few quiet minutes of breathing and rest.'),
     'soundscapes.html': (None,
-        'Calm soundscapes and gentle music made for The Objective Ledger: breathing tracks, peaceful ambient pieces and '
-        'songs about love, acceptance and finding your way back to each other.'),
+        'Soundscapes you can see and feel: a big live picture of whatever plays, optional gentle vibration on phones, '
+        'calm breathing tracks, big instrumentals and live soundscapes made for The Objective Ledger.'),
     'frequency-journey.html': (None,
         'The Frequency Journey: pick Tidbit or Sugarfoot and play a maze chase or a road-and-river crossing, with easy '
         'controls and no game over, and watch the Frequency Buddies cartoon on the same page.'),
