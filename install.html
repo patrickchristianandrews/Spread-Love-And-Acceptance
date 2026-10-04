@@ -26,19 +26,34 @@
   .in-top{ display:flex; gap:1rem; align-items:center; }
   .in-top p{ margin:0 !important; }
   .in-state{ font-weight:600; margin:0 !important; }
-  .in-btn{ font:600 1.05rem/1.2 "Lora", Georgia, serif; min-height:48px; padding:.6rem 1.4rem; border-radius:999px; border:1px solid #2F5F8A; background:#2F5F8A; color:#fff; cursor:pointer; justify-self:start; }
+  .in-btn{ display:inline-flex; align-items:center; gap:.5rem; font:800 1.15rem/1.2 "Lora", Georgia, serif; min-height:56px; padding:.7rem 1.7rem; border-radius:999px; border:0; background:linear-gradient(180deg,#FF7C93,#E4566E); color:#fff; cursor:pointer; justify-self:start; box-shadow:0 6px 0 #B8384F; transform:translateY(-3px); transition:transform .1s, box-shadow .1s; }
+  .in-btn::before{ content:"\1F43E"; }
+  .in-btn::after{ content:"\2728"; }
+  .in-btn:hover{ transform:translateY(0); box-shadow:0 3px 0 #B8384F; }
+  .in-btn:active{ transform:translateY(3px); box-shadow:0 0 0 #B8384F; }
   .in-btn[hidden]{ display:none; }
   .in-btn:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
   .in-pick{ display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:.6rem; margin:1rem 0 1.2rem; }
-  .in-tab{ display:flex; flex-direction:column; align-items:center; gap:.15rem; min-height:92px; padding:.7rem .5rem; border-radius:18px; border:2px solid #C6DFF4; background:#F4F9FE; color:#243B52; font:inherit; cursor:pointer; text-align:center; }
-  .in-tab:hover{ transform:translateY(-2px); }
-  .in-tab[aria-selected="true"]{ background:#2F5F8A; border-color:#2F5F8A; color:#fff; box-shadow:0 8px 20px -10px rgba(47,95,138,.7); }
-  .in-tab:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
-  .in-tab-i{ font-size:1.6rem; line-height:1; }
-  .in-tab-t{ font:700 1.05rem/1.2 "Lora", Georgia, serif; }
-  .in-tab-s{ font:600 .72rem/1.25 "IBM Plex Mono", monospace; padding:.1rem .5rem; border-radius:99px; background:#E6F4EC; color:#2F5A3C; }
+  .in-tab{ --c1:#E6F8EE; --c2:#C9EFD9; --bd:#8FD3AE; --ink:#24523D; --deep:#2F7A5A; position:relative; display:flex; flex-direction:column; align-items:center; gap:.2rem; min-height:100px; padding:.8rem .5rem .75rem; border-radius:24px; border:3px solid var(--bd); background:linear-gradient(160deg,var(--c1),var(--c2)); color:var(--ink); font:inherit; cursor:pointer; text-align:center; box-shadow:0 5px 0 var(--bd); transition:transform .15s, box-shadow .15s; }
+  .in-tab[data-p="windows"]{ --c1:#E7F2FD; --c2:#CBE3F8; --bd:#8DBDE8; --ink:#1F4468; --deep:#2F5F8A; }
+  .in-tab[data-p="apple"]{ --c1:#FFF1F6; --c2:#F6E3F5; --bd:#D6B1E6; --ink:#5B3F73; --deep:#8A4FA8; }
+  .in-tab[data-p="mac"]{ --c1:#F3EEFD; --c2:#E1D8F8; --bd:#B9A6E8; --ink:#3F3270; --deep:#5B46A8; }
+  .in-tab:hover{ transform:translateY(2px) rotate(-1deg); box-shadow:0 3px 0 var(--bd); }
+  .in-tab:active{ transform:translateY(5px); box-shadow:0 0 0 var(--bd); }
+  .in-tab[aria-selected="true"]{ background:linear-gradient(180deg,var(--deep),var(--deep)); border-color:var(--deep); color:#fff; box-shadow:0 5px 0 rgba(0,0,0,.25), 0 10px 22px -10px var(--deep); animation:in-hop 2.8s ease-in-out infinite; }
+  .in-tab[aria-selected="true"]::after{ content:"\1F43E"; position:absolute; top:-.7rem; right:-.3rem; font-size:1.2rem; transform:rotate(18deg); }
+  .in-tab:focus-visible{ outline:3px solid var(--focus); outline-offset:3px; }
+  .in-tab-i{ display:grid; place-items:center; width:2.8rem; height:2.8rem; border-radius:50%; background:#fff; font-size:1.7rem; line-height:1; box-shadow:inset 0 -3px 0 rgba(0,0,0,.08); }
+  .in-tab:hover .in-tab-i{ animation:in-wig .5s ease-in-out; }
+  .in-tab-t{ font:800 1.08rem/1.2 "Lora", Georgia, serif; }
+  .in-tab-s{ font:600 .72rem/1.25 "IBM Plex Mono", monospace; padding:.12rem .55rem; border-radius:99px; background:rgba(255,255,255,.85); color:#2F5A3C; }
+  .in-tab-s.is-now::before{ content:"\2728 "; }
   .in-tab-s.is-soon{ background:#FFF1D6; color:#7A5410; }
-  .in-tab[aria-selected="true"] .in-tab-s{ background:rgba(255,255,255,.92); }
+  .in-tab-s.is-soon::before{ content:"\1F319 "; }
+  .in-tab[aria-selected="true"] .in-tab-s{ background:rgba(255,255,255,.95); }
+  @keyframes in-wig{ 0%,100%{ transform:rotate(0); } 25%{ transform:rotate(-14deg) scale(1.12); } 75%{ transform:rotate(14deg) scale(1.12); } }
+  @keyframes in-hop{ 0%,70%,100%{ transform:translateY(0); } 80%{ transform:translateY(-5px); } 90%{ transform:translateY(0); } }
+  @media (prefers-reduced-motion: reduce){ .in-tab[aria-selected="true"]{ animation:none; } .in-tab:hover .in-tab-i{ animation:none; } .in-tab:hover{ transform:none; } }
   .in-panel{ margin:0 0 1.4rem; }
   .in-panel[hidden]{ display:none; }
   .in-soon{ margin:.4rem 0 1rem; padding:1.2rem 1.3rem; border-radius:22px; border:2px dashed #E1B861; background:linear-gradient(135deg,#FFF8E6,#FFEFD2); text-align:center; }
@@ -66,7 +81,7 @@
   .in-pin li{ margin:0 !important; }
   .in-pin a{ display:inline-block; min-height:44px; padding:.55rem 1rem; border-radius:999px; border:1px solid #2F5F8A; text-decoration:none; background:#FFFDF7; box-sizing:border-box; }
   @media (max-width:760px){ .in-pick{ grid-template-columns:repeat(2,minmax(0,1fr)); } }
-  @media (max-width:560px){ .in-pick{ grid-template-columns:1fr; } .in-tab{ flex-direction:row; justify-content:flex-start; gap:.7rem; min-height:64px; padding:.6rem .9rem; text-align:left; flex-wrap:wrap; } .in-tab-t{ flex:1; } }
+  @media (max-width:560px){ .in-pick{ grid-template-columns:1fr; } .in-tab{ flex-direction:row; justify-content:flex-start; gap:.7rem; min-height:68px; padding:.6rem .9rem; text-align:left; flex-wrap:wrap; } .in-tab-t{ flex:1; } .in-tab[aria-selected="true"]::after{ top:-.6rem; right:.6rem; } }
 </style>
 <!-- seo:start -->
 <link rel="canonical" href="https://spreadloveandacceptance.com/install.html">

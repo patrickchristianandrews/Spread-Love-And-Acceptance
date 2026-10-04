@@ -137,7 +137,12 @@
       { href: '/relationships.html#map', deep: true, code: 'Map', title: 'The full map', note: 'Every chapter, worksheet and tool, for every kind of relationship' },
       { href: '/grandparents.html', code: 'New', title: 'For grandparents', note: 'Help with the grandkids without taking over: fair childcare, house rules and saying no kindly' }
     ]},
-    { id: 'book', title: 'The book', blurb: 'The manuscript, one idea per chapter. Each chapter pairs with a workpaper that puts it to use.', items: [
+    { id: 'book', title: 'The book', blurb: 'Part One is the most important: yourself. Part Two is between us, one idea per chapter, each paired with a workpaper that puts it to use.', items: [
+      { sub: 'Part One: The most important, yourself' },
+      { href: '/book/self-1-then.html', deep: true, code: 'Then', title: 'Where you came from', note: 'Where your lens came from: growing up, old rules and what life taught you' },
+      { href: '/book/self-2-now.html', deep: true, code: 'Now', title: 'Who you are today', note: 'Your wiring, your weather and your words, and what is fair to you' },
+      { href: '/book/self-3-next.html', deep: true, code: 'Next', title: 'Who you are becoming', note: 'What matters to you, one small goal, tiny steps and a kind monthly look at yourself' },
+      { sub: 'Part Two: Between us' },
       { href: '/book/preface.html', deep: true, code: 'Preface', title: 'The work nobody sees', note: 'The quiet, unseen work of running a shared life, and why it deserves to be noticed' },
       { href: '/book/chapter-1.html', deep: true, code: 'I', title: 'Why we get out of tune', note: 'How pace, tone and urgency nudge two people out of sync, and how to get back in tune' },
       { href: '/book/chapter-2.html', deep: true, code: 'II', title: 'Is the split working?', note: 'A simple way to see whether the way you share the work can last. It looks at the arrangement, never at a person' },
@@ -277,6 +282,11 @@
     ]},
     { id: 'read', name: 'Read & learn', title: 'Read & learn', blurb: 'The book, the library and the stories, in one place. Each page has a short version and a deeper one.', items: [
       { sub: 'The book' },
+      { sub: 'Part One: The most important, yourself' },
+      { href: '/book/self-1-then.html', deep: true, code: 'Then', title: 'Where you came from', note: 'Where your lens came from: growing up, old rules and what life taught you' },
+      { href: '/book/self-2-now.html', deep: true, code: 'Now', title: 'Who you are today', note: 'Your wiring, your weather and your words, and what is fair to you' },
+      { href: '/book/self-3-next.html', deep: true, code: 'Next', title: 'Who you are becoming', note: 'What matters to you, one small goal, tiny steps and a kind monthly look at yourself' },
+      { sub: 'Part Two: Between us' },
       { href: '/book/preface.html', deep: true, code: 'Preface', title: 'The work nobody sees', note: 'The quiet, unseen work of running a shared life' },
       { href: '/book/chapter-1.html', deep: true, code: 'I', title: 'Why we get out of tune', note: 'How pace, tone and urgency nudge two people out of sync' },
       { href: '/book/chapter-2.html', deep: true, code: 'II', title: 'Is the split working?', note: 'Look at the arrangement, never at a person' },
