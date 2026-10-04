@@ -4407,9 +4407,11 @@
         "polymath",
         "polymaths",
         "the polymath way",
-        "how every field connects"
+        "how every field connects",
+        "thirteen fields",
+        "the thirteen fields"
       ],
-      "what": "The polymath page explains how different fields (psychology, economics, nature, music and more) grow from the same few roots: balance, signal and noise, feedback loops, limited capacity, ownership and structure, quiet incentives, and state and setting. Christian, the creator, is a polymath who studied nine fields and found where they meet, and those meeting points became the Five Pillars.",
+      "what": "The polymath page explains how different fields (psychology, economics, nature, music and more) grow from the same few roots: balance, signal and noise, feedback loops, limited capacity, ownership and structure, quiet incentives, and state and setting. Christian, the creator, is a polymath who studied thirteen fields (the newest four are the art of debating, politics, music and the healing power of laughter) and found where they meet, and those meeting points became the Five Pillars.",
       "how": [
         "Read the seven roots and the fields each one shows up in.",
         "See which fields meet in each of the Five Pillars.",
@@ -4440,12 +4442,12 @@
       "id": "connections",
       "kind": "intent",
       "first": true,
-      "name": "how the nine fields connect",
-      "pat": "\\b(how|what|which|where|in what way)\\b[^?]*\\b(fields|areas|subjects|inputs|disciplines|things (you|christian|they) studied|nine (fields|areas|inputs|subjects)|learnings|studies)\\b[^?]*\\b(connect\\w*|link\\w*|relate\\w*|tie\\w*|fit together|overlap\\w*|intersect\\w*)\\b|\\bconnections? (between|across|among|in) (the )?(nine|9|fields|areas|subjects|inputs|disciplines)\\b|\\b(nine|9) (fields|areas|inputs|subjects)\\b[^?]*\\b(connect\\w*|link\\w*|relate\\w*|tie\\w*)\\b|\\bhow (does|do) (it|they|everything|all of (it|this|them)) (all )?(connect|tie together|fit together)\\b|\\bshow me (the )?(obvious|main|first) connections\\b",
+      "name": "how the thirteen fields connect",
+      "pat": "\\b(how|what|which|where|in what way)\\b[^?]*\\b(fields|areas|subjects|inputs|disciplines|things (you|christian|they) studied|(nine|thirteen|13) (fields|areas|inputs|subjects)|learnings|studies)\\b[^?]*\\b(connect\\w*|link\\w*|relate\\w*|tie\\w*|fit together|overlap\\w*|intersect\\w*)\\b|\\bconnections? (between|across|among|in) (the )?(nine|thirteen|9|13|fields|areas|subjects|inputs|disciplines)\\b|\\b(nine|thirteen|9|13) (fields|areas|inputs|subjects)\\b[^?]*\\b(connect\\w*|link\\w*|relate\\w*|tie\\w*)\\b|\\bhow (does|do) (it|they|everything|all of (it|this|them)) (all )?(connect|tie together|fit together)\\b|\\bshow me (the )?(obvious|main|first) connections\\b",
       "keys": [],
       "what": [
-        "Christian’s nine fields (neurobiology, psychology, philosophy, behavioral science, economics, finance, business, holistic therapies, aromatherapy) connect in every one of their 36 possible pairs. I sort them into three layers: 12 obvious, 14 hidden and 10 abstract. There’s also a chain where each field leads logically into the next, all the way round.",
-        "They connect along seven kinds of root: balance, signal and noise, feedback loops, limited capacity, ownership and structure, quiet incentives, and state and setting. Here are the 12 most obvious, where two fields share an idea in plain sight:"
+        "Christian’s thirteen fields (neurobiology, psychology, philosophy, the art of debating, politics, behavioral science, economics, finance, business, holistic therapies, laughter therapy, music, aromatherapy) connect in every one of their 78 possible pairs. I sort them into three layers: 28 obvious, 29 hidden and 21 abstract. There’s also a chain where each field leads logically into the next, all the way round.",
+        "They connect along seven kinds of root: balance, signal and noise, feedback loops, limited capacity, ownership and structure, quiet incentives, and state and setting. Here are the 28 most obvious, where two fields share an idea in plain sight:"
       ],
       "how": [
         "Psychology + Behavioral science (feedback loops): Habits beat willpower, especially when you’re tired. A routine too small to skip keeps going on the bad days. In the program: The 90-second check-in (WP-13).",
@@ -4459,9 +4461,25 @@
         "Economics + Business (limited capacity): Time and attention get spent like any budget, and they run out like one too. In the program: The Lemonade Stand.",
         "Economics + Finance (balance): Both keep accounts of a limited supply. Together they give the book its ledger and the idea of unbilled debt. In the program: The Preface: unbilled debt.",
         "Finance + Business (ownership and structure): Internal controls give every job an owner and every entry a record. In the program: One owner per job (WP-03).",
-        "Holistic therapies + Aromatherapy (state and setting): Both start with the body and the senses, not the argument. In the program: The Soundscape Catalog."
+        "Holistic therapies + Aromatherapy (state and setting): Both start with the body and the senses, not the argument. In the program: The Soundscape Catalog.",
+        "The art of debating + Psychology (signal and noise): Winning an argument and being understood are different goals. Debate trains the first; psychology reminds you the second is why you started talking. In the program: Say it so it lands (WP-09).",
+        "The art of debating + Philosophy (signal and noise): Debate grew out of philosophy: a claim is only tested when someone who disagrees gets to push on it. Telling what you know from what you assume is the first move of both. In the program: The Conversation Reader.",
+        "The art of debating + Politics (ownership and structure): Politics is debate with a decision attached: someone has to hear every side, then decide. A home needs a small version, with each voice heard first and one agreement at the end. In the program: Check-ins.",
+        "Politics + Philosophy (ownership and structure): Politics asks philosophy’s questions with real stakes: what is fair, who decides, and who is owed what. In the program: Chapter IV: two kinds of fair.",
+        "Politics + Behavioral science (quiet incentives): Good policy makes the right thing the easy thing: defaults, small rewards, less friction. Good house rules work the same way. In the program: Pillar V.",
+        "Politics + Economics (quiet incentives): Politics is largely a contest over who gets limited resources; economics counts them. In a home the resources are time, money and attention. In the program: The Lemonade Stand.",
+        "Politics + Business (ownership and structure): Governance means who is accountable for what, how decisions get made, and how to change them. “One owner per job” is governance for a household. In the program: One owner per job (WP-03).",
+        "Music + Psychology (state and setting): Music changes mood faster than words, and people use it on purpose: to pump up, to wind down, or to feel less alone. In the program: Drift: calm visualizer.",
+        "Music + Neurobiology (state and setting): Rhythm and sound reach the nervous system directly. Slow tempos tend to settle the body and fast ones lift it. In the program: The Soundscape Catalog.",
+        "Music + Behavioral science (feedback loops): A song is a loop: a pattern that repeats with small changes. A habit tied to a tune or a time of day is easier to keep. In the program: The 90-second check-in (WP-13).",
+        "Music + Holistic therapies (state and setting): Music therapy is a recognized form of care: singing, drumming and listening help people settle, feel connected and find words. In the program: The Calm-Down Kit (WP-11).",
+        "Music + Aromatherapy (state and setting): Sound and scent both set the mood of a room before anyone speaks. A playlist in the kitchen does what a candle does. In the program: The Soundscape Catalog.",
+        "Music + Laughter therapy (state and setting): Laughter is rhythm too: breath, bounce and sound, in time with other people. A shared laugh and a shared song both say “we’re in step.” In the program: Pause & Play.",
+        "Laughter therapy + Psychology (state and setting): A shared laugh tells the body “we’re safe.” Research on couples suggests that gentle humor during a disagreement can help calm it down. In the program: Turning Toward.",
+        "Laughter therapy + Neurobiology (state and setting): Laughing is linked with looser muscles and lower stress afterward. It’s a quick way to let the body know the alarm can stand down. In the program: The Calm-Down Kit (WP-11).",
+        "Laughter therapy + Holistic therapies (state and setting): Laughter yoga and therapeutic humor are part of the holistic toolkit: a whole-body reset that costs nothing. In the program: The Night Garden."
       ],
-      "pillar": "Would you like the 14 hidden connections, the 10 abstract ones, or the chain that runs through all nine?",
+      "pillar": "Would you like the 29 hidden connections, the 21 abstract ones, or the chain that runs through all thirteen?",
       "chips": [
         [
           "Show me the hidden connections",
@@ -4478,11 +4496,11 @@
       ],
       "links": [
         [
-          "See all 36 on one grid",
+          "See all 78 on one grid",
           "/polymath.html#all-pairs"
         ],
         [
-          "The chain through all nine",
+          "The chain through all thirteen",
           "/polymath.html#chain"
         ]
       ]
@@ -4495,7 +4513,7 @@
       "pat": "\\b(hidden|less obvious|deeper|surprising|unexpected|subtle|secret|more) connections?\\b|\\bshow me (the )?hidden( ones)?\\b",
       "keys": [],
       "what": [
-        "Here are the 14 hidden connections: fields that look far apart until you see the root they share."
+        "Here are the 29 hidden connections: fields that look far apart until you see the root they share."
       ],
       "how": [
         "Psychology + Philosophy (signal and noise): Intent isn’t impact, and most of what’s said in a conflict is a guess wearing the costume of a fact. In the program: The Signal Translator.",
@@ -4511,9 +4529,24 @@
         "Neurobiology + Economics (limited capacity): Attention is scarce. Noticing, remembering and planning spend it, even when nobody sees. In the program: The mental load.",
         "Neurobiology + Business (limited capacity): A team past capacity drops things, and so does a body. Both need a safety margin for the ordinary bad week. In the program: Chapter V: a capacity issue.",
         "Neurobiology + Finance (balance): Your battery works like a balance sheet: leftover stress is a debt, and rest is the reserve. In the program: The Battery & Stress Meter (WP-02).",
-        "Business + Holistic therapies (feedback loops): Maintenance before breakdown. Care for people the way a good team cares for its systems, before the crisis. In the program: Check-ins."
+        "Business + Holistic therapies (feedback loops): Maintenance before breakdown. Care for people the way a good team cares for its systems, before the crisis. In the program: Check-ins.",
+        "The art of debating + Behavioral science (feedback loops): Arguments run on habit: the same lines, the same escalation. The best debate trick, restating their point before you answer, only works once it’s practiced enough to be automatic. In the program: The 90-second check-in (WP-13).",
+        "The art of debating + Economics (quiet incentives): In a debate the reward goes to whoever wins the room. At home the quiet reward for “winning” is the other person giving up, which costs far more than it saves. In the program: Chapter IV: two kinds of fair.",
+        "The art of debating + Finance (balance): A good argument keeps honest books: claims on one side, evidence on the other, and no entry without support. “You always…” is a debit with no receipt. In the program: The Conversation Reader.",
+        "The art of debating + Business (ownership and structure): Good meetings have a chair, an agenda and a decision at the end. A good hard talk at home needs the same: one topic, a turn each, and a named next step. In the program: Check-ins.",
+        "The art of debating + Neurobiology (state and setting): Reasoning well needs the thinking part of the brain, and it goes quiet on high alert. The best debate skill is knowing when your body can’t take part yet. In the program: The Calm-Down Kit (WP-11).",
+        "The art of debating + Aromatherapy (state and setting): Where an argument happens shapes how it goes. A crowded kitchen at dinnertime argues differently from a quiet walk. In the program: Check-ins: a good moment.",
+        "The art of debating + Music (signal and noise): Tone carries more than the words. The same sentence has a pace and a pitch, and spoken softly and slowly it lands differently than spoken fast and flat. In the program: The Signal Translator.",
+        "The art of debating + Laughter therapy (signal and noise): Humor in a disagreement can open a door or slam one. Laughing with someone shows you’re on the same side; laughing at them shuts the talk down. In the program: Say it so it lands (WP-09).",
+        "Politics + Psychology (signal and noise): Groups hear what they fear. How a message is framed changes how it’s received, and that’s as true at a dinner table as in a parliament. In the program: The Signal Translator.",
+        "Politics + Finance (balance): A budget is a political document: it shows what a group values. A week’s chores and hours are a household budget, and they show the same thing. In the program: Who did what (WP-01).",
+        "Music + Business (ownership and structure): An orchestra works because every player has a part and someone sets the tempo: one owner per job, and one shared beat. In the program: One owner per job (WP-03).",
+        "Laughter therapy + Behavioral science (feedback loops): A small, shared bit of silliness gets repeated and sticks. The in-joke is a habit that keeps closeness going. In the program: Turning Toward.",
+        "Laughter therapy + Economics (limited capacity): Joy refills what effort spends. A few minutes of play is a cheap way to top up the battery everything else draws on. In the program: Pause & Play.",
+        "Laughter therapy + Business (feedback loops): Teams that can laugh together tend to find it easier to say hard things early, while they’re still small. In the program: Check-ins.",
+        "Laughter therapy + Aromatherapy (state and setting): A warm, softly lit, relaxed room makes laughter easier. The senses set the mood for play as much as for calm. In the program: The Soundscape Catalog."
       ],
-      "pillar": "Want to go one layer deeper, to the 10 abstract connections, or see the chain?",
+      "pillar": "Want to go one layer deeper, to the 21 abstract connections, or see the chain?",
       "chips": [
         [
           "Show me the abstract connections",
@@ -4525,7 +4558,7 @@
         ],
         [
           "Back to the obvious ones",
-          "How do the nine fields connect?"
+          "How do the thirteen fields connect?"
         ]
       ],
       "links": [
@@ -4547,7 +4580,7 @@
       "pat": "\\b(abstract|philosophical|big picture|underlying|universal|most abstract) connections?\\b|\\bshow me (the )?abstract( ones)?\\b",
       "keys": [],
       "what": [
-        "Here are the 10 abstract connections: the deepest patterns, where the fields stop looking like separate subjects at all."
+        "Here are the 21 abstract connections: the deepest patterns, where the fields stop looking like separate subjects at all."
       ],
       "how": [
         "Philosophy + Behavioral science (feedback loops): Aristotle thought we become what we repeatedly do. Character, like a habit, is built by small acts, not by one big decision. In the program: Small and often.",
@@ -4559,9 +4592,20 @@
         "Economics + Aromatherapy (quiet incentives): A room, like a market, carries costs nobody pays out loud. A rushed, noisy setting quietly taxes every conversation in it. In the program: Chapter IV: the setting.",
         "Business + Aromatherapy (state and setting): Good workplaces are designed so the setting helps people do their best. A home can be too: a quiet corner for hard talks is a design choice. In the program: Check-ins: a good moment.",
         "Finance + Holistic therapies (balance): A solvency read says whether an arrangement can last, never whether it’s worthwhile. Holistic care asks the other question: what makes the whole person well. In the program: Chapter II.",
-        "Finance + Aromatherapy (balance): Changing the setting costs almost nothing and pays back on every conversation held there: the cheapest investment in the whole program. In the program: Chapter IV: where and when to talk."
+        "Finance + Aromatherapy (balance): Changing the setting costs almost nothing and pays back on every conversation held there: the cheapest investment in the whole program. In the program: Chapter IV: where and when to talk.",
+        "The art of debating + Holistic therapies (state and setting): Holistic care treats the whole person, and so does a good debate partner. The person across from you is tired, hungry or hurt as well as holding a position. In the program: The Perspective Shifter.",
+        "Politics + Neurobiology (state and setting): The nervous system treats a threat to “our side” as a threat to the self. Calm bodies compromise more, which is why settling comes before the vote. In the program: The Calm-Down Kit (WP-11).",
+        "Politics + Holistic therapies (balance): Public health and holistic care agree that wellbeing is shaped by the conditions around a person, not only by their choices. Fix the conditions. In the program: Pillar II.",
+        "Politics + Aromatherapy (state and setting): Politics knows the setting is a message: where the table is, how the room is laid out, who sits where. A home can use the same craft for hard talks. In the program: Check-ins: a good moment.",
+        "Politics + Music (feedback loops): Anthems and marching songs show how music binds a group. A shared beat is how a crowd starts to feel like one body. In the program: The theme song music video.",
+        "Politics + Laughter therapy (signal and noise): Groups have long used jokes and satire to say what can’t be said straight about power. At home, a light touch lets a sore topic be raised, if both people are in on the joke. In the program: Check-ins.",
+        "Music + Philosophy (balance): Thinkers since Pythagoras have asked why sound moves us. Harmony is a picture of fairness: different parts, each with room, in one piece. In the program: Echoes of Gold.",
+        "Music + Economics (limited capacity): Attention is what a song and a market both compete for, and it runs out. A noisy setting taxes every conversation held in it. In the program: The Soundscape Catalog.",
+        "Music + Finance (balance): In music a rest is written into the score, and silence counts as much as sound. In a household the quiet work needs writing down too. In the program: The Preface: unbilled debt.",
+        "Laughter therapy + Philosophy (signal and noise): Thinkers have long said humor spots what’s out of place: the gap between how things are and how they should be. A good joke names the gap without blaming anyone. In the program: The Perspective Shifter.",
+        "Laughter therapy + Finance (balance): Goodwill is a reserve, and shared laughs are deposits that don’t appear on any sheet but make the withdrawals of a hard week survivable. In the program: Turning Toward."
       ],
-      "pillar": "That’s all 36 pairs. Last of all, the chain: how each field leads into the next.",
+      "pillar": "That’s all 78 pairs. Last of all, the chain: how each field leads into the next.",
       "chips": [
         [
           "Show me the chain",
@@ -4573,7 +4617,7 @@
         ],
         [
           "Start from the obvious ones",
-          "How do the nine fields connect?"
+          "How do the thirteen fields connect?"
         ]
       ],
       "links": [
@@ -4658,22 +4702,24 @@
       "kind": "intent",
       "first": true,
       "name": "the deepest connections, where many fields meet",
-      "pat": "\\b(deepest|most hidden|deeper still|even deeper)\\b[^?]*\\b(connection|connections|link|links|fields?|ones?)\\b|\\bwhere\\b[^?]*\\b(all|nine|9|the|many) (nine |9 )?(fields|subjects|areas)?\\s?(all )?meet\\b|\\bintersection of (all|the nine|the 9)\\b|\\b(all|nine|9) (fields )?(meet )?at once\\b",
+      "pat": "\\b(deepest|most hidden|deeper still|even deeper)\\b[^?]*\\b(connection|connections|link|links|fields?|ones?)\\b|\\bwhere\\b[^?]*\\b(all|nine|thirteen|9|13|the|many) (nine |thirteen |9 |13 )?(fields|subjects|areas)?\\s?(all )?meet\\b|\\bintersection of (all|the nine|the thirteen|the 9|the 13)\\b|\\b(all|nine|thirteen|9|13) (fields )?(meet )?at once\\b",
       "keys": [],
       "what": [
-        "Past obvious, hidden and abstract, there's a deepest level: moments where many of the nine fields meet at once. Here are four:"
+        "Past obvious, hidden and abstract, there's a deepest level: moments where many of the thirteen fields meet at once. Here are 6:"
       ],
       "how": [
-        "One hard conversation, all nine fields at once (9 fields: Neurobiology, Psychology, Philosophy, Behavioral science, Economics, Finance, Business, Holistic therapies, Aromatherapy). A single tense talk about the dishes runs through every field in the program, one after another, in a few seconds. Then you decide: talk now, or name a better time. Either way, you’re choosing with the whole picture.",
+        "One hard conversation, all thirteen fields at once (13 fields: Neurobiology, Psychology, Philosophy, The art of debating, Politics, Behavioral science, Economics, Finance, Business, Holistic therapies, Laughter therapy, Music, Aromatherapy). A single tense talk about the dishes runs through every field in the program, one after another, in a few seconds. Then you decide: talk now, or name a better time. Either way, you’re choosing with the whole picture.",
         "The job nobody owns (6 fields: Psychology, Behavioral science, Economics, Finance, Business, Philosophy). Each of us remembers our own effort best (psychology). A job with no owner drifts to whoever notices first (behavioral science). Noticing spends real attention (economics), so a debt builds up that nobody writes down (finance). Business calls it a missing owner. Philosophy calls it unfair. They’re all describing the same unwritten job.",
         "The tired week (6 fields: Neurobiology, Holistic therapies, Behavioral science, Economics, Finance, Business). A worn-out body has less to give (neurobiology), so rest has to match effort (holistic therapies). Habits have to be small enough to survive that week (behavioral science). A household running at full stretch has no safety margin (economics) and no reserve for a surprise (finance), and a team in the same state drops things (business). One tired week shows that capacity is a single root under six fields.",
-        "The room does some of the talking (6 fields: Aromatherapy, Neurobiology, Psychology, Philosophy, Economics, Business). Noise, light and smell reach the senses first (aromatherapy and the senses) and set the body’s alert level (neurobiology). That changes what a person can take in (psychology), and even what they believe happened (philosophy). A rushed, noisy room quietly taxes every conversation in it (economics), and good workplaces are designed to avoid that (business). Choosing the place is part of the conversation."
+        "The room does some of the talking (6 fields: Aromatherapy, Neurobiology, Psychology, Philosophy, Economics, Business). Noise, light and smell reach the senses first (aromatherapy and the senses) and set the body’s alert level (neurobiology). That changes what a person can take in (psychology), and even what they believe happened (philosophy). A rushed, noisy room quietly taxes every conversation in it (economics), and good workplaces are designed to avoid that (business). Choosing the place is part of the conversation.",
+        "Making a house rule (5 fields: Philosophy, The art of debating, Politics, Business, Behavioral science). Agreeing on a rule is politics at the smallest scale. Philosophy asks what is fair. Debate says each side should be able to state the other’s case before answering. Politics is how a group decides, and who gets a say. Business gives the rule an owner, and behavioral science makes it easy enough to follow on a bad day.",
+        "The mood of the room (5 fields: Music, Laughter therapy, Aromatherapy, Neurobiology, Holistic therapies). Sound, a shared laugh and the setting reach the body before any words do. Music sets the tempo (music), a laugh lets the body stand down (laughter), and light, scent and noise set the mood of the room (aromatherapy and the senses). Neurobiology explains why it works, and holistic care says to start there."
       ],
       "pillar": "These are the whole program in one moment: read your state, check what you know, count the load, give the job an owner, and mind the setting.",
       "chips": [
         [
           "Show me the chain",
-          "Show me the chain through the nine fields"
+          "Show me the chain through the thirteen fields"
         ],
         [
           "The abstract ones",
@@ -4686,7 +4732,7 @@
           "/polymath.html#climb"
         ],
         [
-          "The intersection of all nine, with flowcharts",
+          "The intersection of all thirteen, with flowcharts",
           "/polymath.html#intersection"
         ]
       ]
@@ -4695,28 +4741,32 @@
       "id": "connections-chain",
       "kind": "intent",
       "first": true,
-      "name": "the chain through all nine fields",
-      "pat": "\\b(how|does|do)\\b[^?]*\\b(one|each) (field|subject|area)\\b[^?]*\\b(lead|leads|flow|flows|follow|follows) (in)?to\\b|\\b(the )?chain (of|through|across)? ?(the )?(nine|9|all|fields)?\\b|\\bshow me the chain\\b|\\bhow one field leads into the next\\b",
+      "name": "the chain through all thirteen fields",
+      "pat": "\\b(how|does|do)\\b[^?]*\\b(one|each) (field|subject|area)\\b[^?]*\\b(lead|leads|flow|flows|follow|follows) (in)?to\\b|\\b(the )?chain (of|through|across)? ?(the )?(nine|thirteen|9|13|all|fields)?\\b|\\bshow me the chain\\b|\\bhow one field leads into the next\\b",
       "keys": [],
       "what": [
-        "The nine fields also line up in a chain, where each one follows logically from the last, and the ninth leads back to the first. Read it as one argument:"
+        "The thirteen fields also line up in a chain, where each one follows logically from the last, and the last leads back to the first. Read it as one argument:"
       ],
       "how": [
         "Neurobiology → Psychology: The body’s state comes first. It shapes what you feel, and how every word you hear lands.",
         "Psychology → Philosophy: Once you know feelings color what you hear, you have to ask what you actually know, and what you’re only assuming.",
-        "Philosophy → Behavioral science: Knowing what’s fair isn’t enough. Good intentions fade under stress, so you need habits and structures that work on bad days.",
+        "Philosophy → The art of debating: Knowing what’s fair isn’t enough. You have to be able to say it, and to test it with someone who disagrees, without it turning into a fight.",
+        "The art of debating → Politics: Debate between two people becomes politics when a group has to decide: who gets a say, who chooses, and how a disagreement ends without a loser.",
+        "Politics → Behavioral science: Fair rules agreed on aren’t enough. Good intentions fade under stress, so you need habits and structures that work on bad days.",
         "Behavioral science → Economics: Structures run on incentives. People follow what the setup rewards, and every choice spends a limited supply of time and attention.",
         "Economics → Finance: If time and attention are limited, they can be counted: a ledger of who spends what, the unseen work included.",
         "Finance → Business: Counting isn’t enough on its own. Each regular job needs an owner and a simple check, or the books drift again.",
         "Business → Holistic therapies: Systems are run by people. A team, or a home, only works if the people in it are cared for, not just managed.",
-        "Holistic therapies → Aromatherapy: Caring for the whole person starts with the body and the senses: rest, calm and the setting you’re in.",
+        "Holistic therapies → Laughter therapy: Caring for the whole person includes joy. A shared laugh is a reset for the body and a repair for the relationship, and it costs nothing.",
+        "Laughter therapy → Music: Laughter and music do the same quiet work: they bring people into step, with a shared breath and a shared beat.",
+        "Music → Aromatherapy: Sound is one of the senses that sets the mood of a room, along with light and scent, and the setting is part of every conversation.",
         "Aromatherapy → Neurobiology: And the senses feed straight back into the nervous system, setting the body’s state, which is where the chain began."
       ],
-      "pillar": "Each step is a pillar in action. Together they’re the program in one loop: read your state, check what you know, build habits, notice incentives, count the load, give jobs owners, care for the people, and mind the setting.",
+      "pillar": "Each step is a pillar in action. Together they’re the program in one loop: read your state, check what you know, argue kindly, decide fairly, build habits, count the load, give jobs owners, care for the people, share a laugh, find the beat, and mind the setting.",
       "chips": [
         [
           "Back to the obvious ones",
-          "How do the nine fields connect?"
+          "How do the thirteen fields connect?"
         ],
         [
           "What is a polymath?",
@@ -4729,7 +4779,7 @@
           "/polymath.html#chain"
         ],
         [
-          "All 36 pairs on one grid",
+          "All 78 pairs on one grid",
           "/polymath.html#all-pairs"
         ]
       ]

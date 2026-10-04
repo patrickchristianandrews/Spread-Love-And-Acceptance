@@ -172,7 +172,7 @@
     ]},
     { id: 'about', title: 'About & status', blurb: 'Who made this and why, what’s finished so far, and the site’s policies.', items: [
       { href: '/about.html', code: '', title: 'About the creator', note: 'The person behind it, their story, and why this exists' },
-      { href: '/polymath.html', code: '', title: 'The polymath way', note: 'How every field grows from the same few roots, and how nine of them became one program' },
+      { href: '/polymath.html', code: '', title: 'The polymath way', note: 'How every field grows from the same few roots, and how thirteen of them became one program' },
       { href: '/program-overview.html', deep: true, code: '', title: 'Program Overview', note: 'How the chapters, workpapers and calculators fit together' },
       { href: '/suite-index.html', deep: true, code: '', title: 'Suite Index', note: 'The official list of what’s built today. If it isn’t here, it isn’t live yet' },
       { href: '/roadmap.html', code: '', title: 'Content Roadmap', note: 'What’s live, what’s being written, and what’s planned' },
@@ -241,7 +241,7 @@
       { href: '/grandparents.html', code: 'Guide', title: 'For grandparents', note: 'Help with the grandkids without taking over' },
       { sub: 'Words and big ideas' },
       { href: '/glossary.html', code: 'Words', title: 'Glossary', note: 'Every word the site uses, in plain English' },
-      { href: '/polymath.html', title: 'The polymath way', note: 'How nine fields of study became one program' }
+      { href: '/polymath.html', title: 'The polymath way', note: 'How thirteen fields of study became one program' }
     ]},
     { id: 'self', name: 'Know yourself', title: 'Know yourself', blurb: 'Everything you can use on your own: understand your wiring, load and patterns, settle yourself, get ready for a hard talk, and read up, at your pace. Nothing here needs anyone else.', items: [
       { sub: 'Start here, on your own' },
@@ -328,7 +328,7 @@
     ]},
     { id: 'about', name: 'About', title: 'About', blurb: 'Who made this and why, what’s finished, and the site’s policies.', items: [
       { href: '/about.html', title: 'About the creator', note: 'Christian’s story, and why this exists' },
-      { href: '/polymath.html', title: 'The polymath way', note: 'How nine fields of study became one program' },
+      { href: '/polymath.html', title: 'The polymath way', note: 'How thirteen fields of study became one program' },
       { href: '/ways-in.html', deep: true, title: 'Ways in', note: 'Free while it’s being built: what each level opens' },
       { href: '/membership.html', title: 'Membership', note: 'Sign up free, or sign out of this browser' },
       { href: '/roadmap.html', title: 'Content Roadmap', note: 'What’s live, in progress and planned' },
@@ -341,6 +341,12 @@
       { href: '/legal/refund-policy.html', title: 'Refund policy' }
     ]}
   ];
+
+  // The polymath way sits at the bottom of every menu group, so it is one tap away from anywhere.
+  MENU.forEach(function (g) {
+    g.items = g.items.filter(function (it) { return it.href !== '/polymath.html'; });
+    g.items.push({ href: '/polymath.html', code: '', title: 'The polymath way', note: 'How thirteen fields grow from the same few roots', foot: true });
+  });
 
   // ===== Nothing below needs editing =====
   var STORE_KEY = 'tol-member-email';
@@ -428,7 +434,7 @@
           '<span class="tol-code">' + esc(it.code || '') + '</span>' +
           '<span class="tol-title">' + esc(it.title) + (it.note ? '<small>' + esc(it.note) + '</small>' : '') + '</span>' +
           '<span class="tol-access">' + (it.paid ? (isMember ? 'unlocked' : (CONFIG.freePreview ? 'Free with sign-up' : 'members')) : '') + '</span>';
-        var li = el('li'); li.appendChild(a);
+        var li = el('li', it.foot ? { class: 'tol-foot-row' } : null); li.appendChild(a);
         if (it.deep) li.appendChild(el('a', { class: 'dig tol-dig', href: deepHref(it) }, 'Dig deeper'));
         ol.appendChild(li);
       });
@@ -474,7 +480,7 @@
       if (it.href === '/index.html' || it.menu === false) return;
       var a = el('a', { href: it.href }, (it.code ? '<span class="tol-drop-code">' + esc(it.code) + '</span>' : '') + '<span>' + esc(it.title) + '</span>');
       if (it.href.split('#')[0] === current) a.setAttribute('aria-current', 'page');
-      var li = el('li'); li.appendChild(a); ul.appendChild(li);
+      var li = el('li', it.foot ? { class: 'tol-foot-row' } : null); li.appendChild(a); ul.appendChild(li);
     });
     menu.appendChild(ul);
     var all = el('button', { type: 'button', class: 'tol-drop-all', 'aria-controls': 'tol-panel' }, 'Everything on the site &rarr;');
@@ -878,6 +884,7 @@
       '<p class="tol-promise">What you type into the tools and worksheets stays on your device. It is never collected or sent to us. <a href="/legal/privacy-policy.html#your-entries">How we handle your information</a></p>';
     foot.innerHTML = promise +
       '<span class="tol-foot-brand"><img src="/assets/img/logo-mark.svg" alt="" width="40" height="40">Spread Love &amp; Acceptance &middot; spreadloveandacceptance.com</span>' +
+ (current === '/polymath.html' ? '' : '<p class="tol-foot-polymath">Every part of this program grows from the same few roots, seen across thirteen fields. <a href="/polymath.html">The polymath way &rarr;</a></p>') +
       '<nav class="tol-foot-guides" aria-label="Guides" style="display:flex;flex-wrap:wrap;gap:.3rem 1rem;justify-content:center;margin:0 0 .75rem;font-size:.9rem">' +
         '<a href="/invisible-labor-mental-load.html">The mental load</a>' +
         '<a href="/chore-chart-for-couples.html">Chore chart for couples</a>' +

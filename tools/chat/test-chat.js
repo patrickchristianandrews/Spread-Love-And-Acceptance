@@ -508,11 +508,13 @@ t('parents', 'when is the next season of frequency buddies', { kind: 'card', id:
 t('parents', 'is there a season 2 teaser', { kind: 'card', id: 'buddiess2', link: '/frequency-buddies-season-2.html' });
 
 // ---------------------------------------------------------------- the nine fields and how they connect
-t('connections', 'how do the nine fields connect', { id: 'connections', text: /36 possible pairs.*12 obvious, 14 hidden and 10 abstract/s });
+t('connections', 'how do the nine fields connect', { id: 'connections', text: /78 possible pairs.*28 obvious, 29 hidden and 21 abstract/s });
+t('connections', 'how do the thirteen fields connect', { id: 'connections', text: /thirteen fields.*debating.*politics.*laughter therapy/s });
 t('connections', 'how are all the different areas Christian studied connected?', { id: 'connections', text: /seven kinds of root/ });
 t('connections', 'Show me the hidden connections', { id: 'connections-hidden', text: /Neurobiology \+ Finance/ });
 t('connections', 'what are the deepest connections?', { id: 'connections-deepest', text: /One hard conversation/ });
 t('connections', 'where do all nine fields meet at once', { id: 'connections-deepest' });
+t('connections', 'where do all thirteen fields meet at once', { id: 'connections-deepest', text: /house rule/ });
 t('connections', 'Show me the abstract connections', { id: 'connections-abstract', text: /Aristotle/ });
 t('connections', 'Show me how one field leads into the next', { id: 'connections-chain', text: /Aromatherapy → Neurobiology/ });
 t('connections', 'what is a polymath', { kind: 'card', id: 'polymath', link: '/polymath.html' });
