@@ -233,14 +233,16 @@
     if (android) { state.textContent = 'Use Chrome’s menu to install.'; sub.textContent = 'Follow the five steps below. It takes about ten seconds.'; }
     else { state.textContent = 'This part is for an Android phone.'; sub.textContent = 'Open this page on your Android phone, or pick your device above.'; }
   }
+  var wasInstalled = false; try { wasInstalled = localStorage.getItem('tol-app-installed') === '1'; if (installed) localStorage.setItem('tol-app-installed', '1'); } catch (e) {}
   if (installed) { state.textContent = 'You are already using the app.'; sub.textContent = 'Nothing more to do. Enjoy it.'; }
+  else if (wasInstalled) { state.textContent = 'The app is already on this phone.'; sub.textContent = 'Look for the two little bubbles on your home screen or in your app drawer. Nothing more to do.'; }
   else {
     plain();
     window.addEventListener('beforeinstallprompt', function (e) {
       e.preventDefault(); ev = e; btn.hidden = false;
       state.textContent = 'Ready to install.'; sub.textContent = 'Tap the button. Chrome asks you to confirm, then the icon appears.';
     });
-    window.addEventListener('appinstalled', function () { btn.hidden = true; ev = null; state.textContent = 'Installed. Look for the two little bubbles on your home screen.'; sub.textContent = 'You can close this tab.'; });
+    window.addEventListener('appinstalled', function () { try { localStorage.setItem('tol-app-installed', '1'); } catch (e) {} btn.hidden = true; ev = null; state.textContent = 'Installed. Look for the two little bubbles on your home screen.'; sub.textContent = 'You can close this tab.'; });
     btn.addEventListener('click', function () {
       if (!ev) return; ev.prompt();
       ev.userChoice.then(function (c) { if (c && c.outcome === 'dismissed') { state.textContent = 'No problem. It will be here when you are ready.'; } ev = null; btn.hidden = true; }).catch(function () {});

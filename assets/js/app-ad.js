@@ -98,9 +98,18 @@
     '@media (max-width:620px){ .appad{ grid-template-columns:1fr; padding:1rem; } .appad .aa-stage{ max-width:260px; margin:0 auto; } }';
   function css() { if (document.getElementById('appad-css')) return; var s = document.createElement('style'); s.id = 'appad-css'; s.textContent = CSS; document.head.appendChild(s); }
 
+  // has this phone installed the app? Remembered once seen: opened as the app, installed from the browser, or reported by Chrome
+  function standalone() { return (window.matchMedia && matchMedia('(display-mode: standalone)').matches) || navigator.standalone === true; }
+  function noteInstalled() { lsSet('tol-app-installed', '1'); }
+  if (standalone()) noteInstalled();
+  window.addEventListener('appinstalled', function () { noteInstalled(); var h = document.querySelector('[data-app-ad]'); if (h) h.innerHTML = ''; });
   function mount() {
     if (lsGet('tol-appad-off') === '1') return;
-    if ((window.matchMedia && matchMedia('(display-mode: standalone)').matches) || navigator.standalone === true) return;
+    if (standalone() || lsGet('tol-app-installed') === '1') return;
+    // Chrome on Android can say whether this site's app is already installed (the manifest lists it as related)
+    if (navigator.getInstalledRelatedApps) {
+      try { navigator.getInstalledRelatedApps().then(function (apps) { if (apps && apps.length) { noteInstalled(); var h = document.querySelector('[data-app-ad]'); if (h) h.innerHTML = ''; } }).catch(function () {}); } catch (e) {}
+    }
     var path = location.pathname.replace(/\/index\.html$/, '/'); if (/install\.html$/.test(path)) return;
     var host = document.querySelector('[data-app-ad]'); if (!host) return;
     css();

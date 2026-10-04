@@ -126,5 +126,11 @@
       "form_factor": "wide",
       "label": "The Night Garden"
     }
+  ],
+  "related_applications": [
+    {
+      "platform": "webapp",
+      "url": "https://spreadloveandacceptance.com/manifest.webmanifest"
+    }
   ]
 }
