@@ -36,6 +36,7 @@
   var SECTIONS = [
     { id: 'new', title: 'What’s new', blurb: 'Newly added and newly expanded, newest first.', items: [
       { href: '/whats-new.html', code: 'All', title: 'What’s new', note: 'Everything newly added and everything that’s grown, in one place, with dates' },
+      { href: '/bears-dojo.html', code: 'New', title: 'The Bears Dojo', note: 'A temple garden to wander, a bear to build, and a quiet room of gentle things to do' },
       { href: '/wavelength.html', code: 'New', title: 'Wavelength', note: 'Replaces Your Heartprint: pick your wiring, find your Wave Code, read your self-discovery chapters' },
       { href: '/growing-up.html', code: 'New', title: 'Where your lens came from', note: 'How growing up shapes the way you see yourself and others, and how to choose which old rules to keep' },
       { href: '/frequency-buddies.html', code: 'New', title: 'Frequency Buddies', note: 'Animated episodes with Tidbit and Sugarfoot, with captions on' },
@@ -94,6 +95,7 @@
     ]},
     { id: 'play', title: 'Play', blurb: 'Calm games for a busy mind: a gentle way to read your state and settle it (Pillar III) before you talk. No timers and no way to lose, and something new in the background every few levels.', items: [
       { href: '/pause-and-play.html', code: 'All', title: 'Pause & Play', note: 'All the calm games in one place, with your level and your garden' },
+      { href: '/bears-dojo.html', code: 'New', title: 'The Bears Dojo', note: 'Wander a temple garden while Tidbit and Sugarfoot tend it, build your own bear, then step inside for something gentle and always different' },
       { href: '/frequency-journey.html', code: 'New', title: 'The Frequency Journey', note: 'Guide Tidbit and Sugarfoot through seven tone-themed worlds: practice tuning in (Pillar IV) while you settle (Pillar III)' },
       { href: '/calm-visualizer.html', code: 'New', title: 'Drift: calm visualizer', note: 'Pick how you feel. Slow, deep 3D colors and binaural tones (headphones on) ease you toward calm. Pillar III: settle first' },
       { href: '/night-garden.html', code: 'New', title: 'The Night Garden', note: 'A calm place to breathe, play and let your mind settle. Flowers bloom as you breathe; no timers, nothing to lose' },
@@ -266,6 +268,7 @@
       { href: '/calm-visualizer.html', code: 'Drift', title: 'Drift: calm visualizer', note: 'Slow colors and tones matched to how you feel' },
       { href: '/night-garden.html', code: 'Breathe', title: 'The Night Garden', note: 'Breathe slowly and watch the flowers bloom' },
       { href: '/soundscapes.html', code: 'Audio', title: 'Soundscapes', note: 'Background audio for settling down' },
+      { href: '/bears-dojo.html', code: 'New', title: 'The Bears Dojo', note: 'A temple garden and a quiet room of gentle things to do' },
       { href: '/pause-and-play.html', code: 'All', title: 'Pause & Play', note: 'All the calm games, your level and your garden' },
       { sub: 'Before you say it' },
       { href: '/workpapers/wp-09-tone-filter.html', deep: true, code: 'WP-09', title: 'Say it so it lands', note: 'A fact, a feeling and a kind ask, before you send' },
@@ -305,6 +308,7 @@
     ]},
     { id: 'play', name: 'Calm & play', title: 'Calm & play', blurb: 'Calm games and sounds for a busy mind. No timers and no way to lose.', items: [
       { href: '/pause-and-play.html', code: 'All', title: 'Pause & Play', note: 'All the calm games, your level and your garden' },
+      { href: '/bears-dojo.html', code: 'New', title: 'The Bears Dojo', note: 'A temple garden to wander, a bear to build, a quiet room of gentle things' },
       { href: '/night-garden.html', code: 'Breathe', title: 'The Night Garden', note: 'Breathe slowly and watch the flowers bloom' },
       { href: '/calm-visualizer.html', code: 'Drift', title: 'Drift: calm visualizer', note: 'Slow colors and tones matched to how you feel' },
       { href: '/frequency-journey.html', code: 'Game', title: 'The Frequency Journey', note: 'A calm puzzle journey with Tidbit and Sugarfoot' },

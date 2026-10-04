@@ -5013,6 +5013,50 @@
       ]
     },
     {
+      "id": "bearsdojo",
+      "kind": "tool",
+      "name": "The Bears Dojo",
+      "keys": [
+        "bears dojo",
+        "the bears dojo",
+        "bear dojo",
+        "dojo",
+        "temple garden",
+        "build a bear",
+        "build my bear",
+        "my bear",
+        "tidbit and sugarfoot garden"
+      ],
+      "what": "The Bears Dojo is a calm place to wander into: a temple garden with a fountain and streams where Tidbit and Sugarfoot quietly tend the grounds. You can build a little bear that looks like you, then step through the doors into a warm room where one gentle thing waits at a time, always something different: a breath, a singing bowl, stacking stones, raking sand, a kind-word card, a memory match, a lantern for the stream and more. No timers, no scores, no way to lose. Everything stays on your device, and sound stays off until you turn it on.",
+      "how": [
+        "Look around the garden and watch Tidbit and Sugarfoot at work. Nothing needs doing.",
+        "Build your bear at the gate: fur, ears, robe, an accessory and a name.",
+        "Tap Step inside. Press Another for something new, or turn on drift to let it change on its own.",
+        "Press Escape, or Leave, to come back to the garden."
+      ],
+      "pillar": "Pillar III, Read your state first: settle your body before you talk.",
+      "chips": [
+        [
+          "Other calm games",
+          "What calm games are there?"
+        ],
+        [
+          "Keep the page still",
+          "How do I keep the page still?"
+        ]
+      ],
+      "links": [
+        [
+          "Open The Bears Dojo",
+          "/bears-dojo.html"
+        ],
+        [
+          "Pause & Play",
+          "/pause-and-play.html"
+        ]
+      ]
+    },
+    {
       "id": "grandparents",
       "kind": "tool",
       "name": "the page for grandparents",
