@@ -67,7 +67,7 @@
     if (o.over) o.over(g, t);
     g.restore();
     var ang = o.rot || 0, lx = hx * face * s, ly = (hy - 14) * s;
-    return { x: x + lx * Math.cos(ang) - ly * Math.sin(ang), y: y - lift + lx * Math.sin(ang) + ly * Math.cos(ang) };
+    return { x: x + lx * Math.cos(ang) - ly * Math.sin(ang), y: y - lift + lx * Math.sin(ang) + ly * Math.cos(ang), who: who };
   }
   // accessories, drawn in head space (head centre at 0,0, radius 11, facing right)
   var HAT = {
@@ -83,10 +83,12 @@
   };
 
   // ---------------------------------------------------------------- per-frame records: speech bubbles and secrets in canvas pixels
-  var FR = { says: [], secrets: [] };
+  var FR = { says: [], secrets: [], narr: [] };
   function px(g, x, y) { var m = g.getTransform(); return { x: m.a * x + m.c * y + m.e, y: m.b * x + m.d * y + m.f, k: Math.hypot(m.a, m.b) }; }
   // a line of dialogue, shown from u0 to u1 over the speaker's head (o: { big, dx })
-  function say(g, head, text, u, u0, u1, o) { if (u < u0 || u > u1) return; var p = px(g, head.x, head.y); FR.says.push({ x: p.x, y: p.y, text: text, a: clamp((u - u0) / 0.12, 0, 1) * clamp((u1 - u) / 0.14, 0, 1), pop: (u - u0), o: o || {} }); live(text); }
+  function say(g, head, text, u, u0, u1, o) { if (u < u0 || u > u1) return; var p = px(g, head.x, head.y); FR.says.push({ who: head.who || 'tidbit', x: p.x, y: p.y, text: text, a: clamp((u - u0) / 0.12, 0, 1) * clamp((u1 - u) / 0.14, 0, 1), pop: (u - u0), o: o || {} }); live(text); }
+  // the trailer announcer: a line across the top of the picture, typed out, and read aloud by the player (draw: false = read aloud only)
+  function narr(text, u, u0, u1, draw) { if (u < u0 || u > u1) return; FR.narr.push({ text: text, u: u - u0, a: clamp((u - u0) / 0.2, 0, 1) * clamp((u1 - u) / 0.25, 0, 1), draw: draw !== false }); live(text); }
   var SECRETS = [
     { id: 'star', name: 'The star sticker', where: 'balloon', hint: 'Look closely at the balloon basket, way up above the clouds.' },
     { id: 'paw', name: 'The paw print', where: 'library', hint: 'Check the book spines in the library, next to the secret door.' },
@@ -145,6 +147,7 @@
     o = o || {};
     var gr = g.createRadialGradient(320, 180, 20, 320, 180, 420); gr.addColorStop(0, o.c0 || '#3D2C63'); gr.addColorStop(1, o.c1 || '#130D24'); g.fillStyle = gr; g.fillRect(-60, -60, VW + 120, VH + 120);
     for (var i = 0; i < 46; i++) { var x = rnd(i + 3) * VW + Math.sin(u + i) * 6, y = ((rnd(i + 7) * VH - u * (8 + rnd(i) * 14)) % VH + VH) % VH; circ(g, x, y, 0.6 + rnd(i + 11) * 1.6, 'rgba(255,224,160,' + (0.15 + rnd(i + 13) * 0.35) + ')'); }
+    narr(text.replace(/\.$/, '…'), u, 0.1, d, false);
     var s = calm ? 1 + 0.03 * u / d : (1 + 0.55 * (1 - eout(u / 0.2))) * (1 + 0.04 * u / d), a = calm ? clamp(u / 0.3, 0, 1) * clamp((d - u) / 0.3, 0, 1) : clamp(u / 0.07, 0, 1);
     g.save(); g.globalAlpha = a; g.translate(320, 180); g.scale(s, s);
     font(g, '700', o.size || 52); spacing(g, 1); g.textAlign = 'center'; g.textBaseline = 'middle';
@@ -526,10 +529,191 @@
     say(g, sug, 'Wait… did anyone see where Tidbit went?', u, 0.4, 3.3);
     say(g, tid, 'Ready for Season 2!', u, 4.15, 6.2, { big: false });
     say(g, sug, 'Hee hee! Of course you are.', u, 6.3, 7.7);
+    say(g, tid, 'And remember… I’ll be bark!', u, 7.8, 9.4);
+  }
+
+  // ---------------------------------------------------------------- the funny middle: six slapstick bits, each a wink at a famous movie
+  function bone(g, x, y, s, rot, col) { g.save(); g.translate(x, y); g.rotate(rot || 0); g.scale(s, s); rr(g, -9, -2, 18, 4, 2, col); circ(g, -10, -2.6, 3, col); circ(g, -10, 2.6, 3, col); circ(g, 10, -2.6, 3, col); circ(g, 10, 2.6, 3, col); g.restore(); }
+  function beachBall(g, x, y, r, rot, sq) {
+    g.save(); g.translate(x, y); g.scale(1 + (1 - sq) * 0.6, sq); g.rotate(rot); circ(g, 0, 0, r, '#FFFFFF');
+    var cols = ['#F27D7D', '#7FB8F0', '#F7DC6F', '#8FD694', '#F2A0B8', '#B79CEB'];
+    for (var i = 0; i < 6; i++) { g.fillStyle = cols[i]; g.beginPath(); g.moveTo(0, 0); g.arc(0, 0, r, i / 6 * TAU, (i + 0.5) / 6 * TAU); g.closePath(); g.fill(); }
+    circ(g, 0, 0, r * 0.16, '#FFFFFF'); g.restore();
+  }
+  function onomato(g, text, x, y, size, col, a, rot) { if (a <= 0) return; g.save(); g.globalAlpha = a; g.translate(x, y); g.rotate(rot || 0); font(g, '800', size); g.textAlign = 'center'; g.textBaseline = 'middle'; g.fillStyle = 'rgba(0,0,0,.35)'; g.fillText(text, 2, 3); g.fillStyle = col; g.fillText(text, 0, 0); g.restore(); }
+  function splash(g, x, y, u0, u, n, seed) { var q = u - u0; if (q < 0 || q > 1.1) return; for (var i = 0; i < n; i++) { var a = -Math.PI * (0.1 + 0.8 * rnd(i + seed)), v = 70 + rnd(i + seed + 1) * 130, px1 = x + Math.cos(a) * v * q, py1 = y + Math.sin(a) * v * q + 280 * q * q; if (py1 > y + 6) continue; circ(g, px1, py1, 3.4 - q * 1.6, 'rgba(190,225,250,' + (0.9 - q * 0.8) + ')'); } }
+  // 1. the boulder (Raiders of the Lost Ark): it turns out to be a beach ball
+  function boulder(g, u, d, calm) {
+    var shake = calm || u < 3.0 || u > 5.1 ? 0 : 1.6;
+    g.save(); if (shake) g.translate(Math.sin(u * 53) * shake, Math.cos(u * 47) * shake);
+    sky(g, [[0, '#EE9A55'], [0.55, '#F7CE88'], [1, '#FCE9BE']], 280);
+    glow(g, 520, 92, 200, '255,236,190', 0.45); circ(g, 520, 92, 32, '#FFF1BE');
+    g.fillStyle = '#C99A62'; g.beginPath(); g.moveTo(-60, 282); g.lineTo(20, 150); g.lineTo(110, 150); g.lineTo(150, 282); g.fill();
+    for (var c = 0; c < 3; c++) { rr(g, 200 + c * 60, 170, 22, 112, 3, '#B98750'); rr(g, 194 + c * 60, 164, 34, 10, 3, '#C9996A'); }
+    g.fillStyle = lin(g, 0, 280, 0, 360, [[0, '#E0B678'], [1, '#C79A5C']]); g.fillRect(-60, 280, VW + 120, 120);
+    rr(g, 322, 262, 44, 24, 3, '#9C7448'); rr(g, 316, 256, 56, 8, 3, '#B58A58');
+    var taken = u > 2.3;
+    if (!taken) { glow(g, 344, 244, 30, '255,225,120', 0.5 + 0.2 * Math.sin(u * 8)); bone(g, 344, 246, 1.2, 0, '#F6C945'); }
+    var tx = u < 3.5 ? 276 : Math.min(548, 276 + (u - 3.5) * 270), running = u >= 3.5 && tx < 548, face = tx >= 548 ? -1 : 1;
+    var tid = pup(g, 'tidbit', tx, 306, 1.5, { pose: running ? 'run' : 'sit', face: face, t: u, ph: tx * 0.24, over: HAT.explorer, wag: running ? Math.sin(u * 16) * 0.7 : Math.sin(u * 6) * 0.4, lift: running ? 4 * Math.abs(Math.sin(u * 14)) : 0, ear: running ? -0.6 : 0 });
+    if (taken) bone(g, tid.x + 17 * face, tid.y + 26, 0.95, 0.3 * face, '#F6C945');
+    var sug = pup(g, 'sugarfoot', 598, 306, 1.4, { pose: 'sit', face: -1, t: u + 1, ear: u > 3.2 ? -0.7 : 0, tilt: u > 3.2 ? -0.1 : 0 });
+    var bx = u < 3.2 ? -90 : u < 4.5 ? -90 + (u - 3.2) * 340 : 352 + 96 * eout((u - 4.5) / 0.9), isBall = u > 5.3;
+    if (u >= 3.1 && u < 5.9) {
+      var rot = bx / 46;
+      if (!isBall) { g.save(); g.translate(bx, 262); g.rotate(rot); circ(g, 0, 0, 46, '#8D8A94'); circ(g, -12, -14, 14, '#9C99A4'); line(g, -30, 10, -8, 22, '#6E6B76', 3); line(g, 10, -34, 24, -10, '#6E6B76', 3); line(g, 14, 24, 34, 12, '#6E6B76', 3); g.restore(); }
+      else { var sq = 1 - 0.28 * bump((u - 5.3) / 0.7) - 0.06 * clamp((u - 5.9) / 1, 0, 1); beachBall(g, bx, 262 + (1 - sq) * 40, 46, rot * 0.3, sq); }
+      if (!calm && u < 5.3) for (var k = 0; k < 8; k++) { var q = ((u * 1.6 + rnd(k + 1500)) % 1); g.globalAlpha = (1 - q) * 0.5; circ(g, bx - 30 - q * 80 - rnd(k + 1501) * 24, 300 - q * 20, 5 + q * 11, '#E2C79A'); g.globalAlpha = 1; }
+    }
+    if (u > 5.3 && u < 6.4) onomato(g, 'pffffft…', 440, 214, 24, '#FFFFFF', win(u, 5.3, 6.4, 0.2), -0.08);
+    narr('In a world of golden bones…', u, 0.1, 2.0);
+    say(g, tid, 'One golden bone. Easy!', u, 2.1, 3.3);
+    say(g, sug, 'Tidbit! RUN!', u, 3.5, 4.8, { big: true });
+    say(g, tid, 'Is that a… beach ball?', u, 5.5, 7.0);
+    say(g, sug, 'Every single time.', u, 6.2, 7.4);
+    g.restore();
+  }
+  // 2. the pond (Jaws): a fin, two dramatic notes, and a very small shark
+  function jaws(g, u, d, calm) {
+    sky(g, [[0, '#0E1636'], [1, '#25306A']], 210); stars(g, 40, 1600, u, 170, calm);
+    circ(g, 520, 58, 22, '#FFF4D2'); circ(g, 529, 52, 19, '#18204A'); glow(g, 520, 58, 90, '255,240,200', 0.12);
+    var WL = 236;
+    g.fillStyle = lin(g, 0, 190, 0, 360, [[0, '#2E4F8C'], [1, '#14265A']]); g.fillRect(-60, 190, VW + 120, 220);
+    for (var w = 0; w < 9; w++) line(g, 20 + w * 74 + Math.sin(u * 1.2 + w) * 8, 214 + (w % 3) * 16, 60 + w * 74 + Math.sin(u * 1.2 + w) * 8, 214 + (w % 3) * 16, 'rgba(150,190,240,.25)', 1.6);
+    g.fillStyle = 'rgba(255,240,200,.14)'; g.fillRect(500, 190, 40, 170);
+    rr(g, 556, 196, 100, 10, 2, '#5A4636'); rr(g, 580, 204, 8, 60, 2, '#4A3A2C'); rr(g, 630, 204, 8, 60, 2, '#4A3A2C');
+    // Tidbit paddles on a duck ring
+    var by = WL + 5 + Math.sin(u * 2.3) * 3, leap = clamp((u - 3.0) / 1.0, 0, 1), air = bump(leap) * 110, fl = leap < 1 && leap > 0 ? -TAU * leap : 0, tx = 250 + leap * 60;
+    if (u < 3.0 || u > 4.1) {
+      var tid = pup(g, 'tidbit', tx, (u > 4.1 ? WL + 36 : by) + 18, 1.45, { pose: 'sit', face: 1, t: u, tilt: u < 3.0 ? Math.sin(u * 2) * 0.06 : 0.1, noShadow: true, ear: u >= 2.7 && u < 3 ? -1.2 : 0 });
+      if (u < 3.0) { ell(g, tx + 2, by + 8, 36, 12, '#F7DC6F'); ell(g, tx + 2, by + 6, 24, 6, '#14265A'); circ(g, tx - 30, by + 2, 6, '#F7DC6F'); }
+    } else { var tl = pup(g, 'tidbit', tx, WL + 18 - air, 1.45, { pose: 'wiggle', face: 1, t: u, rot: fl, noShadow: true, ear: -1 }); }
+    // the fin glides in from the right, two beats at a time
+    var fx = u < 2.7 ? mix(660, 330, clamp((u - 0.5) / 2.2, 0, 1)) : 330;
+    var beat = u > 0.8 && u < 3.0 ? Math.max(0, Math.sin(u * Math.PI * 2 / 0.9)) : 0;
+    var rise = clamp((u - 2.9) / 0.5, 0, 1);
+    var sy0 = WL + 40 - 30 * rise;
+    g.save(); g.beginPath(); g.rect(0, 0, VW, WL + 2); g.clip();
+    var sug = pup(g, 'sugarfoot', fx, sy0 + 50, 1.5, { pose: 'sit', face: -1, t: u + 1, over: function (gg) { gg.fillStyle = '#8A8FA0'; gg.beginPath(); gg.moveTo(-8, -9); gg.lineTo(0, -38); gg.lineTo(10, -9); gg.fill(); gg.fillStyle = '#A8ADBD'; gg.beginPath(); gg.moveTo(-3, -11); gg.lineTo(0, -30); gg.lineTo(4, -11); gg.fill(); }, noShadow: true, tilt: u > 3.0 ? 0.08 : 0 });
+    g.restore();
+    if (u > 0.5 && u < 3.0) for (var r2 = 0; r2 < 3; r2++) { var rq = ((u * 0.9 + r2 / 3) % 1); g.strokeStyle = 'rgba(200,225,255,' + 0.45 * (1 - rq) + ')'; g.lineWidth = 1.4; g.beginPath(); g.ellipse(fx, WL + 2, 14 + rq * 50, 3 + rq * 7, 0, 0, TAU); g.stroke(); }
+    ell(g, fx, WL + 3, 20, 3.5, 'rgba(120,160,220,.35)');
+    onomato(g, beat > 0.5 ? 'DUN…' : 'dun…', 330, 120, beat > 0.5 ? 40 : 34, '#E4566E', win(u, 0.9, 2.9, 0.25) * (0.5 + 0.5 * beat), 0);
+    splash(g, tx + 20, WL + 2, 3.9, u, 16, 1700);
+    if (u > 3.9) for (var rr2 = 0; rr2 < 2; rr2++) { var q3 = ((u - 3.9) * 0.8 + rr2 * 0.4) % 1; g.strokeStyle = 'rgba(210,235,255,' + 0.6 * (1 - q3) + ')'; g.lineWidth = 1.4; g.beginPath(); g.ellipse(tx + 20, WL + 4, 18 + q3 * 70, 3 + q3 * 9, 0, 0, TAU); g.stroke(); }
+    say(g, { x: tx, y: by - 38, who: 'tidbit' }, 'Nice night for a swim.', u, 0.3, 1.7);
+    say(g, { x: tx, y: by - 38, who: 'tidbit' }, '…Hello?', u, 2.0, 2.9);
+    say(g, sug, 'Gotcha!', u, 3.0, 4.2, { big: true });
+    say(g, { x: tx, y: WL - 20, who: 'tidbit' }, 'We need a bigger bone!', u, 4.4, 6.0);
+  }
+  // 3. slow motion (The Matrix): Tidbit dodges a pie, and the pie finds Sugarfoot
+  function matrix(g, u, d, calm) {
+    g.fillStyle = lin(g, 0, 0, 0, VH, [[0, '#04140C'], [1, '#0A2E1A']]); g.fillRect(-60, -60, VW + 120, VH + 120);
+    for (var c = 0; c < 36; c++) { var cx0 = 10 + c * 18, sp = 30 + rnd(c + 1800) * 60, off = rnd(c + 1801) * 400; font(g, '600', 12, '"IBM Plex Mono", monospace'); g.textAlign = 'center'; for (var k = 0; k < 9; k++) { var yy = ((u * sp + off - k * 16) % 460) - 40; g.fillStyle = 'rgba(80,255,150,' + (0.5 * (1 - k / 9) * 0.8) + ')'; g.fillText(String.fromCharCode(0x30A0 + Math.floor(rnd(c * 9 + k + Math.floor(u * 3)) * 60)), cx0, yy); } }
+    g.fillStyle = 'rgba(0,0,0,.45)'; g.fillRect(-60, 290, VW + 120, 120);
+    var lean = sio((u - 1.4) / 0.9) * (1 - sio((u - 2.9) / 0.9));
+    var tid = pup(g, 'tidbit', 250, 312, 1.6, { pose: 'sit', face: 1, t: u, rot: -0.55 * lean, tilt: -0.2 * lean, sy: 1 - 0.1 * lean, over: function (gg) { rr(gg, -9, -5, 24, 6, 3, '#101010'); circ(gg, -3, -2, 4.4, '#0A0A0A'); circ(gg, 8, -2, 4.4, '#0A0A0A'); gg.fillStyle = 'rgba(120,255,170,.5)'; gg.fillRect(-6, -4, 3, 1.5); } });
+    var hit = u > 3.6, pie = u > 0.9 && u < 3.7;
+    var sug = pup(g, 'sugarfoot', 500, 312, 1.6, { pose: 'sit', face: -1, t: u + 1, ear: hit ? -0.9 : 0, tilt: hit ? 0.2 : 0 });
+    if (pie) { var q = clamp((u - 0.9) / 2.8, 0, 1), px0 = mix(-40, 484, q), py0 = 236 + 8 * Math.sin(q * 3) - 18 * bump(q); for (var gh = 4; gh >= 1; gh--) { g.globalAlpha = 0.14 * (5 - gh) / 4; var gq = clamp(q - gh * 0.03, 0, 1); ell(g, mix(-40, 484, gq), 236 + 8 * Math.sin(gq * 3) - 18 * bump(gq), 24, 7, '#F6F0E4'); } g.globalAlpha = 1; ell(g, px0, py0 + 4, 26, 7, '#C98A4E'); ell(g, px0, py0 - 1, 24, 9, '#FFF8EC'); circ(g, px0 - 4, py0 - 9, 4, '#D93A52'); }
+    if (hit) { var sq2 = clamp((u - 3.6) / 0.25, 0, 1); for (var b2 = 0; b2 < 7; b2++) { var ang = -Math.PI * (0.1 + 0.8 * rnd(b2 + 1850)), v = 40 + rnd(b2 + 1851) * 70, qq = clamp((u - 3.6) / 0.9, 0, 1); circ(g, 488 + Math.cos(ang) * v * qq, 262 + Math.sin(ang) * v * qq + 60 * qq * qq, 5 - qq * 2, '#FFF8EC'); } ell(g, sug.x - 8, sug.y + 24, 20 * sq2, 14 * sq2, '#FFF8EC'); circ(g, sug.x - 12, sug.y + 16, 5 * sq2, '#FFF8EC'); circ(g, sug.x - 2, sug.y + 28, 5 * sq2, '#FFF8EC'); circ(g, sug.x - 14, sug.y + 31, 4 * sq2, '#D93A52'); }
+    onomato(g, 'SPLAT!', 500, 170, 34, '#FFF8EC', win(u, 3.6, 4.7, 0.1), 0.1);
+    say(g, tid, 'Whoa… slow motion.', u, 0.3, 1.8);
+    say(g, tid, 'I know pie-fu.', u, 2.0, 3.4);
+    say(g, sug, 'Why is it always me?', u, 4.0, 5.4);
+    say(g, sug, 'Mmm. Cherry.', u, 5.5, 6.4);
+  }
+  // 4. the vault (Mission: Impossible): a cookie, a rope and a muffled partner
+  function vault(g, u, d, calm) {
+    g.fillStyle = lin(g, 0, 0, 0, VH, [[0, '#10121F'], [1, '#22263C']]); g.fillRect(-60, -60, VW + 120, VH + 120);
+    for (var t = 0; t < 8; t++) { g.fillStyle = 'rgba(255,255,255,.04)'; g.fillRect(t * 84, 0, 2, 300); }
+    g.fillStyle = '#1A1C2C'; g.fillRect(-60, 300, VW + 120, 100);
+    var alarm = u > 4.3, flick = alarm ? (Math.floor(u * 6) % 2 ? 1 : 0.4) : 1;
+    for (var l = 0; l < 7; l++) { var y0 = 70 + l * 36, y1 = 70 + ((l * 53) % 7) * 36 + 40; g.strokeStyle = 'rgba(255,60,80,' + (0.5 * flick * (0.7 + 0.3 * Math.sin(u * 5 + l))) + ')'; g.lineWidth = alarm ? 3 : 2; g.beginPath(); g.moveTo(-10, y0); g.lineTo(650, y1); g.stroke(); }
+    if (alarm) { g.fillStyle = 'rgba(255,40,70,' + (0.14 * (Math.floor(u * 6) % 2 ? 1 : 0.2)) + ')'; g.fillRect(0, 0, VW, VH); }
+    rr(g, 296, 268, 48, 40, 3, '#3A3F5A'); ell(g, 320, 266, 34, 7, '#E8E8F0'); ell(g, 320, 263, 14, 6, '#C98A4E'); circ(g, 316, 262, 1.4, '#6B4A2A'); circ(g, 324, 264, 1.4, '#6B4A2A');
+    var q = clamp((u - 0.6) / 3.0, 0, 1), y0r = u < 4.0 ? mix(-6, 188, eio(q)) : mix(188, 308, clamp((u - 4.0) / 0.45, 0, 1) * clamp((u - 4.0) / 0.45, 0, 1)), fall = clamp((u - 4.0) / 0.5, 0, 1), rot = u < 4.0 ? Math.PI + Math.sin(u * 2) * 0.05 : Math.PI + Math.PI * fall;
+    var tid = pup(g, 'tidbit', 566, 308, 1.5, { pose: 'sit', face: -1, t: u, ear: -0.4, tilt: u > 4.0 ? 0.15 : -0.05 });
+    if (u < 4.0) { line(g, 320, -6, 320, y0r, '#B8A27A', 2.2); line(g, 320, -6, tid.x - 4, tid.y + 16, '#B8A27A', 2.2); circ(g, 320, -4, 5, '#8A8FA0'); }
+    var sug = pup(g, 'sugarfoot', 320, y0r, 1.5, { pose: 'sit', face: 1, t: u + 1, rot: rot, noShadow: u < 4.2, ear: -0.5 });
+    onomato(g, 'WEE-OO! WEE-OO!', 320, 48, 28, '#FF6A86', win(u, 4.3, 6.2, 0.1) * flick, 0);
+    say(g, sug, 'Almost there…', u, 0.9, 2.3);
+    say(g, tid, 'Mmf! Mmf mmf!', u, 1.5, 2.9);
+    say(g, sug, 'Got it!', u, 3.0, 3.9, { big: true });
+    say(g, tid, '…Oops.', u, 4.0, 5.0);
+    say(g, sug, 'Mission: possible… ish.', u, 5.0, 6.6);
+  }
+  // 5. the bridge (The Lord of the Rings, and Steve Urkel): a wizard holds the line against a ladybug
+  function bridge(g, u, d, calm) {
+    sky(g, [[0, '#8EC8F2'], [1, '#EAF6FF']], 250); puff(g, 90 + u * 5, 60, 0.8, 'rgba(255,255,255,.95)'); puff(g, 420 + u * 4, 40, 0.6, 'rgba(255,255,255,.9)');
+    g.fillStyle = '#7DB868'; g.beginPath(); g.moveTo(-60, 250); g.quadraticCurveTo(200, 210, 420, 244); g.quadraticCurveTo(560, 230, 700, 244); g.lineTo(700, 400); g.lineTo(-60, 400); g.fill();
+    var WL = 306; g.fillStyle = lin(g, 0, WL - 20, 0, 380, [[0, '#6CB5E4'], [1, '#3F86C2']]); g.fillRect(-60, WL - 6, VW + 120, 100);
+    for (var w = 0; w < 8; w++) line(g, 10 + w * 84 + Math.sin(u * 1.4 + w) * 6, WL + 14 + (w % 3) * 12, 56 + w * 84 + Math.sin(u * 1.4 + w) * 6, WL + 14 + (w % 3) * 12, 'rgba(255,255,255,.35)', 1.6);
+    rr(g, 150, 268, 340, 12, 3, '#A9825A'); for (var pl = 0; pl < 11; pl++) line(g, 156 + pl * 31, 268, 156 + pl * 31, 280, '#7E5C3A', 1.5);
+    rr(g, 150, 232, 8, 38, 2, '#8B6743'); rr(g, 482, 232, 8, 38, 2, '#8B6743'); rr(g, 150, 232, 340, 5, 2, '#8B6743'); rr(g, 150, 250, 340, 4, 2, '#8B6743');
+    var hitU = 3.7, tumble = clamp((u - hitU) / 0.9, 0, 1);
+    // Sugarfoot the wizard, staff and all
+    var sx = u < hitU ? 330 : 330 + tumble * 90, sy = u < hitU ? 268 : 268 + (-80 * bump(tumble) + 120 * tumble * tumble), srot = u < hitU ? 0 : tumble * TAU * 1.2;
+    var inWater = sy > WL - 10 && u >= hitU;
+    function wiz(gg) { gg.fillStyle = '#9AA0B4'; gg.beginPath(); gg.moveTo(-12, -9); gg.lineTo(2, -40); gg.lineTo(14, -9); gg.fill(); ell(gg, 1, -9, 17, 4, '#8A90A4'); ell(gg, 4, 11, 7, 9, '#F4F4F4'); }
+    if (!inWater) {
+      var sug = pup(g, 'sugarfoot', sx, sy, 1.55, { pose: 'sit', face: 1, t: u + 1, rot: srot, over: wiz, ear: u > 1.3 && u < 3.4 ? -0.4 : 0, noShadow: u >= hitU });
+      if (u < hitU) { line(g, sx + 34, 268, sx + 34, 182, '#7A5636', 4); circ(g, sx + 34, 178, 8, '#BFE7F5'); glow(g, sx + 34, 178, u > 1.4 && u < 3.2 ? 44 : 26, '200,240,255', u > 1.4 && u < 3.2 ? 0.7 : 0.35); }
+    }
+    // the ladybug: a very slow, very brave visitor
+    var lx = mix(160, 480, clamp((u - 0.4) / 3.1, 0, 1)); if (u < hitU + 0.2) { circ(g, lx, 262, 6, '#E4566E'); g.fillStyle = '#2A2A3A'; g.beginPath(); g.arc(lx + 4, 262, 3, 0, TAU); g.fill(); circ(g, lx - 1, 260, 1.1, '#2A2A3A'); circ(g, lx + 2, 264, 1.1, '#2A2A3A'); line(g, lx - 3, 267, lx - 4, 270, '#2A2A3A', 1); line(g, lx + 3, 267, lx + 4, 270, '#2A2A3A', 1); }
+    // Tidbit comes in way too fast
+    var tx = u < 3.1 ? -60 : u < hitU ? mix(-60, 300, (u - 3.1) / (hitU - 3.1)) : 300 + tumble * 80, ty = u < hitU ? 268 : 268 + (-40 * bump(tumble) + 130 * tumble * tumble);
+    if (u >= 3.1 && !inWater) { pup(g, 'tidbit', tx, ty, 1.55, { pose: u < hitU ? 'run' : 'wiggle', face: 1, t: u, ph: tx * 0.24, rot: u < hitU ? 0 : -tumble * TAU, lift: u < hitU ? 3 * Math.abs(Math.sin(u * 16)) : 0, wag: 0.7, noShadow: u >= hitU }); }
+    // both end up in the stream, heads out
+    if (u >= hitU + 0.9) {
+      g.save(); g.beginPath(); g.rect(0, 0, VW, WL + 2); g.clip();
+      var bob = Math.sin(u * 3) * 2; pup(g, 'sugarfoot', 420, WL + 40 + bob, 1.55, { pose: 'sit', face: -1, t: u + 1, over: wiz, noShadow: true, ear: -0.8 }); pup(g, 'tidbit', 380, WL + 40 - bob, 1.55, { pose: 'sit', face: 1, t: u, noShadow: true, ear: -1 }); g.restore();
+      for (var r3 = 0; r3 < 2; r3++) { var rq = ((u - hitU - 0.9) * 0.7 + r3 * 0.5) % 1; g.strokeStyle = 'rgba(255,255,255,' + 0.6 * (1 - rq) + ')'; g.lineWidth = 1.4; g.beginPath(); g.ellipse(400, WL + 2, 30 + rq * 80, 4 + rq * 10, 0, 0, TAU); g.stroke(); }
+    }
+    splash(g, 400, WL, hitU + 0.7, u, 20, 1900);
+    var sh = u >= hitU + 0.9 ? { x: 420, y: WL - 40, who: 'sugarfoot' } : { x: sx, y: sy - 74, who: 'sugarfoot' };
+    say(g, { x: sx, y: 268 - 74, who: 'sugarfoot' }, 'YOU SHALL NOT PASS!', u, 1.0, 3.0, { big: true });
+    say(g, { x: sx, y: 268 - 74, who: 'sugarfoot' }, '…Okay, then.', u, 3.05, 3.65);
+    say(g, { x: 396, y: WL - 40, who: 'tidbit' }, 'Did I do that?', u, 5.3, 6.6);
+  }
+  // 6. the leap (Toy Story): to infinity, and into the laundry
+  function laundry(g, u, d, calm) {
+    sky(g, [[0, '#7CC6F2'], [1, '#E6F6FF']], 250); circ(g, 560, 58, 24, '#FFF1B0'); glow(g, 560, 58, 100, '255,245,190', 0.5); puff(g, 120 + u * 5, 62, 0.8, 'rgba(255,255,255,.95)');
+    g.fillStyle = '#A6DB86'; g.fillRect(-60, 250, VW + 120, 160); g.fillStyle = '#86C76C'; g.fillRect(-60, 296, VW + 120, 100);
+    for (var f = 0; f < 22; f++) rr(g, f * 30 - 10, 220, 14, 50, 3, '#F4EFE0');
+    rr(g, -10, 238, VW + 20, 5, 2, '#E8E0CC'); rr(g, -10, 252, VW + 20, 5, 2, '#E8E0CC');
+    // the doghouse
+    rr(g, 24, 226, 120, 80, 4, '#C9704A'); g.fillStyle = '#9A4E32'; g.beginPath(); g.moveTo(10, 228); g.lineTo(84, 186); g.lineTo(158, 228); g.fill(); rr(g, 60, 256, 48, 50, 18, '#3A2418');
+    // the laundry basket
+    var landU = 2.5, bq = clamp((u - landU) / 0.3, 0, 1), bsq = 1 - 0.14 * bump(bq);
+    rr(g, 440, 280, 80, 30 * bsq + 4, 6, '#C9A06A'); for (var wv = 0; wv < 5; wv++) line(g, 450 + wv * 16, 284, 450 + wv * 16, 308, '#A8804C', 1.6);
+    var pile = u < landU ? [['#F2A0B8', 460, 276], ['#7FB8F0', 482, 272], ['#F7DC6F', 500, 278]] : [];
+    pile.forEach(function (p) { ell(g, p[1], p[2], 16, 8, p[0]); });
+    // Sugarfoot, folding
+    var sug = pup(g, 'sugarfoot', 580, 308, 1.5, { pose: 'sit', face: -1, t: u + 1, ear: u > landU ? -0.9 : 0, tilt: u > landU + 0.4 ? 0.12 : 0 });
+    // Tidbit, caped, on the roof, then airborne
+    var lq = clamp((u - 1.6) / (landU - 1.6), 0, 1), air = u > 1.6 && u < landU;
+    var tx = air ? mix(96, 480, lq) : u >= landU ? 480 : 96, ty = air ? mix(190, 280, lq) - 120 * 4 * lq * (1 - lq) : u >= landU ? 282 + 12 * bump(clamp((u - landU) / 0.4, 0, 1)) : 190;
+    var tid = pup(g, 'tidbit', tx, ty, 1.55, { pose: air ? 'wiggle' : u >= landU ? 'sit' : 'sit', face: 1, t: u, over: HAT.goggles, cape: '#E4566E', capeFly: air, rot: air ? -0.5 + lq * 1.1 : 0, ear: air ? -1.2 : 0, wag: 0.6, noShadow: air });
+    if (u >= landU) {
+      var q2 = clamp((u - landU) / 1.2, 0, 1); for (var s = 0; s < 14; s++) { var a = -Math.PI * (0.1 + 0.8 * rnd(s + 2000)), v = 80 + rnd(s + 2001) * 120, px1 = 480 + Math.cos(a) * v * q2, py1 = 276 + Math.sin(a) * v * q2 + 300 * q2 * q2; if (py1 > 306) py1 = 306 + (s % 3) * 3; ell(g, px1, py1, 13, 6, ['#F2A0B8', '#7FB8F0', '#F7DC6F', '#8FD694', '#B79CEB'][s % 5], q2 * 6 + s); }
+      // a sock lands on Tidbit's head
+      var sq3 = clamp((u - landU - 0.8) / 0.5, 0, 1); if (sq3 > 0) { g.save(); g.translate(tid.x + 2, tid.y - 8 + (1 - eout(sq3)) * -40); g.rotate(0.3); rr(g, -6, -20, 12, 26, 6, '#F7DC6F'); rr(g, -6, -20, 12, 6, 3, '#E4566E'); g.restore(); }
+    }
+    onomato(g, 'FWOOMP!', 470, 236, 28, '#FFFFFF', win(u, landU, landU + 1.1, 0.1), -0.1);
+    say(g, { x: 96, y: 112, who: 'tidbit' }, 'Ready? Watch this!', u, 0.3, 1.6);
+    say(g, { x: tx, y: Math.max(40, ty - 70), who: 'tidbit' }, 'To infinity… and beyond!', u, 1.7, 2.9, { big: true });
+    say(g, sug, 'That’s my laundry.', u, 3.1, 4.3);
+    say(g, tid, 'To infinity… and the laundry!', u, 4.4, 6.1);
   }
 
   // ---------------------------------------------------------------- the edit: every shot on the timeline
   // [start, end, id, draw function, extra]
+  // the funny middle: a card, then six bits (id, length in seconds, draw function)
+  var GAGS = [['boulder', 7.2, boulder], ['jaws', 6.2, jaws], ['matrix', 6.2, matrix], ['vault', 6.6, vault], ['bridge', 6.6, bridge], ['laundry', 6.2, laundry]];
+  var G0 = 38.7, GCARD = 1.8, GL = GCARD + GAGS.reduce(function (n, x) { return n + x[1]; }, 0);   // the funny middle starts at G0 and lasts GL seconds
+  var POST_EXTRA = 1.6;   // a little longer at the very end, for one more gag
   var EDIT = [
     [0, 8.0, 'cold', coldOpen],
     [8.0, 10.0, 'card', function (g, u, d, c) { card(g, u, d, 'The pals are back.', null, c); }],
@@ -546,6 +730,10 @@
     [31.0, 32.5, 'card', function (g, u, d, c) { card(g, u, d, 'Bigger adventures.', { size: 56 }, c); }],
     [32.5, 35.5, 'sneeze', sneeze],
     [35.5, 38.7, 'puddle', puddle],
+    [G0, G0 + GCARD, 'card', function (g, u, d, c) { card(g, u, d, 'Funnier than ever.', { size: 56, c0: '#5B3A6B', c1: '#1C1030' }, c); }]
+  ];
+  (function () { var t = G0 + GCARD; GAGS.forEach(function (x) { EDIT.push([t, t + x[1], x[0], x[2]]); t += x[1]; }); })();
+  [
     [38.7, 39.2, 'flash1', function (g, u, d, c) { zoomed(g, balloon, u + 0.8, 1.35, 330, 230, c); }, 'fast'],
     [39.2, 39.7, 'flash2', function (g, u, d, c) { zoomed(g, market, u + 1.2, 1.3, 320, 150, c); }, 'fast'],
     [39.7, 40.2, 'flash3', function (g, u, d, c) { zoomed(g, underwater, u + 1, 1.3, 330, 220, c); }, 'fast'],
@@ -554,12 +742,12 @@
     [47.7, 48.7, 'riser', riser],
     [48.7, 55.2, 'reveal', reveal],
     [55.2, 55.9, 'black', function (g) { rr(g, -60, -60, VW + 120, VH + 120, 0, '#0B0816'); }],
-    [55.9, 63.8, 'post', post]
-  ];
-  var DUR = 63.8;
+    [55.9, 63.8 + POST_EXTRA, 'post', post]
+  ].forEach(function (e) { var r = e.slice(); r[0] += GL; r[1] += GL; EDIT.push(r); });
+  var DUR = 63.8 + GL + POST_EXTRA;
   function zoomed(g, fn, u, z, fx, fy, calm) { g.save(); g.translate(fx, fy); g.scale(z, z); g.translate(-fx, -fy); fn(g, u, 2, calm, true); g.restore(); }
   // in the calm version the fast flurry becomes one gentle look back at the balloon
-  var CALM_SWAP = { flash1: [38.7, 40.2, 'flashc', function (g, u, d, c) { balloon(g, u + 0.3, 2, c, true); }] };
+  var CALM_SWAP = { flash1: [38.7 + GL, 40.2 + GL, 'flashc', function (g, u, d, c) { balloon(g, u + 0.3, 2, c, true); }] };
   function shotAt(T, calm) {
     for (var i = 0; i < EDIT.length; i++) {
       var s = EDIT[i]; if (T < s[1] || i === EDIT.length - 1) {
@@ -577,7 +765,7 @@
   // ---------------------------------------------------------------- painting a frame
   // render(g, W, H, T, calm, bs): bs makes speech bubbles bigger on small screens
   function render(g, W, H, T, calm, bs) {
-    FR.says = []; FR.secrets = []; FR.line = '';
+    FR.says = []; FR.secrets = []; FR.narr = []; FR.line = '';
     var k = Math.min(W / VW, H / VH), ox = (W - VW * k) / 2, oy = (H - VH * k) / 2;
     g.setTransform(1, 0, 0, 1, 0, 0); g.fillStyle = '#0B0816'; g.fillRect(0, 0, W, H);
     g.save(); g.beginPath(); g.rect(ox, oy, VW * k, VH * k); g.clip();
@@ -595,6 +783,13 @@
     var vg = g.createRadialGradient(W / 2, H / 2, Math.min(W, H) * 0.35, W / 2, H / 2, Math.max(W, H) * 0.75); vg.addColorStop(0, 'rgba(0,0,0,0)'); vg.addColorStop(1, 'rgba(10,6,20,.38)'); g.fillStyle = vg; g.fillRect(0, 0, W, H);
     // the speech bubbles, on top, at a steady size
     FR.says.forEach(function (s) { bubble(g, s, k * (bs || 1), ox, oy, W, H, calm); });
+    // the trailer narrator: a big, low caption in the movie-trailer voice
+    FR.narr.forEach(function (n) {
+      if (!n.draw) return;
+      var fs = 26 * k * (bs || 1); g.save(); g.globalAlpha = n.a; g.font = '800 ' + fs + 'px Lora, Georgia, serif'; g.textAlign = 'center'; g.textBaseline = 'middle';
+      g.fillStyle = 'rgba(8,4,18,.55)'; g.fillText(n.text.toUpperCase(), W / 2 + 2, H * 0.86 + 2);
+      g.fillStyle = '#FFE9B0'; g.fillText(n.text.toUpperCase(), W / 2, H * 0.86); g.restore();
+    });
     // fade in from black at the very start, and out at the end
     var fade = Math.max(clamp(1 - T / 0.8, 0, 1), clamp((T - (DUR - 0.6)) / 0.6, 0, 1));
     if (fade > 0) { g.fillStyle = 'rgba(11,8,22,' + fade + ')'; g.fillRect(0, 0, W, H); }
@@ -766,6 +961,53 @@
     talk(60.2, 7, 660, 0.035);
     ev(62.2, 'sample', 'sugarfoot-laugh-1', 0.45);
     ev(63.0, 'bell', 84, 0.04);
+    // the funny middle (G0 .. G0 + GL): everything from the flurry on moves later, and the new bits get their own music
+    E.forEach(function (e) { if (e[0] >= 38.19) e[0] += GL; });
+    var starts = [], tt = G0 + GCARD; GAGS.forEach(function (x) { starts.push(tt); tt += x[1]; });
+    hit(G0, true); ev(G0, 'sparkle', 0.03); ev(G0 + 0.1, 'whoosh', 0.7, 0.1);
+    var roots = [48, 48, 53, 55], tEnd = G0 + GL;
+    for (var bb = 0, tb = G0 + GCARD; tb < tEnd - 0.6; bb++, tb += 1.2) {
+      var inJaws = tb > starts[1] - 0.2 && tb < starts[2] - 0.2, inMatrix = tb > starts[2] - 0.2 && tb < starts[3] - 0.2;
+      if (inJaws || inMatrix) continue;
+      var rt = roots[bb % 4];
+      ev(tb, 'pluck', rt + 12, 0.07); ev(tb + 0.3, 'pluck', rt + 19, 0.05); ev(tb + 0.6, 'pluck', rt + 16, 0.05); ev(tb + 0.9, 'pluck', rt + 19, 0.05);
+      ev(tb, 'kick', 0.2 * H); ev(tb + 0.6, 'kick', 0.16 * H); ev(tb + 0.3, 'hat', 0.03); ev(tb + 0.9, 'hat', 0.03);
+      if (bb % 2) ev(tb + 0.6, 'snare', 0.055 * H);
+    }
+    // 1. boulder: sneaky plucks, a rumble, drums, then a slide-whistle sigh
+    var T = starts[0];
+    ev(T + 2.3, 'bell', 88, 0.07); ev(T + 3.0, 'rumble', 3.0, 0.4);
+    for (var k1 = 0; k1 < 8; k1++) ev(T + 3.2 + k1 * 0.28, 'tom', 90 + (k1 % 2) * 25, 0.22 * H);
+    ev(T + 3.4, 'boom', 0.4 * H); ev(T + 5.3, 'glide', 700, 150, 0.7, 0.08, 'sine'); ev(T + 5.5, 'sample', 'sugarfoot-laugh-1', 0.4);
+    talk(T + 2.1, 6, 640); talk(T + 3.5, 4, 470); talk(T + 5.5, 6, 640); talk(T + 6.2, 5, 470);
+    // 2. pond: two dramatic notes, faster and faster
+    T = starts[1];
+    for (var k2 = 0, t2 = T + 0.9; k2 < 5 && t2 < T + 2.9; k2++) { ev(t2, 'bass', 40, 0.5, 0.15); ev(t2 + 0.26, 'bass', 41, 0.5, 0.15); t2 += k2 < 2 ? 0.9 : 0.6; }
+    ev(T + 2.9, 'swell', 0.5, 0.14 * H); ev(T + 2.95, 'crash', 0.08 * H); ev(T + 3.0, 'glide', 300, 1500, 0.3, 0.07, 'triangle'); ev(T + 3.3, 'sample', 'sugarfoot-laugh-2', 0.45); ev(T + 3.9, 'splash', 0.35);
+    talk(T + 0.3, 6, 640); talk(T + 2.0, 3, 640); talk(T + 3.0, 4, 470); talk(T + 4.4, 7, 640);
+    // 3. slow motion: a long low sweep, a splat, and a sad trombone
+    T = starts[2];
+    ev(T + 1.0, 'bass', 33, 2.6, 0.12); ev(T + 1.0, 'glide', 260, 80, 2.4, 0.05, 'sawtooth'); ev(T + 3.5, 'tom', 80, 0.3 * H); ev(T + 3.6, 'splash', 0.3); ev(T + 3.6, 'crash', 0.05 * H);
+    ev(T + 4.2, 'glide', 400, 340, 0.4, 0.06, 'sawtooth'); ev(T + 4.65, 'glide', 340, 290, 0.4, 0.06, 'sawtooth'); ev(T + 5.1, 'glide', 290, 210, 0.9, 0.06, 'sawtooth');
+    talk(T + 0.3, 6, 640); talk(T + 2.0, 5, 640); talk(T + 4.0, 7, 470); talk(T + 5.5, 4, 470);
+    // 4. vault: a tense five-beat riff, a cookie "ting", an alarm
+    T = starts[3];
+    for (var k3 = 0; k3 < 6; k3++) { [0, 0.4, 0.8, 1.0, 1.4].forEach(function (o) { ev(T + 0.6 + k3 * 1.6 + o, 'bass', k3 % 2 ? 38 : 36, 0.2, 0.09); }); if (T + 0.6 + k3 * 1.6 < T + 4.2) ev(T + 0.6 + k3 * 1.6 + 0.2, 'hat', 0.03); }
+    ev(T + 3.0, 'bell', 96, 0.07); ev(T + 4.0, 'glide', 900, 200, 0.5, 0.08, 'sine'); ev(T + 4.45, 'kick', 0.3 * H);
+    for (var k4 = 0; k4 < 6; k4++) ev(T + 4.3 + k4 * 0.3, 'glide', k4 % 2 ? 660 : 880, k4 % 2 ? 660 : 880, 0.26, 0.03, 'sawtooth');
+    talk(T + 0.9, 5, 640); talk(T + 1.5, 6, 330, 0.03); talk(T + 3.0, 3, 640); talk(T + 4.0, 3, 330); talk(T + 5.0, 7, 640);
+    // 5. bridge: a big, serious chord, a tiny ladybug, and a splash
+    T = starts[4];
+    ev(T + 0.8, 'pad', [45, 57, 64], 3.2, 0.045); ev(T + 0.9, 'swell', 1.0, 0.12 * H); ev(T + 1.0, 'tom', 80, 0.3 * H); ev(T + 1.0, 'boom', 0.4 * H); ev(T + 1.4, 'bell', 76, 0.05);
+    ev(T + 3.65, 'crash', 0.08 * H); ev(T + 4.0, 'glide', 700, 200, 0.5, 0.07, 'sine'); ev(T + 4.4, 'splash', 0.4); ev(T + 5.3, 'sample', 'tidbit-ooh', 0.4);
+    talk(T + 1.0, 8, 330); talk(T + 3.05, 3, 470); talk(T + 5.3, 6, 640);
+    // 6. the leap: a hero fanfare and a very soft landing
+    T = starts[5];
+    [72, 76, 79, 84].forEach(function (m, i) { ev(T + 1.7 + i * 0.09, 'bell', m, 0.06); }); ev(T + 1.75, 'whoosh', 0.8, 0.14); ev(T + 2.5, 'boom', 0.35 * H); ev(T + 2.5, 'crash', 0.06 * H);
+    for (var k6 = 0; k6 < 6; k6++) ev(T + 2.6 + k6 * 0.1, 'marimba', 84 - k6 * 2, 0.06); ev(T + 3.2, 'sample', 'sugarfoot-aww', 0.4);
+    talk(T + 0.3, 6, 640); talk(T + 1.7, 7, 640); talk(T + 3.1, 5, 470); talk(T + 4.4, 8, 640);
+    // the very end: one more bark
+    ev(55.9 + GL + 7.8, 'sample', 'tidbit-arfarf', 0.45); talk(55.9 + GL + 7.9, 8, 660, 0.035); ev(55.9 + GL + 9.1, 'sample', 'tidbit-yip', 0.4);
     E.sort(function (a, b) { return a[0] - b[0]; });
     return E;
   }
@@ -809,18 +1051,18 @@
       '<div class="tz-stage"><canvas class="tz-cv" role="img" aria-label="The Frequency Buddies Season 2 teaser. Tap the hidden secrets as it plays."></canvas>' +
       '<div class="tz-fx" aria-hidden="true"></div>' +
       '<div class="tz-tap"><button type="button" class="tz-tb tz-tap-play" aria-label="Play">▶</button><button type="button" class="tz-tb tz-tap-re" aria-label="Replay from the start">↺</button><button type="button" class="tz-tb tz-tap-full" aria-label="Full screen">⛶</button></div>' +
-      '<div class="tz-ov tz-start"><div class="tz-ovc"><p class="tz-k">Season 2 · the teaser</p><button type="button" class="tz-big">▶ Play the teaser</button><p>About a minute. <b>Five secrets</b> are hidden in it: tap them when you spot them!</p></div></div>' +
+      '<div class="tz-ov tz-start"><div class="tz-ovc"><p class="tz-k">Season 2 · the teaser</p><button type="button" class="tz-big">▶ Play the teaser</button><p>About two minutes. <b>Five secrets</b> are hidden in it: tap them when you spot them!</p></div></div>' +
       '<div class="tz-ov tz-end" hidden><div class="tz-ovc"><p class="tz-k">Season 2 is coming soon</p><h3 class="tz-end-h">You found 0 of 5 secrets</h3><p class="tz-end-p">Watch it again to find them all.</p><div class="tz-row"><button type="button" class="tz-b is-main tz-again">↺ Watch again</button><a class="tz-b" href="#pick">Pick your favorite new place</a></div></div></div>' +
       '</div>' +
       '<div class="tz-prog"><div class="tz-track" role="slider" tabindex="0" aria-label="Teaser time" aria-valuemin="0" aria-valuemax="' + Math.round(DUR) + '" aria-valuenow="0"><div class="tz-fill"></div></div><span class="tz-time">0:00 / ' + fmt(DUR) + '</span></div>' +
-      '<div class="tz-ctrl"><button type="button" class="tz-b is-main tz-play">▶ Play</button><button type="button" class="tz-b tz-re">↺ Replay</button><button type="button" class="tz-b tz-snd" aria-pressed="true">🔊 Sound <span class="tz-st">On</span></button><span class="tz-sp"></span><button type="button" class="tz-b tz-full">⛶ <span class="tz-lbl">Full screen</span></button></div>' +
+      '<div class="tz-ctrl"><button type="button" class="tz-b is-main tz-play">▶ Play</button><button type="button" class="tz-b tz-re">↺ Replay</button><button type="button" class="tz-b tz-snd" aria-pressed="true">🔊 Sound <span class="tz-st">On</span></button><button type="button" class="tz-b tz-vox" aria-pressed="false" hidden>🗣 Voices <span class="tz-st">Off</span></button><span class="tz-sp"></span><button type="button" class="tz-b tz-full">⛶ <span class="tz-lbl">Full screen</span></button></div>' +
       '<div class="tz-found" aria-live="polite"><span class="tz-found-t">🔍 Secrets found: <b>0</b> of 5</span><span class="tz-dots" aria-hidden="true"></span></div>' +
       '<p class="tz-sr" aria-live="polite"></p>' +
       '</div>';
     var $ = function (s) { return host.querySelector(s); };
     var player = $('.tz-player'), stage = $('.tz-stage'), cv = $('.tz-cv'), g = cv.getContext('2d'), fxEl = $('.tz-fx');
-    var startOv = $('.tz-start'), endOv = $('.tz-end'), playBtn = $('.tz-play'), sndBtn = $('.tz-snd'), track = $('.tz-track'), fill = $('.tz-fill'), timeEl = $('.tz-time'), srEl = $('.tz-sr');
-    var P = { T: 0, playing: false, started: false, sound: MEM.sound !== false, calm: calmNow(), at: 0, raf: 0, recent: [], fx: [], ended: false };
+    var startOv = $('.tz-start'), endOv = $('.tz-end'), playBtn = $('.tz-play'), sndBtn = $('.tz-snd'), voxBtn = $('.tz-vox'), track = $('.tz-track'), fill = $('.tz-fill'), timeEl = $('.tz-time'), srEl = $('.tz-sr');
+    var P = { T: 0, playing: false, started: false, sound: MEM.sound !== false, voices: MEM.voices === true, calm: calmNow(), at: 0, raf: 0, recent: [], fx: [], ended: false };
     var A = { ctx: null, master: null, bus: null, live: [], E: null, idx: 0, map: 0, timer: 0 };
     var W = 0, H = 0, dpr = 1, bs = 1;
     function resize() {
@@ -831,7 +1073,7 @@
       paint();
     }
     // after the end, the title stays up behind the end card
-    function paint() { if (!W) return; render(g, W, H, P.ended ? 53.2 : P.T, P.calm, bs); drawFx(); if (FR.line && FR.line !== lastLive) { lastLive = FR.line; srEl.textContent = FR.line; } }
+    function paint() { if (!W) return; render(g, W, H, P.ended ? 53.2 + GL : P.T, P.calm, bs); drawFx(); if (P.playing) speakNow(); if (FR.line && FR.line !== lastLive) { lastLive = FR.line; srEl.textContent = FR.line; } }
     // the found-a-secret ring, drawn over the picture for a moment
     function drawFx() {
       var now = performance.now(); P.fx = P.fx.filter(function (f) { return now - f.t0 < 1100; });
@@ -842,6 +1084,21 @@
         g.restore();
       });
     }
+    // ----- read aloud: the speech bubbles and the narrator, in the browser's own voices
+    var spoken = {}, canSay = 'speechSynthesis' in window && typeof SpeechSynthesisUtterance !== 'undefined';
+    function speakNow() {
+      if (!P.voices || !canSay) return;
+      var items = FR.narr.map(function (n) { return { who: 'narr', text: n.text }; }).concat(FR.says.map(function (x) { return { who: x.who, text: x.text }; }));
+      items.forEach(function (it) {
+        var key = it.who + '|' + it.text; if (spoken[key] && P.T - spoken[key] < 3) return; spoken[key] = P.T;
+        try {
+          var u = new SpeechSynthesisUtterance(it.text.replace(/…/g, '...'));
+          u.rate = it.who === 'narr' ? 0.85 : 1.05; u.pitch = it.who === 'narr' ? 0.5 : it.who === 'sugarfoot' ? 0.8 : 1.5; u.volume = 0.9;
+          speechSynthesis.speak(u);
+        } catch (e) {}
+      });
+    }
+    function silence() { spoken = {}; try { if (canSay) speechSynthesis.cancel(); } catch (e) {} }
     // ----- sound
     function ensureAudio() {
       unlockMediaAudio();
@@ -882,12 +1139,12 @@
       if (ensureAudio()) audioStart(P.T);
       P.playing = true; P.at = performance.now(); syncBtns(); wake(); if (!P.raf) P.raf = requestAnimationFrame(loop); inView();
     }
-    function pause() { P.playing = false; audioStop(); if (P.raf) cancelAnimationFrame(P.raf); P.raf = 0; syncBtns(); wake(true); paint(); }
+    function pause() { P.playing = false; audioStop(); silence(); if (P.raf) cancelAnimationFrame(P.raf); P.raf = 0; syncBtns(); wake(true); paint(); }
     function toggle() { if (P.playing) pause(); else play(); }
     function restart() { P.T = 0; P.recent = []; play(); }
-    function seek(t) { P.T = clamp(t, 0, DUR); endOv.hidden = true; if (P.playing) { audioStart(P.T); P.at = performance.now(); } paint(); progress(); }
+    function seek(t) { silence(); P.T = clamp(t, 0, DUR); endOv.hidden = true; if (P.playing) { audioStart(P.T); P.at = performance.now(); } paint(); progress(); }
     function finish() {
-      P.playing = false; P.ended = true; audioStop(); syncBtns(); wake(true);
+      P.playing = false; P.ended = true; audioStop(); silence(); syncBtns(); wake(true);
       MEM.plays = (MEM.plays || 0) + 1; save(MEM);
       var n = MEM.found.length; $('.tz-end-h').textContent = n >= 5 ? 'You found all 5 secrets! 🌟' : 'You found ' + n + ' of 5 secrets';
       $('.tz-end-p').textContent = n >= 5 ? 'Super spotter! Season 2 is coming soon, and you’re ready for it.' : n === 0 ? 'Five secrets are hidden in the teaser. Watch it again and tap them when you spot them!' : 'Watch it again to find them all. Need a clue? The hints are just below.';
@@ -937,6 +1194,8 @@
     $('.tz-again').addEventListener('click', function () { restart(); });
     playBtn.addEventListener('click', toggle);
     $('.tz-re').addEventListener('click', restart);
+    function syncVox() { voxBtn.setAttribute('aria-pressed', P.voices ? 'true' : 'false'); voxBtn.innerHTML = '🗣 Voices <span class="tz-st">' + (P.voices ? 'On' : 'Off') + '</span>'; }
+    if (canSay) { voxBtn.hidden = false; syncVox(); voxBtn.addEventListener('click', function () { P.voices = !P.voices; MEM.voices = P.voices; save(MEM); silence(); syncVox(); }); }
     sndBtn.addEventListener('click', function () { P.sound = !P.sound; MEM.sound = P.sound; save(MEM); if (P.sound && P.playing && !A.ctx && ensureAudio()) audioStart(P.T); syncSound(); });
     $('.tz-full').addEventListener('click', function () {
       var fs = document.fullscreenElement || document.webkitFullscreenElement;
@@ -963,7 +1222,7 @@
     if (REDUCED_MQ && REDUCED_MQ.addEventListener) REDUCED_MQ.addEventListener('change', function () { if (!P.playing) { P.calm = calmNow(); paint(); } });
     window.addEventListener('resize', resize);
     // the poster: the big title, before anyone presses play
-    P.T = 51.6; syncSound(); syncFound();
+    P.T = 51.6 + GL; syncSound(); syncFound();
     resize();
     if (document.fonts && document.fonts.load) Promise.all(['700 40px Fraunces', 'italic 500 28px Fraunces', '600 19px Lora', '800 30px Lora', '500 13px "IBM Plex Mono"'].map(function (f) { return document.fonts.load(f).catch(function () {}); })).then(function () { paint(); });
     return { P: P, play: play, pause: pause, seek: seek, restart: restart, paint: paint, found: function () { return MEM.found.slice(); }, secrets: function () { return FR.secrets.map(function (s) { var r = cv.getBoundingClientRect(); return { id: s.id, x: r.left + s.x * r.width / W, y: r.top + s.y * r.height / H }; }); }, shot: function () { return FR.shot; }, setCalm: function (v) { window.__teaserCalm = v; P.calm = calmNow(); paint(); } };

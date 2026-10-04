@@ -1,12 +1,16 @@
-/* sound-senses.js — "See and feel the sound" for /soundscapes.html.
+/* sound-senses.js — "See and feel the sound", the heart of /soundscapes.html.
    Whatever is playing (a track, a live soundscape or a Breathe-break bed) is listened to with a Web Audio
    analyser, entirely on this device. Nothing is recorded, saved or sent.
-   SEE: a canvas drawing of the sound. Aurora (soft ribbons), Rings (a ring leaves the centre on each low pulse)
-        and Wave (the sound's own shape). With reduced motion on, only a still, slowly changing Glow is drawn.
+   SEE: a big stage at the top of the page, drawn live. Five looks: Aurora (soft ribbons), Rings (a ring leaves
+        the centre on each low pulse), Tunnel (hexagons rush toward you, faster when it is louder), Bars (a
+        spectrum) and Wave (the sound's own shape). Auto changes the look every so often. It goes full screen.
+        While something plays and the stage has scrolled away, a slim bar under the header keeps a live
+        picture, the name and a Stop button in view. Every sound on the page has a "See and feel this" button.
+        With reduced motion on, only a still, slowly changing Glow is drawn.
    FEEL: opt-in vibration on phones that allow it (Chrome on Android; iPhones don't). Off until chosen.
         Rumble follows the low tones, Beat follows pulses, Heartbeat is a steady lub-dub. Pulses are short and
         never faster than about two a second, and stop when the sound stops or the page is hidden.
-   window.TOLSenses.engine(eng | null) lets the page say that a Breathe-break bed is playing. */
+   window.TOLSenses.engine(eng | null, name) lets the page say that a Breathe-break bed is playing. */
 (function () {
   'use strict';
   var host = document.getElementById('senses');
@@ -16,7 +20,8 @@
   function lsSet(k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
   var RM = !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
   var canVib = typeof navigator.vibrate === 'function';
-  var LOOKS = RM ? ['glow'] : ['aurora', 'rings', 'wave'];
+  var LOOKS = RM ? ['glow'] : ['auto', 'aurora', 'rings', 'tunnel', 'bars', 'wave'];
+  var ROTATE = ['aurora', 'tunnel', 'rings', 'bars', 'wave'];
   var LEVELS = ['off', 'soft', 'medium', 'strong'], GAIN = { off: 0, soft: 0.6, medium: 1, strong: 1.7 };
   var FEELS = ['rumble', 'beat', 'heart'];
   var look = lsGet('tol-sense-look'); if (LOOKS.indexOf(look) < 0) look = LOOKS[0];
@@ -24,42 +29,98 @@
   var feel = lsGet('tol-haptic-mode'); if (FEELS.indexOf(feel) < 0) feel = 'rumble';
 
   // ---------- the panel ----------
-  var NAMES = { aurora: 'Aurora', rings: 'Rings', wave: 'Wave', glow: 'Glow' };
+  var NAMES = { auto: 'Auto', aurora: 'Aurora', rings: 'Rings', tunnel: 'Tunnel', bars: 'Bars', wave: 'Wave', glow: 'Glow' };
   var FNAMES = { rumble: 'Rumble', beat: 'Beat', heart: 'Heartbeat' };
+  var LNAMES = { off: 'Off', soft: 'Soft', medium: 'Medium', strong: 'Strong' };
   function btns(group, list, names, cur) {
     return list.map(function (k) { return '<button type="button" class="sn-b" data-' + group + '="' + k + '" aria-pressed="' + (k === cur) + '">' + names[k] + '</button>'; }).join('');
   }
-  var LNAMES = { off: 'Off', soft: 'Soft', medium: 'Medium', strong: 'Strong' };
   host.innerHTML =
-    '<h2 id="senses-h" class="live-h">See and feel the sound</h2>' +
-    '<p class="live-lede">Press play on any sound below and watch it move, or let your phone feel it with you. Everything happens on your device.</p>' +
-    '<div class="sn-stage"><canvas id="sn-cv" aria-hidden="true"></canvas><p class="sn-idle" id="sn-idle">Press play on a track or a live soundscape to see it here.</p></div>' +
+    '<p class="sn-kick">The big idea</p>' +
+    '<h2 id="senses-h" class="sn-title">See and feel the sound</h2>' +
+    '<p class="sn-lede">Press play on anything on this page and watch it move, or let your phone feel it with you. Everything happens on your device.</p>' +
+    '<div class="sn-stage" id="sn-stage"><canvas id="sn-cv" aria-hidden="true"></canvas><p class="sn-idle" id="sn-idle">Press <strong>See and feel this</strong> on any sound below, or pick one with Find your sound.</p>' +
+    '<div class="sn-hud"><span class="sn-now" id="sn-now"></span><button type="button" class="sn-b sn-hud-b" id="sn-full" aria-label="Full screen">&#x26F6; Full screen</button></div></div>' +
     '<div class="sn-row" role="group" aria-label="How to see the sound"><span class="sn-l">See</span>' + btns('look', LOOKS, NAMES, look) + '</div>' +
     '<div class="sn-row" id="sn-feel-row" role="group" aria-label="How strongly to feel the sound"><span class="sn-l">Feel</span>' + btns('level', LEVELS, LNAMES, level) + '</div>' +
     '<div class="sn-row" id="sn-mode-row" role="group" aria-label="What to feel"><span class="sn-l">Like</span>' + btns('feel', FEELS, FNAMES, feel) +
     '<button type="button" class="sn-b sn-test" id="sn-test">Try a pulse</button></div>' +
     '<p class="sn-note" id="sn-note"></p><p class="sn-status" id="sn-status" role="status" aria-live="polite"></p>';
   host.querySelectorAll('p, h2').forEach(function (n) { n.classList.add('no-bubble'); });
-  var cv = document.getElementById('sn-cv'), g = cv.getContext('2d'), idle = document.getElementById('sn-idle'),
-      status = document.getElementById('sn-status'), note = document.getElementById('sn-note');
+  var stage = document.getElementById('sn-stage'), cv = document.getElementById('sn-cv'), g = cv.getContext('2d'), idle = document.getElementById('sn-idle'),
+      status = document.getElementById('sn-status'), note = document.getElementById('sn-note'), nowEl = document.getElementById('sn-now'), fullBtn = document.getElementById('sn-full');
   note.textContent = canVib
     ? 'Vibration is off until you choose a strength. It is short and gentle, uses a little battery, and stops when the sound stops. Low sounds also rumble through a phone speaker or headphones, which is its own kind of feeling.'
     : 'This device cannot vibrate from a web page (iPhones cannot), so you can see the sound here, and feel it through the speaker or headphones. On an Android phone with Chrome you can also feel it as vibration.';
   if (!canVib) { document.getElementById('sn-feel-row').hidden = true; document.getElementById('sn-mode-row').hidden = true; }
   if (RM) note.textContent += ' Your device asks for less motion, so the picture is a still, slowly changing glow.';
 
+  // the slim bar that follows you down the page while something plays
+  var dock = document.createElement('div');
+  dock.className = 'sn-dock'; dock.hidden = true; dock.setAttribute('role', 'region'); dock.setAttribute('aria-label', 'Now playing');
+  dock.innerHTML = '<canvas class="sn-dock-cv" aria-hidden="true" width="120" height="28"></canvas><span class="sn-dock-name"></span><button type="button" class="sn-dock-b" data-dock="open">Open</button><button type="button" class="sn-dock-b" data-dock="stop">Stop</button>';
+  document.body.appendChild(dock);
+  var dcv = dock.querySelector('canvas'), dg = dcv.getContext('2d'), dname = dock.querySelector('.sn-dock-name');
+
   function say(msg) { status.textContent = msg; }
   function press(group, val) { host.querySelectorAll('[data-' + group + ']').forEach(function (b) { b.setAttribute('aria-pressed', String(b.getAttribute('data-' + group) === val)); }); }
+  function smooth() { return RM ? 'auto' : 'smooth'; }
+  function stopAll() {
+    document.querySelectorAll('.track-player').forEach(function (a) { try { if (!a.paused) a.pause(); } catch (e) {} });
+    var on = document.querySelector('[data-live][aria-pressed="true"]'); if (on) on.click();
+    if (window.TOLBrainBreaks && window.TOLBrainBreaks.stop) try { window.TOLBrainBreaks.stop(); } catch (e) {}
+  }
   host.addEventListener('click', function (e) {
     var b = e.target.closest('button'); if (!b) return;
-    if (b.hasAttribute('data-look')) { look = b.getAttribute('data-look'); lsSet('tol-sense-look', look); press('look', look); rings.length = 0; say('Seeing sound as ' + NAMES[look] + '.'); }
+    if (b.hasAttribute('data-look')) { look = b.getAttribute('data-look'); lsSet('tol-sense-look', look); press('look', look); rings.length = 0; autoAt = performance.now(); say(look === 'auto' ? 'The picture will change every so often.' : 'Seeing sound as ' + NAMES[look] + '.'); }
     else if (b.hasAttribute('data-level')) { level = b.getAttribute('data-level'); lsSet('tol-haptic', level); press('level', level); if (level === 'off') stopBuzz(); else { buzz(24, true); } say(level === 'off' ? 'Vibration is off.' : 'Feeling sound: ' + LNAMES[level] + ', ' + FNAMES[feel] + '.'); heartOn = false; }
     else if (b.hasAttribute('data-feel')) { feel = b.getAttribute('data-feel'); lsSet('tol-haptic-mode', feel); press('feel', feel); heartOn = false; stopBuzz(); say('Feeling the sound as ' + FNAMES[feel] + (level === 'off' ? '. Choose a strength above to turn vibration on.' : '.')); }
     else if (b.id === 'sn-test') {
       if (level === 'off') { say('Choose Soft, Medium or Strong first.'); return; }
       buzz(30, true); setTimeout(function () { buzz(60, true); }, 450); say('That was a test pulse.');
     }
+    else if (b.id === 'sn-full') toggleFull();
   });
+  dock.addEventListener('click', function (e) {
+    var b = e.target.closest('button'); if (!b) return;
+    if (b.getAttribute('data-dock') === 'open') stage.scrollIntoView({ block: 'center', behavior: smooth() });
+    else if (b.getAttribute('data-dock') === 'stop') { stopAll(); }
+  });
+
+  // ---------- full screen ----------
+  function isFull() { return document.fullscreenElement === stage || document.webkitFullscreenElement === stage || stage.classList.contains('is-full'); }
+  function toggleFull() {
+    if (isFull()) { var ex = document.exitFullscreen || document.webkitExitFullscreen; if (document.fullscreenElement || document.webkitFullscreenElement) { try { ex.call(document); } catch (e) {} } stage.classList.remove('is-full'); document.documentElement.style.overflow = ''; syncFull(); return; }
+    var rq = stage.requestFullscreen || stage.webkitRequestFullscreen;
+    if (rq) { try { var pr = rq.call(stage); if (pr && pr.catch) pr.catch(function () { stage.classList.add('is-full'); document.documentElement.style.overflow = 'hidden'; syncFull(); }); } catch (e) { stage.classList.add('is-full'); document.documentElement.style.overflow = 'hidden'; } }
+    else { stage.classList.add('is-full'); document.documentElement.style.overflow = 'hidden'; }
+    setTimeout(syncFull, 120);
+  }
+  function syncFull() { var f = isFull(); fullBtn.innerHTML = f ? '&#x2715; Exit full screen' : '&#x26F6; Full screen'; fullBtn.setAttribute('aria-label', f ? 'Exit full screen' : 'Full screen'); stage.classList.toggle('is-full-now', f); }
+  ['fullscreenchange', 'webkitfullscreenchange'].forEach(function (ev) { document.addEventListener(ev, function () { if (!document.fullscreenElement && !document.webkitFullscreenElement) { stage.classList.remove('is-full'); document.documentElement.style.overflow = ''; } syncFull(); }); });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && stage.classList.contains('is-full')) toggleFull(); });
+
+  // ---------- "See and feel this" on every sound ----------
+  function addSeeButtons() {
+    document.querySelectorAll('.track-card').forEach(function (card) {
+      var a = card.querySelector('.track-player'); if (!a || card.querySelector('.sn-see')) return;
+      var b = document.createElement('button'); b.type = 'button'; b.className = 'sn-see'; b.innerHTML = '&#x1F441; See and feel this';
+      b.addEventListener('click', function () {
+        document.querySelectorAll('.track-player').forEach(function (o) { if (o !== a && !o.paused) o.pause(); });
+        var on = document.querySelector('[data-live][aria-pressed="true"]'); if (on) on.click();
+        var p = a.play(); if (p && p.catch) p.catch(function () { say('Your browser blocked the sound. Press play on the track.'); });
+        stage.scrollIntoView({ block: 'center', behavior: smooth() });
+      });
+      a.parentNode.insertBefore(b, a.nextSibling);
+    });
+    document.querySelectorAll('.live-card').forEach(function (card) {
+      var lb = card.querySelector('[data-live]'); if (!lb || card.querySelector('.sn-see')) return;
+      var b = document.createElement('button'); b.type = 'button'; b.className = 'sn-see'; b.innerHTML = '&#x1F441; See and feel this';
+      b.addEventListener('click', function () { if (lb.getAttribute('aria-pressed') !== 'true') lb.click(); stage.scrollIntoView({ block: 'center', behavior: smooth() }); });
+      card.appendChild(b);
+    });
+  }
+  addSeeButtons();
 
   // ---------- finding what is playing ----------
   var AC = null, taps = typeof WeakMap === 'function' ? new WeakMap() : null, eng = null, an = null, bufF = null, bufT = null, srcName = '';
@@ -88,7 +149,7 @@
   }
 
   // ---------- reading the sound ----------
-  var lvl = 0, bass = 0, mid = 0, high = 0, ema = 0, lastBeat = 0, lastRumble = 0, rings = [], t0 = performance.now();
+  var lvl = 0, bass = 0, mid = 0, high = 0, ema = 0, lastBeat = 0, lastRumble = 0, rings = [], t0 = performance.now(), peaks = [], tun = 0, lastT = 0, autoAt = performance.now(), autoI = 0;
   function band(lo, hi, hz) {
     var a = Math.max(0, Math.floor(lo / hz)), b = Math.min(bufF.length - 1, Math.ceil(hi / hz)), s = 0, n = 0;
     for (var i = a; i <= b; i++) { s += bufF[i]; n++; }
@@ -130,20 +191,23 @@
   }
 
   // ---------- drawing it ----------
-  var W = 300, H = 220, dpr = 1;
+  var W = 300, H = 280, dpr = 1;
   function fit() {
-    var w = Math.max(200, Math.round(cv.parentNode.clientWidth)); dpr = Math.min(2, window.devicePixelRatio || 1);
+    var full = isFull();
+    var w = Math.max(200, Math.round(stage.clientWidth || cv.parentNode.clientWidth));
+    H = full ? Math.max(200, Math.round(stage.clientHeight || window.innerHeight)) : Math.round(Math.max(250, Math.min(420, w * 0.46)));
+    dpr = Math.min(2, window.devicePixelRatio || 1);
     if (cv.width !== Math.round(w * dpr) || cv.height !== Math.round(H * dpr)) { cv.width = Math.round(w * dpr); cv.height = Math.round(H * dpr); }
     cv.style.height = H + 'px'; W = w; g.setTransform(dpr, 0, 0, dpr, 0, 0);
   }
   function bg() { var gr = g.createLinearGradient(0, 0, 0, H); gr.addColorStop(0, '#171A34'); gr.addColorStop(1, '#262050'); g.fillStyle = gr; g.fillRect(0, 0, W, H); }
   function rgba(c, a) { return 'rgba(' + c + ',' + a.toFixed(3) + ')'; }
-  var WARM = '247,168,150', TEAL = '127,224,215', VIOLET = '178,150,240', GOLD = '248,215,106';
+  var WARM = '247,168,150', TEAL = '127,224,215', VIOLET = '178,150,240', GOLD = '248,215,106', PINK = '255,150,190';
   function drawAurora(t) {
     bg();
     var cols = [[WARM, bass], [TEAL, mid], [VIOLET, high]];
     for (var i = 0; i < 3; i++) {
-      var c = cols[i][0], e = cols[i][1], amp = 14 + e * 62, base = H * (0.38 + i * 0.17), ph = t / (1800 + i * 500) + i * 2;
+      var c = cols[i][0], e = cols[i][1], amp = H * (0.06 + e * 0.26), base = H * (0.38 + i * 0.17), ph = t / (1800 + i * 500) + i * 2;
       g.beginPath(); g.moveTo(0, H);
       for (var x = 0; x <= W; x += 6) { var y = base + Math.sin(x / (70 + i * 30) + ph) * amp + Math.sin(x / (33 + i * 11) - ph * 1.4) * amp * 0.35; g.lineTo(x, y); }
       g.lineTo(W, H); g.closePath();
@@ -153,61 +217,103 @@
   }
   function drawRings(t, beatNow) {
     bg();
-    var cx = W / 2, cy = H / 2;
-    if (beatNow || (feel === 'rumble' && lvl > 0.08 && t - (drawRings.last || 0) > 1700)) { rings.push({ r: 20, a: 0.35 + lvl * 0.6, c: beatNow ? WARM : TEAL }); drawRings.last = t; if (rings.length > 14) rings.shift(); }
+    var cx = W / 2, cy = H / 2, reach = Math.hypot(W, H) / 2;
+    if (beatNow || (feel === 'rumble' && lvl > 0.08 && t - (drawRings.last || 0) > 1700)) { rings.push({ r: 20, a: 0.35 + lvl * 0.6, c: beatNow ? WARM : TEAL }); drawRings.last = t; if (rings.length > 16) rings.shift(); }
     for (var i = rings.length - 1; i >= 0; i--) {
-      var o = rings[i]; o.r += 1.1 + lvl * 2.2; o.a *= 0.985;
-      if (o.a < 0.02 || o.r > W) { rings.splice(i, 1); continue; }
-      g.strokeStyle = rgba(o.c, o.a); g.lineWidth = 2; g.beginPath(); g.arc(cx, cy, o.r, 0, Math.PI * 2); g.stroke();
+      var o = rings[i]; o.r += (1.1 + lvl * 2.2) * (H / 280); o.a *= 0.985;
+      if (o.a < 0.02 || o.r > reach) { rings.splice(i, 1); continue; }
+      g.strokeStyle = rgba(o.c, o.a); g.lineWidth = 2 + lvl * 3; g.beginPath(); g.arc(cx, cy, o.r, 0, Math.PI * 2); g.stroke();
     }
-    var r = 16 + bass * 34 + mid * 14, gr = g.createRadialGradient(cx, cy, 2, cx, cy, r * 2.2);
+    var r = (16 + bass * 34 + mid * 14) * (H / 280), gr = g.createRadialGradient(cx, cy, 2, cx, cy, r * 2.2);
     gr.addColorStop(0, rgba(GOLD, 0.95)); gr.addColorStop(0.5, rgba(WARM, 0.35 + lvl * 0.3)); gr.addColorStop(1, rgba(VIOLET, 0));
     g.fillStyle = gr; g.beginPath(); g.arc(cx, cy, r * 2.2, 0, Math.PI * 2); g.fill();
   }
   function drawWave() {
     bg();
-    var n = bufT.length, step = Math.max(1, Math.floor(n / W)), mid2 = H / 2, amp = 20 + lvl * 80;
+    var n = bufT.length, step = Math.max(1, Math.floor(n / W)), mid2 = H / 2, amp = H * (0.08 + lvl * 0.3);
     g.lineJoin = 'round';
     for (var pass = 0; pass < 2; pass++) {
       g.beginPath();
       for (var i = 0, x = 0; i < n; i += step, x++) { var v = (bufT[i] - 128) / 128; var y = mid2 + v * amp * (pass ? 0.5 : 1); if (i === 0) g.moveTo(x, y); else g.lineTo(x, y); }
-      g.strokeStyle = pass ? rgba(VIOLET, 0.45) : rgba(TEAL, 0.9); g.lineWidth = pass ? 5 : 2; g.stroke();
+      g.strokeStyle = pass ? rgba(VIOLET, 0.45) : rgba(TEAL, 0.9); g.lineWidth = pass ? 6 : 2.4; g.stroke();
     }
+  }
+  function drawBars() {
+    bg();
+    var n = Math.max(20, Math.min(64, Math.floor(W / 15))), bw = W / n, maxBin = Math.floor(bufF.length * 0.55), floor = H * 0.8;
+    for (var i = 0; i < n; i++) {
+      var lo = Math.floor(Math.pow(i / n, 1.7) * maxBin) + 1, hi = Math.floor(Math.pow((i + 1) / n, 1.7) * maxBin) + 2, s = 0, c = 0;
+      for (var k = lo; k <= hi && k < bufF.length; k++) { s += bufF[k]; c++; }
+      var v = c ? s / c / 255 : 0; peaks[i] = Math.max(v, (peaks[i] || 0) - 0.012);
+      var bh = Math.max(3, v * floor * 0.95), x = i * bw + bw * 0.14, col = i / n < 0.4 ? WARM : i / n < 0.75 ? TEAL : VIOLET;
+      var gr = g.createLinearGradient(0, floor - bh, 0, floor); gr.addColorStop(0, rgba(col, 0.95)); gr.addColorStop(1, rgba(col, 0.35));
+      g.fillStyle = gr; g.fillRect(x, floor - bh, bw * 0.72, bh);
+      g.fillStyle = rgba(col, 0.12); g.fillRect(x, floor + 4, bw * 0.72, bh * 0.28);
+      g.fillStyle = rgba(GOLD, 0.9); g.fillRect(x, floor - peaks[i] * floor * 0.95 - 4, bw * 0.72, 2.5);
+    }
+  }
+  function hexagon(cx, cy, r, rot) { g.beginPath(); for (var k = 0; k < 6; k++) { var a = rot + k * Math.PI / 3; if (k) g.lineTo(cx + Math.cos(a) * r, cy + Math.sin(a) * r); else g.moveTo(cx + Math.cos(a) * r, cy + Math.sin(a) * r); } g.closePath(); }
+  function drawTunnel(t) {
+    bg();
+    var cx = W / 2, cy = H / 2, N = 16, maxR = Math.hypot(W, H) * 0.62, dt = Math.min(60, t - lastT); lastT = t;
+    tun += (0.00005 + lvl * 0.00026 + bass * 0.0001) * dt;
+    for (var i = 0; i < N; i++) {
+      var q = (i / N + tun) % 1, r = Math.pow(q, 2.3) * maxR + 4, a = Math.min(1, q * 4) * (1 - q) * (0.55 + lvl * 0.8);
+      g.strokeStyle = rgba(i % 3 === 0 ? WARM : i % 3 === 1 ? TEAL : VIOLET, Math.min(0.95, a)); g.lineWidth = 1 + q * 5 * (0.6 + bass); hexagon(cx, cy, r, t / 4000 + i * 0.07 + q * 0.4); g.stroke();
+    }
+    var gr = g.createRadialGradient(cx, cy, 0, cx, cy, 40 + bass * 90); gr.addColorStop(0, rgba(GOLD, 0.55 + bass * 0.4)); gr.addColorStop(1, rgba(PINK, 0)); g.fillStyle = gr; g.fillRect(0, 0, W, H);
   }
   function drawGlow() {
     bg();
-    var r = 40 + lvl * 90, gr = g.createRadialGradient(W / 2, H / 2, 4, W / 2, H / 2, r * 1.6);
+    var r = (40 + lvl * 90) * (H / 280), gr = g.createRadialGradient(W / 2, H / 2, 4, W / 2, H / 2, r * 1.6);
     gr.addColorStop(0, rgba(GOLD, 0.5 + lvl * 0.4)); gr.addColorStop(0.5, rgba(WARM, 0.2 + lvl * 0.3)); gr.addColorStop(1, rgba(VIOLET, 0));
     g.fillStyle = gr; g.fillRect(0, 0, W, H);
   }
   function drawIdle(t) {
     bg();
-    var k = 0.5 + 0.5 * Math.sin(t / 2600), gr = g.createRadialGradient(W / 2, H / 2, 2, W / 2, H / 2, 70 + k * 12);
+    var k = 0.5 + 0.5 * Math.sin(t / 2600), gr = g.createRadialGradient(W / 2, H / 2, 2, W / 2, H / 2, (70 + k * 12) * (H / 280));
     gr.addColorStop(0, rgba(GOLD, 0.16)); gr.addColorStop(1, rgba(VIOLET, 0)); g.fillStyle = gr; g.fillRect(0, 0, W, H);
+  }
+  // the slim "now playing" bar: a tiny live spectrum
+  function drawDock() {
+    if (!an || !bufF) return;
+    dg.clearRect(0, 0, 120, 28); var n = 24, bw = 120 / n, maxBin = Math.floor(bufF.length * 0.5);
+    for (var i = 0; i < n; i++) {
+      var lo = Math.floor(Math.pow(i / n, 1.7) * maxBin) + 1, hi = Math.floor(Math.pow((i + 1) / n, 1.7) * maxBin) + 2, s = 0, c = 0;
+      for (var k = lo; k <= hi && k < bufF.length; k++) { s += bufF[k]; c++; }
+      var v = c ? s / c / 255 : 0, bh = Math.max(2, v * 26); dg.fillStyle = i / n < 0.4 ? '#F7A896' : i / n < 0.75 ? '#7FE0D7' : '#B296F0'; dg.fillRect(i * bw + 1, 28 - bh, bw - 2, bh);
+    }
   }
 
   // ---------- the loop ----------
   var visible = true, lastCheck = 0, lastDraw = 0, raf = 0;
-  if ('IntersectionObserver' in window) new IntersectionObserver(function (es) { visible = es[0].isIntersecting; }, { threshold: 0.05 }).observe(host);
+  if ('IntersectionObserver' in window) new IntersectionObserver(function (es) { visible = es[0].isIntersecting; }, { threshold: 0.05 }).observe(stage);
+  function placeDock() { var bar = document.querySelector('.tol-bar'), top = bar ? Math.max(0, Math.round(bar.getBoundingClientRect().bottom)) : 0; dock.style.top = top + 'px'; }
+  function showDock(on) { if (dock.hidden === !on) return; dock.hidden = !on; if (on) placeDock(); }
   function loop(now) {
     raf = requestAnimationFrame(loop);
-    if (document.hidden) { if (an) { an = null; stopBuzz(); } return; }
+    if (document.hidden) { if (an) { an = null; stopBuzz(); showDock(false); } return; }
     if (now - lastCheck > 400) {
       lastCheck = now;
       var s = findSource();
-      if (s && s.an !== an) { an = s.an; srcName = s.name; idle.hidden = true; say('Seeing ' + srcName + '.'); lastBeat = 0; ema = 0; }
-      else if (!s && an) { an = null; stopBuzz(); idle.hidden = false; rings.length = 0; say('The sound stopped.'); }
+      if (s && s.an !== an) { an = s.an; srcName = s.name; idle.hidden = true; say('Seeing ' + srcName + '.'); nowEl.textContent = srcName; dname.textContent = srcName; lastBeat = 0; ema = 0; }
+      else if (!s && an) { an = null; stopBuzz(); idle.hidden = false; rings.length = 0; nowEl.textContent = ''; say('The sound stopped.'); }
     }
-    if (!visible && !(an && level !== 'off')) return;
+    showDock(!!an && !visible && !isFull());
+    if (!visible && !(an && level !== 'off') && dock.hidden) return;
     if (RM && now - lastDraw < 160) { if (an) { var rr = analyse(); feelStep(rr); } return; }
-    lastDraw = now; fit();
-    if (!an) { RM ? drawGlow() : drawIdle(now - t0); return; }
+    lastDraw = now;
+    if (visible || isFull()) fit();
+    if (!an) { if (visible || isFull()) { RM ? drawGlow() : drawIdle(now - t0); } return; }
     var r = analyse(); feelStep(r);
-    if (!visible) return;
-    var t = now - t0;
-    if (look === 'rings') drawRings(t, r.beat); else if (look === 'wave') drawWave(); else if (look === 'glow') drawGlow(); else drawAurora(t);
+    if (!dock.hidden) drawDock();
+    if (!visible && !isFull()) return;
+    var t = now - t0, cur = look;
+    if (look === 'auto') { if (now - autoAt > 16000) { autoAt = now; autoI = (autoI + 1) % ROTATE.length; rings.length = 0; } cur = ROTATE[autoI]; }
+    if (cur === 'rings') drawRings(t, r.beat); else if (cur === 'wave') drawWave(); else if (cur === 'glow') drawGlow(); else if (cur === 'bars') drawBars(); else if (cur === 'tunnel') drawTunnel(t); else drawAurora(t);
   }
   window.addEventListener('pagehide', stopBuzz);
+  window.addEventListener('resize', function () { if (!dock.hidden) placeDock(); });
   document.addEventListener('visibilitychange', function () { if (document.hidden) stopBuzz(); });
   fit(); drawIdle(0);
   raf = requestAnimationFrame(loop);

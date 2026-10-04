@@ -55,19 +55,37 @@
   .sf-alt div{ min-width:0; } .sf-alt span{ display:block; color:var(--ink-soft); font-size:.9rem; }
   .sf-mine{ display:flex; flex-wrap:wrap; gap:.4rem 1rem; align-items:baseline; margin:0 0 .9rem; padding:.6rem .9rem; border-radius:14px; background:#EAF6EF; color:#2F5A3C; font-size:.93rem; }
   .sf-link{ font:inherit; background:none; border:0; padding:.2rem 0; text-decoration:underline; color:#2F5A3C; cursor:pointer; font-weight:600; min-height:32px; }
-  #senses{ margin:0 0 2rem; }
-  .sn-stage{ position:relative; margin:1rem 0 .8rem; border-radius:18px; overflow:hidden; border:1px solid #3A3566; background:#171A34; }
+  main > section#senses{ margin:0 0 1.6rem !important; padding:1.3rem 1.3rem 1.1rem !important; border:0 !important; border-radius:26px !important; color:#fff !important; background:linear-gradient(135deg,#171A34,#2A2050 60%,#4A2460) !important; box-shadow:0 18px 44px rgba(40,20,80,.35) !important; }
+  .sn-kick{ margin:0 0 .3rem; display:inline-block; padding:.12rem .7rem; border-radius:999px; background:#FFD66B; color:#3A1B52; font:700 .74rem/1.7 "IBM Plex Mono", monospace; letter-spacing:.08em; text-transform:uppercase; }
+  .sn-title{ margin:.2rem 0 .3rem; font:700 clamp(1.7rem,5.4vw,2.6rem)/1.08 "Fraunces", Georgia, serif; color:#fff; max-width:none; text-wrap:balance; }
+  .sn-lede{ margin:0 0 .9rem; color:#E6DDF8; font-size:1.02rem; line-height:1.5; max-width:62ch; }
+  .sn-stage{ position:relative; margin:.4rem 0 .9rem; border-radius:20px; overflow:hidden; border:1px solid #4A4380; background:#171A34; }
   #sn-cv{ display:block; width:100%; }
-  .sn-idle{ position:absolute; inset:auto 0 .9rem 0; margin:0; text-align:center; color:#D8D2F0; font-size:.95rem; padding:0 1rem; }
+  .sn-idle{ position:absolute; inset:auto 0 3.4rem 0; margin:0; text-align:center; color:#E6DDF8; font-size:1rem; padding:0 1.2rem; }
+  .sn-hud{ position:absolute; left:0; right:0; bottom:0; display:flex; justify-content:space-between; align-items:center; gap:.6rem; padding:.55rem .7rem; background:linear-gradient(transparent,rgba(10,6,30,.65)); }
+  .sn-now{ font:600 1rem "Fraunces", Georgia, serif; color:#fff; text-shadow:0 1px 6px rgba(0,0,0,.5); min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .sn-stage.is-full, .sn-stage:fullscreen{ border-radius:0; border:0; margin:0; width:100vw; height:100vh; position:fixed; inset:0; z-index:1000; }
+  .sn-stage:-webkit-full-screen{ width:100%; height:100%; }
   .sn-row{ display:flex; flex-wrap:wrap; align-items:center; gap:.4rem; margin:.4rem 0; }
   .sn-row[hidden]{ display:none; }
-  .sn-l{ font-family:"IBM Plex Mono", monospace; font-size:.8rem; text-transform:uppercase; letter-spacing:.08em; color:var(--ink-soft); min-width:3.2rem; }
-  .sn-b{ font:inherit; font-size:.92rem; min-height:44px; padding:.3rem .9rem; border-radius:999px; border:1px solid #E6D6EE; background:#fff; color:#4E3F6B; cursor:pointer; }
-  .sn-b[aria-pressed="true"]{ background:#EDE3F8; border-color:#B9A0E0; font-weight:600; }
-  .sn-b:focus-visible{ outline:2px solid var(--focus); outline-offset:2px; }
+  .sn-l{ font-family:"IBM Plex Mono", monospace; font-size:.8rem; text-transform:uppercase; letter-spacing:.08em; color:#CFC3EE; min-width:3.2rem; }
+  .sn-b{ font:inherit; font-size:.92rem; min-height:44px; padding:.3rem .95rem; border-radius:999px; border:1px solid rgba(255,255,255,.28); background:rgba(255,255,255,.1); color:#fff; cursor:pointer; }
+  .sn-b[aria-pressed="true"]{ background:#FFD66B; border-color:#FFD66B; color:#3A1B52; font-weight:700; }
+  .sn-b:focus-visible, .sn-see:focus-visible, .sn-dock-b:focus-visible{ outline:3px solid #fff; outline-offset:2px; }
   .sn-test{ border-style:dashed; }
-  .sn-note{ margin:.6rem 0 0; font-size:.9rem; color:var(--ink-soft); line-height:1.55; max-width:65ch; }
-  .sn-status{ margin:.3rem 0 0; min-height:1.3em; font-size:.88rem; color:#2F5A3C; }
+  .sn-hud-b{ background:rgba(20,10,50,.55); }
+  .sn-note{ margin:.7rem 0 0; font-size:.9rem; color:#D4C9F0; line-height:1.55; max-width:65ch; }
+  .sn-status{ margin:.3rem 0 0; min-height:1.3em; font-size:.88rem; color:#9FE8C0; }
+  main > section#senses .sn-title, main > section#senses .sn-lede, main > section#senses .sn-note, main > section#senses .sn-status{ background:none !important; box-shadow:none !important; border:0 !important; padding:0 !important; color:inherit; }
+  main > section#senses .sn-lede{ color:#E6DDF8 !important; } main > section#senses .sn-note{ color:#D4C9F0 !important; } main > section#senses .sn-status{ color:#9FE8C0 !important; }
+  .sn-see{ display:inline-flex; align-items:center; gap:.4rem; margin:.5rem 0 .2rem; font:600 .95rem "Lora", Georgia, serif; min-height:44px; padding:.4rem 1.1rem; border-radius:999px; border:2px solid #6B4F8A; background:linear-gradient(135deg,#2A2050,#4A2460); color:#fff; cursor:pointer; }
+  .sn-see:hover{ filter:brightness(1.12); }
+  .sn-dock{ position:fixed; left:0; right:0; z-index:870; display:flex; align-items:center; gap:.7rem; padding:.35rem .9rem; background:rgba(23,26,52,.94); color:#fff; backdrop-filter:blur(6px); box-shadow:0 6px 18px rgba(0,0,0,.25); }
+  .sn-dock[hidden]{ display:none; }
+  .sn-dock-cv{ width:120px; height:28px; flex:none; }
+  .sn-dock-name{ flex:1; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; font:600 .95rem "Fraunces", Georgia, serif; }
+  .sn-dock-b{ font:600 .85rem "Lora", Georgia, serif; min-height:36px; padding:.2rem .85rem; border-radius:999px; border:1px solid rgba(255,255,255,.35); background:rgba(255,255,255,.12); color:#fff; cursor:pointer; }
+  @media (max-width:520px){ .sn-dock-cv{ width:72px; } main > section#senses{ padding:1rem .9rem .9rem !important; border-radius:20px !important; } }
   .phones-note{ margin:0 0 1.2rem; padding:.7rem 1rem; border-radius:14px; background:#F3EEF9; border:1px solid #D9C8F0; color:#4E3F6B; font-size:.95rem; line-height:1.5; }
   #brain-breakers{ margin-top:2.5rem; }
   .bb-lede{ font-size:1.05rem; }
@@ -193,13 +211,17 @@
     <div class="mark">The Objective Ledger
       <small>SOUNDSCAPES</small>
     </div>
-    <p class="tagline">Calming background audio made for the framework, added one real track at a time. Nothing listed here is a placeholder.</p>
+    <p class="tagline">Sounds you can see and feel. Calming audio, big instrumentals and live soundscapes, added one real piece at a time. Nothing listed here is a placeholder.</p>
     <a class="back-link" href="index.html">&larr; Back to the home page</a>
   </aside>
 
   <div class="rule" aria-hidden="true"></div>
 
   <main>
+
+    <section id="senses" class="no-bubble" aria-labelledby="senses-h"></section>
+
+    <section id="finder" aria-labelledby="finder-h"></section>
 
     <section id="catalog">
       <div class="kicker">Audio</div>
@@ -213,9 +235,7 @@
 
       <p class="phones-note"><span aria-hidden="true">&#127911;</span> <strong>Soundscapes sound best with headphones.</strong> The deep, low tones and the gentle left-to-right movement are much of what makes them calming, and small speakers can’t carry them.</p>
 
-      <section id="finder" aria-labelledby="finder-h"></section>
 
-      <section id="senses" aria-labelledby="senses-h"></section>
 
       <div class="track-list">
 

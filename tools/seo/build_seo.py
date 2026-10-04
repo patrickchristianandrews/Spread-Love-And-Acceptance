@@ -86,8 +86,8 @@ OVERRIDE = {
         'Drift is a calm visualizer: tell it how you feel, put on headphones and let slow, dreamy visuals and gentle '
         'tones keep you company for a few quiet minutes of breathing and rest.'),
     'soundscapes.html': (None,
-        'Calm soundscapes and gentle music made for The Objective Ledger: breathing tracks, peaceful ambient pieces and '
-        'songs about love, acceptance and finding your way back to each other.'),
+        'Soundscapes you can see and feel: a big live picture of whatever plays, optional gentle vibration on phones, '
+        'calm breathing tracks, big instrumentals and live soundscapes made for The Objective Ledger.'),
     'frequency-journey.html': (None,
         'The Frequency Journey: pick Tidbit or Sugarfoot and play a maze chase or a road-and-river crossing, with easy '
         'controls and no game over, and watch the Frequency Buddies cartoon on the same page.'),
@@ -242,7 +242,7 @@ SEARCH.update({
  'frequency-buddies-music-video-maker.html': ('Make Your Own Frequency Buddies Music Video', 'Make your own Frequency Buddies theme song music video: pick the stage, lights, effects, dance moves, costumes and who’s on stage, then play it and share the link.'),
  'frequency-buddies-music-video.html': ('Frequency Buddies Theme Song Music Video', 'The Frequency Buddies theme song as a music video: Tidbit, Sugarfoot and every friend from the episodes sing, dance and cheer on a stage that moves.'),
  'frequency-buddies-live.html': ('Frequency Buddies Live: A Kids’ Cartoon Channel', 'An always-on Frequency Buddies channel: drop in anytime, watch the kids’ cartoon episode playing right now, and cast it to your TV. Free, with captions.'),
- 'frequency-buddies-season-2.html': ('Frequency Buddies Season 2: Watch the Teaser', 'Frequency Buddies Season 2 is coming: watch the one-minute teaser with Tidbit and Sugarfoot, spot the five hidden secrets and pick the new place you can’t wait to see.'),
+ 'frequency-buddies-season-2.html': ('Frequency Buddies Season 2: Watch the Teaser', 'Frequency Buddies Season 2 is coming: watch the two-minute teaser with Tidbit and Sugarfoot, spot the five hidden secrets and pick the new place you can’t wait to see.'),
  'pal-cam-tv.html': ('Pal Cam TV: A Cozy Cartoon Puppy Cam for Your TV', 'Leave two cartoon pups playing and napping on your TV all day, with calm music and light that follows the time of day. Free, no sign-up, ready to cast.'),
  # the book
  'book/preface.html': ('Invisible Labor at Home: The Work Nobody Sees', 'The Preface: the planning, remembering and noticing that keeps a home running, why this invisible work goes unseen, and how seeing it changes everything.'),
