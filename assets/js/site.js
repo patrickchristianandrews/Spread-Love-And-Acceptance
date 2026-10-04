@@ -287,6 +287,7 @@
       { href: '/program.html', title: 'Which part to use when', note: 'The six weeks, the suite and the package, side by side' }
     ]},
     { id: 'play', name: 'Calm & play', title: 'Calm & play', blurb: 'Calm games and sounds for a busy mind. No timers and no way to lose.', items: [
+      { sub: 'Play' },
       { href: '/pause-and-play.html', code: 'All', title: 'Pause & Play', note: 'All the calm games, your level and your garden' },
       { href: '/recheck-drive.html', code: 'Game', title: 'The Re-check Drive', note: 'A calm football game: kind actions move the ball to a field goal' },
       { href: '/night-garden.html', code: 'Breathe', title: 'The Night Garden', note: 'Breathe slowly and watch the flowers bloom' },
@@ -296,16 +297,23 @@
       { href: '/quiet-words.html', code: 'Game', title: 'Quiet Words', note: 'A gentle word search' },
       { href: '/quiet-crossword.html', code: 'Game', title: 'Quiet Crossword', note: 'Small, friendly crosswords for your phone' },
       { href: '/daily-ledger-crossword.html', code: 'Game', title: 'The Daily Ledger Crossword', note: 'From a quick Mini to a Big Sunday' },
-      { href: '/soundscapes.html', code: 'Audio', title: 'Soundscapes', note: 'Background audio for settling down' },
-      { href: '/echoes-of-gold.html', code: 'Album', title: 'Echoes of Gold', note: 'The companion album' }
-    ]},
-    { id: 'kids', name: 'Kids & families', title: 'For kids & families', blurb: 'Tidbit and Sugarfoot’s cartoon and live pal cam, and help for every generation at home.', items: [
-      { href: '/frequency-buddies.html', code: 'Cartoon', title: 'Frequency Buddies', note: 'A free kids’ cartoon about feelings, with captions' },
+      { sub: 'Watch' },
+      { href: '/frequency-buddies.html', code: 'Cartoon', title: 'Frequency Buddies', note: 'A free cartoon about feelings, with captions' },
       { href: '/frequency-buddies-live.html', code: 'On air', title: 'Frequency Buddies Live', note: 'An always-on station: drop in on the episode playing now' },
       { href: '/frequency-buddies-shuffle.html', code: 'Shuffle', title: 'Frequency Buddies on shuffle', note: 'Episodes in a random order, and downloads' },
       { href: '/pal-cam-tv.html', code: 'Live', title: 'Pal Cam TV', note: 'The pups live, all day, full screen or on your TV' },
+      { sub: 'Listen' },
+      { href: '/soundscapes.html', code: 'Audio', title: 'Soundscapes', note: 'Background audio for settling down' },
+      { href: '/echoes-of-gold.html', code: 'Album', title: 'Echoes of Gold', note: 'The companion album' }
+    ]},
+    { id: 'family', name: 'Family', title: 'Family', blurb: 'Help for every generation at home, and the first tools to try together.', items: [
+      { href: '/relationships.html#family', deep: true, title: 'Family: where to start', note: 'The first tools to try together at home' },
+      { href: '/relationships.html#co-parents', deep: true, title: 'Co-parents', note: 'Calm handoffs and one owner for each task' },
       { href: '/grandparents.html', code: 'New', title: 'For grandparents', note: 'Help with the grandkids without taking over' },
-      { href: '/relationships.html#family', title: 'Family: where to start', note: 'The first tools to try together at home' }
+      { href: '/growing-up.html', deep: true, title: 'Where your lens came from', note: 'How growing up shapes what each of us expects' },
+      { href: '/turning-toward.html', deep: true, title: 'Turning toward', note: 'Seven small, everyday ways to connect' },
+      { href: '/check-ins.html', deep: true, title: 'Check-ins', note: 'How to have a tender conversation kindly' },
+      { href: '/complacency.html', deep: true, title: 'Complacency', note: 'Why “it’s fine” stops being checked, with parents, kids and everyone at home' }
     ]},
     { id: 'about', name: 'About', title: 'About', blurb: 'Who made this and why, what’s finished, and the site’s policies.', items: [
       { href: '/about.html', title: 'About the creator', note: 'Christian’s story, and why this exists' },
