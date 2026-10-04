@@ -16,7 +16,8 @@
   var TRACKS = [
     { id: 'star', title: 'Shooting Star', src: '/assets/audio/soundscapes/Shooting-Star.mp3', len: '3:27' },
     { id: 'watching', title: 'Watching a Shooting Star', src: '/assets/audio/soundscapes/Watching-a-Shooting-Star.mp3', len: '3:38' },
-    { id: 'shimmer', title: 'Thunderous Shimmer', src: '/assets/audio/soundscapes/Thunderous-Shimmer.mp3', len: '2:51' }
+    { id: 'shimmer', title: 'Thunderous Shimmer', src: '/assets/audio/soundscapes/Thunderous-Shimmer.mp3', len: '2:51' },
+    { id: 'bedroom', title: 'Bouncy Bedroom', src: '/assets/audio/soundscapes/Bouncy-Bedroom.mp3', len: '1:33' }
   ];
   function lsGet(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
   function lsSet(k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
@@ -81,7 +82,7 @@
       : 'About three minutes. No sign-up, and nothing plays until you press a button.';
     var head = kind === 'end'
       ? '<p class="bb-kick">BRAIN BREAK</p><h2 id="bb-h-end">Finished a step? <em>Break your brain</em> for three minutes.</h2><p>Big instrumental music, then straight back to the program. Breaks work best when they are short and they end.</p>'
-      : '<p class="bb-kick">NEW &middot; BRAIN BREAKERS</p><h2 id="bb-h-home">Come get your brain wrecked. <em>Broken in a good way.</em></h2><p>Three instrumental pieces, from soft and floating to big and cinematic, made for a three-minute break between program steps. One tap, then back to it.</p>';
+      : '<p class="bb-kick">NEW &middot; BRAIN BREAKERS</p><h2 id="bb-h-home">Come get your brain wrecked. <em>Broken in a good way.</em></h2><p>Four instrumental pieces, from soft and floating to big and cinematic, made for a three-minute break between program steps. One tap, then back to it.</p>';
     el.innerHTML =
       '<div class="bb-bars" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>' + head +
       '<div class="bb-ctl">' +

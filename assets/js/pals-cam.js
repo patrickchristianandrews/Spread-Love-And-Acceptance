@@ -1313,9 +1313,9 @@
     '.pc-cv{position:absolute;left:0;top:0;display:block;touch-action:manipulation;cursor:pointer;-webkit-user-select:none;user-select:none}' +
     '.pc-rec{position:absolute;left:.6rem;top:.55rem;display:inline-flex;align-items:center;gap:.35rem;padding:.2rem .55rem;border-radius:999px;background:rgba(255,253,248,.85);font:600 .66rem/1.2 "IBM Plex Mono",monospace;letter-spacing:.08em;color:#8A3E52;pointer-events:none}' +
     '.pc-rec i{width:7px;height:7px;border-radius:50%;background:#E4566E;animation:pcDot 2s ease-in-out infinite}' +
-    '.pc-time{position:absolute;right:.6rem;top:.55rem;padding:.2rem .55rem;border-radius:999px;background:rgba(255,253,248,.85);font:600 .66rem/1.2 "IBM Plex Mono",monospace;letter-spacing:.06em;color:#3C3350;pointer-events:none;font-variant-numeric:tabular-nums}' +
+    '.pc-time{position:absolute;right:.6rem;top:.55rem;padding:.2rem .55rem;border-radius:999px;background:rgba(255,253,248,.9);font:700 .72rem/1.2 "IBM Plex Mono",monospace;letter-spacing:.05em;color:#3B1D6E;pointer-events:none;font-variant-numeric:tabular-nums}' +
     '.pc-time:empty{display:none}' +
-    '.pc-wx{position:absolute;left:.6rem;top:2.1rem;padding:.2rem .6rem;border:0;border-radius:999px;background:rgba(255,253,248,.88);font:600 .7rem/1.2 "IBM Plex Mono",monospace;letter-spacing:.04em;color:#3C3350;cursor:pointer;max-width:70%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}' +
+    '.pc-wx{position:absolute;left:.6rem;top:2.1rem;padding:.2rem .6rem;border:0;border-radius:999px;background:rgba(255,253,248,.88);font:700 .76rem/1.2 "IBM Plex Mono",monospace;letter-spacing:.03em;color:#3B1D6E;cursor:pointer;max-width:70%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}' +
     '.pc-wx.is-set{cursor:pointer}' +
 
     '.pc-badge{position:absolute;right:.6rem;top:2.1rem;padding:.25rem .7rem;border-radius:999px;background:#3C3350;color:#FFF3D6;font:700 .8rem/1.2 Fraunces,Georgia,serif;pointer-events:none}' +

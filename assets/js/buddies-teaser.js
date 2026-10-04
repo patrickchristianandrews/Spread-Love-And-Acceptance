@@ -660,7 +660,7 @@
     say(g, tid, 'Snakes?!', u, 1.6, 2.5);
     say(g, tid, 'I have had it with these snakes on this—', u, 2.6, 4.0, { big: true });
     say(g, sug, '…PLANE! This lovely plane!', u, 4.1, 5.0, { big: true });
-    say(g, tid, 'Mmf mmf!', u, 5.0, 5.5);
+    say(g, tid, 'Hey!', u, 5.0, 5.5);
     say(g, tid, '…on this plane.', u, 5.6, 6.3);
     say(g, sug, 'Good girl.', u, 6.3, 7.0);
   }
@@ -679,7 +679,7 @@
     var sug = pup(g, 'sugarfoot', 320, y0r, 1.5, { pose: 'sit', face: 1, t: u + 1, rot: rot, noShadow: u < 4.2, ear: -0.5 });
     onomato(g, 'WEE-OO! WEE-OO!', 320, 48, 28, '#FF6A86', win(u, 4.3, 6.2, 0.1) * flick, 0);
     say(g, sug, 'Almost there…', u, 0.9, 2.3);
-    say(g, tid, 'Mmf! Mmf mmf!', u, 1.5, 2.9);
+    say(g, tid, 'Holding on tight!', u, 1.5, 2.9);
     say(g, sug, 'Got it!', u, 3.0, 3.9, { big: true });
     say(g, tid, '…Oops.', u, 4.0, 5.0);
     say(g, sug, 'Mission: possible… ish.', u, 5.0, 6.6);
