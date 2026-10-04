@@ -90,7 +90,7 @@
     '.appad .aa-say{ position:absolute; left:50%; top:-2px; transform:translateX(-50%); background:#fff; color:#3B2A55; font:700 .9rem/1 "Fraunces",Georgia,serif; padding:.35rem .7rem; border-radius:14px; box-shadow:0 4px 10px rgba(0,0,0,.12); pointer-events:none; white-space:nowrap; }' +
     '.appad .aa-say::after{ content:""; position:absolute; left:50%; bottom:-5px; width:10px; height:10px; background:#fff; transform:translateX(-50%) rotate(45deg); }' +
     '.appad .aa-k{ margin:0 0 .15rem !important; font:600 .72rem "IBM Plex Mono",monospace; letter-spacing:.1em; text-transform:uppercase; color:#8A4FA8 !important; background:none !important; box-shadow:none !important; border:0 !important; padding:0 !important; }' +
-    '.appad .aa-h{ margin:0 !important; font:800 clamp(1.7rem,6vw,2.5rem)/1 "Fraunces",Georgia,serif !important; color:#3B2A55 !important; background:none !important; box-shadow:none !important; border:0 !important; padding:0 !important; letter-spacing:-.01em; }' +
+    '.appad .aa-h{ margin:0 0 .6rem !important; font:800 clamp(1.7rem,6vw,2.5rem)/1 "Fraunces",Georgia,serif !important; color:#3B2A55 !important; background:none !important; box-shadow:none !important; border:0 !important; padding:0 !important; letter-spacing:-.01em; }' +
     '.appad .aa-h em{ font-style:normal; color:#E4566E; }' +
     '.appad .aa-p{ margin:.4rem 0 .7rem !important; color:#4B3D63 !important; line-height:1.45; background:none !important; box-shadow:none !important; border:0 !important; padding:0 !important; max-width:none !important; }' +
     '.appad .aa-pick{ display:flex; flex-wrap:wrap; gap:.5rem; margin:0 0 .6rem; }' +
@@ -126,7 +126,6 @@
         '<span class="aa-stage"><span class="aa-tilt"><canvas width="380" height="240" aria-hidden="true"></canvas></span><span class="aa-say" aria-hidden="true"></span></span>' +
         '<div><p class="aa-k no-bubble">Free app</p>' +
         '<h2 class="aa-h no-bubble" id="aa-h">Get the <em>app!</em></h2>' +
-        '<p class="aa-p no-bubble">Tidbit and Sugarfoot are moonwalking onto your home screen. Pick your device:</p>' +
         '<div class="aa-pick" role="group" aria-label="Choose your device">' +
           '<a class="aa-chip" href="/install.html#android"><span>Android</span><small>Install now</small></a>' +
           '<a class="aa-chip" href="/install.html#windows"><span>Windows</span><small>Install now</small></a>' +
