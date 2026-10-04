@@ -2718,7 +2718,7 @@
     [/^\/frequency-buddies\.html$/, 'Share this episode', 'Frequency Buddies: a gentle cartoon for kids and families, free, with captions.', { pin: true, episode: true }],
     [/^\/frequency-buddies-live\.html$/, 'Share the station', 'Frequency Buddies Live: a gentle cartoon station for kids and families, always on.', { pin: true }],
     [/^\/frequency-buddies-shuffle\.html$/, 'Share this page', 'Frequency Buddies on shuffle: gentle cartoon episodes for kids and families.', { pin: true }],
-    [/^\/frequency-buddies-season-2\.html$/, 'Share the teaser', 'Frequency Buddies Season 2 is coming! Watch the one-minute teaser and look for the five secrets.', { pin: true }],
+    [/^\/frequency-buddies-season-2\.html$/, 'Share the teaser', 'Frequency Buddies Season 2 is coming! Watch the two-minute teaser and look for the five secrets.', { pin: true }],
     [/^\/frequency-buddies-music-video[\w-]*\.html$/, 'Share the music video', 'A Frequency Buddies music video for kids and families.', { pin: true }],
     // games (the game, never a score)
     [/^\/pause-and-play\.html$/, 'Share the games', 'Calm games for a busy mind. Free, with no timers.'],
