@@ -3994,7 +3994,7 @@
       "id": "app",
       "kind": "intent",
       "name": "using the site like an app",
-      "pat": "\\b(is there|do you have|have you got|got|any) an? (app|mobile app|phone app|iphone app|android app)\\b|\\b(download|install|get) (the |an |this as an )?(app|it on my phone)\\b|\\bapp store\\b|\\bplay store\\b|\\bhome ?screen\\b|\\b(is|does) (it|this|the site) (an app|work (on|as) (a phone|an app|my phone|mobile))\\b",
+      "pat": "\\b(is there|do you have|have you got|got|any) an? (app|mobile app|phone app|iphone app|android app)\\b|\\b(download|install|get) (the |an |this as an )?(app|it on my phone)\\b|\\bapp store\\b|\\bplay store\\b|\\bhome ?screen\\b|\\b(is|does) (it|this|the site) (an app|work (on|as) (a phone|an app|my phone|mobile))\\b|\\bwidgets?\\b",
       "keys": [
         "is there an app",
         "an app",
@@ -4004,7 +4004,8 @@
       ],
       "what": [
         "There’s nothing to download, and you don’t need an app store. The site works like an app on your phone: add it to your home screen and it opens full-screen, with its own icon, like any other app.",
-        "Pages you’ve opened before keep working without a connection, and everything you type in the tools stays on your device."
+        "Pages you’ve opened before keep working without a connection, and everything you type in the tools stays on your device.",
+        "Real Android widgets need a native app, so an app installed from Chrome can’t add one yet. Press and hold the icon for quick jumps, or pin a single page to your home screen."
       ],
       "how": [
         "On an iPhone or iPad, open the site in Safari, tap the Share button, then “Add to Home Screen”.",
@@ -4012,6 +4013,10 @@
         "On a computer, most browsers show an install icon in the address bar."
       ],
       "links": [
+        [
+          "Put the app on your phone",
+          "/install.html"
+        ],
         [
           "Start here",
           "/start-here.html"
@@ -4776,19 +4781,10 @@
       "kind": "tool",
       "name": "the Separated co-parents page",
       "keys": [
-        "co-parent",
-        "co-parents",
-        "coparent",
-        "coparents",
-        "co-parenting",
-        "coparenting",
-        "parallel parenting",
-        "my ex",
         "exchange day",
         "handoff",
         "handoffs",
-        "custody exchange",
-        "~hostile ex"
+        "custody exchange"
       ],
       "what": "After a separation, the goal is calm, brief, child-focused contact. The Separated co-parents page has an exchange-day script, ways to keep kids out of the middle, a tone check, and a parallel-parenting route for a co-parent who won’t cooperate. A court order or parenting plan always comes first, and it is not legal advice.",
       "how": [
@@ -4826,10 +4822,6 @@
         "fair split",
         "chore split",
         "housework split",
-        "roommate chores",
-        "housemates",
-        "roommates",
-        "roommate bills",
         "split the bills"
       ],
       "what": "There are several tools for splitting the load, and they work best in an order. Most households only need the first three.",
@@ -4852,36 +4844,6 @@
         [
           "The Lemonade Stand",
           "/lemonade-stand.html"
-        ]
-      ]
-    },
-    {
-      "id": "install-app",
-      "kind": "tool",
-      "name": "the install page",
-      "keys": [
-        "install the app",
-        "install app",
-        "add to home screen",
-        "home screen",
-        "app on my phone",
-        "android app",
-        "download the app",
-        "widget",
-        "widgets",
-        "~is there an app"
-      ],
-      "what": "You can put the whole site on an Android phone as an app from Chrome: its own icon, full screen, and it keeps working offline. Real Android widgets need a native app, so an installed web app can’t add one yet.",
-      "how": [
-        "Open the site in Chrome, tap the three dots, then tap Install app (or Add to Home screen, then Install).",
-        "Press and hold the icon for quick jumps, and drag any of them onto your home screen.",
-        "On iPhone, use Share, then Add to Home Screen."
-      ],
-      "pillar": "",
-      "links": [
-        [
-          "Put the app on your phone",
-          "/install.html"
         ]
       ]
     },

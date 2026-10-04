@@ -55,6 +55,12 @@ t('tools', 'What is Turning Toward?', { kind: 'card', id: 'turning', link: '/tur
 t('tools', 'What is complacency?', { kind: 'term', link: '/complacency.html' });
 t('tools', 'What is the Re-check Drive?', { kind: 'card', id: 'recheckdrive', link: '/recheck-drive.html' });
 t('tools', 'is there a football game about this', { kind: 'card', id: 'recheckdrive', link: '/recheck-drive.html' });
+t('tools', 'we are in a fight right now and both upset, what do we say', { link: '/upset-right-now.html', steps: true, text: /pause line|come back to this at eight|pick this up at eight/ });
+t('tools', 'tell me about the new baby page', { kind: 'card', id: 'new-parent', link: '/new-parent.html' });
+t('tools', 'how do I put the app on my android phone', { kind: 'card', id: 'app', link: '/install.html' });
+t('tools', 'can the app have widgets', { kind: 'card', id: 'app', text: /native app/ });
+t('tools', 'what are the five love languages', { kind: 'card', id: 'love-languages', link: '/love-languages.html' });
+t('tools', 'where are all the formulas and cut-offs written out', { kind: 'card', id: 'method-and-limits', link: '/method-and-limits.html' });
 t('tools', 'What are touchstones?', { link: ['/complacency.html#touchstones', '/library/connection.html#shared-language'] });
 t('tools', 'how do I bring back an inside joke or pet name', { link: ['/complacency.html#touchstones', '/library/connection.html#shared-language'] });
 t('tools', 'how do I stop taking my partner for granted', { link: ['/complacency.html', '/library/connection.html#complacency', '/turning-toward.html'] });
