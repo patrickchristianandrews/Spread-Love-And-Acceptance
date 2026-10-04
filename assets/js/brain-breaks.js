@@ -14,6 +14,7 @@
   var path = location.pathname.replace(/\/$/, '/index.html');
   var isHome = path === '/index.html' || path === '/';
   var TRACKS = [
+    { id: 'star', title: 'Shooting Star', src: '/assets/audio/soundscapes/Shooting-Star.mp3', len: '3:27' },
     { id: 'shooting', title: 'Watching a Shooting Star', src: '/assets/audio/soundscapes/Watching-a-Shooting-Star.mp3', len: '3:38' },
     { id: 'shimmer', title: 'Thunderous Shimmer', src: '/assets/audio/soundscapes/Thunderous-Shimmer.mp3', len: '2:51' }
   ];
