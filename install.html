@@ -261,8 +261,14 @@
   function paint() {
     ready = !!ok();
     var manual = panels[cur] && panels[cur].querySelector('.in-manual');
-    if (cur === 'apple') { card.hidden = true; return; }
-    card.hidden = false; card.classList.remove('is-ok'); btn.hidden = true;
+    card.hidden = false; card.classList.remove('is-ok'); btn.hidden = true; btn.textContent = 'Install the app';
+    if (cur === 'apple') {   // Apple does not let a web page install itself, so the button opens the share sheet, where "Add to Home Screen" is one tap away
+      if (installed) { state.textContent = 'You are already using the app.'; sub.textContent = 'Nothing more to do. Enjoy it.'; card.classList.add('is-ok'); if (manual) manual.open = false; return; }
+      if (was) { state.textContent = 'The app is already on this device.'; sub.textContent = 'Look for the two little bubbles on your home screen.'; card.classList.add('is-ok'); return; }
+      if (ios) { state.textContent = 'Two taps and it is on your home screen.'; sub.textContent = 'Press the button. Your share sheet opens. Tap Add to Home Screen, then Add.'; btn.textContent = 'Add to Home Screen'; btn.hidden = false; if (manual) manual.open = false; }
+      else { state.textContent = 'This part is for an iPhone or iPad.'; sub.textContent = 'Open this page on it, or pick your device above.'; }
+      return;
+    }
     if (installed) { state.textContent = 'You are already using the app.'; sub.textContent = 'Nothing more to do. Enjoy it.'; card.classList.add('is-ok'); if (manual) manual.open = false; return; }
     if (was) { state.textContent = 'The app is already on this device.'; sub.textContent = 'Look for the two little bubbles on your home screen, Start menu or app drawer.'; card.classList.add('is-ok'); if (manual) manual.open = false; return; }
     if (ready) { state.textContent = 'Ready to install.'; sub.textContent = 'Press the button. Your browser asks you to confirm, then the app is installed.'; btn.hidden = false; if (manual) manual.open = false; }
@@ -296,6 +302,12 @@
   window.addEventListener('appinstalled', function () { try { localStorage.setItem('tol-app-installed', '1'); } catch (e) {} was = true; paint(); });
   setTimeout(paint, 800); setTimeout(paint, 2500);
   btn.addEventListener('click', function () {
+    if (cur === 'apple') {
+      var hint = function () { state.textContent = 'Now tap Add to Home Screen.'; sub.textContent = 'In the share sheet, scroll the row of actions to Add to Home Screen, tap it, then tap Add at the top right. If the sheet closed, press the button again.'; };
+      if (navigator.share) { navigator.share({ title: 'Spread Love & Acceptance', url: location.origin + '/' }).then(hint, hint); hint(); }
+      else { state.textContent = 'Tap the Share button in Safari.'; sub.textContent = 'It is the square with an arrow, at the bottom of the screen (top right on an iPad). Then choose Add to Home Screen and tap Add.'; }
+      return;
+    }
     if (!window.TOLInstall) return;
     btn.disabled = true; state.textContent = 'Asking your browser…';
     window.TOLInstall.ask().then(function (r) {

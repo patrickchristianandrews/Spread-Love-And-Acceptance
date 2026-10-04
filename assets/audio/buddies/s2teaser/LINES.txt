@@ -1,6 +1,6 @@
-# Season 2 teaser lines for recorded voices (one mp3 per line, named <key>.mp3, same folder).
-# Voices as in Season 1: tidbit (bright, quick), sugarfoot (softer, slower), narr (the trailer narrator: calm, low).
-# Then list each recording in index.json as {"<key>":[<seconds>]}. Until a line has a recording, the device's own speech reads it.
+# Season 2 teaser voices: one mp3 per line, named <key>.mp3 in this folder, listed in index.json as {"<key>":[<seconds>]}.
+# Tidbit (bright, quick), Sugarfoot (softer, slower) and the trailer narrator are synthesized voices made with the open-source Kokoro model (Apache 2.0).
+# To swap in your own recording of a line, replace its mp3 (same key) and update its seconds in index.json. A line with no mp3 falls back to the device's own speech.
 # key	who	seconds on screen	text
 b039e77b	tidbit	1.63	Did you hear that?
 285e9fd9	sugarfoot	1.38	From… out there.

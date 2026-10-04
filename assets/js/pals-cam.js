@@ -760,8 +760,8 @@
   function wxKind(c) { return c === 0 ? ['clear', 'Clear', '☀️'] : c <= 2 ? ['clouds', 'Partly cloudy', '⛅'] : c === 3 ? ['clouds', 'Cloudy', '☁️'] : c <= 48 ? ['clouds', 'Foggy', '🌫️'] : c <= 57 ? ['rain', 'Drizzle', '🌦️'] : c <= 67 ? ['rain', 'Rain', '🌧️'] : c <= 77 ? ['snow', 'Snow', '❄️'] : c <= 82 ? ['rain', 'Showers', '🌦️'] : c <= 86 ? ['snow', 'Snow showers', '🌨️'] : ['storm', 'Thunderstorm', '⛈️']; }
   function wxShow() {
     if (!wxEl) return;
-    if (!WX) { wxEl.textContent = '⛅ Show my weather'; wxEl.classList.remove('is-set'); return; }
-    wxEl.textContent = WX.icon + ' ' + WX.deg + '° ' + WX.text; wxEl.classList.add('is-set'); wxEl.title = 'Weather where you are right now';
+    if (!WX) { wxEl.textContent = '📍 Allow location for weather'; wxEl.classList.remove('is-set'); return; }
+    wxEl.textContent = WX.icon + ' ' + WX.deg + '° ' + WX.text; wxEl.classList.add('is-set'); wxEl.setAttribute('aria-label', WX.deg + ' degrees, ' + WX.text + '. Tap to stop using your location.'); wxEl.title = 'Weather where you are right now. Tap to stop using your location.';
   }
   function wxApply(d) { WX = d; wxShow(); ambient = []; }
   function wxFetch(lat, lon) {
@@ -778,8 +778,8 @@
     var c = null; try { c = JSON.parse(localStorage.getItem(wxKey) || 'null'); } catch (e) {}
     if (c && c.d) { if (!WX) wxApply(c.d); if (Date.now() - c.at > 20 * 60 * 1000) wxFetch(c.lat, c.lon); return; }
     if (!ask || !navigator.geolocation) return;
-    if (wxEl) wxEl.textContent = '⛅ Finding the weather…';
-    navigator.geolocation.getCurrentPosition(function (pos) { wxFetch(Math.round(pos.coords.latitude * 10) / 10, Math.round(pos.coords.longitude * 10) / 10); }, function () { if (wxEl) wxEl.textContent = '⛅ Weather needs your location'; }, { timeout: 8000, maximumAge: 3600000 });
+    if (wxEl) wxEl.textContent = '📍 Finding the weather…';
+    navigator.geolocation.getCurrentPosition(function (pos) { wxFetch(Math.round(pos.coords.latitude * 10) / 10, Math.round(pos.coords.longitude * 10) / 10); }, function () { if (wxEl) wxEl.textContent = '📍 Location was not shared. Tap to try again'; }, { timeout: 8000, maximumAge: 3600000 });
   }
   function showTime() {
     if (!timeEl || !isOpen) return;
@@ -1316,7 +1316,7 @@
     '.pc-time{position:absolute;right:.6rem;top:.55rem;padding:.2rem .55rem;border-radius:999px;background:rgba(255,253,248,.85);font:600 .66rem/1.2 "IBM Plex Mono",monospace;letter-spacing:.06em;color:#3C3350;pointer-events:none;font-variant-numeric:tabular-nums}' +
     '.pc-time:empty{display:none}' +
     '.pc-wx{position:absolute;left:.6rem;top:2.1rem;padding:.2rem .6rem;border:0;border-radius:999px;background:rgba(255,253,248,.88);font:600 .7rem/1.2 "IBM Plex Mono",monospace;letter-spacing:.04em;color:#3C3350;cursor:pointer;max-width:70%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}' +
-    '.pc-wx.is-set{cursor:default}' +
+    '.pc-wx.is-set{cursor:pointer}' +
 
     '.pc-badge{position:absolute;right:.6rem;top:2.1rem;padding:.25rem .7rem;border-radius:999px;background:#3C3350;color:#FFF3D6;font:700 .8rem/1.2 Fraunces,Georgia,serif;pointer-events:none}' +
     '.pc-badge.is-pop{animation:pcPop .5s cubic-bezier(.2,1.6,.4,1) both}' +
@@ -1391,7 +1391,7 @@
         '<div class="pc-tr8"><button type="button" class="pc-mus" aria-pressed="false">🎵<span class="pc-lbl"> Music</span> <span class="pc-st">Off</span></button><button type="button" class="pc-snd" aria-pressed="true">🔊<span class="pc-lbl"> Sound</span> <span class="pc-st">On</span></button>' +
         '<button type="button" class="pc-x" aria-label="Close the pal cam"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>Close</button></div></div>' +
         '<div class="pc-snote" role="status" hidden><p class="pc-snote-t"></p><div class="pc-snote-b"><button type="button" class="pc-snote-off">Turn sound off</button><button type="button" class="pc-snote-ok">Got it</button></div></div>' +
-        '<div class="pc-stage"><canvas class="pc-cv" role="img" aria-label="Tidbit and Sugarfoot playing"></canvas><span class="pc-rec" aria-hidden="true"><i></i>PAL CAM</span><span class="pc-time" aria-hidden="true"></span><button type="button" class="pc-wx" aria-live="polite">⛅ Show my weather</button><span class="pc-badge" hidden></span></div>' +
+        '<div class="pc-stage"><canvas class="pc-cv" role="img" aria-label="Tidbit and Sugarfoot playing"></canvas><span class="pc-rec" aria-hidden="true"><i></i>PAL CAM</span><span class="pc-time" aria-hidden="true"></span><button type="button" class="pc-wx" aria-live="polite">📍 Allow location for weather</button><span class="pc-badge" hidden></span></div>' +
         '<p class="pc-cap" id="pc-cap"><span class="pc-main"></span><span class="pc-punch"></span></p>' +
         '<div class="pc-btns"><button type="button" class="pc-b is-main pc-next">Next!</button><button type="button" class="pc-b is-sur pc-sur">Surprise me</button><button type="button" class="pc-b pc-pause" aria-pressed="false">Pause</button></div>' +
         '<div class="pc-trs"><button type="button" class="pc-tr" data-trick="0">Tidbit, do a trick!</button><button type="button" class="pc-tr" data-trick="1">Sugarfoot, do a trick!</button></div>' +
@@ -1404,7 +1404,7 @@
     capEl = ov.querySelector('.pc-cap'); capMain = ov.querySelector('.pc-main'); capPunch = ov.querySelector('.pc-punch'); whereEl = ov.querySelector('#pc-where');
     liveEl = ov.querySelector('.pc-live'); factLists = ov.querySelectorAll('.pc-fl');
     timeEl = ov.querySelector('.pc-time'); showTime(); setInterval(showTime, 1000);
-    wxEl = ov.querySelector('.pc-wx'); wxEl.addEventListener('click', function () { if (!WX) wxStart(true); }); wxStart(false);
+    wxEl = ov.querySelector('.pc-wx'); wxEl.addEventListener('click', function () { if (!WX) wxStart(true); else { try { localStorage.removeItem(wxKey); } catch (e) {} WX = null; ambient = []; wxShow(); } }); wxStart(false);
     badge = ov.querySelector('.pc-badge'); tallyN = ov.querySelector('.pc-n'); tallyTot = ov.querySelector('.pc-tot'); chips = ov.querySelector('.pc-chips'); btnPause = ov.querySelector('.pc-pause');
     ov.querySelector('.pc-x').addEventListener('click', close);
     ov.querySelector('.pc-mus').addEventListener('click', function () { primeSound(); var go = function () { if (MUS()) { MUS().toggle(); if (setting) MUS().scene(setting.id, hour); } syncMusBtn(); ambSync(); }; if (MUS()) go(); else if (musP) musP.then(go); });
