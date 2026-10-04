@@ -110,7 +110,7 @@ OVERRIDE = {
         'Someone sent you Spread Love & Acceptance? Here is what they can and can’t see, what stays yours, and kind ways '
         'to say yes, not yet or no. Nothing is entered about you without you.'),
     'about.html': (None,
-        'The story behind Spread Love & Acceptance and The Objective Ledger: fifteen years auditing complex systems, a '
+        'The story behind Spread Love & Acceptance and The Objective Ledger: a career auditing complex systems, a '
         'lifetime of wondering how people work, and a free, growing suite of tools for kinder relationships.'),
     'legal/privacy-policy.html': ('Privacy Policy', 'How Spread Love & Acceptance handles your information: what you type in the tools stays on your device.'),
     'legal/terms-of-service.html': ('Terms of Service', 'The terms for using Spread Love & Acceptance and The Objective Ledger.'),
@@ -192,7 +192,7 @@ SEARCH.update({
  'complacency.html': ('Complacency in Relationships: When “It’s Fine” Stops Being Checked', 'Complacency isn’t laziness. It’s what happens when something has worked for a long time and we stop looking. How to spot it in yourself and in relationships, and small re-checks that keep things alive.'),
  'five-pillars.html': ('The Five Pillars of Fair, Kind Relationships', 'Five simple ideas for fair, kind relationships: see the whole mental load, fix the setup instead of the person, read your stress first, and tune how you talk.'),
  'relationships.html': ('Relationship Tools for Couples, Families and Roommates', 'Free ways to share chores fairly, use kinder words and hold calmer check-ins, for couples, families, co-parents, friends, roommates, coworkers and caregivers.'),
- 'about.html': ('About Spread Love & Acceptance and Its Creator', 'Meet Christian, the creator of Spread Love & Acceptance and The Objective Ledger: fifteen years auditing systems, and a free, growing suite of kindness tools.'),
+ 'about.html': ('About Spread Love & Acceptance and Its Creator', 'Meet Christian, the creator of Spread Love & Acceptance and The Objective Ledger: a career auditing systems, and a free, growing suite of kindness tools.'),
  'how-it-works.html': ('How It Works: An Outside Look at Yourself', 'How the program works: a calm, outside view of your life situation, your wiring and what you notice, like an honest auditor with no verdict on your worth.'),
  'contents.html': ('Contents: Every Free Tool, Guide and Chapter', 'Everything in the program in three parts: tools for understanding yourself, tools for any two people, and where to start in your kind of relationship.'),
  'is-this-for-you.html': ('Is This Right for You? What It Is and Isn’t', 'A free self-help program for your own stress and reactions, and a fair way for two people to see what each carries at home. Education, not counseling.'),
@@ -551,7 +551,7 @@ def ld_for(path, title, desc, url, kw, modified, published, body, image):
                                      'mental load', 'invisible labor', 'division of labor at home', 'household chores for couples', 'calm',
                                      'breathing exercises', 'mindfulness', 'neurodiversity', 'neurodivergent relationships', 'self-discovery']})
         graph.append(dict(AUTHOR, **{'jobTitle': 'Creator of ' + BRAND, 'worksFor': {'@id': SITE + '/#org'},
-                                     'description': 'Christian (they/them) created ' + BRAND + ' and ' + PROGRAM + ' after fifteen years as a government auditor.'}))
+                                     'description': 'Christian (they/them) created ' + BRAND + ' and ' + PROGRAM + ' after working as a government auditor.'}))
     if path == 'index.html':
         graph.append({'@type': 'WebSite', '@id': SITE + '/#website', 'name': BRAND, 'alternateName': [PROGRAM, 'Spread Love and Acceptance'],
                       'url': SITE + '/', 'description': desc, 'inLanguage': 'en-US', 'publisher': {'@id': SITE + '/#org'}, 'keywords': ', '.join(kw)})
