@@ -61,7 +61,7 @@
     ['/word-bloom.html', 'Word Bloom', 'spell a few words from the petals'],
     ['/night-garden.html', 'The Night Garden', 'breathe with the glowing light for a few rounds'],
     ['/quiet-crossword.html', 'Quiet Crossword', 'fill in two or three clues, then stop'],
-    ['/frequency-journey-play.html', 'The Frequency Journey', 'walk the pals through one small puzzle']
+    ['/frequency-journey.html', 'The Frequency Journey', 'play one short round as Tidbit or Sugarfoot']
   ], lastPick = -1;
   var pickBtn = document.getElementById('pp-pick'), pickOut = document.getElementById('pp-pick-out');
   if (pickBtn && pickOut) pickBtn.addEventListener('click', function () {

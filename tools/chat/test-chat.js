@@ -47,12 +47,28 @@ t('tools', 'Tell me about the Daily Ledger crossword', { kind: 'card', id: 'dail
 t('tools', 'What is Quiet Words?', { kind: 'card', id: 'quietwords' });
 t('tools', 'What is the Frequency Journey?', { kind: 'card', id: 'journey', link: '/frequency-journey.html' });
 t('tools', 'Who are Tidbit and Sugarfoot?', { kind: 'card', id: 'journey', text: /Tidbit and Sugarfoot/ });
+t('tools', 'Is there a maze game with Tidbit and Sugarfoot?', { kind: 'card', id: 'journey', link: '/frequency-journey.html' });
 t('tools', 'What is the pal cam?', { kind: 'card', id: 'palcam', text: /Journey/ });
 t('tools', 'How do I check in on Tidbit and Sugarfoot?', { kind: 'card', id: 'palcam', steps: true });
 t('tools', 'What are the soundscapes?', { kind: 'card', id: 'soundscapes' });
 t('tools', 'What is Echoes of Gold?', { kind: 'card', id: 'album' });
 t('tools', 'Is there a podcast?', { kind: 'card', id: 'podcast' });
 t('tools', 'What is Turning Toward?', { kind: 'card', id: 'turning', link: '/turning-toward.html' });
+t('tools', 'What is complacency?', { kind: 'term', link: '/complacency.html' });
+t('tools', 'What is the Re-check Drive?', { kind: 'card', id: 'recheckdrive', link: '/recheck-drive.html' });
+t('tools', 'is there a football game about this', { kind: 'card', id: 'recheckdrive', link: '/recheck-drive.html' });
+t('tools', 'we are in a fight right now and both upset, what do we say', { link: '/upset-right-now.html', steps: true, text: /pause line|come back to this at eight|pick this up at eight/ });
+t('tools', 'tell me about the new baby page', { kind: 'card', id: 'new-parent', link: '/new-parent.html' });
+t('tools', 'how do I put the app on my android phone', { kind: 'card', id: 'app', link: '/install.html' });
+t('tools', 'can the app have widgets', { kind: 'card', id: 'app', text: /native app/ });
+t('tools', 'what are the five love languages', { kind: 'card', id: 'love-languages', link: '/love-languages.html' });
+t('tools', 'where are all the formulas and cut-offs written out', { kind: 'card', id: 'method-and-limits', link: '/method-and-limits.html' });
+t('tools', 'can I feel the sound with vibration on my phone', { kind: 'card', id: 'senses', link: '/soundscapes.html' });
+t('tools', 'what are the brain breakers', { kind: 'card', id: 'brainbreak', link: '/soundscapes.html' });
+t('tools', 'which soundscape should I pick', { kind: 'card', id: 'findsound', link: '/soundscapes.html' });
+t('tools', 'What are touchstones?', { link: ['/complacency.html#touchstones', '/library/connection.html#shared-language'] });
+t('tools', 'how do I bring back an inside joke or pet name', { link: ['/complacency.html#touchstones', '/library/connection.html#shared-language'] });
+t('tools', 'how do I stop taking my partner for granted', { link: ['/complacency.html', '/library/connection.html#complacency', '/turning-toward.html'] });
 t('tools', 'What is the check-ins guide?', { kind: 'card', id: 'checkins', link: '/check-ins.html' });
 t('tools', 'What is know your own wiring about?', { kind: 'card', id: 'knowyourself', link: '/know-yourself.html' });
 t('tools', 'What is Wired Differently?', { kind: 'card', id: 'wired' });
@@ -184,6 +200,9 @@ s('My brother keeps borrowing my stuff without asking', 'family+boundaries');
 s('I yelled at my kids and feel guilty', 'kid+repair');
 s('My partner procrastinates on everything', 'partner+motivation', { text: /hard to watch|struggle to get started/ });
 // "roommates" said about a partner means drifting apart, not sharing a flat
+s("My partner and I have gotten complacent and are on autopilot", 'partner+complacency', { link: '/complacency.html', text: /real question|thank-you|re-check/i });
+s("My husband and I have gone stale and are stuck in a rut", 'partner+complacency', { link: '/complacency.html' });
+s("I feel like I'm coasting and on autopilot", 'self+complacency', { link: '/complacency.html' });
 s("I feel like we're roommates", 'partner+distance', { link: '/turning-toward.html', not: /your roommate/i });
 s("My husband and I are just roommates now", 'partner+distance', { link: '/turning-toward.html', text: /turn toward|ritual/i, not: /your roommate/i });
 
@@ -237,7 +256,7 @@ c('followups', ['What is the Lemonade Stand?', 'how do I start?'], { steps: true
 c('followups', ['What is the Lemonade Stand?', 'give me an example'], { text: /roommates listed 14 jobs/ });
 c('followups', ['What is WP-13?', 'what about for roommates?'], { kind: 'road', id: 'roommate' });
 c('followups', ['My sister always makes plans without asking me.', 'tell me more'], { link: '/library/' });
-c('followups', ['What is the Journey?', 'tell me more'], { text: /pal cam|life lesson/ });
+c('followups', ['What is the Journey?', 'tell me more'], { text: /pal cam|quicker|steadier/ });
 c('followups', ['What is active listening?', 'tell me more'], { not: /couldn’t find/ });
 
 // ---------------------------------------------------------------- friendly clarifying questions

@@ -45,10 +45,10 @@ SECTION_KEYWORDS = [
     (r'^(night-garden|calm-visualizer|soundscapes|wp-11-sound|pause-and-play|echoes-of-gold)',
      ['calm', 'relaxation', 'breathing', 'meditation', 'mindfulness', 'peace', 'soundscapes', 'ambient music', 'sound frequencies', 'higher frequency']),
     (r'^frequency-buddies', ['animated stories', 'cartoon for kids and families', 'Tidbit and Sugarfoot', 'kindness stories', 'working through tough times together', 'captions']),
-    (r'^(frequency-journey|frequency-framework)', ['higher frequency', 'sound frequencies', 'Solfeggio tones', 'harmony', 'being in tune', 'calm puzzle game']),
+    (r'^(frequency-journey|frequency-framework)', ['higher frequency', 'sound frequencies', 'Solfeggio tones', 'harmony', 'being in tune', 'calm arcade game', 'maze game', 'crossing game']),
     (r'^(quiet-words|word-bloom|quiet-crossword|daily-ledger-crossword|quest|keepsakes|garden-backdrop|pal-cam)',
      ['calm games', 'relaxing word games', 'crossword', 'word search', 'cozy games', 'no timers', 'Tidbit and Sugarfoot']),
-    (r'^(signal-translator|carrier-wave|conversation-reader|wired-differently|wiring-card|turning-toward|check-ins|know-yourself|ask|tools/)',
+    (r'^(signal-translator|carrier-wave|conversation-reader|wired-differently|wiring-card|turning-toward|complacency|recheck-drive|check-ins|know-yourself|ask|tools/)',
      ['communication tool', 'tone checker', 'how a message lands', 'repair after an argument', 'reconciliation', 'neurodiversity', 'listening', 'connection']),
     (r'^(workpapers|wp-|calc01|lemonade|quick-checks|full-path|do/|snapshot|dashboard|suite-index|prog-01)',
      ['chore chart', 'fair division of labor', 'household workload', 'mental load worksheet', 'stress check', 'calm-down plan', 'daily check-in', 'free worksheets']),
@@ -73,6 +73,9 @@ OVERRIDE = {
     'turning-toward.html': (None,
         'Connection is built in small, everyday moments. Seven simple practices for love and appreciation: noticing when '
         'someone reaches for you, specific thanks, celebrating good news and gentle repair after a hard moment.'),
+    'complacency.html': (None,
+        'Complacency isn’t laziness. It’s what happens when something has worked for a long time and we stop looking. '
+        'How it shows up in you, partners, family, friends, housemates and coworkers, and the small re-checks that help.'),
     'pause-and-play.html': (None,
         'Calm games for a busy mind: the Night Garden, the Frequency Journey, Word Bloom, two crosswords and Quiet Words. '
         'No timers and no way to lose, just a peaceful few minutes with Tidbit and Sugarfoot.'),
@@ -86,8 +89,8 @@ OVERRIDE = {
         'Calm soundscapes and gentle music made for The Objective Ledger: breathing tracks, peaceful ambient pieces and '
         'songs about love, acceptance and finding your way back to each other.'),
     'frequency-journey.html': (None,
-        'The Frequency Journey: help Tidbit and Sugarfoot find the Perfect Frequency through seven tone-themed worlds of '
-        'calm puzzles, riddles and small lessons about harmony, patience and being in tune with each other.'),
+        'The Frequency Journey: pick Tidbit or Sugarfoot and play a maze chase or a road-and-river crossing, with easy '
+        'controls and no game over, and watch the Frequency Buddies cartoon on the same page.'),
     'frequency-buddies.html': (None,
         'Frequency Buddies: gentle animated adventures starring two pups, Tidbit and Sugarfoot, who hit real tough times, '
         'work through them together and come out stronger. About 16 to 17 minutes each, with captions and real, recorded voices.'),
@@ -101,13 +104,13 @@ OVERRIDE = {
         'Paste a text thread or chat and see where it turned, what each of you may be hearing, and calmer replies built '
         'from your own words. A free, private tool for repair and reconciliation.'),
     'library.html': (None,
-        'The Professor’s Library: 233 plain-language entries on relationships, conflict and reconciliation, kindness, '
+        'The Professor’s Library: 235 plain-language entries on relationships, conflict and reconciliation, kindness, '
         'gratitude, emotions, stress, calm and differences in wiring, with honest notes on the evidence.'),
     'sent-this.html': (None,
         'Someone sent you Spread Love & Acceptance? Here is what they can and can’t see, what stays yours, and kind ways '
         'to say yes, not yet or no. Nothing is entered about you without you.'),
     'about.html': (None,
-        'The story behind Spread Love & Acceptance and The Objective Ledger: fifteen years auditing complex systems, a '
+        'The story behind Spread Love & Acceptance and The Objective Ledger: a career auditing complex systems, a '
         'lifetime of wondering how people work, and a free, growing suite of tools for kinder relationships.'),
     'legal/privacy-policy.html': ('Privacy Policy', 'How Spread Love & Acceptance handles your information: what you type in the tools stays on your device.'),
     'legal/terms-of-service.html': ('Terms of Service', 'The terms for using Spread Love & Acceptance and The Objective Ledger.'),
@@ -136,7 +139,7 @@ SEARCH = {
  'quiet-crossword.html': ('Quiet Crossword: Easy, Gentle Mini Crosswords', 'Small, friendly crosswords with gentle clues, from easy to tricky. Free, calm and no timers: a peaceful puzzle for a few quiet minutes.'),
  'quiet-words.html': ('Quiet Words: A Calm, Free Word Search', 'A calming word search with soft themes, levels from easy to tricky and no timers. Free to play on your phone or computer.'),
  'daily-ledger-crossword.html': ('Daily Crossword Puzzle, Newspaper Style (Free)', 'A free newspaper-style crossword with fair, friendly clues. Play in your browser on any device, at your own pace.'),
- 'frequency-journey.html': ('The Frequency Journey: A Calm Puzzle Adventure', 'Help Tidbit and Sugarfoot find the Perfect Frequency through seven worlds of calm puzzles, riddles and small lessons about patience and harmony.'),
+ 'frequency-journey.html': ('The Frequency Journey: A Calm Arcade With Tidbit and Sugarfoot', 'Pick Tidbit or Sugarfoot and play a maze chase or a road-and-river crossing. Easy controls, a relaxed pace and no game over, plus the Frequency Buddies cartoon.'),
  'frequency-buddies.html': ('Frequency Buddies: A Kids’ Cartoon About Feelings', 'Gentle animated episodes for kids and families: two pups, Tidbit and Sugarfoot, face tough times, talk it through and come out stronger. Free, with captions.'),
  'frequency-buddies-live.html': ('Frequency Buddies Live: Drop In Anytime', 'A Frequency Buddies TV station that is always on: drop in anytime, watch the episode playing right now, and cast it to your TV.'),
  'frequency-buddies-shuffle.html': ('Frequency Buddies: Watch Every Episode on Shuffle', 'Every Frequency Buddies episode back to back in a random order, with the theme song, plus every episode to download and watch offline.'),
@@ -185,9 +188,11 @@ SEARCH.update({
  # home and start
  'index.html': ('Spread Love & Acceptance: Free Relationship Self-Help Tools', 'Free self-help for love and acceptance at home: share the mental load, a fair chore chart, calm ways to stop fighting, a communication quiz and a kids’ cartoon.'),
  'start-here.html': ('Start Here: Fair Chores, Calm Talks, Kinder Relationships', 'New here? The one idea behind it all, the best free first tools, and a gentle six-week path to fairer chores, fewer fights and kinder talks at home.'),
+ 'recheck-drive.html': ('The Re-check Drive: A Calm Football Game for Keeping Things Alive', 'A calm football game with no clock and no way to lose. Do the small, kind things from the complacency playbook for real, and the ball moves toward a field goal on screen.'),
+ 'complacency.html': ('Complacency in Relationships: When “It’s Fine” Stops Being Checked', 'Complacency isn’t laziness. It’s what happens when something has worked for a long time and we stop looking. How to spot it in yourself and in relationships, and small re-checks that keep things alive.'),
  'five-pillars.html': ('The Five Pillars of Fair, Kind Relationships', 'Five simple ideas for fair, kind relationships: see the whole mental load, fix the setup instead of the person, read your stress first, and tune how you talk.'),
  'relationships.html': ('Relationship Tools for Couples, Families and Roommates', 'Free ways to share chores fairly, use kinder words and hold calmer check-ins, for couples, families, co-parents, friends, roommates, coworkers and caregivers.'),
- 'about.html': ('About Spread Love & Acceptance and Its Creator', 'Meet Christian, the creator of Spread Love & Acceptance and The Objective Ledger: fifteen years auditing systems, and a free, growing suite of kindness tools.'),
+ 'about.html': ('About Spread Love & Acceptance and Its Creator', 'Meet Christian, the creator of Spread Love & Acceptance and The Objective Ledger: a career auditing systems, and a free, growing suite of kindness tools.'),
  'how-it-works.html': ('How It Works: An Outside Look at Yourself', 'How the program works: a calm, outside view of your life situation, your wiring and what you notice, like an honest auditor with no verdict on your worth.'),
  'contents.html': ('Contents: Every Free Tool, Guide and Chapter', 'Everything in the program in three parts: tools for understanding yourself, tools for any two people, and where to start in your kind of relationship.'),
  'is-this-for-you.html': ('Is This Right for You? What It Is and Isn’t', 'A free self-help program for your own stress and reactions, and a fair way for two people to see what each carries at home. Education, not counseling.'),
@@ -231,7 +236,7 @@ SEARCH.update({
  'quiet-words.html': ('Calm Word Search, No Timer: Quiet Words (Free)', 'A calm, free word search with soft themes, levels from easy to tricky and no timer. Every word you find leaves a kind thought behind. Play on phone or computer.'),
  'quiet-crossword.html': ('Quiet Crossword: Easy, Gentle Mini Crosswords', 'Small, friendly mini crosswords with gentle clues in five levels from easy to tricky. Free and calm with no timer: a peaceful puzzle for a few quiet minutes.'),
  'daily-ledger-crossword.html': ('Daily Crossword Puzzle, Newspaper Style (Free)', 'A free newspaper-style daily crossword with fair, friendly clues, from a quick 5x5 mini to a big Sunday grid. Play in your browser on any device, at your pace.'),
- 'frequency-journey.html': ('The Frequency Journey: A Calm Puzzle Adventure', 'Help Tidbit and Sugarfoot find the Perfect Frequency through seven worlds of calm puzzles, riddles and small lessons about patience, kindness and harmony.'),
+ 'frequency-journey.html': ('The Frequency Journey: A Calm Arcade With Tidbit and Sugarfoot', 'Pick Tidbit or Sugarfoot and play a maze chase or a road-and-river crossing. Easy controls, a relaxed pace and no game over, plus the Frequency Buddies cartoon.'),
  'frequency-buddies.html': ('Frequency Buddies: A Kids’ Cartoon About Feelings', 'Free animated episodes for kids and families: two pups, Tidbit and Sugarfoot, face tough times, talk it through and come out stronger. With captions.'),
  'frequency-buddies-shuffle.html': ('Frequency Buddies: Every Episode on Shuffle', 'Every Frequency Buddies episode back to back in a random order, with the theme song: a free kids’ cartoon about feelings, plus each episode to download.'),
  'frequency-buddies-music-video-maker.html': ('Make Your Own Frequency Buddies Music Video', 'Make your own Frequency Buddies theme song music video: pick the stage, lights, effects, dance moves, costumes and who’s on stage, then play it and share the link.'),
@@ -267,6 +272,7 @@ SEARCH.update({
  'library/calm.html': ('Calm and Attention, Explained', 'What research says about calm and attention: breathing, mindfulness, nature, rest, mind-wandering and flow, with modest and honest claims about each one.'),
  'learn/index.html': ('Stories From Philosophy for Everyday Life', 'Twelve old stories from philosophy, retold in plain words, to help you know yourself, see the other person more clearly and live more kindly with others.'),
  # cut-off descriptions
+ 'complacency-in-depth.html': (None, 'Why good things fade into the background, the quiet signs of complacency, how it shows up in yourself and in every kind of relationship, and the small, kind re-checks that keep things alive.'),
  'check-ins-in-depth.html': (None, 'How to hold a hard conversation kindly: a calm time and place, listening before any reply, a reply that does not erase what was heard, and a plan for both.'),
  'contents-in-depth.html': (None, 'Everything in The Objective Ledger, in three parts: self-discovery tools, relationship tools for any two people, and where to start in each relationship.'),
  'how-it-works-in-depth.html': (None, 'How The Objective Ledger works in full: an outside look at your life situation, your wiring and what you discover, and why the technical layer is optional.'),
@@ -389,8 +395,8 @@ def series_ld(publisher):
 
 
 TOOLS = r'^(tools/|signal-translator|carrier-wave-decoder|conversation-reader|lemonade-stand|calc01-solvency|wiring-card|quick-checks|full-path|workpapers/calculators|do/|snapshot/|pal-cam-tv|ask)'
-GAMES = r'^(quiet-words|word-bloom|quiet-crossword|daily-ledger-crossword|frequency-journey|night-garden|calm-visualizer)'
-ARTICLES = r'^(invisible-labor-mental-load|chore-chart-for-couples|grandparents|how-to-stop-fighting|neurodivergent-relationships|book/|library/|learn/|workpapers/wp-|workpapers/report|wp-|five-pillars|turning-toward|check-ins|know-yourself|wired-differently|frequency-framework|how-it-works|relationships|self-path|glossary)'
+GAMES = r'^(recheck-drive|quiet-words|word-bloom|quiet-crossword|daily-ledger-crossword|frequency-journey|night-garden|calm-visualizer)'
+ARTICLES = r'^(invisible-labor-mental-load|chore-chart-for-couples|grandparents|how-to-stop-fighting|neurodivergent-relationships|book/|library/|learn/|workpapers/wp-|workpapers/report|wp-|five-pillars|turning-toward|complacency|check-ins|know-yourself|wired-differently|frequency-framework|how-it-works|relationships|self-path|glossary)'
 
 
 def rel_url(path):
@@ -549,7 +555,7 @@ def ld_for(path, title, desc, url, kw, modified, published, body, image):
                                      'mental load', 'invisible labor', 'division of labor at home', 'household chores for couples', 'calm',
                                      'breathing exercises', 'mindfulness', 'neurodiversity', 'neurodivergent relationships', 'self-discovery']})
         graph.append(dict(AUTHOR, **{'jobTitle': 'Creator of ' + BRAND, 'worksFor': {'@id': SITE + '/#org'},
-                                     'description': 'Christian (they/them) created ' + BRAND + ' and ' + PROGRAM + ' after fifteen years as a government auditor.'}))
+                                     'description': 'Christian (they/them) created ' + BRAND + ' and ' + PROGRAM + ' after working as a government auditor.'}))
     if path == 'index.html':
         graph.append({'@type': 'WebSite', '@id': SITE + '/#website', 'name': BRAND, 'alternateName': [PROGRAM, 'Spread Love and Acceptance'],
                       'url': SITE + '/', 'description': desc, 'inLanguage': 'en-US', 'publisher': {'@id': SITE + '/#org'}, 'keywords': ', '.join(kw)})
@@ -758,7 +764,7 @@ Sitemap: https://spreadloveandacceptance.com/sitemap.xml
 
 def priority(path):
     if path == 'index.html': return '1.0'
-    if re.search(r'^(start-here|five-pillars|relationships|pause-and-play|ask|signal-translator|library\.html|turning-toward|night-garden|sent-this|start-in-10|about|contents|program|frequency-buddies|wp-0[1-4]\.html|conversation-reader|check-ins)', path): return '0.9'
+    if re.search(r'^(start-here|five-pillars|relationships|pause-and-play|ask|signal-translator|library\.html|turning-toward|complacency|night-garden|sent-this|start-in-10|about|contents|program|frequency-buddies|wp-0[1-4]\.html|conversation-reader|check-ins)', path): return '0.9'
     if re.search(r'^(book/|library/|workpapers/fill/suite|frequency-journey|soundscapes|calm-visualizer|word-bloom|quiet-words|quiet-crossword|daily-ledger)', path): return '0.8'
     return '0.6'
 
@@ -777,11 +783,11 @@ def write_sitemap(report):
 
 GROUPS = [
     ('Start here', r'^(index|start-here|start-in-10|sent-this|about|how-it-works|is-this-for-you|ways-in|program\.html|contents|glossary|five-pillars|relationships|self-path|whats-new|membership)'),
-    ('Guides to common questions', r'^(invisible-labor-mental-load|chore-chart-for-couples|grandparents|how-to-stop-fighting|neurodivergent-relationships|communication-style-quiz)'),
+    ('Guides to common questions', r'^(complacency|invisible-labor-mental-load|chore-chart-for-couples|grandparents|how-to-stop-fighting|neurodivergent-relationships|communication-style-quiz)'),
     ('Tools for kinder conversations and fair relationships', r'^(ask|signal-translator|carrier-wave|conversation-reader|wired-differently|wiring-card|turning-toward|check-ins|know-yourself|quick-checks|lemonade|calc01|full-path|snapshot)'),
     ('Worksheets (the Workpaper Suite)', r'^(workpapers|wp-|do/|prog-01|suite-index|program-overview)'),
     ('Calm, breathing and sound', r'^(night-garden|calm-visualizer|soundscapes|wp-11-sound|echoes-of-gold|pal-cam)'),
-    ('Calm games', r'^(pause-and-play|quiet-words|word-bloom|quiet-crossword|daily-ledger|frequency-journey|quest)'),
+    ('Calm games', r'^(pause-and-play|recheck-drive|quiet-words|word-bloom|quiet-crossword|daily-ledger|frequency-journey|quest)'),
     ('The book', r'^book/'),
     ('The Professor’s Library and further reading', r'^(library|learn/|reading|podcast|frequency-framework)'),
 ]

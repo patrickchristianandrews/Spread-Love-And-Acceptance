@@ -9,16 +9,16 @@
    The Frequency Buddies episodes (/assets/js/buddies/) are small data files, saved up front so an episode
    plays offline; a future episode not in the list is saved the first time it's watched.
    Bump VERSION when the list below changes. */
-var VERSION = 'tol-v99';
+var VERSION = 'tol-v100';
 var CORE = [
   '/', '/index.html', '/offline.html',
-  '/night-garden.html', '/quiet-words.html', '/word-bloom.html', '/quiet-crossword.html', '/pause-and-play.html', '/ask.html', '/whats-new.html', '/frequency-journey.html', '/frequency-journey-play.html', '/pal-cam-tv.html', '/frequency-buddies.html', '/frequency-buddies-live.html', '/daily-ledger-crossword.html', '/garden-backdrop.html', '/turning-toward.html', '/quick-checks.html', '/lemonade-stand.html',
+  '/night-garden.html', '/quiet-words.html', '/word-bloom.html', '/quiet-crossword.html', '/pause-and-play.html', '/ask.html', '/whats-new.html', '/frequency-journey.html', '/frequency-journey-play.html', '/pal-cam-tv.html', '/frequency-buddies.html', '/frequency-buddies-live.html', '/daily-ledger-crossword.html', '/garden-backdrop.html', '/turning-toward.html', '/quick-checks.html', '/lemonade-stand.html', '/install.html', '/upset-right-now.html', '/share-the-load.html', '/new-parent.html', '/co-parenting.html', '/surprise.html', '/method-and-limits.html',
   '/assets/css/site.css', '/assets/css/reading.css', '/assets/css/games.css',
   '/assets/js/site.js', '/assets/js/night-garden.js', '/assets/js/quiet-words.js', '/assets/js/calm-music.js', '/assets/js/tips.js', '/assets/js/breathe.js', '/assets/js/turning-toward.js',
-  '/assets/js/rewards.js', '/assets/js/pause-and-play.js', '/assets/js/site-chat.js', '/assets/js/frequency-journey.js', '/assets/js/journey-levels.js', '/assets/js/pups.js', '/assets/js/journey-pals.js', '/assets/js/chat-kb.js', '/assets/js/word-bloom.js', '/assets/js/quiet-crossword.js', '/assets/js/game-levels.js',
+  '/assets/js/rewards.js', '/assets/js/pause-and-play.js', '/assets/js/site-chat.js', '/assets/js/arcade.js', '/assets/js/pups.js', '/assets/js/journey-pals.js', '/assets/js/chat-kb.js', '/assets/js/word-bloom.js', '/assets/js/quiet-crossword.js', '/assets/js/game-levels.js',
   '/assets/js/pals-cam.js', '/assets/js/ten-return.js', '/assets/js/pals-cam-acts.js', '/assets/js/pals-cam-more.js', '/assets/js/pals-cam-tricks.js', '/assets/js/pals-cam-invite.js', '/assets/js/pals-cam-pack-scenes.js', '/assets/js/pals-cam-pack-extra.js', '/assets/js/pals-cam-pack-more.js',
   '/assets/js/buddies-player.js', '/assets/js/buddies/s1e1.js', '/assets/js/buddies/s1e2.js', '/assets/js/buddies/s1e3.js', '/assets/js/buddies/s1e4.js', '/assets/js/buddies/s1e5.js',
-  '/assets/js/journey-pools.js', '/assets/js/journey-pools-2.js', '/assets/js/journey-pools-3.js', '/assets/js/journey-pools-4.js', '/assets/js/journey-pools-5.js',
+  
   '/assets/js/learn-play.js', '/assets/js/learn-play-data.js', '/assets/js/join-invite.js', '/assets/js/pup-visits.js', '/assets/js/pup-visits-lines.js', '/assets/js/calc01-core.js', '/assets/js/mood-arbitrage.js',
   '/wavelength.html', '/assets/js/wavelength.js', '/assets/js/come-back.js', '/assets/css/come-back.css', '/assets/js/share-clip.js', '/assets/js/pick-up.js', '/growing-up.html', '/assets/js/roots.js', '/assets/js/lemonade-calc.js',
   '/reading.html', '/assets/js/reading-page.js', '/assets/js/reading-list.js', '/assets/js/reading-suggest.js', '/assets/js/buddies-suggest.js',

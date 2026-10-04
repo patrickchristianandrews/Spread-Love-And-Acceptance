@@ -178,8 +178,11 @@
       if (bed) bed.g.gain.setTargetAtTime(1, ac.currentTime, 1.2);
     }
     var CUE = { in: 392, top: 440, out: 329.63, bottom: 293.66 };
+    var an = null;
     return {
       ctx: ac,
+      // an analyser on the final mix, for the soundscapes page's "see and feel the sound" panel
+      analyser: function () { if (!an) { an = ac.createAnalyser(); an.fftSize = 1024; an.smoothingTimeConstant = 0.82; comp.connect(an); } return an; },
       start: function (name) { if (ac.state !== 'running') ac.resume(); setBed(name); master.gain.cancelScheduledValues(ac.currentTime); master.gain.setTargetAtTime(0.6, ac.currentTime, 2); },
       bed: setBed,
       mute: function (m) { master.gain.cancelScheduledValues(ac.currentTime); master.gain.setTargetAtTime(m ? 0 : 0.6, ac.currentTime, m ? 0.4 : 1.2); if (media) { if (m) media.pause(); else if (bedName === 'beneath') media.play().catch(function () {}); } },

@@ -1706,7 +1706,31 @@
     try { if (window.speechSynthesis.speaking || window.speechSynthesis.pending) window.speechSynthesis.cancel(); window.speechSynthesis.speak(u); } catch (e) { return false; }
     return true;
   }
-  function vstop() { VO.token++; if (VO.ok) { try { window.speechSynthesis.cancel(); } catch (e) {} } cstop(); }
+  function vstop() { VO.token++; if (VO.ok) { try { window.speechSynthesis.cancel(); } catch (e) {} } cstop(); tstop(); }
+
+  // THE TRAILER: the "Next time" card is read aloud like a movie trailer. A low, slow narrator for the
+  // dramatic lines, a quicker, higher one for the slapstick ones, with a beat between lines. Device
+  // speech only (there is no recording of it); the card always shows the words too.
+  var TV = { token: 0, on: false, btn: null };
+  function tbtn() { if (TV.btn) { TV.btn.textContent = TV.on ? '■ Stop the trailer' : '🎬 Hear the trailer'; TV.btn.setAttribute('aria-pressed', TV.on ? 'true' : 'false'); } }
+  function tstop() { var was = TV.on; TV.token++; TV.on = false; if (was && VO.ok) { try { window.speechSynthesis.cancel(); } catch (e) {} } tbtn(); }
+  function tspeak(lines) {
+    if (!lines || !lines.length || !voicesReady()) return false;
+    try { window.speechSynthesis.cancel(); } catch (e) {}
+    var tok = ++TV.token, i = 0; TV.on = true; tbtn();
+    (function nextLine() {
+      if (tok !== TV.token) return;
+      if (i >= lines.length) { TV.on = false; tbtn(); return; }
+      var line = lines[i], last = i === lines.length - 1, funny = /!|\?|\(/.test(line);
+      var u = new window.SpeechSynthesisUtterance(cleanForSpeech(line));
+      u.voice = VO.picked.narrator || VO.picked.guest; u.lang = u.voice && u.voice.lang || 'en-US';
+      u.pitch = last ? 0.5 : funny ? 0.85 : 0.55; u.rate = last ? 0.8 : funny ? 1.02 : 0.84; u.volume = 1;
+      var step = function () { if (tok !== TV.token) return; i++; setTimeout(nextLine, funny ? 220 : 520); };
+      u.onend = step; u.onerror = step; VO.cur = u;
+      try { window.speechSynthesis.speak(u); } catch (e) { TV.on = false; tbtn(); }
+    })();
+    return true;
+  }
 
   // RECORDED VOICES: every line is recorded ahead of time (natural voices, one per character) in
   // /assets/audio/buddies/<episode>/<key>.mp3, listed in index.json. A line plays its recording through
@@ -1888,6 +1912,10 @@
     '.fb-ovc .fb-row{display:flex;gap:.5rem;justify-content:center;flex-wrap:wrap}' +
     '.fb-ovc .fb-next{margin:.6rem auto .9rem;padding:.7rem .9rem;border-radius:16px;background:rgba(255,255,255,.1);border:1px dashed rgba(255,255,255,.3)}' +
     '.fb-ovc .fb-next b{display:block;color:#FFE08A;font:600 .78rem/1.3 "IBM Plex Mono",monospace;letter-spacing:.06em;text-transform:uppercase}' +
+    '.fb-ovc .fb-trailer{margin:.45rem 0 .6rem;max-height:34vh;overflow-y:auto;text-align:left}' +
+    '.fb-ovc .fb-trailer p{margin:.35rem 0;font:italic 500 .95rem/1.45 Fraunces,Georgia,serif}' +
+    '.fb-ovc .fb-trailer p:first-child{color:#FFE08A;letter-spacing:.02em}' +
+    '.fb-ovc .fb-trailer p:last-child{font-style:normal;font-weight:700;color:#FFE08A}' +
     '.fb-ovc a.fb-b{display:inline-flex;align-items:center;text-decoration:none}' +
     '@media (max-width:600px){.fb-ovc p{font-size:.88rem;margin-bottom:.45rem}.fb-ovc .fb-hide-s{display:none}}' +
     '.fb-note{margin:0;padding:0 .3rem;font-size:.8rem;color:#CFC3E4}' +
@@ -2533,12 +2561,16 @@
     function showEnd() {
       var ep = P.ep, nid = nextIdOf(P.id), nep = nid ? B.episodes[nid] : null, ce = nid ? catalogEntry(nid) : null;
       var teaser = ep.next || (nep && nep.blurb) || '', ntitle = nep ? nep.title : ce ? ce.title : '';
+      var trailer = Array.isArray(teaser), tlines = trailer ? teaser : [];   // a trailer (a list of lines) is read aloud; a plain teaser stays plain text
       endOv.innerHTML = '<div class="fb-ovc"><p class="fb-k">The end · ' + esc(ep.title) + '</p><h3>What the pals learned</h3><p>' + esc(ep.lesson) + '</p>' +
-        (teaser || ntitle ? '<div class="fb-next"><b>Next time on Frequency Buddies' + (ntitle ? ': ' + esc(ntitle) : '') + '</b>' + esc(teaser) + '</div>' : '') +
+        (tlines.length || teaser || ntitle ? '<div class="fb-next"><b>Next time on Frequency Buddies' + (ntitle ? ': ' + esc(ntitle) : '') + '</b>' + (trailer ? '<div class="fb-trailer">' + tlines.map(function (l) { return '<p>' + esc(l) + '</p>'; }).join('') + '</div>' + (VO.ok && tlines.length ? '<button type="button" class="fb-b fb-hear" aria-pressed="false">🎬 Hear the trailer</button>' : '') : esc(teaser)) + '</div>' : '') +
         '<div class="fb-row">' + (nep ? '<a class="fb-b is-main" href="/frequency-buddies.html?ep=' + nid + '">▶ Watch episode ' + nep.number + '</a>' : nid ? '<span class="fb-b" aria-disabled="true">Episode ' + (ce ? ce.n : '') + ' is coming soon</span>' : '') +
         '<button type="button" class="fb-b fb-again">↺ Watch again</button><a class="fb-b" href="/frequency-journey.html#buddies">All episodes</a></div></div>';
       endOv.querySelector('.fb-again').addEventListener('click', restart);
-      endOv.hidden = false; live.textContent = 'The end. ' + ep.lesson;
+      TV.btn = endOv.querySelector('.fb-hear'); tstop();
+      if (TV.btn) TV.btn.addEventListener('click', function () { if (TV.on) tstop(); else tspeak(tlines); });
+      endOv.hidden = false;
+      if (TV.btn && P.voices && voicesReady()) setTimeout(function () { if (!endOv.hidden && !TV.on) tspeak(tlines); }, 700); live.textContent = 'The end. ' + ep.lesson;
       var f = endOv.querySelector('a.is-main, .fb-again'); if (f) try { f.focus({ preventScroll: true }); } catch (e) {}
     }
     function ready(ep) {
@@ -2571,7 +2603,7 @@
     resize(); syncBtns();
     var pk = window.TOLPalsCam && window.TOLPalsCam.loadPacks ? window.TOLPalsCam.loadPacks().catch(function () {}) : Promise.resolve();
     Promise.all([loadEpisode(P.id), pk]).then(function (r) { ready(r[0]); });
-    API._p = P;
+    API._p = P; API._showEnd = showEnd;
     API._music = function () { return { mood: AU.mood, cur: MF.cur, cue: MF.cue }; };
     API.record = recStart; API.stopRecording = recStop; API.recording = function () { return !!P.rec; }; API.recordSupported = recSupported;
     API.thumbnail = thumbnail; API.switchTo = function (id) { switchTo(id, false); }; API.shuffleNext = function () { switchTo(shufflePick(P.id), true); }; API._themeTick = function (dt) { themeTick(dt); }; API._startTheme = startTheme; // (for tests and the preview video)

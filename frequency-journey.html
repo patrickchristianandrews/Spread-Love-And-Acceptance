@@ -12,8 +12,8 @@
 </script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>The Frequency Journey: A Calm Puzzle Adventure</title>
-<meta name="description" content="Help Tidbit and Sugarfoot find the Perfect Frequency through seven worlds of calm puzzles, riddles and small lessons about patience, kindness and harmony.">
+<title>The Frequency Journey</title>
+<meta name="description" content="Pick Tidbit or Sugarfoot and play a maze chase or a road-and-river crossing. Easy controls, a relaxed pace and no game over, plus the Frequency Buddies cartoon.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,500&family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -24,6 +24,7 @@
 <script src="/assets/js/journey-pals.js" defer></script>
 <!-- pal cam hook --><script src="/assets/js/pals-cam-acts.js" defer></script><script src="/assets/js/pals-cam-more.js" defer></script><script src="/assets/js/pals-cam-tricks.js" defer></script><script src="/assets/js/pals-cam.js" defer></script>
 <script src="/assets/js/buddies-player.js" defer></script>
+<script src="/assets/js/arcade.js" defer></script>
 <style>
   .jp-canvas{ position:fixed; inset:0; width:100vw; height:100vh; z-index:40; pointer-events:none; }
   .jl main.read{ max-width:52rem; }
@@ -35,9 +36,10 @@
   .jl-k{ margin:0; font:500 .75rem/1 "IBM Plex Mono", monospace; letter-spacing:.14em; text-transform:uppercase; color:#8A6D8F; }
   .jl-hero h1{ margin:.35rem 0 .4rem; font-size:clamp(2.1rem, 8vw, 3.2rem); line-height:1.05; }
   .jl-hero .jl-sub{ margin:0 auto 1.2rem; max-width:34rem; font-family:"Fraunces", Georgia, serif; font-style:italic; font-size:1.12rem; color:#4E3F6B; }
-  .jl-go{ display:inline-flex; align-items:center; gap:.5rem; min-height:48px; padding:.7rem 1.5rem; border-radius:999px; background:#3C3350; color:#FFF8EE !important; text-decoration:none !important;
+  .jl-go{ display:inline-flex; align-items:center; gap:.5rem; min-height:48px; padding:.7rem 1.5rem; border-radius:999px; background:#3C3350; color:#FFF8EE !important; text-decoration:none !important; border:0; cursor:pointer;
     font:600 1.05rem "Lora", Georgia, serif; box-shadow:0 10px 24px rgba(60,51,80,.25); transition:transform .15s; }
   .jl-go:hover{ transform:translateY(-2px); }
+  .jl-go:focus-visible{ outline:3px solid #7B6CD9; outline-offset:3px; }
   .jl-go.is-soft{ background:#fff; color:#3C3350 !important; border:1px solid #D9C8F0; box-shadow:none; }
   .jl-actions{ display:flex; gap:.6rem; justify-content:center; flex-wrap:wrap; }
   .jl-sec{ margin:2.4rem 0 1rem; }
@@ -50,34 +52,80 @@
   .jl-pal h3{ margin:0; font-size:1.35rem; }
   .jl-pal .jl-tagline{ margin:0; font:500 .72rem/1.3 "IBM Plex Mono", monospace; letter-spacing:.06em; text-transform:uppercase; color:#8A6D8F; }
   .jl-pal p{ margin:0; font-size:.95rem; line-height:1.5; }
-  .jl-worlds{ list-style:none; margin:0; padding:0; display:grid; gap:.9rem; grid-template-columns:1fr; counter-reset:w; }
-  @media (min-width:640px){ .jl-worlds{ grid-template-columns:1fr 1fr; } .jl-worlds li:last-child{ grid-column:1 / -1; } }
-  .jl-world{ position:relative; display:block; padding:1rem 1.1rem 1rem 4.6rem; border-radius:22px; text-decoration:none !important; color:inherit !important; min-height:5.6rem;
-    background:linear-gradient(150deg, var(--w1), var(--w2)); border:1px solid rgba(0,0,0,.05); transition:transform .15s, box-shadow .15s; }
-  .jl-world:hover{ transform:translateY(-2px); box-shadow:0 10px 26px rgba(60,40,90,.12); }
-  .jl-world .jl-hz{ position:absolute; left:.9rem; top:1rem; display:grid; place-items:center; width:3rem; height:3rem; border-radius:50%; background:rgba(255,255,255,.75); font:600 .78rem/1 "IBM Plex Mono", monospace; color:#3C3350; }
-  .jl-world h3{ margin:0 0 .15rem; font-size:1.12rem; }
-  .jl-world p{ margin:0; font-size:.92rem; line-height:1.45; }
-  .jl-world .jl-lesson{ display:block; margin-top:.35rem; font:italic .88rem/1.4 "Fraunces", Georgia, serif; color:#5B4A86; }
-  .jl-world.is-night{ color:#FFF6E0 !important; } .jl-world.is-night p, .jl-world.is-night .jl-lesson{ color:#E6DDF6; }
   .jl-how{ display:grid; gap:.8rem; grid-template-columns:1fr; }
   @media (min-width:640px){ .jl-how{ grid-template-columns:1fr 1fr 1fr; } }
   .jl-how div{ padding:1rem 1.1rem; border-radius:20px; background:rgba(255,253,248,.9); border:1px solid rgba(217,200,240,.7); }
   .jl-how strong{ display:block; font-family:"Fraunces", Georgia, serif; font-size:1.05rem; margin-bottom:.2rem; }
   .jl-how p{ margin:0; font-size:.93rem; }
-  .jl-end{ margin:2.6rem 0 1rem; padding:1.6rem 1.3rem; border-radius:28px; text-align:center; background:linear-gradient(160deg, rgba(46,47,92,.9), rgba(92,74,120,.88)); color:#FFF6E0; }
-  .jl-end h2{ color:#FFF6E0; margin:0 0 .4rem; }
-  .jl-end p{ margin:0 auto 1.1rem; max-width:32rem; color:#E6DDF6; }
   .jl .jl-buddies{ margin:0; }
   .jl-note{ text-align:center; font-size:.85rem; color:var(--ink-soft); margin:1rem auto; max-width:34rem; }
-  @media (prefers-reduced-motion: reduce){ .jl-sun{ animation:none; } }
+
+  /* the arcade: pick a pup, pick a game */
+  .ar-select{ padding:1.4rem 1.2rem 1.5rem; border-radius:28px; background:linear-gradient(160deg, rgba(37,32,78,.96), rgba(70,58,128,.94)); color:#FFF6E0; border:1px solid rgba(255,255,255,.15); box-shadow:0 18px 44px rgba(40,30,80,.25); }
+  .ar-select[hidden], .ar-stage[hidden]{ display:none !important; }
+  .ar-select > h2{ color:#FFE08A; font-family:"IBM Plex Mono", monospace; letter-spacing:.18em; text-transform:uppercase; font-size:1.15rem; }
+  .ar-select > p.jl-intro{ color:#E6DDF6; }
+  .ar-fs{ border:0; margin:1.2rem 0 0; padding:0; }
+  .ar-fs legend{ padding:0; margin:0 0 .6rem; font:600 .8rem "IBM Plex Mono", monospace; letter-spacing:.12em; text-transform:uppercase; color:#FFE08A; }
+  .ar-row{ display:grid; gap:.8rem; grid-template-columns:1fr; }
+  @media (min-width:600px){ .ar-row{ grid-template-columns:1fr 1fr; } }
+  .ar-card{ position:relative; display:grid; grid-template-columns:auto 1fr; gap:.2rem .9rem; align-items:center; padding:.9rem 1rem; border-radius:20px; background:rgba(255,255,255,.08); border:2px solid rgba(255,255,255,.18); cursor:pointer; min-height:64px; }
+  .ar-card input{ position:absolute; inset:0; opacity:0; margin:0; cursor:pointer; }
+  .ar-card:has(input:checked){ background:rgba(255,224,138,.18); border-color:#FFE08A; box-shadow:0 0 0 3px rgba(255,224,138,.25); }
+  .ar-card:has(input:focus-visible){ outline:3px solid #fff; outline-offset:3px; }
+  .ar-card canvas{ grid-row:span 3; width:96px; height:80px; border-radius:12px; }
+  .ar-card h3{ margin:0; font-size:1.2rem; color:#FFF6E0; }
+  .ar-card p{ margin:0; font-size:.9rem; line-height:1.45; color:#E6DDF6; }
+  .ar-card .ar-ctl{ font:500 .72rem/1.4 "IBM Plex Mono", monospace; color:#CFC3F0; }
+  .ar-card .ar-best{ font:500 .72rem/1.4 "IBM Plex Mono", monospace; color:#FFE08A; }
+  .ar-card .ar-tick{ position:absolute; top:.6rem; right:.8rem; font-size:1.1rem; opacity:0; }
+  .ar-card:has(input:checked) .ar-tick{ opacity:1; }
+  .ar-opts{ display:flex; flex-wrap:wrap; gap:.4rem 1.4rem; margin:1.1rem 0 0; }
+  .ar-opts label{ display:inline-flex; align-items:center; gap:.5rem; min-height:44px; font-size:.95rem; color:#FFF6E0; cursor:pointer; }
+  .ar-opts input{ width:1.25rem; height:1.25rem; accent-color:#FFE08A; }
+  .ar-go-row{ display:flex; justify-content:center; margin:1.3rem 0 0; }
+  .ar-go-row .jl-go{ background:#FFE08A; color:#2A2552 !important; font-size:1.2rem; padding:.85rem 2.4rem; min-height:56px; }
+
+  .ar-stage{ margin:1.2rem auto 1rem; max-width:34rem; padding:.9rem .9rem 1.1rem; border-radius:28px; background:linear-gradient(160deg, rgba(37,32,78,.97), rgba(60,50,110,.95)); color:#FFF6E0; box-shadow:0 18px 44px rgba(40,30,80,.28); }
+  .ar-bar{ display:flex; justify-content:space-between; align-items:center; gap:.6rem; flex-wrap:wrap; margin:0 0 .6rem; }
+  .ar-who{ display:flex; align-items:center; gap:.6rem; }
+  .ar-who canvas{ width:44px; height:38px; }
+  .ar-stage{ color:#FFF6E0; }
+  .ar-who b{ font-family:"Fraunces", Georgia, serif; font-size:1.15rem; color:#FFF6E0; }
+  .ar-who span{ font-size:.85rem; color:#E6DDF6; }
+  .ar-nums{ display:flex; gap:.9rem; font:500 .78rem "IBM Plex Mono", monospace; letter-spacing:.04em; color:#CFC3F0; text-transform:uppercase; }
+  .ar-nums b{ display:block; font-size:1.25rem; color:#FFE08A; letter-spacing:0; }
+  .ar-wrap{ position:relative; margin:0 auto; width:100%; max-width:30rem; touch-action:none; user-select:none; -webkit-user-select:none; border-radius:18px; outline:none; }
+  .ar-wrap:focus-visible{ box-shadow:0 0 0 3px #FFE08A; }
+  .ar-wrap canvas{ display:block; width:100%; height:auto; border-radius:18px; background:#201C44; }
+  .ar-overlay{ position:absolute; inset:0; display:grid; place-items:center; padding:1rem; border-radius:18px; background:rgba(20,16,44,.84); text-align:center; }
+  .ar-overlay[hidden]{ display:none; }
+  .ar-overlay h2{ margin:0 0 .4rem; color:#FFE08A; font-size:1.5rem; }
+  .ar-overlay p{ margin:0 auto .9rem; max-width:22rem; color:#FFF6E0; }
+  .ar-ov-btns{ display:flex; gap:.6rem; justify-content:center; flex-wrap:wrap; }
+  .ar-ov-extra{ margin-top:.6rem; font:500 .78rem "IBM Plex Mono", monospace; color:#CFC3F0; }
+  .ar-status{ min-height:2.6em; margin:.7rem .2rem .4rem; font-size:.95rem; color:#FFF6E0; text-align:center; }
+  .ar-dpad{ display:grid; grid-template-columns:repeat(3, 76px); grid-template-rows:repeat(2, 76px); gap:8px; justify-content:center; margin:.4rem auto .8rem; }
+  .ar-dpad button{ border-radius:22px; border:2px solid rgba(255,255,255,.28); background:rgba(255,255,255,.12); color:#FFF6E0; font-size:2rem; line-height:1; cursor:pointer; touch-action:manipulation; -webkit-tap-highlight-color:transparent; }
+  .ar-dpad button:active, .ar-dpad button:hover{ background:rgba(255,224,138,.28); border-color:#FFE08A; }
+  .ar-dpad button:focus-visible{ outline:3px solid #FFE08A; outline-offset:2px; }
+  .ar-dpad .d-up{ grid-column:2; grid-row:1; } .ar-dpad .d-left{ grid-column:1; grid-row:2; } .ar-dpad .d-down{ grid-column:2; grid-row:2; } .ar-dpad .d-right{ grid-column:3; grid-row:2; }
+  .ar-btns{ display:flex; flex-wrap:wrap; gap:.5rem; justify-content:center; }
+  .ar-btn{ font:600 .92rem "Lora", Georgia, serif; min-height:46px; padding:.5rem 1.1rem; border-radius:999px; border:1px solid rgba(255,255,255,.3); background:rgba(255,255,255,.1); color:#FFF6E0; cursor:pointer; }
+  .ar-btn:hover{ background:rgba(255,255,255,.2); }
+  .ar-btn.is-main{ background:#FFE08A; color:#2A2552; border-color:#FFE08A; }
+  .ar-btn:focus-visible{ outline:3px solid #fff; outline-offset:2px; }
+  .ar-help{ margin:.8rem auto 0; max-width:30rem; font-size:.85rem; color:#CFC3F0; text-align:center; }
+  @media (max-width:420px){ .ar-dpad{ grid-template-columns:repeat(3, 70px); grid-template-rows:repeat(2, 70px); } }
+  @media (prefers-reduced-motion: reduce){ .jl-sun{ animation:none; } .jl-go:hover{ transform:none; } }
+  @media print{ .ar-select, .ar-stage{ display:none; } }
 </style>
 <!-- seo:start -->
 <link rel="canonical" href="https://spreadloveandacceptance.com/frequency-journey.html">
 <link rel="alternate" hreflang="en-us" href="https://spreadloveandacceptance.com/frequency-journey.html">
 <link rel="alternate" hreflang="x-default" href="https://spreadloveandacceptance.com/frequency-journey.html">
 <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
-<meta name="keywords" content="self-help, relationships, kindness, love, appreciation, acceptance, connection, communication, calm, peace, harmony, reconciliation, emotional wellbeing, self-discovery, fairness at home, mental load, invisible work, free self-help tools, higher frequency, sound frequencies, Solfeggio tones, being in tune, calm puzzle game">
+<meta name="keywords" content="self-help, relationships, kindness, love, appreciation, acceptance, connection, communication, calm, peace, harmony, reconciliation, emotional wellbeing, self-discovery, fairness at home, mental load, invisible work, free self-help tools, higher frequency, sound frequencies, Solfeggio tones, being in tune, calm arcade game, maze game, crossing game">
 <meta name="author" content="Christian, Spread Love &amp; Acceptance">
 <meta name="application-name" content="Spread Love &amp; Acceptance">
 <meta name="theme-color" content="#F5EFDE">
@@ -88,8 +136,8 @@
 <link rel="apple-touch-icon" href="/assets/icons/apple-touch-icon-180.png" sizes="180x180">
 <link rel="manifest" href="/manifest.webmanifest">
 <meta property="og:site_name" content="Spread Love &amp; Acceptance">
-<meta property="og:title" content="The Frequency Journey: A Calm Puzzle Adventure">
-<meta property="og:description" content="Help Tidbit and Sugarfoot find the Perfect Frequency through seven worlds of calm puzzles, riddles and small lessons about patience, kindness and harmony.">
+<meta property="og:title" content="The Frequency Journey">
+<meta property="og:description" content="Pick Tidbit or Sugarfoot and play a maze chase or a road-and-river crossing. Easy controls, a relaxed pace and no game over, plus the Frequency Buddies cartoon.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://spreadloveandacceptance.com/frequency-journey.html">
 <meta property="og:image" content="https://spreadloveandacceptance.com/assets/img/og-image.png">
@@ -99,34 +147,91 @@
 <meta property="og:image:alt" content="Two friends sharing one heart, with two happy pups: Spread Love &amp; Acceptance">
 <meta property="og:locale" content="en_US">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="The Frequency Journey: A Calm Puzzle Adventure">
-<meta name="twitter:description" content="Help Tidbit and Sugarfoot find the Perfect Frequency through seven worlds of calm puzzles, riddles and small lessons about patience, kindness and harmony.">
+<meta name="twitter:title" content="The Frequency Journey">
+<meta name="twitter:description" content="Pick Tidbit or Sugarfoot and play a maze chase or a road-and-river crossing. Easy controls, a relaxed pace and no game over, plus the Frequency Buddies cartoon.">
 <meta name="twitter:image" content="https://spreadloveandacceptance.com/assets/img/og-image.png">
 <meta name="twitter:image:alt" content="Two friends sharing one heart, with two happy pups: Spread Love &amp; Acceptance">
-<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@id":"https://spreadloveandacceptance.com/frequency-journey.html#page","name":"The Frequency Journey: A Calm Puzzle Adventure","headline":"The Frequency Journey: A Calm Puzzle Adventure","description":"Help Tidbit and Sugarfoot find the Perfect Frequency through seven worlds of calm puzzles, riddles and small lessons about patience, kindness and harmony.","url":"https://spreadloveandacceptance.com/frequency-journey.html","inLanguage":"en-US","isAccessibleForFree":true,"keywords":"self-help, relationships, kindness, love, appreciation, acceptance, connection, communication, calm, peace, harmony, reconciliation, emotional wellbeing, self-discovery, fairness at home, mental load, invisible work, free self-help tools, higher frequency, sound frequencies, Solfeggio tones, being in tune, calm puzzle game","publisher":{"@type":"Organization","@id":"https://spreadloveandacceptance.com/#org","name":"Spread Love & Acceptance","url":"https://spreadloveandacceptance.com/","logo":{"@type":"ImageObject","url":"https://spreadloveandacceptance.com/assets/img/logo-stacked.png"}},"isPartOf":{"@type":"WebSite","@id":"https://spreadloveandacceptance.com/#website","name":"Spread Love & Acceptance","url":"https://spreadloveandacceptance.com/"},"datePublished":"2026-09-27","dateModified":"2026-10-02","image":"https://spreadloveandacceptance.com/assets/img/og-image.png","primaryImageOfPage":{"@type":"ImageObject","url":"https://spreadloveandacceptance.com/assets/img/og-image.png"},"@type":"WebApplication","applicationCategory":"GameApplication","operatingSystem":"Any (web browser)","browserRequirements":"Requires JavaScript","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Spread Love & Acceptance","item":"https://spreadloveandacceptance.com/"},{"@type":"ListItem","position":2,"name":"Calm games","item":"https://spreadloveandacceptance.com/pause-and-play.html"},{"@type":"ListItem","position":3,"name":"The Frequency Journey: A Calm Puzzle Adventure","item":"https://spreadloveandacceptance.com/frequency-journey.html"}]}]}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@id":"https://spreadloveandacceptance.com/frequency-journey.html#page","name":"The Frequency Journey","headline":"The Frequency Journey","description":"Pick Tidbit or Sugarfoot and play a maze chase or a road-and-river crossing. Easy controls, a relaxed pace and no game over, plus the Frequency Buddies cartoon.","url":"https://spreadloveandacceptance.com/frequency-journey.html","inLanguage":"en-US","isAccessibleForFree":true,"keywords":"self-help, relationships, kindness, love, appreciation, acceptance, connection, communication, calm, peace, harmony, reconciliation, emotional wellbeing, self-discovery, fairness at home, mental load, invisible work, free self-help tools, higher frequency, sound frequencies, Solfeggio tones, being in tune, calm arcade game, maze game, crossing game","publisher":{"@type":"Organization","@id":"https://spreadloveandacceptance.com/#org","name":"Spread Love & Acceptance","url":"https://spreadloveandacceptance.com/","logo":{"@type":"ImageObject","url":"https://spreadloveandacceptance.com/assets/img/logo-stacked.png"}},"isPartOf":{"@type":"WebSite","@id":"https://spreadloveandacceptance.com/#website","name":"Spread Love & Acceptance","url":"https://spreadloveandacceptance.com/"},"datePublished":"2026-09-27","dateModified":"2026-10-02","image":"https://spreadloveandacceptance.com/assets/img/og-image.png","primaryImageOfPage":{"@type":"ImageObject","url":"https://spreadloveandacceptance.com/assets/img/og-image.png"},"@type":"WebApplication","applicationCategory":"GameApplication","operatingSystem":"Any (web browser)","browserRequirements":"Requires JavaScript","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Spread Love & Acceptance","item":"https://spreadloveandacceptance.com/"},{"@type":"ListItem","position":2,"name":"Calm games","item":"https://spreadloveandacceptance.com/pause-and-play.html"},{"@type":"ListItem","position":3,"name":"The Frequency Journey","item":"https://spreadloveandacceptance.com/frequency-journey.html"}]}]}</script>
 <!-- seo:end -->
 </head>
 <body class="jl" data-no-cheer data-garden-nopals>
 <main class="read">
 
-
 <section class="jl-hero" data-romp aria-labelledby="jl-h">
   <div class="jl-sun" aria-hidden="true"></div>
-  <p class="jl-k">A calm puzzle journey</p>
-  <h1 id="jl-h">The Frequency Journey: a calm puzzle adventure</h1>
+  <p class="jl-k">The arcade</p>
+  <h1 id="jl-h">The Frequency Journey: pick a pup, pick a game</h1>
 <!-- pal cam hook (pals-cam.js): check in on Tidbit & Sugarfoot -->
 <div class="pc-launch-row" data-palcam-row hidden><button type="button" class="pc-launch" data-palcam-open><span class="pc-paw"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><ellipse cx="12" cy="16.2" rx="4.6" ry="3.8"/><circle cx="6" cy="10.8" r="2.1"/><circle cx="9.6" cy="6.8" r="2.1"/><circle cx="14.4" cy="6.8" r="2.1"/><circle cx="18" cy="10.8" r="2.1"/></svg></span><span><span class="pc-lt">Check in on Tidbit &amp; Sugarfoot</span><small><i class="pc-dot" aria-hidden="true"></i>See what they&rsquo;re up to</small></span></button></div>
 <!-- /pal cam hook -->
-  <p class="jl-sub">Somewhere above the clouds is the Perfect Frequency. Tidbit and Sugarfoot are going to find it, together.</p>
+  <p class="jl-sub">Play as Tidbit or Sugarfoot in a maze chase or a road-and-river crossing. There’s no game over, and the controls are as easy as we could make them.</p>
   <div class="jl-actions">
-    <a class="jl-go" href="/frequency-journey-play.html">&#9654; Begin the journey</a>
-    <a class="jl-go is-soft" href="#worlds">See the seven worlds</a>
+    <a class="jl-go" href="#ar-select">&#9654; Choose and play</a>
+    <a class="jl-go is-soft" href="#buddies">Watch Frequency Buddies</a>
   </div>
+</section>
+
+<section class="jl-sec ar-select" id="ar-select" aria-labelledby="ar-h">
+  <h2 id="ar-h" class="no-bubble">Press start</h2>
+  <p class="jl-intro no-bubble">Two pups, two games. Pick what you like. You can change your mind any time.</p>
+
+  <fieldset class="ar-fs">
+    <legend class="no-bubble">1 · Choose your pup</legend>
+    <div class="ar-row">
+      <label class="ar-card"><input type="radio" name="ar-pup" value="tidbit"><canvas data-pal="collar" width="192" height="160" aria-hidden="true"></canvas><h3>Tidbit</h3><p>Quick on her paws. A little faster, and her hops are snappier.</p><span class="ar-tick" aria-hidden="true">&#10003;</span></label>
+      <label class="ar-card"><input type="radio" name="ar-pup" value="sugarfoot"><canvas data-pal="drop" width="192" height="160" aria-hidden="true"></canvas><h3>Sugarfoot</h3><p>Steady and strong. A little slower, but golden hearts last longer and she’s harder to bump.</p><span class="ar-tick" aria-hidden="true">&#10003;</span></label>
+    </div>
+  </fieldset>
+
+  <fieldset class="ar-fs">
+    <legend class="no-bubble">2 · Choose your game</legend>
+    <div class="ar-row">
+      <label class="ar-card"><input type="radio" name="ar-game" value="chase"><canvas id="ar-prev-chase" width="120" height="90" aria-hidden="true"></canvas><h3>Treat Chase</h3><p>Gather every treat in the maze. Grumpy little clouds of Static drift about, and a golden heart turns them into bubbles you can pop.</p><span class="ar-ctl">Steer with arrows, a swipe or a tap</span><span class="ar-best" id="ar-best-chase"></span><span class="ar-tick" aria-hidden="true">&#10003;</span></label>
+      <label class="ar-card"><input type="radio" name="ar-game" value="cross"><canvas id="ar-prev-cross" width="120" height="90" aria-hidden="true"></canvas><h3>Cross the Way</h3><p>Hop over the busy road, ride the logs and lily pads over the river, and reach all five doghouses.</p><span class="ar-ctl">One hop per press, tap or swipe</span><span class="ar-best" id="ar-best-cross"></span><span class="ar-tick" aria-hidden="true">&#10003;</span></label>
+    </div>
+  </fieldset>
+
+  <div class="ar-opts">
+    <label><input type="checkbox" id="ar-sel-relaxed"> Relaxed pace (slower, kinder, recommended)</label>
+    <label><input type="checkbox" id="ar-sel-sound"> Sound</label>
+  </div>
+  <div class="ar-go-row"><button type="button" class="jl-go" id="ar-start">&#9654; Start</button></div>
+  <noscript><p class="jl-note">The games need JavaScript. <a href="/frequency-buddies.html">Frequency Buddies</a> works without it.</p></noscript>
+</section>
+
+<section class="ar-stage no-bubble" id="ar-stage" hidden aria-label="The game">
+  <div class="ar-bar">
+    <div class="ar-who"><canvas id="ar-who" width="88" height="76" aria-hidden="true"></canvas><div><b id="ar-title"></b><span id="ar-pupname"></span></div></div>
+    <div class="ar-nums"><span>Score<b id="ar-score">0</b></span><span>Level<b id="ar-level">1</b></span><span>Best<b id="ar-best">0</b></span></div>
+  </div>
+  <div class="ar-wrap" id="ar-wrap" tabindex="0" role="application" aria-label="The game">
+    <canvas id="ar-cv" aria-hidden="true"></canvas>
+    <div class="ar-overlay" id="ar-overlay" hidden role="dialog" aria-modal="false" aria-labelledby="ar-ov-h">
+      <div><h2 id="ar-ov-h"></h2><p id="ar-ov-p"></p>
+        <div class="ar-ov-btns"><button type="button" class="ar-btn is-main" id="ar-ov-go">Go</button><button type="button" class="ar-btn" id="ar-ov-menu">Back to the menu</button></div>
+        <div class="ar-ov-extra" id="ar-ov-extra"></div></div>
+    </div>
+  </div>
+  <p class="ar-status" id="ar-status" aria-live="polite"></p>
+  <div class="ar-dpad" role="group" aria-label="Move: on-screen arrows (hold one to keep going)">
+    <button type="button" class="d-up" id="ar-d-up" aria-label="Up">&#9650;</button>
+    <button type="button" class="d-left" id="ar-d-left" aria-label="Left">&#9664;</button>
+    <button type="button" class="d-down" id="ar-d-down" aria-label="Down">&#9660;</button>
+    <button type="button" class="d-right" id="ar-d-right" aria-label="Right">&#9654;</button>
+  </div>
+  <div class="ar-btns">
+    <button type="button" class="ar-btn" id="ar-pause">&#9208; Pause</button>
+    <button type="button" class="ar-btn" id="ar-restart">&#8634; Restart</button>
+    <button type="button" class="ar-btn" id="ar-sound" aria-pressed="true">&#128266; Sound: on</button>
+    <button type="button" class="ar-btn" id="ar-relaxed" aria-pressed="true">&#127807; Relaxed pace: on</button>
+    <button type="button" class="ar-btn" id="ar-menu">&#9776; Menu</button>
+  </div>
+  <p class="ar-help">Move with the arrow keys or WASD, a swipe, a tap on the field, or the big arrows. A turn you press a little early is remembered. P pauses, M mutes.</p>
 </section>
 
 <section class="jl-sec" aria-labelledby="jl-meet">
   <h2 id="jl-meet">Meet the pals</h2>
-  <p class="jl-intro">Two best friends, each wonderful in her own way. They get there as themselves, and they get there side by side.</p>
+  <p class="jl-intro">Two best friends, each wonderful in her own way. They’re on the same team in every game.</p>
   <div class="jl-pals">
     <div class="jl-pal" data-romp>
       <canvas data-pal="collar" width="192" height="176" aria-hidden="true"></canvas>
@@ -143,20 +248,6 @@
   </div>
 </section>
 
-<section class="jl-sec" id="worlds" aria-labelledby="jl-worlds-h">
-  <h2 id="jl-worlds-h">Seven worlds, one song</h2>
-  <p class="jl-intro">Each world is tuned to its own tone, with its own kind of challenge and its own little lesson. The climb gets gently harder as you go.</p>
-  <ol class="jl-worlds">
-    <li><a class="jl-world is-night" data-romp href="/frequency-journey-play.html?world=1" style="--w1:rgba(46,52,86,.92);--w2:rgba(74,66,112,.9)"><span class="jl-hz" aria-hidden="true">1</span><h3>The Whispering Shadows</h3><p>A stormy forest where the path only shows when the pals stay close.</p><span class="jl-lesson">It’s easier to be brave next to someone you trust.</span></a></li>
-    <li><a class="jl-world" data-romp href="/frequency-journey-play.html?world=2" style="--w1:rgba(226,240,250,.95);--w2:rgba(206,228,246,.92)"><span class="jl-hz" aria-hidden="true">2</span><h3>The Melting Glaciers</h3><p>Old ice gives way to new streams, and frozen paths become ways through.</p><span class="jl-lesson">Letting go of the old way can open a new one.</span></a></li>
-    <li><a class="jl-world" data-romp href="/frequency-journey-play.html?world=3" style="--w1:rgba(255,243,200,.95);--w2:rgba(255,228,190,.92)"><span class="jl-hz" aria-hidden="true">3</span><h3>The Golden Meadow</h3><p>Flowers bloom wherever they run, and little lights wait to be gathered.</p><span class="jl-lesson">Kindness to yourself makes room for joy.</span></a></li>
-    <li><a class="jl-world" data-romp href="/frequency-journey-play.html?world=4" style="--w1:rgba(247,222,214,.95);--w2:rgba(236,214,232,.92)"><span class="jl-hz" aria-hidden="true">4</span><h3>The Bridge of Echoes</h3><p>A canyon where Tidbit and Sugarfoot take separate paths and help each other across.</p><span class="jl-lesson">What one of us does changes the way for the other.</span></a></li>
-    <li><a class="jl-world" data-romp href="/frequency-journey-play.html?world=5" style="--w1:rgba(214,238,240,.95);--w2:rgba(222,214,246,.92)"><span class="jl-hz" aria-hidden="true">5</span><h3>The Singing Valleys</h3><p>Crystals hum and wind chimes sing, and clarity comes from listening.</p><span class="jl-lesson">Say it clearly and kindly, and it can be heard.</span></a></li>
-    <li><a class="jl-world is-night" data-romp href="/frequency-journey-play.html?world=6" style="--w1:rgba(34,38,76,.94);--w2:rgba(58,52,100,.92)"><span class="jl-hz" aria-hidden="true">6</span><h3>The Starry Summit</h3><p>A night climb over constellations, where not everything is what it seems.</p><span class="jl-lesson">Look again: what you can see is not always what you assumed.</span></a></li>
-    <li><a class="jl-world" data-romp href="/frequency-journey-play.html?world=7" style="--w1:rgba(255,246,230,.95);--w2:rgba(214,230,250,.92)"><span class="jl-hz" aria-hidden="true">7</span><h3>The Infinite Sky</h3><p>The top of the journey: an open sky to rest in, where the pals place stars and simply be, together.</p><span class="jl-lesson">The Perfect Frequency was the two of you, in tune.</span></a></li>
-  </ol>
-</section>
-
 <section class="jl-sec" id="buddies" aria-labelledby="jl-buddies-h">
   <h2 id="jl-buddies-h">Frequency Buddies</h2>
   <p class="jl-intro">An animated adventure series starring Tidbit and Sugarfoot: mini movies of about 16 to 17 minutes, each in a new world, each with a real tough time the pals work through together. Captions are always on.</p>
@@ -167,21 +258,15 @@
 </section>
 
 <section class="jl-sec" aria-labelledby="jl-how-h">
-  <h2 id="jl-how-h">How the journey works</h2>
+  <h2 id="jl-how-h">How the arcade works</h2>
   <div class="jl-how">
-    <div data-romp><strong>A new challenge every level</strong><p>Riddles, little life lessons, sorting, memory, melodies, logic and path puzzles, each one different from the last.</p></div>
-    <div data-romp><strong>No timers, no losing</strong><p>A wrong answer just gets a kind explanation and another try. Hints are always there, and so are undo and restart.</p></div>
-    <div data-romp><strong>Something to take with you</strong><p>Every level ends with a small lesson from the program, and a link to read more if you’d like to.</p></div>
+    <div data-romp><strong>Easy to control</strong><p>Arrow keys, WASD, a swipe, a tap on the field or big on-screen arrows. A turn pressed a little early is remembered, and in Cross the Way one hop can wait for the last.</p></div>
+    <div data-romp><strong>No game over</strong><p>A bump or a splash sends your pup back to the start with a soft “oof”. Treats you’ve gathered stay gathered, and your score never goes down.</p></div>
+    <div data-romp><strong>Yours alone</strong><p>Your pup, your settings and your best scores stay in this browser. Nothing is sent anywhere. Pause any time, and Relaxed pace slows everything down.</p></div>
   </div>
 </section>
 
-<section class="jl-end" data-romp aria-labelledby="jl-end-h">
-  <h2 id="jl-end-h">Ready when you are</h2>
-  <p>Put your headphones on if you have them. Each world plays its tone softly, and the pals are already waiting at the edge of the forest.</p>
-  <a class="jl-go is-soft" href="/frequency-journey-play.html">&#9654; Begin the journey</a>
-</section>
-
-<p class="jl-note">Each world has its own soft tone, simply as a calm theme for the music. Your progress stays in this browser.</p>
+<p class="jl-note">Every level clear brings a small line of kindness from the program. Play for a minute or for an hour.</p>
 </main>
 <script>
   // little portraits of the pals on their cards

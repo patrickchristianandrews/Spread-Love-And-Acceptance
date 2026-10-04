@@ -2010,7 +2010,7 @@
       ],
       "what": "Pause & Play is the calm corner of the site: gentle games for when your mind needs a rest. Drift, the Night Garden, the Frequency Journey, Word Bloom, Quiet Crossword, the Daily Ledger Crossword and Quiet Words. No timers, no way to lose, and every few levels something new appears in the living garden behind every page.",
       "how": [
-        "Pick a game that fits your mood: breathing (Night Garden, Drift), words (Word Bloom, Quiet Words, the crosswords) or a gentle journey (the Frequency Journey).",
+        "Pick a game that fits your mood: breathing (Night Garden, Drift), words (Word Bloom, Quiet Words, the crosswords) or a quick arcade round (the Frequency Journey).",
         "Play a few minutes to settle before a hard conversation, or to wind down at night.",
         "Your level and streak are kept on this device only."
       ],
@@ -2134,21 +2134,23 @@
       "keys": [
         "frequency journey",
         "~journey",
+        "~arcade",
+        "~maze",
         "~tidbit",
         "~sugarfoot",
         "tidbit and sugarfoot",
-        "perfect frequency",
-        "~seven worlds",
-        "~7 worlds"
+        "~video game",
+        "~treat chase",
+        "~cross the way"
       ],
-      "what": "The Frequency Journey is a calm puzzle journey with two best friends, Tidbit and Sugarfoot, through seven tone-themed worlds, all the way up to the Perfect Frequency. Every level is a different small challenge: riddles, puzzles, breathing, sorting, a little singing. No timer, and no way to lose.",
+      "what": "The Frequency Journey is a little arcade with two best friends, Tidbit and Sugarfoot. You pick which pup to play as, then pick a game: Treat Chase, a maze where you gather every treat while grumpy little clouds of Static drift about (a golden heart turns them into bubbles you can pop), or Cross the Way, where you hop over a busy road and ride logs and lily pads across a river to five doghouses. No game over: a bump just sends your pup back to the start.",
       "how": [
-        "Press Begin the journey, or see the seven worlds first.",
-        "Each level is a new kind of challenge, fitted to its world, and they grow a little harder as you climb (the leaves show how challenging each is).",
-        "Use Hint, Undo or Rest here whenever you like.",
-        "A new set is drawn each time you play, skipping ones you’ve already seen on this device."
+        "Pick Tidbit or Sugarfoot, pick a game, and press Start.",
+        "Steer with the arrow keys or WASD, a swipe, a tap on the playfield, or the big on-screen arrows. A turn you press a little early is remembered.",
+        "Relaxed pace (on by default) slows everything down. Pause any time.",
+        "Each level you clear counts toward the garden behind every page."
       ],
-      "more": "The worlds each carry a little life lesson, like “It’s easier to be brave next to someone you trust” in the stormy forest, or “Letting go of the old way can open a new one” in the melting glaciers. Along the way you practice tuning in (Pillar IV) while you settle (Pillar III). On the Journey pages you can also open the pal cam to check in on Tidbit and Sugarfoot and see what they’re up to.",
+      "more": "Tidbit is a little quicker; Sugarfoot is steadier, her golden hearts last longer and she’s harder to bump. After each level there’s a small line of kindness from the program. On the same page you can open the pal cam to check in on Tidbit and Sugarfoot, and watch Frequency Buddies.",
       "pillar": "Pillar IV, Tune how you send and receive, while you settle with Pillar III.",
       "links": [
         [
@@ -2156,8 +2158,8 @@
           "/frequency-journey.html"
         ],
         [
-          "Play the Journey",
-          "/frequency-journey-play.html"
+          "Frequency Buddies",
+          "/frequency-buddies.html"
         ]
       ]
     },
@@ -3006,7 +3008,7 @@
         "~creator",
         "~author"
       ],
-      "what": "The program was made by Christian, who spent fifteen years as a government auditor and audit manager and a lifetime studying how people work: psychology, philosophy, neurobiology and more. He’s autistic, with ADHD, OCD and anxiety in the mix, and built the program from what he learned about his own wiring and about systems.",
+      "what": "The program was made by Christian, who worked as a government auditor and audit manager and has spent a lifetime studying how people work: psychology, philosophy, neurobiology and more. He’s autistic, with ADHD, OCD and anxiety in the mix, and built the program from what he learned about his own wiring and about systems.",
       "links": [
         [
           "About the creator",
@@ -3882,7 +3884,7 @@
       "id": "app",
       "kind": "intent",
       "name": "using the site like an app",
-      "pat": "\\b(is there|do you have|have you got|got|any) an? (app|mobile app|phone app|iphone app|android app)\\b|\\b(download|install|get) (the |an |this as an )?(app|it on my phone)\\b|\\bapp store\\b|\\bplay store\\b|\\bhome ?screen\\b|\\b(is|does) (it|this|the site) (an app|work (on|as) (a phone|an app|my phone|mobile))\\b",
+      "pat": "\\b(is there|do you have|have you got|got|any) an? (app|mobile app|phone app|iphone app|android app)\\b|\\b(download|install|get) (the |an |this as an )?(app|it on my phone)\\b|\\bapp store\\b|\\bplay store\\b|\\bhome ?screen\\b|\\b(is|does) (it|this|the site) (an app|work (on|as) (a phone|an app|my phone|mobile))\\b|\\bwidgets?\\b",
       "keys": [
         "is there an app",
         "an app",
@@ -3892,7 +3894,8 @@
       ],
       "what": [
         "There’s nothing to download, and you don’t need an app store. The site works like an app on your phone: add it to your home screen and it opens full-screen, with its own icon, like any other app.",
-        "Pages you’ve opened before keep working without a connection, and everything you type in the tools stays on your device."
+        "Pages you’ve opened before keep working without a connection, and everything you type in the tools stays on your device.",
+        "Real Android widgets need a native app, so an app installed from Chrome can’t add one yet. Press and hold the icon for quick jumps, or pin a single page to your home screen."
       ],
       "how": [
         "On an iPhone or iPad, open the site in Safari, tap the Share button, then “Add to Home Screen”.",
@@ -3900,6 +3903,10 @@
         "On a computer, most browsers show an install icon in the address bar."
       ],
       "links": [
+        [
+          "Put the app on your phone",
+          "/install.html"
+        ],
         [
           "Start here",
           "/start-here.html"
@@ -4971,6 +4978,448 @@
         [
           "WP-03: One owner per job",
           "/workpapers/wp-03-raci-treaty.html"
+        ]
+      ]
+    },
+    {
+      "id": "complacency",
+      "kind": "tool",
+      "name": "the Complacency guide",
+      "keys": [
+        "complacency",
+        "complacent",
+        "~taking for granted",
+        "~taken for granted",
+        "~autopilot",
+        "~coasting",
+        "gone stale",
+        "in a rut",
+        "~hedonic adaptation",
+        "~getting used to it"
+      ],
+      "what": "Complacency is what happens when something has worked for a long time and you stop checking on it. It isn’t laziness or a lack of love. It’s a setup nobody has looked at lately. The Complacency guide covers the quiet signs, how it shows up in you, partners, family, friends, housemates and coworkers, how it differs from contentment and acceptance, and small, regular re-checks.",
+      "how": [
+        "Notice the quiet signs: “fine” is the whole conversation, thanks has become a reflex, “we’ve always done it this way” is the reason.",
+        "Ask one real question you don’t already know the answer to, and listen to all of it.",
+        "Say one specific thank-you a week.",
+        "Put a small re-check on the calendar: daily 90-second check-in, weekly question and thanks, monthly look-back, quarterly “does this still work for everyone?”",
+        "Keep it light: a re-check is a look, not a trial."
+      ],
+      "pillar": "Pillar V, Notice the quiet incentives, and Pillar I, See the whole load.",
+      "links": [
+        [
+          "Complacency",
+          "/complacency.html"
+        ],
+        [
+          "The full guide",
+          "/complacency-in-depth.html"
+        ],
+        [
+          "Ten questions to ask (Turning Toward)",
+          "/turning-toward-in-depth.html#their-world"
+        ],
+        [
+          "Complacency (Library)",
+          "/library/connection.html#complacency"
+        ]
+      ]
+    },
+    {
+      "id": "recheckdrive",
+      "kind": "tool",
+      "name": "the Re-check Drive",
+      "keys": [
+        "re check drive",
+        "recheck drive",
+        "~football game",
+        "~field goal",
+        "complacency game",
+        "playbook game"
+      ],
+      "what": "The Re-check Drive is a calm football game made from the complacency playbook. You pick who it’s for (yourself or someone close), call a play like “ask a question you don’t know the answer to,” do it for real, and tell the game you did. Each one moves the ball toward a field goal. There’s no clock, no opponent that can score, and no way to lose.",
+      "how": [
+        "Pick who the drive is for, then tap Start the drive.",
+        "Call a play from your hand, do it in real life, and tap “I did it.” “Not today” costs nothing.",
+        "Share your own context and ask for theirs: both sides’ context is part of a good drive.",
+        "When you reach field-goal range, kick it. Your drive is saved only in your browser."
+      ],
+      "pillar": "Pillar V, Notice the quiet incentives, with Pillar IV, Tune how you send and receive.",
+      "links": [
+        [
+          "The Re-check Drive",
+          "/recheck-drive.html"
+        ],
+        [
+          "Complacency",
+          "/complacency.html"
+        ]
+      ]
+    },
+    {
+      "id": "touchstones",
+      "kind": "tool",
+      "name": "touchstones",
+      "keys": [
+        "touchstone",
+        "touchstones",
+        "~inside joke",
+        "~pet name",
+        "~code word",
+        "~private idiom",
+        "~shared language",
+        "~shared phrase"
+      ],
+      "what": "A touchstone is a small, shared piece of language or meaning that says “we’re us”: an inside joke, a pet name, the way you say hello, a song, a place or a story you retell. A few words carry a whole history. They can go stale when they’re said on autopilot, and they’re one of the quickest ways to bring warmth back.",
+      "how": [
+        "Retell a story from both sides: how you met, or how a joke began.",
+        "Say an old phrase or pet name on purpose, and see if it still lands.",
+        "Agree plain words for hard moments in advance, like a weather word (“my sky is clear, gusty or fogged in”) or a pause word (“pause, back at eight”).",
+        "Retire any nickname or joke that hurts, and ask before assuming the words are shared."
+      ],
+      "pillar": "Pillar IV, Tune how you send and receive, and Pillar V, Notice the quiet incentives.",
+      "links": [
+        [
+          "Touchstones",
+          "/complacency.html#touchstones"
+        ],
+        [
+          "Shared language (Library)",
+          "/library/connection.html#shared-language"
+        ],
+        [
+          "Turning Toward: rituals",
+          "/turning-toward.html#rituals"
+        ]
+      ]
+    },
+    {
+      "id": "upset-right-now",
+      "kind": "intent",
+      "first": true,
+      "name": "the Upset right now page",
+      "pat": "\\b(we re|we are|were|i m|i am|im) (in|having|having a|in a|right in the middle of( a)?) (a )?(fight|argument|row|blowup|blow up|shouting match)( right now| now)?\\b|\\b(fighting|arguing|yelling|shouting) (right now|at the moment|as we speak)\\b|\\b(right now|at the moment)\\b[^?]*\\b(fighting|fight|argument|arguing|both upset|so upset|so angry)\\b|\\bwe re both (upset|angry|mad|yelling|worked up)\\b|\\bboth (of us )?(upset|angry|worked up|yelling)\\b[^?]*\\b(what|how) (do|should|can) (we|i)\\b",
+      "keys": [],
+      "what": [
+        "Here is a five-minute way through, for two upset people. Nothing is saved, and it works on one phone."
+      ],
+      "how": [
+        "Say a pause line with a return time: “I want to get this right and I’m too worked up. Can we pick this up at eight?”",
+        "Breathe out longer than you breathe in: in for 4, out for 6, for about a minute.",
+        "Move apart for at least twenty minutes. Drink water, walk, and don’t rehearse the argument.",
+        "Come back on time: “I’m back. The topic is still the sink. I am not against you.”",
+        "Say back what you heard, then say yours in three parts: a fact, a feeling and one small ask."
+      ],
+      "pillar": "Pillar III, Read your state first.",
+      "links": [
+        [
+          "Upset right now?",
+          "/upset-right-now.html"
+        ],
+        [
+          "How to stop fighting with your partner",
+          "/how-to-stop-fighting-with-your-partner.html"
+        ],
+        [
+          "The Carrier Wave Decoder",
+          "/carrier-wave-decoder.html"
+        ]
+      ]
+    },
+    {
+      "id": "new-parent",
+      "kind": "tool",
+      "name": "the New baby page",
+      "keys": [
+        "new baby",
+        "newborn",
+        "new parent",
+        "new parents",
+        "new dad",
+        "new mom",
+        "new mum",
+        "having a baby",
+        "had a baby",
+        "just had a baby",
+        "~sleep deprived",
+        "~baby jobs",
+        "postpartum"
+      ],
+      "what": "A new baby adds a job nobody can see: keeping track of everything. When you are both tired, it lands on whoever notices first. The New baby page gives three small steps to keep that from landing on one of you by accident, and a note on when sad or anxious feelings are worth telling a doctor about.",
+      "how": [
+        "List every job, including the thinking part: the pediatrician visits, noticing the diapers are low, meals, the family chat, thank-you notes.",
+        "Give each job one owner. That person does it and also remembers it.",
+        "Review it once a week for ten minutes: what felt heavy, and one job to swap.",
+        "If sadness or anxiety lasts more than two weeks or gets heavier, tell a doctor or nurse. In the US, Postpartum Support International’s helpline is 1-800-944-4773."
+      ],
+      "pillar": "Pillar I, See the whole load.",
+      "links": [
+        [
+          "New baby, sharing the load",
+          "/new-parent.html"
+        ],
+        [
+          "A fair chore chart",
+          "/chore-chart-for-couples.html"
+        ],
+        [
+          "Invisible labor and the mental load",
+          "/invisible-labor-mental-load.html"
+        ]
+      ]
+    },
+    {
+      "id": "co-parenting",
+      "kind": "tool",
+      "name": "the Separated co-parents page",
+      "keys": [
+        "exchange day",
+        "handoff",
+        "handoffs",
+        "custody exchange"
+      ],
+      "what": "After a separation, the goal is calm, brief, child-focused contact. The Separated co-parents page has an exchange-day script, ways to keep kids out of the middle, a tone check, and a parallel-parenting route for a co-parent who won’t cooperate. A court order or parenting plan always comes first, and it is not legal advice.",
+      "how": [
+        "Keep it short and about the child: “Hi. Homework’s done. Pick-up is Sunday at five.”",
+        "Never use the kids as messengers. Send messages to the adult.",
+        "Give each task one owner, in a shared calendar or a short note.",
+        "Park bigger things: “Can we put that on Thursday’s check-in?”",
+        "If the other parent is controlling or frightening, put your safety first: plan exchanges in public or through a third person, and keep your messages short and factual."
+      ],
+      "pillar": "Pillar IV, Tune how you send and receive.",
+      "links": [
+        [
+          "Separated co-parents",
+          "/co-parenting.html"
+        ],
+        [
+          "The Signal Translator",
+          "/signal-translator.html"
+        ],
+        [
+          "Say it so it lands",
+          "/workpapers/wp-09-tone-filter.html"
+        ]
+      ]
+    },
+    {
+      "id": "share-the-load",
+      "kind": "tool",
+      "name": "Share the load, step by step",
+      "keys": [
+        "share the load",
+        "split the chores",
+        "split chores",
+        "who does what",
+        "fair split",
+        "chore split",
+        "housework split",
+        "split the bills"
+      ],
+      "what": "There are several tools for splitting the load, and they work best in an order. Most households only need the first three.",
+      "how": [
+        "Name every job, including the thinking part, with the fair chore chart.",
+        "See the split in plain numbers with the Lemonade Stand.",
+        "Give each job one owner with One owner per job.",
+        "Look back each week, and monthly with What keeps coming back?"
+      ],
+      "pillar": "Pillar I, See the whole load.",
+      "links": [
+        [
+          "Share the load, step by step",
+          "/share-the-load.html"
+        ],
+        [
+          "A fair chore chart",
+          "/chore-chart-for-couples.html"
+        ],
+        [
+          "The Lemonade Stand",
+          "/lemonade-stand.html"
+        ]
+      ]
+    },
+    {
+      "id": "method-and-limits",
+      "kind": "tool",
+      "name": "Method and limits",
+      "keys": [
+        "how is it scored",
+        "how is it calculated",
+        "formula",
+        "formulas",
+        "scoring",
+        "how are scores worked out",
+        "is this validated",
+        "cut-offs",
+        "cutoffs",
+        "weights"
+      ],
+      "what": "Every score on the site is written out on one page: how it is worked out, where the cut-offs are, and what it can’t tell you. The rules are simple and chosen by hand, not fitted to data, and none of them predicts anything.",
+      "how": [
+        "The stress check adds five questions scored 0 to 4 and divides by 20.",
+        "The Lemonade Stand describes each person’s share of the hours, with words chosen at 60% and 90% for two people.",
+        "The setup check weights balance, ownership and stress at 0.40, 0.35 and 0.25."
+      ],
+      "pillar": "",
+      "links": [
+        [
+          "Method and limits",
+          "/method-and-limits.html"
+        ]
+      ]
+    },
+    {
+      "id": "love-languages",
+      "kind": "tool",
+      "name": "the Love languages guide",
+      "keys": [
+        "love language",
+        "love languages",
+        "five love languages",
+        "chapman",
+        "~words of affirmation",
+        "~acts of service",
+        "~quality time",
+        "~physical touch",
+        "~receiving gifts",
+        "apology languages",
+        "~how do i show love",
+        "~feel cared for"
+      ],
+      "what": "The five love languages (words, acts of service, gifts, quality time and touch) are a friendly way to talk about how people give and feel care. Research does not support one fixed language per person, so the guide treats them as a menu, with what is healthy and unhealthy about each, how to practice, how to talk about it, and similar ideas such as apology languages, bids for connection and responsiveness.",
+      "how": [
+        "Remember three real moments you felt most cared for, and share them.",
+        "Tick what would feel like care right now on the care card, and swap cards.",
+        "Offer one thing from the other person’s card each week, and ask for one from yours.",
+        "Ask in your weekly review: “What made you feel most cared for this week?”",
+        "If someone uses “love” to control you, that is not a language mismatch. Put your safety first."
+      ],
+      "pillar": "Pillar IV, Tune how you send and receive, and Pillar V, Notice the quiet incentives.",
+      "links": [
+        [
+          "Love languages: a menu, not a label",
+          "/love-languages.html"
+        ],
+        [
+          "The full guide",
+          "/love-languages-in-depth.html"
+        ],
+        [
+          "What the research says (Library)",
+          "/library/relationships.html#love-languages"
+        ],
+        [
+          "Say thank you, specifically",
+          "/turning-toward.html#thanks"
+        ]
+      ]
+    },
+    {
+      "id": "senses",
+      "kind": "tool",
+      "name": "See and feel the sound",
+      "keys": [
+        "haptic",
+        "haptics",
+        "vibration",
+        "vibrate",
+        "feel the sound",
+        "see the sound",
+        "see and feel",
+        "~feel sound",
+        "~see sound",
+        "~vibrate with the music",
+        "~buzz"
+      ],
+      "what": "The Soundscapes page can draw whatever is playing as a moving picture (aurora, rings or wave), and on an Android phone with Chrome it can also vibrate gently with the sound: a rumble that follows the low tones, a beat, or a steady heartbeat. Vibration is off until you choose a strength. iPhones can’t vibrate from a web page, so there you can see the sound and feel it through the speaker or headphones.",
+      "how": [
+        "Open Soundscapes and press play on any track or live soundscape.",
+        "Pick how to see it: Aurora, Rings or Wave. With reduced motion on, you get a still, slowly changing glow.",
+        "On an Android phone, choose Soft, Medium or Strong under Feel, then pick Rumble, Beat or Heartbeat. Try a pulse first.",
+        "The Upset right now page can also buzz in time with its breathing pacer."
+      ],
+      "pillar": "Pillar III, Read your state first.",
+      "links": [
+        [
+          "See and feel the sound",
+          "/soundscapes.html#senses"
+        ],
+        [
+          "Upset right now?",
+          "/upset-right-now.html"
+        ]
+      ]
+    },
+    {
+      "id": "brainbreak",
+      "kind": "tool",
+      "name": "Brain Breakers and Brain Breaks",
+      "keys": [
+        "brain break",
+        "brain breaks",
+        "brain breaker",
+        "brain breakers",
+        "~take a brain break"
+      ],
+      "what": "Brain Breakers are big, bold instrumental pieces on the Soundscapes page, made for a short break between program steps: come get your brain wrecked, broken in a good way. A Brain Break card sits at the top of the home page and at the end of each program page. Press a button, take about three minutes, and the card then offers the next step in the program. Nothing plays until you press a button, and the only thing kept is a count of breaks on your own device.",
+      "how": [
+        "Press one of the two tracks on the home page or at the end of a chapter or worksheet, or press Surprise me.",
+        "Keep your eyes off the screen if you like. It is about three minutes.",
+        "When it ends, follow the link to the next step in the program.",
+        "Want more? The Brain Breakers section on Soundscapes has both tracks, and See and feel the sound draws and vibrates with them."
+      ],
+      "pillar": "Pillar III, Read your state first.",
+      "links": [
+        [
+          "Brain Breakers",
+          "/soundscapes.html#brain-breakers"
+        ],
+        [
+          "See and feel the sound",
+          "/soundscapes.html#senses"
+        ],
+        [
+          "Start in 10 minutes",
+          "/start-in-10-minutes.html"
+        ]
+      ]
+    },
+    {
+      "id": "findsound",
+      "kind": "tool",
+      "name": "Find your sound",
+      "keys": [
+        "find your sound",
+        "which soundscape",
+        "which track",
+        "which sound",
+        "what should i listen to",
+        "recommend music",
+        "recommend a track",
+        "~which one should i play",
+        "~what music should i"
+      ],
+      "what": "Find your sound is a short picker at the top of the Soundscapes page. Tap what you need (wake up, reset, calm down, focus, wind down, feel something big), how your body is, and how you like sound, and it suggests one track or live soundscape with the reasons, plus two others to try. You can save a go-to for each need, and it shows what you play most. All of that stays on your device.",
+      "how": [
+        "Open Soundscapes and find Find your sound at the top.",
+        "Tap what you need right now. Add how your body is, and how you like sound, if you want.",
+        "Press Play it, or try one of the two others.",
+        "Save a go-to if one works for you. Big sounds can feel like too much when you are overwhelmed, so the picker leans calm then."
+      ],
+      "pillar": "Pillar III, Read your state first.",
+      "links": [
+        [
+          "Find your sound",
+          "/soundscapes.html#finder"
+        ],
+        [
+          "Brain Breakers",
+          "/soundscapes.html#brain-breakers"
+        ],
+        [
+          "See and feel the sound",
+          "/soundscapes.html#senses"
         ]
       ]
     }

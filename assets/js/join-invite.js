@@ -1,6 +1,6 @@
 /* join-invite.js — "Join the newsletter": a free note when something new arrives, which also opens the few pages that ask for an email.
    site.js loads this only for visitors who haven't signed up. It adds:
-   - a banner at the very top of the home page, and
+   - a banner at the very top of the home page (only when the page has no sign-up strip of its own), and
    - rarely, a small invitation while browsing other pages
      (about 1 in 5 page views, at most once every two weeks, never in the first minute of a visit
      or of a page, never on the pages about growing up and knowing yourself, never when the device asks
@@ -63,6 +63,8 @@
   // ---------- the home page banner ----------
   function banner() {
     var main = document.querySelector('main');
+    // the home page has its own sign-up strip at the bottom, so nothing sits on the first screen
+    if (document.getElementById('open-free')) return;
     if (!main || document.querySelector('.tol-join-banner')) return;
     var b = document.createElement('section');
     b.className = 'tol-join tol-join-banner';

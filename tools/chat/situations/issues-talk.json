@@ -362,6 +362,80 @@
       ],
       "ex": "Alex kept hearing that his texts sounded cold. He added a line to his Wiring Card, “Short means busy, not upset,” and started adding a “thanks!” to requests. His partner said the texts felt warmer, and Alex didn’t have to change how he thinks.",
       "tonight": "Tell one person how you mean things when you’re direct, in one kind sentence."
+    },
+    "complacency": {
+      "label": "things going stale or being taken for granted",
+      "match": [
+        [
+          "complacen*|gone stale|going stale|gotten stale|stale|in a rut|stuck in a rut|on autopilot|autopilot|going through the motions|each other for granted|got(ten)? too comfortable|too comfortable|stopped trying|stopped making an effort|stopped asking|lost the spark|no spark|coasting|same old|nothing new|like business partners|just logistics|only talk about (the )?(kids|chores|bills|logistics|schedule)|run on routine",
+          5
+        ],
+        [
+          "comfortable|routine|boring|bored|spark|used to|habit",
+          1
+        ]
+      ],
+      "reflect": "It can be quietly worrying when nothing is wrong, and yet something has gone flat. That feeling is worth listening to.",
+      "reflect_self": "It sounds like parts of your life are running on autopilot, and some part of you has noticed.",
+      "going": "This is Pillar V, Notice the quiet incentives, with Pillar I, See the whole load. When something has worked for a long time, minds get used to it and stop checking, and nothing breaks on the day that starts. It isn’t laziness and it isn’t about anyone’s character. It’s a setup nobody has looked at lately, and {they} may have noticed it too.",
+      "going_self": "This is Pillar V, Notice the quiet incentives, and Pillar I, See the whole load. When something has been fine for a long time, “it’s fine” becomes the easy default, and you stop looking. A small, regular re-check is kinder and easier than waiting for something to break.",
+      "steps": [
+        "Ask one real question you don’t already know the answer to, then listen to the whole answer. “What’s on your mind that I don’t know about?” works.",
+        "Say one specific thank-you this week: the thing, the effort, or the quality behind it.",
+        "When you raise it, name what you noticed as a fact, share your own side first, and ask for theirs. Then put a small re-check on the calendar, like ten minutes once a month."
+      ],
+      "steps_self": [
+        "Ask yourself once a month: “What am I assuming is fine? When did I last actually check?”",
+        "Pick one area you’ve been coasting in and take one small step, like a call, an appointment or a new thing to try.",
+        "Notice which “I’ve always been this way” sentences might be old patterns rather than wiring, and look at one of them again, kindly."
+      ],
+      "scripts": {
+        "default": [
+          "Nothing’s wrong. I’ve noticed we haven’t asked each other much lately, and part of that is me. Here’s what’s been going on for me. What’s it been like for you?",
+        "Nothing’s wrong. I just realized I haven’t asked you anything real in a while, and I miss it. What’s on your mind?",
+          "Could we do a quick check on how things are going? Not a big talk. Ten minutes: what’s working and what we’ve stopped mentioning."
+        ],
+        "partner": [
+          "I’ve been thinking about how long it’s been since we did something new together. Want to try something small this weekend?",
+          "Thank you for handling the school forms, I know that takes real effort. I don’t say it enough."
+        ],
+        "friend": [
+          "I keep saying we should catch up, so let’s pick a day. Does the first Sunday of the month work for a call?"
+        ],
+        "family": [
+          "I realized I know your old stories better than what’s going on in your life now. How are things really?"
+        ],
+        "roommate": [
+          "The chore list is a year old. Could we have ten minutes to check what still works and what doesn’t?"
+        ],
+        "coworker": [
+          "Could we take a few minutes to check whether this process still works for everyone? It’s been the same for a while."
+        ],
+        "self": [
+          "I’ve been saying “I’m fine” for a while. Am I?",
+          "I’m going to look at one thing I’ve been assuming is okay."
+        ]
+      },
+      "path": [
+        [
+          "Complacency",
+          "/complacency.html"
+        ],
+        [
+          "Turning Toward: ten questions to ask",
+          "/turning-toward-in-depth.html#their-world"
+        ],
+        [
+          "WP-13: The 90-second daily check-in",
+          "/workpapers/wp-13-pll-protocol.html"
+        ]
+      ],
+      "deeper": [
+        "what is complacency",
+        "What is complacency?"
+      ],
+      "ex": "After eight years, Sam and Jo realized their dinners were “Good day?” “Fine.” and nothing else. They started asking one question neither knew the answer to, and put a ten-minute monthly check-in on the calendar. Neither felt anything had been wrong. Both said it felt like noticing each other again.",
+      "tonight": "Ask one question tonight that you don’t already know the answer to, and listen to all of it."
     }
   }
 }

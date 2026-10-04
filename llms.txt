@@ -15,7 +15,7 @@ Key facts:
 
 ## Start here
 - [Home](https://spreadloveandacceptance.com/): Free self-help for love and acceptance at home: share the mental load, a fair chore chart, calm ways to stop fighting, a communication quiz and a kids’ cartoon.
-- [About Spread Love & Acceptance and Its Creator](https://spreadloveandacceptance.com/about.html): Meet Christian, the creator of Spread Love & Acceptance and The Objective Ledger: fifteen years auditing systems, and a free, growing suite of kindness tools.
+- [About Spread Love & Acceptance and Its Creator](https://spreadloveandacceptance.com/about.html): Meet Christian, the creator of Spread Love & Acceptance and The Objective Ledger: a career auditing systems, and a free, growing suite of kindness tools.
 - [Contents: Every Free Tool, Guide and Chapter](https://spreadloveandacceptance.com/contents.html): Everything in the program in three parts: tools for understanding yourself, tools for any two people, and where to start in your kind of relationship.
 - [The Five Pillars of Fair, Kind Relationships](https://spreadloveandacceptance.com/five-pillars.html): Five simple ideas for fair, kind relationships: see the whole mental load, fix the setup instead of the person, read your stress first, and tune how you talk.
 - [Glossary: The Words, in Plain English](https://spreadloveandacceptance.com/glossary.html): Every word this site uses, from battery to talk window, in one plain sentence with an example, plus each tool’s everyday name beside its technical one.
@@ -34,6 +34,7 @@ Key facts:
 ## Guides to common questions
 - [Fair Chore Chart for Couples (Free, Printable)](https://spreadloveandacceptance.com/chore-chart-for-couples.html): A free, printable chore chart for couples, families and roommates: list every job, including the invisible ones, give each one an owner and review it weekly.
 - [Communication Style Quiz: Find Your Wave Code (Free)](https://spreadloveandacceptance.com/communication-style-quiz.html): A free communication style quiz: find your four-letter Wave Code and which of 16 archetypes fits, from pace and detail to how you send and receive words.
+- [Complacency in Relationships](https://spreadloveandacceptance.com/complacency.html): Complacency isn’t laziness. It’s what happens when something has worked for a long time and we stop looking.
 - [For Grandparents: Help Without Taking Over](https://spreadloveandacceptance.com/grandparents.html): Free, gentle help for grandparents: share childcare fairly, agree on house rules with your adult children, say no kindly, and stay close to your grandkids.
 - [How to Stop Fighting With Your Partner: 7 Calm Steps](https://spreadloveandacceptance.com/how-to-stop-fighting-with-your-partner.html): Practical, calm ways to stop fighting with your partner: notice the early signs, take a real pause, check your words, and fix the setup behind repeat fights.
 - [Invisible Labor and the Mental Load: How to Share It](https://spreadloveandacceptance.com/invisible-labor-mental-load.html): What invisible labor and the mental load are, real examples from everyday home life, and five calm steps couples and families can use to share it fairly.
@@ -81,12 +82,12 @@ Key facts:
 
 ## Calm games
 - [Daily Crossword Puzzle, Newspaper Style (Free)](https://spreadloveandacceptance.com/daily-ledger-crossword.html): A free newspaper-style daily crossword with fair, friendly clues, from a quick 5x5 mini to a big Sunday grid. Play in your browser on any device, at your pace.
-- [Play The Frequency Journey](https://spreadloveandacceptance.com/frequency-journey-play.html): Guide Sugarfoot and Tidbit through seven gentle, tone-themed worlds to find the Perfect Frequency.
-- [The Frequency Journey: A Calm Puzzle Adventure](https://spreadloveandacceptance.com/frequency-journey.html): Help Tidbit and Sugarfoot find the Perfect Frequency through seven worlds of calm puzzles, riddles and small lessons about patience, kindness and harmony.
+- [The Frequency Journey](https://spreadloveandacceptance.com/frequency-journey.html): Pick Tidbit or Sugarfoot and play a maze chase or a road-and-river crossing. Easy controls, a relaxed pace and no game over, plus the Frequency Buddies cartoon.
 - [Calm Games for a Busy Mind: Free, No Timers](https://spreadloveandacceptance.com/pause-and-play.html): Free calm games with no timers and no way to lose: the Night Garden breathing game, the Frequency Journey, Word Bloom, crosswords and a cozy word search.
 - [The Quest Map](https://spreadloveandacceptance.com/quest.html): A friendly map of the whole program, grouped by the Five Pillars. Each chapter, workpaper, guide, tool, game and library shelf lights up as you explore it.
 - [Quiet Crossword: Easy, Gentle Mini Crosswords](https://spreadloveandacceptance.com/quiet-crossword.html): Small, friendly mini crosswords with gentle clues in five levels from easy to tricky. Free and calm with no timer: a peaceful puzzle for a few quiet minutes.
 - [Calm Word Search, No Timer: Quiet Words (Free)](https://spreadloveandacceptance.com/quiet-words.html): A calm, free word search with soft themes, levels from easy to tricky and no timer. Every word you find leaves a kind thought behind. Play on phone or computer.
+- [The Re-check Drive: A Calm Football Game for Keeping…](https://spreadloveandacceptance.com/recheck-drive.html): A calm football game with no clock and no way to lose. Do the small, kind things from the complacency playbook for real, and the ball moves toward a field goal.
 - [Word Bloom: A Relaxing Letter-Wheel Word Game](https://spreadloveandacceptance.com/word-bloom.html): A free, relaxing word game: swipe across a wheel of letters to find the hidden words. Hundreds of levels from easy to tricky, with no timers and no ads.
 
 ## The book
