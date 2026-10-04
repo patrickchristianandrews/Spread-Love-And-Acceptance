@@ -36,6 +36,7 @@
   var SECTIONS = [
     { id: 'new', title: 'What’s new', blurb: 'Newly added and newly expanded, newest first.', items: [
       { href: '/whats-new.html', code: 'All', title: 'What’s new', note: 'Everything newly added and everything that’s grown, in one place, with dates' },
+      { href: '/soundscapes.html#brain-breakers', code: 'New', title: 'Brain Breakers', note: 'A new music section on Soundscapes: big, bold instrumental pieces, with a way to see and feel the sound' },
       { href: '/love-languages.html', deep: true, code: 'New', title: 'Love languages: a menu, not a label', note: 'What is healthy and unhealthy about each of the five, how to practice and talk about them, and similar ideas like apology languages and bids' },
       { href: '/install.html', code: 'New', title: 'Put the app on your phone', note: 'Install the full app on Android in a few taps, with an honest answer about widgets' },
       { href: '/upset-right-now.html', code: 'New', title: 'Upset right now?', note: 'A five-minute page for two upset people: a pause line with a return time, a breathing pacer, and how to come back' },
@@ -300,6 +301,7 @@
       { href: '/frequency-journey.html', code: 'Game', title: 'The Frequency Journey', note: 'Pick Tidbit or Sugarfoot: a maze chase or a road-and-river crossing, with easy controls' },
       { href: '/calm-visualizer.html', code: 'Drift', title: 'Drift: calm visualizer', note: 'Slow colors and tones matched to how you feel' },
       { href: '/soundscapes.html', code: 'Audio', title: 'Soundscapes', note: 'Background audio for settling down' },
+      { href: '/soundscapes.html#brain-breakers', code: 'New', title: 'Brain Breakers', note: 'Big, bold instrumental music: come get your brain wrecked, broken in a good way' },
       { href: '/frequency-buddies.html', code: 'Cartoon', title: 'Frequency Buddies', note: 'A free cartoon about feelings, with captions. Live and shuffle versions are inside' },
       { href: '/pal-cam-tv.html', code: 'Live', title: 'Pal Cam TV', note: 'The pups live, all day, full screen or on your TV' },
       { href: '/echoes-of-gold.html', code: 'Album', title: 'Echoes of Gold', note: 'The companion album' }
@@ -981,6 +983,7 @@
     roommate: ['/share-the-load.html', '/lemonade-stand.html', '/chore-chart-for-couples.html'], roommates: 'roommate', housemate: 'roommate', housemates: 'roommate', flatmate: 'roommate', flatmates: 'roommate',
     install: ['/install.html'], app: 'install', android: 'install', widget: 'install', widgets: 'install', homescreen: 'install', offline: 'install', phone: 'install',
     love: ['/love-languages.html', '/turning-toward.html', '/complacency.html'], language: 'love', languages: 'love', chapman: 'love', affirmation: 'love', appreciation: 'love', thanks: 'love', gifts: 'love', touch: 'love', appreciated: 'love', cared: 'love',
+    brain: ['/soundscapes.html'], breakers: 'brain', wrecked: 'brain', instrumental: 'brain', shimmer: 'brain', thunderous: 'brain', shooting: 'brain',
     haptic: ['/soundscapes.html'], haptics: 'haptic', vibration: 'haptic', vibrate: 'haptic', buzz: 'haptic', rumble: 'haptic', synesthesia: 'haptic', visualize: 'haptic', aurora: 'haptic',
     surprise: ['/surprise.html'], random: 'surprise', bored: 'surprise', wander: 'surprise', stumble: 'surprise',
     formula: ['/method-and-limits.html'], formulas: 'formula', method: 'formula', score: 'formula', scoring: 'formula', limits: 'formula',
