@@ -315,6 +315,7 @@ A kinder, research-friendly way to use it: treat it as a menu rather than a diag
 research:
 A 2024 review by Emily Impett, Haeyoung Gideon Park and Amy Muise examined the evidence and concluded that the core assumptions of the love languages framework are not well supported, while suggesting that the underlying message, that partners should learn what the other needs, is sound. Relationship researchers often point to responsiveness as the better-supported idea underneath it.
 links:
+/love-languages.html | Love languages: a menu, not a label
 /turning-toward.html#thanks | Turning Toward: thanks and appreciation
 /lemonade-stand.html | The Lemonade Stand: who did what this week
 talk:

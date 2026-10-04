@@ -35,9 +35,31 @@
   ],
   "shortcuts": [
     {
-      "name": "Today’s small moment",
-      "short_name": "Today",
-      "url": "/turning-toward.html",
+      "name": "Today’s Weather",
+      "short_name": "Weather",
+      "url": "/quick-checks.html",
+      "icons": [
+        {
+          "src": "/assets/icons/icon-192.png",
+          "sizes": "192x192"
+        }
+      ]
+    },
+    {
+      "name": "Upset right now?",
+      "short_name": "Upset now",
+      "url": "/upset-right-now.html",
+      "icons": [
+        {
+          "src": "/assets/icons/icon-192.png",
+          "sizes": "192x192"
+        }
+      ]
+    },
+    {
+      "name": "Share the load",
+      "short_name": "Share load",
+      "url": "/share-the-load.html",
       "icons": [
         {
           "src": "/assets/icons/icon-192.png",
@@ -49,17 +71,6 @@
       "name": "The Night Garden",
       "short_name": "Garden",
       "url": "/night-garden.html",
-      "icons": [
-        {
-          "src": "/assets/icons/icon-192.png",
-          "sizes": "192x192"
-        }
-      ]
-    },
-    {
-      "name": "Today’s Weather",
-      "short_name": "Weather",
-      "url": "/quick-checks.html",
       "icons": [
         {
           "src": "/assets/icons/icon-192.png",

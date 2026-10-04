@@ -6,8 +6,8 @@
    Now and then they also pop up just to say hi.
 
    Pacing (delightful, never annoying):
-   - nothing in the first 10-14 seconds on a page; then at most one visit per 45-60 seconds of
-     reading (time with the tab hidden doesn't count), 3 or 4 per page view, 12 per browser session,
+   - nothing in the first 10-14 seconds on a page; then at most one visit per 2.5-3.5 minutes of
+     reading (time with the tab hidden doesn't count), 1 or 2 per page view, 6 per browser session,
      and the gap carries over when you move to the next page;
    - never while something else is up: the weather pill, the pal cam invitation, the join pop-up,
      the Breathe break, the menus, or any dialog. If one opens mid-visit, the pups wrap up at once;
@@ -45,10 +45,10 @@
   function qp(k) { var m = new RegExp('[?&]' + k + '=([\\w-]+)').exec(q); return m ? m[1] : ''; }
   var FAST = TEST === 'fast', QUICK = !!TEST && !FAST, SC = FAST ? 0.1 : 1;
   var START_GATE = QUICK ? 800 : (10000 + Math.random() * 4000) * SC;   // never in the first ~10 s
-  var GAP_MIN = 45000 * SC, GAP_MAX = 60000 * SC;                        // one visit per 45-60 s of reading
+  var GAP_MIN = 150000 * SC, GAP_MAX = 210000 * SC;                      // one visit per 2.5-3.5 min of reading
   var HELLO_WAIT = qp('pupkind') === 'section' ? 1e12 : (QUICK ? 3000 : 20000 * SC);                          // eligible this long without a section: maybe a hello
-  var SESS_CAP = 12, KEY = 'tol-pups-';
-  var PAGE_CAP = 3 + (Math.random() < 0.5 ? 1 : 0);
+  var SESS_CAP = 6, KEY = 'tol-pups-';
+  var PAGE_CAP = 1 + (Math.random() < 0.5 ? 1 : 0);
   var P_SECTION = TEST ? 1 : 0.6;                                        // not every section, just now and then
 
   function ssGet(k) { try { return sessionStorage.getItem(KEY + k); } catch (e) { return null; } }

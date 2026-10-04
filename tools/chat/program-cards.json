@@ -4695,6 +4695,271 @@
           "/book/chapter-3.html"
         ]
       ]
+    },
+    {
+      "id": "upset-right-now",
+      "kind": "intent",
+      "first": true,
+      "name": "the Upset right now page",
+      "pat": "\\b(we re|we are|were|i m|i am|im) (in|having|having a|in a|right in the middle of( a)?) (a )?(fight|argument|row|blowup|blow up|shouting match)( right now| now)?\\b|\\b(fighting|arguing|yelling|shouting) (right now|at the moment|as we speak)\\b|\\b(right now|at the moment)\\b[^?]*\\b(fighting|fight|argument|arguing|both upset|so upset|so angry)\\b|\\bwe re both (upset|angry|mad|yelling|worked up)\\b|\\bboth (of us )?(upset|angry|worked up|yelling)\\b[^?]*\\b(what|how) (do|should|can) (we|i)\\b",
+      "keys": [],
+      "what": [
+        "Here is a five-minute way through, for two upset people. Nothing is saved, and it works on one phone."
+      ],
+      "how": [
+        "Say a pause line with a return time: “I want to get this right and I’m too worked up. Can we pick this up at eight?”",
+        "Breathe out longer than you breathe in: in for 4, out for 6, for about a minute.",
+        "Move apart for at least twenty minutes. Drink water, walk, and don’t rehearse the argument.",
+        "Come back on time: “I’m back. The topic is still the sink. I am not against you.”",
+        "Say back what you heard, then say yours in three parts: a fact, a feeling and one small ask."
+      ],
+      "pillar": "Pillar III, Read your state first.",
+      "links": [
+        [
+          "Upset right now?",
+          "/upset-right-now.html"
+        ],
+        [
+          "How to stop fighting with your partner",
+          "/how-to-stop-fighting-with-your-partner.html"
+        ],
+        [
+          "The Carrier Wave Decoder",
+          "/carrier-wave-decoder.html"
+        ]
+      ]
+    },
+    {
+      "id": "new-parent",
+      "kind": "tool",
+      "name": "the New baby page",
+      "keys": [
+        "new baby",
+        "newborn",
+        "new parent",
+        "new parents",
+        "new dad",
+        "new mom",
+        "new mum",
+        "having a baby",
+        "had a baby",
+        "just had a baby",
+        "~sleep deprived",
+        "~baby jobs",
+        "postpartum"
+      ],
+      "what": "A new baby adds a job nobody can see: keeping track of everything. When you are both tired, it lands on whoever notices first. The New baby page gives three small steps to keep that from landing on one of you by accident, and a note on when sad or anxious feelings are worth telling a doctor about.",
+      "how": [
+        "List every job, including the thinking part: the pediatrician visits, noticing the diapers are low, meals, the family chat, thank-you notes.",
+        "Give each job one owner. That person does it and also remembers it.",
+        "Review it once a week for ten minutes: what felt heavy, and one job to swap.",
+        "If sadness or anxiety lasts more than two weeks or gets heavier, tell a doctor or nurse. In the US, Postpartum Support International’s helpline is 1-800-944-4773."
+      ],
+      "pillar": "Pillar I, See the whole load.",
+      "links": [
+        [
+          "New baby, sharing the load",
+          "/new-parent.html"
+        ],
+        [
+          "A fair chore chart",
+          "/chore-chart-for-couples.html"
+        ],
+        [
+          "Invisible labor and the mental load",
+          "/invisible-labor-mental-load.html"
+        ]
+      ]
+    },
+    {
+      "id": "co-parenting",
+      "kind": "tool",
+      "name": "the Separated co-parents page",
+      "keys": [
+        "co-parent",
+        "co-parents",
+        "coparent",
+        "coparents",
+        "co-parenting",
+        "coparenting",
+        "parallel parenting",
+        "my ex",
+        "exchange day",
+        "handoff",
+        "handoffs",
+        "custody exchange",
+        "~hostile ex"
+      ],
+      "what": "After a separation, the goal is calm, brief, child-focused contact. The Separated co-parents page has an exchange-day script, ways to keep kids out of the middle, a tone check, and a parallel-parenting route for a co-parent who won’t cooperate. A court order or parenting plan always comes first, and it is not legal advice.",
+      "how": [
+        "Keep it short and about the child: “Hi. Homework’s done. Pick-up is Sunday at five.”",
+        "Never use the kids as messengers. Send messages to the adult.",
+        "Give each task one owner, in a shared calendar or a short note.",
+        "Park bigger things: “Can we put that on Thursday’s check-in?”",
+        "If the other parent is controlling or frightening, put your safety first: plan exchanges in public or through a third person, and keep your messages short and factual."
+      ],
+      "pillar": "Pillar IV, Tune how you send and receive.",
+      "links": [
+        [
+          "Separated co-parents",
+          "/co-parenting.html"
+        ],
+        [
+          "The Signal Translator",
+          "/signal-translator.html"
+        ],
+        [
+          "Say it so it lands",
+          "/workpapers/wp-09-tone-filter.html"
+        ]
+      ]
+    },
+    {
+      "id": "share-the-load",
+      "kind": "tool",
+      "name": "Share the load, step by step",
+      "keys": [
+        "share the load",
+        "split the chores",
+        "split chores",
+        "who does what",
+        "fair split",
+        "chore split",
+        "housework split",
+        "roommate chores",
+        "housemates",
+        "roommates",
+        "roommate bills",
+        "split the bills"
+      ],
+      "what": "There are several tools for splitting the load, and they work best in an order. Most households only need the first three.",
+      "how": [
+        "Name every job, including the thinking part, with the fair chore chart.",
+        "See the split in plain numbers with the Lemonade Stand.",
+        "Give each job one owner with One owner per job.",
+        "Look back each week, and monthly with What keeps coming back?"
+      ],
+      "pillar": "Pillar I, See the whole load.",
+      "links": [
+        [
+          "Share the load, step by step",
+          "/share-the-load.html"
+        ],
+        [
+          "A fair chore chart",
+          "/chore-chart-for-couples.html"
+        ],
+        [
+          "The Lemonade Stand",
+          "/lemonade-stand.html"
+        ]
+      ]
+    },
+    {
+      "id": "install-app",
+      "kind": "tool",
+      "name": "the install page",
+      "keys": [
+        "install the app",
+        "install app",
+        "add to home screen",
+        "home screen",
+        "app on my phone",
+        "android app",
+        "download the app",
+        "widget",
+        "widgets",
+        "~is there an app"
+      ],
+      "what": "You can put the whole site on an Android phone as an app from Chrome: its own icon, full screen, and it keeps working offline. Real Android widgets need a native app, so an installed web app can’t add one yet.",
+      "how": [
+        "Open the site in Chrome, tap the three dots, then tap Install app (or Add to Home screen, then Install).",
+        "Press and hold the icon for quick jumps, and drag any of them onto your home screen.",
+        "On iPhone, use Share, then Add to Home Screen."
+      ],
+      "pillar": "",
+      "links": [
+        [
+          "Put the app on your phone",
+          "/install.html"
+        ]
+      ]
+    },
+    {
+      "id": "method-and-limits",
+      "kind": "tool",
+      "name": "Method and limits",
+      "keys": [
+        "how is it scored",
+        "how is it calculated",
+        "formula",
+        "formulas",
+        "scoring",
+        "how are scores worked out",
+        "is this validated",
+        "cut-offs",
+        "cutoffs",
+        "weights"
+      ],
+      "what": "Every score on the site is written out on one page: how it is worked out, where the cut-offs are, and what it can’t tell you. The rules are simple and chosen by hand, not fitted to data, and none of them predicts anything.",
+      "how": [
+        "The stress check adds five questions scored 0 to 4 and divides by 20.",
+        "The Lemonade Stand describes each person’s share of the hours, with words chosen at 60% and 90% for two people.",
+        "The setup check weights balance, ownership and stress at 0.40, 0.35 and 0.25."
+      ],
+      "pillar": "",
+      "links": [
+        [
+          "Method and limits",
+          "/method-and-limits.html"
+        ]
+      ]
+    },
+    {
+      "id": "love-languages",
+      "kind": "tool",
+      "name": "the Love languages guide",
+      "keys": [
+        "love language",
+        "love languages",
+        "five love languages",
+        "chapman",
+        "~words of affirmation",
+        "~acts of service",
+        "~quality time",
+        "~physical touch",
+        "~receiving gifts",
+        "apology languages",
+        "~how do i show love",
+        "~feel cared for"
+      ],
+      "what": "The five love languages (words, acts of service, gifts, quality time and touch) are a friendly way to talk about how people give and feel care. Research does not support one fixed language per person, so the guide treats them as a menu, with what is healthy and unhealthy about each, how to practice, how to talk about it, and similar ideas such as apology languages, bids for connection and responsiveness.",
+      "how": [
+        "Remember three real moments you felt most cared for, and share them.",
+        "Tick what would feel like care right now on the care card, and swap cards.",
+        "Offer one thing from the other person’s card each week, and ask for one from yours.",
+        "Ask in your weekly review: “What made you feel most cared for this week?”",
+        "If someone uses “love” to control you, that is not a language mismatch. Put your safety first."
+      ],
+      "pillar": "Pillar IV, Tune how you send and receive, and Pillar V, Notice the quiet incentives.",
+      "links": [
+        [
+          "Love languages: a menu, not a label",
+          "/love-languages.html"
+        ],
+        [
+          "The full guide",
+          "/love-languages-in-depth.html"
+        ],
+        [
+          "What the research says (Library)",
+          "/library/relationships.html#love-languages"
+        ],
+        [
+          "Say thank you, specifically",
+          "/turning-toward.html#thanks"
+        ]
+      ]
     }
   ],
   "clarify": [
