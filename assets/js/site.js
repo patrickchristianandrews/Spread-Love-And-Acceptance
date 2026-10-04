@@ -1562,11 +1562,11 @@
   // itself when the device asks for less motion, and this browser remembers the choice.
   // Other scripts can read window.TOLStill.on() or listen for the 'tol-still' event.
   var STILL_KEY = 'tol-still', stillHooks = [];
-  // on a phone the page starts still too (calmer to read, and kinder to the battery); turning it off in
-  // Settings is remembered, like any other choice made here
+  // the page moves by default on every screen, phones included; it starts still only when the device
+  // asks for less motion. Turning it on in Settings is remembered, like any other choice made here
   function stillDefault() {
     var mm = window.matchMedia;
-    return !!(mm && (mm('(prefers-reduced-motion: reduce)').matches || mm('(max-width: 700px) and (pointer: coarse)').matches || mm('(max-width: 560px)').matches));
+    return !!(mm && mm('(prefers-reduced-motion: reduce)').matches);
   }
   var stillOn = (function () {
     var v = lsGet(STILL_KEY);
@@ -1597,7 +1597,7 @@
     return b;
   }
   // chosen(): only a still page someone asked for (here, or with the device's reduce-motion setting). The movies,
-  // the pal cam and the games follow that, not the phone's calmer default, so what people come to watch stays lively.
+  // the pal cam and the games follow that, so what people come to watch stays lively.
   function stillChosen() { var v = lsGet(STILL_KEY); if (v === '1' || v === '0') return v === '1'; return !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches); }
   window.TOLStill = { on: function () { return stillOn; }, chosen: stillChosen, set: setStill };
 
