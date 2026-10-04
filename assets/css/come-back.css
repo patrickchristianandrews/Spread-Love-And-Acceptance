@@ -1,4 +1,4 @@
-/* come-back.css — "What you got from this", "Next time", "Your path so far" and "Today's tiny thing"
+/* come-back.css — "What you got from this", "Next time" and "Today's tiny thing"
    (come-back.js). The home page's time picker is styled in index.html, so it never jumps on load. */
 html.tol-no-helpers .cb-extra, html.tol-quiet .cb-extra{ display:none !important; }
 /* the home page uses this picker instead of the menu launcher's copy */

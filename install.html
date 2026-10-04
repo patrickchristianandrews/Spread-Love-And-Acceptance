@@ -12,8 +12,8 @@
 </script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Put the app on your phone · Spread Love &amp; Acceptance</title>
-<meta name="description" content="Install the full Spread Love &amp; Acceptance app on your Android phone in a few taps: its own icon, full screen, works offline.">
+<title>Get the App · Spread Love &amp; Acceptance</title>
+<meta name="description" content="Get the Spread Love &amp; Acceptance app: install on Android in a few taps (its own icon, full screen, works offline), with iPhone steps today and the App Store.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,500&family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -29,15 +29,43 @@
   .in-btn{ font:600 1.05rem/1.2 "Lora", Georgia, serif; min-height:48px; padding:.6rem 1.4rem; border-radius:999px; border:1px solid #2F5F8A; background:#2F5F8A; color:#fff; cursor:pointer; justify-self:start; }
   .in-btn[hidden]{ display:none; }
   .in-btn:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
-  .in-steps{ counter-reset:s; list-style:none; padding:0 !important; margin:.8rem 0 1.4rem !important; display:grid; gap:.6rem; }
-  .in-steps li{ counter-increment:s; margin:0 !important; max-width:none !important; position:relative; padding:.75rem 1rem .75rem 3.1rem; border-radius:16px; border:1px solid var(--line); background:rgba(255,251,242,.96); }
-  .in-steps li::before{ content:counter(s); position:absolute; left:.9rem; top:.7rem; width:1.7rem; height:1.7rem; border-radius:50%; background:#2F5F8A; color:#fff; font-weight:700; text-align:center; line-height:1.7rem; }
-  .in-get{ list-style:none; padding:0 !important; margin:.8rem 0 1.4rem !important; display:grid; gap:.5rem; }
-  .in-get li{ margin:0 !important; max-width:none !important; padding:.6rem 1rem .6rem 2.6rem; position:relative; border-radius:14px; border:1px solid var(--line); background:rgba(255,251,242,.96); }
-  .in-get li::before{ content:"✓"; position:absolute; left:1rem; font-weight:700; color:#2F5A3C; }
+  .in-pick{ display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:.6rem; margin:1rem 0 1.2rem; }
+  .in-tab{ display:flex; flex-direction:column; align-items:center; gap:.15rem; min-height:92px; padding:.7rem .5rem; border-radius:18px; border:2px solid #C6DFF4; background:#F4F9FE; color:#243B52; font:inherit; cursor:pointer; text-align:center; }
+  .in-tab:hover{ transform:translateY(-2px); }
+  .in-tab[aria-selected="true"]{ background:#2F5F8A; border-color:#2F5F8A; color:#fff; box-shadow:0 8px 20px -10px rgba(47,95,138,.7); }
+  .in-tab:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
+  .in-tab-i{ font-size:1.6rem; line-height:1; }
+  .in-tab-t{ font:700 1.05rem/1.2 "Lora", Georgia, serif; }
+  .in-tab-s{ font:600 .72rem/1.25 "IBM Plex Mono", monospace; padding:.1rem .5rem; border-radius:99px; background:#E6F4EC; color:#2F5A3C; }
+  .in-tab-s.is-soon{ background:#FFF1D6; color:#7A5410; }
+  .in-tab[aria-selected="true"] .in-tab-s{ background:rgba(255,255,255,.92); }
+  .in-panel{ margin:0 0 1.4rem; }
+  .in-panel[hidden]{ display:none; }
+  .in-soon{ margin:.4rem 0 1rem; padding:1.2rem 1.3rem; border-radius:22px; border:2px dashed #E1B861; background:linear-gradient(135deg,#FFF8E6,#FFEFD2); text-align:center; }
+  .in-soon p{ margin:0 auto !important; max-width:44ch !important; background:none !important; box-shadow:none !important; border:0 !important; padding:0 !important; }
+  .in-soon-k{ font:600 .78rem "IBM Plex Mono", monospace; letter-spacing:.1em; text-transform:uppercase; color:#7A5410; }
+  .in-soon-h{ font:800 clamp(1.8rem,6vw,2.6rem)/1.1 "Fraunces", Georgia, serif; color:#3B2A55; margin:.2rem auto .4rem !important; }
+  .in-card{ margin:.4rem 0 1.4rem; padding:1.1rem 1.2rem; border-radius:20px; border:1px solid #C6DFF4; background:#EEF4FB; display:grid; gap:.7rem; }
+  .in-card img{ border-radius:18px; }
+  .in-top{ display:flex; gap:1rem; align-items:center; }
+  .in-top p{ margin:0 !important; background:none !important; box-shadow:none !important; border:0 !important; padding:0 !important; }
+  .in-state{ font-weight:600; margin:0 !important; }
+  .in-btn{ font:600 1.05rem/1.2 "Lora", Georgia, serif; min-height:48px; padding:.6rem 1.4rem; border-radius:999px; border:1px solid #2F5F8A; background:#2F5F8A; color:#fff; cursor:pointer; justify-self:start; }
+  .in-btn[hidden]{ display:none; }
+  .in-btn:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
+  /* numbered steps and ticks: the site's bubble rules were eating the left padding, so these are pinned */
+  main.read ol.in-steps{ counter-reset:s; list-style:none !important; padding:0 !important; margin:.8rem 0 1.2rem !important; display:grid; gap:.6rem; }
+  main.read ol.in-steps > li{ counter-increment:s; margin:0 !important; max-width:none !important; position:relative; padding:.75rem 1rem .75rem 3.4rem !important; border-radius:16px; border:1px solid var(--line); background:rgba(255,251,242,.96); list-style:none !important; }
+  main.read ol.in-steps > li::before{ content:counter(s); position:absolute; left:.9rem; top:.7rem; width:1.8rem; height:1.8rem; border-radius:50%; background:#2F5F8A; color:#fff; font-weight:700; text-align:center; line-height:1.8rem; }
+  main.read ul.in-get{ list-style:none !important; padding:0 !important; margin:.8rem 0 1.4rem !important; display:grid; gap:.5rem; }
+  main.read ul.in-get > li{ margin:0 !important; max-width:none !important; padding:.65rem 1rem .65rem 2.9rem !important; position:relative; border-radius:14px; border:1px solid var(--line); background:rgba(255,251,242,.96); list-style:none !important; }
+  main.read ul.in-get > li::before{ content:"\2713"; position:absolute; left:1rem; top:.62rem; font-weight:700; color:#2F5A3C; }
+  main.read ul.in-plain{ list-style:none !important; padding:0 !important; margin:.6rem 0 1.2rem !important; display:grid; gap:.5rem; }
+  main.read ul.in-plain > li{ margin:0 !important; max-width:none !important; padding:.65rem 1rem !important; border-radius:14px; border:1px solid var(--line); background:rgba(255,251,242,.96); list-style:none !important; }
   .in-pin{ display:flex; flex-wrap:wrap; gap:.5rem; margin:.6rem 0 1.4rem; padding:0; list-style:none; }
   .in-pin li{ margin:0 !important; }
   .in-pin a{ display:inline-block; min-height:44px; padding:.55rem 1rem; border-radius:999px; border:1px solid #2F5F8A; text-decoration:none; background:#FFFDF7; box-sizing:border-box; }
+  @media (max-width:560px){ .in-pick{ grid-template-columns:1fr; } .in-tab{ flex-direction:row; justify-content:flex-start; gap:.7rem; min-height:64px; padding:.6rem .9rem; text-align:left; flex-wrap:wrap; } .in-tab-t{ flex:1; } }
 </style>
 <!-- seo:start -->
 <link rel="canonical" href="https://spreadloveandacceptance.com/install.html">
@@ -55,8 +83,8 @@
 <link rel="apple-touch-icon" href="/assets/icons/apple-touch-icon-180.png" sizes="180x180">
 <link rel="manifest" href="/manifest.webmanifest">
 <meta property="og:site_name" content="Spread Love &amp; Acceptance">
-<meta property="og:title" content="Put the app on your phone · Spread Love &amp; Acceptance">
-<meta property="og:description" content="Install the full Spread Love &amp; Acceptance app on your Android phone in a few taps: its own icon, full screen, works offline.">
+<meta property="og:title" content="Get the App · Spread Love &amp; Acceptance">
+<meta property="og:description" content="Get the Spread Love &amp; Acceptance app: install on Android in a few taps (its own icon, full screen, works offline), with iPhone steps today and the App Store.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://spreadloveandacceptance.com/install.html">
 <meta property="og:image" content="https://spreadloveandacceptance.com/assets/img/og-image.png">
@@ -66,77 +94,111 @@
 <meta property="og:image:alt" content="Two friends sharing one heart, with two happy pups: Spread Love &amp; Acceptance">
 <meta property="og:locale" content="en_US">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Put the app on your phone · Spread Love &amp; Acceptance">
-<meta name="twitter:description" content="Install the full Spread Love &amp; Acceptance app on your Android phone in a few taps: its own icon, full screen, works offline.">
+<meta name="twitter:title" content="Get the App · Spread Love &amp; Acceptance">
+<meta name="twitter:description" content="Get the Spread Love &amp; Acceptance app: install on Android in a few taps (its own icon, full screen, works offline), with iPhone steps today and the App Store.">
 <meta name="twitter:image" content="https://spreadloveandacceptance.com/assets/img/og-image.png">
 <meta name="twitter:image:alt" content="Two friends sharing one heart, with two happy pups: Spread Love &amp; Acceptance">
-<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@id":"https://spreadloveandacceptance.com/install.html#page","name":"Put the app on your phone · Spread Love & Acceptance","headline":"Put the app on your phone · Spread Love & Acceptance","description":"Install the full Spread Love & Acceptance app on your Android phone in a few taps: its own icon, full screen, works offline.","url":"https://spreadloveandacceptance.com/install.html","inLanguage":"en-US","isAccessibleForFree":true,"keywords":"self-help, relationships, kindness, love, appreciation, acceptance, connection, communication, calm, peace, harmony, reconciliation, emotional wellbeing, self-discovery, fairness at home, mental load, invisible work, free self-help tools","publisher":{"@type":"Organization","@id":"https://spreadloveandacceptance.com/#org","name":"Spread Love & Acceptance","url":"https://spreadloveandacceptance.com/","logo":{"@type":"ImageObject","url":"https://spreadloveandacceptance.com/assets/img/logo-stacked.png"}},"isPartOf":{"@type":"WebSite","@id":"https://spreadloveandacceptance.com/#website","name":"Spread Love & Acceptance","url":"https://spreadloveandacceptance.com/"},"datePublished":"2026-10-04","dateModified":"2026-10-04","image":"https://spreadloveandacceptance.com/assets/img/og-image.png","primaryImageOfPage":{"@type":"ImageObject","url":"https://spreadloveandacceptance.com/assets/img/og-image.png"},"@type":"WebPage"},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Spread Love & Acceptance","item":"https://spreadloveandacceptance.com/"},{"@type":"ListItem","position":2,"name":"Put the app on your phone","item":"https://spreadloveandacceptance.com/install.html"}]}]}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@id":"https://spreadloveandacceptance.com/install.html#page","name":"Get the App · Spread Love & Acceptance","headline":"Get the App · Spread Love & Acceptance","description":"Get the Spread Love & Acceptance app: install on Android in a few taps (its own icon, full screen, works offline), with iPhone steps today and the App Store.","url":"https://spreadloveandacceptance.com/install.html","inLanguage":"en-US","isAccessibleForFree":true,"keywords":"self-help, relationships, kindness, love, appreciation, acceptance, connection, communication, calm, peace, harmony, reconciliation, emotional wellbeing, self-discovery, fairness at home, mental load, invisible work, free self-help tools","publisher":{"@type":"Organization","@id":"https://spreadloveandacceptance.com/#org","name":"Spread Love & Acceptance","url":"https://spreadloveandacceptance.com/","logo":{"@type":"ImageObject","url":"https://spreadloveandacceptance.com/assets/img/logo-stacked.png"}},"isPartOf":{"@type":"WebSite","@id":"https://spreadloveandacceptance.com/#website","name":"Spread Love & Acceptance","url":"https://spreadloveandacceptance.com/"},"datePublished":"2026-10-04","dateModified":"2026-10-04","image":"https://spreadloveandacceptance.com/assets/img/og-image.png","primaryImageOfPage":{"@type":"ImageObject","url":"https://spreadloveandacceptance.com/assets/img/og-image.png"},"@type":"WebPage"},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Spread Love & Acceptance","item":"https://spreadloveandacceptance.com/"},{"@type":"ListItem","position":2,"name":"Get the App","item":"https://spreadloveandacceptance.com/install.html"}]}]}</script>
 <!-- seo:end -->
 </head>
 <body>
 <main class="read">
-<header class="read-head"><p class="read-code">Start here</p><h1>Put the app on your phone</h1></header>
+<header class="read-head"><p class="read-code">Start here</p><h1>Get the app</h1></header>
 
-<p class="simple-lede">Put the whole site on your Android phone as an app, the same one Chrome installs when you choose <strong>Install app</strong>. It gets its own icon, opens full screen with no address bar, and keeps working when your signal drops.</p>
+<p class="simple-lede">Put the whole site on your phone as an app. It gets its own icon, opens full screen with no address bar, and keeps working when your signal drops. <strong>Pick your phone first:</strong></p>
 
-<div class="in-card no-bubble" id="in-card">
-  <div class="in-top"><img src="/assets/icons/icon-192.png" alt="" width="72" height="72"><div><p class="in-state" id="in-state" role="status">Checking your phone…</p><p id="in-sub">One tap if your browser allows it. Steps below if not.</p></div></div>
-  <button type="button" class="in-btn" id="in-btn" hidden>Install the app</button>
+<div class="in-pick no-bubble" role="tablist" aria-label="Choose your device">
+  <button type="button" role="tab" class="in-tab" id="tab-android" data-p="android" aria-controls="p-android" aria-selected="false"><span class="in-tab-i" aria-hidden="true">&#129302;</span><span class="in-tab-t">Android</span><span class="in-tab-s is-now">Install now</span></button>
+  <button type="button" role="tab" class="in-tab" id="tab-apple" data-p="apple" aria-controls="p-apple" aria-selected="false"><span class="in-tab-i" aria-hidden="true">&#127822;</span><span class="in-tab-t">iPhone &amp; iPad</span><span class="in-tab-s is-soon">App Store: coming soon</span></button>
+  <button type="button" role="tab" class="in-tab" id="tab-computer" data-p="computer" aria-controls="p-computer" aria-selected="false"><span class="in-tab-i" aria-hidden="true">&#128187;</span><span class="in-tab-t">Computer</span><span class="in-tab-s is-now">Chrome or Edge</span></button>
 </div>
+
+<section class="in-panel no-bubble" id="p-android" role="tabpanel" aria-labelledby="tab-android" hidden>
+  <div class="in-card no-bubble" id="in-card">
+    <div class="in-top"><img src="/assets/icons/icon-192.png" alt="" width="72" height="72"><div><p class="in-state" id="in-state" role="status">Checking your phone…</p><p id="in-sub">One tap if your browser allows it. Steps below if not.</p></div></div>
+    <button type="button" class="in-btn" id="in-btn" hidden>Install the app</button>
+  </div>
+
+  <h2 id="chrome">Install it with Chrome on Android</h2>
+  <ol class="in-steps no-bubble">
+    <li>Open <strong>spreadloveandacceptance.com</strong> in <strong>Chrome</strong>. Use a normal tab, not an Incognito one.</li>
+    <li>Tap the <strong>three dots</strong> <span aria-hidden="true">(&#8942;)</span> at the top right of Chrome.</li>
+    <li>Tap <strong>Install app</strong>. If you only see <strong>Add to Home screen</strong>, tap that and then choose <strong>Install</strong>.</li>
+    <li>Tap <strong>Install</strong> once more to confirm. The icon with the two little bubbles lands on your home screen.</li>
+    <li>Open it from there. It opens full screen, like an app you downloaded.</li>
+  </ol>
+  <p>If the button above is showing, you can tap it instead of doing steps 2 to 4.</p>
+
+  <h2 id="others">Another browser on Android?</h2>
+  <ul class="in-plain no-bubble">
+    <li><strong>Samsung Internet:</strong> tap the menu (three lines), then <strong>Add page to</strong>, then <strong>Home screen</strong>. Newer versions also show an install icon in the address bar.</li>
+    <li><strong>Firefox:</strong> tap the three dots, then <strong>Install</strong>.</li>
+    <li><strong>Edge:</strong> tap the three dots, then <strong>Add to phone</strong>.</li>
+  </ul>
+
+  <h2 id="stuck">If the install option doesn&rsquo;t show</h2>
+  <ul class="in-plain no-bubble">
+    <li>Update Chrome from the Play Store. Install needs a fairly recent version.</li>
+    <li>Make sure you are on <strong>spreadloveandacceptance.com</strong> itself, not inside another app&rsquo;s built-in browser. Tap the three dots and choose <strong>Open in Chrome</strong>.</li>
+    <li>Stay on the site for a few seconds first. Chrome sometimes waits a moment before it offers to install.</li>
+    <li>Already installed? Look in your app drawer for <strong>The Ledger</strong>. Chrome only offers Install once.</li>
+    <li>To remove it later, press and hold the icon and choose <strong>Uninstall</strong>. Anything saved in it stays only on your phone.</li>
+  </ul>
+</section>
+
+<section class="in-panel no-bubble" id="p-apple" role="tabpanel" aria-labelledby="tab-apple" hidden>
+  <div class="in-soon no-bubble">
+    <p class="in-soon-k">Apple App Store</p>
+    <p class="in-soon-h">Coming soon</p>
+    <p>There is no App Store version yet, and no date to promise. When it is ready, this page will say so first.</p>
+  </div>
+  <h2 id="iphone">On your iPhone or iPad today</h2>
+  <p>You do not have to wait. The whole site already works from your Home Screen, the same site in its own icon with no browser bars.</p>
+  <ol class="in-steps no-bubble">
+    <li>Open <strong>spreadloveandacceptance.com</strong> in <strong>Safari</strong>. (Other iPhone browsers can&rsquo;t add it, so switch to Safari if you are in one.)</li>
+    <li>Tap the <strong>Share</strong> button, the square with an arrow pointing up.</li>
+    <li>Scroll down and tap <strong>Add to Home Screen</strong>.</li>
+    <li>Tap <strong>Add</strong>. The icon with the two little bubbles lands on your Home Screen.</li>
+    <li>Open it from there. It opens full screen.</li>
+  </ol>
+  <p>One honest difference: iPhones don&rsquo;t let a web page make the phone vibrate, so the &ldquo;feel the sound&rdquo; buzz only works on Android. You can still see and hear everything.</p>
+</section>
+
+<section class="in-panel no-bubble" id="p-computer" role="tabpanel" aria-labelledby="tab-computer" hidden>
+  <h2 id="desktop">On a computer</h2>
+  <ol class="in-steps no-bubble">
+    <li>Open <strong>spreadloveandacceptance.com</strong> in <strong>Chrome</strong> or <strong>Edge</strong>.</li>
+    <li>Look for the small <strong>install icon</strong> at the right end of the address bar (a screen with a down arrow), and click it.</li>
+    <li>Click <strong>Install</strong>. It opens in its own window and gets its own icon.</li>
+  </ol>
+  <p>Safari on a Mac: choose <strong>File</strong>, then <strong>Add to Dock</strong>. Firefox on a computer doesn&rsquo;t install web apps, but the site works fine in a normal tab.</p>
+</section>
 
 <h2 id="what-you-get">What you get</h2>
 <ul class="in-get no-bubble">
-  <li>An icon on your home screen and in your app drawer, like any other app.</li>
+  <li>An icon on your home screen, like any other app.</li>
   <li>Full screen, with no browser bars in the way.</li>
   <li>The games, tools, chat and cartoons keep working without a connection once you have opened them.</li>
-  <li>Press and hold the icon for quick jumps: Today’s Weather, Upset right now?, Share the load and the Night Garden.</li>
+  <li>On Android, press and hold the icon for quick jumps: Today&rsquo;s Weather, Upset right now?, Share the load and the Night Garden.</li>
   <li>Nothing you type is sent anywhere, the same as on the website. It stays on your phone.</li>
   <li>No store account, no download size to worry about, and updates arrive by themselves.</li>
 </ul>
 
-<h2 id="chrome">Install it with Chrome on Android</h2>
-<ol class="in-steps no-bubble">
-  <li>Open <strong>spreadloveandacceptance.com</strong> in <strong>Chrome</strong>. Use a normal tab, not an Incognito one.</li>
-  <li>Tap the <strong>three dots</strong> <span aria-hidden="true">(&#8942;)</span> at the top right of Chrome.</li>
-  <li>Tap <strong>Install app</strong>. If you only see <strong>Add to Home screen</strong>, tap that and then choose <strong>Install</strong>.</li>
-  <li>Tap <strong>Install</strong> once more to confirm. The icon with the two little bubbles lands on your home screen.</li>
-  <li>Open it from there. It opens full screen, like an app you downloaded.</li>
-</ol>
-<p>If the button at the top of this page is showing, you can tap it instead of doing steps 2 to 4.</p>
-
-<h2 id="others">Another browser?</h2>
-<ul>
-  <li><strong>Samsung Internet:</strong> tap the menu (three lines), then <strong>Add page to</strong>, then <strong>Home screen</strong>. Newer versions also show an install icon in the address bar.</li>
-  <li><strong>Firefox:</strong> tap the three dots, then <strong>Install</strong>.</li>
-  <li><strong>Edge:</strong> tap the three dots, then <strong>Add to phone</strong>.</li>
-  <li><strong>iPhone or iPad:</strong> in Safari, tap <strong>Share</strong>, then <strong>Add to Home Screen</strong>.</li>
-  <li><strong>A computer:</strong> Chrome and Edge show an install icon at the right of the address bar.</li>
-</ul>
-
 <h2 id="widgets">Can it have widgets?</h2>
-<p>Not yet, and here is the plain reason. A real Android widget, the kind that sits on your home screen and updates itself, has to be built into a downloaded Android app. An app that Chrome installs from a website can’t add one, and the standard for web widgets only works on Windows right now. We would rather tell you that than fake it.</p>
+<p>Not yet, and here is the plain reason. A real Android widget, the kind that sits on your home screen and updates itself, has to be built into a downloaded Android app. An app that Chrome installs from a website can&rsquo;t add one, and the standard for web widgets only works on Windows right now. We would rather tell you that than fake it.</p>
 <p>Two things get you close today:</p>
-<ul>
-  <li><strong>Press and hold the app icon.</strong> A short list of quick jumps pops up, and you can drag any of them out onto your home screen as its own icon.</li>
-  <li><strong>Pin a single page.</strong> Open one of these in Chrome, then use the menu and <strong>Add to Home screen</strong>. You get a one-tap tile for just that page.</li>
+<ul class="in-plain no-bubble">
+  <li><strong>Press and hold the app icon</strong> (Android). A short list of quick jumps pops up, and you can drag any of them out onto your home screen as its own icon.</li>
+  <li><strong>Pin a single page.</strong> Open one of these, then use the browser menu and <strong>Add to Home screen</strong>. You get a one-tap tile for just that page.</li>
 </ul>
 <ul class="in-pin no-bubble">
   <li><a href="/night-garden.html">The Night Garden</a></li>
-  <li><a href="/quick-checks.html#today">Today’s Weather</a></li>
-  <li><a href="/turning-toward.html">Today’s small moment</a></li>
+  <li><a href="/quick-checks.html#today">Today&rsquo;s Weather</a></li>
+  <li><a href="/turning-toward.html">Today&rsquo;s small moment</a></li>
   <li><a href="/ask.html">Ask Professor Puddles</a></li>
   <li><a href="/pal-cam-tv.html">Pal Cam TV</a></li>
 </ul>
-<p>A true Android widget, such as a daily small moment or a one-tap Breathe, would mean building a native Android app that wraps this site. That is a bigger project, and it is on the idea list.</p>
-
-<h2 id="stuck">If the install option doesn’t show</h2>
-<ul>
-  <li>Update Chrome from the Play Store. Install needs a fairly recent version.</li>
-  <li>Make sure you are on <strong>spreadloveandacceptance.com</strong> itself, not inside another app’s built-in browser. Tap the three dots and choose <strong>Open in Chrome</strong>.</li>
-  <li>Stay on the site for a few seconds first. Chrome sometimes waits a moment before it offers to install.</li>
-  <li>Already installed? Look in your app drawer for <strong>The Ledger</strong>. Chrome only offers Install once.</li>
-  <li>To remove it later, press and hold the icon and choose <strong>Uninstall</strong>. Anything saved in it stays only on your phone.</li>
-</ul>
+<p>A true widget, such as a daily small moment or a one-tap Breathe, would mean building a native app that wraps this site. That is a bigger project, and it is on the idea list.</p>
 
 <div class="try-this">
   <p><strong>Try this:</strong> Once it is on your home screen, open it and try <a href="/start-in-10-minutes.html">Start in 10 minutes</a>. It is a good first thing to do with a new app.</p>
@@ -148,11 +210,28 @@
   'use strict';
   var state = document.getElementById('in-state'), sub = document.getElementById('in-sub'), btn = document.getElementById('in-btn'), ev = null;
   var installed = (window.matchMedia && matchMedia('(display-mode: standalone)').matches) || navigator.standalone === true;
-  var ua = navigator.userAgent, android = /android/i.test(ua), ios = /iphone|ipad|ipod/i.test(ua);
+  var ua = navigator.userAgent, android = /android/i.test(ua), ios = /iphone|ipad|ipod/i.test(ua) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+  var tabs = Array.prototype.slice.call(document.querySelectorAll('.in-tab')), panels = { android: document.getElementById('p-android'), apple: document.getElementById('p-apple'), computer: document.getElementById('p-computer') };
+  function show(id, move) {
+    if (!panels[id]) id = 'android';
+    tabs.forEach(function (t) { var on = t.getAttribute('data-p') === id; t.setAttribute('aria-selected', String(on)); t.tabIndex = on ? 0 : -1; });
+    Object.keys(panels).forEach(function (k) { panels[k].hidden = k !== id; });
+    if (move) { try { history.replaceState(null, '', '#' + id); } catch (e) {} }
+  }
+  tabs.forEach(function (t, i) {
+    t.addEventListener('click', function () { show(t.getAttribute('data-p'), true); });
+    t.addEventListener('keydown', function (e) {
+      var d = e.key === 'ArrowRight' ? 1 : e.key === 'ArrowLeft' ? -1 : 0; if (!d) return;
+      var n = tabs[(i + d + tabs.length) % tabs.length]; n.focus(); show(n.getAttribute('data-p'), true); e.preventDefault();
+    });
+  });
+  // start on the hash if there is one, otherwise on the phone you are holding
+  var h = (location.hash || '').replace('#', ''), map = { chrome: 'android', others: 'android', stuck: 'android', iphone: 'apple', desktop: 'computer' };
+  show(panels[h] ? h : map[h] || (ios ? 'apple' : android ? 'android' : 'android'), false);
+  if (map[h]) setTimeout(function () { var el = document.getElementById(h); if (el) el.scrollIntoView(); }, 50);
   function plain() {
-    if (ios) { state.textContent = 'On an iPhone, use Share, then Add to Home Screen.'; sub.textContent = 'The steps for iPhone are in “Another browser?” below.'; }
-    else if (android) { state.textContent = 'Use Chrome’s menu to install.'; sub.textContent = 'Follow the five steps below. It takes about ten seconds.'; }
-    else { state.textContent = 'This works best on an Android phone.'; sub.textContent = 'Open this page on your phone, or look for the install icon in your address bar here.'; }
+    if (android) { state.textContent = 'Use Chrome’s menu to install.'; sub.textContent = 'Follow the five steps below. It takes about ten seconds.'; }
+    else { state.textContent = 'This part is for an Android phone.'; sub.textContent = 'Open this page on your Android phone, or pick your device above.'; }
   }
   if (installed) { state.textContent = 'You are already using the app.'; sub.textContent = 'Nothing more to do. Enjoy it.'; }
   else {

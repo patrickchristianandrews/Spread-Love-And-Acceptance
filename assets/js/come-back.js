@@ -3,9 +3,9 @@
      two to four steps. The ideas come from the menu's time launcher (pick-up.js) plus a few more,
      lean toward what you picked in "Start where you are" or opened lately, and change each visit.
      The last choice is remembered here ("Welcome back. 5 minutes again?").
-   - Home page: "Today's tiny thing" (one small practice a day) and "Your path so far".
+   - Home page: "Today's tiny thing" (one small practice a day).
    - Book chapters, tools, calm games and Frequency Buddies: a short "What you got from this" line
-     at the natural end, and a "Next time" idea. Hubs show "Your path so far" too.
+     at the natural end, and a "Next time" idea.
    It mostly reads what the site already keeps here (recent pages, Check yourself petals, garden
    levels, episodes, tool drafts) and adds one small key, tol-come-back-v1, for the rest.
    No streaks to keep, no timers, nothing to lose: pick up anytime. Nothing is sent anywhere.
@@ -252,7 +252,6 @@
       add({ t: 'Check today’s weather', u: '/quick-checks.html#today', m: 1, why: 'so you know what today is good for' });
       add(pickFrom(P[30], seed, used));
       add(pickFrom(P[15].filter(function (x) { return x.tag === 'calm'; }).concat(P[1].filter(function (x) { return x.u === '/night-garden.html'; })), seed + 1, used));
-      if (anything() && !helpersOff()) steps.push({ t: 'Look at your path so far', u: '#cb-path', m: 1, why: 'see what you have gained' });
     }
     return steps;
   }
@@ -351,8 +350,7 @@
     return box;
   }
 
-  /* ---------------------------------------------------------------- "Your path so far" */
-  function stat(n, of, label, none) {
+    function stat(n, of, label, none) {
     var dots = '';
     if (of) { dots = '<span class="cb-dots" aria-hidden="true">'; for (var i = 0; i < of; i++) dots += '<i' + (i < n ? ' class="on"' : '') + '></i>'; dots += '</span>'; }
     return '<li class="' + (n ? 'is-on' : 'is-zero') + '"><span class="cb-n">' + n + (of ? '<small> of ' + of + '</small>' : '') + '</span><span class="cb-l">' + esc(n ? label : none) + '</span>' + dots + '</li>';
@@ -368,34 +366,6 @@
     return ['/prog-01.html', 'Six gentle weeks', 'one small session a week'];
   }
   function anything() { return chaptersRead() || toolsTried().length || Object.keys(gamesPlayed()).length || episodesWatched().length || petals(); }
-  function pathCard(where) {
-    if (!anything()) return null;
-    var box = el('section', { class: 'cb-path cb-extra no-bubble no-cheer' + (where ? ' is-' + where : ''), id: 'cb-path', tabindex: '-1', 'aria-labelledby': 'cb-path-h' });
-    function draw() {
-      var cr = chaptersRead(), tt = toolsTried(), gp = Object.keys(gamesPlayed()), ew = episodesWatched(), pt = petals(), nx = nextIdea();
-      var gains = [];
-      if (cr) gains.push(cr === 1 ? 'one idea from the book' : cr + ' ideas from the book');
-      if (tt.length) gains.push(tt.length === 1 ? 'one tool you can use again' : tt.length + ' tools you can use again');
-      if (gp.length) gains.push('calm minutes in ' + (gp.length === 1 ? gp[0] : gp.length + ' games'));
-      if (ew.length) gains.push(ew.length === 1 ? 'one story to talk about with the kids' : ew.length + ' stories to talk about with the kids');
-      var days = (S.days || []).length;
-      box.innerHTML = '<h2 class="cb-h" id="cb-path-h">Your path so far</h2>' +
-        (gains.length ? '<p class="cb-gain">So far you have ' + esc(gains.length > 1 ? gains.slice(0, -1).join(', ') + ' and ' + gains[gains.length - 1] : gains[0]) + '.</p>' : '') +
-        '<ul class="cb-stats">' + stat(cr, BOOK.length, cr === 1 ? 'chapter read' : 'chapters read', 'chapters read') +
-        stat(tt.length, 0, tt.length === 1 ? 'tool tried' : 'tools tried', 'tools tried yet') +
-        stat(gp.length, 0, gp.length === 1 ? 'calm game played' : 'calm games played', 'calm games yet') +
-        stat(ew.length, EPISODES.length, ew.length === 1 ? 'episode watched' : 'episodes watched', 'episodes watched') + '</ul>' +
-        (pt ? '<p class="cb-line"><span aria-hidden="true">🌸</span> ' + pt + ' Check yourself ' + (pt === 1 ? 'petal' : 'petals') + ' collected. <a href="/quest.html">See the quest map</a></p>' : '') +
-        '<p class="cb-line cb-garden" data-cb-garden></p>' +
-        '<p class="cb-next"><span class="cb-k">Next time</span> <a href="' + esc(nx[0]) + '">' + esc(nx[1]) + '</a> <span class="cb-next-n">' + esc(nx[2]) + '</span></p>' +
-        '<p class="cb-foot">' + (days > 1 ? 'You have been here on ' + days + ' different days. ' : '') + 'Pick up anytime: nothing here runs out or resets. Kept only on this device. <a href="/on-this-device.html">What’s stored here</a></p>';
-      whenRewards(function () { var g = box.querySelector('[data-cb-garden]'); if (g) { var s = gardenLine(); if (s) g.innerHTML = '<span aria-hidden="true">✨</span> ' + s; else g.remove(); } });
-    }
-    draw();
-    box._redraw = draw;
-    return box;
-  }
-
   /* ---------------------------------------------------------------- end cards */
   function endCard(label) {
     return el('aside', { class: 'cb-end cb-extra no-bubble no-cheer', 'aria-label': label || 'What you got from this' });
@@ -403,7 +373,7 @@
   function fillEnd(box, gain, next, extra) {
     box.innerHTML = '<p class="cb-k">What you got from this</p><p class="cb-benefit">' + esc(gain) + '</p>' +
       (next ? '<p class="cb-next"><span class="cb-k">Next time</span> <a href="' + esc(next[0]) + '">' + esc(next[1]) + '</a>' + (next[2] ? ' <span class="cb-next-n">' + esc(next[2]) + '</span>' : '') + '</p>' : '') +
-      '<p class="cb-mini">' + (extra || '') + '<span data-cb-garden></span> <a href="/#cb-path">Your path so far</a></p>';
+      '<p class="cb-mini">' + (extra || '') + '<span data-cb-garden></span></p>';
     whenRewards(function () { var g = box.querySelector('[data-cb-garden]'); if (g) g.innerHTML = gardenLine() ? gardenLine() + ' ' : ''; });
     if (!still()) { box.classList.add('cb-in'); }
   }
@@ -502,7 +472,6 @@
     if (helpersOff()) return;
     var wrap = el('div', { class: 'cb-home cb-extra' });
     wrap.appendChild(tinyCard());
-    var pc = pathCard('home'); if (pc) wrap.appendChild(pc);
     var st = main.querySelector('.announce-stack'), at = st;
     while (at && at.nextElementSibling && /tol-pickup-host|tol-offer/.test(at.nextElementSibling.className)) at = at.nextElementSibling;
     if (at) at.after(wrap); else main.appendChild(wrap);
@@ -517,7 +486,6 @@
     if (TOOLS[path]) return toolPage(main);
     if (path === '/frequency-buddies.html') return buddiesPage(main);
     if (GAME_PAGES.test(path) || (doc.body.classList.contains('is-game') && !HUBS.test(path))) return gamePage(main);
-    if (HUBS.test(path)) { var pc = pathCard('hub'); if (pc) placeAtEnd(main, pc); }
   }
   if (doc.readyState === 'loading') doc.addEventListener('DOMContentLoaded', start); else start();
 

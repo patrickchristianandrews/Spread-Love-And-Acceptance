@@ -3891,7 +3891,7 @@
         "the app"
       ],
       "what": [
-        "There’s nothing to download, and you don’t need an app store. The site works like an app on your phone: add it to your home screen and it opens full-screen, with its own icon, like any other app.",
+        "There’s nothing to download, and you don’t need an app store. An Apple App Store version is coming soon, with no date yet. Until then, the site works like an app on your phone: add it to your home screen and it opens full-screen, with its own icon, like any other app.",
         "Pages you’ve opened before keep working without a connection, and everything you type in the tools stays on your device.",
         "Real Android widgets need a native app, so an app installed from Chrome can’t add one yet. Press and hold the icon for quick jumps, or pin a single page to your home screen."
       ],
@@ -3902,7 +3902,7 @@
       ],
       "links": [
         [
-          "Put the app on your phone",
+          "Get the app",
           "/install.html"
         ],
         [
@@ -4834,7 +4834,7 @@
     {
       "id": "timepicker",
       "kind": "tool",
-      "name": "the time picker and Your path so far",
+      "name": "the time picker and Today’s tiny thing",
       "keys": [
         "how much time",
         "i only have",
@@ -4845,20 +4845,14 @@
         "short on time",
         "quick thing to do",
         "what should i do today",
-        "your path so far",
-        "my path so far",
-        "path so far",
-        "my progress",
-        "what have i done",
         "tiny thing",
         "today's tiny thing",
         "next time"
       ],
-      "what": "At the top of the home page, “How much time do you have?” offers 1, 5, 15 or 30+ minutes. Each gives a short plan with links that changes from visit to visit, and it remembers your last choice. As you go, “Your path so far” shows the chapters you’ve read, tools you’ve tried, calm games you’ve played and episodes you’ve watched, and each section ends with what you got from it and a “Next time” idea. There’s also one small “Today’s tiny thing” each day. Nothing runs out or resets: pick up any time.",
+      "what": "At the top of the home page, “How much time do you have?” offers 1, 5, 15 or 30+ minutes. Each gives a short plan with links that changes from visit to visit, and it remembers your last choice. Each section ends with what you got from it and a “Next time” idea. There’s also one small “Today’s tiny thing” each day. Nothing runs out or resets: pick up any time.",
       "how": [
         "Open the home page and tap how much time you have.",
         "Follow the two to four steps in your plan, or tap Another idea.",
-        "Check “Your path so far” on the home page to see what you’ve explored.",
         "Try Today’s tiny thing and tap I tried it."
       ],
       "pillar": "Small and often: a few minutes, kindly, is enough.",
@@ -4866,10 +4860,6 @@
         [
           "I have 5 minutes",
           "I only have 5 minutes, what should I do?"
-        ],
-        [
-          "Where’s my progress?",
-          "Where can I see my path so far?"
         ]
       ],
       "links": [
