@@ -516,6 +516,10 @@ t('parents', 'is this safe for my grandkids to watch', { id: 'kidswatch', link: 
 t('parents', 'how do I share this page', { kind: 'card', id: 'kipshare' });
 t('parents', 'what tricks can kip the paperclip do', { kind: 'card', id: 'kipshare' });
 t('parents', 'what is the learn tab', { kind: 'card', id: 'learntab' });
+t('parents', 'what can I use on my own', { id: /^(knowmenu|alone)$/ });
+t('parents', 'what is the know yourself menu', { kind: 'card', id: 'knowmenu', link: '/self-path.html' });
+t('parents', 'what is the bears dojo', { kind: 'card', id: 'bearsdojo', link: '/bears-dojo.html' });
+t('parents', 'can I build a bear that looks like me', { kind: 'card', id: 'bearsdojo', text: /build a little bear/ });
 t('parents', 'is there a page for grandparents', { kind: 'card', id: 'grandparents', link: '/grandparents.html' });
 t('parents', 'tips for grandparents', { kind: 'card', id: 'grandparents', text: /their house, their rules/ });
 t('parents', 'how do I say no to babysitting my grandkids', { kind: 'sit', id: /\+grandkids$/, script: true });
@@ -530,11 +534,13 @@ t('parents', 'when is the next season of frequency buddies', { kind: 'card', id:
 t('parents', 'is there a season 2 teaser', { kind: 'card', id: 'buddiess2', link: '/frequency-buddies-season-2.html' });
 
 // ---------------------------------------------------------------- the nine fields and how they connect
-t('connections', 'how do the nine fields connect', { id: 'connections', text: /36 possible pairs.*12 obvious, 14 hidden and 10 abstract/s });
+t('connections', 'how do the nine fields connect', { id: 'connections', text: /78 possible pairs.*28 obvious, 29 hidden and 21 abstract/s });
+t('connections', 'how do the thirteen fields connect', { id: 'connections', text: /thirteen fields.*debating.*politics.*laughter therapy/s });
 t('connections', 'how are all the different areas Christian studied connected?', { id: 'connections', text: /seven kinds of root/ });
 t('connections', 'Show me the hidden connections', { id: 'connections-hidden', text: /Neurobiology \+ Finance/ });
 t('connections', 'what are the deepest connections?', { id: 'connections-deepest', text: /One hard conversation/ });
 t('connections', 'where do all nine fields meet at once', { id: 'connections-deepest' });
+t('connections', 'where do all thirteen fields meet at once', { id: 'connections-deepest', text: /house rule/ });
 t('connections', 'Show me the abstract connections', { id: 'connections-abstract', text: /Aristotle/ });
 t('connections', 'Show me how one field leads into the next', { id: 'connections-chain', text: /Aromatherapy → Neurobiology/ });
 t('connections', 'what is a polymath', { kind: 'card', id: 'polymath', link: '/polymath.html' });

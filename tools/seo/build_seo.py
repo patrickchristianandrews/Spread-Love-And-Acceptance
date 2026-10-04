@@ -42,7 +42,7 @@ SECTION_KEYWORDS = [
      ['psychology-informed', 'personal growth', 'healthy relationships', 'understanding yourself', 'kind communication', 'couples', 'family', 'friends', 'roommates', 'coworkers', 'caregivers']),
     (r'^book/', ['self-help book', 'relationship book', 'shared household work', 'fairness', 'communication', 'stress and reactions']),
     (r'^library', ['psychology', 'relationship research', 'conflict resolution', 'gratitude', 'self-compassion', 'emotions', 'stress', 'neurodiversity', 'mindfulness']),
-    (r'^(night-garden|calm-visualizer|soundscapes|wp-11-sound|pause-and-play|echoes-of-gold)',
+    (r'^(night-garden|bears-dojo|calm-visualizer|soundscapes|wp-11-sound|pause-and-play|echoes-of-gold)',
      ['calm', 'relaxation', 'breathing', 'meditation', 'mindfulness', 'peace', 'soundscapes', 'ambient music', 'sound frequencies', 'higher frequency']),
     (r'^frequency-buddies', ['animated stories', 'cartoon for kids and families', 'Tidbit and Sugarfoot', 'kindness stories', 'working through tough times together', 'captions']),
     (r'^(frequency-journey|frequency-framework)', ['higher frequency', 'sound frequencies', 'Solfeggio tones', 'harmony', 'being in tune', 'calm arcade game', 'maze game', 'crossing game']),
@@ -133,6 +133,7 @@ SEARCH = {
  'ask.html': ('Free Relationship Help Chat: Ask Professor Puddles', 'Describe what’s going on in a relationship and get kind, practical next steps and words you could use. Free and private: what you type stays on your device.'),
  'library.html': ('Relationship Psychology Library, in Plain English', 'Hundreds of plain-language entries on relationships, conflict, kindness, gratitude, emotions, stress, calm and wiring, with honest notes on the evidence.'),
  'pause-and-play.html': ('Calm Games for a Busy Mind: Free, No Timers', 'Free calm games with no timers and no way to lose: the Night Garden, the Frequency Journey, Word Bloom, crosswords and a word search, with two friendly pups.'),
+ 'bears-dojo.html': ('The Bears Dojo: A Calm Temple Garden to Wander Into', 'Wander a quiet temple garden where Tidbit and Sugarfoot tend the grounds, build your own bear, then step inside for gentle things to do. Free, no timers, nothing saved.'),
  'night-garden.html': ('The Night Garden: A Calm Breathing Game', 'A peaceful garden at night: breathe slowly to make flowers bloom, guide fireflies into constellations and stack glowing stones. A free, calm game.'),
  'calm-visualizer.html': ('Drift: A Calm Visualizer With Soft Tones', 'Tell Drift how you feel, put on headphones and let slow, dreamy visuals, kind words and gentle tones keep you company for a few quiet minutes.'),
  'word-bloom.html': ('Word Bloom: A Relaxing Letter-Wheel Word Game', 'A free, calm word game: spin a wheel of letters and find the hidden words. Levels from easy to tricky, no timers and no ads.'),
@@ -159,7 +160,7 @@ SEARCH = {
  'know-yourself.html': ('Know Your Own Wiring: A Self-Discovery Guide', 'Understand how you take in plans, change and feedback, and how to explain what helps you to the people you live and work with.'),
  'wavelength.html': ('Wavelength: Free Communication Style Quiz and Self-Discovery Guide', 'A free quiz on how you think, talk and listen. Pick your wiring (ADHD, autistic, AuDHD and more) and get your four-letter Wave Code and archetype.'),
  'perspective-shifter.html': ('The Perspective Shifter: See It From Their Side', 'A simple tool for seeing a moment from someone else’s side: their state, wiring, surroundings and history, and what each of you could and couldn’t see.'),
- 'polymath.html': ('The Polymath Way: How Every Field Connects', 'How psychology, economics, nature, music and more grow from the same few roots, and how a polymath joined nine fields into one program you can learn.'),
+ 'polymath.html': ('The Polymath Way: How Every Field Connects', 'How psychology, economics, nature, music and more grow from the same few roots, and how a polymath joined thirteen fields into one program you can learn.'),
  'about.html': ('About Spread Love & Acceptance', 'The story behind Spread Love & Acceptance and The Objective Ledger: a free, growing suite of tools for kinder, fairer relationships.'),
  'book/preface.html': ('The Work Nobody Sees: Invisible Labor at Home', 'The preface: the planning, remembering and noticing that keeps a home running, why it goes unseen, and how seeing it changes everything.'),
  'book/chapter-1.html': ('Why We Get Out of Tune (Chapter I)', 'Chapter I: why kind people still end up resentful at home, and how small mismatches in what we see and expect add up over time.'),
@@ -232,6 +233,7 @@ SEARCH.update({
  'snapshot/index.html': ('A 2-Minute Snapshot of How Your Household Shares the Load', 'A gentle two-minute look at how the shared load is set up at home and how it bends, for couples, families, roommates and teams. Not a test or a diagnosis.'),
  # calm, games and media
  'pause-and-play.html': ('Calm Games for a Busy Mind: Free, No Timers', 'Free calm games with no timers and no way to lose: the Night Garden breathing game, the Frequency Journey, Word Bloom, crosswords and a cozy word search.'),
+ 'bears-dojo.html': ('The Bears Dojo: A Calm Temple Garden to Wander Into', 'Wander a quiet temple garden where Tidbit and Sugarfoot tend the grounds, build your own bear, then step inside for gentle things to do. Free, no timers, nothing saved.'),
  'night-garden.html': ('The Night Garden: A Calm Breathing Exercise Game', 'A breathing exercise you can play: breathe slowly to make flowers bloom, guide fireflies into constellations and stack glowing stones. Free, calm, no timers.'),
  'calm-visualizer.html': ('Drift: Calm Visuals and Soft Tones to Unwind', 'Tell Drift how you feel, put on headphones, and let slow, dreamy visuals, kind words and gentle tones keep you company for a few quiet minutes of calm.'),
  'soundscapes.html': ('Brain Breakers: Instrumental Music to See and Feel', 'Three instrumental pieces by Christian’s Lab, from soft and floating to big and cinematic, with a live picture and gentle vibration so you can see and feel the sound.'),
@@ -382,7 +384,7 @@ CRUMB_PARENTS = [
     (r'^library/', 'The Professor’s Library', 'library.html'),
     (r'^learn/index-in-depth', 'Stories from Philosophy', 'learn/index.html'),
     (r'^(workpapers/|wp-\d|prog-01-in)', 'Which part of the program to use', 'program.html'),
-    (r'^(night-garden|word-bloom|quiet-crossword|quiet-words|daily-ledger|frequency-journey|calm-visualizer|keepsakes)', 'Calm games', 'pause-and-play.html'),
+    (r'^(night-garden|bears-dojo|word-bloom|quiet-crossword|quiet-words|daily-ledger|frequency-journey|calm-visualizer|keepsakes)', 'Calm games', 'pause-and-play.html'),
     (r'^frequency-buddies-', 'Frequency Buddies', 'frequency-buddies.html'),
 ]
 
@@ -404,7 +406,7 @@ def series_ld(publisher):
 
 
 TOOLS = r'^(tools/|signal-translator|carrier-wave-decoder|conversation-reader|lemonade-stand|calc01-solvency|wiring-card|quick-checks|full-path|workpapers/calculators|do/|snapshot/|pal-cam-tv|ask)'
-GAMES = r'^(recheck-drive|quiet-words|word-bloom|quiet-crossword|daily-ledger-crossword|frequency-journey|night-garden|calm-visualizer)'
+GAMES = r'^(recheck-drive|quiet-words|word-bloom|quiet-crossword|daily-ledger-crossword|frequency-journey|night-garden|bears-dojo|calm-visualizer)'
 ARTICLES = r'^(invisible-labor-mental-load|chore-chart-for-couples|grandparents|how-to-stop-fighting|neurodivergent-relationships|book/|library/|learn/|workpapers/wp-|workpapers/report|wp-|five-pillars|turning-toward|complacency|check-ins|know-yourself|wired-differently|frequency-framework|how-it-works|relationships|self-path|glossary)'
 
 
@@ -795,7 +797,7 @@ GROUPS = [
     ('Guides to common questions', r'^(complacency|invisible-labor-mental-load|chore-chart-for-couples|grandparents|how-to-stop-fighting|neurodivergent-relationships|communication-style-quiz)'),
     ('Tools for kinder conversations and fair relationships', r'^(ask|signal-translator|carrier-wave|conversation-reader|wired-differently|wiring-card|turning-toward|check-ins|know-yourself|quick-checks|lemonade|calc01|full-path|snapshot)'),
     ('Worksheets (the Workpaper Suite)', r'^(workpapers|wp-|do/|prog-01|suite-index|program-overview)'),
-    ('Calm, breathing and sound', r'^(night-garden|calm-visualizer|soundscapes|wp-11-sound|echoes-of-gold|pal-cam)'),
+    ('Calm, breathing and sound', r'^(night-garden|bears-dojo|calm-visualizer|soundscapes|wp-11-sound|echoes-of-gold|pal-cam)'),
     ('Calm games', r'^(pause-and-play|recheck-drive|quiet-words|word-bloom|quiet-crossword|daily-ledger|frequency-journey|quest)'),
     ('The book', r'^book/'),
     ('The Professor’s Library and further reading', r'^(library|learn/|reading|podcast|frequency-framework)'),

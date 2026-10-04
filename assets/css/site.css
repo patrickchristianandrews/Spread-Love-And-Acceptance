@@ -2442,6 +2442,10 @@ html.tol-bubbles:not(.tol-nobubbles) main table:where(:not(.no-bubble, .tol-plai
 }
 .tol-drop li.tol-sub{ margin:.45rem 0 .1rem; padding:.45rem .5rem .1rem; }
 .tol-drop{ max-height:calc(100vh - var(--tol-bar-h, 58px) - 1.5rem); overflow-y:auto; overscroll-behavior:contain; }
+/* The polymath way: the last row of every menu group, set apart */
+.tol-drop li.tol-foot-row, .tol-index li.tol-foot-row{ margin-top:.4rem; padding-top:.4rem; border-top:1px solid var(--line, #d9cdb4); }
+.tol-foot-polymath{ margin:0 0 .75rem; font-size:.92rem; text-align:center; }
+.tol-foot-polymath a{ font-weight:600; white-space:nowrap; }
 
 /* ========================= Share (site.js TOLShare) =========================
    The quiet "Share this page" button near the end of a page, small Share buttons beside a
