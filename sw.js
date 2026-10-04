@@ -9,12 +9,12 @@
    The Frequency Buddies episodes (/assets/js/buddies/) are small data files, saved up front so an episode
    plays offline; a future episode not in the list is saved the first time it's watched.
    Bump VERSION when the list below changes. */
-var VERSION = 'tol-v108';
+var VERSION = 'tol-v109';
 var CORE = [
   '/', '/index.html', '/offline.html',
-  '/night-garden.html', '/quiet-words.html', '/word-bloom.html', '/quiet-crossword.html', '/pause-and-play.html', '/ask.html', '/whats-new.html', '/frequency-journey.html', '/frequency-journey-play.html', '/pal-cam-tv.html', '/frequency-buddies.html', '/frequency-buddies-live.html', '/daily-ledger-crossword.html', '/garden-backdrop.html', '/turning-toward.html', '/quick-checks.html', '/lemonade-stand.html', '/install.html', '/upset-right-now.html', '/share-the-load.html', '/new-parent.html', '/co-parenting.html', '/surprise.html', '/method-and-limits.html',
-  '/assets/css/site.css', '/assets/css/reading.css', '/assets/css/games.css',
-  '/assets/js/site.js', '/assets/js/night-garden.js', '/assets/js/quiet-words.js', '/assets/js/calm-music.js', '/assets/js/tips.js', '/assets/js/breathe.js', '/assets/js/turning-toward.js',
+  '/night-garden.html', '/bears-dojo.html', '/quiet-words.html', '/word-bloom.html', '/quiet-crossword.html', '/pause-and-play.html', '/ask.html', '/whats-new.html', '/frequency-journey.html', '/frequency-journey-play.html', '/pal-cam-tv.html', '/frequency-buddies.html', '/frequency-buddies-live.html', '/daily-ledger-crossword.html', '/garden-backdrop.html', '/turning-toward.html', '/quick-checks.html', '/lemonade-stand.html', '/install.html', '/upset-right-now.html', '/share-the-load.html', '/new-parent.html', '/co-parenting.html', '/surprise.html', '/method-and-limits.html',
+  '/assets/css/site.css', '/assets/css/reading.css', '/assets/css/games.css', '/assets/css/bears-dojo.css',
+  '/assets/js/site.js', '/assets/js/bears-dojo.js', '/assets/js/bears-dojo-scene.js', '/assets/js/bears-dojo-offerings.js', '/assets/js/bears-dojo-offerings-2.js', '/assets/js/night-garden.js', '/assets/js/quiet-words.js', '/assets/js/calm-music.js', '/assets/js/tips.js', '/assets/js/breathe.js', '/assets/js/turning-toward.js',
   '/assets/js/rewards.js', '/assets/js/pause-and-play.js', '/assets/js/site-chat.js', '/assets/js/arcade.js', '/assets/js/pups.js', '/assets/js/journey-pals.js', '/assets/js/chat-kb.js', '/assets/js/word-bloom.js', '/assets/js/quiet-crossword.js', '/assets/js/game-levels.js',
   '/assets/js/pals-cam.js', '/assets/js/ten-return.js', '/assets/js/pals-cam-acts.js', '/assets/js/pals-cam-more.js', '/assets/js/pals-cam-tricks.js', '/assets/js/pals-cam-invite.js', '/assets/js/pals-cam-pack-scenes.js', '/assets/js/pals-cam-pack-extra.js', '/assets/js/pals-cam-pack-more.js',
   '/assets/js/buddies-player.js', '/assets/js/buddies/s1e1.js', '/assets/js/buddies/s1e2.js', '/assets/js/buddies/s1e3.js', '/assets/js/buddies/s1e4.js', '/assets/js/buddies/s1e5.js',

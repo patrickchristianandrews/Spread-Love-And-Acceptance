@@ -25,12 +25,15 @@
     economics: { name: 'Economics', r: { capacity: 'every resource is limited, and using it has a cost', incentives: 'choices follow what gets rewarded', balance: 'a household at 95% has no safety margin for a bad week', loops: 'markets settle by constant small adjustments' } },
     business: { name: 'Business', r: { ownership: 'unclear ownership causes most failures', incentives: 'what gets measured gets done', loops: 'teams improve by reviewing and adjusting', capacity: 'a team stretched too thin drops things' } },
     finance: { name: 'Finance', r: { balance: 'solvency: is this month sustainable?', capacity: 'reserves are what get you through a surprise', incentives: 'interest quietly rewards what you keep doing' } },
+    debate: { name: 'The art of debating', r: { signal: 'restate their point first, so what you answer is what they said', ownership: 'a chair, a turn each and a decision at the end', incentives: 'a debate rewards winning the room, and a home needs a reward for understanding', loops: 'the same lines repeat until someone breaks the pattern' } },
+    politics: { name: 'Politics', r: { ownership: 'who decides, who’s accountable, and how rules change', incentives: 'rules and rewards shape what people do more than speeches do', balance: 'a fair share of a limited supply, argued out in the open', signal: 'framing: the same facts land differently depending on how they’re put' } },
     holistic: { name: 'Holistic practice', r: { state: 'start with the body, then the argument', balance: 'rest, movement and care keep the whole person steady', capacity: 'notice the limit before you’re past it' } },
     senses: { name: 'Aromatherapy and the senses', r: { state: 'light, noise and scent shift what you can take in', signal: 'a busy room adds static to any conversation', capacity: 'too much input fills you up fast' } },
+    laughter: { name: 'Laughter therapy', r: { state: 'a shared laugh lets the body stand down', loops: 'an in-joke is a small ritual that keeps closeness going', balance: 'play refills what effort spends', signal: 'laughing with someone opens a talk, laughing at them closes it' } },
     music: { name: 'Music and sound', r: { signal: 'a clear note through the static', loops: 'rhythm: a pattern that repeats and keeps everyone together', state: 'a song can change the feel of a room', balance: 'harmony: parts that fit instead of competing' } },
     nature: { name: 'Nature and ecology', r: { balance: 'a pond, a forest or a field stays healthy when what’s taken is given back', loops: 'seasons and cycles that come round again', capacity: 'land can only carry so much', ownership: 'a hive gives every job to someone' } }
   };
-  var ORDER = ['audit', 'psychology', 'philosophy', 'behavioral', 'neuro', 'economics', 'business', 'finance', 'holistic', 'senses', 'music', 'nature'];
+  var ORDER = ['audit', 'psychology', 'philosophy', 'debate', 'politics', 'behavioral', 'neuro', 'economics', 'business', 'finance', 'holistic', 'laughter', 'senses', 'music', 'nature'];
   function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
   function opts(sel) { return ORDER.map(function (k) { return '<option value="' + k + '"' + (k === sel ? ' selected' : '') + '>' + esc(FIELDS[k].name) + '</option>'; }).join(''); }
 
@@ -71,7 +74,7 @@
   show();
 })();
 
-/* the 36 pairs (a grid on a wide screen, a list field by field on a phone) and the chain through all nine */
+/* all 78 pairs of the thirteen fields (a grid on a wide screen, a list field by field on a phone) and the chain through all of them */
 (function () {
   'use strict';
   var N = window.TOL_NINE, grid = document.querySelector('[data-nine-grid]'), chainEl = document.querySelector('[data-nine-chain]');
@@ -125,7 +128,7 @@
     el.innerHTML = '<h4>Closest links, from obvious to hidden</h4><ul>' + pick.map(function (p) {
       var other = p[0] === f ? p[1] : p[0];
       return '<li class="t-' + p[3] + '"><strong>+ <a href="#field-' + other + '">' + esc(NAME[other]) + '</a></strong> <span class="ng-tag">(' + esc(N.tiers[p[3]].toLowerCase()) + ', ' + esc(N.roots[p[2]]) + ')</span><br>' + esc(p[4]) + ' <a href="' + p[5][1] + '">' + esc(p[5][0]) + ' →</a></li>';
-    }).join('') + '</ul><p class="ng-tag">All ' + mine.length + ' of its links are in <a href="#all-pairs">the grid of 36 pairs</a>.</p>';
+    }).join('') + '</ul><p class="ng-tag">All ' + mine.length + ' of its links are in <a href="#all-pairs">the grid of ' + N.pairs.length + ' pairs</a>.</p>';
   });
   // a link to a field chapter opens it
   function openField() {
@@ -150,7 +153,7 @@
         '</ul><p class="ng-tag">See all ' + cnt[t] + ' in <a href="#all-pairs">the grid</a>.</p></li>';
     }).join('');
     if (N.deep) {
-      html += '<li style="--tc:#A8792F"><span class="pc-lvl">Step 4 of 4</span><h3>' + esc(N.tiers.d || 'Deepest') + ': where many fields meet at once</h3><p>Here the connections stop being pairs. One everyday moment runs through three, six, or all nine fields.</p><ul>' +
+      html += '<li style="--tc:#A8792F"><span class="pc-lvl">Step 4 of 4</span><h3>' + esc(N.tiers.d || 'Deepest') + ': where many fields meet at once</h3><p>Here the connections stop being pairs. One everyday moment runs through three, six, or all thirteen fields.</p><ul>' +
         N.deep.map(function (d) {
           return '<li><strong>' + esc(d.title) + '</strong><span class="pc-chips">' + d.fields.map(function (f) { return '<span>' + esc(NAME[f]) + '</span>'; }).join('') + '</span>' + esc(d.text) +
             (d.steps ? ' <a href="#flow-moment">Follow it step by step ↓</a>' : '') + ' <a href="' + d.tool[1] + '">' + esc(d.tool[0]) + ' →</a></li>';
@@ -159,18 +162,27 @@
     climbEl.innerHTML = html;
   }
 
-  // flowchart 1: one moment through all nine fields, snaking across three rows on a wide screen
+  // flowchart 1: one moment through every field, snaking across rows of three on a wide screen
   var flowEl = document.querySelector('[data-flow-moment]');
   var talk = N.deep && N.deep.filter(function (d) { return d.steps; })[0];
   if (flowEl && talk) {
-    var STAGE = ['s-in', 's-in', 's-in', 's-btw', 's-btw', 's-btw', 's-out', 's-out', 's-out'];
-    // grid places: row 1 left to right, row 2 right to left, row 3 left to right; arrows follow the path
-    var COL = [1, 2, 3, 3, 2, 1, 1, 2, 3], ARROW = ['a-r', 'a-r', 'a-d', 'a-l', 'a-l', 'a-d', 'a-r', 'a-r', 'a-d'];
+    // inside you, between you, around you
+    var STAGE_OF = { nb: 's-in', ps: 's-in', ph: 's-in', db: 's-btw', po: 's-btw', bs: 's-btw', ec: 's-btw', fi: 's-btw', bu: 's-btw', ht: 's-out', la: 's-out', mu: 's-out', ar: 's-out' };
     var STAGE_NAME = { 's-in': 'inside you', 's-btw': 'between you', 's-out': 'around you' };
-    flowEl.innerHTML = '<li class="fc-pill a-d" style="grid-column:1">Something happens</li>' +
-      talk.steps.map(function (s, i) {
-        return '<li class="' + STAGE[i] + ' ' + ARROW[i] + '" style="--c:' + COL[i] + '" data-row="' + (Math.floor(i / 3) + 2) + '"><b><small>' + (i + 1) + '</small>' + esc(NAME[s[0]]) + '</b><span class="fc-vh">(' + STAGE_NAME[STAGE[i]] + ') </span>' + esc(s[1]) + '</li>';
-      }).join('') +
-      '<li class="fc-pill fc-decided" style="--c:3">' + esc(talk.decide) + '</li>';
+    // grid places: row 1 left to right, row 2 right to left, and so on; arrows follow the path
+    var last = talk.steps.length - 1, decided;
+    var items = talk.steps.map(function (s, i) {
+      var r = Math.floor(i / 3), pos = i % 3, ltr = r % 2 === 0, col = ltr ? pos + 1 : 3 - pos;
+      var arrow = pos < 2 ? (ltr ? 'a-r' : 'a-l') : 'a-d';
+      if (i === last) {
+        // the last step points at the decision: beside it if there is room on its row, else below it
+        if (pos < 2) { arrow = ltr ? 'a-r' : 'a-l'; decided = ltr ? (col + 1) + ' / 4' : '1 / ' + col; decided = [decided, r + 2]; }
+        else { arrow = 'a-d'; decided = ['2 / 4', r + 3]; }
+      }
+      var st = STAGE_OF[s[0]] || 's-in';
+      return '<li class="' + st + ' ' + arrow + '" style="--c:' + col + ';--r:' + (r + 2) + '" data-row="' + (r + 2) + '"><b><small>' + (i + 1) + '</small>' + esc(NAME[s[0]]) + '</b><span class="fc-vh">(' + STAGE_NAME[st] + ') </span>' + esc(s[1]) + '</li>';
+    });
+    flowEl.innerHTML = '<li class="fc-pill a-d" style="grid-column:1">Something happens</li>' + items.join('') +
+      '<li class="fc-pill fc-decided" style="--dc:' + decided[0] + ';--r:' + decided[1] + '">' + esc(talk.decide) + '</li>';
   }
 })();

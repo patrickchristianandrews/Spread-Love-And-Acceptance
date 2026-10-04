@@ -46,6 +46,7 @@
       { href: '/co-parenting.html', code: 'New', title: 'Separated co-parents', note: 'Calmer handoffs, a tone check, and a parallel-parenting route, with a safety note' },
       { href: '/surprise.html', code: 'New', title: 'Surprise me', note: 'One button picks a game, a guide or something calm' },
       { href: '/complacency.html', deep: true, code: 'New', title: 'Complacency', note: 'Why “it’s fine” stops being checked, how it shows up in you, partners, family, friends, housemates and coworkers, and the small re-checks that keep things alive' },
+      { href: '/bears-dojo.html', code: 'New', title: 'The Bears Dojo', note: 'A temple garden to wander, a bear to build, and a quiet room of gentle things to do' },
       { href: '/wavelength.html', code: 'New', title: 'Wavelength', note: 'Replaces Your Heartprint: pick your wiring, find your Wave Code, read your self-discovery chapters' },
       { href: '/growing-up.html', code: 'New', title: 'Where your lens came from', note: 'How growing up shapes the way you see yourself and others, and how to choose which old rules to keep' },
       { href: '/frequency-buddies.html', code: 'New', title: 'Frequency Buddies', note: 'Animated episodes with Tidbit and Sugarfoot, with captions on' },
@@ -115,7 +116,8 @@
     { id: 'play', title: 'Play', blurb: 'Calm games for a busy mind: a gentle way to read your state and settle it (Pillar III) before you talk. No timers and no way to lose, and something new in the background every few levels.', items: [
       { href: '/pause-and-play.html', code: 'All', title: 'Pause & Play', note: 'All the calm games in one place, with your level and your garden' },
       { href: '/recheck-drive.html', code: 'New', title: 'The Re-check Drive', note: 'A calm football game: do the small, kind things from the complacency playbook, and the ball moves toward a field goal. No clock, no way to lose' },
-      { href: '/frequency-journey.html', code: 'New', title: 'The Frequency Journey', note: 'Pick Tidbit or Sugarfoot and play a maze chase or a road-and-river crossing: easy controls and no game over' },
+      { href: '/bears-dojo.html', code: 'New', title: 'The Bears Dojo', note: 'Wander a temple garden while Tidbit and Sugarfoot tend it, build your own bear, then step inside for something gentle and always different' },
+      { href: '/frequency-journey.html', code: 'New', title: 'The Frequency Journey', note: 'Guide Tidbit and Sugarfoot through seven tone-themed worlds: practice tuning in (Pillar IV) while you settle (Pillar III)' },
       { href: '/calm-visualizer.html', code: 'New', title: 'Drift: calm visualizer', note: 'Pick how you feel. Slow, deep 3D colors and binaural tones (headphones on) ease you toward calm. Pillar III: settle first' },
       { href: '/night-garden.html', code: 'New', title: 'The Night Garden', note: 'A calm place to breathe, play and let your mind settle. Flowers bloom as you breathe; no timers, nothing to lose' },
       { href: '/word-bloom.html', code: 'New', title: 'Word Bloom', note: 'Swipe across the petals to spell words. Hundreds of gentle levels and a bonus jar, and every few levels something new appears in the background' },
@@ -200,7 +202,7 @@
     ]},
     { id: 'about', title: 'About & status', blurb: 'Who made this and why, what’s finished so far, and the site’s policies.', items: [
       { href: '/about.html', code: '', title: 'About the creator', note: 'The person behind it, their story, and why this exists' },
-      { href: '/polymath.html', code: '', title: 'The polymath way', note: 'How every field grows from the same few roots, and how nine of them became one program' },
+      { href: '/polymath.html', code: '', title: 'The polymath way', note: 'How every field grows from the same few roots, and how thirteen of them became one program' },
       { href: '/method-and-limits.html', code: '', title: 'Method and limits', note: 'Every score, formula and cut-off on the site, written out, with what each can’t tell you' },
       { href: '/program-overview.html', deep: true, code: '', title: 'Program Overview', note: 'How the chapters, workpapers and calculators fit together' },
       { href: '/suite-index.html', deep: true, code: '', title: 'Suite Index', note: 'The official list of what’s built today. If it isn’t here, it isn’t live yet' },
@@ -274,17 +276,44 @@
       { href: '/workpapers/wp-09-tone-filter.html', deep: true, code: 'WP-09', title: 'Say it so it lands', note: 'A fact, a feeling and a kind ask' },
       { href: '/tools/mood-arbitrage-free.html', code: 'Tool', title: 'Mood Arbitrage', note: 'Small, kind ways to shift a heavy mood' }
     ]},
-    { id: 'self', name: 'Know yourself', title: 'Know yourself', blurb: 'Understand your own wiring, load and patterns, on your own and at your pace.', items: [
+    { id: 'self', name: 'Know yourself', title: 'Know yourself', blurb: 'Everything you can use on your own: understand your wiring, load and patterns, settle yourself, get ready for a hard talk, and read up, at your pace. Nothing here needs anyone else.', items: [
+      { sub: 'Start here, on your own' },
       { href: '/self-path.html', code: 'Start', title: 'Your self-discovery path', note: 'The self path, step by step, on your own' },
       { href: '/wavelength.html', code: 'New', title: 'Find your Wavelength', note: 'How you think, talk and listen: your Wave Code' },
-      { href: '/wiring-card.html', code: 'Tool', title: 'Wiring Card', note: 'A one-page card on how you like to be spoken to' },
-      { href: '/communication-style-quiz.html', code: 'Quiz', title: 'Communication style quiz', note: 'Find your Wave Code' },
+      { href: '/quick-checks.html#today', code: 'Daily', title: 'Today’s Weather', note: 'A one-minute read on how you’re doing today' },
+      { href: '/ask.html', code: 'Chat', title: 'Ask Professor Puddles', note: 'Ask in your own words. Answers come only from this site' },
+      { sub: 'Know your own wiring' },
       { href: '/know-yourself.html', deep: true, title: 'Know your own wiring', note: 'What’s you, what life taught you, and what’s just today' },
       { href: '/growing-up.html', deep: true, title: 'Where your lens came from', note: 'How growing up shapes what you expect, and which rules to keep' },
       { href: '/wired-differently.html', deep: true, title: 'Wired Differently', note: 'How differently wired people hear the same words' },
+      { href: '/wiring-card.html', code: 'Tool', title: 'Wiring Card', note: 'A one-page card on how you like to be spoken to' },
+      { href: '/communication-style-quiz.html', code: 'Quiz', title: 'Communication style quiz', note: 'What the Wavelength quiz looks at, and how to use your result' },
+      { href: '/tools/frequency-calibration.html', code: 'Tool', title: 'Find your natural rhythms', note: 'Your rhythms for money, decisions, check-ins and rest' },
+      { href: '/neurodivergent-relationships.html', code: 'Guide', title: 'Neurodivergent relationships', note: 'Tips for ADHD, autistic and AuDHD readers' },
+      { sub: 'Check your load' },
       { href: '/workpapers/wp-02-battery-stress-meter.html', deep: true, code: 'WP-02', title: 'How much are you carrying?', note: 'Five quick questions about today’s load' },
+      { href: '/lemonade-stand.html', code: 'Tool', title: 'The Lemonade Stand', note: 'Choose “just me” to see your own load for the week' },
+      { href: '/invisible-labor-mental-load.html', code: 'Guide', title: 'Invisible labor and the mental load', note: 'What it is, and five calm steps to share it' },
+      { sub: 'Settle yourself' },
       { href: '/wp-11.html', deep: true, code: 'WP-11', title: 'The Calm-Down Kit', note: 'Decide ahead of time what settles you' },
-      { href: '/tools/frequency-calibration.html', code: 'Tool', title: 'Find your natural rhythms', note: 'Your rhythms for money, decisions, check-ins and rest' }
+      { href: '/calm-visualizer.html', code: 'Drift', title: 'Drift: calm visualizer', note: 'Slow colors and tones matched to how you feel' },
+      { href: '/night-garden.html', code: 'Breathe', title: 'The Night Garden', note: 'Breathe slowly and watch the flowers bloom' },
+      { href: '/soundscapes.html', code: 'Audio', title: 'Soundscapes', note: 'Background audio for settling down' },
+      { href: '/bears-dojo.html', code: 'New', title: 'The Bears Dojo', note: 'A temple garden and a quiet room of gentle things to do' },
+      { href: '/pause-and-play.html', code: 'All', title: 'Pause & Play', note: 'All the calm games, your level and your garden' },
+      { sub: 'Before you say it' },
+      { href: '/workpapers/wp-09-tone-filter.html', deep: true, code: 'WP-09', title: 'Say it so it lands', note: 'A fact, a feeling and a kind ask, before you send' },
+      { href: '/signal-translator.html', code: 'Tool', title: 'The Signal Translator', note: 'Try a sentence and see how it might land' },
+      { href: '/conversation-reader.html', code: 'Tool', title: 'The Conversation Reader', note: 'Paste a thread and see where it turned' },
+      { href: '/perspective-shifter.html', code: 'Tool', title: 'The Perspective Shifter', note: 'See a moment from the other side' },
+      { href: '/carrier-wave-decoder.html', code: 'Tool', title: 'The Carrier Wave Decoder', note: 'A guided session you can run alone, for when a talk goes sideways' },
+      { sub: 'Worksheets and reading' },
+      { href: '/workpapers/fill/suite.html?road=self', code: 'Suite', title: 'Workpapers for you', note: 'The “Just me” road: worksheets in order, fillable and printable' },
+      { href: '/book/chapter-3.html', deep: true, code: 'III', title: 'Full tanks and different angles', note: 'Why some reactions are bigger than their cause' },
+      { href: '/learn/index.html#part-self', deep: true, code: 'Stories', title: 'Stories from Philosophy: knowing yourself', note: 'The Second Arrow, the Ship of Theseus, What Is Up to Us' },
+      { href: '/library.html', code: 'Library', title: 'The Professor’s Library', note: 'Psychology and conflict in plain words' },
+      { href: '/reading.html', code: 'Articles', title: 'Articles to read', note: 'Hand-picked articles from trusted sources' },
+      { href: '/glossary.html', code: 'Words', title: 'Glossary', note: 'Every word the site uses, in plain English' }
     ]},
     { id: 'read', name: 'Read & learn', title: 'Read & learn', blurb: 'The book, the library and the stories, in one place. Each page has a short version and a deeper one.', items: [
       { sub: 'The book' },
@@ -312,6 +341,7 @@
       { href: '/polymath.html', title: 'The polymath way', note: 'How nine fields of study became one program' }
     ]},
     { id: 'play', name: 'Calm & play', title: 'Calm & play', blurb: 'Calm games, cartoons and sounds for a busy mind. No timers and no way to lose.', items: [
+      { href: '/bears-dojo.html', code: 'New', title: 'The Bears Dojo', note: 'A temple garden to wander, a bear to build, a quiet room of gentle things' },
       { href: '/night-garden.html', code: 'Breathe', title: 'The Night Garden', note: 'Breathe slowly and watch the flowers bloom' },
       { href: '/pause-and-play.html', code: 'All', title: 'Pause & Play', note: 'All the calm games and word puzzles, your level and your garden' },
       { href: '/frequency-journey.html', code: 'Game', title: 'The Frequency Journey', note: 'Pick Tidbit or Sugarfoot: a maze chase or a road-and-river crossing, with easy controls' },
@@ -340,6 +370,12 @@
       { href: '/legal/refund-policy.html', title: 'Refund policy' }
     ]}
   ];
+
+  // The polymath way sits at the bottom of every menu group, so it is one tap away from anywhere.
+  MENU.forEach(function (g) {
+    g.items = g.items.filter(function (it) { return it.href !== '/polymath.html'; });
+    g.items.push({ href: '/polymath.html', code: '', title: 'The polymath way', note: 'How thirteen fields grow from the same few roots', foot: true });
+  });
 
   // ===== Nothing below needs editing =====
   var STORE_KEY = 'tol-member-email';
@@ -427,7 +463,7 @@
           '<span class="tol-code">' + esc(it.code || '') + '</span>' +
           '<span class="tol-title">' + esc(it.title) + (it.note ? '<small>' + esc(it.note) + '</small>' : '') + '</span>' +
           '<span class="tol-access">' + (it.paid ? (isMember ? 'unlocked' : (CONFIG.freePreview ? 'Free with sign-up' : 'members')) : '') + '</span>';
-        var li = el('li'); li.appendChild(a);
+        var li = el('li', it.foot ? { class: 'tol-foot-row' } : null); li.appendChild(a);
         if (it.deep) li.appendChild(el('a', { class: 'dig tol-dig', href: deepHref(it) }, 'Dig deeper'));
         ol.appendChild(li);
       });
@@ -473,7 +509,7 @@
       if (it.href === '/index.html' || it.menu === false) return;
       var a = el('a', { href: it.href }, (it.code ? '<span class="tol-drop-code">' + esc(it.code) + '</span>' : '') + '<span>' + esc(it.title) + '</span>');
       if (it.href.split('#')[0] === current) a.setAttribute('aria-current', 'page');
-      var li = el('li'); li.appendChild(a); ul.appendChild(li);
+      var li = el('li', it.foot ? { class: 'tol-foot-row' } : null); li.appendChild(a); ul.appendChild(li);
     });
     menu.appendChild(ul);
     var all = el('button', { type: 'button', class: 'tol-drop-all', 'aria-controls': 'tol-panel' }, 'Everything on the site &rarr;');
@@ -884,6 +920,7 @@
       '<p class="tol-promise">What you type into the tools and worksheets stays on your device. It is never collected or sent to us. <a href="/legal/privacy-policy.html#your-entries">How we handle your information</a></p>';
     foot.innerHTML = promise +
       '<span class="tol-foot-brand"><img src="/assets/img/logo-mark.svg" alt="" width="40" height="40">Spread Love &amp; Acceptance &middot; spreadloveandacceptance.com</span>' +
+ (current === '/polymath.html' ? '' : '<p class="tol-foot-polymath">Every part of this program grows from the same few roots, seen across thirteen fields. <a href="/polymath.html">The polymath way &rarr;</a></p>') +
       '<nav class="tol-foot-guides" aria-label="Guides" style="display:flex;flex-wrap:wrap;gap:.3rem 1rem;justify-content:center;margin:0 0 .75rem;font-size:.9rem">' +
         '<a href="/invisible-labor-mental-load.html">The mental load</a>' +
         '<a href="/chore-chart-for-couples.html">Chore chart for couples</a>' +
