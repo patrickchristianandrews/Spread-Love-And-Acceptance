@@ -44,11 +44,33 @@
   function small() { return Math.min(screen.width || innerWidth, screen.height || innerHeight, innerWidth, innerHeight) < 820; }
 
   // ---- 3. full screen goes sideways
-  function lock() { try { var o = screen.orientation; if (o && o.lock) { var p = o.lock('landscape'); if (p && p.catch) p.catch(function () {}); } } catch (e) {} }
-  function unlock() { try { var o = screen.orientation; if (o && o.unlock) o.unlock(); } catch (e) {} }
+  // First choice: ask the phone to turn (Android Chrome allows it in real full screen and in the installed app).
+  // If the phone will not (iPhones, or a browser tab using the fill-the-screen fallback), turn the picture itself
+  // a quarter turn so it fills the sideways screen, and drop that the moment the phone really is sideways.
+  var locked = false, lockTried = 0;
+  function lock() {
+    try { var o = screen.orientation; if (o && o.lock) { var p = o.lock('landscape'); if (p && p.then) p.then(function () { locked = true; }).catch(function () { locked = false; }); return; } } catch (e) {}
+    locked = false;
+  }
+  function unlock() { locked = false; try { var o = screen.orientation; if (o && o.unlock) o.unlock(); } catch (e) {} }
+  function fullBox() { var el = fsEl(); if (el) return el; return document.querySelector('.is-full, .is-full-now'); }
+  var turned = null;
+  function quarterTurn(on, box) {
+    if (turned && turned !== box) { turned.classList.remove('tsw-rot'); turned = null; }
+    if (on && box && !box.classList.contains('tsw-rot')) { box.classList.add('tsw-rot'); turned = box; try { window.dispatchEvent(new Event('resize')); } catch (e) {} }
+    if (!on && turned) { turned.classList.remove('tsw-rot'); turned = null; try { window.dispatchEvent(new Event('resize')); } catch (e) {} }
+  }
+  function sidewaysCheck() {
+    var box = fullBox();
+    if (!box || !small()) { if (turned) quarterTurn(false); if (!box && lockTried) { lockTried = 0; unlock(); } return; }
+    if (!port.matches) { quarterTurn(false, box); return; }        // the phone is already sideways
+    if (!locked && lockTried < 3) { lockTried++; lock(); }          // ask the phone to turn
+    if (!locked && lockTried >= 1) setTimeout(function () { if (port.matches && !locked && fullBox() === box) quarterTurn(true, box); }, 450);
+  }
   ['fullscreenchange', 'webkitfullscreenchange'].forEach(function (ev) {
-    document.addEventListener(ev, function () { if (fsEl()) lock(); else unlock(); });
+    document.addEventListener(ev, function () { lockTried = 0; if (fsEl()) lock(); else unlock(); setTimeout(sidewaysCheck, 150); });
   });
+  setInterval(sidewaysCheck, 700);
 
   // ---- 2. turning sideways opens the picture
   var autoBox = null, autoBtn = null, leftByUser = false;
@@ -90,7 +112,8 @@
 
   // ---- 1. the hint
   var TARGETS = ['#sn-stage', '.tz-stage', '.fb-stage', '.fbmv-stage', '#cv-gl', '#ng-canvas'];
-  var CSS = '.tsw{ display:none; align-items:center; gap:.6rem; margin:.6rem auto; padding:.45rem .5rem .45rem .9rem; max-width:34rem; border-radius:999px; background:#FFF4D6; border:1px solid #E7C777; color:#5A430F; font:600 .92rem/1.25 "Lora",Georgia,serif; box-shadow:0 4px 12px -6px rgba(90,60,10,.4); }' +
+  var CSS = '.tsw-rot{ position:fixed !important; inset:auto !important; top:0 !important; left:0 !important; width:100vh !important; height:100vw !important; width:100dvh !important; height:100dvw !important; max-width:none !important; transform-origin:top left !important; transform:rotate(90deg) translateY(-100%) !important; z-index:10060 !important; border-radius:0 !important; margin:0 !important; }' +
+    '.tsw{ display:none; align-items:center; gap:.6rem; margin:.6rem auto; padding:.45rem .5rem .45rem .9rem; max-width:34rem; border-radius:999px; background:#FFF4D6; border:1px solid #E7C777; color:#5A430F; font:600 .92rem/1.25 "Lora",Georgia,serif; box-shadow:0 4px 12px -6px rgba(90,60,10,.4); }' +
     '.tsw.is-on{ display:flex; }' +
     '.tsw-ph{ flex:none; width:1.5rem; height:2.3rem; display:grid; place-items:center; }' +
     '.tsw-ph i{ display:block; width:.95rem; height:1.7rem; border:2px solid #5A430F; border-radius:.3rem; position:relative; transform-origin:50% 50%; animation:tsw-turn 3.2s ease-in-out infinite; }' +
@@ -116,6 +139,8 @@
     scan(); var n = 0, iv = setInterval(function () { scan(); if (++n > 12) clearInterval(iv); }, 800);
     if (port.addEventListener) port.addEventListener('change', onTurn); else if (port.addListener) port.addListener(onTurn);
     window.addEventListener('resize', sync);
+    try { if (screen.orientation && screen.orientation.addEventListener) screen.orientation.addEventListener('change', onTurn); } catch (e) {}
+    window.addEventListener('orientationchange', function () { setTimeout(onTurn, 120); });
     if (!port.matches) setTimeout(function () { goSideways(true); }, 900);   // arrived already sideways with something playing
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', start); else start();

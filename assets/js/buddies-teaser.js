@@ -140,7 +140,7 @@
     // two little "!"s when the ears go up
     if (u > 3.85 && u < 4.9) { var a = win(u, 3.9, 4.9, 0.12); g.globalAlpha = a; font(g, '800', 22); g.textAlign = 'center'; g.fillStyle = '#FFE08A'; g.fillText('!', tid.x + 4, tid.y - 10 - 4 * eout((u - 3.9) / 0.2)); g.fillText('!', sug.x - 4, sug.y - 10 - 4 * eout((u - 3.9) / 0.2)); g.globalAlpha = 1; }
     say(g, tid, 'Did you hear that?', u, 5.0, 6.55);
-    say(g, sug, 'It’s coming from… out there.', u, 6.6, 8.0);
+    say(g, sug, 'From… out there.', u, 6.6, 8.0);
     g.restore();
   }
   function card(g, u, d, text, o, calm) {
@@ -448,7 +448,7 @@
     if (u > 1.35) { var lq = clamp((u - 1.35) / 0.7, 0, 1), lx = tid.x + 4 + Math.sin(lq * 9) * 18 * (1 - lq), ly = mix(60, tid.y + 12, eout(lq)); g.save(); g.translate(lx, ly); g.rotate(Math.sin(lq * 8) * 0.6 * (1 - lq) + 0.3); ell(g, 0, 0, 9, 4.5, '#E89B3A'); line(g, -9, 0, 9, 0, '#B8701F', 1); g.restore(); }
     var gig = u > 1.25, sug = pup(g, 'sugarfoot', 520, 312, 1.5, { pose: gig ? 'wiggle' : 'sit', face: -1, t: u + 1, wag: gig ? Math.sin(u * 16) * 0.8 : 0.3 });
     say(g, sug, 'Hee hee!', u, 1.3, 2.05);
-    say(g, tid, 'I meant to do that!', u, 2.1, 3.2);
+    say(g, tid, 'On purpose!', u, 2.1, 3.2);
   }
   function hill(g, u, d, calm) {
     var z = mix(1.28, 1, eio(u / d));
@@ -528,8 +528,8 @@
     if (pop) for (var i = 0; i < 12; i++) { var q = u - 3.9, a = -Math.PI * (0.15 + 0.7 * rnd(i + 1301)), v = 80 + rnd(i + 1302) * 90; if (q > 1) break; star(g, 452 + Math.cos(a) * v * q, 230 + Math.sin(a) * v * q + 60 * q * q, 3 * (1 - q), 'rgba(255,236,160,' + (1 - q) + ')'); }
     say(g, sug, 'Wait… did anyone see where Tidbit went?', u, 0.4, 3.3);
     say(g, tid, 'Ready for Season 2!', u, 4.15, 6.2, { big: false });
-    say(g, sug, 'Hee hee! Of course you are.', u, 6.3, 7.7);
-    say(g, tid, 'And remember… I’ll be bark!', u, 7.8, 9.4);
+    say(g, sug, 'Of course!', u, 6.3, 7.7);
+    say(g, tid, 'I’ll be bark!', u, 7.8, 9.4);
   }
 
   // ---------------------------------------------------------------- the funny middle: seven slapstick bits, each a wink at a famous movie
@@ -567,10 +567,10 @@
     }
     if (u > 5.3 && u < 6.4) onomato(g, 'pffffft…', 440, 214, 24, '#FFFFFF', win(u, 5.3, 6.4, 0.2), -0.08);
     narr('In a world of golden bones…', u, 0.1, 2.0);
-    say(g, tid, 'One golden bone. Easy!', u, 2.1, 3.3);
+    say(g, tid, 'Golden bone. Easy!', u, 2.1, 3.3);
     say(g, sug, 'Tidbit! RUN!', u, 3.5, 4.8, { big: true });
-    say(g, tid, 'Is that a… beach ball?', u, 5.5, 7.0);
-    say(g, sug, 'Every single time.', u, 6.2, 7.4);
+    say(g, tid, 'A… beach ball?', u, 5.5, 7.0);
+    say(g, sug, 'Every time.', u, 6.2, 7.4);
     g.restore();
   }
   // 2. the pond (Jaws): a fin, two dramatic notes, and a very small shark
@@ -715,7 +715,7 @@
     splash(g, 400, WL, hitU + 0.7, u, 20, 1900);
     var sh = u >= hitU + 0.9 ? { x: 420, y: WL - 40, who: 'sugarfoot' } : { x: sx, y: sy - 74, who: 'sugarfoot' };
     say(g, { x: sx, y: 268 - 74, who: 'sugarfoot' }, 'YOU SHALL NOT PASS!', u, 1.0, 3.0, { big: true });
-    say(g, { x: sx, y: 268 - 74, who: 'sugarfoot' }, '…Okay, then.', u, 3.05, 3.65);
+    say(g, { x: sx, y: 268 - 74, who: 'sugarfoot' }, '…Okay.', u, 3.05, 3.65);
     say(g, { x: 396, y: WL - 40, who: 'tidbit' }, 'Did I do that?', u, 5.3, 6.6);
   }
   // 6. the leap (Toy Story): to infinity, and into the laundry
@@ -753,6 +753,9 @@
   // [start, end, id, draw function, extra]
   // the funny middle: a card, then six bits (id, length in seconds, draw function)
   var GAGS = [['boulder', 7.2, boulder], ['jaws', 6.2, jaws], ['matrix', 6.2, matrix], ['snakes', 7.0, snakes], ['vault', 6.6, vault], ['bridge', 6.6, bridge], ['laundry', 6.2, laundry]];
+  // each bit is slowed to the pace its lines need to be spoken, so the voices and the picture always go along together
+  var GK = { boulder: 1.35, jaws: 1.5, matrix: 1.5, snakes: 1.8, vault: 1, bridge: 1.4, laundry: 1.35 };
+  GAGS = GAGS.map(function (x) { var k = GK[x[0]] || 1, f = x[2]; return [x[0], x[1] * k, k === 1 ? f : function (g, u, d, c) { return f(g, u / k, d / k, c); }, k]; });
   var G0 = 38.7, GCARD = 1.8, GL = GCARD + GAGS.reduce(function (n, x) { return n + x[1]; }, 0);   // the funny middle starts at G0 and lasts GL seconds
   var POST_EXTRA = 1.6;   // a little longer at the very end, for one more gag
   var EDIT = [
@@ -1036,44 +1039,46 @@
     hit(G0, true); ev(G0, 'sparkle', 0.03); ev(G0 + 0.1, 'whoosh', 0.7, 0.1);
     var tEnd = G0 + GL;
     // 1. boulder: sneaky plucks, a rumble, drums, then a slide-whistle sigh
-    var T = starts[0];
+    var marks = [E.length], T = starts[0];
     ev(T + 2.3, 'bell', 88, 0.07); ev(T + 3.0, 'rumble', 3.0, 0.4);
     for (var k1 = 0; k1 < 8; k1++) ev(T + 3.2 + k1 * 0.28, 'tom', 90 + (k1 % 2) * 25, 0.22 * H);
     ev(T + 3.4, 'boom', 0.4 * H); ev(T + 5.3, 'glide', 700, 150, 0.7, 0.08, 'sine'); ev(T + 5.5, 'sample', 'sugarfoot-laugh-1', 0.4);
     talk(T + 2.1, 6, 640); talk(T + 3.5, 4, 470); talk(T + 5.5, 6, 640); talk(T + 6.2, 5, 470);
     // 2. pond: two dramatic notes, faster and faster
-    T = starts[1];
+    marks.push(E.length); T = starts[1];
     for (var k2 = 0, t2 = T + 0.9; k2 < 5 && t2 < T + 2.9; k2++) { ev(t2, 'bass', 40, 0.5, 0.15); ev(t2 + 0.26, 'bass', 41, 0.5, 0.15); t2 += k2 < 2 ? 0.9 : 0.6; }
     ev(T + 2.9, 'swell', 0.5, 0.14 * H); ev(T + 2.95, 'crash', 0.08 * H); ev(T + 3.0, 'glide', 300, 1500, 0.3, 0.07, 'triangle'); ev(T + 3.3, 'sample', 'sugarfoot-laugh-2', 0.45); ev(T + 3.9, 'splash', 0.35);
     talk(T + 0.3, 6, 640); talk(T + 2.0, 3, 640); talk(T + 3.0, 4, 470); talk(T + 4.4, 7, 640);
     // 3. slow motion: a long low sweep, a splat, and a sad trombone
-    T = starts[2];
+    marks.push(E.length); T = starts[2];
     ev(T + 1.0, 'bass', 33, 2.6, 0.12); ev(T + 1.0, 'glide', 260, 80, 2.4, 0.05, 'sawtooth'); ev(T + 3.5, 'tom', 80, 0.3 * H); ev(T + 3.6, 'splash', 0.3); ev(T + 3.6, 'crash', 0.05 * H);
     ev(T + 4.2, 'glide', 400, 340, 0.4, 0.06, 'sawtooth'); ev(T + 4.65, 'glide', 340, 290, 0.4, 0.06, 'sawtooth'); ev(T + 5.1, 'glide', 290, 210, 0.9, 0.06, 'sawtooth');
     talk(T + 0.3, 6, 640); talk(T + 2.0, 5, 640); talk(T + 4.0, 7, 470); talk(T + 5.5, 4, 470);
     // 4. snakes on a plane: a calm cabin, hissing, a drumroll... and a stop-short when the word nearly comes out
-    T = starts[3];
+    marks.push(E.length); T = starts[3];
     ev(T + 0.1, 'pad', [57, 60, 64], 1.2, 0.03); ev(T + 1.0, 'whoosh', 0.5, 0.1); ev(T + 1.05, 'bell', 91, 0.05); ev(T + 1.2, 'swell', 1.2, 0.1 * H); ev(T + 1.4, 'rumble', 2.4, 0.3);
     for (var ks = 0; ks < 9; ks++) ev(T + 2.5 + ks * (0.2 - ks * 0.008), 'tom', 96 - ks * 3, (0.16 + ks * 0.015) * H);
     ev(T + 2.6, 'bass', 33, 1.4, 0.1); ev(T + 4.0, 'crash', 0.09 * H); ev(T + 4.0, 'boom', 0.4 * H); ev(T + 4.05, 'blip', 880, 0.05);
     ev(T + 4.6, 'sample', 'tidbit-hmm', 0.5); ev(T + 5.1, 'glide', 500, 330, 0.5, 0.06, 'sawtooth'); ev(T + 5.7, 'sample', 'sugarfoot-laugh-2', 0.4); ev(T + 6.2, 'bell', 84, 0.05);
     talk(T + 0.2, 6, 470); talk(T + 1.6, 4, 640); talk(T + 2.6, 9, 640); talk(T + 4.1, 7, 470); talk(T + 4.3, 4, 330, 0.03); talk(T + 5.5, 4, 640); talk(T + 6.2, 4, 470);
     // 5. vault: a tense five-beat riff, a cookie "ting", an alarm
-    T = starts[4];
+    marks.push(E.length); T = starts[4];
     for (var k3 = 0; k3 < 6; k3++) { [0, 0.4, 0.8, 1.0, 1.4].forEach(function (o) { ev(T + 0.6 + k3 * 1.6 + o, 'bass', k3 % 2 ? 38 : 36, 0.2, 0.09); }); if (T + 0.6 + k3 * 1.6 < T + 4.2) ev(T + 0.6 + k3 * 1.6 + 0.2, 'hat', 0.03); }
     ev(T + 3.0, 'bell', 96, 0.07); ev(T + 4.0, 'glide', 900, 200, 0.5, 0.08, 'sine'); ev(T + 4.45, 'kick', 0.3 * H);
     for (var k4 = 0; k4 < 6; k4++) ev(T + 4.3 + k4 * 0.3, 'glide', k4 % 2 ? 660 : 880, k4 % 2 ? 660 : 880, 0.26, 0.03, 'sawtooth');
     talk(T + 0.9, 5, 640); talk(T + 1.5, 6, 330, 0.03); talk(T + 3.0, 3, 640); talk(T + 4.0, 3, 330); talk(T + 5.0, 7, 640);
     // 6. bridge: a big, serious chord, a tiny ladybug, and a splash
-    T = starts[5];
+    marks.push(E.length); T = starts[5];
     ev(T + 0.8, 'pad', [45, 57, 64], 3.2, 0.045); ev(T + 0.9, 'swell', 1.0, 0.12 * H); ev(T + 1.0, 'tom', 80, 0.3 * H); ev(T + 1.0, 'boom', 0.4 * H); ev(T + 1.4, 'bell', 76, 0.05);
     ev(T + 3.65, 'crash', 0.08 * H); ev(T + 4.0, 'glide', 700, 200, 0.5, 0.07, 'sine'); ev(T + 4.4, 'splash', 0.4); ev(T + 5.3, 'sample', 'tidbit-ooh', 0.4);
     talk(T + 1.0, 8, 330); talk(T + 3.05, 3, 470); talk(T + 5.3, 6, 640);
     // 7. the leap: a hero fanfare and a very soft landing
-    T = starts[6];
+    marks.push(E.length); T = starts[6];
     [72, 76, 79, 84].forEach(function (m, i) { ev(T + 1.7 + i * 0.09, 'bell', m, 0.06); }); ev(T + 1.75, 'whoosh', 0.8, 0.14); ev(T + 2.5, 'boom', 0.35 * H); ev(T + 2.5, 'crash', 0.06 * H);
     for (var k6 = 0; k6 < 6; k6++) ev(T + 2.6 + k6 * 0.1, 'marimba', 84 - k6 * 2, 0.06); ev(T + 3.2, 'sample', 'sugarfoot-aww', 0.4);
     talk(T + 0.3, 6, 640); talk(T + 1.7, 7, 640); talk(T + 3.1, 5, 470); talk(T + 4.4, 8, 640);
+    marks.push(E.length);
+    GAGS.forEach(function (gg, n) { var k = gg[3]; if (k === 1) return; for (var q = marks[n]; q < marks[n + 1]; q++) E[q][0] = starts[n] + (E[q][0] - starts[n]) * k; });
     // the very end: one more bark
     ev(55.9 + GL + 7.8, 'sample', 'tidbit-arfarf', 0.45); talk(55.9 + GL + 7.9, 8, 660, 0.035); ev(55.9 + GL + 9.1, 'sample', 'tidbit-yip', 0.4);
     // ---- Season 1's sound, made to fit this picture exactly
@@ -1186,28 +1191,51 @@
       });
     }
     // ----- read aloud: the speech bubbles and the narrator, in the browser's own voices
-    var prevKeys = {}, voiceList = [], canSay = 'speechSynthesis' in window && typeof SpeechSynthesisUtterance !== 'undefined';
-    function loadVoices() { try { voiceList = speechSynthesis.getVoices() || []; } catch (e) { voiceList = []; } }
-    if (canSay) { loadVoices(); try { speechSynthesis.addEventListener('voiceschanged', loadVoices); } catch (e) {} }
-    // a clear English voice for everyone, and a deeper one for the trailer narrator when the device has one
-    function pickVoice(narrator) {
-      var en = voiceList.filter(function (v) { return /^en[-_]/i.test(v.lang) || v.lang === 'en'; }); if (!en.length) return null;
-      var want = narrator ? /daniel|david|alex|google uk english male|male|guy|james|mark/i : /samantha|zira|aria|jenny|google us english|google uk english female|female|karen|moira/i;
-      return en.filter(function (v) { return want.test(v.name); })[0] || en.filter(function (v) { return /^en[-_]US/i.test(v.lang); })[0] || en[0];
+    // VOICES, the way Season 1 does them: a recorded voice for a line when one exists
+    // (/assets/audio/buddies/s2teaser/<key>.mp3, listed in index.json, key made from who|text), otherwise the device's own speech,
+    // with Season 1's voice choices (Tidbit bright and quick, Sugarfoot softer and slower, the narrator calm and low).
+    var prevKeys = {}, voiceList = [], picked = null, canSay = 'speechSynthesis' in window && typeof SpeechSynthesisUtterance !== 'undefined';
+    var FEM = /samantha|ava|allison|susan|zira|aria|jenny|michelle|karen|moira|tessa|fiona|serena|victoria|emma|joanna|salli|kendra|kimberly|ivy|libby|sonia|natasha|female|google us english/i;
+    var MALE = /daniel|alex|guy|david|mark|tom|arthur|oliver|ryan|brian|matthew|justin|george|male|james|aaron|fred/i;
+    function vscore(v, fem) { var sc = 0, n = v.name || ''; if (/en[-_]US/i.test(v.lang)) sc += 3; if (/natural|neural|enhanced|premium|online/i.test(n)) sc += 3; if (/google/i.test(n)) sc += 1; if (fem ? FEM.test(n) : MALE.test(n)) sc += 4; if (v.localService === false) sc += 0.5; return sc; }
+    function vpick() {
+      if (!voiceList.length) return null;
+      var fem = voiceList.slice().sort(function (x, y) { return vscore(y, true) - vscore(x, true); }), male = voiceList.slice().sort(function (x, y) { return vscore(y, false) - vscore(x, false); });
+      var tid = fem[0], sug = fem.filter(function (v) { return v.name !== tid.name && FEM.test(v.name); })[0] || tid, nar = male.filter(function (v) { return MALE.test(v.name); })[0] || fem.filter(function (v) { return v !== tid && v !== sug; })[0] || tid;
+      return { tidbit: tid, sugarfoot: sug, narr: nar };
     }
+    function loadVoices() { try { voiceList = (speechSynthesis.getVoices() || []).filter(function (v) { return /^en([-_]|$)/i.test(v.lang || ''); }); } catch (e) { voiceList = []; } picked = vpick(); }
+    if (canSay) { loadVoices(); try { speechSynthesis.addEventListener('voiceschanged', loadVoices); } catch (e) {} }
+    var VOICE = { tidbit: { pitch: 1.6, rate: 1.08 }, sugarfoot: { pitch: 1.35, rate: 0.95 }, narr: { pitch: 1.0, rate: 0.95 } };
+    function ckey(who, text) { var h = 0x811c9dc5, t = who + '|' + text; for (var i = 0; i < t.length; i++) { h ^= t.charCodeAt(i); h = Math.imul(h, 0x01000193) >>> 0; } return ('0000000' + h.toString(16)).slice(-8); }
+    var CLIP = { map: null, started: false, bufs: {} };
+    function clipsInit() { if (CLIP.started) return; CLIP.started = true; fetch('/assets/audio/buddies/s2teaser/index.json', { cache: 'no-cache' }).then(function (r) { return r.ok ? r.json() : null; }).then(function (m) { CLIP.map = m || {}; }).catch(function () { CLIP.map = {}; }); }
+    function lineDur(who, text) { var L = scanLines(P.calm), k = who + '|' + text; for (var i = 0; i < L.length; i++) if (L[i].who === who && L[i].text === text) return L[i].dur; return 1.5; }
     // the music steps back a little while someone is talking, so every word can be heard
     function duck(on) { try { if (A.master && A.ctx) A.master.gain.setTargetAtTime(on ? 0.5 : 0.9, A.ctx.currentTime, 0.05); } catch (e) {} }
+    function playClip(key) {
+      var c = A.ctx; if (!c) return false;
+      var go = function (buf) { if (!buf || !P.playing) return; var s2 = c.createBufferSource(), gn = c.createGain(); s2.buffer = buf; gn.gain.value = 1; s2.connect(gn); gn.connect(c.destination); duck(true); s2.onended = function () { duck(false); }; s2.start(); A.live.push(s2); };
+      if (CLIP.bufs[key]) { CLIP.bufs[key].then(go); return true; }
+      CLIP.bufs[key] = fetch('/assets/audio/buddies/s2teaser/' + key + '.mp3').then(function (r) { return r.ok ? r.arrayBuffer() : null; }).then(function (ab) { return ab ? new Promise(function (ok) { try { c.decodeAudioData(ab, ok, function () { ok(null); }); } catch (e) { ok(null); } }) : null; }).catch(function () { return null; });
+      CLIP.bufs[key].then(go); return true;
+    }
     function speakNow() {
-      if (!canSay) return;
-      var items = FR.narr.map(function (n) { return { who: 'narr', text: n.text }; }).concat(FR.says.map(function (x) { return { who: x.who, text: x.text }; })), cur = {}, fresh = [];
+      var items = FR.narr.map(function (n) { return { who: 'narr', text: n.text }; }).concat(FR.says.map(function (x) { return { who: x.who === 'sugarfoot' ? 'sugarfoot' : 'tidbit', text: x.text }; })), cur = {}, fresh = [];
       items.forEach(function (it) { var k = it.who + '|' + it.text; cur[k] = 1; if (!prevKeys[k]) fresh.push(it); });
       prevKeys = cur; if (!fresh.length) return;
-      try { speechSynthesis.cancel(); } catch (e) {}   // never let the voice fall behind the picture: the newest line wins
+      clipsInit();
+      var spokeWithSpeech = false;
       fresh.forEach(function (it) {
+        var key = ckey(it.who, it.text);
+        if (CLIP.map && CLIP.map[key]) { playClip(key); return; }   // a recorded voice
+        if (!canSay) return;
         try {
-          var u = new SpeechSynthesisUtterance(it.text.replace(/…/g, '...').replace(/—/g, '...')), v = pickVoice(it.who === 'narr');
+          if (!spokeWithSpeech) { try { speechSynthesis.cancel(); } catch (e) {} spokeWithSpeech = true; }   // never let the voice fall behind the picture
+          var V = VOICE[it.who] || VOICE.tidbit, u = new SpeechSynthesisUtterance(it.text.replace(/…/g, '...').replace(/—/g, '...')), v = picked && picked[it.who];
           if (v) { u.voice = v; u.lang = v.lang; } else u.lang = 'en-US';
-          u.rate = it.who === 'narr' ? 0.9 : 1.12; u.pitch = it.who === 'narr' ? 0.6 : it.who === 'sugarfoot' ? 0.85 : 1.45; u.volume = 1;
+          var words = (it.text.match(/[A-Za-z’']+/g) || []).length, need = 0.35 + 0.34 * words, win = lineDur(it.who, it.text);
+          u.pitch = V.pitch; u.rate = Math.max(0.9, Math.min(1.5, V.rate * Math.max(1, need / Math.max(0.6, win)))); u.volume = 1;
           u.onstart = function () { duck(true); }; u.onend = u.onerror = function () { duck(false); };
           speechSynthesis.speak(u);
         } catch (e) {}
@@ -1382,7 +1410,7 @@
   }
   var API = window.TOLTeaser = { duration: DUR, secrets: SECRETS.map(function (s) { return s.id; }), places: PLACES.map(function (p) { return p.id; }), edit: EDIT.map(function (s) { return { t0: s[0], t1: s[1], id: s[2] }; }),
     renderAt: function (canvas, T, calm) { var g = canvas.getContext('2d'); render(g, canvas.width, canvas.height, T, !!calm, 1); return FR.shot; },
-    renderAudio: renderAudio, lines: function () { return []; } };
+    renderAudio: renderAudio, lines: function (calm) { return scanLines(!!calm).map(function (l) { return { t: +l.T.toFixed(2), who: l.who, text: l.text, dur: +l.dur.toFixed(2) }; }); } };
   function init() {
     var host = document.querySelector('[data-teaser]'); if (host) { var pl = mount(host); API.player = pl; ['play', 'pause', 'seek', 'restart', 'found', 'secrets', 'shot', 'setCalm'].forEach(function (k) { API[k] = pl[k]; }); API.state = function () { return { t: pl.P.T, playing: pl.P.playing, ended: pl.P.ended, calm: pl.P.calm, shot: FR.shot, found: MEM.found.slice() }; }; }
     var pk = document.querySelector('[data-teaser-picker]'); if (pk) mountPicker(pk);
