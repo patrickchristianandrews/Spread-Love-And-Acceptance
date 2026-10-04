@@ -5412,6 +5412,56 @@
           "/soundscapes.html#senses"
         ]
       ]
+    },
+    {
+      "id": "bookparts",
+      "kind": "tool",
+      "name": "how the book is arranged",
+      "keys": [
+        "where does the book start",
+        "where should i start the book",
+        "start of the book",
+        "the book parts",
+        "parts of the book",
+        "part one",
+        "part two",
+        "part three",
+        "know yourself part",
+        "the most important yourself",
+        "then now next",
+        "is there a part about myself",
+        "is there a chapter about me",
+        "chapters about self",
+        "part of the book about myself",
+        "book about myself",
+        "about myself in the book",
+        "a part about myself"
+      ],
+      "what": "The book now starts with you. Part One, “The most important: yourself,” has three short sections: Then (where your lens came from), Now (your wiring, your weather and your words) and Next (what matters to you, one small goal, tiny steps and a kind monthly look at yourself). Part Two, “Between us,” is the Preface and Chapters I to V on sharing the work, talking, fairness and the monthly look-back. Part Three, “Keeping it warm,” is a reading list of guides: love languages, complacency, turning toward and check-ins. You can read in any order, and each page has a short version and a full one.",
+      "how": [
+        "Start with Then if you like to begin at the beginning, or Now if you want to read yourself first.",
+        "Take Next when you want to choose one small thing to grow toward.",
+        "When you are ready to bring someone else in, move on to the Preface and Chapter I."
+      ],
+      "pillar": "Pillar III, Read your state first.",
+      "links": [
+        [
+          "Then: where you came from",
+          "/book/self-1-then.html"
+        ],
+        [
+          "Now: who you are today",
+          "/book/self-2-now.html"
+        ],
+        [
+          "Next: who you are becoming",
+          "/book/self-3-next.html"
+        ],
+        [
+          "The contents page",
+          "/contents-in-depth.html"
+        ]
+      ]
     }
   ],
   "clarify": [
