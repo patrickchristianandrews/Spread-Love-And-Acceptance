@@ -569,8 +569,8 @@
     narr('In a world of golden bones…', u, 0.1, 2.0);
     say(g, tid, 'Golden bone. Easy!', u, 2.1, 3.3);
     say(g, sug, 'Tidbit! RUN!', u, 3.5, 4.8, { big: true });
-    say(g, tid, 'A… beach ball?', u, 5.5, 7.0);
-    say(g, sug, 'Every time.', u, 6.2, 7.4);
+    say(g, tid, 'A… beach ball?', u, 5.45, 6.3);
+    say(g, sug, 'Every time.', u, 6.45, 7.2);
     g.restore();
   }
   // 2. the pond (Jaws): a fin, two dramatic notes, and a very small shark
@@ -621,7 +621,7 @@
     say(g, tid, 'Whoa… slow motion.', u, 0.3, 1.8);
     say(g, tid, 'I know pie-fu.', u, 2.0, 3.4);
     say(g, sug, 'Why is it always me?', u, 4.0, 5.4);
-    say(g, sug, 'Mmm. Cherry.', u, 5.5, 6.4);
+    say(g, sug, 'Cherry.', u, 5.5, 6.4);
   }
   // 4. snakes on a plane (the famous line, kept family-friendly): Tidbit has had it, and Sugarfoot gets there first
   function snk(g, x0, y0, x1, y1, t, amp, w, col, headCol) {
@@ -678,8 +678,8 @@
     if (u < 4.0) { line(g, 320, -6, 320, y0r, '#B8A27A', 2.2); line(g, 320, -6, tid.x - 4, tid.y + 16, '#B8A27A', 2.2); circ(g, 320, -4, 5, '#8A8FA0'); }
     var sug = pup(g, 'sugarfoot', 320, y0r, 1.5, { pose: 'sit', face: 1, t: u + 1, rot: rot, noShadow: u < 4.2, ear: -0.5 });
     onomato(g, 'WEE-OO! WEE-OO!', 320, 48, 28, '#FF6A86', win(u, 4.3, 6.2, 0.1) * flick, 0);
-    say(g, sug, 'Almost there…', u, 0.9, 2.3);
-    say(g, tid, 'Holding on tight!', u, 1.5, 2.9);
+    say(g, sug, 'Almost there…', u, 0.6, 1.6);
+    say(g, tid, 'Holding on tight!', u, 1.75, 2.9);
     say(g, sug, 'Got it!', u, 3.0, 3.9, { big: true });
     say(g, tid, '…Oops.', u, 4.0, 5.0);
     say(g, sug, 'Mission: possible… ish.', u, 5.0, 6.6);
@@ -754,7 +754,7 @@
   // the funny middle: a card, then six bits (id, length in seconds, draw function)
   var GAGS = [['boulder', 7.2, boulder], ['jaws', 6.2, jaws], ['matrix', 6.2, matrix], ['snakes', 7.0, snakes], ['vault', 6.6, vault], ['bridge', 6.6, bridge], ['laundry', 6.2, laundry]];
   // each bit is slowed to the pace its lines need to be spoken, so the voices and the picture always go along together
-  var GK = { boulder: 1.35, jaws: 1.5, matrix: 1.5, snakes: 1.8, vault: 1, bridge: 1.4, laundry: 1.35 };
+  var GK = { boulder: 1.6, jaws: 1.75, matrix: 1.75, snakes: 2.1, vault: 1.25, bridge: 1.65, laundry: 1.6 };   // stretched so each line has room to breathe before the next
   GAGS = GAGS.map(function (x) { var k = GK[x[0]] || 1, f = x[2]; return [x[0], x[1] * k, k === 1 ? f : function (g, u, d, c) { return f(g, u / k, d / k, c); }, k]; });
   var G0 = 38.7, GCARD = 1.8, GL = GCARD + GAGS.reduce(function (n, x) { return n + x[1]; }, 0);   // the funny middle starts at G0 and lasts GL seconds
   var POST_EXTRA = 1.6;   // a little longer at the very end, for one more gag
