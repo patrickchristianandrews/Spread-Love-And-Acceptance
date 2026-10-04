@@ -24,42 +24,42 @@ a7a90fdc	sugarfoot	0.75	…Bless you!
 0a56bce0	sugarfoot	0.75	Hee hee!
 46403597	tidbit	1.13	On purpose!
 759eaabc	narr	1.63	Funnier than ever…
-8435bce1	narr	2.5	In a world of golden bones…
-ad8b98a3	tidbit	1.63	Golden bone. Easy!
-37a67a62	sugarfoot	1.75	Tidbit! RUN!
-4dbe1091	tidbit	2	A… beach ball?
-633e6993	sugarfoot	1.38	Every time.
-08fbaf9e	tidbit	2.13	Nice night for a swim.
-a78075a2	tidbit	1.38	…Hello?
-1cd86ece	sugarfoot	1.88	Gotcha!
-514771b7	tidbit	2.38	We need a bigger bone!
-8c68aeb7	tidbit	2.25	Whoa… slow motion.
-319a30a3	tidbit	2	I know pie-fu.
-d22515e8	sugarfoot	2	Why is it always me?
-7f0761ff	sugarfoot	1	Mmm. Cherry.
-94b52fdd	sugarfoot	2.13	What a smooth flight!
-21923442	tidbit	1.63	Snakes?!
-81dcd6c7	tidbit	2.63	I have had it with these snakes on this—
-c9f33b3a	sugarfoot	1.63	…PLANE! This lovely plane!
-d90469fe	tidbit	0.88	Hey!
-a783d992	tidbit	1.25	…on this plane.
-5ff9db36	sugarfoot	1.25	Good girl.
-6457fd87	sugarfoot	1.38	Almost there…
-be6d5122	tidbit	1.38	Holding on tight!
-d1f45bd7	sugarfoot	0.88	Got it!
-05c0a602	tidbit	1	…Oops.
-f0fbb566	sugarfoot	1.63	Mission: possible… ish.
-66c6786d	sugarfoot	2.75	YOU SHALL NOT PASS!
-bb333da3	sugarfoot	0.88	…Okay.
-a271e7e6	tidbit	1.88	Did I do that?
-d8f59e5b	tidbit	1.75	Ready? Watch this!
-0fdf35eb	tidbit	1.63	To infinity… and beyond!
-719506bd	sugarfoot	1.63	That’s my laundry.
-4b21575a	tidbit	2.25	To infinity… and the laundry!
-f6f14695	narr	1.5	Same big hearts…
-8ee1d294	sugarfoot	2.25	Wherever we go next…
+8435bce1	narr	3	In a world of golden bones…
+ad8b98a3	tidbit	2	Golden bone. Easy!
+37a67a62	sugarfoot	2.13	Tidbit! RUN!
+4dbe1091	tidbit	1.38	A… beach ball?
+633e6993	sugarfoot	1.25	Every time.
+08fbaf9e	tidbit	2.38	Nice night for a swim.
+a78075a2	tidbit	1.5	…Hello?
+1cd86ece	sugarfoot	2	Gotcha!
+514771b7	tidbit	2.88	We need a bigger bone!
+8c68aeb7	tidbit	2.63	Whoa… slow motion.
+319a30a3	tidbit	2.5	I know pie-fu.
+d22515e8	sugarfoot	2.5	Why is it always me?
+592f44c0	sugarfoot	1.25	Cherry.
+94b52fdd	sugarfoot	2.5	What a smooth flight!
+21923442	tidbit	1.88	Snakes?!
+81dcd6c7	tidbit	2.88	I have had it with these snakes on this—
+c9f33b3a	sugarfoot	1.88	…PLANE! This lovely plane!
+d90469fe	tidbit	1.13	Hey!
+a783d992	tidbit	1.5	…on this plane.
+5ff9db36	sugarfoot	1.5	Good girl.
+6457fd87	sugarfoot	1.25	Almost there…
+be6d5122	tidbit	1.5	Holding on tight!
+d1f45bd7	sugarfoot	1.13	Got it!
+05c0a602	tidbit	1.25	…Oops.
+f0fbb566	sugarfoot	2	Mission: possible… ish.
+66c6786d	sugarfoot	3.25	YOU SHALL NOT PASS!
+bb333da3	sugarfoot	1	…Okay.
+a271e7e6	tidbit	2.13	Did I do that?
+d8f59e5b	tidbit	2	Ready? Watch this!
+0fdf35eb	tidbit	1.88	To infinity… and beyond!
+719506bd	sugarfoot	1.88	That’s my laundry.
+4b21575a	tidbit	2.75	To infinity… and the laundry!
+f6f14695	narr	1.38	Same big hearts…
+8ee1d294	sugarfoot	2.13	Wherever we go next…
 79eaac1b	tidbit	2.63	…we go together.
-a7c58420	sugarfoot	3	Wait… did anyone see where Tidbit went?
+a7c58420	sugarfoot	2.88	Wait… did anyone see where Tidbit went?
 914be78b	tidbit	2.13	Ready for Season 2!
-34319fbe	sugarfoot	1.38	Of course!
-0b5aaa37	tidbit	1.5	I’ll be bark!
+34319fbe	sugarfoot	1.5	Of course!
+0b5aaa37	tidbit	1.63	I’ll be bark!
