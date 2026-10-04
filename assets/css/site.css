@@ -1648,8 +1648,8 @@ html.tol-bigtext .tol-logo{ width:1.5rem; height:1.5rem; }
 @media print{ .tol-still-btn{ display:none !important; } }
 
 /* ---------- Keep the page still (html.tol-still) ----------
-   The garden is taken away by site.js; the floating bubbles and hearts go; the buddies and mascots stop. */
-html.tol-still .tol-wash b, html.tol-still .tol-garden-bg, html.tol-still .tol-garden-veil, html.tol-still .tol-poplet,
+   The garden is taken away by site.js (when the device asks for reduced motion, or Keep the page still / Quiet mode was chosen); the floating bubbles and hearts go; the buddies and mascots stop. */
+html.tol-still .tol-wash b, html.tol-still .tol-poplet,
 html.tol-still .tol-cheer-heart, html.tol-still .tol-cheer-dot{ display:none !important; }
 html.tol-still .tol-wash i,
 html.tol-still .tol-cheer, html.tol-still .tol-cheer *,

@@ -642,8 +642,15 @@
     // someone has asked their device to save data.
     var saveData = navigator.connection && navigator.connection.saveData;
     var gardenParts = null;
+    // The garden is on by default, on phones too. It stays away only when the device asks for reduced motion
+    // or the visitor chose "Keep the page still" / Quiet mode here (a phone's small screen alone no longer hides it).
+    function gardenOk() {
+      var mm = window.matchMedia;
+      if (mm && mm('(prefers-reduced-motion: reduce)').matches && lsGet(STILL_KEY) !== '0') return false;
+      return lsGet(STILL_KEY) !== '1';
+    }
     function makeGarden() {
-      if (gardenParts || stillOn) return;
+      if (gardenParts || !gardenOk()) return;
       // each part of the site has its own scene, lit by the visitor's clock; the games stay in the Night Garden
       var SCENES = { start: 'garden', about: 'garden', self: 'beach', media: 'beach', relationships: 'lake', book: 'meadow', workpapers: 'river', program: 'forest', tools: 'forest' };
       var secId = (current === '/relationships.html' && 'relationships') || (hereSection && hereSection.id) || (/^\/book\//.test(current) ? 'book' : /^\/workpapers\//.test(current) ? 'workpapers' : /^\/(learn|legal)\//.test(current) ? 'about' : ''), sceneQ = secId === 'play' || body.classList.contains('is-game') ? '?scene=garden&tod=night' : '?scene=' + (SCENES[secId] || 'garden');
@@ -660,7 +667,7 @@
       makeGarden();
       // "Keep the page still" takes the garden away entirely (nothing keeps moving out of sight), and brings it back
       stillHooks.push(function (on) {
-        if (on && gardenParts) { gardenParts.forEach(function (n) { n.remove(); }); gardenParts = null; document.documentElement.classList.remove('has-garden'); }
+        if (on && !gardenOk() && gardenParts) { gardenParts.forEach(function (n) { n.remove(); }); gardenParts = null; document.documentElement.classList.remove('has-garden'); }
         else if (!on) makeGarden();
       });
     }
