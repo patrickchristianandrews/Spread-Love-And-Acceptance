@@ -4783,6 +4783,143 @@
       ]
     },
     {
+      "id": "kipshare",
+      "kind": "tool",
+      "name": "sharing and Kip the Paperclip",
+      "keys": [
+        "kip",
+        "paperclip",
+        "share this page",
+        "share a page",
+        "share this chapter",
+        "how do i share",
+        "can i share",
+        "share button",
+        "share with a friend",
+        "send this to",
+        "send a link",
+        "pass it on"
+      ],
+      "what": "You can share almost any page with the Share button near the end of it. On a phone it opens your own share menu; on a computer a small panel offers Copy link, Text, Email and a few social links. Tools share only their link, never what you typed. Your own results (like your Wave Code, your statement or your Lemonade Stand summary) are shared only when you tap Share. The cute lavender paperclip on the button is Kip: tap him for a trick, and he dances when something gets shared.",
+      "how": [
+        "Scroll to the end of the page and tap Share (Kip sits on the button).",
+        "Pick your app, or tap Copy link and paste it anywhere.",
+        "To share a result, use the Share button right next to it, like “Share my Wave Code”.",
+        "Tap Kip himself for a trick: a dance, a spin, a heart shape, a cartwheel and more.",
+        "Don’t want Kip? Turn him off in Settings (“Show Kip the Paperclip”) or with Hide the helpers."
+      ],
+      "pillar": "Sharing opens your own app. Nothing is sent from this site.",
+      "chips": [
+        [
+          "What tricks can Kip do?",
+          "What tricks can Kip the paperclip do?"
+        ],
+        [
+          "Is sharing private?",
+          "Does sharing send what I typed?"
+        ]
+      ],
+      "links": [
+        [
+          "What’s new: meet Kip",
+          "/whats-new.html"
+        ]
+      ]
+    },
+    {
+      "id": "timepicker",
+      "kind": "tool",
+      "name": "the time picker and Your path so far",
+      "keys": [
+        "how much time",
+        "i only have",
+        "i have 5 minutes",
+        "i have five minutes",
+        "i have a minute",
+        "i have 15 minutes",
+        "short on time",
+        "quick thing to do",
+        "what should i do today",
+        "your path so far",
+        "my path so far",
+        "path so far",
+        "my progress",
+        "what have i done",
+        "tiny thing",
+        "today's tiny thing",
+        "next time"
+      ],
+      "what": "At the top of the home page, “How much time do you have?” offers 1, 5, 15 or 30+ minutes. Each gives a short plan with links that changes from visit to visit, and it remembers your last choice. As you go, “Your path so far” shows the chapters you’ve read, tools you’ve tried, calm games you’ve played and episodes you’ve watched, and each section ends with what you got from it and a “Next time” idea. There’s also one small “Today’s tiny thing” each day. Nothing runs out or resets: pick up any time.",
+      "how": [
+        "Open the home page and tap how much time you have.",
+        "Follow the two to four steps in your plan, or tap Another idea.",
+        "Check “Your path so far” on the home page to see what you’ve explored.",
+        "Try Today’s tiny thing and tap I tried it."
+      ],
+      "pillar": "Small and often: a few minutes, kindly, is enough.",
+      "chips": [
+        [
+          "I have 5 minutes",
+          "I only have 5 minutes, what should I do?"
+        ],
+        [
+          "Where’s my progress?",
+          "Where can I see my path so far?"
+        ]
+      ],
+      "links": [
+        [
+          "The home page",
+          "/"
+        ]
+      ]
+    },
+    {
+      "id": "learntab",
+      "kind": "tool",
+      "name": "the Learn tab",
+      "keys": [
+        "learn tab",
+        "the learn menu",
+        "where are the articles",
+        "articles",
+        "where can i read more",
+        "reading list",
+        "what can i read",
+        "learn more",
+        "library",
+        "stories from philosophy",
+        "the podcast"
+      ],
+      "what": "The Learn tab in the menu gathers everything that teaches in one place: the big ideas (the Five Pillars, how it works, the Frequency Framework, the one-page summary, the book), read and listen (the Professor’s Library, Stories from Philosophy, hand-picked articles, the podcast), understanding yourself and each other, the guides, and the glossary and polymath page. Pages that belong to a program stay there too.",
+      "how": [
+        "Open the Menu and choose Learn.",
+        "Pick a section: the big ideas, read and listen, understand yourself and each other, guides, or words and big ideas.",
+        "New learning pages show up here first."
+      ],
+      "pillar": "Every pillar has a page here to go deeper.",
+      "chips": [
+        [
+          "Hand-picked articles",
+          "Where are the articles to read?"
+        ],
+        [
+          "The glossary",
+          "What is the glossary?"
+        ]
+      ],
+      "links": [
+        [
+          "Articles to read",
+          "/reading.html"
+        ],
+        [
+          "The Professor’s Library",
+          "/library.html"
+        ]
+      ]
+    },
+    {
       "id": "grandparents",
       "kind": "tool",
       "name": "the page for grandparents",
