@@ -983,6 +983,7 @@
     roommate: ['/share-the-load.html', '/lemonade-stand.html', '/chore-chart-for-couples.html'], roommates: 'roommate', housemate: 'roommate', housemates: 'roommate', flatmate: 'roommate', flatmates: 'roommate',
     install: ['/install.html'], app: 'install', android: 'install', widget: 'install', widgets: 'install', homescreen: 'install', offline: 'install', phone: 'install',
     love: ['/love-languages.html', '/turning-toward.html', '/complacency.html'], language: 'love', languages: 'love', chapman: 'love', affirmation: 'love', appreciation: 'love', thanks: 'love', gifts: 'love', touch: 'love', appreciated: 'love', cared: 'love',
+    recommend: ['/soundscapes.html'], recommendation: 'recommend', pick: 'recommend', which: 'recommend',
     brain: ['/soundscapes.html'], breakers: 'brain', wrecked: 'brain', instrumental: 'brain', shimmer: 'brain', thunderous: 'brain', shooting: 'brain',
     haptic: ['/soundscapes.html'], haptics: 'haptic', vibration: 'haptic', vibrate: 'haptic', buzz: 'haptic', rumble: 'haptic', synesthesia: 'haptic', visualize: 'haptic', aurora: 'haptic',
     surprise: ['/surprise.html'], random: 'surprise', bored: 'surprise', wander: 'surprise', stumble: 'surprise',

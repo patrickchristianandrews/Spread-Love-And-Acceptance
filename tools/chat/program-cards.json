@@ -4992,6 +4992,44 @@
           "/start-in-10-minutes.html"
         ]
       ]
+    },
+    {
+      "id": "findsound",
+      "kind": "tool",
+      "name": "Find your sound",
+      "keys": [
+        "find your sound",
+        "which soundscape",
+        "which track",
+        "which sound",
+        "what should i listen to",
+        "recommend music",
+        "recommend a track",
+        "~which one should i play",
+        "~what music should i"
+      ],
+      "what": "Find your sound is a short picker at the top of the Soundscapes page. Tap what you need (wake up, reset, calm down, focus, wind down, feel something big), how your body is, and how you like sound, and it suggests one track or live soundscape with the reasons, plus two others to try. You can save a go-to for each need, and it shows what you play most. All of that stays on your device.",
+      "how": [
+        "Open Soundscapes and find Find your sound at the top.",
+        "Tap what you need right now. Add how your body is, and how you like sound, if you want.",
+        "Press Play it, or try one of the two others.",
+        "Save a go-to if one works for you. Big sounds can feel like too much when you are overwhelmed, so the picker leans calm then."
+      ],
+      "pillar": "Pillar III, Read your state first.",
+      "links": [
+        [
+          "Find your sound",
+          "/soundscapes.html#finder"
+        ],
+        [
+          "Brain Breakers",
+          "/soundscapes.html#brain-breakers"
+        ],
+        [
+          "See and feel the sound",
+          "/soundscapes.html#senses"
+        ]
+      ]
     }
   ],
   "clarify": [

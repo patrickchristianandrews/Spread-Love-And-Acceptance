@@ -39,6 +39,7 @@
     '<div class="sn-row" id="sn-mode-row" role="group" aria-label="What to feel"><span class="sn-l">Like</span>' + btns('feel', FEELS, FNAMES, feel) +
     '<button type="button" class="sn-b sn-test" id="sn-test">Try a pulse</button></div>' +
     '<p class="sn-note" id="sn-note"></p><p class="sn-status" id="sn-status" role="status" aria-live="polite"></p>';
+  host.querySelectorAll('p, h2').forEach(function (n) { n.classList.add('no-bubble'); });
   var cv = document.getElementById('sn-cv'), g = cv.getContext('2d'), idle = document.getElementById('sn-idle'),
       status = document.getElementById('sn-status'), note = document.getElementById('sn-note');
   note.textContent = canVib

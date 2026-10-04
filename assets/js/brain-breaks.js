@@ -15,7 +15,7 @@
   var isHome = path === '/index.html' || path === '/';
   var TRACKS = [
     { id: 'star', title: 'Shooting Star', src: '/assets/audio/soundscapes/Shooting-Star.mp3', len: '3:27' },
-    { id: 'shooting', title: 'Watching a Shooting Star', src: '/assets/audio/soundscapes/Watching-a-Shooting-Star.mp3', len: '3:38' },
+    { id: 'watching', title: 'Watching a Shooting Star', src: '/assets/audio/soundscapes/Watching-a-Shooting-Star.mp3', len: '3:38' },
     { id: 'shimmer', title: 'Thunderous Shimmer', src: '/assets/audio/soundscapes/Thunderous-Shimmer.mp3', len: '2:51' }
   ];
   function lsGet(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
@@ -90,7 +90,7 @@
       '<div class="bb-now" hidden><p class="bb-line"></p><div class="bb-track" aria-hidden="true"><b></b></div><button type="button" class="bb-alt" data-stop="1">Stop the break</button></div>' +
       '<div class="bb-done" hidden></div>' +
       '<p class="bb-msg" role="status" aria-live="polite"></p>' +
-      '<p class="bb-meta">' + esc(hook) + ' &middot; <a href="/soundscapes.html#brain-breakers">All Brain Breakers</a> &middot; <a href="/soundscapes.html#senses">See and feel the sound</a></p>';
+      '<p class="bb-meta">' + esc(hook) + ' &middot; <a href="/soundscapes.html#finder">Find your sound</a> &middot; <a href="/soundscapes.html#brain-breakers">All Brain Breakers</a> &middot; <a href="/soundscapes.html#senses">See and feel</a></p>';
     var ctl = el.querySelector('.bb-ctl'), now = el.querySelector('.bb-now'), done = el.querySelector('.bb-done'), msg = el.querySelector('.bb-msg'),
         line = el.querySelector('.bb-line'), bar = el.querySelector('.bb-track b');
     var api = {
@@ -133,6 +133,7 @@
       aud.addEventListener('timeupdate', function () { if (aud.cur) aud.cur.tick(aud.currentTime, aud.duration); });
       aud.addEventListener('ended', function () { lsSet('tol-bb-count', String(count() + 1)); if (aud.cur) aud.cur.finished(); });
     }
+    try { var pl = JSON.parse(lsGet('tol-sound-plays') || '{}') || {}; pl[t.id] = (pl[t.id] || 0) + 1; lsSet('tol-sound-plays', JSON.stringify(pl)); } catch (e) {} // feeds "Find your sound"
     aud.cur = card; card.title = t.title;
     aud.src = t.src; aud.currentTime = 0;
     var p = aud.play();

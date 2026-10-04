@@ -33,6 +33,28 @@
     gap: 24px;
   }
 
+  #finder{ margin:0 0 2rem; padding:1.1rem 1.2rem; border-radius:20px; border:1px solid #E6D6EE; background:linear-gradient(135deg, #FFF8EE, #F7EEF8); }
+  .sf-q{ margin:.9rem 0 0; }
+  .sf-ql{ margin:0 0 .4rem; font-weight:600; }
+  .sf-ql span{ font-weight:400; color:var(--ink-soft); font-size:.9rem; }
+  .sf-chips{ display:flex; flex-wrap:wrap; gap:.4rem; }
+  .sf-c, .sf-b{ font:inherit; font-size:.92rem; min-height:44px; padding:.3rem .9rem; border-radius:999px; border:1px solid #D9C8F0; background:#fff; color:#4E3F6B; cursor:pointer; }
+  .sf-c[aria-pressed="true"], .sf-b[aria-pressed="true"]{ background:#EDE3F8; border-color:#B9A0E0; font-weight:600; }
+  .sf-c:focus-visible, .sf-b:focus-visible, .sf-play:focus-visible, .sf-link:focus-visible{ outline:2px solid var(--focus); outline-offset:2px; }
+  .sf-out{ margin-top:1.1rem; }
+  .sf-hint, .sf-small, .sf-note{ color:var(--ink-soft); font-size:.9rem; line-height:1.55; }
+  .sf-pick{ padding:1rem 1.1rem; border-radius:16px; background:#fff; border:2px solid #B9A0E0; }
+  .sf-pick h3{ margin:.1rem 0 .3rem; font-family:"Fraunces", Georgia, serif; font-size:1.35rem; }
+  .sf-k{ margin:0; font-family:"IBM Plex Mono", monospace; font-size:.75rem; text-transform:uppercase; letter-spacing:.08em; color:var(--ink-soft); }
+  .sf-pick ul{ margin:.4rem 0 .6rem; padding-left:1.1rem; line-height:1.5; }
+  .sf-warn{ margin:.4rem 0; padding:.5rem .8rem; border-radius:12px; background:#FFF1E6; color:#6B4425; font-size:.92rem; }
+  .sf-row{ display:flex; flex-wrap:wrap; gap:.5rem; align-items:center; margin:.6rem 0 .2rem; }
+  .sf-play{ font:600 1rem/1.2 "Lora", Georgia, serif; min-height:48px; padding:.5rem 1.3rem; border-radius:999px; border:1px solid #6B4F8A; background:#6B4F8A; color:#fff; cursor:pointer; }
+  .sf-more{ margin-top:.9rem; }
+  .sf-alt{ display:flex; gap:.7rem; align-items:center; justify-content:space-between; padding:.6rem 0; border-top:1px solid #E6D6EE; }
+  .sf-alt div{ min-width:0; } .sf-alt span{ display:block; color:var(--ink-soft); font-size:.9rem; }
+  .sf-mine{ display:flex; flex-wrap:wrap; gap:.4rem 1rem; align-items:baseline; margin:0 0 .9rem; padding:.6rem .9rem; border-radius:14px; background:#EAF6EF; color:#2F5A3C; font-size:.93rem; }
+  .sf-link{ font:inherit; background:none; border:0; padding:.2rem 0; text-decoration:underline; color:#2F5A3C; cursor:pointer; font-weight:600; min-height:32px; }
   #senses{ margin:0 0 2rem; }
   .sn-stage{ position:relative; margin:1rem 0 .8rem; border-radius:18px; overflow:hidden; border:1px solid #3A3566; background:#171A34; }
   #sn-cv{ display:block; width:100%; }
@@ -182,7 +204,7 @@
     <section id="catalog">
       <div class="kicker">Audio</div>
       <h1 class="tol-page-h">Soundscape Catalog: calm music and relaxing soundscapes</h1>
-      <p class="lede">Every track below has actually been produced and is ready to hear. You can now also <a href="#senses">see the sound and feel it</a>: a picture that moves with whatever is playing, and gentle vibration on Android phones. Looking for something bigger? Head to the <a href="#brain-breakers">Brain Breakers</a>. This page grows one real track at a time, not from a planned track list.</p>
+      <p class="lede">Every track below has actually been produced and is ready to hear. Not sure which to press? <a href="#finder">Find your sound</a>. You can also <a href="#senses">see the sound and feel it</a>: a picture that moves with whatever is playing, and gentle vibration on Android phones. Looking for something bigger? Head to the <a href="#brain-breakers">Brain Breakers</a>. This page grows one real track at a time, not from a planned track list.</p>
 
       <div class="catalog-note">
         <p><strong>A note on what these are:</strong> these are ambient, atmospheric audio pieces, not a validated therapeutic or clinical tool. Some people find ambient and low-frequency audio calming as part of a personal listening habit. That's a matter of personal taste, not an established treatment.</p>
@@ -190,6 +212,8 @@
       </div>
 
       <p class="phones-note"><span aria-hidden="true">&#127911;</span> <strong>Soundscapes sound best with headphones.</strong> The deep, low tones and the gentle left-to-right movement are much of what makes them calming, and small speakers can’t carry them.</p>
+
+      <section id="finder" aria-labelledby="finder-h"></section>
 
       <section id="senses" aria-labelledby="senses-h"></section>
 
@@ -332,6 +356,7 @@
     <script src="/assets/js/breathe.js" defer></script>
     <script src="/assets/js/soundscapes-live.js" defer></script>
     <script src="/assets/js/sound-senses.js" defer></script>
+    <script src="/assets/js/sound-finder.js" defer></script>
     <script>
       document.addEventListener('DOMContentLoaded', function () {
         // the first four are the Breathe break's own beds; the others come from soundscapes-live.js
