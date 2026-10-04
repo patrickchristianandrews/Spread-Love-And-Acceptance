@@ -1022,6 +1022,7 @@
   function safeCall(fn, i) { try { g.save(); fn(g, A, i, clock); g.restore(); } catch (e) { g.restore(); stats.errors++; } }
 
   function drawBubbles() {
+    var placed = [];   // where this frame's bubbles already are, so two never sit on top of each other
     for (var j = 0; j < bubbles.length; j++) {
       var b = bubbles[j], pos = typeof b.who === 'number' ? headPos(b.who) : b.who;
       if (b.p < 80 && typeof b.who === 'number' && SND()) SND().bubble(b.who, b.text);
@@ -1032,6 +1033,18 @@
       g.font = '700 ' + (big ? 16 : 12.5) + 'px Fraunces, Georgia, serif';
       var w = heart ? 26 : Math.max(24, g.measureText(txt).width + 14), h = 24;
       var bx = clamp(pos.x + (b.opt.dx || (pos.face || 1) * 8), w / 2 + 4, LW - w / 2 - 4), by = clamp(pos.y - 30 + (b.opt.dy || 0), h / 2 + 4, LH - 10);
+      // if it would land on a bubble already drawn, stack it above (or below, if there's no room above) instead
+      for (var tries = 0; tries < 4; tries++) {
+        var hit = null;
+        for (var q = 0; q < placed.length; q++) {
+          var o = placed[q];
+          if (Math.abs(bx - o.x) < (w + o.w) / 2 + 4 && Math.abs(by - o.y) < (h + o.h) / 2 + 4) { hit = o; break; }
+        }
+        if (!hit) break;
+        var up = hit.y - (h + hit.h) / 2 - 6, down = hit.y + (h + hit.h) / 2 + 6;
+        by = up >= h / 2 + 4 ? up : Math.min(down, LH - 10);
+      }
+      placed.push({ x: bx, y: by, w: w, h: h });
       g.translate(bx, by); g.scale(s, s);
       g.fillStyle = '#FFFDF8'; g.strokeStyle = 'rgba(92,74,134,.55)'; g.lineWidth = 1.2;
       g.beginPath(); if (g.roundRect) g.roundRect(-w / 2, -h / 2, w, h, 12); else g.rect(-w / 2, -h / 2, w, h); g.fill(); g.stroke();

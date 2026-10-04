@@ -342,8 +342,10 @@
     // where they sit (local x), nearer the content in the margin, a little way in on phones
     var edge = margin ? W - 44 * sc : Math.min(W * 0.42, 176);
     var pups = [], names = plan.who === 'both' ? (Math.random() < 0.5 ? ['tidbit', 'sugarfoot'] : ['sugarfoot', 'tidbit']) : [plan.who];
+    // far enough apart that the two never overlap while they talk, as long as there's room on screen
+    var gap = Math.min(100 * sc, Math.max(62 * sc, edge - 60 * sc));
     names.forEach(function (id, i) {
-      var per = PER[id], tx = edge - i * 62 * sc;
+      var per = PER[id], tx = edge - i * gap;
       pups.push({ id: id, per: per, L: P.looks[per.look], x: -70 * sc, tx: tx, face: 1, fd: 1, pose: 'run', popT: -1e9,
         ph: 0, wph: Math.random() * 6, wagS: 1, lift: 0, rot: 0, sx: 1, sy: 1, tilt: 0, raise: 0, wave: 0, lastX: -70 * sc,
         blinkAt: rnd(600, 2000), blinkEnd: 0, tiltAt: rnd(1200, 2600), mv: null, arrived: false, off: false });
