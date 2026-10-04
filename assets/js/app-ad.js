@@ -133,29 +133,12 @@
     host.innerHTML =
       '<aside class="appad no-bubble" aria-labelledby="aa-h">' +
         '<span class="aa-stage"><span class="aa-tilt"><canvas width="380" height="240" aria-hidden="true"></canvas></span><span class="aa-say" aria-hidden="true"></span></span>' +
-        '<div><p class="aa-k no-bubble">Free app</p>' +
+        '<div>' +
         '<h2 class="aa-h no-bubble" id="aa-h">Get the <em>app!</em></h2>' +
-        '<div class="aa-pick" role="group" aria-label="Choose your device">' +
-          '<a class="aa-chip" href="/install.html#android"><span class="aa-ic" aria-hidden="true">\u{1F916}</span><span><b>Android</b><small>Install now</small></span></a>' +
-          '<a class="aa-chip is-win" href="/install.html#windows"><span class="aa-ic" aria-hidden="true">\u{1FA9F}</span><span><b>Windows</b><small>Install now</small></span></a>' +
-          '<a class="aa-chip is-soon" href="/install.html#apple"><span class="aa-ic" aria-hidden="true">\u{1F34E}</span><span><b>iPhone &amp; iPad</b><small>App Store: coming soon</small></span></a>' +
-        '</div>' +
         '<a class="aa-go" href="/install.html">Get the app</a></div>' +
         '<button type="button" class="aa-x" aria-label="Hide this for now">&times;</button>' +
       '</aside>';
     var card = host.firstChild, cv = card.querySelector('canvas'), tilt = card.querySelector('.aa-tilt'), say = card.querySelector('.aa-say'), g = cv.getContext('2d');
-    // Android, Windows and the main button install right here when the browser allows it; otherwise they open the install page.
-    // iPhone and iPad cannot be installed with one tap (Apple only allows Add to Home Screen by hand), so that chip shows the steps.
-    function msg(t) { var m = card.querySelector('.aa-msg'); if (!m) { m = document.createElement('p'); m.className = 'aa-msg no-bubble'; m.setAttribute('role', 'status'); card.querySelector('.aa-go').parentNode.appendChild(m); } m.textContent = t; }
-    card.addEventListener('click', function (e) {
-      var a = e.target.closest('a.aa-chip:not(.is-soon), a.aa-go'); if (!a || !window.TOLInstall || !window.TOLInstall.ready()) return;
-      e.preventDefault(); msg('Asking your browser…');
-      window.TOLInstall.ask().then(function (r) {
-        if (r === 'accepted') { noteInstalled(); msg('Installed! Look for the two little bubbles.'); setTimeout(function () { stopLoop(); host.innerHTML = ''; }, 2200); }
-        else if (r === 'dismissed') msg('No problem. Press again any time.');
-        else location.href = a.getAttribute('href');
-      });
-    });
     document.addEventListener('tol-app-installed', function () { stopLoop(); host.innerHTML = ''; });
     card.querySelector('.aa-x').addEventListener('click', function () { lsSet('tol-appad-off', '1'); stopLoop(); host.innerHTML = ''; });
     var raf = 0, vis = true, t0 = performance.now(), lastSay = '';

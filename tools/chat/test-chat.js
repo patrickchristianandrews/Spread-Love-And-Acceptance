@@ -66,6 +66,10 @@ t('tools', 'where are all the formulas and cut-offs written out', { kind: 'card'
 t('tools', 'can I feel the sound with vibration on my phone', { kind: 'card', id: 'senses', link: '/soundscapes.html' });
 t('tools', 'what are the brain breakers', { kind: 'card', id: 'brainbreak', link: '/soundscapes.html' });
 t('tools', 'which soundscape should I pick', { kind: 'card', id: 'findsound', link: '/soundscapes.html' });
+t('tools', 'how do I say sorry so it lands', { kind: 'card', id: 'apologylang', link: '/apology-languages.html' });
+t('tools', 'how do I show appreciation to my team at work', { kind: 'card', id: 'appreciationwork', link: '/appreciation-at-work.html' });
+t('tools', 'how do love languages and apology languages fit together', { kind: 'card', id: 'languageshub', link: '/languages-of-connection.html' });
+t('tools', 'what is a touchstone', { kind: 'card', id: 'touchstones', link: '/touchstones.html' });
 t('tools', 'where does the book start', { kind: 'card', id: 'bookparts', link: '/book/self-1-then.html' });
 t('tools', 'is there a part of the book about myself', { kind: 'card', id: 'bookparts', link: '/book/self-1-then.html' });
 t('tools', 'What are touchstones?', { link: ['/complacency.html#touchstones', '/library/connection.html#shared-language'] });
