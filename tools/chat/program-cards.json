@@ -4315,7 +4315,7 @@
         "more episodes",
         "are there more episodes"
       ],
-      "what": "Season 2 of Frequency Buddies is on its way, and there’s a two-minute teaser to watch now. Tidbit and Sugarfoot head farther than ever: a hot-air balloon above the clouds, a lighthouse in the fog, a snowy mountain top, a secret door in the library, a night market, a glowing sea and a rooftop full of shooting stars, plus a new friend nobody has met yet, all told like a movie trailer with six slapstick gags that borrow famous movie moments. There’s no release date yet; it’s coming, and the site will share more as it gets closer.",
+      "what": "Season 2 of Frequency Buddies is on its way, and there’s a two-minute teaser to watch now. Tidbit and Sugarfoot head farther than ever: a hot-air balloon above the clouds, a lighthouse in the fog, a snowy mountain top, a secret door in the library, a night market, a glowing sea and a rooftop full of shooting stars, plus a new friend nobody has met yet, all told like a movie trailer with seven slapstick gags that borrow famous movie moments. There’s no release date yet; it’s coming, and the site will share more as it gets closer.",
       "how": [
         "Open the Season 2 page and press Play the teaser. It’s about two minutes long, and the Voices button reads it aloud.",
         "Five little secrets are hidden in it, like a star sticker and a paw print. Tap one on the picture when you spot it, or pause and hunt. What you find is remembered on your device only.",
@@ -5056,9 +5056,14 @@
         "~code word",
         "~private idiom",
         "~shared language",
-        "~shared phrase"
+        "~shared phrase",
+        "touchstone guide",
+        "shared words and jokes",
+        "our own words",
+        "rituals and inside jokes",
+        "nicknames"
       ],
-      "what": "A touchstone is a small, shared piece of language or meaning that says “we’re us”: an inside joke, a pet name, the way you say hello, a song, a place or a story you retell. A few words carry a whole history. They can go stale when they’re said on autopilot, and they’re one of the quickest ways to bring warmth back.",
+      "what": "A touchstone is a small, shared piece of language or meaning that says “we’re us”: an inside joke, a pet name, the way you say hello, a song, a place or a story you retell. A few words carry a whole history. They can go stale when they’re said on autopilot, and they’re one of the quickest ways to bring warmth back. There is now a whole guide to them, written like the love languages guide, with a short list you can fill in.",
       "how": [
         "Retell a story from both sides: how you met, or how a joke began.",
         "Say an old phrase or pet name on purpose, and see if it still lands.",
@@ -5068,8 +5073,12 @@
       "pillar": "Pillar IV, Tune how you send and receive, and Pillar V, Notice the quiet incentives.",
       "links": [
         [
-          "Touchstones",
-          "/complacency.html#touchstones"
+          "Touchstones: your shared language",
+          "/touchstones.html"
+        ],
+        [
+          "Touchstones in full",
+          "/touchstones-in-depth.html"
         ],
         [
           "Shared language (Library)",
@@ -5078,6 +5087,10 @@
         [
           "Turning Toward: rituals",
           "/turning-toward.html#rituals"
+        ],
+        [
+          "Complacency: when they go stale",
+          "/complacency.html#touchstones"
         ]
       ]
     },
@@ -5410,6 +5423,174 @@
         [
           "See and feel the sound",
           "/soundscapes.html#senses"
+        ]
+      ]
+    },
+    {
+      "id": "bookparts",
+      "kind": "tool",
+      "name": "how the book is arranged",
+      "keys": [
+        "where does the book start",
+        "where should i start the book",
+        "start of the book",
+        "the book parts",
+        "parts of the book",
+        "part one",
+        "part two",
+        "part three",
+        "know yourself part",
+        "the most important yourself",
+        "then now next",
+        "is there a part about myself",
+        "is there a chapter about me",
+        "chapters about self",
+        "part of the book about myself",
+        "book about myself",
+        "about myself in the book",
+        "a part about myself"
+      ],
+      "what": "The book now starts with you. Part One, “The most important: yourself,” has three short sections: Then (where your lens came from), Now (your wiring, your weather and your words) and Next (what matters to you, one small goal, tiny steps and a kind monthly look at yourself). Part Two, “Between us,” is the Preface and Chapters I to V on sharing the work, talking, fairness and the monthly look-back. Part Three, “Keeping it warm,” is a reading list of guides: love languages, complacency, turning toward and check-ins. You can read in any order, and each page has a short version and a full one.",
+      "how": [
+        "Start with Then if you like to begin at the beginning, or Now if you want to read yourself first.",
+        "Take Next when you want to choose one small thing to grow toward.",
+        "When you are ready to bring someone else in, move on to the Preface and Chapter I."
+      ],
+      "pillar": "Pillar III, Read your state first.",
+      "links": [
+        [
+          "Then: where you came from",
+          "/book/self-1-then.html"
+        ],
+        [
+          "Now: who you are today",
+          "/book/self-2-now.html"
+        ],
+        [
+          "Next: who you are becoming",
+          "/book/self-3-next.html"
+        ],
+        [
+          "The contents page",
+          "/contents-in-depth.html"
+        ]
+      ]
+    },
+    {
+      "id": "apologylang",
+      "kind": "tool",
+      "name": "apology languages",
+      "keys": [
+        "apology language",
+        "apology languages",
+        "five apology languages",
+        "how to apologize",
+        "how to say sorry",
+        "say sorry so it lands",
+        "~my apology didnt help",
+        "~sorry did not help",
+        "~sorry didnt help"
+      ],
+      "what": "Apology languages are five parts of a sorry that different people need: expressing regret, accepting responsibility, making it right, a plan to change, and asking for forgiveness (Chapman and Thomas). The idea is popular and little tested, so the page treats it as a menu. The better-supported finding is that acknowledging responsibility and offering to repair matter most. The guide has healthy and sideways versions of each, scripts, and a way to ask “what helps you most after a hurt?” on a calm day.",
+      "how": [
+        "Ask on a calm day: “When I’ve upset you, what helps most: hearing sorry, hearing I understand, or seeing me fix it?”",
+        "Say it in three parts: what happened, that it was yours, and one thing you will do.",
+        "Check afterwards: “Did that cover it, or is there a part I missed?”"
+      ],
+      "pillar": "Pillar IV, Tune how you send and receive, and Pillar II, Fix the setup, not the person.",
+      "links": [
+        [
+          "Apology languages",
+          "/apology-languages.html"
+        ],
+        [
+          "What makes an apology work",
+          "/library/conflict.html#apology-research"
+        ],
+        [
+          "How the languages fit together",
+          "/languages-of-connection.html"
+        ]
+      ]
+    },
+    {
+      "id": "appreciationwork",
+      "kind": "tool",
+      "name": "appreciation at work",
+      "keys": [
+        "appreciation at work",
+        "languages of appreciation",
+        "how to thank coworkers",
+        "how to thank my team",
+        "thank my boss",
+        "show appreciation to staff",
+        "employee appreciation",
+        "~my team never says thank you",
+        "~feel unappreciated at work",
+        "appreciation to my team",
+        "show appreciation",
+        "appreciation to my team at work",
+        "thank my team",
+        "appreciate my team"
+      ],
+      "what": "Appreciation at work is the workplace version of love languages (Chapman and White): words, quality time, acts of service, small gifts and appropriate touch like a handshake. It is popular and little tested, so the page uses it as a menu and a question to ask: how do you like to be thanked? The sturdier advice is to be specific, timely, sincere and fitted to the person, and never to use thanks in place of fair pay, workload or credit.",
+      "how": [
+        "Ask a coworker: “When something goes well, what is a way of saying thanks that you actually like?”",
+        "Say what they did and what it made possible.",
+        "Once a month ask yourself whom you have not thanked in a while."
+      ],
+      "pillar": "Pillar IV, Tune how you send and receive, and Pillar V, Notice the quiet incentives.",
+      "links": [
+        [
+          "Appreciation at work",
+          "/appreciation-at-work.html"
+        ],
+        [
+          "Love languages at work",
+          "/love-languages-in-depth.html#work"
+        ],
+        [
+          "Teams in the Library",
+          "/library/teams.html"
+        ]
+      ]
+    },
+    {
+      "id": "languageshub",
+      "kind": "tool",
+      "name": "how the languages fit together",
+      "keys": [
+        "how the languages fit together",
+        "languages of connection",
+        "how do love languages and apology languages fit",
+        "all the languages",
+        "~tie it all together",
+        "~how does it all connect",
+        "what to reach for when"
+      ],
+      "what": "The languages of connection page puts it all in one picture: six layers from you outward. First you (know yourself), then how you talk and listen (Wavelength and the Wiring Card), how you show care (love languages), the words you share (touchstones), how you repair (apology languages), and how you keep it alive (turning toward, check-ins and the complacency re-checks). It has a table of what to reach for in each situation, how well each idea holds up, and a worked example.",
+      "how": [
+        "Find the row in the table that sounds most like this week.",
+        "Read that one page and try one small thing from it.",
+        "If you only do one thing, start with yourself."
+      ],
+      "pillar": "Pillar IV, Tune how you send and receive.",
+      "links": [
+        [
+          "How the languages fit together",
+          "/languages-of-connection.html"
+        ],
+        [
+          "Love languages",
+          "/love-languages.html"
+        ],
+        [
+          "Touchstones",
+          "/touchstones.html"
+        ],
+        [
+          "Apology languages",
+          "/apology-languages.html"
         ]
       ]
     }

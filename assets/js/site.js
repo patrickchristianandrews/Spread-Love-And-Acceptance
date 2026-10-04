@@ -38,6 +38,7 @@
       { href: '/whats-new.html', code: 'All', title: 'What’s new', note: 'Everything newly added and everything that’s grown, in one place, with dates' },
       { href: '/soundscapes.html#brain-breakers', code: 'New', title: 'Brain Breakers', note: 'The Soundscapes page is now all Brain Breakers: three instrumental pieces, with a way to see and feel the sound' },
       { href: '/love-languages.html', deep: true, code: 'New', title: 'Love languages: a menu, not a label', note: 'What is healthy and unhealthy about each of the five, how to practice and talk about them, and similar ideas like apology languages and bids' },
+      { href: '/languages-of-connection.html', code: 'New', title: 'How the languages fit together', note: 'Love, apology and appreciation languages, touchstones and your wiring in one picture, with what to reach for when' },
       { href: '/install.html', code: 'New', title: 'Get the app', note: 'Install on Android in a few taps; iPhone steps today, App Store coming soon' },
       { href: '/upset-right-now.html', code: 'New', title: 'Upset right now?', note: 'A five-minute page for two upset people: a pause line with a return time, a breathing pacer, and how to come back' },
       { href: '/share-the-load.html', code: 'New', title: 'Share the load, step by step', note: 'The tools for splitting the load, in the order to use them, with a section for roommates' },
@@ -90,6 +91,7 @@
       { href: '/chore-chart-for-couples.html', code: 'Print', title: 'A fair chore chart for couples', note: 'A free, printable chore chart with one owner per job, for couples, families and roommates' },
       { href: '/how-to-stop-fighting-with-your-partner.html', code: 'Guide', title: 'How to stop fighting with your partner', note: 'Seven calm steps, from the first sign to fixing the setup behind repeat fights' },
       { href: '/love-languages.html', deep: true, code: 'Guide', title: 'Love languages: a menu, not a label', note: 'What is healthy and unhealthy about each of the five, how to practice and talk about them, and ideas like them' },
+      { href: '/languages-of-connection.html', code: 'New', title: 'How the languages fit together', note: 'Love, apology and appreciation languages, touchstones and your wiring in one picture, with what to reach for when' },
       { href: '/neurodivergent-relationships.html', code: 'Guide', title: 'Neurodivergent relationships', note: 'Practical tips for ADHD, autistic and AuDHD couples and families' },
       { href: '/communication-style-quiz.html', code: 'Quiz', title: 'Communication style quiz', note: 'What the Wavelength quiz looks at, the four Wave Code letters, and how to use your result' },
       { href: '/complacency.html', deep: true, code: 'Guide', title: 'Complacency', note: 'Why “it’s fine” stops being checked, how it shows up in you, partners, family, friends, housemates and coworkers, and the small re-checks that keep things alive' }
@@ -137,7 +139,12 @@
       { href: '/relationships.html#map', deep: true, code: 'Map', title: 'The full map', note: 'Every chapter, worksheet and tool, for every kind of relationship' },
       { href: '/grandparents.html', code: 'New', title: 'For grandparents', note: 'Help with the grandkids without taking over: fair childcare, house rules and saying no kindly' }
     ]},
-    { id: 'book', title: 'The book', blurb: 'The manuscript, one idea per chapter. Each chapter pairs with a workpaper that puts it to use.', items: [
+    { id: 'book', title: 'The book', blurb: 'Part One is the most important: yourself. Part Two is between us, one idea per chapter, each paired with a workpaper that puts it to use.', items: [
+      { sub: 'Part One: The most important, yourself' },
+      { href: '/book/self-1-then.html', deep: true, code: 'Then', title: 'Where you came from', note: 'Where your lens came from: growing up, old rules and what life taught you' },
+      { href: '/book/self-2-now.html', deep: true, code: 'Now', title: 'Who you are today', note: 'Your wiring, your weather and your words, and what is fair to you' },
+      { href: '/book/self-3-next.html', deep: true, code: 'Next', title: 'Who you are becoming', note: 'What matters to you, one small goal, tiny steps and a kind monthly look at yourself' },
+      { sub: 'Part Two: Between us' },
       { href: '/book/preface.html', deep: true, code: 'Preface', title: 'The work nobody sees', note: 'The quiet, unseen work of running a shared life, and why it deserves to be noticed' },
       { href: '/book/chapter-1.html', deep: true, code: 'I', title: 'Why we get out of tune', note: 'How pace, tone and urgency nudge two people out of sync, and how to get back in tune' },
       { href: '/book/chapter-2.html', deep: true, code: 'II', title: 'Is the split working?', note: 'A simple way to see whether the way you share the work can last. It looks at the arrangement, never at a person' },
@@ -253,6 +260,10 @@
       { href: '/check-ins.html', deep: true, title: 'Check-ins', note: 'How to have a tender conversation kindly' },
       { href: '/turning-toward.html', deep: true, title: 'Turning toward', note: 'Seven small, everyday ways to connect' },
       { href: '/love-languages.html', deep: true, code: 'New', title: 'Love languages', note: 'What’s healthy and unhealthy about each, how to practice them, and ideas like them' },
+      { href: '/touchstones.html', deep: true, code: 'New', title: 'Touchstones', note: 'The shared words, jokes and rituals that say we are us, and how to keep them fresh' },
+      { href: '/apology-languages.html', code: 'New', title: 'Apology languages', note: 'The parts of a sorry that help after a hurt, and what research says works' },
+      { href: '/appreciation-at-work.html', code: 'New', title: 'Appreciation at work', note: 'Five ways people like to be thanked at work, as a menu, not a label' },
+      { href: '/languages-of-connection.html', code: 'New', title: 'How the languages fit together', note: 'Love, apology and appreciation languages, touchstones and your wiring in one picture, with what to reach for when' },
       { href: '/complacency.html', deep: true, title: 'Complacency', note: 'Why “it’s fine” stops being checked, and the small re-checks that keep things alive' },
       { href: '/recheck-drive.html', code: 'Game', title: 'The Re-check Drive', note: 'Play out the complacency playbook, one real action at a time' },
       { sub: 'Tools for a message or a moment' },
@@ -277,6 +288,11 @@
     ]},
     { id: 'read', name: 'Read & learn', title: 'Read & learn', blurb: 'The book, the library and the stories, in one place. Each page has a short version and a deeper one.', items: [
       { sub: 'The book' },
+      { sub: 'Part One: The most important, yourself' },
+      { href: '/book/self-1-then.html', deep: true, code: 'Then', title: 'Where you came from', note: 'Where your lens came from: growing up, old rules and what life taught you' },
+      { href: '/book/self-2-now.html', deep: true, code: 'Now', title: 'Who you are today', note: 'Your wiring, your weather and your words, and what is fair to you' },
+      { href: '/book/self-3-next.html', deep: true, code: 'Next', title: 'Who you are becoming', note: 'What matters to you, one small goal, tiny steps and a kind monthly look at yourself' },
+      { sub: 'Part Two: Between us' },
       { href: '/book/preface.html', deep: true, code: 'Preface', title: 'The work nobody sees', note: 'The quiet, unseen work of running a shared life' },
       { href: '/book/chapter-1.html', deep: true, code: 'I', title: 'Why we get out of tune', note: 'How pace, tone and urgency nudge two people out of sync' },
       { href: '/book/chapter-2.html', deep: true, code: 'II', title: 'Is the split working?', note: 'Look at the arrangement, never at a person' },
@@ -976,8 +992,8 @@
     chat: ['/ask.html'], ask: ['/ask.html'], question: ['/ask.html'], professor: ['/ask.html'],
     divorce: ['/co-parenting.html', '/relationships.html', '/library/life.html', '/check-ins.html', '/signal-translator.html'], separated: 'divorce', separation: 'divorce', ex: 'divorce', coparent: 'divorce',
     arcade: ['/frequency-journey.html'], maze: 'arcade', chase: 'arcade', crossing: 'arcade',
-    complacent: ['/complacency.html', '/complacency-in-depth.html', '/turning-toward.html', '/workpapers/wp-13-pll-protocol.html'], touchstone: ['/complacency.html#touchstones', '/library/connection.html#shared-language', '/turning-toward.html#rituals'], touchstones: 'touchstone', idiom: 'touchstone', idioms: 'touchstone', petname: 'touchstone', nickname: 'touchstone', nicknames: 'touchstone', petname: 'touchstone', joke: 'touchstone', jokes: 'touchstone', catchphrase: 'touchstone', codeword: 'touchstone', complacency: 'complacent', stale: 'complacent', boring: 'complacent', bored: 'complacent', rut: 'complacent', drifting: 'complacent', drift: 'complacent', granted: 'complacent', coasting: 'complacent', autopilot: 'complacent', spark: 'complacent',
-    sorry: ['/library/conflict.html', '/signal-translator.html', '/conversation-reader.html', '/workpapers/wp-09-tone-filter.html'], apology: 'sorry', apologize: 'sorry', repair: 'sorry', forgive: 'sorry',
+    complacent: ['/complacency.html', '/complacency-in-depth.html', '/turning-toward.html', '/workpapers/wp-13-pll-protocol.html'], touchstone: ['/touchstones.html', '/complacency.html#touchstones', '/library/connection.html#shared-language', '/turning-toward.html#rituals'], touchstones: 'touchstone', idiom: 'touchstone', idioms: 'touchstone', petname: 'touchstone', nickname: 'touchstone', nicknames: 'touchstone', petname: 'touchstone', joke: 'touchstone', jokes: 'touchstone', catchphrase: 'touchstone', codeword: 'touchstone', complacency: 'complacent', stale: 'complacent', boring: 'complacent', bored: 'complacent', rut: 'complacent', drifting: 'complacent', drift: 'complacent', granted: 'complacent', coasting: 'complacent', autopilot: 'complacent', spark: 'complacent',
+    sorry: ['/apology-languages.html', '/library/conflict.html', '/signal-translator.html', '/conversation-reader.html', '/workpapers/wp-09-tone-filter.html'], apology: 'sorry', apologize: 'sorry', repair: 'sorry', forgive: 'sorry',
     puppy: ['#palcam', '/frequency-buddies.html', '/frequency-journey.html', '/pal-cam-tv.html'], pup: 'puppy', pups: 'puppy', dog: 'puppy', tidbit: 'puppy', sugarfoot: 'puppy',
     screenshot: ['/conversation-reader.html'],
     childhood: ['/growing-up.html', '/growing-up-in-depth.html', '/know-yourself.html'], raised: 'childhood', upbringing: 'childhood', parents: 'childhood', grew: 'childhood', growing: 'childhood', family: ['/growing-up.html', '/relationships.html'],
@@ -988,7 +1004,8 @@
     baby: ['/new-parent.html', '/share-the-load.html', '/chore-chart-for-couples.html', '/invisible-labor-mental-load.html'], newborn: 'baby', infant: 'baby', toddler: 'baby', postpartum: 'baby', newparent: 'baby', sleepless: 'baby',
     roommate: ['/share-the-load.html', '/lemonade-stand.html', '/chore-chart-for-couples.html'], roommates: 'roommate', housemate: 'roommate', housemates: 'roommate', flatmate: 'roommate', flatmates: 'roommate',
     install: ['/install.html'], app: 'install', android: 'install', widget: 'install', widgets: 'install', homescreen: 'install', offline: 'install', phone: 'install',
-    love: ['/love-languages.html', '/turning-toward.html', '/complacency.html'], language: 'love', languages: 'love', chapman: 'love', affirmation: 'love', appreciation: 'love', thanks: 'love', gifts: 'love', touch: 'love', appreciated: 'love', cared: 'love',
+    appreciate: ['/appreciation-at-work.html', '/love-languages.html'], appreciation: 'appreciate', languages: ['/languages-of-connection.html', '/love-languages.html'], connection: ['/languages-of-connection.html'],
+    love: ['/love-languages.html', '/turning-toward.html', '/complacency.html'], language: 'love', chapman: 'love', affirmation: 'love', thanks: 'love', gifts: 'love', touch: 'love', appreciated: 'love', cared: 'love',
     recommend: ['/soundscapes.html'], recommendation: 'recommend', pick: 'recommend', which: 'recommend',
     brain: ['/soundscapes.html'], breakers: 'brain', wrecked: 'brain', instrumental: 'brain', shimmer: 'brain', thunderous: 'brain', shooting: 'brain',
     haptic: ['/soundscapes.html'], haptics: 'haptic', vibration: 'haptic', vibrate: 'haptic', buzz: 'haptic', rumble: 'haptic', synesthesia: 'haptic', visualize: 'haptic', aurora: 'haptic',
@@ -1395,6 +1412,20 @@
   }
   var installPrompt = null;
   window.addEventListener('beforeinstallprompt', function (e) { e.preventDefault(); installPrompt = e; });
+  // one call anywhere on the site (the Get the app ad, the install page): ask the browser to install the app right now
+  window.TOLInstall = {
+    ready: function () { return !!installPrompt; },
+    ask: function () {
+      if (!installPrompt) return Promise.resolve('unavailable');
+      var ev = installPrompt; installPrompt = null;
+      try { ev.prompt(); } catch (e) { return Promise.resolve('error'); }
+      return ev.userChoice.then(function (c) {
+        var ok = c && c.outcome === 'accepted';
+        if (ok) { try { localStorage.setItem('tol-app-installed', '1'); } catch (e) {} document.dispatchEvent(new CustomEvent('tol-app-installed')); }
+        return ok ? 'accepted' : 'dismissed';
+      }).catch(function () { return 'error'; });
+    }
+  };
   // ---------- Professor Puddles: the site's chat host, floating by, with a hello bubble up top ----------
   var PUDDLES_SVG = '<svg viewBox="-4 -14 88 92" aria-hidden="true" focusable="false">' +
     '<path d="M40 8C33 22 14 36 14 50c0 14 12 22 26 22s26-8 26-22C66 36 47 22 40 8z" fill="#CFE6FA" stroke="#7FB2E0" stroke-width="2.6"/>' +
@@ -2823,6 +2854,8 @@
     if ((current === '/index.html' || BB_PAGE.test(current)) && !document.querySelector('meta[http-equiv="Content-Security-Policy"]')) { var bbs = document.createElement('script'); bbs.src = '/assets/js/brain-breaks.js'; bbs.defer = true; document.head.appendChild(bbs); }
     // tablets, laptops and desktops: an "On this page" outline, keyboard shortcuts, roomier touch targets (wide-screens.js)
     { var wsc = document.createElement('script'); wsc.src = '/assets/js/wide-screens.js'; wsc.defer = true; document.head.appendChild(wsc); }
+    // a very faint local time and weather note in the corner, so nobody has to leave the page to check (clock-weather.js)
+    { var cwx = document.createElement('script'); cwx.src = '/assets/js/clock-weather.js'; cwx.defer = true; document.head.appendChild(cwx); }
     // phones: a "turn sideways" hint under big pictures, and full screen asks for landscape
     if (/^\/(soundscapes|frequency-buddies[a-z0-9-]*|calm-visualizer|night-garden|pal-cam-tv)\.html$/.test(current)) { var tsw = document.createElement('script'); tsw.src = '/assets/js/turn-sideways.js'; tsw.defer = true; document.head.appendChild(tsw); }
     if (location.hash) { var t = document.getElementById(location.hash.slice(1)); if (t) t.scrollIntoView(); }

@@ -755,9 +755,35 @@
   var MB = { prev: null, last: 0 }, wantPlace = false;
   // the local time in the top corner, like a real camera's timestamp
   var timeEl = null;
+  // the real weather where you are: asked for once (your phone or browser asks you first), kept only on this device as a rounded spot, read from Open-Meteo
+  var WX = null, wxEl = null, wxKey = 'tol-pc-wx', wxBusy = false;
+  function wxKind(c) { return c === 0 ? ['clear', 'Clear', '☀️'] : c <= 2 ? ['clouds', 'Partly cloudy', '⛅'] : c === 3 ? ['clouds', 'Cloudy', '☁️'] : c <= 48 ? ['clouds', 'Foggy', '🌫️'] : c <= 57 ? ['rain', 'Drizzle', '🌦️'] : c <= 67 ? ['rain', 'Rain', '🌧️'] : c <= 77 ? ['snow', 'Snow', '❄️'] : c <= 82 ? ['rain', 'Showers', '🌦️'] : c <= 86 ? ['snow', 'Snow showers', '🌨️'] : ['storm', 'Thunderstorm', '⛈️']; }
+  function wxShow() {
+    if (!wxEl) return;
+    if (!WX) { wxEl.textContent = '⛅ Show my weather'; wxEl.classList.remove('is-set'); return; }
+    wxEl.textContent = WX.icon + ' ' + WX.deg + '° ' + WX.text; wxEl.classList.add('is-set'); wxEl.title = 'Weather where you are right now';
+  }
+  function wxApply(d) { WX = d; wxShow(); ambient = []; }
+  function wxFetch(lat, lon) {
+    if (wxBusy || !window.fetch) return; wxBusy = true;
+    var f = /^en-US/i.test(navigator.language || '') ? 'fahrenheit' : 'celsius';
+    fetch('https://api.open-meteo.com/v1/forecast?latitude=' + lat + '&longitude=' + lon + '&current=temperature_2m,weather_code&temperature_unit=' + f).then(function (r) { return r.ok ? r.json() : null; }).then(function (j) {
+      wxBusy = false; if (!j || !j.current) return; var k = wxKind(j.current.weather_code);
+      var d = { kind: k[0], text: k[1], icon: k[2], deg: Math.round(j.current.temperature_2m) };
+      try { localStorage.setItem(wxKey, JSON.stringify({ lat: lat, lon: lon, at: Date.now(), d: d })); } catch (e) {}
+      wxApply(d);
+    }).catch(function () { wxBusy = false; });
+  }
+  function wxStart(ask) {
+    var c = null; try { c = JSON.parse(localStorage.getItem(wxKey) || 'null'); } catch (e) {}
+    if (c && c.d) { if (!WX) wxApply(c.d); if (Date.now() - c.at > 20 * 60 * 1000) wxFetch(c.lat, c.lon); return; }
+    if (!ask || !navigator.geolocation) return;
+    if (wxEl) wxEl.textContent = '⛅ Finding the weather…';
+    navigator.geolocation.getCurrentPosition(function (pos) { wxFetch(Math.round(pos.coords.latitude * 10) / 10, Math.round(pos.coords.longitude * 10) / 10); }, function () { if (wxEl) wxEl.textContent = '⛅ Weather needs your location'; }, { timeout: 8000, maximumAge: 3600000 });
+  }
   function showTime() {
     if (!timeEl || !isOpen) return;
-    try { timeEl.textContent = new Date().toLocaleTimeString([], { hour: 'numeric', minute: '2-digit', second: '2-digit' }); } catch (e) { timeEl.textContent = ''; }
+    try { timeEl.textContent = new Date().toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' }); } catch (e) { timeEl.textContent = ''; }
   }
   function whereText() { var ph = phaseOf(hour); return 'Pal cam · ' + (EVENT && EVENT.special ? EVENT.name + ' · ' : '') + ph.charAt(0).toUpperCase() + ph.slice(1) + ' at ' + setting.name; }
   function toSetting(st) {
@@ -1128,11 +1154,17 @@
       if (evk === 'leaf' && !setting.leaves) for (var le = 0; le < (RM ? 3 : 6); le++) ambient.push({ k: 'leaf', x: mix(env.x0, env.x1, Math.random()), y: mix(env.y0, G, Math.random()), s: Math.random() * 6, v: 0.01 + Math.random() * 0.01 });
       if (evk === 'snow' && !setting.snow) for (var sn = 0; sn < (RM ? 6 : 12); sn++) ambient.push({ k: 'snow', x: mix(env.x0, env.x1, Math.random()), y: mix(env.y0, G + 30, Math.random()), s: Math.random() * 6, v: 0.01 + Math.random() * 0.01 });
       if (setting.snow) for (var s = 0; s < (RM ? 10 : 22); s++) ambient.push({ k: 'snow', x: mix(env.x0, env.x1, Math.random()), y: mix(env.y0, G + 30, Math.random()), s: Math.random() * 6, v: 0.012 + Math.random() * 0.012 });
+      if (WX && !setting.indoor && !setting.dream) {
+        if (WX.kind === 'rain' || WX.kind === 'storm') for (var rn = 0; rn < (RM ? 14 : 34); rn++) ambient.push({ k: 'rain', x: mix(env.x0, env.x1, Math.random()), y: mix(env.y0, G + 30, Math.random()), s: Math.random() * 6, v: 0.2 + Math.random() * 0.12 });
+        if (WX.kind === 'snow' && !setting.snow) for (var sw = 0; sw < (RM ? 8 : 18); sw++) ambient.push({ k: 'snow', x: mix(env.x0, env.x1, Math.random()), y: mix(env.y0, G + 30, Math.random()), s: Math.random() * 6, v: 0.012 + Math.random() * 0.012 });
+        if (WX.kind === 'clouds' || WX.kind === 'rain' || WX.kind === 'storm' || WX.kind === 'snow') for (var wc = 0; wc < 3; wc++) ambient.push({ k: 'cloud', x: mix(env.x0, env.x1, Math.random()), y: 22 + wc * 20, s: 0.9 + Math.random() * 0.4, v: 0.005 + Math.random() * 0.004 });
+      }
       if (setting.leaves) for (var l2 = 0; l2 < (RM ? 3 : 6); l2++) ambient.push({ k: 'leaf', x: mix(env.x0, env.x1, Math.random()), y: mix(env.y0, G, Math.random()), s: Math.random() * 6, v: 0.01 + Math.random() * 0.01 });
     }
     for (var j = 0; j < ambient.length; j++) {
       var a = ambient[j];
       if (a.k === 'cloud') { a.x += a.v * dt * (RM ? 0.5 : 1); if (a.x > env.x1 + 10) a.x = env.x0 - 60; }
+      else if (a.k === 'rain') { a.y += a.v * dt; a.x -= a.v * dt * 0.12; if (a.y > G + 40) { a.y = env.y0; a.x = mix(env.x0, env.x1, Math.random()); } }
       else if (a.k === 'snow' || a.k === 'leaf' || a.k === 'petal') { a.y += a.v * dt; a.x += Math.sin(clock / 900 + a.s) * 0.01 * dt; if (a.y > G + 40) { a.y = env.y0; a.x = mix(env.x0, env.x1, Math.random()); } }
     }
   }
@@ -1147,6 +1179,7 @@
     for (var j = 0; j < ambient.length; j++) {
       var a = ambient[j];
       if (a.k === 'fly' && dark) { var fx = a.x + Math.sin(clock / 1300 + a.s) * 14, fy = a.y + Math.cos(clock / 1700 + a.s * 2) * 9, gl = 0.5 + 0.5 * Math.sin(clock / 700 + a.s * 3); U.circle(g, fx, fy, 5, 'rgba(255,240,140,' + (0.18 * gl).toFixed(2) + ')'); U.circle(g, fx, fy, 1.6, 'rgba(255,245,170,' + (0.5 + 0.5 * gl).toFixed(2) + ')'); }
+      else if (a.k === 'rain') { g.strokeStyle = 'rgba(190,220,255,.7)'; g.lineWidth = 1.2; g.beginPath(); g.moveTo(a.x, a.y); g.lineTo(a.x - 1.6, a.y + 7); g.stroke(); }
       else if (a.k === 'snow') U.circle(g, a.x, a.y, 1.6 + (a.s % 1), 'rgba(255,255,255,.85)');
       else if (a.k === 'leaf') { g.save(); g.translate(a.x, a.y); g.rotate(clock / 600 + a.s); U.ell(g, 0, 0, 3.6, 1.8, ['#E8913F', '#D8643F', '#F2C14E'][Math.floor(a.s) % 3]); g.restore(); }
       else if (a.k === 'petal') { g.save(); g.translate(a.x, a.y); g.rotate(clock / 700 + a.s); U.ell(g, 0, 0, 3.2, 1.8, a.s > 3 ? '#F7C9D4' : '#FFFFFF'); g.restore(); }
@@ -1282,6 +1315,9 @@
     '.pc-rec i{width:7px;height:7px;border-radius:50%;background:#E4566E;animation:pcDot 2s ease-in-out infinite}' +
     '.pc-time{position:absolute;right:.6rem;top:.55rem;padding:.2rem .55rem;border-radius:999px;background:rgba(255,253,248,.85);font:600 .66rem/1.2 "IBM Plex Mono",monospace;letter-spacing:.06em;color:#3C3350;pointer-events:none;font-variant-numeric:tabular-nums}' +
     '.pc-time:empty{display:none}' +
+    '.pc-wx{position:absolute;left:.6rem;top:2.1rem;padding:.2rem .6rem;border:0;border-radius:999px;background:rgba(255,253,248,.88);font:600 .7rem/1.2 "IBM Plex Mono",monospace;letter-spacing:.04em;color:#3C3350;cursor:pointer;max-width:70%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}' +
+    '.pc-wx.is-set{cursor:default}' +
+
     '.pc-badge{position:absolute;right:.6rem;top:2.1rem;padding:.25rem .7rem;border-radius:999px;background:#3C3350;color:#FFF3D6;font:700 .8rem/1.2 Fraunces,Georgia,serif;pointer-events:none}' +
     '.pc-badge.is-pop{animation:pcPop .5s cubic-bezier(.2,1.6,.4,1) both}' +
     '@keyframes pcPop{from{transform:scale(.4);opacity:0}to{transform:scale(1);opacity:1}}' +
@@ -1355,7 +1391,7 @@
         '<div class="pc-tr8"><button type="button" class="pc-mus" aria-pressed="false">🎵<span class="pc-lbl"> Music</span> <span class="pc-st">Off</span></button><button type="button" class="pc-snd" aria-pressed="true">🔊<span class="pc-lbl"> Sound</span> <span class="pc-st">On</span></button>' +
         '<button type="button" class="pc-x" aria-label="Close the pal cam"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>Close</button></div></div>' +
         '<div class="pc-snote" role="status" hidden><p class="pc-snote-t"></p><div class="pc-snote-b"><button type="button" class="pc-snote-off">Turn sound off</button><button type="button" class="pc-snote-ok">Got it</button></div></div>' +
-        '<div class="pc-stage"><canvas class="pc-cv" role="img" aria-label="Tidbit and Sugarfoot playing"></canvas><span class="pc-rec" aria-hidden="true"><i></i>PAL CAM</span><span class="pc-time" aria-hidden="true"></span><span class="pc-badge" hidden></span></div>' +
+        '<div class="pc-stage"><canvas class="pc-cv" role="img" aria-label="Tidbit and Sugarfoot playing"></canvas><span class="pc-rec" aria-hidden="true"><i></i>PAL CAM</span><span class="pc-time" aria-hidden="true"></span><button type="button" class="pc-wx" aria-live="polite">⛅ Show my weather</button><span class="pc-badge" hidden></span></div>' +
         '<p class="pc-cap" id="pc-cap"><span class="pc-main"></span><span class="pc-punch"></span></p>' +
         '<div class="pc-btns"><button type="button" class="pc-b is-main pc-next">Next!</button><button type="button" class="pc-b is-sur pc-sur">Surprise me</button><button type="button" class="pc-b pc-pause" aria-pressed="false">Pause</button></div>' +
         '<div class="pc-trs"><button type="button" class="pc-tr" data-trick="0">Tidbit, do a trick!</button><button type="button" class="pc-tr" data-trick="1">Sugarfoot, do a trick!</button></div>' +
@@ -1368,6 +1404,7 @@
     capEl = ov.querySelector('.pc-cap'); capMain = ov.querySelector('.pc-main'); capPunch = ov.querySelector('.pc-punch'); whereEl = ov.querySelector('#pc-where');
     liveEl = ov.querySelector('.pc-live'); factLists = ov.querySelectorAll('.pc-fl');
     timeEl = ov.querySelector('.pc-time'); showTime(); setInterval(showTime, 1000);
+    wxEl = ov.querySelector('.pc-wx'); wxEl.addEventListener('click', function () { if (!WX) wxStart(true); }); wxStart(false);
     badge = ov.querySelector('.pc-badge'); tallyN = ov.querySelector('.pc-n'); tallyTot = ov.querySelector('.pc-tot'); chips = ov.querySelector('.pc-chips'); btnPause = ov.querySelector('.pc-pause');
     ov.querySelector('.pc-x').addEventListener('click', close);
     ov.querySelector('.pc-mus').addEventListener('click', function () { primeSound(); var go = function () { if (MUS()) { MUS().toggle(); if (setting) MUS().scene(setting.id, hour); } syncMusBtn(); ambSync(); }; if (MUS()) go(); else if (musP) musP.then(go); });

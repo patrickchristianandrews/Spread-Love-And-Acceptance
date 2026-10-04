@@ -94,12 +94,21 @@
     '.appad .aa-h em{ font-style:normal; color:#E4566E; }' +
     '.appad .aa-p{ margin:.4rem 0 .7rem !important; color:#4B3D63 !important; line-height:1.45; background:none !important; box-shadow:none !important; border:0 !important; padding:0 !important; max-width:none !important; }' +
     '.appad .aa-pick{ display:flex; flex-wrap:wrap; gap:.5rem; margin:0 0 .6rem; }' +
-    '.appad .aa-chip{ display:inline-flex; flex-direction:column; justify-content:center; min-height:48px; padding:.4rem .9rem; border-radius:16px; text-decoration:none !important; font:700 .98rem/1.15 "Lora",Georgia,serif; color:#fff !important; background:#2F7A5A; border:2px solid #2F7A5A; }' +
-    '.appad .aa-chip small{ font:600 .72rem "IBM Plex Mono",monospace; letter-spacing:.04em; opacity:.92; }' +
-    '.appad .aa-chip.is-soon{ background:#fff; color:#4B3D63 !important; border:2px dashed #B79AD0; }' +
-    '.appad .aa-chip:hover{ transform:translateY(-2px); }' +
+    '.appad .aa-chip{ display:inline-flex; align-items:center; gap:.55rem; min-height:54px; padding:.4rem 1rem .4rem .5rem; border-radius:20px; text-decoration:none !important; color:#24523D !important; background:linear-gradient(160deg,#E6F8EE,#C9EFD9); border:2px solid #8FD3AE; box-shadow:0 4px 0 #8FD3AE; transition:transform .15s, box-shadow .15s; }' +
+    '.appad .aa-chip .aa-ic{ flex:none; display:grid; place-items:center; width:2.4rem; height:2.4rem; border-radius:50%; background:#fff; font-size:1.35rem; line-height:1; box-shadow:inset 0 -2px 0 rgba(0,0,0,.08); }' +
+    '.appad .aa-chip b{ display:block; font:800 1rem/1.15 "Lora",Georgia,serif; }' +
+    '.appad .aa-chip small{ display:block; font:600 .72rem/1.3 "IBM Plex Mono",monospace; letter-spacing:.03em; opacity:.9; }' +
+    '.appad .aa-chip.is-win{ color:#1F4468 !important; background:linear-gradient(160deg,#E7F2FD,#CBE3F8); border-color:#8DBDE8; box-shadow:0 4px 0 #8DBDE8; }' +
+    '.appad .aa-chip.is-soon{ color:#5B3F73 !important; background:linear-gradient(160deg,#FFF1F6,#F6E3F5); border:2px dashed #C9A4DC; box-shadow:0 4px 0 #E1CCEC; }' +
+    '.appad .aa-chip:hover{ transform:translateY(2px) rotate(-1.5deg); box-shadow:0 2px 0 rgba(0,0,0,.12); }' +
+    '.appad .aa-chip:hover .aa-ic{ animation:aa-wig .5s ease-in-out; }' +
+    '@keyframes aa-wig{ 0%,100%{ transform:rotate(0); } 25%{ transform:rotate(-14deg) scale(1.1); } 75%{ transform:rotate(14deg) scale(1.1); } }' +
+    '@media (prefers-reduced-motion: reduce){ .appad .aa-chip:hover .aa-ic{ animation:none; } .appad .aa-chip:hover{ transform:none; } }' +
     '.appad .aa-chip:focus-visible, .appad .aa-go:focus-visible, .appad .aa-x:focus-visible{ outline:3px solid #3B2A55; outline-offset:2px; }' +
-    '.appad .aa-go{ display:inline-block; min-height:44px; padding:.55rem 1.1rem; border-radius:999px; background:#E4566E; color:#fff !important; text-decoration:none !important; font:800 1rem/1.2 "Lora",Georgia,serif; box-shadow:0 6px 0 #B8384F; transform:translateY(-3px); transition:transform .1s, box-shadow .1s; }' +
+    '.appad .aa-go{ display:inline-flex; align-items:center; gap:.45rem; min-height:48px; padding:.55rem 1.3rem; border-radius:999px; background:linear-gradient(180deg,#FF7C93,#E4566E); color:#fff !important; text-decoration:none !important; font:800 1.05rem/1.2 "Lora",Georgia,serif; box-shadow:0 6px 0 #B8384F; transform:translateY(-3px); transition:transform .1s, box-shadow .1s; }' +
+    '.appad .aa-go::before{ content:"\\1F43E"; font-size:1.1rem; }' +
+    '.appad .aa-go::after{ content:"\\2728"; font-size:.95rem; }' +
+    '.appad .aa-msg{ margin:.6rem 0 0 !important; padding:0 !important; background:none !important; box-shadow:none !important; border:0 !important; font:700 .95rem "Lora",Georgia,serif; color:#2F7A5A !important; }' +
     '.appad .aa-go:hover{ transform:translateY(0); box-shadow:0 3px 0 #B8384F; }' +
     '.appad .aa-x{ position:absolute; top:.45rem; right:.5rem; width:44px; height:44px; border-radius:50%; border:0; background:transparent; color:#6B4F8A; font-size:1.3rem; cursor:pointer; }' +
     '@media (max-width:620px){ .appad{ grid-template-columns:1fr; padding:1rem; } .appad .aa-stage{ max-width:260px; margin:0 auto; } }';
@@ -124,17 +133,13 @@
     host.innerHTML =
       '<aside class="appad no-bubble" aria-labelledby="aa-h">' +
         '<span class="aa-stage"><span class="aa-tilt"><canvas width="380" height="240" aria-hidden="true"></canvas></span><span class="aa-say" aria-hidden="true"></span></span>' +
-        '<div><p class="aa-k no-bubble">Free app</p>' +
+        '<div>' +
         '<h2 class="aa-h no-bubble" id="aa-h">Get the <em>app!</em></h2>' +
-        '<div class="aa-pick" role="group" aria-label="Choose your device">' +
-          '<a class="aa-chip" href="/install.html#android"><span>Android</span><small>Install now</small></a>' +
-          '<a class="aa-chip" href="/install.html#windows"><span>Windows</span><small>Install now</small></a>' +
-          '<a class="aa-chip is-soon" href="/install.html#apple"><span>iPhone &amp; iPad</span><small>App Store: coming soon</small></a>' +
-        '</div>' +
-        '<a class="aa-go" href="/install.html">Get the app &rarr;</a></div>' +
+        '<a class="aa-go" href="/install.html">Get the app</a></div>' +
         '<button type="button" class="aa-x" aria-label="Hide this for now">&times;</button>' +
       '</aside>';
     var card = host.firstChild, cv = card.querySelector('canvas'), tilt = card.querySelector('.aa-tilt'), say = card.querySelector('.aa-say'), g = cv.getContext('2d');
+    document.addEventListener('tol-app-installed', function () { stopLoop(); host.innerHTML = ''; });
     card.querySelector('.aa-x').addEventListener('click', function () { lsSet('tol-appad-off', '1'); stopLoop(); host.innerHTML = ''; });
     var raf = 0, vis = true, t0 = performance.now(), lastSay = '';
     function frame(now) {

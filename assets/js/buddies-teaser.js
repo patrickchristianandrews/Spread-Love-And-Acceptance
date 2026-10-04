@@ -86,7 +86,7 @@
   var FR = { says: [], secrets: [], narr: [] };
   function px(g, x, y) { var m = g.getTransform(); return { x: m.a * x + m.c * y + m.e, y: m.b * x + m.d * y + m.f, k: Math.hypot(m.a, m.b) }; }
   // a line of dialogue, shown from u0 to u1 over the speaker's head (o: { big, dx })
-  function say(g, head, text, u, u0, u1, o) { if (u < u0 || u > u1) return; var p = px(g, head.x, head.y); FR.says.push({ who: head.who || 'tidbit', x: p.x, y: p.y, text: text, a: clamp((u - u0) / 0.12, 0, 1) * clamp((u1 - u) / 0.14, 0, 1), pop: (u - u0), o: o || {} }); live(text); }
+  function say(g, head, text, u, u0, u1, o) { if (u < u0 || u > u1) return; var p = px(g, head.x, head.y); FR.says.push({ dur: u1 - u0, who: head.who || 'tidbit', x: p.x, y: p.y, text: text, a: clamp((u - u0) / 0.12, 0, 1) * clamp((u1 - u) / 0.14, 0, 1), pop: (u - u0), o: o || {} }); live(text); }
   // the trailer announcer: a line across the top of the picture, typed out, and read aloud by the player (draw: false = read aloud only)
   function narr(text, u, u0, u1, draw) { if (u < u0 || u > u1) return; FR.narr.push({ text: text, u: u - u0, a: clamp((u - u0) / 0.2, 0, 1) * clamp((u1 - u) / 0.25, 0, 1), draw: draw !== false }); live(text); }
   var SECRETS = [
@@ -140,7 +140,7 @@
     // two little "!"s when the ears go up
     if (u > 3.85 && u < 4.9) { var a = win(u, 3.9, 4.9, 0.12); g.globalAlpha = a; font(g, '800', 22); g.textAlign = 'center'; g.fillStyle = '#FFE08A'; g.fillText('!', tid.x + 4, tid.y - 10 - 4 * eout((u - 3.9) / 0.2)); g.fillText('!', sug.x - 4, sug.y - 10 - 4 * eout((u - 3.9) / 0.2)); g.globalAlpha = 1; }
     say(g, tid, 'Did you hear that?', u, 5.0, 6.55);
-    say(g, sug, 'It’s coming from… out there.', u, 6.6, 8.0);
+    say(g, sug, 'From… out there.', u, 6.6, 8.0);
     g.restore();
   }
   function card(g, u, d, text, o, calm) {
@@ -448,7 +448,7 @@
     if (u > 1.35) { var lq = clamp((u - 1.35) / 0.7, 0, 1), lx = tid.x + 4 + Math.sin(lq * 9) * 18 * (1 - lq), ly = mix(60, tid.y + 12, eout(lq)); g.save(); g.translate(lx, ly); g.rotate(Math.sin(lq * 8) * 0.6 * (1 - lq) + 0.3); ell(g, 0, 0, 9, 4.5, '#E89B3A'); line(g, -9, 0, 9, 0, '#B8701F', 1); g.restore(); }
     var gig = u > 1.25, sug = pup(g, 'sugarfoot', 520, 312, 1.5, { pose: gig ? 'wiggle' : 'sit', face: -1, t: u + 1, wag: gig ? Math.sin(u * 16) * 0.8 : 0.3 });
     say(g, sug, 'Hee hee!', u, 1.3, 2.05);
-    say(g, tid, 'I meant to do that!', u, 2.1, 3.2);
+    say(g, tid, 'On purpose!', u, 2.1, 3.2);
   }
   function hill(g, u, d, calm) {
     var z = mix(1.28, 1, eio(u / d));
@@ -528,11 +528,11 @@
     if (pop) for (var i = 0; i < 12; i++) { var q = u - 3.9, a = -Math.PI * (0.15 + 0.7 * rnd(i + 1301)), v = 80 + rnd(i + 1302) * 90; if (q > 1) break; star(g, 452 + Math.cos(a) * v * q, 230 + Math.sin(a) * v * q + 60 * q * q, 3 * (1 - q), 'rgba(255,236,160,' + (1 - q) + ')'); }
     say(g, sug, 'Wait… did anyone see where Tidbit went?', u, 0.4, 3.3);
     say(g, tid, 'Ready for Season 2!', u, 4.15, 6.2, { big: false });
-    say(g, sug, 'Hee hee! Of course you are.', u, 6.3, 7.7);
-    say(g, tid, 'And remember… I’ll be bark!', u, 7.8, 9.4);
+    say(g, sug, 'Of course!', u, 6.3, 7.7);
+    say(g, tid, 'I’ll be bark!', u, 7.8, 9.4);
   }
 
-  // ---------------------------------------------------------------- the funny middle: six slapstick bits, each a wink at a famous movie
+  // ---------------------------------------------------------------- the funny middle: seven slapstick bits, each a wink at a famous movie
   function bone(g, x, y, s, rot, col) { g.save(); g.translate(x, y); g.rotate(rot || 0); g.scale(s, s); rr(g, -9, -2, 18, 4, 2, col); circ(g, -10, -2.6, 3, col); circ(g, -10, 2.6, 3, col); circ(g, 10, -2.6, 3, col); circ(g, 10, 2.6, 3, col); g.restore(); }
   function beachBall(g, x, y, r, rot, sq) {
     g.save(); g.translate(x, y); g.scale(1 + (1 - sq) * 0.6, sq); g.rotate(rot); circ(g, 0, 0, r, '#FFFFFF');
@@ -567,10 +567,10 @@
     }
     if (u > 5.3 && u < 6.4) onomato(g, 'pffffft…', 440, 214, 24, '#FFFFFF', win(u, 5.3, 6.4, 0.2), -0.08);
     narr('In a world of golden bones…', u, 0.1, 2.0);
-    say(g, tid, 'One golden bone. Easy!', u, 2.1, 3.3);
+    say(g, tid, 'Golden bone. Easy!', u, 2.1, 3.3);
     say(g, sug, 'Tidbit! RUN!', u, 3.5, 4.8, { big: true });
-    say(g, tid, 'Is that a… beach ball?', u, 5.5, 7.0);
-    say(g, sug, 'Every single time.', u, 6.2, 7.4);
+    say(g, tid, 'A… beach ball?', u, 5.5, 7.0);
+    say(g, sug, 'Every time.', u, 6.2, 7.4);
     g.restore();
   }
   // 2. the pond (Jaws): a fin, two dramatic notes, and a very small shark
@@ -623,7 +623,48 @@
     say(g, sug, 'Why is it always me?', u, 4.0, 5.4);
     say(g, sug, 'Mmm. Cherry.', u, 5.5, 6.4);
   }
-  // 4. the vault (Mission: Impossible): a cookie, a rope and a muffled partner
+  // 4. snakes on a plane (the famous line, kept family-friendly): Tidbit has had it, and Sugarfoot gets there first
+  function snk(g, x0, y0, x1, y1, t, amp, w, col, headCol) {
+    var n = 22, dx = x1 - x0, dy = y1 - y0, len = Math.hypot(dx, dy) || 1, nx = -dy / len, ny = dx / len, pts = [];
+    for (var i = 0; i <= n; i++) { var q = i / n, off = Math.sin(t * 5 - q * 9) * amp * (0.25 + q); pts.push([x0 + dx * q + nx * off, y0 + dy * q + ny * off]); }
+    for (var k = 0; k < n; k++) { g.strokeStyle = k % 4 < 2 ? col : '#3E9A58'; g.lineWidth = w * (1 - 0.45 * (k / n)); g.lineCap = 'round'; g.beginPath(); g.moveTo(pts[k][0], pts[k][1]); g.lineTo(pts[k + 1][0], pts[k + 1][1]); g.stroke(); }
+    var h = pts[n], pr = pts[n - 1], ang = Math.atan2(h[1] - pr[1], h[0] - pr[0]);
+    g.save(); g.translate(h[0], h[1]); g.rotate(ang);
+    ell(g, 2, 0, w * 0.75, w * 0.6, headCol || col); circ(g, 1, -w * 0.28, 1.9, '#fff'); circ(g, 1, w * 0.28, 1.9, '#fff'); circ(g, 1.6, -w * 0.28, 0.9, '#222'); circ(g, 1.6, w * 0.28, 0.9, '#222');
+    if (Math.floor(t * 4) % 2) { line(g, w * 0.7, 0, w * 0.7 + 7, 0, '#E4566E', 1.1); line(g, w * 0.7 + 7, 0, w * 0.7 + 10, -2, '#E4566E', 1); line(g, w * 0.7 + 7, 0, w * 0.7 + 10, 2, '#E4566E', 1); }
+    g.restore();
+  }
+  function snakes(g, u, d, calm) {
+    // the cabin: a wall of windows over a row of blue seats, overhead bins, and a carpeted aisle
+    g.fillStyle = lin(g, 0, 0, 0, VH, [[0, '#E3EAF4'], [1, '#B8C6DB']]); g.fillRect(-60, -60, VW + 120, VH + 120);
+    rr(g, -20, -4, VW + 40, 56, 6, '#C9D3E3'); for (var b = 0; b < 4; b++) { rr(g, 22 + b * 160, 8, 140, 38, 8, '#D8E0EE'); rr(g, 22 + b * 160, 40, 140, 5, 2, '#AEBBD0'); }
+    var open = u > 1.0 ? clamp((u - 1.0) / 0.25, 0, 1) : 0;
+    for (var w2 = 0; w2 < 4; w2++) { var wx = 56 + w2 * 160; rr(g, wx, 78, 86, 78, 22, '#9FB0C8'); g.save(); g.beginPath(); if (g.roundRect) g.roundRect(wx + 5, 83, 76, 68, 18); else g.rect(wx + 5, 83, 76, 68); g.clip(); g.fillStyle = lin(g, 0, 83, 0, 151, [[0, '#7DBEF2'], [1, '#D6EEFF']]); g.fillRect(wx, 80, 90, 80); puff(g, wx + ((u * 30 + w2 * 40) % 120) - 40, 118, 0.7, 'rgba(255,255,255,.95)'); g.restore(); }
+    for (var sr = 0; sr < 4; sr++) { var sxs = 40 + sr * 160; rr(g, sxs, 196, 110, 150, 26, '#4A6FA5'); rr(g, sxs + 10, 206, 90, 22, 11, '#6A8FC4'); }
+    g.fillStyle = '#6D7C9A'; g.fillRect(-60, 318, VW + 120, 100); g.fillStyle = 'rgba(255,255,255,.12)'; for (var cs = 0; cs < 10; cs++) g.fillRect(cs * 70, 318, 3, 100);
+    // oxygen masks drop
+    if (open > 0) for (var m = 0; m < 4; m++) { var mx = 98 + m * 160 + Math.sin(u * 3 + m) * 4, my = 40 + open * (44 + 10 * Math.sin(m * 2)); line(g, 98 + m * 160, 40, mx, my, '#9AA3B5', 1.6); ell(g, mx, my + 5, 9, 7, '#F7D86A'); }
+    // snakes tumble out of the bins (cheerful, green and not scary), and two slither down the aisle
+    var drop = sio((u - 1.0) / 0.7), fl = u > 1.6 ? clamp((u - 1.6) / 0.5, 0, 1) : 0;
+    if (drop > 0) [[120, 0], [330, 1], [520, 2]].forEach(function (s0) { snk(g, s0[0], 44, s0[0] + Math.sin(u * 2 + s0[1]) * 14, 44 + 120 * drop + s0[1] * 14, u + s0[1], 7, 11, '#5CC47A'); });
+    if (fl > 0) { snk(g, -40 + 150 * fl, 330, 130 + 150 * fl, 336, u, 8, 12, '#6FD08A'); snk(g, 700 - 230 * fl, 340, 520 - 230 * fl, 332, u + 1, 8, 12, '#4FB86F', '#4FB86F'); }
+    onomato(g, 'SSSSSSS', 330, 72, 34, '#2F8A4C', win(u, 1.2, 2.8, 0.15), -0.04);
+    // the two on the case
+    var stand = clamp((u - 1.5) / 0.4, 0, 1), tcx = 200, tid = pup(g, 'tidbit', tcx, 326, 1.45, { pose: u < 1.5 ? 'sit' : 'run', face: 1, t: u, ph: u * 5, over: HAT.goggles, tilt: -0.04 + 0.04 * Math.sin(u * 9) * stand, wag: 0.3, lift: 0 });
+    var dash = u < 3.7 ? 470 : u < 4.1 ? mix(470, 262, eio((u - 3.7) / 0.4)) : u < 5.4 ? 262 : mix(262, 340, sio((u - 5.4) / 0.6));
+    var sug = pup(g, 'sugarfoot', dash, 326, 1.45, { pose: (u >= 3.7 && u < 4.1) ? 'run' : 'sit', face: -1, t: u + 1, ph: u * 18, over: HAT.beanie('#7FB8F0'), lift: (u >= 3.7 && u < 4.1) ? 6 : 0 });
+    // the paw that stops the word
+    if (u >= 4.05 && u < 5.5) { var px = tid.x + 14, py = tid.y + 8; ell(g, px, py, 11, 8, '#C98A4E', 0.2); circ(g, px - 4, py - 5, 2.2, '#B97847'); circ(g, px + 1, py - 6, 2.2, '#B97847'); circ(g, px + 6, py - 4, 2.2, '#B97847'); }
+    onomato(g, 'FWUMP!', 300, 186, 30, '#FFF8EC', win(u, 4.0, 4.9, 0.1), 0.08);
+    say(g, sug, 'What a smooth flight!', u, 0.2, 1.4);
+    say(g, tid, 'Snakes?!', u, 1.6, 2.5);
+    say(g, tid, 'I have had it with these snakes on this—', u, 2.6, 4.0, { big: true });
+    say(g, sug, '…PLANE! This lovely plane!', u, 4.1, 5.0, { big: true });
+    say(g, tid, 'Mmf mmf!', u, 5.0, 5.5);
+    say(g, tid, '…on this plane.', u, 5.6, 6.3);
+    say(g, sug, 'Good girl.', u, 6.3, 7.0);
+  }
+  // 5. the vault (Mission: Impossible): a cookie, a rope and a muffled partner
   function vault(g, u, d, calm) {
     g.fillStyle = lin(g, 0, 0, 0, VH, [[0, '#10121F'], [1, '#22263C']]); g.fillRect(-60, -60, VW + 120, VH + 120);
     for (var t = 0; t < 8; t++) { g.fillStyle = 'rgba(255,255,255,.04)'; g.fillRect(t * 84, 0, 2, 300); }
@@ -674,7 +715,7 @@
     splash(g, 400, WL, hitU + 0.7, u, 20, 1900);
     var sh = u >= hitU + 0.9 ? { x: 420, y: WL - 40, who: 'sugarfoot' } : { x: sx, y: sy - 74, who: 'sugarfoot' };
     say(g, { x: sx, y: 268 - 74, who: 'sugarfoot' }, 'YOU SHALL NOT PASS!', u, 1.0, 3.0, { big: true });
-    say(g, { x: sx, y: 268 - 74, who: 'sugarfoot' }, '…Okay, then.', u, 3.05, 3.65);
+    say(g, { x: sx, y: 268 - 74, who: 'sugarfoot' }, '…Okay.', u, 3.05, 3.65);
     say(g, { x: 396, y: WL - 40, who: 'tidbit' }, 'Did I do that?', u, 5.3, 6.6);
   }
   // 6. the leap (Toy Story): to infinity, and into the laundry
@@ -711,7 +752,10 @@
   // ---------------------------------------------------------------- the edit: every shot on the timeline
   // [start, end, id, draw function, extra]
   // the funny middle: a card, then six bits (id, length in seconds, draw function)
-  var GAGS = [['boulder', 7.2, boulder], ['jaws', 6.2, jaws], ['matrix', 6.2, matrix], ['vault', 6.6, vault], ['bridge', 6.6, bridge], ['laundry', 6.2, laundry]];
+  var GAGS = [['boulder', 7.2, boulder], ['jaws', 6.2, jaws], ['matrix', 6.2, matrix], ['snakes', 7.0, snakes], ['vault', 6.6, vault], ['bridge', 6.6, bridge], ['laundry', 6.2, laundry]];
+  // each bit is slowed to the pace its lines need to be spoken, so the voices and the picture always go along together
+  var GK = { boulder: 1.35, jaws: 1.5, matrix: 1.5, snakes: 1.8, vault: 1, bridge: 1.4, laundry: 1.35 };
+  GAGS = GAGS.map(function (x) { var k = GK[x[0]] || 1, f = x[2]; return [x[0], x[1] * k, k === 1 ? f : function (g, u, d, c) { return f(g, u / k, d / k, c); }, k]; });
   var G0 = 38.7, GCARD = 1.8, GL = GCARD + GAGS.reduce(function (n, x) { return n + x[1]; }, 0);   // the funny middle starts at G0 and lasts GL seconds
   var POST_EXTRA = 1.6;   // a little longer at the very end, for one more gag
   var EDIT = [
@@ -824,11 +868,13 @@
 
   // ---------------------------------------------------------------- the music and sounds (Web Audio)
   function hz(m) { return 440 * Math.pow(2, (m - 69) / 12); }
-  var SAMPLES = ['tidbit-hmm', 'sugarfoot-ooh', 'sugarfoot-laugh-2', 'tidbit-yip', 'tidbit-arfarf', 'sugarfoot-arfarf', 'sugarfoot-aww', 'sugarfoot-laugh-1', 'tidbit-ooh', 'tidbit-laugh-1'];
+  var FXN = ['arf', 'arfarf', 'ruff', 'woof', 'yip', 'hmm', 'ooh', 'aww', 'mmm', 'sigh', 'laugh-1', 'laugh-2'];
+  var SAMPLES = []; ['tidbit', 'sugarfoot'].forEach(function (w) { FXN.forEach(function (n) { SAMPLES.push(w + '-' + n); }); });
+  var AMBN = ['birds', 'wind', 'waves', 'crickets', 'city', 'carnival', 'cafe', 'underwater', 'rain', 'stream'];   // the same place sounds Season 1 uses
   var BUF = {}, bufP = null, decodeCtx = null;
   function loadSamples(c) {
     if (bufP) return bufP; decodeCtx = c;
-    var list = SAMPLES.map(function (n) { return ['/assets/audio/buddies/fx/' + n + '.mp3', n]; }).concat([['/assets/audio/buddies/theme-open.mp3', 'theme']]);
+    var list = SAMPLES.map(function (n) { return ['/assets/audio/buddies/fx/' + n + '.mp3', n]; }).concat(AMBN.map(function (n) { return ['/assets/audio/ambience/' + n + '.mp3', 'amb:' + n]; })).concat([['/assets/audio/buddies/theme-open.mp3', 'theme']]);
     bufP = Promise.all(list.map(function (L) {
       return fetch(L[0]).then(function (r) { return r.ok ? r.arrayBuffer() : null; }).then(function (ab) {
         if (!ab) return; return new Promise(function (ok) { try { var pr = c.decodeAudioData(ab, function (b) { BUF[L[1]] = b; ok(); }, function () { ok(); }); if (pr && pr.catch) pr.catch(function () { ok(); }); } catch (e) { ok(); } });
@@ -848,7 +894,13 @@
     function gainTo(dest) { var gn = c.createGain(); gn.connect(dest || bus); return gn; }
     function noiseSrc(t, len, buf) { var n = src(c.createBufferSource()); n.buffer = buf || noise; n.loop = true; n.start(t); n.stop(t + len); return n; }
     function filt(type, f, q) { var b = c.createBiquadFilter(); b.type = type; b.frequency.value = f; if (q) b.Q.value = q; return b; }
+    // Season 1's music bed: soft pads and plucks through a low-pass, kept low under everything else
+    var mus = c.createGain(); mus.gain.value = 0.55; var mlp = c.createBiquadFilter(); mlp.type = 'lowpass'; mlp.frequency.value = 1500; mus.connect(mlp); mlp.connect(bus);
+    var amb = c.createGain(); amb.gain.value = 0.9; amb.connect(bus);
     var I = {
+      mpad: function (t, m, len, vol) { [[0, 'triangle', 0.5], [5, 'sine', 0.7]].forEach(function (v) { var o = osc(v[1], hz(m), t, t + len + 1.8), gn = gainTo(mus); o.detune.value = v[0]; var pk = vol * v[2]; gn.gain.setValueAtTime(0.0001, t); gn.gain.linearRampToValueAtTime(pk, t + Math.min(1.4, len * 0.35)); gn.gain.setValueAtTime(pk, t + len * 0.75); gn.gain.linearRampToValueAtTime(0.0001, t + len + 1.6); o.connect(gn); }); },
+      mpluck: function (t, m, vol) { var o = osc('sine', hz(m), t, t + 1), gn = gainTo(mus); gn.gain.setValueAtTime(0.0001, t); gn.gain.linearRampToValueAtTime(vol, t + 0.02); gn.gain.exponentialRampToValueAtTime(0.0001, t + 0.9); o.connect(gn); },
+      amb: function (t, name, len, vol) { var b = BUF['amb:' + name]; if (!b) return; var sN = src(c.createBufferSource()), gn = gainTo(amb); sN.buffer = b; sN.loop = true; sN.connect(gn); gn.gain.setValueAtTime(0.0001, t); gn.gain.linearRampToValueAtTime(vol, t + 0.6); gn.gain.setValueAtTime(vol, t + Math.max(0.6, len - 0.7)); gn.gain.linearRampToValueAtTime(0.0001, t + len); sN.start(t, (name.length * 1.7) % Math.max(1, b.duration - 1)); sN.stop(t + len + 0.1); },
       pad: function (t, notes, len, vol) { notes.forEach(function (m) { [[-7, 'triangle', 0.5], [6, 'sine', 0.7]].forEach(function (v) { var o = osc(v[1], hz(m), t, t + len + 2.2), gn = gainTo(); o.detune.value = v[0]; env(gn, t, Math.min(1.6, len * 0.35), vol * v[2], len * 0.55, 1.8); o.connect(gn); }); }); },
       bass: function (t, m, len, vol) { var o = osc('triangle', hz(m), t, t + len + 0.4), gn = gainTo(); env(gn, t, 0.01, vol, len * 0.4, len * 0.5); o.connect(gn); var o2 = osc('sine', hz(m - 12), t, t + len + 0.4), g2 = gainTo(); env(g2, t, 0.01, vol * 0.8, len * 0.4, len * 0.5); o2.connect(g2); },
       pluck: function (t, m, vol) { var o = osc('triangle', hz(m), t, t + 0.8), gn = gainTo(); env(gn, t, 0.005, vol, 0.01, 0.5); o.connect(gn); },
@@ -868,6 +920,13 @@
       swell: function (t, len, vol) { var n = noiseSrc(t, len + 0.05), f = filt('bandpass', 400, 1.2), gn = gainTo(); f.frequency.setValueAtTime(300, t); f.frequency.exponentialRampToValueAtTime(5000, t + len); gn.gain.setValueAtTime(0.0001, t); gn.gain.exponentialRampToValueAtTime(vol, t + len); gn.gain.linearRampToValueAtTime(0.0001, t + len + 0.04); n.connect(f); f.connect(gn); },
       rumble: function (t, len, vol) { var n = noiseSrc(t, len, brown), f = filt('lowpass', 140), gn = gainTo(); gn.gain.setValueAtTime(0.0001, t); gn.gain.linearRampToValueAtTime(vol, t + len * 0.35); gn.gain.linearRampToValueAtTime(0.0001, t + len); n.connect(f); f.connect(gn); var o = osc('sine', 46, t, t + len), g2 = gainTo(); g2.gain.setValueAtTime(0.0001, t); g2.gain.linearRampToValueAtTime(vol * 0.6, t + len * 0.4); g2.gain.linearRampToValueAtTime(0.0001, t + len); o.connect(g2); },
       cricket: function (t, vol) { for (var k = 0; k < 3; k++) { var o = osc('sine', 4300, t + k * 0.05, t + k * 0.05 + 0.04), gn = gainTo(); env(gn, t + k * 0.05, 0.004, vol, 0.01, 0.02); o.connect(gn); } },
+      vox: function (t, f, len, vol, vi, f2) { // a little talking voice: a buzzy tone through two vowel filters, one per syllable
+        var V = [[730, 1090], [310, 2200], [570, 900], [530, 1800], [660, 1700]][vi % 5], o = osc('sawtooth', f, t, t + len + 0.05), g = gainTo();
+        o.frequency.setValueAtTime(f, t); o.frequency.linearRampToValueAtTime(f2 || f, t + len);
+        var lfo = osc('sine', 6, t, t + len + 0.05), lg = c.createGain(); lg.gain.value = f * 0.012; lfo.connect(lg); lg.connect(o.frequency);
+        var a1 = filt('bandpass', V[0], 5), a2 = filt('bandpass', V[1], 7), g1 = c.createGain(), g2 = c.createGain(); g1.gain.value = 1; g2.gain.value = 0.6;
+        env(g, t, 0.015, vol, len * 0.55, len * 0.35); o.connect(a1); o.connect(a2); a1.connect(g1); a2.connect(g2); g1.connect(g); g2.connect(g);
+      },
       blip: function (t, f, vol) { var o = osc('triangle', f, t, t + 0.12), gn = gainTo(); o.frequency.setValueAtTime(f, t); o.frequency.linearRampToValueAtTime(f * 1.08, t + 0.05); env(gn, t, 0.005, vol, 0.03, 0.05); o.connect(gn); },
       glide: function (t, f0, f1, len, vol, type) { var o = osc(type || 'sine', f0, t, t + len + 0.1), gn = gainTo(); o.frequency.setValueAtTime(f0, t); o.frequency.exponentialRampToValueAtTime(f1, t + len); env(gn, t, 0.01, vol, len * 0.7, len * 0.3); o.connect(gn); },
       whoosh: function (t, len, vol) { var n = noiseSrc(t, len + 0.1), f = filt('bandpass', 400, 2), gn = gainTo(); f.frequency.setValueAtTime(300, t); f.frequency.exponentialRampToValueAtTime(2600, t + len * 0.5); f.frequency.exponentialRampToValueAtTime(400, t + len); gn.gain.setValueAtTime(0.0001, t); gn.gain.linearRampToValueAtTime(vol, t + len * 0.45); gn.gain.linearRampToValueAtTime(0.0001, t + len); n.connect(f); f.connect(gn); },
@@ -878,12 +937,40 @@
     };
     return I;
   }
+  // Season 1's music moods (chords as MIDI notes, period in seconds per chord) and what each shot feels like
+  var CH = {
+    gentle: { p: 5.2, c: [[48, 55, 64, 71], [45, 52, 60, 67], [41, 48, 57, 64], [43, 50, 59, 62]], arp: 0.25 },
+    happy: { p: 3.6, c: [[48, 55, 64, 67], [43, 50, 59, 67], [45, 52, 60, 64], [41, 48, 57, 65]], arp: 1 },
+    tense: { p: 4.4, c: [[45, 52, 60, 64], [46, 53, 62, 65], [43, 50, 58, 62], [45, 52, 61, 64]], arp: 0, pulse: true },
+    brave: { p: 3.8, c: [[50, 57, 62, 66], [45, 52, 61, 64], [47, 54, 62, 66], [43, 50, 59, 62]], arp: 0.8, pulse: true },
+    triumph: { p: 3.2, c: [[48, 55, 64, 67], [41, 48, 60, 65], [43, 50, 59, 67], [48, 55, 64, 72]], arp: 1 }
+  };
+  var SHOT_MOOD = { cold: 'gentle', balloon: 'brave', lighthouse: 'gentle', mountain: 'brave', library: 'happy', market: 'happy', underwater: 'gentle', rooftop: 'brave', friend: 'gentle', sneeze: 'happy', puddle: 'happy', boulder: 'tense', jaws: 'tense', matrix: 'tense', snakes: 'tense', vault: 'tense', bridge: 'brave', laundry: 'happy', flash1: 'triumph', flash2: 'triumph', flash3: 'triumph', hill: 'happy', riser: 'triumph', reveal: 'triumph', post: 'gentle' };
+  var SHOT_AMB = { cold: [['crickets', 0.5]], balloon: [['wind', 0.55]], lighthouse: [['waves', 0.6], ['wind', 0.25]], mountain: [['wind', 0.6]], library: [['cafe', 0.2]], market: [['carnival', 0.4], ['city', 0.2]], underwater: [['underwater', 0.6]], rooftop: [['city', 0.35], ['wind', 0.25]], friend: [['birds', 0.4]], sneeze: [['birds', 0.35]], puddle: [['rain', 0.5]], boulder: [['wind', 0.35], ['birds', 0.2]], jaws: [['waves', 0.55], ['crickets', 0.25]], bridge: [['stream', 0.5], ['birds', 0.3]], laundry: [['birds', 0.5]], hill: [['birds', 0.4]], post: [['crickets', 0.4]] };
+  // every line that appears on screen, and when: found by playing the picture quietly on a tiny canvas, so the sound can never drift from it
+  var SCAN = {};
+  function scanLines(calm) {
+    var key = calm ? 'c' : 'n'; if (SCAN[key]) return SCAN[key];
+    var cv = document.createElement('canvas'); cv.width = 128; cv.height = 72; var g = cv.getContext('2d'); if (!g) return [];
+    var out = [], act = {}, keep = { says: FR.says, narr: FR.narr, line: FR.line, secrets: FR.secrets, quiet: FR.quiet };
+    for (var T = 0; T <= DUR; T += 0.125) {
+      try { render(g, 128, 72, T, !!calm, 1); } catch (e) {}
+      var now = {};
+      FR.says.forEach(function (x) { now[x.who + '|' + x.text] = { who: x.who, text: x.text }; });
+      FR.narr.forEach(function (x) { now['narr|' + x.text] = { who: 'narr', text: x.text }; });
+      Object.keys(now).forEach(function (k) { if (!act[k]) act[k] = { T: T, who: now[k].who, text: now[k].text }; });
+      Object.keys(act).forEach(function (k) { if (!now[k]) { act[k].dur = T - act[k].T; out.push(act[k]); delete act[k]; } });
+    }
+    Object.keys(act).forEach(function (k) { act[k].dur = DUR - act[k].T; out.push(act[k]); });
+    FR.says = keep.says; FR.narr = keep.narr; FR.line = keep.line; FR.secrets = keep.secrets; FR.quiet = keep.quiet;
+    out.sort(function (x, y) { return x.T - y.T; }); SCAN[key] = out; return out;
+  }
   // the score: [time, instrument, ...args]; `calm` softens the big hits
   function score(calm) {
     var E = [], H = calm ? 0.55 : 1;
     function ev() { E.push(Array.prototype.slice.call(arguments)); }
-    function talk(t, n, base, vol) { for (var i = 0; i < n; i++) ev(t + i * 0.085, 'blip', base * (1 + 0.25 * rnd(i * 3 + base)), vol || 0.035); }
-    function hit(t, big) { ev(t, 'kick', 0.5 * H); if (big) ev(t, 'boom', 0.55 * H); ev(t, 'crash', (big ? 0.07 : 0.045) * H); }
+    function talk() {}   // the little synthetic voice blips are gone: every line now gets a real recorded pup sound instead
+    function hit(t, big) { if (big) ev(t, 'boom', 0.3 * H); }
     // cold open: crickets, a soft chord, then everything goes quiet... and a rumble
     ev(0, 'pad', [57, 64, 67, 71], 7.6, 0.03);
     [0.3, 0.9, 1.6, 2.2, 2.9, 3.3].forEach(function (t) { ev(t, 'cricket', 0.018); });
@@ -896,15 +983,7 @@
     ev(7.0, 'swell', 1.0, 0.12 * H);
     // the build: A minor, F, C, G, with a pulse that grows
     var prog = [[45, [57, 60, 64]], [41, [53, 57, 60]], [36, [55, 60, 64]], [43, [55, 59, 62]]];
-    function bars(t0, n, opt) {
-      for (var b = 0; b < n; b++) {
-        var t = t0 + b * 2, ch = prog[(b + (opt.off || 0)) % 4];
-        ev(t, 'pad', ch[1], 1.9, opt.pad || 0.022);
-        for (var e = 0; e < 8; e++) { ev(t + e * 0.25, 'bass', ch[0], 0.2, opt.bass || 0.06); if (opt.hats && e % 2) ev(t + e * 0.25, 'hat', 0.03); if (opt.arp) ev(t + e * 0.25, 'pluck', ch[1][e % 3] + 12 + (e > 3 ? 12 : 0), 0.035); }
-        if (opt.kick) for (var q = 0; q < 4; q++) ev(t + q * 0.5, 'kick', 0.28 * H);
-        if (opt.snare) { ev(t + 0.5, 'snare', 0.08 * H); ev(t + 1.5, 'snare', 0.08 * H); }
-      }
-    }
+    function bars() {}
     hit(8.0, true); ev(8.0, 'piano', 45, 0.12); ev(8.0, 'piano', 57, 0.1);
     bars(8.0, 4, { bass: 0.05, kick: false });
     [10, 12, 14].forEach(function (t) { hit(t, false); ev(t, 'tom', 110, 0.2 * H); });
@@ -965,49 +1044,105 @@
     E.forEach(function (e) { if (e[0] >= 38.19) e[0] += GL; });
     var starts = [], tt = G0 + GCARD; GAGS.forEach(function (x) { starts.push(tt); tt += x[1]; });
     hit(G0, true); ev(G0, 'sparkle', 0.03); ev(G0 + 0.1, 'whoosh', 0.7, 0.1);
-    var roots = [48, 48, 53, 55], tEnd = G0 + GL;
-    for (var bb = 0, tb = G0 + GCARD; tb < tEnd - 0.6; bb++, tb += 1.2) {
-      var inJaws = tb > starts[1] - 0.2 && tb < starts[2] - 0.2, inMatrix = tb > starts[2] - 0.2 && tb < starts[3] - 0.2;
-      if (inJaws || inMatrix) continue;
-      var rt = roots[bb % 4];
-      ev(tb, 'pluck', rt + 12, 0.07); ev(tb + 0.3, 'pluck', rt + 19, 0.05); ev(tb + 0.6, 'pluck', rt + 16, 0.05); ev(tb + 0.9, 'pluck', rt + 19, 0.05);
-      ev(tb, 'kick', 0.2 * H); ev(tb + 0.6, 'kick', 0.16 * H); ev(tb + 0.3, 'hat', 0.03); ev(tb + 0.9, 'hat', 0.03);
-      if (bb % 2) ev(tb + 0.6, 'snare', 0.055 * H);
-    }
+    var tEnd = G0 + GL;
     // 1. boulder: sneaky plucks, a rumble, drums, then a slide-whistle sigh
-    var T = starts[0];
+    var marks = [E.length], T = starts[0];
     ev(T + 2.3, 'bell', 88, 0.07); ev(T + 3.0, 'rumble', 3.0, 0.4);
     for (var k1 = 0; k1 < 8; k1++) ev(T + 3.2 + k1 * 0.28, 'tom', 90 + (k1 % 2) * 25, 0.22 * H);
     ev(T + 3.4, 'boom', 0.4 * H); ev(T + 5.3, 'glide', 700, 150, 0.7, 0.08, 'sine'); ev(T + 5.5, 'sample', 'sugarfoot-laugh-1', 0.4);
     talk(T + 2.1, 6, 640); talk(T + 3.5, 4, 470); talk(T + 5.5, 6, 640); talk(T + 6.2, 5, 470);
     // 2. pond: two dramatic notes, faster and faster
-    T = starts[1];
+    marks.push(E.length); T = starts[1];
     for (var k2 = 0, t2 = T + 0.9; k2 < 5 && t2 < T + 2.9; k2++) { ev(t2, 'bass', 40, 0.5, 0.15); ev(t2 + 0.26, 'bass', 41, 0.5, 0.15); t2 += k2 < 2 ? 0.9 : 0.6; }
     ev(T + 2.9, 'swell', 0.5, 0.14 * H); ev(T + 2.95, 'crash', 0.08 * H); ev(T + 3.0, 'glide', 300, 1500, 0.3, 0.07, 'triangle'); ev(T + 3.3, 'sample', 'sugarfoot-laugh-2', 0.45); ev(T + 3.9, 'splash', 0.35);
     talk(T + 0.3, 6, 640); talk(T + 2.0, 3, 640); talk(T + 3.0, 4, 470); talk(T + 4.4, 7, 640);
     // 3. slow motion: a long low sweep, a splat, and a sad trombone
-    T = starts[2];
+    marks.push(E.length); T = starts[2];
     ev(T + 1.0, 'bass', 33, 2.6, 0.12); ev(T + 1.0, 'glide', 260, 80, 2.4, 0.05, 'sawtooth'); ev(T + 3.5, 'tom', 80, 0.3 * H); ev(T + 3.6, 'splash', 0.3); ev(T + 3.6, 'crash', 0.05 * H);
     ev(T + 4.2, 'glide', 400, 340, 0.4, 0.06, 'sawtooth'); ev(T + 4.65, 'glide', 340, 290, 0.4, 0.06, 'sawtooth'); ev(T + 5.1, 'glide', 290, 210, 0.9, 0.06, 'sawtooth');
     talk(T + 0.3, 6, 640); talk(T + 2.0, 5, 640); talk(T + 4.0, 7, 470); talk(T + 5.5, 4, 470);
-    // 4. vault: a tense five-beat riff, a cookie "ting", an alarm
-    T = starts[3];
+    // 4. snakes on a plane: a calm cabin, hissing, a drumroll... and a stop-short when the word nearly comes out
+    marks.push(E.length); T = starts[3];
+    ev(T + 0.1, 'pad', [57, 60, 64], 1.2, 0.03); ev(T + 1.0, 'whoosh', 0.5, 0.1); ev(T + 1.05, 'bell', 91, 0.05); ev(T + 1.2, 'swell', 1.2, 0.1 * H); ev(T + 1.4, 'rumble', 2.4, 0.3);
+    for (var ks = 0; ks < 9; ks++) ev(T + 2.5 + ks * (0.2 - ks * 0.008), 'tom', 96 - ks * 3, (0.16 + ks * 0.015) * H);
+    ev(T + 2.6, 'bass', 33, 1.4, 0.1); ev(T + 4.0, 'crash', 0.09 * H); ev(T + 4.0, 'boom', 0.4 * H); ev(T + 4.05, 'blip', 880, 0.05);
+    ev(T + 4.6, 'sample', 'tidbit-hmm', 0.5); ev(T + 5.1, 'glide', 500, 330, 0.5, 0.06, 'sawtooth'); ev(T + 5.7, 'sample', 'sugarfoot-laugh-2', 0.4); ev(T + 6.2, 'bell', 84, 0.05);
+    talk(T + 0.2, 6, 470); talk(T + 1.6, 4, 640); talk(T + 2.6, 9, 640); talk(T + 4.1, 7, 470); talk(T + 4.3, 4, 330, 0.03); talk(T + 5.5, 4, 640); talk(T + 6.2, 4, 470);
+    // 5. vault: a tense five-beat riff, a cookie "ting", an alarm
+    marks.push(E.length); T = starts[4];
     for (var k3 = 0; k3 < 6; k3++) { [0, 0.4, 0.8, 1.0, 1.4].forEach(function (o) { ev(T + 0.6 + k3 * 1.6 + o, 'bass', k3 % 2 ? 38 : 36, 0.2, 0.09); }); if (T + 0.6 + k3 * 1.6 < T + 4.2) ev(T + 0.6 + k3 * 1.6 + 0.2, 'hat', 0.03); }
     ev(T + 3.0, 'bell', 96, 0.07); ev(T + 4.0, 'glide', 900, 200, 0.5, 0.08, 'sine'); ev(T + 4.45, 'kick', 0.3 * H);
     for (var k4 = 0; k4 < 6; k4++) ev(T + 4.3 + k4 * 0.3, 'glide', k4 % 2 ? 660 : 880, k4 % 2 ? 660 : 880, 0.26, 0.03, 'sawtooth');
     talk(T + 0.9, 5, 640); talk(T + 1.5, 6, 330, 0.03); talk(T + 3.0, 3, 640); talk(T + 4.0, 3, 330); talk(T + 5.0, 7, 640);
-    // 5. bridge: a big, serious chord, a tiny ladybug, and a splash
-    T = starts[4];
+    // 6. bridge: a big, serious chord, a tiny ladybug, and a splash
+    marks.push(E.length); T = starts[5];
     ev(T + 0.8, 'pad', [45, 57, 64], 3.2, 0.045); ev(T + 0.9, 'swell', 1.0, 0.12 * H); ev(T + 1.0, 'tom', 80, 0.3 * H); ev(T + 1.0, 'boom', 0.4 * H); ev(T + 1.4, 'bell', 76, 0.05);
     ev(T + 3.65, 'crash', 0.08 * H); ev(T + 4.0, 'glide', 700, 200, 0.5, 0.07, 'sine'); ev(T + 4.4, 'splash', 0.4); ev(T + 5.3, 'sample', 'tidbit-ooh', 0.4);
     talk(T + 1.0, 8, 330); talk(T + 3.05, 3, 470); talk(T + 5.3, 6, 640);
-    // 6. the leap: a hero fanfare and a very soft landing
-    T = starts[5];
+    // 7. the leap: a hero fanfare and a very soft landing
+    marks.push(E.length); T = starts[6];
     [72, 76, 79, 84].forEach(function (m, i) { ev(T + 1.7 + i * 0.09, 'bell', m, 0.06); }); ev(T + 1.75, 'whoosh', 0.8, 0.14); ev(T + 2.5, 'boom', 0.35 * H); ev(T + 2.5, 'crash', 0.06 * H);
     for (var k6 = 0; k6 < 6; k6++) ev(T + 2.6 + k6 * 0.1, 'marimba', 84 - k6 * 2, 0.06); ev(T + 3.2, 'sample', 'sugarfoot-aww', 0.4);
     talk(T + 0.3, 6, 640); talk(T + 1.7, 7, 640); talk(T + 3.1, 5, 470); talk(T + 4.4, 8, 640);
+    marks.push(E.length);
+    GAGS.forEach(function (gg, n) { var k = gg[3]; if (k === 1) return; for (var q = marks[n]; q < marks[n + 1]; q++) E[q][0] = starts[n] + (E[q][0] - starts[n]) * k; });
     // the very end: one more bark
     ev(55.9 + GL + 7.8, 'sample', 'tidbit-arfarf', 0.45); talk(55.9 + GL + 7.9, 8, 660, 0.035); ev(55.9 + GL + 9.1, 'sample', 'tidbit-yip', 0.4);
+    // ---- Season 1's sound, made to fit this picture exactly
+    // the old per-line sounds and synthetic pads give way to: a mood for each shot (Season 1's own chords), the real place sounds under
+    // it, and a recorded pup sound the moment each line appears. The lines and their times are read straight from the picture.
+    E = E.filter(function (e) { return e[1] !== 'pad' && e[1] !== 'cricket' && e[1] !== 'blip' && !(e[1] === 'sample' && e[2] !== 'theme'); });
+    var segs = [], last = null;
+    EDIT.forEach(function (sh) {
+      var m = sh[2] === 'card' ? (last ? last.m : 'gentle') : (SHOT_MOOD[sh[2]] || (last ? last.m : 'gentle'));
+      if (last && last.m === m) last.te = sh[1]; else { last = { m: m, ts: sh[0], te: sh[1] }; segs.push(last); }
+    });
+    segs.forEach(function (sg) {
+      var C = CH[sg.m]; if (!C) return;
+      for (var t = sg.ts, st = 0; t < sg.te - 0.4; t += C.p, st++) {
+        var chord = C.c[st % C.c.length], len = Math.min(C.p, sg.te - t + 0.8);
+        chord.forEach(function (n, i) { ev(t, 'mpad', n, len, i === 0 ? 0.03 : 0.022); });
+        if (C.arp) for (var k = 0; k < 8; k++) if (rnd(st * 9 + k + t) < C.arp) ev(t + k * C.p / 8, 'mpluck', chord[(k * 3 + st) % chord.length] + 12, 0.018);
+        if (C.pulse) for (var q = 0; q < 4; q++) ev(t + q * C.p / 4, 'mpluck', chord[0] - 12, 0.03);
+      }
+    });
+    EDIT.forEach(function (sh) {
+      var L = SHOT_AMB[sh[2]]; if (!L) return;
+      L.forEach(function (a) { ev(Math.max(0, sh[0] - 0.3), 'amb', a[0], sh[1] - sh[0] + 0.9, a[1] * 0.8); });
+    });
+    var cnt = { tidbit: 0, sugarfoot: 0 };
+    scanLines(calm).forEach(function (ln) {
+      if (ln.who === 'narr') return;
+      var w = ln.who === 'sugarfoot' ? 'sugarfoot' : 'tidbit', i = cnt[w]++, tx = ln.text.toLowerCase(), pick;
+      if (/ha ha|hee|funny|joke|laugh/.test(tx)) pick = 'laugh-' + (1 + i % 2);
+      else if (/\?/.test(tx)) pick = ['hmm', 'ooh', 'hmm', 'arf'][i % 4];
+      else if (/…|\.\.\.|—/.test(tx) && !/!/.test(tx)) pick = ['aww', 'mmm', 'sigh', 'hmm'][i % 4];
+      else if (/!/.test(tx)) pick = ['arf', 'yip', 'arfarf', 'woof', 'ruff'][i % 5];
+      else pick = ['arf', 'ruff', 'mmm'][i % 3];
+      ev(ln.T + 0.04, 'sample', w + '-' + pick, 0.62);
+    });
+    // every line is spoken by a little talking voice, timed to the words on screen (Tidbit bright and quick, Sugarfoot softer and lower, the narrator deep and slow).
+    // The words that matter (SHOUTED ones, the last word of a shout or a question, and the key word of a trailing "…") get a higher, louder, longer syllable and a tiny beat of space before them.
+    scanLines(calm).forEach(function (ln) {
+      var ws = ln.text.match(/[A-Za-z0-9’']+[!?…]*/g) || []; if (!ws.length) return;
+      var V = ln.who === 'narr' ? { f: 128, v: 0.05 } : ln.who === 'sugarfoot' ? { f: 392, v: 0.05 } : { f: 560, v: 0.05 };
+      var q = /\?/.test(ln.text), ex = /!/.test(ln.text), syl = [], tot = 0;
+      ws.forEach(function (w, wi) {
+        var core = w.replace(/[^A-Za-z0-9’']/g, ''), loud = core.length > 1 && core === core.toUpperCase() && /[A-Z]/.test(core);
+        var last = wi === ws.length - 1, strong = loud || (last && /[!?]/.test(w)) || (last && ws.length > 1 && !/…/.test(w)) || (wi === ws.length - 2 && /…$/.test(w) === false && /…/.test(ws[ws.length - 1]) && ws.length > 2);
+        var n = Math.max(1, Math.round(core.length / 3.2)); syl.push({ n: n, strong: strong, loud: loud, last: last, w: strong ? 1.5 : 1 }); tot += n * (strong ? 1.5 : 1);
+      });
+      var span = Math.max(0.5, ln.dur * 0.86), step = span / tot, t = ln.T + 0.06, k = 0;
+      syl.forEach(function (w, wi) {
+        if (w.strong && wi > 0) t += step * 0.35;   // a hair of space before the important word
+        for (var s2 = 0; s2 < w.n; s2++, k++) {
+          var u = tot ? (t - ln.T) / span : 0, f = V.f * (1 + 0.14 * (rnd(k * 5.3 + ln.T) - 0.5) + (q ? 0.3 * Math.max(0, u - 0.5) : 0) - (ex ? 0 : 0.05 * u)), len = Math.min(0.26, step * (w.strong ? 1.4 : 0.85)), vol = V.v * (ln.who === 'narr' ? 1.1 : 1) * (0.8 + 0.3 * rnd(k * 2.1 + ln.T));
+          if (w.strong) { f *= w.loud ? 1.28 : 1.16; vol *= w.loud ? 1.9 : 1.5; }
+          ev(t, 'vox', f, len, vol, Math.floor(rnd(k * 1.7 + ln.T * 3) * 5), f * (q && w.last && s2 === w.n - 1 ? 1.3 : w.strong ? 1.04 : 0.94));
+          t += step * (w.strong ? 1.5 : 1) / 1;
+        }
+      });
+    });
     E.sort(function (a, b) { return a[0] - b[0]; });
     return E;
   }
@@ -1055,14 +1190,14 @@
       '<div class="tz-ov tz-end" hidden><div class="tz-ovc"><p class="tz-k">Season 2 is coming soon</p><h3 class="tz-end-h">You found 0 of 5 secrets</h3><p class="tz-end-p">Watch it again to find them all.</p><div class="tz-row"><button type="button" class="tz-b is-main tz-again">↺ Watch again</button><a class="tz-b" href="#pick">Pick your favorite new place</a></div></div></div>' +
       '</div>' +
       '<div class="tz-prog"><div class="tz-track" role="slider" tabindex="0" aria-label="Teaser time" aria-valuemin="0" aria-valuemax="' + Math.round(DUR) + '" aria-valuenow="0"><div class="tz-fill"></div></div><span class="tz-time">0:00 / ' + fmt(DUR) + '</span></div>' +
-      '<div class="tz-ctrl"><button type="button" class="tz-b is-main tz-play">▶ Play</button><button type="button" class="tz-b tz-re">↺ Replay</button><button type="button" class="tz-b tz-snd" aria-pressed="true">🔊 Sound <span class="tz-st">On</span></button><button type="button" class="tz-b tz-vox" aria-pressed="false" hidden>🗣 Voices <span class="tz-st">Off</span></button><span class="tz-sp"></span><button type="button" class="tz-b tz-full">⛶ <span class="tz-lbl">Full screen</span></button></div>' +
+      '<div class="tz-ctrl"><button type="button" class="tz-b is-main tz-play">▶ Play</button><button type="button" class="tz-b tz-re">↺ Replay</button><span class="tz-sp"></span><button type="button" class="tz-b tz-full">⛶ <span class="tz-lbl">Full screen</span></button></div>' +
       '<div class="tz-found" aria-live="polite"><span class="tz-found-t">🔍 Secrets found: <b>0</b> of 5</span><span class="tz-dots" aria-hidden="true"></span></div>' +
       '<p class="tz-sr" aria-live="polite"></p>' +
       '</div>';
     var $ = function (s) { return host.querySelector(s); };
     var player = $('.tz-player'), stage = $('.tz-stage'), cv = $('.tz-cv'), g = cv.getContext('2d'), fxEl = $('.tz-fx');
-    var startOv = $('.tz-start'), endOv = $('.tz-end'), playBtn = $('.tz-play'), sndBtn = $('.tz-snd'), voxBtn = $('.tz-vox'), track = $('.tz-track'), fill = $('.tz-fill'), timeEl = $('.tz-time'), srEl = $('.tz-sr');
-    var P = { T: 0, playing: false, started: false, sound: MEM.sound !== false, voices: MEM.voices === true, calm: calmNow(), at: 0, raf: 0, recent: [], fx: [], ended: false };
+    var startOv = $('.tz-start'), endOv = $('.tz-end'), playBtn = $('.tz-play'), track = $('.tz-track'), fill = $('.tz-fill'), timeEl = $('.tz-time'), srEl = $('.tz-sr');
+    var P = { T: 0, playing: false, started: false, sound: true, voices: true, calm: calmNow(), at: 0, raf: 0, recent: [], fx: [], ended: false };
     var A = { ctx: null, master: null, bus: null, live: [], E: null, idx: 0, map: 0, timer: 0 };
     var W = 0, H = 0, dpr = 1, bs = 1;
     function resize() {
@@ -1085,20 +1220,57 @@
       });
     }
     // ----- read aloud: the speech bubbles and the narrator, in the browser's own voices
-    var spoken = {}, canSay = 'speechSynthesis' in window && typeof SpeechSynthesisUtterance !== 'undefined';
+    // VOICES, the way Season 1 does them: a recorded voice for a line when one exists
+    // (/assets/audio/buddies/s2teaser/<key>.mp3, listed in index.json, key made from who|text), otherwise the device's own speech,
+    // with Season 1's voice choices (Tidbit bright and quick, Sugarfoot softer and slower, the narrator calm and low).
+    var prevKeys = {}, voiceList = [], picked = null, canSay = 'speechSynthesis' in window && typeof SpeechSynthesisUtterance !== 'undefined';
+    var FEM = /samantha|ava|allison|susan|zira|aria|jenny|michelle|karen|moira|tessa|fiona|serena|victoria|emma|joanna|salli|kendra|kimberly|ivy|libby|sonia|natasha|female|google us english/i;
+    var MALE = /daniel|alex|guy|david|mark|tom|arthur|oliver|ryan|brian|matthew|justin|george|male|james|aaron|fred/i;
+    function vscore(v, fem) { var sc = 0, n = v.name || ''; if (/en[-_]US/i.test(v.lang)) sc += 3; if (/natural|neural|enhanced|premium|online/i.test(n)) sc += 3; if (/google/i.test(n)) sc += 1; if (fem ? FEM.test(n) : MALE.test(n)) sc += 4; if (v.localService === false) sc += 0.5; return sc; }
+    function vpick() {
+      if (!voiceList.length) return null;
+      var fem = voiceList.slice().sort(function (x, y) { return vscore(y, true) - vscore(x, true); }), male = voiceList.slice().sort(function (x, y) { return vscore(y, false) - vscore(x, false); });
+      var tid = fem[0], sug = fem.filter(function (v) { return v.name !== tid.name && FEM.test(v.name); })[0] || tid, nar = male.filter(function (v) { return MALE.test(v.name); })[0] || fem.filter(function (v) { return v !== tid && v !== sug; })[0] || tid;
+      return { tidbit: tid, sugarfoot: sug, narr: nar };
+    }
+    function loadVoices() { try { voiceList = (speechSynthesis.getVoices() || []).filter(function (v) { return /^en([-_]|$)/i.test(v.lang || ''); }); } catch (e) { voiceList = []; } picked = vpick(); }
+    if (canSay) { loadVoices(); try { speechSynthesis.addEventListener('voiceschanged', loadVoices); } catch (e) {} }
+    var VOICE = { tidbit: { pitch: 1.6, rate: 1.08 }, sugarfoot: { pitch: 1.35, rate: 0.95 }, narr: { pitch: 1.0, rate: 0.95 } };
+    function ckey(who, text) { var h = 0x811c9dc5, t = who + '|' + text; for (var i = 0; i < t.length; i++) { h ^= t.charCodeAt(i); h = Math.imul(h, 0x01000193) >>> 0; } return ('0000000' + h.toString(16)).slice(-8); }
+    var CLIP = { map: null, started: false, bufs: {} };
+    function clipsInit() { if (CLIP.started) return; CLIP.started = true; fetch('/assets/audio/buddies/s2teaser/index.json', { cache: 'no-cache' }).then(function (r) { return r.ok ? r.json() : null; }).then(function (m) { CLIP.map = m || {}; }).catch(function () { CLIP.map = {}; }); }
+    function lineDur(who, text) { var L = scanLines(P.calm), k = who + '|' + text; for (var i = 0; i < L.length; i++) if (L[i].who === who && L[i].text === text) return L[i].dur; return 1.5; }
+    // the music steps back a little while someone is talking, so every word can be heard
+    function duck(on) { try { if (A.master && A.ctx) A.master.gain.setTargetAtTime(on ? 0.5 : 0.9, A.ctx.currentTime, 0.05); } catch (e) {} }
+    function playClip(key) {
+      var c = A.ctx; if (!c) return false;
+      var go = function (buf) { if (!buf || !P.playing) return; var s2 = c.createBufferSource(), gn = c.createGain(); s2.buffer = buf; gn.gain.value = 1; s2.connect(gn); gn.connect(c.destination); duck(true); s2.onended = function () { duck(false); }; s2.start(); A.live.push(s2); };
+      if (CLIP.bufs[key]) { CLIP.bufs[key].then(go); return true; }
+      CLIP.bufs[key] = fetch('/assets/audio/buddies/s2teaser/' + key + '.mp3').then(function (r) { return r.ok ? r.arrayBuffer() : null; }).then(function (ab) { return ab ? new Promise(function (ok) { try { c.decodeAudioData(ab, ok, function () { ok(null); }); } catch (e) { ok(null); } }) : null; }).catch(function () { return null; });
+      CLIP.bufs[key].then(go); return true;
+    }
     function speakNow() {
-      if (!P.voices || !canSay) return;
-      var items = FR.narr.map(function (n) { return { who: 'narr', text: n.text }; }).concat(FR.says.map(function (x) { return { who: x.who, text: x.text }; }));
-      items.forEach(function (it) {
-        var key = it.who + '|' + it.text; if (spoken[key] && P.T - spoken[key] < 3) return; spoken[key] = P.T;
+      var items = FR.narr.map(function (n) { return { who: 'narr', text: n.text }; }).concat(FR.says.map(function (x) { return { who: x.who === 'sugarfoot' ? 'sugarfoot' : 'tidbit', text: x.text }; })), cur = {}, fresh = [];
+      items.forEach(function (it) { var k = it.who + '|' + it.text; cur[k] = 1; if (!prevKeys[k]) fresh.push(it); });
+      prevKeys = cur; if (!fresh.length) return;
+      clipsInit();
+      var spokeWithSpeech = false;
+      fresh.forEach(function (it) {
+        var key = ckey(it.who, it.text);
+        if (CLIP.map && CLIP.map[key]) { playClip(key); return; }   // a recorded voice
+        if (!canSay) return;
         try {
-          var u = new SpeechSynthesisUtterance(it.text.replace(/…/g, '...'));
-          u.rate = it.who === 'narr' ? 0.85 : 1.05; u.pitch = it.who === 'narr' ? 0.5 : it.who === 'sugarfoot' ? 0.8 : 1.5; u.volume = 0.9;
+          if (!spokeWithSpeech) { try { speechSynthesis.cancel(); } catch (e) {} spokeWithSpeech = true; }   // never let the voice fall behind the picture
+          var V = VOICE[it.who] || VOICE.tidbit, u = new SpeechSynthesisUtterance(it.text.replace(/…/g, '...').replace(/—/g, '...')), v = picked && picked[it.who];
+          if (v) { u.voice = v; u.lang = v.lang; } else u.lang = 'en-US';
+          var words = (it.text.match(/[A-Za-z’']+/g) || []).length, need = 0.35 + 0.34 * words, win = lineDur(it.who, it.text);
+          u.pitch = V.pitch; u.rate = Math.max(0.9, Math.min(1.5, V.rate * Math.max(1, need / Math.max(0.6, win)))); u.volume = 1;
+          u.onstart = function () { duck(true); }; u.onend = u.onerror = function () { duck(false); };
           speechSynthesis.speak(u);
         } catch (e) {}
       });
     }
-    function silence() { spoken = {}; try { if (canSay) speechSynthesis.cancel(); } catch (e) {} }
+    function silence() { prevKeys = {}; duck(false); try { if (canSay) speechSynthesis.cancel(); } catch (e) {} }
     // ----- sound
     function ensureAudio() {
       unlockMediaAudio();
@@ -1120,10 +1292,9 @@
       // the theme song started before this point? pick it up partway
       A.E.forEach(function (e) { if (e[1] === 'sample' && e[2] === 'theme' && fromT > e[0] && fromT < e[0] + e[5]) { var into = fromT - e[0]; fire(I, [0, 'sample', 'theme', e[3], e[4] + into, e[5] - into], c.currentTime + 0.06); } });
       while (A.idx < A.E.length && A.E[A.idx][0] < fromT - 0.01) A.idx++;
-      function pump() { if (!A.bus || A.ctx !== c) return; var horizon = c.currentTime + 0.5; while (A.idx < A.E.length && A.E[A.idx][0] + A.map < horizon) { var e = A.E[A.idx++]; fire(I, e, Math.max(c.currentTime, e[0] + A.map)); } }
+      function pump() { if (!A.bus || A.ctx !== c) return; var horizon = c.currentTime + 0.5; while (A.idx < A.E.length && A.E[A.idx][0] + A.map < horizon) { var e = A.E[A.idx++]; if (e[1] === 'vox' && canSay) { e = e.slice(); e[4] *= 0.6; } fire(I, e, Math.max(c.currentTime, e[0] + A.map)); } }
       pump(); A.timer = setInterval(pump, 120);
     }
-    function syncSound() { sndBtn.setAttribute('aria-pressed', P.sound ? 'true' : 'false'); sndBtn.innerHTML = (P.sound ? '🔊' : '🔇') + ' Sound <span class="tz-st">' + (P.sound ? 'On' : 'Off') + '</span>'; if (A.master && A.ctx) try { A.master.gain.setTargetAtTime(P.sound ? 0.9 : 0, A.ctx.currentTime, 0.08); } catch (e) {} }
     // ----- the clock
     function loop() {
       P.raf = 0; if (!P.playing) return;
@@ -1136,9 +1307,11 @@
     function play() {
       if (P.T >= DUR - 0.05 || !P.started) P.T = 0; // the first press starts at the very beginning, not at the poster
       P.calm = calmNow(); P.started = true; P.ended = false; startOv.hidden = true; endOv.hidden = true;
+      if (canSay) { try { var pr = new SpeechSynthesisUtterance(' '); pr.volume = 0; speechSynthesis.speak(pr); } catch (e) {} }   // phones only allow speech that starts from a tap
       if (ensureAudio()) audioStart(P.T);
       P.playing = true; P.at = performance.now(); syncBtns(); wake(); if (!P.raf) P.raf = requestAnimationFrame(loop); inView();
     }
+    document.addEventListener('visibilitychange', function () { if (!document.hidden && P.playing && A.ctx && A.ctx.state === 'suspended') { try { A.ctx.resume(); } catch (e) {} } });
     function pause() { P.playing = false; audioStop(); silence(); if (P.raf) cancelAnimationFrame(P.raf); P.raf = 0; syncBtns(); wake(true); paint(); }
     function toggle() { if (P.playing) pause(); else play(); }
     function restart() { P.T = 0; P.recent = []; play(); }
@@ -1194,9 +1367,6 @@
     $('.tz-again').addEventListener('click', function () { restart(); });
     playBtn.addEventListener('click', toggle);
     $('.tz-re').addEventListener('click', restart);
-    function syncVox() { voxBtn.setAttribute('aria-pressed', P.voices ? 'true' : 'false'); voxBtn.innerHTML = '🗣 Voices <span class="tz-st">' + (P.voices ? 'On' : 'Off') + '</span>'; }
-    if (canSay) { voxBtn.hidden = false; syncVox(); voxBtn.addEventListener('click', function () { P.voices = !P.voices; MEM.voices = P.voices; save(MEM); silence(); syncVox(); }); }
-    sndBtn.addEventListener('click', function () { P.sound = !P.sound; MEM.sound = P.sound; save(MEM); if (P.sound && P.playing && !A.ctx && ensureAudio()) audioStart(P.T); syncSound(); });
     $('.tz-full').addEventListener('click', function () {
       var fs = document.fullscreenElement || document.webkitFullscreenElement;
       if (fs) { (document.exitFullscreen || document.webkitExitFullscreen).call(document); return; }
@@ -1215,14 +1385,14 @@
       if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT' || (t && t.isContentEditable)) return;
       if (!player.contains(t) && t !== document.body) return;
       if (e.key === ' ' || e.key === 'k') { if (tag === 'BUTTON' && e.key === ' ') return; e.preventDefault(); toggle(); }
-      else if (e.key === 'm') sndBtn.click(); else if (e.key === 'f') $('.tz-full').click();
+      else if (e.key === 'f') $('.tz-full').click();
     });
     document.addEventListener('visibilitychange', function () { if (document.hidden && P.playing) pause(); });
     document.addEventListener('tol-still', function () { if (!P.playing) { P.calm = calmNow(); paint(); } });
     if (REDUCED_MQ && REDUCED_MQ.addEventListener) REDUCED_MQ.addEventListener('change', function () { if (!P.playing) { P.calm = calmNow(); paint(); } });
     window.addEventListener('resize', resize);
     // the poster: the big title, before anyone presses play
-    P.T = 51.6 + GL; syncSound(); syncFound();
+    P.T = 51.6 + GL; syncFound();
     resize();
     if (document.fonts && document.fonts.load) Promise.all(['700 40px Fraunces', 'italic 500 28px Fraunces', '600 19px Lora', '800 30px Lora', '500 13px "IBM Plex Mono"'].map(function (f) { return document.fonts.load(f).catch(function () {}); })).then(function () { paint(); });
     return { P: P, play: play, pause: pause, seek: seek, restart: restart, paint: paint, found: function () { return MEM.found.slice(); }, secrets: function () { return FR.secrets.map(function (s) { var r = cv.getBoundingClientRect(); return { id: s.id, x: r.left + s.x * r.width / W, y: r.top + s.y * r.height / H }; }); }, shot: function () { return FR.shot; }, setCalm: function (v) { window.__teaserCalm = v; P.calm = calmNow(); paint(); } };
@@ -1269,7 +1439,7 @@
   }
   var API = window.TOLTeaser = { duration: DUR, secrets: SECRETS.map(function (s) { return s.id; }), places: PLACES.map(function (p) { return p.id; }), edit: EDIT.map(function (s) { return { t0: s[0], t1: s[1], id: s[2] }; }),
     renderAt: function (canvas, T, calm) { var g = canvas.getContext('2d'); render(g, canvas.width, canvas.height, T, !!calm, 1); return FR.shot; },
-    renderAudio: renderAudio, lines: function () { return []; } };
+    renderAudio: renderAudio, lines: function (calm) { return scanLines(!!calm).map(function (l) { return { t: +l.T.toFixed(2), who: l.who, text: l.text, dur: +l.dur.toFixed(2) }; }); } };
   function init() {
     var host = document.querySelector('[data-teaser]'); if (host) { var pl = mount(host); API.player = pl; ['play', 'pause', 'seek', 'restart', 'found', 'secrets', 'shot', 'setCalm'].forEach(function (k) { API[k] = pl[k]; }); API.state = function () { return { t: pl.P.T, playing: pl.P.playing, ended: pl.P.ended, calm: pl.P.calm, shot: FR.shot, found: MEM.found.slice() }; }; }
     var pk = document.querySelector('[data-teaser-picker]'); if (pk) mountPicker(pk);

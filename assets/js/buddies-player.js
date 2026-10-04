@@ -1464,6 +1464,8 @@
           var same = b.scene === stage.scene, cv = call('canvas');
           if (cv && i > 1) stage.transition(cv, same || stage.reduced || b.scene === 'blank' || stage.scene === 'blank' ? 'fade' : 'pan');
           stage.applyScene(b); stage.endSay();
+          // the pals stand where the next 'place' says from the very first frame of the new scene (not where they stood in the last one, which could be right on the bridge)
+          for (var la = i + 1; la < F.beats.length; la++) { var kb = kindOf(F.beats[la].b); if (kb === 'place') { var pb = F.beats[la].b; if (pb.place) stage.place(pb.place, true); stage.applyProps(pb.props); } else if (kb !== 'music') break; }
           if (b.caption) { stage.card = { text: b.caption, t0: stage.t + SCENE_T * 0.55, dur: SCENE_CAP }; call('onCaption', 'scene', b.caption, b); }
           call('onWeather', stage.weather);
           break;

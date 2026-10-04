@@ -66,6 +66,12 @@
 
   /* ---------------------------------------------------------------- what the site already keeps */
   var BOOK = [
+    { u: '/book/self-1-then.html', code: 'Then', t: 'Where you came from', n: 'where your lens came from, and which old rules to keep',
+      gain: 'You now know one way to meet your own reactions: some of what you feel was learned long ago, and you can keep the rules that still help.' },
+    { u: '/book/self-2-now.html', code: 'Now', t: 'Who you are today', n: 'your wiring, your weather and your words',
+      gain: 'You now know one way to read yourself before you speak: your wiring, how today is going, and one clear sentence about what helps.' },
+    { u: '/book/self-3-next.html', code: 'Next', t: 'Who you are becoming', n: 'what matters to you, one small goal and a kind monthly look',
+      gain: 'You now know one way to grow toward something: pick what matters, one small step, a plan for the tired day, and a gentle look back.' },
     { u: '/book/preface.html', code: 'Preface', t: 'The work nobody sees', n: 'why the unseen work at home deserves to be noticed',
       gain: 'You now know why the unseen work of a home is worth writing down: once both of you can see it, it can be shared and thanked.' },
     { u: '/book/chapter-1.html', code: 'Chapter I', t: 'Why we get out of tune', n: 'how pace, tone and urgency nudge two people out of step',
@@ -185,7 +191,7 @@
     return out;
   }
   function pools() {
-    var nc = nextChapter() || BOOK[1], ne = nextEpisode() || EPISODES[0], L = fromLauncher();
+    var nc = nextChapter() || BOOK[0], ne = nextEpisode() || EPISODES[0], L = fromLauncher();
     var P = {
       1: [
         { t: 'Check today’s weather', u: '/quick-checks.html#today', m: 1, why: 'one minute on how you are doing today', tag: 'self' },

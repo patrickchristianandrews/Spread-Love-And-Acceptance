@@ -125,6 +125,12 @@ Key facts:
 - [The Monthly Relationship Look-Back (Chapter V)](https://spreadloveandacceptance.com/book/chapter-5.html): Chapter V: a calm monthly look-back for couples and households to see what changed, celebrate it, and adjust the setup before resentment builds up.
 - [Preface in depth: Unbilled Debt](https://spreadloveandacceptance.com/book/preface-in-depth.html): The full Preface: every home keeps a set of books nobody agreed to. Why the invisible work of a shared life matters, and why noticing it is not keeping score.
 - [Invisible Labor at Home: The Work Nobody Sees](https://spreadloveandacceptance.com/book/preface.html): The Preface: the planning, remembering and noticing that keeps a home running, why this invisible work goes unseen, and how seeing it changes everything.
+- [Know Yourself, Then: Where Your Lens Came From](https://spreadloveandacceptance.com/book/self-1-then-in-depth.html): Part One, Then, in full: the three layers of a reaction, the lens idea, how it forms, old answers and fairer readings, and how to choose which rules to keep.
+- [Know Yourself, Then: Where Your Lens Came From](https://spreadloveandacceptance.com/book/self-1-then.html): Part One, Then: where your lens came from, how growing up shaped what you expect, and which old rules are worth keeping.
+- [Know Yourself, Now: Your Wiring, State and Words](https://spreadloveandacceptance.com/book/self-2-now-in-depth.html): Part One, Now, in full: wiring and conditions, how you like to be spoken to, reading your state, a four-step self-check, kind limits and how much to share.
+- [Know Yourself, Now: Your Wiring, Weather and Words](https://spreadloveandacceptance.com/book/self-2-now.html): Part One, Now: how you are built, what kind of day you are having, and one clear sentence about what helps.
+- [Know Yourself, Next: Shaping Who You Are Becoming](https://spreadloveandacceptance.com/book/self-3-next-in-depth.html): Part One, Next, in full: values first, one small goal, what gets in the way, tiny repeatable steps, if-then plans, asking for support and a kind monthly.
+- [Know Yourself, Next: Shaping Who You Are Becoming](https://spreadloveandacceptance.com/book/self-3-next.html): Part One, Next: what matters to you, one small goal, tiny steps for tired days and a kind monthly look at yourself.
 
 ## The Professor’s Library and further reading
 - [The Frequency Framework in depth](https://spreadloveandacceptance.com/frequency-framework-in-depth.html): How any relationship runs on five different rhythms, and the beat frequency that creates friction when they drift apart.
@@ -149,6 +155,8 @@ Key facts:
 - [Further Reading](https://spreadloveandacceptance.com/reading.html): Hand-picked articles from Psychology Today, Greater Good Magazine, The Gottman Institute and other trusted sources, sorted by topic and by the Five Pillars.
 
 ## More
+- [Apology Languages: How to Say Sorry So It Lands](https://spreadloveandacceptance.com/apology-languages.html): The five apology languages as a menu of parts of a good apology, with what research says works best, scripts, and how to ask what helps after a hurt.
+- [Appreciation at Work: Five Ways People Like to Be Thanked](https://spreadloveandacceptance.com/appreciation-at-work.html): The five languages of appreciation for the workplace as a menu, not a label: words, time, help, small gifts and appropriate touch, with what research says and.
 - [The site’s architecture, in detail](https://spreadloveandacceptance.com/architecture/architecture.html): The full technical picture of how The Objective Ledger is put together: pages, tools, privacy and how it all connects.
 - [How the site is built](https://spreadloveandacceptance.com/architecture/): How The Objective Ledger is designed and built, and why.
 - [Our Logo](https://spreadloveandacceptance.com/brand.html): The Spread Love & Acceptance logo: two different friends sharing one heart. The marks, the lockups, the colors, how to use them and downloads.
@@ -164,6 +172,7 @@ Key facts:
 - [The Whole Idea on One Printable Page](https://spreadloveandacceptance.com/infographic.html): The whole idea on one printable page: the Five Pillars, how an unowned chore turns into resentment, the Lemonade Stand chore tracker, and three kind phrases.
 - [Get the App](https://spreadloveandacceptance.com/install.html): Get the Spread Love & Acceptance app: install on Android in a few taps (its own icon, full screen, works offline), with iPhone steps today and the App Store.
 - [My garden — your keepsakes from the calm games](https://spreadloveandacceptance.com/keepsakes.html): Everything that has arrived in the garden behind the pages as you played the calm games, and the constellations you dedicated in the Night Garden.
+- [How the Languages of Connection Fit Together](https://spreadloveandacceptance.com/languages-of-connection.html): Love languages, apology languages, touchstones, appreciation at work, your wiring and keeping it alive, in one picture: six layers from you outward, what to.
 - [Privacy Policy](https://spreadloveandacceptance.com/legal/privacy-policy.html): How Spread Love & Acceptance handles your information: what you type in the tools stays on your device.
 - [Cancellation & Refund Policy](https://spreadloveandacceptance.com/legal/refund-policy.html): Cancellation and refund terms for Spread Love & Acceptance.
 - [Terms of Service](https://spreadloveandacceptance.com/legal/terms-of-service.html): The terms for using Spread Love & Acceptance and The Objective Ledger.
@@ -182,5 +191,7 @@ Key facts:
 - [Frequency Sync Visualizer](https://spreadloveandacceptance.com/tools/frequency-sync-visualizer.html): A calm picture of two rhythms drifting into step: the idea behind the 90-second check-in (WP-13).
 - [Mood Arbitrage, Level 1: The Free Introduction](https://spreadloveandacceptance.com/tools/mood-arbitrage-free.html): Level 1 of Mood Arbitrage: settle yourself first, read the state someone else is in (wound up, shut down or scattered), and choose one small move that helps.
 - [Mood Arbitrage, Level 2: The Full Toolkit](https://spreadloveandacceptance.com/tools/mood-arbitrage-full.html): Level 2 of Mood Arbitrage: a plan builder that turns your state, their state, the situation and the relationship into a printable plan, plus five worked.
+- [Touchstones in Full: Shared Words, Jokes, Rituals and…](https://spreadloveandacceptance.com/touchstones-in-depth.html): The full guide to touchstones: what they are, what the research says, words, jokes, rituals, stories, how they go stale, when they go wrong, and a four-week.
+- [Touchstones: Your Shared Language of Words, Jokes and…](https://spreadloveandacceptance.com/touchstones.html): Touchstones are the small shared words, jokes, rituals and stories that say we are us. How to notice them, keep them fresh and make new ones, for couples.
 - [Upset right now? Calm down together](https://spreadloveandacceptance.com/upset-right-now.html): A five-minute page for two upset people: a pause line with a return time, a one-minute breathing pacer, and how to come back and say it kindly.
 - [Wavelength: Free Communication Style Quiz and…](https://spreadloveandacceptance.com/wavelength.html): A free quiz on how you think, talk and listen. Pick your wiring (ADHD, autistic, AuDHD and more) and get your four-letter Wave Code and archetype.

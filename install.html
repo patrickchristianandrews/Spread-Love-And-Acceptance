@@ -26,19 +26,38 @@
   .in-top{ display:flex; gap:1rem; align-items:center; }
   .in-top p{ margin:0 !important; }
   .in-state{ font-weight:600; margin:0 !important; }
-  .in-btn{ font:600 1.05rem/1.2 "Lora", Georgia, serif; min-height:48px; padding:.6rem 1.4rem; border-radius:999px; border:1px solid #2F5F8A; background:#2F5F8A; color:#fff; cursor:pointer; justify-self:start; }
+  .in-btn{ display:inline-flex; align-items:center; gap:.5rem; font:800 1.15rem/1.2 "Lora", Georgia, serif; min-height:56px; padding:.7rem 1.7rem; border-radius:999px; border:0; background:linear-gradient(180deg,#FF7C93,#E4566E); color:#fff; cursor:pointer; justify-self:start; box-shadow:0 6px 0 #B8384F; transform:translateY(-3px); transition:transform .1s, box-shadow .1s; }
+  .in-btn::before{ content:"\1F43E"; }
+  .in-btn::after{ content:"\2728"; }
+  .in-btn:hover{ transform:translateY(0); box-shadow:0 3px 0 #B8384F; }
+  .in-btn:active{ transform:translateY(3px); box-shadow:0 0 0 #B8384F; }
   .in-btn[hidden]{ display:none; }
   .in-btn:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
   .in-pick{ display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:.6rem; margin:1rem 0 1.2rem; }
-  .in-tab{ display:flex; flex-direction:column; align-items:center; gap:.15rem; min-height:92px; padding:.7rem .5rem; border-radius:18px; border:2px solid #C6DFF4; background:#F4F9FE; color:#243B52; font:inherit; cursor:pointer; text-align:center; }
-  .in-tab:hover{ transform:translateY(-2px); }
-  .in-tab[aria-selected="true"]{ background:#2F5F8A; border-color:#2F5F8A; color:#fff; box-shadow:0 8px 20px -10px rgba(47,95,138,.7); }
-  .in-tab:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
-  .in-tab-i{ font-size:1.6rem; line-height:1; }
-  .in-tab-t{ font:700 1.05rem/1.2 "Lora", Georgia, serif; }
-  .in-tab-s{ font:600 .72rem/1.25 "IBM Plex Mono", monospace; padding:.1rem .5rem; border-radius:99px; background:#E6F4EC; color:#2F5A3C; }
+  .in-tab{ --c1:#E6F8EE; --c2:#C9EFD9; --bd:#8FD3AE; --ink:#24523D; --deep:#2F7A5A; position:relative; display:flex; flex-direction:column; align-items:center; gap:.2rem; min-height:100px; padding:.8rem .5rem .75rem; border-radius:24px; border:3px solid var(--bd); background:linear-gradient(160deg,var(--c1),var(--c2)); color:var(--ink); font:inherit; cursor:pointer; text-align:center; box-shadow:0 5px 0 var(--bd); transition:transform .15s, box-shadow .15s; }
+  .in-tab[data-p="windows"]{ --c1:#E7F2FD; --c2:#CBE3F8; --bd:#8DBDE8; --ink:#1F4468; --deep:#2F5F8A; }
+  .in-tab[data-p="apple"]{ --c1:#FFF1F6; --c2:#F6E3F5; --bd:#D6B1E6; --ink:#5B3F73; --deep:#8A4FA8; }
+  .in-tab[data-p="mac"]{ --c1:#F3EEFD; --c2:#E1D8F8; --bd:#B9A6E8; --ink:#3F3270; --deep:#5B46A8; }
+  .in-tab:hover{ transform:translateY(2px) rotate(-1deg); box-shadow:0 3px 0 var(--bd); }
+  .in-tab:active{ transform:translateY(5px); box-shadow:0 0 0 var(--bd); }
+  .in-tab[aria-selected="true"]{ background:linear-gradient(180deg,var(--deep),var(--deep)); border-color:var(--deep); color:#fff; box-shadow:0 5px 0 rgba(0,0,0,.25), 0 10px 22px -10px var(--deep); animation:in-hop 2.8s ease-in-out infinite; }
+  .in-tab[aria-selected="true"]::after{ content:"\1F43E"; position:absolute; top:-.7rem; right:-.3rem; font-size:1.2rem; transform:rotate(18deg); }
+  .in-tab:focus-visible{ outline:3px solid var(--focus); outline-offset:3px; }
+  .in-tab-i{ display:grid; place-items:center; width:2.8rem; height:2.8rem; border-radius:50%; background:#fff; font-size:1.7rem; line-height:1; box-shadow:inset 0 -3px 0 rgba(0,0,0,.08); }
+  .in-tab:hover .in-tab-i{ animation:in-wig .5s ease-in-out; }
+  .in-tab-t{ font:800 1.08rem/1.2 "Lora", Georgia, serif; }
+  .in-tab-s{ font:600 .72rem/1.25 "IBM Plex Mono", monospace; padding:.12rem .55rem; border-radius:99px; background:rgba(255,255,255,.85); color:#2F5A3C; }
+  .in-tab-s.is-now::before{ content:"\2728 "; }
   .in-tab-s.is-soon{ background:#FFF1D6; color:#7A5410; }
-  .in-tab[aria-selected="true"] .in-tab-s{ background:rgba(255,255,255,.92); }
+  .in-tab-s.is-soon::before{ content:"\1F319 "; }
+  .in-tab[aria-selected="true"] .in-tab-s{ background:rgba(255,255,255,.95); }
+  @keyframes in-wig{ 0%,100%{ transform:rotate(0); } 25%{ transform:rotate(-14deg) scale(1.12); } 75%{ transform:rotate(14deg) scale(1.12); } }
+  @keyframes in-hop{ 0%,70%,100%{ transform:translateY(0); } 80%{ transform:translateY(-5px); } 90%{ transform:translateY(0); } }
+  @media (prefers-reduced-motion: reduce){ .in-tab[aria-selected="true"]{ animation:none; } .in-tab:hover .in-tab-i{ animation:none; } .in-tab:hover{ transform:none; } }
+  .in-manual{ margin:.2rem 0 1rem; padding:.5rem 1rem; border-radius:18px; border:2px dashed #C6DFF4; background:rgba(255,255,255,.55); }
+  .in-manual > summary{ cursor:pointer; min-height:44px; display:flex; align-items:center; font:700 1rem "Lora",Georgia,serif; color:#2F5F8A; }
+  .in-manual[open] > summary{ margin-bottom:.4rem; }
+  .in-card.is-ok{ border-color:#8FD3AE; background:#EAF7F0; }
   .in-panel{ margin:0 0 1.4rem; }
   .in-panel[hidden]{ display:none; }
   .in-soon{ margin:.4rem 0 1rem; padding:1.2rem 1.3rem; border-radius:22px; border:2px dashed #E1B861; background:linear-gradient(135deg,#FFF8E6,#FFEFD2); text-align:center; }
@@ -66,7 +85,7 @@
   .in-pin li{ margin:0 !important; }
   .in-pin a{ display:inline-block; min-height:44px; padding:.55rem 1rem; border-radius:999px; border:1px solid #2F5F8A; text-decoration:none; background:#FFFDF7; box-sizing:border-box; }
   @media (max-width:760px){ .in-pick{ grid-template-columns:repeat(2,minmax(0,1fr)); } }
-  @media (max-width:560px){ .in-pick{ grid-template-columns:1fr; } .in-tab{ flex-direction:row; justify-content:flex-start; gap:.7rem; min-height:64px; padding:.6rem .9rem; text-align:left; flex-wrap:wrap; } .in-tab-t{ flex:1; } }
+  @media (max-width:560px){ .in-pick{ grid-template-columns:1fr; } .in-tab{ flex-direction:row; justify-content:flex-start; gap:.7rem; min-height:68px; padding:.6rem .9rem; text-align:left; flex-wrap:wrap; } .in-tab-t{ flex:1; } .in-tab[aria-selected="true"]::after{ top:-.6rem; right:.6rem; } }
 </style>
 <!-- seo:start -->
 <link rel="canonical" href="https://spreadloveandacceptance.com/install.html">
@@ -115,12 +134,13 @@
   <button type="button" role="tab" class="in-tab" id="tab-mac" data-p="mac" aria-controls="p-mac" aria-selected="false"><span class="in-tab-i" aria-hidden="true">&#128187;</span><span class="in-tab-t">Mac &amp; Linux</span><span class="in-tab-s is-now">Chrome or Edge</span></button>
 </div>
 
-<section class="in-panel no-bubble" id="p-android" role="tabpanel" aria-labelledby="tab-android" hidden>
-  <div class="in-card no-bubble" id="in-card">
-    <div class="in-top"><img src="/assets/icons/icon-192.png" alt="" width="72" height="72"><div><p class="in-state" id="in-state" role="status">Checking your phone…</p><p id="in-sub">One tap if your browser allows it. Steps below if not.</p></div></div>
-    <button type="button" class="in-btn" id="in-btn" hidden>Install the app</button>
-  </div>
+<div class="in-card no-bubble" id="in-card" hidden>
+  <div class="in-top"><img src="/assets/icons/icon-192.png" alt="" width="72" height="72"><div><p class="in-state" id="in-state" role="status">Checking your device…</p><p id="in-sub"></p></div></div>
+  <button type="button" class="in-btn" id="in-btn" hidden>Install the app</button>
+</div>
 
+<section class="in-panel no-bubble" id="p-android" role="tabpanel" aria-labelledby="tab-android" hidden>
+  <details class="in-manual no-bubble"><summary>Show the steps by hand</summary>
   <h2 id="chrome">Install it with Chrome on an Android phone or tablet</h2>
   <ol class="in-steps no-bubble">
     <li>Open <strong>spreadloveandacceptance.com</strong> in <strong>Chrome</strong>. Use a normal tab, not an Incognito one.</li>
@@ -146,6 +166,7 @@
     <li>Already installed? Look in your app drawer for <strong>The Ledger</strong>. Chrome only offers Install once.</li>
     <li>To remove it later, press and hold the icon and choose <strong>Uninstall</strong>. Anything saved in it stays only on your phone.</li>
   </ul>
+</details>
 </section>
 
 <section class="in-panel no-bubble" id="p-apple" role="tabpanel" aria-labelledby="tab-apple" hidden>
@@ -167,6 +188,7 @@
 </section>
 
 <section class="in-panel no-bubble" id="p-windows" role="tabpanel" aria-labelledby="tab-windows" hidden>
+  <details class="in-manual no-bubble"><summary>Show the steps by hand</summary>
   <h2 id="windows">Install it on Windows 10 or 11</h2>
   <p>It installs as a web app: its own window and icon, no store and no download page. Use <strong>Edge</strong> or <strong>Chrome</strong>.</p>
   <ol class="in-steps no-bubble">
@@ -178,9 +200,11 @@
   </ol>
   <p>It keeps working without a connection once you have opened pages, and updates by itself. To remove it later, open the app, click the three dots in its title bar and choose <strong>Uninstall</strong>, or use Settings, then Apps.</p>
   <p>Firefox on Windows doesn&rsquo;t install web apps, but the site works fine in a normal tab. A Microsoft Store version and Windows widgets are not built yet.</p>
+</details>
 </section>
 
 <section class="in-panel no-bubble" id="p-mac" role="tabpanel" aria-labelledby="tab-mac" hidden>
+  <details class="in-manual no-bubble"><summary>Show the steps by hand</summary>
   <h2 id="desktop">On a Mac or Linux computer</h2>
   <ol class="in-steps no-bubble">
     <li>Open <strong>spreadloveandacceptance.com</strong> in <strong>Chrome</strong> or <strong>Edge</strong>.</li>
@@ -188,6 +212,7 @@
     <li>Click <strong>Install</strong>. It opens in its own window and gets its own icon.</li>
   </ol>
   <p>Safari on a Mac: choose <strong>File</strong>, then <strong>Add to Dock</strong>. Firefox doesn&rsquo;t install web apps, but the site works fine in a normal tab.</p>
+</details>
 </section>
 
 <h2 id="what-you-get">What you get</h2>
@@ -224,15 +249,36 @@
 <script>
 (function () {
   'use strict';
-  var state = document.getElementById('in-state'), sub = document.getElementById('in-sub'), btn = document.getElementById('in-btn'), ev = null;
+  var card = document.getElementById('in-card'), state = document.getElementById('in-state'), sub = document.getElementById('in-sub'), btn = document.getElementById('in-btn');
   var installed = (window.matchMedia && matchMedia('(display-mode: standalone)').matches) || navigator.standalone === true;
   var ua = navigator.userAgent, android = /android/i.test(ua), ios = /iphone|ipad|ipod/i.test(ua) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+  var win = /windows/i.test(ua), mac = /macintosh|mac os x|linux|cros/i.test(ua) && !android && !ios;
   var tabs = Array.prototype.slice.call(document.querySelectorAll('.in-tab')), panels = { android: document.getElementById('p-android'), apple: document.getElementById('p-apple'), windows: document.getElementById('p-windows'), mac: document.getElementById('p-mac') };
+  var cur = 'android', ready = false, was = false;
+  try { was = localStorage.getItem('tol-app-installed') === '1'; if (installed) localStorage.setItem('tol-app-installed', '1'); } catch (e) {}
+  function ok() { return window.TOLInstall && window.TOLInstall.ready(); }
+  // the install card: one button that installs, and the steps by hand tucked underneath for when the browser will not offer it
+  function paint() {
+    ready = !!ok();
+    var manual = panels[cur] && panels[cur].querySelector('.in-manual');
+    if (cur === 'apple') { card.hidden = true; return; }
+    card.hidden = false; card.classList.remove('is-ok'); btn.hidden = true;
+    if (installed) { state.textContent = 'You are already using the app.'; sub.textContent = 'Nothing more to do. Enjoy it.'; card.classList.add('is-ok'); if (manual) manual.open = false; return; }
+    if (was) { state.textContent = 'The app is already on this device.'; sub.textContent = 'Look for the two little bubbles on your home screen, Start menu or app drawer.'; card.classList.add('is-ok'); if (manual) manual.open = false; return; }
+    if (ready) { state.textContent = 'Ready to install.'; sub.textContent = 'Press the button. Your browser asks you to confirm, then the app is installed.'; btn.hidden = false; if (manual) manual.open = false; }
+    else {
+      var fit = (cur === 'android' && android) || (cur === 'windows' && win) || (cur === 'mac' && mac);
+      state.textContent = fit ? 'Your browser has not offered the one-tap install yet.' : 'This part is for ' + (cur === 'android' ? 'an Android phone or tablet' : cur === 'windows' ? 'Windows' : 'a Mac or Linux computer') + '.';
+      sub.textContent = fit ? 'Stay on the site a few seconds and it may appear here. Or follow the short steps below.' : 'Open this page on that device, or pick your device above.';
+      if (manual && fit) manual.open = true;
+    }
+  }
   function show(id, move) {
-    if (!panels[id]) id = 'android';
+    if (!panels[id]) id = 'android'; cur = id;
     tabs.forEach(function (t) { var on = t.getAttribute('data-p') === id; t.setAttribute('aria-selected', String(on)); t.tabIndex = on ? 0 : -1; });
     Object.keys(panels).forEach(function (k) { panels[k].hidden = k !== id; });
     if (move) { try { history.replaceState(null, '', '#' + id); } catch (e) {} }
+    paint();
   }
   tabs.forEach(function (t, i) {
     t.addEventListener('click', function () { show(t.getAttribute('data-p'), true); });
@@ -241,30 +287,24 @@
       var n = tabs[(i + d + tabs.length) % tabs.length]; n.focus(); show(n.getAttribute('data-p'), true); e.preventDefault();
     });
   });
-  // start on the hash if there is one, otherwise on the phone you are holding
+  // start on the hash if there is one, otherwise on the device you are holding
   var h = (location.hash || '').replace('#', ''), map = { chrome: 'android', others: 'android', stuck: 'android', iphone: 'apple', computer: 'windows', desktop: 'mac' };
-  var win = /windows/i.test(ua), mac = /macintosh|mac os x|linux|cros/i.test(ua) && !android && !ios;
   show(panels[h] ? h : map[h] || (ios ? 'apple' : android ? 'android' : win ? 'windows' : mac ? 'mac' : 'android'), false);
-  if (map[h]) setTimeout(function () { var el = document.getElementById(h); if (el) el.scrollIntoView(); }, 50);
-  function plain() {
-    if (android) { state.textContent = 'Use Chrome’s menu to install.'; sub.textContent = 'Follow the five steps below. It takes about ten seconds.'; }
-    else { state.textContent = 'This part is for an Android phone.'; sub.textContent = 'Open this page on your Android phone, or pick your device above.'; }
-  }
-  var wasInstalled = false; try { wasInstalled = localStorage.getItem('tol-app-installed') === '1'; if (installed) localStorage.setItem('tol-app-installed', '1'); } catch (e) {}
-  if (installed) { state.textContent = 'You are already using the app.'; sub.textContent = 'Nothing more to do. Enjoy it.'; }
-  else if (wasInstalled) { state.textContent = 'The app is already on this phone.'; sub.textContent = 'Look for the two little bubbles on your home screen or in your app drawer. Nothing more to do.'; }
-  else {
-    plain();
-    window.addEventListener('beforeinstallprompt', function (e) {
-      e.preventDefault(); ev = e; btn.hidden = false;
-      state.textContent = 'Ready to install.'; sub.textContent = 'Tap the button. Chrome asks you to confirm, then the icon appears.';
+  if (map[h]) setTimeout(function () { var el = document.getElementById(h); if (el) { var d = el.closest('details'); if (d) d.open = true; el.scrollIntoView(); } }, 60);
+  window.addEventListener('beforeinstallprompt', function () { setTimeout(paint, 50); });
+  document.addEventListener('tol-app-installed', function () { was = true; paint(); });
+  window.addEventListener('appinstalled', function () { try { localStorage.setItem('tol-app-installed', '1'); } catch (e) {} was = true; paint(); });
+  setTimeout(paint, 800); setTimeout(paint, 2500);
+  btn.addEventListener('click', function () {
+    if (!window.TOLInstall) return;
+    btn.disabled = true; state.textContent = 'Asking your browser…';
+    window.TOLInstall.ask().then(function (r) {
+      btn.disabled = false;
+      if (r === 'accepted') { was = true; paint(); }
+      else if (r === 'dismissed') { state.textContent = 'No problem. It will be here when you are ready.'; sub.textContent = 'Press the button again any time.'; paint(); state.textContent = 'No problem. It will be here when you are ready.'; }
+      else paint();
     });
-    window.addEventListener('appinstalled', function () { try { localStorage.setItem('tol-app-installed', '1'); } catch (e) {} btn.hidden = true; ev = null; state.textContent = 'Installed. Look for the two little bubbles on your home screen.'; sub.textContent = 'You can close this tab.'; });
-    btn.addEventListener('click', function () {
-      if (!ev) return; ev.prompt();
-      ev.userChoice.then(function (c) { if (c && c.outcome === 'dismissed') { state.textContent = 'No problem. It will be here when you are ready.'; } ev = null; btn.hidden = true; }).catch(function () {});
-    });
-  }
+  });
 })();
 </script>
 </body>

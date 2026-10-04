@@ -6,6 +6,9 @@
      "g" then "a" to Ask Professor Puddles, "b" opens Breathe, "a" opens Professor Puddles here, "q" toggles Quiet.
      Shortcuts never fire while you are typing, and they are skipped on pages with their own controls (games,
      cartoons, the teaser, soundscapes, Drift, the Night Garden).
+   - More for laptops and desktops: a thin reading-progress line, a Back to top button, "j" and "k" to step through
+     sections, "n" for the page's Next time link, Ctrl or Cmd plus K for search, a "copy link to this section" mark on
+     headings, a Wide page switch in the outline, and pages that load instantly when you point at a link.
    - On touch tablets: a little more room for the text, larger tap targets in the menu, chips and links, and a
      wider reading column in portrait. Reduced motion turns the smooth scrolling off.
    Nothing is stored or sent. */
@@ -39,7 +42,19 @@
     '.tol-outline a:focus-visible{ outline:2px solid #3B2A55; outline-offset:1px; }' +
     '@media (min-width:1260px){ .tol-outline.is-on{ display:block; } }' +
     '@media (max-width:1259px){ .tol-outline{ display:none !important; } }' +
-    '@media print{ .tol-outline, .tol-keys{ display:none !important; } }' +
+    '@media print{ .tol-outline, .tol-keys, .tol-prog, .tol-top, .tol-hl{ display:none !important; } }' +
+    'main.read h2{ scroll-margin-top:84px; }' +
+    '.tol-prog{ position:fixed; top:0; left:0; height:3px; width:0; z-index:900; background:linear-gradient(90deg,#8FD3AE,#F8D76A,#F7A896); transition:width .1s linear; pointer-events:none; }' +
+    '.tol-top{ position:fixed; right:max(1rem,env(safe-area-inset-right)); bottom:4.4rem; z-index:860; width:46px; height:46px; border-radius:50%; border:2px solid #C9B3EA; background:rgba(255,253,248,.95); color:#5B3F73; font-size:1.2rem; cursor:pointer; box-shadow:0 6px 16px -8px rgba(60,40,90,.5); opacity:0; pointer-events:none; transform:translateY(8px); transition:opacity .2s, transform .2s; }' +
+    '.tol-top.on{ opacity:1; pointer-events:auto; transform:none; }' +
+    '.tol-top:hover{ background:#EDE3F8; } .tol-top:focus-visible{ outline:3px solid #3B2A55; outline-offset:2px; }' +
+    '.tol-hl{ margin-left:.4rem; padding:0 .35rem; border:0; background:none; color:#8A4FA8; font:600 .8em "IBM Plex Mono",monospace; cursor:pointer; opacity:0; transition:opacity .15s; border-radius:6px; vertical-align:middle; }' +
+    'h2:hover > .tol-hl, h2:focus-within > .tol-hl, .tol-hl:focus-visible{ opacity:1; }' +
+    '.tol-hl:hover{ background:#EDE3F8; }' +
+    '.tol-hl.done{ opacity:1; color:#2F7A5A; }' +
+    '.tol-outline-wide{ margin:.5rem 0 0; display:flex; align-items:center; gap:.45rem; font:600 .78rem "Lora",Georgia,serif; color:#3B2A55; cursor:pointer; }' +
+    '.tol-outline-wide input{ width:1.1rem; height:1.1rem; accent-color:#8A4FA8; }' +
+    '@media (min-width:1280px){ html.tol-wide main.read{ max-width:58rem; } html.tol-wide main.read p, html.tol-wide main.read li{ max-width:72ch; } }' +
     // the shortcuts list
     '.tol-keys{ position:fixed; inset:0; z-index:2000; display:grid; place-items:center; background:rgba(20,12,40,.55); padding:1rem; }' +
     '.tol-keys[hidden]{ display:none; }' +
@@ -63,8 +78,11 @@
     if (hs.length < 4 || main.textContent.length < 3500) return;
     var used = {}, items = hs.slice(0, 18).map(function (h) { if (!h.id) h.id = slug(h.textContent, used); return { h: h, id: h.id, t: h.textContent.replace(/\s+/g, ' ').trim().replace(/[.:]$/, '') }; });
     var nav = document.createElement('nav'); nav.className = 'tol-outline no-bubble'; nav.setAttribute('aria-label', 'On this page');
-    nav.innerHTML = '<h2>On this page</h2><ol>' + items.map(function (i) { return '<li><a href="#' + i.id + '">' + i.t.replace(/</g, '&lt;') + '</a></li>'; }).join('') + '</ol>';
+    nav.innerHTML = '<h2>On this page</h2><ol>' + items.map(function (i) { return '<li><a href="#' + i.id + '">' + i.t.replace(/</g, '&lt;') + '</a></li>'; }).join('') + '</ol><label class="tol-outline-wide"><input type="checkbox" id="tol-wide-cb"> Wide page</label>';
     document.body.appendChild(nav);
+    var wcb = nav.querySelector('#tol-wide-cb'), wideOn = false; try { wideOn = localStorage.getItem('tol-wide') === '1'; } catch (er) {}
+    document.documentElement.classList.toggle('tol-wide', wideOn); wcb.checked = wideOn;
+    wcb.addEventListener('change', function () { document.documentElement.classList.toggle('tol-wide', wcb.checked); try { localStorage.setItem('tol-wide', wcb.checked ? '1' : '0'); } catch (er) {} place(); });
     var links = Array.prototype.slice.call(nav.querySelectorAll('a'));
     nav.addEventListener('click', function (e) {
       var a = e.target.closest('a'); if (!a) return; var t = document.getElementById(a.getAttribute('href').slice(1)); if (!t) return;
@@ -83,7 +101,7 @@
   }
 
   // ---------- the keyboard
-  var KEYS = [['/', 'Search the site'], ['?', 'Show this list'], ['g then h', 'Go to the home page'], ['g then s', 'Go to Start here'], ['g then a', 'Go to Ask Professor Puddles'], ['a', 'Open Professor Puddles on this page'], ['b', 'Open Breathe, a one-minute calm break'], ['q', 'Quiet mode on or off'], ['Esc', 'Close whatever is open']];
+  var KEYS = [['/', 'Search the site'], ['Ctrl K', 'Search the site (Cmd K on a Mac)'], ['j / k', 'Next / previous section on the page'], ['n', 'Open the page’s “Next time” suggestion'], ['t', 'Back to the top'], ['?', 'Show this list'], ['g then h', 'Go to the home page'], ['g then s', 'Go to Start here'], ['g then a', 'Go to Ask Professor Puddles'], ['a', 'Open Professor Puddles on this page'], ['b', 'Open Breathe, a one-minute calm break'], ['q', 'Quiet mode on or off'], ['Esc', 'Close whatever is open']];
   var dlg = null, lastTrigger = null, gAt = 0;
   function typing(t) { return t && (/^(INPUT|TEXTAREA|SELECT)$/.test(t.tagName) || t.isContentEditable); }
   function openKeys() {
@@ -102,9 +120,14 @@
     document.addEventListener('keydown', function (e) {
       if (e.defaultPrevented) return;
       if (e.key === 'Escape') { closeKeys(); return; }
+      if ((e.ctrlKey || e.metaKey) && !e.altKey && (e.key === 'k' || e.key === 'K')) { if (click('.tol-search-btn')) e.preventDefault(); return; }
       if (e.ctrlKey || e.metaKey || e.altKey || typing(e.target)) return;
       if (dlg && !dlg.hidden) { if (e.key === 'Tab') { e.preventDefault(); dlg.querySelector('.tol-keys-x').focus(); } return; }
       var k = e.key, now = Date.now();
+      if (k === 'j' || k === 'J') { e.preventDefault(); sectionStep(1); return; }
+      if (k === 'k' || k === 'K') { e.preventDefault(); sectionStep(-1); return; }
+      if (k === 't' || k === 'T') { e.preventDefault(); window.scrollTo({ top: 0, behavior: RM ? 'auto' : 'smooth' }); return; }
+      if (k === 'n' || k === 'N') { var nx = document.querySelector('.cb-end .cb-next a'); if (nx) { e.preventDefault(); location.href = nx.href; } return; }
       if (gAt && now - gAt < 1200) {
         gAt = 0; var go = { h: '/', s: '/start-here.html', a: '/ask.html' }[k.toLowerCase()]; if (go) { e.preventDefault(); location.href = go; return; }
       }
@@ -127,6 +150,50 @@
     }
   }
 
-  function start() { css(); outline(); keyboard(); }
+  // ---------- reading progress, back to top, section links, instant pages
+  function extras() {
+    if (OWN.test(path)) return;
+    var main = document.querySelector('main.read'); if (!main) return;
+    var bar = document.createElement('div'); bar.className = 'tol-prog'; bar.setAttribute('aria-hidden', 'true'); document.body.appendChild(bar);
+    var top = document.createElement('button'); top.type = 'button'; top.className = 'tol-top'; top.setAttribute('aria-label', 'Back to top'); top.innerHTML = '&uarr;'; document.body.appendChild(top);
+    top.addEventListener('click', function () { window.scrollTo({ top: 0, behavior: RM ? 'auto' : 'smooth' }); var h = main.querySelector('h1'); if (h) { h.setAttribute('tabindex', '-1'); try { h.focus({ preventScroll: true }); } catch (e) {} } });
+    var tick = 0;
+    function onScroll() { if (tick) return; tick = requestAnimationFrame(function () { tick = 0; var de = document.documentElement, max = de.scrollHeight - innerHeight, y = window.pageYOffset; bar.style.width = max > 200 ? Math.min(100, y / max * 100).toFixed(1) + '%' : '0'; top.classList.toggle('on', y > innerHeight * 1.2); }); }
+    window.addEventListener('scroll', onScroll, { passive: true }); onScroll();
+    // a small "copy link to this section" mark after each section heading that has an id
+    if (fine) Array.prototype.forEach.call(main.querySelectorAll('h2[id]'), function (h) {
+      if (h.closest('aside, nav, .tol-keys, .tol-outline, .appad') || h.querySelector('.tol-hl')) return;
+      var b = document.createElement('button'); b.type = 'button'; b.className = 'tol-hl'; b.textContent = '#'; b.setAttribute('aria-label', 'Copy a link to this section'); b.title = 'Copy a link to this section';
+      b.addEventListener('click', function (e) {
+        e.preventDefault(); var url = location.origin + location.pathname + '#' + h.id;
+        function done() { b.classList.add('done'); b.textContent = 'copied'; setTimeout(function () { b.classList.remove('done'); b.textContent = '#'; }, 1400); }
+        try { navigator.clipboard.writeText(url).then(done).catch(function () { prompt('Copy this link', url); }); } catch (er) { prompt('Copy this link', url); }
+        try { history.replaceState(null, '', '#' + h.id); } catch (er) {}
+      });
+      h.appendChild(b);
+    });
+    // pages load instantly when you point at a link (the browser fetches it a moment early)
+    if (fine && 'relList' in document.createElement('link') && document.createElement('link').relList.supports && document.createElement('link').relList.supports('prefetch')) {
+      var done = {}, to = 0;
+      document.addEventListener('mouseover', function (e) {
+        var a = e.target.closest && e.target.closest('a[href]'); if (!a || a.target === '_blank' || a.origin !== location.origin || a.hash && a.pathname === location.pathname) return;
+        var u = a.pathname + a.search; if (done[u] || !/\.html$|\/$/.test(a.pathname) || /\/(workpapers\/fill|games|puzzles)\//.test(a.pathname)) return;
+        clearTimeout(to); to = setTimeout(function () { if (done[u]) return; done[u] = 1; var l = document.createElement('link'); l.rel = 'prefetch'; l.href = u; document.head.appendChild(l); }, 120);
+      }, { passive: true });
+    }
+  }
+  // step through sections with j and k
+  function sectionStep(dir) {
+    var main = document.querySelector('main.read'); if (!main) return;
+    var hs = Array.prototype.filter.call(main.querySelectorAll('h2'), function (h) { return h.getClientRects().length && !h.closest('aside, nav, .tol-keys, .tol-outline'); });
+    if (!hs.length) return;
+    var y = 90, target = null;
+    if (dir > 0) { for (var i = 0; i < hs.length; i++) if (hs[i].getBoundingClientRect().top > y + 30) { target = hs[i]; break; } }
+    else { for (var j = hs.length - 1; j >= 0; j--) if (hs[j].getBoundingClientRect().top < y - 30) { target = hs[j]; break; } }
+    if (target) { target.scrollIntoView({ block: 'start', behavior: RM ? 'auto' : 'smooth' }); target.setAttribute('tabindex', '-1'); try { target.focus({ preventScroll: true }); } catch (e) {} }
+    else if (dir < 0) window.scrollTo({ top: 0, behavior: RM ? 'auto' : 'smooth' });
+  }
+
+  function start() { css(); outline(); keyboard(); extras(); }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', start); else start();
 })();
