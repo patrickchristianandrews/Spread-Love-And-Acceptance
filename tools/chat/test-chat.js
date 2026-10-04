@@ -509,7 +509,6 @@ t('parents', 'what can I watch with my grandkids', { id: 'kidswatch', link: '/fr
 t('parents', 'is this safe for my grandkids to watch', { id: 'kidswatch', link: '/frequency-buddies.html' });
 t('parents', 'how do I share this page', { kind: 'card', id: 'kipshare' });
 t('parents', 'what tricks can kip the paperclip do', { kind: 'card', id: 'kipshare' });
-t('parents', 'where can I see my path so far', { kind: 'card', id: 'timepicker' });
 t('parents', 'what is the learn tab', { kind: 'card', id: 'learntab' });
 t('parents', 'is there a page for grandparents', { kind: 'card', id: 'grandparents', link: '/grandparents.html' });
 t('parents', 'tips for grandparents', { kind: 'card', id: 'grandparents', text: /their house, their rules/ });

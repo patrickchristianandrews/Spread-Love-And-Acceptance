@@ -38,7 +38,7 @@
       { href: '/whats-new.html', code: 'All', title: 'What’s new', note: 'Everything newly added and everything that’s grown, in one place, with dates' },
       { href: '/soundscapes.html#brain-breakers', code: 'New', title: 'Brain Breakers', note: 'The Soundscapes page is now all Brain Breakers: three instrumental pieces, with a way to see and feel the sound' },
       { href: '/love-languages.html', deep: true, code: 'New', title: 'Love languages: a menu, not a label', note: 'What is healthy and unhealthy about each of the five, how to practice and talk about them, and similar ideas like apology languages and bids' },
-      { href: '/install.html', code: 'New', title: 'Put the app on your phone', note: 'Install the full app on Android in a few taps, with an honest answer about widgets' },
+      { href: '/install.html', code: 'New', title: 'Get the app', note: 'Install on Android in a few taps; iPhone steps today, App Store coming soon' },
       { href: '/upset-right-now.html', code: 'New', title: 'Upset right now?', note: 'A five-minute page for two upset people: a pause line with a return time, a breathing pacer, and how to come back' },
       { href: '/share-the-load.html', code: 'New', title: 'Share the load, step by step', note: 'The tools for splitting the load, in the order to use them, with a section for roommates' },
       { href: '/new-parent.html', code: 'New', title: 'New baby, sharing the load', note: 'Three steps for the baby jobs and the invisible ones' },
@@ -71,7 +71,7 @@
       { href: '/co-parenting.html', code: '', title: 'Separated co-parents', note: 'Exchange-day scripts, a tone check, parallel parenting, and a safety note' },
       { href: '/upset-right-now.html', code: '', title: 'Upset right now?', note: 'Pause, breathe and come back: a five-minute page, no sign-up' },
       { href: '/surprise.html', code: '', title: 'Surprise me', note: 'One button picks a game, a guide or something calm' },
-      { href: '/install.html', code: '', title: 'Put the app on your phone', note: 'Install the full app on Android: its own icon, full screen, works offline' },
+      { href: '/install.html', code: '', title: 'Get the app', note: 'Android now, iPhone App Store coming soon: its own icon, full screen, works offline' },
       { href: '/program.html', code: '', title: 'Which part of the program to use', note: 'Six weeks, the Workpaper Suite, the package and report, and the indexes: which to use when' },
       { href: '/index.html', code: '', title: 'Home', note: 'What’s new, the ways in, and the full contents' },
       { href: '/five-pillars.html', deep: true, code: '', title: 'The Five Pillars', note: 'The five ideas under everything here, how each works inside you and between you and others, and where each one shows up' },
@@ -222,7 +222,7 @@
       { href: '/ask.html', code: 'Chat', title: 'Ask Professor Puddles', note: 'Ask in your own words. Answers come only from this site' },
       { href: '/surprise.html', code: 'Wander', title: 'Surprise me', note: 'One button picks a game, a guide or something calm' },
       { href: '/sent-this.html', title: 'Sent this by someone?', note: 'What they see, what stays yours, and how to say no kindly' },
-      { href: '/install.html', code: 'App', title: 'Put the app on your phone', note: 'Install it from Chrome in a few taps: its own icon, full screen, works offline' },
+      { href: '/install.html', code: 'App', title: 'Get the app', note: 'Install in a few taps: its own icon, full screen, works offline' },
       { href: '/whats-new.html', code: 'New', title: 'What’s new', note: 'Everything newly added, with dates' },
       { sub: 'Find your situation' },
       { href: '/relationships.html', deep: true, code: 'All', title: 'Where to start in your relationship', note: 'Partners, family, co-parents, friends, roommates, coworkers and caregivers' },
@@ -776,7 +776,7 @@
     buildPuddlesPop(body);
     comfortOffer(body);
     rememberPage(body);
-    if (!document.querySelector('meta[http-equiv="Content-Security-Policy"]')) { var cbk = document.createElement('script'); cbk.src = '/assets/js/come-back.js'; document.head.appendChild(cbk); } // time picker, "What you got from this", "Your path so far" (come-back.js)
+    if (!document.querySelector('meta[http-equiv="Content-Security-Policy"]')) { var cbk = document.createElement('script'); cbk.src = '/assets/js/come-back.js'; document.head.appendChild(cbk); } // time picker, "What you got from this" (come-back.js)
     if (current === '/index.html') {
       var hi = document.querySelector('main [data-home-intro]');
       // below the approved opening (intro, join, pal cam, hello, new notices): after the first notices stack
@@ -2821,6 +2821,8 @@
     // Brain Breakers: the bold card on the home page, and a "Brain Break" card ending each program page
     var BB_PAGE = /^\/(index|start-in-10-minutes|invisible-labor-mental-load|chore-chart-for-couples|how-to-stop-fighting-with-your-partner|neurodivergent-relationships|communication-style-quiz|check-ins|turning-toward|complacency|wired-differently|love-languages|share-the-load|new-parent|co-parenting|prog-01)(-in-depth)?\.html$|^\/(book|workpapers)\/(?!fill\/)/;
     if ((current === '/index.html' || BB_PAGE.test(current)) && !document.querySelector('meta[http-equiv="Content-Security-Policy"]')) { var bbs = document.createElement('script'); bbs.src = '/assets/js/brain-breaks.js'; bbs.defer = true; document.head.appendChild(bbs); }
+    // phones: a "turn sideways" hint under big pictures, and full screen asks for landscape
+    if (/^\/(soundscapes|frequency-buddies[a-z0-9-]*|calm-visualizer|night-garden|pal-cam-tv)\.html$/.test(current)) { var tsw = document.createElement('script'); tsw.src = '/assets/js/turn-sideways.js'; tsw.defer = true; document.head.appendChild(tsw); }
     if (location.hash) { var t = document.getElementById(location.hash.slice(1)); if (t) t.scrollIntoView(); }
 
     if (stored && !CONFIG.freePreview) {
