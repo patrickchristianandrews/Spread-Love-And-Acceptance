@@ -119,9 +119,10 @@
         '<span class="aa-stage"><span class="aa-tilt"><canvas width="380" height="240" aria-hidden="true"></canvas></span><span class="aa-say" aria-hidden="true"></span></span>' +
         '<div><p class="aa-k no-bubble">Free app</p>' +
         '<h2 class="aa-h no-bubble" id="aa-h">Get the <em>app!</em></h2>' +
-        '<p class="aa-p no-bubble">Tidbit and Sugarfoot are moonwalking onto your home screen. Pick your phone:</p>' +
-        '<div class="aa-pick" role="group" aria-label="Choose your phone">' +
+        '<p class="aa-p no-bubble">Tidbit and Sugarfoot are moonwalking onto your home screen. Pick your device:</p>' +
+        '<div class="aa-pick" role="group" aria-label="Choose your device">' +
           '<a class="aa-chip" href="/install.html#android"><span>Android</span><small>Install now</small></a>' +
+          '<a class="aa-chip" href="/install.html#windows"><span>Windows</span><small>Install now</small></a>' +
           '<a class="aa-chip is-soon" href="/install.html#apple"><span>iPhone &amp; iPad</span><small>App Store: coming soon</small></a>' +
         '</div>' +
         '<a class="aa-go" href="/install.html">Get the app &rarr;</a></div>' +
