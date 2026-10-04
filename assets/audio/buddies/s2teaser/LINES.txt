@@ -1,6 +1,7 @@
 # Season 2 teaser voices: one mp3 per line, named <key>.mp3 in this folder, listed in index.json as {"<key>":[<seconds>]}.
-# Tidbit (bright, quick), Sugarfoot (softer, slower) and the trailer narrator are synthesized voices made with the open-source Kokoro model (Apache 2.0).
-# To swap in your own recording of a line, replace its mp3 (same key) and update its seconds in index.json. A line with no mp3 falls back to the device's own speech.
+# Made the same way as Season 1's voices: the open-source Kokoro model's af_heart voice (Apache 2.0), then pitch-shifted with Rubber Band:
+#   Tidbit 1.55x pitch at speed 0.95, Sugarfoot 1.3x pitch at speed 0.8, the narrator at its own pitch at speed 0.93.
+# To swap in your own recording of a line, replace its mp3 (same key) and update its seconds in index.json.
 # key	who	seconds on screen	text
 b039e77b	tidbit	1.63	Did you hear that?
 285e9fd9	sugarfoot	1.38	From… out there.

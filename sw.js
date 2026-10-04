@@ -9,7 +9,7 @@
    The Frequency Buddies episodes (/assets/js/buddies/) are small data files, saved up front so an episode
    plays offline; a future episode not in the list is saved the first time it's watched.
    Bump VERSION when the list below changes. */
-var VERSION = 'tol-v111';
+var VERSION = 'tol-v112';
 var CORE = [
   '/', '/index.html', '/offline.html',
   '/night-garden.html', '/bears-dojo.html', '/quiet-words.html', '/word-bloom.html', '/quiet-crossword.html', '/pause-and-play.html', '/ask.html', '/whats-new.html', '/frequency-journey.html', '/frequency-journey-play.html', '/pal-cam-tv.html', '/frequency-buddies.html', '/frequency-buddies-live.html', '/daily-ledger-crossword.html', '/garden-backdrop.html', '/turning-toward.html', '/quick-checks.html', '/lemonade-stand.html', '/install.html', '/upset-right-now.html', '/share-the-load.html', '/new-parent.html', '/co-parenting.html', '/surprise.html', '/method-and-limits.html',
