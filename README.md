@@ -4,7 +4,7 @@ Source for The Objective Ledger (TOL-OS) site. The repo root is the site root: G
 
 ## How the site fits together
 
-- **Navigation and membership** live in one file: `assets/js/site.js`. The `SECTIONS` list at the top is the menu for every page, in reading order. `RIBBON` picks which sections appear in the top bar (Start here, Self-discovery, Relationships, Book, Workpapers, Tools, Media); each opens a short dropdown of its page titles. "Everything on the site" and the phone Menu show all sections collapsed, one open at a time. New media pages go in the `media` section. To add a page, add a line there and put these two lines in the page's `<head>`:
+- **Navigation and membership** live in one file: `assets/js/site.js`. The `SECTIONS` list at the top lists every page, in reading order, and sets each page's members lock and previous/next links. `MENU` is the shorter, grouped view people browse: its groups are the top bar (Start here, Book, Learn, Know yourself, Tools for two, Calm & play, Kids & families, About), and each opens a short dropdown. `{ sub: 'Name' }` starts a small heading inside a group. **Know yourself** holds everything one person can use alone; things that need another person live under **Tools for two**. A page can appear in more than one group. "Everything on the site" and the phone Menu show all groups collapsed, one open at a time. To add a page, add a line to `SECTIONS` (and to `MENU` if it should show in the menu) and put these two lines in the page's `<head>`:
   ```html
   <link rel="stylesheet" href="/assets/css/site.css">
   <script src="/assets/js/site.js" defer></script>

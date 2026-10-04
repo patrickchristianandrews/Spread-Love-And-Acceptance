@@ -4920,6 +4920,49 @@
       ]
     },
     {
+      "id": "knowmenu",
+      "kind": "tool",
+      "name": "the Know yourself menu",
+      "keys": [
+        "know yourself menu",
+        "the know yourself tab",
+        "what can i use on my own",
+        "tools for one person",
+        "tools i can use alone",
+        "things i can do alone",
+        "where are the tools for me",
+        "just for me menu",
+        "solo tools"
+      ],
+      "what": "The Know yourself tab in the menu gathers everything one person can use alone: start here on your own (your self path, Wavelength, Today’s Weather, Professor Puddles), know your own wiring, check your load, settle yourself, get ready before a hard talk, and the worksheets and reading that go with it. Nothing there needs anyone else.",
+      "how": [
+        "Open the Menu and choose Know yourself.",
+        "Pick a group: start here, know your wiring, check your load, settle yourself, before you say it, or worksheets and reading.",
+        "For things to do with someone else, look under Tools for two."
+      ],
+      "pillar": "Pillar III, Read your state first, and Pillar I, See the whole load: both start with you.",
+      "chips": [
+        [
+          "Doing it on my own",
+          "Can I do this alone?"
+        ],
+        [
+          "Tools for two",
+          "What tools are there for two people?"
+        ]
+      ],
+      "links": [
+        [
+          "Your self-discovery path",
+          "/self-path.html"
+        ],
+        [
+          "Workpapers for you",
+          "/workpapers/fill/suite.html"
+        ]
+      ]
+    },
+    {
       "id": "grandparents",
       "kind": "tool",
       "name": "the page for grandparents",

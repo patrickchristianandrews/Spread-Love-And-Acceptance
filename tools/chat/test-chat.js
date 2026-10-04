@@ -492,6 +492,8 @@ t('parents', 'how do I share this page', { kind: 'card', id: 'kipshare' });
 t('parents', 'what tricks can kip the paperclip do', { kind: 'card', id: 'kipshare' });
 t('parents', 'where can I see my path so far', { kind: 'card', id: 'timepicker' });
 t('parents', 'what is the learn tab', { kind: 'card', id: 'learntab' });
+t('parents', 'what can I use on my own', { id: /^(knowmenu|alone)$/ });
+t('parents', 'what is the know yourself menu', { kind: 'card', id: 'knowmenu', link: '/self-path.html' });
 t('parents', 'is there a page for grandparents', { kind: 'card', id: 'grandparents', link: '/grandparents.html' });
 t('parents', 'tips for grandparents', { kind: 'card', id: 'grandparents', text: /their house, their rules/ });
 t('parents', 'how do I say no to babysitting my grandkids', { kind: 'sit', id: /\+grandkids$/, script: true });
