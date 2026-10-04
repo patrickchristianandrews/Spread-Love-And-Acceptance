@@ -132,6 +132,8 @@ window.TOL_TIPS = {
     ['connection', 'Send a “thinking of you”.', 'A short message saying you thought of someone can mean a lot, and it asks nothing of them.'],
     ['connection', 'Put the phone face down.', 'When you’re with someone, turning your phone over shows them they have your attention.'],
     ['connection', 'Ask a better question.', 'Swap “How was your day?” for “What was the best bit of your day?” and see where it goes.'],
+    ['connection', 'Ask something you don’t know.', 'Ask one question you don’t already know the answer to, then listen to the whole reply. People keep changing, even the ones we know best.'],
+    ['connection', 'Check what you’ve stopped checking.', 'Things that have been fine for a long time are the ones nobody looks at. Pick one, and take a quick, kind look.'],
     ['connection', 'Share a happy memory.', 'Remind someone of a good time you shared. It can warm you both up.'],
     ['connection', 'Show you’re listening.', 'A nod, a smile or a short “mm, go on” helps people feel heard. Use whatever feels natural to you.'],
     ['connection', 'Plan something to look forward to.', 'Suggest a small plan with someone, like a walk or a call next week. Looking forward to it is part of the joy.'],
@@ -255,6 +257,7 @@ window.TOL_TIPS = {
     ['home', 'Care for something living.', 'Water a plant, feed a pet or tend a window box. Looking after something can feel grounding.'],
 
     // Gratitude
+    ['gratitude', 'Thank the reliable thing.', 'The jobs that always get done are the ones nobody thanks. Name one today and say what it took.'],
     ['gratitude', 'Write down three good things.', 'Tonight, note three things that went well today, however small, and why they happened.'],
     ['gratitude', 'Thank your past self.', 'Think of something you did earlier that made today easier, and quietly thank yourself.'],
     ['gratitude', 'Notice everyday comforts.', 'Running water, a warm jumper, a favorite mug. Take a moment to appreciate one.'],

@@ -260,6 +260,54 @@ talk:
 - How do we greet each other at the end of the day?
 - What new ritual might we try?
 
+@@ complacency | Complacency and getting used to good things
+pillars: V, I
+aka: complacency, complacent, taking for granted, taken for granted, hedonic adaptation, hedonic treadmill, habituation, getting used to it, autopilot, coasting, stale relationship, in a rut
+nut: Complacency is what happens when something has worked for a long time and we stop checking on it. Part of the reason is adaptation: minds get used to whatever stays the same, including good things, so steady kindness and reliable work fade from attention.
+deep:
+Psychologists use “adaptation” (or “habituation”) for the way people return toward a baseline as circumstances become familiar. Philip Brickman and Donald Campbell called the general pattern the “hedonic treadmill” in 1971. A new home or a new relationship feels vivid at first, then ordinary.
+
+In relationships, the cost of adaptation is that the things people depend on most, a steady partner or a reliable routine, are the ones they stop noticing. Appreciation and curiosity fade without anyone deciding to let them go. Nothing breaks on the day the attention stops, so nothing signals that it has.
+
+Researchers who study adaptation suggest that variety and appreciation can slow it. Kennon Sheldon, Julia Boehm and Sonja Lyubomirsky proposed that people keep good things feeling fresh by varying them and by deliberately appreciating them. In couples, Arthur Aron’s self-expansion model points the same way: shared novelty, such as trying something new together, is linked with better relationship quality.
+
+Complacency is not the same as contentment or acceptance. Contentment can look closely at what is good and enjoy it. Complacency does not look. A small, regular re-check, such as a real question and a specific thank-you each week, is a practical counter. It should stay light: a look, not a trial.
+
+Telling yourself everything is fine can also be a way of staying safe in a relationship where someone feels afraid or controlled. That is not complacency, and it calls for support from someone trusted or a qualified professional.
+research:
+Brickman and Campbell’s 1971 chapter introduced the hedonic treadmill. Lyubomirsky’s 2011 review, “Hedonic adaptation to positive and negative experiences,” summarizes evidence that people often adapt to positive changes quickly. Aron and colleagues (2000) found that couples who took part in novel, mildly challenging activities together reported better relationship quality than couples who did pleasant, familiar ones. Effects are modest, and this research is still developing.
+links:
+/complacency.html | Complacency: when “it’s fine” stops being checked
+/turning-toward-in-depth.html#their-world | Turning Toward: ten questions to ask
+/workpapers/wp-13-pll-protocol.html | The 90-second daily check-in (WP-13)
+talk:
+- What are we assuming is fine that we haven’t looked at lately?
+- When did we last ask each other something we didn’t already know the answer to?
+- What did we used to do together that we miss?
+
+@@ shared-language | Shared language and touchstones
+pillars: IV, V
+aka: touchstones, private idioms, personal idioms, inside jokes, pet names, nicknames, couple talk, catchphrases, code words, shared language, shared stories, family words
+nut: Close people build a private vocabulary of inside jokes, pet names, stories and phrases that outsiders wouldn’t understand. Some studies link more of this shared language with greater relationship satisfaction, though the evidence is correlational.
+deep:
+Researchers call these private words and phrases “personal idioms.” Pet names, nicknames, special phrases, code words and jokes carry a whole shared history in a few words. They say “you and I have a past that belongs to us,” which is why a single phrase can calm or delight someone more than a long explanation.
+
+“Touchstones” is a wider idea: any small, shared piece of meaning that reminds people who they are together. It can be a song, a place, an object, a story you retell, or the way you greet each other. Like rituals of connection, touchstones depend on being used. They can go stale when they are said on autopilot or quietly dropped.
+
+Shared words are also practical. Couples and families often agree plain phrases for hard moments in advance, such as a word for “I need a pause” or a quick way to say how full your tank is. Agreed words let people give context fast, and they keep a hard moment from being read as an attack.
+
+There are cautions. A nickname or joke only works if both people feel warm about it, and a joke at someone’s expense can wound even when it is old. Words are not shared equally: people who hear language literally, people from different families or cultures, and people who are new to a group may not read a private phrase the way it was meant. Ask before assuming, and be ready to retire a touchstone that hurts.
+research:
+Hopper, Knapp and Scott described couples’ personal idioms in 1981. Bruess and Pearson (1993) found that idiom use was associated with marital satisfaction over the life cycle, and the same researchers (1997) studied interpersonal rituals in marriage and adult friendship. These studies are correlational: they cannot show that shared language causes satisfaction, only that the two go together. Barbara Fiese’s work on family rituals and symbolic meaning points in a similar direction.
+links:
+/complacency.html#touchstones | Complacency: touchstones and how to refresh them
+/turning-toward.html#rituals | Turning Toward: small rituals
+/wiring-card.html | The Wiring Card: agree what words should mean
+talk:
+- What words, jokes or names do we use that no one else would understand?
+- Is there a phrase or joke of ours we’d like to bring back?
+- What plain words could we agree on for when one of us needs a pause?
+
 @@ social-support | Social support and wellbeing
 pillars: III, IV
 aka: social support, support network, having people, relationships and health, connection matters

@@ -51,6 +51,12 @@ t('tools', 'What are the soundscapes?', { kind: 'card', id: 'soundscapes' });
 t('tools', 'What is Echoes of Gold?', { kind: 'card', id: 'album' });
 t('tools', 'Is there a podcast?', { kind: 'card', id: 'podcast' });
 t('tools', 'What is Turning Toward?', { kind: 'card', id: 'turning', link: '/turning-toward.html' });
+t('tools', 'What is complacency?', { kind: 'term', link: '/complacency.html' });
+t('tools', 'What is the Re-check Drive?', { kind: 'card', id: 'recheckdrive', link: '/recheck-drive.html' });
+t('tools', 'is there a football game about this', { kind: 'card', id: 'recheckdrive', link: '/recheck-drive.html' });
+t('tools', 'What are touchstones?', { link: ['/complacency.html#touchstones', '/library/connection.html#shared-language'] });
+t('tools', 'how do I bring back an inside joke or pet name', { link: ['/complacency.html#touchstones', '/library/connection.html#shared-language'] });
+t('tools', 'how do I stop taking my partner for granted', { link: ['/complacency.html', '/library/connection.html#complacency', '/turning-toward.html'] });
 t('tools', 'What is the check-ins guide?', { kind: 'card', id: 'checkins', link: '/check-ins.html' });
 t('tools', 'What is know your own wiring about?', { kind: 'card', id: 'knowyourself', link: '/know-yourself.html' });
 t('tools', 'What is Wired Differently?', { kind: 'card', id: 'wired' });
@@ -182,6 +188,9 @@ s('My brother keeps borrowing my stuff without asking', 'family+boundaries');
 s('I yelled at my kids and feel guilty', 'kid+repair');
 s('My partner procrastinates on everything', 'partner+motivation', { text: /hard to watch|struggle to get started/ });
 // "roommates" said about a partner means drifting apart, not sharing a flat
+s("My partner and I have gotten complacent and are on autopilot", 'partner+complacency', { link: '/complacency.html', text: /real question|thank-you|re-check/i });
+s("My husband and I have gone stale and are stuck in a rut", 'partner+complacency', { link: '/complacency.html' });
+s("I feel like I'm coasting and on autopilot", 'self+complacency', { link: '/complacency.html' });
 s("I feel like we're roommates", 'partner+distance', { link: '/turning-toward.html', not: /your roommate/i });
 s("My husband and I are just roommates now", 'partner+distance', { link: '/turning-toward.html', text: /turn toward|ritual/i, not: /your roommate/i });
 

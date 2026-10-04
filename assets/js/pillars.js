@@ -63,6 +63,12 @@
     '/turning-toward.html': { p: [4, 5], n: {
       4: ['Notice when someone reaches for you.', 'Answer small bids so they land.'],
       5: ['Notice what you take for granted.', 'Specific thanks keeps the unseen work steady.'] } },
+    '/recheck-drive.html': { p: [5, 4], n: {
+      5: ['Notice what you have stopped checking, and do one small thing about it.', 'Give your context, ask for theirs, and re-check on a schedule, on the same team.'],
+      4: ['Find words for what you mean and what you have been carrying.', 'Say it so it lands, then say back what you heard.'] } },
+    '/complacency.html': { p: [5, 1], n: {
+      5: ['Notice what you have stopped checking, and the default that says “it’s fine.”', 'Put a small, regular re-check into the setup, and say specific thanks.'],
+      1: ['Look at what you assume is fine: your habits, health and load.', 'Notice who has been quietly covering for the setup that “works.”'] } },
     '/check-ins.html': { p: [3, 4], n: {
       3: ['Check you are calm enough to listen.', 'Choose a time and place you can both handle.'],
       4: ['Say the one thing you mean.', 'Acknowledge before you rebut, so it lands.'] } },

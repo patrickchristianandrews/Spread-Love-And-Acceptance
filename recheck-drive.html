@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-NKC6CQ9S66"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-NKC6CQ9S66');
+</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Re-check Drive: A Calm Football Game for Keeping…</title>
+<meta name="description" content="A calm football game with no clock and no way to lose. Do the small, kind things from the complacency playbook for real, and the ball moves toward a field goal.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,500&family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/css/site.css">
+<link rel="stylesheet" href="/assets/css/reading.css">
+<link rel="stylesheet" href="/assets/css/games.css">
+<style>
+  .rd{ position:relative; padding:1rem 1rem 1.2rem; }
+  .rd[hidden], .rd [hidden]{ display:none !important; }
+  .rd h2{ margin:0 0 .4rem; font-family:"Fraunces", Georgia, serif; font-size:1.25rem; color:var(--g-ink); }
+  .rd p{ max-width:none; color:var(--g-ink); }
+  .rd-who{ border:0; padding:0; margin:.4rem 0 1rem; display:flex; flex-wrap:wrap; gap:.5rem; }
+  .rd-who legend{ font-size:.95rem; font-weight:600; margin:0 0 .5rem; padding:0; color:var(--g-ink); }
+  .rd-chip{ position:relative; }
+  .rd-chip input{ position:absolute; inset:0; opacity:0; margin:0; cursor:pointer; }
+  .rd-chip span{ display:inline-block; min-height:44px; padding:.65rem 1rem; border:1px solid var(--g-edge); border-radius:999px; background:var(--g-tile); color:var(--g-ink); font-size:.95rem; }
+  .rd-chip input:checked + span{ background:#3C3350; color:#FFF8EE; border-color:#3C3350; }
+  .rd-chip input:focus-visible + span{ outline:2px solid var(--focus, #5B4BA8); outline-offset:2px; }
+  .rd-btn{ font:inherit; font-size:.95rem; font-weight:600; min-height:44px; padding:.5rem 1.15rem; border-radius:999px; border:1px solid var(--g-edge); background:var(--g-tile); color:var(--g-ink); cursor:pointer; }
+  .rd-btn:hover{ background:var(--g-accent); }
+  .rd-btn.is-primary{ background:#3C3350; border-color:#3C3350; color:#FFF8EE; }
+  .rd-btn.is-primary:hover{ background:#54457A; }
+  .rd-btn:focus-visible, .rd-card:focus-visible{ outline:2px solid var(--focus, #5B4BA8); outline-offset:2px; }
+  .rd-row{ display:flex; flex-wrap:wrap; gap:.5rem .75rem; align-items:center; margin:.6rem 0 0; }
+
+  .rd-score{ display:flex; justify-content:space-between; align-items:center; gap:.5rem; margin:0 0 .5rem; padding:.45rem .9rem; border-radius:14px; background:#2F2745; color:#FFF8EE; font-family:"IBM Plex Mono", ui-monospace, monospace; font-size:.82rem; letter-spacing:.04em; }
+  .rd-score b{ font-size:1.25rem; margin-left:.25rem; }
+  .rd-score .rd-mid{ font-size:.78rem; text-align:center; color:#F0E6C8; }
+  .rd-field{ display:block; width:100%; height:auto; border-radius:14px; box-shadow:0 6px 18px rgba(40,60,40,.25); }
+  .rd-ball{ transition:transform .9s cubic-bezier(.3,.1,.2,1); }
+  .rd-mark{ transition:transform .9s cubic-bezier(.3,.1,.2,1); }
+  .rd-status{ margin:.7rem 0 .2rem; font-weight:600; }
+  .rd-sub{ margin:0 0 .6rem; font-size:.92rem; color:var(--g-soft) !important; }
+  .rd-badges{ display:flex; flex-wrap:wrap; gap:.4rem; margin:.2rem 0 .8rem; }
+  .rd-badge{ display:inline-flex; gap:.35rem; align-items:center; padding:.2rem .7rem; border-radius:999px; font-size:.82rem; border:1px dashed var(--g-edge); color:var(--g-soft); background:transparent; }
+  .rd-badge.is-on{ border-style:solid; background:var(--g-found); color:#244634; }
+
+  .rd-hand{ display:grid; grid-template-columns:repeat(auto-fit, minmax(14rem, 1fr)); gap:.7rem; margin:.4rem 0; }
+  .rd-card{ text-align:left; font:inherit; display:flex; flex-direction:column; gap:.3rem; padding:.8rem .9rem; border-radius:16px; border:1px solid var(--g-edge); background:var(--g-tile); color:var(--g-ink); cursor:pointer; min-height:44px; }
+  .rd-card:hover{ transform:translateY(-2px); box-shadow:0 8px 20px rgba(60,50,80,.14); }
+  .rd-cat{ font-family:"IBM Plex Mono", ui-monospace, monospace; font-size:.7rem; letter-spacing:.07em; text-transform:uppercase; color:var(--g-soft); }
+  .rd-card strong{ font-family:"Fraunces", Georgia, serif; font-size:1.05rem; font-weight:600; }
+  .rd-yds{ font-size:.82rem; font-weight:600; color:#2E6B47; }
+  .rd-sheet{ margin:.8rem 0 0; padding:1rem 1.1rem; border-radius:18px; border:2px solid #3C3350; background:var(--g-tile); }
+  .rd-sheet h3{ margin:0 0 .3rem; font-family:"Fraunces", Georgia, serif; font-size:1.2rem; color:var(--g-ink); }
+  .rd-sheet label{ display:block; font-size:.85rem; font-weight:600; margin:.7rem 0 .25rem; color:var(--g-ink); }
+  .rd-sheet textarea{ width:100%; min-height:5.2rem; font:inherit; font-size:1rem; line-height:1.5; padding:.6rem .75rem; border-radius:12px; border:1px solid var(--g-edge); background:#FFFDF8; color:#3C3350; resize:vertical; }
+  .rd-honest{ font-size:.85rem; color:var(--g-soft) !important; margin:.6rem 0 0; }
+  .rd-kick{ margin:.9rem 0 0; padding:1rem 1.1rem; border-radius:18px; background:linear-gradient(135deg,#FFF3C8,#FFE49A); color:#4B3A0E; text-align:center; }
+  .rd-kick p{ color:#4B3A0E !important; margin:.2rem 0 .7rem; }
+  .rd-done{ margin:.9rem 0 0; padding:1.1rem 1.2rem; border-radius:18px; background:var(--g-found); color:#244634; }
+  .rd-done h2{ color:#244634; }
+  .rd-done p{ color:#244634 !important; }
+  .rd-log{ margin:.8rem 0 0; font-size:.92rem; color:var(--g-ink); }
+  .rd-log summary{ cursor:pointer; font-weight:600; min-height:44px; display:flex; align-items:center; }
+  .rd-log ol{ margin:.2rem 0 .5rem; padding-left:1.3rem; }
+  .rd-total{ margin:.8rem 0 0; font-size:.82rem; color:var(--g-soft) !important; }
+  .rd-heart{ position:fixed; z-index:50; pointer-events:none; font-size:1.4rem; animation:rd-float 3.2s ease-out forwards; }
+  @keyframes rd-float{ from{ transform:translateY(0) scale(.8); opacity:1; } to{ transform:translateY(-70vh) scale(1.3); opacity:0; } }
+  @media (prefers-reduced-motion: reduce){
+    .rd-ball, .rd-mark{ transition:none; }
+    .rd-card:hover{ transform:none; }
+    .rd-heart{ animation:none; display:none; }
+  }
+  @media (max-width:520px){
+    .rd{ padding:.8rem .7rem 1rem; }
+    .rd-score{ font-size:.74rem; padding:.4rem .6rem; }
+    .rd-score .rd-mid{ font-size:.7rem; }
+  }
+  @media print{ .rd{ display:none; } }
+</style>
+<script src="/assets/js/site.js" defer></script>
+<script src="/assets/js/recheck-drive.js" defer></script>
+<!-- seo:start -->
+<link rel="canonical" href="https://spreadloveandacceptance.com/recheck-drive.html">
+<link rel="alternate" hreflang="en-us" href="https://spreadloveandacceptance.com/recheck-drive.html">
+<link rel="alternate" hreflang="x-default" href="https://spreadloveandacceptance.com/recheck-drive.html">
+<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+<meta name="keywords" content="self-help, relationships, kindness, love, appreciation, acceptance, connection, communication, calm, peace, harmony, reconciliation, emotional wellbeing, self-discovery, fairness at home, mental load, invisible work, free self-help tools, communication tool, tone checker, how a message lands, repair after an argument, neurodiversity, listening">
+<meta name="author" content="Christian, Spread Love &amp; Acceptance">
+<meta name="application-name" content="Spread Love &amp; Acceptance">
+<meta name="theme-color" content="#F5EFDE">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" href="/assets/icons/icon.svg" type="image/svg+xml">
+<link rel="icon" href="/assets/icons/favicon-32.png" type="image/png" sizes="32x32">
+<link rel="icon" href="/assets/icons/favicon-16.png" type="image/png" sizes="16x16">
+<link rel="apple-touch-icon" href="/assets/icons/apple-touch-icon-180.png" sizes="180x180">
+<link rel="manifest" href="/manifest.webmanifest">
+<meta property="og:site_name" content="Spread Love &amp; Acceptance">
+<meta property="og:title" content="The Re-check Drive: A Calm Football Game for Keeping…">
+<meta property="og:description" content="A calm football game with no clock and no way to lose. Do the small, kind things from the complacency playbook for real, and the ball moves toward a field goal.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://spreadloveandacceptance.com/recheck-drive.html">
+<meta property="og:image" content="https://spreadloveandacceptance.com/assets/img/og-image.png">
+<meta property="og:image:type" content="image/png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Two friends sharing one heart, with two happy pups: Spread Love &amp; Acceptance">
+<meta property="og:locale" content="en_US">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="The Re-check Drive: A Calm Football Game for Keeping…">
+<meta name="twitter:description" content="A calm football game with no clock and no way to lose. Do the small, kind things from the complacency playbook for real, and the ball moves toward a field goal.">
+<meta name="twitter:image" content="https://spreadloveandacceptance.com/assets/img/og-image.png">
+<meta name="twitter:image:alt" content="Two friends sharing one heart, with two happy pups: Spread Love &amp; Acceptance">
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@id":"https://spreadloveandacceptance.com/recheck-drive.html#page","name":"The Re-check Drive: A Calm Football Game for Keeping…","headline":"The Re-check Drive: A Calm Football Game for Keeping…","description":"A calm football game with no clock and no way to lose. Do the small, kind things from the complacency playbook for real, and the ball moves toward a field goal.","url":"https://spreadloveandacceptance.com/recheck-drive.html","inLanguage":"en-US","isAccessibleForFree":true,"keywords":"self-help, relationships, kindness, love, appreciation, acceptance, connection, communication, calm, peace, harmony, reconciliation, emotional wellbeing, self-discovery, fairness at home, mental load, invisible work, free self-help tools, communication tool, tone checker, how a message lands, repair after an argument, neurodiversity, listening","publisher":{"@type":"Organization","@id":"https://spreadloveandacceptance.com/#org","name":"Spread Love & Acceptance","url":"https://spreadloveandacceptance.com/","logo":{"@type":"ImageObject","url":"https://spreadloveandacceptance.com/assets/img/logo-stacked.png"}},"isPartOf":{"@type":"WebSite","@id":"https://spreadloveandacceptance.com/#website","name":"Spread Love & Acceptance","url":"https://spreadloveandacceptance.com/"},"datePublished":"2026-10-04","dateModified":"2026-10-04","image":"https://spreadloveandacceptance.com/assets/img/og-image.png","primaryImageOfPage":{"@type":"ImageObject","url":"https://spreadloveandacceptance.com/assets/img/og-image.png"},"@type":"WebApplication","applicationCategory":"GameApplication","operatingSystem":"Any (web browser)","browserRequirements":"Requires JavaScript","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Spread Love & Acceptance","item":"https://spreadloveandacceptance.com/"},{"@type":"ListItem","position":2,"name":"The Re-check Drive: A Calm Football Game for Keeping…","item":"https://spreadloveandacceptance.com/recheck-drive.html"}]}]}</script>
+<!-- seo:end -->
+</head>
+<body data-no-tip>
+<main class="read">
+<header class="read-head"><p class="read-code">New &middot; a calm game</p><h1>The Re-check Drive</h1></header>
+
+<p class="simple-lede">A football drive where you can’t lose. Do the small, kind things from the <a href="/complacency.html">complacency playbook</a> for real: notice, ask, thank, share your side, ask for theirs. Each one moves the ball down the field toward a field goal. There’s no clock, and the Rut never scores.</p>
+<p class="pillar-note"><strong>Where this fits:</strong> This game puts <a href="/five-pillars.html#quiet-incentives">Pillar V, Notice the quiet incentives</a> to work, with <a href="/five-pillars.html#tune-signals">Pillar IV, Tune how you send and receive</a>. <strong>In you:</strong> notice what you’ve stopped checking. <strong>Between you and others:</strong> give your context, ask for theirs, and re-check on a schedule, on the same team.</p>
+
+<section class="gm-board rd" id="rd" aria-label="The Re-check Drive">
+
+  <div id="rd-setup">
+    <h2>Who is this drive for?</h2>
+    <p>Pick one person, or yourself. You’ll play it as the two of you against the Rut, the quiet drift that sets in when “it’s fine” stops being checked.</p>
+    <fieldset class="rd-who" id="rd-who">
+      <legend>Choose who it’s for</legend>
+    </fieldset>
+    <div class="rd-row"><button type="button" class="rd-btn is-primary" id="rd-start">Start the drive</button></div>
+    <noscript><p>This game needs JavaScript. The same plays are in the <a href="/complacency.html">Complacency guide</a>.</p></noscript>
+  </div>
+
+  <div id="rd-game" hidden>
+    <div class="rd-score" aria-label="Scoreboard">
+      <span>US<b id="rd-us">0</b></span>
+      <span class="rd-mid" id="rd-down">1st &amp; 10</span>
+      <span>THE RUT<b>0</b></span>
+    </div>
+    <svg class="rd-field" id="rd-svg" viewBox="0 0 1000 300" role="img" aria-label="A football field"></svg>
+    <p class="rd-status" id="rd-status" aria-live="polite"></p>
+    <p class="rd-sub" id="rd-sub"></p>
+    <div class="rd-badges" aria-label="Both sides’ context">
+      <span class="rd-badge" id="rd-b-mine">&#9675; Your context shared</span>
+      <span class="rd-badge" id="rd-b-theirs">&#9675; Their context asked for</span>
+    </div>
+
+    <div id="rd-handwrap">
+      <h2 id="rd-hand-h">Call a play</h2>
+      <div class="rd-hand" id="rd-hand" role="group" aria-labelledby="rd-hand-h"></div>
+      <div class="rd-row"><button type="button" class="rd-btn" id="rd-shuffle">Show me different plays</button></div>
+    </div>
+
+    <section class="rd-sheet" id="rd-sheet" aria-live="polite" hidden></section>
+
+    <div class="rd-kick" id="rd-kick" hidden>
+      <h2>You’re in field-goal range</h2>
+      <p>Kick whenever you’re ready, or call another play first for the extra yards.</p>
+      <button type="button" class="rd-btn is-primary" id="rd-kick-btn">Kick the field goal</button>
+    </div>
+
+    <div class="rd-done" id="rd-done" hidden role="status">
+      <h2 id="rd-done-h">It’s good!</h2>
+      <p id="rd-done-p"></p>
+      <div class="rd-row">
+        <button type="button" class="rd-btn" id="rd-copy">Copy my drive</button>
+        <button type="button" class="rd-btn is-primary" id="rd-again">Start a new drive</button>
+      </div>
+    </div>
+
+    <details class="rd-log" id="rd-log">
+      <summary>My drive so far</summary>
+      <ol id="rd-log-list"></ol>
+    </details>
+    <div class="rd-row"><button type="button" class="rd-btn" id="rd-reset">Start over</button></div>
+    <p class="rd-total" id="rd-total"></p>
+  </div>
+</section>
+
+<div class="try-this">
+  <p><strong>How it works:</strong> Call a play, do it in real life, then tell the game you did. The ball moves only when you say so. Nobody checks but you, and nothing you type is sent anywhere. Your drive is saved only in this browser, and “Start over” erases it.</p>
+  <p><a href="/complacency.html">Read the Complacency guide &rarr;</a> <a href="/check-ins.html">Check-ins</a> <a href="/turning-toward.html">Turning Toward</a></p>
+</div>
+</main>
+</body>
+</html>

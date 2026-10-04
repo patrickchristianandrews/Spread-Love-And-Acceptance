@@ -2329,6 +2329,118 @@
       ]
     },
     {
+      "id": "complacency",
+      "kind": "tool",
+      "name": "the Complacency guide",
+      "keys": [
+        "complacency",
+        "complacent",
+        "~taking for granted",
+        "~taken for granted",
+        "~autopilot",
+        "~coasting",
+        "gone stale",
+        "in a rut",
+        "~hedonic adaptation",
+        "~getting used to it"
+      ],
+      "what": "Complacency is what happens when something has worked for a long time and you stop checking on it. It isn’t laziness or a lack of love. It’s a setup nobody has looked at lately. The Complacency guide covers the quiet signs, how it shows up in you, partners, family, friends, housemates and coworkers, how it differs from contentment and acceptance, and small, regular re-checks.",
+      "how": [
+        "Notice the quiet signs: “fine” is the whole conversation, thanks has become a reflex, “we’ve always done it this way” is the reason.",
+        "Ask one real question you don’t already know the answer to, and listen to all of it.",
+        "Say one specific thank-you a week.",
+        "Put a small re-check on the calendar: daily 90-second check-in, weekly question and thanks, monthly look-back, quarterly “does this still work for everyone?”",
+        "Keep it light: a re-check is a look, not a trial."
+      ],
+      "pillar": "Pillar V, Notice the quiet incentives, and Pillar I, See the whole load.",
+      "links": [
+        [
+          "Complacency",
+          "/complacency.html"
+        ],
+        [
+          "The full guide",
+          "/complacency-in-depth.html"
+        ],
+        [
+          "Ten questions to ask (Turning Toward)",
+          "/turning-toward-in-depth.html#their-world"
+        ],
+        [
+          "Complacency (Library)",
+          "/library/connection.html#complacency"
+        ]
+      ]
+    },
+    {
+      "id": "recheckdrive",
+      "kind": "tool",
+      "name": "the Re-check Drive",
+      "keys": [
+        "re check drive",
+        "recheck drive",
+        "~football game",
+        "~field goal",
+        "complacency game",
+        "playbook game"
+      ],
+      "what": "The Re-check Drive is a calm football game made from the complacency playbook. You pick who it’s for (yourself or someone close), call a play like “ask a question you don’t know the answer to,” do it for real, and tell the game you did. Each one moves the ball toward a field goal. There’s no clock, no opponent that can score, and no way to lose.",
+      "how": [
+        "Pick who the drive is for, then tap Start the drive.",
+        "Call a play from your hand, do it in real life, and tap “I did it.” “Not today” costs nothing.",
+        "Share your own context and ask for theirs: both sides’ context is part of a good drive.",
+        "When you reach field-goal range, kick it. Your drive is saved only in your browser."
+      ],
+      "pillar": "Pillar V, Notice the quiet incentives, with Pillar IV, Tune how you send and receive.",
+      "links": [
+        [
+          "The Re-check Drive",
+          "/recheck-drive.html"
+        ],
+        [
+          "Complacency",
+          "/complacency.html"
+        ]
+      ]
+    },
+    {
+      "id": "touchstones",
+      "kind": "tool",
+      "name": "touchstones",
+      "keys": [
+        "touchstone",
+        "touchstones",
+        "~inside joke",
+        "~pet name",
+        "~code word",
+        "~private idiom",
+        "~shared language",
+        "~shared phrase"
+      ],
+      "what": "A touchstone is a small, shared piece of language or meaning that says “we’re us”: an inside joke, a pet name, the way you say hello, a song, a place or a story you retell. A few words carry a whole history. They can go stale when they’re said on autopilot, and they’re one of the quickest ways to bring warmth back.",
+      "how": [
+        "Retell a story from both sides: how you met, or how a joke began.",
+        "Say an old phrase or pet name on purpose, and see if it still lands.",
+        "Agree plain words for hard moments in advance, like a weather word (“my sky is clear, gusty or fogged in”) or a pause word (“pause, back at eight”).",
+        "Retire any nickname or joke that hurts, and ask before assuming the words are shared."
+      ],
+      "pillar": "Pillar IV, Tune how you send and receive, and Pillar V, Notice the quiet incentives.",
+      "links": [
+        [
+          "Touchstones",
+          "/complacency.html#touchstones"
+        ],
+        [
+          "Shared language (Library)",
+          "/library/connection.html#shared-language"
+        ],
+        [
+          "Turning Toward: rituals",
+          "/turning-toward.html#rituals"
+        ]
+      ]
+    },
+    {
       "id": "knowyourself",
       "kind": "tool",
       "name": "Know your own wiring",
