@@ -33,6 +33,19 @@
     gap: 24px;
   }
 
+  #senses{ margin:0 0 2rem; }
+  .sn-stage{ position:relative; margin:1rem 0 .8rem; border-radius:18px; overflow:hidden; border:1px solid #3A3566; background:#171A34; }
+  #sn-cv{ display:block; width:100%; }
+  .sn-idle{ position:absolute; inset:auto 0 .9rem 0; margin:0; text-align:center; color:#D8D2F0; font-size:.95rem; padding:0 1rem; }
+  .sn-row{ display:flex; flex-wrap:wrap; align-items:center; gap:.4rem; margin:.4rem 0; }
+  .sn-row[hidden]{ display:none; }
+  .sn-l{ font-family:"IBM Plex Mono", monospace; font-size:.8rem; text-transform:uppercase; letter-spacing:.08em; color:var(--ink-soft); min-width:3.2rem; }
+  .sn-b{ font:inherit; font-size:.92rem; min-height:44px; padding:.3rem .9rem; border-radius:999px; border:1px solid #E6D6EE; background:#fff; color:#4E3F6B; cursor:pointer; }
+  .sn-b[aria-pressed="true"]{ background:#EDE3F8; border-color:#B9A0E0; font-weight:600; }
+  .sn-b:focus-visible{ outline:2px solid var(--focus); outline-offset:2px; }
+  .sn-test{ border-style:dashed; }
+  .sn-note{ margin:.6rem 0 0; font-size:.9rem; color:var(--ink-soft); line-height:1.55; max-width:65ch; }
+  .sn-status{ margin:.3rem 0 0; min-height:1.3em; font-size:.88rem; color:#2F5A3C; }
   .phones-note{ margin:0 0 1.2rem; padding:.7rem 1rem; border-radius:14px; background:#F3EEF9; border:1px solid #D9C8F0; color:#4E3F6B; font-size:.95rem; line-height:1.5; }
   #live{ margin-top:2.5rem; }
   .live-h{ font-family:"Fraunces", Georgia, serif; font-size:1.5rem; margin:0 0 .5rem; }
@@ -165,7 +178,7 @@
     <section id="catalog">
       <div class="kicker">Audio</div>
       <h1 class="tol-page-h">Soundscape Catalog: calm music and relaxing soundscapes</h1>
-      <p class="lede">Every track below has actually been produced and is ready to hear. This page grows one real track at a time, not from a planned track list.</p>
+      <p class="lede">Every track below has actually been produced and is ready to hear. You can now also <a href="#senses">see the sound and feel it</a>: a picture that moves with whatever is playing, and gentle vibration on Android phones. This page grows one real track at a time, not from a planned track list.</p>
 
       <div class="catalog-note">
         <p><strong>A note on what these are:</strong> these are ambient, atmospheric audio pieces, not a validated therapeutic or clinical tool. Some people find ambient and low-frequency audio calming as part of a personal listening habit. That's a matter of personal taste, not an established treatment.</p>
@@ -173,6 +186,8 @@
       </div>
 
       <p class="phones-note"><span aria-hidden="true">&#127911;</span> <strong>Soundscapes sound best with headphones.</strong> The deep, low tones and the gentle left-to-right movement are much of what makes them calming, and small speakers can’t carry them.</p>
+
+      <section id="senses" aria-labelledby="senses-h"></section>
 
       <div class="track-list">
 
@@ -265,6 +280,7 @@
     </section>
     <script src="/assets/js/breathe.js" defer></script>
     <script src="/assets/js/soundscapes-live.js" defer></script>
+    <script src="/assets/js/sound-senses.js" defer></script>
     <script>
       document.addEventListener('DOMContentLoaded', function () {
         // the first four are the Breathe break's own beds; the others come from soundscapes-live.js
@@ -279,6 +295,7 @@
         }
         function stopLive(fade) {
           if (eng) { eng.end(); eng = null; }
+          if (window.TOLSenses) window.TOLSenses.engine(null);
           if (LIVE) LIVE.stop(fade);
           playing = ''; label();
         }
@@ -289,11 +306,13 @@
             players.forEach(function (a) { if (!a.paused) a.pause(); });
             if (own(name)) {
               if (eng) { eng.end(); eng = null; }
+              if (window.TOLSenses) window.TOLSenses.engine(null);
               if (!LIVE.start(name)) return;
             } else {
               if (!window.TOLBreathe) return;
               if (LIVE) LIVE.stop(0.6);
               if (!eng) { eng = window.TOLBreathe.Engine(); if (!eng) return; eng.start(name); } else eng.bed(name);
+              if (window.TOLSenses) window.TOLSenses.engine(eng, name);
             }
             playing = name; label();
           });

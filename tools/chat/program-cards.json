@@ -4922,6 +4922,42 @@
           "/turning-toward.html#thanks"
         ]
       ]
+    },
+    {
+      "id": "senses",
+      "kind": "tool",
+      "name": "See and feel the sound",
+      "keys": [
+        "haptic",
+        "haptics",
+        "vibration",
+        "vibrate",
+        "feel the sound",
+        "see the sound",
+        "see and feel",
+        "~feel sound",
+        "~see sound",
+        "~vibrate with the music",
+        "~buzz"
+      ],
+      "what": "The Soundscapes page can draw whatever is playing as a moving picture (aurora, rings or wave), and on an Android phone with Chrome it can also vibrate gently with the sound: a rumble that follows the low tones, a beat, or a steady heartbeat. Vibration is off until you choose a strength. iPhones can’t vibrate from a web page, so there you can see the sound and feel it through the speaker or headphones.",
+      "how": [
+        "Open Soundscapes and press play on any track or live soundscape.",
+        "Pick how to see it: Aurora, Rings or Wave. With reduced motion on, you get a still, slowly changing glow.",
+        "On an Android phone, choose Soft, Medium or Strong under Feel, then pick Rumble, Beat or Heartbeat. Try a pulse first.",
+        "The Upset right now page can also buzz in time with its breathing pacer."
+      ],
+      "pillar": "Pillar III, Read your state first.",
+      "links": [
+        [
+          "See and feel the sound",
+          "/soundscapes.html#senses"
+        ],
+        [
+          "Upset right now?",
+          "/upset-right-now.html"
+        ]
+      ]
     }
   ],
   "clarify": [

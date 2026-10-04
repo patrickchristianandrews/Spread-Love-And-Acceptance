@@ -97,6 +97,7 @@ First, each of you says what you heard the other say, and checks it: “What I h
 <div class="sx-pace no-bubble">
 <output id="px-out" role="status" aria-live="polite">Press start when you are ready.</output>
 <button type="button" class="sx-btn" id="px-btn">Start the breathing pacer</button>
+<p id="px-buzz-row" hidden style="margin:.8rem 0 0"><label style="display:inline-flex;gap:.5rem;align-items:center;min-height:44px;cursor:pointer"><input type="checkbox" id="px-buzz" style="width:1.25rem;height:1.25rem"> Feel it too: buzz with each count (short taps in, longer ones out)</label></p>
 </div>
 
 <div class="sx-safe no-bubble" role="note">
@@ -127,12 +128,15 @@ First, each of you says what you heard the other say, and checks it: “What I h
 (function () {
   'use strict';
   var out = document.getElementById('px-out'), btn = document.getElementById('px-btn'), t = null, running = false;
+  var buzz = document.getElementById('px-buzz'), buzzRow = document.getElementById('px-buzz-row');
+  if (typeof navigator.vibrate === 'function' && buzzRow) buzzRow.hidden = false; // phones that can vibrate only; off until ticked
   var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
-  function stop(msg) { clearTimeout(t); running = false; btn.textContent = 'Start the breathing pacer'; out.textContent = msg || 'Press start when you are ready.'; }
+  function stop(msg) { clearTimeout(t); running = false; try { if (navigator.vibrate) navigator.vibrate(0); } catch (e) {} btn.textContent = 'Start the breathing pacer'; out.textContent = msg || 'Press start when you are ready.'; }
   function run(round, phase, n) {
     if (!running) return;
     var len = phase === 'in' ? 4 : 6;
     out.textContent = (phase === 'in' ? 'Breathe in … ' : 'Breathe out … ') + n + '   (round ' + round + ' of 5)';
+    if (buzz && buzz.checked) { try { navigator.vibrate(phase === 'in' ? 22 : 70); } catch (e) {} }
     t = setTimeout(function () {
       if (n < len) return run(round, phase, n + 1);
       if (phase === 'in') return run(round, 'out', 1);

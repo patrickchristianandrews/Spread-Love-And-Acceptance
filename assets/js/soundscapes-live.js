@@ -6,6 +6,7 @@
 (function () {
   'use strict';
   var AC = null, out = null, nodes = [], timers = [], cur = '';
+  var an = null; // an analyser for the "see and feel the sound" panel (sound-senses.js)
 
   function ctx() {
     if (AC) return AC;
@@ -132,6 +133,7 @@
     if (cur) stop(0.8);
     if (AC.state === 'suspended') AC.resume();
     out = AC.createGain(); out.gain.value = 0; out.connect(AC.destination);
+    if (an) { try { out.connect(an); } catch (e) {} }
     out.gain.linearRampToValueAtTime(0.9, AC.currentTime + 2.5);
     cur = name;
     BEDS[name]();
@@ -139,5 +141,12 @@
   }
   // the site's Quiet mode, switched on while something plays: fade it out
   document.addEventListener('tol-quiet', function () { try { if (window.TOLQuiet && window.TOLQuiet.on()) stop(1.5); } catch (e) {} });
-  window.TOLLiveSounds = { start: start, stop: stop, playing: function () { return cur; }, names: Object.keys(BEDS) };
+  // an analyser fed by whatever is playing now (made on first ask), for drawing and feeling the sound
+  function analyser() {
+    if (!ctx()) return null;
+    if (!an) { an = AC.createAnalyser(); an.fftSize = 1024; an.smoothingTimeConstant = 0.82; }
+    if (out) { try { out.connect(an); } catch (e) {} }
+    return an;
+  }
+  window.TOLLiveSounds = { start: start, stop: stop, playing: function () { return cur; }, names: Object.keys(BEDS), analyser: analyser };
 })();
