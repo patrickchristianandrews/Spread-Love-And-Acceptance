@@ -8,16 +8,7 @@ TOLBuddies.episodes['s1e4'] = {
   pillar: 'II',
   blurb: 'On the way to the Great Kite Festival at Lighthouse Point, the pals\' kite snaps, the blame flies, and a seaside mystery begins.',
   lesson: 'When something breaks, look at how things were set up before looking for someone to blame.',
-  next: [
-    "Season finale. One night. One forest. And a hill where the stars come down.",
-    "It begins with a walk. It ends with… well, honestly, it also includes a lot of tripping over roots.",
-    "An owl who only speaks in dramatic pauses. A squad of fireflies on a secret mission. A lantern that definitely will not self-destruct in five seconds. (It’s a lantern.)",
-    "A branch to the nose! A hedgehog in a very big hurry! A very large moth in a very small cape!",
-    "Then comes the hill, and a training montage with a lot of rolling backwards, the way every great champion starts.",
-    "Fears get big in the dark. Friends get bigger.",
-    "This is the longest night the pals have ever had, and maybe the best one.",
-    "The Longest Night. Bring a blanket. Bring your biggest heart. Do not bring the sneezing flower."
-  ],
+  next: 'The season finale: a night walk through the forest to the hill where the stars fall, and the longest night the pals have ever had.',
   chapters: [
     { title: 'A kite named Sunny', beats: [
       { scene: 'blank', hour: 12, weather: 'clear' },

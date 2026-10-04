@@ -2272,9 +2272,9 @@
     function showEnd() {
       var ep = P.ep, nid = nextIdOf(P.id), nep = nid ? B.episodes[nid] : null, ce = nid ? catalogEntry(nid) : null;
       var teaser = ep.next || (nep && nep.blurb) || '', ntitle = nep ? nep.title : ce ? ce.title : '';
-      var tlines = Array.isArray(teaser) ? teaser : (teaser ? [teaser] : []);
+      var trailer = Array.isArray(teaser), tlines = trailer ? teaser : [];   // a trailer (a list of lines) is read aloud; a plain teaser stays plain text
       endOv.innerHTML = '<div class="fb-ovc"><p class="fb-k">The end · ' + esc(ep.title) + '</p><h3>What the pals learned</h3><p>' + esc(ep.lesson) + '</p>' +
-        (tlines.length || ntitle ? '<div class="fb-next"><b>Next time on Frequency Buddies' + (ntitle ? ': ' + esc(ntitle) : '') + '</b><div class="fb-trailer">' + tlines.map(function (l) { return '<p>' + esc(l) + '</p>'; }).join('') + '</div>' + (VO.ok && tlines.length ? '<button type="button" class="fb-b fb-hear" aria-pressed="false">🎬 Hear the trailer</button>' : '') + '</div>' : '') +
+        (tlines.length || teaser || ntitle ? '<div class="fb-next"><b>Next time on Frequency Buddies' + (ntitle ? ': ' + esc(ntitle) : '') + '</b>' + (trailer ? '<div class="fb-trailer">' + tlines.map(function (l) { return '<p>' + esc(l) + '</p>'; }).join('') + '</div>' + (VO.ok && tlines.length ? '<button type="button" class="fb-b fb-hear" aria-pressed="false">🎬 Hear the trailer</button>' : '') : esc(teaser)) + '</div>' : '') +
         '<div class="fb-row">' + (nep ? '<a class="fb-b is-main" href="/frequency-buddies.html?ep=' + nid + '">▶ Watch episode ' + nep.number + '</a>' : nid ? '<span class="fb-b" aria-disabled="true">Episode ' + (ce ? ce.n : '') + ' is coming soon</span>' : '') +
         '<button type="button" class="fb-b fb-again">↺ Watch again</button><a class="fb-b" href="/frequency-journey.html#buddies">All episodes</a></div></div>';
       endOv.querySelector('.fb-again').addEventListener('click', restart);

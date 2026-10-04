@@ -9,14 +9,20 @@ TOLBuddies.episodes['s1e5'] = {
   blurb: 'In the season finale, the pals set off through the night forest to see the stars fall, and get turned around in the dark.',
   lesson: 'Some habits pull us so quietly we hardly notice, and once we notice them, we get to choose a new way, together.',
   next: [
-    "The first season is over. But a map has arrived, and so has Professor Puddles.",
-    "A treasure map. A boat that is, technically, a bathtub. A parrot who will not stop doing impressions.",
-    "Not all who wander are lost, but some of them are very, very seasick.",
+    "The first season is over. The treehouse is quiet. The kite is… mostly fixed. Everything is finally calm.",
+    "And then the mail truck arrives. (It is not a mail truck. It is a very confused pelican.)",
+    "In its beak: a map. A very old map. A map signed, in very fancy handwriting, by Professor Puddles.",
+    "One boat. Two pups. A crew of absolutely no sailors. And the boat is, technically, a bathtub.",
+    "Not all who wander are lost. But some of them are very, very seasick.",
     "Waves! Whales! A very polite sea monster who only wants to borrow a cup of sugar!",
     "A seagull steals the map. A crab steals the seagull. Nobody steals the snacks, because Sugarfoot is sitting on them.",
-    "Just keep swimming. (Tidbit tried. It was mostly splashing.)",
-    "Same pals. Bigger waves. Even bigger hearts.",
-    "Frequency Buddies, Season 2. Hold on to your ears."
+    "Tidbit tries to row. The oar flips. The oar hits the bucket. The bucket hits the mast. The mast hits the parrot, who has opinions, and has never once stopped doing impressions.",
+    "A banana peel on a ship! (Of course there is a banana peel on a ship.) It slips Tidbit. It slips Sugarfoot. It slips the captain’s hat, which was not even attached to anyone.",
+    "Tidbit tries to swim. Just keep swimming, she says. It is mostly splashing. It is a lot of splashing.",
+    "They said it could not be done. They also said the bathtub could not float. They were… partly right.",
+    "Fears get big on the open sea. Friends get bigger. Anchors, however, get stuck, in the one place anchors should never get stuck.",
+    "Same pals. Bigger waves. Even bigger hearts. And a pelican with a very good sense of timing.",
+    "Frequency Buddies, Season 2: The Great Big Sea. Hold on to your ears."
   ],
   chapters: [
     { title: 'Starfall night', beats: [

@@ -9,16 +9,7 @@ TOLBuddies.episodes['s1e1'] = {
   pillar: 'III',
   blurb: 'A treetop expedition to finish the treehouse before the big storm, with a lost toolbox, a wobbly rope bridge and a rainy creek crossing.',
   lesson: 'Check your battery before you fix anything: take a pause, pick a time to come back, and then build it better, together.',
-  next: [
-    "A long time ago, in a park not far away…",
-    "The big concert is tonight. The band is ready. The music is perfect. And then… a gust of wind.",
-    "Five song pages. One enormous city. And a sunset that will absolutely not wait.",
-    "Tidbit slips on a banana peel. Sugarfoot slips on the same banana peel. Somehow, the banana peel slips too.",
-    "A runaway tuba! A pie to the face of a very serious pigeon! A giant cinnamon roll rolls down the street after our heroes, Raiders of the Lost Bark style!",
-    "There will be honking. There will be flailing. There will be a trombone exactly where no trombone should ever be.",
-    "This week, the wind has stolen the music, and two pals are going to get it back, one wobbly, wacky note at a time.",
-    "Out of Tune. May the Fetch be with you."
-  ],
+  next: 'A gust scatters the park band’s five song pages across the city, and the pals hunt for every one before the sunset concert.',
   chapters: [
     { title: 'A big plan', beats: [
       { scene: 'blank', hour: 12, weather: 'clear' },
