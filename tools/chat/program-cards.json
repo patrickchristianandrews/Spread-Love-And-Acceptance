@@ -4958,6 +4958,40 @@
           "/upset-right-now.html"
         ]
       ]
+    },
+    {
+      "id": "brainbreak",
+      "kind": "tool",
+      "name": "Brain Breakers and Brain Breaks",
+      "keys": [
+        "brain break",
+        "brain breaks",
+        "brain breaker",
+        "brain breakers",
+        "~take a brain break"
+      ],
+      "what": "Brain Breakers are big, bold instrumental pieces on the Soundscapes page, made for a short break between program steps: come get your brain wrecked, broken in a good way. A Brain Break card sits at the top of the home page and at the end of each program page. Press a button, take about three minutes, and the card then offers the next step in the program. Nothing plays until you press a button, and the only thing kept is a count of breaks on your own device.",
+      "how": [
+        "Press one of the two tracks on the home page or at the end of a chapter or worksheet, or press Surprise me.",
+        "Keep your eyes off the screen if you like. It is about three minutes.",
+        "When it ends, follow the link to the next step in the program.",
+        "Want more? The Brain Breakers section on Soundscapes has both tracks, and See and feel the sound draws and vibrates with them."
+      ],
+      "pillar": "Pillar III, Read your state first.",
+      "links": [
+        [
+          "Brain Breakers",
+          "/soundscapes.html#brain-breakers"
+        ],
+        [
+          "See and feel the sound",
+          "/soundscapes.html#senses"
+        ],
+        [
+          "Start in 10 minutes",
+          "/start-in-10-minutes.html"
+        ]
+      ]
     }
   ],
   "clarify": [

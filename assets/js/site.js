@@ -2506,6 +2506,9 @@
     applyState(isMember);
     // not signed up yet: the "join free to unlock everything" banner on the home page and the occasional invitation elsewhere
     if (!isMember && CONFIG.freePreview) { var ji = document.createElement('script'); ji.src = '/assets/js/join-invite.js'; ji.defer = true; document.head.appendChild(ji); }
+    // Brain Breakers: the bold card on the home page, and a "Brain Break" card ending each program page
+    var BB_PAGE = /^\/(index|start-in-10-minutes|invisible-labor-mental-load|chore-chart-for-couples|how-to-stop-fighting-with-your-partner|neurodivergent-relationships|communication-style-quiz|check-ins|turning-toward|complacency|wired-differently|love-languages|share-the-load|new-parent|co-parenting|prog-01)(-in-depth)?\.html$|^\/(book|workpapers)\/(?!fill\/)/;
+    if ((current === '/index.html' || BB_PAGE.test(current)) && !document.querySelector('meta[http-equiv="Content-Security-Policy"]')) { var bbs = document.createElement('script'); bbs.src = '/assets/js/brain-breaks.js'; bbs.defer = true; document.head.appendChild(bbs); }
     if (location.hash) { var t = document.getElementById(location.hash.slice(1)); if (t) t.scrollIntoView(); }
 
     if (stored && !CONFIG.freePreview) {
