@@ -39,7 +39,7 @@ A transition ritual is a small, regular routine that marks the switch from one r
 
 It doesn’t need to be long. The point is a clear signal to yourself, and ideally an agreement with others (“give me ten minutes when I get in”).
 
-Program: The soundscape The Breath Beneath is designed as a bridge out of intense work before you walk in the door.
+Program: A soft Brain Breaker like Shooting Star, or the Breathe button’s sounds, can act as a bridge out of intense work before you walk in the door.
 
 ## Recovery after a hard day
 aka: recovery; rest and recovery; recharging

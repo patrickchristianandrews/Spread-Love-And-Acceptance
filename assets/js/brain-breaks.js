@@ -81,7 +81,7 @@
       : 'About three minutes. No sign-up, and nothing plays until you press a button.';
     var head = kind === 'end'
       ? '<p class="bb-kick">BRAIN BREAK</p><h2 id="bb-h-end">Finished a step? <em>Break your brain</em> for three minutes.</h2><p>Big instrumental music, then straight back to the program. Breaks work best when they are short and they end.</p>'
-      : '<p class="bb-kick">NEW &middot; BRAIN BREAKERS</p><h2 id="bb-h-home">Come get your brain wrecked. <em>Broken in a good way.</em></h2><p>Big, bold instrumental music made for a three-minute break between program steps. One tap, then back to it.</p>';
+      : '<p class="bb-kick">NEW &middot; BRAIN BREAKERS</p><h2 id="bb-h-home">Come get your brain wrecked. <em>Broken in a good way.</em></h2><p>Three instrumental pieces, from soft and floating to big and cinematic, made for a three-minute break between program steps. One tap, then back to it.</p>';
     el.innerHTML =
       '<div class="bb-bars" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>' + head +
       '<div class="bb-ctl">' +
@@ -90,7 +90,7 @@
       '<div class="bb-now" hidden><p class="bb-line"></p><div class="bb-track" aria-hidden="true"><b></b></div><button type="button" class="bb-alt" data-stop="1">Stop the break</button></div>' +
       '<div class="bb-done" hidden></div>' +
       '<p class="bb-msg" role="status" aria-live="polite"></p>' +
-      '<p class="bb-meta">' + esc(hook) + ' &middot; <a href="/soundscapes.html#finder">Find your sound</a> &middot; <a href="/soundscapes.html#brain-breakers">All Brain Breakers</a> &middot; <a href="/soundscapes.html#senses">See and feel</a></p>';
+      '<p class="bb-meta">' + esc(hook) + ' &middot; <a href="/soundscapes.html#finder">Find your Brain Breaker</a> &middot; <a href="/soundscapes.html#brain-breakers">All Brain Breakers</a> &middot; <a href="/soundscapes.html#senses">See and feel</a></p>';
     var ctl = el.querySelector('.bb-ctl'), now = el.querySelector('.bb-now'), done = el.querySelector('.bb-done'), msg = el.querySelector('.bb-msg'),
         line = el.querySelector('.bb-line'), bar = el.querySelector('.bb-track b');
     var api = {

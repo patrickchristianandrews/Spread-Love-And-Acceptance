@@ -1,16 +1,19 @@
-/* sound-senses.js — "See and feel the sound", the heart of /soundscapes.html.
-   Whatever is playing (a track, a live soundscape or a Breathe-break bed) is listened to with a Web Audio
-   analyser, entirely on this device. Nothing is recorded, saved or sent.
-   SEE: a big stage at the top of the page, drawn live. Five looks: Aurora (soft ribbons), Rings (a ring leaves
+/* sound-senses.js — "See and feel the sound", the heart of /soundscapes.html (the Brain Breakers page).
+   Whichever Brain Breaker is playing is listened to with a Web Audio analyser, entirely on this device.
+   Nothing is recorded, saved or sent.
+   SEE: a big stage at the top of the page, drawn live. Six looks: Stars (a starfield that twinkles with the
+        highs, with shooting stars on the beat), Aurora (soft ribbons), Rings (a ring leaves
         the centre on each low pulse), Tunnel (hexagons rush toward you, faster when it is louder), Bars (a
-        spectrum) and Wave (the sound's own shape). Auto changes the look every so often. It goes full screen.
+        spectrum) and Wave (the sound's own shape). Auto picks looks that suit the track and changes them every so
+        often. Under the stage a live card shows the track's own notes and an energy meter. It goes full screen.
         While something plays and the stage has scrolled away, a slim bar under the header keeps a live
-        picture, the name and a Stop button in view. Every sound on the page has a "See and feel this" button.
+        picture, the name and a Stop button in view. Every track has a "See and feel this" button.
         With reduced motion on, only a still, slowly changing Glow is drawn.
    FEEL: opt-in vibration on phones that allow it (Chrome on Android; iPhones don't). Off until chosen.
-        Rumble follows the low tones, Beat follows pulses, Heartbeat is a steady lub-dub. Pulses are short and
+        Match follows the track (slow heartbeat for Shooting Star, rumble for Thunderous Shimmer, beat for
+        Watching a Shooting Star). Rumble follows the low tones, Beat follows pulses, Heartbeat is a steady lub-dub. Pulses are short and
         never faster than about two a second, and stop when the sound stops or the page is hidden.
-   window.TOLSenses.engine(eng | null, name) lets the page say that a Breathe-break bed is playing. */
+   */
 (function () {
   'use strict';
   var host = document.getElementById('senses');
@@ -20,17 +23,20 @@
   function lsSet(k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
   var RM = !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
   var canVib = typeof navigator.vibrate === 'function';
-  var LOOKS = RM ? ['glow'] : ['auto', 'aurora', 'rings', 'tunnel', 'bars', 'wave'];
-  var ROTATE = ['aurora', 'tunnel', 'rings', 'bars', 'wave'];
+  var LOOKS = RM ? ['glow'] : ['auto', 'stars', 'aurora', 'rings', 'tunnel', 'bars', 'wave'];
+  // what Auto cycles through for each track, and how Match feels it
+  var ROTATE = { star: ['stars', 'aurora', 'wave', 'stars'], shimmer: ['rings', 'bars', 'tunnel', 'stars'], watching: ['tunnel', 'stars', 'aurora', 'bars'], other: ['stars', 'aurora', 'tunnel', 'rings', 'bars', 'wave'] };
+  var TRACKFEEL = { star: 'heart', shimmer: 'rumble', watching: 'beat', other: 'rumble' };
+  var TRACKID = { 'Shooting Star': 'star', 'Thunderous Shimmer': 'shimmer', 'Watching a Shooting Star': 'watching' };
   var LEVELS = ['off', 'soft', 'medium', 'strong'], GAIN = { off: 0, soft: 0.6, medium: 1, strong: 1.7 };
-  var FEELS = ['rumble', 'beat', 'heart'];
+  var FEELS = ['match', 'rumble', 'beat', 'heart'];
   var look = lsGet('tol-sense-look'); if (LOOKS.indexOf(look) < 0) look = LOOKS[0];
   var level = lsGet('tol-haptic'); if (LEVELS.indexOf(level) < 0 || !canVib) level = 'off';
-  var feel = lsGet('tol-haptic-mode'); if (FEELS.indexOf(feel) < 0) feel = 'rumble';
+  var feel = lsGet('tol-haptic-mode'); if (FEELS.indexOf(feel) < 0) feel = 'match';
 
   // ---------- the panel ----------
-  var NAMES = { auto: 'Auto', aurora: 'Aurora', rings: 'Rings', tunnel: 'Tunnel', bars: 'Bars', wave: 'Wave', glow: 'Glow' };
-  var FNAMES = { rumble: 'Rumble', beat: 'Beat', heart: 'Heartbeat' };
+  var NAMES = { auto: 'Auto', stars: 'Stars', aurora: 'Aurora', rings: 'Rings', tunnel: 'Tunnel', bars: 'Bars', wave: 'Wave', glow: 'Glow' };
+  var FNAMES = { match: 'Match the track', rumble: 'Rumble', beat: 'Beat', heart: 'Heartbeat' };
   var LNAMES = { off: 'Off', soft: 'Soft', medium: 'Medium', strong: 'Strong' };
   function btns(group, list, names, cur) {
     return list.map(function (k) { return '<button type="button" class="sn-b" data-' + group + '="' + k + '" aria-pressed="' + (k === cur) + '">' + names[k] + '</button>'; }).join('');
@@ -38,9 +44,10 @@
   host.innerHTML =
     '<p class="sn-kick">The big idea</p>' +
     '<h2 id="senses-h" class="sn-title">See and feel the sound</h2>' +
-    '<p class="sn-lede">Press play on anything on this page and watch it move, or let your phone feel it with you. Everything happens on your device.</p>' +
-    '<div class="sn-stage" id="sn-stage"><canvas id="sn-cv" aria-hidden="true"></canvas><p class="sn-idle" id="sn-idle">Press <strong>See and feel this</strong> on any sound below, or pick one with Find your sound.</p>' +
+    '<p class="sn-lede">Press play on a Brain Breaker and watch it move, or let your phone feel it with you. Each track has its own pictures and its own kind of pulse. Everything happens on your device.</p>' +
+    '<div class="sn-stage" id="sn-stage"><canvas id="sn-cv" aria-hidden="true"></canvas><p class="sn-idle" id="sn-idle">Press <strong>See and feel this</strong> on a track below, or pick one with Find your Brain Breaker.</p>' +
     '<div class="sn-hud"><span class="sn-now" id="sn-now"></span><button type="button" class="sn-b sn-hud-b" id="sn-full" aria-label="Full screen">&#x26F6; Full screen</button></div></div>' +
+    '<div class="sn-info" id="sn-info" hidden aria-live="polite"><div class="sn-info-top"><strong id="sn-info-name"></strong><span class="sn-meter" aria-hidden="true"><i id="sn-meter"></i></span><span class="sn-meter-l">Energy</span></div><dl id="sn-info-fx"></dl></div>' +
     '<div class="sn-row" role="group" aria-label="How to see the sound"><span class="sn-l">See</span>' + btns('look', LOOKS, NAMES, look) + '</div>' +
     '<div class="sn-row" id="sn-feel-row" role="group" aria-label="How strongly to feel the sound"><span class="sn-l">Feel</span>' + btns('level', LEVELS, LNAMES, level) + '</div>' +
     '<div class="sn-row" id="sn-mode-row" role="group" aria-label="What to feel"><span class="sn-l">Like</span>' + btns('feel', FEELS, FNAMES, feel) +
@@ -48,7 +55,7 @@
     '<p class="sn-note" id="sn-note"></p><p class="sn-status" id="sn-status" role="status" aria-live="polite"></p>';
   host.querySelectorAll('p, h2').forEach(function (n) { n.classList.add('no-bubble'); });
   var stage = document.getElementById('sn-stage'), cv = document.getElementById('sn-cv'), g = cv.getContext('2d'), idle = document.getElementById('sn-idle'),
-      status = document.getElementById('sn-status'), note = document.getElementById('sn-note'), nowEl = document.getElementById('sn-now'), fullBtn = document.getElementById('sn-full');
+      status = document.getElementById('sn-status'), infoEl = document.getElementById('sn-info'), infoName = document.getElementById('sn-info-name'), infoFx = document.getElementById('sn-info-fx'), meter = document.getElementById('sn-meter'), note = document.getElementById('sn-note'), nowEl = document.getElementById('sn-now'), fullBtn = document.getElementById('sn-full');
   note.textContent = canVib
     ? 'Vibration is off until you choose a strength. It is short and gentle, uses a little battery, and stops when the sound stops. Low sounds also rumble through a phone speaker or headphones, which is its own kind of feeling.'
     : 'This device cannot vibrate from a web page (iPhones cannot), so you can see the sound here, and feel it through the speaker or headphones. On an Android phone with Chrome you can also feel it as vibration.';
@@ -67,12 +74,11 @@
   function smooth() { return RM ? 'auto' : 'smooth'; }
   function stopAll() {
     document.querySelectorAll('.track-player').forEach(function (a) { try { if (!a.paused) a.pause(); } catch (e) {} });
-    var on = document.querySelector('[data-live][aria-pressed="true"]'); if (on) on.click();
     if (window.TOLBrainBreaks && window.TOLBrainBreaks.stop) try { window.TOLBrainBreaks.stop(); } catch (e) {}
   }
   host.addEventListener('click', function (e) {
     var b = e.target.closest('button'); if (!b) return;
-    if (b.hasAttribute('data-look')) { look = b.getAttribute('data-look'); lsSet('tol-sense-look', look); press('look', look); rings.length = 0; autoAt = performance.now(); say(look === 'auto' ? 'The picture will change every so often.' : 'Seeing sound as ' + NAMES[look] + '.'); }
+    if (b.hasAttribute('data-look')) { look = b.getAttribute('data-look'); lsSet('tol-sense-look', look); press('look', look); rings.length = 0; autoAt = performance.now(); autoI = 0; say(look === 'auto' ? 'The picture will change every so often.' : 'Seeing sound as ' + NAMES[look] + '.'); }
     else if (b.hasAttribute('data-level')) { level = b.getAttribute('data-level'); lsSet('tol-haptic', level); press('level', level); if (level === 'off') stopBuzz(); else { buzz(24, true); } say(level === 'off' ? 'Vibration is off.' : 'Feeling sound: ' + LNAMES[level] + ', ' + FNAMES[feel] + '.'); heartOn = false; }
     else if (b.hasAttribute('data-feel')) { feel = b.getAttribute('data-feel'); lsSet('tol-haptic-mode', feel); press('feel', feel); heartOn = false; stopBuzz(); say('Feeling the sound as ' + FNAMES[feel] + (level === 'off' ? '. Choose a strength above to turn vibration on.' : '.')); }
     else if (b.id === 'sn-test') {
@@ -107,25 +113,16 @@
       var b = document.createElement('button'); b.type = 'button'; b.className = 'sn-see'; b.innerHTML = '&#x1F441; See and feel this';
       b.addEventListener('click', function () {
         document.querySelectorAll('.track-player').forEach(function (o) { if (o !== a && !o.paused) o.pause(); });
-        var on = document.querySelector('[data-live][aria-pressed="true"]'); if (on) on.click();
         var p = a.play(); if (p && p.catch) p.catch(function () { say('Your browser blocked the sound. Press play on the track.'); });
         stage.scrollIntoView({ block: 'center', behavior: smooth() });
       });
       a.parentNode.insertBefore(b, a.nextSibling);
     });
-    document.querySelectorAll('.live-card').forEach(function (card) {
-      var lb = card.querySelector('[data-live]'); if (!lb || card.querySelector('.sn-see')) return;
-      var b = document.createElement('button'); b.type = 'button'; b.className = 'sn-see'; b.innerHTML = '&#x1F441; See and feel this';
-      b.addEventListener('click', function () { if (lb.getAttribute('aria-pressed') !== 'true') lb.click(); stage.scrollIntoView({ block: 'center', behavior: smooth() }); });
-      card.appendChild(b);
-    });
   }
   addSeeButtons();
 
   // ---------- finding what is playing ----------
-  var AC = null, taps = typeof WeakMap === 'function' ? new WeakMap() : null, eng = null, an = null, bufF = null, bufT = null, srcName = '';
-  var engName = '';
-  window.TOLSenses = { engine: function (e, name) { eng = e || null; engName = e && name ? name : ''; } };
+  var AC = null, taps = typeof WeakMap === 'function' ? new WeakMap() : null, an = null, bufF = null, bufT = null, srcName = '', curCard = null;
   function shared() { if (AC) return AC; var C = window.AudioContext || window.webkitAudioContext; if (!C) return null; try { AC = new C(); } catch (e) { AC = null; } return AC; }
   function trackAnalyser(a) {
     var c = shared(); if (!c || !taps) return null;
@@ -140,16 +137,21 @@
     var audios = document.querySelectorAll('.track-player');
     for (var i = 0; i < audios.length; i++) {
       var a = audios[i];
-      if (!a.paused && !a.ended) { var n = trackAnalyser(a); if (n) { var card = a.closest('.track-card'), h = card && card.querySelector('.track-title'); return { an: n, name: h ? h.textContent.replace(/^\d+\.\s*/, '') : 'the track' }; } }
+      if (!a.paused && !a.ended) { var n = trackAnalyser(a); if (n) { var card = a.closest('.track-card'), h = card && card.querySelector('.track-title'); return { an: n, card: card, name: h ? h.textContent.replace(/^\d+\.\s*/, '') : 'the track' }; } }
     }
-    var L = window.TOLLiveSounds;
-    if (L && L.playing && L.playing()) { var la = L.analyser && L.analyser(); if (la) return { an: la, name: L.playing() }; }
-    if (eng && eng.analyser) { var ea = eng.analyser(); if (ea) return { an: ea, name: engName || 'the soundscape' }; }
     return null;
   }
 
+  function trackKey() { return TRACKID[srcName] || 'other'; }
+  function showInfo() {
+    var fx = curCard && curCard.querySelector('.bb-fx'); infoName.textContent = srcName;
+    infoFx.innerHTML = fx ? fx.innerHTML : ''; infoEl.hidden = !fx;
+    infoEl.querySelectorAll('div, dt, dd, dl, strong, span').forEach(function (n) { n.classList.add('no-bubble'); });
+  }
+  function curFeel() { return feel === 'match' ? TRACKFEEL[trackKey()] : feel; }
+
   // ---------- reading the sound ----------
-  var lvl = 0, bass = 0, mid = 0, high = 0, ema = 0, lastBeat = 0, lastRumble = 0, rings = [], t0 = performance.now(), peaks = [], tun = 0, lastT = 0, autoAt = performance.now(), autoI = 0;
+  var stars = [], shoots = [], lvl = 0, bass = 0, mid = 0, high = 0, ema = 0, lastBeat = 0, lastRumble = 0, rings = [], t0 = performance.now(), peaks = [], tun = 0, lastT = 0, autoAt = performance.now(), autoI = 0;
   function band(lo, hi, hz) {
     var a = Math.max(0, Math.floor(lo / hz)), b = Math.min(bufF.length - 1, Math.ceil(hi / hz)), s = 0, n = 0;
     for (var i = a; i <= b; i++) { s += bufF[i]; n++; }
@@ -184,10 +186,11 @@
   }
   function feelStep(r) {
     if (!canVib || level === 'off') { if (heartOn) stopBuzz(); return; }
-    if (feel === 'heart') { if (!heartOn) { heartOn = true; heartbeat(); } return; }
+    var cf = curFeel();
+    if (cf === 'heart') { if (!heartOn) { heartOn = true; heartbeat(); } return; }
     if (heartOn) stopBuzz();
-    if (feel === 'beat') { if (r.beat) buzz(14 + bass * 40); }
-    else if (feel === 'rumble' && bass > 0.06 && r.now - lastRumble > 450) { lastRumble = r.now; buzz(9 + bass * 55); }
+    if (cf === 'beat') { if (r.beat) buzz(14 + bass * 40); }
+    else if (cf === 'rumble' && bass > 0.06 && r.now - lastRumble > 450) { lastRumble = r.now; buzz(9 + bass * 55); }
   }
 
   // ---------- drawing it ----------
@@ -218,7 +221,7 @@
   function drawRings(t, beatNow) {
     bg();
     var cx = W / 2, cy = H / 2, reach = Math.hypot(W, H) / 2;
-    if (beatNow || (feel === 'rumble' && lvl > 0.08 && t - (drawRings.last || 0) > 1700)) { rings.push({ r: 20, a: 0.35 + lvl * 0.6, c: beatNow ? WARM : TEAL }); drawRings.last = t; if (rings.length > 16) rings.shift(); }
+    if (beatNow || (curFeel() === 'rumble' && lvl > 0.08 && t - (drawRings.last || 0) > 1700)) { rings.push({ r: 20, a: 0.35 + lvl * 0.6, c: beatNow ? WARM : TEAL }); drawRings.last = t; if (rings.length > 16) rings.shift(); }
     for (var i = rings.length - 1; i >= 0; i--) {
       var o = rings[i]; o.r += (1.1 + lvl * 2.2) * (H / 280); o.a *= 0.985;
       if (o.a < 0.02 || o.r > reach) { rings.splice(i, 1); continue; }
@@ -227,6 +230,27 @@
     var r = (16 + bass * 34 + mid * 14) * (H / 280), gr = g.createRadialGradient(cx, cy, 2, cx, cy, r * 2.2);
     gr.addColorStop(0, rgba(GOLD, 0.95)); gr.addColorStop(0.5, rgba(WARM, 0.35 + lvl * 0.3)); gr.addColorStop(1, rgba(VIOLET, 0));
     g.fillStyle = gr; g.beginPath(); g.arc(cx, cy, r * 2.2, 0, Math.PI * 2); g.fill();
+  }
+  function drawStars(t, beatNow) {
+    var gr = g.createLinearGradient(0, 0, 0, H); gr.addColorStop(0, '#0B0C22'); gr.addColorStop(1, '#241A4A'); g.fillStyle = gr; g.fillRect(0, 0, W, H);
+    var want = Math.round(60 + W / 6);
+    while (stars.length < want) stars.push({ x: Math.random(), y: Math.random(), z: 0.2 + Math.random() * 0.8, p: Math.random() * 6.28 });
+    // a glow low in the sky that swells with the low tones
+    var ng = g.createRadialGradient(W / 2, H * 1.05, 4, W / 2, H * 1.05, H * (0.55 + bass * 0.7)); ng.addColorStop(0, rgba(WARM, 0.18 + bass * 0.5)); ng.addColorStop(0.5, rgba(VIOLET, 0.1 + mid * 0.25)); ng.addColorStop(1, rgba(VIOLET, 0)); g.fillStyle = ng; g.fillRect(0, 0, W, H);
+    var dt = Math.min(60, t - (drawStars.last || t)); drawStars.last = t;
+    stars.forEach(function (s) {
+      s.x -= (0.00003 + lvl * 0.00012) * s.z * dt; if (s.x < -0.02) { s.x = 1.02; s.y = Math.random(); }
+      var tw = 0.5 + 0.5 * Math.sin(t / 380 * s.z + s.p), a = 0.25 + 0.75 * tw * (0.5 + high * 1.6), r = (0.6 + s.z * 1.6) * (1 + bass * 0.9) * (H / 280);
+      g.fillStyle = rgba(s.z > 0.75 ? GOLD : '255,255,255', Math.min(1, a)); g.beginPath(); g.arc(s.x * W, s.y * H, r, 0, 6.2832); g.fill();
+    });
+    if ((beatNow || (lvl > 0.1 && Math.random() < 0.004 + lvl * 0.01)) && shoots.length < 6) shoots.push({ x: 0.45 + Math.random() * 0.6, y: Math.random() * 0.5, v: 0.5 + Math.random() * 0.6, a: 1 });
+    for (var i = shoots.length - 1; i >= 0; i--) {
+      var o = shoots[i]; o.x -= 0.011 * o.v * (1 + lvl); o.y += 0.006 * o.v * (1 + lvl); o.a -= 0.014;
+      if (o.a <= 0) { shoots.splice(i, 1); continue; }
+      var x = o.x * W, y = o.y * H, tl = 70 * o.v * (H / 280), tg = g.createLinearGradient(x, y, x + tl, y - tl * 0.5);
+      tg.addColorStop(0, rgba('255,246,214', o.a)); tg.addColorStop(1, rgba(GOLD, 0)); g.strokeStyle = tg; g.lineWidth = 2.4; g.beginPath(); g.moveTo(x, y); g.lineTo(x + tl, y - tl * 0.5); g.stroke();
+      g.fillStyle = rgba('255,255,255', o.a); g.beginPath(); g.arc(x, y, 2.4, 0, 6.2832); g.fill();
+    }
   }
   function drawWave() {
     bg();
@@ -296,8 +320,8 @@
     if (now - lastCheck > 400) {
       lastCheck = now;
       var s = findSource();
-      if (s && s.an !== an) { an = s.an; srcName = s.name; idle.hidden = true; say('Seeing ' + srcName + '.'); nowEl.textContent = srcName; dname.textContent = srcName; lastBeat = 0; ema = 0; }
-      else if (!s && an) { an = null; stopBuzz(); idle.hidden = false; rings.length = 0; nowEl.textContent = ''; say('The sound stopped.'); }
+      if (s && s.an !== an) { an = s.an; srcName = s.name; curCard = s.card; showInfo(); idle.hidden = true; say('Seeing ' + srcName + '.'); nowEl.textContent = srcName; dname.textContent = srcName; lastBeat = 0; ema = 0; }
+      else if (!s && an) { an = null; stopBuzz(); idle.hidden = false; rings.length = 0; nowEl.textContent = ''; infoEl.hidden = true; curCard = null; say('The sound stopped.'); }
     }
     showDock(!!an && !visible && !isFull());
     if (!visible && !(an && level !== 'off') && dock.hidden) return;
@@ -309,8 +333,9 @@
     if (!dock.hidden) drawDock();
     if (!visible && !isFull()) return;
     var t = now - t0, cur = look;
-    if (look === 'auto') { if (now - autoAt > 16000) { autoAt = now; autoI = (autoI + 1) % ROTATE.length; rings.length = 0; } cur = ROTATE[autoI]; }
-    if (cur === 'rings') drawRings(t, r.beat); else if (cur === 'wave') drawWave(); else if (cur === 'glow') drawGlow(); else if (cur === 'bars') drawBars(); else if (cur === 'tunnel') drawTunnel(t); else drawAurora(t);
+    if (look === 'auto') { var rot = ROTATE[trackKey()]; if (now - autoAt > 14000) { autoAt = now; autoI = (autoI + 1) % rot.length; rings.length = 0; } cur = rot[autoI % rot.length]; }
+    meter.style.width = Math.round(Math.min(1, lvl * 1.15) * 100) + '%';
+    if (cur === 'stars') drawStars(t, r.beat); else if (cur === 'rings') drawRings(t, r.beat); else if (cur === 'wave') drawWave(); else if (cur === 'glow') drawGlow(); else if (cur === 'bars') drawBars(); else if (cur === 'tunnel') drawTunnel(t); else drawAurora(t);
   }
   window.addEventListener('pagehide', stopBuzz);
   window.addEventListener('resize', function () { if (!dock.hidden) placeDock(); });
