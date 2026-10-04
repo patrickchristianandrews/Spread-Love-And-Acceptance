@@ -2433,3 +2433,52 @@ html.tol-bubbles:not(.tol-nobubbles) main table:where(:not(.no-bubble, .tol-plai
 }
 .tol-drop li.tol-sub{ margin:.45rem 0 .1rem; padding:.45rem .5rem .1rem; }
 .tol-drop{ max-height:calc(100vh - var(--tol-bar-h, 58px) - 1.5rem); overflow-y:auto; overscroll-behavior:contain; }
+
+/* ========================= Share (site.js TOLShare) =========================
+   The quiet "Share this page" button near the end of a page, small Share buttons beside a
+   tool's own Copy, and the share sheet shown where the device has no share menu of its own.
+   Plain on purpose: no text bubbles (tol-plain / no-bubble), 44px targets, and it follows the
+   site's dark look (the page-wide invert) because it uses only text and plain colors. */
+.tol-share-row{ display:flex; flex-wrap:wrap; align-items:center; gap:.5rem; margin:2rem 0 1rem; padding-top:1rem; border-top:1px solid var(--line); max-width:40rem; }
+.tol-share-row.is-inline{ margin:.75rem 0; padding-top:0; border-top:0; }
+.tol-share-row .tol-share-btn, .tol-share-btn.is-small{
+  display:inline-flex; align-items:center; gap:.45rem; min-height:44px; padding:.4rem 1.05rem; box-sizing:border-box;
+  font:600 .95rem/1.2 var(--tol-sans, system-ui, sans-serif); color:#3C3354; background:#FFFDF7;
+  border:1.5px solid #B9A8D6; border-radius:999px; cursor:pointer; }
+.tol-share-btn.is-small{ min-height:44px; padding:.3rem .8rem; font-size:.88rem; vertical-align:middle; }
+.tol-share-row .tol-share-btn:hover, .tol-share-btn.is-small:hover{ background:#F3EEF9; }
+.tol-share-btn:focus-visible, .tol-share-act:focus-visible, .tol-share-close:focus-visible{ outline:3px solid var(--focus, #2B5B8C); outline-offset:2px; }
+.tol-share-ic{ display:inline-block; width:1em; text-align:center; }
+.tol-share-ic::before{ content:"\2197"; }
+.tol-sharesheet{ position:fixed; inset:0; z-index:990; display:flex; align-items:center; justify-content:center; padding:16px; box-sizing:border-box;
+  background:rgba(33,29,23,.4); color:var(--ink, #2B2620); font-family:var(--tol-sans, system-ui, sans-serif); }
+.tol-sharesheet[hidden]{ display:none; }
+.tol-share-card{ box-sizing:border-box; width:min(26rem, 100%); max-height:calc(100vh - 32px); max-height:calc(100dvh - 32px); overflow-y:auto; overscroll-behavior:contain;
+  background:#FFFDF7; border:1.5px solid #B9A8D6; border-radius:20px; padding:1rem 1.1rem 1.1rem; box-shadow:0 18px 50px rgba(33,29,23,.25);
+  animation:tol-share-in .22s var(--ease-out, ease-out); }
+@keyframes tol-share-in{ from{ opacity:0; transform:translateY(12px); } to{ opacity:1; transform:none; } }
+.tol-share-head{ display:flex; align-items:center; justify-content:space-between; gap:1rem; }
+.tol-share-head h2{ margin:0; font:600 1.3rem/1.2 "Fraunces", Georgia, serif; }
+.tol-share-close{ min-height:44px; min-width:44px; padding:.35rem .9rem; font:inherit; font-size:.95rem; color:var(--ink, #2B2620); background:none; border:1px solid #8C826E; border-radius:999px; cursor:pointer; }
+.tol-share-close:hover{ background:var(--paper-deep, #ECE2C4); }
+.tol-sharesheet p{ max-width:none; }
+.tol-share-what{ margin:.5rem 0 .2rem; color:var(--ink-soft, #5A5346); font-size:.95rem; line-height:1.4; overflow-wrap:anywhere; }
+.tol-share-preview{ margin:.5rem 0 0; padding:.6rem .75rem; max-height:9rem; overflow-y:auto; white-space:pre-wrap; overflow-wrap:anywhere;
+  font-size:.9rem; line-height:1.45; background:#F7F1E2; border:1px solid var(--line, #D9CBA3); border-radius:12px; }
+.tol-share-acts{ display:grid; grid-template-columns:1fr 1fr; gap:.5rem; margin:.9rem 0 .3rem; }
+.tol-share-act{ display:flex; align-items:center; justify-content:center; min-height:44px; padding:.4rem .6rem; box-sizing:border-box; text-align:center;
+  font:600 .95rem/1.2 var(--tol-sans, system-ui, sans-serif); color:#3C3354 !important; text-decoration:none !important; background:#fff;
+  border:1.5px solid #D9C8F0; border-radius:14px; cursor:pointer; }
+.tol-share-act[hidden]{ display:none; }
+.tol-share-act:hover{ background:#F3EEF9; }
+.tol-share-act[data-act="copy"]{ grid-column:1 / -1; background:#EFE8FA; border-color:#B9A8D6; }
+.tol-share-status{ min-height:1.2em; margin:.2rem 0; font-size:.9rem; color:#2F5A3C; }
+.tol-share-note{ margin:.3rem 0 0; font-size:.85rem; line-height:1.4; color:var(--ink-soft, #5A5346); }
+@media (max-width:480px){
+  .tol-sharesheet{ align-items:flex-end; padding:0; }
+  .tol-share-card{ width:100%; border-radius:20px 20px 0 0; max-height:92vh; max-height:92dvh; padding-bottom:calc(1.1rem + env(safe-area-inset-bottom, 0px)); }
+}
+@media (prefers-reduced-motion: reduce){ .tol-share-card{ animation:none; } }
+html.tol-still .tol-share-card{ animation:none; }
+@media print{ .tol-share-row, .tol-sharesheet, .tol-share-btn{ display:none !important; } }
+/* ========================= end Share ========================= */

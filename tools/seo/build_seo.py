@@ -214,7 +214,7 @@ SEARCH.update({
  'growing-up.html': ('Where Your Lens Came From: How Growing Up Shapes You', 'How growing up shapes the adult you are: the big question at each stage, why timing makes some experiences go deeper, and how to choose which old rules to keep.'),
  'self-path.html': ('Your Self-Discovery Path, Step by Step', 'The self-discovery path: understand your own load, rhythms and reactions first, with a few short worksheets and free tools you can use on your own.'),
  # chores and the mental load
- 'lemonade-stand.html': ('Who Did What This Week? A Free Chore Tracker', 'A free chore tracker for couples, families and roommates: note who did what this week, see the household split at a glance, and talk about it without blame.'),
+ 'lemonade-stand.html': ('Who Did What This Week? A Free Chore Tracker', 'A free chore and mental load tracker for one person or a whole home: log who did what this week, see the split or your own load, and talk without blame.'),
  'workpapers/wp-01.html': ('Who Did What: A One-Week Chore Log and Kind Ways to Say No', 'A one-week log of who did what at home, plus three calm ways to say no or “not right now” without starting a fight. A free worksheet for couples and roommates.'),
  'workpapers/wp-02-battery-stress-meter.html': ('Stress Check: How Much Are You Carrying? (WP-02)', 'A five-question stress check that separates how much you are already carrying from how upset you are about one thing. A reflection tool, not a test.'),
  'workpapers/wp-03-raci-treaty.html': ('One Owner per Chore: A Free Household Chore Agreement', 'Give every recurring household chore one clear owner from start to finish, so nothing slips, nobody nags and you stop re-deciding who does what each week.'),
@@ -239,7 +239,10 @@ SEARCH.update({
  'frequency-journey.html': ('The Frequency Journey: A Calm Arcade With Tidbit and Sugarfoot', 'Pick Tidbit or Sugarfoot and play a maze chase or a road-and-river crossing. Easy controls, a relaxed pace and no game over, plus the Frequency Buddies cartoon.'),
  'frequency-buddies.html': ('Frequency Buddies: A Kids’ Cartoon About Feelings', 'Free animated episodes for kids and families: two pups, Tidbit and Sugarfoot, face tough times, talk it through and come out stronger. With captions.'),
  'frequency-buddies-shuffle.html': ('Frequency Buddies: Every Episode on Shuffle', 'Every Frequency Buddies episode back to back in a random order, with the theme song: a free kids’ cartoon about feelings, plus each episode to download.'),
+ 'frequency-buddies-music-video-maker.html': ('Make Your Own Frequency Buddies Music Video', 'Make your own Frequency Buddies theme song music video: pick the stage, lights, effects, dance moves, costumes and who’s on stage, then play it and share the link.'),
+ 'frequency-buddies-music-video.html': ('Frequency Buddies Theme Song Music Video', 'The Frequency Buddies theme song as a music video: Tidbit, Sugarfoot and every friend from the episodes sing, dance and cheer on a stage that moves.'),
  'frequency-buddies-live.html': ('Frequency Buddies Live: A Kids’ Cartoon Channel', 'An always-on Frequency Buddies channel: drop in anytime, watch the kids’ cartoon episode playing right now, and cast it to your TV. Free, with captions.'),
+ 'frequency-buddies-season-2.html': ('Frequency Buddies Season 2: Watch the Teaser', 'Frequency Buddies Season 2 is coming: watch the one-minute teaser with Tidbit and Sugarfoot, spot the five hidden secrets and pick the new place you can’t wait to see.'),
  'pal-cam-tv.html': ('Pal Cam TV: A Cozy Cartoon Puppy Cam for Your TV', 'Leave two cartoon pups playing and napping on your TV all day, with calm music and light that follows the time of day. Free, no sign-up, ready to cast.'),
  # the book
  'book/preface.html': ('Invisible Labor at Home: The Work Nobody Sees', 'The Preface: the planning, remembering and noticing that keeps a home running, why this invisible work goes unseen, and how seeing it changes everything.'),
@@ -319,10 +322,10 @@ def fit_desc(d):
 # The Frequency Buddies season as one video, for video search (with a chapter for each episode)
 SEASON_VIDEO = {
     'url': SITE + '/assets/video/frequency-buddies-season-1.mp4', 'thumb': SITE + '/assets/img/frequency-buddies-season-1.jpg',
-    'name': 'Frequency Buddies · Season 1 · All five episodes', 'duration': 'PT1H12M13S', 'seconds': 4333, 'uploaded': '2026-09-30',
+    'name': 'Frequency Buddies · Season 1 · All five episodes', 'duration': 'PT1H14M5S', 'seconds': 4445, 'uploaded': '2026-10-03',
     'desc': 'Five gentle animated episodes for kids and families: Tidbit and Sugarfoot set off on big little quests, hit real tough times and find their way through, together. With the theme song, captions in the picture and chapters.',
-    'chapters': [(0, 893, 'Episode 1: The Storm Over the Treehouse'), (893, 1746, 'Episode 2: Out of Tune'), (1746, 2598, 'Episode 3: The Heavy Basket'),
-                 (2598, 3451, 'Episode 4: Who Broke the Kite?'), (3451, 4333, 'Episode 5: The Longest Night')],
+    'chapters': [(0, 905, 'Episode 1: The Storm Over the Treehouse'), (905, 1792, 'Episode 2: Out of Tune'), (1792, 2662, 'Episode 3: The Heavy Basket'),
+                 (2662, 3538, 'Episode 4: Who Broke the Kite?'), (3538, 4445, 'Episode 5: The Longest Night')],
 }
 # each episode is its own video file (every file stays under the 25 MB limit some hosts have)
 EPISODE_VIDEOS = [{'url': SITE + '/assets/video/frequency-buddies-s1e%d.mp4' % (i + 1), 'thumb': SEASON_VIDEO['thumb'], 'name': 'Frequency Buddies · ' + n,
@@ -349,8 +352,9 @@ CANONICAL_TO = {
 IMAGE_INFO = {
     OG_IMAGE: (1200, 630, 'image/png', 'Two friends sharing one heart, with two happy pups: Spread Love & Acceptance'),
     SEASON_VIDEO['thumb']: (1280, 720, 'image/jpeg', 'Tidbit and Sugarfoot, the two pups of the Frequency Buddies kids’ cartoon'),
+    SITE + '/assets/img/frequency-buddies-season-2-teaser.jpg': (1280, 720, 'image/jpeg', 'Frequency Buddies Season 2, coming soon: Tidbit and Sugarfoot under a starry sky'),
 }
-PAGE_IMAGE = {p: SEASON_VIDEO['thumb'] for p in ('frequency-buddies.html', 'frequency-buddies-shuffle.html', 'frequency-buddies-live.html')}
+PAGE_IMAGE = {p: SEASON_VIDEO['thumb'] for p in ('frequency-buddies.html', 'frequency-buddies-shuffle.html', 'frequency-buddies-live.html', 'frequency-buddies-music-video.html', 'frequency-buddies-music-video-maker.html')}
 
 AUTHOR_NAME = 'Christian'
 AUTHOR = {'@type': 'Person', '@id': SITE + '/about.html#christian', 'name': AUTHOR_NAME, 'url': SITE + '/about.html'}

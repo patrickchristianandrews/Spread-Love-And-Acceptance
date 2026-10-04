@@ -18,7 +18,7 @@ TOLBuddies.episodes['s1e1'] = {
       { say: 'narrator', text: 'Two pals. One big heart each. Every frequency an adventure.', mood: 'excited', energy: 1.2, hold: 1.2 },
       { say: 'narrator', text: 'This is Frequency Buddies!', mood: 'happy', energy: 1.2, hold: 1 },
       { act: 'highfive', who: 'both', dur: 2.6 },
-      { scene: 'backyard', hour: 8.5, weather: 'clear', caption: 'Saturday morning, in the backyard' },
+      { scene: 'backyard', hour: 8.5, weather: 'clear', props: { plank: 0.9 }, caption: 'Saturday morning, in the backyard' },
       { music: 'happy' },
       { place: { tidbit: 0.16, sugarfoot: 0.64 } },
       { say: 'narrator', text: 'All week long, the pals had been building a treehouse in the old oak, past the woods and over the creek.', mood: 'happy' },
@@ -41,10 +41,10 @@ TOLBuddies.episodes['s1e1'] = {
       { say: 'tidbit', to: 'sugarfoot', text: 'Then we finish before it gets here! A race against the rain!', mood: 'proud', energy: 1.2 },
       { say: 'owl', to: 'tidbit', text: 'Brave words. Keep one eye on the sky, little ones.', mood: 'calm' },
       { guest: 'owl', exit: true },
-      { say: 'tidbit', to: 'sugarfoot', text: 'Mission Treetop! Planks? Check. Map? Check. Toolbox…', mood: 'proud', energy: 1.2 },
+      { say: 'tidbit', to: 'sugarfoot', text: 'Mission Treetop! Planks? Check. Map? Check. Toolbox…', mood: 'proud', energy: 1.2, offscreen: ['toolbox'] },
       { act: 'lookat', who: 'tidbit', target: 'left', dur: 1 },
-      { say: 'tidbit', to: 'self', text: 'Toolbox? Um. Hello, toolbox?', mood: 'worried', energy: 0.8, hold: 1 },
-      { say: 'narrator', text: 'But the toolbox, with the hammer and every single nail, was nowhere to be found.', mood: 'worried', hold: 1.4 }
+      { say: 'tidbit', to: 'self', text: 'Toolbox? Um. Hello, toolbox?', mood: 'worried', energy: 0.8, hold: 1, offscreen: ['toolbox'] },
+      { say: 'narrator', text: 'But the toolbox, with the hammer and every single nail, was nowhere to be found.', mood: 'worried', hold: 1.4, offscreen: ['toolbox', 'hammer'] }
     ] },
 
     { title: 'The missing toolbox', beats: [
@@ -107,7 +107,7 @@ TOLBuddies.episodes['s1e1'] = {
     { title: 'Across the creek', beats: [
       { scene: 'meadow', hour: 14.5, weather: 'rain', props: { creek: true }, caption: 'The meadow, as the first drops fall' },
       { place: { tidbit: 0.28, sugarfoot: 0.12 } },
-      { say: 'sugarfoot', to: 'tidbit', text: 'Whoa. The creek’s higher than usual.', mood: 'worried', energy: 0.9 },
+      { say: 'sugarfoot', to: 'tidbit', text: 'Oh, look. The creek’s way higher than usual.', mood: 'worried', energy: 0.9 },
       { act: 'point', who: 'tidbit', target: 'right', dur: 1.2 },
       { say: 'tidbit', to: 'sugarfoot', text: 'But look, the stepping stones are still way up out of the water.', mood: 'happy' },
       { guest: 'snail', enter: 'right', name: 'Dot the snail' },
@@ -150,7 +150,7 @@ TOLBuddies.episodes['s1e1'] = {
       { say: 'narrator', text: 'Then the wind went quiet. Much too quiet.', mood: 'worried', energy: 0.7, hold: 1.4 },
       { act: 'lookat', who: 'both', target: 'up', dur: 1.2 },
       { music: 'tense' },
-      { scene: 'treehouse', hour: 16.6, weather: 'storm', props: { treehouse: 'built' } },
+      { scene: 'treehouse', hour: 16.6, weather: 'storm', props: { treehouse: 'built', toolbox: 0.32 } },
       { say: 'narrator', text: 'And then the storm came rolling over the hill, all at once.', mood: 'worried', energy: 1.2 },
       { say: 'sugarfoot', to: 'tidbit', text: 'Tidbit! Come away from the tree and get down low! Quick!', mood: 'worried', energy: 1.3 },
       { act: 'run', who: 'both', to: 0.78, dur: 2.4 },
@@ -159,7 +159,9 @@ TOLBuddies.episodes['s1e1'] = {
       { act: 'nuzzle', who: 'both', dur: 3 },
       { say: 'narrator', text: 'The rain poured into the treehouse. There was no roof to stop it. And the wind pushed, and pushed.', mood: 'sad' },
       { act: 'lookat', who: 'both', target: 'left', dur: 1 },
-      { say: 'narrator', text: 'Then, with one big gust… whoosh.', mood: 'worried', hold: 1.4 },
+      { say: 'narrator', text: 'Then, with one big gust… whoosh.', mood: 'worried', hold: 0.8 },
+      { props: { treehouse: 'wrecked' } },
+      { say: 'sugarfoot', to: 'tidbit', text: 'Oh no. Our treehouse!', mood: 'sad', energy: 1.1, hold: 1.4 },
       { music: 'sad' },
       { scene: 'treehouse', hour: 17.4, weather: 'rain', props: { treehouse: 'wrecked', toolbox: 0.3 }, caption: 'A little later, when the wind finally let go' },
       { place: { tidbit: 0.42, sugarfoot: 0.58 } },
@@ -212,7 +214,7 @@ TOLBuddies.episodes['s1e1'] = {
 
     { title: 'Pause', beats: [
       { music: 'gentle' },
-      { scene: 'rainy', hour: 19.5, weather: 'rain', caption: 'Home, by the rainy window' },
+      { scene: 'rainy', hour: 19.5, weather: 'rain', props: { blanket: 0.5 }, caption: 'Home, by the rainy window' },
       { place: { tidbit: 0.4, sugarfoot: 0.6 } },
       { act: 'lie', who: 'both', dur: 1.4 },
       { say: 'narrator', text: 'Dry fur. A warm blanket. Rain tapping softly on the window now, instead of shouting.', mood: 'calm', energy: 0.8 },
@@ -233,7 +235,7 @@ TOLBuddies.episodes['s1e1'] = {
       { say: 'tidbit', to: 'sugarfoot', text: 'Music tomorrow. Right now, I’m feeling very… very yellow.', mood: 'sleepy', energy: 0.7, hold: 1 },
       { act: 'sleep', who: 'both', dur: 3.6 },
       { music: 'none' },
-      { scene: 'rainy', hour: 22.5, weather: 'clear' },
+      { scene: 'rainy', hour: 22.5, weather: 'clear', props: { blanket: 0.5 } },
       { say: 'narrator', text: 'Somewhere in the night, while two pals snored, the rain finally stopped.', mood: 'calm', energy: 0.7, hold: 1.2 },
       { say: 'narrator', text: 'And in the morning, a surprise was waiting at the old oak.', mood: 'surprised', hold: 1.4 }
     ] },
@@ -293,7 +295,7 @@ TOLBuddies.episodes['s1e1'] = {
       { act: 'heart', who: 'both', dur: 2.2 },
       { say: 'narrator', text: 'Storms still come. But now these two know what to do.', mood: 'calm', hold: 1.4 },
       { music: 'brave' },
-      { scene: 'blank', hour: 12, weather: 'clear', caption: 'Next time on Frequency Buddies…' },
+      { scene: 'blank', hour: 12, weather: 'clear', props: { page: [0.14, 150], pages: [0.86, 120] }, caption: 'Next time on Frequency Buddies…' },
       { place: { tidbit: 0.3, sugarfoot: 0.7 } },
       { say: 'narrator', text: 'Next time, a sneaky gust scatters the park band’s five song pages all across the city!', mood: 'excited', energy: 1.2 },
       { say: 'tidbit', to: 'sugarfoot', text: 'A treasure hunt for music? Before the sunset concert? Let’s go!', mood: 'excited', energy: 1.3 },
