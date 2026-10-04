@@ -1,24 +1,92 @@
-/* turn-sideways.js — "Turn your phone sideways" for the pages whose picture is wider than a phone is tall.
-   Two small helpers, on touch screens only:
+/* turn-sideways.js — "Turn your phone sideways" for the pages whose picture is wider than a phone is tall, and
+   keeping the screen awake whenever something is full screen.
+   On touch screens:
    1. A friendly hint under the big picture (Brain Breakers stage, the cartoons and teaser, Drift, the Night Garden)
-      while the phone is upright. It has a little animated phone, can be closed (remembered for this visit only),
-      and disappears by itself once the phone is turned.
-   2. When something goes full screen, ask the phone to turn sideways with it (screen.orientation.lock, which
-      Chrome on Android allows in full screen; iPhones ignore it) and let go again when full screen ends.
+      while the phone is upright. It has a little animated phone, can be closed (for this visit only), and
+      disappears by itself once the phone is turned.
+   2. Turning a phone sideways opens that page's picture full screen by itself, and turning it upright again lets go
+      (only if it was this script that opened it, and never again in the same turn if you close it yourself).
+      Browsers only allow real full screen right after a tap, so on a turn alone the pages' own full-screen fallback
+      (a picture that fills the screen) is used; a tap on Play while sideways gets true full screen.
+   3. When something goes full screen, ask the phone to turn sideways with it (screen.orientation.lock, which Chrome
+      on Android allows in full screen; iPhones ignore it) and let go again when full screen ends.
+   On every device:
+   4. While anything is full screen, the screen is kept awake (Screen Wake Lock) so the phone never dims or locks
+      mid-show. It is let go the moment full screen ends, and asked for again if you come back to the tab.
    Nothing is stored beyond a session flag; with reduced motion the phone icon does not move. */
 (function () {
   'use strict';
-  if (!window.matchMedia || !matchMedia('(pointer: coarse)').matches) return;
-  var port = matchMedia('(orientation: portrait)'), RM = matchMedia('(prefers-reduced-motion: reduce)').matches;
   function ss(k) { try { return sessionStorage.getItem(k); } catch (e) { return null; } }
   function ssSet(k, v) { try { sessionStorage.setItem(k, v); } catch (e) {} }
 
-  // ---- 2. full screen goes sideways
+  // the pictures that can go full screen: [the thing that fills the screen, its Full screen button]
+  var FULL = [['#sn-stage', '#sn-full'], ['.tz-player', '.tz-full'], ['.fb-player', '.fb-full'], ['.fbmv-stage', '.fbmv-full']];
+  function fsEl() { return document.fullscreenElement || document.webkitFullscreenElement || null; }
+  function isFull(box) { return !!box && (fsEl() === box || box.classList.contains('is-full') || box.classList.contains('is-full-now')); }
+  function anyFull() { return !!fsEl() || !!document.querySelector('.is-full, .is-full-now'); }
+
+  // ---- 4. no timeout while full screen
+  var wl = null, wlAsking = false;
+  function acquire() {
+    if (!('wakeLock' in navigator) || wl || wlAsking || document.hidden) return;
+    wlAsking = true;
+    try { navigator.wakeLock.request('screen').then(function (l) { wlAsking = false; wl = l; l.addEventListener('release', function () { wl = null; }); if (!anyFull()) release(); }).catch(function () { wlAsking = false; }); } catch (e) { wlAsking = false; }
+  }
+  function release() { if (wl) { try { wl.release(); } catch (e) {} wl = null; } }
+  function keepAwake() { if (anyFull()) acquire(); else release(); }
+  ['fullscreenchange', 'webkitfullscreenchange'].forEach(function (ev) { document.addEventListener(ev, function () { keepAwake(); setTimeout(keepAwake, 200); }); });
+  document.addEventListener('visibilitychange', function () { if (!document.hidden) keepAwake(); });
+  setInterval(keepAwake, 1500);   // also covers the fill-the-screen fallback, which is only a CSS class
+  window.addEventListener('pagehide', release);
+
+  if (!window.matchMedia || !matchMedia('(pointer: coarse)').matches) return;
+  var port = matchMedia('(orientation: portrait)'), RM = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function small() { return Math.min(screen.width || innerWidth, screen.height || innerHeight, innerWidth, innerHeight) < 820; }
+
+  // ---- 3. full screen goes sideways
   function lock() { try { var o = screen.orientation; if (o && o.lock) { var p = o.lock('landscape'); if (p && p.catch) p.catch(function () {}); } } catch (e) {} }
   function unlock() { try { var o = screen.orientation; if (o && o.unlock) o.unlock(); } catch (e) {} }
   ['fullscreenchange', 'webkitfullscreenchange'].forEach(function (ev) {
-    document.addEventListener(ev, function () { if (document.fullscreenElement || document.webkitFullscreenElement) lock(); else unlock(); });
+    document.addEventListener(ev, function () { if (fsEl()) lock(); else unlock(); });
   });
+
+  // ---- 2. turning sideways opens the picture
+  var autoBox = null, autoBtn = null, leftByUser = false;
+  function boxes() { var out = []; FULL.forEach(function (f) { var b = document.querySelector(f[0]), btn = document.querySelector(f[1]); if (b && btn) out.push({ box: b, btn: btn }); }); return out; }
+  function visibleShare(el) { var r = el.getBoundingClientRect(), vh = innerHeight; var h = Math.min(r.bottom, vh) - Math.max(r.top, 0); return r.height ? Math.max(0, h) / Math.min(r.height, vh) : 0; }
+  function playing(box) {
+    if (box.matches('.is-playing') || box.querySelector('.is-playing')) return true;
+    var m = box.querySelectorAll('audio, video'); for (var i = 0; i < m.length; i++) if (!m[i].paused && !m[i].ended) return true;
+    if (box.id === 'sn-stage') { var t = document.querySelectorAll('.track-player'); for (var j = 0; j < t.length; j++) if (!t[j].paused && !t[j].ended) return true; }
+    return false;
+  }
+  function goSideways(onlyIfPlaying) {
+    if (!small() || leftByUser || anyFull()) return;
+    var pick = null; boxes().forEach(function (b) { if (!pick && (playing(b.box) || (!onlyIfPlaying && visibleShare(b.box) >= 0.45))) pick = b; });
+    if (!pick) return;
+    autoBox = pick.box; autoBtn = pick.btn; try { pick.btn.click(); } catch (e) { autoBox = autoBtn = null; }
+  }
+  function goUpright() {
+    if (autoBox && isFull(autoBox) && autoBtn) { try { autoBtn.click(); } catch (e) {} }
+    autoBox = autoBtn = null; leftByUser = false;
+  }
+  function onTurn() { if (port.matches) goUpright(); else setTimeout(function () { goSideways(false); }, 350); sync(); }
+  // if the person closes full screen themselves while sideways, leave it closed until the next turn
+  var autoSeen = false;
+  setInterval(function () {
+    if (!autoBox) { autoSeen = false; return; }
+    if (isFull(autoBox)) autoSeen = true; else if (autoSeen) { leftByUser = true; autoBox = autoBtn = null; autoSeen = false; }
+  }, 500);
+  document.addEventListener('click', function (e) {
+    // a tap on Play while the phone is sideways is a real gesture, so this one can be true full screen
+    if (port.matches || !small() || anyFull()) return;
+    var b = e.target.closest && e.target.closest('button'); if (!b) return;
+    var t = ((b.getAttribute('aria-label') || '') + ' ' + b.textContent).trim();
+    if (!/^(▶|play|[^a-z]*play)/i.test(t) && !/sn-trkb|sn-see|tz-big|fb-big/.test(b.className)) return;
+    var hit = null; boxes().forEach(function (x) { if (!hit && x.box.contains(b)) hit = x; });
+    if (!hit && /sn-see|sn-trkb/.test(b.className)) { var s = boxes().filter(function (x) { return x.box.id === 'sn-stage'; })[0]; if (s) hit = s; }
+    if (hit && !leftByUser) setTimeout(function () { if (!anyFull() && !port.matches) { autoBox = hit.box; autoBtn = hit.btn; try { hit.btn.click(); } catch (er) {} } }, 60);
+  }, true);
 
   // ---- 1. the hint
   var TARGETS = ['#sn-stage', '.tz-stage', '.fb-stage', '.fbmv-stage', '#cv-gl', '#ng-canvas'];
@@ -38,7 +106,7 @@
     if (el.getAttribute('data-tsw')) return; el.setAttribute('data-tsw', '1');
     var anchor = el; while (anchor.parentNode && anchor.parentNode !== document.body && /^(CANVAS|SPAN)$/.test(anchor.tagName) && anchor.parentNode.children.length === 1) anchor = anchor.parentNode;
     var c = document.createElement('div'); c.className = 'tsw'; c.setAttribute('role', 'note');
-    c.innerHTML = '<span class="tsw-ph" aria-hidden="true"><i></i></span><span class="tsw-t">Turn your phone sideways for a bigger picture.</span><button type="button" class="tsw-x" aria-label="Hide this hint">&times;</button>';
+    c.innerHTML = '<span class="tsw-ph" aria-hidden="true"><i></i></span><span class="tsw-t">Turn your phone sideways for a bigger picture. It goes full screen by itself.</span><button type="button" class="tsw-x" aria-label="Hide this hint">&times;</button>';
     c.querySelector('.tsw-x').addEventListener('click', function () { ssSet('tol-tsw-off', '1'); sync(); });
     anchor.parentNode.insertBefore(c, anchor.nextSibling); chips.push(c); sync();
   }
@@ -46,8 +114,9 @@
   function start() {
     var st = document.createElement('style'); st.textContent = CSS; document.head.appendChild(st);
     scan(); var n = 0, iv = setInterval(function () { scan(); if (++n > 12) clearInterval(iv); }, 800);
-    var onch = function () { sync(); }; if (port.addEventListener) port.addEventListener('change', onch); else if (port.addListener) port.addListener(onch);
+    if (port.addEventListener) port.addEventListener('change', onTurn); else if (port.addListener) port.addListener(onTurn);
     window.addEventListener('resize', sync);
+    if (!port.matches) setTimeout(function () { goSideways(true); }, 900);   // arrived already sideways with something playing
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', start); else start();
 })();
