@@ -9,6 +9,8 @@
         While something plays and the stage has scrolled away, a slim bar under the header keeps a live
         picture, the name and a Stop button in view. Every track has a "See and feel this" button.
         With reduced motion on, only a still, slowly changing Glow is drawn.
+        In full screen a Choose panel opens over the picture: the tracks come first (and an "Undecided? Find what is
+        right for you" button that opens the same picker as the page), then the See and Feel choices.
    FEEL: opt-in vibration on phones that allow it (Chrome on Android; iPhones don't). Off until chosen.
         Match follows the track (slow heartbeat for Shooting Star, rumble for Thunderous Shimmer, beat for
         Watching a Shooting Star). Rumble follows the low tones, Beat follows pulses, Heartbeat is a steady lub-dub. Pulses are short and
@@ -28,7 +30,9 @@
   var ROTATE = { star: ['stars', 'aurora', 'wave', 'stars'], shimmer: ['rings', 'bars', 'tunnel', 'stars'], watching: ['tunnel', 'stars', 'aurora', 'bars'], other: ['stars', 'aurora', 'tunnel', 'rings', 'bars', 'wave'] };
   var TRACKFEEL = { star: 'heart', shimmer: 'rumble', watching: 'beat', other: 'rumble' };
   var TRACKID = { 'Shooting Star': 'star', 'Thunderous Shimmer': 'shimmer', 'Watching a Shooting Star': 'watching' };
-  var LEVELS = ['off', 'soft', 'medium', 'strong'], GAIN = { off: 0, soft: 0.6, medium: 1, strong: 1.7 };
+  var LEVELS = ['off', 'soft', 'medium', 'strong'];
+  // phone motors barely register anything under about 30 ms, so a pulse is 30 to 200 ms, and the rumble is a pattern of on and off
+  var HAPT = { soft: { min: 32, max: 55, duty: 0.4 }, medium: { min: 48, max: 95, duty: 0.65 }, strong: { min: 70, max: 170, duty: 0.92 } };
   var FEELS = ['match', 'rumble', 'beat', 'heart'];
   var look = lsGet('tol-sense-look'); if (LOOKS.indexOf(look) < 0) look = LOOKS[0];
   var level = lsGet('tol-haptic'); if (LEVELS.indexOf(level) < 0 || !canVib) level = 'off';
@@ -46,7 +50,14 @@
     '<h2 id="senses-h" class="sn-title">See and feel the sound</h2>' +
     '<p class="sn-lede">Press play on a Brain Breaker and watch it move, or let your phone feel it with you. Each track has its own pictures and its own kind of pulse. Everything happens on your device.</p>' +
     '<div class="sn-stage" id="sn-stage"><canvas id="sn-cv" aria-hidden="true"></canvas><p class="sn-idle" id="sn-idle">Press <strong>See and feel this</strong> on a track below, or pick one with Find your Brain Breaker.</p>' +
-    '<div class="sn-hud"><span class="sn-now" id="sn-now"></span><button type="button" class="sn-b sn-hud-b" id="sn-full" aria-label="Full screen">&#x26F6; Full screen</button></div></div>' +
+    '<div class="sn-hud"><span class="sn-now" id="sn-now"></span><span class="sn-buzz" id="sn-buzz" title="Lights up when the phone is asked to vibrate" aria-hidden="true">&#x26A1;</span><button type="button" class="sn-b sn-hud-b" id="sn-full" aria-label="Full screen">&#x26F6; Full screen</button></div>' +
+    '<button type="button" class="sn-b sn-opt" id="sn-opt" aria-expanded="false" aria-controls="sn-ovl">&#x2630; Choose</button>' +
+    '<div class="sn-ovl" id="sn-ovl" role="dialog" aria-label="Choose a track, what you see and what you feel" hidden><div class="sn-ovl-in">' +
+      '<div class="sn-ovl-top"><p class="sn-ovl-k">Pick a Brain Breaker</p><button type="button" class="sn-b" id="sn-ovl-x" aria-label="Close this panel">&times; Close</button></div>' +
+      '<div class="sn-trk" id="sn-trk"></div>' +
+      '<div class="sn-find" id="sn-ovl-find" hidden></div>' +
+      '<p class="sn-ovl-k">See and feel it</p><div id="sn-ovl-ctl"></div>' +
+    '</div></div></div>' +
     '<div class="sn-info" id="sn-info" hidden aria-live="polite"><div class="sn-info-top"><strong id="sn-info-name"></strong><span class="sn-meter" aria-hidden="true"><i id="sn-meter"></i></span><span class="sn-meter-l">Energy</span></div><dl id="sn-info-fx"></dl></div>' +
     '<div class="sn-row" role="group" aria-label="How to see the sound"><span class="sn-l">See</span>' + btns('look', LOOKS, NAMES, look) + '</div>' +
     '<div class="sn-row" id="sn-feel-row" role="group" aria-label="How strongly to feel the sound"><span class="sn-l">Feel</span>' + btns('level', LEVELS, LNAMES, level) + '</div>' +
@@ -79,11 +90,11 @@
   host.addEventListener('click', function (e) {
     var b = e.target.closest('button'); if (!b) return;
     if (b.hasAttribute('data-look')) { look = b.getAttribute('data-look'); lsSet('tol-sense-look', look); press('look', look); rings.length = 0; autoAt = performance.now(); autoI = 0; say(look === 'auto' ? 'The picture will change every so often.' : 'Seeing sound as ' + NAMES[look] + '.'); }
-    else if (b.hasAttribute('data-level')) { level = b.getAttribute('data-level'); lsSet('tol-haptic', level); press('level', level); if (level === 'off') stopBuzz(); else { buzz(24, true); } say(level === 'off' ? 'Vibration is off.' : 'Feeling sound: ' + LNAMES[level] + ', ' + FNAMES[feel] + '.'); heartOn = false; }
+    else if (b.hasAttribute('data-level')) { level = b.getAttribute('data-level'); lsSet('tol-haptic', level); press('level', level); vOK = true; if (level === 'off') stopBuzz(); else { var hh = HAPT[level]; vibe([hh.min, 90, hh.max]); } say(level === 'off' ? 'Vibration is off.' : 'Feeling sound: ' + LNAMES[level] + ', ' + FNAMES[feel] + '. That was a sample.'); heartOn = false; }
     else if (b.hasAttribute('data-feel')) { feel = b.getAttribute('data-feel'); lsSet('tol-haptic-mode', feel); press('feel', feel); heartOn = false; stopBuzz(); say('Feeling the sound as ' + FNAMES[feel] + (level === 'off' ? '. Choose a strength above to turn vibration on.' : '.')); }
     else if (b.id === 'sn-test') {
       if (level === 'off') { say('Choose Soft, Medium or Strong first.'); return; }
-      buzz(30, true); setTimeout(function () { buzz(60, true); }, 450); say('That was a test pulse.');
+      var tp = HAPT[level]; vibe([tp.min, 120, tp.max, 120, tp.min]); say('That was a test pulse: short, long, short. If you felt nothing, check that your phone’s vibration or touch feedback is on and that it is not in battery saver or do-not-disturb.');
     }
     else if (b.id === 'sn-full') toggleFull();
   });
@@ -92,6 +103,57 @@
     if (b.getAttribute('data-dock') === 'open') stage.scrollIntoView({ block: 'center', behavior: smooth() });
     else if (b.getAttribute('data-dock') === 'stop') { stopAll(); }
   });
+
+  // ---------- the Choose panel (full screen) ----------
+  var ovl = document.getElementById('sn-ovl'), optBtn = document.getElementById('sn-opt'), trkEl = document.getElementById('sn-trk'), findEl = document.getElementById('sn-ovl-find'), ctlEl = document.getElementById('sn-ovl-ctl');
+  var BLURB = { 'Shooting Star': 'Soft and floating · quiets a busy mind', 'Thunderous Shimmer': 'Textured and curious · a little spark', 'Watching a Shooting Star': 'Big and cinematic · gets you moving' };
+  var finder = null, moved = [];
+  function cards() { return Array.prototype.slice.call(document.querySelectorAll('.track-card')).filter(function (c) { return c.querySelector('.track-player'); }); }
+  function cardName(c) { var h = c.querySelector('.track-title'); return h ? h.textContent.replace(/^\d+\.\s*/, '') : 'Track'; }
+  function drawTracks() {
+    var cs = cards(), html = '';
+    cs.forEach(function (c, i) {
+      var a = c.querySelector('.track-player'), on = !a.paused && !a.ended, nm = cardName(c);
+      html += '<button type="button" class="sn-trkb" data-trk="' + i + '" aria-pressed="' + on + '"><span class="sn-trkb-i" aria-hidden="true">' + (on ? '&#10074;&#10074;' : '&#9654;') + '</span><span><strong>' + nm + '</strong><small>' + (BLURB[nm] || '') + '</small></span></button>';
+    });
+    html += '<button type="button" class="sn-trkb sn-und" data-und="1" aria-expanded="' + (!findEl.hidden) + '" aria-controls="sn-ovl-find"><span class="sn-trkb-i" aria-hidden="true">?</span><span><strong>Undecided?</strong><small>Find what is right for you</small></span></button>';
+    trkEl.innerHTML = html;
+    trkEl.querySelectorAll('*').forEach(function (n) { n.classList.add('no-bubble'); });
+  }
+  function anyPlaying() { return cards().some(function (c) { var a = c.querySelector('.track-player'); return a && !a.paused && !a.ended; }); }
+  function openOvl() { drawTracks(); ovl.hidden = false; optBtn.setAttribute('aria-expanded', 'true'); var f = trkEl.querySelector('button'); if (f) try { f.focus({ preventScroll: true }); } catch (e) {} }
+  function closeOvl() { ovl.hidden = true; optBtn.setAttribute('aria-expanded', 'false'); }
+  optBtn.addEventListener('click', function () { if (ovl.hidden) openOvl(); else closeOvl(); });
+  document.getElementById('sn-ovl-x').addEventListener('click', closeOvl);
+  trkEl.addEventListener('click', function (e) {
+    var b = e.target.closest('button'); if (!b) return;
+    if (b.hasAttribute('data-und')) {
+      findEl.hidden = !findEl.hidden;
+      if (!findEl.hidden && !finder) {
+        if (window.TOLFinder) finder = window.TOLFinder.mount(findEl, { onPlay: function () { setTimeout(function () { drawTracks(); closeOvl(); }, 250); } });
+        else findEl.innerHTML = '<p class="sn-ovl-k">The picker is still loading. Try again in a moment.</p>';
+      }
+      drawTracks(); if (!findEl.hidden) findEl.scrollIntoView({ block: 'nearest', behavior: smooth() });
+      return;
+    }
+    var c = cards()[+b.getAttribute('data-trk')]; if (!c) return;
+    var a = c.querySelector('.track-player');
+    if (!a.paused) { a.pause(); drawTracks(); return; }
+    cards().forEach(function (o) { var oa = o.querySelector('.track-player'); if (oa !== a && !oa.paused) oa.pause(); });
+    var p = a.play(); if (p && p.catch) p.catch(function () { say('Your browser blocked the sound. Tap a track again.'); });
+    closeOvl();
+  });
+  function watchTracks() { cards().forEach(function (c) { var a = c.querySelector('.track-player'); ['play', 'pause', 'ended'].forEach(function (ev) { a.addEventListener(ev, function () { if (!ovl.hidden) drawTracks(); }); }); }); }
+  watchTracks();
+  // the See / Feel / Like rows move into the panel while full screen is on, and back after
+  function moveControls(into) {
+    if (into && !moved.length) {
+      host.querySelectorAll('.sn-row').forEach(function (r) { var ph = document.createComment('sn-row'); r.parentNode.insertBefore(ph, r); moved.push({ r: r, ph: ph }); ctlEl.appendChild(r); });
+    } else if (!into && moved.length) {
+      moved.forEach(function (m) { m.ph.parentNode.insertBefore(m.r, m.ph); m.ph.parentNode.removeChild(m.ph); }); moved = [];
+    }
+  }
+  function onFullChange(f) { moveControls(f); if (f) { if (anyPlaying()) closeOvl(); else openOvl(); } else closeOvl(); }
 
   // ---------- full screen ----------
   function isFull() { return document.fullscreenElement === stage || document.webkitFullscreenElement === stage || stage.classList.contains('is-full'); }
@@ -102,7 +164,8 @@
     else { stage.classList.add('is-full'); document.documentElement.style.overflow = 'hidden'; }
     setTimeout(syncFull, 120);
   }
-  function syncFull() { var f = isFull(); fullBtn.innerHTML = f ? '&#x2715; Exit full screen' : '&#x26F6; Full screen'; fullBtn.setAttribute('aria-label', f ? 'Exit full screen' : 'Full screen'); stage.classList.toggle('is-full-now', f); }
+  var lastFull = false;
+  function syncFull() { var f = isFull(); fullBtn.innerHTML = f ? '&#x2715; Exit full screen' : '&#x26F6; Full screen'; fullBtn.setAttribute('aria-label', f ? 'Exit full screen' : 'Full screen'); stage.classList.toggle('is-full-now', f); if (f !== lastFull) { lastFull = f; onFullChange(f); } }
   ['fullscreenchange', 'webkitfullscreenchange'].forEach(function (ev) { document.addEventListener(ev, function () { if (!document.fullscreenElement && !document.webkitFullscreenElement) { stage.classList.remove('is-full'); document.documentElement.style.overflow = ''; } syncFull(); }); });
   document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && stage.classList.contains('is-full')) toggleFull(); });
 
@@ -151,7 +214,7 @@
   function curFeel() { return feel === 'match' ? TRACKFEEL[trackKey()] : feel; }
 
   // ---------- reading the sound ----------
-  var stars = [], shoots = [], lvl = 0, bass = 0, mid = 0, high = 0, ema = 0, lastBeat = 0, lastRumble = 0, rings = [], t0 = performance.now(), peaks = [], tun = 0, lastT = 0, autoAt = performance.now(), autoI = 0;
+  var stars = [], shoots = [], lvl = 0, bass = 0, mid = 0, high = 0, ema = 0, prevB = 0, fluxAvg = 0, lastBeat = 0, lastRumble = 0, rings = [], t0 = performance.now(), peaks = [], tun = 0, lastT = 0, autoAt = performance.now(), autoI = 0;
   function band(lo, hi, hz) {
     var a = Math.max(0, Math.floor(lo / hz)), b = Math.min(bufF.length - 1, Math.ceil(hi / hz)), s = 0, n = 0;
     for (var i = a; i <= b; i++) { s += bufF[i]; n++; }
@@ -166,31 +229,48 @@
     lvl += (Math.min(1, (bass * 1.3 + mid + high) / 1.6) - lvl) * 0.2;
     var now = performance.now(), beat = false;
     ema += (b - ema) * 0.04;
-    if (b > ema * 1.16 + 0.035 && b > 0.12 && now - lastBeat > 380) { beat = true; lastBeat = now; }
+    // an onset is a quick rise in the low and low-mid sound compared with its recent average
+    var o = Math.max(b, m * 0.8), flux = Math.max(0, o - prevB); prevB = o; fluxAvg += (flux - fluxAvg) * 0.06;
+    if (((b > ema * 1.16 + 0.035 && b > 0.12) || (flux > fluxAvg * 1.9 + 0.012 && o > 0.08)) && now - lastBeat > 300) { beat = true; lastBeat = now; }
     return { beat: beat, now: now };
   }
 
   // ---------- feeling it ----------
-  var heartOn = false, heartTimer = 0;
-  function buzz(ms, force) {
-    if (!canVib || level === 'off') return;
-    var d = Math.max(8, Math.min(70, Math.round(ms * GAIN[level])));
-    try { navigator.vibrate(d); } catch (e) {}
+  var heartOn = false, heartTimer = 0, lastRumble = 0, vOK = true, flashT = 0, buzzDot = null;
+  function flash() {
+    if (!buzzDot) buzzDot = document.getElementById('sn-buzz'); if (!buzzDot) return;
+    buzzDot.classList.add('on'); clearTimeout(flashT); flashT = setTimeout(function () { buzzDot.classList.remove('on'); }, 140);
+  }
+  // one call into the phone; it says so if the browser refuses (Chrome wants a tap on the page first)
+  function vibe(pattern) {
+    if (!canVib || level === 'off') return false;
+    var ok = false; try { ok = navigator.vibrate(pattern); } catch (e) {}
+    if (ok === false) { if (vOK) { vOK = false; say('Your browser would not vibrate yet. Tap the page once, then press Try a pulse.'); } }
+    else { vOK = true; flash(); }
+    return ok;
   }
   function stopBuzz() { clearTimeout(heartTimer); heartOn = false; try { if (canVib) navigator.vibrate(0); } catch (e) {} }
   function heartbeat() {
     if (!heartOn) return;
-    var k = GAIN[level] || 1;
-    try { navigator.vibrate([Math.min(60, Math.round(26 * k)), 90, Math.min(50, Math.round(20 * k))]); } catch (e) {}
-    heartTimer = setTimeout(heartbeat, 940);
+    var h = HAPT[level] || HAPT.medium;
+    vibe([h.min, 110, Math.round(h.min * 0.8)]);
+    heartTimer = setTimeout(heartbeat, 900);
   }
   function feelStep(r) {
     if (!canVib || level === 'off') { if (heartOn) stopBuzz(); return; }
-    var cf = curFeel();
+    var cf = curFeel(), h = HAPT[level] || HAPT.medium;
     if (cf === 'heart') { if (!heartOn) { heartOn = true; heartbeat(); } return; }
     if (heartOn) stopBuzz();
-    if (cf === 'beat') { if (r.beat) buzz(14 + bass * 40); }
-    else if (cf === 'rumble' && bass > 0.06 && r.now - lastRumble > 450) { lastRumble = r.now; buzz(9 + bass * 55); }
+    if (cf === 'beat') {
+      if (r.beat) vibe(Math.round(h.min + Math.min(1, bass * 1.4) * (h.max - h.min)));
+      // soft music has few clear beats: if nothing has pulsed for a while, a slow breath-paced pulse keeps it alive
+      else if (lvl > 0.12 && r.now - lastBeat > 1800) { lastBeat = r.now; vibe(h.min); }
+    } else if (cf === 'rumble' && r.now - lastRumble > 230) {
+      // a texture that follows the low end: the louder the lows, the longer it buzzes inside each quarter second
+      lastRumble = r.now;
+      var e = Math.min(1, bass * 1.5 + lvl * 0.3);
+      if (e > 0.1) { var on = Math.round(h.min * 0.6 + e * (230 * h.duty - h.min * 0.6)); if (on >= 22) vibe([on]); }
+    }
   }
 
   // ---------- drawing it ----------
