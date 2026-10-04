@@ -153,7 +153,18 @@
       moved.forEach(function (m) { m.ph.parentNode.insertBefore(m.r, m.ph); m.ph.parentNode.removeChild(m.ph); }); moved = [];
     }
   }
-  function onFullChange(f) { moveControls(f); if (f) { if (anyPlaying()) closeOvl(); else openOvl(); } else closeOvl(); }
+  // full screen: the buttons and options appear when the screen is touched, clicked or a key is pressed, then fade away by themselves
+  var quietT = 0;
+  function quietWake() {
+    stage.classList.remove('is-quiet'); clearTimeout(quietT);
+    if (!isFull()) return;
+    quietT = setTimeout(function () {
+      var a = document.activeElement, kb = false; try { kb = !!(a && stage.contains(a) && a.matches(':focus-visible')); } catch (e) {}
+      if (isFull() && !kb && (!ovl || ovl.hidden)) stage.classList.add('is-quiet'); else if (isFull()) quietWake();
+    }, 3200);
+  }
+  ['pointerdown', 'pointermove', 'touchstart', 'click', 'keydown'].forEach(function (ev) { stage.addEventListener(ev, quietWake, { passive: true }); });
+  function onFullChange(f) { quietWake(); moveControls(f); if (f) { if (anyPlaying()) closeOvl(); else openOvl(); } else closeOvl(); }
 
   // ---------- full screen ----------
   function isFull() { return document.fullscreenElement === stage || document.webkitFullscreenElement === stage || stage.classList.contains('is-full'); }

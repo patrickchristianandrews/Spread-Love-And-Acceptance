@@ -183,6 +183,9 @@
   .sn-ovl-in{ max-width:46rem; margin:0 auto; padding:1rem 1rem 4.6rem; color:#fff; }
   .sn-stage.is-full .sn-hud, .sn-stage.is-full-now .sn-hud{ z-index:6; background:linear-gradient(transparent,rgba(10,6,30,.96) 45%); }
   .sn-ovl:not([hidden]) + .sn-opt{ display:none !important; }
+  .sn-hud, .sn-opt{ transition:opacity .45s ease; }
+  .sn-stage.is-quiet .sn-hud, .sn-stage.is-quiet .sn-opt{ opacity:0; pointer-events:none; }
+  .sn-stage.is-quiet{ cursor:none; }
   .sn-stage.is-full .sn-idle, .sn-stage.is-full-now .sn-idle{ display:none !important; }
   .sn-ovl-top{ display:flex; justify-content:space-between; align-items:center; gap:1rem; }
   .sn-ovl-k, .sn-ovl p.sf-k{ margin:.5rem 0 .4rem !important; font:600 .78rem "IBM Plex Mono", monospace !important; letter-spacing:.1em; text-transform:uppercase; color:#F8D76A !important; background:none !important; box-shadow:none !important; border:0 !important; padding:0 !important; }
