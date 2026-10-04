@@ -557,6 +557,15 @@ div.tol-gate a.tol-btn, div.tol-gate button.tol-btn, div.tol-gate button{ border
 .tol-wash i{ animation:tol-drift 60s ease-in-out infinite alternate; }
 .tol-wash i:nth-child(even){ animation-duration:75s; animation-direction:alternate-reverse; }
 @keyframes tol-drift{ from{ translate:0 0; } to{ translate:0 -14px; } }
+/* on the home page Professor Puddles sits in the middle at the bottom, as the friendly helper under everything */
+body.is-home-pud .tol-pud-fab{ left:50%; transform:translateX(-50%); }
+@media (max-width:560px){
+  html body.is-home-pud .tol-pud-fab{ left:50% !important; width:auto; height:auto; min-height:48px; padding:.3rem .9rem .3rem .3rem !important; gap:.45rem; justify-content:flex-start;
+    border-radius:999px; border:1px solid #A9CBE8; bottom:max(1rem, env(safe-area-inset-bottom)); }
+  html body.is-home-pud .tol-pud-fab-t{ position:static; width:auto; height:auto; overflow:visible; clip:auto; white-space:nowrap; font-size:.88rem; }
+  html body.is-home-pud .tol-pud-fab-art{ width:40px; height:40px; }
+  html body.is-home-pud .tol-pud-fab-art svg{ width:34px; height:34px; }
+}
 @media (prefers-reduced-motion: reduce){ .tol-wash i{ animation:none; } }
 
 /* ---------- "Breathe with me": a one-minute calm break on every page ---------- */

@@ -1457,7 +1457,7 @@
     var fab = el('button', { type: 'button', class: 'tol-pud-fab', 'aria-label': 'Ask Professor Puddles about this page', title: 'Ask Professor Puddles' },
       '<span class="tol-pud-fab-art" aria-hidden="true">' + PUDDLES_SVG + '</span><span class="tol-pud-fab-t">Ask Professor Puddles</span>');
     fab.addEventListener('click', function () { openPud(opts('')); });
-    body.appendChild(fab); body.classList.add('has-pud-fab');
+    body.appendChild(fab); body.classList.add('has-pud-fab'); if (main.querySelector('[data-home-intro]')) body.classList.add('is-home-pud'); // the home page centres it
     window.TOLPuddles = { open: function (topic) { openPud(opts(topic || '')); } };
 
   }

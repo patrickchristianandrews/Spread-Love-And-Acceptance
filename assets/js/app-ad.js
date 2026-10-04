@@ -108,7 +108,7 @@
     host.innerHTML =
       '<aside class="appad no-bubble" aria-labelledby="aa-h">' +
         '<span class="aa-stage"><span class="aa-tilt"><canvas width="380" height="240" aria-hidden="true"></canvas></span><span class="aa-say" aria-hidden="true"></span></span>' +
-        '<div><p class="aa-k no-bubble">Free app · no store needed</p>' +
+        '<div><p class="aa-k no-bubble">Free app</p>' +
         '<h2 class="aa-h no-bubble" id="aa-h">Get the <em>app!</em></h2>' +
         '<p class="aa-p no-bubble">Tidbit and Sugarfoot are moonwalking onto your home screen. Pick your phone:</p>' +
         '<div class="aa-pick" role="group" aria-label="Choose your phone">' +
