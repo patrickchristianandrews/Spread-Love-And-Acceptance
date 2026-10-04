@@ -619,7 +619,108 @@
       var U = A.U, x = A.x1 - 22, y = A.G + 4, hit = Math.max(0, Math.sin(A.t / 500 * TAU));
       U.circle(g, x, y - 16, 16, '#F4EFE6'); U.circle(g, x, y - 16, 13, '#7C97E8'); U.text(g, 'T&S', x, y - 16, 7, '#FFFFFF', '800'); if (hit > 0.8) { g.strokeStyle = 'rgba(124,151,232,.5)'; g.lineWidth = 1.2; g.beginPath(); g.arc(x, y - 16, 20, 0, TAU); g.stroke(); }
       g.strokeStyle = '#3C3350'; g.lineWidth = 1; g.beginPath(); g.moveTo(A.cx - A.span, 40); g.quadraticCurveTo(A.cx, 52, A.cx + A.span, 40); g.stroke();
-      for (var k = 0; k < 3; k++) { var bx = A.cx - 40 + k * 40, by = 46 + (k === 1 ? 4 : 1) - Math.abs(Math.sin(A.t / 250 + k)) * (A.t > 6200 && A.t < 7400 ? 10 : 2); bird(g, U, bx, by, 0.9, k % 2 ? -1 : 1, A.t > 6200 && A.t < 7400 ? Math.abs(Math.sin(A.t / 60)) : 0, ['#7FB8F0', '#F7A8C2', '#8FD694'][k]); }
+      for (var k = 0; k < 3; k++) { var bx = A.cx - 40 + k * 40, by = 46 + (k === 1 ? 4 : 1) - Math.abs(Math.sin(A.t / 250 + k)) * (A.t > 6200 && A.t < 7400 ? 10 : 2); bird(g, U, bx, by, 0.9, k % 2 ? -1 : 1, A.t > 6200 && A.t < 7400 ? Math.abs(Math.sin(A.t / 60)) : 0, ['#7FB8F0', '#F7A8C2', '#8FD694'][k]); U.line(g, bx, by + 4, bx, by + 15, '#8A6340', 1.2); sign(g, U, bx, by + 22, 72, 13, ['GO TIDBIT!', 'GO SUGARFOOT!', 'ENCORE!'][k], ['#FFF3C9', '#E9F2FF', '#F6EAFB'][k], ['#E4566E', '#3E5A86', '#6A2E86'][k], 7); }
+    } });
+
+  // ======================= SILLY: break dancing, jokes and silly walks =======================
+  // a little boombox, pulsing to the beat (stage units)
+  function boombox(g, U, x, y, t) {
+    var pulse = Math.max(0, Math.sin(t / 500 * TAU)); U.rr(g, x - 17, y - 22, 34, 20, 3, '#4B4E6D'); U.rr(g, x - 6, y - 26, 12, 4, 2, '#3C3350');
+    for (var k = -1; k <= 1; k += 2) { U.circle(g, x + k * 9, y - 12, 6.2 + pulse * 1.2, '#2C2638'); U.circle(g, x + k * 9, y - 12, 3 + pulse * 0.8, '#7FB8F0'); }
+    U.rr(g, x - 4, y - 8, 8, 3, 1, '#F7C948');
+  }
+  // the fan birds on the wire, each holding a little sign: one for Tidbit, one for Sugarfoot
+  function fanWire(g, U, A, hype) {
+    g.strokeStyle = '#3C3350'; g.lineWidth = 1; g.beginPath(); g.moveTo(A.cx - A.span, 40); g.quadraticCurveTo(A.cx, 52, A.cx + A.span, 40); g.stroke();
+    var labels = [['GO TIDBIT!', '#FFF3C9', '#E4566E'], ['GO SUGARFOOT!', '#E9F2FF', '#3E5A86'], ['BEST BUDDIES!', '#F6EAFB', '#6A2E86']], cols = ['#7FB8F0', '#F7A8C2', '#8FD694'];
+    for (var k = 0; k < 3; k++) {
+      var bx = A.cx - 64 + k * 64, by = 46 + (k === 1 ? 4 : 1) - Math.abs(Math.sin(A.t / 250 + k)) * (hype ? 8 : 2), sway = Math.sin(A.t / 300 + k * 2) * (hype ? 3 : 1);
+      bird(g, U, bx, by, 0.9, k % 2 ? -1 : 1, hype ? Math.abs(Math.sin(A.t / 60 + k)) : 0, cols[k]);
+      U.line(g, bx + sway * 0.4, by + 4, bx + sway, by + 15, '#8A6340', 1.2);
+      sign(g, U, bx + sway, by + 22, 72, 13, labels[k][0], labels[k][1], labels[k][2], 7);
+    }
+  }
+
+  add({ id: 'breakdance', name: 'Break dance battle', kind: 'silly', dur: 12400,
+    cap: 'A break dance battle! Tidbit goes first, and the birds brought signs', punch: [9600, 'They finish with a spin, a freeze and a very silly bow.'],
+    at: function (A) { return [A.cx - 70, A.cx + 70]; },
+    run: function (A, T, S) {
+      var c = A.cx;
+      T.x = c - 70; T.face = 1; S.x = c + 70; S.face = -1;
+      A.say(T, 'Dance battle!', 200, 1400); A.say(S, 'Bring it!', 1300, 2200);
+      if (A.tick(500, 1200, 11800)) A.burst(c, A.G - 90, 1, 'note');
+      // round one: Tidbit. Run in, spin on her back, then freeze
+      A.walk(T, c - 70, c - 28, 2200, 2800);
+      if (A.t > 2800) { T.x = c - 28; T.face = 1; }
+      if (A.in(2900, 4700)) { T.pose = 'lie'; T.pivot = 'center'; T.rot = TAU * 3 * A.e(2900, 4700); T.lift = 4 + 4 * Math.abs(Math.sin(A.t / 120)); T.tilt = 0; }
+      A.say(S, 'Whoa!', 3300, 4100);
+      if (A.in(4700, 5600)) { T.pose = 'bow'; T.wag = 3; A.say(T, 'Freeze!', 4800, 5700); }
+      if (A.once(4700)) A.burst(c - 28, A.G - 50, 14, 'confetti', { speed: 0.13, spread: 2.4 });
+      if (A.t > 5700) { T.x = mix(c - 28, c - 70, A.e(5700, 6300)); T.face = 1; }
+      // round two: Sugarfoot. Flips, then the worm
+      A.walk(S, c + 70, c + 24, 5700, 6300);
+      if (A.t > 6300) { S.x = c + 24; S.face = -1; }
+      A.flip(S, 6500, 800, 34, 1, 1);
+      A.say(T, 'Ooh!', 6600, 7400);
+      if (A.in(7500, 9000)) { S.pose = 'wiggle'; S.wag = 4; S.x = c + 24 + Math.sin(A.t / 130) * 16; S.sy *= 1 - 0.1 * Math.abs(Math.sin(A.t / 130)); A.say(S, 'The worm!', 7600, 8600); }
+      if (A.once(7500)) A.burst(c + 24, A.G - 50, 12, 'confetti', { speed: 0.12, spread: 2.2 });
+      if (A.t > 9000) { S.x = mix(c + 24, c + 70, A.e(9000, 9500)); }
+      // finale: both at once
+      if (A.in(9600, 11200)) { T.pose = S.pose = 'wiggle'; T.wag = S.wag = 4; T.x = c - 40 + Math.sin(A.t / 160) * 8; S.x = c + 40 - Math.sin(A.t / 160) * 8; A.spin(T, 9800, 800, 2); A.spin(S, 10100, 800, -2); A.hop(T, 10600, 360, 24); A.hop(S, 10650, 360, 24); }
+      if (A.once(10600)) A.burst(c, A.G - 90, 22, 'confetti', { speed: 0.15, spread: 3 });
+      if (A.t > 11200) { T.x = c - 40; S.x = c + 40; T.face = 1; S.face = -1; T.pose = S.pose = 'bow'; }
+      A.say(T, 'Tie again!', 11300, 12300); A.say(S, 'Best day!', 11500, 12400);
+    },
+    back: function (g, A) { fanWire(g, A.U, A, A.in(2900, 5600) || A.in(6500, 9000) || A.in(9600, 11400)); },
+    front: function (g, A) { boombox(g, A.U, A.cx, A.G + 8, A.t); }
+  });
+
+  add({ id: 'jokes', name: 'Joke swap', kind: 'silly', dur: 17200,
+    cap: 'Joke time! Tidbit and Sugarfoot trade their very best jokes', punch: [15600, 'Boo who? Don’t cry, it’s only a joke!'],
+    at: function (A) { return [A.cx - 44, A.cx + 44]; },
+    run: function (A, T, S) {
+      var c = A.cx; T.x = c - 44; T.face = 1; S.x = c + 44; S.face = -1;
+      function roll(d, a, b, side) { if (A.in(a, b)) { d.pose = 'lie'; d.pivot = 'center'; d.rot = side * (0.5 + Math.sin(A.t / 140) * 0.7); d.lift = 3 + 3 * Math.abs(Math.sin(A.t / 110)); } }
+      // joke one: Tidbit
+      A.say(T, 'What’s a pup’s favorite pizza?', 300, 2300); rear(A, T, 300, 900, 0.25);
+      A.say(S, 'Hmm… I give up!', 2400, 3700);
+      A.say(T, 'Pupperoni!', 3900, 4900); A.hop(T, 3900, 400, 22);
+      if (A.once(3900)) A.burst(c, A.G - 100, 14, 'confetti', { speed: 0.13, spread: 2.4 });
+      A.say(S, 'Ha ha ha!', 5000, 6000); roll(S, 5000, 6400, 1); A.say(T, 'Ha!', 5200, 6000); T.wag = 3;
+      // joke two: Sugarfoot
+      A.say(S, 'Why did the pup sit in the shade?', 6800, 9000); rear(A, S, 6800, 7400, 0.25);
+      A.say(T, 'Why?', 9100, 9900);
+      A.say(S, 'He didn’t want to be a hot dog!', 10000, 12200); A.hop(S, 10000, 400, 22);
+      if (A.once(10000)) A.burst(c, A.G - 100, 14, 'confetti', { speed: 0.13, spread: 2.4 });
+      A.flip(T, 11000, 700, 26, 1, -1); A.say(T, 'Oh no!', 11000, 12000); roll(T, 12000, 13000, -1);
+      // joke three: knock knock, with the best silliness at the end
+      A.say(T, 'Knock knock!', 13100, 14000); A.say(S, 'Who’s there?', 14000, 14900);
+      A.say(T, 'Boo!', 14900, 15400); A.say(S, 'Boo who?', 15400, 16000);
+      A.say(T, 'Don’t cry, it’s only a joke!', 16000, 17100);
+      if (A.t > 16000) { T.wag = S.wag = 3; A.hop(S, 16300, 300, 14); }
+    },
+    front: function (g, A) {
+      var U = A.U, y = A.G + 6;
+      // a tiny drum for the ba-dum-tss after each punchline
+      var hit = A.in(4900, 5200) || A.in(12200, 12500) || A.in(16000, 16300) ? 1.5 : 0;
+      U.ell(g, A.cx, y, 12, 4, '#3C3350'); U.ell(g, A.cx, y - 5 + hit, 11, 3.6, '#F4EFE6'); U.rr(g, A.cx - 11, y - 5 + hit, 22, 6, 1, '#E4566E'); U.ell(g, A.cx, y + 1, 11, 3.6, '#B8384F');
+    } });
+
+  add({ id: 'sillywalks', name: 'Silly walks', kind: 'silly', dur: 9800,
+    cap: 'The silly walk parade: Tidbit prances, Sugarfoot moonwalks', punch: [7400, 'They meet in the middle and wiggle off, very serious.'],
+    at: function (A) { return [A.x0, A.x1]; },
+    run: function (A, T, S) {
+      var c = A.cx;
+      // Tidbit prances to the right, one tiny hop at a time; Sugarfoot moonwalks backwards to the left
+      var pT = A.p(600, 5200), pS = A.p(600, 5200);
+      T.x = mix(A.x0, A.x1, eio(pT)); S.x = mix(A.x1, A.x0, eio(pS));
+      if (pT > 0 && pT < 1) { T.face = 1; S.face = 1; T.pose = 'run'; S.pose = 'run'; var k = Math.floor((A.t - 600) / 300); A.hop(T, 600 + k * 300, 220, 12); S.tilt = Math.sin(A.t / 120) * 0.2; }
+      A.say(T, 'Prance, prance, prance!', 900, 2700); A.say(S, 'Moonwalk!', 2900, 4300);
+      if (A.in(5200, 7400)) { T.face = 1; S.face = -1; T.pose = 'sit'; S.pose = 'sit'; }
+      A.say(T, 'Nice walk!', 5300, 6300); A.say(S, 'It’s a sidewalk.', 6400, 7600);
+      if (A.once(6400)) A.burst(c, A.G - 90, 10, 'confetti', { speed: 0.12, spread: 2.2 });
+      if (A.in(7500, 9200)) { T.pose = S.pose = 'wiggle'; T.wag = S.wag = 4; T.x = mix(T.x, c - 30, A.e(7500, 8000)); S.x = mix(S.x, c + 30, A.e(7500, 8000)); A.spin(T, 8000, 700, 1); A.spin(S, 8200, 700, -1); }
+      if (A.t > 9200) { T.pose = S.pose = 'bow'; }
     } });
 
   add({ id: 'talentshow', name: 'Talent show', kind: 'cool', dur: 9600,
