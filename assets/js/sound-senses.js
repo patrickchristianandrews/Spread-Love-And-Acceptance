@@ -51,13 +51,13 @@
     '<p class="sn-lede">Press play on a Brain Breaker and watch it move, or let your phone feel it with you. Each track has its own pictures and its own kind of pulse. Everything happens on your device.</p>' +
     '<div class="sn-stage" id="sn-stage"><canvas id="sn-cv" aria-hidden="true"></canvas><p class="sn-idle" id="sn-idle">Press <strong>See and feel this</strong> on a track below, or pick one with Find your Brain Breaker.</p>' +
     '<div class="sn-hud"><span class="sn-now" id="sn-now"></span><span class="sn-buzz" id="sn-buzz" title="Lights up when the phone is asked to vibrate" aria-hidden="true">&#x26A1;</span><button type="button" class="sn-b sn-hud-b" id="sn-full" aria-label="Full screen">&#x26F6; Full screen</button></div>' +
-    '<button type="button" class="sn-b sn-opt" id="sn-opt" aria-expanded="false" aria-controls="sn-ovl">&#x2630; Choose</button>' +
     '<div class="sn-ovl" id="sn-ovl" role="dialog" aria-label="Choose a track, what you see and what you feel" hidden><div class="sn-ovl-in">' +
       '<div class="sn-ovl-top"><p class="sn-ovl-k">Pick a Brain Breaker</p><button type="button" class="sn-b" id="sn-ovl-x" aria-label="Close this panel">&times; Close</button></div>' +
       '<div class="sn-trk" id="sn-trk"></div>' +
       '<div class="sn-find" id="sn-ovl-find" hidden></div>' +
       '<p class="sn-ovl-k">See and feel it</p><div id="sn-ovl-ctl"></div>' +
-    '</div></div></div>' +
+    '</div></div>' +
+    '<button type="button" class="sn-b sn-opt" id="sn-opt" aria-expanded="false" aria-controls="sn-ovl">&#x2630; Choose</button></div>' +
     '<div class="sn-info" id="sn-info" hidden aria-live="polite"><div class="sn-info-top"><strong id="sn-info-name"></strong><span class="sn-meter" aria-hidden="true"><i id="sn-meter"></i></span><span class="sn-meter-l">Energy</span></div><dl id="sn-info-fx"></dl></div>' +
     '<div class="sn-row" role="group" aria-label="How to see the sound"><span class="sn-l">See</span>' + btns('look', LOOKS, NAMES, look) + '</div>' +
     '<div class="sn-row" id="sn-feel-row" role="group" aria-label="How strongly to feel the sound"><span class="sn-l">Feel</span>' + btns('level', LEVELS, LNAMES, level) + '</div>' +
