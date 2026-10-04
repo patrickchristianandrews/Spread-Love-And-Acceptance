@@ -62,6 +62,10 @@
   .tv-ctl .tv-exit { background: #FFF8EE; color: #3C3350; border-color: #FFF8EE; }
   html.tv-quiet.tv-fine .tv-ctl { opacity: 0; pointer-events: none; }
   .pc-ov.is-tv .tv-hint { position: absolute; top: 26vh; bottom: auto; right: auto; left: 50%; transform: translateX(-50%); max-width: min(90vw, 34rem); text-align: center; font-size: 1rem; z-index: 3; }
+  /* local time and weather, big enough to read from the couch */
+  .pc-ov.is-tv .pc-time, .pc-ov.is-tv .pc-wx, .pc-ov.is-tv .pc-rec { font-size: clamp(.9rem, .55rem + 1.1vw, 1.7rem); padding: .3rem .9rem; top: max(10px, 2vh); }
+  .pc-ov.is-tv .pc-wx { top: calc(max(10px, 2vh) + clamp(2rem, 1.6rem + 1.6vw, 3rem)); min-height: 44px; }
+  .pc-ov.is-tv .pc-time { right: 1.2rem; } .pc-ov.is-tv .pc-rec, .pc-ov.is-tv .pc-wx { left: 1.2rem; }
   @media (max-width: 420px) { .tv-ctl button { padding: .45rem .75rem; font-size: .95rem; } }
 </style>
 <!-- seo:start -->

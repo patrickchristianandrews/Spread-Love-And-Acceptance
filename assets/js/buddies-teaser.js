@@ -920,6 +920,13 @@
       swell: function (t, len, vol) { var n = noiseSrc(t, len + 0.05), f = filt('bandpass', 400, 1.2), gn = gainTo(); f.frequency.setValueAtTime(300, t); f.frequency.exponentialRampToValueAtTime(5000, t + len); gn.gain.setValueAtTime(0.0001, t); gn.gain.exponentialRampToValueAtTime(vol, t + len); gn.gain.linearRampToValueAtTime(0.0001, t + len + 0.04); n.connect(f); f.connect(gn); },
       rumble: function (t, len, vol) { var n = noiseSrc(t, len, brown), f = filt('lowpass', 140), gn = gainTo(); gn.gain.setValueAtTime(0.0001, t); gn.gain.linearRampToValueAtTime(vol, t + len * 0.35); gn.gain.linearRampToValueAtTime(0.0001, t + len); n.connect(f); f.connect(gn); var o = osc('sine', 46, t, t + len), g2 = gainTo(); g2.gain.setValueAtTime(0.0001, t); g2.gain.linearRampToValueAtTime(vol * 0.6, t + len * 0.4); g2.gain.linearRampToValueAtTime(0.0001, t + len); o.connect(g2); },
       cricket: function (t, vol) { for (var k = 0; k < 3; k++) { var o = osc('sine', 4300, t + k * 0.05, t + k * 0.05 + 0.04), gn = gainTo(); env(gn, t + k * 0.05, 0.004, vol, 0.01, 0.02); o.connect(gn); } },
+      vox: function (t, f, len, vol, vi, f2) { // a little talking voice: a buzzy tone through two vowel filters, one per syllable
+        var V = [[730, 1090], [310, 2200], [570, 900], [530, 1800], [660, 1700]][vi % 5], o = osc('sawtooth', f, t, t + len + 0.05), g = gainTo();
+        o.frequency.setValueAtTime(f, t); o.frequency.linearRampToValueAtTime(f2 || f, t + len);
+        var lfo = osc('sine', 6, t, t + len + 0.05), lg = c.createGain(); lg.gain.value = f * 0.012; lfo.connect(lg); lg.connect(o.frequency);
+        var a1 = filt('bandpass', V[0], 5), a2 = filt('bandpass', V[1], 7), g1 = c.createGain(), g2 = c.createGain(); g1.gain.value = 1; g2.gain.value = 0.6;
+        env(g, t, 0.015, vol, len * 0.55, len * 0.35); o.connect(a1); o.connect(a2); a1.connect(g1); a2.connect(g2); g1.connect(g); g2.connect(g);
+      },
       blip: function (t, f, vol) { var o = osc('triangle', f, t, t + 0.12), gn = gainTo(); o.frequency.setValueAtTime(f, t); o.frequency.linearRampToValueAtTime(f * 1.08, t + 0.05); env(gn, t, 0.005, vol, 0.03, 0.05); o.connect(gn); },
       glide: function (t, f0, f1, len, vol, type) { var o = osc(type || 'sine', f0, t, t + len + 0.1), gn = gainTo(); o.frequency.setValueAtTime(f0, t); o.frequency.exponentialRampToValueAtTime(f1, t + len); env(gn, t, 0.01, vol, len * 0.7, len * 0.3); o.connect(gn); },
       whoosh: function (t, len, vol) { var n = noiseSrc(t, len + 0.1), f = filt('bandpass', 400, 2), gn = gainTo(); f.frequency.setValueAtTime(300, t); f.frequency.exponentialRampToValueAtTime(2600, t + len * 0.5); f.frequency.exponentialRampToValueAtTime(400, t + len); gn.gain.setValueAtTime(0.0001, t); gn.gain.linearRampToValueAtTime(vol, t + len * 0.45); gn.gain.linearRampToValueAtTime(0.0001, t + len); n.connect(f); f.connect(gn); },
@@ -1114,6 +1121,28 @@
       else pick = ['arf', 'ruff', 'mmm'][i % 3];
       ev(ln.T + 0.04, 'sample', w + '-' + pick, 0.62);
     });
+    // every line is spoken by a little talking voice, timed to the words on screen (Tidbit bright and quick, Sugarfoot softer and lower, the narrator deep and slow).
+    // The words that matter (SHOUTED ones, the last word of a shout or a question, and the key word of a trailing "…") get a higher, louder, longer syllable and a tiny beat of space before them.
+    scanLines(calm).forEach(function (ln) {
+      var ws = ln.text.match(/[A-Za-z0-9’']+[!?…]*/g) || []; if (!ws.length) return;
+      var V = ln.who === 'narr' ? { f: 128, v: 0.05 } : ln.who === 'sugarfoot' ? { f: 392, v: 0.05 } : { f: 560, v: 0.05 };
+      var q = /\?/.test(ln.text), ex = /!/.test(ln.text), syl = [], tot = 0;
+      ws.forEach(function (w, wi) {
+        var core = w.replace(/[^A-Za-z0-9’']/g, ''), loud = core.length > 1 && core === core.toUpperCase() && /[A-Z]/.test(core);
+        var last = wi === ws.length - 1, strong = loud || (last && /[!?]/.test(w)) || (last && ws.length > 1 && !/…/.test(w)) || (wi === ws.length - 2 && /…$/.test(w) === false && /…/.test(ws[ws.length - 1]) && ws.length > 2);
+        var n = Math.max(1, Math.round(core.length / 3.2)); syl.push({ n: n, strong: strong, loud: loud, last: last, w: strong ? 1.5 : 1 }); tot += n * (strong ? 1.5 : 1);
+      });
+      var span = Math.max(0.5, ln.dur * 0.86), step = span / tot, t = ln.T + 0.06, k = 0;
+      syl.forEach(function (w, wi) {
+        if (w.strong && wi > 0) t += step * 0.35;   // a hair of space before the important word
+        for (var s2 = 0; s2 < w.n; s2++, k++) {
+          var u = tot ? (t - ln.T) / span : 0, f = V.f * (1 + 0.14 * (rnd(k * 5.3 + ln.T) - 0.5) + (q ? 0.3 * Math.max(0, u - 0.5) : 0) - (ex ? 0 : 0.05 * u)), len = Math.min(0.26, step * (w.strong ? 1.4 : 0.85)), vol = V.v * (ln.who === 'narr' ? 1.1 : 1) * (0.8 + 0.3 * rnd(k * 2.1 + ln.T));
+          if (w.strong) { f *= w.loud ? 1.28 : 1.16; vol *= w.loud ? 1.9 : 1.5; }
+          ev(t, 'vox', f, len, vol, Math.floor(rnd(k * 1.7 + ln.T * 3) * 5), f * (q && w.last && s2 === w.n - 1 ? 1.3 : w.strong ? 1.04 : 0.94));
+          t += step * (w.strong ? 1.5 : 1) / 1;
+        }
+      });
+    });
     E.sort(function (a, b) { return a[0] - b[0]; });
     return E;
   }
@@ -1263,7 +1292,7 @@
       // the theme song started before this point? pick it up partway
       A.E.forEach(function (e) { if (e[1] === 'sample' && e[2] === 'theme' && fromT > e[0] && fromT < e[0] + e[5]) { var into = fromT - e[0]; fire(I, [0, 'sample', 'theme', e[3], e[4] + into, e[5] - into], c.currentTime + 0.06); } });
       while (A.idx < A.E.length && A.E[A.idx][0] < fromT - 0.01) A.idx++;
-      function pump() { if (!A.bus || A.ctx !== c) return; var horizon = c.currentTime + 0.5; while (A.idx < A.E.length && A.E[A.idx][0] + A.map < horizon) { var e = A.E[A.idx++]; fire(I, e, Math.max(c.currentTime, e[0] + A.map)); } }
+      function pump() { if (!A.bus || A.ctx !== c) return; var horizon = c.currentTime + 0.5; while (A.idx < A.E.length && A.E[A.idx][0] + A.map < horizon) { var e = A.E[A.idx++]; if (e[1] === 'vox' && canSay) { e = e.slice(); e[4] *= 0.6; } fire(I, e, Math.max(c.currentTime, e[0] + A.map)); } }
       pump(); A.timer = setInterval(pump, 120);
     }
     // ----- the clock
