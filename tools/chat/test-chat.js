@@ -45,6 +45,7 @@ t('tools', 'Tell me about the Daily Ledger crossword', { kind: 'card', id: 'dail
 t('tools', 'What is Quiet Words?', { kind: 'card', id: 'quietwords' });
 t('tools', 'What is the Frequency Journey?', { kind: 'card', id: 'journey', link: '/frequency-journey.html' });
 t('tools', 'Who are Tidbit and Sugarfoot?', { kind: 'card', id: 'journey', text: /Tidbit and Sugarfoot/ });
+t('tools', 'Is there a maze game with Tidbit and Sugarfoot?', { kind: 'card', id: 'journey', link: '/frequency-journey.html' });
 t('tools', 'What is the pal cam?', { kind: 'card', id: 'palcam', text: /Journey/ });
 t('tools', 'How do I check in on Tidbit and Sugarfoot?', { kind: 'card', id: 'palcam', steps: true });
 t('tools', 'What are the soundscapes?', { kind: 'card', id: 'soundscapes' });
@@ -244,7 +245,7 @@ c('followups', ['What is the Lemonade Stand?', 'how do I start?'], { steps: true
 c('followups', ['What is the Lemonade Stand?', 'give me an example'], { text: /roommates listed 14 jobs/ });
 c('followups', ['What is WP-13?', 'what about for roommates?'], { kind: 'road', id: 'roommate' });
 c('followups', ['My sister always makes plans without asking me.', 'tell me more'], { link: '/library/' });
-c('followups', ['What is the Journey?', 'tell me more'], { text: /pal cam|life lesson/ });
+c('followups', ['What is the Journey?', 'tell me more'], { text: /pal cam|quicker|steadier/ });
 c('followups', ['What is active listening?', 'tell me more'], { not: /couldn’t find/ });
 
 // ---------------------------------------------------------------- friendly clarifying questions

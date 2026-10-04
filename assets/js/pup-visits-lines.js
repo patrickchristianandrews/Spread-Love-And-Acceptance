@@ -136,7 +136,7 @@ window.TOL_PUP_LINES = {
     ['Little “Check yourself” moments light up your quest map!', '/quest.html', 'Your quest map'],
     ['Want something good to read next?', '/reading.html', 'Something to read'],
     ['Need a calm little break? We love the Night Garden.', '/night-garden.html', 'The Night Garden'],
-    ['We have our own puzzle adventure! Riddles, puzzles and seven worlds.', '/frequency-journey.html', 'The Frequency Journey'],
+    ['We have our own arcade! Pick one of us and play a maze chase or cross the road.', '/frequency-journey.html', 'The Frequency Journey'],
     ['Soft sounds for a slow evening.', '/soundscapes.html', 'Soundscapes'],
     ['A 90-second check-in, for busy days.', '/workpapers/wp-13-pll-protocol.html', 'The Daily Loop'],
     ['Curious how it all fits together?', '/how-it-works.html', 'How it works']
@@ -230,7 +230,7 @@ window.TOL_PUP_LINES = {
     new: [
       'Ooh, new things! Pick one that looks fun.',
       ['Find the “Check yourself” moments and light up your map!', '/quest.html', 'Your quest map'],
-      ['Our puzzle journey is here! Seven worlds.', '/frequency-journey.html', 'The Frequency Journey'],
+      ['Our arcade is here! Pick one of us and play.', '/frequency-journey.html', 'The Frequency Journey'],
       ['The Professor has a whole library now.', '/library.html', 'The Professor’s Library'],
       ['Soft sounds for slow moments.', '/soundscapes.html', 'Soundscapes']
     ]

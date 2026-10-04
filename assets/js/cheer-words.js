@@ -149,7 +149,7 @@ window.TOL_CHEER = {
     ['Want a cozy shelf of more to read?', '/library.html', 'The Professor’s Library'],
     ['Hungry for more? There’s a reading list.', '/reading.html', 'Further Reading'],
     ['Want a slow, calm minute with soft colors?', '/calm-visualizer.html', 'Drift, the calm visualizer'],
-    ['Fancy a gentle story game about tuning in?', '/frequency-journey.html', 'The Frequency Journey'],
+    ['Fancy a quick arcade game with Tidbit and Sugarfoot?', '/frequency-journey.html', 'The Frequency Journey'],
     ['A hard talk goes smoother in a kind order.', '/check-ins.html#order', 'The order of a check-in'],
     ['Talk got bumpy? There’s a kind way to regroup.', '/check-ins.html#regroup', 'How to regroup'],
     ['A simple thank-you is a big deal.', '/turning-toward.html#thanks', 'Saying thanks'],
@@ -307,7 +307,7 @@ window.TOL_CHEER = {
       'Play is a lovely way to settle.', 'No timers, no losing. Just fun.', 'A calm game can reset a busy brain.',
       'Play first, talk later. Great plan.', 'Every level is a little breather.', 'Games are more fun with a buddy.',
       ['Find a few quiet words, just for fun.', '/quiet-words.html', 'Quiet Words'],
-      ['A gentle journey about tuning in.', '/frequency-journey.html', 'The Frequency Journey']
+      ['A little arcade game with Tidbit and Sugarfoot.', '/frequency-journey.html', 'The Frequency Journey']
     ]
   }
 };
