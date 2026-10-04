@@ -86,7 +86,7 @@
   var FR = { says: [], secrets: [], narr: [] };
   function px(g, x, y) { var m = g.getTransform(); return { x: m.a * x + m.c * y + m.e, y: m.b * x + m.d * y + m.f, k: Math.hypot(m.a, m.b) }; }
   // a line of dialogue, shown from u0 to u1 over the speaker's head (o: { big, dx })
-  function say(g, head, text, u, u0, u1, o) { if (u < u0 || u > u1) return; var p = px(g, head.x, head.y); FR.says.push({ who: head.who || 'tidbit', x: p.x, y: p.y, text: text, a: clamp((u - u0) / 0.12, 0, 1) * clamp((u1 - u) / 0.14, 0, 1), pop: (u - u0), o: o || {} }); live(text); }
+  function say(g, head, text, u, u0, u1, o) { if (u < u0 || u > u1) return; var p = px(g, head.x, head.y); FR.says.push({ dur: u1 - u0, who: head.who || 'tidbit', x: p.x, y: p.y, text: text, a: clamp((u - u0) / 0.12, 0, 1) * clamp((u1 - u) / 0.14, 0, 1), pop: (u - u0), o: o || {} }); live(text); }
   // the trailer announcer: a line across the top of the picture, typed out, and read aloud by the player (draw: false = read aloud only)
   function narr(text, u, u0, u1, draw) { if (u < u0 || u > u1) return; FR.narr.push({ text: text, u: u - u0, a: clamp((u - u0) / 0.2, 0, 1) * clamp((u1 - u) / 0.25, 0, 1), draw: draw !== false }); live(text); }
   var SECRETS = [
@@ -865,11 +865,13 @@
 
   // ---------------------------------------------------------------- the music and sounds (Web Audio)
   function hz(m) { return 440 * Math.pow(2, (m - 69) / 12); }
-  var SAMPLES = ['tidbit-hmm', 'sugarfoot-ooh', 'sugarfoot-laugh-2', 'tidbit-yip', 'tidbit-arfarf', 'sugarfoot-arfarf', 'sugarfoot-aww', 'sugarfoot-laugh-1', 'tidbit-ooh', 'tidbit-laugh-1'];
+  var FXN = ['arf', 'arfarf', 'ruff', 'woof', 'yip', 'hmm', 'ooh', 'aww', 'mmm', 'sigh', 'laugh-1', 'laugh-2'];
+  var SAMPLES = []; ['tidbit', 'sugarfoot'].forEach(function (w) { FXN.forEach(function (n) { SAMPLES.push(w + '-' + n); }); });
+  var AMBN = ['birds', 'wind', 'waves', 'crickets', 'city', 'carnival', 'cafe', 'underwater', 'rain', 'stream'];   // the same place sounds Season 1 uses
   var BUF = {}, bufP = null, decodeCtx = null;
   function loadSamples(c) {
     if (bufP) return bufP; decodeCtx = c;
-    var list = SAMPLES.map(function (n) { return ['/assets/audio/buddies/fx/' + n + '.mp3', n]; }).concat([['/assets/audio/buddies/theme-open.mp3', 'theme']]);
+    var list = SAMPLES.map(function (n) { return ['/assets/audio/buddies/fx/' + n + '.mp3', n]; }).concat(AMBN.map(function (n) { return ['/assets/audio/ambience/' + n + '.mp3', 'amb:' + n]; })).concat([['/assets/audio/buddies/theme-open.mp3', 'theme']]);
     bufP = Promise.all(list.map(function (L) {
       return fetch(L[0]).then(function (r) { return r.ok ? r.arrayBuffer() : null; }).then(function (ab) {
         if (!ab) return; return new Promise(function (ok) { try { var pr = c.decodeAudioData(ab, function (b) { BUF[L[1]] = b; ok(); }, function () { ok(); }); if (pr && pr.catch) pr.catch(function () { ok(); }); } catch (e) { ok(); } });
@@ -889,7 +891,13 @@
     function gainTo(dest) { var gn = c.createGain(); gn.connect(dest || bus); return gn; }
     function noiseSrc(t, len, buf) { var n = src(c.createBufferSource()); n.buffer = buf || noise; n.loop = true; n.start(t); n.stop(t + len); return n; }
     function filt(type, f, q) { var b = c.createBiquadFilter(); b.type = type; b.frequency.value = f; if (q) b.Q.value = q; return b; }
+    // Season 1's music bed: soft pads and plucks through a low-pass, kept low under everything else
+    var mus = c.createGain(); mus.gain.value = 0.55; var mlp = c.createBiquadFilter(); mlp.type = 'lowpass'; mlp.frequency.value = 1500; mus.connect(mlp); mlp.connect(bus);
+    var amb = c.createGain(); amb.gain.value = 0.9; amb.connect(bus);
     var I = {
+      mpad: function (t, m, len, vol) { [[0, 'triangle', 0.5], [5, 'sine', 0.7]].forEach(function (v) { var o = osc(v[1], hz(m), t, t + len + 1.8), gn = gainTo(mus); o.detune.value = v[0]; var pk = vol * v[2]; gn.gain.setValueAtTime(0.0001, t); gn.gain.linearRampToValueAtTime(pk, t + Math.min(1.4, len * 0.35)); gn.gain.setValueAtTime(pk, t + len * 0.75); gn.gain.linearRampToValueAtTime(0.0001, t + len + 1.6); o.connect(gn); }); },
+      mpluck: function (t, m, vol) { var o = osc('sine', hz(m), t, t + 1), gn = gainTo(mus); gn.gain.setValueAtTime(0.0001, t); gn.gain.linearRampToValueAtTime(vol, t + 0.02); gn.gain.exponentialRampToValueAtTime(0.0001, t + 0.9); o.connect(gn); },
+      amb: function (t, name, len, vol) { var b = BUF['amb:' + name]; if (!b) return; var sN = src(c.createBufferSource()), gn = gainTo(amb); sN.buffer = b; sN.loop = true; sN.connect(gn); gn.gain.setValueAtTime(0.0001, t); gn.gain.linearRampToValueAtTime(vol, t + 0.6); gn.gain.setValueAtTime(vol, t + Math.max(0.6, len - 0.7)); gn.gain.linearRampToValueAtTime(0.0001, t + len); sN.start(t, (name.length * 1.7) % Math.max(1, b.duration - 1)); sN.stop(t + len + 0.1); },
       pad: function (t, notes, len, vol) { notes.forEach(function (m) { [[-7, 'triangle', 0.5], [6, 'sine', 0.7]].forEach(function (v) { var o = osc(v[1], hz(m), t, t + len + 2.2), gn = gainTo(); o.detune.value = v[0]; env(gn, t, Math.min(1.6, len * 0.35), vol * v[2], len * 0.55, 1.8); o.connect(gn); }); }); },
       bass: function (t, m, len, vol) { var o = osc('triangle', hz(m), t, t + len + 0.4), gn = gainTo(); env(gn, t, 0.01, vol, len * 0.4, len * 0.5); o.connect(gn); var o2 = osc('sine', hz(m - 12), t, t + len + 0.4), g2 = gainTo(); env(g2, t, 0.01, vol * 0.8, len * 0.4, len * 0.5); o2.connect(g2); },
       pluck: function (t, m, vol) { var o = osc('triangle', hz(m), t, t + 0.8), gn = gainTo(); env(gn, t, 0.005, vol, 0.01, 0.5); o.connect(gn); },
@@ -919,12 +927,40 @@
     };
     return I;
   }
+  // Season 1's music moods (chords as MIDI notes, period in seconds per chord) and what each shot feels like
+  var CH = {
+    gentle: { p: 5.2, c: [[48, 55, 64, 71], [45, 52, 60, 67], [41, 48, 57, 64], [43, 50, 59, 62]], arp: 0.25 },
+    happy: { p: 3.6, c: [[48, 55, 64, 67], [43, 50, 59, 67], [45, 52, 60, 64], [41, 48, 57, 65]], arp: 1 },
+    tense: { p: 4.4, c: [[45, 52, 60, 64], [46, 53, 62, 65], [43, 50, 58, 62], [45, 52, 61, 64]], arp: 0, pulse: true },
+    brave: { p: 3.8, c: [[50, 57, 62, 66], [45, 52, 61, 64], [47, 54, 62, 66], [43, 50, 59, 62]], arp: 0.8, pulse: true },
+    triumph: { p: 3.2, c: [[48, 55, 64, 67], [41, 48, 60, 65], [43, 50, 59, 67], [48, 55, 64, 72]], arp: 1 }
+  };
+  var SHOT_MOOD = { cold: 'gentle', balloon: 'brave', lighthouse: 'gentle', mountain: 'brave', library: 'happy', market: 'happy', underwater: 'gentle', rooftop: 'brave', friend: 'gentle', sneeze: 'happy', puddle: 'happy', boulder: 'tense', jaws: 'tense', matrix: 'tense', snakes: 'tense', vault: 'tense', bridge: 'brave', laundry: 'happy', flash1: 'triumph', flash2: 'triumph', flash3: 'triumph', hill: 'happy', riser: 'triumph', reveal: 'triumph', post: 'gentle' };
+  var SHOT_AMB = { cold: [['crickets', 0.5]], balloon: [['wind', 0.55]], lighthouse: [['waves', 0.6], ['wind', 0.25]], mountain: [['wind', 0.6]], library: [['cafe', 0.2]], market: [['carnival', 0.4], ['city', 0.2]], underwater: [['underwater', 0.6]], rooftop: [['city', 0.35], ['wind', 0.25]], friend: [['birds', 0.4]], sneeze: [['birds', 0.35]], puddle: [['rain', 0.5]], boulder: [['wind', 0.35], ['birds', 0.2]], jaws: [['waves', 0.55], ['crickets', 0.25]], bridge: [['stream', 0.5], ['birds', 0.3]], laundry: [['birds', 0.5]], hill: [['birds', 0.4]], post: [['crickets', 0.4]] };
+  // every line that appears on screen, and when: found by playing the picture quietly on a tiny canvas, so the sound can never drift from it
+  var SCAN = {};
+  function scanLines(calm) {
+    var key = calm ? 'c' : 'n'; if (SCAN[key]) return SCAN[key];
+    var cv = document.createElement('canvas'); cv.width = 128; cv.height = 72; var g = cv.getContext('2d'); if (!g) return [];
+    var out = [], act = {}, keep = { says: FR.says, narr: FR.narr, line: FR.line, secrets: FR.secrets, quiet: FR.quiet };
+    for (var T = 0; T <= DUR; T += 0.125) {
+      try { render(g, 128, 72, T, !!calm, 1); } catch (e) {}
+      var now = {};
+      FR.says.forEach(function (x) { now[x.who + '|' + x.text] = { who: x.who, text: x.text }; });
+      FR.narr.forEach(function (x) { now['narr|' + x.text] = { who: 'narr', text: x.text }; });
+      Object.keys(now).forEach(function (k) { if (!act[k]) act[k] = { T: T, who: now[k].who, text: now[k].text }; });
+      Object.keys(act).forEach(function (k) { if (!now[k]) { act[k].dur = T - act[k].T; out.push(act[k]); delete act[k]; } });
+    }
+    Object.keys(act).forEach(function (k) { act[k].dur = DUR - act[k].T; out.push(act[k]); });
+    FR.says = keep.says; FR.narr = keep.narr; FR.line = keep.line; FR.secrets = keep.secrets; FR.quiet = keep.quiet;
+    out.sort(function (x, y) { return x.T - y.T; }); SCAN[key] = out; return out;
+  }
   // the score: [time, instrument, ...args]; `calm` softens the big hits
   function score(calm) {
     var E = [], H = calm ? 0.55 : 1;
     function ev() { E.push(Array.prototype.slice.call(arguments)); }
-    function talk(t, n, base, vol) { for (var i = 0; i < n; i++) ev(t + i * 0.085, 'blip', base * (1 + 0.25 * rnd(i * 3 + base)), vol || 0.035); }
-    function hit(t, big) { ev(t, 'kick', 0.5 * H); if (big) ev(t, 'boom', 0.55 * H); ev(t, 'crash', (big ? 0.07 : 0.045) * H); }
+    function talk() {}   // the little synthetic voice blips are gone: every line now gets a real recorded pup sound instead
+    function hit(t, big) { if (big) ev(t, 'boom', 0.3 * H); }
     // cold open: crickets, a soft chord, then everything goes quiet... and a rumble
     ev(0, 'pad', [57, 64, 67, 71], 7.6, 0.03);
     [0.3, 0.9, 1.6, 2.2, 2.9, 3.3].forEach(function (t) { ev(t, 'cricket', 0.018); });
@@ -937,15 +973,7 @@
     ev(7.0, 'swell', 1.0, 0.12 * H);
     // the build: A minor, F, C, G, with a pulse that grows
     var prog = [[45, [57, 60, 64]], [41, [53, 57, 60]], [36, [55, 60, 64]], [43, [55, 59, 62]]];
-    function bars(t0, n, opt) {
-      for (var b = 0; b < n; b++) {
-        var t = t0 + b * 2, ch = prog[(b + (opt.off || 0)) % 4];
-        ev(t, 'pad', ch[1], 1.9, opt.pad || 0.022);
-        for (var e = 0; e < 8; e++) { ev(t + e * 0.25, 'bass', ch[0], 0.2, opt.bass || 0.06); if (opt.hats && e % 2) ev(t + e * 0.25, 'hat', 0.03); if (opt.arp) ev(t + e * 0.25, 'pluck', ch[1][e % 3] + 12 + (e > 3 ? 12 : 0), 0.035); }
-        if (opt.kick) for (var q = 0; q < 4; q++) ev(t + q * 0.5, 'kick', 0.28 * H);
-        if (opt.snare) { ev(t + 0.5, 'snare', 0.08 * H); ev(t + 1.5, 'snare', 0.08 * H); }
-      }
-    }
+    function bars() {}
     hit(8.0, true); ev(8.0, 'piano', 45, 0.12); ev(8.0, 'piano', 57, 0.1);
     bars(8.0, 4, { bass: 0.05, kick: false });
     [10, 12, 14].forEach(function (t) { hit(t, false); ev(t, 'tom', 110, 0.2 * H); });
@@ -1006,15 +1034,7 @@
     E.forEach(function (e) { if (e[0] >= 38.19) e[0] += GL; });
     var starts = [], tt = G0 + GCARD; GAGS.forEach(function (x) { starts.push(tt); tt += x[1]; });
     hit(G0, true); ev(G0, 'sparkle', 0.03); ev(G0 + 0.1, 'whoosh', 0.7, 0.1);
-    var roots = [48, 48, 53, 55], tEnd = G0 + GL;
-    for (var bb = 0, tb = G0 + GCARD; tb < tEnd - 0.6; bb++, tb += 1.2) {
-      var inJaws = tb > starts[1] - 0.2 && tb < starts[2] - 0.2, inMatrix = tb > starts[2] - 0.2 && tb < starts[3] - 0.2, inSnakes = tb > starts[3] - 0.2 && tb < starts[4] - 0.2;
-      if (inJaws || inMatrix || inSnakes) continue;
-      var rt = roots[bb % 4];
-      ev(tb, 'pluck', rt + 12, 0.07); ev(tb + 0.3, 'pluck', rt + 19, 0.05); ev(tb + 0.6, 'pluck', rt + 16, 0.05); ev(tb + 0.9, 'pluck', rt + 19, 0.05);
-      ev(tb, 'kick', 0.2 * H); ev(tb + 0.6, 'kick', 0.16 * H); ev(tb + 0.3, 'hat', 0.03); ev(tb + 0.9, 'hat', 0.03);
-      if (bb % 2) ev(tb + 0.6, 'snare', 0.055 * H);
-    }
+    var tEnd = G0 + GL;
     // 1. boulder: sneaky plucks, a rumble, drums, then a slide-whistle sigh
     var T = starts[0];
     ev(T + 2.3, 'bell', 88, 0.07); ev(T + 3.0, 'rumble', 3.0, 0.4);
@@ -1056,6 +1076,39 @@
     talk(T + 0.3, 6, 640); talk(T + 1.7, 7, 640); talk(T + 3.1, 5, 470); talk(T + 4.4, 8, 640);
     // the very end: one more bark
     ev(55.9 + GL + 7.8, 'sample', 'tidbit-arfarf', 0.45); talk(55.9 + GL + 7.9, 8, 660, 0.035); ev(55.9 + GL + 9.1, 'sample', 'tidbit-yip', 0.4);
+    // ---- Season 1's sound, made to fit this picture exactly
+    // the old per-line sounds and synthetic pads give way to: a mood for each shot (Season 1's own chords), the real place sounds under
+    // it, and a recorded pup sound the moment each line appears. The lines and their times are read straight from the picture.
+    E = E.filter(function (e) { return e[1] !== 'pad' && e[1] !== 'cricket' && e[1] !== 'blip' && !(e[1] === 'sample' && e[2] !== 'theme'); });
+    var segs = [], last = null;
+    EDIT.forEach(function (sh) {
+      var m = sh[2] === 'card' ? (last ? last.m : 'gentle') : (SHOT_MOOD[sh[2]] || (last ? last.m : 'gentle'));
+      if (last && last.m === m) last.te = sh[1]; else { last = { m: m, ts: sh[0], te: sh[1] }; segs.push(last); }
+    });
+    segs.forEach(function (sg) {
+      var C = CH[sg.m]; if (!C) return;
+      for (var t = sg.ts, st = 0; t < sg.te - 0.4; t += C.p, st++) {
+        var chord = C.c[st % C.c.length], len = Math.min(C.p, sg.te - t + 0.8);
+        chord.forEach(function (n, i) { ev(t, 'mpad', n, len, i === 0 ? 0.03 : 0.022); });
+        if (C.arp) for (var k = 0; k < 8; k++) if (rnd(st * 9 + k + t) < C.arp) ev(t + k * C.p / 8, 'mpluck', chord[(k * 3 + st) % chord.length] + 12, 0.018);
+        if (C.pulse) for (var q = 0; q < 4; q++) ev(t + q * C.p / 4, 'mpluck', chord[0] - 12, 0.03);
+      }
+    });
+    EDIT.forEach(function (sh) {
+      var L = SHOT_AMB[sh[2]]; if (!L) return;
+      L.forEach(function (a) { ev(Math.max(0, sh[0] - 0.3), 'amb', a[0], sh[1] - sh[0] + 0.9, a[1] * 0.8); });
+    });
+    var cnt = { tidbit: 0, sugarfoot: 0 };
+    scanLines(calm).forEach(function (ln) {
+      if (ln.who === 'narr') return;
+      var w = ln.who === 'sugarfoot' ? 'sugarfoot' : 'tidbit', i = cnt[w]++, tx = ln.text.toLowerCase(), pick;
+      if (/ha ha|hee|funny|joke|laugh/.test(tx)) pick = 'laugh-' + (1 + i % 2);
+      else if (/\?/.test(tx)) pick = ['hmm', 'ooh', 'hmm', 'arf'][i % 4];
+      else if (/…|\.\.\.|—/.test(tx) && !/!/.test(tx)) pick = ['aww', 'mmm', 'sigh', 'hmm'][i % 4];
+      else if (/!/.test(tx)) pick = ['arf', 'yip', 'arfarf', 'woof', 'ruff'][i % 5];
+      else pick = ['arf', 'ruff', 'mmm'][i % 3];
+      ev(ln.T + 0.04, 'sample', w + '-' + pick, 0.62);
+    });
     E.sort(function (a, b) { return a[0] - b[0]; });
     return E;
   }
