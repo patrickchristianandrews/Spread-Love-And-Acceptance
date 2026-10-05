@@ -5744,6 +5744,51 @@
           "/apology-languages.html"
         ]
       ]
+    },
+    {
+      "id": "control",
+      "kind": "tool",
+      "name": "your part, and matching energy",
+      "keys": [
+        "circle of control",
+        "whats in my control",
+        "what is in my control",
+        "in my control",
+        "out of my control",
+        "only do what i can control",
+        "match energy",
+        "matching energy",
+        "match their energy",
+        "protect my energy",
+        "protecting my energy",
+        "giving more than i get",
+        "i give more than i get",
+        "one sided effort",
+        "one-sided relationship",
+        "energy budget"
+      ],
+      "what": "A thread through the whole book: you can only do what’s in your control, and you protect your own energy by matching energy with energy. In your hands: your words, your effort, your rest, your limits and what you ask for. Not yours: someone else’s mood, reply, pace or choices. Matching energy means giving in proportion to what comes back: warmth for warmth, effort for effort, and a little less when you keep giving far more than you get. It’s about care and effort, never volume or punishment, and in a hard season you match someone’s capacity, not their output.",
+      "how": [
+        "Notice where you’re giving far more than comes back.",
+        "Name it once, without blame: “I’ve noticed I’m usually the one who plans. I’d love it if you started the next one.”",
+        "Adjust your side, kindly, and see what comes back.",
+        "Keep giving fully to children and anyone who depends on you, and choose on purpose when to carry more for a season."
+      ],
+      "pillar": "Pillar III, Read your state first: your battery is the budget you’re protecting.",
+      "links": [
+        [
+          "Part One: who you are today",
+          "/book/self-2-now-in-depth.html#control"
+        ],
+        [
+          "Part One: who you were",
+          "/book/self-1-then-in-depth.html#control"
+        ],
+        [
+          "Part One: who you’re becoming",
+          "/book/self-3-next-in-depth.html#control"
+        ]
+      ]
     }
   ],
   "clarify": [

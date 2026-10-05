@@ -86,6 +86,8 @@ t('tools', 'What is PROG-01?', { kind: 'card', id: 'prog01', link: '/prog-01.htm
 t('tools', 'How does REPORT-01 work?', { kind: 'card', id: 'report01', link: '/workpapers/report-01.html' });
 t('tools', 'What is the Professor’s Library?', { kind: 'card', id: 'library', link: '/library.html' });
 t('tools', 'Where can I find articles to read?', { kind: 'card', id: 'reading', link: '/reading.html' });
+t('tools', 'what does matching energy mean', { kind: 'card', id: 'control', link: '/book/self-2-now-in-depth.html#control' });
+t('tools', 'what is in my control', { kind: 'card', id: 'control' });
 t('tools', 'find me an article about stress', { kind: 'card', id: 'reading', text: /good articles on “stress”/, link: '/reading.html' });
 t('tools', 'any good articles on apologies?', { kind: 'card', id: 'reading', text: /apolog/i });
 t('tools', 'recommend something to read about ADHD', { kind: 'card', id: 'reading', text: /ADHD|attention/i });

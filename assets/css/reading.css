@@ -60,3 +60,11 @@ body{
   .read{ max-width:none; padding:0; }
   .read a{ text-decoration:none; }
 }
+
+/* the book: "what's yours / what isn't" side by side, and a small try-this line */
+.read .two-col{ display:grid; gap:1rem; grid-template-columns:1fr 1fr; margin:1rem 0 1.2rem; }
+@media (max-width:560px){ .read .two-col{ grid-template-columns:1fr; } }
+.read .two-col > div{ padding:.75rem 1rem; border-radius:14px; background:rgba(127,178,224,.1); border:1px solid rgba(127,178,224,.32); }
+.read .two-col h3{ margin:.1rem 0 .4rem; font-size:1.05rem; }
+.read .two-col ul{ margin:0; padding-left:1.1rem; }
+.read p.tol-try{ padding:.7rem 1rem; border-left:4px solid #E3B15C; background:rgba(255,241,207,.5); border-radius:8px; }
