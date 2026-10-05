@@ -1,52 +1,51 @@
 # Season 2 teaser voices: one mp3 per line, named <key>.mp3 in this folder, listed in index.json as {"<key>":[<seconds>]}.
-# Made the same way as Season 1's voices: the open-source Kokoro model's af_heart voice (Apache 2.0), then pitch-shifted with Rubber Band:
-#   Tidbit 1.55x pitch at speed 0.95, Sugarfoot 1.3x pitch at speed 0.8, the narrator at its own pitch at speed 0.93.
+# Made the same way as Season 1's voices: the open-source Kokoro model's af_heart voice (Apache 2.0), then pitch-shifted with Rubber Band, with pitch and pace set by each line’s mood as in Season 1
 # To swap in your own recording of a line, replace its mp3 (same key) and update its seconds in index.json.
 # key	who	seconds on screen	text
 b039e77b	tidbit	1.63	Did you hear that?
-285e9fd9	sugarfoot	1.38	From… out there.
+8bb34735	sugarfoot	1.38	It came from out there!
 d0e8a202	narr	1.88	The pals are back…
 a960afe0	tidbit	1.38	Wheee!
-ec76711f	tidbit	1.38	Look!
+d5fedea9	tidbit	1.38	Look down there!
 fef265cc	sugarfoot	1.5	We made it!
 05ae328c	narr	1.38	New places…
 53856d5d	sugarfoot	1.13	A secret door!
 098224e4	tidbit	1.5	So many lanterns!
-d6ef4ca8	tidbit	1.5	It’s glowing!
+acc8f0e5	tidbit	1.5	And it’s glowing!
 6dc56184	sugarfoot	1.38	Make a wish!
 57d5bdab	narr	1.38	New friends…
 617c319b	tidbit	1.63	Who’s that?
-d99d9857	sugarfoot	1.63	A new friend…?
+a4d4c7c3	sugarfoot	1.63	Maybe a new friend!
 5a28c4e1	narr	1.38	Bigger adventures…
 06157e50	tidbit	0.5	Ah…
 2564ab67	tidbit	0.5	Ah… ahh…
 db4627b1	tidbit	0.63	CHOO!
 a7a90fdc	sugarfoot	0.75	…Bless you!
 0a56bce0	sugarfoot	0.75	Hee hee!
-46403597	tidbit	1.13	On purpose!
+fbd6c9f9	tidbit	1.13	That was on purpose!
 759eaabc	narr	1.63	Funnier than ever…
 8435bce1	narr	3	In a world of golden bones…
-ad8b98a3	tidbit	2	Golden bone. Easy!
+e649fadd	tidbit	2	A golden bone? Easy!
 37a67a62	sugarfoot	2.13	Tidbit! RUN!
-4dbe1091	tidbit	1.38	A… beach ball?
-633e6993	sugarfoot	1.25	Every time.
+09369d62	tidbit	1.38	Wait… a beach ball?
+74e31ccf	sugarfoot	1.25	Every single time.
 08fbaf9e	tidbit	2.38	Nice night for a swim.
-a78075a2	tidbit	1.5	…Hello?
-1cd86ece	sugarfoot	2	Gotcha!
+800ad5e6	tidbit	1.5	Um… hello?
+225dda55	sugarfoot	2	Gotcha! Just me!
 514771b7	tidbit	2.88	We need a bigger bone!
 8c68aeb7	tidbit	2.63	Whoa… slow motion.
 319a30a3	tidbit	2.5	I know pie-fu.
 d22515e8	sugarfoot	2.5	Why is it always me?
-592f44c0	sugarfoot	1.25	Cherry.
+649a70d9	sugarfoot	1.25	At least it’s cherry.
 94b52fdd	sugarfoot	2.5	What a smooth flight!
-21923442	tidbit	1.88	Snakes?!
+57507fd9	tidbit	1.88	Wait… snakes?!
 81dcd6c7	tidbit	2.88	I have had it with these snakes on this—
 c9f33b3a	sugarfoot	1.88	…PLANE! This lovely plane!
-d90469fe	tidbit	1.13	Hey!
-a783d992	tidbit	1.5	…on this plane.
+9c9a30b0	tidbit	1.13	Hey, I was talking!
+a3ff1633	tidbit	1.5	…on this lovely plane.
 5ff9db36	sugarfoot	1.5	Good girl.
 6457fd87	sugarfoot	1.25	Almost there…
-be6d5122	tidbit	1.5	Holding on tight!
+2ebd3e8f	tidbit	1.5	I’m holding on tight!
 d1f45bd7	sugarfoot	1.13	Got it!
 05c0a602	tidbit	1.25	…Oops.
 f0fbb566	sugarfoot	2	Mission: possible… ish.
@@ -55,12 +54,12 @@ bb333da3	sugarfoot	1	…Okay.
 a271e7e6	tidbit	2.13	Did I do that?
 d8f59e5b	tidbit	2	Ready? Watch this!
 0fdf35eb	tidbit	1.88	To infinity… and beyond!
-719506bd	sugarfoot	1.88	That’s my laundry.
+81d9dea4	sugarfoot	1.88	That’s my laundry basket!
 4b21575a	tidbit	2.75	To infinity… and the laundry!
 f6f14695	narr	1.38	Same big hearts…
 8ee1d294	sugarfoot	2.13	Wherever we go next…
 79eaac1b	tidbit	2.63	…we go together.
 a7c58420	sugarfoot	2.88	Wait… did anyone see where Tidbit went?
-914be78b	tidbit	2.13	Ready for Season 2!
-34319fbe	sugarfoot	1.5	Of course!
+d4299e38	tidbit	2.13	Right here! Ready for Season 2!
+d55c76b9	sugarfoot	1.5	Of course you are!
 0b5aaa37	tidbit	1.63	I’ll be bark!
