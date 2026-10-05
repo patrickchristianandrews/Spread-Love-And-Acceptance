@@ -326,3 +326,8 @@ html:not([data-theme="light"]) .od-mat.is-no{ background:#4A2E38; }
 .od-tube.is-swing{ animation:od-swing 2.6s ease-out; }
 @keyframes od-swing{ 0%{ transform:rotate(0); } 10%{ transform:rotate(12deg); } 28%{ transform:rotate(-9deg); } 48%{ transform:rotate(5deg); } 68%{ transform:rotate(-2.4deg); } 100%{ transform:rotate(0); } }
 html.tol-still .od-tube.is-swing span{ box-shadow:0 0 0 3px rgba(199,154,82,.6); }
+
+/* with Tidbit and Sugarfoot: splash, fish, the zen garden */
+.bd-pals{ margin:.6rem 0 0; text-align:center; }
+.bd-pals-k{ margin:.2rem 0 .3rem; font:600 .78rem "IBM Plex Mono", monospace; letter-spacing:.1em; text-transform:uppercase; color:var(--ink2, #5A4E3E); }
+.od-pals{ cursor:pointer; max-width:34rem; }

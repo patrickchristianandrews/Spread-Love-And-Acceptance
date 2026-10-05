@@ -398,7 +398,7 @@
       out.hidden = true; inn.hidden = false; inside = true; moving = false;
       if (!roomBuilt) buildRoom();
       if (BD.scene) BD.scene.pause(); if (BD.roomPups) BD.roomPups.start();
-      A.setMode('inside'); BD.next('now');
+      A.setMode('inside'); if (pendingId && byId[pendingId]) show(pendingId, 'now'); else BD.next('now'); pendingId = null;
       var h = $('#bd-in-h'); try { h.focus({ preventScroll: true }); } catch (e) { h.focus(); }
       var r = h.getBoundingClientRect(); if (r.top < 60 || r.top > innerHeight * 0.6) window.scrollTo({ top: window.scrollY + r.top - 80, behavior: 'auto' });
       curApi && curApi.say('You are inside the dojo. A new offering is ready.');
@@ -420,6 +420,9 @@
     var r = b.getBoundingClientRect(); if (r.top < 60 || r.bottom > innerHeight) b.scrollIntoView({ block: 'center', behavior: 'auto' });
     var l = $('#bd-say'); if (l) l.textContent = 'You are back on the grounds.';
   }
+  // go straight to one offering (the buttons on the grounds: splash, fish, the zen garden)
+  var pendingId = null;
+  BD.enterTo = function (id) { if (inside) { show(id); return; } pendingId = id; enter(); };
   BD.enter = enter; BD.leave = leave;
 
   // ---------- start ----------
