@@ -2148,14 +2148,17 @@
         "~treat trail",
         "~bubble break",
         "~treat shower",
-        "~snake game",
         "~brick breaker",
-        "~classic games"
+        "~classic games",
+        "~treat trail",
+        "~oregon trail",
+        "~wagon trail",
+        "~wagon game"
       ],
-      "what": "Tidbit and Sugarfoot’s Arcade (on Tidbit and Sugarfoot’s Arcade page) is a little arcade with two best friends, Tidbit and Sugarfoot. Pick which pup to play as, then pick one of five gentle classic games: Treat Chase (a maze where a golden heart turns the grumpy Static into bubbles you can pop), Cross the Way (hop over a road and ride logs across a river to five doghouses), Treat Trail (a snake game where bubble friends join your trail), Bubble Break (a brick breaker) and Treat Shower (catch falling treats in a basket). Every level after the first is new, and there’s no game over: a bump only sends your pup back or makes the trail shorter.",
+      "what": "Tidbit and Sugarfoot’s Arcade (on Tidbit and Sugarfoot’s Arcade page) is a little arcade with two best friends, Tidbit and Sugarfoot. Pick which pup to play as, then pick one of five gentle classic games: Treat Chase (a maze where a golden heart turns the grumpy Static into bubbles you can pop), Cross the Way (hop over a road and ride logs across a river to five doghouses), The Treat Trail (a wagon-trail journey from Puddle Hollow to Starfall Hill: choose your pace and snack sizes, cross rivers, trade at posts), Bubble Break (a brick breaker) and Treat Shower (catch falling treats in a basket). Every level after the first is new, and there’s no game over: run low on treats and you forage, run low on energy and you rest.",
       "how": [
         "Pick Tidbit or Sugarfoot, pick one of the five games, and press Start.",
-        "Steer with the arrow keys or WASD, a swipe, a tap on the playfield, or the big on-screen arrows. In Bubble Break and Treat Shower you can also drag. A turn you press a little early is remembered.",
+        "Steer with the arrow keys or WASD, a swipe, a tap on the playfield, or the big on-screen arrows. In Bubble Break and Treat Shower you can also drag; in The Treat Trail you tap a choice or press its number. A turn you press a little early is remembered.",
         "Relaxed pace (on by default) slows everything down. Pause any time.",
         "Each level you clear counts toward the garden behind every page."
       ],
