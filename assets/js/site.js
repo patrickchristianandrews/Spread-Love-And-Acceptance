@@ -36,7 +36,7 @@
   var SECTIONS = [
     { id: 'new', title: 'What’s new', blurb: 'Newly added and newly expanded, newest first.', items: [
       { href: '/whats-new.html', code: 'All', title: 'What’s new', note: 'Everything newly added and everything that’s grown, in one place, with dates' },
-      { href: '/soundscapes.html#brain-breakers', code: 'New', title: 'Brain Breakers', note: 'The Soundscapes page is now all Brain Breakers: four instrumental pieces, with a way to see and feel the sound' },
+      { href: '/soundscapes.html#brain-breakers', code: 'New', title: 'Brain Breakers', note: 'The Soundscapes page is now all Brain Breakers: four instrumental pieces, with a music visualizer and vibration' },
       { href: '/love-languages.html', deep: true, code: 'New', title: 'Love languages: a menu, not a label', note: 'What is healthy and unhealthy about each of the five, how to practice and talk about them, and similar ideas like apology languages and bids' },
       { href: '/languages-of-connection.html', code: 'New', title: 'How the languages fit together', note: 'Love, apology and appreciation languages, touchstones and your wiring in one picture, with what to reach for when' },
       { href: '/install.html', code: 'New', title: 'Get the app', note: 'Install on Android in a few taps; iPhone steps today, App Store coming soon' },
@@ -58,7 +58,7 @@
       { href: '/library.html', code: 'New', title: 'The Professor’s Library', note: 'Deep, plain-language reading on psychology and conflict, and Professor Puddles can chat about all of it' },
       { href: '/reading.html', code: 'New', title: 'Something to read', note: 'Hand-picked articles from trusted sources, matched to what you’re reading' },
       { href: '/frequency-journey.html', code: 'New', title: 'Tidbit and Sugarfoot’s Arcade', note: 'Five gentle classic games (maze chase, crossing, snake trail, brick breaker, catch), new every level, no game over' },
-      { href: '/soundscapes.html', code: 'New', title: 'Brain Breakers', note: 'Shooting Star, Thunderous Shimmer, Watching a Shooting Star and Bouncy Bedroom, with See and feel the sound' },
+      { href: '/soundscapes.html', code: 'New', title: 'Brain Breakers', note: 'Shooting Star, Thunderous Shimmer, Watching a Shooting Star and Bouncy Bedroom, with a music visualizer and vibration' },
       { href: '/ask.html', code: 'New', title: 'Chat with Professor Puddles', note: 'Small drop, big brain: answers made only from this site’s pages. What you type stays on your device' },
       { href: '/pause-and-play.html', code: 'New', title: 'Levels that grow the background', note: 'Every few levels, something new appears behind every page and joins in' },
       { href: '/book/preface.html', code: 'Deeper', title: 'Mini dives, shore to deep', note: 'Tap any word with the water drop and wade in one step at a time' },
@@ -346,7 +346,7 @@
       { href: '/pause-and-play.html', code: 'All', title: 'Pause & Play', note: 'All the calm games and word puzzles, your level and your garden' },
       { href: '/frequency-journey.html', code: 'Game', title: 'Tidbit and Sugarfoot’s Arcade', note: 'Five gentle classic games: a maze chase, a crossing, a snake trail, a brick breaker and a catch game' },
       { href: '/calm-visualizer.html', code: 'Drift', title: 'Drift: calm visualizer', note: 'Slow colors and tones matched to how you feel' },
-      { href: '/soundscapes.html', code: 'Audio', title: 'Soundscapes: Brain Breakers', note: 'Four instrumental pieces you can see and feel: a big live picture, vibration, and a picker' },
+      { href: '/soundscapes.html', code: 'Audio', title: 'Soundscapes: Brain Breakers', note: 'Four instrumental pieces with a music visualizer, vibration and a picker' },
       { href: '/soundscapes.html#brain-breakers', code: 'New', title: 'Brain Breakers', note: 'Come get your brain wrecked, broken in a good way: four instrumental pieces from soft to cinematic' },
       { href: '/frequency-buddies.html', code: 'Cartoon', title: 'Frequency Buddies', note: 'A free cartoon about feelings, with captions. Live and shuffle versions are inside' },
       { href: '/frequency-buddies-music-video.html', code: 'New', title: 'The theme song music video', note: 'Everyone on stage, singing and dancing' },

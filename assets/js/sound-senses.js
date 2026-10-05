@@ -1,4 +1,4 @@
-/* sound-senses.js — "See and feel the sound", the heart of /soundscapes.html (the Brain Breakers page).
+/* sound-senses.js — the music visualizer and vibration, the heart of /soundscapes.html (the Brain Breakers page).
    Whichever Brain Breaker is playing is listened to with a Web Audio analyser, entirely on this device.
    Nothing is recorded, saved or sent.
    SEE: a big stage at the top of the page, drawn live. Six looks: Stars (a starfield that twinkles with the
@@ -7,7 +7,7 @@
         spectrum) and Wave (the sound's own shape). Auto picks looks that suit the track and changes them every so
         often. Under the stage a live card shows the track's own notes and an energy meter. It goes full screen.
         While something plays and the stage has scrolled away, a slim bar under the header keeps a live
-        picture, the name and a Stop button in view. Every track has a "See and feel this" button.
+        picture, the name and a Stop button in view. Every track has a "Play in the visualizer" button.
         With reduced motion on, only a still, slowly changing Glow is drawn.
         In full screen a Choose panel opens over the picture: the tracks come first (and an "Undecided? Find what is
         right for you" button that opens the same picker as the page), then the See and Feel choices.
@@ -25,7 +25,7 @@
   function lsSet(k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
   var RM = !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
   var canVib = typeof navigator.vibrate === 'function';
-  var LOOKS = RM ? ['glow'] : ['media', 'auto', 'stars', 'aurora', 'rings', 'tunnel', 'bars', 'wave'];
+  var LOOKS = RM ? ['glow'] : ['media'];   // one picture: the Media player look (a still glow when the device asks for less motion)
   // what Auto cycles through for each track, and how Match feels it
   var ROTATE = { star: ['media', 'stars', 'aurora', 'wave'], shimmer: ['media', 'rings', 'bars', 'tunnel'], bedroom: ['media', 'rings', 'bars', 'wave'], watching: ['media', 'tunnel', 'stars', 'aurora'], other: ['media', 'stars', 'aurora', 'tunnel', 'rings', 'bars', 'wave'] };
   var TRACKFEEL = { star: 'heart', shimmer: 'rumble', bedroom: 'beat', watching: 'beat', other: 'rumble' };
@@ -34,9 +34,9 @@
   // phone motors barely register anything under about 30 ms, so a pulse is 30 to 200 ms, and the rumble is a pattern of on and off
   var HAPT = { soft: { min: 32, max: 55, duty: 0.4 }, medium: { min: 48, max: 95, duty: 0.65 }, strong: { min: 70, max: 170, duty: 0.92 } };
   var FEELS = ['match', 'rumble', 'beat', 'heart'];
-  var look = lsGet('tol-sense-look'); if (LOOKS.indexOf(look) < 0) look = LOOKS[0];
-  var level = lsGet('tol-haptic'); if (LEVELS.indexOf(level) < 0 || !canVib) level = 'off';
-  var feel = lsGet('tol-haptic-mode'); if (FEELS.indexOf(feel) < 0) feel = 'match';
+  var look = LOOKS[0];
+  var level = lsGet('tol-haptic'); level = canVib && level && level !== 'off' ? 'medium' : 'off';   // vibration is simply on or off
+  var feel = 'match';   // vibration follows each track's own kind of pulse
 
   // ---------- the panel ----------
   var NAMES = { media: 'Media player', auto: 'Auto', stars: 'Stars', aurora: 'Aurora', rings: 'Rings', tunnel: 'Tunnel', bars: 'Bars', wave: 'Wave', glow: 'Glow' };
@@ -47,30 +47,27 @@
   }
   host.innerHTML =
     '<p class="sn-kick">The big idea</p>' +
-    '<h2 id="senses-h" class="sn-title">See and feel the sound</h2>' +
-    '<p class="sn-lede">Press play on a Brain Breaker and watch it move, or let your phone feel it with you. Each track has its own pictures and its own kind of pulse. Everything happens on your device.</p>' +
-    '<div class="sn-stage" id="sn-stage"><canvas id="sn-cv" aria-hidden="true"></canvas><p class="sn-idle" id="sn-idle">Press <strong>See and feel this</strong> on a track below, or pick one with Find your Brain Breaker.</p>' +
+    '<h2 id="senses-h" class="sn-title">Music visualizer and vibration</h2>' +
+    '<p class="sn-lede">Press play on a Brain Breaker and the visualizer moves with the music, like the classic media players. Turn on vibration and your phone feels it with you, each track with its own kind of pulse. Everything happens on your device.</p>' +
+    '<div class="sn-stage" id="sn-stage"><canvas id="sn-cv" aria-hidden="true"></canvas><p class="sn-idle" id="sn-idle">Press <strong>Play in the visualizer</strong> on a track below, or pick one with Find your Brain Breaker.</p>' +
     '<div class="sn-hud"><span class="sn-now" id="sn-now"></span><span class="sn-buzz" id="sn-buzz" title="Lights up when the phone is asked to vibrate" aria-hidden="true">&#x26A1;</span><button type="button" class="sn-b sn-hud-b" id="sn-full" aria-label="Full screen">&#x26F6; Full screen</button></div>' +
-    '<div class="sn-ovl" id="sn-ovl" role="dialog" aria-label="Choose a track, what you see and what you feel" hidden><div class="sn-ovl-in">' +
+    '<div class="sn-ovl" id="sn-ovl" role="dialog" aria-label="Choose a track" hidden><div class="sn-ovl-in">' +
       '<div class="sn-ovl-top"><p class="sn-ovl-k">Pick a Brain Breaker</p><button type="button" class="sn-b" id="sn-ovl-x" aria-label="Close this panel">&times; Close</button></div>' +
       '<div class="sn-trk" id="sn-trk"></div>' +
       '<div class="sn-find" id="sn-ovl-find" hidden></div>' +
-      '<p class="sn-ovl-k">See and feel it</p><div id="sn-ovl-ctl"></div>' +
+      '<p class="sn-ovl-k" id="sn-ovl-vk">Vibration</p><div id="sn-ovl-ctl"></div>' +
     '</div></div>' +
     '<button type="button" class="sn-b sn-opt" id="sn-opt" aria-expanded="false" aria-controls="sn-ovl">&#x2630; Choose</button></div>' +
     '<div class="sn-info" id="sn-info" hidden aria-live="polite"><div class="sn-info-top"><strong id="sn-info-name"></strong><span class="sn-meter" aria-hidden="true"><i id="sn-meter"></i></span><span class="sn-meter-l">Energy</span></div><dl id="sn-info-fx"></dl></div>' +
-    '<div class="sn-row" role="group" aria-label="How to see the sound"><span class="sn-l">See</span>' + btns('look', LOOKS, NAMES, look) + '</div>' +
-    '<div class="sn-row" id="sn-feel-row" role="group" aria-label="How strongly to feel the sound"><span class="sn-l">Feel</span>' + btns('level', LEVELS, LNAMES, level) + '</div>' +
-    '<div class="sn-row" id="sn-mode-row" role="group" aria-label="What to feel"><span class="sn-l">Like</span>' + btns('feel', FEELS, FNAMES, feel) +
-    '<button type="button" class="sn-b sn-test" id="sn-test">Try a pulse</button></div>' +
+    '<div class="sn-row" id="sn-feel-row" role="group" aria-label="Vibration"><button type="button" class="sn-b sn-vib" id="sn-vib" aria-pressed="' + (level !== 'off') + '">&#x1F4F3; Vibration: <b>' + (level !== 'off' ? 'on' : 'off') + '</b></button></div>' +
     '<p class="sn-note" id="sn-note"></p><p class="sn-status" id="sn-status" role="status" aria-live="polite"></p>';
   host.querySelectorAll('p, h2').forEach(function (n) { n.classList.add('no-bubble'); });
   var stage = document.getElementById('sn-stage'), cv = document.getElementById('sn-cv'), g = cv.getContext('2d'), idle = document.getElementById('sn-idle'),
       status = document.getElementById('sn-status'), infoEl = document.getElementById('sn-info'), infoName = document.getElementById('sn-info-name'), infoFx = document.getElementById('sn-info-fx'), meter = document.getElementById('sn-meter'), note = document.getElementById('sn-note'), nowEl = document.getElementById('sn-now'), fullBtn = document.getElementById('sn-full');
   note.textContent = canVib
-    ? 'Vibration is off until you choose a strength. It is short and gentle, uses a little battery, and stops when the sound stops. Low sounds also rumble through a phone speaker or headphones, which is its own kind of feeling.'
+    ? 'Vibration is off until you turn it on. It is short and gentle, uses a little battery, and stops when the sound stops. Low sounds also rumble through a phone speaker or headphones, which is its own kind of feeling.'
     : 'This device cannot vibrate from a web page (iPhones cannot), so you can see the sound here, and feel it through the speaker or headphones. On an Android phone with Chrome you can also feel it as vibration.';
-  if (!canVib) { document.getElementById('sn-feel-row').hidden = true; document.getElementById('sn-mode-row').hidden = true; }
+  if (!canVib) { document.getElementById('sn-feel-row').hidden = true; document.getElementById('sn-ovl-vk').hidden = true; }
   if (RM) note.textContent += ' Your device asks for less motion, so the picture is a still, slowly changing glow.';
 
   // the slim bar that follows you down the page while something plays
@@ -95,6 +92,11 @@
     else if (b.id === 'sn-test') {
       if (level === 'off') { say('Choose Soft, Medium or Strong first.'); return; }
       var tp = HAPT[level]; vibe([tp.min, 120, tp.max, 120, tp.min]); say('That was a test pulse: short, long, short. If you felt nothing, check that your phone’s vibration or touch feedback is on and that it is not in battery saver or do-not-disturb.');
+    }
+    else if (b.id === 'sn-vib') {
+      level = level === 'off' ? 'medium' : 'off'; lsSet('tol-haptic', level); vOK = true;
+      b.setAttribute('aria-pressed', String(level !== 'off')); b.querySelector('b').textContent = level !== 'off' ? 'on' : 'off';
+      if (level === 'off') { stopBuzz(); say('Vibration is off.'); } else { var hh = HAPT[level]; vibe([hh.min, 90, hh.max]); say('Vibration is on. It follows the music.'); }
     }
     else if (b.id === 'sn-full') toggleFull();
   });
@@ -180,11 +182,11 @@
   ['fullscreenchange', 'webkitfullscreenchange'].forEach(function (ev) { document.addEventListener(ev, function () { if (!document.fullscreenElement && !document.webkitFullscreenElement) { stage.classList.remove('is-full'); document.documentElement.style.overflow = ''; } syncFull(); }); });
   document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && stage.classList.contains('is-full')) toggleFull(); });
 
-  // ---------- "See and feel this" on every sound ----------
+  // ---------- "Play in the visualizer" on every sound ----------
   function addSeeButtons() {
     document.querySelectorAll('.track-card').forEach(function (card) {
       var a = card.querySelector('.track-player'); if (!a || card.querySelector('.sn-see')) return;
-      var b = document.createElement('button'); b.type = 'button'; b.className = 'sn-see'; b.innerHTML = '&#x1F441; See and feel this';
+      var b = document.createElement('button'); b.type = 'button'; b.className = 'sn-see'; b.innerHTML = '&#x25B6; Play in the visualizer';
       b.addEventListener('click', function () {
         document.querySelectorAll('.track-player').forEach(function (o) { if (o !== a && !o.paused) o.pause(); });
         var p = a.play(); if (p && p.catch) p.catch(function () { say('Your browser blocked the sound. Press play on the track.'); });

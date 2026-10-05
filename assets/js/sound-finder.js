@@ -83,7 +83,7 @@
         var r = rank(), pick = r[0], more = r.slice(1, 3), f = fav[need] === pick.x.id;
         var reasons = pick.why.filter(function (w) { return w !== '__over'; }).slice(0, 4);
         if (!reasons.length) reasons = [pick.x.note];
-        var warn = body === 'over' && pick.x.e > .3 ? '<p class="sf-warn">Bigger sounds can feel like too much when you are overwhelmed. If you play it, start with the volume low. Shooting Star is the softest of the three.</p>' : '';
+        var warn = body === 'over' && pick.x.e > .3 ? '<p class="sf-warn">Bigger sounds can feel like too much when you are overwhelmed. If you play it, start with the volume low. Shooting Star is the softest of the four.</p>' : '';
         var tail = '';
         res = '<div class="sf-pick"><p class="sf-k">Try this first</p><h3>' + esc(pick.x.name) + '</h3><p class="sf-note">' + esc(pick.x.note) + esc(tail) + '</p><ul>' +
           reasons.map(function (w) { return '<li>' + esc(w) + '</li>'; }).join('') + '</ul>' + warn +
