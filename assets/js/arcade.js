@@ -5,7 +5,7 @@
                   clouds of Static drift about. A golden heart turns them into friendly bubbles you can pop.
      Cross the Way  a crossing game in the same spirit: hop over the busy road, ride the logs and lily pads
                   across the river and reach the five doghouses.
-     Treat Trail  a snake game: a bubble friend joins the trail for every treat; a bump only shortens it.
+     The Treat Trail  a wagon-trail journey: pace, snacks, rivers and trading posts on the way to Starfall Hill.
      Bubble Break a brick-breaker: bounce a bubble into blocks of Static; a miss just floats back down.
      Treat Shower a catch game: fill the basket with falling treats; a raindrop is only a drip on the nose.
    Every level after the first is new: a freshly built maze, shuffled road and river lanes, new hedges, wall
@@ -148,6 +148,8 @@
     if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT') return;
     if (e.ctrlKey || e.metaKey || e.altKey) return;
     var k = e.key, handled = true;
+    // games with their own keys (the Treat Trail's numbered choices); Enter on a focused button is left to the button
+    if (game && game.onKey && !paused && !(tag === 'BUTTON' && (k === 'Enter' || k === ' ')) && game.onKey(k)) { e.preventDefault(); return; }
     if (k === 'ArrowUp' || k === 'w' || k === 'W') dir(0, -1);
     else if (k === 'ArrowDown' || k === 's' || k === 'S') dir(0, 1);
     else if (k === 'ArrowLeft' || k === 'a' || k === 'A') dir(-1, 0);
@@ -682,62 +684,181 @@
   };
 
   /* ==================================================================================================
-     TREAT TRAIL (in the spirit of the old snake games)
-     The pup trots on by herself; steer her to each treat and a little bubble friend joins the trail behind.
-     Bump a hedge or your own trail and it's only an "oof": the trail gets shorter and she starts again in
-     the middle. Gather enough friends to clear the level.
+     THE TREAT TRAIL (in the spirit of the old wagon-trail journey games)
+     Tidbit and Sugarfoot pack a little wagon and set off from Puddle Hollow for Starfall Hill. You choose
+     the pace and the snack sizes, decide what to do at rivers and trading posts, and handle whatever the
+     trail brings. Nobody gets hurt and there's no game over: run low on treats and you stop to forage, run
+     low on energy and you rest. Every journey is different: new landmarks, new events, new weather.
+     Choose with the buttons, the number keys, or up/down then right (or Enter).
      ================================================================================================== */
-  var TG = 20, TT = 22;
-  function Trail(who) {
+  var OW = 480, OH = 300, TRIP = 800;
+  var PLACES = ['Clover Meadow', 'Lantern Bridge', 'Owl’s Hollow', 'Bluebell Creek', 'Mossy Mill', 'Snail’s Rest', 'Pinecone Pass', 'Honeybee Orchard', 'Frog Pond Ferry',
+    'Windmill Rise', 'Old Oak Crossing', 'Teapot Rock', 'Firefly Fields', 'Pebble Beach', 'Sunflower Market', 'Whistling Woods', 'Duckling Dock', 'Moonlit Marsh'];
+  var WEATHER = [['sunny', 'Sunny and warm'], ['breezy', 'A gentle breeze'], ['cloudy', 'Soft grey clouds'], ['rain', 'A light rain'], ['fog', 'A bit foggy']];
+  var EVENTS = [
+    { t: 'A berry patch by the path! Everyone fills up.', d: { treats: 18 } },
+    { t: 'Tidbit has a case of the zoomies. Lots of running, not much traveling.', d: { miles: -15, joy: 2 } },
+    { t: 'Sugarfoot’s paws are sore. You slow down and take it easy.', d: { energy: -8 } },
+    { t: 'A wagon wheel goes wobbly.', fix: true },
+    { t: 'A friendly hedgehog asks if you have a snack to spare.', share: true },
+    { t: 'Fog rolls in and the trail is hard to see. You lose a little time finding it.', d: { miles: -20 } },
+    { t: 'A tailwind! The wagon rolls along nicely.', d: { miles: 25 } },
+    { t: 'Sugarfoot finds a shiny button in the grass.', d: { buttons: 3 } },
+    { t: 'A rain shower. Everyone huddles under the wagon cover and tells jokes.', d: { energy: -4, joy: 1 } },
+    { t: 'A snail on the path shares some news: the river ahead is low today.', d: { joy: 1 } },
+    { t: 'Tidbit naps in a sunbeam and wakes up full of beans.', d: { energy: 10 } },
+    { t: 'A tummy rumble! Somebody ate too many treats. Everyone rests a little.', d: { energy: -6, treats: -4 } },
+    { t: 'Ducklings cross the trail in a line. You wait, and it’s worth it.', d: { miles: -5, joy: 2 } },
+    { t: 'A squirrel trades you a sack of acorns for a song.', d: { treats: 10, joy: 1 } },
+    { t: 'You find a shortcut along the creek.', d: { miles: 30 } },
+    { t: 'The wagon cover rips a little in the wind. Sugarfoot patches it.', d: { energy: -3 } }
+  ];
+  function Trek(who) {
     var me = this; me.who = who; me.P = PUPS[who]; me.score = 0; me.level = 1; me.cleared = false;
-    sizeCanvas(TG * TT, TG * TT); me.newLevel();
+    sizeCanvas(OW, OH); me.ui = null; me.mountUI(); me.newTrip();
   }
-  Trail.prototype.newLevel = function () {
-    var me = this; me.goal = 8 + me.level * 2; me.got = 0;
-    // a few hedges in the field, different every level (none near the middle, where the pup starts)
-    me.rocks = {};
-    var n = Math.min(14, 2 + me.level * 2);
-    for (var i = 0; i < n; i++) { var x = 1 + Math.floor(Math.random() * (TG - 2)), y = 1 + Math.floor(Math.random() * (TG - 2)); if (Math.abs(x - 10) + Math.abs(y - 10) > 4) me.rocks[x + ',' + y] = 1; }
-    me.restart(); me.food();
+  Trek.prototype.newTrip = function () {
+    var me = this, names = PLACES.slice();
+    for (var i = names.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)), x = names[i]; names[i] = names[j]; names[j] = x; }
+    me.stops = [];
+    var kinds = ['river', 'post', 'river', 'post', 'sight', 'river', 'post', 'sight'];
+    for (var k = 0; k < 7; k++) me.stops.push({ at: Math.round((k + 1) * TRIP / 8 + (Math.random() - 0.5) * 50), name: names[k], kind: kinds[(k + me.level) % kinds.length] });
+    me.next = 0; me.miles = 0; me.day = 1; me.treats = 120; me.energy = 90; me.buttons = 20; me.wheels = 1; me.joy = 0;
+    me.pace = 'steady'; me.snack = 'regular'; me.wx = WEATHER[0]; me.roll = 0; me.moveT = 0; me.log = [];
+    me.say('Day 1. Tidbit and Sugarfoot set off from Puddle Hollow for Starfall Hill, ' + TRIP + ' paw-miles away. Pack light, travel kind.');
+    me.menu();
   };
-  Trail.prototype.restart = function () { var me = this; me.body = [[10, 10], [9, 10], [8, 10]]; me.dx = 1; me.dy = 0; me.q = []; me.acc = 0; me.daze = 0; };
-  Trail.prototype.free = function (x, y) { if (x < 0 || y < 0 || x >= TG || y >= TG || this.rocks[x + ',' + y]) return false; for (var i = 0; i < this.body.length; i++) if (this.body[i][0] === x && this.body[i][1] === y) return false; return true; };
-  Trail.prototype.food = function () { for (var k = 0; k < 400; k++) { var x = Math.floor(Math.random() * TG), y = Math.floor(Math.random() * TG); if (this.free(x, y)) { this.treat = [x, y, Math.random() < 0.15]; return; } } };
-  Trail.prototype.onDir = function (dx, dy) { var l = this.q.length ? this.q[this.q.length - 1] : [this.dx, this.dy]; if (dx === -l[0] && dy === -l[1]) return; if (this.q.length < 2) this.q.push([dx, dy]); };
-  Trail.prototype.center = function () { var h = this.body[0]; return { x: h[0] * TT + TT / 2, y: h[1] * TT + TT / 2 }; };
-  Trail.prototype.update = function (dt) {
-    var me = this; if (me.cleared) return;
-    if (me.daze > 0) { me.daze -= dt; return; }
-    var step = 1 / ((S.relaxed ? 5 : 7) + me.level * 0.4); me.acc += dt;
-    while (me.acc >= step) {
-      me.acc -= step; if (me.q.length) { var d = me.q.shift(); me.dx = d[0]; me.dy = d[1]; }
-      var h = me.body[0], nx = h[0] + me.dx, ny = h[1] + me.dy;
-      if (!me.free(nx, ny) && !(me.body.length > 1 && nx === me.body[me.body.length - 1][0] && ny === me.body[me.body.length - 1][1])) {
-        SFX.oof(); say('Oof! ' + me.P.name + ' bumped into something. The trail gets a little shorter.'); me.body = me.body.slice(0, Math.max(3, Math.ceil(me.body.length / 2)));
-        var keep = me.body.length; me.restart(); while (me.body.length < keep) me.body.push([me.body[me.body.length - 1][0] - 1, 10]); me.daze = 0.8; return;
-      }
-      me.body.unshift([nx, ny]);
-      if (me.treat && nx === me.treat[0] && ny === me.treat[1]) {
-        var gold = me.treat[2]; me.score += gold ? 50 : 10; me.got += gold ? 2 : 1; (gold ? SFX.heart : SFX.chomp)();
-        if (me.got >= me.goal) { me.finish(); return; }
-        me.food();
-      } else me.body.pop();
+  Trek.prototype.mountUI = function () {
+    var me = this, wrap = $('ar-wrap'); if (!wrap) return;
+    var old = wrap.querySelector('.ar-tui'); if (old) old.remove();
+    var u = D.createElement('div'); u.className = 'ar-tui';
+    u.innerHTML = '<p class="ar-tui-msg" aria-live="polite"></p><div class="ar-tui-ch" role="group" aria-label="What to do next"></div>';
+    wrap.appendChild(u); me.ui = u; me.msgEl = u.querySelector('.ar-tui-msg'); me.chEl = u.querySelector('.ar-tui-ch');
+    me.chEl.addEventListener('click', function (e) { var b = e.target.closest('button'); if (b && !paused) me.choose(+b.getAttribute('data-i')); });
+    me.sel = 0;
+  };
+  Trek.prototype.destroy = function () { if (this.ui) this.ui.remove(); this.ui = null; };
+  Trek.prototype.say = function (m) { if (this.msgEl) this.msgEl.textContent = m; say(m); };
+  Trek.prototype.ask = function (list) {
+    var me = this; me.opts = list; me.sel = 0;
+    me.chEl.innerHTML = list.map(function (o, i) { return '<button type="button" class="ar-btn' + (i === 0 ? ' is-main' : '') + '" data-i="' + i + '"><b>' + (i + 1) + '</b> ' + o[0] + '</button>'; }).join('');
+  };
+  Trek.prototype.mark = function () { Array.prototype.forEach.call(this.chEl.children, function (b, i) { b.classList.toggle('is-sel', i === this.sel); }, this); };
+  Trek.prototype.choose = function (i) { var o = this.opts && this.opts[i]; if (!o || this.moveT > 0) return; SFX.hop(); o[1].call(this); };
+  Trek.prototype.onDir = function (dx, dy) { if (!this.opts) return; if (dy) { this.sel = (this.sel + dy + this.opts.length) % this.opts.length; this.mark(); } else if (dx > 0) this.choose(this.sel); };
+  Trek.prototype.onKey = function (k) { if (/^[1-9]$/.test(k)) { this.choose(+k - 1); return true; } if (k === 'Enter' || k === ' ') { this.choose(this.sel || 0); return true; } return false; };
+  Trek.prototype.center = function () { return null; };
+  Trek.prototype.clampAll = function () { var me = this; me.treats = Math.max(0, Math.round(me.treats)); me.energy = clamp(Math.round(me.energy), 0, 100); me.buttons = Math.max(0, me.buttons); me.miles = clamp(me.miles, 0, TRIP); };
+  Trek.prototype.menu = function () {
+    var me = this, nx = me.stops[me.next];
+    me.ask([
+      ['Keep traveling', function () { me.travel(); }],
+      ['Rest for a day', function () { me.day++; me.energy += 22; me.treats -= me.eat(); me.clampAll(); me.say('Day ' + me.day + '. Everyone rests. Tidbit snores, Sugarfoot reads the map. Energy is back up.'); me.menu(); }],
+      ['Forage for treats', function () { me.forage(); }],
+      ['Change pace (now: ' + me.pace + ')', function () { me.ask([['Gentle: slow, saves energy', function () { me.pace = 'gentle'; me.say('A gentle pace. Plenty of time to sniff the flowers.'); me.menu(); }], ['Steady: a good balance', function () { me.pace = 'steady'; me.say('A steady pace. Paw after paw.'); me.menu(); }], ['Zoomy: fast, but tiring', function () { me.pace = 'zoomy'; me.say('Zoomy pace! Ears flapping in the wind.'); me.menu(); }]]); }],
+      ['Snack size (now: ' + me.snack + ')', function () { me.ask([['Small snacks: treats last longer', function () { me.snack = 'small'; me.say('Small snacks. Everyone gets a little less, more often.'); me.menu(); }], ['Regular snacks', function () { me.snack = 'regular'; me.say('Regular snacks. Just right.'); me.menu(); }], ['Big snacks: more energy, more treats used', function () { me.snack = 'big'; me.say('Big snacks! Happy tummies, lighter treat bag.'); me.menu(); }]]); }]
+    ]);
+    if (nx && me.miles >= nx.at - 0.5) me.arrive();
+  };
+  Trek.prototype.eat = function () { return { small: 4, regular: 6, big: 9 }[this.snack]; };
+  Trek.prototype.travel = function () {
+    var me = this;
+    me.day++; me.wx = WEATHER[Math.floor(Math.random() * WEATHER.length)];
+    var sp = { gentle: 40, steady: 56, zoomy: 75 }[me.pace] * (me.wx[0] === 'rain' ? 0.75 : me.wx[0] === 'fog' ? 0.8 : 1) * (0.6 + me.energy / 250);
+    var tired = { gentle: 3, steady: 6, zoomy: 11 }[me.pace] - (me.snack === 'big' ? 2 : me.snack === 'small' ? -1 : 0);
+    var nx = me.stops[me.next], goal = nx ? nx.at : TRIP;
+    me.fromMiles = me.miles; me.miles = Math.min(goal, me.miles + sp); me.energy -= tired; me.treats -= me.eat(); me.moveT = 1.1;
+    var msg = 'Day ' + me.day + '. ' + me.wx[1] + '. You travel ' + Math.round(me.miles - me.fromMiles) + ' paw-miles.';
+    if (Math.random() < 0.38) msg += ' ' + me.event();
+    me.clampAll();
+    if (me.treats <= 0) { me.day++; var f = 15 + Math.floor(Math.random() * 20); me.treats += f; me.energy -= 5; msg += ' The treat bag is empty! You stop for a day to forage and find ' + f + ' treats.'; }
+    if (me.energy <= 0) { me.day += 2; me.energy = 45; msg += ' Everyone is worn out, so you rest for two days. Rest is part of the journey.'; }
+    me.clampAll(); me.say(msg);
+    if (me.miles >= TRIP) { me.finishTrip(); return; }
+    if (nx && me.miles >= nx.at) { setTimeout(function () { if (me.ui) me.arrive(); }, 1100); me.ask([]); return; }
+    me.menu();
+  };
+  Trek.prototype.event = function () {
+    var me = this, e = EVENTS[Math.floor(Math.random() * EVENTS.length)];
+    if (e.fix) { if (me.wheels > 0) { me.wheels--; return e.t + ' You swap in the spare wheel.'; } me.day++; return e.t + ' No spare, so Sugarfoot spends a day fixing it with string and patience.'; }
+    if (e.share) { if (me.treats > 20) { me.treats -= 6; me.joy += 3; me.score += 30; return e.t + ' Tidbit shares six treats. The hedgehog does a happy little spin.'; } return e.t + ' Your bag is light, so you share a song instead. The hedgehog loves it.'; }
+    for (var k in e.d) me[k] += e.d[k];
+    return e.t;
+  };
+  Trek.prototype.forage = function () {
+    var me = this; me.day++; me.energy -= 6; var got = 12 + Math.floor(Math.random() * 26), what = ['apples', 'blackberries', 'crunchy carrots', 'acorns', 'wild strawberries', 'pumpkin seeds'][Math.floor(Math.random() * 6)];
+    me.treats += got; me.score += 10; me.clampAll(); SFX.chomp();
+    me.say('Day ' + me.day + '. ' + (me.who === 'tidbit' ? 'Tidbit' : 'Sugarfoot') + ' sniffs out ' + what + '. +' + got + ' treats for the bag.'); me.menu();
+  };
+  Trek.prototype.arrive = function () {
+    var me = this, st = me.stops[me.next]; if (!st) return; me.next++; me.score += 50; SFX.bay();
+    if (st.kind === 'river') {
+      me.say('You reach ' + st.name + ', a river crossing. The water looks ' + (Math.random() < 0.5 ? 'low and slow.' : 'quick today.') + ' How will you cross?');
+      me.ask([
+        ['Wade across (free, a little splashy)', function () { if (Math.random() < 0.35) { var l = 6 + Math.floor(Math.random() * 10); me.treats -= l; me.clampAll(); SFX.splash(); me.say('Splash! A wave soaks the treat bag. You lose ' + l + ' treats, but everyone laughs.'); } else me.say('Paws wet, spirits high. You wade across just fine.'); me.menu(); }],
+        ['Float the wagon (some energy)', function () { me.energy -= 8; me.clampAll(); me.say('Sugarfoot steers, Tidbit paddles. The wagon floats across like a little boat.'); me.menu(); }],
+        ['Take the ferry (5 buttons)', function () { if (me.buttons >= 5) { me.buttons -= 5; me.say('The ferry frog takes your buttons and croaks you across. Smooth and dry.'); } else { me.say('Not enough buttons, so you wait a day for the river to calm, then wade across.'); me.day++; } me.menu(); }],
+        ['Wait a day for calmer water', function () { me.day++; me.energy += 8; me.treats -= me.eat(); me.clampAll(); me.say('You wait by the bank. By morning the river is calm, and you cross easily.'); me.menu(); }]
+      ]);
+    } else if (st.kind === 'post') {
+      me.say('You reach ' + st.name + ', a little trading post. You have ' + me.buttons + ' shiny buttons.');
+      var shop = function () {
+        me.ask([
+          ['Buy 20 treats (4 buttons)', function () { if (me.buttons >= 4) { me.buttons -= 4; me.treats += 20; me.say('A fresh bag of treats! You have ' + me.buttons + ' buttons left.'); } else me.say('Not quite enough buttons for that.'); shop(); }],
+          ['Buy a spare wheel (6 buttons)', function () { if (me.buttons >= 6) { me.buttons -= 6; me.wheels++; me.say('A spare wheel, strapped to the back. Just in case.'); } else me.say('Not quite enough buttons for that.'); shop(); }],
+          ['Trade a song for 3 buttons', function () { me.buttons += 3; me.joy++; me.say('Tidbit howls, Sugarfoot hums. The shopkeeper claps and pays you in buttons.'); shop(); }],
+          ['Back on the trail', function () { me.menu(); }]
+        ]);
+      };
+      shop();
+    } else {
+      var sights = ['a view all the way to the sea', 'a giant tree with a door in it', 'a field of glowing fireflies', 'a waterfall shaped like a heart', 'a rock that looks exactly like a teapot'];
+      me.energy += 6; me.joy += 2; me.clampAll();
+      me.say('You reach ' + st.name + ' and stop to look at ' + sights[Math.floor(Math.random() * sights.length)] + '. Everyone feels a bit lighter.'); me.menu();
     }
   };
-  Trail.prototype.finish = function () {
-    var me = this; me.cleared = true; me.score += 300; SFX.clear(); recordBest(); hud(); paused = true;
-    var gift = rewardLevel('Treat Trail · level ' + me.level);
-    overlay('Level ' + me.level + ' cleared!', 'The whole trail of friends made it. ' + nextLesson(), 'Next level →', function () { paused = false; me.level++; me.cleared = false; me.newLevel(); last = 0; }, '+300 for a full trail' + (gift ? ' · ' + gift : ''));
+  Trek.prototype.finishTrip = function () {
+    var me = this; me.cleared = true; me.ask([]);
+    var bonus = Math.max(0, 600 - me.day * 12) + me.treats * 2 + me.energy * 3 + me.joy * 20 + me.buttons * 5;
+    me.score += bonus; SFX.clear(); recordBest(); hud(); paused = true;
+    var gift = rewardLevel('The Treat Trail · journey ' + me.level);
+    overlay('You made it to Starfall Hill!', 'Day ' + me.day + '. Everyone arrives together, a little muddy and very happy. ' + nextLesson(), 'A new journey →',
+      function () { paused = false; me.level++; me.cleared = false; me.newTrip(); last = 0; }, '+' + bonus + ' for treats, energy, kindness and buttons left' + (gift ? ' · ' + gift : ''));
   };
-  Trail.prototype.draw = function (t) {
+  Trek.prototype.update = function (dt) { if (this.moveT > 0) { this.moveT -= dt; this.roll += dt * 6; } };
+  Trek.prototype.draw = function (t) {
     var me = this; g.setTransform(DPR, 0, 0, DPR, 0, 0);
-    for (var y = 0; y < TG; y++) for (var x = 0; x < TG; x++) { g.fillStyle = (x + y) % 2 ? '#7DBB6E' : '#86C477'; g.fillRect(x * TT, y * TT, TT, TT); }
-    g.strokeStyle = '#3F7D45'; g.lineWidth = 6; g.strokeRect(0, 0, LW, LH);   // the hedge all round the field
-    Object.keys(me.rocks).forEach(function (k) { var p = k.split(','), x0 = +p[0] * TT, y0 = +p[1] * TT; rr(g, x0 + 2, y0 + 3, TT - 4, TT - 5, 8, '#3F7D45'); g.fillStyle = '#5A9E5C'; g.beginPath(); g.arc(x0 + 8, y0 + 9, 4, 0, 7); g.arc(x0 + 15, y0 + 8, 4, 0, 7); g.fill(); });
-    if (me.treat) { var tx = me.treat[0] * TT + TT / 2, ty = me.treat[1] * TT + TT / 2; if (me.treat[2]) heart(g, tx, ty, 6 * (1 + Math.sin(t / 200) * 0.12), '#FF8FA3'); else { g.fillStyle = '#F7E3B5'; g.beginPath(); g.arc(tx - 5, ty - 2, 3, 0, 7); g.arc(tx - 5, ty + 2, 3, 0, 7); g.arc(tx + 5, ty - 2, 3, 0, 7); g.arc(tx + 5, ty + 2, 3, 0, 7); g.fill(); g.fillRect(tx - 5, ty - 2, 10, 4); } }
-    for (var i = me.body.length - 1; i >= 1; i--) { var b = me.body[i], hue = (i * 38) % 360; g.fillStyle = 'hsla(' + hue + ',80%,78%,.95)'; g.beginPath(); g.arc(b[0] * TT + TT / 2, b[1] * TT + TT / 2, TT * 0.38, 0, 7); g.fill(); g.fillStyle = 'rgba(255,255,255,.6)'; g.beginPath(); g.arc(b[0] * TT + TT / 2 - 3, b[1] * TT + TT / 2 - 3, 2.5, 0, 7); g.fill(); }
-    var h = me.body[0]; if (!(me.daze > 0 && Math.floor(t / 120) % 2)) drawPup(g, me.who, h[0] * TT + TT / 2, h[1] * TT + TT / 2 + 9, 0.46, me.dx < 0 ? -1 : 1, t / 90, true, t);
-    g.fillStyle = 'rgba(20,16,44,.55)'; wallPath(g, 6, LH - 24, 170, 18, 8); g.fill(); g.fillStyle = '#FFF6E0'; g.font = '600 11px Lora, Georgia, serif'; g.textAlign = 'left'; g.fillText('Friends on the trail: ' + me.got + ' / ' + me.goal, 14, LH - 11);
+    var wx = me.wx[0], sky = g.createLinearGradient(0, 0, 0, 170);
+    sky.addColorStop(0, wx === 'rain' || wx === 'cloudy' ? '#AEB9C9' : wx === 'fog' ? '#D6DCE2' : '#9FD3F2'); sky.addColorStop(1, '#F1F6EE'); g.fillStyle = sky; g.fillRect(0, 0, OW, 170);
+    if (wx === 'sunny' || wx === 'breezy') { g.fillStyle = '#FFE08A'; g.beginPath(); g.arc(410, 46, 22, 0, 7); g.fill(); }
+    var scroll = (me.miles * 4 + (me.moveT > 0 ? 0 : 0)) % OW, pm = me.moveT > 0 ? (me.fromMiles + (me.miles - me.fromMiles) * (1 - me.moveT / 1.1)) : me.miles, sx = pm * 4;
+    // hills and trees slide by as you travel
+    g.fillStyle = '#9DC58A'; g.beginPath(); g.moveTo(0, 170); for (var x = 0; x <= OW; x += 20) g.lineTo(x, 140 + Math.sin((x + sx * 0.3) / 70) * 16); g.lineTo(OW, 200); g.lineTo(0, 200); g.fill();
+    g.fillStyle = '#84B873'; g.fillRect(0, 170, OW, 130);
+    for (var i = 0; i < 6; i++) { var tx = ((i * 97 - sx * 0.8) % (OW + 80) + OW + 80) % (OW + 80) - 40; g.fillStyle = '#5E9A5A'; g.beginPath(); g.arc(tx, 150, 16, 0, 7); g.arc(tx + 12, 156, 12, 0, 7); g.fill(); g.fillStyle = '#7A5636'; g.fillRect(tx + 3, 160, 5, 14); }
+    // the trail
+    g.fillStyle = '#D9C08F'; g.fillRect(0, 214, OW, 26); g.fillStyle = 'rgba(150,120,80,.35)'; for (var d = 0; d < 12; d++) { var dx2 = ((d * 53 - sx) % OW + OW) % OW; g.fillRect(dx2, 226, 14, 3); }
+    if (wx === 'rain') { g.strokeStyle = 'rgba(80,110,160,.5)'; g.lineWidth = 1.2; for (var r = 0; r < 40; r++) { var rx = (r * 47 + t / 4) % OW, ry = (r * 31 + t / 2) % 200; g.beginPath(); g.moveTo(rx, ry); g.lineTo(rx - 3, ry + 8); g.stroke(); } }
+    if (wx === 'fog') { g.fillStyle = 'rgba(255,255,255,.35)'; g.fillRect(0, 100, OW, 140); }
+    // the wagon, pulled by the pup you chose, with the other riding along
+    var moving = me.moveT > 0, bob = moving ? Math.sin(t / 90) * 1.5 : 0, wxp = 230;
+    g.fillStyle = '#F3EAD6'; g.beginPath(); g.moveTo(wxp - 50, 200 + bob); g.quadraticCurveTo(wxp - 50, 150 + bob, wxp, 148 + bob); g.quadraticCurveTo(wxp + 50, 150 + bob, wxp + 50, 200 + bob); g.closePath(); g.fill();
+    g.strokeStyle = '#C9B48E'; g.lineWidth = 2; for (var h = -30; h <= 30; h += 20) { g.beginPath(); g.moveTo(wxp + h, 152 + bob); g.lineTo(wxp + h, 200 + bob); g.stroke(); }
+    var other = me.who === 'tidbit' ? 'sugarfoot' : 'tidbit';
+    drawPup(g, other, wxp - 4, 192 + bob, 0.55, 1, 0, false, t, 'sit');
+    g.fillStyle = '#9B6B43'; g.fillRect(wxp - 56, 198 + bob, 112, 12);
+    [wxp - 36, wxp + 36].forEach(function (cx) { g.strokeStyle = '#5A3A22'; g.lineWidth = 3; g.beginPath(); g.arc(cx, 216, 13, 0, 7); g.stroke(); for (var s = 0; s < 4; s++) { var a = s * Math.PI / 4 + me.roll; g.beginPath(); g.moveTo(cx, 216); g.lineTo(cx + Math.cos(a) * 13, 216 + Math.sin(a) * 13); g.stroke(); } });
+    g.strokeStyle = '#7A5636'; g.lineWidth = 2; g.beginPath(); g.moveTo(wxp + 56, 206); g.lineTo(wxp + 92, 214); g.stroke();
+    drawPup(g, me.who, wxp + 104, 234, 0.75, 1, t / 90, moving, t, moving ? 'run' : 'sit');
+    // progress along the trail, with the stops
+    g.fillStyle = 'rgba(30,24,50,.72)'; wallPath(g, 8, 8, OW - 16, 38, 10); g.fill();
+    g.fillStyle = '#FFF6E0'; g.font = '600 11px Lora, Georgia, serif'; g.textAlign = 'left';
+    g.fillText('Day ' + me.day + ' · ' + Math.round(me.miles) + ' / ' + TRIP + ' paw-miles · 🦴 ' + me.treats + ' · ⚡ ' + me.energy + '% · 🔘 ' + me.buttons + ' · 🛞 ' + me.wheels, 16, 23);
+    g.fillStyle = 'rgba(255,255,255,.25)'; g.fillRect(16, 32, OW - 32, 5); g.fillStyle = '#FFD66B'; g.fillRect(16, 32, (OW - 32) * pm / TRIP, 5);
+    me.stops.forEach(function (st, i) { var px = 16 + (OW - 32) * st.at / TRIP; g.fillStyle = i < me.next ? '#FFD66B' : '#FFFFFF'; g.beginPath(); g.arc(px, 34.5, 3.2, 0, 7); g.fill(); });
+    var nx = me.stops[me.next];
+    g.fillStyle = 'rgba(30,24,50,.6)'; wallPath(g, 8, OH - 30, OW - 16, 22, 8); g.fill(); g.fillStyle = '#FFF6E0'; g.textAlign = 'center';
+    g.fillText(nx ? 'Next: ' + nx.name + ' (' + { river: 'a river', post: 'a trading post', sight: 'a sight to see' }[nx.kind] + '), ' + Math.max(0, Math.round(nx.at - me.miles)) + ' paw-miles' : 'Next: Starfall Hill, ' + Math.round(TRIP - me.miles) + ' paw-miles', OW / 2, OH - 15);
   };
 
   /* ==================================================================================================
@@ -864,7 +985,7 @@
   var GAMES = {
     chase: { name: 'Treat Chase', make: function (w) { return new Chase(w); }, hint: 'Gather every treat. Golden hearts turn the Static into bubbles you can pop.' },
     cross: { name: 'Cross the Way', make: function (w) { return new Cross(w); }, hint: 'Hop over the road, ride the logs and lily pads, and reach the five doghouses.' },
-    trail: { name: 'Treat Trail', make: function (w) { return new Trail(w); }, hint: 'Steer to each treat and a bubble friend joins your trail. A bump only makes it shorter.' },
+    trail: { name: 'The Treat Trail', make: function (w) { return new Trek(w); }, hint: 'Lead the wagon from Puddle Hollow to Starfall Hill: choose your pace and snacks, cross the rivers, trade at the posts. Nobody gets hurt.' },
     bricks: { name: 'Bubble Break', make: function (w) { return new Bricks(w); }, hint: 'Bounce the bubble into the Static. Up or a tap above the pup sends it off; a miss just floats back.' },
     shower: { name: 'Treat Shower', make: function (w) { return new Catch(w); }, hint: 'Catch the treats in the basket. A raindrop is only a little drip on the nose.' }
   };
@@ -876,6 +997,7 @@
     cv = $('ar-cv'); g = cv.getContext('2d');
     $('ar-select').hidden = true; $('ar-stage').hidden = false;
     if (!GAMES[S.game]) S.game = 'chase';
+    if (game && game.destroy) game.destroy();
     game = GAMES[S.game].make(S.pup);
     paused = false; running = true; tAll = 0; $('ar-overlay').hidden = true; $('ar-pause').textContent = '⏸ Pause';
     $('ar-title').textContent = GAMES[S.game].name;
@@ -886,13 +1008,13 @@
     startLoop(); wrap.focus(); try { wrap.scrollIntoView({ behavior: reduced ? 'auto' : 'smooth', block: 'center' }); } catch (e) { /* ignore */ }
   }
   function backToMenu() {
-    recordBest(); running = false; paused = false; game = null; stopLoop();
+    recordBest(); running = false; paused = false; if (game && game.destroy) game.destroy(); game = null; stopLoop();
     $('ar-overlay').hidden = true; $('ar-stage').hidden = true; $('ar-select').hidden = false;
     try { $('ar-select').scrollIntoView({ block: 'start' }); } catch (e) { /* ignore */ }
     var f = D.querySelector('input[name="ar-game"]:checked'); if (f) f.focus();
     refreshBest();
   }
-  function restart() { recordBest(); if (!game) return; game = GAMES[S.game].make(S.pup); paused = false; $('ar-overlay').hidden = true; $('ar-pause').textContent = '⏸ Pause'; tAll = 0; last = 0; game.draw(0); hud(); say('A fresh start.'); }
+  function restart() { recordBest(); if (!game) return; if (game.destroy) game.destroy(); game = GAMES[S.game].make(S.pup); paused = false; $('ar-overlay').hidden = true; $('ar-pause').textContent = '⏸ Pause'; tAll = 0; last = 0; game.draw(0); hud(); say('A fresh start.'); }
   function drawBadge() {
     var c = $('ar-who'); if (!c || !window.TOLPups) return; var x = c.getContext('2d'); x.setTransform(1, 0, 0, 1, 0, 0); x.clearRect(0, 0, c.width, c.height);
     drawPupOn(x, S.pup, 24, 50, 0.85);
@@ -913,7 +1035,7 @@
     if (T2) { var y = T2.getContext('2d'); y.fillStyle = '#4F86C6'; y.fillRect(0, 0, T2.width, 24); y.fillStyle = '#4A4A58'; y.fillRect(0, 24, T2.width, 28); y.fillStyle = '#6FAF7B'; y.fillRect(0, 52, T2.width, 28);
       rr(y, 8, 6, 36, 12, 6, '#8B5E3C'); rr(y, 62, 8, 30, 12, 6, '#8B5E3C'); rr(y, 14, 28, 26, 14, 4, '#F2F2F7'); rr(y, 62, 31, 30, 14, 4, '#F7C84B'); drawPupOn(y, 'sugarfoot', 52, 78, 0.42); }
     var T3 = $('ar-prev-trail'), T4 = $('ar-prev-bricks'), T5 = $('ar-prev-shower');
-    if (T3) { var z = T3.getContext('2d'); z.fillStyle = '#86C477'; z.fillRect(0, 0, T3.width, T3.height); [[30, 50], [42, 50], [54, 50], [54, 38]].forEach(function (d, i) { z.fillStyle = 'hsl(' + i * 60 + ',80%,78%)'; z.beginPath(); z.arc(d[0], d[1], 5, 0, 7); z.fill(); }); heart(z, 92, 30, 6, '#FF8FA3'); drawPupOn(z, 'tidbit', 70, 62, 0.4); }
+    if (T3) { var z = T3.getContext('2d'); z.fillStyle = '#9FD3F2'; z.fillRect(0, 0, T3.width, 50); z.fillStyle = '#84B873'; z.fillRect(0, 50, T3.width, 40); z.fillStyle = '#D9C08F'; z.fillRect(0, 62, T3.width, 10); z.fillStyle = '#F3EAD6'; z.beginPath(); z.moveTo(30, 60); z.quadraticCurveTo(30, 36, 50, 35); z.quadraticCurveTo(70, 36, 70, 60); z.fill(); z.fillStyle = '#9B6B43'; z.fillRect(28, 58, 44, 5); z.strokeStyle = '#5A3A22'; z.lineWidth = 2; z.beginPath(); z.arc(38, 66, 5, 0, 7); z.moveTo(67, 66); z.arc(62, 66, 5, 0, 7); z.stroke(); drawPupOn(z, 'tidbit', 92, 72, 0.38); }
     if (T4) { var w4 = T4.getContext('2d'); w4.fillStyle = '#2B2560'; w4.fillRect(0, 0, T4.width, T4.height); for (var bi = 0; bi < 5; bi++) for (var bj = 0; bj < 2; bj++) rr(w4, 6 + bi * 22, 8 + bj * 12, 19, 9, 3, 'hsl(' + (bi * 50 + bj * 30) + ',70%,72%)'); w4.fillStyle = 'rgba(180,225,255,.8)'; w4.beginPath(); w4.arc(70, 46, 4, 0, 7); w4.fill(); rr(w4, 38, 68, 44, 7, 3, '#FFF3D6'); }
     if (T5) { var w5 = T5.getContext('2d'); w5.fillStyle = '#BFE3F7'; w5.fillRect(0, 0, T5.width, T5.height); w5.fillStyle = '#fff'; w5.beginPath(); w5.arc(50, 16, 10, 0, 7); w5.arc(64, 12, 12, 0, 7); w5.arc(78, 16, 10, 0, 7); w5.fill(); heart(w5, 40, 42, 5, '#FF8FA3'); w5.fillStyle = '#F7E3B5'; w5.fillRect(70, 36, 12, 5); rr(w5, 44, 64, 34, 9, 4, '#C98B4F'); drawPupOn(w5, 'sugarfoot', 61, 86, 0.32); }
   }

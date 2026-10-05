@@ -119,6 +119,14 @@
   .ar-help{ margin:.8rem auto 0; max-width:30rem; font-size:.85rem; color:#CFC3F0; text-align:center; }
   @media (max-width:420px){ .ar-dpad{ grid-template-columns:repeat(3, 70px); grid-template-rows:repeat(2, 70px); } }
   @media (prefers-reduced-motion: reduce){ .jl-sun{ animation:none; } .jl-go:hover{ transform:none; } }
+  .ar-tui{ padding:.7rem .8rem .8rem; background:#FFF8EC; color:#2B2140; border-top:1px solid rgba(60,50,80,.15); }
+  .ar-tui-msg{ margin:0 0 .6rem; font-size:1rem; line-height:1.5; min-height:3em; }
+  .ar-tui-ch{ display:grid; gap:.4rem; grid-template-columns:repeat(auto-fit, minmax(13rem, 1fr)); }
+  .ar-tui-ch .ar-btn{ text-align:left; min-height:44px; justify-content:flex-start; background:#EFE6F8; color:#2B2140; border-color:#C9BCE3; }
+  .ar-tui-ch .ar-btn.is-main{ background:#3C3350; color:#FFF6E0; border-color:#3C3350; }
+  .ar-tui-ch .ar-btn.is-main b{ background:rgba(255,255,255,.18); }
+  .ar-tui-ch .ar-btn b{ display:inline-grid; place-items:center; width:1.5rem; height:1.5rem; margin-right:.35rem; border-radius:50%; background:rgba(60,50,80,.12); font-size:.85rem; }
+  .ar-tui-ch .ar-btn.is-sel{ outline:3px solid #E3B15C; outline-offset:1px; }
   @media print{ .ar-select, .ar-stage{ display:none; } }
 </style>
 <!-- seo:start -->
@@ -165,7 +173,7 @@
 <!-- pal cam hook (pals-cam.js): check in on Tidbit & Sugarfoot -->
 <div class="pc-launch-row" data-palcam-row hidden><button type="button" class="pc-launch" data-palcam-open><span class="pc-paw"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><ellipse cx="12" cy="16.2" rx="4.6" ry="3.8"/><circle cx="6" cy="10.8" r="2.1"/><circle cx="9.6" cy="6.8" r="2.1"/><circle cx="14.4" cy="6.8" r="2.1"/><circle cx="18" cy="10.8" r="2.1"/></svg></span><span><span class="pc-lt">Check in on Tidbit &amp; Sugarfoot</span><small><i class="pc-dot" aria-hidden="true"></i>See what they&rsquo;re up to</small></span></button></div>
 <!-- /pal cam hook -->
-  <p class="jl-sub">Five classic arcade games, made gentle: a maze chase, a road-and-river crossing, a snake trail, a brick breaker and a catch game. Play as Tidbit or Sugarfoot. Every level is new, there’s no game over, and the controls are as easy as we could make them.</p>
+  <p class="jl-sub">Five classic arcade games, made gentle: a maze chase, a road-and-river crossing, a wagon-trail journey, a brick breaker and a catch game. Play as Tidbit or Sugarfoot. Every level is new, there’s no game over, and the controls are as easy as we could make them.</p>
   <div class="jl-actions">
     <a class="jl-go" href="#ar-select">&#9654; Choose and play</a>
     <a class="jl-go is-soft" href="#buddies">Watch Frequency Buddies</a>
@@ -189,7 +197,7 @@
     <div class="ar-row">
       <label class="ar-card"><input type="radio" name="ar-game" value="chase"><canvas id="ar-prev-chase" width="120" height="90" aria-hidden="true"></canvas><h3>Treat Chase</h3><p>Gather every treat in the maze. Grumpy little clouds of Static drift about, and a golden heart turns them into bubbles you can pop.</p><span class="ar-ctl">Steer with arrows, a swipe or a tap</span><span class="ar-best" id="ar-best-chase"></span><span class="ar-tick" aria-hidden="true">&#10003;</span></label>
       <label class="ar-card"><input type="radio" name="ar-game" value="cross"><canvas id="ar-prev-cross" width="120" height="90" aria-hidden="true"></canvas><h3>Cross the Way</h3><p>Hop over the busy road, ride the logs and lily pads over the river, and reach all five doghouses.</p><span class="ar-ctl">One hop per press, tap or swipe</span><span class="ar-best" id="ar-best-cross"></span><span class="ar-tick" aria-hidden="true">&#10003;</span></label>
-      <label class="ar-card"><input type="radio" name="ar-game" value="trail"><canvas id="ar-prev-trail" width="120" height="90" aria-hidden="true"></canvas><h3>Treat Trail</h3><p>Steer to each treat and a little bubble friend joins the trail behind. Bump a hedge and the trail just gets shorter.</p><span class="ar-ctl">Steer with arrows, a swipe or a tap</span><span class="ar-best" id="ar-best-trail"></span><span class="ar-tick" aria-hidden="true">&#10003;</span></label>
+      <label class="ar-card"><input type="radio" name="ar-game" value="trail"><canvas id="ar-prev-trail" width="120" height="90" aria-hidden="true"></canvas><h3>The Treat Trail</h3><p>Lead the wagon from Puddle Hollow to Starfall Hill. Choose your pace and snack sizes, cross rivers, trade at posts, and handle whatever the trail brings. Nobody gets hurt.</p><span class="ar-ctl">Tap a choice, or press 1 to 5</span><span class="ar-best" id="ar-best-trail"></span><span class="ar-tick" aria-hidden="true">&#10003;</span></label>
       <label class="ar-card"><input type="radio" name="ar-game" value="bricks"><canvas id="ar-prev-bricks" width="120" height="90" aria-hidden="true"></canvas><h3>Bubble Break</h3><p>Bounce a bubble into the blocks of Static until the wall is clear. A miss just floats back down to the cushion.</p><span class="ar-ctl">Left and right, or drag; up to send the bubble</span><span class="ar-best" id="ar-best-bricks"></span><span class="ar-tick" aria-hidden="true">&#10003;</span></label>
       <label class="ar-card"><input type="radio" name="ar-game" value="shower"><canvas id="ar-prev-shower" width="120" height="90" aria-hidden="true"></canvas><h3>Treat Shower</h3><p>Treats tumble down from a friendly cloud. Catch them in the basket. A raindrop is only a little drip on the nose.</p><span class="ar-ctl">Left and right, or drag</span><span class="ar-best" id="ar-best-shower"></span><span class="ar-tick" aria-hidden="true">&#10003;</span></label>
     </div>
