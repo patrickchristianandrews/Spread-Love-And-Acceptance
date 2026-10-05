@@ -1,5 +1,5 @@
 # Season 2 teaser voices: one mp3 per line, named <key>.mp3 in this folder, listed in index.json as {"<key>":[<seconds>]}.
-# Made the same way as Season 1's voices: the open-source Kokoro model's af_heart voice (Apache 2.0), then pitch-shifted with Rubber Band, with pitch and pace set by each line’s mood as in Season 1
+# Made the same way as Season 1's voices: the open-source Kokoro model's af_heart voice (Apache 2.0), then pitch-shifted as in Season 1: the pitch raised fully (about 1.6x for Tidbit, 1.25x for Sugarfoot, set by each line’s mood) while the voice’s tone colour moves only about 12% (Rubber Band with formants kept, then a light resample)
 # To swap in your own recording of a line, replace its mp3 (same key) and update its seconds in index.json.
 # key	who	seconds on screen	text
 b039e77b	tidbit	1.63	Did you hear that?
