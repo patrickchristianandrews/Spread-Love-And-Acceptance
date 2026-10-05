@@ -25,9 +25,9 @@
   function lsSet(k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
   var RM = !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
   var canVib = typeof navigator.vibrate === 'function';
-  var LOOKS = RM ? ['glow'] : ['auto', 'stars', 'aurora', 'rings', 'tunnel', 'bars', 'wave'];
+  var LOOKS = RM ? ['glow'] : ['media', 'auto', 'stars', 'aurora', 'rings', 'tunnel', 'bars', 'wave'];
   // what Auto cycles through for each track, and how Match feels it
-  var ROTATE = { star: ['stars', 'aurora', 'wave', 'stars'], shimmer: ['rings', 'bars', 'tunnel', 'stars'], bedroom: ['rings', 'bars', 'stars', 'wave'], watching: ['tunnel', 'stars', 'aurora', 'bars'], other: ['stars', 'aurora', 'tunnel', 'rings', 'bars', 'wave'] };
+  var ROTATE = { star: ['media', 'stars', 'aurora', 'wave'], shimmer: ['media', 'rings', 'bars', 'tunnel'], bedroom: ['media', 'rings', 'bars', 'wave'], watching: ['media', 'tunnel', 'stars', 'aurora'], other: ['media', 'stars', 'aurora', 'tunnel', 'rings', 'bars', 'wave'] };
   var TRACKFEEL = { star: 'heart', shimmer: 'rumble', bedroom: 'beat', watching: 'beat', other: 'rumble' };
   var TRACKID = { 'Shooting Star': 'star', 'Thunderous Shimmer': 'shimmer', 'Bouncy Bedroom': 'bedroom', 'Watching a Shooting Star': 'watching' };
   var LEVELS = ['off', 'soft', 'medium', 'strong'];
@@ -39,7 +39,7 @@
   var feel = lsGet('tol-haptic-mode'); if (FEELS.indexOf(feel) < 0) feel = 'match';
 
   // ---------- the panel ----------
-  var NAMES = { auto: 'Auto', stars: 'Stars', aurora: 'Aurora', rings: 'Rings', tunnel: 'Tunnel', bars: 'Bars', wave: 'Wave', glow: 'Glow' };
+  var NAMES = { media: 'Media player', auto: 'Auto', stars: 'Stars', aurora: 'Aurora', rings: 'Rings', tunnel: 'Tunnel', bars: 'Bars', wave: 'Wave', glow: 'Glow' };
   var FNAMES = { match: 'Match the track', rumble: 'Rumble', beat: 'Beat', heart: 'Heartbeat' };
   var LNAMES = { off: 'Off', soft: 'Soft', medium: 'Medium', strong: 'Strong' };
   function btns(group, list, names, cur) {
@@ -378,6 +378,48 @@
     }
     var gr = g.createRadialGradient(cx, cy, 0, cx, cy, 40 + bass * 90); gr.addColorStop(0, rgba(GOLD, 0.55 + bass * 0.4)); gr.addColorStop(1, rgba(PINK, 0)); g.fillStyle = gr; g.fillRect(0, 0, W, H);
   }
+
+  // Media player: like the classic Windows Media Player visualizations. Each frame keeps the last one, zoomed in and turned
+  // a touch so everything streams outward in trails, then draws the live sound on top as a six-way kaleidoscope: the
+  // waveform as glowing ribbons, the spectrum as petals, and a burst of light on every beat. The colors drift with the music.
+  var fbc = null, fbg = null, mHue = 200, mSpin = 0;
+  function drawMedia(t, beatNow) {
+    var cw = cv.width, ch = cv.height;
+    if (!fbc) { fbc = document.createElement('canvas'); fbg = fbc.getContext('2d'); }
+    if (fbc.width !== cw || fbc.height !== ch) { fbc.width = cw; fbc.height = ch; fbg.fillStyle = '#070512'; fbg.fillRect(0, 0, cw, ch); }
+    g.setTransform(1, 0, 0, 1, 0, 0); g.globalCompositeOperation = 'source-over'; g.globalAlpha = 1;
+    g.fillStyle = '#070512'; g.fillRect(0, 0, cw, ch);
+    mSpin += 0.0025 + mid * 0.01; mHue = (mHue + 0.35 + bass * 2.2 + (beatNow ? 18 : 0)) % 360;
+    g.save(); g.translate(cw / 2, ch / 2); g.rotate(0.006 * Math.sin(t / 2600) + mid * 0.01); var z = 1.018 + bass * 0.035 + (beatNow ? 0.05 : 0); g.scale(z, z);
+    g.globalAlpha = 0.8 - high * 0.08; g.drawImage(fbc, -cw / 2, -ch / 2); g.restore(); g.globalAlpha = 1;
+    g.setTransform(dpr, 0, 0, dpr, 0, 0); g.globalCompositeOperation = 'lighter';
+    var cx = W / 2, cy = H / 2, R = Math.min(W, H) * 0.46, K = 6, M = 64, nT = bufT.length, nF = Math.floor(bufF.length * 0.45);
+    for (var s = 0; s < K; s++) {
+      g.save(); g.translate(cx, cy); g.rotate(s * Math.PI * 2 / K + mSpin); if (s % 2) g.scale(1, -1);
+      // the waveform as a ribbon across this slice
+      g.beginPath();
+      for (var i = 0; i <= M; i++) {
+        var a = i / M * Math.PI * 2 / K, v = (bufT[Math.floor(i / M * (nT - 1))] - 128) / 128, f = bufF[Math.floor(Math.pow(i / M, 1.6) * nF)] / 255;
+        var r = R * (0.22 + 0.42 * f + 0.28 * v * (0.6 + lvl));
+        if (i) g.lineTo(Math.cos(a) * r, Math.sin(a) * r); else g.moveTo(Math.cos(a) * r, Math.sin(a) * r);
+      }
+      g.strokeStyle = 'hsla(' + ((mHue + s * 14) % 360) + ',95%,58%,' + (0.28 + lvl * 0.35).toFixed(2) + ')'; g.lineWidth = 1.2 + bass * 2.4; g.stroke();
+      // the spectrum as petals reaching out from the middle
+      for (var j = 0; j < 10; j++) {
+        var fv = bufF[Math.floor(Math.pow((j + 0.5) / 10, 1.5) * nF)] / 255; if (fv < 0.08) continue;
+        var pa = (j + 0.5) / 10 * Math.PI * 2 / K, pr = R * (0.15 + fv * 0.85);
+        g.beginPath(); g.moveTo(0, 0); g.quadraticCurveTo(Math.cos(pa - 0.2) * pr * 0.6, Math.sin(pa - 0.2) * pr * 0.6, Math.cos(pa) * pr, Math.sin(pa) * pr);
+        g.strokeStyle = 'hsla(' + ((mHue + 120 + j * 12) % 360) + ',90%,55%,' + (fv * 0.3).toFixed(2) + ')'; g.lineWidth = 1 + fv * 2; g.stroke();
+      }
+      g.restore();
+    }
+    // a soft burst of light in the middle, bigger on the beat
+    var br = R * (0.1 + bass * 0.35 + (beatNow ? 0.2 : 0)), gr = g.createRadialGradient(cx, cy, 0, cx, cy, br);
+    gr.addColorStop(0, 'hsla(' + ((mHue + 60) % 360) + ',100%,65%,' + (0.12 + bass * 0.25).toFixed(2) + ')'); gr.addColorStop(1, 'hsla(' + mHue + ',100%,50%,0)');
+    g.fillStyle = gr; g.beginPath(); g.arc(cx, cy, br, 0, Math.PI * 2); g.fill();
+    g.globalCompositeOperation = 'source-over';
+    fbg.globalCompositeOperation = 'copy'; fbg.drawImage(cv, 0, 0); fbg.globalCompositeOperation = 'source-over';
+  }
   function drawGlow() {
     bg();
     var r = (40 + lvl * 90) * (H / 280), gr = g.createRadialGradient(W / 2, H / 2, 4, W / 2, H / 2, r * 1.6);
@@ -426,7 +468,7 @@
     var t = now - t0, cur = look;
     if (look === 'auto') { var rot = ROTATE[trackKey()]; if (now - autoAt > 14000) { autoAt = now; autoI = (autoI + 1) % rot.length; rings.length = 0; } cur = rot[autoI % rot.length]; }
     meter.style.width = Math.round(Math.min(1, lvl * 1.15) * 100) + '%';
-    if (cur === 'stars') drawStars(t, r.beat); else if (cur === 'rings') drawRings(t, r.beat); else if (cur === 'wave') drawWave(); else if (cur === 'glow') drawGlow(); else if (cur === 'bars') drawBars(); else if (cur === 'tunnel') drawTunnel(t); else drawAurora(t);
+    if (cur === 'media') drawMedia(t, r.beat); else if (cur === 'stars') drawStars(t, r.beat); else if (cur === 'rings') drawRings(t, r.beat); else if (cur === 'wave') drawWave(); else if (cur === 'glow') drawGlow(); else if (cur === 'bars') drawBars(); else if (cur === 'tunnel') drawTunnel(t); else drawAurora(t);
   }
   window.addEventListener('pagehide', stopBuzz);
   window.addEventListener('resize', function () { if (!dock.hidden) placeDock(); });

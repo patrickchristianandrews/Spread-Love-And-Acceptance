@@ -57,7 +57,7 @@
       { href: '/five-pillars.html', code: 'New', title: 'The Five Pillars', note: 'How every part of the program fits together, inside you and between you and others' },
       { href: '/library.html', code: 'New', title: 'The Professor’s Library', note: 'Deep, plain-language reading on psychology and conflict, and Professor Puddles can chat about all of it' },
       { href: '/reading.html', code: 'New', title: 'Something to read', note: 'Hand-picked articles from trusted sources, matched to what you’re reading' },
-      { href: '/frequency-journey.html', code: 'New', title: 'The Frequency Journey', note: 'Pick Tidbit or Sugarfoot and play a maze chase or a road-and-river crossing: easy controls and no game over' },
+      { href: '/frequency-journey.html', code: 'New', title: 'Tidbit and Sugarfoot’s Arcade', note: 'Five gentle classic games (maze chase, crossing, snake trail, brick breaker, catch), new every level, no game over' },
       { href: '/soundscapes.html', code: 'New', title: 'Brain Breakers', note: 'Shooting Star, Thunderous Shimmer, Watching a Shooting Star and Bouncy Bedroom, with See and feel the sound' },
       { href: '/ask.html', code: 'New', title: 'Chat with Professor Puddles', note: 'Small drop, big brain: answers made only from this site’s pages. What you type stays on your device' },
       { href: '/pause-and-play.html', code: 'New', title: 'Levels that grow the background', note: 'Every few levels, something new appears behind every page and joins in' },
@@ -117,7 +117,7 @@
       { href: '/pause-and-play.html', code: 'All', title: 'Pause & Play', note: 'All the calm games in one place, with your level and your garden' },
       { href: '/recheck-drive.html', code: 'New', title: 'The Re-check Drive', note: 'A calm football game: do the small, kind things from the complacency playbook, and the ball moves toward a field goal. No clock, no way to lose' },
       { href: '/bears-dojo.html', code: 'New', title: 'The Bears Dojo', note: 'Wander a temple garden while Tidbit and Sugarfoot tend it, build your own bear, then step inside for something gentle and always different' },
-      { href: '/frequency-journey.html', code: 'New', title: 'The Frequency Journey', note: 'Guide Tidbit and Sugarfoot through seven tone-themed worlds: practice tuning in (Pillar IV) while you settle (Pillar III)' },
+      { href: '/frequency-journey.html', code: 'New', title: 'Tidbit and Sugarfoot’s Arcade', note: 'Five gentle classic games with Tidbit and Sugarfoot: a maze chase, a crossing, a snake trail, a brick breaker and a catch game' },
       { href: '/calm-visualizer.html', code: 'New', title: 'Drift: calm visualizer', note: 'Pick how you feel. Slow, deep 3D colors and binaural tones (headphones on) ease you toward calm. Pillar III: settle first' },
       { href: '/night-garden.html', code: 'New', title: 'The Night Garden', note: 'A calm place to breathe, play and let your mind settle. Flowers bloom as you breathe; no timers, nothing to lose' },
       { href: '/word-bloom.html', code: 'New', title: 'Word Bloom', note: 'Swipe across the petals to spell words. Hundreds of gentle levels and a bonus jar, and every few levels something new appears in the background' },
@@ -344,7 +344,7 @@
       { href: '/bears-dojo.html', code: 'New', title: 'The Bears Dojo', note: 'A temple garden to wander, a bear to build, a quiet room of gentle things' },
       { href: '/night-garden.html', code: 'Breathe', title: 'The Night Garden', note: 'Breathe slowly and watch the flowers bloom' },
       { href: '/pause-and-play.html', code: 'All', title: 'Pause & Play', note: 'All the calm games and word puzzles, your level and your garden' },
-      { href: '/frequency-journey.html', code: 'Game', title: 'The Frequency Journey', note: 'Pick Tidbit or Sugarfoot: a maze chase or a road-and-river crossing, with easy controls' },
+      { href: '/frequency-journey.html', code: 'Game', title: 'Tidbit and Sugarfoot’s Arcade', note: 'Five gentle classic games: a maze chase, a crossing, a snake trail, a brick breaker and a catch game' },
       { href: '/calm-visualizer.html', code: 'Drift', title: 'Drift: calm visualizer', note: 'Slow colors and tones matched to how you feel' },
       { href: '/soundscapes.html', code: 'Audio', title: 'Soundscapes: Brain Breakers', note: 'Four instrumental pieces you can see and feel: a big live picture, vibration, and a picker' },
       { href: '/soundscapes.html#brain-breakers', code: 'New', title: 'Brain Breakers', note: 'Come get your brain wrecked, broken in a good way: four instrumental pieces from soft to cinematic' },
@@ -1532,7 +1532,7 @@
     if (!main.querySelector('.tol-pud-end')) {
       var endBox = el('aside', { class: 'tol-pud-card tol-pud-end no-bubble', 'aria-label': 'Ask Professor Puddles' },
         '<span class="tol-pud-card-art" aria-hidden="true">' + PUDDLES_SVG + '</span>' +
-        '<p><strong>Want to know more?</strong> Ask Professor Puddles! He answers in plain words from this site’s own pages, with a link to read more. Nothing you type leaves your device.</p>' +
+        '<p><strong>Want to know more?</strong> Ask Professor Puddles! He answers in plain words from this site’s own pages, and he can now find you good articles on any topic, too. Nothing you type leaves your device.</p>' +
         '<button type="button" class="tol-pud-card-go">💧 Ask Professor Puddles</button>');
       endBox.querySelector('button').addEventListener('click', function () { openPud(opts(title ? 'Tell me more about ' + title.replace(/[?.!:]+$/, '') : '')); });
       main.appendChild(endBox);

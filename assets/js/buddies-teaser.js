@@ -140,7 +140,7 @@
     // two little "!"s when the ears go up
     if (u > 3.85 && u < 4.9) { var a = win(u, 3.9, 4.9, 0.12); g.globalAlpha = a; font(g, '800', 22); g.textAlign = 'center'; g.fillStyle = '#FFE08A'; g.fillText('!', tid.x + 4, tid.y - 10 - 4 * eout((u - 3.9) / 0.2)); g.fillText('!', sug.x - 4, sug.y - 10 - 4 * eout((u - 3.9) / 0.2)); g.globalAlpha = 1; }
     say(g, tid, 'Did you hear that?', u, 5.0, 6.55);
-    say(g, sug, 'From… out there.', u, 6.6, 8.0);
+    say(g, sug, 'It came from out there!', u, 6.6, 8.0);
     g.restore();
   }
   function card(g, u, d, text, o, calm) {
@@ -222,7 +222,7 @@
     line(g, bx + 30, 306 + bob, bx + 42, 286 + bob, '#6B4430', 2); rr(g, bx + 37, 284 + bob, 10, 12, 3, '#FFD98A'); glow(g, bx + 42, 290 + bob, 34, '255,210,120', 0.5);
     // fog drifting past
     for (var f = 0; f < 7; f++) { var fx = ((f * 140 + u * (10 + f * 3)) % 900) - 160; ell(g, fx, 200 + rnd(f + 2) * 110, 140, 22 + rnd(f) * 14, 'rgba(225,235,245,' + (0.1 + 0.08 * rnd(f + 5)) + ')'); }
-    say(g, tid, 'Look!', u, 0.5, 1.8);
+    say(g, tid, 'Look down there!', u, 0.5, 1.8);
   }
   function mountain(g, u, d, calm) {
     sky(g, [[0, '#2F2B6B'], [0.45, '#9A6A9E'], [0.75, '#F2A28A'], [1, '#FFD69A']], 260);
@@ -336,7 +336,7 @@
     pup(g, 'sugarfoot', sx2 - 30, 228 + Math.sin(u * 2 + 1.5) * 6, 1.25, { pose: 'run', face: 1, t: u, ph: u * 7 + 2, over: HAT.helmet, noShadow: true, rot: -0.05 });
     for (var b = 0; b < 26; b++) { var bx = rnd(b + 71) * VW, by = 360 - ((u * (30 + rnd(b + 72) * 40) + rnd(b + 73) * 360) % 380), br = 1.5 + rnd(b + 74) * 3.5; g.strokeStyle = 'rgba(220,250,255,.55)'; g.lineWidth = 1; g.beginPath(); g.arc(bx + Math.sin(u * 2 + b) * 3, by, br, 0, TAU); g.stroke(); }
     for (var p = 0; p < 24; p++) circ(g, rnd(p + 81) * VW, rnd(p + 82) * 300, 1.1, 'rgba(180,255,230,' + (calm ? 0.5 : 0.3 + 0.3 * Math.sin(u * 2 + p)) + ')');
-    if (!zoom) say(g, tid, 'It’s glowing!', u, 0.5, 1.95);
+    if (!zoom) say(g, tid, 'And it’s glowing!', u, 0.5, 1.95);
   }
   function rooftop(g, u, d, calm) {
     sky(g, [[0, '#0A0F2E'], [0.7, '#262A63'], [1, '#463E7A']]);
@@ -397,7 +397,7 @@
     var tid = pup(g, 'tidbit', 196, 314, 1.5, { pose: 'sit', face: 1, t: u, ear: -0.7, tilt: -0.1 });
     var sug = pup(g, 'sugarfoot', 126, 314, 1.5, { pose: 'sit', face: 1, t: u + 1, ear: -0.6, tilt: -0.15 });
     say(g, tid, 'Who’s that?', u, 0.55, 2.2);
-    say(g, sug, 'A new friend…?', u, 2.35, 3.95);
+    say(g, sug, 'Maybe a new friend!', u, 2.35, 3.95);
     g.restore();
   }
   function meadow(g, u) {
@@ -448,7 +448,7 @@
     if (u > 1.35) { var lq = clamp((u - 1.35) / 0.7, 0, 1), lx = tid.x + 4 + Math.sin(lq * 9) * 18 * (1 - lq), ly = mix(60, tid.y + 12, eout(lq)); g.save(); g.translate(lx, ly); g.rotate(Math.sin(lq * 8) * 0.6 * (1 - lq) + 0.3); ell(g, 0, 0, 9, 4.5, '#E89B3A'); line(g, -9, 0, 9, 0, '#B8701F', 1); g.restore(); }
     var gig = u > 1.25, sug = pup(g, 'sugarfoot', 520, 312, 1.5, { pose: gig ? 'wiggle' : 'sit', face: -1, t: u + 1, wag: gig ? Math.sin(u * 16) * 0.8 : 0.3 });
     say(g, sug, 'Hee hee!', u, 1.3, 2.05);
-    say(g, tid, 'On purpose!', u, 2.1, 3.2);
+    say(g, tid, 'That was on purpose!', u, 2.1, 3.2);
   }
   function hill(g, u, d, calm) {
     var z = mix(1.28, 1, eio(u / d));
@@ -527,8 +527,8 @@
     rr(g, 380, 318, 150, 50, 0, '#1E3530');
     if (pop) for (var i = 0; i < 12; i++) { var q = u - 3.9, a = -Math.PI * (0.15 + 0.7 * rnd(i + 1301)), v = 80 + rnd(i + 1302) * 90; if (q > 1) break; star(g, 452 + Math.cos(a) * v * q, 230 + Math.sin(a) * v * q + 60 * q * q, 3 * (1 - q), 'rgba(255,236,160,' + (1 - q) + ')'); }
     say(g, sug, 'Wait… did anyone see where Tidbit went?', u, 0.4, 3.3);
-    say(g, tid, 'Ready for Season 2!', u, 4.15, 6.2, { big: false });
-    say(g, sug, 'Of course!', u, 6.3, 7.7);
+    say(g, tid, 'Right here! Ready for Season 2!', u, 4.15, 6.2, { big: false });
+    say(g, sug, 'Of course you are!', u, 6.3, 7.7);
     say(g, tid, 'I’ll be bark!', u, 7.8, 9.4);
   }
 
@@ -567,10 +567,10 @@
     }
     if (u > 5.3 && u < 6.4) onomato(g, 'pffffft…', 440, 214, 24, '#FFFFFF', win(u, 5.3, 6.4, 0.2), -0.08);
     narr('In a world of golden bones…', u, 0.1, 2.0);
-    say(g, tid, 'Golden bone. Easy!', u, 2.1, 3.3);
+    say(g, tid, 'A golden bone? Easy!', u, 2.1, 3.3);
     say(g, sug, 'Tidbit! RUN!', u, 3.5, 4.8, { big: true });
-    say(g, tid, 'A… beach ball?', u, 5.45, 6.3);
-    say(g, sug, 'Every time.', u, 6.45, 7.2);
+    say(g, tid, 'Wait… a beach ball?', u, 5.45, 6.3);
+    say(g, sug, 'Every single time.', u, 6.45, 7.2);
     g.restore();
   }
   // 2. the pond (Jaws): a fin, two dramatic notes, and a very small shark
@@ -602,8 +602,8 @@
     splash(g, tx + 20, WL + 2, 3.9, u, 16, 1700);
     if (u > 3.9) for (var rr2 = 0; rr2 < 2; rr2++) { var q3 = ((u - 3.9) * 0.8 + rr2 * 0.4) % 1; g.strokeStyle = 'rgba(210,235,255,' + 0.6 * (1 - q3) + ')'; g.lineWidth = 1.4; g.beginPath(); g.ellipse(tx + 20, WL + 4, 18 + q3 * 70, 3 + q3 * 9, 0, 0, TAU); g.stroke(); }
     say(g, { x: tx, y: by - 38, who: 'tidbit' }, 'Nice night for a swim.', u, 0.3, 1.7);
-    say(g, { x: tx, y: by - 38, who: 'tidbit' }, '…Hello?', u, 2.0, 2.9);
-    say(g, sug, 'Gotcha!', u, 3.0, 4.2, { big: true });
+    say(g, { x: tx, y: by - 38, who: 'tidbit' }, 'Um… hello?', u, 2.0, 2.9);
+    say(g, sug, 'Gotcha! Just me!', u, 3.0, 4.2, { big: true });
     say(g, { x: tx, y: WL - 20, who: 'tidbit' }, 'We need a bigger bone!', u, 4.4, 6.0);
   }
   // 3. slow motion (The Matrix): Tidbit dodges a pie, and the pie finds Sugarfoot
@@ -621,7 +621,7 @@
     say(g, tid, 'Whoa… slow motion.', u, 0.3, 1.8);
     say(g, tid, 'I know pie-fu.', u, 2.0, 3.4);
     say(g, sug, 'Why is it always me?', u, 4.0, 5.4);
-    say(g, sug, 'Cherry.', u, 5.5, 6.4);
+    say(g, sug, 'At least it’s cherry.', u, 5.5, 6.4);
   }
   // 4. snakes on a plane (the famous line, kept family-friendly): Tidbit has had it, and Sugarfoot gets there first
   function snk(g, x0, y0, x1, y1, t, amp, w, col, headCol) {
@@ -657,11 +657,11 @@
     if (u >= 4.05 && u < 5.5) { var px = tid.x + 14, py = tid.y + 8; ell(g, px, py, 11, 8, '#C98A4E', 0.2); circ(g, px - 4, py - 5, 2.2, '#B97847'); circ(g, px + 1, py - 6, 2.2, '#B97847'); circ(g, px + 6, py - 4, 2.2, '#B97847'); }
     onomato(g, 'FWUMP!', 300, 186, 30, '#FFF8EC', win(u, 4.0, 4.9, 0.1), 0.08);
     say(g, sug, 'What a smooth flight!', u, 0.2, 1.4);
-    say(g, tid, 'Snakes?!', u, 1.6, 2.5);
+    say(g, tid, 'Wait… snakes?!', u, 1.6, 2.5);
     say(g, tid, 'I have had it with these snakes on this—', u, 2.6, 4.0, { big: true });
     say(g, sug, '…PLANE! This lovely plane!', u, 4.1, 5.0, { big: true });
-    say(g, tid, 'Hey!', u, 5.0, 5.5);
-    say(g, tid, '…on this plane.', u, 5.6, 6.3);
+    say(g, tid, 'Hey, I was talking!', u, 5.0, 5.5);
+    say(g, tid, '…on this lovely plane.', u, 5.6, 6.3);
     say(g, sug, 'Good girl.', u, 6.3, 7.0);
   }
   // 5. the vault (Mission: Impossible): a cookie, a rope and a muffled partner
@@ -679,7 +679,7 @@
     var sug = pup(g, 'sugarfoot', 320, y0r, 1.5, { pose: 'sit', face: 1, t: u + 1, rot: rot, noShadow: u < 4.2, ear: -0.5 });
     onomato(g, 'WEE-OO! WEE-OO!', 320, 48, 28, '#FF6A86', win(u, 4.3, 6.2, 0.1) * flick, 0);
     say(g, sug, 'Almost there…', u, 0.6, 1.6);
-    say(g, tid, 'Holding on tight!', u, 1.75, 2.9);
+    say(g, tid, 'I’m holding on tight!', u, 1.75, 2.9);
     say(g, sug, 'Got it!', u, 3.0, 3.9, { big: true });
     say(g, tid, '…Oops.', u, 4.0, 5.0);
     say(g, sug, 'Mission: possible… ish.', u, 5.0, 6.6);
@@ -745,7 +745,7 @@
     onomato(g, 'FWOOMP!', 470, 236, 28, '#FFFFFF', win(u, landU, landU + 1.1, 0.1), -0.1);
     say(g, { x: 96, y: 112, who: 'tidbit' }, 'Ready? Watch this!', u, 0.3, 1.6);
     say(g, { x: tx, y: Math.max(40, ty - 70), who: 'tidbit' }, 'To infinity… and beyond!', u, 1.7, 2.9, { big: true });
-    say(g, sug, 'That’s my laundry.', u, 3.1, 4.3);
+    say(g, sug, 'That’s my laundry basket!', u, 3.1, 4.3);
     say(g, tid, 'To infinity… and the laundry!', u, 4.4, 6.1);
   }
 

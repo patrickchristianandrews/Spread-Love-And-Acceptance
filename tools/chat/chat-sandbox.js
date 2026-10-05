@@ -71,6 +71,7 @@ function replyText(r) {
     if (b.k === 'h') return '## ' + b.x;
     if (b.k === 'list') return b.x.map(x => '• ' + x).join('\n');
     if (b.k === 'links') return b.x.map(l => '→ ' + l[0] + ' (' + l[1] + ')').join('\n');
+    if (b.k === 'art') return b.x.map(a => '📰 ' + a.t + ' (' + a.s + '): ' + a.x).join('\n');
     return '[' + (b.h || '') + '] ' + (b.x || []).join(' ') + (b.u ? ' (' + b.u + ')' : '');
   }).join('\n');
 }

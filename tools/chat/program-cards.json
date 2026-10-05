@@ -2008,9 +2008,9 @@
         "levels that grow the background",
         "living garden"
       ],
-      "what": "Pause & Play is the calm corner of the site: gentle games for when your mind needs a rest. Drift, the Night Garden, the Frequency Journey, Word Bloom, Quiet Crossword, the Daily Ledger Crossword and Quiet Words. No timers, no way to lose, and every few levels something new appears in the living garden behind every page.",
+      "what": "Pause & Play is the calm corner of the site: gentle games for when your mind needs a rest. Drift, the Night Garden, Tidbit and Sugarfoot’s Arcade, Word Bloom, Quiet Crossword, the Daily Ledger Crossword and Quiet Words. No timers, no way to lose, and every few levels something new appears in the living garden behind every page.",
       "how": [
-        "Pick a game that fits your mood: breathing (Night Garden, Drift), words (Word Bloom, Quiet Words, the crosswords) or a quick arcade round (the Frequency Journey).",
+        "Pick a game that fits your mood: breathing (Night Garden, Drift), words (Word Bloom, Quiet Words, the crosswords) or a quick arcade round (Tidbit and Sugarfoot’s Arcade).",
         "Play a few minutes to settle before a hard conversation, or to wind down at night.",
         "Your level and streak are kept on this device only."
       ],
@@ -2021,7 +2021,7 @@
           "/pause-and-play.html"
         ],
         [
-          "The Frequency Journey",
+          "Tidbit and Sugarfoot’s Arcade",
           "/frequency-journey.html"
         ]
       ]
@@ -2130,9 +2130,12 @@
     {
       "id": "journey",
       "kind": "tool",
-      "name": "the Frequency Journey",
+      "name": "Tidbit and Sugarfoot’s Arcade",
       "keys": [
         "frequency journey",
+        "tidbit and sugarfoots arcade",
+        "tidbit and sugarfoot arcade",
+        "the arcade",
         "~journey",
         "~arcade",
         "~maze",
@@ -2141,20 +2144,26 @@
         "tidbit and sugarfoot",
         "~video game",
         "~treat chase",
-        "~cross the way"
+        "~cross the way",
+        "~treat trail",
+        "~bubble break",
+        "~treat shower",
+        "~snake game",
+        "~brick breaker",
+        "~classic games"
       ],
-      "what": "The Frequency Journey is a little arcade with two best friends, Tidbit and Sugarfoot. You pick which pup to play as, then pick a game: Treat Chase, a maze where you gather every treat while grumpy little clouds of Static drift about (a golden heart turns them into bubbles you can pop), or Cross the Way, where you hop over a busy road and ride logs and lily pads across a river to five doghouses. No game over: a bump just sends your pup back to the start.",
+      "what": "Tidbit and Sugarfoot’s Arcade (on Tidbit and Sugarfoot’s Arcade page) is a little arcade with two best friends, Tidbit and Sugarfoot. Pick which pup to play as, then pick one of five gentle classic games: Treat Chase (a maze where a golden heart turns the grumpy Static into bubbles you can pop), Cross the Way (hop over a road and ride logs across a river to five doghouses), Treat Trail (a snake game where bubble friends join your trail), Bubble Break (a brick breaker) and Treat Shower (catch falling treats in a basket). Every level after the first is new, and there’s no game over: a bump only sends your pup back or makes the trail shorter.",
       "how": [
-        "Pick Tidbit or Sugarfoot, pick a game, and press Start.",
-        "Steer with the arrow keys or WASD, a swipe, a tap on the playfield, or the big on-screen arrows. A turn you press a little early is remembered.",
+        "Pick Tidbit or Sugarfoot, pick one of the five games, and press Start.",
+        "Steer with the arrow keys or WASD, a swipe, a tap on the playfield, or the big on-screen arrows. In Bubble Break and Treat Shower you can also drag. A turn you press a little early is remembered.",
         "Relaxed pace (on by default) slows everything down. Pause any time.",
         "Each level you clear counts toward the garden behind every page."
       ],
-      "more": "Tidbit is a little quicker; Sugarfoot is steadier, her golden hearts last longer and she’s harder to bump. After each level there’s a small line of kindness from the program. On the same page you can open the pal cam to check in on Tidbit and Sugarfoot, and watch Frequency Buddies.",
+      "more": "Tidbit is a little quicker; Sugarfoot is steadier, her golden hearts last longer and she’s harder to bump. Each new level brings a fresh maze, shuffled lanes, new hedges or a new wall, and a line of kindness you won’t see twice until you’ve seen them all. On the same page you can open the pal cam and watch Frequency Buddies.",
       "pillar": "Pillar IV, Tune how you send and receive, while you settle with Pillar III.",
       "links": [
         [
-          "The Frequency Journey",
+          "Tidbit and Sugarfoot’s Arcade",
           "/frequency-journey.html"
         ],
         [
@@ -2177,16 +2186,16 @@
         "what are tidbit and sugarfoot doing",
         "see what theyre up to"
       ],
-      "what": "The pal cam is a little full-screen window on the Frequency Journey pages where you can check in on Tidbit and Sugarfoot and see what they’re up to. They act out small scripted activities, the setting changes each time you open it, and the light follows your own clock.",
+      "what": "The pal cam is a little full-screen window on the Frequency Journey page (Tidbit and Sugarfoot’s Arcade) and the home page, where you can check in on Tidbit and Sugarfoot and see what they’re up to. They act out small scripted activities, the setting changes each time you open it, and the light follows your own clock.",
       "how": [
-        "Open the Frequency Journey page.",
+        "Open Tidbit and Sugarfoot’s Arcade page.",
         "Tap “Check in on Tidbit & Sugarfoot”.",
         "Watch for a while; close it whenever you like. The tally of what they’ve done today stays in this browser only."
       ],
       "pillar": "A calm moment with the pals: Pillar III, Read your state first.",
       "links": [
         [
-          "The Frequency Journey",
+          "Tidbit and Sugarfoot’s Arcade",
           "/frequency-journey.html"
         ]
       ]
@@ -2931,7 +2940,7 @@
         "~latest",
         "what new"
       ],
-      "what": "What’s new lists everything newly added and everything that’s grown, newest first: recently the Five Pillars page, Drift, the Library, Something to read, the Frequency Journey, the soundscapes and this chat.",
+      "what": "What’s new lists everything newly added and everything that’s grown, newest first: recently the Five Pillars page, Drift, the Library, Something to read, Tidbit and Sugarfoot’s Arcade, the soundscapes and this chat.",
       "links": [
         [
           "What’s new",

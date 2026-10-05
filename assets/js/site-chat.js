@@ -402,6 +402,7 @@
 
   var STARTERS = [
     { label: 'What is Unbilled Debt?', q: 'What is Unbilled Debt?' },
+    { label: 'Find me a good article', q: 'Find me a good article' },
     { label: 'We keep arguing about chores', q: 'How do we stop fighting about chores?' },
     { label: 'Where do I start?', q: 'Where should I start?' },
     { label: 'Which tool fits me?', q: 'Which tool fits my situation?' }
@@ -1157,7 +1158,7 @@
   var LONGER = /^(ok |okay |please |can you |could you )*(give me |go back to |back to )?(the )?(longer|full|fuller|whole|complete|detailed|normal|long) (answers?|replies|version|ones?)( again| please)*$|^(more detail|more details|in more detail|the full answer)( please)?$/;
   var NO_BRIEF = { safety: 1, short: 1, clarify: 1, unclear: 1, offtopic: 1, none: 1, calc: 1 };
   function briefen(state, r) {
-    if (!r || !r.blocks || NO_BRIEF[r.kind] || r.id === 'brief') return r;
+    if (!r || !r.blocks || NO_BRIEF[r.kind] || r.noBrief || r.id === 'brief') return r;
     var words = 0; r.blocks.forEach(function (b) { words += wc(b.k === 'list' || b.k === 'passage' || b.k === 'bg' ? (b.x || []).join(' ') : b.k === 'links' ? '' : b.x || ''); });
     if (words <= 60) return r;
     var out = shortBlocks(r.blocks, true);
@@ -1337,6 +1338,51 @@
     b.push({ k: 'links', x: links.slice(0, 3) });
     return { blocks: b, chips: chips.slice(0, 3), kind: 'card', id: 'polymath' };
   }
+
+  // ---------- good articles: "find me an article about stress", "any good reads on apologies?", "more articles"
+  // From the site's hand-picked reading list (KB.read): three at a time, never the same one twice in a chat,
+  // and they open on the publisher's own site.
+  var ART_RE = /\b(articles?|something (good )?to read|reading list|good reads?|read up on|readings?|blog posts?|further reading|stuff to read|things to read)\b/;
+  var ART_OK = /^https:\/\/(www\.)?(psychologytoday\.com|greatergood\.berkeley\.edu|gottman\.com|health\.harvard\.edu|additudemag\.com|chadd\.org|autism\.org\.uk)\//;
+  var ART_STOP = /\b(articles?|something|good|great|best|some|any|a|an|the|to|read|reads|reading|readings|list|up|on|about|for|of|me|my|i|you|can|could|would|please|find|give|show|recommend|suggest|suggestions?|have|got|do|is|are|there|what|which|where|more|another|other|others|new|different|some|blog|posts?|further|stuff|things|like|these|those|that|this|them|it|want|need|looking|help|with|and|or|in|by|from|online|link|links|how|get|tell)\b/g;
+  function artQuery(state, f) {
+    if (!KB.read || !ART_RE.test(f)) return null;
+    var topic = f.replace(ART_STOP, ' ').replace(/\s+/g, ' ').trim();
+    var again = /\b(more|another|other|different|new)\b/.test(f) && !topic;
+    if (again && state.art) topic = state.art.topic;
+    return { topic: topic };
+  }
+  function artReply(state, aq) {
+    var R = KB.read, seen = (state.art && state.art.seen) || {}, qs = aq.topic ? tokens(aq.topic) : [], scored = [];
+    R.items.forEach(function (it, i) {
+      if (!ART_OK.test(it[1])) return;
+      var sc = 0;
+      if (qs.length) {
+        var tt = tokens(it[0]), sx = tokens(it[2] + ' ' + it[4].map(function (k) { return (R.tags[k] || '') + ' ' + k; }).join(' '));
+        var has = function (list, q) { if (list.indexOf(q) >= 0) return true; if (q.length < 5) return false; var p5 = q.slice(0, 5); for (var z = 0; z < list.length; z++) if (list[z].slice(0, 5) === p5) return true; return false; };
+        qs.forEach(function (q) { if (has(tt, q)) sc += 3; if (has(sx, q)) sc += 1.5; });
+        if (!sc) return;
+      } else sc = Math.random();
+      if (seen[i]) sc -= 100;
+      scored.push([sc + Math.random() * 0.5, i]);
+    });
+    scored.sort(function (a, b) { return b[0] - a[0]; });
+    var pick = scored.filter(function (x) { return x[0] > -50; }).slice(0, 3);
+    if (!pick.length && qs.length) return null;
+    if (!pick.length) pick = scored.slice(0, 3);
+    pick.forEach(function (x) { seen[x[1]] = 1; });
+    state.art = { topic: aq.topic, seen: seen };
+    var arts = pick.map(function (x) { var it = R.items[x[1]]; return { t: it[0], u: it[1], s: it[3], x: it[2] }; });
+    var b = [{ k: 'p', x: aq.topic ? 'Here are some good articles on “' + aq.topic + '”, hand-picked for this site from trusted sources. They open on the publisher’s own site.' :
+      'Here are a few good articles from the site’s hand-picked reading list. Tell me a topic (“stress”, “apologies”, “ADHD”, “chores”) and I’ll find ones that fit.' }];
+    b.push({ k: 'art', x: arts });
+    b.push({ k: 'links', x: [['Browse every article', '/reading.html']] });
+    var chips = [{ label: 'More like these', q: aq.topic ? 'More articles about ' + aq.topic : 'More articles' }];
+    var tagKeys = Object.keys(R.tags);
+    for (var k = 0; chips.length < 3 && k < 6; k++) { var tk = tagKeys[Math.floor(Math.random() * tagKeys.length)], nm = R.tags[tk].split(/ [&,] /)[0]; if (!chips.some(function (c) { return c.label.indexOf(nm) >= 0; })) chips.push({ label: 'Articles on ' + nm.toLowerCase(), q: 'Articles about ' + nm.toLowerCase() }); }
+    state.last = { kind: 'card', card: 'reading', q: 'articles', topic: 'articles', u: '/reading.html' };
+    return { blocks: b, chips: chips, kind: 'card', id: 'reading', noBrief: true };
+  }
   function respond(state, q, chipDoc) {
     var sp = null;
     if (chipDoc == null) {
@@ -1345,6 +1391,8 @@
       // a question about one of the thirteen fields, or two of them, gets that field's (or pair's) own answer, not the overview
       var nf0 = norm(q), nq0 = KB && KB.nine && !DANGER.test(nf0) && nineQuery(nf0), nr0 = nq0 && nineReply(state, nq0);
       if (nr0) return meant(nr0, sp);
+      var aq0 = KB && !DANGER.test(nf0) && artQuery(state, nf0), ar0 = aq0 && artReply(state, aq0);
+      if (ar0) return meant(ar0, sp);
       var cf = careFirst(state, q);
       if (cf) return meant(cf, sp);
     }
@@ -1717,6 +1765,7 @@
     '.tolc .tolc-h{font-family:"Fraunces",Georgia,serif;font-weight:600;font-size:.92rem;margin:.7rem 0 .2rem;color:var(--ink)}',
     '.tolc .tolc-fine{font-size:.8rem;color:var(--ink-soft);font-style:italic;margin:.5rem 0 .3rem}',
     '.tolc-list{margin:.2rem 0 .5rem;padding-left:1.15rem}.tolc-list li{margin:.2rem 0;font-size:.95rem}',
+    '.tolc-arts{list-style:none;margin:.3rem 0 .6rem;padding:0;display:grid;gap:.45rem}.tolc-arts li{padding:.55rem .7rem;border-radius:12px;background:rgba(127,178,224,.12);border:1px solid rgba(127,178,224,.35)}.tolc-arts a{font-weight:700;line-height:1.3}.tolc-arts p{margin:.25rem 0 0;font-size:.9rem;line-height:1.4}',
     '.tolc-links{margin:.1rem 0 .3rem;padding-left:1.3rem}.tolc-links li{margin:0}.tolc-links a.tolc-more{min-height:40px}',
     '.tolc-script{margin:.5rem 0 .6rem;padding:.55rem .75rem;border-radius:12px;background:var(--c-soft);border-left:3px solid var(--c)}',
     '.tolc-script p{font-size:.95rem;margin:0}.tolc-script .tolc-src{font-style:normal;font-weight:600;margin-bottom:.2rem !important}',
@@ -1892,6 +1941,19 @@
             a2.className = 'tolc-more'; a2.href = l[1]; a2.textContent = l[0] + ' →'; li2.appendChild(a2); ol.appendChild(li2);
           });
           if (ol.children.length) el.appendChild(ol);
+          return;
+        }
+        if (b.k === 'art') {
+          var al = document.createElement('ul'); al.className = 'tolc-arts';
+          (b.x || []).forEach(function (it) {
+            if (!it || !ART_OK.test(it.u)) return;
+            var li3 = document.createElement('li'), a3 = document.createElement('a');
+            a3.href = it.u; a3.target = '_blank'; a3.rel = 'noopener noreferrer'; a3.textContent = it.t + ' ↗'; li3.appendChild(a3);
+            var src3 = document.createElement('span'); src3.className = 'tolc-src'; src3.textContent = ' ' + it.s; li3.appendChild(src3);
+            if (it.x) { var p3 = document.createElement('p'); p3.textContent = it.x; li3.appendChild(p3); }
+            al.appendChild(li3);
+          });
+          if (al.children.length) el.appendChild(al);
           return;
         }
         if (b.k === 'bg') {
