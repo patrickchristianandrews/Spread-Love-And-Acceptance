@@ -5,7 +5,7 @@
   'use strict';
   if (window.TOLInShort) return;
   var S = {
-    '/about.html': ['Christian spent fifteen years untangling complicated systems as an auditor.', 'The same habits, seeing the whole picture and blaming the setup instead of a person, became The Objective Ledger.', 'Thirteen fields each shaped one of the tools, and all of them are free while the program is built.'],
+    '/about.html': ['Christian worked as an auditor, untangling complicated systems.', 'The same habits, seeing the whole picture and blaming the setup instead of a person, became The Objective Ledger.', 'Thirteen fields each shaped one of the tools, and all of them are free while the program is built.'],
     '/book/preface-in-depth.html': ['Every shared life has work nobody sees: noticing, remembering, planning, smoothing over.', 'Writing it down is not keeping score. It puts both sides on one page so it can be shared and thanked.', 'The book borrows plain words from accounting and radio because they describe setups, not faults.'],
     '/book/chapter-1-in-depth.html': ['Two kind people can clash because their pace, tone and urgency are out of step, not because either is wrong.', 'Being nearly in step is the noisy part, and stress pushes each person further off.', 'Retuning is simple: notice the static, slow down, say it again softly, and agree a better time.'],
     '/book/chapter-2-in-depth.html': ['A short check of whether the way you share the work can keep going. It looks at the setup, never at a person.', 'It uses three things: how evenly the hours are split, whether every job has one owner, and how tired you both are.', 'It is a guide for talking, not a test: a low reading means “adjust the setup,” not “someone failed.”'],
