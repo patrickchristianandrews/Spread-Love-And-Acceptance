@@ -170,6 +170,42 @@ window.TOL_NINE = {
       fields: ['mu', 'la', 'ar', 'nb', 'ht'], roots: ['state', 'loops'],
       text: 'Sound, a shared laugh and the setting reach the body before any words do. Music sets the tempo (music), a laugh lets the body stand down (laughter), and light, scent and noise set the mood of the room (aromatherapy and the senses). Neurobiology explains why it works, and holistic care says to start there.',
       tool: ['Drift: calm visualizer', '/calm-visualizer.html']
+    },
+    {
+      id: 'apology', title: 'The apology that lands',
+      fields: ['nb', 'ps', 'ph', 'db', 'fi', 'la'], roots: ['state', 'signal', 'balance'],
+      text: 'An apology only lands once the other person’s body has settled enough to hear it (neurobiology). It has to name the impact, not just the intent (psychology), and take responsibility without a “but” (philosophy). The hardest part is debate’s discipline in reverse: no counter-argument, no scoring a point back (the art of debating). A real repair tops the goodwill reserve back up (finance), and later, only if it’s welcome, a small shared laugh tells both bodies the repair took (laughter).',
+      tool: ['Apology languages', '/apology-languages.html']
+    },
+    {
+      id: 'bid', title: 'A small bid for connection',
+      fields: ['ps', 'nb', 'bs', 'fi', 'mu', 'la'], roots: ['loops', 'balance', 'state'],
+      text: '“Look at that bird” is a bid: a small reach for attention (psychology). Turning toward it is a deposit in the goodwill reserve (finance), and doing it often turns it into a habit (behavioral science). A body that feels noticed settles (neurobiology). Matching the other person’s pace and tone is the same skill as keeping time with someone in music, and a shared laugh is the quickest way to say “I’m with you” (laughter).',
+      tool: ['Turning Toward', '/turning-toward.html']
+    },
+    {
+      id: 'money-talk', title: 'The money conversation',
+      fields: ['fi', 'ec', 'ps', 'po', 'db', 'bu'], roots: ['balance', 'owner', 'incent', 'signal'],
+      text: 'Money talk looks like finance, but it runs through five more fields. Money is a limited supply with tradeoffs (economics). It stands for different things to different people, such as safety, freedom or fairness (psychology). Somebody decides on the big purchases, and the other person needs a real say (politics). Hearing their case before making yours keeps it from becoming a contest (the art of debating). And every bill needs one owner and a monthly look back (business).',
+      tool: ['Share the load', '/share-the-load.html']
+    },
+    {
+      id: 'drift', title: 'The slow drift',
+      fields: ['bs', 'ec', 'fi', 'ps', 'ph', 'ht'], roots: ['loops', 'incent', 'balance', 'capacity'],
+      text: 'Nothing dramatic happens. The small kind things just stop, one by one (behavioral science), because the setup rewards the urgent over the important (economics). Each skipped thank-you is a tiny withdrawal nobody records (finance), and we notice our own effort but not theirs (psychology). Philosophy asks whether “nothing went wrong” is the same as “things are fine”, and holistic care says maintenance comes before breakdown.',
+      tool: ['Complacency', '/complacency.html']
+    },
+    {
+      id: 'brain-break', title: 'A three-minute Brain Break',
+      fields: ['mu', 'nb', 'ht', 'bs', 'ec', 'la'], roots: ['state', 'capacity', 'loops'],
+      text: 'A short piece of music changes the body’s state faster than words (music and neurobiology). A planned pause is care before the tank is empty, not after (holistic therapies). Tied to the end of a task, it becomes a habit (behavioral science), and it pays for itself by protecting the limited attention the next task needs (economics). A lighter mood afterward works like a laugh: the body stands down (laughter).',
+      tool: ['Brain Breakers', '/soundscapes.html']
+    },
+    {
+      id: 'new-baby', title: 'A new baby in the house',
+      fields: ['nb', 'ec', 'bu', 'po', 'ht', 'fi', 'la'], roots: ['capacity', 'owner', 'balance', 'state'],
+      text: 'Broken sleep shrinks everyone’s capacity at once (neurobiology), while the workload grows overnight (economics). New jobs appear with no owner (business), and decisions that used to be easy suddenly need a fair way to decide (politics). Rest has to be shared on purpose (holistic therapies), the unseen night work belongs in the ledger (finance), and laughing at the chaos together, never at each other, keeps you on the same side (laughter).',
+      tool: ['New baby, sharing the load', '/new-parent.html']
     }
   ]
 };
