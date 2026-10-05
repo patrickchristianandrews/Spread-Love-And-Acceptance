@@ -544,6 +544,16 @@ t('connections', 'where do all thirteen fields meet at once', { id: 'connections
 t('connections', 'Show me the abstract connections', { id: 'connections-abstract', text: /Aristotle/ });
 t('connections', 'Show me how one field leads into the next', { id: 'connections-chain', text: /Aromatherapy → Neurobiology/ });
 t('connections', 'what is a polymath', { kind: 'card', id: 'polymath', link: '/polymath.html' });
+t('connections', 'how does music connect to economics?', { kind: 'card', id: 'polymath', text: /Music and Economics share the root/, link: '/polymath.html#all-pairs' });
+t('connections', 'what does finance have to do with neurobiology', { kind: 'card', id: 'polymath', text: /balance sheet/ });
+t('connections', 'how is laughter therapy related to psychology', { kind: 'card', id: 'polymath', text: /we’re safe/ });
+t('connections', 'what do debating and politics have in common', { kind: 'card', id: 'polymath', text: /decision attached/ });
+t('connections', 'why did christian study aromatherapy', { kind: 'card', id: 'polymath', text: /Aromatherapy, one of the thirteen fields/, link: '/polymath.html#field-ar' });
+t('connections', 'how does music connect?', { kind: 'card', id: 'polymath', text: /How it connects to the other twelve/ });
+t('connections', 'what does behavioral science have to do with relationships', { kind: 'card', id: 'polymath', text: /Behavioral science, one of the thirteen fields/ });
+t('connections', 'tell me about the art of debating field', { kind: 'card', id: 'polymath', text: /The art of debating, one of the thirteen fields/ });
+t('connections', 'where do all thirteen fields meet at once', { id: 'connections-deepest', text: /The money conversation.*A new baby in the house/s });
+t('connections', 'my partner and I debate about money and it is hurting our relationship', { not: /one of the thirteen fields/ });
 
 // ---------------------------------------------------------------- Wavelength (replaced Your Heartprint)
 t('wavelength', 'what is wavelength', { kind: 'card', id: 'wavelength', link: '/wavelength.html', text: /Wave Code.*16 archetypes/s });

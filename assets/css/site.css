@@ -1256,9 +1256,11 @@ button.tol-dive{ display:inline !important; width:auto !important; min-height:0 
 .tol-pud-card-art svg{ width:100%; height:100%; overflow:visible; }
 .tol-pud-card p{ margin:0; font-size:.95rem; line-height:1.45; max-width:none; }
 .tol-pud-card p strong{ font-family:"Fraunces", Georgia, serif; color:#2F5F8A; }
-.read a.tol-pud-card-go, a.tol-pud-card-go{ justify-self:start; display:inline-flex; align-items:center; gap:.35rem; min-height:40px; padding:.4rem 1rem; border-radius:999px;
+.read a.tol-pud-card-go, a.tol-pud-card-go, .read button.tol-pud-card-go, button.tol-pud-card-go{ border:0; cursor:pointer; justify-self:start; display:inline-flex; align-items:center; gap:.35rem; min-height:40px; padding:.4rem 1rem; border-radius:999px;
   background:#2F5F8A; color:#fff; font:600 .9rem "Lora", Georgia, serif; text-decoration:none; }
-a.tol-pud-card-go:hover{ background:#264E73; }
+a.tol-pud-card-go:hover, button.tol-pud-card-go:hover{ background:#264E73; }
+.tol-pud-end{ margin:2.2rem 0 1rem; }
+@media print{ .tol-pud-end{ display:none !important; } }
 @media (max-width:420px){ .tol-pud-card{ grid-template-columns:1fr; } .tol-pud-card-art{ grid-row:auto; width:3rem; height:3rem; } }
 
 a.tol-puddles-hi-go, .read a.tol-puddles-hi-go, main a.tol-puddles-hi-go{ color:#fff !important; text-decoration:none !important; }

@@ -1514,7 +1514,8 @@
     document.head.appendChild(sc);
   }
   function buildPuddlesPop(body) {
-    if (/^\/(ask|offline|404)\.html$/.test(current) || body.classList.contains('is-game') || body.hasAttribute('data-no-puddles') ||
+    var game = body.classList.contains('is-game');   // games keep the screen to themselves: no floating button, just the note at the end
+    if (/^\/(ask|offline|404)\.html$/.test(current) || body.hasAttribute('data-no-puddles') ||
         document.querySelector('meta[http-equiv="Content-Security-Policy"]') || document.querySelector('.pc-ov.is-tv')) return;
     var main = document.querySelector('main'); if (!main) return;
     var h1 = main.querySelector('h1'), title = h1 ? h1.textContent.replace(/\s+/g, ' ').trim() : document.title.split('·')[0].trim();
@@ -1525,8 +1526,17 @@
     var fab = el('button', { type: 'button', class: 'tol-pud-fab', 'aria-label': 'Ask Professor Puddles about this page', title: 'Ask Professor Puddles' },
       '<span class="tol-pud-fab-art" aria-hidden="true">' + PUDDLES_SVG + '</span><span class="tol-pud-fab-t">Ask Professor Puddles</span>');
     fab.addEventListener('click', function () { openPud(opts('')); });
-    body.appendChild(fab); body.classList.add('has-pud-fab'); if (main.querySelector('[data-home-intro]')) body.classList.add('is-home-pud'); // the home page centres it
+    if (!game) { body.appendChild(fab); body.classList.add('has-pud-fab'); } if (main.querySelector('[data-home-intro]')) body.classList.add('is-home-pud'); // the home page centres it
     window.TOLPuddles = { open: function (topic) { openPud(opts(topic || '')); } };
+    // and at the end of every page: "Want to know more? Ask Professor Puddles!", which opens him already talking about this page
+    if (!main.querySelector('.tol-pud-end')) {
+      var endBox = el('aside', { class: 'tol-pud-card tol-pud-end no-bubble', 'aria-label': 'Ask Professor Puddles' },
+        '<span class="tol-pud-card-art" aria-hidden="true">' + PUDDLES_SVG + '</span>' +
+        '<p><strong>Want to know more?</strong> Ask Professor Puddles! He answers in plain words from this site’s own pages, with a link to read more. Nothing you type leaves your device.</p>' +
+        '<button type="button" class="tol-pud-card-go">💧 Ask Professor Puddles</button>');
+      endBox.querySelector('button').addEventListener('click', function () { openPud(opts(title ? 'Tell me more about ' + title.replace(/[?.!:]+$/, '') : '')); });
+      main.appendChild(endBox);
+    }
 
   }
 

@@ -4419,17 +4419,22 @@
       "what": "The polymath page explains how different fields (psychology, economics, nature, music and more) grow from the same few roots: balance, signal and noise, feedback loops, limited capacity, ownership and structure, quiet incentives, and state and setting. Christian, the creator, is a polymath who studied thirteen fields (the newest four are the art of debating, politics, music and the healing power of laughter) and found where they meet, and those meeting points became the Five Pillars.",
       "how": [
         "Read the seven roots and the fields each one shows up in.",
-        "See which fields meet in each of the Five Pillars.",
-        "Try “connect two fields”: pick any two and see the root they share and the tool it became."
+        "See which fields meet in each of the Five Pillars, and the twelve moments where many fields meet at once (an apology, a money talk, a new baby, a tired week and more).",
+        "Try “connect two fields”: pick any two and see the root they share and the tool it became.",
+        "Or ask me about any field (“why did Christian study music?”) or any two (“how does finance connect to neurobiology?”)."
       ],
       "chips": [
         [
-          "Who is the creator?",
-          "Who made this site?"
+          "How do two fields connect?",
+          "How does music connect to economics?"
         ],
         [
-          "What are the Five Pillars?",
-          "What are the five pillars?"
+          "The deepest connections",
+          "What are the deepest connections?"
+        ],
+        [
+          "Who is the creator?",
+          "Who made this site?"
         ]
       ],
       "links": [

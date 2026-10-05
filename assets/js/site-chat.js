@@ -1270,11 +1270,81 @@
 
   // Decide what to say to one message. Returns {blocks:[...], chips:[...]} (all data, rendered later),
   // or {needBG:true} when the background notes should be fetched first (reply() then asks again).
+
+  // ---------- the thirteen fields Christian studied, and how any two of them connect (KB.nine, from nine-connections.js
+  // and the polymath page): "how does music connect to economics?", "what does finance have to do with relationships?"
+  var FIELD_RE = {
+    nb: /\b(neurobiology|neuroscience|neurology|nervous system|brain science)\b/, ps: /\bpsycholog(y|ical)\b/, ph: /\bphilosoph(y|ical|er|ers)\b/,
+    db: /\b(art of debating|debating|debate|debates)\b/, po: /\b(politics|political)\b/, bs: /\b(behaviou?ral (science|sciences|economics)|behaviou?r science)\b/,
+    ec: /\beconomics\b|\beconomy\b|\beconomic\b/, fi: /\b(finance|financial|accounting|bookkeeping)\b/, bu: /\bbusiness\b/, ht: /\bholistic( therapy| therapies| care| health| practice)?\b/,
+    la: /\b(laughter( therapy)?|healing power of laughter|humou?r)\b/, mu: /\bmusic(al)?\b/, ar: /\b(aromatherapy|aroma)\b/
+  };
+  var NINE_LINK = /\b(connect|connects|connected|connection|connections|link|links|linked|relate|relates|related|relation|relationship between|in common|overlap|overlaps|meet|meets|tie|ties|tied|have to do with|has to do with|similar|share|shares|between)\b/;
+  var NINE_CUE = /\b(field|fields|christian|christians|study|studied|studies|polymath|subject|subjects|discipline|in the program|this program|this site|why (did|does|is|would)|what does .{0,30} (bring|teach|add)|role of|part of)\b/;
+  function nineFields(f) {
+    if (!KB.nine) return [];
+    var g = f.replace(/\bbehaviou?ral economics\b/g, 'behavioral science'), out = [];
+    KB.nine.fields.forEach(function (x) { var m = g.match(FIELD_RE[x[0]]); if (m) out.push([x[0], m.index]); });
+    // "behavioral science" is not also economics or science
+    out.sort(function (a, b) { return a[1] - b[1]; });
+    return out.map(function (x) { return x[0]; });
+  }
+  function nineQuery(f) {
+    var fs = nineFields(f); if (!fs.length) return null;
+    // someone talking about their own life ("we debate about money") gets the usual help, not a lecture on the fields
+    if (/\b(my|i|im|we|our|me|us)\b/.test(f) && !/\b(field|fields|christian|christians|polymath|studied)\b/.test(f)) return null;
+    if (fs.length >= 2 && (NINE_LINK.test(f) || /^(how|what|why|where|is|are|does|do)\b/.test(f))) return { pair: [fs[0], fs[1]] };
+    if (fs.length === 1 && (NINE_LINK.test(f) || NINE_CUE.test(f))) return { field: fs[0] };
+    return null;
+  }
+  function nineReply(state, nq) {
+    var N = KB.nine, NAME = {}; N.fields.forEach(function (x) { NAME[x[0]] = x[1]; });
+    var b = [], chips = [], links = [];
+    function pairOf(a, c) { for (var i = 0; i < N.pairs.length; i++) { var p = N.pairs[i]; if ((p[0] === a && p[1] === c) || (p[0] === c && p[1] === a)) return p; } return null; }
+    function pil(n) { var x = N.pillars && N.pillars[n]; return x ? [x[0], '/five-pillars.html#' + x[1]] : null; }
+    if (nq.pair) {
+      var a = nq.pair[0], c = nq.pair[1], p = pairOf(a, c);
+      if (!p) return null;
+      b.push({ k: 'p', x: NAME[p[0]] + ' and ' + NAME[p[1]] + ' share the root of ' + N.roots[p[2]] + '. It’s one of the ' + String(N.tiers[p[3]]).toLowerCase() + ' connections.' });
+      b.push({ k: 'p', x: p[4] });
+      var deeps = (N.deep || []).filter(function (d) { return d.fields.indexOf(a) >= 0 && d.fields.indexOf(c) >= 0; });
+      if (deeps.length) b.push({ k: 'note', x: 'They also meet with other fields in ' + deeps.slice(0, 3).map(function (d) { return '“' + d.title + '”'; }).join(', ') + '.' });
+      if (p[5] && safePath(p[5][1])) links.push([p[5][0], p[5][1]]);
+      var pl = pil(p[6]); if (pl) links.push(pl);
+      links.push(['See all 78 pairs', '/polymath.html#all-pairs']);
+      chips.push({ label: 'More about ' + NAME[a], q: 'How does ' + NAME[a].replace(/^The /, 'the ') + ' connect?' });
+      chips.push({ label: 'More about ' + NAME[c], q: 'How does ' + NAME[c].replace(/^The /, 'the ') + ' connect?' });
+      chips.push({ label: 'The deepest connections', q: 'What are the deepest connections?' });
+      state.last = { kind: 'card', card: 'polymath', q: NAME[a] + ' and ' + NAME[c], topic: NAME[a] + ' and ' + NAME[c], u: '/polymath.html#all-pairs' };
+    } else {
+      var id = nq.field, inf = (N.info || {})[id] || {};
+      b.push({ k: 'p', x: NAME[id] + ', one of the thirteen fields Christian studied: ' + (inf.sum || '') + '.' });
+      if (inf.studies) b.push({ k: 'p', x: 'What it studies: ' + inf.studies });
+      if (inf.idea) b.push({ k: 'p', x: 'The idea the program borrows: ' + inf.idea });
+      var mine = N.pairs.filter(function (p) { return p[0] === id || p[1] === id; }), order = { o: 0, h: 1, a: 2 };
+      mine.sort(function (x, y) { return order[x[3]] - order[y[3]]; });
+      b.push({ k: 'h', x: 'How it connects to the other twelve' });
+      b.push({ k: 'list', x: mine.map(function (p) { var o = p[0] === id ? p[1] : p[0]; return NAME[o] + ' (' + N.roots[p[2]] + ', ' + String(N.tiers[p[3]]).toLowerCase() + '): ' + p[4]; }) });
+      var ch = (N.chain || []).filter(function (x) { return x[0] === id || x[1] === id; });
+      if (ch.length) b.push({ k: 'note', x: 'In the chain: ' + ch.map(function (x) { return NAME[x[0]] + ' → ' + NAME[x[1]] + ': ' + x[2]; }).join(' ') });
+      (inf.links || []).slice(0, 2).forEach(function (l) { if (safePath(l[1])) links.push(l); });
+      links.push(['Its chapter on the polymath page', '/polymath.html#field-' + id]);
+      var near = mine.filter(function (p) { return p[3] === 'o'; }).slice(0, 2);
+      near.forEach(function (p) { var o = p[0] === id ? p[1] : p[0]; chips.push({ label: NAME[id] + ' + ' + NAME[o], q: 'How does ' + NAME[id] + ' connect to ' + NAME[o] + '?' }); });
+      chips.push({ label: 'The chain through all thirteen', q: 'Show me how one field leads into the next' });
+      state.last = { kind: 'card', card: 'polymath', q: NAME[id], topic: NAME[id], u: '/polymath.html#field-' + id };
+    }
+    b.push({ k: 'links', x: links.slice(0, 3) });
+    return { blocks: b, chips: chips.slice(0, 3), kind: 'card', id: 'polymath' };
+  }
   function respond(state, q, chipDoc) {
     var sp = null;
     if (chipDoc == null) {
       sp = spellFix(q);
       if (sp.fixes.length) q = sp.q;
+      // a question about one of the thirteen fields, or two of them, gets that field's (or pair's) own answer, not the overview
+      var nf0 = norm(q), nq0 = KB && KB.nine && !DANGER.test(nf0) && nineQuery(nf0), nr0 = nq0 && nineReply(state, nq0);
+      if (nr0) return meant(nr0, sp);
       var cf = careFirst(state, q);
       if (cf) return meant(cf, sp);
     }
@@ -1304,6 +1374,8 @@
       if (fu) return fu;
       var calc = calculators(q, f);
       if (calc) { state.last = { kind: 'calc', q: calc.topic || 'calculator', topic: calc.topic }; return calc; }
+      var nq = nineQuery(f), nr = nq && nineReply(state, nq);
+      if (nr) return nr;
       var idm = idiomQuery(f);
       if (idm) return idiomReply(state, idm);
       var tq = termQuery(q), tf = tq && termFor(tq.target);
