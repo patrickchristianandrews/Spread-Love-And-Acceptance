@@ -1,5 +1,6 @@
 # Season 2 teaser voices: one mp3 per line, named <key>.mp3 in this folder, listed in index.json as {"<key>":[<seconds>]}.
 # Made the same way as Season 1's voices: the open-source Kokoro model's af_heart voice (Apache 2.0), reshaped with the WORLD vocoder: pitch raised (about 1.55x for Tidbit, 1.25x for Sugarfoot, set by each line’s mood) while the voice’s tone colour moves only 12 to 16%, with Season 1’s pace for each mood.
+# Each line's melody is then shaped for expression: the words that carry the line get a pitch accent (a small dip, then a rise, a little longer and louder), the overall rise and fall is widened, questions lift at the end, exclamations peak then drop, and trailing lines (… or —) hang in the air. The pup's usual middle pitch stays where it was.
 # To swap in your own recording of a line, replace its mp3 (same key) and update its seconds in index.json.
 # key	who	seconds on screen	text
 b039e77b	tidbit	1.63	Did you hear that?
@@ -17,10 +18,9 @@ acc8f0e5	tidbit	1.5	And it’s glowing!
 617c319b	tidbit	1.63	Who’s that?
 a4d4c7c3	sugarfoot	1.63	Maybe a new friend!
 5a28c4e1	narr	1.38	Bigger adventures…
-06157e50	tidbit	0.5	Ah…
-2564ab67	tidbit	0.5	Ah… ahh…
+2564ab67	tidbit	1.25	Ah… ahh…
 db4627b1	tidbit	0.63	CHOO!
-a7a90fdc	sugarfoot	0.75	…Bless you!
+a7a90fdc	sugarfoot	0.88	…Bless you!
 0a56bce0	sugarfoot	0.75	Hee hee!
 fbd6c9f9	tidbit	1.13	That was on purpose!
 759eaabc	narr	1.63	Funnier than ever…
