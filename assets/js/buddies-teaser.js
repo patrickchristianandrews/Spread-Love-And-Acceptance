@@ -425,9 +425,9 @@
       g.save(); g.translate(hx, hy); g.rotate(hq * (calm ? 3 : 7)); g.scale(1.65, 1.65); HAT.explorer(g); g.restore();
       if (!calm) for (var w = 0; w < 4; w++) { var wq = clamp((u - 1.4 - w * 0.04) / 0.35, 0, 1); if (wq > 0 && wq < 1) line(g, 360 + wq * 60, 220 + w * 12, 380 + wq * 90, 220 + w * 12, 'rgba(255,255,255,' + (0.8 * (1 - wq)) + ')', 2); }
     }
-    say(g, tid, u < 0.85 ? 'Ah…' : 'Ah… ahh…', u, 0.3, 1.35);
-    say(g, tid, 'CHOO!', u, 1.4, 2.05, { big: true });
-    say(g, sug, '…Bless you!', u, 2.15, 3.0);
+    say(g, tid, 'Ah… ahh…', u, 0.12, 1.36);
+    say(g, tid, 'CHOO!', u, 1.38, 2.08, { big: true });
+    say(g, sug, '…Bless you!', u, 2.1, 3.0);
   }
   function puddle(g, u, d, calm) {
     sky(g, [[0, '#A3BAD6'], [1, '#EEF2F8']], 270);
