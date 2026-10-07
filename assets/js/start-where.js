@@ -20,7 +20,7 @@
     { id:'caring', ico:'\uD83E\uDD1D', label:'I\u2019m looking after someone I love',
       say:'Caring for a parent, or for a husband, wife or partner after surgery or an illness, can get heavy quietly. Start with your own battery, because you matter here too. Then try one small thing today: a one-minute break, or asking one person for one specific help, like \u201cCould you do Thursday\u2019s drive?\u201d',
       picks:[
-        ['/relationships-in-depth.html#caregivers','Caregivers: where to start','What to notice, and how to share the care so it does not all land on you.'],
+        ['/caregivers.html','Caring for someone you love','When they can\u2019t share the load back, who else can help, and where to find respite.'],
         ['/workpapers/wp-02-how-much-are-you-carrying.html','How much are you carrying?','A quick look at how full your battery is today, before you judge the day.'],
         ['#breathe','Breathe','A one-minute calm break, right here on this page.']
       ]},
@@ -75,11 +75,11 @@
         ['/self-path.html','Your self-discovery path','A gentle first week, including kind ways to say no.'],
         ['/workpapers/wp-02-how-much-are-you-carrying.html','How much are you carrying?','How full your battery really is today.']
       ]},
-    { id:'child-teen', ico:'\uD83E\uDDD2', label:'Things are hard with my child or teen',
-      say:'Pulling away and pushing back are a normal part of growing up, and they can still hurt. Side-by-side time, short talks and listening first usually help more than the perfect speech.',
+    { id:'child-teen', ico:'\uD83E\uDDD2', label:'My kids fight, or I yell at them',
+      say:'Kids fighting and parents yelling are both very common, and both can change. Short, calm steps work better than a big talk: stop, breathe, then come back and repair.',
       picks:[
-        ['/parents.html','For parents','Big feelings, siblings, teens, and stepfamilies, with words you could use.'],
-        ['/library/life.html#teenagers','Talking with teenagers','What the research says about conflict with teens, and where it stops.'],
+        ['/parents.html','For parents','Siblings who fight, big feelings, coming back after you yell, teens and stepfamilies, with words you could use.'],
+        ['/upset-right-now.html#parent-child','When it\u2019s you and your child','What to do in the minute you\u2019re about to yell, or just did.'],
         ['/workpapers/wp-13-daily-check-in.html','The 90-second daily check-in','A tiny daily habit that keeps the door open.']
       ]},
     { id:'teen', ico:'\uD83C\uDFA7', label:'I\u2019m a teen and home feels hard',
@@ -108,12 +108,20 @@
         ['/relationships-in-depth.html#caregivers','Looking after someone','When caring for someone you love becomes most of the week.'],
         ['#breathe','Breathe for a minute','A short pause, right here.']
       ]},
-    { id:'keep-good', ico:'\uD83C\uDF31', label:'We are okay, and I want to keep it that way',
-      say:'The best time to build the habit is now, while nothing is on fire. Almost nobody starts here, and the ones who do have a far easier time of it later.',
+    { id:'keep-good', ico:'\uD83C\uDF31', label:'We\u2019re okay, but it feels a bit flat',
+      say:'Nothing is wrong, and that\u2019s worth protecting. When things feel flat, small regular moments of attention bring the warmth back, without turning it into a problem to solve.',
       picks:[
+        ['/complacency.html','When \u201cfine\u201d stops being checked','The quiet signs, and the small re-checks that keep things alive.'],
         ['/turning-toward.html','Turning toward','Seven small, everyday ways to build connection while things are good.'],
         ['/workpapers/wp-13-daily-check-in.html','The 90-second daily check-in','The smallest habit here, and the one that lasts.'],
         ['/quick-checks.html#today','Today\u2019s Weather','A daily minute that keeps small things small.']
+      ]},
+    { id:'separated', ico:'\uD83D\uDD00', label:'We\u2019re separated and share the kids',
+      say:'Two homes can work well for kids when the grown-up messages stay short, factual and about the children. You can only control your side, and that is often enough.',
+      picks:[
+        ['/co-parenting.html','Separated co-parents','Calmer handoffs, short messages, and what to do when the other parent won\u2019t cooperate.'],
+        ['/signal-translator.html','Check a message first','See how a message may land before you send it.'],
+        ['/safety.html#after-separation','When it\u2019s more than conflict','Messages that won\u2019t stop, threats, or using the kids: what helps.']
       ]},
     { id:'unsure', ico:'\uD83E\uDD14', label:'I am not sure this is for me',
       say:'Fair. It fits some situations and not others, and it is better to find that out now than after three worksheets. Nothing here costs anything while it is being built.',

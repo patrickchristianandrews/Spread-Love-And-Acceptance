@@ -10,6 +10,13 @@
   A road can also rename a workpaper (names), and say which workpapers can be
   added to it (addable; every one when it's left out). "Just me" (self) is for
   one person only: its sheets are worded that way (TOL_WORKPAPER_SOLO).
+
+  A road can have variants: the same road (same id, same sheets) in a different
+  order, for a different reason to be here. Partners has one, "flat", for a
+  couple who are fine but feel flat. A variant's groups can start with reads
+  ([label, link, why]): pages to read or try before any sheet. A stop marked
+  optional is shown as "Optional". variant(path, key) gives the road with the
+  variant laid over it; the id stays the same, and .variant names the key.
 */
 (function (global) {
   'use strict';
@@ -39,7 +46,8 @@
     mood: ['Soften a tense moment', '/tools/soften-a-tense-moment.html'], wired: ['Wired Differently', '/wired-differently.html'], wiring: ['Wiring Card', '/wiring-card.html'],
     signal: ['The Signal Translator', '/signal-translator.html'], checkins: ['Check-ins', '/check-ins.html'], ground: ['Check-in ground rules', '/check-ins.html#ground'],
     prog: ['PROG-01: 6-week program', '/prog-01.html'], report: ['REPORT-01: The Full Read', '/workpapers/report-01.html'], garden: ['The Night Garden', '/night-garden.html'],
-    toward: ['Turning Toward', '/turning-toward.html']
+    toward: ['Turning Toward', '/turning-toward.html'], complacency: ['Complacency', '/complacency.html'],
+    recheck: ['The Re-check Drive', '/recheck-drive.html']
   };
   function A() { return Array.prototype.map.call(arguments, function (k) { return L[k]; }); }
 
@@ -243,7 +251,45 @@
         ] }
       ],
       next: 'Start the 90-second daily check-in one evening this week, and each begin a Who did what log.',
-      care: 'The tools describe the arrangement, never the person.'
+      care: 'The tools describe the arrangement, never the person.',
+      // "What brings you here?" The road above is for "things feel unfair". This one is for "things feel flat".
+      ask: 'What brings you here?',
+      main: { label: 'Things feel unfair or lopsided', note: 'Your road starts with the work itself: who does what, and who owns each job.' },
+      variants: {
+        flat: {
+          label: 'Things are fine, just flat', note: 'Your road starts with two short reads, a game to play together and the 90-second daily check-in. The chore and load sheets are still here, marked optional.',
+          blurb: 'Two people sharing a life. Nothing is wrong; it just feels flat. Start with small moments of closeness.',
+          groups: [
+            { along: [], title: 'Start here', note: 'Two short reads and one thing to try together. No forms yet.', reads: [
+              ['Complacency', '/complacency.html', 'Why \u201cfine\u201d can slowly turn flat, and the small things that bring it back.'],
+              ['Turning toward', '/turning-toward.html', 'Seven small habits. Notice when your partner reaches for you, and answer.'],
+              ['The Re-check Drive', '/recheck-drive.html', 'A calm game to play together. Each small, kind thing you really do moves the ball.']
+            ], stops: [
+              { wp: 'WP-13', why: '90 seconds a day: how you are, one thanks, one small ask. This is the daily habit that brings closeness back.', again: 'Another week' }
+            ] },
+            { along: A('checkins', 'signal', 'ch3'), title: 'Then', note: 'For the talks that matter, and for your own state.', stops: [
+              { wp: 'WP-09', why: 'Say one thing you miss as fact, feeling and ask, so it lands as an invitation.', again: 'Another message' },
+              { wp: 'WP-02', why: 'How much each of you is already carrying, filled in about yourself. Flat can also mean tired.', again: 'Another day' },
+              { wp: 'WP-11', why: 'A plan for settling when a talk heats up.' }
+            ] },
+            { along: A('lemonade', 'ch2'), title: 'Optional: if the load feels uneven', note: 'Only if chores or planning have started to feel lopsided. Skip these if they haven\u2019t.', stops: [
+              { wp: 'WP-01', why: 'Optional. A week of who did what, written down by each of you.', again: 'Another week', optional: true },
+              { wp: 'WP-03', why: 'Optional. One owner for every regular job, so you stop re-deciding it every week.', optional: true }
+            ] },
+            { along: A('ch5', 'toward'), title: 'Once a month', note: 'Notice what brought you closer, and what keeps coming back.', stops: [
+              { wp: 'WP-04', why: 'Sort repeat problems into real gaps and one-offs.', again: 'Another month' }
+            ] }
+          ],
+          weeks: [
+            ['Notice the small moments', [], A('complacency', 'toward'), 'Read Complacency and Turning toward. Each day, notice one time your partner reached for you, and answer it.'],
+            ['Small daily check-ins', ['WP-13'], A('recheck', 'checkins'), 'Do the 90-second daily check-in every evening. Play one round of the Re-check Drive together.'],
+            ['Your loads', ['WP-02'], A('ch3'), 'Each of you does the one-minute load check daily, about yourself. Say your number before any hard talk.'],
+            ['Say what you miss', ['WP-09', 'WP-11'], A('signal', 'checkins'), 'Say one thing you miss as fact, feeling and ask. Agree on your pause lines.'],
+            ['Look back', ['WP-04'], A('report', 'ch5'), 'Do your first monthly look-back. What brought you closer this month? Keep doing that.']
+          ],
+          next: 'Read Complacency this week, and start the 90-second daily check-in one evening.'
+        }
+      }
     },
     {
       id: 'family', label: 'Family', icon: '⌂', color: '#CFE6D2',
@@ -406,5 +452,18 @@
     p.report = REPORT[p.id] || null;
     p.weeks = WEEKS[p.id] || p.groups.map(function (g) { return [g.title.replace(/^Week \d+ \u00B7 /, ''), g.stops.map(function (x) { return x.wp; }), g.along || [], g.note]; });
   });
-  global.TOL_SUITE_PATHS = { paths: PATHS, names: NAMES, read: READ };
+
+  // The road with one of its variants laid over it (same id, so every sheet, file and report still fits).
+  // No variant, or one the road doesn't have: the road itself.
+  function variant(p, key) {
+    var v = p && key && p.variants && p.variants[key];
+    if (!v) return p;
+    var out = {};
+    Object.keys(p).forEach(function (k) { out[k] = p[k]; });
+    Object.keys(v).forEach(function (k) { if (k !== 'label' && k !== 'note') out[k] = v[k]; });
+    out.variant = key;
+    out.base = p;
+    return out;
+  }
+  global.TOL_SUITE_PATHS = { paths: PATHS, names: NAMES, read: READ, variant: variant };
 })(typeof window !== 'undefined' ? window : globalThis);

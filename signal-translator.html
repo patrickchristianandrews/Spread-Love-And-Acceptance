@@ -8,7 +8,7 @@
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
 
-  gtag('config', 'G-NKC6CQ9S66');
+  gtag('config', 'G-NKC6CQ9S66', { page_location: location.origin + location.pathname }); // the address only: never a ?query or #part
 </script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -178,6 +178,8 @@ textarea[aria-invalid="true"]{border-color:var(--a)!important;box-shadow:0 0 0 2
 .field select{appearance:none;-webkit-appearance:none;background-image:linear-gradient(45deg,transparent 50%,var(--brass) 50%),linear-gradient(135deg,var(--brass) 50%,transparent 50%);background-position:calc(100% - 18px) 50%,calc(100% - 12px) 50%;background-size:6px 6px,6px 6px;background-repeat:no-repeat;text-overflow:ellipsis}
 .field select:hover,.field input[type=text]:hover{border-color:var(--muted)}
 .presetrow{margin-top:10px}
+.gotrel{margin-top:10px}
+.field[hidden]{display:none}
 .quick{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px 18px;margin-top:20px;padding-top:16px;border-top:1px solid var(--line)}
 .grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px 18px}
 @media (max-width:640px){.quick,.grid2{grid-template-columns:minmax(0,1fr)}}
@@ -395,6 +397,20 @@ q.w{quotes:"\201C" "\201D";font-family:var(--mono);font-size:.8rem;background:co
     <h2 id="s3"><label for="phrase" id="phraseLab">Type your sentence</label></h2>
     <p class="hint" id="phraseHint">Type it the way it would actually come out. A text, a Slack message, or something you plan to say out loud.</p>
     <textarea id="phrase" placeholder="The exact words, as they would be said or sent." maxlength="1500" aria-describedby="phraseHint msg"></textarea>
+    <div class="field gotrel" id="gotRelField" hidden>
+      <label for="gotRelSel">Who sent it? (optional)</label>
+      <select id="gotRelSel">
+        <option value="">Not sure / skip</option>
+        <option value="partner">My partner</option>
+        <option value="coparent">My co-parent, or my ex</option>
+        <option value="family">Family</option>
+        <option value="friend">A friend</option>
+        <option value="roommate">A roommate</option>
+        <option value="coworker">A coworker</option>
+        <option value="manager">My manager, or someone on my team</option>
+        <option value="caregiver">Someone I care for, or who cares for me</option>
+      </select>
+    </div>
     <p class="st-shift"><a href="/perspective-shifter.html">Not sure how they saw it? Try the Perspective Shifter first →</a></p>
     <p class="st-shift"><a href="/wavelength.html">Want to know how you both send and receive? Find your Wave Codes in Wavelength →</a></p>
     <div class="field presetrow">
@@ -1523,6 +1539,24 @@ function replyHTML(reply, A, B, phraseFound, phrase){
    RUN
    ============================================================ */
 function cleanSay(s){ return String(s||"").replace(/[ \t]+/g," ").trim(); }
+/* The rewrite keeps the fact, not the blame: "…the dishes and you forgot." becomes "…the dishes."
+   A trailing "and you forgot / didn't / never / always…" clause is dropped from each version. */
+const BLAME_TAIL = /,?\s+and (?:then )?you(?:'ve| have)? (?:forgot|forgotten|didn['’]t|did not|never|always|ignored)\b[^.!?]*(?=[.!?]|$)/gi;
+function dropBlame(rw){
+  const taken = [];
+  rw.variants.forEach(v=>{
+    const t = String(v.text||"").replace(BLAME_TAIL, m=>{ taken.push(m.replace(/^,?\s+/,"")); return ""; });
+    if(t!==v.text && t.replace(/[^A-Za-z]+/g," ").trim().split(" ").length>=3){
+      v.text = t;
+      if(v.label==="Your words") v.label = "Clearest version";
+    }
+  });
+  if(!taken.length) return rw;
+  if(rw.unchanged) rw.unchanged = false;
+  rw.changes.push({id:"blame", from:[...new Set(taken)].slice(0,2), to:[], forWiring:[],
+    why:"\"And you forgot\" turns a fact into a charge. The fact on its own is enough, and the listener can answer it without defending themselves."});
+  return rw;
+}
 function sayOptions(text, rw){
   const opts=[];
   const push=(o)=>{ if(!o.say) return; if(opts.some(x=>x.say.toLowerCase()===o.say.toLowerCase())) return; opts.push(o); };
@@ -1589,7 +1623,7 @@ function run(){
   const lvl = sc.level, pct = sc.pct;
   const strongest = sc.top;                       // readings with weight >= 1, loudest first
   const perB = E.readings(an, Bids, channel);
-  const rw = E.rewrite(an, {wirings:Bids, channel, rel:relId, bond: needB==="bond"||sitId==="bond"});
+  const rw = dropBlame(E.rewrite(an, {wirings:Bids, channel, rel:relId, bond: needB==="bond"||sitId==="bond"}));
 
   const chName={person:"in person",phone:"by phone or video",text:"by text or chat",chat:"on a work chat (Slack or Teams)",group:"in a group channel",email:"by email or long note"}[channel];
   const bWiring = general ? "wiring not chosen, general reading" : listNames(sel.B);
@@ -1849,20 +1883,44 @@ function setMode(m){
   stMode = m; const t = MODE_TEXT[m];
   $("#phraseLab").textContent = t.lab; $("#phraseHint").textContent = t.hint; $("#phrase").placeholder = t.ph; $("#go").textContent = t.go;
   $("#fine").hidden = m==="got"; const pr=document.querySelector(".presetrow"); if(pr) pr.hidden = m==="got";
+  const gr=$("#gotRelField"); if(gr){ gr.hidden = m!=="got"; $("#gotRelSel").value = REL[relId] ? relId : ""; }
   document.querySelectorAll('input[name="stmode"]').forEach(r=>{ r.checked = r.value===m; });
   const nt=$("#notes"); if(nt) nt.hidden = m==="got";
   const R=$("#results"); R.hidden=true; R.innerHTML=""; $("#msg").textContent="";
 }
+/* Received threats: no "it shows how much this matters to them". Co-parents and exes: a brief,
+   factual reply (BIFF: Brief, Informative, Friendly, Firm) that answers the logistics and admits no pattern. */
+const COPARENT_REPLIES = [
+  {label:"Brief and factual", text:"Got it. I'll be there at [the time] on [the day]."},
+  {label:"Hold it for now", text:"I've read this. I'll reply about the children's schedule by [a time]."},
+  {label:"Only the next step", text:"Thanks for letting me know. Next pickup is [the day] at [the time]."}
+];
+function fitReceived(an, rv){
+  const threat = !!an.found.threat;
+  rv.threat = threat || rv.crossed;
+  if(threat) rv.meanings = rv.meanings
+    .filter(m=>!/^They're unhappy about something that happened/.test(m))
+    .map(m=>/^It's worded as an ultimatum/.test(m) ? "It's worded as a threat. Threats aren't okay, whatever was meant. You don't have to answer it on the spot." : m);
+  rv.meanings = rv.meanings.map(m=>m.replace(/\s*It shows how much this matters to them right now\./, ""));
+  rv.coparent = relId==="coparent";
+  if(rv.coparent) rv.replies = rv.crossed
+    ? COPARENT_REPLIES.slice(1,2).concat([{label:"Take time before you answer", text:"I've read this. I'm going to take some time before I reply."}])
+    : rv.replies.filter(r=>r.label==="Check the ask").concat(COPARENT_REPLIES).slice(0,3);
+  return rv;
+}
 function runReceived(text){
   const an = E.analyze(text, {channel});
-  const rv = E.receive(an);
+  const rv = fitReceived(an, E.receive(an));
   let h = '<h2 id="rTitle" class="sr-only" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)">Reading it kindly</h2>';
   h += '<div class="verdict recv" id="verdict"><p class="vk">What it might mean</p><ul class="rmean">'+rv.meanings.map(m=>'<li>'+esc(m)+'</li>').join('')+'</ul>';
   if(rv.literal.length) h += '<div class="literal"><p class="small" style="margin:8px 0 2px"><b>Figures of speech, in plain words:</b></p><ul class="ul">'+rv.literal.map(x=>'<li>&ldquo;'+esc(x.text)+'&rdquo; usually means '+esc(x.means)+'.</li>').join('')+'</ul></div>';
   h += '</div>';
-  if(rv.crossed) h += '<div class="verdict line-card" role="note"><p class="vk">Some of this crossed a line</p><p>Name-calling, put-downs and threats aren&rsquo;t okay, whatever was going on for them. You don&rsquo;t have to answer tonight, and you&rsquo;re allowed to step away.</p><p style="margin-bottom:0">How are you doing right now? If it hurt to read, that makes sense. Look after yourself first. The reply can wait.</p></div>';
+  if(rv.crossed) h += '<div class="verdict line-card" role="note"><p class="vk">Some of this crossed a line</p><p>Name-calling, put-downs and threats aren&rsquo;t okay, whatever was going on for them. You don&rsquo;t have to answer tonight, and you&rsquo;re allowed to step away.</p>'
+    + (rv.threat ? '<p><b>Save a copy, with the date.</b> A screenshot is fine. Keep it somewhere the other person can&rsquo;t see. You don&rsquo;t have to answer it. If it frightens you, see <a href="/safety.html">Not safe at home?</a> for free, private people to talk to.'+(rv.coparent ? ' After a breakup, see also <a href="/safety.html#after-separation">After a separation: when it&rsquo;s more than conflict</a>.' : '')+'</p>' : '')
+    + '<p style="margin-bottom:0">How are you doing right now? If it hurt to read, that makes sense. Look after yourself first. The reply can wait.</p></div>';
   h += '<div class="verdict"><p class="vk">Ways to answer calmly</p>';
   h += rv.replies.length ? '<ul class="replies">'+rv.replies.map((r,i)=>'<li><b>'+esc(r.label)+'</b><p class="vbest">'+esc(r.text)+'</p><button class="ghost" type="button" data-copyr="'+i+'">Copy</button></li>').join('')+'</ul>' : '<p>Answer the way you normally would. Nothing here needs decoding.</p>';
+  if(rv.coparent && rv.replies.length) h += '<p class="small">With a co-parent or an ex, keep it Brief, Informative, Friendly and Firm. Answer the logistics only. You don&rsquo;t have to agree with, or argue about, a pattern in writing. Fill in the parts in brackets. More on <a href="/co-parenting.html#court">co-parenting when it may end up in court</a>.</p>';
   h += '<p class="small">You don&rsquo;t have to reply right away. Waiting until you&rsquo;re calm is a fine answer too.</p>';
   h += '<div class="actions" style="margin:0"><button class="go" type="button" id="checkReply">Check my reply before I send it</button></div></div>';
   h += '<p class="small">'+(rv.found.length ? 'What the words contain: '+esc(rv.found.join("; "))+'. ' : '')+'This reads the words only. It can&rsquo;t know their tone, their day or your history, so these are possibilities, not verdicts.</p>';
@@ -1876,6 +1934,14 @@ function runReceived(text){
   R.scrollIntoView({behavior: matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth", block:"start"});
 }
 document.querySelectorAll('input[name="stmode"]').forEach(r=>r.addEventListener("change",()=>{ if(r.checked) setMode(r.value); }));
+/* "What you got from this" (added by come-back.js): words that fit the mode */
+(function(){
+  const SENT = "You just found a kinder way to say it, before it was said.", GOT = "You read it carefully before answering. That’s the hardest part.";
+  function fit(){ const b=document.querySelector(".cb-end .cb-benefit"); if(!b) return; const want = stMode==="got" ? GOT : SENT; if(b.textContent!==want) b.textContent=want; }
+  const main=document.querySelector("main")||document.body;
+  try { new MutationObserver(fit).observe(main, {childList:true, subtree:true}); } catch(e) {}
+  document.querySelectorAll('input[name="stmode"]').forEach(r=>r.addEventListener("change",fit));
+})();
 
 function swap(){
   const t=sel.A; sel.A=sel.B; sel.B=t;
@@ -1905,7 +1971,7 @@ function applyDefaults(){
   useId="send"; channel="text"; relId=""; bstate="v"; stateKnown=false; sitId=""; envId=""; needA=""; needB="";
   relTouched=false; chTouched=false;
   $("#useSel").value=useId; $("#chSel").value=channel; $("#relSel").value=""; $("#stateSel").value="";
-  ["#sitSel","#envSel","#needASel","#needBSel","#presetSel"].forEach(id=>$(id).value="");
+  ["#sitSel","#envSel","#needASel","#needBSel","#presetSel","#gotRelSel"].forEach(id=>$(id).value="");
 }
 applyDefaults();
 $("#presetSel").addEventListener("change",e=>{ if(!e.target.value) return; const [gi,ti]=e.target.value.split(":").map(Number); const g=PRESET_GROUPS[gi]; if(!g) return;
@@ -1919,6 +1985,7 @@ $("#useSel").addEventListener("change",e=>{
   sync(); rerun();
 });
 $("#relSel").addEventListener("change",e=>{ relId=e.target.value; relTouched=true; rerun(); });
+$("#gotRelSel").addEventListener("change",e=>{ relId=e.target.value; relTouched=true; $("#relSel").value=relId; rerun(); });
 $("#chSel").addEventListener("change",e=>{ channel=e.target.value; chTouched=true; rerun(); });
 $("#stateSel").addEventListener("change",e=>{ bstate=e.target.value||"v"; stateKnown=!!e.target.value; document.documentElement.style.setProperty("--state","var(--"+bstate+")"); rerun(); });
 $("#sitSel").addEventListener("change",e=>{ sitId=e.target.value; rerun(); });
@@ -2142,10 +2209,26 @@ sync();
 })();
 </script>
 <script>
-  // a sentence passed in the address (?text=…), from the Perspective Shifter or a link, goes straight into the box
+  // a sentence passed from the Perspective Shifter or a link goes straight into the box (see below)
   // ?use=work (the link from the At work page), or work mode: start on the work-message setting, and show it
   (function () { try { var u = new URLSearchParams(location.search).get('use'), sel = document.getElementById('useSel'); if (sel && (u === 'work' || document.documentElement.classList.contains('tol-work') || (sessionStorage.getItem('tol-work') === '1')) && [].some.call(sel.options, function (o) { return o.value === 'work'; })) { sel.value = 'work'; sel.dispatchEvent(new Event('change', { bubbles: true })); var fine = document.getElementById('fine'); if (fine) fine.open = true; } } catch (e) {} })();
-  (function () { try { var q = new URLSearchParams(location.search).get('text'); var box = document.getElementById('phrase'); if (q && box && !box.value) { box.value = q.slice(0, 1500); box.dispatchEvent(new Event('input', { bubbles: true })); } } catch (e) {} })();
+  // A sentence handed over from another page waits in sessionStorage ('tol-st-text'), so it never sits in the address.
+  // An older ?text= link still works, but the words are taken out of the address bar straight away.
+  (function () {
+    var params = null; try { params = new URLSearchParams(location.search); } catch (e) {}
+    var q = null;
+    try { q = sessionStorage.getItem('tol-st-text'); if (q != null) sessionStorage.removeItem('tol-st-text'); } catch (e) {}
+    if (!q && params) q = params.get('text');
+    try { var box = document.getElementById('phrase'); if (q && box && !box.value) { box.value = q.slice(0, 1500); box.dispatchEvent(new Event('input', { bubbles: true })); } } catch (e) {}
+    try {
+      if (params && Array.from(params.keys()).some(function (k) { return !(k === 'use' && params.get('use') === 'work') && k !== 'work'; })) {
+        var keep = [];
+        if (params.get('use') === 'work') keep.push('use=work');
+        if (/^[01]$/.test(params.get('work') || '')) keep.push('work=' + params.get('work')); // site.js reads ?work= after this runs
+        history.replaceState(null, '', location.pathname + (keep.length ? '?' + keep.join('&') : '') + location.hash);
+      }
+    } catch (e) {}
+  })();
 </script>
 </body>
 </html>

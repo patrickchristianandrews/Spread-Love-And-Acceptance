@@ -1,5 +1,5 @@
 /* wavelength.js — Wavelength: how you think, talk and listen.
-   Pick your wiring (optional, select all that apply), answer four short parts with either/or taps and tap-to-select
+   Pick your wiring (optional, select all that apply), answer seven short parts with either/or taps and tap-to-select
    statements, choose the inputs you learn through and what helps you, and (if you like) build a personal statement.
    Then read your four-letter Wave Code, your archetype, what each letter means, and sixteen self-discovery chapters:
    seven for your Wave Code and nine for the inputs of learning, plus a page on how the nine inputs connect.
@@ -590,7 +590,7 @@
       '<section class="wl-hero">' +
         '<h2>Find your wavelength</h2>' + waveSVG('QFNA', false) +
         '<p>Find out how you think, how you share and how you take things in. Then share your Wave Code so the people close to you can tune in.</p>' +
-        '<p class="wl-small">About ten minutes, mostly tapping. Your Wave Code is four letters, a bit like the four-letter personality types you may have seen. It’s a fun way to describe your preferences, not a test that measures you. Afterward, sixteen self-discovery chapters open up: seven for your Wave Code and nine for the ways you take things in and learn.</p>' +
+        '<p class="wl-small">Seven short parts, mostly tapping, about ten minutes in all. The last part, your statement, is optional. Your Wave Code is four letters, a bit like the four-letter personality types you may have seen. It’s a fun way to describe your preferences, not a test that measures you. Afterward, sixteen self-discovery chapters open up: seven for your Wave Code and nine for the ways you take things in and learn.</p>' +
         '<p class="wl-small">Fill it in about yourself. If you want to understand someone else, ask them to take it too, then compare.</p>' +
         (S.moved && hasHp ? '<p class="wl-mine"><strong>Welcome back.</strong> Your Heartprint is now part of Wavelength. Your answers came with you: they’re in Part 7, Your statement.</p>' : '') +
         '<label class="wl-field" for="wl-nm">Your first name (optional)</label>' +
@@ -626,7 +626,7 @@
         (S.nts.indexOf('other') >= 0 ? '<label class="wl-field" for="wl-ot">Name your wiring (optional)</label><input type="text" id="wl-ot" maxlength="60" value="' + esc(S.otherText || '') + '">' : '') +
         (sel.length ? '<div class="wl-picked" role="status">' + sel.map(t => '<p><strong>' + t.label + ':</strong> ' + t.about + '</p>').join('') + '</div>' : '') +
         (combo ? '<p class="wl-combo" role="status">' + combo + '</p>' : '') +
-        '<div class="wl-nav"><button type="button" class="wl-btn ghost" id="wl-back">Back</button><button type="button" class="wl-btn" id="wl-next">' + (S.nts.length ? 'Continue' : 'Skip for now') + '</button></div>' +
+        '<div class="wl-nav wl-nav-sticky"><button type="button" class="wl-btn ghost" id="wl-back">Back</button><button type="button" class="wl-btn" id="wl-next">' + (S.nts.length ? 'Continue' : 'Skip for now') + '</button></div>' +
         '<div class="wl-guide">' +
           '<h3>Not sure which fits? A quick guide</h3>' +
           '<p class="wl-small">Read through and select any that sound like you. Many people have more than one. ADHD and autism often show up together, dyslexia often overlaps with ADHD, and being highly sensitive can go with any of them.</p>' +
@@ -662,7 +662,7 @@
         mine.map(chipGroup).join('') +
         (others.length ? '<button type="button" class="wl-linkbtn" id="wl-more" aria-expanded="' + open + '">' + (open ? 'Hide other options' : 'Show options from other wiring types') + '</button>' + (open ? others.map(chipGroup).join('') : '') : '') +
         '<p class="wl-needs" id="wl-need">' + (ready ? '' : 'Answer the questions above to continue.') + '</p>' +
-        '<div class="wl-nav"><button type="button" class="wl-btn ghost" id="wl-back">Back</button><button type="button" class="wl-btn" id="wl-next"' + (ready ? '' : ' disabled') + '>Continue</button></div>' +
+        '<div class="wl-nav wl-nav-sticky"><button type="button" class="wl-btn ghost" id="wl-back">Back</button><button type="button" class="wl-btn" id="wl-next"' + (ready ? '' : ' disabled') + '>Continue</button></div>' +
       '</section>';
     $$('.wl-opt').forEach(b => { b.onclick = () => { S.answers[sec.id][+b.dataset.q] = b.dataset.v; save(); redraw(() => renderSection(sec), '.wl-opt[data-q="' + b.dataset.q + '"][data-v="' + b.dataset.v + '"]'); }; });
     $$('.wl-chip').forEach(b => { b.onclick = () => { const id = b.dataset.chip, i = S.chips.indexOf(id); if (i >= 0) S.chips.splice(i, 1); else S.chips.push(id); b.setAttribute('aria-pressed', S.chips.indexOf(id) >= 0); save(); }; });
@@ -682,7 +682,7 @@
           '<span class="wl-inico" aria-hidden="true">' + x.icon + '</span><strong>' + x.name + '</strong><span>' + x.short + '</span>' + (f.length ? '<em>Often a fit for ' + f.join(' and ') + ' folks</em>' : '') + '</button>'; }).join('') + '</div>' +
         (picked.length > 1 ? '<p class="wl-chiphead">Which one is strongest?</p><div class="wl-chips" role="group" aria-label="Your strongest input">' + picked.map(x => '<button type="button" class="wl-chip" data-top="' + x.id + '" aria-pressed="' + (S.topInput === x.id) + '">' + x.icon + ' ' + x.name + '</button>').join('') + '</div>' : '') +
         '<p class="wl-evidence">These nine are adapted from Howard Gardner’s idea of multiple intelligences. Treat them as preferences, not fixed learning styles: research doesn’t support learning through only one style, and most people learn best when several inputs work together.</p>' +
-        '<div class="wl-nav"><button type="button" class="wl-btn ghost" id="wl-back">Back</button><button type="button" class="wl-btn" id="wl-next">' + (S.inputs.length ? 'Continue' : 'Skip for now') + '</button></div>' +
+        '<div class="wl-nav wl-nav-sticky"><button type="button" class="wl-btn ghost" id="wl-back">Back</button><button type="button" class="wl-btn" id="wl-next">' + (S.inputs.length ? 'Continue' : 'Skip for now') + '</button></div>' +
       '</section>';
     $$('.wl-incard').forEach(b => { b.onclick = () => {
       const id = b.dataset.in, i = S.inputs.indexOf(id);

@@ -485,6 +485,7 @@
     '\\b(is it|it(.?s| is)?|was it) (all )?my fault (he|she|they|my \\w+) (yells|yelled|screams|screamed|shouts|hits|hit|hurts|hurt|gets (so )?(angry|mad|violent)|throws|threw|grabs|grabbed|pushes|pushed)\\b',
     '\\b(he|she|they|my \\w+) (says|said|tells me) it(.?s| is)? my fault (he|she|they) (yell|scream|shout|hit|hurt|get angry|lose)\\w*',
     '\\b(isolat\\w+) me\\b', '\\bcut me off from (my )?(friends|family)\\b', '\\b(threatens|threatened) to (leave with|take|hurt) (the )?(kids|children|baby|dog|cat|pet)\\b',
+    '\\b(cuts?|cutting|hurts?|hurting|harms?|harming|burns?|burning) (themselves|themself|himself|herself)\\b',
     '\\bgaslight\\w*', '\\bmakes? me feel (crazy|like i m crazy|like im crazy)\\b',
     '\\bthrows things\\b', '\\bthrew (a|the|my) \\w+ at me\\b', '\\bblocks? the door\\b', '\\bcoercive\\b'
   ].join('|'));
@@ -494,6 +495,9 @@
   // These get a plainer answer with the difference between agreed sharing and control, the hotline, and a way to keep talking.
   var CONTROL = /\b(checks|checked|checking|reads|read|goes through|went through|looks through|searches|tracks|tracking|monitors|monitoring) (my|all my) (phone|texts|messages|emails?|location|social media)\b|\b(tracks|follows|watches) (me|where i (am|go))\b|\b(tracking|spy|spying) (app|apps|on me)\b|\b(won.?t|wont|doesn.?t|does not|will not|never) let(s)? me (leave|go( out)?|see|talk|have|work|out|sleep|use)\b|\b(controls|takes|took|keeps|hides|hid) (all )?(my|the|our) (money|phone|keys|car keys|passport|cards?|paycheck|bank)\b|\b(isolat\w+) me\b|\bcut me off from (my )?(friends|family)\b|\bgaslight\w*|\bmakes? me feel (crazy|like i m crazy|like im crazy)\b|\b(says|said|tells me) it(.?s| is)? my fault (he|she|they)\b|\b(is it|it(.?s| is)?|was it) (all )?my fault (he|she|they|my \w+) (yells|yelled|screams|screamed|shouts|gets (so )?(angry|mad))\b|\bcontrolling\b|\bcoercive\b/;
   var HARD = /\b(hit|hits|hitting|slap\w*|punch\w*|chok\w*|kick\w*|strangl\w*|shov\w*|push\w* me|beat\w*|kill\w*|die|dead|suicid\w*|hurt\w*|harm\w*|rape\w*|assault\w*|gun|knife|weapon|threat\w*|scared|afraid|frightened|terrified|stalk\w*|overdos\w*|not safe|unsafe|violen\w*|abus\w*|throws|threw|blocks? the door|grabb?\w*)\b/;
+  // a parent reading a teen's phone is a different question from a partner doing it
+  var PARENT_PHONE = /\b(mom|mum|dad|parents?|mother|father|stepmom|stepdad|stepmother|stepfather)\b.{0,40}\b(read\w*|check\w*|go(es)? through|look\w* (at|through)|track\w*|take\w*|took)\b.{0,25}\b(my )?(texts|messages|phone|location|dms|chats?)\b|\b(is|are) (my )?(mom|mum|dad|parents?) allowed to\b/;
+  function cardByIdF(id) { return (IDX.first || []).filter(function (x) { return x.id === id; })[0] || null; }
   function controlReply() {
     return { blocks: [
       { k: 'p', x: 'That’s worth taking seriously, and it’s not your fault. Checking someone’s phone or location, limiting who they see or what money they have, or blaming them for someone else’s anger are common signs of control. They aren’t a communication problem that better wording can fix.' },
@@ -503,6 +507,18 @@
         'If your phone might be checked, use a device they can’t see, and look at the Not safe at home? page for how to clear what this site keeps.'] },
       { k: 'links', x: [['Not safe at home? Hotlines, leaving this site quickly, and clearing what it keeps', '/safety.html']] }],
       chips: [{ label: 'What are the red flags?', q: 'What are the red flags in a relationship?' }, { label: 'Something else', q: 'Start over' }], kind: 'safety' };
+  }
+  // A friend (or anyone else) who is hurting themselves: how to help them, and who helps you help
+  var OTHER_HARM = /\b(cuts?|cutting|hurts?|hurting|harms?|harming|burns?|burning) (themselves|themself|himself|herself)\b|\b(friend|sister|brother|son|daughter|kid|child|partner|girlfriend|boyfriend|gf|bf|mom|dad|someone)\b.{0,40}\b(self ?harm\w*|suicid\w*|wants? to die|kill (themselves|himself|herself))\b/;
+  function otherHarmReply() {
+    return { blocks: [
+      { k: 'p', x: 'Thank you for caring about them. That’s a lot to carry, and you don’t have to handle it alone.' },
+      { k: 'list', x: ['Tell them you noticed and you care, calmly: “I’m worried about you. I’m not mad. I’m here.” Listen more than you fix.',
+        'Don’t promise to keep it secret. Tell a trusted adult (a parent, school counselor, teacher, coach, or doctor) even if they ask you not to. That isn’t betraying them; it’s getting them help.',
+        'If they might be in danger right now, call 911 or your local emergency number.',
+        'You can call or text 988 (the Suicide & Crisis Lifeline in the US) yourself to ask how to help a friend, or text HOME to 741741 (Crisis Text Line). Outside the US, findahelpline.com lists free lines.',
+        'Look after yourself too. Supporting someone who self-harms is heavy; talk to someone about how you’re doing.'] },
+      { k: 'links', x: [['For teens: when it’s more than a bad day', '/teens.html']] }], chips: [], kind: 'safety' };
   }
   function safetyReply(f) {
     var live = f && NOT_LIVE.test(f), self = live && !/\b(he|she|they|partner|husband|wife|boyfriend|girlfriend|spouse|ex|dad|father|mom|mum|mother)\b/.test(f);
@@ -1035,7 +1051,7 @@
   var CV_REDFLAG = /\b(is|are|isnt|was|could) (that|this|it|those|these|they|he|she|this behaviou?r|that behaviou?r) (be )?(a )?(red flags?|toxic|abus\w*|controlling|manipulat\w*|gaslight\w*|healthy|unhealthy|a warning sign|warning signs?|a bad sign)\b|^(red flags?|any red flags|what are (the |some )?red flags|signs of (abuse|control|coercive control|a toxic relationship)|should i be worried|is (this|that) normal in a relationship)\b/;
   var CV_NEXT = /^(ok |okay |so |and |alright |right |cool |great |got it |done |ok done |i did that )*(and )?(then what|what then|what after that|after that|and after that|what comes next|what comes after that|whats after that|what do i do after that|what should i do after that|then)\??$/;
   var CV_RESTART = /^(start over|start again|new topic|change of subject|different (topic|question|thing)|something else|never ?mind|forget (it|that)|lets talk about something else)$/;
-  var CV_PERSONAL = { teamowners: 1, grownkids: 1, phonetrust: 1, lonely: 1, leave: 1, atwork: 1, grief: 1, overgive: 1, burden: 1, parentsblame: 1, onmyown: 1, teens: 1, raisekids: 1, fightnow: 1, judged: 1, sensitive: 1, overload: 1, meltdown: 1, 'upset-right-now': 1 };
+  var CV_PERSONAL = { carehelp: 1, careadultkids: 1, careresent: 1, yellkids: 1, exharass: 1, exmessages: 1, exbadmouth: 1, lgbtq: 1, parentphone: 1, parentsfight: 1, teamowners: 1, grownkids: 1, phonetrust: 1, lonely: 1, leave: 1, atwork: 1, grief: 1, overgive: 1, burden: 1, parentsblame: 1, onmyown: 1, teens: 1, raisekids: 1, fightnow: 1, judged: 1, sensitive: 1, overload: 1, meltdown: 1, 'upset-right-now': 1 };
   var CV_YEAH = /^(yeah|yes|yep|yup|ya|ok|okay|sure|mhm|uh huh|go on|i guess|kind of|kinda|true)$/;
   // the caring answer we gave a turn or two ago (grief, giving too much…), if any
   function careCard(state) {
@@ -1117,6 +1133,14 @@
         var pd = state.pend; state.pend = Object.assign({}, pd, { turn: state.turn || 0 });
         return { blocks: [{ k: 'p', x: 'I’m still with you on “' + pd.f + '”. To give you real steps, I need one more thing: what usually sets it off, or how does it tend to end? A few words is plenty. Or tap the closest one.' }], chips: pd.chips || STARTERS.slice(0, 3), kind: 'clarify' };
       }
+    }
+    // after a caregiving answer, "my daughter won't help" and "I resent him" stay about caregiving
+    var cc3 = careCard(state);
+    if (cc3 && /^care/.test(cc3.id)) {
+      var to = /\b(daughter|son|kids|children|sister|brother|family)\b/.test(f) && /\b(won t|wont|doesn t|doesnt|don t|dont|never|help|visit|call)\b/.test(f) ? 'careadultkids'
+        : /\b(resent\w*|guilt\w*|ashamed|angry at him|angry at her)\b/.test(f) ? 'careresent' : /\b(respite|break|helpline|support|someone to call)\b/.test(f) ? 'carehelp' : '';
+      var tc = to && cardByIdF(to);
+      if (tc) { var rc = cardReply(state, tc, 'about'); rc.kind = 'care'; state.care = { id: to, turn: state.turn || 0, f: f }; return rc; }
     }
     // "what about my sister?" just after a caring answer (grief, giving too much…): the same answer, for them
     var mw = f.match(FU_WHO), C0 = state.care;
@@ -1551,6 +1575,9 @@
       // "different question: …", "by the way, …": a new topic, so nothing from the last one carries over
       var sw0 = norm(q).match(/^(anyway|anyways|by the way|btw|on another note|new question|different question|another question|other question|unrelated|separate question|changing (the )?subject|switching (topics?|gears))\b\s*(.{6,})$/);
       if (sw0) { state.last = null; state.care = null; q = sw0[sw0.length - 1]; }
+      var es = String(q).toLowerCase();
+      if (/[¿¡ñ]|\b(qu[eé]|c[oó]mo|mis|hijos?|esposo|esposa|ayuda|estoy|pelean|tengo|por qu[eé]|necesito|mi pareja|hola)\b/.test(es) && (es.match(/\b(que|qué|como|cómo|mis|mi|hijos|hijo|esposo|esposa|ayuda|estoy|pelean|tengo|necesito|pareja|hola|por|no|se|me|con|los|las|el|la|de|y)\b/g) || []).length >= 3 && !/\b(the|and|my|is|are|i)\b/.test(es))
+        return { blocks: [{ k: 'p', x: 'Hola. Lo siento: por ahora solo puedo responder en inglés. Hay una página corta en español con pasos para cuando los hijos pelean, cuando estás muy enojado, y si no estás seguro en casa. (Sorry, I can only answer in English for now. Here is a short page in Spanish.)' }, { k: 'links', x: [['En español', '/en-espanol.html']] }], chips: [], kind: 'lang' };
       var cvf = norm(q), cv = !DANGER.test(cvf) && !HIDE.test(cvf) && convoTurn(state, cvf);
       if (cv) return meant(cv, sp);
       // a question about one of the thirteen fields, or two of them, gets that field's (or pair's) own answer, not the overview
@@ -1578,7 +1605,13 @@
   function respond1(state, q, chipDoc) {
     var f = norm(q), prevLast = state.last;
     if (chipDoc == null) {
-      if (DANGER.test(f)) { state.last = null; return CONTROL.test(f) && !HARD.test(f) ? controlReply() : safetyReply(f); }
+      if (DANGER.test(f)) {
+        state.last = null;
+        if (OTHER_HARM.test(f) && !/\b(i|me|my ?self)\b.{0,20}\b(cut|hurt|harm|kill|die)\b/.test(f)) return otherHarmReply();
+        var pc = PARENT_PHONE.test(f) && !HARD.test(f) && cardByIdF('parentphone');
+        if (pc) { var rp = cardReply(state, pc, 'about'); rp.kind = 'care'; return rp; }
+        return CONTROL.test(f) && !HARD.test(f) ? controlReply() : safetyReply(f);
+      }
       if (HIDE.test(f)) { state.last = null; return hideReply(); }
       f = roommatesFigure(f);
       var fu = followUp(state, f, q);

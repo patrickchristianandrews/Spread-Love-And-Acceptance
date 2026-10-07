@@ -8,7 +8,7 @@
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
 
-  gtag('config', 'G-NKC6CQ9S66');
+  gtag('config', 'G-NKC6CQ9S66', { page_location: location.origin + location.pathname }); // the address only: never a ?query or #part
 </script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -87,6 +87,13 @@
     html.gr-printing main.read > :not(.gr-handouts){ display:none !important; }
     html.gr-printing .gr-handout:not(.is-print){ display:none !important; }
     html.gr-printing #gr-sheets > .gr-handout.is-print.is-first{ break-before:auto; page-break-before:auto; }
+    /* After a "Print this session (leader copy)" button: only that session's outline */
+    html.gr-print-session body > :not(main){ display:none !important; }
+    html.gr-print-session main.read > *{ display:none !important; }
+    html.gr-print-s1 main.read > #session-1, html.gr-print-s2 main.read > #session-2, html.gr-print-s3 main.read > #session-3,
+    html.gr-print-s4 main.read > #session-4, html.gr-print-s5 main.read > #session-5, html.gr-print-s6 main.read > #session-6{ display:block !important; margin:0 !important; }
+    html.gr-print-session .gr-session, html.gr-print-session .gr-session *{ color:#000 !important; box-shadow:none !important; }
+    html.gr-print-session .gr-session .gr-row{ display:none !important; }
   }
 </style>
 <!-- seo:start -->
@@ -123,7 +130,7 @@
 <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@id":"https://spreadloveandacceptance.com/groups.html#page","name":"Leading a group: a six-session guide","headline":"Leading a group: a six-session guide","description":"A free six-session guide for church small groups, couples’ classes and community groups: session outlines, discussion questions and printable one-page handouts.","url":"https://spreadloveandacceptance.com/groups.html","inLanguage":"en-US","isAccessibleForFree":true,"keywords":"self-help, relationships, kindness, love, appreciation, acceptance, connection, communication, calm, peace, harmony, reconciliation, emotional wellbeing, self-discovery, fairness at home, mental load, invisible work, free self-help tools","publisher":{"@type":"Organization","@id":"https://spreadloveandacceptance.com/#org","name":"Spread Love & Acceptance","url":"https://spreadloveandacceptance.com/","logo":{"@type":"ImageObject","url":"https://spreadloveandacceptance.com/assets/img/logo-stacked.png"}},"isPartOf":{"@type":"WebSite","@id":"https://spreadloveandacceptance.com/#website","name":"Spread Love & Acceptance","url":"https://spreadloveandacceptance.com/"},"datePublished":"2026-10-07","dateModified":"2026-10-07","image":"https://spreadloveandacceptance.com/assets/img/og-image.png","primaryImageOfPage":{"@type":"ImageObject","url":"https://spreadloveandacceptance.com/assets/img/og-image.png"},"@type":"WebPage"},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Spread Love & Acceptance","item":"https://spreadloveandacceptance.com/"},{"@type":"ListItem","position":2,"name":"Leading a group: a six-session guide","item":"https://spreadloveandacceptance.com/groups.html"}]}]}</script>
 <!-- seo:end -->
 </head>
-<body data-no-offer data-no-tip data-no-learnplay data-no-cheer data-no-buddies data-no-pupvisits data-no-brain-break data-no-pillars data-no-clip>
+<body data-no-offer data-no-tip data-no-learnplay data-no-cheer data-no-buddies data-no-pupvisits data-no-brain-break data-no-pillars data-no-clip data-no-pudcards>
 <main class="read">
 <header class="read-head"><p class="read-code">For groups</p><h1>Leading a group: a six-session guide</h1></header>
 
@@ -143,8 +150,8 @@
   <li>Take home: 5 minutes</li>
 </ul>
 <p>You won’t get through every question, and you don’t need to. Pick the two or three that fit your group.</p>
-<p><strong>What you need.</strong> This page on a phone or tablet, pens and paper, and a printer if you have one (optional). You can also show a handout on a screen, or send people the link.</p>
-<p><strong>The handouts.</strong> Each session has a one-page handout with three key ideas, the discussion questions and one small practice for the week. Hand it out at the end, so people can take the practice home. Use <em>Print all handouts</em> for the whole series, or <em>Print this handout</em> under any session.</p>
+<p><strong>What you need.</strong> This page on a phone or tablet, pens and paper, and a printer if you have one (optional). You can also show a handout on a screen, or send people the link. To show a page on a projector or a TV, add <code>?work=1</code> to the end of any link on this site (for example, <code>spreadloveandacceptance.com/groups.html?work=1</code>). You get the plain version, with no cartoons.</p>
+<p><strong>The handouts.</strong> Each session has a one-page handout with three key ideas, the discussion questions and one small practice for the week. Hand it out at the end, so people can take the practice home. Use <em>Print all handouts</em> for the whole series, or <em>Print this handout</em> under any session. To print just the outline of one session for yourself, use <em>Print this session (leader copy)</em>.</p>
 <p><strong>The six sessions.</strong></p>
 <ol class="gr-toc">
   <li><a href="#session-1">Turning toward the small moments</a></li>
@@ -158,13 +165,13 @@
 
 <h2 id="safe">Before you start: keeping the group safe</h2>
 <p>Read these ground rules aloud at the first session, and remind people briefly each week.</p>
-<ul class="gr-rules">
+<ul class="gr-rules" data-keep-steps>
   <li><strong>No one has to share.</strong> Listening is taking part.</li>
   <li><strong>Talk about yourself, not your partner.</strong> Say “I” and “me.” Nobody is here to be talked about.</li>
   <li><strong>What’s said here stays here.</strong> Stories belong to the people who told them.</li>
   <li><strong>Passing is always fine.</strong> “Pass” is a full answer, and nobody asks why.</li>
 </ul>
-<div class="gr-say">
+<div class="gr-say" data-keep-steps>
 <p class="gr-h-label">A short note to read out</p>
 <p>“The ideas in this series are for two people who are both safe. If anyone here is afraid of a partner, please don’t try these at home. They aren’t made for that, and it isn’t your fault. There is a page on the site called <em>Not safe at home?</em>, and in the US the National Domestic Violence Hotline is free and open any time: call 1-800-799-7233, or text START to 88788.”</p>
 <p class="gr-links">On the site: <a href="/safety.html">Not safe at home?</a> · Call <a href="tel:18007997233">1-800-799-7233</a> · Text START to <a href="sms:88788">88788</a></p>
@@ -177,6 +184,17 @@
   <li>If someone tells you they are afraid at home, listen and believe them. Point them to <a href="/safety.html">Not safe at home?</a> and the hotline, rather than to the tools here.</li>
   <li>You are a host, not a counselor. It helps to know a local counselor or pastor you can suggest when something needs more than a group.</li>
 </ul>
+<div class="gr-say" id="worried">
+<p class="gr-h-label">When you’re worried about a couple</p>
+<p>Sometimes you notice something: one person looks afraid, checks with their partner before they speak, or is never allowed to come alone. If that happens:</p>
+<ul>
+  <li><strong>Talk to the person alone, in private.</strong> A quiet “How are things at home?” at a moment when their partner is not nearby. Never raise it in front of their partner.</li>
+  <li><strong>Don’t confront the partner you are worried about.</strong> It can make things more dangerous for the person at home.</li>
+  <li><strong>Skip couples exercises for them.</strong> Couples activities and couples counseling are not advised where one person controls the other. Offer everyone the “on your own” version, so nobody has to explain.</li>
+  <li><strong>Keep the hotline number with you:</strong> <a href="tel:18007997233">1-800-799-7233</a>, or text START to <a href="sms:88788">88788</a>. Outside the US: <a href="https://findahelpline.com/" rel="noopener">findahelpline.com</a>.</li>
+  <li><strong>Know a local domestic violence advocate</strong> before you need one. The hotline can tell you who is near you.</li>
+</ul>
+</div>
 
 <section class="gr-session" id="session-1" aria-labelledby="session-1-h">
 <h2 id="session-1-h">Session 1: Turning toward the small moments</h2>
@@ -201,7 +219,7 @@
 </ol>
 <h3>Take home <span class="gr-time">5 minutes</span></h3>
 <p class="gr-take">Each day this week, catch one small “look at this” and turn toward it. Once this week, thank someone for one specific thing, and tell them what it meant to you.</p>
-<div class="gr-row no-bubble"><button type="button" class="gr-btn is-soft" data-gr-print="1">Print this handout</button><a href="#handout-1">See the handout</a></div>
+<div class="gr-row no-bubble"><button type="button" class="gr-btn is-soft" data-gr-print="1">Print this handout</button><button type="button" class="gr-btn is-soft" data-gr-print-session="1">Print this session (leader copy)</button><a href="#handout-1">See the handout</a></div>
 </section>
 
 <section class="gr-session" id="session-2" aria-labelledby="session-2-h">
@@ -227,7 +245,7 @@
 </ol>
 <h3>Take home <span class="gr-time">5 minutes</span></h3>
 <p class="gr-take">Ask someone for twenty minutes at a set time this week, for one small topic. Use the order: one fact and how it landed, say it back, “Did I get that?”, then swap.</p>
-<div class="gr-row no-bubble"><button type="button" class="gr-btn is-soft" data-gr-print="2">Print this handout</button><a href="#handout-2">See the handout</a></div>
+<div class="gr-row no-bubble"><button type="button" class="gr-btn is-soft" data-gr-print="2">Print this handout</button><button type="button" class="gr-btn is-soft" data-gr-print-session="2">Print this session (leader copy)</button><a href="#handout-2">See the handout</a></div>
 </section>
 
 <section class="gr-session" id="session-3" aria-labelledby="session-3-h">
@@ -253,7 +271,7 @@
 </ol>
 <h3>Take home <span class="gr-time">5 minutes</span></h3>
 <p class="gr-take">Ask one person: “What made you feel most cared for this week?” Listen to the whole answer, and write down the moment, not the category. Then offer one thing from their menu.</p>
-<div class="gr-row no-bubble"><button type="button" class="gr-btn is-soft" data-gr-print="3">Print this handout</button><a href="#handout-3">See the handout</a></div>
+<div class="gr-row no-bubble"><button type="button" class="gr-btn is-soft" data-gr-print="3">Print this handout</button><button type="button" class="gr-btn is-soft" data-gr-print-session="3">Print this session (leader copy)</button><a href="#handout-3">See the handout</a></div>
 </section>
 
 <section class="gr-session" id="session-4" aria-labelledby="session-4-h">
@@ -280,7 +298,7 @@
 <h3>Take home <span class="gr-time">5 minutes</span></h3>
 <p class="gr-take">On a calm day, ask someone: “When I’ve upset you, what helps most?” Tell them yours. If you owe a small apology, offer it in three parts, then ask: “Did that cover it?”</p>
 <p class="gr-note">An apology is not a fix for someone who keeps hurting you, or who uses “sorry” to end your say. If that is happening, see <a href="/safety.html">Not safe at home?</a></p>
-<div class="gr-row no-bubble"><button type="button" class="gr-btn is-soft" data-gr-print="4">Print this handout</button><a href="#handout-4">See the handout</a></div>
+<div class="gr-row no-bubble"><button type="button" class="gr-btn is-soft" data-gr-print="4">Print this handout</button><button type="button" class="gr-btn is-soft" data-gr-print-session="4">Print this session (leader copy)</button><a href="#handout-4">See the handout</a></div>
 </section>
 
 <section class="gr-session" id="session-5" aria-labelledby="session-5-h">
@@ -307,7 +325,7 @@
 <h3>Take home <span class="gr-time">5 minutes</span></h3>
 <p class="gr-take">On a calm day, agree a pause line with someone at home, including a return time. Practice the breathing once a day: in for 4, out for 6, for one minute.</p>
 <p class="gr-note">This is for two people who are both safe and both upset. If one person is afraid of the other, a pause line is not the answer. See <a href="/safety.html">Not safe at home?</a></p>
-<div class="gr-row no-bubble"><button type="button" class="gr-btn is-soft" data-gr-print="5">Print this handout</button><a href="#handout-5">See the handout</a></div>
+<div class="gr-row no-bubble"><button type="button" class="gr-btn is-soft" data-gr-print="5">Print this handout</button><button type="button" class="gr-btn is-soft" data-gr-print-session="5">Print this session (leader copy)</button><a href="#handout-5">See the handout</a></div>
 </section>
 
 <section class="gr-session" id="session-6" aria-labelledby="session-6-h">
@@ -317,6 +335,7 @@
 <p>What is one job you do that nobody sees, at home, at work, in your family or in your community? Go around the room. Anyone can pass.</p>
 <h3>Read together <span class="gr-time">5 minutes</span></h3>
 <div class="gr-read"><p>Every moment has three rings. In the middle is what you control: your words, your effort, your tone, your rest and what you ask for. Around it is what you can influence: you can ask and offer, and the other person still chooses. Outside is what isn’t yours: their mood, their pace, whether they agree. Matching energy means matching care and effort, never volume or meanness: if someone gets loud, you don’t have to get loud.</p><p>At home, much of the effort is invisible: the noticing, remembering, planning and checking. Making it visible, then giving each job one owner, is kinder than arguing about who does more.</p>
+<p><strong>The circle of control, in short.</strong> Most tiredness comes from pouring energy into the outer ring. Your energy is a budget, and quiet resentment or a silent scorecard are signs you are giving more than you have. To match energy kindly: notice the pattern, name it once without blame, adjust your own side, and see what comes back. If you are afraid of someone, none of this applies; see <a href="/safety.html">Not safe at home?</a></p>
 <p class="gr-links">On the site: <a href="/book/self-2-now-in-depth.html#control">Your circle of control, and matching energy</a> · <a href="/invisible-labor-mental-load.html#examples">Invisible labor: everyday examples</a> · <a href="/share-the-load.html">Share the load, step by step</a> · <a href="/chore-chart-for-couples.html#chart">The free printable chore chart</a></p></div>
 <h3>Try it <span class="gr-time">15 minutes</span></h3>
 <div class="gr-try"><p><strong>Three rings (5 minutes, on your own).</strong> Draw three circles, one inside the other. Write what is weighing on you this week in the right ring: in your hands, yours to influence, or not yours. Notice where most of your energy is going.</p>
@@ -325,14 +344,14 @@
 <ol class="gr-qs">
   <li>Which ring takes most of your energy? Which ring do you wish it went to?</li>
   <li>“Match care and effort, never volume.” What does that look like when someone is loud, or going through a hard time?</li>
-  <li>When is it right to give more than you get for a season? How do you know it is still a choice?</li>
+  <li>When is it right to give more than you get for a season? How do you know it is still a choice?<br><em class="gr-note">Leader note: this question could land badly for someone who is being controlled at home. If you are unsure about anyone in the room, skip it.</em></li>
   <li>Which invisible jobs surprised you when you wrote out every step?</li>
   <li>Why might “I do most of the work” and “But I help a lot” both be true?</li>
   <li>Looking back over the six sessions, which small practice do you want to keep?</li>
 </ol>
 <h3>Take home <span class="gr-time">5 minutes</span></h3>
 <p class="gr-take">Write down the three household jobs that cause the most friction, with every step of each. Talk them over at a calm time, and agree one owner per job, start to finish, thinking part included.</p>
-<div class="gr-row no-bubble"><button type="button" class="gr-btn is-soft" data-gr-print="6">Print this handout</button><a href="#handout-6">See the handout</a></div>
+<div class="gr-row no-bubble"><button type="button" class="gr-btn is-soft" data-gr-print="6">Print this handout</button><button type="button" class="gr-btn is-soft" data-gr-print-session="6">Print this session (leader copy)</button><a href="#handout-6">See the handout</a></div>
 </section>
 
 <h2 id="handouts">Printable handouts</h2>
@@ -500,8 +519,11 @@
 (function () {
   'use strict';
   var root = document.documentElement, msg = document.querySelector('.gr-msg');
+  var sessionClasses = ['gr-print-session', 'gr-print-s1', 'gr-print-s2', 'gr-print-s3', 'gr-print-s4', 'gr-print-s5', 'gr-print-s6'];
+  function clearSession() { sessionClasses.forEach(function (c) { root.classList.remove(c); }); }
   function clear() {
     root.classList.remove('gr-printing');
+    clearSession();
     document.querySelectorAll('.gr-handout').forEach(function (h) { h.classList.remove('is-print', 'is-first'); });
   }
   // Mark which handout(s) to print; "all" or a session number. Exposed so it can be tested without a print dialog.
@@ -518,6 +540,26 @@
   }
   window.grChooseHandouts = choose;
   window.addEventListener('afterprint', clear);
+  // Leader copy: one session's outline only. A class on <html> names the session; the print styles do the rest.
+  function chooseSession(n) {
+    clear();
+    if (!document.getElementById('session-' + n)) return false;
+    root.classList.add('gr-print-session', 'gr-print-s' + n);
+    return true;
+  }
+  window.grChooseSession = chooseSession;
+  document.addEventListener('click', function (e) {
+    var s = e.target.closest('[data-gr-print-session]'); if (!s) return;
+    var n = s.getAttribute('data-gr-print-session');
+    if (!chooseSession(n)) return;
+    if (typeof window.print !== 'function') {
+      clearSession();
+      if (msg) msg.textContent = 'This browser can’t print from the page. Try your browser’s Share or Print menu.';
+      return;
+    }
+    if (msg) msg.textContent = 'Opening the print dialog for the session ' + n + ' leader copy.';
+    window.print();
+  });
   document.addEventListener('click', function (e) {
     var b = e.target.closest('[data-gr-print]'); if (!b) return;
     var which = b.getAttribute('data-gr-print');

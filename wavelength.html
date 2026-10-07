@@ -8,7 +8,7 @@
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
 
-  gtag('config', 'G-NKC6CQ9S66');
+  gtag('config', 'G-NKC6CQ9S66', { page_location: location.origin + location.pathname }); // the address only: never a ?query or #part
 </script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -70,6 +70,13 @@
   .wl-app .wl-btn.ghost { background: var(--wl-card); color: var(--wl-ink); border-color: var(--wl-line); }
   .wl-app .wl-nav { display: flex; justify-content: space-between; gap: 12px; margin-top: 24px; flex-wrap: wrap; }
   .wl-app .wl-nav-quiet { margin-top: 8px; justify-content: flex-end; }
+  /* Back and Continue stay in view at the bottom while you scroll through a long list of options */
+  .wl-app .wl-nav.wl-nav-sticky { position: sticky; bottom: 0; z-index: 5; margin-top: 16px; padding: 10px 12px calc(10px + env(safe-area-inset-bottom, 0px));
+    background: var(--paper, #F5EFDE); border-top: 1.5px solid var(--wl-line); border-radius: 16px 16px 0 0; box-shadow: 0 -6px 14px rgba(33,29,23,.08); }
+  @media (max-width: 700px) {
+    .wl-app .wl-nav.wl-nav-sticky { margin: 16px -16px 0; padding-left: 16px; padding-right: 16px; border-radius: 0; flex-wrap: nowrap; }
+    .wl-app .wl-nav.wl-nav-sticky .wl-btn { flex: 1 1 0; padding-left: 12px; padding-right: 12px; }
+  }
   .wl-app .wl-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 12px; }
   .wl-app .wl-linkbtn { background: none; border: 0; padding: 8px 0; min-height: 44px; color: var(--wl-wave); text-decoration: underline; text-underline-offset: 3px; cursor: pointer; font-size: .97rem; text-align: left; }
   .wl-app input[type=text], .wl-app textarea { width: 100%; font: inherit; padding: 12px 14px; border: 1.5px solid var(--wl-line); border-radius: 12px; background: var(--wl-card); color: var(--wl-ink); }
@@ -256,9 +263,9 @@
 <body class="wl-page">
 <main class="read wl-page" id="main">
 <header class="read-head"><p class="read-code">Know yourself</p><h1>Wavelength: how you think, talk and listen</h1></header>
-<p class="simple-lede">Wavelength helps you understand how you think and how you communicate, both giving and receiving. Pick your wiring if you like, tap through four short parts, and get your four-letter Wave Code and archetype. Then read sixteen self-discovery chapters written for your answers, explore how the nine inputs of learning connect, and build a warm personal statement to share.</p>
+<p class="simple-lede">Wavelength helps you understand how you think and how you communicate, both giving and receiving. Pick your wiring if you like, tap through seven short parts (the last one is optional), and get your four-letter Wave Code and archetype. Then read sixteen self-discovery chapters written for your answers, explore how the nine inputs of learning connect, and build a warm personal statement to share.</p>
 <div class="try-this" data-in-short>
-  <p><strong>How it works:</strong> Mostly tapping, about ten minutes. Your wiring step is optional and you can select more than one. Every part shows options that are common for the wiring you picked, and you can open the rest anytime. Wavelength replaces Your Heartprint: the personal statement and its “Things you might not have noticed” are now Part 7.</p>
+  <p><strong>How it works:</strong> Seven short parts, mostly tapping, about ten minutes in all. The last part, your statement, is optional. Your wiring step is optional and you can select more than one. Every part shows options that are common for the wiring you picked, and you can open the rest anytime. Wavelength replaces Your Heartprint: the personal statement and its “Things you might not have noticed” are now Part 7.</p>
   <p>Nothing you type or choose is sent anywhere. Your answers and journal stay on this device only if you tick the box, and “Erase everything” removes them.</p>
 </div>
 <div class="wl-app no-bubble" data-wavelength aria-live="polite"><noscript><p>Wavelength needs JavaScript to build your Wave Code. The guide below explains every letter and archetype.</p></noscript></div>

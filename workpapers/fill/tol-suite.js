@@ -50,7 +50,7 @@
 
   /* ------------------------------------------------------------ state (in memory only) */
 
-  var S = { path: null, names: ['', ''], stops: [], dirty: false, view: 'steps' };
+  var S = { path: null, variant: null, names: ['', ''], stops: [], dirty: false, view: 'steps' };
   var uid = 0, keep = false, keepTimer = null;
 
   // "Just me" is one person, on their own. Every other road has at least two.
@@ -139,9 +139,12 @@
   function sig(en) { return en.workpaper + '|' + (en.label || '') + '|' + JSON.stringify(en.state.values) + '|' + JSON.stringify(en.state.tables); }
 
   // Lay out the stops for a road, carrying over any sheets already filled in.
-  function setPath(id) {
+  // variant: the road's other way in ("flat" on Partners), or nothing for the road as it is.
+  function setPath(id, variant) {
     var p = pathById(id);
     if (!p) return;
+    if (PATHS.variant) p = PATHS.variant(p, variant);
+    S.variant = p.variant || null;
     // (what counts as filled in is read on the road the sheet was filled in on)
     var pool = {};
     S.stops.forEach(function (st) { st.entries.forEach(function (en) { if (filled(en) || en.label) (pool[en.workpaper] = pool[en.workpaper] || []).push(en); }); });
@@ -152,7 +155,7 @@
     S.stops = [];
     p.groups.forEach(function (g, gi) {
       g.stops.forEach(function (s, si) {
-        S.stops.push({ key: gi + '-' + si, wp: s.wp, why: s.why, again: s.again, group: g.title, groupNote: g.note, along: g.along || [], gi: gi, entries: [] });
+        S.stops.push({ key: gi + '-' + si, wp: s.wp, why: s.why, again: s.again, optional: !!s.optional, group: g.title, groupNote: g.note, along: g.along || [], reads: g.reads || [], gi: gi, entries: [] });
       });
     });
     // Hand earlier sheets back out: one per stop for that workpaper, extra ones to its last stop.
@@ -211,6 +214,36 @@
       b.style.setProperty('--c', p.color);
       box.appendChild(b);
     });
+    renderFocus();
+  }
+
+  // "What brings you here?" on a road that has another way in (Partners: unfair, or fine but flat).
+  // It changes the order, the first stops and which sheets are optional; the sheets themselves stay.
+  function renderFocus() {
+    var box = $('ws-focus');
+    if (!box) {
+      var paths = $('ws-paths');
+      if (!paths) return;
+      box = h('div', { className: 'ws-focus', id: 'ws-focus', hidden: true });
+      paths.parentNode.insertBefore(box, paths.nextSibling);
+    }
+    var base = S.path ? (S.path.base || S.path) : null;
+    box.innerHTML = '';
+    if (!base || !base.variants) { box.hidden = true; return; }
+    box.hidden = false;
+    var qid = 'ws-focus-q';
+    box.appendChild(h('p', { className: 'ws-focus-q', id: qid, text: base.ask || 'What brings you here?' }));
+    var row = h('div', { className: 'ws-focus-row', role: 'radiogroup', 'aria-labelledby': qid });
+    var choices = [['', base.main || { label: base.label }]].concat(Object.keys(base.variants).map(function (k) { return [k, base.variants[k]]; }));
+    choices.forEach(function (c) {
+      var on = (S.variant || '') === c[0];
+      row.appendChild(h('button', { type: 'button', className: 'ws-focus-b' + (on ? ' is-on' : ''), role: 'radio', 'aria-checked': on ? 'true' : 'false', tabindex: on ? '0' : '-1', 'data-focus': c[0] }, [
+        h('span', { className: 'ws-focus-t', text: c[1].label })
+      ]));
+    });
+    box.appendChild(row);
+    var cur = choices.filter(function (c) { return (S.variant || '') === c[0]; })[0];
+    if (cur && cur[1].note) box.appendChild(h('p', { className: 'ws-focus-note', text: cur[1].note }));
   }
 
   var namesQ = null, namesNote = null, reportAbout = null; // the page's own words, for the roads with more people
@@ -409,7 +442,9 @@
   function snapshot() {
     var entries = [];
     S.stops.forEach(function (st) { st.entries.forEach(function (en) { if (filled(en) || en.label) entries.push({ workpaper: en.workpaper, label: en.label, stop: st.key, person: typeof en.person === 'number' ? en.person : undefined, state: en.state }); }); });
-    return { format: SUITE_FORMAT, version: 1, path: S.path ? S.path.id : null, names: S.names.slice(), saved: new Date().toISOString(), entries: entries };
+    var out = { format: SUITE_FORMAT, version: 1, path: S.path ? S.path.id : null, names: S.names.slice(), saved: new Date().toISOString(), entries: entries };
+    if (S.variant) out.variant = S.variant;
+    return out;
   }
   function changed() {
     S.dirty = true;
@@ -464,7 +499,7 @@
     var groups = [];
     S.stops.forEach(function (st) {
       var g = groups.filter(function (x) { return x.title === st.group; })[0];
-      if (!g) { g = { title: st.group, note: st.groupNote, along: st.along || [], stops: [] }; groups.push(g); }
+      if (!g) { g = { title: st.group, note: st.groupNote, along: st.along || [], reads: st.reads || [], stops: [] }; groups.push(g); }
       g.stops.push(st);
     });
     var n = 0;
@@ -477,6 +512,20 @@
         li.appendChild(al);
       }
       var ol = h('ol', { className: 'ws-stops' });
+      // pages to read or try first, before any sheet (a road's variant can start this way)
+      (g.reads || []).forEach(function (r) {
+        n++;
+        var rd = h('li', { className: 'ws-stop is-reading' });
+        rd.style.setProperty('--c', ['#F7CAD4', '#EBDDF6', '#CFE6D2', '#F8E7AE', '#D8E4F4', '#F9D9B8'][(n - 1) % 6]);
+        rd.appendChild(h('span', { className: 'ws-dot', 'aria-hidden': 'true' }, [h('span', { text: String(n) })]));
+        rd.appendChild(h('div', { className: 'ws-stop-body' }, [
+          h('p', { className: 'ws-stop-code', text: 'Read or try' }),
+          h('h3', { className: 'ws-stop-name', text: r[0] }),
+          r[2] ? h('p', { className: 'ws-stop-why', text: r[2] }) : null,
+          h('a', { className: 'ws-read', href: r[1], text: 'Open ' + r[0] + ' \u2192' })
+        ]));
+        ol.appendChild(rd);
+      });
       g.stops.forEach(function (st) {
         n++;
         var sc = schema(st.wp), done = st.entries.filter(filled).length, entries = st.entries.length ? st.entries : [null];
@@ -484,7 +533,7 @@
         stop.style.setProperty('--c', ['#F7CAD4', '#EBDDF6', '#CFE6D2', '#F8E7AE', '#D8E4F4', '#F9D9B8'][(n - 1) % 6]);
         stop.appendChild(h('span', { className: 'ws-dot', 'aria-hidden': 'true' }, [h('span', { text: done ? '♥' : String(n) })]));
         var body = h('div', { className: 'ws-stop-body' }, [
-          h('p', { className: 'ws-stop-code', text: st.wp + (done ? ' · ' + done + (done === 1 ? ' sheet filled' : ' sheets filled') : '') }),
+          h('p', { className: 'ws-stop-code' }, [st.wp + (done ? ' · ' + done + (done === 1 ? ' sheet filled' : ' sheets filled') : ''), st.optional ? ' ' : null, st.optional ? h('span', { className: 'ws-optional', text: 'Optional' }) : null]),
           h('h3', { className: 'ws-stop-name', text: SP.nameOf(st.wp) }),
           h('p', { className: 'ws-stop-why', text: st.why }),
           PATHS.read && PATHS.read[st.wp] ? h('a', { className: 'ws-read', href: PATHS.read[st.wp], text: 'Read about ' + st.wp + ' first \u2192' }) : null
@@ -889,7 +938,7 @@
         try { d = JSON.parse(txt); } catch (e) { problems.push(f.name + " isn't a draft or suite file"); return; }
         if (d && d.format === SUITE_FORMAT && Array.isArray(d.entries)) {
           var other = differentRoad(d.path);
-          if (d.path && pathById(d.path) && !S.path) setPath(d.path);
+          if (d.path && pathById(d.path) && !S.path) setPath(d.path, typeof d.variant === 'string' ? d.variant : null);
           if (!other && Array.isArray(d.names) && !S.names.some(function (x) { return String(x || '').trim(); })) {
             S.names = d.names.slice(0, MAX_PEOPLE).map(function (x) { return String(x || ''); });
             fitNames();
@@ -969,7 +1018,8 @@
     var groups = [];
     S.stops.forEach(function (st) {
       var g = groups.filter(function (x) { return x.title === st.group; })[0];
-      if (!g) { g = { title: st.group, note: st.groupNote, along: st.along || [], entries: [] }; groups.push(g); }
+      // pages to read first (a variant's first stops) go in the PDF's reading list for that group, first
+      if (!g) { g = { title: st.group, note: st.groupNote, along: (st.reads || []).map(function (r) { return [r[0], r[1]]; }).concat(st.along || []), entries: [] }; groups.push(g); }
       var list = st.entries.length ? st.entries.slice() : [];
       if (perPerson(st.wp)) {
         // a sheet for everyone: their own, or a blank one with their name on it
@@ -1054,8 +1104,8 @@
 
   function clearAll() {
     if (!global.confirm('Clear everything on this page? Anything you haven\'t saved as a PDF or suite file will be gone.')) return;
-    S = { path: S.path, names: ['', ''], stops: [], dirty: false, view: S.view || 'steps' };
-    if (S.path) setPath(S.path.id); else { renderNames(); renderRoad(); }
+    S = { path: S.path, variant: S.variant, names: ['', ''], stops: [], dirty: false, view: S.view || 'steps' };
+    if (S.path) setPath(S.path.id, S.variant); else { renderNames(); renderRoad(); }
     if (keep) eraseKept('Cleared, and the draft kept on this device is erased. Nothing you typed remains.');
     else say('Cleared. Nothing you typed remains on the page.');
   }
@@ -1069,12 +1119,13 @@
     hhSetup();
     renderPaths();
     var q = (global.location.search.match(/[?&]road=([a-z]+)/) || [])[1];
+    var qf = (global.location.search.match(/[?&]focus=([a-z]+)/) || [])[1] || null;
     var kept = readKept();
     if (kept) {
       // Pick up the draft kept on this device (the person turned this on earlier)
       keep = true;
       if ($('ws-keep')) $('ws-keep').checked = true;
-      if (kept.path && pathById(kept.path)) setPath(kept.path);
+      if (kept.path && pathById(kept.path)) setPath(kept.path, typeof kept.variant === 'string' ? kept.variant : null);
       if (Array.isArray(kept.names)) { S.names = kept.names.slice(0, MAX_PEOPLE).map(function (x) { return String(x || ''); }); fitNames(); }
       kept.entries.forEach(function (x) {
         var sc = x && schema(x.workpaper);
@@ -1087,7 +1138,7 @@
       renderNames(); renderRoad();
       S.dirty = false;
       say('Picked up the draft kept on this device. Press “Erase” to remove it.');
-    } else if (q && pathById(q)) setPath(q); else renderRoad();
+    } else if (q && pathById(q)) setPath(q, qf); else renderRoad();
 
     $('ws-names').addEventListener('input', function (e) {
       var i = e.target.getAttribute('data-name');
@@ -1109,8 +1160,8 @@
     $('ws-paths').addEventListener('click', function (e) {
       var b = e.target.closest('[data-path]');
       if (!b) return;
-      var had = S.path;
-      setPath(b.getAttribute('data-path'));
+      var had = S.path, id = b.getAttribute('data-path');
+      setPath(id, had && had.id === id ? S.variant : null);
       changed();
       // keep the names and the summary in view; step 2 (your fillable PDF) sits right below them
       if (!had) setTimeout(function () { var t = $('ws-summary'); if (t && t.scrollIntoView) t.scrollIntoView({ behavior: reduced ? 'auto' : 'smooth', block: 'nearest' }); }, 60);
@@ -1124,6 +1175,29 @@
       bs[(i + (e.key === 'ArrowRight' || e.key === 'ArrowDown' ? 1 : bs.length - 1)) % bs.length].focus();
     });
 
+    // "What brings you here?": the same road, in the order that fits
+    var focusBox = $('ws-focus');
+    if (focusBox) {
+      focusBox.addEventListener('click', function (e) {
+        var b = e.target.closest('[data-focus]');
+        if (!b || !S.path) return;
+        var key = b.getAttribute('data-focus') || null;
+        if ((S.variant || null) === key) return;
+        setPath(S.path.id, key);
+        changed();
+        var nb = $('ws-focus').querySelector('[data-focus="' + (key || '') + '"]');
+        if (nb) nb.focus();
+        var first = S.stops[0];
+        say('Your road is set for: ' + b.textContent + '. ' + (S.path.groups[0] && S.path.groups[0].reads && S.path.groups[0].reads.length ? 'It starts with ' + S.path.groups[0].reads.map(function (r) { return r[0]; }).join(', ') + ', then ' + SP.nameOf(first.wp) + '.' : 'It starts with ' + SP.nameOf(first.wp) + '.'));
+      });
+      focusBox.addEventListener('keydown', function (e) {
+        if (['ArrowRight', 'ArrowDown', 'ArrowLeft', 'ArrowUp'].indexOf(e.key) < 0) return;
+        var bs = Array.prototype.slice.call(this.querySelectorAll('[data-focus]')), i = bs.indexOf(document.activeElement);
+        if (i < 0) return;
+        e.preventDefault();
+        bs[(i + (e.key === 'ArrowRight' || e.key === 'ArrowDown' ? 1 : bs.length - 1)) % bs.length].click();
+      });
+    }
     $('ws-view').addEventListener('click', function (e) {
       var b = e.target.closest('[data-view]'); if (!b) return;
       S.view = b.getAttribute('data-view'); renderRoad();

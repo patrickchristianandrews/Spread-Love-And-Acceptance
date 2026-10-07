@@ -43,6 +43,8 @@
       { href: '/safety.html', code: 'New', title: 'Not safe at home?', note: 'Free hotlines, a quick way to leave this site, and how to clear what it keeps' },
       { href: '/work.html', code: 'New', title: 'At work', note: 'The plain version for teams: one owner per job, messages that land, appreciation, and a 45-minute team session' },
       { href: '/grief.html', code: 'New', title: 'Grief and later life', note: 'Loss, family after a loss, reconnecting, and starting a new chapter, with places to get help' },
+      { href: '/caregivers.html', code: 'New', title: 'Caring for someone you love', note: 'When they can’t share the load back, who else can help, and where to find respite' },
+      { href: '/en-espanol.html', code: 'New', title: 'En español', note: 'Pasos cortos para cuando los hijos pelean, cuando estás muy enojado, y si no estás a salvo en casa' },
       { href: '/groups.html', code: 'New', title: 'Leading a group', note: 'A free six-session guide with discussion questions and one-page handouts' },
       { href: '/parents.html', code: 'New', title: 'For parents', note: 'Big feelings, siblings who fight, calm-down routines, teens, and watching the pups together' },
       { href: '/teens.html', code: 'New', title: 'For teens', note: 'Parents, friends, feelings and dating, written for you, with places to get help' },
@@ -268,6 +270,8 @@
       { href: '/grandparents.html', title: 'For grandparents', note: 'Help with the grandkids without taking over' },
       { href: '/work.html', code: 'New', title: 'At work', note: 'The plain version for teams, with no cartoons' },
       { href: '/grief.html', code: 'New', title: 'Grief and later life', note: 'Loss, family after a loss, and a new chapter' },
+      { href: '/caregivers.html', code: 'New', title: 'Caring for someone you love', note: 'When they can’t share the load back' },
+      { href: '/en-espanol.html', code: 'New', title: 'En español', note: 'Una página corta en español' },
       { href: '/neurodivergent-relationships.html', code: 'Guide', title: 'Neurodivergent relationships', note: 'Tips for ADHD and autistic couples and families' }
     ]},
     { id: 'load', name: 'Share the load', title: 'Share the load', blurb: 'Split the work at home fairly, step by step. What you type stays on your device.', items: [
@@ -633,7 +637,7 @@
   }
   // the last few pages opened here, for "Pick up where you left off" (this browser only; it can be switched off or erased)
   function rememberPage(body) {
-    if (lsGet('tol-recent-off') || /^\/(index|404|offline|garden-backdrop|pal-cam-tv|on-this-device|membership|safety|ask)\.html$|^\/legal\//.test(current) || location.search.indexOf('palcam-pop') !== -1) return;
+    if (lsGet('tol-recent-off') || /^\/(index|404|offline|garden-backdrop|pal-cam-tv|on-this-device|membership|safety|ask|teens|upset-right-now)\.html$|^\/legal\//.test(current) || location.search.indexOf('palcam-pop') !== -1) return;
     var h1 = document.querySelector('main h1');
     var t = (here && here.title) || (h1 && h1.textContent.replace(/\s+/g, ' ').trim()) || document.title.replace(/\s*[·|–—-]\s*(Spread Love|The Objective Ledger).*$/, '');
     if (!t) return;
@@ -844,7 +848,7 @@
     var lmain = document.querySelector('main');
     // "In short" bullets on the long pages, and "Show me only the steps" (in-short.js)
     if (lmain && !busyPage() && current !== '/index.html' && !document.querySelector('meta[http-equiv="Content-Security-Policy"]') &&
-        (inDepth || /^\/library/.test(current) || (lmain.textContent || '').split(/\s+/).length > 1200) && !/^\/workpapers\//.test(current)) {
+        (inDepth || /^\/library/.test(current) || (lmain.textContent || '').split(/\s+/).length > 700) && !/^\/workpapers\//.test(current)) {
       var isc = document.createElement('script'); isc.src = '/assets/js/in-short.js'; document.head.appendChild(isc);
     }
 
@@ -893,6 +897,13 @@
     }
 
     // "Come back gently": a weekly reminder in the visitor's own calendar, wherever a page asks for one (remind.js)
+    // "Listen to this page": read aloud by the device's own voice (listen.js) on reading pages; it hides itself without a voice
+    if (document.querySelector('main.read') && !body.classList.contains('is-game') && !body.hasAttribute('data-no-listen') && 'speechSynthesis' in window &&
+        current !== '/index.html' && !document.querySelector('meta[http-equiv="Content-Security-Policy"]')) {
+      var lsn = document.createElement('script'); lsn.src = '/assets/js/listen.js';
+      lsn.onload = function () { if (window.TOLListen && window.TOLListen.mount) window.TOLListen.mount({}); };
+      document.head.appendChild(lsn);
+    }
     if (document.querySelector('.bt-switch')) { var btj = document.createElement('script'); btj.src = '/assets/js/book-topic.js'; document.head.appendChild(btj); }
     if (document.querySelector('[data-tol-remind]')) { var rmj = document.createElement('script'); rmj.src = '/assets/js/remind.js'; document.head.appendChild(rmj); }
 
@@ -1139,6 +1150,12 @@
     group: ['/groups.html', '/check-ins.html'], groups: 'group', leader: 'group', facilitator: 'group', church: 'group', class: 'group', discussion: 'group', curriculum: 'group', course: 'group',
     unheard: ['/check-ins.html', '/how-to-stop-fighting-with-your-partner.html', '/signal-translator.html'], ignored: 'unheard', dismissed: 'unheard',
     grief: ['/grief.html', '/library/emotions.html', '/grandparents.html', '/self-path.html'], retirement: ['/grief.html'], retired: 'retirement', retiring: 'retirement', reconnect: ['/grief.html'], reconnecting: 'reconnect', estranged: 'reconnect',
+    yelling: ['/parents.html', '/upset-right-now.html', '/wp-11.html'], yell: 'yelling', yelled: 'yelling', shouting: 'yelling', screaming: 'yelling',
+    dementia: ['/caregivers.html', '/library/stress.html', '/workpapers/wp-02-how-much-are-you-carrying.html'], alzheimers: 'dementia', alzheimer: 'dementia', respite: 'dementia', carer: 'dementia', carers: 'dementia', caregiver: 'dementia', caregivers: 'dementia', caregiving: 'dementia',
+    pronouns: ['/teens.html', '/safety.html'], lgbtq: 'pronouns', lgbt: 'pronouns', gay: 'pronouns', lesbian: 'pronouns', bisexual: 'pronouns', trans: 'pronouns', transgender: 'pronouns', nonbinary: 'pronouns', queer: 'pronouns',
+    harassment: ['/safety.html', '/co-parenting.html'], harassing: 'harassment', harass: 'harassment', cutting: ['/teens.html', '/safety.html'], selfharm: 'cutting',
+    espanol: ['/en-espanol.html'], spanish: 'espanol', 'español': 'espanol',
+    flat: ['/complacency.html', '/turning-toward.html', '/recheck-drive.html'], routine: 'flat',
     stepmom: ['/parents.html', '/co-parenting.html', '/teens.html'], stepmother: 'stepmom', stepdad: 'stepmom', stepfather: 'stepmom', stepparent: 'stepmom', stepparents: 'stepmom', stepkids: 'stepmom', stepchildren: 'stepmom', stepson: 'stepmom', stepdaughter: 'stepmom', blended: 'stepmom', stepfamily: 'stepmom', stepfamilies: 'stepmom',
     lonely: ['/library/connection.html', '/grief.html', '/turning-toward.html'], loneliness: 'lonely', alone: 'lonely', isolated: 'lonely',
     grown: ['/grief.html', '/grandparents.html'], adult: 'grown',
@@ -1306,7 +1323,8 @@
   var runSearch = function () {};
   // Leave quickly: any [data-tol-exit] button, or Esc pressed twice, swaps this tab for a weather search
   // (location.replace, so Back doesn't return here). Linked from the safety page, the menu and safety notes.
-  function quickExit() { try { sessionStorage.removeItem('tol-chat-v1'); } catch (e) {} location.replace('https://www.google.com/search?q=weather+today'); }
+  // it also forgets the chat and the pages remembered for "Pick up where you left off", so nothing shows on a shared device afterwards
+  function quickExit() { try { sessionStorage.removeItem('tol-chat-v1'); localStorage.removeItem('tol-recent'); } catch (e) {} location.replace('https://www.google.com/search?q=weather+today'); }
   document.addEventListener('click', function (e) { var b = e.target.closest && e.target.closest('[data-tol-exit]'); if (b) { e.preventDefault(); quickExit(); } });
   (function () {
     var last = 0, GAME = /^\/(frequency-journey(-play)?|bears-dojo|night-garden|pause-and-play|word-bloom|quiet-words|quiet-crossword|daily-ledger-crossword|re-check-drive|calm-visualizer|soundscapes)\.html$/;
@@ -1696,7 +1714,7 @@
   ];
   function buildPuddlesCards(body) {
     var main = document.querySelector('main.read');
-    if (!main || body.classList.contains('is-game') || sensitivePage() || /^\/(index|ask|whats-new|pause-and-play)\.html$/.test(current) ||
+    if (!main || body.classList.contains('is-game') || body.hasAttribute('data-no-pudcards') || workMode() || sensitivePage() || /^\/(index|ask|whats-new|pause-and-play)\.html$/.test(current) ||
         document.querySelector('meta[http-equiv="Content-Security-Policy"]')) return;
     var sec = body.getAttribute('data-sec') || '', course = /^\/(book|workpapers|learn)\//.test(current) || /^(book|workpapers|program|self|relationships|start|tools)$/.test(sec);
     if (!course) return;
@@ -1708,6 +1726,8 @@
     if (!open.length) return;
     var after = open[Math.min(open.length - 1, Math.max(0, Math.floor(open.length * 0.6)))];
     if (after.tagName === 'H2' && after.nextElementSibling && after.nextElementSibling !== gate) after = after.nextElementSibling;
+    // never between a lead-in paragraph and the list it introduces
+    while (after.tagName === 'P' && after.nextElementSibling && /^(UL|OL)$/.test(after.nextElementSibling.tagName)) after = after.nextElementSibling;
     var n = 0; for (var i = 0; i < current.length; i++) n = (n * 31 + current.charCodeAt(i)) % 997; // the same line on the same page
     var line = PUD_LINES[n % PUD_LINES.length];
     var card = el('aside', { class: 'tol-pud-card', 'aria-label': 'Chat with Professor Puddles' },
@@ -1764,7 +1784,7 @@
     var simpleHref = isFull ? other : here, fullHref = isFull ? here : other;
     var main = document.querySelector('main');
     var words = ((main && main.textContent) || '').split(/\s+/).length;
-    var mins = Math.max(1, Math.round(words / 200));
+    var mins = Math.max(1, Math.round(words / 230));
     var pref = lsGet('tol-depth-pref');
     function opt(kind, href, icon, name, what, who, time) {
       var cur = (kind === 'full') === isFull;
@@ -1793,8 +1813,9 @@
     // some pages fill in their cards after this runs, so count again once everything is on the page
     window.addEventListener('load', function () {
       setTimeout(function () {
-        var clone = main.cloneNode(true); Array.prototype.forEach.call(clone.querySelectorAll('.tol-depth, script, style, nav, .tol-trail, [aria-hidden="true"]'), function (n) { n.remove(); });
-        var n = Math.max(1, Math.round((clone.textContent || '').split(/\s+/).filter(Boolean).length / 200)), t = box.querySelector('.is-here .tol-depth-time');
+        // the page's own words only: not the cards, tips, breaks and helpers the site adds around them
+        var clone = main.cloneNode(true); Array.prototype.forEach.call(clone.querySelectorAll('.tol-depth, script, style, nav, .tol-trail, [aria-hidden="true"], .bkb, .tol-pud-card, .tol-tip, .tol-read, .tol-read-host, .tol-fbs, .tol-fp-note, .lp-card, .tol-cheer, .tol-listen, .tol-offer, .tol-private, .tol-pickup, .tol-inshort, .tol-pillars, .tol-work-note'), function (n) { n.remove(); });
+        var n = Math.max(1, Math.round((clone.textContent || '').split(/\s+/).filter(Boolean).length / 230)), t = box.querySelector('.is-here .tol-depth-time');
         if (t && n > mins && /min read/.test(t.textContent)) t.textContent = 'about ' + n + ' min read';
       }, 1200);
     });
@@ -3068,7 +3089,29 @@
   }
 
   // Read-only access for pages that need the page list (e.g. 404.html)
-  window.TOL = { sections: SECTIONS, menu: MENU, config: CONFIG, signUp: signUpFree, isMember: function () { return isMember; } };
+  // Erase everything this site keeps in this browser: every local and session storage key (only this site's own
+  // can be reached), the offline copies of pages, the service worker, and the analytics cookies. Used by
+  // "Erase everything" on the safety page and "What's stored on this device". opts.stopRemembering keeps one
+  // switch afterwards so the page list isn't started again.
+  function eraseAll(opts) {
+    opts = opts || {};
+    try { localStorage.clear(); } catch (e) {}
+    try { sessionStorage.clear(); } catch (e) {}
+    if (opts.stopRemembering) lsSet('tol-recent-off', '1');
+    // analytics cookies (_ga, _ga_XXXX), on this host and the parent domain
+    try {
+      var host = location.hostname, doms = ['', host, '.' + host.replace(/^www\./, '')];
+      document.cookie.split(';').forEach(function (c) {
+        var n = c.split('=')[0].trim(); if (!/^_ga/.test(n)) return;
+        doms.forEach(function (d) { document.cookie = n + '=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/' + (d ? '; domain=' + d : ''); });
+      });
+    } catch (e) {}
+    var jobs = [];
+    try { if (window.caches && caches.keys) jobs.push(caches.keys().then(function (ks) { return Promise.all(ks.map(function (k) { return caches.delete(k); })); })); } catch (e) {}
+    try { if (navigator.serviceWorker && navigator.serviceWorker.getRegistrations) jobs.push(navigator.serviceWorker.getRegistrations().then(function (rs) { return Promise.all(rs.map(function (r) { return r.unregister(); })); })); } catch (e) {}
+    return Promise.all(jobs).catch(function () {});
+  }
+  window.TOL = { sections: SECTIONS, menu: MENU, config: CONFIG, signUp: signUpFree, isMember: function () { return isMember; }, eraseAll: eraseAll };
 
   // ---------- Start ----------
   function start() {

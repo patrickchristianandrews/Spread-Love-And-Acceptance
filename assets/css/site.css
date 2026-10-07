@@ -2267,7 +2267,7 @@ html.tol-home .tol-pickup-host{ margin-top:.2rem; }
 .tol-steps-toggle button[aria-pressed="true"]{ background:#EAF6EF; border-color:#3E6B4C; }
 .tol-steps-toggle button:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
 .tol-steps-note{ font-size:.92rem; color:var(--ink-soft); }
-html.tol-only-steps main :is(p, ul, blockquote, figure, .tol-table-scroll, table, dl, details, aside, .scene, .tol-pud-card, .tol-cheer, .lp-card, pre):not(ol *, .try-this, .try-this *, .read-head, .read-head *, .tol-steps-toggle, .tol-inshort, .tol-inshort *, .tol-listen, .tol-listen *, .tol-depth, .tol-depth *){ display:none !important; }
+html.tol-only-steps main :is(p, ul, blockquote, figure, .tol-table-scroll, table, dl, details, aside, .scene, .tol-pud-card, .tol-cheer, .lp-card, pre):not(ol *, [data-keep-steps], [data-keep-steps] *, .try-this, .try-this *, .read-head, .read-head *, .tol-steps-toggle, .tol-inshort, .tol-inshort *, .tol-listen, .tol-listen *, .tol-depth, .tol-depth *){ display:none !important; }
 @media print{ .tol-steps-toggle{ display:none !important; } }
 
 /* ---------- Big text on a phone: the title uses the card's full width ---------- */

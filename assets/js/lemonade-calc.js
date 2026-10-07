@@ -258,7 +258,7 @@
       var dot = document.createElement('span'); dot.className = 'dot';
       var inp = document.createElement('input');
       inp.type = 'text'; inp.value = p; inp.maxLength = 40; inp.autocomplete = 'off';
-      inp.setAttribute('aria-label', 'Name of person ' + (i + 1));
+      inp.setAttribute('aria-label', 'Person ' + (i + 1) + ' name');
       inp.addEventListener('input', function () { state.people[i] = inp.value; relabel(); recalc(); });
       wrap.appendChild(dot); wrap.appendChild(inp);
       if (state.people.length > MIN) {

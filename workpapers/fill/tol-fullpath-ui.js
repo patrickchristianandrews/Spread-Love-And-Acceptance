@@ -176,8 +176,36 @@
 
   /* ------------------------------------------------------------ 3. the guided form */
 
+  // The names already typed on this page: "Who's on this road?" in step 1 of the Suite, or the names box
+  // on the download card. They fill only the name boxes that are still empty.
+  function knownNames() {
+    var HH = global.TOLHousehold, suite = global.__workpaperSuite, list = [];
+    try { list = (suite && suite.state && suite.state().names || []).map(function (x) { return String(x || '').trim(); }); } catch (e) { list = []; }
+    if (!list.some(Boolean) && $('fp-names')) list = $('fp-names').value.split(',').map(function (x) { return x.trim(); });
+    return list.map(function (x) { return x && !(HH && HH.isPlaceholder(x)) ? x.slice(0, 40) : ''; });
+  }
+  function whoKey(i) { return FP.NS + 'who.p' + (i + 1); }
+  function fillEmptyNames(list) {
+    if (!S.data || FP.ROADS[S.data.road].solo) return 0;
+    var added = 0;
+    (list || []).forEach(function (nm, i) {
+      if (!nm || i >= S.data.people) return;
+      var cur = String(S.data.values[whoKey(i)] || '').trim();
+      if (cur) return;
+      S.data.values[whoKey(i)] = nm; added++;
+    });
+    if (added) changed();
+    return added;
+  }
+  function whoEmpty() {
+    if (!S.data) return true;
+    for (var i = 0; i < S.data.people; i++) if (String(S.data.values[whoKey(i)] || '').trim()) return false;
+    return true;
+  }
+
   function startForm(step) {
     if (!S.data) S.data = FP.blankData($('fp-road').value, $('fp-count').value);
+    fillEmptyNames(knownNames());
     S.step = step || 0;
     renderForm();
     show('fp-form');
@@ -274,6 +302,8 @@
     if (page.name && page.name !== page.title) sec.appendChild(h('p', { className: 'fp-page-sub', text: page.title }));
     if (page.why) sec.appendChild(h('p', { className: 'fp-why', text: page.why }));
     if (page.intro) sec.appendChild(h('p', { className: 'fp-intro', text: page.intro }));
+    var hhEl = page.id === 'who' ? householdOffer() : null;
+    if (hhEl) sec.appendChild(hhEl);
     page.blocks.forEach(function (b) {
       if (b.kind === 'note') { sec.appendChild(h('p', { className: 'fp-note', text: b.text })); return; }
       if (b.kind === 'steps') {
@@ -336,6 +366,25 @@
       h('button', { type: 'button', className: 'ws-link', id: 'fp-filled-pdf', text: 'Download my answers as a PDF' })
     ]));
   }
+  // "Use your household from before?" on the names page, like the other tools: only when no name is
+  // typed here yet, and "Use them" fills only empty boxes (never over a typed name).
+  function householdOffer() {
+    var HH = global.TOLHousehold, hh = HH && !S.hhNo ? HH.get() : null;
+    if (!hh || !hh.people.length || FP.ROADS[S.data.road].solo || !whoEmpty()) return null;
+    return HH.offer({
+      names: hh.people, status: $('fp-status'),
+      onUse: function () {
+        var want = Math.min(FP.MAX_PEOPLE, Math.max(S.data.people, hh.people.length));
+        if (want !== S.data.people) { S.data.people = FP.clampPeople(S.data.road, want); }
+        var n = fillEmptyNames(hh.people);
+        S.hhNo = true;
+        renderForm();
+        return HH.addedLine(n, 0);
+      },
+      onNo: function () { S.hhNo = true; },
+      focus: function () { return $('fp-f-who-p1'); }
+    });
+  }
   function shortName(p) { return p ? (p.code && /^WP|CALC/.test(p.code) ? p.code + ' ' : '') + (p.name || p.short || p.title) : ''; }
 
   function onFormInput(e) {
@@ -383,11 +432,11 @@
   }
   function detailEl(s, m) {
     var det = h('details', { className: 'fp-rep-wp' + (s.status === 'blank' ? ' is-blank' : ''), id: 'fp-r-' + s.code.toLowerCase(), open: s.status !== 'blank' ? 'open' : null }, [
-      h('summary', {}, [h('span', { className: 'fp-rep-code', text: s.code }), ' ' + s.name + (s.status === 'blank' ? ' · not filled in' : '')])
+      h('summary', {}, [h('span', { className: 'fp-rep-code', text: s.code }), ' ' + s.name + (s.status === 'blank' ? (s.optional ? ' · optional, not filled in' : ' · not filled in') : '')])
     ]);
     if (s.title && s.title !== s.name) det.appendChild(h('p', { className: 'fp-page-sub', text: s.title }));
     det.appendChild(h('p', { className: 'fp-sub', text: 'What was entered' }));
-    if (s.entered.length) det.appendChild(dlOf(s.entered)); else det.appendChild(h('p', { className: 'fp-note', text: 'Not filled in. Nothing here is guessed.' }));
+    if (s.entered.length) det.appendChild(dlOf(s.entered)); else det.appendChild(h('p', { className: 'fp-note', text: s.optional ? 'Optional on your road, and not filled in. Nothing here is guessed.' : 'Not filled in. Nothing here is guessed.' }));
     (s.bars || []).forEach(function (b) { det.appendChild(barsEl(b)); });
     (s.tables || []).forEach(function (t) { det.appendChild(tableEl(t)); });
     var shows = (s.shows || []).concat(s.more || []);
@@ -612,6 +661,7 @@
     if (!S.data) return;
     var out = { format: S.data.format, version: S.data.version, road: S.data.road, people: S.data.people, saved: new Date().toISOString(), values: S.data.values };
     if (S.data.sizes) out.sizes = S.data.sizes;
+    if (S.data.focus) out.focus = S.data.focus;
     download(JSON.stringify(out, null, 2), fileBase(S.data) + '-progress.json', 'application/json');
     S.dirty = false;
     say('Your progress file is in your Downloads. Upload it here any time to pick up where you left off.');
@@ -644,6 +694,9 @@
     $('fp-start').addEventListener('click', function () {
       if (S.data && (S.data.road !== $('fp-road').value) && Object.keys(S.data.values).length && !global.confirm('Start a new ' + FP.ROADS[$('fp-road').value].label + ' package? What you typed for ' + FP.ROADS[S.data.road].label + ' stays until you close the page, but this starts fresh.')) { startForm(S.step); return; }
       if (!S.data || S.data.road !== $('fp-road').value) S.data = FP.blankData($('fp-road').value, $('fp-count').value);
+      // the Suite's "what brings you here" choice comes along when the road is the same
+      var su = global.__workpaperSuite, st = su && su.state && su.state();
+      if (st && st.path && st.path.id === S.data.road) { if (st.variant) S.data.focus = st.variant; else delete S.data.focus; }
       S.from = null;
       startForm(0);
     });

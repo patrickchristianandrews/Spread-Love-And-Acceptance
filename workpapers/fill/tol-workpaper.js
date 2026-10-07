@@ -857,7 +857,9 @@
           dd = h('dd', null, [det]);
         } else {
           dd = h('dd', { text: it.value });
-          if (it.note) dd.appendChild(h('span', { className: 'wpf-help', text: it.note }));
+          // a link on screen stands in for the address written out in the PDF's note
+          if (it.link) dd.appendChild(h('span', { className: 'wpf-help' }, [h('a', { href: it.link[1], text: it.link[0] + ' \u2192' })]));
+          else if (it.note) dd.appendChild(h('span', { className: 'wpf-help', text: it.note }));
         }
         dl.appendChild(dd);
       });

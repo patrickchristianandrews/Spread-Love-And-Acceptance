@@ -582,6 +582,22 @@ c('followups', ['my wife died and I don’t know what to do with myself', 'that 
 c('followups', ['my wife died last spring', 'what about my son?'], { kind: 'care', text: /grown son/ });
 c('followups', ['my roommate never pays the bills on time', 'that didn’t help', 'i already tried that'], { kind: 'nohelp', not: /longer look/ });
 c('followups', ['my gf and i keep fighting about her phone', 'is that a red flag'], { kind: 'redflag', not: /steps I gave/ });
+// round 5: teens, identity, co-parents, caregivers, parents, Spanish
+t('safety', 'my friend cuts themselves what do i do', { kind: 'safety', text: /trusted adult[\s\S]*988/ });
+t('care', 'my dad makes fun of my pronouns', { id: 'lgbtq', text: /Trevor Project/ });
+t('care', 'im gay and scared to come out', { id: 'lgbtq' });
+t('care', 'is my mom allowed to read my texts', { id: 'parentphone', not: /Domestic Violence/ });
+t('care', 'my parents fight all the time', { id: 'parentsfight' });
+t('care', 'is it harassment if my ex texts me 30 times a day', { id: 'exharass', link: '/safety.html#after-separation' });
+t('care', 'my ex sends me long angry texts every night', { id: 'exmessages', text: /BIFF/ });
+t('care', 'should i apologize to my ex for being late', { id: 'exmessages', text: /admit fault/ });
+t('care', 'my ex badmouths me to the kids', { id: 'exbadmouth' });
+t('care', 'is there a helpline or respite for dementia caregivers', { id: 'carehelp', text: /800-272-3900/ });
+t('care', 'my grown daughter lives far away and won\'t help with her dad', { id: 'careadultkids' });
+t('care', 'I feel guilty that I resent him', { id: 'careresent' });
+t('care', 'how i stop yelling', { id: 'yellkids' });
+t('care', 'que hago mis hijos pelean', { kind: 'lang', link: '/en-espanol.html' });
+c('followups', ['I am caring for my husband with dementia and I am exhausted', 'my daughter won\'t help'], { id: 'careadultkids' });
 t('parents', 'what do you do with my email', { id: 'emailwhy', text: /Buttondown/ });
 t('parents', 'what is frequency buddies', { kind: 'card', id: 'buddies', link: '/frequency-buddies.html' });
 t('parents', 'is there a frequency buddies music video', { kind: 'card', id: 'buddiesmusicvideo', link: '/frequency-buddies-music-video.html' });

@@ -1116,6 +1116,147 @@
       ]
     },
     {
+      "id": "carehelp",
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "name": "respite and support for caregivers",
+      "pat": "\\b(respite|adult day|day program|sitter|break from caregiving|break from caring|caregiver support|support group)\\b|\\b(helpline|help line|someone to call)\\b.{0,40}\\b(caregiv\\w*|carer|dementia|alzheimer\\w*)\\b|\\b(dementia|alzheimer\\w*)\\b.{0,40}\\b(help|support|exhausted|tired|break)\\b|\\bi need a break from (caring|caregiving|looking after)\\b",
+      "keys": [],
+      "what": [
+        "You deserve real breaks, and there is help made for exactly this. Getting support isn’t giving up on the person you care for; it’s how you keep going."
+      ],
+      "how": [
+        "In the US, the Alzheimer’s Association 24/7 Helpline is 800-272-3900 (alz.org). You can call any time, about anything, including how you’re feeling.",
+        "The Eldercare Locator (1-800-677-1116, eldercare.acl.gov) can find local help: adult day programs, in-home respite, meals, and caregiver support groups.",
+        "Ask his or her doctor, or a hospital or clinic social worker, about respite care and what insurance or local programs cover.",
+        "Pick one regular break and protect it, even two hours a week. Put a name on who covers it."
+      ],
+      "links": [
+        [
+          "Caring for someone you love",
+          "/caregivers.html"
+        ],
+        [
+          "How much are you carrying?",
+          "/workpapers/wp-02-how-much-are-you-carrying.html"
+        ]
+      ],
+      "chips": [
+        [
+          "My adult child won’t help",
+          "My grown daughter won’t help with caring for her dad"
+        ],
+        [
+          "I feel guilty that I resent it",
+          "I feel guilty that I resent the person I care for"
+        ]
+      ]
+    },
+    {
+      "id": "careadultkids",
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "name": "getting adult children to help with care",
+      "pat": "\\b(my )?(grown |adult )?(daughter|son|kids|children)\\b.{0,50}\\b(won t|wont|doesn t|doesnt|don t|dont|never|refuses? to)\\b.{0,30}\\b(help|visit|call|get it|understand)\\b.{0,60}\\b(dad|mom|mum|father|mother|husband|wife|him|her|caring|care)\\b|\\b(car(e|ing) for|caregiv\\w*|carer|looking after|look after)\\b.{0,80}\\b(daughter|son|kids|children)\\b.{0,30}\\b(won t|wont|doesn t|doesnt|don t|dont|never)\\b",
+      "keys": [],
+      "what": [
+        "That’s a lonely place to be. Adult children who live far away often don’t see how much it takes, and many want to help but don’t know what to do. A specific ask usually works better than a general one."
+      ],
+      "how": [
+        "Ask for one concrete, regular thing they can do from where they are: a weekly call with their parent at a set time, handling the bills or insurance online, booking appointments, or paying for a sitter one afternoon a week.",
+        "Tell them plainly what a normal week looks like for you. People can’t help with a load they can’t see.",
+        "If they can visit, ask for a block of time when you can be away, not just a visit when you’re both there.",
+        "If they still won’t, that hurts, and it isn’t a reflection of you. Look wider: friends, neighbors, a faith community, paid help and respite care."
+      ],
+      "script": [
+        "Could you take over the insurance calls and call Dad every Sunday at 6? That would give me real breathing room."
+      ],
+      "links": [
+        [
+          "Caring for someone you love",
+          "/caregivers.html"
+        ],
+        [
+          "One owner per job",
+          "/workpapers/wp-03-one-owner-per-job.html"
+        ]
+      ],
+      "chips": [
+        [
+          "Respite and support",
+          "Is there respite or support for dementia caregivers?"
+        ]
+      ]
+    },
+    {
+      "id": "careresent",
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "name": "resentment and guilt as a caregiver",
+      "pat": "\\b(resent\\w*|angry at|frustrated with|annoyed with|hate)\\b.{0,40}\\b(the person i care for|him|her|my husband|my wife|my mom|my mum|my dad|my mother|my father|caring|caregiving)\\b.{0,60}\\b(guilt\\w*|bad person|terrible|awful|ashamed)\\b|\\b(guilt\\w*|ashamed|bad person)\\b.{0,40}\\b(resent\\w*)\\b|\\bi resent (caring|looking after|the person i care for)\\b",
+      "keys": [],
+      "what": [
+        "Resentment and guilt are among the most common feelings caregivers have. They don’t mean you love the person less. They usually mean you’re carrying too much, for too long, with too little rest."
+      ],
+      "how": [
+        "Let the feeling be a signal, not a verdict: it’s telling you something needs to change in the setup, not in your heart.",
+        "You don’t have to say it to the person you care for, especially if they can’t take it in. Say it to someone who can hold it: a friend, a support group, a counselor.",
+        "Look for one thing to take off your plate this week, even a small one.",
+        "If the weight doesn’t lift, or you feel hopeless, please talk to a doctor or counselor. In the US you can call or text 988 any time."
+      ],
+      "links": [
+        [
+          "Caring for someone you love",
+          "/caregivers.html"
+        ],
+        [
+          "How much are you carrying?",
+          "/workpapers/wp-02-how-much-are-you-carrying.html"
+        ]
+      ],
+      "chips": [
+        [
+          "Respite and support",
+          "Is there respite or support for dementia caregivers?"
+        ]
+      ]
+    },
+    {
+      "id": "yellkids",
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "name": "yelling at your kids",
+      "pat": "\\bhow (do |can |should )?i stop (yell\\w*|scream\\w*|shout\\w*)\\b|\\bi (always |keep |constantly |still )?(yell|scream|shout) at (my|the) (kids?|children|son|daughter)\\b|\\bstop (yelling|screaming|shouting) at (my|the) (kids?|children)\\b|\\bhow (do )?i stop\\b.{0,20}\\b(yell\\w*|scream\\w*)\\b",
+      "keys": [],
+      "what": [
+        "Almost every parent yells sometimes. You can change it, and you can repair it when it happens."
+      ],
+      "how": [
+        "Notice the warning signs early: a tight jaw, a louder voice, a short fuse. That’s the moment to step back.",
+        "Say it out loud: “I’m getting too loud. I’m going to take a breath.” Then breathe slowly for one minute, or step into another room.",
+        "Come back and repair: “I’m sorry I yelled. That wasn’t fair to you. Let’s try again.” Kids learn a lot from seeing a grown-up make it right.",
+        "Look at what sets it off (being tired, rushed, hungry) and change one thing about that time of day."
+      ],
+      "script": [
+        "I’m sorry I yelled. That wasn’t fair to you. Let’s try again."
+      ],
+      "links": [
+        [
+          "When it’s you and your child",
+          "/upset-right-now.html#parent-child"
+        ],
+        [
+          "For parents",
+          "/parents.html"
+        ]
+      ],
+      "chips": []
+    },
+    {
       "id": "grief",
       "kind": "intent",
       "first": true,
@@ -1312,6 +1453,109 @@
           "What are the red flags in a relationship?"
         ]
       ]
+    },
+    {
+      "id": "exharass",
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "name": "when an ex's messages become harassment",
+      "pat": "\\b(harass\\w*)\\b.{0,40}\\b(my )?(ex|ex wife|ex husband|ex partner|exwife|exhusband|kids dad|kids mom|kids father|kids mother|children s father|children s mother|baby mama|baby daddy|co parent|coparent)\\b|\\b(my )?(ex|ex wife|ex husband|ex partner|exwife|exhusband|kids dad|kids mom|kids father|kids mother|children s father|children s mother|baby mama|baby daddy|co parent|coparent)\\b.{0,60}\\b(harass\\w*|won t stop (texting|calling|messaging)|texts? me (\\d+|dozens|hundreds|thirty|twenty|fifty) times|keeps (texting|calling|messaging) (me )?(all night|every night|nonstop|constantly)|shows up (at my|uninvited)|threaten\\w*)\\b",
+      "keys": [],
+      "what": [
+        "Repeated messages you’ve asked to stop, messages at all hours, threats about the kids or court, or showing up uninvited can cross the line from conflict into harassment. You don’t have to decide that alone, and you don’t owe an answer to every message."
+      ],
+      "how": [
+        "Save everything: screenshots with dates, and keep all contact in one channel, ideally a co-parenting app if your court order allows it.",
+        "Reply only about the children and logistics, once a day at a set time, briefly and factually. Silence on everything else is allowed.",
+        "Talk to your lawyer or a family-court advocate about what counts as harassment where you live and whether a protective order or a change to the parenting plan fits.",
+        "If you’re threatened or feel unsafe, call 911 in an emergency. Advocates at 1-800-799-7233 (or text START to 88788) help people after a separation too, and it’s free and private."
+      ],
+      "links": [
+        [
+          "After a separation: when it’s more than conflict",
+          "/safety.html#after-separation"
+        ],
+        [
+          "Separated co-parents",
+          "/co-parenting.html"
+        ]
+      ],
+      "chips": [
+        [
+          "Should I reply at all?",
+          "Should I reply to my ex at all?"
+        ]
+      ]
+    },
+    {
+      "id": "exmessages",
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "name": "angry messages from an ex",
+      "pat": "\\b(my )?(ex|ex wife|ex husband|ex partner|exwife|exhusband|kids dad|kids mom|kids father|kids mother|children s father|children s mother|baby mama|baby daddy|co parent|coparent)\\b.{0,60}\\b(long|angry|nasty|hostile|insulting)\\b.{0,20}\\b(texts?|messages?|emails?)\\b|\\bshould i (reply|respond|answer|text back|write back) (to )?(my )?(ex|ex wife|ex husband|ex partner|exwife|exhusband|kids dad|kids mom|kids father|kids mother|children s father|children s mother|baby mama|baby daddy|co parent|coparent)\\b|\\bshould i (apologi[sz]e|say sorry) to (my )?(ex|ex wife|ex husband|ex partner|exwife|exhusband|kids dad|kids mom|kids father|kids mother|children s father|children s mother|baby mama|baby daddy|co parent|coparent)\\b|\\bhow (do|should) i (reply|respond) to (my )?(ex|ex wife|ex husband|ex partner|exwife|exhusband|kids dad|kids mom|kids father|kids mother|children s father|children s mother|baby mama|baby daddy|co parent|coparent)\\b",
+      "keys": [],
+      "what": [
+        "With an ex, especially if lawyers are involved, treat every message as something a judge might read one day. Short, factual and about the children is the safest shape."
+      ],
+      "how": [
+        "You don’t have to reply tonight. Answer at a set time once a day, and only the parts about the kids or logistics.",
+        "Use BIFF: Brief, Informative, Friendly (or at least neutral), Firm. For example: “Got it. I’ll be at the school at 5 on Sunday.”",
+        "Skip the history, the feelings and the defending yourself. Don’t admit fault in writing (“It was my fault”, “I always do this”); if something needs owning, say what you’ll do next instead: “I’ll leave earlier on Sundays.”",
+        "Keep copies. If messages turn threatening or won’t stop, see the after-separation part of the Not safe at home? page and talk to your lawyer."
+      ],
+      "script": [
+        "Thanks for letting me know. I’ll have the kids at the school at 5 on Sunday."
+      ],
+      "links": [
+        [
+          "Separated co-parents",
+          "/co-parenting.html"
+        ],
+        [
+          "Check a message before you send it",
+          "/signal-translator.html"
+        ]
+      ],
+      "chips": [
+        [
+          "My ex badmouths me to the kids",
+          "My ex badmouths me to the kids"
+        ]
+      ]
+    },
+    {
+      "id": "exbadmouth",
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "name": "an ex badmouthing you to the kids",
+      "pat": "\\b(my )?(ex|ex wife|ex husband|ex partner|exwife|exhusband|kids dad|kids mom|kids father|kids mother|children s father|children s mother|baby mama|baby daddy|co parent|coparent)\\b.{0,40}\\b(badmouth\\w*|bad mouth\\w*|trash talk\\w*|talks? (bad|badly|crap|trash) about me|says (bad|awful|horrible|terrible) things about me|turning the kids against me|turns? the kids against me|poison\\w*)\\b",
+      "keys": [],
+      "what": [
+        "That hurts, and it puts your kids in the middle. The best protection is usually steady, calm parenting on your side, not answering it in kind."
+      ],
+      "how": [
+        "Don’t criticize your ex back to the kids. Kids feel caught when either parent is put down, and they notice who doesn’t do it.",
+        "If they repeat something, keep it short and warm: “I’m sorry you heard that. Grown-up problems are for grown-ups. I love you, and you never have to pick a side.”",
+        "Write down specific incidents with dates. If it’s affecting the children, talk to your lawyer, a family mediator, or a child counselor.",
+        "Look after yourself too: a friend or counselor who can hear your side means you don’t need the kids to."
+      ],
+      "script": [
+        "I’m sorry you heard that. Grown-up problems are for grown-ups. I love you, and you never have to pick a side."
+      ],
+      "links": [
+        [
+          "Separated co-parents",
+          "/co-parenting.html"
+        ],
+        [
+          "For parents: stepfamilies and two homes",
+          "/parents.html#stepfamilies"
+        ]
+      ],
+      "chips": []
     },
     {
       "id": "onmyown",
@@ -1545,6 +1789,109 @@
           "How do I ask my parents for more freedom?"
         ]
       ]
+    },
+    {
+      "id": "lgbtq",
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "name": "identity, pronouns and coming out",
+      "pat": "\\b(my )?pronouns?\\b|\\bnon ?binary\\b|\\benby\\b|\\btrans(gender)?\\b|\\bgay\\b|\\blesbian\\b|\\bbisexual\\b|\\bbi\\b(?= and| scared| teen)|\\bqueer\\b|\\blgbt\\w*\\b|\\bcoming out\\b|\\bcome out\\b|\\bdeadnam\\w*\\b|\\bmisgender\\w*\\b",
+      "keys": [],
+      "what": [
+        "You belong here, exactly as you are. Being misgendered, mocked or pushed to hide who you are by family is painful, and it isn’t your fault or something you have to earn your way out of."
+      ],
+      "how": [
+        "You get to decide who you come out to, when, and how. There’s no deadline, and it’s okay to wait until you feel safe.",
+        "If a parent mocks your pronouns or identity, one calm line can help, if you feel safe saying it: “I’m not asking you to understand everything today. I’m asking you not to make fun of me.” If it isn’t safe, you don’t have to say anything.",
+        "Find your people: a friend, a school counselor, a GSA club, or an online community you trust. One accepting adult makes a real difference.",
+        "Free, confidential help just for LGBTQ+ young people: The Trevor Project (call 1-866-488-7386, or text START to 678-678), Trans Lifeline (877-565-8860), and the LGBT National Youth Talkline (1-800-246-7743). If you’re thinking about hurting yourself, call or text 988."
+      ],
+      "links": [
+        [
+          "For teens: being yourself at home",
+          "/teens.html#lgbtq"
+        ],
+        [
+          "Not safe at home?",
+          "/safety.html"
+        ],
+        [
+          "For teens",
+          "/teens.html"
+        ]
+      ],
+      "chips": [
+        [
+          "My parents fight all the time",
+          "My parents fight all the time"
+        ]
+      ]
+    },
+    {
+      "id": "parentphone",
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "name": "a parent and your phone",
+      "pat": "\\b(is|are) (my )?(mom|mum|dad|parents?) allowed to (read|check|look at|go through|take|track)\\b|\\b(mom|mum|dad|parents?)\\b.{0,30}\\b(reads?|checks?|goes through|looks through|tracks?|takes?|took)\\b.{0,20}\\bmy (texts|messages|phone|location|dms|chats?)\\b",
+      "keys": [],
+      "what": [
+        "It’s really common for parents of teens to check phones or share locations, and it’s also normal to want privacy. Both things can be true. A parent checking for safety isn’t the same as a partner controlling you."
+      ],
+      "how": [
+        "Ask what they’re worried about. Often there’s one specific fear (strangers, bullying, safety), and you can agree on something that covers it without reading everything.",
+        "Offer a deal: “Can we agree on what you’ll check and when, instead of reading everything? I’ll keep location on when I’m out.”",
+        "Keep your passwords to yourself, and be careful what you put in writing anywhere.",
+        "If a parent uses your phone to scare, punish or isolate you, or you don’t feel safe at home, that’s different. Talk to a school counselor or another trusted adult, or see the Not safe at home? page."
+      ],
+      "script": [
+        "I get that you worry about me. Could we agree on what you check and when, so I can have some privacy too?"
+      ],
+      "links": [
+        [
+          "For teens",
+          "/teens.html"
+        ],
+        [
+          "Not safe at home?",
+          "/safety.html"
+        ]
+      ],
+      "chips": []
+    },
+    {
+      "id": "parentsfight",
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "name": "when your parents fight",
+      "pat": "\\bmy (parents|mom and dad|mum and dad|dad and mom|mom and stepdad|dad and stepmom) (fight|argue|yell|scream|shout)\\w*\\b|\\b(parents|mom and dad) (are always|keep|won t stop|wont stop) (fighting|arguing|yelling)\\b",
+      "keys": [],
+      "what": [
+        "That’s hard to live with, and it isn’t your job to fix it. When parents argue, kids often feel it’s somehow their fault. It isn’t."
+      ],
+      "how": [
+        "Give yourself somewhere to go when it gets loud: headphones, your room, a walk, a friend’s place, or a calm sound on this site.",
+        "If you want to say something, pick a calm moment and keep it about you: “When you two shout, I feel scared and can’t sleep.” You don’t have to take sides.",
+        "Talk to someone outside it: a friend, a relative, a school counselor or coach.",
+        "If anyone gets hurt, things get thrown, or you’re scared for your safety or a parent’s, that’s more than arguing. Call 911 in an emergency, and see the Not safe at home? page."
+      ],
+      "links": [
+        [
+          "For teens",
+          "/teens.html"
+        ],
+        [
+          "Calm sounds",
+          "/soundscapes.html"
+        ],
+        [
+          "Not safe at home?",
+          "/safety.html"
+        ]
+      ],
+      "chips": []
     },
     {
       "id": "screenshot",

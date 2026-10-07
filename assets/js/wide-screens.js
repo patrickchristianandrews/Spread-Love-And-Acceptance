@@ -139,13 +139,15 @@
       else if (k === 'q' || k === 'Q') { if (click('.tol-bar-quiet')) e.preventDefault(); }
     });
     // a one-time whisper that the shortcuts exist, for people with a keyboard
-    var seen = false; try { seen = sessionStorage.getItem('tol-keys-hint') === '1'; } catch (e) {}
-    if (!seen && innerWidth >= 900) {
+    // (once ever, not once a visit; never in the plain or work version, and never on top of another note)
+    var seen = false; try { seen = localStorage.getItem('tol-keys-hint') === '1' || sessionStorage.getItem('tol-keys-hint') === '1'; } catch (e) {}
+    if (!seen && innerWidth >= 900 && !document.documentElement.classList.contains('tol-work')) {
       var onKey = function () { document.removeEventListener('keydown', onKey); };
       setTimeout(function () {
+        if (document.querySelector('.tr-toast.is-in, .tol-offer')) return;
         var h = document.createElement('div'); h.className = 'tol-keys-hint'; h.setAttribute('aria-hidden', 'true'); h.textContent = 'Tip: press ? for keyboard shortcuts'; document.body.appendChild(h);
         requestAnimationFrame(function () { h.classList.add('on'); }); setTimeout(function () { h.classList.remove('on'); setTimeout(function () { h.remove(); }, 500); }, 3600);
-        try { sessionStorage.setItem('tol-keys-hint', '1'); } catch (e) {}
+        try { localStorage.setItem('tol-keys-hint', '1'); } catch (e) {}
       }, 2500);
     }
   }

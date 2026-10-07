@@ -620,7 +620,7 @@
 
   // One section of detailed findings, the same shape for every workpaper and page.
   function detail(lay, s, m) {
-    lay.kicker(s.code + (s.status === 'blank' ? '  ·  not filled in' : ''));
+    lay.kicker(s.code + (s.status === 'blank' ? (s.optional ? '  ·  optional, not filled in' : '  ·  not filled in') : ''));
     lay.h1(s.name, s.title);
     sub(lay, 'What was entered');
     if (s.entered.length) kv(lay, s.entered, { kw: 160 });

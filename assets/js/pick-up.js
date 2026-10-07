@@ -51,11 +51,13 @@
     return 'Your weather today: ' + (SKY[e.sky] || 'logged');
   }
   // the safety page and the chat are never shown back, so nobody picking up a shared phone sees them
-  function recent() { var r = json('tol-recent'); return Array.isArray(r) ? r.filter(function (x) { return x && !/^\/(safety|ask)\.html/.test(x.u || ''); }) : []; }
+  function recent() { var r = json('tol-recent'); return Array.isArray(r) ? r.filter(function (x) { return x && !/^\/(safety|ask|teens|upset-right-now)\.html/.test(x.u || ''); }) : []; }
 
   // ---------- coming back: your next step, and what's new since your last visit ----------
   // NEWS mirrors the newest sections of whats-new.html (add a line here when that page gets a new date).
   var NEWS = [
+    ['2026-10-07', 'Caring for someone you love', '/caregivers.html'],
+    ['2026-10-07', 'En español', '/en-espanol.html'],
     ['2026-10-07', 'At work: the plain version for teams', '/work.html'],
     ['2026-10-07', 'Grief and later life', '/grief.html'],
     ['2026-10-07', 'Everything is open, no sign-up', '/ways-in.html'],
@@ -97,17 +99,31 @@
     return null;
   }
 
+  // things left partway through: the Re-check Drive and Turning toward's seven days
+  function inProgress() {
+    var out = [], rd = json('tol-recheck-drive-v1');
+    if (rd && rd.started && !rd.kicked && typeof rd.yards === 'number') {
+      var togo = Math.max(1, 100 - rd.yards);
+      out.push({ t: 'Your Re-check Drive', u: '/recheck-drive.html', note: togo + ' yards to go' });
+    }
+    var tt = json('tol-tt-7day'), n = 0;
+    if (tt && typeof tt === 'object') for (var k in tt) if (tt[k]) n++;
+    if (n > 0 && n < 7) out.push({ t: 'Turning toward, seven days', u: '/turning-toward.html', note: n + ' of 7 done' });
+    return out;
+  }
   function card(where) {
     var here = location.pathname.replace(/\/$/, '/index.html');
     var rec = recent().filter(function (r) { return r && r.u && r.u !== here; }), last = rec[0];
     var d = drafts(), six = sixWeeks(), wx = weather(), prev = lastVisitDay(), gap = daysSince(prev), nx = nextStep();
     var fresh = prev ? NEWS.filter(function (n) { return n[0] > prev; }).slice(0, 3) : [];
-    if (!last && !d.length && !six && !nx && !fresh.length) return null;
+    var prog = inProgress();
+    if (!last && !d.length && !six && !nx && !fresh.length && !prog.length) return null;
     var rows = '';
     // only on the first look this visit: not when they were on another page a few minutes ago
     var justHere = last && last.at && Date.now() - last.at < 6 * 3600e3;
     if (where !== 'menu' && gap >= 1 && !justHere) rows += '<li><span class="tol-pu-ico" aria-hidden="true">&#128075;</span><span>Welcome back' + (gap === 1 ? '. You were here yesterday.' : gap < 60 ? '. It’s been ' + gap + ' days, and that’s fine: pick up anywhere.' : '. It’s been a while, and that’s fine: pick up anywhere.') + '</span></li>';
     if (nx) rows += '<li><span class="tol-pu-ico" aria-hidden="true">&#10145;</span><span>Your next step: <a href="' + esc(nx.u) + '">' + esc(nx.t) + '</a>' + (nx.note ? ' <small>(' + esc(nx.note) + ')</small>' : '') + '</span></li>';
+    prog.forEach(function (p) { rows += '<li><span class="tol-pu-ico" aria-hidden="true">&#9654;</span><span>Pick up where you stopped: <a href="' + esc(p.u) + '">' + esc(p.t) + '</a> <small>(' + esc(p.note) + ')</small></span></li>'; });
     if (fresh.length) rows += '<li><span class="tol-pu-ico" aria-hidden="true">&#10024;</span><span>New since your last visit: ' + fresh.map(function (n) { return '<a href="' + esc(n[2]) + '">' + esc(n[1]) + '</a>'; }).join(', ') + '</span></li>';
     if (last) rows += '<li><span class="tol-pu-ico" aria-hidden="true">&#128278;</span><span>You were last on <a href="' + esc(last.u) + '">' + esc(last.t) + '</a> <small>' + esc(ago(last.at)) + '</small>' +
       (rec[1] ? '. Before that: <a href="' + esc(rec[1].u) + '">' + esc(rec[1].t) + '</a>' : '') + '</span></li>';

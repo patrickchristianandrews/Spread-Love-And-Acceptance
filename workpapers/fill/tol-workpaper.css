@@ -252,6 +252,19 @@
 .ws-path.is-on .ws-path-icon{ background: #fff; }
 .ws-path.is-on::after{ content: "\2665"; position: absolute; top: 8px; right: 12px; color: #C95B7A; font-size: .9em; animation: ws-pop .5s var(--ease-out, ease); }
 
+/* "What brings you here?" on a road with another way in (Partners: unfair, or fine but flat) */
+.ws-focus{ margin-top: 1em; padding: .9em 1em; border-radius: 18px; background: #FFF6EC; border: 1px solid #F1DCC2; }
+.ws-focus-q{ margin: 0 0 .5em; font-weight: 600; }
+.ws-focus-row{ display: flex; flex-wrap: wrap; gap: 8px; }
+.ws-focus-b{
+  font: inherit; font-size: .95rem; cursor: pointer; min-height: 44px; padding: 8px 16px; border-radius: 999px;
+  border: 1px solid #D9C8F0; background: #fff; color: #4E3F6B; text-align: left;
+}
+.ws-focus-b.is-on{ background: #F7CAD4; border-color: #E8A5B8; color: #3C3350; font-weight: 600; }
+.ws-focus-b.is-on::before{ content: "\2713"; margin-right: 6px; }
+.ws-focus-b:focus-visible{ outline: 2px solid var(--focus, #2B5B8C); outline-offset: 2px; }
+.ws-focus-note{ margin: .6em 0 0; font-size: .92em; color: var(--ink-soft, #524B3E); }
+
 .ws-names{ margin-top: 1.2em; padding: 1em 1.1em; border-radius: 18px; background: #F6EEF8; }
 .ws-names-q{ margin: 0 0 .6em; font-weight: 600; }
 .ws-names-q span{ font-weight: 400; color: var(--ink-soft, #524B3E); font-size: .9em; }
@@ -292,6 +305,10 @@
 .ws-stop-body{ flex: 1; min-width: 0; padding: 10px 14px 12px; border-radius: 18px; background: #FFFDF7; border: 1px solid rgba(60,51,80,.1); }
 .ws-stop.is-done .ws-stop-body{ border-color: #F0C9D5; }
 .ws-stop-code{ margin: 0; font-family: "IBM Plex Mono", ui-monospace, monospace; font-size: .72rem; color: var(--brass-ink, #7A5620); }
+.ws-optional{ display: inline-block; margin-left: 8px; padding: 1px 8px; border-radius: 999px; background: #EEF3F8; border: 1px solid #CBD8E6; color: #3A5470; font-size: .68rem; letter-spacing: .04em; text-transform: uppercase; }
+.ws-stop.is-reading .ws-dot{ border-style: dashed; }
+.ws-stop.is-reading .ws-stop-body{ background: #F4F9F2; border-color: #CFE0CC; }
+.ws-stop.is-reading .ws-read{ margin: 0; font-weight: 600; }
 .ws .ws-stop-name{ margin: .1em 0 .15em; font-size: 1.12rem; line-height: 1.25; }
 .ws-stop-why{ margin: 0 0 .6em; font-size: .92em; color: var(--ink-soft, #524B3E); }
 .ws-sheets{ display: flex; flex-wrap: wrap; gap: 8px; }
