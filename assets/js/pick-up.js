@@ -50,7 +50,8 @@
     var e = a[a.length - 1]; if (!e || e.d !== today()) return null;
     return 'Your weather today: ' + (SKY[e.sky] || 'logged');
   }
-  function recent() { var r = json('tol-recent'); return Array.isArray(r) ? r : []; }
+  // the safety page and the chat are never shown back, so nobody picking up a shared phone sees them
+  function recent() { var r = json('tol-recent'); return Array.isArray(r) ? r.filter(function (x) { return x && !/^\/(safety|ask)\.html/.test(x.u || ''); }) : []; }
 
   // ---------- coming back: your next step, and what's new since your last visit ----------
   // NEWS mirrors the newest sections of whats-new.html (add a line here when that page gets a new date).
@@ -103,7 +104,9 @@
     var fresh = prev ? NEWS.filter(function (n) { return n[0] > prev; }).slice(0, 3) : [];
     if (!last && !d.length && !six && !nx && !fresh.length) return null;
     var rows = '';
-    if (where !== 'menu' && gap >= 1) rows += '<li><span class="tol-pu-ico" aria-hidden="true">&#128075;</span><span>Welcome back' + (gap === 1 ? '. You were here yesterday.' : gap < 60 ? '. It’s been ' + gap + ' days, and that’s fine: pick up anywhere.' : '. It’s been a while, and that’s fine: pick up anywhere.') + '</span></li>';
+    // only on the first look this visit: not when they were on another page a few minutes ago
+    var justHere = last && last.at && Date.now() - last.at < 6 * 3600e3;
+    if (where !== 'menu' && gap >= 1 && !justHere) rows += '<li><span class="tol-pu-ico" aria-hidden="true">&#128075;</span><span>Welcome back' + (gap === 1 ? '. You were here yesterday.' : gap < 60 ? '. It’s been ' + gap + ' days, and that’s fine: pick up anywhere.' : '. It’s been a while, and that’s fine: pick up anywhere.') + '</span></li>';
     if (nx) rows += '<li><span class="tol-pu-ico" aria-hidden="true">&#10145;</span><span>Your next step: <a href="' + esc(nx.u) + '">' + esc(nx.t) + '</a>' + (nx.note ? ' <small>(' + esc(nx.note) + ')</small>' : '') + '</span></li>';
     if (fresh.length) rows += '<li><span class="tol-pu-ico" aria-hidden="true">&#10024;</span><span>New since your last visit: ' + fresh.map(function (n) { return '<a href="' + esc(n[2]) + '">' + esc(n[1]) + '</a>'; }).join(', ') + '</span></li>';
     if (last) rows += '<li><span class="tol-pu-ico" aria-hidden="true">&#128278;</span><span>You were last on <a href="' + esc(last.u) + '">' + esc(last.t) + '</a> <small>' + esc(ago(last.at)) + '</small>' +

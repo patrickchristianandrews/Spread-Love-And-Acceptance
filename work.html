@@ -183,7 +183,7 @@
 
 <h2 id="messages">Messages that land</h2>
 <p>At work, a short message carries more than its words. Pay, reviews and reputation sit underneath it, so a quick line can read as a criticism, an order or a hidden note about someone’s competence, even when it wasn’t meant that way. A little extra clarity costs a few seconds and saves a lot of second-guessing.</p>
-<p><a href="/signal-translator.html">The Signal Translator</a> is a free tool for checking a message before you send it. Type the sentence, choose the work message setting, and it shows how it may land and offers a clearer, kinder way to say it. What you type stays on your device.</p>
+<p><a href="/signal-translator.html?use=work">The Signal Translator</a> is a free tool for checking a message before you send it. Type the sentence (this link opens it on the work-message setting), and it shows how it may land and offers a clearer, kinder way to say it. What you type stays on your device.</p>
 
 <h3>Three before-and-after examples</h3>
 <div class="wk-ba">
@@ -272,7 +272,7 @@
   <li><a href="/relationships-in-depth.html#coworkers"><strong>Coworkers and teams</strong><span>How invisible work shows up at work, and which tools fit a team.</span></a></li>
   <li><a href="/method-and-limits.html"><strong>Method and limits</strong><span>How every score on the site is worked out, and what it cannot tell you.</span></a></li>
   <li><a href="/appreciation-at-work.html"><strong>Appreciation at work</strong><span>Five ways people like to be thanked, as a menu rather than a label.</span></a></li>
-  <li><a href="/signal-translator.html"><strong>The Signal Translator</strong><span>Check how a message may land before you send it, with a clearer way to say it.</span></a></li>
+  <li><a href="/signal-translator.html?use=work"><strong>The Signal Translator</strong><span>Check how a message may land before you send it, with a clearer way to say it.</span></a></li>
   <li><a href="/conversation-reader.html"><strong>The Conversation Reader</strong><span>Paste a thread that went wrong and see where it turned, with calmer replies.</span></a></li>
   <li><a href="/upset-right-now.html"><strong>Upset right now?</strong><span>For heated moments: a pause line with a return time, a breathing pacer, and how to come back.</span></a></li>
 </ul>
@@ -292,7 +292,8 @@
   var status = document.getElementById('wk-status');
   if (!team || !body) return;
   var state = { team: '', rows: [] };
-  var undo = null;
+  var undo = null;      // a function that puts back what was last cleared or removed
+  var undoTimer = null;
 
   function load() {
     try {
@@ -314,18 +315,36 @@
     });
     return out;
   }
+  // the Undo button stays for a short while, then goes (but never while it has focus)
+  function dropUndo() {
+    clearTimeout(undoTimer); undoTimer = null;
+    var b = status.querySelector('button');
+    if (b && document.activeElement === b) { undoTimer = setTimeout(dropUndo, 4000); return; }
+    undo = null;
+    if (b) b.remove();
+  }
   function say(msg, withUndo) {
+    clearTimeout(undoTimer); undoTimer = null;
     status.textContent = msg;
-    if (withUndo) {
+    if (withUndo && undo) {
       var b = document.createElement('button');
       b.type = 'button'; b.className = 'wk-btn wk-small'; b.textContent = 'Undo';
       b.addEventListener('click', function () {
         if (!undo) return;
-        state.rows = undo; undo = null; save(); render(); say('Restored.');
+        var put = undo; undo = null;
+        var focusEl = put();
+        save(); render(); say('Restored.');
+        focusEl = focusEl ? focusEl() : null;
+        if (focusEl) focusEl.focus();
       });
+      status.appendChild(document.createTextNode(' '));
       status.appendChild(b);
+      undoTimer = setTimeout(dropUndo, 20000);
+    } else {
+      undo = null;
     }
   }
+  function jobInput(i) { return body.querySelectorAll('input')[i] || null; }
   function opt(sel, value, label) {
     var o = document.createElement('option');
     o.value = value; o.textContent = label;
@@ -374,10 +393,15 @@
       del.type = 'button'; del.className = 'wk-btn wk-small'; del.textContent = 'Remove';
       del.setAttribute('aria-label', 'Remove row ' + n);
       del.addEventListener('click', function () {
-        state.rows.splice(i, 1); save(); render();
-        say('Row removed.');
-        var next = body.querySelector('input');
-        (next || document.getElementById('wk-add')).focus();
+        var gone = state.rows.splice(i, 1)[0];
+        var name = (gone && gone.task || '').trim();
+        undo = function () {
+          state.rows.splice(Math.min(i, state.rows.length), 0, gone);
+          return function () { return jobInput(i); };
+        };
+        save(); render();
+        say(name ? 'Removed “' + name + '”.' : 'Removed row ' + n + '.', true);
+        (jobInput(i) || document.getElementById('wk-add')).focus();
       });
       tr.appendChild(cell('Recurring job', task));
       tr.appendChild(cell('Owner', owner));
@@ -412,7 +436,11 @@
   });
   document.getElementById('wk-clear').addEventListener('click', function () {
     if (!state.rows.length) { say('The list is already empty.'); return; }
-    undo = state.rows.slice();
+    var kept = state.rows.slice();
+    undo = function () {
+      state.rows = kept;
+      return function () { return jobInput(0) || document.getElementById('wk-clear'); };
+    };
     state.rows = []; save(); render();
     say('List cleared. Team names were kept.', true);
   });

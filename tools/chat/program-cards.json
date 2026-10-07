@@ -1154,6 +1154,166 @@
       ]
     },
     {
+      "id": "grownkids",
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "name": "grown children",
+      "pat": "\\b(grown|adult|grown up|grown-up) (son|daughter|sons|daughters|kids|children|child)\\b|\\breconnect\\w* with my (son|daughter|kids|children)\\b|\\bmy (son|daughter) (and i )?(barely|hardly|never|don t|dont|do not) (talk|speak|call|visit)\\w*\\b.{0,40}\\b(since|after) (his|her|their|my) (mother|father|mom|mum|dad|wife|husband) (died|passed|passed away)\\b",
+      "keys": [],
+      "what": [
+        "Distance with a grown son or daughter is common, especially after a loss or a big change, and it usually isn’t a verdict on you. People grieve and pull back in different ways, and grown children often worry about saying the wrong thing."
+      ],
+      "how": [
+        "Start small and regular rather than big: a short call at the same time each week, or one easy invitation, like lunch or help with a small job.",
+        "One honest line can open a door: “I’ve been quiet because I miss your mother, not because of you. I’d like to see more of you.”",
+        "Let them help you with something practical, like a lift or the new phone. Being useful to you can mean as much to them as it does to you.",
+        "If there’s an old hurt between you, say you’d like to hear their side one day, and leave it there for now."
+      ],
+      "links": [
+        [
+          "Coming back to your grown children and grandchildren",
+          "/grief.html#reconnect"
+        ],
+        [
+          "When your family grieves differently",
+          "/grief.html#family"
+        ],
+        [
+          "For grandparents: staying close",
+          "/grandparents.html"
+        ]
+      ],
+      "chips": [
+        [
+          "What could I say to start?",
+          "What could I say to my grown son to start?"
+        ]
+      ]
+    },
+    {
+      "id": "phonetrust",
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "name": "phones, trust and jealousy",
+      "pat": "\\b(fight|fighting|fights|argue|arguing|argument|arguments|row|rows)\\w* (about|over) (her|his|their|my|our|the) (phone|phones|texts|instagram|snapchat|tiktok|social media|dms)\\b|\\b(she|he|they) (s |is |are )?(always |constantly )?on (her|his|their) phone\\b|\\bjealous\\w*\\b|\\btrust issues\\b|\\b(she|he|they) (says|said) i (don t|dont|do not) trust (her|him|them)\\b|\\bi (don t|dont|do not|can t|cant) trust (her|him|them|my (gf|bf|girlfriend|boyfriend|partner|wife|husband))\\b",
+      "notPat": "\\b(checks|checked|reads|read|goes through|went through|tracks|monitors) my\\b",
+      "keys": [],
+      "what": [
+        "Fights about phones are usually about something underneath: feeling left out, worry, or not being sure where you stand. The phone is just where it shows up."
+      ],
+      "how": [
+        "Talk about the feeling, not the device: “When you’re on your phone at dinner, I feel like I’m not really there.” That lands better than “you’re always on your phone”.",
+        "Agree on one or two simple norms together, like phones away at meals or in bed, rather than one person setting rules for the other.",
+        "If it’s about trust or jealousy, say what would help you feel secure, and ask what would help them. Reassurance you both choose works; checking each other’s phones usually makes it worse.",
+        "If either of you checks, tracks or controls the other’s phone or friends, that’s a different thing from a disagreement. The Not safe at home? page explains the difference."
+      ],
+      "script": [
+        "I don’t want to police your phone. I think what’s really bugging me is feeling a bit shut out. Can we figure out some phone-free time that works for both of us?"
+      ],
+      "links": [
+        [
+          "Check-ins: raise it once, calmly",
+          "/check-ins.html"
+        ],
+        [
+          "Turning toward: small ways to connect",
+          "/turning-toward.html"
+        ],
+        [
+          "Not safe at home? (the difference between worry and control)",
+          "/safety.html"
+        ]
+      ],
+      "chips": [
+        [
+          "Is that a red flag?",
+          "Is that a red flag?"
+        ],
+        [
+          "What could I say?",
+          "Another way to say it"
+        ]
+      ]
+    },
+    {
+      "id": "lonely",
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "name": "feeling lonely",
+      "pat": "\\b(i feel|i m|im|i am|i ve been|ive been|been|feeling|feel) (so |really |kinda |kind of |pretty |very |a bit |a little |super )?(alone|lonely|isolated)\\b|\\b(so|really|kinda|very) lonely\\b|\\bno (one|body) to talk to\\b|\\bi (don t|dont|do not) have (any )?friends\\b",
+      "keys": [],
+      "what": [
+        "Thanks for saying it. Feeling lonely is really common, and it isn’t a flaw in you. It’s a signal, a bit like hunger, that you need more connection, and it tends to ease with small, regular contact rather than one big fix."
+      ],
+      "how": [
+        "Pick one person and send one easy message today, like “Saw this and thought of you”. Small, low-pressure contact counts.",
+        "Put something regular in your week where the same people show up: a class, a club, volunteering, a faith group, or a walk at the same time each day.",
+        "Loneliness can make other people seem less friendly than they are. Assume a bit more goodwill than your mind is telling you.",
+        "If it’s been heavy for a long time, or you’re feeling hopeless, please talk to a doctor or counselor. In the US you can call or text 988 any time."
+      ],
+      "links": [
+        [
+          "Loneliness: what the research says",
+          "/library/connection.html#loneliness"
+        ],
+        [
+          "Turning toward: small ways to connect",
+          "/turning-toward.html"
+        ],
+        [
+          "Your self path",
+          "/self-path.html"
+        ]
+      ],
+      "chips": [
+        [
+          "Something small for today",
+          "Give me one thing to do"
+        ]
+      ]
+    },
+    {
+      "id": "leave",
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "name": "should I leave",
+      "pat": "\\bshould (i|we) (leave|divorce|break up with|split up|separate from|end things with|walk away from)\\b|\\bshould (i|we) (get a )?divorce\\b|\\b(thinking about|thinking of|considering) (leaving|divorc\\w*|breaking up|separating)\\b|\\bis it time to (leave|end it|break up|separate|get divorced)\\b",
+      "keys": [],
+      "what": [
+        "That’s a big question, and it deserves more than a chat can give. I can’t tell you whether to stay or go, but I can help you think it through."
+      ],
+      "how": [
+        "First, safety: if you feel scared of them, or they hurt, threaten, watch or control you, that changes everything. Please look at the Not safe at home? page and talk to an advocate, who can help you plan safely.",
+        "If it’s more that things feel stuck or empty, it can help to write down what you want, what you’ve tried, and what would need to change for you to want to stay.",
+        "A couples counselor, or a counselor just for you, is the best place to work out a decision like this. Many people go on their own first.",
+        "You don’t have to decide today. Taking care of your sleep and support while you think is part of deciding well."
+      ],
+      "links": [
+        [
+          "Not safe at home?",
+          "/safety.html"
+        ],
+        [
+          "Is the setup working for everyone?",
+          "/calc01-solvency.html"
+        ],
+        [
+          "Complacency: when it’s fine but not good",
+          "/complacency.html"
+        ]
+      ],
+      "chips": [
+        [
+          "What are the red flags?",
+          "What are the red flags in a relationship?"
+        ]
+      ]
+    },
+    {
       "id": "onmyown",
       "kind": "intent",
       "first": true,
@@ -1272,6 +1432,44 @@
         ]
       ],
       "notPat": "\\b(of|with) (two|three|four|five|six|seven|eight|[2-8])\\b|\\bteam of\\b"
+    },
+    {
+      "id": "teamowners",
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "name": "a team arguing over who owns what",
+      "pat": "\\b(team leads?|leads|managers?|supervisors?|coworkers|colleagues|staff|my team|two of my (staff|reports|team|people)|teammates)\\b.{0,40}\\b(fight|fighting|fights|clash|clashing|argu\\w*|bicker\\w*|squabbl\\w*|disagree\\w*)\\b.{0,40}\\b(who owns|owns what|ownership|who does what|whose job|whose responsibility|responsib\\w*|who is responsible)\\b|\\b(fighting|arguing|clashing) (over|about) (who owns what|ownership|whose job it is|who does what) at work\\b",
+      "keys": [],
+      "what": [
+        "That’s one of the most common work frictions, and it’s usually a gap in the setup rather than two difficult people. When a job has no clear owner, both leads end up guarding it, or both drop it."
+      ],
+      "how": [
+        "List only the jobs they actually clash over. Keep it short: five to ten is plenty.",
+        "In one calm meeting with both of them, give each job one owner and one backup. The owner does it and sees it through; the backup steps in or flags it if it slips.",
+        "Write it down where both can see it, and agree a date to look at it again in a month. Disagreements after that are about the list, not about each other.",
+        "Keep it separate from performance reviews, so nobody feels they’re being judged for raising a gap."
+      ],
+      "links": [
+        [
+          "At work: a team one-owner list you can print",
+          "/work.html"
+        ],
+        [
+          "A 45-minute team session",
+          "/work.html#team-session"
+        ],
+        [
+          "Messages that land at work",
+          "/work.html#messages"
+        ]
+      ],
+      "chips": [
+        [
+          "How do I test a work message?",
+          "How do I test a work email before I send it?"
+        ]
+      ]
     },
     {
       "id": "raisekids",
@@ -3550,7 +3748,7 @@
         "instead of therapy"
       ],
       "what": [
-        "No. The Objective Ledger isn’t therapy, counseling, diagnosis or treatment, and I’m not a counselor. It’s a shared, practical way to see the load, fix the setup and talk more kindly, built on ideas from psychology and systems. Every score describes the setup, never a person, and none of it is a clinical tool.",
+        "No. This site isn’t therapy, counseling, diagnosis or treatment, and I’m not a counselor. It’s a shared, practical way to see the load, fix the setup and talk more kindly, built on ideas from psychology and systems. Every score describes the setup, never a person, and none of it is a clinical tool.",
         "It can sit happily alongside professional support. If things feel heavy, unsafe or stuck, or have lasted a long time, please talk with a qualified professional."
       ],
       "links": [
@@ -3776,7 +3974,7 @@
       "id": "tol",
       "kind": "intent",
       "name": "what The Objective Ledger is",
-      "pat": "^what (is|s) (this|this site|the objective ledger|tol|tol os|tolos|spread love and acceptance)$|^whats (this|this site)$|^what is this (program|place|website)$",
+      "pat": "^what (is|s) (this|this site|the objective ledger|tol|tol os|tolos|spread love and acceptance)$|^whats (this|this site)$|^what is this (program|place|website)$|\\bwhat( s| is|s)? the (actual |real |whole |main )?point of (this|this site|the site|this website|this place)\\b|\\bwhat is this (site|website) for\\b|\\bwhat (does|do) (this site|this website|you guys) do\\b",
       "keys": [
         "the objective ledger",
         "tol os",
@@ -3785,8 +3983,8 @@
         "spread love and acceptance"
       ],
       "what": [
-        "The Objective Ledger is a free, plain-language program on understanding yourself and getting along with the people you share life with. It gives you a calm, shared way to see the work of running a life (including the invisible parts), fix the setup instead of blaming people, read your state before hard talks, and say things so they land.",
-        "It rests on the Five Pillars, and it works for yourself, partners, family, co-parents, friends, roommates, coworkers and caregivers. The ledger records the arrangement; it never puts anyone on trial."
+        "Spread Love & Acceptance is a free, private set of short tools and guides for understanding yourself and getting along with the people you share life with: partners, family, roommates, coworkers, or just you.",
+        "It helps you see the whole load (including the invisible parts), fix the setup instead of blaming people, calm down before hard talks, and say things so they land. Everything is open with no sign-up, and what you type stays on your device."
       ],
       "links": [
         [

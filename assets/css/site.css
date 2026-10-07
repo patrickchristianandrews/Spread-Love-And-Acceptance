@@ -403,6 +403,9 @@ details.deeper .deeper-body > :first-child{ margin-top:0; }
 .sw-say{ font-size:1.04rem; line-height:1.65; margin:0 0 .9rem; max-width:64ch; }
 .sw-picks{ list-style:none; margin:0; padding:0; counter-reset:sw; }
 .sw-picks li{ margin:.55rem 0; padding-left:1.6rem; position:relative; counter-increment:sw; }
+/* a single suggestion needs no number */
+.sw-picks li:only-child{ padding-left:0; }
+.sw-picks li:only-child::before{ content:none; }
 .sw-picks li::before{
   content:counter(sw); position:absolute; left:0; top:.05rem;
   font-family:"IBM Plex Mono", ui-monospace, monospace; font-size:.72rem; color:var(--brass-ink, #7A5620);
@@ -2577,3 +2580,12 @@ html.tol-work :is(.tol-wash b, .tol-garden-bg, .tol-garden-veil, [data-palcam-ro
 .tol-work-note a{ margin-left:.3rem; }
 html.tol-work .tol-simple .read-head::after, html.tol-work .tol-deep .read-head::after{ display:none !important; }
 html.tol-work .tol-wash i{ opacity:.35; }
+/* plain mode also drops the tip of the day, reading and cartoon suggestions, promos, garden levels, and the Calm & play menu */
+html.tol-work :is(.tol-tip, .tol-fp-note, .tol-read, .tol-fbs, .tol-pud-card, .tr-toast, .tr-card, #tol-sec-play, [data-work-hide]){ display:none !important; }
+html.tol-work .tol-nav-item:has(> button[data-sec="play"]){ display:none !important; }
+html.tol-work main .tol-work-note{ margin:0 0 1rem; }
+/* the home "Pick up where you left off" card now sits inside the opening block */
+html.tol-home .hh .tol-pickup-host{ margin:.8rem 0 1rem; }
+/* (moved out of inline styles, so pages with a strict Content-Security-Policy show them too) */
+.tol-foot-guides{ display:flex; flex-wrap:wrap; gap:.3rem 1rem; justify-content:center; margin:0 0 .75rem; font-size:.9rem; }
+.tol-set-size-md{ font-size:1em; } .tol-set-size-lg{ font-size:1.12em; } .tol-set-size-xl{ font-size:1.25em; } .tol-set-size-xxl{ font-size:1.4em; }

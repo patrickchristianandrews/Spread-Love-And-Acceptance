@@ -392,7 +392,7 @@
 
   function packagePdf(data) {
     var reg = FP.regOf(data), road = FP.ROADS[data.road];
-    var doc = new PDF.Doc({ title: 'Full path package: ' + road.label, producer: 'The Objective Ledger (TOL-OS) Full path package ' + FP.VERSION + ', made on this device', subject: 'tol-fullpath road=' + data.road + ' people=' + data.people });
+    var doc = new PDF.Doc({ title: 'Full path package: ' + road.label, producer: 'Spread Love & Acceptance Full path package ' + FP.VERSION + ', made on this device', subject: 'tol-fullpath road=' + data.road + ' people=' + data.people });
     var lay = new Lay(doc), toc = [];
     var roadName = road.label;
 
@@ -402,7 +402,7 @@
     sprinkle(doc, 5);
     doc.roundRect(L, 50, W, 118, 18, ROAD_COLOR[data.road] || C.pink);
     doc.heart(R - 42, 86, 32, '#FFFFFF');
-    doc.text(L + 20, 78, enc('THE OBJECTIVE LEDGER  ·  FULL PATH PACKAGE  ·  VERSION ' + FP.VERSION), 'Helvetica-Bold', 7.8, C.ink);
+    doc.text(L + 20, 78, enc('SPREAD LOVE & ACCEPTANCE  ·  FULL PATH PACKAGE  ·  VERSION ' + FP.VERSION), 'Helvetica-Bold', 7.8, C.ink);
     doc.text(L + 20, 112, enc('My full path: ' + roadName), 'Times-Bold', 24, C.ink);
     wrap(road.solo ? 'Every page for understanding yourself, in one place: your load score, your calm-down kit, how words reach you, and kind ways to say no.'
       : 'Every workpaper for this road, in one place, plus the CALC-01 inputs and a page to get ready for your report.', 'Times-Italic', 11, W - 110).slice(0, 3).forEach(function (ln, k) { doc.text(L + 20, 134 + k * 13.5, ln, 'Times-Italic', 11, C.ink); });
@@ -477,7 +477,7 @@
       if (e.sub) { wrap(e.sub, 'Times-Italic', 8.8, W - 70).slice(0, 2).forEach(function (ln) { doc.text(L + 16, y + 7, ln, 'Times-Italic', 8.8, C.soft); y += 10.5; }); }
       y += 6;
     });
-    footers(doc, 'The Objective Ledger  ·  Full path package  ·  ' + roadName + '  ·  version ' + FP.VERSION,
+    footers(doc, 'Spread Love & Acceptance  ·  Full path package  ·  ' + roadName + '  ·  version ' + FP.VERSION,
       'Made on your device; nothing you type is sent anywhere. A self-reflection worksheet, not a clinical tool. It describes the setup, never a person.');
     return doc.output();
   }
@@ -641,7 +641,7 @@
   function fitLine(text, font, size, width) { return wrap(text, font, size, width)[0]; }
 
   function reportPdf(m) {
-    var doc = new PDF.Doc({ title: m.title, producer: 'The Objective Ledger (TOL-OS) Full path report, made on this device', subject: 'tol-fullpath-report road=' + m.road });
+    var doc = new PDF.Doc({ title: m.title, producer: 'Spread Love & Acceptance Full path report, made on this device', subject: 'tol-fullpath-report road=' + m.road });
     var lay = new Lay(doc), toc = [];
     function section(title, bookmark, level) {
       lay.page('Full path report  ·  ' + m.roadLabel + '  ·  ' + title);
@@ -654,7 +654,7 @@
     sprinkle(doc, 9);
     doc.roundRect(L, 44, W, 112, 16, ROAD_COLOR[m.road] || C.pink);
     doc.heart(R - 38, 74, 28, '#FFFFFF');
-    doc.text(L + 18, 68, enc('THE OBJECTIVE LEDGER  ·  FULL PATH REPORT'), 'Helvetica-Bold', 7.8, C.ink);
+    doc.text(L + 18, 68, enc('SPREAD LOVE & ACCEPTANCE  ·  FULL PATH REPORT'), 'Helvetica-Bold', 7.8, C.ink);
     var tl = wrap(m.title, 'Times-Bold', 21, W - 90);
     tl.slice(0, 2).forEach(function (ln, k) { doc.text(L + 18, 96 + k * 23, ln, 'Times-Bold', 21, C.ink); });
     var yy0 = 96 + Math.min(tl.length, 2) * 23 + 2;
@@ -915,7 +915,7 @@
       y += step;
     });
     doc.marks = [{ title: 'Cover', level: 0, page: 0 }, { title: 'Contents', level: 0, page: contentsPage }].concat(toc.map(function (e) { return { title: e.t, level: 0, page: e.page }; }));
-    footers(doc, fitLine('The Objective Ledger  ·  Full path report  ·  ' + m.roadLabel + '  ·  made on your device ' + niceDate(m.date), 'Helvetica', 6.8, W - 80),
+    footers(doc, fitLine('Spread Love & Acceptance  ·  Full path report  ·  ' + m.roadLabel + '  ·  made on your device ' + niceDate(m.date), 'Helvetica', 6.8, W - 80),
       fitLine('Everything stays on your device. Not a verdict, not a diagnosis, no health claims. It describes the setup, never a person.', 'Helvetica', 6.8, W - 80));
     return doc.output();
   }

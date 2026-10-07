@@ -38,7 +38,7 @@
       '</div>' +
       '<div class="tol-rm-row">' +
         '<button type="button" class="tol-rm-b" data-rm="ics">Add to my calendar</button>' +
-        '<a class="tol-rm-b is-soft" data-rm="google" href="#" target="_blank" rel="noopener">Google Calendar</a>' +
+        '<a class="tol-rm-b is-soft" data-rm="google" href="#" target="_blank" rel="noopener">Google Calendar<span class="sr-only"> (opens in a new tab)</span></a>' +
       '</div>' +
       '<p class="tol-rm-msg" role="status" aria-live="polite"></p>';
     var dSel = host.querySelector('#' + id + '-d'), tSel = host.querySelector('#' + id + '-t'), g = host.querySelector('[data-rm="google"]'), msg = host.querySelector('.tol-rm-msg');

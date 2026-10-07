@@ -2141,6 +2141,8 @@ sync();
 </script>
 <script>
   // a sentence passed in the address (?text=…), from the Perspective Shifter or a link, goes straight into the box
+  // ?use=work (the link from the At work page), or work mode: start on the work-message setting, and show it
+  (function () { try { var u = new URLSearchParams(location.search).get('use'), sel = document.getElementById('useSel'); if (sel && (u === 'work' || document.documentElement.classList.contains('tol-work') || (sessionStorage.getItem('tol-work') === '1')) && [].some.call(sel.options, function (o) { return o.value === 'work'; })) { sel.value = 'work'; sel.dispatchEvent(new Event('change', { bubbles: true })); var fine = document.getElementById('fine'); if (fine) fine.open = true; } } catch (e) {} })();
   (function () { try { var q = new URLSearchParams(location.search).get('text'); var box = document.getElementById('phrase'); if (q && box && !box.value) { box.value = q.slice(0, 1500); box.dispatchEvent(new Event('input', { bubbles: true })); } } catch (e) {} })();
 </script>
 </body>

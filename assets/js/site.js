@@ -440,8 +440,11 @@
       return sessionStorage.getItem('tol-work') === '1';
     } catch (e) { return !!(q && q[1] === '1'); }
   })();
-  function workMode() { return WORK || !!(document.body && document.body.hasAttribute('data-work')); }
-  if (WORK) document.documentElement.classList.add('tol-work');
+  // Serious pages are always plain too, with no pups, cartoons, tips or promos beside them: grief, safety,
+  // the honest limits, "is this for you?" and the page for someone who was sent a link.
+  var PLAIN = /^\/(grief|safety|method-and-limits|is-this-for-you|sent-this)\.html$/;
+  function workMode() { return WORK || PLAIN.test(current) || !!(document.body && document.body.hasAttribute('data-work')); }
+  if (WORK || PLAIN.test(current)) document.documentElement.classList.add('tol-work');
   // when this visit began (this tab only), so no invitation shows in someone's first minute here
   try { if (!sessionStorage.getItem('tol-visit-t0')) sessionStorage.setItem('tol-visit-t0', String(Date.now())); } catch (e) {}
 
@@ -597,7 +600,7 @@
   }
   // the last few pages opened here, for "Pick up where you left off" (this browser only; it can be switched off or erased)
   function rememberPage(body) {
-    if (lsGet('tol-recent-off') || /^\/(index|404|offline|garden-backdrop|pal-cam-tv|on-this-device|membership)\.html$|^\/legal\//.test(current) || location.search.indexOf('palcam-pop') !== -1) return;
+    if (lsGet('tol-recent-off') || /^\/(index|404|offline|garden-backdrop|pal-cam-tv|on-this-device|membership|safety|ask)\.html$|^\/legal\//.test(current) || location.search.indexOf('palcam-pop') !== -1) return;
     var h1 = document.querySelector('main h1');
     var t = (here && here.title) || (h1 && h1.textContent.replace(/\s+/g, ' ').trim()) || document.title.replace(/\s*[·|–—-]\s*(Spread Love|The Objective Ledger).*$/, '');
     if (!t) return;
@@ -649,6 +652,8 @@
 
     var skip = el('a', { class: 'tol-skip', href: '#tol-main' }, 'Skip to content');
     if (workMode()) document.documentElement.classList.add('tol-work');
+    // arriving on the "At work" page keeps the plain version on for the pages it links to (this tab only)
+    if (body.hasAttribute('data-work') && !/[?&]work=0\b/.test(location.search)) { try { sessionStorage.setItem('tol-work', '1'); } catch (e) {} }
 
     var bar = el('div', { class: 'tol-bar', role: 'banner' });
     bar.style.margin = (-pt) + 'px ' + (-pr) + 'px ' + pt + 'px ' + (-pl) + 'px';
@@ -784,7 +789,7 @@
     }
 
     // levels for calm moments anywhere on the site (rewards.js), except the locked-down workpaper pages
-    if (!window.TOLRewards && !document.querySelector('meta[http-equiv="Content-Security-Policy"]')) {
+    if (!window.TOLRewards && !workMode() && !document.querySelector('meta[http-equiv="Content-Security-Policy"]')) {
       var rw = document.createElement('script'); rw.src = '/assets/js/rewards.js'; document.head.appendChild(rw);
     }
 
@@ -811,7 +816,7 @@
     }
 
     // playful learning layer: "Check yourself" moments, a learning trail and the quest map (learn-play.js)
-    if (!body.hasAttribute('data-no-learnplay') && !document.querySelector('meta[http-equiv="Content-Security-Policy"]')) {
+    if (!body.hasAttribute('data-no-learnplay') && !workMode() && !document.querySelector('meta[http-equiv="Content-Security-Policy"]')) {
       var lp = document.createElement('script'); lp.src = '/assets/js/learn-play.js'; document.head.appendChild(lp);
     }
 
@@ -888,7 +893,13 @@
     if (current === '/index.html') {
       var hi = document.querySelector('main [data-home-intro]');
       // right under the opening block, so a returning visitor sees "Welcome back" and their next step on the first screens
-      if (hi) loadPickUp(function () { var h = el('div', { class: 'tol-pickup-host', 'data-pickup': 'home' }); hi.after(h); window.TOLPickUp.mount(h, 'home'); });
+      // (inside the opening block, under the first lines, so it's on the first screen; removed again if there's nothing to show)
+      if (hi) loadPickUp(function () {
+        var h = el('div', { class: 'tol-pickup-host', 'data-pickup': 'home' }), lede = hi.querySelector('.hh-lede');
+        if (lede) lede.after(h); else hi.after(h);
+        window.TOLPickUp.mount(h, 'home');
+        if (!h.querySelector('.tol-pickup')) h.remove();
+      });
     }
     palCamHooks(body); // pal cam: "Check in on Tidbit & Sugarfoot" from anywhere (see below)
 
@@ -907,8 +918,9 @@
     body.insertBefore(skip, body.firstChild);
     // work mode from a link: one quiet line under the bar says so, with a way out
     if (WORK) {
-      var wk = el('p', { class: 'tol-work-note' }, 'Work mode: the plain version, with no cartoons or games. <a href="' + location.pathname + '?work=0">Turn it off</a>');
-      bar.after(wk);
+      var wk = el('p', { class: 'tol-work-note', role: 'note' }, 'Work mode: the plain version, with no cartoons or games. <a href="' + location.pathname + '?work=0">Turn it off</a>');
+      var wm = document.querySelector('main');
+      if (wm) wm.insertBefore(wk, wm.firstChild); else bar.after(wk);
     }
     if (document.querySelector('aside.sidebar')) document.documentElement.classList.add('tol-own-side');
     // Big text or zoom: nothing in the bar is ever pushed off the side. Step by step, the section
@@ -982,13 +994,13 @@
     foot.innerHTML = promise +
       '<span class="tol-foot-brand"><img src="/assets/img/logo-mark.svg" alt="" width="40" height="40">Spread Love &amp; Acceptance &middot; spreadloveandacceptance.com</span>' +
  (current === '/polymath.html' ? '' : '<p class="tol-foot-polymath">Every part of this program grows from the same few roots, seen across thirteen fields. <a href="/polymath.html">The polymath way &rarr;</a></p>') +
-      '<nav class="tol-foot-guides" aria-label="Guides" style="display:flex;flex-wrap:wrap;gap:.3rem 1rem;justify-content:center;margin:0 0 .75rem;font-size:.9rem">' +
+      '<nav class="tol-foot-guides" aria-label="Guides">' +
         '<a href="/invisible-labor-mental-load.html">The mental load</a>' +
         '<a href="/chore-chart-for-couples.html">Chore chart for couples</a>' +
         '<a href="/how-to-stop-fighting-with-your-partner.html">How to stop fighting</a>' +
         '<a href="/neurodivergent-relationships.html">Neurodivergent relationships</a>' +
         '<a href="/communication-style-quiz.html">Communication style quiz</a>' +
-        '<a href="/frequency-buddies.html">Kids’ cartoon</a>' +
+        '<a href="/frequency-buddies.html" data-work-hide>Kids’ cartoon</a>' +
       '</nav>' +
       '<span class="tol-foot-links">' +
         '<a href="/safety.html">Not safe at home?</a>' +
@@ -998,7 +1010,6 @@
         '<a href="/legal/privacy-policy.html">Privacy</a>' +
         '<a href="/on-this-device.html">Stored on this device</a>' +
         '<a href="/legal/terms-of-service.html">Terms</a>' +
-        '<a href="/legal/refund-policy.html">Refunds</a>' +
         '<a href="mailto:' + CONFIG.supportEmail + '">Contact</a>' +
         (isApp() ? '' : '<button type="button" class="tol-install-link">Add to your home screen</button>') +
       '</span>';
@@ -1095,6 +1106,9 @@
     group: ['/groups.html', '/check-ins.html'], groups: 'group', leader: 'group', facilitator: 'group', church: 'group', class: 'group', discussion: 'group', curriculum: 'group', course: 'group',
     unheard: ['/check-ins.html', '/how-to-stop-fighting-with-your-partner.html', '/signal-translator.html'], ignored: 'unheard', dismissed: 'unheard',
     grief: ['/grief.html', '/library/emotions.html', '/grandparents.html', '/self-path.html'], retirement: ['/grief.html'], retired: 'retirement', retiring: 'retirement', reconnect: ['/grief.html'], reconnecting: 'reconnect', estranged: 'reconnect',
+    stepmom: ['/parents.html', '/co-parenting.html', '/teens.html'], stepmother: 'stepmom', stepdad: 'stepmom', stepfather: 'stepmom', stepparent: 'stepmom', stepparents: 'stepmom', stepkids: 'stepmom', stepchildren: 'stepmom', stepson: 'stepmom', stepdaughter: 'stepmom', blended: 'stepmom', stepfamily: 'stepmom', stepfamilies: 'stepmom',
+    lonely: ['/library/connection.html', '/grief.html', '/turning-toward.html'], loneliness: 'lonely', alone: 'lonely', isolated: 'lonely',
+    grown: ['/grief.html', '/grandparents.html'], adult: 'grown',
     work: ['/work.html', '/appreciation-at-work.html', '/relationships.html'], workplace: 'work', job: 'work', office: 'work', coworker: 'work', coworkers: 'work', colleague: 'work', colleagues: 'work', team: 'work', teams: 'work', manager: 'work', boss: 'work', employee: 'work', employees: 'work', staff: 'work', grieving: 'grief', widow: 'grief', widower: 'grief', widowed: 'grief', bereaved: 'grief', bereavement: 'grief', mourning: 'grief', died: 'grief', loss: 'grief',
     stonewalling: ['/upset-right-now.html', '/how-to-stop-fighting-with-your-partner.html', '/wp-11.html'], stonewall: 'stonewalling',
     grandfather: ['/grandparents.html'], grandpa: 'grandfather', grandmother: 'grandfather', grandma: 'grandfather', grandparent: 'grandfather', grandkids: 'grandfather', grandchildren: 'grandfather',
@@ -1267,7 +1281,8 @@
       if (e.key !== 'Escape' || GAME.test(location.pathname) || document.fullscreenElement) return;
       // an Esc that closes a menu, dialog or clears a box doesn't count, so closing things never sends anyone away
       var ae = document.activeElement || {};
-      if (Array.prototype.some.call(document.querySelectorAll('[role="dialog"]:not([hidden]), [aria-modal="true"]:not([hidden]), dialog[open]'), function (d) { return d.getClientRects().length > 0; }) || /^(INPUT|TEXTAREA|SELECT)$/.test(ae.tagName || '') || ae.isContentEditable) { last = 0; return; }
+      // (an open dropdown or menu button, anything aria-expanded, counts as something this Esc is closing)
+      if (Array.prototype.some.call(document.querySelectorAll('[role="dialog"]:not([hidden]), [aria-modal="true"]:not([hidden]), dialog[open], [aria-expanded="true"]'), function (d) { return d.getClientRects().length > 0; }) || /^(INPUT|TEXTAREA|SELECT)$/.test(ae.tagName || '') || ae.isContentEditable) { last = 0; return; }
       var now = Date.now();
       if (now - last < 700) quickExit();
       last = now;
@@ -1593,7 +1608,7 @@
     });
     var main = document.querySelector('main');
     // Professor Puddles sits just above the "Check in on Tidbit & Sugarfoot" link (or below the "what this is" line)
-    var pal = main && main.querySelector('[data-palcam-top], #explore [data-palcam-row]'), intro = main && main.querySelector('[data-home-intro]');
+    var pal = main && main.querySelector('[data-palcam-top], #explore .home-extras'), intro = main && main.querySelector('[data-home-intro]');
     if (main && pal) pal.parentNode.insertBefore(hi, pal);
     else if (main) main.insertBefore(hi, intro ? intro.nextSibling : main.firstChild); else body.appendChild(hi);
     setTimeout(function () { hi.classList.add('is-in'); }, small ? 0 : 600);
@@ -1988,7 +2003,7 @@
       sw('helpers', 'Hide the helpers', 'Professor Puddles’ cards, the cheering buddies, the pups popping in while you read, tips, petals and pop-up invitations. The “Check in on Tidbit & Sugarfoot” button stays, for when you want them.') +
       sw('sound', 'Keep site sounds off', 'When this is on, the pal cam, the games and the Breathe break start silent') +
       '<h3 class="tol-set-k">Reading</h3>' +
-      '<fieldset class="tol-set-sizes"><legend>Text size <small>(smallest to biggest)</small></legend>' + ['md', 'lg', 'xl', 'xxl'].map(function (k) { return radio('size', 'data-size-opt', k, '<span class="tol-set-size" style="font-size:' + SIZE_SCALE[k] + 'em">' + SIZE_NAMES[k] + '</span>'); }).join('') + '</fieldset>' +
+      '<fieldset class="tol-set-sizes"><legend>Text size <small>(smallest to biggest)</small></legend>' + ['md', 'lg', 'xl', 'xxl'].map(function (k) { return radio('size', 'data-size-opt', k, '<span class="tol-set-size tol-set-size-' + k + '">' + SIZE_NAMES[k] + '</span>'); }).join('') + '</fieldset>' +
       '<fieldset><legend>Font</legend>' + radio('font', 'data-font-opt', 'usual', 'The usual') + radio('font', 'data-font-opt', 'easy', '<span class="tol-set-easyfont">Easy to read</span>') + '</fieldset>' +
       '<fieldset><legend>Spacing</legend>' + radio('space', 'data-space-opt', 'usual', 'The usual') + radio('space', 'data-space-opt', 'wide', 'Roomy') + '</fieldset>' +
       '<fieldset><legend>Page tint</legend>' + radio('tint', 'data-tint-opt', 'none', 'None') + Object.keys(TINTS).map(function (k) { return radio('tint', 'data-tint-opt', k, '<span class="tol-set-swatch is-' + k + '" aria-hidden="true"></span>' + TINTS[k]); }).join('') + '</fieldset>' +
@@ -2104,7 +2119,10 @@
       var what = b.getAttribute('data-offer');
       lsSet('tol-comfort-offer', 'done');
       if (what !== 'no') { setPreset(what, true); announce(what === 'quiet' ? 'Quiet mode is on.' : 'Easy reading is on.'); }
-      var m = document.getElementById('tol-main'); box.remove(); if (m) m.focus({ preventScroll: true });
+      // focus goes to whatever came next (the page's first heading if nothing else), so a screen reader lands somewhere real
+      var nx = box.nextElementSibling, m = document.getElementById('tol-main'); box.remove();
+      var tgt = (nx && nx.matches && nx.matches('h1, h2, h3, p, section, header') ? nx : null) || document.querySelector('main h1, main h2');
+      if (tgt) { if (!tgt.hasAttribute('tabindex')) tgt.setAttribute('tabindex', '-1'); tgt.focus({ preventScroll: true }); } else if (m) m.focus({ preventScroll: true });
     });
     var intro = main.querySelector('[data-home-intro]'), head = main.querySelector('.read-head');
     if (intro) homeSlot(intro).after(box);                   // home: after the approved opening, so its order stays as it is

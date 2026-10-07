@@ -31,6 +31,7 @@
   .card h1{ font-size:1.7rem; margin:4px 0 10px; }
   .step{ background:#FFFDF6; border:1px solid var(--line); border-radius:var(--radius); padding:16px 18px; margin:18px 0; }
   .step h2{ font-size:1.1rem; margin:0 0 4px; }
+  .step .code-note{ font-family:"IBM Plex Mono", monospace; font-size:0.72rem; color:var(--ink-soft); margin:0 0 6px; }
   .step h2 small{ font-family:"IBM Plex Mono", monospace; font-weight:400; font-size:0.66rem; color:var(--ink-soft); margin-left:6px; }
   .hint{ color:var(--ink-soft); font-size:0.86rem; margin:4px 0 10px; }
   .grid{ display:grid; grid-template-columns:repeat(auto-fill, minmax(140px,1fr)); gap:10px; }
@@ -115,8 +116,7 @@
     <div class="kicker">CALC-01 &middot; The quick read</div>
     <h1>Is the setup working for everyone?</h1>
     <p style="font-size:0.9rem;color:var(--ink-soft);">Works for 2 to 8 people.</p>
-    <p>Type in the totals from your worksheets and see, in plain words, whether the way you share the load right now is working. It scores the <strong>setup</strong>, never a person, and never the relationship as a whole. It works for partners, families, roommates, co-carers and small teams: 2 to 8 people.</p>
-    <p class="pillar-note"><small>CALC-01 puts <a href="/five-pillars.html#see-the-load">Pillar I (“See the whole load”)</a> and <a href="/five-pillars.html#fix-the-setup">Pillar II (“Fix the setup, not the person”)</a> to work, with a battery check from <a href="/five-pillars.html#read-your-state">Pillar III, Read your state first</a>. In you: you see the whole load you carry as one number. Between you and others: you get one fair read of the setup, never a score on anyone.</small></p>
+    <p>Type in the totals from your worksheets and see, in plain words, whether the way you share the load right now is working for everyone. It scores the <strong>setup</strong>, never a person, and never the relationship as a whole.</p>
     <p style="font-size:0.9rem;">Want each input worked out from your raw entries, the overall score and a trend log? Use <a href="/calc01-solvency.html">the full CALC-01</a>. The math is the same on both pages.</p>
 
     <div class="step">
@@ -134,8 +134,9 @@
 
     <div class="step" id="s-wb">
       <p class="hint" id="weights-note">Three steps, each counted by how much it matters to the read: balance counts for 40%, ownership for 35% and stress for 25% (the “weights” 0.40, 0.35 and 0.25 you see beside each step).</p>
-      <h2>1. Balance: how the hours split <small>workload balance &middot; weight 0.40 (40%)</small></h2>
-      <p class="hint">From <a href="/workpapers/fill/wp-01.html">WP-01, Who did what, and kind ways to say no</a> or the <a href="/lemonade-stand.html">Lemonade Stand</a>: each person's total hours (or minutes) for the week.</p>
+      <h2>1. How the hours split</h2>
+      <p class="code-note">Balance (workload balance) &middot; counts for 40% (weight 0.40)</p>
+      <p class="hint">From <a href="/workpapers/fill/wp-01.html">WP-01, Who did what</a> or the <a href="/lemonade-stand.html">Lemonade Stand</a>: each person's total hours (or minutes) for the week.</p>
       <fieldset>
         <legend>I have&hellip;</legend>
         <label class="check"><input type="radio" name="wb-mode" value="hours" checked> Each person's hours</label>
@@ -150,7 +151,8 @@
     </div>
 
     <div class="step" id="s-oc">
-      <h2>2. Ownership: does each job have a name? <small>ownership clarity &middot; weight 0.35 (35%)</small></h2>
+      <h2>2. Does each job have a name?</h2>
+      <p class="code-note">Ownership (ownership clarity) &middot; counts for 35% (weight 0.35)</p>
       <p class="hint">From <a href="/workpapers/fill/wp-03.html">WP-03, One owner per job</a>: count every regular job you listed yourself, including the ones nobody owns yet, and how many of them have an owner. Starter examples you never filled in don’t count.</p>
       <div class="pair">
         <div><label for="jobs-total">Jobs on the list</label><input type="number" id="jobs-total" min="0" step="1" inputmode="numeric"></div>
@@ -160,7 +162,8 @@
     </div>
 
     <div class="step" id="s-as">
-      <h2>3. Stress: how much each person is carrying <small>average load &middot; weight 0.25 (25%)</small></h2>
+      <h2>3. How much each person is carrying</h2>
+      <p class="code-note">Stress (average load) &middot; counts for 25% (weight 0.25)</p>
       <p class="hint">From <a href="/workpapers/fill/wp-02.html">WP-02, How much are you carrying?</a>: each person's own score, their five 0&ndash;4 answers added up and divided by 20. It runs from 0 to 1, and higher means heavier. Everyone fills in their own; nobody guesses for someone else.</p>
       <div class="grid" id="batteries"></div>
       <div class="work" id="as-work" aria-live="polite"></div>
@@ -194,6 +197,7 @@
     </div>
 
     <p class="disclaimer"><strong>The words and their cut-offs:</strong> 0.70 or more, working well. 0.40 up to 0.70, needs a look. Below 0.40, needs a rethink, together. Here higher means the setup is working better. Read from the score rounded to two decimals, so the number and the words always agree. This is a rule-of-thumb worksheet, not a tested model or a compatibility test. It only reflects what you enter, and it can't decide whether a relationship is worth continuing. Nothing you type is saved or sent.</p>
+    <p class="disclaimer pillar-note"><small>CALC-01 puts <a href="/five-pillars.html#see-the-load">Pillar I (“See the whole load”)</a> and <a href="/five-pillars.html#fix-the-setup">Pillar II (“Fix the setup, not the person”)</a> to work, with a battery check from <a href="/five-pillars.html#read-your-state">Pillar III, Read your state first</a>. In you: you see the whole load you carry as one number. Between you and others: you get one fair read of the setup, never a score on anyone.</small></p>
     <p class="disclaimer">Read the reasoning in <a href="/book/chapter-2-in-depth.html">Chapter II</a>. Keep the numbers week by week in <a href="/workpapers/report-01.html">REPORT-01</a>, or <a href="/workpapers/fill/suite.html">build your Workpaper Suite</a>.</p>
   </div>
 </main>
@@ -311,7 +315,7 @@
       ? "<strong>Next:</strong> nothing in the setup needs changing this week. Keep the same rhythm of <a href=\"/check-ins.html\">check-ins</a>."
       : "<strong>Next:</strong> start with the biggest shortfall, <strong>" + esc(worst.name.toLowerCase()) + "</strong>, not with whatever happened most recently. Bring the first suggestion above to the others as a question, not a ruling." +
         (bd.key === "low" ? " A calm session to rework the <a href=\"/workpapers/fill/wp-03.html\">job list</a> together will do more than another one-off fix." : "");
-    var L = ["Is the setup working for everyone? Quick read (CALC-01, The Objective Ledger)", "People: " + names.map(function(_, i){ return nameOf(i); }).join(", "), "",
+    var L = ["Is the setup working for everyone? Quick read (CALC-01, Spread Love & Acceptance)", "People: " + names.map(function(_, i){ return nameOf(i); }).join(", "), "",
       "How the setup is working: " + bd.short + " (" + f2(sol.value) + " of 1; 0.70+ working well, 0.40 to 0.69 needs a look, under 0.40 needs a rethink, together)",
       "Balance " + f2(wb) + (b ? " (" + (b.mode === "agreed" ? "against our agreed split" : "against an even share") + ")" : " (from Who did what)") + " x 0.40 = " + fg(sol.parts.wb),
       "Ownership " + f2(oc) + " (" + o.owned + " of " + o.total + " jobs) x 0.35 = " + fg(sol.parts.oc),

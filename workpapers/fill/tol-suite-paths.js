@@ -18,7 +18,7 @@
     'WP-01': 'Who did what',
     'WP-02': 'How much are you carrying?',
     'WP-03': 'One owner per job',
-    'WP-04': 'The monthly look-back',
+    'WP-04': 'What keeps coming back?',
     'WP-09': 'Say it so it lands',
     'WP-11': 'The Calm-Down Kit',
     'WP-13': 'The 90-second daily check-in'
@@ -74,7 +74,7 @@
       ['The weekly handoff', ['WP-13'], A('checkins'), 'A short weekly check-in between homes: load, one thanks, one ask.'],
       ['See the load', ['WP-01', 'WP-02'], A('calc', 'weather'), 'Each of you logs a week, and checks your own load before handoffs.'],
       ['Calm under pressure', ['WP-11'], A('decoder'), 'Decide in advance what settles you before a hard conversation.'],
-      ['The monthly look-back', ['WP-04'], A('report', 'ch5'), 'Sort what slipped into real gaps or one-offs, and adjust the owners.']
+      ['What keeps coming back?', ['WP-04'], A('report', 'ch5'), 'The monthly look-back: sort what slipped into real gaps or one-offs, and adjust the owners.']
     ],
     friends: [
       ['Name what went unseen', ['WP-09'], A('preface', 'signal'), 'Write the unseen thing as one fact, one feeling, one ask. You don’t have to send it yet.'],
@@ -83,9 +83,9 @@
       ['Say it, once, kindly', [], A('checkins', 'toward'), 'Have the one conversation, lightly. Then send a “thinking of you” later in the week.']
     ],
     roommates: [
-      ['A named owner for each chore', ['WP-03'], A('ch4', 'lemonade'), 'Trash, bills, supplies, cleaning: one owner each, agreed at a house meeting.'],
-      ['The house meeting', ['WP-13'], A('checkins', 'ground'), 'A short weekly check-in: load, one thanks, one friction, one ask.'],
-      ['Everyone sees the same picture', ['WP-01'], A('lemonade'), 'List the week’s chores and hours together, so it’s facts, not impressions.'],
+      ['A named owner for each chore', ['WP-03'], A('lemonade', 'ch4'), 'Start with the Lemonade Stand to see the split and the bills. Then give trash, bills, supplies and cleaning one owner each, and put the list on the fridge.'],
+      ['The weekly house meeting', ['WP-13'], A('checkins', 'ground'), 'Ten minutes, once a week: the weekly version of the 90-second check-in. Load, one thanks, one friction, one ask.'],
+      ['Only if you still disagree', ['WP-01'], A('lemonade'), 'If you still disagree about who does what, list one week’s chores and hours together, so it’s facts, not impressions.'],
       ['No call-outs', ['WP-09'], A('signal'), 'Put any point for the meeting through fact, feeling and ask first.'],
       ['What keeps coming back', ['WP-04'], A('calc', 'ch5'), 'At the end of the month, sort the repeats and adjust the owners.']
     ],
@@ -309,13 +309,14 @@
       id: 'roommates', label: 'Roommates', icon: '☕', color: '#F9D9B8',
       blurb: 'Sharing a home without sharing a life.',
       people: ['You', 'Roommate'],
+      names: { 'WP-13': 'The weekly house meeting' },
       groups: [
-        { along: A('lemonade','ch4'), title: 'Start here', note: 'Everyone sees the same picture of the chores.', stops: [
-          { wp: 'WP-03', why: 'A named owner for trash, bills, supplies and cleaning.' },
-          { wp: 'WP-13', why: 'A quick weekly version at a house meeting works well.', again: 'Another week' }
+        { along: A('lemonade','ch4'), title: 'Start here', note: 'First, the Lemonade Stand: everyone sees the same split and the same bills. Then:', stops: [
+          { wp: 'WP-03', why: 'The fridge list: a named owner for trash, bills, supplies and cleaning.' },
+          { wp: 'WP-13', why: 'Ten minutes, once a week: the weekly version of the 90-second daily check-in. Load, one thanks, one friction, one ask.', again: 'Another week' }
         ] },
-        { along: A('calc','ch5','checkins','signal'), title: 'Then', note: 'When goodwill starts running low.', stops: [
-          { wp: 'WP-01', why: "A week of who did what, so it's facts, not impressions.", again: 'Another week' },
+        { along: A('calc','ch5','checkins','signal'), title: 'Then', note: 'Only if you still disagree about who does what, or goodwill starts running low.', stops: [
+          { wp: 'WP-01', why: "Only if you still disagree: a week of who did what, so it's facts, not impressions.", again: 'Another week' },
           { wp: 'WP-09', why: "So a house-meeting point doesn't land as a call-out.", again: 'Another message' },
           { wp: 'WP-04', why: 'Catches the problem that comes back every month.', again: 'Another month' }
         ] },
@@ -332,7 +333,7 @@
       blurb: 'The follow-ups, notes and reminders that keep a team moving.',
       people: ['You', 'Teammate'],
       groups: [
-        { along: A('ch1','signal'), title: 'Start here', note: 'RACI started in project management, so it fits a team naturally.', stops: [
+        { along: A('ch1','signal'), title: 'Start here', note: 'One owner per job comes from project management, so it fits a team naturally.', stops: [
           { wp: 'WP-03', why: 'One named owner for each recurring task.' },
           { wp: 'WP-09', why: 'Check a message before it goes out on chat or email.', again: 'Another message' }
         ] },

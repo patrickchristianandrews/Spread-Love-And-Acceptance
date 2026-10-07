@@ -110,7 +110,7 @@
   @media (max-width:640px){
     .read .hh-t-x{ display:none; }
     .read .hh-time{ margin-bottom:.75rem; }
-    .read .hh-time-opts{ display:grid; grid-template-columns:repeat(4, 1fr); gap:.35rem; }
+    .read .hh-time-opts{ display:grid; grid-template-columns:repeat(5, 1fr); gap:.35rem; }
     .read .hh-time-opts button{ padding:.3rem .2rem; font-size:.92rem; }
     .read .hh .cb-m{ flex-basis:3.6rem; }
     .read .hh .hh-time-plan.is-welcome .cb-step small{ display:none; }
@@ -438,6 +438,7 @@
     <div class="hh-time-opts" role="group" aria-labelledby="hh-time-q">
       <button type="button" data-cb-min="1" aria-pressed="false" aria-controls="hh-time-plan">1 min<span class="hh-t-x">ute</span></button>
       <button type="button" data-cb-min="5" aria-pressed="false" aria-controls="hh-time-plan">5 min<span class="hh-t-x">utes</span></button>
+      <button type="button" data-cb-min="10" aria-pressed="false" aria-controls="hh-time-plan">10 min<span class="hh-t-x">utes</span></button>
       <button type="button" data-cb-min="15" aria-pressed="false" aria-controls="hh-time-plan">15 min<span class="hh-t-x">utes</span></button>
       <button type="button" data-cb-min="30" aria-pressed="false" aria-controls="hh-time-plan">30+ min<span class="hh-t-x">utes</span></button>
     </div>
@@ -452,7 +453,7 @@
     <li><a href="/night-garden.html"><span class="hh-more-k">Calm down now</span> Night Garden</a></li>
     <li><a href="/self-path.html"><span class="hh-more-k">On your own?</span> Your self path</a></li>
     <li><a href="/work.html"><span class="hh-more-k">At work?</span> The plain version</a></li>
-    <li><a href="/book/self-1-then.html"><span class="hh-more-k">Read</span> The book</a></li>
+    <li><a href="/grief.html"><span class="hh-more-k">Lost someone?</span> Grief and later life</a></li>
     <li><a href="/safety.html"><span class="hh-more-k">Not safe at home?</span> Get help</a></li>
   </ul>
 </section>
@@ -460,7 +461,7 @@
     <section id="start-where" aria-labelledby="sw-h">
       <h2 id="sw-h">Start where you are</h2>
       <p class="lede">Tap whatever is closest to true right now. We&rsquo;ll point you to the two or three pages that help most.</p>
-      <div data-tol-start data-first="same-fight,empty,home-bills,invisible,say-hard,know-myself,work,not-safe"></div>
+      <div data-tol-start data-first="same-fight,empty,home-bills,invisible,say-hard,grief,work,not-safe"></div>
     </section>
 
     <section id="guides" aria-labelledby="guides-h">
@@ -478,10 +479,13 @@
     <section id="explore" class="home-explore" aria-labelledby="explore-h">
       <h2 id="explore-h">More to explore</h2>
       <p class="home-new"><span class="announce-tag">New</span> <a href="/work.html">At work</a> <span aria-hidden="true">&middot;</span> <a href="/grief.html">Grief and later life</a> <span aria-hidden="true">&middot;</span> <a href="/complacency.html">Complacency</a> <span aria-hidden="true">&middot;</span> <a href="/whats-new.html">Everything new &rarr;</a></p>
+<details class="home-fold home-extras">
+        <summary>Breaks and extras: music, the pups, and the app</summary>
 <!-- pal cam hook (site.js loads the cam on demand): check in on Tidbit & Sugarfoot -->
 <div class="pc-launch-row" data-palcam-row><button type="button" class="pc-launch" data-palcam-open><span class="pc-paw"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><ellipse cx="12" cy="16.2" rx="4.6" ry="3.8"/><circle cx="6" cy="10.8" r="2.1"/><circle cx="9.6" cy="6.8" r="2.1"/><circle cx="14.4" cy="6.8" r="2.1"/><circle cx="18" cy="10.8" r="2.1"/></svg></span><span><span class="pc-lt">Check in on Tidbit &amp; Sugarfoot</span><small><i class="pc-dot" aria-hidden="true"></i>See what they&rsquo;re up to</small></span></button></div>
 <!-- /pal cam hook -->
 <div data-app-ad></div>
+      </details>
       <ul class="home-explore-links">
         <li><a href="/quick-checks.html#today">Today&rsquo;s weather</a>: a one-minute read on how you&rsquo;re doing</li>
         <li><a href="/frequency-journey.html">The arcade</a> and <a href="/surprise.html">Surprise me</a>: a short break</li>

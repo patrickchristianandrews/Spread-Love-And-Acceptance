@@ -81,8 +81,8 @@
       ? 'Welcome back. Break number ' + (n + 1) + ' is waiting. You have taken ' + n + ' so far, counted on this device only.'
       : 'About three minutes. No sign-up, and nothing plays until you press a button.';
     var head = kind === 'end'
-      ? '<p class="bb-kick">BRAIN BREAK</p><h2 id="bb-h-end">Finished a step? <em>Break your brain</em> for three minutes.</h2><p>Big instrumental music, then straight back to the program. Breaks work best when they are short and they end.</p>'
-      : '<p class="bb-kick">NEW &middot; BRAIN BREAKERS</p><h2 id="bb-h-home">Come get your brain wrecked. <em>Broken in a good way.</em></h2><p>Four instrumental pieces, from soft and floating to big and cinematic, made for a three-minute break between program steps. One tap, then back to it.</p>';
+      ? '<p class="bb-kick">BRAIN BREAK</p><h2 id="bb-h-end">Finished a step? <em>Take a short break.</em></h2><p>A few minutes of music, then back to the program. Breaks work best when they are short and they end.</p>'
+      : '<p class="bb-kick">BRAIN BREAKERS</p><h2 id="bb-h-home">Four short pieces of music <em>for a real break.</em></h2><p>Press play, then come back. They run from soft and floating to big and cinematic, about three minutes each.</p>';
     el.innerHTML =
       '<div class="bb-bars" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>' + head +
       '<div class="bb-ctl">' +
@@ -106,7 +106,7 @@
         else if (!isHome) links += '<a href="/start-in-10-minutes.html">Back to the program: Start in 10 minutes &rarr;</a> ';
         if (lp && !ns) links += '<a href="' + esc(lp.href) + '">Pick up where you were: ' + esc(lp.title) + ' &rarr;</a> ';
         if (isHome) links += '<a href="/start-in-10-minutes.html">Start in 10 minutes &rarr;</a> <a href="/share-the-load.html">Share the load &rarr;</a>';
-        done.innerHTML = '<p><strong>Break over. Brain officially wrecked.</strong> That was break number ' + count() + '. Ready to go back in?</p><p>' + links + '</p>';
+        done.innerHTML = '<p><strong>Break over. Welcome back.</strong> That was break number ' + count() + '. Ready to go back in?</p><p>' + links + '</p>';
         done.hidden = false;
       },
       say: function (s) { msg.textContent = s; }

@@ -265,7 +265,7 @@
   function Report(schema, state, doc) {
     this.schema = schema;
     this.ctx = makeCtx(schema, state);
-    this.doc = doc || new global.TOLPDF.Doc({ title: schema.code + ' ' + schema.title, producer: 'The Objective Ledger (TOL-OS) worksheet, generated on this device' });
+    this.doc = doc || new global.TOLPDF.Doc({ title: schema.code + ' ' + schema.title, producer: 'Spread Love & Acceptance worksheet, generated on this device' });
     this.L = 54; this.R = 558; this.W = this.R - this.L;
     this.top = 54; this.bottom = 730;
     this.newPage();
@@ -302,7 +302,7 @@
 
   P.titleBlock = function () {
     var d = this.doc, s = this.schema;
-    d.text(this.L, this.y + 8, this.enc('The Objective Ledger  ·  ' + s.code + (s.plain && s.plain !== s.title ? '  ·  ' + s.title : '')), 'Helvetica', 8, COLORS.brass);
+    d.text(this.L, this.y + 8, this.enc('Spread Love & Acceptance  ·  ' + s.code + (s.plain && s.plain !== s.title ? '  ·  ' + s.title : '')), 'Helvetica', 8, COLORS.brass);
     this.y += 16;
     d.text(this.L, this.y + 20, this.enc(s.plain || s.title), 'Times-Bold', 21, COLORS.ink);
     this.y += 30;
@@ -431,7 +431,7 @@
       d.setPage(i);
       d.line(self.L, 744, self.R, 744, COLORS.line, 0.5);
       d.text(self.L, 756, self.enc('Created on this device, ' + created + '. Nothing entered was sent to or stored by the website. Keep this file somewhere private.'), 'Helvetica', 7, COLORS.soft);
-      d.text(self.L, 766, self.enc('A self-reflection worksheet, not a clinical tool. It describes the arrangement, never either person.'), 'Helvetica', 7, COLORS.soft);
+      d.text(self.L, 766, self.enc('A self-reflection worksheet, not a clinical tool. It describes the arrangement, never any one person.'), 'Helvetica', 7, COLORS.soft);
       var pg = self.enc('Page ' + (i + 1) + ' of ' + n);
       d.text(self.R - global.TOLPDF.textWidth(pg, 'Helvetica', 7), 766, pg, 'Helvetica', 7, COLORS.soft);
     }
@@ -659,7 +659,7 @@
         var kids = [h('label', { for: c.id, text: f.label, 'data-person-label': f.person != null ? String(f.person) : null }), c.el];
         if (canEdit && f.person != null && peopleCount(st.values) > minPeople) {
           kids = [kids[0], h('div', { className: 'wpf-person-row' }, [c.el,
-            h('button', { type: 'button', className: 'wpf-person-x', 'data-action': 'remove-person', 'data-person': String(f.person), 'aria-label': 'Remove ' + (String(st.values[f.id] || '').trim() || f.label), text: '×' })])];
+            h('button', { type: 'button', className: 'wpf-person-x', 'data-action': 'remove-person', 'data-person': String(f.person), 'aria-label': 'Remove ' + (String(st.values[f.id] || '').trim() || f.label), title: 'Remove this person', text: '×' })])];
         }
         grid.appendChild(h('div', { className: 'wpf-field' + (f.person != null ? ' wpf-person' : '') }, kids));
       });
@@ -787,7 +787,7 @@
       });
       if (!sec.fixedRows) {
         tr.appendChild(h('td', { className: 'wpf-remove' }, [
-          h('button', { type: 'button', 'data-action': 'remove', 'data-table': sec.id, 'data-row': String(i), 'aria-label': 'Remove row ' + (i + 1), text: '×' })
+          h('button', { type: 'button', 'data-action': 'remove', 'data-table': sec.id, 'data-row': String(i), 'aria-label': 'Remove row ' + (i + 1) + (sec.title ? ' from ' + sec.title : ''), title: 'Remove this row', text: '×' })
         ]));
       }
       body.appendChild(tr);
@@ -1095,7 +1095,8 @@
     setTimeout(function () { URL.revokeObjectURL(url); }, 4000);
   }
 
-  A.fileBase = function () { return 'TOL-' + this.schema.code + '-' + this.schema.slug + '-' + today(); };
+  // Download names use the plain name, e.g. One-owner-per-job-WP-03-2026-10-07.pdf (slug is only used here).
+  A.fileBase = function () { return (this.schema.slug || this.schema.code) + '-' + this.schema.code + '-' + today(); };
 
   A.savePdf = function () {
     try {
