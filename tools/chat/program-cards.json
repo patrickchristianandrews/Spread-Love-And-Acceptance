@@ -383,12 +383,140 @@
       ]
     },
     {
+      "id": "breaklength",
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "name": "how long a break should be",
+      "pat": "\\bhow long (should|do|can|is) (a|the|our|my|we|i)? ?(break|pause|time ?out|cool ?down|cooling off)\\b|\\bhow long (should|do) (we|i) (take|wait|stay apart|be apart)\\b|\\b(break|pause|time ?out) (how long|length)\\b",
+      "keys": [],
+      "what": [
+        "At least 20 minutes, often 30, and always name a clock time to come back (“back at 8:30”). It takes about that long for a racing heart to settle, so a shorter break usually means picking up where you left off, still flooded."
+      ],
+      "how": [
+        "Spend the break calming down (a walk, slow breathing, something absorbing), not rehearsing your case.",
+        "Come back at the time you said, even if it’s only to say “I need another half hour.” Keeping the time is what makes a pause feel safe to the other person."
+      ],
+      "script": [
+        "I need a break so I don’t say something unfair. I’ll be back at 8:30, and I want to finish this."
+      ],
+      "links": [
+        [
+          "One wants to talk now, one needs space",
+          "/pursue-withdraw.html"
+        ],
+        [
+          "Upset right now? Breathe and pause",
+          "/upset-right-now.html"
+        ]
+      ],
+      "chips": []
+    },
+    {
+      "id": "comeback",
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "name": "what to say when you come back after a break",
+      "pat": "\\bwhat (do|should|can) (i|we) say when (i|we) come back\\b|\\b(after|end of) (the|a|our) (break|pause|time ?out)\\b.{0,30}\\b(say|start|begin)\\b|\\bcome back (after|from) (the|a) (break|pause)\\b",
+      "keys": [],
+      "what": [
+        "Come back at the time you said, then start soft: say you’re back, name the topic, and say you’re on the same side. Ask for their side before giving yours."
+      ],
+      "how": [
+        "Keep the first sentence short and warm, and stick to the one topic you paused on.",
+        "If you still feel hot, say so and set a new time, rather than pushing through.",
+        "If you’re the one who waited: thank them for coming back before you start."
+      ],
+      "script": [
+        "I’m back. The topic is still the sink. I’m not against you. Can you tell me your side first?",
+        "Thanks for coming back when you said. I’ll listen first."
+      ],
+      "scriptLabels": [
+        "If you took the break",
+        "If you waited"
+      ],
+      "links": [
+        [
+          "One wants to talk now, one needs space",
+          "/pursue-withdraw.html#plan"
+        ],
+        [
+          "Check-ins: one topic at a set time",
+          "/check-ins.html"
+        ]
+      ],
+      "chips": []
+    },
+    {
+      "id": "sentlink",
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "name": "my partner sent me a link",
+      "pat": "\\b(sent|send|sends|shared|texted|gave) me (a |this |the )?(link|page|site|website)\\b|\\b(link|page|site) (my|from my) (partner|wife|husband|girlfriend|boyfriend)\\b|\\bwhy (did|would) (she|he|they|my \\w+) send (me )?(this|a link)\\b",
+      "keys": [],
+      "what": [
+        "Usually it means they want a calmer way to talk, not that you’re the problem. The site looks at the setup between two people, never at who is to blame, and they can’t see what you open or type here."
+      ],
+      "how": [
+        "You don’t have to read it tonight. “I’ll look at it when we’ve both cooled down” is a fair reply.",
+        "The “Sent this by someone?” page explains what they can and can’t see, and has kind ways to say yes, not yet, or no."
+      ],
+      "script": [
+        "Thanks for sending this. I’ll look at it when we’ve both cooled down, and then let’s talk about it."
+      ],
+      "links": [
+        [
+          "Sent this by someone?",
+          "/sent-this.html#hard-time"
+        ],
+        [
+          "One wants to talk now, one needs space",
+          "/pursue-withdraw.html"
+        ]
+      ],
+      "chips": []
+    },
+    {
+      "id": "reconnect",
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "name": "something light to reconnect",
+      "pat": "\\breconnect\\w*\\b|\\b(something|anything|ideas?) (light|fun|small|nice) (to do )?(together|for (the )?two of us|for us)\\b|\\b(fun|light) (for|with) (two|2) people\\b|\\b(feel|get) close again\\b|\\bafter a (rough|hard|bad) (week|patch)\\b.{0,40}\\b(fun|light|reconnect|together)\\b",
+      "notPat": "\\b(grief|died|passed away|widow\\w*|sister|brother|mom|mum|dad|father|mother|son|daughter|friend|estranged|years|cousin|aunt|uncle)\\b",
+      "keys": [],
+      "what": [
+        "After a rough patch, small and often beats big and rare. A few seconds of turning toward each other each day rebuilds warmth faster than one big night out."
+      ],
+      "how": [
+        "Turning toward: one small moment a day for a week, like a question you send or a thing you notice. You can share today’s moment straight to their phone.",
+        "The Re-check Drive: a short, same-team game you play together, where you can’t lose.",
+        "Plan one ordinary thing you both enjoy this week, and put it in the calendar."
+      ],
+      "script": [
+        "What’s one small thing that made you smile today?"
+      ],
+      "links": [
+        [
+          "Turning toward: small daily moments",
+          "/turning-toward.html"
+        ],
+        [
+          "The Re-check Drive",
+          "/recheck-drive.html"
+        ]
+      ],
+      "chips": []
+    },
+    {
       "id": "pursuewithdraw",
       "kind": "intent",
       "first": true,
       "newTopic": true,
       "name": "one of you wants to talk now, the other needs space",
-      "pat": "\\b(won.?t|wont|doesn.?t|never) let (anything|it|things) go\\b|\\bneeds? (some )?(space|time to (think|cool off|calm down))\\b.{0,60}\\b(talk|fight|argu\\w*|let it go|follow\\w*|keeps? going)\\b|\\b(talk|fight|argu\\w*|let (it|anything) go|follow\\w*|keeps? going)\\b.{0,60}\\bneeds? (some )?(space|time)\\b|\\b(walks?|walked|storms?|stormed) (away|off|out)\\b.{0,40}\\b(talk|try|trying|bring|argu\\w*|fight\\w*|every time|whenever)\\b|\\bevery time i (try to )?(talk|bring (it|something|anything) up)\\b|\\bpursu\\w*\\b.{0,40}\\bwithdraw\\w*|\\bwithdraw\\w*\\b.{0,40}\\bpursu\\w*|\\bfollows? me (from )?room to room\\b|\\bnever lets? me talk about\\b|\\b(leaves|left) the (house|room)\\b.{0,60}\\b(phone off|for hours|won.?t answer|doesn.?t answer)\\b|\\bturns? (his|her|their|the) phone off\\b|\\bget (him|her|them|my \\w+) to (stay|finish|keep talking)\\b|\\bfinish the (conversation|argument|talk)\\b|\\bhow long should (a|the|our) (break|pause|time ?out|cool ?down) (be|last)\\b|\\bpause (line|word)\\b|\\b(keeps?|kept) following me\\b|\\bwho is right\\b.{0,40}|\\b(wants|want) to talk (it out )?(now|right now)\\b.{0,60}\\b(space|later|time)\\b",
+      "pat": "\\b(won.?t|wont|doesn.?t|never) let (anything|it|things) go\\b|\\bneeds? (some )?(space|time to (think|cool off|calm down))\\b.{0,60}\\b(talk|fight|argu\\w*|let it go|follow\\w*|keeps? going)\\b|\\b(talk|fight|argu\\w*|let (it|anything) go|follow\\w*|keeps? going)\\b.{0,60}\\bneeds? (some )?(space|time)\\b|\\b(walks?|walked|storms?|stormed) (away|off|out)\\b.{0,40}\\b(talk|try|trying|bring|argu\\w*|fight\\w*|every time|whenever)\\b|\\bevery time i (try to )?(talk|bring (it|something|anything) up)\\b|\\bpursu\\w*\\b.{0,40}\\bwithdraw\\w*|\\bwithdraw\\w*\\b.{0,40}\\bpursu\\w*|\\bfollows? me (from )?room to room\\b|\\bnever lets? me talk about\\b|\\b(leaves|left) the (house|room)\\b.{0,60}\\b(phone off|for hours|won.?t answer|doesn.?t answer)\\b|\\bturns? (his|her|their|the) phone off\\b|\\bpause (line|word)\\b|\\b(keeps?|kept) following me\\b|\\bwho is right\\b.{0,40}|\\b(wants|want) to talk (it out )?(now|right now)\\b.{0,60}\\b(space|later|time)\\b|\\bget (him|her|them|my \\w+) to (stay|finish|keep talking)\\b|\\bfinish the (conversation|argument|talk)\\b",
       "notPat": "\\b(in law|inlaw|mother in law|father in law|parents visit|boss|coworker|teacher)\\b",
       "keys": [],
       "what": [
@@ -423,7 +551,11 @@
           "/check-ins.html"
         ]
       ],
-      "chips": []
+      "chips": [],
+      "scriptLabels": [
+        "If you need space",
+        "If you want to talk now"
+      ]
     },
     {
       "id": "familyduty",
@@ -466,7 +598,11 @@
           "/lemonade-stand.html"
         ]
       ],
-      "chips": []
+      "chips": [],
+      "scriptLabels": [
+        "If you support family",
+        "If you worry about savings"
+      ]
     },
     {
       "id": "retired",
@@ -509,7 +645,11 @@
           "/turning-toward.html"
         ]
       ],
-      "chips": []
+      "chips": [],
+      "scriptLabels": [
+        "If you’ve always run the house",
+        "If you’ve just retired"
+      ]
     },
     {
       "id": "longdistance",

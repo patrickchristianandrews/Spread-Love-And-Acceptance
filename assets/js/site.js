@@ -252,7 +252,7 @@
   // { sub: 'Name' } starts a small heading inside a group. A page left out of MENU is still on
   // the Contents page (/contents.html, linked in every footer as "All pages").
   var MENU = [
-    { id: 'start', name: 'Start here', title: 'Start here', blurb: 'New here? A gentle first step, and a way in for your own situation.', items: [
+    { id: 'start', pick: ['/start-here.html', '/upset-right-now.html', '/ask.html', '/relationships.html', '/sent-this.html', '/safety.html'], name: 'Start here', title: 'Start here', blurb: 'New here? A gentle first step, and a way in for your own situation.', items: [
       { href: '/book/topic-start-here.html', code: 'Book', title: 'The book at a glance', note: 'Where to start in the book, on your own or with others' },
       { href: '/start-here.html', code: 'Start', title: 'Start here', note: 'What this is in one minute, and your best first step' },
       { href: '/start-in-10-minutes.html', code: '10 min', title: 'Start in 10 minutes', note: 'Today’s weather, the Preface, one card and one thing logged' },
@@ -282,7 +282,7 @@
       { href: '/family-obligations.html', code: 'New', title: 'Supporting family, money home', note: 'A duty you plan around together' },
       { href: '/neurodivergent-relationships.html', code: 'Guide', title: 'Neurodivergent relationships', note: 'Tips for ADHD and autistic couples and families' }
     ]},
-    { id: 'load', name: 'Share the load', title: 'Share the load', blurb: 'Split the work at home fairly, step by step. What you type stays on your device.', items: [
+    { id: 'load', pick: ['/share-the-load.html', '/lemonade-stand.html', '/chore-chart-for-couples.html', '/workpapers/wp-03-one-owner-per-job.html', '/workpapers/wp-13-daily-check-in.html', '/invisible-labor-mental-load.html'], name: 'Share the load', title: 'Share the load', blurb: 'Split the work at home fairly, step by step. What you type stays on your device.', items: [
       { href: '/book/topic-share-the-load.html', code: 'Book', title: 'The book on sharing the load', note: 'Every chapter’s part on sharing the work, plus the tools that go with it' },
       { href: '/share-the-load.html', code: 'Start', title: 'Share the load: tools, in order', note: 'Which tool to use first, and what comes next' },
       { href: '/invisible-labor-mental-load.html', code: 'Guide', title: 'Invisible labor and the mental load', note: 'What it is, and five calm steps to share it' },
@@ -299,7 +299,7 @@
       { href: '/full-path.html', code: 'Package', title: 'The package and report', note: 'One PDF for your relationship, and a report from your answers' },
       { href: '/program.html', title: 'Which part to use when', note: 'The six weeks, the suite and the package, side by side' }
     ]},
-    { id: 'talk', name: 'Talk it through', title: 'Talk it through', blurb: 'Say it kindly, hear it fully, and keep small things small. What you type stays on your device.', items: [
+    { id: 'talk', pick: ['/how-to-stop-fighting-with-your-partner.html', '/pursue-withdraw.html', '/check-ins.html', '/turning-toward.html', '/signal-translator.html', '/love-languages.html'], name: 'Talk it through', title: 'Talk it through', blurb: 'Say it kindly, hear it fully, and keep small things small. What you type stays on your device.', items: [
       { href: '/book/topic-talk-it-through.html', code: 'Book', title: 'The book on talking it through', note: 'Every chapter’s part on talking and listening, plus the tools' },
       { href: '/how-to-stop-fighting-with-your-partner.html', code: 'Guide', title: 'How to stop fighting with your partner', note: 'Seven calm steps' },
       { href: '/pursue-withdraw.html', code: 'Guide', title: 'One wants to talk now, one needs space', note: 'A pause plan you agree' },
@@ -320,7 +320,7 @@
       { href: '/workpapers/wp-09-say-it-so-it-lands.html', deep: true, code: 'WP-09', title: 'Say it so it lands', note: 'A fact, a feeling and a kind ask' },
       { href: '/tools/soften-a-tense-moment.html', code: 'Tool', title: 'Soften a tense moment', note: 'Small, kind ways to shift a heavy mood' }
     ]},
-    { id: 'self', name: 'Know yourself', title: 'Know yourself', blurb: 'Everything you can use on your own: understand your wiring, load and patterns, settle yourself, get ready for a hard talk, and read up, at your pace. Nothing here needs anyone else.', items: [
+    { id: 'self', pick: ['/self-path.html', '/wavelength.html', '/wiring-card.html', '/workpapers/wp-02-how-much-are-you-carrying.html', '/wp-11.html', '/wired-differently.html'], name: 'Know yourself', title: 'Know yourself', blurb: 'Everything you can use on your own: understand your wiring, load and patterns, settle yourself, get ready for a hard talk, and read up, at your pace. Nothing here needs anyone else.', items: [
       { href: '/book/topic-know-yourself.html', code: 'Book', title: 'The book on knowing yourself', note: 'Every chapter’s part about you, plus the self tools and workpapers' },
       { sub: 'Start here, on your own' },
       { href: '/self-path.html', code: 'Start', title: 'Your self-discovery path', note: 'The self path, step by step, on your own' },
@@ -360,7 +360,7 @@
       { href: '/reading.html', code: 'Articles', title: 'Articles to read', note: 'Hand-picked articles from trusted sources' },
       { href: '/glossary.html', code: 'Words', title: 'Glossary', note: 'Every word the site uses, in plain English' }
     ]},
-    { id: 'read', name: 'Read & learn', title: 'Read & learn', blurb: 'The book, the library and the stories, in one place. Each page has a short version and a deeper one.', items: [
+    { id: 'read', pick: ['/book/topic-start-here.html', '/library.html', '/learn/index.html', '/reading.html', '/podcast-index.html', '/glossary.html'], name: 'Read & learn', title: 'Read & learn', blurb: 'The book, the library and the stories, in one place. Each page has a short version and a deeper one.', items: [
       { sub: 'The book by topic' },
       { href: '/book/topic-start-here.html', code: 'Topic', title: 'The book at a glance', note: 'Where to start in the book, on your own or with others' },
       { href: '/book/topic-share-the-load.html', code: 'Topic', title: 'The book on sharing the load', note: 'Every chapter’s part on sharing the work, plus the tools that go with it' },
@@ -391,7 +391,7 @@
       { href: '/infographic.html', title: 'The whole idea on one page', note: 'A printable summary, easy to share' },
       { href: '/polymath.html', title: 'The polymath way', note: 'How thirteen fields of study became one program' }
     ]},
-    { id: 'play', name: 'Calm & play', title: 'Calm & play', blurb: 'Calm games, cartoons and sounds for a busy mind. No timers and no way to lose.', items: [
+    { id: 'play', pick: ['/pause-and-play.html', '/night-garden.html', '/soundscapes.html#brain-breakers', '/frequency-buddies.html', '/frequency-journey.html', '/bears-dojo.html'], name: 'Calm & play', title: 'Calm & play', blurb: 'Calm games, cartoons and sounds for a busy mind. No timers and no way to lose.', items: [
       { href: '/book/topic-calm.html', code: 'Book', title: 'The book on staying calm', note: 'Every chapter’s part on settling, plus the calm tools' },
       { href: '/bears-dojo.html', code: 'New', title: 'The Bears Dojo', note: 'A temple garden to wander, a bear to build, a quiet room of gentle things' },
       { href: '/night-garden.html', code: 'Breathe', title: 'The Night Garden', note: 'Breathe slowly and watch the flowers bloom' },
@@ -406,7 +406,7 @@
       { href: '/pal-cam-tv.html', code: 'Live', title: 'Pal Cam TV', note: 'The pups live, all day, full screen or on your TV' },
       { href: '/echoes-of-gold.html', code: 'Album', title: 'Echoes of Gold', note: 'The companion album' }
     ]},
-    { id: 'about', name: 'About', title: 'About', blurb: 'Who made this and why, what this is, and the site’s policies.', items: [
+    { id: 'about', pick: ['/about.html', '/is-this-for-you.html', '/on-this-device.html', '/legal/privacy-policy.html'], name: 'About', title: 'About', blurb: 'Who made this and why, what this is, and the site’s policies.', items: [
       { href: '/about.html', title: 'About the creator', note: 'Christian’s story, and why this exists' },
       { href: '/is-this-for-you.html', deep: true, title: 'Is this right for you?', note: 'What this is and isn’t, and who it helps' },
       { href: '/how-it-works.html', deep: true, title: 'How it works', note: 'A friendly tour of the idea behind it all' },
@@ -422,11 +422,6 @@
     ]}
   ];
 
-  // The polymath way sits at the bottom of every menu group, so it is one tap away from anywhere.
-  MENU.forEach(function (g) {
-    g.items = g.items.filter(function (it) { return it.href !== '/polymath.html'; });
-    g.items.push({ href: '/polymath.html', code: '', title: 'The polymath way', note: 'How thirteen fields grow from the same few roots', foot: true });
-  });
 
   // ===== Nothing below needs editing =====
   var STORE_KEY = 'tol-member-email';
@@ -492,6 +487,19 @@
     return code + ': ' + it.title;
   }
 
+
+  // Each menu group names a few pages (pick) that show first; the rest wait behind "All N pages"
+  function groupLinks(g) { return g.items.filter(function (i) { return i.href && i.href !== '/index.html' && i.menu !== false; }); }
+  function groupPicks(g) {
+    var all = groupLinks(g), seen = {}, out = [];
+    (g.pick || []).forEach(function (h) { var it = all.filter(function (i) { return i.href === h; })[0]; if (it && !seen[h]) { seen[h] = 1; out.push(it); } });
+    if (!out.length) out = all.slice(0, 6);
+    var cur = all.filter(function (i) { return i.href.split('#')[0] === current; })[0];
+    if (cur && out.indexOf(cur) === -1) out.push(cur);   // the page you're on always shows
+    return out;
+  }
+  function groupCount(g) { var seen = {}; groupLinks(g).forEach(function (i) { seen[i.href] = 1; }); return Object.keys(seen).length; }
+
   var isMember = false;
 
   // ---------- Index (panel + home page) ----------
@@ -504,11 +512,10 @@
       var sec;
       if (opts.accordion) {
         // The panel shows section names only; open one to see its pages
-        var count = s.items.filter(function (i) { return i.href && i.href !== '/index.html' && i.menu !== false; }).length;
         sec = el('details', { class: 'tol-index-section tol-acc', id: 'tol-sec-' + s.id });
         if (s.id === opts.open) sec.open = true;
         var hereMark = hereGroup && hereGroup.id === s.id ? ' <span class="tol-acc-here">you are here</span>' : '';
-        sec.appendChild(el('summary', null, '<span class="tol-acc-title">' + esc(s.title) + hereMark + '</span><span class="tol-acc-count">' + count + (count === 1 ? ' page' : ' pages') + '</span>'));
+        sec.appendChild(el('summary', null, '<span class="tol-acc-title">' + esc(s.title) + hereMark + '</span>'));
         // One section open at a time keeps the list short
         sec.addEventListener('toggle', function () {
           if (!sec.open) return;
@@ -518,7 +525,34 @@
         sec = el('div', { class: 'tol-index-section', id: (opts.page ? 'contents-' : 'tol-sec-') + s.id });
         sec.appendChild(el(opts.h || 'h3', null, esc(s.title)));
       }
+      if (opts.accordion) {
+        // a few pages first, plain names only; "Show all" opens the full list with its headings and notes
+        var short = el('ol', { class: 'tol-picks' });
+        groupPicks(s).forEach(function (it) {
+          var pa = el('a', { class: 'tol-row', href: it.href }, '<span class="tol-title">' + esc(it.title) + '</span>');
+          if (it.href.split('#')[0] === current) pa.setAttribute('aria-current', 'page');
+          var pli = el('li'); pli.appendChild(pa); short.appendChild(pli);
+        });
+        var total = groupCount(s), rest = total - short.children.length;
+        sec.appendChild(short);
+        if (rest > 0) {
+          var moreB = el('button', { type: 'button', class: 'tol-more-btn tol-acc-all' }, 'Show all ' + total + ' pages');
+          moreB.addEventListener('click', function () {
+            var full = fullList(s, true); full.classList.add('tol-picks'); short.replaceWith(full); moreB.remove();
+            var fa = full.querySelector('a'); if (fa) fa.focus();
+          });
+          sec.appendChild(moreB);
+        }
+        wrap.appendChild(sec);
+        return;
+      }
       if (s.blurb) sec.appendChild(el('p', null, esc(s.blurb)));
+      sec.appendChild(fullList(s));
+      wrap.appendChild(sec);
+    });
+    return wrap;
+  }
+  function fullList(s, plain) {
       var ol = el('ol');
       s.items.forEach(function (it) {
         if (it.sub) { ol.appendChild(el('li', { class: 'tol-sub', role: 'presentation' }, esc(it.sub))); return; }
@@ -526,18 +560,14 @@
         var a = el('a', { class: 'tol-row', href: it.href });
         if (it.href.split('#')[0] === current) a.setAttribute('aria-current', 'page');
         a.innerHTML =
-          '<span class="tol-code">' + esc(it.code || '') + (it.code ? '<span class="sr-only">: </span>' : '') + '</span>' +
+          (plain ? '' : '<span class="tol-code">' + esc(it.code || '') + (it.code ? '<span class="sr-only">: </span>' : '') + '</span>') +
           '<span class="tol-title">' + esc(it.title) + (it.note ? '<small>' + esc(it.note) + '</small>' : '') + '</span>' +
           '<span class="tol-access">' + (it.paid && !CONFIG.openAll ? (isMember ? 'unlocked' : (CONFIG.freePreview ? 'Free with sign-up' : 'members')) : '') + '</span>';
         var li = el('li', it.foot ? { class: 'tol-foot-row' } : null); li.appendChild(a);
         if (it.deep) li.appendChild(el('a', { class: 'dig tol-dig', href: deepHref(it) }, 'Dig deeper'));
         ol.appendChild(li);
       });
-      if (opts.accordion) capList(ol);
-      sec.appendChild(ol);
-      wrap.appendChild(sec);
-    });
-    return wrap;
+      return ol;
   }
 
   // ---------- Join / Signed-up link (header bar) ----------
@@ -552,7 +582,7 @@
   var panel, scrim, lastFocus, memberLink;
 
   // The sections shown in the top bar. Each opens a short list of its pages.
-  var RIBBON = MENU.map(function (g) { return [g.id, g.name || g.title]; });
+  var RIBBON = MENU.filter(function (g) { return g.id !== 'about'; }).map(function (g) { return [g.id, g.name || g.title]; });
   var openDrop = null;
 
   function closeDrop(refocus) {
@@ -563,55 +593,21 @@
     openDrop = null;
   }
 
-  // Long menu lists show their first few pages, then "Show all N" (the page you're on always stays in view)
-  var MENU_CAP = 8;
-  function capList(list) {
-    var lis = Array.prototype.slice.call(list.children), links = 0, hid = [];
-    lis.forEach(function (li, i) {
-      if (li.classList.contains('tol-sub')) {
-        // a heading stays only if one of its pages is still in view
-        var nxt = lis.slice(i + 1), shown = links;
-        for (var k = 0; k < nxt.length && !nxt[k].classList.contains('tol-sub'); k++) { shown++; if (shown <= MENU_CAP || nxt[k].querySelector('[aria-current]')) return; }
-        if (links >= MENU_CAP) { li.hidden = true; hid.push(li); }
-        return;
-      }
-      links++;
-      if (links > MENU_CAP && !li.querySelector('[aria-current]') && !li.classList.contains('tol-foot-row')) { li.hidden = true; hid.push(li); }
-    });
-    var n = hid.filter(function (li) { return !li.classList.contains('tol-sub'); }).length;
-    if (n < 2) { hid.forEach(function (li) { li.hidden = false; }); return; }
-    var more = el('li', { class: 'tol-more-row' }), b = el('button', { type: 'button', class: 'tol-more-btn', 'aria-expanded': 'false' }, 'Show ' + n + ' more');
-    b.addEventListener('click', function (e) {
-      e.stopPropagation();
-      hid.forEach(function (li) { li.hidden = false; });
-      // focus moves to the first new page before the button goes, so the open menu doesn't close
-      var first = hid.filter(function (li) { return !li.classList.contains('tol-sub'); })[0], a = first && first.querySelector('a');
-      if (a) a.focus();
-      more.remove();
-    });
-    more.appendChild(b);
-    var foot = list.querySelector('.tol-foot-row');
-    if (foot) list.insertBefore(more, foot); else list.appendChild(more);
-  }
-
   function buildDrop(id, name, alignRight) {
     var s = MENU.filter(function (x) { return x.id === id; })[0];
     var item = el('div', { class: 'tol-nav-item' });
     var btn = el('button', { type: 'button', 'data-sec': id, 'aria-expanded': 'false', 'aria-controls': 'tol-drop-' + id }, esc(name));
     if (hereGroup && hereGroup.id === id) btn.setAttribute('aria-current', 'true');
     var menu = el('div', { class: 'tol-drop' + (alignRight ? ' is-right' : ''), id: 'tol-drop-' + id, hidden: '' });
-    if (s.blurb) menu.appendChild(el('p', { class: 'tol-drop-blurb' }, esc(s.blurb)));
     var ul = el('ul');
-    s.items.forEach(function (it) {
-      if (it.sub) { ul.appendChild(el('li', { class: 'tol-sub', role: 'presentation' }, esc(it.sub))); return; }
-      if (it.href === '/index.html' || it.menu === false) return;
-      var a = el('a', { href: it.href }, (it.code ? '<span class="tol-drop-code">' + esc(it.code) + '<span class="sr-only">: </span></span>' : '') + '<span>' + esc(it.title) + '</span>');
+    groupPicks(s).forEach(function (it) {
+      var a = el('a', { href: it.href }, esc(it.title));
       if (it.href.split('#')[0] === current) a.setAttribute('aria-current', 'page');
-      var li = el('li', it.foot ? { class: 'tol-foot-row' } : null); li.appendChild(a); ul.appendChild(li);
+      var li = el('li'); li.appendChild(a); ul.appendChild(li);
     });
-    capList(ul);
     menu.appendChild(ul);
-    var all = el('button', { type: 'button', class: 'tol-drop-all', 'aria-controls': 'tol-panel' }, 'Everything on the site &rarr;');
+    var n = groupCount(s);
+    var all = el('button', { type: 'button', class: 'tol-drop-all', 'aria-controls': 'tol-panel' }, 'All ' + n + ' pages in ' + esc(name) + ' &rarr;');
     all.addEventListener('click', function () { openPanel(id); });
     menu.appendChild(all);
     btn.addEventListener('click', function () {
@@ -724,26 +720,22 @@
 
     scrim = el('div', { class: 'tol-scrim', hidden: '' });
     scrim.addEventListener('click', closePanel);
-    panel = el('div', { class: 'tol-panel', id: 'tol-panel', role: 'dialog', 'aria-modal': 'true', 'aria-label': 'Everything on the site', hidden: '' });
+    panel = el('div', { class: 'tol-panel', id: 'tol-panel', role: 'dialog', 'aria-modal': 'true', 'aria-label': 'Menu', hidden: '' });
     var head = el('div', { class: 'tol-panel-head' });
-    head.appendChild(el('h2', null, 'Everything on the site'));
+    head.appendChild(el('h2', null, 'Menu'));
     var close = el('button', { type: 'button', class: 'tol-close' }, 'Close');
     close.addEventListener('click', closePanel);
     head.appendChild(close);
     panel.appendChild(head);
     panel.appendChild(buildSearch());
-    panel.appendChild(el('p', { class: 'tol-panel-intro' }, 'Open a section to see its pages.' +
-      (CONFIG.openAll ? ' Everything is open while the site is being built. No sign-up needed.' : CONFIG.freePreview ? ' Pages marked <em>Free with sign-up</em> open once you sign up with your email. It’s free.' : '')));
     panel.appendChild(el('p', { class: 'tol-panel-safe' }, '<a href="/safety.html">Not safe at home?</a> <button type="button" data-tol-exit>Leave this site quickly</button>'));
+    panel.appendChild(buildIndex({ accordion: true }));
+    // after the sections: where you left off, then settings in one button (Quiet mode, dark mode and the rest live there)
+    panel.appendChild(el('div', { class: 'tol-panel-pickup', 'data-pickup': 'menu' }));
     var tools = el('div', { class: 'tol-panel-tools' });
-    tools.appendChild(quietButton('switch'));
-    tools.appendChild(stillButton());
-    tools.appendChild(darkButton());
-    tools.appendChild(settingsButton('tol-panel-set', 'All settings'));
+    tools.appendChild(settingsButton('tol-panel-set', 'Settings: text size, Quiet mode, dark mode'));
     tools.appendChild(joinLink('tol-member tol-panel-join'));
     panel.appendChild(tools);
-    panel.appendChild(el('div', { class: 'tol-panel-pickup', 'data-pickup': 'menu' }));
-    panel.appendChild(buildIndex({ accordion: true }));
 
     document.addEventListener('keydown', function (e) {
       if (panel.hidden) return;
@@ -1158,7 +1150,7 @@
     teens: ['/teens.html', '/library/life.html'], crush: 'teens', dating: 'teens', bullied: 'teens', bullying: 'teens', school: 'teens', grounded: 'teens', curfew: 'teens',
     group: ['/groups.html', '/check-ins.html'], groups: 'group', leader: 'group', facilitator: 'group', church: 'group', class: 'group', discussion: 'group', curriculum: 'group', course: 'group',
     unheard: ['/check-ins.html', '/how-to-stop-fighting-with-your-partner.html', '/signal-translator.html'], ignored: 'unheard', dismissed: 'unheard',
-    grief: ['/grief.html', '/library/emotions.html', '/grandparents.html', '/self-path.html'], retirement: ['/retired-together.html', '/grief.html'], retired: 'retirement', retiring: 'retirement', reconnect: ['/grief.html'], reconnecting: 'reconnect', estranged: 'reconnect',
+    grief: ['/grief.html', '/library/emotions.html', '/grandparents.html', '/self-path.html'], retirement: ['/retired-together.html', '/grief.html'], retired: 'retirement', retiring: 'retirement', reconnect: ['/turning-toward.html', '/recheck-drive.html', '/grief.html'], reconnecting: 'reconnect', estranged: 'reconnect',
     yelling: ['/parents.html', '/upset-right-now.html', '/wp-11.html'], yell: 'yelling', yelled: 'yelling', shouting: 'yelling', screaming: 'yelling',
     dementia: ['/caregivers.html', '/library/stress.html', '/workpapers/wp-02-how-much-are-you-carrying.html'], alzheimers: 'dementia', alzheimer: 'dementia', respite: 'dementia', carer: 'dementia', carers: 'dementia', caregiver: 'dementia', caregivers: 'dementia', caregiving: 'dementia',
     pronouns: ['/teens.html', '/safety.html'], lgbtq: 'pronouns', lgbt: 'pronouns', gay: 'pronouns', lesbian: 'pronouns', bisexual: 'pronouns', trans: 'pronouns', transgender: 'pronouns', nonbinary: 'pronouns', queer: 'pronouns',
@@ -1355,13 +1347,13 @@
     var box = el('div', { class: 'tol-find', role: 'search' },
       '<label for="tol-find-q">Search the site</label>' +
       '<input id="tol-find-q" type="search" autocomplete="off" spellcheck="true" enterkeyhint="search" placeholder="A word or two, like “chores” or “calm down”" aria-describedby="tol-find-note">' +
-      '<p class="tol-find-note" id="tol-find-note" aria-live="polite">Searches every page’s title and words, right here on your device. Spelling doesn’t need to be perfect.</p>' +
+      '<p class="tol-find-note" id="tol-find-note" aria-live="polite">Searches every page, on your device. Spelling can be rough.</p>' +
       '<ol class="tol-find-results" hidden></ol>');
     var input = box.querySelector('input'), note = box.querySelector('.tol-find-note'), list = box.querySelector('.tol-find-results'), timer = null;
     runSearch = function (q) {
       q = String(q || '').trim();
       var idx = panel && panel.querySelector('.tol-index');
-      if (!q) { list.hidden = true; list.innerHTML = ''; note.textContent = 'Searches every page’s title and words, right here on your device. Spelling doesn’t need to be perfect.'; if (idx) idx.hidden = false; return; }
+      if (!q) { list.hidden = true; list.innerHTML = ''; note.textContent = 'Searches every page, on your device. Spelling can be rough.'; if (idx) idx.hidden = false; return; }
       loadSearch(function (data) {
         if (input.value.trim() !== q) return;
         if (!data) { note.textContent = 'Search isn’t available just now. The full list of pages is below.'; if (idx) idx.hidden = false; return; }
@@ -1520,7 +1512,7 @@
     ['Hug a little longer.', 'A slow six-second hug helps both of you settle.'],
     ['Leave it better than you found it.', 'Tidy one small spot before you leave a room. Tomorrow’s you will be grateful.']
   ];
-  var NO_TIPS = ['/index.html', '/night-garden.html', '/dashboard.html', '/404.html', '/offline.html'];
+  var NO_TIPS = ['/index.html', '/night-garden.html', '/dashboard.html', '/404.html', '/offline.html', '/pursue-withdraw.html', '/upset-right-now.html', '/safety.html', '/sent-this.html'];
   // The full library (about 300 tips in topics) lives in tips.js and loads when a tip is shown;
   // the short list above is the fallback. Pages lean toward topics that fit them.
   var TIP_TOPICS = {
@@ -2999,7 +2991,7 @@
     [/^\/book\/(preface|chapter-\d)\.html$/, 'Share this chapter', 'A chapter from a free, kind guide to sharing the mental load at home.'],
     [/^\/grandparents\.html$/, 'Share this guide', 'A free, kind guide for grandparents who help with the grandkids.'],
     [/^\/chore-chart-for-couples\.html$/, 'Share this guide', 'A free, printable chore chart with one owner per job.', { pin: true }],
-    [/^\/(how-to-stop-fighting-with-your-partner|pursue-withdraw|upset-right-now)\.html$/, 'Share this page', 'A free, calm guide for when we keep ending up in the same fight. It doesn’t blame either of us.'],
+    [/^\/(how-to-stop-fighting-with-your-partner|pursue-withdraw)\.html$/, 'Share this page', 'A free, calm guide for when we keep ending up in the same fight. It doesn’t blame either of us.'],
     [/^\/check-ins\.html$/, 'Share this guide', 'A free guide to talking about something tender, kindly, at a time that suits us both.'],
     [/^\/turning-toward\.html$/, 'Share this page', 'Small daily ways to turn toward each other. Free, no account.'],
     [/^\/long-distance\.html$/, 'Share this guide', 'A free guide for couples living apart: calls, time zones and short texts.'],

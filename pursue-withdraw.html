@@ -36,6 +36,10 @@
   .pw-btn:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
   .read p.pw-status{ min-height:1.4em; margin:.3rem 0 .4rem !important; font-size:.95rem; color:var(--ink-soft); }
   .read #faq h3{ font-size:1.05rem; margin-top:1.4rem; }
+.pw-saved{ margin:.6rem 0 1rem; padding:.6rem .9rem; border-radius:12px; border:1px solid var(--line, #d8cfb8); background:rgba(255,251,242,.96); }
+.pw-from{ margin:.4rem 0; font-weight:600; }
+.pw-keep{ font-size:.95rem; margin:.5rem 0; } .pw-keep-note{ color:var(--muted, #6a6258); font-size:.9rem; }
+.pw-link{ background:none; border:0; padding:0; color:inherit; text-decoration:underline; cursor:pointer; font:inherit; }
 </style>
 <!-- seo:start -->
 <link rel="canonical" href="https://spreadloveandacceptance.com/pursue-withdraw.html">
@@ -144,7 +148,9 @@
   <input type="text" id="pp-first" value="I’m back. I’m not against you. Can we start again?" autocomplete="off" maxlength="200">
 </div>
 <p class="pw-out-h" id="pp-out-h">Your plan, ready to send:</p>
+<p class="pw-from" id="pp-from" hidden>This is the plan your partner sent you. Change anything you’d like, then send it back.</p>
 <div class="pw-out" id="pp-out" aria-labelledby="pp-out-h" aria-live="polite"></div>
+<p class="pw-keep"><label><input type="checkbox" id="pp-keep" checked> Keep our plan on this device</label> <span class="pw-keep-note">It stays in this browser only, so it’s here next time. <button type="button" class="pw-link" id="pp-forget">Forget it</button></span></p>
 <p class="pw-acts">
   <button type="button" class="pw-btn" id="pp-copy">Copy our plan</button>
   <button type="button" class="pw-btn is-quiet" id="pp-share" data-share data-share-from="#pp-out" data-share-result data-no-clip>Share it</button>
@@ -176,11 +182,39 @@
 <script>
 (function () {
   'use strict';
-  // Builds the plan as plain text from the fields. Nothing is stored or sent; it only lives on this page.
+  // Builds the plan as plain text from the fields. It is kept in this browser only if "Keep" is ticked,
+  // and the link you send carries the plan after the # (never sent to any server), so your partner opens the same plan.
   var $ = function (id) { return document.getElementById(id); };
-  var out = $('pp-out'), status = $('pp-status');
+  var out = $('pp-out'), status = $('pp-status'), KEY = 'tol-pause-plan-v1';
   var ids = ['pp-word', 'pp-min', 'pp-max', 'pp-late', 'pp-first'];
   function v(id, fallback) { var x = ($(id).value || '').trim(); return x || fallback; }
+  function fields() { var o = {}; ids.forEach(function (id) { o[id] = ($(id).value || '').trim(); }); return o; }
+  function fill(o) { ids.forEach(function (id) { if (o && typeof o[id] === 'string' && o[id]) $(id).value = o[id].slice(0, 200); }); }
+  function enc(o) { try { return btoa(unescape(encodeURIComponent(JSON.stringify(o)))).replace(/=+$/, ''); } catch (e) { return ''; } }
+  function dec(t) { try { return JSON.parse(decodeURIComponent(escape(atob(t)))); } catch (e) { return null; } }
+  function link() { return location.origin + location.pathname + '#plan=' + enc(fields()); }
+  function keep() {
+    try { if ($('pp-keep').checked) localStorage.setItem(KEY, JSON.stringify(fields())); else localStorage.removeItem(KEY); } catch (e) {}
+  }
+  // a plan in the link (from your partner) wins; otherwise the one kept on this device
+  var fromLink = /#plan=([A-Za-z0-9+\/_-]+)/.exec(location.hash), saved = null;
+  try { saved = JSON.parse(localStorage.getItem(KEY) || 'null'); } catch (e) { saved = null; }
+  if (fromLink && dec(fromLink[1])) {
+    fill(dec(fromLink[1])); $('pp-from').hidden = false;
+    try { history.replaceState(null, '', location.pathname + '#plan'); } catch (e) {}
+    setTimeout(function () { var pl = document.getElementById('plan'); if (pl) pl.scrollIntoView({ block: 'start' }); }, 300);
+  } else if (saved) {
+    fill(saved);
+    // a short reminder at the top of the page, so the agreed plan is the first thing you see
+    var main = document.querySelector('main h1');
+    if (main) {
+      var top = document.createElement('p'); top.className = 'pw-saved';
+      top.innerHTML = '<strong>Your pause plan:</strong> ';
+      top.appendChild(document.createTextNode('“' + (saved['pp-word'] || 'Timeout') + '”, at least ' + (saved['pp-min'] || '30 minutes') + ', back within ' + (saved['pp-max'] || '2 hours') + '. '));
+      var go = document.createElement('a'); go.href = '#plan'; go.textContent = 'See or change it'; top.appendChild(go);
+      main.parentNode.insertBefore(top, main.nextSibling);
+    }
+  }
   function planText() {
     return 'Our pause plan\n' +
       'Pause word: ' + v('pp-word', 'Timeout') + '\n' +
@@ -189,8 +223,10 @@
       'If one of us can’t come back on time: ' + v('pp-late', 'Send a short message with a new time.') + '\n' +
       'When we come back, we start with: “' + v('pp-first', 'I’m back. I’m not against you.').replace(/^[“"]+|[”"]+$/g, '') + '”';
   }
-  function render() { out.textContent = planText(); }
+  function render() { out.textContent = planText() + '\n\nOpen our plan: ' + link(); keep(); }
   ids.forEach(function (id) { $(id).addEventListener('input', render); $(id).addEventListener('change', render); });
+  $('pp-keep').addEventListener('change', keep);
+  $('pp-forget').addEventListener('click', function () { $('pp-keep').checked = false; keep(); say('Forgotten on this device.'); });
   render();
   function say(msg) { status.textContent = ''; setTimeout(function () { status.textContent = msg; }, 30); }
   function fallbackCopy(text) {
@@ -201,7 +237,7 @@
     ta.remove(); return ok;
   }
   $('pp-copy').addEventListener('click', function () {
-    var text = planText() + '\n\n' + location.origin + location.pathname;
+    var text = planText() + '\n\nOpen our plan: ' + link();
     var done = function () { say('Copied. Paste it into a message to your partner.'); };
     var fail = function () { say(fallbackCopy(text) ? 'Copied. Paste it into a message to your partner.' : 'Copying didn’t work here. Select the plan above and copy it by hand.'); };
     if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(text).then(done, fail);

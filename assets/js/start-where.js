@@ -6,6 +6,7 @@
     { id:'same-fight', ico:'\uD83D\uDD01', label:'We keep having the same fight',
       say:'Then the argument probably is not about the dishes, the money or the calendar. A thing that comes back every week is usually a gap in the arrangement, and arrangements can be changed without anybody being at fault.',
       picks:[
+        ['/pursue-withdraw.html','One wants to talk now, one needs space','If one of you pushes to sort it now and the other walks away, start here: both sides, and a pause plan.'],
         ['/workpapers/wp-03-one-owner-per-job.html','One owner per job','Most repeat fights live in jobs nobody formally owns.'],
         ['/workpapers/wp-04-what-keeps-coming-back.html','What keeps coming back?','Sorts what keeps going wrong into a gap in the setup, too little time or energy, or a one-off.'],
         ['/check-ins.html','Check-ins','How to raise it once, properly, instead of ten times badly.']
