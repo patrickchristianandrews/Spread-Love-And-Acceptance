@@ -9,7 +9,7 @@
    The Frequency Buddies episodes (/assets/js/buddies/) are small data files, saved up front so an episode
    plays offline; a future episode not in the list is saved the first time it's watched.
    Bump VERSION when the list below changes. */
-var VERSION = 'tol-v135';
+var VERSION = 'tol-v136';
 // A first visit saves only this small shell (so the offline page works). The full list below is saved only
 // once the site is installed as an app (site.js asks for it), so a visitor on a metered plan never
 // downloads megabytes they didn't ask for. Everything else is saved the first time it's used.

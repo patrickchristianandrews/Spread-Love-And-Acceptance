@@ -218,7 +218,7 @@ SEARCH.update({
  'growing-up.html': ('Where Your Lens Came From: How Growing Up Shapes You', 'How growing up shapes the adult you are: the big question at each stage, why timing makes some experiences go deeper, and how to choose which old rules to keep.'),
  'self-path.html': ('Your Self-Discovery Path, Step by Step', 'The self-discovery path: understand your own load, rhythms and reactions first, with a few short worksheets and free tools you can use on your own.'),
  # chores and the mental load
- 'lemonade-stand.html': ('Who Did What This Week? A Free Chore Tracker', 'A free chore and mental load tracker for one person or a whole home: log who did what this week, see the split or your own load, and talk without blame.'),
+ 'lemonade-stand.html': ('The Lemonade Stand: chores, bills and who does what', 'A free tool for chores, bills and family money, for one person or a whole home: list who does what and who pays what, see the split or your own load, and talk it over without blame.'),
  'workpapers/wp-01.html': ('Who Did What: A One-Week Chore Log and Kind Ways to Say No', 'A one-week log of who did what at home, plus three calm ways to say no or “not right now” without starting a fight. A free worksheet for couples and roommates.'),
  'workpapers/wp-02-how-much-are-you-carrying.html': ('Stress Check: How Much Are You Carrying? (WP-02)', 'A five-question stress check that separates how much you are already carrying from how upset you are about one thing. A reflection tool, not a test.'),
  'workpapers/wp-03-one-owner-per-job.html': ('One Owner per Job: A Free Household Chore Agreement', 'Give every recurring household chore one clear owner from start to finish, so nothing slips, nobody nags and you stop re-deciding who does what each week.'),
