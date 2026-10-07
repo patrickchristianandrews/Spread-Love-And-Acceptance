@@ -115,7 +115,7 @@
     var sc = schema(code), st = WPK.blankState(sc);
     if (sc.people) applyNames(sc, st);
     else if (sc.meta && sc.meta.some(function (m) { return m.id === 'name'; })) st.values.name = person != null ? (S.names[person] || '') : isSolo() ? S.names[0] : '';
-    if (code === 'WP-02' && !isSolo()) st.values.roadPeople = S.names.length;
+    if (code === 'WP-02' && !isSolo()) st.values.roadPeople = adults().length;
     var en = { id: 'e' + (++uid), workpaper: code, label: label || '', state: st };
     if (person != null) en.person = person;
     return en;
@@ -131,9 +131,21 @@
     return null;
   }
   function whoLabel(i) { return String(S.names[i] || '').trim() || roleLabel(i); }
+  // Children on the road (Family, Co-parents): the sheets about yourself (load scores, calm-down kits)
+  // and the shared average wait only for the adults. "Never ask a child to keep track of what a parent does."
+  var KID_ROADS = { family: true, coparents: true };
+  function kidsOn() { return !!S.path && !!KID_ROADS[S.path.id]; }
+  function isChild(i) { return kidsOn() && !!(S.kids && S.kids[i]); }
+  function adults() { return S.names.map(function (_, i) { return i; }).filter(function (i) { return !isChild(i); }); }
+  function kidsFit() {
+    S.kids = (S.kids || []).slice(0, S.names.length);
+    // co-parents: the first two are the parents; anyone added after them starts out as a child
+    while (S.kids.length < S.names.length) S.kids.push(!!S.path && S.path.id === 'coparents' && S.kids.length >= 2);
+  }
   // How many people are on the road goes onto every battery sheet, so its shared average waits for everyone.
   function syncRoadPeople() {
-    S.stops.forEach(function (st) { st.entries.forEach(function (en) { if (en.workpaper === 'WP-02') { if (isSolo()) delete en.state.values.roadPeople; else en.state.values.roadPeople = S.names.length; } }); });
+    kidsFit();
+    S.stops.forEach(function (st) { st.entries.forEach(function (en) { if (en.workpaper === 'WP-02') { if (isSolo()) delete en.state.values.roadPeople; else en.state.values.roadPeople = adults().length; } }); });
   }
   // The same sheet brought in twice is only kept once.
   function sig(en) { return en.workpaper + '|' + (en.label || '') + '|' + JSON.stringify(en.state.values) + '|' + JSON.stringify(en.state.tables); }
@@ -331,6 +343,12 @@
       inp.value = nm;
       var lab = h('label', { className: 'ws-name', for: 'ws-name-' + i }, [h('span', { text: roleHeading(i) }), inp]);
       var cell = h('div', { className: 'ws-name-cell' }, [lab]);
+      if (kidsOn()) {
+        kidsFit();
+        var kb = h('input', { type: 'checkbox', id: 'ws-kid-' + i, 'data-kid': String(i), autocomplete: 'off' });
+        kb.checked = !!S.kids[i];
+        cell.appendChild(h('label', { className: 'ws-kid', for: 'ws-kid-' + i, title: 'Children aren\u2019t asked to fill in a load score or a calm-down kit, and the shared numbers don\u2019t wait for them.' }, [kb, ' Child']));
+      }
       if (S.names.length > minPeople()) {
         cell.appendChild(h('button', { type: 'button', className: 'ws-name-x', 'data-remove-name': String(i), 'aria-label': 'Take ' + (nm.trim() || roleLabel(i)) + ' off this road', text: '×' }));
       }
@@ -486,6 +504,7 @@
     var who = S.names[i].trim() || roleLabel(i);
     if (!global.confirm('Take ' + who + ' off this road? On every sheet, the jobs they own go back to "—".')) return;
     S.names.splice(i, 1);
+    kidsFit(); S.kids.splice(i, 1);
     eachPeopleSheet(function (sc, st) { if (WPK.peopleCount(st.values) > i) WPK.removePerson(sc, st, i); });
     S.stops.forEach(function (st) { st.entries.forEach(function (en) { if (typeof en.person === 'number') { if (en.person === i) delete en.person; else if (en.person > i) en.person--; } }); });
     syncRoadPeople();
@@ -494,6 +513,101 @@
     var add = $('ws-name-add');
     if (add && !add.hidden) add.focus();
     say(who + ' is off this road.');
+  }
+
+  /* ------------------------------------------------------------ the Lemonade Stand, brought in (step 1) */
+  // A Lemonade Stand code ("LEMON1:" and a base64 JSON, from "Send my side" on /lemonade-stand.html), or the
+  // stand kept on this device (only when someone ticked "Keep this on my device" there). It prefills the
+  // names, a week of Who did what from the hours, and One owner per job from the jobs and their owners.
+  // Nothing is sent anywhere; the code is read here, on this page.
+  var LEMON_KEEP = 'tol-lemonade-stand-v2';
+  var LEMON_FREQ = { day: 7, few: 3, week: 1, eow: 0.5, month: 12 / 52 };
+  var LEMON_OFTEN = { day: 'Daily', few: 'Weekly', week: 'Weekly', eow: 'Weekly', month: 'Monthly' };
+  function lemonB64(s) {
+    var bin = atob(String(s || '').replace(/\s+/g, '').replace(/-/g, '+').replace(/_/g, '/'));
+    try { var a = new Uint8Array(bin.length); for (var i = 0; i < bin.length; i++) a[i] = bin.charCodeAt(i); return new TextDecoder().decode(a); }
+    catch (e) { return decodeURIComponent(escape(bin)); }
+  }
+  function lemonNum(x) { var n = parseFloat(x); return isFinite(n) && n > 0 ? n : 0; }
+  function lemonReal(n) { n = String(n || '').trim(); return n && !/^(me|them|you|person [a-h1-8])$/i.test(n) ? n : ''; }
+  // { people: [names], jobs: [{ n, f, u, v: { name: amount }, t: { name: minutes } }], own: [{ n, w }], by }
+  function lemonFromCode(text) {
+    var m = /LEMON1:\s*([A-Za-z0-9+\/=_-]+)/i.exec(String(text || '')), raw = null;
+    if (!m) return null;
+    try { raw = JSON.parse(lemonB64(m[1])); } catch (e) { return null; }
+    if (!raw || raw.app !== 'lemonade' || !Array.isArray(raw.people)) return null;
+    var people = raw.people.map(lemonReal).filter(Boolean).slice(0, MAX_PEOPLE);
+    function obj(o) { var out = {}; if (o && typeof o === 'object') Object.keys(o).forEach(function (k) { var v = lemonNum(o[k]); if (v) out[String(k).trim()] = v; }); return out; }
+    var jobs = (Array.isArray(raw.jobs) ? raw.jobs : []).slice(0, 200).filter(function (j) { return j && typeof j === 'object' && !j.p; }).map(function (j) {
+      return { n: String(j.n || '').replace(/\s+/g, ' ').trim().slice(0, 120), f: LEMON_FREQ[j.f] ? j.f : 'week', u: j.u === 'h' ? 'h' : 'm', v: obj(j.v), t: obj(j.t) };
+    }).filter(function (j) { return j.n; });
+    var own = (Array.isArray(raw.own) ? raw.own : []).slice(0, 40).filter(function (o) { return o && o.n; }).map(function (o) { return { n: String(o.n).trim().slice(0, 120), w: String(o.w || '').trim() }; });
+    return people.length ? { people: people, jobs: jobs, own: own, by: lemonReal(raw.by) } : null;
+  }
+  function lemonKept() {
+    var st = null;
+    try { st = JSON.parse(global.localStorage.getItem(LEMON_KEEP) || 'null'); } catch (e) { st = null; }
+    if (!st || st.example || !Array.isArray(st.people)) return null;
+    var people = st.people.map(lemonReal);
+    if (!people.some(Boolean)) return null;
+    var jobs = (Array.isArray(st.jobs) ? st.jobs : []).filter(function (j) { return j && !j.ex && !j.personal && String(j.name || '').trim(); }).map(function (j) {
+      var v = {}, t = {};
+      people.forEach(function (p, i) { if (!p) return; var a = lemonNum((j.v || [])[i]), b = lemonNum((j.t || [])[i]); if (a) v[p] = a; if (b) t[p] = b; });
+      return { n: String(j.name).trim().slice(0, 120), f: LEMON_FREQ[j.freq] ? j.freq : 'week', u: j.unit === 'h' ? 'h' : 'm', v: v, t: t };
+    });
+    var own = (Array.isArray(st.owners) ? st.owners : []).filter(function (o) { return o && String(o.name || '').trim(); }).map(function (o) { return { n: String(o.name).trim(), w: o.who >= 0 ? people[o.who] || '' : '' }; });
+    return { people: people.filter(Boolean), jobs: jobs, own: own, by: '' };
+  }
+  function lemonBring(d, from) {
+    if (!S.path) return 'Choose your road first, then bring in your stand.';
+    var here = function () { return S.names.map(function (x) { return SP.fold(x); }); }, added = [];
+    // names: matched by name; someone new goes into an empty place, or is added to the road
+    d.people.forEach(function (p) {
+      if (here().indexOf(SP.fold(p)) >= 0) return;
+      var slot = S.names.findIndex ? S.names.findIndex(function (x) { return !String(x || '').trim(); }) : -1;
+      if (slot >= 0) setName(slot, p);
+      else if (!isSolo() && S.names.length < MAX_PEOPLE) { addName(); setName(S.names.length - 1, p); }
+      else return;
+      added.push(p);
+    });
+    function codeOf(name) { var i = here().indexOf(SP.fold(name)); return i >= 0 ? WPK.CODES[i] : ''; }
+    var made = [];
+    // a week of Who did what, from each person's hours
+    var rows = [];
+    d.jobs.forEach(function (j) {
+      Object.keys(j.v).forEach(function (who) {
+        var c = codeOf(who); if (!c) return;
+        var mins = j.v[who] * (j.u === 'h' ? 60 : 1) * LEMON_FREQ[j.f];
+        if (mins >= 1) rows.push({ task: j.n, who: c, minutes: String(Math.round(mins)) });
+      });
+      Object.keys(j.t).forEach(function (who) {
+        var c = codeOf(who); if (!c) return;
+        var mins = j.t[who] * LEMON_FREQ[j.f];
+        if (mins >= 1) rows.push({ task: j.n + ' (noticing and planning)', who: c, minutes: String(Math.round(mins)), how: 'Noticed and handled' });
+      });
+    });
+    if (rows.length && S.stops.some(function (st) { return st.wp === 'WP-01'; }) && !isSolo()) {
+      var e1 = newEntry('WP-01'); e1.state.tables.audit = rows; e1.from = from; if (place(e1)) made.push('Who did what (' + rows.length + ' rows for one week)');
+    }
+    // One owner per job: every job from the stand, with its owner when the stand has one
+    var owner = {}; d.own.forEach(function (o) { if (o.w) owner[o.n.toLowerCase()] = o.w; });
+    var seen = {}, jobs = [];
+    d.jobs.concat(d.own.map(function (o) { return { n: o.n, f: 'week' }; })).forEach(function (j) {
+      var k = j.n.toLowerCase(); if (seen[k]) return; seen[k] = 1;
+      var r = { task: j.n, freq: LEMON_OFTEN[j.f] || 'Weekly' }, c = owner[k] ? codeOf(owner[k]) : '';
+      if (c) r.r = c;
+      jobs.push(r);
+    });
+    if (jobs.length && S.stops.some(function (st) { return st.wp === 'WP-03'; })) {
+      var e3 = newEntry('WP-03'); e3.state.tables.treaty = jobs; e3.from = from; if (place(e3)) made.push('One owner per job (' + jobs.length + ' jobs, ' + jobs.filter(function (r) { return r.r; }).length + ' with an owner)');
+    }
+    syncAllNames(); syncRoadPeople(); renderNames(); renderRoad(); changed();
+    if (!made.length && !added.length) return 'Nothing new to bring in: those names and jobs are already on your road.';
+    return 'Brought in from your Lemonade Stand: ' + (added.length ? 'the names ' + andList(added) + (made.length ? '; ' : '.') : '') + (made.length ? made.join('; ') + '.' : '') + ' Check them, then change anything on the sheets.';
+  }
+  function lemonRender() {
+    var host = $('ws-lemon'); if (!host) return;
+    var kb = $('ws-lemon-kept'); if (kb) kb.hidden = !lemonKept();
   }
 
   /* ------------------------------------------------------------ keep a draft on this device (opt-in) */
@@ -524,6 +638,7 @@
     S.stops.forEach(function (st) { st.entries.forEach(function (en) { if (filled(en) || en.label) entries.push({ workpaper: en.workpaper, label: en.label, stop: st.key, person: typeof en.person === 'number' ? en.person : undefined, from: en.from || undefined, state: forFile ? shareable(en) : en.state }); }); });
     var out = { format: SUITE_FORMAT, version: 1, path: S.path ? S.path.id : null, names: S.names.slice(), saved: new Date().toISOString(), entries: entries };
     var by = deviceOwner(); if (by) out.by = by;
+    if (kidsOn()) { kidsFit(); if (S.kids.some(Boolean)) out.kids = S.kids.slice(); }
     if (S.variant) out.variant = S.variant;
     if (Array.isArray(S.focusEach)) out.focusEach = S.focusEach.slice(0, MAX_PEOPLE);
     return out;
@@ -660,8 +775,10 @@
   // sheets and their own "another day". WP-02 also shows the shared average, or who it is waiting on.
   function personRows(st) {
     var box = h('div', { className: 'ws-people-rows' }), mine = st.entries.map(function (en) { return { en: en, p: personOf(en) }; });
+    var kids = [];
     S.names.forEach(function (nm, i) {
       var theirs = mine.filter(function (x) { return x.p === i; }).map(function (x) { return x.en; });
+      if (isChild(i) && !theirs.length) { kids.push(whoLabel(i)); return; }
       var row = h('div', { className: 'ws-person-row' }, [h('span', { className: 'ws-person-name', text: whoLabel(i) })]);
       var list = h('div', { className: 'ws-sheets' });
       theirs.forEach(function (en, k) {
@@ -695,6 +812,7 @@
       orow.appendChild(h('p', { className: 'ws-person-hint', text: 'Open one and put a name from "Who\u2019s on this road?" in its name box to move it to that person.' }));
       box.appendChild(orow);
     }
+    if (kids.length) box.appendChild(h('p', { className: 'ws-person-hint', text: 'Not asked of ' + andList(kids) + (kids.length === 1 ? ', who is marked as a child.' : ', who are marked as children.') + ' This sheet is for the adults, each about themselves.' }));
     if (st.wp === 'WP-02') box.appendChild(h('p', { className: 'ws-shared', text: sharedAverage(st) }));
     return box;
   }
@@ -704,13 +822,14 @@
   }
   // Everyone's latest load, and the shared average only once all of them are in (as in CALC-01).
   function sharedAverage(st) {
-    var latest = S.names.map(function (_, i) {
+    var who = adults();
+    var latest = who.map(function (i) {
       var theirs = st.entries.filter(function (en) { return personOf(en) === i && SP.metric(en) != null; });
       theirs.sort(function (a, b) { var x = a.state.values.date || '', y = b.state.values.date || ''; return x < y ? -1 : x > y ? 1 : 0; });
       return theirs.length ? SP.metric(theirs[theirs.length - 1]) : null;
     });
-    var missing = S.names.map(function (_, i) { return i; }).filter(function (i) { return latest[i] == null; });
-    if (missing.length === S.names.length) return 'The shared average (the stress number in CALC-01) appears here once everyone has filled in their own.';
+    var missing = who.filter(function (i, k) { return latest[k] == null; });
+    if (missing.length === who.length) return 'The shared average (the stress number in CALC-01) appears here once everyone has filled in their own.';
     if (missing.length) return 'Shared average: waiting on ' + missing.map(whoLabel).join(', ') + '. It is never worked out while anyone\u2019s is missing.';
     var avg = latest.reduce(function (a, b) { return a + b; }, 0) / latest.length;
     return 'Shared average of everyone\u2019s latest: ' + (Math.round(avg * 100 + 1e-7) / 100).toFixed(2) + (latest.length === 2 ? ' (both in)' : ' (all ' + latest.length + ' in)') + '. That is the stress number for CALC-01.';
@@ -733,6 +852,7 @@
           if (perPerson(code)) {
             // one button per person: everyone fills in their own
             S.names.forEach(function (_, i) {
+              if (isChild(i)) return;
               var theirs = st.entries.filter(function (en) { return personOf(en) === i; }), done1 = theirs.some(filled);
               row.appendChild(h('button', { type: 'button', className: 'ws-sheet-btn' + (done1 ? ' is-filled' : ''), 'data-open': st.key, 'data-entry': theirs[0] ? theirs[0].id : '', 'data-person': String(i) }, [
                 h('span', { className: 'ws-sheet-label', text: code + ' ' + SP.nameOf(code) + ' · ' + whoLabel(i) }), h('span', { className: 'ws-sheet-meta', text: done1 ? '\u2713' : '\u270E' })]));
@@ -1046,6 +1166,11 @@
             S.names = d.names.slice(0, MAX_PEOPLE).map(function (x) { return String(x || ''); });
             fitNames();
           }
+          // who is marked as a child there, matched by name here
+          if (Array.isArray(d.kids) && Array.isArray(d.names)) {
+            kidsFit();
+            d.kids.forEach(function (kid, j) { var k = SP.fold(d.names[j]), at = k ? S.names.map(function (x) { return SP.fold(x); }).indexOf(k) : -1; if (kid && at >= 0) S.kids[at] = true; });
+          }
           d.entries.forEach(function (x) {
             var sc = x && schema(x.workpaper);
             if (!sc) return;
@@ -1156,7 +1281,7 @@
       var list = st.entries.length ? st.entries.slice() : [];
       if (perPerson(st.wp)) {
         // a sheet for everyone: their own, or a blank one with their name on it
-        S.names.forEach(function (_, i) { if (!list.some(function (en) { return personOf(en) === i; })) list.push(newEntry(st.wp, '', i)); });
+        S.names.forEach(function (_, i) { if (!isChild(i) && !list.some(function (en) { return personOf(en) === i; })) list.push(newEntry(st.wp, '', i)); });
         list.sort(function (a, b) { var x = personOf(a), y = personOf(b); return (x == null ? 99 : x) - (y == null ? 99 : y); });
       }
       if (!list.length) list = [newEntry(st.wp)];
@@ -1260,6 +1385,7 @@
       if ($('ws-keep')) $('ws-keep').checked = true;
       if (kept.path && pathById(kept.path)) setPath(kept.path, typeof kept.variant === 'string' ? kept.variant : null);
       if (Array.isArray(kept.names)) { S.names = kept.names.slice(0, MAX_PEOPLE).map(function (x) { return String(x || ''); }); fitNames(); }
+      if (Array.isArray(kept.kids)) S.kids = kept.kids.slice(0, MAX_PEOPLE).map(Boolean);
       if (Array.isArray(kept.focusEach)) { S.focusEach = kept.focusEach.slice(0, MAX_PEOPLE).map(function (x) { return typeof x === 'string' && /^[a-z]{1,20}$/.test(x) ? x : null; }); renderFocus(); }
       kept.entries.forEach(function (x) {
         var sc = x && schema(x.workpaper);
@@ -1274,15 +1400,42 @@
       say('Picked up the draft kept on this device. Press “Erase” to remove it.');
     } else if (q && pathById(q)) setPath(q, qf); else renderRoad();
 
+    var nameTimer = null;
     $('ws-names').addEventListener('input', function (e) {
       var i = e.target.getAttribute('data-name');
-      if (i != null) setName(+i, e.target.value);
+      if (i == null) return;
+      setName(+i, e.target.value);
+      // the road below (each person's own sheets) shows the new name a moment after typing stops
+      clearTimeout(nameTimer); nameTimer = setTimeout(renderRoad, 500);
+    });
+    $('ws-names').addEventListener('change', function (e) {
+      var k = e.target.getAttribute('data-kid');
+      if (k != null) {
+        kidsFit(); S.kids[+k] = e.target.checked;
+        syncRoadPeople(); changed(); renderRoad();
+        say(whoLabel(+k) + (e.target.checked ? ' is marked as a child: no load score or calm-down kit is asked of them, and the shared numbers don\u2019t wait for them.' : ' is marked as an adult.'));
+        return;
+      }
+      if (e.target.getAttribute('data-name') != null) { clearTimeout(nameTimer); renderRoad(); }
     });
     $('ws-names').addEventListener('click', function (e) {
       var x = e.target.closest('[data-remove-name]');
       if (x) removeName(+x.getAttribute('data-remove-name'));
       if (e.target.closest('#ws-name-add')) addName();
     });
+    var lemonGo = $('ws-lemon-go'), lemonUse = $('ws-lemon-kept'), lemonSay = function (m) { var n = $('ws-lemon-note'); if (n) { n.textContent = ''; setTimeout(function () { n.textContent = m; }, 30); } };
+    if (lemonGo) lemonGo.addEventListener('click', function () {
+      var d = lemonFromCode($('ws-lemon-code').value);
+      if (!d) { lemonSay('That doesn’t look like a Lemonade Stand code. Copy the whole thing, starting with LEMON1:'); $('ws-lemon-code').focus(); return; }
+      lemonSay(lemonBring(d, { by: d.by, saved: WPK.today(), file: 'Lemonade Stand code' }));
+      $('ws-lemon-code').value = '';
+    });
+    if (lemonUse) lemonUse.addEventListener('click', function () {
+      var d = lemonKept();
+      if (!d) { lemonSay('There’s no Lemonade Stand kept on this device.'); return; }
+      lemonSay(lemonBring(d, { saved: WPK.today(), file: 'Lemonade Stand on this device' }));
+    });
+    lemonRender();
     var keepBox = $('ws-keep');
     if (keepBox) keepBox.addEventListener('change', function () {
       if (keepBox.checked) { keep = true; if (keepNow()) say('Kept on this device. It will be here next time you open this page. Press “Erase” to remove it.'); }

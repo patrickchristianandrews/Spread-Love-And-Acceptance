@@ -2473,6 +2473,14 @@
   renderLastNames();
 
   /* ---------- links into the page: #side=… (a partner's side), #add-side, #money, #hours ---------- */
+  // scroll there again once the page has settled (fonts, the bar above and late pieces can move it),
+  // unless the person has scrolled in the meantime
+  function settle(el) {
+    var moved = false;
+    function mark() { moved = true; }
+    ['wheel', 'touchmove', 'keydown'].forEach(function (ev) { window.addEventListener(ev, mark, { once: true, passive: true }); });
+    [120, 500, 1200].forEach(function (ms) { setTimeout(function () { if (!moved) el.scrollIntoView({ block: 'start' }); }, ms); });
+  }
   function fromHash() {
     var h = location.hash || '';
     if (/^#side=/.test(h) || h === '#add-side') {
@@ -2484,7 +2492,10 @@
       if (sides && body && body.firstElementChild !== sides) body.insertBefore(sides, body.firstElementChild);
       $('add-box').hidden = false; $('add-side').setAttribute('aria-expanded', 'true');
       $('send-box').hidden = true; $('send-side').setAttribute('aria-expanded', 'false');
-      if (sides) sides.scrollIntoView({ block: 'start' });
+      if (sides) {
+        sides.scrollIntoView({ block: 'start' });
+        settle(sides);
+      }
       if (h === '#add-side') { $('add-code').focus({ preventScroll: true }); return; }
       review(h);
       sideStatus('add-msg', 'Your partner’s side is here. Look it over below, then tap “Add to my stand”.');
@@ -2495,7 +2506,12 @@
       else if (!mode) setMode('group', false);
       if (!solo()) showTab(h === '#money' ? 1 : 0);
       var tab = solo() ? $('panel-hours') : $(h === '#money' ? 'tab-money' : 'tab-hours');
-      if (tab) { tab.scrollIntoView({ block: 'start' }); if (!solo()) tab.focus({ preventScroll: true }); }
+      if (!tab) return;
+      var spot = tab.closest('.ls-tabs') || tab;
+      if (!solo()) tab.focus({ preventScroll: true });
+      spot.scrollIntoView({ block: 'start' });
+      // once more after the page settles (fonts and the bar above can move it)
+      settle(spot);
     }
   }
   fromHash();

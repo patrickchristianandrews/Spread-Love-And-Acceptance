@@ -289,14 +289,16 @@
   .row-amts label.ls-sel-wide select{ max-width:26rem; }
   .ls-money-sum{ white-space:pre-line; overflow-wrap:anywhere; }
   .row-amts label.is-theirs input{ background:#F3EEE0 !important; border-style:dashed !important; color:var(--ink-soft); }
-  .row-amts label.is-theirs > span::after{ content:" \00b7 their side"; font-style:normal; }
+  .row-amts label.is-theirs > span::after{ content:"\00a0\00b7\00a0their side"; font-style:normal; }
   .row-others{ margin:.35rem 0 0 !important; }
   .ls-dbl{ display:flex; flex-wrap:wrap; align-items:center; gap:.2rem .8rem; }
   .ls-hh-keep{ margin:.8rem 0 0 !important; padding:.5rem .8rem .6rem; border-radius:14px; border:2px solid var(--credit, #3E6B4C); background:#F3F8F1; color:var(--ink) !important; }
   .ls-hh-keep .tol-hh-keep-l{ font-weight:600; }
   .ls-hh-keep .tol-hh-keep-hint{ font-size:.88rem; color:var(--ink-soft); }
   .ls-last{ margin:.6rem 0 0; }
-  .ls-last-btn{ width:100%; font-weight:600; border-color:var(--credit, #3E6B4C); background:#F3F8F1; }
+  .ls-last-btn{ width:100%; min-height:44px; padding:.8rem 1rem; text-align:left; font:inherit; font-family:"Fraunces", Georgia, serif; font-weight:600; font-size:1.05rem; color:var(--ink); border:2px solid var(--credit, #3E6B4C); border-radius:16px; background:#F3F8F1; cursor:pointer; }
+  .ls-last-btn:hover{ background:#E6F1E3; }
+  .ls-last-btn:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
   .ls-last[hidden]{ display:none; }
   .ls-wait{ margin:.4rem 0 0 !important; text-align:center; }
   .ls-wait:has(> [hidden]){ display:none; }
@@ -367,7 +369,7 @@
       <button type="button" class="mode-card" data-mode="solo" aria-pressed="false"><span class="mc-t">Just me</span><span class="mc-d">See my own load: work, home, caring, admin, the thinking part, and rest. No comparing with anyone.</span></button>
       <button type="button" class="mode-card" data-mode="group" aria-pressed="false"><span class="mc-t">Me and others I share a home with</span><span class="mc-d">Two to eight people: partners, family, roommates. Each person fills in only their own side, then you see the split together.</span></button>
     </div>
-    <div class="ls-last" id="last-names" hidden><button type="button" class="mode-card ls-last-btn" id="last-names-btn"></button></div>
+    <div class="ls-last" id="last-names" hidden><button type="button" class="ls-last-btn" id="last-names-btn"></button></div>
     <p class="ls-status" id="mode-msg" role="status" aria-live="polite"></p>
   </section>
 

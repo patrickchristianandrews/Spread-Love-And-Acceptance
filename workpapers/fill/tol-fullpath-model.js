@@ -34,6 +34,7 @@
   var CODES = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'];
   var DAYS = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
   // Roughly how many times a week a job comes up, by its "How often" on One owner per job
+  var KID_ROADS = { family: true, coparents: true };
   var FREQ_WEIGHT = { Daily: 7, 'Each meeting': 2, Weekly: 1, Monthly: 0.25, 'As needed': 0.5, Ongoing: 1 };
 
   function WPS() { return global.TOL_WORKPAPERS || {}; }
@@ -212,6 +213,8 @@
     var R = ctx.road, fields = [];
     for (var i = 0; i < ctx.n; i++) {
       fields.push(f('who.p' + (i + 1), R.solo ? 'Your name or initials' : roleOf(ctx.roadId, i) + ': name or initials', 'text', { def: trim(ctx.names[i]), half: true, max: 40 }));
+      // Family and Co-parents: a child isn't asked for a load score, and the shared numbers don't wait for them
+      if (KID_ROADS[ctx.roadId]) fields.push(f('who.p' + (i + 1) + '.child', (roleOf(ctx.roadId, i)) + ' is a child', 'check', { optional: true, half: true }));
     }
     var more = [f('who.started', 'Date you started', 'date', { half: true })];
     if (R.solo) {
@@ -881,6 +884,7 @@
       if (rs.length > 3) sizes.resync = rs.length;
       closingFrom(e13, 'wp13');
     }
+    if (KID_ROADS[roadId] && Array.isArray(snap.kids)) snap.kids.forEach(function (k, i) { if (k && i < n) V['who.p' + (i + 1) + '.child'] = true; });
     var data = blankData(roadId, n, names, sizes);
     if (e3) Object.keys(data.values).forEach(function (k) { if (k.indexOf(NS + 'wp03.treaty.') === 0) delete data.values[k]; });
     names.forEach(function (nm, i) { if (nm) data.values[NS + 'who.p' + (i + 1)] = nm; });
@@ -1144,8 +1148,11 @@
       var bat = got === 5 ? C1().battery(answers) : null;
       if (bat) { score = bat.value; source = 'answers'; }
       else if (shared != null) { score = shared; source = 'shared'; }
-      return { i: p.i, label: p.label, score: score, source: source, answered: got, sum: sum, answers: answers, band: batteryBand(score), note: trim(V(data, base + 'note')), date: V(data, base + 'date') };
+      return { i: p.i, label: p.label, score: score, source: source, answered: got, sum: sum, answers: answers, band: batteryBand(score), note: trim(V(data, base + 'note')), date: V(data, base + 'date'),
+        child: !!(KID_ROADS[data.road] && V(data, 'who.p' + (p.i + 1) + '.child') && !got && score == null) };
     });
+    // the shared load numbers are for the adults: a child marked as one is never waited for
+    var adultsB = out.battery.filter(function (b) { return !b.child; });
     var scored = out.battery.filter(function (b) { return b.score != null; });
     out.wp02 = { filled: out.battery.some(function (b) { return b.answered > 0 || b.source; }), scored: scored.length };
 
@@ -1310,18 +1317,18 @@
       else if (inRange(V(data, 'calc.wb'), 0, 1) != null) { wb = inRange(V(data, 'calc.wb'), 0, 1); wbSrc = 'yours'; }
       if (out.wp03 && out.wp03.oc != null) { oc = out.wp03.oc; ocSrc = 'WP-03'; }
       else if (inRange(V(data, 'calc.oc'), 0, 1) != null) { oc = inRange(V(data, 'calc.oc'), 0, 1); ocSrc = 'yours'; }
-      var st = C1().stress(out.battery.map(function (b) { return b.score; }));
+      var st = C1().stress(adultsB.map(function (b) { return b.score; }));
       if (st.value != null) { as = st.value; asSrc = 'WP-02'; }
       else if (inRange(V(data, 'calc.as'), 0, 1) != null) { as = inRange(V(data, 'calc.as'), 0, 1); asSrc = 'yours'; }
     }
     var fr = num(V(data, 'calc.friction')), rt = num(V(data, 'calc.retunes'));
     var rf = C1().retuning(rt, fr).value;
     var calc = { applies: R.calc, wb: wb, oc: oc, as: as, rf: rf, wbSrc: wbSrc, ocSrc: ocSrc, asSrc: asSrc, friction: fr, retunes: rt, capped: fr > 0 && rt > fr,
-      asPeople: asSrc === 'WP-02' ? n : 0, state: V(data, 'calc.state'), missing: [] };
+      asPeople: asSrc === 'WP-02' ? adultsB.length : 0, state: V(data, 'calc.state'), missing: [] };
     if (R.calc) {
       if (wb == null) calc.missing.push('workload balance (WP-01 minutes with names)');
       if (oc == null) calc.missing.push('ownership clarity (WP-03 tasks with owners)');
-      var waiting = out.battery.filter(function (b) { return b.score == null; }).map(function (b) { return b.label; });
+      var waiting = adultsB.filter(function (b) { return b.score == null; }).map(function (b) { return b.label; });
       calc.waiting = waiting;
       if (as == null) calc.missing.push('everyone\u2019s load score (WP-02; still waiting on ' + list(waiting) + '; it is never worked out while anyone\u2019s is missing)');
       if (!calc.missing.length) {
@@ -1620,7 +1627,7 @@
       });
       c.battery.forEach(function (b) { if (b.score != null) s.shows.push((R.solo ? 'Your load score' : b.label) + ': ' + fmt(b.score) + ', ' + b.band.label.toLowerCase() + '. ' + (b.band.key === 'high' ? 'A way to press pause, not a way out: “let’s come back to this tomorrow.”' : b.band.key === 'medium' ? 'Worth a heads-up before a hard conversation.' : 'Whatever comes up is probably about the thing itself.')); });
       if (!R.solo && c.calc.asSrc === 'WP-02') s.shows.push('Average across all ' + c.n + ' people: ' + fmt(c.calc.as) + '. This is the stress input to CALC-01.');
-      else if (!R.solo && c.calc.applies) s.shows.push('No average yet: still waiting on ' + list(c.battery.filter(function (b) { return b.score == null; }).map(function (b) { return b.label; })) + '. CALC-01 never works it out while anyone\u2019s load score is missing.');
+      else if (!R.solo && c.calc.applies) s.shows.push('No average yet: still waiting on ' + list(c.battery.filter(function (b) { return b.score == null && !b.child; }).map(function (b) { return b.label; })) + '. CALC-01 never works it out while anyone\u2019s load score is missing.');
       if (R.solo) { var tf = topFactors(c); if (tf.length) s.shows.push('Scored 3 or 4: ' + list(tf.map(function (x) { return x.toLowerCase(); })) + '.'); }
       var hi = c.battery.filter(function (b) { return b.band && b.band.key === 'high'; });
       s.next = hi.length ? (R.solo ? 'This week, before any hard conversation, reach for your first settling default and say your number out loud.' : 'Agree that anyone at 0.60 or above can say “not today” and name a time instead, with no explanation needed.') : 'Keep it to one minute a day for a week. Patterns show up fast.';

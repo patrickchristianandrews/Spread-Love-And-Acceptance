@@ -315,7 +315,7 @@
     },
     {
       id: 'family', label: 'Family', icon: '⌂', color: '#CFE6D2',
-      blurb: 'Parents, adult children, siblings and in-laws: a roof, a group chat or a holiday table.',
+      blurb: 'Parents, adult children, siblings, in-laws and stepfamilies, including children who live in two homes: one roof or two, a group chat or a holiday table.',
       people: ['You', 'Family member'],
       groups: [
         { along: A('ch1','wired','signal'), title: 'Start here', note: 'Families often clash on tone and urgency more than on the task.', stops: [

@@ -528,6 +528,12 @@ html.ws-locked .tol-breathe-btn, html.ws-locked .tol-wx{ visibility: hidden; }
 .ws-names-row{ grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); }
 .ws-name-cell{ display: flex; align-items: flex-end; gap: 6px; min-width: 0; }
 .ws-name-cell label{ flex: 1 1 auto; min-width: 0; }
+.ws-lemon{ margin-top: 1em; padding: .6em .9em; border: 1px solid var(--line, #D9CBA3); border-radius: 14px; background: #FFFDF7; }
+.ws-lemon > summary{ cursor: pointer; font-weight: 600; min-height: 44px; display: flex; align-items: center; }
+.ws-lemon textarea{ width: 100%; box-sizing: border-box; font: inherit; font-size: .9rem; margin-top: .3em; overflow-wrap: anywhere; }
+.ws-lemon-l{ display: block; margin-top: .6em; font-size: .92em; }
+.ws-lemon-note:empty{ display: none; }
+.ws-name-cell label.ws-kid{ flex: 0 0 auto; display: inline-flex; align-items: center; gap: 4px; min-height: 44px; font-size: .9em; white-space: nowrap; }
 .ws-names-more{ display: flex; flex-wrap: wrap; align-items: center; gap: 6px 12px; margin: .8em 0 0; }
 .ws-names-count{ font-size: .88em; color: var(--ink-soft, #524B3E); }
 .ws-names-more[hidden]{ display: none; }
