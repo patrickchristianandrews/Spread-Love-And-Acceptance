@@ -467,12 +467,12 @@
         <tr><td>Clarity without parity</td><td>Ownership clarity is 0.85 or higher while workload balance is 0.60 or lower. The job list is clear, but the split is not.</td><td class="mono">WP-01 + WP-03</td></tr>
         <tr><td>Structure holding, repair not</td><td>The setup score is more than 0.08 above the overall score. Friction is being swallowed instead of talked through.</td><td class="mono">CALC-01 + WP-09</td></tr>
         <tr><td>Repair carrying the structure</td><td>The overall score is more than 0.08 above the setup score. Good communication is making up for a setup that keeps causing the friction in the first place.</td><td class="mono">CALC-01 + WP-09</td></tr>
-        <tr><td>Load isn't the driver</td><td>Saturation rises for three or more weeks while workload balance stays flat. Something outside the chore split is causing it.</td><td class="mono">WP-01 + WP-02</td></tr>
+        <tr><td>Load isn't the driver</td><td>Leftover stress rises for three or more weeks while workload balance stays flat. Something outside the chore split is causing it.</td><td class="mono">WP-01 + WP-02</td></tr>
         <tr><td>Drift rule</td><td>The overall score drops by more than 0.10 three weeks in a row. Time for a planned job-list review, not an emergency.</td><td class="mono">CALC-01</td></tr>
         <tr><td>Fixes aren't holding</td><td>More than half of fixed gaps come back, across the recorded months. The same gaps are being patched again instead of truly closed.</td><td class="mono">WP-04</td></tr>
         <tr><td>Job list gone quiet</td><td>Six or more weeks recorded with no job list changes logged. A living agreement that never changes probably isn't being used.</td><td class="mono">WP-03 + WP-13</td></tr>
         <tr><td>The loop isn't feeding forward</td><td>Friction logged over three or more weeks, with nothing moved on to another worksheet. The daily check-in is running but going nowhere.</td><td class="mono">WP-13 + WP-09</td></tr>
-        <tr><td>Kit doing its job</td><td>The Calm-Down Kit was used in a week when saturation fell. Using the kit and the drop line up.</td><td class="mono">WP-11 + WP-02</td></tr>
+        <tr><td>Kit doing its job</td><td>The Calm-Down Kit was used in a week when leftover stress fell. Using the kit and the drop line up.</td><td class="mono">WP-11 + WP-02</td></tr>
         <tr><td>Invisible work surfacing</td><td>Ownership clarity falls while the task list grows. The score drops because hidden work got named, which is the score working as it should.</td><td class="mono">WP-03 + WP-04</td></tr>
         <tr><td>The habit is holding</td><td>The daily check-in ran at least five days a week, three weeks in a row.</td><td class="mono">WP-13</td></tr>
       </tbody>
@@ -607,7 +607,7 @@
     /* 1. clarity without parity */
     if(last && last.oc!==null && last.wb!==null && last.oc>=0.85 && last.wb<=0.60){
       var heavier = last.pctA>50 ? nA : nB;
-      out.push(finding("warn","WP-01 + WP-03 \u00b7 clarity without parity",
+      out.push(finding("warn","clarity without parity \u00b7 WP-01 + WP-03",
         "Ownership is clear (" + last.oc.toFixed(2) + ") and the split is not (" + last.wb.toFixed(2) + "). Every task has a name on it, and most of those names are " + heavier + "'s. This household has written down exactly how lopsided things are. That's a real first step, but not the last one. Clarity and fairness are measured separately, and right now only one of them is good."));
     }
 
@@ -615,11 +615,11 @@
     if(last && last.sol!==null && last.apex!==null && last.rf!==null){
       var gap=last.sol-last.apex;
       if(gap>=0.08){
-        out.push(finding("warn","CALC-01 + WP-09 \u00b7 structure holding, repair not",
-          "Solvency is running " + gap.toFixed(2) + " above apex. The setup works on paper, but repair after friction isn't happening. Friction is being swallowed instead of talked through, which holds for a while and then stops holding. The place to work on is WP-09, not the treaty."));
+        out.push(finding("warn","structure holding, repair not \u00b7 CALC-01 + WP-09",
+          "The setup score is running " + gap.toFixed(2) + " above the overall score. The setup works on paper, but repair after friction isn't happening. Friction is being swallowed instead of talked through, which holds for a while and then stops holding. The place to work on is Say it so it lands (WP-09), not the job list."));
       } else if(gap<=-0.08){
-        out.push(finding("warn","CALC-01 + WP-09 \u00b7 repair carrying the structure",
-          "Apex is running " + Math.abs(gap).toFixed(2) + " above solvency. You're repairing well, but the setup keeps creating the friction you have to repair. Good communication is making up for an arrangement that isn't working, and that's tiring to keep up. The place to work on is the treaty, not the scripts."));
+        out.push(finding("warn","repair carrying the structure \u00b7 CALC-01 + WP-09",
+          "The overall score is running " + Math.abs(gap).toFixed(2) + " above the setup score. You're repairing well, but the setup keeps creating the friction you have to repair. Good communication is making up for an arrangement that isn't working, and that's tiring to keep up. The place to work on is the job list, not the scripts."));
       }
     }
 
@@ -630,8 +630,8 @@
         var asUp = t[2].as>t[1].as && t[1].as>t[0].as;
         var wbFlat = Math.abs(t[2].wb-t[0].wb)<0.08;
         if(asUp && wbFlat){
-          out.push(finding("warn","WP-01 + WP-02 \u00b7 the load isn't the driver",
-            "Saturation (how stretched you both are) has risen three weeks in a row, while the workload split has barely moved. Whatever is wearing you down isn't the chore setup, so reworking the treaty won't touch it. It's worth naming what's going on outside the house before rebalancing what's inside it."));
+          out.push(finding("warn","the load isn't the driver \u00b7 WP-01 + WP-02",
+            "Leftover stress (how stretched you both are) has risen three weeks in a row, while the workload split has barely moved. Whatever is wearing you down isn't the chore setup, so reworking the job list won't touch it. It's worth naming what's going on outside the house before rebalancing what's inside it."));
         }
       }
     }
@@ -643,8 +643,8 @@
         if(ds[i-1].apex!==null && ds[i].apex!==null && (ds[i-1].apex-ds[i].apex)>0.10) drops++; else break;
       }
       if(drops>=3){
-        out.push(finding("warn","CALC-01 \u00b7 drift rule triggered",
-          "Apex has dropped by more than 0.10 three weeks in a row. That points to the setup, not just a bad run, and it calls for a planned WP-03 review, not an emergency conversation. The setup is the kind of problem you can fix."));
+        out.push(finding("warn","drift rule triggered \u00b7 CALC-01",
+          "The overall score has dropped by more than 0.10 three weeks in a row. That points to the setup, not just a bad run, and it calls for a planned review of the job list (One owner per job, WP-03), not an emergency conversation. The setup is the kind of problem you can fix."));
       }
     }
 
@@ -652,7 +652,7 @@
     var g=0,r=0;
     ledger.months.forEach(function(m){ if(m.gaps!==null){g+=m.gaps;} if(m.recur!==null){r+=m.recur;} });
     if(g>0 && (r/g)>0.5){
-      out.push(finding("warn","WP-04 \u00b7 the fixes aren't holding",
+      out.push(finding("warn","the fixes aren't holding \u00b7 WP-04",
         Math.round(r/g*100)+"% of structural gaps have come back after being fixed. At that rate, a falling gap count means little: the same problems keep being patched. When a fix keeps failing, it usually means the owner was named but the conditions weren't set up: no reminder, no time, no realistic slot in the week. Ask what would have to be true for it to happen, not who should have made it happen."));
     }
 
@@ -660,8 +660,8 @@
     if(ws.length>=6){
       var amend=ws.reduce(function(a,w){ return a+(w.amend||0); },0);
       if(amend===0){
-        out.push(finding("warn","WP-03 \u00b7 the treaty has gone quiet",
-          "Six or more weeks recorded, and not one treaty change logged. The treaty is meant to be a living agreement, and one that never changes is usually one nobody is looking at. It's worth checking whether it still describes who actually does what."));
+        out.push(finding("warn","the job list has gone quiet \u00b7 WP-03",
+          "Six or more weeks recorded, and not one job list change logged. The job list is meant to be a living agreement, and one that never changes is usually one nobody is looking at. It's worth checking whether it still describes who actually does what."));
       }
     }
 
@@ -671,8 +671,8 @@
       var fr=recent.reduce(function(a,w){ return a+(w.friction||0); },0);
       var pr=recent.reduce(function(a,w){ return a+(w.promos||0); },0);
       if(fr>=3 && pr===0){
-        out.push(finding("warn","WP-13 + WP-09 \u00b7 the loop isn't feeding forward",
-          "Friction has been logged across the last three weeks, and nothing has been moved on from the daily check-in. The check-in is running but going nowhere. Its whole purpose is that a sore spot that keeps coming up becomes a treaty row or a tone check, instead of staying a low-level irritation."));
+        out.push(finding("warn","the loop isn't feeding forward \u00b7 WP-13 + WP-09",
+          "Friction has been logged across the last three weeks, and nothing has been moved on from the daily check-in. The check-in is running but going nowhere. Its whole purpose is that a sore spot that keeps coming up becomes a row on the job list or a Say it so it lands rewrite, instead of staying a low-level irritation."));
       }
     }
 
@@ -680,8 +680,8 @@
     if(ds.length>=2){
       var li=ds.length-1;
       if((ws[li].kit||0)>0 && ds[li].as!==null && ds[li-1].as!==null && ds[li].as<ds[li-1].as-0.05){
-        out.push(finding("good","WP-11 + WP-02 \u00b7 the kit is doing its job",
-          "The Calm-Down Kit was used this week and saturation fell by " + (ds[li-1].as-ds[li].as).toFixed(2) + ". One week isn't proof of anything, but using the kit and the drop line up. That's worth noticing, without assuming too much."));
+        out.push(finding("good","the kit is doing its job \u00b7 WP-11 + WP-02",
+          "The Calm-Down Kit was used this week and leftover stress fell by " + (ds[li-1].as-ds[li].as).toFixed(2) + ". One week isn't proof of anything, but using the kit and the drop line up. That's worth noticing, without assuming too much."));
       }
     }
 
@@ -691,8 +691,8 @@
       if(a.ocTotal!==null && b.ocTotal!==null && b.ocTotal>a.ocTotal){
         var oa=derive(a).oc, ob=derive(b).oc;
         if(oa!==null && ob!==null && ob<oa){
-          out.push(finding("good","WP-03 + WP-04 \u00b7 invisible work surfacing",
-            "Ownership clarity fell from " + oa.toFixed(2) + " to " + ob.toFixed(2) + ", and the task list grew by " + (b.ocTotal-a.ocTotal) + " at the same time. That's the score working as it should, not the household getting worse. Before, it was measuring a treaty that didn't know those tasks existed. A lower, honest number beats a higher one worked out from an incomplete list."));
+          out.push(finding("good","invisible work surfacing \u00b7 WP-03 + WP-04",
+            "Ownership clarity fell from " + oa.toFixed(2) + " to " + ob.toFixed(2) + ", and the task list grew by " + (b.ocTotal-a.ocTotal) + " at the same time. That's the score working as it should, not the household getting worse. Before, it was measuring a job list that didn't know those tasks existed. A lower, honest number beats a higher one worked out from an incomplete list."));
         }
       }
     }
@@ -701,7 +701,7 @@
     if(ws.length>=3){
       var lp=ws.slice(-3).map(function(w){ return w.loops; }).filter(function(v){ return v!==null; });
       if(lp.length===3 && lp.every(function(v){ return v>=5; })){
-        out.push(finding("good","WP-13 \u00b7 the habit is holding",
+        out.push(finding("good","the habit is holding \u00b7 WP-13",
           "The daily check-in has run at least five days a week for three weeks. It's the one habit meant to outlast everything else, and keeping it is a good sign you'll still be using the program in six months. Not because the check-in is powerful, but because a household that keeps it is still talking on ordinary days."));
       }
     }
@@ -730,7 +730,7 @@
       v.textContent = band;
       var first=ds.find(function(d){ return d.sol!==null; });
       var moved = (first && ds.length>1) ? last.sol-first.sol : null;
-      vb.innerHTML = "Latest solvency score <strong>"+fmt(last.sol)+"</strong>, apex <strong>"+fmt(last.apex)+"</strong>, across "+ds.length+" recorded week"+(ds.length===1?"":"s")+
+      vb.innerHTML = "Latest setup score <strong>"+fmt(last.sol)+"</strong>, overall score <strong>"+fmt(last.apex)+"</strong>, across "+ds.length+" recorded week"+(ds.length===1?"":"s")+
         (moved===null?"." : ". Since the first complete read it has moved <strong>"+(moved>=0?"+":"")+moved.toFixed(2)+"</strong>.")+
         " This describes your setup, not either person.";
     }
@@ -742,7 +742,7 @@
     if(ds.length<2){
       sb.innerHTML='<p class="empty">You need two or more weeks before a trend means anything.</p>';
     } else {
-      var rows=[["Workload balance","wb"],["Ownership clarity","oc"],["Autonomic saturation","as"],["Retuning frequency","rf"],["Solvency","sol"],["Apex","apex"]];
+      var rows=[["Workload balance","wb"],["Ownership clarity","oc"],["Leftover stress","as"],["Retuning frequency","rf"],["Setup score","sol"],["Overall score","apex"]];
       var html='<table><thead><tr><th>Measure</th><th class="num">First</th><th class="num">Latest</th><th class="num">Change</th><th style="width:74px;">Trend</th></tr></thead><tbody>';
       rows.forEach(function(r){
         var series=ds.map(function(d){ return d[r[1]]; });
@@ -754,7 +754,7 @@
         html+='<tr><td>'+r[0]+'</td><td class="num">'+f.toFixed(2)+'</td><td class="num">'+l.toFixed(2)+
               '</td><td class="num" style="color:'+col+';">'+(ch>=0?"+":"")+ch.toFixed(2)+'</td><td>'+sparkline(series)+'</td></tr>';
       });
-      html+='</tbody></table><p style="font-size:.82rem;color:var(--ink-soft);margin-top:10px;">Saturation is the one measure where going down is the improvement.</p>';
+      html+='</tbody></table><p style="font-size:.82rem;color:var(--ink-soft);margin-top:10px;">Leftover stress is the one measure where going down is the improvement.</p>';
       sb.innerHTML=html;
     }
 
@@ -762,9 +762,9 @@
     var nb=$("next-block");
     if(!last || last.sol===null){ nb.innerHTML='<p class="empty">No recommendation yet.</p>'; return; }
     var terms=[
-      {n:"the workload split",v:last.wb,short:(1-last.wb)*W.sol.wb,fix:"WP-01 and the treaty"},
-      {n:"ownership clarity",v:last.oc,short:(1-last.oc)*W.sol.oc,fix:"WP-03, the unowned rows"},
-      {n:"baseline load",v:1-last.as,short:last.as*W.sol.as,fix:"WP-02, and what's driving it"}
+      {n:"the workload split",v:last.wb,short:(1-last.wb)*W.sol.wb,fix:"Who did what (WP-01) and the job list"},
+      {n:"ownership clarity",v:last.oc,short:(1-last.oc)*W.sol.oc,fix:"One owner per job (WP-03), the unowned rows"},
+      {n:"baseline load",v:1-last.as,short:last.as*W.sol.as,fix:"How much are you carrying? (WP-02), and what's driving it"}
     ].sort(function(a,b){ return b.short-a.short; });
     var w0=terms[0];
     nb.innerHTML='<div class="finding'+(r2(last.sol)>=0.70?" good":"")+'"><span class="tag">largest shortfall</span><p>'+
