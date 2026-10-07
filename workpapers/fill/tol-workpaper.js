@@ -1638,12 +1638,22 @@
     // A list shared through a link (#list=…): it is read here, on this device, and the address is tidied
     // straight away so it doesn't stay in the address bar or the history. Nothing is opened until the person chooses.
     var sharedMsg = '';
-    if (schema.share && /^#list=/.test(global.location.hash || '')) {
+    function readHash() {
+      if (!schema.share || !/^#list=/.test(global.location.hash || '')) return false;
       var got = readShared(global.location.hash);
       if (got && got.wp === schema.code) app.sharedIn = got;
-      else sharedMsg = got ? 'That link is for ' + got.wp + '. Open it on the ' + got.wp + ' page.' : 'That shared link looks incomplete. Ask for it again, or paste it under “Open a shared ' + app.shareWhat() + '”.';
+      else sharedMsg = got ? 'That link is for ' + got.wp + '. Open it on the ' + got.wp + ' page.' : 'That shared link looks incomplete. Ask for it again, or paste it under \u201cOpen a shared ' + app.shareWhat() + '\u201d.';
       try { global.history.replaceState(null, '', global.location.pathname + global.location.search); } catch (e) {}
+      return true;
     }
+    function sharedSay() {
+      if (app.sharedIn) { var si = document.getElementById('wpf-share-in'); if (si) { si.scrollIntoView({ block: 'center' }); si.focus(); } app.status('Someone shared ' + (app.shareWhat() === 'week' ? 'a week' : 'a list') + ' with you. Choose what to do with it, at the top of the sheet.'); return true; }
+      if (sharedMsg) { app.status(sharedMsg); sharedMsg = ''; return true; }
+      return false;
+    }
+    readHash();
+    // a link opened in a tab where this page is already open only changes the part after the #
+    global.addEventListener('hashchange', function () { if (readHash()) { app.render(); sharedSay(); } });
 
     // "Keep a draft on this device": off unless the person turns it on
     var keepBox = document.getElementById('wpf-keep'), eraseBtn = document.getElementById('wpf-erase');
@@ -1676,8 +1686,7 @@
     }
     app.render();
     if (app.hhWrite) app.hhWrite.baseline();
-    if (app.sharedIn) { var si = document.getElementById('wpf-share-in'); if (si) { si.scrollIntoView({ block: 'center' }); si.focus(); } app.status('Someone shared ' + (app.shareWhat() === 'week' ? 'a week' : 'a list') + ' with you. Choose what to do with it, at the top of the sheet.'); }
-    else if (sharedMsg) app.status(sharedMsg);
+    if (sharedSay()) { /* said */ }
     else if (kept) app.status('Picked up the draft kept on this device. Press “Erase” to remove it.');
     else if (tabbed && app.dirty) app.status('Your answers from earlier in this tab are back.');
     window.addEventListener('pageshow', function (e) { if (e.persisted) { if (keepBox) keepBox.checked = app.keep; app.render(); } });

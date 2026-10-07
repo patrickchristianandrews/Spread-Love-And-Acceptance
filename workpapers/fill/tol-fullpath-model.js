@@ -900,7 +900,7 @@
       snap.entries.forEach(function (e) {
         if (!e || !e.from || !written(e)) return;
         var who = personOf(e), d = /^\d{4}-\d{2}-\d{2}$/.test(e.from.saved || '') ? new Date(e.from.saved + 'T12:00:00') : null;
-        r.origins.push(e.workpaper + (who != null && who >= 0 ? ' (' + label(who) + ')' : '') + ': from ' + (e.from.by ? e.from.by + '’s file' : 'a file brought in') +
+        r.origins.push(e.workpaper + (who != null && who >= 0 ? ' (' + label(who) + ')' : '') + ': from ' + (e.from.by ? e.from.by + '’s file' : e.from.file ? trim(e.from.file) : 'a file brought in') +
           (d && !isNaN(d) ? ', saved ' + d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) : ''));
       });
     }
@@ -1626,7 +1626,7 @@
         s.entered.push([R.solo ? 'Your answers' : b.label, b.score != null ? (b.source === 'shared' ? 'Score shared: ' + fmt(b.score) : b.answers.join(' + ') + ' = ' + b.sum + ', ÷ 20 = ' + fmt(b.score)) : (b.answered ? b.answered + ' of 5 answered (a score needs all five)' : 'Not filled in')]);
       });
       c.battery.forEach(function (b) { if (b.score != null) s.shows.push((R.solo ? 'Your load score' : b.label) + ': ' + fmt(b.score) + ', ' + b.band.label.toLowerCase() + '. ' + (b.band.key === 'high' ? 'A way to press pause, not a way out: “let’s come back to this tomorrow.”' : b.band.key === 'medium' ? 'Worth a heads-up before a hard conversation.' : 'Whatever comes up is probably about the thing itself.')); });
-      if (!R.solo && c.calc.asSrc === 'WP-02') s.shows.push('Average across all ' + c.n + ' people: ' + fmt(c.calc.as) + '. This is the stress input to CALC-01.');
+      if (!R.solo && c.calc.asSrc === 'WP-02') s.shows.push('Average across ' + (c.calc.asPeople < c.n ? 'the ' + c.calc.asPeople + ' adults' : 'all ' + c.n + ' people') + ': ' + fmt(c.calc.as) + '. This is the stress input to CALC-01.');
       else if (!R.solo && c.calc.applies) s.shows.push('No average yet: still waiting on ' + list(c.battery.filter(function (b) { return b.score == null && !b.child; }).map(function (b) { return b.label; })) + '. CALC-01 never works it out while anyone\u2019s load score is missing.');
       if (R.solo) { var tf = topFactors(c); if (tf.length) s.shows.push('Scored 3 or 4: ' + list(tf.map(function (x) { return x.toLowerCase(); })) + '.'); }
       var hi = c.battery.filter(function (b) { return b.band && b.band.key === 'high'; });
@@ -1724,7 +1724,7 @@
     if (k.applies) {
       out.rows.push(['Workload balance (WB)', k.wb != null ? fmt(k.wb) : 'Not filled in', src(k.wbSrc)]);
       out.rows.push(['Ownership clarity (OC)', k.oc != null ? fmt(k.oc) : 'Not filled in', src(k.ocSrc)]);
-      out.rows.push(['Average load (AS)', k.as != null ? fmt(k.as) : 'Not filled in', k.asSrc === 'WP-02' ? 'worked out from WP-02 (all ' + c.n + ' people)' : src(k.asSrc)]);
+      out.rows.push(['Average load (AS)', k.as != null ? fmt(k.as) : 'Not filled in', k.asSrc === 'WP-02' ? 'worked out from WP-02 (' + (k.asPeople < c.n ? 'the ' + k.asPeople + ' adults; children aren\u2019t asked' : 'all ' + c.n + ' people') + ')' : src(k.asSrc)]);
     }
     out.rows.push(['Retuning (RF)', k.rf != null ? fmt(k.rf) : 'No value', k.friction > 0 ? k.retunes + ' ÷ ' + k.friction + ' friction moments' + (k.capped ? ', capped at 1.00' : '') : (k.friction === 0 ? 'no friction moments: nothing to repair, which is not a zero' : 'not filled in')]);
     if (k.applies) {
@@ -2349,7 +2349,11 @@
         var top = F.pp.slice().sort(function (a, b) { return b.r - a.r; })[0], share = top.r / tot;
         return share >= Math.max(0.5, 1 / F.n + 0.2) ? { top: top, share: share, tot: tot } : null;
       },
-      find: function (d, F, v) { return d.top.label + ' owns ' + d.top.r + ' of the ' + d.tot + ' ' + v.tasks + ' with a single named ' + ownWord(F) + ' (' + pc(d.share) + ').'; },
+      find: function (d, F, v) {
+        // counted by jobs; by how often they come up, the picture can differ (several monthly jobs vs a few daily ones)
+        var wt = F.c.wp03 && F.c.wp03.weighted, by = wt ? (wt.top === d.top.i ? ' Counting how often each comes up, that is about ' + pc(wt.share) + ' of the weekly jobs.' : ' Counting how often each comes up, though, ' + F.P.label(wt.top) + '’s jobs come up most (about ' + pc(wt.share) + '), so the time may lean the other way.') : '';
+        return d.top.label + ' owns ' + d.top.r + ' of the ' + d.tot + ' ' + v.tasks + ' with a single named ' + ownWord(F) + ' (' + pc(d.share) + ').' + by;
+      },
       why: 'Jobs drift to whoever is reliable, then settle there. The setup ends up leaning on one person without anyone deciding it should.',
       rec: function (d, F, v) { return { h: 'month', title: 'Rebalance the named jobs', first: 'Ask ' + d.top.label + ' which ' + v.task + ' they would give away first, and who would like to try it.', script: '“You hold most of these. Which one would you hand over if you could?”', link: linkOf('WP-03'), working: 'Nobody owns more than half the list.' }; } },
     { id: 'recurring-one', pillar: 'V', src: ['WP-03'], pri: 5, title: 'The daily and weekly jobs sit with one person',
