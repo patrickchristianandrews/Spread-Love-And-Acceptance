@@ -144,10 +144,10 @@
   // linked. collect() returns { people, jobs? }. The first collect is the starting point and is never
   // written, so opening a page never changes the household; only what someone types does.
   function writer(tool, collect) {
-    var timer = null, last;
+    var timer = null, last, waiting = false;
     function sig() { try { return JSON.stringify(collect()); } catch (e) { return ''; } }
     function now(force) {
-      clearTimeout(timer);
+      clearTimeout(timer); waiting = false;
       if (!isLinked(tool)) return false;
       var d; try { d = collect() || {}; } catch (e) { return false; }
       var s = JSON.stringify(d);
@@ -156,11 +156,17 @@
       if (!realNames(d.people).length) return false; // nothing real to keep yet: leave the household as it is
       return !!set(d);
     }
+    // a change still waiting when the page is closed, reloaded or put in the background is kept at once
+    function flush() { if (waiting) now(false); }
+    try {
+      global.addEventListener('pagehide', flush);
+      document.addEventListener('visibilitychange', function () { if (document.visibilityState === 'hidden') flush(); });
+    } catch (e) {}
     return {
       baseline: function () { last = sig(); },
       soon: function () {
         if (last === undefined) return;
-        clearTimeout(timer);
+        clearTimeout(timer); waiting = true;
         timer = setTimeout(function () { now(false); }, 600);
       },
       now: now
@@ -286,7 +292,7 @@
   // The writer's control: "Use these names in the other tools (kept only on this device)".
   // Ticking keeps the names (and jobs) from this page in this browser for the other tools to offer, and
   // keeps them up to date from here. Unticking forgets the household on this device.
-  // opts: { tool, write: writer object, label? }
+  // opts: { tool, write: writer object, label?, hint? (one plain line under the tick, on what it saves) }
   function remember(opts) {
     styles();
     var wrap = el('div', 'tol-hh-keep no-print no-bubble');
@@ -301,7 +307,9 @@
     lab.appendChild(words);
     var st = el('p', 'tol-hh-status');
     st.setAttribute('role', 'status'); st.setAttribute('aria-live', 'polite');
-    wrap.appendChild(lab); wrap.appendChild(st);
+    wrap.appendChild(lab);
+    if (opts.hint) { var hint = el('p', 'tol-hh-keep-hint', opts.hint); hint.style.margin = '0'; wrap.appendChild(hint); }
+    wrap.appendChild(st);
     function say(msg) { st.textContent = ''; setTimeout(function () { st.textContent = msg; }, 30); }
     box.addEventListener('change', function () {
       if (box.checked) {
@@ -354,6 +362,7 @@
     lab.style.display = 'block'; lab.style.marginTop = '.7rem';
     var inp = document.createElement('textarea');
     inp.rows = 2; inp.className = 'tol-hh-code'; inp.autocomplete = 'off'; inp.spellcheck = false;
+    inp.setAttribute('aria-label', 'Paste a household code from the other phone');
     lab.appendChild(inp);
     [out, inp].forEach(function (t) { t.style.width = '100%'; t.style.boxSizing = 'border-box'; t.style.font = 'inherit'; t.style.fontSize = '.85rem'; t.style.marginTop = '.3rem'; t.style.overflowWrap = 'anywhere'; });
     var row2 = el('div', 'tol-hh-btns'); row2.style.marginTop = '.4rem';

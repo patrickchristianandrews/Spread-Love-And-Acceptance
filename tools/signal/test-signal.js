@@ -366,5 +366,46 @@ FIX.map(f=>f.t).concat(WORK).forEach(t=>{ const an=E.analyze(t,{channel:"chat"})
 ["absolute","label","passive","minim","vstd","ominous","hint","passiveag","stonewall","idiom","shout","vtime","nowhen","impera","oblig"].forEach(id=>ok(E.gloss(id).length>5 && !/static|wiring/i.test(E.gloss(id)), `${id}: no plain gloss`));
 ok(E.gloss("absolute").includes("always"), "absolute: the gloss should name \"always\" and \"never\"");
 
+// ---------- co-parents: the logistics ask survives a threat; a businesslike "Safest" ----------
+{ const t="If you're late again I'll take you to court. I already told the kids you don't care.";
+  const an=E.analyze(t,{channel:"text"});
+  ok(an.found.legal && an.found.kidsfirst, `"${t}": expected legal and kidsfirst`);
+  W_ALL.forEach(W=>{ const r=E.rewrite(an,{wirings:W, rel:"coparent", channel:"text"});
+    all(r).forEach(s=>{ ok(/\bif you'll be late, please text me by \[a time\]/i.test(s), `"${t}" [${W}]: the pickup/lateness ask was dropped in "${s}"`);
+      ok(/pickup/i.test(s), `"${t}" [${W}]: pickup not named in "${s}"`);
+      ok(!/court|lawyer|custody|you don't care|told the kids/i.test(s), `"${t}" [${W}]: threat or kids line kept in "${s}"`);
+      ok(!/What's changed, plainly/.test(s), `"${t}" [${W}]: only a blank was left in "${s}"`);
+      ok(!/not upset with you as a person|We're okay/i.test(s), `"${t}" [${W}]: relationship reassurance for a co-parent in "${s}"`); });
+    const safe=r.variants.find(v=>v.id==="safe"); ok(safe && /^I'd like to keep this to the plan for the kids\./.test(safe.text), `"${t}" [${W}]: co-parent Safest opener: "${safe&&safe.text}"`); });
+}
+{ const r=E.rewrite(E.analyze("If you miss pickup again I'll call my lawyer.",{channel:"text"}),{rel:"coparent"});
+  ok(/If you can't make it, please tell me by \[a time\]/.test(r.main) && !/lawyer/i.test(r.main), `missed pickup: "${r.main}"`); }
+{ const r=E.rewrite(E.analyze("You need to pick up the kids at 5.",{channel:"text"}),{rel:"coparent"});
+  const safe=r.variants.find(v=>v.id==="safe"); ok(safe && !/not upset with you as a person/.test(safe.text), `co-parent Safest: "${safe&&safe.text}"`);
+  const rp=E.rewrite(E.analyze("You need to pick up the kids at 5.",{channel:"text"}),{rel:"partner"}).variants.find(v=>v.id==="safe");
+  ok(rp && /not upset with you as a person/.test(rp.text), "partners keep the warmer Safest opener"); }
+
+// ---------- a question typed without "?" is not a command, and is never wrapped in "could you" ----------
+{ const t="ok so do you want to call tonight or not. i said work is busy";
+  const an=E.analyze(t,{channel:"text"});
+  ok(!an.found.impera, `"${t}": "do you want…" read as a bare command`);
+  ok(an.found.defend, `"${t}": "i said work is busy" should be flagged as defending`);
+  ok(an.sentences[0].mood==="Question", `"${t}": first sentence should read as a question, got ${an.sentences[0].mood}`);
+  W_ALL.forEach(W=>all(E.rewrite(an,{wirings:W, channel:"text"})).forEach(s=>{
+    ok(!/could you do you|could you (?:do|are|is|did|can) (?:you|we)\b/i.test(s), `"${t}" [${W}]: question wrapped in "could you": "${s}"`);
+    ok(/do you want to call tonight/i.test(s) && /work is busy/i.test(s), `"${t}" [${W}]: content dropped in "${s}"`);
+    ok(!/\bi said\b/i.test(s), `"${t}" [${W}]: still defending in "${s}"`); }));
+  ok(E.FBY.defend && E.FBY.defend.what && E.FBY.defend.fix && E.CHANGE_WHY.defend, "defend has what, fix and a change reason");
+}
+["so do you want pizza or not","are we still on for tonight","did you get my message","can u call me later"].forEach(t=>{ const an=E.analyze(t,{channel:"text"});
+  ok(!an.found.impera, `"${t}": a question is not a command`);
+  all(E.rewrite(an,{channel:"text"})).forEach(s=>ok(!/\b(?:could|can) you (?:do|are|did|can) (?:you|we|u)\b/i.test(s), `"${t}": "${s}"`)); });
+["Do the dishes tonight.","Take out the trash."].forEach(t=>ok(E.analyze(t,{channel:"text"}).found.impera, `"${t}" is still a command`));
+ok(!E.analyze("I said I'd call at 8.",{channel:"text"}).found.defend, "a promise is not defending");
+// "Fine. Whatever works for you.": brush-off or quiet hurt, and the move is to ask
+{ const an=E.analyze("Fine. Whatever works for you.",{channel:"text"});
+  ok(/quiet hurt/i.test(E.FBY.brushoff.name) && /resigned hurt/i.test(E.FBY.brushoff.what) && /ask which/i.test(E.FBY.brushoff.what), "brush-off explains resigned hurt and asking");
+  ok(an.sentences.some(se=>/quiet hurt/.test(se.mood)), "the sentence kind names quiet hurt too"); }
+
 console.log(`${FIX.length} phrase fixtures + ${WORK.length} workplace review cases, ${pass} checks passed, ${fail} failed`);
 if(fail){ console.log(errs.slice(0,40).join("\n")); process.exit(1); }

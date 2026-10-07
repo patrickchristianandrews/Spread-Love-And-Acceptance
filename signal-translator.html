@@ -101,6 +101,10 @@ h3{font-family:var(--display);font-weight:600;font-size:1.08rem;margin:0 0 6px;l
 .panel{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:22px clamp(16px,3vw,30px) 24px;margin-top:22px}
 .step{font-family:var(--mono);font-size:.7rem;letter-spacing:.08em;color:var(--brass-ink, #7A5620);display:block;margin-bottom:4px}
 .hint{font-size:.86rem;color:var(--muted);margin:0 0 12px;max-width:66ch}
+#s3 #phraseLab{display:inline;background:none;padding:0;border-radius:0;box-shadow:none;border:0}
+.replyto{margin:0 0 10px;padding:8px 12px;border-left:4px solid var(--line);border-radius:0 8px 8px 0;background:var(--sheet)}
+.replyto-k{margin:0;font-family:var(--display);font-weight:600;font-size:.88rem;color:var(--muted)}
+.replyto-t{margin:2px 0 4px;white-space:pre-wrap;overflow-wrap:anywhere;font-style:italic}
 
 /* People */
 .people{display:grid;grid-template-columns:1fr auto 1fr;gap:18px;align-items:start}
@@ -399,8 +403,9 @@ q.w{quotes:"\201C" "\201D";font-family:var(--mono);font-size:.8rem;background:co
       <label class="mode"><input type="radio" name="stmode" value="send" checked><span>I&rsquo;m about to send this</span></label>
       <label class="mode"><input type="radio" name="stmode" value="got"><span>Someone sent me this</span></label>
     </div>
-    <h2 id="s3"><label for="phrase" id="phraseLab">Type your sentence</label></h2>
+    <h2 id="s3"><label for="phrase" id="phraseLab" class="no-bubble">Type your sentence</label></h2>
     <p class="hint" id="phraseHint">Type it the way it would actually come out. A text, a Slack message, or something you plan to say out loud.</p>
+    <div class="replyto no-bubble" id="replyTo" hidden><p class="replyto-k no-bubble">Replying to:</p><p class="replyto-t no-bubble" id="replyToText"></p><button type="button" class="linkbtn" id="replyToClear">I&rsquo;m not replying to this</button></div>
     <textarea id="phrase" placeholder="The exact words, as they would be said or sent." maxlength="1500" aria-describedby="phraseHint msg"></textarea>
     <div class="field gotrel" id="gotRelField" hidden>
       <label for="gotRelSel">Who sent it? (optional)</label>
@@ -1862,7 +1867,7 @@ function run(){
   });
   // one plain line first, for anyone who just wants to know: is my sentence okay?
   const plain = E.verdict ? E.verdict(an, sc, rw) : null;
-  let vtop='<div class="verdict" id="verdict">'+(plain?'<p class="vplain v-'+esc(plain.id)+'" id="vplain">'+esc(plain.text)+'</p>':'')+'<p class="vk">How it may land'+(general?' for most listeners':' for '+esc(B))+'</p>';
+  let vtop='<div class="verdict" id="verdict">'+(plain?'<p class="vplain v-'+esc(plain.id)+'" id="vplain">'+esc(plain.text)+'</p>':'')+(replyCtx?replyContext(replyCtx, an):'')+'<p class="vk">How it may land'+(general?' for most listeners':' for '+esc(B))+'</p>';
   vtop+='<p class="vlvl lvl-'+lvl[0]+'">'+esc(lvl[1])+'<span class="gloss">'+esc(/little/i.test(lvl[1]) ? "One small part may get in the way of what you mean." : LVL_PLAIN[lvl[0]]||"")+'</span></p>';
   vtop+='<p class="vfound">'+(foundList.length ? 'What stands out: '+foundList.join(' &middot; ')+'.' : staticIds.length ? 'A small gap: '+esc(fTitle(staticIds[0], found[staticIds[0]]).toLowerCase())+fGloss(staticIds[0])+'.' : 'Nothing in the words is a known trouble spot. Tone, timing and history can still add static the words don\'t show.')+'</p>';
   if(found.legal || found.kidsfirst){
@@ -1958,6 +1963,7 @@ function run(){
    SOMEONE SENT ME THIS: read it kindly, for the person who got it
    ============================================================ */
 let stMode = "send";
+let replyCtx = "";   // the message being answered, when "Check my reply" was used
 const MODE_TEXT = {
   send:{lab:"Type your sentence", hint:"Type it the way it would actually come out. A text, a Slack message, or something you plan to say out loud.", ph:"The exact words, as they would be said or sent.", go:"Translate"},
   got:{lab:"Paste the message you got", hint:"Paste it exactly as it came. You'll see what it might mean and calm ways to answer. It reads the words only, and it won't guess what they think of you.", ph:"The message someone sent you.", go:"Read it kindly"}
@@ -1969,7 +1975,30 @@ function setMode(m){
   const gr=$("#gotRelField"); if(gr){ gr.hidden = m!=="got"; $("#gotRelSel").value = REL[relId] ? relId : ""; }
   document.querySelectorAll('input[name="stmode"]').forEach(r=>{ r.checked = r.value===m; });
   const nt=$("#notes"); if(nt) nt.hidden = m==="got";
+  if(m==="got") replyCtx = "";
+  paintReplyTo();
   const R=$("#results"); R.hidden=true; R.innerHTML=""; $("#msg").textContent="";
+}
+/* "Check my reply before I send it": the message being answered stays in view, and the read of the reply takes it into account */
+document.addEventListener("click", e=>{ if(e.target.closest && e.target.closest("#replyToClear")){ replyCtx=""; paintReplyTo(); $("#phrase").focus(); } });
+function paintReplyTo(){
+  const box=$("#replyTo"); if(!box) return;
+  box.hidden = !replyCtx || stMode!=="send";
+  $("#replyToText").textContent = replyCtx ? "\u201c"+replyCtx+"\u201d" : "";
+}
+/* what the reply may need, given the message it answers */
+function replyContext(prevText, an){
+  if(!prevText) return "";
+  const pv = E.analyze(prevText, {channel});
+  const pf = pv.found, rf = an.found, low = an.text.toLowerCase();
+  const hurtIn = ["brushoff","minimal","guilt","sarcasm","passiveag","absolute","critic","label","stonewall","again","hostile","contempt","vemo","madefeel","blameq"].some(id=>pf[id]);
+  const acks = /\b(?:i hear you|i get (?:it|that)|it sounds like|sounds like you|i'm sorry|i am sorry|you're right|that's fair|fair enough|makes sense|i understand|i miss (?:you|our|it|talking)|i know you)\b/i.test(low);
+  const asked = /\?/.test(prevText) || pv.asks.length;
+  const notes = [];
+  if(rf.defend) notes.push("Your reply explains yourself first. After their message, that can sound like \u201cstop complaining.\u201d Try naming what they asked for, then your side.");
+  if(hurtIn && !acks) notes.push("Their message may carry hurt or frustration. Starting with what you heard (\u201cIt sounds like you [what you heard]\u201d) usually helps the rest of your reply land.");
+  if(asked && !/\b(?:yes|no|sure|okay|ok|can|can't|will|won't|tonight|tomorrow|at \d|by \d|\d\s*(?:am|pm))\b/i.test(low)) notes.push("They asked something. A clear answer, even \u201cnot tonight, how about tomorrow at 8?\u201d, lowers the guessing.");
+  return '<div class="replynote"><p class="small" style="margin:0 0 4px"><b>Replying to:</b> &ldquo;'+esc(prevText.length>160?prevText.slice(0,157)+"\u2026":prevText)+'&rdquo;</p>'+(notes.length?'<ul class="ul small" style="margin:0 0 10px">'+notes.slice(0,2).map(n=>'<li>'+esc(n)+'</li>').join("")+'</ul>':'<p class="small" style="margin:0 0 10px">Your reply reads as an answer to it.</p>')+'</div>';
 }
 /* Received threats: no "it shows how much this matters to them". Co-parents and exes: a brief,
    factual reply (BIFF: Brief, Informative, Friendly, Firm) that answers the logistics and admits no pattern. */
@@ -2020,7 +2049,7 @@ function runReceived(text){
     const t = rv.replies[+b.dataset.copyr].text;
     (navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(()=>{b.textContent="Copied";},()=>{b.textContent="Select and copy manually";});
   }));
-  $("#checkReply").addEventListener("click",()=>{ setMode("send"); $("#phrase").value=""; $("#phrase").focus(); $("#msg").textContent="Type your reply, then Translate to see how it may land."; });
+  $("#checkReply").addEventListener("click",()=>{ setMode("send"); replyCtx = text; paintReplyTo(); $("#phrase").value=""; $("#phrase").focus(); $("#msg").textContent="Type your reply, then Translate to see how it may land."; });
   R.focus({preventScroll:true});
   R.scrollIntoView({behavior: matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth", block:"start"});
 }

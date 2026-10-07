@@ -135,7 +135,12 @@
     return false;
   }
   function levelLine(res, why) {
-    return '✨ ' + esc(why || 'Level done') + '. ' + (res.next ? 'Level ' + res.level + ': something new is on its way to <a href="/keepsakes.html">your garden</a>.' : 'Everything has arrived in <a href="/keepsakes.html">your garden</a>. Thank you.');
+    var nx = nextUnlock(), toNext = Math.max(0, S.nextAt - S.lv);
+    var s = '✨ ' + esc(why || 'Level done') + '. Level ' + res.level + ' in <a href="/keepsakes.html">your garden</a>';
+    if (nx && nx.id.indexOf('garden-flies') !== 0) s += '. ' + (toNext <= 1 ? 'One more level' : toNext + ' more levels') + ' until ' + esc(nx.name.charAt(0).toLowerCase() + nx.name.slice(1)) + ' arrives';
+    else if (nx) s += '. More fireflies are on their way';
+    else s += '. Everything has arrived. Thank you';
+    return s + '.';
   }
   function unlockLine(u) {
     return '<span aria-hidden="true">' + esc(u.icon || '🌸') + '</span> Something new in <a href="/keepsakes.html">your garden</a>: ' + esc(u.name) + '. Look behind the page to find it.';
@@ -147,6 +152,9 @@
     style();
     var ends = document.querySelectorAll('.cb-end');
     var host = ends.length ? ends[ends.length - 1] : (document.querySelector('main') || document.body);
+    // the "What you got from this" box already has a garden line: update that one instead of adding a second
+    var g = host.querySelector('[data-cb-garden]');
+    if (g) { g.innerHTML = html + ' '; return; }
     var p = null;
     for (var i = 0; i < host.children.length; i++) if (host.children[i].classList.contains('tr-line')) p = host.children[i];
     if (!p) { p = document.createElement('p'); p.className = 'tr-line'; p.setAttribute('role', 'status'); host.appendChild(p); }

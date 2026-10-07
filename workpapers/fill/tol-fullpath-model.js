@@ -33,6 +33,8 @@
   var MAX_PEOPLE = 8, MIN_PEOPLE = 2;
   var CODES = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'];
   var DAYS = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+  // Roughly how many times a week a job comes up, by its "How often" on One owner per job
+  var FREQ_WEIGHT = { Daily: 7, 'Each meeting': 2, Weekly: 1, Monthly: 0.25, 'As needed': 0.5, Ongoing: 1 };
 
   function WPS() { return global.TOL_WORKPAPERS || {}; }
   function schemaFor(code, road) {
@@ -404,7 +406,7 @@
   function wp13Intro(ctx) {
     var who = ctx.n > 1 ? 'Each person fills in only their own rows: yours are the ones with your name in the Person column (' + ctx.labels.join(', ') + '). ' : '';
     return (ctx.roadId === 'coworkers' ? 'Run it like a short stand-up. ' : '') + who + 'Load: "Today I was at about low / medium / high capacity." Appreciation: one specific thing you appreciated about ' + otherOne(ctx) + ' today. The other two are optional. Anything that needs a real discussion waits for the weekly catch-up.' +
-      (ctx.n > 1 ? ' If you can, do the evening one face to face, and kindly.' : '');
+      (ctx.n > 1 ? ' If you can, do the evening one face to face or on a call, and kindly.' : '');
   }
   function pageWp13(ctx) {
     var sc = schemaFor('WP-13'), blocks = [], rows = [], k = 0;
@@ -747,8 +749,22 @@
     snap.entries.forEach(function (e) { if (e && e.state && e.workpaper) (by[e.workpaper] = by[e.workpaper] || []).push(e); });
     var got = [];
 
+    // Each person may log their own week, or their own check-ins, on their own device. The same week
+    // brought in from two files is one week: read every sheet for it, never just the last one.
+    function weekOf(en) { return trim(en.state.values.weekOf); }
+    function sameWeek(list, base) { return list.filter(function (e) { return e !== base && written(e) && (!weekOf(e) || !weekOf(base) || weekOf(e) === weekOf(base)); }); }
+    function rowKey(r) { return JSON.stringify(r); }
     var e1 = latest(by['WP-01'] || []);
     if (e1) {
+      var also1 = sameWeek(by['WP-01'] || [], e1);
+      if (also1.length) {
+        // one week: every sheet's rows, each keeping who did it (the same row twice counts once)
+        var st1 = JSON.parse(JSON.stringify(e1.state)), have1 = {};
+        st1.tables.audit = rowsOfT(st1, 'audit');
+        st1.tables.audit.forEach(function (r) { have1[rowKey(r)] = 1; });
+        also1.forEach(function (e) { rowsOfT(e.state, 'audit').forEach(function (r) { if (!have1[rowKey(r)]) { have1[rowKey(r)] = 1; st1.tables.audit.push(r); } }); });
+        e1 = { workpaper: e1.workpaper, person: e1.person, state: st1 };
+      }
       got.push('WP-01');
       set('wp01.weekOf', e1.state.values.weekOf);
       if (!R.refusalsOnly) {
@@ -797,7 +813,8 @@
       got.push('WP-09');
       var v9 = e9.state.values;
       set('wp09.date', v9.date); if (!R.solo) set('wp09.who', v9.name);
-      set('wp09.raw', v9.raw); if (v9.raw__include) V['wp09.rawInclude'] = true;
+      // the raw reaction is just for its writer: it comes along only when its own box is ticked
+      if (v9.raw__include) { set('wp09.raw', v9.raw); V['wp09.rawInclude'] = true; }
       set('wp09.fact', v9.fact); set('wp09.feeling', v9.feeling); set('wp09.ask', v9.ask);
       ['specific', 'saturation', 'neutral', 'pattern'].forEach(function (id) { set('wp09.filter.' + id, v9['filter.' + id]); });
     }
@@ -831,6 +848,26 @@
     }
     var e13 = latest(by['WP-13'] || []);
     if (e13) {
+      var also13 = sameWeek(by['WP-13'] || [], e13);
+      if (also13.length) {
+        // one week of check-ins: each person's rows from whichever sheet has them written
+        var st13 = JSON.parse(JSON.stringify(e13.state)), daily = st13.tables.daily || (st13.tables.daily = []), have13 = {};
+        function slot(r) { return r.day + '|' + r.who; }
+        daily.forEach(function (r) { if (r && r.day && r.who) have13[slot(r)] = r; });
+        also13.forEach(function (e) {
+          (e.state.tables.daily || []).forEach(function (r) {
+            if (!r || !r.day || !r.who) return;
+            var mine = have13[slot(r)];
+            if (!mine) { mine = { day: r.day, who: r.who }; daily.push(mine); have13[slot(r)] = mine; }
+            ['load', 'thanks', 'friction', 'ask'].forEach(function (k) { if (blank(mine[k]) && !blank(r[k])) mine[k] = r[k]; });
+          });
+          var rs0 = st13.tables.resync || (st13.tables.resync = []), seenR = {};
+          rs0.forEach(function (r) { if (r && trim(r.item)) seenR[trim(r.item).toLowerCase()] = 1; });
+          rowsOfT(e.state, 'resync').forEach(function (r) { if (trim(r.item) && !seenR[trim(r.item).toLowerCase()]) { seenR[trim(r.item).toLowerCase()] = 1; rs0.push(r); } });
+        });
+        if (!trim(st13.values.weekOf)) also13.some(function (e) { if (weekOf(e)) { st13.values.weekOf = weekOf(e); return true; } return false; });
+        e13 = { workpaper: e13.workpaper, state: st13 };
+      }
       got.push('WP-13');
       set('wp13.weekOf', e13.state.values.weekOf);
       (e13.state.tables.daily || []).forEach(function (r) {
@@ -852,7 +889,17 @@
     Object.keys(V).forEach(function (k) { data.values[NS + k] = V[k]; });
     if (typeof snap.variant === 'string') data.focus = snap.variant;
     var r = fromJSON(data);
-    if (r) r.fromSuite = got.filter(function (x, k, a) { return a.indexOf(x) === k; });
+    if (r) {
+      r.fromSuite = got.filter(function (x, k, a) { return a.indexOf(x) === k; });
+      // where each sheet brought in from a file came from: "WP-02 (Diego): from Diego's file, saved Oct 7"
+      r.origins = [];
+      snap.entries.forEach(function (e) {
+        if (!e || !e.from || !written(e)) return;
+        var who = personOf(e), d = /^\d{4}-\d{2}-\d{2}$/.test(e.from.saved || '') ? new Date(e.from.saved + 'T12:00:00') : null;
+        r.origins.push(e.workpaper + (who != null && who >= 0 ? ' (' + label(who) + ')' : '') + ': from ' + (e.from.by ? e.from.by + '’s file' : 'a file brought in') +
+          (d && !isNaN(d) ? ', saved ' + d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) : ''));
+      });
+    }
     return r;
   }
 
@@ -1104,12 +1151,13 @@
 
     // WP-01: minutes by person, and the balance score
     if (on['WP-01'] && !R.refusalsOnly) {
-      var mins = P.list.map(function () { return 0; }), noticed = mins.slice(), rowsUsed = 0, unmatched = [], logged = 0, tasks = [], sharedRows = [];
+      var mins = P.list.map(function () { return 0; }), noticed = mins.slice(), seen = {}, rowsUsed = 0, unmatched = [], logged = 0, tasks = [], sharedRows = [];
       rowsOf(data, 'wp01.audit', ['day', 'task', 'who', 'minutes', 'how'], sizeOf(data, 'audit')).forEach(function (r) {
         if (!(trim(r.task) || trim(r.who) || trim(r.minutes) || trim(r.how))) return;
         logged++;
         if (trim(r.task)) tasks.push(trim(r.task));
         var m = num(r.minutes), ow = ownersOf(P, r.who);
+        if (!ow.all) ow.list.forEach(function (k) { seen[k] = true; }); // a row for everyone isn't anyone's own side
         if (!(m > 0) || !ow.list.length) { if (ow.unknown.length && trim(r.who)) unmatched.push(trim(r.who)); return; }
         rowsUsed++;
         // a row shared by several named people is split evenly between them, and said so in the report
@@ -1118,7 +1166,15 @@
       });
       // balance for 2 to 8 people against an even split: 1 − (½Σ|share − 1/n|) ÷ (1 − 1/n)
       var bal = C1().balance(mins), total = bal.total, wb = bal.value, shares = bal.shares ? bal.shares.map(function (x) { return x * 100; }) : null;
-      out.wp01 = { filled: logged > 0 || has(data, 'wp01.weekOf'), logged: logged, rowsUsed: rowsUsed, minutes: mins, noticed: noticed, total: total, shares: shares, wb: wb, unmatched: unmatched, tasks: tasks, sharedRows: sharedRows };
+      // Someone on the road with no rows at all hasn't added their side yet. Their week is missing, not
+      // zero (as with a load score nobody has filled in), so the split, the balance and any hand-over wait.
+      var oneSided = null;
+      if (n >= 2 && rowsUsed > 0) {
+        var none = P.list.filter(function (p) { return !seen[p.i]; });
+        if (none.length) oneSided = { have: P.list.filter(function (p) { return seen[p.i]; }).map(function (p) { return p.label; }), missing: none.map(function (p) { return p.label; }) };
+      }
+      if (oneSided) { wb = null; shares = null; }
+      out.wp01 = { filled: logged > 0 || has(data, 'wp01.weekOf'), logged: logged, rowsUsed: rowsUsed, minutes: mins, noticed: noticed, total: total, shares: shares, wb: wb, unmatched: unmatched, tasks: tasks, sharedRows: sharedRows, oneSided: oneSided };
     }
     // WP-01 Part B: kind no's (every road that has WP-01)
     if (on['WP-01']) {
@@ -1152,16 +1208,20 @@
         if (trim(r.task) && defs[p + 'task'] === trim(r.task) && !seen[trim(r.task).toLowerCase()] && !trim(r.r) && !trim(r.a) && !trim(r.c) && !trim(r.i) && (blank(r.freq) || r.freq === defs[p + 'freq']) && (blank(r.notes) || r.notes === defs[p + 'notes'])) { starterIdx[r._i] = true; starters.push(trim(r.task)); }
       });
       var tasks3 = rows3.filter(function (r) { return trim(r.task) && !starterIdx[r._i]; });
-      var owned = [], unowned = [], half = [], byOwner = P.list.map(function () { return 0; }), unmatched3 = [];
+      var owned = [], unowned = [], half = [], byOwner = P.list.map(function () { return 0; }), byWeight = byOwner.slice(), unmatched3 = [];
       tasks3.forEach(function (r) {
         var ro = ownersOf(P, r.r), ao = ownersOf(P, r.a);
         if (trim(r.r) && ro.unknown.length) unmatched3.push(trim(r.r));
         if (trim(r.a) && ao.unknown.length) unmatched3.push(trim(r.a));
         // one owner per job; the helper is optional (half = a helper but no owner)
         if (trim(r.r)) owned.push(r); else if (trim(r.a)) half.push(r); else unowned.push(r);
-        if (ro.list.length === 1) byOwner[ro.list[0]]++;
+        if (ro.list.length === 1) { byOwner[ro.list[0]]++; byWeight[ro.list[0]] += FREQ_WEIGHT[r.freq] != null ? FREQ_WEIGHT[r.freq] : 1; }
       });
+      // the same jobs counted by how often they come up (a daily job is seven times a week), so a list of
+      // monthly jobs doesn't look as heavy as a list of daily ones
+      var wsum = byWeight.reduce(function (a, b) { return a + b; }, 0), wtop = wsum ? byWeight.indexOf(Math.max.apply(null, byWeight)) : -1;
       out.wp03 = { filled: touched, tasks: tasks3.length, owned: owned.length, oc: touched && tasks3.length ? owned.length / tasks3.length : null, conc: n >= 2 ? C1().concentration(byOwner, 3) : null,
+        weighted: n >= 2 && wsum > 0 ? { top: wtop, share: byWeight[wtop] / wsum, byWeight: byWeight } : null,
         unowned: unowned.map(function (r) { return trim(r.task); }), half: half.map(function (r) { return trim(r.task); }), byOwner: byOwner, unmatched: unmatched3, starters: starters, starterIdx: starterIdx,
         amend: rowsOf(data, 'wp03.amend', ['change'], sizeOf(data, 'amend')).filter(function (r) { return trim(r.change); }).length };
     }
@@ -1229,12 +1289,18 @@
     // owner, of the logged minutes and of the unasked-for minutes. Clarity can read 1.00 with one
     // person holding every job, so this is what keeps a high score honest.
     out.conc = { owned: out.wp03 && out.wp03.filled ? out.wp03.conc : null,
-      minutes: out.wp01 && out.wp01.minutes && n >= 2 ? C1().concentration(out.wp01.minutes, 60) : null,
-      noticed: out.wp01 && out.wp01.noticed && n >= 2 ? C1().concentration(out.wp01.noticed, 60) : null };
+      // a log with someone's week still missing says nothing about who carries more
+      minutes: out.wp01 && out.wp01.minutes && !out.wp01.oneSided && n >= 2 ? C1().concentration(out.wp01.minutes, 60) : null,
+      noticed: out.wp01 && out.wp01.noticed && !out.wp01.oneSided && n >= 2 ? C1().concentration(out.wp01.noticed, 60) : null };
     out.conc.flag = !!((out.conc.owned && out.conc.owned.flag) || (out.conc.minutes && out.conc.minutes.flag));
     out.conc.lines = [];
-    if (out.conc.owned && out.conc.owned.flag) out.conc.lines.push(P.label(out.conc.owned.top) + ' owns ' + out.conc.owned.count + ' of the ' + out.conc.owned.total + ' ' + R.tasks + ' with one named owner (' + pct(out.conc.owned.share) + ')');
-    if (out.conc.minutes && out.conc.minutes.flag) out.conc.lines.push(P.label(out.conc.minutes.top) + ' logged ' + pct(out.conc.minutes.share) + ' of the minutes');
+    // Owning jobs and the time they took are two different things, and can point at different people.
+    // Each line says which one it counts, and how often the jobs come up, so they never read as a contradiction.
+    if (out.conc.owned && out.conc.owned.flag) {
+      var wt = out.wp03.weighted, wline = wt && wt.top === out.conc.owned.top ? '; counting how often each comes up, about ' + pct(wt.share) + ' of the weekly jobs' : wt ? '; counting how often each comes up, ' + P.label(wt.top) + '’s jobs come up most (about ' + pct(wt.share) + ')' : '';
+      out.conc.lines.push(P.label(out.conc.owned.top) + ' owns ' + out.conc.owned.count + ' of the ' + out.conc.owned.total + ' ' + R.tasks + ' with one named owner (' + pct(out.conc.owned.share) + wline + ')');
+    }
+    if (out.conc.minutes && out.conc.minutes.flag) out.conc.lines.push(P.label(out.conc.minutes.top) + ' logged ' + pct(out.conc.minutes.share) + ' of the minutes this week' + (out.conc.owned && out.conc.owned.flag && out.conc.owned.top !== out.conc.minutes.top ? ' (owning a job and the time it took this week are counted separately, so they can point at different people)' : ''));
     if (out.conc.noticed && out.conc.noticed.flag && !(out.conc.minutes && out.conc.minutes.flag && out.conc.minutes.top === out.conc.noticed.top)) out.conc.lines.push(P.label(out.conc.noticed.top) + ' did ' + pct(out.conc.noticed.share) + ' of the work nobody asked for');
 
     // CALC-01
@@ -1354,8 +1420,8 @@
         ? { k: 'Is the setup working?', v: c.calc.solBand.label, band: 'CALC-01, from balance, ownership and how much everyone is carrying.', tone: c.calc.solBand.key, note: 'Setup score ' + fmt(c.calc.sol) + ' of 1, higher = working better (0.70+ working well, 0.40 to 0.69 needs a look, under 0.40 needs a rethink, together).' }
         : { k: 'Is the setup working?', v: 'Not worked out yet', band: R.focus && R.optional && R.optional['WP-01'] ? 'This read is built on the load sheets (WP-01 and WP-03), which are optional on your road. Fill them in only if the load feels uneven.' : 'Still needed: ' + c.calc.missing.join('; '), tone: 'none' });
       if (c.calc.sol != null) tiles.push({ k: 'With repairs counted', v: c.calc.apexBand.label, band: c.calc.apexRebalanced ? 'No friction moments were counted, so there was nothing to repair.' : 'Adds how often friction was repaired.', tone: c.calc.apexBand.key, note: 'Apex ' + fmt(c.calc.apex) + ' of 1' + (c.calc.apexRebalanced ? ', from three inputs.' : ', with retuning ' + fmt(c.calc.rf) + '.') });
-      tiles.push({ k: 'How the time is shared', v: c.calc.wb != null ? cap(C1().shareWords(c.calc.wb)) : 'Not filled in', band: c.calc.wb == null ? 'WP-01 needs minutes and names' : c.calc.wbSrc === 'yours' ? 'Your own number' : 'From WP-01', tone: tone3(c.calc.wb), note: c.calc.wb != null ? 'Balance ' + fmt(c.calc.wb) + ' of 1, where 1 = an even split (0.70+ fairly even, 0.40 to 0.69 leaning, under 0.40 mostly on one person).' : '' });
-      tiles.push({ k: 'Does each job have a name?', v: c.calc.oc == null ? 'Not filled in' : c.calc.oc >= 0.7 ? 'Most jobs have one' : c.calc.oc >= 0.4 ? 'Some jobs have one' : 'Few jobs have one', band: c.calc.oc == null ? 'WP-03 needs owners' : c.calc.ocSrc === 'yours' ? 'Your own number' : c.wp03.owned + ' of ' + c.wp03.tasks + ' jobs with an owner', tone: tone3(c.calc.oc), note: c.calc.oc != null ? 'Ownership clarity ' + fmt(c.calc.oc) + ' of 1.' : '' });
+      tiles.push({ k: 'How the time is shared', v: c.calc.wb != null ? cap(C1().shareWords(c.calc.wb)) : 'Not filled in', band: c.calc.wb == null ? (c.wp01 && c.wp01.oneSided ? 'Waiting for ' + list(c.wp01.oneSided.missing) + '’s week' : 'WP-01 needs minutes and names') : c.calc.wbSrc === 'yours' ? 'Your own number' : 'From WP-01', tone: tone3(c.calc.wb), note: c.calc.wb != null ? 'Balance ' + fmt(c.calc.wb) + ' of 1, where 1 = an even split (0.70+ fairly even, 0.40 to 0.69 leaning, under 0.40 mostly on one person).' : '' });
+      tiles.push({ k: 'Does each job have a name?', v: c.calc.oc == null ? 'Not filled in' : c.calc.oc >= 0.995 ? 'Every job has one' : c.calc.oc >= 0.7 ? 'Most jobs have one' : c.calc.oc >= 0.4 ? 'Some jobs have one' : 'Few jobs have one', band: c.calc.oc == null ? 'WP-03 needs owners' : c.calc.ocSrc === 'yours' ? 'Your own number' : c.wp03.owned + ' of ' + c.wp03.tasks + ' jobs with an owner', tone: tone3(c.calc.oc), note: c.calc.oc != null ? 'Ownership clarity ' + fmt(c.calc.oc) + ' of 1.' : '' });
       var co = c.conc && (c.conc.owned && c.conc.owned.flag ? c.conc.owned : c.conc.minutes && c.conc.minutes.flag ? c.conc.minutes : null);
       if (co) tiles.push({ k: 'Who’s carrying more right now', v: P.label(co.top), band: c.conc.lines[0], tone: 'drift', note: 'About ' + pct(co.share) + '; an even share would be ' + pct(1 / c.n) + '. Noted at half or more, and 20 points over even.' });
     }
@@ -1512,6 +1578,10 @@
     'WP-13': 'It doesn’t settle anything. Anything that needs a real discussion waits for the weekly catch-up.'
   };
 
+  // "Based on Maya's log only. Jordan hasn't added a week yet."
+  function oneSidedLine(o) {
+    return 'Based on ' + list(o.have.map(function (x) { return x + '’s'; })) + ' log only. ' + list(o.missing) + (o.missing.length === 1 ? ' hasn’t' : ' haven’t') + ' added ' + (o.missing.length === 1 ? 'a week' : 'their weeks') + ' yet.';
+  }
   function wpSection(code, c, v, RP) {
     var R = c.R, s = { code: code, name: NAMES[code], title: (schemaFor(code, c.road) || {}).title, entered: [], shows: [], doesnt: DOESNT[code], next: '', status: 'blank', ask: RP && RP.ask ? RP.ask[code] : '' };
     var P = c.P;
@@ -1520,11 +1590,12 @@
       if (!w.filled) { s.next = R.refusalsOnly ? 'Draft one kind no for a real request coming up: why the request is fair, what you have left, and what you can offer instead.' : 'Log one ordinary week, 5 to 7 days: each ' + v.task + ', who did it and rough minutes. No discussing it until the week is done.'; return s; }
       s.status = 'filled';
       if (!R.refusalsOnly) {
+        if (w.oneSided) s.shows.push(oneSidedLine(w.oneSided) + ' The split, the balance and any hand-over wait until everyone’s week is in.');
         s.entered.push(['Rows logged', w.logged ? String(w.logged) : 'Not filled in']);
         s.entered.push(['Minutes with a name', w.total ? fmt(w.total, 0) + ' minutes in ' + w.rowsUsed + ' rows' : 'Not filled in']);
-        if (w.total) P.list.forEach(function (p) { s.entered.push([p.label, fmt(w.minutes[p.i], 0) + ' min (' + Math.round(w.shares[p.i]) + '%), ' + fmt(w.noticed[p.i], 0) + ' noticed and handled without being asked']); });
+        if (w.total) P.list.forEach(function (p) { s.entered.push([p.label, w.oneSided && w.oneSided.missing.indexOf(p.label) >= 0 ? 'Not added yet' : fmt(w.minutes[p.i], 0) + ' min' + (w.shares ? ' (' + Math.round(w.shares[p.i]) + '%)' : '') + ', ' + fmt(w.noticed[p.i], 0) + ' noticed and handled without being asked']); });
         if (w.wb != null) s.shows.push('Workload balance ' + fmt(w.wb) + (c.n === 2 ? ' (1 minus the gap between the two shares).' : ' (1 minus the share of time that would have to change hands for an even split, out of the most it could be).') + ' ' + (w.wb >= 0.7 ? 'The logged work was fairly even.' : w.wb >= 0.4 ? 'The logged work leaned toward one side.' : 'Most of the logged work landed on one side.'));
-        else s.shows.push('No balance score yet: it needs rows with both a name and minutes. An empty log is not an even week.');
+        else if (!w.oneSided) s.shows.push('No balance score yet: it needs rows with both a name and minutes. An empty log is not an even week.');
         if (w.total) {
           var nt = w.noticed.reduce(function (a, b) { return a + b; }, 0);
           if (nt > 0) s.shows.push(Math.round(nt / w.total * 100) + '% of the logged minutes were noticed and handled without anyone asking: the quiet work that usually goes unseen.');
@@ -1709,7 +1780,9 @@
       sug('Read the Know Yourself page for more ways into self-understanding, all at your own pace.');
       return out;
     }
-    out.heading = 'For ' + v.group + ': ' + R.label.toLowerCase();
+    // "For your family" on its own when the road's name only repeats it ("For your family: family")
+    var rl = R.label.toLowerCase(), grp = String(v.group || '');
+    out.heading = grp.toLowerCase().indexOf(rl) >= 0 || rl.indexOf(grp.replace(/^your\s+/i, '').toLowerCase()) === 0 ? 'For ' + grp : 'For ' + grp + ': ' + rl;
     if (RP) { out.paras.push(RP.what); out.paras.push(RP.lens); }
     if (sp && sp.care) out.paras.push(sp.care);
     var t = c.wp03, k = c.calc;
@@ -2582,8 +2655,11 @@
 
   function fireRules(F, v) {
     var out = [];
+    var held = F.c && F.c.wp01 && F.c.wp01.oneSided;
     RULES.forEach(function (r) {
       var d;
+      // a log with only one side in says nothing yet about how the work is shared
+      if (held && (r.src || []).indexOf('WP-01') >= 0) return;
       try { d = r.when(F, v); } catch (e) { d = null; }
       if (!d) return;
       var o = { id: r.id, pillar: r.pillar, src: r.src, pri: r.pri, strength: !!r.strength, title: typeof r.title === 'function' ? r.title(d, F, v) : r.title,
@@ -2601,6 +2677,10 @@
   // typo, or it may be real. level 'check' = probably worth fixing; 'note' = worth knowing.
 
   var CHECKS = [
+    { id: 'wp01-one-sided', where: 'WP-01', level: 'check',
+      when: function (F) { return F.c.wp01 && F.c.wp01.oneSided ? F.c.wp01.oneSided : null; },
+      text: function (o) { return oneSidedLine(o) + ' A missing week isn’t a week of zero, so the split, the balance and any hand-over are held back until ' + (o.missing.length === 1 ? 'it is' : 'they are') + ' in.'; },
+      fix: function (o) { return 'Each person adds their own rows to Who did what (on their own device is fine; then bring the files together here). If ' + list(o.missing) + ' really did none of these jobs this week, a row saying so with 0 minutes is enough.'; } },
     { id: 'wp01-week-too-long', where: 'WP-01', level: 'check',
       when: function (F) { if (!F.w1) return null; var over = F.pp.filter(function (p) { return p.minutes != null && p.minutes > 80 * 60; }); return over.length ? over : null; },
       text: function (o) { return list(o.map(function (p) { return p.label + ', ' + minText(p.minutes) + ','; })).replace(/,$/, '') + ' logged more than 80 hours in one week of jobs. That may be a typo (hours typed as minutes), or it may be a very heavy week.'; },
@@ -3211,9 +3291,9 @@
       'Start with the strengths to protect before the things to work on.',
       'If you share a page, share the page, not a complaint: let the report be the third voice.'
     ] : [
-      'The report is the third person in the room: point at the page, not at each other.',
+      'Let the report be a third voice in the conversation (in the room or on the call): point at the page, not at each other.',
       'Check everyone’s load score first. If anyone reads 0.60 or above, pick another time.',
-      'Timing: ' + v.meeting + ', unhurried' + (F.road === 'coworkers' ? '; not in a busy chat thread or a hallway.' : F.road === 'coparents' || F.road === 'family' ? '; never in front of children.' : '; not late at night and not over text.'),
+      'Timing: ' + v.meeting + ', unhurried' + (F.road === 'coworkers' ? '; not in a busy chat thread or a hallway.' : F.road === 'coparents' || F.road === 'family' ? '; never in front of children.' : '; not late at night, and by voice (in person or on a call), not over text.'),
       'One topic per sitting. Pick it from the "top 3" list, and let the rest wait.',
       'Start with what is working, then the one thing to change.',
       'Talk about the setup, not the person: "the unowned ' + v.tasks + '", not "you never".',

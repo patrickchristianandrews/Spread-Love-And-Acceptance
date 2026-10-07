@@ -32,6 +32,9 @@
   var ROAD_COLOR = { self: C.butter, partners: C.pink, family: C.mint, coparents: C.sky, friends: C.lav, roommates: C.peach, coworkers: '#D6EEF0', caregivers: '#E3EEC9' };
   var L = 44, R = 568, W = R - L, TOP = 46, BOTTOM = 738;
 
+  // A pillar named in plain words first: "Fix the setup (Pillar II)", never a bare "Pillar II"
+  var PILLAR_WORDS = { I: 'See the whole load', II: 'Fix the setup', III: 'Read your state first', IV: 'Tune how you send and receive', V: 'Notice the quiet incentives' };
+  function pillarTag(p) { var k = String(p).toUpperCase(), r = { '1': 'I', '2': 'II', '3': 'III', '4': 'IV', '5': 'V' }[k] || k; return PILLAR_WORDS[r] ? PILLAR_WORDS[r] + ' (Pillar ' + r + ')' : 'Pillar ' + p; }
   function enc(t) { return PDF.encode(t); }
   function wrap(t, f, s, w) { return PDF.wrap(t, f, s, w); }
   function tw(t, f, s) { return PDF.textWidth(enc(t), f, s); }
@@ -743,14 +746,14 @@
     var work = m.insights.filter(function (r) { return !r.strength; }), good = m.insights.filter(function (r) { return r.strength; });
     lay.para(m.insights.length ? m.insights.length + ' of the report’s ' + m.counts.rules + ' insight rules fired for your answers. Each one says what it found, why it matters, and one thing to try. They describe the setup, not anyone’s character.' : 'None of the ' + m.counts.rules + ' insight rules fired yet. Most of them need two or more pages filled in, so this section grows as you do.', { size: 9.3, color: C.soft });
     work.forEach(function (r) {
-      itemHead(lay, r.title, 'Pillar ' + r.pillar + '  ·  ' + r.src.join(', '), C.peach, 40);
+      itemHead(lay, r.title, pillarTag(r.pillar) + '  ·  ' + r.src.join(', '), C.peach, 40);
       labelled(lay, [['What we see', r.finding], ['Why it matters', r.why], ['What to try', r.rec ? r.rec.first : '']], { indent: 14 });
       lay.y += 4;
     });
     if (good.length) {
       lay.h2('Strengths the pages show', 50, C.mint);
       good.forEach(function (r) {
-        itemHead(lay, r.title, 'Pillar ' + r.pillar + '  ·  ' + r.src.join(', '), C.mint, 30);
+        itemHead(lay, r.title, pillarTag(r.pillar) + '  ·  ' + r.src.join(', '), C.mint, 30);
         labelled(lay, [['What we see', r.finding], ['Why it matters', r.why]], { indent: 14 });
         lay.y += 4;
       });
@@ -776,7 +779,7 @@
       lay.h2(h[1], 60, h[2]);
       if (!list2.length) { lay.para('Nothing extra for ' + h[1].toLowerCase() + '.', { size: 9, color: C.soft, font: 'Times-Italic' }); return; }
       list2.forEach(function (r, i) {
-        itemHead(lay, r.title, r.pillar ? 'Pillar ' + r.pillar : '', h[2], 50);
+        itemHead(lay, r.title, r.pillar ? pillarTag(r.pillar) : '', h[2], 50);
         labelled(lay, [['Why', r.why], ['First step', r.first], ['Try saying', r.script, 'Times-Italic'], ['Tool', siteLink(r.link)], ['It’s working when', r.working]], { indent: 14 });
         lay.y += 4;
       });
@@ -791,7 +794,7 @@
       doc.circle(L + 12, lay.y + 11, 11, PASTELS[i % PASTELS.length], C.brass, 0.6);
       doc.text(L + 12 - tw(String(w.week), 'Helvetica-Bold', 9) / 2, lay.y + 14, enc(String(w.week)), 'Helvetica-Bold', 9, C.ink);
       doc.text(L + 32, lay.y + 10, fitLine('Week ' + w.week + ': ' + w.title, 'Helvetica-Bold', 10, W - 34), 'Helvetica-Bold', 10, C.ink);
-      doc.text(L + 32, lay.y + 21, fitLine(w.wp + (w.pillar ? '  ·  Pillar ' + w.pillar : ''), 'Helvetica', 7.8, W - 34), 'Helvetica', 7.8, C.brass);
+      doc.text(L + 32, lay.y + 21, fitLine(w.wp + (w.pillar ? '  ·  ' + pillarTag(w.pillar) : ''), 'Helvetica', 7.8, W - 34), 'Helvetica', 7.8, C.brass);
       lines.forEach(function (ln, k) { doc.text(L + 32, lay.y + 33 + k * 12, ln, 'Helvetica', 9.2, C.ink); });
       lay.y += h + 8;
     });

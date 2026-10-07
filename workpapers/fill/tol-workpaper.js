@@ -1245,11 +1245,25 @@
     }
   };
 
+  // A copy for a file that may be passed on: a private answer (privateOptIn) stays out unless its box is ticked.
+  A.shareableState = function () {
+    var st = this.state, out = null;
+    this.schema.sections.forEach(function (sec) {
+      (sec.fields || []).forEach(function (f) {
+        if (!f.privateOptIn || st.values[f.id + '__include'] || isBlank(st.values[f.id])) return;
+        if (!out) out = clone(st);
+        delete out.values[f.id];
+      });
+    });
+    return out || st;
+  };
+
   A.saveDraft = function () {
-    var draft = { format: DRAFT_FORMAT, version: DRAFT_VERSION, workpaper: this.schema.code, saved: new Date().toISOString(), state: this.state };
+    var shared = this.shareableState(), left = shared !== this.state;
+    var draft = { format: DRAFT_FORMAT, version: DRAFT_VERSION, workpaper: this.schema.code, saved: new Date().toISOString(), state: shared };
     download(JSON.stringify(draft, null, 2), this.fileBase() + '-draft.json', 'application/json');
     this.dirty = false;
-    this.status('Draft file downloaded. Open it here later to keep working, or send it to someone on your road so they can add their part.');
+    this.status('Draft file downloaded. Open it here later to keep working, or send it to someone on your road so they can add their part.' + (left ? ' Your raw reaction stayed out of it, as it is just for you; tick its box to include it.' : ''));
   };
 
   // A fillable PDF from this site, filled in on a phone or computer, opens back into the form.

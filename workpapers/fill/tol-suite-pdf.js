@@ -56,11 +56,12 @@
 
   // The road someone is on can change a worksheet's wording and rows (see TOL_WORKPAPER_VARIANT).
   // On the "Just me" road (self) every sheet is worded for one person (TOL_WORKPAPER_SOLO).
-  var currentRoad = null;
-  function setRoad(road) { currentRoad = road || null; }
+  var currentRoad = null, sheetRoad = null;
+  // sheets: a road variant whose sheets are worded differently ("apart": Partners who live apart)
+  function setRoad(road, sheets) { currentRoad = road || null; sheetRoad = sheets || null; }
   function solo(road) { return (road === undefined ? currentRoad : road) === 'self'; }
   function schemaFor(code, road) {
-    var key = String(code || '').toLowerCase(), r = road === undefined ? currentRoad : road;
+    var key = String(code || '').toLowerCase(), r = road === undefined ? (sheetRoad || currentRoad) : road;
     var v = r === 'self' && global.TOL_WORKPAPER_SOLO ? global.TOL_WORKPAPER_SOLO(key)
       : r && global.TOL_WORKPAPER_VARIANT ? global.TOL_WORKPAPER_VARIANT(key, r) : null;
     return v || (global.TOL_WORKPAPERS || {})[key];

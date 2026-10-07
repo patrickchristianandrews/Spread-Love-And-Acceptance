@@ -148,7 +148,7 @@
     // (what counts as filled in is read on the road the sheet was filled in on)
     var pool = {};
     S.stops.forEach(function (st) { st.entries.forEach(function (en) { if (filled(en) || en.label) (pool[en.workpaper] = pool[en.workpaper] || []).push(en); }); });
-    SP.setRoad(p.id);
+    SP.setRoad(p.id, p.sheetRoad || null);
     S.path = p;
     WPK.setMinPeople(minPeople());
     fitNames();
@@ -498,10 +498,32 @@
 
   /* ------------------------------------------------------------ keep a draft on this device (opt-in) */
 
-  function snapshot() {
+  // Whose file this is, when the sheets show it: the one person whose own sheets (a load score, a kit)
+  // were filled in on this device rather than brought in. Used only for "from Diego's file" in the report.
+  function deviceOwner() {
+    var mine = {};
+    S.stops.forEach(function (st) { st.entries.forEach(function (en) { if (!en.from && filled(en) && perPerson(en.workpaper)) { var p = personOf(en); if (p != null) mine[p] = 1; } }); });
+    var k = Object.keys(mine);
+    return k.length === 1 ? String(S.names[+k[0]] || '').trim() : '';
+  }
+  // A copy of a sheet for a file that may be passed on: a private answer ("Raw reaction" on Say it so it
+  // lands, "Optional, and just for you") stays out unless its own "Include …" box is ticked.
+  function shareable(en) {
+    var sc = schema(en.workpaper), st = en.state, out = null;
+    (sc && sc.sections || []).forEach(function (sec) {
+      (sec.fields || []).forEach(function (f) {
+        if (!f.privateOptIn || st.values[f.id + '__include'] || WPK.isBlank(st.values[f.id])) return;
+        if (!out) out = JSON.parse(JSON.stringify(st));
+        delete out.values[f.id];
+      });
+    });
+    return out || st;
+  }
+  function snapshot(forFile) {
     var entries = [];
-    S.stops.forEach(function (st) { st.entries.forEach(function (en) { if (filled(en) || en.label) entries.push({ workpaper: en.workpaper, label: en.label, stop: st.key, person: typeof en.person === 'number' ? en.person : undefined, state: en.state }); }); });
+    S.stops.forEach(function (st) { st.entries.forEach(function (en) { if (filled(en) || en.label) entries.push({ workpaper: en.workpaper, label: en.label, stop: st.key, person: typeof en.person === 'number' ? en.person : undefined, from: en.from || undefined, state: forFile ? shareable(en) : en.state }); }); });
     var out = { format: SUITE_FORMAT, version: 1, path: S.path ? S.path.id : null, names: S.names.slice(), saved: new Date().toISOString(), entries: entries };
+    var by = deviceOwner(); if (by) out.by = by;
     if (S.variant) out.variant = S.variant;
     if (Array.isArray(S.focusEach)) out.focusEach = S.focusEach.slice(0, MAX_PEOPLE);
     return out;
@@ -876,7 +898,7 @@
     $('ws-sheet-label').value = en.label || '';
     var root = $('ws-sheet-root');
     // People come from "Who's on this road?", and are named the way this road does.
-    app = new WPK.App(root, sc, { state: en.state, statusEl: $('ws-sheet-status'), onChange: onSheetChange, fixedPeople: true, personLabel: roleHeading, road: S.path.id });
+    app = new WPK.App(root, sc, { state: en.state, statusEl: $('ws-sheet-status'), onChange: onSheetChange, fixedPeople: true, personLabel: roleHeading, road: S.path.sheetRoad || S.path.id });
     app.render();
     var sheet = $('ws-sheet');
     sheet.hidden = false;
@@ -972,6 +994,25 @@
   var held = null;
   function roadHasWork() { return S.stops.some(function (st) { return st.entries.some(filled); }); }
   function differentRoad(id) { return id && pathById(id) && S.path && S.path.id !== id && roadHasWork(); }
+  // A one-person sheet (a load score, a calm-down kit) saved on another device says which place it had
+  // there (person 0, 1 …). Each device can list the same people in a different order (Diego's: A = Diego;
+  // Lena's: A = Lena), so the place is turned back into the name it had there, and matched by name here.
+  function personByName(en, there, names) {
+    var who = Array.isArray(names) ? String(names[there] || '').trim() : '', k = SP.fold(who), here = S.names.map(function (x) { return SP.fold(x); });
+    var j = k ? here.indexOf(k) : -1;
+    if (j >= 0) { en.person = j; if (j !== there) en.matched = true; return; }
+    if (!k || !here.some(Boolean)) { en.person = there; return; }   // no names to go by: it keeps its place
+    // someone not on this road yet: their own name goes on the sheet, and personOf() finds them once they are added
+    if (!String(en.state.values.name || '').trim()) en.state.values.name = who;
+  }
+  // Where a sheet came from, for the report: "from Lena's file, saved 7 Oct".
+  function fromNote(file, d) {
+    var o = { file: String(file && file.name || '').slice(0, 120) };
+    if (d && typeof d.by === 'string' && d.by.trim()) o.by = d.by.trim().slice(0, 40);
+    if (d && typeof d.saved === 'string' && /^\d{4}-\d{2}-\d{2}/.test(d.saved)) o.saved = d.saved.slice(0, 10);
+    else if (file && file.lastModified) { var t = new Date(file.lastModified); if (!isNaN(t)) o.saved = t.toISOString().slice(0, 10); }
+    return o;
+  }
   function takeFiles(files) {
     files = Array.prototype.slice.call(files || []);
     if (!files.length) return;
@@ -990,7 +1031,7 @@
           if (Array.isArray(entries.names) && !differentRoad(entries.path) && !S.names.some(function (x) { return String(x || '').trim(); })) {
             S.names = entries.names.slice(0, MAX_PEOPLE); fitNames();
           }
-          entries.forEach(function (en) { if (SP.answers(en) > 0 || en.label) put(en, entries.path, entries.names); });
+          entries.forEach(function (en) { if (SP.answers(en) > 0 || en.label) { en.from = fromNote(f, null); put(en, entries.path, entries.names); } });
           if (!entries.some(function (en) { return SP.answers(en) > 0; })) problems.push(f.name + ' is still blank');
         }, function () { problems.push(f.name + " couldn't be read"); });
       }
@@ -1009,13 +1050,15 @@
             var sc = x && schema(x.workpaper);
             if (!sc) return;
             var en = { workpaper: sc.code, label: typeof x.label === 'string' ? x.label.slice(0, 80) : '', state: clean(sc, x.state) };
-            if (typeof x.person === 'number') en.person = x.person;
+            if (typeof x.person === 'number') personByName(en, x.person, d.names);
+            en.from = fromNote(f, d);
             put(en, d.path, d.names);
           });
           return;
         }
         if (d && d.format === WPK.DRAFT_FORMAT && d.state && schema(d.workpaper)) {
           var sc2 = schema(d.workpaper), en2 = { workpaper: sc2.code, label: '', state: clean(sc2, d.state) };
+          en2.from = fromNote(f, d);
           put(en2, null);
           return;
         }
@@ -1186,7 +1229,7 @@
   function saveSuite() {
     if (!S.path) { say('Choose your road first.'); return; }
     pruneNames();
-    var file = snapshot();
+    var file = snapshot(true);
     WPK.download(JSON.stringify(file, null, 2), base() + '.json', 'application/json');
     S.dirty = false;
     say('Your progress file is in your Downloads. Open it here next time, on any device, to pick up where you left off.');

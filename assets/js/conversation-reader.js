@@ -31,12 +31,21 @@
   function esc(s) { return String(s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
   function snip(t, n) { t = String(t).replace(/\s+/g, ' ').trim(); n = n || 80; return t.length > n ? t.slice(0, n - 3).replace(/\s\S*$/, '') + '…' : t; }
   function plural(n, w) { return n + ' ' + w + (n === 1 ? '' : 's'); }
+  // Notes and the "Which one is you?" step go in their own box above the read, so #cr-out only ever
+  // holds a full read (the "What you got from this" line and the garden level wait for that)
+  function pre(html) {
+    var el = $('cr-pre');
+    if (!el) { if (!html) return null; el = document.createElement('div'); el.id = 'cr-pre'; out.parentNode.insertBefore(el, out); }
+    el.innerHTML = html || '';
+    if (html) out.innerHTML = '';
+    return el;
+  }
 
   // ---------- Reading ----------
   function start(text) {
     var p = R.parse(text);
     if (p.turns.length < 2) {
-      out.innerHTML = '<p class="cr-note" role="alert" style="margin-top:1.5rem!important;">Paste at least two messages, so there’s a back-and-forth to read.</p>';
+      pre('<p class="cr-note" role="alert" style="margin-top:1.5rem!important;">Paste at least two messages, so there’s a back-and-forth to read.</p>');
       draftStep.hidden = true;
       return;
     }
@@ -59,13 +68,13 @@
       h += '<button type="button" class="cr-btn is-quiet" data-pick="' + i + '">' + esc(s) + ' <small>(' + plural(n, 'message') + ')</small></button>';
     });
     h += '</div><p class="cr-note">Not in this conversation yourself? Pick the person you want to understand better.</p></section>';
-    out.innerHTML = h;
+    var box = pre(h);
     draftStep.hidden = true;
-    out.querySelectorAll('[data-pick]').forEach(function (b) {
+    box.querySelectorAll('[data-pick]').forEach(function (b) {
       b.addEventListener('click', function () { state.me = state.speakers[+b.getAttribute('data-pick')]; render(true); });
     });
-    var first = out.querySelector('[data-pick]');
-    if (first) { var sec = out.querySelector('.cr-ask'); if (sec && sec.scrollIntoView) sec.scrollIntoView({ behavior: 'smooth', block: 'start' }); first.focus({ preventScroll: true }); }
+    var first = box.querySelector('[data-pick]');
+    if (first) { var sec = box.querySelector('.cr-ask'); if (sec && sec.scrollIntoView) sec.scrollIntoView({ behavior: 'smooth', block: 'start' }); first.focus({ preventScroll: true }); }
   }
 
   // a tidy drop-down: a title (with an optional little count) that opens to show more
@@ -128,7 +137,8 @@
       if (r.owns && r.owns.length) {
         mv += '<h3 style="margin-top:1.1rem;">Each side’s part</h3><p class="cr-hint">' + (r.owns.length > 1 ? 'Both of you said something that may have added heat. Owning your own line first makes it easier for the other person to own theirs.' : 'One line that may have added heat, and a way to own it. The other side may still have their own part that the words don’t show.') + '</p><ul class="cr-drafts">';
         r.owns.forEach(function (o) {
-          mv += '<li><span class="cr-dl">' + esc(o.mine ? 'Your part' : o.who + '’s part') + ' · ' + esc(R.KINDS[o.kind].label.toLowerCase()) + '</span><div class="cr-script"><q>' + esc(o.script) + '</q>' + (o.mine ? '<button type="button" class="cr-btn is-quiet is-small" data-copy="' + esc(o.script) + '">Copy</button>' : '') + '</div></li>';
+          var part = esc(o.mine ? 'Your part' : o.who + '’s part') + ' · ' + esc(o.label || R.KINDS[o.kind].label.toLowerCase());
+          mv += '<li><span class="cr-dl">' + (o.asked ? esc(o.mine ? 'What you asked for' : 'What ' + o.who + ' asked for') + ': “' + esc(o.asked) + '” · ' + part.replace(/^Your part/, 'your part') : part) + '</span><div class="cr-script"><q>' + esc(o.script) + '</q>' + (o.mine ? '<button type="button" class="cr-btn is-quiet is-small" data-copy="' + esc(o.script) + '">Copy</button>' : '') + '</div></li>';
         });
         mv += '</ul>' + (r.owns.some(function (o) { return !o.mine; }) ? '<p class="cr-note">Their part is theirs to say. It’s here so the read stays fair, not to send to them.</p>' : '');
       }
@@ -178,6 +188,7 @@
     if (!r.safety) html += '<p style="margin-top:1.5rem;"><a class="dig" href="/check-ins-in-depth.html#order">Dig deeper: how to hold the conversation that comes next</a></p>';
     html += '</section>';
 
+    pre('');
     out.innerHTML = html;
     draftStep.hidden = false;
     wire();
@@ -251,7 +262,9 @@
       why = '<details class="cr-why"><summary>What they may hear</summary><ul>' + notes.map(function (k) {
         var K = R.KINDS[k];
         if (k === 'idiom') return t.marks.filter(function (m) { return m.kind === 'idiom'; }).map(function (m) { return '<li><strong>' + esc(K.label) + ':</strong> “' + esc(m.text) + '” usually means ' + esc(m.means) + '. Some people take it literally. <em>Instead:</em> say the plain meaning.</li>'; }).join('');
-        return '<li><strong>' + esc(K.label) + ':</strong> ' + esc(K.hear) + (K.instead ? ' <em>Instead:</em> ' + esc(K.instead) : '') + '</li>';
+        var res = k === 'dismiss' && t.marks.some(function (m) { return m.kind === 'dismiss' && m.resigned; }) && R.KINDS.dismiss.resigned;
+        if (res) return '<li><strong>' + esc(res.label) + ':</strong> ' + esc(res.hear) + ' <em>Instead:</em> ' + esc(res.instead) + '</li>';
+        return '<li><strong>' + esc(K.label) + ':</strong> ' + esc(K.hear) + (K.instead ? ' <em>Instead:</em> ' + esc(K.instead) : '') + (K.need ? ' <em>' + esc(K.need) + '</em>' : '') + '</li>';
       }).join('') + '</ul></details>';
     }
     var readAs = t.readAs && t.readAs.length ? '<p class="cr-hint" style="margin:.2rem 0 0">Read as: ' + t.readAs.slice(0, 3).map(function (f) { return '“' + esc(f.to) + '” (typed “' + esc(f.from) + '”)'; }).join(', ') + '</p>' : '';
@@ -367,6 +380,6 @@
     if (state) { state.me = 'Alex'; render(true); }
   });
   $('cr-clear').addEventListener('click', function () {
-    input.value = ''; draft.value = ''; out.innerHTML = ''; draftOut.innerHTML = ''; draftStep.hidden = true; state = null; input.focus();
+    input.value = ''; draft.value = ''; out.innerHTML = ''; pre(''); draftOut.innerHTML = ''; draftStep.hidden = true; state = null; input.focus();
   });
 })();

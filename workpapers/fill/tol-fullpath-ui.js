@@ -371,7 +371,7 @@
     var c = FP.compute(S.data), out = [], f2 = FP.fmt;
     if (page.id === 'wp01' && c.wp01 && !c.R.refusalsOnly) out.push(c.wp01.wb != null ? 'Workload balance so far: ' + f2(c.wp01.wb) + ' (' + c.P.list.map(function (p) { return p.label + ' ' + Math.round(c.wp01.shares[p.i]) + '%'; }).join(', ') + ')' : 'Workload balance: add rows with a name and minutes.');
     if (page.id === 'wp02') c.battery.forEach(function (b) { out.push(b.label + ': ' + (b.score != null ? f2(b.score) + ' (' + b.band.label.toLowerCase() + ')' : b.answered + ' of 5 answered')); });
-    if (page.id === 'wp03' && c.wp03) out.push(c.wp03.oc != null ? 'Ownership clarity so far: ' + f2(c.wp03.oc) + ' (' + c.wp03.owned + ' of ' + c.wp03.tasks + ' jobs have an owner)' : 'Ownership clarity: give each job one owner.');
+    if (page.id === 'wp03' && c.wp03) out.push(c.wp03.oc != null ? 'Jobs with an owner so far: ' + c.wp03.owned + ' of ' + c.wp03.tasks + ' (' + f2(c.wp03.oc) + ' out of 1)' : 'Give each job one owner.');
     if (page.id === 'wp04' && c.wp04) out.push(c.wp04.patterns.length ? 'A real pattern (3 or 4 weeks): ' + c.wp04.patterns.map(function (p) { return p.task; }).join(', ') : 'Nothing flagged 3 or 4 weeks so far.');
     if (page.id === 'calc' && c.calc.applies) out.push(c.calc.sol != null ? 'Setup score ' + f2(c.calc.sol) + ' (' + c.calc.solBand.label.toLowerCase() + '), overall score ' + f2(c.calc.apex) : 'Not worked out yet. Still needed: ' + c.calc.missing.join('; ') + '.');
     if (page.id === 'calc' && c.calc.rf != null) out.push('Retuning (RF): ' + f2(c.calc.rf));
@@ -568,6 +568,9 @@
     var le = linkEl(s.link); if (le) det.appendChild(le);
     return det;
   }
+  // A pillar named in plain words first: "Fix the setup (Pillar II)", never a bare "Pillar II"
+  var PILLAR_WORDS = { I: 'See the whole load', II: 'Fix the setup', III: 'Read your state first', IV: 'Tune how you send and receive', V: 'Notice the quiet incentives' };
+  function pillarTag(p) { var k = String(p).toUpperCase(), r = { '1': 'I', '2': 'II', '3': 'III', '4': 'IV', '5': 'V' }[k] || k; return PILLAR_WORDS[r] ? PILLAR_WORDS[r] + ' (Pillar ' + r + ')' : 'Pillar ' + p; }
   function itemEl(title, tag, rows, cls) {
     return h('div', { className: 'fp-item ' + (cls || '') }, [h('p', { className: 'fp-item-t', text: title }), tag ? h('p', { className: 'fp-item-tag', text: tag }) : null, dlOf(rows, 'fp-kv-tight')]);
   }
@@ -579,7 +582,7 @@
     if (!snap.entries.length) { say('The full report reads the sheets you\u2019ve filled in. Fill in a sheet on your road, or bring in a file, first.'); return; }
     var r = FP.fromSuite(snap, S.data);
     if (!r) { say('The report could not be made from this suite.'); return; }
-    S.data = r.data; S.read = r.read; S.from = r.fromSuite;
+    S.data = r.data; S.read = r.read; S.from = r.fromSuite; S.origins = r.origins || [];
     changed();
     makeReport();
   }
@@ -602,10 +605,26 @@
     ]));
     if (!FP.ROADS[S.data.road].solo) box.appendChild(shareChoice('fp-share-only2'));
     if (S.from) box.appendChild(h('p', { className: 'fp-callout', text: 'Made from your Workpaper Suite: ' + (S.from.length ? S.from.join(', ') : 'your sheets') + '. The CALC-01 page, your Wiring Card and the Ready page aren\u2019t in the Suite; add them with \u201cChange my answers\u201d if you like, and the report updates.' }));
+    if (S.from && S.origins && S.origins.length) box.appendChild(h('details', { className: 'fp-origins' }, [h('summary', { text: 'Where the sheets came from' }), ulOf(S.origins)]));
     if (m.stateNote) box.appendChild(h('p', { className: 'fp-callout is-lav', text: m.stateNote }));
+
+    // At a glance: one screen at most, first. Everything else is folded into closed sections below,
+    // and "Open every section" opens them all.
+    var glance = h('div', { className: 'fp-glance', role: 'group', 'aria-label': 'At a glance' }, [h('h4', { className: 'fp-h4', text: 'At a glance' }), h('p', { className: 'fp-lead', text: m.summary.para })]);
+    var held = (m.anomalies || []).filter(function (x) { return x.id === 'wp01-one-sided'; })[0];
+    if (held) glance.appendChild(h('p', { className: 'fp-callout is-sand', text: held.text }));
+    if (m.summary.top.length) {
+      var gl = h('ol', { className: 'fp-glance-top' });
+      m.summary.top.slice(0, 3).forEach(function (t) { gl.appendChild(h('li', {}, [h('strong', { text: t.title + '. ' }), 'First step: ' + t.step])); });
+      glance.appendChild(h('p', { className: 'fp-sub', text: 'Top things to work on' }));
+      glance.appendChild(gl);
+    }
+    glance.appendChild(h('p', { className: 'fp-note', text: 'The rest is folded into the sections below. Open the ones you want, when you have the time.' }));
+    box.appendChild(glance);
 
     var secs = [];
     function sec(id, title, open, kids) {
+      open = false; // folded until someone opens it: the glance above is the short version
       secs.push([id, title]);
       var body = h('div', { className: 'fp-rsec-body' }, kids);
       return h('details', { className: 'fp-rsec', id: 'fp-r-' + id, open: open ? 'open' : null }, [h('summary', {}, [h('span', { className: 'fp-rsec-n', text: String(secs.length) }), h('span', { className: 'fp-rsec-t', text: title })]), body]);
@@ -647,9 +666,9 @@
 
     // 3. Connections
     var ins = h('div', { className: 'fp-items' }), work = m.insights.filter(function (r) { return !r.strength; }), good = m.insights.filter(function (r) { return r.strength; });
-    work.forEach(function (r) { ins.appendChild(itemEl(r.title, 'Pillar ' + r.pillar + ' · ' + r.src.join(', '), [['What we see', r.finding], ['Why it matters', r.why], ['What to try', r.rec ? r.rec.first : '']], 'is-work')); });
+    work.forEach(function (r) { ins.appendChild(itemEl(r.title, pillarTag(r.pillar) + ' · ' + r.src.join(', '), [['What we see', r.finding], ['Why it matters', r.why], ['What to try', r.rec ? r.rec.first : '']], 'is-work')); });
     var goodBox = h('div', { className: 'fp-items' });
-    good.forEach(function (r) { goodBox.appendChild(itemEl(r.title, 'Pillar ' + r.pillar + ' · ' + r.src.join(', '), [['What we see', r.finding], ['Why it matters', r.why]], 'is-good')); });
+    good.forEach(function (r) { goodBox.appendChild(itemEl(r.title, pillarTag(r.pillar) + ' · ' + r.src.join(', '), [['What we see', r.finding], ['Why it matters', r.why]], 'is-good')); });
     all.push(sec('connections', 'Connections across workpapers', true, [
       h('p', { className: 'fp-note', text: m.insights.length ? m.insights.length + ' of the report’s ' + m.counts.rules + ' insight rules fired for your answers. They describe the setup, not anyone’s character.' : 'None of the ' + m.counts.rules + ' insight rules fired yet. Most need two or more pages filled in.' }),
       ins, good.length ? h('h4', { className: 'fp-h4', text: 'Strengths the pages show' }) : null, good.length ? goodBox : null
@@ -670,14 +689,14 @@
       if (!m.recs[hz[0]].length) { recBox.appendChild(h('p', { className: 'fp-note', text: 'Nothing extra for ' + hz[1].toLowerCase() + '.' })); return; }
       var it = h('div', { className: 'fp-items' });
       m.recs[hz[0]].forEach(function (r) {
-        var el = itemEl(r.title, r.pillar ? 'Pillar ' + r.pillar : '', [['Why', r.why], ['First step', r.first], ['Try saying', r.script], ['It’s working when', r.working]], 'is-rec is-' + hz[0]);
+        var el = itemEl(r.title, r.pillar ? pillarTag(r.pillar) : '', [['Why', r.why], ['First step', r.first], ['Try saying', r.script], ['It’s working when', r.working]], 'is-rec is-' + hz[0]);
         var le2 = linkEl(r.link, 'Tool: '); if (le2) el.appendChild(le2);
         it.appendChild(el);
       });
       recBox.appendChild(it);
     });
     var pl = h('ol', { className: 'fp-plan' });
-    m.plan.forEach(function (w) { pl.appendChild(h('li', {}, [h('strong', { text: 'Week ' + w.week + ': ' + w.title }), h('span', { className: 'fp-plan-wp', text: w.wp + (w.pillar ? ' · Pillar ' + w.pillar : '') }), h('span', { text: w.do })])); });
+    m.plan.forEach(function (w) { pl.appendChild(h('li', {}, [h('strong', { text: 'Week ' + w.week + ': ' + w.title }), h('span', { className: 'fp-plan-wp', text: w.wp + (w.pillar ? ' · ' + pillarTag(w.pillar) : '') }), h('span', { text: w.do })])); });
     recBox.appendChild(h('h4', { className: 'fp-h4', text: 'Your ' + m.plan.length + '-week plan' }));
     recBox.appendChild(pl);
     all.push(sec('recs', 'Recommendations and your plan', true, [recBox]));

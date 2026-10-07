@@ -693,7 +693,7 @@
       "first": true,
       "newTopic": true,
       "name": "what does this text mean",
-      "pat": "\\bwhat (does|did|do) (she|he|they|my \\w+|it|this|that)? ?(mean|means) (by )?\\b.{0,15}\\b(fine|whatever|ok|okay|k|sure|nevermind|never mind|do what you want)\\b|\\bwhat does \\W?(fine|whatever|ok|okay|k|sure)\\b.{0,40}\\bmean\\b|\\b(she|he|they) (texted|wrote|said|sent) (me )?\\W?(fine|whatever|k|ok)\\b",
+      "pat": "\\bwhat (does|did|do) (she|he|they|my \\w+|it|this|that)? ?(mean|means) (by )?\\b.{0,15}\\b(whatever|do what you want|nevermind|never mind)\\b|\\bwhat does \\W?(fine\\W+whatever|whatever|do what you want)\\b.{0,40}\\bmean\\b|\\b(she|he|they) (texted|wrote|sent) (me )?\\W?(fine|whatever|k)\\b",
       "keys": [],
       "what": [
         "A short text like “Fine.” or “Whatever works for you.” can mean “really, it’s fine” or “I’m hurt and tired of asking”. The words alone can’t tell you, so ask kindly rather than guess."
@@ -827,7 +827,8 @@
         "Your partner probably wants a calmer way to talk.",
         "It does not say you are the problem.",
         "They can’t see what you read here."
-      ]
+      ],
+      "notPat": "\\bused against\\b|\\bagainst me\\b|\\bspy\\w*\\b|\\bsee what i\\b"
     },
     {
       "id": "reconnect",

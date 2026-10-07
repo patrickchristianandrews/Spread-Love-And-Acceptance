@@ -283,7 +283,38 @@
   .tol-hh-move{ display:block; }
   .tol-hh-move summary{ min-height:44px; display:flex; align-items:center; }
   .sr-only{ position:absolute !important; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; }
-  @media print{ .ls-awning, .ls-lemon, .ls-glasses, .ls-tools, .ls-keep, .remove, .add-row, .ls-tabs, .ls-lib, .ls-mode-grid, .ls-more, .ls-draft, .ls-sides, .ls-me, .ls-agree-tick, .row-cue, .row-pick, .tol-hh-move{ display:none; } }
+  /* re-test fixes: wide bill selects, savings and money coming in, whose side, the household tick, nights, links */
+  .row-amts label[hidden]{ display:none !important; }
+  .row-amts label.ls-sel-wide{ grid-column:1 / -1; }
+  .row-amts label.ls-sel-wide select{ max-width:26rem; }
+  .ls-money-sum{ white-space:pre-line; overflow-wrap:anywhere; }
+  .row-amts label.is-theirs input{ background:#F3EEE0 !important; border-style:dashed !important; color:var(--ink-soft); }
+  .row-amts label.is-theirs > span::after{ content:" \00b7 their side"; font-style:normal; }
+  .row-others{ margin:.35rem 0 0 !important; }
+  .ls-dbl{ display:flex; flex-wrap:wrap; align-items:center; gap:.2rem .8rem; }
+  .ls-hh-keep{ margin:.8rem 0 0 !important; padding:.5rem .8rem .6rem; border-radius:14px; border:2px solid var(--credit, #3E6B4C); background:#F3F8F1; color:var(--ink) !important; }
+  .ls-hh-keep .tol-hh-keep-l{ font-weight:600; }
+  .ls-hh-keep .tol-hh-keep-hint{ font-size:.88rem; color:var(--ink-soft); }
+  .ls-last{ margin:.6rem 0 0; }
+  .ls-last-btn{ width:100%; font-weight:600; border-color:var(--credit, #3E6B4C); background:#F3F8F1; }
+  .ls-last[hidden]{ display:none; }
+  .ls-wait{ margin:.4rem 0 0 !important; text-align:center; }
+  .ls-wait:has(> [hidden]){ display:none; }
+  .ls-agreed-top{ margin:1rem 0 0; padding:.8rem; border-radius:16px; background:#FFFDF6; border:1px solid #EAD9A0; }
+  .ls-part .ls-pick{ display:grid; grid-template-columns:repeat(auto-fill, minmax(min(100%, 13rem), 1fr)); gap:.5rem; }
+  .ls-part-p{ display:flex; flex-direction:column; gap:.1rem; padding:.4rem .5rem; border-radius:12px; border:2px solid var(--pc, #EAD9A0); background:#FFFDF6; min-width:0; }
+  .ls-part-p > label:first-child{ display:flex; flex-direction:column; gap:.1rem; font-size:.85rem; color:var(--ink-soft); }
+  .ls-kid{ min-height:44px; font-size:.9rem; }
+  .ls-lib-extra{ margin:.6rem 0 .2rem !important; }
+  .ls-lib-extra[hidden]{ display:none; }
+  .ls-lib-extra button{ min-height:44px; }
+  .ls-add-l{ display:block; font-size:.95rem !important; color:var(--ink) !important; }
+  #send-acts[hidden]{ display:none !important; }
+  .ls-code-l{ display:block; margin-top:.6rem; }
+  .ls-tabs, #sides{ scroll-margin-top:5rem; }
+  /* the floating buttons (back to top, breathe) never sit over the end of the result */
+  @media (max-width:700px){ .balance-line, .ls-money-sum{ padding-bottom:3.6rem !important; } .ls-money-sum{ padding-right:3.2rem; } }
+  @media print{ .ls-awning, .ls-lemon, .ls-glasses, .ls-tools, .ls-keep, .remove, .add-row, .ls-tabs, .ls-lib, .ls-mode-grid, .ls-more, .ls-draft, .ls-sides, .ls-me, .ls-agree-tick, .row-cue, .row-pick, .tol-hh-move, .ls-wait, .ls-agreed-top, .ls-last, .ls-lib-extra, .row-others{ display:none; } }
 </style>
 <script src="/assets/js/site.js" defer></script>
 <!-- seo:start -->
@@ -322,7 +353,7 @@
 </head>
 <body data-no-pillars>
 <main class="read">
-<div class="ls-awning" aria-hidden="true"><span>Fresh squeezed &middot; 0¢</span></div>
+<div class="ls-awning" aria-hidden="true"><span>Fresh squeezed &middot; always free</span></div>
 <header class="read-head"><p class="read-code">Tool &middot; nothing leaves your device</p><h1>The Lemonade Stand: a free chore tracker for who did what <svg class="ls-lemon" viewBox="0 0 64 64" aria-hidden="true"><path d="M8 34c0-13 11-24 26-24 5 0 9 1 12 3 3-2 7-2 9 0-1 3-1 6 0 9 2 3 3 7 3 11 0 14-12 23-27 23S8 47 8 34z" fill="#F8DC6E" stroke="#C9A227" stroke-width="3" stroke-linejoin="round"/><path d="M40 11c2-5 7-7 12-6-2 5-6 8-12 6z" fill="#8CC7A5" stroke="#4E8A66" stroke-width="2.5" stroke-linejoin="round"/><circle cx="24" cy="32" r="2.6" fill="#211D17"/><circle cx="38" cy="32" r="2.6" fill="#211D17"/><path d="M26 40c3 3 7 3 10 0" fill="none" stroke="#211D17" stroke-width="2.5" stroke-linecap="round"/><circle cx="19" cy="38" r="3" fill="#F2A3B6" opacity=".7"/><circle cx="43" cy="38" r="3" fill="#F2A3B6" opacity=".7"/></svg></h1></header>
 <p class="ls-tag">List the jobs, add the time, and see the split, or your own load.</p>
 
@@ -336,6 +367,7 @@
       <button type="button" class="mode-card" data-mode="solo" aria-pressed="false"><span class="mc-t">Just me</span><span class="mc-d">See my own load: work, home, caring, admin, the thinking part, and rest. No comparing with anyone.</span></button>
       <button type="button" class="mode-card" data-mode="group" aria-pressed="false"><span class="mc-t">Me and others I share a home with</span><span class="mc-d">Two to eight people: partners, family, roommates. Each person fills in only their own side, then you see the split together.</span></button>
     </div>
+    <div class="ls-last" id="last-names" hidden><button type="button" class="mode-card ls-last-btn" id="last-names-btn"></button></div>
     <p class="ls-status" id="mode-msg" role="status" aria-live="polite"></p>
   </section>
 
@@ -347,8 +379,9 @@
       <div class="ls-me">
         <p class="ls-mini" id="me-h">Who&rsquo;s filling in on this device right now?</p>
         <div class="ls-pick" id="me-row" role="group" aria-labelledby="me-h"></div>
+        <p class="ls-mini" id="me-note" hidden></p>
       </div>
-      <section class="ls-sides" id="sides" aria-labelledby="sides-h">
+      <section class="ls-sides group-only" id="sides" aria-labelledby="sides-h">
         <p><strong id="sides-h">On two phones?</strong> Each of you fills in your own side, then you bring the two together here. Nothing is uploaded: you pass a short code or a file between you.</p>
         <div class="ls-tools">
           <button type="button" id="send-side" aria-expanded="false" aria-controls="send-box">Send my side to my partner</button>
@@ -356,19 +389,22 @@
         </div>
         <div class="ls-xfer" id="send-box" hidden>
           <p class="ls-mini" id="send-who" hidden></p>
-          <label class="ls-mini" for="send-code">Your code (names, jobs, times and bills, nothing else)</label>
-          <textarea id="send-code" rows="3" readonly></textarea>
-          <div class="ls-tools" id="send-acts">
-            <button type="button" id="send-copy">Copy the code</button>
-            <button type="button" id="send-share">Share it</button>
-            <button type="button" id="send-file">Save as a file</button>
+          <div id="send-acts">
+            <div class="ls-tools"><button type="button" id="send-share">Share it as a link</button></div>
+            <p class="ls-mini">One short line and a link. Your side rides inside the link, after the &ldquo;#&rdquo;, so it&rsquo;s never uploaded anywhere. Tapping it on the other phone opens a preview before anything is added.</p>
+            <label class="ls-mini ls-code-l" for="send-code">Or the code itself (names, jobs, times and bills, nothing else)</label>
+            <textarea id="send-code" rows="3" readonly></textarea>
+            <div class="ls-tools">
+              <button type="button" id="send-copy">Copy the code instead</button>
+              <button type="button" id="send-file">Save as a file</button>
+            </div>
           </div>
           <p class="ls-status" id="send-msg" role="status" aria-live="polite"></p>
-          <p class="ls-mini">Send it any way you like: a text, an email, a note. On the other phone, open the Lemonade Stand, tap &ldquo;Add my partner&rsquo;s side&rdquo; and paste it, or open the file.</p>
+          <p class="ls-mini">Send it any way you like: a text, an email, a note. On the other phone, tap the link, or open the Lemonade Stand, tap &ldquo;Add my partner&rsquo;s side&rdquo; and paste the code, or open the file.</p>
         </div>
         <div class="ls-xfer" id="add-box" hidden>
-          <label class="ls-mini" for="add-code">Paste the code from your partner&rsquo;s phone</label>
-          <textarea id="add-code" rows="3" autocomplete="off" spellcheck="false"></textarea>
+          <label class="ls-mini ls-add-l" for="add-code" id="add-code-l"><strong>Your partner sent you their side? Paste it here</strong> (the code, or the whole message with the link)</label>
+          <textarea id="add-code" rows="3" autocomplete="off" spellcheck="false" aria-labelledby="add-code-l"></textarea>
           <div class="ls-tools">
             <button type="button" id="add-check">Look it over</button>
             <label class="ls-file-btn">Open their file<input type="file" id="add-file" class="sr-only" accept=".json,application/json,.txt,text/plain"></label>
@@ -400,6 +436,10 @@
         </div>
         <div class="ls-cats" id="lib-cats" role="group" aria-label="Kinds of job"></div>
         <p class="ls-mini" id="lib-hint" aria-live="polite"></p>
+        <div class="ls-tools ls-lib-extra" id="lib-extra" hidden>
+          <button type="button" id="baby-pack">+ New baby starter pack</button>
+          <button type="button" id="split-nights" class="group-only">Split the nights (two shifts for the fridge list)</button>
+        </div>
         <div class="ls-tasks" id="lib-tasks" role="group" aria-labelledby="lib-h"></div>
       </div>
 
@@ -409,7 +449,7 @@
       <button class="add-row" id="add-row" type="button">🍋 Add your own job</button>
     </div>
     <div class="ls-panel group-only" id="panel-money" role="tabpanel" aria-labelledby="tab-money" hidden>
-      <p class="ls-panel-note">One line per cost, like rent, power, internet or groceries. Put what each person actually paid. A cost can be shared, one person&rsquo;s own, or an agreed amount that isn&rsquo;t split (like money sent to family). Leave this empty if money isn&rsquo;t part of your picture.</p>
+      <p class="ls-panel-note">One line per cost, like rent, power, internet or groceries. Put what each person actually paid. A cost can be shared, one person&rsquo;s own, an agreed amount that isn&rsquo;t split (like money sent to family), or a savings goal you keep (like &ldquo;Our savings, 200 a month&rdquo;). Savings and family amounts are counted in each person&rsquo;s total, never owed between you. If you like, add &ldquo;Money coming in&rdquo; to see what&rsquo;s left. Leave this empty if money isn&rsquo;t part of your picture.</p>
       <div class="ls-cur">
         <label for="cur-sel">Money in</label>
         <select id="cur-sel">
@@ -429,20 +469,26 @@
     <div class="group-only">
       <div class="ls-glasses" id="glasses" aria-hidden="true"></div>
       <p class="balance-line" id="balance-line" aria-live="polite">Add some hours above to see how the work is split.</p>
-      <label class="ls-check ls-agree-tick"><input type="checkbox" id="checked-on" autocomplete="off"> <span id="checked-t">We&rsquo;ve both looked over these numbers and agree with them</span></label>
-      <p class="ls-mini">Optional. Each person fills in only their own side, so it&rsquo;s worth a look together. The copied summary says whether you have.</p>
+      <p class="ls-wait"><button type="button" class="ls-link-btn" id="wait-skip" hidden></button></p>
+      <div class="ls-agreed ls-agreed-top">
+        <label class="ls-check"><input type="checkbox" id="agreed-on" autocomplete="off"> Compare with a split we agreed on, instead of an even share</label>
+        <div class="row-amts" id="agreed-pcts" hidden></div>
+        <p class="ls-mini">Fair isn&rsquo;t always even. Paid work, part-time hours, a new baby, health, both of you being retired, or a child who lives here part of the time can all change what feels fair. You might agree on something like 60/40, or keep 50/50. Three or more of you? Each share is compared with an even share, or with the split you agreed. The split you agree on is used for shared bills too.</p>
+        <p class="ls-mini-p" id="agreed-nudge" hidden></p>
+        <div class="ls-tools" id="suggest-row" hidden>
+          <button type="button" id="suggest-work" hidden>Suggest a split from paid hours</button>
+          <button type="button" id="suggest-kids" hidden>Suggest an adults and kids split</button>
+        </div>
+        <p class="ls-mini-p" id="suggest-why" aria-live="polite" hidden></p>
+        <div class="ls-part">
+          <p class="ls-mini" id="part-h">Someone lives here only part of the time, like a child who&rsquo;s here every other weekend? Set the nights they&rsquo;re here out of 14, and their fair share follows. Tick &ldquo;Child&rdquo; for children, to get an adults and kids suggestion. (A split you agree on, above, takes the place of this.)</p>
+          <div class="ls-pick" id="part-row" role="group" aria-labelledby="part-h"></div>
+        </div>
+      </div>
+      <label class="ls-check ls-agree-tick"><input type="checkbox" id="checked-on" autocomplete="off"> <span id="checked-t">We&rsquo;ve both looked these over</span></label>
+      <p class="ls-mini">Optional, and either of you can tick it. Each person fills in only their own side, so it&rsquo;s worth a look together. The copied summary says whether you have.</p>
       <div class="ls-res">
         <h2 class="ls-h">How to read it</h2>
-        <div class="ls-agreed">
-          <label class="ls-check"><input type="checkbox" id="agreed-on" autocomplete="off"> Compare with a split we agreed on, instead of an even share</label>
-          <div class="row-amts" id="agreed-pcts" hidden></div>
-          <p class="ls-mini">Fair isn&rsquo;t always even. Paid work, part-time hours, a new baby, health, both of you being retired, or a child who lives here part of the time can all change what feels fair. You might agree on something like 60/40, or keep 50/50. Three or more of you? Each share is compared with an even share, or with the split you agreed. The split you agree on is used for shared bills too.</p>
-          <p class="ls-mini-p" id="agreed-nudge" hidden></p>
-          <div class="ls-part">
-            <p class="ls-mini" id="part-h">Someone lives here only part of the time, like a child who&rsquo;s here every other week? Tap them to count a half share instead of a full one. (A split you agree on, above, takes the place of this.)</p>
-            <div class="ls-pick" id="part-row" role="group" aria-labelledby="part-h"></div>
-          </div>
-        </div>
         <p class="ls-read" id="r-balance" aria-live="polite"></p>
         <h3 class="ls-h3">By area</h3>
         <div id="r-cats"></div>
@@ -550,7 +596,7 @@
   <p><strong>How to use it:</strong> Pick <em>Just me</em> to see your own load, or <em>Me and others</em> to see the split. Add jobs from the task library or type your own. In a shared home, each person fills in only their own hours, then you look at it together. On two phones, tap &ldquo;Send my side to my partner&rdquo; on one and &ldquo;Add my partner&rsquo;s side&rdquo; on the other. Copy the result into your group chat if that helps. The next steps are listed under your result.</p>
   <p>Prefer paper? Print the <a href="/chore-chart-for-couples.html">free fair chore chart for couples</a>, and read <a href="/invisible-labor-mental-load.html">invisible labor and the mental load</a> for the jobs people forget to count.</p>
 </div>
-<p class="cr-note" style="font-size:.9rem;color:var(--ink-soft);">This is for seeing the same picture, not a score to win with. Nothing you type or choose is sent anywhere. While this tab is open, a draft is kept in this tab only, so pressing Back or stepping away doesn&rsquo;t lose it; it&rsquo;s gone when you close the tab or press &ldquo;Clear&rdquo;. Tick &ldquo;Keep this on my device&rdquo; to keep it longer, with any weeks you save, in this browser only, until you press &ldquo;Erase&rdquo;. The page also remembers, on this device, whether you picked &ldquo;Just me&rdquo; or &ldquo;Me and others&rdquo;; &ldquo;Erase&rdquo; removes that too. If you tick &ldquo;Use these names in the other tools&rdquo;, just the names and the home jobs (never the hours) are kept in this browser, so the worksheets and calculators can offer them instead of asking again; untick it to forget them. &ldquo;Send my side to my partner&rdquo; makes a code or a file on your device; it only goes where you send it yourself.</p>
+<p class="cr-note" style="font-size:.9rem;color:var(--ink-soft);">This is for seeing the same picture, not a score to win with. Nothing you type or choose is sent anywhere. While this tab is open, a draft is kept in this tab only, so pressing Back or stepping away doesn&rsquo;t lose it; it&rsquo;s gone when you close the tab or press &ldquo;Clear&rdquo;. Tick &ldquo;Keep this on my device&rdquo; to keep it longer, with any weeks you save, in this browser only, until you press &ldquo;Erase&rdquo;. The page also remembers, on this device, whether you picked &ldquo;Just me&rdquo; or &ldquo;Me and others&rdquo;; &ldquo;Erase&rdquo; removes that too. If you tick &ldquo;Use these names in the other tools&rdquo;, just the names and the home jobs (never the hours) are kept in this browser, so the worksheets and calculators can offer them instead of asking again; untick it to forget them. &ldquo;Send my side to my partner&rdquo; makes a link, a code or a file on your device; it only goes where you send it yourself. In a link, your side sits after the &ldquo;#&rdquo;, which browsers never send to a server, and the page clears it from the address bar once it&rsquo;s read. This tab also keeps your names and your &ldquo;who is this for&rdquo; choice, so a reload doesn&rsquo;t ask again; closing the tab or &ldquo;Clear&rdquo; removes them.</p>
 <section class="ls-print" id="ls-print" aria-hidden="true"></section>
 </main>
 

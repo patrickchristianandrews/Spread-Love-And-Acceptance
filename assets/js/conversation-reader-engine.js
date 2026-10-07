@@ -210,10 +210,15 @@
                 instead: 'Describe what happened and how it landed, not what kind of person they are.' },
     absolute: { label: 'Always / never', heat: 1.5, tone: 'hot',
                 hear: '“Always” and “never” turn one moment into a verdict on everything. The other person usually argues with the absolute instead of hearing the point.',
-                instead: 'Name the specific time: “this week” or “the last two times.”' },
+                instead: 'Name the specific time: “this week” or “the last two times.”',
+                need: 'The need underneath may be fair. Say it as one example and one ask: “On Sunday I called first. Could you call me this week?”' },
     dismiss:  { label: 'Dismissing', heat: 2.5, tone: 'hot',
                 hear: 'Words like “calm down,” “whatever” or “you’re overreacting” tell the other person their feeling doesn’t count. They usually raise the heat.',
-                instead: 'Say what you can hear, even if you see it differently: “I can tell this matters to you.”' },
+                instead: 'Say what you can hear, even if you see it differently: “I can tell this matters to you.”',
+                // "Fine. Whatever works for you." from the person who asked: often resigned hurt, not only dismissal
+                resigned: { label: 'Brush-off, or quiet hurt',
+                  hear: '“Fine, whatever works for you” can be resigned hurt from someone who has stopped asking for what they want, not only a brush-off. The other person often hears “I don’t care.” It’s worth asking which, not deciding.',
+                  instead: 'If it isn’t really fine, say what you want: “Honestly, I’d like [what you want]. Could we [one specific thing]?”' } },
     sarcasm:  { label: 'Sarcasm', heat: 2, tone: 'hot',
                 hear: 'Sarcasm reads worse in writing than out loud. With no tone of voice, the other person fills the gap with the worst version.',
                 instead: 'Say the real thing plainly, once.' },
@@ -309,6 +314,8 @@
       }
       marks.push(m.whole ? { kind: kind, start: 0, end: text.length, text: text.trim(), whole: true } : { kind: kind, start: m.start, end: m.end, text: m.text });
     });
+    // "Fine. Whatever works for you." / "whatever you want" / "I don't care": may be resigned hurt
+    marks.forEach(function (m) { if (m.kind === 'dismiss' && /^(?:(?:fine|ok(?:ay)?|sure)[.,!]?\s*)?(?:whatever(?: works for you| works| you want| you like| you think| you say)?|i don['’]t care|do what you want)[.!…]*$/i.test(String(m.text).trim()) && /^\s*(?:fine|ok(?:ay)?|sure)?[.,!]?\s*(?:whatever|i don['’]t care|do what you want)/i.test(text)) m.resigned = true; });
     if (P && P.idioms) P.idioms(text).forEach(function (x) { if (!/kill|murder|strangle/i.test(x.text)) marks.push({ kind: 'idiom', start: x.start, end: x.start + x.text.length, text: x.text, means: x.means, words: x.words }); });
     var edgy = marks.some(function (m) { return KINDS[m.kind].heat > 0; });
     // Shouting: words in capitals (3+ letters, not common acronyms) and stacked punctuation
@@ -746,9 +753,10 @@
     var a = Math.max(st, q, x, nl) + 1, e = text.slice(m.end).search(/[.?!\n]/);
     return trim(text.slice(a, e === -1 ? text.length : m.end + e + 1));
   }
-  function ownScript(kind, said) {
+  function ownScript(kind, said, resigned) {
     var q = '“' + snippet(said).replace(/[.!?,;:]+$/, '') + '”';
     if (kind === 'withdraw') return 'When I said ' + q + ', I needed a break, and I didn’t say when I’d come back. Can we pick it up at [a time]?';
+    if (kind === 'dismiss' && resigned) return 'When I said ' + q + ', it wasn’t really fine. What I’d like is [what you want, one sentence].';
     if (kind === 'dismiss' || kind === 'brushaside') return 'When I said ' + q + ', I brushed it off. It does matter to me. What I meant was: [the plain version, one sentence].';
     if (kind === 'defend') return 'When I said ' + q + ', I got defensive. I’d like to hear what’s going on for you.';
     if (kind === 'sarcasm' || kind === 'passive') return 'When I said ' + q + ', I was hurt, and it came out sideways. What I meant was: [the plain version, one sentence].';
@@ -761,11 +769,22 @@
       t.marks.forEach(function (m) {
         var k = OWN_ORDER.indexOf(m.kind); if (k === -1) return;
         if (!by[t.who]) { by[t.who] = null; order.push(t.who); }
-        if (!by[t.who] || k < OWN_ORDER.indexOf(by[t.who].kind)) by[t.who] = { kind: m.kind, said: m.whole ? trim(t.text) : sentenceOf(t.text, m), mine: t.mine };
+        if (!by[t.who] || k < OWN_ORDER.indexOf(by[t.who].kind)) by[t.who] = { kind: m.kind, said: m.whole ? trim(t.text) : sentenceOf(t.text, m), mine: t.mine, resigned: !!m.resigned };
       });
     });
     order.sort(function (a, b) { return (by[b].mine ? 1 : 0) - (by[a].mine ? 1 : 0); });
-    return order.map(function (w) { var b = by[w]; return { who: w, mine: b.mine, kind: b.kind, said: b.said, script: ownScript(b.kind, b.said) }; });
+    // the person who raised it: the first one to ask for something. Their part leads with what they asked for.
+    var raised = null;
+    r.turns.some(function (t) {
+      var m = trim(t.text).match(/(?:^|[.!?]\s+)((?:are we still|can we|could we|could you|can you|will you|would you|do you want to|are you (?:free|around|up for)|i(?:[’']d| would) (?:really )?like|i need you to|i want us to)\b[^.!?\n]*[.!?]?)/i);
+      if (m) { raised = { who: t.who, ask: trim(m[1]) }; return true; }
+      return false;
+    });
+    return order.map(function (w) { var b = by[w];
+      var o = { who: w, mine: b.mine, kind: b.kind, said: b.said, script: ownScript(b.kind, b.said, b.resigned) };
+      if (b.resigned) o.label = 'quiet hurt (“whatever”)';
+      if (raised && raised.who === w) o.asked = raised.ask;
+      return o; });
   }
 
   function snippet(t) { t = trim(t).replace(/\s+/g, ' '); return t.length > 70 ? t.slice(0, 67).replace(/\s\S*$/, '') + '…' : t; }

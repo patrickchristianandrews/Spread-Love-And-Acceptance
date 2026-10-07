@@ -48,7 +48,7 @@
   if (!peopleEl || !rowsEl) return;
 
   var MIN = 2, MAX = 8;
-  var KEY = 'tol-lemonade-stand-v2', DRAFT = 'tol-lemonade-draft', MODE_KEY = 'tol-lemonade-mode', MAX_OWN = 5, MAX_WEEKS = 26;
+  var KEY = 'tol-lemonade-stand-v2', DRAFT = 'tol-lemonade-draft', NAMES = 'tol-lemonade-names', MODE_KEY = 'tol-lemonade-mode', MAX_OWN = 5, MAX_WEEKS = 26;
   var COLORS = ['#BFE3CF', '#F8DC6E', '#F2B8C6', '#B9D3F0', '#D9C4F0', '#F6C99B', '#C8E6A0', '#A8DDE0'];
   var WAKING = 112; // about 16 waking hours a day, 7 days
 
@@ -213,12 +213,17 @@
   var hhWrite = null; // keeps the household up to date, only while "Use these names in the other tools" is ticked
   function save() {
     try { sessionStorage.setItem(DRAFT, JSON.stringify(state)); } catch (e) { /* no tab storage: the page still works */ }
+    // the names and the "who is this for" choice on their own too, for this tab only (nothing more)
+    try { sessionStorage.setItem(NAMES, JSON.stringify({ people: state.people.map(function (p) { return String(p || '').slice(0, 40); }), mode: mode })); } catch (e) {}
     if (hhWrite) hhWrite.soon();
     if (!keep) return;
     try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) { /* storage blocked: stay in-tab only */ }
   }
   function loadDraft() {
     try { var raw = sessionStorage.getItem(DRAFT); return raw ? JSON.parse(raw) : null; } catch (e) { return null; }
+  }
+  function loadNames() {
+    try { var o = JSON.parse(sessionStorage.getItem(NAMES) || 'null'); return o && Array.isArray(o.people) && o.people.some(function (p) { return !placeholder(p); }) ? o : null; } catch (e) { return null; }
   }
   function loadMode() { try { var m = localStorage.getItem(MODE_KEY); return m === 'solo' || m === 'group' ? m : null; } catch (e) { return null; } }
   function saveMode(m) { try { localStorage.setItem(MODE_KEY, m); } catch (e) {} }
@@ -335,6 +340,8 @@
       inp.type = 'text'; inp.value = p; inp.maxLength = 40; inp.autocomplete = 'off';
       inp.setAttribute('aria-label', 'Person ' + (i + 1) + ' name');
       inp.addEventListener('input', function () { state.people[i] = inp.value; relabel(); recalc(); });
+      // leaving a name box keeps the household up to date at once (when the tick is on), not a moment later
+      inp.addEventListener('change', function () { if (hhWrite) hhWrite.now(false); });
       wrap.appendChild(dot); wrap.appendChild(inp);
       if (state.people.length > MIN) {
         var rm = document.createElement('button');
@@ -490,7 +497,9 @@
       if (!item.custom || item.catSet) return;
       var g = guessCat(item.name);
       if (g === 'other' || g === item.cat) return;
-      item.cat = g; renderRows(); renderLibTasks(); recalc();
+      item.cat = g;
+      // redraw a moment later, once focus has landed where the person tapped (the time box, say), so it stays there
+      setTimeout(function () { renderRows(); renderLibTasks(); recalc(); }, 0);
       status('Filed “' + item.name.trim() + '” under ' + CAT[g].n + '. Change its area if that’s not right.');
     });
     ta.addEventListener('keydown', function (e) { if (e.key === 'Enter') e.preventDefault(); });
@@ -559,7 +568,7 @@
     amts.appendChild(labeled('Counted in', us, 'ls-sel'));
     amts.appendChild(labeled('How often', fs, 'ls-sel'));
     // a job you typed yourself shows its area right here, so it never quietly lands in the wrong one
-    if (item.custom) amts.appendChild(labeled('Area', cs, 'ls-sel'));
+    if (item.custom) amts.appendChild(labeled('Area', cs, 'ls-sel ls-sel-wide'));
 
     // a new task from the library starts with no one's time: tap who does it to fill in the typical time
     var pickBox = null;
@@ -669,9 +678,11 @@
     requestAnimationFrame(function () { autoGrow(ta); });
     return row;
   }
+  // "Tom paid (£)", "Tom puts in (£)" for savings, "Tom brings in (£)" for money coming in
+  function billWho(b, i) { return nameOf(i) + (b.kind === 'income' ? ' brings in' : b.kind === 'savings' ? ' puts in' : ' paid') + ' (' + state.cur + ')'; }
   function makeBillRow(idx) {
     var item = state.bills[idx]; item.isBill = true;
-    var row = document.createElement('div'); row.className = 'row';
+    var row = document.createElement('div'); row.className = 'row'; row.setAttribute('data-bidx', idx);
     var top = document.createElement('div'); top.className = 'row-top';
     var ta = document.createElement('textarea');
     ta.rows = 1; ta.className = 'task-name'; ta.value = item.name; ta.setAttribute('autocomplete', 'off'); ta.setAttribute('data-fk', 'bn' + idx);
@@ -696,7 +707,7 @@
     state.people.forEach(function (p, i) {
       var lab = document.createElement('label'); lab.style.setProperty('--pc', COLORS[i]);
       var sp = document.createElement('span'); sp.className = 'pname'; sp.dataset.i = i; sp.dataset.k = 'b';
-      sp.textContent = nameOf(i) + ' paid (' + state.cur + ')';
+      sp.textContent = billWho(item, i);
       var inp = document.createElement('input');
       inp.type = 'number'; inp.min = '0'; inp.step = '0.01'; inp.inputMode = 'decimal'; inp.autocomplete = 'off'; inp.setAttribute('data-fk', 'b' + i + '-' + idx);
       inp.setAttribute('aria-label', nameOf(i) + ', amount paid' + (item.ex ? ' (example: ' + (item.ex.v[i] || 0) + ')' : ''));
@@ -717,13 +728,18 @@
     var ks = select(BILL_ORDER.map(function (k) { return [k, BILL_KIND[k]]; }), item.kind || 'shared', 'How this cost is shared', 'bk' + idx);
     var ws = select([[-1, 'Pick who']].concat(state.people.map(function (_, i) { return [i, nameOf(i)]; })), item.who, 'Whose own cost', 'bw' + idx);
     ws.className = 'ls-bill-who';
+    // these two take the row's full width, so their words are never cut off (large text, Easy reading)
     var kLab = lab2('How it’s shared', ks), wLab = lab2('Whose?', ws, item.kind !== 'own');
+    kLab.classList.add('ls-sel-wide'); wLab.classList.add('ls-sel-wide');
     amts.appendChild(kLab); amts.appendChild(wLab);
     var kindNote = document.createElement('p'); kindNote.className = 'ls-mini ls-kind-note';
     function showKind() {
       wLab.hidden = item.kind !== 'own';
-      kindNote.textContent = item.kind === 'own' ? 'Left out of the settle-up: it’s one person’s own cost.' : item.kind === 'agreed' ? 'Kept on the list so it’s seen, but not split and not owed (like money you send to family).' : '';
+      kindNote.textContent = item.kind === 'own' ? 'Left out of the settle-up: it’s one person’s own cost.' : item.kind === 'agreed' ? 'Kept on the list so it’s seen, but not split and not owed (like money you send to family).'
+        : item.kind === 'savings' ? 'Kept on the list and in each person’s total, never split and never owed between you. Like “Our savings, 200 a month”.'
+        : item.kind === 'income' ? 'Not a cost. Optional: with money coming in listed, the summary shows what’s left after the costs.' : '';
       kindNote.hidden = !kindNote.textContent;
+      amts.querySelectorAll('.pname[data-k="b"]').forEach(function (sp) { sp.textContent = billWho(item, +sp.dataset.i); });
     }
     ks.addEventListener('change', function () { own(); item.kind = ks.value; showKind(); markEdited(); recalc(); });
     ws.addEventListener('change', function () { own(); item.who = +ws.value; markEdited(); recalc(); });
@@ -775,7 +791,7 @@
   function relabel() {
     document.querySelectorAll('.row-amts .pname').forEach(function (sp) {
       var i = +sp.dataset.i, k = sp.dataset.k;
-      if (k === 'b') { sp.textContent = nameOf(i) + ' paid (' + state.cur + ')'; return; }
+      if (k === 'b') { var br = sp.closest('.row'), bb = br ? state.bills[+br.getAttribute('data-bidx')] : null; sp.textContent = bb ? billWho(bb, i) : nameOf(i) + ' paid (' + state.cur + ')'; return; }
       var row = sp.closest('.row'), j = row ? state.jobs[+row.getAttribute('data-idx')] : null;
       if (!j) return;
       sp.textContent = (solo() ? 'Me' : nameOf(i)) + (k === 't' ? ', thinking (min)' : ' (' + unitWord(j) + ')');
@@ -823,6 +839,7 @@
         c.k === 'rest' ? 'Rest counts too. It shows how much room your week has to recover.' :
         libCat === 'appts' ? 'Only the logistics: booking, getting there, forms and pickups.' :
         c.inv ? 'This is the invisible part of running a home. It counts.' : '';
+      var extra = $('lib-extra'); if (extra) extra.hidden = libCat !== 'baby';
       (LIB[libCat] || []).forEach(function (t, k) {
         var have = state.jobs.filter(function (j) { return !j.ex && j.name.trim().toLowerCase() === t[0].toLowerCase(); })[0];
         var b = document.createElement('button'); b.type = 'button'; b.className = 'ls-task'; b.setAttribute('data-fk', 'lt-' + libCat + '-' + k);
@@ -1113,7 +1130,7 @@
         : 'The shared bills are already settled: nobody owes anybody.');
       out.push('Shared bills listed: ' + cash(s) + '. ' + how + ' ' + parts.join('; ') + '.' +
         (fallback ? ' (The split you agreed doesn’t add up to 100% yet, so this uses an even split.)' : '') +
-        (tg.mode === 'even' ? ' Even isn’t always the fair answer (incomes and rooms differ), so treat this as a starting point, not a verdict. A split you agree on, under “How to read it”, is used here too.' : ' Treat it as a starting point, not a verdict.'));
+        (tg.mode === 'even' ? ' Even isn’t always the fair answer (incomes and rooms differ), so treat this as a starting point, not a verdict. A split you agree on, just under the result, is used here too.' : ' Treat it as a starting point, not a verdict.'));
     }
     // 4. the lines that are kept and shown, never owed
     if (own.length) out.push('Each person’s own, not in the settle-up: ' + own.map(function (b) {
@@ -1287,6 +1304,13 @@
     if ($('suggest-work')) $('suggest-work').hidden = !sw;
     if ($('suggest-kids')) $('suggest-kids').hidden = !sk;
     if ($('suggest-row')) $('suggest-row').hidden = !sw && !sk;
+    // before any split is agreed: a plain word on why the suggestions are there
+    var why = $('suggest-why');
+    if (why && !state.agreed.on) {
+      why.textContent = sk ? 'With children marked, an even share expects as much of a child as of an adult. An adults and kids split may fit better.'
+        : sw ? 'Paid work is kept out of the home split. If your paid hours differ, a split that evens out the whole week may feel fairer.' : '';
+      why.hidden = !why.textContent;
+    }
   }
   // whole percentages that add up to 100, from any weights
   function wholePcts(w) {
@@ -1690,6 +1714,7 @@
     if (m === 'solo') showTab(0);
     $('copy-result').textContent = m === 'solo' ? 'Copy my summary' : 'Copy the result';
     renderAll();
+    var ln = $('last-names'); if (ln) ln.hidden = true;
     if (announce) $('mode-msg').textContent = m === 'solo' ? 'Set up for just you. Your own week, with no comparison. Your entries are all still here.' : 'Set up for you and the people you share a home with. Each person fills in only their own side.';
   }
 
@@ -1704,11 +1729,20 @@
     if (!state.example) status('Your stand from earlier in this tab is back.');
   } else {
     state = clone(EXAMPLE); state.example = true;
+    // no draft, but the names from earlier in this tab: the example stand, with those names
+    var tabNames = loadNames();
+    if (tabNames) { examplePeople(tabNames.people); if (tabNames.mode === 'solo' || tabNames.mode === 'group') state.mode = tabNames.mode; }
   }
   state.jobs = state.jobs || []; state.bills = state.bills || []; state.owners = state.owners || [];
   // a stand saved before examples became grey placeholders: its example numbers were real values,
   // so start from the placeholder example instead of counting them
-  if (state.example && !anyExample()) { var ppl = state.people; state = clone(EXAMPLE); state.example = true; state.owners = []; if (ppl && ppl.length >= MIN) { state.people = ppl.slice(0, MAX); state.jobs.concat(state.bills).forEach(function (r) { while (r.v.length < state.people.length) r.v.push(0); r.v.length = state.people.length; }); } }
+  if (state.example && !anyExample()) { var ppl = state.people; state = clone(EXAMPLE); state.example = true; state.owners = []; examplePeople(ppl); }
+  // the example stand with these names (its rows grow or shrink to fit)
+  function examplePeople(ppl) {
+    if (!Array.isArray(ppl) || ppl.length < MIN) return;
+    state.people = ppl.slice(0, MAX).map(function (p) { return String(p || ''); });
+    state.jobs.concat(state.bills).forEach(function (r) { while (r.v.length < state.people.length) r.v.push(0); r.v.length = state.people.length; });
+  }
   normalize();
   // Names already known on this device (the household someone chose to keep): an untouched example stand
   // shows them instead of "Me" and "Them", so the owner chips and the rest never fall back to placeholders.
@@ -1729,6 +1763,9 @@
   // After Back or Forward, the browser may put old values back into the boxes. Always redraw the
   // boxes from the stand itself, so what you see and the totals always match.
   window.addEventListener('pageshow', function () { $('keep-device').checked = keep; renderAll(); });
+  // switching apps (to copy a code, say) or a reload: the tab's draft is written once more on the way out
+  window.addEventListener('pagehide', function () { save(); if (hhWrite) hhWrite.now(false); });
+  document.addEventListener('visibilitychange', function () { if (document.visibilityState === 'hidden') save(); });
 
   document.querySelectorAll('.mode-card').forEach(function (b) {
     b.addEventListener('click', function () { var m = b.getAttribute('data-mode'); saveMode(m); setMode(m, true); });
@@ -1738,11 +1775,11 @@
     var b = $('clear-draft');
     if (!b.dataset.armed) { b.dataset.armed = '1'; b.textContent = 'Tap again to clear'; clearTimeout(b.t); b.t = setTimeout(function () { delete b.dataset.armed; b.textContent = 'Clear'; }, 4000); return; }
     delete b.dataset.armed; b.textContent = 'Clear';
-    try { sessionStorage.removeItem(DRAFT); } catch (e) {}
+    try { sessionStorage.removeItem(DRAFT); sessionStorage.removeItem(NAMES); } catch (e) {}
     if (keep) erase();
     state = clone(EXAMPLE); state.example = true; state.owners = []; state.mode = mode;
     renderAll();
-    try { sessionStorage.removeItem(DRAFT); } catch (e) {}
+    try { sessionStorage.removeItem(DRAFT); sessionStorage.removeItem(NAMES); } catch (e) {}
     status('Cleared. The example is back, and nothing from before is kept in this tab.');
   });
 
@@ -1802,6 +1839,23 @@
     }
     renderAgreed(); recalc();
   });
+  // the suggestions fill in the agreed split, say why, and can be changed like any other agreed split
+  function useSuggestion(sg, why) {
+    if (!sg) return;
+    state.agreed.on = true; state.agreed.p = sg.p.map(String);
+    renderAgreed(); recalc();
+    var w = $('suggest-why'); if (w) { w.textContent = why; w.hidden = false; }
+    status('Filled in a suggested split. Change it to what feels fair to you both.');
+  }
+  if ($('suggest-work')) $('suggest-work').addEventListener('click', function () { var sg = suggestSplit(); useSuggestion(sg, sg ? suggestWhy(sg) : ''); });
+  if ($('suggest-kids')) $('suggest-kids').addEventListener('click', function () { var sg = suggestKids(); useSuggestion(sg, sg ? kidsWhy(sg) : ''); });
+  if ($('wait-skip')) $('wait-skip').addEventListener('click', function () {
+    state.noWait = true; recalc();
+    status('Showing the split with what’s here now.');
+    var bl = $('balance-line'); bl.setAttribute('tabindex', '-1'); bl.focus();
+  });
+  if ($('baby-pack')) $('baby-pack').addEventListener('click', addBabyPack);
+  if ($('split-nights')) $('split-nights').addEventListener('click', splitNights);
   $('r-plan').addEventListener('click', function (e) {
     var b = e.target.closest('button[data-plan]'); if (!b) return;
     var j = state.jobs[+b.getAttribute('data-j')]; if (!j) return;
@@ -2176,7 +2230,7 @@
     var json = JSON.stringify(d);
     code.value = SIDE + b64enc(json); code.hidden = false; acts.hidden = false;
     // the link for "Share it", ready before the tap (a phone's share menu wants it at once)
-    if (sendLink.json !== json) {
+    if (!sendLink || sendLink.json !== json) {
       sendLink = { json: json, url: '', who: d.by || '' };
       packSide(json).then(function (pk) { if (sendLink.json === json) sendLink.url = sideLink(pk); }, function () {});
     }
@@ -2223,6 +2277,14 @@
     } catch (e) { sideStatus('send-msg', 'Couldn’t save a file here. Copy the code instead.'); }
   });
   function review(text) {
+    // a link (or a message with one) carries the side after "#side=": unpack it first
+    if (/#side=[zj]/.test(String(text || ''))) {
+      unpackSide(text).then(function (json) {
+        if (json) review(json);
+        else { $('add-review').innerHTML = ''; sideStatus('add-msg', 'That link didn’t open here. Ask for the code instead (“Copy the code instead”), and paste it here.'); }
+      });
+      return;
+    }
     var d = readSide(text), box = $('add-review');
     pending = null;
     if (!d) { box.innerHTML = ''; sideStatus('add-msg', 'That doesn’t look like a Lemonade Stand code. Copy the whole thing, starting with LEMON1:, or open the .json file.'); return; }
@@ -2355,7 +2417,7 @@
     var jobsOnly = hhAuto && !!h && h.jobs.length > 0 && !state.jobs.some(function (j) { return !j.ex; });
     var want = !hhNo && !!h && h.people.length > 0 && (hhNamesEmpty() || jobsOnly);
     if (want && !hhOffer) {
-      hhOffer = HH.offer({ names: jobsOnly ? [] : h.people, jobs: h.jobs.map(function (j) { return j.name; }), question: jobsOnly ? 'Add the jobs kept from before too?' : undefined,
+      hhOffer = HH.offer({ names: jobsOnly ? [] : h.people, jobs: h.jobs.map(function (j) { return j.name; }), question: jobsOnly ? 'Add the jobs kept from before too?' : 'Use the names from last time?',
         onUse: function () { return hhUse(); }, onNo: function () { hhNo = true; }, focus: function () { return peopleEl.querySelector('input'); } });
       hhHost.appendChild(hhOffer);
     } else if (!want && hhOffer && !hhOffer.querySelector('.tol-hh-offer').hidden) {
@@ -2367,8 +2429,11 @@
     hhHost = document.createElement('div');
     peopleBox.insertBefore(hhHost, peopleBox.firstChild);
     hhWrite = HH.writer('lemonade', hhCollect);
-    var hhKeep = HH.remember({ tool: 'lemonade', write: hhWrite });
-    peopleBox.appendChild(hhKeep);
+    // the tick sits right under the names, where they're typed, with one plain line on what it's for
+    var hhKeep = HH.remember({ tool: 'lemonade', write: hhWrite, hint: 'Saves retyping your names in the worksheets, the Signal Translator and the Wiring Card.' });
+    hhKeep.classList.add('ls-hh-keep');
+    var meBox = peopleBox.querySelector('.ls-me');
+    peopleBox.insertBefore(hhKeep, meBox || null);
     // "Household names on another phone?": the names and home jobs as a code (household.js)
     if (HH.transfer) {
       peopleBox.appendChild(HH.transfer({ collect: hhCollect, onLoad: function (d) {
@@ -2378,9 +2443,65 @@
     }
     hhRefresh();
     hhWrite.baseline();
-    HH.onChange(function () { hhKeep.sync(); });
+    HH.onChange(function () { hhKeep.sync(); renderLastNames(); });
   }
 
+  // "Use the names from last time: Tom & Amara": one tap, before "Who is this for?" is picked, when names
+  // are kept on this device (only when someone ticked "Use these names in the other tools")
+  function ampNames(a) { return a.length < 2 ? a.join('') : a.slice(0, -1).join(', ') + ' & ' + a[a.length - 1]; }
+  function lastNames() { var h = HH && HH.get ? HH.get() : null; return h && h.people.length ? h.people.slice(0, MAX) : []; }
+  function renderLastNames() {
+    var box = $('last-names'); if (!box) return;
+    var names = lastNames();
+    box.hidden = !!mode || !names.length;
+    if (!box.hidden) $('last-names-btn').textContent = 'Use the names from last time: ' + ampNames(names);
+  }
+  if ($('last-names-btn')) $('last-names-btn').addEventListener('click', function () {
+    var names = lastNames(); if (!names.length) return;
+    // names only, in place of "Me", "Them" or an empty name; a name typed already stays
+    names.forEach(function (nm) {
+      if (state.people.some(function (p) { return low(p) === low(nm); })) return;
+      var slot = -1;
+      state.people.forEach(function (p, i) { if (slot < 0 && placeholder(p)) slot = i; });
+      if (slot >= 0) state.people[slot] = nm;
+      else if (state.people.length < MAX) { state.people.push(nm); state.jobs.concat(state.bills).forEach(function (r) { r.v.push(0); if (r.t) r.t.push(0); }); }
+    });
+    saveMode('group'); setMode('group', false);
+    $('mode-msg').textContent = 'Using ' + joinNames(names) + ' from last time. Change the names below any time.';
+    var f = peopleEl.querySelector('input'); if (f) f.focus();
+  });
+  renderLastNames();
+
+  /* ---------- links into the page: #side=… (a partner's side), #add-side, #money, #hours ---------- */
+  function fromHash() {
+    var h = location.hash || '';
+    if (/^#side=/.test(h) || h === '#add-side') {
+      // the side is read once, then cleared from the address bar and this tab's history entry
+      try { history.replaceState(null, '', location.pathname + location.search); } catch (e) {}
+      if (mode !== 'group') { saveMode('group'); setMode('group', false); }
+      // the paste box comes first: "Your partner sent you their side? Paste it here"
+      var sides = $('sides'), body = $('ls-body');
+      if (sides && body && body.firstElementChild !== sides) body.insertBefore(sides, body.firstElementChild);
+      $('add-box').hidden = false; $('add-side').setAttribute('aria-expanded', 'true');
+      $('send-box').hidden = true; $('send-side').setAttribute('aria-expanded', 'false');
+      if (sides) sides.scrollIntoView({ block: 'start' });
+      if (h === '#add-side') { $('add-code').focus({ preventScroll: true }); return; }
+      review(h);
+      sideStatus('add-msg', 'Your partner’s side is here. Look it over below, then tap “Add to my stand”.');
+      return;
+    }
+    if (h === '#money' || h === '#hours') {
+      if (h === '#money' && mode !== 'group') setMode('group', mode === 'solo');
+      else if (!mode) setMode('group', false);
+      if (!solo()) showTab(h === '#money' ? 1 : 0);
+      var tab = solo() ? $('panel-hours') : $(h === '#money' ? 'tab-money' : 'tab-hours');
+      if (tab) { tab.scrollIntoView({ block: 'start' }); if (!solo()) tab.focus({ preventScroll: true }); }
+    }
+  }
+  fromHash();
+  window.addEventListener('hashchange', fromHash);
+
   window.TOLLemonade = { recalc: recalc, state: function () { return state; }, mode: function () { return mode; }, setMode: setMode, resultText: resultText, fridgeText: fridgeText, hoursSentence: hoursSentence, moneySentence: moneySentence, balance: balance, saveWeek: saveWeek, library: LIB, categories: CATS,
-    sideData: sideData, sideCode: function () { var d = sideData(); return d.error ? '' : SIDE + b64enc(JSON.stringify(d)); }, readSide: readSide };
+    sideData: sideData, sideCode: function () { var d = sideData(); return d.error ? '' : SIDE + b64enc(JSON.stringify(d)); }, readSide: readSide,
+    sideLink: function () { var d = sideData(); return d.error ? Promise.resolve('') : packSide(JSON.stringify(d)).then(sideLink); } };
 })();

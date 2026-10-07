@@ -209,7 +209,7 @@
   /* one row, lightly: no box around it and none around each field, just a thin line between rows.
      The job (the first field) has the whole width; the short choices sit side by side while they fit,
      and stack one under another at large text. */
-  .wpf-table tr{ display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 8.5rem), 1fr)); gap: 2px 12px;
+  .wpf-table tr{ display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 7.5rem), 1fr)); gap: 2px 12px;
     border: 0; border-top: 1px solid var(--line, #D9CBA3); border-radius: 0; padding: 12px 40px 12px 0; margin: 0; background: transparent; position: relative; }
   .wpf-table tbody tr:first-child{ border-top: 0; padding-top: 4px; }
   .wpf-table td, .wpf-table th.wpf-rowlabel{ grid-column: auto; min-width: 0; }
@@ -242,7 +242,7 @@
   /* one row, lightly: no box around it and none around each field, just a thin line between rows.
      The job (the first field) has the whole width; the short choices sit side by side while they fit,
      and stack one under another at large text. */
-  .wpf-table tr{ display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 8.5rem), 1fr)); gap: 2px 12px;
+  .wpf-table tr{ display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 7.5rem), 1fr)); gap: 2px 12px;
     border: 0; border-top: 1px solid var(--line, #D9CBA3); border-radius: 0; padding: 12px 40px 12px 0; margin: 0; background: transparent; position: relative; }
   .wpf-table tbody tr:first-child{ border-top: 0; padding-top: 4px; }
   .wpf-table td, .wpf-table th.wpf-rowlabel{ grid-column: auto; min-width: 0; }

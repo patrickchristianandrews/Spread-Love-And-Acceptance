@@ -2762,7 +2762,7 @@ const GLOSS = {
   joke:"a joke sign that can hide the real message", tone:"commenting on their face or voice",
   demand:"asking for an answer right away", butc:"praise, then \"but\"",
   already:"it says \"I told you before\"", hedge:"an unsure answer", softno:"a \"no\" that sounds like \"maybe\"",
-  stopask:"\"stop asking\"", tic:"commenting on a movement or sound they may not control",
+defend:"explaining yourself before they've blamed you", stopask:"\"stop asking\"", tic:"commenting on a movement or sound they may not control",
   nowhen:"a request with no time", brushoff:"it can sound like you don't care, or like quiet hurt; ask which",
   dxlabel:"a diagnosis used as an insult", violent:"violent words, even as a joke",
   selfput:"you put yourself down", legal:"a threat about court or the children",

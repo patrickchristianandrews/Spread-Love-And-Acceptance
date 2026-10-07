@@ -76,7 +76,15 @@
     g('Little things', [['Save them a seat', AN], ['Remember how they take their coffee', O], ['Send the article they’d like', AN], ['Check they got home safe', AN], ['Return the thing you borrowed', AN], ['Bring back a small souvenir', AN], ['Text on the anniversary of a hard day', AN], ['Say what you like about them, out loud', AN]], true),
     g('Group life', [['Remember who owes who', AN], ['Keep the shared photo album', O], ['Include someone new', AN], ['Notice who hasn’t come in a while', O], ['Smooth over a group disagreement', AN], ['Keep traditions going', O], ['Book the yearly trip', AN], ['Remind everyone of the plan', AN]], true)
   ];
-  var BY_ROAD = { partners: HOME, family: HOME, program: HOME, coparents: COPARENTS, roommates: ROOMMATES, coworkers: COWORKERS, caregivers: CAREGIVERS, friends: FRIENDS };
+  // Partners who live apart: the calls, the visits and the time zones first, then the parts of home life
+  // that are still shared (money, plans, people), and no chores that assume one kitchen.
+  var APART = [
+    g('Calls and messages', [['Arrange our call', Wk], ['Reschedule a call', AN], ['Good-morning / good-night text', D], ['Time-zone juggling: pick times that work for both', Wk], ['Keep the shared calendar across time zones', O], ['Plan a video date', Wk], ['Remember the other’s big days (exams, interviews)', O]], true),
+    g('Visits', [['Plan or book a visit', M], ['Book travel and tickets', AN], ['Track travel costs and who paid', M], ['Plan what we do on a visit', AN], ['Get the place ready for a visit', AN], ['Airport or station pick-up', AN]]),
+    g('Staying close', [['Send a card or a care package', AN], ['Plan something to watch or play together online', Wk], ['Share small news during the day', D], ['Check in after a hard day', AN]], true),
+    HOME[2], HOME[3], HOME[6]
+  ];
+  var BY_ROAD = { apart: APART, partners: HOME, family: HOME, program: HOME, coparents: COPARENTS, roommates: ROOMMATES, coworkers: COWORKERS, caregivers: CAREGIVERS, friends: FRIENDS };
 
   function taskLibrary(road, kind) {
     var groups = BY_ROAD[road] || HOME;
@@ -134,7 +142,7 @@
 
   function roadWords(road) {
     return {
-      partners: ['Alex', 'Jordan'], family: ['Dana', 'Chris', 'Nana'], coparents: ['Mom', 'Dad'], roommates: ['Ana', 'Ben', 'Cal'],
+      partners: ['Alex', 'Jordan'], apart: ['Diego', 'Lena'], family: ['Dana', 'Chris', 'Nana'], coparents: ['Mom', 'Dad'], roommates: ['Ana', 'Ben', 'Cal'],
       coworkers: ['Sam', 'Priya', 'Lee'], caregivers: ['Maya', 'Leo', 'Priya'], friends: ['You', 'Kim'], program: ['Alex', 'Jordan'], self: ['You']
     }[road] || ['Alex', 'Jordan'];
   }
@@ -148,6 +156,7 @@
     friends: [['Mon', 'Suggest a date for dinner', 0, '10', 'Noticed and handled'], ['Tue', 'Book the table', 0, '10', 'Noticed and handled'], ['Thu', 'Drive people home', 1, '30', 'Asked for']]
   };
   var EX03 = {
+    apart: [['Arrange our call', 'Weekly', 0, 1], ['Good-morning / good-night text', 'Daily', 1, 0], ['Plan or book a visit', 'Monthly', 0, 1], ['Time-zone juggling', 'Weekly', 1, 0], ['Shared bills', 'Monthly', 0, 0]],
     partners: [['Groceries', 'Weekly', 0, 1], ['Cooking', 'Daily', 1, 1], ['Bills', 'Monthly', 0, 0], ['School forms', 'As needed', 1, 0], ['Family calendar', 'Ongoing', 0, 1]],
     family: [['Meals', 'Daily', 2, 0], ['Rides and school runs', 'Daily', 1, 1], ['Birthday planning', 'As needed', 0, 2], ['Laundry', 'Weekly', 1, 0]],
     coparents: [['School forms', 'As needed', 0, 0], ['Dentist visits', 'As needed', 1, 1], ['Pack the bag for handoff', 'Weekly', 0, 1], ['Activity fees', 'As needed', 1, 0]],

@@ -256,6 +256,28 @@
       ask: 'What brings you here?',
       main: { label: 'Things feel unfair or lopsided', note: 'Your road starts with the work itself: who does what, and who owns each job.' },
       variants: {
+        // a couple who live apart: calls, visits and time zones instead of one shared home
+        apart: {
+          label: 'We live apart (long distance)', note: 'Your road starts with the daily check-in on a call, and a list of who starts which calls and who plans the visits. The sheets are worded for two homes.',
+          blurb: 'Two people sharing a life from two places. Calls, visits and time zones are the work here.',
+          sheetRoad: 'apart',
+          groups: [
+            { along: A('ch1', 'checkins'), title: 'Start here', note: 'Stay in step from two places.', stops: [
+              { wp: 'WP-13', why: '90 seconds a day, face to face or on a call: how full you were, one thanks, one small ask.', again: 'Another week' },
+              { wp: 'WP-03', why: 'Who starts which calls? One owner for each regular part of staying close: calls, the good-night text, planning visits, shared bills.' }
+            ] },
+            { along: A('ch2', 'signal', 'lemonade'), title: 'Then', note: 'For your own state, and for the talks that matter on a call.', stops: [
+              { wp: 'WP-02', why: 'How much each of you is already carrying, filled in about yourself. Say your number at the start of a hard call.', again: 'Another day' },
+              { wp: 'WP-09', why: 'Fact, feeling and ask, before you send it. Text loses tone, so this matters even more at a distance.', again: 'Another message' },
+              { wp: 'WP-11', why: 'A plan for settling when a call heats up, including how to pause and call back.' },
+              { wp: 'WP-01', why: 'A week of who did what: arranging calls, planning visits, the time-zone juggling. Each of you logs your own side.', again: 'Another week' }
+            ] },
+            { along: A('ch5', 'toward'), title: 'Once a month', note: 'Catch what keeps slipping between two places.', stops: [
+              { wp: 'WP-04', why: 'Sort repeat problems (missed calls, a visit nobody booked) into real gaps and one-offs.', again: 'Another month' }
+            ] }
+          ],
+          next: 'Agree who starts tomorrow’s call, and try the 90-second check-in on it.'
+        },
         flat: {
           label: 'Things are fine, just flat', note: 'Your road starts with two short reads, a game to play together and the 90-second daily check-in. The chore and load sheets are still here, marked optional.',
           blurb: 'Two people sharing a life. Nothing is wrong; it just feels flat. Start with small moments of closeness.',

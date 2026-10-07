@@ -167,6 +167,8 @@
     { id: 'physical', label: 'Physical state (hungry, sick, in pain)' },
     { id: 'time', label: 'Time pressure today specifically' }
   ];
+  // words in the note that say caring for someone is part of the load
+  var CARE_WORDS = /\b(car(e|es|ing|er|ers)\s+(for|of)|caregiv|carer|looking after|look after|nursing|hospital|dementia|hospice|respite)\b/i;
   function wp02Score(ctx) {
     var sum = 0, answered = 0;
     WP02_FACTORS.forEach(function (f) {
@@ -196,7 +198,9 @@
       var out = [{ label: 'Your load today', value: w[0] + ' (' + points + ' out of 20 points)', num: s }, { label: 'What to do', value: w[1] }];
       var top = WP02_FACTORS.filter(function (f) { return Number(ctx.value('factors.' + f.id)) >= 3; }).map(function (f) { return f.label.replace(/\s*\(.*\)$/, '').replace(/ specifically$/, '').toLowerCase(); });
       // In the high band, putting things off isn't always possible: caring for someone who is ill can't wait.
-      if (sb >= 0.60) out.push({ label: 'If it can\u2019t wait', value: 'If what you\u2019re carrying can\u2019t wait, like caring for someone who is ill, that\u2019s a sign to get more help, not to try harder: ask one person for one specific thing this week, and look into respite care.', note: 'For people caring for someone: spreadloveandacceptance.com/caregivers.html', link: ['Help for caregivers', '/caregivers.html'] });
+      // Only when caring is part of it (the tick, or the note says so), not for a work deadline.
+      var caring = ctx.value('caring') === true || CARE_WORDS.test(String(ctx.value('note') || ''));
+      if (sb >= 0.60 && caring) out.push({ label: 'If it can\u2019t wait', value: 'If what you\u2019re carrying can\u2019t wait, like caring for someone who is ill, that\u2019s a sign to get more help, not to try harder: ask one person for one specific thing this week, and look into respite care.', note: 'For people caring for someone: spreadloveandacceptance.com/caregivers.html', link: ['Help for caregivers', '/caregivers.html'] });
       if (top.length) out.push({ label: 'Filled most by', value: top.join(', ') + '.', note: 'Conditions, not character. Some of them are in your control this week; some are just weather.' });
       out.push({ label: 'Load score', value: fmt(s, 2) + ' out of 1.00', more: 'How is this scored?', num: s, note: 'The five answers added up, then divided by 20. Higher means a heavier load (and a lower battery). The words follow these cut-offs: under 0.15 very light; 0.15 to 0.29 light; 0.30 to 0.44 medium, lighter side; 0.45 to 0.59 medium, heavier side; 0.60 to 0.79 high; 0.80 and up very high. (CALC-01 and the reports group them as under 0.30 low, 0.30 to 0.59 medium, 0.60 and up high.)' });
       if (solo) return out;
@@ -246,6 +250,7 @@
         fields: [
           { id: 'roadPeople', label: 'How many people are on your road, counting you?', type: 'number', min: 1, max: 8, step: '1', prefill: true, help: 'So the shared average waits until everyone\'s score is in.' },
           { id: 'partnerScore', label: "Everyone else's scores, if they've shared them (0–1 each, separated by commas)", type: 'text', placeholder: 'e.g. 0.45, 0.30' },
+          { id: 'caring', label: 'Some of what I\'m carrying is caring for someone', type: 'check' },
           { id: 'note', label: 'Anything you want to name before talking', type: 'textarea' }
         ]
       },
@@ -298,7 +303,7 @@
     sections: [
       {
         type: 'note', pdf: false,
-        text: "This works on its own: list the jobs that keep your home running and give each one a single owner. If you still disagree about who does what, a week of Who did what (WP-01) helps settle it. The starter jobs below are examples. They don't count until you give one an owner or change it. Remove any that don't apply to your household, and add the ones that do, including the invisible ones: forms, gifts, renewals, planning."
+        text: "This works on its own: list the jobs that keep your home (or homes) running and give each one a single owner. If you still disagree about who does what, a week of Who did what (WP-01) helps settle it. The starter jobs below are examples. They don't count until you give one an owner or change it. Remove any that don't apply to your household, and add the ones that do, including the invisible ones: forms, gifts, renewals, planning."
       },
       {
         id: 'treaty', type: 'table', title: 'Who owns each job',
@@ -435,7 +440,7 @@
         id: 'transducer', type: 'fields', title: 'Before you speak or send: fact, feeling, ask',
         intro: 'Use it on one thing that actually stung.',
         fields: [
-          { id: 'raw', label: 'Raw reaction', type: 'textarea', help: 'Optional, and just for you. It is left out of the PDF unless you check the box.', privateOptIn: 'Include the raw reaction in the PDF' },
+          { id: 'raw', label: 'Raw reaction', type: 'textarea', help: 'Optional, and just for you. It is left out of the PDF and of any file you save to share (a draft, Save my progress) unless you tick the box.', privateOptIn: 'Include my raw reaction in the PDF and in saved files' },
           { id: 'fact', label: "What's the fact underneath this? (One sentence, no adjectives.)", type: 'textarea', help: 'For example: "The bins went out late on Tuesday." One event, no "always" or "you never".' },
           { id: 'feeling', label: "What's the feeling underneath this? (Frustrated, tired, unseen, rushed…)", type: 'textarea', chips: FEELINGS, chipsLabel: 'Tap a word to add it', help: 'For example: "I felt rushed and a bit alone with it." A feeling about you, not a verdict about them.' },
           { id: 'ask', label: "What's the actual ask? (What do you want to happen next, specifically?)", type: 'textarea', help: 'For example: "Could we set a reminder for Monday nights?" Something the other person can say yes to.' }
@@ -620,7 +625,7 @@
     sections: [
       {
         id: 'daily', type: 'table', title: 'Each day',
-        intro: 'Each person fills in only their own rows: yours are the ones with your name under Person. Load: "Today I was at about low / medium / high capacity." Appreciation: one specific thing you appreciated about the other person today (or someone at home, if there are more of you). The other two columns are optional. Anything that needs a real discussion waits for the weekly catch-up. If you can, do the evening one face to face, and kindly.',
+        intro: 'Each person fills in only their own rows: yours are the ones with your name under Person. Load: "Today I was at about low / medium / high capacity." Appreciation: one specific thing you appreciated about the other person today (or someone at home, if there are more of you). The other two columns are optional. Anything that needs a real discussion waits for the weekly catch-up. If you can, do the evening one face to face or on a call, and kindly.',
         addLabel: 'Add a row',
         personDays: DAYS,
         columns: [
@@ -703,6 +708,21 @@
       sign: "Agreeing means everyone sharing the care has read this version and knows who owns what. It doesn't mean the load feels even, only that ownership is clear."
     }
   };
+  // Partners who live apart (the Workpaper Suite's "We live apart" on the Partners road): the calls,
+  // visits and time zones are the jobs that need an owner.
+  RACI_ROADS.apart = {
+    title: 'Who starts which calls, and who owns the rest',
+    purpose: 'A living agreement for a couple who live apart: every regular part of staying close gets one owner, the person who starts it and sees it through. Who starts which calls? Who plans the next visit? That way nobody has to wonder whose turn it is. A helper is optional.',
+    note: 'Fill it in together, face to face or on a call. Start with who starts which calls, then visits, then anything you still share (bills, plans, family dates). Remove any rows that don\'t fit, and add the ones that do.',
+    rows: [
+      { task: 'Who starts which calls', freq: 'Weekly' }, { task: 'Reschedule a call when plans change', freq: 'As needed' },
+      { task: 'Good-morning / good-night text', freq: 'Daily' }, { task: 'Time-zone juggling: pick call times', freq: 'Weekly' },
+      { task: 'Plan or book a visit', freq: 'Monthly' }, { task: 'Travel costs: track who paid', freq: 'Monthly' },
+      { task: 'Remember each other\'s big days', freq: 'Ongoing' }
+    ],
+    amend: 'When life changes (a new job, a move, a new time zone), rework the agreement in writing, instead of letting the calling and planning drift to whoever started doing more. Either of you can ask for a review on a call, or at What keeps coming back? (WP-04), the monthly look-back.',
+    sign: 'Agreeing means you have both read this version and know who owns what. It doesn\'t mean the distance feels even, only that ownership is clear.'
+  };
   var variants = {};
   function variant(key, road) {
     key = String(key || '').toLowerCase();
@@ -721,6 +741,7 @@
       if (s.id === 'amendments') c.intro = v.amend;
       if (s.id === 'treaty') {
         c.defaultRows = v.rows;
+        if (v.title) c.title = v.title;
         c.columns = s.columns.map(function (col) {
           if (col.id === 'freq' && v.freq) { var f = {}; Object.keys(col).forEach(function (k) { f[k] = col[k]; }); f.options = v.freq; return f; }
           return col;
@@ -771,7 +792,7 @@
       sections: {
         note: { text: 'Answer about yourself, based on the last 24 to 48 hours.' },
         reading: { compute: wp02Reading(true) },
-        extra: { fields: [{ id: 'note', label: 'Anything else on your mind right now', type: 'textarea' }] },
+        extra: { fields: [{ id: 'caring', label: 'Some of what I\'m carrying is caring for someone', type: 'check' }, { id: 'note', label: 'Anything else on your mind right now', type: 'textarea' }] },
         notePdf: { text: 'A high score is a way to press pause, not a way out. It means "I\'ll come back to this tomorrow," not "this doesn\'t need to happen."' }
       }
     },

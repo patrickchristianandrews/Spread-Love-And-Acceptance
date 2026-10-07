@@ -233,5 +233,19 @@ ok(!lay.bubbles.some(b => /Delivered|iMessage|9:4|Today|82%/.test(b.text)), 'no 
 const noHead = O.layout([{ width: 1000, height: 2000, lines: [L('hey are you home?', 40, 400, 500, 440), L('Thanks Jamie, on my way', 500, 500, 960, 540)] }]);
 ok(noHead.name === 'Jamie', 'with no header, a greeting in my message names them (got ' + noHead.name + ')');
 
+// ---------- long-distance re-test: the person who raised it, a fix that fits the speaker, always/never ----------
+{
+  const r = readOf(lena.split('\n').slice(0, 8).join('\n'), 'Lena');
+  const me = r.owns.find(o => o.who === 'Lena');
+  ok(me && me.asked === 'Are we still on for a call tonight?', 'Lena’s part leads with what she asked for (got ' + (me && me.asked) + ')');
+  ok(me && me.kind === 'dismiss' && /quiet hurt/.test(me.label), 'Lena’s “whatever” reads as quiet hurt, not only dismissing (got ' + (me && me.label) + ')');
+  ok(me && !/brushed it off/.test(me.script) && /What I’d like is/.test(me.script), 'Lena’s own-your-part says what she wants: ' + (me && me.script));
+  ok(!r.owns.find(o => o.who === 'Diego').asked, 'only the person who asked gets an “asked for” label');
+  const m = r.turns[6].marks.find(x => x.kind === 'dismiss');
+  ok(m && m.resigned && R.KINDS.dismiss.resigned && !/I can tell this matters to you/.test(R.KINDS.dismiss.resigned.instead), 'a resigned “whatever” gets a fix that fits the speaker');
+  ok(!R.findMarks('Calm down.').some(x => x.resigned), '“Calm down” is not resigned hurt');
+  ok(/need underneath may be fair/i.test(R.KINDS.absolute.need) && /one example and one ask/.test(R.KINDS.absolute.need), 'always/never notes the need may be fair');
+}
+
 console.log(`${pass} passed, ${fail} failed`);
 if (fail) { errs.forEach(e => console.log('  - ' + e)); process.exit(1); }
