@@ -53,6 +53,7 @@
   ];
   var S = {}; function sel(g) { return S[g] || (S[g] = []); }
   function on(g, id) { return sel(g).indexOf(id) >= 0; }
+  function escA(s) { return String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/'/g, '&#39;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
   function esc(s) { var d = document.createElement('div'); d.textContent = s == null ? '' : String(s); return d.innerHTML; }
   function label(groups, g, id) { var G = groups.filter(function (x) { return x.id === g; })[0]; var o = G && G.o.filter(function (x) { return x[0] === id; })[0]; return o; }
   function joinList(a) { return a.length <= 1 ? a.join('') : a.slice(0, -1).join(', ') + (a.length > 2 ? ',' : '') + ' and ' + a[a.length - 1]; }
@@ -112,12 +113,19 @@
       (theirs ? ' I’m wondering whether, for you, ' + theirsPhrase(theirs[0]) + '.' : '') +
       ' Could we compare notes? I’d like to understand how it looked to you.';
     h += '<h3>A sentence to bridge the gap</h3><p class="ps-bridge">' + esc(bridge) + '</p>' +
-      '<p class="ps-acts"><button type="button" class="ps-b" data-copy>Copy the sentence</button><a class="ps-b is-main" href="/signal-translator.html?text=' + encodeURIComponent(bridge) + '">Check how it may land in the Signal Translator →</a></p>';
+      '<p class="ps-acts"><button type="button" class="ps-b" data-copy>Copy the sentence</button><a class="ps-b is-main" href="/signal-translator.html" data-st-text="' + escA(bridge) + '">Check how it may land in the Signal Translator →</a></p>';
     var said = (root.querySelector('[data-said]') || {}).value;
-    if (said && said.trim()) h += '<p class="ps-acts"><a class="ps-b" href="/signal-translator.html?text=' + encodeURIComponent(said.trim()) + '">See how the words that were said may have been heard →</a></p>';
+    if (said && said.trim()) h += '<p class="ps-acts"><a class="ps-b" href="/signal-translator.html" data-st-text="' + escA(said.trim()) + '">See how the words that were said may have been heard →</a></p>';
     h += '<p class="ps-tag">Built on the seven angles in <a href="/book/chapter-3.html">Chapter III</a> and <a href="/five-pillars.html#tune-signals">Pillar IV, Tune how you send and receive</a>. For how different wiring changes what’s heard, see <a href="/wired-differently.html">Wired Differently</a>.</p>';
     out.innerHTML = h;
   }
+  // the words go to the Signal Translator through this tab's sessionStorage, never in the address,
+  // so they can't end up in history, server logs, caches or analytics
+  document.addEventListener('click', function (e) {
+    var a = e.target.closest && e.target.closest('a[data-st-text]');
+    if (!a) return;
+    try { sessionStorage.setItem('tol-st-text', a.getAttribute('data-st-text')); } catch (x) {}
+  });
   function theirsPhrase(id) {
     return { calm: 'you were simply calm and meant it plainly', revved: 'you were already wound up when I asked', empty: 'you were running on empty', unsure: 'something was going on that I didn’t know about',
       day: 'it had already been a long day', sleep: 'you were short on sleep', rushed: 'you were rushed', money: 'money was on your mind', caring: 'you were stretched from caring for someone',

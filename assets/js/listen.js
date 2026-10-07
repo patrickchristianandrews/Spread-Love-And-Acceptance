@@ -77,7 +77,10 @@
   function pickVoice() {
     var vs = synth ? synth.getVoices() : [];
     var lang = (document.documentElement.lang || 'en-US').toLowerCase();
+    // the page's own language first (the Spanish page is read in Spanish), then English
+    var base = lang.split('-')[0];
     voice = vs.filter(function (v) { return v.lang && v.lang.toLowerCase() === lang && v.localService; })[0] ||
+      (base !== 'en' ? vs.filter(function (v) { return v.lang && v.lang.toLowerCase().indexOf(base) === 0; })[0] : null) ||
       vs.filter(function (v) { return v.lang && v.lang.toLowerCase().indexOf('en') === 0 && v.default; })[0] ||
       vs.filter(function (v) { return v.lang && v.lang.toLowerCase().indexOf('en-us') === 0; })[0] ||
       vs.filter(function (v) { return v.lang && v.lang.toLowerCase().indexOf('en') === 0; })[0] || null;

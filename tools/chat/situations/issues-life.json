@@ -427,7 +427,7 @@
       "label": "kids fighting with each other",
       "defaultWho": "kid",
       "match": [["(my |the |our )?(kids|children|boys|girls|twins|son and daughter|daughter and son|siblings) (always |keep |wont stop |constantly |wont quit )?(fight|fighting|argue|arguing|bicker|bickering|squabble|squabbling|hit each other|scream at each other|are at each other)|(fight|fights|fighting|bickering) between (my|the|our) (kids|children|boys|girls)|(brother|sister) (keeps |always )?(hits?|teases?|picks? on) (his|her|their) (brother|sister)|kids sibling rivalry", 7], ["each other|fight*|bicker*|squabbl*", 1]],
-      "reflect": "Living with kids who are at each other’s throats is exhausting, and wanting more peace at home is completely fair.",
+      "reflect": "Living with kids who fight all the time is exhausting, and wanting more peace at home is completely fair.",
       "going": "This is Pillar II, Fix the setup, not the person. Most fights between kids are about the same few things: turns, space, fairness and the grown-ups’ attention. When the setup makes those clear (whose turn, whose space, what happens next), there is less to fight about, and the grown-up gets to be a coach instead of a judge.",
       "ownSteps": true,
       "steps": [

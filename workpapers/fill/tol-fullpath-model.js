@@ -143,10 +143,16 @@
   var ROAD_ORDER = ['self', 'partners', 'family', 'coparents', 'friends', 'roommates', 'coworkers', 'caregivers'];
 
   function road(id) { return ROADS[id] || null; }
-  function suitePath(id) {
+  // focus: the road's other way in, from the Suite ("flat" on Partners: fine, but flat). The report then
+  // follows that road's order, and the sheets it marks optional aren't asked for.
+  function suitePath(id, focus) {
     var P = global.TOL_SUITE_PATHS;
-    return P ? P.paths.filter(function (p) { return p.id === id; })[0] || null : null;
+    var p = P ? P.paths.filter(function (x) { return x.id === id; })[0] || null : null;
+    return p && focus && P.variant ? P.variant(p, focus) : p;
   }
+  // The workpapers this road's report reads, in its order; on a variant, the variant's order.
+  function focusOf(data) { var sp = data && data.focus ? suitePath(data.road, data.focus) : null; return sp && sp.variant ? sp : null; }
+  function optionalOf(sp) { var out = {}; if (sp) sp.groups.forEach(function (g) { g.stops.forEach(function (x) { if (x.optional) out[x.wp] = true; }); }); return out; }
   function clampPeople(roadId, n) {
     if (road(roadId) && road(roadId).solo) return 1;
     n = parseInt(n, 10) || MIN_PEOPLE;
@@ -762,6 +768,7 @@
     // what the Suite has no page for (CALC-01 inputs, self-notes, the Ready page) comes from an earlier package, if there is one
     if (keep && keep.road === roadId && keep.values) Object.keys(keep.values).forEach(function (k) { if (/^tol\.v1\.(calc|self|ready)\.|^tol\.v1\.who\.(started|context|others)$/.test(k)) data.values[k] = keep.values[k]; });
     Object.keys(V).forEach(function (k) { data.values[NS + k] = V[k]; });
+    if (typeof snap.variant === 'string') data.focus = snap.variant;
     var r = fromJSON(data);
     if (r) r.fromSuite = got.filter(function (x, k, a) { return a.indexOf(x) === k; });
     return r;
@@ -773,7 +780,10 @@
     var found = {};
     Object.keys(obj.values).forEach(function (k) { var v = obj.values[k]; if (typeof v === 'string' || typeof v === 'boolean' || typeof v === 'number') found[k] = typeof v === 'number' ? String(v) : v; });
     found[NS + 'meta.road'] = obj.road; found[NS + 'meta.people'] = String(obj.people); found[NS + 'meta.version'] = obj.version || '';
-    return fromFields(found);
+    var r = fromFields(found);
+    // the Suite's "what brings you here" choice (a road variant), when there is one
+    if (r && typeof obj.focus === 'string' && /^[a-z]{1,20}$/.test(obj.focus) && r.data.road === obj.road) r.data.focus = obj.focus;
+    return r;
   }
 
   // What was read, page by page, and what is missing or couldn't be matched.
@@ -892,6 +902,16 @@
   // Every number the report uses, with where it came from. Blank means null, never a guess.
   function compute(data) {
     var reg = regOf(data), R = ROADS[data.road], P = people(data), n = data.people;
+    var fsp = focusOf(data);
+    if (fsp) {
+      // the same road and pages, read in the variant's order, with its optional sheets known
+      var order = [], R2 = {};
+      fsp.groups.forEach(function (g) { g.stops.forEach(function (x) { if (R.wps.indexOf(x.wp) >= 0 && order.indexOf(x.wp) < 0) order.push(x.wp); }); });
+      R.wps.forEach(function (w) { if (order.indexOf(w) < 0) order.push(w); });
+      Object.keys(R).forEach(function (k) { R2[k] = R[k]; });
+      R2.wps = order; R2.focus = fsp.variant; R2.optional = optionalOf(fsp);
+      R = R2;
+    }
     var on = {}; R.wps.forEach(function (c) { on[c] = true; });
     var out = { road: data.road, R: R, n: n, P: P, reg: reg, on: on };
 
@@ -1133,7 +1153,7 @@
   function fill(t, v) { return String(t).replace(/\{(\w+)\}/g, function (m, k) { return v[k] != null ? v[k] : m; }); }
 
   function report(data) {
-    var c = compute(data), R = c.R, v = vocab(c), P = c.P, sp = suitePath(data.road), RP = sp && sp.report;
+    var c = compute(data), R = c.R, v = vocab(c), P = c.P, sp = suitePath(data.road, data.focus), RP = sp && sp.report;
     var model = { road: data.road, roadLabel: R.label, n: c.n, date: new Date(), names: P.list.map(function (p) { return p.label; }), calc: c.calc, battery: c.battery };
     model.forWho = R.solo ? (P.list[0].name || 'You') : list(P.list.map(function (p) { return p.label; }));
     model.title = R.solo ? 'Your full path report' : 'Your full path report: ' + R.label;
@@ -1149,7 +1169,7 @@
     if (R.calc) {
       tiles.push(c.calc.sol != null
         ? { k: 'Is the setup working?', v: c.calc.solBand.label, band: 'CALC-01, from balance, ownership and how much everyone is carrying.', tone: c.calc.solBand.key, note: 'Setup score ' + fmt(c.calc.sol) + ' of 1, higher = working better (0.70+ working well, 0.40 to 0.69 needs a look, under 0.40 needs a rethink, together).' }
-        : { k: 'Is the setup working?', v: 'Not worked out yet', band: 'Still needed: ' + c.calc.missing.join('; '), tone: 'none' });
+        : { k: 'Is the setup working?', v: 'Not worked out yet', band: R.focus && R.optional && R.optional['WP-01'] ? 'This read is built on the load sheets (WP-01 and WP-03), which are optional on your road. Fill them in only if the load feels uneven.' : 'Still needed: ' + c.calc.missing.join('; '), tone: 'none' });
       if (c.calc.sol != null) tiles.push({ k: 'With repairs counted', v: c.calc.apexBand.label, band: c.calc.apexRebalanced ? 'No friction moments were counted, so there was nothing to repair.' : 'Adds how often friction was repaired.', tone: c.calc.apexBand.key, note: 'Apex ' + fmt(c.calc.apex) + ' of 1' + (c.calc.apexRebalanced ? ', from three inputs.' : ', with retuning ' + fmt(c.calc.rf) + '.') });
       tiles.push({ k: 'How the time is shared', v: c.calc.wb != null ? cap(C1().shareWords(c.calc.wb)) : 'Not filled in', band: c.calc.wb == null ? 'WP-01 needs minutes and names' : c.calc.wbSrc === 'yours' ? 'Your own number' : 'From WP-01', tone: tone3(c.calc.wb), note: c.calc.wb != null ? 'Balance ' + fmt(c.calc.wb) + ' of 1, where 1 = an even split (0.70+ fairly even, 0.40 to 0.69 leaning, under 0.40 mostly on one person).' : '' });
       tiles.push({ k: 'Does each job have a name?', v: c.calc.oc == null ? 'Not filled in' : c.calc.oc >= 0.7 ? 'Most jobs have one' : c.calc.oc >= 0.4 ? 'Some jobs have one' : 'Few jobs have one', band: c.calc.oc == null ? 'WP-03 needs owners' : c.calc.ocSrc === 'yours' ? 'Your own number' : c.wp03.owned + ' of ' + c.wp03.tasks + ' jobs with an owner', tone: tone3(c.calc.oc), note: c.calc.oc != null ? 'Ownership clarity ' + fmt(c.calc.oc) + ' of 1.' : '' });
@@ -1163,7 +1183,8 @@
     model.tiles = tiles;
 
     model.findings = findings(c, v);
-    model.sections = R.wps.map(function (code) { return wpSection(code, c, v, RP); });
+    model.sections = R.wps.map(function (code) { var s = wpSection(code, c, v, RP); if (R.optional && R.optional[code]) s.optional = true; return s; });
+    model.focus = R.focus || null;
     model.calcSection = calcSection(c, v);
     model.roadPart = roadPart(c, v, RP, sp);
     model.pillars = pillarView(c, v);
@@ -1231,7 +1252,7 @@
       else if (calc.sol >= 0.4) add(10, 'The setup reads ' + s + ' on CALC-01: it needs a look, because something is slipping. The biggest single gap is ' + calc.worst.fix + ', so start there, not with whatever happened most recently.');
       else add(10, 'The setup reads ' + s + ' on CALC-01: it needs a rethink, together, because it is asking too much as it is. That is a statement about the setup, not about anyone. The biggest gap is ' + calc.worst.fix + '.');
       if (calc.rf != null && Math.abs(calc.gap) >= 0.08) add(7, calc.gap > 0 ? 'The setup score runs ' + fmt(calc.gap) + ' above the overall score: the setup holds, but repair after friction isn’t keeping up. WP-09 is the place to work, not the owners list.' : 'Apex runs ' + fmt(-calc.gap) + ' above the setup score: you repair well, but the setup keeps making friction to repair. The owners list is the place to work.');
-    } else if (R.calc && c.anything) {
+    } else if (R.calc && c.anything && !R.focus) {
       add(3, 'CALC-01 isn’t worked out yet. Still needed: ' + calc.missing.join('; ') + '. Nothing is guessed in the meantime.');
     }
     var high = c.battery.filter(function (b) { return b.score != null && b.score >= 0.6; });
@@ -1860,6 +1881,8 @@
         repeatFriction: repeats(fr.map(function (r) { return r.friction; })), repeatAsk: repeats(d13.filter(function (r) { return r.ask; }).map(function (r) { return r.ask; })),
         weekOf: parseISO(V(data, 'wp13.weekOf')) };
       F.w13.bothDays = F.w13.frictionDays.filter(function (d) { return d.high; });
+      // Only a day or two of check-ins: too early for a rate or a pattern, so it is read as a start
+      F.w13.early = F.w13.entries > 0 && F.w13.daysWith <= 2;
     }
 
     // Self-notes: whose they are, the wiring, the weather
@@ -2101,7 +2124,7 @@
       why: 'When ownership is clear and a job still slips, the usual cause is capacity or timing, not clarity. Another reminder won’t help; a smaller job or a better time might.',
       rec: function (p, F, v) { return { h: 'month', title: 'Ask about capacity, not clarity', first: 'Ask the owner of ' + p[0].task + ' what gets in the way, and what would make it fit.', script: '“You own this and it still slips. What gets in the way, honestly?”', link: linkOf('WP-04'), working: 'It isn’t ticked next month.' }; } },
     { id: 'clear-but-skips', pillar: 'V', src: ['WP-03', 'WP-13'], pri: 6, title: 'Ownership is clear, check-ins keep skipping',
-      when: function (F) { return F.c.wp03 && F.c.wp03.oc != null && F.c.wp03.oc >= 0.8 && F.w13 && F.w13.rate < 0.5 ? { rate: F.w13.rate } : null; },
+      when: function (F) { return F.c.wp03 && F.c.wp03.oc != null && F.c.wp03.oc >= 0.8 && F.w13 && !F.w13.early && F.w13.rate < 0.5 ? { rate: F.w13.rate } : null; },
       find: function (d) { return 'Ownership is clear on paper, but only ' + pc(d.rate) + ' of the possible daily check-ins happened.'; },
       why: 'Clear owners set the setup up; the check-in keeps it steady. Without it, small slips surface late, at the monthly look-back or in an argument.',
       rec: function (d, F, v) { return { h: 'week', title: 'Make the check-in smaller', first: 'Cut the check-in to one line each (load and one thanks), at a time you already share.', script: '“Could we do the 90-second version, just load and one thanks, right after ' + (F.road === 'coworkers' ? 'the morning sync' : 'dinner') + '?”', link: linkOf('WP-13'), working: 'Five or more check-ins next week.' }; } },
@@ -2289,11 +2312,15 @@
       find: function (r) { return 'The ask ' + q(short(r.text, 50)) + ' came up ' + r.times + ' times.'; },
       why: 'An ask that repeats is a request that hasn’t found an owner yet. Once it has one, nobody has to keep asking.',
       rec: function (r, F, v) { return { h: 'week', title: 'Turn the repeated ask into a job', first: 'Give the thing behind the ask a named owner on WP-03.', script: '“You’ve asked for this a few times. Let’s make it someone’s job.”', link: linkOf('WP-03'), working: 'The ask stops appearing in the check-ins.' }; } },
-    { id: 'checkins-skip', pillar: 'V', src: ['WP-13'], pri: 5, title: 'Check-ins are patchy',
-      when: function (F) { var w = F.w13; if (!w) return null; return w.rate < 0.5 || (F.n >= 2 && w.skipped.length && w.skipped.length < F.n) ? w : null; },
-      find: function (w, F) { return w.entries + ' of ' + w.possible + ' possible check-ins ' + (w.entries === 1 ? 'was' : 'were') + ' filled in (' + pc(w.rate) + ')' + (F.n >= 2 && w.skipped.length ? '; none yet from ' + list(lbl(w.skipped)) : '') + '.'; },
-      why: 'A check-in only works when it is short enough to keep. A patchy week usually means the check-in is too long or at the wrong time, not that anyone doesn’t care.',
-      rec: function (w, F, v) { return { h: 'week', title: 'A check-in short enough to keep', first: 'Attach the check-in to something that already happens every day, and cut it to 90 seconds.', script: '', link: linkOf('checkins'), working: 'Five or more days of check-ins next week, from everyone.' }; } },
+    // With only a day or two written, this reads as a start, not a rate: no percentage, no "patchy".
+    { id: 'checkins-skip', pillar: 'V', src: ['WP-13'], pri: 5, title: function (w) { return w.early ? 'The check-ins have started' : 'Check-ins are patchy'; },
+      when: function (F) { var w = F.w13; if (!w) return null; return w.early || w.rate < 0.5 || (F.n >= 2 && w.skipped.length && w.skipped.length < F.n) ? w : null; },
+      find: function (w, F) {
+        if (w.early) return 'You’ve started: ' + plural(w.entries, 'check-in') + ' so far. A few more will show a pattern.';
+        return w.entries + ' of ' + w.possible + ' possible check-ins ' + (w.entries === 1 ? 'was' : 'were') + ' filled in (' + pc(w.rate) + ')' + (F.n >= 2 && w.skipped.length ? '; none yet from ' + list(lbl(w.skipped)) : '') + '.';
+      },
+      why: function (w) { return w.early ? 'A day or two is a good start. A check-in only works when it is short enough to keep, so keep it small while it becomes a habit.' : 'A check-in only works when it is short enough to keep. A patchy week usually means the check-in is too long or at the wrong time, not that anyone doesn’t care.'; },
+      rec: function (w, F, v) { return { h: 'week', title: w.early ? 'Keep the check-in going' : 'A check-in short enough to keep', first: 'Attach the check-in to something that already happens every day, like dinner, and keep it to 90 seconds.', script: '', link: linkOf('checkins'), working: 'Five or more days of check-ins next week, from everyone.' }; } },
     { id: 'checkins-steady', pillar: 'V', src: ['WP-13'], pri: 3, strength: true, title: 'Check-ins are steady',
       when: function (F) { return F.w13 && F.w13.rate >= 0.8 ? F.w13 : null; },
       find: function (w) { return w.entries + ' of ' + w.possible + ' possible check-ins ' + (w.entries === 1 ? 'was' : 'were') + ' filled in (' + pc(w.rate) + ').'; },
@@ -2673,13 +2700,13 @@
       var w13 = F.w13;
       s.tables.push(tbl('Check-ins by person', ['Person', 'Check-ins', 'High / med / low', 'Thanks', 'Frictions'], F.pp.map(function (p) { return [p.label, p.checkins + ' of 7', p.loads.High + ' / ' + p.loads.Medium + ' / ' + p.loads.Low, String(p.thanks), String(p.friction)]; }), [1.4, 1, 1.3, 0.8, 0.9]));
       s.bars.push(bars('Check-ins by day', w13.byDay.map(function (d) { return { label: d.day, value: d.n, max: n, text: d.n + ' of ' + n + (d.high ? ', ' + d.high + ' high' : '') + (d.friction ? ', ' + plural(d.friction, 'friction') : '') }; })));
-      s.more.push('Consistency: ' + w13.entries + ' of ' + w13.possible + ' possible check-ins (' + pc(w13.rate) + '), on ' + w13.daysWith + ' of 7 days.');
+      s.more.push(w13.early ? 'You’ve started: ' + plural(w13.entries, 'check-in') + ' so far, on ' + plural(w13.daysWith, 'day') + '. A few more will show a pattern.' : 'Consistency: ' + w13.entries + ' of ' + w13.possible + ' possible check-ins (' + pc(w13.rate) + '), on ' + w13.daysWith + ' of 7 days.');
       if (n >= 2 && w13.skipped.length) s.more.push('No check-ins yet from ' + list(lbl(w13.skipped)) + '.');
       if (w13.frictionRows.length) s.more.push(plural(w13.frictionRows.length, 'friction note') + ', ' + w13.frictionOnHigh + ' of them on a high-load day.');
       if (w13.repeatFriction.length) s.more.push('A friction that repeats: ' + q(short(w13.repeatFriction[0].text, 50)) + ' (' + w13.repeatFriction[0].times + ' times).');
       if (w13.repeatAsk.length) s.more.push('An ask that repeats: ' + q(short(w13.repeatAsk[0].text, 50)) + ' (' + w13.repeatAsk[0].times + ' times).');
       if (w13.empty.length) s.more.push(plural(w13.empty.length, 'check-in') + ' had a load but no notes.');
-      s.suggests.push(w13.rate >= 0.6 ? 'The habit is holding. Skim the week for anything that came up more than twice and move it on.' : 'The check-in may be too long or at the wrong time. Shorter and attached to an existing routine usually fixes it.');
+      s.suggests.push(w13.early ? 'Keep going for a few more days, at the same time each day. Then the pattern will show.' : w13.rate >= 0.6 ? 'The habit is holding. Skim the week for anything that came up more than twice and move it on.' : 'The check-in may be too long or at the wrong time. Shorter and attached to an existing routine usually fixes it.');
     }
     return s;
   }
@@ -2736,7 +2763,8 @@
     var fixes = checks.filter(function (x) { return x.level === 'check'; });
     // Checking a number is housekeeping: it goes after every real finding, never above one.
     var tidyRec = fixes.length ? ({ h: 'now', pri: 0.5, title: 'Check a few numbers', why: plural(fixes.length, 'entry', 'entries') + ' may be typos (see "Worth a second look"), and they touch the numbers below.', first: fixes[0].fix, script: '', link: linkOf('READY'), working: 'The next report has nothing marked "worth fixing".', from: 'checks' }) : null;
-    sections.filter(function (s) { return s.status === 'blank'; }).forEach(function (s, i) {
+    // a sheet the road marks optional isn't asked for when it is blank
+    sections.filter(function (s) { return s.status === 'blank' && !s.optional; }).forEach(function (s, i) {
       recs.push({ h: i < 1 ? 'week' : 'month', pri: 2 - i * 0.1, title: 'Fill in ' + s.code + ', ' + s.name, why: s.code + ' was left blank, so the report can’t say anything about it yet.', first: s.next, script: '', link: linkOf(s.code), working: 'The next report has a section for it.', from: 'blank:' + s.code,
         plan: { title: s.name, wp: s.code, do: s.next, pillar: '' } });
     });
@@ -2758,6 +2786,9 @@
   function plan2(recs, c, v, sp) {
     var R = c.R, weeks = [], seen = {};
     function push(w) { var k = w.title.toLowerCase(); if (seen[k]) return; seen[k] = 1; weeks.push(w); }
+    // A road variant that starts with reading (Partners, fine but flat) keeps that as week 1
+    var w0 = sp && sp.variant && sp.weeks && sp.weeks[0];
+    if (w0 && !(w0[1] && w0[1].length)) push({ title: w0[0], wp: (w0[2] || []).map(function (l) { return l && l[0]; }).filter(Boolean).join(', ') || 'Read', do: w0[3], pillar: '' });
     recs.now.concat(recs.week, recs.month).forEach(function (r) {
       if (weeks.length >= 5) return;
       if (r.from === 'checks' || r.from === 'state-not-now') return;
@@ -3033,21 +3064,26 @@
 
   function confidence(F, checks) {
     var c = F.c, secs = [];
+    var opt = c.R.optional || {};
     c.R.wps.forEach(function (code) {
+      var ok0 = code === 'WP-01' ? !!(c.wp01 && c.wp01.filled) : code === 'WP-03' ? !!(c.wp03 && c.wp03.filled) : true;
+      if (opt[code] && !ok0) return; // optional on this road, and left blank: not counted against the picture
       var ok = code === 'WP-02' ? c.wp02.filled : code === 'WP-01' ? !!(c.wp01 && c.wp01.filled) : code === 'WP-03' ? !!(c.wp03 && c.wp03.filled) : code === 'WP-04' ? !!(c.wp04 && c.wp04.filled) : code === 'WP-09' ? !!(c.wp09 && c.wp09.filled) : code === 'WP-11' ? !!(c.wp11 && c.wp11.filled) : !!(c.wp13 && c.wp13.filled);
       secs.push([code + ' ' + NAMES[code], ok]);
     });
-    secs.push(['CALC-01 inputs', !!(c.calc.state || c.calc.friction != null || c.calc.retunes != null || has(F.data, 'calc.wb') || has(F.data, 'calc.oc') || has(F.data, 'calc.as'))]);
+    var calcOk = !!(c.calc.state || c.calc.friction != null || c.calc.retunes != null || has(F.data, 'calc.wb') || has(F.data, 'calc.oc') || has(F.data, 'calc.as'));
+    // CALC-01 is built on the load sheets: on a road where those are optional, a blank one isn't counted either
+    if (calcOk || !(opt['WP-01'] && opt['WP-03'])) secs.push(['CALC-01 inputs', calcOk]);
     secs.push(['the Wiring Card', !!c.notes.wiringLines]);
     secs.push(['the weather log', !!c.notes.weather.length]);
     secs.push(['the Ready page', !!(c.ready.going || c.ready.focus || c.ready.when || c.ready.fair)]);
     var filled = secs.filter(function (s) { return s[1]; }), blankS = secs.filter(function (s) { return !s[1]; }), share = filled.length / secs.length;
     var level = share >= 0.75 ? 'Fuller picture' : share >= 0.4 ? 'Partial picture' : 'Early picture';
-    var core = F.solo ? c.battery[0].score != null : c.calc.applies ? c.calc.sol != null : F.bat.scored.length > 0;
+    var core = F.solo ? c.battery[0].score != null : c.calc.applies && !c.R.focus ? c.calc.sol != null : F.bat.scored.length > 0 || !!(c.wp13 && c.wp13.filled);
     var fixes = checks.filter(function (x) { return x.level === 'check'; }).length;
     var text = 'Based on ' + filled.length + ' of ' + secs.length + ' sections; ' + (blankS.length ? list(blankS.map(function (s) { return s[0]; })) + (blankS.length === 1 ? ' was' : ' were') + ' blank.' : 'nothing was left blank.');
     var weight = level === 'Fuller picture' ? 'Enough is filled in to take the patterns seriously' : level === 'Partial picture' ? 'Treat it as a first sketch: the patterns are real, and a few more pages would make them firmer' : 'Treat it as a starting point: most pages are still blank, so read the findings as hints';
-    weight += core ? '.' : (F.solo ? ', and your load score isn’t in yet.' : c.calc.applies ? ', and the overall CALC-01 read isn’t worked out yet.' : '.');
+    weight += core ? '.' : (F.solo ? ', and your load score isn’t in yet.' : c.calc.applies && !c.R.focus ? ', and the overall CALC-01 read isn’t worked out yet.' : '.');
     if (fixes) weight += ' ' + plural(fixes, 'entry', 'entries') + ' may be typos (see "Worth a second look"), so treat the numbers they touch as rough.';
     return { level: level, text: text, weight: weight, filled: filled.length, of: secs.length, blank: blankS.map(function (s) { return s[0]; }), sections: secs };
   }
@@ -3059,24 +3095,42 @@
   function summaryOf(F, v, fired, conf, recs, model) {
     var c = F.c, R = F.R, k = c.calc, bits = [];
     var who = F.solo ? (F.pp[0].name || 'you') : list(F.pp.map(function (p) { return p.label; }));
-    bits.push('This report reads what ' + (F.solo ? (F.pp[0].name ? F.pp[0].name + ' entered' : 'you entered') : who + ' entered') + ' on the ' + R.label + ' road: ' + conf.filled + ' of ' + conf.of + ' sections.');
+    // In their own words first: what brought them here, when they wrote it
+    var ctx = trim(c.who && c.who.context);
+    if (ctx) { ctx = short(ctx.replace(/\s+/g, ' '), 220); bits.push('You said: ' + q(/[.!?\u2026]$/.test(ctx) ? ctx : ctx + '.')); }
+    bits.push('This report reads what ' + (F.solo ? (F.pp[0].name ? F.pp[0].name + ' entered' : 'you entered') : who + ' entered') + ' on the ' + R.label + ' road' + (R.focus === 'flat' ? ', for a relationship that is fine but feels flat' : '') + ': ' + conf.filled + ' of ' + conf.of + ' sections.');
+    // Not much written yet: say so gently, before any number
+    var early = conf.level === 'Early picture' || (F.w13 && F.w13.early && conf.filled <= 3);
+    if (early) bits.push('This is an early read. Only a little is filled in so far, so take it as a first look, not a pattern. It gets clearer with each page.');
     if (k.sol != null) bits.push('Overall, the setup reads ' + fmt(k.sol) + ' on CALC-01 (' + k.solBand.label.toLowerCase() + '), and the part losing the most points is ' + k.worst.fix.replace(/ \(.*\)$/, '') + '.');
-    else if (k.applies) bits.push('The overall CALC-01 read isn’t worked out yet, because ' + (k.missing.length === 1 ? 'one input is' : k.missing.length + ' inputs are') + ' still missing.');
+    else if (k.applies && !R.focus && !early) bits.push('The overall CALC-01 read isn’t worked out yet, because ' + (k.missing.length === 1 ? 'one input is' : k.missing.length + ' inputs are') + ' still missing.');
     if (F.solo && c.battery[0].score != null) bits.push('Your load reads ' + fmt(c.battery[0].score) + ', a ' + c.battery[0].band.label.toLowerCase() + '.');
     else if (!F.solo && F.bat.scored.length) bits.push(F.bat.high.length ? list(lbl(F.bat.high)) + (F.bat.high.length === 1 ? ' is' : ' are') + ' running at a high load, so timing matters this week.' : 'No one’s load score is in the high band, so conditions are workable.');
     var work = fired.filter(function (r) { return !r.strength && r.rec && r.id !== 'state-not-now'; });
     var good = fired.filter(function (r) { return r.strength; });
     if (k.sol != null && k.sol >= 0.7 && leanReasons(c).length) bits.push('The score holds, but ' + list(leanReasons(c)) + ', so read it together with that.');
-    if (work.length) bits.push('The clearest thing to work on: ' + lc(work[0].title) + '.');
+    // What is working comes first, then the one thing to work on
     var named = good.filter(function (r) { return r.id !== 'ready-going'; });
     if (named.length) bits.push('What’s working: ' + lc(named[0].title) + '.');
     else if (c.ready.going) bits.push('What’s working, in your own words: ' + q(short(c.ready.going, 100).replace(/[.!]$/, '')) + '.');
-    if (!work.length && !good.length) bits.push('There isn’t enough filled in yet to draw firm conclusions, and that is fine: the report grows with each page.');
+    else if (conf.filled) bits.push('What’s working: you started, and you are looking at it ' + (F.solo ? 'honestly.' : 'together.'));
+    if (work.length) bits.push(early ? 'A first thing to try: ' + lc(work[0].rec && work[0].rec.title || work[0].title) + '.' : 'The clearest thing to work on: ' + lc(work[0].title) + '.');
+    if (!work.length && !good.length && !early) bits.push('There isn’t enough filled in yet to draw firm conclusions, and that is fine: the report grows with each page.');
     bits.push('It is a picture of the setup, not a verdict on anyone.');
     var strengths = good.slice(0, 5).map(function (r) { return { title: r.title, text: r.finding }; });
     if (!strengths.length) strengths.push({ title: 'You started', text: conf.filled ? 'You filled in ' + plural(conf.filled, 'section') + '. Looking at it honestly is the first strength.' : 'You opened the package. Looking honestly is where it starts.' });
-    var top = work.slice(0, 3).map(function (r) { return { title: r.title, text: r.finding, step: r.rec.first }; });
-    recs.now.concat(recs.week, recs.month).forEach(function (r) { if (top.length < 3 && !top.some(function (t) { return t.title === r.title; })) top.push({ title: r.title, text: r.why, step: r.first }); });
+    // Top 3: one entry per finding. A rule and the recommendation it made are the same item, so they are
+    // matched by where they came from (the rule's id), and by their words, never listed twice.
+    var top = [], usedFrom = {}, usedText = {};
+    function addTop(from, title, text, step) {
+      var tk = String(title || '').toLowerCase(), xk = String(text || '').toLowerCase();
+      if (top.length >= 3 || (from && usedFrom[from]) || usedText['t:' + tk] || (xk && usedText['x:' + xk])) return;
+      if (from) usedFrom[from] = 1;
+      usedText['t:' + tk] = 1; if (xk) usedText['x:' + xk] = 1;
+      top.push({ title: title, text: text, step: step, from: from || '' });
+    }
+    work.forEach(function (r) { addTop(r.id, r.title, r.finding, r.rec.first); });
+    recs.now.concat(recs.week, recs.month).forEach(function (r) { addTop(r.from, r.title, r.why, r.first); });
     var guideBands = [];
     if (k.applies) guideBands.push('Setup score and overall score: 0.70 and up, working well; 0.40 to 0.69, needs a look; under 0.40, needs a rethink, together. Here higher means working better.');
     if (k.applies) guideBands.push('Workload balance and ownership clarity: 1.00 is an even split or every job has an owner; 0.70 and up reads well.');

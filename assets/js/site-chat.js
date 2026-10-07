@@ -1051,7 +1051,7 @@
   var CV_REDFLAG = /\b(is|are|isnt|was|could) (that|this|it|those|these|they|he|she|this behaviou?r|that behaviou?r) (be )?(a )?(red flags?|toxic|abus\w*|controlling|manipulat\w*|gaslight\w*|healthy|unhealthy|a warning sign|warning signs?|a bad sign)\b|^(red flags?|any red flags|what are (the |some )?red flags|signs of (abuse|control|coercive control|a toxic relationship)|should i be worried|is (this|that) normal in a relationship)\b/;
   var CV_NEXT = /^(ok |okay |so |and |alright |right |cool |great |got it |done |ok done |i did that )*(and )?(then what|what then|what after that|after that|and after that|what comes next|what comes after that|whats after that|what do i do after that|what should i do after that|then)\??$/;
   var CV_RESTART = /^(start over|start again|new topic|change of subject|different (topic|question|thing)|something else|never ?mind|forget (it|that)|lets talk about something else)$/;
-  var CV_PERSONAL = { lgbtq: 1, parentphone: 1, parentsfight: 1, teamowners: 1, grownkids: 1, phonetrust: 1, lonely: 1, leave: 1, atwork: 1, grief: 1, overgive: 1, burden: 1, parentsblame: 1, onmyown: 1, teens: 1, raisekids: 1, fightnow: 1, judged: 1, sensitive: 1, overload: 1, meltdown: 1, 'upset-right-now': 1 };
+  var CV_PERSONAL = { carehelp: 1, careadultkids: 1, careresent: 1, yellkids: 1, exharass: 1, exmessages: 1, exbadmouth: 1, lgbtq: 1, parentphone: 1, parentsfight: 1, teamowners: 1, grownkids: 1, phonetrust: 1, lonely: 1, leave: 1, atwork: 1, grief: 1, overgive: 1, burden: 1, parentsblame: 1, onmyown: 1, teens: 1, raisekids: 1, fightnow: 1, judged: 1, sensitive: 1, overload: 1, meltdown: 1, 'upset-right-now': 1 };
   var CV_YEAH = /^(yeah|yes|yep|yup|ya|ok|okay|sure|mhm|uh huh|go on|i guess|kind of|kinda|true)$/;
   // the caring answer we gave a turn or two ago (grief, giving too much…), if any
   function careCard(state) {
@@ -1133,6 +1133,14 @@
         var pd = state.pend; state.pend = Object.assign({}, pd, { turn: state.turn || 0 });
         return { blocks: [{ k: 'p', x: 'I’m still with you on “' + pd.f + '”. To give you real steps, I need one more thing: what usually sets it off, or how does it tend to end? A few words is plenty. Or tap the closest one.' }], chips: pd.chips || STARTERS.slice(0, 3), kind: 'clarify' };
       }
+    }
+    // after a caregiving answer, "my daughter won't help" and "I resent him" stay about caregiving
+    var cc3 = careCard(state);
+    if (cc3 && /^care/.test(cc3.id)) {
+      var to = /\b(daughter|son|kids|children|sister|brother|family)\b/.test(f) && /\b(won t|wont|doesn t|doesnt|don t|dont|never|help|visit|call)\b/.test(f) ? 'careadultkids'
+        : /\b(resent\w*|guilt\w*|ashamed|angry at him|angry at her)\b/.test(f) ? 'careresent' : /\b(respite|break|helpline|support|someone to call)\b/.test(f) ? 'carehelp' : '';
+      var tc = to && cardByIdF(to);
+      if (tc) { var rc = cardReply(state, tc, 'about'); rc.kind = 'care'; state.care = { id: to, turn: state.turn || 0, f: f }; return rc; }
     }
     // "what about my sister?" just after a caring answer (grief, giving too much…): the same answer, for them
     var mw = f.match(FU_WHO), C0 = state.care;
@@ -1567,6 +1575,9 @@
       // "different question: …", "by the way, …": a new topic, so nothing from the last one carries over
       var sw0 = norm(q).match(/^(anyway|anyways|by the way|btw|on another note|new question|different question|another question|other question|unrelated|separate question|changing (the )?subject|switching (topics?|gears))\b\s*(.{6,})$/);
       if (sw0) { state.last = null; state.care = null; q = sw0[sw0.length - 1]; }
+      var es = String(q).toLowerCase();
+      if (/[¿¡ñ]|\b(qu[eé]|c[oó]mo|mis|hijos?|esposo|esposa|ayuda|estoy|pelean|tengo|por qu[eé]|necesito|mi pareja|hola)\b/.test(es) && (es.match(/\b(que|qué|como|cómo|mis|mi|hijos|hijo|esposo|esposa|ayuda|estoy|pelean|tengo|necesito|pareja|hola|por|no|se|me|con|los|las|el|la|de|y)\b/g) || []).length >= 3 && !/\b(the|and|my|is|are|i)\b/.test(es))
+        return { blocks: [{ k: 'p', x: 'Hola. Lo siento: por ahora solo puedo responder en inglés. Hay una página corta en español con pasos para cuando los hijos pelean, cuando estás muy enojado, y si no estás seguro en casa. (Sorry, I can only answer in English for now. Here is a short page in Spanish.)' }, { k: 'links', x: [['En español', '/en-espanol.html']] }], chips: [], kind: 'lang' };
       var cvf = norm(q), cv = !DANGER.test(cvf) && !HIDE.test(cvf) && convoTurn(state, cvf);
       if (cv) return meant(cv, sp);
       // a question about one of the thirteen fields, or two of them, gets that field's (or pair's) own answer, not the overview

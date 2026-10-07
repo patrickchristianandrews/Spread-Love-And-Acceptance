@@ -7,7 +7,7 @@
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
-  gtag('config', 'G-NKC6CQ9S66');
+  gtag('config', 'G-NKC6CQ9S66', { page_location: location.origin + location.pathname }); // the address only: never a ?query or #part
 </script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -314,8 +314,8 @@
 
   <div id="ls-body" hidden>
     <div class="group-only">
-      <p class="ls-panel-note"><strong>Who's at the stand?</strong> Tap a name to change it.</p>
-      <div class="ls-people" id="people"></div>
+      <p class="ls-panel-note"><strong id="people-h">Who's at the stand?</strong> Tap a name to change it.</p>
+      <div class="ls-people" id="people" role="group" aria-labelledby="people-h"></div>
       <button class="add-row ls-people-add" id="add-person" type="button">+ Add a person</button>
     </div>
 

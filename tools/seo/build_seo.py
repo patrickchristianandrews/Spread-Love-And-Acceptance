@@ -305,6 +305,8 @@ SEARCH.update({
  'neurodivergent-relationships.html': ('Neurodivergent Relationships: ADHD and Autistic Couples', 'Practical tips for ADHD, autistic and AuDHD couples and families: communication differences, sensory overload at home, plans, chores and kind feedback.'),
  'communication-style-quiz.html': ('Communication Style Quiz: Find Your Wave Code (Free)', 'A free communication style quiz: find your four-letter Wave Code and which of 16 archetypes fits, from pace and detail to how you send and receive words.'),
  'grandparents.html': ('For Grandparents: Help Without Taking Over', 'Free, gentle help for grandparents: share childcare fairly, agree on house rules with your adult children, say no kindly, and stay close to your grandkids.'),
+ 'caregivers.html': ('Caring for Someone You Love: Help for Caregivers', 'Free, practical help for caregivers: when the person can’t share the load back, how to ask family for specific help, and where to find respite and support.'),
+ 'en-espanol.html': ('En español: ayuda para tu familia', 'Una página corta y gratuita en español: cuando los hijos pelean, cuando gritas, cuando estás muy enojado, y si no estás a salvo en casa.'),
  'work.html': ('At Work: Fair Workloads and Kind Messages for Teams', 'Free, plain tools for teams: one owner per job, messages that land, appreciation that fits, and a 45-minute team session. No sign-up, no cartoons.'),
  'grief.html': ('Grief and Later Life: Loss, Family and a New Chapter', 'Gentle, free help after a loss: grieving differently in one family, reconnecting with grown children, starting a new chapter, and where to get support.'),
 })
@@ -672,9 +674,11 @@ def process(path, report):
     body = s[s.find('</head>'):]
     has = lambda needle: needle in head
     og_type = 'article' if path != 'index.html' and re.search(ARTICLES, path) else 'website'
+    # a page in another language (en-espanol.html is lang="es") says so in its tags
+    m_lang = re.search(r'<html[^>]*\slang="([a-z]{2})', s); lang = m_lang.group(1) if m_lang else 'en'
     lines = ['<!-- seo:start -->',
              '<link rel="canonical" href="' + attr(url) + '">',
-             '<link rel="alternate" hreflang="en-us" href="' + attr(url) + '">',
+             '<link rel="alternate" hreflang="' + ('en-us' if lang == 'en' else lang) + '" href="' + attr(url) + '">',
              '<link rel="alternate" hreflang="x-default" href="' + attr(url) + '">',
              '<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">',
              '<meta name="keywords" content="' + attr(', '.join(kw)) + '">',
@@ -697,7 +701,7 @@ def process(path, report):
     if itype: lines.append('<meta property="og:image:type" content="' + itype + '">')
     if iw: lines += ['<meta property="og:image:width" content="%d">' % iw, '<meta property="og:image:height" content="%d">' % ih]
     lines += ['<meta property="og:image:alt" content="' + attr(ialt) + '">',
-              '<meta property="og:locale" content="en_US">']
+              '<meta property="og:locale" content="' + ('en_US' if lang == 'en' else lang + '_US') + '">']
     if og_type == 'article':
         lines += ['<meta property="article:published_time" content="' + published + '">',
                   '<meta property="article:modified_time" content="' + modified + '">',
@@ -708,6 +712,7 @@ def process(path, report):
               '<meta name="twitter:image" content="' + attr(image) + '">',
               '<meta name="twitter:image:alt" content="' + attr(ialt) + '">']
     ld = json.dumps(ld_for(path, title, desc, url, kw, modified, published, body, image), ensure_ascii=False, separators=(',', ':')).replace('</', '<\\/')
+    if lang != 'en': ld = ld.replace('"inLanguage":"en-US"', '"inLanguage":"' + lang + '"')
     lines.append('<script type="application/ld+json">' + ld + '</script>')
     lines.append('<!-- seo:end -->')
     s = s.replace('</head>', '\n'.join(l for l in lines if l) + '\n</head>', 1)

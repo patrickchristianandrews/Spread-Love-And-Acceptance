@@ -195,6 +195,8 @@
       // plain words first; the number and how it is worked out come after, folded away on screen
       var out = [{ label: 'Your load today', value: w[0] + ' (' + points + ' out of 20 points)', num: s }, { label: 'What to do', value: w[1] }];
       var top = WP02_FACTORS.filter(function (f) { return Number(ctx.value('factors.' + f.id)) >= 3; }).map(function (f) { return f.label.replace(/\s*\(.*\)$/, '').replace(/ specifically$/, '').toLowerCase(); });
+      // In the high band, putting things off isn't always possible: caring for someone who is ill can't wait.
+      if (sb >= 0.60) out.push({ label: 'If it can\u2019t wait', value: 'If what you\u2019re carrying can\u2019t wait, like caring for someone who is ill, that\u2019s a sign to get more help, not to try harder: ask one person for one specific thing this week, and look into respite care.', note: 'For people caring for someone: spreadloveandacceptance.com/caregivers.html', link: ['Help for caregivers', '/caregivers.html'] });
       if (top.length) out.push({ label: 'Filled most by', value: top.join(', ') + '.', note: 'Conditions, not character. Some of them are in your control this week; some are just weather.' });
       out.push({ label: 'Load score', value: fmt(s, 2) + ' out of 1.00', more: 'How is this scored?', num: s, note: 'The five answers added up, then divided by 20. Higher means a heavier load (and a lower battery). The words follow these cut-offs: under 0.15 very light; 0.15 to 0.29 light; 0.30 to 0.44 medium, lighter side; 0.45 to 0.59 medium, heavier side; 0.60 to 0.79 high; 0.80 and up very high. (CALC-01 and the reports group them as under 0.30 low, 0.30 to 0.59 medium, 0.60 and up high.)' });
       if (solo) return out;
