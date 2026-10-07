@@ -163,7 +163,7 @@
     // a small "copy link to this section" mark after each section heading that has an id
     if (fine) Array.prototype.forEach.call(main.querySelectorAll('h2[id]'), function (h) {
       if (h.closest('aside, nav, .tol-keys, .tol-outline, .appad') || h.querySelector('.tol-hl')) return;
-      var b = document.createElement('button'); b.type = 'button'; b.className = 'tol-hl'; b.textContent = '#'; b.setAttribute('aria-label', 'Copy a link to this section'); b.title = 'Copy a link to this section';
+      var b = document.createElement('button'); b.type = 'button'; b.className = 'tol-hl'; b.textContent = '#'; b.title = 'Copy a link to this section'; b.setAttribute('aria-hidden', 'true'); b.tabIndex = -1;   // a mouse extra: kept out of the heading's spoken name
       b.addEventListener('click', function (e) {
         e.preventDefault(); var url = location.origin + location.pathname + '#' + h.id;
         function done() { b.classList.add('done'); b.textContent = 'copied'; setTimeout(function () { b.classList.remove('done'); b.textContent = '#'; }, 1400); }

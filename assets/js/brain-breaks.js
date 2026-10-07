@@ -152,10 +152,9 @@
     var main = document.querySelector('main'); if (!main) return;
     if (isHome) {
       var intro = main.querySelector('[data-home-intro]'); if (!intro) return;
-      // right inside the opening block, above the three start cards, so it is the first big thing anyone sees
-      var c = Card('home'), at = intro.querySelector('.hh-go');
-      if (at && at.previousElementSibling && at.previousElementSibling.tagName === 'H2') at = at.previousElementSibling;
-      if (at) at.parentNode.insertBefore(c.el, at); else intro.parentNode.insertBefore(c.el, intro.nextSibling);
+      var c = Card('home');
+      // below the hero's ways in (and the pal cam row), so the calm and urgent choices come first
+      var after = main.querySelector('[data-palcam-row]') || intro; after.parentNode.insertBefore(c.el, after.nextSibling);
     } else {
       if (window.TOLSite && window.TOLSite.sensitive && window.TOLSite.sensitive()) return;
       if (main.hasAttribute('data-no-brain-break') || document.querySelector('.bb-end')) return;

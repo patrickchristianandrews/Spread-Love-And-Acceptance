@@ -9,7 +9,11 @@
    The Frequency Buddies episodes (/assets/js/buddies/) are small data files, saved up front so an episode
    plays offline; a future episode not in the list is saved the first time it's watched.
    Bump VERSION when the list below changes. */
-var VERSION = 'tol-v121';
+var VERSION = 'tol-v122';
+// A first visit saves only this small shell (so the offline page works). The full list below is saved only
+// once the site is installed as an app (site.js asks for it), so a visitor on a metered plan never
+// downloads megabytes they didn't ask for. Everything else is saved the first time it's used.
+var SHELL = ['/', '/index.html', '/offline.html', '/assets/css/site.css', '/assets/css/reading.css', '/assets/js/site.js', '/assets/img/logo-mark.svg', '/manifest.webmanifest'];
 var CORE = [
   '/', '/index.html', '/offline.html',
   '/night-garden.html', '/bears-dojo.html', '/quiet-words.html', '/word-bloom.html', '/quiet-crossword.html', '/pause-and-play.html', '/ask.html', '/whats-new.html', '/frequency-journey.html', '/frequency-journey-play.html', '/pal-cam-tv.html', '/frequency-buddies.html', '/frequency-buddies-live.html', '/daily-ledger-crossword.html', '/garden-backdrop.html', '/turning-toward.html', '/quick-checks.html', '/lemonade-stand.html', '/install.html', '/upset-right-now.html', '/share-the-load.html', '/new-parent.html', '/co-parenting.html', '/surprise.html', '/method-and-limits.html',
@@ -27,8 +31,20 @@ var CORE = [
 
 self.addEventListener('install', function (e) {
   e.waitUntil(caches.open(VERSION).then(function (c) {
-    return Promise.all(CORE.map(function (u) { return c.add(u).catch(function () {}); }));
+    return Promise.all(SHELL.map(function (u) { return c.add(u).catch(function () {}); }));
   }).then(function () { return self.skipWaiting(); }));
+});
+
+// the installed app asks for the full offline set once per version
+self.addEventListener('message', function (e) {
+  if (!e.data || e.data.type !== 'save-all') return;
+  var p = caches.open(VERSION).then(function (c) {
+    return c.match('/__saved-all').then(function (done) {
+      if (done) return;
+      return Promise.all(CORE.map(function (u) { return c.add(u).catch(function () {}); })).then(function () { return c.put('/__saved-all', new Response('1')); });
+    });
+  });
+  if (e.waitUntil) e.waitUntil(p);
 });
 
 self.addEventListener('activate', function (e) {

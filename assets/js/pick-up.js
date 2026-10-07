@@ -81,13 +81,13 @@
     return box;
   }
 
-  // ---------- "I have 2, 5 or 10 minutes" ----------
+  // ---------- "I have 1, 5 or 15 minutes" (the same choices as the home page) ----------
   var TIME = {
-    2: [['Wound up', 'Breathe for one minute', '#breathe'], ['Before a talk', 'Check your weather', '/quick-checks.html#today'],
+    1: [['Wound up', 'Breathe for one minute', '#breathe'], ['Before a talk', 'Check your weather', '/quick-checks.html#today'],
         ['A message to send', 'Test it in the Signal Translator', '/signal-translator.html'], ['Just a moment', 'Sit in the Night Garden', '/night-garden.html']],
     5: [['We just had a fight', 'Paste it into the Conversation Reader', '/conversation-reader.html'], ['Chores piling up', 'List them in the Lemonade Stand', '/lemonade-stand.html'],
         ['Wound up', 'Three minutes of Breathe', '#breathe'], ['Understand myself', 'Start your Wiring Card', '/wiring-card.html']],
-    10: [['New here', 'Start in 10 minutes', '/start-in-10-minutes.html'], ['After a hard talk', 'The Carrier Wave Decoder, step by step', '/carrier-wave-decoder.html'],
+    15: [['New here', 'Start in 10 minutes', '/start-in-10-minutes.html'], ['After a hard talk', 'The Carrier Wave Decoder, step by step', '/carrier-wave-decoder.html'],
         ['Chores piling up', 'Give every job one owner (WP-03)', '/workpapers/wp-03-raci-treaty.html'], ['Need to settle', 'A soundscape, eyes closed', '/soundscapes.html']]
   };
   function launcher(where) {
@@ -96,7 +96,7 @@
     box.setAttribute('aria-label', 'Something for the time you have');
     var id = 'tol-time-' + Math.random().toString(36).slice(2, 7);
     box.innerHTML = '<p class="tol-time-q" id="' + id + '">How much time do you have?</p>' +
-      '<div class="tol-time-opts" role="group" aria-labelledby="' + id + '">' + [2, 5, 10].map(function (m) { return '<button type="button" data-min="' + m + '" aria-pressed="false" aria-controls="' + id + '-list">' + m + ' minutes</button>'; }).join('') + '</div>' +
+      '<div class="tol-time-opts" role="group" aria-labelledby="' + id + '">' + [1, 5, 15].map(function (m) { return '<button type="button" data-min="' + m + '" aria-pressed="false" aria-controls="' + id + '-list">' + m + (m === 1 ? ' minute' : ' minutes') + '</button>'; }).join('') + '</div>' +
       '<ul class="tol-time-list" id="' + id + '-list" hidden></ul>';
     box.addEventListener('click', function (e) {
       var b = e.target.closest('[data-min]');

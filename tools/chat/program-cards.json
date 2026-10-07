@@ -472,7 +472,8 @@
         "Asking this shows you care about getting it right.",
         "You can own your part, if there is one, without carrying all of it.",
         "Look at the setup before the person, and that includes you.",
-        "You don’t have to settle who was right tonight."
+        "You don’t have to settle who was right tonight.",
+        "If you’re ever afraid of them, or they blame you for their yelling or for hurting you, that blame isn’t yours to carry. The Not safe at home? page has free people to talk to."
       ],
       "what_hurt": [
         "No, not the way it was said to you. How someone speaks to you is theirs to own, and things between two people are rarely one person’s fault."
@@ -481,7 +482,8 @@
         "You can care about what was underneath it without taking the blame for the tone.",
         "Crying or feeling shaken afterward is a very human response, not a weakness.",
         "You don’t have to work out who was right tonight.",
-        "When you’re both calm, you can say how it landed, in one sentence."
+        "When you’re both calm, you can say how it landed, in one sentence.",
+        "If you’re ever afraid of them, or they blame you for their yelling or for hurting you, that blame isn’t yours to carry. The Not safe at home? page has free people to talk to."
       ],
       "pillar": "Pillar II, Fix the setup, not the person.",
       "links": [
@@ -492,6 +494,10 @@
         [
           "WP-11: The Calm-Down Kit",
           "/wp-11.html"
+        ],
+        [
+          "Not safe at home?",
+          "/safety.html"
         ]
       ],
       "chips": [
@@ -1063,6 +1069,167 @@
         [
           "Is my mom to blame?",
           "Is my mom to blame for how I am?"
+        ]
+      ]
+    },
+    {
+      "id": "overgive",
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "name": "giving too much, and boundaries",
+      "pat": "\\bover ?-? ?giv\\w*|\\bgive (too much|and give|more than i get|everything)\\b|\\bi m always the one (who|that) (gives|does|plans|texts|apologi[sz]es|reaches out)\\b|\\bset(ting)? (a |some |better |healthy )?boundar\\w*|\\bboundar(y|ies)\\b|\\bone ?-? ?sided\\b|\\b(drained|exhausted|depleted|used up) (by|from|after) (him|her|them|my|people|everyone|helping|giving)\\b",
+      "keys": [],
+      "what": [
+        "Giving more than comes back wears you down, and it isn’t a character flaw. It’s a budget running in the red. The book’s Part One has a section on exactly this: what is in your control, and how to match energy kindly."
+      ],
+      "how": [
+        "In your hands: your words, your effort, your rest, your limits, and saying yes, no or “not today.” Theirs to decide: how it lands, whether they change, what they think of you.",
+        "Signs you’re over-giving: quiet resentment, a silent scorecard, feeling invisible, being tired before the day starts.",
+        "Notice it, name it once without blame, then adjust your side: give the effort that’s being given, and see what comes back.",
+        "Matching energy means matching care and effort, never volume or meanness. If you’re afraid of someone, that’s different: the Not safe at home? page is for that."
+      ],
+      "script": "I can do my part. That one is yours.",
+      "links": [
+        [
+          "Your circle of control, and matching energy",
+          "/book/self-2-now-in-depth.html#control"
+        ],
+        [
+          "Your self-discovery path (on your own)",
+          "/self-path.html"
+        ],
+        [
+          "The Battery & Stress Meter",
+          "/workpapers/wp-02-battery-stress-meter.html"
+        ]
+      ],
+      "chips": [
+        [
+          "How do I say no kindly?",
+          "How do I say no kindly?"
+        ],
+        [
+          "I feel drained after my ex texts",
+          "I feel drained after my ex texts"
+        ]
+      ]
+    },
+    {
+      "id": "onmyown",
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "name": "being on your own after a breakup or divorce",
+      "pat": "\\b(just |recently |finally )?(got |getting |going through (a |my )?)?divorc\\w*\\b.{0,40}\\b(lost|alone|lonely|empty|sad|lost myself|starting over|don t know who i am|rebuild\\w*)\\b|\\b(after|since) (my |the |our )?(divorce|breakup|break up|separation|split)\\b|\\b(broke|broken) up\\b.{0,40}\\b(lost|alone|lonely|sad|empty)\\b|\\b(my )?ex (texts|text|messages|calls|emails|contacts)\\b|\\b(texts|messages|calls) from (my )?ex\\b|\\bstarting over\\b|\\bon my own (again|now)\\b|\\bfind myself again\\b",
+      "notPat": "\\b(kids?|children|son|daughter|custody|handoffs?|pick ?-? ?up|drop ?-? ?off|co ?-? ?parent\\w*)\\b",
+      "keys": [],
+      "what": [
+        "I’m sorry. The end of a relationship can leave you feeling lost, even when it was the right thing. That’s a normal part of finding your feet again, not a sign you’re doing it wrong."
+      ],
+      "how": [
+        "Start with you, not the relationship: the self path walks you through your battery, your wiring and what settles you, with no partner needed.",
+        "If contact with your ex drains you, you can keep replies short, kind and about the practical thing, and you don’t have to answer straight away.",
+        "Spend your energy in your own circle: your rest, your limits, and what you ask for. How they respond is theirs.",
+        "Go gently. Feeling better usually comes in small steps, not all at once."
+      ],
+      "script": "I’ll get back to you on that tomorrow.",
+      "links": [
+        [
+          "Your self-discovery path",
+          "/self-path.html"
+        ],
+        [
+          "Your circle of control, and matching energy",
+          "/book/self-2-now-in-depth.html#control"
+        ],
+        [
+          "Separated co-parents (if there are children)",
+          "/co-parenting.html"
+        ]
+      ],
+      "chips": [
+        [
+          "How do I stop over-giving?",
+          "How do I stop over-giving?"
+        ],
+        [
+          "Tell me something calming",
+          "Tell me something calming"
+        ]
+      ]
+    },
+    {
+      "id": "group",
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "name": "using this with a group or class",
+      "pat": "\\b(small |church |faith |support |study |discussion |couples |marriage |book )(group|class|club|circle)s?\\b|\\b(leader|leaders|facilitator|facilitat\\w*) (guide|notes|kit)\\b|\\bdiscussion questions\\b|\\b(run|lead|teach|facilitate|host) (a |this with a |it with a |this in a )?(group|class|workshop|course|session|study)\\b|\\bgroup (course|curriculum|sessions|study)\\b",
+      "keys": [],
+      "what": [
+        "Yes. There’s a free group guide: six sessions you can run with couples, a class or any small group, each with an opening question, a short reading, an activity, discussion questions and a one-page handout. No one needs to sign up."
+      ],
+      "how": [
+        "Each session takes about an hour and uses free pages that need no email: check-ins, turning toward, love and apology languages, and the circle of control.",
+        "Every handout prints cleanly on one page, without the cartoons.",
+        "The guide has a note for leaders on keeping it safe: no one is asked to share more than they want, and there’s a short safety note to read out."
+      ],
+      "links": [
+        [
+          "Leading a group: the six-session guide",
+          "/groups.html"
+        ],
+        [
+          "Weekly check-ins",
+          "/check-ins.html"
+        ],
+        [
+          "Love languages",
+          "/love-languages.html"
+        ]
+      ],
+      "chips": [
+        [
+          "What’s in session one?",
+          "What’s in session one of the group guide?"
+        ]
+      ]
+    },
+    {
+      "id": "raisekids",
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "name": "raising emotionally healthy kids",
+      "pat": "\\b(raise|raising|bring up|bringing up|parent|parenting|help|teach|teaching)\\b.{0,30}\\b(emotionally (healthy|intelligent|strong)|kind|resilient|steady|confident|happy) (kids?|children|son|daughter|child|toddlers?)\\b|\\b(emotion|feelings) coach\\w*\\b|\\b(my|our) (kid|kids|child|children|son|daughter|toddler) (has|have|throws|gets) (big feelings|tantrums?|meltdowns?)\\b|\\btantrums?\\b|\\bhelp (my|our) (kid|kids|child|children|son|daughter) (with|handle|name|manage) (their |his |her )?(feelings|emotions|anger)\\b",
+      "keys": [],
+      "what": [
+        "There’s a page for this: For parents. It covers helping kids name and handle big feelings, siblings who fight, calm-down routines, teens, and watching Tidbit and Sugarfoot together."
+      ],
+      "how": [
+        "Notice the feeling, name it, accept it, and limit the behavior: “You’re really angry. It’s okay to be angry. It’s not okay to hit. Let’s stomp it out instead.”",
+        "Practice calming down on calm days, so it’s ready on hard ones: a slow “smell the flower, blow out the candle” breath works well.",
+        "After a blow-up, come back and repair together. Saying sorry is a skill kids learn by watching you do it."
+      ],
+      "links": [
+        [
+          "For parents: raising kind, steady kids",
+          "/parents.html"
+        ],
+        [
+          "Siblings who fight",
+          "/parents.html#siblings"
+        ],
+        [
+          "Watching Frequency Buddies together",
+          "/parents.html#watch-together"
+        ]
+      ],
+      "chips": [
+        [
+          "My kids fight all the time",
+          "My two kids fight all the time"
         ]
       ]
     },

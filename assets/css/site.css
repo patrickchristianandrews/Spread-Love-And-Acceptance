@@ -198,6 +198,9 @@ div.tol-gate p{ max-width:60ch; }
 .tol-panel{ width:min(38rem, 100vw); padding-top:0; }
 .tol-panel-head{ position:sticky; top:0; z-index:1; background:var(--paper); padding:1.1rem 0 .75rem; margin:0; border-bottom:1px solid var(--line); }
 .tol-panel-intro{ margin:.9rem 0 0; font-size:.95rem; color:var(--ink-soft); line-height:1.55; }
+.tol-panel-safe{ margin:.6rem 0 0; font-size:.92rem; display:flex; flex-wrap:wrap; gap:.4rem .9rem; align-items:center; }
+.tol-panel-safe button{ font:inherit; color:inherit; background:none; border:1px solid currentColor; border-radius:999px; padding:.2rem .7rem; min-height:32px; cursor:pointer; }
+@media print{ .tol-panel-safe{ display:none !important; } }
 .tol-panel .tol-index-section{ margin-top:1.9rem; }
 .tol-panel .tol-index-section > h3{ font-style:normal; font-weight:600; font-size:1.25rem; }
 .tol-panel .tol-index-section > p{ font-size:.93rem; line-height:1.5; margin-bottom:.4rem; }
@@ -2312,6 +2315,14 @@ html.tol-still .tol-breathe-btn{ transition:none; }
 body.has-pud-fab .tol-wx{ bottom:calc(4.6rem + env(safe-area-inset-bottom, 0px)) !important; }
 html.tol-no-helpers .tol-pud-fab{ display:none !important; }
 @media print{ .tol-pud-fab{ display:none !important; } }
+/* the time and weather note never sits under Professor Puddles: on wider screens it rides just above him */
+body.has-pud-fab:not(.is-home-pud) .tol-cw{ bottom:calc(max(1rem, env(safe-area-inset-bottom)) + 58px) !important; }
+body.has-pud-fab:not(.is-home-pud) .tol-cw-card{ bottom:calc(max(1rem, env(safe-area-inset-bottom)) + 94px) !important; }
+/* while scrolling on a touch screen, the note fades out of the way, and comes back when the page rests */
+.tol-cw.is-scrolling{ opacity:0 !important; pointer-events:none; }
+/* game mode (set by a game while it runs): nothing floats over the controls */
+body.tol-gaming .tol-pud-fab, body.tol-gaming .tol-cw, body.tol-gaming .tol-cw-card, body.tol-gaming .tol-breathe-btn,
+body.tol-gaming .tol-wx, body.tol-gaming .tol-toast, body.tol-gaming .tol-keys-tip{ display:none !important; }
 /* on a phone, Professor Puddles and Breathe tuck against the screen edges as slim tabs, in the margin beside the
    text, so neither one covers what someone is reading */
 @media (max-width:560px){
@@ -2323,6 +2334,10 @@ html.tol-no-helpers .tol-pud-fab{ display:none !important; }
     border-radius:24px 0 0 24px; border-right:0; justify-content:flex-start; }
   html body .tol-breathe-btn.is-compact.is-left:not(.is-high){ left:0 !important; right:auto !important; border-radius:0 24px 24px 0; padding:0 4px 0 0 !important; justify-content:flex-end; }
   body.has-pud-fab .tol-wx{ bottom:calc(1rem + env(safe-area-inset-bottom, 0px)) !important; }
+  body.has-pud-fab:not(.is-home-pud) .tol-cw{ bottom:max(6px, env(safe-area-inset-bottom)) !important; }
+  body.has-pud-fab:not(.is-home-pud) .tol-cw-card{ bottom:calc(max(6px, env(safe-area-inset-bottom)) + 2.1rem) !important; }
+  /* the home page's centred Puddles pill steps right of the time note, so the two sit side by side on the bottom edge */
+  html body.is-home-pud .tol-pud-fab{ left:calc(50% + 46px) !important; }
 }
 /* the two choices in every mini dive: wade in deeper, or chat it out with Professor Puddles */
 .tol-dive-wade{ display:flex; flex-wrap:wrap; align-items:center; gap:.5rem; }
@@ -2514,4 +2529,10 @@ html.tol-still .tol-share-card{ animation:none; }
   html body .tol-pud-fab .tol-pud-fab-t { position:absolute !important; width:1px !important; height:1px !important; overflow:hidden !important; clip:rect(0 0 0 0) !important; padding:0 !important; }
   .tol-cw { left:auto !important; right:max(8px,env(safe-area-inset-right)); }
   .tol-cw-card { left:auto !important; right:max(8px,env(safe-area-inset-right)); }
+}
+
+/* printing: only the page's own words. Tips, invitations, promos, helpers and anything floating stay off paper. */
+@media print{
+  .tol-keys-hint, .tol-toast, .tol-offer, .tol-msg, .tol-pillars, .tol-panel, .tol-scrim, .tol-cw, .tol-cw-card, .tol-pud-end,
+  .appad, .bkb, .tpv, .tsc-svg, .lp-spark, .tol-read-host, .tol-skip, iframe{ display:none !important; }
 }

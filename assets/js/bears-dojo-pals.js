@@ -86,23 +86,39 @@
   var FISH_SAY = ['Tidbit says hello, then lets it swim home.', 'Tidbit gives it a gentle look and a gentle splash back into the water.', '“Thank you for visiting,” Tidbit seems to say. Off it goes.',
     'Tidbit wags so hard the dock wobbles. Then back it goes.', 'It wiggles. Tidbit wiggles. Back into the pond it goes.'];
   BD.offer({ id: 'fish', kind: 'Fish', title: 'Fishing with Tidbit', mount: function (host, api) {
-    host.innerHTML = '<p class="od-note">Tidbit has her little rod and a spot on the dock. Cast, wait for the bobber to dip, then reel in. Every fish is said hello to and let go.</p>';
+    host.innerHTML = '<p class="od-note">Tidbit has her little rod and a spot on the dock. Cast the line and watch the red bobber. A little twitch is only a nibble; when it really dips, a Reel in! button appears. Take your time, there is plenty of it. Every fish is said hello to and let go.</p>';
     var C = canvas(host, 480, 300, 'A small wooden dock over a pond. Tidbit sits at the end with a fishing rod.');
-    var row = document.createElement('div'); row.className = 'od-row'; row.innerHTML = '<button type="button" class="bd-go" id="od-fish">Cast the line</button>'; host.appendChild(row);
+    var row = document.createElement('div'); row.className = 'od-row'; row.innerHTML = '<button type="button" class="bd-go" id="od-fish">Cast the line</button><button type="button" class="bd-go" id="od-reel" hidden>Reel in!</button>'; host.appendChild(row);
     var say = document.createElement('p'); say.className = 'od-note od-say'; say.setAttribute('aria-live', 'polite'); host.appendChild(say);
-    var btn = $('#od-fish', host), g = C.g, W = C.w, H = C.h, t = 0, st = 'idle', stT = 0, bob = { x: 0, y: 0 }, fly = 0, caught = null, count = 0, wait = 0;
+    var btn = $('#od-fish', host), rbtn = $('#od-reel', host), g = C.g, W = C.w, H = C.h, t = 0, st = 'idle', stT = 0, bob = { x: 0, y: 0 }, fly = 0, caught = null, count = 0, wait = 0, nibAt = 0, nib = 0;
     var rodTip = { x: 214, y: 128 };
-    function setBtn(txt, dis) { btn.textContent = txt; if (dis) { btn.setAttribute('aria-disabled', 'true'); btn.classList.add('is-wait'); } else { btn.removeAttribute('aria-disabled'); btn.classList.remove('is-wait'); } }
+    // a light, gentle bit of skill: wait through the little nibbles, then reel in when the bobber really dips. The window
+    // is generous, and a missed fish just swims off kindly: cast again whenever you like. No fail screens, no timers shown.
+    var BITE = function () { return api.still() ? 14 : 7; };
+    // while waiting the button looks quiet but still answers (with a gentle "not yet"), so it is not marked disabled
+    function setBtn(txt, dis) { btn.textContent = txt; btn.classList.toggle('is-wait', !!dis); }
+    // swap which button shows (cast or reel), carrying keyboard focus across so nobody loses their place
+    function showReel(on) {
+      var had = document.activeElement === (on ? btn : rbtn);
+      rbtn.hidden = !on; btn.hidden = on;
+      if (had) { try { (on ? rbtn : btn).focus({ preventScroll: true }); } catch (e) { (on ? rbtn : btn).focus(); } }
+    }
     function cast() {
-      bob.x = 300 + rand(140); bob.y = 196 + rand(70); st = 'fly'; fly = 0; caught = null; setBtn('Waiting…', true);
-      say.textContent = 'Tidbit casts. Plip! Now we wait, quietly.'; wait = api.still() ? 1.2 : 2.5 + Math.random() * 4;
+      bob.x = 300 + rand(140); bob.y = 196 + rand(70); st = 'fly'; fly = 0; caught = null; nib = 0; showReel(false); setBtn('Waiting for a bite…', true);
+      say.textContent = 'Tidbit casts. Plip! Now we wait, quietly, and watch the bobber.'; wait = api.still() ? 2 : 3 + Math.random() * 4;
+      nibAt = (!api.still() && wait > 3.5 && Math.random() < 0.75) ? 1.2 + Math.random() * (wait - 2.6) : 0;   // sometimes a little nibble first
+    }
+    function notYet() {
+      say.textContent = nib > 0 ? 'Just a nibble. Wait for the big dip, then reel in.' : 'Not yet. Keep an eye on the red bobber; when it really dips, Reel in! appears.';
     }
     function reel() {
-      if (st === 'bite') { var f = pick(FISH); caught = { name: f[0], col: f[1] }; count++; st = 'catch'; stT = 0; api.audio.plop(); say.textContent = 'Tidbit reels in ' + f[0] + '! ' + pick(FISH_SAY); setBtn('Cast again', false); if (api.audio.on) api.audio.tone(api.audio.note(5), 0.5, 0.04); }
-      else if (st === 'wait') { st = 'idle'; say.textContent = 'Too soon. Tidbit reels in an empty line and laughs. Try again when the bobber dips.'; setBtn('Cast again', false); }
+      if (st !== 'bite') { if (st === 'wait' || st === 'fly') notYet(); return; }
+      var f = pick(FISH); caught = { name: f[0], col: f[1] }; count++; st = 'catch'; stT = 0; api.audio.plop(); showReel(false);
+      say.textContent = 'Tidbit reels in ' + f[0] + '! ' + pick(FISH_SAY); setBtn('Cast again', false); if (api.audio.on) api.audio.tone(api.audio.note(5), 0.5, 0.04);
     }
-    btn.addEventListener('click', function () { if (st === 'idle' || st === 'catch' || st === 'gone') cast(); else if (st === 'bite' || st === 'wait') reel(); });
-    api.on(C.cv, 'pointerdown', function () { if (st === 'bite') reel(); else if (st === 'idle' || st === 'catch' || st === 'gone') cast(); });
+    btn.addEventListener('click', function () { if (st === 'idle' || st === 'catch' || st === 'gone') cast(); else if (st === 'bite') reel(); else notYet(); });
+    rbtn.addEventListener('click', reel);
+    api.on(C.cv, 'pointerdown', function () { if (st === 'bite') reel(); else if (st === 'idle' || st === 'catch' || st === 'gone') cast(); else notYet(); });
     function draw() {
       var sky = g.createLinearGradient(0, 0, 0, 140); sky.addColorStop(0, '#F6D9B8'); sky.addColorStop(1, '#F3EBD7'); g.fillStyle = sky; g.fillRect(0, 0, W, 140);
       ell(g, 390, 52, 24, 24, '#FFE3A3'); g.fillStyle = '#86A97A'; g.beginPath(); g.moveTo(0, 130); g.quadraticCurveTo(160, 92, 300, 120); g.quadraticCurveTo(400, 106, 480, 126); g.lineTo(480, 150); g.lineTo(0, 150); g.fill();
@@ -120,7 +136,7 @@
         var bx = bob.x, by = bob.y;
         if (st === 'fly') { var q = Math.min(1, fly); bx = rodTip.x + (bob.x - rodTip.x) * q; by = rodTip.y + (bob.y - rodTip.y) * q - Math.sin(q * Math.PI) * 60; }
         if (st === 'catch') { var q2 = Math.min(1, stT / 0.8); bx = bob.x + (rodTip.x + 10 - bob.x) * q2; by = bob.y + (rodTip.y + 30 - bob.y) * q2 - Math.sin(q2 * Math.PI) * 40; }
-        var dip = st === 'bite' ? 4 + Math.sin(t / 80) * 3 : Math.sin(t / 500) * 1.2;
+        var dip = st === 'bite' ? 7 + Math.sin(t / 80) * 3 : nib > 0 ? 1.5 + Math.sin(t / 45) * 1.8 : Math.sin(t / 500) * 1.2;
         g.strokeStyle = 'rgba(60,50,40,.7)'; g.lineWidth = 1; g.beginPath(); g.moveTo(rodTip.x, rodTip.y); g.quadraticCurveTo((rodTip.x + bx) / 2, Math.max(rodTip.y, by) + 10, bx, by + dip - 6); g.stroke();
         if (st === 'catch' && caught) {
           g.save(); g.translate(bx, by + 4); g.rotate(Math.sin(t / 90) * 0.4); ell(g, 0, 0, 14, 6, caught.col); g.fillStyle = caught.col; g.beginPath(); g.moveTo(-12, 0); g.lineTo(-22, -7); g.lineTo(-22, 7); g.fill(); g.fillStyle = '#222'; g.beginPath(); g.arc(8, -1.5, 1.4, 0, TAU); g.fill(); g.restore();
@@ -134,8 +150,12 @@
     api.frames(function (dt) {
       var s = dt / 1000; t += api.still() ? 0 : dt; stT += s;
       if (st === 'fly') { fly += s * 1.6; if (fly >= 1) { st = 'wait'; stT = 0; api.audio.plop(); } }
-      else if (st === 'wait') { wait -= s; if (wait <= 0) { st = 'bite'; stT = 0; say.textContent = 'The bobber dips! Something is nibbling. Reel in!'; setBtn('Reel in!', false); if (api.audio.on) api.audio.tone(api.audio.note(3), 0.25, 0.04); } }
-      else if (st === 'bite') { if (stT > (api.still() ? 9 : 3.6)) { st = 'gone'; say.textContent = 'It swam off to think about it. Plenty more in the pond.'; setBtn('Cast again', false); } }
+      else if (st === 'wait') {
+        wait -= s; if (nib > 0) nib -= s;
+        if (nibAt && stT >= nibAt) { nibAt = 0; nib = 0.9; say.textContent = 'A little twitch. Just a nibble… wait for it.'; }
+        if (wait <= 0) { st = 'bite'; stT = 0; nib = 0; say.textContent = 'The bobber dips! Reel in!'; showReel(true); setBtn('Cast again', false); if (api.audio.on) api.audio.tone(api.audio.note(3), 0.25, 0.04); }
+      }
+      else if (st === 'bite') { if (stT > BITE()) { st = 'gone'; showReel(false); say.textContent = 'The fish gave the bait a friendly sniff and swam off home. Plenty more in the pond. Cast again whenever you like.'; setBtn('Cast again', false); } }
       draw();
     });
     setBtn('Cast the line', false); draw();
@@ -234,6 +254,21 @@
       '<button type="button" class="bd-pill" data-pal="zengarden">🪨 The zen garden with Sugarfoot</button></div>';
     acts.parentNode.insertBefore(box, acts.nextSibling);
     box.addEventListener('click', function (e) { var b = e.target.closest && e.target.closest('[data-pal]'); if (b && BD.enterTo) BD.enterTo(b.getAttribute('data-pal')); });
+    // inside the dojo too: a small row to switch to another of these without leaving
+    var card = $('#bd-offering');
+    if (card && !$('#bd-pals-in')) {
+      var sw = document.createElement('div'); sw.className = 'bd-pals'; sw.id = 'bd-pals-in'; sw.setAttribute('role', 'group'); sw.setAttribute('aria-label', 'Switch to another thing to do with Tidbit and Sugarfoot');
+      sw.innerHTML = '<p class="bd-pals-k" aria-hidden="true">Or, with Tidbit and Sugarfoot</p><div class="bd-actions">' +
+        '<button type="button" class="bd-pill" data-pal="splash">💦 Splash</button>' +
+        '<button type="button" class="bd-pill" data-pal="fish">🎣 Fish</button>' +
+        '<button type="button" class="bd-pill" data-pal="zengarden">🪨 Zen garden</button></div>';
+      card.parentNode.insertBefore(sw, card.nextSibling);
+      sw.addEventListener('click', function (e) { var b = e.target.closest && e.target.closest('[data-pal]'); if (b && BD.enterTo) BD.enterTo(b.getAttribute('data-pal')); });
+      // mark the one that is on now
+      var mark = function () { var cur = BD.current && BD.current(); Array.prototype.forEach.call(sw.querySelectorAll('[data-pal]'), function (b) { if (b.getAttribute('data-pal') === cur) b.setAttribute('aria-current', 'true'); else b.removeAttribute('aria-current'); }); };
+      var tt = $('#bd-off-t'); if (tt && window.MutationObserver) new MutationObserver(mark).observe(tt, { childList: true, characterData: true, subtree: true });
+      mark();
+    }
   }
   if (BD.ready) boot(); else document.addEventListener('bears-dojo-ready', boot);
 })();

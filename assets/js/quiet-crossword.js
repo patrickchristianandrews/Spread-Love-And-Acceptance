@@ -159,13 +159,13 @@
     for (var r = 0; r < pz.H; r++) for (var c = 0; c < pz.W; c++) {
       var key = r + ',' + c, d;
       if (sol[key]) {
-        d = document.createElement('button'); d.type = 'button'; d.className = 'gm-cell is-on xw-cell'; d.setAttribute('data-k', key);
+        d = document.createElement('button'); d.type = 'button'; d.className = 'gm-cell is-on xw-cell'; d.setAttribute('data-k', key); d.tabIndex = -1;
         d.innerHTML = (numAt[key] ? '<span class="gm-n">' + numAt[key] + '</span>' : '') + '<span class="xw-l">' + (S.fill[key] || '') + '</span>';
         d.setAttribute('aria-label', cellLabel(key));
       } else { d = document.createElement('div'); d.className = 'gm-cell xw-block'; }
       gridEl.appendChild(d); cells[key] = d;
     }
-    listA.innerHTML = ''; listD.innerHTML = '';
+    listA.innerHTML = ''; listD.innerHTML = ''; lastClue = '';
     words.forEach(function (w, i) {
       var li = document.createElement('li'); li.innerHTML = '<button type="button" data-w="' + i + '"><b>' + w.n + '</b> ' + esc(w.clue) + ' <span class="xw-len">(' + w.text.length + ')</span></button>';
       (w.d === 'a' ? listA : listD).appendChild(li);
@@ -185,12 +185,17 @@
     return list.filter(function (w) { return w.d === dir; })[0] || list[0];
   }
   function solved(w) { return w.cells.every(function (k) { return S.fill[k] === sol[k]; }); }
+  var lastClue = '';
   function paint() {
     var w = current(); if (w) dir = w.d;
+    // roving tabindex: only the active square is in the Tab order, and when focus is already in the
+    // grid it moves with the active square, so a screen reader hears where typing has taken you
+    var ae = document.activeElement, inGrid = !!(ae && ae !== document.body && gridEl.contains(ae));
     Object.keys(cells).forEach(function (k) {
       var el = cells[k]; if (!sol[k]) return;
       el.classList.toggle('is-word', !!w && w.cells.indexOf(k) !== -1);
       el.classList.toggle('is-sel', k === sel);
+      var ti = k === sel ? 0 : -1; if (el.tabIndex !== ti) el.tabIndex = ti;
       el.querySelector('.xw-l').textContent = S.fill[k] || '';
       var lab = cellLabel(k); if (el.getAttribute('aria-label') !== lab) el.setAttribute('aria-label', lab);
     });
@@ -201,7 +206,9 @@
     });
     // squares that are no longer part of any solved word lose their glow
     Object.keys(cells).forEach(function (k) { if (sol[k] && !words.some(function (x) { return x.cells.indexOf(k) !== -1 && solved(x); })) cells[k].classList.remove('is-found'); });
-    if (w) clueEl.innerHTML = '<b>' + w.n + ' ' + (w.d === 'a' ? 'Across' : 'Down') + '</b> ' + esc(w.clue) + ' <span class="xw-len">(' + w.text.length + ')</span>';
+    // the clue line is a live region: only rewrite it when the active clue changes, not on every letter
+    if (w) { var ch = '<b>' + w.n + ' ' + (w.d === 'a' ? 'Across' : 'Down') + '</b> ' + esc(w.clue) + ' <span class="xw-len">(' + w.text.length + ')</span>'; if (ch !== lastClue) { lastClue = ch; clueEl.innerHTML = ch; } }
+    if (inGrid && sel && cells[sel] && document.activeElement !== cells[sel]) { try { cells[sel].focus(); } catch (e) {} }
     keepInView();
   }
   // with bigger squares the grid can be wider than the screen: keep the square you're on in view

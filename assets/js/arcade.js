@@ -196,7 +196,9 @@
   }
   function startLoop() { if (!raf) { last = 0; raf = requestAnimationFrame(frame); } }
   function stopLoop() { if (raf) { cancelAnimationFrame(raf); raf = 0; } }
-  D.addEventListener('visibilitychange', function () { if (D.hidden && running && !paused) togglePause(true); });
+  D.addEventListener('visibilitychange', function () { if (D.hidden && running && !paused) togglePause(true); gaming(running && !D.hidden); });
+  window.addEventListener('pagehide', function () { gaming(false); });
+  window.addEventListener('pageshow', function () { gaming(running && !D.hidden); });
 
   /* ---------- overlay ---------- */
   function overlay(title, text, goLabel, onGo, extra) {
@@ -738,7 +740,8 @@
     me.sel = 0;
   };
   Trek.prototype.destroy = function () { if (this.ui) this.ui.remove(); this.ui = null; };
-  Trek.prototype.say = function (m) { if (this.msgEl) this.msgEl.textContent = m; say(m); };
+  // the trail's story is told once, in its own panel under the picture (not again in the status line)
+  Trek.prototype.say = function (m) { if (this.msgEl) this.msgEl.textContent = m; else say(m); };
   Trek.prototype.ask = function (list) {
     var me = this; me.opts = list; me.sel = 0;
     me.chEl.innerHTML = list.map(function (o, i) { return '<button type="button" class="ar-btn' + (i === 0 ? ' is-main' : '') + '" data-i="' + i + '"><b>' + (i + 1) + '</b> ' + o[0] + '</button>'; }).join('');
@@ -983,11 +986,11 @@
 
   // every game in the arcade
   var GAMES = {
-    chase: { name: 'Treat Chase', make: function (w) { return new Chase(w); }, hint: 'Gather every treat. Golden hearts turn the Static into bubbles you can pop.' },
-    cross: { name: 'Cross the Way', make: function (w) { return new Cross(w); }, hint: 'Hop over the road, ride the logs and lily pads, and reach the five doghouses.' },
-    trail: { name: 'The Treat Trail', make: function (w) { return new Trek(w); }, hint: 'Lead the wagon from Puddle Hollow to Starfall Hill: choose your pace and snacks, cross the rivers, trade at the posts. Nobody gets hurt.' },
-    bricks: { name: 'Bubble Break', make: function (w) { return new Bricks(w); }, hint: 'Bounce the bubble into the Static. Up or a tap above the pup sends it off; a miss just floats back.' },
-    shower: { name: 'Treat Shower', make: function (w) { return new Catch(w); }, hint: 'Catch the treats in the basket. A raindrop is only a little drip on the nose.' }
+    chase: { name: 'Treat Chase', make: function (w) { return new Chase(w); }, hint: 'Gather every treat. Golden hearts turn the Static into bubbles you can pop.', keys: 'udlr', help: 'Move with the arrow keys or WASD, a swipe, a tap on the field, or the big arrows. A turn you press a little early is remembered. P pauses, M mutes.' },
+    cross: { name: 'Cross the Way', make: function (w) { return new Cross(w); }, hint: 'Hop over the road, ride the logs and lily pads, and reach the five doghouses.', keys: 'udlr', help: 'One hop per press: the arrow keys or WASD, a swipe, a tap on the field, or the big arrows. One extra hop can wait while a hop is in the air. P pauses, M mutes.' },
+    trail: { name: 'The Treat Trail', make: function (w) { return new Trek(w); }, hint: 'Lead the wagon from Puddle Hollow to Starfall Hill: choose your pace and snacks, cross the rivers, trade at the posts. Nobody gets hurt.', keys: '', help: 'Tap a choice under the picture, or press 1 to 5. Up and down pick a choice, Enter takes it. P pauses, M mutes.' },
+    bricks: { name: 'Bubble Break', make: function (w) { return new Bricks(w); }, hint: 'Bounce the bubble into the Static. Up or a tap above the pup sends it off; a miss just floats back.', keys: 'lur', up: 'Send the bubble', help: 'Left and right (or drag along the field) move the cushion; up or a tap above the pup sends the bubble. P pauses, M mutes.' },
+    shower: { name: 'Treat Shower', make: function (w) { return new Catch(w); }, hint: 'Catch the treats in the basket. A raindrop is only a little drip on the nose.', keys: 'lr', help: 'Left and right, or drag along the field, move the basket. P pauses, M mutes.' }
   };
 
   /* ---------- the menu and the stage ---------- */
@@ -1003,18 +1006,69 @@
     $('ar-title').textContent = GAMES[S.game].name;
     $('ar-pupname').textContent = ' · playing as ' + PUPS[S.pup].name;
     var wrap = $('ar-wrap'); wrap.setAttribute('aria-label', GAMES[S.game].name + ' game. Use the arrow keys or WASD to move, P to pause, M for sound.');
+    setControls(GAMES[S.game]);
     drawBadge(); hud(); game.draw(0);
     say(GAMES[S.game].hint);
-    startLoop(); wrap.focus(); try { wrap.scrollIntoView({ behavior: reduced ? 'auto' : 'smooth', block: 'center' }); } catch (e) { /* ignore */ }
+    gaming(true); fitStage();
+    startLoop(); try { wrap.focus({ preventScroll: true }); } catch (e) { wrap.focus(); }
+    showStage();
   }
+  // game mode: the site's floating pills step aside while a game is on (site.css, body.tol-gaming)
+  function gaming(on) { if (D.body) D.body.classList.toggle('tol-gaming', !!on); }
+  // only the on-screen arrows this game uses, and its own short how-to
+  function setControls(G) {
+    var keys = G.keys || '', pad = $('ar-dpad');
+    if (pad) {
+      pad.hidden = !keys; pad.setAttribute('data-keys', keys);
+      [['up', 'u'], ['left', 'l'], ['down', 'd'], ['right', 'r']].forEach(function (k) { var b = $('ar-d-' + k[0]); if (b) b.hidden = keys.indexOf(k[1]) < 0; });
+      var up = $('ar-d-up'); if (up) up.setAttribute('aria-label', G.up || 'Up');
+      pad.setAttribute('aria-label', keys === 'lr' || keys === 'lur' ? 'Move left and right: on-screen arrows (hold one to keep going)' : 'Move: on-screen arrows (hold one to keep going)');
+    }
+    var h = $('ar-help'); if (h && G.help) h.textContent = G.help;
+  }
+  // the site header stays at the top of the screen; the game sits just under it
+  function headerH() { var b = D.querySelector('.tol-bar'); if (!b) return 0; var cs = getComputedStyle(b); if (cs.position !== 'sticky' && cs.position !== 'fixed') return 0; var r = b.getBoundingClientRect(); return r.bottom > 0 ? r.height : 0; }
+  // size the playfield so the field and its controls fit on one screen (portrait: stacked; landscape touch: side by side)
+  function fitStage() {
+    var stage = $('ar-stage'), play = $('ar-play'), wrap = $('ar-wrap'), side = $('ar-side');
+    if (!stage || stage.hidden || !play || !wrap || !cv || !LW) return;
+    var vh = window.innerHeight || D.documentElement.clientHeight, avail = vh - headerH() - 10;
+    for (var pass = 0; pass < 2; pass++) {
+      var cs = getComputedStyle(play), row = cs.display === 'flex' && cs.flexDirection === 'row';
+      var pw = play.clientWidth, gap = parseFloat(cs.columnGap) || 0;
+      var maxW = row ? pw - (side ? side.offsetWidth : 0) - gap : pw;
+      var st = stage.getBoundingClientRect(), extra = wrap.offsetHeight - cv.offsetHeight, padB = parseFloat(getComputedStyle(stage).paddingBottom) || 0, other;
+      if (row) other = (play.getBoundingClientRect().top - st.top) + extra + padB;
+      else { var btns = $('ar-btns'), last = btns ? btns.getBoundingClientRect().bottom : st.bottom; other = (last - st.top) - cv.offsetHeight + padB; }
+      var w = Math.min(maxW, 760, (avail - other) * LW / LH);
+      w = Math.max(w, Math.min(maxW, row ? 240 : 360));   // a phone keeps a full-width field (its buttons may sit just below)
+      wrap.style.width = Math.floor(w) + 'px';
+    }
+  }
+  function showStage() {
+    var stage = $('ar-stage'); if (!stage) return;
+    var top = stage.getBoundingClientRect().top + (window.pageYOffset || 0) - headerH() - 6;
+    try { window.scrollTo({ top: Math.max(0, top), behavior: reduced ? 'auto' : 'smooth' }); } catch (e) { window.scrollTo(0, Math.max(0, top)); }
+  }
+  var fitT = 0;
+  function onResize() { clearTimeout(fitT); fitT = setTimeout(function () { if (running) fitStage(); }, 120); }
   function backToMenu() {
-    recordBest(); running = false; paused = false; if (game && game.destroy) game.destroy(); game = null; stopLoop();
-    $('ar-overlay').hidden = true; $('ar-stage').hidden = true; $('ar-select').hidden = false;
+    recordBest(); running = false; paused = false; if (game && game.destroy) game.destroy(); game = null; stopLoop(); gaming(false);
+    $('ar-overlay').hidden = true; $('ar-stage').hidden = true; $('ar-select').hidden = false; $('ar-wrap').style.width = '';
     try { $('ar-select').scrollIntoView({ block: 'start' }); } catch (e) { /* ignore */ }
     var f = D.querySelector('input[name="ar-game"]:checked'); if (f) f.focus();
     refreshBest();
   }
-  function restart() { recordBest(); if (!game) return; if (game.destroy) game.destroy(); game = GAMES[S.game].make(S.pup); paused = false; $('ar-overlay').hidden = true; $('ar-pause').textContent = '⏸ Pause'; tAll = 0; last = 0; game.draw(0); hud(); say('A fresh start.'); }
+  // the Start button names the chosen game, and comes into view as soon as a game is picked
+  function startLabel() { var b = $('ar-start'); if (b && GAMES[S.game]) b.textContent = '▶ Start ' + GAMES[S.game].name; }
+  function revealStart() {
+    var row = $('ar-go-row'), b = $('ar-start'); if (!row || !b) return;
+    var r = b.getBoundingClientRect(), vh = window.innerHeight || 0, stuck = getComputedStyle(row).position === 'sticky';
+    // a sticky Start is already on screen; otherwise bring it up above the floating pills at the bottom
+    if (r.top < headerH() || r.bottom > vh - (stuck ? 0 : 90)) { try { row.scrollIntoView({ block: 'end', behavior: reduced ? 'auto' : 'smooth' }); } catch (e) { row.scrollIntoView(false); } }
+    if (!reduced) { b.classList.remove('is-nudge'); void b.offsetWidth; b.classList.add('is-nudge'); }
+  }
+  function restart() { recordBest(); if (!game) return; if (game.destroy) game.destroy(); game = GAMES[S.game].make(S.pup); paused = false; $('ar-overlay').hidden = true; $('ar-pause').textContent = '⏸ Pause'; tAll = 0; last = 0; game.draw(0); hud(); say('A fresh start.'); fitStage(); }
   function drawBadge() {
     var c = $('ar-who'); if (!c || !window.TOLPups) return; var x = c.getContext('2d'); x.setTransform(1, 0, 0, 1, 0, 0); x.clearRect(0, 0, c.width, c.height);
     drawPupOn(x, S.pup, 24, 50, 0.85);
@@ -1045,7 +1099,8 @@
     var pr = D.querySelector('input[name="ar-pup"][value="' + S.pup + '"]'); if (pr) pr.checked = true;
     var gr = D.querySelector('input[name="ar-game"][value="' + S.game + '"]'); if (gr) gr.checked = true;
     Array.prototype.forEach.call(D.querySelectorAll('input[name="ar-pup"]'), function (i) { i.addEventListener('change', function () { S.pup = i.value; save(); }); });
-    Array.prototype.forEach.call(D.querySelectorAll('input[name="ar-game"]'), function (i) { i.addEventListener('change', function () { S.game = i.value; save(); }); });
+    Array.prototype.forEach.call(D.querySelectorAll('input[name="ar-game"]'), function (i) { i.addEventListener('change', function () { S.game = i.value; save(); startLabel(); }); i.addEventListener('click', function () { setTimeout(revealStart, 0); }); });
+    startLabel();
     var sr = $('ar-sel-relaxed'), ss = $('ar-sel-sound');
     if (sr) sr.addEventListener('change', function () { S.relaxed = sr.checked; save(); syncToggles(); });
     if (ss) ss.addEventListener('change', function () { S.sound = ss.checked; save(); syncToggles(); });
@@ -1064,6 +1119,7 @@
       el.addEventListener('keydown', function (e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); dir(b[1], b[2]); } });
     });
     D.addEventListener('keydown', onKey);
+    window.addEventListener('resize', onResize); window.addEventListener('orientationchange', onResize);
     var wrap = $('ar-wrap'); wrap.addEventListener('pointerdown', onPointerDown); wrap.addEventListener('pointermove', onPointerMove); wrap.addEventListener('pointerup', onPointerUp); wrap.addEventListener('pointercancel', function () { ptr = null; });
     syncToggles(); refreshBest();
     var go = function () { previews(); };

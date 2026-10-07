@@ -474,16 +474,40 @@
     '\\b(do ?n.?t|do not|dont) (really )?(want|wanna) to (be here|be alive|live|exist|wake up|be around)\\b', '\\b(want|wanna|wish i could) (to )?(disappear|vanish|not exist|not wake up|fall asleep and not wake up)\\b',
     '\\bi (just |really |honestly )?can.?t go on( anymore| living| like this)?$', '\\bcan.?t go on (anymore|living|like this)\\b', '\\b(better off|be better) without me\\b', '\\bno (point|reason) (in )?(living|being alive|going on|to keep going)\\b',
     '\\bwish (i|id) (was|were|had) (dead|never (been )?born|not here|not alive)\\b', '\\btired of (living|being alive|life)\\b', '\\b(nothing|no one|nobody) to live for\\b',
-    '\\btake my (own )?life\\b', '\\bunalive\\w*', '\\bnot (be|being) here anymore\\b', '\\bgive up on (life|living|everything)\\b', '\\bhurt (him|her|them|someone|somebody)\\b'
+    '\\btake my (own )?life\\b', '\\bunalive\\w*', '\\bnot (be|being) here anymore\\b', '\\bgive up on (life|living|everything)\\b', '\\bhurt (him|her|them|someone|somebody)\\b',
+    // control and fear: someone watching, limiting or frightening you is a safety matter, not a talking-better one
+    '\\b(checks|checked|reads|read|goes through|went through|looks through|searches|tracks|monitors|takes|took|smashed|broke) (my|all my) (phone|texts|messages|emails?|location|social media)\\b',
+    '\\b(tracks|follows|watches) (me|where i (am|go))\\b', '\\b(tracking|spy|spying) (app|apps|on me)\\b',
+    '\\b(won.?t|wont|doesn.?t|does not|will not|never) let(s)? me (leave|go( out)?|see|talk|have|work|out|sleep|use)\\b',
+    '\\b(controls|takes|took|keeps|hides|hid) (all )?(my|the|our) (money|phone|keys|car keys|passport|cards?|paycheck|bank)\\b',
+    '\\b(scared|afraid|frightened|terrified) (to go home|to leave|to tell (him|her|them)|of what (he|she|they).?(ll| will) do|of (my|his|her) (partner|husband|wife|boyfriend|girlfriend|ex))\\b',
+    '\\b(scared|afraid|frightened|terrified) (of|for) (him|her)\\b', '\\bnot safe\\b', '\\bunsafe\\b',
+    '\\b(is it|it.?s|was it) (all )?my fault (he|she|they|my \\w+) (yells|yelled|screams|screamed|shouts|hits|hit|hurts|hurt|gets (so )?(angry|mad|violent)|throws|threw|grabs|grabbed|pushes|pushed)\\b',
+    '\\b(he|she|they|my \\w+) (says|said|tells me) it.?s my fault (he|she|they) (yell|scream|shout|hit|hurt|get angry|lose)\\w*',
+    '\\b(isolat\\w+) me\\b', '\\bcut me off from (my )?(friends|family)\\b', '\\b(threatens|threatened) to (leave with|take|hurt) (the )?(kids|children|baby|dog|cat|pet)\\b',
+    '\\bthrows things\\b', '\\bthrew (a|the|my) \\w+ at me\\b', '\\bblocks? the door\\b', '\\bcoercive\\b'
   ].join('|'));
   // the words people use when they may not want to live: these also get the 988 line
   var NOT_LIVE = /\bsuicid\w*|\bkill(ing)? my ?self\b|\b(want|wants|wanted|going) to die\b|\bend (it all|my life)\b|\bno reason to (live|go on)\b|\b(do ?n.?t|do not|dont) (really )?(want|wanna) to (be here|be alive|live|exist|wake up|be around)\b|\b(want|wanna|wish i could) (to )?(disappear|vanish|not exist|not wake up|fall asleep and not wake up)\b|\bi (just |really |honestly )?can.?t go on( anymore| living| like this)?$|\bcan.?t go on (anymore|living|like this)\b|\b(better off|be better) without me\b|\bno (point|reason) (in )?(living|being alive|going on|to keep going)\b|\bwish (i|id) (was|were|had) (dead|never (been )?born|not here|not alive)\b|\btired of (living|being alive|life)\b|\b(nothing|no one|nobody) to live for\b|\btake my (own )?life\b|\bunalive\w*|\bnot (be|being) here anymore\b|\bgive up on (life|living|everything)\b|\bself ?harm\w*|\b(hurt|hurting|harm|harming|cut|cutting) my ?self\b|\boverdos\w*/;
   function safetyReply(f) {
+    var live = f && NOT_LIVE.test(f), self = live && !/\b(he|she|they|partner|husband|wife|boyfriend|girlfriend|spouse|ex|dad|father|mom|mum|mother)\b/.test(f);
     var blocks = [
-      { k: 'p', x: 'I’m really glad you said something. What you’re describing sounds serious, and it’s beyond what a small helper like me can help with. You deserve real support from a person.' },
-      { k: 'p', x: 'Please reach out to someone you trust, or to a qualified professional who can help with this properly.' }];
-    if (f && NOT_LIVE.test(f)) blocks.push({ k: 'p', x: 'If you might act on these feelings, you can call or text 988, the Suicide & Crisis Lifeline, any time.' });
+      { k: 'p', x: 'I’m really glad you said something. What you’re describing sounds serious, and it’s beyond what a small helper like me can help with. You deserve real support from a person.' }];
+    if (!self) blocks.push(
+      { k: 'p', x: 'If someone is hurting, threatening, watching or controlling you, that is not your fault, and it isn’t something better wording or staying calmer can fix. The tips on this site are for two people who are both safe, so please don’t use them to manage someone who frightens you.' },
+      { k: 'p', x: 'In the US you can call the National Domestic Violence Hotline at 1-800-799-7233, or text START to 88788, any time. Outside the US, findahelpline.com lists free lines in your country. If you’re in danger right now, call 911 or your local emergency number.' });
+    else blocks.push({ k: 'p', x: 'Please reach out to someone you trust, or to a qualified professional who can help with this properly.' });
+    if (live) blocks.push({ k: 'p', x: 'If you might act on these feelings, you can call or text 988, the Suicide & Crisis Lifeline, any time.' });
+    blocks.push({ k: 'links', x: [['Not safe at home? Hotlines, leaving this site quickly, and clearing what it keeps', '/safety.html']] });
     return { blocks: blocks, chips: [], kind: 'safety' };
+  }
+  // "how do I hide that I visited", "clear my history": how to cover tracks on this site, kindly and plainly
+  var HIDE = /\b(hide|cover|delete|clear|erase|remove|wipe)\b.{0,30}\b(visit(ed)?|history|tracks|this site|that i (was|came)|my (searches|chat))\b|\b(private|incognito) (window|mode|browsing)\b|\bquick(ly)? exit\b|\bleave (this site )?quickly\b/;
+  function hideReply() {
+    return { blocks: [
+      { k: 'p', x: 'Here’s how to leave less of a trace. This site keeps small notes only in this browser (your settings, the pages you opened for “Pick up where you left off”, and this chat). The Not safe at home? page has one button to erase all of it and stop the page list.' },
+      { k: 'list', x: ['Next time, open the site in a private window (Incognito or Private browsing), so nothing goes into your history.', 'To remove past visits, open your browser’s History, search for “spreadloveandacceptance”, and delete those entries.', 'To leave fast, press Esc twice, or use “Leave this site quickly” in the menu.'] },
+      { k: 'links', x: [['Not safe at home? (erase button and hotlines)', '/safety.html'], ['What’s stored on this device', '/on-this-device.html']] }], chips: [], kind: 'safety' };
   }
 
   // ------------------------------------------------------------------ small calculators, worked out right here
@@ -1414,6 +1438,7 @@
     var f = norm(q), prevLast = state.last;
     if (chipDoc == null) {
       if (DANGER.test(f)) { state.last = null; return safetyReply(f); }
+      if (HIDE.test(f)) { state.last = null; return hideReply(); }
       f = roommatesFigure(f);
       var fu = followUp(state, f, q);
       if (fu && fu.needBG) return fu;
