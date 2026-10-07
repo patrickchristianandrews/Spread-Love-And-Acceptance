@@ -321,7 +321,16 @@
     var k = e.key;
     if (/^[a-zA-Z]$/.test(k)) { e.preventDefault(); wake(); type(k.toUpperCase()); }
     else if (k === 'Backspace') { e.preventDefault(); back(); }
-    else if (k === 'Tab') { e.preventDefault(); nextWord(e.shiftKey ? -1 : 1); }
+    else if (k === 'Tab') {
+      // Tab moves word to word, and after the last word (or Shift+Tab before the first) it leaves the
+      // puzzle like any other control, so the keyboard is never trapped. Escape leaves straight away.
+      var wi = words.indexOf(current()), edge = e.shiftKey ? wi <= 0 : wi >= words.length - 1;
+      if (edge || !(document.activeElement.closest && document.activeElement.closest('.xw-cell'))) return;
+      e.preventDefault(); nextWord(e.shiftKey ? -1 : 1);
+    }
+    else if (k === 'Escape' && document.activeElement.closest && document.activeElement.closest('.xw-cell')) {
+      e.preventDefault(); var out = document.querySelector('.xw-lists button, .xw-lists a, .xw-lists [tabindex]') || document.querySelector('.xw-next'); if (out) out.focus();
+    }
     else if (k.indexOf('Arrow') === 0 && sel) {
       e.preventDefault();
       var p = sel.split(',').map(Number), d = { ArrowUp: [-1, 0], ArrowDown: [1, 0], ArrowLeft: [0, -1], ArrowRight: [0, 1] }[k];

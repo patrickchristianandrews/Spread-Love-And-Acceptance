@@ -34,6 +34,13 @@
     cat: { col: ['#E3E1EE', '#A9A4C4'], name: ['Whiskers', 'Marmalade', 'Socks', 'Purrcy', 'Meowzart', 'Catrick Swayze', 'Sir Pounce', 'Kitty Purry', 'Clawdia', 'Cattitude'], body: function (c) { return '<path d="M14 34 L16 10 L32 22 Z M66 34 L64 10 L48 22 Z" fill="' + c[0] + '" stroke="' + c[1] + '" stroke-width="2.4" stroke-linejoin="round"/><ellipse cx="40" cy="45" rx="28" ry="25" fill="' + c[0] + '" stroke="' + c[1] + '" stroke-width="2.6"/><path d="M12 48h10M12 53h10M58 48h10M58 53h10" stroke="' + c[1] + '" stroke-width="1.4" stroke-linecap="round"/>'; } }
   };
   var KIND_KEYS = Object.keys(KINDS);
+  // On serious pages (guides, the book, worksheets, anything about relationships) the friends keep plain,
+  // gentle names and no silly disguises; the playful names and costumes are for the games and the cartoon.
+  var PLAY = /^\/(frequency-buddies[a-z0-9-]*|pal-cam[a-z0-9-]*|frequency-journey(-play)?|bears-dojo|pause-and-play|night-garden|word-bloom|quiet-words|quiet-crossword|daily-ledger-crossword|re-check-drive|soundscapes|calm-visualizer|echoes-of-gold|quest|surprise)\.html$/;
+  var SERIOUS = !PLAY.test(location.pathname);
+  var PLAIN = { blob: ['Mochi', 'Bean', 'Squish'], cloud: ['Nimbus', 'Misty', 'Drizzle'], star: ['Stella', 'Nova', 'Sparky'], drop: ['Dewdrop', 'Ripple', 'Splash'],
+    heart: ['Sweetpea', 'Heartley', 'Kay'], moon: ['Luna', 'Nightlight', 'Dee'], frog: ['Lily', 'Hopkins', 'Ribbit'], bunny: ['Clover', 'Thistle', 'Buttons'],
+    bear: ['Honey', 'Barnaby', 'Cocoa'], cat: ['Whiskers', 'Socks', 'Marmalade'] };
 
   // ---------- the silly disguises ----------
   var DISGUISES = {
@@ -152,11 +159,11 @@
 
   function place(s, kind, idx) {
     var who = kinds[idx % kinds.length], K = KINDS[who], c = K.col || COLORS[(idx + Math.floor(Math.random() * 6)) % COLORS.length];
-    var dz = Math.random() < 0.65 ? dzs[idx % dzs.length] : null;
+    var dz = !SERIOUS && Math.random() < 0.65 ? dzs[idx % dzs.length] : null;
     var TITLES = { detective: [', PI', ', Private Eye', ' Holmes'], crown: [' the First', ', Your Majesty', ' the Magnificent'], wizard: [' the Wise', ' the Wizardly', ' of the Sparkly Hat'],
       pirate: [' Sea-Legs', ' the Salty', ' Barnacle-Beard'], tophat: [', Esquire', ' the Dapper'], chef: [', Head Chef', ' Crumbsworth'], groucho: [' (Totally Not in Disguise)', ' Incognito'],
       beret: [' the Artiste', ' Picasso'], party: [' the Life of the Party'], shades: [' the Cool'], nose: [' the Honkable'], flowers: [' Blossomcrown'] };
-    var titled = !!(dz && TITLES[dz] && Math.random() < 0.6), name = pick(K.name) + (titled ? pick(TITLES[dz]) : '');
+    var titled = !!(dz && TITLES[dz] && Math.random() < 0.6), name = SERIOUS ? pick(PLAIN[who] || ['Pip']) : pick(K.name) + (titled ? pick(TITLES[dz]) : '');
     var role = kind === 'end' ? 'cheer' : (idx % 3 === 1 ? 'fact' : idx % 3 === 2 && CHAT_ON ? 'chat' : 'cheer');
     var w = document.createElement('div');
     w.className = 'tol-cheer ' + (idx % 2 ? 'is-right' : 'is-left') + (kind === 'end' ? ' is-end' : '') + ' is-' + role;
