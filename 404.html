@@ -137,9 +137,10 @@ document.addEventListener('DOMContentLoaded', function () {
   // each page once, even when it's listed in more than one section (the first listing wins, except "What's new")
   var pages = [], seenHref = {};
   TOL.sections.slice().sort(function (a, b) { return (a.id === 'new') - (b.id === 'new'); }).forEach(function (s) {
-    s.items.forEach(function (it) {
-      var h = it.href;
-      if (it.href === '/index.html' || seenHref[h]) return;
+    (s.items || []).forEach(function (it) {
+      // the menu also holds sub-headings ({ sub: 'Heading' }) with no page behind them: skip those
+      var h = it && it.href;
+      if (!h || typeof h !== 'string' || h === '/index.html' || seenHref[h]) return;
       seenHref[h] = 1; pages.push({ it: it, section: s });
     });
   });

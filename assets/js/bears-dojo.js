@@ -356,7 +356,16 @@
     return api;
   }
   var curApi = null;
-  function show(id, quiet) {
+  // bring the offering card up under the site header and put focus on its title (keyboard and screen-reader users land on it)
+  function headerH() { var b = $('.tol-bar'); if (!b) return 0; var cs = getComputedStyle(b); if (cs.position !== 'sticky' && cs.position !== 'fixed') return 0; var r = b.getBoundingClientRect(); return r.bottom > 0 ? r.height : 0; }
+  function revealCard() {
+    var card = $('#bd-offering'), t = $('#bd-off-t'); if (!card) return;
+    var top = card.getBoundingClientRect().top + (window.pageYOffset || 0) - headerH() - 10;
+    try { window.scrollTo({ top: Math.max(0, top), behavior: still() ? 'auto' : 'smooth' }); } catch (e) { window.scrollTo(0, Math.max(0, top)); }
+    if (t) { try { t.focus({ preventScroll: true }); } catch (e) { t.focus(); } }
+  }
+  BD.revealCard = revealCard;
+  function show(id, quiet, reveal) {
     var o = byId[id]; if (!o) return;
     var card = $('#bd-offering'), body = $('#bd-off-body');
     function swap() {
@@ -367,6 +376,7 @@
       try { o.mount(body, curApi); } catch (e) { if (window.console) console.warn('bears-dojo offering failed', id, e); body.innerHTML = '<p>This one is resting. Try another.</p>'; }
       card.classList.remove('is-out'); lastAct = Date.now();
       if (!quiet) curApi.say('Now: ' + o.title);
+      if (reveal) revealCard();
     }
     if (still() || quiet === 'now') swap(); else { card.classList.add('is-out'); setTimeout(swap, 420); }
   }
@@ -398,7 +408,9 @@
       out.hidden = true; inn.hidden = false; inside = true; moving = false;
       if (!roomBuilt) buildRoom();
       if (BD.scene) BD.scene.pause(); if (BD.roomPups) BD.roomPups.start();
-      A.setMode('inside'); if (pendingId && byId[pendingId]) show(pendingId, 'now'); else BD.next('now'); pendingId = null;
+      var direct = !!(pendingId && byId[pendingId]);
+      A.setMode('inside'); if (direct) show(pendingId, 'now', true); else BD.next('now'); pendingId = null;
+      if (direct) { curApi && curApi.say('You are inside the dojo: ' + byId[current].title + '.'); return; }   // straight to an activity: its card is in view and focused
       var h = $('#bd-in-h'); try { h.focus({ preventScroll: true }); } catch (e) { h.focus(); }
       var r = h.getBoundingClientRect(); if (r.top < 60 || r.top > innerHeight * 0.6) window.scrollTo({ top: window.scrollY + r.top - 80, behavior: 'auto' });
       curApi && curApi.say('You are inside the dojo. A new offering is ready.');
@@ -422,12 +434,22 @@
   }
   // go straight to one offering (the buttons on the grounds: splash, fish, the zen garden)
   var pendingId = null;
-  BD.enterTo = function (id) { if (inside) { show(id); return; } pendingId = id; enter(); };
+  BD.enterTo = function (id) { if (inside) { show(id, false, true); return; } pendingId = id; enter(); };
   BD.enter = enter; BD.leave = leave;
 
   // ---------- start ----------
   function boot() {
     var live = el('div', { id: 'bd-say', class: 'sr-only', 'aria-live': 'polite', role: 'status' }); $('#bd').appendChild(live);
+    // the captions under the garden and the room change on their own every few seconds (the pups going about their day):
+    // they are shown, not announced. A caption that changes because of something you did (the bell, a tap on your bear)
+    // is read out through the one polite live region above.
+    var caps = ['#bd-caption', '#bd-room-caption'];
+    doc.addEventListener('click', function () {
+      var before = caps.map(function (s) { var c = $(s); return c ? c.textContent : ''; });
+      setTimeout(function () {
+        caps.forEach(function (s, i) { var c = $(s); if (c && c.textContent && c.textContent !== before[i] && !c.closest('[hidden]')) { live.textContent = ''; setTimeout(function () { live.textContent = c.textContent; }, 40); } });
+      }, 0);
+    }, true);
     buildBuilder(); paintPreview(); syncSound(); syncStillBtn();
     lastId = lsGet(SEEN_KEY);
     $('#bd-sound').addEventListener('click', function () { A.toggle(); });

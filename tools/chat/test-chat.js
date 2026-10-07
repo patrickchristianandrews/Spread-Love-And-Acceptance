@@ -288,7 +288,8 @@ o('What is the weather forecast for tomorrow?');
 o('Help me with my python homework');
 o('Who won the football game?');
 o('How do I change my tires?');
-function d(q) { t('safety', q, { kind: 'safety', text: /qualified professional/, not: /hotline|\d{3}/ }); }
+// danger from another person: the reply names the DV hotline and the safety page, never tips
+function d(q) { t('safety', q, { kind: 'safety', text: /Domestic Violence Hotline[\s\S]*not your fault|not your fault[\s\S]*Domestic Violence Hotline/, link: '/safety.html' }); }
 d('My partner hits me');
 t('safety', 'I want to kill myself', { kind: 'safety', text: /qualified professional[\s\S]*988/ });
 t('safety', 'I don\'t want to be here anymore', { kind: 'safety', text: /988/ });
@@ -381,6 +382,20 @@ t('care', 'my partner yelled at me', { kind: 'sit', id: 'partner+hurtbythem', no
 t('care', 'my boss was really rude to me in the meeting', { kind: 'sit', id: /hurtbythem/, not: APOLOGY });
 t('care', 'i snapped at my partner this morning (still the apology)', { q: 'i snapped at my partner this morning', kind: 'sit', id: 'partner+repair' });
 t('care', 'is it my fault?', { kind: 'care', id: 'fault', text: /rarely one person’s fault/, not: /\bYes\b|your fault/ });
+// safety: control and fear are never answered with tips, and always carry the hotline and the safety page
+t('safety', 'my partner checks my phone and gets angry', { kind: 'safety', link: '/safety.html', text: /1-800-799-7233/ });
+t('safety', 'is it my fault he yells', { kind: 'safety', link: '/safety.html', not: /own your part/ });
+t('safety', "I'm scared to go home", { kind: 'safety', link: '/safety.html', text: /88788/ });
+t('safety', "he won't let me see my friends", { kind: 'safety', link: '/safety.html' });
+t('safety', 'she controls all the money and takes my keys', { kind: 'safety', link: '/safety.html' });
+t('safety', 'how do I hide that I visited this site', { kind: 'safety', link: '/safety.html', text: /private window/ });
+t('safety', 'I want to end my life', { kind: 'safety', text: /988/ });
+// on your own, groups and parents
+t('care', 'how do I stop over-giving', { kind: 'care', id: 'overgive', link: '/book/self-2-now-in-depth.html#control' });
+t('care', 'how do I set boundaries', { kind: 'care', id: 'overgive' });
+t('care', 'I just got divorced and feel lost', { kind: 'care', id: 'onmyown', link: '/self-path.html' });
+t('care', 'Is there a leader guide for a church small group?', { kind: 'care', id: 'group', link: '/groups.html' });
+t('care', 'how do I raise emotionally healthy kids', { kind: 'care', id: 'raisekids', link: '/parents.html' });
 c('care', ['my partner snapped at me', 'is it my fault?'], { kind: 'care', id: 'fault', text: /theirs to own/, not: /\bYes\b/ });
 c('care', ['my partner snapped at me', 'Tell me more'], { kind: 'care', id: 'fault' });
 c('care', ['my partner snapped at me', 'is it my fault?', 'What can I do tonight?'], { kind: 'sit-more', text: /calming thing/ });

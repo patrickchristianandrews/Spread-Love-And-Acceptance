@@ -63,10 +63,29 @@
     { id:'know-myself', ico:'\uD83E\uDDED', label:'I want to understand myself better',
       say:'That is the half of the program you can do entirely alone, and it is the half everything else rests on. No partner, no permission, nothing to negotiate.',
       picks:[
+        ['/self-path.html','Your self-discovery path','Step by step, on your own: your battery, your wiring, what settles you and kind ways to say no.'],
+        ['/book/self-2-now-in-depth.html#control','Your circle of control','What is yours to do, what is theirs to decide, and how to match energy kindly.'],
         ['/wavelength.html','Wavelength','How you think, talk and listen: your wiring, your Wave Code and sixteen self-discovery chapters.'],
-        ['/quick-checks.html#today','Today\u2019s Weather','Start today. Within two weeks, the almanac shows your patterns.'],
-        ['/tools/frequency-calibration.html','Frequency Calibration','Your natural pace for decisions, contact and recovery.'],
-        ['/learn/index.html','Stories from Philosophy','Twelve old stories that work as honest mirrors.']
+        ['/quick-checks.html#today','Today\u2019s Weather','Start today. Within two weeks, the almanac shows your patterns.']
+      ]},
+    { id:'give-too-much', ico:'\u2696', label:'I give more than I get back',
+      say:'Quiet resentment, a silent scorecard and being tired before the day starts are not character flaws. They are a budget running in the red, and the fix starts on your side of the line.',
+      picks:[
+        ['/book/self-2-now-in-depth.html#control','Your circle of control, and matching energy','Signs you are over-giving, and how to match care and effort kindly.'],
+        ['/self-path.html','Your self-discovery path','A gentle first week, including kind ways to say no.'],
+        ['/workpapers/wp-02-battery-stress-meter.html','The battery check (WP-02)','How full your battery really is today.']
+      ]},
+    { id:'child-teen', ico:'\uD83E\uDDD2', label:'Things are hard with my child or teen',
+      say:'Pulling away and pushing back are a normal part of growing up, and they can still hurt. Side-by-side time, short talks and listening first usually help more than the perfect speech.',
+      picks:[
+        ['/library/life.html#teenagers','Talking with teenagers','What the research says about conflict with teens, and where it stops.'],
+        ['/turning-toward.html','Turning toward','Small, everyday ways to stay connected.'],
+        ['/workpapers/wp-13-pll-protocol.html','WP-13: the 90-second check-in','A tiny daily habit that keeps the door open.']
+      ]},
+    { id:'not-safe', ico:'\uD83D\uDEE1', label:'I don\u2019t feel safe with someone',
+      say:'If someone hurts, threatens, watches or controls you, that is not a communication problem and it is not your fault. Please skip the tools here and talk to people who help with this every day.',
+      picks:[
+        ['/safety.html','Not safe at home?','Free hotlines, how to leave this site quickly, and how to clear what it keeps.']
       ]},
     { id:'keep-good', ico:'\uD83C\uDF31', label:'We are okay, and I want to keep it that way',
       say:'The best time to build the habit is now, while nothing is on fire. Almost nobody starts here, and the ones who do have a far easier time of it later.',
@@ -81,6 +100,12 @@
         ['/is-this-for-you.html','Is this right for you?','What it is, what it is not, and who it does not suit.'],
         ['/how-it-works.html','How it works','The whole idea in plain language, in about four minutes.'],
         ['/ways-in.html','Ways in','What is free, what an email opens, and what each level shares.']
+      ]},
+    { id:'group', ico:'\uD83D\uDC65', label:'I want to use this with a group',
+      say:'A church small group, a couples\u2019 class or a community circle can use the free pages together, with no sign-up for anyone.',
+      picks:[
+        ['/groups.html','Leading a group','Six sessions with discussion questions and one-page handouts.'],
+        ['/check-ins.html','Check-ins','A good first session: hear it back before you answer.']
       ]}
   ];
 

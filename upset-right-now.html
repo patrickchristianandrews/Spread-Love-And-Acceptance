@@ -37,6 +37,12 @@
   .sx-pace output{ display:block; font:500 1.5rem/1.3 "Fraunces", Georgia, serif; min-height:2.6em; }
   .sx-btn{ font:600 1rem/1.2 "Lora", Georgia, serif; min-height:48px; padding:.5rem 1.3rem; border-radius:999px; border:1px solid #2F5F8A; background:#2F5F8A; color:#fff; cursor:pointer; }
   .sx-btn:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
+  .sx-safe-top{ margin:.7rem 0 .1rem; padding:.6rem .9rem; border-radius:14px; border:1px solid #E3C6A8; background:#FFF8F0; font-size:.95rem; line-height:1.45; max-width:34rem; }
+  .sx-safe-top a{ font-weight:600; }
+  .sx-exit{ margin-top:.6rem; font:600 .95rem/1.2 "Lora", Georgia, serif; min-height:44px; padding:.45rem 1.1rem; border-radius:999px; border:1px solid #8A4B2A; background:#FFFDF7; color:#5A2E16; cursor:pointer; }
+  .sx-exit:hover{ background:#FFF1E4; }
+  .sx-exit:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
+  .sx-sr{ position:absolute !important; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; border:0; }
 </style>
 <!-- seo:start -->
 <link rel="canonical" href="https://spreadloveandacceptance.com/upset-right-now.html">
@@ -74,7 +80,8 @@
 </head>
 <body data-sensitive data-no-breathe>
 <main class="read">
-<header class="read-head"><p class="read-code">Calm down together</p><h1>Upset right now?</h1></header>
+<header class="read-head"><p class="read-code">Calm down together</p><h1>Upset right now?</h1>
+<p class="sx-safe-top no-bubble">If you’re afraid of the other person, or it isn’t safe, skip this page: see <a href="/safety.html">Not safe at home?</a> for people to talk to, or <a href="#not-safe">the helplines below</a>.</p></header>
 
 <p class="simple-lede">One phone, two upset people, five minutes. Read a step out loud, or take turns. Nothing here asks you to learn anything. Nothing you do is saved, and there is no sign-up.</p>
 
@@ -95,13 +102,14 @@ First, each of you says what you heard the other say, and checks it: “What I h
 </ol>
 
 <div class="sx-pace no-bubble">
-<output id="px-out" role="status" aria-live="polite">Press start when you are ready.</output>
+<output id="px-out" class="px-out" aria-hidden="true">Press start when you are ready.</output>
+<p id="px-say" class="px-say sx-sr" role="status" aria-live="polite"></p>
 <button type="button" class="sx-btn" id="px-btn">Start the breathing pacer</button>
 <p id="px-buzz-row" hidden style="margin:.8rem 0 0"><label style="display:inline-flex;gap:.5rem;align-items:center;min-height:44px;cursor:pointer"><input type="checkbox" id="px-buzz" style="width:1.25rem;height:1.25rem"> Feel it too: buzz with each count (short taps in, longer ones out)</label></p>
 </div>
 
-<div class="sx-safe no-bubble" role="note">
-<h2>If you are afraid, or it is not safe</h2>
+<div class="sx-safe no-bubble" id="not-safe" role="note" aria-labelledby="not-safe-h">
+<h2 id="not-safe-h">If you are afraid, or it is not safe</h2>
 <p>This page is for two people who are both safe and both upset. If one of you is afraid of the other, or things have turned physical or controlling, a pause line and a calm talk are not the answer. Please put your safety first.</p>
 <ul>
 <li>In danger now: call your local emergency number.</li>
@@ -109,6 +117,8 @@ First, each of you says what you heard the other say, and checks it: “What I h
 <li>US: for thoughts of harming yourself, call or text 988.</li>
 <li>Elsewhere: findahelpline.com lists free lines by country.</li>
 </ul>
+<p>More people to talk to: <a href="/safety.html">Not safe at home?</a></p>
+<button type="button" class="sx-exit" data-tol-exit>Leave this site quickly</button>
 </div>
 
 <h2 id="after">When you are ready for more</h2>
@@ -127,15 +137,19 @@ First, each of you says what you heard the other say, and checks it: “What I h
 <script>
 (function () {
   'use strict';
-  var out = document.getElementById('px-out'), btn = document.getElementById('px-btn'), t = null, running = false;
+  // #px-out is the visual countdown (hidden from screen readers, since it changes every second);
+  // #px-say is the polite live region, and only changes when the phase changes, so speech never piles up
+  var out = document.getElementById('px-out'), say = document.getElementById('px-say'), btn = document.getElementById('px-btn'), t = null, running = false;
+  function announce(msg) { if (say.textContent !== msg) say.textContent = msg; }
   var buzz = document.getElementById('px-buzz'), buzzRow = document.getElementById('px-buzz-row');
   if (typeof navigator.vibrate === 'function' && buzzRow) buzzRow.hidden = false; // phones that can vibrate only; off until ticked
   var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
-  function stop(msg) { clearTimeout(t); running = false; try { if (navigator.vibrate) navigator.vibrate(0); } catch (e) {} btn.textContent = 'Start the breathing pacer'; out.textContent = msg || 'Press start when you are ready.'; }
+  function stop(msg) { clearTimeout(t); running = false; try { if (navigator.vibrate) navigator.vibrate(0); } catch (e) {} btn.textContent = 'Start the breathing pacer'; out.textContent = msg || 'Press start when you are ready.'; announce(msg || ''); }
   function run(round, phase, n) {
     if (!running) return;
     var len = phase === 'in' ? 4 : 6;
     out.textContent = (phase === 'in' ? 'Breathe in … ' : 'Breathe out … ') + n + '   (round ' + round + ' of 5)';
+    if (n === 1) announce(phase === 'in' ? 'Round ' + round + ' of 5. Breathe in for 4.' : 'Breathe out for 6.');
     if (buzz && buzz.checked) { try { navigator.vibrate(phase === 'in' ? 22 : 70); } catch (e) {} }
     t = setTimeout(function () {
       if (n < len) return run(round, phase, n + 1);

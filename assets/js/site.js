@@ -36,6 +36,9 @@
   var SECTIONS = [
     { id: 'new', title: 'What’s new', blurb: 'Newly added and newly expanded, newest first.', items: [
       { href: '/whats-new.html', code: 'All', title: 'What’s new', note: 'Everything newly added and everything that’s grown, in one place, with dates' },
+      { href: '/safety.html', code: 'New', title: 'Not safe at home?', note: 'Free hotlines, a quick way to leave this site, and how to clear what it keeps' },
+      { href: '/groups.html', code: 'New', title: 'Leading a group', note: 'A free six-session guide with discussion questions and one-page handouts' },
+      { href: '/parents.html', code: 'New', title: 'For parents', note: 'Big feelings, siblings who fight, calm-down routines, teens, and watching the pups together' },
       { href: '/soundscapes.html#brain-breakers', code: 'New', title: 'Brain Breakers', note: 'The Soundscapes page is now all Brain Breakers: four instrumental pieces, with a music visualizer and vibration' },
       { href: '/love-languages.html', deep: true, code: 'New', title: 'Love languages: a menu, not a label', note: 'What is healthy and unhealthy about each of the five, how to practice and talk about them, and similar ideas like apology languages and bids' },
       { href: '/languages-of-connection.html', code: 'New', title: 'How the languages fit together', note: 'Love, apology and appreciation languages, touchstones and your wiring in one picture, with what to reach for when' },
@@ -72,6 +75,7 @@
       { href: '/new-parent.html', code: '', title: 'New baby, sharing the load', note: 'A three-step way for new parents to split the baby jobs and the invisible ones' },
       { href: '/co-parenting.html', code: '', title: 'Separated co-parents', note: 'Exchange-day scripts, a tone check, parallel parenting, and a safety note' },
       { href: '/upset-right-now.html', code: '', title: 'Upset right now?', note: 'Pause, breathe and come back: a five-minute page, no sign-up' },
+      { href: '/safety.html', code: '', title: 'Not safe at home?', note: 'Hotlines, leaving this site quickly, and clearing what it keeps' },
       { href: '/surprise.html', code: '', title: 'Surprise me', note: 'One button picks a game, a guide or something calm' },
       { href: '/install.html', code: '', title: 'Get the app', note: 'Android now, iPhone App Store coming soon: its own icon, full screen, works offline' },
       { href: '/program.html', code: '', title: 'Which part of the program to use', note: 'Six weeks, the Workpaper Suite, the package and report, and the indexes: which to use when' },
@@ -139,7 +143,9 @@
       { href: '/relationships.html#caregivers', deep: true, code: '', title: 'Caregivers', note: 'Start with your battery, one owner per job, and the Calm-Down Kit' },
       { href: '/full-path.html', code: 'Package', title: 'The workpaper package and report', note: 'One fillable PDF for your relationship, and a detailed report from your answers: findings, recommendations and a plan' },
       { href: '/relationships.html#map', deep: true, code: 'Map', title: 'The full map', note: 'Every chapter, worksheet and tool, for every kind of relationship' },
-      { href: '/grandparents.html', code: 'New', title: 'For grandparents', note: 'Help with the grandkids without taking over: fair childcare, house rules and saying no kindly' }
+      { href: '/grandparents.html', code: 'New', title: 'For grandparents', note: 'Help with the grandkids without taking over: fair childcare, house rules and saying no kindly' },
+      { href: '/parents.html', code: '', title: 'For parents', note: 'Big feelings, siblings who fight, teens, and watching the pups together' },
+      { href: '/groups.html', code: '', title: 'Leading a group', note: 'A six-session guide with discussion questions and handouts' },
     ]},
     { id: 'book', title: 'The book', blurb: 'Part One is the most important: yourself. Part Two is between us, one idea per chapter, each paired with a workpaper that puts it to use.', items: [
       { sub: 'Part One: The most important, yourself' },
@@ -227,6 +233,7 @@
       { href: '/start-here.html', code: 'Start', title: 'Start here', note: 'What this is in one minute, and your best first step' },
       { href: '/start-in-10-minutes.html', code: '10 min', title: 'Start in 10 minutes', note: 'Today’s weather, the Preface, one card and one thing logged' },
       { href: '/upset-right-now.html', code: 'Now', title: 'Upset right now?', note: 'A five-minute page for two upset people: pause, breathe, come back' },
+      { href: '/safety.html', code: 'Safety', title: 'Not safe at home?', note: 'If someone hurts, threatens, watches or controls you: hotlines, leaving quickly, clearing this site' },
       { href: '/quick-checks.html#today', code: 'Daily', title: 'Today’s Weather', note: 'A one-minute read on how you’re doing today' },
       { href: '/ask.html', code: 'Chat', title: 'Ask Professor Puddles', note: 'Ask in your own words. Answers come only from this site' },
       { href: '/surprise.html', code: 'Wander', title: 'Surprise me', note: 'One button picks a game, a guide or something calm' },
@@ -237,6 +244,8 @@
       { href: '/relationships.html', deep: true, code: 'All', title: 'Where to start in your relationship', note: 'Partners, family, co-parents, friends, roommates, coworkers and caregivers' },
       { href: '/new-parent.html', code: 'New', title: 'New baby, sharing the load', note: 'Three steps for the baby jobs and the invisible ones' },
       { href: '/co-parenting.html', code: 'New', title: 'Separated co-parents', note: 'Calmer handoffs, a tone check, and a route for a co-parent who won’t cooperate' },
+      { href: '/parents.html', code: 'New', title: 'For parents', note: 'Big feelings, siblings who fight, teens, and watching the pups together' },
+      { href: '/groups.html', code: 'New', title: 'Leading a group', note: 'Six sessions with discussion questions and handouts, no sign-up' },
       { href: '/share-the-load.html#roommates', title: 'Roommates and housemates', note: 'Chores, bills and a ten-minute house meeting' },
       { href: '/grandparents.html', title: 'For grandparents', note: 'Help with the grandkids without taking over' },
       { href: '/neurodivergent-relationships.html', code: 'Guide', title: 'Neurodivergent relationships', note: 'Tips for ADHD and autistic couples and families' }
@@ -346,12 +355,11 @@
       { href: '/pause-and-play.html', code: 'All', title: 'Pause & Play', note: 'All the calm games and word puzzles, your level and your garden' },
       { href: '/frequency-journey.html', code: 'Game', title: 'Tidbit and Sugarfoot’s Arcade', note: 'Five gentle classic games: a maze chase, a crossing, a wagon-trail journey, a brick breaker and a catch game' },
       { href: '/calm-visualizer.html', code: 'Drift', title: 'Drift: calm visualizer', note: 'Slow colors and tones matched to how you feel' },
-      { href: '/soundscapes.html', code: 'Audio', title: 'Soundscapes: Brain Breakers', note: 'Four instrumental pieces with a music visualizer, vibration and a picker' },
-      { href: '/soundscapes.html#brain-breakers', code: 'New', title: 'Brain Breakers', note: 'Come get your brain wrecked, broken in a good way: four instrumental pieces from soft to cinematic' },
+      { href: '/soundscapes.html#brain-breakers', code: 'Music', title: 'Brain Breakers', note: 'Four instrumental pieces from soft to cinematic, with a music visualizer and vibration' },
       { href: '/frequency-buddies.html', code: 'Cartoon', title: 'Frequency Buddies', note: 'A free cartoon about feelings, with captions. Live and shuffle versions are inside' },
       { href: '/frequency-buddies-music-video.html', code: 'New', title: 'The theme song music video', note: 'Everyone on stage, singing and dancing' },
       { href: '/frequency-buddies-music-video-maker.html', code: 'Make', title: 'Make your own music video', note: 'Pick the stage, costumes and moves, then share it' },
-      { href: '/frequency-buddies-season-2.html', code: 'Soon', title: 'Season 2 teaser', note: 'New places, new friends, and five hidden secrets' },
+      { href: '/frequency-buddies-season-2.html', code: 'Teaser', title: 'Season 2 teaser', note: 'Out now: new places, new friends, and five hidden secrets. Season 2 is coming soon' },
       { href: '/pal-cam-tv.html', code: 'Live', title: 'Pal Cam TV', note: 'The pups live, all day, full screen or on your TV' },
       { href: '/echoes-of-gold.html', code: 'Album', title: 'Echoes of Gold', note: 'The companion album' }
     ]},
@@ -460,7 +468,7 @@
         var a = el('a', { class: 'tol-row', href: it.href });
         if (it.href.split('#')[0] === current) a.setAttribute('aria-current', 'page');
         a.innerHTML =
-          '<span class="tol-code">' + esc(it.code || '') + '</span>' +
+          '<span class="tol-code">' + esc(it.code || '') + (it.code ? '<span class="sr-only">: </span>' : '') + '</span>' +
           '<span class="tol-title">' + esc(it.title) + (it.note ? '<small>' + esc(it.note) + '</small>' : '') + '</span>' +
           '<span class="tol-access">' + (it.paid ? (isMember ? 'unlocked' : (CONFIG.freePreview ? 'Free with sign-up' : 'members')) : '') + '</span>';
         var li = el('li', it.foot ? { class: 'tol-foot-row' } : null); li.appendChild(a);
@@ -507,7 +515,7 @@
     s.items.forEach(function (it) {
       if (it.sub) { ul.appendChild(el('li', { class: 'tol-sub', role: 'presentation' }, esc(it.sub))); return; }
       if (it.href === '/index.html' || it.menu === false) return;
-      var a = el('a', { href: it.href }, (it.code ? '<span class="tol-drop-code">' + esc(it.code) + '</span>' : '') + '<span>' + esc(it.title) + '</span>');
+      var a = el('a', { href: it.href }, (it.code ? '<span class="tol-drop-code">' + esc(it.code) + '<span class="sr-only">: </span></span>' : '') + '<span>' + esc(it.title) + '</span>');
       if (it.href.split('#')[0] === current) a.setAttribute('aria-current', 'page');
       var li = el('li', it.foot ? { class: 'tol-foot-row' } : null); li.appendChild(a); ul.appendChild(li);
     });
@@ -632,6 +640,7 @@
     panel.appendChild(buildSearch());
     panel.appendChild(el('p', { class: 'tol-panel-intro' }, 'Open a section to see its pages.' +
       (CONFIG.freePreview ? ' Pages marked <em>Free with sign-up</em> open once you sign up with your email. It’s free.' : '')));
+    panel.appendChild(el('p', { class: 'tol-panel-safe' }, '<a href="/safety.html">Not safe at home?</a> <button type="button" data-tol-exit>Leave this site quickly</button>'));
     var tools = el('div', { class: 'tol-panel-tools' });
     tools.appendChild(quietButton('switch'));
     tools.appendChild(stillButton());
@@ -804,7 +813,7 @@
 
     // "Something to read": one hand-picked article that fits this reading page, near the end (reading-suggest.js)
     var readMain = document.querySelector('main.read');
-    if (readMain && !body.hasAttribute('data-no-reading') && !document.querySelector('meta[http-equiv="Content-Security-Policy"]') && !/^\/(index|reading|library|whats-new|contents|contents-in-depth|roadmap|telemetry|404|offline)\.html$|^\/legal\//.test(current)) {
+    if (readMain && !body.hasAttribute('data-no-reading') && !document.querySelector('meta[http-equiv="Content-Security-Policy"]') && !/^\/(index|reading|library|whats-new|contents|contents-in-depth|roadmap|telemetry|404|offline|safety|groups|frequency-buddies[a-z0-9-]*|pal-cam-tv|frequency-journey(-play)?|bears-dojo|pause-and-play)\.html$|^\/legal\//.test(current)) {   // kids' pages and the safety page get no grown-up articles
       var rl = document.createElement('script'); rl.src = '/assets/js/reading-list.js';
       rl.onload = function () {
         var rs = document.createElement('script'); rs.src = '/assets/js/reading-suggest.js';
@@ -930,6 +939,7 @@
         '<a href="/frequency-buddies.html">Kids’ cartoon</a>' +
       '</nav>' +
       '<span class="tol-foot-links">' +
+        '<a href="/safety.html">Not safe at home?</a>' +
         '<a href="/contents.html">All pages</a>' +
         '<a href="/membership.html">Membership</a>' +
         '<a href="/roadmap.html">Roadmap</a>' +
@@ -1024,6 +1034,13 @@
     autism: ['/wired-differently.html', '/wavelength.html', '/wiring-card.html', '/know-yourself.html'], autistic: 'autism', adhd: 'autism', neurodivergent: 'autism', wiring: 'autism', sensory: 'autism',
     personality: ['/wavelength.html', '/know-yourself.html'], quiz: 'personality', archetype: 'personality', wavelength: 'personality', heartprint: 'personality', neurotype: 'personality', audhd: 'autism',
     dyslexia: ['#settings', '/wired-differently.html'], listen: ['#settings'], aloud: ['#settings'], read: null, larger: ['#settings'], size: ['#settings'], bigger: ['#settings'], font: ['#settings'], quiet: ['#settings'], dark: ['#settings'], settings: ['#settings'],
+    safe: ['/safety.html', '/on-this-device.html', '/upset-right-now.html'], safety: 'safe', unsafe: 'safe', abuse: 'safe', abused: 'safe', abusive: 'safe', abuser: 'safe', violence: 'safe', violent: 'safe',
+    hotline: 'safe', helpline: 'safe', danger: 'safe', dangerous: 'safe', scared: 'safe', afraid: 'safe', threat: 'safe', threatened: 'safe', threatens: 'safe', controlling: 'safe', coercive: 'safe', hide: 'safe', escape: 'safe', dv: 'safe', hurts: 'safe', hit: 'safe', hits: 'safe', stalking: 'safe',
+    boundaries: ['/book/self-2-now-in-depth.html', '/self-path.html', '/workpapers/wp-01.html', '/library/connection.html'], boundary: 'boundaries', overgiving: 'boundaries', 'over-giving': 'boundaries', giving: 'boundaries', control: 'boundaries', pleaser: 'boundaries', pleasing: 'boundaries', energy: 'boundaries', resentment: 'boundaries',
+    kids: ['/parents.html', '/frequency-buddies.html', '/library/life.html', '/growing-up.html'], kid: 'kids', child: 'kids', children: 'kids', parenting: 'kids', siblings: 'kids', sibling: 'kids', brothers: 'kids', sisters: 'kids', tantrum: 'kids', tantrums: 'kids',
+    teen: ['/parents.html', '/library/life.html', '/turning-toward.html', '/workpapers/wp-13-pll-protocol.html'], teens: 'teen', teenager: 'teen', teenagers: 'teen', teenage: 'teen', son: 'teen', daughter: 'teen', adolescent: 'teen',
+    group: ['/groups.html', '/check-ins.html'], groups: 'group', leader: 'group', facilitator: 'group', church: 'group', class: 'group', discussion: 'group', curriculum: 'group', course: 'group',
+    unheard: ['/check-ins.html', '/how-to-stop-fighting-with-your-partner.html', '/signal-translator.html'], ignored: 'unheard', dismissed: 'unheard',
     erase: ['/on-this-device.html'], delete: ['/on-this-device.html'], stored: ['/on-this-device.html'], privacy: ['/on-this-device.html', '/legal/privacy-policy.html'],
     minutes: ['/start-in-10-minutes.html', '/quick-checks.html'], start: ['/start-here.html', '/start-in-10-minutes.html'],
     chat: ['/ask.html'], ask: ['/ask.html'], question: ['/ask.html'], professor: ['/ask.html'],
@@ -1057,7 +1074,7 @@
     '#settings': { u: '#settings', t: 'Settings: text size, Easy reading, Quiet mode', d: 'Bigger text, an easy-to-read font, roomy spacing, a page tint, a reading ruler, dark mode, Quiet mode and site sounds. Long pages also have “In short” and “Show me only the steps”.', k: 'Settings' },
     '#palcam': { u: '#palcam', t: 'Check in on Tidbit & Sugarfoot (the pal cam)', d: 'Opens right here: a peek at the two pups, Tidbit and Sugarfoot, with little captions. You can turn the sound off.', k: 'Pups' }
   };
-  var TOOL_URL = /^\/(upset-right-now|surprise|install|conversation-reader|carrier-wave-decoder|signal-translator|lemonade-stand|wiring-card|quick-checks|ask|night-garden|calm-visualizer|soundscapes|pause-and-play|word-bloom|quiet-words|quiet-crossword|daily-ledger-crossword|frequency-journey|start-in-10-minutes|on-this-device)\.html$|^\/workpapers\/(wp-|calculators|fill)|^\/wp-11\.html$|^\/tools\//;
+  var TOOL_URL = /^\/(safety|upset-right-now|surprise|install|conversation-reader|carrier-wave-decoder|signal-translator|lemonade-stand|wiring-card|quick-checks|ask|night-garden|calm-visualizer|soundscapes|pause-and-play|word-bloom|quiet-words|quiet-crossword|daily-ledger-crossword|frequency-journey|start-in-10-minutes|on-this-device)\.html$|^\/workpapers\/(wp-|calculators|fill)|^\/wp-11\.html$|^\/tools\//;
 
   // the words the site uses, with how often, for "Did you mean"
   function prepSearch(list) {
@@ -1183,6 +1200,22 @@
     return { hits: hits, used: used, fixed: fixed, changed: changed, auto: auto };
   }
   var runSearch = function () {};
+  // Leave quickly: any [data-tol-exit] button, or Esc pressed twice, swaps this tab for a weather search
+  // (location.replace, so Back doesn't return here). Linked from the safety page, the menu and safety notes.
+  function quickExit() { try { sessionStorage.removeItem('tol-chat-v1'); } catch (e) {} location.replace('https://www.google.com/search?q=weather+today'); }
+  document.addEventListener('click', function (e) { var b = e.target.closest && e.target.closest('[data-tol-exit]'); if (b) { e.preventDefault(); quickExit(); } });
+  (function () {
+    var last = 0, GAME = /^\/(frequency-journey(-play)?|bears-dojo|night-garden|pause-and-play|word-bloom|quiet-words|quiet-crossword|daily-ledger-crossword|re-check-drive|calm-visualizer|soundscapes)\.html$/;
+    document.addEventListener('keydown', function (e) {
+      if (e.key !== 'Escape' || GAME.test(location.pathname) || document.fullscreenElement) return;
+      // an Esc that closes a menu, dialog or clears a box doesn't count, so closing things never sends anyone away
+      var ae = document.activeElement || {};
+      if (Array.prototype.some.call(document.querySelectorAll('[role="dialog"]:not([hidden]), [aria-modal="true"]:not([hidden]), dialog[open]'), function (d) { return d.getClientRects().length > 0; }) || /^(INPUT|TEXTAREA|SELECT)$/.test(ae.tagName || '') || ae.isContentEditable) { last = 0; return; }
+      var now = Date.now();
+      if (now - last < 700) quickExit();
+      last = now;
+    }, true);
+  })();
   function buildSearch() {
     var box = el('div', { class: 'tol-find', role: 'search' },
       '<label for="tol-find-q">Search the site</label>' +
@@ -1441,7 +1474,12 @@
     add('meta', { name: 'apple-mobile-web-app-title', content: 'The Ledger' });
     if (isApp()) document.documentElement.classList.add('tol-app');
     if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) {
-      window.addEventListener('load', function () { navigator.serviceWorker.register('/sw.js').catch(function () {}); });
+      window.addEventListener('load', function () {
+        navigator.serviceWorker.register('/sw.js').catch(function () {});
+        // the full offline set is saved only in the installed app, and never on a data-saver connection
+        var saver = navigator.connection && navigator.connection.saveData;
+        if (isApp() && !saver) navigator.serviceWorker.ready.then(function (r) { if (r.active) r.active.postMessage({ type: 'save-all' }); }).catch(function () {});
+      });
     }
   }
   function isApp() {
@@ -1534,7 +1572,7 @@
         '<span class="tol-pud-card-art" aria-hidden="true">' + PUDDLES_SVG + '</span>' +
         '<p><strong>Want to know more?</strong> Ask Professor Puddles! He answers in plain words from this site’s own pages, and he can now find you good articles on any topic, too. Nothing you type leaves your device.</p>' +
         '<button type="button" class="tol-pud-card-go">💧 Ask Professor Puddles</button>');
-      endBox.querySelector('button').addEventListener('click', function () { openPud(opts(title ? 'Tell me more about ' + title.replace(/[?.!:]+$/, '') : '')); });
+      endBox.querySelector('button').addEventListener('click', function () { openPud(opts(title && current !== '/index.html' ? 'Tell me more about ' + title.replace(/[?.!:]+$/, '') : '')); /* the home page's headline isn't a topic: just say hello */ });
       main.appendChild(endBox);
     }
 
@@ -1901,7 +1939,7 @@
       sw('bubbles', 'Text bubbles', 'Each piece of text sits in its own soft, round bubble. Turn this off for plain text on the page') +
       '<h3 class="tol-set-k">Time and weather</h3>' +
       sw('wxnote', 'Show the time and weather note', 'A very faint note in the corner of each page') +
-      sw('wxloc', 'Use my location for the weather', 'Your browser asks first. Only a rounded spot is kept, on this device, and nothing is sent to us. Turn this off to forget it') +
+      sw('wxloc', 'Use my location for the weather', 'Your browser asks first. Only a rounded spot is kept, on this device. To look up the weather, that rounded spot is sent to Open-Meteo, a free weather service with no account. Nothing is sent to us. Turn this off to forget it') +
       '<p class="tol-set-wxmsg" role="status" hidden></p>' +
       '<p class="tol-set-foot">These choices stay in this browser only. <button type="button" class="tol-set-reset">Back to the usual</button> <a href="/on-this-device.html">What’s stored on this device</a></p>' +
       '</div>');

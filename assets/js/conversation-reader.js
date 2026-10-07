@@ -100,15 +100,17 @@
     // Threats or control: no rewording makes those okay
     if (r.safety) {
       html += '<section class="cr-safety" role="alert" aria-labelledby="cr-safe"><h2 id="cr-safe">Step away from this one</h2>' +
-        '<p>Something in this conversation reads as a threat, or as checking, controlling or cutting someone off. That isn’t a communication problem to be worded better, and the Reader can’t judge it properly. It’s okay to step away.</p></section>';
+        '<p>Something in this conversation reads as a threat, or as checking, controlling or cutting someone off. That isn’t a communication problem to be worded better, and the Reader can’t judge it properly. It’s okay to step away.</p>' +
+        '<p>If someone is hurting, threatening, watching or controlling you, it isn’t your fault. In the US, the National Domestic Violence Hotline is free and private: call 1-800-799-7233 or text START to 88788. Elsewhere, findahelpline.com lists free lines. If you’re in danger right now, call 911 or your local emergency number.</p>' +
+        '<p><a href="/safety.html">Not safe at home?</a> <button type="button" class="cr-btn is-quiet is-small" data-tol-exit>Leave this site quickly</button></p></section>';
     }
 
     // 03 The read
     html += '<section class="cr-step" aria-labelledby="cr-s3"><h2 id="cr-s3"><span>03</span>The read</h2>';
     html += '<div class="cr-summary">' + summary(r, them) + chart(r) + '</div>';
 
-    // How to respond
-    if (r.next && r.next.length) {
+    // How to respond (not for a thread that reads as threats or control: there, no advice on wording)
+    if (r.next && r.next.length && !r.safety) {
       var mv = '<ol class="cr-moves">';
       r.next.forEach(function (m, i) {
         mv += '<li' + (i === 0 ? ' class="is-first"' : '') + '><h3>' + esc(m.title) + '</h3><p>' + esc(m.say) + '</p>' +
@@ -136,7 +138,7 @@
     html += drop('Message by message', th + '</ol>', false, plural(r.turns.length, 'message'));
 
     // Patterns on each side
-    var pt = patterns(r, them);
+    var pt = r.safety ? '' : patterns(r, them);
     if (pt) html += drop('Patterns on each side', pt, false);
 
     // Other things worth noticing
@@ -164,9 +166,9 @@
       var h = Math.round(g.mins / 60);
       notes.push('<strong>A long silence</strong> of about ' + plural(h, 'hour') + ' before message ' + (g.at + 1) + '. Silence after a hard message is often read as not caring, even when it means someone needed time. Saying “I need some time, I’ll reply tonight” closes that gap.');
     });
-    if (notes.length) html += drop('Worth noticing', '<ul class="cr-list">' + notes.map(function (n) { return '<li>' + n + '</li>'; }).join('') + '</ul>', false, String(notes.length));
+    if (notes.length && !r.safety) html += drop('Worth noticing', '<ul class="cr-list">' + notes.map(function (n) { return '<li>' + n + '</li>'; }).join('') + '</ul>', false, String(notes.length));
 
-    html += '<p style="margin-top:1.5rem;"><a class="dig" href="/check-ins-in-depth.html#order">Dig deeper: how to hold the conversation that comes next</a></p>';
+    if (!r.safety) html += '<p style="margin-top:1.5rem;"><a class="dig" href="/check-ins-in-depth.html#order">Dig deeper: how to hold the conversation that comes next</a></p>';
     html += '</section>';
 
     out.innerHTML = html;

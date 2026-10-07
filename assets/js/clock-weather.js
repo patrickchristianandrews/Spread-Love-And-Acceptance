@@ -39,7 +39,7 @@
   }
   function openCard(note) {
     var set = !!WX;
-    card.innerHTML = '<p class="tol-cw-t">' + (set ? 'Weather is on' : 'Show the weather where you are?') + '</p><p class="tol-cw-p">' + (set ? 'It uses a rounded spot from your location, kept only on this device. Turn it off any time.' : 'Your browser will ask first. Only a rounded spot is kept, on this device, and nothing is sent to us.') + '</p>' + (note ? '<p class="tol-cw-p"><strong>' + note + '</strong></p>' : '') +
+    card.innerHTML = '<p class="tol-cw-t">' + (set ? 'Weather is on' : 'Show the weather where you are?') + '</p><p class="tol-cw-p">' + (set ? 'It uses a rounded spot from your location, kept only on this device and shared only with Open-Meteo, a free weather service, to look up the weather. Turn it off any time.' : 'Your browser will ask first. Only a rounded spot is kept, on this device. To look up the weather, that rounded spot is sent to Open-Meteo, a free weather service with no account. Nothing is sent to us.') + '</p>' + (note ? '<p class="tol-cw-p"><strong>' + note + '</strong></p>' : '') +
       '<div class="tol-cw-b">' + (set ? '<button type="button" data-a="off">Stop using my location</button>' : '<button type="button" data-a="allow" class="is-main">Allow location</button>') + '<button type="button" data-a="hide">Hide this note</button><button type="button" data-a="settings">Open Settings</button><button type="button" data-a="close">Close</button></div>';
     card.hidden = false;
     card.onclick = function (e) {
@@ -68,6 +68,13 @@
     document.addEventListener('keydown', function (e) { if (e.key === 'Escape') card.hidden = true; });
     document.body.appendChild(el); render(); start(false); setInterval(render, 15000); window.addEventListener('resize', render);
     document.addEventListener('fullscreenchange', function () { el.hidden = !!document.fullscreenElement; });
+    // on a touch screen the note steps out of the way while the page scrolls, so it never sits on what someone is reading
+    var rest = null;
+    window.addEventListener('scroll', function () {
+      if (!window.matchMedia || !matchMedia('(pointer:coarse)').matches || !card.hidden) return;
+      el.classList.add('is-scrolling'); clearTimeout(rest);
+      rest = setTimeout(function () { el.classList.remove('is-scrolling'); }, 1400);
+    }, { passive: true });
   }
   function offWx() { try { localStorage.removeItem(KEY); } catch (e) {} WX = null; render(); }
   function showNote(on) {

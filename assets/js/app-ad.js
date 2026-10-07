@@ -140,7 +140,14 @@
       '</aside>';
     var card = host.firstChild, cv = card.querySelector('canvas'), tilt = card.querySelector('.aa-tilt'), say = card.querySelector('.aa-say'), g = cv.getContext('2d');
     document.addEventListener('tol-app-installed', function () { stopLoop(); host.innerHTML = ''; });
-    card.querySelector('.aa-x').addEventListener('click', function () { lsSet('tol-appad-off', '1'); stopLoop(); host.innerHTML = ''; });
+    card.querySelector('.aa-x').addEventListener('click', function () {
+      lsSet('tol-appad-off', '1'); stopLoop();
+      // keep keyboard focus nearby (the next link or button after the card), not back at the top of the page
+      var next = host.nextElementSibling, f = null;
+      while (next && !f) { f = next.matches('a[href], button') ? next : next.querySelector('a[href], button'); next = next.nextElementSibling; }
+      host.innerHTML = '';
+      if (f) f.focus();
+    });
     var raf = 0, vis = true, t0 = performance.now(), lastSay = '';
     function frame(now) {
       raf = 0; if (!vis || document.hidden) return;

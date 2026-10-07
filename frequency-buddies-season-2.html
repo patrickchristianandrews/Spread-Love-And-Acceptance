@@ -41,16 +41,21 @@
   .tz-cv{ display:block; width:100%; height:100%; cursor:pointer; touch-action:manipulation; }
   .tz-tap{ position:absolute; inset:0; z-index:3; pointer-events:none; transition:opacity .35s; }
   .tz-tb{ position:absolute; pointer-events:auto; display:grid; place-items:center; border:2px solid rgba(255,255,255,.75); background:rgba(20,14,32,.62); color:#FFF6E6; cursor:pointer; border-radius:999px; font:600 1.2rem/1 system-ui,sans-serif; width:48px; height:48px; padding:0; }
-  .tz-tap-play{ left:50%; top:50%; width:76px; height:76px; margin:-38px 0 0 -38px; font-size:1.8rem; }
-  .tz-tap-re{ left:.6rem; top:.6rem; } .tz-tap-full{ right:.6rem; top:.6rem; }
+  .tz-tap-play{ left:50%; top:50%; width:76px; height:76px; margin:-38px 0 0 -38px; font-size:1.8rem; pointer-events:none; }
   .tz-tb:focus-visible,.tz-b:focus-visible,.tz-big:focus-visible,.tz-track:focus-visible,.tz-pick:focus-visible{ outline:3px solid #F7C98B; outline-offset:2px; }
+  .tz-player.is-poster .tz-tap,.tz-player.is-poster .tz-prog,.tz-player.is-poster .tz-ctrl{ display:none; }
   .tz-player:not(.is-playing) .tz-tap-play{ opacity:.95; }
   .tz-player.is-idle .tz-tap{ opacity:0; } .tz-player.is-idle .tz-tb{ pointer-events:none; } .tz-player.is-idle .tz-cv{ cursor:none; }
   .tz-stage:has(.tz-ov:not([hidden])) .tz-tap{ display:none; }
   .tz-ov{ position:absolute; inset:0; z-index:4; display:flex; align-items:center; justify-content:center; padding:1rem; text-align:center; background:linear-gradient(180deg,rgba(24,18,40,.15),rgba(24,18,40,.72)); overflow:auto; }
   .tz-ov[hidden]{ display:none; }
-  .tz-start{ background:linear-gradient(180deg,rgba(24,18,40,.35),rgba(24,18,40,.82)); }
-  @media (max-width:600px){ .tz-ov{ padding:.5rem; } .tz-start .tz-k,.tz-end .tz-k{ display:none; } .tz-start p{ margin:.25rem auto 0; font-size:.8rem; } .tz-end h3{ font-size:1.05rem; } .tz-end .tz-end-p{ font-size:.78rem; margin:.15rem auto; } .tz-end .tz-b{ min-height:40px; font-size:.85rem; padding:.3rem .7rem; } .tz-row{ margin-top:.3rem; gap:.35rem; } }
+  /* the poster's label, Play button and secrets line: under the picture, so they never cover the title */
+  .tz-start{ text-align:center; padding:.35rem .5rem .2rem; }
+  .tz-start[hidden]{ display:none; }
+  .tz-start .tz-ovc{ margin:0 auto; }
+  .tz-start .tz-k{ margin:0 0 .5rem; }
+  .tz-start p:last-child{ margin:.55rem auto 0; }
+  @media (max-width:600px){ .tz-ov{ padding:.5rem; } .tz-end .tz-k{ display:none; } .tz-start p:last-child{ font-size:.88rem; } .tz-end h3{ font-size:1.05rem; } .tz-end .tz-end-p{ font-size:.78rem; margin:.15rem auto; } .tz-end .tz-b{ min-height:40px; font-size:.85rem; padding:.3rem .7rem; } .tz-row{ margin-top:.3rem; gap:.35rem; } }
   .tz-ovc{ max-width:32rem; }
   .tz-ovc p{ margin:.35rem auto; color:#F2EAFB; font-size:.95rem; line-height:1.4; }
   .tz-ovc h3{ margin:.1rem 0 .3rem; font:600 clamp(1.15rem,4vw,1.7rem)/1.15 Fraunces,Georgia,serif; color:#FFF3D6; }
@@ -73,9 +78,18 @@
   .tz-b[aria-pressed="true"]{ background:rgba(142,221,166,.16); border-color:#8EDDA6; } .tz-b[aria-pressed="true"] .tz-st{ background:#8EDDA6; color:#16331F; }
   .tz-b[aria-pressed="false"]{ border-style:dashed; color:#CFC7DC !important; }
   .tz-sp{ flex:1; }
-  @media (max-width:600px){ .tz-ctrl .tz-lbl{ display:none; } .tz-b{ padding:.35rem .65rem; } .tz-ovc p{ font-size:.85rem; } .tz-big{ font-size:1rem; min-height:48px; padding:.5rem 1.1rem; } }
+  @media (max-width:600px){ .tz-ctrl .tz-lbl{ position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; } .tz-b{ padding:.35rem .65rem; } .tz-ovc p{ font-size:.85rem; } .tz-big{ font-size:1rem; min-height:48px; padding:.5rem 1.1rem; } }
   .tz-found{ display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:.4rem .8rem; padding:.45rem .8rem; border-radius:14px; background:rgba(255,255,255,.07); font:600 .95rem/1.3 Lora,Georgia,serif; }
   .tz-found b{ color:#FFE08A; }
+  /* the keyboard way to find a secret: the button lights up (and can be reached with Tab) only while a secret is on screen;
+     a faded placeholder holds its place the rest of the time, so nothing below the player jumps */
+  .tz-lookw{ display:inline-grid; }
+  .tz-lookw > *{ grid-area:1/1; justify-content:center; }
+  .tz-look,.tz-look-ghost{ min-height:40px; padding:.25rem .75rem; font-size:.85rem; }
+  .tz-look-ghost{ border-style:dashed; opacity:.45; cursor:default; }
+  .tz-look-ghost:hover{ background:rgba(255,255,255,.08); }
+  .tz-look{ visibility:hidden; background:rgba(255,224,138,.16); border-color:#FFE08A; }
+  .tz-look.is-on{ visibility:visible; } .tz-lookw:has(.tz-look.is-on) .tz-look-ghost{ visibility:hidden; }
   .tz-dots{ display:inline-flex; gap:.35rem; } .tz-dots i{ width:14px; height:14px; border-radius:50%; border:2px solid rgba(255,224,138,.55); } .tz-dots i.on{ background:#FFE08A; border-color:#FFE08A; }
   .tz-sr{ position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; margin:0; }
   .tz-player:fullscreen,.tz-player.is-full{ position:fixed; inset:0; z-index:10050; border-radius:0; padding:max(.6rem,env(safe-area-inset-top)) .8rem max(.6rem,env(safe-area-inset-bottom)); overflow:auto; justify-content:center; }
@@ -168,7 +182,7 @@
 
 <section class="fbt-sec" aria-labelledby="fbt-sh">
   <h2 id="fbt-sh">Spot the secrets</h2>
-  <p class="fbt-lede">A star sticker, a paw print and three more surprises are tucked into the teaser. Tap one on the picture when you see it, or pause and hunt. What you find is remembered on this device only.</p>
+  <p class="fbt-lede">A star sticker, a paw print and three more surprises are tucked into the teaser. Tap one on the picture when you see it, or pause and hunt. With a keyboard or a screen reader, press S while a secret is on screen, or use the “Look for a secret here” button that appears under the picture (you’ll hear when one shows up). What you find is remembered on this device only.</p>
   <ul class="fbt-secrets" data-teaser-secrets></ul>
 </section>
 

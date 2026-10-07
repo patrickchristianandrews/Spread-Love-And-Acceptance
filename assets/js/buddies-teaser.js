@@ -1188,20 +1188,25 @@
   function mount(host) {
     host.innerHTML =
       '<div class="tz-player">' +
-      '<div class="tz-stage"><canvas class="tz-cv" role="img" aria-label="The Frequency Buddies Season 2 teaser. Tap the hidden secrets as it plays."></canvas>' +
+      '<div class="tz-stage"><canvas class="tz-cv" role="img" aria-label="The Frequency Buddies Season 2 teaser. Five secrets are hidden in it: tap them as it plays, or press S while one is on screen."></canvas>' +
       '<div class="tz-fx" aria-hidden="true"></div>' +
-      '<div class="tz-tap"><button type="button" class="tz-tb tz-tap-play" aria-label="Play">▶</button><button type="button" class="tz-tb tz-tap-re" aria-label="Replay from the start">↺</button><button type="button" class="tz-tb tz-tap-full" aria-label="Full screen">⛶</button></div>' +
-      '<div class="tz-ov tz-start"><div class="tz-ovc"><p class="tz-k">Season 2 · the teaser</p><button type="button" class="tz-big">▶ Play the teaser</button><p>About two minutes. <b>Five secrets</b> are hidden in it: tap them when you spot them!</p></div></div>' +
-      '<div class="tz-ov tz-end" hidden><div class="tz-ovc"><p class="tz-k">Season 2 is coming soon</p><h3 class="tz-end-h">You found 0 of 5 secrets</h3><p class="tz-end-p">Watch it again to find them all.</p><div class="tz-row"><button type="button" class="tz-b is-main tz-again">↺ Watch again</button><a class="tz-b" href="#pick">Pick your favorite new place</a></div></div></div>' +
+      // the big play/pause sign over the picture is only a picture: a click on it goes to the canvas, which plays or pauses.
+      // The one set of real controls is the bar under the picture.
+      '<div class="tz-tap" aria-hidden="true"><span class="tz-tb tz-tap-play">▶</span></div>' +
+      '<div class="tz-ov tz-end" hidden><div class="tz-ovc"><p class="tz-k">Season 2 is coming soon</p><h3 class="tz-end-h">You found 0 of 5 secrets</h3><p class="tz-end-p">Watch it again to find them all.</p><div class="tz-row"><button type="button" class="tz-b is-main tz-again"><span aria-hidden="true">↺</span> Watch again</button><a class="tz-b" href="#pick">Pick your favorite new place</a></div></div></div>' +
       '</div>' +
+      // the poster's words sit under the picture, not on top of the big title
+      '<div class="tz-start"><div class="tz-ovc"><p class="tz-k">Out now: the Season 2 teaser</p><button type="button" class="tz-big"><span aria-hidden="true">▶</span> Play the teaser</button><p>Season 2 itself is coming soon. The teaser is about two minutes long, and <b>five secrets</b> are hidden in it: tap them when you spot them, or press S.</p></div></div>' +
       '<div class="tz-prog"><div class="tz-track" role="slider" tabindex="0" aria-label="Teaser time" aria-valuemin="0" aria-valuemax="' + Math.round(DUR) + '" aria-valuenow="0"><div class="tz-fill"></div></div><span class="tz-time">0:00 / ' + fmt(DUR) + '</span></div>' +
-      '<div class="tz-ctrl"><button type="button" class="tz-b is-main tz-play">▶ Play</button><button type="button" class="tz-b tz-re">↺ Replay</button><span class="tz-sp"></span><button type="button" class="tz-b tz-full">⛶ <span class="tz-lbl">Full screen</span></button></div>' +
-      '<div class="tz-found" aria-live="polite"><span class="tz-found-t">🔍 Secrets found: <b>0</b> of 5</span><span class="tz-dots" aria-hidden="true"></span></div>' +
+      '<div class="tz-ctrl"><button type="button" class="tz-b is-main tz-play"><span aria-hidden="true">▶</span> Play</button><button type="button" class="tz-b tz-re"><span aria-hidden="true">↺</span> Replay<span class="tz-sr"> from the start</span></button><span class="tz-sp"></span><button type="button" class="tz-b tz-full"><span aria-hidden="true">⛶</span> <span class="tz-lbl">Full screen</span></button></div>' +
+      '<div class="tz-found"><span class="tz-found-t">🔍 Secrets found: <b>0</b> of 5</span><span class="tz-lookw"><span class="tz-b tz-look-ghost" aria-hidden="true">Watch for a secret…</span><button type="button" class="tz-b tz-look"><span aria-hidden="true">🔍</span> Look for a secret here</button></span><span class="tz-dots" aria-hidden="true"></span></div>' +
       '<p class="tz-sr" aria-live="polite"></p>' +
+      '<p class="tz-sr tz-sr2" aria-live="polite"></p>' +
       '</div>';
     var $ = function (s) { return host.querySelector(s); };
     var player = $('.tz-player'), stage = $('.tz-stage'), cv = $('.tz-cv'), g = cv.getContext('2d'), fxEl = $('.tz-fx');
-    var startOv = $('.tz-start'), endOv = $('.tz-end'), playBtn = $('.tz-play'), track = $('.tz-track'), fill = $('.tz-fill'), timeEl = $('.tz-time'), srEl = $('.tz-sr');
+    var startOv = $('.tz-start'), endOv = $('.tz-end'), playBtn = $('.tz-play'), track = $('.tz-track'), fill = $('.tz-fill'), timeEl = $('.tz-time'), srEl = $('p.tz-sr'), sr2 = $('.tz-sr2'), lookBtn = $('.tz-look');
+    player.classList.add('is-poster');
     var P = { T: 0, playing: false, started: false, sound: true, voices: true, calm: calmNow(), at: 0, raf: 0, recent: [], fx: [], ended: false };
     var A = { ctx: null, master: null, bus: null, live: [], E: null, idx: 0, map: 0, timer: 0 };
     var W = 0, H = 0, dpr = 1, bs = 1;
@@ -1213,7 +1218,7 @@
       paint();
     }
     // after the end, the title stays up behind the end card
-    function paint() { if (!W) return; render(g, W, H, P.ended ? 53.2 + GL : P.T, P.calm, bs); drawFx(); if (P.playing) speakNow(); if (FR.line && FR.line !== lastLive) { lastLive = FR.line; srEl.textContent = FR.line; } }
+    function paint() { if (!W) return; render(g, W, H, P.ended ? 53.2 + GL : P.T, P.calm, bs); drawFx(); if (P.playing) speakNow(); if (FR.line && FR.line !== lastLive) { lastLive = FR.line; srEl.textContent = FR.line; } syncLook(); }
     // the found-a-secret ring, drawn over the picture for a moment
     function drawFx() {
       var now = performance.now(); P.fx = P.fx.filter(function (f) { return now - f.t0 < 1100; });
@@ -1312,10 +1317,14 @@
       paint(); progress(); noteRecent(); P.raf = requestAnimationFrame(loop);
     }
     function progress() { var p = P.T / DUR; fill.style.width = (p * 100).toFixed(2) + '%'; timeEl.textContent = fmt(P.T) + ' / ' + fmt(DUR); track.setAttribute('aria-valuenow', Math.round(P.T)); }
-    function syncBtns() { playBtn.textContent = P.playing ? '❚❚ Pause' : '▶ Play'; var tp = $('.tz-tap-play'); tp.textContent = P.playing ? '❚❚' : '▶'; tp.setAttribute('aria-label', P.playing ? 'Pause' : 'Play'); player.classList.toggle('is-playing', P.playing); }
+    function syncBtns() { playBtn.innerHTML = P.playing ? '<span aria-hidden="true">❚❚</span> Pause' : '<span aria-hidden="true">▶</span> Play'; $('.tz-tap-play').textContent = P.playing ? '❚❚' : '▶'; player.classList.toggle('is-playing', P.playing); }
     function play() {
       if (P.T >= DUR - 0.05 || !P.started) P.T = 0; // the first press starts at the very beginning, not at the poster
-      P.calm = calmNow(); P.started = true; P.ended = false; startOv.hidden = true; endOv.hidden = true;
+      // the button that was pressed (the poster's Play, or Watch again) is about to disappear: keep keyboard and
+      // screen reader focus in the player, on its Pause button, instead of letting it fall to the top of the page
+      var ae = document.activeElement, lost = !!(ae && (startOv.contains(ae) || endOv.contains(ae)));
+      P.calm = calmNow(); P.started = true; P.ended = false; startOv.hidden = true; endOv.hidden = true; player.classList.remove('is-poster');
+      if (lost) { try { playBtn.focus({ preventScroll: true }); } catch (e) { playBtn.focus(); } }
       if (canSay) { try { var pr = new SpeechSynthesisUtterance(' '); pr.volume = 0; speechSynthesis.speak(pr); } catch (e) {} }   // phones only allow speech that starts from a tap
       if (ensureAudio()) audioStart(P.T);
       P.playing = true; P.at = performance.now(); syncBtns(); wake(); if (!P.raf) P.raf = requestAnimationFrame(loop); inView();
@@ -1346,9 +1355,31 @@
       if (fresh) { MEM.found.push(s.id); save(MEM); }
       if (A.ctx && A.bus && A.I) { var t = A.ctx.currentTime + 0.01; [84, 88, 91, 96].forEach(function (m, i) { A.I.bell(t + i * 0.07, m, 0.06); }); }
       else if (ensureAudio()) { var c = A.ctx, out = c.createGain(); out.connect(A.master); var I2 = kit(c, out, function () {}); [84, 88, 91, 96].forEach(function (m, i) { I2.bell(c.currentTime + 0.02 + i * 0.07, m, 0.06); }); setTimeout(function () { try { out.disconnect(); } catch (e) {} }, 2500); }
-      toast(fresh ? (MEM.found.length >= 5 ? 'You found all 5 secrets! 🌟' : 'Secret found: ' + def.name.toLowerCase() + '! ' + MEM.found.length + ' of 5') : 'Already found: ' + def.name.toLowerCase());
+      var msg = fresh ? (MEM.found.length >= 5 ? 'You found all 5 secrets! 🌟' : 'Secret found: ' + def.name.toLowerCase() + '! ' + MEM.found.length + ' of 5') : 'Already found: ' + def.name.toLowerCase();
+      toast(msg); say2(msg.replace(/ 🌟/, ''));
       syncFound(); document.dispatchEvent(new CustomEvent('tol-teaser-secret', { detail: { id: s.id, fresh: fresh, found: MEM.found.slice() } }));
     }
+    // ----- finding secrets from the keyboard: the "Look for a secret here" button under the picture shows up
+    // (and can be reached with Tab) only while a secret is on screen; S does the same from anywhere in the player
+    var lastSecret = '';
+    function say2(msg) { sr2.textContent = ''; setTimeout(function () { sr2.textContent = msg; }, 30); }
+    function secretNow() {
+      if (!P.started || P.ended) return null; var now = performance.now();
+      return FR.secrets[0] || P.recent.filter(function (r) { return now - r.t < 600; })[0] || null;
+    }
+    function syncLook() {
+      var s = secretNow(), id = s ? s.id : '';
+      lookBtn.classList.toggle('is-on', !!s || document.activeElement === lookBtn);
+      if (id !== lastSecret) { lastSecret = id; if (id && MEM.found.indexOf(id) < 0) say2('A secret is on screen. Press S, or the Look for a secret here button, to find it.'); }
+    }
+    function lookHere() {
+      var s = secretNow();
+      if (s) { found(s); wake(); return; }
+      var msg = P.started ? 'No secret on screen right now. Keep watching!' : 'Press Play first, then look for the secrets.';
+      toast(msg); say2(msg);
+    }
+    lookBtn.addEventListener('click', lookHere);
+    lookBtn.addEventListener('blur', function () { if (!secretNow()) lookBtn.classList.remove('is-on'); });
     var toastT = 0;
     function toast(msg) { fxEl.textContent = msg; fxEl.classList.add('is-on'); clearTimeout(toastT); toastT = setTimeout(function () { fxEl.classList.remove('is-on'); }, 2200); }
     function syncFound() {
@@ -1370,9 +1401,6 @@
     });
     stage.addEventListener('mousemove', function () { wake(); });
     $('.tz-big').addEventListener('click', function () { play(); });
-    $('.tz-tap-play').addEventListener('click', function () { toggle(); wake(); });
-    $('.tz-tap-re').addEventListener('click', function () { restart(); });
-    $('.tz-tap-full').addEventListener('click', function () { $('.tz-full').click(); wake(); });
     $('.tz-again').addEventListener('click', function () { restart(); });
     playBtn.addEventListener('click', toggle);
     $('.tz-re').addEventListener('click', restart);
@@ -1395,6 +1423,7 @@
       if (!player.contains(t) && t !== document.body) return;
       if (e.key === ' ' || e.key === 'k') { if (tag === 'BUTTON' && e.key === ' ') return; e.preventDefault(); toggle(); }
       else if (e.key === 'f') $('.tz-full').click();
+      else if (e.key === 's' || e.key === 'S') { if (tag === 'A') return; e.preventDefault(); lookHere(); }
     });
     document.addEventListener('visibilitychange', function () { if (document.hidden && P.playing) pause(); });
     document.addEventListener('tol-still', function () { if (!P.playing) { P.calm = calmNow(); paint(); } });

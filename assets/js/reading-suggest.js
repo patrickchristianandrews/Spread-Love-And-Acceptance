@@ -266,7 +266,7 @@
     aud.appendChild(bSelf); aud.appendChild(bOthers);
 
     var body = el('div', 'tol-read-body');
-    body.setAttribute('aria-live', 'polite');
+    // announced only after someone asks for another article (set on click below), never on its own
     var src = el('span', 'tol-read-src');
     var pil = el('p', 'tol-read-p');
     var title = el(level ? 'h' + level : 'p', 'tol-read-t');
@@ -335,9 +335,9 @@
       if (state.item && fitsAudience(state.item, state.audience)) return;
       another(true);
     }
-    bSelf.addEventListener('click', function () { onAud('self'); });
-    bOthers.addEventListener('click', function () { onAud('others'); });
-    next.addEventListener('click', function () { another(true); });
+    bSelf.addEventListener('click', function () { body.setAttribute('aria-live', 'polite'); onAud('self'); });
+    bOthers.addEventListener('click', function () { body.setAttribute('aria-live', 'polite'); onAud('others'); });
+    next.addEventListener('click', function () { body.setAttribute('aria-live', 'polite'); another(true); });
     function opened() { if (state.item) markOpened(state.item.id); }
     go.addEventListener('click', opened);
     go.addEventListener('auxclick', function (e) { if (e.button === 1) opened(); });
