@@ -19,8 +19,12 @@
 
   // ===== Settings you edit =====
   var CONFIG = {
-    // true = everything is free with an email sign-up; paid membership is "coming soon"
+    // true = everything is free with an email sign-up (unless openAll); paid membership is "coming soon"
     freePreview: true,
+    // true = everything is open to everyone while the program is being built: no sign-up, no locked
+    // sections; the email list stays as an optional way to get updates. Set to false to bring the
+    // sign-up gate (and later paid membership) back.
+    openAll: true,
     signupUrl: 'https://buttondown.email/api/emails/embed-subscribe/spreadloveandacceptance',
     price: '$27/month',
     joinUrl: 'https://gumroad.com/spreadloveandacceptance', // ← replace with your Gumroad product link
@@ -37,6 +41,8 @@
     { id: 'new', title: 'What’s new', blurb: 'Newly added and newly expanded, newest first.', items: [
       { href: '/whats-new.html', code: 'All', title: 'What’s new', note: 'Everything newly added and everything that’s grown, in one place, with dates' },
       { href: '/safety.html', code: 'New', title: 'Not safe at home?', note: 'Free hotlines, a quick way to leave this site, and how to clear what it keeps' },
+      { href: '/work.html', code: 'New', title: 'At work', note: 'The plain version for teams: one owner per job, messages that land, appreciation, and a 45-minute team session' },
+      { href: '/grief.html', code: 'New', title: 'Grief and later life', note: 'Loss, family after a loss, reconnecting, and starting a new chapter, with places to get help' },
       { href: '/groups.html', code: 'New', title: 'Leading a group', note: 'A free six-session guide with discussion questions and one-page handouts' },
       { href: '/parents.html', code: 'New', title: 'For parents', note: 'Big feelings, siblings who fight, calm-down routines, teens, and watching the pups together' },
       { href: '/teens.html', code: 'New', title: 'For teens', note: 'Parents, friends, feelings and dating, written for you, with places to get help' },
@@ -141,10 +147,12 @@
       { href: '/relationships.html#friends', deep: true, code: '', title: 'Friends', note: 'Start with Turning Toward, the Conversation Reader, and saying it so it lands' },
       { href: '/relationships.html#roommates', deep: true, code: '', title: 'Roommates', note: 'Start with the Lemonade Stand, one owner per job, and the daily check-in' },
       { href: '/relationships.html#coworkers', deep: true, code: '', title: 'Coworkers & teams', note: 'Start with one owner per job, getting back in tune, and saying it so it lands' },
+      { href: '/work.html', code: 'New', title: 'At work', note: 'The plain version for teams, with no cartoons: one owner per job, messages, appreciation, a team session' },
       { href: '/relationships.html#caregivers', deep: true, code: '', title: 'Caregivers', note: 'Start with your battery, one owner per job, and the Calm-Down Kit' },
       { href: '/full-path.html', code: 'Package', title: 'The workpaper package and report', note: 'One fillable PDF for your relationship, and a detailed report from your answers: findings, recommendations and a plan' },
       { href: '/relationships.html#map', deep: true, code: 'Map', title: 'The full map', note: 'Every chapter, worksheet and tool, for every kind of relationship' },
       { href: '/grandparents.html', code: 'New', title: 'For grandparents', note: 'Help with the grandkids without taking over: fair childcare, house rules and saying no kindly' },
+      { href: '/grief.html', code: 'New', title: 'Grief and later life', note: 'Loss, family after a loss, reconnecting, and starting a new chapter' },
       { href: '/parents.html', code: '', title: 'For parents', note: 'Big feelings, siblings who fight, teens, and watching the pups together' },
       { href: '/teens.html', code: '', title: 'For teens', note: 'Parents, friends, feelings and dating, written for you' },
       { href: '/groups.html', code: '', title: 'Leading a group', note: 'A six-session guide with discussion questions and handouts' },
@@ -196,10 +204,10 @@
       { href: '/signal-translator.html', code: 'New', title: 'The Signal Translator', note: 'Test a sentence before a check-in. Pick the wiring, the room, and how it might land' },
       { href: '/perspective-shifter.html', code: 'New', title: 'The Perspective Shifter', note: 'See a moment from their side: their state, wiring, surroundings, and what each of you could see' },
       { href: '/carrier-wave-decoder.html', code: 'Tool', title: 'The Carrier Wave Decoder', note: 'A guided session for the moment a conversation starts going sideways' },
-      { href: '/workpapers/calculators/calc01-solvency.html', code: 'CALC-01', title: 'Is the setup working for everyone?', note: 'Also called the solvency read: add your worksheet numbers and see whether the way you share the load is working' },
+      { href: '/workpapers/calculators/calc01-solvency.html', code: 'CALC-01', title: 'Is the setup working for everyone?', note: 'Add your worksheet numbers and see whether the way you share the load is working' },
       { href: '/calc01-solvency.html', code: 'CALC-01', title: 'Is the setup working for everyone? The long form', note: 'Enter hours and jobs for 2–8 people and see the math step by step', menu: false },
-      { href: '/tools/mood-arbitrage-free.html', code: 'Tool', title: 'Mood Arbitrage', note: 'Small, kind ways to shift a heavy mood: a printable plan builder, five scenarios and a four-week practice plan' },
-      { href: '/tools/mood-arbitrage-full.html', code: 'Tool', title: 'Mood Arbitrage: the full toolkit', note: 'Five everyday scenarios and a four-week practice plan', paid: true, menu: false },
+      { href: '/tools/mood-arbitrage-free.html', code: 'Tool', title: 'Soften a tense moment', note: 'Small, kind ways to shift a heavy mood: a printable plan builder, five scenarios and a four-week practice plan' },
+      { href: '/tools/mood-arbitrage-full.html', code: 'Tool', title: 'Soften a tense moment: the full toolkit', note: 'Five everyday scenarios and a four-week practice plan', paid: true, menu: false },
       { href: '/tools/frequency-calibration.html', code: '', title: 'Find your natural rhythms', note: 'Compare your rhythms across five areas of daily life', paid: true },
       { href: '/tools/frequency-sync-visualizer.html', code: '', title: 'Watch two rhythms sync', note: 'A moving picture of how the daily check-in keeps two people in step', paid: true },
       { href: '/snapshot/index.html', code: '', title: 'A quick snapshot', note: 'A two-minute look at how things are right now' }
@@ -222,7 +230,7 @@
       { href: '/suite-index.html', deep: true, code: '', title: 'Suite Index', note: 'The official list of what’s built today. If it isn’t here, it isn’t live yet' },
       { href: '/roadmap.html', code: '', title: 'Content Roadmap', note: 'What’s live, what’s being written, and what’s planned' },
       { href: '/telemetry.html', code: '', title: 'Rollout Status', note: 'How much of the planned program is finished, counted plainly' },
-      { href: '/membership.html', code: '', title: 'Membership', note: 'Free while in development: sign up, or sign out of this browser' },
+      { href: '/membership.html', code: '', title: 'Email updates', note: 'Everything is open; leave your email if you’d like a short note when something new ships' },
       { href: '/on-this-device.html', code: '', title: 'What’s stored on this device', note: 'Everything this site keeps in your browser, in plain words, with a button to erase each one' },
       { href: '/legal/privacy-policy.html', code: '', title: 'Privacy policy', note: 'What’s collected, who holds it, and your rights' },
       { href: '/legal/terms-of-service.html', code: '', title: 'Terms of service', note: 'The rules for using the site' },
@@ -258,6 +266,8 @@
       { href: '/groups.html', code: 'New', title: 'Leading a group', note: 'Six sessions with discussion questions and handouts, no sign-up' },
       { href: '/share-the-load.html#roommates', title: 'Roommates and housemates', note: 'Chores, bills and a ten-minute house meeting' },
       { href: '/grandparents.html', title: 'For grandparents', note: 'Help with the grandkids without taking over' },
+      { href: '/work.html', code: 'New', title: 'At work', note: 'The plain version for teams, with no cartoons' },
+      { href: '/grief.html', code: 'New', title: 'Grief and later life', note: 'Loss, family after a loss, and a new chapter' },
       { href: '/neurodivergent-relationships.html', code: 'Guide', title: 'Neurodivergent relationships', note: 'Tips for ADHD and autistic couples and families' }
     ]},
     { id: 'load', name: 'Share the load', title: 'Share the load', blurb: 'Split the work at home fairly, step by step. What you type stays on your device.', items: [
@@ -295,7 +305,7 @@
       { href: '/perspective-shifter.html', code: 'Tool', title: 'The Perspective Shifter', note: 'See a moment from their side' },
       { href: '/carrier-wave-decoder.html', code: 'Tool', title: 'The Carrier Wave Decoder', note: 'For when a talk starts going sideways' },
       { href: '/workpapers/wp-09-tone-filter.html', deep: true, code: 'WP-09', title: 'Say it so it lands', note: 'A fact, a feeling and a kind ask' },
-      { href: '/tools/mood-arbitrage-free.html', code: 'Tool', title: 'Mood Arbitrage', note: 'Small, kind ways to shift a heavy mood' }
+      { href: '/tools/mood-arbitrage-free.html', code: 'Tool', title: 'Soften a tense moment', note: 'Small, kind ways to shift a heavy mood' }
     ]},
     { id: 'self', name: 'Know yourself', title: 'Know yourself', blurb: 'Everything you can use on your own: understand your wiring, load and patterns, settle yourself, get ready for a hard talk, and read up, at your pace. Nothing here needs anyone else.', items: [
       { href: '/book/topic-know-yourself.html', code: 'Book', title: 'The book on knowing yourself', note: 'Every chapter’s part about you, plus the self tools and workpapers' },
@@ -390,7 +400,7 @@
       { href: '/five-pillars.html', deep: true, title: 'The Five Pillars', note: 'The five ideas under everything here' },
       { href: '/method-and-limits.html', title: 'Method and limits', note: 'Every score, formula and cut-off, written out' },
       { href: '/ways-in.html', deep: true, title: 'Ways in', note: 'Free while it’s being built: what each level opens' },
-      { href: '/membership.html', title: 'Membership', note: 'Sign up free, or sign out of this browser' },
+      { href: '/membership.html', title: 'Email updates', note: 'Optional: a short note when something new ships' },
       { href: '/on-this-device.html', title: 'What’s stored on this device', note: 'See and erase what this site keeps in your browser' },
       { href: '/contents.html', deep: true, code: 'All', title: 'Every page', note: 'The full contents and site directory, including status pages' },
       { href: '/legal/privacy-policy.html', title: 'Privacy policy' },
@@ -420,6 +430,18 @@
   var SENSITIVE = /^\/(growing-up|know-yourself)\.html$/;
   function sensitivePage() { return SENSITIVE.test(current) || !!(document.body && document.body.hasAttribute('data-sensitive')); }
   if (SENSITIVE.test(current)) document.documentElement.classList.add('tol-sensitive');
+  // Work mode: a plain version to share at work, with no mascots, cartoons, garden or games. A link with
+  // ?work=1 turns it on for this tab (it stays on as they click around), ?work=0 turns it off, and pages
+  // marked data-work (the "At work" page) always open in it. Nothing is stored beyond this tab.
+  var WORK = (function () {
+    var q = /[?&]work=([01])\b/.exec(location.search);
+    try {
+      if (q) { if (q[1] === '1') sessionStorage.setItem('tol-work', '1'); else sessionStorage.removeItem('tol-work'); }
+      return sessionStorage.getItem('tol-work') === '1';
+    } catch (e) { return !!(q && q[1] === '1'); }
+  })();
+  function workMode() { return WORK || !!(document.body && document.body.hasAttribute('data-work')); }
+  if (WORK) document.documentElement.classList.add('tol-work');
   // when this visit began (this tab only), so no invitation shows in someone's first minute here
   try { if (!sessionStorage.getItem('tol-visit-t0')) sessionStorage.setItem('tol-visit-t0', String(Date.now())); } catch (e) {}
 
@@ -490,7 +512,7 @@
         a.innerHTML =
           '<span class="tol-code">' + esc(it.code || '') + (it.code ? '<span class="sr-only">: </span>' : '') + '</span>' +
           '<span class="tol-title">' + esc(it.title) + (it.note ? '<small>' + esc(it.note) + '</small>' : '') + '</span>' +
-          '<span class="tol-access">' + (it.paid ? (isMember ? 'unlocked' : (CONFIG.freePreview ? 'Free with sign-up' : 'members')) : '') + '</span>';
+          '<span class="tol-access">' + (it.paid && !CONFIG.openAll ? (isMember ? 'unlocked' : (CONFIG.freePreview ? 'Free with sign-up' : 'members')) : '') + '</span>';
         var li = el('li', it.foot ? { class: 'tol-foot-row' } : null); li.appendChild(a);
         if (it.deep) li.appendChild(el('a', { class: 'dig tol-dig', href: deepHref(it) }, 'Dig deeper'));
         ol.appendChild(li);
@@ -626,6 +648,7 @@
         pb = parseFloat(cs.paddingBottom) || 0, pl = parseFloat(cs.paddingLeft) || 0;
 
     var skip = el('a', { class: 'tol-skip', href: '#tol-main' }, 'Skip to content');
+    if (workMode()) document.documentElement.classList.add('tol-work');
 
     var bar = el('div', { class: 'tol-bar', role: 'banner' });
     bar.style.margin = (-pt) + 'px ' + (-pr) + 'px ' + pt + 'px ' + (-pl) + 'px';
@@ -659,7 +682,7 @@
     panel.appendChild(head);
     panel.appendChild(buildSearch());
     panel.appendChild(el('p', { class: 'tol-panel-intro' }, 'Open a section to see its pages.' +
-      (CONFIG.freePreview ? ' Pages marked <em>Free with sign-up</em> open once you sign up with your email. It’s free.' : '')));
+      (CONFIG.openAll ? ' Everything is open while the site is being built. No sign-up needed.' : CONFIG.freePreview ? ' Pages marked <em>Free with sign-up</em> open once you sign up with your email. It’s free.' : '')));
     panel.appendChild(el('p', { class: 'tol-panel-safe' }, '<a href="/safety.html">Not safe at home?</a> <button type="button" data-tol-exit>Leave this site quickly</button>'));
     var tools = el('div', { class: 'tol-panel-tools' });
     tools.appendChild(quietButton('switch'));
@@ -735,7 +758,7 @@
     function gardenOk() {
       var mm = window.matchMedia;
       if (mm && mm('(prefers-reduced-motion: reduce)').matches && lsGet(STILL_KEY) !== '0') return false;
-      return lsGet(STILL_KEY) !== '1';
+      return lsGet(STILL_KEY) !== '1' && !workMode();
     }
     function makeGarden() {
       if (gardenParts || !gardenOk()) return;
@@ -882,6 +905,11 @@
     body.insertBefore(anchor, body.firstChild);
     body.insertBefore(bar, body.firstChild);
     body.insertBefore(skip, body.firstChild);
+    // work mode from a link: one quiet line under the bar says so, with a way out
+    if (WORK) {
+      var wk = el('p', { class: 'tol-work-note' }, 'Work mode: the plain version, with no cartoons or games. <a href="' + location.pathname + '?work=0">Turn it off</a>');
+      bar.after(wk);
+    }
     if (document.querySelector('aside.sidebar')) document.documentElement.classList.add('tol-own-side');
     // Big text or zoom: nothing in the bar is ever pushed off the side. Step by step, the section
     // buttons fold into Menu, then Join moves into the menu panel, then the name wraps onto two lines.
@@ -965,7 +993,7 @@
       '<span class="tol-foot-links">' +
         '<a href="/safety.html">Not safe at home?</a>' +
         '<a href="/contents.html">All pages</a>' +
-        '<a href="/membership.html">Membership</a>' +
+        '<a href="/membership.html">' + (CONFIG.openAll ? 'Email updates' : 'Membership') + '</a>' +
         '<a href="/roadmap.html">Roadmap</a>' +
         '<a href="/legal/privacy-policy.html">Privacy</a>' +
         '<a href="/on-this-device.html">Stored on this device</a>' +
@@ -1066,7 +1094,8 @@
     teens: ['/teens.html', '/library/life.html'], crush: 'teens', dating: 'teens', bullied: 'teens', bullying: 'teens', school: 'teens', grounded: 'teens', curfew: 'teens',
     group: ['/groups.html', '/check-ins.html'], groups: 'group', leader: 'group', facilitator: 'group', church: 'group', class: 'group', discussion: 'group', curriculum: 'group', course: 'group',
     unheard: ['/check-ins.html', '/how-to-stop-fighting-with-your-partner.html', '/signal-translator.html'], ignored: 'unheard', dismissed: 'unheard',
-    grief: ['/library/emotions.html', '/grandparents.html', '/self-path.html'], grieving: 'grief', widow: 'grief', widower: 'grief', widowed: 'grief', bereaved: 'grief', bereavement: 'grief', mourning: 'grief', died: 'grief', loss: 'grief',
+    grief: ['/grief.html', '/library/emotions.html', '/grandparents.html', '/self-path.html'], retirement: ['/grief.html'], retired: 'retirement', retiring: 'retirement', reconnect: ['/grief.html'], reconnecting: 'reconnect', estranged: 'reconnect',
+    work: ['/work.html', '/appreciation-at-work.html', '/relationships.html'], workplace: 'work', job: 'work', office: 'work', coworker: 'work', coworkers: 'work', colleague: 'work', colleagues: 'work', team: 'work', teams: 'work', manager: 'work', boss: 'work', employee: 'work', employees: 'work', staff: 'work', grieving: 'grief', widow: 'grief', widower: 'grief', widowed: 'grief', bereaved: 'grief', bereavement: 'grief', mourning: 'grief', died: 'grief', loss: 'grief',
     stonewalling: ['/upset-right-now.html', '/how-to-stop-fighting-with-your-partner.html', '/wp-11.html'], stonewall: 'stonewalling',
     grandfather: ['/grandparents.html'], grandpa: 'grandfather', grandmother: 'grandfather', grandma: 'grandfather', grandparent: 'grandfather', grandkids: 'grandfather', grandchildren: 'grandfather',
     erase: ['/on-this-device.html'], delete: ['/on-this-device.html'], stored: ['/on-this-device.html'], privacy: ['/on-this-device.html', '/legal/privacy-policy.html'],
@@ -1564,7 +1593,7 @@
     });
     var main = document.querySelector('main');
     // Professor Puddles sits just above the "Check in on Tidbit & Sugarfoot" link (or below the "what this is" line)
-    var pal = main && main.querySelector('[data-palcam-top]'), intro = main && main.querySelector('[data-home-intro]');
+    var pal = main && main.querySelector('[data-palcam-top], #explore [data-palcam-row]'), intro = main && main.querySelector('[data-home-intro]');
     if (main && pal) pal.parentNode.insertBefore(hi, pal);
     else if (main) main.insertBefore(hi, intro ? intro.nextSibling : main.firstChild); else body.appendChild(hi);
     setTimeout(function () { hi.classList.add('is-in'); }, small ? 0 : 600);
@@ -1843,7 +1872,7 @@
     if (t === 'dark' || t === 'light') return t === 'dark';
     return !!(window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches);
   }
-  function helpersHidden() { return document.documentElement.classList.contains('tol-no-helpers'); }
+  function helpersHidden() { var c = document.documentElement.classList; return c.contains('tol-no-helpers') || c.contains('tol-work'); }
   applyReading();
   if (window.matchMedia) { try { window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', applyReading); } catch (e) {} }
   function darkButton() {
@@ -2469,7 +2498,7 @@
     // once signed up, the header says nothing about it (anyone glancing at the screen would see it);
     // the menu panel keeps a plain "Membership" link
     memberLinks.forEach(function (a) {
-      a.textContent = member ? 'Membership' : (CONFIG.freePreview ? 'Join free' : 'Join');
+      a.textContent = CONFIG.openAll ? 'Email updates' : member ? 'Membership' : (CONFIG.freePreview ? 'Join free' : 'Join');
       a.classList.toggle('is-member', member);
       if (a === memberLink) a.hidden = member;
     });
@@ -2488,7 +2517,7 @@
     function done() {
       unlock();
       try { localStorage.removeItem('tol-join-pending'); } catch (e) {}
-      say('You’re signed up. Every page on the site is now open in this browser. The newsletter may send a confirmation email; confirming keeps you on the update list.', 'ok');
+      say(CONFIG.openAll ? 'You’re on the list. We’ll send a short note when something new ships. The newsletter may send a confirmation email first; confirming keeps you on it.' : 'You’re signed up. Every page on the site is now open in this browser. The newsletter may send a confirmation email; confirming keeps you on the update list.', 'ok');
       applyState(true);
     }
     // The newsletter couldn't be reached (offline, blocked, or the service is down). Everything still
@@ -2498,7 +2527,7 @@
       try { localStorage.setItem('tol-join-pending', '1'); } catch (e) {}
       function warn(box) {
         box.className = 'tol-msg is-warn';
-        box.innerHTML = 'We couldn’t reach the newsletter just now, so you’re not on the update list yet. Everything is open on this device anyway. Try joining again later. ';
+        box.innerHTML = 'We couldn’t reach the newsletter just now, so you’re not on the update list yet. ' + (CONFIG.openAll ? '' : 'Everything is open on this device anyway. ') + 'Try joining again later. ';
         var again = el('button', { type: 'button', class: 'tol-msg-retry' }, 'Try joining again');
         again.addEventListener('click', function () { signUpFree(email, box); });
         box.appendChild(again);
@@ -2589,7 +2618,7 @@
   }
 
   function installGates() {
-    if (!(here && here.paid)) return;
+    if (CONFIG.openAll || !(here && here.paid)) return;
     var locked = document.querySelectorAll('.locked-section');
     if (!locked.length) {
       // Page marked paid but has no locked markup: lock everything after its first block
@@ -2660,8 +2689,10 @@
         e.preventDefault(); signIn(f.querySelector('input[type="email"]').value, msg);
       });
     });
-    document.querySelectorAll('[data-tol-if-member]').forEach(function (n) { n.hidden = !isMember; });
-    document.querySelectorAll('[data-tol-if-guest]').forEach(function (n) { n.hidden = isMember; });
+    // while everything is open, "member" here just means "already left an email for updates"
+    var signed = CONFIG.openAll ? !!lsGet(STORE_KEY) : isMember;
+    document.querySelectorAll('[data-tol-if-member]').forEach(function (n) { n.hidden = !signed; });
+    document.querySelectorAll('[data-tol-if-guest]').forEach(function (n) { n.hidden = signed; });
     document.querySelectorAll('[data-tol-price]').forEach(function (s) { s.textContent = CONFIG.price; });
     document.querySelectorAll('[data-tol-support]').forEach(function (a) {
       a.href = 'mailto:' + CONFIG.supportEmail; a.textContent = CONFIG.supportEmail;
@@ -2977,19 +3008,19 @@
     var stored = null;
     try { stored = localStorage.getItem(STORE_KEY); } catch (e) {}
     // Returning members see content immediately; the check below confirms or revokes it
-    isMember = !!stored;
+    isMember = CONFIG.openAll || !!stored;
     buildChrome();
     installGates();
     applyState(isMember);
     // not signed up yet: the "join free to unlock everything" banner on the home page and the occasional invitation elsewhere
-    if (!isMember && CONFIG.freePreview) { var ji = document.createElement('script'); ji.src = '/assets/js/join-invite.js'; ji.defer = true; document.head.appendChild(ji); }
+    if (!isMember && CONFIG.freePreview && !CONFIG.openAll) { var ji = document.createElement('script'); ji.src = '/assets/js/join-invite.js'; ji.defer = true; document.head.appendChild(ji); }
     // Brain Breakers: the bold card on the home page, and a "Brain Break" card ending each program page
     var BB_PAGE = /^\/(index|start-in-10-minutes|invisible-labor-mental-load|chore-chart-for-couples|how-to-stop-fighting-with-your-partner|neurodivergent-relationships|communication-style-quiz|check-ins|turning-toward|complacency|wired-differently|love-languages|share-the-load|new-parent|co-parenting|prog-01)(-in-depth)?\.html$|^\/(book|workpapers)\/(?!fill\/)/;
-    if ((current === '/index.html' || BB_PAGE.test(current)) && !document.querySelector('meta[http-equiv="Content-Security-Policy"]')) { var bbs = document.createElement('script'); bbs.src = '/assets/js/brain-breaks.js'; bbs.defer = true; document.head.appendChild(bbs); }
+    if ((current === '/index.html' || BB_PAGE.test(current)) && !workMode() && !document.querySelector('meta[http-equiv="Content-Security-Policy"]')) { var bbs = document.createElement('script'); bbs.src = '/assets/js/brain-breaks.js'; bbs.defer = true; document.head.appendChild(bbs); }
     // tablets, laptops and desktops: an "On this page" outline, keyboard shortcuts, roomier touch targets (wide-screens.js)
     { var wsc = document.createElement('script'); wsc.src = '/assets/js/wide-screens.js'; wsc.defer = true; document.head.appendChild(wsc); }
     // a very faint local time and weather note in the corner, so nobody has to leave the page to check (clock-weather.js)
-    { var cwx = document.createElement('script'); cwx.src = '/assets/js/clock-weather.js'; cwx.defer = true; document.head.appendChild(cwx); }
+    if (!workMode()) { var cwx = document.createElement('script'); cwx.src = '/assets/js/clock-weather.js'; cwx.defer = true; document.head.appendChild(cwx); }
     // phones: a "turn sideways" hint under big pictures, and full screen asks for landscape
     if (/^\/(soundscapes|frequency-buddies[a-z0-9-]*|calm-visualizer|night-garden|pal-cam-tv)\.html$/.test(current)) { var tsw = document.createElement('script'); tsw.src = '/assets/js/turn-sideways.js'; tsw.defer = true; document.head.appendChild(tsw); }
     if (location.hash) { var t = document.getElementById(location.hash.slice(1)); if (t) t.scrollIntoView(); }

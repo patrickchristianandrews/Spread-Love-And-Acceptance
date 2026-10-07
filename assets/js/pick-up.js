@@ -55,6 +55,9 @@
   // ---------- coming back: your next step, and what's new since your last visit ----------
   // NEWS mirrors the newest sections of whats-new.html (add a line here when that page gets a new date).
   var NEWS = [
+    ['2026-10-07', 'At work: the plain version for teams', '/work.html'],
+    ['2026-10-07', 'Grief and later life', '/grief.html'],
+    ['2026-10-07', 'Everything is open, no sign-up', '/ways-in.html'],
     ['2026-10-07', 'For teens', '/teens.html'],
     ['2026-10-07', 'The book: an “On your own” part in every chapter', '/book/chapter-1.html#on-your-own'],
     ['2026-10-07', 'A weekly reminder in your own calendar', '/self-path.html#steps'],

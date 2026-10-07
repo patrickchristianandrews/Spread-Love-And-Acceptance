@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-NKC6CQ9S66"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-NKC6CQ9S66');
+</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>At Work: Fair Workloads, Clear Messages, Real Appreciation</title>
+<meta name="description" content="Free, plain help for teams: give every recurring job one owner, write work messages that land, thank people in ways that fit, and run a 45-minute team session.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,500&family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/css/site.css">
+<link rel="stylesheet" href="/assets/css/reading.css">
+<script src="/assets/js/site.js" defer></script>
+<style>
+  /* Only the site's own color tokens are used here, so dark mode follows site.css. */
+  .wk-jump{ list-style:none; padding:0 !important; margin:1rem 0 1.75rem !important; display:flex; flex-wrap:wrap; gap:.5rem; }
+  .wk-jump li{ margin:0 !important; max-width:none !important; }
+  .wk-jump a{ display:inline-flex; align-items:center; min-height:44px; box-sizing:border-box; padding:.45rem 1rem; border:1px solid var(--line); border-radius:999px; background:var(--paper); text-decoration:none; font-size:.98rem; }
+  .wk-jump a:hover{ border-color:var(--credit); }
+  .wk-say{ margin:.6rem 0 1.5rem !important; padding:.3rem 0 .3rem .95rem; border-left:3px solid var(--credit); }
+  .wk-say h3{ font-size:1.02rem !important; margin:.2rem 0 .3rem !important; }
+  .wk-say p{ margin:.35rem 0 !important; }
+  .wk-ba{ margin:.75rem 0 1.25rem; padding:.85rem 1rem; border:1px solid var(--line); border-radius:var(--radius, 10px); background:var(--paper); }
+  .wk-ba p{ margin:.3rem 0 !important; max-width:none !important; }
+  .wk-ba .wk-lab{ display:inline-block; min-width:4.2rem; font-family:"IBM Plex Mono", monospace; font-size:.8rem; letter-spacing:.04em; text-transform:uppercase; color:var(--ink-soft); }
+  .wk-ba .wk-why{ color:var(--ink-soft); font-size:.95rem; }
+  .wk-links{ list-style:none; padding:0 !important; margin:.75rem 0 1.5rem !important; display:grid; gap:.5rem; width:100%; }
+  .wk-links li{ margin:0 !important; max-width:none !important; width:100%; box-sizing:border-box; }
+  .wk-links a{ display:block; min-height:44px; box-sizing:border-box; padding:.7rem 1rem; background:var(--paper); border:1px solid var(--line); border-radius:var(--radius, 10px); text-decoration:none; }
+  .wk-links a:hover{ border-color:var(--credit); }
+  .wk-links a strong{ font-family:"Fraunces", Georgia, serif; text-decoration:underline; text-underline-offset:.15em; }
+  .wk-links a span{ display:block; color:var(--ink-soft); font-size:.95rem; margin-top:.15rem; }
+  .wk-note{ margin:1rem 0 1.5rem; padding:.85rem 1.1rem; border-radius:var(--radius, 10px); border:1px solid var(--line); background:var(--paper-deep); }
+  .wk-note p{ margin:.3rem 0 !important; max-width:none !important; }
+  .wk-time{ font-family:"IBM Plex Mono", monospace; font-size:.8rem; font-weight:400; color:var(--ink-soft); margin-left:.4rem; white-space:nowrap; }
+
+  /* The team one-owner list */
+  .wk-tool{ margin:1.25rem 0 1.75rem; padding:1rem 1.1rem 1.1rem; border:1px solid var(--line); border-radius:var(--radius, 10px); background:var(--paper); }
+  .wk-tool h3{ margin-top:.2rem !important; }
+  .wk-field{ margin:.5rem 0 1rem; }
+  .wk-field label{ display:block; font-weight:600; margin-bottom:.25rem; }
+  .wk-field .wk-hint{ display:block; color:var(--ink-soft); font-size:.92rem; margin:.1rem 0 .35rem; }
+  .wk-tool input[type="text"], .wk-tool select{ font:inherit; font-size:1rem; width:100%; box-sizing:border-box; min-height:44px; padding:.4rem .55rem; border:1px solid var(--ink-soft); border-radius:8px; background:var(--paper); color:var(--ink); }
+  .wk-tool input[type="text"]:focus-visible, .wk-tool select:focus-visible, .wk-tool button:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
+  /* Rows are cards: the job on top, then owner, backup and how often side by side (stacked on a phone). */
+  .wk-tool table, .wk-tool tbody, .wk-tool tr, .wk-tool td{ display:block; width:100%; box-sizing:border-box; }
+  .wk-tool table{ margin:0 0 .75rem; border:0; }
+  .wk-tool thead{ position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; }
+  .wk-tool tr{ display:grid; grid-template-columns:repeat(3, minmax(0, 1fr)) auto; gap:.35rem .6rem; align-items:end; border:1px solid var(--line); border-radius:var(--radius, 10px); padding:.6rem .75rem .75rem; margin:0 0 .75rem; background:var(--paper); }
+  .wk-tool td, .wk-tool td + td{ border:0; padding:0; height:auto; }
+  .wk-tool td:first-child{ grid-column:1 / -1; }
+  .wk-tool td::before{ content:attr(data-label); display:block; font-size:.85rem; font-weight:600; color:var(--ink-soft); margin-bottom:.15rem; }
+  .wk-tool td.wk-del::before, .wk-tool td.wk-empty::before{ content:none; }
+  .wk-tool tr.wk-none{ display:block; border-style:dashed; }
+  .wk-btns{ display:flex; flex-wrap:wrap; gap:.5rem; margin:.5rem 0; }
+  .wk-btn{ font:600 1rem/1.2 "Lora", Georgia, serif; min-height:44px; padding:.5rem 1.1rem; border-radius:999px; border:1.5px solid var(--credit); background:var(--paper); color:var(--ink); cursor:pointer; }
+  .wk-btn.wk-main{ background:var(--credit); color:var(--paper); }
+  .wk-btn.wk-small{ font-size:.92rem; padding:.4rem .85rem; border-color:var(--line); }
+  .wk-btn:hover{ border-color:var(--ink); }
+  .wk-status{ min-height:1.4em; margin:.4rem 0 0 !important; color:var(--ink-soft); font-size:.95rem; }
+  .wk-status button{ margin-left:.5rem; }
+  .wk-privacy{ margin:.9rem 0 0 !important; padding-top:.75rem; border-top:1px solid var(--line); font-size:.95rem; color:var(--ink-soft); max-width:none !important; }
+  .wk-privacy .wk-btn{ margin-top:.4rem; }
+  .wk-empty{ color:var(--ink-soft); font-style:italic; }
+  @media (max-width:560px){
+    .wk-tool tr{ grid-template-columns:minmax(0, 1fr); }
+  }
+  @media print{
+    .wk-btns, .wk-status, .wk-privacy, .wk-tool .wk-del, .wk-tool .wk-hint, .wk-tool tr.wk-none{ display:none !important; }
+    .wk-tool table{ display:table; border-collapse:collapse; }
+    .wk-tool thead{ display:table-header-group; position:static; width:auto; height:auto; overflow:visible; clip:auto; }
+    .wk-tool tbody{ display:table-row-group; }
+    .wk-tool tr{ display:table-row; border:0; padding:0; background:transparent; }
+    .wk-tool td, .wk-tool th{ display:table-cell; padding:.4rem .5rem; border-bottom:1px solid var(--line); text-align:left; }
+    .wk-tool td::before{ content:none; }
+    .wk-tool input[type="text"], .wk-tool select{ border:0; padding:0; min-height:0; -webkit-appearance:none; appearance:none; background:transparent; }
+    .wk-tool td:first-child{ width:40%; }
+    .wk-tool input::placeholder{ color:transparent; }
+    .wk-tool select:has(option[value=""]:checked){ color:transparent; }
+    html.wk-printing main > *:not(.wk-tool){ display:none !important; }
+    html.wk-printing .wk-tool{ border:0; padding:0; margin:0; box-shadow:none; }
+  }
+  main.read > ul.wk-links.wk-links.wk-links, main.read > ul.wk-jump.wk-jump.wk-jump{ --bb-pl:var(--bb-px); padding-left:var(--bb-px) !important; } /* the list cards sit evenly inside their bubble */
+</style>
+<!-- seo:start -->
+<link rel="canonical" href="https://spreadloveandacceptance.com/work.html">
+<link rel="alternate" hreflang="en-us" href="https://spreadloveandacceptance.com/work.html">
+<link rel="alternate" hreflang="x-default" href="https://spreadloveandacceptance.com/work.html">
+<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+<meta name="keywords" content="self-help, relationships, kindness, love, appreciation, acceptance, connection, communication, calm, peace, harmony, reconciliation, emotional wellbeing, self-discovery, fairness at home, mental load, invisible work, free self-help tools">
+<meta name="author" content="Christian, Spread Love &amp; Acceptance">
+<meta name="application-name" content="Spread Love &amp; Acceptance">
+<meta name="theme-color" content="#F5EFDE">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" href="/assets/icons/icon.svg" type="image/svg+xml">
+<link rel="icon" href="/assets/icons/favicon-32.png" type="image/png" sizes="32x32">
+<link rel="icon" href="/assets/icons/favicon-16.png" type="image/png" sizes="16x16">
+<link rel="apple-touch-icon" href="/assets/icons/apple-touch-icon-180.png" sizes="180x180">
+<link rel="manifest" href="/manifest.webmanifest">
+<meta property="og:site_name" content="Spread Love &amp; Acceptance">
+<meta property="og:title" content="At Work: Fair Workloads, Clear Messages, Real Appreciation">
+<meta property="og:description" content="Free, plain help for teams: give every recurring job one owner, write work messages that land, thank people in ways that fit, and run a 45-minute team session.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://spreadloveandacceptance.com/work.html">
+<meta property="og:image" content="https://spreadloveandacceptance.com/assets/img/og-image.png">
+<meta property="og:image:type" content="image/png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Two friends sharing one heart, with two happy pups: Spread Love &amp; Acceptance">
+<meta property="og:locale" content="en_US">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="At Work: Fair Workloads, Clear Messages, Real Appreciation">
+<meta name="twitter:description" content="Free, plain help for teams: give every recurring job one owner, write work messages that land, thank people in ways that fit, and run a 45-minute team session.">
+<meta name="twitter:image" content="https://spreadloveandacceptance.com/assets/img/og-image.png">
+<meta name="twitter:image:alt" content="Two friends sharing one heart, with two happy pups: Spread Love &amp; Acceptance">
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@id":"https://spreadloveandacceptance.com/work.html#page","name":"At Work: Fair Workloads, Clear Messages, Real Appreciation","headline":"At Work: Fair Workloads, Clear Messages, Real Appreciation","description":"Free, plain help for teams: give every recurring job one owner, write work messages that land, thank people in ways that fit, and run a 45-minute team session.","url":"https://spreadloveandacceptance.com/work.html","inLanguage":"en-US","isAccessibleForFree":true,"keywords":"self-help, relationships, kindness, love, appreciation, acceptance, connection, communication, calm, peace, harmony, reconciliation, emotional wellbeing, self-discovery, fairness at home, mental load, invisible work, free self-help tools","publisher":{"@type":"Organization","@id":"https://spreadloveandacceptance.com/#org","name":"Spread Love & Acceptance","url":"https://spreadloveandacceptance.com/","logo":{"@type":"ImageObject","url":"https://spreadloveandacceptance.com/assets/img/logo-stacked.png"}},"isPartOf":{"@type":"WebSite","@id":"https://spreadloveandacceptance.com/#website","name":"Spread Love & Acceptance","url":"https://spreadloveandacceptance.com/"},"datePublished":"2026-10-07","dateModified":"2026-10-07","image":"https://spreadloveandacceptance.com/assets/img/og-image.png","primaryImageOfPage":{"@type":"ImageObject","url":"https://spreadloveandacceptance.com/assets/img/og-image.png"},"@type":"WebPage"},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Spread Love & Acceptance","item":"https://spreadloveandacceptance.com/"},{"@type":"ListItem","position":2,"name":"At Work: Fair Workloads, Clear Messages, Real Appreciation","item":"https://spreadloveandacceptance.com/work.html"}]}]}</script>
+<!-- seo:end -->
+</head>
+<body data-work data-no-offer data-no-learnplay data-no-cheer data-no-pillars data-no-buddies data-no-pupvisits data-no-brain-break data-no-clip data-no-puddles>
+<main class="read" id="main">
+<header class="read-head"><p class="read-code">At work</p><h1>At work: fair workloads, clear messages, real appreciation</h1></header>
+
+<p class="simple-lede">Most friction at work is not about people being difficult. It comes from jobs nobody clearly owns, messages that land harder than they were meant, and thanks that doesn’t fit. This page gathers simple, free tools for all three. It is written so a team lead or HR manager can share it with a team as it is.</p>
+
+<ul class="wk-jump" aria-label="On this page">
+  <li><a href="#workload">Fair workloads</a></li>
+  <li><a href="#messages">Messages that land</a></li>
+  <li><a href="#appreciation">Appreciation that counts</a></li>
+  <li><a href="#team-session">A 45-minute team session</a></li>
+  <li><a href="#one-to-ones">Better one-to-ones</a></li>
+  <li><a href="#more">Go deeper</a></li>
+</ul>
+
+<h2 id="workload">Fair workloads</h2>
+<p>Every team runs on work that never appears on a project plan: sending the follow-up after a meeting, keeping the notes, booking the room, chasing the missing figure, remembering the deadline nobody wrote down, welcoming the new starter. This is coordination work. It keeps everything moving, and it is easy to miss for three reasons.</p>
+<ul>
+  <li><strong>It is invisible when it works.</strong> Nobody notices the reminder that went out. They only notice when it doesn’t.</li>
+  <li><strong>It drifts to whoever is reliable.</strong> The person who did it once becomes the person who always does it, without anyone deciding that.</li>
+  <li><strong>It rarely shows up in a review.</strong> Over time the person carrying it does more and gets less credit, and resentment builds quietly.</li>
+</ul>
+<p>When a job belongs to “everyone,” it often ends up belonging to no one, or to the same one person every time. The fix is not to blame anyone. It is to write the recurring jobs down and give each one a single owner, with a backup for holidays and busy weeks. Fix the setup, not the person.</p>
+
+<section class="wk-tool tol-plain" id="owner-list" aria-labelledby="owner-list-h">
+  <h3 id="owner-list-h">Team one-owner list</h3>
+  <p>List the jobs that come round again and again. Give each one an owner, a backup and how often it happens. This is the team version of the site’s <a href="/workpapers/wp-03-raci-treaty.html">One owner per job</a> worksheet.</p>
+
+  <div class="wk-field">
+    <label for="wk-team">Team members</label>
+    <span class="wk-hint" id="wk-team-hint">Type first names, separated by commas. They fill the owner and backup lists below.</span>
+    <input type="text" id="wk-team" aria-describedby="wk-team-hint" autocomplete="off" placeholder="For example: Ana, Ben, Chris, Dee">
+  </div>
+
+  <div class="table-wrap">
+    <table id="wk-table" class="no-bubble">
+      <caption class="sr-only">Recurring jobs, with an owner, a backup and how often</caption>
+      <thead>
+        <tr><th scope="col">Recurring job</th><th scope="col">Owner</th><th scope="col">Backup</th><th scope="col">How often</th><th scope="col" class="wk-del"><span class="sr-only">Remove</span></th></tr>
+      </thead>
+      <tbody id="wk-rows"></tbody>
+    </table>
+  </div>
+
+  <div class="wk-btns">
+    <button type="button" class="wk-btn wk-main" id="wk-add">Add a row</button>
+    <button type="button" class="wk-btn" id="wk-print">Print</button>
+    <button type="button" class="wk-btn" id="wk-clear">Clear</button>
+  </div>
+  <p class="wk-status" id="wk-status" role="status" aria-live="polite"></p>
+
+  <p class="wk-privacy" id="wk-privacy">Private: this list is kept only in this browser, on this device. Nothing is sent anywhere, and your team can’t see it unless you print or share it yourself. <button type="button" class="wk-btn wk-small" id="wk-erase">Erase what’s saved</button></p>
+</section>
+
+<p>A few tips. Start with the five jobs that cause the most “I thought you were doing that.” Agree the list together, rather than handing it out. Give the jobs nobody wants a rotation, so they don’t settle on one person. And look at the list again every month or two: owners change as work changes.</p>
+
+<h2 id="messages">Messages that land</h2>
+<p>At work, a short message carries more than its words. Pay, reviews and reputation sit underneath it, so a quick line can read as a criticism, an order or a hidden note about someone’s competence, even when it wasn’t meant that way. A little extra clarity costs a few seconds and saves a lot of second-guessing.</p>
+<p><a href="/signal-translator.html">The Signal Translator</a> is a free tool for checking a message before you send it. Type the sentence, choose the work message setting, and it shows how it may land and offers a clearer, kinder way to say it. What you type stays on your device.</p>
+
+<h3>Three before-and-after examples</h3>
+<div class="wk-ba">
+  <p><span class="wk-lab">Before</span> “Per my last email, the figures are attached.”</p>
+  <p><span class="wk-lab">After</span> “Sending the figures again here in case the first email got buried. The totals are on page 2.”</p>
+  <p class="wk-why">Why: “per my last email” is often read as “you didn’t read it.” The new version gives the same information without the sting.</p>
+</div>
+<div class="wk-ba">
+  <p><span class="wk-lab">Before</span> “We need to talk about your performance.”</p>
+  <p><span class="wk-lab">After</span> “Could we meet Thursday at 2 for twenty minutes? The last two client reports went out a few days late, and I’d like to work out together what would help.”</p>
+  <p class="wk-why">Why: a vague, heavy opener leaves someone worrying for days. Being specific about the topic, the time and the aim is kinder, not harsher.</p>
+</div>
+<div class="wk-ba">
+  <p><span class="wk-lab">Before</span> “Just circling back on this.”</p>
+  <p><span class="wk-lab">After</span> “Could you send the signed contract by Friday at noon? If that date doesn’t work, let me know what would.”</p>
+  <p class="wk-why">Why: “circling back” hints that something is late without saying what is needed. A clear ask with a date is easier to answer.</p>
+</div>
+
+<h3>Fact, impact, request</h3>
+<p>Elsewhere on this site, a hard message has three parts: a fact, a feeling and an ask. At work, the same shape becomes <strong>fact, impact, request</strong>.</p>
+<ol>
+  <li><strong>Fact.</strong> What happened, in words a camera could record. No labels like “careless” or “always.”</li>
+  <li><strong>Impact.</strong> What it meant for the work, the customer or the team. You can say how it affected you, briefly: “I was caught off guard.”</li>
+  <li><strong>Request.</strong> One clear, small ask, with an owner and, if it helps, a date.</li>
+</ol>
+<div class="wk-say">
+  <h3>For example</h3>
+  <p>“The report went out on Monday without the March figures. The client asked about them on the call and I didn’t have an answer. Could we add a check of the figures to Friday’s list, and could you own that check?”</p>
+</div>
+
+<h2 id="appreciation">Appreciation that counts</h2>
+<p>People like to be thanked in different ways at work. One person loves public praise in the team meeting; the person at the next desk would much rather have a quiet note. <a href="/appreciation-at-work.html">Appreciation at work</a> walks through five kinds: specific words, real attention, practical help, a small thoughtful token, and (for those who welcome it) a handshake or a high-five.</p>
+<p>An honest word about the evidence: the “five languages of appreciation” idea is popular in workplaces but has been tested very little. The sturdier finding is simpler. People tend to value appreciation that is <strong>specific, timely, sincere and given in a way that fits them</strong>. So use the five as prompts for a question, not as labels for coworkers.</p>
+<ul>
+  <li><strong>Ask.</strong> “When something goes well, how do you like to be thanked: in public, or one-to-one?”</li>
+  <li><strong>Be specific.</strong> “Thank you for catching that error. It saved us a day.”</li>
+  <li><strong>Check who you’ve missed.</strong> Once a month: “Whom have I not thanked in a while?” The coordination work above is often the first thing to go unthanked.</li>
+</ul>
+<div class="wk-note">
+  <p><strong>Thanks never replaces fair pay or a fair workload.</strong> Appreciation that goes with fair treatment feels real. Appreciation used in place of it, or to avoid a harder conversation about pay, workload or boundaries, tends to feel hollow.</p>
+</div>
+
+<h2 id="team-session">A 45-minute team session</h2>
+<p>An outline for a team of about three to ten people, adapted from the site’s <a href="/groups.html">guide for leading a group</a>. You don’t need a facilitator. Anyone on the team can host it. Bring this page on a screen, or print the one-owner list above.</p>
+
+<h3>Ground rules <span class="wk-time">read aloud at the start</span></h3>
+<ul>
+  <li><strong>No one has to share.</strong> Listening is taking part, and “pass” is a full answer.</li>
+  <li><strong>Talk about the work, not personalities.</strong> Jobs, handoffs and messages, not who someone is.</li>
+  <li><strong>No one is rated.</strong> Nothing said here goes into a review, a file or a scorecard.</li>
+</ul>
+
+<h3>Opener <span class="wk-time">5 minutes</span></h3>
+<p>Go round the table: “Name one small thing someone on this team did recently that made your week easier.” Anyone can pass.</p>
+
+<h3>The one-owner list <span class="wk-time">15 minutes</span></h3>
+<p>Together, list the recurring jobs that keep the team running, especially the invisible ones: notes, follow-ups, onboarding, the shared inbox, the rota. For each, agree one owner and one backup. If a job has no volunteer, give it a rotation. Use the <a href="#owner-list">team one-owner list</a> on a shared screen.</p>
+
+<h3>Messages that land <span class="wk-time">15 minutes</span></h3>
+<p>In pairs, each person brings one ordinary, low-stakes message: a request, a reminder, a handover. Rewrite it using <a href="#messages">fact, impact, request</a>, or run it through the Signal Translator. Swap and ask: “How does this land for you?” Keep examples general. Nobody brings a real complaint about a colleague.</p>
+
+<h3>Agreements <span class="wk-time">10 minutes</span></h3>
+<p>Agree two or three small things to try for the next month, such as “every meeting ends with one owner per action” or “deadlines go in the first line of the message.” Write them down and set a date to look back.</p>
+
+<div class="wk-note">
+  <p><strong>Keep it voluntary, and keep it separate from performance.</strong> This is a session about how the team works, not about how well any one person works. Never use what people say or write here to evaluate anyone. If an issue with one person comes up, take it to a private conversation, not the group.</p>
+</div>
+
+<h2 id="one-to-ones">Better one-to-ones</h2>
+<p>A regular one-to-one between a manager and a team member works best as a short, calm talk, not a status report. The site’s <a href="/check-ins.html">check-in</a> idea fits it well.</p>
+<ul>
+  <li><strong>A set time.</strong> Same day, same time, kept. Moving it once is fine; cancelling it again and again tells someone they’re not a priority.</li>
+  <li><strong>One topic.</strong> Pick the one thing that matters most this week. If another comes up, write it down for next time.</li>
+  <li><strong>Hear it back before you answer.</strong> One person says what happened and how it landed. The other says back what they heard and asks, “Did I get that?” Solutions wait until both have been heard.</li>
+</ul>
+<div class="wk-say">
+  <h3>Words you could use</h3>
+  <p>“What’s the one thing that would make next week easier?”</p>
+  <p>“Let me check I’ve understood: the handover from sales is arriving without the contract details, and you’re losing a day chasing them. Did I get that?”</p>
+  <p>“I don’t have an answer yet. I’ll come back to you by Wednesday.”</p>
+</div>
+
+<h2 id="more">Go deeper</h2>
+<ul class="wk-links">
+  <li><a href="/library/teams.html"><strong>Systems and teams</strong><span>The research on clear owners, handoffs, blameless reviews and why shared jobs slip.</span></a></li>
+  <li><a href="/relationships-in-depth.html#coworkers"><strong>Coworkers and teams</strong><span>How invisible work shows up at work, and which tools fit a team.</span></a></li>
+  <li><a href="/method-and-limits.html"><strong>Method and limits</strong><span>How every score on the site is worked out, and what it cannot tell you.</span></a></li>
+  <li><a href="/appreciation-at-work.html"><strong>Appreciation at work</strong><span>Five ways people like to be thanked, as a menu rather than a label.</span></a></li>
+  <li><a href="/signal-translator.html"><strong>The Signal Translator</strong><span>Check how a message may land before you send it, with a clearer way to say it.</span></a></li>
+  <li><a href="/conversation-reader.html"><strong>The Conversation Reader</strong><span>Paste a thread that went wrong and see where it turned, with calmer replies.</span></a></li>
+  <li><a href="/upset-right-now.html"><strong>Upset right now?</strong><span>For heated moments: a pause line with a return time, a breathing pacer, and how to come back.</span></a></li>
+</ul>
+<div class="wk-note">
+  <p>To share this page without decorations, use the link <a href="https://spreadloveandacceptance.com/work.html">spreadloveandacceptance.com/work.html</a> — it opens in work mode. Any page can open in work mode by adding <code>?work=1</code> to its address.</p>
+</div>
+<p>This page shares general ideas about how teams work. It is not legal, HR or medical advice, and it is not a tool for evaluating anyone’s performance.</p>
+</main>
+<script>
+(function () {
+  'use strict';
+  // Team one-owner list. Kept only in this browser (localStorage), never sent anywhere.
+  var KEY = 'tol-work-owners-v1';
+  var OFTEN = ['Daily', 'Weekly', 'Every two weeks', 'Monthly', 'Quarterly', 'As needed'];
+  var team = document.getElementById('wk-team');
+  var body = document.getElementById('wk-rows');
+  var status = document.getElementById('wk-status');
+  if (!team || !body) return;
+  var state = { team: '', rows: [] };
+  var undo = null;
+
+  function load() {
+    try {
+      var s = JSON.parse(localStorage.getItem(KEY) || 'null');
+      if (s && typeof s === 'object') {
+        state.team = typeof s.team === 'string' ? s.team : '';
+        state.rows = Array.isArray(s.rows) ? s.rows.filter(function (r) { return r && typeof r === 'object'; }) : [];
+      }
+    } catch (e) {}
+  }
+  function save() {
+    try { localStorage.setItem(KEY, JSON.stringify({ v: 1, team: state.team, rows: state.rows })); } catch (e) {}
+  }
+  function names() {
+    var seen = {}, out = [];
+    state.team.split(/[,;\n]/).forEach(function (n) {
+      n = n.trim();
+      if (n && !seen[n.toLowerCase()]) { seen[n.toLowerCase()] = 1; out.push(n); }
+    });
+    return out;
+  }
+  function say(msg, withUndo) {
+    status.textContent = msg;
+    if (withUndo) {
+      var b = document.createElement('button');
+      b.type = 'button'; b.className = 'wk-btn wk-small'; b.textContent = 'Undo';
+      b.addEventListener('click', function () {
+        if (!undo) return;
+        state.rows = undo; undo = null; save(); render(); say('Restored.');
+      });
+      status.appendChild(b);
+    }
+  }
+  function opt(sel, value, label) {
+    var o = document.createElement('option');
+    o.value = value; o.textContent = label;
+    sel.appendChild(o);
+    return o;
+  }
+  function personSelect(value, list) {
+    var sel = document.createElement('select');
+    opt(sel, '', list.length ? 'Choose…' : 'Add team members above');
+    list.forEach(function (n) { opt(sel, n, n); });
+    // keep a saved name even if it was taken out of the team field, so nothing is lost silently
+    if (value && list.indexOf(value) === -1) opt(sel, value, value + ' (not in team list)');
+    sel.value = value || '';
+    return sel;
+  }
+  function cell(label, control) {
+    var td = document.createElement('td');
+    td.setAttribute('data-label', label);
+    td.appendChild(control);
+    return td;
+  }
+  function render() {
+    var list = names();
+    body.textContent = '';
+    state.rows.forEach(function (r, i) {
+      var n = i + 1;
+      var tr = document.createElement('tr');
+      var task = document.createElement('input');
+      task.type = 'text'; task.value = r.task || ''; task.autocomplete = 'off';
+      task.placeholder = 'For example: send the meeting notes';
+      task.setAttribute('aria-label', 'Recurring job, row ' + n);
+      task.addEventListener('input', function () { r.task = task.value; save(); });
+      var owner = personSelect(r.owner, list);
+      owner.setAttribute('aria-label', 'Owner, row ' + n);
+      owner.addEventListener('change', function () { r.owner = owner.value; save(); });
+      var backup = personSelect(r.backup, list);
+      backup.setAttribute('aria-label', 'Backup, row ' + n);
+      backup.addEventListener('change', function () { r.backup = backup.value; save(); });
+      var often = document.createElement('select');
+      opt(often, '', 'Choose…');
+      OFTEN.forEach(function (f) { opt(often, f, f); });
+      often.value = OFTEN.indexOf(r.often) > -1 ? r.often : '';
+      often.setAttribute('aria-label', 'How often, row ' + n);
+      often.addEventListener('change', function () { r.often = often.value; save(); });
+      var del = document.createElement('button');
+      del.type = 'button'; del.className = 'wk-btn wk-small'; del.textContent = 'Remove';
+      del.setAttribute('aria-label', 'Remove row ' + n);
+      del.addEventListener('click', function () {
+        state.rows.splice(i, 1); save(); render();
+        say('Row removed.');
+        var next = body.querySelector('input');
+        (next || document.getElementById('wk-add')).focus();
+      });
+      tr.appendChild(cell('Recurring job', task));
+      tr.appendChild(cell('Owner', owner));
+      tr.appendChild(cell('Backup', backup));
+      tr.appendChild(cell('How often', often));
+      var tdDel = cell('', del); tdDel.className = 'wk-del'; tr.appendChild(tdDel);
+      body.appendChild(tr);
+    });
+    if (!state.rows.length) {
+      var tr0 = document.createElement('tr'); tr0.className = 'wk-none';
+      var td0 = document.createElement('td');
+      td0.colSpan = 5; td0.className = 'wk-empty';
+      td0.textContent = 'No jobs yet. Use “Add a row” to start.';
+      tr0.appendChild(td0); body.appendChild(tr0);
+    }
+  }
+
+  team.addEventListener('input', function () { state.team = team.value; save(); render(); });
+  document.getElementById('wk-add').addEventListener('click', function () {
+    state.rows.push({ task: '', owner: '', backup: '', often: '' });
+    save(); render(); say('Row added.');
+    var inputs = body.querySelectorAll('input');
+    if (inputs.length) inputs[inputs.length - 1].focus();
+  });
+  document.getElementById('wk-print').addEventListener('click', function () {
+    var root = document.documentElement;
+    root.classList.add('wk-printing');
+    var done = function () { root.classList.remove('wk-printing'); window.removeEventListener('afterprint', done); };
+    window.addEventListener('afterprint', done);
+    window.print();
+    setTimeout(done, 1000);
+  });
+  document.getElementById('wk-clear').addEventListener('click', function () {
+    if (!state.rows.length) { say('The list is already empty.'); return; }
+    undo = state.rows.slice();
+    state.rows = []; save(); render();
+    say('List cleared. Team names were kept.', true);
+  });
+  document.getElementById('wk-erase').addEventListener('click', function () {
+    try { localStorage.removeItem(KEY); } catch (e) {}
+    state = { team: '', rows: [] }; undo = null;
+    team.value = ''; render();
+    say('Erased. Nothing from this list is saved in this browser now.');
+  });
+
+  load();
+  team.value = state.team;
+  if (!state.rows.length && !state.team) state.rows.push({ task: '', owner: '', backup: '', often: '' });
+  render();
+})();
+</script>
+</body>
+</html>

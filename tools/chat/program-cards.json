@@ -1134,12 +1134,12 @@
       ],
       "links": [
         [
-          "Grief, loss and change (the Professor’s Library)",
-          "/library/emotions.html#grief-and-change"
+          "Grief and later life",
+          "/grief.html"
         ],
         [
-          "Your self-discovery path",
-          "/self-path.html"
+          "Grief, loss and change (the Professor’s Library)",
+          "/library/emotions.html#grief-and-change"
         ],
         [
           "For grandparents: staying close",
@@ -1233,6 +1233,45 @@
           "What’s in session one of the group guide?"
         ]
       ]
+    },
+    {
+      "id": "atwork",
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "name": "using this at work",
+      "pat": "\\b(use|using|bring|share|try|run) (this|it|the site|these tools|the program) (at|for|with) (work|my team|our team|the office|my job|my staff|my coworkers|my colleagues)\\b|\\b(at|for) work (version|mode)\\b|\\bwork ?mode\\b|\\b(my|our) team (doesnt|does not|won t|wont|keeps|never|always)\\b|\\b(who owns what|nobody owns|no one owns) (at work|on (my|our|the) team)\\b|\\b(team|staff|work) (meeting|session|retro|offsite) (idea|ideas|activity|exercise)\\b|\\bwithout (the )?(cartoons|mascots|dogs|pups) (for|at) work\\b",
+      "keys": [],
+      "what": [
+        "Yes. The At work page is the plain version for teams, with no cartoons: one owner per job for a team (a small tool you can print), messages that land, appreciation that fits the person, a 45-minute team session, and one-to-ones."
+      ],
+      "how": [
+        "Start with the one-owner list: every recurring job gets one owner and one backup, so nobody has to keep chasing.",
+        "Test a tricky email or chat message in the message checker, set to Work message, before you send it.",
+        "To share any page without the cartoons, add ?work=1 to its link, like spreadloveandacceptance.com/work.html?work=1. It stays plain as people click around.",
+        "The team session is voluntary, and it’s never used to judge anyone’s performance."
+      ],
+      "links": [
+        [
+          "At work: the plain version for teams",
+          "/work.html"
+        ],
+        [
+          "Appreciation at work",
+          "/appreciation-at-work.html"
+        ],
+        [
+          "Coworkers and teams",
+          "/relationships.html#coworkers"
+        ]
+      ],
+      "chips": [
+        [
+          "How do I test a work message?",
+          "How do I test a work email before I send it?"
+        ]
+      ],
+      "notPat": "\\b(of|with) (two|three|four|five|six|seven|eight|[2-8])\\b|\\bteam of\\b"
     },
     {
       "id": "raisekids",
@@ -3541,17 +3580,17 @@
         "paid membership"
       ],
       "what": [
-        "Everything is free while the program is being built. Most of the site needs nothing from you. Entering your email once opens the rest (Chapters III to V, all seven live workpapers, REPORT-01, PROG-01 and the full tools) in that browser, with no account or password.",
-        "Paid membership comes later. Nothing is charged now, and everyone on the email list will hear before anything changes."
+        "Yes. Everything is open and free while the site is being built, with no sign-up and no account. Every chapter, workpaper and tool works without giving anything.",
+        "If you’d like a short note when something new ships, you can leave your email on the Email updates page. That’s optional, and nothing is charged."
       ],
       "links": [
         [
-          "Ways in",
-          "/ways-in.html"
+          "Email updates (optional)",
+          "/membership.html"
         ],
         [
-          "Membership",
-          "/membership.html"
+          "Ways in",
+          "/ways-in.html"
         ]
       ]
     },
@@ -4641,16 +4680,12 @@
       "pat": "\\b(do|will|would|must|should) i (have to|need to|got to|be asked to)? ?(give|enter|share|hand over|type in|put in|sign up with|provide) (you )?(my|an|your|a) (email|e mail|email address)\\b|\\b(do|does) (it|this|the site|you) (need|want|require|ask for) (my|an) (email|e mail)\\b|\\bwhat (do|will|does) (you|the site|it|this) (do|use) with my (email|e mail|address)\\b|\\bwhy (do you|does it|does the site|is it) (need|want|ask(ing)? for|asking) (my|an) (email|e mail)\\b|\\b(is|will) my (email|e mail)( address)? (be )?(safe|shared|sold|private|given|passed)\\b|\\bwill you (sell|share|spam)\\b|\\bcan i use (it|this|the site) without (an |my )?(email|signing up)\\b",
       "keys": [],
       "what": [
-        "No. You can read, play and use the tools without giving anything. An email is only asked for to open the fill-in workpapers and Chapters III to V, and to send a short note when something new arrives.",
-        "If you do join, your address goes to Buttondown, the newsletter service, and is used only for those notes. It’s never sold, and every note has an unsubscribe link. What you type in the tools and this chat stays on your device either way."
+        "No. You can read, play and use every chapter, workpaper and tool without giving anything. An email is only for a short note when something new ships, if you want one.",
+        "If you do leave it, your address goes to Buttondown, the newsletter service, and is used only for those notes. It’s never sold, and every note has an unsubscribe link. What you type in the tools and this chat stays on your device either way."
       ],
       "links": [
         [
-          "Ways in: what needs an email",
-          "/ways-in.html"
-        ],
-        [
-          "Membership",
+          "Email updates (optional)",
           "/membership.html"
         ],
         [

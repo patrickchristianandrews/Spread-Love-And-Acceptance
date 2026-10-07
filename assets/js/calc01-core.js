@@ -206,7 +206,7 @@
     return { key: 'low', cls: 'low', word: 'Needs a rethink, together', label: 'Needs a rethink, together: the setup is asking too much as it is. That is about the setup, not anyone in it.', short: 'needs a rethink, together' };
   }
   // The same cut-offs, said once in words, for every page that shows the bands.
-  var BAND_NOTE = '0.70 or more: working well. 0.40 up to 0.70: needs a look. Below 0.40: needs a rethink, together. Here higher means the setup is working better (on the WP-02 battery, higher means heavier).';
+  var BAND_NOTE = '0.70 or more: working well. 0.40 up to 0.70: needs a look. Below 0.40: needs a rethink, together. Here higher means the setup is working better (the opposite of How much are you carrying?, where higher means heavier).';
   // How evenly the time is shared, in words (the same 0.70 / 0.40 cut-offs as the bands).
   function shareWords(v) { var x = r2(v); return x >= BANDS.high ? 'fairly even' : x >= BANDS.low ? 'leaning to one side' : 'mostly on one person'; }
 
@@ -221,7 +221,7 @@
         out.push({ key: 'wb', gain: (h.after - o.wb) * w.wb,
           text: 'Hand about ' + f1(h.hours) + ' hour' + (h.hours === 1 ? '' : 's') + ' a week from ' + nm(h.from) + ' to ' + nm(h.to) +
             '. Balance would go from ' + f2(o.wb) + ' to ' + f2(h.after) + '.',
-          link: ['WP-01, Who did what, and kind ways to say no', '/workpapers/fill/wp-01.html'] });
+          link: ['Who did what, and kind ways to say no (WP-01)', '/workpapers/fill/wp-01.html'] });
       }
       out.push({ key: 'wb-all', gain: (1 - o.wb) * w.wb, full: true,
         text: 'A split that fully matches your ' + (o.balance && o.balance.mode === 'agreed' ? 'agreed shares' : 'even shares') + ' would add up to ' + fg((1 - o.wb) * w.wb) + '.' +
@@ -231,7 +231,7 @@
       var t = o.ownership.total, own = o.ownership.owned;
       out.push({ key: 'oc', gain: w.oc / t,
         text: 'Give one more job an owner (the person who does it and sees it through). Ownership would go from ' + f2(o.oc) + ' to ' + f2((own + 1) / t) + '.',
-        link: ['WP-03, One owner per job', '/workpapers/fill/wp-03.html'] });
+        link: ['One owner per job (WP-03)', '/workpapers/fill/wp-03.html'] });
       if (t - own > 1) out.push({ key: 'oc-all', gain: (1 - o.oc) * w.oc, full: true,
         text: 'Naming owners for all ' + (t - own) + ' unowned jobs would add ' + fg((1 - o.oc) * w.oc) + '. Keep them on the list until they have names; deleting them only hides them.' });
     }
@@ -239,7 +239,7 @@
       var drop = Math.min(0.10, o.as);
       out.push({ key: 'as', gain: drop * w.as,
         text: 'If the average load came down by ' + f2(drop) + ' (about ' + f1(drop * 20) + ' points on each person’s 20-point check), the score would rise by ' + fg(drop * w.as) + '. That usually comes from outside the chore list: a lighter week elsewhere, more sleep, less rushing.',
-        link: ['WP-02, How much are you carrying?', '/workpapers/fill/wp-02.html'] });
+        link: ['How much are you carrying? (WP-02)', '/workpapers/fill/wp-02.html'] });
     }
     out.sort(function (a, b) { return (a.full ? 1 : 0) - (b.full ? 1 : 0) || b.gain - a.gain; });
     return out;
@@ -305,7 +305,7 @@
         else if (i >= 0 && i < n) row.hours[i] += m / 60;
       });
       out.ledger.forEach(function (row) { row.hours = row.hours.map(function (h) { return Math.round(h * 100) / 100; }); });
-      if (out.ledger.length) out.found.push('WP-01 (' + out.ledger.length + ' job' + (out.ledger.length === 1 ? '' : 's') + ')');
+      if (out.ledger.length) out.found.push('Who did what (' + out.ledger.length + ' job' + (out.ledger.length === 1 ? '' : 's') + ')');
     }
     var w3 = latest('WP-03');
     if (w3) {
@@ -316,7 +316,7 @@
         var ri = CODES.indexOf(r.r), ai = CODES.indexOf(r.a);
         out.raci.push({ name: String(r.task).trim(), r: ri >= 0 && ri < n ? String(ri) : '', a: ai >= 0 && ai < n ? String(ai) : '' });
       });
-      if (out.raci.length) out.found.push('WP-03 (' + out.raci.length + ' job' + (out.raci.length === 1 ? '' : 's') + ')');
+      if (out.raci.length) out.found.push('One owner per job (' + out.raci.length + ' job' + (out.raci.length === 1 ? '' : 's') + ')');
     }
     var got = 0;
     names.forEach(function (nm, i) {

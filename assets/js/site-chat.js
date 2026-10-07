@@ -590,7 +590,7 @@
       if (n3.length === 3 && !hasNamed) { wb = n3[0]; oc = n3[1]; as = n3[2]; hasNamed = 3; }
       else if (n3.length === 1 && !hasNamed) {
         var b1 = calcBand(n3[0]);
-        return { blocks: [{ k: 'p', x: 'A Solvency Read of ' + r2(n3[0]) + ' falls in this band. ' + b1[0] + ' First move: ' + b1[1] }, { k: 'note', x: 'It reads the setup, never a person. ' + NOT_VERDICT },
+        return { blocks: [{ k: 'p', x: 'A setup score of ' + r2(n3[0]) + ' falls in this band. ' + b1[0] + ' First move: ' + b1[1] }, { k: 'note', x: 'It reads the setup, never a person. ' + NOT_VERDICT },
           { k: 'links', x: [['CALC-01: Is the setup working for everyone?', '/workpapers/calculators/calc01-solvency.html']] }],
           chips: [{ label: 'Show me the math', q: 'Show me the math for CALC-01' }], kind: 'calc', topic: 'solvency read' };
       }
@@ -606,17 +606,17 @@
       var gaps = [['workload balance', 0.4 - tW, 'the Lemonade Stand or WP-01', '/lemonade-stand.html'], ['ownership clarity', 0.35 - tO, 'WP-03, One owner per job', '/workpapers/wp-03-raci-treaty.html'], ['the batteries (stress)', 0.25 - tA, 'WP-02 and the Calm-Down Kit', '/workpapers/wp-02-battery-stress-meter.html']];
       gaps.sort(function (a, b) { return b[1] - a[1]; });
       var out = [
-        { k: 'p', x: 'Here’s the Solvency Read with your numbers: 0.40 × ' + r2(wb) + ' (balance) + 0.35 × ' + r2(oc) + ' (ownership) + 0.25 × (1 − ' + r2(as) + ') (battery, flipped) = ' + r3(tW) + ' + ' + r3(tO) + ' + ' + r3(tA) + ' = ' + r2(sol) + '.' },
+        { k: 'p', x: 'Here’s the setup score with your numbers: 0.40 × ' + r2(wb) + ' (balance) + 0.35 × ' + r2(oc) + ' (ownership) + 0.25 × (1 − ' + r2(as) + ') (battery, flipped) = ' + r3(tW) + ' + ' + r3(tO) + ' + ' + r3(tA) + ' = ' + r2(sol) + '.' },
         { k: 'p', x: band[0] + ' First move: ' + band[1] }];
       if (gaps[0][1] > 0.02) out.push({ k: 'p', x: 'The biggest gap is ' + gaps[0][0] + ' (' + r2(gaps[0][1]) + ' of the points available went unearned), so ' + gaps[0][2] + ' is the place to look first.' });
       if (rf != null) {
         var apex = 0.35 * wb + 0.30 * oc + 0.20 * (1 - as) + 0.15 * rf;
-        out.push({ k: 'p', x: 'With repair included (retuning ' + r2(rf) + '), the apex score is 0.35 × ' + r2(wb) + ' + 0.30 × ' + r2(oc) + ' + 0.20 × (1 − ' + r2(as) + ') + 0.15 × ' + r2(rf) + ' = ' + r2(apex) + '.' +
-          (sol - apex > 0.1 ? ' Solvency is higher than apex, which usually means friction is being swallowed rather than repaired: WP-09 is the place to work on.' : '') });
+        out.push({ k: 'p', x: 'With repair included (retuning ' + r2(rf) + '), the overall score is 0.35 × ' + r2(wb) + ' + 0.30 × ' + r2(oc) + ' + 0.20 × (1 − ' + r2(as) + ') + 0.15 × ' + r2(rf) + ' = ' + r2(apex) + '.' +
+          (sol - apex > 0.1 ? ' The setup score is higher than the overall score, which usually means friction is being swallowed rather than repaired: Say it so it lands (WP-09) is the place to work on.' : '') });
       }
       out.push({ k: 'note', x: 'Pillars I and II: it reads the setup, never a person. The weights are an openly stated judgment call, not a fitted model, and ' + NOT_VERDICT.charAt(0).toLowerCase() + NOT_VERDICT.slice(1) });
       out.push({ k: 'links', x: safeLinks([['CALC-01: Is the setup working for everyone?', '/workpapers/calculators/calc01-solvency.html'], [gaps[0][2], gaps[0][3]]]) });
-      return { blocks: out, chips: [{ label: 'Where do these numbers come from?', q: 'How does CALC-01 work?' }, { label: 'What does apex mean?', q: 'What is the apex score in CALC-01?' }], kind: 'calc', topic: 'solvency read' };
+      return { blocks: out, chips: [{ label: 'Where do these numbers come from?', q: 'How does CALC-01 work?' }, { label: 'What does the overall score mean?', q: 'What is the apex score in CALC-01?' }], kind: 'calc', topic: 'solvency read' };
     }
     // two people's hours → workload balance
     var hrs = low.match(/(\d+(?:\.\d+)?)\s*(?:hours?|hrs?)\b.*?(\d+(?:\.\d+)?)\s*(?:hours?|hrs?)\b/);
@@ -1012,6 +1012,83 @@
   var FU_START = /^(so |ok |okay |and )?(how (do|should|would|can) (i|we) (start|begin|get started|use (it|this|that|them|these|those)|do (it|this|that))|where (do|should) (i|we) (start|begin)|what (do|should) (i|we) do first|first step|whats the first step|what is the first step|how do i begin|where to start)( with (it|this|that))?$/;
   var FU_WHO = /^(and |but |ok |okay |so )?((what|how) about|and|and for|and with|for|with|what if its|what if it s|same (thing )?(for|with)|does (this|that|it) (work|help|apply) (for|with)|would (this|that|it) (work|help) (for|with)|can i use (this|that|it) (for|with))\s+(.{2,40})$/;
   var FU_TONIGHT = /^(ok |okay |so |but |and |ok but |okay but |right but |fine but )*(what (do|can|should|could) (i|we) (actually |really |even |possibly )?do( about it| about that)? ?(tonight|now|right now|today|this evening|first)?|what can i do tonight|whats (one|a) (tiny|small|little) (thing|step)( for tonight)?|(one|a) (tiny|small|little) (thing|step)( for tonight| i can do)?|now what|what now|what next|whats next|whats the first step tonight|what (do|should|can) (i|we) do next|give me (one|a|just one|a single) (thing|step)( to do| i can do| for now| right now)?|(tell me )?(one|just one) thing (to do|i can do)|(whats|what is) the next step|next step)( please)?$/;
+  // ------------------------------------------------------------------ conversation turns
+  // "thanks", "that didn't help", "is that a red flag?", "ok and then what?", "start over", and
+  // "what about my sister?" right after a caring answer. They keep the topic we were on.
+  var CV_THANKS = /^(ok |okay |oh |aw |aww )?(thanks?|thank (you|u)|ty|thx|cheers|many thanks|appreciate (it|that|you))( (so|very) much| a lot| a bunch| again)?( (puddles|professor|professor puddles|prof))?( (that|this) (helps?|helped|was (helpful|useful|great|kind|nice)))?$|^(that|this) (helps?|helped|was (really |so |very )?(helpful|useful))( thanks?| thank you)?$/;
+  var CV_NOHELP = /^(sorry |hmm |um |well |but |no |nah |honestly |ok |okay )*((that|this|it|none of (that|this|it)|your (answer|advice|reply)) (didnt|did not|doesnt|does not|isnt|is not|wasnt|was not|wont|will not) (help|work|helpful|useful|fit|right|it|what i (meant|asked|needed|wanted))( me)?( at all| much| really)?( though)?|not (helpful|useful|really helpful|quite it|it|what i (meant|asked|needed))|(thats|that s) (not (it|helpful|useful|right|what i (meant|asked|needed))|useless|no help|unhelpful)|useless|unhelpful|no help|not helping|still stuck|i m still stuck|im still stuck|(i ve|ive|i have) (already )?tried (that|it|those|this)( already)?|i already tried (that|it|those|this)|tried (that|it) already)$/;
+  var CV_REDFLAG = /\b(is|are|isnt|was|could) (that|this|it|those|these|they|he|she|this behaviou?r|that behaviou?r) (be )?(a )?(red flags?|toxic|abus\w*|controlling|manipulat\w*|gaslight\w*|healthy|unhealthy|a warning sign|warning signs?|a bad sign)\b|^(red flags?|any red flags|what are (the |some )?red flags|signs of (abuse|control|coercive control|a toxic relationship)|should i be worried|is (this|that) normal in a relationship)\b/;
+  var CV_NEXT = /^(ok |okay |so |and |alright |right |cool |great |got it |done |ok done |i did that )*(and )?(then what|what then|what after that|after that|and after that|what comes next|what comes after that|whats after that|what do i do after that|what should i do after that|then)\??$/;
+  var CV_RESTART = /^(start over|start again|new topic|change of subject|different (topic|question|thing)|something else|never ?mind|forget (it|that)|lets talk about something else)$/;
+  var CV_PERSONAL = { grief: 1, overgive: 1, burden: 1, parentsblame: 1, onmyown: 1, teens: 1, raisekids: 1, fightnow: 1, judged: 1, sensitive: 1, overload: 1, meltdown: 1, 'upset-right-now': 1 };
+  function lc1(x) { return String(x || '').replace(/^./, function (ch) { return ch.toLowerCase(); }); }
+  function convoTurn(state, f) {
+    var L = state.last;
+    if (CV_THANKS.test(f)) return { blocks: [{ k: 'p', x: 'You’re welcome.' }, { k: 'p', x: 'Ask me something else whenever you like.' }], chips: [{ label: 'Surprise me', q: 'Surprise me' }, { label: 'Give me a little tip', q: 'Give me a tip' }], kind: 'thanks' };
+    if (CV_RESTART.test(f)) { state.last = null; state.care = null; return { blocks: [{ k: 'p', x: 'Sure, a fresh start. What’s on your mind? A few words is plenty.' }], chips: STARTERS, kind: 'restart' }; }
+    if (CV_REDFLAG.test(f)) {
+      var b = [];
+      var I0 = L && L.kind === 'sit' && IDX.sit.issues[L.issue];
+      if (I0 && L.issue !== 'hurtbythem') b.push({ k: 'p', x: 'On its own, ' + lc1(I0.label) + ' is a common problem, and a fixable one. It isn’t a red flag by itself. What matters is how it happens, and how you feel around them.' });
+      else b.push({ k: 'p', x: 'Here’s how to tell an ordinary rough patch from a red flag.' });
+      b.push({ k: 'p', x: 'These are red flags, and they’re not a communication problem:' });
+      b.push({ k: 'list', x: ['You feel scared of them, or of how they’ll react.', 'They hurt, push, corner or threaten you, or threaten to hurt themselves, the kids or a pet.', 'They check your phone, track where you are, or cut you off from friends and family.', 'They control all the money, or stop you from working.', 'They pressure you into sex, or anything else you don’t want.', 'You’re always the one to blame, and you’ve started to doubt your own memory.'] });
+      b.push({ k: 'p', x: 'If any of these fit, please skip the tools here and talk to people who help with this every day. In the US, the National Domestic Violence Hotline is free and private: call 1-800-799-7233, or text START to 88788.' });
+      b.push({ k: 'links', x: [['Not safe at home? Hotlines, leaving this site quickly, and clearing what it keeps', '/safety.html']] });
+      b.push({ k: 'note', x: 'If none of them fit, it’s most likely an ordinary problem you can work on together, and the steps I gave still apply.' });
+      return { blocks: b, chips: L && L.kind === 'sit' ? [{ label: 'What should I do first?', q: 'What should I do first?' }, { label: 'Words I could use', q: 'Another way to say it' }] : [], kind: 'redflag' };
+    }
+    if (CV_NOHELP.test(f)) {
+      var tried = /tried/.test(f), nb = [];
+      if (L && L.kind === 'sit' && IDX.sit.issues[L.issue]) {
+        var P = sitParts(L.issue, L.who, L.noun, L.actor), I = P.I;
+        nb.push({ k: 'p', x: tried ? 'Fair enough: you’ve already tried the obvious step. What happened when you did? Tell me in a sentence, and I’ll suggest what to try next.' : 'Sorry, that missed. Let’s come at ' + lc1(I.label) + ' from another side.' });
+        if (I.deeper) nb.push({ k: 'p', x: 'When the quick steps don’t move it, the longer look usually does: ' + I.deeper[0] + '.' });
+        if (P.path[1]) nb.push({ k: 'links', x: [P.path[1]] });
+        nb.push({ k: 'p', x: 'Or tell me which part didn’t fit: you’ve tried it already, it’s bigger than that, or I’ve got the situation wrong. I’ll change course.' });
+        state.last = Object.assign({}, L, { v: (L.v || 0) + 1 });
+        var ch = [];
+        if (I.deeper) ch.push({ label: 'Go deeper', q: I.deeper[1] });
+        ch.push({ label: 'Something smaller', q: 'Give me one thing to do' });
+        ch.push({ label: 'Start over', q: 'Start over' });
+        return { blocks: nb, chips: ch, kind: 'nohelp' };
+      }
+      nb.push({ k: 'p', x: tried ? 'Fair enough, you’ve already tried that. What happened when you did? Tell me in a sentence or two, and I’ll suggest something different.' : 'Sorry that didn’t help. Could you tell me a bit more in your own words, like who it’s with and what happened? I’ll try again from there.' });
+      nb.push({ k: 'note', x: 'Some things are bigger than any tool. If it feels that way, a counselor, your doctor, or someone you trust is a good next step, and if you’re not safe, the Not safe at home? page lists free hotlines.' });
+      nb.push({ k: 'links', x: [['Not safe at home?', '/safety.html']] });
+      return { blocks: nb, chips: STARTERS.slice(0, 3), kind: 'nohelp' };
+    }
+    if (CV_NEXT.test(f) && L && L.kind === 'sit' && IDX.sit.issues[L.issue]) {
+      var P2 = sitParts(L.issue, L.who, L.noun, L.actor), st = (L.stage || 0) + 1, solo = L.who === 'self', xb = [];
+      state.last = Object.assign({}, L, { stage: st });
+      if (st === 1) {
+        xb.push({ k: 'p', x: solo ? 'Once those small steps are done, give it a few days and just notice what changes: your energy, your mood, what still snags.' : fill('Once those small steps are done, the next move is one calm conversation with {them}, at a time that suits you both, not in the middle of it.', P2.ctx) });
+        if (P2.scripts.length && !solo) xb.push({ k: 'script', l: 'A way to open it', x: fill(P2.scripts[((L.v || 0) + 1) % P2.scripts.length], P2.ctx) });
+        if (P2.path[0]) { xb.push({ k: 'p', x: 'Then, when you have ten calm minutes, open the first stop on your short path:' }); xb.push({ k: 'links', x: [P2.path[0]] }); }
+      } else if (st === 2) {
+        xb.push({ k: 'p', x: solo ? 'After that, give it one ordinary week before you judge it. Then look back: what got easier, and what still sticks?' : 'After that, give it one ordinary week before you judge it. Then look back together for ten minutes: what got easier, and what still sticks?' });
+        if (P2.path[1]) xb.push({ k: 'links', x: [P2.path[1]] });
+      } else {
+        xb.push({ k: 'p', x: 'That’s the whole short plan. If it’s still stuck after a couple of weeks, tell me what’s still happening, and we’ll look at it from another side.' });
+        if (P2.path.length) xb.push({ k: 'links', x: P2.path });
+      }
+      return { blocks: xb, chips: st < 3 ? [{ label: 'And then what?', q: 'And then what?' }, { label: 'That didn’t help', q: 'That didn’t help' }] : [{ label: 'Start over', q: 'Start over' }], kind: 'sit-more' };
+    }
+    // "what about my sister?" just after a caring answer (grief, giving too much…): the same answer, for them
+    var mw = f.match(FU_WHO), C0 = state.care;
+    if (mw && C0 && C0.turn === (state.turn || 0) - 1 && CV_PERSONAL[C0.id]) {
+      var c = (IDX.first || []).filter(function (x) { return x.id === C0.id; })[0];
+      var sw = detectSituation(f);
+      if (c && sw.who && sw.who !== 'self' && !(sw.issue && sw.score >= 3)) {
+        var r = cardReply(state, c, 'about');
+        var who = sw.noun ? 'your ' + sw.noun.replace(/^(my|our|the|a|an)\s+/, '') : whoCtx(sw.who).them;
+        r.blocks.unshift({ k: 'p', x: 'Yes, the same goes with ' + who + '. Each person carries it a little differently, so go gently and ask, rather than guess.' });
+        r.kind = 'care'; state.care = { id: C0.id, turn: state.turn || 0 };
+        return r;
+      }
+    }
+    return null;
+  }
   function followUp(state, f, q) {
     var L = state.last;
     if (!L) return null;
@@ -1232,6 +1309,7 @@
         }
       }
       r.kind = 'care';
+      state.care = { id: c.id, turn: state.turn || 0 };
       if (c.id === 'brief') state.brief = 1;
       // a question about the chat or a feeling keeps the topic we were on; a new topic (a meltdown, "I have ADHD") takes over
       if (!c.newTopic) state.last = L || state.last;
@@ -1409,9 +1487,15 @@
   }
   function respond(state, q, chipDoc) {
     var sp = null;
+    state.turn = (state.turn || 0) + 1;
     if (chipDoc == null) {
       sp = spellFix(q);
       if (sp.fixes.length) q = sp.q;
+      // "different question: …", "by the way, …": a new topic, so nothing from the last one carries over
+      var sw0 = norm(q).match(/^(anyway|anyways|by the way|btw|on another note|new question|different question|another question|other question|unrelated|separate question|changing (the )?subject|switching (topics?|gears))\b\s*(.{6,})$/);
+      if (sw0) { state.last = null; state.care = null; q = sw0[sw0.length - 1]; }
+      var cvf = norm(q), cv = !DANGER.test(cvf) && !HIDE.test(cvf) && convoTurn(state, cvf);
+      if (cv) return meant(cv, sp);
       // a question about one of the thirteen fields, or two of them, gets that field's (or pair's) own answer, not the overview
       var nf0 = norm(q), nq0 = KB && KB.nine && !DANGER.test(nf0) && nineQuery(nf0), nr0 = nq0 && nineReply(state, nq0);
       if (nr0) return meant(nr0, sp);
