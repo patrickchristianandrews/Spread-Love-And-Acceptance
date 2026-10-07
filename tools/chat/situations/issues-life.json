@@ -236,7 +236,7 @@
       "steps": ["Agree with your partner, privately and calmly, on a few house rules you both support.", "Let each parent lead on rules for their own kids for now, while the stepparent focuses on warmth and one-on-one time.", "Make small, regular moments, like a shared hobby or a weekly outing, that don’t depend on anyone calling anyone Mom or Dad."],
       "scripts": {
         "default": ["Could we agree on a few house rules together first, and then you share them with the kids? I think they’ll hear it better from you.", "I’d love to build my own relationship with them, slowly. Could I take them for pancakes on Saturdays?"],
-        "kid": ["I’m not trying to replace your mom. I’d just like us to get along. Want to help me pick dinner tonight?"]
+        "kid": ["I’m not trying to replace your mom or dad. I’d just like us to get along. Want to help me pick dinner tonight?"]
       },
       "path": [["Stepfamilies (Library)", "/library/life.html#stepfamilies"], ["Where families start", "/relationships-in-depth.html#family"], ["Where co-parents start", "/relationships-in-depth.html#co-parents"]],
       "deeper": ["how stepfamilies settle", "What does the Library say about stepfamilies?"],

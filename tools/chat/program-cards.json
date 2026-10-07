@@ -1455,6 +1455,107 @@
       ]
     },
     {
+      "id": "bioparent",
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "name": "a parent caught between partner and kids",
+      "pat": "\\b(stuck|caught|torn) (in the middle|between)\\b.{0,60}\\b(husband|wife|partner|spouse|stepdad|stepmom)\\b|\\bmy (husband|wife|partner|spouse) is (too )?(strict|harsh|hard|mean|cold) (on|with|to) my (kids|children|son|daughter|teens|teenagers)\\b|\\bmy (husband|wife|partner) and my (kids|teens|teenagers|children|son|daughter) (don t|dont|do not|can t|cant|won t|wont) get (along|on)\\b",
+      "keys": [],
+      "what": [
+        "Being in the middle is one of the hardest spots in a blended family. You love your kids, you love your partner, and it can feel like every choice lets one of them down. That’s a very common feeling, and it isn’t a sign you’ve chosen wrong."
+      ],
+      "how": [
+        "Meet your partner privately first and agree a few house rules you both stand behind. Then you share them with your kids, so the rules come from their parent.",
+        "Ask your partner to lead with warmth for now and leave most discipline to you. That isn’t sidelining them; it’s how stepfamilies usually settle.",
+        "Give your partner a real role and say it out loud to the kids, like being in charge of Saturday breakfast or homework help.",
+        "Make time just for the two of you, too. A steady couple makes the kids feel safer, not less loved."
+      ],
+      "script": [
+        "Can we agree on bedtime and screen rules together tonight? Then I’ll tell the kids, and I’ll back you up when it comes up."
+      ],
+      "links": [
+        [
+          "Stepfamilies and blended families",
+          "/parents.html#stepfamilies"
+        ],
+        [
+          "For teens (to share with yours)",
+          "/teens.html"
+        ]
+      ],
+      "chips": [
+        [
+          "My partner feels like an outsider",
+          "My husband feels like an outsider in our home"
+        ]
+      ]
+    },
+    {
+      "id": "outsider",
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "name": "feeling like an outsider in a blended family",
+      "pat": "\\b(feel|feels|feeling) like (an outsider|a guest|i don t belong|i dont belong|he doesn t belong|she doesn t belong)\\b|\\boutsider in (my|our|his|her) own (home|house|family)\\b|\\bguest in (my|our) own (home|house)\\b",
+      "keys": [],
+      "what": [
+        "Feeling like a guest in your own home is very common for stepparents, and for the partner who moved in. It usually eases with time, a clear role, and small shared routines, not by pushing to be accepted faster."
+      ],
+      "how": [
+        "Ask for one or two things that are clearly yours in the house, like a job, a routine, or a space, so you’re part of how things run.",
+        "Build one regular, low-pressure thing with each stepkid, with no rules attached: a drive, a game, a meal you cook together.",
+        "Tell your partner how it feels, without blame: “Sometimes I feel like a visitor here. Could we find a couple of things that are ours?”",
+        "Keep your own anchors too: your own kids’ time, your friends, your interests. You don’t have to earn your place by giving everything up."
+      ],
+      "script": [
+        "Sometimes I feel like a visitor here. Could we find a couple of things that are ours, and could you back me up on them with the kids?"
+      ],
+      "links": [
+        [
+          "Stepfamilies and blended families",
+          "/parents.html#stepfamilies"
+        ],
+        [
+          "Turning toward",
+          "/turning-toward.html"
+        ]
+      ],
+      "chips": []
+    },
+    {
+      "id": "exschedule",
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "name": "agreeing holidays and schedules with an ex",
+      "pat": "\\b(my )?(ex|ex wife|ex husband|ex partner|exwife|exhusband|kids dad|kids mom|kids father|kids mother|co parent|coparent)\\b.{0,50}\\b(holidays?|christmas|thanksgiving|easter|birthdays?|summer|vacation|schedule|custody|visitation|weekends?|parenting plan)\\b",
+      "keys": [],
+      "what": [
+        "Holiday schedules are one of the most common sore spots between separated parents. Your court order or parenting plan comes first; if it covers holidays, that’s the answer, and you can point to it calmly."
+      ],
+      "how": [
+        "Check the parenting plan or court order before you write anything. If it’s silent, propose something simple and fair, like alternating years or splitting the day.",
+        "Write it short and factual, about the kids and the dates only: “Proposal for Christmas: kids with me Dec 24 to noon Dec 25, with you noon Dec 25 to Dec 26. We swap next year. Can you confirm by Nov 15?”",
+        "Don’t tell the kids the plan until both of you have agreed it, so they’re never in the middle.",
+        "If you can’t agree, a family mediator or your lawyer can help. Keep copies of what was sent."
+      ],
+      "script": [
+        "Proposal for Christmas: the kids with me Dec 24 to noon Dec 25, with you noon Dec 25 to Dec 26. We swap next year. Can you confirm by Nov 15?"
+      ],
+      "links": [
+        [
+          "Separated co-parents",
+          "/co-parenting.html"
+        ],
+        [
+          "If this may end up in court",
+          "/co-parenting.html#court"
+        ]
+      ],
+      "chips": []
+    },
+    {
       "id": "exharass",
       "kind": "intent",
       "first": true,
