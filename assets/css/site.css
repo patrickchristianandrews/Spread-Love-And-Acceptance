@@ -2071,18 +2071,18 @@ h1.tol-page-h{ font-family:"Fraunces", Georgia, serif; font-weight:600; font-siz
 .tol-offer button:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
 
 /* text size: every word on the page grows, whatever size the page set it in */
-html.tol-text-lg:not(.tol-nozoom) body{ zoom:1.12; }
-html.tol-text-xl:not(.tol-nozoom) body{ zoom:1.25; }
-html.tol-text-xxl:not(.tol-nozoom) body{ zoom:1.4; }
-html.tol-nozoom.tol-text-lg{ font-size:112.5%; }
-html.tol-nozoom.tol-text-xl{ font-size:125%; }
-html.tol-nozoom.tol-text-xxl{ font-size:140%; }
+html.tol-text-lg:not(.tol-nozoom) body{ zoom:1.15; }
+html.tol-text-xl:not(.tol-nozoom) body{ zoom:1.35; }
+html.tol-text-xxl:not(.tol-nozoom) body{ zoom:1.6; }
+html.tol-nozoom.tol-text-lg{ font-size:115%; }
+html.tol-nozoom.tol-text-xl{ font-size:135%; }
+html.tol-nozoom.tol-text-xxl{ font-size:160%; }
 html:is(.tol-text-lg, .tol-text-xl, .tol-text-xxl) .tol-panel{ width:min(34rem, 100%); }
 /* the top bar grows a little less than the page on a phone (about 1.12x at the two biggest sizes), so
    Quiet, Settings and Menu keep their words and the logo never runs under them */
 @media (max-width:700px){
   html.tol-text-xl:not(.tol-nozoom) .tol-bar{ zoom:.9; }
-  html.tol-text-xxl:not(.tol-nozoom) .tol-bar{ zoom:.8; }
+  html.tol-text-xxl:not(.tol-nozoom) .tol-bar{ zoom:.7; }
 }
 
 /* the easy-to-read font, roomy spacing, and Easy reading's shorter, left-aligned lines */
@@ -2588,4 +2588,16 @@ html.tol-work main .tol-work-note{ margin:0 0 1rem; }
 html.tol-home .hh .tol-pickup-host{ margin:.8rem 0 1rem; }
 /* (moved out of inline styles, so pages with a strict Content-Security-Policy show them too) */
 .tol-foot-guides{ display:flex; flex-wrap:wrap; gap:.3rem 1rem; justify-content:center; margin:0 0 .75rem; font-size:.9rem; }
-.tol-set-size-md{ font-size:1em; } .tol-set-size-lg{ font-size:1.12em; } .tol-set-size-xl{ font-size:1.25em; } .tol-set-size-xxl{ font-size:1.4em; }
+.tol-set-size-md{ font-size:1em; } .tol-set-size-lg{ font-size:1.15em; } .tol-set-size-xl{ font-size:1.35em; } .tol-set-size-xxl{ font-size:1.6em; }
+/* while reading (scrolling down), the floating buttons step aside so they never cover the words;
+   scrolling up, the top or end of the page, or keyboard focus brings them back */
+:is(.tol-pud-fab, .tol-breathe-btn, .tol-top){ transition:opacity .25s ease, transform .25s ease; }
+html.tol-reading :is(.tol-pud-fab, .tol-breathe-btn, .tol-top):not(:focus-visible):not(:focus-within){ opacity:0 !important; pointer-events:none !important; transform:translateY(14px); }
+html.tol-reading body.is-home-pud .tol-pud-fab:not(:focus-visible){ transform:translate(-50%, 14px); }
+@media (prefers-reduced-motion: reduce){ html.tol-reading :is(.tol-pud-fab, .tol-breathe-btn, .tol-top){ transform:none !important; } :is(.tol-pud-fab, .tol-breathe-btn, .tol-top){ transition:opacity .15s linear; } }
+/* "Show N more" at the end of a long menu list */
+.tol-more-row{ list-style:none; }
+.tol-more-btn{ font:inherit; font-size:.92rem; margin:.3rem 0 .2rem; padding:.45rem .9rem; min-height:40px; background:none; color:var(--focus, #2B5B8C); border:1px dashed var(--line, #d8cfb8); border-radius:999px; cursor:pointer; }
+.tol-more-btn:hover{ background:var(--paper-deep, #f3ecd9); }
+.tol-more-btn:focus-visible{ outline:2px solid var(--focus); outline-offset:2px; }
+.tol-drop li[hidden], .tol-index li[hidden]{ display:none !important; }

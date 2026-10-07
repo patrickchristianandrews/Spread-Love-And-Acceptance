@@ -409,7 +409,7 @@ q.w{quotes:"\201C" "\201D";font-family:var(--mono);font-size:.8rem;background:co
 
 
     <details class="fine" id="fine">
-      <summary>Fine-tune (optional): who it's for, the channel, the listener's wiring</summary>
+      <summary>Fine-tune (optional): who it's for, the channel, and the listener's wiring if you know it</summary>
       <div class="fine-b">
     <div class="quick" style="margin-top:6px;padding-top:0;border-top:0">
       <div class="field">
@@ -912,10 +912,12 @@ function fillSelect(id, list, neutral){
    Neurotypical clears the neurodivergent picks, and the other way round. */
 function buildWiring(who){
   const host = document.querySelector('[data-wiring="'+who+'"]');
-  const lab = who==="B" ? "Listener's wiring" : "Your wiring (the speaker)";
-  const opts = '<option value="">Not sure / skip</option>'+WIRING_IDS.map(id=>'<option value="'+id+'">'+esc(NT[id].name)+'</option>').join("");
+  const lab = who==="B" ? "Listener's wiring (only if you know it)" : "Your wiring (the speaker)";
+  const opts = '<option value="">'+(who==="B" ? "Don't know, or not shared: skip" : "Not sure / skip")+'</option>'+WIRING_IDS.map(id=>'<option value="'+id+'">'+esc(NT[id].name)+'</option>').join("");
   host.innerHTML = [0,1,2].map(i=>'<div class="wrow'+(i?' extra':'')+'"'+(i?' hidden':'')+'><label for="w'+who+i+'">'+(i?'Also':lab)+'</label><select id="w'+who+i+'" data-who="'+who+'">'+opts+'</select></div>').join("")
-    +'<button type="button" class="linkbtn" id="add'+who+'">+ Add another</button><p class="picked" id="picked'+who+'" aria-live="polite"></p>';
+    +'<button type="button" class="linkbtn" id="add'+who+'">+ Add another</button><p class="picked" id="picked'+who+'" aria-live="polite"></p>'
+    +(who==="B" ? '<p class="small wnote" id="wnoteB">Only choose this if you know their neurotype, because they’ve told you or it’s yours too. Never guess at someone’s diagnosis; the read works fine without it.</p>' : '');
+  if(who==="B"){ host.querySelectorAll("select").forEach(s=>s.setAttribute("aria-describedby","wnoteB")); }
   host.addEventListener("change", e=>{ const s=e.target.closest("select"); if(s) readWiring(who, s); });
   $("#add"+who).addEventListener("click", ()=>{
     const hid=[...host.querySelectorAll(".extra")].find(x=>x.hidden);

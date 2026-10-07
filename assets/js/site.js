@@ -520,6 +520,7 @@
         if (it.deep) li.appendChild(el('a', { class: 'dig tol-dig', href: deepHref(it) }, 'Dig deeper'));
         ol.appendChild(li);
       });
+      if (opts.accordion) capList(ol);
       sec.appendChild(ol);
       wrap.appendChild(sec);
     });
@@ -549,6 +550,37 @@
     openDrop = null;
   }
 
+  // Long menu lists show their first few pages, then "Show all N" (the page you're on always stays in view)
+  var MENU_CAP = 8;
+  function capList(list) {
+    var lis = Array.prototype.slice.call(list.children), links = 0, hid = [];
+    lis.forEach(function (li, i) {
+      if (li.classList.contains('tol-sub')) {
+        // a heading stays only if one of its pages is still in view
+        var nxt = lis.slice(i + 1), shown = links;
+        for (var k = 0; k < nxt.length && !nxt[k].classList.contains('tol-sub'); k++) { shown++; if (shown <= MENU_CAP || nxt[k].querySelector('[aria-current]')) return; }
+        if (links >= MENU_CAP) { li.hidden = true; hid.push(li); }
+        return;
+      }
+      links++;
+      if (links > MENU_CAP && !li.querySelector('[aria-current]') && !li.classList.contains('tol-foot-row')) { li.hidden = true; hid.push(li); }
+    });
+    var n = hid.filter(function (li) { return !li.classList.contains('tol-sub'); }).length;
+    if (n < 2) { hid.forEach(function (li) { li.hidden = false; }); return; }
+    var more = el('li', { class: 'tol-more-row' }), b = el('button', { type: 'button', class: 'tol-more-btn', 'aria-expanded': 'false' }, 'Show ' + n + ' more');
+    b.addEventListener('click', function (e) {
+      e.stopPropagation();
+      hid.forEach(function (li) { li.hidden = false; });
+      // focus moves to the first new page before the button goes, so the open menu doesn't close
+      var first = hid.filter(function (li) { return !li.classList.contains('tol-sub'); })[0], a = first && first.querySelector('a');
+      if (a) a.focus();
+      more.remove();
+    });
+    more.appendChild(b);
+    var foot = list.querySelector('.tol-foot-row');
+    if (foot) list.insertBefore(more, foot); else list.appendChild(more);
+  }
+
   function buildDrop(id, name, alignRight) {
     var s = MENU.filter(function (x) { return x.id === id; })[0];
     var item = el('div', { class: 'tol-nav-item' });
@@ -564,6 +596,7 @@
       if (it.href.split('#')[0] === current) a.setAttribute('aria-current', 'page');
       var li = el('li', it.foot ? { class: 'tol-foot-row' } : null); li.appendChild(a); ul.appendChild(li);
     });
+    capList(ul);
     menu.appendChild(ul);
     var all = el('button', { type: 'button', class: 'tol-drop-all', 'aria-controls': 'tol-panel' }, 'Everything on the site &rarr;');
     all.addEventListener('click', function () { openPanel(id); });
@@ -1836,8 +1869,8 @@
       TINT_KEY = 'tol-tint', RULER_KEY = 'tol-ruler', BUB_KEY = 'tol-nobubbles', SOUND_KEY = 'tol-sound-off', PREV_KEY = 'tol-comfort-prev';
   // the sound switches the pal cam and the games keep for themselves
   var SOUND_KEYS = ['tol-pc-sound', 'tol-pc-music', 'tol-qw-sound', 'tol-xw-sound', 'tol-bloom-sound'];
-  // four steps, each bigger than the one before (every word on the page is scaled by 1, 1.12, 1.25 or 1.4)
-  var SIZE_NAMES = { md: 'Standard', lg: 'Large', xl: 'Larger', xxl: 'Largest' }, SIZE_SCALE = { md: 1, lg: 1.12, xl: 1.25, xxl: 1.4 };
+  // four steps, each bigger than the one before (every word on the page is scaled by 1, 1.15, 1.35 or 1.6)
+  var SIZE_NAMES = { md: 'Standard', lg: 'Large', xl: 'Larger', xxl: 'Largest' }, SIZE_SCALE = { md: 1, lg: 1.15, xl: 1.35, xxl: 1.6 };
   var TINTS = { cream: 'Cream', blue: 'Soft blue', mint: 'Mint' };
   function quietOn() { return lsGet(QUIET_KEY) === '1'; }
   function easyOn() { return lsGet(EASY_KEY) === '1'; }
@@ -1975,7 +2008,7 @@
     box.querySelectorAll('input[data-font-opt]').forEach(function (i) { i.checked = i.value === (lsGet(FONT_KEY) || 'usual'); });
     box.querySelectorAll('input[data-space-opt]').forEach(function (i) { i.checked = i.value === (lsGet(SPACE_KEY) || 'usual'); });
     box.querySelectorAll('input[data-tint-opt]').forEach(function (i) { i.checked = i.value === (lsGet(TINT_KEY) || 'none'); });
-    var map = { still: stillOn, helpers: helpersHidden(), sound: !soundAllowed(), ruler: lsGet(RULER_KEY) === '1', bubbles: lsGet(BUB_KEY) !== '1', wxnote: lsGet('tol-clockwx-off') !== '1', wxloc: !!lsGet('tol-pc-wx') || wxPending };
+    var map = { still: stillOn, helpers: helpersHidden(), sound: !soundAllowed(), ruler: lsGet(RULER_KEY) === '1', bubbles: lsGet(BUB_KEY) !== '1', wxnote: lsGet('tol-clockwx-off') !== '1' && (lsGet('tol-clockwx-on') === '1' || !!lsGet('tol-pc-wx')), wxloc: !!lsGet('tol-pc-wx') || wxPending };
     box.querySelectorAll('input[data-switch]').forEach(function (i) { i.checked = !!map[i.getAttribute('data-switch')]; i.disabled = quietOn() && !/^(ruler|bubbles|wxnote|wxloc)$/.test(i.getAttribute('data-switch')); });
     box.querySelectorAll('[data-preset]').forEach(function (b) { b.setAttribute('aria-pressed', String(lsGet(PRESETS[b.getAttribute('data-preset')].key) === '1')); });
     var qn = box.querySelector('.tol-set-qnote'); if (qn) qn.hidden = !quietOn();
@@ -2029,14 +2062,14 @@
       if (s === 'sound') { setSounds(i.checked); quietEvent(); }
       if (s === 'ruler') { if (i.checked) lsSet(RULER_KEY, '1'); else lsDel(RULER_KEY); }
       if (s === 'bubbles') { if (i.checked) lsDel(BUB_KEY); else lsSet(BUB_KEY, '1'); }
-      if (s === 'wxnote') { var cw = window.TOLClockWx; if (cw && cw.show) cw.show(i.checked); else if (i.checked) lsDel('tol-clockwx-off'); else lsSet('tol-clockwx-off', '1'); }
+      if (s === 'wxnote') { var cw = window.TOLClockWx; if (cw && cw.show) cw.show(i.checked); else if (i.checked) { lsDel('tol-clockwx-off'); lsSet('tol-clockwx-on', '1'); var cwl = document.createElement('script'); cwl.src = '/assets/js/clock-weather.js'; document.head.appendChild(cwl); } else { lsSet('tol-clockwx-off', '1'); lsDel('tol-clockwx-on'); } }
       if (s === 'wxloc') {
         var msg = box.querySelector('.tol-set-wxmsg'), cw2 = window.TOLClockWx;
         if (!i.checked) { if (cw2 && cw2.off) cw2.off(); else lsDel('tol-pc-wx'); if (msg) msg.hidden = true; }
         else {
           if (msg) { msg.hidden = false; msg.textContent = 'Asking your browser… choose Allow when it asks.'; }
           var go = function () { return window.TOLClockWx && window.TOLClockWx.ask ? window.TOLClockWx.ask() : Promise.resolve('unavailable'); };
-          if (!window.TOLClockWx || !window.TOLClockWx.ask) { lsDel('tol-clockwx-off'); }
+          if (!window.TOLClockWx || !window.TOLClockWx.ask) { lsDel('tol-clockwx-off'); lsSet('tol-clockwx-on', '1'); }
           wxPending = true;
           go().then(function (r) {
             wxPending = false; var ok = r === 'ok'; i.checked = ok;
@@ -2319,6 +2352,22 @@
     window.addEventListener('scroll', onScroll, { passive: true });
     timer = setTimeout(show, 60000);
   }
+
+  // ---------- While reading, the floating buttons step aside ----------
+  // Scrolling down (reading) tucks away Ask Professor Puddles, Breathe and Back to top, so they never sit on
+  // the words; scrolling up, reaching the top or the end, or tabbing to one of them brings them straight back.
+  (function () {
+    var lastY = window.scrollY || 0, ticking = false, h = document.documentElement;
+    function upd() {
+      ticking = false;
+      var y = window.scrollY || 0, max = document.documentElement.scrollHeight - window.innerHeight, dy = y - lastY;
+      if (y < 240 || y > max - 320) h.classList.remove('tol-reading');
+      else if (dy > 6) h.classList.add('tol-reading');
+      else if (dy < -24) h.classList.remove('tol-reading');
+      if (Math.abs(dy) > 6 || y < 240) lastY = y;
+    }
+    window.addEventListener('scroll', function () { if (!ticking) { ticking = true; requestAnimationFrame(upd); } }, { passive: true });
+  })();
 
   // ---------- Pal cam (the Frequency Journey's Tidbit & Sugarfoot), openable from any page ----------
   // Nothing loads until it's asked for: a [data-palcam-open] link, or the occasional "Peek?"
