@@ -566,6 +566,22 @@ t('parents', 'how do I say no to babysitting my grandkids', { kind: 'sit', id: /
 t('parents', 'do I have to give my email', { id: 'emailwhy', text: /without giving anything/ });
 t('parents', 'can I use this at work with my team?', { id: 'atwork', link: '/work.html' });
 t('parents', 'my husband died last year', { id: 'grief', link: '/grief.html' });
+// round 4: safety nuance, new topics, memory
+t('safety', "he says it's my fault he yells", { kind: 'safety', link: '/safety.html', not: /Snapping|apolog/i });
+t('safety', 'my partner gaslights me', { kind: 'safety', link: '/safety.html' });
+t('safety', 'is it controlling if he checks my location', { kind: 'safety', text: /agreed to/, link: '/safety.html' });
+t('safety', 'I don\'t want to be here anymore (911 and findahelpline)', { q: "I don't want to be here anymore", kind: 'safety', text: /911[\s\S]*findahelpline/ });
+t('care', 'should I leave my husband?', { id: 'leave', link: '/safety.html' });
+t('care', 'my gf and i keep fighting about her phone', { id: 'phonetrust' });
+t('care', 'i feel kinda alone lately', { id: 'lonely' });
+t('care', 'my grown son and I barely talk since his mother passed', { id: 'grownkids', link: '/grief.html#reconnect' });
+t('care', 'my two team leads keep fighting over who owns what', { id: 'teamowners', link: '/work.html' });
+t('care', 'whats the actual point of this site', { id: 'tol', not: /I think you mean/ });
+c('followups', ['my wife died and I don’t know what to do with myself', 'ok and then what?'], { link: '/grief.html' });
+c('followups', ['my wife died and I don’t know what to do with myself', 'that didn’t help'], { kind: 'nohelp', not: /Not safe at home/ });
+c('followups', ['my wife died last spring', 'what about my son?'], { kind: 'care', text: /grown son/ });
+c('followups', ['my roommate never pays the bills on time', 'that didn’t help', 'i already tried that'], { kind: 'nohelp', not: /longer look/ });
+c('followups', ['my gf and i keep fighting about her phone', 'is that a red flag'], { kind: 'redflag', not: /steps I gave/ });
 t('parents', 'what do you do with my email', { id: 'emailwhy', text: /Buttondown/ });
 t('parents', 'what is frequency buddies', { kind: 'card', id: 'buddies', link: '/frequency-buddies.html' });
 t('parents', 'is there a frequency buddies music video', { kind: 'card', id: 'buddiesmusicvideo', link: '/frequency-buddies-music-video.html' });

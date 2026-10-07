@@ -51,6 +51,7 @@
   .section-head{ margin:46px 0 22px 0; padding-top:24px; border-top:3px double var(--brass); }
   .section-head .part-label{ font-family:"IBM Plex Mono", monospace; font-size:0.72rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--brass-ink); margin:0 0 4px 0; }
   .section-head h2{ font-size:1.35rem; margin:0; }
+  .section-head .code-note{ font-family:"IBM Plex Mono", monospace; font-size:0.72rem; color:var(--ink-soft); letter-spacing:0.02em; margin:4px 0 0 0; }
   .section-head h2 small{ font-family:"IBM Plex Mono", monospace; font-weight:400; font-size:0.66rem; color:var(--ink-soft); letter-spacing:0.04em; margin-left:6px; }
 
   /* controls: 44px targets */
@@ -251,17 +252,21 @@
     <h1 class="sheet-mark">Is the setup working for everyone?
       <small>For 2 to 8 people</small>
     </h1>
-    <p class="sheet-tagline">This scores one narrow thing: whether the way you share the work right now, as you logged it, can keep going. It never scores a person or the relationship. It works for any group that shares a load: partners, families, roommates, co-carers, a small team at work. (The idea is borrowed from accounting: can the setup carry its own weight?)</p>
-    <p class="sheet-tagline"><strong>A place to start a conversation, not a verdict.</strong> A low score doesn't blame anyone, and a high score doesn't mean anyone should stop speaking up.</p>
-    <p class="sheet-tagline pillar-note"><small>CALC-01 puts <a href="/five-pillars.html#see-the-load">Pillar I (“See the whole load”)</a> and <a href="/five-pillars.html#fix-the-setup">Pillar II (“Fix the setup, not the person”)</a> to work. Step Zero uses <a href="/five-pillars.html#read-your-state">Pillar III, Read your state first</a>, and the retuning count uses <a href="/five-pillars.html#tune-signals">Pillar IV, Tune how you send and receive</a>. In you: you see the whole load you carry, and check your state before you read the number. Between you and others: you get one fair read of the setup, never a score on anyone.</small></p>
-    <p class="sheet-tagline">The math comes from <a href="/book/chapter-2-in-depth.html">Chapter II</a>. Only have totals? Try the <a href="/workpapers/calculators/calc01-solvency.html">quick read</a>. To follow it week by week, use <a href="/workpapers/report-01.html">REPORT-01</a>.</p>
+    <p class="sheet-tagline">This tells you, in plain words, whether the way you share the work right now can keep going for everyone. It never scores a person or the relationship.</p>
+    <p class="sheet-tagline"><strong>A place to start a conversation, not a verdict.</strong> A low score doesn't blame anyone, and a high score doesn't mean anyone should stop speaking up. Only have totals? Try the <a href="/workpapers/calculators/calc01-solvency.html">quick read</a>.</p>
+    <details class="no-print">
+      <summary>More about this calculator</summary>
+      <p class="sheet-tagline">It works for any group that shares a load: partners, families, roommates, co-carers, a small team at work. The idea is borrowed from accounting: can the setup carry its own weight?</p>
+      <p class="sheet-tagline pillar-note"><small>CALC-01 puts <a href="/five-pillars.html#see-the-load">Pillar I (“See the whole load”)</a> and <a href="/five-pillars.html#fix-the-setup">Pillar II (“Fix the setup, not the person”)</a> to work. Step Zero uses <a href="/five-pillars.html#read-your-state">Pillar III, Read your state first</a>, and the retuning count uses <a href="/five-pillars.html#tune-signals">Pillar IV, Tune how you send and receive</a>. In you: you see the whole load you carry, and check your state before you read the number. Between you and others: you get one fair read of the setup, never a score on anyone.</small></p>
+      <p class="sheet-tagline">The math comes from <a href="/book/chapter-2-in-depth.html">Chapter II</a>. To follow it week by week, use <a href="/workpapers/report-01.html">REPORT-01</a>.</p>
+    </details>
     <nav class="toc no-print" aria-label="On this page">
       <a href="#state">Check your state</a>
       <a href="#people">Who's sharing</a>
       <a href="#wb">Balance</a>
       <a href="#oc">Ownership</a>
       <a href="#as">Stress</a>
-      <a href="#rf">Retuning</a>
+      <a href="#rf">Repair</a>
       <a href="#read">The read</a>
       <a href="#trend">Trend</a>
       <a href="#spec">How it's scored</a>
@@ -310,7 +315,7 @@
       <div class="pipe-cell"><span class="src">WP-01 &middot; Who did what</span>Hours each person logged<b>&rarr; Balance</b></div>
       <div class="pipe-cell"><span class="src">WP-03 &middot; One owner per job</span>Jobs with an owner<b>&rarr; Ownership</b></div>
       <div class="pipe-cell"><span class="src">WP-02 &middot; How much are you carrying?</span>Five things each person rates about themselves<b>&rarr; Stress</b></div>
-      <div class="pipe-cell"><span class="src">WP-09 &middot; Say it so it lands</span>Rough moments you retuned<b>&rarr; Retuning (overall score only)</b></div>
+      <div class="pipe-cell"><span class="src">WP-09 &middot; Say it so it lands</span>Rough moments you retuned (talked through calmly before answering)<b>&rarr; Retuning (overall score only)</b></div>
     </div>
     <div class="intro-note">
       <p><strong>Two scores, two questions.</strong> The <em>setup score</em> uses balance, ownership and stress, and asks: can this week's load last as it's set up? The <em>overall score</em> adds retuning and asks a wider question: is the whole system working, including repair after rough moments? They can disagree, and the gap is useful.</p>
@@ -319,7 +324,7 @@
 
   <!-- ================= WB ================= -->
   <section id="wb" aria-labelledby="wb-h">
-    <div class="section-head"><p class="part-label">Input 1 of 4 &middot; Pillar I</p><h2 id="wb-h">Balance: how the hours split <small>workload balance</small></h2></div>
+    <div class="section-head"><p class="part-label">Input 1 of 4 &middot; Balance</p><h2 id="wb-h">How the hours split</h2><p class="code-note">Workload balance</p></div>
     <div class="panel">
       <div class="panel-head"><h3>The week's hours</h3><span class="src-tag">From <a href="/workpapers/fill/wp-01.html">WP-01, Who did what</a></span></div>
       <p class="panel-note">Enter this week's rough hours for each job, for each person. Rough is fine: the split is what matters. Count the invisible work too (planning, remembering, keeping track).</p>
@@ -351,7 +356,7 @@
 
   <!-- ================= OC ================= -->
   <section id="oc" aria-labelledby="oc-h">
-    <div class="section-head"><p class="part-label">Input 2 of 4 &middot; Pillar II</p><h2 id="oc-h">Ownership: does each job have a name? <small>ownership clarity</small></h2></div>
+    <div class="section-head"><p class="part-label">Input 2 of 4 &middot; Ownership</p><h2 id="oc-h">Does each job have a name?</h2><p class="code-note">Ownership clarity</p></div>
     <div class="panel">
       <div class="panel-head"><h3>The job list</h3><span class="src-tag">From <a href="/workpapers/fill/wp-03.html">WP-03, One owner per job</a></span></div>
       <p class="panel-note">For each regular job, pick its <strong>owner</strong>: the one person who does it and sees it through. A <strong>helper</strong> (someone who pitches in or notices if it slips) is optional. A job counts as owned when it has an owner.</p>
@@ -372,7 +377,7 @@
 
   <!-- ================= AS ================= -->
   <section id="as" aria-labelledby="as-h">
-    <div class="section-head"><p class="part-label">Input 3 of 4 &middot; Pillar III</p><h2 id="as-h">Stress: how much each person is carrying <small>average load (AS)</small></h2></div>
+    <div class="section-head"><p class="part-label">Input 3 of 4 &middot; Stress</p><h2 id="as-h">How much each person is carrying</h2><p class="code-note">Average load (AS in the formulas)</p></div>
     <div class="panel">
       <div class="panel-head"><h3>Everyone's load score</h3><span class="src-tag">From <a href="/workpapers/fill/wp-02.html">WP-02, How much are you carrying?</a> (higher = heavier)</span></div>
       <p class="panel-note">Each person fills in their own card, about themselves, for the last 24 to 48 hours. 0 = not at all, 4 = very true. Guessing for someone else turns a reflection tool into a way of watching them, so the read waits until every card is complete.</p>
@@ -384,13 +389,13 @@
 
   <!-- ================= RF ================= -->
   <section id="rf" aria-labelledby="rf-h">
-    <div class="section-head"><p class="part-label">Input 4 of 4 &middot; Pillar IV &middot; overall score only</p><h2 id="rf-h">Retuning: repair after rough moments <small>retuning (RF)</small></h2></div>
+    <div class="section-head"><p class="part-label">Input 4 of 4 &middot; Retuning &middot; overall score only</p><h2 id="rf-h">Repair after rough moments</h2><p class="code-note">Retuning (RF in the formulas)</p></div>
     <div class="panel">
       <div class="panel-head"><h3>Counting repairs</h3><span class="src-tag">From <a href="/workpapers/fill/wp-09.html">WP-09, Say it so it lands</a></span></div>
-      <p class="panel-note">Count the week's rough moments (when something landed badly enough to notice). Then count how many you ran through the WP-09 steps (fact, feeling, ask) before you answered. This measures what you did about friction, not how much there was.</p>
+      <p class="panel-note">Count the week's rough moments (when something landed badly enough to notice). Then count how many you <strong>retuned</strong>: talked it through calmly before answering, using the WP-09 steps (fact, feeling, ask). This measures what you did about friction, not how much there was.</p>
       <div style="display:grid;grid-template-columns:1fr 110px;gap:10px;align-items:center;max-width:520px;">
         <label for="friction">Rough moments this week</label><input type="number" id="friction" min="0" step="1" inputmode="numeric">
-        <label for="retunes">Of those, how many you retuned first</label><input type="number" id="retunes" min="0" step="1" inputmode="numeric">
+        <label for="retunes">Of those, how many you retuned (talked through calmly first)</label><input type="number" id="retunes" min="0" step="1" inputmode="numeric">
       </div>
       <div class="derive" id="rf-derive" aria-live="polite"></div>
     </div>
@@ -595,7 +600,7 @@ overall = (balance &times; 0.35) + (ownership &times; 0.30) + ((1 &minus; stress
   </section>
 
   <footer class="sheet-footer">
-    The Objective Ledger &middot; CALC-01 &middot; A rule-of-thumb worksheet, not a tested tool &middot; Runs in your browser
+    Spread Love &amp; Acceptance &middot; CALC-01 &middot; A rule-of-thumb worksheet, not a tested tool &middot; Runs in your browser
   </footer>
 </main>
 
@@ -1015,7 +1020,7 @@ overall = (balance &times; 0.35) + (ownership &times; 0.30) + ((1 &minus; stress
   var copyText = "";
   function buildCopyText(b, o, s, r, sol, ap, solV, apV, sb, ab, moves, useSig, custom){
     var L = [];
-    L.push("Is the setup working for everyone? (CALC-01, The Objective Ledger)");
+    L.push("Is the setup working for everyone? (CALC-01, Spread Love & Acceptance)");
     L.push("People: " + S.people.map(function(_, i){ return nameOf(i); }).join(", "));
     L.push("");
     L.push("How the setup is working: " + sb.short + " (" + f2(solV) + " of 1; 0.70+ working well, 0.40 to 0.69 needs a look, under 0.40 needs a rethink, together)");

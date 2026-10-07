@@ -40,7 +40,7 @@
     return el;
   }
   function today() { var d = new Date(); return d.getFullYear() + '-' + ('0' + (d.getMonth() + 1)).slice(-2) + '-' + ('0' + d.getDate()).slice(-2); }
-  function fileBase(data) { return 'TOL-Full-Path-' + FP.ROADS[data.road].label.replace(/[^A-Za-z0-9]+/g, '-').replace(/-+$/, '') + '-' + today(); }
+  function fileBase(data) { return 'Spread-Love-and-Acceptance-Full-Path-' + FP.ROADS[data.road].label.replace(/[^A-Za-z0-9]+/g, '-').replace(/-+$/, '') + '-' + today(); }
   function download(bytes, name, type) {
     var blob = new Blob([bytes], { type: type }), url = URL.createObjectURL(blob), a = h('a', { href: url, download: name, rel: 'noopener' });
     document.body.appendChild(a); a.click(); a.remove();

@@ -85,7 +85,7 @@
 
   var NAMES = {
     'WP-01': 'Who did what', 'WP-02': 'How much are you carrying?', 'WP-03': 'One owner per job',
-    'WP-04': 'The monthly look-back', 'WP-09': 'Say it so it lands', 'WP-11': 'The Calm-Down Kit', 'WP-13': 'The 90-second daily check-in'
+    'WP-04': 'What keeps coming back?', 'WP-09': 'Say it so it lands', 'WP-11': 'The Calm-Down Kit', 'WP-13': 'The 90-second daily check-in'
   };
 
   // one: a single person on this road; group2/groupN: everyone, for two or more; work: the shared load;
@@ -1571,7 +1571,7 @@
     };
     var from = {
       I: R.solo ? 'WP-02 and your weather log' : 'workload balance (WP-01)',
-      II: R.solo ? 'your Calm-Down Kit defaults and kind no’s' : 'ownership clarity (WP-03)' + (c.wp04 ? ' and the monthly look-back (WP-04)' : ''),
+      II: R.solo ? 'your Calm-Down Kit defaults and kind no’s' : 'ownership clarity (WP-03)' + (c.wp04 ? ' and What keeps coming back? (WP-04)' : ''),
       III: 'load scores (WP-02)' + (c.wp11 ? ' and coming back after settling (WP-11)' : ''),
       IV: 'fact, feeling and ask (WP-09), your retuning count' + (c.notes.wiringLines ? ' and your Wiring Card' : ''),
       V: R.solo ? 'what keeps slipping' : 'appreciations (WP-13), repeat slips (WP-04) and unclaimed ' + v.tasks
@@ -1640,7 +1640,7 @@
     'WP-01': ['WP-01 Who did what', '/workpapers/fill/wp-01.html'],
     'WP-02': ['WP-02 How much are you carrying?', '/workpapers/fill/wp-02.html'],
     'WP-03': ['WP-03 One owner per job', '/workpapers/fill/wp-03.html'],
-    'WP-04': ['WP-04 The monthly look-back', '/workpapers/fill/wp-04.html'],
+    'WP-04': ['WP-04 What keeps coming back?', '/workpapers/fill/wp-04.html'],
     'WP-09': ['WP-09 Say it so it lands', '/workpapers/fill/wp-09.html'],
     'WP-11': ['WP-11 The Calm-Down Kit', '/workpapers/fill/wp-11.html'],
     'WP-13': ['WP-13 The 90-second daily check-in', '/workpapers/fill/wp-13.html'],

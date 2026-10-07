@@ -220,7 +220,7 @@
   }
 
   function sheetTitle(pen, entry, e, schema, opts) {
-    pen.kicker(('The Objective Ledger  ·  ' + schema.code + (entry.group ? '  ·  ' + entry.group : '')).toUpperCase());
+    pen.kicker(('Spread Love & Acceptance  ·  ' + schema.code + (entry.group ? '  ·  ' + entry.group : '')).toUpperCase());
     // the plain name is the title; the technical name is a small subtitle
     var name = nameOf(schema.code), tech = schema.title;
     pen.doc.text(L, pen.y + 20, enc(name), 'Times-Bold', 21, C.ink);
@@ -413,8 +413,8 @@
     doc.page.ops.length = 0; // no running header on a sheet's first page
     rep.y = rep.top;
     entry.page = doc.pages.length - 1;
-    if (entry.group) { doc.text(rep.L, rep.y + 8, enc('The Objective Ledger  ·  ' + schema.code + '  ·  ' + entry.group), 'Helvetica', 8, C.brass); rep.y += 16; }
-    else { doc.text(rep.L, rep.y + 8, enc('The Objective Ledger  ·  ' + schema.code), 'Helvetica', 8, C.brass); rep.y += 16; }
+    if (entry.group) { doc.text(rep.L, rep.y + 8, enc('Spread Love & Acceptance  ·  ' + schema.code + '  ·  ' + entry.group), 'Helvetica', 8, C.brass); rep.y += 16; }
+    else { doc.text(rep.L, rep.y + 8, enc('Spread Love & Acceptance  ·  ' + schema.code), 'Helvetica', 8, C.brass); rep.y += 16; }
     doc.text(rep.L, rep.y + 20, enc(nameOf(schema.code)), 'Times-Bold', 21, C.ink);
     rep.y += 30;
     if (schema.title !== nameOf(schema.code)) { doc.text(rep.L, rep.y + 6, enc('Also called ' + schema.title), 'Times-Italic', 9.5, C.soft); rep.y += 14; }
@@ -442,7 +442,7 @@
     d.heart(R - 44, 92, 34, '#FFFFFF');
     d.circle(R - 86, 138, 13, null, '#FFFFFF', 1.6);
     d.circle(R - 90, 134, 2.5, '#FFFFFF');
-    d.text(L + 22, 84, enc('THE OBJECTIVE LEDGER  ·  WORKPAPER SUITE'), 'Helvetica-Bold', 8, C.ink);
+    d.text(L + 22, 84, enc('SPREAD LOVE & ACCEPTANCE  ·  WORKPAPER SUITE'), 'Helvetica-Bold', 8, C.ink);
     d.text(L + 22, 118, enc(opts.fillable ? 'My workpapers, ready to fill in' : 'My workpaper report'), 'Times-Bold', 25, C.ink);
     var sub = (path ? path.label + '. ' + path.blurb : 'Your workpapers, in order.');
     wrap(sub, 'Times-Italic', 11.5, W - 130).slice(0, 2).forEach(function (ln, k) { d.text(L + 22, 140 + k * 14, ln, 'Times-Italic', 11.5, C.ink); });
@@ -499,7 +499,7 @@
     pen.doc.text(L + total * 17 + 8, pen.y + 10, enc(doneN + ' of ' + total + ' sheets started'), 'Helvetica', 9, C.soft);
     pen.y += 26;
     var RP = plan.path && plan.path.report;
-    pen.para(RP ? RP.lens : 'Each read describes how things are set up and shared, never either person. Use it to start a conversation, not to end one.', { font: 'Times-Italic', size: 9.5, color: C.soft, after: 8 });
+    pen.para(RP ? RP.lens : 'Each read describes how things are set up and shared, never any one person. Use it to start a conversation, not to end one.', { font: 'Times-Italic', size: 9.5, color: C.soft, after: 8 });
 
     plan.groups.forEach(function (g, gi) {
       pen.heading(g.title, 50, PASTELS[gi % PASTELS.length]);
@@ -760,7 +760,7 @@
         offset = front.pages.length;
       }
     }
-    var out = new PDF.Doc({ title: opts.title, producer: 'The Objective Ledger (TOL-OS) Workpaper Suite, made on this device', subject: 'tol-workpaper-suite' + (plan.path ? ' path=' + plan.path.id : '') });
+    var out = new PDF.Doc({ title: opts.title, producer: 'Spread Love & Acceptance Workpaper Suite, made on this device', subject: 'tol-workpaper-suite' + (plan.path ? ' path=' + plan.path.id : '') });
     var F = front ? front.pages.length : 0;
     out.pages = (front ? front.pages : []).concat(sheets.pages);
     out.pages.forEach(function (p, i) {

@@ -177,7 +177,7 @@
   /* ---------- retuning (WP-09) ---------- */
   function retuning(retunes, friction) {
     var f = num(friction), r = num(retunes);
-    if (f === null || f <= 0) return { value: null, note: 'No friction logged, so retuning has no value. Nothing to repair is not a failure to repair.' };
+    if (f === null || f <= 0) return { value: null, note: 'No rough moments logged, so retuning (repair after rough moments) has no value. Nothing to repair is not a failure to repair.' };
     if (r === null || r < 0) r = 0;
     return { value: clamp01(r / f), capped: r > f, retunes: r, friction: f };
   }

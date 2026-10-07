@@ -1,6 +1,6 @@
 /* come-back.js — a kind reason to come back, kept on this device only.
-   - Home page: "How much time do you have?" (1, 5, 15 or 30+ minutes) turns into a short plan of
-     two to four steps. The ideas come from the menu's time launcher (pick-up.js) plus a few more,
+   - Home page: "How much time do you have?" (1, 5, 10, 15 or 30+ minutes) turns into a short plan of
+     one to four steps that add up to the time picked. The ideas come from the menu's time launcher (pick-up.js) plus a few more,
      lean toward what you picked in "Start where you are" or opened lately, and change each visit.
      The last choice is remembered here ("Welcome back. 5 minutes again?").
    - Home page: "Today's tiny thing" (one small practice a day).
@@ -205,6 +205,12 @@
         { t: 'Try a Check yourself moment', u: '/five-pillars.html', m: 4, why: 'a quick question on the Five Pillars, with a petal for you', tag: 'self' },
         { t: 'Watch one chapter of Frequency Buddies with a kid', u: '/frequency-buddies.html?ep=' + ne[0], m: 4, why: ne[1] + ', in short pieces', tag: 'kids' }
       ],
+      10: [
+        { t: 'Read the first half of ' + nc.code + ': ' + nc.t, u: nc.u, m: 6, why: nc.n, tag: 'book' },
+        { t: 'Plan your early signs in the Calm-Down Kit', u: '/wp-11.html', m: 6, why: 'what you notice first, and what settles you', tag: 'calm' },
+        { t: 'Say one message so it lands', u: '/workpapers/wp-09-tone-filter.html', m: 6, why: 'a fact, a feeling and a kind ask', tag: 'talk' },
+        { t: 'Play a calm game level', u: '/pause-and-play.html', m: 8, why: 'no timers and no way to lose', tag: 'calm' }
+      ],
       15: [
         { t: 'Read all of ' + nc.code + ': ' + nc.t, u: nc.u, m: 12, why: nc.n, tag: 'book' },
         { t: 'Find your Wavelength', u: '/wavelength.html', m: 12, why: 'how you think, talk and listen', tag: 'self' },
@@ -223,6 +229,8 @@
     [1, 5, 15].forEach(function (k) {
       L[k].forEach(function (x) { if (!P[k].some(function (y) { return y.u.split('?')[0] === x.u.split('?')[0]; })) P[k].push(x); });
     });
+    // the 10-minute plan can also use the five-minute ideas that take the full five
+    P[5].forEach(function (x) { if (x.m === 5 && !P[10].some(function (y) { return samePage(x, y); })) P[10].push(x); });
     return P;
   }
   var CLOSERS = [
@@ -230,30 +238,71 @@
     { t: 'Let one slow breath out before you go back to your day', m: 0.5 },
     { t: 'Say one thank-you, out loud or in a text', m: 0.5 }
   ];
-  function pickFrom(list, seed, avoid) {
-    var w = wanted(), last = (recent()[0] || {}).u;
-    var ok = list.filter(function (x) { return x.u.split('#')[0] !== last && (!avoid || avoid.indexOf(x.u) === -1); });
-    if (!ok.length) ok = list;
-    // the ones that fit you come first; the rest rotate in, so it stays fresh
+  function pathOf(u) { return String(u || '').split(/[?#]/)[0]; }
+  // pages opened lately (site.js keeps them in 'tol-recent'), so a plan can offer something new
+  function visited() { var v = {}; recent().forEach(function (r) { v[pathOf(r.u)] = 1; }); return v; }
+  // the list in the order it fits you: your kind of thing first, the rest rotating in so it stays fresh.
+  // Pages opened lately (and anything already in the plan) are left out, unless that would leave nothing.
+  function ranked(list, seed, avoid) {
+    var w = wanted(), seen = visited(), last = pathOf((recent()[0] || {}).u);
+    function notUsed(x) { return !avoid || avoid.indexOf(pathOf(x.u)) === -1 || !pathOf(x.u); }
+    var ok = list.filter(function (x) { var pa = pathOf(x.u); return notUsed(x) && !(pa && seen[pa]); });
+    if (!ok.length) ok = list.filter(function (x) { return notUsed(x) && pathOf(x.u) !== last; });
+    if (!ok.length) ok = list.filter(notUsed);
+    if (!ok.length) ok = list.slice();
     var scored = ok.map(function (x, i) { return { x: x, s: (w[x.tag] || 0) * 10 + ((i * 7 + seed * 3) % ok.length) }; });
     scored.sort(function (a, b) { return b.s - a.s; });
     var top = Math.max(1, Math.min(scored.length, Object.keys(w).length ? 2 : scored.length));
-    return scored[seed % top].x;
+    var out = scored.map(function (o) { return o.x; }), lead = out.splice(seed % top, 1)[0];
+    out.unshift(lead);
+    return out;
+  }
+  function pickFrom(list, seed, avoid) { return ranked(list, seed, avoid)[0]; }
+  // Breathe falls back to the Night Garden, so the two count as one place
+  function placeOf(u) { return u === '#breathe' ? '/night-garden.html' : pathOf(u) || u; }
+  function samePage(a, b) { return placeOf(a.u) === placeOf(b.u); }
+  // one main step plus up to two small ones that add up to exactly the minutes picked.
+  // A one-minute opener (a breath, today's weather) goes first when one fits.
+  function fit(target, mains, smalls, seed) {
+    var M = ranked(mains.filter(function (x) { return x.m <= target; }), seed);
+    for (var i = 0; i < M.length; i++) {
+      var main = M[i], rem = target - main.m;
+      if (!rem) return [main];
+      var F = ranked(smalls.filter(function (x) { return x.m <= rem && !samePage(x, main); }), seed + 1).slice(0, 8);
+      var best = null, bestScore = -1e9;
+      for (var a = 0; a < F.length; a++) {
+        var tries = [[F[a], a]];
+        for (var b = a + 1; b < F.length; b++) if (!samePage(F[a], F[b])) tries.push([F[a], F[b], a + b]);
+        tries.forEach(function (c) {
+          var rank = c.pop(), sum = 0; c.forEach(function (x) { sum += x.m; });
+          if (sum !== rem) return;
+          // prefer a one-minute opener, then fewer steps, then the ones that fit you best (earlier in F)
+          var sc = (c.some(function (x) { return x.m === 1; }) ? 100 : 0) + (c.length === 1 ? 20 : 0) - rank;
+          if (sc > bestScore) { bestScore = sc; best = c; }
+        });
+      }
+      if (best) {
+        var open = best.filter(function (x) { return x.m === 1; }).slice(0, 1);
+        return open.concat([main], best.filter(function (x) { return open.indexOf(x) === -1; }));
+      }
+    }
+    return null;
   }
   function plan(min, seed) {
     var P = pools(), steps = [], used = [];
-    function add(x) { if (x) { steps.push(x); used.push(x.u); } }
+    function add(x) { if (x) { steps.push(x); used.push(pathOf(x.u)); } }
+    var ones = P[1].filter(function (x) { return x.u !== '#cb-tiny' || !helpersOff(); });
     if (min === 1) {
       add(pickFrom(P[1], seed));
       steps.push(CLOSERS[seed % CLOSERS.length]);
-    } else if (min === 5) {
-      add(pickFrom(P[1].filter(function (x) { return x.u !== '#cb-tiny'; }), seed + 1));
-      add(pickFrom(P[5], seed, used));
-    } else if (min === 15) {
-      add(pickFrom(P[1], seed + 2));
-      add(pickFrom(P[15], seed, used));
-      var small = P[5].filter(function (x) { return x.m <= 3; });
-      add(pickFrom(small.length ? small : P[5], seed + 1, used));
+    } else if (min === 5 || min === 10 || min === 15) {
+      var mains = min === 5 ? P[5] : min === 10 ? P[10] : P[15];
+      var smalls = min === 5 ? ones : ones.concat(P[5].filter(function (x) { return x.m <= 5; }));
+      var got = fit(min, mains, smalls, seed);
+      if (got) return got;
+      // nothing adds up exactly: a short opener and the closest main step
+      add(pickFrom(ones, seed + 1));
+      add(pickFrom(mains.filter(function (x) { return x.m < min; }), seed, used));
     } else {
       add({ t: 'Check today’s weather', u: '/quick-checks.html#today', m: 1, why: 'so you know what today is good for' });
       add(pickFrom(P[30], seed, used));
@@ -262,12 +311,18 @@
     return steps;
   }
   function mins(m) { return m < 1 ? 'a moment' : m === 1 ? '1 min' : m + ' min'; }
-  var LABEL = { 1: '1-minute', 5: '5-minute', 15: '15-minute', 30: '30-minute' };
-  var NICE = { 1: '1 minute', 5: '5 minutes', 15: '15 minutes', 30: '30 minutes or more' };
+  var LABEL = { 1: '1-minute', 5: '5-minute', 10: '10-minute', 15: '15-minute', 30: '30-minute' };
+  var NICE = { 1: '1 minute', 5: '5 minutes', 10: '10 minutes', 15: '15 minutes', 30: '30 minutes or more' };
 
   function timePicker(box) {
     var opts = box.querySelectorAll('[data-cb-min]'), out = box.querySelector('[data-cb-plan]'), q = box.querySelector('.hh-time-q');
     if (!opts.length || !out) return;
+    // the buttons are one group, named by the question
+    var grp = opts[0].parentNode;
+    if (grp && grp !== box && !grp.getAttribute('role')) {
+      grp.setAttribute('role', 'group');
+      if (q) { if (!q.id) q.id = 'cb-time-q'; grp.setAttribute('aria-labelledby', q.id); }
+    }
     var seed = (S.visits || 0) + dayNum();
     S.visits = (S.visits || 0) + 1; save();
     function show(min, welcome) {

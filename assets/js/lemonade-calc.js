@@ -667,10 +667,46 @@
     var fair = s / t.length;
     var parts = t.map(function (x, i) {
       var d = x - fair;
-      var tail = Math.abs(d) < 0.005 ? 'right on an even share' : (d > 0 ? money(d) + ' over an even share' : money(-d) + ' under an even share');
-      return nameOf(i) + ' paid ' + money(x) + ' (' + tail + ')';
+      var tail = Math.abs(d) < 0.005 ? 'right on an even share' : (d > 0 ? cash(d) + ' over an even share' : cash(-d) + ' under an even share');
+      return nameOf(i) + ' paid ' + cash(x) + ' (' + tail + ')';
     });
-    return 'Shared costs listed: ' + money(s) + '. An even split would be ' + money(fair) + ' each. ' + parts.join('; ') + '. Even isn’t always the fair answer (incomes and rooms differ), so treat this as a starting point, not a verdict.';
+    var settle = settleUp(t, fair);
+    return 'Shared costs listed: ' + cash(s) + '. An even split would be ' + cash(fair) + ' each. ' + parts.join('; ') + '.' + (settle ? ' To settle up evenly: ' + settle : '') + ' Even isn’t always the fair answer (incomes and rooms differ), so treat this as a starting point, not a verdict.';
+  }
+  // Money with the dollar sign (the page has no currency setting).
+  function cash(n) { return '$' + money(n); }
+  function joinNames(a) { return a.length < 2 ? a.join('') : a.slice(0, -1).join(', ') + ' and ' + a[a.length - 1]; }
+  // Who pays whom to reach an even split: those who paid under their share pay those who paid over,
+  // largest first, in whole cents. Same even-split math as the sentence above.
+  function settleUp(t, fair) {
+    var owe = [], due = [];
+    t.forEach(function (x, i) {
+      var c = Math.round((x - fair) * 100);
+      if (c < 0) owe.push({ i: i, c: -c }); else if (c > 0) due.push({ i: i, c: c });
+    });
+    if (!owe.length || !due.length) return '';
+    owe.sort(function (a, b) { return b.c - a.c; }); due.sort(function (a, b) { return b.c - a.c; });
+    var moves = [], o = 0, d = 0;
+    while (o < owe.length && d < due.length) {
+      var c = Math.min(owe[o].c, due[d].c);
+      if (c > 0) moves.push({ from: owe[o].i, to: due[d].i, c: c });
+      owe[o].c -= c; due[d].c -= c;
+      if (owe[o].c <= 0) o++;
+      if (due[d].c <= 0) d++;
+    }
+    // drop leftover rounding cents (one or two cents per person at most)
+    moves = moves.filter(function (m) { return m.c > 2; });
+    if (!moves.length) return '';
+    // group "A, B and C each owe D $30" when the same amount goes to the same person
+    var groups = [];
+    moves.forEach(function (m) {
+      var g = groups.filter(function (x) { return x.to === m.to && x.c === m.c; })[0];
+      if (g) g.from.push(m.from); else groups.push({ to: m.to, c: m.c, from: [m.from] });
+    });
+    return groups.map(function (g) {
+      var who = joinNames(g.from.map(function (i) { return nameOf(i); }));
+      return who + (g.from.length > 1 ? ' each owe ' : ' owes ') + nameOf(g.to) + ' ' + cash(g.c / 100) + '.';
+    }).join(' ');
   }
 
   /* ---------- Chapter II's balance score (same math as CALC-01) ---------- */
@@ -1030,7 +1066,7 @@
       if (si.length) lines.push('- I’m going to make ' + listNames(si) + ' simpler.');
       if (sc.length) lines.push('- I’m putting ' + listNames(sc) + ' on a set time each week.');
     }
-    lines.push('', 'Made with the Lemonade Stand at The Objective Ledger.');
+    lines.push('', 'Made with the Lemonade Stand at Spread Love & Acceptance.');
     return lines.join('\n');
   }
   function resultText() {
@@ -1057,7 +1093,7 @@
     if (ctx) lines.push('', ctx);
     var ms = moneySentence();
     if (ms) lines.push('', ms);
-    lines.push('', 'Made with the Lemonade Stand at The Objective Ledger.');
+    lines.push('', 'Made with the Lemonade Stand at Spread Love & Acceptance.');
     return lines.join('\n');
   }
   function copyText(text) {

@@ -927,7 +927,7 @@
   }
   var tip = null, soloTip = null;
 
-  function base() { return 'TOL-Workpaper-Suite-' + (S.path ? S.path.label.replace(/[^A-Za-z0-9]+/g, '-') + '-' : '') + WPK.today(); }
+  function base() { return 'Spread-Love-and-Acceptance-Workpaper-Suite-' + (S.path ? S.path.label.replace(/[^A-Za-z0-9]+/g, '-') + '-' : '') + WPK.today(); }
 
   function makePdf(kind) {
     if (!S.path) { say('Choose your road first, then your PDF is made from it.'); $('ws-paths').querySelector('button').focus(); return; }

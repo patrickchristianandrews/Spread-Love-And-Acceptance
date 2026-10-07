@@ -25,6 +25,10 @@
   .ask-head h1{ font-size:clamp(1.35rem,4.5vw,1.8rem); margin-bottom:.2rem; }
   .ask-about{ margin-top:1.4rem; }
   .ask-about summary{ cursor:pointer; font-weight:600; min-height:44px; display:flex; align-items:center; }
+  .ask-exit{ margin:.2rem 0 1rem; font-size:.92rem; display:flex; flex-wrap:wrap; gap:.4rem .7rem; align-items:center; }
+  .ask-exit button{ font:inherit; font-size:.9rem; min-height:40px; padding:.35rem .9rem; border-radius:999px; border:1px solid var(--line, #d8cfb8); background:var(--paper, #fffaf0); color:var(--ink, #2a2530); cursor:pointer; }
+  .ask-exit button:focus-visible{ outline:3px solid var(--focus, #2B5B8C); outline-offset:2px; }
+  .ask-exit small{ color:var(--ink-soft, #5A5346); }
 </style>
 <!-- seo:start -->
 <link rel="canonical" href="https://spreadloveandacceptance.com/ask.html">
@@ -63,6 +67,7 @@
 <body data-no-tip data-no-breathe>
 <main class="read">
 <header class="read-head ask-head"><p class="read-code">Ask</p><h1>Chat with Professor Puddles</h1></header>
+<p class="ask-exit no-bubble"><button type="button" data-tol-exit>Leave this site quickly</button> <small>Or press Esc twice. Not safe at home? <a href="/safety.html">Free, private help</a>.</small></p>
 
 <div id="ask-chat"></div>
 <noscript><p>The Professor needs JavaScript to run in your browser. You can still browse everything from the <a href="/contents.html">Contents</a>.</p></noscript>

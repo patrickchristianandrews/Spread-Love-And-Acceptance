@@ -83,9 +83,9 @@
   /* ------------------------------------------------------------------ WP-01 */
   W['wp-01'] = {
     code: 'WP-01',
-    title: 'Who did what, and kind ways to say no',
-    plain: 'Who did what, and kind ways to say no',
-    slug: 'Field-Audit',
+    title: 'Who did what',
+    plain: 'Who did what',
+    slug: 'Who-did-what',
     purpose: "Write down what actually happened this week, before anyone starts remembering it as a story. Fill it in together, or each keep your own copy and compare at the end of the week. Either way, write down only what you did or saw yourself; never fill in someone else's side for them.",
     people: true,
     meta: [
@@ -145,8 +145,8 @@
         }
       },
       {
-        id: 'refusals', type: 'table', title: 'Part B: Neutral refusals we want to try', optional: true,
-        intro: 'Optional. Draft a "not right now" for a real situation in three steps: say why the request is fair, say honestly what you have left, and offer something instead.',
+        id: 'refusals', type: 'table', title: 'Part B (optional): Kind ways to say no', optional: true,
+        intro: 'Optional. Kind ways to say no, drafted ahead of time. Draft a "not right now" for a real situation in three steps: say why the request is fair, say honestly what you have left, and offer something instead.',
         addLabel: 'Add a refusal',
         columns: [
           { id: 'kind', label: 'Type', type: 'select', options: ['Capacity check', 'Delegation pivot', 'Time commitment'], w: 1.2 },
@@ -216,7 +216,7 @@
     code: 'WP-02',
     title: 'How much are you carrying?',
     plain: 'How much are you carrying?',
-    slug: 'Battery-Stress-Meter',
+    slug: 'How-much-are-you-carrying',
     purpose: 'A one-minute check that each person fills in about themselves. It separates "How much am I already carrying?" from "How upset am I about this one thing?" Higher numbers mean more load. It is not a clinical test, just a structured gut-check.',
     people: false,
     perPerson: true,
@@ -285,7 +285,7 @@
     code: 'WP-03',
     title: 'One owner per job',
     plain: 'One owner per job',
-    slug: 'RACI-Treaty',
+    slug: 'One-owner-per-job',
     purpose: 'A living agreement that gives every regular household job one owner: the person who does it and sees it through. That way nobody has to re-decide who owns what every week. If you like, add a helper who pitches in or notices if it slips. The helper is optional.',
     people: true,
     meta: [
@@ -294,7 +294,7 @@
     sections: [
       {
         type: 'note', pdf: false,
-        text: "Use this after your first full week of Who did what (WP-01), and fill it in from what that week's log actually showed. The starter jobs below are examples. They don't count until you give one an owner or change it. Remove any that don't apply to your household, and add the ones that do, including the invisible ones: forms, gifts, renewals, planning."
+        text: "This works on its own: list the jobs that keep your home running and give each one a single owner. If you still disagree about who does what, a week of Who did what (WP-01) helps settle it. The starter jobs below are examples. They don't count until you give one an owner or change it. Remove any that don't apply to your household, and add the ones that do, including the invisible ones: forms, gifts, renewals, planning."
       },
       {
         id: 'treaty', type: 'table', title: 'Who owns each job',
@@ -322,7 +322,7 @@
       },
       {
         id: 'amendments', type: 'table', title: 'Changes to the list', optional: true,
-        intro: 'When life changes, rework the agreement in writing, instead of letting jobs drift to whoever started doing more. Anyone on it can ask for a review at a weekly check-in, or at the monthly look-back (WP-04).',
+        intro: 'When life changes, rework the agreement in writing, instead of letting jobs drift to whoever started doing more. Anyone on it can ask for a review at a weekly check-in, or at What keeps coming back? (WP-04), the monthly look-back.',
         addLabel: 'Add a change',
         columns: [
           { id: 'date', label: 'Date', type: 'date', w: 1.1 },
@@ -341,8 +341,8 @@
     code: 'WP-04',
     title: 'What keeps coming back?',
     plain: 'What keeps coming back?',
-    slug: 'Deficit-Audit',
-    purpose: 'A monthly look-back, done together, across four weeks of Who did what (WP-01) and One owner per job (WP-03). It looks for the tasks that keep slipping. The goal is not to tally what anyone owes, but to find where the setup needs a fix.',
+    slug: 'What-keeps-coming-back',
+    purpose: 'What keeps coming back? A monthly look-back, done together, across four weeks of Who did what (WP-01) and One owner per job (WP-03). It looks for the tasks that keep slipping. The goal is not to tally what anyone owes, but to find where the setup needs a fix.',
     people: true,
     meta: [
       { id: 'month', label: 'Month', type: 'text', placeholder: 'e.g. September 2026' }
@@ -419,7 +419,7 @@
     code: 'WP-09',
     title: 'Say it so it lands',
     plain: 'Say it so it lands',
-    slug: 'Tone-Filter',
+    slug: 'Say-it-so-it-lands',
     purpose: 'A self-check each of you uses on your own side of a conversation. It helps you turn a raw reaction into something the other person can actually take in, and weigh a message you received before you react to it. Nothing here records or analyzes anyone\'s voice.',
     people: false,
     meta: [
@@ -512,7 +512,7 @@
     code: 'WP-11',
     title: 'The Calm-Down Kit',
     plain: 'The Calm-Down Kit',
-    slug: 'Calm-Down-Kit',
+    slug: 'The-Calm-Down-Kit',
     purpose: 'A short plan, made ahead of time, for calming your body down enough to have the conversation, or to put it off honestly. Everyone fills in their own kit, about themselves. Fill in Part A on an ordinary day, not a hard one.',
     people: false,
     perPerson: true,
@@ -596,7 +596,7 @@
     code: 'WP-13',
     title: 'The 90-second daily check-in',
     plain: 'The 90-second daily check-in',
-    slug: 'Phase-Locked-Loop',
+    slug: 'The-90-second-daily-check-in',
     purpose: 'A 90-second daily check-in that keeps everyone in step with small, steady corrections instead of occasional big ones. Each person answers each prompt in one sentence, about their own day. No debating, no solving, no arguing back.',
     people: true,
     meta: [
@@ -659,7 +659,7 @@
       ],
       freq: ['Daily', 'Each meeting', 'Weekly', 'Monthly', 'As needed', 'Ongoing'],
       ci: true,
-      amend: 'When the work changes, rework the agreement in writing, instead of letting tasks drift to whoever started picking them up. Anyone on the team can ask for a review at a regular check-in, or at the monthly look-back (WP-04).',
+      amend: 'When the work changes, rework the agreement in writing, instead of letting tasks drift to whoever started picking them up. Anyone on the team can ask for a review at a regular check-in, or at What keeps coming back? (WP-04), the monthly look-back.',
       sign: "Agreeing means everyone has read this version and knows who owns what. It isn't a performance record, and it isn't for HR. It only means ownership is clear."
     },
     roommates: {
@@ -671,7 +671,7 @@
         { task: 'Shared supplies (soap, paper, basics)', freq: 'As needed' }, { task: 'Trash and recycling', freq: 'Weekly' },
         { task: 'Guests and quiet hours', freq: 'Ongoing' }
       ],
-      amend: 'When things change (someone moves in or out, a schedule shifts), rework the agreement in writing, instead of letting jobs drift to whoever started doing more. Anyone can ask for a review at a house meeting, or at the monthly look-back (WP-04).',
+      amend: 'When things change (someone moves in or out, a schedule shifts), rework the agreement in writing, instead of letting jobs drift to whoever started doing more. Anyone can ask for a review at a house meeting, or at What keeps coming back? (WP-04), the monthly look-back.',
       sign: "Agreeing means everyone has read this version and knows who owns what. It doesn't mean every job feels perfectly even, only that ownership is clear."
     },
     caregivers: {
@@ -684,7 +684,7 @@
         { task: 'Visits', freq: 'Weekly' }, { task: 'Overnight calls', freq: 'As needed' },
         { task: 'Groceries and meals', freq: 'Weekly' }
       ],
-      amend: 'When the care changes, rework the agreement in writing, instead of letting tasks drift to whoever lives closest or started doing more. Anyone sharing the care can ask for a review at a regular check-in, or at the monthly look-back (WP-04).',
+      amend: 'When the care changes, rework the agreement in writing, instead of letting tasks drift to whoever lives closest or started doing more. Anyone sharing the care can ask for a review at a regular check-in, or at What keeps coming back? (WP-04), the monthly look-back.',
       sign: "Agreeing means everyone sharing the care has read this version and knows who owns what. It doesn't mean the load feels even, only that ownership is clear."
     }
   };
@@ -736,6 +736,7 @@
     'wp-01': {
       title: 'Kind ways to say no',
       plain: 'Kind ways to say no',
+      slug: 'Kind-ways-to-say-no',
       purpose: 'Kind ways to say no, drafted ahead of time. For a real request you can\'t take on right now, write a "not right now" in three steps: say why the request is fair, say honestly what you have left, and offer something instead. Having a few ready means you don\'t have to find the words on the spot.',
       people: false,
       meta: [
