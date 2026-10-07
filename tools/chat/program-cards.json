@@ -387,7 +387,7 @@
       "kind": "intent",
       "first": true,
       "name": "something calming",
-      "pat": "\\b(tell me|say|give me|share|send me|i need|i want|i could use|i d like|id like) (something|anything|some words|a few words|a thought|words|a little something)? ?(calming|calm|comforting|soothing|gentle|reassuring|peaceful|nice|kind)\\b|\\bcalm me( down)?\\b|\\bhelp me (calm|settle|relax|breathe|slow down)\\b|\\bi (need|want|have) to (calm down|settle down|relax|breathe)\\b|\\bi need (some )?(calm|peace|a moment|a breather)\\b|\\bsoothe me\\b|\\bcomfort me\\b|\\bi cant (calm down|relax|settle)\\b|\\bsomething to (calm|settle|soothe) me\\b|\\bcalm (places?|spaces?|spots?|corners?)\\b|\\bi feel (so )?(panicky|shaky|wound up|keyed up)\\b",
+      "pat": "\\b(tell me|say|give me|share|send me|i need|i want|i could use|i d like|id like) (something|anything|some words|a few words|a thought|words|a little something)? ?(calming|calm|comforting|soothing|gentle|reassuring|peaceful|nice|kind)\\b|\\bcalm me( down)?\\b|\\bhelp me (calm|settle|relax|breathe|slow down)\\b|\\bi (need|want|have) to (calm down|settle down|relax|breathe)\\b|\\bi need (some )?(calm|peace|a moment|a breather)\\b|\\bsoothe me\\b|\\bcomfort me\\b|\\bi cant (calm down|relax|settle)\\b|\\bsomething to (calm|settle|soothe) me\\b|\\bcalm (places?|spaces?|spots?|corners?)\\b|\\bi feel (so )?(panicky|shaky|wound up|keyed up)\\b|\\bcalm (down|myself) (fast|quick|quickly|now|right now)\\b|\\bhow (do|can) i (calm|settle) (down|myself)\\b|\\b(keyed|wound|worked|amped) up\\b|\\bmy heart (is )?(racing|pounding)\\b|\\bcool (off|down) (fast|quickly|now)\\b|\\bpanic(ked|king)? attacks?\\b|\\bpanicking\\b|\\bcan t (stop )?breath(e|ing)\\b",
       "keys": [],
       "what": [
         "Of course. Let’s slow down together for a moment."
@@ -1112,6 +1112,44 @@
         [
           "I feel drained after my ex texts",
           "I feel drained after my ex texts"
+        ]
+      ]
+    },
+    {
+      "id": "grief",
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "name": "grief and loss",
+      "pat": "\\b(my|our) (wife|husband|partner|spouse|mom|mum|mother|dad|father|son|daughter|child|baby|brother|sister|friend|best friend|grandma|grandpa|grandmother|grandfather|dog|cat) (died|passed|passed away|is gone|was killed)\\b|\\b(lost|losing) (my|our) (wife|husband|partner|spouse|mom|mum|mother|dad|father|son|daughter|child|baby|brother|sister|friend|best friend|dog|cat)\\b|\\bi m (a )?(widow|widower|widowed)\\b|\\b(widow|widower|widowed|bereaved|bereavement|grieving|grief|mourning)\\b|\\bsince (she|he|they) (died|passed)\\b",
+      "keys": [],
+      "what": [
+        "I’m so sorry. Losing someone you love changes everything, and there’s no right way or right timetable to grieve. Pulling back for a while is a very common part of it, not a failing."
+      ],
+      "how": [
+        "People in the same family often grieve differently: one wants to talk, another keeps busy. Neither is wrong.",
+        "Staying connected to the person you lost, through memories and rituals, is healthy. Grief doesn’t have to end in “moving on”.",
+        "If you’ve pulled away from family, one small step is enough: a short call, or one honest line like “I’ve been quiet because I miss her, not because of you.”",
+        "If the weight doesn’t lift, or you have thoughts of not wanting to be here, please talk to a doctor, a grief counselor, or call or text 988 in the US."
+      ],
+      "links": [
+        [
+          "Grief, loss and change (the Professor’s Library)",
+          "/library/emotions.html#grief-and-change"
+        ],
+        [
+          "Your self-discovery path",
+          "/self-path.html"
+        ],
+        [
+          "For grandparents: staying close",
+          "/grandparents.html"
+        ]
+      ],
+      "chips": [
+        [
+          "How do I reconnect with my grown kids?",
+          "How do I reconnect with my grown children?"
         ]
       ]
     },
@@ -5154,7 +5192,7 @@
         "reading list",
         "what can i read",
         "learn more",
-        "library",
+        "the professor s library",
         "stories from philosophy",
         "the podcast"
       ],

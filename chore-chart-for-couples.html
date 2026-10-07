@@ -23,6 +23,7 @@
 <style>
   .g-steps{ counter-reset:gs; list-style:none; padding:0 !important; margin:1rem 0 1.5rem !important; display:grid; gap:.6rem; }
   .g-steps > li{ counter-increment:gs; margin:0; max-width:none; padding:.8rem 1rem .8rem 3rem; position:relative; background:var(--paper); border:1px solid var(--line); border-radius:var(--radius, 10px); }
+  .read .g-steps > li{ padding-left:3rem !important; }
   .g-steps > li::before{ content:counter(gs); position:absolute; left:.85rem; top:.8rem; width:1.5rem; height:1.5rem; border-radius:50%; background:var(--brass); color:#fff; font:600 .85rem/1.5rem "IBM Plex Mono", monospace; text-align:center; }
   .g-steps strong{ font-family:"Fraunces", Georgia, serif; }
   .g-links{ list-style:none; padding:0 !important; margin:.75rem 0 1.5rem !important; display:grid; gap:.45rem; }

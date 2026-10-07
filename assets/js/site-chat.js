@@ -464,7 +464,7 @@
     '\\b(hits?|hitting|slapp?(s|ed|ing)?|punch(es|ed|ing)?|chok(e|es|ed|ing)|kick(s|ed|ing)?|strangl\\w*|grabb?(ed|ing) me by) (me|us|my (kids?|children|son|daughter|baby))\\b',
     '\\b(shoved|shoves|pushed|pushes) me (down|over|into|against|around)\\b', '\\bbeats? me up\\b',
     '\\babus(e|es|ed|ive|er|ers|ing)\\b', '\\bdomestic (violence|abuse)\\b', '\\bviolen(t|ce)\\b',
-    '\\bsuicid\\w*', '\\bkill(ing)? (my ?self|me|him|her|them|everyone)\\b', '\\b(want|wants|wanted|going) to die\\b',
+    '\\bsuicid\\w*', '\\bkill (my ?self|me|him|her|them|everyone)\\b', '\\bkilling (my ?self|him|her|them|everyone)\\b', '\\b(he|she|they|someone|my \\w+) (is |s |are )?(going to |gonna |will |ll |wants to |threatened to |tried to )?kill(ing)? me\\b', '\\b(want|wants|wanted|going) to die\\b',
     '\\bend (it all|my life)\\b', '\\bself ?harm\\w*', '\\b(hurt|hurting|harm|harming|cut|cutting) my ?self\\b', '\\bno reason to (live|go on)\\b',
     '\\bthreat(en|ens|ened|ening)\\w* (to )?(hurt|kill|harm)\\b', '\\b(threatens|threatened) me\\b',
     '\\b(afraid|scared|frightened|terrified) (of|for) (him|her|my (life|safety)|my (partner|husband|wife|boyfriend|girlfriend|spouse|ex|dad|father|mom|mum|mother|stepdad|stepmom))\\b',

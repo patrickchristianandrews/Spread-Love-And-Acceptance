@@ -70,8 +70,15 @@
     ['/book/chapter-3.html', 'Chapter III: full tanks'], ['/book/chapter-4.html', 'Chapter IV: two kinds of fair'], ['/book/chapter-5.html', 'Chapter V: the monthly look-back']];
   function lastVisitDay() {
     var days = json('tol-visit-days'), t = today(), prev = '';
-    (Array.isArray(days) ? days : []).forEach(function (d) { if (typeof d === 'string' && d < t && d > prev) prev = d; });
+    // site.js keeps these as Date.toDateString() ("Wed Oct 07 2026"); read either that or YYYY-MM-DD
+    (Array.isArray(days) ? days : []).forEach(function (d) { d = isoDay(d); if (d && d < t && d > prev) prev = d; });
     return prev;
+  }
+  function isoDay(d) {
+    if (typeof d !== 'string') return '';
+    if (/^\d{4}-\d\d-\d\d$/.test(d)) return d;
+    var x = new Date(d); if (isNaN(x.getTime())) return '';
+    return x.getFullYear() + '-' + ('0' + (x.getMonth() + 1)).slice(-2) + '-' + ('0' + x.getDate()).slice(-2);
   }
   function daysSince(d) { if (!d) return 0; return Math.round((new Date(today() + 'T12:00:00') - new Date(d + 'T12:00:00')) / 864e5); }
   function nextStep() {

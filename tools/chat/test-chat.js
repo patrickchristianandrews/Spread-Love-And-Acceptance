@@ -397,6 +397,11 @@ t('care', 'I just got divorced and feel lost', { kind: 'care', id: 'onmyown', li
 t('care', 'Is there a leader guide for a church small group?', { kind: 'care', id: 'group', link: '/groups.html' });
 t('care', 'how do I raise emotionally healthy kids', { kind: 'care', id: 'raisekids', link: '/parents.html' });
 t('care', "I'm 15 and my parents don't understand me", { kind: 'care', id: 'teens', link: '/teens.html' });
+t('care', 'my wife died last year and my kids say I have withdrawn', { kind: 'care', id: 'grief', link: '/library/emotions.html' });
+t('care', 'how do I calm down fast', { kind: 'care', id: 'calmnow' });
+t('care', 'i had a panic attack in the library today', { kind: 'care', id: 'calmnow' });
+t('care', 'exam stress is killing me', { not: /Domestic Violence|911/ });
+t('situations', 'is it normal to go quiet in a fight', { text: /weakness|overload|pause/ });
 c('care', ['my partner snapped at me', 'is it my fault?'], { kind: 'care', id: 'fault', text: /theirs to own/, not: /\bYes\b/ });
 c('care', ['my partner snapped at me', 'Tell me more'], { kind: 'care', id: 'fault' });
 c('care', ['my partner snapped at me', 'is it my fault?', 'What can I do tonight?'], { kind: 'sit-more', text: /calming thing/ });

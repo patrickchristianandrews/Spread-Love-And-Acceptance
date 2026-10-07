@@ -366,7 +366,7 @@
       { href: '/glossary.html', code: 'Words', title: 'Glossary', note: 'Every word the site uses, in plain English' },
       { href: '/frequency-framework.html', deep: true, title: 'The Frequency Framework', note: 'Why two kind people fall out of step, and how to find the rhythm again' },
       { href: '/infographic.html', title: 'The whole idea on one page', note: 'A printable summary, easy to share' },
-      { href: '/polymath.html', title: 'The polymath way', note: 'How nine fields of study became one program' }
+      { href: '/polymath.html', title: 'The polymath way', note: 'How thirteen fields of study became one program' }
     ]},
     { id: 'play', name: 'Calm & play', title: 'Calm & play', blurb: 'Calm games, cartoons and sounds for a busy mind. No timers and no way to lose.', items: [
       { href: '/book/topic-calm.html', code: 'Book', title: 'The book on staying calm', note: 'Every chapter’s part on settling, plus the calm tools' },
@@ -864,8 +864,8 @@
     if (!document.querySelector('meta[http-equiv="Content-Security-Policy"]')) { var cbk = document.createElement('script'); cbk.src = '/assets/js/come-back.js'; document.head.appendChild(cbk); } // time picker, "What you got from this" (come-back.js)
     if (current === '/index.html') {
       var hi = document.querySelector('main [data-home-intro]');
-      // below the approved opening (intro, join, pal cam, hello, new notices): after the first notices stack
-      if (hi) loadPickUp(function () { var h = el('div', { class: 'tol-pickup-host', 'data-pickup': 'home' }); homeSlot(hi).after(h); window.TOLPickUp.mount(h, 'home'); });
+      // right under the opening block, so a returning visitor sees "Welcome back" and their next step on the first screens
+      if (hi) loadPickUp(function () { var h = el('div', { class: 'tol-pickup-host', 'data-pickup': 'home' }); hi.after(h); window.TOLPickUp.mount(h, 'home'); });
     }
     palCamHooks(body); // pal cam: "Check in on Tidbit & Sugarfoot" from anywhere (see below)
 
@@ -1066,6 +1066,9 @@
     teens: ['/teens.html', '/library/life.html'], crush: 'teens', dating: 'teens', bullied: 'teens', bullying: 'teens', school: 'teens', grounded: 'teens', curfew: 'teens',
     group: ['/groups.html', '/check-ins.html'], groups: 'group', leader: 'group', facilitator: 'group', church: 'group', class: 'group', discussion: 'group', curriculum: 'group', course: 'group',
     unheard: ['/check-ins.html', '/how-to-stop-fighting-with-your-partner.html', '/signal-translator.html'], ignored: 'unheard', dismissed: 'unheard',
+    grief: ['/library/emotions.html', '/grandparents.html', '/self-path.html'], grieving: 'grief', widow: 'grief', widower: 'grief', widowed: 'grief', bereaved: 'grief', bereavement: 'grief', mourning: 'grief', died: 'grief', loss: 'grief',
+    stonewalling: ['/upset-right-now.html', '/how-to-stop-fighting-with-your-partner.html', '/wp-11.html'], stonewall: 'stonewalling',
+    grandfather: ['/grandparents.html'], grandpa: 'grandfather', grandmother: 'grandfather', grandma: 'grandfather', grandparent: 'grandfather', grandkids: 'grandfather', grandchildren: 'grandfather',
     erase: ['/on-this-device.html'], delete: ['/on-this-device.html'], stored: ['/on-this-device.html'], privacy: ['/on-this-device.html', '/legal/privacy-policy.html'],
     minutes: ['/start-in-10-minutes.html', '/quick-checks.html'], start: ['/start-here.html', '/start-in-10-minutes.html'],
     chat: ['/ask.html'], ask: ['/ask.html'], question: ['/ask.html'], professor: ['/ask.html'],
