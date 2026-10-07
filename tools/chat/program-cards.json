@@ -492,7 +492,7 @@
           "/carrier-wave-decoder.html#decode"
         ],
         [
-          "WP-11: The Calm-Down Kit",
+          "The Calm-Down Kit (WP-11)",
           "/wp-11.html"
         ],
         [
@@ -529,7 +529,7 @@
       ],
       "links": [
         [
-          "WP-11: The Calm-Down Kit",
+          "The Calm-Down Kit (WP-11)",
           "/wp-11.html"
         ],
         [
@@ -571,7 +571,7 @@
       ],
       "how": [
         "1 minute: Today’s Weather, a quick read on how you are today.",
-        "2 minutes: the Battery Meter (WP-02), or a breathing break with the Breathe button.",
+        "2 minutes: How much are you carrying? (WP-02), or a breathing break with the Breathe button.",
         "5 minutes: a round of Word Bloom or Quiet Words, or one card of a Simple chapter.",
         "10 minutes: fill in the Calm-Down Kit (WP-11), so it’s ready when you need it."
       ],
@@ -585,7 +585,7 @@
           "/quick-checks.html#today"
         ],
         [
-          "WP-02: How full is your battery?",
+          "How much are you carrying? (WP-02)",
           "/workpapers/wp-02-battery-stress-meter.html"
         ]
       ],
@@ -618,7 +618,7 @@
       ],
       "links": [
         [
-          "WP-11: The Calm-Down Kit",
+          "The Calm-Down Kit (WP-11)",
           "/wp-11.html"
         ],
         [
@@ -662,7 +662,7 @@
       ],
       "links": [
         [
-          "WP-11: The Calm-Down Kit",
+          "The Calm-Down Kit (WP-11)",
           "/wp-11.html"
         ],
         [
@@ -916,7 +916,7 @@
           "/night-garden.html"
         ],
         [
-          "WP-11: The Calm-Down Kit",
+          "The Calm-Down Kit (WP-11)",
           "/wp-11.html"
         ],
         [
@@ -956,7 +956,7 @@
       "script": "Earlier I got overloaded, and I’m okay now. What helps me is a short break somewhere quiet when things get intense.",
       "links": [
         [
-          "WP-11: The Calm-Down Kit",
+          "The Calm-Down Kit (WP-11)",
           "/wp-11.html"
         ],
         [
@@ -1100,7 +1100,7 @@
           "/self-path.html"
         ],
         [
-          "The Battery & Stress Meter",
+          "How much are you carrying? (WP-02)",
           "/workpapers/wp-02-battery-stress-meter.html"
         ]
       ],
@@ -1392,13 +1392,13 @@
         "Pick who it’s for: “Just me” to see your own load, or “Me and others” for two to eight people who share a home. You can switch any time, and your entries stay.",
         "If you share a home, add everyone’s names. Each person fills in only their own side.",
         "Tap tasks in the task library (home, food, laundry, kids and caring, pets, money, admin, errands, planning and remembering, emotional work, work hours, rest and more). Typical minutes are filled in; change them to fit your week, or add your own jobs.",
-        "For each job, set how often it happens. Open “More” to add the thinking part (noticing, planning, remembering) and who notices first. The “who did what” log (WP-01) is the best source.",
+        "For each job, set how often it happens. Open “More” to add the thinking part (noticing, planning, remembering) and who notices first. The log in Who did what (WP-01) is the best source.",
         "Optionally, add shared costs on the money side: what each person actually paid.",
         "Look at the result calmly: the split or your own ledger, by area, the work you can and can’t see, and week by week if you save each week. Copy, print or share a clean summary if that helps.",
-        "Next step: give each job one owner with WP-03, and use the totals in CALC-01."
+        "Next step: give each job one owner with One owner per job (WP-03), and use the totals in Is the setup working for everyone? (CALC-01)."
       ],
       "results": "The result shows each person’s share of the hours (and money, if you added it). An even split isn’t the goal in itself: what matters is whether everyone sees the same picture and agrees the split works. A lopsided split is a fact about the setup, often jobs that quietly drifted to whoever notices first, never a judgment of anyone.",
-      "math": "Each person’s share is their hours divided by everyone’s total hours. For two people, CALC-01 turns that into workload balance: 1 minus the difference between the two percentages, divided by 100, so an even split is 1.00 and a completely one-sided week is 0.00. With more people, the tool works the balance out from everyone’s hours for you.",
+      "math": "Each person’s share is their hours divided by everyone’s total hours. For two people, the calculator (CALC-01) turns that into workload balance: 1 minus the difference between the two percentages, divided by 100, so an even split is 1.00 and a completely one-sided week is 0.00. With more people, the tool works the balance out from everyone’s hours for you.",
       "ex": "Three roommates listed 14 jobs. The split came out 52%, 30% and 18%, mostly because one person always bought the shared groceries and cleaned the bathroom. They gave those two jobs new owners, and the next month it was much closer.",
       "pillar": "Pillar I, See the whole load, with a nod to Pillar V, Notice the quiet incentives.",
       "links": [
@@ -1407,7 +1407,7 @@
           "/lemonade-stand.html"
         ],
         [
-          "WP-03: One owner per job",
+          "One owner per job (WP-03)",
           "/workpapers/wp-03-raci-treaty.html"
         ]
       ]
@@ -1415,7 +1415,7 @@
     {
       "id": "wp01",
       "kind": "tool",
-      "name": "WP-01, Who did what (the Field Audit)",
+      "name": "Who did what (WP-01)",
       "keys": [
         "wp01",
         "wp 01",
@@ -1425,7 +1425,7 @@
         "workpaper 1",
         "workpaper one"
       ],
-      "what": "WP-01 is a one-week log of who did what at home, plus kind ways to say no. It catches what actually happened before memory turns the week into a story. It’s the usual first worksheet in the program.",
+      "what": "Who did what (WP-01) is a one-week log of who did what at home, plus kind ways to say no. It catches what actually happened before memory turns the week into a story. It’s the usual first worksheet in the program.",
       "how": [
         "For seven days, each of you logs your own tasks: the day, what it was, who did it, rough minutes, and whether someone asked or it was just noticed and handled.",
         "Log the small and invisible jobs too, like noticing the milk is low.",
@@ -1433,8 +1433,8 @@
         "Don’t discuss it until the week is done. Then compare, calmly, or put the totals into the Lemonade Stand.",
         "For saying no: say why the request is fair, say honestly what you have left, then offer something instead."
       ],
-      "results": "WP-01 doesn’t give a score. It gives you both the same facts: total minutes per person, and how much was noticed versus asked for. Those totals feed the Lemonade Stand and CALC-01’s workload balance.",
-      "ex": "“Tuesday, noticed we’re out of dish soap, bought it on the way home, 15 min, noticed (not asked).” That one row is the invisible work WP-01 is designed to catch.",
+      "results": "Who did what (WP-01) doesn’t give a score. It gives you both the same facts: total minutes per person, and how much was noticed versus asked for. Those totals feed the Lemonade Stand and the calculator’s workload balance (CALC-01).",
+      "ex": "“Tuesday, noticed we’re out of dish soap, bought it on the way home, 15 min, noticed (not asked).” That one row is the invisible work Who did what (WP-01) is designed to catch.",
       "start": [
         "Pick a start day, like tomorrow morning.",
         "Keep the log somewhere easy: the fill-in version on screen, a printed sheet, or your phone’s notes.",
@@ -1443,7 +1443,7 @@
       "pillar": "Pillar I, See the whole load. Its kind ways to say no use Pillar IV.",
       "links": [
         [
-          "WP-01: Who did what",
+          "Who did what (WP-01)",
           "/workpapers/wp-01.html"
         ],
         [
@@ -1459,7 +1459,7 @@
     {
       "id": "wp02",
       "kind": "tool",
-      "name": "WP-02, the Battery & Stress Meter",
+      "name": "How much are you carrying? (WP-02)",
       "keys": [
         "wp02",
         "wp 02",
@@ -1473,7 +1473,7 @@
         "workpaper two",
         "~battery"
       ],
-      "what": "WP-02 is a quick, kind check on yourself that separates how much you’re already carrying from how upset you are about one thing. Sometimes a small thing feels huge because the rest of the day was heavy. It’s a gut-check, not a medical test.",
+      "what": "How much are you carrying? (WP-02) is a quick, kind check on yourself that separates how much you’re already carrying from how upset you are about one thing. Sometimes a small thing feels huge because the rest of the day was heavy. It’s a gut-check, not a medical test.",
       "how": [
         "Fill it in only about yourself, thinking about the last day or two.",
         "Score five things from 0 (not at all) to 4 (very true): sleep, workload elsewhere, any unresolved conflict, how your body feels, and time pressure today.",
@@ -1481,7 +1481,7 @@
         "Use the result to pace a hard talk, not to dodge one. You can also type your five answers to me and I’ll work it out."
       ],
       "results": "Under 0.3: whatever comes up is probably about the thing itself. From 0.3 to 0.6: say out loud, “Heads up, I’m carrying more than usual today.” Over 0.6: be gentle with yourself and put off anything that doesn’t need deciding in the next hour. A high score means “later”, not “never”. It describes your state today, not a verdict on you.",
-      "math": "Five answers, each 0 to 4, so the most you can score is 20. Add them up and divide by 20 to get a number from 0 to 1. For example, 3 + 2 + 4 + 1 + 2 = 12, and 12 ÷ 20 = 0.60. In CALC-01, the average of everyone’s battery scores becomes the stress input, and it goes in flipped, as (1 − the score), so more stress lowers the read.",
+      "math": "Five answers, each 0 to 4, so the most you can score is 20. Add them up and divide by 20 to get a number from 0 to 1. For example, 3 + 2 + 4 + 1 + 2 = 12, and 12 ÷ 20 = 0.60. In the calculator (CALC-01), the average of everyone’s battery scores becomes the stress input, and it goes in flipped, as (1 − the score), so more stress lowers the read.",
       "ex": "Answers of 3, 2, 4, 1 and 2 add up to 12, and 12 ÷ 20 = 0.60, the top of the middle band: a good day to say “Heads up, I’m carrying more than usual today” before anything hard.",
       "pillar": "Pillar III, Read your state first.",
       "chips": [
@@ -1492,7 +1492,7 @@
       ],
       "links": [
         [
-          "WP-02: How full is your battery?",
+          "How much are you carrying? (WP-02)",
           "/workpapers/wp-02-battery-stress-meter.html"
         ],
         [
@@ -1500,7 +1500,7 @@
           "/workpapers/fill/wp-02.html"
         ],
         [
-          "WP-11: The Calm-Down Kit",
+          "The Calm-Down Kit (WP-11)",
           "/wp-11.html"
         ]
       ]
@@ -1508,7 +1508,7 @@
     {
       "id": "wp03",
       "kind": "tool",
-      "name": "WP-03, One owner per job (the RACI Treaty)",
+      "name": "One owner per job (WP-03)",
       "keys": [
         "wp03",
         "wp 03",
@@ -1519,21 +1519,21 @@
         "workpaper 3",
         "workpaper three"
       ],
-      "what": "WP-03 gives every regular job one clear owner, so nobody has to keep asking and nothing is left vaguely shared. It works for two people or a group (it’s the same idea teams use, called RACI).",
+      "what": "One owner per job (WP-03) gives every regular job one clear owner, so nobody has to keep asking and nothing is left vaguely shared. It works for two people or a group (it’s the same idea teams use, called RACI).",
       "how": [
-        "Sit down once, ideally with a week of the WP-01 log.",
+        "Sit down once, ideally with a week of the log from Who did what (WP-01).",
         "List the regular jobs: groceries, dishes, bills, the family calendar, and your own.",
         "For each, write how often it happens and two names: the Responsible person (does it) and the Accountable person (notices if it didn’t get done). They can be the same person.",
         "Agree on it together. Agreeing means clear, not perfect.",
         "Change it on purpose at the weekly closing, never by drift."
       ],
       "results": "Count the jobs with both names filled in and divide by the total number of jobs. That’s your ownership clarity, from 0 to 1. Keep unowned jobs on the list: seeing them is the whole point. Higher clarity means fewer “I thought you were doing it” moments.",
-      "math": "Ownership clarity = jobs with both a Responsible and an Accountable name ÷ all jobs listed. Eight fully owned jobs out of ten gives 0.80. It measures how clear ownership is, not how fair it is, and it feeds CALC-01 with a weight of 0.35.",
+      "math": "Ownership clarity = jobs with both a Responsible and an Accountable name ÷ all jobs listed. Eight fully owned jobs out of ten gives 0.80. It measures how clear ownership is, not how fair it is, and it feeds the calculator (CALC-01) with a weight of 0.35.",
       "ex": "“Bins: weekly, Responsible Jordan, Accountable Jordan.” “Dentist appointments: as needed, Responsible Sam, Accountable Sam.” Two rows, and two jobs nobody has to ask about again.",
       "pillar": "Pillar II, Fix the setup, not the person, with a nod to Pillar V.",
       "links": [
         [
-          "WP-03: One owner per job",
+          "One owner per job (WP-03)",
           "/workpapers/wp-03-raci-treaty.html"
         ],
         [
@@ -1549,7 +1549,7 @@
     {
       "id": "wp04",
       "kind": "tool",
-      "name": "WP-04, What keeps coming back? (the Deficit Audit)",
+      "name": "What keeps coming back? (WP-04)",
       "keys": [
         "wp04",
         "wp 04",
@@ -1560,19 +1560,19 @@
         "workpaper 4",
         "workpaper four"
       ],
-      "what": "WP-04 is a gentle monthly look back, done together, to find the jobs that keep slipping and fix the setup instead of patching the same problem again.",
+      "what": "What keeps coming back? (WP-04) is a gentle monthly look back, done together, to find the jobs that keep slipping and fix the setup instead of patching the same problem again.",
       "how": [
-        "Once a month, bring your four weekly WP-01 logs and your WP-03 job list.",
+        "Once a month, bring your four weekly logs from Who did what (WP-01) and your job list from One owner per job (WP-03).",
         "List every job that was noticed but not done, or only done after being raised more than once. Check off each week it happened.",
         "Three or four checks is a pattern, not a fluke.",
-        "Sort each repeat: no clear owner (update WP-03), the owner can’t keep up (a kind, honest talk), or a temporary cause like illness or travel (note it and move on).",
+        "Sort each repeat: no clear owner (update the job list), the owner can’t keep up (a kind, honest talk), or a temporary cause like illness or travel (note it and move on).",
         "Make the changes, and write down how many structural gaps you found."
       ],
       "results": "The number to watch is structural gaps: jobs with no clear owner. Fewer each month means it’s working. More means the setup needs another look, not that anyone failed.",
       "pillar": "Pillar II, Fix the setup, not the person, with a nod to Pillar V.",
       "links": [
         [
-          "WP-04: What keeps coming back?",
+          "What keeps coming back? (WP-04)",
           "/workpapers/wp-04-deficit-audit.html"
         ],
         [
@@ -1584,7 +1584,7 @@
     {
       "id": "wp09",
       "kind": "tool",
-      "name": "WP-09, Say it so it lands (the Tone Filter)",
+      "name": "Say it so it lands (WP-09)",
       "keys": [
         "wp09",
         "wp 09",
@@ -1595,19 +1595,19 @@
         "workpaper 9",
         "workpaper nine"
       ],
-      "what": "WP-09 is a quick self-check to run before you answer something that stung, so what you say is something the other person can actually hear. It only looks at your own next message.",
+      "what": "Say it so it lands (WP-09) is a quick self-check to run before you answer something that stung, so what you say is something the other person can actually hear. It only looks at your own next message.",
       "how": [
         "Before you speak, find three things: the fact, in one sentence with no adjectives; the feeling underneath, like tired or unseen; and the ask, what you want to happen next.",
         "If your sentence is a judgment on the person (“you always…”), swap it for one fact and one ask.",
         "Before you react, weigh what you heard: is it about a specific task? Would it read the same if you weren’t stretched? Could a neutral meaning fit?",
         "If you’re stretched or unsure, pause first."
       ],
-      "results": "There’s no score. The result is a better sentence. In CALC-01, the share of friction moments you ran through fact, feeling and ask becomes retuning frequency, which feeds the apex score.",
+      "results": "There’s no score. The result is a better sentence. In the calculator (CALC-01), the share of friction moments you ran through fact, feeling and ask becomes retuning frequency, which feeds the overall score.",
       "ex": "“You never think about anyone but yourself” becomes: “The bin wasn’t out before pickup. I feel a bit unseen. Can we pick a fixed day for it?”",
       "pillar": "Pillar IV, Tune how you send and receive.",
       "links": [
         [
-          "WP-09: Say it so it lands",
+          "Say it so it lands (WP-09)",
           "/workpapers/wp-09-tone-filter.html"
         ],
         [
@@ -1619,7 +1619,7 @@
     {
       "id": "wp11",
       "kind": "tool",
-      "name": "WP-11, the Calm-Down Kit",
+      "name": "the Calm-Down Kit (WP-11)",
       "keys": [
         "wp11",
         "wp 11",
@@ -1629,7 +1629,7 @@
         "workpaper 11",
         "sound toolkit"
       ],
-      "what": "WP-11 is a plan you make while calm for bringing your body back down in a heated moment, so you can finish the conversation or honestly put it off. It’s for you, never something to hand to the other person.",
+      "what": "The Calm-Down Kit (WP-11) is a plan you make while calm for bringing your body back down in a heated moment, so you can finish the conversation or honestly put it off. It’s for you, never something to hand to the other person.",
       "how": [
         "On an ordinary, calm day, write what tends to set you off and where you feel it first.",
         "Pick two calming steps (like breathing in for four and out for six, or a slow walk).",
@@ -1637,12 +1637,12 @@
         "In the moment: check your battery, say your line, do your first calming step.",
         "Check your battery again before going back."
       ],
-      "results": "It uses your WP-02 battery score to decide when to go back: under 0.50, go back at the time you said; between 0.50 and 0.60, do another round; still 0.60 or more after two rounds, pick a new time and say when. When you go back, start with one small, simple task first.",
+      "results": "It uses your battery score from How much are you carrying? (WP-02) to decide when to go back: under 0.50, go back at the time you said; between 0.50 and 0.60, do another round; still 0.60 or more after two rounds, pick a new time and say when. When you go back, start with one small, simple task first.",
       "ex": "A pause line: “I’m getting too wound up to listen well. I’m going for a ten-minute walk, and I’ll be back at 7:30 to finish this.”",
       "pillar": "Pillar III, Read your state first.",
       "links": [
         [
-          "WP-11: The Calm-Down Kit",
+          "The Calm-Down Kit (WP-11)",
           "/wp-11.html"
         ],
         [
@@ -1654,7 +1654,7 @@
     {
       "id": "wp13",
       "kind": "tool",
-      "name": "WP-13, the 90-second daily check-in",
+      "name": "the 90-second daily check-in (WP-13)",
       "keys": [
         "wp13",
         "wp 13",
@@ -1669,19 +1669,19 @@
         "pll protocol",
         "workpaper 13"
       ],
-      "what": "WP-13 is a 90-second daily check-in that makes small corrections every day, so little things don’t pile up into a big weekend argument. Small and often beats big and rare.",
+      "what": "The 90-second daily check-in (WP-13) makes small corrections every day, so little things don’t pile up into a big weekend argument. Small and often beats big and rare.",
       "how": [
         "Pick a regular moment, like after dinner.",
         "Each of you says one sentence each on: how full you were today (low, medium or high), one thing you appreciated about the other, and optionally one small thing that didn’t feel great and one thing that would help tomorrow.",
         "One speaks, the other just listens. No debating, and nothing gets solved here.",
-        "Once a week, skim the notes: anything that came up more than twice moves to WP-03 or WP-09."
+        "Once a week, skim the notes: anything that came up more than twice moves to the job list (WP-03) or to Say it so it lands (WP-09)."
       ],
       "results": "No score. The sign it’s working is fewer surprises: small things get mentioned while they’re small, and a daily thank-you keeps things steady.",
       "ex": "“Medium today. I appreciated you handling the vet call. The sink pile got to me a bit. Tomorrow it’d help if we did the dishes right after dinner.” That’s the whole thing, about 30 seconds.",
       "pillar": "Pillar IV, Tune how you send and receive, with a nod to Pillar V.",
       "links": [
         [
-          "WP-13: The 90-second daily check-in",
+          "The 90-second daily check-in (WP-13)",
           "/workpapers/wp-13-pll-protocol.html"
         ],
         [
@@ -1693,7 +1693,7 @@
     {
       "id": "calc01",
       "kind": "tool",
-      "name": "CALC-01, Can the load last? (the Solvency Read)",
+      "name": "Is the setup working for everyone? (CALC-01)",
       "keys": [
         "calc01",
         "calc 01",
@@ -1706,17 +1706,17 @@
         "apex score",
         "~apex"
       ],
-      "what": "CALC-01 gives one read on whether the way you share the work right now can keep going. It scores the setup, never a person, and it isn’t a compatibility test. There’s a quick three-slider version and a full version that works each input out from your worksheets and keeps a trend log. It works for households and teams of two to eight people.",
+      "what": "Is the setup working for everyone? (CALC-01) gives one read on whether the way you share the work right now can keep going. It scores the setup, never a person, and it isn’t a compatibility test. There’s a quick three-slider version and a full version that works each input out from your worksheets and keeps a trend log. It works for households and teams of two to eight people.",
       "how": [
         "Before reading any number, check your own state (Step Zero).",
-        "Workload balance: enter the week’s hours per person from WP-01 or the Lemonade Stand.",
-        "Ownership clarity: list the regular jobs from WP-03 and who is Responsible and Accountable for each.",
-        "Battery: each person enters their own five WP-02 answers, about themselves only.",
-        "Optionally, count friction moments and how many you retuned with WP-09 (for the apex score).",
+        "Workload balance: enter the week’s hours per person from Who did what (WP-01) or the Lemonade Stand.",
+        "Ownership clarity: list the regular jobs from One owner per job (WP-03) and who is Responsible and Accountable for each.",
+        "Battery: each person enters their own five answers from How much are you carrying? (WP-02), about themselves only.",
+        "Optionally, count friction moments and how many you retuned with Say it so it lands (WP-09) (for the overall score).",
         "Read the result together, calmly, and look at the biggest shortfall first."
       ],
       "results": "0.70 or more: the setup is carrying its own weight, so keep the same rhythm of check-ins. 0.40 to 0.69: something is drifting; look at the input with the biggest gap (often ownership clarity, but check). Under 0.40: the setup can’t last as it is, so rework the whole agreement rather than patching. The band edges are round numbers: 0.69 and 0.70 are really the same week. It’s a starting point, not a verdict.",
-      "math": "Solvency = 0.40 × workload balance + 0.35 × ownership clarity + 0.25 × (1 − average battery score). Each input runs from 0 to 1, so the read does too. The battery goes in flipped, because a setup that only works when everyone is well rested isn’t working. The apex score adds repair: 0.35 × balance + 0.30 × ownership + 0.20 × (1 − battery) + 0.15 × retuning frequency. The weights are an openly stated judgment call, not numbers fitted to data. For exact details (and how it handles more than two people), the full CALC-01 page shows every formula.",
+      "math": "Setup score = 0.40 × workload balance + 0.35 × ownership clarity + 0.25 × (1 − average battery score). Each input runs from 0 to 1, so the read does too. The battery goes in flipped, because a setup that only works when everyone is well rested isn’t working. The overall score adds repair: 0.35 × balance + 0.30 × ownership + 0.20 × (1 − battery) + 0.15 × retuning frequency. The weights are an openly stated judgment call, not numbers fitted to data. For exact details (and how it handles more than two people), the full calculator page (CALC-01) shows every formula.",
       "ex": "Balance 0.60, ownership 0.50 and battery 0.40 give 0.40 × 0.60 + 0.35 × 0.50 + 0.25 × 0.60 = 0.24 + 0.175 + 0.15 = 0.57: something is drifting, and ownership has the biggest gap. You can type your own numbers to me, like “CALC-01: balance 0.6, ownership 0.5, battery 0.4”.",
       "pillar": "Pillar I, See the whole load, and Pillar II, Fix the setup, not the person. Step Zero uses Pillar III.",
       "chips": [
@@ -1727,7 +1727,7 @@
       ],
       "links": [
         [
-          "CALC-01: the full calculator",
+          "Is the setup working for everyone? (CALC-01)",
           "/calc01-solvency.html"
         ],
         [
@@ -1753,8 +1753,8 @@
       ],
       "what": "REPORT-01 is one place to type in what your worksheets produced each week, and a report that reads them side by side to show where they agree and where they don’t. It brings all Five Pillars together, and reads the setup, never a person.",
       "how": [
-        "Once a week, after your short end-of-week review, copy in the figures from the worksheets you ran: WP-01 minutes, WP-02 scores, WP-03 counts and so on. Leave blank what you didn’t run.",
-        "Once a month, add your WP-04 look-back: the gaps you found, and how many came back after being fixed.",
+        "Once a week, after your short end-of-week review, copy in the figures from the worksheets you ran: minutes from Who did what (WP-01), scores from How much are you carrying? (WP-02), counts from One owner per job (WP-03) and so on. Leave blank what you didn’t run.",
+        "Once a month, add your monthly look-back from What keeps coming back? (WP-04): the gaps you found, and how many came back after being fixed.",
         "Press Save ledger to download a small file, and Load ledger next week to carry on. Nothing is stored in the browser or sent anywhere."
       ],
       "results": "The report says where things stand, how the numbers fit together, and what to do next, following written rules you can check. The repeat count from the monthly look-back matters most: problems that come back after being fixed point to the setup.",
@@ -1790,10 +1790,10 @@
       ],
       "what": "PROG-01 is a six-week path through the program, one step at a time. It works best with the other person, but you can do it on your own.",
       "how": [
-        "Week 1, see the work: read the Preface and Chapter I, check your state with Today’s Weather, and log a week in WP-01.",
-        "Week 2, one owner per job: read Chapter II, fill in WP-03, and get a first read from CALC-01.",
-        "Week 3, your batteries: read Chapters III and IV, and do the WP-02 Battery Meter daily.",
-        "Week 4, talk about it kindly: WP-09 and your Calm-Down Kit (WP-11).",
+        "Week 1, see the work: read the Preface and Chapter I, check your state with Today’s Weather, and log a week in Who did what (WP-01).",
+        "Week 2, one owner per job: read Chapter II, fill in One owner per job (WP-03), and get a first read from Is the setup working for everyone? (CALC-01).",
+        "Week 3, your batteries: read Chapters III and IV, and do How much are you carrying? (WP-02) daily.",
+        "Week 4, talk about it kindly: Say it so it lands (WP-09) and your Calm-Down Kit (WP-11).",
         "Week 5, get back in step: the 90-second daily check-in (WP-13).",
         "Week 6, make it last: log another week, compare with week one, and do your first monthly look-back (WP-04)."
       ],
@@ -1889,7 +1889,7 @@
       ],
       "what": "Every workpaper has a fill-in version: type your entries on screen and download a finished PDF to keep. Nothing is stored unless you turn on “Keep a draft on this device”, and you can erase it any time.",
       "how": [
-        "Open the fill-in page and pick a workpaper (the usual order is WP-01, WP-02, WP-03, WP-09, WP-11 and WP-13, with WP-04 once a month).",
+        "Open the fill-in page and pick a workpaper (the usual order is Who did what, How much are you carrying?, One owner per job, Say it so it lands, the Calm-Down Kit and the 90-second daily check-in, with What keeps coming back? once a month).",
         "Type your entries.",
         "Download the PDF, or keep a draft on this device if it’s your own device.",
         "Or do them all at once, in your road’s order, in the Workpaper Suite."
@@ -1916,10 +1916,10 @@
         "try the workpapers",
         "~sandbox"
       ],
-      "what": "The Workpaper Playground lets you try three core tools in a few minutes, with real calculations and nothing saved: WP-01 (who’s doing what), WP-03 (one owner per job) and CALC-01 (can the load last).",
+      "what": "The Workpaper Playground lets you try three core tools in a few minutes, with real calculations and nothing saved: Who did what (WP-01), One owner per job (WP-03) and Is the setup working for everyone? (CALC-01).",
       "how": [
         "Open the Playground.",
-        "Try a quick week in WP-01, a few jobs in WP-03, and see how they feed CALC-01.",
+        "Try a quick week in Who did what (WP-01), a few jobs in One owner per job (WP-03), and see how they feed the calculator (CALC-01).",
         "When it clicks, move to the real fill-in workpapers or the Workpaper Suite."
       ],
       "pillar": "Pillar I, See the whole load, and Pillar II, Fix the setup, not the person.",
@@ -1967,7 +1967,7 @@
           "/quick-checks.html#today"
         ],
         [
-          "WP-02: How full is your battery?",
+          "How much are you carrying? (WP-02)",
           "/workpapers/wp-02-battery-stress-meter.html"
         ]
       ]
@@ -2058,7 +2058,7 @@
           "/signal-translator.html"
         ],
         [
-          "WP-09: Say it so it lands",
+          "Say it so it lands (WP-09)",
           "/workpapers/wp-09-tone-filter.html"
         ]
       ]
@@ -2181,7 +2181,7 @@
           "/tools/frequency-sync-visualizer.html"
         ],
         [
-          "WP-13: The 90-second daily check-in",
+          "The 90-second daily check-in (WP-13)",
           "/workpapers/wp-13-pll-protocol.html"
         ]
       ]
@@ -2189,13 +2189,13 @@
     {
       "id": "mood",
       "kind": "tool",
-      "name": "Mood Arbitrage",
+      "name": "Soften a tense moment",
       "keys": [
         "mood arbitrage",
         "~arbitrage",
         "~mood frequencies"
       ],
-      "what": "Mood Arbitrage is about noticing the state someone’s body is in and gently helping a tense moment soften, starting with calming your own body first. It isn’t forced cheerfulness. The free introduction shows the core idea and one full example; the full toolkit adds five everyday scenarios, 15-plus ready-made moves and a four-week practice plan.",
+      "what": "Soften a tense moment is about noticing the state someone’s body is in and gently helping a tense moment soften, starting with calming your own body first. It isn’t forced cheerfulness. The free introduction shows the core idea and one full example; the full toolkit adds five everyday scenarios, 15-plus ready-made moves and a four-week practice plan.",
       "how": [
         "Start with the free introduction and its worked example.",
         "Notice the state first: calm, revved up or shut down.",
@@ -2206,7 +2206,7 @@
       "pillar": "Pillar III, Read your state first, and Pillar IV, Tune how you send and receive.",
       "links": [
         [
-          "Mood Arbitrage: free introduction",
+          "Soften a tense moment: free introduction",
           "/tools/mood-arbitrage-free.html"
         ],
         [
@@ -2782,7 +2782,7 @@
           "/five-pillars.html#fix-the-setup"
         ],
         [
-          "WP-03: One owner per job",
+          "One owner per job (WP-03)",
           "/workpapers/wp-03-raci-treaty.html"
         ],
         [
@@ -2805,7 +2805,7 @@
       ],
       "what": "Pillar III, Read your state first, borrows from nervous-system science. In you: know how full your battery is (calm, revved up or shut down) before you judge a moment. Between you and others: pick the timing, pause and come back; your state shapes how the other person’s words land.",
       "how": [
-        "Check Today’s Weather or your WP-02 battery before a hard talk.",
+        "Check Today’s Weather or How much are you carrying? (WP-02) before a hard talk.",
         "Plan what settles you in the Calm-Down Kit (WP-11).",
         "Read Chapter III on full tanks."
       ],
@@ -2932,7 +2932,7 @@
       "what": "The Preface is about the work nobody sees: remembering appointments, noticing the milk is low, calming a tense moment. None of it shows up on a calendar, so it rarely gets a thank-you, and over months it piles up. The book calls that pile unbilled debt. It’s free to read.",
       "how": [
         "Read the simple version first, then the full preface if you want the detail.",
-        "Try a week of WP-01 to see your own unbilled work.",
+        "Try a week of Who did what (WP-01) to see your own unbilled work.",
         "Listen to podcast Episode 1 if you like a human voice with the ideas."
       ],
       "pillar": "Mostly Pillar I, See the whole load, with Pillar V.",
@@ -2942,7 +2942,7 @@
           "/book/preface.html"
         ],
         [
-          "WP-01: Who did what",
+          "Who did what (WP-01)",
           "/workpapers/wp-01.html"
         ]
       ]
@@ -2985,10 +2985,10 @@
         "is the split working",
         "epistemic verdict engine"
       ],
-      "what": "Chapter II asks one gentle question: can the way you share the work keep going, or is one of you quietly running on empty? It looks at the month, not last night, using what you both wrote down, and it introduces the three numbers behind CALC-01. It looks at the arrangement, never at a person. It’s free to read.",
+      "what": "Chapter II asks one gentle question: can the way you share the work keep going, or is one of you quietly running on empty? It looks at the month, not last night, using what you both wrote down, and it introduces the three numbers behind Is the setup working for everyone? (CALC-01). It looks at the arrangement, never at a person. It’s free to read.",
       "how": [
-        "Read the chapter, then fill in WP-01 and WP-03.",
-        "Get a first read in CALC-01."
+        "Read the chapter, then fill in Who did what (WP-01) and One owner per job (WP-03).",
+        "Get a first read in Is the setup working for everyone? (CALC-01)."
       ],
       "pillar": "Pillar I and Pillar II, with help from Pillar III.",
       "links": [
@@ -2997,7 +2997,7 @@
           "/book/chapter-2.html"
         ],
         [
-          "CALC-01",
+          "Is the setup working for everyone? (CALC-01)",
           "/workpapers/calculators/calc01-solvency.html"
         ]
       ]
@@ -3019,7 +3019,7 @@
       ],
       "what": "Chapter III explains why some reactions are bigger than their cause (a full tank overflows) and why two people can see the same moment so differently: the seven angles people see things from. Anything decided while a tank is overflowing is worth coming back to. It opens free with your email.",
       "how": [
-        "Read the chapter, then try the WP-02 Battery Meter daily for a week.",
+        "Read the chapter, then try How much are you carrying? (WP-02) daily for a week.",
         "Plan your pause in the Calm-Down Kit (WP-11)."
       ],
       "pillar": "Mostly Pillar III, with help from Pillar IV.",
@@ -3029,7 +3029,7 @@
           "/book/chapter-3.html"
         ],
         [
-          "WP-02",
+          "How much are you carrying? (WP-02)",
           "/workpapers/wp-02-battery-stress-meter.html"
         ]
       ]
@@ -3049,7 +3049,7 @@
       "what": "Chapter IV is about agreeing what “fair” means before you argue about it, and giving a comment a moment to land before you answer. One kind of fair asks “did everything get done?”, the other “did each of us do what we said?”. Both are reasonable; friction starts when you’re each using a different one. It opens free with your email.",
       "how": [
         "Talk about which kind of fair each of you uses, on a calm day.",
-        "Practice letting a comment land (WP-09) before you answer."
+        "Practice letting a comment land, then use Say it so it lands (WP-09) before you answer."
       ],
       "pillar": "Pillar II and Pillar V, with help from Pillar III.",
       "links": [
@@ -3058,7 +3058,7 @@
           "/book/chapter-4.html"
         ],
         [
-          "WP-09",
+          "Say it so it lands (WP-09)",
           "/workpapers/wp-09-tone-filter.html"
         ]
       ]
@@ -3076,7 +3076,7 @@
       "what": "Chapter V is about looking back once a month for the problems that keep coming back, and fixing the setup instead of having the same argument again. One missed job is a fluke; the same job missed four weeks running is a pattern you only see across the month. It opens free with your email.",
       "how": [
         "Bring four weekly logs and your job list.",
-        "Run WP-04, the monthly look-back."
+        "Run What keeps coming back? (WP-04), the monthly look-back."
       ],
       "pillar": "Pillar II and Pillar V, with help from Pillar I.",
       "links": [
@@ -3085,7 +3085,7 @@
           "/book/chapter-5.html"
         ],
         [
-          "WP-04",
+          "What keeps coming back? (WP-04)",
           "/workpapers/wp-04-deficit-audit.html"
         ]
       ]
@@ -3272,7 +3272,7 @@
         "~planned",
         "what live"
       ],
-      "what": "Five of twelve planned chapters, seven of fifteen workpapers (WP-01, 02, 03, 04, 09, 11 and 13) and one of seven calculators (CALC-01) are live, plus the six-week program and the free tools. The Suite Index is the official list: if something isn’t on it, it isn’t live yet. The Roadmap shows what’s being written and planned (estimates, not promises).",
+      "what": "Five of twelve planned chapters, seven of fifteen workpapers (WP-01, 02, 03, 04, 09, 11 and 13) and one of seven calculators (Is the setup working for everyone?, CALC-01) are live, plus the six-week program and the free tools. The Suite Index is the official list: if something isn’t on it, it isn’t live yet. The Roadmap shows what’s being written and planned (estimates, not promises).",
       "links": [
         [
           "Suite Index",
@@ -3336,7 +3336,7 @@
         "this chat",
         "~ask page"
       ],
-      "what": "I’m Professor Puddles, the site’s chat helper: a small drop with a big brain. I answer from the site’s pages, the Library and my background notes (always labelled), I can walk you through any tool, work out a Battery Meter or CALC-01 score, and suggest a short path for what’s going on. Everything runs in your browser; what you type stays on this device.",
+      "what": "I’m Professor Puddles, the site’s chat helper: a small drop with a big brain. I answer from the site’s pages, the Library and my background notes (always labelled), I can walk you through any tool, work out a battery score or a setup score, and suggest a short path for what’s going on. Everything runs in your browser; what you type stays on this device.",
       "links": [
         [
           "Chat with Professor Puddles",
@@ -3378,7 +3378,7 @@
       "how": [
         "One minute on Today’s Weather to see how you’re doing today.",
         "Read the Preface, The work nobody sees (free).",
-        "Start a who-did-what list today, in WP-01 or on the Lemonade Stand. Just today’s jobs is plenty.",
+        "Start a who-did-what list today, in Who did what (WP-01) or on the Lemonade Stand. Just today’s jobs is plenty.",
         "Later, follow the Workpaper Suite for your road, or the six gentle weeks (PROG-01)."
       ],
       "links": [
@@ -3424,9 +3424,9 @@
         "Happy to help you pick. Who is it mostly about? Tap one below, or just tell me what’s going on in your own words and I’ll suggest a short path."
       ],
       "how": [
-        "Arguing about chores or who does more: the Lemonade Stand, then WP-03 (one owner per job).",
-        "Things said the wrong way: the Signal Translator or WP-09 (say it so it lands).",
-        "Getting too wound up to talk: WP-02 (your battery) and WP-11 (the Calm-Down Kit).",
+        "Arguing about chores or who does more: the Lemonade Stand, then One owner per job (WP-03).",
+        "Things said the wrong way: the Signal Translator or Say it so it lands (WP-09).",
+        "Getting too wound up to talk: How much are you carrying? (WP-02) and the Calm-Down Kit (WP-11).",
         "Different wiring: the Wiring Card and Wired Differently.",
         "Feeling distant: Turning Toward and the 90-second daily check-in (WP-13)."
       ],
@@ -3477,7 +3477,7 @@
         "Yes, absolutely. Everything starts with you: your own battery, your own wiring, what settles you, and seeing your own load. Many people start alone, and the change in them is often what invites the other person in later."
       ],
       "how": [
-        "Check Today’s Weather and the WP-02 battery for yourself.",
+        "Check Today’s Weather and How much are you carrying? (WP-02) for yourself.",
         "Learn your wiring (Know your own wiring, the Wiring Card).",
         "Plan your Calm-Down Kit (WP-11).",
         "Log your own side of the week (WP-01). Only fill in worksheets about yourself, never about someone else."
@@ -3512,12 +3512,12 @@
         "more than 2 people"
       ],
       "what": [
-        "Yes. The ideas work for any group that shares a home, work or care. The Lemonade Stand and one-owner-per-job (WP-03) handle two to eight people, CALC-01 works for households and teams of two to eight, and the Workpaper Suite has roads for roommates, families, coworkers and caregivers. Some pages are written for two people, but the same steps scale up."
+        "Yes. The ideas work for any group that shares a home, work or care. The Lemonade Stand and One owner per job (WP-03) handle two to eight people, Is the setup working for everyone? (CALC-01) works for households and teams of two to eight, and the Workpaper Suite has roads for roommates, families, coworkers and caregivers. Some pages are written for two people, but the same steps scale up."
       ],
       "how": [
         "Put everyone’s jobs and hours on the Lemonade Stand (two to eight names).",
         "Hold one short meeting to give every regular job one owner (WP-03).",
-        "Each person does their own battery check (WP-02), about themselves only.",
+        "Each person fills in their own How much are you carrying? (WP-02), about themselves only.",
         "Look back once a month (WP-04) for what keeps slipping."
       ],
       "links": [
@@ -3637,11 +3637,11 @@
       ],
       "links": [
         [
-          "WP-02: How full is your battery?",
+          "How much are you carrying? (WP-02)",
           "/workpapers/wp-02-battery-stress-meter.html"
         ],
         [
-          "CALC-01: Can the load last?",
+          "Is the setup working for everyone? (CALC-01)",
           "/workpapers/calculators/calc01-solvency.html"
         ]
       ],
@@ -3651,7 +3651,7 @@
           "What does my battery score mean?"
         ],
         [
-          "My CALC-01 read",
+          "My setup score",
           "What does my CALC-01 score mean?"
         ],
         [
@@ -3677,7 +3677,7 @@
         "program overview"
       ],
       "what": [
-        "Use them in order, not all at once. The usual path is WP-01 (see the work), then WP-03 (one owner per job), WP-02 (your batteries), WP-09 and WP-11 (talk so it lands, and pause well), and WP-13 (the daily check-in), with WP-04 once a month. CALC-01 reads what WP-01, WP-02 and WP-03 produce, and REPORT-01 keeps it week by week."
+        "Use them in order, not all at once. The usual path is Who did what (WP-01, see the work), then One owner per job (WP-03), How much are you carrying? (WP-02, your batteries), Say it so it lands (WP-09) and the Calm-Down Kit (WP-11), and the 90-second daily check-in (WP-13), with What keeps coming back? (WP-04) once a month. Is the setup working for everyone? (CALC-01) reads what the first three produce, and REPORT-01 keeps it week by week."
       ],
       "links": [
         [
@@ -3705,7 +3705,7 @@
         "time commitment"
       ],
       "what": [
-        "Not long, on purpose. Today’s Weather takes about a minute, the Battery Meter a minute or two, the daily check-in 90 seconds, and a week of WP-01 a few minutes a day. WP-03 is one sit-down, and the monthly look-back maybe half an hour. The guided program runs six gentle weeks, one worksheet a week."
+        "Not long, on purpose. Today’s Weather takes about a minute, How much are you carrying? a minute or two, the daily check-in 90 seconds, and a week of Who did what a few minutes a day. One owner per job is one sit-down, and the monthly look-back maybe half an hour. The guided program runs six gentle weeks, one worksheet a week."
       ],
       "links": [
         [
@@ -4154,7 +4154,7 @@
       ],
       "how": [
         "Start with Today’s Weather, a one-minute check on yourself.",
-        "Try WP-02, the Battery Meter, before a conversation that matters, with anyone.",
+        "Try How much are you carrying? (WP-02) before a conversation that matters, with anyone.",
         "Learn your own wiring on Know your own wiring, so you can explain what helps you."
       ],
       "links": [
@@ -4167,7 +4167,7 @@
           "/quick-checks.html#today"
         ],
         [
-          "WP-02: How full is your battery?",
+          "How much are you carrying? (WP-02)",
           "/workpapers/wp-02-battery-stress-meter.html"
         ]
       ]
@@ -4229,7 +4229,7 @@
         "Open the Carrier Wave Decoder and choose the Together tab.",
         "Pick “One device” to pass the phone back and forth, or “Two devices: start it” to get a code.",
         "The other person picks “Two devices: I got a code” and enters it, then you reveal together.",
-        "For a daily habit together, try WP-13, the 90-second check-in."
+        "For a daily habit together, try the 90-second daily check-in (WP-13)."
       ],
       "links": [
         [
@@ -4237,7 +4237,7 @@
           "/carrier-wave-decoder.html#together"
         ],
         [
-          "WP-13: The 90-second daily check-in",
+          "The 90-second daily check-in (WP-13)",
           "/workpapers/wp-13-pll-protocol.html"
         ]
       ]
@@ -4293,7 +4293,7 @@
           "/quick-checks.html#today"
         ],
         [
-          "WP-11: The Calm-Down Kit",
+          "The Calm-Down Kit (WP-11)",
           "/wp-11.html"
         ]
       ]
@@ -4750,12 +4750,12 @@
         "They connect along seven kinds of root: balance, signal and noise, feedback loops, limited capacity, ownership and structure, quiet incentives, and state and setting. Here are the 28 most obvious, where two fields share an idea in plain sight:"
       ],
       "how": [
-        "Psychology + Behavioral science (feedback loops): Habits beat willpower, especially when you’re tired. A routine too small to skip keeps going on the bad days. In the program: The 90-second check-in (WP-13).",
+        "Psychology + Behavioral science (feedback loops): Habits beat willpower, especially when you’re tired. A routine too small to skip keeps going on the bad days. In the program: The 90-second daily check-in (WP-13).",
         "Psychology + Neurobiology (state and setting): How you feel and how your nervous system is running are the same moment, seen from two sides. In the program: Today’s Weather.",
         "Psychology + Holistic therapies (state and setting): Calm the body before the conversation. Words land better once the body has settled. In the program: The Calm-Down Kit (WP-11).",
         "Philosophy + Business (ownership and structure): “Fair by promises” only works when the promises are written down: one owner per job. In the program: Chapter IV: two kinds of fair.",
         "Behavioral science + Economics (quiet incentives): People follow what the setup quietly rewards, far more than what they intend. In the program: Pillar V.",
-        "Behavioral science + Business (feedback loops): Small, regular reviews catch problems while they’re small, in a company or a home. In the program: The monthly look-back (WP-04).",
+        "Behavioral science + Business (feedback loops): Small, regular reviews catch problems while they’re small, in a company or a home. In the program: What keeps coming back? (WP-04).",
         "Neurobiology + Holistic therapies (limited capacity): A system past its limit can’t think its way back. Settle first, then talk. In the program: Breathe or the Night Garden.",
         "Neurobiology + Aromatherapy (state and setting): What reaches the senses sets the body’s alert level. A noisy room makes every comment arrive louder. In the program: Chapter IV: giving a comment time to land.",
         "Economics + Business (limited capacity): Time and attention get spent like any budget, and they run out like one too. In the program: The Lemonade Stand.",
@@ -4771,7 +4771,7 @@
         "Politics + Business (ownership and structure): Governance means who is accountable for what, how decisions get made, and how to change them. “One owner per job” is governance for a household. In the program: One owner per job (WP-03).",
         "Music + Psychology (state and setting): Music changes mood faster than words, and people use it on purpose: to pump up, to wind down, or to feel less alone. In the program: Drift: calm visualizer.",
         "Music + Neurobiology (state and setting): Rhythm and sound reach the nervous system directly. Slow tempos tend to settle the body and fast ones lift it. In the program: Brain Breakers.",
-        "Music + Behavioral science (feedback loops): A song is a loop: a pattern that repeats with small changes. A habit tied to a tune or a time of day is easier to keep. In the program: The 90-second check-in (WP-13).",
+        "Music + Behavioral science (feedback loops): A song is a loop: a pattern that repeats with small changes. A habit tied to a tune or a time of day is easier to keep. In the program: The 90-second daily check-in (WP-13).",
         "Music + Holistic therapies (state and setting): Music therapy is a recognized form of care: singing, drumming and listening help people settle, feel connected and find words. In the program: The Calm-Down Kit (WP-11).",
         "Music + Aromatherapy (state and setting): Sound and scent both set the mood of a room before anyone speaks. A playlist in the kitchen does what a candle does. In the program: Brain Breakers.",
         "Music + Laughter therapy (state and setting): Laughter is rhythm too: breath, bounce and sound, in time with other people. A shared laugh and a shared song both say “we’re in step.” In the program: Pause & Play.",
@@ -4823,14 +4823,14 @@
         "Psychology + Aromatherapy (state and setting): The same sentence lands differently in a calm, quiet room. The setting changes what a person can take in. In the program: Chapter IV: where and when to talk.",
         "Philosophy + Economics (balance): Efficient and fair aren’t the same thing. “It all got done” can hide who quietly did it. In the program: Chapter IV: two kinds of fair.",
         "Philosophy + Finance (balance): Double-entry bookkeeping is a fairness idea: every entry has two sides, and a book that balances from one side only isn’t balanced. In the program: Your side, their side.",
-        "Behavioral science + Neurobiology (limited capacity): A tired body makes good habits harder. That’s why the program’s habits are tiny: they have to survive the worst day of the week. In the program: The 90-second check-in (WP-13).",
+        "Behavioral science + Neurobiology (limited capacity): A tired body makes good habits harder. That’s why the program’s habits are tiny: they have to survive the worst day of the week. In the program: The 90-second daily check-in (WP-13).",
         "Behavioral science + Finance (quiet incentives): A score you can raise by deleting the hard rows is rewarding the wrong thing. Keep the unowned jobs on the list. In the program: Chapter II: ownership clarity.",
         "Behavioral science + Aromatherapy (state and setting): Cues in a room start habits. A cup of tea or a familiar scent can become your signal to slow down. In the program: The Calm-Down Kit (WP-11).",
         "Neurobiology + Economics (limited capacity): Attention is scarce. Noticing, remembering and planning spend it, even when nobody sees. In the program: The mental load.",
         "Neurobiology + Business (limited capacity): A team past capacity drops things, and so does a body. Both need a safety margin for the ordinary bad week. In the program: Chapter V: a capacity issue.",
-        "Neurobiology + Finance (balance): Your battery works like a balance sheet: leftover stress is a debt, and rest is the reserve. In the program: The Battery & Stress Meter (WP-02).",
+        "Neurobiology + Finance (balance): Your battery works like a balance sheet: leftover stress is a debt, and rest is the reserve. In the program: How much are you carrying? (WP-02).",
         "Business + Holistic therapies (feedback loops): Maintenance before breakdown. Care for people the way a good team cares for its systems, before the crisis. In the program: Check-ins.",
-        "The art of debating + Behavioral science (feedback loops): Arguments run on habit: the same lines, the same escalation. The best debate trick, restating their point before you answer, only works once it’s practiced enough to be automatic. In the program: The 90-second check-in (WP-13).",
+        "The art of debating + Behavioral science (feedback loops): Arguments run on habit: the same lines, the same escalation. The best debate trick, restating their point before you answer, only works once it’s practiced enough to be automatic. In the program: The 90-second daily check-in (WP-13).",
         "The art of debating + Economics (quiet incentives): In a debate the reward goes to whoever wins the room. At home the quiet reward for “winning” is the other person giving up, which costs far more than it saves. In the program: Chapter IV: two kinds of fair.",
         "The art of debating + Finance (balance): A good argument keeps honest books: claims on one side, evidence on the other, and no entry without support. “You always…” is a debit with no receipt. In the program: The Conversation Reader.",
         "The art of debating + Business (ownership and structure): Good meetings have a chair, an agenda and a decision at the end. A good hard talk at home needs the same: one topic, a turn each, and a named next step. In the program: Check-ins.",
@@ -4891,7 +4891,7 @@
         "Economics + Holistic therapies (balance): Rest isn’t time lost. It keeps the capacity that everything else spends, so skipping it is borrowing against next week. In the program: Wavelength: what fills you up.",
         "Economics + Aromatherapy (quiet incentives): A room, like a market, carries costs nobody pays out loud. A rushed, noisy setting quietly taxes every conversation in it. In the program: Chapter IV: the setting.",
         "Business + Aromatherapy (state and setting): Good workplaces are designed so the setting helps people do their best. A home can be too: a quiet corner for hard talks is a design choice. In the program: Check-ins: a good moment.",
-        "Finance + Holistic therapies (balance): A solvency read says whether an arrangement can last, never whether it’s worthwhile. Holistic care asks the other question: what makes the whole person well. In the program: Chapter II.",
+        "Finance + Holistic therapies (balance): A setup score says whether an arrangement can last, never whether it’s worthwhile. Holistic care asks the other question: what makes the whole person well. In the program: Chapter II.",
         "Finance + Aromatherapy (balance): Changing the setting costs almost nothing and pays back on every conversation held there: the cheapest investment in the whole program. In the program: Chapter IV: where and when to talk.",
         "The art of debating + Holistic therapies (state and setting): Holistic care treats the whole person, and so does a good debate partner. The person across from you is tired, hungry or hurt as well as holding a position. In the program: The Perspective Shifter.",
         "Politics + Neurobiology (state and setting): The nervous system treats a threat to “our side” as a threat to the self. Calm bodies compromise more, which is why settling comes before the vote. In the program: The Calm-Down Kit (WP-11).",
@@ -5369,7 +5369,7 @@
       "what": "The page for grandparents is for anyone who helps with the grandkids: grandparents, great-aunts and great-uncles, and other older relatives who often care for children in the family. It shows how to check your own tank before a busy visit, share the load fairly so help doesn’t quietly turn into an unspoken full-time job, agree on house rules with your grown children (their house, their rules; your house, a few gentle ones you agree on), say no kindly, be a calm place for the grandkids and stay close from far away.",
       "how": [
         "Before a busy visit, take one minute with Today’s Weather to see how full your own tank is.",
-        "Write down every job you do for the grandkids in a normal week, and give each regular one an owner with WP-03, One owner per job.",
+        "Write down every job you do for the grandkids in a normal week, and give each regular one an owner with One owner per job (WP-03).",
         "Ask the parents for their top three rules (screens, sweets, bedtime) and keep to those. Everything else can be your own way at your house.",
         "Say plainly when you can help and for how long: “I can do Tuesdays and Thursdays until five.” A clear yes is easier to keep than a vague always.",
         "For calm time together, watch a chapter of Frequency Buddies or play the Night Garden, side by side or on a call."
@@ -5396,7 +5396,7 @@
           "/grandparents.html#scripts"
         ],
         [
-          "WP-03: One owner per job",
+          "One owner per job (WP-03)",
           "/workpapers/wp-03-raci-treaty.html"
         ]
       ]
@@ -6122,7 +6122,7 @@
           "What does my battery score mean?"
         ],
         [
-          "My CALC-01 read",
+          "My setup score",
           "What does my CALC-01 score mean?"
         ],
         [
@@ -6158,11 +6158,11 @@
       "x": "Which numbers would you like to work out?",
       "chips": [
         [
-          "CALC-01: can the load last?",
+          "Is the setup working for everyone?",
           "Show me the math for CALC-01"
         ],
         [
-          "WP-02: my battery",
+          "How much are you carrying? (my battery)",
           "Show me the math for WP-02"
         ],
         [

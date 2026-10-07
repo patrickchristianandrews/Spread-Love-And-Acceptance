@@ -648,7 +648,7 @@
     .split(' ').forEach(function (w) { ASPECT[stem(w)] = 1; ASPECT[w] = 1; });
   function matchCard(f) {
     var fw = ' ' + f + ' ', cards = KB.cards || [], qt = null;
-    var fw2 = fw.replace(/(\d)([a-z])/g, '$1 $2').replace(/ checkin(s?) /g, ' check in$1 ');  // "6-week", "90-second check-in"
+    var fw2 = fw.replace(/(\d)([a-z])/g, '$1 $2').replace(/ checkin(s?) /g, ' check in$1 ');  // "6-week", "90-second daily check-in"
     for (var i = 0; i < IDX.cardKeys.length; i++) {
       var ck = IDX.cardKeys[i];
       if (fw.indexOf(ck.k) === -1 && fw2.indexOf(ck.k) === -1) continue;

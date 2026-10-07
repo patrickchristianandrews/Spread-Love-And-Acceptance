@@ -103,7 +103,7 @@
     ['Matching energy means matching care and effort, never volume or meanness.', '/book/self-2-now-in-depth.html#control', 'Matching energy'],
     ['A kind no can be fair: say why, say what you have left, and offer something else.', '/self-path.html#no', 'Kind ways to say no'],
     ['Different brains take in the same words differently, and that’s nobody’s fault.', '/wired-differently.html', 'Wired differently'],
-    ['A tiny daily check-in keeps small things small.', '/workpapers/wp-13-pll-protocol.html', 'The 90-second check-in'],
+    ['A tiny daily check-in keeps small things small.', '/workpapers/wp-13-pll-protocol.html', 'The 90-second daily check-in'],
     ['Thank-yous land best when they’re specific: “thanks for remembering the dentist.”', '/turning-toward.html#thanks', 'Saying thanks'],
     ['Some of how you react was learned growing up, and you get to choose which old rules to keep.', '/growing-up.html', 'Where your lens came from'],
     ['Rest isn’t a reward for finishing. It’s what makes the next thing possible.', '/wp-11.html', 'The Calm-Down Kit']

@@ -385,7 +385,7 @@ window.TOLLearnPlayData = {
       m: [
         { at: 'left over from earlier', k: 'sort', q: 'This-moment stress, or leftover stress?', bins: ['This-moment stress', 'Leftover stress'],
           items: [['“I’m upset about the dishes.”', 0], ['“I’m exhausted, and the dishes are what I noticed.”', 1], ['A poor night’s sleep, carried into dinner', 1], ['The thing right in front of you', 0]] },
-        { at: 'Check your battery', k: 'slider', q: 'Score five things from 0 to 4, add them up and divide by 20. Drag to see what each score says.', label: 'Battery score (what you’re carrying)',
+        { at: 'Check your stress tank', k: 'slider', q: 'Score five things from 0 to 4, add them up and divide by 20. Drag to see what each score says.', label: 'Battery score (what you’re carrying)',
           min: 0, max: 1, step: 0.05, start: 0.2, fmt: 'dec2',
           zones: [[0.3, 'Low load', 'Whatever comes up is probably about the thing itself.', '🌤️'],
                   [0.6, 'Moderate', 'Say it out loud first: “Heads up, I’m carrying more than usual today.”', '⛅'],
@@ -447,7 +447,7 @@ window.TOLLearnPlayData = {
 
     /* ------------------------------------------------------------ the book, full */
     '/book/preface-in-depth.html': {
-      t: 'Preface (full): Unbilled Debt', g: 'p1', n: '/book/chapter-1-in-depth.html',
+      t: 'Preface (full): The work nobody sees', g: 'p1', n: '/book/chapter-1-in-depth.html',
       m: [
         { at: 'Unbilled debt: the work', k: 'quiz', q: 'In a business, an unbilled hour is…',
           o: [['Work done but never written on an invoice', true, 'Yes! At home it’s the same: the work was real, it just never made it onto the page.'],
@@ -462,9 +462,9 @@ window.TOLLearnPlayData = {
               ['Less than 50 percent', false, 'Not quite. They added up to more than 100, not less.']] },
         { at: 'Writing it down is not', k: 'sort', q: 'Scorekeeping, or a shared ledger?', bins: ['Scorekeeping', 'A shared ledger'],
           items: [['Looks backward: who owes whom?', 0], ['Looks forward: what do we change next week?', 1], ['Used to prove a point', 0], ['Both people write their own side', 1]] },
-        { at: 'borrows these words', k: 'match', q: 'Match each grand name to its plain meaning.',
-          pairs: [['Unbilled debt', 'Work that got done but nobody saw or thanked'], ['Autonomic Saturation', 'How much stress you’re already carrying'],
-                  ['Sensory Gating', 'Giving a comment a moment to land'], ['The Deficit Audit', 'A monthly look-back for jobs that keep slipping']] }
+        { at: 'borrows these words', k: 'match', q: 'Match each idea to its plain meaning.',
+          pairs: [['Unbilled debt', 'Work that got done but nobody saw or thanked'], ['Leftover stress', 'How much stress you’re already carrying'],
+                  ['Letting a comment land', 'Giving a comment a moment before you react'], ['The monthly look-back', 'A look each month at jobs that keep slipping']] }
       ],
       e: [
         { f: 'This book calls that gap unbilled debt', s: 'Unbilled debt is the work someone did that nobody else noticed.', x: 'You booked the plumber, bought the gift and paid the bill. None of it was seen, so it’s “unbilled.”' },
@@ -475,7 +475,7 @@ window.TOLLearnPlayData = {
     },
 
     '/book/chapter-1-in-depth.html': {
-      t: 'Chapter I (full): The Radio Frequency Paradigm', g: 'p4', n: '/book/chapter-2-in-depth.html',
+      t: 'Chapter I (full): Why we get out of tune', g: 'p4', n: '/book/chapter-2-in-depth.html',
       m: [
         { at: 'The radio whistle', k: 'quiz', q: 'What do engineers call the extra tone two nearly matched signals make?',
           o: [['A heterodyne, or a “beat”', true, 'Yes! A third, uglier sound that neither radio was sending.'],
@@ -498,16 +498,16 @@ window.TOLLearnPlayData = {
       ],
       e: [
         { f: 'Engineers call this a heterodyne', s: 'When two signals are almost the same, they make a whistle neither one was making.', x: 'Two fair sentences, said in two slightly different moods, can make an argument nobody meant.' },
-        { f: 'These three match names from polyvagal theory', s: 'The long words are just science names for calm, revved up and running on empty.', x: '“I’m revved up right now” works just as well as any technical term.' },
-        { f: 'the full CALC-01 calculator has a', s: 'Retuning frequency simply counts how often you fixed a bumpy moment before answering.', x: 'Five moments went badly and you retuned three of them: 3 out of 5.' }
+        { f: 'These labels come from polyvagal theory', s: 'The long words are just science names for calm, revved up and running on empty.', x: '“I’m revved up right now” works just as well as any technical term.' },
+        { f: 'the full chore-split calculator (CALC-01) has a', s: 'Retuning frequency simply counts how often you fixed a bumpy moment before answering.', x: 'Five moments went badly and you retuned three of them: 3 out of 5.' }
       ]
     },
 
     '/book/chapter-2-in-depth.html': {
-      t: 'Chapter II (full): P(Solvency)', g: 'p1', n: '/book/chapter-3-in-depth.html',
+      t: 'Chapter II (full): Is the split working?', g: 'p1', n: '/book/chapter-3-in-depth.html',
       m: [
-        { at: 'What the names mean', k: 'match', q: 'Match each grand name to its plain meaning.',
-          pairs: [['Epistemic', 'To do with what we know'], ['Solvency', 'Able to keep paying its way'], ['P(Solvency)', 'Just a name: a simple weighted sum, not a probability']] },
+        { at: 'Where the idea comes from', k: 'match', q: 'Match each idea to its plain meaning.',
+          pairs: [['What it reads', 'Only what you both wrote down, not what you remember in the heat of the moment'], ['Borrowed from accounting', 'Can the setup keep going without someone running out?'], ['The setup score', 'A simple weighted sum, not a probability']] },
         { at: 'Workload balance', k: 'gap', q: 'Do the chapter’s sum.',
           s: 'A 70/30 week scores 1 − 40 ÷ 100 = ___.', o: ['0.60', '0.70', '0.30'], a: 0,
           say: 'Yes! And a 30/70 week scores exactly the same. The arithmetic doesn’t care who carries more.' },
@@ -533,17 +533,17 @@ window.TOLLearnPlayData = {
     },
 
     '/book/chapter-3-in-depth.html': {
-      t: 'Chapter III (full): Autonomic Saturation', g: 'p3', n: '/book/chapter-4-in-depth.html',
+      t: 'Chapter III (full): Full tanks and different angles', g: 'p3', n: '/book/chapter-4-in-depth.html',
       m: [
-        { at: 'Autonomic Saturation', k: 'flip', q: 'Two big words, both plain once unpacked. Tap to flip.',
-          cards: [['Autonomic', 'The part of your nervous system that runs things without you deciding.', 'Notice your breathing. You didn’t choose that pace.'],
-                  ['Saturation', 'How full something is, like a sponge that can’t take anymore water.', 'Picture that sponge after a long day.']] },
-        { at: 'battery score, step by step', k: 'slider', q: 'Add up your five 0–4 scores. Drag to your total and watch it divide by 20.', label: 'Your total, out of 20',
+        { at: 'Leftover stress (how full', k: 'flip', q: 'Two plain ideas behind leftover stress. Tap to flip.',
+          cards: [['Your nervous system on autopilot', 'The part of your nervous system that runs things without you deciding.', 'Notice your breathing. You didn’t choose that pace.'],
+                  ['A full tank', 'How full something is, like a sponge that can’t take any more water.', 'Picture that sponge after a long day.']] },
+        { at: 'stress-tank score, step by step', k: 'slider', q: 'Add up your five 0–4 scores. Drag to your total and watch it divide by 20.', label: 'Your total, out of 20',
           min: 0, max: 20, step: 1, start: 3, fmt: 'over20',
           zones: [[5, 'Low load (0 to 0.3)', 'Whatever comes up is probably about the thing itself.', '🌤️'],
                   [12, 'Moderate (0.3 to 0.6)', 'Sam’s 11 lands here: “Heads up, I’m carrying a lot today.”', '⛅'],
                   [20, 'High (0.6 to 1)', 'Be gentle with yourself, and put off anything that can wait an hour.', '🌧️']] },
-        { at: 'The 7 Ocular Vectors', k: 'match', q: 'Match each angle to the question you ask yourself.',
+        { at: 'Seven angles on the same moment', k: 'match', q: 'Match each angle to the question you ask yourself.',
           pairs: [['Physical tiredness', 'How rested am I, really, right now?'], ['History', 'Am I reacting to today, or the last five times?'],
                   ['Family script', 'Who did this job in the home I grew up in?'], ['Outside stress', 'Is money or work shaping how I see this?']] },
         { at: 'Two true views', k: 'quiz', q: 'In the old story of the Blind Men and the Elephant, why do they argue?',
@@ -556,43 +556,43 @@ window.TOLLearnPlayData = {
               ['Skip the talk for good', false, 'Not quite. A high reading means later, never never.']] }
       ],
       e: [
-        { f: 'Parts of that theory are still debated', s: 'The three states are handy everyday labels, not medical facts.', x: '“I’m running on empty” is enough. No science words needed.' },
-        { f: 'is a direction', s: 'The seven angles are seven different spots you might be looking at a moment from.', x: 'You see the pile of mail as a to-do list. They see it as “I’m always the one who opens it.”' },
+        { f: 'whose main claims are still debated', s: 'The three states are handy everyday labels, not medical facts.', x: '“I’m running on empty” is enough. No science words needed.' },
+        { f: 'the angle you might be looking at a moment from', s: 'The seven angles are seven different spots you might be looking at a moment from.', x: 'You see the pile of mail as a to-do list. They see it as “I’m always the one who opens it.”' },
         { f: 'The average of both people', s: 'Your two battery scores get averaged and used in Chapter II’s check, where more stress lowers the result.', x: '0.55 and 0.25 average to 0.40.' },
-        { f: 'Autonomic Saturation asks', s: 'One tool asks how charged the room is. The other asks what each person thinks it’s really about.', x: '“I’m at 0.55 and seeing this from time pressure.” “I’m at 0.25, and for me it’s history.”' }
+        { f: 'The stress-tank check asks', s: 'One tool asks how charged the room is. The other asks what each person thinks it’s really about.', x: '“I’m at 0.55 and seeing this from time pressure.” “I’m at 0.25, and for me it’s history.”' }
       ]
     },
 
     '/book/chapter-4-in-depth.html': {
       t: 'Chapter IV (full): Two kinds of fair', g: 'p5', n: '/book/chapter-5-in-depth.html',
       m: [
-        { at: 'Deontological parity: the two', k: 'match', q: 'Match each philosophy word to its plain meaning.',
-          pairs: [['Consequentialist', 'Fair by results (from “consequences”)'], ['Deontological', 'Fair by promises (from the Greek for “duty”)'], ['Parity', 'Equal standing']] },
+        { at: 'The two kinds of fair', k: 'match', q: 'Match each philosophy word to its plain meaning.',
+          pairs: [['Consequentialist', 'Fair by results (from “consequences”)'], ['Deontological', 'Fair by promises (from the Greek for “duty”)'], ['Fair by the rules', 'Judge an owned job by whether its owner did it']] },
         { at: 'Choosing your kind of fair', k: 'sort', q: 'Judged by promises, or by results?', bins: ['By promises', 'By results'],
-          items: [['An owned job on the WP-03 list', 0], ['A flat tire', 1], ['A surprise visitor', 1], ['A shared job that keeps coming up, once it moves to the owned list', 0]] },
+          items: [['An owned job on the job list', 0], ['A flat tire', 1], ['A surprise visitor', 1], ['A shared job that keeps coming up, once it moves to the owned list', 0]] },
         { at: 'Covering without resentment', k: 'quiz', q: 'Covering once is kindness. Covering every week is…',
           o: [['A sign the job needs a new owner, or a talk about capacity', true, 'Yes! The monthly look-back in Chapter V is built to catch this.'],
               ['Just how it is', false, 'Not quite. Repeats are a signal worth noticing.'],
               ['Proof the owner doesn’t care', false, 'Not quite. It’s a fact about the job, never a verdict on the person.']] },
         { at: 'notice, name, decide', k: 'gap', q: 'Fill the gap with the book’s own word.',
-          s: 'Gating isn’t bottling things up. It’s about ___: letting the spike pass before deciding how much weight a comment deserves.', o: ['timing', 'winning', 'forgetting'], a: 0,
-          say: 'Yes! Timing. The Calm-Down Kit helps the spike pass, and WP-09 helps with the reply.' },
+          s: 'Letting a comment land isn’t bottling things up. It’s about ___: letting the spike pass before deciding how much weight a comment deserves.', o: ['timing', 'winning', 'forgetting'], a: 0,
+          say: 'Yes! Timing. The Calm-Down Kit helps the spike pass, and Say it so it lands (WP-09) helps with the reply.' },
         { at: 'flat thank-you', k: 'wyr', q: '“Thanks for taking out the trash,” said flatly. Would you rather…',
           o: [['Snap back: “I do them every week, you know.”', 'Now there’s an argument about tone, and nobody remembers it started with a thank-you.'],
               ['“That landed a bit oddly for me. Give me a second.”', 'After a breath: “Did you mean that as a thank-you?” “Yes, sorry, I’m worn out.” Over in ten seconds.']] }
       ],
       e: [
         { f: 'Philosophers call this deontological', s: 'Fair by promises means asking: did each person do the jobs they said they would?', x: 'You said you’d take Tuesday’s trash, so Tuesday’s trash are yours.' },
-        { f: 'Deontological parity is this book', s: 'Once a job has an owner, you judge the job by whether that owner did it.', x: 'If someone quietly covered for you, the job still has a question mark next to your name.' },
-        { f: 'The term is borrowed loosely from brain science', s: 'Not every comment needs a full-volume reaction. Let it settle first.', x: 'Say “give me a second” before answering a remark that stung.' }
+        { f: 'This book calls the agreement being fair by the rules', s: 'Once a job has an owner, you judge the job by whether that owner did it.', x: 'If someone quietly covered for you, the job still has a question mark next to your name.' },
+        { f: 'The idea is borrowed loosely from brain science', s: 'Not every comment needs a full-volume reaction. Let it settle first.', x: 'Say “give me a second” before answering a remark that stung.' }
       ]
     },
 
     '/book/chapter-5-in-depth.html': {
-      t: 'Chapter V (full): The Deficit Audit', g: 'p2', n: '/workpapers/wp-04-deficit-audit.html',
+      t: 'Chapter V (full): The monthly look-back', g: 'p2', n: '/workpapers/wp-04-deficit-audit.html',
       m: [
         { at: 'Why a monthly look', k: 'flip', q: 'Three rhythms keep things running. Tap each one.',
-          cards: [['Daily', 'The 90-second check-in (WP-13).', 'Tonight, one sentence each.'],
+          cards: [['Daily', 'The 90-second daily check-in (WP-13).', 'Tonight, one sentence each.'],
                   ['Weekly', 'The weekly closing: tally the week and glance at the job list.', 'Pick a five-minute slot on Sunday.'],
                   ['Monthly', 'The look-back: which gaps kept reopening?', 'Put twenty minutes in the calendar.']] },
         { at: 'What a gap looks like', k: 'quiz', q: '“The trash has quietly become nobody’s job for three months.” That’s…',
@@ -600,7 +600,7 @@ window.TOLLearnPlayData = {
               ['An event', false, 'Not quite. One missed Tuesday is an event. A deficit keeps coming back.'],
               ['Nothing to notice', false, 'Not quite. This is exactly what the look-back is for.']] },
         { at: 'Step two: sort each repeat', k: 'match', q: 'Match each kind of gap to what you do about it.',
-          pairs: [['Structural gap', 'Update the WP-03 list together'], ['Capacity issue', 'Book an honest, kind conversation'], ['One-off', 'Note it and move on']] },
+          pairs: [['Structural gap', 'Update the job list together'], ['Capacity issue', 'Book an honest, kind conversation'], ['One-off', 'Note it and move on']] },
         { at: 'How to talk about a pattern', k: 'wyr', q: 'Would you rather say…',
           o: [['“You never take out the trash.”', 'A pattern said as a verdict gets argued with.'],
               ['“The trash has slipped four weeks running. What’s getting in the way on Tuesdays?”', 'A pattern said as a repeated fact can get an owner.']] },
@@ -609,7 +609,7 @@ window.TOLLearnPlayData = {
               ['Yes, to settle up fairly', false, 'Not quite. Those hours are gone. The question is where the setup failed.']] }
       ],
       e: [
-        { f: 'In accounting, a deficit is a shortfall', s: 'Here a “deficit” is a job that keeps falling short, and the “audit” is a friendly monthly look.', x: 'The recycling overflowing every other week is a deficit.' },
+        { f: 'The idea is borrowed from accounting', s: 'Here a “shortfall” is a job that keeps falling short, and the look-back is a friendly monthly look.', x: 'The recycling overflowing every other week is a deficit.' },
         { f: 'A single missed job is an event', s: 'One miss is a blip. The same miss month after month is a gap in the setup.', x: 'Trash missed once: a blip. Trash missed every Tuesday for three months: a gap.' },
         { f: 'A falling number of structural gaps', s: 'If fewer jobs are missing an owner each month, the setup is getting better.', x: 'Three gaps in March, one in April: it’s working.' }
       ]
@@ -617,14 +617,14 @@ window.TOLLearnPlayData = {
 
     /* ------------------------------------------------------------ workpapers */
     '/workpapers/wp-01.html': {
-      t: 'WP-01: Who did what', g: 'p1', n: '/workpapers/wp-02-battery-stress-meter.html',
+      t: 'Who did what (WP-01)', g: 'p1', n: '/workpapers/wp-02-battery-stress-meter.html',
       m: [
         { at: 'Write down the week', k: 'quiz', q: 'Who fills in each side of the log?',
           o: [['Each of you writes only your own side', true, 'Yes! You’re the only expert on your own week.'],
               ['Whoever does more fills in both', false, 'Not quite. Nobody fills in the other person’s side.']] },
         { at: 'log the small jobs', k: 'gap', q: 'Fill the gap with the sheet’s own word.',
           s: 'For every task, note the day, what it was, who did it, roughly how many ___, and whether someone asked for it.', o: ['minutes', 'feelings', 'complaints'], a: 0,
-          say: 'Yes! Those minutes go into the Lemonade Stand and CALC-01.' },
+          say: 'Yes! Those minutes go into the Lemonade Stand and Is the setup working for everyone? (CALC-01).' },
         { at: 'Log what happened', k: 'quiz', q: 'You noticed the full trash can three times before taking it out. How many rows?',
           o: [['One honest row', true, 'Yes! One honest row, not three rows of resentment.'],
               ['Three rows', false, 'Not quite. Log what happened, once.']] },
@@ -638,7 +638,7 @@ window.TOLLearnPlayData = {
     },
 
     '/workpapers/wp-02-battery-stress-meter.html': {
-      t: 'WP-02: How much are you carrying?', g: 'p3', n: '/wp-11.html',
+      t: 'How much are you carrying? (WP-02)', g: 'p3', n: '/wp-11.html',
       m: [
         { at: 'before a hard conversation', k: 'quiz', q: 'This check is…',
           o: [['A simple gut-check', true, 'Yes! Kind and quick, and not a medical test.'],
@@ -660,7 +660,7 @@ window.TOLLearnPlayData = {
     },
 
     '/wp-11.html': {
-      t: 'WP-11: The Calm-Down Kit', g: 'p3', n: '/workpapers/wp-03-raci-treaty.html',
+      t: 'The Calm-Down Kit (WP-11)', g: 'p3', n: '/workpapers/wp-03-raci-treaty.html',
       m: [
         { at: 'never for them', k: 'quiz', q: 'Who is the Calm-Down Kit for?',
           o: [['You, about yourself', true, 'Yes! It’s never something to hand to the other person.'],
@@ -681,10 +681,10 @@ window.TOLLearnPlayData = {
     },
 
     '/workpapers/wp-03-raci-treaty.html': {
-      t: 'WP-03: One owner per job', g: 'p2', n: '/workpapers/wp-04-deficit-audit.html',
+      t: 'One owner per job (WP-03)', g: 'p2', n: '/workpapers/wp-04-deficit-audit.html',
       m: [
-        { at: 'two names', k: 'match', q: 'Match each name to its job.',
-          pairs: [['Responsible', 'Does the job'], ['Accountable', 'Keeps an eye on it and gently follows up'], ['Both at once', 'Allowed: it can be the same person']] },
+        { at: 'Every job gets one owner', k: 'match', q: 'Match each name to its job.',
+          pairs: [['Owner', 'Does the job and sees it through'], ['Helper', 'Optional: pitches in, or notices if it slips'], ['Agreeing', 'You both know who owns what, as written']] },
         { at: 'Change it on purpose', k: 'wyr', q: 'Life changed, and the trash no longer fit your week. Would you rather…',
           o: [['Let the other person quietly pick them up', 'That’s drift: one person quietly doing more.'],
               ['Raise it at the weekly closing and agree on the change', 'Changed on purpose, not by drift.']] },
@@ -700,16 +700,16 @@ window.TOLLearnPlayData = {
     },
 
     '/workpapers/wp-04-deficit-audit.html': {
-      t: 'WP-04: What keeps coming back?', g: 'p2', n: '/workpapers/wp-09-tone-filter.html',
+      t: 'What keeps coming back? (WP-04)', g: 'p2', n: '/workpapers/wp-09-tone-filter.html',
       m: [
         { at: 'monthly, not weekly', k: 'quiz', q: 'What do you bring to the monthly look-back?',
-          o: [['Four weekly WP-01 logs and your WP-03 job list', true, 'Yes! That’s all you need.'],
+          o: [['Four weekly logs from Who did what and your job list', true, 'Yes! That’s all you need.'],
               ['A list of complaints', false, 'Not quite. Bring the logs, not the grievances.'],
               ['Just your memory', false, 'Not quite. Memories blur. The logs keep it fair.']] },
         { at: 'List the jobs that slipped', k: 'gap', q: 'Fill the gap with the sheet’s own word.',
           s: 'Three or four checks in a month is a real pattern, not a ___.', o: ['fluke', 'crime', 'test'], a: 0,
           say: 'Yes! A pattern, and patterns can be fixed in the setup.' },
-        { at: 'Sort each repeat', k: 'sort', q: 'Which kind of repeat is it?', bins: ['Update WP-03', 'Kind, honest talk', 'Note it and move on'],
+        { at: 'Sort each repeat', k: 'sort', q: 'Which kind of repeat is it?', bins: ['Update the job list', 'Kind, honest talk', 'Note it and move on'],
           items: [['The named owner isn’t the one doing it', 0], ['The owner can’t keep up', 1], ['It slipped during a week of illness', 2]] },
         { at: 'Nobody owes anything', k: 'quiz', q: 'A job with no owner is…',
           o: [['A gap in the list', true, 'Yes! Not a judgment on whoever kept covering it.'],
@@ -718,9 +718,9 @@ window.TOLLearnPlayData = {
     },
 
     '/workpapers/wp-09-tone-filter.html': {
-      t: 'WP-09: Say it so it lands', g: 'p4', n: '/workpapers/wp-13-pll-protocol.html',
+      t: 'Say it so it lands (WP-09)', g: 'p4', n: '/workpapers/wp-13-pll-protocol.html',
       m: [
-        { at: 'own next message', k: 'quiz', q: 'Whose messages does the Tone Filter check?',
+        { at: 'own next message', k: 'quiz', q: 'Whose messages does Say it so it lands check?',
           o: [['Your own next message', true, 'Yes! Each of you uses it on yourself.'],
               ['The other person’s texts', false, 'Not quite. Nothing is recorded, and nobody else’s voice is analyzed.']] },
         { at: 'find three things', k: 'sort', q: 'Fact, feeling or ask?', bins: ['Fact', 'Feeling', 'Ask'],
@@ -735,9 +735,9 @@ window.TOLLearnPlayData = {
     },
 
     '/workpapers/wp-13-pll-protocol.html': {
-      t: 'WP-13: The 90-second check-in', g: 'p5', n: '/turning-toward.html',
+      t: 'The 90-second daily check-in (WP-13)', g: 'p5', n: '/turning-toward.html',
       m: [
-        { at: 'Small and often', k: 'quiz', q: 'What is a phase-locked loop?',
+        { at: 'Small and often', k: 'quiz', q: 'In electronics, what does the small circuit behind this check-in do?',
           o: [['A circuit that keeps two signals in step', true, 'Yes! This check-in does the same for two people, with tiny daily nudges.'],
               ['A kind of knot', false, 'Not quite. It’s a circuit that keeps two signals in step.'],
               ['A long weekly meeting', false, 'Not quite. Small and often beats big and rare.']] },
@@ -788,9 +788,9 @@ window.TOLLearnPlayData = {
           pairs: [['Open access', 'Start right away, with nothing asked of you'], ['Free with email', 'Enter your email once and the rest opens in that browser'],
                   ['Paid membership', 'Coming later, and nothing is charged now']] },
         { at: 'Where everything is', k: 'quiz', q: 'The workpapers work best in an order. Where do you start?',
-          o: [['WP-01, the week’s log of who did what', true, 'Yes! WP-01 → WP-02 → WP-03 → WP-09 → WP-13, with WP-04 once a month.'],
-              ['WP-04, the monthly look-back', false, 'Not quite. WP-04 comes once a month, after the others have had time to work.'],
-              ['Any of them, all at once', false, 'Not quite. One at a time, in order. If things feel urgent, start with WP-11 or WP-02.']] }
+          o: [['Who did what (WP-01), the week’s log', true, 'Yes! Who did what, then How much are you carrying?, One owner per job, Say it so it lands and the 90-second daily check-in, with What keeps coming back? once a month.'],
+              ['What keeps coming back? (WP-04), the monthly look-back', false, 'Not quite. That one comes once a month, after the others have had time to work.'],
+              ['Any of them, all at once', false, 'Not quite. One at a time, in order. If things feel urgent, start with the Calm-Down Kit or How much are you carrying?']] }
       ]
     },
 
@@ -802,7 +802,7 @@ window.TOLLearnPlayData = {
                   ['Written down for a few weeks: you get short-tempered around 5 p.m.', 2], ['Caring for a parent while working full time', 0],
                   ['You think out loud, and your roommate needs quiet to think', 1]] },
         { at: 'Plain first', k: 'flip', q: 'Tap each card to see the plain version.',
-          cards: [['Autonomic saturation', 'Stress left over from earlier in the day makes you react faster to the next thing.', 'On a running-on-empty day, say “it’s the day, not you.”'],
+          cards: [['Leftover stress', 'Stress left over from earlier in the day makes you react faster to the next thing.', 'On a running-on-empty day, say “it’s the day, not you.”'],
                   ['The technical layer', 'Optional. The tools work the same without it.', 'Read the plain version first, and the technical part only if you’re curious.'],
                   ['A heuristic', 'A practical rule of thumb, not a clinical or diagnostic tool.', 'Treat the numbers as a starting point for a talk.']] },
         { at: 'Where the static comes from', k: 'quiz', q: 'You say “in a minute,” meaning “when I finish this.” They hear “in sixty seconds.” Where does the static live?',
@@ -823,8 +823,8 @@ window.TOLLearnPlayData = {
               ['The chapter gives a score; the workpaper explains it', false, 'Not quite. Chapters explain ideas. Worksheets are where you do something with them.'],
               ['They’re two versions of the same thing', false, 'Not quite. They pair up, but one explains and the other puts it to use.']] },
         { at: 'feed one number', k: 'match', q: 'Match each piece to what it does.',
-          pairs: [['WP-01, WP-02 and WP-03', 'Feed the Solvency Read'], ['CALC-01', 'One read on whether the way you share things can last'],
-                  ['WP-13', 'A 90-second daily check-in with no debate']] },
+          pairs: [['Who did what, How much are you carrying? and One owner per job', 'Feed the setup score'], ['Is the setup working for everyone?', 'One read on whether the way you share things can last'],
+                  ['The 90-second daily check-in', 'One sentence each, once a day, with no debate']] },
         { at: 'No score ever comes from one person', k: 'wyr', q: 'Your number comes back lower than you hoped. Would you rather…',
           o: [['Show it as proof that something is wrong with them', 'That ends a conversation. A number should start one, and no score comes from one person alone.'],
               ['Use it to open a calm talk about the setup', 'That’s the page’s rule: a number should start a conversation, never end one.']] },
@@ -856,7 +856,7 @@ window.TOLLearnPlayData = {
         { at: 'The map', k: 'match', q: 'Match each word on the map to what it means.',
           pairs: [['Core', 'Built for this, or one of the first things to reach for'], ['Helpful', 'Works with small adjustments'], ['A dash', 'Usually not the right tool']] },
         { at: 'Partners', k: 'quiz', q: 'One partner tracks every birthday and bill. The other hears “you never help” as unfair. Why?',
-          o: [['From where they stand, it is unfair: they genuinely don’t know that work exists', true, 'Yes! That’s why WP-01 comes first: a week of who did what, written down by each of you.'],
+          o: [['From where they stand, it is unfair: they genuinely don’t know that work exists', true, 'Yes! That’s why Who did what (WP-01) comes first: a week of who did what, written down by each of you.'],
               ['They’re pretending not to notice', false, 'Not quite. The page says they genuinely don’t see it. Unseen work isn’t the same as ignored work.'],
               ['The tracker is exaggerating', false, 'Not quite. The work is real, it’s just invisible. Writing it down makes it visible to both of you.']] },
         { at: 'Co-parents', k: 'wyr', q: 'Handoff day, and something bigger comes up. Would you rather…',
@@ -921,7 +921,7 @@ window.TOLLearnPlayData = {
       t: 'Check-ins (full)', g: 'p3', n: '/turning-toward-in-depth.html',
       m: [
         { at: 'Ground rules', k: 'sort', q: 'Before a check-in, sort your list into three piles.', bins: ['Today', 'A system problem', 'Can wait'],
-          items: [['Something that will still be wrong tomorrow if you don’t touch it', 0], ['The trash has no owner and keep getting missed', 1, 'That goes to WP-03 or the weekly review, not into a speech.'],
+          items: [['Something that will still be wrong tomorrow if you don’t touch it', 0], ['The trash has no owner and keep getting missed', 1, 'That goes to the job list (One owner per job, WP-03) or the weekly review, not into a speech.'],
                   ['A real worry about the holidays, with a date to look at it', 2], ['A task with no owner', 1]] },
         { at: 'The setting has to be right', k: 'quiz', q: 'Which of these is a check-in, not an ambush?',
           o: [['“Can we use twenty minutes at 8, after dinner, for the kitchen thing?”', true, 'Yes! Named in advance, one topic, and a time when nobody is rushing out.'],

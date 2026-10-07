@@ -21,7 +21,7 @@
     'WP-04': 'The monthly look-back',
     'WP-09': 'Say it so it lands',
     'WP-11': 'The Calm-Down Kit',
-    'WP-13': 'The 90-second check-in'
+    'WP-13': 'The 90-second daily check-in'
   };
 
   // where to read about each workpaper
@@ -36,7 +36,7 @@
     ch4: ['Ch. IV: Two kinds of fair', '/book/chapter-4.html'], ch5: ['Ch. V: The monthly look-back', '/book/chapter-5.html'],
     lemonade: ['The Lemonade Stand', '/lemonade-stand.html'], calc: ['CALC-01: Is the setup working for everyone?', '/workpapers/calculators/calc01-solvency.html'],
     decoder: ['Carrier Wave Decoder', '/carrier-wave-decoder.html'], freq: ['Frequency Calibration', '/tools/frequency-calibration.html'],
-    mood: ['Mood Arbitrage', '/tools/mood-arbitrage-free.html'], wired: ['Wired Differently', '/wired-differently.html'], wiring: ['Wiring Card', '/wiring-card.html'],
+    mood: ['Soften a tense moment', '/tools/mood-arbitrage-free.html'], wired: ['Wired Differently', '/wired-differently.html'], wiring: ['Wiring Card', '/wiring-card.html'],
     signal: ['The Signal Translator', '/signal-translator.html'], checkins: ['Check-ins', '/check-ins.html'], ground: ['Check-in ground rules', '/check-ins.html#ground'],
     prog: ['PROG-01: 6-week program', '/prog-01.html'], report: ['REPORT-01: The Full Read', '/workpapers/report-01.html'], garden: ['The Night Garden', '/night-garden.html'],
     toward: ['Turning Toward', '/turning-toward.html']
@@ -56,7 +56,7 @@
     partners: [
       ['See the work', ['WP-01'], A('preface', 'ch1'), 'Each of you logs one week of who did what. No discussing it yet.'],
       ['One owner per job', ['WP-03'], A('ch2', 'lemonade'), 'Sit down once, with the log, and give every regular job one owner.'],
-      ['Small daily corrections', ['WP-13'], A('toward', 'decoder'), 'Do the 90-second check-in every evening this week.'],
+      ['Small daily corrections', ['WP-13'], A('toward', 'decoder'), 'Do the 90-second daily check-in every evening this week.'],
       ['Your loads', ['WP-02'], A('ch3', 'calc'), 'Each of you does the one-minute load check daily, about yourself. Say your number before any hard talk.'],
       ['Talk so it lands', ['WP-09', 'WP-11'], A('signal', 'checkins'), 'Agree on your pause lines, then try one check-in using the ground rules.'],
       ['Make it last', ['WP-01', 'WP-04'], A('report', 'ch5'), 'Run the week log again, compare it with week one, and do your first monthly look-back.']
@@ -92,7 +92,7 @@
     coworkers: [
       ['Who owns what', ['WP-03'], A('ch1'), 'A named owner for each recurring team task: follow-ups, notes, reminders.'],
       ['Messages before sending', ['WP-09'], A('signal'), 'Check one charged chat or email with fact, feeling and ask.'],
-      ['A short stand-up', ['WP-13'], A('checkins'), 'Try the 90-second check-in as a team stand-up, once a day.'],
+      ['A short stand-up', ['WP-13'], A('checkins'), 'Try the 90-second daily check-in as a team stand-up, once a day.'],
       ['Make the invisible visible', ['WP-01'], A('decoder'), 'For one week, log the follow-ups and reminders that usually go unseen.'],
       ['A kind retrospective', ['WP-04', 'WP-02'], A('ch5', 'weather'), 'Look back at what slipped. And privately, check your own load.']
     ],
@@ -242,7 +242,7 @@
           { wp: 'WP-04', why: 'Sort repeat problems into real gaps and one-offs.', again: 'Another month' }
         ] }
       ],
-      next: 'Start the 90-second check-in one evening this week, and each begin a Who did what log.',
+      next: 'Start the 90-second daily check-in one evening this week, and each begin a Who did what log.',
       care: 'The tools describe the arrangement, never the person.'
     },
     {
@@ -388,7 +388,7 @@
           { wp: 'WP-11', why: 'Your pause line, agreed on a calm day.' }
         ] },
         { along: A('freq','checkins'), title: 'Week 5 · Get back in step', note: 'Small corrections, daily.', stops: [
-          { wp: 'WP-13', why: 'Try the 90-second check-in together.' }
+          { wp: 'WP-13', why: 'Try the 90-second daily check-in together.' }
         ] },
         { along: A('report','toward'), title: 'Week 6 · Make it last', note: 'The same log, run twice.', stops: [
           { wp: 'WP-01', why: 'Run Who did what again and compare it with Week 1.' },

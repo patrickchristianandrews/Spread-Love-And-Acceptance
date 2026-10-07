@@ -59,7 +59,7 @@
     elsewhere: { name: 'A hard day from somewhere else', text: 'This started somewhere else, so it isn’t yours to fix. Your job is company and a little relief, not solutions or advice.',
       agree: 'When one of us has had a hard day, we’ll say so early, and the other will hold new problems until the next day.' },
     load: { name: 'Too much on their plate', text: 'The weight is sitting on one person. Once it settles, share the load for real: one job moves to you, for good, with no reminders needed.',
-      agree: 'Each recurring job gets one named owner, written down, so nobody carries the list alone. (<a href="/workpapers/wp-03-raci-treaty.html">WP-03</a> helps.)' },
+      agree: 'Each recurring job gets one named owner, written down, so nobody carries the list alone. (<a href="/workpapers/wp-03-raci-treaty.html">One owner per job (WP-03)</a> helps.)' },
     sensory: { name: 'Too much noise, people or light', text: 'Change the place before anything else: a quieter room, outside, or leaving early. Keep words to a minimum until you’re out.',
       agree: 'When a place gets too loud or busy for one of us, either can say ‘time to go,’ no explanation needed.' }
   };
@@ -122,7 +122,7 @@
       t += '\n' + s.h + '\n' + (s.list ? s.list.map(function (x) { return '- ' + strip(x); }).join('\n') : strip(s.html)) + '\n';
     });
     if (withPractice) t += '\nFour weeks to build the skill\n' + PRACTICE.map(function (w) { return '[ ] ' + w[0] + ': ' + w[1]; }).join('\n') + '\n';
-    return t + '\nFrom Mood Arbitrage, The Objective Ledger. A rule of thumb, not a clinical tool.';
+    return t + '\nFrom Soften a tense moment, The Objective Ledger. A rule of thumb, not a clinical tool.';
   }
 
   function copy(text, done) {

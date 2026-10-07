@@ -246,7 +246,7 @@
     if (page.id === 'wp02') c.battery.forEach(function (b) { out.push(b.label + ': ' + (b.score != null ? f2(b.score) + ' (' + b.band.label.toLowerCase() + ')' : b.answered + ' of 5 answered')); });
     if (page.id === 'wp03' && c.wp03) out.push(c.wp03.oc != null ? 'Ownership clarity so far: ' + f2(c.wp03.oc) + ' (' + c.wp03.owned + ' of ' + c.wp03.tasks + ' jobs have an owner)' : 'Ownership clarity: give each job one owner.');
     if (page.id === 'wp04' && c.wp04) out.push(c.wp04.patterns.length ? 'A real pattern (3 or 4 weeks): ' + c.wp04.patterns.map(function (p) { return p.task; }).join(', ') : 'Nothing flagged 3 or 4 weeks so far.');
-    if (page.id === 'calc' && c.calc.applies) out.push(c.calc.sol != null ? 'Solvency ' + f2(c.calc.sol) + ' (' + c.calc.solBand.label.toLowerCase() + '), apex ' + f2(c.calc.apex) : 'Not worked out yet. Still needed: ' + c.calc.missing.join('; ') + '.');
+    if (page.id === 'calc' && c.calc.applies) out.push(c.calc.sol != null ? 'Setup score ' + f2(c.calc.sol) + ' (' + c.calc.solBand.label.toLowerCase() + '), overall score ' + f2(c.calc.apex) : 'Not worked out yet. Still needed: ' + c.calc.missing.join('; ') + '.');
     if (page.id === 'calc' && c.calc.rf != null) out.push('Retuning (RF): ' + f2(c.calc.rf));
     return out;
   }

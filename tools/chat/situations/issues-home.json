@@ -53,7 +53,7 @@
           "/lemonade-stand.html"
         ],
         [
-          "WP-01: Who did what",
+          "Who did what (WP-01)",
           "/workpapers/wp-01.html"
         ],
         [
@@ -63,11 +63,11 @@
       ],
       "path_self": [
         [
-          "WP-01: Who did what",
+          "Who did what (WP-01)",
           "/workpapers/wp-01.html"
         ],
         [
-          "WP-02: How full is your battery?",
+          "How much are you carrying? (WP-02)",
           "/workpapers/wp-02-battery-stress-meter.html"
         ],
         [
@@ -127,7 +127,7 @@
           "/lemonade-stand.html"
         ],
         [
-          "WP-03: One owner per job",
+          "One owner per job (WP-03)",
           "/workpapers/wp-03-raci-treaty.html"
         ],
         [
@@ -175,7 +175,7 @@
       },
       "path": [
         [
-          "WP-03: One owner per job",
+          "One owner per job (WP-03)",
           "/workpapers/wp-03-raci-treaty.html"
         ],
         [
@@ -188,8 +188,8 @@
         ]
       ],
       "deeper": [
-        "one owner per job (RACI)",
-        "What is the RACI Treaty?"
+        "one owner per job",
+        "What is WP-03?"
       ],
       "ex": "A team of seven kept missing the weekly client update. They gave it one Responsible person (Priya) and one Accountable person (the lead), and wrote it in the team tracker. The update went out on time for six weeks straight, and nobody had to ask."
     },
@@ -226,7 +226,7 @@
       },
       "path": [
         [
-          "WP-03: One owner per job",
+          "One owner per job (WP-03)",
           "/workpapers/wp-03-raci-treaty.html"
         ],
         [
@@ -282,7 +282,7 @@
           "/lemonade-stand.html"
         ],
         [
-          "WP-09: Say it so it lands",
+          "Say it so it lands (WP-09)",
           "/workpapers/wp-09-tone-filter.html"
         ],
         [
@@ -333,11 +333,11 @@
       },
       "path": [
         [
-          "WP-03: One owner per job",
+          "One owner per job (WP-03)",
           "/workpapers/wp-03-raci-treaty.html"
         ],
         [
-          "WP-09: Say it so it lands",
+          "Say it so it lands (WP-09)",
           "/workpapers/wp-09-tone-filter.html"
         ],
         [
@@ -389,7 +389,7 @@
           "/turning-toward.html"
         ],
         [
-          "WP-13: The 90-second daily check-in",
+          "The 90-second daily check-in (WP-13)",
           "/workpapers/wp-13-pll-protocol.html"
         ],
         [
@@ -450,7 +450,7 @@
           "/lemonade-stand.html"
         ],
         [
-          "WP-03: One owner per job",
+          "One owner per job (WP-03)",
           "/workpapers/wp-03-raci-treaty.html"
         ],
         [
@@ -494,11 +494,11 @@
       },
       "path": [
         [
-          "WP-03: One owner per job (who handles what)",
+          "One owner per job (WP-03, who handles what)",
           "/workpapers/wp-03-raci-treaty.html"
         ],
         [
-          "WP-09: Say it so it lands",
+          "Say it so it lands (WP-09)",
           "/workpapers/wp-09-tone-filter.html"
         ],
         [
@@ -542,7 +542,7 @@
       "reflect": "Caring for someone is real, demanding work, and it’s very easy to stop noticing your own battery while you do it.",
       "going": "This is Pillar III (read your state first) and Pillar I (see the whole load). Caregiving piles up invisible jobs: appointments, calls, forms, worry, and the emotional work of staying steady for someone else. Running on empty isn’t a failure of love. It’s a sign the load needs more hands and more structure, and that your own battery counts too.",
       "steps": [
-        "Check your own battery today (the WP-02 five questions take a minute). If it’s high, that’s a reason to ask for help, not to push harder.",
+        "Check your own battery today: the five questions in How much are you carrying? (WP-02) take a minute. If it’s high, that’s a reason to ask for help, not to push harder.",
         "List the care jobs and give each one a named owner, including other family, friends or services where you can.",
         "Ask for one specific kind of help, with a time, rather than “more help”."
       ],
@@ -561,11 +561,11 @@
       },
       "path": [
         [
-          "WP-02: How full is your battery?",
+          "How much are you carrying? (WP-02)",
           "/workpapers/wp-02-battery-stress-meter.html"
         ],
         [
-          "WP-03: One owner per job (share the care tasks)",
+          "One owner per job (WP-03, share the care tasks)",
           "/workpapers/wp-03-raci-treaty.html"
         ],
         [
@@ -624,7 +624,7 @@
       ],
       "path": [
         [
-          "WP-03: One owner per job",
+          "One owner per job (WP-03)",
           "/workpapers/wp-03-raci-treaty.html"
         ],
         [
@@ -740,7 +740,7 @@
       ],
       "path": [
         [
-          "WP-03: One owner per job",
+          "One owner per job (WP-03)",
           "/workpapers/wp-03-raci-treaty.html"
         ],
         [

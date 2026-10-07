@@ -22,7 +22,7 @@
 
   // what a tool remembers, in plain words, so the card can say where you were
   var WP_NAMES = { 'WP-01': 'Who did what (WP-01)', 'WP-02': 'How much are you carrying? (WP-02)', 'WP-03': 'One owner per job (WP-03)', 'WP-04': 'What keeps coming back? (WP-04)',
-    'WP-09': 'Say it so it lands (WP-09)', 'WP-11': 'The Calm-Down Kit (WP-11)', 'WP-13': 'The 90-second check-in (WP-13)' };
+    'WP-09': 'Say it so it lands (WP-09)', 'WP-11': 'The Calm-Down Kit (WP-11)', 'WP-13': 'The 90-second daily check-in (WP-13)' };
   function drafts() {
     var out = [];
     keys().forEach(function (k) {

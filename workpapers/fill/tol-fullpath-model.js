@@ -85,7 +85,7 @@
 
   var NAMES = {
     'WP-01': 'Who did what', 'WP-02': 'How much are you carrying?', 'WP-03': 'One owner per job',
-    'WP-04': 'The monthly look-back', 'WP-09': 'Say it so it lands', 'WP-11': 'The Calm-Down Kit', 'WP-13': 'The 90-second check-in'
+    'WP-04': 'The monthly look-back', 'WP-09': 'Say it so it lands', 'WP-11': 'The Calm-Down Kit', 'WP-13': 'The 90-second daily check-in'
   };
 
   // one: a single person on this road; group2/groupN: everyone, for two or more; work: the shared load;
@@ -422,8 +422,8 @@
         'Workload balance (WB), from WP-01: how close the logged minutes come to an even split. 1 = even. With two people it is 1 minus the gap between the two shares; with more, 1 minus the share of time that would have to change hands, out of the most it could be.',
         'Ownership clarity (OC), from WP-03: jobs with an owner, divided by all jobs (starter examples nobody filled in are left out).',
         'Stress (AS), from WP-02: the average load score across everyone. It waits until every person\u2019s load score is in.',
-        'Solvency = WB × 0.40 + OC × 0.35 + (1 − AS) × 0.25. 0.70 and up: working well. 0.40 to 0.69: needs a look. Under 0.40: needs a rethink, together. Higher means the setup is working better.',
-        'Apex = WB × 0.35 + OC × 0.30 + (1 − AS) × 0.20 + RF × 0.15, where RF = retunes ÷ friction moments (below).'
+        'Setup score = WB × 0.40 + OC × 0.35 + (1 − AS) × 0.25. 0.70 and up: working well. 0.40 to 0.69: needs a look. Under 0.40: needs a rethink, together. Higher means the setup is working better.',
+        'Overall score = WB × 0.35 + OC × 0.30 + (1 − AS) × 0.20 + RF × 0.15, where RF = retunes ÷ friction moments (below).'
       ] });
       blocks.push({ kind: 'fields', title: 'Your own numbers (optional)', intro: 'Only used when the matching workpaper is blank, for example if you used the Lemonade Stand instead of WP-01. Numbers from 0 to 1. Leave blank to use the worked-out numbers.', fields: [
         f('calc.wb', 'Workload balance (0 to 1)', 'number', { min: 0, max: 1, third: true, optional: true }),
@@ -523,7 +523,7 @@
     R.wps.forEach(function (code) {
       var p = BUILDERS[code](ctx);
       p.name = NAMES[code];
-      if (R.solo && code === 'WP-01') { p.name = 'Kind ways to say no'; p.title = 'Neutral Refusals'; }
+      if (R.solo && code === 'WP-01') { p.name = 'Kind ways to say no'; p.title = 'Kind ways to say no'; }
       p.why = whyOf(roadId, code);
       pages.push(p);
     });
@@ -1148,7 +1148,7 @@
     function cap(s) { return s.charAt(0).toUpperCase() + s.slice(1); }
     if (R.calc) {
       tiles.push(c.calc.sol != null
-        ? { k: 'Is the setup working?', v: c.calc.solBand.label, band: 'CALC-01, from balance, ownership and how much everyone is carrying.', tone: c.calc.solBand.key, note: 'Solvency ' + fmt(c.calc.sol) + ' of 1, higher = working better (0.70+ working well, 0.40 to 0.69 needs a look, under 0.40 needs a rethink, together).' }
+        ? { k: 'Is the setup working?', v: c.calc.solBand.label, band: 'CALC-01, from balance, ownership and how much everyone is carrying.', tone: c.calc.solBand.key, note: 'Setup score ' + fmt(c.calc.sol) + ' of 1, higher = working better (0.70+ working well, 0.40 to 0.69 needs a look, under 0.40 needs a rethink, together).' }
         : { k: 'Is the setup working?', v: 'Not worked out yet', band: 'Still needed: ' + c.calc.missing.join('; '), tone: 'none' });
       if (c.calc.sol != null) tiles.push({ k: 'With repairs counted', v: c.calc.apexBand.label, band: c.calc.apexRebalanced ? 'No friction moments were counted, so there was nothing to repair.' : 'Adds how often friction was repaired.', tone: c.calc.apexBand.key, note: 'Apex ' + fmt(c.calc.apex) + ' of 1' + (c.calc.apexRebalanced ? ', from three inputs.' : ', with retuning ' + fmt(c.calc.rf) + '.') });
       tiles.push({ k: 'How the time is shared', v: c.calc.wb != null ? cap(C1().shareWords(c.calc.wb)) : 'Not filled in', band: c.calc.wb == null ? 'WP-01 needs minutes and names' : c.calc.wbSrc === 'yours' ? 'Your own number' : 'From WP-01', tone: tone3(c.calc.wb), note: c.calc.wb != null ? 'Balance ' + fmt(c.calc.wb) + ' of 1, where 1 = an even split (0.70+ fairly even, 0.40 to 0.69 leaning, under 0.40 mostly on one person).' : '' });
@@ -1230,7 +1230,7 @@
       else if (calc.sol >= 0.7) add(10, 'The setup reads ' + s + ' on CALC-01: it is working well. Keep the same rhythm; nothing needs fixing this week.');
       else if (calc.sol >= 0.4) add(10, 'The setup reads ' + s + ' on CALC-01: it needs a look, because something is slipping. The biggest single gap is ' + calc.worst.fix + ', so start there, not with whatever happened most recently.');
       else add(10, 'The setup reads ' + s + ' on CALC-01: it needs a rethink, together, because it is asking too much as it is. That is a statement about the setup, not about anyone. The biggest gap is ' + calc.worst.fix + '.');
-      if (calc.rf != null && Math.abs(calc.gap) >= 0.08) add(7, calc.gap > 0 ? 'Solvency runs ' + fmt(calc.gap) + ' above apex: the setup holds, but repair after friction isn’t keeping up. WP-09 is the place to work, not the owners list.' : 'Apex runs ' + fmt(-calc.gap) + ' above solvency: you repair well, but the setup keeps making friction to repair. The owners list is the place to work.');
+      if (calc.rf != null && Math.abs(calc.gap) >= 0.08) add(7, calc.gap > 0 ? 'The setup score runs ' + fmt(calc.gap) + ' above the overall score: the setup holds, but repair after friction isn’t keeping up. WP-09 is the place to work, not the owners list.' : 'Apex runs ' + fmt(-calc.gap) + ' above the setup score: you repair well, but the setup keeps making friction to repair. The owners list is the place to work.');
     } else if (R.calc && c.anything) {
       add(3, 'CALC-01 isn’t worked out yet. Still needed: ' + calc.missing.join('; ') + '. Nothing is guessed in the meantime.');
     }
@@ -1260,7 +1260,7 @@
     }
     if (c.wp04 && c.wp04.patterns.length) add(7, plural(c.wp04.patterns.length, 'task') + ' came up 3 or 4 weeks out of 4: ' + listSome(c.wp04.patterns.map(function (p) { return p.task; }), 3) + '. That is a pattern, not a fluke, and usually a gap in the setup.');
     if (c.conc && c.conc.flag && !(calc.sol != null && calc.sol >= 0.7)) add(7, cap(c.conc.lines.join('; ')) + '. That is a fact about how the setup has settled, not about effort or care, and it is worth one question: which job would they hand over first?');
-    if (c.wp09 && c.wp09.advice === 'pause') add(5, 'Your Tone Filter checks suggest pausing before you answer that message' + (c.wp09.pattern ? ': it may be touching an older pattern, not just these words.' : '.'));
+    if (c.wp09 && c.wp09.advice === 'pause') add(5, 'Your Say it so it lands checks suggest pausing before you answer that message' + (c.wp09.pattern ? ': it may be touching an older pattern, not just these words.' : '.'));
     if (c.wp13 && c.wp13.thanks.length) add(4, plural(c.wp13.thanks.length, 'appreciation') + ' written down in the daily check-ins. Those are worth reading again on a harder day.');
     if (c.wp11 && c.wp11.filled && !(c.wp11.first || c.wp11.second)) add(3, 'The Calm-Down Kit is started, but no settling defaults are chosen yet. Picking two on a calm day is what makes it work in the moment.');
     if (R.solo && c.notes.wiringLines) add(5, 'Your Wiring Card has ' + c.notes.wiringLines + ' of 9 lines filled in. That is the start of a short, kind way to explain yourself, whenever you want to share it.');
@@ -1413,7 +1413,7 @@
     }
     if (code === 'WP-13') {
       var q = c.wp13;
-      if (!q.filled) { s.next = c.road === 'coworkers' ? 'Try the 90-second check-in as a team stand-up for one week: load, one thanks, one ask.' : 'Try it for one week, 90 seconds a day: load, one thanks, one small ask.'; return s; }
+      if (!q.filled) { s.next = c.road === 'coworkers' ? 'Try the 90-second daily check-in as a team stand-up for one week: load, one thanks, one ask.' : 'Try it for one week, 90 seconds a day: load, one thanks, one small ask.'; return s; }
       s.status = 'filled';
       s.entered.push(['Check-ins recorded', q.entries + ' of ' + q.possible]);
       P.list.forEach(function (p) { var l = q.loads[p.i]; if (l.Low + l.Medium + l.High) s.entered.push([p.label, l.High + ' high, ' + l.Medium + ' medium, ' + l.Low + ' low']); });
@@ -1439,8 +1439,8 @@
     out.rows.push(['Retuning (RF)', k.rf != null ? fmt(k.rf) : 'No value', k.friction > 0 ? k.retunes + ' ÷ ' + k.friction + ' friction moments' + (k.capped ? ', capped at 1.00' : '') : (k.friction === 0 ? 'no friction moments: nothing to repair, which is not a zero' : 'not filled in')]);
     if (k.applies) {
       if (k.sol != null) {
-        out.lines.push('Solvency = ' + fmt(k.wb) + ' × 0.40 + ' + fmt(k.oc) + ' × 0.35 + (1 − ' + fmt(k.as) + ') × 0.25 = ' + fmt(k.sol) + ': ' + k.solBand.label.toLowerCase() + '.');
-        out.lines.push('Apex = ' + (k.apexRebalanced ? '(' + fmt(k.wb) + ' × 0.35 + ' + fmt(k.oc) + ' × 0.30 + (1 − ' + fmt(k.as) + ') × 0.20) ÷ 0.85' : fmt(k.wb) + ' × 0.35 + ' + fmt(k.oc) + ' × 0.30 + (1 − ' + fmt(k.as) + ') × 0.20 + ' + fmt(k.rf) + ' × 0.15') + ' = ' + fmt(k.apex) + ': ' + k.apexBand.label.toLowerCase() + '.');
+        out.lines.push('Setup score = ' + fmt(k.wb) + ' × 0.40 + ' + fmt(k.oc) + ' × 0.35 + (1 − ' + fmt(k.as) + ') × 0.25 = ' + fmt(k.sol) + ': ' + k.solBand.label.toLowerCase() + '.');
+        out.lines.push('Overall score = ' + (k.apexRebalanced ? '(' + fmt(k.wb) + ' × 0.35 + ' + fmt(k.oc) + ' × 0.30 + (1 − ' + fmt(k.as) + ') × 0.20) ÷ 0.85' : fmt(k.wb) + ' × 0.35 + ' + fmt(k.oc) + ' × 0.30 + (1 − ' + fmt(k.as) + ') × 0.20 + ' + fmt(k.rf) + ' × 0.15') + ' = ' + fmt(k.apex) + ': ' + k.apexBand.label.toLowerCase() + '.');
         out.lines.push('Where the points went: ' + k.terms.map(function (t) { return t.key + ' gives up ' + fmt(t.short, 3); }).join(', ') + '. The biggest gap is ' + k.worst.fix + '.');
         if (c.conc && c.conc.lines.length) out.lines.push('Beside the score: ' + c.conc.lines.join('; ') + '. The score reads whether jobs are named and time is logged, not how they are spread, so this is worth reading next to it' + (k.sol >= 0.7 ? ', even at ' + fmt(k.sol) + '.' : '.'));
         if (k.sol < 0.4 && k.apex < 0.4) out.lines.push('Both scores are low at the same time. In that pattern, one more worksheet probably isn’t what helps most. It may be worth asking someone neutral that everyone trusts to help you rework the setup together.');
@@ -1604,7 +1604,7 @@
     if (c.wp04 && c.wp04.patterns.length) add(7, 'Fix what keeps slipping', 'WP-04, WP-03', 'Give ' + list(c.wp04.patterns.map(function (p) { return p.task; }).slice(0, 3)) + ' a new or clearer owner, then watch it for a month.', 'V');
     if (c.wp09 && (!c.wp09.filled || c.wp09.advice === 'pause' || (k.rf != null && k.rf < 0.5))) add(6, 'Say it so it lands', 'WP-09', 'Put one charged message a week through fact, feeling and ask before it goes out. Count the friction moments and how many you retuned.', 'IV');
     if (c.wp11 && !(c.wp11.first && c.wp11.second)) add(5, 'Your calm-down kit', 'WP-11', 'On a calm day, pick two settling defaults and write a pause line: how you are, how long you need, when you’ll be back.', 'III');
-    if (c.wp13 && (!c.wp13.filled || c.wp13.thanks.length < c.n)) add(5, c.road === 'coworkers' ? 'A short daily stand-up' : 'The 90-second check-in', 'WP-13', 'Every day for a week: load, one thanks, one small ask. No debating.', 'V');
+    if (c.wp13 && (!c.wp13.filled || c.wp13.thanks.length < c.n)) add(5, c.road === 'coworkers' ? 'A short daily stand-up' : 'The 90-second daily check-in', 'WP-13', 'Every day for a week: load, one thanks, one small ask. No debating.', 'V');
     if (R.solo && !c.notes.wiringLines) add(6, 'Know your wiring', 'Wiring Card', 'Fill in the Wiring Card, then read it back and change anything that isn’t quite true. See /know-yourself.html for more.', 'IV');
     if (R.solo && c.notes.weather.length < 2) add(4, 'Notice your weather', 'Today’s Weather', 'Once a week, check the sky, the pressure and your sleep. Just notice.', 'I');
     if (c.refusals && !c.refusals.length && c.on['WP-01']) add(4, 'Kind ways to say no', 'WP-01 Part B', 'Draft one kind no, then try it on a small request.', 'II');
@@ -1643,7 +1643,7 @@
     'WP-04': ['WP-04 The monthly look-back', '/workpapers/fill/wp-04.html'],
     'WP-09': ['WP-09 Say it so it lands', '/workpapers/fill/wp-09.html'],
     'WP-11': ['WP-11 The Calm-Down Kit', '/workpapers/fill/wp-11.html'],
-    'WP-13': ['WP-13 The 90-second check-in', '/workpapers/fill/wp-13.html'],
+    'WP-13': ['WP-13 The 90-second daily check-in', '/workpapers/fill/wp-13.html'],
     'CALC-01': ['CALC-01, Is the setup working for everyone?', '/calc01-solvency.html'],
     NOTES: ['Make a Wiring Card', '/wiring-card.html'],
     wiring: ['Make a Wiring Card', '/wiring-card.html'],
@@ -1939,7 +1939,7 @@
       q: function () { return 'If we could change only one thing about how the load is shared, which one would help most?'; } },
     { id: 'apex-gap', pillar: 'IV', src: ['CALC-01', 'WP-09'], pri: 6, title: 'Repair and setup are out of step',
       when: function (F) { var k = F.c.calc; return k.sol != null && k.rf != null && Math.abs(k.gap) >= 0.08 ? k : null; },
-      find: function (k) { return k.gap > 0 ? 'Solvency runs ' + fmt(k.gap) + ' above apex: the setup holds, but repair after friction isn’t keeping up.' : 'Apex runs ' + fmt(-k.gap) + ' above solvency: you repair well, but the setup keeps making friction to repair.'; },
+      find: function (k) { return k.gap > 0 ? 'The setup score runs ' + fmt(k.gap) + ' above the overall score: the setup holds, but repair after friction isn’t keeping up.' : 'The overall score runs ' + fmt(-k.gap) + ' above the setup score: you repair well, but the setup keeps making friction to repair.'; },
       why: function (k) { return k.gap > 0 ? 'When repair lags, small frictions pile up even in a fair setup.' : 'Good repair is a strength, but it is tiring to keep repairing what the setup keeps causing.'; },
       rec: function (k, F, v) { return k.gap > 0 ? { h: 'week', title: 'Retune one message a week', first: 'Next time something lands badly, write the fact, the feeling and the ask before answering.', script: '“Give me a minute to say that better.”', link: linkOf('WP-09'), working: 'Retunes out of friction moments goes above half.' } : { h: 'week', title: 'Fix the setup that keeps causing friction', first: 'Look at what the frictions were about, and give that ' + v.task + ' a clear owner.', script: '“We keep smoothing this over. Could we fix who owns it instead?”', link: linkOf('WP-03'), working: 'Fewer friction moments to count next week.' }; } },
 
@@ -2222,7 +2222,7 @@
       when: function (F) { var k = F.c.calc; return k.rf != null && k.rf >= 0.75 ? k : null; },
       find: function (k) { return k.retunes + ' of ' + k.friction + ' friction moments ' + (k.retunes === 1 ? 'was' : 'were') + ' retuned before answering (RF ' + fmt(k.rf) + ').'; },
       why: 'That is the repair habit working. It is worth saying out loud, because it is invisible when it works.' },
-    { id: 'wp09-pause', pillar: 'III', src: ['WP-09'], pri: 6, title: 'The Tone Filter says pause first',
+    { id: 'wp09-pause', pillar: 'III', src: ['WP-09'], pri: 6, title: 'Say it so it lands says: pause first',
       when: function (F) { return F.c.wp09 && F.c.wp09.advice === 'pause' ? F.c.wp09 : null; },
       find: function (m) { return 'The four checks on WP-09 suggest pausing before answering' + (m.pattern ? ': it may be answering an older pattern, not just these words' : m.satNo ? ': you might read it differently with a lighter load' : '') + '.'; },
       why: 'A reply sent while carrying a lot, or at an old pattern, lands on the wrong target. Waiting a day costs little.',
@@ -2273,7 +2273,7 @@
       when: function (F) { var w = F.c.wp13; return w && w.entries >= 4 && w.thanks.length < w.entries / 3 ? w : null; },
       find: function (w) { return 'Only ' + w.thanks.length + ' of ' + w.entries + ' check-ins included something appreciated.'; },
       why: 'When thanks go quiet, work starts to feel owed rather than given. It is the cheapest thing to bring back.',
-      rec: function (w, F, v) { return { h: 'week', title: 'One thanks a day', first: 'Make the thanks the first line of every check-in this week, even a small one.', script: '“Thanks for ___ today. I noticed.”', link: linkOf('WP-13'), working: 'Most check-ins next week include a thanks.', plan: { title: F.road === 'coworkers' ? 'A short daily stand-up' : 'The 90-second check-in', wp: 'WP-13', do: 'Every day for a week: load, one thanks, one small ask. Thanks first. No debating.', pillar: 'V' } }; } },
+      rec: function (w, F, v) { return { h: 'week', title: 'One thanks a day', first: 'Make the thanks the first line of every check-in this week, even a small one.', script: '“Thanks for ___ today. I noticed.”', link: linkOf('WP-13'), working: 'Most check-ins next week include a thanks.', plan: { title: F.road === 'coworkers' ? 'A short daily stand-up' : 'The 90-second daily check-in', wp: 'WP-13', do: 'Every day for a week: load, one thanks, one small ask. Thanks first. No debating.', pillar: 'V' } }; } },
     { id: 'thanks-uneven', pillar: 'V', src: ['WP-13'], pri: 4, title: 'Thanks are written by some, not others',
       when: function (F) { if (!(F.n >= 2 && F.w13)) return null; var zero = F.pp.filter(function (p) { return p.checkins >= 2 && p.thanks === 0; }), many = F.pp.filter(function (p) { return p.thanks >= 2; }); return zero.length && many.length ? { zero: zero, many: many } : null; },
       find: function (d) { return list(lbl(d.many)) + ' wrote appreciations in the check-ins; ' + list(lbl(d.zero)) + ' checked in but wrote none.'; },
@@ -2818,7 +2818,7 @@
       else if (p.noticed >= 60) starter = 'What do you do around ' + (F.road === 'coworkers' ? 'the team' : 'here') + ' that you think nobody notices?';
       else if (F.w3 && p.r >= 3) starter = 'Which of your ' + Ts + ' would you most like to hand over or share?';
       else if (p.mental >= 2) starter = 'What are you keeping track of in your head that we could write down together?';
-      else if (F.w13 && p.checkins < 3) starter = 'What would make a 90-second check-in easy for you to keep?';
+      else if (F.w13 && p.checkins < 3) starter = 'What would make a 90-second daily check-in easy for you to keep?';
       else if (p.thanks >= 2) starter = 'What has felt good to notice this week?';
       else starter = 'What is one thing that is working for you right now, and one small thing that would help?';
       return { i: p.i, label: p.label, rows: rows, strengths: strengths.slice(0, 4), help: help.slice(0, 3), starter: starter };
@@ -2941,7 +2941,7 @@
 
   /* ---------- the Individual road: words for one person, never a second one */
 
-  var SOLO_SKIP_TERMS = { 'Workload balance (WB)': 1, 'Ownership clarity (OC)': 1, 'Average load (AS)': 1, 'Solvency': 1, 'Apex': 1, 'Owner': 1, 'Helper': 1,
+  var SOLO_SKIP_TERMS = { 'Workload balance (WB)': 1, 'Ownership clarity (OC)': 1, 'Average load (AS)': 1, 'Setup score': 1, 'Overall score': 1, 'Owner': 1, 'Helper': 1,
     'Consulted and Informed': 1, 'Noticed and handled': 1, 'Structural gap': 1, 'Capacity issue': 1, 'Pattern': 1 };
   var SOLO_WORDS = [
     [/“([^”]*?)\s*Can we pick this up ([^”?]*)\?”/g, '“$1 I’ll pick this up $2.”'],
@@ -2987,8 +2987,8 @@
     ['Workload balance (WB)', 'How close the logged minutes come to an even split. 1.00 is even.'],
     ['Ownership clarity (OC)', 'The share of jobs with an owner.'],
     ['Average load (AS)', 'Everyone’s load score averaged. Only worked out when every load score is in.'],
-    ['Solvency', 'The CALC-01 read of whether the way the load is shared can keep going.'],
-    ['Apex', 'Solvency with repair after friction (retuning) added in.'],
+    ['Setup score', 'The CALC-01 read of whether the way the load is shared can keep going.'],
+    ['Overall score', 'The setup score with repair after friction (retuning) added in.'],
     ['Retuning (RF)', 'Friction moments you ran through fact, feeling and ask before answering, divided by all friction moments.'],
     ['Friction moment', 'A time something landed badly enough to notice.'],
     ['Owner', 'The one person who does the job and sees it through.'],
@@ -3014,8 +3014,8 @@
       'Load score (WP-02): the five answers added up and divided by 20. Under 0.30 is a low load, 0.30 to 0.59 medium, 0.60 and up high.',
       'Workload balance (WP-01): each person’s share of the logged minutes is compared with an even split. Balance is 1 minus the part of the time that would have to change hands, out of the most it could be. With two people this is 1 minus the gap between the two shares.',
       'Ownership clarity (WP-03): jobs with an owner, divided by all jobs listed.',
-      'Solvency (CALC-01): balance × 0.40 + ownership × 0.35 + (1 − average load) × 0.25. Apex adds retuning: × 0.35, × 0.30, × 0.20 and retuning × 0.15. With no friction counted, apex uses the first three, rebalanced.',
-      'Bands for solvency and apex: 0.70 and up, working well; 0.40 to 0.69, needs a look; under 0.40, needs a rethink, together. Higher means working better. Bands are read from the number rounded to two decimals, so the number and the band always agree.',
+      'Setup score (CALC-01): balance × 0.40 + ownership × 0.35 + (1 − average load) × 0.25. The overall score adds retuning: × 0.35, × 0.30, × 0.20 and retuning × 0.15. With no friction counted, the overall score uses the first three, rebalanced.',
+      'Bands for the setup score and overall score: 0.70 and up, working well; 0.40 to 0.69, needs a look; under 0.40, needs a rethink, together. Higher means working better. Bands are read from the number rounded to two decimals, so the number and the band always agree.',
       'Patterns (WP-04): 3 or 4 weeks out of 4. Consistency (WP-13): check-ins filled in, divided by 7 days × the number of people.',
       'Insight rules connect two or more pages. Each one fires only when its condition is met by what was entered, and says what it found, why it matters and one step to take. This report has ' + RULES.length + ' rules; the ones that fired for you are listed.',
       'Data checks (' + CHECKS.length + ' of them) look for numbers that may be typos or answers that seem to disagree. They are worded gently because the answer may be real.',
@@ -3024,7 +3024,7 @@
       'All of it is worked out on this device. Nothing you type or choose is sent anywhere.'
     ];
     if (F.solo) {
-      out = out.filter(function (t) { return !/^(Workload balance|Ownership clarity|Solvency|Bands for solvency|Patterns \(WP-04\))/.test(t); });
+      out = out.filter(function (t) { return !/^(Workload balance|Ownership clarity|Setup score|Bands for the setup score|Patterns \(WP-04\))/.test(t); });
       out.splice(1, 0, 'Retuning (CALC-01): friction moments you ran through fact, feeling and ask before answering, divided by all friction moments. On this road CALC-01 only looks at you, so there is no shared-workload score.',
         'Weather log: your load score week by week, read next to your sky, pressure and sleep to show what tends to make a week heavier or lighter.');
     }
@@ -3078,7 +3078,7 @@
     var top = work.slice(0, 3).map(function (r) { return { title: r.title, text: r.finding, step: r.rec.first }; });
     recs.now.concat(recs.week, recs.month).forEach(function (r) { if (top.length < 3 && !top.some(function (t) { return t.title === r.title; })) top.push({ title: r.title, text: r.why, step: r.first }); });
     var guideBands = [];
-    if (k.applies) guideBands.push('Solvency and apex: 0.70 and up, working well; 0.40 to 0.69, needs a look; under 0.40, needs a rethink, together. Here higher means working better.');
+    if (k.applies) guideBands.push('Setup score and overall score: 0.70 and up, working well; 0.40 to 0.69, needs a look; under 0.40, needs a rethink, together. Here higher means working better.');
     if (k.applies) guideBands.push('Workload balance and ownership clarity: 1.00 is an even split or every job has an owner; 0.70 and up reads well.');
     guideBands.push('How much you’re carrying (the WP-02 load score): under 0.30 low load, 0.30 to 0.59 medium, 0.60 and up high. Higher means heavier, not a worse person.');
     if (c.wp11 && c.wp11.readings) guideBands.push('Coming back after settling (WP-11) uses the same WP-02 load score with one line of its own: under 0.50, return to the conversation. It sits inside the medium range on purpose: you don’t need a light load to come back, just less than half.');

@@ -283,7 +283,7 @@
   }
   W['wp-03'] = {
     code: 'WP-03',
-    title: 'RACI Treaty',
+    title: 'One owner per job',
     plain: 'One owner per job',
     slug: 'RACI-Treaty',
     purpose: 'A living agreement that gives every regular household job one owner: the person who does it and sees it through. That way nobody has to re-decide who owns what every week. If you like, add a helper who pitches in or notices if it slips. The helper is optional.',
@@ -339,8 +339,8 @@
   function flagged(r) { return ['w1', 'w2', 'w3', 'w4'].filter(function (k) { return r[k]; }).length; }
   W['wp-04'] = {
     code: 'WP-04',
-    title: 'Deficit Audit',
-    plain: 'The monthly look-back',
+    title: 'What keeps coming back?',
+    plain: 'What keeps coming back?',
     slug: 'Deficit-Audit',
     purpose: 'A monthly look-back, done together, across four weeks of Who did what (WP-01) and One owner per job (WP-03). It looks for the tasks that keep slipping. The goal is not to tally what anyone owes, but to find where the setup needs a fix.',
     people: true,
@@ -594,7 +594,7 @@
   DAYS.forEach(function (d) { WP13_ROWS.push({ day: d, who: 'A' }); WP13_ROWS.push({ day: d, who: 'B' }); });
   W['wp-13'] = {
     code: 'WP-13',
-    title: 'Phase-Locked Loop',
+    title: 'The 90-second daily check-in',
     plain: 'The 90-second daily check-in',
     slug: 'Phase-Locked-Loop',
     purpose: 'A 90-second daily check-in that keeps everyone in step with small, steady corrections instead of occasional big ones. Each person answers each prompt in one sentence, about their own day. No debating, no solving, no arguing back.',
@@ -734,7 +734,7 @@
   function copyOf(o) { var c = {}; Object.keys(o).forEach(function (k) { c[k] = o[k]; }); return c; }
   var SOLO = {
     'wp-01': {
-      title: 'Neutral Refusals',
+      title: 'Kind ways to say no',
       plain: 'Kind ways to say no',
       purpose: 'Kind ways to say no, drafted ahead of time. For a real request you can\'t take on right now, write a "not right now" in three steps: say why the request is fair, say honestly what you have left, and offer something instead. Having a few ready means you don\'t have to find the words on the spot.',
       people: false,
