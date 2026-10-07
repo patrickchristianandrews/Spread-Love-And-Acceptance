@@ -1350,7 +1350,7 @@
     if (!HH || !hhHost) return;
     var h = HH.get(), want = !hhNo && !!h && h.people.length > 0 && hhNamesEmpty();
     if (want && !hhOffer) {
-      hhOffer = HH.offer({ names: h.people, jobs: h.jobs.map(function (j) { return j.name; }), onUse: hhUse, onNo: function () { hhNo = true; } });
+      hhOffer = HH.offer({ names: h.people, jobs: h.jobs.map(function (j) { return j.name; }), onUse: hhUse, onNo: function () { hhNo = true; }, focus: function () { return peopleEl.querySelector('input'); } });
       hhHost.appendChild(hhOffer);
     } else if (!want && hhOffer && !hhOffer.querySelector('.tol-hh-offer').hidden) {
       hhOffer.remove(); hhOffer = null;

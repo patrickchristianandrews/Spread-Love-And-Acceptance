@@ -1202,7 +1202,7 @@ overall = (balance &times; 0.35) + (ownership &times; 0.30) + ((1 &minus; stress
     if (!HH || !hhHost) return;
     var hh = HH.get(), want = !hhNo && !!hh && hh.people.length > 0 && hhEmpty();
     if (want && !hhOffer){
-      hhOffer = HH.offer({ names: hh.people, jobs: hh.jobs.map(function(j){ return j.name; }), onUse: hhUse, onNo: function(){ hhNo = true; } });
+      hhOffer = HH.offer({ names: hh.people, jobs: hh.jobs.map(function(j){ return j.name; }), onUse: hhUse, onNo: function(){ hhNo = true; }, focus: function(){ return $("pname-0"); } });
       hhHost.appendChild(hhOffer);
     } else if (!want && hhOffer && !hhOffer.querySelector(".tol-hh-offer").hidden){ hhOffer.remove(); hhOffer = null; }
   }

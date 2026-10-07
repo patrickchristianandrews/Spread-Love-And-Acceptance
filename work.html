@@ -472,7 +472,8 @@
         save(); render();
         return HH.addedLine(hh.people.length, 0);
       },
-      noMessage: 'No problem. Type your team’s names here.'
+      noMessage: 'No problem. Type your team’s names here.',
+      focus: function () { return team; }
     });
     field.parentNode.insertBefore(offer, field);
     team.addEventListener('input', function () { var b = offer.querySelector('.tol-hh-offer'); if (b && state.team.trim()) b.hidden = true; });

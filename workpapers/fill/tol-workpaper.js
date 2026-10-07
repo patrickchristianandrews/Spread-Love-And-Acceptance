@@ -986,7 +986,8 @@
       jobs: canJobs ? hh.jobs.map(function (j) { return j.name; }) : [],
       status: this.opts.statusEl || document.getElementById('wpf-status'),
       onUse: function () { return self.hhUse(canNames, canJobs); },
-      onNo: function () { self.hhNo = true; }
+      onNo: function () { self.hhNo = true; },
+      focus: function () { return self.root.querySelector(canNames ? '[data-key="partnerA"]' : '[data-col="task"]'); }
     });
   };
   // Fill in the household: names only into empty places, never over a typed name; jobs at the top of

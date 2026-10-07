@@ -304,7 +304,7 @@
     if (hhKeep) { hhKeep.hidden = !shared; hhKeep.sync(); }
     var hh = HH.get(), want = shared && !hhNo && !!hh && hh.people.length > 0 && hhNamesEmpty();
     if (want && !hhOffer) {
-      hhOffer = HH.offer({ names: hh.people, onUse: hhUse, onNo: function () { hhNo = true; } });
+      hhOffer = HH.offer({ names: hh.people, onUse: hhUse, onNo: function () { hhNo = true; }, focus: function () { return $('ws-name-0'); } });
       hhHost.appendChild(hhOffer);
     } else if (!want && hhOffer && !hhOffer.querySelector('.tol-hh-offer').hidden) {
       hhOffer.remove(); hhOffer = null;

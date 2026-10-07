@@ -184,10 +184,11 @@
   }
 
   // The one-line offer: "Use your household from before? Liam, Jordan, Priya, Sam · [Use them] [No thanks]".
-  // opts: { names:[...], jobs:[...] (names of jobs to mention), question, onUse() -> message, onNo(), status: element for the message (optional) }
+  // opts: { names:[...], jobs:[...] (names of jobs to mention), question, onUse() -> message, onNo(), noMessage,
+  //         status: element for the message (optional), focus() -> element to move keyboard focus to afterwards }
   function offer(opts) {
     styles();
-    var wrap = el('div', 'tol-hh no-print');
+    var wrap = el('div', 'tol-hh no-print no-bubble');
     var box = el('div', 'tol-hh-offer');
     box.setAttribute('role', 'group');
     box.setAttribute('aria-label', 'Your household from before');
@@ -216,15 +217,22 @@
       setTimeout(function () { target.textContent = msg; }, 30);
     }
     use.addEventListener('click', function () {
+      box.hidden = true; // first, so a tool that redraws while filling in keeps this line for the message
       var msg = opts.onUse ? opts.onUse() : '';
-      box.hidden = true;
       say(msg);
+      refocus();
     });
     no.addEventListener('click', function () {
       box.hidden = true;
       if (opts.onNo) opts.onNo();
       say(opts.noMessage || 'No problem. Type the names you want here.');
+      refocus();
     });
+    // the buttons are gone now: keep keyboard focus nearby (the tool says where, usually its first name box)
+    function refocus() {
+      var f = typeof opts.focus === 'function' ? opts.focus() : null;
+      try { if (f && f.focus) f.focus(); } catch (e) {}
+    }
     wrap.say = say;
     return wrap;
   }
@@ -235,15 +243,16 @@
   // opts: { tool, write: writer object, label? }
   function remember(opts) {
     styles();
-    var wrap = el('div', 'tol-hh-keep no-print');
+    var wrap = el('div', 'tol-hh-keep no-print no-bubble');
     var lab = el('label', 'tol-hh-keep-l');
     var box = document.createElement('input');
     box.type = 'checkbox';
     box.autocomplete = 'off';
     box.checked = isLinked(opts.tool);
+    var words = el('span', 'tol-hh-keep-t', (opts.label || 'Use these names in the other tools') + ' ');
+    words.appendChild(el('span', 'tol-hh-keep-n', '(kept only on this device)'));
     lab.appendChild(box);
-    lab.appendChild(document.createTextNode(' ' + (opts.label || 'Use these names in the other tools') + ' '));
-    lab.appendChild(el('span', 'tol-hh-keep-n', '(kept only on this device)'));
+    lab.appendChild(words);
     var st = el('p', 'tol-hh-status');
     st.setAttribute('role', 'status'); st.setAttribute('aria-live', 'polite');
     wrap.appendChild(lab); wrap.appendChild(st);
