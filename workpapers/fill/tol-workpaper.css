@@ -98,6 +98,9 @@
 .wpf-remove button:hover{ border-color: var(--debit, #96412B); color: var(--debit, #96412B); }
 
 .wpf-table-actions{ display: flex; flex-wrap: wrap; gap: 10px; margin-top: 10px; }
+.wpf-undo{ display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; margin: 10px 0 0; padding: 8px 12px; border-radius: 12px; background: #FFF6E5; border: 1px solid #E8C98A; color: #4A3418; font-size: .95rem; }
+.wpf-undo .wpf-add{ min-height: 40px; }
+@media print{ .wpf-undo{ display: none !important; } }
 .wpf-add{
   font: inherit; font-size: 0.9rem;
   padding: 7px 14px;
@@ -643,3 +646,22 @@ html.ws-locked .tol-breathe-btn, html.ws-locked .tol-wx{ visibility: hidden; }
 .wpf-share-code{ width: 100%; max-width: 100%; box-sizing: border-box; font: inherit; font-size: .85rem; overflow-wrap: anywhere; word-break: break-all; }
 .wpf-share-msg{ margin: 0; padding: .5em .8em; border-radius: 8px; background: #FFF6EC; }
 @media print{ .wpf-share, .wpf-share-in{ display: none !important; } }
+
+/* WP-13 on a phone: today's rows first, the rest of the week folded (tol-workpaper.js) */
+.wpf-today{ display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 12px; margin: 0 0 10px; }
+.wpf-today-k{ margin: 0; font-weight: 600; }
+.wpf-today-more{ margin: 8px 0 0; font-size: .9rem; color: var(--ink-soft, #524B3E); }
+@media print{ .wpf-today, .wpf-today-more{ display: none !important; } }
+
+/* The "A flower was planted in your Night Garden" note (site.js) never covers an open sheet in the Suite */
+html.ws-locked .tol-planted{ display: none !important; }
+
+/* Two lists of One owner per job, side by side (tol-suite.js) */
+.ws-compare{ margin: 12px 0 0; padding: 10px 14px; border-radius: 14px; background: var(--paper, #FBF6E9); border: 1px solid var(--line, #D9CBA3); }
+.ws-compare summary{ cursor: pointer; font-weight: 600; min-height: 32px; }
+.ws-compare-note{ margin: 8px 0; font-size: .9rem; color: var(--ink-soft, #524B3E); }
+.ws-compare-h{ margin: 12px 0 4px; font-weight: 700; }
+.ws-compare-list{ margin: 0; padding-left: 1.1rem; }
+.ws-compare-list li{ margin: 0 0 8px; overflow-wrap: anywhere; }
+.ws-compare-sides{ display: flex; flex-direction: column; gap: 2px; margin-top: 2px; }
+.ws-sheet-rm{ margin-left: auto; }

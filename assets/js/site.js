@@ -268,6 +268,7 @@
       { href: '/relationships.html', deep: true, code: 'All', title: 'Where to start in your relationship', note: 'Partners, family, co-parents, friends, roommates, coworkers and caregivers' },
       { href: '/new-parent.html', code: 'New', title: 'New baby, sharing the load', note: 'Three steps for the baby jobs and the invisible ones' },
       { href: '/co-parenting.html', code: 'New', title: 'Separated co-parents', note: 'Calmer handoffs, a tone check, and a route for a co-parent who won’t cooperate' },
+      { href: '/parents.html#stepfamilies', code: 'New', title: 'Stepfamilies and blended families', note: 'The parent in the middle, the stepparent’s place, and children in two homes' },
       { href: '/parents.html', code: 'New', title: 'For parents', note: 'Big feelings, siblings who fight, teens, and watching the pups together' },
       { href: '/teens.html', code: 'New', title: 'For teens', note: 'Parents, friends, feelings and dating, written for you' },
       { href: '/groups.html', code: 'New', title: 'Leading a group', note: 'Six sessions with discussion questions and handouts, no sign-up' },
@@ -492,6 +493,19 @@
 
 
   // Each menu group names a few pages (pick) that show first; the rest wait behind "All N pages"
+  // in the menus, tools are named by what they do; the tool's own name follows in brackets
+  var PLAIN_LABEL = {
+    '/signal-translator.html': 'Check a message before you send it',
+    '/conversation-reader.html': 'Read a tricky conversation calmly',
+    '/lemonade-stand.html': 'Who does what, and who pays what (Lemonade Stand)',
+    '/wavelength.html': 'How you talk and listen (Wavelength)',
+    '/wiring-card.html': 'A card on how you take in words (Wiring Card)',
+    '/carrier-wave-decoder.html': 'When a talk goes sideways (Decoder)',
+    '/perspective-shifter.html': 'See it from their side',
+    '/soundscapes.html#brain-breakers': 'Calm music (Brain Breakers)',
+    '/workpapers/fill/suite.html': 'All the worksheets in one place (Workpaper Suite)'
+  };
+  function menuLabel(it) { return PLAIN_LABEL[it.href] || it.title; }
   function groupLinks(g) { return g.items.filter(function (i) { return i.href && i.href !== '/index.html' && i.menu !== false; }); }
   function groupPicks(g) {
     var all = groupLinks(g), seen = {}, out = [];
@@ -528,11 +542,15 @@
         sec = el('div', { class: 'tol-index-section', id: (opts.page ? 'contents-' : 'tol-sec-') + s.id });
         sec.appendChild(el(opts.h || 'h3', null, esc(s.title)));
       }
+      if (opts.accordion && opts.full && s.id === opts.open) {
+        // arrived from "All N pages in …": the whole list straight away
+        var whole = fullList(s, true); whole.classList.add('tol-picks'); sec.appendChild(whole); wrap.appendChild(sec); return;
+      }
       if (opts.accordion) {
         // a few pages first, plain names only; "Show all" opens the full list with its headings and notes
         var short = el('ol', { class: 'tol-picks' });
         groupPicks(s).forEach(function (it) {
-          var pa = el('a', { class: 'tol-row', href: it.href }, '<span class="tol-title">' + esc(it.title) + '</span>');
+          var pa = el('a', { class: 'tol-row', href: it.href }, '<span class="tol-title">' + esc(menuLabel(it)) + '</span>');
           if (it.href.split('#')[0] === current) pa.setAttribute('aria-current', 'page');
           var pli = el('li'); pli.appendChild(pa); short.appendChild(pli);
         });
@@ -564,10 +582,10 @@
         if (it.href.split('#')[0] === current) a.setAttribute('aria-current', 'page');
         a.innerHTML =
           (plain ? '' : '<span class="tol-code">' + esc(it.code || '') + (it.code ? '<span class="sr-only">: </span>' : '') + '</span>') +
-          '<span class="tol-title">' + esc(it.title) + (it.note ? '<small>' + esc(it.note) + '</small>' : '') + '</span>' +
+          '<span class="tol-title">' + esc(plain ? menuLabel(it) : it.title) + (it.note ? '<small>' + esc(it.note) + '</small>' : '') + '</span>' +
           '<span class="tol-access">' + (it.paid && !CONFIG.openAll ? (isMember ? 'unlocked' : (CONFIG.freePreview ? 'Free with sign-up' : 'members')) : '') + '</span>';
         var li = el('li', it.foot ? { class: 'tol-foot-row' } : null); li.appendChild(a);
-        if (it.deep) li.appendChild(el('a', { class: 'dig tol-dig', href: deepHref(it) }, 'Dig deeper'));
+        if (it.deep && !plain) li.appendChild(el('a', { class: 'dig tol-dig', href: deepHref(it) }, 'Dig deeper'));  // the menu stays simple: each page links its own full version
         ol.appendChild(li);
       });
       return ol;
@@ -604,14 +622,14 @@
     var menu = el('div', { class: 'tol-drop' + (alignRight ? ' is-right' : ''), id: 'tol-drop-' + id, hidden: '' });
     var ul = el('ul');
     groupPicks(s).forEach(function (it) {
-      var a = el('a', { href: it.href }, esc(it.title));
+      var a = el('a', { href: it.href }, esc(menuLabel(it)));
       if (it.href.split('#')[0] === current) a.setAttribute('aria-current', 'page');
       var li = el('li'); li.appendChild(a); ul.appendChild(li);
     });
     menu.appendChild(ul);
     var n = groupCount(s);
     var all = el('button', { type: 'button', class: 'tol-drop-all', 'aria-controls': 'tol-panel' }, 'All ' + n + ' pages in ' + esc(name) + ' &rarr;');
-    all.addEventListener('click', function () { openPanel(id); });
+    all.addEventListener('click', function () { openPanel(id, false, true); });
     menu.appendChild(all);
     btn.addEventListener('click', function () {
       var wasOpen = openDrop && openDrop.btn === btn;
@@ -657,18 +675,19 @@
     lsSet('tol-recent', JSON.stringify(list.slice(0, 6)));
   }
 
-  function openPanel(sectionId, toSearch) {
+  function openPanel(sectionId, toSearch, full) {
     lastFocus = document.activeElement;
     var pu = panel.querySelector('[data-pickup="menu"]');
     if (pu && !toSearch) loadPickUp(function () { window.TOLPickUp.mount(pu, 'menu'); });
     closeDrop();
-    panel.querySelector('.tol-index').replaceWith(buildIndex({ accordion: true, open: sectionId }));
+    panel.querySelector('.tol-index').replaceWith(buildIndex({ accordion: true, open: sectionId, full: !!full }));
     if (!toSearch) { var q0 = panel.querySelector('.tol-find input'); if (q0 && q0.value) { q0.value = ''; runSearch(''); } }
     else { var q1 = panel.querySelector('.tol-find input'); if (q1 && q1.value) runSearch(q1.value); }
     scrim.hidden = false; panel.hidden = false;
     setInert(true);
     document.querySelectorAll('[aria-controls="tol-panel"]').forEach(function (b) { b.setAttribute('aria-expanded', 'true'); });
     panel.scrollTop = 0;  // start at the top so every section name is in view
+    if (full && sectionId) { var openSec = panel.querySelector('#tol-sec-' + sectionId); if (openSec) openSec.scrollIntoView({ block: 'start' }); }
     if (toSearch) panel.querySelector('.tol-find input').focus({ preventScroll: true });
     else panel.querySelector('.tol-close').focus({ preventScroll: true });
   }
@@ -1968,8 +1987,8 @@
 
   // Quiet mode and Easy reading: one tap turns on a bundle; turning it off puts back what was there
   var PRESETS = {
-    quiet: { key: QUIET_KEY, keys: [STILL_KEY, HELP_KEY, SOUND_KEY].concat(SOUND_KEYS),
-      on: function () { lsSet(HELP_KEY, '1'); setSounds(true); lsSet(STILL_KEY, '1'); } },
+    quiet: { key: QUIET_KEY, keys: [STILL_KEY, HELP_KEY, SOUND_KEY, BUB_KEY].concat(SOUND_KEYS),
+      on: function () { lsSet(HELP_KEY, '1'); setSounds(true); lsSet(STILL_KEY, '1'); lsSet(BUB_KEY, '1'); } },  // still, silent, and plain text without a box round every line
     easy: { key: EASY_KEY, keys: [FONT_KEY, SPACE_KEY, TINT_KEY, STILL_KEY, HELP_KEY],
       on: function () { lsSet(FONT_KEY, 'easy'); lsSet(SPACE_KEY, 'wide'); if (!lsGet(TINT_KEY)) lsSet(TINT_KEY, 'cream'); lsSet(STILL_KEY, '1'); } }  // Easy reading leaves the helpers alone; Hide the helpers is its own switch
   };
@@ -2061,7 +2080,7 @@
       '<div class="tol-set-head"><h2 id="' + id + '-h">Settings</h2><button type="button" class="tol-set-close">Close</button></div>' +
       '<p class="tol-set-intro">Make the site calmer, or easier to read. Your choices stay on this device only.</p>' +
       '<div class="tol-set-presets">' +
-        '<button type="button" class="tol-preset" data-preset="quiet" aria-pressed="false"><span class="tol-preset-ico" aria-hidden="true">&#127769;</span><strong>Quiet mode</strong><small>A still page. No helpers, pop-ups or sounds, and no levels or petals.</small><span class="tol-preset-state" aria-hidden="true"></span></button>' +
+        '<button type="button" class="tol-preset" data-preset="quiet" aria-pressed="false"><span class="tol-preset-ico" aria-hidden="true">&#127769;</span><strong>Quiet mode</strong><small>A still page in plain text. No helpers, pop-ups or sounds, no boxes round every line, and no levels or petals.</small><span class="tol-preset-state" aria-hidden="true"></span></button>' +
         '<button type="button" class="tol-preset" data-preset="easy" aria-pressed="false"><span class="tol-preset-ico" aria-hidden="true">&#128214;</span><strong>Easy reading</strong><small>A clear, roomy font, more space between letters and lines, shorter lines, a soft tint and a still page.</small><span class="tol-preset-state" aria-hidden="true"></span></button>' +
       '</div>' +
       '<h3 class="tol-set-k">Calm</h3>' +
@@ -2182,7 +2201,7 @@
     var main = document.querySelector('main'); if (!main) return;
     lsSet('tol-comfort-offer', 'shown'); // offered once; Settings at the top is always there
     var box = el('aside', { class: 'tol-offer no-bubble no-cheer', 'aria-label': 'Make the site calmer or easier to read' },
-      '<p><strong>Would a calmer page help?</strong> Quiet mode keeps everything still and silent, with no pop-ups. Easy reading uses a clear font and roomy lines. You can change either one any time in <em>Settings</em> at the top.</p>' +
+      '<p><strong>Would a calmer page help?</strong> Quiet mode keeps everything still, silent and plain, with no pop-ups. Easy reading uses a clear font and roomy lines. You can change either one any time in <em>Settings</em> at the top.</p>' +
       '<p class="tol-offer-row"><button type="button" data-offer="quiet">Quiet mode</button><button type="button" data-offer="easy">Easy reading</button><button type="button" data-offer="no" class="is-quiet">No thanks</button></p>');
     box.addEventListener('click', function (e) {
       var b = e.target.closest('[data-offer]'); if (!b) return;

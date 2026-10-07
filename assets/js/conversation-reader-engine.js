@@ -211,7 +211,9 @@
     absolute: { label: 'Always / never', heat: 1.5, tone: 'hot',
                 hear: '“Always” and “never” turn one moment into a verdict on everything. The other person usually argues with the absolute instead of hearing the point.',
                 instead: 'Name the specific time: “this week” or “the last two times.”',
-                need: 'The need underneath may be fair. Say it as one example and one ask: “On Sunday I called first. Could you call me this week?”' },
+                need: 'The need underneath may be fair. Say it as one example and one ask: “On Sunday I called first. Could you call me this week?”',
+                // "I'm always the one who reaches out": a pattern noticed on your own side
+                pattern: 'Naming a pattern you’ve noticed isn’t the same as a verdict.' },
     dismiss:  { label: 'Dismissing', heat: 2.5, tone: 'hot',
                 hear: 'Words like “calm down,” “whatever” or “you’re overreacting” tell the other person their feeling doesn’t count. They usually raise the heat.',
                 instead: 'Say what you can hear, even if you see it differently: “I can tell this matters to you.”',
@@ -316,6 +318,8 @@
     });
     // "Fine. Whatever works for you." / "whatever you want" / "I don't care": may be resigned hurt
     marks.forEach(function (m) { if (m.kind === 'dismiss' && /^(?:(?:fine|ok(?:ay)?|sure)[.,!]?\s*)?(?:whatever(?: works for you| works| you want| you like| you think| you say)?|i don['’]t care|do what you want)[.!…]*$/i.test(String(m.text).trim()) && /^\s*(?:fine|ok(?:ay)?|sure)?[.,!]?\s*(?:whatever|i don['’]t care|do what you want)/i.test(text)) m.resigned = true; });
+    // "I'm always the one who reaches out": a pattern the speaker has noticed on their own side, not a verdict on the other person
+    marks.forEach(function (m) { if (m.kind === 'absolute' && !m.whole && /\bi(?:['’]m| am)?\s+(?:always|never)\b|\bi(?:['’]m| am) (?:the (?:only )?one who) (?:always|never)\b/i.test(text.slice(Math.max(0, m.start - 22), m.end))) m.pattern = true; });
     if (P && P.idioms) P.idioms(text).forEach(function (x) { if (!/kill|murder|strangle/i.test(x.text)) marks.push({ kind: 'idiom', start: x.start, end: x.start + x.text.length, text: x.text, means: x.means, words: x.words }); });
     var edgy = marks.some(function (m) { return KINDS[m.kind].heat > 0; });
     // Shouting: words in capitals (3+ letters, not common acronyms) and stacked punctuation
@@ -456,6 +460,10 @@
     }
     out.tallyMe = tally(function (t) { return t.mine; });
     out.tallyThem = tally(function (t) { return !t.mine; });
+    // "Fine. Whatever works for you." is counted under its gentler name, the same as on the message card
+    function resigned(filter) { return out.turns.filter(filter).reduce(function (a, t) { return a + t.marks.filter(function (m) { return m.kind === 'dismiss' && m.resigned; }).length; }, 0); }
+    out.resignedMe = resigned(function (t) { return t.mine; });
+    out.resignedThem = resigned(function (t) { return !t.mine; });
 
     // Repair attempts the other person didn't take
     out.missedRepairs = [];

@@ -182,8 +182,8 @@ textarea.pastein{width:100%;min-height:120px;border:1px solid var(--line);backgr
   </div>
 
   <section class="panel" id="compare" hidden aria-labelledby="cmp-h" style="margin-top:18px">
-    <h2 id="cmp-h">The two cards, side by side</h2>
-    <p class="hint">Rows where your picks don&rsquo;t overlap are shaded gold: not a problem, just the best places for a short talk, each with a bridge to try. Rows you share are shaded green.</p>
+    <h2 id="cmp-h" tabindex="-1">The two cards, side by side</h2>
+    <p class="hint">Rows where your picks don&rsquo;t overlap are shaded gold: not a problem, just the best places for a short talk. Rows you share are shaded green. Each gold row, and each line only one card has, comes with a bridge to try.</p>
     <div class="cmp-wrap" id="cmp-body"></div>
   </section>
   <div class="wallet" id="wallet" aria-hidden="true"></div>
@@ -212,7 +212,7 @@ textarea.pastein{width:100%;min-height:120px;border:1px solid var(--line);backgr
     upset: [["space","company"],["space","talk"]]
   };
   const KEEP_KEY = "tol-wiring-card", DRAFT_KEY = "tol-wiring-draft";
-  let pending = null, undoSnap = null, undoMsg = "", showCmp = false, pasteOpen = false, pasteDraft = "", pasteMsg = "";
+  let pending = null, undoSnap = null, undoMsg = "", showCmp = false, cmpHidden = false, pasteOpen = false, pasteDraft = "", pasteMsg = "";
   const LINES = [
     {id:"receive", q:"How I receive things best", opts:[["writing","In writing"],["face","Face to face"],["call","A short call"],["voice","A voice note I can replay"],["one","One thing at a time"],["list","A written list"],["aloud","Read the important parts to me"]]},
     {id:"words", q:"I take words", opts:[["literal","Literally"],["tone","I read tone as part of the message"],["both","Literally when it matters, tone when it is light"]]},
@@ -224,6 +224,7 @@ textarea.pastein{width:100%;min-height:120px;border:1px solid var(--line);backgr
     {id:"ask", q:"A request lands best as", opts:[["could","\"Could you ___ by ___?\""],["list","One written list, not a stack of hints"],["headline","The ask in the first sentence"],["choice","Two clear options, not an open guess"]]},
     // an optional group, shown under its own heading in the form; on the card it reads as plain lines, not a label
     {id:"adhd", q:"Good to know about me", group:"Often shared by ADHD folks", opts:[["remind","Reminders help me; they aren't nagging"],["crit","Criticism hits hard: start with what's okay"],["double","Side by side helps me start (body doubling)"],["time","Time slips for me: give me a heads-up before it matters"],["steps","Big jobs go better in small, visible steps"],["vanish","If I interrupt, it's so the thought doesn't vanish, not because I'm not listening"],["forget","If I forget something, it isn't that I don't care"]]},
+    {id:"autism", q:"Also good to know about me", group:"Often shared by autistic folks", opts:[["plan","Tell me the plan, and tell me if it changes"],["literal","Say it literally; I'll take it as said"],["senses","Noise, light or touch can wear me out"],["quiet","If I go quiet, I'm processing, not upset"],["routine","Routines help me; a change costs me energy"],["eyes","I may not look at you, and I'm still listening"],["script","A script or a rehearsal helps before a new or hard talk"]]},
     {id:"depleted", q:"When I'm running low, what helps", opts:[["shorter","Shorter messages"],["writing","Writing only"],["volume","Lower volume and fewer people"],["notopic","Don't add a second topic"],["return","Name a return time, then give space"]]},
     {id:"sensory", q:"Sensory needs", opts:[["noise","Quiet, or a lower volume"],["light","Softer light, no glare"],["room","Room to move, not boxed in"],["touch","Ask before touching"],["scent","Strong smells are hard for me"],["breaks","Short breaks in long talks"]]},
     {id:"notice", q:"How much notice I need for a change of plan", one:true, opts:[["same","A heads-up the same day is fine"],["hours","A few hours"],["day","A day ahead"],["days","A few days, when I can"]]},
@@ -291,8 +292,67 @@ textarea.pastein{width:100%;min-height:120px;border:1px solid var(--line);backgr
       steps: "Name just the first small step, and write it where you can both see it.",
       vanish: "Keep a note handy so a thought can be parked, not lost. When it can’t wait, “Sorry, quick thought” and then hand the talk back.",
       forget: "Treat a slip as a setup problem, not a feelings one: a shared list or a reminder fixes more than a talk does."},
+      any: "Pick one line from this part of the card and try it for a week. Then check in: did it help?"},
+    autism: {each: {
+      plan: "Share the plan ahead, in writing if you can, and send a quick note the moment it changes: “Change of plan: we’re leaving at six, not five.”",
+      literal: "Say what you mean in plain words, and mean what you say. If you’re joking or hinting, say so.",
+      senses: "For a talk that matters, pick a quieter, softer spot, and ask before a hug or a touch.",
+      quiet: "Take quiet as thinking, not a mood. Ask once, “Want some time with that?”, then wait without pushing.",
+      routine: "Keep the steady parts of the day steady, and when something has to move, say so early and say what stays the same.",
+      eyes: "Don’t ask for eye contact as proof of listening. Side by side, on a walk or in the car, often works better.",
+      script: "Give a heads-up about what the talk is about, so there’s time to get ready. “Tomorrow, can we talk about the holidays?”"},
       any: "Pick one line from this part of the card and try it for a week. Then check in: did it help?"}
   };
+  // When only one card has a line, a bridge for the other person: what they can do to meet it. A pick's own bridge first, else the line's.
+  const SOLO = {
+    wire: {_: "Read this line on their card, and send important things the way it says words reach them, not the way you’d take them in.",
+      written: "Put anything important in writing too, even if you’ve said it out loud.", spoken: "For anything important, say it out loud or send a voice note, not only a text.",
+      moment: "Leave a beat after anything important, and don’t take a pause as a no.", noise: "Move important talks somewhere quiet, and turn the TV or music down first.",
+      fast: "Slow down and take one topic at a time when it matters.", longtext: "Keep important messages short, with the ask in the first line.",
+      short: "Keep messages short and clear when they’re busy or tired.", tone: "Watch your tone as much as your words, and say the feeling out loud rather than leaving it to tone.",
+      feelings: "Give feelings a little time to find words. “Take your time; I’m here” helps more than “What’s wrong?”", change: "Give a heads-up as early as you can when a plan changes.",
+      repeat: "Leave room for them to say it back in their own words, and treat that as care, not doubt."},
+    receive: {_: "Send important things the way their card asks, even if it isn’t how you’d do it.",
+      writing: "Follow anything important with a short written note.", face: "Save big things for face to face, not a text.", call: "A short call often works better than a long text thread.",
+      voice: "Try a voice note they can replay.", one: "One thing at a time: finish one topic before starting the next.", list: "Put it in one written list instead of several messages.",
+      aloud: "Read the important parts out loud, without making a thing of it."},
+    words: {_: "When it matters, say plainly what you mean, and ask if you aren’t sure how they meant something.",
+      literal: "Say exactly what you mean. Hints, sarcasm and “you know what I mean” are easy to miss.", tone: "Your tone carries as much as your words for them, so say it the way you’d want it heard.",
+      both: "When it matters, keep it literal; when it’s light, tone is fine. If unsure, ask “Serious or joking?”"},
+    time: {_: "Ask your question, then give them the time their card asks for before you expect an answer.",
+      sec: "They can usually answer quickly, so a quick question is fine.", min: "Leave a few minutes before expecting an answer: “Take your time, I’ll check back in ten.”",
+      tomorrow: "For anything big, say “No rush; tomorrow is fine,” and mean it.", write: "Put the question in a message so they can answer when they’re ready."},
+    quiet: {_: "Read their quiet the way their card says, and ask once instead of guessing.",
+      think: "Take their quiet as thinking, and give it a minute.", load: "If they go quiet, lower the volume and leave the rest for later.",
+      space: "Give space when they go quiet, and trust that they’ll come back.", upset: "Ask once, gently: “Are you okay, or would you like a bit of time?”",
+      fine: "Their quiet usually means nothing is wrong, so there’s no need to fix it."},
+    texts: {_: "Read their short texts the way their card says, and ask once if you aren’t sure.",
+      brief: "A short text from them is just short. It isn’t a mood.", wrong: "If a short text sounds off, ask once: “All okay?”",
+      minute: "A short text can mean “give me a minute.” Give them one.", done: "“Done for now” means for now, not done with you. Pick it up later."},
+    upset: {_: "When they’re upset, ask once what they need, and go with the answer.",
+      space: "Give them space first, and agree a time to come back to it.", company: "Sit with them quietly; you don’t have to fix it.", talk: "Make time to talk it through, without rushing to solutions.",
+      plan: "Help write down a short plan of what happens next.", hug: "Wait to be asked before a hug or a touch.", signal: "Say it plainly: “We’re okay.” It helps more than you’d think."},
+    avoid: {_: "Pick one thing from their list to steer clear of this week."},
+    ask: {_: "When you ask them for something, use the shape their card asks for."},
+    adhd: {_: BRIDGES.adhd.any}, autism: {_: BRIDGES.autism.any},
+    depleted: {_: "Agree a word or an emoji that means “I’m running low,” and when they send it, switch to what their card says helps."},
+    sensory: {_: "For talks that matter, set things up the way their card asks. It costs you little and helps them a lot.",
+      noise: "Pick a quiet spot, or turn things down, before a talk that matters.", light: "Soften the light, or sit away from the glare.",
+      room: "Leave room to move: sit side by side, or walk and talk.", touch: "Ask before a hug or a touch, even a friendly one.",
+      scent: "Go easy on strong scents when you’ll be close.", breaks: "Build in short breaks during long talks, and don’t read one as walking away."},
+    notice: {_: "When a plan changes, tell them as early as their card asks, even if it isn’t final yet."},
+    channel: {_: "Use the place their card gives for each kind of topic: plans by text, feelings in person, and so on."},
+    interrupt: {_: "Get their attention the way their card says, and keep “this is urgent” for when it is."},
+    quiethelp: {_: "If they go quiet, do what their card says helps, once, and trust them to come back.",
+      time: "Give them time, and trust them to come back.", once: "Check in once, gently, then leave it.", write: "Offer to carry on in writing.",
+      sit: "Sit with them without talking. Being there is enough.", when: "Ask when they’d like to pick it up, then wait for that time."}
+  };
+  function soloBridge(id, ids){
+    const S0 = SOLO[id]; if(!S0) return "";
+    const own = ids.filter(x=>S0[x]); if(own.length) return own.slice(0,2).map(x=>S0[x]).join(" ");
+    if(BRIDGES[id] && BRIDGES[id].each){ const e = ids.filter(x=>BRIDGES[id].each[x]); if(e.length) return e.slice(0,2).map(x=>BRIDGES[id].each[x]).join(" "); }
+    return S0._ || "";
+  }
   function bridgeFor(id, ia, ib){
     const B = BRIDGES[id]; if(!B) return "";
     if(B.each){ const only = ia.filter(x=>!ib.includes(x)).concat(ib.filter(x=>!ia.includes(x))).filter(x=>B.each[x]); return only.length ? only.slice(0,2).map(x=>B.each[x]).join(" ") : B.any; }
@@ -314,6 +374,7 @@ textarea.pastein{width:100%;min-height:120px;border:1px solid var(--line);backgr
     "depleted:shorter":"need shorter messages when running low", "depleted:return":"want a return time, then space, when running low", "sensory:noise":"do better somewhere quiet", "sensory:touch":"want to be asked before touching",
     "wire:written":"remember written words better", "wire:spoken":"remember spoken words better", "wire:moment":"need a moment to turn words into meaning", "wire:noise":"find background noise hard to talk over",
     "wire:fast":"get lost in fast talk or many topics at once", "wire:tone":"feel tone strongly", "wire:change":"get thrown by a sudden change of plan", "wire:short":"do best with short, clear messages",
+    "autism:plan":"want the plan, and a heads-up when it changes", "autism:literal":"want things said literally", "autism:senses":"get worn out by noise, light or touch", "autism:quiet":"go quiet to process, not because you’re upset", "autism:routine":"find routines helpful",
     "adhd:remind":"find reminders helpful, not nagging", "adhd:crit":"want to hear what’s okay before what to change", "adhd:time":"want a heads-up before time matters", "adhd:double":"start more easily side by side"
   };
   function joinAnd(a){ return a.length < 2 ? a.join("") : a.slice(0,-1).join(", ") + (a.length > 2 ? "," : "") + " and " + a[a.length-1]; }
@@ -461,7 +522,7 @@ textarea.pastein{width:100%;min-height:120px;border:1px solid var(--line);backgr
     };
     LINES.filter(l=>CORE.includes(l.id)).forEach(line=>{ h += lineHtml(line); });
     // optional groups, such as "Often shared by ADHD folks": in view, with their own heading, and fine to leave blank
-    LINES.filter(l=>l.group).forEach(line=>{ h += '<div class="lgroup"><p class="ghead">'+esc(line.group)+' <span class="how">(optional; anyone can pick these, no diagnosis needed)</span></p>'+lineHtml(line)+'</div>'; });
+    LINES.filter(l=>l.group).forEach(line=>{ h += '<div class="lgroup" data-group="'+line.id+'"><p class="ghead">'+esc(line.group)+' <span class="how">(optional; anyone can pick these, no diagnosis needed)</span></p>'+lineHtml(line)+'</div>'; });
     const extra = LINES.filter(l=>!CORE.includes(l.id) && !l.group), filledExtra = extra.filter(l=>lineText(who, l)).length + (st.wiring.size ? 1 : 0);
     const open = moreOpen[who] || filledExtra > 0;
     h += '<details class="more" data-more="'+who+'"'+(open?" open":"")+'><summary>More lines, optional <span class="how">('+(extra.length+1)+' more'+(filledExtra?', '+filledExtra+' filled in':'')+')</span></summary>';
@@ -500,7 +561,7 @@ textarea.pastein{width:100%;min-height:120px;border:1px solid var(--line);backgr
     }
     if(pasteOpen){
       h += '<div class="panel" id="pastebox" style="margin-top:12px"><h2>Paste your partner&rsquo;s card</h2>' +
-        '<p class="hint">On their device, they make their card and tap &ldquo;Copy the card&rdquo;, then send it to you. Paste the whole message here and it fills in the other person&rsquo;s card, so you can compare without retyping. Nothing is sent anywhere.</p>' +
+        '<p class="hint">On their device, they make their card and tap &ldquo;Copy the card&rdquo; or &ldquo;Copy a link to my card&rdquo;, then send it to you. Paste the whole message or the link here and it fills in the other person&rsquo;s card, so you can compare without retyping. (Opening the link does the same thing.) Nothing is sent anywhere.</p>' +
         '<label class="lab" for="pastetext">Their copied card</label><textarea id="pastetext" class="pastein" spellcheck="false">'+esc(pasteDraft)+'</textarea>' +
         '<div class="actions"><button class="go" type="button" id="pastego">Fill in their card</button><button class="ghost" type="button" id="pastecancel">Cancel</button></div>' +
         '<p class="privacy" id="pastemsg" role="status" aria-live="polite">'+esc(pasteMsg)+'</p></div>';
@@ -523,9 +584,10 @@ textarea.pastein{width:100%;min-height:120px;border:1px solid var(--line);backgr
       }).join("");
       const body = rows ? '<dl>'+rows+'</dl>' : (wire || st.wave ? '' : '<p class="emptycard">Nothing on the card yet. Tap an answer in the form and it shows up here.</p>');
       return '<article class="sheet"><p class="ck">WIRING CARD &middot; NOT A DIAGNOSIS</p><h2>'+esc(name)+'</h2>'+(st.wave?'<p class="wavecode">Wave Code '+esc(waveLabel(st.wave))+'</p>':'')+(wire?'<p class="wire">'+esc(wire)+'</p>':'')+body+'<p class="fine">Applies more strictly when I am running low. Not a contract, and not a label. Change it when it stops being true. Spread Love &amp; Acceptance &middot; spreadloveandacceptance.com/wiring-card.html</p></article>';
-    }).join("") + '<div class="actions"><button class="go" type="button" id="copy">Copy the card</button><button class="ghost" type="button" id="copymd">Copy as a team snippet (Markdown)</button><button class="ghost" type="button" id="pdf">Save as PDF</button><button class="ghost" type="button" id="print">Print</button><button class="ghost" type="button" id="printwallet">Print a wallet-size card</button></div><p class="privacy" id="copymsg" role="status" aria-live="polite"></p>';
+    }).join("") + '<div class="actions"><button class="go" type="button" id="copy">Copy the card</button><button class="ghost" type="button" id="copylink">Copy a link to my card</button><button class="ghost" type="button" id="copymd">Copy as a team snippet (Markdown)</button><button class="ghost" type="button" id="pdf">Save as PDF</button><button class="ghost" type="button" id="print">Print</button><button class="ghost" type="button" id="printwallet">Print a wallet-size card</button></div><p class="privacy" id="copymsg" role="status" aria-live="polite"></p>';
     $("#printwallet").addEventListener("click", printWallet);
     $("#copy").addEventListener("click", copyCard);
+    $("#copylink").addEventListener("click", copyLink);
     $("#copymd").addEventListener("click", copyMarkdown);
     $("#print").addEventListener("click", ()=>window.print());
     $("#pdf").addEventListener("click", savePdf);
@@ -570,7 +632,7 @@ textarea.pastein{width:100%;min-height:120px;border:1px solid var(--line);backgr
   }
 
   // "Keep my card on this device": off by default, in this browser only, removed by Erase.
-  function snapshot(){ const o = {people: people.slice()}; ["A","B"].forEach(w=>{ const s = state[w]; o[w] = {name: s.name, wiring: [...s.wiring], picks: s.picks, custom: s.custom, wave: s.wave||""}; }); return o; }
+  function snapshot(){ const o = {people: people.slice(), cmp: showCmp ? "open" : (cmpHidden ? "hidden" : "")}; ["A","B"].forEach(w=>{ const s = state[w]; o[w] = {name: s.name, wiring: [...s.wiring], picks: s.picks, custom: s.custom, wave: s.wave||""}; }); return o; }
   function keepNow(){ if(!keep) return; try{ localStorage.setItem(KEEP_KEY, JSON.stringify(snapshot())); }catch(e){} }
   function readKept(){
     try{
@@ -713,6 +775,29 @@ textarea.pastein{width:100%;min-height:120px;border:1px solid var(--line);backgr
   function copyCard(){
     copyText(people.map(plain).join("\n\n") + "\n\nTo compare on your own device: open spreadloveandacceptance.com/wiring-card.html and tap “Paste my partner’s card”.", $("#copy"), "Copied as plain text. The other person can paste it into their Wiring Card with “Paste my partner’s card” to compare.");
   }
+  // A link that carries your card after the #, the way Wavelength's ?compare= link carries a Wave Code. The part after
+  // the # stays in the browser: it is never sent to the website when the link is opened.
+  function cardLink(who){ return location.origin + location.pathname + "#card=" + cardCode(who || "A"); }
+  function copyLink(){
+    if(!hasContent("A") && !state.A.name.trim()){ const m = $("#copymsg"); if(m) m.textContent = "Fill in a line or two on your card first, then copy the link."; return; }
+    copyText(cardLink("A"), $("#copylink"), "Link copied. Send it to them: it opens this page with your card next to theirs. Your card travels inside the link itself; nothing is stored or sent anywhere else.");
+  }
+  // Opened from someone's card link (wiring-card.html#card=WC1....): bring their card in, then take it out of the address bar.
+  function readLink(){
+    const hsh = String(location.hash||"");
+    if(!/^#card=WC1\./.test(hsh)) return false;
+    try{ history.replaceState(history.state, "", location.pathname + location.search); }catch(e){}
+    const cards = readCardCodes(decodeURIComponent(hsh.slice(6)));
+    if(!cards.length){ lastSwap = "That card link looks cut off. Ask them to copy it again, or to send the copied card instead."; return false; }
+    if(sameCard(cards[0], state.A)){ lastSwap = "That link is your own card, so there was nothing new to bring in."; return false; }
+    const nm = cards[0].name.trim();
+    bringIn(decodeURIComponent(hsh.slice(6)));
+    if(!hasContent("A")) showCmp = false;
+    lastSwap = hasContent("A")
+      ? (nm ? nm + "’s card" : "Their card") + " came in with the link. It’s filled in below yours, and the two cards are side by side further down."
+      : (nm ? nm + "’s card" : "Their card") + " came in with the link, and it’s filled in below. Fill in your own card above, and the two show side by side further down.";
+    return true;
+  }
   function copyMarkdown(){
     copyText(people.map(markdown).join("\n\n---\n\n"), $("#copymd"), "Copied as Markdown. Paste it into a Slack canvas, Notion page or team wiki.");
   }
@@ -755,7 +840,9 @@ textarea.pastein{width:100%;min-height:120px;border:1px solid var(--line);backgr
       } else if(ta || tb) tag = "Only one card has this";
       h += '<tr class="'+cls+'"><th scope="row">'+esc(q)+(tag?'<br><span class="tag">'+esc(tag)+'</span>':'')+'</th><td data-l="'+esc(nA)+'">'+(ta?esc(ta):'<em>blank</em>')+'</td><td data-l="'+esc(nB)+'">'+(tb?esc(tb):'<em>blank</em>')+'</td></tr>';
       // a line only one card has usually needs no talk, except the optional groups: they're about what helps one of you
-      if(cls==="diff" || (BRIDGES[id] && BRIDGES[id].each && (ia.length || ib.length) && !cls)){ const br = bridgeFor(id, ia, ib); if(br) h += '<tr class="bridge"><td colspan="3"><strong>A bridge to try:</strong> '+esc(br)+'</td></tr>'; }
+      // every line only one card has gets a bridge too: what the other person can do to meet it
+      const br = cls==="diff" ? bridgeFor(id, ia, ib) : (!(ta && tb) ? soloBridge(id, ta ? ia : ib) : "");
+      if(br) h += '<tr class="bridge"><td colspan="3"><strong>A bridge to try:</strong> '+esc(br)+'</td></tr>';
     });
     // first what the two cards share, then (if there's a lot) a nudge to start small
     const said = shared.filter(t=>!/^picked /.test(t)).concat(shared.filter(t=>/^picked /.test(t))).slice(0,3);
@@ -836,10 +923,10 @@ textarea.pastein{width:100%;min-height:120px;border:1px solid var(--line);backgr
     if(t.id==="confirm-yes"){ const p = pending; pending = null; undoSnap = Object.assign({who: p.who}, JSON.parse(JSON.stringify(snapshot()))); undoMsg = "The guide’s example is in. Changed your mind?"; p.run(); paintForms(); paint(); const u = $("#undo"); if(u) u.focus(); return; }
     if(t.id==="confirm-no"){ const w0 = pending && pending.who; pending = null; paintForms(); const b = document.querySelector('[data-example="'+w0+'"]'); if(b) b.focus(); return; }
     if(t.id==="undo"){ const w0 = undoSnap.who; loadSnap(undoSnap); undoSnap = null; paintForms(); paint(); const m = $("#pickmsg"); if(m) m.textContent = "Undone. Your own answers are back."; const b = document.querySelector('[data-example="'+w0+'"]'); if(b) b.focus(); return; }
-    if(t.id==="cmpbtn"){ showCmp = !showCmp; paintForms(); paint(); if(showCmp) $("#compare").scrollIntoView({block:"start", behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth"}); return; }
+    if(t.id==="cmpbtn"){ showCmp = !showCmp; cmpHidden = !showCmp; paintForms(); paint(); if(showCmp) toCompare(); return; }
     if(t.id==="cleardraft"){
       if(!t.dataset.armed){ t.dataset.armed = "1"; t.textContent = "Tap again to clear both cards"; setTimeout(()=>{ if(t.isConnected){ delete t.dataset.armed; t.textContent = "Clear"; } }, 4000); return; }
-      people.length = 0; people.push("A"); state.A = fresh(); state.B = fresh(); pending = null; undoSnap = null; showCmp = false;
+      people.length = 0; people.push("A"); state.A = fresh(); state.B = fresh(); pending = null; undoSnap = null; showCmp = false; cmpHidden = false;
       try{ sessionStorage.removeItem(DRAFT_KEY); }catch(err){}
       paintForms(); paint(); try{ sessionStorage.removeItem(DRAFT_KEY); }catch(err){}
       const m = $("#pickmsg"); if(m) m.textContent = keep ? "Cleared. The card kept on this device is blank now too; Erase removes it." : "Cleared. Nothing from this card is kept in this tab.";
@@ -871,8 +958,13 @@ textarea.pastein{width:100%;min-height:120px;border:1px solid var(--line);backgr
     const err = bringIn(text);
     if(err){ pasteMsg = err; const m = $("#pastemsg"); if(m) m.textContent = err; return; }
     paintForms(); paint();
-    const u = $("#undo"); if(u) u.focus({preventScroll:true});
-    const sec = document.querySelector('[data-who="B"].panel'); if(sec) sec.scrollIntoView({block:"start", behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth"});
+    // straight to the side-by-side: on a phone the other person's form is a long way above it
+    toCompare();
+  }
+  function toCompare(){
+    const box = $("#compare"); if(!box || box.hidden) return;
+    box.scrollIntoView({block:"start", behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth"});
+    const h = $("#cmp-h"); if(h) h.focus({preventScroll:true});
   }
   $("#forms").addEventListener("paste", e=>{ if(e.target.id !== "pastetext") return; setTimeout(()=>{ const ta = $("#pastetext"); if(ta && ta.value.trim()) { pasteDraft = ta.value; if(/WC1\./.test(ta.value)) pasteIn(ta.value); } }, 0); });
   $("#forms").addEventListener("change", e=>{
@@ -896,9 +988,17 @@ textarea.pastein{width:100%;min-height:120px;border:1px solid var(--line);backgr
   if(readKept()) keep = true;
   // this tab's own draft is the newest copy, kept or not
   try{ const d = JSON.parse(sessionStorage.getItem(DRAFT_KEY) || "null"); if(d && loadSnap(d)){ const hasB = people.includes("B"); if(!keep && (hasContent("A") || (hasB && hasContent("B")))) lastSwap = "Your card from earlier in this tab is back."; } }catch(e){}
+  // the side-by-side stays open after a reload when both cards have something on them, unless it was hidden on purpose
+  (function(){ let d = null; try{ d = JSON.parse(sessionStorage.getItem(DRAFT_KEY) || "null"); }catch(e){} if(!d){ try{ d = JSON.parse(localStorage.getItem(KEEP_KEY) || "null"); }catch(e){} }
+    cmpHidden = !!(d && d.cmp==="hidden");
+    if(people.includes("B") && hasContent("A") && hasContent("B") && !cmpHidden) showCmp = true; })();
+  const fromLink = readLink();
+  window.addEventListener("hashchange", ()=>{ if(readLink()){ paintForms(); paint(); toCompareOrB(); } });
+  function toCompareOrB(){ if(showCmp && hasContent("A")) toCompare(); else { const sec = document.querySelector('[data-who="B"].panel'); if(sec) sec.scrollIntoView({block:"start"}); } }
   window.addEventListener("pageshow", ev=>{ if(ev.persisted){ paintForms(); paint(); } });
   paintForms();
   paint();
+  if(fromLink) toCompareOrB();
   if(keep){ const m = $("#keepmsg"); if(m) m.textContent = "Picked up the card kept on this device. Press Erase to remove it."; }
 })();
 </script>

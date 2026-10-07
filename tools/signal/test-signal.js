@@ -360,7 +360,7 @@ TESTER.forEach(c=>{
 });
 FIX.map(f=>f.t).concat(WORK).forEach(t=>{ const an=E.analyze(t,{channel:"chat"}); const sc=E.score(an,["general"],"chat","v"); const v=E.verdict(an,sc,E.rewrite(an,{wirings:["general"]}));
   ok(v && v.text && v.text.split(/(?<=\.)\s/).length<=2, `"${t}": plain verdict missing or long: "${v&&v.text}"`);
-  if(sc.level[0]==="heavy") ok(v.id==="fight", `"${t}": heavy static but verdict "${v.text}"`);
+  if(sc.level[0]==="heavy") ok(v.id==="fight" || (an.apology && v.apology), `"${t}": heavy static but verdict "${v.text}"`);
   if(sc.level[0]==="clear" && !an.staticIds.length) ok(v.id==="ok", `"${t}": clear but verdict "${v.text}"`); });
 // jargon labels have a plain gloss
 ["absolute","label","passive","minim","vstd","ominous","hint","passiveag","stonewall","idiom","shout","vtime","nowhen","impera","oblig"].forEach(id=>ok(E.gloss(id).length>5 && !/static|wiring/i.test(E.gloss(id)), `${id}: no plain gloss`));
@@ -406,6 +406,43 @@ ok(!E.analyze("I said I'd call at 8.",{channel:"text"}).found.defend, "a promise
 { const an=E.analyze("Fine. Whatever works for you.",{channel:"text"});
   ok(/quiet hurt/i.test(E.FBY.brushoff.name) && /resigned hurt/i.test(E.FBY.brushoff.what) && /ask which/i.test(E.FBY.brushoff.what), "brush-off explains resigned hurt and asking");
   ok(an.sentences.some(se=>/quiet hurt/.test(se.mood)), "the sentence kind names quiet hurt too"); }
+
+// ---------- re-test: an apology with "but you…", words that are really in the message, inferred asks ----------
+{ const t="Oh no, sorry!! I was totally distracted, I'm the worst 😩 but you didn't have to say it like that";
+  const an=E.analyze(t,{channel:"text"});
+  ok(an.apology, `"${t}": a real apology`);
+  ok(an.found.sorrybut && /^but you didn't have to say it like that$/i.test(an.found.sorrybut[0]), `"${t}": the blaming clause is flagged: ${JSON.stringify(an.found.sorrybut)}`);
+  ok(E.FBY.sorrybut && E.FBY.sorrybut.kind==="static" && E.GLOSS.sorrybut && E.CHANGE_WHY.sorrybut && E.CHECK.sorrybut, "sorrybut has a name, gloss, change reason and check-back");
+  // a criticism-sensitive listener, or one who is stressed: the headline stays gentle, and says the apology is kept
+  [["adhd","v"],["anxiety","s"],["general","d"],["hsp","v"]].forEach(([w,st])=>{
+    const sc=E.score(an,[w],"text",st), r=E.rewrite(an,{wirings:[w], rel:"partner", channel:"text"}), v=E.verdict(an,sc,r);
+    ok(!/start a fight/i.test(v.text), `"${t}" [${w},${st}]: harsh headline "${v.text}" (${sc.level[1]})`);
+    if(sc.level[0]!=="clear") ok(/keeps your apology/.test(v.text) && v.apology, `"${t}" [${w},${st}]: apology headline "${v.text}"`);
+    ok(sc.top.length===0 || sc.top[0].fid==="sorrybut", `"${t}" [${w},${st}]: loudest reading should be the "but you…" clause, got ${sc.top[0] && sc.top[0].fid}`);
+    all(r).forEach(x=>{
+      ok(!/didn't have to say it like that|the worst/i.test(x), `"${t}" [${w}]: blame or put-down kept in "${x}"`);
+      ok(/sorry/i.test(x) && /distracted/.test(x), `"${t}" [${w}]: the apology was lost in "${x}"`);
+      ok(!/,\s*😩|,\s*but\b\s*[.?!]?$/.test(x), `"${t}" [${w}]: stray comma in "${x}"`); });
+    ok(/stung a little/.test(r.main), `"${t}" [${w}]: the hurt is said separately: "${r.main}"`); });
+}
+[["Sorry, but you're being ridiculous.",false],["I'm not sorry, but you're wrong.",false],["Sorry you feel that way, but you started it.",false],["Great job on dinner, but you forgot the milk.",false],
+ ["I'm sorry I snapped. But you didn't have to slam the door.",true],["My fault, I forgot the milk, though you could have reminded me.",true]].forEach(([t,want])=>{
+  const an=E.analyze(t,{channel:"text"}); ok(!!an.found.sorrybut===want, `"${t}": sorrybut ${!!an.found.sorrybut}, want ${want}`); });
+ok(!E.analyze("I'm so sorry I missed your call.",{channel:"text"}).found.sorrybut && E.analyze("I'm so sorry I missed your call.",{channel:"text"}).apology, "a plain apology has no \"but you\" flag");
+// "What stands out" names only words that are in the message, once
+{ const t="If you're late again I'll take you to court and you'll never see the kids.";
+  const an=E.analyze(t,{channel:"text"});
+  Object.keys(an.found).forEach(id=>{ const ttl=E.title(id, an.found[id], an);
+    (ttl.match(/["“]([^"”]+)["”]/g)||[]).forEach(q=>{ const w=q.replace(/["“”,]/g,"").toLowerCase().trim(); ok(an.norm.toLowerCase().includes(w), `"${t}": title "${ttl}" quotes "${w}", which isn't in the message`); }); });
+  ok(!/still|even/i.test(E.title("again", an.found.again, an)), `again title: ${E.title("again", an.found.again, an)}`); }
+ok(E.title("again", [], null)===E.FBY.again.name, "with no words to show, the full name is kept");
+// the ask, inferred when the message says what it's about; otherwise a plain-language prompt, never a bracketed blank
+[["You always correct me with the baby.",/Could you let me handle it my way, and tell me later if you disagree\?/],
+ ["You're always correcting me with the kids in front of your mother.",/let me handle it my way/],
+ ["You always interrupt me.",/Could you let me finish before you answer\?/],
+ ["You always leave the lights on.",/Could you \(say the one thing you'd like\) going forward\?/]].forEach(([t,re])=>W_ALL.forEach(W=>{
+  const r=E.rewrite(E.analyze(t,{channel:"text"}),{wirings:W, rel:"partner"});
+  ok(re.test(r.main), `"${t}" [${W}]: ask "${r.main}"`); ok(!/\[one specific thing\]/.test(r.main), `"${t}" [${W}]: raw blank in "${r.main}"`); }));
 
 console.log(`${FIX.length} phrase fixtures + ${WORK.length} workplace review cases, ${pass} checks passed, ${fail} failed`);
 if(fail){ console.log(errs.slice(0,40).join("\n")); process.exit(1); }

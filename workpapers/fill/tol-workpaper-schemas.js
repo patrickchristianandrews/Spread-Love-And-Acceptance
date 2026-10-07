@@ -25,7 +25,14 @@
   function r2(n) { return Math.round(n * 100 + 1e-7) / 100; }
   // CALC-01 balance for 2 to 8 people against an even split. Uses the shared calc01-core.js when the
   // page loads it; the fallback below is the same formula: 1 − (½Σ|share − 1/n|) ÷ (1 − 1/n).
-  function balanceOf(amounts) {
+  function balanceOf(amounts, target) {
+    if (target && global.TOLCalc01) return global.TOLCalc01.balance(amounts, target.map(function (x) { return x * 100; })).value;
+    if (target) {
+      var tt = amounts.reduce(function (a, b) { return a + b; }, 0);
+      if (amounts.length < 2 || !(tt > 0)) return null;
+      var mv = amounts.reduce(function (a, x, i) { return a + Math.abs(x / tt - target[i]); }, 0) / 2, most = 1 - Math.min.apply(null, target);
+      return most > 0 ? Math.max(0, Math.min(1, 1 - mv / most)) : 1;
+    }
     if (global.TOLCalc01) return global.TOLCalc01.balance(amounts).value;
     var n = amounts.length, total = amounts.reduce(function (a, b) { return a + b; }, 0);
     if (n < 2 || !(total > 0)) return null;
@@ -124,17 +131,37 @@
             });
           });
           var total = people.reduce(function (a, p) { return a + t[p]; }, 0);
+          // Someone (not a child) with no rows at all hasn't added their side yet: their week is missing,
+          // not zero. No split and no balance until it is in, never "Jordan 0%, balance 0.00".
+          var hasRow = {};
+          ctx.rows('audit').forEach(function (r) { if (r.who && r.who !== 'Both' && (r.task || parseFloat(r.minutes) > 0)) hasRow[r.who] = true; });
+          var waiting = people.length >= 2 && Object.keys(hasRow).length ? people.filter(function (p) { return !hasRow[p] && !(ctx.isChild && ctx.isChild(p)); }) : [];
           var left = bad.length ? { label: 'Left out', value: plural(bad.length, 'row') + ' (' + bad.slice(0, 3).join(', ') + (bad.length > 3 ? ' and ' + (bad.length - 3) + ' more' : '') + '): minutes need to be between 0 and 1,440 (a whole day) in one row.', note: 'Nothing is guessed. Fix the number and the totals update.' } : null;
           if (!total) return [{ label: 'Totals', value: 'Add rows with a person and minutes to see the totals.' }].concat(left ? [left] : []);
+          if (waiting.length) {
+            var wn = waiting.map(function (p) { return ctx.name(p) + '\u2019s'; }), wl = wn.length < 2 ? wn.join('') : wn.slice(0, -1).join(', ') + ' and ' + wn[wn.length - 1];
+            var so = people.filter(function (p) { return hasRow[p]; }).map(function (p) { return { label: ctx.name(p), value: fmt(t[p], 0) + ' minutes logged so far' }; });
+            return so.concat([{ label: 'The split', value: 'Waiting for ' + wl + (waiting.length === 1 ? ' side.' : ' sides.'), note: 'The split and the workload balance score appear once everyone has logged their own week. Nobody fills in someone else\u2019s side for them.' }]).concat(left ? [left] : []);
+          }
+          var tgt = ctx.target ? ctx.target() : null;
           var pct = {};
           people.forEach(function (p) { pct[p] = t[p] / total * 100; });
           // 1 = an even split; 0 = one person logged everything. With two people this is 1 - |A% - B%|;
           // with more, 1 - (the share of time that would have to change hands) / (the most it could be).
-          var balance = balanceOf(people.map(function (p) { return t[p]; }));
+          var balance = balanceOf(people.map(function (p) { return t[p]; }), tgt ? tgt.t : null);
           var out = people.map(function (p) {
             return { label: ctx.name(p), value: fmt(t[p], 0) + ' minutes (' + fmt(pct[p], 0) + '%), of which ' + fmt(noticed[p], 0) + ' noticed and handled without being asked' };
           });
-          out.push({ label: 'Workload balance score', value: fmt(balance, 2), note: 'Enter this as the workload balance number in CALC-01. It describes how the logged work was split this week, not anyone in it.' + (people.length > 2 ? ' With more than two people, it is 1 minus the share of the week\'s time that would have to change hands for an even split, divided by the most that could ever be.' : '') });
+          out.push({ label: 'Workload balance score', value: fmt(balance, 2), note: 'Enter this as the workload balance number in CALC-01. It describes how the logged work was split this week, not anyone in it.' + (tgt ? ' It is read against ' + tgt.label + ', the same way the Lemonade Stand reads it.' : people.length > 2 ? ' With more than two people, it is 1 minus the share of the week\'s time that would have to change hands for an even split, divided by the most that could ever be.' : '') });
+          if (tgt) {
+            // against the split you agreed (or the nights each person is here), as the Lemonade Stand says it
+            var gaps = people.map(function (p, i) { return pct[p] - tgt.t[i] * 100; }), big = 0;
+            gaps.forEach(function (g, i) { if (Math.abs(g) > Math.abs(gaps[big])) big = i; });
+            var gp = Math.round(Math.abs(gaps[big]));
+            out.push({ label: 'Against ' + tgt.label.replace(/ \(.*\)$/, ''), value: gp < 5 ? 'Close to it this week.' : ctx.name(people[big]) + ' is about ' + gp + ' points ' + (gaps[big] > 0 ? 'over' : 'under') + ' ' + tgt.label + '.', note: 'A fact about how this week fell, not about effort or care.' });
+            if (left) out.push(left);
+            return out;
+          }
           // Who is carrying the most, next to the balance: the logged minutes, and the unasked-for ones
           var cm = concentrationOf(people.map(function (p) { return t[p]; }), 60);
           var cn = concentrationOf(people.map(function (p) { return noticed[p]; }), 60);
@@ -226,6 +253,8 @@
     purpose: 'A one-minute check that each person fills in about themselves. It separates "How much am I already carrying?" from "How upset am I about this one thing?" Higher numbers mean more load. It is not a clinical test, just a structured gut-check.',
     people: false,
     perPerson: true,
+    // "Share as a link" / "Open a shared score" (tol-workpaper.js): someone else's score goes into "Everyone else's scores"
+    share: { what: 'score', after: 'reading', values: WP02_FACTORS.map(function (f) { return 'factors.' + f.id; }).concat(['caring', 'note']), score: wp02Score },
     meta: [
       { id: 'name', label: 'Your name', type: 'text' },
       { id: 'date', label: 'Date', type: 'date' }

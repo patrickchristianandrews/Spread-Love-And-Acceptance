@@ -804,7 +804,7 @@
     else {
       // the same answer twice in a row reads like a machine: the second time, just the words to use and where to read more
       if (state.easy && c.plain && c.plain.length) { state.last = { kind: 'card', card: c.id, q: c.name, topic: c.name }; return { blocks: easyBlocks(c), chips: [{ label: 'Tell me more', q: 'Tell me more' }], kind: 'card', id: c.id, noBrief: 1 }; }
-      var again = c.kind === 'intent' && state.last && state.last.card === c.id;
+      var again = c.kind === 'intent' && state.last && state.last.card === c.id && alike(state.prevF, state.curF) >= 0.5;
       if (again) b.push({ k: 'p', x: 'That’s the same thing we just looked at, so here’s the short version. The page below has the rest.' });
       else {
         (Array.isArray(c.what) ? c.what : [c.what]).forEach(function (x) { if (x) b.push({ k: 'p', x: x }); });
@@ -1063,7 +1063,7 @@
   var CV_REDFLAG = /\b(is|are|isnt|was|could) (that|this|it|those|these|they|he|she|this behaviou?r|that behaviou?r) (be )?(a )?(red flags?|toxic|abus\w*|controlling|manipulat\w*|gaslight\w*|healthy|unhealthy|a warning sign|warning signs?|a bad sign)\b|^(red flags?|any red flags|what are (the |some )?red flags|signs of (abuse|control|coercive control|a toxic relationship)|should i be worried|is (this|that) normal in a relationship)\b/;
   var CV_NEXT = /^(ok |okay |so |and |alright |right |cool |great |got it |done |ok done |i did that )*(and )?(then what|what then|what after that|after that|and after that|what comes next|what comes after that|whats after that|what do i do after that|what should i do after that|then)\??$/;
   var CV_RESTART = /^(start over|start again|new topic|change of subject|different (topic|question|thing)|something else|never ?mind|forget (it|that)|lets talk about something else)$/;
-  var CV_PERSONAL = { notrealdad: 1, parttimechild: 1, textmeaning: 1, handover: 1, paidwork: 1, disagreenumbers: 1, longstay: 1, ndcouple: 1, sharelist: 1, breaklength: 1, comeback: 1, sentlink: 1, reconnect: 1, pursuewithdraw: 1, familyduty: 1, retired: 1, longdistance: 1, bioparent: 1, outsider: 1, exschedule: 1, carehelp: 1, careadultkids: 1, careresent: 1, yellkids: 1, exharass: 1, exmessages: 1, exbadmouth: 1, lgbtq: 1, parentphone: 1, parentsfight: 1, teamowners: 1, grownkids: 1, phonetrust: 1, lonely: 1, leave: 1, atwork: 1, grief: 1, overgive: 1, burden: 1, parentsblame: 1, onmyown: 1, teens: 1, raisekids: 1, fightnow: 1, judged: 1, sensitive: 1, overload: 1, meltdown: 1, 'upset-right-now': 1 };
+  var CV_PERSONAL = { getstay: 1, backmeup: 1, sendamount: 1, planrecall: 1, gamefortwo: 1, retirepurpose: 1, notrealdad: 1, parttimechild: 1, textmeaning: 1, handover: 1, paidwork: 1, disagreenumbers: 1, longstay: 1, ndcouple: 1, sharelist: 1, breaklength: 1, comeback: 1, sentlink: 1, reconnect: 1, pursuewithdraw: 1, familyduty: 1, retired: 1, longdistance: 1, bioparent: 1, outsider: 1, exschedule: 1, carehelp: 1, careadultkids: 1, careresent: 1, yellkids: 1, exharass: 1, exmessages: 1, exbadmouth: 1, lgbtq: 1, parentphone: 1, parentsfight: 1, teamowners: 1, grownkids: 1, phonetrust: 1, lonely: 1, leave: 1, atwork: 1, grief: 1, overgive: 1, burden: 1, parentsblame: 1, onmyown: 1, teens: 1, raisekids: 1, fightnow: 1, judged: 1, sensitive: 1, overload: 1, meltdown: 1, 'upset-right-now': 1 };
   var CV_YEAH = /^(yeah|yes|yep|yup|ya|ok|okay|sure|mhm|uh huh|go on|i guess|kind of|kinda|true)$/;
   // the caring answer we gave a turn or two ago (grief, giving too much…), if any
   function careCard(state) {
@@ -1394,8 +1394,19 @@
     }
     return { blocks: [{ k: 'p', x: 'This chat is starting fresh, so there’s nothing earlier here to pick up. It only keeps a conversation in this tab, until you close it.' }, tail], chips: STARTERS.slice(0, 3), kind: 'care' };
   }
+  // how alike two questions are (shared words): the short "same thing again" reply is only for a near-repeat
+  function alike(a, b) {
+    if (!a || !b) return 0;
+    var A = {}, B = {}, n = 0, u = 0, k;
+    a.split(' ').forEach(function (w) { if (w.length > 2) A[w] = 1; });
+    b.split(' ').forEach(function (w) { if (w.length > 2) B[w] = 1; });
+    for (k in A) { u++; if (B[k]) n++; }
+    for (k in B) if (!A[k]) u++;
+    return u ? n / u : 0;
+  }
   function careFirst(state, q) {
     var f = norm(q);
+    state.prevF = state.curF; state.curF = f;
     if (!f || DANGER.test(f)) return null;
     var ub = unBrief(state, f);
     if (ub) return ub;
@@ -1403,6 +1414,16 @@
     if (SHORTER.test(f)) return shorter(state);
     if (LEFT_OFF.test(f)) return leftOff(state);
     var L = state.last, n = f.split(' ').length;
+    // after the long-distance answer, "how do I bring it up without nagging?" or "how do I make her stop being mad?"
+    // stays about calls and distance, not chores
+    if (L && (L.card === 'longdistance' || (L.kind === 'sit' && L.issue === 'longdistance')) && /\b(bring (it|this) up|nag\w*|stop being (mad|upset|angry)|make (her|him|them) (stop|less)|(she|he|they) (s|is|are) (mad|upset|angry)|without (sounding|starting))\b/.test(f)) {
+      var ld = cardById('longdistance');
+      return { blocks: [{ k: 'p', x: 'Keep it about the rhythm, not the scorecard: one example, how it felt, and one ask for a plan you both choose.' },
+        { k: 'list', x: ['If you usually reach out: “I’ve been the one starting most of our calls, and I miss feeling chosen. Can we agree a rhythm, so it isn’t always on me?”',
+          'If you call less: “I know you’ve been reaching out more. Work is heavy right now, and it isn’t about you. Can we pick our call days together, and I’ll start the Sunday one?”',
+          'Answer the person as well as the plan: if they asked “are we still on tonight?”, answer that first.'] },
+        { k: 'links', x: safeLinks((ld && ld.links) || []).slice(0, 2) }], chips: [], kind: 'care', id: 'longdistance' };
+    }
     for (var i = 0; i < (IDX.first || []).length; i++) {
       var c = IDX.first[i];
       if (!c.re.test(f) || (c.notRe && c.notRe.test(f))) continue;

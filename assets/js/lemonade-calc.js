@@ -58,10 +58,10 @@
   var WAKING = 112; // about 16 waking hours a day, 7 days
 
   /* ---------- how often, and categories ---------- */
-  var FREQ = { day: 7, few: 3, week: 1, eow: 0.5, month: 12 / 52 };
-  var FREQ_ORDER = ['day', 'few', 'week', 'eow', 'month'];
-  var FREQ_LABEL = { day: 'Each day', few: '3 times a week', week: 'Each week', eow: 'Every other weekend', month: 'Each month' };
-  var FREQ_SHORT = { day: 'a day', few: '3× a week', week: 'a week', eow: 'every other weekend', month: 'a month' };
+  var FREQ = { day: 7, few: 3, two: 2, week: 1, eow: 0.5, month: 12 / 52 };
+  var FREQ_ORDER = ['day', 'few', 'two', 'week', 'eow', 'month'];
+  var FREQ_LABEL = { day: 'Each day', few: '3 times a week', two: 'Twice a week', week: 'Each week', eow: 'Every other weekend', month: 'Each month' };
+  var FREQ_SHORT = { day: 'a day', few: '3× a week', two: '2× a week', week: 'a week', eow: 'every other weekend', month: 'a month' };
   // k: 'home' jobs are counted in the split; 'work' and 'rest' are shown beside it, never in it.
   // inv: the whole job is invisible work (thinking or emotional), not just its thinking part.
   var CATS = [
@@ -115,26 +115,41 @@
     return hit;
   }
   // Older stands had no categories: make a calm guess from the job's name, or file it under "Other jobs".
+  // Rest is only ever guessed from clearly restful words (a nap, a hobby, the gym for me). A pick-up, a
+  // drop-off, a hand-over, a school run, a drive or an appointment is work for someone, never rest.
+  var NOT_REST = /pick(?:ing|s)?[ -]?up|drop(?:ping|s)?[ -]?off|hand-?(?:off|over)|school run|\bdriv(?:e|es|ing)\b|\blifts?\b|\brides?\b|appoint|custody|co-?parent|collect|ferry|transport|errand/;
   var GUESS = [
     ['baby', /baby|newborn|nappy|nappies|diaper|night feed|bottle|pump|formula|burp/],
-    ['emotional', /emotion|check-?in|peace|listen|support|comfort/], ['money', /bill|budget|money|tax|rent|bank|pay|mortgage|subscription/],
+    ['emotional', /emotion|check-?in|peace|listen|support|comfort/], ['money', /bill|budget|money|\btax|\brent\b|bank|\bpay|mortgage|subscription/],
     ['food', /groc|meal|cook|lunch|dinner|breakfast|food|kitchen/], ['laundry', /laundry|fold|iron|towel/],
-    ['pets', /pet|dog|cat\b|litter|vet/], ['kids', /kid|child|baby|bedtime|homework|school run|daycare|caring|care for/],
-    ['appts', /appoint|doctor|dentist|pharmac|clinic|prescription|check-?up/], ['admin', /form|paper|mail|email|insurance|admin|document|renew|licen[cs]e|passport/],
+    ['pets', /\bpets?\b|dog|\bcats?\b|litter|\bvet/], ['work', /commute|(?:drive|driving) to work/],
+    ['appts', /appoint|doctor|dentist|pharmac|clinic|prescription|check-?up/],
+    ['kids', /kid|child|baby|bedtime|homework|school run|daycare|caring|care for|pick(?:ing|s)?[ -]?up|drop(?:ping|s)?[ -]?off|hand-?(?:off|over)|custody|co-?parent|\bdriv(?:e|es|ing)\b|\blifts?\b|\brides?\b/],
+    ['admin', /form|paper|mail|email|insurance|admin|document|renew|licen[cs]e|passport/],
     ['errands', /errand|shop|store|gift|return/], ['car', /car\b|repair|fix|garage|tire/], ['yard', /yard|garden|mow|lawn|snow|leaves|weed/],
     ['social', /birthday|anniversar|family|friend|call|visit|holiday|in-?laws/], ['mental', /plan|remember|calendar|schedul|list|notic|organi[sz]/],
-    ['home', /dish|clean|tidy|vacuum|bathroom|trash|floor|sheet|dust/], ['work', /work|job|commute|class|study/], ['rest', /rest|hobby|myself|relax|off\b/]
+    ['home', /dish|clean|tidy|vacuum|bathroom|trash|floor|sheet|dust/], ['work', /work|job|commute|class|study/],
+    ['rest', /\b(?:naps?|napping|rest|resting|relax|relaxing|hobby|hobbies|me[- ]time|time (?:to|for) myself|gym for me|my gym|yoga|meditat\w*|lie[- ]in|sleep(?:ing)? in|day off)\b/]
   ];
   function guessCat(name) {
     var m = libMatch(name); if (m) return m.cat;
     var l = (name || '').toLowerCase(), c = 'other';
     for (var i = 0; i < GUESS.length; i++) if (GUESS[i][1].test(l)) { c = GUESS[i][0]; break; }
+    if (c === 'rest' && NOT_REST.test(l)) c = 'other';
     return c;
+  }
+  // the area a job is counted in, in plain words: "Rest, not in the split"
+  var AREA_SHORT = { rest: 'Rest', work: 'Work & school' };
+  function areaWords(j) {
+    var c = CAT[j.cat] || CAT.other, k = kindOf(j), n = AREA_SHORT[c.id] || c.n;
+    if (solo()) return n;
+    if (k === 'personal') return 'Own family or personal, not in the split';
+    return n + (k === 'home' ? ', in the split' : ', not in the split');
   }
 
   // The example is shown as grey placeholder text (item.ex), never as values: it is never counted in
   // a total, and the first edit to a row turns that row into yours.
-  function exampleRow(name, v, cat) { return { name: '', v: v.map(function () { return 0; }), ex: { name: name, v: v }, cat: cat, freq: 'week', unit: 'h', t: [], nf: -1 }; }
+  function exampleRow(name, v, cat) { return { name: '', v: v.map(function () { return 0; }), ex: { name: name, v: v }, cat: cat, freq: 'week', unit: 'h', t: [], nm: [] }; }
   var EXAMPLE = {
     people: ['Me', 'Them'],
     jobs: [
@@ -194,22 +209,33 @@
   }
   // Before the other side comes in: someone with nothing on their side yet, while another person has
   // entries. No verdict, score or hand-over hours until their side arrives (or "Show the split anyway").
-  // With three or more, only while just one person has filled anything in (a child may rightly have none).
+  // With three or more grown-ups, only while just one of them has filled anything in. Children are never
+  // waited for: a parent usually fills in their part, and a child may rightly have none.
   // (kind 'bills' asks about the Money tab; otherwise it's the hours)
   function waitingFor(kind) {
     if (solo() || state.noWait) return [];
+    var adults = state.people.map(function (_, i) { return i; }).filter(function (i) { return !state.kid[i]; });
+    if (adults.length < 2) return [];
     var have = state.people.map(function (_, i) {
       return kind === 'bills' ? state.bills.some(function (b) { return !b.ex && num(b.v[i]) > 0; })
         : state.jobs.some(function (j) { return !j.ex && (num(j.v[i]) > 0 || num((j.t || [])[i]) > 0); });
-    }), withData = have.filter(Boolean).length;
-    if (!withData || (state.people.length > 2 && withData > 1)) return [];
-    return state.people.map(function (_, i) { return i; }).filter(function (i) { return !have[i]; });
+    }), withData = adults.filter(function (i) { return have[i]; }).length;
+    if (!withData || (adults.length > 2 && withData > 1)) return [];
+    return adults.filter(function (i) { return !have[i]; });
   }
   function waitNames(w) { return w.filter(function (i) { return !placeholder(state.people[i]); }).map(nameOf); }
-  function waitText(w) {
+  // what: 'bills' for the Money tab. Never asks anyone to send a code to themselves: on the phone of the
+  // person still to fill in ("Who's filling in"), it asks for their own side instead.
+  function waitText(w, what) {
+    var see = what === 'bills' ? 'to see who owes whom' : 'to see the split';
+    var me = state.me, mine = me >= 0 && w.indexOf(me) >= 0, rest = w.filter(function (i) { return i !== me; }), restNamed = waitNames(rest);
+    if (mine) {
+      return 'Waiting for your side' + (placeholder(state.people[me]) ? '' : ', ' + nameOf(me)) + '. Fill in your own ' + (what === 'bills' ? 'amounts' : 'hours') + ' above ' + see +
+        (rest.length ? (restNamed.length === rest.length ? ', and ask ' + joinNames(restNamed) + ' for theirs.' : ', and ask the others for theirs.') : '.');
+    }
     var named = waitNames(w);
-    if (!named.length || named.length < w.length) return 'Waiting for the other side. Send your code (“Send my side to my partner”, above) to see the split.';
-    return 'Waiting for ' + joinNames(named.map(function (x) { return x + '’s'; })) + (named.length === 1 ? ' side' : ' sides') + '. Send ' + joinNames(named) + ' your code to see the split.';
+    if (!named.length || named.length < w.length) return 'Waiting for the other side. Send your side (“Send my side to my partner”, above) ' + see + '.';
+    return 'Waiting for ' + joinNames(named.map(function (x) { return x + '’s'; })) + (named.length === 1 ? ' side' : ' sides') + '. Send ' + joinNames(named) + ' your side ' + see + '.';
   }
   function status(msg) { var s = $('ls-status'); if (s) { s.textContent = msg; clearTimeout(status.t); status.t = setTimeout(function () { s.textContent = ''; }, 4000); } }
   function solo() { return mode === 'solo'; }
@@ -259,8 +285,21 @@
       // a stand from before "how often" and minutes: its numbers were hours this week
       if (!FREQ[j.freq]) j.freq = 'week';
       if (j.unit !== 'm' && j.unit !== 'h') j.unit = 'h';
+      // how often, person by person (Ben twice a week, Aisha each day), when someone set it that way
+      if (Array.isArray(j.fq)) j.fq = fit(j.fq, n, j.freq).map(function (f) { return FREQ[f] ? f : j.freq; });
+      else delete j.fq;
       if (!CAT[j.cat]) j.cat = guessCat(j.name || (j.ex && j.ex.name));
-      if (typeof j.nf !== 'number' || j.nf >= n) j.nf = -1;
+      // a job typed in by hand that an older guess filed under rest (like "Dropping off Leo"): guess again
+      if (j.custom && !j.catSet && j.cat === 'rest' && guessCat(j.name) !== 'rest') j.cat = guessCat(j.name);
+      // who notices first, as each person sees it (j.nm[i] = 1: "I usually notice first"). An older stand
+      // kept one name (nf); that becomes that person's mark. Just me: j.nso = "someone else notices first".
+      if (!Array.isArray(j.nm)) {
+        j.nm = [];
+        if (typeof j.nf === 'number' && j.nf >= 0 && j.nf < n) j.nm[j.nf] = 1;
+        if (j.nf === -2) j.nso = 1;
+      }
+      j.nm = fit(j.nm, n, 0).map(function (x) { return x ? 1 : 0; });
+      delete j.nf;
     });
     state.bills.forEach(function (b) {
       b.name = b.name || ''; b.v = fit(b.v, n, 0);
@@ -281,16 +320,40 @@
     state.checked = !!state.checked;
     state.noWait = !!state.noWait;
     state.asPick = !!state.asPick;
+    state.compact = !!state.compact;
+    if (state.tab !== 'money') delete state.tab;
+    // a split suggested from the other phone, waiting for "Use it?"
+    var ao = state.agreedOffer;
+    if (!ao || typeof ao !== 'object' || !Array.isArray(ao.p) || ao.p.length !== n) delete state.agreedOffer;
+    else ao.by = String(ao.by || '').slice(0, 40);
   }
 
   /* ---------- weekly time ---------- */
-  function mult(j) { return FREQ[j.freq] || 1; }
-  // night feeds that happen inside the on-call hours, once someone says so, are counted once (in on-call)
-  function doH(j, i) { return j.inCall && isNightFeed(j) && onCallListed() ? 0 : num(j.v[i]) * (j.unit === 'm' ? 1 / 60 : 1) * mult(j); }
+  // how often a job happens for one person (left out: the job's own "how often")
+  function freqOf(j, i) { return i != null && j.fq && FREQ[j.fq[i]] ? j.fq[i] : j.freq; }
+  function mult(j, i) { return FREQ[freqOf(j, i)] || 1; }
+  function doH(j, i) {
+    var n = num(j.v[i]); if (!n) return 0;
+    return n * (j.unit === 'm' ? 1 / 60 : 1) * (mult(j, i) - feedInside(j, i));
+  }
   function isOnCall(j) { return !j.ex && /^on call at night/.test(low(j.name)); }
   function isNightFeed(j) { return !j.ex && /^night feeds?\b/.test(low(j.name)); }
   function onCallListed() { return state.jobs.some(function (j) { return isOnCall(j) && j.v.some(function (x) { return num(x) > 0; }); }); }
-  function thH(j, i) { return num((j.t || [])[i]) / 60 * mult(j); }
+  // Night feeds inside on-call hours, once someone says so, are counted once, but only on the nights that
+  // person is on call: on call 3 nights and feeding 7 leaves 4 nights of feeds counted on top.
+  function callNights(i) { return Math.min(7, sum(state.jobs.filter(isOnCall).map(function (j) { return num(j.v[i]) > 0 ? mult(j, i) : 0; }))); }
+  function feedInside(j, i) { return j.inCall && isNightFeed(j) && num(j.v[i]) > 0 ? Math.min(mult(j, i), callNights(i)) : 0; }
+  function nightsTxt(x) { x = Math.round(x * 10) / 10; return x + (x === 1 ? ' night' : ' nights'); }
+  // "counted inside on-call on 3 nights for Ben", or '' when none of the feeds sit inside on-call
+  function feedNote(j) {
+    if (!j.inCall || !isNightFeed(j)) return '';
+    var per = state.people.map(function (_, i) { return { i: i, n: feedInside(j, i) }; }).filter(function (o) { return o.n > 0 && (!solo() || o.i === 0); });
+    if (!per.length) return '';
+    return 'counted inside on-call on ' + (solo() || state.people.length < 2 ? nightsTxt(per[0].n) : joinNames(per.map(function (o, k) { return (k ? nightsTxt(o.n).replace(/ nights?$/, '') : nightsTxt(o.n)) + ' for ' + nameOf(o.i); })));
+  }
+  // anyone with both night feeds and on-call nights: the feeds can be counted inside on-call
+  function feedOverlap(j) { return isNightFeed(j) && state.people.some(function (_, i) { return num(j.v[i]) > 0 && callNights(i) > 0 && (!solo() || i === 0); }); }
+  function thH(j, i) { return num((j.t || [])[i]) / 60 * mult(j, i); }
   // a job marked as someone's own family or personal life is counted on its own, outside the shared split
   function kindOf(j) { return j.personal && !solo() ? 'personal' : (CAT[j.cat] || CAT.other).k; }
   function jobH(j, i) { return doH(j, i) + thH(j, i); }
@@ -324,7 +387,7 @@
     var s = raw != null ? raw : String((think ? j.t[i] : j.v[i]) || '');
     var n = parseFloat(s), wk;
     if (s === '' || s === '0') { wk = 0; n = 0; }
-    else wk = isFinite(n) ? (think || j.unit === 'm' ? n / 60 : n) * (j.isBill ? 1 : mult(j)) : 0;
+    else wk = isFinite(n) ? (think || j.unit === 'm' ? n / 60 : n) * (j.isBill ? 1 : mult(j, i)) : 0;
     var bad = s !== '' && (!isFinite(n) || n < 0 || (!j.isBill && wk > 168));
     var arr = think ? j.t : j.v;
     if (bad) { j.raw = j.raw || {}; j.raw[k] = s; arr[i] = 0; }
@@ -367,9 +430,10 @@
   function addPerson() {
     if (state.people.length >= MAX) return;
     state.people.push('');
-    state.jobs.forEach(function (j) { j.v.push(0); j.t.push(0); });
+    state.jobs.forEach(function (j) { j.v.push(0); j.t.push(0); if (j.nm) j.nm.push(0); if (j.fq) j.fq.push(j.freq); });
     state.bills.forEach(function (b) { b.v.push(0); });
     state.agreed.p.push('');
+    delete state.agreedOffer;
     state.part.push(1); state.kid.push(false);
     renderAll();
     var inputs = peopleEl.querySelectorAll('input');
@@ -390,9 +454,10 @@
     if (state.people.length <= MIN) return;
     var gone = nameOf(i);
     state.people.splice(i, 1);
-    state.jobs.forEach(function (j) { j.v.splice(i, 1); j.t.splice(i, 1); shiftRaw(j, i); if (j.nf === i) j.nf = -1; else if (j.nf > i) j.nf--; });
+    state.jobs.forEach(function (j) { j.v.splice(i, 1); j.t.splice(i, 1); shiftRaw(j, i); if (j.nm) j.nm.splice(i, 1); if (j.fq) j.fq.splice(i, 1); });
     state.bills.forEach(function (b) { b.v.splice(i, 1); shiftRaw(b, i); });
     state.agreed.p.splice(i, 1);
+    delete state.agreedOffer;
     state.part.splice(i, 1); state.kid.splice(i, 1);
     state.bills.forEach(function (b) { if (b.who === i) b.who = -1; else if (b.who > i) b.who--; });
     if (state.me === i) state.me = -1; else if (state.me > i) state.me--;
@@ -436,7 +501,7 @@
       var whose = (solo() ? 'You' : nameOf(i)) + (think ? ', thinking part' : '');
       return whose + ': “' + raw + '” isn’t counted, ' + (!isFinite(n) ? 'because it isn’t a number.' :
         n < 0 ? 'because ' + (j.isBill ? 'amounts' : 'time') + ' can’t be negative.' :
-        j.unit === 'h' && j.freq === 'week' && !think ? 'because it’s more hours than a week has (168). Were they minutes?' :
+        j.unit === 'h' && freqOf(j, i) === 'week' && !think ? 'because it’s more hours than a week has (168). Were they minutes?' :
         'because it comes to more hours than a week has (168). Check the number and how often.');
     }).join(' ');
   }
@@ -482,24 +547,39 @@
       var dblB = document.createElement('button'); dblB.type = 'button'; dblB.className = 'ls-link-btn'; dblB.setAttribute('data-fk', 'dbl' + idx);
       dblB.addEventListener('click', function () {
         item.inCall = !item.inCall; markEdited(); recalc();
-        status(item.inCall ? 'Night feeds are counted as part of on-call now, not on top.' : 'Night feeds are counted on top of on-call again.');
+        status(item.inCall ? 'Night feeds are counted inside on-call on the nights it covers now, and on top of it on the other nights.' : 'Night feeds are counted on top of on-call again.');
       });
       dbl.appendChild(dblP); dbl.appendChild(dblB);
     }
     function showDbl() {
       if (!dbl) return;
-      var both = onCallListed() && item.v.some(function (x) { return num(x) > 0; });
+      var both = onCallListed() && feedOverlap(item);
       dbl.hidden = !both;
       if (!both) return;
-      dblP.textContent = item.inCall ? 'Counted as part of “On call at night”, not on top of it.' : 'Night feeds happen inside on-call hours. Count them once?';
+      var fn = feedNote(item), left = state.people.some(function (_, i) { return (!solo() || i === 0) && doH(item, i) > 0; });
+      dblP.textContent = item.inCall ? 'Night feeds are ' + fn + (left ? '. The other nights are counted on top.' : '.') : 'Night feeds on the nights someone is on call happen inside those hours. Count them once on those nights?';
       dblB.textContent = item.inCall ? 'Count them on top again' : 'Count feeds as part of on-call';
     }
-    row._refresh = function () { showNote(); showSum(); showDbl(); };
+    // a job you typed yourself says, in plain words, where it's counted: "Counted as: Rest, not in the split. Change?"
+    var area = null;
+    if (item.custom) {
+      area = document.createElement('p'); area.className = 'row-area'; area.setAttribute('aria-live', 'polite');
+      var areaT = document.createElement('span');
+      var areaB = document.createElement('button'); areaB.type = 'button'; areaB.className = 'ls-link-btn'; areaB.textContent = 'Change?'; areaB.setAttribute('data-fk', 'ar' + idx);
+      areaB.addEventListener('click', function () { cs.focus(); try { if (cs.showPicker) cs.showPicker(); } catch (e) {} });
+      area.appendChild(areaT); area.appendChild(document.createTextNode(' ')); area.appendChild(areaB);
+    }
+    function showArea() {
+      if (!area) return;
+      area.hidden = !item.name.trim() && !item.v.some(function (x) { return num(x) > 0; });
+      areaT.textContent = 'Counted as: ' + areaWords(item) + '.';
+    }
+    row._refresh = function () { showNote(); showSum(); showDbl(); showArea(); };
     ta.addEventListener('input', function () {
       own(); item.name = ta.value.replace(/\n/g, ' '); autoGrow(ta); markEdited();
       // a job you typed yourself: a calm guess at its area from its name, until you pick one
       if (item.custom && !item.catSet) { var g = guessCat(item.name); if (g !== 'other' && cs.value !== g) cs.value = g; }
-      recalc(); renderPicks();
+      recalc(); renderPicks(); showArea();
     });
     // the guess files the job under its area once you leave the name
     ta.addEventListener('change', function () {
@@ -521,12 +601,19 @@
     // kind of job (in the fold), how often and minutes or hours (beside the time)
     var meta = document.createElement('div'); meta.className = 'row-kind';
     var cs = select(CATS.map(function (c) { return [c.id, c.n]; }), item.cat, 'Kind of job', 'c' + idx);
-    var fs = select(FREQ_ORDER.map(function (f) { return [f, FREQ_LABEL[f]]; }), item.freq, 'How often', 'f' + idx);
+    var fs = select(FREQ_ORDER.map(function (f) { return [f, FREQ_LABEL[f]]; }), solo() ? freqOf(item, 0) : item.freq, 'How often', 'f' + idx);
     var us = select([['m', 'Minutes'], ['h', 'Hours']], item.unit, 'Minutes or hours', 'u' + idx);
     function labeled(txt, el, cls) { var l = document.createElement('label'); if (cls) l.className = cls; var sp = document.createElement('span'); sp.textContent = txt; l.appendChild(sp); l.appendChild(el); return l; }
     if (!item.custom) meta.appendChild(labeled('Kind of job', cs));
     cs.addEventListener('change', function () { own(); item.cat = cs.value; item.catSet = true; markEdited(); renderRows(); renderLibTasks(); recalc(); status('Moved to ' + CAT[item.cat].n + '.'); });
-    fs.addEventListener('change', function () { own(); item.freq = fs.value; revalidate(item); markEdited(); refreshInputs(); recalc(); });
+    fs.addEventListener('change', function () { own(); if (item.fq && solo()) item.fq[0] = fs.value; else { item.freq = fs.value; delete item.fq; } revalidate(item); markEdited(); refreshInputs(); recalc(); });
+    // how often, person by person: "Ben twice a week, Aisha each day"
+    function freqSel(i) {
+      var ps = select(FREQ_ORDER.map(function (f) { return [f, FREQ_LABEL[f]]; }), freqOf(item, i), (solo() ? 'You' : nameOf(i)) + ', how often', 'fq' + i + '-' + idx);
+      ps.classList.add('ls-pfreq');
+      ps.addEventListener('change', function () { own(); item.fq[i] = ps.value; revalidate(item); markEdited(); refreshInputs(); recalc(); });
+      return ps;
+    }
     us.addEventListener('change', function () {
       own();
       var to = us.value;
@@ -552,7 +639,9 @@
         markEdited(); row._refresh(); recalc();
       });
       lab.appendChild(sp); lab.appendChild(inp);
-      inputs.push({ i: i, think: think, k: k, inp: inp, sp: sp });
+      var pf = !think && item.fq && !solo() ? freqSel(i) : null;
+      if (pf) lab.appendChild(pf);
+      inputs.push({ i: i, think: think, k: k, inp: inp, sp: sp, pf: pf });
       return lab;
     }
     function refreshInputs() {
@@ -560,7 +649,8 @@
         var i = o.i, inp = o.inp;
         o.sp.textContent = (solo() ? 'Me' : nameOf(i)) + (o.think ? ', thinking (min)' : ' (' + unitWord(item) + ')');
         inp.step = o.think || item.unit === 'm' ? '5' : '0.5';
-        var lab = (solo() ? 'Your time' : nameOf(i)) + (o.think ? ', thinking part in minutes' : ', ' + unitWord(item)) + ', ' + FREQ_LABEL[item.freq].toLowerCase();
+        var lab = (solo() ? 'Your time' : nameOf(i)) + (o.think ? ', thinking part in minutes' : ', ' + unitWord(item)) + ', ' + FREQ_LABEL[freqOf(item, i)].toLowerCase();
+        if (o.pf) { o.pf.setAttribute('aria-label', nameOf(i) + ', how often'); if (document.activeElement !== o.pf) o.pf.value = freqOf(item, i); }
         if (item.ex && !o.think) { inp.value = ''; inp.placeholder = String(item.ex.v[i] || 0); lab += ' (example: ' + (item.ex.v[i] || 0) + ')'; }
         else {
           inp.placeholder = '0';
@@ -575,9 +665,34 @@
     }
     visiblePeople().forEach(function (i) { amts.appendChild(amountInput(i, false)); });
     amts.appendChild(labeled('Counted in', us, 'ls-sel'));
-    amts.appendChild(labeled('How often', fs, 'ls-sel'));
+    var fsLab = labeled('How often', fs, 'ls-sel'); fsLab.hidden = !!item.fq && !solo();
+    amts.appendChild(fsLab);
     // a job you typed yourself shows its area right here, so it never quietly lands in the wrong one
     if (item.custom) amts.appendChild(labeled('Area', cs, 'ls-sel ls-sel-wide'));
+    // "How often differs by person?": each person's own "how often" beside their time
+    var each = null;
+    if (!solo() && !item.ex && state.people.length > 1) {
+      each = document.createElement('p'); each.className = 'ls-mini ls-freq-each';
+      var eb = document.createElement('button'); eb.type = 'button'; eb.className = 'ls-link-btn'; eb.setAttribute('data-fk', 'fe' + idx);
+      eb.textContent = item.fq ? 'Same “how often” for everyone' : 'How often differs by person?';
+      eb.setAttribute('aria-expanded', String(!!item.fq));
+      eb.addEventListener('click', function () {
+        own();
+        if (item.fq) {
+          // back to one "how often": the one used by whoever has time on it (or this phone's person)
+          var pick = state.me >= 0 && num(item.v[state.me]) > 0 ? state.me : item.v.map(num).indexOf(Math.max.apply(null, item.v.map(num)));
+          item.freq = item.fq[pick >= 0 ? pick : 0] || item.freq; delete item.fq;
+          status('One “how often” for everyone on “' + (item.name.trim() || 'this job') + '”: ' + FREQ_LABEL[item.freq].toLowerCase() + '.');
+        } else {
+          item.fq = state.people.map(function () { return item.freq; });
+          status('Each person has their own “how often” on “' + (item.name.trim() || 'this job') + '” now, beside their time.');
+        }
+        revalidate(item); markEdited(); renderRows(); recalc();
+        var r = rowFor(item), f = r && (r.querySelector('select.ls-pfreq[data-fk^="fq' + (state.me >= 0 ? state.me : 0) + '-"]') || r.querySelector('[data-fk^="fe"]'));
+        if (f) f.focus();
+      });
+      each.appendChild(eb);
+    }
 
     // a new task from the library starts with no one's time: tap who does it to fill in the typical time
     var pickBox = null;
@@ -626,7 +741,7 @@
     // the thinking part and who notices first: optional, folded away until it's wanted
     var more = document.createElement('button');
     more.type = 'button'; more.className = 'ls-more'; more.setAttribute('data-fk', 'm' + idx);
-    var hasThink = item.t.some(function (x) { return num(x) > 0; }) || item.nf !== -1 || (item.raw && Object.keys(item.raw).some(function (k) { return k.charAt(0) === 't'; }));
+    var hasThink = item.t.some(function (x) { return num(x) > 0; }) || item.nm.some(Boolean) || !!item.nso || (item.raw && Object.keys(item.raw).some(function (k) { return k.charAt(0) === 't'; }));
     var open = !!(hasThink || item.open);
     thinkBox.hidden = !open;
     function moreLabel() { more.textContent = (thinkBox.hidden ? '+ ' : '− ') + 'More: the thinking part, who notices, ' + (solo() ? 'kind' : 'kind, own or shared'); more.setAttribute('aria-expanded', String(!thinkBox.hidden)); }
@@ -638,22 +753,37 @@
     visiblePeople().forEach(function (i) { tAmts.appendChild(amountInput(i, true)); });
     thinkBox.appendChild(tAmts);
     var nfWrap = document.createElement('div'); nfWrap.className = 'ls-nf';
-    var nfLab = document.createElement('p'); nfLab.className = 'ls-mini'; nfLab.id = 'nf-' + idx; nfLab.textContent = 'Who usually notices it needs doing first?';
+    var nfLab = document.createElement('p'); nfLab.className = 'ls-mini'; nfLab.id = 'nf-' + idx;
+    // each person marks only their own view ("I usually notice first"); one person's tap is never taken as fact for the others
+    var mine = !solo() && state.me >= 0;
+    nfLab.textContent = solo() ? 'Who usually notices it needs doing first?' : mine ? 'Do you usually notice it needs doing first? Mark only your own view.' : 'Who usually notices it needs doing first? Each person marks only their own view.';
     var nfg = document.createElement('div'); nfg.className = 'ls-pick'; nfg.setAttribute('role', 'group'); nfg.setAttribute('aria-labelledby', 'nf-' + idx);
-    var nfOpts = solo() ? [[0, 'Me'], [-2, 'Someone else']] : state.people.map(function (_, i) { return [i, nameOf(i)]; });
+    var nfOpts = solo() ? [[0, 'Me'], [-2, 'Someone else']] : mine ? [[state.me, 'I usually notice first']] : state.people.map(function (_, i) { return [i, nameOf(i) + ': I notice first']; });
+    function nfOn(i) { return i === -2 ? !!item.nso : !!item.nm[i]; }
     nfOpts.forEach(function (o) {
       var b = document.createElement('button'); b.type = 'button'; b.className = 'ls-chip'; b.setAttribute('data-fk', 'nf' + idx + '_' + o[0]);
+      if (!solo() && !mine) b.setAttribute('data-nfp', '1');
       if (o[0] >= 0) b.style.setProperty('--pc', COLORS[o[0]]);
-      b.setAttribute('aria-pressed', String(item.nf === o[0])); b.textContent = o[1];
+      b.setAttribute('aria-pressed', String(nfOn(o[0]))); b.textContent = o[1];
       b.addEventListener('click', function () {
-        own(); item.nf = item.nf === o[0] ? -1 : o[0];
-        nfg.querySelectorAll('button').forEach(function (x) { x.setAttribute('aria-pressed', 'false'); });
-        b.setAttribute('aria-pressed', String(item.nf === o[0]));
+        own();
+        var on = !nfOn(o[0]);
+        if (o[0] === -2) item.nso = on ? 1 : 0; else item.nm[o[0]] = on ? 1 : 0;
+        // just me: "Me" and "Someone else" are one answer
+        if (solo() && on) { if (o[0] === -2) item.nm[0] = 0; else item.nso = 0; }
+        nfg.querySelectorAll('button').forEach(function (x) { var m = /_(-?\d+)$/.exec(x.getAttribute('data-fk') || ''); if (m) x.setAttribute('aria-pressed', String(nfOn(+m[1]))); });
         markEdited(); recalc();
       });
       nfg.appendChild(b);
     });
-    nfWrap.appendChild(nfLab); nfWrap.appendChild(nfg); thinkBox.appendChild(nfWrap); thinkBox.appendChild(meta);
+    var nfViews = document.createElement('p'); nfViews.className = 'ls-mini ls-nf-views';
+    function showViews() {
+      if (solo()) { nfViews.hidden = true; return; }
+      var others = state.people.map(function (_, i) { return i; }).filter(function (i) { return !mine || i !== state.me; }).filter(function (i) { return item.nm[i]; });
+      nfViews.hidden = !mine || !others.length;
+      if (!nfViews.hidden) nfViews.textContent = joinNames(others.map(nameOf)) + (others.length === 1 ? ' marked' : ' each marked') + ' this as noticing it first too.';
+    }
+    nfWrap.appendChild(nfLab); nfWrap.appendChild(nfg); nfWrap.appendChild(nfViews); thinkBox.appendChild(nfWrap); thinkBox.appendChild(meta);
     if (!solo()) thinkBox.appendChild(persBox);
 
     // three or more people, with "Who's filling in" set: just that person's boxes, and a short line for the
@@ -675,13 +805,13 @@
       var n = state.people.filter(function (_, i) { return i !== state.me && (num(item.v[i]) > 0 || num(item.t[i]) > 0); }).length;
       othT.textContent = 'Others: ' + (n ? n + ' filled in' : 'none filled in yet') + '.';
     }
-    var refresh0 = row._refresh; row._refresh = function () { refresh0(); showOthers(); };
+    var refresh0 = row._refresh; row._refresh = function () { refresh0(); showOthers(); showViews(); };
 
     var foot = document.createElement('div'); foot.className = 'row-foot';
     foot.appendChild(more); foot.appendChild(sumLine);
     row.appendChild(top);
     if (pickBox) row.appendChild(pickBox);
-    row.appendChild(amts); if (others) row.appendChild(others); row.appendChild(persTag); row.appendChild(foot);
+    row.appendChild(amts); if (each) row.appendChild(each); if (others) row.appendChild(others); if (area) row.appendChild(area); row.appendChild(persTag); row.appendChild(foot);
     row.appendChild(thinkBox); if (dbl) row.appendChild(dbl); row.appendChild(cue); row.appendChild(note);
     refreshInputs();
     requestAnimationFrame(function () { autoGrow(ta); });
@@ -808,9 +938,9 @@
     renderAsRow(); renderMeRow(); renderPartRow(); renderAgreed(); renderOwners(); markSides();
     document.querySelectorAll('select.ls-bill-who option').forEach(function (o) { var i = +o.value; if (i >= 0) o.textContent = nameOf(i); });
     document.querySelectorAll('.row-pick .ls-chip').forEach(function (b) { var m = /_(\d+)$/.exec(b.getAttribute('data-fk') || ''); if (m) b.textContent = nameOf(+m[1]); });
-    document.querySelectorAll('.ls-nf .ls-chip').forEach(function (b) {
+    document.querySelectorAll('.ls-nf .ls-chip[data-nfp]').forEach(function (b) {
       var m = /_(-?\d+)$/.exec(b.getAttribute('data-fk') || ''); var i = m ? +m[1] : -1;
-      if (i >= 0 && !solo()) b.textContent = nameOf(i);
+      if (i >= 0 && !solo()) b.textContent = nameOf(i) + ': I notice first';
     });
   }
   function markEdited() {
@@ -875,7 +1005,7 @@
     BABY_PACK.forEach(function (nm) {
       var t = libTask(nm);
       if (!t || state.jobs.some(function (j) { return low(j.name) === low(nm); })) return;
-      var j = { name: t[0], v: zeros(), t: zeros(), cat: 'baby', freq: t[2], unit: t[3] || 'm', nf: -1 };
+      var j = { name: t[0], v: zeros(), t: zeros(), cat: 'baby', freq: t[2], unit: t[3] || 'm', nm: zeros() };
       if (me >= 0) j.v[me] = t[1]; else j.pick = t[1];
       state.jobs.push(j); added.push(nm);
     });
@@ -917,7 +1047,7 @@
     var hadEx = anyExample();
     state.jobs = state.jobs.filter(function (j) { return !j.ex; });
     state.bills = state.bills.filter(function (b) { return !b.ex; });
-    var j = { name: t[0], v: state.people.map(function () { return 0; }), t: state.people.map(function () { return 0; }), cat: cat, freq: t[2], unit: t[3] || 'm', nf: -1 };
+    var j = { name: t[0], v: state.people.map(function () { return 0; }), t: state.people.map(function () { return 0; }), cat: cat, freq: t[2], unit: t[3] || 'm', nm: zeros() };
     var pers = !solo() && !!PERSONAL_LIB[t[0].toLowerCase()];
     if (pers) j.personal = true;
     if (me >= 0) j.v[me] = t[1]; else j.pick = t[1];
@@ -1015,8 +1145,8 @@
     if (state.agreed.on) {
       var p = state.agreed.p.map(function (x) { var v = parseFloat(x); return isFinite(v) ? v : 0; });
       var ps = sum(p);
-      if (p.some(function (x) { return x < 0; })) return { error: 'An agreed share can’t be negative.' };
-      if (Math.abs(ps - 100) > 0.5) return { error: 'Your agreed shares add up to ' + r1(ps) + '%. Make them add up to 100% to compare.' };
+      if (p.some(function (x) { return x < 0; })) return { error: 'A share in your split can’t be negative.' };
+      if (Math.abs(ps - 100) > 0.5) return { error: 'The shares in your split add up to ' + r1(ps) + '%. Make them add up to 100% to compare.' };
       return { t: p.map(function (x) { return x / ps; }), mode: 'agreed' };
     }
     var w = state.part.slice(0, n), ws = sum(w) || n;
@@ -1024,30 +1154,66 @@
   }
   function evenTarget() { var n = state.people.length; return { t: state.people.map(function () { return 1 / n; }), mode: 'even' }; }
   function halfNames() { return joinNames(state.part.map(function (x, i) { return x !== 1 ? nameOf(i) + ' (' + nightsWord(nightsOf(i)) + ')' : ''; }).filter(Boolean)); }
-  function pctList(t) { return t.map(function (x, i) { return nameOf(i) + ' ' + Math.round(x * 100) + '%'; }).join(', '); }
+  // a share as people say it: 71, or 28.6 when whole numbers can't keep two identical people identical
+  function pctNum(x) { var r = Math.round(x * 10) / 10; return String(Math.abs(r - Math.round(r)) < 0.05 ? Math.round(r) : r); }
+  function pctList(t) { return t.map(function (x, i) { return nameOf(i) + ' ' + pctNum(x * 100) + '%'; }).join(', '); }
+  // "71/29"
+  function splitShort(t) { return t.map(function (x) { return pctNum(x * 100); }).join('/'); }
+  // A split is only "agreed" once you've both ticked "We've both looked these over"; until then it's the split you set.
+  function agreedWord() { return state.checked ? 'agreed' : 'set'; }
   function targetLabel(tg) {
-    if (tg.mode === 'agreed') return 'the split you agreed (' + pctList(tg.t) + ')';
+    if (tg.mode === 'agreed') return 'the split you ' + agreedWord() + ' (' + pctList(tg.t) + ')';
     if (tg.mode === 'part') return 'a fair share with ' + halfNames() + ' counted for the nights they’re here (' + pctList(tg.t) + ')';
     return 'an even share';
+  }
+  // the same target in a few words, for "about 8 h a week more than the 71/29 you set"
+  function targetShort(tg) {
+    if (tg.mode === 'agreed') return 'the ' + splitShort(tg.t) + ' you ' + agreedWord();
+    if (tg.mode === 'part') return 'a fair share for the nights each person is here (' + splitShort(tg.t) + ')';
+    return 'an even share';
+  }
+  // The biggest gap from the target, in plain hours a week. Over about 3 hours it's said in hours, never
+  // as "close" or "holding": a score can look fine while one person carries a whole evening more each week.
+  var GAP_H = 3;
+  function hoursGap(t, tg) {
+    var s = sum(t); if (s <= 0 || !tg || tg.error) return null;
+    var g = t.map(function (x, i) { return x - tg.t[i] * s; }), big = 0;
+    g.forEach(function (x, i) { if (Math.abs(x) > Math.abs(g[big])) big = i; });
+    // with two people the one doing more is named; with more, whoever is furthest off
+    if (t.length === 2 && g[big] < 0) big = 1 - big;
+    var h = Math.abs(g[big]);
+    return { i: big, h: h, more: g[big] > 0, big: h > GAP_H, txt: nameOf(big) + ' is doing about ' + hrs(h) + ' a week ' + (g[big] > 0 ? 'more' : 'less') + ' than ' + targetShort(tg) };
   }
   // When the hours look close but the thinking work (noticing, planning, remembering, keeping the peace)
   // sits mostly with one person: 70% or more of it with two people, or 1.5 times an even share with more.
   function invLean() {
     var inv = peopleTotals('home', invH), s = sum(inv), n = inv.length, thr = n === 2 ? 0.7 : Math.max(0.5, 1.5 / n);
     var top = 0; inv.forEach(function (x, i) { if (x > inv[top]) top = i; });
-    var nc = noticeCounts(), nt = 0; nc.me.forEach(function (x, i) { if (x > nc.me[nt]) nt = i; });
-    var byInv = s >= 0.5 && inv[top] / s >= thr, byNotice = nc.marked >= 3 && nc.me[nt] / nc.marked >= thr;
+    var nc = noticeCounts(), nt = 0, marks = sum(nc.me); nc.me.forEach(function (x, i) { if (x > nc.me[nt]) nt = i; });
+    // who notices first counts only once at least two people have marked their own view
+    var byInv = s >= 0.5 && inv[top] / s >= thr, byNotice = nc.who >= 2 && nc.me[nt] >= 3 && nc.me[nt] / marks >= thr;
     var ip = Math.round(inv[top] / s * 100);
     if (byInv) return { i: top, t: 'the noticing and planning sit mostly with ' + who(top) + ' (' + (ip >= 100 ? 'all' : 'about ' + ip + '%') + ' of the thinking and emotional work' +
-      (byNotice && nt === top ? ', and first to notice on ' + nc.me[nt] + ' of the ' + nc.marked + ' jobs marked' : '') + ')' };
-    if (byNotice) return { i: nt, t: 'the noticing sits mostly with ' + who(nt) + ' (first to notice on ' + nc.me[nt] + ' of the ' + nc.marked + ' jobs marked)' };
+      (byNotice && nt === top ? ', and as you each marked it, ' + noticeViews(nc) : '') + ')' };
+    if (byNotice) return { i: nt, t: 'the noticing sits mostly with ' + who(nt) + ', as you each marked it (' + noticeViews(nc) + ')' };
     return null;
   }
   // How the words are chosen (said on the page too): with two people, the bigger share under 60% is
   // "fairly close", 60% or more "leans one way", 90% or more "nearly all". With three or more, a share
   // of 1.5 times an even share or more "leans one way"; anything less is "fairly even". Against the
   // split you agreed (or half shares), within 10 points of it reads as close.
+  // More than about 3 hours a week from the target is said in plain hours, never as "close" or "holding".
   function hoursSentence() {
+    var txt = hoursSentence0(), t = totals(state.jobs);
+    if (anyBad(state.jobs) || sum(t) <= 0 || waitingFor().length) return txt;
+    var tg = target(); if (tg.error) tg = evenTarget();
+    var gap = hoursGap(t, tg);
+    if (!gap || !gap.big || !/\b(close|holding|fairly even|near)\b/i.test(txt)) return txt;
+    var p = pcts(t), lean = invLean();
+    return 'This week: ' + state.people.map(function (_, i) { return nameOf(i) + ' ' + Math.round(p[i]) + '%'; }).join(', ') + '. ' + gap.txt + '.' +
+      (lean ? ' And ' + lean.t + '.' : '') + ' That’s not a verdict on anyone, just what’s written down. Worth a look together.';
+  }
+  function hoursSentence0() {
     var t = totals(state.jobs), s = sum(t);
     // a number that can't be counted (negative, not a number, more than a week) holds the read back,
     // so a typo never turns into "100% done by them"
@@ -1120,12 +1286,12 @@
     // 3. shared bills: who owes whom, then how it was worked out
     var t = state.people.map(function (_, i) { return sum(shared.map(function (b) { return num(b.v[i]); })); }), s = sum(t);
     if (s > 0 && wait.length) {
-      out.push('Shared bills listed so far: ' + cash(s) + '. ' + waitText(wait).replace(/ to see the split\.$/, ' to see who owes whom.'));
+      out.push('Shared bills listed so far: ' + cash(s) + '. ' + waitText(wait, 'bills'));
     } else if (s > 0) {
       var tg = target(), fallback = !!tg.error;
       if (fallback) tg = evenTarget();
       var fair = tg.t.map(function (x) { return x * s; });
-      var how = tg.mode === 'agreed' ? 'Split by the share you agreed (' + pctList(tg.t) + '), that’s ' + state.people.map(function (_, i) { return nameOf(i) + ' ' + cash(fair[i]); }).join(', ') + '.'
+      var how = tg.mode === 'agreed' ? 'Split by the shares you ' + agreedWord() + ' (' + pctList(tg.t) + '), that’s ' + state.people.map(function (_, i) { return nameOf(i) + ' ' + cash(fair[i]); }).join(', ') + '.'
         : tg.mode === 'part' ? 'With ' + halfNames() + ' counted for the nights they’re here, a fair split is ' + state.people.map(function (_, i) { return nameOf(i) + ' ' + cash(fair[i]); }).join(', ') + '.'
         : 'An even split would be ' + cash(fair[0]) + ' each.';
       var word = tg.mode === 'even' ? 'an even share' : 'their share';
@@ -1135,11 +1301,11 @@
         return nameOf(i) + ' paid ' + cash(x) + ' (' + tail + ')';
       });
       var settle = settleUp(t, fair);
-      out.push(settle ? (tg.mode === 'agreed' ? 'To settle up the shared bills by the split you agreed: ' : tg.mode === 'part' ? 'To settle up the shared bills: ' : 'To settle up the shared bills evenly: ') + settle
+      out.push(settle ? (tg.mode === 'agreed' ? 'To settle up the shared bills by the split you ' + agreedWord() + ': ' : tg.mode === 'part' ? 'To settle up the shared bills: ' : 'To settle up the shared bills evenly: ') + settle
         : 'The shared bills are already settled: nobody owes anybody.');
       out.push('Shared bills listed: ' + cash(s) + '. ' + how + ' ' + parts.join('; ') + '.' +
-        (fallback ? ' (The split you agreed doesn’t add up to 100% yet, so this uses an even split.)' : '') +
-        (tg.mode === 'even' ? ' Even isn’t always the fair answer (incomes and rooms differ), so treat this as a starting point, not a verdict. A split you agree on, just under the result, is used here too.' : ' Treat it as a starting point, not a verdict.'));
+        (fallback ? ' (The split you set doesn’t add up to 100% yet, so this uses an even split.)' : '') +
+        (tg.mode === 'even' ? ' Even isn’t always the fair answer (incomes and rooms differ), so treat this as a starting point, not a verdict. A split you set, just under the result, is used here too.' : ' Treat it as a starting point, not a verdict.'));
     }
     // 4. the lines that are kept and shown, never owed
     if (own.length) out.push('Each person’s own, not in the settle-up: ' + own.map(function (b) {
@@ -1207,7 +1373,10 @@
     if (!b) return '';
     if (b.error) return b.error;
     var against = targetLabel({ t: b.target, mode: b.mode });
-    var txt = 'Balance score: ' + b.value.toFixed(2) + ' against ' + against + '. On Chapter II’s scale the setup reads as ' + band(b.value) + ' (0.70 or more is holding, 0.40 up to 0.70 is drifting, under 0.40 asks for a kind rethink). It reads the setup, never a person.';
+    // more than about 3 hours a week off: the hours come first, so a "holding" score never hides them
+    var gap = hoursGap(totals(state.jobs), { t: b.target, mode: b.mode });
+    var reads = gap && gap.big && band(b.value) === 'holding' ? 'the score is in the holding range, but in plain hours ' + gap.txt : 'the setup reads as ' + band(b.value);
+    var txt = 'Balance score: ' + b.value.toFixed(2) + ' against ' + against + '. On Chapter II’s scale ' + reads + ' (0.70 or more is holding, 0.40 up to 0.70 is drifting, under 0.40 asks for a kind rethink). It reads the setup, never a person.';
     if (b.value < 0.995 && b.movedHours >= 0.25) txt += ' About ' + hrs(b.movedHours) + ' a week would need to change hands to match.';
     var lean = invLean();
     if (lean) txt += ' The score counts hours only: ' + lean.t + ', and that load is real too.';
@@ -1222,15 +1391,27 @@
       return { c: c, per: per };
     });
   }
+  // Who notices first, as each person marked it on their own side: me[i] is how many jobs person i marked
+  // "I usually notice first"; both is how many jobs more than one person marked; who is how many people marked any.
   function noticeCounts() {
-    var c = { me: state.people.map(function () { return 0; }), other: 0, marked: 0, listed: 0 };
+    var c = { me: state.people.map(function () { return 0; }), other: 0, marked: 0, listed: 0, both: 0, who: 0 };
     state.jobs.forEach(function (j) {
       if (j.ex || kindOf(j) !== 'home') return;
       if (!j.name.trim() && !sum(j.v)) return;
       c.listed++;
-      if (j.nf >= 0) { c.me[j.nf]++; c.marked++; } else if (j.nf === -2) { c.other++; c.marked++; }
+      var nm = (j.nm || []).slice(0, state.people.length), k = 0;
+      if (solo()) nm = [nm[0] || 0];
+      nm.forEach(function (x, i) { if (x) { c.me[i]++; k++; } });
+      if (solo() && j.nso) { c.other++; k++; }
+      if (k) c.marked++;
+      if (!solo() && k > 1) c.both++;
     });
+    c.who = c.me.filter(function (x) { return x > 0; }).length;
     return c;
+  }
+  // "Maya marked 6; Jordan hasn't marked yet"
+  function noticeViews(c) {
+    return state.people.map(function (_, i) { return c.me[i] ? nameOf(i) + ' marked ' + c.me[i] : nameOf(i) + ' hasn’t marked yet'; }).join('; ');
   }
   function soloNums() {
     var home = peopleTotals('home', doH)[0], think = peopleTotals('home', thH)[0], inv = peopleTotals('home', invH)[0];
@@ -1270,6 +1451,15 @@
       return '<li><div class="ls-cat-top"><span>' + esc(x.c.n) + tag + '</span><span class="ls-num">' + hrs(x.tot) + '</span></div>' + b + (whoLine ? '<p class="ls-mini">' + esc(whoLine) + '</p>' : '') + '</li>';
     }).join('') + '</ul>';
   }
+  var lastWhole = '';
+  function noticeLine(nc) {
+    if (!nc.marked) return 'Who notices first? Each person marks their own view under “More” on a job. Unowned work falls to whoever notices first, every time.';
+    var marks = sum(nc.me), top = 0; nc.me.forEach(function (x, i) { if (x > nc.me[top]) top = i; });
+    return 'Who usually notices first, as each of you sees it: ' + noticeViews(nc) + '.' +
+      (nc.both ? ' On ' + nc.both + ' job' + (nc.both === 1 ? '' : 's') + ', more than one of you marked yourself: worth a chat, as you may each be noticing.' : '') +
+      (nc.who >= 2 && nc.me[top] >= 3 && nc.me[top] / marks >= 0.6 ? ' Most of the noticing is marked by ' + who(top) + '. Those jobs are good ones to give a single owner, the noticing included (WP-03).' : '') +
+      (nc.who < 2 && state.people.length > 1 ? ' One person’s marks are their own view, so it’s worth hearing the other side too.' : '');
+  }
   function groupResults() {
     var b = balance();
     $('r-balance').textContent = balanceText(b);
@@ -1285,17 +1475,20 @@
       }).join('') + '</ul>' + (allInv > 0 ? '' : '<p class="ls-mini">No thinking or emotional work counted yet. Open “More” on a job, or add from “Planning & remembering” and “Emotional work”.</p>');
     }
     var nc = noticeCounts(), nb = $('r-notice');
-    if (!nc.marked) nb.textContent = 'Who notices first? Mark it under “More” on a job. Unowned work falls to whoever notices first, every time.';
-    else {
-      var top = 0; nc.me.forEach(function (x, i) { if (x > nc.me[top]) top = i; });
-      nb.textContent = 'Who notices first, on the ' + nc.marked + ' job' + (nc.marked === 1 ? '' : 's') + ' you marked: ' + state.people.map(function (_, i) { return nameOf(i) + ' ' + nc.me[i]; }).join(', ') + '.' +
-        (nc.me[top] / nc.marked >= 0.6 && nc.marked >= 3 ? ' Most of the noticing sits with ' + who(top) + '. Those jobs are good ones to give a single owner, the noticing included (WP-03).' : '');
-    }
+    nb.textContent = noticeLine(nc);
     var work = peopleTotals('work'), rest = peopleTotals('rest'), pers = peopleTotals('personal'), ctx = [], differ = workDiffers(work);
+    // the whole week side by side, for seeing only: it never changes the home split. When paid hours differ,
+    // it sits right under the glasses, where the split is read, not far below.
+    var whole = sum(work) > 0 && sum(home) > 0 ? 'Home + paid work: ' + state.people.map(function (_, i) { return nameOf(i) + ' ' + hrs(home[i] + work[i]); }).join(', ') + '. This doesn’t change the home split; it shows the whole week.' : '';
+    var ww = $('whole-week'), wwOn = !!(whole && differ && !waitingFor().length);
+    if (ww) {
+      ww.hidden = !wwOn;
+      ww.innerHTML = wwOn ? '<p>' + esc(whole) + '</p>' + bar(state.people.map(function (_, i) { return { v: home[i] + work[i], c: COLORS[i] }; })) : '';
+    }
+    lastWhole = wwOn ? whole : '';
     if (sum(work) > 0) {
-      ctx.push('Paid work and school, kept out of the split: ' + state.people.map(function (_, i) { return nameOf(i) + ' ' + hrs(work[i]); }).join(', ') + '.' + (differ && !state.agreed.on ? ' These differ quite a bit, so a split you agree on may be fairer than an even one, as Chapter II says.' : ''));
-      // the whole week side by side, for seeing only: it never changes the home split
-      if (sum(home) > 0) ctx.push('Home + paid work: ' + state.people.map(function (_, i) { return nameOf(i) + ' ' + hrs(home[i] + work[i]); }).join(', ') + '. This doesn’t change the home split above; it shows the whole week.');
+      ctx.push('Paid work and school, kept out of the split: ' + state.people.map(function (_, i) { return nameOf(i) + ' ' + hrs(work[i]); }).join(', ') + '.' + (differ && !state.agreed.on ? ' These differ quite a bit, so a split you set together may be fairer than an even one, as Chapter II says.' : ''));
+      if (whole && !wwOn) ctx.push(whole);
     }
     if (sum(pers) > 0) ctx.push('Each person’s own family and personal time, counted on its own and not in the split: ' + state.people.map(function (_, i) { return nameOf(i) + ' ' + hrs(pers[i]); }).join(', ') + '.');
     if (sum(rest) > 0) ctx.push('Rest and recharging logged: ' + state.people.map(function (_, i) { return nameOf(i) + ' ' + hrs(rest[i]); }).join(', ') + '.');
@@ -1320,12 +1513,54 @@
         : sw ? 'Paid work is kept out of the home split. If your paid hours differ, a split that evens out the whole week may feel fairer.' : '';
       why.hidden = !why.textContent;
     }
+    renderOffer(); renderIncome();
   }
-  // whole percentages that add up to 100, from any weights
+  // "Ben suggests 71/29. Use it?": a split that came with the other phone's side, never switched on by itself
+  function renderOffer() {
+    var box = $('agreed-offer'), o = state.agreedOffer; if (!box) return;
+    box.hidden = solo() || !o;
+    if (box.hidden) return;
+    var t = o.p.map(function (x) { return (parseFloat(x) || 0) / 100; });
+    $('agreed-offer-t').textContent = (o.by || 'The other phone') + ' suggests ' + splitShort(t) + ' (' + pctList(t) + '). Use it?';
+  }
+  // Both "Money coming in" lines filled: offer to split shared bills by income (59/41)
+  function incomeSplit() {
+    if (solo()) return null;
+    var inc = state.people.map(function (_, i) { return sum(state.bills.filter(function (b) { return !b.ex && b.kind === 'income'; }).map(function (b) { return num(b.v[i]); })); });
+    var adults = state.people.map(function (_, i) { return i; }).filter(function (i) { return !state.kid[i]; });
+    if (adults.length < 2 || adults.some(function (i) { return !(inc[i] > 0); })) return null;
+    var p = wholePcts(inc);
+    var same = state.agreed.on && p.every(function (x, i) { return Math.abs((parseFloat(state.agreed.p[i]) || 0) - x) < 0.05; });
+    return { p: p, same: same };
+  }
+  function renderIncome() {
+    var row = $('income-row'), b = $('income-split'); if (!row || !b) return;
+    var sg = incomeSplit();
+    row.hidden = !sg || sg.same;
+    if (sg && !sg.same) b.textContent = 'Split shared bills by income (' + splitShort(sg.p.map(function (x) { return x / 100; })) + ')';
+    if (!sg) { var w = $('income-why'); if (w) w.hidden = true; }
+  }
+  // Whole percentages that add up to 100, from any weights. People with the same weight (two children
+  // here the same nights) always get the same share: when whole numbers can't do that, tenths are used.
   function wholePcts(w) {
-    var ws = sum(w), pct = w.map(function (x) { return x / ws * 100; }), r = pct.map(Math.floor), left = 100 - sum(r);
-    pct.map(function (x, i) { return { i: i, f: x - Math.floor(x) }; }).sort(function (a, b) { return b.f - a.f; }).slice(0, left).forEach(function (o) { r[o.i]++; });
-    return r;
+    var ws = sum(w) || 1, pct = w.map(function (x) { return x / ws * 100; });
+    function tryUnit(u) {
+      var r = pct.map(function (x) { return Math.floor(x / u + 1e-9); }), left = Math.round(100 / u) - sum(r);
+      var groups = [];
+      w.forEach(function (x, i) {
+        var g = groups.filter(function (gg) { return Math.abs(w[gg.ix[0]] - x) < 1e-9; })[0];
+        if (g) g.ix.push(i); else groups.push({ ix: [i], f: pct[i] / u - Math.floor(pct[i] / u + 1e-9) });
+      });
+      groups.sort(function (a, b) { return b.f - a.f || a.ix.length - b.ix.length; });
+      groups.forEach(function (g) { if (left > 0 && g.f > 1e-9 && g.ix.length <= left) { g.ix.forEach(function (i) { r[i]++; }); left -= g.ix.length; } });
+      groups.forEach(function (g) { if (left > 0 && g.ix.length <= left) { g.ix.forEach(function (i) { r[i]++; }); left -= g.ix.length; } });
+      return { r: r.map(function (x) { return Math.round(x * u * 10) / 10; }), left: left, u: u };
+    }
+    var a = tryUnit(1); if (!a.left) return a.r;
+    var b = tryUnit(0.1);
+    // still a few tenths short (rare): the biggest share takes them, so it adds up to 100
+    if (b.left) { var top = 0; w.forEach(function (x, i) { if (x > w[top]) top = i; }); b.r[top] = Math.round((b.r[top] + b.left / 10) * 10) / 10; }
+    return b.r;
   }
   // "Suggest an adults and kids split": each adult a full share, each child a quarter share, both scaled
   // by the nights they're here. A starting point for ages and what you agree, never a rule.
@@ -1631,6 +1866,8 @@
     if (s.inv > 0) lines.push('', 'About ' + hrs(s.inv) + ' a week of it is work nobody sees: noticing, planning, remembering and keeping the peace.');
     var nc = noticeCounts();
     if (nc.marked) lines.push('I’m the one who notices first on ' + nc.me[0] + ' of the ' + nc.marked + ' job' + (nc.marked === 1 ? '' : 's') + ' I marked.');
+    var feeds = state.jobs.filter(function (j) { return feedNote(j); });
+    if (feeds.length) lines.push('Night feeds: ' + feedNote(feeds[0]) + ', and on top of it on any other nights.');
     var ho = planned('handoff'), dr = planned('drop'), si = planned('simplify'), sc = planned('schedule');
     if (ho.length || dr.length || si.length || sc.length) {
       lines.push('', 'What would help:');
@@ -1646,23 +1883,29 @@
     if (solo()) return soloText();
     // only the parts that have something in them: bills alone never start with "0h (0%)"
     var t = totals(state.jobs), p = pcts(t), s = sum(t), ms = moneySentence(), tg = target();
-    var hasHours = s > 0 || anyBad(state.jobs);
+    // every job with time on it is listed, the ones outside the split too, marked as such
+    var listed = state.jobs.filter(function (j) { return !j.ex && j.name.trim() && state.people.some(function (_, i) { return jobH(j, i) > 0 || num(j.v[i]) > 0; }); });
+    var hasHours = s > 0 || anyBad(state.jobs) || listed.length > 0;
     var lines = [hasHours ? 'Our lemonade stand this week (hours, not a verdict):' : ms ? 'Our shared costs (not a verdict):' : 'Our lemonade stand this week:'];
     if (s > 0) {
       var tgOn = !tg.error && tg.mode !== 'even', wait = anyBad(state.jobs) ? [] : waitingFor();
       // while a side is still to come: hours only, no percentages
       state.people.forEach(function (x, i) {
-        lines.push('- ' + nameOf(i) + ': ' + (wait.indexOf(i) >= 0 ? 'side not in yet' : r1(t[i]) + 'h' + (wait.length ? '' : ' (' + Math.round(p[i]) + '%' + (tgOn ? (tg.mode === 'agreed' ? ', agreed ' : ', fair share ') + Math.round(tg.t[i] * 100) + '%' : '') + ')')));
+        lines.push('- ' + nameOf(i) + ': ' + (wait.indexOf(i) >= 0 ? 'side not in yet' : r1(t[i]) + 'h' + (wait.length ? '' : ' (' + Math.round(p[i]) + '%' + (tgOn ? (tg.mode === 'agreed' ? ', ' + agreedWord() + ' ' : ', fair share ') + pctNum(tg.t[i] * 100) + '%' : '') + ')')));
       });
-      var jobs = state.jobs.filter(function (j) { return !j.ex && j.name.trim() && kindOf(j) === 'home' && state.people.some(function (_, i) { return jobH(j, i) > 0; }); });
-      if (jobs.length) {
-        lines.push('', 'Jobs (hours a week, thinking part included):');
-        jobs.forEach(function (j) {
-          lines.push('- ' + j.name.trim() + ': ' + state.people.map(function (x, i) { return nameOf(i) + ' ' + r1(jobH(j, i)) + 'h'; }).join(', '));
-        });
-      }
+      if (lastWhole) lines.push(lastWhole);
     }
-    if (hasHours) {
+    if (listed.length) {
+      lines.push('', 'Jobs (hours a week, thinking part included):');
+      listed.forEach(function (j) {
+        var k = kindOf(j), fn = feedNote(j);
+        var mark = k === 'home' ? '' : k === 'rest' ? ' (rest, not in the split)' : k === 'work' ? ' (paid work or school, not in the split)' : ' (own family or personal, not in the split)';
+        lines.push('- ' + j.name.trim() + mark + (fn ? ' (' + fn + ')' : '') + ': ' + state.people.map(function (x, i) {
+          return nameOf(i) + ' ' + r1(jobH(j, i)) + 'h' + (j.fq && num(j.v[i]) > 0 ? ' (' + FREQ_LABEL[freqOf(j, i)].toLowerCase() + ')' : '');
+        }).join(', '));
+      });
+    }
+    if (s > 0 || anyBad(state.jobs)) {
       lines.push('', hoursSentence());
       var bt = balanceText(balance()); if (bt) lines.push('', bt);
       var tc = topCats(6);
@@ -1670,8 +1913,10 @@
       var inv = peopleTotals('home', invH);
       if (sum(inv) > 0) lines.push('', 'Thinking and emotional work (the invisible part): ' + state.people.map(function (_, i) { return nameOf(i) + ' ' + hrs(inv[i]); }).join(', ') + '.');
       var nc = noticeCounts();
-      if (nc.marked) lines.push('Who notices first: ' + state.people.map(function (_, i) { return nameOf(i) + ' ' + nc.me[i]; }).join(', ') + ' (of ' + nc.marked + ' jobs marked).');
+      if (nc.marked) lines.push('Who usually notices first, as each person marked it: ' + noticeViews(nc) + '.');
     }
+    var feeds = state.jobs.filter(function (j) { return feedNote(j); });
+    if (feeds.length) lines.push('', 'Night feeds: ' + feedNote(feeds[0]) + ', and on top of it on any other nights.');
     var ctx = $('r-context') && !$('r-context').hidden ? $('r-context').textContent : '';
     if (ctx) lines.push('', ctx);
     if (ms) lines.push('', ms);
@@ -1816,7 +2061,7 @@
   $('add-row').addEventListener('click', function () {
     // the area you were looking at in the library, if you picked one; otherwise a guess from the name you type
     var cat = libTouched && CAT[libCat] ? libCat : 'other';
-    state.jobs.push({ name: '', v: state.people.map(function () { return 0; }), t: state.people.map(function () { return 0; }), cat: cat, freq: 'week', unit: 'm', nf: -1, custom: true });
+    state.jobs.push({ name: '', v: state.people.map(function () { return 0; }), t: state.people.map(function () { return 0; }), cat: cat, freq: 'week', unit: 'm', nm: zeros(), custom: true });
     renderRows(); recalc();
     var r = rowFor(state.jobs[state.jobs.length - 1]); var t = r && r.querySelector('textarea'); if (t) t.focus();
     status('Added a blank job under ' + CAT[cat].n + '. Type its name, then the time, and pick its area if it’s not right.');
@@ -2166,7 +2411,7 @@
     state.bills = state.bills.filter(function (b) { return !b.ex; });
     var tag = ' (from ' + fromWord(d) + ')';
     function newJob(ij, name) {
-      var j = { name: name, v: zeros(), t: zeros(), cat: ij.c, freq: ij.f, unit: ij.u, nf: -1 };
+      var j = { name: name, v: zeros(), t: zeros(), cat: ij.c, freq: ij.f, unit: ij.u, nm: zeros() };
       Object.keys(ij.v).forEach(function (k) { if (map[k] != null) j.v[map[k]] = ij.v[k]; });
       Object.keys(ij.t).forEach(function (k) { if (map[k] != null) j.t[map[k]] = ij.t[k]; });
       if (ij.nf && map[ij.nf] != null) j.nf = map[ij.nf];
@@ -2403,7 +2648,7 @@
       h.jobs.forEach(function (hj) {
         if (state.jobs.some(function (j) { return j.name.trim().toLowerCase() === hj.name.toLowerCase(); })) return;
         var m = libMatch(hj.name), zero = function () { var a = []; for (var i = 0; i < n; i++) a.push(0); return a; };
-        state.jobs.push({ name: hj.name, v: zero(), t: zero(), cat: guessCat(hj.name), freq: m ? m.t[2] : 'week', unit: m && m.t[3] ? m.t[3] : 'm', nf: -1 });
+        state.jobs.push({ name: hj.name, v: zero(), t: zero(), cat: guessCat(hj.name), freq: m ? m.t[2] : 'week', unit: m && m.t[3] ? m.t[3] : 'm', nm: zeros() });
         jobs++;
       });
       // the fridge list, when it is empty: jobs that already have an owner in the household

@@ -47,6 +47,11 @@
   // What an unnamed person is called. The Workpaper Suite swaps in its road's words ("You", "Teammate 2").
   var labelFor = function (i) { return 'Person ' + CODES[i]; };
   function setDefaultLabels(fn) { labelFor = typeof fn === 'function' ? fn : function (i) { return 'Person ' + CODES[i]; }; }
+  // What a page that knows the household can add (the Workpaper Suite): who is a child, and the split a
+  // week is compared with (the one agreed on the Lemonade Stand, or each person counted for the nights
+  // they're here). fn(names) returns { kids: [true/false by place], target: { t: [fractions], mode, label } }.
+  var household = null;
+  function setHousehold(fn) { household = typeof fn === 'function' ? fn : null; }
 
   function peopleCount(values) {
     values = values || {};
@@ -202,6 +207,15 @@
     });
   }
 
+  // A short name for a row, for "Removed “Groceries”": its job or task, or the first thing written in it
+  function rowName(section, row) {
+    if (!row) return '';
+    var c = section.columns.filter(function (x) { return !x.prefill && x.type !== 'computed' && !isBlank(row[x.id]) && typeof row[x.id] === 'string'; })[0];
+    var t = String(row.task || row.item || row.job || (c ? row[c.id] : '') || '').replace(/\s+/g, ' ').trim();
+    if (!t && row.day && section.personDays) return row.day;
+    return t.length > 40 ? t.slice(0, 39) + '\u2026' : t;
+  }
+
   function makeCtx(schema, state) {
     var byId = {};
     schema.sections.forEach(function (s) { if (s.id) byId[s.id] = s; });
@@ -219,7 +233,15 @@
         return '';
       },
       count: function () { return peopleCount(state.values); },
-      people: function () { return CODES.slice(0, peopleCount(state.values)); }
+      people: function () { return CODES.slice(0, peopleCount(state.values)); },
+      // a child on a family road is never waited for, and never handed hours
+      isChild: function (p) { var hh = household ? household() : null, i = CODES.indexOf(p); return !!(hh && hh.kids && i >= 0 && hh.kids[i]); },
+      // the share each person is compared with, when it isn't an even one; null means even
+      target: function () {
+        var hh = household ? household() : null, n = peopleCount(state.values), tg = hh && hh.target;
+        if (!tg || !Array.isArray(tg.t) || tg.t.length !== n || tg.mode === 'even') return null;
+        return tg;
+      }
     };
   }
 
@@ -789,6 +811,22 @@
       box.appendChild(h('div', { className: 'wpf-rows-for' }, [h('label', { for: pid, text: 'Filling in your own rows? Show ' }), sel]));
       if (only) box.appendChild(h('p', { className: 'wpf-turn', role: 'note', text: 'These are ' + ctx.name(only) + '\u2019s rows. Only ' + ctx.name(only) + ' fills them in, about their own day. On a shared device? Hand it over here.' }));
     }
+    // On a phone, a day-by-day check-in opens on today's rows (one person's, when "Only …'s rows" is
+    // picked), with the rest of the week folded under "Show the whole week". It really is 90 seconds then.
+    // Nothing is taken off the sheet or the PDF; the other days are only folded on screen.
+    this.weekOpen = this.weekOpen || {};
+    var today0 = sec.personDays ? sec.personDays[(new Date().getDay() + 6) % 7] : '';
+    var phone = !!(global.matchMedia && global.matchMedia('(max-width: 640px)').matches);
+    var foldDay = sec.personDays && phone && !this.weekOpen[sec.id] && rows.some(function (r) { return r && r.day === today0; }) ? today0 : '';
+    var folded = 0;
+    if (sec.personDays && phone) {
+      var todayWho = rows.filter(function (r) { return r && r.day === today0 && (!only || r.who === only); }).map(function (r) { return r.who ? ctx.name(r.who) : ''; }).filter(Boolean);
+      var fid = 'f' + (++this.uid);
+      box.appendChild(h('div', { className: 'wpf-today' }, [
+        h('p', { className: 'wpf-today-k', id: fid, text: foldDay ? 'Today: ' + today0 + (todayWho.length ? ' / ' + todayWho.join(', ') : '') : 'The whole week' }),
+        h('button', { type: 'button', className: 'wpf-add', 'data-action': 'week-toggle', 'data-table': sec.id, 'aria-expanded': foldDay ? 'false' : 'true', 'aria-describedby': fid, text: foldDay ? 'Show the whole week' : 'Show just today' })
+      ]));
+    }
     var table = h('table', { className: 'wpf-table no-bubble' + (sec.fixedRows ? ' wpf-fixed' : '') });
     var headRow = h('tr');
     if (sec.fixedRows) headRow.appendChild(h('th', { scope: 'col' }, [h('span', { className: 'visually-hidden', text: 'Person' })]));
@@ -805,6 +843,7 @@
     rows.forEach(function (r, i) {
       var tr = h('tr', sec.examples ? { 'data-ex-table': sec.id, 'data-ex-row': String(i) } : null);
       if (only && r && r.who !== only) tr.hidden = true;
+      else if (foldDay && r && r.day !== foldDay) { tr.hidden = true; folded++; }
       if (sec.fixedRows) tr.appendChild(h('th', { scope: 'row', className: 'wpf-rowlabel', 'data-fixed': fixed[i], text: rowLabel(fixed[i], ctx) }));
       sec.columns.forEach(function (c, ci) {
         var td = h('td', { 'data-label': c.label });
@@ -828,9 +867,15 @@
     });
     table.appendChild(body);
     box.appendChild(table);
+    if (foldDay && folded) box.appendChild(h('p', { className: 'wpf-today-more', text: 'The other ' + (folded === 1 ? 'row is' : folded + ' rows are') + ' folded away, not removed. They are all in the PDF.' }));
 
     if (!sec.fixedRows) {
       var actions = h('div', { className: 'wpf-table-actions' });
+      if (this.undo && this.undo.tbl === sec.id) {
+        box.appendChild(h('p', { className: 'wpf-undo' }, [
+          h('span', { text: 'Removed ' + (this.undo.what ? '\u201c' + this.undo.what + '\u201d' : 'a row') + '. ' }),
+          h('button', { type: 'button', className: 'wpf-add', 'data-action': 'undo-remove', 'data-table': sec.id, text: 'Undo' })]));
+      }
       actions.appendChild(h('button', { type: 'button', className: 'wpf-add', 'data-action': 'add', 'data-table': sec.id, text: sec.addLabel || 'Add a row' }));
       if (sec.pull) actions.appendChild(h('button', { type: 'button', className: 'wpf-add', 'data-action': 'pull', 'data-table': sec.id, text: sec.pull.label }));
       if (sec.examples) actions.appendChild(h('button', { type: 'button', className: 'wpf-add wpf-ex-clear', 'data-action': 'clear-examples', 'data-table': sec.id, text: 'Remove the example jobs' }));
@@ -948,6 +993,7 @@
       var again = this.root.querySelector('[data-rows-for="' + id + '"]'); if (again) again.focus();
       return;
     }
+    if (this.undo) { this.undo = null; Array.prototype.forEach.call(this.root.querySelectorAll('.wpf-undo'), function (x) { x.remove(); }); }
     var val = t.type === 'checkbox' ? t.checked : t.value;
     var tbl = t.getAttribute('data-table');
     if (tbl && t.getAttribute('data-col')) {
@@ -1108,13 +1154,17 @@
     d.p = d.p.slice(0, MAX_PEOPLE).map(function (x) { return String(x == null ? '' : x).replace(/\s+/g, ' ').trim().slice(0, 40); });
     d.m = d.m && typeof d.m === 'object' ? d.m : {};
     d.tb = d.tb && typeof d.tb === 'object' ? d.tb : {};
+    d.vals = d.vals && typeof d.vals === 'object' ? d.vals : null;
+    d.s = typeof d.s === 'number' && isFinite(d.s) ? d.s : null;
     return d;
   }
   A.shareWhat = function () { return (this.schema.share && this.schema.share.what) || 'list'; };
   // This sheet as a small object: names, the boxes at the top, and the rows someone wrote (never the
   // untouched examples, never the closing tick, never a private answer).
   A.shareData = function () {
-    var st = this.state, v = st.values, n = peopleCount(v), names = CODES.slice(0, n).map(function (c) { return String(v['partner' + c] || '').trim(); });
+    var st = this.state, v = st.values;
+    if (!this.schema.people) return this.shareDataOne();
+    var n = peopleCount(v), names = CODES.slice(0, n).map(function (c) { return String(v['partner' + c] || '').trim(); });
     if (names.some(function (x) { return !x; })) return { error: 'Give everyone a name at the top first, so the other phone knows who is who.' };
     var d = { t: 'tol-list', v: 1, wp: this.schema.code, p: names, m: {}, tb: {} }, rows = 0;
     (this.schema.meta || []).forEach(function (f) { if (!isBlank(v[f.id]) && typeof v[f.id] !== 'object') d.m[f.id] = v[f.id]; });
@@ -1137,6 +1187,20 @@
     if (!rows) return { error: this.shareWhat() === 'week' ? 'Write something on the sheet first, then share it.' : 'Add a job (or give an example job an owner) first, then share the list.' };
     return d;
   };
+  // A sheet one person fills in about themselves (How much are you carrying?): their name, the date,
+  // their answers and the score they add up to. Never a private answer.
+  A.shareDataOne = function () {
+    var sc = this.schema, v = this.state.values, name = String(v.name || '').trim(), keys = (sc.share && sc.share.values) || [];
+    if (!name) return { error: 'Type your name at the top first, so the others know whose ' + this.shareWhat() + ' this is.' };
+    var d = { t: 'tol-list', v: 1, wp: sc.code, p: [name], m: {}, tb: {}, vals: {} }, got = 0;
+    (sc.meta || []).forEach(function (f) { if (!isBlank(v[f.id]) && typeof v[f.id] !== 'object') d.m[f.id] = v[f.id]; });
+    keys.forEach(function (k) { if (!isBlank(v[k]) && typeof v[k] !== 'object') { d.vals[k] = v[k]; got++; } });
+    var sc0 = sc.share && sc.share.score ? sc.share.score(makeCtx(sc, this.state)) : null;
+    if (sc.share && sc.share.score && sc0 == null) return { error: 'Answer all five rows first, then share your score.' };
+    if (sc0 != null) d.s = Math.round(sc0 * 100) / 100;
+    if (!got) return { error: 'Write something on the sheet first, then share it.' };
+    return d;
+  };
   A.shareLink = function (d) {
     var loc = global.location, enc = b64urlEnc(JSON.stringify(d));
     return { link: loc.origin + loc.pathname + loc.search + SHARE_HASH + enc, code: SHARE_CODE + enc };
@@ -1144,16 +1208,18 @@
   // How many rows a shared list holds, for the offer ("12 jobs")
   A.sharedCount = function (d) {
     var self = this, n = 0;
+    if (d.vals && typeof d.vals === 'object') n += Object.keys(d.vals).length;
     Object.keys(d.tb).forEach(function (k) { var s = self.schema.sections.filter(function (x) { return x.id === k; })[0]; if (s && Array.isArray(d.tb[k])) n += d.tb[k].length; });
     return n;
   };
   A.shareEl = function () {
     var what = this.shareWhat(), open = this.shareOpen || '';
     var box = h('div', { className: 'wpf-share no-print tol-plain', role: 'group', 'aria-label': 'Share this ' + what });
-    box.appendChild(h('p', { className: 'wpf-share-h', text: what === 'week' ? 'Keeping this week together?' : 'Keeping this list together?' }));
-    box.appendChild(h('p', { className: 'wpf-help', text: 'Send it to the others as a link, and open theirs here. When you open one, you choose to combine it with what is here or to replace it. People are matched by name.' }));
+    var one = !this.schema.people;
+    box.appendChild(h('p', { className: 'wpf-share-h', text: one ? 'Sharing your ' + what + ' with the others?' : what === 'week' ? 'Keeping this week together?' : 'Keeping this list together?' }));
+    box.appendChild(h('p', { className: 'wpf-help', text: one ? 'Send it as a link instead of a file, and open theirs here. Someone else\u2019s ' + what + ' goes into \u201cEveryone else\u2019s scores\u201d below; your own answers stay as they are.' : 'Send it to the others as a link, and open theirs here. When you open one, you choose to combine it with what is here or to replace it. People are matched by name.' }));
     box.appendChild(h('div', { className: 'wpf-share-btns' }, [
-      h('button', { type: 'button', className: 'wpf-add', 'data-action': 'share-make', 'aria-expanded': open === 'make' ? 'true' : 'false', text: 'Share this ' + what }),
+      h('button', { type: 'button', className: 'wpf-add', 'data-action': 'share-make', 'aria-expanded': open === 'make' ? 'true' : 'false', text: one ? 'Share as a link' : 'Share this ' + what }),
       h('button', { type: 'button', className: 'wpf-add', 'data-action': 'share-open', 'aria-expanded': open === 'open' ? 'true' : 'false', text: 'Open a shared ' + what })
     ]));
     if (open === 'make') {
@@ -1182,7 +1248,9 @@
       var inp = h('textarea', { id: iid, rows: '3', className: 'wpf-share-code', 'data-share-in': '1', autocomplete: 'off', spellcheck: 'false' });
       inp.value = this.sharePaste || '';
       q.appendChild(inp);
-      q.appendChild(h('div', { className: 'wpf-share-btns' }, [
+      q.appendChild(h('div', { className: 'wpf-share-btns' }, one ? [
+        h('button', { type: 'button', className: 'wpf-add', 'data-action': 'share-combine', text: 'Add it here' })
+      ] : [
         h('button', { type: 'button', className: 'wpf-add', 'data-action': 'share-combine', text: 'Combine with what’s here' }),
         h('button', { type: 'button', className: 'wpf-add', 'data-action': 'share-replace', text: 'Replace what’s here' })
       ]));
@@ -1197,6 +1265,15 @@
     var what = this.shareWhat(), n = this.sharedCount(d), names = d.p.filter(Boolean);
     var empty = answered(this.schema, this.state) === 0;
     var box = h('div', { className: 'wpf-share-in no-print tol-plain', role: 'group', 'aria-label': 'A shared ' + what, tabindex: '-1', id: 'wpf-share-in' });
+    if (!this.schema.people) {
+      box.appendChild(h('p', {}, [h('strong', { text: (names[0] || 'Someone') + ' shared their ' + what + ' with you. ' }), d.s != null ? 'Load score: ' + d.s.toFixed(2) + ' out of 1.00.' : '']));
+      box.appendChild(h('p', { className: 'wpf-help', text: this.oneIsMine(d) ? 'It looks like your own sheet, so adding it fills in what is empty here.' : 'Adding it puts their score into \u201cEveryone else\u2019s scores\u201d. Your own answers stay as they are.' }));
+      box.appendChild(h('div', { className: 'wpf-share-btns' }, [
+        h('button', { type: 'button', className: 'wpf-add', 'data-action': 'share-in-combine', text: 'Add it here' }),
+        h('button', { type: 'button', className: 'wpf-add', 'data-action': 'share-in-no', text: 'Not now' })
+      ]));
+      return box;
+    }
     box.appendChild(h('p', {}, [h('strong', { text: 'Someone shared ' + (what === 'week' ? 'a week' : 'a list') + ' with you. ' }),
       (names.length ? 'Names: ' + names.join(', ') + '. ' : '') + n + (what === 'week' ? (n === 1 ? ' row.' : ' rows.') : (n === 1 ? ' job.' : ' jobs.'))]));
     box.appendChild(h('p', { className: 'wpf-help', text: empty ? 'Nothing is on this page yet, so either choice simply opens it.' : 'Combine keeps everything here and adds what is new, matching people by name. Where both have something different, this page keeps its own and tells you. Replace swaps this page for the shared ' + what + '.' }));
@@ -1259,8 +1336,41 @@
   };
   // Take in a shared sheet. replace: the shared one instead of this page. Otherwise combine: add what is
   // new, fill in what is empty here, and keep this page's own answer wherever both have something different.
+  // Is a shared one-person sheet this person's own (same name, or nothing here yet)?
+  A.oneIsMine = function (d) {
+    var mine = String(this.state.values.name || '').trim();
+    return !mine || answered(this.schema, this.state) === 0 || fold(mine) === fold(d.p[0]);
+  };
+  A.takeSharedOne = function (d) {
+    var sc = this.schema, v = this.state.values, what = this.shareWhat(), who = d.p[0] || 'Someone';
+    if (this.oneIsMine(d)) {
+      var filled = 0, differ = 0, vals = d.vals || {};
+      (sc.meta || []).forEach(function (f) { var x = d.m[f.id]; if (x != null && typeof x !== 'object' && isBlank(v[f.id])) { v[f.id] = x; filled++; } });
+      ((sc.share && sc.share.values) || []).forEach(function (k) {
+        var x = vals[k];
+        if (x == null || typeof x === 'object' || x === '') return;
+        if (isBlank(v[k])) { v[k] = x; filled++; } else if (String(v[k]) !== String(x)) differ++;
+      });
+      this.state = sanitize(sc, this.state);
+      this.changed();
+      return 'Opened ' + who + '\u2019s ' + what + (filled ? '' : ': everything in it was already here') + '.' + (differ ? ' ' + (differ === 1 ? 'One answer is' : differ + ' answers are') + ' different, so this page kept its own.' : '') + ' Nothing was sent anywhere.';
+    }
+    if (d.s == null || !(d.s >= 0 && d.s <= 1)) return who + ' hasn\u2019t answered all five rows yet, so there is no score to add.';
+    var list = String(v.partnerScore || '').split(/[,;\s]+/).filter(Boolean);
+    var txt = d.s.toFixed(2);
+    if (list.indexOf(txt) >= 0 && this.lastShared === who + txt) return who + '\u2019s score (' + txt + ') is already in \u201cEveryone else\u2019s scores\u201d.';
+    list.push(txt);
+    v.partnerScore = list.join(', ');
+    this.lastShared = who + txt;
+    this.state = sanitize(sc, this.state);
+    this.changed();
+    return 'Added ' + who + '\u2019s load score (' + txt + ') to \u201cEveryone else\u2019s scores\u201d. Your own answers are as they were. Nothing was sent anywhere.';
+  };
   A.takeShared = function (d, replace) {
     var self = this, sc = this.schema, what = this.shareWhat();
+    // a page that holds several sheets (the Workpaper Suite) may put it somewhere better first
+    if (this.opts.takeShared) { var routed = this.opts.takeShared(d, replace, this); if (routed) return routed; }
+    if (!sc.people) return this.takeSharedOne(d);
     if (replace && answered(sc, this.state) > 0 && !global.confirm('Replace what is on this page with the shared ' + what + '?')) return '';
     var st = replace ? blankState(sc) : this.state, v = st.values, added = { people: [], rows: 0, filled: 0 }, differ = [], dropped = [];
     if (replace) {
@@ -1467,6 +1577,15 @@
     var tbl = b.getAttribute('data-table'), rows = this.state.tables[tbl];
     var sec = this.schema.sections.filter(function (s) { return s.id === tbl; })[0];
     var action = b.getAttribute('data-action');
+    if (action === 'week-toggle') {
+      this.weekOpen = this.weekOpen || {};
+      this.weekOpen[tbl] = !this.weekOpen[tbl];
+      this.render();
+      var wt = this.root.querySelector('[data-action="week-toggle"][data-table="' + tbl + '"]');
+      if (wt) wt.focus();
+      this.status(this.weekOpen[tbl] ? 'Showing the whole week.' : 'Showing just today. The other days are folded away, not removed.');
+      return;
+    }
     if (action === 'clear-examples') {
       var left = rows.filter(function (r) { return !isExampleRow(sec, r); }), gone = rows.length - left.length;
       this.state.tables[tbl] = left.length ? left : [{}];
@@ -1484,12 +1603,31 @@
       var inputs = this.root.querySelectorAll('[data-table="' + tbl + '"][data-row="' + (rows.length - 1) + '"]');
       if (inputs[0]) inputs[0].focus();
     } else if (action === 'remove') {
-      var i = +b.getAttribute('data-row');
-      if (!rowIsEmpty(sec, rows[i]) && !window.confirm('Remove this row and what is written in it?')) return;
+      // One tap removes the row; a row with something written in it can come back with "Undo".
+      // (No confirm box: some phones and in-app browsers block it, and the tap then did nothing.)
+      var i = +b.getAttribute('data-row'), gone = rows[i], wasEmpty = !gone || rowIsEmpty(sec, gone);
       rows.splice(i, 1);
-      if (!rows.length) rows.push({});
+      var filler = false;
+      if (!rows.length) { rows.push({}); filler = true; }
+      this.undo = wasEmpty ? null : { tbl: tbl, i: i, row: gone, filler: filler, what: rowName(sec, gone) };
       this.changed();
       this.render();
+      var nextX = this.root.querySelector('button[data-action="remove"][data-table="' + tbl + '"][data-row="' + Math.min(i, rows.length - 1) + '"]');
+      var undoB = this.root.querySelector('[data-action="undo-remove"]');
+      if (undoB) undoB.focus(); else if (nextX) nextX.focus();
+      this.status(wasEmpty ? 'Removed an empty row.' : 'Removed ' + (this.undo.what ? '\u201c' + this.undo.what + '\u201d' : 'that row') + '. Tap Undo to bring it back.');
+    } else if (action === 'undo-remove') {
+      var u = this.undo;
+      if (!u || u.tbl !== tbl) return;
+      var back = this.state.tables[tbl];
+      if (u.filler && back.length === 1 && rowIsEmpty(sec, back[0])) back.length = 0;
+      back.splice(Math.min(u.i, back.length), 0, u.row);
+      this.undo = null;
+      this.changed();
+      this.render();
+      var bx = this.root.querySelector('[data-table="' + tbl + '"][data-row="' + Math.min(u.i, back.length - 1) + '"]:not(button)');
+      if (bx) bx.focus();
+      this.status('Brought ' + (u.what ? '\u201c' + u.what + '\u201d' : 'the row') + ' back.');
     } else if (action === 'pull') {
       var have = {}, key = sec.pull.key, added = 0;
       rows.forEach(function (r) { if (r[key]) have[r[key].trim().toLowerCase()] = true; });
@@ -1647,7 +1785,7 @@
       return true;
     }
     function sharedSay() {
-      if (app.sharedIn) { var si = document.getElementById('wpf-share-in'); if (si) { si.scrollIntoView({ block: 'center' }); si.focus(); } app.status('Someone shared ' + (app.shareWhat() === 'week' ? 'a week' : 'a list') + ' with you. Choose what to do with it, at the top of the sheet.'); return true; }
+      if (app.sharedIn) { var si = document.getElementById('wpf-share-in'); if (si) { si.scrollIntoView({ block: 'center' }); si.focus(); } app.status('Someone shared ' + (app.shareWhat() === 'week' ? 'a week' : app.shareWhat() === 'list' ? 'a list' : 'their ' + app.shareWhat()) + ' with you. Choose what to do with it, at the top of the sheet.'); return true; }
       if (sharedMsg) { app.status(sharedMsg); sharedMsg = ''; return true; }
       return false;
     }
@@ -1736,7 +1874,7 @@
     Report: Report, renderBody: renderBody, App: App, download: download, today: today, formatDate: formatDate,
     displayCell: displayCell, rowIsEmpty: rowIsEmpty, rowLabel: rowLabel, isBlank: isBlank, COLORS: COLORS, DRAFT_FORMAT: DRAFT_FORMAT,
     CODES: CODES, MAX_PEOPLE: MAX_PEOPLE, peopleCount: peopleCount, fixedRowsFor: fixedRowsFor, syncPeople: syncPeople, rangeProblem: rangeProblem,
-    addPerson: addPerson, removePerson: removePerson, personOptions: personOptions, setDefaultLabels: setDefaultLabels,
+    addPerson: addPerson, removePerson: removePerson, personOptions: personOptions, setDefaultLabels: setDefaultLabels, setHousehold: setHousehold,
     setMinPeople: setMinPeople, optionLabel: optionLabel, isExampleRow: isExampleRow, agreedLine: agreedLine, closingLines: closingLines,
     labelFor: function (i) { return labelFor(i); }, readShared: readShared
   };

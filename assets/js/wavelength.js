@@ -455,7 +455,7 @@
   /* ---------- state: on this device only, and only if you turn that on ---------- */
   function fresh() {
     return { v: 1, keep: false, step: 0, name: '', nts: [], otherText: '', answers: { pace: [null, null, null], lens: [null, null, null], send: [null, null, null], recv: [null, null, null] },
-      chips: [], showAll: {}, inputs: [], topInput: null, hp: { pick: {}, words: {}, at: 0, own: {} }, journal: {}, done: [], ch: null, view: null, connLevel: 0, connFocus: null, moved: false, their: null };
+      chips: [], showAll: {}, inputs: [], topInput: null, hp: { pick: {}, words: {}, at: 0, own: {} }, journal: {}, done: [], ch: null, view: null, connLevel: 0, connFocus: null, moved: false, their: null, quick: false };
   }
   function lsGet(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
   function lsSet(k, v) { try { localStorage.setItem(k, v); return true; } catch (e) { return false; } }
@@ -674,10 +674,12 @@
   function go(n) { S.step = n; S.ch = null; S.view = null; render(); toTop(); }
   function redraw(fn, sel) { const y = window.scrollY; fn(); window.scrollTo(0, y); if (sel) { const f = $(sel); if (f) f.focus({ preventScroll: true }); } }
   function progress() {
-    let bars = ''; for (let i = 1; i <= TOTAL + 1; i++) bars += '<span class="' + (i <= S.step ? 'on' : '') + '"></span>';
+    let bars = ''; const q = quickNow(); for (let i = q ? 2 : 1; i <= (q ? 5 : TOTAL + 1); i++) bars += '<span class="' + (i <= S.step ? 'on' : '') + '"></span>';
     return '<div class="wl-progress" aria-hidden="true">' + bars + '</div>';
   }
-  function partLabel() { return '<p class="wl-steplabel">Part ' + (S.step - 1) + ' of ' + TOTAL + '</p>'; }
+  function partLabel() { return '<p class="wl-steplabel">Part ' + (S.step - 1) + ' of ' + (quickNow() ? '4, just your Wave Code' : TOTAL) + '</p>'; }
+  // "Just my Wave Code": Parts 1 to 4, either/or questions only, then the result; Parts 5 to 7 stay optional afterward
+  function quickNow() { return !!S.quick && S.step >= 2 && S.step <= 5; }
 
   function renderIntro() {
     const hasHp = sentences().length > 0;
@@ -694,6 +696,8 @@
         '<input type="text" id="wl-nm" maxlength="30" autocomplete="given-name" value="' + esc(S.name) + '">' +
         keepBox('wl-keep-intro') +
         '<div class="wl-nav"><span></span><button type="button" class="wl-btn" id="wl-go">Start</button></div>' +
+        (codeDone() ? '' : '<div class="wl-nav wl-quickrow"><span></span><button type="button" class="wl-btn ghost" id="wl-quick">Just my Wave Code (about 2 minutes)</button></div>' +
+          '<p class="wl-small">Twelve either/or taps for your four letters first. Parts 5 to 7 stay optional, and you can add them after your result.</p>') +
         (hasHp || codeDone() ? '<div class="wl-nav wl-nav-quiet">' + (hasHp ? '<button type="button" class="wl-linkbtn" id="wl-tostmt">Go to my statement</button>' : '') + (codeDone() ? '<button type="button" class="wl-linkbtn" id="wl-tores">See my results</button>' : '') + '</div>' : '') +
         (started(S) && OTHERS.length < MAX_OTHERS ? '<div class="wl-nav wl-nav-quiet"><button type="button" class="wl-linkbtn" id="wl-other">' + (S.name ? 'Not ' + esc(S.name) + '? ' : 'Sharing this device? ') + 'Start someone else’s turn</button></div>' : '') +
         (OTHERS.length ? '<div class="wl-sect"><h3>Also on this device</h3>' + othersList(false) + '</div>' : '') +
@@ -702,7 +706,8 @@
     NOTICE = '';
     const nm = $('#wl-nm');
     nm.oninput = () => { S.name = nm.value.trim(); save(); };
-    $('#wl-go').onclick = () => { S.name = nm.value.trim(); go(1); };
+    $('#wl-go').onclick = () => { S.name = nm.value.trim(); S.quick = false; go(1); };
+    const qk = $('#wl-quick'); if (qk) qk.onclick = () => { S.name = nm.value.trim(); S.quick = true; go(2); };
     const ts = $('#wl-tostmt'); if (ts) ts.onclick = () => go(TOTAL + 1);
     const tr = $('#wl-tores'); if (tr) tr.onclick = () => go(RESULTS);
     const ot = $('#wl-other'); if (ot) ot.onclick = () => { S.name = nm.value.trim(); if (handOver()) go(0); };
@@ -759,18 +764,19 @@
             '<button type="button" class="wl-opt" data-q="' + i + '" data-v="a" aria-pressed="' + (ans[i] === 'a') + '">' + esc(q.a) + '</button>' +
             '<button type="button" class="wl-opt" data-q="' + i + '" data-v="b" aria-pressed="' + (ans[i] === 'b') + '">' + esc(q.b) + '</button>' +
           '</div></div>').join('') +
+        (quickNow() ? '<p class="wl-small">Just your Wave Code for now. The statements that make your profile sound like you can wait: you can add them after your result.</p>' :
         '<p class="wl-chiphead">' + (sec.axis === null ? 'Tap all that help' : 'Tap any that sound like you') + '</p>' +
         '<p class="wl-chiphint">' + (sec.axis === null ? 'Pick as many as you like.' : 'Optional, but these make your profile sound like you.') + (S.nts.length ? '' : ' Picked your wiring? You’ll see the options most common for it first.') + '</p>' +
         mine.map(chipGroup).join('') +
-        (others.length ? '<button type="button" class="wl-linkbtn" id="wl-more" aria-expanded="' + open + '">' + (open ? 'Hide other options' : 'Show options from other wiring types') + '</button>' + (open ? others.map(chipGroup).join('') : '') : '') +
+        (others.length ? '<button type="button" class="wl-linkbtn" id="wl-more" aria-expanded="' + open + '">' + (open ? 'Hide other options' : 'Show options from other wiring types') + '</button>' + (open ? others.map(chipGroup).join('') : '') : '')) +
         '<p class="wl-needs" id="wl-need">' + (ready ? '' : 'Answer the questions above to continue.') + '</p>' +
-        '<div class="wl-nav wl-nav-sticky"><button type="button" class="wl-btn ghost" id="wl-back">Back</button><button type="button" class="wl-btn" id="wl-next"' + (ready ? '' : ' disabled') + '>Continue</button></div>' +
+        '<div class="wl-nav wl-nav-sticky"><button type="button" class="wl-btn ghost" id="wl-back">Back</button><button type="button" class="wl-btn" id="wl-next"' + (ready ? '' : ' disabled') + '>' + (quickNow() && S.step === 5 ? 'See my Wave Code' : 'Continue') + '</button></div>' +
       '</section>';
     $$('.wl-opt').forEach(b => { b.onclick = () => { S.answers[sec.id][+b.dataset.q] = b.dataset.v; save(); redraw(() => renderSection(sec), '.wl-opt[data-q="' + b.dataset.q + '"][data-v="' + b.dataset.v + '"]'); }; });
     $$('.wl-chip').forEach(b => { b.onclick = () => { const id = b.dataset.chip, i = S.chips.indexOf(id); if (i >= 0) S.chips.splice(i, 1); else S.chips.push(id); b.setAttribute('aria-pressed', S.chips.indexOf(id) >= 0); save(); }; });
     const more = $('#wl-more'); if (more) more.onclick = () => { S.showAll[sec.id] = !open; save(); redraw(() => renderSection(sec), '#wl-more'); };
-    $('#wl-back').onclick = () => go(S.step - 1);
-    $('#wl-next').onclick = () => go(S.step + 1);
+    $('#wl-back').onclick = () => go(quickNow() && S.step === 2 ? 0 : S.step - 1);
+    $('#wl-next').onclick = () => go(quickNow() && S.step === 5 ? RESULTS : S.step + 1);
   }
 
   function renderInputs(sec) {
@@ -1034,6 +1040,8 @@
             (S.keep ? '' : '<p class="wl-mine wl-small" id="wl-keepoffer">Your results are kept in this tab until you close it. <button type="button" class="wl-linkbtn" id="wl-keepnow">Keep this on my device</button></p>') +
             '<p class="wl-small"><strong>At your best:</strong> ' + code.split('').map(L => lower(LETTERS[L].gift.replace(/\.$/, ''))).join('; ') + '. <strong>Watch for:</strong> ' + code.split('').map(L => LETTERS[L].watch).join('; ') + '.</p>' +
           '</div>' +
+          (S.quick ? '<div class="wl-sect wl-more-parts" id="wl-moreparts"><h3>Want more? Parts 5 to 7 are optional</h3><p class="wl-small">How you take things in and learn, what helps you feel understood, and a short statement to share. Each adds to your results below, and you can stop anytime.</p>' +
+            '<div class="wl-actions"><button type="button" class="wl-btn ghost" id="wl-addparts">Carry on with Part 5</button><button type="button" class="wl-btn ghost" id="wl-addchips">Add statements that sound like me</button></div></div>' : '') +
           '<div class="wl-wavebox">' + waveSVG(code, true) +
             '<p class="wl-wavecap">Your waveform: faster waves for Quick Spark, slower for Slow Simmer; sharp edges for Trees, smooth for Forest; taller for Direct, softer for Nuanced; echoes for Attuned, one clean line for Explicit.</p></div>' +
           '<div class="wl-sect"><h3>What each letter means</h3><p class="wl-small">Tap a letter to open it. Each one is a preference on a line between two ends, and everyone uses both ends sometimes.</p>' + letters + '</div>' + twoWays(code, scores)
@@ -1051,9 +1059,10 @@
           '<p class="wl-toast" id="wl-stoast" role="status"></p></div>' +
         (done ?
           '<div class="wl-sect" id="wl-compare"><h3>' + (S.their && S.their.from ? 'Compare with ' + esc(S.their.from) : 'Compare with someone') + '</h3>' +
-            '<p class="wl-small">Have them take Wavelength too, then enter their Wave Code, or paste the message they sent you, to see where you’ll want to tune in on purpose.</p>' +
-            '<div class="wl-pairbox"><label class="wl-sr" for="wl-pc">Their Wave Code</label><input type="text" id="wl-pc" class="wl-codein" placeholder="e.g. SFNA, or paste their message" autocomplete="off" autocapitalize="characters" spellcheck="false" value="' + (S.their ? S.their.code : '') + '"><button type="button" class="wl-btn ghost" id="wl-cmp">Compare</button></div>' +
-            '<div class="wl-pairout" id="wl-pout" aria-live="polite">' + (S.their ? compareHTML(code, S.their.code, S.name, S.their.from) : '') + '</div></div>' : '') +
+            '<div id="wl-pcbox"' + (S.their ? ' hidden' : '') + '><p class="wl-small">Have them take Wavelength too, then enter their Wave Code, or paste the message they sent you, to see where you’ll want to tune in on purpose.</p>' +
+            '<div class="wl-pairbox"><label class="wl-sr" for="wl-pc">Their Wave Code</label><input type="text" id="wl-pc" class="wl-codein" placeholder="e.g. SFNA, or paste their message" autocomplete="off" autocapitalize="characters" spellcheck="false" value=""><button type="button" class="wl-btn ghost" id="wl-cmp">Compare</button></div></div>' +
+            '<div class="wl-pairout" id="wl-pout" aria-live="polite">' + (S.their ? compareHTML(code, S.their.code, S.name, S.their.from) : '') + '</div>' +
+            (S.their ? '<p class="wl-small"><button type="button" class="wl-linkbtn" id="wl-cmpother" aria-controls="wl-pcbox" aria-expanded="false">Compare with someone else</button></p>' : '') + '</div>' : '') +
         '<div class="wl-sect" id="wl-people"><h3>Sharing this device?</h3>' +
           '<p class="wl-small">Hand it over for someone else’s turn. ' + (done ? 'Your results stay here under your name, so you can switch back, and when they finish you’ll see how your two codes compare.' : 'Your answers so far stay here under your name, so you can switch back.') + '</p>' +
           (S.name.trim() ? '' : '<label class="wl-field" for="wl-pname">Your first name, so your results are easy to find</label><input type="text" id="wl-pname" maxlength="30" autocomplete="given-name">') +
@@ -1076,17 +1085,27 @@
       p.getBoundingClientRect(); p.style.transition = 'stroke-dashoffset 1.6s ease-out'; p.style.strokeDashoffset = '0';
     }
     const on = (id, fn) => { const el = $(id); if (el) el.onclick = fn; };
+    on('#wl-addparts', () => { S.quick = false; go(6); });
+    on('#wl-addchips', () => { S.quick = false; go(2); });
     on('#wl-finish', () => { const i = ['pace', 'lens', 'send', 'recv'].findIndex(id => S.answers[id].some(v => v === null)); go(2 + Math.max(0, i)); });
     let pastedFrom = null;
     on('#wl-cmp', () => {
       const other = extractCode($('#wl-pc').value), out = $('#wl-pout');
       if (!other) { out.innerHTML = '<p class="wl-needs">Enter four letters in order: Q or S, F or T, D or N, E or A. You can also paste the whole message they sent.</p>'; return; }
-      $('#wl-pc').value = other;
+      $('#wl-pc').value = '';
       // a new code is a new person, unless it came with a name or it's the one already here
       const from = pastedFrom !== null ? pastedFrom : (S.their && S.their.code === other ? S.their.from : '');
       S.their = { code: other, from: from }; pastedFrom = null; save();
       out.innerHTML = compareHTML(code, other, S.name, from); wireCompare(code, other, S.name, from);
+      // the comparison is showing now, so the box tucks away behind "Compare with someone else"
+      const bx = $('#wl-pcbox'); if (bx) bx.hidden = true;
+      let ob = $('#wl-cmpother');
+      if (!ob) { out.insertAdjacentHTML('afterend', '<p class="wl-small"><button type="button" class="wl-linkbtn" id="wl-cmpother" aria-controls="wl-pcbox" aria-expanded="false">Compare with someone else</button></p>'); ob = $('#wl-cmpother'); ob.onclick = openOther; }
+      else ob.setAttribute('aria-expanded', 'false');
+      const hh = $('#wl-compare h3'); if (hh) hh.textContent = from ? 'Compare with ' + from : 'Compare with someone';
     });
+    function openOther() { const bx = $('#wl-pcbox'), ob = $('#wl-cmpother'); if (!bx) return; bx.hidden = false; if (ob) ob.setAttribute('aria-expanded', 'true'); const i = $('#wl-pc'); if (i) { i.value = ''; i.focus(); } }
+    on('#wl-cmpother', openOther);
     const pc = $('#wl-pc');
     if (pc) { pc.onkeydown = e => { if (e.key === 'Enter') { e.preventDefault(); $('#wl-cmp').click(); } }; codeField(pc, (c, from) => { pastedFrom = from || ''; }); }
     if (done && S.their) wireCompare(code, S.their.code, S.name, S.their.from);
@@ -1281,15 +1300,25 @@
 
   // Opened from someone's Wave Code link (wavelength.html?compare=SFNA&from=Priya): read it, then take it out of the
   // address bar so the code and name don't linger in history or get shared on by accident.
-  (function readLink() {
-    let q; try { q = new URLSearchParams(location.search); } catch (e) { return; }
-    if (!q.has('compare') && !q.has('from')) return;
+  const fromLink = (function readLink() {
+    let q; try { q = new URLSearchParams(location.search); } catch (e) { return false; }
+    if (!q.has('compare') && !q.has('from')) return false;
     const code = extractCode(q.get('compare') || ''), from = cleanName(q.get('from') || '');
     try { history.replaceState(history.state, '', location.pathname + location.hash); } catch (e) {}
-    if (!code) return;
+    if (!code) return false;
     S.their = { code: code, from: from }; S.view = 'incoming'; S.ch = null;
+    return true;
   })();
 
   render();
+  // a ?compare= link opens at "Compare with ...'s Wave Code", not at the top of the page (on a phone it's well down);
+  // once more after fonts and images settle, unless the reader has already started scrolling
+  if (fromLink) {
+    let moved = false; const stop = () => { moved = true; };
+    ['wheel', 'touchstart', 'keydown'].forEach(ev => window.addEventListener(ev, stop, { once: true, passive: true }));
+    const toCmp = () => { const h = root.querySelector('.wl-incoming h2'); if (!h || moved) return; h.setAttribute('tabindex', '-1'); h.scrollIntoView({ block: 'start' }); h.focus({ preventScroll: true }); };
+    toCmp();
+    if (document.readyState !== 'complete') window.addEventListener('load', () => setTimeout(toCmp, 0), { once: true });
+  }
   window.TOLWavelength = { code: () => score().code, done: codeDone, insights: () => insights().map(x => x.t), statement: stmtPlain, chapters: () => CHAPTERS.map(c => c.title) };
 })();

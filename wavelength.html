@@ -230,6 +230,13 @@
   @media (max-width: 420px) { .wl-app .wl-fbranch { grid-template-columns: 1fr; } }
   @media (prefers-reduced-motion: reduce) { .wl-app * { transition: none !important; animation: none !important; } }
   main.read .wl-arch-list { columns: 2 14rem; }
+  main.read details.wl-howto { margin: 10px 0 14px; font-size: .95rem; }
+  main.read details.wl-howto summary { cursor: pointer; list-style: none; min-height: 44px; display: flex; flex-wrap: wrap; align-items: center; gap: 2px 8px; }
+  main.read details.wl-howto summary::-webkit-details-marker { display: none; }
+  main.read details.wl-howto .wl-howto-more { color: var(--focus, #2B5B8C); text-decoration: underline; text-underline-offset: 3px; }
+  main.read details.wl-howto[open] .wl-howto-more { display: none; }
+  main.read details.wl-howto p { margin: 6px 0 0; }
+  .wl-app .wl-quickrow { margin-top: 8px; }
 </style>
 <!-- seo:start -->
 <link rel="canonical" href="https://spreadloveandacceptance.com/wavelength.html">
@@ -269,10 +276,11 @@
 <main class="read wl-page" id="main">
 <header class="read-head"><p class="read-code">Know yourself</p><h1>Wavelength: how you think, talk and listen</h1></header>
 <p class="simple-lede">Wavelength helps you understand how you think and how you communicate, both giving and receiving. Pick your wiring if you like, tap through seven short parts (the last one is optional), and get your four-letter Wave Code and archetype. Then read sixteen self-discovery chapters written for your answers, explore how the nine inputs of learning connect, and build a warm personal statement to share.</p>
-<div class="try-this" data-in-short>
-  <p><strong>How it works:</strong> Seven short parts, mostly tapping, about ten minutes in all. The last part, your statement, is optional. Your wiring step is optional and you can select more than one. Every part shows options that are common for the wiring you picked, and you can open the rest anytime. Wavelength replaces Your Heartprint: the personal statement and its “Things you might not have noticed” are now Part 7.</p>
+<details class="wl-howto">
+  <summary><span><strong>How it works:</strong> seven short parts, about ten minutes, and nothing you choose is sent anywhere.</span> <span class="wl-howto-more">details</span></summary>
+  <p>Mostly tapping. Want only your four letters? “Just my Wave Code” takes about two minutes, and the rest stays optional. The last part, your statement, is optional too. Your wiring step is optional and you can select more than one. Every part shows options that are common for the wiring you picked, and you can open the rest anytime.</p>
   <p>Nothing you type or choose is sent anywhere. Your answers stay in this tab until you close it, so a reload won’t lose them. They stay on this device after that only if you tick the box (you can also do it from your results), and “Erase everything” removes them.</p>
-</div>
+</details>
 <div class="wl-app no-bubble" data-wavelength aria-live="polite"><noscript><p>Wavelength needs JavaScript to build your Wave Code. The guide below explains every letter and archetype.</p></noscript></div>
 
 <section aria-labelledby="wl-about">

@@ -12,9 +12,11 @@
     "Use them" never overwrites a name someone already typed. (One small exception: the Lemonade Stand swaps
     its untouched example labels, "Me" and "Them", for the kept names, and says so.)
 
-  Stored as { v:1, people:[names], jobs:[{ name, owner? }], at: timestamp, links:[tools that keep it up to date] }.
+  Stored as { v:1, people:[names], jobs:[{ name, owner?, f? }], at: timestamp, links:[tools that keep it up to date] }.
+  f is how often the job happens ('day', 'few', 'two', 'week', 'eow', 'month'), when a tool knows it, so a
+  second phone shows "Each day" where the first one had it, not a default.
 
-  Another phone: toCode() turns the names and jobs (never hours, never anything else) into a short text
+  Another phone: toCode() turns the names and jobs with how often (never hours, never anything else) into a text
   code, "TOLHOME1:" and a base64 JSON, that people pass between them themselves (a text, an email). fromCode()
   reads one back (or the same JSON from a file) without keeping anything; importCode() adds it to the
   household on this device, and is only called when someone taps a button that says so. transfer() is the
@@ -56,10 +58,14 @@
       seen[k] = 1;
       var job = { name: name }, owner = j && typeof j === 'object' ? findName(people, j.owner) : '';
       if (owner) job.owner = owner;
+      var f = j && typeof j === 'object' ? cleanFreq(j.f) : '';
+      if (f) job.f = f;
       out.push(job);
     });
     return out;
   }
+  // how often a job happens: a short word like 'day' or 'week' (the tools know what each one means)
+  function cleanFreq(f) { return typeof f === 'string' && /^[a-z]{2,8}$/.test(f) ? f : ''; }
   function normalize(raw) {
     if (!raw || typeof raw !== 'object') return null;
     var people = realNames(raw.people);
@@ -91,12 +97,13 @@
     var people = Array.isArray(data.people) ? realNames(data.people) : old.people;
     var jobs = old.jobs;
     if (Array.isArray(data.jobs)) {
-      var had = {};
-      old.jobs.forEach(function (j) { if (j.owner) had[j.name.toLowerCase()] = j.owner; });
+      var had = {}, hadF = {};
+      old.jobs.forEach(function (j) { if (j.owner) had[j.name.toLowerCase()] = j.owner; if (j.f) hadF[j.name.toLowerCase()] = j.f; });
       jobs = data.jobs.map(function (j) {
-        var o = j && typeof j === 'object' ? j : { name: j };
+        var o = j && typeof j === 'object' ? j : { name: j }, k = str(o.name, 80).toLowerCase();
         // owner left out = not known on that page, so keep the one it had; owner '' = it has none now
-        return { name: o.name, owner: 'owner' in o ? o.owner : had[str(o.name, 80).toLowerCase()] || '' };
+        // (how often works the same way: left out keeps what was there)
+        return { name: o.name, owner: 'owner' in o ? o.owner : had[k] || '', f: cleanFreq(o.f) || hadF[k] || '' };
       });
     }
     return write(normalize({ people: people, jobs: jobs, links: old.links }));
@@ -106,11 +113,11 @@
     data = data || {};
     var old = read() || { v: 1, people: [], jobs: [], links: [] };
     var people = realNames(old.people.concat(Array.isArray(data.people) ? data.people : []));
-    var jobs = old.jobs.map(function (j) { return { name: j.name, owner: j.owner }; });
+    var jobs = old.jobs.map(function (j) { return { name: j.name, owner: j.owner, f: j.f }; });
     (Array.isArray(data.jobs) ? data.jobs : []).forEach(function (j) {
       var o = j && typeof j === 'object' ? j : { name: j }, k = str(o.name, 80).toLowerCase(), hit = null;
       jobs.forEach(function (x) { if (x.name.toLowerCase() === k) hit = x; });
-      if (hit) { if (o.owner) hit.owner = o.owner; } else jobs.push({ name: o.name, owner: o.owner });
+      if (hit) { if (o.owner) hit.owner = o.owner; if (cleanFreq(o.f)) hit.f = o.f; } else jobs.push({ name: o.name, owner: o.owner, f: o.f });
     });
     return write(normalize({ people: people, jobs: jobs, links: old.links }));
   }
@@ -350,7 +357,7 @@
     var sum = el('summary', 'tol-hh-keep-l', opts.label || 'Household names on another phone?');
     sum.style.cursor = 'pointer';
     wrap.appendChild(sum);
-    var intro = el('p', 'tol-hh-text', 'Send the names and jobs (never any hours) as a short code, and paste it on the other phone. Nothing is uploaded: you pass it between you.');
+    var intro = el('p', 'tol-hh-text', 'Send the names and jobs, with how often each one happens (never any hours), as a code, and paste it on the other phone. Nothing is uploaded: you pass it between you.');
     intro.style.margin = '.3rem 0 .5rem';
     var row = el('div', 'tol-hh-btns');
     var cp = el('button', 'tol-hh-btn', 'Copy the household code'); cp.type = 'button';

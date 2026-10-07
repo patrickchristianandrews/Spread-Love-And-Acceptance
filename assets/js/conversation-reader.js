@@ -264,7 +264,8 @@
         if (k === 'idiom') return t.marks.filter(function (m) { return m.kind === 'idiom'; }).map(function (m) { return '<li><strong>' + esc(K.label) + ':</strong> “' + esc(m.text) + '” usually means ' + esc(m.means) + '. Some people take it literally. <em>Instead:</em> say the plain meaning.</li>'; }).join('');
         var res = k === 'dismiss' && t.marks.some(function (m) { return m.kind === 'dismiss' && m.resigned; }) && R.KINDS.dismiss.resigned;
         if (res) return '<li><strong>' + esc(res.label) + ':</strong> ' + esc(res.hear) + ' <em>Instead:</em> ' + esc(res.instead) + '</li>';
-        return '<li><strong>' + esc(K.label) + ':</strong> ' + esc(K.hear) + (K.instead ? ' <em>Instead:</em> ' + esc(K.instead) : '') + (K.need ? ' <em>' + esc(K.need) + '</em>' : '') + '</li>';
+        var pat = K.pattern && t.marks.some(function (m) { return m.kind === k && m.pattern; }) ? ' ' + esc(K.pattern) : '';
+        return '<li><strong>' + esc(K.label) + ':</strong> ' + esc(K.hear) + pat + (K.instead ? ' <em>Instead:</em> ' + esc(K.instead) : '') + (K.need ? ' <em>' + esc(K.need) + '</em>' : '') + '</li>';
       }).join('') + '</ul></details>';
     }
     var readAs = t.readAs && t.readAs.length ? '<p class="cr-hint" style="margin:.2rem 0 0">Read as: ' + t.readAs.slice(0, 3).map(function (f) { return '“' + esc(f.to) + '” (typed “' + esc(f.from) + '”)'; }).join(', ') + '</p>' : '';
@@ -277,16 +278,22 @@
     var out = '', pos = 0;
     marks.forEach(function (m) {
       if (m.start < pos) return;
-      out += esc(text.slice(pos, m.start)) + '<mark class="t-' + R.KINDS[m.kind].tone + '" title="' + esc(R.KINDS[m.kind].label) + '">' + esc(text.slice(m.start, m.end)) + '</mark>';
+      out += esc(text.slice(pos, m.start)) + '<mark class="t-' + R.KINDS[m.kind].tone + '" title="' + esc(markLabel(m)) + '">' + esc(text.slice(m.start, m.end)) + '</mark>';
       pos = m.end;
     });
     out += esc(text.slice(pos));
-    if (whole) out = '<mark class="t-' + R.KINDS[whole.kind].tone + '" title="' + esc(R.KINDS[whole.kind].label) + '">' + out + '</mark>';
+    if (whole) out = '<mark class="t-' + R.KINDS[whole.kind].tone + '" title="' + esc(markLabel(whole)) + '">' + out + '</mark>';
     return out;
   }
+  // a resigned "whatever" carries the gentler name everywhere: on the card, in the marks and in the table
+  function markLabel(m) { return m.kind === 'dismiss' && m.resigned && R.KINDS.dismiss.resigned ? R.KINDS.dismiss.resigned.label : R.KINDS[m.kind].label; }
 
   function patterns(r, them) {
-    var rows = ORDER.filter(function (k) { return r.tallyMe[k] || r.tallyThem[k]; });
+    // a resigned "whatever" is its own row, under the gentler name the message card uses
+    var rMe = r.resignedMe || 0, rThem = r.resignedThem || 0;
+    var cnt = function (side, k) { var n = (side === 'me' ? r.tallyMe : r.tallyThem)[k] || 0; if (k === 'dismiss') n -= side === 'me' ? rMe : rThem; if (k === 'dismiss:resigned') n = side === 'me' ? rMe : rThem; return n; };
+    var rows = [];
+    ORDER.forEach(function (k) { if (k === 'dismiss') { if (rMe || rThem) rows.push('dismiss:resigned'); } if (cnt('me', k) || cnt('them', k)) rows.push(k); });
     if (!rows.length) return '';
     var hint = r.crossedThem && !r.crossedMe ? 'How often each pattern shows up. Some lines from ' + esc(them) + ' were put-downs. Whatever else was going on, that isn’t okay, and it isn’t yours to fix.'
       : r.crossedMe && !r.crossedThem ? 'How often each pattern shows up. Some of your lines were put-downs. Owning those, plainly, is the fastest way back.'
@@ -294,7 +301,8 @@
     var h = '<p class="cr-hint">' + hint + '</p>' +
       '<div class="cr-table-wrap"><table class="cr-table"><thead><tr><th scope="col">Pattern</th><th scope="col" class="n">You</th><th scope="col" class="n">' + esc(them.length > 14 ? 'Them' : them) + '</th></tr></thead><tbody>';
     rows.forEach(function (k) {
-      h += '<tr' + (GOOD[k] ? ' class="good"' : '') + '><td>' + (GOOD[k] ? '<span class="plus" aria-label="helpful">+</span>' : '') + esc(R.KINDS[k].label) + '</td><td class="n">' + (r.tallyMe[k] || '·') + '</td><td class="n">' + (r.tallyThem[k] || '·') + '</td></tr>';
+      var lab = k === 'dismiss:resigned' ? R.KINDS.dismiss.resigned.label : R.KINDS[k].label;
+      h += '<tr' + (GOOD[k] ? ' class="good"' : '') + '><td>' + (GOOD[k] ? '<span class="plus" aria-label="helpful">+</span>' : '') + esc(lab) + '</td><td class="n">' + (cnt('me', k) || '·') + '</td><td class="n">' + (cnt('them', k) || '·') + '</td></tr>';
     });
     var anyGood = rows.some(function (k) { return GOOD[k]; });
     return h + '</tbody></table></div><p class="cr-note">' + (anyGood ? 'Rows marked + are the helpful ones. ' : '') + 'This table is for you to notice your own side, not to show them: counts read aloud become ammunition.</p>';

@@ -187,6 +187,14 @@ const M = [
   ['coworker', 'Circling back on this.', 'S'],
   ['coworker', 'As previously stated, the budget is final.', 'S'],
   ['coworker', 'Please advise.', 'S'],
+  // ---------------- re-test: an apology with blame after it, parenting, everyday examples from anywhere
+  ['partner', 'Oh no, sorry!! I was totally distracted, I’m the worst 😩 but you didn’t have to say it like that', 'SH'],
+  ['partner', 'You always correct me with the baby.', 'S'],
+  ['coparent', 'If you’re late again I’ll take you to court and you’ll never see the kids.', 'H'],
+  ['family', 'Could we split the bill evenly this time?', 'CS'],
+  ['family', 'Please call your parents back today. They asked twice.', 'CS'],
+  ['roommate', 'Can you send your share of the rent by the 1st?', 'CS'],
+  ['family', 'Thank you for helping my mother with her forms.', 'C'],
 ];
 
 const SWEAR = /\b(?:f+u+c+k\w*|f\*+\w*|fk\w*|fuk\w*|sh[i*]t\w*|bullsh\w*|damn\w*|hell|crap\w*|piss\w*|wtf|ffs|screw you|idiot|nightmare|lazy|selfish|useless|pathetic|slob|disappointment|terrible parent|last nerve|shut up|driving me crazy|can't stand|hate you|done with you)\b/i;
@@ -357,6 +365,21 @@ const chk = (c, m) => { if (c) pass++; else { fail++; errs.push(m); } };
   ['You’re always correcting me with the baby, it is not respectful to me as her mother.', 'You always forget.', 'I already told the kids you’re not coming.', 'You’ll never see them again.'].forEach(t => all(rw(t)).forEach(x => chk(!brokenRx(x), 'self-check let through: ' + x)));
 }
 function brokenRx(x) { return /\b(?:a lot|much) (?:a lot|much)\b|To recap: (?:them|the kids)|\byou'll (?:rarely|often)\b|, it (?:is|was)[^.]*a lot\./i.test(x); }
+// ---------- re-test: apologies keep their apology; the blame clause is the loudest part; no raw blanks ----------
+{
+  const an = t => E.analyze(t, { channel: 'text' });
+  const t = 'Oh no, sorry!! I was totally distracted, I’m the worst 😩 but you didn’t have to say it like that';
+  const r = E.rewrite(an(t), { wirings: ['general'], channel: 'text', rel: 'partner' });
+  chk(/^Oh no, sorry!{1,2} I was totally distracted 😩 Separately, the way you said it stung a little\. Can we talk about that later\?$/.test(r.main), 'apology rewrite keeps the apology, drops the blame, no stray comma: ' + r.main);
+  chk(r.changes.some(c => c.id === 'sorrybut'), 'the “but you…” change is explained');
+  const g = E.receive(an(t));
+  chk(g && !/didn't have to say it like that/.test(JSON.stringify(g.replies || [])), 'received: the blame is not read back as a reply');
+  ['You always correct me with the baby.', 'You never help with bedtime.', 'You always leave the lights on.', 'You never call me back.'].forEach(m => {
+    const x = E.rewrite(an(m), { wirings: ['general'], channel: 'text', rel: 'partner' });
+    [x.main].concat(x.variants.map(v => v.text)).forEach(s => chk(!/\[one specific thing\] going forward/.test(s), 'raw blank in “' + m + '”: ' + s));
+  });
+  chk(!E.analyze('Sorry I’m late! Traffic was awful.', { channel: 'text' }).found.sorrybut, 'an apology with no blame is not flagged');
+}
 // the shared list: the same line gets the same marks in the Conversation Reader
 const R = require(path.join(__dirname, '../../assets/js/conversation-reader-engine.js'));
 [['fine. whatever you want', /dismiss/], ['i don’t care', /dismiss/], ['whatevs', /dismiss/], ['Nobody asked you.', /contempt/], ['You are so autistic.', /verdict/], ['this is why nobody wants to deal with you', /contempt/], ['You are getting on my last fucking nerve', /swear|hostile/], ['You’re a total nightmare', /verdict/], ['It would be nice if someone helped around here.', /hint/], ['We need to talk.', /opener/], ['of course you did. I have to do everything around here', /sarcasm/], ['Fine. Whatever works for you.', /dismiss/], ['Sure, go out with your friends, I’ll just sit here.', /sarcasm/], ['Don’t mind me.', /passive/]].forEach(([t, want]) => {

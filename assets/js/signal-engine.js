@@ -437,6 +437,11 @@ const F = [
   {id:"safety", name:"A real safety concern", kind:"good", re:null,
    what:"A safety worry (the stove, a door, a car seat, medicine) is valid and worth saying plainly. It's about keeping everyone safe, not about who's to blame.",
    fix:"Keep it."},
+  // an apology that turns back into blame: "Sorry I was distracted, but you didn't have to say it like that."
+  // Found in analyze() (it needs the apology before it), so no pattern here.
+  {id:"sorrybut", name:"“But you…” after an apology", kind:"static", re:null,
+   what:"A “but you…” after an apology turns it back into blame. The listener tends to remember the blame, not the sorry, and the apology stops counting.",
+   fix:"Keep the apology on its own. If their words stung too, say that separately, later: “The way you said it stung a little. Can we talk about that later?”"},
   {id:"repair", name:"Owning your part", kind:"good",
    re:/\b(?:i'm sorry|i am sorry|i apologi[sz]e|my part|i was wrong|i should have|i shouldn't have|i messed up|that's on me|my fault|my mistake)\b/gi,
    what:"Owning your part first makes it much easier for the other person to own theirs.",
@@ -1340,6 +1345,20 @@ function analyze(textIn, opts){
   const letters = raw.replace(/[^A-Za-z]/g,""), caps = raw.replace(/[^A-Z]/g,"");
   const allCaps = letters.length >= 10 && caps.length >= letters.length*0.8 && words(raw) >= 3;
 
+  // a real apology ("sorry", "my fault"), and a "but you…" after it: the blame is the part most likely to sting
+  const apology = APOLOGY_AT(low);
+  if(apology >= 0){
+    BUT_YOU.lastIndex = apology;
+    const bm = BUT_YOU.exec(low);
+    if(bm){
+      const st = bm.index + bm[0].search(/\b(?:but|though|although|except)\b/i), en = bm.index + bm[0].replace(/[\s.!?]+$/,"").length;
+      push("sorrybut", st, en);
+      drop("butc", h=>h.s < en && st < h.e);
+    }
+    // "Oh no, sorry!!" is earnest, not shouting: exclamation marks alone in an apology aren't marked
+    drop("shout", h=>/^!+$/.test(h.match));
+  }
+
   // assemble
   const found={}; const spans=[];
   hits.forEach(h=>{
@@ -1364,9 +1383,24 @@ function analyze(textIn, opts){
       ask: !asks.length && staticIds.some(id=>["disclaim","label","absolute","critic","madefeel","compare","again","past","passive","sarcasm","vemo","guilt","feellike","blameq"].includes(id))
     },
     feelingWord: feelingM ? feelingM[1] : "",
-    safety
+    safety,
+    apology: apology >= 0
   };
 }
+/* Where a real apology starts, or -1. "Sorry, but…" as a lead-in, "sorry you feel that way" and "not sorry" don't count. */
+const APOL_RE = /\b(?:(?:i'm|i am|so|really|very|truly)\s+)*(?:sorry|i apologi[sz]e|my bad|my fault|my mistake|i messed up|that's on me|i was wrong)\b/gi;
+function APOLOGY_AT(low){
+  APOL_RE.lastIndex = 0; let m;
+  while((m = APOL_RE.exec(low))!==null){
+    const before = low.slice(Math.max(0, m.index-12), m.index), after = low.slice(m.index + m[0].length, m.index + m[0].length + 24);
+    if(/\bnot\s+$|\bno\s+$/.test(before)) continue;
+    if(/^\s*(?:not sorry|you feel|you're|you are|if you|that you|for you\b|but you're|,?\s*but\b)/.test(after)) continue;
+    return m.index;
+  }
+  return -1;
+}
+// the "but you…" clause after an apology, up to the end of its sentence
+const BUT_YOU = /(?:^|[\s,;:–—-])\s*(?:but|though|although|except)\s+(?:you(?:'re|'ve|'d|'ll)?|your)\b[^.!?\n]*/gi;
 
 /* the older shape the page used */
 function detect(text, ch){ const a=analyze(text,{channel:ch}); return {found:a.found, spans:a.spans, words:a.words, analysis:a}; }
@@ -1422,7 +1456,8 @@ function score(an, ids, ch, state){
   let level = sc<1.5?["clear","Clear signal"]:sc<4.5?["some","Some static"]:["heavy","Heavy static"];
   // the headline never says "clear" while something is flagged
   if(level[0]==="clear" && an.staticIds.length) level = ["some","A little static"];
-  return {score:sc, level, pct:Math.max(6, Math.min(100, Math.round(sc/8*100))), top:top.sort((a,b)=>b.w-a.w)};
+  // on a tie, the "but you…" after an apology is named first: it's the part most likely to sting
+  return {score:sc, level, pct:Math.max(6, Math.min(100, Math.round(sc/8*100))), top:top.sort((a,b)=>(b.w-a.w) || ((b.fid==="sorrybut")-(a.fid==="sorrybut")))};
 }
 
 /* ============================================================
@@ -1571,6 +1606,7 @@ const BROKEN_RX = [
 ];
 function brokenEnglish(t){ const x = String(t||"").replace(/\[[^\]]*\]/g,"X"); return BROKEN_RX.some(rx=>rx.test(x)); }
 function tidy(t){
+  t = t.replace(/,\s*((?:\p{Extended_Pictographic}|\uFE0F|\u200D)+)/gu, " $1");
   t = t.replace(/[ \t]+/g," ").replace(/ +([,.!?:;])/g,"$1").replace(/([,.!?:;])(?=[A-Za-z])/g,"$1 ").replace(/,\s*([.!?])/g,"$1")
        .replace(/,\s*,/g,",").replace(/([.?!])\s*\./g,"$1").replace(/\?\?+/g,"?").replace(/!!+/g,"!").replace(/^\s*[,.;:]\s*/,"").replace(/\s+\n/g,"\n").trim();
   t = t.replace(/(^|[.!?]\s+|[.!?]\]\s+|\n)([a-z])/g,(m,p,c)=>p+c.toUpperCase());
@@ -1655,7 +1691,20 @@ function rewrite(an, opts){
   }
   if(/\.{3,}|…/.test(text)){ text = text.replace(/\s*(?:\.{3,}|…)\s*/g,". "); note("dots","…","."); }
 
-  const isApology = /^\W*(?:(?:i'm|i am|so|really|very)\s+)*sorry\b|^\W*(?:i apologi[sz]e|my bad|my fault|my mistake|i messed up)\b/i.test(text);
+  // "Sorry I was distracted, but you didn't have to say it like that": the apology stays whole, and what stung
+  // about their words is said separately, as a feeling, for later
+  let laterLine = "", cut = "";
+  if(has("sorrybut")){
+    text = text.replace(BUT_YOU, (mm)=>{
+      if(laterLine) return mm;
+      cut = mm;
+      const said = /\b(?:say|said|saying|speak|spoke|talk(?:ed)? to me|tone|like that|way you|yell|snap|shout)/i.test(mm);
+      laterLine = said ? "Separately, the way you said it stung a little. Can we talk about that later?" : "Separately, there's something that bothered me too. Can we talk about that later, when we're both calm?";
+      return "";
+    });
+    if(laterLine){ text = text.replace(/[\s,;:–—-]+$/,"").replace(/[\s,;:–—-]+([.!?])/g,"$1"); note("sorrybut", cut.trim().replace(/^[,;:–—-\s]+|[.!?\s]+$/g,""), laterLine); }
+  }
+  const isApology = /^\W*(?:(?:oh no|oh|oops|ugh)[\s,!.]+)?(?:(?:i'm|i am|so|really|very)\s+)*sorry\b|^\W*(?:i apologi[sz]e|my bad|my fault|my mistake|i messed up)\b/i.test(text) || (an.apology && has("sorrybut"));
   if(isApology) text = text.replace(/^\W*(?:(?:i'm |i am )?(?:so |really )?sorry[\s,!.]*){2,}/i, mm=>{ note("apology", mm.trim().replace(/[,.!\s]+$/,""), "I'm sorry"); return "I'm sorry, "; });
   const out = [];
   const ctx = {converted:false, critical:false, hostile:false, insult:false, noAsk:false, apology:isApology, rel:opts.rel||""};
@@ -1776,8 +1825,11 @@ function rewrite(an, opts){
     // a pattern ("always", "never") wants a habit, not a deadline; a time already given stays the only time
     const pattern = log.some(c=>c.id==="absolute");
     const tail = pattern ? " going forward" : hadTime ? "" : " by [a time]";
-    main = main.replace(/([^.!?…\s])\s*$/,"$1.").replace(/\s*$/," Could you [one specific thing]"+tail+"?");
-    note("addask","(no ask)","Could you [one specific thing]"+tail+"?");
+    // when the message already says what it's about ("correcting me with the baby"), the ask can say it too
+    const inferred = inferAsk(an.norm);
+    const ask = inferred || "Could you "+ASK_PROMPT+tail+"?";
+    main = main.replace(/([^.!?…\s])\s*$/,"$1.").replace(/\s*$/," "+ask);
+    note("addask","(no ask)",ask);
   }
   // the draft already names a time ("by Friday", "tomorrow"): never add a second, blank one
   if(hadTime && /\bby \[a time\]/.test(main) && WHEN_REAL.test(main)) main = main.replace(/\s*\bby \[a time\]/g, "");
@@ -1790,11 +1842,27 @@ function rewrite(an, opts){
   if(has("absolute") && /\b(?:always|never)\b/i.test(main)){
     main = main.replace(/\b(?<!(?:'ll|will|would|'d|won't|can't|could) )(always|never)\b/gi, (w)=>{ note("absolute", w.toLowerCase(), /always/i.test(w)?"often":"rarely"); return /^A/.test(w)?"Often":/^N/.test(w)?"Rarely":/always/i.test(w)?"often":"rarely"; });
   }
+  if(laterLine) main = endP(main.replace(/\s+$/,""))+" "+laterLine;
   main = tidy(main);
   if(list) list = list.split("\n").map((l,i)=>i?l:tidy(l)).join("\n");
   // nothing changed: give the words back exactly as typed ("hey" stays "hey", not "Hey.")
   if(!log.length && !list) main = an.norm.trim();
   return finish(main, list, log, an, W, opts);
+}
+
+/* The ask, when a complaint says plainly what it's about. Otherwise the rewrite uses a plain-language prompt. */
+const ASK_PROMPT = "(say the one thing you'd like)";
+const KID_RE = /\b(?:baby|babies|kids?|children|child|son|daughter|toddler|newborn|bedtime|feeding|feeds|nap|naps|nappy|nappies|diaper|diapers|bath|bathtime|bottle|parenting)\b/i;
+const INFER_ASKS = [
+  [/\b(?:correct\w*|criticiz\w*|criticis\w*|second[- ]guess\w*|undermin\w*|overrul\w*|nitpick\w*)\s+me\b|\btell(?:s|ing)? me how to\b/i, KID_RE, "Could you let me handle it my way, and tell me later if you disagree?"],
+  [/\binterrupt\w*\s+me\b|\bcut(?:s|ting)? me off\b|\btalk(?:s|ing)? over me\b/i, null, "Could you let me finish before you answer?"],
+  [/\b(?:correct\w*|criticiz\w*|criticis\w*)\s+me\b[^.!?]*\bin front of\b|\bin front of\b[^.!?]*\b(?:correct\w*|criticiz\w*|criticis\w*)\s+me\b/i, null, "If something I do bothers you, could you tell me later, just the two of us?"],
+  [/\bon your phone\b|\bscrolling\b/i, null, "Could we put our phones away when we're talking?"]
+];
+function inferAsk(text){
+  const t = String(text||"");
+  for(const [re, need, ask] of INFER_ASKS){ if(re.test(t) && (!need || need.test(t))) return ask; }
+  return "";
 }
 
 /* Swearing, fed-up lines and name-calling, clause by clause. A clause that is only heat ("you're getting
@@ -2600,6 +2668,19 @@ Object.assign(CHECK, {
 });
 Object.keys(SHARED_READ).forEach(w=>{ if(NT[w]) Object.keys(SHARED_READ[w]).forEach(f=>{ if(!NT[w].receive[f]) NT[w].receive[f]=SHARED_READ[w][f]; }); });
 
+/* "Sorry, but you…": the blame after an apology is the part most likely to sting */
+const SORRY_READ = {
+ nt:[2,"So it's my fault after all.","After “but,” the blame tends to drown out the sorry."],
+ anxiety:[3,"They're sorry, but really I'm the problem.","The blame at the end is what gets replayed later, not the apology."],
+ adhd:[3,"Even their apology ends with what I did wrong.","Criticism lands hard and fast for many ADHD listeners, and it can wipe out the apology before it."],
+ autistic:[1,"Which part is the real message, the sorry or the blame?","Two messages in one sentence are hard to weigh, so the listener may answer the wrong one."],
+ hsp:[3,"The apology was nice, but the last part really stung.","Sensitive listeners feel the edge strongly, and for longer."],
+ trauma:[2,"It's coming back on me again.","Blame tucked into an apology can feel less safe than plain words."]
+};
+Object.keys(SORRY_READ).forEach(w=>{ if(NT[w] && !NT[w].receive.sorrybut) NT[w].receive.sorrybut = SORRY_READ[w]; });
+Object.assign(CHECK, { sorrybut:"\"Thank you for saying sorry. Did something I said bother you too? I'd like to hear it.\"" });
+Object.assign(CHANGE_WHY, { sorrybut:{g:"The “but you…” came out, so the apology can count on its own. What bothered you about their words stays, said as your own feeling and kept for later, so it can be heard instead of argued.", adhd:"For a listener who is sensitive to criticism, the blame at the end can wipe out the apology. Kept apart, both can land.", anxiety:"Blame at the end of an apology is the part that gets replayed. Kept apart, the apology can settle."} });
+
 /* ============================================================
    EXPORT
    ============================================================ */
@@ -2737,6 +2818,7 @@ function receive(an){
    Shown next to the name, never instead of the detail below it.
    ============================================================ */
 const GLOSS = {
+  sorrybut:"it turns the apology back into blame",
   oblig:"it sounds like an order", should:"it tells them what to do", shouldhave:"it blames them for the past",
   impera:"an order with no \"please\" or \"could you\"", cannot:"it sounds annoyed, not like a real question",
   blameq:"a question that really says \"it's your fault\"", label:"calling the person a name, like \"lazy\"",
@@ -2779,8 +2861,13 @@ function title(id, words, an){
     const th = w && (w.match(new RegExp("\\b("+SAFE_THING+")\\b","i"))||[])[1];
     return th ? "A real safety concern about the "+th.toLowerCase() : f.name;
   }
+  // a name built from example words ("Again," "still," "even") would show words that aren't in the message,
+  // so when the message's own words are shown beside it, the name says what the words do instead
+  if(w && PLAIN_TITLE[id]) return PLAIN_TITLE[id];
+  if(w && /\s*\([^)]*["“][^)]*\)\s*$/.test(f.name)) return f.name.replace(/\s*\([^)]*["“][^)]*\)\s*$/, "");
   return f.name;
 }
+const PLAIN_TITLE = {again:"Words that point at a pattern", should:"Telling them what they should do", cannot:"Asking them what not to do", already:"Pointing out you said it before", stopask:"Telling them to stop asking"};
 /* Plain-word gloss for a pattern, or "" when the name already says it */
 function gloss(id){ return GLOSS[id] || ""; }
 /* One plain sentence at the top of a result. It agrees with the score and the flags:
@@ -2789,6 +2876,10 @@ function verdict(an, sc, rw){
   if(!an || !an.norm || !an.norm.trim() || (rw && rw.gibberish)) return {id:"none", text:"This doesn't look like a sentence yet. Type what you'd really say."};
   const lvl = sc && sc.level ? sc.level[0] : "clear";
   const soft = rw && !rw.unchanged;
+  // a real apology in it: the headline says so, gently, for a listener who is sensitive to criticism too
+  const sorry = an.apology && !an.found.legal && !an.found.kidsfirst && !an.found.violent && !an.found.threat;
+  if(sorry && (lvl==="heavy" || (lvl==="some" && !(sc.level[1]||"").match(/little/i))))
+    return {id:"hurt", apology:true, text: soft ? "Some of this may land harder than you mean. Here's a version that keeps your apology." : "Some of this may land harder than you mean. The notes below show which part."};
   if(an.found.legal || an.found.kidsfirst || an.found.violent || an.found.threat || lvl==="heavy")
     return {id:"fight", text: soft ? "This will likely start a fight. Try the softer version below." : "This will likely start a fight. The notes below show why."};
   if(lvl==="some" && !(sc.level[1]||"").match(/little/i))

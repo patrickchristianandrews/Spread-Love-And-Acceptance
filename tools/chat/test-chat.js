@@ -651,7 +651,7 @@ t('couples', 'one of us wants to talk it out now and the other needs space. who 
 t('couples', 'he walks away every time I try to talk', { kind: 'care', id: 'pursuewithdraw', text: /return time/ });
 t('couples', 'we have the same fight every week, she pursues and I withdraw', { kind: 'care', id: 'pursuewithdraw' });
 t('couples', 'how long should a break be?', { kind: 'care', id: 'breaklength', text: /20 minutes/, not: /respite/ });
-t('couples', 'how do I get him to stay and finish the conversation?', { kind: 'care', id: 'pursuewithdraw' });
+t('couples', 'how do I get him to stay and finish the conversation?', { kind: 'care', id: 'getstay', text: /when shall we pick this up/i });
 t('couples', 'he never lets me talk about anything', { kind: 'care', id: 'pursuewithdraw', not: /signs of control/ });
 t('couples', 'she follows me from room to room when I need space', { kind: 'care', id: 'pursuewithdraw', not: /signs of control/ });
 t('couples', "he won't let me talk to my friends", { kind: 'safety' });
@@ -666,7 +666,7 @@ t('couples', 'my husband no understand i must help my family back home', { kind:
 t('couples', "my wife sends a lot of money to her family and I feel we can't save", { kind: 'care', id: 'familyduty', not: /visits/ });
 t('couples', 'my mother-in-law visits too often', { kind: 'sit', not: /motherinlaw/ });
 t('couples', "my wife says I'm under her feet since I retired", { kind: 'care', id: 'retired' });
-t('couples', 'I just retired and feel useless at home', { kind: 'care', id: 'retired' });
+t('couples', 'I just retired and feel useless at home', { kind: 'care', id: /^(retired|retirepurpose)$/ });
 t('couples', 'retirement', { kind: 'care', id: 'retired', not: /widow|living alone/ });
 t('couples', "we're long distance and always fighting about who calls", { kind: 'care', id: 'longdistance' });
 t('couples', 'My stepdaughter says I am not her real mom and my husband is stuck in the middle', { not: /signs of control/ });
@@ -676,18 +676,23 @@ t('retest', 'what do I say when I come back after the break?', { kind: 'care', i
 t('retest', 'my partner sent me a link in the middle of a fight, is she trying to tell me I\'m the problem?', { kind: 'care', id: 'sentlink', link: '/sent-this.html' });
 t('retest', "we had a rough week, what's something light and fun we can do to reconnect?", { kind: 'care', id: 'reconnect', link: '/turning-toward.html' });
 t('retest', 'my mother want to come stay with us for 3 months', { kind: 'care', id: 'longstay' });
-t('retest', 'how much is reasonable to send?', { kind: 'care', id: 'familyduty' });
+t('retest', 'how much is reasonable to send?', { kind: 'care', id: 'sendamount', text: /twice a year/ });
 t('retest', 'im adhd and my gf is autistic, we just moved in together. is there stuff for couples like us?', { kind: 'care', id: 'ndcouple', link: '/neurodivergent-relationships.html' });
 t('retest', 'how can me and my girlfriend both see the same chore list? she made it on her phone', { kind: 'care', id: 'sharelist', not: /doesn.t feel fair/ });
 t('retest', 'she redoes everything i do', { kind: 'care', id: 'handover' });
-t('retest', 'i miss work', { kind: 'care', id: 'retired' });
+t('retest', 'i miss work', { kind: 'care', id: 'retirepurpose', link: '/retired-together.html#purpose' });
 t('retest', 'my wife says she does everything but i work full time. how is that counted', { kind: 'care', id: 'paidwork' });
 t('retest', 'what if we disagree about the numbers', { kind: 'care', id: 'disagreenumbers' });
 t('retest', "my stepdaughter says I'm not her real dad, how do I respond", { kind: 'care', id: 'notrealdad', text: /not trying to be/ });
 t('retest', 'my own son is only with us every other weekend and feels like a visitor', { kind: 'care', id: 'parttimechild' });
 t('retest', 'what does fine whatever works for you mean', { kind: 'care', id: 'textmeaning', link: '/signal-translator.html' });
 c('retest', ["my husband doesn't understand that I have to support my family", 'please say it in simpler English'], { text: /easy words/, not: /only be guessing/ });
-c('retest', ['he walks away every time I try to talk', 'he never lets me talk about anything'], { text: /short version/, not: /\.,/ });
+c('retest', ['he walks away every time I try to talk', 'he walks away every time I try to talk to him'], { text: /short version/, not: /\.,/ });
+c('retest', ['he walks away every time I try to talk', 'how do I get him to stay and finish the conversation?'], { id: 'getstay', not: /short version/ });
+t('retest', 'what if my wife doesn\'t back me up', { kind: 'care', id: 'backmeup' });
+t('retest', 'what percentage of our income is normal to send to her mum?', { kind: 'care', id: 'sendamount', not: /bedtime/ });
+t('retest', 'a game for two of us', { kind: 'care', id: 'gamefortwo', link: '/recheck-drive.html' });
+c('retest', ['we\'re long distance and always fighting about who calls', 'work is just busy, how do i make her stop being mad'], { text: /call days together/ });
 
 // ---------------------------------------------------------------- run
 (async () => {

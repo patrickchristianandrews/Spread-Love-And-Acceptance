@@ -547,7 +547,7 @@
       "first": true,
       "newTopic": true,
       "name": "how paid work counts in the split",
-      "pat": "\\b(work|working|i work) (full ?time|40 hours|long hours|all day)\\b.{0,60}\\b(count|counted|fair|split|share|does everything|do everything)\\b|\\b(she|he|they|my \\w+) (says|thinks) (she|he|they) (does|do) everything\\b.{0,40}\\b(work|job)\\b|\\b(maternity|paternity|parental) leave\\b.{0,60}\\b(fair|split|share)\\b|\\b(fair|split|share)\\b.{0,40}\\b(maternity|paternity|parental) leave\\b|\\bhow (is|does) (paid work|my job|work) (count|counted|fit)\\b|\\bsplit night (feeds|shifts)\\b|\\bnight feeds\\b.{0,40}\\b(fair|split|works? full ?time)\\b",
+      "pat": "\\b(work|working|i work) (full ?time|40 hours|long hours|all day)\\b.{0,60}\\b(count|counted|fair|split|share|does everything|do everything)\\b|\\b(she|he|they|my \\w+) (says|thinks) (she|he|they) (does|do) everything\\b.{0,40}\\b(work|job)\\b|\\b(maternity|paternity|parental) leave\\b.{0,60}\\b(fair|split|share)\\b|\\b(fair|split|share)\\b.{0,40}\\b(maternity|paternity|parental) leave\\b|\\bhow (is|does) (paid work|my job|work) (count|counted|fit)\\b|\\bsplit night (feeds|shifts)\\b|\\bnight feeds\\b.{0,40}\\b(fair|split|works? full ?time)\\b|\\b(is|does) (my|his|her) (paid work|job|work) (counted|count)\\b|\\bwhat does suggest a split\\b|\\bsuggest a split from paid hours\\b|\\b(feels|seems|looks) unfair\\b.{0,40}\\b(work|job) full ?time\\b|\\bi work full ?time\\b.{0,40}\\b(unfair|79|percent|%)",
       "keys": [],
       "what": [
         "Paid work is real work, and so is the work at home. The Lemonade Stand keeps them apart on purpose, so neither cancels the other out, and then lets you agree a split that fits your week."
@@ -719,6 +719,220 @@
       "chips": []
     },
     {
+      "id": "getstay",
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "name": "getting a partner to stay and finish a talk",
+      "pat": "\\bget (him|her|them|my \\w+) to (stay|finish|keep talking|come back)\\b|\\bfinish the (conversation|argument|talk)\\b|\\b(make|keep) (him|her|them) (stay|talk)\\b",
+      "keys": [],
+      "what": [
+        "You can’t make someone stay in a talk when they’re flooded, but you can make coming back easy and certain. Asking “when will we come back to it?” instead of “stay and finish” is usually what gets the talk back."
+      ],
+      "how": [
+        "Ask for a time, not an answer: “Okay. When shall we pick this up?” A named time is your guarantee it isn’t being dropped.",
+        "Let them go, and don’t follow; following tells their body the danger isn’t over.",
+        "Use the wait for yourself: write down the one thing you most want them to understand.",
+        "Come back to one topic only, and let them speak first."
+      ],
+      "script": [
+        "Okay, take your break. When shall we pick this up? I want to hear you, and I want us to finish it."
+      ],
+      "plain": [
+        "You can’t make them stay.",
+        "Ask: “When can we talk again?”",
+        "Let them go. Don’t follow.",
+        "Talk again at that time."
+      ],
+      "links": [
+        [
+          "One wants to talk now, one needs space",
+          "/pursue-withdraw.html"
+        ],
+        [
+          "Our pause plan",
+          "/pursue-withdraw.html#plan"
+        ]
+      ],
+      "chips": []
+    },
+    {
+      "id": "backmeup",
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "name": "my partner doesn't back me up",
+      "pat": "\\b(doesn t|doesnt|won t|wont|never|didn t|didnt) (back|backs) me up\\b|\\b(undermine\\w*|takes? (their|the kids|her|his) side)\\b.{0,40}\\b(kids?|son|daughter|step\\w*|in front of)\\b|\\bnot on the same page\\b.{0,30}\\b(kids|rules|discipline|parenting)\\b",
+      "keys": [],
+      "what": [
+        "Feeling unbacked in front of the kids is lonely, and it’s one of the most common snags in stepfamilies and in any family with two parents. It usually means the rules weren’t agreed in private first, not that your partner is against you."
+      ],
+      "how": [
+        "Agree the few rules that matter most in private, at a calm time, before they come up with the kids.",
+        "Agree a sign or a line for “let’s talk about this later”, so neither of you argues it out in front of them.",
+        "In a stepfamily, the parent usually leads on discipline at first while the stepparent builds the relationship; backing up means supporting that, not enforcing alone.",
+        "Afterwards, talk about it as a gap in the plan, not as betrayal."
+      ],
+      "script": [
+        "I felt on my own in front of the kids earlier. Can we agree the few rules that matter to us both, so we back each other up next time?"
+      ],
+      "plain": [
+        "Agree the rules together in private.",
+        "Then support each other in front of the kids.",
+        "Talk later, not in front of them."
+      ],
+      "links": [
+        [
+          "Stepfamilies and blended families",
+          "/parents.html#stepfamilies"
+        ],
+        [
+          "For parents",
+          "/parents.html"
+        ]
+      ],
+      "chips": []
+    },
+    {
+      "id": "sendamount",
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "name": "how much family support is reasonable",
+      "pat": "\\bhow much (is (it )?(reasonable|normal|fair|ok|okay)|should (i|we|she|he)) (to )?(send|give)\\b|\\bwhat (percent\\w*|percentage|share|amount)\\b.{0,40}\\b(send|give|income)\\b.{0,40}\\b(family|parents|mum|mom|mother|home)\\b|\\b(percent\\w*|percentage) of (our|my|his|her) income\\b",
+      "keys": [],
+      "what": [
+        "There’s no right number for everyone; it depends on your income, your family’s needs and what you both feel secure with. What helps most is choosing the number together, with a simple method, instead of arguing month by month."
+      ],
+      "how": [
+        "Add up what goes now, and fix the basics first: rent, food, bills and an amount of savings you both want.",
+        "From what’s left, agree a monthly family-support line, and write it down.",
+        "Agree an emergency rule (for example: a phone call before any extra amount above a set figure).",
+        "Look at it again twice a year, or when income or family needs change.",
+        "Put it in the Lemonade Stand’s Money tab as an agreed amount, so it is never a debt between you."
+      ],
+      "script": [
+        "Could we sit down with the numbers on Sunday, put the basics and our savings first, and then agree the family amount together?"
+      ],
+      "plain": [
+        "There is no one right number.",
+        "First pay rent, food, bills and savings.",
+        "Then agree a family amount together.",
+        "Look at it again twice a year."
+      ],
+      "links": [
+        [
+          "Supporting family: agree a monthly amount",
+          "/family-obligations.html#amount"
+        ],
+        [
+          "The Lemonade Stand Money tab",
+          "/lemonade-stand.html#money"
+        ]
+      ],
+      "chips": []
+    },
+    {
+      "id": "planrecall",
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "name": "our pause plan",
+      "pat": "\\b(what|where) (was|is) (our|the|my) pause (plan|word)\\b|\\bour pause plan\\b|\\bfind (our|the) (pause )?plan\\b",
+      "keys": [],
+      "what": [
+        "If you ticked “Keep our plan on this device”, your pause plan is waiting at the top of the “One wants to talk now” page on this phone. If your partner sent it to you, the link they sent opens it too."
+      ],
+      "how": [
+        "Open the page below; a kept plan shows as “Your pause plan” near the top.",
+        "No plan yet? Fill one in together on a calm day: pause word, shortest break, latest return time and the first sentence back."
+      ],
+      "plain": [
+        "Your plan is on the “One wants to talk now” page.",
+        "No plan yet? Make one together on a calm day."
+      ],
+      "links": [
+        [
+          "Our pause plan",
+          "/pursue-withdraw.html#plan"
+        ]
+      ],
+      "chips": []
+    },
+    {
+      "id": "gamefortwo",
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "name": "a game for two",
+      "pat": "\\b(game|games|something to play)\\b.{0,25}\\b(for two|two of us|together|for us|couples?|with my (partner|wife|husband|gf|bf))\\b|\\b(two|2) player\\b",
+      "keys": [],
+      "what": [
+        "The Re-check Drive is the one made for two: a short, same-team game where you take turns with small real plays (one thank-you, one question) and you can’t lose."
+      ],
+      "how": [
+        "Choose “Us, together” at the start and take turns.",
+        "For something quieter side by side, Pause & Play has calm games you can pass the phone for."
+      ],
+      "plain": [
+        "Play the Re-check Drive together.",
+        "Choose “Us, together”.",
+        "Take turns. You can’t lose."
+      ],
+      "links": [
+        [
+          "The Re-check Drive",
+          "/recheck-drive.html"
+        ],
+        [
+          "Turning toward",
+          "/turning-toward.html"
+        ]
+      ],
+      "chips": []
+    },
+    {
+      "id": "retirepurpose",
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "name": "finding purpose after retiring",
+      "pat": "\\bi miss (work|my job|working|the office|my colleagues)\\b|\\bwhat (do|should|can) i do (with myself )?all day\\b|\\b(retired|retirement|since i retired)\\b.{0,40}\\b(useless|pointless|lost|in the way|bored|no purpose)\\b|\\b(useless|pointless|bored|no purpose)\\b.{0,40}\\b(retired|retirement)\\b|\\bnothing to do all day\\b",
+      "notPat": "\\b(died|passed away|widow\\w*)\\b",
+      "keys": [],
+      "what": [
+        "Missing work is common and real: work gave structure, people and a sense of being useful. Most people need to rebuild those on purpose after retiring, and it takes a few months."
+      ],
+      "how": [
+        "Pick one thing with a regular time and other people: a class, a club, volunteering, a part-time role.",
+        "Use something you’re good at: fixing, teaching, organizing, cooking for others.",
+        "Keep a lunch or call going with a few old colleagues.",
+        "Move most days, outside if you can.",
+        "At home, take one whole job that’s completely yours.",
+        "If you feel low most days for more than a couple of weeks, talk to your doctor."
+      ],
+      "script": [
+        "I miss feeling useful. Can we work out one thing at home that’s completely mine, and I’ll find one thing outside the house too?"
+      ],
+      "plain": [
+        "Missing work is normal.",
+        "Find one regular thing with other people.",
+        "Use a skill you have.",
+        "Take one job at home that is yours."
+      ],
+      "links": [
+        [
+          "Feeling useless, or in the way",
+          "/retired-together.html#purpose"
+        ],
+        [
+          "Retired and both home now",
+          "/retired-together.html"
+        ]
+      ],
+      "chips": []
+    },
+    {
       "id": "breaklength",
       "kind": "intent",
       "first": true,
@@ -873,7 +1087,7 @@
       "first": true,
       "newTopic": true,
       "name": "one of you wants to talk now, the other needs space",
-      "pat": "\\b(won.?t|wont|doesn.?t|never) let (anything|it|things) go\\b|\\bneeds? (some )?(space|time to (think|cool off|calm down))\\b.{0,60}\\b(talk|fight|argu\\w*|let it go|follow\\w*|keeps? going)\\b|\\b(talk|fight|argu\\w*|let (it|anything) go|follow\\w*|keeps? going)\\b.{0,60}\\bneeds? (some )?(space|time)\\b|\\b(walks?|walked|storms?|stormed) (away|off|out)\\b.{0,40}\\b(talk|try|trying|bring|argu\\w*|fight\\w*|every time|whenever)\\b|\\bevery time i (try to )?(talk|bring (it|something|anything) up)\\b|\\bpursu\\w*\\b.{0,40}\\bwithdraw\\w*|\\bwithdraw\\w*\\b.{0,40}\\bpursu\\w*|\\bfollows? me (from )?room to room\\b|\\bnever lets? me talk about\\b|\\b(leaves|left) the (house|room)\\b.{0,60}\\b(phone off|for hours|won.?t answer|doesn.?t answer)\\b|\\bturns? (his|her|their|the) phone off\\b|\\bpause (line|word)\\b|\\b(keeps?|kept) following me\\b|\\bwho is right\\b.{0,40}|\\b(wants|want) to talk (it out )?(now|right now)\\b.{0,60}\\b(space|later|time)\\b|\\bget (him|her|them|my \\w+) to (stay|finish|keep talking)\\b|\\bfinish the (conversation|argument|talk)\\b",
+      "pat": "\\b(won.?t|wont|doesn.?t|never) let (anything|it|things) go\\b|\\bneeds? (some )?(space|time to (think|cool off|calm down))\\b.{0,60}\\b(talk|fight|argu\\w*|let it go|follow\\w*|keeps? going)\\b|\\b(talk|fight|argu\\w*|let (it|anything) go|follow\\w*|keeps? going)\\b.{0,60}\\bneeds? (some )?(space|time)\\b|\\b(walks?|walked|storms?|stormed) (away|off|out)\\b.{0,40}\\b(talk|try|trying|bring|argu\\w*|fight\\w*|every time|whenever)\\b|\\bevery time i (try to )?(talk|bring (it|something|anything) up)\\b|\\bpursu\\w*\\b.{0,40}\\bwithdraw\\w*|\\bwithdraw\\w*\\b.{0,40}\\bpursu\\w*|\\bfollows? me (from )?room to room\\b|\\bnever lets? me talk about\\b|\\b(leaves|left) the (house|room)\\b.{0,60}\\b(phone off|for hours|won.?t answer|doesn.?t answer)\\b|\\bturns? (his|her|their|the) phone off\\b|\\bpause (line|word)\\b|\\b(keeps?|kept) following me\\b|\\bwho is right\\b.{0,40}|\\b(wants|want) to talk (it out )?(now|right now)\\b.{0,60}\\b(space|later|time)\\b",
       "notPat": "\\b(in law|inlaw|mother in law|father in law|parents visit|boss|coworker|teacher)\\b",
       "keys": [],
       "what": [
@@ -2153,7 +2367,7 @@
       "first": true,
       "newTopic": true,
       "name": "a parent caught between partner and kids",
-      "pat": "\\b(stuck|caught|torn) (in the middle|between)\\b.{0,60}\\b(husband|wife|partner|spouse|stepdad|stepmom)\\b|\\bmy (husband|wife|partner|spouse) is (too )?(strict|harsh|hard|mean|cold) (on|with|to) my (kids|children|son|daughter|teens|teenagers)\\b|\\bmy (husband|wife|partner) and my (kids|teens|teenagers|children|son|daughter) (don t|dont|do not|can t|cant|won t|wont) get (along|on)\\b",
+      "pat": "\\b(stuck|caught|torn) (in the middle|between)\\b.{0,60}\\b(husband|wife|partner|spouse|stepdad|stepmom)\\b|\\bmy (husband|wife|partner|spouse) is (too )?(strict|harsh|hard|mean|cold) (on|with|to) my (kids|children|son|daughter|teens|teenagers)\\b|\\bmy (husband|wife|partner) and my (kids|teens|teenagers|children|son|daughter) (don t|dont|do not|can t|cant|won t|wont) get (along|on)\\b|\\b(husband|wife|partner|boyfriend|girlfriend)\\b.{0,40}\\b(and )?my (\\d+ year old|teen\\w*|son|daughter|kids?)\\b.{0,40}\\b(clash\\w*|fight\\w*|argu\\w*|don t get along)\\b|\\b(pick|take|choose) (a )?side\\b.{0,40}\\b(husband|wife|partner|kids?|teen\\w*|son|daughter)\\b",
       "keys": [],
       "what": [
         "Being in the middle is one of the hardest spots in a blended family. You love your kids, you love your partner, and it can feel like every choice lets one of them down. That’s a very common feeling, and it isn’t a sign you’ve chosen wrong."
@@ -2222,7 +2436,7 @@
       "first": true,
       "newTopic": true,
       "name": "agreeing holidays and schedules with an ex",
-      "pat": "\\b(my )?(ex|ex wife|ex husband|ex partner|exwife|exhusband|kids dad|kids mom|kids father|kids mother|co parent|coparent)\\b.{0,50}\\b(holidays?|holiday schedule|christmas|thanksgiving|easter|birthdays?|summer|vacation|custody|visitation|parenting plan)\\b",
+      "pat": "\\b(my )?(ex|ex wife|ex husband|ex partner|exwife|exhusband|kids dad|kids mom|kids father|kids mother|co parent|coparent)\\b.{0,50}\\b(holidays?|holiday schedule|christmas|thanksgiving|easter|birthdays?|summer|vacation|custody|visitation|parenting plan)\\b|\\bholiday schedule\\b|\\b(christmas|holidays?|thanksgiving)\\b.{0,40}\\b(with )?(my|her|his|the kids ) ?(ex|ex wife|ex husband|co parent|their (dad|mom|mum))\\b",
       "keys": [],
       "what": [
         "Holiday schedules are one of the most common sore spots between separated parents. Your court order or parenting plan comes first; if it covers holidays, that’s the answer, and you can point to it calmly."

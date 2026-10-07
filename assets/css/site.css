@@ -2586,7 +2586,8 @@ html.tol-home .hh .tol-pickup-host{ margin:.8rem 0 1rem; }
 /* while reading (scrolling down), the floating buttons step aside so they never cover the words;
    scrolling up, the top or end of the page, or keyboard focus brings them back */
 :is(.tol-pud-fab, .tol-breathe-btn, .tol-top){ transition:opacity .25s ease, transform .25s ease; }
-html.tol-reading :is(.tol-pud-fab, .tol-breathe-btn, .tol-top):not(:focus-visible):not(:focus-within){ opacity:0 !important; pointer-events:none !important; transform:translateY(14px); }
+html.tol-reading :is(.tol-breathe-btn, .tol-top):not(:focus-visible):not(:focus-within){ opacity:0 !important; pointer-events:none !important; transform:translateY(14px); }
+/* Professor Puddles stays in view while reading, so there is always someone to ask */
 
 @media (prefers-reduced-motion: reduce){ html.tol-reading :is(.tol-pud-fab, .tol-breathe-btn, .tol-top){ transform:none !important; } :is(.tol-pud-fab, .tol-breathe-btn, .tol-top){ transition:opacity .15s linear; } }
 /* "Show N more" at the end of a long menu list */
@@ -2595,3 +2596,7 @@ html.tol-reading :is(.tol-pud-fab, .tol-breathe-btn, .tol-top):not(:focus-visibl
 .tol-more-btn:hover{ background:var(--paper-deep, #f3ecd9); }
 .tol-more-btn:focus-visible{ outline:2px solid var(--focus); outline-offset:2px; }
 .tol-drop li[hidden], .tol-index li[hidden]{ display:none !important; }
+
+/* the menu's short lists and their full lists have no code column: names use the full width */
+.tol-index .tol-picks .tol-row, .tol-panel .tol-picks .tol-row{ grid-template-columns:1fr auto !important; }
+.tol-picks .tol-code:empty{ display:none; }
