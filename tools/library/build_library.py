@@ -339,4 +339,9 @@ def main():
 
 
 if __name__ == '__main__':
+    # The library pages have since been edited by hand (plain tool names, "This site's idea" labels and the
+    # folded pillar notes, see mark_own_ideas.py). Rebuilding from the entries would undo that, so it only
+    # runs on purpose, after those edits have been carried into the entries.
+    if '--force' not in sys.argv:
+        sys.exit('build_library.py: the library pages are now edited directly; rerun with --force only after porting those edits into tools/library/entries/.')
     main()

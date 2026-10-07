@@ -32,7 +32,7 @@ VOID = {'area', 'base', 'br', 'col', 'embed', 'hr', 'img', 'input', 'link', 'met
         'param', 'source', 'track', 'wbr'}
 SKIP_TAGS = {'script', 'style', 'noscript', 'template', 'svg', 'nav', 'button', 'select',
              'textarea', 'option', 'canvas', 'audio', 'video', 'iframe', 'pre', 'dialog', 'head'}
-SKIP_CLASSES = {'depth-bar', 'dig', 'read-code', 'tol-bar', 'tol-panel', 'skip', 'sr-only',
+SKIP_CLASSES = {'lib-own-k', 'lib-legend', 'depth-bar', 'dig', 'read-code', 'tol-bar', 'tol-panel', 'skip', 'sr-only',
                 'visually-hidden', 'announce-tag', 'tol-private', 'print-only', 'tol-index', 'tol-access',
                 'lib-top', 'lib-note', 'lib-aka', 'lib-pillar-list'}
 INLINE = {'span', 'a', 'small', 'strong', 'em', 'b', 'i', 'code', 'abbr', 'sup', 'sub', 'mark', 'time', 'label', 'kbd', 'q', 'cite'}

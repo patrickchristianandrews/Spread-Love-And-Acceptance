@@ -11,6 +11,12 @@
     this device". Then the whole suite is kept in localStorage on this device
     only, until you press "Erase". Otherwise it lives on this page until you
     close it, and in the files you choose to download.
+  - The household (/assets/js/household.js): on a shared road with no names yet,
+    "Who's on this road?" offers the names kept from another tool, and fills
+    only empty places. Ticking "Use these names in the other tools" keeps the
+    names (and the jobs and owners from One owner per job) in this browser for
+    the other tools, until it is unticked. One owner per job offers the
+    household's jobs when it is opened with none of your own on it.
   - "Who's on this road?" holds 2 to 8 people. Every worksheet's person
     drop-downs list all of them. The "Just me" road (self) holds one: your own
     name, with every sheet worded for you alone.
@@ -241,7 +247,79 @@
     $('ws-name-add').hidden = S.names.length >= MAX_PEOPLE;
     $('ws-names-count').textContent = S.names.length + ' people · up to ' + MAX_PEOPLE;
     $('ws-care').textContent = p.care;
+    hhRefresh();
     refreshDynamic();
+  }
+
+  /* ------------------------------------------------------------ the household, typed once (household.js) */
+
+  var HH = global.TOLHousehold, hhHost = null, hhOffer = null, hhKeep = null, hhNo = false, hhWrite = null;
+  function hhNamesEmpty() { return S.names.every(function (n) { return !String(n || '').trim() || HH.isPlaceholder(n); }); }
+  // The road's names, and the jobs (with owners) written on One owner per job
+  function hhCollect() {
+    var jobs = [], seen = {};
+    S.stops.forEach(function (st) {
+      st.entries.forEach(function (en) {
+        var sc = schema(en.workpaper), sec = sc && sc.sections.filter(function (x) { return x.type === 'table' && x.library === 'owner'; })[0];
+        if (!sec) return;
+        (en.state.tables[sec.id] || []).forEach(function (r) {
+          if (!r || !r.task || WPK.rowIsEmpty(sec, r) || WPK.isExampleRow(sec, r)) return;
+          var name = String(r.task).trim(), k = name.toLowerCase(), ci = WPK.CODES.indexOf(r.r);
+          if (!name || seen[k]) return;
+          seen[k] = 1;
+          jobs.push({ name: name, owner: ci >= 0 ? String(S.names[ci] || '').trim() : '' });
+        });
+      });
+    });
+    var out = { people: S.names.slice() };
+    if (jobs.length) out.jobs = jobs;
+    return out;
+  }
+  // Names go only into empty places, never over a typed one; extra people are added to the road.
+  function hhUse() {
+    var hh = HH.get(), added = 0;
+    if (!hh) return '';
+    hh.people.forEach(function (nm) {
+      if (S.names.some(function (n) { return String(n || '').trim().toLowerCase() === nm.toLowerCase(); })) return;
+      var slot = -1;
+      S.names.forEach(function (n, i) { if (slot < 0 && (!String(n || '').trim() || HH.isPlaceholder(n))) slot = i; });
+      if (slot < 0) {
+        if (S.names.length >= MAX_PEOPLE) return;
+        S.names.push('');
+        eachPeopleSheet(function (sc, st) { while (WPK.peopleCount(st.values) < S.names.length && WPK.addPerson(sc, st)) { /* keep in step with the road */ } });
+        slot = S.names.length - 1;
+      }
+      setName(slot, nm);
+      added++;
+    });
+    syncRoadPeople();
+    changed();
+    renderNames(); renderRoad();
+    return HH.addedLine(added, 0) + (hh.jobs.length ? ' Its jobs are offered when you open One owner per job.' : '');
+  }
+  function hhRefresh() {
+    if (!HH || !hhHost) return;
+    var shared = !!S.path && !isSolo();
+    hhHost.hidden = !shared;
+    if (hhKeep) { hhKeep.hidden = !shared; hhKeep.sync(); }
+    var hh = HH.get(), want = shared && !hhNo && !!hh && hh.people.length > 0 && hhNamesEmpty();
+    if (want && !hhOffer) {
+      hhOffer = HH.offer({ names: hh.people, onUse: hhUse, onNo: function () { hhNo = true; } });
+      hhHost.appendChild(hhOffer);
+    } else if (!want && hhOffer && !hhOffer.querySelector('.tol-hh-offer').hidden) {
+      hhOffer.remove(); hhOffer = null;
+    }
+  }
+  function hhSetup() {
+    if (!HH) return;
+    var wrap = $('ws-names'), q = $('ws-names-q');
+    if (!wrap) return;
+    hhHost = h('div', { className: 'ws-hh' });
+    if (q && q.parentNode === wrap) wrap.insertBefore(hhHost, q.nextSibling); else wrap.insertBefore(hhHost, wrap.firstChild);
+    hhWrite = HH.writer('suite', hhCollect);
+    hhKeep = HH.remember({ tool: 'suite', write: hhWrite });
+    wrap.appendChild(hhKeep);
+    HH.onChange(function () { if (hhKeep) hhKeep.sync(); });
   }
 
   // A person added and never named, with nothing on any sheet, is taken off before anything is made,
@@ -336,6 +414,7 @@
   function changed() {
     S.dirty = true;
     refreshDynamic();
+    if (hhWrite) hhWrite.soon();
     if (!keep) return;
     clearTimeout(keepTimer);
     keepTimer = setTimeout(keepNow, 400);
@@ -987,6 +1066,7 @@
     if (global.TOLTips) global.TOLTips.get(['calm'], function () { /* loads the tips library, so a road's tip is ready when a report is made */ }, 1);
     var eraseBtn0 = $('ws-erase');
     if (eraseBtn0 && !$('ws-erase-note')) eraseBtn0.parentNode.insertBefore(h('span', { className: 'wpf-erase-note', id: 'ws-erase-note', role: 'status', 'aria-live': 'polite' }), eraseBtn0.nextSibling);
+    hhSetup();
     renderPaths();
     var q = (global.location.search.match(/[?&]road=([a-z]+)/) || [])[1];
     var kept = readKept();
@@ -1121,6 +1201,8 @@
       return 'You have unsaved entries.';
     });
     refreshDynamic();
+    hhRefresh();
+    if (hhWrite) hhWrite.baseline();
     booted = true;
     // the Full path package fills its own road list once it has started: follow step 1 after that
     setTimeout(mirrorFullPath, 0);

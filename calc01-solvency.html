@@ -604,6 +604,7 @@ overall = (balance &times; 0.35) + (ownership &times; 0.30) + ((1 &minus; stress
   </footer>
 </main>
 
+<script src="/assets/js/household.js"></script>
 <script>
 (function(){
   "use strict";
@@ -698,6 +699,7 @@ overall = (balance &times; 0.35) + (ownership &times; 0.30) + ((1 &minus; stress
     each(document.querySelectorAll('input[name="target-mode"]'), function(r){ r.checked = r.value === S.targetMode; });
     $("target-row").classList.toggle("on", S.targetMode === "agreed");
     $("ledger-hint").style.visibility = nPeople() > 2 ? "visible" : "hidden";
+    hhRefresh();
   }
 
   function renderLedger(){
@@ -1169,6 +1171,46 @@ overall = (balance &times; 0.35) + (ownership &times; 0.30) + ((1 &minus; stress
     var rows = $(tbodyId).querySelectorAll("tr");
     var row = rows[Math.min(idx, rows.length - 1)];
     (row ? row.querySelector("input,select") : $(fallbackId)).focus();
+  }
+
+  /* ---------- the household, typed once in another tool (/assets/js/household.js) ---------- */
+  // Only offered, when no one has typed a name here yet. "Use them" fills empty places, never a typed name.
+  var HH = window.TOLHousehold, hhHost = null, hhOffer = null, hhNo = false;
+  function hhEmpty(){ return S.people.every(function(p){ return !String(p || "").trim() || HH.isPlaceholder(p); }); }
+  function hhNoHours(){ return S.ledger.every(function(r){ return r.hours.every(function(x){ return !(+x > 0); }); }); }
+  function hhNoOwners(){ return S.raci.every(function(r){ return r.r === "" && r.a === ""; }); }
+  function hhUse(){
+    var hh = HH.get(), names = 0, jobs = 0;
+    if (!hh) return "";
+    hh.people.forEach(function(nm){
+      if (S.people.some(function(p){ return String(p || "").trim().toLowerCase() === nm.toLowerCase(); })) return;
+      var slot = -1;
+      S.people.forEach(function(p, i){ if (slot < 0 && (!String(p || "").trim() || HH.isPlaceholder(p))) slot = i; });
+      if (slot < 0){ if (S.people.length >= C.MAX_PEOPLE) return; resize(S.people.length + 1); slot = S.people.length - 1; }
+      S.people[slot] = nm; names++;
+    });
+    if (hh.jobs.length){
+      var owner = function(nm){ var k = String(nm || "").toLowerCase(), at = ""; S.people.forEach(function(p, i){ if (k && String(p || "").trim().toLowerCase() === k) at = String(i); }); return at; };
+      // the starter job names make way for the household's, while nothing is filled in against them
+      if (hhNoHours()){ S.ledger = hh.jobs.map(function(j){ return { name: j.name, hours: S.people.map(function(){ return 0; }) }; }); jobs = hh.jobs.length; }
+      if (hhNoOwners()){ S.raci = hh.jobs.map(function(j){ return { name: j.name, r: owner(j.owner), a: "" }; }); jobs = hh.jobs.length; }
+    }
+    renderAll(); recalc();
+    return HH.addedLine(names, jobs);
+  }
+  function hhRefresh(){
+    if (!HH || !hhHost) return;
+    var hh = HH.get(), want = !hhNo && !!hh && hh.people.length > 0 && hhEmpty();
+    if (want && !hhOffer){
+      hhOffer = HH.offer({ names: hh.people, jobs: hh.jobs.map(function(j){ return j.name; }), onUse: hhUse, onNo: function(){ hhNo = true; } });
+      hhHost.appendChild(hhOffer);
+    } else if (!want && hhOffer && !hhOffer.querySelector(".tol-hh-offer").hidden){ hhOffer.remove(); hhOffer = null; }
+  }
+  if (HH){
+    var hhPanel = $("people-count").parentNode;
+    hhHost = document.createElement("div");
+    hhHost.className = "no-print";
+    hhPanel.insertBefore(hhHost, hhPanel.firstChild);
   }
 
   /* ---------- start ---------- */

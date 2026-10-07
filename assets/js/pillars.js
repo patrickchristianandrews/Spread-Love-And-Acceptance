@@ -196,6 +196,7 @@
   css.textContent =
     '.tol-pillars{position:relative;z-index:2;box-sizing:border-box;max-width:100%;margin:0 0 1.6rem;padding:.7rem .8rem .6rem;background:#F5EFDE;border:1px solid #D9CBA3;border-radius:3px;font:500 .9rem/1.4 "IBM Plex Mono",ui-monospace,monospace;color:#2B2620}' +
     '.tol-pillars-label{display:block;margin:0 0 .45rem;font-size:.875rem;letter-spacing:.04em;color:#5A5346}' +
+    '.tol-pillars-label .tp-kicker{display:inline-block;margin:0 .45rem .15rem 0;padding:.05rem .45rem;border:1px solid #A8792F;border-radius:999px;font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;color:#5A5346;white-space:nowrap}' +
     '.tol-pillars-label a{color:#2B2620;text-decoration:underline;text-decoration-color:#A8792F;text-underline-offset:3px}' +
     '.tol-pillars ul{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:.35rem}' +
     '.tol-pillars li{margin:0;max-width:none}' +
@@ -219,7 +220,7 @@
   var chips = '', how = '';
   for (var i = 1; i <= 5; i++) {
     var P = PILLARS[i], lines = (entry.n && entry.n[i]) || [P.you, P.us];
-    var tip = on[i] ? 'For you: ' + lines[0] + ' With others: ' + lines[1] : P.name + ' (' + P.field + ')';
+    var tip = on[i] ? 'For you: ' + lines[0] + ' With others: ' + lines[1] : P.name + ' (borrowed from ' + P.field.toLowerCase() + ')';
     chips += '<li><a class="tp-chip' + (on[i] ? ' is-on' : '') + '" href="/five-pillars.html#' + P.id + '" title="' + esc(tip) + '">' +
       '<b>' + P.roman + '</b>' + esc(P.short) + (on[i] ? '<span class="sr"> (used on this page)</span>' : '') + '</a></li>';
   }
@@ -230,8 +231,8 @@
 
   var nav = document.createElement('nav');
   nav.className = 'tol-pillars';
-  nav.setAttribute('aria-label', 'Pillars in this page');
-  nav.innerHTML = '<span class="tol-pillars-label">Pillars in this page · <a href="/five-pillars.html">the Five Pillars</a></span>' +
+  nav.setAttribute('aria-label', 'Pillars in this page, this site’s own framework');
+  nav.innerHTML = '<span class="tol-pillars-label"><span class="tp-kicker">This site’s framework</span> Pillars in this page · <a href="/five-pillars.html">the Five Pillars</a></span>' +
     '<ul>' + chips + '</ul>' +
     '<details><summary>How this page uses ' + (entry.p.length === 1 ? 'it' : 'them') + '</summary><dl>' + how + '</dl></details>';
 

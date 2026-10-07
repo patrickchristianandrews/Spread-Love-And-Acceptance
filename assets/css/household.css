@@ -1,0 +1,18 @@
+/* household.css — the "Use your household from before?" offer and the
+   "Use these names in the other tools" tick (assets/js/household.js). Loaded by that script. */
+.tol-hh{ margin: 0 0 .9rem; max-width: 100%; }
+.tol-hh-offer{ display: flex; flex-wrap: wrap; align-items: center; gap: .5rem .9rem; padding: .7rem .9rem; border: 1px solid var(--line, #D9CBA3); border-left: 4px solid var(--credit, #3E6B4C); border-radius: 12px; background: #F3F8F1; color: var(--ink, #2B2620); }
+.tol-hh-offer[hidden]{ display: none; }
+.tol-hh-text{ flex: 1 1 16rem; min-width: 0; margin: 0 !important; line-height: 1.45; overflow-wrap: anywhere; }
+.tol-hh-btns{ display: flex; flex-wrap: wrap; gap: .5rem; }
+.tol-hh-btn{ font: inherit; font-size: .95rem; min-height: 44px; min-width: 44px; padding: .4rem 1rem; border-radius: 999px; border: 1px solid var(--ink, #2B2620); background: #FFFDF6; color: var(--ink, #2B2620); cursor: pointer; }
+.tol-hh-btn.is-main{ background: var(--credit, #3E6B4C); border-color: var(--credit, #3E6B4C); color: #fff; font-weight: 600; }
+.tol-hh-btn:hover{ filter: brightness(.96); }
+.tol-hh-btn:focus-visible, .tol-hh-keep input:focus-visible{ outline: 2px solid var(--focus, #2B5B8C); outline-offset: 2px; }
+.tol-hh-status{ margin: .35rem 0 0 !important; font-size: .92rem; color: var(--credit, #3E6B4C); min-height: 0; }
+.tol-hh-status:empty{ display: none; }
+.tol-hh-keep{ margin: .8rem 0 0; font-size: .93rem; color: var(--ink-soft, #5A5346); }
+.tol-hh-keep-l{ display: inline-flex; align-items: center; gap: .5rem; min-height: 44px; cursor: pointer; overflow-wrap: anywhere; }
+.tol-hh-keep-l input{ width: 1.2rem !important; height: 1.2rem; min-height: 0 !important; margin: 0; flex: none; }
+.tol-hh-keep-n{ color: var(--ink-soft, #5A5346); }
+@media print{ .tol-hh, .tol-hh-keep{ display: none !important; } }
