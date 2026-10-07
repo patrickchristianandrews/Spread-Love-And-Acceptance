@@ -1253,6 +1253,7 @@ function analyze(textIn, opts){
   if(has("critic") && has("again")) drop("critic", h=>/again/i.test(h.match));
   if(has("minim") && has("oblig")) {/* both stay: "you just need to" */}
   if(has("feellike")) drop("istate", h=>inside(h,"feellike"));
+  drop("hyper", h=>inside(h,"selfput"));  // "I'm the worst" is one reading (a put-down), not two
   drop("reassure", h=>inside(h,"softener"));  // "is that okay with you?" is a kind check, not a worry
   if(has("label") && has("invalid")) drop("label", h=>inside(h,"invalid"));
   if(has("urgent") && has("vtime")) drop("vtime", h=>inside(h,"urgent"));

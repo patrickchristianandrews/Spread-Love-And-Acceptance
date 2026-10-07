@@ -21,7 +21,7 @@
   not split), a savings goal (kept, never owed), or money coming in (optional: shows what's left). The
   summary leads with each person's total, then the settle-up.
 
-  Two phones: "Send my side to my partner" makes a short code ("LEMON1:" and a base64 JSON) or a .json
+  Two phones: "Send my side to my partner" makes a link (the main way), or a code ("LEMON1:" and a base64 JSON) or a .json
   file with the names, jobs, times and bills (never the example). "Add my partner's side" reads one back
   and merges it: people are matched by name, new jobs and bills are added, blanks are filled in, and
   where both phones have different numbers for the same job, the person chooses: keep mine, use theirs,
@@ -1732,7 +1732,8 @@
     if (ws) {
       var wn = waitNames(wait);
       ws.hidden = !wait.length;
-      ws.textContent = (wn.length === wait.length && wn.length ? joinNames(wn) + (wn.length === 1 ? ' has' : ' have') : 'The other side has') + ' nothing to add this week? Show the split anyway';
+      ws.textContent = wait.length === 1 && wait[0] === state.me ? 'Nothing to add on your side this week? Show the split anyway'
+        : (wn.length === wait.length && wn.length ? joinNames(wn) + (wn.length === 1 ? ' has' : ' have') : 'The other side has') + ' nothing to add this week? Show the split anyway';
     }
     $('money-line').textContent = moneySentence();
     // per-category hours beside each group heading

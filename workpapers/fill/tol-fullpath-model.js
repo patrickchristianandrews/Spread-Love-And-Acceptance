@@ -766,7 +766,7 @@
         // one week: every sheet's rows, each keeping who did it (the same row twice counts once)
         var st1 = JSON.parse(JSON.stringify(e1.state)), have1 = {};
         st1.tables.audit = rowsOfT(st1, 'audit');
-        st1.tables.audit = st1.tables.audit.filter(function (r) { if (have1[rowKey(r)]) return false; have1[rowKey(r)] = 1; return true; });
+        st1.tables.audit.forEach(function (r) { have1[rowKey(r)] = 1; });
         also1.forEach(function (e) { rowsOfT(e.state, 'audit').forEach(function (r) { if (!have1[rowKey(r)]) { have1[rowKey(r)] = 1; st1.tables.audit.push(r); } }); });
         e1 = { workpaper: e1.workpaper, person: e1.person, state: st1 };
       }
@@ -1118,6 +1118,24 @@
   }
 
   function V(data, id) { var v = data.values[NS + id]; return v == null ? '' : v; }
+  // The share each person's week is compared with: the split agreed on the Lemonade Stand (when everyone
+  // has one and they add up to 100%), or a fair share with each person counted for the nights they're
+  // here (as the stand does). null means an even split.
+  function targetOf(data, P) {
+    var sp = data.split, n = P.list.length;
+    if (!sp || n < 2) return null;
+    var ag = sp.agreed || [], sum = 0, all = true;
+    for (var i = 0; i < n; i++) { if (ag[i] == null) all = false; else sum += ag[i]; }
+    if (all && Math.abs(sum - 100) <= 0.5) {
+      var ta = P.list.map(function (p) { return ag[p.i] / sum; });
+      return { t: ta, mode: 'agreed', label: 'the split you agreed (' + P.list.map(function (p) { return p.label + ' ' + Math.round(ta[p.i] * 100) + '%'; }).join(', ') + ')' };
+    }
+    var ni = sp.nights || [], w = P.list.map(function (p) { return ni[p.i] != null ? ni[p.i] / 14 : 1; });
+    if (w.every(function (x) { return x === 1; })) return null;
+    var ws = sumOf(w), tp = w.map(function (x) { return x / ws; });
+    var part = P.list.filter(function (p) { return w[p.i] < 1; }).map(function (p) { return p.label + ' (' + (ni[p.i] === 7 ? 'half the time' : ni[p.i] + ' of 14 nights') + ')'; });
+    return { t: tp, mode: 'part', label: 'a fair share with ' + list(part) + ' counted for the nights they\u2019re here (' + P.list.map(function (p) { return p.label + ' ' + Math.round(tp[p.i] * 100) + '%'; }).join(', ') + ')' };
+  }
   function has(data, id) { return !blank(data.values[NS + id]); }
   function rowsOf(data, prefix, cols, max) {
     var out = [];
@@ -2073,12 +2091,30 @@
         days: uniq(rows.filter(function (r) { return r.day && (r.task || r.whoRaw); }).map(function (r) { return r.day; })).length,
         handoff: null };
       if (c.wp01.wb != null && n >= 2) {
-        var bh = C1().balance(c.wp01.minutes.map(function (m) { return m / 60; })), ho = C1().balanceHandoff(bh);
-        // Only a handoff that really helps: it must raise the balance, and never move work toward
-        // someone whose load score is higher than the giver's.
+        var tp0 = c.target ? c.target.t.map(function (x) { return x * 100; }) : null;
+        var bh = C1().balance(c.wp01.minutes.map(function (m) { return m / 60; }), tp0);
+        if (bh.error && tp0) bh = C1().balance(c.wp01.minutes.map(function (m) { return m / 60; }));
+        // The one handoff that helps most: from the adult furthest over their share to the adult furthest
+        // under it. Never toward someone marked as a child, and never toward someone whose load score is
+        // higher than the giver's. It must really raise the balance.
+        var ho = null;
+        if (bh.value != null && bh.gaps) {
+          var adults = P.list.filter(function (p) { return !(c.kids && c.kids[p.i]); }).map(function (p) { return p.i; });
+          var over = null, under = null;
+          adults.forEach(function (i) { if (over == null || bh.gaps[i] > bh.gaps[over]) over = i; if (under == null || bh.gaps[i] < bh.gaps[under]) under = i; });
+          if (over != null && under != null && over !== under && bh.gaps[over] > 0 && bh.gaps[under] < 0) {
+            var hrs = Math.min(bh.gaps[over], -bh.gaps[under]) * bh.total;
+            if (hrs > 0.05) {
+              hrs = Math.max(0.5, Math.round(hrs * 2) / 2);
+              var h2 = bh.hours.slice(); h2[over] = Math.max(0, h2[over] - hrs); h2[under] += hrs;
+              var aft = C1().balance(h2, bh.mode === 'agreed' ? bh.target.map(function (x) { return x * 100; }) : null).value;
+              ho = { from: over, to: under, hours: hrs, after: aft };
+            }
+          }
+        }
         var bf = ho && c.battery[ho.from], bt = ho && c.battery[ho.to];
         var heavierTo = !!(bf && bt && bf.score != null && bt.score != null && bt.score > bf.score);
-        if (ho && ho.after != null && ho.after > c.wp01.wb + 0.005 && !heavierTo) F.w1.handoff = { from: P.label(ho.from), to: P.label(ho.to), fromI: ho.from, toI: ho.to, hours: ho.hours, after: ho.after };
+        if (ho && ho.after != null && ho.after > c.wp01.wb + 0.005 && !heavierTo && !(F.reacher != null && ho.to === F.reacher)) F.w1.handoff = { from: P.label(ho.from), to: P.label(ho.to), fromI: ho.from, toI: ho.to, hours: ho.hours, after: ho.after };
         F.w1.balance = bh;
       }
     }
