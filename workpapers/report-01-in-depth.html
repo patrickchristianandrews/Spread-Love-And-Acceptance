@@ -150,6 +150,7 @@
   }
 </style>
 <script src="/assets/js/site.js" defer></script>
+<script src="/assets/js/household.js"></script>
 <!-- seo:start -->
 <link rel="canonical" href="https://spreadloveandacceptance.com/workpapers/report-01-in-depth.html">
 <link rel="alternate" hreflang="en-us" href="https://spreadloveandacceptance.com/workpapers/report-01-in-depth.html">
@@ -847,6 +848,26 @@
   $("name-b").addEventListener("input",renderReport);
 
   renderAll();
+
+  // The household kept on this device (household.js, only if someone ticked "Use these names in the other
+  // tools" elsewhere): offer its names, one tap, like the other pages do. It never fills them in by itself,
+  // and only while the boxes still say "Person A" and "Person B" (or are empty).
+  var HH = window.TOLHousehold, hh = HH && HH.get ? HH.get() : null;
+  function unnamed(el){ var v = String(el.value || "").trim(); return !v || /^person [ab]$/i.test(v); }
+  if (hh && hh.people.length && unnamed($("name-a")) && unnamed($("name-b"))){
+    var offer = HH.offer({
+      names: hh.people, question: "Use your household from before?",
+      onUse: function(){
+        $("name-a").value = hh.people[0] || "Person A";
+        if (hh.people[1]) $("name-b").value = hh.people[1];
+        renderReport();
+        return HH.addedLine(Math.min(hh.people.length, 2), 0) + (hh.people.length > 2 ? " This ledger has room for two people; the first two are filled in." : "");
+      },
+      focus: function(){ return $("name-a"); }
+    });
+    var grid = $("name-a").closest(".grid");
+    if (grid && grid.parentNode) grid.parentNode.insertBefore(offer, grid);
+  }
 })();
 </script>
 

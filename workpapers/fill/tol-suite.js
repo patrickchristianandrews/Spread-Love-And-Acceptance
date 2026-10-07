@@ -116,9 +116,56 @@
     if (sc.people) applyNames(sc, st);
     else if (sc.meta && sc.meta.some(function (m) { return m.id === 'name'; })) st.values.name = person != null ? (S.names[person] || '') : isSolo() ? S.names[0] : '';
     if (code === 'WP-02' && !isSolo()) st.values.roadPeople = adults().length;
-    var en = { id: 'e' + (++uid), workpaper: code, label: label || '', state: st };
+    var en = { id: 'e' + (++uid), sid: newSid(), workpaper: code, label: label || '', state: st };
     if (person != null) en.person = person;
     return en;
+  }
+  // Every sheet has its own identity (sid), kept in drafts and files. The same sheet coming back inside
+  // someone else's file (they brought yours in earlier) is that one sheet, never a second copy to count again.
+  function newSid() { return Date.now().toString(36) + Math.random().toString(36).slice(2, 8); }
+  function cellsOf(r, sec) { var o = {}; sec.columns.forEach(function (c) { var v = r && r[c.id]; if (c.type !== 'computed' && v !== '' && v != null && v !== false) o[c.id] = typeof v === 'string' ? v.replace(/\s+/g, ' ').trim().toLowerCase() : v; }); return o; }
+  function rowKeyOf(r, sec) { var o = cellsOf(r, sec); return JSON.stringify(Object.keys(o).sort().map(function (k) { return [k, o[k]]; })); }
+  function realRows(sc, st, sec) { return (st.tables[sec.id] || []).filter(function (r) { return r && !WPK.rowIsEmpty(sec, r) && !WPK.isExampleRow(sec, r); }); }
+  // is everything written on sheet a also on sheet b?
+  function contained(a, b) {
+    if (a.workpaper !== b.workpaper) return false;
+    var sc = schema(a.workpaper), ok = true;
+    Object.keys(a.state.values).forEach(function (k) {
+      var v = a.state.values[k];
+      if (!ok || /^(partner[A-H]|peopleCount|roadPeople)$/.test(k) || v === '' || v == null || v === false) return;
+      if (String(b.state.values[k] == null ? '' : b.state.values[k]).trim().toLowerCase() !== String(v).trim().toLowerCase()) ok = false;
+    });
+    sc.sections.forEach(function (sec) {
+      if (!ok || sec.type !== 'table') return;
+      var have = {}; realRows(sc, b.state, sec).forEach(function (r) { have[rowKeyOf(r, sec)] = 1; });
+      realRows(sc, a.state, sec).forEach(function (r) {
+        if (!ok || have[rowKeyOf(r, sec)]) return;
+        if (sec.personDays) { var o = cellsOf(r, sec), hit = (b.state.tables[sec.id] || []).filter(function (x) { return x && x.day === r.day && x.who === r.who; })[0]; if (hit && Object.keys(o).every(function (k) { return cellsOf(hit, sec)[k] === o[k]; })) return; }
+        ok = false;
+      });
+    });
+    return ok;
+  }
+  // the same sheet from two devices: what is new on the other one is added, nothing here is overwritten
+  function mergeSheet(x, en) {
+    var sc = schema(x.workpaper), got = 0;
+    Object.keys(en.state.values).forEach(function (k) { var v = en.state.values[k]; if (v !== '' && v != null && v !== false && WPK.isBlank(x.state.values[k])) { x.state.values[k] = v; got++; } });
+    sc.sections.forEach(function (sec) {
+      if (sec.type !== 'table') return;
+      var rows = x.state.tables[sec.id] || (x.state.tables[sec.id] = []), have = {};
+      realRows(sc, x.state, sec).forEach(function (r) { have[rowKeyOf(r, sec)] = 1; });
+      realRows(sc, en.state, sec).forEach(function (r) {
+        if (have[rowKeyOf(r, sec)]) return;
+        if (sec.personDays) {
+          var hit = rows.filter(function (y) { return y && y.day === r.day && y.who === r.who; })[0];
+          if (hit) { sec.columns.forEach(function (c) { if (!c.prefill && WPK.isBlank(hit[c.id]) && !WPK.isBlank(r[c.id])) { hit[c.id] = r[c.id]; got++; } }); return; }
+        }
+        var slot = rows.filter(function (y) { return y && WPK.rowIsEmpty(sec, y) && !sec.personDays; })[0];
+        if (slot) Object.keys(r).forEach(function (k) { slot[k] = r[k]; }); else rows.push(JSON.parse(JSON.stringify(r)));
+        have[rowKeyOf(r, sec)] = 1; got++;
+      });
+    });
+    return got;
   }
   function filled(en) { return SP.answers(en) > 0; }
   // WP-02 and WP-11 are filled in by each person about themselves: on a shared road, one set per person.
@@ -232,6 +279,13 @@
     var sc0 = schema(en.workpaper), nm0 = nameMap(sc0, en.state);
     if (nm0 && nm0.clash.length) nameAsks.push({ en: en, info: nm0 });
     else if (nm0 && nm0.moved) { remapSheet(sc0, en.state, nm0.map); en.matched = true; }
+    if (!(nm0 && nm0.clash.length)) {
+      var twin = null, inside = false;
+      S.stops.forEach(function (st) { st.entries.forEach(function (x) { if (en.sid && x.sid === en.sid) twin = x; else if (x.workpaper === en.workpaper && filled(x) && contained(en, x)) inside = true; }); });
+      if (twin) { if (mergeSheet(twin, en)) en.mergedInto = twin; return false; }
+      if (inside) return false;
+    }
+    if (!en.sid) en.sid = newSid();
     var stops = S.stops.filter(function (st) { return st.wp === en.workpaper; });
     if (!stops.length) stops = [extraStop(en.workpaper)];
     var target = null;
@@ -568,17 +622,20 @@
     else if (f && typeof f === 'object') Object.keys(f).forEach(function (k) { if (LEMON_FREQ[f[k]]) out[String(k).trim()] = f[k]; });
     return Object.keys(out).length ? out : 'week';
   }
+  // each person's own "how often" (fq, by name) wins over the job's (f)
   function freqOf(j, who) {
-    if (typeof j.f === 'string') return j.f;
-    var hit = null; Object.keys(j.f).forEach(function (k) { if (SP.fold(k) === SP.fold(who)) hit = j.f[k]; });
-    return hit || 'week';
+    var hit = null, all = [j.fq, typeof j.f === 'object' ? j.f : null];
+    all.forEach(function (o) { if (!hit && o) Object.keys(o).forEach(function (k) { if (!hit && SP.fold(k) === SP.fold(who) && LEMON_FREQ[o[k]]) hit = o[k]; }); });
+    return hit || (typeof j.f === 'string' ? j.f : 'week');
   }
   // the one "how often" for One owner per job: the job's own, or the most often anyone does it
   function freqMain(j) {
-    if (typeof j.f === 'string') return j.f;
-    var best = 'week'; Object.keys(j.f).forEach(function (k) { if (LEMON_FREQ[j.f[k]] > LEMON_FREQ[best]) best = j.f[k]; });
+    var best = typeof j.f === 'string' ? j.f : 'week';
+    [j.fq, typeof j.f === 'object' ? j.f : null].forEach(function (o) { if (o) Object.keys(o).forEach(function (k) { if (LEMON_FREQ[o[k]] > LEMON_FREQ[best]) best = o[k]; }); });
     return best;
   }
+  // who marked themselves first to notice on a job (each person marks their own), by name
+  function noticers(j) { return (j.nm || []).concat(j.nf ? [j.nf] : []).map(function (x) { return SP.fold(x); }); }
   // One tidy shape, whatever the stand sent:
   // { people, by, kids: [names], nights: { name: 1–14 }, agreed: { name: % }, jobs: [{ n, f, u, v, t, nf, home }], own: [{ n, w }] }
   function lemonShape(raw) {
@@ -587,7 +644,9 @@
     function obj(o, cap) { var out = {}; if (o && typeof o === 'object') Object.keys(o).forEach(function (k) { var v = lemonNum(o[k]); if (v && (!cap || v <= cap)) out[String(k).trim()] = v; }); return out; }
     var jobs = (Array.isArray(raw.jobs) ? raw.jobs : []).slice(0, 200).filter(function (j) { return j && typeof j === 'object' && !j.p; }).map(function (j) {
       var n = lemonClean(j.n);
-      return { n: n, f: lemonFreq(j.f, people), u: j.u === 'h' ? 'h' : 'm', v: obj(j.v), t: obj(j.t), nf: lemonClean(j.nf, 40), home: lemonHome(n, typeof j.c === 'string' ? j.c : '') };
+      var fq = lemonFreq(j.fq && typeof j.fq === 'object' ? j.fq : null, people);
+      return { n: n, f: lemonFreq(j.f, people), fq: typeof fq === 'object' ? fq : null, u: j.u === 'h' ? 'h' : 'm', v: obj(j.v), t: obj(j.t), nf: lemonClean(j.nf, 40),
+        nm: (Array.isArray(j.nm) ? j.nm : []).map(function (x) { return lemonClean(x, 40); }).filter(Boolean), home: lemonHome(n, typeof j.c === 'string' ? j.c : '') };
     }).filter(function (j) { return j.n; });
     var own = (Array.isArray(raw.own) ? raw.own : []).slice(0, 40).filter(function (o) { return o && o.n; }).map(function (o) { return { n: lemonClean(o.n), w: lemonClean(o.w, 40) }; });
     var nights = {};
@@ -627,8 +686,9 @@
     var jobs = (Array.isArray(st.jobs) ? st.jobs : []).filter(function (j) { return j && !j.ex && !j.personal && String(j.name || '').trim(); }).map(function (j) {
       var v = {}, t = {};
       people.forEach(function (p, i) { if (!p) return; var a = lemonNum((j.v || [])[i]), b = lemonNum((j.t || [])[i]); if (a) v[p] = a; if (b) t[p] = b; });
-      var f = j.freqs || j.freq;
-      return { n: lemonClean(j.name), f: lemonFreq(f, people), u: j.unit === 'h' ? 'h' : 'm', v: v, t: t, nf: typeof j.nf === 'number' && j.nf >= 0 ? people[j.nf] || '' : '', home: lemonHome(j.name, typeof j.cat === 'string' ? j.cat : '') };
+      var fq = Array.isArray(j.fq) ? lemonFreq(j.fq, people) : null;
+      var nm = Array.isArray(j.nm) ? people.filter(function (p, i) { return p && j.nm[i]; }) : [];
+      return { n: lemonClean(j.name), f: lemonFreq(j.freq, people), fq: fq && typeof fq === 'object' ? fq : null, u: j.unit === 'h' ? 'h' : 'm', v: v, t: t, nf: typeof j.nf === 'number' && j.nf >= 0 ? people[j.nf] || '' : '', nm: nm, home: lemonHome(j.name, typeof j.cat === 'string' ? j.cat : '') };
     });
     var own = (Array.isArray(st.owners) ? st.owners : []).filter(function (o) { return o && String(o.name || '').trim(); }).map(function (o) { return { n: lemonClean(o.name), w: o.who >= 0 ? people[o.who] || '' : '' }; });
     var kids = [], nights = {}, agreed = {};
@@ -739,7 +799,7 @@
         var c = codeOf(who); if (!c) return;
         var f = freqOf(j, who); word = LEMON_WORD[f];
         var mins = j.v[who] * (j.u === 'h' ? 60 : 1) * LEMON_FREQ[f];
-        if (mins >= 1) { sides[c] = 1; push(j.n + (word ? ' (' + word + ')' : ''), c, mins, j.nf && SP.fold(j.nf) === SP.fold(who) ? 'Noticed and handled' : ''); }
+        if (mins >= 1) { sides[c] = 1; push(j.n + (word ? ' (' + word + ')' : ''), c, mins, noticers(j).indexOf(SP.fold(who)) >= 0 ? 'Noticed and handled' : ''); }
       });
       Object.keys(j.t).forEach(function (who) {
         var c = codeOf(who); if (!c) return;
@@ -843,7 +903,7 @@
   }
   function snapshot(forFile) {
     var entries = [];
-    S.stops.forEach(function (st) { st.entries.forEach(function (en) { if (filled(en) || en.label) entries.push({ workpaper: en.workpaper, label: en.label, stop: st.key, person: typeof en.person === 'number' ? en.person : undefined, from: en.from || undefined, state: forFile ? shareable(en) : en.state }); }); });
+    S.stops.forEach(function (st) { st.entries.forEach(function (en) { if (filled(en) || en.label) entries.push({ workpaper: en.workpaper, label: en.label, sid: en.sid || undefined, stop: st.key, person: typeof en.person === 'number' ? en.person : undefined, from: en.from || undefined, state: forFile ? shareable(en) : en.state }); }); });
     var out = { format: SUITE_FORMAT, version: 1, path: S.path ? S.path.id : null, names: S.names.slice(), saved: new Date().toISOString(), entries: entries };
     var by = deviceOwner(); if (by) out.by = by;
     if (kidsOn()) { kidsFit(); if (S.kids.some(Boolean)) out.kids = S.kids.slice(); }
@@ -1043,7 +1103,7 @@
     if (!sec) return null;
     var lists = st.entries.filter(filled).map(function (en, k) {
       var rows = (en.state.tables.treaty || []).filter(function (r) { return r && String(r.task || '').trim() && !WPK.rowIsEmpty(sec, r) && !WPK.isExampleRow(sec, r); });
-      var whose = en.from && en.from.by ? en.from.by : en.label || (k === 0 && deviceOwner() ? deviceOwner() : 'Sheet ' + (k + 1));
+      var whose = en.from && en.from.by ? en.from.by : !en.from && deviceOwner() ? deviceOwner() : en.label || 'Sheet ' + (k + 1);
       return { en: en, rows: rows, whose: whose };
     }).filter(function (l) { return l.rows.length; });
     if (lists.length < 2) return null;
@@ -1521,6 +1581,9 @@
             if (typeof x.person === 'number') personByName(en, x.person, d.names);
             en.from = fromNote(f, d);
             if (x.from && x.from.lemon) en.from.lemon = 1;
+            // a sheet that was brought into that file from someone else's still says whose it was
+            if (x.from && typeof x.from.by === 'string' && x.from.by.trim()) en.from.by = x.from.by.trim().slice(0, 40);
+            if (typeof x.sid === 'string') en.sid = x.sid.slice(0, 40);
             put(en, d.path, d.names);
           });
           return;
@@ -1744,6 +1807,7 @@
         var en = { workpaper: sc.code, label: typeof x.label === 'string' ? x.label.slice(0, 80) : '', state: clean(sc, x.state) };
         if (typeof x.person === 'number') en.person = x.person;
         if (x.from && typeof x.from === 'object') en.from = fromClean(x.from);
+        if (typeof x.sid === 'string') en.sid = x.sid.slice(0, 40);
         place(en);
       });
       syncAllNames(); syncRoadPeople();
@@ -1777,7 +1841,8 @@
         say(whoLabel(+k) + (e.target.checked ? ' is marked as a child: no load score or calm-down kit is asked of them, and the shared numbers don\u2019t wait for them.' : ' is marked as an adult.'));
         return;
       }
-      if (e.target.getAttribute('data-name') != null) { clearTimeout(nameTimer); roadSoon(); }
+      // (after this event has run its course: on a phone the tap that blurred the box comes right after it)
+      if (e.target.getAttribute('data-name') != null) { clearTimeout(nameTimer); nameTimer = setTimeout(roadSoon, 0); }
     });
     $('ws-names').addEventListener('click', function (e) {
       if (e.target.closest('[data-split-forget]')) { S.split = null; changed(); renderNames(); renderRoad(); say('Each week is read against an even split now. Bring in your Lemonade Stand again to use its split.'); return; }

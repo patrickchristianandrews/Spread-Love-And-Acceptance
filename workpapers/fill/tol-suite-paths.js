@@ -470,8 +470,16 @@
   ];
 
   // the 6-week program's weeks are its groups; every other road gets its own plan above
+  // Living apart: the same report, worded for two homes, calls and visits
+  REPORT.apart = {};
+  Object.keys(REPORT.partners).forEach(function (k) { REPORT.apart[k] = REPORT.partners[k]; });
+  REPORT.apart.what = 'A shared picture of how the two of you stay close from two places: who starts which calls, who plans the visits, how much each of you is carrying, and how you talk about it.';
+  REPORT.apart.together = ['How to read it together', 'Pick a call when you\u2019re both free and neither of you is carrying a heavy load. Each read the at-a-glance page on your own first, then share one thing that surprised you and one thing you appreciated. One topic per call.'];
+  REPORT.apart.look = ['Calls or messages that always start from the same side.', 'Regular parts of staying close (calls, the good-night text, planning visits) with no clear owner.', 'Weeks when one load stayed high while the other eased.', 'Things that came up again in the monthly look-back, like a missed call or a visit nobody booked.'];
+  REPORT.apart.talk = ['What did you do this month to stay close that I didn\u2019t see?', 'Which call or plan would you like the other one to start?', 'When you\u2019re carrying a lot, what helps most from me, from where I am?', 'What is one small thing we could change before our next call?'];
   PATHS.forEach(function (p) {
     p.report = REPORT[p.id] || null;
+    if (p.variants && p.variants.apart) p.variants.apart.report = REPORT.apart;
     p.weeks = WEEKS[p.id] || p.groups.map(function (g) { return [g.title.replace(/^Week \d+ \u00B7 /, ''), g.stops.map(function (x) { return x.wp; }), g.along || [], g.note]; });
   });
 
